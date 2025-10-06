@@ -20,7 +20,7 @@
   cargoBuildHook = makeSetupHook {
     name = "cargo-build-hook.sh";
     substitutions = {
-      inherit (stdenv.targetPlatform.rust) rustcTarget;
+      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
       inherit (rust.envVars) setEnv;
 
     };
@@ -35,7 +35,7 @@
   cargoCheckHook = makeSetupHook {
     name = "cargo-check-hook.sh";
     substitutions = {
-      inherit (stdenv.targetPlatform.rust) rustcTarget;
+      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
       inherit (rust.envVars) setEnv;
     };
     passthru.tests = {
@@ -63,7 +63,7 @@
     name = "cargo-nextest-hook.sh";
     propagatedBuildInputs = [ cargo-nextest ];
     substitutions = {
-      inherit (stdenv.targetPlatform.rust) rustcTarget;
+      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
     };
     passthru.tests = {
       test = tests.rust-hooks.cargoNextestHook;
@@ -121,7 +121,7 @@
       pkgsHostTarget.rustc
     ];
     substitutions = {
-      inherit (stdenv.targetPlatform.rust) rustcTarget;
+      inherit (stdenv.targetPlatform.rust) rustcTargetSpec;
       inherit (rust.envVars) setEnv;
 
     };

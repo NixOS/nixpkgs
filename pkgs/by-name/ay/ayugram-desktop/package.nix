@@ -26,7 +26,7 @@ telegram-desktop.override {
       passthru.updateScript = nix-update-script { };
 
       meta = previousAttrs.meta // {
-        mainProgram = if stdenv.hostPlatform.isLinux then "ayugram-desktop" else "AyuGram";
+        mainProgram = "AyuGram";
         description = "Desktop Telegram client with good customization and Ghost mode";
         longDescription = ''
           The best that could be in the world of Telegram clients.

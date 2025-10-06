@@ -24,12 +24,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gpu-screen-recorder-gtk";
-  version = "5.7.6";
+  version = "5.7.8";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/${pname}";
     tag = version;
-    hash = "sha256-sgcee8/+mu+4J0jev9gxY2NIf/9ud1+yMSoqk8HmVk8=";
+    hash = "sha256-Vzi7IfiMsBFJZaZwC1CWZkVFCfDAfU0lmO7orRLjqgU=";
   };
 
   nativeBuildInputs = [

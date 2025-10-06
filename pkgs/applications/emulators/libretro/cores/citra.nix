@@ -9,13 +9,13 @@
 }:
 mkLibretroCore {
   core = "citra";
-  version = "0-unstable-2025-06-22";
+  version = "0-unstable-2025-08-17";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "citra";
-    rev = "176214934cd46d6e072adcbda5f676bc4ca3162e";
-    hash = "sha256-cdBR64OBOGMy0ROR89mbKXC0xk+QkBHUKEkIn2czGiQ=";
+    rev = "5263fae3344e5e9af43036e0e38bec2d10fb2407";
+    hash = "sha256-66kbE1taODjxXDhO3uV5R212nikyXfHwCHC/zamZuL0=";
     fetchSubmodules = true;
   };
 
@@ -28,10 +28,6 @@ mkLibretroCore {
   ];
 
   extraNativeBuildInputs = [ cmake ];
-
-  # This changes `ir/opt` to `ir/var/empty` in `externals/dynarmic/src/dynarmic/CMakeLists.txt`
-  # making the build fail, as that path does not exist
-  dontFixCmake = true;
 
   # https://github.com/libretro/citra/blob/a31aff7e1a3a66f525b9ea61633d2c5e5b0c8b31/.gitlab-ci.yml#L6
   cmakeFlags = [

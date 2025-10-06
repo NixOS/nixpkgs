@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "falconpy";
-  version = "1.5.3";
+  version = "1.5.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "CrowdStrike";
     repo = "falconpy";
     tag = "v${version}";
-    hash = "sha256-yK6delBTDnK5cP8mWIQZRfZClRsM2IeqjqrqOjbrlnc=";
+    hash = "sha256-m/pW9M2HXTtu42UIOCq7J1lr+y9mc3N74lD+qaCjaVE=";
   };
 
   build-system = [ hatchling ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "falconpy" ];
 
   meta = {
-    description = "The CrowdStrike Falcon SDK for Python";
+    description = "CrowdStrike Falcon SDK for Python";
     homepage = "https://github.com/CrowdStrike/falconpy";
     changelog = "https://github.com/CrowdStrike/falconpy/releases/tag/${src.tag}";
     license = lib.licenses.unlicense;

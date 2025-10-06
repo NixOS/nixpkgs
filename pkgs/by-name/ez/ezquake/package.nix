@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "QW-Group";
-    repo = pname + "-source";
-    rev = version;
+    repo = "ezquake" + "-source";
+    tag = version;
     fetchSubmodules = true;
     hash = "sha256-ThrsJfj+eP7Lv2ZSNLO6/b98VHrL6/rhwf2p0qMvTF8=";
   };

@@ -151,14 +151,6 @@ let
     ];
     separateDebugInfo = !stdenv.hostPlatform.isStatic;
     hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-    env =
-      prevAttrs.env or { }
-      // lib.optionalAttrs (
-        stdenv.isLinux
-        && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
-        && !(stdenv.system == "loongarch64-linux")
-        && !(stdenv.hostPlatform.useLLVM or false)
-      ) { LDFLAGS = "-fuse-ld=gold"; };
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {

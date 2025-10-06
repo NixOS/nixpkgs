@@ -2,41 +2,44 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
   trousers,
   openssl,
   opencryptoki,
   perl,
 }:
 
-let
-  version = "1.3.9.1";
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tpm-tools";
-  inherit version;
+  version = "1.3.9.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/trousers/tpm-tools/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0s7srgghykxnlb1g4izabzf2gfb1knxc0nzn6bly49h8cpi19dww";
+    url = "mirror://sourceforge/trousers/tpm-tools/${finalAttrs.version}/tpm-tools-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ivg3lJouwwsZU4msiisxvEn+MVBQdRt9TQ1DK/eBKpc=";
   };
 
-  sourceRoot = ".";
+  postPatch = ''
+    mkdir -p po
+    mkdir -p m4
+    cp -R po_/* po/
+    touch po/Makefile.in.in
+    touch m4/Makefile.am
+    substituteInPlace include/tpm_pkcs11.h \
+      --replace-fail "libopencryptoki.so" "${opencryptoki}/lib/opencryptoki/libopencryptoki.so"
+  '';
 
-  patches = [
-    (fetchurl {
-      url = "https://sources.debian.org/data/main/t/tpm-tools/1.3.9.1-0.1/debian/patches/05-openssl1.1_fix_data_mgmt.patch";
-      sha256 = "161yysw4wgy3spsz6p1d0ib0h5pnrqm8bdh1l71c4hz6a6wpcyxj";
-    })
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
   ];
 
-  nativeBuildInputs = [ perl ];
   buildInputs = [
     trousers
     openssl
     opencryptoki
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Management tools for TPM hardware";
     longDescription = ''
       tpm-tools is an open-source package designed to enable user and
@@ -44,8 +47,8 @@ stdenv.mkDerivation rec {
       Module (TPM), similar to a smart card environment.
     '';
     homepage = "https://sourceforge.net/projects/trousers/files/tpm-tools/";
-    license = licenses.cpl10;
-    maintainers = [ maintainers.ak ];
-    platforms = platforms.unix;
+    license = lib.licenses.cpl10;
+    maintainers = [ lib.maintainers.ak ];
+    platforms = lib.platforms.unix;
   };
-}
+})

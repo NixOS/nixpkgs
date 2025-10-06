@@ -12,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "nitrokey-start-firmware";
-    rev = "RTM.${finalAttrs.version}";
+    tag = "RTM.${finalAttrs.version}";
     hash = "sha256-POW1d/fgOyYa7127FSTCtHGyMWYzKW0qqA1WUyvNc3w=";
     fetchSubmodules = true;
   };

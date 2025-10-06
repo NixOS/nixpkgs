@@ -3,16 +3,18 @@
   stdenv,
   fetchurl,
   updateAutotoolsGnuConfigScriptsHook,
-  withJitSealloc ? true,
+  # Causes consistent segfaults on ELFv1 PPC64 when trying to use Perl regex in gnugrep
+  # https://github.com/PCRE2Project/pcre2/issues/762
+  withJitSealloc ? !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv1),
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.44";
+  version = "10.46";
 
   src = fetchurl {
     url = "https://github.com/PhilipHazel/pcre2/releases/download/pcre2-${version}/pcre2-${version}.tar.bz2";
-    hash = "sha256-008C4RPPcZOh6/J3DTrFJwiNSF1OBH7RDl0hfG713pY=";
+    hash = "sha256-FfvFq6a+7gsXrssEYCrjlDI5OroevY45t8q/fbiDKZ8=";
   };
 
   nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];

@@ -9,18 +9,22 @@
   pnpm_10,
   stdenv,
   writeShellScript,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
   buildWebExtension ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.12.7";
+  version = "1.13.1";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MS88KCH8ZdLyKoR0K45CSJutZSKUhz4FAE2VtrSx0ic=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-FqRRpsS1NPpxJr6iaDvQJ3fuX07oo08lZ6f+oEQb3MM=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -58,30 +62,36 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
-  # Vencord had a single "devbuild" release that we do not care about
-  passthru.updateScript = writeShellScript "update-vencord" ''
-    export PATH="${
-      lib.makeBinPath [
-        curl
-        jq
-        nix-update
-      ]
-    }:$PATH"
-    ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
-    latestTag=$(echo "$ghTags" | jq -r .[0].name)
+  passthru = {
+    # We need to fetch the latest *tag* ourselves, as nix-update can only fetch the latest *releases* from GitHub
+    # Vencord had a single "devbuild" release that we do not care about
+    updateScript = writeShellScript "update-vencord" ''
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          nix-update
+        ]
+      }:$PATH"
+      ghTags=$(curl ''${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} "https://api.github.com/repos/Vendicated/Vencord/tags")
+      latestTag=$(echo "$ghTags" | jq -r .[0].name)
 
-    echo "Latest tag: $latestTag"
+      echo "Latest tag: $latestTag"
 
-    exec nix-update --version "$latestTag" "$@"
-  '';
+      exec nix-update --version "$latestTag" "$@"
+    '';
+
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withVencord
+    );
+  };
 
   meta = {
-    description = "Vencord web extension";
+    description = "Cutest Discord client mod";
     homepage = "https://github.com/Vendicated/Vencord";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      donteatoreo
+      FlameFlag
       FlafyDev
       Gliczy
       NotAShelf

@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage rec {
     RUSTFLAGS = "-C relro-level=partial";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-EC+Wps6u1qXpv7ByM3NkRVCKRKCaBtC1o2vK8cKqzyU=";
 
   meta = with lib; {

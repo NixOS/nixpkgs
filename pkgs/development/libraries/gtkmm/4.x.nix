@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
     hash = "sha256-LuMcFUefxNjpWLA8i1+7yOF7wSLCovVESXtOBWGeM+w=";
   };
 
@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}4";
+      packageName = "gtkmm";
+      attrPath = "gtkmm4";
       versionPolicy = "odd-unstable";
     };
   };

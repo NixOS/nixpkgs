@@ -2,27 +2,27 @@
 
 {
   c.src = fetchurl {
-    url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.23.4.tar.gz";
-    hash = "sha256:b66c5043e26d84e5f17a059af71b157bcf202221069ed220aa1696d7d1d28a7a";
+    url = "https://github.com/tree-sitter/tree-sitter-c/archive/v0.24.1.tar.gz";
+    hash = "sha256:25dd4bb3dec770769a407e0fc803f424ce02c494a56ce95fedc525316dcf9b48";
   };
   lua.src = fetchurl {
-    url = "https://github.com/tree-sitter-grammars/tree-sitter-lua/archive/v0.3.0.tar.gz";
-    hash = "sha256:a34cc70abfd8d2d4b0fabf01403ea05f848e1a4bc37d8a4bfea7164657b35d31";
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-lua/archive/v0.4.0.tar.gz";
+    hash = "sha256:b0977aced4a63bb75f26725787e047b8f5f4a092712c840ea7070765d4049559";
   };
   vim.src = fetchurl {
-    url = "https://github.com/tree-sitter-grammars/tree-sitter-vim/archive/v0.5.0.tar.gz";
-    hash = "sha256:90019d12d2da0751c027124f27f5335babf069a050457adaed53693b5e9cf10a";
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-vim/archive/v0.7.0.tar.gz";
+    hash = "sha256:44eabc31127c4feacda19f2a05a5788272128ff561ce01093a8b7a53aadcc7b2";
   };
   vimdoc.src = fetchurl {
-    url = "https://github.com/neovim/tree-sitter-vimdoc/archive/v3.0.1.tar.gz";
-    hash = "sha256:76b65e5bee9ff78eb21256619b1995aac4d80f252c19e1c710a4839481ded09e";
+    url = "https://github.com/neovim/tree-sitter-vimdoc/archive/v4.0.0.tar.gz";
+    hash = "sha256:8096794c0f090b2d74b7bff94548ac1be3285b929ec74f839bd9b3ff4f4c6a0b";
   };
   query.src = fetchurl {
-    url = "https://github.com/tree-sitter-grammars/tree-sitter-query/archive/v0.5.1.tar.gz";
-    hash = "sha256:fe8c712880a529d454347cd4c58336ac2db22243bae5055bdb5844fb3ea56192";
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-query/archive/v0.6.2.tar.gz";
+    hash = "sha256:90682e128d048fbf2a2a17edca947db71e326fa0b3dba4136e041e096538b4eb";
   };
   markdown.src = fetchurl {
-    url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v0.4.1.tar.gz";
-    hash = "sha256:e0fdb2dca1eb3063940122e1475c9c2b069062a638c95939e374c5427eddee9f";
+    url = "https://github.com/tree-sitter-grammars/tree-sitter-markdown/archive/v0.5.0.tar.gz";
+    hash = "sha256:14c2c948ccf0e9b606eec39b09286c59dddf28307849f71b7ce2b1d1ef06937e";
   };
 }

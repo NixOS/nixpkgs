@@ -43,8 +43,10 @@
   libmsgraph,
   python3,
   gsettings-desktop-schemas,
+  googleSupport ? false, # dependency on vulnerable libsoup versions
 }:
 
+assert googleSupport -> gnomeSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "gvfs";
   version = "1.57.2";
@@ -106,8 +108,10 @@ stdenv.mkDerivation (finalAttrs: {
     glib-networking # TLS support
     gnome-online-accounts
     libsecret
-    libgdata
     libmsgraph
+  ]
+  ++ lib.optionals googleSupport [
+    libgdata
   ];
 
   mesonFlags = [
@@ -130,8 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dgcr=false"
     "-Dgoa=false"
     "-Dkeyring=false"
-    "-Dgoogle=false"
     "-Donedrive=false"
+  ]
+  ++ lib.optionals (!googleSupport) [
+    "-Dgoogle=false"
   ]
   ++ lib.optionals (avahi == null) [
     "-Ddnssd=false"

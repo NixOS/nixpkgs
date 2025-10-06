@@ -7,17 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-nomad";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "rraval";
     repo = "git-nomad";
     rev = "v${version}";
-    sha256 = "sha256-G/i+mCKZSe8tPMuCLzymkU9SGyFNHY74cGhcC4ru0/k=";
+    sha256 = "sha256-0svIieFrWIXH25q9dNDzlywYrSe0syhb0qpkDbRAfd4=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WfmHQ9HXEGfAKQXPMJFNeuOYA0NbmwWdntZjP/YHWCw=";
+  cargoHash = "sha256-zmjHD7EBXTppfB40UOT/SvKIqQj+vb7Sriasu1twTrg=";
 
   nativeCheckInputs = [ git ];
 

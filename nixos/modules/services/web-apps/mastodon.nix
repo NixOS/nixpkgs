@@ -131,10 +131,11 @@ let
 
   envFile = pkgs.writeText "mastodon.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   mastodonTootctl =
@@ -706,12 +707,7 @@ in
         };
       };
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.mastodon;
-        defaultText = lib.literalExpression "pkgs.mastodon";
-        description = "Mastodon package to use.";
-      };
+      package = lib.mkPackageOption pkgs "mastodon" { };
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
@@ -1080,7 +1076,7 @@ in
               proxyWebsockets = true;
             };
 
-            locations."/api/v1/streaming/" = {
+            locations."/api/v1/streaming" = {
               proxyPass = "http://mastodon-streaming";
               proxyWebsockets = true;
             };
@@ -1100,7 +1096,7 @@ in
 
         services.postfix = lib.mkIf (cfg.smtp.createLocally && cfg.smtp.host == "127.0.0.1") {
           enable = true;
-          hostname = lib.mkDefault "${cfg.localDomain}";
+          settings.main.myhostname = lib.mkDefault "${cfg.localDomain}";
         };
 
         services.redis.servers.mastodon = lib.mkIf redisActuallyCreateLocally (

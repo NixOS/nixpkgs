@@ -9,11 +9,12 @@
   pytestCheckHook,
   python-dateutil,
   pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-text";
-  version = "1.9.3";
+  version = "1.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +23,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "kiota-python";
     tag = "microsoft-kiota-serialization-text-v${version}";
-    hash = "sha256-FUfVkJbpD0X7U7DPzyoh+84Bk7C07iLT9dmbUeliFu8=";
+    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
   };
 
   sourceRoot = "${src.name}/packages/serialization/text/";
@@ -41,6 +42,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_serialization_text" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-serialization-text-v";
+  };
 
   meta = with lib; {
     description = "Text serialization implementation for Kiota generated clients in Python";

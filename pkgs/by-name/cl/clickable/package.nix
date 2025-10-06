@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "clickable";
-  version = "8.3.1";
+  version = "8.5.0";
   format = "pyproject";
 
   src = fetchFromGitLab {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    hash = "sha256-Vn2PyALaRrE+jJRdZzW+jjCm3f2GfpgrQcFGB7kr4EM=";
+    hash = "sha256-hQkRntdOlWLK+vVrdiWEkYIMK+ymEEC5ajh7+L2fH2g=";
   };
 
   build-system = [ python3Packages.setuptools ];

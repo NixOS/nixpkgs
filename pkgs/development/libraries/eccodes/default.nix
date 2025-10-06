@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eccodes";
-  version = "2.41.0";
+  version = "2.42.0";
 
   src = fetchurl {
     url = "https://confluence.ecmwf.int/download/attachments/45757960/eccodes-${version}-Source.tar.gz";
-    hash = "sha256-oUZ4QuEe1/YqL1zBmC4E7sYjmPSWLmugOs52RvMs8nA=";
+    hash = "sha256-YDcbNXywEd7lRtsuq6zlt+J/D4fT6kpa3eeJE3GzwSg=";
   };
 
   postPatch = ''
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://confluence.ecmwf.int/display/ECC/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     description = "ECMWF library for reading and writing GRIB, BUFR and GTS abbreviated header";
   };

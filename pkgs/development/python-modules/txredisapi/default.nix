@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/IlyaSkriblovsky/txredisapi";
-    description = "non-blocking redis client for python";
+    description = "Non-blocking redis client for python";
     license = licenses.asl20;
     maintainers = with maintainers; [ dandellion ];
   };

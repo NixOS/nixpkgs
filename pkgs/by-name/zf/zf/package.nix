@@ -4,24 +4,27 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  zig_0_13,
+  zig_0_15,
   callPackage,
 }:
 
+let
+  zig = zig_0_15;
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
     tag = finalAttrs.version;
-    hash = "sha256-Rsl8gAfVMeF5CLyPSrtzdgSCvEwPnBwHT4BOF9JQYYo=";
+    hash = "sha256-RHGck3cZx9hzh+z5BexO3k9thda73qSq5ugy0Ouh2QI=";
   };
 
   nativeBuildInputs = [
     installShellFiles
-    zig_0_13.hook
+    zig.hook
   ];
 
   postPatch = ''

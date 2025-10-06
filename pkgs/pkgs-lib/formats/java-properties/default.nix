@@ -46,7 +46,7 @@ in
       type =
         let
           elemType =
-            oneOf ([
+            oneOf [
               # `package` isn't generalized to `path` because path values
               # are ambiguous. Are they host path strings (toString /foo/bar)
               # or should they be added to the store? ("${/foo/bar}")
@@ -56,7 +56,7 @@ in
               (coercedTo bool boolToString str)
               (coercedTo int toString str)
               (coercedTo float toString str)
-            ])
+            ]
             // {
               description = "string, package, bool, int or float";
             };

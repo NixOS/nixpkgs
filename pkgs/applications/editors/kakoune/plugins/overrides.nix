@@ -112,7 +112,7 @@ self: super: {
     };
   };
 
-  kakoune-rainbow = super.kakoune-rainbow.overrideAttrs (oldAttrs: rec {
+  kakoune-rainbow = super.kakoune-rainbow.overrideAttrs (oldAttrs: {
     preFixup = ''
       mkdir -p $out/bin
       mv $out/share/kak/autoload/plugins/kakoune-rainbow/bin/kak-rainbow.scm $out/bin
@@ -146,14 +146,14 @@ self: super: {
     };
   };
 
-  powerline-kak = super.powerline-kak.overrideAttrs (oldAttrs: rec {
+  powerline-kak = super.powerline-kak.overrideAttrs (oldAttrs: {
     preFixup = ''
       substituteInPlace $out/share/kak/autoload/plugins/powerline-kak/rc/modules/git.kak \
         --replace ' git ' ' ${git}/bin/git '
     '';
   });
 
-  hop-kak = rustPlatform.buildRustPackage rec {
+  hop-kak = rustPlatform.buildRustPackage {
     pname = "hop-kak";
     version = "0.2.0";
 
@@ -172,7 +172,6 @@ self: super: {
       git
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-cgUBa0rgfJFnosCgD20G1rlOl/nyXJ9bA9SSf4BuqAs=";
 
     postInstall = ''
@@ -181,7 +180,7 @@ self: super: {
     '';
 
     meta = with lib; {
-      description = "hinting brought to Kakoune selections";
+      description = "Hinting brought to Kakoune selections";
       homepage = "https://git.sr.ht/~hadronized/hop.kak/";
       license = licenses.bsd3;
       maintainers = with maintainers; [ oleina ];

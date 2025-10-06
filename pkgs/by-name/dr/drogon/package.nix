@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "drogonframework";
     repo = "drogon";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-eFOYmqfyb/yp83HRa0hWSMuROozR/nfnEp7k5yx8hj0=";
     fetchSubmodules = true;
   };

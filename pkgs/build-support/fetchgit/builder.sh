@@ -8,6 +8,11 @@ echo "exporting $url (rev $rev) into $out"
 
 runHook preFetch
 
+if [ -n "$gitConfigFile" ]; then
+  echo "using GIT_CONFIG_GLOBAL=$gitConfigFile"
+  export GIT_CONFIG_GLOBAL="$gitConfigFile"
+fi
+
 $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" \
   ${leaveDotGit:+--leave-dotGit} \
   ${fetchLFS:+--fetch-lfs} \
@@ -16,6 +21,7 @@ $SHELL $fetcher --builder --url "$url" --out "$out" --rev "$rev" --name "$name" 
   ${fetchTags:+--fetch-tags} \
   ${sparseCheckout:+--sparse-checkout "$sparseCheckout"} \
   ${nonConeMode:+--non-cone-mode} \
-  ${branchName:+--branch-name "$branchName"}
+  ${branchName:+--branch-name "$branchName"} \
+  ${rootDir:+--root-dir "$rootDir"}
 
 runHook postFetch

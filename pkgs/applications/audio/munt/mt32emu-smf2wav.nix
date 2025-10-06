@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     sed -i -e '/add_subdirectory(mt32emu)/d' CMakeLists.txt
   '';
 
-  dontFixCmake = true;
-
   nativeBuildInputs = [
     cmake
     pkg-config

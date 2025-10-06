@@ -60,7 +60,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   meta = {
-    description = "basic user tool to execute simple docker containers in user space without root privileges";
+    description = "Basic user tool to execute simple docker containers in user space without root privileges";
     homepage = "https://indigo-dc.gitbooks.io/udocker";
     changelog = "https://github.com/indigo-dc/udocker/releases/tag/${version}";
     license = lib.licenses.asl20;

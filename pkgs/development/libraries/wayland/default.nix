@@ -23,28 +23,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayland";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url =
       with finalAttrs;
       "https://gitlab.freedesktop.org/wayland/wayland/-/releases/${version}/downloads/${pname}-${version}.tar.xz";
-    hash = "sha256-hk+yqDmeLQ7DnVbp2bdTwJN3W+rcYCLOgfRBkpqB5e0=";
+    hash = "sha256-gokkh6Aa1nszTsqDtUMXp8hqA6ic+trP71IR8RpdBTY=";
   };
 
   patches = [
     ./darwin.patch
   ];
 
-  postPatch =
-    lib.optionalString withDocumentation ''
-      patchShebangs doc/doxygen/gen-doxygen.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      # delete line containing os-wrappers-test, disables
-      # the building of os-wrappers-test
-      sed -i '/os-wrappers-test/d' tests/meson.build
-    '';
+  postPatch = lib.optionalString withDocumentation ''
+    patchShebangs doc/doxygen/gen-doxygen.py
+  '';
 
   outputs = [
     "out"
@@ -113,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wayland.freedesktop.org/";
     license = licenses.mit; # Expat version
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin; # requires more work: https://gitlab.freedesktop.org/wayland/wayland/-/merge_requests/481
     maintainers = with maintainers; [
       codyopel
       qyliss

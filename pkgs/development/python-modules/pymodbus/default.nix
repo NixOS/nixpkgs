@@ -21,15 +21,17 @@
 
 buildPythonPackage rec {
   pname = "pymodbus";
-  version = "3.9.2";
+  version = "3.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymodbus-dev";
     repo = "pymodbus";
     tag = "v${version}";
-    hash = "sha256-nzaIE8ZBIwo6ZChYBzQzMndCM/hOwCVKepkUACn8e80=";
+    hash = "sha256-2wOeghoi8FSk1II/0rid+ddRq7ceerH7ZeLcb+SSXKY=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -70,6 +72,11 @@ buildPythonPackage rec {
     "test_simulator"
   ];
 
+  disabledTestPaths = [
+    # Don't test the examples
+    "examples/"
+  ];
+
   meta = with lib; {
     description = "Python implementation of the Modbus protocol";
     longDescription = ''
@@ -79,8 +86,8 @@ buildPythonPackage rec {
       lightweight project is needed.
     '';
     homepage = "https://github.com/pymodbus-dev/pymodbus";
-    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
+    changelog = "https://github.com/pymodbus-dev/pymodbus/releases/tag/${src.tag}";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
     mainProgram = "pymodbus.simulator";
   };

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "The framework for analyzing the GNAT Project (GPR) files";
+    description = "Framework for analyzing the GNAT Project (GPR) files";
     homepage = "https://github.com/AdaCore/gpr";
     license = with licenses; [
       asl20

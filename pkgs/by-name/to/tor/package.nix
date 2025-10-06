@@ -19,6 +19,7 @@
   nixosTests,
   writeShellScript,
   versionCheckHook,
+  makeSetupHook,
 }:
 
 let
@@ -45,11 +46,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tor";
-  version = "0.4.8.17";
+  version = "0.4.8.18";
 
   src = fetchurl {
     url = "https://dist.torproject.org/tor-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ebRyXh1LiHueaP0JsNIkN3fVzjzUceU4WDvPb52M21Y=";
+    hash = "sha256-SupsEJ1O/06iuvuQWn5rCpZdFP6FYhSwL82QRrTZOvg=";
   };
 
   outputs = [
@@ -111,8 +112,21 @@ stdenv.mkDerivation (finalAttrs: {
   versionCheckProgramArg = "--version";
 
   passthru = {
-    tests.tor = nixosTests.tor;
+    tests = {
+      inherit (nixosTests) tor;
+      proxyHook = callPackage ./proxy-hook-tests.nix {
+        tor = finalAttrs.finalPackage;
+      };
+    };
     updateScript = callPackage ./update.nix { };
+    proxyHook = makeSetupHook {
+      name = "tor-proxy-hook";
+      substitutions = {
+        grep = lib.getExe gnugrep;
+        tee = lib.getExe' coreutils "tee";
+        tor = lib.getExe finalAttrs.finalPackage;
+      };
+    } ./proxy-hook.sh;
   };
 
   meta = {

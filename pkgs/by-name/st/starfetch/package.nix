@@ -16,10 +16,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
-    substituteInPlace src/starfetch.cpp --replace /usr/local/ $out/
+    substituteInPlace src/starfetch.cpp --replace-fail /usr/local/ $out/
   ''
   + lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace makefile --replace g++ clang++
+    substituteInPlace makefile --replace-warn g++ clang++
   '';
 
   installPhase = ''

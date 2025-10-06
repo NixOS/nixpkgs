@@ -582,7 +582,7 @@ rec {
       ...
     }@args:
     let
-      stream = streamLayeredImage (builtins.removeAttrs args [ "compressor" ]);
+      stream = streamLayeredImage (removeAttrs args [ "compressor" ]);
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}" {
@@ -1043,12 +1043,13 @@ rec {
       );
 
       contentsList = if builtins.isList contents then contents else [ contents ];
-      bind-paths = builtins.toString (
-        builtins.map (path: "--bind=${path}:${path}!") [
+      bind-paths = toString (
+        map (path: "--bind=${path}:${path}!") [
           "/dev/"
           "/proc/"
           "/sys/"
           "${builtins.storeDir}/"
+          "$NIX_BUILD_TOP"
           "$out/layer.tar"
         ]
       );
@@ -1085,6 +1086,7 @@ rec {
                     --exclude=./proc \
                     --exclude=./sys \
                     --exclude=.${builtins.storeDir} \
+                    --exclude=".$NIX_BUILD_TOP" \
                     --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                     --hard-dereference \
                     -cf $out/layer.tar .
@@ -1111,24 +1113,32 @@ rec {
         '';
       };
 
-      layersJsonFile = buildPackages.dockerMakeLayers {
-        inherit debug;
-        closureRoots = optionals includeStorePaths [
-          baseJson
-          customisationLayer
-        ];
-        excludePaths = [
-          baseJson
-          customisationLayer
-        ];
-        pipeline =
-          if layeringPipeline != null then
-            layeringPipeline
-          else
-            import ./popularity-contest-layering-pipeline.nix { inherit lib jq runCommand; } {
-              inherit fromImage maxLayers;
-            };
-      };
+      closureRoots = optionals includeStorePaths [
+        baseJson
+        customisationLayer
+      ];
+
+      excludePaths = [
+        baseJson
+        customisationLayer
+      ];
+
+      layersJsonFile =
+        if layeringPipeline == null then
+          buildPackages.dockerAutoLayer {
+            inherit
+              closureRoots
+              debug
+              excludePaths
+              fromImage
+              maxLayers
+              ;
+          }
+        else
+          buildPackages.dockerMakeLayers {
+            inherit closureRoots debug excludePaths;
+            pipeline = layeringPipeline;
+          };
 
       conf =
         runCommand "${baseName}-conf.json"
@@ -1403,7 +1413,7 @@ rec {
       ...
     }@args:
     let
-      stream = streamNixShellImage (builtins.removeAttrs args [ "compressor" ]);
+      stream = streamNixShellImage (removeAttrs args [ "compressor" ]);
       compress = compressorForImage compressor drv.name;
     in
     runCommand "${drv.name}-env.tar${compress.ext}" {

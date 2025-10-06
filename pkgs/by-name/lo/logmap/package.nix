@@ -6,7 +6,7 @@
 
 python3.pkgs.buildPythonApplication {
   pname = "logmap";
-  version = "unstable-2021-12-15";
+  version = "0-unstable-2021-12-15";
   format = "other";
 
   src = fetchFromGitHub {

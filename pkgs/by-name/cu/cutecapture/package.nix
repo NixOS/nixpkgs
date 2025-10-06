@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "(3)DS capture software for Linux and Mac";
+    description = "Nintendo DS and 3DS capture software for Linux and Mac";
     homepage = "https://github.com/Gotos/CuteCapture";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;

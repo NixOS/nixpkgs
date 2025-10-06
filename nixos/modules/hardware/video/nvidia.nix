@@ -229,7 +229,7 @@ in
 
         Warning: This feature is relatively new, depending on your system this might
         work poorly. AMD support, especially so.
-        See: https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828
+        See: <https://forums.developer.nvidia.com/t/the-all-new-outputsink-feature-aka-reverse-prime/129828>
 
         Note that this option only has any effect if the "nvidia" driver is specified
         in {option}`services.xserver.videoDrivers`, and it should preferably
@@ -333,7 +333,7 @@ in
     lib.mkIf cfg.enabled (
       lib.mkMerge [
         # Common
-        ({
+        {
           assertions = [
             {
               assertion = !(nvidiaEnabled && cfg.datacenter.enable);
@@ -388,7 +388,7 @@ in
             extraPackages32 = [ nvidia_x11.lib32 ];
           };
           environment.systemPackages = [ nvidia_x11.bin ];
-        })
+        }
 
         # X11
         (lib.mkIf nvidiaEnabled {
@@ -709,7 +709,7 @@ in
                 "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
 
             services = lib.mkMerge [
-              ({
+              {
                 nvidia-fabricmanager = {
                   enable = true;
                   description = "Start NVIDIA NVLink Management";
@@ -736,7 +736,7 @@ in
                     LimitCORE = "infinity";
                   };
                 };
-              })
+              }
               (lib.mkIf cfg.nvidiaPersistenced {
                 "nvidia-persistenced" = {
                   description = "NVIDIA Persistence Daemon";

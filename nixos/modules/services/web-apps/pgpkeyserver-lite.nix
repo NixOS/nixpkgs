@@ -47,7 +47,7 @@ in
       hkpPort = mkOption {
         default = sksCfg.hkpPort;
         defaultText = literalExpression "config.${sksOpt.hkpPort}";
-        type = types.int;
+        type = types.port;
         description = ''
           Which port the sks-keyserver is listening on.
         '';

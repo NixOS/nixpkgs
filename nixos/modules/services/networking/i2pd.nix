@@ -184,6 +184,10 @@ let
         (boolOpt "enabled" cfg.ntcp2.enable)
         (boolOpt "published" cfg.ntcp2.published)
         (intOpt "port" cfg.ntcp2.port)
+        (sec "ssu2")
+        (boolOpt "enabled" cfg.ssu2.enable)
+        (boolOpt "published" cfg.ssu2.published)
+        (intOpt "port" cfg.ssu2.port)
         (sec "addressbook")
         (strOpt "defaulturl" cfg.addressbook.defaulturl)
       ]
@@ -413,7 +417,7 @@ in
       };
 
       port = mkOption {
-        type = with types; nullOr int;
+        type = with types; nullOr port;
         default = null;
         description = ''
           I2P listen port. If no one is given the router will pick between 9111 and 30777.
@@ -540,6 +544,18 @@ in
         '';
       };
 
+      ssu2 = {
+        enable = mkEnableTrueOption "SSU2";
+        published = mkEnableOption "SSU2 publication";
+        port = mkOption {
+          type = types.port;
+          default = 0;
+          description = ''
+            Port to listen for incoming SSU2 connections (0=auto).
+          '';
+        };
+      };
+
       limits.transittunnels = mkOption {
         type = types.int;
         default = 2500;
@@ -651,7 +667,7 @@ in
           description = "Upstream outproxy bind address.";
         };
         outproxyPort = mkOption {
-          type = types.int;
+          type = types.port;
           default = 4444;
           description = "Upstream outproxy bind port.";
         };
@@ -670,7 +686,7 @@ in
             {
               options = {
                 destinationPort = mkOption {
-                  type = with types; nullOr int;
+                  type = with types; nullOr port;
                   default = null;
                   description = "Connect to particular port at destination.";
                 };
@@ -695,7 +711,7 @@ in
             {
               options = {
                 inPort = mkOption {
-                  type = types.int;
+                  type = types.port;
                   default = 0;
                   description = "Service port. Default to the tunnel's listen port.";
                 };

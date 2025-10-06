@@ -4,8 +4,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "code-spell-checker-german";
     publisher = "streetsidesoftware";
-    version = "2.3.3";
-    hash = "sha256-sEdr8SQDFWgCq77flvbReILgWtT/ao8cJjrgC7RKO80=";
+    version = "2.3.4";
+    hash = "sha256-zc0cv4AOswvYcC4xJOq2JEPMQ5qTj9Dad5HhxtNETEs=";
   };
   meta = {
     changelog = "https://marketplace.visualstudio.com/items/streetsidesoftware.code-spell-checker-german/changelog";

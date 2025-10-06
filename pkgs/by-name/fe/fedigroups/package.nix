@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
     leaveDotGit = true; # git command in build.rs
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-6UijHshvKANtMMfNADWDViDrh6bGlPvFz4xqJeWdqB0=";
 
   nativeBuildInputs = [

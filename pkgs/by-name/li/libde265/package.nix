@@ -15,14 +15,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "1.0.15";
+  version = "1.0.16";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-guiLM4RNe5O0qpeCoQUbs1Z7j0wp8iK9za2+6NIB8yY=";
+    hash = "sha256-4Y7tuVeDLoONU6/R/47QhGtzBiM9mtl4O++CN+KCUn4=";
   };
 
   nativeBuildInputs = [
@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "dec265";
     license = lib.licenses.lgpl3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

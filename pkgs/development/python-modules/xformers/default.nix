@@ -31,14 +31,15 @@
 }:
 let
   inherit (torch) cudaCapabilities cudaPackages cudaSupport;
+
+  # version 0.0.32.post2 was confirmed to break CUDA.
+  # Remove this note once the latest published revision "just works".
   version = "0.0.30";
 in
 buildPythonPackage {
   pname = "xformers";
   inherit version;
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "facebookresearch";

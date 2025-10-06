@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vulkan-tools";
-  version = "1.4.313.0";
+  version = "1.4.321.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "vulkan-sdk-${version}";
-    hash = "sha256-47RVuhK9NDtOazG4awTjwbZSnG+thGw6GpyKmcCgWpQ=";
+    hash = "sha256-cd7aLDhXiZ4Wlnrx2dfCQG3j+9vosM3SeohhCNvVN48=";
   };
 
   patches = [ ./wayland-scanner.patch ];
@@ -70,6 +70,9 @@ stdenv.mkDerivation rec {
   env.PKG_CONFIG_WAYLAND_SCANNER_WAYLAND_SCANNER = lib.getExe buildPackages.wayland-scanner;
 
   cmakeFlags = [
+    # Temporarily disabled, see https://github.com/KhronosGroup/Vulkan-Tools/issues/1130
+    # FIXME: remove when fixed upstream
+    "-DBUILD_CUBE=OFF"
     # Don't build the mock ICD as it may get used instead of other drivers, if installed
     "-DBUILD_ICD=OFF"
     # vulkaninfo loads libvulkan using dlopen, so we have to add it manually to RPATH

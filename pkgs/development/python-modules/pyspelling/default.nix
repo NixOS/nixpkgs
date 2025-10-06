@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "pyspelling";
-  version = "2.10";
+  version = "2.11";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rNZxM8G3zs1BDj1EieYfLksfC2rPGubEjCQPuyFynDc=";
+    hash = "sha256-lMxu+pecJneWAa1mb42Yat9S0kezEzN61nqscWN0nQ4=";
   };
 
   build-system = [
@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Spell checker";
     homepage = "https://pypi.org/project/pyspelling";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -8,15 +8,15 @@
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.28.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = "stripe-cli";
     rev = "v${version}";
-    hash = "sha256-bMJ5KY6eIdCiAXmk8UWIWPI1CtePo+j83USTpouw4h4=";
+    hash = "sha256-qDrEDP3gDHggXxavMVuVitFN+OWz5WlamePS/1/zlq8=";
   };
-  vendorHash = "sha256-T8vrEbR240ihkLDG4vu0s+MxKJ5nOLm0aseDgK9EPPE=";
+  vendorHash = "sha256-EDdRgApJ7gv/4ma/IfaHi+jjpTPegsUfqHbvoFMn048=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -54,7 +54,7 @@ buildGoModule rec {
         rm pkg/plugins/plugin_test.go
       '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd stripe \
       --bash <($out/bin/stripe completion --write-to-stdout --shell bash) \
       --zsh <($out/bin/stripe completion --write-to-stdout --shell zsh)

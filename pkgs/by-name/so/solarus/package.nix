@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  fetchpatch,
   cmake,
   ninja,
   luajit,
@@ -22,22 +21,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "solarus";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "solarus-games";
     repo = "solarus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-Kfg4pFZrEhsIU4RQlOox3hMpk2PXbOzrkwDElPGnDjA=";
+    rev = "e70e3df7369d690615fc4c9b3f8dfa00066c5e87";
+    hash = "sha256-NOHv4b+r2WnyHEVLtcox+8+3Q3TtSDHB7vpKSTDHVKM=";
   };
-
-  patches = [
-    # https://gitlab.com/solarus-games/solarus/-/merge_requests/1570
-    (fetchpatch {
-      url = "https://gitlab.com/solarus-games/solarus/-/commit/8e1eee51cbfa5acf2511b059739153065b0ba21d.patch";
-      hash = "sha256-KevGavtUhpHRt85WLh9ApmZ8a+NeWB1zDDHKGT08yhQ=";
-    })
-  ];
 
   outputs = [
     "out"

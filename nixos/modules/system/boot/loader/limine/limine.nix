@@ -22,7 +22,7 @@ let
       biosSupport = cfg.biosSupport;
       biosDevice = cfg.biosDevice;
       partitionIndex = cfg.partitionIndex;
-      forceMbr = cfg.forceMbr;
+      force = cfg.force;
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
@@ -42,6 +42,13 @@ in
   meta = {
     inherit (pkgs.limine.meta) maintainers;
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "boot" "loader" "limine" "forceMbr" ]
+      [ "boot" "loader" "limine" "force" ]
+    )
+  ];
 
   options.boot.loader.limine = {
     enable = lib.mkEnableOption "the Limine Bootloader";
@@ -169,9 +176,9 @@ in
       '';
     };
 
-    forceMbr = lib.mkEnableOption null // {
+    force = lib.mkEnableOption null // {
       description = ''
-        Force MBR detection to work even if the safety checks fail, use absolutely only if necessary!
+        Force installation even if the safety checks fail, use absolutely only if necessary!
       '';
     };
 
@@ -448,7 +455,7 @@ in
         script = ''
           cp ${config.services.fwupd.package.fwupd-efi}/libexec/fwupd/efi/fwupd*.efi /run/fwupd-efi/
           chmod +w /run/fwupd-efi/fwupd*.efi
-          ${lib.getExe pkgs.sbctl} sign /run/fwupd-efi/fwupd*.efi
+          ${lib.getExe cfg.secureBoot.sbctl} sign /run/fwupd-efi/fwupd*.efi
         '';
       };
 

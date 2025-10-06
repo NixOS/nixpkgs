@@ -9,19 +9,9 @@ let
   #     let k3s_1_23 = (callPackage ./path/to/k3s {
   #       commonK3sArg = ....
   #     }).k3s_1_23;
-  extraArgs = builtins.removeAttrs args [ "callPackage" ];
+  extraArgs = removeAttrs args [ "callPackage" ];
 in
 {
-  k3s_1_30 = common (
-    (import ./1_30/versions.nix)
-    // {
-      updateScript = [
-        ./update-script.sh
-        "30"
-      ];
-    }
-  ) extraArgs;
-
   k3s_1_31 = common (
     (import ./1_31/versions.nix)
     // {

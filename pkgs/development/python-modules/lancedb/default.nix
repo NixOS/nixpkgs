@@ -92,7 +92,7 @@ buildPythonPackage rec {
     cd python/python/tests
   '';
 
-  pytestFlagsArray = [ "-m 'not slow'" ];
+  disabledTestMarks = [ "slow" ];
 
   disabledTests = [
     # require tantivy which is not packaged in nixpkgs

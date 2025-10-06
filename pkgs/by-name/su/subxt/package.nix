@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BV/zP0L0gDmLSuzkp4OkOPfgldXBUiaHL4rciM7lrno=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7kmxnlhgNj0hY9FwVrzmdHw73Jf/pSeTHi6sqDg9X24=";
 
   # Only build the command line client

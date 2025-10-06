@@ -20,6 +20,7 @@ let
       hash = "sha256-fh31qrqjQiRQL03pQl4KJAEtbKMwG8/nJroqIDOIePw=";
     })
     ./super-slicer-use-boost186.patch
+    ./super-slicer-fix-cereal-1.3.1.patch
   ];
 
   wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
@@ -32,6 +33,9 @@ let
       hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
       fetchSubmodules = true;
     };
+    patches = [
+      ../../../by-name/wx/wxGTK31/0001-fix-assertion-using-hide-in-destroy.patch
+    ];
   });
 
   versions = {

@@ -6,8 +6,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "cwtools-vscode";
     publisher = "tboby";
-    version = "0.10.26";
-    hash = "sha256-1ZfmcF87LyRxCbQvVX21m1yFu+7QeDCofKXEHj5W8DA=";
+    version = "0.10.30";
+    hash = "sha256-C/2K1o6AOWumOwVjyNQZhqHe2T6LGW32dDJtLXIZguc=";
   };
   meta = {
     description = "Paradox Language Features for Visual Studio Code";

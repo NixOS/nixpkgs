@@ -246,7 +246,7 @@ chosenStdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description =
-      "PKCS#11 interface for TPM2 hardware."
+      "PKCS#11 interface for TPM2 hardware"
       + lib.optionalString (extraDescription != null) " ${extraDescription}";
     homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = lib.licenses.bsd2;

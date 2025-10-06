@@ -7,7 +7,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "ebpf-usb";
-  version = "unstable-2022-04-03";
+  version = "0-unstable-2022-04-03";
   pyproject = false;
 
   src = fetchFromGitHub {

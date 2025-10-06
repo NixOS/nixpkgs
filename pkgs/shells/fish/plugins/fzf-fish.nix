@@ -66,5 +66,6 @@ buildFishPlugin rec {
       euxane
       natsukium
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -15,7 +15,7 @@ let
       postgresql-clauses = makeEnsureTestFor package;
     };
 
-  test-sql = pkgs.writeText "postgresql-test" (''
+  test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION pgcrypto; -- just to check if lib loading works
     CREATE TABLE sth (
       id int
@@ -38,7 +38,7 @@ let
       }
       console.log(xs.reduce((acc, x) => acc + x, 0));
     $$ LANGUAGE plv8;
-  '');
+  '';
 
   makeTestForWithBackupAll =
     package: backupAll:
@@ -65,6 +65,8 @@ let
           services.postgresqlBackup = {
             enable = true;
             databases = lib.optional (!backupAll) "postgres";
+            pgdumpOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            pgdumpAllOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           };
         };
 
@@ -100,6 +102,12 @@ let
           machine.succeed(check_count("SELECT * FROM sth;", 5))
           machine.fail(check_count("SELECT * FROM sth;", 4))
           machine.succeed(check_count("SELECT xpath('/test/text()', doc) FROM xmltest;", 1))
+
+          with subtest("killing postgres process should trigger an automatic restart"):
+              machine.succeed("systemctl kill -s KILL postgresql")
+
+              machine.wait_until_succeeds("systemctl is-active postgresql.service")
+              machine.wait_until_succeeds("systemctl is-active postgresql.target")
 
           with subtest("Backup service works"):
               machine.succeed(

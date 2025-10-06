@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "llm-anthropic";
-  version = "0.17";
+  version = "0.19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = version;
-    hash = "sha256-2fatBKZMttC5flzfC7MWCpduc3m6IOVWZiW1K2dYqis=";
+    hash = "sha256-2RGjcbT5Q9kuc89l/hyofg9EkYJUDXQGYbMx1xE/qn4=";
   };
 
   build-system = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";
     homepage = "https://github.com/simonw/llm-anthropic";
-    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aos ];
   };

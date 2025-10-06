@@ -32,18 +32,16 @@ let
     # Override the version of some packages pinned in Home Assistant's setup.py and requirements_all.txt
 
     (self: super: {
-      aioelectricitymaps = super.aioelectricitymaps.overridePythonAttrs (oldAttrs: rec {
-        version = "0.4.0";
+      aionotion = super.aionotion.overridePythonAttrs rec {
+        version = "2024.03.0";
         src = fetchFromGitHub {
-          owner = "jpbede";
-          repo = "aioelectricitymaps";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-q06B40c0uvSuzH/3YCoxg4p9aNIOPrphsoESktF+B14=";
+          owner = "bachya";
+          repo = "aionotion";
+          tag = version;
+          hash = "sha256-BsbfLb5wCVxR8v2U2Zzt7LMl7XJcZWfVjZN47VDkhFc=";
         };
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
-      });
+        postPatch = null;
+      };
 
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
@@ -87,17 +85,7 @@ let
         ];
       });
 
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "4.0.3";
-        src = fetchFromGitHub {
-          owner = "aio-libs";
-          repo = "async-timeout";
-          tag = "v${version}";
-          hash = "sha256-gJGVRm7YMWnVicz2juHKW8kjJBxn4/vQ/kc2kQyl1i4=";
-        };
-      });
-
-      av = super.av.overridePythonAttrs (rec {
+      av = super.av.overridePythonAttrs rec {
         version = "13.1.0";
         src = fetchFromGitHub {
           owner = "PyAV-Org";
@@ -105,26 +93,14 @@ let
           tag = "v${version}";
           hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
         };
-      });
+      };
 
-      brother = super.brother.overridePythonAttrs (rec {
-        version = "4.3.1";
-        src = fetchFromGitHub {
-          owner = "bieniu";
-          repo = "brother";
-          tag = version;
-          hash = "sha256-fWa5FNBGV8tnJ3CozMicXLGsDvnTjNzU8PdV266MeeQ=";
-        };
-      });
-
-      google-genai = super.google-genai.overridePythonAttrs (old: rec {
-        version = "1.7.0";
-        src = fetchFromGitHub {
-          owner = "googleapis";
-          repo = "python-genai";
-          tag = "v${version}";
-          hash = "sha256-vmrFPE7H9s9varrP0s6WK4opoU1hREH7rVVjrKiXY5E=";
-        };
+      imageio = super.imageio.overridePythonAttrs (oldAttrs: {
+        disabledTests = oldAttrs.disabledTests or [ ] ++ [
+          # broken by pyav pin
+          "test_keyframe_intervals"
+          "test_lagging_video_stream"
+        ];
       });
 
       gspread = super.gspread.overridePythonAttrs (oldAttrs: rec {
@@ -140,12 +116,13 @@ let
         ];
       });
 
-      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
+      livisi = super.livisi.overridePythonAttrs (oldAttrs: rec {
+        version = "0.0.25";
         src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
+          owner = "planbnet";
+          repo = "livisi";
           tag = "v${version}";
-          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
+          hash = "sha256-kEkbuZmYzxhrbTdo7eZJYu2N2uJtfspgqepplXvSXFg=";
         };
       });
 
@@ -200,6 +177,21 @@ let
         };
       });
 
+      py-madvr2 = super.py-madvr2.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.40";
+        src = fetchFromGitHub {
+          owner = "iloveicedgreentea";
+          repo = "py-madvr";
+          tag = "v${version}";
+          hash = "sha256-0IX57Sa/oXGiViD39FVBRa2jxuKuZ3UNsOTHwuBdmWs=";
+        };
+        pythonImportsCheck = [ "madvr" ];
+        disabledTests = oldAttrs.disabledTests ++ [
+          "test_async_add_tasks"
+          "test_send_heartbeat"
+        ];
+      });
+
       # Pinned due to API changes >0.3.5.3
       pyatag = super.pyatag.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.5.3";
@@ -243,44 +235,6 @@ let
         };
       });
 
-      pyoctoprintapi = super.pyoctoprintapi.overridePythonAttrs (oldAttrs: rec {
-        version = "0.1.12";
-        src = fetchFromGitHub {
-          owner = "rfleming71";
-          repo = "pyoctoprintapi";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-Jf/zYnBHVl3TYxFy9Chy6qNH/eCroZkmUOEWfd62RIo=";
-        };
-      });
-
-      # snmp component does not support pysnmp 7.0+
-      pysnmp = super.pysnmp.overridePythonAttrs (oldAttrs: rec {
-        version = "6.2.6";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmp";
-          tag = "v${version}";
-          hash = "sha256-+FfXvsfn8XzliaGUKZlzqbozoo6vDxUkgC87JOoVasY=";
-        };
-      });
-
-      pysnmpcrypto = super.pysnmpcrypto.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.4";
-        src = fetchFromGitHub {
-          owner = "lextudio";
-          repo = "pysnmpcrypto";
-          tag = "v${version}";
-          hash = "sha256-f0w4Nucpe+5VE6nhlnePRH95AnGitXeT3BZb3dhBOTk=";
-        };
-        build-system = with self; [ setuptools ];
-        postPatch = ''
-          # ValueError: invalid literal for int() with base 10: 'post0' in File "<string>", line 104, in <listcomp>
-          substituteInPlace setup.py --replace \
-            "observed_version = [int(x) for x in setuptools.__version__.split('.')]" \
-            "observed_version = [36, 2, 0]"
-        '';
-      });
-
       pysnooz = super.pysnooz.overridePythonAttrs (oldAttrs: rec {
         version = "0.8.6";
         src = fetchFromGitHub {
@@ -289,6 +243,8 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-hJwIObiuFEAVhgZXYB9VCeAlewBBnk0oMkP83MUCpyU=";
         };
+        patches = [ ];
+        doCheck = false;
       });
 
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
@@ -303,6 +259,26 @@ let
         doCheck = false;
       });
 
+      python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
+        version = "21.5";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-i1YEcN615xeI4HcygXV9kzuXpT2yDSnlNU6bZqu1dPM=";
+        };
+      });
+
+      pytraccar = super.pytraccar.overridePythonAttrs (oldAttrs: rec {
+        version = "2.1.1";
+
+        src = fetchFromGitHub {
+          inherit (oldAttrs.src) owner repo;
+          tag = version;
+          hash = "sha256-WTRqYw66iD4bbb1aWJfBI67+DtE1FE4oiuUKpfVqypE=";
+        };
+      });
+
       # Pinned due to API changes ~1.0
       vultr = super.vultr.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.2";
@@ -314,7 +290,7 @@ let
         };
       });
 
-      wolf-comm = super.wolf-comm.overridePythonAttrs (rec {
+      wolf-comm = super.wolf-comm.overridePythonAttrs rec {
         version = "0.0.23";
         src = fetchFromGitHub {
           owner = "janrothkegel";
@@ -322,7 +298,7 @@ let
           tag = version;
           hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
         };
-      });
+      };
 
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
@@ -354,7 +330,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.7.3";
+  hassVersion = "2025.10.1";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -375,13 +351,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-FT77obtb081QOgw+nqbQvvW+3x/L2WUr3DLT8X1Wpwg=";
+    hash = "sha256-1C7Lg/pL1C+pUoo4RiL1TVECTqtEn6jnZ6muLohYPcw=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-jO+rNIzEvtQ1vhSD1Xbq/SKV5XvBOb4MmkkczoeD1Kc=";
+    hash = "sha256-cVARVLg80wVkruSed7ywrnK+lutLWbMJL2MBIwAapBA=";
   };
 
   build-system = with python.pkgs; [
@@ -514,17 +490,19 @@ python.pkgs.buildPythonApplication rec {
       # some components are needed even if tests in tests/components are disabled
       "default_config"
       "hue"
-      "qwikswitch"
     ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # assign tests grouped by file to workers
-    "--dist loadfile"
+    "--dist=loadfile"
     # enable full variable printing on error
     "--showlocals"
   ];
 
-  enabledTestPaths = [ "tests" ];
+  enabledTestPaths = [
+    # tests are located in tests/
+    "tests"
+  ];
 
   disabledTestPaths = [
     # we neither run nor distribute hassfest
@@ -543,14 +521,17 @@ python.pkgs.buildPythonApplication rec {
     "tests/test_bootstrap.py::test_setup_hass_takes_longer_than_log_slow_startup"
     "tests/test_test_fixtures.py::test_evict_faked_translations"
     "tests/helpers/test_backup.py::test_async_get_manager"
-    # (2025.7.0) Fails to find name of tracked time interval in scheduled jobs
-    "tests/helpers/test_event.py::test_track_time_interval_name"
-    # (2025.7.2) Exception string mismatch (non-blocking vs non blocking)
-    "tests/test_core.py::test_services_call_return_response_requires_blocking"
+    # (2025.9.0) Extra argument (demo platform) in list that is expected to be empty
+    "tests/scripts/test_check_config.py::test_config_platform_valid"
+    # (2025.9.0) Schema mismatch, diff shows a required field that needs to be removed
+    "tests/test_data_entry_flow.py::test_section_in_serializer"
+    # (2025.9.0) unique id collision in async_update_entry
+    "tests/test_config_entries.py::test_async_update_entry_unique_id_collision"
   ];
 
   preCheck = ''
     export HOME="$TEMPDIR"
+    export PYTHONASYNCIODEBUG=1
 
     # the tests require the existance of a media dir
     mkdir "$NIX_BUILD_TOP"/media

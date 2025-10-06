@@ -28,6 +28,7 @@
   libwmf,
   zlib,
   libzip,
+  xz,
   ghostscript,
   aalib,
   shared-mime-info,
@@ -133,6 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     libwmf
     zlib
     libzip
+    xz
     ghostscript
     aalib
     shared-mime-info
@@ -216,7 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "GNU Image Manipulation Program";
     homepage = "https://www.gimp.org/";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     mainProgram = "gimp";

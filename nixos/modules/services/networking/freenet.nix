@@ -15,7 +15,7 @@ in
       enable = lib.mkEnableOption "Freenet daemon";
 
       nice = lib.mkOption {
-        type = lib.types.int;
+        type = lib.types.ints.between (-20) 19;
         default = 10;
         description = "Set the nice level for the Freenet daemon";
       };

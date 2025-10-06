@@ -6,6 +6,7 @@
   byacc, # can also use bison, but byacc has fewer dependencies
   keyutils,
   openssl,
+  bashNonInteractive,
   perl,
   pkg-config,
 
@@ -32,11 +33,13 @@
 
 stdenv.mkDerivation rec {
   pname = "krb5";
-  version = "1.21.3";
+  version = "1.22.1";
+
+  __structuredAttrs = true;
 
   src = fetchurl {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
-    hash = "sha256-t6TNXq1n+wi5gLIavRUP9yF+heoyDJ7QxtrdMEhArTU=";
+    hash = "sha256-GogyuMrZI+u/E5T2fi789B46SfRgKFpm41reyPoAU68=";
   };
 
   outputs = [
@@ -48,10 +51,15 @@ stdenv.mkDerivation rec {
   # While "out" acts as the bin output, most packages only care about the lib output.
   # We set prefix such that all the pkg-config configuration stays inside the dev and lib outputs.
   # stdenv will take care of overriding bindir, sbindir, etc. such that "out" contains the binaries.
-  prefix = builtins.placeholder "lib";
+  prefix = placeholder "lib";
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    NIX_CFLAGS_COMPILE = "-fcommon";
+  env = {
+    # The release 1.21.3 is not compatible with c23, which changed the meaning of
+    #
+    #     void foo();
+    #
+    # declaration.
+    NIX_CFLAGS_COMPILE = "-std=gnu17" + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
   };
 
   configureFlags = [
@@ -73,6 +81,8 @@ stdenv.mkDerivation rec {
     "ac_cv_printf_positional=yes"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     byacc
     perl
@@ -83,6 +93,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openssl
+    bashNonInteractive # cannot use bashInteractive because of a dependency cycle
   ]
   ++ lib.optionals (
     stdenv.hostPlatform.isLinux
@@ -116,7 +127,7 @@ stdenv.mkDerivation rec {
   # options don't give us enough granularity to specify that, so we have to override the generated
   # Makefiles manually.
   postConfigure = ''
-    find $libFolders -type f -name Makefile -print0 | while IFS= read -rd "" f; do
+    find "''${libFolders[@]}" -type f -name Makefile -print0 | while IFS= read -rd "" f; do
       substituteInPlace "$f" --replace-fail "$out" "$lib"
     done
   '';
@@ -125,9 +136,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$lib"/{bin,sbin,lib/pkgconfig,share/{et,man/man1}}
   '';
 
-  # not via outputBin, due to reference from libkrb5.so
   postInstall = ''
+    # not via outputBin, due to reference from libkrb5.so
     moveToOutput bin/krb5-config "$dev"
+    moveToOutput sbin/krb5-send-pr "$out"
+    moveToOutput bin/compile_et "$out"
   '';
 
   # Disable _multioutDocs in stdenv by overriding it to be a no-op.
@@ -140,6 +153,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   doCheck = false; # fails with "No suitable file for testing purposes"
+
+  outputChecks.lib.disallowedRequisites = [
+    # bash cannot be here because of a dependency cycle
+    bashNonInteractive
+  ];
 
   meta = with lib; {
     description = "MIT Kerberos 5";

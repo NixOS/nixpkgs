@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     ./configure.sh
 
     # Rather than patch ./configure, just sneak in use of aiger here, since it
@@ -28,6 +30,8 @@ stdenv.mkDerivation {
       --replace-fail '$(AIGER)/aiger.o'  '${aiger.lib}/lib/libaiger.a'     \
       --replace-fail '$(AIGER)/aiger.h'  '${aiger.dev}/include/aiger.h' \
       --replace-fail '-I$(AIGER)'        '-I${aiger.dev}/include'
+
+    runHook postConfigure
   '';
 
   installPhase = ''

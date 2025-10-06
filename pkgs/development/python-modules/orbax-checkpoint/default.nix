@@ -9,6 +9,7 @@
   flit-core,
 
   # dependencies
+  aiofiles,
   etils,
   humanize,
   importlib-resources,
@@ -23,7 +24,6 @@
   typing-extensions,
 
   # tests
-  aiofiles,
   chex,
   google-cloud-logging,
   mock,
@@ -31,18 +31,19 @@
   portpicker,
   pytest-xdist,
   pytestCheckHook,
+  safetensors,
 }:
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.19";
+  version = "0.11.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-j15E4jGvxIjEdWG6Lwr9mvPXr9WifrD1zFF6Vj+7wik=";
+    hash = "sha256-myhPWKP2uI9NQKZki1Rr+B6Kusn0qNWREKHkiDrSheA=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -55,6 +56,7 @@ buildPythonPackage rec {
 
   dependencies = [
     absl-py
+    aiofiles
     etils
     humanize
     importlib-resources
@@ -70,7 +72,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    aiofiles
     chex
     google-cloud-logging
     mock
@@ -78,6 +79,7 @@ buildPythonPackage rec {
     portpicker
     pytest-xdist
     pytestCheckHook
+    safetensors
   ];
 
   pythonImportsCheck = [
@@ -104,6 +106,10 @@ buildPythonPackage rec {
     # Description from first occurrence: Number of processes to use.
     # https://github.com/google/orbax/issues/1580
     "orbax/checkpoint/experimental/emergency/"
+
+    # E   FileNotFoundError: [Errno 2] No such file or directory:
+    # '/build/absl_testing/DefaultSnapshotTest/runTest/root/path/to/source/data.txt'
+    "orbax/checkpoint/_src/path/snapshot/snapshot_test.py"
 
     # Circular dependency flax
     "orbax/checkpoint/_src/metadata/empty_values_test.py"

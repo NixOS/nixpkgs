@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "reconplogger";
-  version = "4.16.1";
+  version = "4.18.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "omni-us";
     repo = "reconplogger";
     tag = "v${version}";
-    hash = "sha256-F/6vT3jLxpteUFtYNtGyiO/JxeRtwJKpdGXTFJ6IDCE=";
+    hash = "sha256-awUGDE9yuPhWMZ4osCJKw8v5V1leoFF3DeCbluHeN70=";
   };
 
   build-system = [ setuptools ];

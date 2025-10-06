@@ -66,6 +66,8 @@ let
     werkzeug
     zipp
     zxcvbn
+    standard-imghdr
+
   ];
 
   all_patches = [

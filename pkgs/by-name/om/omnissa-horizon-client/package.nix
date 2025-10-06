@@ -12,7 +12,7 @@
   configText ? "",
 }:
 let
-  version = "2503";
+  version = "2506";
 
   sysArch =
     if stdenv.hostPlatform.system == "x86_64-linux" then
@@ -39,8 +39,8 @@ let
     pname = "omnissa-horizon-files";
     inherit version;
     src = fetchurl {
-      url = "https://download3.omnissa.com/software/CART26FQ1_LIN_2503_TARBALL/Omnissa-Horizon-Client-Linux-2503-8.15.0-14256322247.tar.gz";
-      sha256 = "c7df084d717dc70ce53eadfbe5a9d0daa06931b640702a8355705fbd93e16bb4";
+      url = "https://download3.omnissa.com/software/CART26FQ2_LIN_2506_TARBALL/Omnissa-Horizon-Client-Linux-2506-8.16.0-16536624989.tar.gz";
+      sha256 = "5515e79188e2605ced5a95c3a3829865b567be5d7a8de00a57455f7b5b2ae392";
     };
     nativeBuildInputs = [ makeWrapper ];
     installPhase = ''
@@ -114,22 +114,7 @@ let
           xorg.libXScrnSaver
           xorg.libXtst
           zlib
-
-          # c.f. https://github.com/NixOS/nixpkgs/pull/418543
-          (libxml2.overrideAttrs (oldAttrs: rec {
-            version = "2.13.8";
-            src = fetchurl {
-              url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-              hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
-            };
-            meta = oldAttrs.meta // {
-              knownVulnerabilities = oldAttrs.meta.knownVulnerabilities or [ ] ++ [
-                "CVE-2025-49794"
-                "CVE-2025-49796"
-                "CVE-2025-6021"
-              ];
-            };
-          }))
+          libxml2_13
 
           (writeTextDir "etc/omnissa/config" configText)
         ];

@@ -124,7 +124,7 @@ in
         host1.wait_until_succeeds("ip --json -6 r | jq -e 'map(select(.dst == \"fdff::2\")) | any'")
         host2.wait_until_succeeds("ip --json -6 r | jq -e 'map(select(.dst == \"fdff::1\")) | any'")
 
-      with subtest("Check fake routes in preCheckConfig do not exists"):
+      with subtest("Check fake routes in preCheckConfig do not exist"):
         host1.fail("ip --json r | jq -e 'map(select(.dst == \"1.2.3.4\")) | any'")
         host2.fail("ip --json r | jq -e 'map(select(.dst == \"1.2.3.4\")) | any'")
 

@@ -20,12 +20,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "kornelski";
     repo = "pngquant";
-    rev = version;
+    tag = version;
     hash = "sha256-u2zEp9Llo+c/+1QGW4V4r40KQn/ATHCTEsrpy7bRf/I=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-W+/y79KkSVHqBybouUazGVfTQAuelXvn6EXtu+TW7j4=";
   cargoPatches = [
     # https://github.com/kornelski/pngquant/issues/347
@@ -56,6 +55,6 @@ rustPlatform.buildRustPackage rec {
       bsd2
     ];
     mainProgram = "pngquant";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

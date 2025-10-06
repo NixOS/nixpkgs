@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "grafana-clock-panel";
-  version = "2.1.8";
-  zipHash = "sha256-QLvq2CSlJuEaYAazn8MoY3XCiXeRILj4dTp/aqrHL/k=";
+  version = "2.1.9";
+  zipHash = "sha256-awc1bA3MHg0z7HDzqhhWOymVPeEsOHUdxX0xneOd7kY=";
   meta = with lib; {
     description = "Clock panel for Grafana";
     license = licenses.mit;

@@ -13,11 +13,11 @@
 
   passthru.updateScript = bundlerUpdateScript "colorls";
 
-  meta = with lib; {
+  meta = {
     description = "Prettified LS";
     homepage = "https://github.com/athityakumar/colorls";
-    license = with licenses; mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       lukebfox
       nicknovitski
       cbley

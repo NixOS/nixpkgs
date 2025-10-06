@@ -67,11 +67,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "freeipa";
-  version = "4.12.4";
+  version = "4.12.5";
 
   src = fetchurl {
     url = "https://releases.pagure.org/freeipa/freeipa-${version}.tar.gz";
-    hash = "sha256-Nn3dHoaAt6+MZ0gMFCJniXginq4guNM8HjChren9adY=";
+    hash = "sha256-jvXS9Hx9VGFccFL19HogfH15JVIW7pc3/TY1pOvJglM=";
   };
 
   patches = [

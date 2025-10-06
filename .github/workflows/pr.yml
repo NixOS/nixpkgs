@@ -1,16 +1,16 @@
 name: PR
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/build.yml
-      - .github/workflows/check.yml
-      - .github/workflows/eval.yml
-      - .github/workflows/lint.yml
-      - .github/workflows/pr.yml
-      - .github/workflows/labels.yml
-      - .github/workflows/reviewers.yml # needs eval results from the same event type
   pull_request_target:
+  workflow_call:
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+      NIXPKGS_CI_APP_PRIVATE_KEY:
+        required: true
+      OWNER_APP_PRIVATE_KEY:
+        # The Test workflow should not actually request reviews from owners.
+        required: false
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -21,47 +21,32 @@ permissions: {}
 jobs:
   prepare:
     runs-on: ubuntu-24.04-arm
+    permissions:
+      # wrong branch review comment
+      pull-requests: write
     outputs:
-      baseBranch: ${{ steps.branches.outputs.base }}
-      headBranch: ${{ steps.branches.outputs.head }}
-      mergedSha: ${{ steps.get-merge-commit.outputs.mergedSha }}
-      targetSha: ${{ steps.get-merge-commit.outputs.targetSha }}
-      systems: ${{ steps.systems.outputs.systems }}
+      baseBranch: ${{ steps.prepare.outputs.base }}
+      headBranch: ${{ steps.prepare.outputs.head }}
+      mergedSha: ${{ steps.prepare.outputs.mergedSha }}
+      targetSha: ${{ steps.prepare.outputs.targetSha }}
+      systems: ${{ steps.prepare.outputs.systems }}
+      touched: ${{ steps.prepare.outputs.touched }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          sparse-checkout-cone-mode: true # default, for clarity
           sparse-checkout: |
-            .github/actions
-            ci/supportedBranches.js
-            ci/supportedSystems.json
-      - name: Check if the PR can be merged and get the test merge commit
-        uses: ./.github/actions/get-merge-commit
-        id: get-merge-commit
-
-      - name: Load supported systems
-        id: systems
-        run: |
-          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
-
-      - name: Determine branch type
-        id: branches
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+            ci/github-script
+      - id: prepare
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
-            const { classify } = require('./ci/supportedBranches.js')
-            const { base, head } = context.payload.pull_request
-
-            const baseClassification = classify(base.ref)
-            core.setOutput('base', baseClassification)
-            core.info('base classification:', baseClassification)
-
-            const headClassification =
-              (base.repo.full_name == head.repo.full_name) ?
-              classify(head.ref) :
-              // PRs from forks are always considered WIP.
-              { type: ['wip'] }
-            core.setOutput('head', headClassification)
-            core.info('head classification:', headClassification)
+            require('./ci/github-script/prepare.js')({
+              github,
+              context,
+              core,
+              dry: context.eventName == 'pull_request',
+            })
 
   check:
     name: Check
@@ -70,14 +55,20 @@ jobs:
     permissions:
       # cherry-picks
       pull-requests: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
+      mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
 
   lint:
     name: Lint
     needs: [prepare]
     uses: ./.github/workflows/lint.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
@@ -90,11 +81,12 @@ jobs:
       # compare
       statuses: write
     secrets:
-      OWNER_APP_PRIVATE_KEY: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
     with:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
       systems: ${{ needs.prepare.outputs.systems }}
+      testVersions: ${{ contains(fromJSON(needs.prepare.outputs.touched), 'pinned') && !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development') }}
 
   labels:
     name: Labels
@@ -128,22 +120,35 @@ jobs:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
 
-  # This job's only purpose is to serve as a target for the "Required Status Checks" branch ruleset.
+  # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block merging a PR.
-  # If they pass, it is skipped — which counts as "success" for purposes of the branch ruleset.
-  # However, if any of them fail, this job will also fail — thus blocking the branch ruleset.
-  no-pr-failures:
+  unlock:
+    if: github.event_name != 'pull_request' && always()
     # Modify this list to add or remove jobs from required status checks.
     needs:
       - check
       - lint
       - eval
       - build
-    # WARNING:
-    # Do NOT change the name of this job, otherwise the rule will not catch it anymore.
-    # This would prevent all PRs from merging.
-    name: no PR failures
-    if: ${{ failure() }}
     runs-on: ubuntu-24.04-arm
+    permissions:
+      statuses: write
     steps:
-      - run: exit 1
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        with:
+          script: |
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}?pr=${payload.pull_request.number}`
+            await github.rest.repos.createCommitStatus({
+              ...repo,
+              sha: payload.pull_request.head.sha,
+              // WARNING:
+              // Do NOT change the name of this, otherwise the rule will not catch it anymore.
+              // This would prevent all PRs from merging.
+              context: 'no PR failures',
+              state: JSON.parse(process.env.RESULTS).every(status => status == 'success') ? 'success' : 'error',
+              target_url,
+            })

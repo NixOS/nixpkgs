@@ -9,7 +9,7 @@
   makeDesktopItem,
 }:
 let
-  version = "0.9.18-beta";
+  version = "0.9.19-beta";
 in
 flutter332.buildFlutterApplication {
   inherit version;
@@ -18,7 +18,7 @@ flutter332.buildFlutterApplication {
     owner = "jmshrv";
     repo = "finamp";
     rev = version;
-    hash = "sha256-ea3+L6M2iaT1Rfy7tH1+3VpnjV+T8S86ZWc9l7pwW/4=";
+    hash = "sha256-gvVKiaQ6qqMcE90B8T2FJKoViRxmIGsABmcXq+fO5hs=";
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
@@ -35,10 +35,11 @@ flutter332.buildFlutterApplication {
     media_kit_libs_windows_audio = "sha256-p3hRq79whLFJLNUgL9atXyTGvOIqCbTRKVk1ie0Euqs=";
     palette_generator = "sha256-mnRJf3asu1mm9HYU8U0di+qRk3SpNFwN3S5QxChpIA0=";
     split_view = "sha256-unTJQDXUUPVDudlk0ReOPNYrsyEpbd/UMg1tHZsmg+k=";
+    flutter_user_certificates_android = "sha256-HL1Qd0D3CLYJysWLX2jqWt1FJRGm/BE8EjVFPztOIPo=";
   };
 
   postFixup = ''
-    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-needed libflutter_discord_rpc.so --add-rpath ${
       lib.makeLibraryPath [ mpv-unwrapped ]
     }
   '';

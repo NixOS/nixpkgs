@@ -23,9 +23,10 @@ let
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
     ${lib.toShellVars env}
-    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service)"
+    # UID is a read-only shell variable
+    eval "$(${config.systemd.package}/bin/systemctl show -pUID,GID,MainPID tandoor-recipes.service | tr '[:upper:]' '[:lower:]')"
     exec ${pkgs.util-linux}/bin/nsenter \
-      -t $MainPID -m -S $UID -G $GID --wdns=${env.MEDIA_ROOT} \
+      -t $mainpid -m -S $uid -G $gid --wdns=${env.MEDIA_ROOT} \
       ${pkg}/bin/tandoor-recipes "$@"
   '';
 in
@@ -183,7 +184,7 @@ in
       };
     };
 
-    services.paperless.settings = lib.mkIf cfg.database.createLocally {
+    services.tandoor-recipes.extraConfig = lib.mkIf cfg.database.createLocally {
       DB_ENGINE = "django.db.backends.postgresql";
       POSTGRES_HOST = "/run/postgresql";
       POSTGRES_USER = "tandoor_recipes";

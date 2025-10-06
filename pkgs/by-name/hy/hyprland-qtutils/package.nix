@@ -14,13 +14,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-qtutils";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-qtutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2dModE32doiyQMmd6EDAQeZnz+5LOs6KXyE0qX76WIg=";
+    hash = "sha256-bTYedtQFqqVBAh42scgX7+S3O6XKLnT6FTC6rpmyCCc=";
   };
 
   nativeBuildInputs = [

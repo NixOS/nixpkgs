@@ -35,7 +35,12 @@
   texinfo,
   xorgproto,
   zlib,
+  # https://github.com/liballeg/allegro5/blob/master/README_sdl.txt
+  useSDL ? false,
+  sdl2-compat ? null,
 }:
+
+assert useSDL -> sdl2-compat != null;
 
 stdenv.mkDerivation rec {
   pname = "allegro";
@@ -89,6 +94,9 @@ stdenv.mkDerivation rec {
     libXxf86misc
     libXxf86vm
     xorgproto
+  ]
+  ++ lib.optionals useSDL [
+    sdl2-compat
   ];
 
   postPatch = ''
@@ -97,7 +105,12 @@ stdenv.mkDerivation rec {
     sed -e 's@OpenAL/@AL/@g' -i addons/audio/openal.c
   '';
 
-  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+  cmakeFlags = [
+    "-DCMAKE_SKIP_RPATH=ON"
+  ]
+  ++ lib.optionals useSDL [
+    "ALLEGRO_SDL=ON"
+  ];
 
   outputs = [
     "out"

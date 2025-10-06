@@ -10,11 +10,11 @@
 buildKodiAddon rec {
   pname = "formula1";
   namespace = "plugin.video.formula1";
-  version = "2.0.5";
+  version = "2.0.7";
 
   src = fetchzip {
     url = "https://mirrors.kodi.tv/addons/${lib.toLower rel}/${namespace}/${namespace}-${version}.zip";
-    sha256 = "sha256-zOEf1CXywEqUpBhan03xjVQ3Rjp3h08X2OgQ4GAjwJQ=";
+    sha256 = "sha256-yz9SB0hiw5JKURGNvAazxazL+bMtfziNXlOLLoGUPOU=";
   };
 
   propagatedBuildInputs = [

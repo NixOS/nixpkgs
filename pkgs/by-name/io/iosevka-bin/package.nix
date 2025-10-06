@@ -12,12 +12,12 @@ let
 
   variantHashes = import ./variants.nix;
   validVariants = map (lib.removePrefix "Iosevka") (
-    builtins.attrNames (builtins.removeAttrs variantHashes [ "Iosevka" ])
+    builtins.attrNames (removeAttrs variantHashes [ "Iosevka" ])
   );
 in
 stdenv.mkDerivation rec {
   pname = "${name}-bin";
-  version = "33.2.6";
+  version = "33.3.0";
 
   src = fetchurl {
     url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/PkgTTC-${name}-${version}.zip";

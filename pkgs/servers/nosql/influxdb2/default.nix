@@ -43,13 +43,15 @@ let
       # https://github.com/influxdata/flux/pull/5542
       ./fix-unsigned-char.patch
     ];
-    # Don't fail on missing code documentation
+    # Don't fail on warnings
     postPatch = ''
-      substituteInPlace flux-core/src/lib.rs \
-        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
+      substituteInPlace flux/Cargo.toml \
+        --replace-fail 'default = ["strict", ' 'default = ['
+      substituteInPlace flux-core/Cargo.toml \
+        --replace-fail 'default = ["strict"]' 'default = []'
     '';
     sourceRoot = "${src.name}/libflux";
-    useFetchCargoVendor = true;
+
     cargoHash = "sha256-A6j/lb47Ob+Po8r1yvqBXDVP0Hf7cNz8WFZqiVUJj+Y=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
     buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
@@ -136,6 +138,6 @@ buildGoModule {
     description = "Open-source distributed time series database";
     license = licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

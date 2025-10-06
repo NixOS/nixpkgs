@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.3.0";
+  version = "2025.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-j25+DfWReonXKqxkX9OVHjKo+Indh13rlBE5PyGe69c=";
+    hash = "sha256-bwM4Q95YTEp9pDz6LmBLOeYjmi8nH8Cc/srZlXfEIlg=";
   };
 
   postPatch = ''
@@ -111,11 +111,14 @@ buildPythonPackage rec {
   ++ optional-dependencies.dataframe;
   versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Rerun failed tests up to three times
-    "--reruns 3"
+    "--reruns=3"
+  ];
+
+  disabledTestMarks = [
     # Don't run tests that require network access
-    "-m 'not network'"
+    "network"
   ];
 
   disabledTests = [

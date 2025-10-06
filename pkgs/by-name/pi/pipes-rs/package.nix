@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pipes-rs";
-  version = "1.6.3";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "lhvy";
     repo = "pipes-rs";
     rev = "v${version}";
-    sha256 = "sha256-NrBmkA7sV1RhfG9KEqQNMR5s0l2u66b7KK0toDjQIps=";
+    sha256 = "sha256-7FdC/VY1ZO4E/qDdeKzsIai8h5ZgMrSr1C+Ny4fYh38=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-0up9S3+NjBV8zsvsyVANvITisMSBXsab6jFwt19gnQk=";
+  cargoHash = "sha256-TIVWl/9xSFsSXD9XzOHBvc/1HvI/radas00p4fZ/AzM=";
 
   doInstallCheck = true;
 

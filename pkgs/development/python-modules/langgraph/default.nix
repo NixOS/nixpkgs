@@ -5,25 +5,26 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   langchain-core,
   langgraph-checkpoint,
   langgraph-prebuilt,
   langgraph-sdk,
+  pydantic,
   xxhash,
 
   # tests
   aiosqlite,
   dataclasses-json,
+  fakeredis,
   grandalf,
   httpx,
   langgraph-checkpoint-postgres,
   langgraph-checkpoint-sqlite,
   langsmith,
   psycopg,
-  pydantic,
   pytest-asyncio,
   pytest-mock,
   pytest-repeat,
@@ -32,36 +33,40 @@
   syrupy,
   postgresql,
   postgresqlTestHook,
+  redisTestHook,
 
   # passthru
   nix-update-script,
 }:
 buildPythonPackage rec {
   pname = "langgraph";
-  version = "0.4.1";
+  version = "0.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = version;
-    hash = "sha256-bTxtfduuuyRITZqhk15aWwxNwiZ7TMTgBOEPat6zVIc=";
+    hash = "sha256-9jl16cKp3E7j79PXrr/3splrcJtfQQN7yFJ5sfa6c+I=";
   };
 
   postgresqlTestSetupPost = ''
-    substituteInPlace tests/conftest.py \
+    substituteInPlace tests/conftest_store.py \
+      --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
+    substituteInPlace tests/conftest_checkpointer.py \
       --replace-fail "DEFAULT_POSTGRES_URI = \"postgres://postgres:postgres@localhost:5442/\"" "DEFAULT_POSTGRES_URI = \"postgres:///$PGDATABASE\""
   '';
 
   sourceRoot = "${src.name}/libs/langgraph";
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
     langgraph-checkpoint
     langgraph-prebuilt
     langgraph-sdk
+    pydantic
     xxhash
   ];
 
@@ -75,6 +80,9 @@ buildPythonPackage rec {
     pytestCheckHook
     postgresql
     postgresqlTestHook
+    redisTestHook
+    fakeredis
+    langgraph-checkpoint
   ];
 
   checkInputs = [
@@ -96,9 +104,9 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # test is flaky due to pydantic error on the exception
-    "test_doesnt_warn_valid_schema"
-    "test_tool_node_inject_store"
+    # Requires `langgraph dev` to be running
+    "test_remote_graph_basic_invoke"
+    "test_remote_graph_stream_messages_tuple"
 
     # Disabling tests that requires to create new random databases
     "test_cancel_graph_astream"
@@ -113,10 +121,6 @@ buildPythonPackage rec {
     "test_no_modifier"
     "test_pending_writes_resume"
     "test_remove_message_via_state_update"
-
-    # pydantic.errors.PydanticForbiddenQualifier,
-    # see https://github.com/langchain-ai/langgraph/issues/4360
-    "test_state_schema_optional_values"
   ];
 
   disabledTestPaths = [
@@ -129,11 +133,15 @@ buildPythonPackage rec {
   ];
 
   # Since `langgraph` is the only unprefixed package, we have to use an explicit match
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "([0-9.]+)"
-    ];
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
   };
 
   meta = {

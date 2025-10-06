@@ -41,7 +41,7 @@ stdenv.mkDerivation {
   '';
 
   installPhase = ''
-    runHook preBuild
+    runHook preInstall
     mkdir -p $out/bin $out/resources
     find . -type f -executable -exec cp {} $out/bin \;
     for d in *; do
@@ -49,14 +49,13 @@ stdenv.mkDerivation {
         cp -ar "$d/src/resources" "$out/resources/$d"
       fi
     done
-    runHook postBuild
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "Collection of games made with raylib";
     homepage = "https://www.raylib.com/games.html";
     license = licenses.zlib;
-    maintainers = with maintainers; [ ehmry ];
     inherit (raylib.meta) platforms;
   };
 }

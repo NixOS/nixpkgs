@@ -17,7 +17,7 @@ index b705a0d..9bfcaab 100644
 -    libraries=get_curl_libraries(),
 -    extra_objects=get_curl_archives(),
 -    library_dirs=[arch["libdir"]],
-+    libraries=["curl-impersonate-chrome"],
++    libraries=["curl-impersonate"],
      source_extension=".c",
      include_dirs=[
          str(root_dir / "include"),

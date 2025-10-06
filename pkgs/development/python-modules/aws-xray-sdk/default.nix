@@ -10,7 +10,7 @@
   importlib-metadata,
   jsonpickle,
   pymysql,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pynamodb,
   pytestCheckHook,
   pythonOlder,
@@ -52,7 +52,7 @@ buildPythonPackage rec {
     httpx
     pymysql
     pynamodb
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
     sqlalchemy
     webtest
@@ -64,6 +64,8 @@ buildPythonPackage rec {
     # We don't care about benchmarks
     "tests/test_local_sampling_benchmark.py"
     "tests/test_patcher.py"
+    # async def functions are not natively supported.
+    "tests/test_async_recorder.py"
   ];
 
   pythonImportsCheck = [ "aws_xray_sdk" ];

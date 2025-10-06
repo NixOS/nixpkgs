@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "bctoolbox";
-    rev = version;
+    tag = version;
     hash = "sha256-OwwSGzMFwR2ajUUgAy7ea/Q2pWxn3DO72W7ukcjBJnU=";
   };
 

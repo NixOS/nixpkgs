@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-YctXDhCMJvDQLPsuhzdyYDUIlFE2vKltNtrFFeE7YE8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-3lrNZyQVP+gswbF+pqQmVIHg3bjiJ22y87PtTHDwIXs=";
 
   passthru.tests.version = testers.testVersion {
@@ -31,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/sitkevij/hex/releases/tag/v${version}";
     mainProgram = "hx";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

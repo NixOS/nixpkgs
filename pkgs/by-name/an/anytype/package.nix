@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildNpmPackage,
   pkg-config,
@@ -11,29 +12,25 @@
   commandLineArgs ? "",
 }:
 
-let
+buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.46.5";
+  version = "0.50.3";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
-    tag = "v${version}";
-    hash = "sha256-gDlxyHxBLWVBLnaI6rFclfjwqkw9gneBEC7ssmWDKYU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-D2B8DY9VogRc0YP/NKEmg0uVT1ZaqQrOA/4AS845phU=";
   };
-  description = "P2P note-taking tool";
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "1d7ca0073bdd02d0145b8da3b1b956ca0652a108";
-    hash = "sha256-aL79DOIFH3CocbcLW0SJ472mYPZJXrPJyRKy8zXiF4o=";
+    rev = "27d713f500ed375aabb57b551dbc0561cd1983b3";
+    hash = "sha256-1SyCVwicUoxj/xxlYe3dElYYXWtzbw2bHiHZ0FKgYDw=";
   };
-in
-buildNpmPackage {
-  inherit pname version src;
 
-  npmDepsHash = "sha256-WEw3RCi7dWs2eMYxLH7DcmWBrN4T8T6beIyplcXgJAA=";
+  npmDepsHash = "sha256-pC1hT85Lk4asGRkQf4ZGlNULtmdlKX/2X1eDHMi6BZ0=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -52,7 +49,7 @@ buildNpmPackage {
 
   patches = [
     ./0001-feat-update-Disable-auto-checking-for-updates-and-updating-manually.patch
-    ./0001-fix-single-instance-detection-when-not-packaged.patch
+    ./0002-remove-grpc-devtools.patch
   ];
 
   buildPhase = ''
@@ -61,7 +58,7 @@ buildNpmPackage {
     cp -r ${anytype-heart}/lib dist/
     cp -r ${anytype-heart}/bin/anytypeHelper dist/
 
-    for lang in ${locales}/locales/*; do
+    for lang in ${finalAttrs.locales}/locales/*; do
       cp "$lang" "dist/lib/json/lang/$(basename $lang)"
     done
 
@@ -105,7 +102,7 @@ buildNpmPackage {
       exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
-      comment = description;
+      comment = finalAttrs.meta.description;
       mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"
@@ -117,14 +114,20 @@ buildNpmPackage {
     })
   ];
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    inherit description;
+    description = "P2P note-taking tool";
     homepage = "https://anytype.io/";
+    changelog = "https://community.anytype.io/t/anytype-desktop-${
+      builtins.replaceStrings [ "." ] [ "-" ] (lib.versions.majorMinor finalAttrs.version)
+    }-0-released";
     license = lib.licenses.unfreeRedistributable;
     mainProgram = "anytype";
     maintainers = with lib.maintainers; [
       autrimpo
       adda
+      kira-bruneau
     ];
     platforms = [
       "x86_64-linux"
@@ -132,5 +135,6 @@ buildNpmPackage {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

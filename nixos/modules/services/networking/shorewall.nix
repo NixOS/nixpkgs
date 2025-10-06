@@ -24,12 +24,7 @@ in
           :::
         '';
       };
-      package = lib.mkOption {
-        type = types.package;
-        default = pkgs.shorewall;
-        defaultText = lib.literalExpression "pkgs.shorewall";
-        description = "The shorewall package to use.";
-      };
+      package = lib.mkPackageOption pkgs "shorewall" { };
       configs = lib.mkOption {
         type = types.attrsOf types.lines;
         default = { };

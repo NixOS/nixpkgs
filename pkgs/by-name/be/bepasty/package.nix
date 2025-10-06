@@ -27,7 +27,7 @@ in
 
 bepastyPython.pkgs.buildPythonPackage rec {
   pname = "bepasty";
-  version = "1.2.1";
+  version = "1.2.2";
   format = "pyproject";
 
   propagatedBuildInputs = with bepastyPython.pkgs; [
@@ -50,7 +50,7 @@ bepastyPython.pkgs.buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-08cyr2AruGAfHAwHHS8WMfJh7DBKymaYyz4AxI/ubkE=";
+    hash = "sha256-teazPj+IrgbVeUkWqgWhpIldgfCTbZYJAqn5Q5blcm8=";
   };
 
   nativeCheckInputs = with bepastyPython.pkgs; [

@@ -185,7 +185,7 @@ in
 
         description = ''
           Extra binary formats to register with the kernel.
-          See https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html for more details.
+          See <https://www.kernel.org/doc/html/latest/admin-guide/binfmt-misc.html> for more details.
         '';
 
         type = types.attrsOf (
@@ -403,14 +403,14 @@ in
     );
 
     systemd = lib.mkMerge [
-      ({
+      {
         tmpfiles.rules = [
           "d /run/binfmt 0755 -"
         ]
         ++ lib.mapAttrsToList (name: interpreter: "L+ /run/binfmt/${name} - - - - ${interpreter}") (
           lib.mapAttrs mkInterpreter config.boot.binfmt.registrations
         );
-      })
+      }
 
       (lib.mkIf (config.boot.binfmt.registrations != { }) {
         additionalUpstreamSystemUnits = [

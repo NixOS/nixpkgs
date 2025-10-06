@@ -59,12 +59,13 @@ stdenv.mkDerivation (finalAttrs: {
   mesonFlags = [
     "-Dgdm-xsession=true"
     # TODO: Setup a default-path? https://gitlab.gnome.org/GNOME/gdm/-/blob/6fc40ac6aa37c8ad87c32f0b1a5d813d34bf7770/meson_options.txt#L6
-    "-Dinitial-vt=${finalAttrs.passthru.initialVT}"
+    "-Dinitial-vt=1"
     "-Dudev-dir=${placeholder "out"}/lib/udev/rules.d"
     "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.mesonOption "run-dir" "/run/gdm")
   ];
 
   nativeBuildInputs = [
@@ -185,9 +186,6 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = gnome.updateScript { packageName = "gdm"; };
 
-    # Used in GDM NixOS module
-    # Don't remove.
-    initialVT = "7";
     dconfDb = "${finalAttrs.finalPackage}/share/gdm/greeter-dconf-defaults";
     dconfProfile = "user-db:user\nfile-db:${finalAttrs.passthru.dconfDb}";
 

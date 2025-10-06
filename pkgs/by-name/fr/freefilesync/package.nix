@@ -4,7 +4,6 @@
   fetchurl,
   replaceVars,
   fetchDebianPatch,
-  fetchFromGitHub,
   copyDesktopItems,
   pkg-config,
   wrapGAppsHook3,
@@ -15,43 +14,31 @@
   libidn2,
   libssh2,
   openssl,
-  wxGTK32,
+  wxwidgets_3_3,
   makeDesktopItem,
 }:
 
 let
-  wxwidgets_3_3 = wxGTK32.overrideAttrs (
+  wxwidgets_3_3' = wxwidgets_3_3.overrideAttrs (
     finalAttrs: previousAttrs: {
-      version = "3.3.0-unstable-2025-02-02";
-      src = fetchFromGitHub {
-        owner = "wxWidgets";
-        repo = "wxWidgets";
-        rev = "969c5a46b5c1da57836f721a4ce5df9feaa437f9";
-        fetchSubmodules = true;
-        hash = "sha256-ODPE896xc5RxdyfIzdPB5fsTeBm3O+asYJd99fuW6AY=";
-      };
       patches = [
         ./wxcolorhook.patch
       ];
-      configureFlags = lib.subtractLists [
-        "--disable-compat28"
-        "--enable-unicode"
-      ] previousAttrs.configureFlags;
     }
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freefilesync";
-  version = "14.3";
+  version = "14.5";
 
   src = fetchurl {
     url = "https://freefilesync.org/download/FreeFileSync_${finalAttrs.version}_Source.zip";
     # The URL only redirects to the file on the second attempt
     postFetch = ''
-      rm -f $out
-      tryDownload "$url"
+      rm -f "$out"
+      tryDownload "$url" "$out"
     '';
-    hash = "sha256-F8oIoG+SaHwhT7aA+iYp9/eWyGf6CiDIGm6Y2px0wlI=";
+    hash = "sha256-+qfj1zf3V5xxtvXgCa0QDDRhEPQ3Qzii5eKiMySuUUY=";
   };
 
   sourceRoot = ".";
@@ -73,12 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # https://freefilesync.org/forum/viewtopic.php?t=12163
-  postPatch = ''
-    substituteInPlace zen/socket.h zen/sys_error.h \
-      --replace-fail "#undef G_GNUC_UNUSED" ""
-  '';
-
   nativeBuildInputs = [
     copyDesktopItems
     pkg-config
@@ -93,7 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
     libidn2
     libssh2
     openssl
-    wxwidgets_3_3
+    wxwidgets_3_3'
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

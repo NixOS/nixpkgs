@@ -21,7 +21,7 @@ let
     let
       # reports boolean as yes / no
       mkValueString =
-        with lib;
+
         v:
         if lib.isInt v then
           toString v
@@ -319,7 +319,7 @@ in
                 '';
               };
               port = lib.mkOption {
-                type = lib.types.nullOr lib.types.int;
+                type = lib.types.nullOr lib.types.port;
                 default = null;
                 description = ''
                   Port to listen to.
@@ -766,6 +766,7 @@ in
         restartTriggers = [ config.environment.etc."ssh/sshd_config".source ];
 
         serviceConfig = {
+          Type = "notify-reload";
           Restart = "always";
           ExecStart = lib.concatStringsSep " " [
             (lib.getExe' cfg.package "sshd")

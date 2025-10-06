@@ -8,13 +8,13 @@
 
 buildPythonPackage rec {
   pname = "django-soft-delete";
-  version = "1.0.19";
+  version = "1.0.21";
   pyproject = true;
 
   src = fetchPypi {
     pname = "django_soft_delete";
     inherit version;
-    hash = "sha256-xn7okg4UVuyoTMWbMwTvJ/qdR2tRa+cmzn4fxVhQKQg=";
+    hash = "sha256-VCvUZQ0naRBaQ2Pqe7f72zwoQp26pmQXFg+PS13GidU=";
   };
 
   build-system = [ hatchling ];

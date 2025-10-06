@@ -12,10 +12,7 @@ def perform_ocr_on_screenshot(screenshot_path: Path) -> str:
     Perform OCR on a screenshot that contains text.
     Returns a string with all words that could be found.
     """
-    variants = perform_ocr_variants_on_screenshot(screenshot_path, False)[0]
-    if len(variants) != 1:
-        raise MachineError(f"Received wrong number of OCR results: {len(variants)}")
-    return variants[0]
+    return perform_ocr_variants_on_screenshot(screenshot_path, False)[0]
 
 
 def perform_ocr_variants_on_screenshot(

@@ -15,14 +15,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "conduit";
-  version = "0.9.4";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "LLNL";
     repo = "conduit";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-xs/9hsE1DLCegXp3CHSl6qpC4ap+niNAWX5lNlUxz9E=";
+    hash = "sha256-mX7/5C4wd70Kx1rQyo2BcZMwDRqvxo4fBdz3pq7PuvM=";
   };
 
   nativeBuildInputs = [

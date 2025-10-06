@@ -40,7 +40,7 @@ let
 in
 buildPythonPackage rec {
   pname = "jax";
-  version = "0.6.2";
+  version = "0.7.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     repo = "jax";
     # google/jax contains tags for jax and jaxlib. Only use jax tags!
     tag = "jax-v${version}";
-    hash = "sha256-MTgpwpJWxULCiZhDG+MFpOp8ZHoj1ZDmOD05OaGfXhM=";
+    hash = "sha256-GBpHFjvF7SvxJafu7aVlTp0jxSo4jAi9oPeMg2B/P24=";
   };
 
   build-system = [ setuptools ];
@@ -84,21 +84,33 @@ buildPythonPackage rec {
   # high parallelism will result in the tests getting stuck
   dontUsePytestXdist = true;
 
+  pytestFlags = [
+    "--numprocesses=4"
+    "-Wignore::DeprecationWarning"
+  ];
+
   # NOTE: Don't run the tests in the experimental directory as they require flax
   # which creates a circular dependency. See https://discourse.nixos.org/t/how-to-nix-ify-python-packages-with-circular-dependencies/14648/2.
   # Not a big deal, this is how the JAX docs suggest running the test suite
   # anyhow.
-  pytestFlagsArray = [
-    "--numprocesses=4"
-    "-W ignore::DeprecationWarning"
+  enabledTestPaths = [
     "tests/"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # SystemError: nanobind::detail::nb_func_error_except(): exception could not be translated!
     # reported at: https://github.com/jax-ml/jax/issues/26106
-    "--deselect tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
-    "--deselect tests/shape_poly_test.py::ShapePolyTest"
-    "--deselect tests/tree_util_test.py::TreeTest"
+    "tests/pjit_test.py::PJitErrorTest::testAxisResourcesMismatch"
+    "tests/shape_poly_test.py::ShapePolyTest"
+    "tests/tree_util_test.py::TreeTest"
+
+    # Mostly AssertionError on numerical tests failing since 0.7.0
+    # https://github.com/jax-ml/jax/issues/31428
+    "tests/export_back_compat_test.py"
+    "tests/lax_numpy_test.py"
+    "tests/lax_scipy_test.py"
+    "tests/lax_test.py"
+    "tests/linalg_test.py"
   ];
 
   # Prevents `tests/export_back_compat_test.py::CompatTest::test_*` tests from failing on darwin with
@@ -167,6 +179,9 @@ buildPythonPackage rec {
     description = "Source-built JAX frontend: differentiate, compile, and transform Numpy code";
     homepage = "https://github.com/google/jax";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      samuela
+    ];
   };
 }

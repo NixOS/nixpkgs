@@ -186,7 +186,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop;
   };
-  hadoop_3_3 = common rec {
+  hadoop_3_3 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
@@ -204,7 +204,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop_3_3;
   };
-  hadoop2 = common rec {
+  hadoop2 = common {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
       version = "2.10.2";

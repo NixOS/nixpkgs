@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://htcondor.org/";
-    description = "HTCondor is a software system that creates a High-Throughput Computing (HTC) environment";
+    description = "Software system that creates a High-Throughput Computing (HTC) environment";
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ evey ];

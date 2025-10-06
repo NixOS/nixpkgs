@@ -45,11 +45,11 @@ let
     boost
     zlib
   ]
-  ++ lib.optional withQt (if (supportWayland) then qt5.qtwayland else qt5.qtbase);
+  ++ lib.optional withQt (if supportWayland then qt5.qtwayland else qt5.qtbase);
 in
 stdenv.mkDerivation rec {
   pname = "zxtune";
-  version = "5100";
+  version = "5101";
 
   outputs = [ "out" ];
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
     owner = "zxtune";
     repo = "zxtune";
     rev = "r${version}";
-    hash = "sha256-SNHnpLAbiHCo11V090EY/vLH4seoZWpMHMMBLGkr88E=";
+    hash = "sha256-C+1tmQ8cKGpigWDh5p0mqv9B7/Tv8iJ4JVc835Q4y40=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   buildPhase =
     let
-      setOptionalSupport = name: var: "support_${name}=" + (if (var) then "1" else "");
+      setOptionalSupport = name: var: "support_${name}=" + (if var then "1" else "");
       makeOptsCommon = [
         ''-j$NIX_BUILD_CORES''
         ''root.version=${src.rev}''
@@ -115,11 +115,11 @@ stdenv.mkDerivation rec {
     in
     ''
       runHook preBuild
-      make ${builtins.toString makeOptsCommon} -C apps/xtractor
-      make ${builtins.toString makeOptsCommon} -C apps/zxtune123
+      make ${toString makeOptsCommon} -C apps/xtractor
+      make ${toString makeOptsCommon} -C apps/zxtune123
     ''
     + lib.optionalString withQt ''
-      make ${builtins.toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
+      make ${toString (makeOptsCommon ++ makeOptsQt)} -C apps/zxtune-qt
     ''
     + ''
       runHook postBuild

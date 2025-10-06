@@ -18,17 +18,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2025.2";
+  version = "2025.9";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
     tag = version;
-    hash = "sha256-ijSUGiAowxSqYwH3OxSWiGvm99n88ETJxAFn5x4m/BE=";
+    hash = "sha256-yjia9tNNaXCTQFe8xfUeBYVHhW214AaOeCLFjAG703E=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-j4lx3sSQZ7BKl+d5nFJQkMhgQWjn0xkNNCWMlbKLwVQ=";
+  cargoHash = "sha256-GmcRm6/dvY3stjV2ON8NVlVWZ5m0LXa9Kv0gqycbRoY=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -47,6 +46,7 @@ rustPlatform.buildRustPackage rec {
     xorg.libX11
     xorg.libXcursor
     xorg.libXi
+    xorg.libxcb
   ];
 
   desktopItems = [

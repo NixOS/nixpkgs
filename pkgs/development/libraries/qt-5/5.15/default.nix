@@ -26,8 +26,7 @@
   gst-plugins-base,
   gtk3,
   dconf,
-  llvmPackages_15,
-  overrideLibcxx,
+  llvmPackages_19,
   darwin,
 
   # options
@@ -66,6 +65,16 @@ let
       ./qtdeclarative-default-disable-qmlcache.patch
       # add version specific QML import path
       ./qtdeclarative-qml-paths.patch
+    ]
+    # FIXME: Make unconditional on next staging cycle
+    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
+      # Fix an undefined behavior, and fix random-seeming build error with Clang. See:
+      # - https://codereview.qt-project.org/c/qt/qtdeclarative/+/354847
+      # - https://github.com/llvm/llvm-project/issues/74070
+      (fetchpatch {
+        url = "https://github.com/qt/qtdeclarative/commit/636481a31110f1819efaf6500b25fbc395854311.patch";
+        hash = "sha256-ACOG3IjR0SIlLYioODGdhkNTGNvnKu6iOihsVdzyvgo=";
+      })
     ];
     qtlocation = lib.optionals stdenv.cc.isClang [
       # Fix build with Clang 16
@@ -328,16 +337,9 @@ let
       qtwayland = callPackage ../modules/qtwayland.nix { };
       qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
       qtwebengine = callPackage ../modules/qtwebengine.nix {
-        # The version of Chromium used by Qt WebEngine 5.15.x does not build with clang 16 due
-        # to the following errors:
-        # * -Wenum-constexpr-conversion: This is a downgradable error in clang 16, but it is planned
-        #   to be made into a hard error in a future version of clang. Patches are not available for
-        #   the version of v8 used by Chromium in Qt WebEngine, and fixing the code is non-trivial.
-        # * -Wincompatible-function-pointer-types: This is also a downgradable error generated
-        #   starting with clang 16. Patches are available upstream that can be backported.
-        # Because the first error is non-trivial to fix and suppressing it risks future breakage,
-        # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
-        stdenv = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
+        # Won’t build with Clang 20, as `-Wenum-constexpr-conversion`
+        # was made a hard error.
+        stdenv = if stdenv.cc.isClang then llvmPackages_19.stdenv else stdenv;
         inherit (srcs.qtwebengine) version;
         inherit (darwin) bootstrap_cmds;
         python = python3;

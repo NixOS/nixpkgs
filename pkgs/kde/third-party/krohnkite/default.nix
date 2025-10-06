@@ -10,13 +10,13 @@
 }:
 buildNpmPackage (finalAttrs: {
   pname = "krohnkite";
-  version = "0.9.9.1";
+  version = "0.9.9.2";
 
   src = fetchFromGitHub {
     owner = "anametologin";
     repo = "krohnkite";
     tag = finalAttrs.version;
-    hash = "sha256-Famg/g+Qwux4dZa6+CMKP6dDHNHNvJDKTsWQDukHHGk=";
+    hash = "sha256-gulKg23BeWL270B2omRYJIuAHIsKu1cBVpimgButM9I=";
   };
 
   npmDepsHash = "sha256-Q/D6s0wOPSEziE1dBXgTakjhXCGvzhvLVS7zXcZlPCI=";

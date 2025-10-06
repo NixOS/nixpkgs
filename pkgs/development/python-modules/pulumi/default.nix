@@ -54,6 +54,7 @@ buildPythonPackage {
   ];
 
   pythonRelaxDeps = [
+    "protobuf"
     "grpcio"
     "pip"
     "semver"
@@ -66,11 +67,20 @@ buildPythonPackage {
     pulumi-python
   ];
 
+  disabledTestPaths = [
+    # TODO: remove disabledTestPaths once the test is fixed upstream.
+    # https://github.com/pulumi/pulumi/pull/19080#discussion_r2309611222
+    "lib/test/provider/experimental/test_property_value.py::test_nesting"
+  ];
+
   # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L10-L11
   # https://github.com/pulumi/pulumi/blob/0acaf8060640fdd892abccf1ce7435cd6aae69fe/sdk/python/scripts/test_fast.sh#L16
   installCheckPhase = ''
     runHook preInstallCheck
-    ${python.executable} -m pytest --junit-xml= --ignore=lib/test/automation lib/test
+    declare -a _disabledTestPathsArray
+    concatTo _disabledTestPathsArray disabledTestPaths
+    ${python.executable} -m pytest --junit-xml= --ignore=lib/test/automation lib/test \
+      "''${_disabledTestPathsArray[@]/#/--deselect=}"
     pushd lib/test_with_mocks
     ${python.executable} -m pytest --junit-xml=
     popd
@@ -86,8 +96,6 @@ buildPythonPackage {
     description = "Modern Infrastructure as Code. Any cloud, any language";
     homepage = "https://www.pulumi.com";
     license = lib.licenses.asl20;
-    # https://github.com/pulumi/pulumi/issues/16828
-    broken = lib.versionAtLeast protobuf.version "5";
     maintainers = with lib.maintainers; [
       teto
       tie

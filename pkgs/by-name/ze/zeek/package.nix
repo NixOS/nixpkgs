@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zeek";
-  version = "7.2.1";
+  version = "7.2.2";
 
   src = fetchurl {
     url = "https://download.zeek.org/zeek-${finalAttrs.version}.tar.gz";
-    hash = "sha256-nbq25TGq/HubTfAysxuVHU34xp3AkJp8yBHB20FlUC0=";
+    hash = "sha256-Kx3ySPlBmaFoThxGDWTPHF5J10ccK1YvlCrF++mAWJM=";
   };
 
   strictDeps = true;

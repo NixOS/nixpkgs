@@ -32,15 +32,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-  pytestFlagsArray = [
+
+  enabledTestPaths = [
     # test_R folder is just for comparison of results with R lib
     # we need only test folder
     "test/"
+  ];
 
-    # several tests has same name, so we use --deselect instead of disableTests
-
+  # several tests has same name, so we use --deselect instead of disableTests
+  dilsabledTestPaths = [
     # Test execution is too long > 15 min
-    "--deselect=test/tbats/TBATS_test.py::TestTBATS::test_fit_predict_trigonometric_seasonal"
+    "test/tbats/TBATS_test.py::TestTBATS::test_fit_predict_trigonometric_seasonal"
   ];
 
   pythonImportsCheck = [ "tbats" ];

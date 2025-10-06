@@ -21,13 +21,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "minizinc-ide";
-  version = "2.9.3";
+  version = "2.9.4";
 
   src = fetchFromGitHub {
     owner = "MiniZinc";
     repo = "MiniZincIDE";
     rev = version;
-    hash = "sha256-wYS46keOPPQLs0fFeSeb2wz+VX6A1UUGjiGzHZhPxVk=";
+    hash = "sha256-ZESd83aqXr4vxEt9PvgarnELPi9BaEf68IUALYaTfzI=";
     fetchSubmodules = true;
   };
 

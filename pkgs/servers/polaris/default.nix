@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-bVXz/rSfkmdQlAa3B4zamZebpRBOkch6zNOFiyEQBbY=";
 
   # Compile-time environment variables for where to find assets needed at runtime

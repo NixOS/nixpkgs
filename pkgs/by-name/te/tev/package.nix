@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = "tev";
-    rev = "v${version}";
+    tag = "v${version}";
     fetchSubmodules = true;
     hash = "sha256-ke1T5nOrDoJilpfshAIAFWw/640Gm5OaxZ+ZakCevTs=";
   };
@@ -76,6 +76,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # needs apple frameworks + SDK fix? see #205247
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -17,7 +17,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src/catppuccinifier-cli";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-mIzRK4rqD8ON8LqkG3QhOseZLM5+Rr1Rhj1uuu+KRMI=";
 
   meta = {

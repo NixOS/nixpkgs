@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-c5YabBqZn6ilIkF3lifTsYyLZMsZN21jDj1hNu0PRAc=";
   };
 
+  configureFlags = [
+    (lib.withFeatureAs true "boost" boost.dev)
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = "https://www.twolame.org/";
     license = with licenses; [ lgpl2Plus ];
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

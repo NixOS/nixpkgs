@@ -3,41 +3,30 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
+  libcosmicAppHook,
   just,
   pkg-config,
-  libglvnd,
-  libxkbcommon,
+  glib,
   libinput,
   fontconfig,
   freetype,
-  libgbm,
-  wayland,
-  xorg,
-  vulkan-loader,
   nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-beta.1.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-mgUSkYtc+i9pXv0n3zLHwBXFxfeWlhbsFJKa7X+mI98=";
+    hash = "sha256-Zd/vTNZt9tPXryOwo2U68FtIul7xiRcz5N4Heuyicoc=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-qfPLDgGeYGSO0ZKJooXRK0NnTqzJ6zq6RhBpTTUusQY=";
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2025-04-17";
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+  cargoHash = "sha256-YfD06RAQPZRwapd0fhNsZ0tx+0JMNDXiPJIWwDhmG0M=";
 
   postPatch = ''
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
@@ -46,61 +35,54 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     just
     pkg-config
-    makeBinaryWrapper
+    libcosmicAppHook
   ];
+
   buildInputs = [
-    libxkbcommon
-    xorg.libX11
+    glib
     libinput
-    libglvnd
     fontconfig
     freetype
-    libgbm
-    wayland
-    vulkan-loader
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-edit"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
-  # Force linking to libEGL, which is always dlopen()ed, and to
-  # libwayland-client, which is always dlopen()ed except by the
-  # obscure winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
-    "-lEGL"
-    "-lwayland-client"
-    "-Wl,--pop-state"
-  ];
+  passthru = {
+    tests = {
+      inherit (nixosTests)
+        cosmic
+        cosmic-autologin
+        cosmic-noxwayland
+        cosmic-autologin-noxwayland
+        ;
+    };
 
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-edit" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share"
-  '';
-
-  passthru.tests = {
-    inherit (nixosTests)
-      cosmic
-      cosmic-autologin
-      cosmic-noxwayland
-      cosmic-autologin-noxwayland
-      ;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version"
+        "unstable"
+        "--version-regex"
+        "epoch-(.*)"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pop-os/cosmic-edit";
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
-    license = licenses.gpl3Only;
-    teams = [ teams.cosmic ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    teams = [ lib.teams.cosmic ];
+    platforms = lib.platforms.linux;
   };
 })

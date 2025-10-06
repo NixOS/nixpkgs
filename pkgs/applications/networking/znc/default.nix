@@ -19,15 +19,16 @@
   zlib,
   withIPv6 ? true,
   withDebug ? false,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "znc";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchurl {
     url = "https://znc.in/releases/archive/znc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-vmWtm2LvVFp+lIby90E07cU7pROtQ6adnYtHZgUzaxk=";
+    hash = "sha256-Tm52hR2/JgYYWXK1PsXeytaP5TtjpW5N+LizwKbEaAA=";
   };
 
   postPatch = ''
@@ -66,6 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  passthru = {
+    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+  };
+
   meta = {
     description = "Advanced IRC bouncer";
     homepage = "https://wiki.znc.in/ZNC";
@@ -75,5 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
+    pkgConfigModules = [ "znc" ];
   };
 })

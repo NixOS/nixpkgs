@@ -1,0 +1,281 @@
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -8,7 +8,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "5f7b0a21988c1bf877cf4759ef5ddaac04c1c9fe808c9142ecb78ba97d97a28a"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "bytes",
+  "futures-core",
+  "futures-sink",
+@@ -29,7 +29,7 @@
+  "actix-service",
+  "actix-utils",
+  "actix-web",
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "bytes",
+  "derive_more 2.0.1",
+  "futures-core",
+@@ -53,7 +53,7 @@
+  "actix-service",
+  "actix-utils",
+  "base64 0.22.1",
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "brotli",
+  "bytes",
+  "bytestring",
+@@ -335,15 +335,13 @@
+ 
+ [[package]]
+ name = "async-compression"
+-version = "0.4.29"
++version = "0.4.30"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "5bee399cc3a623ec5a2db2c5b90ee0190a2260241fbe0c023ac8f7bab426aaf8"
++checksum = "977eb15ea9efd848bb8a4a1a2500347ed7f0bf794edf0dc3ddcf439f43d36b23"
+ dependencies = [
+  "compression-codecs",
+  "compression-core",
+- "flate2",
+  "futures-core",
+- "memchr",
+  "pin-project-lite",
+  "tokio",
+ ]
+@@ -430,9 +428,9 @@
+ 
+ [[package]]
+ name = "bitflags"
+-version = "2.9.3"
++version = "2.9.4"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "34efbcccd345379ca2868b2b2c9d3782e9cc58ba87bc7d79d5b53d9c9ae6f25d"
++checksum = "2261d10cca569e4643e526d8dc2e62e433cc8aba21ab764233731f8d369bf394"
+ 
+ [[package]]
+ name = "block-buffer"
+@@ -513,10 +511,11 @@
+ 
+ [[package]]
+ name = "cc"
+-version = "1.2.34"
++version = "1.2.35"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "42bc4aea80032b7bf409b0bc7ccad88853858911b7713a8062fdc0623867bedc"
++checksum = "590f9024a68a8c40351881787f1934dc11afd69090f5edb6831464694d836ea3"
+ dependencies = [
++ "find-msvc-tools",
+  "jobserver",
+  "libc",
+  "shlex",
+@@ -566,9 +565,9 @@
+ 
+ [[package]]
+ name = "clap"
+-version = "4.5.46"
++version = "4.5.47"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2c5e4fcf9c21d2e544ca1ee9d8552de13019a42aa7dbf32747fa7aaf1df76e57"
++checksum = "7eac00902d9d136acd712710d71823fb8ac8004ca445a89e73a41d45aa712931"
+ dependencies = [
+  "clap_builder",
+  "clap_derive",
+@@ -576,9 +575,9 @@
+ 
+ [[package]]
+ name = "clap_builder"
+-version = "4.5.46"
++version = "4.5.47"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fecb53a0e6fcfb055f686001bc2e2592fa527efaf38dbe81a6a9563562e57d41"
++checksum = "2ad9bbf750e73b5884fb8a211a9424a1906c1e156724260fdae972f31d70e1d6"
+ dependencies = [
+  "anstream",
+  "anstyle",
+@@ -588,9 +587,9 @@
+ 
+ [[package]]
+ name = "clap_derive"
+-version = "4.5.45"
++version = "4.5.47"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "14cb31bb0a7d536caef2639baa7fad459e15c3144efefa6dbd1c84562c4739f6"
++checksum = "bbfd7eae0b0f1a6e63d4b13c9c478de77c2eb546fba158ad50b4203dc24b9f9c"
+ dependencies = [
+  "heck 0.5.0",
+  "proc-macro2",
+@@ -612,15 +611,13 @@
+ 
+ [[package]]
+ name = "compression-codecs"
+-version = "0.4.29"
++version = "0.4.30"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c7eea68f0e02c2b0aa8856e9a9478444206d4b6828728e7b0697c0f8cca265cb"
++checksum = "485abf41ac0c8047c07c87c72c8fb3eb5197f6e9d7ded615dfd1a00ae00a0f64"
+ dependencies = [
+  "compression-core",
+  "flate2",
+- "futures-core",
+  "memchr",
+- "pin-project-lite",
+ ]
+ 
+ [[package]]
+@@ -828,9 +825,9 @@
+ 
+ [[package]]
+ name = "deranged"
+-version = "0.4.0"
++version = "0.5.3"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9c9e6a11ca8224451684bc0d7d5a7adbf8f2fd6887261a1cfc3c0432f9d4068e"
++checksum = "d630bccd429a5bb5a64b5e94f693bfc48c9f8566418fda4c494cc94f911f87cc"
+ dependencies = [
+  "powerfmt",
+ ]
+@@ -1077,6 +1074,12 @@
+ ]
+ 
+ [[package]]
++name = "find-msvc-tools"
++version = "0.1.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "e178e4fba8a2726903f6ba98a6d221e76f9c12c650d5dc0e6afdc50677b49650"
++
++[[package]]
+ name = "flate2"
+ version = "1.1.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+@@ -1675,7 +1678,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "046fa2d4d00aea763528b4950358d0ead425372445dc8ff86312b3c69ff7727b"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "cfg-if",
+  "libc",
+ ]
+@@ -1813,9 +1816,9 @@
+ 
+ [[package]]
+ name = "lexical-core"
+-version = "1.0.0"
++version = "1.0.5"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c26c7da389462e0173a0e9580b3cf7b6a10074e93df78b2768d3ee9fa6d54fc4"
++checksum = "b765c31809609075565a70b4b71402281283aeda7ecaf4818ac14a7b2ade8958"
+ dependencies = [
+  "lexical-parse-float",
+  "lexical-parse-integer",
+@@ -1911,7 +1914,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "391290121bad3d37fbddad76d8f5d1c1c314cfc646d143d7e07a3086ddff0ce3"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "libc",
+  "redox_syscall",
+ ]
+@@ -2096,7 +2099,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "1610d7994d67a05bb35861cd733b069b1171de8693bc8452849c59361a1bb87b"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "cfg-if",
+  "cssparser",
+  "encoding_rs",
+@@ -2152,22 +2155,22 @@
+ 
+ [[package]]
+ name = "minicbor"
+-version = "0.19.1"
++version = "2.1.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "d7005aaf257a59ff4de471a9d5538ec868a21586534fff7f85dd97d4043a6139"
++checksum = "4f182275033b808ede9427884caa8e05fa7db930801759524ca7925bd8aa7a82"
+ dependencies = [
+  "minicbor-derive",
+ ]
+ 
+ [[package]]
+ name = "minicbor-derive"
+-version = "0.13.0"
++version = "0.18.2"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "1154809406efdb7982841adb6311b3d095b46f78342dd646736122fe6b19e267"
++checksum = "b17290c95158a760027059fe3f511970d6857e47ff5008f9e09bffe3d3e1c6af"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+- "syn 1.0.109",
++ "syn 2.0.106",
+ ]
+ 
+ [[package]]
+@@ -2728,7 +2731,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "5407465600fb0548f1442edf71dd20683c6ed326200ace4b1ef0763521bb3b77"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+ ]
+ 
+ [[package]]
+@@ -2878,7 +2881,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "11181fbabf243db407ef8df94a6ce0b2f9a733bd8be4ad02b4eda9602296cac8"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "errno",
+  "libc",
+  "linux-raw-sys",
+@@ -3291,12 +3294,11 @@
+ 
+ [[package]]
+ name = "time"
+-version = "0.3.41"
++version = "0.3.43"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "8a7619e19bc266e0f9c5e6686659d394bc57973859340060a69221e57dbc0c40"
++checksum = "83bde6f1ec10e72d583d91623c939f623002284ef622b87de38cfd546cbf2031"
+ dependencies = [
+  "deranged",
+- "itoa 1.0.15",
+  "num-conv",
+  "powerfmt",
+  "serde",
+@@ -3306,15 +3308,15 @@
+ 
+ [[package]]
+ name = "time-core"
+-version = "0.1.4"
++version = "0.1.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "c9e9a38711f559d9e3ce1cdb06dd7c5b8ea546bc90052da6d06bb76da74bb07c"
++checksum = "40868e7c1d2f0b8d73e4a8c7f0ff63af4f6d19be117e90bd73eb1d62cf831c6b"
+ 
+ [[package]]
+ name = "time-macros"
+-version = "0.2.22"
++version = "0.2.24"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3526739392ec93fd8b359c8e98514cb3e8e021beb4e5f597b00a0221f8ed8a49"
++checksum = "30cfb0125f12d9c277f35663a0a33f8c30190f4e4574868a330595412d34ebf3"
+ dependencies = [
+  "num-conv",
+  "time-core",
+@@ -3429,7 +3431,7 @@
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "adc82fd73de2a9722ac5da747f12383d2bfdb93591ee6c58486e0097890f05f2"
+ dependencies = [
+- "bitflags 2.9.3",
++ "bitflags 2.9.4",
+  "bytes",
+  "futures-util",
+  "http 1.3.1",

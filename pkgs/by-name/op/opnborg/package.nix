@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "opnborg";
-  version = "0.1.71";
+  version = "0.1.74";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "opnborg";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-hLdPS9LkDdncUsuNY8Bnqxgf0V9unObP2cVHcElCp1Q=";
+    hash = "sha256-hTI4PwYCOu5vamea7T5Run5hZKLv7VYusBYYyM21ZOs=";
   };
 
-  vendorHash = "sha256-U4arzJwQoHfdSAe2/giDJ1qDXQl8exSWGMHjwocQ4DE=";
+  vendorHash = "sha256-kRJ0Q4qSImQxTbILGTRYt7s2TLlhoUOPc1f1QS9hSQE=";
 
   ldflags = [
     "-s"

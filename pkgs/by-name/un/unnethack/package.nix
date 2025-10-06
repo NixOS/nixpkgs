@@ -77,8 +77,12 @@ stdenv.mkDerivation {
     description = "Fork of NetHack";
     mainProgram = "unnethack";
     homepage = "https://unnethack.wordpress.com/";
-    license = "nethack";
+    license = with lib.licenses; [
+      gpl3Only
+      cc-by-sa-30
+      publicDomain
+    ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

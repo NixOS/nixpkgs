@@ -89,16 +89,31 @@ class VSCodeExtensionUpdater:
         """
         Retrieves a raw Nix attribute value.
         """
-        return self.execute_command(["nix", "eval", "--raw", "-f", ".", attribute_path])
+        return self.execute_command([
+            "nix",
+            "--extra-experimental-features",
+            "nix-command",
+            "eval",
+            "--raw",
+            "-f",
+            ".",
+            attribute_path
+        ])
 
     def get_nix_system(self) -> str:
         """
         Retrieves system from Nix.
         """
-        return self._get_nix_attribute("system")
+        return self._get_nix_attribute("stdenv.hostPlatform.system")
 
     def get_supported_nix_systems(self) -> list[str]:
-        nix_config = self.execute_command(["nix", "config", "show"])
+        nix_config = self.execute_command([
+            "nix",
+            "--extra-experimental-features",
+            "nix-command",
+            "config",
+            "show"
+        ])
         system = None
         extra_platforms = []
         for line in nix_config.splitlines():
@@ -120,6 +135,8 @@ class VSCodeExtensionUpdater:
     def _get_nix_vscode_extension_src_hash(self, system: str) -> str:
         url = self.execute_command([
             "nix",
+            "--extra-experimental-features",
+            "nix-command",
             "eval",
             "--raw",
             "-f",
@@ -131,6 +148,8 @@ class VSCodeExtensionUpdater:
         sha256 = self.execute_command(["nix-prefetch-url", url])
         return self.execute_command([
             "nix",
+            "--extra-experimental-features",
+            "nix-command",
             "hash",
             "convert",
             "--to",
@@ -183,6 +202,8 @@ class VSCodeExtensionUpdater:
             return json.loads(
                 self.execute_command([
                     "nix",
+                    "--extra-experimental-features",
+                    "nix-command",
                     "eval",
                     "--json",
                     "-f",

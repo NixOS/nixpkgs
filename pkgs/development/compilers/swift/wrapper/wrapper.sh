@@ -8,7 +8,7 @@ if (( "${NIX_DEBUG:-0}" >= 7 )); then
     set -x
 fi
 
-cc_wrapper="${NIX_CC:-@default_cc_wrapper@}"
+cc_wrapper="@cc_wrapper@"
 
 source $cc_wrapper/nix-support/utils.bash
 

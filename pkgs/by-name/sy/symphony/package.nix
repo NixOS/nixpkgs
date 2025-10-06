@@ -4,42 +4,45 @@
   fetchFromGitHub,
   coin-utils,
   coinmp,
-  gfortran,
-  libtool,
   glpk,
   osi,
+  gfortran,
+  libtool,
   pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "symphony";
-  version = "5.7.2";
+  version = "5.7.3";
 
   outputs = [ "out" ];
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "SYMPHONY";
-    rev = "releases/${version}";
-    hash = "sha256-OdTUMG3iVhjhw5uKtUnsLCZ4DfMjYHm8+/ozfmw7J6c=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-f97LICRykxhiZiSsSBE9IJBLL/ApWV+utvlHuUhx1PI=";
   };
 
   nativeBuildInputs = [
+    gfortran
     libtool
     pkg-config
-    glpk
-    gfortran
-    coinmp
-    osi
+  ];
+
+  buildInputs = [
     coin-utils
+    coinmp
+    glpk
+    osi
   ];
 
   meta = {
-    description = "SYMPHONY is an open-source solver, callable library, and development framework for mixed-integer linear programs (MILPs) written in C with a number of unique features";
+    description = "Open-source solver, callable library, and development framework for mixed-integer linear programs (MILPs)";
     homepage = "https://www.coin-or.org/SYMPHONY/index.htm";
-    changelog = "https://github.com/coin-or/SYMPHONY/blob/${version}/CHANGELOG.md";
-    platforms = [ "x86_64-linux" ];
+    changelog = "https://github.com/coin-or/SYMPHONY/blob/${finalAttrs.version}/CHANGELOG.md";
+    platforms = lib.platforms.linux;
     license = lib.licenses.epl20;
     maintainers = with lib.maintainers; [ b-rodrigues ];
   };
-}
+})

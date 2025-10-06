@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage {
     sha256 = "sha256-pRDRRVb8Lyna8X/PEjS9tS5dbG4g7vyMCU5AqPlpxec=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-5HRhKW1VbecUdc+iad3hOKsR82JI2Pgtio3z/8pqZIg=";
 
   meta = with lib; {
@@ -23,7 +22,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/RazrFalcon/SVGCleaner";
     changelog = "https://github.com/RazrFalcon/svgcleaner/releases";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ yuu ];
+    maintainers = [ ];
     mainProgram = "svgcleaner";
   };
 }

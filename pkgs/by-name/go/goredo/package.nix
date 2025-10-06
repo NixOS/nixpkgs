@@ -61,7 +61,7 @@ buildGoModule rec {
 
   meta = with lib; {
     outputsToInstall = [ "out" ];
-    description = "djb's redo, a system for building files from source files. Written in Go";
+    description = "Makefile replacement that sucks less";
     homepage = "https://www.goredo.cypherpunks.ru";
     license = licenses.gpl3;
     maintainers = [ maintainers.spacefrogg ];

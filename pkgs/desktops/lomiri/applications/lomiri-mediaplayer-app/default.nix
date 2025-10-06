@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Media Player application for Ubuntu Touch devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-mediaplayer-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only

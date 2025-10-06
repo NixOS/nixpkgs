@@ -1,10 +1,9 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../../.. -i ysh -p oils-for-unix chicken
+#! nix-shell -I nixpkgs=../../../../.. -i ysh -p oils-for-unix chicken nix-prefetch-git jq
 
 setglobal ENV.URL_PREFIX="https://code.call-cc.org/egg-tarballs/5/"
-cd $(nix-prefetch-url \
-     'https://code.call-cc.org/cgi-bin/gitweb.cgi?p=eggs-5-latest.git;a=snapshot;h=master;sf=tgz' \
-     --name chicken-eggs-5-latest --unpack --print-path | tail -1)
+cd $(nix-prefetch-git --deepClone --quiet \
+       https://code.call-cc.org/eggs-5-latest | jq --raw-output .path)
 
 echo "# THIS IS A GENERATED FILE.  DO NOT EDIT!" > $_this_dir/deps.toml
 for i, item in */*/*.egg {

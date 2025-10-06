@@ -3,19 +3,20 @@
   fetchFromGitHub,
   installShellFiles,
   lib,
+  stdenv,
   testers,
   kubevirt,
 }:
 
 buildGoModule rec {
   pname = "kubevirt";
-  version = "1.5.2";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "kubevirt";
     repo = "kubevirt";
     rev = "v${version}";
-    hash = "sha256-R01kW6mS1Ce3oi3p6RFVXif/BybM9HlbL2WT9b5wJuE=";
+    hash = "sha256-50OaBnQrYn3LZLvsfvGU5ZssPbdKyyAnebqn85iVoYk=";
   };
 
   vendorHash = null;
@@ -32,7 +33,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd virtctl \
       --bash <($out/bin/virtctl completion bash) \
       --fish <($out/bin/virtctl completion fish) \

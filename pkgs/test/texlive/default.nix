@@ -34,7 +34,7 @@ rec {
           nativeBuildInputs = [ texLive ] ++ attrs.nativeBuildInputs or [ ];
           text = builtins.toFile "${name}.tex" text;
         }
-        // builtins.removeAttrs attrs [
+        // removeAttrs attrs [
           "nativeBuildInputs"
           "text"
           "texLive"

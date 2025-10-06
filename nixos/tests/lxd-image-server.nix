@@ -1,15 +1,20 @@
 { pkgs, lib, ... }:
 
 let
-  lxd-image = import ../release.nix {
+  incus-image = import ../release.nix {
     configuration = {
       # Building documentation makes the test unnecessarily take a longer time:
       documentation.enable = lib.mkForce false;
     };
   };
 
-  lxd-image-metadata = lxd-image.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
-  lxd-image-rootfs = lxd-image.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+  incus-image-metadata =
+    incus-image.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}
+    + "/tarball/nixos-image-lxc-*-${pkgs.stdenv.hostPlatform.system}.tar.xz";
+
+  incus-image-rootfs =
+    incus-image.incusContainerImage.${pkgs.stdenv.hostPlatform.system}
+    + "/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
 
 in
 {
@@ -31,9 +36,11 @@ in
         memorySize = 2048;
         diskSize = 4096;
 
-        lxc.lxcfs.enable = true;
-        lxd.enable = true;
+        incus.enable = true;
       };
+
+      # incus requires
+      networking.nftables.enable = true;
 
       security.pki.certificates = [
         (builtins.readFile ./common/acme/server/ca.cert.pem)
@@ -64,37 +71,29 @@ in
 
   testScript = ''
     machine.wait_for_unit("sockets.target")
-    machine.wait_for_unit("lxd.service")
-    machine.wait_for_file("/var/lib/lxd/unix.socket")
+    machine.wait_for_unit("incus.service")
 
-    # Wait for lxd to settle
-    machine.succeed("lxd waitready")
-
-    # lxd expects the pool's directory to already exist
-    machine.succeed("mkdir /var/lxd-pool")
+    machine.succeed("incus admin waitready")
+    machine.succeed("incus admin init --minimal")
 
     machine.succeed(
-        "lxd init --minimal"
-    )
-
-    machine.succeed(
-        "lxc image import ${lxd-image-metadata}/*/*.tar.xz ${lxd-image-rootfs}/*/*.tar.xz --alias nixos"
+        "incus image import ${incus-image-metadata} ${incus-image-rootfs} --alias nixos"
     )
 
     loc = "/var/www/simplestreams/images/iats/nixos/amd64/default/v1"
 
     with subtest("push image to server"):
-        machine.succeed("lxc launch nixos test")
+        machine.succeed("incus launch nixos test")
         machine.sleep(5)
-        machine.succeed("lxc stop -f test")
-        machine.succeed("lxc publish --public test --alias=testimg")
-        machine.succeed("lxc image export testimg")
+        machine.succeed("incus stop -f test")
+        machine.succeed("incus publish --public test --alias=testimg")
+        machine.succeed("incus image export testimg")
         machine.succeed("ls >&2")
         machine.succeed("mkdir -p " + loc)
         machine.succeed("mv *.tar.gz " + loc)
 
     with subtest("pull image from server"):
-        machine.succeed("lxc remote add img https://acme.test --protocol=simplestreams")
-        machine.succeed("lxc image list img: >&2")
+        machine.succeed("incus remote add img https://acme.test --protocol=simplestreams")
+        machine.succeed("incus image list img: >&2")
   '';
 }

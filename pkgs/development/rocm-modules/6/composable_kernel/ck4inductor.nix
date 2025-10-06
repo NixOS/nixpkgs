@@ -14,7 +14,7 @@ buildPythonPackage {
     setuptools
     setuptools-scm
   ];
-  version = "6.4.0";
+  version = "6.4.3";
   inherit (composable_kernel) src;
   pythonImportsCheck = [
     "ck4inductor"
@@ -34,7 +34,7 @@ buildPythonPackage {
     fi
   '';
   meta = with lib; {
-    description = "pytorch inductor backend which uses composable_kernel universal GEMM implementations";
+    description = "Pytorch inductor backend which uses composable_kernel universal GEMM implementations";
     homepage = "https://github.com/ROCm/composable_kernel";
     license = with licenses; [ mit ];
     teams = [ teams.rocm ];

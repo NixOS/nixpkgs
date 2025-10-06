@@ -1,7 +1,7 @@
 # Tests downloading a signed update artifact from a server to a target machine.
 # This test does not rely on the `systemd.timer` units provided by the
-# `systemd-sysupdate` module but triggers the `systemd-sysupdate` service
-# manually to make the test more robust.
+# `systemd-sysupdate` module but triggers the `updatectl` tool directly to
+# demonstrate how to initiate updates manually.
 
 { lib, pkgs, ... }:
 
@@ -62,7 +62,8 @@ in
   testScript = ''
     server.wait_for_unit("nginx.service")
 
-    target.succeed("systemctl start systemd-sysupdate")
+    print(target.succeed("updatectl list"))
+    target.succeed("updatectl update")
     assert "nixos" in target.wait_until_succeeds("cat /nixos_1.txt", timeout=5)
   '';
 }

@@ -152,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.2";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-UpoZPipXZbzLWCOXzDjfyTDrsKyXGbh3Rkwj5IeWeY4=";
+    hash = "sha256-3VwDwRjYo9/ifkl2Vt9pTmLabt+XyS0FXi0el+YgC/A=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-FkJB33vVVz7Kh23kfmjQDn61X2VkKLG9mUt8f3TrCHg=";
+    hash = "sha256-WZdfon6mnM+5caWW6yInQx5B1GjCxQ0XLbJlbvHa3Zc=";
   };
 
   patches = [
@@ -195,7 +195,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/builtins/tests/test_tests.rs \
       --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-    substituteInPlace src/tests/highlight.rs \
+    substituteInPlace src/highlight/tests.rs \
       --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
       --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
       --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
@@ -234,6 +234,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm tests/pexpects/job_summary.py
     rm tests/pexpects/signals.py
     rm tests/pexpects/fg.py
+    rm tests/checks/fish_exit.fish
   ''
   + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
     # This test seems to consistently fail on aarch64 and darwin

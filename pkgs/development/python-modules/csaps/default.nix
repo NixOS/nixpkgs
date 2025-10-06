@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "csaps";
-  version = "1.3.2";
+  version = "1.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "espdev";
     repo = "csaps";
     tag = "v${version}";
-    hash = "sha256-T1B0ta104UKLCUc97RQrvUSFt8ZCn9Y1Qiqo4DKHDsI=";
+    hash = "sha256-1pNJaNExhcRWDjJenEKp1eJ4wZMFXxwWcmepEt6/p0s=";
   };
 
   build-system = [

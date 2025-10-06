@@ -2,6 +2,8 @@
   lib,
   stdenv,
   alsa-lib,
+  autoreconfHook,
+  bluez-headers,
   dbus,
   docutils,
   ell,
@@ -27,12 +29,15 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bluez";
-  version = "5.83";
+  inherit (bluez-headers) version src;
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/bluez-${finalAttrs.version}.tar.xz";
-    hash = "sha256-EIUi2QnSIFgTmb/sk9qrYgNVOc7vPdo+eZcHhcY70kw=";
-  };
+  patches = [
+    (fetchurl {
+      name = "static.patch";
+      url = "https://lore.kernel.org/linux-bluetooth/20250703182908.2370130-1-hi@alyssa.is/raw";
+      hash = "sha256-4Yz3ljsn2emJf+uTcJO4hG/YXvjERtitce71TZx5Hak=";
+    })
+  ];
 
   buildInputs = [
     alsa-lib
@@ -47,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
     docutils
     pkg-config
     python3Packages.pygments
@@ -101,6 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "nfc")
     (lib.enableFeature true "pie")
     (lib.enableFeature true "sixaxis")
+    (lib.enableFeature (lib.elem "libsystemd" udev.meta.pkgConfigModules) "systemd")
     # Set "deprecated" to provide ciptool, sdptool, and rfcomm (unmaintained);
     # superseded by new D-Bus APIs
     (lib.enableFeature true "deprecated")
@@ -176,17 +183,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://www.bluez.org/";
-    description = "Official Linux Bluetooth protocol stack";
-    changelog = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/tree/ChangeLog?h=${finalAttrs.version}";
-    license = with lib.licenses; [
-      bsd2
-      gpl2Plus
-      lgpl21Plus
-      mit
-    ];
     mainProgram = "btinfo";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;
+    inherit (bluez-headers.meta)
+      changelog
+      description
+      homepage
+      license
+      maintainers
+      platforms
+      ;
   };
 })

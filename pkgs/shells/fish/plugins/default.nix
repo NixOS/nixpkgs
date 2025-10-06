@@ -12,6 +12,8 @@ lib.makeScope newScope (
 
     autopair = callPackage ./autopair.nix { };
 
+    aws = callPackage ./aws.nix { };
+
     bang-bang = callPackage ./bang-bang.nix { };
 
     bobthefish = callPackage ./bobthefish.nix { };

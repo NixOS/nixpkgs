@@ -44,7 +44,7 @@ let
       ghc ? ghcWithPackages (p: with p; [ ieee754 ]),
     }:
     let
-      library-file = mkLibraryFile pkgs;
+      libraryFile = mkLibraryFile pkgs;
       pname = "agdaWithPackages";
       version = Agda.version;
     in
@@ -54,7 +54,10 @@ let
         nativeBuildInputs = [ makeWrapper ];
         passthru = {
           unwrapped = Agda;
-          inherit withPackages;
+          inherit
+            withPackages
+            libraryFile
+            ;
           tests = {
             inherit (nixosTests) agda;
             allPackages = withPackages (filter self.lib.isUnbrokenAgdaPackage (attrValues self));
@@ -67,7 +70,7 @@ let
         mkdir -p $out/bin
         makeWrapper ${lib.getExe Agda} $out/bin/agda \
           ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
-          --add-flags "--library-file=${library-file}"
+          --add-flags "--library-file=${libraryFile}"
         ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
       '';
 
@@ -90,8 +93,6 @@ let
       pname,
       meta,
       buildInputs ? [ ],
-      everythingFile ? "./Everything.agda",
-      includePaths ? [ ],
       libraryName ? pname,
       libraryFile ? "${libraryName}.agda-lib",
       buildPhase ? null,
@@ -100,17 +101,14 @@ let
       ...
     }:
     let
-      agdaWithArgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
-      includePathArgs = concatMapStrings (path: "-i" + path + " ") (
-        includePaths ++ [ (dirOf everythingFile) ]
-      );
+      agdaWithPkgs = withPackages (filter (p: p ? isAgdaDerivation) buildInputs);
     in
     {
       inherit libraryName libraryFile;
 
       isAgdaDerivation = true;
 
-      buildInputs = buildInputs ++ [ agdaWithArgs ];
+      buildInputs = buildInputs ++ [ agdaWithPkgs ];
 
       buildPhase =
         if buildPhase != null then
@@ -118,8 +116,7 @@ let
         else
           ''
             runHook preBuild
-            agda ${includePathArgs} ${everythingFile}
-            rm ${everythingFile} ${lib.interfaceFile Agda.version everythingFile}
+            agda --build-library
             runHook postBuild
           '';
 

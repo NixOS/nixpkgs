@@ -40,7 +40,7 @@
   ...
 }@args:
 let
-  cleanedArgs = builtins.removeAttrs args [
+  cleanedArgs = removeAttrs args [
     "pname"
     "name"
     "version"

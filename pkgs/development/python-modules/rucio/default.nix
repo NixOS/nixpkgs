@@ -1,11 +1,13 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
 
   # build-system
+  packaging,
   setuptools,
+  wheel,
 
   # dependencies
   alembic,
@@ -25,50 +27,64 @@
   python-magic,
   redis,
   requests,
+  rich,
   sqlalchemy,
   statsd,
   stomp-py,
   tabulate,
+  typing-extensions,
   urllib3,
 
   # tests
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
-  pname = "rucio";
-  version = "32.8.6";
-  pyproject = true;
+let
+  version = "38.3.0";
 
   src = fetchFromGitHub {
     owner = "rucio";
     repo = "rucio";
     tag = version;
-    hash = "sha256-VQQ4gy9occism1WDrlcHnB7b7D5/G68wKct2PhD59FA=";
+    hash = "sha256-hMFWydOWfpRooOVd1wJ5jDWsdvF2oT1n/SlLj3CM9Qs=";
   };
+in
+buildPythonPackage {
+  pname = "rucio";
+  inherit version src;
+  pyproject = true;
+
+  # future-1.0.0 not supported for interpreter python3.13
+  disabled = pythonAtLeast "3.13";
 
   pythonRelaxDeps = [
     "alembic"
     "argcomplete"
-    "boto3"
     "dogpile.cache"
     "flask"
     "geoip2"
     "google-auth"
     "jsonschema"
     "oic"
+    "packaging"
     "paramiko"
     "prometheus_client"
     "python-dateutil"
     "redis"
     "requests"
+    "rich"
     "sqlalchemy"
     "stomp.py"
+    "typing_extensions"
     "urllib3"
   ];
 
+  pythonRemoveDeps = [ "boto" ];
+
   build-system = [
+    packaging
     setuptools
+    wheel
   ];
 
   dependencies = [
@@ -82,6 +98,7 @@ buildPythonPackage rec {
     google-auth
     jsonschema
     oic
+    packaging
     paramiko
     prometheus-client
     pymemcache
@@ -89,10 +106,12 @@ buildPythonPackage rec {
     python-magic
     redis
     requests
+    rich
     sqlalchemy
     statsd
     stomp-py
     tabulate
+    typing-extensions
     urllib3
   ];
 
@@ -107,7 +126,7 @@ buildPythonPackage rec {
   meta = {
     description = "Tool for Scientific Data Management";
     homepage = "http://rucio.cern.ch/";
-    changelog = "https://github.com/rucio/rucio/releases/tag/${version}";
+    changelog = "https://github.com/rucio/rucio/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ veprbl ];
   };

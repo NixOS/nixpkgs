@@ -71,7 +71,6 @@ rustPlatform.buildRustPackage {
     libtool
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-dLhlYOrLjoBSRGDJB0qTEIb+oGnp9X+ADHddpYITdl8=";
 
   cargoBuildFlags = [ "--features=ffmpeg-system" ];

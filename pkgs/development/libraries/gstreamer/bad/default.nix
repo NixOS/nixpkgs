@@ -24,6 +24,7 @@
   # warning: No decoder available for type 'video/x-h264, stream-format=(string)avc, [...], lcevc=(boolean)false, [...]
   lcevcdecSupport ? false,
   lcevcdec,
+  ldacbtSupport ? lib.meta.availableOn stdenv.hostPlatform ldacbt,
   ldacbt,
   liblc3,
   libass,
@@ -31,6 +32,7 @@
   ladspaH,
   lcms2,
   libnice,
+  webrtcAudioProcessingSupport ? lib.meta.availableOn stdenv.hostPlatform webrtc-audio-processing_1,
   webrtc-audio-processing_1,
   lilv,
   lv2,
@@ -113,7 +115,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-bad";
-  version = "1.26.0";
+  version = "1.26.5";
 
   outputs = [
     "out"
@@ -122,21 +124,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/gst-plugins-bad/gst-plugins-bad-${finalAttrs.version}.tar.xz";
-    hash = "sha256-+Ch6hMX2Y2ilpQ2l+WmZSgLEfyAiD/4coxVBk+Za8hY=";
+    hash = "sha256-mJDyYvOyqVZNy2KenraX13uT0fcYl+2hqBcLfc/nMpQ=";
   };
 
   patches = [
     # Add fallback paths for nvidia userspace libraries
     (replaceVars ./fix-paths.patch {
       inherit (addDriverRunpath) driverLink;
-    })
-
-    # Fix Requires in gstreamer-analytics-1.0.pc
-    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/8661
-    (fetchpatch {
-      url = "https://gitlab.freedesktop.org/gstreamer/gstreamer/-/commit/bc93bbf5c87ec994ea136bb40accc09dfa35ae98.patch";
-      stripLen = 2;
-      hash = "sha256-QQDpHe363iPxTuthITRbLUKaAXS2F9s5zfCn/ps14WE=";
     })
   ];
 
@@ -162,10 +156,8 @@ stdenv.mkDerivation (finalAttrs: {
     orc
     json-glib
     lcms2
-    ldacbt
     liblc3
     libass
-    webrtc-audio-processing_1
     libbs2b
     libmodplug
     openjpeg
@@ -267,6 +259,12 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals lcevcdecSupport [
     lcevcdec
+  ]
+  ++ lib.optionals ldacbtSupport [
+    ldacbt
+  ]
+  ++ lib.optionals webrtcAudioProcessingSupport [
+    webrtc-audio-processing_1
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_gstreamer

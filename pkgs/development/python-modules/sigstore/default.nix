@@ -7,42 +7,42 @@
   flit-core,
   id,
   importlib-resources,
+  nix-update-script,
+  platformdirs,
   pretend,
+  pyasn1,
   pydantic,
   pyjwt,
   pyopenssl,
   pytestCheckHook,
-  pythonOlder,
   requests,
+  rfc3161-client,
+  rfc8785,
   rich,
-  nix-update-script,
   securesystemslib,
+  sigstore-models,
   sigstore-protobuf-specs,
   sigstore-rekor-types,
-  rfc3161-client,
   tuf,
-  rfc8785,
-  pyasn1,
-  platformdirs,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-python";
-  version = "3.6.2";
+  version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "sigstore-python";
     tag = "v${version}";
-    hash = "sha256-fghieYu5TDYwJCwesXbqRiuYCaTTDZhmHWvCwSbIO6w=";
+    hash = "sha256-KAHGg2o5t8qfbvLGTzaVoV7AcMkgi3rXxyOQgSASl7A=";
   };
 
   pythonRelaxDeps = [
     "sigstore-rekor-types"
     "rfc3161-client"
+    "cryptography"
   ];
 
   build-system = [ flit-core ];
@@ -62,6 +62,7 @@ buildPythonPackage rec {
     requests
     rich
     securesystemslib
+    sigstore-models
     sigstore-protobuf-specs
     sigstore-rekor-types
     tuf
@@ -70,11 +71,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pretend
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "sigstore" ];
 

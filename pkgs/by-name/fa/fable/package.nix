@@ -18,7 +18,7 @@ buildDotnetGlobalTool (finalAttrs: {
   };
 
   meta = {
-    description = "Fable is an F# to JavaScript compiler";
+    description = "F# to JavaScript compiler";
     mainProgram = "fable";
     homepage = "https://github.com/fable-compiler/fable";
     changelog = "https://github.com/fable-compiler/fable/releases/tag/v${finalAttrs.version}";

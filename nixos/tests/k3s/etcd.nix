@@ -50,6 +50,7 @@ import ../make-test-python.nix (
           services.k3s = {
             enable = true;
             role = "server";
+            package = k3s;
             extraFlags = [
               "--datastore-endpoint=\"http://192.168.1.1:2379\""
               "--disable coredns"
@@ -82,46 +83,43 @@ import ../make-test-python.nix (
         };
     };
 
-    testScript = ''
-      with subtest("should start etcd"):
-          etcd.start()
-          etcd.wait_for_unit("etcd.service")
+    testScript = # python
+      ''
+        with subtest("should start etcd"):
+            etcd.start()
+            etcd.wait_for_unit("etcd.service")
 
-      with subtest("should wait for etcdctl endpoint status to succeed"):
-          etcd.wait_until_succeeds("etcdctl endpoint status")
+        with subtest("should wait for etcdctl endpoint status to succeed"):
+            etcd.wait_until_succeeds("etcdctl endpoint status")
 
-      with subtest("should wait for etcdctl endpoint health to succeed"):
-          etcd.wait_until_succeeds("etcdctl endpoint health")
+        with subtest("should wait for etcdctl endpoint health to succeed"):
+            etcd.wait_until_succeeds("etcdctl endpoint health")
 
-      with subtest("should start k3s"):
-          k3s.start()
-          k3s.wait_for_unit("k3s")
+        with subtest("should start k3s"):
+            k3s.start()
+            k3s.wait_for_unit("k3s")
 
-      with subtest("should test if kubectl works"):
-          k3s.wait_until_succeeds("k3s kubectl get node")
+        with subtest("should test if kubectl works"):
+            k3s.wait_until_succeeds("k3s kubectl get node")
 
-      with subtest("should wait for service account to show up; takes a sec"):
-          k3s.wait_until_succeeds("k3s kubectl get serviceaccount default")
+        with subtest("should wait for service account to show up; takes a sec"):
+            k3s.wait_until_succeeds("k3s kubectl get serviceaccount default")
 
-      with subtest("should create a sample secret object"):
-          k3s.succeed("k3s kubectl create secret generic nixossecret --from-literal thesecret=abacadabra")
+        with subtest("should create a sample secret object"):
+            k3s.succeed("k3s kubectl create secret generic nixossecret --from-literal thesecret=abacadabra")
 
-      with subtest("should check if secret is correct"):
-          k3s.wait_until_succeeds("[[ $(kubectl get secrets nixossecret -o json | jq -r .data.thesecret | base64 -d) == abacadabra ]]")
+        with subtest("should check if secret is correct"):
+            k3s.wait_until_succeeds("[[ $(kubectl get secrets nixossecret -o json | jq -r .data.thesecret | base64 -d) == abacadabra ]]")
 
-      with subtest("should have a secret in database"):
-          etcd.wait_until_succeeds("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")
+        with subtest("should have a secret in database"):
+            etcd.wait_until_succeeds("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")
 
-      with subtest("should delete the secret"):
-          k3s.succeed("k3s kubectl delete secret nixossecret")
+        with subtest("should delete the secret"):
+            k3s.succeed("k3s kubectl delete secret nixossecret")
 
-      with subtest("should not have a secret in database"):
-          etcd.wait_until_fails("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")
-
-      with subtest("should shutdown k3s and etcd"):
-          k3s.shutdown()
-          etcd.shutdown()
-    '';
+        with subtest("should not have a secret in database"):
+            etcd.wait_until_fails("[[ $(etcdctl get /registry/secrets/default/nixossecret | head -c1 | wc -c) -ne 0 ]]")
+      '';
 
     meta.maintainers = etcd.meta.maintainers ++ lib.teams.k3s.members;
   }

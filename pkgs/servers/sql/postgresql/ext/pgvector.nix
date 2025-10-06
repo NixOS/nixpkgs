@@ -7,13 +7,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "pgvector";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "pgvector";
     repo = "pgvector";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JsZV+I4eRMypXTjGmjCtMBXDVpqTIPHQa28ogXncE/Q=";
+    hash = "sha256-4EqazYWstczL9T3YFqq2gtbcKIj6zWU8ItYt2nnwPYo=";
   };
 
   meta = {

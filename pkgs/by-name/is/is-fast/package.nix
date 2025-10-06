@@ -11,17 +11,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "is-fast";
-  version = "0.17.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "Magic-JD";
     repo = "is-fast";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jMRoGGvyKgtu4j9alF9aXfNA/1WOa24CTI0bWZo44Ag=";
+    hash = "sha256-Wy5twHlCAlf/W12Y9a/IVFbsLuc8hkhH+5pBoL6Av0Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-UzB6lKXPbN/iUZ2e/ApxTdnu7/nYhvvSIUwGxSopNZ4=";
+  cargoHash = "sha256-EsB/Z8HwhYBQ8HDia0IJU3U0k9ZnR558Yrv1sYLUAZ0=";
 
   nativeBuildInputs = [ pkg-config ];
 

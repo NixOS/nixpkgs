@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "jkbonfield";
     repo = "io_lib";
-    rev = "io_lib-" + builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
+    tag = "io_lib-" + builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-X96gFrefH2NAp4+fvVLXHP9FbF04gQOWLm/tAFJPgR8=";
   };

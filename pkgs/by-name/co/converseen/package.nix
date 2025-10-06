@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "converseen";
-  version = "0.14.0.0";
+  version = "0.15.0.3";
 
   src = fetchFromGitHub {
     owner = "Faster3ck";
     repo = "Converseen";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-i7r6AyOk+WtMjlDc5/tDvaUV6yMKaQ7xZ9z9s+KBmts=";
+    hash = "sha256-ZC7D+0tonAIkbDaoqw+RarIVuNcDQe410JrfC2kG+B8=";
   };
 
   strictDeps = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://converseen.fasterland.net/";
     changelog = "https://github.com/Faster3ck/Converseen/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "converseen";
     platforms = lib.platforms.all;
   };

@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if enablePython then "python-gdcm" else "gdcm";
-  version = "3.0.26";
+  version = "3.2.1";
 
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GuTxFgK5nfP4l36uqSOMrOkiwTi/T2ywcLh4LDNkKsI=";
+    hash = "sha256-V1UPfRlNIDZa/N9wQ6wu8uCFH6bw8Y6jomy7BB4SNEA=";
   };
 
   patches = [
@@ -34,13 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix vtk deprecated api, See https://docs.vtk.org/en/latest/release_details/9.3.html#id13.
     # Upstream mailing list: https://sourceforge.net/p/gdcm/mailman/message/59197515.
     ./fix-vtk-deprecated-api.patch
-  ]
-  ++ lib.optionals (lib.versionOlder vtk.version "9.3") [
-    (fetchpatch2 {
-      url = "https://github.com/malaterre/GDCM/commit/3be6c2fa0945c91889bcf06e8c20e88f69692dd5.patch?full_index=1";
-      hash = "sha256-Yt5f4mxhP5n+L0A/CRq3CxKCqUT7LZ8uKdbCf9P71Zc=";
-      revert = true;
-    })
   ];
 
   cmakeFlags = [
@@ -128,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       bsd3
       asl20
     ];
-    maintainers = with lib.maintainers; [ tfmoraes ];
+    maintainers = with lib.maintainers; [ bcdarwin ];
     platforms = lib.platforms.all;
   };
 })

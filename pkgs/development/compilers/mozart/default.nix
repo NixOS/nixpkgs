@@ -5,7 +5,7 @@
   cmake,
   unzip,
   makeWrapper,
-  boost,
+  boost183,
   llvmPackages,
   gmp,
   emacs,
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    boost
+    boost183
     gmp
     emacs
     jre_headless

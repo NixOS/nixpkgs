@@ -26,14 +26,14 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "pre-commit";
-  version = "4.2.0";
+  version = "4.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
     tag = "v${version}";
-    hash = "sha256-rUhI9NaxyRfLu/mfLwd5B0ybSnlAQV2Urx6+fef0sGM=";
+    hash = "sha256-vypzvO00pic5F7c3D3ABBMXLrBSEB9n6og3EsBLZNCs=";
   };
 
   patches = [
@@ -220,7 +220,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Framework for managing and maintaining multi-language pre-commit hooks";
     homepage = "https://pre-commit.com/";
-    changelog = "https://github.com/pre-commit/pre-commit/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/pre-commit/pre-commit/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ borisbabic ];
     mainProgram = "pre-commit";

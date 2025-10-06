@@ -8,6 +8,7 @@
   ninja,
   qt5,
   shiboken2,
+  withWebengine ? false, # vulnerable, so omit by default
 }:
 stdenv.mkDerivation rec {
   pname = "pyside2";
@@ -67,13 +68,15 @@ stdenv.mkDerivation rec {
       qtlocation
       qtscript
       qtwebsockets
-      qtwebengine
       qtwebchannel
       qtcharts
       qtsensors
       qtsvg
       qt3d
     ])
+    ++ lib.optionals withWebengine [
+      qt5.qtwebengine
+    ]
     ++ (with python.pkgs; [ setuptools ])
     ++ (lib.optionals (python.pythonOlder "3.9") [
       # see similar issue: 202262
@@ -95,7 +98,7 @@ stdenv.mkDerivation rec {
     description = "LGPL-licensed Python bindings for Qt";
     license = licenses.lgpl21;
     homepage = "https://wiki.qt.io/Qt_for_Python";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;
   };

@@ -18,19 +18,17 @@
 
 buildPythonPackage rec {
   pname = "rich-toolkit";
-  version = "0.14.6";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "patrick91";
     repo = "rich-toolkit";
-    tag = "v${version}";
-    hash = "sha256-SHQZ0idEx/zDEtP0xQoJg7eUT8+SqLdWljxfTgXzjkk=";
+    tag = version;
+    hash = "sha256-NcdABfbqE+VzE6bptBO98Cf7jetlfVqa/LB5Chg/P8Y=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -43,15 +41,13 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonImportsCheck = [
-    "rich_toolkit"
-  ];
+  pythonImportsCheck = [ "rich_toolkit" ];
 
   meta = {
     changelog = "https://github.com/patrick91/rich-toolkit/releases/tag/${src.tag}";
     description = "Rich toolkit for building command-line applications";
-    homepage = "https://pypi.org/project/rich-toolkit";
+    homepage = "https://github.com/patrick91/rich-toolkit/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

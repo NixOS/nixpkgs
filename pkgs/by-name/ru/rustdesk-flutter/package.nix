@@ -29,11 +29,12 @@
   cargo-expand,
   yq,
   callPackage,
+  addDriverRunpath,
 }:
 let
   flutterRustBridge = rustPlatform.buildRustPackage rec {
     pname = "flutter_rust_bridge_codegen";
-    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.3.2/.github/workflows/bridge.yml#L10
+    version = "1.80.1"; # https://github.com/rustdesk/rustdesk/blob/1.4.1/.github/workflows/bridge.yml#L10
 
     src = fetchFromGitHub {
       owner = "fzyzcjy";
@@ -46,7 +47,6 @@ let
       ./update-flutter-dev-path.patch
     ];
 
-    useFetchCargoVendor = true;
     cargoHash = "sha256-4khuq/DK4sP98AMHyr/lEo1OJdqLujOIi8IgbKBY60Y=";
     cargoBuildFlags = [
       "--package"
@@ -64,14 +64,14 @@ let
 in
 flutter.buildFlutterApplication rec {
   pname = "rustdesk";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "rustdesk";
     repo = "rustdesk";
     tag = version;
     fetchSubmodules = true;
-    hash = "sha256-fuS2ENrMlzk1AIZGZp4M3ZbsHks5TFW2pRQEGzsTThQ=";
+    hash = "sha256-nS8KjLzgdzgvn5mM1lJL2vFk0g/ZUZBvdkjyC+MdHDE=";
   };
 
   strictDeps = true;
@@ -79,7 +79,7 @@ flutter.buildFlutterApplication rec {
 
   # Configure the Flutter/Dart build
   sourceRoot = "${src.name}/flutter";
-  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.3.9/flutter/pubspec.lock | yq > pubspec.lock.json
+  # curl https://raw.githubusercontent.com/rustdesk/rustdesk/1.4.1/flutter/pubspec.lock | yq > pubspec.lock.json
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = {
     dash_chat_2 = "sha256-J5Bc6CeCoRGN870aNEVJ2dkQNb+LOIZetfG2Dsfz5Ow=";
@@ -101,7 +101,7 @@ flutter.buildFlutterApplication rec {
       src
       patches
       ;
-    hash = "sha256-9DjfGfTs8/J9XPZmWXCibyRib1/abnWzznQn6A5Tw2I=";
+    hash = "sha256-ecLR6cMVDrTKeoTE5Yxkw5dN4ceAm+RD7BVXwIQ1fnk=";
   };
 
   dontCargoBuild = true;
@@ -205,6 +205,7 @@ flutter.buildFlutterApplication rec {
   '';
 
   extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : ${addDriverRunpath.driverLink}/lib \
     --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 

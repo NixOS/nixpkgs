@@ -74,6 +74,8 @@ buildPythonPackage rec {
     homepage = "https://github.com/fonttools/skia-pathops";
     license = lib.licenses.bsd3;
     maintainers = [ lib.maintainers.BarinovMaxim ];
+    # "The Skia team is not endian-savvy enough to support big-endian CPUs."
+    badPlatforms = lib.platforms.bigEndian;
     # ERROR at //gn/BUILDCONFIG.gn:87:14: Script returned non-zero exit code.
     broken = isPyPy;
   };

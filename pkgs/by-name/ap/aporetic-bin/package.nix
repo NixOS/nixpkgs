@@ -33,7 +33,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
       DamienCassou
-      drupol
     ];
   };
 })

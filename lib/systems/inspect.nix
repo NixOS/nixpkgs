@@ -337,12 +337,15 @@ rec {
       kernel = kernels.windows;
     };
     isCygwin = {
-      kernel = kernels.windows;
-      abi = abis.cygnus;
+      kernel = kernels.cygwin;
     };
     isMinGW = {
       kernel = kernels.windows;
       abi = abis.gnu;
+    };
+    isMsvc = {
+      kernel = kernels.windows;
+      abi = abis.msvc;
     };
     isWasi = {
       kernel = kernels.wasi;

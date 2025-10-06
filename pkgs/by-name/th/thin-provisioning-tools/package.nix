@@ -7,29 +7,32 @@
   fetchFromGitHub,
   nixosTests,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "thin-provisioning-tools";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "jthornber";
     repo = "thin-provisioning-tools";
     rev = "v${version}";
-    hash = "sha256-gjsURDzA4LRTTgKZPzzTcvTdi1mXx4FkWmyoPcpdPfU=";
+    hash = "sha256-JnibI3txqPXwEemLtgtfe6NAZrOX09p0w4sp9/HEXBQ=";
   };
 
-  nativeBuildInputs = [
+  strictDeps = true;
+  depsBuildBuild = [
     pkg-config
+    lvm2
+    udev
+  ];
+  nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
   buildInputs = [
-    udev
     lvm2
+    udev
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-H5GRAZpFl2t/bH8THyPkZq5ptS70XkhSCxQ6ko+0RC8=";
+  cargoHash = "sha256-1spipVIT49G0l6yLyv3/7jsR2xyJQPjtB5vouyAjpgA=";
 
   passthru.tests = {
     inherit (nixosTests.lvm2) lvm-thinpool-linux-latest;

@@ -59,6 +59,11 @@ stdenv.mkDerivation rec {
     # Heap buffer overflow that's been here since coreutils 7.2 in 2009:
     # https://www.openwall.com/lists/oss-security/2025/05/27/2
     ./CVE-2025-5278.patch
+
+    # Fixes test-float-h failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    # Multiple upstream commits squashed with adjustments, see header
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
   ];
 
   postPatch = ''
@@ -100,6 +105,11 @@ stdenv.mkDerivation rec {
       echo "int main() { return 77; }" > "$f"
     done
 
+    # These tests sometimes fail on ZFS-backed NFS filesystems
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-file-has-acl-1.sh
+    sed '2i echo "Skipping test: fails on zfs " && exit 77' -i gnulib-tests/test-set-mode-acl-1.sh
+    sed '2i echo "Skipping test: ls/removed-directory" && exit 77' -i ./tests/ls/removed-directory.sh
+
     # intermittent failures on builders, unknown reason
     sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
 
@@ -117,7 +127,15 @@ stdenv.mkDerivation rec {
   + (optionalString stdenv.hostPlatform.isAarch64 ''
     # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
     sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
-  '');
+  '')
+  + (optionalString stdenv.hostPlatform.isPower64
+    # test command fails to parse long fraction part on ppc64
+    # When fraction parsing is fixed, still wrong output due to fraction length mismatch
+    # https://debbugs.gnu.org/cgi/bugreport.cgi?bug=78985
+    ''
+      sed '2i echo Skipping float sort-ing test && exit 77' -i ./tests/sort/sort-float.sh
+    ''
+  );
 
   outputs = [
     "out"

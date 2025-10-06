@@ -2,7 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  llvm_17,
+  llvm,
   libffi,
   libz,
   libxml2,
@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-jVfAfR02R2RaTtzFSBoLuq/wdPaaI/eochrZaRVdmHY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-IOMhwcZHB5jVYDM65zifxCjVHWl1EBbxNA3WVmarWcs=";
 
   buildInputs = [
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    llvm_17
+    llvm
     makeWrapper
   ];
 
@@ -62,6 +61,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       simple = callPackage ./test.nix { };
     };
   };
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Language for building concurrent software with confidence";

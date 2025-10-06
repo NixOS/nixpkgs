@@ -204,6 +204,44 @@ let
       // {
         meta = { };
       };
+
+    preserves-binary-data =
+      (derivation {
+        name = "preserves-binary-data";
+        system = stdenv.buildPlatform.system;
+        builder = "${stdenv.__bootPackages.stdenv.__bootPackages.bashNonInteractive}/bin/bash";
+        initialPath = [
+          stdenv.__bootPackages.stdenv.__bootPackages.coreutils
+        ];
+        strictDeps = false;
+        args = [
+          "-c"
+          ''
+            set -euo pipefail
+            . ${../../stdenv/generic/setup.sh}
+            . ${../../build-support/setup-hooks/patch-shebangs.sh}
+            mkdir -p $out/bin
+            # Create a script with binary data after the shebang
+            echo "#!/bin/bash" > $out/bin/test
+            echo "echo 'script start'" >> $out/bin/test
+            # Add some binary data (null bytes and other non-printable chars)
+            printf '\x00\x01\x02\xff\xfe' >> $out/bin/test
+            echo >> $out/bin/test
+            echo "echo 'script end'" >> $out/bin/test
+            chmod +x $out/bin/test
+            patchShebangs $out/bin/test
+            # Verify binary data is still present by checking file size and content
+            if ! printf '\x00\x01\x02\xff\xfe' | cmp -s - <(sed -n '3p' $out/bin/test | tr -d '\n'); then
+              echo "Binary data corrupted during patching"
+              exit 1
+            fi
+          ''
+        ];
+        assertion = "grep '^#!${stdenv.shell}' $out/bin/test > /dev/null";
+      })
+      // {
+        meta = { };
+      };
   };
 in
 stdenv.mkDerivation {
@@ -219,6 +257,7 @@ stdenv.mkDerivation {
       read-only-script
       preserves-read-only
       preserves-timestamp
+      preserves-binary-data
       ;
   };
   buildCommand = ''

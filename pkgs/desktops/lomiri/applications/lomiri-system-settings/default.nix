@@ -198,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "System Settings application for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-system-settings";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = licenses.gpl3Only;
     mainProgram = "lomiri-system-settings";

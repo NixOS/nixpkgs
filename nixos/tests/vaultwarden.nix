@@ -69,7 +69,7 @@ let
               driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_new-password').send_keys(
                   '${userPassword}'
               )
-              driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_confirm-new-password').send_keys(
+              driver.find_element(By.CSS_SELECTOR, 'input#input-password-form_new-password-confirm').send_keys(
                   '${userPassword}'
               )
               if driver.find_element(By.XPATH, '//input[@formcontrolname="checkForBreaches"]').is_selected():

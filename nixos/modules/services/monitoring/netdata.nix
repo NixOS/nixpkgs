@@ -412,8 +412,6 @@ in
       });
     };
 
-    systemd.enableCgroupAccounting = true;
-
     security.wrappers = {
       "apps.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/apps.plugin.org";
@@ -442,14 +440,6 @@ in
       "perf.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/perf.plugin.org";
         capabilities = "cap_sys_admin+ep";
-        owner = cfg.user;
-        group = cfg.group;
-        permissions = "u+rx,g+x,o-rwx";
-      };
-
-      "systemd-journal.plugin" = {
-        source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
-        capabilities = "cap_dac_read_search,cap_syslog+ep";
         owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
@@ -487,6 +477,15 @@ in
         source = "${cfg.package}/libexec/netdata/plugins.d/ndsudo.org";
         setuid = true;
         owner = "root";
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+    }
+    // lib.optionalAttrs (cfg.package.withSystemdJournal) {
+      "systemd-journal.plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/systemd-journal.plugin.org";
+        capabilities = "cap_dac_read_search,cap_syslog+ep";
+        owner = cfg.user;
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
       };

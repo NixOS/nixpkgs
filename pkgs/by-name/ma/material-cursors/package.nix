@@ -8,7 +8,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "material-cursors";
-  version = "unstable-2023-11-30";
+  version = "0-unstable-2023-11-30";
 
   src = fetchFromGitHub {
     owner = "varlesh";
@@ -38,6 +38,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/varlesh/material-cursors";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

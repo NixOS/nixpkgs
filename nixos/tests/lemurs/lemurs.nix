@@ -11,6 +11,8 @@
     ];
   };
 
+  enableOCR = true;
+
   nodes.machine = _: {
     imports = [ ../common/user-account.nix ];
     services.displayManager.lemurs.enable = true;
@@ -20,7 +22,7 @@
     machine.start()
 
     machine.wait_for_unit("multi-user.target")
-    machine.wait_until_succeeds("pgrep -f 'lemurs.*tty1'")
+    machine.wait_for_text("Login")
     machine.screenshot("postboot")
 
     with subtest("Log in as alice on a virtual console"):

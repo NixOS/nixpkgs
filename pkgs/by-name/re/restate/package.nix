@@ -25,17 +25,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "restate";
-  version = "1.4.2";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "restatedev";
     repo = "restate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0p3pH2lQnb3oOsGtKP8olVUefobGa3DsnB2LMx06+no=";
+    hash = "sha256-NMT1/Oy0EmAtGqHMK3FL/MZczKz//hXkpKWhQ4S3tLw=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9EeS599rZLLKkdBS1bTX7y7CTmeTBlgHZ8c0WBlbZmk=";
+  cargoHash = "sha256-M7p20eeaxijlGjYBAAwmK4y/58eo7NysoK+Gvs86SNo=";
 
   env = {
     PROTOC = lib.getExe protobuf;
@@ -52,22 +51,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
             "-C force-unwind-tables"
             "--cfg uuid_unstable"
             "--cfg tokio_unstable"
-            "--cfg tokio_taskdump"
           ];
 
           "aarch64-unknown-linux-gnu" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
+            "--cfg tokio_taskdump"
           ];
 
           "x86_64-unknown-linux-musl" = self.build ++ [
             "-C link-self-contained=yes"
+            "--cfg tokio_taskdump"
           ];
 
           "aarch64-unknown-linux-musl" = self.build ++ [
             # Enable frame pointers to support Parca (https://github.com/parca-dev/parca-agent/pull/1805)
             "-C force-frame-pointers=yes"
             "-C link-self-contained=yes"
+            "--cfg tokio_taskdump"
           ];
         });
       in

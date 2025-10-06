@@ -6,11 +6,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "mountain-duck";
-  version = "4.14.1.21330";
+  version = "5.0.2.28022";
 
   src = fetchurl {
     url = "https://dist.mountainduck.io/Mountain%20Duck-${finalAttrs.version}.zip";
-    sha256 = "0wcnqwzrhzgjpm7pqzbn4fbnwc5rnmw56gma0a1961d5j9vqcs49";
+    sha256 = "sha256-QismxRiDN6AfzaR8/WZq4O9Wj7knMXhGtIWjkhg/rAQ=";
   };
   dontUnpack = true;
 
@@ -30,7 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://mountainduck.io";
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [
+      emilytrau
+      iedame
+    ];
     platforms = platforms.darwin;
   };
 })

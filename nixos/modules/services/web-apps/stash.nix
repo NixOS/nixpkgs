@@ -221,7 +221,7 @@ let
       dangerous_allow_public_without_auth = mkOption {
         type = types.bool;
         default = false;
-        description = "Learn more at https://docs.stashapp.cc/networking/authentication-required-when-accessing-stash-from-the-internet/";
+        description = "Learn more at <https://docs.stashapp.cc/networking/authentication-required-when-accessing-stash-from-the-internet/>";
       };
       gallery_cover_regex = mkOption {
         type = types.str;
@@ -276,7 +276,7 @@ let
       security_tripwire_accessed_from_public_internet = mkOption {
         type = types.nullOr types.str;
         default = "";
-        description = "Learn more at https://docs.stashapp.cc/networking/authentication-required-when-accessing-stash-from-the-internet/";
+        description = "Learn more at <https://docs.stashapp.cc/networking/authentication-required-when-accessing-stash-from-the-internet/>";
       };
       sequential_scanning = mkOption {
         type = types.bool;

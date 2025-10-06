@@ -3,29 +3,38 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   gpytorch,
   linear-operator,
   multipledispatch,
   pyre-extensions,
   pyro-ppl,
-  setuptools,
-  setuptools-scm,
-  torch,
   scipy,
+  torch,
+
+  # optional-dependencies
+  pymoo,
+
+  # tests
   pytestCheckHook,
   pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.14.0";
+  version = "0.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "botorch";
     tag = "v${version}";
-    hash = "sha256-IyRi5kXePnDv2q6SrXLtdltQ1/2/zQ3EBx5phtuX8sE=";
+    hash = "sha256-6hAsKIlwycZtLZn1vkcu4fR85uACA4FSkT5e/wos17A=";
   };
 
   build-system = [
@@ -42,6 +51,12 @@ buildPythonPackage rec {
     scipy
     torch
   ];
+
+  optional-dependencies = {
+    pymoo = [
+      pymoo
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

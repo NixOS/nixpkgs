@@ -346,6 +346,9 @@ stdenvNoCC.mkDerivation {
           }
         fi
       ''
+      + optionalString (libc.w32api or null != null) ''
+        echo '-L${lib.getLib libc.w32api}${libc.libdir or "/lib/w32api"}' >> $out/nix-support/libc-ldflags
+      ''
     )
 
     ##
@@ -478,7 +481,7 @@ stdenvNoCC.mkDerivation {
       libc_dev
       libc_lib
       ;
-    default_hardening_flags_str = builtins.toString defaultHardeningFlags;
+    default_hardening_flags_str = toString defaultHardeningFlags;
   }
   // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
     # These will become empty strings when not targeting Darwin.

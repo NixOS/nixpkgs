@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "evaluate";
-  version = "0.4.4";
+  version = "0.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "huggingface";
     repo = "evaluate";
     tag = "v${version}";
-    hash = "sha256-zN0Kud4CJMM5gazWKOR9kmwTVHYgT7DsZqbHjFIe47w=";
+    hash = "sha256-wK50bPJSwCNFJO0l6+15+GrbaFQNfAr/djn9JTOlwpw=";
   };
 
   build-system = [ setuptools ];

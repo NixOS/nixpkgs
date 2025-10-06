@@ -18,7 +18,7 @@
   pygobject3,
   pyopenssl,
   qrcode,
-  pytest-asyncio,
+  pytest-asyncio_0,
   python-snappy,
   pytestCheckHook,
   pythonOlder,
@@ -34,8 +34,6 @@ buildPythonPackage rec {
   pname = "autobahn";
   version = "24.4.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "crossbario";
@@ -63,7 +61,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     mock
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
   ]
   ++ optional-dependencies.scram
@@ -74,9 +72,12 @@ buildPythonPackage rec {
     export USE_ASYNCIO=1
   '';
 
-  pytestFlagsArray = [
-    "--ignore=./autobahn/twisted"
+  enabledTestPaths = [
     "./autobahn"
+  ];
+
+  disabledTestPaths = [
+    "./autobahn/twisted"
   ];
 
   pythonImportsCheck = [ "autobahn" ];

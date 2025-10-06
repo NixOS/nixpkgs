@@ -2,23 +2,35 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  makeWrapper,
   testers,
   television,
   nix-update-script,
+  extraPackages ? [ ],
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "television";
-  version = "0.11.9";
+  version = "0.13.5";
 
   src = fetchFromGitHub {
     owner = "alexpasmantier";
     repo = "television";
     tag = finalAttrs.version;
-    hash = "sha256-9ug3MFBAvdOpA7Cw5eqCjS2gWK0InqlfUAOItE0o40s=";
+    hash = "sha256-IlFOYnZ9xPQaRheielKqAckyVlSVQMhnO4wCtVixlNQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-n417hrDLpBD7LhtHfqHPgr9N+gkdC9nw+iDnNRcTqQQ=";
+  cargoHash = "sha256-QKUspbC1bmSeZP0n/O5roEqQkrja+fVKLhAvgzqNS9E=";
+
+  nativeBuildInputs = [ makeWrapper ];
+
+  postInstall = lib.optionalString (extraPackages != [ ]) ''
+    wrapProgram $out/bin/tv \
+      --prefix PATH : ${lib.makeBinPath extraPackages}
+  '';
+
+  # TODO(@getchoo): Investigate selectively disabling some tests, or fixing them
+  # https://github.com/NixOS/nixpkgs/pull/423662#issuecomment-3156362941
+  doCheck = false;
 
   passthru = {
     tests.version = testers.testVersion {

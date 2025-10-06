@@ -64,8 +64,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  pytestFlags = [ "--verbose" ];
+
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "tests/fast" ];
+  pytestFlagsArray = [ "--verbose" ];
+  enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
     # avoid dependency on mypy
@@ -84,6 +87,9 @@ buildPythonPackage rec {
     # causing a later test to fail with a spurious KeyboardInterrupt
     "test_connection_interrupt"
     "test_query_interruption"
+
+    # flaky due to a race condition in checking whether a thread is alive
+    "test_query_progress"
   ];
 
   # remove duckdb dir to prevent import confusion by pytest

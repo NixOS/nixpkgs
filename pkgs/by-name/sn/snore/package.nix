@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
-    description = "sleep with feedback";
+    description = "'sleep' with feedback";
     homepage = "https://github.com/clamiax/snore";
     license = licenses.mit;
     maintainers = with maintainers; [ cafkafk ];

@@ -91,9 +91,9 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # this file tries importing `deepspeed`, which is not yet packaged in nixpkgs
-    "--ignore=tests/test_huggingface_api.py"
+    "tests/test_huggingface_api.py"
   ];
 
   disabledTests = [

@@ -127,7 +127,7 @@ let
     };
   };
 
-  beamDeps = builtins.removeAttrs allBeamDeps [
+  beamDeps = removeAttrs allBeamDeps [
     "sqlite3"
     "p1_pgsql"
     "p1_mysql"
@@ -141,7 +141,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ejabberd";
-  version = "25.04";
+  version = "25.08";
 
   nativeBuildInputs = [
     makeWrapper
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "processone";
     repo = "ejabberd";
     tag = finalAttrs.version;
-    hash = "sha256-BIt5kLEtvMUlyntQ98Mgidmo6lJHbt/LJYrbxPaJxPo=";
+    hash = "sha256-nipFr4ezo2prlpLfAW8iu8HAG8nhkIXXiAbsoM7QKTM=";
   };
 
   passthru.tests = {
@@ -222,8 +222,8 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       sander
-      abbradar
       chuangzhu
+      toastal
     ];
   };
 })

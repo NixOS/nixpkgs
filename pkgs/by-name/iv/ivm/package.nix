@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   cargo,
-  llvm_16,
+  llvm,
   stdenv,
   libffi,
   libz,
@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage (finalAttr: {
     hash = "sha256-pqqUvHK6mPrK1Mir2ILANxtih9OrAKDJPE0nRWc5JOY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-voUucoSLsKn0QhCpr52U8x9K4ykkx7iQ3SsHfjrXu+Q=";
 
   buildInputs = [
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttr: {
       --prefix PATH : ${
         lib.makeBinPath [
           cargo
-          llvm_16.dev
+          llvm.dev
           stdenv.cc
         ]
       } \

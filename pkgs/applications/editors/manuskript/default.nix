@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "manuskript";
     owner = "olivierkes";
     tag = version;
     hash = "sha256-jOhbN6lMx04q60S0VOABmSNE/x9Er9exFYvWJe2INlE=";
@@ -29,15 +29,15 @@ python3Packages.buildPythonApplication rec {
 
   patchPhase = ''
     substituteInPlace manuskript/ui/welcome.py \
-      --replace sample-projects $out/share/${pname}/sample-projects
+      --replace sample-projects $out/share/manuskript/sample-projects
   '';
 
   buildPhase = "";
 
   installPhase = ''
-    mkdir -p $out/share/${pname}
+    mkdir -p $out/share/manuskript
     cp -av  bin/ i18n/ libs/ manuskript/ resources/ icons/ $out
-    cp -r sample-projects/ $out/share/${pname}
+    cp -r sample-projects/ $out/share/manuskript
   '';
 
   postFixup = ''

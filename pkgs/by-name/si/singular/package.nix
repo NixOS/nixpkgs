@@ -15,7 +15,7 @@
   sharutils,
   file,
   getconf,
-  flint3,
+  flint,
   ntl,
   mpfr,
   cddlib,
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
     # if a release is tagged (which sometimes does not happen), it will
     # be in the format below.
-    rev = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
+    tag = "Release-${lib.replaceStrings [ "." ] [ "-" ] version}";
     hash = "sha256-vrRIirWQLbbe1l07AqqHK/StWo0egKuivdKT5R8Rx58=";
 
     # the repository's .gitattributes file contains the lines "/Tst/
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-gfanlib"
     "--with-ntl=${ntl}"
-    "--with-flint=${flint3}"
+    "--with-flint=${flint}"
   ]
   ++ lib.optionals enableDocs [
     "--enable-doc-build"
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # necessary
     gmp
-    flint3
+    flint
     # by upstream recommended but optional
     ncurses
     readline

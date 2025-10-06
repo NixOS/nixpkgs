@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "pgf-umlcd";
-  version = "unstable-2020-05-28";
+  version = "0-unstable-2020-05-28";
 
   src = fetchFromGitHub {
     owner = "pgf-tikz";
@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/pgf-tikz/pgf-umlsd";
     description = "Some LaTeX macros for UML Sequence Diagrams";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -18,7 +18,6 @@
   ninja,
   testers,
   useCmakeBuild ? (!ocamlBindings), # TODO: remove gnu make build once cmake supports ocaml
-  ...
 }:
 
 assert pythonBindings -> !stdenv.hostPlatform.isStatic;
@@ -29,13 +28,13 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "z3";
-  version = "4.15.1";
+  version = "4.15.3";
 
   src = fetchFromGitHub {
     owner = "Z3Prover";
     repo = "z3";
     rev = "z3-${finalAttrs.version}";
-    hash = "sha256-mzU21AlKjC5406lQXfBSz/AIwo/1FThqap5JgldkAgQ=";
+    hash = "sha256-Lw037Z0t0ySxkgMXkbjNW5CB4QQLRrrSEBsLJqiomZ4=";
   };
 
   patches = lib.optionals useCmakeBuild [

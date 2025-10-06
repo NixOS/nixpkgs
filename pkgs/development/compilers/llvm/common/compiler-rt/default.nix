@@ -41,16 +41,13 @@ let
   # TODO: Make this account for GCC having libstdcxx, which will help
   # use clean up the `cmakeFlags` rats nest below.
   haveLibcxx = stdenv.cc.libcxx != null;
-  isDarwinStatic =
-    stdenv.hostPlatform.isDarwin
-    && stdenv.hostPlatform.isStatic
-    && lib.versionAtLeast release_version "16";
+  isDarwinStatic = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isStatic;
   inherit (stdenv.hostPlatform) isMusl isAarch64 isWindows;
   noSanitizers = !haveLibc || bareMetal || isMusl || isDarwinStatic || isWindows;
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "compiler-rt${lib.optionalString (haveLibc) "-libc"}";
+  pname = "compiler-rt${lib.optionalString haveLibc "-libc"}";
   inherit version;
 
   src =
@@ -58,8 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
       runCommand "compiler-rt-src-${version}" { inherit (monorepoSrc) passthru; } (
         ''
           mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
           cp -r ${monorepoSrc}/cmake "$out"
         ''
         + lib.optionalString (lib.versionAtLeast release_version "21") ''
@@ -74,76 +69,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/compiler-rt";
 
-  patches =
-    lib.optional (lib.versionOlder release_version "15") (getVersionFile "compiler-rt/codesign.patch") # Revert compiler-rt commit that makes codesign mandatory
-    ++ [
-      (getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
-      # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
-      # extra `/`.
-      (getVersionFile "compiler-rt/normalize-var.patch")
-      # Fix build on armv6l
-      ./armv6-no-ldrexd-strexd.patch
-    ]
-    ++ lib.optional (lib.versions.major release_version == "12") (fetchpatch {
-      # fixes the parallel build on aarch64 darwin
-      name = "fix-symlink-race-aarch64-darwin.patch";
-      url = "https://github.com/llvm/llvm-project/commit/b31080c596246bc26d2493cfd5e07f053cf9541c.patch";
-      relative = "compiler-rt";
-      hash = "sha256-Cv2NC8402yU7QaTR6TzdH+qyWRy+tTote7KKWtKRWFQ=";
-    })
-    ++ lib.optional (
-      lib.versions.major release_version == "12"
-      || (lib.versionAtLeast release_version "14" && lib.versionOlder release_version "18")
-    ) (getVersionFile "compiler-rt/gnu-install-dirs.patch")
-    ++
-      lib.optional (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
-        (fetchpatch {
-          name = "cfi_startproc-after-label.patch";
-          url = "https://github.com/llvm/llvm-project/commit/7939ce39dac0078fef7183d6198598b99c652c88.patch";
-          stripLen = 1;
-          hash = "sha256-tGqXsYvUllFrPa/r/dsKVlwx5IrcJGccuR1WAtUg7/o=";
-        })
-    ++
-      lib.optional (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
-        # Prevent a compilation error on darwin
-        (getVersionFile "compiler-rt/darwin-targetconditionals.patch")
-    # TODO: make unconditional and remove in <15 section below. Causes rebuilds.
-    ++ lib.optionals (lib.versionAtLeast release_version "15") [
-      # See: https://github.com/NixOS/nixpkgs/pull/186575
-      ./darwin-plistbuddy-workaround.patch
-    ]
-    ++
-      lib.optional (lib.versions.major release_version == "15")
-        # See: https://github.com/NixOS/nixpkgs/pull/194634#discussion_r999829893
-        ./armv7l-15.patch
-    ++ lib.optionals (lib.versionOlder release_version "15") [
-      ./darwin-plistbuddy-workaround.patch
-      (getVersionFile "compiler-rt/armv7l.patch")
-      # Fix build on armv6l
-      ./armv6-mcr-dmb.patch
-      ./armv6-sync-ops-no-thumb.patch
-    ]
-    ++
-      lib.optionals (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "18")
-        [
-          # Fix build on armv6l
-          ./armv6-scudo-no-yield.patch
-        ]
-    ++ lib.optionals (lib.versionAtLeast release_version "13") [
-      (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
-    ]
-    ++ lib.optional (lib.versions.major release_version == "19") (fetchpatch {
-      url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
-      hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
-      relative = "compiler-rt";
-    });
+  patches = [
+    (getVersionFile "compiler-rt/X86-support-extension.patch") # Add support for i486 i586 i686 by reusing i386 config
+    # ld-wrapper dislikes `-rpath-link //nix/store`, so we normalize away the
+    # extra `/`.
+    (getVersionFile "compiler-rt/normalize-var.patch")
+    # Fix build on armv6l
+    ./armv6-no-ldrexd-strexd.patch
+    # See: https://github.com/NixOS/nixpkgs/pull/186575
+    ./darwin-plistbuddy-workaround.patch
+  ]
+  ++ [
+    (getVersionFile "compiler-rt/armv6-scudo-libatomic.patch")
+  ]
+  ++ lib.optional (lib.versions.major release_version == "19") (fetchpatch {
+    url = "https://github.com/llvm/llvm-project/pull/99837/commits/14ae0a660a38e1feb151928a14f35ff0f4487351.patch";
+    hash = "sha256-JykABCaNNhYhZQxCvKiBn54DZ5ZguksgCHnpdwWF2no=";
+    relative = "compiler-rt";
+  });
 
   nativeBuildInputs = [
     cmake
     python3
     libllvm.dev
+    ninja
   ]
-  ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ jq ];
   buildInputs =
     lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isRiscV) linuxHeaders
@@ -152,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     NIX_CFLAGS_COMPILE = toString (
       [
-        "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+        "-DSCUDO_DEFAULT_OPTIONS=delete_size_mismatch=false:dealloc_type_mismatch=false"
       ]
       ++ lib.optionals (!haveLibc) [
         # The compiler got stricter about this, and there is a usellvm patch below
@@ -181,17 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "SANITIZER_CXX_ABI_LIBNAME" "libcxxabi")
     (lib.cmakeBool "COMPILER_RT_USE_BUILTINS_LIBRARY" true)
   ]
-  ++
-    lib.optionals
-      ((!haveLibc || bareMetal || isMusl || isAarch64) && (lib.versions.major release_version == "13"))
-      [
-        (lib.cmakeBool "COMPILER_RT_BUILD_LIBFUZZER" false)
-      ]
   ++ lib.optionals (useLLVM && haveLibc) [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" true)
     (lib.cmakeBool "COMPILER_RT_BUILD_PROFILE" true)
   ]
-  ++ lib.optionals (noSanitizers) [
+  ++ lib.optionals noSanitizers [
     (lib.cmakeBool "COMPILER_RT_BUILD_SANITIZERS" false)
   ]
   ++ lib.optionals ((useLLVM && !haveLibcxx) || !haveLibc || bareMetal || isMusl || isDarwinStatic) [
@@ -212,16 +156,16 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!haveLibc) [
     (lib.cmakeFeature "CMAKE_C_FLAGS" "-nodefaultlibs")
   ]
-  ++ lib.optionals (useLLVM) [
+  ++ lib.optionals useLLVM [
     (lib.cmakeBool "COMPILER_RT_BUILD_BUILTINS" true)
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     (lib.cmakeFeature "CMAKE_TRY_COMPILE_TARGET_TYPE" "STATIC_LIBRARY")
   ]
-  ++ lib.optionals (bareMetal) [
+  ++ lib.optionals bareMetal [
     (lib.cmakeFeature "COMPILER_RT_OS_DIR" "baremetal")
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin) (
-    lib.optionals (lib.versionAtLeast release_version "16") [
+    [
       (lib.cmakeFeature "CMAKE_LIPO" "${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}lipo")
     ]
     ++ lib.optionals (!haveLibcxx) [
@@ -234,8 +178,6 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "DARWIN_osx_ARCHS" stdenv.hostPlatform.darwinArch)
       (lib.cmakeFeature "DARWIN_osx_BUILTIN_ARCHS" stdenv.hostPlatform.darwinArch)
       (lib.cmakeFeature "SANITIZER_MIN_OSX_VERSION" stdenv.hostPlatform.darwinMinVersion)
-    ]
-    ++ lib.optionals (lib.versionAtLeast release_version "15") [
       # `COMPILER_RT_DEFAULT_TARGET_ONLY` does not apply to Darwin:
       # https://github.com/llvm/llvm-project/blob/27ef42bec80b6c010b7b3729ed0528619521a690/compiler-rt/cmake/base-config-ix.cmake#L153
       (lib.cmakeBool "COMPILER_RT_ENABLE_IOS" false)
@@ -244,6 +186,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (noSanitizers && lib.versionAtLeast release_version "19") [
     (lib.cmakeBool "COMPILER_RT_BUILD_CTX_PROFILE" false)
   ]
+  ++
+    lib.optional (stdenv.hostPlatform.isAarch64 && !haveLibc)
+      # Fixes https://github.com/NixOS/nixpkgs/issues/393603
+      (lib.cmakeBool "COMPILER_RT_DISABLE_AARCH64_FMV" true)
   ++ devExtraCmakeFlags;
 
   outputs = [
@@ -272,21 +218,11 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           substituteInPlace lib/builtins/clear_cache.c \
             --replace-fail "#include <assert.h>" ""
-          substituteInPlace lib/builtins/cpu_model${lib.optionalString (lib.versionAtLeast release_version "18") "/x86"}.c \
+          substituteInPlace lib/builtins/cpu_model/x86.c \
             --replace-fail "#include <assert.h>" ""
         ''
       )
     )
-    +
-      lib.optionalString
-        (lib.versionAtLeast release_version "13" && lib.versionOlder release_version "14")
-        ''
-          # https://github.com/llvm/llvm-project/blob/llvmorg-14.0.6/libcxx/utils/merge_archives.py
-          # Seems to only be used in v13 though it's present in v12 and v14, and dropped in v15.
-          substituteInPlace ../libcxx/utils/merge_archives.py \
-            --replace-fail "import distutils.spawn" "from shutil import which as find_executable" \
-            --replace-fail "distutils.spawn." ""
-        ''
     +
       lib.optionalString (lib.versionAtLeast release_version "19")
         # codesign in sigtool doesn't support the various options used by the build
@@ -297,16 +233,12 @@ stdenv.mkDerivation (finalAttrs: {
             --replace-fail 'find_program(CODESIGN codesign)' ""
         '';
 
-  preConfigure =
-    lib.optionalString (lib.versionOlder release_version "16" && !haveLibc) ''
-      cmakeFlagsArray+=(-DCMAKE_C_FLAGS="-nodefaultlibs -ffreestanding")
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      cmakeFlagsArray+=(
-        "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
-        "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
-      )
-    '';
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    cmakeFlagsArray+=(
+      "-DDARWIN_macosx_CACHED_SYSROOT=$SDKROOT"
+      "-DDARWIN_macosx_OVERRIDE_SDK_VERSION=$(jq -r .Version "$SDKROOT/SDKSettings.json")"
+    )
+  '';
 
   # Hack around weird upstream RPATH bug
   postInstall =

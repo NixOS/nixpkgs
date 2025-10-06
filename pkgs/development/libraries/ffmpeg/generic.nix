@@ -10,6 +10,7 @@
   texinfo,
   texinfo6,
   yasm,
+  nasm,
 
   # You can fetch any upstream version using this derivation by specifying version and hash
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
@@ -64,6 +65,7 @@
   withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport,
   withCuvid ? withHeadlessDeps && withNvcodec,
   withDav1d ? withHeadlessDeps, # AV1 decoder (focused on speed and correctness)
+  withDavs2 ? withFullDeps && withGPL, # AVS2 decoder
   withDc1394 ? withFullDeps && !stdenv.hostPlatform.isDarwin, # IIDC-1394 grabbing (ieee 1394)
   withDrm ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # libdrm support
   withDvdnav ? withFullDeps && withGPL && lib.versionAtLeast version "7", # needed for DVD demuxing
@@ -85,6 +87,7 @@
   withFrei0r ? withFullDeps && withGPL, # frei0r video filtering
   withFribidi ? withHeadlessDeps, # Needed for drawtext filter
   withGme ? withFullDeps, # Game Music Emulator
+  withGmp ? withHeadlessDeps && withVersion3, # rtmp(t)e support
   withGnutls ? withHeadlessDeps,
   withGsm ? withFullDeps, # GSM de/encoder
   withHarfbuzz ? withHeadlessDeps && lib.versionAtLeast version "6.1", # Needed for drawtext filter
@@ -107,6 +110,7 @@
   withNvdec ? withHeadlessDeps && withNvcodec,
   withNvenc ? withHeadlessDeps && withNvcodec,
   withOpenal ? withFullDeps, # OpenAL 1.1 capture support
+  withOpenapv ? withHeadlessDeps && lib.versionAtLeast version "8.0", # APV encoding support
   withOpencl ? withHeadlessDeps,
   withOpencoreAmrnb ? withFullDeps && withVersion3, # AMR-NB de/encoder
   withOpencoreAmrwb ? withFullDeps && withVersion3, # AMR-WB decoder
@@ -121,7 +125,7 @@
   withQuirc ? withFullDeps && lib.versionAtLeast version "7", # QR decoding
   withRav1e ? withFullDeps, # AV1 encoder (focused on speed and safety)
   withRist ? withHeadlessDeps, # Reliable Internet Stream Transport (RIST) protocol
-  withRtmp ? withFullDeps, # RTMP[E] support
+  withRtmp ? false, # RTMP[E] support via librtmp
   withRubberband ? withFullDeps && withGPL && !stdenv.hostPlatform.isFreeBSD, # Rubberband filter
   withSamba ? withFullDeps && !stdenv.hostPlatform.isDarwin && withGPLv3, # Samba protocol
   withSdl2 ? withSmallDeps,
@@ -133,16 +137,17 @@
   withSrt ? withHeadlessDeps, # Secure Reliable Transport (SRT) protocol
   withSsh ? withHeadlessDeps, # SFTP protocol
   withSvg ? withFullDeps, # SVG protocol
-  withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isAarch64 && !stdenv.hostPlatform.isMinGW, # AV1 encoder/decoder (focused on speed and correctness)
+  withSvtav1 ? withHeadlessDeps && !stdenv.hostPlatform.isMinGW, # AV1 encoder/decoder (focused on speed and correctness)
   withTensorflow ? false, # Tensorflow dnn backend support (Increases closure size by ~390 MiB)
   withTheora ? withHeadlessDeps, # Theora encoder
   withTwolame ? withFullDeps, # MP2 encoding
+  withUavs3d ? withFullDeps, # AVS3 decoder
   withV4l2 ? withHeadlessDeps && stdenv.hostPlatform.isLinux, # Video 4 Linux support
   withV4l2M2m ? withV4l2,
   withVaapi ? withHeadlessDeps && (with stdenv; isLinux || isFreeBSD), # Vaapi hardware acceleration
   withVdpau ? withSmallDeps && !stdenv.hostPlatform.isMinGW, # Vdpau hardware acceleration
   withVidStab ? withHeadlessDeps && withGPL, # Video stabilization
-  withVmaf ? withFullDeps && !stdenv.hostPlatform.isAarch64 && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
+  withVmaf ? withFullDeps && lib.versionAtLeast version "5", # Netflix's VMAF (Video Multi-Method Assessment Fusion)
   withVoAmrwbenc ? withFullDeps && withVersion3, # AMR-WB encoder
   withVorbis ? withHeadlessDeps, # Vorbis de/encoding, native encoder exists
   withVpl ? withFullDeps && stdenv.hostPlatform.isLinux, # Hardware acceleration via intel libvpl
@@ -150,9 +155,11 @@
   withVulkan ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin,
   withVvenc ? withFullDeps && lib.versionAtLeast version "7.1", # H.266/VVC encoding
   withWebp ? withHeadlessDeps, # WebP encoder
+  withWhisper ? withFullDeps && lib.versionAtLeast version "8.0", # Whisper speech recognition
   withX264 ? withHeadlessDeps && withGPL, # H.264/AVC encoder
   withX265 ? withHeadlessDeps && withGPL, # H.265/HEVC encoder
   withXavs ? withFullDeps && withGPL, # AVS encoder
+  withXavs2 ? withFullDeps && withGPL, # AVS2 encoder
   withXcb ? withXcbShm || withXcbxfixes || withXcbShape, # X11 grabbing using XCB
   withXcbShape ? withFullDeps, # X11 grabbing shape rendering
   withXcbShm ? withFullDeps, # X11 grabbing shm communication
@@ -203,7 +210,9 @@
   # https://github.com/NixOS/nixpkgs/pull/211834#issuecomment-1417435991)
   buildAvresample ? withHeadlessDeps && lib.versionOlder version "5", # Build avresample library
   buildAvutil ? withHeadlessDeps, # Build avutil library
-  buildPostproc ? withHeadlessDeps, # Build postproc library
+  # Libpostproc is only available on versions lower than 8.0
+  # https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/8c920c4c396163e3b9a0b428dd550d3c986236aa
+  buildPostproc ? withHeadlessDeps && lib.versionOlder version "8.0", # Build postproc library
   buildSwresample ? withHeadlessDeps, # Build swresample library
   buildSwscale ? withHeadlessDeps, # Build swscale library
   withLib ?
@@ -243,6 +252,7 @@
   codec2,
   clang,
   dav1d,
+  davs2,
   fdk_aac,
   flite,
   fontconfig,
@@ -250,6 +260,7 @@
   frei0r,
   fribidi,
   game-music-emu,
+  gmp,
   gnutls,
   gsm,
   harfbuzz,
@@ -309,6 +320,7 @@
   nv-codec-headers-12,
   ocl-icd, # OpenCL ICD
   openal,
+  openapv,
   opencl-headers, # OpenCL headers
   opencore-amr,
   openh264,
@@ -328,14 +340,17 @@
   speex,
   srt,
   svt-av1,
+  uavs3d,
   vid-stab,
   vo-amrwbenc,
   vulkan-headers,
   vulkan-loader,
   vvenc,
+  whisper-cpp,
   x264,
   x265,
   xavs,
+  xavs2,
   xevd,
   xeve,
   xvidcore,
@@ -499,6 +514,11 @@ stdenv.mkDerivation (
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
+        (fetchpatch2 {
+          name = "lcevcdec-4.0.0-compat.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
+          hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
+        })
       ]
       ++ optionals (lib.versionOlder version "7.2") [
         (fetchpatch2 {
@@ -564,7 +584,12 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature buildAvutil "avutil")
+    ]
+    ++ optionals (lib.versionOlder version "8.0") [
+      # FFMpeg >= 8 doesn't know about the flag anymore
       (enableFeature (buildPostproc && withGPL) "postproc")
+    ]
+    ++ [
       (enableFeature buildSwresample "swresample")
       (enableFeature buildSwscale "swscale")
     ]
@@ -614,6 +639,7 @@ stdenv.mkDerivation (
       (enableFeature withCudaNVCC "cuda-nvcc")
       (enableFeature withCuvid "cuvid")
       (enableFeature withDav1d "libdav1d")
+      (enableFeature withDavs2 "libdavs2")
       (enableFeature withDc1394 "libdc1394")
       (enableFeature withDrm "libdrm")
     ]
@@ -631,6 +657,7 @@ stdenv.mkDerivation (
       (enableFeature withFrei0r "frei0r")
       (enableFeature withFribidi "libfribidi")
       (enableFeature withGme "libgme")
+      (enableFeature withGmp "gmp")
       (enableFeature withGnutls "gnutls")
       (enableFeature withGsm "libgsm")
     ]
@@ -671,6 +698,11 @@ stdenv.mkDerivation (
       (enableFeature withNvdec "nvdec")
       (enableFeature withNvenc "nvenc")
       (enableFeature withOpenal "openal")
+    ]
+    ++ optionals (versionAtLeast version "8.0") [
+      (enableFeature withOpenapv "liboapv")
+    ]
+    ++ [
       (enableFeature withOpencl "opencl")
       (enableFeature withOpencoreAmrnb "libopencore-amrnb")
       (enableFeature withOpencoreAmrwb "libopencore-amrwb")
@@ -713,6 +745,7 @@ stdenv.mkDerivation (
       (enableFeature withTensorflow "libtensorflow")
       (enableFeature withTheora "libtheora")
       (enableFeature withTwolame "libtwolame")
+      (enableFeature withUavs3d "libuavs3d")
       (enableFeature withV4l2 "libv4l2")
       (enableFeature withV4l2M2m "v4l2-m2m")
       (enableFeature withVaapi "vaapi")
@@ -734,9 +767,15 @@ stdenv.mkDerivation (
     ]
     ++ [
       (enableFeature withWebp "libwebp")
+    ]
+    ++ optionals (versionAtLeast version "8.0") [
+      (enableFeature withWhisper "whisper")
+    ]
+    ++ [
       (enableFeature withX264 "libx264")
       (enableFeature withX265 "libx265")
       (enableFeature withXavs "libxavs")
+      (enableFeature withXavs2 "libxavs2")
       (enableFeature withXcb "libxcb")
       (enableFeature withXcbShape "libxcb-shape")
       (enableFeature withXcbShm "libxcb-shm")
@@ -794,8 +833,9 @@ stdenv.mkDerivation (
       addDriverRunpath
       perl
       pkg-config
-      yasm
     ]
+    # 8.0 is only compatible with nasm, and we don't want to rebuild all older ffmpeg builds at this moment.
+    ++ (if versionOlder version "8.0" then [ yasm ] else [ nasm ])
     # Texinfo version 7.1 introduced breaking changes, which older versions of ffmpeg do not handle.
     ++ (if versionOlder version "5" then [ texinfo6 ] else [ texinfo ])
     ++ optionals withCudaLLVM [ clang ]
@@ -827,6 +867,7 @@ stdenv.mkDerivation (
         cuda_nvcc
       ]
       ++ optionals withDav1d [ dav1d ]
+      ++ optionals withDavs2 [ davs2 ]
       ++ optionals withDc1394 ([ libdc1394 ] ++ (lib.optional stdenv.hostPlatform.isLinux libraw1394))
       ++ optionals withDrm [ libdrm ]
       ++ optionals withDvdnav [ libdvdnav ]
@@ -841,6 +882,7 @@ stdenv.mkDerivation (
       ++ optionals withFrei0r [ frei0r ]
       ++ optionals withFribidi [ fribidi ]
       ++ optionals withGme [ game-music-emu ]
+      ++ optionals withGmp [ gmp ]
       ++ optionals withGnutls [ gnutls ]
       ++ optionals withGsm [ gsm ]
       ++ optionals withHarfbuzz [ harfbuzz ]
@@ -864,6 +906,7 @@ stdenv.mkDerivation (
         cuda_nvcc
       ]
       ++ optionals withOpenal [ openal ]
+      ++ optionals withOpenapv [ openapv ]
       ++ optionals withOpencl [
         ocl-icd
         opencl-headers
@@ -902,6 +945,7 @@ stdenv.mkDerivation (
       ++ optionals withTensorflow [ libtensorflow ]
       ++ optionals withTheora [ libtheora ]
       ++ optionals withTwolame [ twolame ]
+      ++ optionals withUavs3d [ uavs3d ]
       ++ optionals withV4l2 [ libv4l ]
       ++ optionals withVaapi [ (if withSmallDeps then libva else libva-minimal) ]
       ++ optionals withVdpau [ libvdpau ]
@@ -917,9 +961,11 @@ stdenv.mkDerivation (
       ]
       ++ optionals withVvenc [ vvenc ]
       ++ optionals withWebp [ libwebp ]
+      ++ optionals withWhisper [ whisper-cpp ]
       ++ optionals withX264 [ x264 ]
       ++ optionals withX265 [ x265 ]
       ++ optionals withXavs [ xavs ]
+      ++ optionals withXavs2 [ xavs2 ]
       ++ optionals withXcb [ libxcb ]
       ++ optionals withXevd [ xevd ]
       ++ optionals withXeve [ xeve ]

@@ -28,7 +28,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://unifoundry.com/unifont/";
 
     # Basically GPL2+ with font exception.
-    license = "https://unifoundry.com/LICENSE.txt";
+    license = with lib.licenses; [
+      gpl2Plus
+      fontException
+    ];
     maintainers = [ maintainers.mathnerd314 ];
     platforms = platforms.all;
   };

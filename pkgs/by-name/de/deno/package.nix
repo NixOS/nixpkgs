@@ -29,37 +29,39 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.4.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-7VHw+jjQ/N2b2AIBrGBcnLJ/k3MRkPnKRHD134A7mmw=";
+    hash = "sha256-UqD9Va33XVX73bjwUdb6woZ3kP/Xz6iBVqV1ceRbXq0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ZEWSnath9v04wU1VyFDAx3LANnVhfE5s93jX4QW3XlI=";
+  cargoHash = "sha256-OrKg3bOA5AyLQA+LIsHwWpk9DHodhcCVzdKW/S9+mNY=";
 
   patches = [
-    ./tests-replace-hardcoded-paths.patch
-    ./tests-darwin-differences.patch
-    ./tests-no-chown.patch
+    # Patch out the remote upgrade (deno update) check.
+    # Not a blocker in the build sandbox, since implementation and tests are
+    # considerately written for no external networking, but removing brings
+    # in-line with common nixpkgs practice.
+    ./patches/0000-remove-deno-upgrade-check.patch
+    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
+    # deno from nixpkgs.
+    ./patches/0001-remove-deno-upgrade.patch
+    ./patches/0002-tests-replace-hardcoded-paths.patch
+    ./patches/0003-tests-linux-no-chown.patch
+    ./patches/0004-tests-darwin-fixes.patch
+    # some new TS tests don't identify `deno` location from parent actively
+    # running `deno` instance
+    # https://github.com/denoland/deno/pull/30914
+    ./patches/0005-tests-fix-deno-path.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
     tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
-  ''
-  +
-    lib.optionalString
-      (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
-      ''
-        # LTO crashes with the latest Rust + LLVM combination.
-        # https://github.com/rust-lang/rust/issues/141737
-        # TODO: remove this once LLVM is upgraded to 20.1.7
-        tomlq -ti '.profile.release.lto = false' Cargo.toml
-      '';
+  '';
 
   buildInputs = [
     libffi
@@ -180,6 +182,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=watcher"
     "--skip=node_unit_tests::_fs_watch_test"
     "--skip=js_unit_tests::fs_events_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
+    "--skip=tests::test_userspace_resolver"
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -204,13 +210,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
-
-    ${lib.optionalString canExecute ''
-      installShellCompletion --cmd deno \
-        --bash <($out/bin/deno completions bash) \
-        --fish <($out/bin/deno completions fish) \
-        --zsh <($out/bin/deno completions zsh)
-    ''}
+  ''
+  + lib.optionalString canExecute ''
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
   '';
 
   doInstallCheck = canExecute;

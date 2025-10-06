@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "5";
+          patch = "7";
           suffix = "";
         };
-        hash = "sha256-k+WD8kNFTm6eRYjKLCZiIGrZYWWYYyd6/NuWgBZH1kA=";
+        hash = "sha256-VGL5CZ39MOI43vg8cdkYl9jKpf9uvHpQ8U1IAs2qp5o=";
       };
     };
 
@@ -92,9 +92,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "rc1";
+        suffix = "rc3";
       };
-      hash = "sha256-hwd4CunxnFv1ufJ4JxgboRza17spLqScrVQkMx5A7os=";
+      hash = "sha256-ZG3JReScc6FBiW3toS1D8/KT/WlCZ3TBb8Q0lhgOj80=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
@@ -105,37 +105,7 @@
           inherit passthruFun;
           pythonAttr = "python3Minimal";
           # strip down that python version as much as possible
-          openssl = null;
-          readline = null;
-          ncurses = null;
-          gdbm = null;
-          sqlite = null;
-          tzdata = null;
-          libuuid = null;
-          bzip2 = null;
-          libxcrypt = null;
-          xz = null;
-          zlib = null;
-          libffi = null;
-          stripConfig = true;
-          stripIdlelib = true;
-          stripTests = true;
-          stripTkinter = true;
-          rebuildBytecode = false;
-          stripBytecode = true;
-          includeSiteCustomize = false;
-          enableOptimizations = false;
-          enableLTO = false;
-          mimetypesSupport = false;
-          withExpat = false;
-          withMpdecimal = false;
-          /*
-            The actual 'allowedReferences' attribute is set inside the cpython derivation.
-            This is necessary in order to survive overrides of dependencies.
-          */
-          allowedReferenceNames = [
-            "bashNonInteractive"
-          ];
+          withMinimalDeps = true;
         }
         // sources.python313
       )).overrideAttrs
@@ -180,10 +150,10 @@
       sourceVersion = {
         major = "7";
         minor = "3";
-        patch = "19";
+        patch = "20";
       };
 
-      hash = "sha256-SBfARLtGmjJ05gqjZFdw+B60+RZup/3E5sNRNFVUyNg=";
+      hash = "sha256-d4bdp2AAPi6nQJwQN+UCAMV47EJ84CRaxM11hxCyBvs=";
       pythonVersion = "3.11";
       db = db.override { dbmSupport = !stdenv.hostPlatform.isDarwin; };
       python = __splicedPackages.pypy27;

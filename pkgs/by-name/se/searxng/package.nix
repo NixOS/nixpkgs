@@ -13,19 +13,27 @@ in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-07-16";
-    format = "setuptools";
+    version = "0-unstable-2025-09-11";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "62fac1c6a9db94682f8ef686f0424a482663b288";
-      hash = "sha256-3Ma16EdQdqnXyz+ipH5qq9TF0+DwpNU2kq2RTgK5b/A=";
+      rev = "7c1ebc01489a5b96d4abb0ad9c1180701eb4456c";
+      hash = "sha256-nOIt4PyO6DALz7gw5Hh1w1ZDyEAsQAVp4O/eFOLYZ0A=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "flask"
+      "flask-babel"
+      "httpx-socks"
+      "lxml"
+      "typer-slim"
+      "whitenoise"
+    ];
 
     preBuild =
       let
@@ -45,6 +53,8 @@ python.pkgs.toPythonModule (
         GIT_BRANCH="master"
         EOF
       '';
+
+    build-system = with python.pkgs; [ setuptools ];
 
     dependencies =
       with python.pkgs;
@@ -67,9 +77,10 @@ python.pkgs.toPythonModule (
         python-dateutil
         pyyaml
         setproctitle
-        typer
+        typer-slim
         uvloop
         valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;

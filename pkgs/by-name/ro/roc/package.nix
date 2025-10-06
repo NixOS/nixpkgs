@@ -17,18 +17,18 @@
 
 let
   llvmPackages = llvmPackages_18;
-  rocVersion = "alpha3";
+  rocVersion = "alpha4";
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "roc";
   version = "0-${rocVersion}";
 
   src = fetchFromGitHub {
     owner = "roc-lang";
     repo = "roc";
-    rev = "9a0238e0f34c09e27e3ca89e8fc5a684a21bf456";
-    hash = "sha256-iM16DlTf+1yXBZVH7QqzhKuSkn1n/ZDosnZj3t+io0E=";
+    rev = "d73ea109cc21442da01387c1e5e911607c74692d";
+    hash = "sha256-pPnOM4hpbAkGCV47aw5eHbpOujjFtJa3v/3/D8gybO8=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +51,7 @@ rustPlatform.buildRustPackage rec {
     stdenv.cc.cc.lib
   ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9cOJ79GrnrMEIhFikvCfXa2SI4O0fy50cr4Fb6p4Vho=";
+  cargoHash = "sha256-wJViSHcezoIchWe4Py9j+9U+YJUA5ja/x94UipuWO2g=";
 
   # prevents zig AccessDenied error github.com/ziglang/zig/issues/6810
   XDG_CACHE_HOME = "xdg_cache";

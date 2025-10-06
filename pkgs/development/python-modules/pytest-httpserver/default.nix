@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpserver";
-  version = "1.1.2";
+  version = "1.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "csernazs";
     repo = "pytest-httpserver";
     tag = version;
-    hash = "sha256-41JrZ3ubaJHNzwGDWUSseJ3Z405k21SOpwW7jG5rNxg=";
+    hash = "sha256-5pyCDzt9nCwYcUdCjWlJiAkyNmf6oWBqSHQL7kJJluA=";
   };
 
   nativeBuildInputs = [ poetry-core ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "HTTP server for pytest to test HTTP clients";
     homepage = "https://www.github.com/csernazs/pytest-httpserver";
-    changelog = "https://github.com/csernazs/pytest-httpserver/blob/${version}/CHANGES.rst";
+    changelog = "https://github.com/csernazs/pytest-httpserver/blob/${src.tag}/CHANGES.rst";
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ fab ];
   };

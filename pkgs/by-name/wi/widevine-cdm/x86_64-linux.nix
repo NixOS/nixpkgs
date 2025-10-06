@@ -1,28 +1,44 @@
 {
   lib,
   stdenv,
-  fetchzip,
+  fetchurl,
+  go-crx3,
 }:
+
+let
+  manifest = builtins.fromJSON (builtins.readFile ./x86_64-manifest.json);
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "widevine-cdm";
-  version = "4.10.2891.0";
+  version = manifest.version;
 
-  src = fetchzip {
-    url = "https://dl.google.com/widevine-cdm/${finalAttrs.version}-linux-x64.zip";
-    hash = "sha256-ZO6FmqJUnB9VEJ7caJt58ym8eB3/fDATri3iOWCULRI=";
-    stripRoot = false;
+  src = fetchurl {
+    url = manifest.url;
+    hash = manifest.sri;
   };
+
+  nativeBuildInputs = [ go-crx3 ];
+
+  unpackPhase = ''
+    unpackDir="src"
+    cp "$src" "$unpackDir".crx # go-crx3 doesn't like .crx3 extensions
+    crx3 unpack "$unpackDir".crx
+
+    cd "$unpackDir"
+  '';
 
   installPhase = ''
     runHook preInstall
 
     install -vD manifest.json $out/share/google/chrome/WidevineCdm/manifest.json
-    install -vD LICENSE.txt $out/share/google/chrome/WidevineCdm/LICENSE.txt
-    install -vD libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
+    install -vD LICENSE $out/share/google/chrome/WidevineCdm/LICENSE.txt
+    install -vD _platform_specific/linux_x64/libwidevinecdm.so $out/share/google/chrome/WidevineCdm/_platform_specific/linux_x64/libwidevinecdm.so
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update-x86_64.py;
 
   meta = import ./meta.nix lib;
 })

@@ -1,5 +1,6 @@
 {
   stdenv,
+  buildPackages,
   fetchurl,
   popt,
   ncurses,
@@ -18,12 +19,27 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xi049dp99Cmaw6ZSUI6VlTd1JEAYHjTHayrs69fzAbk=";
   };
 
+  postConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace lanserv/Makefile \
+      --replace-fail "sdrcomp/sdrcomp_build -o" "${buildPackages.openipmi}/bin/sdrcomp -o"
+  '';
+
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    python3
+  ];
+
   buildInputs = [
     ncurses
     popt
     python3
     readline
     openssl
+  ];
+
+  makeFlags = [
+    "BUILD_CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   outputs = [
@@ -42,6 +58,5 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ arezvov ];
-    teams = [ teams.c3d2 ];
   };
 }

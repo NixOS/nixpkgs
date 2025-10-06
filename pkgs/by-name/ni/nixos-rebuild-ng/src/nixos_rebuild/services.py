@@ -192,12 +192,15 @@ def _build_system(
                 build_flags=build_flags | {"no_out_link": no_link, "dry_run": dry_run},
             )
 
-    nix.copy_closure(
-        path_to_config,
-        to_host=target_host,
-        from_host=build_host,
-        copy_flags=copy_flags,
-    )
+    # In dry_run mode there is nothing to copy
+    # https://github.com/NixOS/nixpkgs/issues/444156
+    if not dry_run:
+        nix.copy_closure(
+            path_to_config,
+            to_host=target_host,
+            from_host=build_host,
+            copy_flags=copy_flags,
+        )
 
     return path_to_config
 

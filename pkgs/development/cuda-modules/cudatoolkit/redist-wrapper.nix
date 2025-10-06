@@ -2,8 +2,6 @@
   lib,
   symlinkJoin,
   backendStdenv,
-  cudaOlder,
-  cudatoolkit-legacy-runfile,
   cudaMajorMinorVersion,
   cuda_cccl ? null,
   cuda_cudart ? null,
@@ -61,26 +59,22 @@ let
   # This assumes we put `cudatoolkit` in `buildInputs` instead of `nativeBuildInputs`:
   allPackages = (map (p: p.__spliced.buildHost or p) hostPackages) ++ targetPackages;
 in
+symlinkJoin rec {
+  name = "cuda-merged-${cudaMajorMinorVersion}";
+  version = cudaMajorMinorVersion;
 
-if cudaOlder "11.4" then
-  cudatoolkit-legacy-runfile
-else
-  symlinkJoin rec {
-    name = "cuda-merged-${cudaMajorMinorVersion}";
-    version = cudaMajorMinorVersion;
+  paths = builtins.concatMap getAllOutputs allPackages;
 
-    paths = builtins.concatMap getAllOutputs allPackages;
-
-    passthru = {
-      cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
-      lib = symlinkJoin {
-        inherit name;
-        paths = map (p: lib.getLib p) allPackages;
-      };
+  passthru = {
+    cc = lib.warn "cudaPackages.cudatoolkit is deprecated, refer to the manual and use splayed packages instead" backendStdenv.cc;
+    lib = symlinkJoin {
+      inherit name;
+      paths = map (p: lib.getLib p) allPackages;
     };
+  };
 
-    meta = with lib; {
-      description = "Wrapper substituting the deprecated runfile-based CUDA installation";
-      license = licenses.nvidiaCuda;
-    };
-  }
+  meta = with lib; {
+    description = "Wrapper substituting the deprecated runfile-based CUDA installation";
+    license = licenses.nvidiaCuda;
+  };
+}

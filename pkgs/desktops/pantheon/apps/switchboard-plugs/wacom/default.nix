@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-wacom";
     rev = version;
     sha256 = "sha256-xTv3QPlLPJQ6C5t4Udy1H9IrLQGuik8prvGlpfFm1DQ=";
   };

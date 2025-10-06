@@ -54,11 +54,11 @@
 
 stdenv.mkDerivation rec {
   pname = "qmmp";
-  version = "2.2.7";
+  version = "2.2.8";
 
   src = fetchurl {
     url = "https://qmmp.ylsoftware.com/files/qmmp/2.2/${pname}-${version}.tar.bz2";
-    hash = "sha256-3c/wthj0eQgC9tUtmnlrXzLLfQ8jyZGBuAT2FPq1+7I=";
+    hash = "sha256-cwqXoGOkmOs32p4vgZjf5XBpPmpsfyshDVgb2H27k4o=";
   };
 
   nativeBuildInputs = [

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "lxqt-menu-data";
     rev = version;
     hash = "sha256-kFgrR7BSl08REC9SgBvLYFhJ9H++FCDQdqQaoAm5Oyw=";
   };

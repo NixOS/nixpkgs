@@ -16,10 +16,12 @@
   # run the compiled `generate-book` utility to prepare the files for mdbook
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  version = "1.43.0";
+in
+rustPlatform.buildRustPackage {
+  inherit version;
   pname = "just";
-  version = "1.42.3";
   outputs = [
     "out"
   ]
@@ -32,11 +34,10 @@ rustPlatform.buildRustPackage rec {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-SinL3sdSTtE3oGHe54P4n1jWarJIwYXWp1kPNXGwKIA=";
+    hash = "sha256-148bubjJYbmqugOd8crWXLqxigWfd3VVnsL0/WB2FYM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-byE2ssjEy6etHzkbeYCuW69TC8ErkYhU7oTt0U107Ac=";
+  cargoHash = "sha256-3DIpEPStOh/PcjoJ5dWpfSgRNMTCmN+wO2VzeNtikFU=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]

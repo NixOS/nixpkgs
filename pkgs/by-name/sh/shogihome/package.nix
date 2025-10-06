@@ -22,16 +22,16 @@ let
 in
 buildNpmPackage (finalAttrs: {
   pname = "shogihome";
-  version = "1.24.1";
+  version = "1.25.0";
 
   src = fetchFromGitHub {
     owner = "sunfish-shogi";
     repo = "shogihome";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BVc/aQ9q+VfWWOJQgNEBNYpvYLsX6eiIwiKRhVkxmZ8=";
+    hash = "sha256-Qa8ykN514Moc/PpBhD/X+mzfclQPp3yiriwTJCtmMA8=";
   };
 
-  npmDepsHash = "sha256-9BsEEcdFYs9SSgL749Zhau34uieyOQry/g3wo/oW0DA=";
+  npmDepsHash = "sha256-rcrj3dG96oNbmp3cXw1qRJPi1SZdBcG9paAShSfb/0E=";
 
   postPatch = ''
     substituteInPlace package.json \
@@ -40,8 +40,9 @@ buildNpmPackage (finalAttrs: {
 
     substituteInPlace .electron-builder.config.mjs \
       --replace-fail 'AppImage' 'dir'
-
-    # Workaround for https://github.com/electron/electron/issues/31121
+  ''
+  # Workaround for https://github.com/electron/electron/issues/31121
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/background/window/path.ts \
       --replace-fail 'process.resourcesPath' "'$out/share/lib/shogihome/resources'"
   '';
@@ -71,12 +72,15 @@ buildNpmPackage (finalAttrs: {
     rm electron-dist/libvulkan.so.1
     cp '${lib.getLib vulkan-loader}/lib/libvulkan.so.1' electron-dist
   ''
+  # Explicitly set identity to null to avoid signing on arm64 macs with newer electron-builder.
+  # See: https://github.com/electron-userland/electron-builder/pull/9007
   + ''
     npm run electron:pack
 
     ./node_modules/.bin/electron-builder \
         --dir \
         --config .electron-builder.config.mjs \
+        -c.mac.identity=null \
         -c.electronDist=electron-dist \
         -c.electronVersion=${electron.version}
 
@@ -139,7 +143,7 @@ buildNpmPackage (finalAttrs: {
         ];
         runtimeEnv = {
           PNAME = finalAttrs.pname;
-          PKG_FILE = builtins.toString ./package.nix;
+          PKG_FILE = toString ./package.nix;
         };
         text = ''
           new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"

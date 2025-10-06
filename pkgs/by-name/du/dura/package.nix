@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-xAcFk7z26l4BYYBEw+MvbG6g33MpPUvnpGvgmcqhpGM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Xci9168KqJf+mhx3k0d+nH6Ov5tqNtB6nxiL9BwVYjU=";
 
   cargoPatches = [
@@ -48,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/tkellogg/dura";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

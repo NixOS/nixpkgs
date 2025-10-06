@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "desktop-notifier";
-  version = "6.1.1";
+  version = "6.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "desktop-notifier";
     tag = "v${version}";
-    hash = "sha256-COPJHMURwb76p5a5w1/i1xL7B8f2GWGfXXeWW/GUxeY=";
+    hash = "sha256-VVbBKhGCtdsNOfRJPpDk9wwsTtdEwbTSZjheXLydO70=";
   };
 
   build-system = [ setuptools ];

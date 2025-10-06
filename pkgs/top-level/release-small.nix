@@ -47,7 +47,7 @@ in
   };
 
 }
-// (mapTestOn ({
+// (mapTestOn {
 
   aspell = all;
   at = linux;
@@ -168,7 +168,6 @@ in
   util-linux = linux;
   util-linuxMinimal = linux;
   w3m = all;
-  webkitgtk_4_0 = linux;
   wget = all;
   which = all;
   wirelesstools = linux;
@@ -177,4 +176,4 @@ in
   xkeyboard_config = linux;
   zip = all;
   tests-stdenv-gcc-stageCompare = linux;
-}))
+})

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "gb-io";
-  version = "0.3.5";
+  version = "0.3.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "althonos";
     repo = "gb-io.py";
     rev = "v${version}";
-    hash = "sha256-xpyfb5pTV8w7S7g2Tagl5N3jLO+IisP2KXuYN/RDDpY=";
+    hash = "sha256-iLRXyiVji9q4C5YtBsTT9bklSueY9RlX7Kz4cu+hmpE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-97aEuXdq9oEqYJs6sgQU5a0vAMJmWJzu2WGjOqzxZ4c=";
+    hash = "sha256-miwCgZpaFVMaNJLUTYSGEkmg+uT7lbzJZnBa9yZqC8U=";
   };
 
   sourceRoot = src.name;

@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.24.4";
+  version = "1.24.7";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-WoaoOjH5+oFJC4xUIKw4T9PZWj5x+6Zlx7P5XR3+8rQ=";
+    hash = "sha256-Ko9Q2w+IgDYHxQ1+qINNy3vUg8a0KKkeNg/fhiS0ZGQ=";
   };
 
   strictDeps = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .
@@ -80,7 +80,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
-  CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
+  # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
+  # https://github.com/golang/go/issues/8912
+  # https://github.com/golang/go/issues/13192
+  CGO_ENABLED =
+    if
+      (
+        stdenv.targetPlatform.isWasi
+        || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
+      )
+    then
+      0
+    else
+      1;
 
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 

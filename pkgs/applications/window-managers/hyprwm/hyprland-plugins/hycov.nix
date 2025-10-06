@@ -1,20 +1,19 @@
 {
   lib,
   mkHyprlandPlugin,
-  hyprland,
   cmake,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland rec {
+mkHyprlandPlugin (finalAttrs: {
   pluginName = "hycov";
   version = "0.41.2.1";
 
   src = fetchFromGitHub {
     owner = "DreamMaoMao";
     repo = "hycov";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-NRnxbkuiq1rQ+uauo7D+CEe73iGqxsWxTQa+1SEPnXQ=";
   };
 
@@ -30,4 +29,4 @@ mkHyprlandPlugin hyprland rec {
     platforms = lib.platforms.linux;
     broken = true; # Doesn't work after Hyprland v0.41.2 https://gitee.com/DreamMaoMao/hycov/issues/IANYC8#note_31512295_link
   };
-}
+})

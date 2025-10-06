@@ -1,37 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   setuptools,
+  setuptools-scm,
   pytestCheckHook,
 }:
 buildPythonPackage rec {
   pname = "uuid6";
-  version = "2024.7.10";
+  version = "2025.0.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-LSnX9j9ZPKruoODQ3QrYEpycZjsp4ZvfiC6GS+3xj7A=";
+  src = fetchFromGitHub {
+    owner = "oittaa";
+    repo = "uuid6-python";
+    tag = version;
+    hash = "sha256-E8oBbD52zTDcpRCBsJXfSgpF7FPNSVB43uxvsA62XHU=";
   };
-
-  # https://github.com/oittaa/uuid6-python/blob/e647035428d984452b9906b75bb007198533dfb1/setup.py#L12-L19
-  env.GITHUB_REF = "refs/tags/${version}";
 
   build-system = [
     setuptools
+    setuptools-scm
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
-  ];
-
-  pytestFlagsArray = [
-    "test/"
-  ];
-
-  disabledTestPaths = [
-    "test/test_uuid6.py"
   ];
 
   pythonImportsCheck = [
@@ -39,6 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    changelog = "https://github.com/oittaa/uuid6-python/releases/tag/${src.tag}";
     description = "New time-based UUID formats which are suited for use as a database key";
     homepage = "https://github.com/oittaa/uuid6-python";
     license = lib.licenses.mit;

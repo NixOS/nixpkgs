@@ -14,12 +14,12 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "devpi-ldap";
   version = "2.1.1-unstable-2023-11-28";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "devpi";
@@ -48,10 +48,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "devpi_ldap" ];
 
   meta = {
-    homepage = "https://github.com/devpi/devpi-ldap";
     description = "LDAP authentication for devpi-server";
+    homepage = "https://github.com/devpi/devpi-ldap";
     changelog = "https://github.com/devpi/devpi-ldap/blob/main/CHANGELOG.rst";
-    license = lib.licenses.mit; # according to its setup.py
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ confus ];
   };
 }

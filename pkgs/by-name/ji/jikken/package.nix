@@ -19,14 +19,18 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-8A9b9Ms/unv+qQRd5jiTV/6SJa6ZYLsE0fK97ohacPI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-nwFTKol5phXFuDzAcnPoFq8UrrqMDE6NuitpXE5qJwU=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^(v\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = with lib; {
     description = "Powerful, source control friendly REST API testing toolkit";

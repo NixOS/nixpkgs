@@ -4,7 +4,6 @@
   lib,
   fetchurl,
   fetchpatch,
-  fetchFromSavannah,
   zlib,
   gdbm,
   ncurses,
@@ -38,7 +37,6 @@ let
   op = lib.optional;
   ops = lib.optionals;
   opString = lib.optionalString;
-  config = import ./config.nix { inherit fetchFromSavannah; };
   rubygems = import ./rubygems {
     inherit
       stdenv
@@ -74,7 +72,6 @@ let
           lib,
           fetchurl,
           fetchpatch,
-          fetchFromSavannah,
           rubygemsSupport ? true,
           zlib,
           zlibSupport ? true,
@@ -229,10 +226,10 @@ let
             cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
           '';
 
+          # Ruby >= 2.1.0 tries to download config.{guess,sub}; copy it from autoconf instead.
           postPatch = ''
             sed -i configure.ac -e '/config.guess/d'
-            cp --remove-destination ${config}/config.guess tool/
-            cp --remove-destination ${config}/config.sub tool/
+            cp --remove-destination ${autoconf}/share/autoconf/build-aux/config.{guess,sub} tool/
           '';
 
           configureFlags = [
@@ -419,20 +416,27 @@ in
   };
 
   ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "8" "";
-    hash = "sha256-d6zdjPu+H45XO15lNuA8UQPfmJ3AX6aMcPARgzw1YHU=";
+    version = rubyVersion "3" "2" "9" "";
+    hash = "sha256-q7rZjbmusVJ3Ow01ho5QADuMRn89BhUld8Tf7Z2I7So=";
     cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
   };
 
   ruby_3_3 = generic {
-    version = rubyVersion "3" "3" "8" "";
-    hash = "sha256-WuKKh6WaPkrWa8KTHSMturlT0KqPa687xPj4CXfInKs=";
+    version = rubyVersion "3" "3" "9" "";
+    hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
     cargoHash = "sha256-xE7Cv+NVmOHOlXa/Mg72CTSaZRb72lOja98JBvxPvSs=";
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "5" "";
-    hash = "sha256-HYjYontEL93kqgbcmehrC78LKIlj2EMxEt1frHmP1e4=";
+    version = rubyVersion "3" "4" "6" "";
+    hash = "sha256-48Gauej0GzcjEk+8ARTN58v1XmWqnFjBKs2J7JwN0bk=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
+
+  ruby_3_5 = generic {
+    version = rubyVersion "3" "5" "0" "preview1";
+    hash = "sha256-7PCcfrkC6Rza+cxVPNAMypuEiz/A4UKXhQ+asIzdRvA=";
+    cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
 }

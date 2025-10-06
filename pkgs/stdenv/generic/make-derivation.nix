@@ -60,7 +60,7 @@ let
     :::{.note}
     This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
 
-    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    Most arguments are also passed through to the underlying call of [`derivation`](https://nixos.org/manual/nix/stable/language/derivations).
     :::
   */
   mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
@@ -84,6 +84,10 @@ let
       args = rattrs (args // { inherit finalPackage overrideAttrs; });
       #              ^^^^
 
+      /**
+        Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
+      */
+      # NOTE: the above documentation had to be duplicated in `lib/customisation.nix`: `makeOverridable`.
       overrideAttrs =
         f0:
         let
@@ -111,8 +115,8 @@ let
                 ${
                   args.name or "${pname}-${version}"
                 } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                  builtins.toString pos.line or "<unknown line>"
-                }:${builtins.toString pos.column or "<unknown column>"}.
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
                 This is most likely not what you want. In order to properly change the version of a package, override
                 both the `version` and `src` attributes:
@@ -126,7 +130,7 @@ let
                 })
 
                 (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              '' (prev // (builtins.removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+              '' (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
             );
         in
         makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
@@ -150,6 +154,7 @@ let
     "pie"
     "relro"
     "stackprotector"
+    "glibcxxassertions"
     "stackclashprotection"
     "strictoverflow"
     "trivialautovarinit"
@@ -171,7 +176,82 @@ let
     "disallowedRequisites"
     "allowedReferences"
     "allowedRequisites"
+    "allowedImpureDLLs"
   ];
+
+  inherit (stdenv)
+    hostPlatform
+    buildPlatform
+    targetPlatform
+    extraNativeBuildInputs
+    extraBuildInputs
+    extraSandboxProfile
+    __extraImpureHostDeps
+    ;
+
+  stdenvHasCC = stdenv.hasCC;
+  stdenvShell = stdenv.shell;
+
+  buildPlatformSystem = buildPlatform.system;
+  buildIsDarwin = buildPlatform.isDarwin;
+
+  inherit (hostPlatform)
+    isLinux
+    isDarwin
+    isWindows
+    isCygwin
+    isOpenBSD
+    isStatic
+    isMusl
+    ;
+
+  # Target is not included by default because most programs don't care.
+  # Including it then would cause needless mass rebuilds.
+  #
+  # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
+  useDefaultConfigurePlatforms = hostPlatform != buildPlatform || config.configurePlatformsByDefault;
+  defaultConfigurePlatforms = optionals useDefaultConfigurePlatforms [
+    "build"
+    "host"
+  ];
+  buildPlatformConfigureFlag = "--build=${buildPlatform.config}";
+  hostPlatformConfigureFlag = "--host=${hostPlatform.config}";
+  targetPlatformConfigureFlag = "--target=${targetPlatform.config}";
+  defaultConfigurePlatformsFlags = optionals useDefaultConfigurePlatforms [
+    buildPlatformConfigureFlag
+    hostPlatformConfigureFlag
+  ];
+
+  # TODO(@Ericson2314): Make always true and remove / resolve #178468
+  defaultStrictDeps = if config.strictDepsByDefault then true else hostPlatform != buildPlatform;
+
+  canExecuteHostOnBuild = buildPlatform.canExecute hostPlatform;
+  defaultHardeningFlags =
+    (if stdenvHasCC then stdenv.cc else { }).defaultHardeningFlags or
+    # fallback safe-ish set of flags
+    (
+      if isOpenBSD && isStatic then
+        knownHardeningFlags # Need pie, in fact
+      else
+        remove "pie" knownHardeningFlags
+    );
+  stdenvHostSuffix = optionalString (hostPlatform != buildPlatform) "-${hostPlatform.config}";
+  stdenvStaticMarker = optionalString isStatic "-static";
+  userHook = config.stdenv.userHook or null;
+
+  requiredSystemFeaturesShouldBeSet =
+    buildPlatform ? gcc.arch
+    && !(
+      buildPlatform.isAarch64
+      && (
+        # `aarch64-darwin` sets `{gcc.arch = "armv8.3-a+crypto+sha2+...";}`
+        buildPlatform.isDarwin
+        ||
+          # `aarch64-linux` has `{ gcc.arch = "armv8-a"; }` set by default
+          buildPlatform.gcc.arch == "armv8-a"
+      )
+    );
+  gccArchFeature = [ "gccarch-${buildPlatform.gcc.arch}" ];
 
   # Turn a derivation into its outPath without a string context attached.
   # See the comment at the usage site.
@@ -202,17 +282,15 @@ let
     # to be built eventually, we would still like to get the error early and without
     # having to wait while nix builds a derivation that might not be used.
     # See also https://github.com/NixOS/nix/issues/4629
-    optionalAttrs (attrs ? disallowedReferences) {
-      disallowedReferences = map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
-    }
-    // optionalAttrs (attrs ? disallowedRequisites) {
-      disallowedRequisites = map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
-    }
-    // optionalAttrs (attrs ? allowedReferences) {
-      allowedReferences = mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
-    }
-    // optionalAttrs (attrs ? allowedRequisites) {
-      allowedRequisites = mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
+    {
+      ${if (attrs ? disallowedReferences) then "disallowedReferences" else null} =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedReferences;
+      ${if (attrs ? disallowedRequisites) then "disallowedRequisites" else null} =
+        map unsafeDerivationToUntrackedOutpath attrs.disallowedRequisites;
+      ${if (attrs ? allowedReferences) then "allowedReferences" else null} =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedReferences;
+      ${if (attrs ? allowedRequisites) then "allowedRequisites" else null} =
+        mapNullable unsafeDerivationToUntrackedOutpath attrs.allowedRequisites;
     };
 
   makeDerivationArgument =
@@ -259,16 +337,7 @@ let
 
       # Configure Phase
       configureFlags ? [ ],
-      # Target is not included by default because most programs don't care.
-      # Including it then would cause needless mass rebuilds.
-      #
-      # TODO(@Ericson2314): Make [ "build" "host" ] always the default / resolve #87909
-      configurePlatforms ?
-        optionals (stdenv.hostPlatform != stdenv.buildPlatform || config.configurePlatformsByDefault)
-          [
-            "build"
-            "host"
-          ],
+      configurePlatforms ? defaultConfigurePlatforms,
 
       # TODO(@Ericson2314): Make unconditional / resolve #33599
       # Check phase
@@ -279,8 +348,7 @@ let
       doInstallCheck ? config.doCheckByDefault or false,
 
       # TODO(@Ericson2314): Make always true and remove / resolve #178468
-      strictDeps ?
-        if config.strictDepsByDefault then true else stdenv.hostPlatform != stdenv.buildPlatform,
+      strictDeps ? defaultStrictDeps,
 
       enableParallelBuilding ? config.enableParallelBuildingByDefault,
 
@@ -291,6 +359,8 @@ let
       __propagatedImpureHostDeps ? [ ],
       sandboxProfile ? "",
       propagatedSandboxProfile ? "",
+
+      allowedImpureDLLs ? [ ],
 
       hardeningEnable ? [ ],
       hardeningDisable ? [ ],
@@ -321,12 +391,12 @@ let
     let
       # TODO(@oxij, @Ericson2314): This is here to keep the old semantics, remove when
       # no package has `doCheck = true`.
-      doCheck' = doCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-      doInstallCheck' = doInstallCheck && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+      doCheck' = doCheck && canExecuteHostOnBuild;
+      doInstallCheck' = doInstallCheck && canExecuteHostOnBuild;
 
       separateDebugInfo' =
         let
-          actualValue = separateDebugInfo && stdenv.hostPlatform.isLinux;
+          actualValue = separateDebugInfo && isLinux;
           conflictingOption =
             attrs ? "disallowedReferences"
             || attrs ? "disallowedRequisites"
@@ -352,7 +422,7 @@ let
           ++ depsTargetTarget
           ++ depsTargetTargetPropagated
         ) == 0;
-      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenv.hasCC;
+      dontAddHostSuffix = attrs ? outputHash && !noNonNativeDeps || !stdenvHasCC;
 
       concretizeFlagImplications =
         flag: impliesFlags: list:
@@ -366,15 +436,6 @@ let
           (concretizeFlagImplications "strictflexarrays1" [ "strictflexarrays3" ])
         ]
       );
-      defaultHardeningFlags =
-        (if stdenv.hasCC then stdenv.cc else { }).defaultHardeningFlags or
-        # fallback safe-ish set of flags
-        (
-          if with stdenv.hostPlatform; isOpenBSD && isStatic then
-            knownHardeningFlags # Need pie, in fact
-          else
-            remove "pie" knownHardeningFlags
-        );
       enabledHardeningOptions =
         if builtins.elem "all" hardeningDisable' then
           [ ]
@@ -421,7 +482,8 @@ let
         nativeBuildInputs' =
           nativeBuildInputs
           ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
-          ++ optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh
+          ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
+          ++ optional isCygwin ../../build-support/setup-hooks/cygwin-dll-link.sh
           ++ optionals doCheck nativeCheckInputs
           ++ optionals doInstallCheck nativeInstallCheckInputs;
 
@@ -478,24 +540,22 @@ let
 
         derivationArg =
           removeAttrs attrs removedOrReplacedAttrNames
-          // (optionalAttrs (attrs ? name || (attrs ? pname && attrs ? version)) {
-            name =
+          // {
+            ${if (attrs ? name || (attrs ? pname && attrs ? version)) then "name" else null} =
               let
                 # Indicate the host platform of the derivation if cross compiling.
                 # Fixed-output derivations like source tarballs shouldn't get a host
                 # suffix. But we have some weird ones with run-time deps that are
                 # just used for their side-affects. Those might as well since the
                 # hash can't be the same. See #32986.
-                hostSuffix = optionalString (
-                  stdenv.hostPlatform != stdenv.buildPlatform && !dontAddHostSuffix
-                ) "-${stdenv.hostPlatform.config}";
+                hostSuffix = optionalString (!dontAddHostSuffix) stdenvHostSuffix;
 
                 # Disambiguate statically built packages. This was originally
                 # introduce as a means to prevent nix-env to get confused between
                 # nix and nixStatic. This should be also achieved by moving the
                 # hostSuffix before the version, so we could contemplate removing
                 # it again.
-                staticMarker = optionalString stdenv.hostPlatform.isStatic "-static";
+                staticMarker = stdenvStaticMarker;
               in
               lib.strings.sanitizeDerivationName (
                 if attrs ? name then
@@ -507,9 +567,8 @@ let
                   ) "The `version` attribute cannot be null.";
                   "${attrs.pname}${staticMarker}${hostSuffix}-${attrs.version}"
               );
-          })
-          // {
-            builder = attrs.realBuilder or stdenv.shell;
+
+            builder = attrs.realBuilder or stdenvShell;
             args =
               attrs.args or [
                 "-e"
@@ -524,9 +583,9 @@ let
             # indeed more finely than Nix knows or cares about. The `system`
             # attribute of `buildPlatform` matches Nix's degree of specificity.
             # exactly.
-            inherit (stdenv.buildPlatform) system;
+            system = buildPlatformSystem;
 
-            userHook = config.stdenv.userHook or null;
+            inherit userHook;
             __ignoreNulls = true;
             inherit __structuredAttrs strictDeps;
 
@@ -547,61 +606,55 @@ let
             # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
             configureFlags =
               configureFlags
-              ++ optional (elem "build" configurePlatforms) "--build=${stdenv.buildPlatform.config}"
-              ++ optional (elem "host" configurePlatforms) "--host=${stdenv.hostPlatform.config}"
-              ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+              ++ (
+                if configurePlatforms == defaultConfigurePlatforms then
+                  defaultConfigurePlatformsFlags
+                else
+                  optional (elem "build" configurePlatforms) buildPlatformConfigureFlag
+                  ++ optional (elem "host" configurePlatforms) hostPlatformConfigureFlag
+                  ++ optional (elem "target" configurePlatforms) targetPlatformConfigureFlag
+              );
 
             inherit patches;
 
             inherit doCheck doInstallCheck;
 
             inherit outputs;
-          }
-          // optionalAttrs (__contentAddressed) {
-            inherit __contentAddressed;
-            # Provide default values for outputHashMode and outputHashAlgo because
-            # most people won't care about these anyways
-            outputHashAlgo = attrs.outputHashAlgo or "sha256";
-            outputHashMode = attrs.outputHashMode or "recursive";
-          }
-          // optionalAttrs (enableParallelBuilding) {
-            inherit enableParallelBuilding;
-            enableParallelChecking = attrs.enableParallelChecking or true;
-            enableParallelInstalling = attrs.enableParallelInstalling or true;
-          }
-          // optionalAttrs (hardeningDisable != [ ] || hardeningEnable != [ ] || stdenv.hostPlatform.isMusl) {
-            NIX_HARDENING_ENABLE = builtins.concatStringsSep " " enabledHardeningOptions;
-          }
-          //
+
+            # When the derivations is content addressed provide default values
+            # for outputHashMode and outputHashAlgo because most people won't
+            # care about these anyways
+            ${if __contentAddressed then "__contentAddressed" else null} = __contentAddressed;
+            ${if __contentAddressed then "outputHashAlgo" else null} = attrs.outputHashAlgo or "sha256";
+            ${if __contentAddressed then "outputHashMode" else null} = attrs.outputHashMode or "recursive";
+
+            ${if enableParallelBuilding then "enableParallelBuilding" else null} = enableParallelBuilding;
+            ${if enableParallelBuilding then "enableParallelChecking" else null} =
+              attrs.enableParallelChecking or true;
+            ${if enableParallelBuilding then "enableParallelInstalling" else null} =
+              attrs.enableParallelInstalling or true;
+
+            ${
+              if (hardeningDisable != [ ] || hardeningEnable != [ ] || isMusl) then
+                "NIX_HARDENING_ENABLE"
+              else
+                null
+            } =
+              builtins.concatStringsSep " " enabledHardeningOptions;
+
             # TODO: remove platform condition
             # Enabling this check could be a breaking change as it requires to edit nix.conf
             # NixOS module already sets gccarch, unsure of nix installers and other distributions
-            optionalAttrs
-              (
-                stdenv.buildPlatform ? gcc.arch
-                && !(
-                  stdenv.buildPlatform.isAarch64
-                  && (
-                    # `aarch64-darwin` sets `{gcc.arch = "armv8.3-a+crypto+sha2+...";}`
-                    stdenv.buildPlatform.isDarwin
-                    ||
-                      # `aarch64-linux` has `{ gcc.arch = "armv8-a"; }` set by default
-                      stdenv.buildPlatform.gcc.arch == "armv8-a"
-                  )
-                )
-              )
-              {
-                requiredSystemFeatures = attrs.requiredSystemFeatures or [ ] ++ [
-                  "gccarch-${stdenv.buildPlatform.gcc.arch}"
-                ];
-              }
-          // optionalAttrs (stdenv.buildPlatform.isDarwin) (
+            ${if requiredSystemFeaturesShouldBeSet then "requiredSystemFeatures" else null} =
+              attrs.requiredSystemFeatures or [ ] ++ gccArchFeature;
+          }
+          // optionalAttrs buildIsDarwin (
             let
               allDependencies = concatLists (concatLists dependencies);
               allPropagatedDependencies = concatLists (concatLists propagatedDependencies);
 
               computedSandboxProfile = concatMap (input: input.__propagatedSandboxProfile or [ ]) (
-                stdenv.extraNativeBuildInputs ++ stdenv.extraBuildInputs ++ allDependencies
+                extraNativeBuildInputs ++ extraBuildInputs ++ allDependencies
               );
 
               computedPropagatedSandboxProfile = concatMap (
@@ -610,7 +663,7 @@ let
 
               computedImpureHostDeps = unique (
                 concatMap (input: input.__propagatedImpureHostDeps or [ ]) (
-                  stdenv.extraNativeBuildInputs ++ stdenv.extraBuildInputs ++ allDependencies
+                  extraNativeBuildInputs ++ extraBuildInputs ++ allDependencies
                 )
               );
 
@@ -624,7 +677,7 @@ let
               __sandboxProfile =
                 let
                   profiles = [
-                    stdenv.extraSandboxProfile
+                    extraSandboxProfile
                   ]
                   ++ computedSandboxProfile
                   ++ computedPropagatedSandboxProfile
@@ -643,7 +696,7 @@ let
                 ++ computedPropagatedImpureHostDeps
                 ++ __propagatedImpureHostDeps
                 ++ __impureHostDeps
-                ++ stdenv.__extraImpureHostDeps
+                ++ __extraImpureHostDeps
                 ++ [
                   "/dev/zero"
                   "/dev/random"
@@ -651,6 +704,19 @@ let
                   "/bin/sh"
                 ];
               __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
+            }
+          )
+          // optionalAttrs (isWindows || isCygwin) (
+            let
+              dlls =
+                allowedImpureDLLs
+                ++ lib.optionals isCygwin [
+                  "KERNEL32.dll"
+                  "cygwin1.dll"
+                ];
+            in
+            {
+              allowedImpureDLLs = if dlls != [ ] then dlls else null;
             }
           )
           // (
@@ -751,12 +817,12 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs ([
+        removeAttrs attrs [
           "meta"
           "passthru"
           "pos"
           "env"
-        ])
+        ]
         // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
@@ -800,7 +866,7 @@ let
       # for a fixed-output derivation, the corresponding inputDerivation should
       # *not* be fixed-output. To achieve this we simply delete the attributes that
       # would make it fixed-output.
-      deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [
+      deleteFixedOutputRelatedAttrs = lib.flip removeAttrs [
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"
@@ -828,7 +894,7 @@ let
             _derivation_original_builder = derivationArg.builder;
             _derivation_original_args = derivationArg.args;
 
-            builder = stdenv.shell;
+            builder = stdenvShell;
             # The builtin `declare -p` dumps all bash and environment variables,
             # which is where all build input references end up (e.g. $PATH for
             # binaries). By writing this to $out, Nix can find and register
@@ -842,7 +908,7 @@ let
               "-c"
               ''
                 out="${placeholder "out"}"
-                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
+                if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; fi
                 declare -p > $out
                 for var in $passAsFile; do
                     pathVar="''${var}Path"

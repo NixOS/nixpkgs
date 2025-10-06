@@ -26,7 +26,7 @@ let
           input: (input.pname or null) != "pytest-twisted"
         ) oldAttrs.nativeCheckInputs;
 
-        pytestFlagsArray = null;
+        doCheck = false;
       });
     };
   };
@@ -163,7 +163,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://tahoe-lafs.org/";
     license = [
       lib.licenses.gpl2Plus # or
-      "TGPPLv1+"
+      {
+        fullName = "Transitive Grace Period Public Licence version 1.0";
+        url = "https://github.com/tahoe-lafs/tahoe-lafs/blob/master/COPYING.TGPPL.rst";
+      }
     ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
     platforms = lib.platforms.linux;

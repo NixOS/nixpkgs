@@ -9,7 +9,7 @@ let
   cfg = config.services.mailman;
 
   inherit
-    (pkgs.mailmanPackages.buildEnvs {
+    (cfg.packageSet.buildEnvs {
       withHyperkitty = cfg.hyperkitty.enable;
       withLDAP = cfg.ldap.enable;
     })
@@ -58,7 +58,7 @@ let
   # TODO: Should this be RFC42-ised so that users can set additional options without modifying the module?
   postfixMtaConfig = pkgs.writeText "mailman-postfix.cfg" ''
     [postfix]
-    postmap_command: ${pkgs.postfix}/bin/postmap
+    postmap_command: ${lib.getExe' config.services.postfix.package "postmap"}
     transport_file_type: hash
   '';
 
@@ -115,6 +115,10 @@ in
         type = lib.types.bool;
         default = false;
         description = "Enable Mailman on this host. Requires an active MTA on the host (e.g. Postfix).";
+      };
+
+      packageSet = lib.mkPackageOption pkgs "mailmanPackages" { } // {
+        type = lib.types.attrs;
       };
 
       ldap = {
@@ -348,7 +352,7 @@ in
       mailman.layout = "fhs";
 
       "paths.fhs" = {
-        bin_dir = "${pkgs.mailmanPackages.mailman}/bin";
+        bin_dir = "${cfg.packageSet.mailman}/bin";
         var_dir = "/var/lib/mailman";
         queue_dir = "$var_dir/queue";
         template_dir = "$var_dir/templates";
@@ -437,9 +441,9 @@ in
             for more info.
           '';
         }
-        (requirePostfixHash [ "config" "relay_domains" ] "postfix_domains")
-        (requirePostfixHash [ "config" "transport_maps" ] "postfix_lmtp")
-        (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "settings" "main" "relay_domains" ] "postfix_domains")
+        (requirePostfixHash [ "settings" "main" "transport_maps" ] "postfix_lmtp")
+        (requirePostfixHash [ "settings" "main" "local_recipient_maps" ] "postfix_lmtp")
       ]);
 
     users.users.mailman = {
@@ -554,9 +558,9 @@ in
     ];
 
     services.postfix = lib.mkIf cfg.enablePostfix {
-      recipientDelimiter = "+"; # bake recipient addresses in mail envelopes via VERP
-      config = {
+      settings.main = {
         owner_request_special = "no"; # Mailman handles -owner addresses on its own
+        recipient_delimiter = "+"; # bake recipient addresses in mail envelopes via VERP
       };
     };
 

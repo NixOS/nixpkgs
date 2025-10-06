@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = "compliance-trestle";
-  version = "3.9.0";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oscal-compass";
     repo = "compliance-trestle";
     tag = "v${version}";
-    hash = "sha256-WWqrUfDlzpZAXtOlq3Uq8AmUOerUmMCr9KPjdjk4JHg=";
+    hash = "sha256-AJ1luN2X6Q4dp4fna14x6HgUw1uX4X87BXkVBPVIn9k=";
     fetchSubmodules = true;
   };
 
@@ -98,7 +98,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "trestle" ];
 
   meta = {
-    description = "An opinionated tooling platform for managing compliance as code, using continuous integration and NIST's OSCAL standard";
+    description = "Opinionated tooling platform for managing compliance as code, using continuous integration and NIST's OSCAL standard";
     homepage = "https://github.com/oscal-compass/compliance-trestle";
     changelog = "https://github.com/oscal-compass/compliance-trestle/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;

@@ -26,8 +26,6 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  doCheck = false;
-
   meta = with lib; {
     mainProgram = "drone";
     maintainers = with maintainers; [ techknowlogick ];

@@ -335,6 +335,8 @@ in
       }
     );
 
+    environment.corePackages = [ cfg.package ];
+
     # SSH configuration. Slight duplication of the sshd_config
     # generation in the sshd service.
     environment.etc."ssh/ssh_config".text = ''
@@ -380,8 +382,8 @@ in
         ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
         ExecStart =
           "${cfg.package}/bin/ssh-agent "
-          + lib.optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ")
-          + lib.optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ")
+          + lib.optionalString (cfg.agentTimeout != null) "-t ${cfg.agentTimeout} "
+          + lib.optionalString (cfg.agentPKCS11Whitelist != null) "-P ${cfg.agentPKCS11Whitelist} "
           + "-a %t/ssh-agent";
         StandardOutput = "null";
         Type = "forking";

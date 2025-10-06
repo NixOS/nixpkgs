@@ -8,7 +8,7 @@
 
 let
   pname = "sdbus";
-  version = "0.14.0";
+  version = "0.14.1.post0";
 in
 buildPythonPackage {
   format = "setuptools";
@@ -19,7 +19,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QdYbdswFqepB0Q1woR6fmobtlfQPcTYwxeGDQODkx28=";
+    hash = "sha256-rjkVqz4/ChFmMuHlh235krlSnoKwtJIAbrIvh5Htbes=";
   };
 
   meta = with lib; {

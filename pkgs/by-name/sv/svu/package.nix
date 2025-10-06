@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "svu";
-  version = "3.2.3";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = "caarlos0";
     repo = "svu";
     rev = "v${version}";
-    sha256 = "sha256-jnUVl34luj6kUyx27+zWFxKZMD+R1uzu78oJV7ziSag=";
+    sha256 = "sha256-NzhVEChNsUkzGe1/M8gl1K0SD5nAQ/PrYUxGQKQUAtU=";
   };
 
-  vendorHash = "sha256-P5Ys4XjT5wKCbnxl3tKjpouiSZBFf/zfXKrV8MaGyMU=";
+  vendorHash = "sha256-xhNJsARuZZx9nhmTNDMB51VC0QgjZgOYFKLhLf+3b3A=";
 
   ldflags = [
     "-s"

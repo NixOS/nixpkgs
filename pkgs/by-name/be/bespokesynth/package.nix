@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = "bespokesynth";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ad8wdLos3jM0gRMpcfRKeaiUxJsPGqWd/7XeDz87ToQ=";
     fetchSubmodules = true;
   };
@@ -150,14 +150,14 @@ stdenv.mkDerivation (finalAttrs: {
       '';
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isLinux "-rpath ${
-    lib.makeLibraryPath ([
+    lib.makeLibraryPath [
       libX11
       libXrandr
       libXinerama
       libXext
       libXcursor
       libXScrnSaver
-    ])
+    ]
   }";
 
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath

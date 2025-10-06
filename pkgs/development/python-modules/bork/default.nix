@@ -34,6 +34,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "build"
     "packaging"
     "urllib3"
   ];
@@ -56,7 +57,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   disabledTests = [
     # tries to call python -m bork
