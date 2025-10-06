@@ -129,8 +129,11 @@ let
       callPackage,
       makeWrapper,
       unzip,
+      coreutils,
+      findutils,
       ncurses5,
       ncurses6,
+      gnused,
       udev,
       testers,
       runCommand,
@@ -176,28 +179,47 @@ let
       # We only need to patchelf some libs embedded in JARs.
       dontAutoPatchelf = true;
 
+      # All the installed Gradle libraries and binaries go here. Note that the Gradle wrapper
+      # will look for a lib directory above its own directory (which is presumed to be bin)
+      # for loading the main Gradle jar.
+      gradleLibexec = "${placeholder "out"}/libexec/gradle";
+
       installPhase =
-        with builtins;
         let
           # set toolchains via installations.path property in gradle.properties.
           # See https://docs.gradle.org/current/userguide/toolchains.html#sec:custom_loc
-          toolchainPaths = "org.gradle.java.installations.paths=${concatStringsSep "," javaToolchains}";
-          jnaLibraryPath = if stdenv.hostPlatform.isLinux then lib.makeLibraryPath [ udev ] else "";
-          jnaFlag =
-            if stdenv.hostPlatform.isLinux then "--add-flags \"-Djna.library.path=${jnaLibraryPath}\"" else "";
+          toolchainPaths = "org.gradle.java.installations.paths=${lib.concatStringsSep "," javaToolchains}";
+          jnaLibraryPath = lib.optionalString stdenv.hostPlatform.isLinux (lib.makeLibraryPath [ udev ]);
+          jnaFlag = lib.optionalString stdenv.hostPlatform.isLinux ''--add-flags "-Djna.library.path=${jnaLibraryPath}"'';
         in
         ''
-          mkdir -pv $out/lib/gradle/
-          cp -rv lib/ $out/lib/gradle/
+          # Install all the Gradle jars.
+          mkdir -vp $gradleLibexec
+          cp -av lib/ $gradleLibexec
+          [ -f $gradleLibexec/lib/gradle-launcher-*.jar ] || { echo "No Gradle launcher jar found!" >&2 && exit 1; }
 
-          gradle_launcher_jar=$(echo $out/lib/gradle/lib/gradle-launcher-*.jar)
-          test -f $gradle_launcher_jar
-          makeWrapper ${java}/bin/java $out/bin/gradle \
-            --set JAVA_HOME ${java} \
-            ${jnaFlag} \
-            --add-flags "-classpath $gradle_launcher_jar org.gradle.launcher.GradleMain"
+          # Set up toolchain paths in the gradle.properties.
+          echo ${lib.escapeShellArg toolchainPaths} > $gradleLibexec/gradle.properties
 
-          echo "${toolchainPaths}" > $out/lib/gradle/gradle.properties
+          # Just use the existing gradle wrapper (usually called `gradlew`) as the main program.
+          mkdir -vp $gradleLibexec/bin
+          cp -v bin/gradle $gradleLibexec/bin/gradlew
+          chmod +x $gradleLibexec/bin/gradlew
+          patchShebangs --host $gradleLibexec/bin/gradlew
+
+          # Ensure that JAVA_HOME is set so the installed Gradle wrapper picks it up.
+          # The wrapper also needs coreutils, xargs, and sed.
+          mkdir -vp $out/bin
+          makeWrapper $gradleLibexec/bin/gradlew $out/bin/gradle \
+            --set-default JAVA_HOME ${java} \
+            --suffix PATH : ${
+              lib.makeBinPath [
+                coreutils
+                findutils
+                gnused
+              ]
+            } \
+            ${jnaFlag}
         '';
 
       dontFixup = !stdenv.hostPlatform.isLinux;
@@ -212,10 +234,10 @@ let
           export PATH="${buildPackages.jdk}/bin:$PATH"
           . ${./patching.sh}
 
-          nativeVersion="$(extractVersion native-platform $out/lib/gradle/lib/native-platform-*.jar)"
+          nativeVersion="$(extractVersion native-platform $gradleLibexec/lib/native-platform-*.jar)"
           for variant in "" "-ncurses5" "-ncurses6"; do
             autoPatchelfInJar \
-              $out/lib/gradle/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
+              $gradleLibexec/lib/native-platform-linux-${arch}$variant-''${nativeVersion}.jar \
               "${lib.getLib stdenv.cc.cc}/lib64:${
                 lib.makeLibraryPath [
                   stdenv.cc.cc
@@ -228,14 +250,14 @@ let
           # The file-events library _seems_ to follow the native-platform version, but
           # we won’t assume that.
           if [ -n "${newFileEvents}" ]; then
-            fileEventsVersion="$(extractVersion gradle-fileevents $out/lib/gradle/lib/gradle-fileevents-*.jar)"
+            fileEventsVersion="$(extractVersion gradle-fileevents $gradleLibexec/lib/gradle-fileevents-*.jar)"
             autoPatchelfInJar \
-              $out/lib/gradle/lib/gradle-fileevents-''${fileEventsVersion}.jar \
+              $gradleLibexec/lib/gradle-fileevents-''${fileEventsVersion}.jar \
               "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
           else
-            fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
+            fileEventsVersion="$(extractVersion file-events $gradleLibexec/lib/file-events-*.jar)"
             autoPatchelfInJar \
-              $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
+              $gradleLibexec/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
               "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
           fi
 
