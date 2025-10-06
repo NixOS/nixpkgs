@@ -55,12 +55,19 @@ in
       };
     };
 
+    systemd.tmpfiles.settings.cosmic-greeter."/run/cosmic-greeter".d = {
+      group = "cosmic-greeter";
+      mode = "0755";
+      user = "cosmic-greeter";
+    };
+
     # The greeter user is hardcoded in `cosmic-greeter`
     users.groups.cosmic-greeter = { };
     users.users.cosmic-greeter = {
       description = "COSMIC login greeter user";
       isSystemUser = true;
       home = "/var/lib/cosmic-greeter";
+      homeMode = "0750";
       createHome = true;
       group = "cosmic-greeter";
     };
