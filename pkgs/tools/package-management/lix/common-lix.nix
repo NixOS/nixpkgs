@@ -54,6 +54,7 @@ assert lib.assertMsg (
   nlohmann_json,
   ninja,
   openssl,
+  pkgsStatic,
   rustc,
   toml11,
   pegtl,
@@ -139,10 +140,8 @@ stdenv.mkDerivation (finalAttrs: {
     # python3.withPackages does not splice properly, see https://github.com/NixOS/nixpkgs/issues/305858
     (buildPackages.python3.withPackages (
       p:
-      [
-        p.python-frontmatter
-        p.toml
-      ]
+      [ p.python-frontmatter ]
+      ++ lib.optionals (lib.versionOlder version "2.94") [ p.toml ]
       ++ lib.optionals finalAttrs.doInstallCheck [
         p.aiohttp
         p.pytest
@@ -202,6 +201,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals hasExternalLixDoc [ lix-doc ]
   ++ lib.optionals (!isLegacyParser) [ pegtl ]
+  ++ lib.optionals (lib.versionOlder version "2.94") [ libsodium ]
   # NOTE(Raito): I'd have expected that the LLVM packaging would inject the
   # libunwind library path directly in the wrappers, but it does inject
   # -lunwind without injecting the library path...
@@ -285,7 +285,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (lib.mesonOption "sandbox-shell" "${busybox-sandbox-shell}/bin/busybox")
-  ];
+  ]
+  ++
+    lib.optionals
+      (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
+      [
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
+      ];
 
   ninjaFlags = [ "-v" ];
 
