@@ -661,10 +661,6 @@ let
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
 
-        functoria = callPackage ../development/ocaml-modules/functoria { };
-
-        functoria-runtime = callPackage ../development/ocaml-modules/functoria/runtime.nix { };
-
         functory = callPackage ../development/ocaml-modules/functory { };
 
         ### G ###
