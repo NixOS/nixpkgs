@@ -1,10 +1,9 @@
-#TODO LIST:
-#1. Split to _1c-enterprise-common/_1c-enterprise-client/_1c-enterprise-server and symlink _1c-enterprise-server and _1c-enterprise-common to _1c-enterprise-client
-#2. Add systemd and 1cv8usr:1cv8grp for _1c-enterprise-server
 { stdenv
 , dpkg
 , autoPatchelfHook
 , makeWrapper
+, _1c-enterprise-common
+, _1c-enterprise-server
 , glib
 , glibc
 , gtk3
@@ -26,7 +25,7 @@
 , openssl
 , libxml2
 , zlib
-, requireFile # or use fetchurl
+, requireFile
 , openal
 , libssh
 , libGLU
@@ -38,42 +37,30 @@
 , patchelf
 , gsettings-desktop-schemas
 , copyDesktopItems
+, versions ? ""
+, callPackage
 , ...
 }:
 
 let
-  pkgName = "_1c-enterprise-client";
-  pkgVersion = "8.3.27.1606";
-  Version =  lib.versions.splitVersion pkgVersion;
-  pkgVersion3 =  builtins.concatStringsSep "." (lib.take 3 Version);
-  pkgVersionBuild = builtins.elemAt Version 3;
-  pkgVersionStr = "${pkgVersion3}-${pkgVersionBuild}";
-  # Define the deb files
-  clientDeb = requireFile {
-    name = "1c-enterprise-${pkgVersion}-client_${pkgVersionStr}_amd64.deb";
-    url = "https://releases.1c.ru/project/Platform83";
-    sha256 = "sha256-gTylZZNYM7mSxqwKGDQktF8swBl1cSkHIC0K833cnhQ=";
-  };
-  commonDeb = requireFile {
-    name = "1c-enterprise-${pkgVersion}-common_${pkgVersionStr}_amd64.deb";
-    url = "https://releases.1c.ru/project/Platform83";
-    sha256 = "sha256-PGjttk+GIum/4yp9rwG5iRXhIkUkP35bNP2hVUpDB5s=";
-  };
-  serverDeb = requireFile {
-    name = "1c-enterprise-${pkgVersion}-server_${pkgVersionStr}_amd64.deb";
-    url = "https://releases.1c.ru/project/Platform83";
-    sha256 = "sha256-l4vibq5/V78CgDwoIFJnS4PC2chXfPEyvOrcVnq+KNg=";
-  };
+  v = callPackage ../_1c-enterprise {};
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = pkgName;
-  version = pkgVersion;
-  pkgversion = pkgVersionStr;
-  src = ./.;
+  pname = "_1c-enterprise-client";
+  version = v.pkgVersion;
+  pkgversion = v.pkgVersionStr;
+  src = requireFile v.clientDebInfo;
 
-  nativeBuildInputs = [ dpkg patchelf autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    patchelf
+    autoPatchelfHook
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [
+    _1c-enterprise-common
     stdenv.cc.cc.lib
     glibc
     e2fsprogs
@@ -114,37 +101,27 @@ stdenv.mkDerivation (finalAttrs: {
     libsoup_2_4
     libGL
     gsettings-desktop-schemas
-    copyDesktopItems
   ];
 
   unpackPhase = ''
-   dpkg-deb -x ${clientDeb} .
-   dpkg-deb -x ${commonDeb} .
-   dpkg-deb -x ${serverDeb} .
+    dpkg-deb -x $src .
   '';
 
-  preInstall = ''
-    mkdir -p $out/{bin,opt/1cv8/{conf,common},share/applications,sbin}
-    cat > $out/sbin/ldconfig <<EOF
-    #!${stdenv.shell}
-    echo "ldconfig dummy"
-    EOF
-    chmod +x $out/sbin/ldconfig
-    export PATH="/sbin:$PATH"
-  '';
 
   installPhase = ''
     runHook preInstall
 
+    mkdir -p $out/{bin,opt/1cv8/{conf,common},share/applications,sbin}
     cp -r ./opt $out
     cp -r ./usr/share $out
-    find $out/opt/1cv8 -name 'libstdc++.so.6' -delete
-    find $out/opt/1cv8 -name 'libcairo-v8.so' -delete
+
+    ln -sf ${_1c-enterprise-common}/opt/1cv8/x86_64/${finalAttrs.version}/* $out/opt/1cv8/x86_64/${finalAttrs.version}/
+    ln -sf ${_1c-enterprise-server}/opt/1cv8/x86_64/${finalAttrs.version}/* $out/opt/1cv8/x86_64/${finalAttrs.version}/
+
     mv $out/opt/1cv8/x86_64/${finalAttrs.version}/1cestart-${finalAttrs.pkgversion}.desktop $out/share/applications/1cestart-${finalAttrs.pkgversion}.desktop
 
     runHook postInstall
   '';
-
 
   postInstall = ''
     ln -s $out/opt/1cv8/x86_64/${finalAttrs.version}/1cestart $out/opt/1cv8/common/1cestart
@@ -152,6 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/opt/1cv8/x86_64/${finalAttrs.version}/1cv8 $out/bin/1cv8
     ln -s $out/opt/1cv8/x86_64/${finalAttrs.version}/1cv8c $out/bin/1cv8c
     ln -s $out/opt/1cv8/x86_64/${finalAttrs.version}/1cv8s $out/bin/1cv8s
+
     substituteInPlace $out/share/applications/1cestart-${finalAttrs.pkgversion}.desktop \
       --replace "/opt/1cv8/common/1cestart" "1cestart"
     substituteInPlace $out/share/applications/1cv8-${finalAttrs.pkgversion}.desktop \
@@ -163,12 +141,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-  '';
-
-  postFixup = ''
-    if [ -d $out/opt/1cv8 ]; then
-      addAutoPatchelfSearchPath $out/opt/1cv8/x86_64/${finalAttrs.version}/
-    fi
+    addAutoPatchelfSearchPath "$out/opt/1cv8/x86_64/${finalAttrs.version}"
+    addAutoPatchelfSearchPath "${_1c-enterprise-common}/opt/1cv8/x86_64/${finalAttrs.version}"
+    addAutoPatchelfSearchPath "${_1c-enterprise-server}/opt/1cv8/x86_64/${finalAttrs.version}"
+    autoPatchelf $out
   '';
 
   meta = with lib; {
@@ -176,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://1c.ru";
     license = {
       fullName = "License agreement for 1C:Enterprise 8.3";
-      url = "file://${out}/opt/1cv8/x86_64/${finalAttrs.version}/licenses/1CEnterprise_en.htm ";
+      url = "file://${out}/opt/1cv8/x86_64/${finalAttrs.version}/licenses/1CEnterprise_en.htm";
       free = false;
     };
     platforms = [ "x86_64-linux" ];
