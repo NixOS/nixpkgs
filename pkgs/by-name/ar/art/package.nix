@@ -109,7 +109,7 @@ stdenv.mkDerivation rec {
     homepage = "https://art.pixls.us";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
-    mainProgram = "art";
+    mainProgram = "ART";
     platforms = lib.platforms.linux;
   };
 }
