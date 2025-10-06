@@ -1,0 +1,100 @@
+diff --git a/src/storage/storage_backend_logical.c b/src/storage/storage_backend_logical.c
+index 51e9337820..dea1e9f166 100644
+--- a/src/storage/storage_backend_logical.c
++++ b/src/storage/storage_backend_logical.c
+@@ -49,7 +49,7 @@ virStorageBackendLogicalSetActive(virStoragePoolObj *pool,
+     g_autoptr(virCommand) cmd = NULL;
+     int ret;
+ 
+-    cmd = virStorageBackendLogicalChangeCmd("vgchange", def, on);
++    cmd = virStorageBackendLogicalChangeCmd("@vgchange@", def, on);
+ 
+     virObjectUnlock(pool);
+     ret = virCommandRun(cmd, NULL);
+@@ -70,7 +70,7 @@ virStorageBackendLogicalRemoveDevice(const char *path)
+ {
+     g_autoptr(virCommand) cmd = NULL;
+ 
+-    cmd = virCommandNewArgList("pvremove", path, NULL);
++    cmd = virCommandNewArgList("@pvremove@", path, NULL);
+     if (virCommandRun(cmd, NULL) < 0)
+         VIR_INFO("Failed to pvremove logical device '%s'", path);
+ }
+@@ -100,7 +100,7 @@ virStorageBackendLogicalInitializeDevice(const char *path)
+      * Initialize the physical volume because vgcreate is not
+      * clever enough todo this for us :-(
+      */
+-    pvcmd = virCommandNewArgList("pvcreate", path, NULL);
++    pvcmd = virCommandNewArgList("@pvcreate@", path, NULL);
+     return virCommandRun(pvcmd, NULL);
+ }
+ 
+@@ -380,7 +380,7 @@ virStorageBackendLogicalFindLVs(virStoragePoolObj *pool,
+     };
+     g_autoptr(virCommand) cmd = NULL;
+ 
+-    cmd = virCommandNewArgList("lvs",
++    cmd = virCommandNewArgList("@lvs@",
+                                "--separator", "#",
+                                "--noheadings",
+                                "--units", "b",
+@@ -487,7 +487,7 @@ virStorageBackendLogicalGetPoolSources(virStoragePoolSourceList *sourceList)
+     if (virCommandRun(vgcmd, NULL) < 0)
+         VIR_WARN("Failure when running vgscan to refresh physical volumes");
+ 
+-    pvcmd = virCommandNewArgList("pvs",
++    pvcmd = virCommandNewArgList("@pvs@",
+                                  "--noheadings",
+                                  "-o", "pv_name,vg_name",
+                                  NULL, NULL);
+@@ -658,7 +658,7 @@ virStorageBackendLogicalBuildPool(virStoragePoolObj *pool,
+                              VIR_STORAGE_POOL_BUILD_NO_OVERWRITE,
+                              cleanup);
+ 
+-    vgcmd = virCommandNewArgList("vgcreate", def->source.name, NULL);
++    vgcmd = virCommandNewArgList("@vgcreate@", def->source.name, NULL);
+ 
+     for (i = 0; i < def->source.ndevice; i++) {
+         const char *path = def->source.devices[i].path;
+@@ -720,7 +720,7 @@ virStorageBackendLogicalRefreshPool(virStoragePoolObj *pool)
+     if (virStorageBackendLogicalFindLVs(pool, NULL) < 0)
+         return -1;
+ 
+-    cmd = virCommandNewArgList("vgs",
++    cmd = virCommandNewArgList("@vgs@",
+                                "--separator", ":",
+                                "--noheadings",
+                                "--units", "b",
+@@ -769,7 +769,7 @@ virStorageBackendLogicalDeletePool(virStoragePoolObj *pool,
+     virCheckFlags(0, -1);
+ 
+     /* first remove the volume group */
+-    cmd = virCommandNewArgList("vgremove",
++    cmd = virCommandNewArgList("@vgremove@",
+                                "-f", def->source.name,
+                                NULL);
+     if (virCommandRun(cmd, NULL) < 0)
+@@ -795,8 +795,8 @@ virStorageBackendLogicalDeleteVol(virStoragePoolObj *pool G_GNUC_UNUSED,
+ 
+     virWaitForDevices();
+ 
+-    lvchange_cmd = virCommandNewArgList("lvchange", "-aln", vol->target.path, NULL);
+-    lvremove_cmd = virCommandNewArgList("lvremove", "-f", vol->target.path, NULL);
++    lvchange_cmd = virCommandNewArgList("@lvchange@", "-aln", vol->target.path, NULL);
++    lvremove_cmd = virCommandNewArgList("@lvremove@", "-f", vol->target.path, NULL);
+ 
+     if (virCommandRun(lvremove_cmd, NULL) < 0) {
+         if (virCommandRun(lvchange_cmd, NULL) < 0) {
+diff --git a/tests/storagepoolxml2argvtest.c b/tests/storagepoolxml2argvtest.c
+index d5c2531ab8..f24427666f 100644
+--- a/tests/storagepoolxml2argvtest.c
++++ b/tests/storagepoolxml2argvtest.c
+@@ -43,7 +43,7 @@ testCompareXMLToArgvFiles(bool shouldFail,
+         break;
+ 
+     case VIR_STORAGE_POOL_LOGICAL:
+-        cmd = virStorageBackendLogicalChangeCmd("vgchange", def, true);
++        cmd = virStorageBackendLogicalChangeCmd("@vgchange@", def, true);
+         break;
+ 
+     case VIR_STORAGE_POOL_DIR:
