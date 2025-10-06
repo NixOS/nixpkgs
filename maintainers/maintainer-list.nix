@@ -10340,6 +10340,11 @@
     github = "higebu";
     githubId = 733288;
   };
+  higherorderlogic = {
+    name = "Hol";
+    github = "HigherOrderLogic";
+    githubId = 73709188;
+  };
   hirenashah = {
     email = "hiren@hiren.io";
     github = "hirenashah";
