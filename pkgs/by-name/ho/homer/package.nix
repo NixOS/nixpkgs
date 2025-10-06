@@ -53,6 +53,10 @@ stdenvNoCC.mkDerivation rec {
     mkdir -p $out
     cp -R dist/* $out/
 
+    # Remove sample/demo files from output
+    rm -f $out/assets/*.yml.dist
+    rm -f $out/assets/*.css.sample
+
     runHook postInstall
   '';
 
