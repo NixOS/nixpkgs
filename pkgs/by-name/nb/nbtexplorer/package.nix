@@ -47,11 +47,11 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : "${gtk2}/lib"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NBT editor for Minecraft game data";
     homepage = "https://github.com/jaquadro/NBTExplorer";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [peritia];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ peritia ];
   };
 }
