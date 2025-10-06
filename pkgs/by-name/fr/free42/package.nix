@@ -1,24 +1,20 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
+  fetchurl,
   alsa-lib,
   copyDesktopItems,
   wrapGAppsHook3,
   makeDesktopItem,
   pkg-config,
 }:
-
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation rec {
   pname = "free42";
   version = "3.3.8";
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "thomasokken";
-    repo = "free42";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-L6WZM5/+ujM6hv85ppt9YiqHLkd0vYFx3nFVcJwzEBM=";
+  src = fetchurl {
+    url = "https://thomasokken.com/free42/upstream/free42-nologo-${version}.tgz";
+    hash = "sha256-4Wj2UYxwrvUE7RPuCaru48cWwQjdyusKCfqbx27UJEs=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Calculator";
       exec = "free42bin";
       type = "Application";
-      comment = "A software clone of HP-42S Calculator";
+      comment = "Software clone of the HP-42S calculator";
       icon = "free42";
       categories = [
         "Utility"
@@ -55,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Calculator";
       exec = "free42dec";
       type = "Application";
-      comment = "A software clone of HP-42S Calculator";
+      comment = "Software clone of the HP-42S calculator";
       icon = "free42";
       categories = [
         "Utility"
@@ -68,9 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     make -C gtk cleaner
-    make --jobs=$NIX_BUILD_CORES -C gtk
+    make --jobs=$NIX_BUILD_CORES -C gtk AUDIO_ALSA=1
     make -C gtk clean
-    make --jobs=$NIX_BUILD_CORES -C gtk BCD_MATH=1
+    make --jobs=$NIX_BUILD_CORES -C gtk AUDIO_ALSA=1 BCD_MATH=1
 
     runHook postBuild
   '';
@@ -94,13 +90,25 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+
+  postFixup = ''
+    wrapProgram $out/bin/free42dec \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
+      "''${gappsWrapperArgs[@]}"
+
+    wrapProgram $out/bin/free42bin \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ alsa-lib ]} \
+      "''${gappsWrapperArgs[@]}"
+  '';
+
   meta = {
     homepage = "https://thomasokken.com/free42/";
     changelog = "https://thomasokken.com/free42/history.html";
-    description = "Software clone of HP-42S Calculator";
+    description = "Software clone of the HP-42S calculator";
     license = with lib.licenses; [ gpl2Only ];
     maintainers = with lib.maintainers; [ elfenermarcell ];
     mainProgram = "free42dec";
     platforms = with lib.platforms; unix;
   };
-})
+}
