@@ -251,6 +251,7 @@ in
 
       serviceConfig = {
         User = cfg.user;
+        Group = cfg.group;
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
