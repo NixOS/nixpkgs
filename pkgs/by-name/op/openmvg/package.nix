@@ -14,7 +14,7 @@
   libpng,
   libtiff,
   nix-update-script,
-  openmp,
+  llvmPackages,
   osi,
   zlib,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -22,14 +22,14 @@
   enableDocs ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.1";
   pname = "openmvg";
 
   src = fetchFromGitHub {
     owner = "openmvg";
     repo = "openmvg";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vG+tW9Gl/DAUL8DeY+rJVDJH/oMPH3XyZMUgzjtwFv0=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    openmp
+    llvmPackages.openmp
     osi
     zlib
   ];
@@ -60,15 +60,20 @@ stdenv.mkDerivation rec {
 
   # flann is missing because the lz4 dependency isn't propagated: https://github.com/openMVG/openMVG/issues/1265
   cmakeFlags = [
-    "-DOpenMVG_BUILD_EXAMPLES=${if enableExamples then "ON" else "OFF"}"
-    "-DOpenMVG_BUILD_DOC=${if enableDocs then "ON" else "OFF"}"
-    "-DTARGET_ARCHITECTURE=generic"
-    "-DCLP_INCLUDE_DIR_HINTS=${lib.getDev clp}/include"
-    "-DCOINUTILS_INCLUDE_DIR_HINTS=${lib.getDev coin-utils}/include"
-    "-DLEMON_INCLUDE_DIR_HINTS=${lib.getDev lemon-graph}/include"
-    "-DOSI_INCLUDE_DIR_HINTS=${lib.getDev osi}/include"
+    (lib.cmakeBool "OpenMVG_BUILD_EXAMPLES" enableExamples)
+    (lib.cmakeBool "OpenMVG_BUILD_DOC" enableDocs)
+    (lib.cmakeFeature "TARGET_ARCHITECTURE" "generic")
+    (lib.cmakeFeature "CLP_INCLUDE_DIR_HINTS" "${lib.getDev clp}/include")
+    (lib.cmakeFeature "COINUTILS_INCLUDE_DIR_HINTS" "${lib.getDev coin-utils}/include")
+    (lib.cmakeFeature "LEMON_INCLUDE_DIR_HINTS" "${lib.getDev lemon-graph}/include")
+    (lib.cmakeFeature "OSI_INCLUDE_DIR_HINTS" "${lib.getDev osi}/include")
+
+    # Compatibility with CMake < 3.5 has been removed from CMake.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ]
-  ++ lib.optional enableShared "-DOpenMVG_BUILD_SHARED=ON";
+  ++ lib.optionals enableShared [
+    (lib.cmakeBool "OpenMVG_BUILD_SHARED" true)
+  ];
 
   cmakeDir = "./src";
 
@@ -83,14 +88,18 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     description = "Library for computer-vision scientists and targeted for the Multiple View Geometry community";
     homepage = "https://openmvg.readthedocs.io/en/latest/";
+    downloadPage = "https://github.com/openMVG/openMVG";
+    changelog = "https://github.com/openMVG/openMVG/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mpl20;
     platforms = lib.platforms.unix;
+    badPlatforms = [
+      "x86_64-darwin"
+    ];
     maintainers = with lib.maintainers; [
       mdaiter
       bouk
     ];
   };
-}
+})
