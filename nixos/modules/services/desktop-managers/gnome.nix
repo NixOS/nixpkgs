@@ -297,8 +297,12 @@ in
 
       systemd.packages = [
         pkgs.gnome-flashback
+        pkgs.metacity
+        (pkgs.gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
       ]
-      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm cfg.flashback.customSessions;
 
       environment.systemPackages = [
         pkgs.gnome-flashback
@@ -311,9 +315,7 @@ in
         wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
       ) flashbackWms)
       # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-      ++ (map (
-        wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
-      ) flashbackWms);
+      ++ (map (wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel; }) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {

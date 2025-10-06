@@ -26,8 +26,17 @@
 
       services.desktopManager.gnome.enable = true;
       services.desktopManager.gnome.debug = true;
-      services.desktopManager.gnome.flashback.enableMetacity = true;
-      services.displayManager.defaultSession = "gnome-flashback-metacity";
+
+      services.desktopManager.gnome.flashback.customSessions = [
+        {
+          # Intentionally a different name to test mkSystemdTargetForWm.
+          wmName = "metacitytest";
+          wmLabel = "Metacity";
+          wmCommand = "${pkgs.metacity}/bin/metacity";
+          enableGnomePanel = true;
+        }
+      ];
+      services.displayManager.defaultSession = "gnome-flashback-metacitytest";
     };
 
   testScript =
