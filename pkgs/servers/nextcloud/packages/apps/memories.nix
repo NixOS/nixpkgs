@@ -17,6 +17,7 @@ let
       appHash = "sha256-ORv+6XkN+qTk5bXMFKv2Mv/jU+7F12IbWE9JjV2ot9o=";
       srcHash = "sha256-hiYAQshi84oOw1qfNECWAssbln8UPwD+8Hfb2pKw8no=";
     };
+    "32" = latestVersionForNc."31";
   };
   currentVersionInfo =
     latestVersionForNc.${ncVersion}
