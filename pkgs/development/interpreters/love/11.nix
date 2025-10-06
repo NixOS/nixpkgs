@@ -18,7 +18,6 @@
   libjpeg,
   libpng,
   libwebp,
-  lua5_1,
   mesa,
   xorg,
   zlib,
