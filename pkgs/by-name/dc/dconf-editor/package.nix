@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "dconf-editor";
-  version = "49.rc";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/dconf-editor/${lib.versions.major version}/dconf-editor-${version}.tar.xz";
-    hash = "sha256-IvI9WgT0+/3gq3nWlhrprFURX+ttoXgl/4y0tr0rbnU=";
+    hash = "sha256-kKjM+t9R3/MeACgyT7mjWLLSbFroYaccfb+fTdm905k=";
   };
 
   patches = [
