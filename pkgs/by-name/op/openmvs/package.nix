@@ -16,6 +16,7 @@
   llvmPackages,
   opencv,
   pkg-config,
+  python3,
   stdenv,
   vcg,
   zstd,
@@ -27,7 +28,7 @@ let
   });
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.2.0";
+  version = "2.3.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
@@ -35,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "openmvs";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
+    hash = "sha256-+0rz1O7pf9dUyfK0ESW4DFzrpBgDKZxQ/mmHoh8mh+0=";
   };
 
   # SSE is enabled by default
@@ -57,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
     llvmPackages.openmp
     vcg
+    python3
   ];
 
   nativeBuildInputs = [
