@@ -27,11 +27,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snapshot";
-  version = "49.rc";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/snapshot/${lib.versions.major finalAttrs.version}/snapshot-${finalAttrs.version}.tar.xz";
-    hash = "sha256-S7ivkP/sn/MmIS8ElqA336J3/v6fj5sPAWYpQQ3hK0M=";
+    hash = "sha256-X5YZPSkZxzVXRdJqGwHyPDyzCpPHQtWD7EKSfEpFrhg=";
   };
 
   patches = [
