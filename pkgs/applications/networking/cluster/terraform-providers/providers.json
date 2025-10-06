@@ -785,15 +785,6 @@
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-L1wufPa7LPPyOPTL+jFQgiWzJoJYS+fCdw3N0KZqKtc="
   },
-  "metal": {
-    "hash": "sha256-1HTSDVMk2VhoYRLInrBK3bDuYU0SwyhBV1p5A2tlU/I=",
-    "homepage": "https://registry.terraform.io/providers/equinix/metal",
-    "owner": "equinix",
-    "repo": "terraform-provider-metal",
-    "rev": "v3.3.0",
-    "spdx": "MPL-2.0",
-    "vendorHash": "sha256-QxbZv6YMa5/I4bTeQBNdmG3EKtLEmstnH7HMiZzFJrI="
-  },
   "migadu": {
     "hash": "sha256-XXtDXByaSnnUGLPiwUNTPTHqDOED7IJQsf8b9x0/R8E=",
     "homepage": "https://registry.terraform.io/providers/metio/migadu",
