@@ -1795,6 +1795,7 @@ mapAliases {
   mpris-discord-rpc = throw "'mpris-discord-rpc' has been renamed to 'music-discord-rpc'."; # Added 2025-09-14
   mq-cli = throw "'mq-cli' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   mrkd = throw "'mrkd' has been removed as it is unmaintained since 2021"; # Added 2024-12-21
+  mrpeach = throw "'mrpeach' has been removed as it is unmaintained"; # Added 2025-10-06
   mrxvt = throw "'mrxvt' has been removed due to lack of maintainence upstream"; # Added 2025-09-25
   msp430NewlibCross = msp430Newlib; # Added 2024-09-06
   msgpack = throw "msgpack has been split into msgpack-c and msgpack-cxx"; # Added 2025-09-14
