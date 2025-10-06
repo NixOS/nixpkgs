@@ -14,7 +14,7 @@
   libpng,
   libtiff,
   nix-update-script,
-  openmp,
+  llvmPackages,
   osi,
   zlib,
   enableShared ? !stdenv.hostPlatform.isStatic,
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     libtiff
-    openmp
+    llvmPackages.openmp
     osi
     zlib
   ];
