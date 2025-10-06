@@ -35,6 +35,8 @@ jobs:
             into: staging-next
           - from: staging-next
             into: staging
+          - from: master
+            into: staging-nixos
     uses: ./.github/workflows/periodic-merge.yml
     with:
       from: ${{ matrix.pairs.from }}
