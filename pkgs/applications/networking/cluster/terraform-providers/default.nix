@@ -116,7 +116,9 @@ let
         name: date: throw "the ${name} terraform provider has been archived by upstream on ${date}";
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
-    lib.optionalAttrs config.allowAliases { };
+    lib.optionalAttrs config.allowAliases {
+      _assert = archived "_assert" "2025/10";
+    };
 
   # excluding aliases, used by terraform-full
   actualProviders = automated-providers // special-providers;
