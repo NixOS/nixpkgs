@@ -36,6 +36,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-u12Qfc0fmcs7TU35/gqfRxjSpw9SDbc4+ebR7lGpvJI=";
   };
 
+  postPatch =
+    let
+      versionList = lib.versions.splitVersion openh264.version;
+      major = lib.elemAt versionList 0;
+      minor = lib.elemAt versionList 1;
+      patch = lib.elemAt versionList 2;
+    in
+    ''
+      substituteInPlace video/external/src/decoder/openh264.rs \
+        --replace-fail "OpenH264Version(2, 4, 1)" \
+                       "OpenH264Version(${major}, ${minor}, ${patch})"
+    '';
+
   cargoHash = "sha256-v/3vf7YYJiz+PMBsznvOJsNLtv6bEQ9pffAI33rLVuw=";
   cargoBuildFlags = lib.optional withRuffleTools "--workspace";
 
@@ -66,27 +79,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  # Prevents ruffle from downloading openh264 at runtime for Linux
-  openh264-241 =
-    if stdenv.hostPlatform.isLinux then
-      openh264.overrideAttrs (_: rec {
-        version = "2.4.1";
-        src = fetchFromGitHub {
-          owner = "cisco";
-          repo = "openh264";
-          tag = "v${version}";
-          hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
-        };
-      })
-    else
-      null;
-
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux (
     [
       wayland
       libxkbcommon
       vulkan-loader
-      finalAttrs.openh264-241
+      openh264
     ]
     ++ lib.optionals withX11 [
       libXcursor
