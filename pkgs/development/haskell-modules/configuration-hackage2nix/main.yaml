@@ -380,6 +380,7 @@ package-maintainers:
     - sitemap
   ncfavier:
     - Agda
+    - agda2hs
     - irc-client
     - lambdabot
     - shake
