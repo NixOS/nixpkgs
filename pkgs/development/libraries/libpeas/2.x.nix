@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.1.0";
+  version = "2.2.0";
 
   outputs = [
     "out"
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-DcWB9P4pdU+xFK3G9GoEIyAMER4IweWtCHGeVcQY3pc=";
+    hash = "sha256-wohyM/CEpp+r/H+gFA1BBJGGPXBQr7KGd/mlU7JYCtk=";
   };
 
   patches = [
