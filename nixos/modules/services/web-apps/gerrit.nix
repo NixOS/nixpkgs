@@ -247,6 +247,7 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "full";
+        RemoveIPC = true;
         RestrictAddressFamilies = [
           "AF_UNIX"
           "AF_INET"
