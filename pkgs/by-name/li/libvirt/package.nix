@@ -76,7 +76,7 @@
   enableZfs ? stdenv.hostPlatform.isLinux,
   zfs,
   enableLvm2 ? stdenv.hostPlatform.isLinux,
-  lvm2
+  lvm2,
 }:
 
 let
