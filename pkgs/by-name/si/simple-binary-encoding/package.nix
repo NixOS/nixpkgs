@@ -9,6 +9,7 @@
   # Generating the usage instructions for script
   htmlq,
   html2text,
+  txt2man,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "simple-binary-encoding";
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     gradle
     htmlq
     html2text
+    txt2man
   ];
 
   mitmCache = gradle.fetchDeps {
@@ -40,7 +42,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [
     "out"
-    "all"
     "benchmarks"
     "samples"
     "tool"
@@ -57,9 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
           cp -r "sbe-$output"/build/docs/javadoc "''${!output}/share/javadoc"
         fi
       fi
+      if [[ "$output" == "tool" ]]; then
+        cp sbe-all/build/libs/*.jar "$tool/share/sbe"
+      fi
     done
 
-    mkdir -p "$out/"{bin,share/doc}
+    mkdir -p "$out/"{bin,share/doc,share/man}
 
     # Generate the usage file from the javadoc
     shopt -s globstar
@@ -70,7 +74,20 @@ stdenv.mkDerivation (finalAttrs: {
       > "$out/share/doc/sbetool.txt"
 
     echo >> "$out/share/doc/sbetool.txt"
-    echo "Additional arguments will be interpreted by java(1)." >> "$out/share/doc/sbetool.txt"
+    echo "All other arguments will be interpreted by java(1)." >> "$out/share/doc/sbetool.txt"
+
+    # Generate a manpage
+    sed \
+      -e '1i\NAME\nsbetool - ' \
+      -e 's/Usage:/\nSYNOPSIS\n/' \
+      -e 's/Available Options:/\nOPTIONS\n/' \
+      < "$out/share/doc/sbetool.txt" \
+      | txt2man \
+        -P simple-binary-encoding \
+        -t "sbetool" -s1 \
+        -r "$pname $verison" \
+        -v "Simple Binary Encoding" \
+        > "$out/share/man/sbetool.1"
 
     runtimeShell="${runtimeShell}" java="${lib.getExe jre}" \
       substituteAll ${./sbetool.sh} "$out/bin/sbetool"

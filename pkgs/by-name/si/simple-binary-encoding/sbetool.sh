@@ -47,5 +47,5 @@ fi
 @java@ \
   --add-opens java.base/jdk.internal.misc=ALL-UNNAMED \
   "${opts[@]}" \
-  -jar "@all@/share/sbe/sbe-all-@version@.jar" \
+  -jar "@tool@/share/sbe/sbe-all-@version@.jar" \
   "${files[@]}"
