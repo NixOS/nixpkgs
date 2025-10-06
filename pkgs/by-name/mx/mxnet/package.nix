@@ -68,6 +68,9 @@ stdenv.mkDerivation rec {
     "-DUSE_MKL_IF_AVAILABLE=OFF"
     "-DUSE_CUDA=OFF"
     "-DUSE_CUDNN=OFF"
+    # New versions of CMake refuse to build 3rdparty/googletest/googletest as it specifies a 2.x version of
+    # CMake
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
