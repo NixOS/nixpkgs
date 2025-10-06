@@ -76,11 +76,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-control-center";
-  version = "49.rc";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-control-center/${lib.versions.major finalAttrs.version}/gnome-control-center-${finalAttrs.version}.tar.xz";
-    hash = "sha256-DL9Y5KD9UVdB83b0NHFd52R9mz2QrwhvksOrt4liIkI=";
+    hash = "sha256-pdjc4qAooAR+hnQ8J3J33os1oGPUSDNgSuo+ieqFn5c=";
   };
 
   patches = [
