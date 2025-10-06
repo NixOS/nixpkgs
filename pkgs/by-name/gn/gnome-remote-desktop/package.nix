@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-remote-desktop";
-  version = "49.rc";
+  version = "49.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-remote-desktop/${lib.versions.major version}/gnome-remote-desktop-${version}.tar.xz";
-    hash = "sha256-4CXGbr1Ju5VJFDbzexcg48bLMfl8VFaWaoWxPo4GxyY=";
+    hash = "sha256-1HrdnZcPIkrMd+/lohZIbUBFHivCG4W/7FOX1CD9oYo=";
   };
 
   nativeBuildInputs = [
