@@ -62,7 +62,12 @@ buildGoModule rec {
     mv $out/bin/hub $out/bin/beszel-hub
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "webui"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/henrygd/beszel";
