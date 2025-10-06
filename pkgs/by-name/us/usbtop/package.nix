@@ -7,15 +7,15 @@
   boost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "usbtop";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "aguinet";
     repo = "usbtop";
-    rev = "release-${version}";
-    sha256 = "0qbad0aq6j4jrh90l6a0akk71wdzhyzmy6q8wl138axyj2bp9kss";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-Ws90l5C+KzQC5QgbX7+Hv/Fw5lRAGQoSzJJIgxVoamE=";
   };
 
   postPatch =
@@ -29,17 +29,19 @@ stdenv.mkDerivation rec {
     '';
 
   nativeBuildInputs = [ cmake ];
+
   buildInputs = [
     libpcap
     boost
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/aguinet/usbtop";
+    changelog = "https://github.com/aguinet/usbtop/raw/${finalAttrs.src.rev}/CHANGELOG";
     description = "Top utility that shows an estimated instantaneous bandwidth on USB buses and devices";
     mainProgram = "usbtop";
     maintainers = [ ];
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
   };
-}
+})
