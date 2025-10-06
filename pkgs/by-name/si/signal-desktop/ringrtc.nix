@@ -1,5 +1,5 @@
 {
-  rustPlatform,
+  rustPackages_1_89,
   lib,
   fetchFromGitHub,
   cmake,
@@ -18,7 +18,7 @@ let
     buildSharedLibs = false;
   };
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_89.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
   version = "2.58.1";
 
