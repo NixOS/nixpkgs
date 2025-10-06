@@ -261,6 +261,7 @@ in
         CapabilityBoundingSet = "";
         LockPersonality = true;
         # MemoryDenyWriteExecute = false;   Breaks execution;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
