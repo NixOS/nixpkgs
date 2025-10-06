@@ -256,9 +256,10 @@ let
         cachix
         # carp broken on 2024-04-09
         changelog-d
-        cornelis
         cedille
         client-ip-echo
+        cornelis
+        codd
         darcs
         dconf2nix
         dhall
