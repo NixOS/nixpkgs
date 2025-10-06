@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchurl,
   meson,
   ninja,
   pkg-config,
@@ -20,20 +20,17 @@
   libxml2,
   sane-backends,
   vala,
-  gitUpdater,
+  gnome,
   gobject-introspection,
 }:
 
 stdenv.mkDerivation rec {
   pname = "simple-scan";
-  version = "49.0";
+  version = "49.0.1";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "simple-scan";
-    tag = version;
-    hash = "sha256-CZNbw6Ve91bhF5ItsJYOhyUy4CsimXrTLIQBRDhnzFU=";
+  src = fetchurl {
+    url = "mirror://gnome/sources/simple-scan/${lib.versions.major version}/simple-scan-${version}.tar.xz";
+    hash = "sha256-4ZdiQiZj70v1059udfTWGo3hgTcpqW5X4E6Bdk4B6uI=";
   };
 
   nativeBuildInputs = [
@@ -64,9 +61,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   passthru = {
-    updateScript = gitUpdater {
-      # Ignore tags like 48.1-2, which actually does not introduce any changes.
-      ignoredVersions = "-";
+    updateScript = gnome.updateScript {
+      packageName = "simple-scan";
     };
   };
 
