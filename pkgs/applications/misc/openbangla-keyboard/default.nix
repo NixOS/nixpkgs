@@ -29,6 +29,15 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # prevents runtime crash when fcitx5-based IM attempts to look in /usr
+    (fetchpatch {
+      name = "use-CMAKE_INSTALL_PREFIX-for-loading-data.patch";
+      url = "https://github.com/OpenBangla/OpenBangla-Keyboard/commit/f402472780c29eaa6b4cc841a70289adf171462b.diff";
+      hash = "sha256-YahvtyOxe8F40Wfe+31C6fdmm197QN26/Q67oinOplk=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
