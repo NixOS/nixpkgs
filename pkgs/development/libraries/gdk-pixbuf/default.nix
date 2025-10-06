@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gdk-pixbuf";
-  version = "2.43.5";
+  version = "2.44.3";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-      hash = "sha256-pyPsJChCf4V7hyffu+nat3FCoT+20MR/lSIiUa42/xU=";
+      hash = "sha256-QKktzCN/+UtjqAwVmj9vIs1Z9vtJYfIBx4eZ+iyKwKY=";
     };
 
   patches = [
