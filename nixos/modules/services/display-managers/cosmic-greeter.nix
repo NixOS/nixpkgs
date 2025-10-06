@@ -70,6 +70,7 @@ in
       homeMode = "0750";
       createHome = true;
       group = "cosmic-greeter";
+      extraGroups = [ "video" ];
     };
     # Required for authentication
     security.pam.services.cosmic-greeter = { };
