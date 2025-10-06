@@ -465,6 +465,7 @@ in
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = "strict";
