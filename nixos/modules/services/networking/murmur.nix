@@ -345,6 +345,7 @@ in
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
