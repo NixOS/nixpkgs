@@ -1443,15 +1443,6 @@
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-rUYHapEVqRupLOPVbcAH8YP0cuXclMmYTQUkqeOwCN0="
   },
-  "vra7": {
-    "hash": "sha256-KzxthTn3z0kZTUTKO8zq6DaNMTnfb7gFlbuWgxZtqwo=",
-    "homepage": "https://registry.terraform.io/providers/vmware/vra7",
-    "owner": "vmware",
-    "repo": "terraform-provider-vra7",
-    "rev": "v3.0.15",
-    "spdx": "MPL-2.0",
-    "vendorHash": null
-  },
   "vsphere": {
     "hash": "sha256-vRO6vxzi4d0hNc0MmQLhN7roONnsjxPBtFt0fyvxWd8=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/vsphere",

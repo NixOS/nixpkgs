@@ -123,6 +123,7 @@ let
       huaweicloudstack = archived "huaweicloudstack" "2025/10";
       metal = archived "metal" "2025/10";
       stackpath = archived "stackpath" "2025/10";
+      vra7 = archived "vra7" "2025/10";
     };
 
   # excluding aliases, used by terraform-full
