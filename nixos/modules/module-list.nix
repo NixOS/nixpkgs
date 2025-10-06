@@ -1260,7 +1260,7 @@
   ./services/networking/netbird/server.nix
   ./services/networking/netclient.nix
   ./services/networking/networkd-dispatcher.nix
-  ./services/networking/networkmanager.nix
+  ./services/networking/networkmanager/default.nix
   ./services/networking/newt.nix
   ./services/networking/nextdns.nix
   ./services/networking/nftables.nix
