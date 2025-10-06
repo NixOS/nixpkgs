@@ -3501,10 +3501,6 @@ with pkgs;
 
   openhantek6022 = libsForQt5.callPackage ../applications/science/electronics/openhantek6022 { };
 
-  openmvs = callPackage ../applications/science/misc/openmvs {
-    inherit (llvmPackages) openmp;
-  };
-
   openntpd_nixos = openntpd.override {
     privsepUser = "ntp";
     privsepPath = "/var/empty";
