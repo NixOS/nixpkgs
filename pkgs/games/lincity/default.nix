@@ -68,10 +68,10 @@ stdenv.mkDerivation rec {
     sed -e 's@\[MPS_INFO_CHARS\]@[MPS_INFO_CHARS+8]@' -i mps.c -i mps.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "City simulation game";
     mainProgram = "xlincity";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
     maintainers = [ ];
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found

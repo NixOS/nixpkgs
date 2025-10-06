@@ -45,12 +45,12 @@ python3Packages.buildPythonApplication rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Weaponized web shell";
     homepage = "https://github.com/epinna/weevely3";
     mainProgram = "weevely";
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ d3vil0p3r ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
   };
 }

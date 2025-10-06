@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     ./xpilot-ng-sdl-window-fix.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer X11 space combat game";
     homepage = "http://xpilot.sf.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.linux;
   };
 }

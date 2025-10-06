@@ -33,10 +33,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pretix_servicefees" ];
 
-  meta = with lib; {
+  meta = {
     description = "Allows to charge a flat fee on all orders";
     homepage = "https://github.com/pretix/pretix-servicefees";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

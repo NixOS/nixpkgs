@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-QB4s6g3QmHFPtR7utGmfhQ8iUFyw6DXGii4XTj2V874=";
 
-  meta = with lib; {
+  meta = {
     description = "Cargo extension for building Android NDK projects";
     mainProgram = "cargo-ndk";
     homepage = "https://github.com/bbqsrc/cargo-ndk";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];

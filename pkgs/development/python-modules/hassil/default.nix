@@ -43,12 +43,12 @@ buildPythonPackage rec {
     "tests/test_fuzzy.py"
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/home-assistant/hassil/blob/${src.tag}/CHANGELOG.md";
     description = "Intent parsing for Home Assistant";
     mainProgram = "hassil";
     homepage = "https://github.com/home-assistant/hassil";
-    license = licenses.asl20;
-    teams = [ teams.home-assistant ];
+    license = lib.licenses.asl20;
+    teams = [ lib.teams.home-assistant ];
   };
 }

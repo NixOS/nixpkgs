@@ -49,12 +49,12 @@ mkDerivation rec {
     "-DYAB_PORTS=qt"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open-source Sega Saturn emulator";
     mainProgram = "yabause";
     homepage = "https://yabause.org/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

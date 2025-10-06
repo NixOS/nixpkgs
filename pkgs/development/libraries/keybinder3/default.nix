@@ -50,11 +50,11 @@ stdenv.mkDerivation rec {
       --replace "dummy pkg-config" 'dummy ''${ac_tool_prefix}pkg-config'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library for registering global key bindings";
     homepage = "https://github.com/kupferlauncher/keybinder/";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

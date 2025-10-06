@@ -122,10 +122,10 @@ stdenv.mkDerivation (finalAttrs: {
     find $out/share/doc/brmodelo/javadoc -name "*.html" -exec strip-nondeterminism --type javadoc {} +
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Entity-relationship diagram tool for making conceptual and logical database models";
     homepage = "https://github.com/chcandido/brModelo";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     mainProgram = "brmodelo";
     maintainers = [ ];
   };

@@ -44,13 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Improved version of the AviSynth frameserver";
     homepage = "https://avs-plus.net/";
     changelog = "https://github.com/AviSynth/AviSynthPlus/releases/tag/${finalAttrs.src.rev}";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     pkgConfigModules = [ "avisynth" ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ jopejoe1 ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ jopejoe1 ];
   };
 })

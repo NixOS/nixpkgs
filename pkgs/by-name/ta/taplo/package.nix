@@ -47,11 +47,11 @@ rustPlatform.buildRustPackage rec {
           --zsh <($out/bin/taplo completions zsh)
       '';
 
-  meta = with lib; {
+  meta = {
     description = "TOML toolkit written in Rust";
     homepage = "https://taplo.tamasfe.dev";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "taplo";
   };
 }

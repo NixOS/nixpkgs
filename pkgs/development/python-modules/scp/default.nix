@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scp" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jbardin/scp.py";
     description = "SCP module for paramiko";
-    license = licenses.lgpl21Only;
-    maintainers = with maintainers; [ xnaveira ];
+    license = lib.licenses.lgpl21Only;
+    maintainers = with lib.maintainers; [ xnaveira ];
   };
 }

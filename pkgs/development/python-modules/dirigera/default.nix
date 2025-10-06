@@ -40,8 +40,8 @@ buildPythonPackage rec {
     description = "Module for controlling the IKEA Dirigera Smart Home Hub";
     homepage = "https://github.com/Leggin/dirigera";
     changelog = "https://github.com/Leggin/dirigera/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "generate-token";
     broken = versionOlder pydantic.version "2";
   };

@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "bindir=$(out)/bin" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://angband.github.io/angband";
     description = "Single-player roguelike dungeon exploration game";
     mainProgram = "angband";
-    maintainers = [ maintainers.kenran ];
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    maintainers = [ lib.maintainers.kenran ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 })

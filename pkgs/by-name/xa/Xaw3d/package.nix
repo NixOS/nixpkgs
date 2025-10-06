@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
     xorgproto
   ];
 
-  meta = with lib; {
+  meta = {
     description = "3D widget set based on the Athena Widget set";
     platforms = lib.platforms.unix;
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

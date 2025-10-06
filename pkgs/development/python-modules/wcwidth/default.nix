@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "wcwidth" ];
 
-  meta = with lib; {
+  meta = {
     description = "Measures number of Terminal column cells of wide-character codes";
     longDescription = ''
       This API is mainly for Terminal Emulator implementors -- any Python
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/jquast/wcwidth";
     changelog = "https://github.com/jquast/wcwidth/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

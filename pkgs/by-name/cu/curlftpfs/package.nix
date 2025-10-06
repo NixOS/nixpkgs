@@ -51,11 +51,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails, doesn't work well too, btw
 
-  meta = with lib; {
+  meta = {
     description = "Filesystem for accessing FTP hosts based on FUSE and libcurl";
     mainProgram = "curlftpfs";
     homepage = "https://curlftpfs.sourceforge.net";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
   };
 }

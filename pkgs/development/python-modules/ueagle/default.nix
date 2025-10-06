@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "uEagle" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library Rainforest EAGLE devices";
     homepage = "https://github.com/jcalbert/uEagle";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform code editor";
     longDescription = ''
       Text/code editor with lite UI. Syntax highlighting for 200+ languages.
@@ -137,9 +137,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://cudatext.github.io/";
     changelog = "https://cudatext.github.io/history.txt";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.linux;
     mainProgram = "cudatext";
   };
 }

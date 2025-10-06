@@ -34,10 +34,10 @@ buildGoModule rec {
     installManPage man/*.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Making SSH more convenient";
     homepage = "https://codeberg.org/vaporup/ssh-tools";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
   };
 }

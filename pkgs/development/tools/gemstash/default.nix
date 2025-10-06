@@ -15,10 +15,10 @@ bundlerApp rec {
     tests = { inherit (nixosTests) gemstash; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cache for RubyGems.org and a private gem server";
     homepage = "https://github.com/rubygems/gemstash";
-    license = licenses.mit;
-    maintainers = [ maintainers.viraptor ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.viraptor ];
   };
 }

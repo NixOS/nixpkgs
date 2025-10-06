@@ -38,12 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     louvain-community
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CNF minimizer and minimal independent set calculator";
     homepage = "https://github.com/meelgroup/arjun";
-    license = licenses.mit;
-    maintainers = with maintainers; [ t4ccer ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ t4ccer ];
+    platforms = lib.platforms.linux;
     mainProgram = "arjun";
   };
 })

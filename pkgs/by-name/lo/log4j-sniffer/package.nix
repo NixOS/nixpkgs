@@ -28,11 +28,11 @@ buildGoModule rec {
     git init
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool that scans archives to check for vulnerable log4j versions";
     mainProgram = "log4j-sniffer";
     homepage = "https://github.com/palantir/log4j-sniffer";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -62,11 +62,11 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Operating system independent implementation of iOS device features";
     homepage = "https://github.com/danielpaulus/go-ios";
-    license = licenses.mit;
-    maintainers = with maintainers; [ eyjhb ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ eyjhb ];
     mainProgram = "ios";
   };
 }

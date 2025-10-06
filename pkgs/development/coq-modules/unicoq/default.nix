@@ -20,9 +20,9 @@ mkCoqDerivation {
   release."1.6-8.19".sha256 = "sha256-fDk60B8AzJwiemxHGgWjNu6PTu6NcJoI9uK7Ww2AT14=";
   releaseRev = v: "v${v}";
   mlPlugin = true;
-  meta = with lib; {
+  meta = {
     description = "Enhanced unification algorithm for Coq";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
   preBuild = ''
     coq_makefile -f _CoqProject -o Makefile

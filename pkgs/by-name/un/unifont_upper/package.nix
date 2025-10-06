@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation rec {
       gpl2Plus
       fontException
     ];
-    maintainers = [ maintainers.mathnerd314 ];
-    platforms = platforms.all;
+    maintainers = [ lib.maintainers.mathnerd314 ];
+    platforms = lib.platforms.all;
   };
 }

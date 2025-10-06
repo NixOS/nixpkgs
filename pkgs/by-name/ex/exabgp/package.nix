@@ -36,13 +36,13 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "BGP swiss army knife of networking";
     homepage = "https://github.com/Exa-Networks/exabgp";
     changelog = "https://github.com/Exa-Networks/exabgp/blob/${src.tag}/CHANGELOG.rst";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     mainProgram = "exabgp";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       hexa
       raitobezarius
     ];

@@ -112,12 +112,12 @@ stdenv.mkDerivation {
     fontconfig
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Professional video editing and compositing environment (community version)";
     homepage = "http://cinelerra-cv.wikidot.com/";
     mainProgram = "cinelerracv";
-    maintainers = with maintainers; [ marcweber ];
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ marcweber ];
+    license = lib.licenses.gpl2Only;
     # https://github.com/cinelerra-cv-team/cinelerra-cv/issues/3
     platforms = [ "x86_64-linux" ];
   };

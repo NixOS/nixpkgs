@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for the Berkely Unified Parallel C language";
     longDescription = ''
       Unified Parallel C (UPC) is an extension of the C programming language
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       thread of execution per processor.
     '';
     homepage = "https://upc.lbl.gov/";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ zimbatm ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ zimbatm ];
   };
 }

@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
     description = "Clozure Common Lisp";
     homepage = "https://ccl.clozure.com/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "ccl";
     teams = [ lib.teams.lisp ];
     platforms = attrNames options;

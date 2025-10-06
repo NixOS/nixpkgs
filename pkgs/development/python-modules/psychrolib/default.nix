@@ -29,11 +29,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "psychrolib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of psychrometric functions to calculate thermodynamic properties";
     homepage = "https://github.com/psychrometrics/psychrolib";
     changelog = "https://github.com/psychrometrics/psychrolib/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -99,12 +99,12 @@ rustPlatform.buildRustPackage rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/JakeStanger/ironbar";
     description = "Customizable gtk-layer-shell wlroots/sway bar written in Rust";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       yavko
       donovanglover
       jakestanger

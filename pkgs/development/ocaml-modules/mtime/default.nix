@@ -33,11 +33,11 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = with lib; {
+    meta = {
       description = "Monotonic wall-clock time for OCaml";
       homepage = "https://erratique.ch/software/mtime";
       inherit (ocaml.meta) platforms;
-      maintainers = [ maintainers.vbgl ];
-      license = licenses.bsd3;
+      maintainers = [ lib.maintainers.vbgl ];
+      license = lib.licenses.bsd3;
     };
   }

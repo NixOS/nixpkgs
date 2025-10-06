@@ -61,12 +61,12 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://wimlib.net";
     description = "Library and program to extract, create, and modify WIM files";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3
       lgpl3
       mit

@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
         "'$out/share/dool/'"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python3 compatible clone of dstat";
     homepage = "https://github.com/scottchiefbaker/dool";
     changelog = "https://github.com/scottchiefbaker/dool/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ figsoda ];
+    platforms = lib.platforms.linux;
     mainProgram = "dool";
   };
 }

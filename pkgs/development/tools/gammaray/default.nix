@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     "-DGAMMARAY_BUILD_DOCS=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Software introspection tool for Qt applications developed by KDAB";
     homepage = "https://github.com/KDAB/GammaRay";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ wineee ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "gammaray";
   };
 }

@@ -33,11 +33,11 @@ buildPythonPackage rec {
 
   passthru.tests.wagtail-factories = callPackage ./tests.nix { };
 
-  meta = with lib; {
+  meta = {
     description = "Factory boy classes for wagtail";
     homepage = "https://github.com/wagtail/wagtail-factories";
     changelog = "https://github.com/wagtail/wagtail-factories/blob/${src.tag}/CHANGES";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sephi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sephi ];
   };
 }

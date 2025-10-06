@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://launchpad.net/gnuclad";
     description = "Generating cladogram trees for the GNU/Linux distro timeline project";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mog ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mog ];
+    platforms = lib.platforms.unix;
     mainProgram = "gnuclad";
   };
 }

@@ -18,10 +18,10 @@ buildGoModule rec {
   sourceRoot = "${src.name}/cmd/tar2ext4";
   vendorHash = null;
 
-  meta = with lib; {
+  meta = {
     description = "Convert a tar archive to an ext4 image";
-    maintainers = with maintainers; [ qyliss ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ qyliss ];
+    license = lib.licenses.mit;
     mainProgram = "tar2ext4";
   };
 }

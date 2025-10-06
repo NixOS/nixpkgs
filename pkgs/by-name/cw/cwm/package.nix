@@ -37,15 +37,15 @@ stdenv.mkDerivation rec {
 
   prePatch = ''sed -i "s@/usr/local@$out@" Makefile'';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight and efficient window manager for X11";
     homepage = "https://github.com/leahneukirchen/cwm";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       _0x4A6F
       mkf
     ];
-    license = licenses.isc;
-    platforms = platforms.linux;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.linux;
     mainProgram = "cwm";
   };
 }

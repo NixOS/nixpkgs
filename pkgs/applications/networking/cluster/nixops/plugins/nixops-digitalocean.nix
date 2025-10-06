@@ -45,10 +45,10 @@ buildPythonPackage {
 
   passthru.updateScript = unstableGitUpdater { };
 
-  meta = with lib; {
+  meta = {
     description = "NixOps Digitalocean plugin";
     homepage = "https://github.com/nix-community/nixops-digitalocean";
-    license = licenses.lgpl3Only;
+    license = lib.licenses.lgpl3Only;
     maintainers = [ ];
   };
 }

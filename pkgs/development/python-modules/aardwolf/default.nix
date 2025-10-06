@@ -71,12 +71,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aardwolf" ];
 
-  meta = with lib; {
+  meta = {
     description = "Asynchronous RDP protocol implementation";
     mainProgram = "ardpscan";
     homepage = "https://github.com/skelsec/aardwolf";
     changelog = "https://github.com/skelsec/aardwolf/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

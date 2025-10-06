@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openal ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility library to help manage common tasks with OpenAL applications";
     homepage = "https://github.com/kcat/alure";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
   };
 }

@@ -24,7 +24,7 @@ bundlerApp {
     inherit (nixosTests) schleuder;
   };
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Encrypting mailing list manager with remailing-capabilities";
     longDescription = ''
@@ -34,7 +34,7 @@ bundlerApp {
     '';
     homepage = "https://schleuder.org";
     changelog = "https://0xacab.org/schleuder/schleuder/blob/main/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

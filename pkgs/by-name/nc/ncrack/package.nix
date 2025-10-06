@@ -46,12 +46,12 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Network authentication tool";
     mainProgram = "ncrack";
     homepage = "https://nmap.org/ncrack/";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

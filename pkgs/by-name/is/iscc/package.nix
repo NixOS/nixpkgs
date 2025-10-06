@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
   # They worked in wine but not on real windows.
   dontStrip = 1;
 
-  meta = with lib; {
+  meta = {
     description = "Compiler for Inno Setup, a tool for creating Windows installers";
     homepage = "https://jrsoftware.org/isinfo.php";
     changelog = "https://jrsoftware.org/files/is6-whatsnew.htm";
-    license = licenses.unfreeRedistributable;
+    license = lib.licenses.unfreeRedistributable;
     maintainers = [ ];
     platforms = wineWow64Packages.stable.meta.platforms;
   };

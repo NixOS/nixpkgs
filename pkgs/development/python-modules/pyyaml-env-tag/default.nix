@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yaml_env_tag" ];
 
-  meta = with lib; {
+  meta = {
     description = "Custom YAML tag for referencing environment variables";
     homepage = "https://github.com/waylan/pyyaml-env-tag";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

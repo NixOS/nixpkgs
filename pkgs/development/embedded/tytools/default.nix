@@ -28,11 +28,11 @@ stdenv.mkDerivation rec {
     qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Collection of tools to manage Teensy boards";
     homepage = "https://koromix.dev/tytools";
-    license = licenses.unlicense;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ahuzik ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ahuzik ];
   };
 }
