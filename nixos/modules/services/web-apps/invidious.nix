@@ -82,11 +82,11 @@ let
     ''
     # optional extra settings file
     + lib.optionalString (cfg.extraSettingsFile != null) ''
-      configParts+=("$(< ${cfg.extraSettingsFile})")
+      configParts+=("$(< ${lib.escapeShellArg cfg.extraSettingsFile})")
     ''
     # explicitly specified hmac key file
     + lib.optionalString (cfg.hmacKeyFile != null) ''
-      configParts+=("$(< ${cfg.hmacKeyFile})")
+      configParts+=("$(< ${lib.escapeShellArg cfg.hmacKeyFile})")
     ''
     # configure threads for secondary instances
     + lib.optionalString (scaleIndex > 0) ''
