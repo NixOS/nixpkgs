@@ -637,8 +637,6 @@ let
           group
           description
           home
-          homeMode
-          createHome
           isSystemUser
           password
           hashedPasswordFile
@@ -892,6 +890,10 @@ in
           }
         else
           ""; # keep around for backwards compatibility
+
+      systemd.tmpfiles.rules = lib.mapAttrsToList (
+        _: user: "d '${user.home}' ${user.homeMode} ${user.name} ${user.group} - -"
+      ) (lib.filterAttrs (_: user: user.createHome && user.enable) cfg.users);
 
       systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
         wantedBy = [ "multi-user.target" ];
