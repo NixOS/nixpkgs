@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
     "-DUSE_MKL_IF_AVAILABLE=OFF"
     "-DUSE_CUDA=OFF"
     "-DUSE_CUDNN=OFF"
