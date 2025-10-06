@@ -108,7 +108,7 @@ let
       zfs
     ]
     ++ lib.optionals enableLvm2 [
-      zfs
+      lvm2
     ]
   );
 in
