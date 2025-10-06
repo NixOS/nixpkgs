@@ -253,6 +253,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
+        StateDirectoryMode = "750";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
         AmbientCapabilities = "";
