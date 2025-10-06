@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "websockets"
+    "typer"
   ];
 
   build-system = with python3Packages; [
