@@ -152,15 +152,6 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
-  "azurestack": {
-    "hash": "sha256-aSwVa7y1AJ6sExx+bO/93oLBNgSBDJjuPYPY8i3C9T0=",
-    "homepage": "https://registry.terraform.io/providers/hashicorp/azurestack",
-    "owner": "hashicorp",
-    "repo": "terraform-provider-azurestack",
-    "rev": "v1.0.0",
-    "spdx": "MPL-2.0",
-    "vendorHash": null
-  },
   "baiducloud": {
     "hash": "sha256-zKkXfSIVVW0QxQB/fJNowy1mQPfXlv6HFcNaNlBSIvY=",
     "homepage": "https://registry.terraform.io/providers/baidubce/baiducloud",
