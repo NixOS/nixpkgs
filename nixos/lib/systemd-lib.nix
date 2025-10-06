@@ -349,6 +349,15 @@ rec {
       )
     );
 
+  settingsToSections =
+    settings:
+    concatStringsSep "\n" (
+      mapAttrsToList (section_name: section_attrs: ''
+        [${section_name}]
+        ${attrsToSection section_attrs}
+      '') settings
+    );
+
   generateUnits =
     {
       allowCollisions ? true,
@@ -724,10 +733,7 @@ rec {
 
   commonUnitText =
     def: lines:
-    ''
-      [Unit]
-      ${attrsToSection def.unitConfig}
-    ''
+    (settingsToSections { Unit = def.unitConfig; })
     + lines
     + optionalString (def.wantedBy != [ ]) ''
 
@@ -745,10 +751,7 @@ rec {
       enable
       overrideStrategy
       ;
-    text = ''
-      [Unit]
-      ${attrsToSection def.unitConfig}
-    '';
+    text = (settingsToSections { Unit = def.unitConfig; });
   };
 
   serviceToUnit = def: {
@@ -832,10 +835,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Timer]
-      ${attrsToSection def.timerConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Timer = def.timerConfig;
+    });
   };
 
   pathToUnit = def: {
@@ -848,10 +850,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Path]
-      ${attrsToSection def.pathConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Path = def.pathConfig;
+    });
   };
 
   mountToUnit = def: {
@@ -864,10 +865,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Mount]
-      ${attrsToSection def.mountConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Mount = def.mountConfig;
+    });
   };
 
   automountToUnit = def: {
@@ -880,10 +880,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Automount]
-      ${attrsToSection def.automountConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Automount = def.automountConfig;
+    });
   };
 
   sliceToUnit = def: {
@@ -896,10 +895,9 @@ rec {
       enable
       overrideStrategy
       ;
-    text = commonUnitText def ''
-      [Slice]
-      ${attrsToSection def.sliceConfig}
-    '';
+    text = commonUnitText def (settingsToSections {
+      Slice = def.sliceConfig;
+    });
   };
 
   # Create a directory that contains systemd definition files from an attrset

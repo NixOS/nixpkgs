@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/knorrie/btrfs-heatmap";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.evils ];
+    maintainers = [ ];
   };
 }

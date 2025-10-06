@@ -8051,13 +8051,6 @@
     githubId = 6803717;
     name = "Ilya Elenskiy";
   };
-  evils = {
-    email = "evils.devils@protonmail.com";
-    matrix = "@evils:nixos.dev";
-    github = "evils";
-    githubId = 30512529;
-    name = "Evils";
-  };
   evris99 = {
     name = "Evrymachos Koukoumakas";
     github = "evris99";

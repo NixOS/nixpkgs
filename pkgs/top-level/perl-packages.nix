@@ -2062,21 +2062,14 @@ with self;
 
   AuthenSASL = buildPerlPackage {
     pname = "Authen-SASL";
-    version = "2.1700";
+    version = "2.1900";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1700.tar.gz";
-      hash = "sha256-uG1aV2uNOHruJPOfR6VK/RS7ZrCQA9tQZQAfHeA6js4=";
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1900.tar.gz";
+      hash = "sha256-vjUzpokbLmdxULR5waDUvxHIu+6+0+e466NAU+k5I7A=";
     };
-    patches = [
-      (fetchurl {
-        name = "CVE-2025-40918.patch";
-        url = "https://security.metacpan.org/patches/A/Authen-SASL/2.1800/CVE-2025-40918-r1.patch";
-        hash = "sha256-2Mk6RoD7tI8V6YFV8gs08LLs0QeMJqwGz/eZ6zXBBpw=";
-      })
-    ];
     propagatedBuildInputs = [
-      DigestHMAC
       CryptURandom
+      DigestHMAC
     ];
     meta = {
       description = "SASL Authentication framework";
@@ -10956,6 +10949,29 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  DistributionMetadata = buildPerlModule {
+    pname = "Distribution-Metadata";
+    version = "0.10";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Distribution-Metadata-0.10.tar.gz";
+      sha256 = "sha256-uynMfh26OQphJnYfB9BwQ27fqinrjpBwMCOwXzET6nE=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      pkgs.gnumake
+    ];
+    propagatedBuildInputs = [
+      PerlStrip
+      CPANDistnameInfo
+      JSON
+    ];
+    meta = {
+      description = "Distribution::Metadata - gather distribution metadata in local";
+      homepage = "https://metacpan.org/pod/Distribution::Metadata";
+      mainProgram = "Metadata.pm";
     };
   };
 
@@ -39014,10 +39030,10 @@ with self;
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.46";
+    version = "0.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.46.tar.gz";
-      hash = "sha256-ZaJyapEAeUma1LuDxBeAWdpDMGrpLIc0yPoXwC8ioB0=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.48.tar.gz";
+      hash = "sha256-hXoHC6Rlq1uJ1NjTbZI1jt1m5ee0qRWEYR2FElrJqcc=";
     };
     buildInputs = [
       ExtUtilsCChecker

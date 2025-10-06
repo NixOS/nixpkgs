@@ -6,6 +6,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   nixosTests,
   zlib,
   libxcrypt,
@@ -42,12 +43,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dzFqPhtsOSRbwR71j01trdBjwBTBuuyPDYF5jFGeBys=";
+    hash = "sha256-rWMLawtz4dEYrM5Fj+wb8efQ5ClTDyZo7FgvT4u3jmU=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-11230.patch";
+      url = "https://github.com/haproxy/haproxy/commit/06675db4bf234ed17e14305f1d59259d2fe78b06.patch";
+      hash = "sha256-ULHN2gj4TZHUEDIJ6FAaRoyth/wz4VhXOf6maFfkhJA=";
+    })
+  ];
 
   buildInputs = [
     sslPkg

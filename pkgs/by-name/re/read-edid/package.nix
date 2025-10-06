@@ -18,7 +18,10 @@ stdenv.mkDerivation rec {
   patches = [ ./fno-common.patch ];
 
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'COPYING' 'LICENSE'
+    substituteInPlace CMakeLists.txt --replace-fail 'COPYING' 'LICENSE'
+
+    # cmake 4 compatibility, upstream is dead
+    substituteInPlace CMakeLists.txt --replace-fail "cmake_minimum_required (VERSION 2.6)" "cmake_minimum_required (VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];

@@ -164,7 +164,6 @@ stdenv.mkDerivation rec {
   # Avoid referencing -dev paths because of debug assertions.
   env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
-  dontFixCmake = true;
   dontWrapGApps = true;
 
   shellHook = ''

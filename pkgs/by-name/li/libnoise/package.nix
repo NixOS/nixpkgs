@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-coazd4yedH69b+TOSTFV1CEzN0ezjoGyOaYR9QBhp2E=";
   };
 
+  # cmake 4 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [

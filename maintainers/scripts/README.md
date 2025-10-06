@@ -1,7 +1,7 @@
 # Maintainer scripts
 
 This folder contains various executable scripts for nixpkgs maintainers, and supporting data or nixlang files as needed.
-These scripts generally aren't a stable interface and may changed or be removed.
+These scripts generally aren't a stable interface and may be changed or be removed.
 
 What follows is a (very incomplete) overview of available scripts.
 
