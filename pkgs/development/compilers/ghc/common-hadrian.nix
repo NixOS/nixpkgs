@@ -55,7 +55,8 @@
   gmp,
 
   # If enabled, use -fPIC when compiling static libs.
-  enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform && !stdenv.targetPlatform.isWindows,
+  enableRelocatedStaticLibs ?
+    stdenv.targetPlatform != stdenv.hostPlatform && !stdenv.targetPlatform.isWindows,
 
   # Exceeds Hydra output limit (at the time of writing ~3GB) when cross compiled to riscv64.
   # A riscv64 cross-compiler fits into the limit comfortably.
