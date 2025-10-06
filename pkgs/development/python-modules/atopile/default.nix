@@ -43,6 +43,7 @@
   semver,
   sexpdata,
   shapely,
+  truststore,
   typer,
   urllib3,
   zstd,
@@ -61,7 +62,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.11.6";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -70,7 +71,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-UIS9ZyvsXOqgHBHIMLAfoVFGw59wZb7vgddUJ4yCf7k=";
+    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
   };
 
   build-system = [
@@ -120,6 +121,7 @@ buildPythonPackage rec {
     semver
     sexpdata
     shapely
+    truststore
     typer
     urllib3
     zstd
@@ -127,6 +129,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "posthog"
+    "prompt-toolkit"
     "zstd"
   ];
 
@@ -194,6 +197,15 @@ buildPythonPackage rec {
     "test_jlcpcb_pick_capacitor"
     "test_regression_rp2040_usb_diffpair_full"
     "test_model_translations"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/build/logs/latest'
+    "test_muster_diamond_dependencies"
+    "test_muster_disconnected_components"
+    "test_muster_register_decorator"
+    "test_muster_select_skips_targets_with_failed_dependencies"
+    "test_muster_select_skips_targets_with_partial_failed_dependencies"
+    "test_muster_select_yields_targets_with_all_successful_dependencies"
+    "test_muster_specific_targets_with_dependencies"
   ];
 
   # in order to use pytest marker, we need to use ppytestFlagsArray
