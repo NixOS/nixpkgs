@@ -6538,6 +6538,8 @@ self: super: with self; {
 
   hatch-babel = callPackage ../development/python-modules/hatch-babel { };
 
+  hatch-build-scripts = callPackage ../development/python-modules/hatch-build-scripts { };
+
   hatch-docstring-description =
     callPackage ../development/python-modules/hatch-docstring-description
       { };
@@ -16418,6 +16420,8 @@ self: super: with self; {
 
   sarif-tools = callPackage ../development/python-modules/sarif-tools { };
 
+  sasdata = callPackage ../development/python-modules/sasdata { };
+
   sasmodels = callPackage ../development/python-modules/sasmodels { };
 
   sat-tmp = callPackage ../development/python-modules/sat-tmp { };
@@ -18094,6 +18098,8 @@ self: super: with self; {
   };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
+
+  tccbox = callPackage ../development/python-modules/tccbox { };
 
   tcolorpy = callPackage ../development/python-modules/tcolorpy { };
 
