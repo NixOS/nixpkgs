@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Pytest helps for compare images and regression";
     homepage = "https://github.com/Apkawa/pytest-image-diff";
     license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }
