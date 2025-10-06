@@ -12,8 +12,9 @@
   libpng,
   libtiff,
   mpfr,
+  nix-update-script,
+  llvmPackages,
   opencv,
-  openmp,
   pkg-config,
   stdenv,
   vcg,
@@ -25,20 +26,22 @@ let
     buildInputs = old.buildInputs ++ [ zstd ];
   });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.2.0";
   pname = "openmvs";
 
   src = fetchFromGitHub {
     owner = "cdcseacave";
     repo = "openmvs";
-    rev = "v${version}";
-    hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
+    hash = "sha256-j/tGkR73skZiU+bP4j6aZ5CxkbIcHtqKcaUTgNvj0C8=";
   };
 
   # SSE is enabled by default
-  cmakeFlags = lib.optional (!stdenv.hostPlatform.isx86_64) "-DOpenMVS_USE_SSE=OFF";
+  cmakeFlags = lib.optionals (!stdenv.hostPlatform.isx86_64) [
+    (lib.cmakeBool "OpenMVS_USE_SSE" false)
+  ];
 
   buildInputs = [
     boostWithZstd
@@ -52,7 +55,7 @@ stdenv.mkDerivation rec {
     libtiff
     mpfr
     opencv
-    openmp
+    llvmPackages.openmp
     vcg
   ];
 
@@ -69,11 +72,14 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Open Multi-View Stereo reconstruction library";
     homepage = "https://github.com/cdcseacave/openMVS";
+    changelog = "https://github.com/cdcseacave/openMVS/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ bouk ];
   };
-}
+})
