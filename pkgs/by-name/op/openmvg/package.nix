@@ -67,6 +67,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "COINUTILS_INCLUDE_DIR_HINTS" "${lib.getDev coin-utils}/include")
     (lib.cmakeFeature "LEMON_INCLUDE_DIR_HINTS" "${lib.getDev lemon-graph}/include")
     (lib.cmakeFeature "OSI_INCLUDE_DIR_HINTS" "${lib.getDev osi}/include")
+
+    # Compatibility with CMake < 3.5 has been removed from CMake.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ]
   ++ lib.optionals enableShared [
     (lib.cmakeBool "OpenMVG_BUILD_SHARED" true)
