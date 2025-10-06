@@ -192,7 +192,7 @@ in
         inherit lib stdenvNoCC;
         # Curl should be in /usr/bin or so.
         curl = null;
-        inherit (config) rewriteURL;
+        inherit (config) hashedMirrors rewriteURL;
       };
 
     }
