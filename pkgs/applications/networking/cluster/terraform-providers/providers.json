@@ -614,15 +614,6 @@
     "spdx": "MPL-2.0",
     "vendorHash": null
   },
-  "huaweicloudstack": {
-    "hash": "sha256-WSJDp+LFjVPquQVMgib/YZV35kktLH2vMCIZJWqakXs=",
-    "homepage": "https://registry.terraform.io/providers/huaweicloud/huaweicloudstack",
-    "owner": "huaweicloud",
-    "repo": "terraform-provider-huaweicloudstack",
-    "rev": "v1.3.0",
-    "spdx": "MPL-2.0",
-    "vendorHash": null
-  },
   "hydra": {
     "hash": "sha256-A9BemEPLhvYzhksvYRfmhQXY3EEdTxQcmjE9+2+BKqg=",
     "homepage": "https://registry.terraform.io/providers/DeterminateSystems/hydra",
