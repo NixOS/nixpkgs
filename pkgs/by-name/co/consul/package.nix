@@ -1,14 +1,14 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo125Module rec {
   pname = "consul";
-  version = "1.21.4";
+  version = "1.21.5";
 
   # Note: Currently only release tags are supported, because they have the Consul UI
   # vendored. See
@@ -22,7 +22,7 @@ buildGoModule rec {
     owner = "hashicorp";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-z2hyEqC8SnIac01VjB2g2+RAaZEaLlVsqBzwedx5t4Q=";
+    hash = "sha256-x5e0DhJ3qMh51E+bEIzl0JmH7bvdicVgOa0l1Qix9vI=";
   };
 
   # This corresponds to paths with package main - normally unneeded but consul
@@ -32,7 +32,7 @@ buildGoModule rec {
     "connect/certgen"
   ];
 
-  vendorHash = "sha256-fWdzFyRtbTOgAapmVz1ScYEHCZUx7nfqw0y2v4aDuic=";
+  vendorHash = "sha256-PZtLz7jqtqYcBO/xrE/tE4vqNstLq9Iv20eWnW5xloQ=";
 
   doCheck = false;
 
@@ -57,20 +57,10 @@ buildGoModule rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsl11;
     maintainers = with maintainers; [
-      adamcstephens
       vdemeester
       nh2
       techknowlogick
     ];
     mainProgram = "consul";
-    knownVulnerabilities = [
-      (lib.concatStringsSep " " [
-        "Note: These issues are fixed in the unstable nixpkgs releases."
-        "They cannot be fixed in the 25.05 release due to incompatible Go versions."
-      ])
-      "Remote authentication bypass (https://github.com/hashicorp/consul/pull/22612)"
-      "Local attacker can see TLS private key in some cases (https://github.com/hashicorp/consul/pull/22626)"
-      "Comparisons of sensitive values may be susceptible to timing attacks (https://github.com/hashicorp/consul/pull/22537)"
-    ];
   };
 }
