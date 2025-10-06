@@ -51,25 +51,6 @@ let
     });
   '';
 
-  ns = xs: pkgs.writeText "nameservers" (lib.concatStrings (map (s: "nameserver ${s}\n") xs));
-
-  overrideNameserversScript = pkgs.writeScript "02overridedns" ''
-    #!/bin/sh
-    PATH=${
-      lib.makeBinPath [
-        pkgs.gnused
-        pkgs.gnugrep
-        pkgs.coreutils
-      ]
-    }
-    tmp=$(mktemp)
-    sed '/nameserver /d' /etc/resolv.conf > $tmp
-    grep 'nameserver ' /etc/resolv.conf | \
-      grep -vf ${ns (cfg.appendNameservers ++ cfg.insertNameservers)} > $tmp.ns
-    cat $tmp ${ns cfg.insertNameservers} $tmp.ns ${ns cfg.appendNameservers} > /etc/resolv.conf
-    rm -f $tmp $tmp.ns
-  '';
-
   dispatcherTypesSubdirMap = {
     basic = "";
     pre-up = "pre-up.d/";
@@ -95,6 +76,7 @@ in
     ./backwards-compat.nix
 
     ./mac-address.nix
+    ./nameservers.nix
   ];
 
   meta = {
@@ -237,24 +219,6 @@ in
         default = "WARN";
         description = ''
           Set the default logging verbosity level.
-        '';
-      };
-
-      appendNameservers = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = ''
-          A list of name servers that should be appended
-          to the ones configured in NetworkManager or received by DHCP.
-        '';
-      };
-
-      insertNameservers = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [ ];
-        description = ''
-          A list of name servers that should be inserted before
-          the ones configured in NetworkManager or received by DHCP.
         '';
       };
 
@@ -451,9 +415,6 @@ in
         }
       ) cfg.plugins
     )
-    // lib.optionalAttrs (cfg.appendNameservers != [ ] || cfg.insertNameservers != [ ]) {
-      "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
-    }
     // lib.listToAttrs (
       lib.imap1 (i: s: {
         name = "NetworkManager/dispatcher.d/${
@@ -515,7 +476,6 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [
         configFile
-        overrideNameserversScript
       ];
 
       # useful binaries for user-specified hooks
