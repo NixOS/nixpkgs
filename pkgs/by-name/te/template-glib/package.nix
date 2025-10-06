@@ -5,6 +5,7 @@
   meson,
   ninja,
   pkg-config,
+  gi-docgen,
   glib,
   gobject-introspection,
   flex,
@@ -12,14 +13,11 @@
   vala,
   gettext,
   gnome,
-  gtk-doc,
-  docbook-xsl-nons,
-  docbook_xml_dtd_43,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "template-glib";
-  version = "3.37.1";
+  version = "3.38.0";
 
   outputs = [
     "out"
@@ -29,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/template-glib/${lib.versions.majorMinor finalAttrs.version}/template-glib-${finalAttrs.version}.tar.xz";
-    hash = "sha256-16xEMdWUe6KSCGx+R7iK6Kzb7A+PjTiyvbiIoL3MBhw=";
+    hash = "sha256-QNANwiPc8ut/LsQi997FpnNzoMoRAavKD0nGLwUMsxI=";
   };
 
   nativeBuildInputs = [
@@ -40,10 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     flex
     bison
     vala
+    gi-docgen
     glib
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_43
     gobject-introspection
   ];
 
@@ -52,10 +48,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "-Dgtk_doc=true"
+    "-Ddocs=true"
   ];
 
   doCheck = true;
+
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput share/doc/template-glib-1.0 "$devdoc"
+  '';
 
   passthru = {
     updateScript = gnome.updateScript {
