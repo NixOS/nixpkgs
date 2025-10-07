@@ -91,6 +91,38 @@ with pkgs;
   gccStdenvNoLibs = mkStdenvNoLibs gccStdenv;
   clangStdenvNoLibs = mkStdenvNoLibs clangStdenv;
 
+  stdenvUutilsCoreutils =
+    let
+      uutils-coreutils = pkgs.uutils-coreutils-minimal;
+      bintools = wrapBintoolsWith {
+        bintools = stdenv.cc.bintools.bintools;
+        coreutils = buildPackages.uutils-coreutils;
+      };
+    in
+    stdenv.override {
+      cc = stdenv.cc.override {
+        coreutils = buildPackages.uutils-coreutils;
+        inherit bintools;
+      };
+
+      initialPath = (lib.remove buildPackages.coreutils stdenv.initialPath) ++ [
+        buildPackages.uutils-coreutils
+      ];
+      allowedRequisites = lib.mapNullable (
+        rs:
+        (lib.remove [
+          buildPackages.bintools
+          buildPackages.expand-response-params
+          buildPackages.coreutils
+        ] rs)
+        ++ [
+          buildPackages.bintools
+          buildPackages.expand-response-params
+          buildPackages.uutils-coreutils
+        ]
+      ) (stdenv.allowedRequisites or null);
+    };
+
   # For convenience, allow callers to get the path to Nixpkgs.
   path = ../..;
 
@@ -2553,13 +2585,14 @@ with pkgs;
 
   compass = callPackage ../development/tools/compass { };
 
-  coreutils = callPackage ../tools/misc/coreutils { };
+  coreutils =
+    if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils else gnu-coreutils;
 
   # The coreutils above are built with dependencies from
   # bootstrapping. We cannot override it here, because that pulls in
   # openssl from the previous stage as well.
-  coreutils-full = callPackage ../tools/misc/coreutils { minimal = false; };
-  coreutils-prefixed = coreutils.override {
+  coreutils-full = gnu-coreutils.override { minimal = false; };
+  coreutils-prefixed = gnu-coreutils.override {
     withPrefix = true;
     singleBinary = false;
   };
@@ -2675,6 +2708,11 @@ with pkgs;
 
   uutils-coreutils-noprefix = uutils-coreutils.override { prefix = null; };
 
+  uutils-coreutils-minimal = pkgs.uutils-coreutils.override {
+    prefix = null;
+    withDocs = false;
+  };
+
   xkcdpass = with python3Packages; toPythonApplication xkcdpass;
 
   zonemaster-cli = perlPackages.ZonemasterCLI;
@@ -2772,7 +2810,10 @@ with pkgs;
     inherit (windows) libgnurx;
   };
 
-  findutils = callPackage ../tools/misc/findutils { };
+  findutils = callPackage ../tools/misc/findutils {
+    coreutils =
+      if stdenv.hostPlatform.useUutilsCoreutils or false then uutils-coreutils-minimal else gnu-coreutils;
+  };
 
   bsd-fingerd = bsd-finger.override {
     buildProduct = "daemon";
