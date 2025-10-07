@@ -12,6 +12,8 @@
 
   passfail2 = callPackage ./passfail2 { };
 
+  puppy-reinforcement = callPackage ./puppy-reinforcement { };
+
   recolor = callPackage ./recolor { };
 
   reviewer-refocus-card = callPackage ./reviewer-refocus-card { };

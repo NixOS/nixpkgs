@@ -18,7 +18,7 @@
   python3,
   qtbase,
   qttools,
-  tbb,
+  onetbb,
   unshield,
   wrapQtAppsHook,
   xz,
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     minizip
     qtbase
     qttools
-    tbb
+    onetbb
     xz
     zlib
   ];

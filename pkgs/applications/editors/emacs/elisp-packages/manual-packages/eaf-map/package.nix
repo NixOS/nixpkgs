@@ -3,7 +3,7 @@
   lib,
   melpaBuild,
   fetchFromGitHub,
-  # Java Script dependency
+  # JavaScript dependency
   nodejs,
   fetchNpmDeps,
   npmHooks,
@@ -60,7 +60,6 @@ melpaBuild (finalAttrs: {
         pycurl
         python-tsp
       ];
-    eafOtherDeps = [ ];
   };
 
   meta = {

@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.0.3";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-e6pPsPz0huZyn14XO3uFUmJhBpMxhWLfyD0VBQXsJ1s=";
+    hash = "sha256-0TMUSNCrDEtOkojcmFFhmLQ0ghyLAn+OS4xl4Sbr76c=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -94,14 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
       -e  '/^proc wait_for_ofs_sync/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
 
+    CLIENTS="$NIX_BUILD_CORES"
+    if (( $CLIENTS > 4)); then
+      CLIENTS=4
+    fi
+
     ./runtest \
       --no-latency \
       --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
+      --clients "$CLIENTS" \
       --tags -leaks \
       --skipunit integration/aof-multi-part \
       --skipunit integration/failover \
-      --skipunit integration/replication-rdbchannel
+      --skipunit integration/replication-rdbchannel \
+      --skiptest "Check MEMORY USAGE for embedded key strings with jemalloc"
+      # ^ breaks due to unexpected and varying address space sizes that jemalloc gets built with
 
     runHook postCheck
   '';

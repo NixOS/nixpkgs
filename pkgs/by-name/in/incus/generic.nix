@@ -10,6 +10,7 @@
 {
   callPackage,
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   acl,
@@ -114,8 +115,25 @@ buildGoModule (finalAttrs: {
     substituteInPlace Makefile --replace-fail '. $(SPHINXENV) ; ' ""
     make doc-incremental
 
+    # build multiple binaries of incus-agent
+    build_incus_agent() {
+      GOOS="$1" GOARCH="$2" CGO_ENABLED=0 \
+      go build -ldflags="-s" -tags=agent,netgo \
+        -o "$out/share/agent/incus-agent.$1.$3" ./cmd/incus-agent
+    }
+    ${lib.optionalString stdenv.hostPlatform.isx86_64 ''
+      build_incus_agent linux   amd64  x86_64
+      build_incus_agent linux   386    i686
+      build_incus_agent windows amd64  x86_64
+      build_incus_agent windows 386    i686
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      build_incus_agent linux   arm64 aarch64
+      build_incus_agent windows arm64 aarch64
+    ''}
+
     # build some static executables
-    make incus-agent incus-migrate
+    make incus-migrate
   '';
 
   # Disable tests requiring local operations
@@ -140,9 +158,9 @@ buildGoModule (finalAttrs: {
       --zsh <($out/bin/incus completion zsh)
 
     mkdir -p $agent_loader/bin $agent_loader/etc/systemd/system $agent_loader/lib/udev/rules.d
-    cp internal/server/instance/drivers/agent-loader/incus-agent-setup $agent_loader/bin/
-    chmod +x $agent_loader/bin/incus-agent-setup
-    patchShebangs $agent_loader/bin/incus-agent-setup
+    cp internal/server/instance/drivers/agent-loader/incus-agent{,-setup} $agent_loader/bin/
+    chmod +x $agent_loader/bin/incus-agent{,-setup}
+    patchShebangs $agent_loader/bin/incus-agent{,-setup}
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.service $agent_loader/etc/systemd/system/
     cp internal/server/instance/drivers/agent-loader/systemd/incus-agent.rules $agent_loader/lib/udev/rules.d/99-incus-agent.rules
     substituteInPlace $agent_loader/etc/systemd/system/incus-agent.service --replace-fail 'TARGET/systemd' "$agent_loader/bin"

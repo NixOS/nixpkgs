@@ -44,7 +44,7 @@ stdenv.mkDerivation {
     if (builtins.elem system platforms) then
       sources.${system}
     else
-      throw "Source for ${pname} is not available for ${system}";
+      throw "Source for 1password-cli is not available for ${system}";
 
   nativeBuildInputs = [
     installShellFiles
@@ -63,23 +63,23 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
-    install -D ${mainProgram} $out/bin/${mainProgram}
+    install -D op $out/bin/op
     runHook postInstall
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     HOME=$TMPDIR
-    installShellCompletion --cmd ${mainProgram} \
-      --bash <($out/bin/${mainProgram} completion bash) \
-      --fish <($out/bin/${mainProgram} completion fish) \
-      --zsh <($out/bin/${mainProgram} completion zsh)
+    installShellCompletion --cmd op \
+      --bash <($out/bin/op completion bash) \
+      --fish <($out/bin/op completion fish) \
+      --zsh <($out/bin/op completion zsh)
   '';
 
   dontStrip = stdenv.hostPlatform.isDarwin;
 
   doInstallCheck = true;
 
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/${mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/op";
   versionCheckProgramArg = "--version";
 
   passthru = {

@@ -49,7 +49,7 @@ buildGoModule rec {
     description = "Configuration framework for Kubernetes applications";
     license = lib.licenses.mit;
     homepage = "https://github.com/mykso/myks";
-    maintainers = with lib.maintainers; [
+    maintainers = [
       lib.maintainers.kbudde
       lib.maintainers.zebradil
     ];

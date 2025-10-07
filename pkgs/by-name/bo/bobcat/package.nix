@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.com";
     owner = "fbb-git";
     repo = "bobcat";
-    rev = version;
+    tag = version;
     hash = "sha256-JLJKaJmztputIon9JkKzpm3Ch60iwm4Imh9p42crYzA=";
   };
 

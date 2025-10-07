@@ -331,6 +331,7 @@ let
         hasInfix
         hasPrefix
         hasSuffix
+        join
         stringToCharacters
         stringAsChars
         escape

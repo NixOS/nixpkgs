@@ -2,31 +2,37 @@
   lib,
   stdenv,
   buildPythonPackage,
-  cython,
   fetchFromGitHub,
+
+  # build-system
+  cython,
+  setuptools,
+
+  # nativeBuildInputs
+  pkg-config,
+
+  # buildInputs
+  ffmpeg-headless,
+
+  # dependencies
+
   fetchurl,
   linkFarm,
-  ffmpeg-headless,
   numpy,
   pillow,
-  pkg-config,
   pytestCheckHook,
-  pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "av";
-  version = "14.1.0";
+  version = "15.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
     tag = "v${version}";
-    hash = "sha256-GYdt6KMMmDSyby447MbShL2GbrH8R1UuOeiVlztGuS4=";
+    hash = "sha256-VeF6Sti1Ide2LchiCuPut/bdbJUv+5eTH2q0YMcniyA=";
   };
 
   build-system = [
@@ -87,12 +93,12 @@ buildPythonPackage rec {
     "av.video"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pythonic bindings for FFmpeg";
     mainProgram = "pyav";
     homepage = "https://github.com/PyAV-Org/PyAV";
     changelog = "https://github.com/PyAV-Org/PyAV/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

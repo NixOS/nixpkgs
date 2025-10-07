@@ -39,6 +39,6 @@ buildPythonPackage rec {
     mainProgram = "cflow2dot";
     homepage = "https://github.com/johnyf/pycflow2dot";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }

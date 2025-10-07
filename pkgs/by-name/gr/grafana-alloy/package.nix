@@ -17,17 +17,17 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.10.2";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${version}";
-    hash = "sha256-7KOnpkpQzqvqyMAuDyUjIzseJAxqmkjEw9ecHD+kI3I=";
+    hash = "sha256-nE8R3llMWr5OqqFUoGP9alCgJVEvCeE8Ea2+g3d3fAk=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-/G00ZJnAQoAFR66sYkO3bqhnWXvGmronjFnk7m8ogYA=";
+  vendorHash = "sha256-8n1r2Wun5ZSvjsU2Vl/fSRoQnTfKbrcQI6a7YDX/HZA=";
 
   nativeBuildInputs = [
     fixup-yarn-lock

@@ -53,8 +53,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     ${jdkWithFX}/lib/openjdk/bin/jar xf $src jet.png
     magick jet.png -resize 128x128 jet128.png
     magick jet.png -resize 48x48 jet48.png
-    install -Dm444 jet48.png $out/share/icons/hicolor/48x48/jet.png
-    install -Dm444 jet128.png $out/share/icons/hicolor/128x128/jet.png
+    install -Dm444 jet48.png $out/share/icons/hicolor/48x48/apps/jet.png
+    install -Dm444 jet128.png $out/share/icons/hicolor/128x128/apps/jet.png
 
     install -Dm444 $src $out/share/java/JetUML-${finalAttrs.version}.jar
 

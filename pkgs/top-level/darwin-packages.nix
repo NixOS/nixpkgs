@@ -101,6 +101,8 @@ makeScopeWithSplicing' {
 
         libunwind = callPackage ../os-specific/darwin/libunwind { };
 
+        libcxx = callPackage ../os-specific/darwin/libcxx { };
+
         sigtool = callPackage ../os-specific/darwin/sigtool { };
 
         signingUtils = callPackage ../os-specific/darwin/signing-utils { };

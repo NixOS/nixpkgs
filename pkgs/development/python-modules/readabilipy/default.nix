@@ -29,6 +29,12 @@ buildPythonPackage rec {
     hash = "sha256-FYdSbq3rm6fBHm5fDRAB0airX9fNcUGs1wHN4i6mnG0=";
   };
 
+  patches = [
+    # Fix test failures with Python 3.13.6
+    # https://github.com/alan-turing-institute/ReadabiliPy/pull/116
+    ./python3.13.6-compatibility.patch
+  ];
+
   javascript = buildNpmPackage {
     pname = "readabilipy-javascript";
     inherit version;

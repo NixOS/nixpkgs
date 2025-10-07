@@ -257,6 +257,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
+        example = lib.literalExpression "\"\${pkgs.where-is-my-sddm-theme.override { variants = [ \"qt5\" ]; }}/share/sddm/themes/where_is_my_sddm_theme_qt5\"";
         description = ''
           Greeter theme to use.
         '';

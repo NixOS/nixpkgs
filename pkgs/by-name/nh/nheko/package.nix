@@ -5,7 +5,6 @@
   cmake,
   asciidoc,
   pkg-config,
-  boost,
   cmark,
   coeurl,
   curl,
@@ -23,16 +22,17 @@
   libnice,
   qt6Packages,
   fetchpatch,
+  withVoipSupport ? stdenv.hostPlatform.isLinux,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nheko";
   version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "Nheko-Reborn";
     repo = "nheko";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-WlWxe4utRSc9Tt2FsnhBwxzQsoDML2hvm3g5zRnDEiU=";
   };
 
@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Nheko-Reborn/nheko/commit/2769642d3c7bd3c0d830b2f18ef6b3bf6a710bf4.patch";
       hash = "sha256-y8aiS6h5CSJYBdsAH4jYhAyrFug7aH2H8L6rBfULnQQ=";
     })
+    ./fix-darwin-build.patch
   ];
 
   nativeBuildInputs = [
@@ -53,7 +54,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost
     cmark
     coeurl
     curl
@@ -65,35 +65,39 @@ stdenv.mkDerivation rec {
     nlohmann_json
     olm
     qt6Packages.qtbase
+    qt6Packages.qtdeclarative
     qt6Packages.qtimageformats
     qt6Packages.qtkeychain
     qt6Packages.qtmultimedia
+    qt6Packages.qtsvg
     qt6Packages.qttools
-    qt6Packages.qtwayland
     qt6Packages.qt-jdenticon
     re2
     spdlog
   ]
-  ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    (gst-plugins-good.override { qt6Support = true; })
-    gst-plugins-bad
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6Packages.qtwayland
+  ]
+  ++ lib.optionals withVoipSupport [
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    (gst_all_1.gst-plugins-good.override { qt6Support = true; })
+    gst_all_1.gst-plugins-bad
     libnice
-  ]);
+  ];
 
   cmakeFlags = [
-    "-DCOMPILE_QML=ON" # see https://github.com/Nheko-Reborn/nheko/issues/389
+    (lib.cmakeBool "VOIP" withVoipSupport)
   ];
 
   preFixup = ''
-    # add gstreamer plugins path to the wrapper
     # unset QT_STYLE_OVERRIDE to avoid showing a blank window when started
     # https://github.com/NixOS/nixpkgs/issues/333009
-    qtWrapperArgs+=(
-      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"
-      --unset QT_STYLE_OVERRIDE
-    )
+    qtWrapperArgs+=(--unset QT_STYLE_OVERRIDE)
+  ''
+  + lib.optionalString withVoipSupport ''
+    # add gstreamer plugins path to the wrapper
+    qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
   '';
 
   meta = with lib; {
@@ -104,11 +108,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       ekleog
       fpletz
+      rebmit
       rnhmjoj
     ];
     platforms = platforms.all;
-    # Should be fixable if a higher clang version is used, see:
-    # https://github.com/NixOS/nixpkgs/pull/85922#issuecomment-619287177
-    broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

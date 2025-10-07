@@ -295,7 +295,7 @@ in
       services.nginx.virtualHosts."${cfg.domain}" = mkIf (cfg.nginx != null) (
         lib.mkMerge [
           cfg.nginx
-          ({
+          {
             root = lib.mkForce "${package}/htdocs";
             locations."/".index = "index.php";
             locations."~ [^/]\\.php(/|$)" = {
@@ -304,7 +304,7 @@ in
                 fastcgi_pass unix:${config.services.phpfpm.pools.dolibarr.socket};
               '';
             };
-          })
+          }
         ]
       );
 

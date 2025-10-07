@@ -24,7 +24,7 @@
       filter =
         name: type:
         let
-          name' = builtins.baseNameOf name;
+          name' = baseNameOf name;
         in
         name' != "default.nix" && name' != "target";
     };

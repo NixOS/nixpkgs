@@ -18,18 +18,18 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";
-  version = "3.41";
+  version = "3.43";
 
   src = fetchurl (
     if (wine.meta.mainProgram == "wine64") then
       {
         url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox64.exe";
-        hash = "sha256-i8Ps8fNZUmAOyxo4DDjIjp1jwIGjIgT9CU1YgjAHC/Y=";
+        hash = "sha256-W0HPUf2B6NCCaH9rUiFZz0q6IubfjtxIZyHU4JUHtuk=";
       }
     else
       {
         url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/winbox.exe";
-        hash = "sha256-NypSEC5YKpqldlkSIRFtWVD4xJZcjGcfjnphSg70wmE=";
+        hash = "sha256-pAOOTgmjQoXI2o2MKTDuOOpb7q0rb/zWATDNyAMOLms=";
       }
   );
 

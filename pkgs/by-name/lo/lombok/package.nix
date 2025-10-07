@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lombok";
-  version = "1.18.40";
+  version = "1.18.42";
 
   src = fetchurl {
     url = "https://projectlombok.org/downloads/lombok-${version}.jar";
-    sha256 = "sha256-Gy1mCf8zLnCC/tOXs6ql0SWBL3vwoHp9hv/qFbccv90=";
+    sha256 = "sha256-NIik6ZlMJllrqs7r7ljK02pQ472uxb5ytYNNPDtWAwY=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

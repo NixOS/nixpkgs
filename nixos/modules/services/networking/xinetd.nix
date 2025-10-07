@@ -65,7 +65,7 @@ in
 
       type =
         with types;
-        listOf (submodule ({
+        listOf (submodule {
 
           options = {
 
@@ -130,7 +130,7 @@ in
 
           };
 
-        }));
+        });
 
     };
 

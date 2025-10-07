@@ -2,39 +2,39 @@
   lib,
   bitvector-for-humans,
   buildPythonPackage,
-  fetchFromGitHub,
+  busylight-core,
   fastapi,
+  fetchFromGitHub,
+  hatchling,
   hidapi,
+  httpx,
   loguru,
-  poetry-core,
   pyserial,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typer,
+  udevCheckHook,
   uvicorn,
   webcolors,
-  udevCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.37.0";
+  version = "0.45.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
     tag = "v${version}";
-    hash = "sha256-uKuQy4ce6WTTpprAbQ6QE7WlotMlVacaDZ+dsvY1N58=";
+    hash = "sha256-G+l+jkHZzz3tX1CcC7Cq1iCFZPbeQ6CI4xCMkTWA5EE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     bitvector-for-humans
+    busylight-core
     hidapi
     loguru
     pyserial
@@ -50,10 +50,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    httpx
     pytestCheckHook
     pytest-mock
     udevCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/test_pydantic_models.py" ];
 

@@ -129,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = ''
-    runHook preInstallPhase
+    runHook preInstall
 
     install -v -m755 -D \
       *${stdenv.hostPlatform.extensions.sharedLibrary}* \
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
     Cflags: -I''${includedir}
     EOF
 
-    runHook postInstallPhase
+    runHook postInstall
   '';
 
   meta = {

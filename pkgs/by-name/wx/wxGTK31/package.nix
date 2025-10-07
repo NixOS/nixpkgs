@@ -130,7 +130,6 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       wxWindowsException31
     ];
-    maintainers = with maintainers; [ tfmoraes ];
     platforms = platforms.unix;
   };
 }

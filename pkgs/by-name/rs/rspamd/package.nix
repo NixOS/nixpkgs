@@ -2,9 +2,10 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   doctest,
-  fmt_11,
+  fmt,
   perl,
   glib,
   luajit,
@@ -48,6 +49,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-0qX/rvcEXxzr/PGL2A59T18Mfcalrjz0KJpEWBKJsZg=";
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/rspamd/rspamd/commit/d808fd75ff1db1821b1dd817eb4ba9a118b31090.patch";
+      hash = "sha256-v1Gn3dPxN/h92NYK3PTrZomnbwUcVkAWcYeQCFzQNyo=";
+    })
+  ];
+
   hardeningEnable = [ "pie" ];
 
   nativeBuildInputs = [
@@ -59,7 +67,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     doctest
-    fmt_11
+    fmt
     glib
     openssl
     pcre

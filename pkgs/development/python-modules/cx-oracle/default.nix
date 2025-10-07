@@ -30,6 +30,5 @@ buildPythonPackage rec {
     description = "Python interface to Oracle";
     homepage = "https://oracle.github.io/python-cx_Oracle";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ y0no ];
   };
 }

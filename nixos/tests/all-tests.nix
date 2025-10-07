@@ -745,10 +745,11 @@ in
   installer-systemd-stage-1 = handleTest ./installer-systemd-stage-1.nix { };
   intune = runTest ./intune.nix;
   invidious = runTest ./invidious.nix;
-  invoiceplane = runTest ./invoiceplane.nix;
   iodine = runTest ./iodine.nix;
   iosched = runTest ./iosched.nix;
+  ipget = runTest ./ipget.nix;
   ipv6 = runTest ./ipv6.nix;
+  irqbalance = runTest ./irqbalance.nix;
   iscsi-multipath-root = runTest ./iscsi-multipath-root.nix;
   iscsi-root = runTest ./iscsi-root.nix;
   isolate = runTest ./isolate.nix;
@@ -830,6 +831,7 @@ in
   lighttpd = runTest ./lighttpd.nix;
   limesurvey = runTest ./limesurvey.nix;
   limine = import ./limine { inherit runTest; };
+  linkwarden = runTest ./web-apps/linkwarden.nix;
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
   litellm = runTest ./litellm.nix;
   litestream = runTest ./litestream.nix;
@@ -934,7 +936,6 @@ in
   moosefs = runTest ./moosefs.nix;
   mopidy = runTest ./mopidy.nix;
   morph-browser = runTest ./morph-browser.nix;
-  morty = runTest ./morty.nix;
   mosquitto = runTest ./mosquitto.nix;
   movim = import ./web-apps/movim { inherit recurseIntoAttrs runTest; };
   mpd = runTest ./mpd.nix;
@@ -1075,6 +1076,7 @@ in
   ntpd = runTest ./ntpd.nix;
   ntpd-rs = runTest ./ntpd-rs.nix;
   nvidia-container-toolkit = runTest ./nvidia-container-toolkit.nix;
+  nvme-rs = runTest ./nvme-rs.nix;
   nvmetcfg = runTest ./nvmetcfg.nix;
   nyxt = runTest ./nyxt.nix;
   nzbget = runTest ./nzbget.nix;
@@ -1171,10 +1173,6 @@ in
     inherit runTest;
     php = pkgs.php;
   };
-  php81 = import ./php/default.nix {
-    inherit runTest;
-    php = pkgs.php81;
-  };
   php82 = import ./php/default.nix {
     inherit runTest;
     php = pkgs.php82;
@@ -1216,7 +1214,6 @@ in
     handleTest ./postfix-raise-smtpd-tls-security-level.nix
       { };
   postfix-tlspol = runTest ./postfix-tlspol.nix;
-  postfixadmin = runTest ./postfixadmin.nix;
   postgres-websockets = runTest ./postgres-websockets.nix;
   postgresql = handleTest ./postgresql { };
   postgrest = runTest ./postgrest.nix;
@@ -1299,6 +1296,7 @@ in
   restic = runTest ./restic.nix;
   restic-rest-server = runTest ./restic-rest-server.nix;
   retroarch = runTest ./retroarch.nix;
+  ringboard = runTest ./ringboard.nix;
   rke2 = handleTestOn [ "aarch64-linux" "x86_64-linux" ] ./rke2 { };
   rkvm = handleTest ./rkvm { };
   rmfakecloud = runTest ./rmfakecloud.nix;
@@ -1405,18 +1403,22 @@ in
   switchTest = runTest ./switch-test.nix;
   sx = runTest ./sx.nix;
   sympa = runTest ./sympa.nix;
-  syncthing = runTest ./syncthing.nix;
-  syncthing-folders = runTest ./syncthing-folders.nix;
-  syncthing-init = runTest ./syncthing-init.nix;
-  syncthing-many-devices = runTest ./syncthing-many-devices.nix;
-  syncthing-no-settings = runTest ./syncthing-no-settings.nix;
-  syncthing-relay = runTest ./syncthing-relay.nix;
+  syncthing = runTest ./syncthing/main.nix;
+  syncthing-folders = runTest ./syncthing/folders.nix;
+  syncthing-guiPassword = runTest ./syncthing/guiPassword.nix;
+  syncthing-guiPasswordFile = runTest ./syncthing/guiPasswordFile.nix;
+  syncthing-init = runTest ./syncthing/init.nix;
+  # FIXME: Test has been failing since 2025-07-06:
+  # https://github.com/NixOS/nixpkgs/issues/447674
+  # syncthing-many-devices = runTest ./syncthing/many-devices.nix;
+  syncthing-no-settings = runTest ./syncthing/no-settings.nix;
+  syncthing-relay = runTest ./syncthing/relay.nix;
   sysfs = runTest ./sysfs.nix;
   sysinit-reactivation = runTest ./sysinit-reactivation.nix;
   systemd = runTest ./systemd.nix;
   systemd-analyze = runTest ./systemd-analyze.nix;
   systemd-binfmt = handleTestOn [ "x86_64-linux" ] ./systemd-binfmt.nix { };
-  systemd-boot = handleTest ./systemd-boot.nix { };
+  systemd-boot = import ./systemd-boot.nix { inherit runTest runTestOn; };
   systemd-bpf = runTest ./systemd-bpf.nix;
   systemd-capsules = runTest ./systemd-capsules.nix;
   systemd-confinement = handleTest ./systemd-confinement { };
@@ -1459,6 +1461,7 @@ in
   systemd-machinectl = runTest ./systemd-machinectl.nix;
   systemd-misc = runTest ./systemd-misc.nix;
   systemd-networkd = runTest ./systemd-networkd.nix;
+  systemd-networkd-batadv = runTest ./systemd-networkd-batadv.nix;
   systemd-networkd-bridge = runTest ./systemd-networkd-bridge.nix;
   systemd-networkd-dhcpserver = runTest ./systemd-networkd-dhcpserver.nix;
   systemd-networkd-dhcpserver-static-leases = runTest ./systemd-networkd-dhcpserver-static-leases.nix;
@@ -1517,6 +1520,7 @@ in
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
   tpm-ek = handleTest ./tpm-ek { };
+  tpm2 = runTest ./tpm2.nix;
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
@@ -1528,7 +1532,6 @@ in
   trickster = runTest ./trickster.nix;
   trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
   tsm-client-gui = runTest ./tsm-client-gui.nix;
-  tt-rss = runTest ./web-apps/tt-rss.nix;
   ttyd = runTest ./web-servers/ttyd.nix;
   tuned = runTest ./tuned.nix;
   tuptime = runTest ./tuptime.nix;

@@ -7,6 +7,8 @@
   gtk4,
   gtk4-layer-shell,
   hyprland,
+  gcc,
+  pixman,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -31,6 +33,21 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gtk4
     gtk4-layer-shell
   ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : '${lib.makeBinPath [ gcc ]}'
+      --prefix CPATH : '${
+        lib.makeIncludePath (
+          hyprland.buildInputs
+          ++ [
+            hyprland
+            pixman
+          ]
+        )
+      }'
+    )
+  '';
 
   meta = {
     description = "Modern GTK4-based window switcher and application launcher for Hyprland";

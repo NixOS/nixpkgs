@@ -17,16 +17,16 @@
 
 buildPythonPackage rec {
   pname = "aiounifi";
-  version = "86";
+  version = "87";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.13";
 
   src = fetchFromGitHub {
     owner = "Kane610";
     repo = "aiounifi";
     tag = "v${version}";
-    hash = "sha256-9SnNWJNfG0Z+XkZtth6yDRnPf0OiAHmiyTI0WQN+2SY=";
+    hash = "sha256-+aObnX82erFXAdQ5hdj/ebMj9Xm5ZCooprt+UensDpM=";
   };
 
   postPatch = ''
@@ -51,8 +51,6 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
   ];
-
-  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "aiounifi" ];
 

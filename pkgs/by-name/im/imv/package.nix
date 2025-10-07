@@ -33,7 +33,7 @@
   libjxl,
   libpng,
   librsvg,
-  netsurf,
+  libnsgif,
   libheif,
 }:
 
@@ -56,12 +56,12 @@ let
       librsvg
       libheif
       libjxl
+      libnsgif
       ;
     libjpeg = libjpeg_turbo;
-    inherit (netsurf) libnsgif;
   };
 
-  backendFlags = builtins.map (
+  backendFlags = map (
     b: if builtins.elem b withBackends then "-D${b}=enabled" else "-D${b}=disabled"
   ) (builtins.attrNames backends);
 in
@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
     inih
   ]
   ++ windowSystems."${withWindowSystem}"
-  ++ builtins.map (b: backends."${b}") withBackends;
+  ++ map (b: backends."${b}") withBackends;
 
   patches = [
     (fetchpatch {

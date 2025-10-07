@@ -1,15 +1,16 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  numpy,
-  scipy,
-  matplotlib,
-  setuptools,
-  setuptools-scm,
   cvxopt,
+  fetchFromGitHub,
+  matplotlib,
+  numpy,
+  numpydoc,
   pytest-timeout,
   pytestCheckHook,
+  scipy,
+  setuptools-scm,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -41,17 +42,23 @@ buildPythonPackage rec {
     cvxopt = [ cvxopt ];
   };
 
-  pythonImportsCheck = [ "control" ];
-
   nativeCheckInputs = [
-    cvxopt
+    numpydoc
     pytest-timeout
     pytestCheckHook
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+
+  pythonImportsCheck = [ "control" ];
+
+  disabledTestPaths = [
+    # Don't test the docs
+    "doc/test_sphinxdocs.py"
   ];
 
   meta = {
-    changelog = "https://github.com/python-control/python-control/releases/tag/${src.tag}";
     description = "Python Control Systems Library";
+    changelog = "https://github.com/python-control/python-control/releases/tag/${src.tag}";
     homepage = "https://github.com/python-control/python-control";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ Peter3579 ];

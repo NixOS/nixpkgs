@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "globus-cli";
-  version = "3.37.0";
+  version = "3.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "globus";
     repo = "globus-cli";
     tag = version;
-    hash = "sha256-CG57RmWVI1p/8zjDhrH1ZK1KwNrwxbz0FkwOKLBbFcc=";
+    hash = "sha256-TjJ0GBXRYSMbWfCkGJSBzToHEjoN5ZJAzZe2yiRJhtg=";
   };
 
   build-system = with python3Packages; [

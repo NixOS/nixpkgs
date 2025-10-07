@@ -82,6 +82,6 @@ buildPythonPackage rec {
     description = "RBTools is a set of command line tools for working with Review Board and RBCommons";
     mainProgram = "rbt";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

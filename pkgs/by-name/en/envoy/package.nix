@@ -12,8 +12,8 @@
   rustPlatform,
   cmake,
   gn,
-  go,
-  jdk,
+  go_1_24,
+  openjdk11_headless,
   ninja,
   patchelf,
   python312,
@@ -50,12 +50,13 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-pih2EaVFDSTaCDpqkVSt39wBFGc4MFrhc1BioeHBp+w=";
-        aarch64-linux = "sha256-RpgZSsDJctTzqm8M3u0+jyEi51HaNC2RZH0Hrelovo8=";
+        x86_64-linux = "sha256-xBSSDxvp6VjZt+Fc62/eP5Z2WWfpkAGl1Z+PupyDpg4=";
+        aarch64-linux = "sha256-2g8x12zkyZyjkv5NubG4bVmiLiN8uoEZ33e6Azd1guw=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
+  jdk = openjdk11_headless;
 
 in
 buildBazelPackage rec {
@@ -123,7 +124,7 @@ buildBazelPackage rec {
     cmake
     python3
     gn
-    go
+    go_1_24
     jdk
     ninja
     patchelf

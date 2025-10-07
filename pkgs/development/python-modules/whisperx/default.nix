@@ -35,14 +35,14 @@ let
 in
 buildPythonPackage rec {
   pname = "whisperx";
-  version = "3.4.2";
+  version = "3.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "m-bain";
     repo = "whisperX";
     tag = "v${version}";
-    hash = "sha256-7MjrtvZGWfgtdQNotzdVMjj0sYfab/6PLQcZCOoqoNM=";
+    hash = "sha256-zx77Fx8KYTWCFcC6Uy6pbe8LJtXP3b6lkwuOSEEYJfU=";
   };
 
   build-system = [ setuptools ];

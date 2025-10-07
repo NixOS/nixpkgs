@@ -26,6 +26,7 @@ let
       cosmic-files
       config.services.displayManager.cosmic-greeter.package
       cosmic-idle
+      cosmic-initial-setup
       cosmic-launcher
       cosmic-notifications
       cosmic-osd
@@ -71,6 +72,8 @@ in
     environment.pathsToLink = [
       "/share/backgrounds"
       "/share/cosmic"
+      "/share/cosmic-layouts"
+      "/share/cosmic-themes"
     ];
     environment.systemPackages = utils.removePackagesByName (
       corePkgs
@@ -103,6 +106,8 @@ in
     services.graphical-desktop.enable = true;
 
     xdg = {
+      # Required for cosmic-osd
+      sounds.enable = true;
       icons.fallbackCursorThemes = lib.mkDefault [ "Cosmic" ];
 
       portal = {

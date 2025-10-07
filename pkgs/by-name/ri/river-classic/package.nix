@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river-classic";
-  version = "0.3.12";
+  version = "0.3.13";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "codeberg.org";
     owner = "river";
     repo = "river-classic";
-    hash = "sha256-ZYJYQINv6aNj8jyPOtMh5kf/HweIweTztWUStbr/9Zc=";
+    hash = "sha256-XLWvxSChYN5wyhr8R8/3Pfykw61k451XmvgoM45zkEk=";
     tag = "v${finalAttrs.version}";
   };
 

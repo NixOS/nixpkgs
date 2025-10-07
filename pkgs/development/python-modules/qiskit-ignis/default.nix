@@ -43,9 +43,9 @@ buildPythonPackage rec {
     scikit-learn
     scipy
   ]
-  ++ lib.optionals (withCvx) [ cvxpy ]
-  ++ lib.optionals (withVisualization) [ matplotlib ]
-  ++ lib.optionals (withJit) [ numba ];
+  ++ lib.optionals withCvx [ cvxpy ]
+  ++ lib.optionals withVisualization [ matplotlib ]
+  ++ lib.optionals withJit [ numba ];
 
   # Tests
   pythonImportsCheck = [ "qiskit.ignis" ];
@@ -71,6 +71,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-ignis/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

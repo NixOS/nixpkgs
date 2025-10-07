@@ -12,7 +12,6 @@
   python3,
   libarchive,
   libmsym,
-  msgpack,
   qttools,
   wrapQtAppsHook,
 }:
@@ -52,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
-    repo = pname;
+    repo = "avogadrolibs";
     tag = version;
     hash = "sha256-0DJU40Etse90rdX8xByjQeUiBsJtEQozZQQsWsc4vxk=";
   };
@@ -78,16 +77,15 @@ stdenv.mkDerivation rec {
     glew
     libarchive
     libmsym
-    msgpack
     qttools
   ];
 
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
-    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsConfig.cmake \
+    substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsConfig.cmake \
       --replace "$out/" ""
 
-    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsTargets.cmake \
+    substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsTargets.cmake \
       --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 

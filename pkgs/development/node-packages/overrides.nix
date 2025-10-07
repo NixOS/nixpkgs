@@ -168,7 +168,7 @@ final: prev: {
 
   pulp = prev.pulp.override {
     # tries to install purescript
-    npmFlags = builtins.toString [ "--ignore-scripts" ];
+    npmFlags = toString [ "--ignore-scripts" ];
 
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''

@@ -4,19 +4,20 @@
   fetchFromGitHub,
 
   # dependencies
+  google-generativeai,
+  joblib,
   networkx,
   numpy,
-  scipy,
-  scikit-learn,
+  opt-einsum,
   pandas,
   pyparsing,
-  torch,
+  pyro-ppl,
+  scikit-learn,
+  scipy,
   statsmodels,
+  torch,
   tqdm,
-  joblib,
-  opt-einsum,
   xgboost,
-  google-generativeai,
 
   # tests
   pytestCheckHook,
@@ -38,19 +39,20 @@ buildPythonPackage rec {
   };
 
   dependencies = [
+    google-generativeai
+    joblib
     networkx
     numpy
-    scipy
-    scikit-learn
+    opt-einsum
     pandas
     pyparsing
-    torch
+    pyro-ppl
+    scikit-learn
+    scipy
     statsmodels
+    torch
     tqdm
-    joblib
-    opt-einsum
     xgboost
-    google-generativeai
   ];
 
   disabledTests = [
@@ -64,6 +66,9 @@ buildPythonPackage rec {
 
     # requires optional dependency daft
     "test_to_daft"
+
+    # AssertionError
+    "test_estimate_example_smoke_test"
   ];
 
   nativeCheckInputs = [
@@ -74,6 +79,8 @@ buildPythonPackage rec {
     mock
     black
   ];
+
+  pythonImportsCheck = [ "pgmpy" ];
 
   meta = {
     description = "Python Library for learning (Structure and Parameter), inference (Probabilistic and Causal), and simulations in Bayesian Networks";

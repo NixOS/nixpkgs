@@ -12,6 +12,7 @@
   pytest,
   pytest-asyncio,
   pytestCheckHook,
+  pyyaml,
   setuptools,
   testfixtures,
   typing-extensions,
@@ -19,15 +20,22 @@
 
 buildPythonPackage rec {
   pname = "approvaltests";
-  version = "15.0.0";
+  version = "15.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "approvals";
     repo = "ApprovalTests.Python";
     tag = "v${version}";
-    hash = "sha256-lXc81hQzxHxpg96OSWkkWmdmLOf4nU56dIKYVgLo+s8=";
+    hash = "sha256-cOaL8u5q9kx+yLB0e/ALnGYYGF5v50wsIIF1UUTPe1Y=";
   };
+
+  postPatch = ''
+    echo 'version_number = "${version}"' > version.py
+    mv .github approvaltests approval_utilities tests setup
+    cd setup
+    rm setup.cfg
+  '';
 
   build-system = [ setuptools ];
 
@@ -47,6 +55,7 @@ buildPythonPackage rec {
     numpy
     pytest-asyncio
     pytestCheckHook
+    pyyaml
   ];
 
   disabledTests = [

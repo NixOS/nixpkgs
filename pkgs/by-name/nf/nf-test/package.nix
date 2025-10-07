@@ -11,11 +11,11 @@
 stdenv.mkDerivation rec {
 
   pname = "nf-test";
-  version = "0.9.2";
+  version = "0.9.3";
 
   src = fetchurl {
     url = "https://github.com/askimed/nf-test/releases/download/v${version}/nf-test-${version}.tar.gz";
-    hash = "sha256-v7LgbfKdTvQbMcs1ajdKmSQr742YQ0uL4wN79rPV1No=";
+    hash = "sha256-LLylgv34HiMXg+sjBbMdeLVPMV5+h+Z2xEWCiBqbNEY=";
   };
   sourceRoot = ".";
 

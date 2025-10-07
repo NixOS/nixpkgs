@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "pybids";
-  version = "0.19.0";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bids-standard";
     repo = "pybids";
     tag = version;
-    hash = "sha256-x1OlqfuRZvfWwOt+WTR8lAtOPWcrsymQyXPfiEj4lk4=";
+    hash = "sha256-e1uD9rNs50GP8myNY+5VbcdRKlLykSTd9ESKrhSW+r8=";
   };
 
   postPatch = ''

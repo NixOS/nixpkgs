@@ -54,5 +54,5 @@ callPackage ./common.nix (
       };
     };
   }
-  // builtins.removeAttrs args [ "callPackage" ]
+  // removeAttrs args [ "callPackage" ]
 )

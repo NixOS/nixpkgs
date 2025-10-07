@@ -59,7 +59,7 @@ let
   # - metal if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
   # !! warn if multiple acceleration methods are enabled and default to the first one in the list
   featureDevice =
-    if (builtins.isNull acceleration) then
+    if (isNull acceleration) then
       (warnIfMultipleAccelerationMethods availableAccelerations)
     else
       acceleration;
@@ -106,9 +106,9 @@ let
   darwinBuildInputs = [
     llamaccpPackage
   ]
-  ++ optionals stdenv.hostPlatform.isDarwin ([
+  ++ optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_15
-  ]);
+  ];
 
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];

@@ -5,13 +5,13 @@
   libsForQt5,
   cmake,
 }:
-mkDerivation rec {
+mkDerivation {
   pname = "ldutils";
   version = "1.15";
 
   src = fetchFromGitLab {
     owner = "ldutils-projects";
-    repo = pname;
+    repo = "ldutils";
     rev = "4fc416f694ce888c5bd4c4432a7730bb6260475c";
     #rev = "v_${version}";
     hash = "sha256-UMDayvz9RlcR4HVJNn7tN4FKbiKAFRSPaK0osA6OGTI=";

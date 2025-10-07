@@ -26,7 +26,6 @@ assert lib.assertMsg (
   boehmgc,
   boost,
   brotli,
-  busybox,
   busybox-sandbox-shell,
   bzip2,
   callPackage,
@@ -55,6 +54,7 @@ assert lib.assertMsg (
   nlohmann_json,
   ninja,
   openssl,
+  pkgsStatic,
   rustc,
   toml11,
   pegtl,
@@ -79,7 +79,11 @@ assert lib.assertMsg (
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
   enableStatic ? stdenv.hostPlatform.isStatic,
   enableStrictLLVMChecks ? true,
-  withAWS ? !enableStatic && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  withAWS ?
+    lib.meta.availableOn stdenv.hostPlatform aws-c-common
+    && !enableStatic
+    && (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isDarwin),
+  aws-c-common,
   aws-sdk-cpp,
   # FIXME support Darwin once https://github.com/NixOS/nixpkgs/pull/392918 lands
   withDtrace ?
@@ -291,7 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals
       (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
       [
-        (lib.mesonOption "build-test-shell" "${busybox}/bin")
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
       ];
 
   ninjaFlags = [ "-v" ];

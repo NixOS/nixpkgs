@@ -263,7 +263,7 @@ in
         TimeoutStartSec = "infinity";
         DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
       }
-      // (lib.optionalAttrs (usingDefaultDataDir) {
+      // (lib.optionalAttrs usingDefaultDataDir {
         StateDirectory = "opensearch";
         StateDirectoryMode = "0700";
       });

@@ -38,6 +38,9 @@ let
       "-DUSE_CYRUS_SASL"
       "-I${cyrus_sasl.dev}/include/sasl"
       "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
+      # Fix build with gcc15, no upstream fix for stable releases:
+      # https://www.mail-archive.com/postfix-devel@postfix.org/msg01270.html
+      "-std=gnu17"
     ]
     ++ lib.optional withPgSQL "-DHAS_PGSQL"
     ++ lib.optionals withMySQL [

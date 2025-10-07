@@ -15,10 +15,13 @@
   buildLlvmTools,
   fixDarwinDylibNames,
   enableManpages ? false,
+  enableClangToolsExtra ? true,
   devExtraCmakeFlags ? [ ],
   replaceVars,
   getVersionFile,
   fetchpatch,
+  # for tests
+  libclang,
 }:
 stdenv.mkDerivation (
   finalAttrs:
@@ -28,12 +31,12 @@ stdenv.mkDerivation (
 
     src =
       if monorepoSrc != null then
-        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } (''
+        runCommand "clang-src-${version}" { inherit (monorepoSrc) passthru; } ''
           mkdir -p "$out"
           cp -r ${monorepoSrc}/cmake "$out"
           cp -r ${monorepoSrc}/clang "$out"
-          cp -r ${monorepoSrc}/clang-tools-extra "$out"
-        '')
+          ${lib.optionalString enableClangToolsExtra "cp -r ${monorepoSrc}/clang-tools-extra \"$out\""}
+        ''
       else
         src;
 
@@ -171,7 +174,8 @@ stdenv.mkDerivation (
 
       mkdir -p $dev/bin
     ''
-    + (
+    # TODO(@LunNova): Clean up this rebuild avoidance in staging
+    + lib.optionalString enableClangToolsExtra (
       if lib.versionOlder release_version "20" then
         ''
           cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen,clang-pseudo-gen} $dev/bin
@@ -180,7 +184,10 @@ stdenv.mkDerivation (
         ''
           cp bin/{clang-tblgen,clang-tidy-confusable-chars-gen} $dev/bin
         ''
-    );
+    )
+    + lib.optionalString (!enableClangToolsExtra) ''
+      cp bin/clang-tblgen $dev/bin
+    '';
 
     env =
       lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform && !stdenv.hostPlatform.useLLVM)
@@ -209,6 +216,9 @@ stdenv.mkDerivation (
         ) "stackclashprotection"
         ++ lib.optional (!(targetPlatform.isx86_64 || targetPlatform.isAarch64)) "zerocallusedregs"
         ++ (finalAttrs.passthru.hardeningUnsupportedFlags or [ ]);
+      tests.withoutOptionalFeatures = libclang.override {
+        enableClangToolsExtra = false;
+      };
     };
 
     requiredSystemFeatures = [ "big-parallel" ];

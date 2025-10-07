@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "s2n-tls";
-  version = "1.5.24";
+  version = "1.5.26";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "s2n-tls";
     rev = "v${version}";
-    hash = "sha256-a5TJlxDj5B+fq8EUrlXtqGKtMC3S8PoIG2w12DTYVsc=";
+    hash = "sha256-6Py1ygHinx3n7k/hQN+85C57YXh7ag0OGYR+NOnx1rE=";
   };
 
   nativeBuildInputs = [ cmake ];

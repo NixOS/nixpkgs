@@ -6,7 +6,7 @@
 lib.fetchers.withNormalizedHash { } (
   {
     s3url,
-    name ? builtins.baseNameOf s3url,
+    name ? baseNameOf s3url,
     outputHash,
     outputHashAlgo,
     region ? "us-east-1",

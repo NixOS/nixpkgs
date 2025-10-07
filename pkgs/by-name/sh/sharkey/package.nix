@@ -165,7 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = with lib.platforms; linux ++ darwin;
     mainProgram = "sharkey";
     maintainers = with lib.maintainers; [
-      srxl
       tmarkus
     ];
   };

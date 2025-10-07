@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-javascript";
-  version = "0.23.1";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter-javascript";
     tag = "v${version}";
-    hash = "sha256-apgWWYD0XOvH5c3BY7kAF7UYtwPJaEvJzC5aWvJ9YQ8=";
+    hash = "sha256-2Jj/SUG+k8lHlGSuPZvHjJojvQFgDiZHZzH8xLu7suE=";
   };
 
   build-system = [

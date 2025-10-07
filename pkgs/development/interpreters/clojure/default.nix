@@ -9,7 +9,6 @@
   makeWrapper,
   writeScript,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
   version = "1.12.2.1565";

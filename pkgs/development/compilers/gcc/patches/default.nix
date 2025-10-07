@@ -55,7 +55,7 @@ in
 [ ]
 # Pass the path to a C++ compiler directly in the Makefile.in
 ++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
-++ optionals (noSysDirs) (
+++ optionals noSysDirs (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
     ./gcc-12-no-sys-dirs.patch
@@ -86,11 +86,12 @@ in
 )
 # Pass CFLAGS on to gnat
 ++ optional langAda ./gnat-cflags-11.patch
-++ optional langFortran (
-  # Fix interaction of gfortran and libtool
-  # Fixes the output of -v
-  # See also https://github.com/nixOS/nixpkgs/commit/cc6f814a8f0e9b70ede5b24192558664fa1f98a2
-  ./gcc-12-gfortran-driving.patch)
+++
+  optional langFortran
+    # Fix interaction of gfortran and libtool
+    # Fixes the output of -v
+    # See also https://github.com/nixOS/nixpkgs/commit/cc6f814a8f0e9b70ede5b24192558664fa1f98a2
+    ./gcc-12-gfortran-driving.patch
 # Do not pass a default include dir on PowerPC+Musl
 # See https://github.com/NixOS/nixpkgs/pull/45340/commits/d6bb7d45162ac93e017cc9b665ae4836f6410710
 ++ [ ./ppc-musl.patch ]
@@ -223,3 +224,17 @@ in
   }
   .${majorVersion} or [ ]
 )
+
+++ optional targetPlatform.isCygwin (fetchpatch {
+  name = "libstdc-fix-compilation-in-freestanding-win32.patch";
+  url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-2-corngood@gmail.com/raw";
+  hash = "sha256-+EYW9lG8CviVX7RyNHp+iX+8BRHUjt5b07k940khbbY=";
+})
+
+++ optionals targetPlatform.isCygwin [
+  (fetchpatch {
+    name = "cygwin-fix-compilation-with-inhibit_libc.patch";
+    url = "https://inbox.sourceware.org/gcc-patches/20250926170154.2222977-1-corngood@gmail.com/raw";
+    hash = "sha256-mgzMRvgPdhj+Q2VRsFhpE2WQzg0CvWsc5/FRAsSU1Es=";
+  })
+]

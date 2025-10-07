@@ -18,7 +18,8 @@ lib.makeOverridable (
     private ? false,
     forceFetchGit ? false,
     fetchLFS ? false,
-    sparseCheckout ? [ ],
+    rootDir ? "",
+    sparseCheckout ? lib.optional (rootDir != "") rootDir,
     githubBase ? "github.com",
     varPrefix ? null,
     meta ? { },
@@ -69,6 +70,7 @@ lib.makeOverridable (
       || deepClone
       || forceFetchGit
       || fetchLFS
+      || (rootDir != "")
       || (sparseCheckout != [ ]);
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.

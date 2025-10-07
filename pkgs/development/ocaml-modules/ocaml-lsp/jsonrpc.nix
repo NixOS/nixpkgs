@@ -10,7 +10,7 @@
   ocaml,
   version ?
     if lib.versionAtLeast ocaml.version "5.3" then
-      "1.23.0"
+      "1.23.1"
     else if lib.versionAtLeast ocaml.version "5.2" then
       "1.21.0"
     else if lib.versionAtLeast ocaml.version "4.14" then
@@ -26,10 +26,10 @@
 let
   params =
     {
-      "1.23.0" = {
+      "1.23.1" = {
         name = "lsp";
         minimalOCamlVersion = "5.3";
-        sha256 = "sha256-fyvQI7VKgOrOFihtKIkcE2B2iUYFLJOZGKipzZU0Dn0=";
+        sha256 = "sha256-x0fjlAJmOeogRGfoWd6T6o6ZWNv0T3gNyyoYl8VtdXE=";
       };
       "1.22.0" = {
         name = "lsp";
@@ -96,7 +96,9 @@ buildDunePackage rec {
       ];
 
   propagatedBuildInputs =
-    if lib.versionAtLeast version "1.7.0" then
+    if lib.versionAtLeast version "1.23.1" then
+      [ yojson ]
+    else if lib.versionAtLeast version "1.7.0" then
       [ ]
     else
       [

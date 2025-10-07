@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  gitUpdater,
   substitute,
   cmake,
   coreutils,
@@ -35,6 +34,8 @@
   buildServer ? true,
   SDL2,
   useSDL2 ? true,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -141,10 +142,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  passthru.updateScript = gitUpdater {
-    allowedVersions = "\\.";
-    ignoredVersions = "-android$";
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://www.luanti.org/";

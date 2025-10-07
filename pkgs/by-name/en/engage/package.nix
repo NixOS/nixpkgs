@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   env = {
-    ENGAGE_DOCS_LINK = "file://${builtins.placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
+    ENGAGE_DOCS_LINK = "file://${placeholder "doc"}/share/doc/${finalAttrs.pname}/index.html";
   };
 
   src = fetchFromGitLab {
@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd engage ${
       builtins.concatStringsSep " " (
-        builtins.map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
+        map (shell: "--${shell} <($out/bin/engage completions ${shell})") [
           "bash"
           "zsh"
           "fish"

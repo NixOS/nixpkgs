@@ -9,7 +9,7 @@ mkDerivation rec {
   version = "0.9";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "cubical";
     owner = "agda";
     rev = "v${version}";
     hash = "sha256-Lmzofq2rKFmfsAoH3zIFB2QLeUhFmIO44JsF+dDrubw=";

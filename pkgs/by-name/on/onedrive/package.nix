@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       peterhoeg
       bertof
+      guylamar2006
     ];
     platforms = lib.platforms.linux;
   };

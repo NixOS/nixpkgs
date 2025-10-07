@@ -17,6 +17,16 @@ stdenv.mkDerivation rec {
     sha256 = "1bi7wsz3p5slb43kj7lgb3r6lb91lvb6ldi556k4y50ix6b5khyb";
   };
 
+  # Fix the build with CMake 4.
+  #
+  # See: <https://sourceforge.net/p/ebook-tools/bugs/14/>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 2.4.0)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

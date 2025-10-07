@@ -24,9 +24,9 @@ runCommand "${alsa-lib.pname}-${alsa-lib.version}"
   }
   (
     (lib.concatMapStringsSep "\n" (output: ''
-      mkdir ${builtins.placeholder output}
+      mkdir ${placeholder output}
       ${lndir}/bin/lndir ${lib.attrByPath [ output ] null alsa-lib} \
-        ${builtins.placeholder output}
+        ${placeholder output}
     '') alsa-lib.outputs)
     + ''
       cp -r ${merged}/lib/alsa-lib $out/lib

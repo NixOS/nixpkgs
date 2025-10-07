@@ -12,6 +12,7 @@
   udev,
   wrapGAppsHook3,
   writeScript,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,6 +58,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     libsecret
     libgbm
+    sqlite
   ];
 
   unpackPhase = ''

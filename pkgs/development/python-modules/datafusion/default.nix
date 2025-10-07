@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "datafusion";
-  version = "49.0.0";
+  version = "50.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -32,12 +32,12 @@ buildPythonPackage rec {
     tag = version;
     # Fetch arrow-testing and parquet-testing (tests assets)
     fetchSubmodules = true;
-    hash = "sha256-U3LRZQMjL8sNa5yQmwfhw9NRGC0299TRODylzZkvFh4=";
+    hash = "sha256-to1GJQqI4aJOW8pGhWvU44ePrRo0cgeNwEGRJlb9grM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src version;
-    hash = "sha256-lCbqy6kZK+LSLvr+Odxt167ACnDap2enH/J4ILcPtOc=";
+    hash = "sha256-ZACp7bBLYKmuZVAWEa2YxoCbQqwALv2bWf+zz6jbV9w=";
   };
 
   nativeBuildInputs = with rustPlatform; [

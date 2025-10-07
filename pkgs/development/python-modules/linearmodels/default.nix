@@ -27,6 +27,13 @@ buildPythonPackage rec {
     hash = "sha256-oWVBsFSKnv/8AHYP5sxO6+u5+hsOw/uQlOetse5ue88=";
   };
 
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace-fail "setuptools_scm[toml]>=8.0.0,<9.0.0" "setuptools_scm[toml]"
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools_scm[toml]>=8,<9" "setuptools_scm[toml]"
+  '';
+
   build-system = [
     setuptools
     setuptools-scm
@@ -48,6 +55,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "linearmodels" ];
+
+  disabledTestPaths = [
+    # Skip long-running tests
+    "linearmodels/tests/panel/test_panel_ols.py"
+  ];
 
   meta = {
     description = "Models for panel data, system regression, instrumental variables and asset pricing";

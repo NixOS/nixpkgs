@@ -15,7 +15,7 @@
   icon ? "", # Optional icon file.
 }:
 
-writeShellScript "make-darwin-bundle-${name}" (''
+writeShellScript "make-darwin-bundle-${name}" ''
   function makeDarwinBundlePhase() {
     mkdir -p "''${!outputBin}/Applications/${name}.app/Contents/MacOS"
     mkdir -p "''${!outputBin}/Applications/${name}.app/Contents/Resources"
@@ -28,4 +28,4 @@ writeShellScript "make-darwin-bundle-${name}" (''
   }
 
   appendToVar preDistPhases makeDarwinBundlePhase
-'')
+''

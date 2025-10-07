@@ -289,7 +289,7 @@ let
     # `optionType`: The option type to parenthesize or not.
     #   The option whose description we're returning.
     #
-    # Return value
+    # Returns value
     #
     # The description of the `optionType`, with parentheses if there may be an
     # ambiguity.
@@ -1247,7 +1247,14 @@ let
               let
                 docsEval = base.extendModules { modules = [ noCheckForDocsModule ]; };
               in
-              docsEval._module.freeformType.description or name;
+              if docsEval._module.freeformType ? description then
+                "open ${name} of ${
+                  optionDescriptionPhrase (
+                    class: class == "noun" || class == "composite"
+                  ) docsEval._module.freeformType
+                }"
+              else
+                name;
           inherit check;
           merge = {
             __functor =
@@ -1366,7 +1373,7 @@ let
             if builtins.isString v then
               ''"${v}"''
             else if builtins.isInt v then
-              builtins.toString v
+              toString v
             else if builtins.isBool v then
               boolToString v
             else

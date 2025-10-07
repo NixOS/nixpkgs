@@ -22,7 +22,7 @@ buildFHSEnv {
       stdenv.cc.libc
       gcc
     ])
-    ++ (
+    ++
       # OpenHMD dependencies
       (
         pkgs.openhmd.buildInputs
@@ -31,12 +31,12 @@ buildFHSEnv {
           meson
         ])
       )
-    )
+
     ++ (
       # OpenComposite dependencies
       pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs
     )
-    ++ (
+    ++
       # Monado dependencies
       (
         pkgs.monado.buildInputs
@@ -63,17 +63,17 @@ buildFHSEnv {
           libepoxy
           lz4
           lz4.dev
-          tbb
+          onetbb
           libxkbcommon
           librealsense
           boost
           glew
         ])
       )
-    )
-    ++ (
+
+    ++
       # SteamVR driver dependencies
-      [ pkgs.zlib ])
+      [ pkgs.zlib ]
     ++ (
       # WiVRn dependencies
       pkgs.wivrn.buildInputs

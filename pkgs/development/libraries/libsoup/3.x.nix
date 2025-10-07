@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libsoup_3";
-      packageName = pname;
+      packageName = "libsoup";
       versionPolicy = "odd-unstable";
     };
   };

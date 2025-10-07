@@ -42,8 +42,6 @@ in
             options = {
               enable = mkEnableOption "Wyoming Piper server";
 
-              piper = mkPackageOption pkgs "piper-tts" { };
-
               voice = mkOption {
                 type = str;
                 example = "en-us-ryan-medium";
@@ -159,8 +157,6 @@ in
                 "/var/lib/wyoming/piper"
                 "--uri"
                 options.uri
-                "--piper"
-                (lib.getExe options.piper)
                 "--voice"
                 options.voice
                 "--speaker"
@@ -194,7 +190,7 @@ in
             ProtectKernelTunables = true;
             ProtectControlGroups = true;
             ProtectProc = "invisible";
-            ProcSubset = "pid";
+            ProcSubset = "all"; # for onnxruntime, which queries cpuinfo
             RestrictAddressFamilies = [
               "AF_INET"
               "AF_INET6"
