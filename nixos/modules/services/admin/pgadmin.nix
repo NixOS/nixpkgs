@@ -247,6 +247,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectProc = "invisible";
         ProtectSystem = "full";
         RemoveIPC = true;
         RestrictAddressFamilies = [
