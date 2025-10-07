@@ -6228,10 +6228,10 @@ with pkgs;
   );
   ansible_2_17 = python3Packages.toPythonApplication (
     python3Packages.ansible-core.overridePythonAttrs (oldAttrs: rec {
-      version = "2.17.8";
+      version = "2.19.3";
       src = oldAttrs.src.override {
         inherit version;
-        hash = "sha256-Ob6KeYaix9NgabDZciC8L2eDxl/qfG1+Di0A0ayK+Hc=";
+        hash = "sha256-JDppZpoAe+B5Q2C8RHf3DgEozgCR3Dr0xcuBxqRm9XM=";
       };
     })
   );
