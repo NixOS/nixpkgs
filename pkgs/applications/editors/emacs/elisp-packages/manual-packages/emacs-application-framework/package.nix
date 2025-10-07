@@ -10,7 +10,6 @@
   # Emacs dependencies
   all-the-icons,
   # Other dependencies
-  nodejs,
   wmctrl,
   xdotool,
   # Updater
@@ -22,7 +21,6 @@
 let
 
   appPythonDeps = map (item: item.eafPythonDeps) enabledApps;
-  appOtherDeps = map (item: item.eafOtherDeps) enabledApps;
 
   pythonPackageLists = [
     (
@@ -41,25 +39,14 @@ let
   pythonPkgs = ps: builtins.concatLists (map (f: f ps) pythonPackageLists);
   pythonEnv = python3.withPackages pythonPkgs;
 
-  otherPackageLists = [
-    (
-      [
-        nodejs
-        wmctrl
-      ]
-      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform xdotool) [ xdotool ]
-    )
-  ]
-  ++ appOtherDeps;
-  otherPkgs = builtins.concatLists otherPackageLists;
+  wmctrlExe = lib.getExe wmctrl;
+  xdotoolExe = lib.optionalString (lib.meta.availableOn stdenv.hostPlatform xdotool) (
+    lib.getExe xdotool
+  );
 
   appsDrv = symlinkJoin {
     name = "emacs-application-framework-apps";
     paths = enabledApps;
-  };
-  depsBin = symlinkJoin {
-    name = "emacs-application-framework-deps-bin";
-    paths = otherPkgs;
   };
 
 in
@@ -84,6 +71,20 @@ melpaBuild (finalAttrs: {
     substituteInPlace eaf.el \
       --replace-fail "\"python.exe\" \"python3\"" \
                      "\"python.exe\" \"${pythonEnv.interpreter}\""
+
+    substituteInPlace eaf.el \
+      --replace-fail "(executable-find \"wmctrl\")" \
+                     "(executable-find \"${wmctrlExe}\")" \
+      --replace-fail "(shell-command-to-string \"wmctrl -m\")" \
+                     "(shell-command-to-string \"${wmctrlExe} -m\")" \
+      --replace-fail "\"wmctrl -i -a \$(wmctrl -lp | awk -vpid=\$PID '\$3==%s {print \$1; exit}')\"" \
+                     "\"${wmctrlExe} -i -a \$(${wmctrlExe} -lp | awk -vpid=\$PID '\$3==%s {print \$1; exit}')\""
+
+    substituteInPlace eaf.el \
+      --replace-fail "(executable-find \"xdotool\")" \
+                     "(executable-find \"${xdotoolExe}\")" \
+      --replace-fail "(shell-command-to-string \"xdotool getactivewindow getwindowname\")" \
+                     "(shell-command-to-string \"${xdotoolExe} getactivewindow getwindowname\")"
   '';
 
   files = ''
@@ -112,13 +113,6 @@ melpaBuild (finalAttrs: {
       cp -r $APPNATDIR/. \
             $NATDIR/
     fi
-
-    mkdir -p $out/bin/
-    for item in ${depsBin}/bin/*; do
-      # Some symbolic links point to another symbolic link
-      ln -s $(readlink -f $item) \
-            $out/bin/$(basename $item)
-    done
   '';
 
   passthru.updateScript = unstableGitUpdater { };
