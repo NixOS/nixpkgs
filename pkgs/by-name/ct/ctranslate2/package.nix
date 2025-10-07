@@ -1,13 +1,14 @@
 {
   lib,
   stdenv,
+  config,
   fetchFromGitHub,
   cmake,
   llvmPackages, # openmp
   withMkl ? false,
   mkl,
-  withCUDA ? false,
-  withCuDNN ? false,
+  withCUDA ? config.cudaSupport,
+  withCuDNN ? withCUDA && (cudaPackages ? cudnn),
   cudaPackages,
   # Enabling both withOneDNN and withOpenblas is broken
   # https://github.com/OpenNMT/CTranslate2/issues/1294
