@@ -4,6 +4,7 @@
   buildPackages,
   pkg-config,
   fetchurl,
+  fetchpatch,
   libedit,
   runCommand,
   dash,
@@ -11,12 +12,25 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dash";
-  version = "0.5.12";
+  version = "0.5.13";
 
   src = fetchurl {
     url = "http://gondor.apana.org.au/~herbert/dash/files/dash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-akdKxG6LCzKRbExg32lMggWNMpfYs4W3RQgDDKSo8oo=";
+    hash = "sha256-/Y2hIeMGsn9ZMwYTQXsYK4hE8R4mlTHMRyC/Uj4+Btc=";
   };
+
+  patches = [
+    # Inverted if typo
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=6dcc007a72f13c3e518a65bffef571795ad6678c";
+      hash = "sha256-lOL/MaDHk1D/1387Exaa31mVOf3e70zRzluiFGEtUz4=";
+    })
+    # Missing NUL byte due to off-by-one
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/utils/dash/dash.git/patch/?id=85ae9ea3b7a9d5bc4e95d1bacf3446c545b6ed8b";
+      hash = "sha256-crsE64oC/LebzggijMHBnGHSmeAy4LB57LHcL62+zBw=";
+    })
+  ];
 
   strictDeps = true;
 
