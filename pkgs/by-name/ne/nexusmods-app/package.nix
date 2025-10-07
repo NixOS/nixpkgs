@@ -1,6 +1,5 @@
 {
   _7zz,
-  avalonia,
   buildDotnetModule,
   callPackage,
   desktop-file-utils,
@@ -44,11 +43,6 @@ buildDotnetModule (finalAttrs: {
   # TODO: do something about this in buildDotnetModule
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
-
-  buildInputs = [
-    # TODO: bump avalonia to 11.1.3
-    # avalonia
-  ];
 
   nativeCheckInputs = [ _7zz ];
 
