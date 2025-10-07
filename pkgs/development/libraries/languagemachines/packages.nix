@@ -9,7 +9,7 @@ in
   ucto = pkgs.ucto;
   uctodata = pkgs.uctodata;
   timbl = pkgs.timbl;
-  timblserver = callPackage ./timblserver.nix { };
+  timblserver = pkgs.timblserver;
   mbt = callPackage ./mbt.nix { };
   frog = callPackage ./frog.nix { inherit icu; };
   frogdata = callPackage ./frogdata.nix { };
