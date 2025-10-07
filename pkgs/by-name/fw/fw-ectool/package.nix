@@ -20,6 +20,12 @@ stdenv.mkDerivation {
     hash = "sha256-j0Z2Uo1LBXlHZVHPm4Xjx3LZaI6Qq0nSdViyC/CjWC8=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.1)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
