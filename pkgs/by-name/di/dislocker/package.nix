@@ -31,6 +31,13 @@ stdenv.mkDerivation rec {
       url = "https://github.com/Aorimn/dislocker/commit/7744f87c75fcfeeb414d0957771042b10fb64e62.diff";
       sha256 = "0bpyccbbfjsidsrd2q9qylb95nvi8g3glb3jss7xmhywj86bhzr5";
     })
+    # fix compatibility with CMake (https://cmake.org/cmake/help/v4.0/command/cmake_minimum_required.html)
+    # https://github.com/Aorimn/dislocker/pull/346
+    (fetchpatch {
+      name = "cmake-raise-minimum-required-version-to-3.5.patch";
+      url = "https://github.com/Aorimn/dislocker/commit/337d05dc7447436539f2fb481eef0e528a000b66.patch";
+      hash = "sha256-6LTRjaZfyGS2BCdpcJy/qo0r8soXJSZqWjZRbaKvcQk=";
+    })
   ];
 
   nativeBuildInputs = [
