@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = "com.thomasokken.plus42bin";
+      name = "plus42bin";
       desktopName = "Plus42Bin";
       genericName = "Calculator";
       exec = "plus42bin";
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       ];
     })
     (makeDesktopItem {
-      name = "com.thomasokken.plus42dec";
+      name = "plus42dec";
       desktopName = "Plus42Dec";
       genericName = "Calculator";
       exec = "plus42dec";
