@@ -207,6 +207,9 @@ stdenv.mkDerivation rec {
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
     ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+    # gnulib does not consider Clang-specific warnings to be bugs:
+    # https://lists.gnu.org/r/bug-gnulib/2025-06/msg00325.html
+    ++ optional stdenv.cc.isClang "-Wno-error=format-security"
   );
 
   # Works around a bug with 8.26:
