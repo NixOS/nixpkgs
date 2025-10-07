@@ -258,14 +258,6 @@ in
       "kernel.panic_on_oops" = 1;
     };
 
-    users = lib.mkIf cfg.cisHardening {
-      users.etcd = {
-        group = "etcd";
-        isSystemUser = true;
-      };
-      groups.etcd = { };
-    };
-
     systemd.services."rke2-${cfg.role}" = {
       description = "Rancher Kubernetes Engine v2";
       documentation = [ "https://github.com/rancher/rke2#readme" ];
