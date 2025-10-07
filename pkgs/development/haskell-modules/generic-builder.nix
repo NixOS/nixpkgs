@@ -19,6 +19,30 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 
+  # This is a silly workaround to avoid infinite recursion.
+  # We don't know which packages need template haskell, so we always need iserv-proxy for the host
+  # but then that package also has dependencies which would themselves need iserv-proxy.
+  # TODO: grab host iserv-proxy from the "original" package set without TH support, then have host TH support on the "real" package set.
+  iservProxyDependency =
+    pname:
+    builtins.elem pname [
+      "iserv-proxy"
+      "libiserv"
+      "network"
+    ];
+
+  buildWithProxy =
+    pname:
+    isCross
+    && !(iservProxyDependency pname)
+    && stdenv.hostPlatform.emulatorAvailable buildPackages
+    && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) # TODO: add windows support via wine
+  ;
+
+  # In practice we need the iserv-proxy setup for cross testing since many
+  # suites use Template Haskell for test discovery, including QuickCheck's
+  runCrossTests = buildWithProxy;
+
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
   # https://github.com/haskell/cabal/issues/6466 for details.
@@ -70,7 +94,7 @@ in
   buildFlags ? [ ],
   haddockFlags ? [ ],
   description ? null,
-  doCheck ? !isCross,
+  doCheck ? !isCross || runCrossTests pname,
   doBenchmark ? false,
   doHoogle ? true,
   doHaddockQuickjump ? doHoogle,
@@ -285,17 +309,8 @@ let
     END { print "" }
   '';
 
-  emulator = {
-    path = stdenv.hostPlatform.emulator buildPackages;
-    enable =
-      isCross
-      && stdenv.hostPlatform.emulatorAvailable buildPackages
-      && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)
-      && !(builtins.elem pname [
-        "iserv-proxy"
-        "libiserv"
-        "network"
-      ]);
+  crossUtils = {
+    emulator = stdenv.hostPlatform.emulator buildPackages;
 
     iservWrapper =
       let
@@ -314,7 +329,7 @@ let
             set -euo pipefail
             PORT=$((5000 + $RANDOM % 5000))
             (>&2 echo "---> Starting interpreter on port $PORT")
-            ${emulator.path} ${hostProxy} tmp $PORT &
+            ${crossUtils.emulator} ${hostProxy} tmp $PORT &
             (>&2 echo "---| interpreter should have started on $PORT")
             RISERV_PID="$!"
             ${buildProxy} $@ 127.0.0.1 "$PORT"
@@ -352,11 +367,11 @@ let
   ]
   ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
 
-  ++ optionals emulator.enable (
+  ++ optionals (buildWithProxy pname) (
     map (opt: "--ghc-option=${opt}") [
       "-fexternal-interpreter"
       "-pgmi"
-      emulator.iservWrapper
+      crossUtils.iservWrapper
     ]
   );
 
@@ -601,7 +616,7 @@ let
       export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
     fi
 
-    exec "$@"
+    ${if runCrossTests pname then crossUtils.emulator + " $@" else ''exec "$@"''}
   '';
 
   testTargetsString =
@@ -862,8 +877,19 @@ lib.fix (
         runHook postCheck
       '';
 
+      # stdenv.make-derivation sets `doCheck = false` when the build platform can't directly execute the host platform
+      # which means the `checkPhase` ends up disabled and we need to sneak it back in somehow
+      # TODO: avoid this workaround - add some sort of doCheckEmulated?
       haddockPhase = ''
-        runHook preHaddock
+        ${
+          if (doCheck && isCross) then
+            ''
+              ${drv.checkPhase}
+              runHook preHaddock
+            ''
+          else
+            "runHook preHaddock"
+        }
         ${optionalString (doHaddock && isLibrary) ''
           ${setupCommand} haddock --html \
             ${optionalString doHoogle "--hoogle"} \
