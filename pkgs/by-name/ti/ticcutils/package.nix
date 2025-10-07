@@ -1,10 +1,10 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
   libtool,
+  autoreconfHook,
   pkg-config,
   autoconf-archive,
   libxml2,
@@ -13,22 +13,22 @@
   libtar,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-ticcutils.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ticcutils";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "ticcutils-${release.version}.tar.gz";
+  version = "0.15";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "ticcutils";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-1+Plo2yZyDJWn/Yk4pawQGzwdx2UBfER9ZYAYLgYGh0=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
+
   buildInputs = [
     libtool
     autoconf-archive
@@ -39,7 +39,10 @@ stdenv.mkDerivation {
     libtar
     # broken but optional: boost
   ];
-  preConfigure = "sh bootstrap.sh";
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     description = "This module contains useful functions for general use in the TiCC software stack and beyond";
@@ -49,4 +52,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ roberth ];
   };
 
-}
+})

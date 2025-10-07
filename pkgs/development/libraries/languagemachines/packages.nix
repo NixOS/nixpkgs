@@ -4,7 +4,7 @@ let
   icu = pkgs.icu60;
 in
 {
-  ticcutils = callPackage ./ticcutils.nix { };
+  ticcutils = pkgs.ticcutils;
   libfolia = callPackage ./libfolia.nix { inherit icu; };
   ucto = callPackage ./ucto.nix { inherit icu; };
   uctodata = callPackage ./uctodata.nix { };
