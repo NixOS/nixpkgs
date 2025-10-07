@@ -41,6 +41,12 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # Disable strict runtime dependency checking until upstream relaxes
+  # exact version pin on requests (requests==2.32.4 -> requests>=2.32.4)
+  # See: https://github.com/sbrunner/sphinx-prompt/pull/609
+  # See: https://github.com/NixOS/nixpkgs/issues/449603
+  dontCheckRuntimeDeps = true;
+
   meta = with lib; {
     description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
