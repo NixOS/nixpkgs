@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://labix.org/doc/constraint/";
     downloadPage = "https://github.com/python-constraint/python-constraint/releases";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

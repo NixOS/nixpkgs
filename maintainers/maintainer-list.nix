@@ -6905,12 +6905,6 @@
     githubId = 187309685;
     name = "Drew Council";
   };
-  drewrisinger = {
-    email = "drisinger+nixpkgs@gmail.com";
-    github = "drewrisinger";
-    githubId = 10198051;
-    name = "Drew Risinger";
-  };
   dritter = {
     email = "dritter03@googlemail.com";
     github = "dritter";

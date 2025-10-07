@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Non-blocking Python methods using decorators";
     homepage = "https://github.com/ranaroussi/multitasking";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }
