@@ -18367,6 +18367,12 @@
     githubId = 151337;
     name = "Nick Novitski";
   };
+  nickthegroot = {
+    name = "Nick DeGroot";
+    email = "nick@nickthegroot.com";
+    github = "nickthegroot";
+    githubId = 1966472;
+  };
   nico202 = {
     email = "anothersms@gmail.com";
     github = "nico202";
