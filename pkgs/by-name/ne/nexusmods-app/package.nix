@@ -101,8 +101,8 @@ buildDotnetModule (finalAttrs: {
 
     # Bitmap icons
     for i in 16 24 48 64 96 128 256 512; do
-      size=''${i}x''${i}
-      dir=$out/share/icons/hicolor/$size/apps
+      size="$i"x"$i"
+      dir="$out/share/icons/hicolor/$size/apps"
       mkdir -p $dir
       magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
