@@ -122,6 +122,7 @@ buildPythonPackage rec {
     # Requires downloads
     "test_4457"
     "test_4445"
+    "test_4533"
     # Not a git repository, so git ls-files fails
     "test_open2"
   ];
