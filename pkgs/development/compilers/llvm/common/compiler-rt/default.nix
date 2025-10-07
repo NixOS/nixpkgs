@@ -15,7 +15,6 @@
   libcxx,
   linuxHeaders,
   freebsd,
-  libxcrypt,
 
   # Some platforms have switched to using compiler-rt, but still want a
   # libgcc.a for ABI compat purposes. The use case would be old code that
@@ -122,9 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "COMPILER_RT_DEFAULT_TARGET_ONLY" true)
     (lib.cmakeFeature "CMAKE_C_COMPILER_TARGET" stdenv.hostPlatform.config)
     (lib.cmakeFeature "CMAKE_ASM_COMPILER_TARGET" stdenv.hostPlatform.config)
-  ]
-  ++ lib.optionals (haveLibc && stdenv.hostPlatform.libc == "glibc") [
-    (lib.cmakeFeature "SANITIZER_COMMON_CFLAGS" "-I${libxcrypt}/include")
   ]
   ++ lib.optionals (useLLVM && haveLibc && stdenv.cc.libcxx == libcxx) [
     (lib.cmakeFeature "SANITIZER_CXX_ABI" "libcxxabi")

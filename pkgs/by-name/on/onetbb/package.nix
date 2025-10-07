@@ -4,7 +4,9 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  hwloc,
   ninja,
+  pkg-config,
   ctestCheckHook,
 }:
 
@@ -55,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     ctestCheckHook
+    pkg-config
+  ];
+
+  buildInputs = [
+    hwloc
   ];
 
   doCheck = true;
@@ -73,6 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace test/CMakeLists.txt \
       --replace-fail 'tbb_add_test(SUBDIR conformance NAME conformance_resumable_tasks DEPENDENCIES TBB::tbb)' ""
   '';
+
+  cmakeFlags = [
+    (lib.cmakeBool "TBB_DISABLE_HWLOC_AUTOMATIC_SEARCH" false)
+  ];
 
   env = {
     # Fix build with modern gcc

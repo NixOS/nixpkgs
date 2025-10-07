@@ -1,21 +1,26 @@
 {
+  callPackage,
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   setuptools,
   setuptools-scm,
 
+  bottle,
   certifi,
   filelock,
   isodate,
+  jsonschema,
   lxml,
   numpy,
   openpyxl,
+  pillow,
   pyparsing,
   python-dateutil,
   regex,
+  truststore,
+  typing-extensions,
 
   gui ? true,
   tkinter,
@@ -43,116 +48,131 @@
   boto3,
 }:
 
-buildPythonPackage rec {
-  pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.30.25";
-  pyproject = true;
+# ideally we'd use finalAttrs.finalPackage instead of lib.fix for self-reference,
+# but buildPythonPackage doesn't support it yet
+lib.fix (
+  self:
+  buildPythonPackage rec {
+    pname = "arelle${lib.optionalString (!gui) "-headless"}";
+    version = "2.37.59";
+    pyproject = true;
 
-  disabled = pythonAtLeast "3.13"; # Note: when updating, check if this is still needed
+    src = fetchFromGitHub {
+      owner = "Arelle";
+      repo = "Arelle";
+      tag = version;
+      hash = "sha256-ao4OKe3e1V3Df7396gVn4nqmpKNAbs5ny2y/GsxQwcE=";
+    };
 
-  src = fetchFromGitHub {
-    owner = "Arelle";
-    repo = "Arelle";
-    tag = version;
-    hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
-  };
-
-  outputs = [
-    "out"
-    "doc"
-  ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml --replace-fail \
-        'requires = ["setuptools~=73.0", "wheel~=0.44", "setuptools_scm[toml]~=8.1"]' \
-        'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
-  '';
-
-  build-system = [
-    setuptools
-    setuptools-scm
-  ];
-
-  dependencies = [
-    certifi
-    filelock
-    isodate
-    lxml
-    numpy
-    openpyxl
-    pyparsing
-    python-dateutil
-    regex
-  ]
-  ++ lib.optionals gui [ tkinter ];
-
-  optional-dependencies = {
-    crypto = [ pycryptodome ];
-    db = [
-      pg8000
-      pymysql
-      pyodbc
-      rdflib
+    outputs = [
+      "out"
+      "doc"
     ];
-    efm = [
-      holidays
-      pytz
-    ];
-    esef = [ tinycss2 ];
-    objectmaker = [ graphviz ];
-    webserver = [
-      cheroot
-      cherrypy
-      tornado
-    ];
-  };
 
-  nativeBuildInputs = [
-    # deps for docs
-    sphinxHook
-    sphinx-autodoc2
-    myst-parser
-    sphinx-copybutton
-    furo
-  ];
-
-  # the arelleGUI executable doesn't work when the gui option is false
-  postInstall = lib.optionalString (!gui) ''
-    find $out/bin -name "*arelleGUI*" -delete
-  '';
-
-  nativeCheckInputs = [
-    pytestCheckHook
-    boto3
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
-  disabledTestPaths = [
-    "tests/integration_tests"
-  ]
-  ++ lib.optionals (!gui) [
-    # these tests import tkinter
-    "tests/unit_tests/arelle/test_updater.py"
-    "tests/unit_tests/arelle/test_import.py"
-  ];
-
-  meta = {
-    description = "Open source XBRL platform";
-    longDescription = ''
-      An open source facility for XBRL, the eXtensible Business Reporting
-      Language supporting various standards, exposed through a Python or
-      REST API ${lib.optionalString gui " and a graphical user interface"}.
+    postPatch = ''
+      substituteInPlace pyproject.toml --replace-fail \
+          'requires = ["setuptools>=80.9,<81", "wheel>=0.45,<1", "setuptools_scm[toml]>=9.2,<10"]' \
+          'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
     '';
-    mainProgram = "arelle";
-    homepage = "http://arelle.org/";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      tomasajt
-      roberth
+
+    build-system = [
+      setuptools
+      setuptools-scm
     ];
-  };
-}
+
+    dependencies = [
+      bottle
+      certifi
+      filelock
+      isodate
+      jsonschema
+      lxml
+      numpy
+      openpyxl
+      pillow
+      pyparsing
+      python-dateutil
+      regex
+      truststore
+      typing-extensions
+    ]
+    ++ lib.optionals gui [ tkinter ];
+
+    optional-dependencies = {
+      crypto = [ pycryptodome ];
+      db = [
+        pg8000
+        pymysql
+        pyodbc
+        rdflib
+      ];
+      efm = [
+        holidays
+        pytz
+      ];
+      esef = [ tinycss2 ];
+      objectmaker = [ graphviz ];
+      webserver = [
+        cheroot
+        cherrypy
+        tornado
+      ];
+    };
+
+    nativeBuildInputs = [
+      # deps for docs
+      sphinxHook
+      sphinx-autodoc2
+      myst-parser
+      sphinx-copybutton
+      furo
+    ];
+
+    # the arelleGUI executable doesn't work when the gui option is false
+    postInstall = lib.optionalString (!gui) ''
+      find $out/bin -name "*arelleGUI*" -delete
+    '';
+
+    nativeCheckInputs = [
+      pytestCheckHook
+      boto3
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+
+    preCheck = ''
+      export HOME=$(mktemp -d)
+    '';
+
+    disabledTestPaths = [
+      "tests/integration_tests"
+    ]
+    ++ lib.optionals (!gui) [
+      # these tests import tkinter
+      "tests/unit_tests/arelle/test_updater.py"
+      "tests/unit_tests/arelle/test_import.py"
+    ];
+
+    passthru.hasGUI = gui;
+
+    passthru.tests = {
+      cli = callPackage ./test-cli.nix { arelle = self; };
+    };
+
+    meta = {
+      changelog = "https://github.com/Arelle/Arelle/releases/tag/${src.tag}";
+      description = "Open source XBRL platform";
+      longDescription = ''
+        An open source facility for XBRL, the eXtensible Business Reporting
+        Language supporting various standards, exposed through a Python or
+        REST API ${lib.optionalString gui " and a graphical user interface"}.
+      '';
+      mainProgram = "arelle";
+      homepage = "http://arelle.org/";
+      license = lib.licenses.asl20;
+      maintainers = with lib.maintainers; [
+        tomasajt
+        roberth
+      ];
+    };
+  }
+)

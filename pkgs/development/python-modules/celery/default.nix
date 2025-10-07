@@ -9,6 +9,7 @@
   click-plugins,
   click-repl,
   click,
+  cryptography,
   fetchFromGitHub,
   gevent,
   google-cloud-firestore,
@@ -29,6 +30,9 @@
   pyyaml,
   setuptools,
   vine,
+  # The AMQP REPL depends on click-repl, which is incompatible with our version
+  # of click.
+  withAmqpRepl ? false,
 }:
 
 buildPythonPackage rec {
@@ -43,6 +47,10 @@ buildPythonPackage rec {
     hash = "sha256-+sickqRfSkBxhcO0W9na6Uov4kZ7S5oqpXXKX0iRQ0w=";
   };
 
+  patches = lib.optionals (!withAmqpRepl) [
+    ./remove-amqp-repl.patch
+  ];
+
   build-system = [ setuptools ];
 
   dependencies = [
@@ -50,13 +58,16 @@ buildPythonPackage rec {
     click
     click-didyoumean
     click-plugins
-    click-repl
     kombu
     python-dateutil
     vine
+  ]
+  ++ lib.optionals withAmqpRepl [
+    click-repl
   ];
 
   optional-dependencies = {
+    auth = [ cryptography ];
     azureblockblob = [
       azure-identity
       azure-storage-blob

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   bootstrap_cmds,
   byacc, # can also use bison, but byacc has fewer dependencies
   keyutils,
@@ -41,6 +42,15 @@ stdenv.mkDerivation rec {
     url = "https://kerberos.org/dist/krb5/${lib.versions.majorMinor version}/krb5-${version}.tar.gz";
     hash = "sha256-GogyuMrZI+u/E5T2fi789B46SfRgKFpm41reyPoAU68=";
   };
+
+  patches = lib.optionals stdenv.hostPlatform.isFreeBSD [
+    (fetchpatch {
+      name = "fix-missing-ENODATA.patch";
+      url = "https://cgit.freebsd.org/ports/plain/security/krb5-122/files/patch-lib_krad_packet.c?id=0501f716c4aff7880fde56e42d641ef504593b7d";
+      extraPrefix = "";
+      hash = "sha256-l8ev+WrDKbTqwgBRYhfJGELkCCE8mJTqVHFBvvCPvgE=";
+    })
+  ];
 
   outputs = [
     "out"
