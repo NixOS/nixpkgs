@@ -1,5 +1,5 @@
 {
-  pkgsBuildBuild,
+  pkgsBuildHost,
   qtModule,
   stdenv,
   lib,
@@ -42,14 +42,15 @@ qtModule {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
 
-  cmakeFlags =
-    lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      "-DQt6LinguistTools_DIR=${pkgsBuildBuild.qt6.qttools}/lib/cmake/Qt6LinguistTools"
-      "-DQt6ToolsTools_DIR=${pkgsBuildBuild.qt6.qttools}/lib/cmake/Qt6ToolsTools"
-    ]
-    ++ lib.optionals withClang [
-      "-DFEATURE_clang=ON"
-    ];
+  # When cross building, qttools depends on tools from the host version of itself.
+  # The override requires we access it through pkgsBuildHost.
+  propagatedNativeBuildInputs = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    pkgsBuildHost.qt6.qttools.override { inherit withClang; }
+  );
+
+  cmakeFlags = lib.optionals withClang [
+    "-DFEATURE_clang=ON"
+  ];
 
   postInstall = ''
     mkdir -p "$dev"

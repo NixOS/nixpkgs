@@ -41,6 +41,12 @@ stdenv.mkDerivation (
       # don't leak OS version into the final output
       # https://bugreports.qt.io/browse/QTBUG-136060
       [ "-DCMAKE_SYSTEM_VERSION=" ]
+      # Qt disables tools such as qmlls when cross compiling by default,
+      # presumably with the assumption of having an embedded target.
+      ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+        "-DQT_FORCE_BUILD_TOOLS=ON"
+        "-DQT_BUILD_TOOLS_BY_DEFAULT=ON"
+      ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         "-DQT_NO_XCODE_MIN_VERSION_CHECK=ON"
         # This is only used for the min version check, which we disabled above.

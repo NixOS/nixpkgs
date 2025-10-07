@@ -153,17 +153,19 @@ let
       qtspeech = callPackage ./modules/qtspeech.nix { };
       qtquick3d = callPackage ./modules/qtquick3d.nix { };
       qtquick3dphysics = callPackage ./modules/qtquick3dphysics.nix { };
-      qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker.nix { };
+      qtquickeffectmaker = callPackage ./modules/qtquickeffectmaker { };
       qtquicktimeline = callPackage ./modules/qtquicktimeline.nix { };
       qtremoteobjects = callPackage ./modules/qtremoteobjects.nix { };
       qtsvg = callPackage ./modules/qtsvg.nix { };
       qtscxml = callPackage ./modules/qtscxml.nix { };
       qttools = callPackage ./modules/qttools { };
       qttranslations = callPackage ./modules/qttranslations.nix {
-        qttools = self.qttools.override {
-          qtbase = self.qtbase.override { qttranslations = null; };
-          qtdeclarative = null;
-        };
+        qttools = self.qttools.override (
+          lib.optionalAttrs (self.qtbase.stdenv.buildPlatform.canExecute self.qtbase.stdenv.hostPlatform) {
+            qtbase = self.qtbase.override { qttranslations = null; };
+            qtdeclarative = null;
+          }
+        );
       };
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };

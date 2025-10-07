@@ -1,10 +1,10 @@
 {
-  pkgsBuildBuild,
   stdenv,
   lib,
   qtModule,
   qtbase,
   qtdeclarative,
+  qtwayland,
   wayland,
   wayland-scanner,
   pkg-config,
@@ -26,13 +26,11 @@ qtModule {
   propagatedNativeBuildInputs = [
     wayland
     wayland-scanner
-  ];
+  ]
+  # When cross building, qtwayland depends on tools from the host version of itself
+  ++ lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) qtwayland;
   buildInputs = [ libdrm ];
   nativeBuildInputs = [ pkg-config ];
-
-  cmakeFlags = lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "-DQt6WaylandScannerTools_DIR=${pkgsBuildBuild.qt6.qtwayland}/lib/cmake/Qt6WaylandScannerTools"
-  ];
 
   meta = {
     platforms = lib.platforms.unix;
