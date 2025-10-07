@@ -7131,12 +7131,6 @@ with pkgs;
 
   inherit (cosmopolitan) cosmocc;
 
-  ctranslate2 = callPackage ../development/libraries/ctranslate2 rec {
-    withCUDA = pkgs.config.cudaSupport;
-    withCuDNN = withCUDA && (cudaPackages ? cudnn);
-    cudaPackages = pkgs.cudaPackages;
-  };
-
   ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
 
   ustream-ssl-wolfssl = callPackage ../development/libraries/ustream-ssl {
