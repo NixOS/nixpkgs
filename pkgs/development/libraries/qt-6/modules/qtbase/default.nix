@@ -79,6 +79,9 @@
   gtk3,
   withLibinput ? false,
   libinput,
+  withWayland ? lib.meta.availableOn stdenv.hostPlatform wayland,
+  wayland,
+  wayland-scanner,
   # options
   qttranslations ? null,
 }:
@@ -158,7 +161,11 @@ stdenv.mkDerivation rec {
     xorg.xcbutilcursor
     libepoxy
   ]
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
+  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ];
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
@@ -188,7 +195,14 @@ stdenv.mkDerivation rec {
   ]
   # I’m not sure if this is necessary, but the macOS mkspecs stuff
   # tries to call `xcrun xcodebuild`, so better safe than sorry.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]
+  # wayland-scanner needs to be propagated as both build
+  # (for the wayland-scanner binary) and host (for the
+  # actual wayland.xml protocol definition)
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ];
 
   strictDeps = true;
 
