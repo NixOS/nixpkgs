@@ -98,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_LLVM" true)
     (lib.cmakeBool "USE_SYSTEM_NLOHMANN_JSON" true)
     (lib.cmakeBool "USE_SYSTEM_YARA" true)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
