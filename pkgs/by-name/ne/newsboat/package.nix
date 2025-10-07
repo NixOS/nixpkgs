@@ -36,6 +36,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CyhyzNw2LXwIVf/SX2rQRvEex5LmjZfZKgCe88jthz0=";
   };
 
+  # fix macOS build
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/newsboat/newsboat/commit/4139a0ba1ec87e442ef1408823b07fc739742f9d.patch";
+      hash = "sha256-zdtdpUQGATq/9w+hAY/Va9Ob95c8VT2D9aKFmAF+O0c=";
+    })
+    (fetchpatch {
+      url = "https://github.com/newsboat/newsboat/commit/4eb748b6b6b63acddb3582e012442e519e8704ea.patch";
+      hash = "sha256-A/0WbuMIapTsLoziUPr95ZctIr2hW7JOJSdMVaWayYI=";
+    })
+  ];
+
   # allow other ncurses versions on Darwin
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.sh --replace-fail "ncurses5.4" "ncurses"
