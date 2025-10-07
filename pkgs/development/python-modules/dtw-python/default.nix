@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dtw-python";
-  version = "1.5.3";
+  version = "1.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "DynamicTimeWarping";
     repo = "dtw-python";
     tag = "v${version}";
-    hash = "sha256-Q2TffroAGS6DeU5hUE/M2Luuxa5VfU+wxbGdfhcioSA=";
+    hash = "sha256-DaYqKvjbp2yjL0a5f+vkB4OFOCWqt+f1HUUfarbns3A=";
   };
 
   nativeBuildInputs = [
