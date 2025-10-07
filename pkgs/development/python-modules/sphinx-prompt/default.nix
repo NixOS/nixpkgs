@@ -39,9 +39,15 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  # upstream pins these unnecessarily in their requirements.txt
+  pythonRelaxDeps = [
+    "certifi"
+    "requests"
+    "urllib3"
+    "zipp"
+  ];
 
-  pythonRelaxDeps = [ "requests" ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {
     description = "Sphinx extension for creating unselectable prompt";
