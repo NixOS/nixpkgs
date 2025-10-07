@@ -2239,10 +2239,6 @@ with pkgs;
 
   deluge-2_x = deluge;
 
-  diffoscopeMinimal = diffoscope.override {
-    enableBloat = false;
-  };
-
   diffutils = callPackage ../tools/text/diffutils { };
 
   drone = callPackage ../development/tools/continuous-integration/drone { };

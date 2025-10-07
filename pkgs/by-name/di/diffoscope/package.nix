@@ -1,23 +1,28 @@
 {
   lib,
   stdenv,
+  p7zip,
   aapt,
   abootimg,
   acl,
   apksigcopier,
   apksigner,
   apktool,
+  asar,
   binutils-unwrapped-all-targets,
   bzip2,
   cbfstool,
+  cctools,
   cdrkit,
   colord,
   colordiff,
   coreutils,
   cpio,
   db,
+  dexdump,
   diffutils,
   docutils,
+  docx2txt-pl,
   dtc,
   e2fsprogs,
   enableBloat ? true,
@@ -162,7 +167,9 @@ python.pkgs.buildPythonApplication rec {
   # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
     [
+      abootimg
       acl
+      asar
       binutils-unwrapped-all-targets
       bzip2
       cdrkit
@@ -185,6 +192,7 @@ python.pkgs.buildPythonApplication rec {
       lz4
       lzip
       openssl
+      p7zip
       pgpdump
       sng
       sqlite
@@ -218,6 +226,7 @@ python.pkgs.buildPythonApplication rec {
         apktool
         cbfstool
         colord
+        dexdump
         enjarify
         ffmpeg
         fpc
@@ -226,7 +235,7 @@ python.pkgs.buildPythonApplication rec {
         giflib
         gnumeric
         gnupg
-        hdf5
+        hdf5.bin
         imagemagick
         jdk8
         libcaca
@@ -247,6 +256,7 @@ python.pkgs.buildPythonApplication rec {
         wabt
         xmlbeans
         binwalk
+        docx2txt-pl
       ]
       ++ (with python.pkgs; [
         androguard
@@ -255,10 +265,12 @@ python.pkgs.buildPythonApplication rec {
         h5py
         pdfminer-six
         r2pipe
-        # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
       ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
+      # Add lipo and otool
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+
     )
   );
 
