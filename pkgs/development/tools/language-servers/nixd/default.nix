@@ -17,6 +17,7 @@
   pkg-config,
   testers,
   python3,
+  writeText,
 }:
 
 let
@@ -37,6 +38,14 @@ let
       python3
       pkg-config
       llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
+    ];
+
+    # meson still wouldn't find llvm-config when cross compiling, unless we tell it to use the `-native` one.
+    mesonFlags = lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--cross-file=${writeText "crossfile.ini" ''
+        [binaries]
+        llvm-config = '${lib.getExe' llvmPackages.llvm.dev "llvm-config-native"}'
+      ''}"
     ];
 
     mesonBuildType = "release";
