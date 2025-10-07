@@ -407,9 +407,6 @@ in
           inherit kernel;
         };
 
-        exfat-nofuse =
-          if lib.versionOlder kernel.version "5.8" then callPackage ../os-specific/linux/exfat { } else null;
-
         evdi = callPackage ../os-specific/linux/evdi { };
 
         fanout = callPackage ../os-specific/linux/fanout { };
@@ -709,6 +706,7 @@ in
         zfs_2_1 = throw "zfs_2_1 has been removed"; # added 2024-12-25;
         ati_drivers_x11 = throw "ati drivers are no longer supported by any kernel >=4.1"; # added 2021-05-18;
         deepin-anything-module = throw "the Deepin desktop environment and associated tools have been removed from nixpkgs due to lack of maintenance";
+        exfat-nofuse = throw "exfat-nofuse has been removed, all kernels > 5.8 come with built-in exfat support"; # added 2025-10-07
         hid-nintendo = throw "hid-nintendo was added in mainline kernel version 5.16"; # Added 2023-07-30
         sch_cake = throw "sch_cake was added in mainline kernel version 4.19"; # Added 2023-06-14
         rtl8723bs = throw "rtl8723bs was added in mainline kernel version 4.12"; # Added 2023-06-14

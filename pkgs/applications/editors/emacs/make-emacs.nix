@@ -74,6 +74,7 @@
   withCairo ? withX,
   withCsrc ? true,
   withDbus ? stdenv.hostPlatform.isLinux,
+  withGcMarkTrace ? false, # increase gc performance for reduced debugability
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
@@ -408,6 +409,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withNS "ns")
   ]
   ++ [
+    (lib.enableFeature withGcMarkTrace "gc-mark-trace")
     (lib.withFeature withCompressInstall "compress-install")
     (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
     (lib.withFeature withNativeCompilation "native-compilation")

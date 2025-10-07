@@ -467,7 +467,7 @@ in
         PrivateTmp = true;
         ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;

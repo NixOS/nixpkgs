@@ -36,7 +36,7 @@ let
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "cloudflare-warp" + lib.optionalString headless "-headless";
@@ -130,7 +130,6 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
   passthru = {
@@ -156,22 +155,23 @@ stdenv.mkDerivation rec {
             rg '([^/]+)\.0\.yaml\b' --only-matching --replace '$1'
         )"
 
-        for platform in ${lib.escapeShellArgs meta.platforms}; do
-          update-source-version "${pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
+        for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+          update-source-version "${finalAttrs.pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
         done
       '';
     });
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/warp-releases/linux/ga/${finalAttrs.version}.0.yaml";
     description =
       "Replaces the connection between your device and the Internet with a modern, optimized, protocol"
       + lib.optionalString headless " (headless version)";
     homepage = "https://pkg.cloudflareclient.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     mainProgram = "warp-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       marcusramberg
     ];
     platforms = [
@@ -179,4 +179,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})
