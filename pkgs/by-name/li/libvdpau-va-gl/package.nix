@@ -42,8 +42,6 @@ stdenv.mkDerivation rec {
     libGLU
   ];
 
-  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
-
   doCheck = false; # fails. needs DRI access
 
   meta = with lib; {
