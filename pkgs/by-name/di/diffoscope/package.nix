@@ -1,23 +1,28 @@
 {
   lib,
   stdenv,
+  p7zip,
   aapt,
   abootimg,
   acl,
   apksigcopier,
   apksigner,
   apktool,
+  asar,
   binutils-unwrapped-all-targets,
   bzip2,
   cbfstool,
+  cctools,
   cdrkit,
   colord,
   colordiff,
   coreutils,
   cpio,
   db,
+  dexdump,
   diffutils,
   docutils,
+  docx2txt-pl,
   dtc,
   e2fsprogs,
   enableBloat ? true,
@@ -106,12 +111,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "304";
+  version = "306";
   pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-lJdZRIyoVq1PsmiicsSxJ0Mgsy5IcAUar6l8QvJoxOw=";
+    hash = "sha256-Yr4xynjR5N7aImb8VVLsiUE+OoKOoneDUbw9O7b77b8=";
   };
 
   outputs = [
@@ -160,7 +165,9 @@ python.pkgs.buildPythonApplication rec {
   # Packages which are marked broken for a platform are not automatically filtered to avoid accidentally removing them without noticing it.
   pythonPath = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (
     [
+      abootimg
       acl
+      asar
       binutils-unwrapped-all-targets
       bzip2
       cdrkit
@@ -183,6 +190,7 @@ python.pkgs.buildPythonApplication rec {
       lz4
       lzip
       openssl
+      p7zip
       pgpdump
       sng
       sqlite
@@ -216,6 +224,7 @@ python.pkgs.buildPythonApplication rec {
         apktool
         cbfstool
         colord
+        dexdump
         enjarify
         ffmpeg
         fpc
@@ -224,7 +233,7 @@ python.pkgs.buildPythonApplication rec {
         giflib
         gnumeric
         gnupg
-        hdf5
+        hdf5.bin
         imagemagick
         jdk8
         libcaca
@@ -245,6 +254,7 @@ python.pkgs.buildPythonApplication rec {
         wabt
         xmlbeans
         binwalk
+        docx2txt-pl
       ]
       ++ (with python.pkgs; [
         androguard
@@ -253,10 +263,12 @@ python.pkgs.buildPythonApplication rec {
         h5py
         pdfminer-six
         r2pipe
-        # docx2txt, nixpkgs packages another project named the same, which does not work
       ])
       # oggvideotools is broken on Darwin, please put it back when it will be fixed?
       ++ lib.optionals stdenv.hostPlatform.isLinux [ oggvideotools ]
+      # Add lipo and otool
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools ]
+
     )
   );
 
