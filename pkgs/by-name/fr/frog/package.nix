@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gitUpdater,
+  callPackage,
   autoreconfHook,
   bzip2,
   libtar,
@@ -61,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
+    tests.simple = callPackage ./test.nix { };
   };
 
   meta = with lib; {

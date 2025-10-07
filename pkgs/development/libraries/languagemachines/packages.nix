@@ -14,5 +14,5 @@ in
   frog = pkgs.frog;
   frogdata = pkgs.frogdata;
 
-  test = callPackage ./test.nix { };
+  test = pkgs.frog.tests.simple;
 }
