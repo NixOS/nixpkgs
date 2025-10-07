@@ -8,7 +8,7 @@ A K3s maintainer, maintains K3s's:
 - [issues](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+k3s)
 - [pull requests](https://github.com/NixOS/nixpkgs/pulls?q=is%3Aopen+is%3Apr+label%3A%226.topic%3A+k3s%22)
 - [NixOS tests](https://github.com/NixOS/nixpkgs/tree/master/nixos/tests/k3s)
-- [NixOS service module](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/cluster/k3s/default.nix)
+- [NixOS service module](https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/cluster/rancher)
 - [update script](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/networking/cluster/k3s/update-script.sh) (the process of updating)
 - updates (the act of updating) and [r-ryantm bot logs](https://r.ryantm.com/log/k3s/)
 - deprecations
