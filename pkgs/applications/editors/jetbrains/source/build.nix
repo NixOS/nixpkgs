@@ -102,6 +102,7 @@ let
     inherit src;
     sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
+    cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
     postPatch = "cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a";
     passthru.patched-libdbusmenu = libdbusmenu-jb;
     installPhase = ''
