@@ -60,6 +60,7 @@ in
         CapabilityBoundingSet = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = false; # enabling it breaks execution
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
