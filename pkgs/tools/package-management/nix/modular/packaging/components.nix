@@ -154,7 +154,10 @@ let
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
-    preConfigure =
+    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
+    # reports of undefined behavior on previous versions. Note that this does //not// use
+    # `finalAttrs.version` in order to avoid infinite recursion.
+    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
       let
         interpositionFlags = [
           "-fno-semantic-interposition"
