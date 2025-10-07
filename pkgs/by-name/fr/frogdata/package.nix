@@ -1,38 +1,37 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
   libtool,
   pkg-config,
   autoconf-archive,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-frogdata.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frogdata";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "frogdata-${release.version}.tar.gz";
+  version = "0.13";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "frogdata";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-f3rPjc8iYPVJsL6pez2WBw+rCxy6xm3DzOi8S+PDkvg=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
   buildInputs = [
     libtool
     autoconf-archive
   ];
 
-  preConfigure = ''
-    sh bootstrap.sh
-  '';
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     description = "Data for Frog, a Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
@@ -42,4 +41,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ roberth ];
   };
 
-}
+})
