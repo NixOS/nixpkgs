@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "debian-inspector";
-  version = "31.1.0";
+  version = "31.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "debian_inspector";
     inherit version;
-    hash = "sha256-68+8FwZPEL07bSEizbyXtxpJSvDruvr5qM6t/osWT5k=";
+    hash = "sha256-uyFsYrb7D9cM1OQzkIERX0oV711uI/TEKF6t67z8egU=";
   };
 
   dontConfigure = true;
