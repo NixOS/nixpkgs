@@ -19,29 +19,69 @@
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
 
-  # This is a silly workaround to avoid infinite recursion.
-  # We don't know which packages need template haskell, so we always need iserv-proxy for the host
-  # but then that package also has dependencies which would themselves need iserv-proxy.
-  # TODO: grab host iserv-proxy from the "original" package set without TH support, then have host TH support on the "real" package set.
-  iservProxyDependency =
-    pname:
-    builtins.elem pname [
-      "iserv-proxy"
-      "libiserv"
-      "network"
-    ];
+  crossSupport = rec {
+    emulator = stdenv.hostPlatform.emulator buildPackages;
 
-  buildWithProxy =
-    pname:
-    isCross
-    && !(iservProxyDependency pname)
-    && stdenv.hostPlatform.emulatorAvailable buildPackages
-    && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) # TODO: add windows support via wine
-  ;
+    # This is a silly workaround to avoid infinite recursion.
+    # We don't know which packages need template haskell, so we always need iserv-proxy for the host
+    # but then that package also has dependencies which would themselves need iserv-proxy.
+    # TODO: grab host iserv-proxy from the "original" package set without TH support, then have host TH support on the "real" package set.
+    iservProxyDependency =
+      pname:
+      builtins.elem pname [
+        "iserv-proxy"
+        "libiserv"
+        "network"
+      ];
 
-  # In practice we need the iserv-proxy setup for cross testing since many
-  # suites use Template Haskell for test discovery, including QuickCheck's
-  runCrossTests = buildWithProxy;
+    buildWithProxy =
+      pname:
+      isCross
+      && !(iservProxyDependency pname)
+      && stdenv.hostPlatform.emulatorAvailable buildPackages
+      && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) # TODO: add windows support via wine
+    ;
+
+    # In practice we need the iserv-proxy setup for cross testing since many
+    # suites use Template Haskell for test discovery, including QuickCheck's
+    doCheck = buildWithProxy;
+
+    iservWrapper =
+      let
+        buildProxy = iserv-proxy.build + "/bin/iserv-proxy";
+
+        wrapperScript =
+          enableProfiling:
+          let
+            overrides = haskellLib.overrideCabal {
+              enableLibraryProfiling = enableProfiling;
+              enableExecutableProfiling = enableProfiling;
+            };
+            hostProxy = overrides iserv-proxy.host + "/bin/iserv-proxy-interpreter";
+          in
+          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
+            set -euo pipefail
+            PORT=$((5000 + $RANDOM % 5000))
+            (>&2 echo "---> Starting interpreter on port $PORT")
+            ${emulator} ${hostProxy} tmp $PORT &
+            (>&2 echo "---| interpreter should have started on $PORT")
+            RISERV_PID="$!"
+            ${buildProxy} $@ 127.0.0.1 "$PORT"
+            (>&2 echo "---> killing interpreter...")
+            kill $RISERV_PID
+          '';
+
+        both = buildPackages.symlinkJoin {
+          name = "iserv-wrapper-both";
+          paths = builtins.map wrapperScript [
+            false
+            true
+          ];
+        };
+
+      in
+      "${both}/bin/iserv-wrapper";
+  };
 
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
@@ -94,7 +134,7 @@ in
   buildFlags ? [ ],
   haddockFlags ? [ ],
   description ? null,
-  doCheck ? !isCross || runCrossTests pname,
+  doCheck ? !isCross || crossSupport.doCheck pname,
   doBenchmark ? false,
   doHoogle ? true,
   doHaddockQuickjump ? doHoogle,
@@ -309,46 +349,6 @@ let
     END { print "" }
   '';
 
-  crossUtils = {
-    emulator = stdenv.hostPlatform.emulator buildPackages;
-
-    iservWrapper =
-      let
-        buildProxy = iserv-proxy.build + "/bin/iserv-proxy";
-
-        wrapperScript =
-          enableProfiling:
-          let
-            overrides = haskellLib.overrideCabal {
-              enableLibraryProfiling = enableProfiling;
-              enableExecutableProfiling = enableProfiling;
-            };
-            hostProxy = overrides iserv-proxy.host + "/bin/iserv-proxy-interpreter";
-          in
-          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
-            set -euo pipefail
-            PORT=$((5000 + $RANDOM % 5000))
-            (>&2 echo "---> Starting interpreter on port $PORT")
-            ${crossUtils.emulator} ${hostProxy} tmp $PORT &
-            (>&2 echo "---| interpreter should have started on $PORT")
-            RISERV_PID="$!"
-            ${buildProxy} $@ 127.0.0.1 "$PORT"
-            (>&2 echo "---> killing interpreter...")
-            kill $RISERV_PID
-          '';
-
-        both = buildPackages.symlinkJoin {
-          name = "iserv-wrapper-both";
-          paths = builtins.map wrapperScript [
-            false
-            true
-          ];
-        };
-
-      in
-      "${both}/bin/iserv-wrapper";
-  };
-
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
@@ -367,11 +367,11 @@ let
   ]
   ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
 
-  ++ optionals (buildWithProxy pname) (
+  ++ optionals (crossSupport.buildWithProxy pname) (
     map (opt: "--ghc-option=${opt}") [
       "-fexternal-interpreter"
       "-pgmi"
-      crossUtils.iservWrapper
+      crossSupport.iservWrapper
     ]
   );
 
@@ -616,7 +616,7 @@ let
       export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
     fi
 
-    ${if runCrossTests pname then crossUtils.emulator + " $@" else ''exec "$@"''}
+    ${if crossSupport.doCheck pname then crossSupport.emulator + " $@" else ''exec "$@"''}
   '';
 
   testTargetsString =
