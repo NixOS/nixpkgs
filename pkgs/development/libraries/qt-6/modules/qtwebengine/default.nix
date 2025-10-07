@@ -37,7 +37,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -59,13 +58,12 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
   cctools,
   xcbuild,
-
-  fetchpatch,
 }:
 
 qtModule {
@@ -112,13 +110,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # Fix GPU rendering with Mesa 25.2
-    # https://bugreports.qt.io/browse/QTBUG-139424
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/3cc88e0f85113e38ccb1bfdadb7d150c2389b1bc.diff";
-      hash = "sha256-5tKZ6b93VP4mKVc7jctrbW5Ktl+4Mjxw6bK1ajY62zQ=";
-    })
   ];
 
   postPatch = ''
@@ -208,7 +199,6 @@ qtModule {
 
     # Video formats
     srtp
-    libvpx
 
     # Audio formats
     libopus
@@ -267,6 +257,7 @@ qtModule {
 
     libkrb5
     libgbm
+    libva
   ];
 
   buildInputs = [
