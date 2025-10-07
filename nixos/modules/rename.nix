@@ -266,6 +266,9 @@ in
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
     '')
+    (mkRemovedOptionModule [ "services" "tt-rss" ] ''
+      The tt-rss package and module have been removed, since upstream development ceased 2025-11-01 and the source is no longer available officially.
+    '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
     )

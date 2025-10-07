@@ -661,10 +661,6 @@ let
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
 
-        functoria = callPackage ../development/ocaml-modules/functoria { };
-
-        functoria-runtime = callPackage ../development/ocaml-modules/functoria/runtime.nix { };
-
         functory = callPackage ../development/ocaml-modules/functory { };
 
         ### G ###
@@ -1977,6 +1973,8 @@ let
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
+        synchronizer = callPackage ../development/ocaml-modules/synchronizer { };
+
         syslog = callPackage ../development/ocaml-modules/syslog { };
 
         syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
@@ -2001,7 +1999,7 @@ let
 
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
-        tcslib = callPackage ../development/ocaml-modules/tcslib { };
+        tcs-lib = callPackage ../development/ocaml-modules/tcs-lib { };
 
         tdigest = callPackage ../development/ocaml-modules/tdigest { };
 

@@ -72,7 +72,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     runHook preBuild
 
     pushd node
-    npm run build -- --copy-to-prebuilds
+    npm run build -- --copy-to-prebuilds --node-arch ${stdenv.hostPlatform.node.arch}
     popd
 
     runHook postBuild
