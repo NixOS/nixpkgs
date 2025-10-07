@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Zc1AXNpHQXXFO8jkMaJj6xYkmkQxAM8G+SiPiH9xCAw=";
   };
 
+  patches = [
+    # https://github.com/scipopt/scip/pull/169
+    ./0001-check-fix-invalid-ctest-invocation.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
