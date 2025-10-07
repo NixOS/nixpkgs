@@ -334,6 +334,9 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
       homepage = "https://catppuccin.com";
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
-      maintainers = [ lib.maintainers.khaneliman ];
+      maintainers = with lib.maintainers; [
+        khaneliman
+        SchweGELBin
+      ];
     };
   }
