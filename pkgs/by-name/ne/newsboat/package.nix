@@ -3,6 +3,9 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
+  cargo,
+  rustc,
   stfl,
   sqlite,
   curl,
@@ -17,7 +20,7 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "newsboat";
   version = "2.41";
 
@@ -28,19 +31,23 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-LhEhbK66OYwAD/pel81N7Hgh/xEvnFR8GlZzgqZIe5M=";
   };
 
-  cargoHash = "sha256-CyhyzNw2LXwIVf/SX2rQRvEex5LmjZfZKgCe88jthz0=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-CyhyzNw2LXwIVf/SX2rQRvEex5LmjZfZKgCe88jthz0=";
+  };
 
-  # TODO: Check if that's still needed
+  # allow other ncurses versions on Darwin
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Allow other ncurses versions on Darwin
-    substituteInPlace config.sh \
-      --replace "ncurses5.4" "ncurses"
+    substituteInPlace config.sh --replace-fail "ncurses5.4" "ncurses"
   '';
 
   nativeBuildInputs = [
     pkg-config
     asciidoctor
     gettext
+    cargo
+    rustc
+    rustPlatform.cargoSetupHook
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     makeWrapper
@@ -60,12 +67,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     gettext
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
-
-  postBuild = ''
-    make -j $NIX_BUILD_CORES prefix="$out"
-  '';
-
   # https://github.com/NixOS/nixpkgs/pull/98471#issuecomment-703100014 . We set
   # these for all platforms, since upstream's gettext crate behavior might
   # change in the future.
@@ -73,16 +74,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
   GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
 
+  makeFlags = [ "prefix=$(out)" ];
+  enableParallelBuilding = true;
+
   doCheck = true;
+  checkTarget = "test";
 
-  preCheck = ''
-    make -j $NIX_BUILD_CORES test
-  '';
-
-  postInstall = ''
-    make -j $NIX_BUILD_CORES prefix="$out" install
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for prog in $out/bin/*; do
       wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
     done
@@ -91,13 +89,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
   };
-
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 newsboat $out/bin/newsboat
-    install -Dm755 podboat $out/bin/podboat
-    runHook postInstall
-  '';
 
   meta = {
     homepage = "https://newsboat.org/";
