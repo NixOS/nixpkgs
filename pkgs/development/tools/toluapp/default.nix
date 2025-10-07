@@ -31,11 +31,13 @@ stdenv.mkDerivation rec {
       'cmake_minimum_required ( VERSION 4.0 )'
   '';
 
+  strictDeps = true;
+
   meta = with lib; {
     description = "Tool to integrate C/Cpp code with Lua";
     homepage = "http://www.codenix.com/~tolua/";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ colinsane ];
     mainProgram = "tolua++";
     platforms = with platforms; unix;
   };
