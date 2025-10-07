@@ -1433,7 +1433,7 @@ rec {
     let
       compress = compressorForImage compressor stream.name;
     in
-    runCommand "${stream.name}-env.tar${compress.ext}" {
+    runCommand "${stream.name}.tar${compress.ext}" {
       inherit (stream) imageName;
       passthru = {
         inherit stream;
