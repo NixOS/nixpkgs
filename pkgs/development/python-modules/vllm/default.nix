@@ -200,16 +200,19 @@ let
         "8.9"
         "9.0"
         "9.0a"
-        "10.0"
-        "10.0a"
-        "10.1"
-        "10.1a"
-        "10.3"
-        "10.3a"
-        "12.0"
-        "12.0a"
-        "12.1"
-        "12.1a"
+        # Blackwell (SM100+) capabilities temporarily disabled due to CUTLASS API incompatibility
+        # FlashMLA kernels require CUTLASS v4.2.1+ APIs not available in bundled v4.0.0
+        # TODO: Re-enable when vLLM upgrades CUTLASS (see https://github.com/vllm-project/vllm/pull/24673)
+        # "10.0"
+        # "10.0a"
+        # "10.1"
+        # "10.1a"
+        # "10.3"
+        # "10.3a"
+        # "12.0"
+        # "12.0a"
+        # "12.1"
+        # "12.1a"
       ];
       ptx = lists.map (x: "${x}+PTX") real;
     in
