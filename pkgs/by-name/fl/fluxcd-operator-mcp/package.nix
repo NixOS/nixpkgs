@@ -9,16 +9,16 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "fluxcd-operator-mcp";
-  version = "0.29.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "controlplaneio-fluxcd";
     repo = "fluxcd-operator";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-yV8aGmY2mUAu0urIi7d1pIjhJasRX17hpmvFEQm4YpY=";
+    hash = "sha256-czVqgxP/byv2b88pn0GmklVIyd+b/S7hM4agSikSS7I=";
   };
 
-  vendorHash = "sha256-zCzMNlpBBUS2P2aywFDUp/RSl+HlfQe+L8a1+vVYbgY=";
+  vendorHash = "sha256-5bpj7XWAD0aUeOmuI5zBRGdXfUW+/47nqVkzwyckisw=";
 
   ldflags = [
     "-s"
