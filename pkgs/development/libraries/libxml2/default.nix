@@ -58,6 +58,15 @@ let
         tag = "v${packages.libxml2.version}";
         hash = "sha256-jumHSiIMDzqG2hvPUdcBP8LsszcU+loOY+vqEh/0Yqo=";
       };
+      extraPatches = [
+        # Fixes a regression in attribute normalization.
+        # Also see https://www.postgresql.org/message-id/flat/0756AC61-FBA3-46E2-B3C2-19B58B65EBDC%2540yesql.se
+        # To be removed with 2.15.1.
+        (fetchpatch2 {
+          url = "https://gitlab.gnome.org/GNOME/libxml2/-/commit/da45a190f718e8e2f0e3d2a6325ffa23abc8b90c.patch";
+          hash = "sha256-dE5DxkP+LBZ8N5V3x02Q1xOU9IXDvvr64xzcln0QH0E=";
+        })
+      ];
       extraMeta = {
         maintainers = with lib.maintainers; [
           jtojnar
