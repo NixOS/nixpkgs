@@ -94,13 +94,7 @@ in
     };
 
     emailServer = {
-      enable = lib.mkOption {
-        description = ''
-          Enable SMTP email server. This is necessary, if you want to use password recovery or change your own password
-        '';
-        type = lib.types.bool;
-        default = false;
-      };
+      enable = lib.mkEnableOption "SMTP email server. This is necessary, if you want to use password recovery or change your own password";
       address = lib.mkOption {
         description = "SMTP server for email delivery";
         type = lib.types.str;
@@ -111,16 +105,8 @@ in
         type = lib.types.port;
         default = 25;
       };
-      useSSL = lib.mkOption {
-        description = "SMTP server should use SSL";
-        type = lib.types.bool;
-        default = false;
-      };
-      useTLS = lib.mkOption {
-        description = "SMTP server should use TLS";
-        type = lib.types.bool;
-        default = false;
-      };
+      useSSL = lib.mkEnableOption "SSL for connecting to the SMTP server";
+      useTLS = lib.mkEnableOption "TLS for connecting to the SMTP server";
       username = lib.mkOption {
         description = "SMTP server username for email delivery";
         type = lib.types.nullOr lib.types.str;
