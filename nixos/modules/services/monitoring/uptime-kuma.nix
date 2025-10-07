@@ -53,6 +53,7 @@ in
       serviceConfig = {
         Type = "simple";
         StateDirectory = "uptime-kuma";
+        StateDirectoryMode = "750";
         DynamicUser = true;
         ExecStart = "${cfg.package}/bin/uptime-kuma-server";
         Restart = "on-failure";
