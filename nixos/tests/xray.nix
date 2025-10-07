@@ -96,4 +96,5 @@ in
 {
   json = makeTest "json";
   yaml = makeTest "yaml";
+  toml = makeTest "toml";
 }

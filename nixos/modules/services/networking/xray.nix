@@ -24,10 +24,10 @@ with lib;
       package = mkPackageOption pkgs "xray" { };
 
       settingsExtension = mkOption {
-        type = types.enum [ "json" "yaml" ];
+        type = types.enum [ "json" "yaml" "toml" ];
         default = "json";
         description = ''
-          Configuration file extension for xray. Both JSON and YAML are supported.
+          Configuration file extension for xray. JSON, YAML and TOML are supported.
 
           Note: If `settingsFile` is used, its extension must match the configured extension, otherwise xray will fail to parse it.
         '';
