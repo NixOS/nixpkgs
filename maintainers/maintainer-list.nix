@@ -5308,12 +5308,6 @@
     githubId = 1957293;
     name = "Casey Ransom";
   };
-  CrazedProgrammer = {
-    email = "crazedprogrammer@gmail.com";
-    github = "CrazedProgrammer";
-    githubId = 12202789;
-    name = "CrazedProgrammer";
-  };
   creator54 = {
     email = "hi.creator54@gmail.com";
     github = "Creator54";

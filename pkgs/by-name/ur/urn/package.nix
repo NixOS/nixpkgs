@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     description = "Yet another Lisp variant which compiles to Lua";
     mainProgram = "urn";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ CrazedProgrammer ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 
