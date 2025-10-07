@@ -377,7 +377,7 @@ in
         IMMICH_MEDIA_LOCATION = cfg.mediaLocation;
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
       }
-      // lib.optionalAttrs (cfg.settings != null || cfg.settingsFile != null) {
+      // lib.optionalAttrs (cfg.settings != null) {
         IMMICH_CONFIG_FILE = "/run/immich/config.json";
       };
 
