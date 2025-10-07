@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "wasm-bindgen.github.io/wasm-bindgen/";
+    homepage = "https://wasm-bindgen.github.io/wasm-bindgen/";
     license = with lib.licenses; [
       asl20 # or
       mit
