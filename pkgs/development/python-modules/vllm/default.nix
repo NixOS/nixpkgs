@@ -474,8 +474,7 @@ buildPythonPackage rec {
   passthru = {
     # make internal dependency available to overlays
     vllm-flash-attn = vllm-flash-attn';
-    # updates the cutlass fetcher instead
-    skipBulkUpdate = true;
+    updateScript = ./update.py;
   };
 
   meta = {
