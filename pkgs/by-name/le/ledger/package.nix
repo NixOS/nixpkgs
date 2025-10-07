@@ -90,6 +90,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_DOCS:BOOL=ON"
     "-DUSE_PYTHON:BOOL=${if usePython then "ON" else "OFF"}"
     "-DUSE_GPGME:BOOL=${if gpgmeSupport then "ON" else "OFF"}"
+    # See https://github.com/NixOS/nixpkgs/issues/445447
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   # by default, it will query the python interpreter for it's sitepackages location
