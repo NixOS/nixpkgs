@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   # https://github.com/jarro2783/cxxopts/issues/332
   postPatch = ''
     substituteInPlace packaging/pkgconfig.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
   patches = [
