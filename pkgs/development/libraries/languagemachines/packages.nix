@@ -11,7 +11,7 @@ in
   timbl = pkgs.timbl;
   timblserver = pkgs.timblserver;
   mbt = pkgs.mbt;
-  frog = callPackage ./frog.nix { inherit icu; };
+  frog = pkgs.frog;
   frogdata = pkgs.frogdata;
 
   test = callPackage ./test.nix { };

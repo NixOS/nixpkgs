@@ -7286,8 +7286,6 @@ with pkgs;
     };
   };
 
-  frog = res.languageMachines.frog;
-
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
