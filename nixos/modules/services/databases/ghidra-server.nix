@@ -18,53 +18,65 @@ let
     else
       null;
 
-  ghidraServerConfig = pkgs.writeText "ghidra-server.conf" ''
-    wrapper.working.dir=''${ghidra_home}
-    wrapper.tmp.path=''${wrapper_tmpdir}
-    include=''${classpath_frag}
+  mapToIndexedAttrs = xs: lib.attrsToList (lib.imap0 (i: lib.nameValuePair (toString i)) xs);
 
-    wrapper.java.app.mainclass=ghidra.server.remote.GhidraServer
-    wrapper.java.command=''${java}
-    wrapper.java.umask=027
-    # TODO: Figure out if IPv6 is supported
-    wrapper.java.additional.1=-Djava.net.preferIPv4Stack=true
-    # TODO: Figure out if file logging may be disabled
-    wrapper.java.additional.2=-DApplicationRollingFileAppender.maxBackupIndex=10
-    wrapper.java.additional.3=-Dclasspath_frag=''${classpath_frag}
-    wrapper.java.additional.4=-Djava.io.tmpdir=''${wrapper_tmpdir}
-    wrapper.java.additional.5=-Djna.tmpdir=''${wrapper_tmpdir}
-    wrapper.java.additional.6=-Dghidra.tls.server.protocols=${lib.strings.concatStringsSep ";" cfg.tls.protocols}
-    wrapper.java.additional.7=-Djdk.tls.server.cipherSuites=${lib.strings.concatStringsSep "\\," cfg.tls.cipherSuites}
-    # TODO: Enable PKI authentication
-    # wrapper.java.additional.8=-Dghidra.cacerts=./Ghidra/cacerts
-    # TODO: Make TLS certs configurable
-    # wrapper.java.additional.9=-Dghidra.keystore=
-    # wrapper.java.additional.10=-Dghidra.password=
-    wrapper.java.additional.11=-Ddb.buffers.DataBuffer.compressedOutput=true
-    wrapper.java.initmemory=${toString cfg.heapMin}
-    wrapper.java.maxmemory=${toString cfg.heapMax}
+  ghidraServerConfig = lib.filterAttrsRecursive (_: v: v != null) {
+    wrapper.working.dir = "$${ghidra_home}";
+    wrapper.tmp.path = "$${wrapper_tmpdir}";
+    include = "$${classpath_frag}";
 
-    ghidra.repositories.dir=${cfg.repositoryDir}
+    wrapper.java.app.mainclass = "ghidra.server.remote.GhidraServer";
+    wrapper.java.command = "$${java}";
+    wrapper.java.umask = 027;
+    wrapper.java.initmemory = cfg.heapMin;
+    wrapper.java.maxmemory = cfg.heapMax;
 
-    wrapper.app.parameter.1=${authType}
-    ${if (!cfg.authentication.useClientLogin) then "wrapper.app.parameter.2=-u" else ""}
-    wrapper.app.parameter.3=-ip ${cfg.address}
-    wrapper.app.parameter.4=-i ${cfg.address}
-    wrapper.app.parameter.5=-p${toString cfg.port}
-    ${if cfg.authentication.useAutoProvision then "wrapper.app.parameter.6=-autoProvision" else ""}
-    ${if cfg.authentication.allowAnonymous then "wrapper.app.parameter.7=-anonymous" else ""}
-    wrapper.app.parameter.8=${cfg.repositoryDir}
-    wrapper.app.account=${cfg.user}
+    wrapper.java.additional = mapToIndexedAttrs [
+      # TODO: Figure out if IPv6 is supported
+      "-Djava.net.preferIPv4Stack=true"
+      # TODO: Figure out if file logging may be disabled
+      "-DApplicationRollingFileAppender.maxBackupIndex=10"
+      "-Dclasspath_frag=$${classpath_frag}"
+      "-Djava.io.tmpdir=$${wrapper_tmpdir}"
+      "-Djna.tmpdir=$${wrapper_tmpdir}"
+      "-Dghidra.tls.server.protocols=${lib.strings.concatStringsSep ";" cfg.tls.protocols}"
+      "-Djdk.tls.server.cipherSuites=${lib.strings.concatStringsSep "\\," cfg.tls.cipherSuites}"
+      # TODO: Enable PKI authentication
+      # "-Dghidra.cacerts=./Ghidra/cacerts";
+      # TODO: Make TLS certs configurable
+      # "-Dghidra.keystore=";
+      # "-Dghidra.password=";
+      "-Ddb.buffers.DataBuffer.compressedOutput=true"
+    ];
 
-    wrapper.console.title=${cfg.console.title}
-    wrapper.console.loglevel=${cfg.console.loglevel}
-    wrapper.console.format=${cfg.console.format}
+    ghidra.repositories.dir = cfg.repositoryDir;
 
-    wrapper.logfile=
+    wrapper.app.parameter = mapToIndexedAttrs [
+      authType
+      (if (!cfg.authentication.useClientLogin) then "-u" else null)
+      "-ip ${cfg.address}"
+      "-i ${cfg.address}"
+      "-p${toString cfg.port}"
+      (if cfg.authentication.useAutoProvision then "-autoProvision" else null)
+      (if cfg.authentication.allowAnonymous then "-anonymous" else null)
+      cfg.repositoryDir
+    ];
 
-    wrapper.lockfile=/run/ghidra-server/ghidra-server.lck
-    wrapper.pidfile=/run/ghidra-server/ghidra-server.pid
-  '';
+    wrapper.app.account = cfg.user;
+
+    wrapper.console.title = cfg.console.title;
+    wrapper.console.loglevel = cfg.console.loglevel;
+    wrapper.console.format = cfg.console.format;
+
+    wrapper.logfile = "";
+
+    wrapper.lockfile = "/run/ghidra-server/ghidra-server.lck";
+    wrapper.pidfile = "/run/ghidra-server/ghidra-server.pid";
+  };
+
+  ghidraServerConfigFile =
+    (pkgs.formats.javaProperties { }).generate "ghidra-server.conf"
+      ghidraServerConfig;
 in
 {
   options.services.ghidra-server = {
@@ -204,7 +216,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
-      "L+ /etc/ghidra-server.conf - - - - ${ghidraServerConfig}"
+      "L+ /etc/ghidra-server.conf - - - - ${ghidraServerConfigFile}"
     ];
 
     systemd.services.ghidra-server = {
