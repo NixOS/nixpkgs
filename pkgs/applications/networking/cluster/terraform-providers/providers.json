@@ -552,13 +552,13 @@
     "vendorHash": "sha256-UmlhKa2SVgrhRc1EOO9sEkherIS77CP+hkAL3Y79h3U="
   },
   "hcloud": {
-    "hash": "sha256-2IEi5YE7iXGmf1bKDZgswf5v5Hw9SdhSb1GxNzsm8qM=",
+    "hash": "sha256-Y7W4pMH9wuiTasobEWtQOZNyeZ6MJKuegveZnlORxm0=",
     "homepage": "https://registry.terraform.io/providers/hetznercloud/hcloud",
     "owner": "hetznercloud",
     "repo": "terraform-provider-hcloud",
-    "rev": "v1.53.1",
+    "rev": "v1.54.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-vwuWz881nn901lAubv2xNCCIoNtyaVQJ77PM8E1LHjg="
+    "vendorHash": "sha256-jwDezL9gI6A9pCdD1CUgEOJT8dqVuPX/sFjTO4Jiqs4="
   },
   "helm": {
     "hash": "sha256-i4ceWiEXJYL1x9DmqAfcUidiW5+x/sRCxevDz4MnzHs=",
