@@ -6,7 +6,7 @@ in
 {
   ticcutils = pkgs.ticcutils;
   libfolia = pkgs.libfolia;
-  ucto = callPackage ./ucto.nix { inherit icu; };
+  ucto = pkgs.ucto;
   uctodata = pkgs.uctodata;
   timbl = callPackage ./timbl.nix { };
   timblserver = callPackage ./timblserver.nix { };
