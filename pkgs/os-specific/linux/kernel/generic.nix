@@ -98,6 +98,9 @@ let
     # files.
 
     let
+      # Get stdenv for hostPlatform from __spliced which also works for llvmPackages.stdenv
+      buildStdenv = stdenv.__spliced.buildBuild or stdenv;
+
       # Combine the `features' attribute sets of all the kernel patches.
       kernelFeatures = lib.foldr (x: y: (x.features or { }) // y) (
         {
@@ -171,7 +174,7 @@ let
         kernelConfig = kernelConfigFun intermediateNixConfig;
         passAsFile = [ "kernelConfig" ];
 
-        depsBuildBuild = [ buildPackages.stdenv.cc ];
+        depsBuildBuild = [ buildStdenv.cc ];
         nativeBuildInputs = [
           perl
           gmp
@@ -197,7 +200,7 @@ let
           inherit
             lib
             stdenv
-            buildPackages
+            buildStdenv
             extraMakeFlags
             ;
         };

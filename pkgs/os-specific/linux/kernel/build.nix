@@ -87,6 +87,9 @@ lib.makeOverridable (
   }:
 
   let
+    # Get stdenv for hostPlatform from __spliced which also works for llvmPackages.stdenv
+    buildStdenv = stdenv.__spliced.buildBuild or stdenv;
+
     # Provide defaults. Note that we support `null` so that callers don't need to use optionalAttrs,
     # which can lead to unnecessary strictness and infinite recursions.
     modDirVersion_ = if modDirVersion == null then lib.versions.pad 3 version else modDirVersion;
@@ -109,7 +112,7 @@ lib.makeOverridable (
       inherit
         lib
         stdenv
-        buildPackages
+        buildStdenv
         extraMakeFlags
         ;
     };
@@ -247,7 +250,7 @@ lib.makeOverridable (
       "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
     ];
 
-    depsBuildBuild = [ buildPackages.stdenv.cc ];
+    depsBuildBuild = [ buildStdenv.cc ];
     nativeBuildInputs = [
       bison
       flex
