@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  doCheck = true;
+  doCheck = !stdenv.hostPlatform.isCygwin;
 
   passthru = {
     tests.version = testers.testVersion {
