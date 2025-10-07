@@ -20,13 +20,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.6";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0OtCxz7g1xMmnkDke34deaS3dx5b8bGOC0Vbq6BIObg=";
+    hash = "sha256-wvg06YSQOZvP/NHl3WPfnI9F0+KN0cJ2CBwaZD8Xpfk=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       patches
       ;
     fetcherVersion = 1;
-    hash = "sha256-MDqAncWdU2rIQAGF/wx2gWxDf74P3fp3w4nA8b6AITw=";
+    hash = "sha256-HQxQIMbj2xsxD1jwj/itfAW6KHxX81Eu60ouzxQDu44=";
   };
 
   nativeBuildInputs = [
