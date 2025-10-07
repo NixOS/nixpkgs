@@ -27,6 +27,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   meta = with lib; {
     homepage = "https://github.com/CLD2Owners/cld2";
     description = "Compact Language Detector 2";
