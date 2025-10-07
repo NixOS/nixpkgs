@@ -99,6 +99,21 @@ let
     .${platform};
   inherit (arches) depsArch projectArch targetArch;
 
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
+
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+  });
+
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
@@ -125,7 +140,7 @@ stdenv.mkDerivation rec {
     libXdamage
     nss
     nspr
-    thrift
+    thrift20
   ];
 
   src = fetchFromGitHub {
@@ -184,7 +199,7 @@ stdenv.mkDerivation rec {
       -e 's|vcpkg_install_package(boost-filesystem boost-interprocess thrift)||' \
       -i CMakeLists.txt
 
-    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${thrift}/bin/thrift)|' -i remote/CMakeLists.txt
+    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
 
     mkdir jcef_build
     cd jcef_build
