@@ -37,7 +37,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -59,6 +58,7 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
@@ -208,7 +208,6 @@ qtModule {
 
     # Video formats
     srtp
-    libvpx
 
     # Audio formats
     libopus
@@ -267,6 +266,7 @@ qtModule {
 
     libkrb5
     libgbm
+    libva
   ];
 
   buildInputs = [
