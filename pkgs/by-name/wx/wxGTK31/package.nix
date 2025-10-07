@@ -20,7 +20,7 @@
   withPrivateFonts ? false,
   withEGL ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
-  withWebKit ? stdenv.hostPlatform.isDarwin,
+  withWebKit ? false,
   webkitgtk_4_1,
   libpng,
 }:

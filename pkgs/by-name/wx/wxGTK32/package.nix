@@ -27,7 +27,7 @@
   compat30 ? true,
   unicode ? true,
   withMesa ? !stdenv.hostPlatform.isDarwin,
-  withWebKit ? true,
+  withWebKit ? false,
   webkitgtk_4_1,
 }:
 let
