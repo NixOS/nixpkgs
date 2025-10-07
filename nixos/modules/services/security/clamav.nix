@@ -266,6 +266,8 @@ in
       socketConfig = {
         SocketUser = clamavUser;
         SocketGroup = clamavGroup;
+        # LocalSocketMode setting in clamd.conf is not prefixed with octal 0, add it here.
+        SocketMode = "0${cfg.daemon.settings.LocalSocketMode or "666"}";
       };
     };
 
