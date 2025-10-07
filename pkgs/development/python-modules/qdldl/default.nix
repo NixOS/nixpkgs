@@ -57,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/osqp/qdldl-python";
     changelog = "https://github.com/osqp/qdldl-python/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }
