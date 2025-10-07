@@ -8,7 +8,7 @@ in
   libfolia = pkgs.libfolia;
   ucto = pkgs.ucto;
   uctodata = pkgs.uctodata;
-  timbl = callPackage ./timbl.nix { };
+  timbl = pkgs.timbl;
   timblserver = callPackage ./timblserver.nix { };
   mbt = callPackage ./mbt.nix { };
   frog = callPackage ./frog.nix { inherit icu; };
