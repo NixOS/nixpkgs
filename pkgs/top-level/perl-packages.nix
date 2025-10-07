@@ -1175,6 +1175,31 @@ with self;
     };
   };
 
+  AppFatPackerSimple = buildPerlModule {
+    pname = "App-FatPacker-Simple";
+    version = "0.20";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-FatPacker-Simple-0.20.tar.gz";
+      sha256 = "sha256-nkSy/gno2PxT5aA3UWCRK0Dnn9fIdcCOtQvoGUZocSo=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      pkgs.gnumake
+      ClonePP
+      PPI
+      TestLeakTrace
+      DistributionMetadata
+    ];
+    propagatedBuildInputs = [
+      AppFatPacker
+    ];
+    meta = {
+      description = "A simpler way to fatpack perl programs";
+      homepage = "https://metacpan.org/pod/App::FatPacker::Simple";
+      mainProgram = "Simple.pm";
+    };
+  };
+
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
     version = "1.7047";
