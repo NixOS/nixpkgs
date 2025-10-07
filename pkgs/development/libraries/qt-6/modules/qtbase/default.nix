@@ -29,6 +29,7 @@
   vulkan-loader,
   libthai,
   libdrm,
+  libgbm,
   libdatrie,
   lttng-ust,
   libepoxy,
@@ -133,6 +134,7 @@ stdenv.mkDerivation rec {
     lttng-ust
     libthai
     libdrm
+    libgbm
     libdatrie
     udev
     # Text rendering
