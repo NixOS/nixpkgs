@@ -1,0 +1,17 @@
+diff --git a/auparse/test/Makefile.am b/auparse/test/Makefile.am
+index f8fd453f..2079f6cc 100644
+--- a/auparse/test/Makefile.am
++++ b/auparse/test/Makefile.am
+@@ -32,12 +32,7 @@ DISTCLEANFILES = $(CLEANFILES)
+ AM_CPPFLAGS = -I${top_srcdir}/auparse -I${top_srcdir}/lib -I${top_srcdir}/common \
+ 	-I${top_srcdir}/src
+ 
+-if HAVE_ASAN
+-AM_CFLAGS = -D_GNU_SOURCE -Wno-pointer-sign ${WFLAGS} ${ASAN_FLAGS}
+-AM_LDFLAGS = ${ASAN_FLAGS}
+-else
+ AM_CFLAGS = -D_GNU_SOURCE -Wno-pointer-sign ${WFLAGS}
+-endif
+ 
+ if BUILD_STATIC
+ STATIC_LINK = -static

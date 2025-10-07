@@ -36,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NX0TWA+LtcZgbM9aQfokWv2rGNAAb3ksGqAH8URAkYM=";
   };
 
+  patches = [
+    # builds with pie+asan on a hardened linux kernel fail for some reason, so don't test asan
+    ./test-auparse-without-asan.patch
+  ];
+
   postPatch = ''
     substituteInPlace bindings/swig/src/auditswig.i \
       --replace-fail "/usr/include/linux/audit.h" \
