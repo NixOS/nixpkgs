@@ -4,7 +4,6 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "svg-py";
   version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "orsinium-labs";
