@@ -224,6 +224,7 @@ in
         LogsDirectory = "pgadmin";
         LogsDirectoryMode = "750";
         StateDirectory = "pgadmin";
+        StateDirectoryMode = "750";
         ExecStart = "${cfg.package}/bin/pgadmin4";
         LoadCredential = [
           "initial_password:${cfg.initialPasswordFile}"
