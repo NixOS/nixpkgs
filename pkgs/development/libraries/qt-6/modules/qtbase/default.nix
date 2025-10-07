@@ -251,6 +251,9 @@ stdenv.mkDerivation rec {
   qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
+    # makes Qt print the configure summary
+    "--log-level=STATUS"
+
     "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
     "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
     "-DINSTALL_QMLDIR=${qtQmlPrefix}"
