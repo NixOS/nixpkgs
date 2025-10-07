@@ -7755,12 +7755,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  languageMachines = recurseIntoAttrs (
-    import ../development/libraries/languagemachines/packages.nix {
-      inherit pkgs;
-    }
-  );
-
   lcms = lcms2;
 
   libagar = callPackage ../development/libraries/libagar { };
