@@ -331,7 +331,7 @@ lib.checkListOfEnum "${pname}: variant" validVariants [ variant ] lib.checkListO
 
     meta = {
       description = "Soothing pastel themes";
-      homepage = "https://github.com/catppuccin/catppuccin";
+      homepage = "https://catppuccin.com";
       license = lib.licenses.mit;
       platforms = lib.platforms.all;
       maintainers = [ lib.maintainers.khaneliman ];
