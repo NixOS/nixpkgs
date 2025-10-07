@@ -51,8 +51,6 @@ stdenv.mkDerivation rec {
     mpfr # if not included, throws fatal error: mpfr.h not found
   ];
 
-  cmakeFlags = [ ];
-
   doCheck = true;
 
   meta = {
