@@ -43,6 +43,7 @@
   semver,
   sexpdata,
   shapely,
+  truststore,
   typer,
   urllib3,
   zstd,
@@ -61,7 +62,7 @@
 
 buildPythonPackage rec {
   pname = "atopile";
-  version = "0.11.2";
+  version = "0.12.4";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -70,7 +71,7 @@ buildPythonPackage rec {
     owner = "atopile";
     repo = "atopile";
     tag = "v${version}";
-    hash = "sha256-JczlQulHlViV9pg0uPXd9Boagp74VBdZ1UMDXh2c3DA=";
+    hash = "sha256-SB6D1738t3kQJI+V9ClVsByHm6BsLl078N/wDAHJE6E=";
   };
 
   build-system = [
@@ -120,6 +121,7 @@ buildPythonPackage rec {
     semver
     sexpdata
     shapely
+    truststore
     typer
     urllib3
     zstd
@@ -127,6 +129,7 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "posthog"
+    "prompt-toolkit"
     "zstd"
   ];
 
@@ -185,6 +188,8 @@ buildPythonPackage rec {
     "test_performance_mifs_bus_params"
     "test_resistor"
     "test_reserved_attrs"
+    "test_examples_build"
+    "test_net_names_deterministic"
     # requires internet
     "test_simple_pick"
     "test_simple_negative_pick"
@@ -192,14 +197,15 @@ buildPythonPackage rec {
     "test_jlcpcb_pick_capacitor"
     "test_regression_rp2040_usb_diffpair_full"
     "test_model_translations"
-    # type error
-    "test_alternate_trait_constructor_with_params"
-    "test_parameterised_trait_with_params"
-    "test_trait_alternate_constructor_precedence"
-    "test_trait_template_enum"
-    "test_trait_template_enum_invalid"
-    # failure
-    "test_solve_voltage_divider_complex"
+
+    # FileNotFoundError: [Errno 2] No such file or directory: '/build/source/build/logs/latest'
+    "test_muster_diamond_dependencies"
+    "test_muster_disconnected_components"
+    "test_muster_register_decorator"
+    "test_muster_select_skips_targets_with_failed_dependencies"
+    "test_muster_select_skips_targets_with_partial_failed_dependencies"
+    "test_muster_select_yields_targets_with_all_successful_dependencies"
+    "test_muster_specific_targets_with_dependencies"
   ];
 
   # in order to use pytest marker, we need to use ppytestFlagsArray

@@ -2,22 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
   hatch-vcs,
+
+  # dependencies
+  httpx,
   pydantic,
-  requests,
+  truststore,
 }:
 
 buildPythonPackage rec {
   pname = "atopile-easyeda2kicad";
-  version = "0.9.6";
+  version = "0.9.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "atopile";
     repo = "easyeda2kicad.py";
     tag = "v${version}";
-    hash = "sha256-0d7lcs/aWSwxGBEIGkEcKc7SwBCqjBdoJIlCnLh8RFA=";
+    hash = "sha256-l5ecNNu9vu073aK85F+tOSodEHk2wso95RYXk9DyTFo=";
   };
 
   build-system = [
@@ -26,8 +31,9 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    httpx
     pydantic
-    requests
+    truststore
   ];
 
   pythonImportsCheck = [ "easyeda2kicad" ];
