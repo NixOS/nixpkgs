@@ -8,6 +8,7 @@
   fixDarwinDylibNames,
   flac,
   freetype,
+  gitUpdater,
   gtk3,
   libGL,
   libGLU,
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchpatch2 {
-      name = "Bump CMake minimum version to 3.5";
+      name = "Bump-CMake-minimum-version-to-3.5";
       url = "https://github.com/liballeg/allegro5/commit/6e93fcaabaafd81701f4cd1b74f4b69dd598bc9b.patch?full_index=1";
       hash = "sha256-IEnn66bS2m6MVFCNf341yLtd7jTl2gflL5EFJFmbEt4=";
     })
@@ -125,6 +126,10 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  strictDeps = true;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Game programming library";
