@@ -1,0 +1,29 @@
+From 1d93dfba00f224787cfc2cde1af2ab5d7f5b87f7 Mon Sep 17 00:00:00 2001
+From: qbisi <qbisicwate@gmail.com>
+Date: Sat, 16 Nov 2024 22:20:00 +0800
+Subject: [PATCH] optional arm feature complex
+
+---
+ libsrc/core/simd_arm64.hpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/libsrc/core/simd_arm64.hpp b/libsrc/core/simd_arm64.hpp
+index 9e0bcce45..dc2190788 100644
+--- a/libsrc/core/simd_arm64.hpp
++++ b/libsrc/core/simd_arm64.hpp
+@@ -154,6 +154,7 @@ namespace ngcore
+     return FNMA(SIMD<double,2> (a), b, c);
+   }
+ 
++#ifdef __ARM_FEATURE_COMPLEX
+   // ARM complex mult:
+   // https://arxiv.org/pdf/1901.07294.pdf
+   // c += a*b    (a0re, a0im, a1re, a1im, ...), 
+@@ -162,6 +163,7 @@ namespace ngcore
+     auto tmp = vcmlaq_f64(c.Data(), a.Data(), b.Data());   // are * b
+     c = vcmlaq_rot90_f64(tmp, a.Data(), b.Data());    // += i*aim * b
+   }
++#endif
+   
+ 
+   NETGEN_INLINE SIMD<double,2> operator+ (SIMD<double,2> a, SIMD<double,2> b)
