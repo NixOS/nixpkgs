@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ lua ];
 
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+
   patches = [
     ./environ-and-linux-is-kinda-posix.patch
     ./headers.patch
