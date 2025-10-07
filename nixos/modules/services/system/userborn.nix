@@ -93,26 +93,6 @@ in
 
     systemd = {
 
-      # Create home directories, do not create /var/empty even if that's a user's
-      # home.
-      tmpfiles.settings.home-directories =
-        lib.mapAttrs'
-          (
-            username: opts:
-            lib.nameValuePair (toString opts.home) {
-              d = {
-                mode = opts.homeMode;
-                user = opts.name;
-                inherit (opts) group;
-              };
-            }
-          )
-          (
-            lib.filterAttrs (
-              _username: opts: opts.enable && opts.createHome && opts.home != "/var/empty"
-            ) userCfg.users
-          );
-
       services.userborn = {
         wantedBy = [ "sysinit.target" ];
         requiredBy = [ "sysinit-reactivation.target" ];
