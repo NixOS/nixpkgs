@@ -41,6 +41,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  pythonRelaxDeps = [ "requests" ];
+
   meta = with lib; {
     description = "Sphinx extension for creating unselectable prompt";
     homepage = "https://github.com/sbrunner/sphinx-prompt";
