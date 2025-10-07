@@ -1252,6 +1252,9 @@ rec {
       tag ? null,
       uid ? 1000,
       gid ? 1000,
+      # Default to `/build` instead of a non-existent `/homeless-shelter` for backwards compatibility.
+      #
+      # https://github.com/NixOS/nix/issues/6379
       homeDirectory ? "/build",
       shell ? bashInteractive + "/bin/bash",
       command ? null,
