@@ -470,6 +470,9 @@ let
           ''}
           ${optionalString (hasSSL && vhost.quic) ''
             http3 ${if vhost.http3 then "on" else "off"};
+            ${optionalString vhost.http3 ''
+              add_header 'Alt-Svc: h3=":$server_port"; ma=86400' always;
+            ''}
             http3_hq ${if vhost.http3_hq then "on" else "off"};
           ''}
           ${optionalString hasSSL ''
