@@ -57,10 +57,11 @@ python3.pkgs.buildPythonApplication rec {
 
   # prevent double wrapping
   dontWrapGApps = true;
-  preFixup = ''
-    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  makeWrapperArgs = [ "\${gappsWrapperArgs[@]}" ];
 
+  postFixup = ''
     patchShebangs --update $out/share/wike/wike-sp
+    wrapPythonProgramsIn "$out/share/wike" "$out $pythonPath"
   '';
 
   passthru = {
