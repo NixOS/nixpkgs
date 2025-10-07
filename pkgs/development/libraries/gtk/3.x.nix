@@ -88,6 +88,11 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./patches/3.0-immodules.cache.patch
     ./patches/3.0-Xft-setting-fallback-compute-DPI-properly.patch
+    # Backport https://gitlab.gnome.org/GNOME/gtk/-/commit/6cb612ac15923844155885b7eaa02764de84936e to fix Clang build.
+    # Darwin lacks the GNU libm sincos(), causing test build failures.
+    # Extends upstream fix to tests and skips sincos() when using Clang.
+    # Drop once upstream Meson properly detects sincos() absence on Darwin.
+    ./patches/3.0-clang-tests-sincos.patch
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # X11 module requires <gio/gdesktopappinfo.h> which is not installed on Darwin
