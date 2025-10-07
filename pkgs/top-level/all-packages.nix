@@ -10815,7 +10815,6 @@ with pkgs;
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
 
   ardour = callPackage ../applications/audio/ardour { };
-  ardour_7 = callPackage ../applications/audio/ardour/7.nix { };
 
   arelle = with python3Packages; toPythonApplication arelle;
 
