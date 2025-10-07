@@ -102,7 +102,12 @@ let
     inherit src;
     sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
-    postPatch = "cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a";
+    postPatch = ''
+      # Fix the build with CMake 4.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 2.6.0)' 'cmake_minimum_required(VERSION 3.10)'
+      cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a
+    '';
     passthru.patched-libdbusmenu = libdbusmenu-jb;
     installPhase = ''
       runHook preInstall
