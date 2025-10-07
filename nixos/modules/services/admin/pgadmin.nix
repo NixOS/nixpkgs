@@ -222,6 +222,7 @@ in
         User = "pgadmin";
         DynamicUser = true;
         LogsDirectory = "pgadmin";
+        LogsDirectoryMode = "750";
         StateDirectory = "pgadmin";
         ExecStart = "${cfg.package}/bin/pgadmin4";
         LoadCredential = [
