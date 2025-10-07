@@ -33,6 +33,18 @@ mkLibretroCore {
     xz
   ];
 
+  # CMake Error at 3rdparty/libzip/libzip/CMakeLists.txt:1 (cmake_minimum_required):
+  # Compatibility with CMake < 3.5 has been removed from CMake.
+  #
+  # Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+  # to tell CMake that the project requires at least <min> but has been updated
+  # to work with policies introduced by <max> or earlier.
+  #
+  # Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   # libretro/ps2 needs at least those flags to compile, and probably doesn't
   # work on x86_64-v1
   # https://github.com/libretro/ps2/blob/397b8f54b92aeffd2dd502c2c9b601305fb1de9d/cmake/BuildParameters.cmake#L101
