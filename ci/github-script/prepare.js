@@ -1,6 +1,11 @@
 const { classify } = require('../supportedBranches.js')
 const { postReview } = require('./reviews.js')
 
+console.log("Hello, world!");
+
+process.exit(1);
+
+
 module.exports = async ({ github, context, core, dry }) => {
   const pull_number = context.payload.pull_request.number
 
