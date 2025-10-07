@@ -63,7 +63,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+  cmakeFlags = [
+    "-DCMAKE_SKIP_RPATH=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   meta = with lib; {
     description = "Game programming library";
