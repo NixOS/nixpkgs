@@ -19683,12 +19683,6 @@
     githubId = 7239200;
     name = "panda2134";
   };
-  pandaman = {
-    email = "kointosudesuyo@infoseek.jp";
-    github = "pandaman64";
-    githubId = 1788628;
-    name = "pandaman";
-  };
   pandanz = {
     email = "gate.rules-5j@icloud.com";
     github = "pandanz";
