@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
+  preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    # Yes, this works and is required for cross :'/
+    export PATH=$PATH:${net-snmp.dev}/bin
+  '';
+
   enableParallelBuilding = true;
 
   outputs = [
