@@ -1418,7 +1418,7 @@ let
         nodes.machine = {
           networking.useNetworkd = networkd;
           networking.bridges = lib.listToAttrs (
-            lib.flip builtins.map ifnames (name: {
+            lib.flip map ifnames (name: {
               inherit name;
               value.interfaces = [ ];
             })

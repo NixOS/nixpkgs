@@ -204,7 +204,7 @@ in
                     NB_SERVICE = client.service.name;
                     NB_WIREGUARD_PORT = toString client.port;
                   } // optionalAttrs (client.dns-resolver.address != null) {
-                    NB_DNS_RESOLVER_ADDRESS = "''${client.dns-resolver.address}:''${builtins.toString client.dns-resolver.port}";
+                    NB_DNS_RESOLVER_ADDRESS = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
                 '';
                 description = ''
@@ -326,7 +326,7 @@ in
                     WgIface = client.interface;
                     WgPort = client.port;
                   } // optionalAttrs (client.dns-resolver.address != null) {
-                    CustomDNSAddress = "''${client.dns-resolver.address}:''${builtins.toString client.dns-resolver.port}";
+                    CustomDNSAddress = "''${client.dns-resolver.address}:''${toString client.dns-resolver.port}";
                   }
                 '';
                 description = ''
@@ -417,7 +417,7 @@ in
               NB_WIREGUARD_PORT = toString client.port;
             }
             // optionalAttrs (client.dns-resolver.address != null) {
-              NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
+              NB_DNS_RESOLVER_ADDRESS = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
             };
 
             config.config = {
@@ -426,7 +426,7 @@ in
               WgPort = client.port;
             }
             // optionalAttrs (client.dns-resolver.address != null) {
-              CustomDNSAddress = "${client.dns-resolver.address}:${builtins.toString client.dns-resolver.port}";
+              CustomDNSAddress = "${client.dns-resolver.address}:${toString client.dns-resolver.port}";
             };
           }
         )

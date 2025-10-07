@@ -567,7 +567,7 @@ in
         "${config.system.nixos-init.package}/bin/initrd-init"
       ]
       ++ jobScripts
-      ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
+      ++ map (c: removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
 
       targets.initrd.aliases = [ "default.target" ];
       units =

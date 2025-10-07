@@ -360,8 +360,8 @@ let
         target = lib.mkDefault (mkManifestTarget name);
         source = lib.mkIf (config.content != null) (
           let
-            name' = "k3s-manifest-" + builtins.baseNameOf name;
-            docName = "k3s-manifest-doc-" + builtins.baseNameOf name;
+            name' = "k3s-manifest-" + baseNameOf name;
+            docName = "k3s-manifest-doc-" + baseNameOf name;
             mkSource =
               value:
               if builtins.isList value then
