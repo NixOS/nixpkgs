@@ -5,7 +5,7 @@
   callPackage,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchgit,
+  fetchFromGitHub,
   imagemagick,
   lib,
   xdg-utils,
@@ -25,9 +25,10 @@ buildDotnetModule (finalAttrs: {
   inherit pname;
   version = "0.17.2";
 
-  src = fetchgit {
-    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
-    rev = "refs/tags/v${finalAttrs.version}";
+  src = fetchFromGitHub {
+    owner = "Nexus-Mods";
+    repo = "NexusMods.App";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-2B5n1yN42birMJ1YaUU/KjzhHIJTv8nwrupc0ULc8Hc=";
     fetchSubmodules = true;
   };
@@ -196,7 +197,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0
