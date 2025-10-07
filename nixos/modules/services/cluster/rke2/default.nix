@@ -258,6 +258,14 @@ in
       "kernel.panic_on_oops" = 1;
     };
 
+    users = lib.mkIf cfg.cisHardening {
+      users.etcd = {
+        group = "etcd";
+        isSystemUser = true;
+      };
+      groups.etcd = { };
+    };
+
     systemd.services."rke2-${cfg.role}" = {
       description = "Rancher Kubernetes Engine v2";
       documentation = [ "https://github.com/rancher/rke2#readme" ];
@@ -316,7 +324,7 @@ in
             ++ (lib.optional cfg.selinux "--selinux")
             ++ (lib.optional (cfg.role == "server" && cfg.cni != "canal") "--cni=${cfg.cni}")
             ++ (lib.optional cfg.cisHardening "--profile=${
-              if cfg.package.version >= "1.25" then "cis-1.23" else "cis-1.6"
+              if cfg.package.version >= "1.29" then "cis" else "cis-1.23"
             }")
             ++ cfg.extraFlags
           )
