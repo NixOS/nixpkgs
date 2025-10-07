@@ -32,10 +32,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0c0a4pfvnhkh8dmih1igm7qm2ligzvccppjskpz85v69xizfsj71";
+      sha256 = "1w64msy9wdyagcl2rcr7lynmdrazjb8wr6406r47x6k007q8jpd3";
       type = "gem";
     };
-    version = "0.9.6";
+    version = "0.10.2";
   };
   cbor-packed = {
     groups = [ "default" ];
