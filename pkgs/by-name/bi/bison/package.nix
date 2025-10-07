@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
   # Tests were disabled on LLVM/Darwin due to https://github.com/NixOS/nixpkgs/issues/463659
   # TODO: enable doInstallCheck unconditionally when fixed upstream.
-  doInstallCheck = !stdenv.cc.isClang;
+  doInstallCheck = !stdenv.cc.isClang && !stdenv.buildPlatform.isCygwin;
 
   meta = {
     homepage = "https://www.gnu.org/software/bison/";
