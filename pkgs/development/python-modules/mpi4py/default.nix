@@ -8,6 +8,8 @@
   toPythonModule,
   pytestCheckHook,
   mpiCheckPhaseHook,
+  mpi4py,
+  mpich,
 }:
 
 buildPythonPackage rec {
@@ -60,6 +62,10 @@ buildPythonPackage rec {
 
   passthru = {
     inherit mpi;
+
+    tests = {
+      mpich = mpi4py.override { mpi = mpich; };
+    };
   };
 
   meta = {
