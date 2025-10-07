@@ -1,0 +1,10 @@
+diff --git a/src/ucd-tools/CMakeLists.txt b/src/ucd-tools/CMakeLists.txt
+index 8b26757a..41b1a9bd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,3 +1,5 @@
++cmake_minimum_required(VERSION 3.10)
++
+ add_library(ucd STATIC
+   src/case.c
+   src/categories.c

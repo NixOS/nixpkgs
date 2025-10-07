@@ -45,6 +45,8 @@ let
     pname = "ucd-tools";
     inherit version src;
 
+    patches = [ ./cmake.patch ];
+
     sourceRoot = "${src.name}/src/ucd-tools";
 
     nativeBuildInputs = [ cmake ];
