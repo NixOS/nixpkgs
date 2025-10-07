@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     boost
   ];
 
+  cmakeFlags = [
+    # See https://github.com/NixOS/nixpkgs/issues/445447
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--with-boost=${boost.dev}"
