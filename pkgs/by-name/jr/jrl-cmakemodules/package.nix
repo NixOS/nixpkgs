@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
   cmake,
 }:
@@ -16,6 +17,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-WQiAAexshQ4zgaBNo/CD91XV+PAeoPZatmehSA14aPM=";
   };
+
+  patches = [
+    # ref. https://github.com/jrl-umi3218/jrl-cmakemodules/pull/783
+    (fetchpatch {
+      name = "fix-permissions.patch";
+      url = "https://github.com/jrl-umi3218/jrl-cmakemodules/commit/defed70c8a7c5e4bd5b26006bef26e3fb22c3b26.patch";
+      hash = "sha256-muO6DwQhNPCv6DPmnHnEHjsh/FSj0ljgNCb+ZowLRaY=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
