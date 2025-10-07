@@ -1,33 +1,33 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
   bzip2,
   libtar,
   libtool,
   pkg-config,
   autoconf-archive,
   libxml2,
-  languageMachines,
+  ticcutils,
+  timbl,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-mbt.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mbt";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "mbt-${release.version}.tar.gz";
+  version = "3.2.16";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "mbt";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-O/LhLWgLwDctkRYjds+AM9fGMIRX3eCnJhRIXyVrJ04=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
   buildInputs = [
     bzip2
@@ -35,13 +35,14 @@ stdenv.mkDerivation {
     libtool
     autoconf-archive
     libxml2
-    languageMachines.ticcutils
-    languageMachines.timbl
+    ticcutils
+    timbl
   ];
   patches = [ ./mbt-add-libxml2-dep.patch ];
-  preConfigure = ''
-    sh bootstrap.sh
-  '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     description = "Memory Based Tagger";
@@ -57,4 +58,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})
