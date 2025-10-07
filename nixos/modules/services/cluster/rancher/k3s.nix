@@ -22,12 +22,6 @@ let
       ]
       ++ config
     ) instruction;
-
-  chartDir = "/var/lib/rancher/k3s/server/static/charts";
-  # Produces a list containing all duplicate chart names
-  duplicateCharts = lib.intersectLists (builtins.attrNames cfg.autoDeployCharts) (
-    builtins.attrNames cfg.charts
-  );
 in
 {
   imports = [ (removeOption [ "docker" ] "k3s docker option is no longer supported.") ];
@@ -61,6 +55,10 @@ in
       to know how to configure the firewall.
     '';
 
+    disable.description = ''
+      Disable default components, see the [K3s documentation](https://docs.k3s.io/installation/packaged-components#using-the---disable-flag).
+    '';
+
     images = {
       example = lib.literalExpression ''
         [
@@ -76,22 +74,12 @@ in
       '';
       description = ''
         List of derivations that provide container images.
-        All images are linked to {file}`${baseModule.imageDir}` before k3s starts and are consequently imported
+        All images are linked to {file}`${baseModule.paths.imageDir}` before k3s starts and are consequently imported
         by the k3s agent. Consider importing the k3s airgap images archive of the k3s package in
         use, if you want to pre-provision this node with all k3s container images. This option
         only makes sense on nodes with an enabled agent.
       '';
     };
-
-    autoDeployCharts.description = ''
-      Auto deploying Helm charts that are installed by the k3s Helm controller. Avoid using
-      attribute names that are also used in the [](#opt-services.k3s.manifests) and
-      [](#opt-services.k3s.charts) options. Manifests with the same name will override
-      auto deploying charts with the same name. Similiarly, charts with the same name will
-      overwrite the Helm chart contained in auto deploying charts. This option only makes
-      sense on server nodes (`role = server`). See the
-      [k3s Helm documentation](https://docs.k3s.io/helm) for further information.
-    '';
 
     # k3s-specific options
 
@@ -122,39 +110,17 @@ in
       default = false;
       description = "Only run the server. This option only makes sense for a server.";
     };
-
-    charts = lib.mkOption {
-      type = with lib.types; attrsOf (either path package);
-      default = { };
-      example = lib.literalExpression ''
-        nginx = ../charts/my-nginx-chart.tgz;
-        redis = ../charts/my-redis-chart.tgz;
-      '';
-      description = ''
-        Packaged Helm charts that are linked to {file}`${chartDir}` before k3s starts.
-        The attribute name will be used as the link target (relative to {file}`${chartDir}`).
-        The specified charts will only be placed on the file system and made available to the
-        Kubernetes APIServer from within the cluster. See the [](#opt-services.k3s.autoDeployCharts)
-        option and the [k3s Helm controller docs](https://docs.k3s.io/helm#using-the-helm-controller)
-        to deploy Helm charts. This option only makes sense on server nodes (`role = server`).
-      '';
-    };
   };
 
   # implementation
 
   config = lib.mkIf cfg.enable (
     lib.recursiveUpdate baseModule.config {
-      warnings =
-        (lib.optional (cfg.role != "server" && cfg.charts != { })
-          "k3s: Helm charts are only made available to the cluster on server nodes (role == server), they will be ignored by this node."
-        )
-        ++ (lib.optional (duplicateCharts != [ ])
-          "k3s: The following auto deploying charts are overriden by charts of the same name: ${toString duplicateCharts}."
-        )
-        ++ (lib.optional (cfg.disableAgent && cfg.images != [ ])
-          "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node."
-        );
+      warnings = (
+        lib.optional (
+          cfg.disableAgent && cfg.images != [ ]
+        ) "k3s: Images are only imported on nodes with an enabled agent, they will be ignored by this node."
+      );
 
       assertions = [
         {
@@ -166,26 +132,6 @@ in
           message = "k3s: clusterInit must be false if role is 'agent'";
         }
       ];
-
-      systemd.tmpfiles.settings."10-k3s" =
-        let
-          # Merge charts with charts contained in enabled auto deploying charts
-          helmCharts =
-            (lib.concatMapAttrs (n: v: { ${n} = v.package; }) (
-              lib.filterAttrs (_: v: v.enable) cfg.autoDeployCharts
-            ))
-            // cfg.charts;
-          # Ensure that all chart targets have a .tgz suffix
-          mkChartTarget = name: if (lib.hasSuffix ".tgz" name) then name else name + ".tgz";
-          # Make a systemd-tmpfiles rule for a chart
-          mkChartRule = target: source: {
-            name = "${chartDir}/${mkChartTarget target}";
-            value = {
-              "L+".argument = "${source}";
-            };
-          };
-        in
-        lib.mapAttrs' (n: v: mkChartRule n v) helmCharts;
     }
   );
 }

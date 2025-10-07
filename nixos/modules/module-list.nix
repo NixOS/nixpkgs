@@ -470,7 +470,6 @@
   ./services/cluster/corosync/default.nix
   ./services/cluster/druid/default.nix
   ./services/cluster/hadoop/default.nix
-  ./services/cluster/k3s/default.nix
   ./services/cluster/kubernetes/addon-manager.nix
   ./services/cluster/kubernetes/addons/dns.nix
   ./services/cluster/kubernetes/apiserver.nix
@@ -483,7 +482,7 @@
   ./services/cluster/kubernetes/scheduler.nix
   ./services/cluster/pacemaker/default.nix
   ./services/cluster/patroni/default.nix
-  ./services/cluster/rke2/default.nix
+  ./services/cluster/rancher/default.nix
   ./services/cluster/spark/default.nix
   ./services/cluster/temporal/default.nix
   ./services/computing/boinc/client.nix
