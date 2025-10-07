@@ -18262,6 +18262,12 @@
     githubId = 18604892;
     name = "Nathan Ruiz";
   };
+  nathanscully = {
+    email = "nath@nscully.com";
+    github = "nathanscully";
+    githubId = 3359816;
+    name = "Nathan Scully";
+  };
   nathyong = {
     github = "nathyong";
     githubId = 818502;
