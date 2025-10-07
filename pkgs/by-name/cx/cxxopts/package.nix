@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   icu74,
   pkg-config,
@@ -19,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-baM6EX9D0yfrKxuPXyUUV9RqdrVLyygeG6x57xN8lc4=";
   };
 
-  buildInputs = lib.optionals enableUnicodeHelp [ icu74.dev ];
+  propagatedBuildInputs = lib.optionals enableUnicodeHelp [ icu74.dev ];
   cmakeFlags = [
     "-DCXXOPTS_BUILD_EXAMPLES=OFF"
   ]
@@ -36,6 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace packaging/pkgconfig.pc.in \
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/jarro2783/cxxopts/commit/e98c73d665915b292a0592bf34fcbe8522035bc1.patch?full_index=1";
+      name = "fix-icu-uc-typo-in-pkgconfig.patch";
+      hash = "sha256-bqd3H66Op1/EkN2HLd84Obky4Y2ndPPY8MGZ5fqtdk4=";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/jarro2783/cxxopts";
