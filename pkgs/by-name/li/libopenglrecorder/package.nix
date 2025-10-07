@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   libjpeg,
@@ -22,6 +23,15 @@ stdenv.mkDerivation {
     rev = "c1b81ce26e62fae1aaa086b5cd337cb12361ea3d";
     sha256 = "13s2d7qs8z4w0gb3hx03n97xmwl07d4s473m4gw90qcvmz217kiz";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/Benau/libopenglrecorder/pull/14
+      name = "support building against cmake 4";
+      url = "https://github.com/Benau/libopenglrecorder/commit/6101627e9952ec1a835dad38475f281878526052.patch?full_index=1";
+      hash = "sha256-EJIXiTPKLxwStHqQeWqjpv/9olqKOMse5lzCp/j0zJM=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
