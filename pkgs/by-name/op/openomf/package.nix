@@ -67,6 +67,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
+
   postInstall = ''
     mkdir -p $out/share/icons/hicolor/256x256/apps
     unzip -j ${assets} -d $out/share/games/openomf
