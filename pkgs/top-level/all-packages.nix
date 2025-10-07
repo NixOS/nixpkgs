@@ -591,7 +591,7 @@ with pkgs;
       makeOverridable (import ../build-support/fetchurl) {
         inherit lib stdenvNoCC buildPackages;
         inherit cacert;
-        inherit (config) rewriteURL;
+        inherit (config) hashedMirrors rewriteURL;
         curl = buildPackages.curlMinimal.override (old: rec {
           # break dependency cycles
           fetchurl = stdenv.fetchurlBoot;
@@ -14645,8 +14645,6 @@ with pkgs;
       haskell.lib.compose.justStaticExecutables haskellPackages.nix-serve-ng;
 
   nix-visualize = python3.pkgs.callPackage ../tools/package-management/nix-visualize { };
-
-  nixfmt-classic = haskellPackages.nixfmt.bin;
 
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildGoModule,
-  buildGo125Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -103,15 +102,11 @@ let
       mkProviderFetcher = fetchFromGitLab;
       owner = "gitlab-org";
     };
-    # actions update always fails but can't reproduce the failure.
-    heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
     # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
     libvirt = automated-providers.libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
     });
     minio = automated-providers.minio.override { spdx = "AGPL-3.0-only"; };
-    # requires go >= 1.25.0
-    talos = automated-providers.talos.override { mkProviderGoModule = buildGo125Module; };
   };
 
   # Put all the providers we not longer support in this list.
@@ -122,7 +117,13 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      fly = archived "fly" "2023/10";
+      _assert = archived "_assert" "2025/10";
+      azurestack = archived "azurestack" "2025/10";
+      googleworkspace = archived "googleworkspace" "2025/10";
+      huaweicloudstack = archived "huaweicloudstack" "2025/10";
+      metal = archived "metal" "2025/10";
+      stackpath = archived "stackpath" "2025/10";
+      vra7 = archived "vra7" "2025/10";
     };
 
   # excluding aliases, used by terraform-full
