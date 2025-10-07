@@ -36,6 +36,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CyhyzNw2LXwIVf/SX2rQRvEex5LmjZfZKgCe88jthz0=";
   };
 
+  patches = [ ./darwin-fmt.patch ];
+
   # allow other ncurses versions on Darwin
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace config.sh --replace-fail "ncurses5.4" "ncurses"
