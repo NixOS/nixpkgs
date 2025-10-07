@@ -18,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-zBV45WMAXtCpPPbDpr04K/a9UtZ4KLP9nUauBlbhrFo=";
   };
 
+  postPatch = ''
+    substituteInPlace libsuperderpy/src/3rdparty/cimgui/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.1)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];
