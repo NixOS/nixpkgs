@@ -80,11 +80,7 @@
 }:
 
 let
-  abiVersion =
-    if lib.versionAtLeast gtk4.version "4.0" then
-      "6.0"
-    else
-      "4.${if lib.versions.major libsoup_3.version == "2" then "0" else "1"}";
+  abiVersion = if lib.versionAtLeast gtk4.version "4.0" then "6.0" else "4.1";
 in
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
@@ -225,7 +221,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     [
       "-DENABLE_INTROSPECTION=ON"
       "-DPORT=GTK"
-      "-DUSE_SOUP2=${cmakeBool (lib.versions.major libsoup_3.version == "2")}"
+      "-DUSE_SOUP2=${cmakeBool false}"
       "-DUSE_LIBSECRET=${cmakeBool withLibsecret}"
       "-DENABLE_EXPERIMENTAL_FEATURES=${cmakeBool enableExperimental}"
     ]

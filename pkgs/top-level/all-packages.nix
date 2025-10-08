@@ -8819,11 +8819,6 @@ with pkgs;
     gtk4 = gtk3;
   };
 
-  webkitgtk_4_0 = webkitgtk_6_0.override {
-    libsoup_3 = libsoup_2_4;
-    gtk4 = gtk3;
-  };
-
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
 
   wt = wt4;
