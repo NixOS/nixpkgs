@@ -19,7 +19,6 @@
   file,
   which,
   zip,
-  perl,
   zlib,
   cups,
   freetype,
@@ -48,6 +47,7 @@
   bash,
   liberation_ttf,
   cacert,
+  jre-generate-cacerts,
 
   nixpkgs-openjdk-updater,
 
@@ -249,8 +249,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (!atLeast11) [
     lndir
-    # Certificates generated using perl in `installPhase`
-    perl
   ]
   ++ lib.optionals (!atLeast11 && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     # Certificates generated using keytool in `installPhase`
@@ -575,7 +573,7 @@ stdenv.mkDerivation (finalAttrs: {
     (
       cd $jre/lib/openjdk/jre/lib/security
       rm cacerts
-      perl ${./8/generate-cacerts.pl} ${
+      ${jre-generate-cacerts} ${
         if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
           "$jre/lib/openjdk/jre/bin/keytool"
         else
