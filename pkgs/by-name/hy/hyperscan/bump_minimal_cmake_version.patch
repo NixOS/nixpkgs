@@ -1,0 +1,21 @@
+From 58fe9af10b20b4ca2d0a124b3b6c08cb06db5541 Mon Sep 17 00:00:00 2001
+From: Xeonacid <h.dwwwwww@gmail.com>
+Date: Tue, 14 Oct 2025 16:52:25 +0800
+Subject: [PATCH] Update minimal cmake version to 3.5
+
+Fix build error on cmake 4.0
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 7757916d2..c0ea17ecd 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.8.11)
++cmake_minimum_required (VERSION 3.5)
+ project (hyperscan C CXX)
+ 
+ set (HS_MAJOR_VERSION 5)
+
