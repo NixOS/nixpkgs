@@ -10536,6 +10536,12 @@
     githubId = 60099368;
     name = "Rafael Kienitz";
   };
+  htuscher = {
+    email = "htuscher@proton.me";
+    github = "htuscher";
+    githubId = 5076356;
+    name = "Hans Tuscher";
+  };
   huantian = {
     name = "David Li";
     email = "davidtianli@gmail.com";
