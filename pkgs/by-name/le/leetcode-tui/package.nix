@@ -1,11 +1,10 @@
-{
-  lib,
-  rustPlatform,
-  fetchFromGitHub,
-  pkg-config,
-  openssl,
-  stdenv,
-  darwin,
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, pkg-config
+, openssl
+, stdenv
+, pkgs
 }:
 
 rustPlatform.buildRustPackage {
@@ -21,7 +20,6 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-JJMsJxadEHgo7Xk57zsjchEYZPUL31eJ3BmDA/f4rxI=";
 
-  # Ensure openssl-sys uses Nix's OpenSSL and build the right workspace member
   OPENSSL_NO_VENDOR = 1;
   cargoBuildFlags = [
     "-p"
@@ -36,8 +34,8 @@ rustPlatform.buildRustPackage {
     openssl
   ]
   ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+    pkgs.darwin.apple_sdk.frameworks.Security
+    pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
   doCheck = false;
