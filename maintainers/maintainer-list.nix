@@ -25987,6 +25987,12 @@
     githubId = 1761259;
     name = "Eric Roberts";
   };
+  thshafi170 = {
+    email = "thshafi170@gmail.com";
+    github = "thshafi170";
+    githubId = 41439127;
+    name = "Tawsif Hossain Shafi";
+  };
   thtrf = {
     email = "thtrf@proton.me";
     github = "thtrf";
