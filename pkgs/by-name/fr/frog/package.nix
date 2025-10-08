@@ -62,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
-    tests.simple = callPackage ./test.nix { };
+    tests.simple = callPackage ./test.nix { frog = finalAttrs.finalPackage; };
   };
 
   meta = with lib; {
