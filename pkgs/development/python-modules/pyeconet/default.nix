@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   paho-mqtt,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "pyeconet";
   version = "0.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "w1ll1am23";
