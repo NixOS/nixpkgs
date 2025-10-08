@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pythonOlder,
   uv-build,
   pytestCheckHook,
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-u//L2vxucFlWmk1+pdp+iCrpzzMZUonDAn1LELgX86E=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/Ch00k/ffmpy/commit/11a053d11939b488ce7ac362589372904218a798.patch?full_index=1";
+      hash = "sha256-78D64uSX03zp2VM7h3hg493Vtow8fh+tQWXkzVgokDA=";
+    })
+  ];
 
   postPatch =
     # Default to store ffmpeg.
