@@ -19,10 +19,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  doCheck = false;
   dontFixup = true;
 
   installPhase = ''
