@@ -30,7 +30,6 @@ let
     })
 
     ./gyp-patches-pre-v22-import-sys.patch
-    ./gyp-patches-set-fallback-value-for-CLT.patch
   ];
 in
 buildNodejs {

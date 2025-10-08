@@ -33,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "kfactory";
-  version = "1.14.3";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
     tag = "v${version}";
-    hash = "sha256-dwJqKl6o2w8fxcNMQAvt5dI1k89yoy/PiIH9eo3JQbA=";
+    hash = "sha256-el3bGv57mAfxYG9tdLX5N6R76F+9GY9jdZaIUjMqcVU=";
   };
 
   build-system = [

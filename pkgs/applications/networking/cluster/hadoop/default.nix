@@ -6,6 +6,7 @@
   autoPatchelfHook,
   jdk8_headless,
   jdk11_headless,
+  jdk21_headless,
   bash,
   coreutils,
   which,
@@ -39,11 +40,15 @@ let
       tests,
     }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname jdk;
+      inherit pname;
+      jdk = platformAttrs.${stdenv.system}.jdk or jdk;
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
         url =
           "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
+          +
+            lib.optionalString (lib.hasAttr "variant" platformAttrs.${stdenv.system})
+              "-${platformAttrs.${stdenv.system}.variant}"
           + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64"
           + ".tar.gz";
         inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"))
@@ -170,23 +175,25 @@ in
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
-        version = "3.4.1";
-        hash = "sha256-mtVIeDOZbf5VFOdW9DkQKckFKf0i6NAC/T3QwUwEukY=";
-        srcHash = "sha256-lE9uSohy6GWXprFEYbEin2ITqTms2h6EWXe4nEd3U4Y=";
+        version = "3.4.2";
+        hash = "sha256-YySoP+EeUXiQQ2/G2AvIKVBu0lLL4kZXUrkSIJAN+4M=";
+        srcHash = "sha256-AkZjpHk57S3pYiZambxgRHR7PD51HSI4H1HHW9ICah4=";
+        variant = "lean";
       };
       x86_64-darwin = x86_64-linux;
-      aarch64-linux = x86_64-linux // {
+      aarch64-linux = {
         version = "3.4.0";
         hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
         srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
+        jdk = jdk11_headless;
       };
       aarch64-darwin = aarch64-linux;
     };
-    jdk = jdk11_headless;
+    jdk = jdk21_headless;
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop;
   };
-  hadoop_3_3 = common rec {
+  hadoop_3_3 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
@@ -204,7 +211,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop_3_3;
   };
-  hadoop2 = common rec {
+  hadoop2 = common {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
       version = "2.10.2";

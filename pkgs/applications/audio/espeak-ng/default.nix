@@ -47,6 +47,11 @@ let
 
     sourceRoot = "${src.name}/src/ucd-tools";
 
+    # fix compatibility with CMake (https://cmake.org/cmake/help/v4.0/policy/CMP0000.html)
+    postPatch = ''
+      echo 'cmake_minimum_required(VERSION 4.0)' >> CMakeLists.txt
+    '';
+
     nativeBuildInputs = [ cmake ];
 
     installPhase = ''

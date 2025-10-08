@@ -237,6 +237,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       fugi
     ];
-    inherit (electron.meta) platforms;
+    platforms = electron.meta.platforms ++ lib.platforms.darwin;
   };
 })

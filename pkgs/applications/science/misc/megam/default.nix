@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       almost every other maxent package out there.
     '';
     homepage = "http://www.umiacs.umd.edu/~hal/megam";
-    license = "non-commercial";
+    license = lib.licenses.unfree;
     maintainers = with maintainers; [ leixb ];
     platforms = platforms.unix;
   };

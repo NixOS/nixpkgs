@@ -1,13 +1,13 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  fetchgit,
+  fetchFromGitea,
+  fetchpatch,
   cmake,
   libuuid,
   expat,
   libiconv,
-  botan2,
+  botan3,
   systemd,
   pkg-config,
   python3Packages,
@@ -26,22 +26,36 @@ assert lib.assertMsg (
 ) "At least one Biboumi database provider required";
 
 let
-  louiz_catch = fetchgit {
-    url = "https://lab.louiz.org/louiz/Catch.git";
-    rev = "0a34cc201ef28bf25c88b0062f331369596cb7b7"; # v2.2.1
-    sha256 = "0ad0sjhmzx61a763d2ali4vkj8aa1sbknnldks7xlf4gy83jfrbl";
+  catch = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "poezio";
+    repo = "catch";
+    tag = "v2.2.1";
+    hash = "sha256-dGUnB/KPONqPno1aO5cOSiE5N4lUiTbMUcH0X6HUoCk=";
   };
-in
-stdenv.mkDerivation rec {
+
   pname = "biboumi";
   version = "9.0";
+in
+stdenv.mkDerivation {
+  inherit pname version;
 
-  src = fetchurl {
-    url = "https://git.louiz.org/biboumi/snapshot/biboumi-${version}.tar.xz";
-    sha256 = "1jvygri165aknmvlinx3jb8cclny6cxdykjf8dp0a3l3228rmzqy";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "poezio";
+    repo = "biboumi";
+    tag = version;
+    hash = "sha256-yjh9WFuFjaoZLfXTfZajmdRO+3KZqJYBEd0HgqcC28A=";
   };
 
-  patches = [ ./catch.patch ];
+  patches = [
+    ./catch.patch
+    (fetchpatch {
+      name = "update_botan_to_version_3.patch";
+      url = "https://codeberg.org/poezio/biboumi/commit/e4d32f939240ed726e9981e42c0dc251cd9879da.patch";
+      hash = "sha256-QUt2ZQtoouLHAeEUlJh+yfCYEmLboL/tk6O2TbHR67Q=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -53,7 +67,7 @@ stdenv.mkDerivation rec {
     expat
     libiconv
     systemd
-    botan2
+    botan3
   ]
   ++ lib.optional withIDN libidn
   ++ lib.optional withPostgreSQL libpq
@@ -65,19 +79,25 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
+  cmakeFlags = [
+    # Fix breakage with CMake 4
+    "-DCMAKE_SKIP_RPATH=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
-    cp ${louiz_catch}/single_include/catch.hpp tests/
+    cp ${catch}/single_include/catch.hpp tests/
   '';
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Modern XMPP IRC gateway";
     mainProgram = "biboumi";
-    platforms = platforms.unix;
-    homepage = "https://lab.louiz.org/louiz/biboumi";
-    license = licenses.zlib;
-    maintainers = [ maintainers.woffs ];
+    platforms = lib.platforms.unix;
+    homepage = "https://codeberg.org/poezio/biboumi";
+    license = lib.licenses.zlib;
+    maintainers = [ lib.maintainers.woffs ];
   };
 }

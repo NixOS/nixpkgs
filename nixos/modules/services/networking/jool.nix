@@ -289,7 +289,7 @@ in
     system.checks = lib.optional (cfg.nat64 != { } || cfg.siit != { }) (
       pkgs.runCommand "jool-validated"
         {
-          nativeBuildInputs = with pkgs.buildPackages; [ jool-cli ];
+          nativeBuildInputs = [ jool-cli ];
           preferLocalBuild = true;
         }
         (

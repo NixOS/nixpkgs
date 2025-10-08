@@ -905,6 +905,7 @@ let
       # Enable staging drivers.  These are somewhat experimental, but
       # they generally don't hurt.
       STAGING = yes;
+      STAGING_MEDIA = yes;
     };
 
     proc-events = {
@@ -1314,7 +1315,7 @@ let
         # required for P2P transfers between accelerators
         HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
 
-        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit (yes);
+        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit yes;
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 

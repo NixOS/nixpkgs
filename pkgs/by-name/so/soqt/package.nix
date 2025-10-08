@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/coin3d/soqt";
     license = lib.licenses.bsd3;
     description = "Glue between Coin high-level 3D visualization library and Qt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

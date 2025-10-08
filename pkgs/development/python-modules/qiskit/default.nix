@@ -71,9 +71,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [
-      drewrisinger
-      pandaman
-    ];
+    maintainers = [ ];
   };
 }

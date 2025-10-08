@@ -54,7 +54,7 @@ symlinkJoin {
     done
   '';
 
-  meta = builtins.removeAttrs nemo.meta [
+  meta = removeAttrs nemo.meta [
     "name"
     "outputsToInstall"
     "position"

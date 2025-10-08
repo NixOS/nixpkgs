@@ -9,7 +9,7 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "xcaplib";
   # latest commit is needed for python 3.13 compat.
   version = "2.0.1-unstable-2025-03-20";

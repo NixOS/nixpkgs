@@ -243,7 +243,7 @@ in
 
     services.redis.servers.pixelfed.enable = lib.mkIf cfg.redis.createLocally true;
     services.pixelfed.settings = mkMerge [
-      ({
+      {
         APP_ENV = mkDefault "production";
         APP_DEBUG = mkDefault false;
         # https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L312-L316
@@ -270,7 +270,7 @@ in
         LOG_CHANNEL = mkDefault "stderr";
         # TODO: find out the correct syntax?
         # TRUST_PROXIES = mkDefault "127.0.0.1/8, ::1/128";
-      })
+      }
       (mkIf (cfg.redis.createLocally) {
         BROADCAST_DRIVER = mkDefault "redis";
         CACHE_DRIVER = mkDefault "redis";
@@ -524,7 +524,6 @@ in
           '';
           extraConfig = ''
             add_header X-Frame-Options "SAMEORIGIN";
-            add_header X-XSS-Protection "1; mode=block";
             add_header X-Content-Type-Options "nosniff";
             index index.html index.htm index.php;
             error_page 404 /index.php;

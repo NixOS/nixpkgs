@@ -77,8 +77,8 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
       runHook preInstall
 
       name= ./install.sh \
-        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + builtins.toString schemeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--theme " + builtins.toString colorVariants)} \
+        ${lib.optionalString (schemeVariants != [ ]) ("--scheme " + toString schemeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--theme " + toString colorVariants)} \
         --dest $out/share/icons
 
       # Deduplicate files and remove broken symlinks

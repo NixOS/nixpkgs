@@ -25,14 +25,14 @@ stdenv.mkDerivation (finalAttrs: {
     && (!stdenv.hostPlatform.isMusl);
 
   # Blank llvm dir just so relative path works
-  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
+  src = runCommand "${finalAttrs.pname}-src-${version}" { inherit (monorepoSrc) passthru; } ''
     mkdir -p "$out"
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/mlir "$out"
     cp -r ${monorepoSrc}/third-party "$out/third-party"
 
     mkdir -p "$out/llvm"
-  '');
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/mlir";
 

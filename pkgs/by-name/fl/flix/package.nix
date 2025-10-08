@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "flix";
-  version = "0.62.0";
+  version = "0.64.0";
 
   src = fetchurl {
     url = "https://github.com/flix/flix/releases/download/v${version}/flix.jar";
-    sha256 = "sha256-YUFeEeDpgRQ9nciOMtyoFjEJ81D8ATQFBgb1H707FtM=";
+    sha256 = "sha256-/iBzYJY3YPPexvZTMF1A9Qz4j67qEcrRWckGuTg87XI=";
   };
 
   dontUnpack = true;

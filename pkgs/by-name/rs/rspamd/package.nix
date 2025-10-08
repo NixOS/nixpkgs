@@ -5,7 +5,7 @@
   fetchpatch2,
   cmake,
   doctest,
-  fmt_11,
+  fmt,
   perl,
   glib,
   luajit,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     doctest
-    fmt_11
+    fmt
     glib
     openssl
     pcre

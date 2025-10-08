@@ -79,7 +79,7 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/op";
+  versionCheckProgram = "${placeholder "out"}/bin/op";
   versionCheckProgramArg = "--version";
 
   passthru = {

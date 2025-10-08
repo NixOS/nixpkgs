@@ -630,15 +630,15 @@ def install_bootloader() -> None:
         if config('partitionIndex'):
             limine_deploy_args.append(str(config('partitionIndex')))
 
-        if config('forceMbr'):
-            limine_deploy_args.append('--force-mbr')
+        if config('force'):
+            limine_deploy_args.append('--force')
 
         try:
             subprocess.run(limine_deploy_args)
         except:
             raise Exception(
                 'Failed to deploy BIOS stage 1 Limine bootloader!\n' +
-                'You might want to try enabling the `boot.loader.limine.forceMbr` option.')
+                'You might want to try enabling the `boot.loader.limine.force` option.')
 
     print("removing unused boot files...")
     for path in paths:

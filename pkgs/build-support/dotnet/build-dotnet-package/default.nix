@@ -122,4 +122,4 @@ let
     '';
   };
 in
-stdenv.mkDerivation (attrs // (builtins.removeAttrs attrsOrig [ "nativeBuildInputs" ]))
+stdenv.mkDerivation (attrs // (removeAttrs attrsOrig [ "nativeBuildInputs" ]))

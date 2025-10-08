@@ -89,9 +89,9 @@ in
       };
     in
     {
-      enable = lib.mkEnableOption (''
+      enable = lib.mkEnableOption ''
         synchronise your machine's IP address with a dynamic DNS provider using inadyn
-      '');
+      '';
       user = lib.mkOption {
         default = "inadyn";
         type = lib.types.str;

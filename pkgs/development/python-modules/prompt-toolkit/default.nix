@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "prompt-toolkit";
-  version = "3.0.51";
+  version = "3.0.52";
   pyproject = true;
 
   src = fetchPypi {
     pname = "prompt_toolkit";
     inherit version;
-    hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
+    hash = "sha256-KM3hkpKcjnMh3oXeHdvnNvE3UUiwLy4X7dhABCsb6FU=";
   };
 
   postPatch = ''

@@ -121,7 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "HARECACHE=.harecache"
-    "PREFIX=${builtins.placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
     "ARCH=${arch}"
     "VERSION=${finalAttrs.version}-nixpkgs"
     "QBEFLAGS=-t${qbePlatform}"

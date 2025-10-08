@@ -2,18 +2,21 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  luabridge,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sjasmplus";
-  version = "1.18.3";
+  version = "1.21.0";
 
   src = fetchFromGitHub {
     owner = "z00m128";
     repo = "sjasmplus";
-    rev = "v${version}";
-    sha256 = "sha256-+FvNYfJ5I91RfuJTiOPhj5KW8HoOq8OgnnpFEgefSGc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iPtH/Uviw9m3tcbG44aZO+I6vR95/waXUejpwPPCpqo=";
   };
+
+  buildInputs = [ luabridge ];
 
   buildFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -22,16 +25,18 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     runHook preInstall
-    install -D sjasmplus $out/bin/sjasmplus
+
+    install -D --mode=0755 sjasmplus $out/bin/sjasmplus
+
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://z00m128.github.io/sjasmplus/";
-    description = "Z80 assembly language cross compiler. It is based on the SjASM source code by Sjoerd Mastijn";
+    description = "Z80 assembly language cross compiler based on the SjASM source code by Sjoerd Mastijn";
     mainProgram = "sjasmplus";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ electrified ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ electrified ];
   };
-}
+})

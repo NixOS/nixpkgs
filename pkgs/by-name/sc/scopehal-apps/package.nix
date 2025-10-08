@@ -98,7 +98,7 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mv -v $out/bin/ngscopeclient $out/bin/.ngscopeclient-unwrapped
     makeWrapper $out/bin/.ngscopeclient-unwrapped $out/bin/ngscopeclient \
-      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath ([ vulkan-loader ])}"
+      --prefix DYLD_LIBRARY_PATH : "${lib.makeLibraryPath [ vulkan-loader ]}"
   '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''

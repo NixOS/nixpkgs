@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       hexagonal backdrop grids for easier alignment.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

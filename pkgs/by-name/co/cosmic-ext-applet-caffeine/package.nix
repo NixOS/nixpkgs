@@ -9,7 +9,7 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "cosmic-ext-applet-caffeine";
-  version = "2025-09-29";
+  version = "0-unstable-2025-09-29";
 
   src = fetchFromGitHub {
     owner = "tropicbliss";

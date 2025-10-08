@@ -15,7 +15,7 @@ let
       case = case: out: { inherit case out; };
     in
     lib.switch coq.coq-version [
-      (case ("9.0") "1.4-9.0")
+      (case "9.0" "1.4-9.0")
     ] null;
   release = {
     "1.4-9.0".sha256 = "sha256-5QecDAMkvgfDPZ7/jDfnOgcE+Eb1LTAozP7nz6nkuxg=";

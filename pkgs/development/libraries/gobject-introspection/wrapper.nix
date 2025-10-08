@@ -16,13 +16,13 @@
 
 let
   # ensure that `.override` works
-  args = builtins.removeAttrs _args [
+  args = removeAttrs _args [
     "buildPackages"
     "targetPackages"
     "gobject-introspection-unwrapped"
   ];
   # passing this stdenv to `targetPackages...` breaks due to splicing not working in `.override``
-  argsForTarget = builtins.removeAttrs args [ "stdenv" ];
+  argsForTarget = removeAttrs args [ "stdenv" ];
 
   overriddenUnwrappedGir = gobject-introspection-unwrapped.override args;
   # if we have targetPackages.gobject-introspection then propagate that

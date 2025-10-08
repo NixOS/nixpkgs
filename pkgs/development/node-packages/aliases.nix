@@ -68,6 +68,7 @@ mapAliases {
   inherit (pkgs) carbon-now-cli; # added 2023-08-17
   inherit (pkgs) carto; # added 2023-08-17
   castnow = pkgs.castnow; # added 2023-07-30
+  inherit (pkgs) cdktf-cli; # added 2025-10-02
   inherit (pkgs) clean-css-cli; # added 2023-08-18
   inherit (pkgs) clubhouse-cli; # added 2023-08-18
   inherit (pkgs) coc-clangd; # added 2024-06-29

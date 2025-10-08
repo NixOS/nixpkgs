@@ -238,7 +238,7 @@ import ../make-test-python.nix (
       nn2.wait_for_open_port(9870)
       nn2.wait_for_open_port(8022)
       nn2.wait_for_open_port(8020)
-      nn1.succeed("systemd-cat netstat -tulpne")
+      nn1.succeed("systemd-cat ss -tulpne")
 
       # Start failover controllers
       nn1.succeed("systemctl start hdfs-zkfc")

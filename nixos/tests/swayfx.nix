@@ -2,7 +2,7 @@
 {
   name = "swayfx";
   meta = {
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   # testScriptWithTypes:49: error: Cannot call function of unknown type

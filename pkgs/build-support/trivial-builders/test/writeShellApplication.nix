@@ -13,7 +13,7 @@ let
   checkShellApplication =
     args@{ name, expected, ... }:
     let
-      writeShellApplicationArgs = builtins.removeAttrs args [ "expected" ];
+      writeShellApplicationArgs = removeAttrs args [ "expected" ];
       script = writeShellApplication writeShellApplicationArgs;
       executable = lib.getExe script;
       expected' = writeTextFile {

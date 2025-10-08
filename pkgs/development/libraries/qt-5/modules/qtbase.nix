@@ -156,7 +156,7 @@ stdenv.mkDerivation (
       ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
       ++ lib.optional developerBuild gdb
       ++ lib.optional (cups != null) cups
-      ++ lib.optional (mysqlSupport) libmysqlclient
+      ++ lib.optional mysqlSupport libmysqlclient
       ++ lib.optional (libpq != null) libpq;
 
       nativeBuildInputs = [
@@ -168,7 +168,7 @@ stdenv.mkDerivation (
         pkg-config
         which
       ]
-      ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
+      ++ lib.optionals mysqlSupport [ libmysqlclient ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     }
@@ -339,11 +339,11 @@ stdenv.mkDerivation (
         );
       }
       // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-        NIX_CFLAGS_COMPILE_FOR_BUILD = toString ([
+        NIX_CFLAGS_COMPILE_FOR_BUILD = toString [
           "-Wno-warn=free-nonheap-object"
           "-Wno-free-nonheap-object"
           "-w"
-        ]);
+        ];
       };
 
       prefixKey = "-prefix ";
@@ -493,7 +493,7 @@ stdenv.mkDerivation (
             "-I"
             "${cups.dev}/include"
           ]
-          ++ lib.optionals (mysqlSupport) [
+          ++ lib.optionals mysqlSupport [
             "-L"
             "${libmysqlclient}/lib"
             "-I"

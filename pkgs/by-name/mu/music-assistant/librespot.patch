@@ -1,0 +1,25 @@
+diff --git a/music_assistant/providers/spotify/helpers.py b/music_assistant/providers/spotify/helpers.py
+index 8b6c4e78f5f3f64c9dc6206028177c99ed0542ed..25ed6e468b393d2da74167e3c2ac4bdcd2e2699e 100644
+--- a/music_assistant/providers/spotify/helpers.py
++++ b/music_assistant/providers/spotify/helpers.py
+@@ -4,6 +4,7 @@ from __future__ import annotations
+
+ import os
+ import platform
++from shutil import which
+
+ from music_assistant.helpers.process import check_output
+
+@@ -20,12 +21,8 @@ async def get_librespot_binary() -> str:
+         except OSError:
+             return None
+
+-    base_path = os.path.join(os.path.dirname(__file__), "bin")
+-    system = platform.system().lower().replace("darwin", "macos")
+-    architecture = platform.machine().lower()
+-
+     if bridge_binary := await check_librespot(
+-        os.path.join(base_path, f"librespot-{system}-{architecture}")
++        which("librespot")
+     ):
+         return bridge_binary

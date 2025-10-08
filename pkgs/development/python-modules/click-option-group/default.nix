@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "click-option-group";
-  version = "0.5.7";
+  version = "0.5.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "click-contrib";
     repo = "click-option-group";
     tag = "v${version}";
-    hash = "sha256-MiTOAgIZZEvU6aLdUpQvLTd7dJpYXU1gJz+ea8C/95Y=";
+    hash = "sha256-VTJsyaJBKU+BqjQWisQOTZikGGkPaafmJ778UUOeyPs=";
   };
 
   build-system = [

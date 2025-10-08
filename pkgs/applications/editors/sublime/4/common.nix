@@ -46,7 +46,7 @@ let
   downloadUrl =
     arch: "https://download.sublimetext.com/sublime_text_build_${buildVersion}_${arch}.tar.xz";
   versionUrl = "https://download.sublimetext.com/latest/${if dev then "dev" else "stable"}";
-  versionFile = builtins.toString ./packages.nix;
+  versionFile = toString ./packages.nix;
 
   neededLibraries = [
     xorg.libX11
@@ -136,7 +136,7 @@ let
     };
   };
 in
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = pnameBase;
   version = buildVersion;
 
@@ -217,4 +217,4 @@ stdenv.mkDerivation (rec {
       "x86_64-linux"
     ];
   };
-})
+}

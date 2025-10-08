@@ -11,7 +11,7 @@
   zsh,
 }:
 let
-  cleanArgs = lib.flip builtins.removeAttrs [
+  cleanArgs = lib.flip removeAttrs [
     "dependencies"
     "meta"
   ];

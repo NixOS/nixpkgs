@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/hylang/hyrule";
     changelog = "https://github.com/hylang/hyrule/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

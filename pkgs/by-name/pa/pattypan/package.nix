@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     ant
-    jdk
+    jdk'
     makeWrapper
     wrapGAppsHook3
     copyDesktopItems

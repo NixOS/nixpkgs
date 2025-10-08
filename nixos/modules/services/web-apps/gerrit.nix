@@ -219,28 +219,33 @@ in
       '';
 
       serviceConfig = {
-        CacheDirectory = "gerrit";
         DynamicUser = true;
         ExecStart = "${gerrit-cli}/bin/gerrit daemon --console-log";
         LimitNOFILE = 4096;
         StandardInput = "socket";
         StandardOutput = "journal";
         StateDirectory = "gerrit";
+        StateDirectoryMode = "750";
+        CacheDirectory = "gerrit";
+        CacheDirectoryMode = "750";
         WorkingDirectory = "%S/gerrit";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
         ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_UNIX"

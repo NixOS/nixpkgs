@@ -15,7 +15,7 @@
   jq,
   gcc,
   elfutils,
-  tbb,
+  onetbb,
   protobuf,
   grpc,
   yaml-cpp,
@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     openssl
     curl
     jq
-    tbb
+    onetbb
     re2
     protobuf
     grpc

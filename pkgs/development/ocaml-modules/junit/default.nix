@@ -6,7 +6,7 @@
   tyxml,
 }:
 
-buildDunePackage (rec {
+buildDunePackage rec {
   pname = "junit";
   version = "2.3.0";
 
@@ -28,4 +28,4 @@ buildDunePackage (rec {
     maintainers = [ ];
     homepage = "https://github.com/Khady/ocaml-junit";
   };
-})
+}
