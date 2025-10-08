@@ -2749,6 +2749,10 @@ with pkgs;
 
   fcitx5-table-other = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-other.nix { };
 
+  firezone-server = callPackage ../by-name/fi/firezone-server/package.nix {
+    beamPackages = beam27Packages;
+  };
+
   flannel = callPackage ../tools/networking/flannel { };
   cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix { };
 
