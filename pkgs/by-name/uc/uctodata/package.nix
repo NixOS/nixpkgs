@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uctodata";
-  version = "0.4";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "uctodata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4P9icZSm+DYGxGobSGzSExTv+ZQaLjkJ0gvOI27byRk=";
+    hash = "sha256-mMQevs7Ju86H+6eIPh8mMVFXUwca73Z940DasUGRnOw=";
   };
 
   nativeBuildInputs = [
