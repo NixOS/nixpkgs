@@ -17,10 +17,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     dpkg
   ];
 
-  dontPatch = true;
-  dontConfigure = true;
-  dontBuild = true;
-  doCheck = false;
   dontFixup = true;
 
   installPhase = ''
