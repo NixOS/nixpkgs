@@ -57,6 +57,14 @@ stdenv.mkDerivation rec {
     libical
   ];
 
+  postPatch = ''
+    # Switch to girepository-2.0
+    # libpeas1 will be dropped in https://gitlab.gnome.org/World/Endeavour/-/merge_requests/153
+    substituteInPlace src/gui/gtd-application.c \
+      --replace-fail "#include <girepository.h>" "#include <girepository/girepository.h>" \
+      --replace-fail "g_irepository_get_option_group" "gi_repository_get_option_group"
+  '';
+
   passthru = {
     updateScript = gitUpdater { };
   };
