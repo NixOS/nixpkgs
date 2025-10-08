@@ -14,7 +14,7 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.50.4";
+  version = "0.50.5";
 
   src = fetchFromGitHub {
     owner = "anyproto";
@@ -26,8 +26,8 @@ buildNpmPackage (finalAttrs: {
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "eba098d97b271cb037beb3e3b349b15c0ffe9358";
-    hash = "sha256-lTT5n+uT+sw1GXP7wwvUb+JhjmjlCjxXiD9Mr1u4aHc=";
+    rev = "aaa83aae39a7dbf59c3c8580be4700edf7481893";
+    hash = "sha256-MOR7peovTYYQR96lOoxyETY0aOH6KcB9vXCqpXKxI/4=";
   };
 
   npmDepsHash = "sha256-RL4f9N0DX+qhxM4x5Vdku3EydRIa9IQUYB3R2wJbY4E=";
