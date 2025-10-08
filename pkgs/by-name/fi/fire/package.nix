@@ -78,14 +78,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fire";
-  version = "1.5.0b-unstable-2025-09-20";
+  version = "1.5.0b-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "jerryuhoo";
     repo = "Fire";
-    rev = "34a424a4fc50984213b6e98e3aaae3dcb8e960c4";
+    rev = "16a46b7d052d36a4b69838f7b9f0308769766222";
     fetchSubmodules = true;
-    hash = "sha256-ZTsZ/J5aeyjg4pxhjjIkgoTB5sSg2jpeKAp/uc4V+aQ=";
+    hash = "sha256-0jr96f/arEp+qUdMYY/z09pyoq6GAKpxhtwvdAvkG+Y=";
   };
 
   postPatch =
