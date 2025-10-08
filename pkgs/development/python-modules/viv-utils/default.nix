@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "viv-utils";
-  version = "0.8.0";
+  version = "0.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "williballenthin";
     repo = "viv-utils";
     tag = "v${version}";
-    hash = "sha256-tstuRdQPcx2tPC2r+ngS99Yi3oP33p+Z1rh3N6BUBgo=";
+    hash = "sha256-YyD6CFA8lhc1XU7pckKv3th422ssYZkRJ/JfQD5e65c=";
   };
 
   build-system = [ setuptools-scm ];
