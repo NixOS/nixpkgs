@@ -7,15 +7,12 @@
   commoncode,
   pytestCheckHook,
   setuptools-scm,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "debian-inspector";
   version = "31.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "debian_inspector";
