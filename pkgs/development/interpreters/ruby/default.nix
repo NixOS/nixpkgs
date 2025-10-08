@@ -59,9 +59,12 @@ let
       ver = version;
       atLeast31 = lib.versionAtLeast ver.majMin "3.1";
       atLeast32 = lib.versionAtLeast ver.majMin "3.2";
+      isCross = stdenv.buildPlatform != stdenv.hostPlatform;
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
         atLeast32
+        # tries to load the wrong shared objects
+        && !isCross
         && (
           stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
         );
