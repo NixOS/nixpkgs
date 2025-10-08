@@ -76,11 +76,6 @@ let
         debugInfo = true;
       };
 
-      elixir_1_14 = lib'.callElixir ../interpreters/elixir/1.14.nix {
-        inherit erlang;
-        debugInfo = true;
-      };
-
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
