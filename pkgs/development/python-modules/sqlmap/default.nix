@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   file,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "sqlmap";
   version = "1.9.10";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
