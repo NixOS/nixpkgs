@@ -11,10 +11,10 @@
 
 let
   pname = "hol4";
-  vnum = "14";
+  vnum = "2";
 
-  version = "k.${vnum}";
-  longVersion = "kananaskis-${vnum}";
+  version = "t.${vnum}";
+  longVersion = "trindemossen-${vnum}";
   holsubdir = "hol-${longVersion}";
   kernelFlag = if experimentalKernel then "--expk" else "--stdknl";
 
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "mirror://sourceforge/hol/hol/${longVersion}/${holsubdir}.tar.gz";
-    sha256 = "6Mc/qsEjzxGqzt6yP6x/1Tmqpwc1UDGlwV1Gl+4pMsY=";
+    url = "https://github.com/HOL-Theorem-Prover/HOL/releases/download/trindemossen-2/hol-trindemossen-2.tar.gz";
+    sha256 = "sha256-Ciy6IaB7LqwKlZOnEw1H1IcVoSL/bfbQxoWPcZD3H3w=";
   };
 
   buildInputs = [
@@ -57,8 +57,10 @@ stdenv.mkDerivation {
     cd ${holsubdir}
 
     substituteInPlace tools/Holmake/Holmake_types.sml \
-      --replace "\"/bin/" "\"" \
+      --replace "\"/bin/unquote" "\"unquote"
 
+    substituteInPlace tools/editor-modes/emacs/hol-mode.src \
+      --replace "/tools/yasnippets" "/tools/editor-modes/emacs/yasnippets"
 
     for f in tools/buildutils.sml help/src-sml/DOT;
     do
