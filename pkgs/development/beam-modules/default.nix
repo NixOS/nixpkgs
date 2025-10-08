@@ -87,7 +87,7 @@ let
 
       lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 buildHex; };
 
-      livebook = callPackage ./livebook { };
+      livebook = callPackage ./livebook { inherit beamPackages; };
 
       # Non hex packages. Examples how to build Rebar/Mix packages with and
       # without helper functions buildRebar3 and buildMix.
