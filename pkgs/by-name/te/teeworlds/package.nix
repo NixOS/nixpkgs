@@ -43,6 +43,12 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    # Fix for CMake v4
+    # ref. https://github.com/teeworlds/teeworlds/pull/2821 merged upstream
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 2.8.12...3.19.1)"
+
     # set compiled-in DATA_DIR so resources can be found
     substituteInPlace src/engine/shared/storage.cpp \
       --replace '#define DATA_DIR "data"' \
