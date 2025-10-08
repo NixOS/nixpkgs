@@ -28,6 +28,10 @@ buildPythonPackage rec {
     hash = "sha256-JKCTn2YkdyGLvchMT9C61PxjYxuQFzt3SjCE9JvgtVc=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml --replace-fail 'version = "0.0.0"' 'version = "${version}"'
+  '';
+
   build-system = [
     poetry-core
     poetry-dynamic-versioning
