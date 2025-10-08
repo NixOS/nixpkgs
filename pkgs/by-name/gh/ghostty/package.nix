@@ -159,6 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) allTerminfo;
       nixos = nixosTests.terminal-emulators.ghostty;
     };
+    updateScript = ./update.nu;
   };
 
   meta = {
