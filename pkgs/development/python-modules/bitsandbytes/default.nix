@@ -12,11 +12,12 @@
 
   # dependencies
   scipy,
+  trove-classifiers,
 }:
 
 let
   pname = "bitsandbytes";
-  version = "0.47.0";
+  version = "0.48.1";
 
   inherit (torch) cudaPackages cudaSupport;
   inherit (cudaPackages) cudaMajorMinorVersion;
@@ -62,7 +63,7 @@ buildPythonPackage {
     owner = "bitsandbytes-foundation";
     repo = "bitsandbytes";
     tag = version;
-    hash = "sha256-iUAeiNbPa3Q5jJ4lK2G0WvTKuipb0zO1mNe+wcRdnqs=";
+    hash = "sha256-OkhWv5Mb/cnWJteCXvDEkWQvK+QK26YQex39yWIezrQ=";
   };
 
   # By default, which library is loaded depends on the result of `torch.cuda.is_available()`.
@@ -112,6 +113,7 @@ buildPythonPackage {
   dependencies = [
     scipy
     torch
+    trove-classifiers
   ];
 
   doCheck = false; # tests require CUDA and also GPU access
