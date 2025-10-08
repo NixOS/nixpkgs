@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_AVX512=ON"
+    # Fix the build with CMake 4
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-DFAT_RUNTIME=ON"
   ++ lib.optional withStatic "-DBUILD_STATIC_AND_SHARED=ON"
