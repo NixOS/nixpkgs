@@ -51,7 +51,6 @@ in
       elixir_1_15
       elixir-ls
       lfe
-      lfe_2_1
       ;
   };
 

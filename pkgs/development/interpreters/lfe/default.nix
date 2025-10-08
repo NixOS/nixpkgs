@@ -1,43 +1,29 @@
 {
-  config,
-  lib,
-  fetchFromGitHub,
-  erlang,
-  makeWrapper,
-  coreutils,
   bash,
-  buildRebar3,
   buildHex,
-}:
-
-{
-  baseName ? "lfe",
-  version,
-  maximumOTPVersion,
-  sha256 ? "",
-  hash ? "",
-  rev ? version,
-  src ? fetchFromGitHub {
-    inherit hash rev sha256;
-    owner = "lfe";
-    repo = "lfe";
-  },
-  patches ? [ ],
+  buildRebar3,
+  config,
+  coreutils,
+  erlang,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
 }:
 
 let
   inherit (lib)
     assertMsg
     makeBinPath
-    optionalString
     getVersion
     versionAtLeast
-    versionOlder
     versions
     ;
 
-  mainVersion = versions.major (getVersion erlang);
+  version = "2.2.0";
+  hash = "sha256-47lEUVU9Api1Yj1q+Ch8aIV8kaALhst1ty8RHTwMVcI=";
 
+  maximumOTPVersion = "27";
+  mainVersion = versions.major (getVersion erlang);
   maxAssert = versionAtLeast maximumOTPVersion mainVersion;
 
   proper = buildHex {
@@ -56,22 +42,27 @@ else
     LFE ${version} is supported on OTP <=${maximumOTPVersion}, not ${mainVersion}.
   '';
   buildRebar3 {
-    name = baseName;
+    name = "lfe";
+    inherit version;
 
-    inherit src version;
+    src = fetchFromGitHub {
+      owner = "lfe";
+      repo = "lfe";
+      tag = "v${version}";
+      inherit hash;
+    };
+
+    patches = [
+      ./fix-rebar-config.patch
+      ./dedup-ebins.patch
+    ];
 
     nativeBuildInputs = [
       makeWrapper
       erlang
     ];
+
     beamDeps = [ proper ];
-    patches = [
-      ./fix-rebar-config.patch
-      ./dedup-ebins.patch
-    ]
-    ++ patches;
-    doCheck = true;
-    checkTarget = "travis";
 
     makeFlags = [
       "-e"
@@ -79,26 +70,12 @@ else
       "PREFIX=$$out"
     ];
 
-    # These installPhase tricks are based on Elixir's Makefile.
-    # TODO: Make, upload, and apply a patch.
-    installPhase = optionalString (versionOlder version "1.3") ''
-      local libdir=$out/lib/lfe
-      local ebindir=$libdir/ebin
-      local bindir=$libdir/bin
+    # override buildRebar3's install to let the builder use make install
+    installPhase = "";
 
-      rm -Rf $ebindir
-      install -m755 -d $ebindir
-      install -m644 _build/default/lib/lfe/ebin/* $ebindir
+    doCheck = true;
+    checkTarget = "travis";
 
-      install -m755 -d $bindir
-
-      for bin in bin/lfe{,c,doc,script}; do install -m755 $bin $bindir; done
-
-      install -m755 -d $out/bin
-      for file in $bindir/*; do ln -sf $file $out/bin/; done
-    '';
-
-    # Thanks again, Elixir.
     postFixup = ''
       # LFE binaries are shell scripts which run erl and lfe.
       # Add some stuff to PATH so the scripts can run without problems.
@@ -124,7 +101,8 @@ else
       '';
 
       homepage = "https://lfe.io";
-      downloadPage = "https://github.com/rvirding/lfe/releases";
+      downloadPage = "https://github.com/lfe/lfe/releases";
+      changelog = "https://github.com/lfe/lfe/releases/tag/v${version}";
 
       license = licenses.asl20;
       teams = [ teams.beam ];
