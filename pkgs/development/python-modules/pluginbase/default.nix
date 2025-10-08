@@ -22,10 +22,11 @@ buildPythonPackage rec {
     PYTHONPATH=.. pytest
   '';
 
-  meta = with lib; {
+  meta = {
+    description = "Support library for building plugins systems in Python";
     homepage = "https://github.com/mitsuhiko/pluginbase";
-    description = "Support library for building plugins sytems in Python";
-    license = licenses.bsd3;
-    platforms = platforms.all;
+    changelog = "https://github.com/mitsuhiko/pluginbase/releases/tag/${version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ ];
   };
 }
