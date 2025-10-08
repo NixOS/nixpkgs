@@ -1,19 +1,24 @@
 {
+  channel,
   pname,
   version,
+  src,
+  passthru,
   meta,
   stdenv,
   fetchurl,
   undmg,
 }:
 
-stdenv.mkDerivation rec {
-  inherit pname version meta;
+stdenv.mkDerivation {
+  inherit
+    pname
+    version
+    src
+    passthru
+    meta
+    ;
 
-  src = fetchurl {
-    url = "https://download.zotero.org/client/release/${version}/Zotero-${version}.dmg";
-    hash = "sha256-DeiQbg8wMFHsJ/jlbGj3wdXrRsGLJ0tOyGRex2w43lU=";
-  };
   sourceRoot = ".";
 
   nativeBuildInputs = [ undmg ];
