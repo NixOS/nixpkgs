@@ -20,6 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace ll-installer/space.linglong.Installer.desktop \
       --replace-fail "Exec=/usr/bin/ll-installer" "Exec=$out/bin/ll-installer"
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.0)' \
+        'cmake_minimum_required(VERSION 3.0...4.0)'
   '';
 
   nativeBuildInputs = [
