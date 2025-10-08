@@ -140,6 +140,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  dontWrapGApps = true;
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   postFixup = ''
     for executable in \
       zotero-bin plugin-container updater vaapitest \
@@ -153,5 +158,8 @@ stdenv.mkDerivation (finalAttrs: {
     find . -executable -type f -exec \
       patchelf --set-rpath "$libPath" \
         "$out/usr/lib/zotero-bin-${finalAttrs.version}/{}" \;
+
+    wrapProgram $out/bin/zotero \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
   '';
 })
