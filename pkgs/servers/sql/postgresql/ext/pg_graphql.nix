@@ -11,7 +11,7 @@ buildPgrxExtension (finalAttrs: {
   cargo-pgrx = cargo-pgrx_0_16_0;
 
   pname = "pg_graphql";
-  version = "1.5.12-unstable-2025-09-01";
+  version = "1.5.11";
 
   src = fetchFromGitHub {
     owner = "supabase";
