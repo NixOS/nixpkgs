@@ -12,6 +12,7 @@
   bzip2,
   libtar,
   frog,
+  timblserver,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
         Reverse dependencies. Does not respect overrides.
       */
       reverseDependencies = lib.recurseIntoAttrs {
-        inherit frog;
+        inherit frog timblserver;
       };
     };
   };
