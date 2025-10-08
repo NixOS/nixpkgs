@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/HOL-Theorem-Prover/HOL/releases/download/trindemossen-2/hol-trindemossen-2.tar.gz";
-    sha256 = "sha256-Ciy6IaB7LqwKlZOnEw1H1IcVoSL/bfbQxoWPcZD3H3w=";
+    url = "https://github.com/HOL-Theorem-Prover/HOL/releases/download/${longVersion}/${holsubdir}.tar.gz";
+    hash = "sha256-Ciy6IaB7LqwKlZOnEw1H1IcVoSL/bfbQxoWPcZD3H3w=";
   };
 
   buildInputs = [
