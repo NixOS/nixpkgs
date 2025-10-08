@@ -380,6 +380,10 @@ let
               "test-runner-run"
               "test-runner-watch-mode"
               "test-watch-mode-files_watcher"
+
+              # fail on openssl 3.6.0
+              "test-http2-server-unknown-protocol"
+              "test-tls-ocsp-callback"
             ]
             ++ lib.optionals (!lib.versionAtLeast version "22") [
               "test-tls-multi-key"
