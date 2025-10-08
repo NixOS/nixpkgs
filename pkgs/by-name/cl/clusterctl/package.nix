@@ -10,7 +10,7 @@
 
 buildGoModule rec {
   pname = "clusterctl";
-  version = "1.11.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
