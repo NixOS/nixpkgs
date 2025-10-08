@@ -483,12 +483,12 @@ lib.makeOverridable (
           # headers on 3.10 though.
 
           chmod u+w -R ..
-          arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
+          buildArchDir="$dev/lib/modules/${modDirVersion}/build/arch"
 
           # Remove unused arches
           for d in $(cd arch/; ls); do
-            if [ "$d" = "$arch" ]; then continue; fi
-            if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
+            if [ -d "$buildArchDir/$d" ]; then continue; fi
+            if [ -d "$buildArchDir/arm64" ] && [ "$d" = arm ]; then continue; fi
             rm -rf arch/$d
           done
 
@@ -502,7 +502,7 @@ lib.makeOverridable (
           find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
           # Keep root and arch-specific Makefiles
-          chmod u-w Makefile arch/"$arch"/Makefile*
+          chmod u-w Makefile arch/*/Makefile*
 
           # Keep whole scripts dir
           chmod u-w -R scripts

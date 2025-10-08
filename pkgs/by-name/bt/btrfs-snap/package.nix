@@ -15,7 +15,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "jf647";
     repo = "btrfs-snap";
-    rev = version;
+    tag = version;
     sha256 = "sha256-SDzLjgNRuR9XpmcYCD9T10MLS+//+pWFGDiTAb8NiLQ=";
   };
   buildInputs = [ bash ];

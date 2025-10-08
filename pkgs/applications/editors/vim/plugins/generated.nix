@@ -3781,6 +3781,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  cybu-nvim = buildVimPlugin {
+    pname = "cybu.nvim";
+    version = "2025-07-24";
+    src = fetchFromGitHub {
+      owner = "ghillb";
+      repo = "cybu.nvim";
+      rev = "c8a8c71cd0e38d4165b02819dfdc32dedc35a6b6";
+      sha256 = "0bxgil5vb6lpq420xw404qbxd92by6qjxilba36h9dd87js97by1";
+    };
+    meta.homepage = "https://github.com/ghillb/cybu.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   dailies-nvim = buildVimPlugin {
     pname = "dailies.nvim";
     version = "2025-04-21";

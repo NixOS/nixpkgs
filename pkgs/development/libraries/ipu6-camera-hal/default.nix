@@ -54,6 +54,7 @@ stdenv.mkDerivation {
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
     "-DCMAKE_INSTALL_SUB_PATH=${ipuTarget}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   NIX_CFLAGS_COMPILE = [

@@ -105,6 +105,9 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-ssl=${openssl.dev}"
     "--with-gc=${boehmgc.dev}"
+    # The code won't compile in c23 mode.
+    # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+    "CFLAGS=-std=gnu17"
   ]
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"

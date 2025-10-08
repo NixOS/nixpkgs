@@ -45,6 +45,17 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  agda = {
+    members = [
+      alexarice
+      ncfavier
+      phijor
+      turion
+    ];
+    scope = "Maintain Agda-related packages and modules.";
+    shortName = "Agda";
+  };
+
   android = {
     members = [
       adrian-gierakowski
@@ -1125,7 +1136,7 @@ with lib.maintainers;
       LunNova
       mschwaig
     ];
-    githubTeams = [ "rocm-maintainers" ];
+    githubTeams = [ "rocm" ];
     scope = "Maintain ROCm and related packages.";
     shortName = "ROCm";
   };

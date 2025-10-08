@@ -37,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "musl";
 
+  __structuredAttrs = true;
+
   nativeBuildInputs = [
     autoreconfHook
   ];

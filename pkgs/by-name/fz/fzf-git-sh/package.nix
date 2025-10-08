@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fzf-git-sh";
-  version = "0-unstable-2025-09-17";
+  version = "0-unstable-2025-10-05";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf-git.sh";
-    rev = "93bc471fcf37358ef4094ffed41dc8002d767a5d";
-    hash = "sha256-PAOHLUqwGn9/ERmu2izYT0+/5U0nDbTR/i8K3ZPM/Fo=";
+    rev = "90d80420f679af6d120d34b6c9ceb2225dbd9649";
+    hash = "sha256-/9NhKkPdOtV3LbxPZ3FQEqpzqWZqlkh7La3ND+zZXyg=";
   };
 
   dontBuild = true;

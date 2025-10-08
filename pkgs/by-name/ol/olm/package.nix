@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     substituteInPlace olm.pc.in \
       --replace '$'{exec_prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
       --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.4)' \
+        'cmake_minimum_required(VERSION 3.10)'
   ''
   # Clang 19 has become more strict about assigning to const variables
   # Patch from https://bugs.freebsd.org/bugzilla/show_bug.cgi?id=281497

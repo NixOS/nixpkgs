@@ -74,6 +74,8 @@
   withCairo ? withX,
   withCsrc ? true,
   withDbus ? stdenv.hostPlatform.isLinux,
+  # https://github.com/emacs-mirror/emacs/blob/emacs-30.2/etc/NEWS#L52-L56
+  withGcMarkTrace ? false,
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
@@ -408,6 +410,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.withFeature withNS "ns")
   ]
   ++ [
+    (lib.enableFeature withGcMarkTrace "gc-mark-trace")
     (lib.withFeature withCompressInstall "compress-install")
     (lib.withFeature withToolkitScrollBars "toolkit-scroll-bars")
     (lib.withFeature withNativeCompilation "native-compilation")

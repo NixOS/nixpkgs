@@ -831,6 +831,7 @@ in
   lighttpd = runTest ./lighttpd.nix;
   limesurvey = runTest ./limesurvey.nix;
   limine = import ./limine { inherit runTest; };
+  linkwarden = runTest ./web-apps/linkwarden.nix;
   listmonk = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./listmonk.nix { };
   litellm = runTest ./litellm.nix;
   litestream = runTest ./litestream.nix;
@@ -1519,6 +1520,7 @@ in
   tomcat = runTest ./tomcat.nix;
   tor = runTest ./tor.nix;
   tpm-ek = handleTest ./tpm-ek { };
+  tpm2 = runTest ./tpm2.nix;
   # tracee requires bpf
   tracee = handleTestOn [ "x86_64-linux" ] ./tracee.nix { };
   traefik = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./traefik.nix;
@@ -1530,7 +1532,6 @@ in
   trickster = runTest ./trickster.nix;
   trilium-server = runTestOn [ "x86_64-linux" ] ./trilium-server.nix;
   tsm-client-gui = runTest ./tsm-client-gui.nix;
-  tt-rss = runTest ./web-apps/tt-rss.nix;
   ttyd = runTest ./web-servers/ttyd.nix;
   tuned = runTest ./tuned.nix;
   tuptime = runTest ./tuptime.nix;

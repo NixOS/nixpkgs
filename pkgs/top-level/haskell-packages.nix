@@ -94,12 +94,6 @@ in
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc94 = compiler.ghc948;
-      ghc963 = callPackage ../development/compilers/ghc/9.6.3.nix {
-        bootPkgs = bb.packages.ghc924Binary;
-        inherit (buildPackages.python3Packages) sphinx;
-        inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        inherit buildTargetLlvmPackages llvmPackages;
-      };
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
         bootPkgs = bb.packages.ghc924Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -126,7 +120,7 @@ in
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
             # With both 9.6.3 and 9.6.4 binary it is impossible to link against
             # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
+            bb.packages.ghc967
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -141,7 +135,7 @@ in
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
             # With both 9.6.3 and 9.6.4 binary it is impossible to link against
             # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
+            bb.packages.ghc967
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
@@ -156,14 +150,12 @@ in
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
             # With both 9.6.3 and 9.6.4 binary it is impossible to link against
             # the clock package (probably a hsc2hs problem).
-            bb.packages.ghc963
+            bb.packages.ghc967
           else
             bb.packages.ghc963Binary;
         inherit (buildPackages.python3Packages) sphinx;
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
-        # 2023-01-15: Support range >= 11 && < 16
-        buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
-        llvmPackages = pkgs.llvmPackages_15;
+        inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc910 = compiler.ghc9103;
       ghc9121 = callPackage ../development/compilers/ghc/9.12.1.nix {
@@ -253,11 +245,6 @@ in
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.4.x.nix { };
       };
       ghc94 = packages.ghc948;
-      ghc963 = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc963;
-        ghc = bh.compiler.ghc963;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.6.x.nix { };
-      };
       ghc967 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc967;
         ghc = bh.compiler.ghc967;

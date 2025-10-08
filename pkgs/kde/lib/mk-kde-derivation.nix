@@ -153,7 +153,6 @@ let
     propagatedBuildInputs = deps ++ extraPropagatedBuildInputs;
     strictDeps = true;
 
-    dontFixCmake = true;
     cmakeFlags = [ "-DQT_MAJOR_VERSION=6" ] ++ extraCmakeFlags;
 
     separateDebugInfo = true;

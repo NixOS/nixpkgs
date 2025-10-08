@@ -95,7 +95,10 @@ in
 
     environment.systemPackages = [ pkgs.audit ];
 
-    systemd.services.audit-rules = {
+    # upstream contains a audit-rules.service, which uses augenrules.
+    # That script does not handle cleanup correctly and insists on loading from /etc/audit.
+    # So, instead we have our own service for loading rules.
+    systemd.services.audit-rules-nixos = {
       description = "Load Audit Rules";
       wantedBy = [ "sysinit.target" ];
       before = [

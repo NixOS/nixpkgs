@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-KOAhIVn4G5u0A1TE75Xv7iYO3/i8foqWYecH0kJHdBM=";
   };
 
+  # Updating to 4.4.1 would bring some errors, and the patch doesn't apply cleanly
+  # https://github.com/warmcat/libwebsockets/commit/47efb8c1c2371fa309f85a32984e99b2cc1d614a
+  postPatch = ''
+    for f in $(find . -name CMakeLists.txt); do
+      sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i "$f"
+    done
+  '';
+
   outputs = [
     "out"
     "dev"
