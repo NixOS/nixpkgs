@@ -876,7 +876,6 @@
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/jellyfin.nix
-  ./services/misc/jellyseerr.nix
   ./services/misc/klipper.nix
   ./services/misc/languagetool.nix
   ./services/misc/leaps.nix
@@ -941,6 +940,7 @@
   ./services/misc/rumno.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sdrplay.nix
+  ./services/misc/seerr.nix
   ./services/misc/servarr/lidarr.nix
   ./services/misc/servarr/prowlarr.nix
   ./services/misc/servarr/radarr.nix
