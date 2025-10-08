@@ -19,8 +19,8 @@ let
     versions
     ;
 
-  version = "2.1.4";
-  hash = "sha256-mDavRI2it0SrSR0iBItm2MfjI+F/zCy38YSd2KpE0Hs=";
+  version = "2.2.0";
+  hash = "sha256-47lEUVU9Api1Yj1q+Ch8aIV8kaALhst1ty8RHTwMVcI=";
 
   maximumOTPVersion = "27";
   mainVersion = versions.major (getVersion erlang);
