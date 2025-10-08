@@ -3117,6 +3117,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  colibri-vim = buildVimPlugin {
+    pname = "colibri.vim";
+    version = "2019-06-15";
+    src = fetchFromGitHub {
+      owner = "archseer";
+      repo = "colibri.vim";
+      rev = "ad82132e0cbbdfa194d722f15c2df8f0d04b5b71";
+      sha256 = "1aknwa8gacinvfq9vnpqx3xjwjl8qddih8cvf878nf2xhp59gff0";
+    };
+    meta.homepage = "https://github.com/archseer/colibri.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   colorbuddy-nvim = buildVimPlugin {
     pname = "colorbuddy.nvim";
     version = "2024-05-08";
