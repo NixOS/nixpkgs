@@ -489,6 +489,7 @@ mapAliases {
   autoconf213 = throw "'autoconf213' has been removed in favor of 'autoconf'"; # Added 2025-07-21
   autoconf264 = throw "'autoconf264' has been removed in favor of 'autoconf'"; # Added 2025-07-21
   automake111x = throw "'automake111x' has been removed in favor of 'automake'"; # Added 2025-07-21
+  autopanosiftc = throw "'autopanosiftc' has been removed, as it is unmaintained upstream"; # Added 2025-10-07
   autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
   autoreconfHook264 = throw "'autoreconfHook264' has been removed in favor of 'autoreconfHook'"; # Added 2025-07-21
   aumix = throw "'aumix' has been removed due to lack of maintenance upstream. Consider using 'pamixer' for CLI or 'pavucontrol' for GUI"; # Added 2024-09-14
@@ -555,6 +556,7 @@ mapAliases {
   brasero-original = lib.warnOnInstantiate "Use 'brasero-unwrapped' instead of 'brasero-original'" brasero-unwrapped; # Added 2024-09-29
   breath-theme = throw "'breath-theme' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   bridgand = throw "'brigand' has been removed due to being unmaintained"; # Added 2025-04-30
+  brogue = lib.warnOnInstantiate "Use 'brogue-ce' instead of 'brogue' for updated releases" brogue-ce; # Added 2025-10-04
   bs-platform = throw "'bs-platform' was removed as it was broken, development ended and 'melange' has superseded it"; # Added 2024-07-29
   buf-language-server = throw "'buf-language-server' was removed as its development has moved to the 'buf' package"; # Added 2024-11-15
 
@@ -1388,6 +1390,7 @@ mapAliases {
   libsoup = lib.warnOnInstantiate "'libsoup' has been renamed to 'libsoup_2_4'" libsoup_2_4; # Added 2024-12-02
   libstdcxx5 = throw "libstdcxx5 is severly outdated and has been removed"; # Added 2024-11-24
   libtap = throw "libtap has been removed, as it was unused and deprecated by its author in favour of cmocka"; # Added 2025-09-16
+  libtcod = throw "'libtcod' has been removed due to being unused and having an incompatible build-system"; # Added 2025-10-04
   libtensorflow-bin = libtensorflow; # Added 2022-09-25
   libtorrent = throw "'libtorrent' has been renamed to 'libtorrent-rakshasa' for clearer distinction from 'libtorrent-rasterbar'"; # Added 2025-09-10
   libtorrentRasterbar = throw "'libtorrentRasterbar' has been renamed to/replaced by 'libtorrent-rasterbar'"; # Converted to throw 2024-10-17

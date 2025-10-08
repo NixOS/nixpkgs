@@ -2658,8 +2658,8 @@ with pkgs;
 
   kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
-  rocmPackages = rocmPackages_6;
-  rocmPackages_6 = recurseIntoAttrs (callPackage ../development/rocm-modules/6 { });
+  rocmPackages = recurseIntoAttrs rocmPackages_6;
+  rocmPackages_6 = callPackage ../development/rocm-modules/6 { };
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
@@ -7130,12 +7130,6 @@ with pkgs;
   };
 
   inherit (cosmopolitan) cosmocc;
-
-  ctranslate2 = callPackage ../development/libraries/ctranslate2 rec {
-    withCUDA = pkgs.config.cudaSupport;
-    withCuDNN = withCUDA && (cudaPackages ? cudnn);
-    cudaPackages = pkgs.cudaPackages;
-  };
 
   ustream-ssl = callPackage ../development/libraries/ustream-ssl { ssl_implementation = openssl; };
 
