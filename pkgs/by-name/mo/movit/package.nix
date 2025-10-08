@@ -45,10 +45,7 @@ stdenv.mkDerivation rec {
     libepoxy
   ];
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-std=c++17"; # needed for latest gtest
-  }
-  // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     NIX_LDFLAGS = "-framework OpenGL";
   };
 
