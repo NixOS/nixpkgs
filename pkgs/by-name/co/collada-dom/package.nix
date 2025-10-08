@@ -36,6 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
+  cmakeFlags = [
+    # See https://github.com/NixOS/nixpkgs/issues/445447
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ];
+
   meta = {
     description = "API that provides a C++ object representation of a COLLADA XML instance document";
     longDescription = "This is a fork of [rdiankov/collada-dom](https://github.com/rdiankov/collada-dom) which has been unmaintained for six years.";
