@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "LiveSplit";
-    repo = pname;
+    repo = "obs-livesplit-one";
     rev = "v${version}";
     sha256 = "sha256-4Ar4ChSl226BVFyAnqpWDLxsZF63bxl++sWD+6aENW8=";
   };
@@ -43,6 +43,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ maintainers.Bauke ];
-    platforms = obs-studio.meta.platforms;
+    inherit (obs-studio.meta) platforms;
   };
 }

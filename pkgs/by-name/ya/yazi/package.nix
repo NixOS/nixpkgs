@@ -58,36 +58,36 @@ let
       null
     else
       runCommand "YAZI_CONFIG_HOME" { } ''
-        mkdir -p $out
+        mkdir -p "$out"
         ${lib.concatMapStringsSep "\n" (
           name:
           lib.optionalString (settings ? ${name} && settings.${name} != { }) ''
-            ln -s ${settingsFormat.generate "${name}.toml" settings.${name}} $out/${name}.toml
+            ln -s ${settingsFormat.generate "${name}.toml" settings.${name}} "$out/${name}.toml"
           ''
         ) files}
 
-        mkdir $out/plugins
+        mkdir "$out/plugins"
         ${lib.optionalString (plugins != { }) ''
           ${lib.concatStringsSep "\n" (
             lib.mapAttrsToList (
               name: value:
-              "ln -s ${value} $out/plugins/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"
+              ''ln -s ${value} "$out/plugins/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"''
             ) plugins
           )}
         ''}
 
-        mkdir $out/flavors
+        mkdir "$out/flavors"
         ${lib.optionalString (flavors != { }) ''
           ${lib.concatStringsSep "\n" (
             lib.mapAttrsToList (
               name: value:
-              "ln -s ${value} $out/flavors/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"
+              ''ln -s ${value} "$out/flavors/${if lib.hasSuffix ".yazi" name then name else "${name}.yazi"}"''
             ) flavors
           )}
         ''}
 
 
-        ${lib.optionalString (initLua != null) "ln -s ${initLua} $out/init.lua"}
+        ${lib.optionalString (initLua != null) ''ln -s "${initLua}" "$out/init.lua"''}
       '';
 in
 runCommand yazi-unwrapped.name
@@ -97,10 +97,10 @@ runCommand yazi-unwrapped.name
     nativeBuildInputs = [ makeWrapper ];
   }
   ''
-    mkdir -p $out/bin
-    ln -s ${yazi-unwrapped}/share $out/share
-    ln -s ${yazi-unwrapped}/bin/ya $out/bin/ya
-    makeWrapper ${yazi-unwrapped}/bin/yazi $out/bin/yazi \
+    mkdir -p "$out/bin"
+    ln -s "${yazi-unwrapped}/share" "$out/share"
+    ln -s ${lib.getExe' yazi-unwrapped "ya"} "$out/bin/ya"
+    makeWrapper ${lib.getExe' yazi-unwrapped "yazi"} "$out/bin/yazi" \
       --prefix PATH : ${lib.makeBinPath runtimePaths} \
       ${lib.optionalString (configHome != null) "--set YAZI_CONFIG_HOME ${configHome}"}
   ''

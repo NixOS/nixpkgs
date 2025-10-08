@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     homepage = "http://www.brother.com/";
     description = "Brother HLL2375DW printer driver";
     license = licenses.unfree;
-    platforms = builtins.map (arch: "${arch}-linux") arches;
+    platforms = map (arch: "${arch}-linux") arches;
     maintainers = [ maintainers.gador ];
   };
 }

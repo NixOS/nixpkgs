@@ -10,7 +10,7 @@
   zlib,
   setuptools,
   cudaSupport ? config.cudaSupport or false,
-  cudaPackages_11 ? { },
+  cudaPackages,
   addDriverRunpath,
   # runtime dependencies
   httpx,
@@ -88,7 +88,7 @@ buildPythonPackage {
           (lib.getLib stdenv.cc.cc)
         ]
         ++ lib.optionals cudaSupport (
-          with cudaPackages_11;
+          with cudaPackages;
           [
             cudatoolkit.lib
             cudatoolkit.out

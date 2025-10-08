@@ -19,20 +19,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.8.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-+Ce9jjOZH0kFj4EfRgAabUDA9iRmHq7umVD9pOqGBbw=";
+    hash = "sha256-5yYcclJBb5kKaDr9irkLQBa6Tg8yO1LWh89ntBiMQho=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-+ecdxq5YwZdWRATl1Jc3BaDfyVW5n4T4flCLqzFoVIQ=";
+  npmDepsHash = "sha256-mLl8igkdujzI4Fz4SoUrCdnI2KUo6DsNtPdAhwjYpac=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs = [
@@ -100,6 +100,7 @@ buildNpmPackage rec {
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
     npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
@@ -188,6 +189,7 @@ buildNpmPackage rec {
       mattpolzin
       redyf
       water-sucks
+      starsep
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

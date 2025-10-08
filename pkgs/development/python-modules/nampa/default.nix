@@ -4,9 +4,10 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools,
+  unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nampa";
   version = "1.0-unstable-2024-12-18";
   pyproject = true;
@@ -26,6 +27,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "nampa" ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Python implementation of the FLIRT technology";

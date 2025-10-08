@@ -254,6 +254,33 @@ in
         StateDirectory = lib.mkIf (lib.hasPrefix "/var/lib/jenkins" cfg.home) "jenkins";
         # For (possible) socket use
         RuntimeDirectory = "jenkins";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        # MemoryDenyWriteExecute = false;   Breaks execution;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        ProtectClock = true;
+        ProtectControlGroups = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
   };

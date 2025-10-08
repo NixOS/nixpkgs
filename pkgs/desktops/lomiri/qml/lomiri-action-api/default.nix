@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-action-api";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-action-api";
     tag = finalAttrs.version;
-    hash = "sha256-v/nU+e/8ny5ViUygnPnbn7Cc9i2B+olH5zJgUFCdsDA=";
+    hash = "sha256-pwHvbiUvkAi7/XgpNfgrqcp3znFKSXlAAacB2XsHQkg=";
   };
 
   outputs = [

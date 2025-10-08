@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_36,
+  electron_38,
   python3,
   makeWrapper,
   callPackage,
@@ -23,7 +23,7 @@
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_36;
+  electron = electron_38;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.64.0";
+  version = "7.73.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-jBSL9g7+lgyG4luKP84MaWfS+dniBzp3lRimgKtWrI8=";
+    hash = "sha256-5cwGV0WPOS7O/xnQZ38t/hiQppqFFtVQmGuniGsD6H8=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -112,6 +112,18 @@ stdenv.mkDerivation (finalAttrs: {
     }
   );
 
+  postPatch = ''
+    # The spell checker dictionary URL interpolates the electron version,
+    # however, the official website only provides dictionaries for electron
+    # versions which they vendor into the binary releases. Since we unpin
+    # electron to use the one from nixpkgs the URL may point to nonexistent
+    # resource if the nixpkgs version is different. To fix this we hardcode
+    # the electron version to the declared one here instead of interpolating
+    # it at runtime.
+    substituteInPlace app/updateDefaultSession.ts \
+      --replace-fail "\''${process.versions.electron}" "`jq -r '.devDependencies.electron' < package.json`"
+  '';
+
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs)
       pname
@@ -122,15 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-xAmIfTv270g6FoNPCauPBT2H3XTgK6MOjIIwRk0U9PY="
+        "sha256-9YvNs925xBUYEpF429rHfMXIGPapVYd8j1jZa/yBuhA="
       else
-        "sha256-Wmqu+tkoT13PEQ6QA2KczLtgbxgCWwZ6pNuE1klWLCk=";
+        "sha256-lcr8EeL+wd6VihKcBgfXNRny8VskX8g7I7WTAkLuBss=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1753917014;
+    SOURCE_DATE_EPOCH = 1759413120;
   };
 
   preBuild = ''
@@ -187,7 +199,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     pnpm run generate
     pnpm exec electron-builder \
-      --dir \
+      --linux "dir:${stdenv.hostPlatform.node.arch}" \
       --config.extraMetadata.environment=$SIGNAL_ENV \
       -c.electronDist=electron-dist \
       -c.electronVersion=${electron.version}
@@ -206,10 +218,12 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 $icon $out/share/icons/hicolor/`basename ''${icon%.png}`/apps/signal-desktop.png
     done
 
+    # TODO: Remove --ozone-platform=wayland after next electron update,
+    # see https://github.com/electron/electron/pull/48309
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

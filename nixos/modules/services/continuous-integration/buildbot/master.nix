@@ -86,7 +86,7 @@ in
 
       configurators = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        description = "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
+        description = "Configurator Steps, see <https://docs.buildbot.net/latest/manual/configuration/configurators.html>";
         default = [ ];
         example = [
           "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
@@ -182,7 +182,7 @@ in
 
       pbPort = lib.mkOption {
         default = 9989;
-        type = lib.types.either lib.types.str lib.types.int;
+        type = lib.types.either lib.types.str lib.types.port;
         example = "'tcp:9990:interface=127.0.0.1'";
         description = ''
           The buildmaster will listen on a TCP port of your choosing
@@ -245,7 +245,7 @@ in
 
       pythonPackages = lib.mkOption {
         type = lib.types.functionTo (lib.types.listOf lib.types.package);
-        default = pythonPackages: with pythonPackages; [ ];
+        default = pythonPackages: [ ];
         defaultText = lib.literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
         example = lib.literalExpression "pythonPackages: with pythonPackages; [ requests ]";

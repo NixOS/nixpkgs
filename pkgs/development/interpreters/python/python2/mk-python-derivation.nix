@@ -171,12 +171,12 @@ let
       checkDrv = drv: if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch drv else drv;
 
     in
-    inputs: builtins.map (checkDrv) inputs;
+    inputs: map checkDrv inputs;
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (
     stdenv.mkDerivation (
-      (builtins.removeAttrs attrs [
+      (removeAttrs attrs [
         "disabled"
         "checkPhase"
         "checkInputs"
@@ -212,7 +212,7 @@ let
           setuptoolsBuildHook
         ]
         ++ lib.optionals (format == "pyproject") [
-          (pipBuildHook)
+          pipBuildHook
         ]
         ++ lib.optionals (format == "wheel") [
           wheelUnpackHook
@@ -223,7 +223,7 @@ let
           eggInstallHook
         ]
         ++ lib.optionals (format != "other") [
-          (pipInstallHook)
+          pipInstallHook
         ]
         ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
           # This is a test, however, it should be ran independent of the checkPhase and checkInputs

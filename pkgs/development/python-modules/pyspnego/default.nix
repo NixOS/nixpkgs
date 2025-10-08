@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyspnego";
-  version = "0.11.2";
+  version = "0.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "jborean93";
     repo = "pyspnego";
     tag = "v${version}";
-    hash = "sha256-5aGHCw0d1aFcHLPRMkya0hlHV30aTKshbcOjfPMOFko=";
+    hash = "sha256-dkss+8Z0dS4MTunBZWEH+WK1+kGikCHf7VPCR1reMS0=";
   };
 
   nativeBuildInputs = [ setuptools ];

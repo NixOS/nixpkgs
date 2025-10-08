@@ -28,7 +28,7 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shiori \
       --bash <($out/bin/shiori completion bash) \
       --fish <($out/bin/shiori completion fish) \

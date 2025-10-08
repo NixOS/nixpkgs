@@ -29,14 +29,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-google-genai";
-  version = "2.1.8";
+  version = "2.1.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-google";
     tag = "libs/genai/v${version}";
-    hash = "sha256-ObeQuxBEiJhR2AgkFeIZ1oe2GxhhQywRA8eCALOwkT8=";
+    hash = "sha256-kqII8RG1ep+n5CqKLY1v7Mc+zJh6kl1rAjMmkomfeqM=";
   };
 
   sourceRoot = "${src.name}/libs/genai";
@@ -72,8 +72,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_google_genai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "libs/genai/v";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "libs/genai/v";
+    };
   };
 
   meta = {

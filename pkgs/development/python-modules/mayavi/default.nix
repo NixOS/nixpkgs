@@ -60,7 +60,7 @@ buildPythonPackage rec {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mayavi2";
     # segfault
     broken = pythonAtLeast "3.13";

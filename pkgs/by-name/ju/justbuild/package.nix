@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchurl,
 
-  fmt_10,
+  fmt,
   nlohmann_json,
   cli11,
   microsoft-gsl,
@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.6.2";
+  version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-C2Tv/R8bIKAG0E1vcZyS2fs2Pr26+luinPsjCqbboR0=";
+    hash = "sha256-ZTwe6S0AH1yQt5mABtIeWuMbiVSKeOZWMFI26fthLsM=";
   };
 
   bazelapi = fetchurl {
@@ -63,12 +63,7 @@ stdenv.mkDerivation rec {
 
     # Dependencies of just
     cli11
-    # Using fmt 10 because this is the same version upstream currently
-    # uses for bundled builds
-    # For future updates: The currently used version can be found in the file
-    # etc/repos.in.json: https://github.com/just-buildsystem/justbuild/blob/master/etc/repos.in.json
-    # under the key .repositories.fmt
-    fmt_10
+    fmt
     microsoft-gsl
     nlohmann_json
 

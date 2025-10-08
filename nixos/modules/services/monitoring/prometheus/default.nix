@@ -1904,7 +1904,7 @@ in
       default = null;
       description = ''
         Specifies which file should be used as web.config.file and be passed on startup.
-        See https://prometheus.io/docs/prometheus/latest/configuration/https/ for valid options.
+        See <https://prometheus.io/docs/prometheus/latest/configuration/https/> for valid options.
       '';
     };
 

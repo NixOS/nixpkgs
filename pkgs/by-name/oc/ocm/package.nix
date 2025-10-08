@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "ocm";
-  version = "1.0.7";
+  version = "1.0.8";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "sha256-fN7nrWxF4eFaEd5iNpVJWoK23S76jjh20834b/MVlPo=";
+    sha256 = "sha256-v+BWmdTDJm1oElP/XV59pHm7NlsFj2sDTymtT0xpXKY=";
   };
 
-  vendorHash = "sha256-q/Se4jq1a25QX9TzVkPbOi7AeT2hossCX4dh9gMqCx0=";
+  vendorHash = "sha256-GOdRYVnFPS1ovFmU+9MEnwTNg1sa9/25AjzbcbBJrQ0=";
 
   # Strip the final binary.
   ldflags = [
@@ -38,7 +39,7 @@ buildGoModule rec {
     "-skip=^TestCLI$"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ocm \
       --bash <($out/bin/ocm completion bash) \
       --fish <($out/bin/ocm completion fish) \

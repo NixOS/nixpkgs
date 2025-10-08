@@ -1,0 +1,26 @@
+diff --git a/scripts/generate_bash_completion.sh b/scripts/generate_bash_completion.sh
+index 778810570c..84d2d49a0d 100755
+--- a/scripts/generate_bash_completion.sh
++++ b/scripts/generate_bash_completion.sh
+@@ -68,7 +68,7 @@ mkdir "${tempdir}/root"
+ 
+ server_javabase_flag=
+ [ -z "${javabase}" ] || server_javabase_flag="--server_javabase=${javabase}"
+-"${bazel}" --output_user_root="${tempdir}/root" ${server_javabase_flag} \
++"${bazel}" --batch --output_user_root="${tempdir}/root" ${server_javabase_flag} \
+     help completion >>"${tempdir}/output"
+ 
+ [ -z "${append}" ] || cat ${append} >>"${tempdir}/output"
+diff --git a/scripts/generate_fish_completion.py b/scripts/generate_fish_completion.py
+index bafe28979f..a941d8f7f9 100644
+--- a/scripts/generate_fish_completion.py
++++ b/scripts/generate_fish_completion.py
+@@ -102,7 +102,7 @@ class BazelCompletionWriter(object):
+ 
+   def _get_bazel_output(self, args):
+     return subprocess.check_output(
+-        (self._bazel, '--output_user_root={}'.format(self._output_user_root)) +
++        (self._bazel, '--batch', '--output_user_root={}'.format(self._output_user_root)) +
+         tuple(args),
+         universal_newlines=True)
+ 

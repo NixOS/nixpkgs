@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "duo-unix";
-  version = "2.1.0";
+  version = "2.2.0";
 
   src = fetchurl {
     url = "https://dl.duosecurity.com/duo_unix-${version}.tar.gz";
-    sha256 = "sha256-QpF+qZeCd4n7A+dl7e0KfwpQ+CIJIoNZMafEPz2Dtik=";
+    sha256 = "sha256-o5myAUg2tf+Yu7tB93EU/gZkGAHYtrEh6zyCiVJ2pmY=";
   };
 
   buildInputs = [

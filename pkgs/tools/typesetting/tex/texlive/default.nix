@@ -5,8 +5,7 @@
 */
 {
   lib,
-  #, stdenv
-  gcc12Stdenv,
+  stdenv,
   fetchpatch,
   fetchurl,
   runCommand,
@@ -42,12 +41,11 @@
   biber-ms,
   makeFontsConf,
   useFixedHashes ? true,
+  extraMirrors ? [ ],
   recurseIntoAttrs,
   nixfmt,
+  luajit,
 }:
-let
-  stdenv = gcc12Stdenv;
-in
 let
   # various binaries (compiled)
   bin = callPackage ./bin.nix {
@@ -93,6 +91,7 @@ let
           python3
           ruby
           zip
+          luajit
           ;
       };
     in
@@ -115,25 +114,28 @@ let
   # should be switching to the tlnet-final versions
   # (https://tug.org/historic/).
   mirrors =
-    if version.final then
-      [
-        # tlnet-final snapshot; used when texlive.tlpdb is frozen
-        # the TeX Live yearly freeze typically happens in mid-March
-        "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
-        "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
-      ]
-    else
-      [
-        # CTAN mirrors
-        "https://mirror.ctan.org/systems/texlive/tlnet"
-        # daily snapshots hosted by one of the texlive release managers;
-        # used for packages that in the meanwhile have been updated or removed from CTAN
-        # and for packages that have not reached yet the historic mirrors
-        # please note that this server is not meant for large scale deployment
-        # https://tug.org/pipermail/tex-live/2019-November/044456.html
-        # https://texlive.info/ MUST appear last (see tlpdbxz)
-        "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
-      ];
+    extraMirrors
+    ++ (
+      if version.final then
+        [
+          # tlnet-final snapshot; used when texlive.tlpdb is frozen
+          # the TeX Live yearly freeze typically happens in mid-March
+          "http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/${toString version.texliveYear}/tlnet-final"
+          "ftp://tug.org/texlive/historic/${toString version.texliveYear}/tlnet-final"
+        ]
+      else
+        [
+          # CTAN mirrors
+          "https://mirror.ctan.org/systems/texlive/tlnet"
+          # daily snapshots hosted by one of the texlive release managers;
+          # used for packages that in the meanwhile have been updated or removed from CTAN
+          # and for packages that have not reached yet the historic mirrors
+          # please note that this server is not meant for large scale deployment
+          # https://tug.org/pipermail/tex-live/2019-November/044456.html
+          # https://texlive.info/ MUST appear last (see tlpdbxz)
+          "https://texlive.info/tlnet-archive/${version.year}/${version.month}/${version.day}/tlnet"
+        ]
+    );
 
   tlpdbxz = fetchurl {
     urls =
@@ -252,7 +254,7 @@ let
   };
   toSpecifiedNV = p: rec {
     name = value.tlOutputName;
-    value = builtins.removeAttrs p [ "pkgs" ] // {
+    value = removeAttrs p [ "pkgs" ] // {
       outputSpecified = true;
       tlOutputName = tlTypeToOut.${p.tlType};
     };
@@ -260,10 +262,10 @@ let
   toTLPkgSet =
     pname: drvs:
     let
-      set = lib.listToAttrs (builtins.map toSpecifiedNV drvs);
+      set = lib.listToAttrs (map toSpecifiedNV drvs);
       mainDrv = set.out or set.tex or set.tlpkg or set.texdoc or set.texsource;
     in
-    builtins.removeAttrs mainDrv [ "outputSpecified" ];
+    removeAttrs mainDrv [ "outputSpecified" ];
   toTLPkgSets = { pkgs, ... }: lib.mapAttrsToList toTLPkgSet (lib.groupBy (p: p.pname) pkgs);
 
   # export TeX packages as { pkgs = [ ... ]; } in the top attribute set

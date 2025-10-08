@@ -37,8 +37,8 @@ backendStdenv.mkDerivation {
     (getLib libcublas)
     (getOutput "static" libcublas)
     cuda_cudart
-  ]
-  ++ lib.optionals (cudaAtLeast "12.0") [ cuda_cccl ];
+    cuda_cccl
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)

@@ -7,16 +7,16 @@
 
 buildNpmPackage rec {
   pname = "marp-cli";
-  version = "4.2.2";
+  version = "4.2.3";
 
   src = fetchFromGitHub {
     owner = "marp-team";
     repo = "marp-cli";
     rev = "v${version}";
-    hash = "sha256-9ivc/LuadZLjxAfk9Q57uUVEEXGLbgwTjKdc/v8dDxo=";
+    hash = "sha256-CvQq9qndD9S/9t8UBpewQsW83CfV3BXftfFgFZ5Lttk=";
   };
 
-  npmDepsHash = "sha256-glIMWRHZV/5bt3LcWOQctZ4JoqKlmhWu85NyUr9aDLs=";
+  npmDepsHash = "sha256-VbpseSPH8uncCWiHtXBvCBARflXCCVTltmLO4uB8qmc=";
   npmPackFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
 
@@ -26,7 +26,7 @@ buildNpmPackage rec {
     description = "About A CLI interface for Marp and Marpit based converters";
     homepage = "https://github.com/marp-team/marp-cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
     platforms = nodejs.meta.platforms;
     mainProgram = "marp";
   };

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "asana";
-  version = "5.2.0";
+  version = "5.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "asana";
     repo = "python-asana";
     tag = "v${version}";
-    hash = "sha256-wTA7y7hUyAxNe5xad34thmzTKhQDk/oGHDflxpQdOrY=";
+    hash = "sha256-5GgBFZuiQDQXvZECIqY+kXTrUzkuoD8pJGKIg4TD1fw=";
   };
 
   build-system = [ setuptools ];

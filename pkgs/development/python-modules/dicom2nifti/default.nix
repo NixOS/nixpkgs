@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.5.1";
+  version = "2.6.2";
   pyproject = true;
 
   # no tests in PyPI dist
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "icometrix";
     repo = "dicom2nifti";
     tag = version;
-    hash = "sha256-lPaBKqYO8B138fCgeKH6vpwGQhN3JCOnDj5PgaYfRPA=";
+    hash = "sha256-VS1ad7sAgVWkFkTPLxzloj0dvweW5wqBlQpFqD9uZLs=";
   };
 
   postPatch = ''

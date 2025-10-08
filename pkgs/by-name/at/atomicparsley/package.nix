@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wez";
     repo = "atomicparsley";
-    rev = version;
+    tag = version;
     sha256 = "sha256-VhrOMpGNMkNNYjcfCqlHI8gdApWr1ThtcxDwQ6gyV/g=";
   };
 

@@ -48,7 +48,7 @@ DNS records will also be required:
 After this has been done and appropriate DNS records have been
 set up, the Postorius mailing list manager and the Hyperkitty
 archive browser will be available at
-https://lists.example.org/. Note that this setup is not
+`https://lists.example.org/`. Note that this setup is not
 sufficient to deliver emails to most email providers nor to
 avoid spam -- a number of additional measures for authenticating
 incoming and outgoing mails, such as SPF, DMARC and DKIM are

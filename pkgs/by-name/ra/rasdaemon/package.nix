@@ -1,6 +1,7 @@
 {
   autoreconfHook,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   libtraceevent,
   nix-update-script,
@@ -16,14 +17,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-veaqAbSJvoUzkn1OLYY3t3y9Bh8dzuenpLGO2yz/yaM=";
+    hash = "sha256-SpMNkeJkjaWteWsIScRnzNILf+PtVu1sX9e6ctwm3G0=";
   };
+
+  patches = [
+    # https://github.com/mchehab/rasdaemon/pull/212
+    (fetchpatch {
+      name = "fix_buffer_overflow_in_add_event_handler_read.patch";
+      url = "https://github.com/mchehab/rasdaemon/commit/46bed1b6845bcb560d760b4cacea7df67cd6d1fd.patch";
+      hash = "sha256-5T5U2i0i/7MpHzqpPq6mn2ghSUj9O6BzY11VcySgCMo=";
+    })
+  ];
 
   strictDeps = true;
 
@@ -120,6 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ evils ];
+    maintainers = [ ];
   };
 })

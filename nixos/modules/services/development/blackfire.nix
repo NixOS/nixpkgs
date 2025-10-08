@@ -25,7 +25,7 @@ in
       enable = lib.mkEnableOption "Blackfire profiler agent";
       settings = lib.mkOption {
         description = ''
-          See https://blackfire.io/docs/up-and-running/configuration/agent
+          See <https://blackfire.io/docs/up-and-running/configuration/agent>
         '';
         type = lib.types.submodule {
           freeformType = with lib.types; attrsOf str;
@@ -36,7 +36,7 @@ in
               description = ''
                 Sets the server id used to authenticate with Blackfire
 
-                You can find your personal server-id at https://blackfire.io/my/settings/credentials
+                You can find your personal server-id at <https://blackfire.io/my/settings/credentials>
               '';
             };
 
@@ -45,7 +45,7 @@ in
               description = ''
                 Sets the server token used to authenticate with Blackfire
 
-                You can find your personal server-token at https://blackfire.io/my/settings/credentials
+                You can find your personal server-token at <https://blackfire.io/my/settings/credentials>
               '';
             };
           };

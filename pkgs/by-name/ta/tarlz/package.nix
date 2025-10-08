@@ -40,7 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Massively parallel combined implementation of the tar archiver and the lzip compressor";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ehmry ];
     mainProgram = "tarlz";
   };
 })

@@ -24,7 +24,7 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
-    attrsToSection
+    settingsToSections
     ;
 
   upstreamSystemUnits = [
@@ -107,11 +107,16 @@ let
     # Maintaining state across reboots.
     "systemd-random-seed.service"
   ]
-  ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service")
+  ++ optionals cfg.package.withBootloader [
+    "systemd-boot-random-seed.service"
+    "systemd-bless-boot.service"
+  ]
   ++ [
     "systemd-backlight@.service"
     "systemd-rfkill.service"
     "systemd-rfkill.socket"
+
+    "boot-complete.target"
 
     # Hibernate / suspend.
     "hibernate.target"
@@ -203,6 +208,10 @@ let
   ++ [
     "systemd-exit.service"
     "systemd-update-done.service"
+
+    # Capsule support
+    "capsule@.service"
+    "capsule.slice"
   ]
   ++ cfg.additionalUpstreamSystemUnits;
 
@@ -550,6 +559,11 @@ in
           (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
         ]
       );
+      shadow = (
+        mkMerge [
+          (mkAfter [ "systemd" ])
+        ]
+      );
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -581,7 +595,7 @@ in
         enabledUnits = filterAttrs (n: v: !elem n cfg.suppressedSystemUnits) cfg.units;
 
       in
-      ({
+      {
         "systemd/system".source = generateUnits {
           type = "system";
           units = enabledUnits;
@@ -589,10 +603,7 @@ in
           upstreamWants = upstreamSystemWants;
         };
 
-        "systemd/system.conf".text = ''
-          [Manager]
-          ${attrsToSection cfg.settings.Manager}
-        '';
+        "systemd/system.conf".text = settingsToSections cfg.settings;
 
         "systemd/sleep.conf".text = ''
           [Sleep]
@@ -617,7 +628,7 @@ in
         "systemd/user-preset/00-nixos.preset".text = ''
           ignore *
         '';
-      });
+      };
 
     services.dbus.enable = true;
 

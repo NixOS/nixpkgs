@@ -13,24 +13,24 @@
 
 assert withGf2x -> gf2x != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ntl";
   version = "11.5.1";
 
   src = fetchurl {
-    url = "http://www.shoup.net/ntl/ntl-${version}.tar.gz";
-    sha256 = "sha256-IQ0GwxMGy8bq9oFEU8Vsd22djo3zbXTrMG9qUj0caoo=";
+    url = "http://www.shoup.net/ntl/ntl-${finalAttrs.version}.tar.gz";
+    hash = "sha256-IQ0GwxMGy8bq9oFEU8Vsd22djo3zbXTrMG9qUj0caoo=";
   };
 
+  strictDeps = true;
+  depsBuildBuild = [
+    perl # needed for ./configure
+  ];
   buildInputs = [
     gmp
   ];
 
-  nativeBuildInputs = [
-    perl # needed for ./configure
-  ];
-
-  sourceRoot = "${pname}-${version}/src";
+  sourceRoot = "ntl-${finalAttrs.version}/src";
 
   enableParallelBuilding = true;
 
@@ -42,9 +42,9 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ ];
 
   # reference: http://shoup.net/ntl/doc/tour-unix.html
+  dontAddStaticConfigureFlags = true; # perl config doesn't understand it.
   configureFlags = [
     "DEF_PREFIX=$(out)"
-    "SHARED=on" # genereate a shared library (as well as static)
     "NATIVE=off" # don't target code to current hardware (reproducibility, portability)
     "TUNE=${
       if tune then
@@ -55,15 +55,20 @@ stdenv.mkDerivation rec {
         "generic" # "chooses options that should be OK for most platforms"
     }"
     "CXX=${stdenv.cc.targetPrefix}c++"
+    "AR=${stdenv.cc.targetPrefix}ar"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+    "SHARED=on" # genereate a shared library
   ]
   ++ lib.optionals withGf2x [
     "NTL_GF2X_LIB=on"
     "GF2X_PREFIX=${gf2x}"
   ];
 
+  enableParallelChecking = true;
   doCheck = true; # takes some time
 
-  meta = with lib; {
+  meta = {
     description = "Library for doing Number Theory";
     longDescription = ''
       NTL is a high-performance, portable C++ library providing data
@@ -76,11 +81,11 @@ stdenv.mkDerivation rec {
     homepage = "http://www.shoup.net/ntl/";
     # also locally at "${src}/doc/tour-changes.html";
     changelog = "https://www.shoup.net/ntl/doc/tour-changes.html";
-    teams = [ teams.sage ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    teams = [ lib.teams.sage ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     # Does not cross compile
     # https://github.com/libntl/ntl/issues/8
     broken = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
   };
-}
+})

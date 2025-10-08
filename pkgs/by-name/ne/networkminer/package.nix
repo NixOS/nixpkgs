@@ -39,6 +39,9 @@ buildDotnetModule rec {
     # Embedded base64-encoded app icon in resx fails to parse. Delete it
     sed -zi 's|<data name="$this.Icon".*</data>||g' NetworkMiner/NamedPipeForm.resx
     sed -zi 's|<data name="$this.Icon".*</data>||g' NetworkMiner/UpdateCheck.resx
+
+    # Remove the UTF-8 BOM from the desktop file.
+    dos2unix -r NetworkMiner/NetworkMiner.desktop
   '';
 
   nugetDeps = ./deps.json;

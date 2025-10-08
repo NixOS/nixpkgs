@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch,
 
   buildEnv,
   linkFarm,
@@ -63,11 +64,15 @@ stdenv.mkDerivation {
   inherit version src;
 
   patches = [
-    # - ensure boost is linked dynamically
-    # - fix readstat's find logic
-    # - disable some of the renv logic
-    # - dont't check for dependencies required for building modules
-    ./cmake.patch
+    (fetchpatch {
+      name = "readstat-use-find-library.patch";
+      url = "https://github.com/jasp-stats/jasp-desktop/commit/87c5a1f4724833aed0f7758499b917b3107ee196.patch";
+      hash = "sha256-0CrMKJkZpS97KmQFvZPyV1h3C7eKVr/IT0dARYBoKFo=";
+    })
+    ./link-boost-dynamically.patch
+    ./disable-module-install-logic.patch # don't try to install modules via cmake
+    ./disable-renv-logic.patch
+    ./dont-check-for-module-deps.patch # dont't check for dependencies required for building modules
   ];
 
   cmakeFlags = [
@@ -100,7 +105,7 @@ stdenv.mkDerivation {
     qt6.qt5compat
   ];
 
-  # needed so that JASPEngine can find libRInside.so
+  # needed so that the linker can find libRInside.so
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
   postInstall = ''

@@ -20,7 +20,7 @@
   fontconfig,
   dpkg,
   libproxy,
-  libxml2,
+  libxml2_13,
   gst_all_1,
   dbus,
   makeWrapper,
@@ -37,14 +37,6 @@ let
       "amd64"
     else
       throw "Unsupported system ${stdenv.hostPlatform.system} ";
-
-  libxml2' = libxml2.overrideAttrs rec {
-    version = "2.13.8";
-    src = fetchurl {
-      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
-    };
-  };
 in
 mkDerivation rec {
   pname = "googleearth-pro";
@@ -78,7 +70,7 @@ mkDerivation rec {
     libXrender
     libproxy
     libxcb
-    libxml2'
+    libxml2_13
     sqlite
     zlib
     alsa-lib

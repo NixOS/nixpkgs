@@ -24,19 +24,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "peazip";
-  version = "10.6.0";
+  version = "10.6.1";
 
   src = fetchFromGitHub {
     owner = "peazip";
     repo = "peazip";
     rev = finalAttrs.version;
-    hash = "sha256-oRgsT2j5P6jbaBAgLMGArJ+pCVSgC/CJcHM45mRw6Bs=";
+    hash = "sha256-y+q4S3XHkN2dvHMaRxPQwK9l9LaA5rGvrzzZ+x76qUQ=";
   };
   sourceRoot = "${finalAttrs.src.name}/peazip-sources";
 
   postPatch = ''
     # set it to use compression programs from $PATH
-    substituteInPlace dev/peach.pas --replace "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
+    substituteInPlace dev/peach.pas --replace-fail "  HSYSBIN       = 0;" "  HSYSBIN       = 2;"
   '';
 
   nativeBuildInputs = [
@@ -96,12 +96,27 @@ stdenv.mkDerivation (finalAttrs: {
     install -D res/share/batch/freedesktop_integration/KDE-servicemenus/KDE3-konqueror/*.desktop -t $out/share/apps/konqueror/servicemenus
 
     # Install desktop entries's icons
-    mkdir -p $out/share/icons/hicolor/256x256/apps
-    ln -s $out/share/peazip/icons/peazip.png -t $out/share/icons/hicolor/256x256/apps/
-    mkdir $out/share/icons/hicolor/256x256/mimetypes
-    ln -s $out/share/peazip/icons/peazip_{7z,zip,cd}.png $out/share/icons/hicolor/256x256/mimetypes/
-    mkdir $out/share/icons/hicolor/256x256/actions
-    ln -s $out/share/peazip/icons/peazip_{add,extract,convert}.png $out/share/icons/hicolor/256x256/actions/
+    for size in {48,256}; do
+      mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
+      mkdir $out/share/icons/hicolor/"$size"x"$size"/mimetypes
+      mkdir $out/share/icons/hicolor/"$size"x"$size"/actions
+    done
+
+    pushd res/share/batch/freedesktop_integration
+
+    cp peazip.png $out/share/icons/hicolor/256x256/apps/
+    pushd additional-desktop-files
+    cp peazip_{7z,cd,zip}.png $out/share/icons/hicolor/256x256/mimetypes/
+    cp peazip_{add,extract,convert}.png $out/share/icons/hicolor/256x256/actions/
+    popd
+
+    pushd alternative-icons/48px
+    # for some reason the maintainer only made 48px version of *some* icons
+    cp peazip.png $out/share/icons/hicolor/48x48/apps/
+    cp peazip_{add,extract}.png $out/share/icons/hicolor/48x48/actions/
+    popd
+
+    popd
 
     runHook postInstall
   '';

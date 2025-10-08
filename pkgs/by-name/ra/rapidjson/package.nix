@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "RAPIDJSON_BUILD_DOC" true)
     (lib.cmakeBool "RAPIDJSON_BUILD_TESTS" true)
-    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" true)
+    (lib.cmakeBool "RAPIDJSON_BUILD_EXAMPLES" false)
     # gtest 1.13+ requires C++14 or later.
     (lib.cmakeBool "RAPIDJSON_BUILD_CXX11" false)
     (lib.cmakeBool "RAPIDJSON_BUILD_CXX17" true)
@@ -69,7 +69,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_CXX_FLAGS_RELEASE" "-Wno-error")
   ];
 
-  doCheck = !(stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isDarwin);
+  doCheck =
+    !(stdenv.hostPlatform.isStatic || stdenv.hostPlatform.isDarwin)
+    && lib.meta.availableOn stdenv.hostPlatform valgrind;
 
   nativeCheckInputs = [
     valgrind
@@ -88,7 +90,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = [
       lib.maintainers.dotlambda
-      lib.maintainers.Madouura
       lib.maintainers.tobim
     ];
   };

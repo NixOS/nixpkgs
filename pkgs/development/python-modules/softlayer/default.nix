@@ -22,6 +22,7 @@
   sphinx,
   testtools,
   tkinter,
+  writableTmpDirAsHomeHook,
   zeep,
 }:
 
@@ -37,13 +38,9 @@ buildPythonPackage rec {
     hash = "sha256-mlC4o39Ol1ALguc9KGpxB0M0vhWz4LG2uwhW8CBrVgg=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  pythonRelaxDeps = [
-    "rich"
-  ];
+  pythonRelaxDeps = [ "rich" ];
 
   dependencies = [
     click
@@ -63,14 +60,9 @@ buildPythonPackage rec {
     sphinx
     testtools
     tkinter
+    writableTmpDirAsHomeHook
     zeep
   ];
-
-  # Otherwise soap_tests.py will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))

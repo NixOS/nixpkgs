@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

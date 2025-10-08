@@ -7,7 +7,6 @@
   zlib,
   libuv,
   sqlite,
-  http-parser,
   icu,
   bash,
   ninja,
@@ -28,6 +27,7 @@
   runtimeShell,
   gnupg,
   installShellFiles,
+  darwin,
 }:
 
 {
@@ -70,30 +70,6 @@ let
       "freebsd"
     else
       throw "unsupported os ${platform.uname.system}";
-  destCPU =
-    let
-      platform = stdenv.hostPlatform;
-    in
-    if platform.isAarch then
-      "arm" + lib.optionalString platform.is64bit "64"
-    else if platform.isMips32 then
-      "mips" + lib.optionalString platform.isLittleEndian "le"
-    else if platform.isMips64 && platform.isLittleEndian then
-      "mips64el"
-    else if platform.isPower then
-      "ppc" + lib.optionalString platform.is64bit "64"
-    else if platform.isx86_64 then
-      "x64"
-    else if platform.isx86_32 then
-      "ia32"
-    else if platform.isS390x then
-      "s390x"
-    else if platform.isRiscV64 then
-      "riscv64"
-    else if platform.isLoongArch64 then
-      "loong64"
-    else
-      throw "unsupported cpu ${platform.uname.processor}";
   destARMFPU =
     let
       platform = stdenv.hostPlatform;
@@ -122,16 +98,11 @@ let
       null;
   # TODO: also handle MIPS flags (mips_arch, mips_fpu, mips_float_abi).
 
-  useSharedHttpParser =
-    !stdenv.hostPlatform.isDarwin && lib.versionOlder "${majorVersion}.${minorVersion}" "11.4";
   useSharedSQLite = lib.versionAtLeast version "22.5";
 
   sharedLibDeps = {
     inherit openssl zlib libuv;
   }
-  // (lib.optionalAttrs useSharedHttpParser {
-    inherit http-parser;
-  })
   // (lib.optionalAttrs useSharedSQLite {
     inherit sqlite;
   });
@@ -214,7 +185,6 @@ let
         zlib
         libuv
         openssl
-        http-parser
         icu
         bash
       ]
@@ -256,7 +226,7 @@ let
         # --cross-compiling flag enables use of CC_host et. al
         (if canExecute || canEmulate then "--no-cross-compiling" else "--cross-compiling")
         "--dest-os=${destOS}"
-        "--dest-cpu=${destCPU}"
+        "--dest-cpu=${stdenv.hostPlatform.node.arch}"
       ]
       ++ lib.optionals (destARMFPU != null) [ "--with-arm-fpu=${destARMFPU}" ]
       ++ lib.optionals (destARMFloatABI != null) [ "--with-arm-float-abi=${destARMFloatABI}" ]
@@ -322,6 +292,11 @@ let
 
       inherit patches;
 
+      postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+        substituteInPlace test/parallel/test-macos-app-sandbox.js \
+          --subst-var-by codesign '${darwin.sigtool}/bin/codesign'
+      '';
+
       __darwinAllowLocalNetworking = true; # for tests
 
       doCheck = canExecute;
@@ -385,7 +360,6 @@ let
               "test-process-initgroups"
               "test-process-setgroups"
               "test-process-uid-gid"
-              "test-setproctitle"
               # This is a bit weird, but for some reason fs watch tests fail with
               # sandbox.
               "test-fs-promises-watch"
@@ -416,7 +390,7 @@ let
             ]
             ++ lib.optionals stdenv.buildPlatform.isDarwin [
               # Disable tests that don’t work under macOS sandbox.
-              "test-macos-app-sandbox"
+              # uv_os_setpriority returned EPERM (operation not permitted)
               "test-os"
               "test-os-process-priority"
 
@@ -428,6 +402,10 @@ let
 
               # Those are annoyingly flaky, but not enough to be marked as such upstream.
               "test-wasi"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isMusl [
+              # Doesn't work in sandbox on x86_64.
+              "test-dns-set-default-order"
             ]
             ++ lib.optionals (stdenv.buildPlatform.isDarwin && stdenv.buildPlatform.isx86_64) [
               # These tests fail on x86_64-darwin (even without sandbox).
@@ -445,6 +423,27 @@ let
           )
         }"
       ];
+
+      sandboxProfile = ''
+        (allow file-read*
+          (literal "/Library/Keychains/System.keychain")
+          (literal "/private/var/db/mds/system/mdsDirectory.db")
+          (literal "/private/var/db/mds/system/mdsObject.db"))
+
+        ; Allow files written by Module Directory Services (MDS), which is used
+        ; by Security.framework: https://apple.stackexchange.com/a/411476
+        ; These rules are based on the system sandbox profiles found in
+        ; /System/Library/Sandbox/Profiles.
+        (allow file-write*
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mdsDirectory\.db$")
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mdsObject\.db_?$")
+          (regex #"^/private/var/folders/[^/]+/[^/]+/C/mds/mds\.lock$"))
+
+        (allow mach-lookup
+          (global-name "com.apple.FSEvents")
+          (global-name "com.apple.SecurityServer")
+          (global-name "com.apple.system.opendirectoryd.membership"))
+      '';
 
       postInstall =
         let

@@ -3,7 +3,7 @@
   fetchFromGitLab,
   stdenv,
 
-  flint3,
+  flint,
   gmp,
   libmpc,
   mpfr,
@@ -13,6 +13,7 @@
   gsl,
   man,
   pkg-config,
+  writableTmpDirAsHomeHook,
 
   unstableGitUpdater,
   writeScript,
@@ -25,18 +26,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.5-unstable-2025-08-09";
+  version = "11.5-unstable-2025-09-27";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "76c6f2b28cdada1e71dfbc0932df595f763e375a";
-    hash = "sha256-QB6aUF8538vd5IF8eQhYAbzU7jAxqw70RrUB1ewzY6s=";
+    rev = "5e05a6ac2c21e19629018edd6e4c434db7ccefa7";
+    hash = "sha256-rMqWQeqBbHAytybX8w9yBAnlzjUJOSKtnpCVF6Nblrg=";
   };
 
   buildInputs =
-    lib.optional withArb flint3
+    lib.optional withArb flint
     ++ lib.optionals withGMP [
       gmp
       mpfr
@@ -183,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     man
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   installCheckInputs = [
@@ -190,19 +192,18 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   /*
-    XXX: The upstream assumes that `$HOME` is `/home/$USER`, and the source files
-    lie in `$HOME/cl` . The script presented here uses a fake `$USER` and a
-    symbolic linked `$HOME/cl` , which make the test suite work but do not meet
-    the conditions completely.
+    The test suite assumes that "there are two subdirectories of the home directory referred to: cl and test",
+    where `cl` is "the s7 source directory" and `test` is "a safe place to write temp files".
   */
   installCheckPhase = ''
     runHook preInstallCheck
 
+    ln -sr . $HOME/cl
+    mkdir $HOME/test
+
     $CC s7.c -c -o s7.o
     $CC ffitest.c s7.o -o ffitest
     mv ffitest $dst_bin
-    mkdir -p nix-build/home
-    ln -sr . nix-build/home/cl
 
     ${lib.optionalString withArb ''
       substituteInPlace s7test.scm \
@@ -211,7 +212,7 @@ stdenv.mkDerivation (finalAttrs: {
       cp $out/lib/libarb_s7.so .
     ''}
 
-    USER=nix-s7-builder PATH="$dst_bin:$PATH" HOME=$PWD/nix-build/home \
+    PATH="$dst_bin:$PATH" \
         s7-repl s7test.scm
 
     rm $dst_bin/ffitest

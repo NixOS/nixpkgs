@@ -12,17 +12,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-randr";
-  version = "1.0.0-alpha.7";
+  version = "1.0.0-beta.1.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-randr";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-vCGbWsG/F3WhWVSy8Z3r4ZHpks/X/57/ZZXuw6BFl+c=";
+    hash = "sha256-daP2YZ7B1LXzqh2n0KoSTJbitdK+hlZO+Ydt9behzmQ=";
   };
 
-  cargoHash = "sha256-lW44Y7RhA1l+cCDwqSq9sbhWi+kONJ0zy1fUu8WPYw0=";
+  cargoHash = "sha256-tkmBthh+nM3Mb9WoSjxMbx3t0NTf6lv91TwEwEANS6U=";
 
   nativeBuildInputs = [
     just
@@ -39,8 +39,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-randr"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   passthru = {

@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.abbradar ];
+    maintainers = [ ];
     teams = [ lib.teams.android ];
   };
 })

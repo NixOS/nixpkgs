@@ -5,6 +5,7 @@
   buildGoModule,
   libGL,
   libX11,
+  libxcb,
   libXcursor,
   libXfixes,
   libxkbcommon,
@@ -42,6 +43,7 @@ buildGoModule rec {
     libxkbcommon
     wayland
     libX11
+    libxcb
     libXcursor
     libXfixes
     libGL

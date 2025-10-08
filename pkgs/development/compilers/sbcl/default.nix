@@ -29,8 +29,8 @@ let
     "2.4.10".sha256 = "sha256-zus5a2nSkT7uBIQcKva+ylw0LOFGTD/j5FPy3hDF4vg=";
     # By unofficial and very loose convention we keep the latest version of
     # SBCL, and the previous one in case someone quickly needs to roll back.
-    "2.5.4".sha256 = "sha256-XxS07ZKUKp44dZT6wAC5bbdGfpzlYTBn/8CSPfPsIHI=";
     "2.5.5".sha256 = "sha256-ZQJnCvs2G6m+RKL6/pr5tZ57JK5QmnkaZrVIHylVlQs=";
+    "2.5.7".sha256 = "sha256-xPr+t5VpnVvP+QhQkazHYtz15V+FI1Yl89eu8SyJ0dM=";
   };
   # Collection of pre-built SBCL binaries for platforms that need them for
   # bootstrapping. Ideally these are to be avoided.  If ECL (or any other
@@ -218,8 +218,8 @@ stdenv.mkDerivation (self: {
     "--prefix=$out"
     "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
   ]
-  ++ builtins.map (x: "--with-${x}") self.enableFeatures
-  ++ builtins.map (x: "--without-${x}") self.disableFeatures
+  ++ map (x: "--with-${x}") self.enableFeatures
+  ++ map (x: "--without-${x}") self.disableFeatures
   ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
     "--arch=arm64"
   ];

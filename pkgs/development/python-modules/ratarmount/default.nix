@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "ratarmount";
-  version = "1.0.0";
+  version = "1.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cXm301LMEsiE1eKJO70gTy7asdZ5CKnKtxLinW2+iJ4=";
+    hash = "sha256-XiwtmZ7HGZwjJJrUD3TOP3o19RBwB/Yu09xdwK13+hk=";
   };
 
   pythonRelaxDeps = [ "python-xz" ];

@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "x-transformers";
-  version = "2.5.6";
+  version = "2.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "x-transformers";
     tag = version;
-    hash = "sha256-9PUOPcTm2xvtKV4T2lAGu/3BiQZzSlwo43i0x1gbrAM=";
+    hash = "sha256-ItMa5CPe53g9XlB2LZsdQJ3s0m0oF6ZQnAInajZeq/w=";
   };
 
   build-system = [ hatchling ];

@@ -11,14 +11,14 @@
 
 stdenv.mkDerivation rec {
   pname = "subtitlecomposer";
-  version = "0.8.1";
+  version = "0.8.2";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "multimedia";
     repo = "subtitlecomposer";
     rev = "v${version}";
-    hash = "sha256-5RBrxOy1EIgDLb21r1y+Pou8d/j05a1YYMRJh1n8vSA=";
+    hash = "sha256-zGbI960NerlOEUvhOLm+lEJdbhj8VFUfm8pkOYGRcGw=";
   };
 
   nativeBuildInputs = [

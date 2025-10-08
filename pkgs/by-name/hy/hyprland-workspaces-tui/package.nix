@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   makeWrapper,
@@ -27,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [ hyprland-workspaces ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hyprland-workspaces-tui \
       --bash <($out/bin/hyprland-workspaces-tui --completions bash) \
       --zsh <($out/bin/hyprland-workspaces-tui --completions zsh) \

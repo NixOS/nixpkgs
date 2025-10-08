@@ -9,6 +9,7 @@
 
   # apparmor deps
   libapparmor,
+  apparmor-bin-utils,
 
   # testing
   perl,
@@ -28,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace rc.apparmor.functions \
       --replace-fail "/sbin/apparmor_parser" "$out/bin/apparmor_parser" # FIXME
     substituteInPlace rc.apparmor.functions \
-      --replace-fail "/usr/sbin/aa-status" '$(which aa-status)'
+      --replace-fail "/usr/sbin/aa-status" "${lib.getExe' apparmor-bin-utils "aa-status"}"
     sed -i rc.apparmor.functions -e '2i . ${./fix-rc.apparmor.functions.sh}'
   '';
 
@@ -59,12 +60,6 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = "pushd ./tst";
 
   checkTarget = "tests";
-
-  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [
-    # equality tests are broken on musl due to different priority values
-    # https://gitlab.com/apparmor/apparmor/-/issues/513
-    "-o equality"
-  ];
 
   postCheck = "popd";
 

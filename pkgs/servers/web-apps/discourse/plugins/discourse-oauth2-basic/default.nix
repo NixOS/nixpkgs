@@ -15,7 +15,6 @@ mkDiscoursePlugin rec {
   };
   meta = with lib; {
     homepage = "https://github.com/discourse/${name}";
-    maintainers = with maintainers; [ ehmry ];
     license = licenses.mit;
     description = "Basic OAuth2 plugin for use with Discourse";
   };

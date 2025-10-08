@@ -23,9 +23,9 @@ with lib;
 
       wantedBy = [
         "multi-user.target"
-        "sshd.service"
+        "sshd-keygen.service"
       ];
-      before = [ "sshd.service" ];
+      before = [ "sshd-keygen.service" ];
       after = [ "fetch-ec2-metadata.service" ];
 
       path = [ pkgs.iproute2 ];
@@ -80,7 +80,7 @@ with lib;
     systemd.services.print-host-key = {
       description = "Print SSH Host Key";
       wantedBy = [ "multi-user.target" ];
-      after = [ "sshd.service" ];
+      after = [ "sshd-keygen.service" ];
       script = ''
         # Print the host public key on the console so that the user
         # can obtain it securely by parsing the output of

@@ -99,26 +99,25 @@ import ../make-test-python.nix (
         };
       };
 
-    testScript = ''
-      start_all()
+    testScript = # python
+      ''
+        start_all()
 
-      machine.wait_for_unit("k3s")
-      # check existence of the manifest files
-      machine.fail("ls /var/lib/rancher/k3s/server/manifests/absent.yaml")
-      machine.succeed("ls /var/lib/rancher/k3s/server/manifests/foo-namespace.yaml")
-      machine.succeed("ls /var/lib/rancher/k3s/server/manifests/hello.yaml")
+        machine.wait_for_unit("k3s")
+        # check existence of the manifest files
+        machine.fail("ls /var/lib/rancher/k3s/server/manifests/absent.yaml")
+        machine.succeed("ls /var/lib/rancher/k3s/server/manifests/foo-namespace.yaml")
+        machine.succeed("ls /var/lib/rancher/k3s/server/manifests/hello.yaml")
 
-      # check if container images got imported
-      machine.wait_until_succeeds("crictl img | grep 'test\.local/pause'")
-      machine.wait_until_succeeds("crictl img | grep 'test\.local/hello'")
+        # check if container images got imported
+        machine.wait_until_succeeds("crictl img | grep 'test\.local/pause'")
+        machine.wait_until_succeeds("crictl img | grep 'test\.local/hello'")
 
-      # check if resources of manifests got created
-      machine.wait_until_succeeds("kubectl get ns foo")
-      machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello")
-      machine.fail("kubectl get ns absent")
-
-      machine.shutdown()
-    '';
+        # check if resources of manifests got created
+        machine.wait_until_succeeds("kubectl get ns foo")
+        machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello")
+        machine.fail("kubectl get ns absent")
+      '';
 
     meta.maintainers = lib.teams.k3s.members;
   }

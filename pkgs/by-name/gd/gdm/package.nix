@@ -65,6 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dsystemduserunitdir=${placeholder "out"}/lib/systemd/user"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    (lib.mesonOption "run-dir" "/run/gdm")
   ];
 
   nativeBuildInputs = [

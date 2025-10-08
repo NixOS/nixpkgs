@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       by all major browsers, allowing for performance benefits and granular
       design control of the typeface's weight, width, and slant.
     '';
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

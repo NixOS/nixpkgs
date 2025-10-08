@@ -39,16 +39,16 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "liana";
-  version = "12.0"; # keep in sync with lianad
+  version = "13.0"; # keep in sync with lianad
 
   src = fetchFromGitHub {
     owner = "wizardsardine";
     repo = "liana";
     tag = "v${version}";
-    hash = "sha256-TZUNYr7p4P/++eX9ZNU/d1IurPrkZn/PJmJOsB01VMY=";
+    hash = "sha256-zr9FZZSLPMk2d5vyZqrj12RG4UCdmkyKLjTU7XpgedE=";
   };
 
-  cargoHash = "sha256-Hb5icOKgQiDzFLWwUfkwXcr1vn80QcAr+fKwG37PkYc=";
+  cargoHash = "sha256-uLSlx1WWCcngL1WSP3jOvwFJd/gbz/g9AT6Of9rwEMw=";
 
   nativeBuildInputs = [
     pkg-config

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-menus";
-    rev = version;
+    tag = version;
     hash = "sha256-ug1RSP2TBrypi0aGhF05k39koY3rGgJi0LuWyuuICd0=";
   };
 

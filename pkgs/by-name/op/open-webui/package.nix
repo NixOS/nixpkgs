@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.18";
+  version = "0.6.32";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-1V9mOhO8jpr0HU0djLjKw6xDQMBmqie6Gte4xfg9PfQ=";
+    hash = "sha256-+P/IjELE1G2Fm8OwS5l7k78f78s/o1/Dy945aw+lfQw=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,13 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.28.0";
+    pyodideVersion = "0.28.2";
     pyodide = fetchurl {
-      hash = "sha256-4YwDuhcWPYm40VKfOEqPeUSIRQl1DDAdXEUcMuzzU7o=";
+      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-bMqK9NvuTwqnhflGDfZTEkaFG8y34Qf94SgR0HMClrQ=";
+    npmDepsHash = "sha256-BcSDzLg2voHyUz4cnXQ0KRNSbLCsCwJ1itEJSbfAQhU=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -85,12 +85,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  pythonRemoveDeps = [
-    "docker"
-    "pytest"
-    "pytest-docker"
-  ];
-
   dependencies =
     with python3Packages;
     [
@@ -113,12 +107,10 @@ python3Packages.buildPythonApplication rec {
       black
       boto3
       chromadb
-      colbert-ai
       cryptography
       ddgs
       docx2txt
       einops
-      elasticsearch
       extract-msg
       fake-useragent
       fastapi
@@ -126,7 +118,6 @@ python3Packages.buildPythonApplication rec {
       firecrawl-py
       fpdf2
       ftfy
-      gcp-storage-emulator
       google-api-python-client
       google-auth-httplib2
       google-auth-oauthlib
@@ -136,14 +127,14 @@ python3Packages.buildPythonApplication rec {
       googleapis-common-protos
       httpx
       iso-639
+      itsdangerous
       langchain
       langchain-community
       langdetect
-      langfuse
       ldap3
       loguru
       markdown
-      moto
+      mcp
       nltk
       onnxruntime
       openai
@@ -161,23 +152,19 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
+      oracledb
       pandas
       passlib
       peewee
       peewee-migrate
       pgvector
       pillow
-      pinecone-client
-      playwright
-      posthog
       psutil
-      psycopg2-binary
+      pyarrow
       pycrdt
       pydub
       pyjwt
       pymdown-extensions
-      pymilvus
-      pymongo
       pymysql
       pypandoc
       pypdf
@@ -188,7 +175,6 @@ python3Packages.buildPythonApplication rec {
       python-socketio
       pytube
       pyxlsb
-      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -198,6 +184,7 @@ python3Packages.buildPythonApplication rec {
       sentencepiece
       soundfile
       starlette-compress
+      starsessions
       tencentcloud-sdk-python
       tiktoken
       transformers
@@ -207,7 +194,30 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ moto.optional-dependencies.s3;
+    ++ pyjwt.optional-dependencies.crypto
+    ++ starsessions.optional-dependencies.redis;
+
+  optional-dependencies = with python3Packages; rec {
+    postgres = [
+      pgvector
+      psycopg2-binary
+    ];
+
+    all = [
+      colbert-ai
+      elasticsearch
+      moto
+      gcp-storage-emulator
+      playwright
+      oracledb
+      pinecone-client
+      pymilvus
+      pymongo
+      qdrant-client
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ postgres;
+  };
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -244,8 +254,8 @@ python3Packages.buildPythonApplication rec {
     '';
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
-      drupol
       shivaraj-bh
+      codgician
     ];
   };
 }

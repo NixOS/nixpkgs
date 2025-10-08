@@ -8,27 +8,28 @@
   addBinToPathHook,
 }:
 
-let
-  test-data = fetchFromGitHub {
-    name = "test-data";
-    owner = "MultiQC";
-    repo = "test-data";
-    rev = "d775b73c106d48726653f2fd02e473b7acbd93d8";
-    hash = "sha256-uxBpMx22gWJmnbF9tVuVIdYdiqUh7n51swzu5hnfZQ0=";
-  };
-in
 python3Packages.buildPythonApplication rec {
   pname = "multiqc";
-  version = "1.29";
+  version = "1.30";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    name = "multiqc";
-    owner = "MultiQC";
-    repo = "MultiQC";
-    tag = "v${version}";
-    hash = "sha256-KKLdDNf889lEbCyNpJFZoE8rNO50CRzNP4hKpKHRAcE=";
-  };
+  # Two data sources. One for the code, another for the test data
+  srcs = [
+    (fetchFromGitHub {
+      name = "multiqc";
+      owner = "MultiQC";
+      repo = "MultiQC";
+      tag = "v${version}";
+      hash = "sha256-TR5YFoWj97gpsykIzc1lqtYVePsVLRIT0HXw+VPJ7o4=";
+    })
+    (fetchFromGitHub {
+      owner = "MultiQC";
+      repo = "test-data";
+      rev = "cc9f853e7892eb537e91505e0e847ff63669138d";
+      hash = "sha256-/MiNnPayG6wpF2S09ENYTlEBF7Km4aH1RjdGOfMgZcA=";
+      name = "test-data";
+    })
+  ];
 
   # Multiqc cannot remove temporary directories in some case.
   # Default is 10 retries, lower it to 2
@@ -37,9 +38,16 @@ python3Packages.buildPythonApplication rec {
       --replace-fail \
         "max_retries: int = 10," \
         "max_retries: int = 2,"
+    substituteInPlace pyproject.toml \
+      --replace 'polars-lts-cpu' 'polars'
   '';
 
-  build-system = with python3Packages; [ setuptools ];
+  sourceRoot = "multiqc";
+
+  nativeBuildInputs = with python3Packages; [
+    setuptools
+    wheel
+  ];
 
   dependencies = with python3Packages; [
     boto3
@@ -49,25 +57,25 @@ python3Packages.buildPythonApplication rec {
     jinja2
     kaleido
     markdown
+    natsort
     numpy
     packaging
     requests
+    polars
     pillow
     plotly
+    pyarrow
     pyyaml
     rich
     rich-click
     coloredlogs
     spectra
     pydantic
+    tiktoken
     typeguard
     tqdm
     python-dotenv
-    natsort
-    tiktoken
     jsonschema
-    polars
-    pyarrow
   ];
 
   optional-dependencies = {
@@ -89,19 +97,26 @@ python3Packages.buildPythonApplication rec {
     ];
   };
 
+  # Some tests run subprocess.run() with "multiqc"
   preCheck = ''
-    ln -s ${test-data} ./test-data
+    chmod -R u+w ../test-data
+    ln -s ../test-data .
   '';
 
+  # Some tests run subprocess.run() with "ps"
   nativeCheckInputs =
-    (with python3Packages; [
+    with python3Packages;
+    [
+      pytest-cov-stub
       pytest-xdist
       pytestCheckHook
-    ])
-    ++ [
-      addBinToPathHook # Some tests run subprocess.run() with "multiqc"
-      procps # Some tests run subprocess.run() with "ps"
+      syrupy
+      pygithub
       versionCheckHook
+    ]
+    ++ [
+      procps
+      addBinToPathHook
     ];
 
   versionCheckProgramArg = "--version";

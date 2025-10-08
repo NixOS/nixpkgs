@@ -8,6 +8,7 @@
   inter,
   databaseType ? "sqlite",
   environmentVariables ? { },
+  nixosTests,
 }:
 
 assert lib.assertOneOf "databaseType" databaseType [
@@ -28,16 +29,16 @@ in
 
 buildNpmPackage (finalAttrs: {
   pname = "pangolin";
-  version = "1.8.0";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "pangolin";
     tag = finalAttrs.version;
-    hash = "sha256-Cy5COyZAH0NPQDMpKUmweYWkyupDC2sNf2CP+EJ5GiE=";
+    hash = "sha256-o55S9Fr1gnyuXFAVgugrnFyJIv7nKMZ3Lc4+m/aVrII=";
   };
 
-  npmDepsHash = "sha256-OGqYmOO6pizcOrdaoSGgjDQgqpjU0SIw3ceh57eyjr4=";
+  npmDepsHash = "sha256-0vqH3nAB4HqfwS7Oy/qewzLyx48vS+rKiAwwbTkSOOc=";
 
   nativeBuildInputs = [
     esbuild
@@ -151,7 +152,10 @@ buildNpmPackage (finalAttrs: {
         }
       ];
 
-  passthru = { inherit databaseType; };
+  passthru = {
+    inherit databaseType;
+    tests = { inherit (nixosTests) pangolin; };
+  };
 
   meta = {
     description = "Tunneled reverse proxy server with identity and access control";

@@ -12,15 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdrkit";
-  version = "1.1.11-3.5";
+  version = "1.1.11-4";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "cdrkit";
     rev = "debian/9%${finalAttrs.version}";
-    hash = "sha256-T7WhztbpVvGegF6rTHGTkEALq+mcAtTerzDQ3f6Cq78=";
+    hash = "sha256-oOqvSA2MAURf0YOrWM5Ft6Ln43gXw7SEvNxxRrDs8sI=";
   };
+
+  patches = [
+    ./cmake-4.patch
+  ];
 
   nativeBuildInputs = [
     cmake

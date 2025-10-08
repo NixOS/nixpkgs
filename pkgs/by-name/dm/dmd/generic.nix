@@ -40,7 +40,7 @@ let
     );
   };
 
-  bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
+  bits = toString stdenv.hostPlatform.parsed.cpu.bits;
   osname = if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name;
 
   pathToDmd = "\${NIX_BUILD_TOP}/dmd/generated/${osname}/release/${bits}/dmd";

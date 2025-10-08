@@ -146,8 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname
   ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) softhsm;
 
-  preCheck =
-    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  preCheck = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    ''
       # construct a dummy HOME
       export HOME=$(realpath ../dummy-home)
       mkdir -p ~/.ssh
@@ -197,7 +197,8 @@ stdenv.mkDerivation (finalAttrs: {
       # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
       substituteInPlace regress/test-exec.sh \
         --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
-    '';
+    ''
+  );
   # integration tests hard to get working on darwin with its shaky
   # sandbox
   # t-exec tests fail on musl

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "1.0-unstable-2025-07-12";
+  version = "1.0-unstable-2025-09-27";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "0bf6fc74c42f2bdfe3c7dfcdcb5290ee72efe99c";
-    hash = "sha256-FSxU6a8+G1iGIj1PCJi7zPLYIfos8Xk7KA4NxTW6+DI=";
+    rev = "87465a40baf315e32213fbd100fee20d7d97c371";
+    hash = "sha256-iZjzC+LwVZcB4WKd6JYU0oUswQuxby1NPfIa62uLsdg=";
   };
 
   outputs = [
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://wiki.xxiivv.com/site/uxn.html";
     description = "Assembler and emulator for the Uxn stack machine";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
   };

@@ -1,5 +1,4 @@
 {
-  lib,
   rust-bindgen-unwrapped,
   zlib,
   bash,
@@ -14,7 +13,6 @@ let
         #for substituteAll
         inherit bash;
         unwrapped = rust-bindgen-unwrapped;
-        libclang = (lib.getLib clang.cc);
         meta = rust-bindgen-unwrapped.meta // {
           longDescription = rust-bindgen-unwrapped.meta.longDescription + ''
             This version of bindgen is wrapped with the required compiler flags

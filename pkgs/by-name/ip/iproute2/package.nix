@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   buildPackages,
   bison,
   flex,
@@ -11,20 +12,31 @@
   elfutils,
   libmnl,
   libbpf,
+  python3,
   gitUpdater,
   pkgsStatic,
 }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.15.0";
+  version = "6.16.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-gEGFSoglg61SY0ZnNsnIxox0saNXVKt3DSM0P5R1KPs=";
+    hash = "sha256-WQDMwV+aw797fq6B3rWTcSPfNemTR6fxGiKBhILwqNA=";
   };
 
   patches = [
+    (fetchpatch {
+      name = "color-assume-background-is-dark-if-unknown.patch";
+      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/patch/?id=cc0f1109d2864686180ba2ce6fba5fcb3bf437bf";
+      hash = "sha256-BGD70cXKnDvk7IEU5RQA+pn1dErWjgr74GeSkYtFXoI=";
+    })
+    (fetchpatch {
+      name = "color-do-not-use-dark-blue-in-dark-background-palette.patch";
+      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/patch/?id=46a4659313c2610427a088d8f03b731819f2b87a";
+      hash = "sha256-TXrmGZNsYWdYLsLoBXZEr3cd8HT4EhRg+jACRrC0gKE=";
+    })
     (fetchurl {
       name = "musl-endian.patch";
       url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
@@ -85,6 +97,7 @@ stdenv.mkDerivation rec {
     db
     iptables
     libmnl
+    python3
   ]
   # needed to uploaded bpf programs
   ++ lib.optionals (!stdenv.hostPlatform.isStatic) [

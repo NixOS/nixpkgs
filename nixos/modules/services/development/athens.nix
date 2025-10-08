@@ -7,7 +7,7 @@
 let
   cfg = config.services.athens;
 
-  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig ({
+  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig {
     GoBinary = "${cfg.goBinary}/bin/go";
     GoEnv = cfg.goEnv;
     GoBinaryEnvVars = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.goBinaryEnvVars;
@@ -141,7 +141,7 @@ let
         };
       };
     };
-  });
+  };
 
   configFile = lib.pipe athensConfig [
     (lib.filterAttrsRecursive (_k: v: v != null))
@@ -861,7 +861,7 @@ in
           default = "localhost";
         };
         port = lib.mkOption {
-          type = lib.types.int;
+          type = lib.types.port;
           description = "Port for the MySQL database.";
           default = 3306;
         };
@@ -901,7 +901,7 @@ in
           default = "localhost";
         };
         port = lib.mkOption {
-          type = lib.types.int;
+          type = lib.types.port;
           description = "Port for the Postgres database.";
           default = 5432;
         };

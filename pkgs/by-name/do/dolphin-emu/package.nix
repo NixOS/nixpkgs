@@ -17,7 +17,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt_10,
+  fmt,
   gtest,
   hidapi,
   libXdmcp,
@@ -54,13 +54,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2506a";
+  version = "2509";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-xYGq2Yt4Gqb/QDA6HZajs7JCwETufuqigk3bZbsgdEM=";
+    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     enet
     ffmpeg
-    fmt_10
+    fmt
     gtest
     hidapi
     libXdmcp
@@ -132,6 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
     (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
     (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+    # Fix building v2509, should be removed in the future
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)

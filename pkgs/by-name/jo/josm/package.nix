@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  fetchFromGitHub,
+  fetchsvn,
   makeWrapper,
   unzip,
   jre,
@@ -11,21 +11,20 @@
 }:
 let
   pname = "josm";
-  version = "19423";
+  version = "19439";
   srcs = {
     jar = fetchurl {
       url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-      hash = "sha256-s8aMV31NsDFE5XLP523PH3RNvq78eTAa+UvmjyY5a+E=";
+      hash = "sha256-EuboKKNpApYlh9b78oB5AbtOM38oMe3NEa4fovA78Uk=";
     };
     macosx = fetchurl {
       url = "https://josm.openstreetmap.de/download/macosx/josm-macos-${version}-java21.zip";
-      hash = "sha256-8eps1eTUn9FHHYwECH/742PV7wnnRO08dlZmaxd1aZU=";
+      hash = "sha256-b38Xd0qx0ceNtJ5UIWDJkGOvaHSB/46onPbd6LJ6siY=";
     };
-    pkg = fetchFromGitHub {
-      owner = "JOSM";
-      repo = "josm";
-      tag = "${version}-tested";
-      hash = "sha256-ke8+JMFx95WyYR+ZIbjUVh3CT72bAfiMBGkc0Mim+60=";
+    pkg = fetchsvn {
+      url = "https://josm.openstreetmap.de/svn/trunk/native/linux/tested";
+      rev = version;
+      hash = "sha256-9YTSX4chUxijtJ7a1pLE2kYo9hdOB/8vnnfFqMeXKbE=";
     };
   };
 
@@ -53,7 +52,7 @@ stdenv.mkDerivation {
     else
       ''
         install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-        cp -R ${srcs.pkg}/native/linux/tested/usr/share $out
+        cp -R ${srcs.pkg}/usr/share $out
 
         # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
         makeWrapper ${jre}/bin/java $out/bin/josm \

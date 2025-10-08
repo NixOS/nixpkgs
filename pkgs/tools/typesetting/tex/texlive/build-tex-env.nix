@@ -46,7 +46,7 @@ lib.fix (
     buildEnv' =
       args:
       (
-        buildEnv ({ inherit (args) name paths; })
+        buildEnv { inherit (args) name paths; }
         // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
       ).overrideAttrs
         (

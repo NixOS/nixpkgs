@@ -36,7 +36,6 @@
 
   libiconv ? null,
   ncurses,
-  glibcLocales ? null,
 
   # GHC can be built with system libffi or a bundled one.
   libffi ? null,
@@ -67,16 +66,16 @@
   enableShared ? with stdenv.targetPlatform; !isWindows && !useiOSPrebuilt && !isStatic && !isGhcjs,
 
   # Whether to build terminfo.
-  # FIXME(@sternenseemann): This actually doesn't influence what hadrian does,
-  # just what buildInputs etc. looks like. It would be best if we could actually
-  # tell it what to do like it was possible with make.
   enableTerminfo ?
     !(
       stdenv.targetPlatform.isWindows
       || stdenv.targetPlatform.isGhcjs
-      # terminfo can't be built for cross
-      || (stdenv.buildPlatform != stdenv.hostPlatform)
-      || (stdenv.hostPlatform != stdenv.targetPlatform)
+      # Before <https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13932>,
+      # we couldn't force hadrian to build terminfo for cross.
+      || (
+        lib.versionOlder version "9.15.20250808"
+        && (stdenv.buildPlatform != stdenv.hostPlatform || stdenv.hostPlatform != stdenv.targetPlatform)
+      )
     ),
 
   # Libdw.c only supports x86_64, i686 and s390x as of 2022-08-04
@@ -90,6 +89,10 @@
       !stdenv.targetPlatform.isStatic
     && !stdenv.hostPlatform.isStatic,
   elfutils,
+
+  # Enable NUMA support in RTS
+  enableNuma ? lib.meta.availableOn stdenv.targetPlatform numactl,
+  numactl,
 
   # What flavour to build. Flavour string may contain a flavour and flavour
   # transformers as accepted by hadrian.
@@ -110,7 +113,7 @@
         # While split sections are now enabled by default in ghc 8.8 for windows,
         # they seem to lead to `too many sections` errors when building base for
         # profiling.
-        ++ lib.optionals (!stdenv.targetPlatform.isWindows) [ "split_sections" ];
+        ++ (if stdenv.targetPlatform.isWindows then [ "no_split_sections" ] else [ "split_sections" ]);
     in
     baseFlavour + lib.concatMapStrings (t: "+${t}") transformers,
 
@@ -128,10 +131,12 @@
     -- no way to set this via the command line
     finalStage :: Stage
     finalStage = ${
-      # Always build the stage 2 compiler if possible.
-      # TODO(@sternensemann): unify condition with make-built GHCs
-      if stdenv.hostPlatform.canExecute stdenv.targetPlatform then
-        "Stage2" # native compiler or “native” cross e.g. pkgsStatic
+      # N. B. hadrian ignores this setting if it doesn't agree it's possible,
+      # i.e. when its cross-compiling setting is true. So while we could, in theory,
+      # build Stage2 if hostPlatform.canExecute targetPlatform, hadrian won't play
+      # ball (with make, Stage2 was built if hostPlatform.system == targetPlatform.system).
+      if stdenv.hostPlatform == stdenv.targetPlatform then
+        "Stage2" # native compiler
       else
         "Stage1" # cross compiler
     }
@@ -180,51 +185,29 @@
           || (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.11");
       in
 
-      # Fix docs build with Sphinx >= 7 https://gitlab.haskell.org/ghc/ghc/-/issues/24129
-      lib.optionals (lib.versionOlder version "9.6.7") [
-        ./docs-sphinx-7.patch
-      ]
-      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.5") [
-        # Fix aarch64-linux builds of 9.6.0 - 9.6.4.
-        # Fixes a pointer type mismatch in the RTS.
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/24348
-        (fetchpatch {
-          name = "fix-incompatible-pointer-types.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1e48c43483693398001bfb0ae644a3558bf6a9f3.diff";
-          hash = "sha256-zUlzpX7J1n+MCEv9AWpj69FTy2uzJH8wrQDkTexGbgM=";
-        })
-      ]
-      ++
-        lib.optionals
-          (
-            # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
-            lib.versionOlder version "9.11"
-            && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
-            && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
-            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
-          )
-          [
-            # Determine size of time related types using hsc2hs instead of assuming CLong.
-            # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
-            # https://github.com/haskell/ghcup-hs/issues/1107
-            # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
-            # Note that in normal situations this shouldn't be the case since nixpkgs
-            # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
-            (fetchpatch {
-              name = "unix-fix-ctimeval-size-32-bit.patch";
-              url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
-              sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
-              stripLen = 1;
-              extraPrefix = "libraries/unix/";
-            })
-          ]
-      ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.6.6") [
-        (fetchpatch {
-          name = "fix-fully_static.patch";
-          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/1bb24432ff77e11a0340a7d8586e151e15bba2a1.diff";
-          hash = "sha256-MpvTmFFsNiPDoOp9BhZyWeapeibQ77zgEV+xzZ1UAXs=";
-        })
-      ]
+      lib.optionals
+        (
+          # 2025-01-16: unix >= 2.8.6.0 is unaffected which is shipped by GHC 9.12.1 and 9.8.4
+          lib.versionOlder version "9.11"
+          && !(lib.versionAtLeast version "9.6.7" && lib.versionOlder version "9.8")
+          && !(lib.versionAtLeast version "9.8.4" && lib.versionOlder version "9.9")
+          && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.11")
+        )
+        [
+          # Determine size of time related types using hsc2hs instead of assuming CLong.
+          # Prevents failures when e.g. stat(2)ing on 32bit systems with 64bit time_t etc.
+          # https://github.com/haskell/ghcup-hs/issues/1107
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/25095
+          # Note that in normal situations this shouldn't be the case since nixpkgs
+          # doesn't set -D_FILE_OFFSET_BITS=64 and friends (yet).
+          (fetchpatch {
+            name = "unix-fix-ctimeval-size-32-bit.patch";
+            url = "https://github.com/haskell/unix/commit/8183e05b97ce870dd6582a3677cc82459ae566ec.patch";
+            sha256 = "17q5yyigqr5kxlwwzb95sx567ysfxlw6bp3j4ji20lz0947aw6gv";
+            stripLen = 1;
+            extraPrefix = "libraries/unix/";
+          })
+        ]
       ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
         # Fix unlit being installed under a different name than is used in the
         # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317
@@ -248,6 +231,14 @@
             ./Cabal-3.12-paths-fix-cycle-aarch64-darwin.patch
         )
       ]
+      ++ lib.optionals stdenv.targetPlatform.isWindows [
+        # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13919
+        (fetchpatch {
+          name = "include-modern-utimbuf.patch";
+          url = "https://gitlab.haskell.org/ghc/ghc/-/commit/7e75928ed0f1c4654de6ddd13d0b00bf4b5c6411.patch";
+          hash = "sha256-sb+AHdkGkCu8MW0xoQIpD5kEc0zYX8udAMDoC+TWc0Q=";
+        })
+      ]
       # Prevents passing --hyperlinked-source to haddock. Note that this can
       # be configured via a user defined flavour now. Unfortunately, it is
       # impossible to import an existing flavour in UserSettings, so patching
@@ -262,17 +253,6 @@
             ../../tools/haskell/hadrian/disable-hyperlinked-source-extra-args.patch
         )
       ]
-      # Incorrect bounds on Cabal in hadrian
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/24100
-      ++
-        lib.optionals
-          (lib.elem version [
-            "9.8.1"
-            "9.8.2"
-          ])
-          [
-            ../../tools/haskell/hadrian/hadrian-9.8.1-allow-Cabal-3.10.patch
-          ]
       ++ lib.optionals (lib.versionAtLeast version "9.8" && lib.versionOlder version "9.12") [
         (fetchpatch {
           name = "enable-ignore-build-platform-mismatch.patch";
@@ -291,6 +271,11 @@
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/39bb6e583d64738db51441a556d499aa93a4fc4a.patch";
           sha256 = "0w5fx413z924bi2irsy1l4xapxxhrq158b5gn6jzrbsmhvmpirs0";
         })
+      ]
+
+      # Missing ELF symbols
+      ++ lib.optionals stdenv.targetPlatform.isAndroid [
+        ./ghc-define-undefined-elf-st-visibility.patch
       ];
 
     stdenv = stdenvNoCC;
@@ -329,13 +314,18 @@ assert !enableNativeBignum -> gmp != null;
 assert stdenv.buildPlatform == stdenv.hostPlatform || stdenv.hostPlatform == stdenv.targetPlatform;
 
 # It is currently impossible to cross-compile GHC with Hadrian.
-assert stdenv.buildPlatform == stdenv.hostPlatform;
+assert lib.assertMsg (stdenv.buildPlatform == stdenv.hostPlatform)
+  "GHC >= 9.6 can't be cross-compiled. If you meant to build a GHC cross-compiler, use `buildPackages`.";
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
   # TODO(@Ericson2314) Make unconditional
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+
+  # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
+  # so haddock isn't available for GHC cross-compilers. Can we fix that?
+  hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
 
   hadrianSettings =
     # -fexternal-dynamic-refs apparently (because it's not clear from the
@@ -407,6 +397,8 @@ let
           ld = cc.bintools;
           "ld.gold" = cc.bintools;
 
+          windres = cc.bintools;
+
           otool = cc.bintools.bintools;
 
           # GHC needs install_name_tool on all darwin platforms. The same one can
@@ -425,7 +417,10 @@ let
         }
         .${name};
     in
-    "${tools}/bin/${tools.targetPrefix}${name}";
+    getToolExe tools name;
+
+  # targetPrefix aware lib.getExe'
+  getToolExe = drv: name: lib.getExe' drv "${drv.targetPrefix or ""}${name}";
 
   # Use gold either following the default, or to avoid the BFD linker due to some bugs / perf issues.
   # But we cannot avoid BFD when using musl libc due to https://sourceware.org/bugzilla/show_bug.cgi?id=23856
@@ -465,6 +460,7 @@ let
       gmp
       libffi
       ncurses
+      numactl
       ;
   };
 
@@ -485,9 +481,6 @@ stdenv.mkDerivation (
     postPatch = ''
       patchShebangs --build .
     '';
-
-    # GHC needs the locale configured during the Haddock phase.
-    LANG = "en_US.UTF-8";
 
     # GHC is a bit confused on its cross terminology.
     # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
@@ -521,8 +514,15 @@ stdenv.mkDerivation (
       export INSTALL_NAME_TOOL="${toolPath "install_name_tool" targetCC}"
     ''
     + lib.optionalString useLLVM ''
-      export LLC="${lib.getBin buildTargetLlvmPackages.llvm}/bin/llc"
-      export OPT="${lib.getBin buildTargetLlvmPackages.llvm}/bin/opt"
+      export LLC="${getToolExe buildTargetLlvmPackages.llvm "llc"}"
+      export OPT="${getToolExe buildTargetLlvmPackages.llvm "opt"}"
+    ''
+    # LLVMAS should be a "specific LLVM compatible assembler" which needs to understand
+    # assembly produced by LLVM. The easiest way to be sure is to use clang from the same
+    # version as llc and opt. Note that the naming chosen by GHC is misleading, clang can
+    # be used as an assembler, llvm-as converts IR into machine code.
+    + lib.optionalString (useLLVM && lib.versionAtLeast version "9.10") ''
+      export LLVMAS="${getToolExe buildTargetLlvmPackages.clang "clang"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       # LLVM backend on Darwin needs clang: https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
@@ -532,16 +532,23 @@ stdenv.mkDerivation (
       # the assembly it is given, we need to make sure that it matches the LLVM version of $CC if possible.
       # It is unclear (at the time of writing 2024-09-01)  whether $CC should match the LLVM version we use
       # for llc and opt which would require using a custom darwin stdenv for targetCC.
+      # 2025-09-06: The existence of LLVMAS suggests that matching $CC is fine (correct?) here.
       export CLANG="${
         if targetCC.isClang then
           toolPath "clang" targetCC
         else
-          "${buildTargetLlvmPackages.clang}/bin/${buildTargetLlvmPackages.clang.targetPrefix}clang"
+          getToolExe buildTargetLlvmPackages.clang "clang"
       }"
     ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && hostPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${glibcLocales}/lib/locale/locale-archive"
-    ''
+    # Haddock and sphinx need a working locale
+    + lib.optionalString (enableDocs || hasHaddock) (
+      ''
+        export LANG="en_US.UTF-8"
+      ''
+      + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+        export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
+      ''
+    )
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
     ''
@@ -641,13 +648,18 @@ stdenv.mkDerivation (
       "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
       "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
     ]
-    ++ lib.optionals (disableLargeAddressSpace) [
+    ++ lib.optionals disableLargeAddressSpace [
       "--disable-large-address-space"
     ]
     ++ lib.optionals enableDwarf [
       "--enable-dwarf-unwind"
       "--with-libdw-includes=${lib.getDev targetLibs.elfutils}/include"
       "--with-libdw-libraries=${lib.getLib targetLibs.elfutils}/lib"
+    ]
+    ++ lib.optionals enableNuma [
+      "--enable-numa"
+      "--with-libnuma-includes=${lib.getDev targetLibs.numactl}/include"
+      "--with-libnuma-libraries=${lib.getLib targetLibs.numactl}/lib"
     ]
     ++ lib.optionals targetPlatform.isDarwin [
       # Darwin uses llvm-ar. GHC will try to use `-L` with `ar` when it is `llvm-ar`
@@ -715,8 +727,13 @@ stdenv.mkDerivation (
 
     buildInputs = [ bash ] ++ (libDeps hostPlatform);
 
-    depsTargetTarget = map lib.getDev (libDeps targetPlatform);
-    depsTargetTargetPropagated = map (lib.getOutput "out") (libDeps targetPlatform);
+    # stage0:ghc (i.e. stage1) doesn't need to link against libnuma, so it's target specific
+    depsTargetTarget = map lib.getDev (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
+    depsTargetTargetPropagated = map (lib.getOutput "out") (
+      libDeps targetPlatform ++ lib.optionals enableNuma [ targetLibs.numactl ]
+    );
 
     hadrianFlags = [
       "--flavour=${ghcFlavour}"
@@ -807,18 +824,24 @@ stdenv.mkDerivation (
     ''
     + lib.optionalString useLLVM ''
       ghc-settings-edit "$settingsFile" \
-        "LLVM llc command" "${lib.getBin llvmPackages.llvm}/bin/llc" \
-        "LLVM opt command" "${lib.getBin llvmPackages.llvm}/bin/opt"
+        "LLVM llc command" "${getToolExe llvmPackages.llvm "llc"}" \
+        "LLVM opt command" "${getToolExe llvmPackages.llvm "opt"}"
+    ''
+    # See comment for LLVMAS in preConfigure
+    + lib.optionalString (useLLVM && lib.versionAtLeast version "9.10") ''
+      ghc-settings-edit "$settingsFile" \
+        "LLVM llvm-as command" "${getToolExe llvmPackages.clang "clang"}"
     ''
     + lib.optionalString (useLLVM && stdenv.targetPlatform.isDarwin) ''
       ghc-settings-edit "$settingsFile" \
         "LLVM clang command" "${
           # See comment for CLANG in preConfigure
-          if installCC.isClang then
-            toolPath "clang" installCC
-          else
-            "${llvmPackages.clang}/bin/${llvmPackages.clang.targetPrefix}clang"
+          if installCC.isClang then toolPath "clang" installCC else getToolExe llvmPackages.clang "clang"
         }"
+    ''
+    + lib.optionalString stdenv.targetPlatform.isWindows ''
+      ghc-settings-edit "$settingsFile" \
+      "windres command" "${toolPath "windres" installCC}"
     ''
     + ''
 
@@ -831,13 +854,10 @@ stdenv.mkDerivation (
 
       inherit llvmPackages;
       inherit enableShared;
+      inherit hasHaddock;
 
       # Expose hadrian used for bootstrapping, for debugging purposes
       inherit hadrian;
-
-      # TODO(@sternenseemann): there's no stage0:exe:haddock target by default,
-      # so haddock isn't available for GHC cross-compilers. Can we fix that?
-      hasHaddock = stdenv.hostPlatform == stdenv.targetPlatform;
 
       bootstrapAvailable = lib.meta.availableOn stdenv.buildPlatform bootPkgs.ghc;
     };
@@ -852,6 +872,8 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
+      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
+      broken = useLLVM;
     };
 
     dontStrip = targetPlatform.useAndroidPrebuilt || targetPlatform.isWasm;

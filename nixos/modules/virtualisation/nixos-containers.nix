@@ -416,11 +416,11 @@ let
               description = "The protocol specifier for port forwarding between host and container";
             };
             hostPort = mkOption {
-              type = types.int;
+              type = types.port;
               description = "Source port of the external interface on host";
             };
             containerPort = mkOption {
-              type = types.nullOr types.int;
+              type = types.nullOr types.port;
               default = null;
               description = "Target port of container";
             };
@@ -509,19 +509,31 @@ in
 
     boot.isContainer = mkOption {
       type = types.bool;
-      default = false;
+      default = config.boot.isNspawnContainer;
+      defaultText = "config.boot.isNspawnContainer";
       description = ''
         Whether this NixOS machine is a lightweight container running
         in another NixOS system.
       '';
     };
 
+    boot.isNspawnContainer = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether the machine is running in an nspawn container. This
+        option is added because [](#opt-boot.isContainer) is heavily used
+        for non-nspawn environments as well, hence nspawn-specific settings
+        are guarded by this option.
+      '';
+    };
+
     boot.enableContainers = mkOption {
       type = types.bool;
-      default = true;
+      default = config.containers != { };
+      defaultText = lib.literalExpression "config.containers != { }";
       description = ''
-        Whether to enable support for NixOS containers. Defaults to true
-        (at no cost if containers are not actually used).
+        Whether to enable support for NixOS containers.
       '';
     };
 
@@ -558,7 +570,7 @@ in
                                     { inherit (host.pkgs.stdenv) hostPlatform; }
                                   else
                                     { localSystem = host.pkgs.stdenv.hostPlatform; };
-                                boot.isContainer = true;
+                                boot.isNspawnContainer = true;
                                 networking.hostName = mkDefault name;
                                 networking.useDHCP = false;
                                 assertions = [
@@ -729,7 +741,7 @@ in
                   so that no overlapping UID/GID ranges are assigned to multiple containers.
                   This is the recommanded option as it enhances container security massively and operates fully automatically in most cases.
 
-                  See https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users= for details.
+                  See <https://www.freedesktop.org/software/systemd/man/latest/systemd-nspawn.html#--private-users=> for details.
                 '';
               };
 

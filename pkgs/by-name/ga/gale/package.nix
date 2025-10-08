@@ -20,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gale";
-  version = "1.9.2";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "Kesomannen";
     repo = "gale";
     tag = finalAttrs.version;
-    hash = "sha256-AADU89Nxy7dpmamRdvCSe5ItwoVsRvgQocoMKs7qUZo=";
+    hash = "sha256-SnPYuMYdoY69CWMztuDxw0ohRDU2uECNhBs46hLg+eA=";
   };
 
   postPatch = ''
@@ -36,13 +36,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-QQXP/x7AjDtUpe6h+pC6vUsIAptv1kN/1MJZjHAIdMo=";
+    hash = "sha256-DYhPe59qfsSjyMIN31RL0mrHfmE6/I1SF+XutettkO8=";
   };
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
 
-  cargoHash = "sha256-+eSEOcmrY+3LpOssJzXHFQYKkvdacl5K6FPfcf7LTUQ=";
+  cargoHash = "sha256-tWQRYD6hMU7cvtelGryLdpfoEnUKYt7yYNwHTFZ4pLw=";
 
   nativeBuildInputs = [
     jq

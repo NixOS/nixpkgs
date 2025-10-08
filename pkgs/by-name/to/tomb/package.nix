@@ -13,12 +13,12 @@
   lib,
   libargon2,
   lsof,
-  makeWrapper,
+  makeBinaryWrapper,
   nix-update-script,
   pinentry,
   stdenvNoCC,
-  testers,
-  util-linux,
+  util-linuxMinimal,
+  versionCheckHook,
   zsh,
 }:
 
@@ -37,22 +37,22 @@ let
     libargon2
     lsof
     pinentry
-    util-linux
+    util-linuxMinimal
   ];
 
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tomb";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "dyne";
-    repo = "Tomb";
+    repo = "tomb";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-P8YS6PlfrAHY2EsSyCG8QAeDbN7ChHmjxtqIAtMLomk=";
+    hash = "sha256-z7LkCes0wg+1bZrNXXy4Lh5VwMotCULJQy5DmCisu+Q=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
   buildInputs = [
     pinentry
@@ -63,28 +63,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # if not, it shows .tomb-wrapped when running
     substituteInPlace tomb \
       --replace-fail 'TOMBEXEC=$0' 'TOMBEXEC=tomb'
+
+    # Fix version variable
+    sed -i 's/VERSION=".*"/VERSION="${finalAttrs.version}"/' tomb
   '';
 
   installPhase = ''
-    install -Dm755 tomb $out/bin/tomb
-    install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
+    runHook preInstall
+
+    install -D -m755 -t $out/bin tomb
+    install -D -m644 -t $out/share/man/man1/ doc/tomb.1
 
     wrapProgram $out/bin/tomb \
       --prefix PATH : $out/bin:${lib.makeBinPath runtimeDependencies}
+
+    runHook postInstall
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-      command = "tomb -v";
-    };
     updateScript = nix-update-script { };
   };
 
   meta = {
     description = "File encryption on GNU/Linux";
     homepage = "https://dyne.org/tomb/";
-    changelog = "https://github.com/dyne/Tomb/blob/v${finalAttrs.version}/ChangeLog.md";
+    changelog = "https://github.com/dyne/tomb/blob/v${finalAttrs.version}/ChangeLog.md";
     license = lib.licenses.gpl3Only;
     mainProgram = "tomb";
     maintainers = with lib.maintainers; [

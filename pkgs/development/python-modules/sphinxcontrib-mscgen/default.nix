@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Sphinx extension using mscgen to render diagrams";
     homepage = "https://github.com/sphinx-contrib/mscgen";
     license = licenses.bola11;
-    maintainers = with maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

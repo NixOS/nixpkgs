@@ -37,6 +37,8 @@ in
       '';
     };
 
+    package = mkPackageOption pkgs "x2goserver" { };
+
     superenicer = {
       enable = mkEnableOption "superenicer" // {
         description = ''
@@ -87,7 +89,7 @@ in
       icons.enable = true;
     };
 
-    environment.systemPackages = [ pkgs.x2goserver ];
+    environment.systemPackages = [ cfg.package ];
 
     users.groups.x2go = { };
     users.users.x2go = {
@@ -97,14 +99,14 @@ in
     };
 
     security.wrappers.x2gosqliteWrapper = {
-      source = "${pkgs.x2goserver}/lib/x2go/libx2go-server-db-sqlite3-wrapper.pl";
+      source = "${cfg.package}/lib/x2go/libx2go-server-db-sqlite3-wrapper.pl";
       owner = "x2go";
       group = "x2go";
       setuid = false;
       setgid = true;
     };
     security.wrappers.x2goprintWrapper = {
-      source = "${pkgs.x2goserver}/bin/x2goprint";
+      source = "${cfg.package}/bin/x2goprint";
       owner = "x2go";
       group = "x2go";
       setuid = false;
@@ -123,7 +125,7 @@ in
         # x2goclient sends SSH commands with preset PATH set to
         # "/usr/local/bin;/usr/bin;/bin". Since we cannot filter arbitrary ssh
         # commands, we have to make the following executables available.
-        map (f: "L+ /usr/local/bin/${f} - - - - ${x2goserver}/bin/${f}") [
+        map (f: "L+ /usr/local/bin/${f} - - - - ${cfg.package}/bin/${f}") [
           "x2goagent"
           "x2gobasepath"
           "x2gocleansessions"
@@ -173,7 +175,7 @@ in
       unitConfig.Documentation = "man:x2goserver.conf(5)";
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.x2goserver}/bin/x2gocleansessions";
+        ExecStart = "${cfg.package}/bin/x2gocleansessions";
         PIDFile = "/run/x2go/x2goserver.pid";
         User = "x2go";
         Group = "x2go";
@@ -184,10 +186,10 @@ in
         if [ ! -e /var/lib/x2go/setup_ran ]
         then
           mkdir -p /var/lib/x2go/conf
-          cp -r ${pkgs.x2goserver}/etc/x2go/* /var/lib/x2go/conf/
+          cp -r ${cfg.package}/etc/x2go/* /var/lib/x2go/conf/
           ln -sf ${x2goServerConf} /var/lib/x2go/conf/x2goserver.conf
           ln -sf ${x2goAgentOptions} /var/lib/x2go/conf/x2goagent.options
-          ${pkgs.x2goserver}/bin/x2godbadmin --createdb
+          ${cfg.package}/bin/x2godbadmin --createdb
           touch /var/lib/x2go/setup_ran
         fi
       '';

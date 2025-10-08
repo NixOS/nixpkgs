@@ -236,13 +236,14 @@ let
     +
       /*
         Now we update the other settings defined in cleanedConfig which are not
-        "folders" or "devices".
+        "folders", "devices", or "guiPasswordFile".
       */
       (lib.pipe cleanedConfig [
         builtins.attrNames
         (lib.subtractLists [
           "folders"
           "devices"
+          "guiPasswordFile"
         ])
         (map (subOption: ''
           curl -X PUT -d ${
@@ -251,6 +252,12 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ])
+    +
+      # Now we hash the contents of guiPasswordFile and use the result to update the gui password
+      (lib.optionalString (cfg.guiPasswordFile != null) ''
+        ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
+        curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+      '')
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -282,6 +289,14 @@ in
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
@@ -336,7 +351,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.int;
+                      type = types.nullOr types.port;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.
@@ -837,6 +852,12 @@ in
           from the configuration, creating path conflicts.
         '';
       }
+      {
+        assertion = (lib.hasAttrByPath [ "gui" "password" ] cfg.settings) -> cfg.guiPasswordFile == null;
+        message = ''
+          Please use only one of services.syncthing.settings.gui.password or services.syncthing.guiPasswordFile.
+        '';
+      }
     ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
@@ -894,14 +915,19 @@ in
                   install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart = ''
-            ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
-              ${escapeShellArgs cfg.extraFlags}
-          '';
+          ExecStart =
+            let
+              args = lib.escapeShellArgs (
+                (lib.cli.toGNUCommandLine { } {
+                  "no-browser" = true;
+                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "config" = cfg.configDir;
+                  "data" = cfg.databaseDir;
+                })
+                ++ cfg.extraFlags
+              );
+            in
+            "${lib.getExe cfg.package} ${args}";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

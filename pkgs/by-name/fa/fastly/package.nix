@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchurl,
   fetchFromGitHub,
   installShellFiles,
@@ -11,13 +12,13 @@
 
 buildGoModule rec {
   pname = "fastly";
-  version = "11.4.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-jfj37b3L3LcPODBYBAOTWq+mA0xrIr3r+6lu65gKyYI=";
+    hash = "sha256-P5n1CWGVu5rdfLOlKgnx5JtwDoI35y3zlvcqp48vQ7g=";
     # The git commit is part of the `fastly version` original output;
     # leave that output the same in nixpkgs. Use the `.git` directory
     # to retrieve the commit SHA, and remove the directory afterwards,
@@ -34,7 +35,7 @@ buildGoModule rec {
     "cmd/fastly"
   ];
 
-  vendorHash = "sha256-souo+yksoZpUxWfY7flL4uLdRgAIrtZKRIlGK0p1hZs=";
+  vendorHash = "sha256-ff65Vi0BmYF72MbrMmFzqDTXQWaEtaBQaPdLub8ZToo=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -68,7 +69,7 @@ buildGoModule rec {
       --set FASTLY_VICEROY_USE_PATH 1
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME="$(mktemp -d)"
     installShellCompletion --cmd fastly \
       --bash <($out/bin/fastly --completion-script-bash) \
@@ -82,7 +83,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       ereslibre
-      shyim
     ];
     mainProgram = "fastly";
   };

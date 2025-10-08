@@ -8,6 +8,7 @@
   setuptools,
   unasync,
   urllib3,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   build-system = [
     setuptools
     unasync
+    writableTmpDirAsHomeHook
   ];
 
   dependencies = [
@@ -33,10 +35,6 @@ buildPythonPackage rec {
     numpy
     urllib3
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # Module has no tests
   doCheck = false;

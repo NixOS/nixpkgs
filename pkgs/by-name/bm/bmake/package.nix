@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bmake";
-  version = "20250528";
+  version = "20250804";
 
   src = fetchurl {
     url = "https://www.crufty.net/ftp/pub/sjg/bmake-${finalAttrs.version}.tar.gz";
-    hash = "sha256-DcOJpeApiqWFNTtgeW1dYy3mYNreWNAKzWCtcihGyaM=";
+    hash = "sha256-C0kDdkSyUyBtLnENRuMoWeYt/ixsjnIYrkOfLvUN6K0=";
   };
 
   patches = [
@@ -53,11 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Disabled tests:
+  # * cmd-interrupt: tries to `SIGINT` make itself, flaky as a result
   # * directive-export{,-gmake}: another failure related to TZ variables
   # * opt-keep-going-indirect: not yet known
-  # * varmod-localtime: musl doesn't support TZDIR and this test relies on
-  #   impure, implicit paths
-  env.BROKEN_TESTS = builtins.concatStringsSep " " [
+  # * varmod-localtime: musl doesn't support TZDIR and this test relies on impure, implicit paths
+  env.BROKEN_TESTS = lib.concatStringsSep " " [
+    "cmd-interrupt"
     "directive-export"
     "directive-export-gmake"
     "opt-keep-going-indirect"

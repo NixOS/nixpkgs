@@ -26,16 +26,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ aiohttp ];
 
+  doCheck = false; # all tests are async and no async plugin is configured
+
   nativeCheckInputs = [
     faker
     pytest-aiohttp
     pytest-mock
     pytestCheckHook
-  ];
-
-  disabledTests = [
-    # Not all tests are ready yet
-    "test_successful"
   ];
 
   pythonImportsCheck = [ "aiolookin" ];

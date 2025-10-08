@@ -20,7 +20,7 @@
   vulkan-loader,
   wayland,
   zenity,
-  libsForQt5,
+  kdePackages,
   cairo,
   pango,
   atkmm,
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         lib.makeBinPath [
           rclone
           zenity
-          libsForQt5.kdialog
+          kdePackages.kdialog
         ]
       } \
         "''${gappsWrapperArgs[@]}"
@@ -125,6 +125,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       pasqui23
       megheaiulian
+      iedame
     ];
     mainProgram = "ludusavi";
   };

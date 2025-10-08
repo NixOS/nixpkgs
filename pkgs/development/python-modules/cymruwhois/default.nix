@@ -33,10 +33,13 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "cymruwhois" ];
 
   disabledTests = [
-    # Tests require network access
-    "test_asn"
     # AssertionError
     "test_doctest"
+  ];
+
+  disabledTestPaths = [
+    # £Failed: 'yield' keyword is allowed in fixtures, but not in tests (test_common)
+    "tests/test_common_lookups.py"
   ];
 
   meta = {

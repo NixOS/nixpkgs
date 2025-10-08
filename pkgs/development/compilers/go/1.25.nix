@@ -28,11 +28,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.25rc3";
+  version = "1.25.1";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-Rw4LjnCmjyhV59AJ8TXsgLPRgIXSxOU323Xmrkliv3Q=";
+    hash = "sha256-0BDBCc7pTYDv5oHqtGvepJGskGv0ZYPDLp8NuwvRpZQ=";
   };
 
   strictDeps = true;
@@ -85,7 +85,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
-  CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
+  # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
+  # https://github.com/golang/go/issues/8912
+  # https://github.com/golang/go/issues/13192
+  CGO_ENABLED =
+    if
+      (
+        stdenv.targetPlatform.isWasi
+        || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
+      )
+    then
+      0
+    else
+      1;
 
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 

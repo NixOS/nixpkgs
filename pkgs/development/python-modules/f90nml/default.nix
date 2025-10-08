@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "f90nml";
-  version = "1.4.1";
+  version = "1.4.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "marshallward";
     repo = "f90nml";
     rev = "v" + version;
-    hash = "sha256-nSpVBAS2VvXIQwYK/qVVzEc13bicAQ+ScXpO4Rn2O+8=";
+    hash = "sha256-EbfQU4+JuFEfHiivVOCOuTCqtBVbILapJ7A0Bx90cdQ=";
   };
 
   build-system = [ setuptools-scm ];

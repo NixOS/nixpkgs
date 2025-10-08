@@ -16,14 +16,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "tartube";
-  version = "2.5.156";
+  version = "2.5.164";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "axcore";
     repo = "tartube";
     tag = "v${version}";
-    sha256 = "sha256-4M1tYq8nVC1/+SQMtt0D0YfLW1uYWPcGx7XjuvbBxFw=";
+    sha256 = "sha256-PPvbdxxGUYUKL+5exO5+iO5ObJgjzFejZIIDA17hvYo=";
   };
 
   nativeBuildInputs = [

@@ -950,7 +950,7 @@ in
       let
         cfgFiles =
           cfg:
-          lib.optionals cfg.isoImage.showConfiguration ([
+          lib.optionals cfg.isoImage.showConfiguration [
             {
               source = cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
               target = "/boot/" + cfg.boot.kernelPackages.kernel + "/" + cfg.system.boot.loader.kernelFile;
@@ -959,7 +959,7 @@ in
               source = cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
               target = "/boot/" + cfg.system.build.initialRamdisk + "/" + cfg.system.boot.loader.initrdFile;
             }
-          ])
+          ]
           ++ lib.concatLists (
             lib.mapAttrsToList (_: { configuration, ... }: cfgFiles configuration) cfg.specialisation
           );

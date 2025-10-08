@@ -40,6 +40,10 @@ in
         default = false;
         internal = true;
       };
+      options.boot.isNspawnContainer = lib.mkOption {
+        default = false;
+        internal = true;
+      };
     }
   ];
 
@@ -85,7 +89,7 @@ in
     };
     hostPort = mkOption {
       default = 31022;
-      type = types.int;
+      type = types.port;
       example = 22;
       description = ''
         The localhost host port to forward TCP to the guest port.
@@ -208,18 +212,18 @@ in
           ''
         );
 
-        run-builder = hostPkgs.writeShellScriptBin "run-builder" (''
+        run-builder = hostPkgs.writeShellScriptBin "run-builder" ''
           set -euo pipefail
           KEYS="''${KEYS:-./keys}"
           KEYS="$(${hostPkgs.nix}/bin/nix-store --add "$KEYS")" ${lib.getExe config.system.build.vm}
-        '');
+        '';
 
-        script = hostPkgs.writeShellScriptBin "create-builder" (''
+        script = hostPkgs.writeShellScriptBin "create-builder" ''
           set -euo pipefail
           export KEYS="''${KEYS:-./keys}"
           ${lib.getExe add-keys}
           ${lib.getExe run-builder}
-        '');
+        '';
 
       in
       script.overrideAttrs (old: {

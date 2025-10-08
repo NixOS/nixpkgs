@@ -22,7 +22,7 @@
   supportedSystems ? builtins.fromJSON (builtins.readFile ../../ci/supportedSystems.json),
   # The platform triples for which we build bootstrap tools.
   bootstrapConfigs ? [
-    "aarch64-apple-darwin"
+    "arm64-apple-darwin"
     "aarch64-unknown-linux-gnu"
     "aarch64-unknown-linux-musl"
     "i686-unknown-linux-gnu"
@@ -44,8 +44,8 @@
       # so users choosing to allow don't have to rebuild them every time.
       permittedInsecurePackages = [
         "olm-3.2.16" # see PR #347899
-        "kanidm_1_5-1.5.0"
-        "kanidmWithSecretProvisioning_1_5-1.5.0"
+        "kanidm_1_6-1.6.4"
+        "kanidmWithSecretProvisioning_1_6-1.6.4"
       ];
     };
 
@@ -57,12 +57,10 @@
   # resulting tree of attributes to *not* have a ".${system}"
   # suffixed upon every job name like Hydra expects.
   #
-  # This flag exists mainly for use by
-  # pkgs/top-level/release-attrnames-superset.nix; see that file for
-  # full details.  The exact behavior of this flag may change; it
-  # should be considered an internal implementation detail of
-  # pkgs/top-level/.
-  #
+  # This flag exists mainly for use by ci/eval/attrpaths.nix; see
+  # that file for full details.  The exact behavior of this flag
+  # may change; it should be considered an internal implementation
+  # detail of ci/eval.
   attrNamesOnly ? false,
 }:
 
@@ -153,7 +151,7 @@ let
             # jobs.firefox-unwrapped.x86_64-darwin
             jobs.qt5.qtmultimedia.x86_64-darwin
             jobs.inkscape.x86_64-darwin
-            jobs.gimp.x86_64-darwin
+            jobs.gimp2.x86_64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.x86_64-darwin
             jobs.wireshark.x86_64-darwin
             jobs.transmission_3-gtk.x86_64-darwin
@@ -197,7 +195,7 @@ let
             # jobs.firefox-unwrapped.aarch64-darwin
             jobs.qt5.qtmultimedia.aarch64-darwin
             jobs.inkscape.aarch64-darwin
-            jobs.gimp.aarch64-darwin
+            jobs.gimp2.aarch64-darwin # FIXME replace with gimp once https://github.com/NixOS/nixpkgs/issues/411189 is resoved
             jobs.emacs.aarch64-darwin
             jobs.wireshark.aarch64-darwin
             jobs.transmission_3-gtk.aarch64-darwin
@@ -259,9 +257,7 @@ let
           jobs.tests.stdenv.hooks.patch-shebangs.x86_64-linux
         */
       ]
-      # FIXME: these are just temporarily omitted until fixed
-      # see https://hydra.nixos.org/build/303330677#tabs-constituents
-      #++ collect isDerivation jobs.stdenvBootstrapTools
+      ++ collect isDerivation jobs.stdenvBootstrapTools
       ++ optionals supportDarwin.x86_64 [
         jobs.stdenv.x86_64-darwin
         jobs.cargo.x86_64-darwin
@@ -361,27 +357,24 @@ let
         if attrNamesOnly then id else release-lib.getPlatforms
       );
       packageJobs = packagePlatforms pkgs // {
-        haskell.compiler = packagePlatforms pkgs.haskell.compiler;
-        haskellPackages = packagePlatforms pkgs.haskellPackages;
         # Build selected packages (HLS) for multiple Haskell compilers to rebuild
         # the cache after a staging merge
-        haskell.packages =
-          genAttrs
-            [
-              # TODO: share this list between release.nix and release-haskell.nix
-              "ghc90"
-              "ghc92"
-              "ghc94"
-              "ghc96"
-              "ghc98"
-              "ghc910"
-              "ghc912"
-            ]
-            (compilerName: {
-              inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
-                haskell-language-server
-                ;
-            });
+        haskell = packagePlatforms pkgs.haskell // {
+          packages =
+            genAttrs
+              [
+                "ghc94"
+                "ghc96"
+                "ghc98"
+                "ghc910"
+                "ghc912"
+              ]
+              (compilerName: {
+                inherit (packagePlatforms pkgs.haskell.packages.${compilerName})
+                  haskell-language-server
+                  ;
+              });
+        };
 
         pkgsLLVM.stdenv = [
           "x86_64-linux"
@@ -406,6 +399,8 @@ let
 
         # Fails CI in its current state
         ocamlPackages = { };
+
+        pkgsRocm = pkgs.rocmPackages.meta.release-packagePlatforms;
       };
       mapTestOn-packages = if attrNamesOnly then packageJobs else mapTestOn packageJobs;
     in

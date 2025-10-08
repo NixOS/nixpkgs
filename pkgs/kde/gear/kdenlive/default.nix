@@ -1,7 +1,6 @@
 {
   mkKdeDerivation,
   replaceVars,
-  mediainfo,
   mlt,
   glaxnimate,
   ffmpeg-full,
@@ -20,7 +19,7 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      inherit mediainfo mlt glaxnimate;
+      inherit mlt glaxnimate;
       ffmpeg = ffmpeg-full;
     })
   ];

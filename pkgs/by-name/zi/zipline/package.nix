@@ -32,13 +32,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.2.1";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-16D44QQHrXn6y+3IRsWh6iHSr+o4l3zHDW7SOFMsHnc=";
+    hash = "sha256-tQRfgLU0Dvf3vhELsttprfzscvHUgI1u7k9RA4S4vqo=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git_head
@@ -48,8 +48,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    fetcherVersion = 1;
-    hash = "sha256-kIneqtLPZ29PzluKUGO4XbQYHbNddu0kTfoP4C22k7U=";
+    fetcherVersion = 2;
+    hash = "sha256-zbr57RVBKGpnL5u0evbQAKGyMftHXj6cuntYBHiUxiM=";
   };
 
   buildInputs = [
@@ -85,9 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod
+    find node_modules -xtype l -delete
+
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \

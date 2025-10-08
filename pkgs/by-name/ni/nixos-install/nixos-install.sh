@@ -122,14 +122,6 @@ while [[ "$checkPath" != "/" ]]; do
     checkPath="$(dirname "$checkPath")"
 done
 
-# Check if the mount point root directory is owned by root
-if [[ "$(stat -c '%u:%g' "$mountPoint")" != "0:0" ]]; then
-    echo "$0: $mountPoint is not owned by root:root (owned by $(stat -c '%U:%G' "$mountPoint"))"
-    echo "$0: installation root directory must be owned by root to avoid system issues"
-    echo "$0: run 'sudo chown root:root $mountPoint' to fix this"
-    exit 1
-fi
-
 # Verify that user is not trying to use attribute building and flake
 # at the same time
 if [[ -z $buildingAttribute && -n $flake ]]; then

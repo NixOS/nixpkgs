@@ -12,7 +12,7 @@ functions. Those should be installed to
 When the `programs.fish.enable` and
 `programs.fish.vendor.{completions,config,functions}.enable` options from the
 NixOS Fish module are set to true, those paths are symlinked in the current
-system environment and automatically loaded by Fish.
+system environment and are automatically loaded by Fish.
 
 
 ## Packaging Fish plugins {#sec-fish-plugins-pkg}

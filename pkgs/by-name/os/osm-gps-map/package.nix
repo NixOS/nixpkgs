@@ -7,6 +7,8 @@
   gnome-common,
   gtk3,
   gobject-introspection,
+  autoreconfHook,
+  gtk-doc,
   pkg-config,
   lib,
   stdenv,
@@ -50,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
     pkg-config
     gobject-introspection
     gnome-common

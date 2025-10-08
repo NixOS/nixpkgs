@@ -30,7 +30,6 @@ stdenvNoCC.mkDerivation {
   meta = {
     homepage = "https://typodermicfonts.com/";
     description = "Typodermic fonts";
-    maintainers = with lib.maintainers; [ ehmry ];
     license = lib.licenses.unfree // {
       fullName = "Font Software for Desktop End User License Agreement";
       url = "https://typodermicfonts.com/end-user-license-agreement/";

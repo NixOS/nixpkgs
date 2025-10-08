@@ -24,7 +24,11 @@
 assert cudaSupport -> (cudaPackages ? cudatoolkit && cudaPackages.cudatoolkit != null);
 assert enablePython -> pythonPackages != null;
 
-stdenv.mkDerivation rec {
+let
+  stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
+in
+
+stdenv'.mkDerivation rec {
   pname = "librealsense";
   version = "2.56.3";
 
@@ -35,7 +39,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "IntelRealSense";
-    repo = pname;
+    repo = "librealsense";
     rev = "v${version}";
     sha256 = "sha256-Stx337mGcpMCg9DlZmvX4LPQmCSzLRFcUQPxaD/Y0Ds=";
   };

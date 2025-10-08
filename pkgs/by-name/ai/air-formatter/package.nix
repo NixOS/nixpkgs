@@ -27,6 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
+  cargoBuildFlags = [ "-p air" ];
+
   passthru = {
     updateScript = nix-update-script { };
   };

@@ -32,6 +32,19 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
   setOutputFlags = false; # some aren't supported
+  separateDebugInfo = false;
+
+  patches = [
+    # linux-gnuabielfv{1,2} is not in ncurses' list of GNU-ish targets (or smth like that?).
+    # Causes some defines (_XOPEN_SOURCE=600, _DEFAULT_SOURCE) to not get set, so wcwidth is not exposed by system headers, which causes a FTBFS.
+    # Reported and fix submitted to upstream in https://lists.gnu.org/archive/html/bug-ncurses/2025-07/msg00040.html
+    # Backported to the 6.5 release (dropped some hunks for code that isn't in this release yet)
+    ./1001-ncurses-Support-gnuabielfv1-2.patch
+  ];
+
+  postPatch = ''
+    sed -i '1i #include <stdbool.h>' include/curses.h.in
+  '';
 
   # see other isOpenBSD clause below
   configurePlatforms =
@@ -45,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     (lib.withFeature (!enableStatic) "shared")
-    "--without-debug"
     "--enable-pc-files"
     "--enable-symlinks"
     "--with-manpage-format=normal"
     "--disable-stripping"
     "--with-versioned-syms"
   ]
+  ++ lib.optional (!finalAttrs.separateDebugInfo) "--without-debug"
   ++ lib.optional unicodeSupport "--enable-widec"
   ++ lib.optional (!withCxx) "--without-cxx"
   ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
@@ -94,6 +107,22 @@ stdenv.mkDerivation (finalAttrs: {
     # which assumes that your openbsd is from the 90s, leading to a truly awful compiler/linker configuration.
     # No, autoreconfHook doesn't work.
     "--host=${stdenv.hostPlatform.config}${stdenv.cc.libc.version}"
+  ]
+  # Without this override, the upstream configure system results in
+  #
+  #     typedef unsigned char NCURSES_BOOL;
+  #     #define bool NCURSES_BOOL;
+  #
+  # Which breaks C++ bindings:
+  #
+  #      > /nix/store/[...]-gcc-15.1.0/include/c++/15.1.0/cstddef:81:21: error: redefinition of 'struct std::__byte_operand<unsigned char>'
+  #      >    81 |   template<> struct __byte_operand<unsigned char> { using __type = byte; };
+  #      >       |                     ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #      > /nix/store/[...]-gcc-15.1.0/include/c++/15.1.0/cstddef:78:21: note: previous definition of 'struct std::__byte_operand<unsigned char>'
+  #      >    78 |   template<> struct __byte_operand<bool> { using __type = byte; };
+  #
+  ++ [
+    "cf_cv_type_of_bool=bool"
   ];
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
@@ -134,12 +163,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  postFixup =
+  postInstall =
     let
       abiVersion-extension =
         if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}";
     in
+    lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
+      rm "$out"/lib/*.a
     ''
+    + ''
       # Determine what suffixes our libraries have
       suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
     ''
@@ -212,10 +244,6 @@ stdenv.mkDerivation (finalAttrs: {
       moveToOutput "bin/infotocap" "$out"
       moveToOutput "bin/infocmp" "$out"
     '';
-
-  preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
-    rm "$out"/lib/*.a
-  '';
 
   # I'm not very familiar with ncurses, but it looks like most of the
   # exec here will run hard-coded executables. There's one that is

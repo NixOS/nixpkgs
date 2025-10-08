@@ -20,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "google-genai";
-  version = "1.29.0";
+  version = "1.38.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-genai";
     tag = "v${version}";
-    hash = "sha256-EOwIXZ373hsEfGxCE6DRjPRuqPQQoFHTzIDGK1K9X6Q=";
+    hash = "sha256-gJaLEpNKHl6n1MvQDIUW7ynsHYH2eEPGsYso5jSysNg=";
   };
 
   build-system = [
@@ -37,7 +37,9 @@ buildPythonPackage rec {
     twine
   ];
 
-  pythonRelaxDeps = [ "websockets" ];
+  pythonRelaxDeps = [
+    "tenacity"
+  ];
 
   dependencies = [
     anyio

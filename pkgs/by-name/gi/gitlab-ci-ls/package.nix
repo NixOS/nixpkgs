@@ -8,15 +8,15 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "gitlab-ci-ls";
-  version = "1.1.8";
+  version = "1.2.2";
   src = fetchFromGitHub {
     owner = "alesbrelih";
     repo = "gitlab-ci-ls";
     rev = "${version}";
-    hash = "sha256-8386MX5jR4LNrpuXVmv+aLnfEvzSJBZgggS3Uj2MU9A=";
+    hash = "sha256-ZpLkiTJP3pofDcXrQPdl5Vm6SKsp6DecwSfXWC9h2qI=";
   };
 
-  cargoHash = "sha256-tyx3GGhVyOOo1SnGlS02JqEhY+D70NqzKVX7WeXu+ls=";
+  cargoHash = "sha256-wDu89bhyR4a0U9KDF0iasdYrc1GUGlYH1y6D8+NKPy4=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];

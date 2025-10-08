@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geographiclib";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "geographiclib";
     repo = "geographiclib";
     tag = "v${version}";
-    hash = "sha256-hFheJ6Q1GEfqPVq7t4SHN/n2JniqCQUzwl7GEVG0jgo=";
+    hash = "sha256-G0D44iP3ApYlxNxF+hrB20v3X+4gp2p94gQLygqgB3E=";
   };
 
   outputs = [
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://geographiclib.sourceforge.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ sikmir ];
+    teams = [ lib.teams.geospatial ];
     platforms = lib.platforms.unix;
   };
 }

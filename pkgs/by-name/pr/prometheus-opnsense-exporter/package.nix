@@ -6,13 +6,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "prometheus-opnsense-exporter";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "athennamind";
     repo = "opnsense-exporter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U/F301HkRfmzB8czwHP9u5UajR9CvxhSZwrJSIwcRd4=";
+    hash = "sha256-j16ATUeFqPiPElUqCPwylcujN/qiD9GrrBOXelAbgNs=";
   };
 
   ldflags = [

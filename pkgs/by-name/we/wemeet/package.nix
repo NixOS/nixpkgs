@@ -66,7 +66,6 @@ let
       libportal
       xdg-desktop-portal
       libsForQt5.qtwayland
-      libsForQt5.xwaylandvideobridge
       opencv4WithoutCuda
       pipewire
       xorg.libXdamage
@@ -190,6 +189,7 @@ stdenv.mkDerivation {
     mkdir -p $out/app
     cp -r opt/wemeet $out/app/wemeet
     cp -r usr/share $out/share
+    # bundled libcurl depends on openssl 1.1 which is not available in nixpkgs
     rm -f $out/app/wemeet/lib/libcurl.so
     substituteInPlace $out/share/applications/wemeetapp.desktop \
       --replace-fail "/opt/wemeet/wemeetapp.sh" "wemeet" \
@@ -201,8 +201,7 @@ stdenv.mkDerivation {
     ln -s $out/app/wemeet/bin/raw/xcast.conf $out/app/wemeet/bin/xcast.conf
     ln -s $out/app/wemeet/plugins $out/app/wemeet/lib/plugins
     ln -s $out/app/wemeet/resources $out/app/wemeet/lib/resources
-    mkdir -p $out/app/wemeet/lib/translations
-    ln -s $out/app/wemeet/translations/qtwebengine_locales $out/app/wemeet/lib/translations/qtwebengine_locales
+    ln -s $out/app/wemeet/translations $out/app/wemeet/lib/translations
 
     runHook postInstall
   '';
@@ -218,9 +217,9 @@ stdenv.mkDerivation {
         "--set QT_STYLE_OVERRIDE fusion"
         "--set IBUS_USE_PORTAL 1"
         "--set XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb"
-        "--prefix LD_LIBRARY_PATH : $out/lib:$out/translations:${xorg.libXext}/lib:${xorg.libXdamage}/lib:${opencv4WithoutCuda}/lib:${xorg.libXrandr}/lib"
-        "--prefix PATH : $out/bin"
-        "--prefix QT_PLUGIN_PATH : $out/plugins"
+        "--prefix LD_LIBRARY_PATH : $out/app/wemeet/lib:$out/translations:${xorg.libXext}/lib:${xorg.libXdamage}/lib:${opencv4WithoutCuda}/lib:${xorg.libXrandr}/lib"
+        "--prefix PATH : $out/app/wemeet/bin"
+        "--prefix QT_PLUGIN_PATH : $out/app/wemeet/plugins"
       ];
       commonWrapperArgs = baseWrapperArgs ++ [
         "--prefix LD_PRELOAD : ${libwemeetwrap}/lib/libwemeetwrap.so"

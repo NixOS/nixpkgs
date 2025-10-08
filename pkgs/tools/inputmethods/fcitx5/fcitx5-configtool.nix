@@ -30,19 +30,18 @@
 
 stdenv.mkDerivation rec {
   pname = "fcitx5-configtool";
-  version = "5.1.9";
+  version = "5.1.10";
 
   src = fetchFromGitHub {
     owner = "fcitx";
     repo = pname;
     rev = version;
-    hash = "sha256-x4DhPxiwPR16xQpBFnJ1DiU435BHOOs6pFj+zJQXFUI=";
+    hash = "sha256-Py2UDBQRqvT7kwZeQIXKrIjGAbOjjxEyEfO5tdtizW4=";
   };
 
   cmakeFlags = [
     (lib.cmakeBool "KDE_INSTALL_USE_QT_SYS_PATHS" true)
     (lib.cmakeBool "ENABLE_KCM" kcmSupport)
-    (lib.cmakeBool "USE_QT6" (lib.versions.major qtbase.version == "6"))
   ];
 
   nativeBuildInputs = [

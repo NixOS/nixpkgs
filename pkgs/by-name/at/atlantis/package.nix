@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "atlantis";
-  version = "0.35.1";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "runatlantis";
     repo = "atlantis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xYj6qu5bXpryuh2vqtYF+8HP/JRM5Cc8ctT+1S1gS2Q=";
+    hash = "sha256-STw7qQHLyST5eyr3siBY1adO2vyUEH1xlwatj3Oyp0U=";
   };
 
   ldflags = [
@@ -21,7 +21,7 @@ buildGoModule (finalAttrs: {
     "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  vendorHash = "sha256-ac2IGN+wtDAXei1uxCIZQGOmwJ3+AhIX2qq0RMqO0G8=";
+  vendorHash = "sha256-GeO+T8PUrN1zX0S6roeles5sB68KwStiuQ65k+tNf68=";
 
   subPackages = [ "." ];
 

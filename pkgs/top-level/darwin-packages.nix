@@ -101,6 +101,8 @@ makeScopeWithSplicing' {
 
         libunwind = callPackage ../os-specific/darwin/libunwind { };
 
+        libcxx = callPackage ../os-specific/darwin/libcxx { };
+
         sigtool = callPackage ../os-specific/darwin/sigtool { };
 
         signingUtils = callPackage ../os-specific/darwin/signing-utils { };
@@ -172,6 +174,8 @@ makeScopeWithSplicing' {
           xcode_16_2
           xcode_16_3
           xcode_16_4
+          xcode_26
+          xcode_26_Apple_silicon
           xcode
           requireXcode
           ;

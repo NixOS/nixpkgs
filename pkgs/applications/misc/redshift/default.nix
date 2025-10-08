@@ -168,7 +168,7 @@ rec {
 
     src = fetchFromGitLab {
       owner = "chinstrap";
-      repo = pname;
+      repo = "gammastep";
       rev = "v${version}";
       hash = "sha256-c8JpQLHHLYuzSC9bdymzRTF6dNqOLwYqgwUOpKcgAEU=";
     };
@@ -178,7 +178,7 @@ rec {
       longDescription = "Gammastep" + lib.removePrefix "Redshift" redshift.meta.longDescription;
       homepage = "https://gitlab.com/chinstrap/gammastep";
       mainProgram = "gammastep";
-      maintainers = (with lib.maintainers; [ ]) ++ redshift.meta.maintainers;
+      maintainers = [ ] ++ redshift.meta.maintainers;
     };
   };
 }

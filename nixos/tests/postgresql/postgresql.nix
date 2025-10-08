@@ -15,7 +15,7 @@ let
       postgresql-clauses = makeEnsureTestFor package;
     };
 
-  test-sql = pkgs.writeText "postgresql-test" (''
+  test-sql = pkgs.writeText "postgresql-test" ''
     CREATE EXTENSION pgcrypto; -- just to check if lib loading works
     CREATE TABLE sth (
       id int
@@ -38,7 +38,7 @@ let
       }
       console.log(xs.reduce((acc, x) => acc + x, 0));
     $$ LANGUAGE plv8;
-  '');
+  '';
 
   makeTestForWithBackupAll =
     package: backupAll:
@@ -65,6 +65,8 @@ let
           services.postgresqlBackup = {
             enable = true;
             databases = lib.optional (!backupAll) "postgres";
+            pgdumpOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            pgdumpAllOptions = "--restrict-key=ABCDEFGHIJKLMNOPQRSTUVWXYZ";
           };
         };
 

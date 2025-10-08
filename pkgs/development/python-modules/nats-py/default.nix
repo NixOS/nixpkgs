@@ -56,6 +56,9 @@ buildPythonPackage rec {
     "test_subscribe_iterate_next_msg"
     "test_ordered_consumer_larger_streams"
     "test_object_file_basics"
+    # Should be safe to remove on next version upgrade (from 2.11.0)
+    # https://github.com/nats-io/nats.py/pull/728
+    "test_object_list"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     "test_subscribe_iterate_next_msg"

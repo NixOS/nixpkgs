@@ -59,6 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/alemart/opensurge/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ federicoschonborn ];
+    maintainers = [ ];
   };
 })

@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   meta = with lib; {
     description = "Smart pointer constructs for the (GNU) C programming language";
     homepage = "https://github.com/Snaipe/libcsptr";

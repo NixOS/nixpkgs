@@ -20,15 +20,15 @@
 }:
 
 let
-  nix = nixVersions.nix_2_28;
+  nixComponents = nixVersions.nixComponents_2_30;
   common = rec {
-    version = "2.6.4";
+    version = "2.7.0";
 
     src = fetchFromGitHub {
       owner = "nix-community";
       repo = "nixd";
       tag = version;
-      hash = "sha256-K7S626SPzlNCmRhntSKhGP1iyHJXBZEeHliX4iEwbKk=";
+      hash = "sha256-VPUX/68ysFUr1S8JW9I1rU5UcRoyZiCjL+9u2owrs6w=";
     };
 
     nativeBuildInputs = [
@@ -36,6 +36,7 @@ let
       ninja
       python3
       pkg-config
+      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";
@@ -102,7 +103,10 @@ in
       ];
 
       buildInputs = [
-        nix
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         gtest
         boost
       ];
@@ -126,7 +130,10 @@ in
       sourceRoot = "${common.src.name}/nixd";
 
       buildInputs = [
-        nix
+        nixComponents.nix-main
+        nixComponents.nix-expr
+        nixComponents.nix-cmd
+        nixComponents.nix-flake
         nixf
         nixt
         llvmPackages.llvm

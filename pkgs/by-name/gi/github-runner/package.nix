@@ -16,22 +16,32 @@
   buildPackages,
   runtimeShell,
   # List of Node.js runtimes the package should support
-  nodeRuntimes ? [ "node20" ],
+  nodeRuntimes ? [
+    "node20"
+    "node24"
+  ],
   nodejs_20,
+  nodejs_24,
 }:
 
 # Node.js runtimes supported by upstream
-assert builtins.all (x: builtins.elem x [ "node20" ]) nodeRuntimes;
+assert builtins.all (
+  x:
+  builtins.elem x [
+    "node20"
+    "node24"
+  ]
+) nodeRuntimes;
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.327.1";
+  version = "2.328.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wTbhuBg9eIq1wGifeORTUvp9+yWDHb42J88o2Fmnrfo=";
+    hash = "sha256-3Q2bscLKdUBPx+5X0qxwtcy3CU6N/wE8yO1CcATSyBQ=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
@@ -208,6 +218,7 @@ buildDotnetModule (finalAttrs: {
     # "JavaScript Actions in Alpine containers are only supported on x64 Linux runners. Detected Linux Arm64"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNodeRuntimeVersionInAlpineContainerAsync"
     "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode20RuntimeVersionInAlpineContainerAsync"
+    "GitHub.Runner.Common.Tests.Worker.StepHostL0.DetermineNode24RuntimeVersionInAlpineContainerAsync"
   ]
   ++ lib.optionals finalAttrs.DOTNET_SYSTEM_GLOBALIZATION_INVARIANT [
     "GitHub.Runner.Common.Tests.Util.StringUtilL0.FormatUsesInvariantCulture"
@@ -225,6 +236,9 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} _layout/externals/node20
+  ''
+  + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
+    ln -s ${nodejs_24} _layout/externals/node24
   '';
 
   postInstall = ''
@@ -266,6 +280,9 @@ buildDotnetModule (finalAttrs: {
   ''
   + lib.optionalString (lib.elem "node20" nodeRuntimes) ''
     ln -s ${nodejs_20} $out/lib/externals/node20
+  ''
+  + lib.optionalString (lib.elem "node24" nodeRuntimes) ''
+    ln -s ${nodejs_24} $out/lib/externals/node24
   ''
   + ''
     # Install Nodejs scripts called from workflows

@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/WayfireWM/wayfire-plugins-extra";
     description = "Additional plugins for Wayfire";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     inherit (wayfire.meta) platforms;
   };
 })

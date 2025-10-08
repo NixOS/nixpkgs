@@ -37,7 +37,7 @@ let
   whenPlatformHasEBPFJit = lib.mkIf (
     stdenv.hostPlatform.isAarch32
     || stdenv.hostPlatform.isAarch64
-    || stdenv.hostPlatform.isx86_64
+    || stdenv.hostPlatform.isx86
     || (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit)
     || (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit)
   );
@@ -111,6 +111,7 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
@@ -229,6 +230,7 @@ let
       DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
       DAMON_RECLAIM = whenAtLeast "5.16" yes;
       DAMON_LRU_SORT = whenAtLeast "6.0" yes;
+      DAMON_STAT = whenAtLeast "6.17" yes;
       # Support recovering from memory failures on systems with ECC and MCA recovery.
       MEMORY_FAILURE = yes;
 
@@ -321,7 +323,7 @@ let
       NET_CLS_BPF = module;
       NET_ACT_BPF = module;
       NET_SCHED = yes;
-      NET_SCH_BPF = whenAtLeast "6.16" yes;
+      NET_SCH_BPF = whenAtLeast "6.16" (whenPlatformHasEBPFJit yes);
       L2TP_V3 = yes;
       L2TP_IP = module;
       L2TP_ETH = module;
@@ -329,7 +331,7 @@ let
       BONDING = module;
       NET_L3_MASTER_DEV = option yes;
       NET_FOU_IP_TUNNELS = option yes;
-      IP_NF_TARGET_REDIRECT = module;
+      IP_NF_TARGET_REDIRECT = whenOlder "6.17" module;
       NETKIT = whenAtLeast "6.7" yes;
 
       PPP_MULTILINK = yes; # PPP multilink support
@@ -526,7 +528,9 @@ let
         DRM_AMD_DC_DCN = lib.mkIf (with stdenv.hostPlatform; isx86 || isPower64) (
           whenBetween "5.11" "6.4" yes
         );
-        DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
+        # Not available when using clang
+        # See: https://github.com/torvalds/linux/blob/172a9d94339cea832d89630b89d314e41d622bd8/drivers/gpu/drm/amd/display/Kconfig#L14
+        DRM_AMD_DC_FP = lib.mkIf (!stdenv.cc.isClang) (whenAtLeast "6.4" yes);
         DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
         DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
 
@@ -705,8 +709,8 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
-      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
-      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+      BCACHEFS_QUOTA = whenBetween "6.7" "6.18" (option yes);
+      BCACHEFS_POSIX_ACL = whenBetween "6.7" "6.18" (option yes);
 
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
@@ -901,6 +905,7 @@ let
       # Enable staging drivers.  These are somewhat experimental, but
       # they generally don't hurt.
       STAGING = yes;
+      STAGING_MEDIA = yes;
     };
 
     proc-events = {
@@ -1090,7 +1095,9 @@ let
         HOLTEK_FF = yes;
         INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
+        LOGITECH_FF = yes;
         LOGIG940_FF = yes;
+        LOGIWHEELS_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
         NVIDIA_SHIELD_FF = whenAtLeast "6.5" yes;
         PLAYSTATION_FF = whenAtLeast "5.12" yes;
@@ -1302,8 +1309,13 @@ let
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
         # Enable AMD's ROCm GPU compute stack
-        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit (yes);
-        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit (yes);
+        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
+        # required for P2P DMABUF
+        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+        # required for P2P transfers between accelerators
+        HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+
+        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit yes;
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 
@@ -1469,6 +1481,9 @@ let
         # Enable AMD Wi-Fi RF band mitigations
         # See https://cateee.net/lkddb/web-lkddb/AMD_WBRF.html
         AMD_WBRF = whenAtLeast "6.8" yes;
+
+        # Enable AMD heterogeneous core hardware feedback interface
+        AMD_HFI = whenAtLeast "6.17" yes;
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;

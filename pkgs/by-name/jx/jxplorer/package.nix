@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Java Ldap Browser";
     homepage = "https://sourceforge.net/projects/jxplorer/";
-    license = lib.licenses.caossl;
-    maintainers = with maintainers; [ benwbooth ];
+    license = lib.licenses.asl11;
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "jxplorer";
   };

@@ -1,24 +1,25 @@
 {
   lib,
-  buildGoModule,
+  stdenv,
+  buildGo125Module,
   fetchFromGitHub,
   installShellFiles,
   testers,
   dnscontrol,
 }:
 
-buildGoModule rec {
+buildGo125Module rec {
   pname = "dnscontrol";
-  version = "4.23.0";
+  version = "4.25.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
     tag = "v${version}";
-    hash = "sha256-Jaa+geO2836kQHTRhaQru367iQvqac6sgnpL9244dkw=";
+    hash = "sha256-8VNo2IPchplTlI97BzsGcc6i0z7V79oHkSVtCLY8558=";
   };
 
-  vendorHash = "sha256-PbOqi9vfz46lwoP3aUPl/JKDJtYYF7IwnN9lppZ8KYA=";
+  vendorHash = "sha256-Ob6TP81pnsX/uzEh0ekz+koVoC/tqC/3P4wAShnQOVc=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +31,7 @@ buildGoModule rec {
     "-X=github.com/StackExchange/dnscontrol/v4/pkg/version.version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd dnscontrol \
       --bash <($out/bin/dnscontrol shell-completion bash) \
       --zsh <($out/bin/dnscontrol shell-completion zsh)

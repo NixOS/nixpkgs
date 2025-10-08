@@ -143,7 +143,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tlp";
     maintainers = with maintainers; [
-      abbradar
       lovesegfault
     ];
     license = licenses.gpl2Plus;

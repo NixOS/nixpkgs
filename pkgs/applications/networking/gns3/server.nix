@@ -87,6 +87,7 @@ python3Packages.buildPythonApplication {
   disabledTestPaths = [
     # fails on ofborg because of lack of cpu vendor information
     "tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    "tests/controller/test_project.py"
   ];
 
   passthru.tests = {

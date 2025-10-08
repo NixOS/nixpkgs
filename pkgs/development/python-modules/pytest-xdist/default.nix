@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-xdist";
-  version = "3.6.1";
+  version = "3.8.0";
   disabled = pythonOlder "3.7";
 
   pyproject = true;
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "pytest_xdist";
     inherit version;
-    hash = "sha256-6tFWpNsjHux2lzf1dmjvWKIISjSy5VxKj6INhhEHMA0=";
+    hash = "sha256-fleBJeybxgUIYaqT8tWfHY0IVZXWVRwskLb0+tjTqfE=";
   };
 
   build-system = [

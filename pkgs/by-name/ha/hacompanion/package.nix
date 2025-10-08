@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "hacompanion";
-  version = "1.0.21";
+  version = "1.0.23";
 
   src = fetchFromGitHub {
     owner = "tobias-kuendig";
     repo = "hacompanion";
     rev = "v${version}";
-    hash = "sha256-6fj9Gs/ezISx5Llele5mrTFR0IiQzzm1wWcAywTaFPk=";
+    hash = "sha256-C86XRgNwR0VD0Dph4D7ysB9ul6fBw1MTK++ODsJrE8k=";
   };
 
   vendorHash = "sha256-y2eSuMCDZTGdCs70zYdA8NKbuPPN5xmnRfMNK+AE/q8=";
@@ -27,5 +27,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ramblurr ];
+    mainProgram = "hacompanion";
   };
 }

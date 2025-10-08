@@ -10,17 +10,17 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "werf";
-  version = "2.45.0";
+  version = "2.47.8";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tTWhGaKEYrZAQnIkuRcTMLlYooexhRIc0rJ4wzqJCWM=";
+    hash = "sha256-1F/Gy5bKq+08aJaNM5XdI8/z2A6p+4UL+Rf/NXhtWlU=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-5OSt0oMFb0MjJDXTFJKtaintOhnCShBOHfjllWbwb6Y=";
+  vendorHash = "sha256-bmHnpADqmJXMJvPRv7WpnafgPg+ZlwfsvXKdAxW5Ovg=";
 
   subPackages = [ "cmd/werf" ];
 
@@ -83,7 +83,7 @@ buildGoModule (finalAttrs: {
 
   versionCheckProgramArg = "version";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     for shell in bash fish zsh; do
       installShellCompletion \
         --cmd werf \

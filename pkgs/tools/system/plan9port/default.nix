@@ -135,7 +135,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [
       bbarker
-      ehmry
       ftrvxmtrx
       kovirobi
       matthewdargan

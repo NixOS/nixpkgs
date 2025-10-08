@@ -12,6 +12,7 @@
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
   openclSupport ? false,
   clblast,
@@ -29,7 +30,9 @@
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && !openclSupport,
   vulkanSupport ? false,
   rpcSupport ? false,
+  apple-sdk_14,
   curl,
+  llama-cpp,
   shaderc,
   vulkan-headers,
   vulkan-loader,
@@ -40,7 +43,7 @@
 let
   # It's necessary to consistently use backendStdenv when building with CUDA support,
   # otherwise we get libstdc++ errors downstream.
-  # cuda imposes an upper bound on the gcc version, e.g. the latest gcc compatible with cudaPackages_11 is gcc11
+  # cuda imposes an upper bound on the gcc version
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else stdenv;
   inherit (lib)
     cmakeBool
@@ -72,13 +75,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6134";
+  version = "6670";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-J/Z6xrCfdSkf504AGiOmgRqgrOUXXTpqq5BpXwgOI4g=";
+    hash = "sha256-B4Qog7RLcre8KB9N+aVUZSJwlkHIIcCxR8jySoxbXoQ=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
@@ -118,6 +121,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     ++ optionals rocmSupport rocmBuildInputs
     ++ optionals blasSupport [ blas ]
     ++ optionals vulkanSupport vulkanBuildInputs
+    ++ optionals metalSupport [ apple-sdk_14 ]
     ++ [ curl ];
 
   preConfigure = ''
@@ -146,8 +150,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
-    # TODO: this should become `clr.gpuTargets` in the future.
-    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmPackages.rocblas.amdgpu_targets)
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")
@@ -173,26 +176,31 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # the tests are failing as of 2025-08
   doCheck = false;
 
-  passthru.updateScript = nix-update-script {
-    attrPath = "llama-cpp";
-    extraArgs = [
-      "--version-regex"
-      "b(.*)"
-    ];
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+      metal = llama-cpp.override { metalSupport = true; };
+    };
+    updateScript = nix-update-script {
+      attrPath = "llama-cpp";
+      extraArgs = [
+        "--version-regex"
+        "b(.*)"
+      ];
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Inference of Meta's LLaMA model (and others) in pure C/C++";
     homepage = "https://github.com/ggml-org/llama.cpp";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "llama";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
+      booxter
       dit7ya
-      elohmeier
       philiptaron
       xddxdd
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     badPlatforms = optionals (cudaSupport || openclSupport) lib.platforms.darwin;
     broken = metalSupport && !effectiveStdenv.hostPlatform.isDarwin;
   };

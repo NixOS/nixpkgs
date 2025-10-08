@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "public";
     group = "BC";
     repo = "belcard";
-    rev = version;
+    tag = version;
     sha256 = "sha256-pRNJ1bDS2v0Cn+6cxMeFa0JQ27UZR6kCI9P6gQ5W2GA=";
   };
 

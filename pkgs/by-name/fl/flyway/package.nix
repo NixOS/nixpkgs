@@ -9,10 +9,10 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "flyway";
-  version = "11.7.0";
+  version = "11.13.0";
   src = fetchurl {
-    url = "mirror://maven/org/flywaydb/flyway-commandline/${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-Ajm4V+AAaC3NXvdTkxJ9uhk0QayZzoPYyU5RRrWxz/g=";
+    url = "https://github.com/flyway/flyway/releases/download/flyway-${finalAttrs.version}/flyway-commandline-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-yIptnNIt76qYer9AhLRZ0hhuUhx56PWXU3jjkLBz11M=";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -20,10 +20,13 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     mkdir -p $out/bin $out/share/flyway
     cp -r drivers conf licenses README.txt $out/share/flyway
-    install -Dt $out/share/flyway/lib lib/*.jar lib/flyway/*.jar lib/oracle_wallet/*.jar lib/aad/msal4j-1.15.1.jar lib/aad/slf4j-api-1.7.30.jar
+    find lib -type f -name "*.jar" | while read -r file; do
+        dest="$out/share/flyway/lib/''${file#lib/}"
+        install -D "$file" "$dest"
+    done
     makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
       --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
-      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
+      --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/lib/flyway/*:$out/share/flyway/lib/aad/*:$out/share/flyway/lib/netty/*:$out/share/flyway/drivers/*'" \
       --add-flags "org.flywaydb.commandline.Main" \
   '';
   passthru.tests = {

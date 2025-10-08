@@ -51,6 +51,6 @@ buildPythonPackage rec {
     description = "Jinja2 template bindings for the Pyramid web framework";
     homepage = "https://github.com/Pylons/pyramid_jinja2";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

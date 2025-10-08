@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "turrishw";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "turris-cz";
     repo = "turrishw";
     tag = "v${version}";
-    hash = "sha256-elu2f54asdzdn7wQT2CKo8kVYnc1KTakRyr8Nxu+XNw=";
+    hash = "sha256-LQ1ebcVQo7jixAKOPg/oNBnRU8AZebHANfDU4lamB8g=";
   };
 
   build-system = [ hatchling ];

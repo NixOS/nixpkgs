@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "identify";
-  version = "2.6.13";
+  version = "2.6.14";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pre-commit";
     repo = "identify";
     tag = "v${version}";
-    hash = "sha256-Du96uRQCymduvAruHSgjKv/OrDIPaMwPU+x/OTchERQ=";
+    hash = "sha256-l486vlvhDEm9f11z1FDB9AxAbQ+jgHvGppn4CTc/dLk=";
   };
 
   build-system = [ setuptools ];

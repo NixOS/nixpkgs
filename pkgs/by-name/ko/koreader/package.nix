@@ -12,39 +12,44 @@
   sdcv,
   SDL2,
   openssl,
-  nix-update-script,
+  writeScript,
 }:
 let
   luajit_lua52 = luajit.override { enable52Compat = true; };
-in
-stdenv.mkDerivation rec {
-  pname = "koreader";
-  version = "2025.04";
 
-  src =
-    {
-      aarch64-linux = fetchurl {
-        url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-arm64.deb";
-        hash = "sha256-bpKNP+1C0oHZEv6HGL4dBziv3RfCow882yV8JFLtDJ4=";
-      };
-      armv7l-linux = fetchurl {
-        url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-armhf.deb";
-        hash = "sha256-q3M33f0b5FAU/nmPfzsXu93mVZOhXMVgBbfwnieqkeM=";
-      };
-      x86_64-linux = fetchurl {
-        url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-        hash = "sha256-ZZujk98YVvNJmffW2fDg+n+z1xgtkha7y1LasYEhCR4=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  version = "2025.08";
 
   src_repo = fetchFromGitHub {
     repo = "koreader";
     owner = "koreader";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Kt00AZARfQjGY8FzDcQB8UaowWW2+KWyXJzexFNmZmM=";
+    hash = "sha256-lkXpmvde1PPJRocnRpmuu4AeCv/0Mql40Aw5WIZfj5s=";
   };
+in
+stdenv.mkDerivation {
+  pname = "koreader";
+  inherit version;
+
+  src =
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      arch = selectSystem {
+        aarch64-linux = "arm64";
+        armv7l-linux = "armhf";
+        x86_64-linux = "amd64";
+      };
+    in
+    fetchurl {
+      url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-${arch}.deb";
+      hash = selectSystem {
+        aarch64-linux = "sha256-OWhTlVEw1Sj7ZBE6/vTMwt67nP/qzBi47ZOtUZ2aBeo=";
+        armv7l-linux = "sha256-NOlyh+q0WAsSD8r4MH0jVfRvxBmqkxmMzUp9Jwn5u+s=";
+        x86_64-linux = "sha256-nzQdfc9bo0RCpa9sGH0rc7RBnR6Z0z6NIyJcYogNhCw=";
+      };
+    };
 
   nativeBuildInputs = [
     makeWrapper
@@ -60,29 +65,31 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  dontConfigure = true;
-  dontBuild = true;
-
   installPhase = ''
-    mkdir -p $out
-    dpkg-deb -x $src .
-    cp -R usr/* $out/
+    runHook preInstall
 
-    # Link required binaries
+    cp --recursive usr $out
+  ''
+  # Link required binaries
+  + ''
     ln -sf ${luajit_lua52}/bin/luajit $out/lib/koreader/luajit
     ln -sf ${sdcv}/bin/sdcv $out/lib/koreader/sdcv
     ln -sf ${gnutar}/bin/tar $out/lib/koreader/tar
-
-    # Link SSL/network libraries
+  ''
+  # Link SSL/network libraries
+  + ''
     ln -sf ${openssl.out}/lib/libcrypto.so.3 $out/lib/koreader/libs/libcrypto.so.1.1
     ln -sf ${openssl.out}/lib/libssl.so.3 $out/lib/koreader/libs/libssl.so.1.1
-
-    # Copy fonts
+  ''
+  # Copy fonts
+  + ''
     find ${src_repo}/resources/fonts -type d -execdir cp -r '{}' $out/lib/koreader/fonts \;
-
-    # Remove broken symlinks
+  ''
+  # Remove broken symlinks
+  + ''
     find $out -xtype l -print -delete
-
+  ''
+  + ''
     wrapProgram $out/bin/koreader --prefix LD_LIBRARY_PATH : $out/lib/koreader/libs:${
       lib.makeLibraryPath [
         gtk3-x11
@@ -92,10 +99,29 @@ stdenv.mkDerivation rec {
         openssl.out
       ]
     }
+
+    runHook postInstall
   '';
 
   passthru = {
-    updateScript = nix-update-script { };
+    inherit src_repo;
+    updateScript = writeScript "update-koreader" ''
+      #!/usr/bin/env nix-shell
+      #!nix-shell -i bash -p nix curl jq nix-update common-updater-scripts
+      set -eou pipefail
+      version=$(nix eval --raw --file . koreader.version)
+      nix-update koreader
+      latestVersion=$(nix eval --raw --file . koreader.version)
+      if [[ "$latestVersion" == "$version" ]]; then
+        exit 0
+      fi
+      update-source-version koreader $latestVersion --source-key=src_repo --ignore-same-version
+      systems=$(nix eval --json -f . koreader.meta.platforms | jq --raw-output '.[]')
+      for system in $systems; do
+        hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . koreader.src.url --system "$system")))
+        update-source-version koreader $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
+      done
+    '';
   };
 
   meta = {
@@ -112,7 +138,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       contrun
-      neonfuz
       liberodark
     ];
   };

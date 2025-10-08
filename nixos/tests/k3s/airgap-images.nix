@@ -22,21 +22,13 @@ import ../make-test-python.nix (
           "--disable servicelb"
           "--disable traefik"
         ];
-        images = [ k3s.airgapImages ];
+        images = [ k3s.airgap-images ];
       };
     };
 
     testScript = ''
-      import json
-
-      start_all()
       machine.wait_for_unit("k3s")
       machine.wait_until_succeeds("journalctl -r --no-pager -u k3s | grep \"Imported images from /var/lib/rancher/k3s/agent/images/\"")
-      images = json.loads(machine.succeed("crictl img -o json"))
-      image_names = [i["repoTags"][0] for i in images["images"]]
-      with open("${k3s.imagesList}") as expected_images:
-        for line in expected_images:
-          assert line.rstrip() in image_names, f"The image {line.rstrip()} is not present in the airgap images archive"
     '';
   }
 )

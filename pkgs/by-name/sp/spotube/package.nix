@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spotube";
-  version = "4.0.2";
+  version = "5.0.0";
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
@@ -46,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     libappindicator
     libnotify
     libsoup_3
-    mpv-unwrapped
     webkitgtk_4_1
   ];
 
@@ -54,31 +53,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
-    ${lib.optionalString stdenv.hostPlatform.isLinux ''
-      mkdir -p $out
-      cp -r usr/* $out
-    ''}
-
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r Spotube.app $out/Applications
-      makeBinaryWrapper $out/Applications/Spotube.app/Contents/MacOS/Spotube $out/bin/spotube
-    ''}
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out
+    cp -r usr/* $out
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r Spotube.app $out/Applications
+    makeBinaryWrapper $out/Applications/Spotube.app/Contents/MacOS/Spotube $out/bin/spotube
+  ''
+  + ''
     runHook postInstall
-  '';
-
-  preFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf $out/share/spotube/lib/libmedia_kit_native_event_loop.so \
-        --replace-needed libmpv.so.1 libmpv.so
   '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     makeWrapper $out/share/spotube/spotube $out/bin/spotube \
-        "''${gappsWrapperArgs[@]}" \
-        --prefix LD_LIBRARY_PATH : $out/share/spotube/lib:${lib.makeLibraryPath [ mpv-unwrapped ]} \
-        --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
+      "''${gappsWrapperArgs[@]}" \
+      --prefix LD_LIBRARY_PATH : $out/share/spotube/lib:${lib.makeLibraryPath [ mpv-unwrapped ]} \
+      --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
   '';
 
   passthru.sources =
@@ -94,19 +87,19 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "aarch64-linux" = fetchArtifact {
         suffix = "linux-aarch64.deb";
-        hash = "sha256-zoJ0WPui6KdUyML47RbEBNySTZ8FvStYAOj1mndjh1s=";
+        hash = "sha256-xMYqhywxJTghJlxqO05i79140R5PBOsMw66BYIWq5Vw=";
       };
       "x86_64-linux" = fetchArtifact {
         suffix = "linux-x86_64.deb";
-        hash = "sha256-SM/lWUhXe20FCgneegn5As5a53YBsoDIMfIYhRBHWjI=";
+        hash = "sha256-ZsppON33jnn52eoVtCX7gyWy7lLlRRrhzvOz7reCP4Q=";
       };
       "x86_64-darwin" = fetchArtifact {
         suffix = "macos-universal.dmg";
-        hash = "sha256-0eNeMpC8usPfbuh2aj43n6KLysRQ55yLdOT7Z5faVLU=";
+        hash = "sha256-OMgDMWBsG/Powfti4ObeZfWFir8KzCbzi8ujV6Y967s=";
       };
       "aarch64-darwin" = fetchArtifact {
         suffix = "macos-universal.dmg";
-        hash = "sha256-0eNeMpC8usPfbuh2aj43n6KLysRQ55yLdOT7Z5faVLU=";
+        hash = "sha256-OMgDMWBsG/Powfti4ObeZfWFir8KzCbzi8ujV6Y967s=";
       };
     };
 

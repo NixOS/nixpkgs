@@ -29,6 +29,7 @@
   armTrustedFirmwareS905,
   opensbi,
   buildPackages,
+  callPackages,
   darwin,
 }@pkgs:
 
@@ -136,7 +137,7 @@ let
 
           mkdir -p "$out/nix-support"
           ${lib.concatMapStrings (file: ''
-            echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+            echo "file binary-dist ${installDir}/${baseNameOf file}" >> "$out/nix-support/hydra-build-products"
           '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
 
           runHook postInstall
@@ -198,17 +199,22 @@ in
 
     filesToInstall = [
       "tools/dumpimage"
+      "tools/fdt_add_pubkey"
       "tools/fdtgrep"
       "tools/kwboot"
+      "tools/mkeficapsule"
       "tools/mkenvimage"
       "tools/mkimage"
       "tools/env/fw_printenv"
+      "tools/mkeficapsule"
     ];
 
     pythonScriptsToInstall = {
       "tools/efivar.py" = (python3.withPackages (ps: [ ps.pyopenssl ]));
     };
   };
+
+  ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
     defconfig = "A20-OLinuXino-Lime_defconfig";
@@ -238,6 +244,12 @@ in
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+  };
+
+  ubootBananaPim2Zero = buildUBoot {
+    defconfig = "bananapi_m2_zero_defconfig";
+    filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
+    extraMeta.platforms = [ "armv7l-linux" ];
   };
 
   ubootBananaPim3 = buildUBoot {

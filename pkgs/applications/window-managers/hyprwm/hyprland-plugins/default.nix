@@ -3,25 +3,37 @@
   lib,
   callPackage,
   pkg-config,
-}:
+  hyprland,
+}@topLevelArgs:
 let
-  mkHyprlandPlugin =
-    hyprland:
-    args@{ pluginName, ... }:
-    hyprland.stdenv.mkDerivation (
-      args
-      // {
+
+  mkHyprlandPlugin = lib.extendMkDerivation {
+    constructDrv = topLevelArgs.hyprland.stdenv.mkDerivation;
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        pluginName ? "",
+        nativeBuildInputs ? [ ],
+        buildInputs ? [ ],
+        hyprland ? topLevelArgs.hyprland,
+        ...
+      }@args:
+
+      {
         pname = "${pluginName}";
-        nativeBuildInputs = [ pkg-config ] ++ args.nativeBuildInputs or [ ];
-        buildInputs = [ hyprland ] ++ hyprland.buildInputs ++ (args.buildInputs or [ ]);
+        nativeBuildInputs = [ pkg-config ] ++ nativeBuildInputs;
+        buildInputs = [ hyprland ] ++ hyprland.buildInputs ++ buildInputs;
         meta = args.meta // {
           description = args.meta.description or "";
           longDescription =
             (args.meta.longDescription or "")
             + "\n\nPlugins can be installed via a plugin entry in the Hyprland NixOS or Home Manager options.";
+
+          platforms = args.meta.platforms or hyprland.meta.platforms or [ ];
         };
-      }
-    );
+      };
+  };
 
   plugins = lib.mergeAttrsList [
     { hy3 = import ./hy3.nix; }

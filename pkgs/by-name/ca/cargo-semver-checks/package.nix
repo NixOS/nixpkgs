@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-semver-checks";
-  version = "0.43.0";
+  version = "0.44.0";
 
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = "cargo-semver-checks";
     tag = "v${version}";
-    hash = "sha256-SfmixBe7M0wnKEIBCpae2ypqgsTb5/AC0GwI42uMGlE=";
+    hash = "sha256-QU8vLdq129gcGi8/VfjflY6zkIXXam/Ri2zjbO3sPNg=";
   };
 
-  cargoHash = "sha256-OD3N1rtgXQhWNfFjnLLrkBvC9Ra9EBNv6GqtX0ai4Gs=";
+  cargoHash = "sha256-0oPAIhhBcCwZT8sD2PWJ5ZDuMMFvmwxhyOXJWA9+jZg=";
 
   nativeBuildInputs = [
     cmake
@@ -34,6 +34,10 @@ rustPlatform.buildRustPackage rec {
     # requires internet access
     "--skip=detects_target_dependencies"
     "--skip=query::tests_lints::feature_missing"
+    # platform specific snapshots
+    "--skip=query::tests_lints::trait_method_target_feature_removed"
+    "--skip=query::tests_lints::unsafe_trait_method_requires_more_target_features"
+    "--skip=query::tests_lints::unsafe_trait_method_target_feature_added"
   ];
 
   preCheck = ''

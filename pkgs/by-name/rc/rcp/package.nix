@@ -7,22 +7,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rcp";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "wykurz";
     repo = "rcp";
     rev = "v${version}";
-    hash = "sha256-mFFMxGu/r8xtfMkpDW2Rk/oTWQcS9oK6ngoRKCc+STo=";
+    hash = "sha256-hAm9dHxsIR5cJlZHvSUcj3FXBIF9g7klJ2gSg9vVQcE=";
   };
 
-  cargoHash = "sha256-2S3bygSu9ouT/RYCmafFGvFHHFJXVryb5E3PMmcZs0U=";
+  cargoHash = "sha256-iULpW3DiEUmKz5OKUeWfYNAfhrEECd2XijtYqfcbjB0=";
 
   RUSTFLAGS = "--cfg tokio_unstable";
 
   checkFlags = [
-    # this test also sets setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
+    # these tests set setuid permissions on a test file (3oXXX) which doesn't work in a sandbox
     "--skip=copy::copy_tests::check_default_mode"
+    "--skip=test_weird_permissions"
+    "--skip=test_edge_case_special_permissions"
+    # these tests require network access to determine local IP address
+    "--skip=test_remote"
   ];
 
   meta = {

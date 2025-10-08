@@ -7,11 +7,11 @@
 
 let
   pname = "electron-mail";
-  version = "5.3.0";
+  version = "5.3.3";
 
   src = fetchurl {
     url = "https://github.com/vladimiry/ElectronMail/releases/download/v${version}/electron-mail-${version}-linux-x86_64.AppImage";
-    hash = "sha256-QGYsD8Ec6/G4X2dGZfH7LwT6o6X599kP6V34y6WxP64=";
+    hash = "sha256-i1oJ/DNGspE7ELuN7MI0e8/69SZwirqahBa7Jf5kP7s=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
@@ -22,7 +22,7 @@ appimageTools.wrapType2 {
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
     substituteInPlace $out/share/applications/${pname}.desktop \
-      --replace 'Exec=AppRun' 'Exec=${pname}'
+      --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
