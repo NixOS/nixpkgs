@@ -8218,8 +8218,12 @@ self: super: with self; {
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (
-    pkgs.dtc.override {
-      inherit python;
+    callPackage pkgs.dtc.override {
+      # Have to manually give it the correct
+      # meson or else it will provide the pythonPackages meson
+      # which doesn't have a setupHook
+      meson = pkgs.pkgsBuildHost.meson;
+      python3 = python;
       pythonSupport = true;
     }
   );
