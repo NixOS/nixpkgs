@@ -1316,6 +1316,18 @@ mapAliases {
   ### L ###
 
   l3afpad = throw "'l3afpad' has been removed due to lack of maintenance upstream. Consider using 'xfce.mousepad' instead"; # Added 2024-09-14
+  languageMachines = {
+    ticcutils = ticcutils;
+    libfolia = libfolia;
+    ucto = ucto;
+    uctodata = uctodata;
+    timbl = timbl;
+    timblserver = timblserver;
+    mbt = mbt;
+    frog = frog;
+    frogdata = frogdata;
+    test = frog.tests.simple;
+  }; # Added 2025-10-07
   larynx = piper-tts; # Added 2023-05-09
   LASzip = laszip; # Added 2024-06-12
   LASzip2 = laszip_2; # Added 2024-06-12

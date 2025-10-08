@@ -1,34 +1,39 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  callPackage,
+  autoreconfHook,
   bzip2,
   libtar,
   libtool,
   pkg-config,
   autoconf-archive,
   libxml2,
-  icu,
-  languageMachines,
+  icu60,
+  ticcutils,
+  timbl,
+  mbt,
+  libfolia,
+  ucto,
+  frogdata,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-frog.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frog";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "frog-v${release.version}.tar.gz";
+  version = "0.13.7";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "frog";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-khc2uZ/dOtWPTnt/ZD6ILxD386MaZt6fsvNTWTCbs+c=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
   buildInputs = [
     bzip2
@@ -36,27 +41,29 @@ stdenv.mkDerivation {
     libtool
     autoconf-archive
     libxml2
-    icu
-    languageMachines.ticcutils
-    languageMachines.timbl
-    languageMachines.mbt
-    languageMachines.libfolia
-    languageMachines.ucto
-    languageMachines.frogdata
+    icu60
+    ticcutils
+    timbl
+    mbt
+    libfolia
+    ucto
+    frogdata
   ];
 
-  preConfigure = ''
-    sh bootstrap.sh
-  '';
   postInstall = ''
     # frog expects the data files installed in the same prefix
     mkdir -p $out/share/frog/;
-    for f in ${languageMachines.frogdata}/share/frog/*; do
+    for f in ${frogdata}/share/frog/*; do
       ln -s $f $out/share/frog/;
     done;
 
     make check
   '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests.simple = callPackage ./test.nix { frog = finalAttrs.finalPackage; };
+  };
 
   meta = with lib; {
     description = "Tagger-Lemmatizer-Morphological-Analyzer-Dependency-Parser for Dutch";
@@ -72,4 +79,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})

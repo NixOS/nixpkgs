@@ -1,10 +1,10 @@
 {
   runCommand,
-  languageMachines,
+  frog,
 }:
 
 runCommand "frog-test" { } ''
-  ${languageMachines.frog}/bin/frog >$out <<EOF
+  ${frog}/bin/frog >$out <<EOF
   Dit is een test
 
   EOF

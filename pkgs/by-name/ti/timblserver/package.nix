@@ -1,33 +1,33 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
   bzip2,
   libtar,
   libtool,
   pkg-config,
   autoconf-archive,
   libxml2,
-  languageMachines,
+  ticcutils,
+  timbl,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-timblserver.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "timblserver";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "timblserver-${release.version}.tar.gz";
+  version = "1.11";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "timblserver";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TE6fsgr/L5GcBjFKlU6S1DiT8OKP6i7TVirxj/OfhlM=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
   buildInputs = [
     bzip2
@@ -35,10 +35,13 @@ stdenv.mkDerivation {
     libtool
     autoconf-archive
     libxml2
-    languageMachines.ticcutils
-    languageMachines.timbl
+    ticcutils
+    timbl
   ];
-  preConfigure = "sh bootstrap.sh";
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+  };
 
   meta = with lib; {
     description = "This server for TiMBL implements several memory-based learning algorithms";
@@ -54,4 +57,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})

@@ -1,57 +1,70 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
   libtool,
   pkg-config,
   autoconf-archive,
   libxml2,
-  icu,
+  icu60,
   bzip2,
   libtar,
-  languageMachines,
+  ticcutils,
+  libfolia,
+  uctodata,
+  frog,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-ucto.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ucto";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "ucto-${release.version}.tar.gz";
+  version = "0.9.6";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "ucto";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-DFQ4ePE3n3zg0mrqUNHzE3Hi81n1IurYjhh6YVAghEE=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
   buildInputs = [
     bzip2
     libtool
     autoconf-archive
-    icu
+    icu60
     libtar
     libxml2
-    languageMachines.ticcutils
-    languageMachines.libfolia
-    languageMachines.uctodata
+    ticcutils
+    libfolia
+    uctodata
     # TODO textcat from libreoffice? Pulls in X11 dependencies?
   ];
-  preConfigure = "sh bootstrap.sh;";
 
   postInstall = ''
     # ucto expects the data files installed in the same prefix
     mkdir -p $out/share/ucto/;
-    for f in ${languageMachines.uctodata}/share/ucto/*; do
+    for f in ${uctodata}/share/ucto/*; do
       echo "Linking $f"
       ln -s $f $out/share/ucto/;
     done;
   '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      /**
+        Reverse dependencies. Does not respect overrides.
+      */
+      reverseDependencies = lib.recurseIntoAttrs {
+        inherit frog;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Rule-based tokenizer for natural language";
@@ -68,4 +81,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})

@@ -1,34 +1,34 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
   libtool,
   pkg-config,
   autoconf-archive,
   libxml2,
-  icu,
+  icu60,
   bzip2,
   libtar,
-  languageMachines,
+  ticcutils,
+  frog,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-libfolia.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libfolia";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "libfolia-${release.version}.tar.gz";
+  version = "1.7";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "libfolia";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-fH+XqTaMf7/8ZA0lwWiD7s7fmGkjni83Q7lv5sh50H4=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
   buildInputs = [
     bzip2
@@ -36,13 +36,24 @@ stdenv.mkDerivation {
     autoconf-archive
     libtar
     libxml2
-    icu
-    languageMachines.ticcutils
+    icu60
+    ticcutils
   ];
-  preConfigure = "sh bootstrap.sh";
 
   # compat with icu61+ https://github.com/unicode-org/icu/blob/release-64-2/icu4c/readme.html#L554
   CXXFLAGS = [ "-DU_USING_ICU_NAMESPACE=1" ];
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      /**
+        Reverse dependencies. Does not respect overrides.
+      */
+      reverseDependencies = lib.recurseIntoAttrs {
+        inherit frog;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "C++ API for FoLiA documents; an XML-based linguistic annotation format";
@@ -57,4 +68,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})

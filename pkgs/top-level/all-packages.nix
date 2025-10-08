@@ -7273,8 +7273,6 @@ with pkgs;
     };
   };
 
-  frog = res.languageMachines.frog;
-
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
   makeFontsConf = callPackage ../development/libraries/fontconfig/make-fonts-conf.nix { };
@@ -7743,12 +7741,6 @@ with pkgs;
   l-smash = callPackage ../development/libraries/l-smash {
     stdenv = gccStdenv;
   };
-
-  languageMachines = recurseIntoAttrs (
-    import ../development/libraries/languagemachines/packages.nix {
-      inherit pkgs;
-    }
-  );
 
   lcms = lcms2;
 

@@ -1,35 +1,47 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  automake,
-  autoconf,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
   libtool,
   pkg-config,
   autoconf-archive,
+  frog,
 }:
 
-let
-  release = lib.importJSON ./release-info/LanguageMachines-uctodata.json;
-in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "uctodata";
-  version = release.version;
-  src = fetchurl {
-    inherit (release) url sha256;
-    name = "uctodata-${release.version}.tar.gz";
+  version = "0.4";
+
+  src = fetchFromGitHub {
+    owner = "LanguageMachines";
+    repo = "uctodata";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4P9icZSm+DYGxGobSGzSExTv+ZQaLjkJ0gvOI27byRk=";
   };
+
   nativeBuildInputs = [
     pkg-config
-    automake
-    autoconf
+    autoreconfHook
   ];
+
   buildInputs = [
     libtool
     autoconf-archive
   ];
-  preConfigure = "sh bootstrap.sh";
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      /**
+        Reverse dependencies. Does not respect overrides.
+      */
+      reverseDependencies = lib.recurseIntoAttrs {
+        inherit frog;
+      };
+    };
+  };
 
   meta = with lib; {
     description = "Rule-based tokenizer for natural language";
@@ -45,4 +57,4 @@ stdenv.mkDerivation {
     '';
   };
 
-}
+})
