@@ -38,14 +38,14 @@ buildPythonPackage rec {
     hash = "sha256-zd1KJQOH3uHrePJbBgLuq++GSoM1KYW9VwpYnCrZZQY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-requirements-txt
     hatch-nodejs-version
     hatchling
     trove-classifiers
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
     backrefs
     colorama
