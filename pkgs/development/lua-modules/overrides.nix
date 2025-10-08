@@ -298,6 +298,14 @@ in
         url = "https://github.com/psychon/lgi/commit/46a163d9925e7877faf8a4f73996a20d7cf9202a.patch";
         sha256 = "0gfvvbri9kyzhvq3bvdbj2l6mwvlz040dk4mrd5m9gz79f7w109c";
       })
+
+      # https://github.com/lgi-devs/lgi/issues/346
+      # https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/issues/1
+      (fetchpatch {
+        name = "glib-2.86.0.patch";
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/lgi/-/raw/05a0c9df75883da235bacd4379b769e7d7713fb9/0001-Use-TypeClass.get-instead-of-.ref.patch";
+        hash = "sha256-Z1rNv0VzVrK41rV73KiPXq9yLaNxbTOFiSd6eLZyrbY=";
+      })
     ];
 
     # https://github.com/lgi-devs/lgi/pull/300
