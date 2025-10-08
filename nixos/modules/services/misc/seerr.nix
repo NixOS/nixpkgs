@@ -5,37 +5,37 @@
   ...
 }:
 let
-  cfg = config.services.jellyseerr;
+  cfg = config.services.seerr;
 in
 {
   meta.maintainers = [ lib.maintainers.camillemndn ];
 
-  options.services.jellyseerr = {
-    enable = lib.mkEnableOption ''Jellyseerr, a requests manager for Jellyfin'';
-    package = lib.mkPackageOption pkgs "jellyseerr" { };
+  options.services.seerr = {
+    enable = lib.mkEnableOption ''Seerr, a requests manager for Jellyfin'';
+    package = lib.mkPackageOption pkgs "seerr" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = ''Open port in the firewall for the Jellyseerr web interface.'';
+      description = ''Open port in the firewall for the Seerr web interface.'';
     };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 5055;
-      description = ''The port which the Jellyseerr web UI should listen to.'';
+      description = ''The port which the Seerr web UI should listen to.'';
     };
 
     configDir = lib.mkOption {
       type = lib.types.path;
-      default = "/var/lib/jellyseerr/config";
+      default = "/var/lib/seerr/config";
       description = "Config data directory";
     };
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.jellyseerr = {
-      description = "Jellyseerr, a requests manager for Jellyfin";
+    systemd.services.seerr = {
+      description = "Seerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
@@ -44,7 +44,7 @@ in
       };
       serviceConfig = {
         Type = "exec";
-        StateDirectory = "jellyseerr";
+        StateDirectory = "seerr";
         DynamicUser = true;
         ExecStart = lib.getExe cfg.package;
         Restart = "on-failure";

@@ -1,6 +1,6 @@
 {
   lib,
-  pnpm_9,
+  pnpm_10,
   fetchFromGitHub,
   stdenv,
   makeWrapper,
@@ -14,15 +14,15 @@
 
 let
   nodejs = nodejs_22;
-  pnpm = pnpm_9.override { inherit nodejs; };
+  pnpm = pnpm_10.override { inherit nodejs; };
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "jellyseerr";
+  pname = "seerr";
   version = "2.7.3";
 
   src = fetchFromGitHub {
-    owner = "Fallenbagel";
-    repo = "jellyseerr";
+    owner = "seerr-team";
+    repo = "seerr";
     tag = "v${finalAttrs.version}";
     hash = "sha256-a3lhQ33Zb+vSu1sQjuqO3bITiQEIOVyFTecmJAhJROU=";
   };
@@ -67,34 +67,29 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share
-    cp -r -t $out/share .next node_modules dist public package.json jellyseerr-api.yml
+    cp -r -t $out/share .next node_modules dist public package.json seerr-api.yml
     runHook postInstall
   '';
 
   postInstall = ''
     mkdir -p $out/bin
-    makeWrapper '${nodejs}/bin/node' "$out/bin/jellyseerr" \
+    makeWrapper '${nodejs}/bin/node' "$out/bin/seerr" \
       --add-flags "$out/share/dist/index.js" \
       --chdir "$out/share" \
       --set NODE_ENV production
   '';
 
   passthru = {
-    inherit (nixosTests) jellyseerr;
+    inherit (nixosTests) seerr;
     updateScript = nix-update-script { };
   };
 
   meta = {
-    description = "Fork of overseerr for jellyfin support";
-    homepage = "https://github.com/Fallenbagel/jellyseerr";
-    longDescription = ''
-      Jellyseerr is a free and open source software application for managing
-      requests for your media library. It is a a fork of Overseerr built to
-      bring support for Jellyfin & Emby media servers!
-    '';
+    description = "Open-source media request and discovery manager for Jellyfin, Plex, and Emby";
+    homepage = "https://github.com/seerr-team/seerr";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.camillemndn ];
     platforms = lib.platforms.linux;
-    mainProgram = "jellyseerr";
+    mainProgram = "seerr";
   };
 })
