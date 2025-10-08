@@ -12,7 +12,6 @@
   opencv4,
   pandas,
   pillow,
-  pythonOlder,
   requests,
   retinaface,
   setuptools,
@@ -24,8 +23,6 @@ buildPythonPackage rec {
   pname = "deepface";
   version = "0.0.95";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serengil";
