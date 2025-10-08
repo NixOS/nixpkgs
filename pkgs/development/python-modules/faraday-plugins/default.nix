@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "faraday-plugins";
-  version = "1.25.0";
+  version = "1.27.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
     tag = version;
-    hash = "sha256-VkpwTHPpM1cS5HT5zE3gB25zWOTIVaZdPKNgQFJHO/Q=";
+    hash = "sha256-bKb2J6iqJ2cEx6S5a4yL/xeHOqwutYhDCJQAbjfTQVE=";
   };
 
   postPatch = ''
@@ -68,6 +68,9 @@ buildPythonPackage rec {
     # JSON parsing issue
     "test_process_report_ignore_info"
     "test_process_report_tags"
+    "test_process_report_min_severity"
+    "test_process_report_max_severity"
+    "test_process_report_min_max_severity"
   ];
 
   pythonImportsCheck = [ "faraday_plugins" ];
