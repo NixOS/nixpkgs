@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   qt6,
 }:
@@ -21,6 +22,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace ll-installer/space.linglong.Installer.desktop \
       --replace-fail "Exec=/usr/bin/ll-installer" "Exec=$out/bin/ll-installer"
   '';
+
+  patches = [
+    (fetchpatch2 {
+      # https://github.com/OpenAtom-Linyaps/linyaps-web-store-installer/pull/24
+      url = "https://github.com/OpenAtom-Linyaps/linyaps-web-store-installer/commit/fc365dd06b17df38d9ae991775e51c5f1b547341.patch?full_index=1";
+      hash = "sha256-BpFM3w8njRANvxH34PyP3Y2hLtZWOl18KZxzA+Ew3Zg=";
+      includes = [ "CMakeLists.txt" ];
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

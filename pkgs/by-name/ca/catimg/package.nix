@@ -17,6 +17,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
+
+  # Fix build with CMake 4: https://github.com/NixOS/nixpkgs/issues/449801
+  # CMake 4 removed support for CMake < 3.5, so we set the minimum policy version
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   env = lib.optionalAttrs (stdenv.hostPlatform.libc == "glibc") {
     CFLAGS = "-D_DEFAULT_SOURCE";
   };
