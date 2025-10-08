@@ -15,12 +15,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "2.0.7";
+  version = "2.0.9";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HunKXVuDGTdH+CzIQbtkN0oRMocQ7gVh6Mf6L7wlhAY=";
+    hash = "sha256-St4ZaZOgJhdMWr75V5OJAt/4JgOkvkCMmpYpn2mbxh0=";
   };
 
   passthru.updateScript = nix-update-script { };
