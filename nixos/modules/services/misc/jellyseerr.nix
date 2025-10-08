@@ -12,7 +12,7 @@ in
 
   options.services.jellyseerr = {
     enable = lib.mkEnableOption "Jellyseerr, a requests manager for Jellyfin";
-    package = lib.mkPackageOption pkgs "jellyseerr" { };
+    package = lib.mkPackageOption pkgs "seerr" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
