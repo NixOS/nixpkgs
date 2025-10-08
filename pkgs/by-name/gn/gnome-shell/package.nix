@@ -57,10 +57,13 @@
   gnome-autoar,
   gnome-tecla,
   bash-completion,
+  lcms2,
   libgbm,
   libGL,
   libXi,
   libX11,
+  libxkbcommon,
+  libsoup_3,
   libxml2,
 }:
 
@@ -69,7 +72,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-shell";
-  version = "48.4";
+  version = "49.0";
 
   outputs = [
     "out"
@@ -78,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${lib.versions.major finalAttrs.version}/gnome-shell-${finalAttrs.version}.tar.xz";
-    hash = "sha256-QOLtdLRTZ/DKOPv6oKtHCGjSNZHQPcQNCr1v930jtwc=";
+    hash = "sha256-/whrnDIYCZQw2RhSQ7Z3ajaiy3vLcFqYxhLyz0dCcIo=";
   };
 
   patches = [
@@ -152,10 +155,13 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
+    lcms2 # required by mutter-clutter
     libgbm
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11
+    libxkbcommon
+    libsoup_3
     libxml2
 
     # recording
@@ -185,7 +191,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs \
       src/data-to-c.py \
-      meson/generate-app-list.py
+      build-aux/generate-app-list.py
 
     # We can generate it ourselves.
     rm -f man/gnome-shell.1

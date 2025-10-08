@@ -7,14 +7,17 @@
   pkg-config,
   rustc,
   cargo,
+  python3,
   rustPlatform,
   vala,
   gi-docgen,
+  gobject-introspection,
   libseccomp,
   lcms2,
   gtk4,
-  gobject-introspection,
   gnome,
+  replaceVars,
+  bubblewrap,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -24,14 +27,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "1.2.3";
+  version = "2.0.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "glycin";
     tag = finalAttrs.version;
-    hash = "sha256-O7Z7kzC0BU7FAF1UZC6LbXVIXPDertsAUNYwHAjkzPI=";
+    hash = "sha256-HLvdDQ1rXm2JTUwot07qOIzNaK/sK6zLswips8oIp9c=";
   };
 
   nativeBuildInputs = [
@@ -40,24 +43,25 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     rustc
     cargo
+    python3
     rustPlatform.cargoSetupHook
   ]
   ++ lib.optionals withIntrospection [
     vala
     gi-docgen
+    gobject-introspection
   ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-g2tsQ6q+sUxn3itu3IgZ5EGtDorPzhaO5B1hlEW5xzs=";
+    hash = "sha256-IaiQ1OdmlBcIYyruG6p/rrOxq7x8csF/W3ONerh2lAA=";
   };
 
   buildInputs = [
     libseccomp
     lcms2
     gtk4
-  ]
-  ++ lib.optionals withIntrospection [ gobject-introspection ];
+  ];
 
   propagatedBuildInputs = [
     libseccomp
@@ -66,11 +70,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonBool "glycin-loaders" false)
+    (lib.mesonBool "glycin-thumbnailer" false)
     (lib.mesonBool "libglycin" true)
     (lib.mesonBool "introspection" withIntrospection)
     (lib.mesonBool "vapi" withIntrospection)
     (lib.mesonBool "capi_docs" withIntrospection)
   ];
+
+  postPatch = ''
+    patch -p2 < ${finalAttrs.passthru.glycin3PathsPatch}
+
+    patchShebangs \
+      build-aux/crates-version.py
+  '';
 
   passthru = {
     updateScript =
@@ -100,6 +112,14 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+
+    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
+      bwrap = "${bubblewrap}/bin/bwrap";
+    };
+
+    glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
+      bwrap = "${bubblewrap}/bin/bwrap";
+    };
   };
 
   meta = {
@@ -111,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [ normalcea ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "glycin-1"

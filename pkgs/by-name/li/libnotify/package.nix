@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
-  version = "0.8.6";
+  version = "0.8.7";
 
   outputs = [
     "out"
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-xVQKrvtg4dY7HFh8BfIoTr5y7OfQwOXkp3jP1YRLa1g=";
+    hash = "sha256-S+FSAuxBhPzhrBWZfs5VMNK+Mv6Vc4da6xDjtXOFh0g=";
   };
 
   mesonFlags = [

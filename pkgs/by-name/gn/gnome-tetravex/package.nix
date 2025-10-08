@@ -20,11 +20,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-tetravex";
-  version = "3.38.2";
+  version = "3.38.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-tetravex/${lib.versions.majorMinor version}/gnome-tetravex-${version}.tar.xz";
-    hash = "sha256-H83xCXm5o1JgCdeDociKOJkY82DaTttE+6JccfGGkRs=";
+    hash = "sha256-g4SawGTUVuHdRrbiAcaGFSYkw9HsS5mTWYWkmqeRcss=";
   };
 
   patches = [

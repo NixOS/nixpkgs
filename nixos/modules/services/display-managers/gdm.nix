@@ -348,15 +348,15 @@ in
     # GDM LFS PAM modules, adapted somehow to NixOS
     security.pam.services = {
       gdm-launch-environment.text = ''
-        auth     required       pam_succeed_if.so audit quiet_success user = gdm
+        auth     required       pam_succeed_if.so audit quiet_success user ingroup gdm
         auth     optional       pam_permit.so
 
-        account  required       pam_succeed_if.so audit quiet_success user = gdm
+        account  required       pam_succeed_if.so audit quiet_success user ingroup gdm
         account  sufficient     pam_unix.so
 
         password required       pam_deny.so
 
-        session  required       pam_succeed_if.so audit quiet_success user = gdm
+        session  required       pam_succeed_if.so audit quiet_success user ingroup gdm
         session  required       pam_env.so conffile=/etc/pam/environment readenv=0
         session  optional       ${config.systemd.package}/lib/security/pam_systemd.so
         session  optional       pam_keyinit.so force revoke

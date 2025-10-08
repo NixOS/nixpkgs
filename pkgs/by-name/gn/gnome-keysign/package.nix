@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitLab,
+  fetchpatch,
   python3,
   wrapGAppsHook3,
   gobject-introspection,
@@ -11,7 +12,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "gnome-keysign";
-  version = "1.3.0";
+  version = "0.9";
   format = "setuptools";
 
   src = fetchFromGitLab {
@@ -19,8 +20,16 @@ python3.pkgs.buildPythonApplication rec {
     owner = "GNOME";
     repo = "gnome-keysign";
     rev = version;
-    hash = "sha256-k77z8Yligzs4rHpPckRGcC5qnCHynHQRjdDkzxwt1Ss=";
+    hash = "sha256-wLw3yUqCzuSDqD+C4ttYWFsnNTeGojQW6uYsCGnTepk=";
   };
+
+  patches = [
+    # Remove broken future dependency
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-keysign/-/commit/ea197254baf70a499a371678369eda85aff7a4c5.patch";
+      hash = "sha256-Msd0NzNAkoAAxZ/WNiM3xV382lnx+xT6gyQiNGDEMM8=";
+    })
+  ];
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -43,7 +52,6 @@ python3.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
-    future
     gpgme
     magic-wormhole
     pygobject3

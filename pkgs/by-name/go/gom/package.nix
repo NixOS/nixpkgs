@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gom";
-  version = "0.5.3";
+  version = "0.5.4";
 
   outputs = [
     "out"
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gom/${lib.versions.majorMinor version}/gom-${version}.tar.xz";
-    sha256 = "Bp0JCfvca00n7feoeTZhlOOrUIsDVIv1uJ/2NUbSAXc=";
+    sha256 = "V7qAb+CAqTfVZkF40hutdlOyxWHqEoGHp7ELwXYrf2U=";
   };
 
   patches = [

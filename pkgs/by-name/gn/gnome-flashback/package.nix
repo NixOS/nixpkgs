@@ -66,11 +66,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-flashback";
-  version = "3.56.0";
+  version = "3.58.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-flashback/${lib.versions.majorMinor finalAttrs.version}/gnome-flashback-${finalAttrs.version}.tar.xz";
-    hash = "sha256-LQ+iLzc9sIDq7w5Wk7lijN6ETyVjPVqQMTsEndlSkmA=";
+    hash = "sha256-qqI+cEJHfnQfJCebRoudIK9OwZXuQ7PTEs2q+E2YwyE=";
   };
 
   patches = [

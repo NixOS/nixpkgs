@@ -40,6 +40,9 @@ buildPythonPackage rec {
       stripLen = 2;
       hash = "sha256-BfWPc8dsB09KiEm9bNT8e+jH76jiDefQlEhhLJoq7tI=";
     })
+
+    # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/issues/4322
+    ./skip-failing-test-not-initialized.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

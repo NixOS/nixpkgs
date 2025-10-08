@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   vala,
   pkg-config,
   gtk3,
@@ -37,6 +38,15 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/gitg/${lib.versions.majorMinor version}/gitg-${version}.tar.xz";
     hash = "sha256-NCoxaE2rlnHNNBvT485mWtzuBGDCoIHdxJPNvAMTJTA=";
   };
+
+  patches = [
+    # Switch to girepository-2.0
+    # https://gitlab.gnome.org/GNOME/gitg/-/merge_requests/278
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gitg/raw/630cf1bdb50ad37fb20b81d76caa8622e7225c58/f/gitg-gir-2.0.patch";
+      hash = "sha256-9pC7wrxWcI1C/8yB5AcaED0RyaVbQzT0Ajuz0TM4hmo=";
+    })
+  ];
 
   nativeBuildInputs = [
     gobject-introspection
