@@ -21302,6 +21302,12 @@
     githubId = 30029970;
     keys = [ { fingerprint = "FA05 8A29 B45E 06C0 8FE9  4907 05D2 BE42 F3EC D7CC"; } ];
   };
+  Ra77a3l3-jar = {
+    name = "Raffaele Meo";
+    email = "raffaelemeo77@gmail.com";
+    github = "Ra77a3l3-jar";
+    githubId = 175424218;
+  };
   raboof = {
     email = "arnout@bzzt.net";
     matrix = "@raboof:matrix.org";
