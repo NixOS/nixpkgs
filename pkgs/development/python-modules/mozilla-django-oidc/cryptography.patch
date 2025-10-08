@@ -1,0 +1,13 @@
+diff --git a/tests/test_auth.py b/tests/test_auth.py
+index 345de64..a78dab4 100644
+--- a/tests/test_auth.py
++++ b/tests/test_auth.py
+@@ -1219,7 +1219,7 @@ def test_es256_alg_verification(self, mock_requests):
+         self.backend = OIDCAuthenticationBackend()
+ 
+         # Generate a private key to create a test token with
+-        private_key = ec.generate_private_key(ec.SECP256R1, default_backend())
++        private_key = ec.generate_private_key(ec.SECP256R1(), default_backend())
+ 
+         # Make the public key available through the JWKS response
+         public_numbers = private_key.public_key().public_numbers()
