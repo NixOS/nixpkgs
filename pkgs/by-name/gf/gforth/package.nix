@@ -6,6 +6,7 @@
   autoreconfHook,
   texinfo,
   libffi,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -16,16 +17,19 @@ in
 stdenv.mkDerivation rec {
 
   pname = "gforth";
-  version = "0.7.9_20230518";
+  version = "0.7.9_20251001";
 
   src = fetchFromGitHub {
     owner = "forthy42";
     repo = "gforth";
     rev = version;
-    hash = "sha256-rXtmmENBt9RMdLPq8GDyndh4+CYnCmz6NYpe3kH5OwU=";
+    hash = "sha256-u9snXcFa/YYvITgMBY8FRYyyLFhHCP6hWA5ljwdKGLk=";
   };
 
+  patches = [ ./use-nproc-instead-of-fhs.patch ];
+
   nativeBuildInputs = [
+    writableTmpDirAsHomeHook
     autoreconfHook
     texinfo
     bootForth
