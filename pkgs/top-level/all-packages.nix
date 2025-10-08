@@ -7431,6 +7431,8 @@ with pkgs;
         package = windows.mcfgthreads;
       };
 
+  relibc = callPackage ../development/libraries/relibc { };
+
   # Only supported on Linux and only on glibc
   glibcLocales =
     if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu then
