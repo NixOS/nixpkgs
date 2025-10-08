@@ -79,16 +79,19 @@
   fetchpatch,
 }:
 
+let
+  abiVersion =
+    if lib.versionAtLeast gtk3.version "4.0" then
+      "6.0"
+    else
+      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}";
+in
+
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
   version = "2.50.1";
-  name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
-    if lib.versionAtLeast gtk3.version "4.0" then
-      "6.0"
-    else
-      "4.${if lib.versions.major libsoup.version == "2" then "0" else "1"}"
-  }";
+  name = "webkitgtk-${finalAttrs.version}+abi=${abiVersion}";
 
   outputs = [
     "out"
@@ -267,9 +270,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     homepage = "https://webkitgtk.org/";
     license = licenses.bsd2;
     pkgConfigModules = [
-      "javascriptcoregtk-4.0"
-      "webkit2gtk-4.0"
-      "webkit2gtk-web-extension-4.0"
+      "javascriptcoregtk-${abiVersion}"
+      "webkit2gtk-${abiVersion}"
+      "webkit2gtk-web-extension-${abiVersion}"
     ];
     platforms = platforms.linux ++ platforms.darwin;
     teams = [ teams.gnome ];
