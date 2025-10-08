@@ -1,6 +1,7 @@
 {
   pname,
   version,
+  src,
   meta,
   lib,
   stdenv,
@@ -33,16 +34,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit pname version meta;
-
-  src =
-    let
-      escapedVersion = lib.escapeURL version;
-    in
-    fetchurl {
-      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}_linux-x86_64.tar.xz";
-      hash = "sha256-tlIvUyp0wGQyyF1pvTqHaM019iV26mZlaqsgsRSzYMs=";
-    };
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
   dontPatchELF = true;
   nativeBuildInputs = [ wrapGAppsHook3 ];
@@ -154,4 +151,6 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "$libPath" \
         "$out/usr/lib/zotero-bin-${version}/{}" \;
   '';
+
+  passthru.updateScript = ./update.sh;
 }

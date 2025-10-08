@@ -1,6 +1,7 @@
 {
   pname,
   version,
+  src,
   meta,
   stdenv,
   fetchurl,
@@ -8,16 +9,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  inherit pname version meta;
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
-  src =
-    let
-      escapedVersion = lib.escapeURL version;
-    in
-    fetchurl {
-      url = "https://download.zotero.org/client/beta/${escapedVersion}/Zotero-${escapedVersion}.dmg";
-      hash = "sha256-LBFfBWsitApSdg41vsKT6i5Yk6NNLc7FV+BJGVmHv7E=";
-    };
   sourceRoot = ".";
 
   nativeBuildInputs = [ undmg ];
@@ -34,4 +32,6 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = ./update.sh;
 }
