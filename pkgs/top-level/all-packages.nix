@@ -1703,7 +1703,6 @@ with pkgs;
   };
 
   plausible = callPackage ../by-name/pl/plausible/package.nix {
-    elixir = elixir_1_18;
     beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_18; });
   };
 
@@ -2184,7 +2183,6 @@ with pkgs;
   mkspiffs-presets = recurseIntoAttrs (callPackages ../tools/filesystems/mkspiffs/presets.nix { });
 
   mobilizon = callPackage ../servers/mobilizon {
-    elixir = beam.packages.erlang_26.elixir_1_15;
     beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = self.elixir_1_15; });
     mobilizon-frontend = callPackage ../servers/mobilizon/frontend.nix { };
   };
@@ -3833,7 +3831,6 @@ with pkgs;
   tautulli = python3Packages.callPackage ../servers/tautulli { };
 
   pleroma = callPackage ../servers/pleroma {
-    elixir = elixir_1_17;
     beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
   };
 
@@ -5748,7 +5745,6 @@ with pkgs;
   inherit (beam.packages.erlang_26.beamPackages)
     elixir_1_16
     elixir_1_15
-    elixir_1_14
     ;
 
   inherit (beam.packages.erlang)
@@ -5760,7 +5756,6 @@ with pkgs;
     rebar3WithPlugins
     fetchHex
     lfe
-    lfe_2_1
     ;
 
   beamPackages = dontRecurseIntoAttrs beam27Packages;
@@ -7046,8 +7041,6 @@ with pkgs;
 
   inherit (callPackages ../development/libraries/bashup-events { }) bashup-events32 bashup-events44;
 
-  bc-soci = callPackage ../development/libraries/soci/bc-soci.nix { };
-
   # TODO(@Ericson2314): Build bionic libc from source
   bionic =
     if stdenv.hostPlatform.useAndroidPrebuilt then
@@ -7281,8 +7274,6 @@ with pkgs;
       enableLDAP = true;
     };
   };
-
-  frog = res.languageMachines.frog;
 
   fontconfig = callPackage ../development/libraries/fontconfig { };
 
@@ -7753,12 +7744,6 @@ with pkgs;
     stdenv = gccStdenv;
   };
 
-  languageMachines = recurseIntoAttrs (
-    import ../development/libraries/languagemachines/packages.nix {
-      inherit pkgs;
-    }
-  );
-
   lcms = lcms2;
 
   libagar = callPackage ../development/libraries/libagar { };
@@ -8129,10 +8114,6 @@ with pkgs;
 
   mbedtls_2 = callPackage ../development/libraries/mbedtls/2.nix { };
   mbedtls = callPackage ../development/libraries/mbedtls/3.nix { };
-
-  mediastreamer = libsForQt5.callPackage ../development/libraries/mediastreamer { };
-
-  mediastreamer-openh264 = callPackage ../development/libraries/mediastreamer/msopenh264.nix { };
 
   mergerfs = callPackage ../tools/filesystems/mergerfs { };
 
@@ -9833,9 +9814,8 @@ with pkgs;
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
 
-  rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix rec {
-    erlang = erlang_27;
-    elixir = elixir_1_17.override { inherit erlang; };
+  rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix {
+    beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_17; });
   };
 
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
@@ -11811,8 +11791,6 @@ with pkgs;
   libutp = callPackage ../applications/networking/p2p/libutp { };
   libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };
 
-  linphone = libsForQt5.callPackage ../applications/networking/instant-messengers/linphone { };
-
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
@@ -12542,8 +12520,6 @@ with pkgs;
 
   super-slicer-latest = super-slicer.latest;
 
-  soci = callPackage ../development/libraries/soci { };
-
   socialscan = with python3.pkgs; toPythonApplication socialscan;
 
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
@@ -12769,6 +12745,10 @@ with pkgs;
   tests-stdenv-gcc-stageCompare = callPackage ../test/stdenv/gcc-stageCompare.nix { };
 
   twinkle = qt5.callPackage ../applications/networking/instant-messengers/twinkle { };
+
+  linphonePackages = recurseIntoAttrs (
+    callPackage ../applications/networking/instant-messengers/linphone { }
+  );
 
   buildTypstPackage = callPackage ../build-support/build-typst-package.nix { };
 
