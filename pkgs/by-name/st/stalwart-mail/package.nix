@@ -18,14 +18,14 @@
   stalwartEnterprise ? false,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
   version = "0.11.8";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VqGosbSQxNeOS+kGtvXAmz6vyz5mJlXvKZM57B1Xue4=";
   };
 
@@ -146,6 +146,9 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
+  # Allow network access during tests on Darwin/macOS
+  __darwinAllowLocalNetworking = true;
+
   passthru = {
     inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
     webadmin = callPackage ./webadmin.nix { };
@@ -176,4 +179,4 @@ rustPlatform.buildRustPackage rec {
       pandapip1
     ];
   };
-}
+})
