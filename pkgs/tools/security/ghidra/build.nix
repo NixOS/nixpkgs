@@ -15,6 +15,8 @@
   ghidra-extensions,
   python3,
   python3Packages,
+  writeShellApplication,
+  nix-update,
 }:
 
 let
@@ -193,6 +195,15 @@ stdenv.mkDerivation (finalAttrs: {
       ;
 
     withExtensions = callPackage ./with-extensions.nix { ghidra = finalAttrs.finalPackage; };
+
+    updateScript = lib.getExe (writeShellApplication {
+      name = "ghidra-update";
+      runtimeInputs = [ nix-update ];
+      text = ''
+        nix-update --version-regex 'Ghidra_(.*)_build' ghidra
+        eval "$(nix-build --no-out-link -A ghidra.mitmCache.updateScript)"
+      '';
+    });
   };
 
   meta = {
