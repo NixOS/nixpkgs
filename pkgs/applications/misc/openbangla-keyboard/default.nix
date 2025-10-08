@@ -19,26 +19,15 @@
 
 stdenv.mkDerivation rec {
   pname = "openbangla-keyboard";
-  version = "unstable-2023-07-21";
+  version = "unstable-2025-08-19";
 
   src = fetchFromGitHub {
     owner = "openbangla";
     repo = "openbangla-keyboard";
-    # no upstream release in 3 years
-    # fcitx5 support was added over a year after the last release
-    rev = "780bd40eed16116222faff044bfeb61a07af158f";
-    hash = "sha256-4CR4lgHB51UvS/RLc0AEfIKJ7dyTCOfDrQdGLf9de8E=";
+    rev = "723e348ad2cb0607684d907ce8a9457e12993f4f";
+    hash = "sha256-XAcL4gBcu84DMR6o9JSJ/PmI1PsDdTETknD6C48E8ek=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # prevents runtime crash when fcitx5-based IM attempts to look in /usr
-    (fetchpatch {
-      name = "use-CMAKE_INSTALL_PREFIX-for-loading-data.patch";
-      url = "https://github.com/OpenBangla/OpenBangla-Keyboard/commit/f402472780c29eaa6b4cc841a70289adf171462b.diff";
-      hash = "sha256-YahvtyOxe8F40Wfe+31C6fdmm197QN26/Q67oinOplk=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -63,7 +52,7 @@ stdenv.mkDerivation rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit src cargoRoot postPatch;
-    hash = "sha256-qZMTZi7eqEp5kSmVx7qdS7eDKOzSv9fMjWT0h/MGyeY=";
+    hash = "sha256-UrS12fcXIIT3xhl/nyegwROBMCIepi6n07CS5CEA2BY=";
   };
 
   cmakeFlags =
@@ -85,7 +74,10 @@ stdenv.mkDerivation rec {
     mainProgram = "openbangla-gui";
     homepage = "https://openbangla.github.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ hqurve ];
+    maintainers = with lib.maintainers; [
+      hqurve
+      thshafi170
+    ];
     platforms = lib.platforms.linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
