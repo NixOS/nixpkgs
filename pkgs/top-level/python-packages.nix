@@ -7974,6 +7974,8 @@ self: super: with self; {
 
   langchain-google-genai = callPackage ../development/python-modules/langchain-google-genai { };
 
+  langchain-gradient = callPackage ../development/python-modules/langchain-gradient { };
+
   langchain-groq = callPackage ../development/python-modules/langchain-groq { };
 
   langchain-huggingface = callPackage ../development/python-modules/langchain-huggingface { };
