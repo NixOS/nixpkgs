@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "glv2";
     repo = "bruteforce-wallet";
-    rev = version;
+    tag = version;
     hash = "sha256-ngzG39c/bWv++PHVgce9r1PXElFhpgYoAepbqD/1Dq0=";
   };
 
