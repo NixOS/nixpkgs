@@ -6578,6 +6578,8 @@ self: super: with self; {
 
   green = callPackage ../development/python-modules/green { };
 
+  greenback = callPackage ../development/python-modules/greenback { };
+
   greeneye-monitor = callPackage ../development/python-modules/greeneye-monitor { };
 
   # built-in for pypi
