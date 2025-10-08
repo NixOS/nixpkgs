@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace-fail c++11 c++17
+      --replace-fail c++11 c++17 \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.13)" # done by https://github.com/Kingcom/armips/commit/e1ed5bf0f4565250b98b0ddfb9112f15dc8e8e3b upstream, patch not directly compatible
   '';
 
   nativeBuildInputs = [ cmake ];
