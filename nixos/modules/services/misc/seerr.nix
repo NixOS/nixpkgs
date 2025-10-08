@@ -5,25 +5,29 @@
   ...
 }:
 let
-  cfg = config.services.jellyseerr;
+  cfg = config.services.seerr;
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "services" "jellyseerr" ] [ "services" "seerr" ])
+  ];
+
   meta.maintainers = [ lib.maintainers.camillemndn ];
 
-  options.services.jellyseerr = {
-    enable = lib.mkEnableOption "Jellyseerr, a requests manager for Jellyfin";
+  options.services.seerr = {
+    enable = lib.mkEnableOption "Seerr, a requests manager for Jellyfin";
     package = lib.mkPackageOption pkgs "seerr" { };
 
     openFirewall = lib.mkOption {
       type = lib.types.bool;
       default = false;
-      description = "Open port in the firewall for the Jellyseerr web interface.";
+      description = "Open port in the firewall for the Seerr web interface.";
     };
 
     port = lib.mkOption {
       type = lib.types.port;
       default = 5055;
-      description = "The port which the Jellyseerr web UI should listen to.";
+      description = "The port which the Seerr web UI should listen to.";
     };
 
     configDir = lib.mkOption {
@@ -34,8 +38,8 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    systemd.services.jellyseerr = {
-      description = "Jellyseerr, a requests manager for Jellyfin";
+    systemd.services.seerr = {
+      description = "Seerr, a requests manager for Jellyfin";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       environment = {
