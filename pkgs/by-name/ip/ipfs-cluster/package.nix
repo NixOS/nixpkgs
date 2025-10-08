@@ -17,6 +17,8 @@ buildGoModule (finalAttrs: {
     hash = "sha256-mdLrLiRNudpQ8i0lvwoNAqhSWJ8VMEC1ZRxXHWHpqLY=";
   };
 
+  __darwinAllowLocalNetworking = true; # required for tests
+
   meta = with lib; {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = "https://ipfscluster.io";
