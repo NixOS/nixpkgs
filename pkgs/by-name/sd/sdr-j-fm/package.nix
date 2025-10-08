@@ -22,22 +22,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdr-j-fm";
-  version = "3.20";
+  version = "3.20-2025-10-07";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";
     repo = "sdr-j-fm";
-    tag = finalAttrs.version;
-    hash = "sha256-qNSmBVY1n5+DR9k1d+nY11gBrYS7Ah774R2FMgCR4ks=";
+    rev = "e348cc0a4b4b16f716f36115400dfd861b9a0bd5";
+    hash = "sha256-Do2W+B4U8xxCwGRjrJNWkSpgcXG+2PXoemju5oef+jU=";
   };
-
-  patches = [
-    # Fix linking error, https://github.com/JvanKatwijk/sdr-j-fm/pull/26
-    (fetchpatch {
-      url = "https://github.com/JvanKatwijk/sdr-j-fm/pull/26/commits/b336b5175a267347e037adb333669e571f7bde01.patch";
-      hash = "sha256-xYNR6XZVSKKk+s/DQJFGaSGc2U+P1AWFIeiRnGfpZX8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -47,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     qt5.qtbase
+    qt5.qtmultimedia
     libsForQt5.qwt6_1
     fftwFloat
     libsamplerate
@@ -54,14 +47,16 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     libsndfile
   ];
-  cmakeFlags = lib.mapAttrsToList lib.cmakeBool finalAttrs.passthru.features;
+  cmakeFlags = lib.mapAttrsToList lib.cmakeBool finalAttrs.passthru.features ++ [
+    # https://github.com/JvanKatwijk/sdr-j-fm/issues/27#issuecomment-3371932903
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   passthru = {
     features = {
       # All of these features don't require an external dependencies, although it
       # may be implied - upstraem bundles everything they need in their repo.
       AIRSPY = true;
-      SDRPLAY = true;
       SDRPLAY_V3 = true;
       HACKRF = true;
       LIME = true;
