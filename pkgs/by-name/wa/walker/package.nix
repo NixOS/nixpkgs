@@ -1,30 +1,34 @@
 {
   lib,
-  buildGoModule,
+  rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  vips,
+  protobuf,
+  glib,
   gobject-introspection,
   wrapGAppsHook4,
   gtk4,
   gtk4-layer-shell,
+  gdk-pixbuf,
+  graphene,
+  cairo,
+  pango,
+  poppler,
   nix-update-script,
-  libqalculate,
 }:
 
-buildGoModule rec {
+rustPlatform.buildRustPackage rec {
   pname = "walker";
-  version = "0.13.26";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "abenz1267";
     repo = "walker";
     rev = "v${version}";
-    hash = "sha256-LslpfHXj31Lvq+26ZDzCTaGBbxmp7yXlgKT+uwUEEts=";
+    hash = "sha256-cSRd4ncUWjB59nRqY0X0eXioOIL7q7PwgOQggE54lTI=";
   };
 
-  vendorHash = "sha256-N7lNxO/l3E1BlSSbSiQjrDPy2sWwk4G4JYlUArmMJxs=";
-  subPackages = [ "cmd/walker.go" ];
+  cargoHash = "sha256-Nm7KxZBvQOk4gOJCtMyMVASepJDrVmogHqv6Tc1r33Q=";
 
   passthru.updateScript = nix-update-script { };
 
@@ -32,21 +36,26 @@ buildGoModule rec {
     pkg-config
     gobject-introspection
     wrapGAppsHook4
+    protobuf
   ];
 
   buildInputs = [
+    glib
     gtk4
-    vips
     gtk4-layer-shell
-    libqalculate
+    gdk-pixbuf
+    graphene
+    cairo
+    pango
+    poppler
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Wayland-native application runner";
     homepage = "https://github.com/abenz1267/walker";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ donovanglover ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ donovanglover ];
     mainProgram = "walker";
   };
 }
