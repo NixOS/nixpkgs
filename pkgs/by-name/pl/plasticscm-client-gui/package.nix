@@ -82,13 +82,17 @@ buildFHSEnv {
     done
 
     mkdir -p $out/share/applications
-    for entry in ${plasticscm-client-gui-unwrapped}/share/applications/*; do
+
+    for entry in ${plasticscm-client-gui-unwrapped}/share/applications/{unityvcs,plasticx}.desktop; do
       substitute $entry $out/share/applications/$(basename $entry) \
-        --replace-quiet /opt/plasticscm5/client/linplasticx plasticgui \
-        --replace-quiet /opt/plasticscm5/client/lingluonx gluon \
-        --replace-quiet /opt/plasticscm5/theme/avalonia/icons/linunityvcs.ico linunityvcs \
-        --replace-quiet /opt/plasticscm5/theme/avalonia/icons/lingluonx.ico lingluonx
+        --replace-fail /opt/plasticscm5/client/linplasticx plasticgui \
+        --replace-fail /opt/plasticscm5/theme/avalonia/icons/linunityvcs.ico linunityvcs
     done
+
+    substitute ${plasticscm-client-gui-unwrapped}/share/applications/gluonx.desktop \
+      $out/share/applications/gluonx.desktop \
+      --replace-fail /opt/plasticscm5/client/lingluonx gluon \
+      --replace-fail /opt/plasticscm5/theme/avalonia/icons/lingluonx.ico lingluonx
 
     for ico in ${plasticscm-client-gui-unwrapped}/opt/plasticscm5/theme/avalonia/icons/*; do
       tmpdir=$(mktemp -d)
