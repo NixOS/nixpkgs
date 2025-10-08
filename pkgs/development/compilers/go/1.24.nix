@@ -65,7 +65,9 @@ stdenv.mkDerivation (finalAttrs: {
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
     ./go-env-go_ldso.patch
-    ./go-default-pie.patch
+    (replaceVars ./go-default-pie.patch {
+      inherit (stdenv.targetPlatform.go) GOARCH;
+    })
   ];
 
   inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;

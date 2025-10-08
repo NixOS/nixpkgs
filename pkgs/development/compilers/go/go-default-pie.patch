@@ -7,7 +7,7 @@ index f9706a6988..abac42d550 100644
  		return true
  	}
 -	return false
-+	return BuildModeSupported("gc", "pie", goos, goarch)
++	return goarch == "@GOARCH@" && BuildModeSupported("gc", "pie", goos, goarch)
  }
  
  // ExecutableHasDWARF reports whether the linked executable includes DWARF
