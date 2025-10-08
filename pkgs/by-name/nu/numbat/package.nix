@@ -25,6 +25,19 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     mkdir -p $out/share/numbat
     cp -r $src/numbat/modules $out/share/numbat/
+
+    mkdir -p $out/share/applications
+    cp $src/assets/numbat.desktop $out/share/applications
+
+    for size in 16 22 24 32 48 64 128 256 512; do
+      dims="''${size}x''${size}"
+      dest=$out/share/icons/hicolor/''${dims}/apps
+      mkdir -p $dest
+      cp $src/assets/numbat-''${dims}.png ''${dest}/numbat.png
+    done
+
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp $src/assets/numbat.svg $out/share/icons/hicolor/scalable/apps
   '';
 
   preCheck = ''
