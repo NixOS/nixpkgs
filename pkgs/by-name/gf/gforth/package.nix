@@ -14,15 +14,14 @@ let
   bootForth = callPackage ./boot-forth.nix { };
   lispDir = "${placeholder "out"}/share/emacs/site-lisp";
 in
-stdenv.mkDerivation rec {
-
+stdenv.mkDerivation (finalAttrs: {
   pname = "gforth";
   version = "0.7.9_20251001";
 
   src = fetchFromGitHub {
     owner = "forthy42";
     repo = "gforth";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-u9snXcFa/YYvITgMBY8FRYyyLFhHCP6hWA5ljwdKGLk=";
   };
 
@@ -35,6 +34,7 @@ stdenv.mkDerivation rec {
     bootForth
     swig
   ];
+
   buildInputs = [
     libffi
   ];
@@ -54,9 +54,11 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Forth implementation of the GNU project";
-    homepage = "https://github.com/forthy42/gforth";
-    license = lib.licenses.gpl3;
+    homepage = "https://www.gnu.org/software/gforth";
+    downloadPage = "https://github.com/forthy42/gforth";
+    license = lib.licenses.gpl3Plus;
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64; # segfault when running ./gforthmi
     platforms = lib.platforms.all;
+    mainProgram = "gforth";
   };
-}
+})
