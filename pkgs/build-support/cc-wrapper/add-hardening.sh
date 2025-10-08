@@ -25,6 +25,13 @@ if [[ -n "${hardeningEnableMap[strictflexarrays3]-}" ]]; then
   hardeningEnableMap["strictflexarrays1"]=1
 fi
 
+# libcxxhardeningextensive implies libcxxhardeningfast enablement - make explicit before
+# we filter unsupported flags because unsupporting libcxxhardeningextensive
+# doesn't mean we should unsupport libcxxhardeningfast too
+if [[ -n "${hardeningEnableMap[libcxxhardeningextensive]-}" ]]; then
+  hardeningEnableMap["libcxxhardeningfast"]=1
+fi
+
 
 # Remove unsupported flags.
 for flag in @hardening_unsupported_flags@; do
@@ -36,6 +43,10 @@ for flag in @hardening_unsupported_flags@; do
   # strictflexarrays1 being unsupported implies strictflexarrays3 is unsupported
   if [[ "$flag" = 'strictflexarrays1' ]] ; then
     unset -v "hardeningEnableMap['strictflexarrays3']"
+  fi
+  # libcxxhardeningfast being unsupported implies libcxxhardeningextensive is unsupported
+  if [[ "$flag" = 'libcxxhardeningfast' ]] ; then
+    unset -v "hardeningEnableMap['libcxxhardeningextensive']"
   fi
 done
 
@@ -50,9 +61,14 @@ if [[ -n "${hardeningEnableMap[strictflexarrays3]-}" ]]; then
   unset -v "hardeningEnableMap['strictflexarrays1']"
 fi
 
+# now make libcxxhardeningfast and libcxxhardeningextensive mutually exclusive
+if [[ -n "${hardeningEnableMap[libcxxhardeningextensive]-}" ]]; then
+  unset -v "hardeningEnableMap['libcxxhardeningfast']"
+fi
+
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
-  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection nostrictaliasing pacret strictflexarrays1 strictflexarrays3 pic strictoverflow glibcxxassertions format trivialautovarinit zerocallusedregs)
+  declare -a allHardeningFlags=(fortify fortify3 shadowstack stackprotector stackclashprotection nostrictaliasing pacret strictflexarrays1 strictflexarrays3 pic strictoverflow libcxxhardeningfast libcxxhardeningextensive glibcxxassertions format trivialautovarinit zerocallusedregs)
   declare -A hardeningDisableMap=()
 
   # Determine which flags were effectively disabled so we can report below.
@@ -114,6 +130,14 @@ for flag in "${!hardeningEnableMap[@]}"; do
     glibcxxassertions)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling glibcxxassertions >&2; fi
       hardeningCFlagsBefore+=('-D_GLIBCXX_ASSERTIONS')
+      ;;
+    libcxxhardeningfast)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling libcxxhardeningfast >&2; fi
+      hardeningCFlagsBefore+=('-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST')
+      ;;
+    libcxxhardeningextensive)
+      if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling libcxxhardeningextensive >&2; fi
+      hardeningCFlagsBefore+=('-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE')
       ;;
     stackprotector)
       if (( "${NIX_DEBUG:-0}" >= 1 )); then echo HARDENING: enabling stackprotector >&2; fi

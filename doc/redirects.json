@@ -124,6 +124,12 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "libcxxhardeningextensive": [
+    "index.html#libcxxhardeningextensive"
+  ],
+  "libcxxhardeningfast": [
+    "index.html#libcxxhardeningfast"
+  ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],

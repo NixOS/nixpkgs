@@ -1675,6 +1675,18 @@ Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on 
 
 These checks may have an impact on performance in some cases.
 
+#### `libcxxhardeningfast` {#libcxxhardeningfast}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_FAST` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "fast" mode contains a set of security-critical checks that can be done with relatively little overhead in constant time.
+
+Disabling `libcxxhardeningfast` implies disablement of checks from `libcxxhardeningextensive`.
+
+#### `libcxxhardeningextensive` {#libcxxhardeningextensive}
+
+Adds the `-D_LIBCPP_HARDENING_MODE=_LIBCPP_HARDENING_MODE_EXTENSIVE` compiler flag. This flag only has an effect on libc++ targets, and when defined, enables a set of assertions that prevent undefined behavior caused by violating preconditions of the standard library. libc++ provides several hardening modes, and this "extensive" mode adds checks for undefined behavior that incur relatively little overhead but aren’t security-critical. The additional rigour impacts performance more than fast mode: benchmarking is recommended to determine if it is acceptable for a particular application.
+
+Enabling this flag implies enablement of checks from `libcxxhardeningfast`. Disabling this flag does not imply disablement of checks from `libcxxhardeningfast`.
+
 #### `pacret` {#pacret}
 
 This flag adds the `-mbranch-protection=pac-ret` compiler option on aarch64-linux targets. This uses ARM v8.3's Pointer Authentication feature to sign function return pointers before adding them to the stack. The pointer's authenticity is then validated before returning to its destination. This dramatically increases the difficulty of ROP exploitation techniques.
