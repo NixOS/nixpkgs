@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-bbjV3+41cxAlKCEd1/nvnZ19GhctWOr5Lu4X+Vg3EAk=";
   };
 
+  # TODO: drop -DCMAKE_POLICY_VERSION_MINIMUM once maim adds CMake 4 support
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.10" ];
   nativeBuildInputs = [
     cmake
     pkg-config
