@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    # Fix configure with cmake4 for the vendored protobuf
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   installPhase = ''
     install -Dm755 -t $out/bin grpc_node_plugin
     install -Dm755 -t $out/bin deps/protobuf/protoc
