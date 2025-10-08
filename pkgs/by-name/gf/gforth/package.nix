@@ -4,6 +4,7 @@
   fetchFromGitHub,
   callPackage,
   autoreconfHook,
+  gitUpdater,
   texinfo,
   libffi,
   writableTmpDirAsHomeHook,
@@ -51,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
   preConfigure = ''
     mkdir -p ${lispDir}
   '';
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Forth implementation of the GNU project";
