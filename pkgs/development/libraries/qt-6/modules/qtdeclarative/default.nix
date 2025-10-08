@@ -1,4 +1,5 @@
 {
+  fetchpatch,
   qtModule,
   qtbase,
   qtlanguageserver,
@@ -29,31 +30,19 @@ qtModule {
   ];
 
   patches = [
-    # invalidates qml caches created from nix applications at different
-    # store paths and disallows saving caches of bare qml files in the store.
-    (replaceVars ./invalidate-caches-from-mismatched-store-paths.patch {
+    # don't cache bytecode of bare qml files in the store, as that never gets cleaned up
+    (replaceVars ./dont-cache-nix-store-paths.patch {
       nixStore = builtins.storeDir;
-      nixStoreLength = toString ((builtins.stringLength builtins.storeDir) + 1); # trailing /
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
-
     # Fix common crash
-    # Manual backport of https://invent.kde.org/qt/qt/qtdeclarative/-/commit/b1ee7061ba77a7f5dc4148129bb2083f5c28e039
     # https://bugreports.qt.io/browse/QTBUG-140018
-    ./stackview-crash.patch
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtdeclarative/-/commit/2b7f93da38d41ffaeb5322a7dca40ec26fc091a1.diff";
+      hash = "sha256-AOXey18lJlswpZ8tpTTZeFb0VE9k1louXy8TPPGNiA4=";
+    })
   ];
-
-  preConfigure =
-    let
-      storePrefixLen = toString ((builtins.stringLength builtins.storeDir) + 1);
-    in
-    ''
-      # "NIX:" is reserved for saved qmlc files in patch 0001, "QTDHASH:" takes the place
-      # of the old tag, which is otherwise the qt version, invalidating caches from other
-      # qtdeclarative store paths.
-      echo "QTDHASH:''${out:${storePrefixLen}:32}" > .tag
-    '';
 
   cmakeFlags = [
     "-DQt6ShaderToolsTools_DIR=${pkgsBuildBuild.qt6.qtshadertools}/lib/cmake/Qt6ShaderTools"

@@ -1,6 +1,6 @@
 {
   lib,
-  fetchurl,
+  fetchgit,
   llvmPackages,
   python,
   cmake,
@@ -13,14 +13,15 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "shiboken6";
-  version = "6.9.3";
+  version = "6.10.0";
 
-  src = fetchurl {
-    url = "mirror://qt/official_releases/QtForPython/pyside6/PySide6-${finalAttrs.version}-src/pyside-setup-everywhere-src-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fNLVq7mPLm9EKw5B9fz5MOcxKuSxf2gTFrGtx7Y7sXI=";
+  src = fetchgit {
+    url = "https://code.qt.io/pyside/pyside-setup.git";
+    rev = "97af685d5b777323690704fb9848f50aa2728ce9";
+    hash = "sha256-zJV4rrqr2bzWFEG1CWOI+y6wbfQDvWAst6T3aSssj6M=";
   };
 
-  sourceRoot = "pyside-setup-everywhere-src-${finalAttrs.version}/sources/shiboken6";
+  sourceRoot = "${finalAttrs.src.name}/sources/shiboken6";
 
   patches = [ ./fix-include-qt-headers.patch ];
 
@@ -48,10 +49,17 @@ stdenv'.mkDerivation (finalAttrs: {
   # variable available in this file.
   postPatch = ''
     substituteInPlace cmake/ShibokenHelpers.cmake --replace-fail '#!/bin/bash' '#!''${BASH}'
+
+    # raise ValueError('ZIP does not support timestamps before 1980')
+    find \
+      shibokenmodule/files.dir/shibokensupport/ \
+      libshiboken/embed/signature_bootstrap.py \
+      -exec touch -d "1980-01-01T00:00Z" {} \;
   '';
 
   postInstall = ''
     cd ../../..
+    chmod +w .
     ${python.pythonOnBuildForHost.interpreter} setup.py egg_info --build-type=shiboken6
     cp -r shiboken6.egg-info $out/${python.sitePackages}/
   '';

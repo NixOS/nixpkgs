@@ -5110,8 +5110,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.30.1";
-          hash = "sha256-cKdVQTGj7R37YefQAaTspF1RVul/9wv7u9b5TpGZN5k=";
+          version = "1.31.0";
+          hash = "sha256-97dQeCFm2i5uRF45k1tVMWiXNh5xBw3MVYM8MSIeDFE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5468,8 +5468,8 @@ let
         mktplcRef = {
           name = "vscode-zig";
           publisher = "ziglang";
-          version = "0.6.13";
-          hash = "sha256-4DYsSGqWa+jbD8tguULFQLdhKluXK8skj9nSst9UX8U=";
+          version = "0.6.14";
+          hash = "sha256-Bp0WdHTew+AZVtlHY/BBngtWJ9F4MjPx5tcR4HgXBio=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";

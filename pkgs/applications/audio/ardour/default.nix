@@ -19,7 +19,6 @@
   glibc,
   glibmm,
   graphviz,
-  gtkmm2,
   harvid,
   hidapi,
   itstool,
@@ -44,6 +43,7 @@
   lv2,
   makeWrapper,
   pango,
+  pangomm,
   perl,
   pkg-config,
   python3,
@@ -59,6 +59,7 @@
   vamp-plugin-sdk,
   wafHook,
   xjadeo,
+  xorg,
   optimize ? true, # disable to print Lua DSP script output to stdout
   videoSupport ? true,
 }:
@@ -128,7 +129,6 @@ stdenv.mkDerivation (
       flac
       fluidsynth
       glibmm
-      gtkmm2
       hidapi
       itstool
       kissfft
@@ -151,6 +151,7 @@ stdenv.mkDerivation (
       lrdf
       lv2
       pango
+      pangomm
       perl
       python3
       qm-dsp
@@ -163,6 +164,8 @@ stdenv.mkDerivation (
       suil
       taglib
       vamp-plugin-sdk
+      xorg.libXinerama
+      xorg.libXrandr
     ]
     ++ lib.optionals videoSupport [
       harvid

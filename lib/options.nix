@@ -345,13 +345,6 @@ rec {
     );
 
   /**
-    Deprecated alias of mkPackageOption, to be removed in 25.05.
-
-    Previously used to create options with markdown documentation, which is no longer required.
-  */
-  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
-
-  /**
     This option accepts arbitrary definitions, but it does not produce an option value.
 
     This is useful for sharing a module across different module sets

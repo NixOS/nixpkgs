@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "7";
+          patch = "8";
           suffix = "";
         };
-        hash = "sha256-VGL5CZ39MOI43vg8cdkYl9jKpf9uvHpQ8U1IAs2qp5o=";
+        hash = "sha256-uZEHMFJrKYKZtGs1WVztkFVyLfYMBq1jAfak4scoolI=";
       };
     };
 
@@ -92,9 +92,9 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "rc3";
+        suffix = "";
       };
-      hash = "sha256-ZG3JReScc6FBiW3toS1D8/KT/WlCZ3TBb8Q0lhgOj80=";
+      hash = "sha256-Ipna5ULTlc44g6ygDTyRAwfNaOCy9zNgmMjnt+7p8+k=";
       inherit passthruFun;
     };
     # Minimal versions of Python (built without optional dependencies)
