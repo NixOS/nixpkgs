@@ -2,6 +2,7 @@
   lib,
   stdenv,
   mkDerivation,
+  fetchpatch,
   fetchurl,
   cmake,
   runtimeShell,
@@ -41,6 +42,12 @@ mkDerivation rec {
   patches = [
     # add support for SC_DATA_DIR and SC_PLUGIN_DIR env vars to override compile-time values
     ./supercollider-3.12.0-env-dirs.patch
+
+    # Fixes the build with CMake 4
+    (fetchpatch {
+      url = "https://github.com/supercollider/supercollider/commit/7d1f3fbe54e122889489a2f60bbc6cd6bb3bce28.patch";
+      hash = "sha256-gyE0B2qTbj0ppbLlYTMa2ooY3FHzzIrdrpWYr81Hy1Y=";
+    })
   ];
 
   postPatch = ''
