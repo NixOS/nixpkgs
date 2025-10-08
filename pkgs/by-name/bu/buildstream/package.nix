@@ -21,27 +21,15 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "buildstream";
-  version = "2.5.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "apache";
     repo = "buildstream";
     tag = version;
-    hash = "sha256-/kGmAHx10//iVeqLXwcIWNI9FGIi0LlNJW+s6v0yU3Q=";
+    hash = "sha256-2Z+s0dQB85MBO06llhIEO3jwWfL53n74S28ENHcbe/Q=";
   };
-
-  # FIXME: To be removed in v2.6.0 of Buildstream.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/apache/buildstream/commit/9c4378ab2ec71b6b79ef90ee4bd950dd709a0310.patch?full_index=1";
-      hash = "sha256-po3Dn7gCv7o7h3k8qhmoH/b6Vv6ikKO/pkA20RvdU1g=";
-    })
-    (fetchpatch {
-      url = "https://github.com/apache/buildstream/commit/456a464b2581c52cad2b0b48596f5c19ad1db23f.patch?full_index=1";
-      hash = "sha256-0oFENx4AUhd1uJxRzbKzO5acGDosCc4vFJaSJ6urvhk=";
-    })
-  ];
 
   build-system = with python3Packages; [
     cython
@@ -115,10 +103,6 @@ python3Packages.buildPythonApplication rec {
 
     # Blob not found in the local CAS
     "test_source_pull_partial_fallback_fetch"
-
-    # FAILED tests/sources/tar.py::test_out_of_basedir_hardlinks - AssertionError
-    # FIXME: To be removed in v2.6.0 of Buildstream.
-    "test_out_of_basedir_hardlinks"
   ];
 
   disabledTestPaths = [
