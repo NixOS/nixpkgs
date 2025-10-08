@@ -2,7 +2,6 @@
   lib,
   beam,
   callPackage,
-  wxGTK32,
   stdenv,
   wxSupport ? true,
   systemd,
@@ -29,20 +28,14 @@ in
     # Three versions are supported according to https://github.com/erlang/otp/security
 
     erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
       inherit wxSupport systemdSupport;
     };
 
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
       inherit wxSupport systemdSupport;
     };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
       inherit wxSupport systemdSupport;
     };
 

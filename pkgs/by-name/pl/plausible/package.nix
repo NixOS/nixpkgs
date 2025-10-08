@@ -12,7 +12,6 @@
   brotli,
   tailwindcss_3,
   esbuild,
-  ...
 }:
 
 let
