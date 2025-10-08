@@ -3,11 +3,9 @@
   buildPythonPackage,
   fetchFromGitHub,
   fsspec,
-  funcy,
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   reflink,
   setuptools-scm,
   shortuuid,
@@ -17,8 +15,6 @@ buildPythonPackage rec {
   pname = "dvc-objects";
   version = "5.1.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "iterative";
@@ -32,9 +28,9 @@ buildPythonPackage rec {
       --replace " --benchmark-skip" ""
   '';
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [ fsspec ] ++ lib.optionals (pythonOlder "3.12") [ funcy ];
+  dependencies = [ fsspec ];
 
   nativeCheckInputs = [
     pytest-asyncio
