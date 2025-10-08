@@ -32,7 +32,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://www.plasticscm.com";
-    description = "A Software Configuration Management system from Unity that tracks changes to source code and any digital asset over time";
+    description = "SCM by Unity for game development";
     platforms = [ "x86_64-linux" ];
     mainProgram = "cm";
     license = lib.licenses.unfree;
