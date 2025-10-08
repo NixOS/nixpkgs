@@ -37,6 +37,13 @@ stdenv.mkDerivation {
     xcbutil
   ];
 
+  # See https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.tests = { inherit (nixosTests) xss-lock; };
 
   meta = with lib; {
