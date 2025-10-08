@@ -129,7 +129,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/Qiskit/qiskit/releases";
     changelog = "https://docs.quantum.ibm.com/api/qiskit/release-notes/${lib.versions.majorMinor version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [];
+    maintainers = [ ];
     # Note: Building requires Rust toolchain due to native extensions
   };
 }
