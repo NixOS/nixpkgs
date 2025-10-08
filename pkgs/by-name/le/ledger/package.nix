@@ -99,6 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_DOCS" true)
     (lib.cmakeBool "USE_PYTHON" usePython)
     (lib.cmakeBool "USE_GPGME" gpgmeSupport)
+
+    # CMake 4 dropped support of versions lower than 3.5, and versions
+    # lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   installTargets = [
