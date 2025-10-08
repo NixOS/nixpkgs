@@ -4,7 +4,6 @@
   fetchPypi,
   gtfs-realtime-bindings,
   httpx,
-  pythonOlder,
   requests,
   setuptools,
 }:
@@ -13,8 +12,6 @@ buildPythonPackage rec {
   pname = "pytransportnswv2";
   version = "2.0.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "PyTransportNSWv2";
