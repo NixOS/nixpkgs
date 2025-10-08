@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "4.2.1";
+  version = "4.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "celery";
     repo = "billiard";
     tag = "v${version}";
-    hash = "sha256-9LuAlIn6hNiZGvWuaaDQxx9g0aBVF6Z2krxEOrssqRs=";
+    hash = "sha256-KUA1ydRoDIALhapDPG4c0C4q0Z72MReHeFCqqGviCNw=";
   };
 
   build-system = [ setuptools ];
