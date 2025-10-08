@@ -43,7 +43,10 @@ stdenv.mkDerivation {
     libxcrypt
   ]);
 
-  cmakeFlags = [ "-DBUILD_TESTS=OFF" ];
+  cmakeFlags = [
+    "-DBUILD_TESTS=OFF"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   dontWrapQtApps = true;
 
