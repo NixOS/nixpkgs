@@ -39,6 +39,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Utilities to parse Debian package, copyright and control files";
     homepage = "https://github.com/nexB/debian-inspector";
+    changelog = "https://github.com/aboutcode-org/debian-inspector/blob/v${version}/CHANGELOG.rst";
     license = with licenses; [
       asl20
       bsd3
