@@ -14,13 +14,13 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "snx-rs";
-  version = "4.8.1";
+  version = "4.8.2";
 
   src = fetchFromGitHub {
     owner = "ancwrd1";
     repo = "snx-rs";
     tag = "v${version}";
-    hash = "sha256-/ntw1AuOqTy9s1jY+6UIDqZWtmjr1DVRQur/h0LkkXI=";
+    hash = "sha256-wVc3iddqXTpsBZqEY+WWR1Taig4crhlQqw7jypm3ZMc=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
 
-  cargoHash = "sha256-lLYQ+N5P8p4jiJCo6UyXvXeDT9JRlzIk8VH6UKlqvX0=";
+  cargoHash = "sha256-HRew3ldsgUbCh4eW1MSvoxLZobSJRjj7Eg0+XRbjFes=";
 
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/snx-rs";

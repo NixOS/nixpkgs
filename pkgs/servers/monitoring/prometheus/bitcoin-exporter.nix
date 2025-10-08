@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bitcoin-prometheus-exporter";
-  version = "0.8.0";
+  version = "0.9.0";
 
   format = "other";
 
@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "jvstein";
     repo = pname;
     tag = "v${version}";
-    sha256 = "sha256-UTH7m50GGVVUm2ogO0LcVGC1y4FGccOfSPiebXwXoNE=";
+    sha256 = "sha256-08QG/5Kj++rjWz7OciqKSJUk00lSJCbfB5XwwP+h4so=";
   };
 
   # Copying bitcoind-monitor.py is enough.

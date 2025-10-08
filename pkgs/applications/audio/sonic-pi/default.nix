@@ -19,8 +19,6 @@
   reproc,
   platform-folders,
   ruby_3_2,
-  erlang,
-  elixir,
   beamPackages,
   alsa-lib,
   rtmidi,
@@ -73,8 +71,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ruby
-    erlang
-    elixir
+    beamPackages.erlang
+    beamPackages.elixir
     beamPackages.hex
   ];
 
@@ -224,8 +222,8 @@ stdenv.mkDerivation rec {
     fi
 
     # Remove runtime Erlang references
-    for file in $(grep -FrIl '${erlang}/lib/erlang' $out/app/server/beam/tau); do
-      substituteInPlace "$file" --replace '${erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
+    for file in $(grep -FrIl '${beamPackages.erlang}/lib/erlang' $out/app/server/beam/tau); do
+      substituteInPlace "$file" --replace '${beamPackages.erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
     done
   '';
 

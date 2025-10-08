@@ -461,19 +461,21 @@ in
         CapabilityBoundingSet = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
         ProtectSystem = "strict";
         ReadWritePaths = [
           cfg.stateDir

@@ -3653,6 +3653,10 @@ self: super: with self; {
 
   dfdiskcache = callPackage ../development/python-modules/dfdiskcache { };
 
+  dftd4 = callPackage ../by-name/df/dftd4/python.nix {
+    inherit (pkgs) dftd4;
+  };
+
   diagrams = callPackage ../development/python-modules/diagrams { };
 
   diceware = callPackage ../development/python-modules/diceware { };
@@ -7696,6 +7700,8 @@ self: super: with self; {
   jupyterlab-pygments = callPackage ../development/python-modules/jupyterlab-pygments { };
 
   jupyterlab-server = callPackage ../development/python-modules/jupyterlab-server { };
+
+  jupyterlab-vim = callPackage ../development/python-modules/jupyterlab-vim { };
 
   jupyterlab-widgets = callPackage ../development/python-modules/jupyterlab-widgets { };
 
@@ -12440,8 +12446,6 @@ self: super: with self; {
   py-dormakaba-dkey = callPackage ../development/python-modules/py-dormakaba-dkey { };
 
   py-ecc = callPackage ../development/python-modules/py-ecc { };
-
-  py-eth-sig-utils = callPackage ../development/python-modules/py-eth-sig-utils { };
 
   py-evm = callPackage ../development/python-modules/py-evm { };
 
@@ -17301,6 +17305,10 @@ self: super: with self; {
   sphinx-jinja = callPackage ../development/python-modules/sphinx-jinja { };
 
   sphinx-jupyterbook-latex = callPackage ../development/python-modules/sphinx-jupyterbook-latex { };
+
+  sphinx-last-updated-by-git =
+    callPackage ../development/python-modules/sphinx-last-updated-by-git
+      { };
 
   sphinx-lv2-theme = callPackage ../development/python-modules/sphinx-lv2-theme { };
 

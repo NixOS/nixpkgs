@@ -2,10 +2,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  neo4j,
-  llama-index-core,
   hatchling,
-  pythonOlder,
+  llama-index-core,
+  neo4j,
 }:
 
 buildPythonPackage rec {
@@ -13,13 +12,13 @@ buildPythonPackage rec {
   version = "0.5.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchPypi {
     pname = "llama_index_graph_stores_neo4j";
     inherit version;
     hash = "sha256-P3EzR6piD49dFQY26LuV4/gZpOsFe5Hfp87BFiwo1Xg=";
   };
+
+  pythonRelaxDeps = [ "neo4j" ];
 
   build-system = [ hatchling ];
 
@@ -27,6 +26,9 @@ buildPythonPackage rec {
     neo4j
     llama-index-core
   ];
+
+  # Tests are not shipped with PyPI package
+  doCheck = false;
 
   pythonImportsCheck = [ "llama_index.graph_stores.neo4j" ];
 

@@ -13,7 +13,6 @@
   pytest-asyncio,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   setuptools,
   syrupy,
   voluptuous,
@@ -21,16 +20,14 @@
 
 buildPythonPackage rec {
   pname = "env-canada";
-  version = "0.11.2";
+  version = "0.11.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "michaeldavie";
     repo = "env_canada";
     tag = "v${version}";
-    hash = "sha256-r0a2bMgWY6dH88aOJoNpmcSyQi207XDI3Ehu37kU9hY=";
+    hash = "sha256-9sgdoHsYklszt1y63WQ4BkIGLxprILx2kh7+BmmUlqE=";
   };
 
   build-system = [ setuptools ];

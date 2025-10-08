@@ -1324,8 +1324,8 @@ let
         mktplcRef = {
           publisher = "discloud";
           name = "discloud";
-          version = "2.27.2";
-          hash = "sha256-NkOYn0ZNRqgi8HHowZSYmRKeOfqcxXfKIXUQNsJ0BtM=";
+          version = "2.27.9";
+          hash = "sha256-6+sAbjpwWTLGZ7uH6rl7LZcNmOnAftiYGithbBlvIak=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/discloud.discloud/changelog";
@@ -1707,8 +1707,8 @@ let
         mktplcRef = {
           name = "vscode-jest-runner";
           publisher = "firsttris";
-          version = "0.4.82";
-          hash = "sha256-8sKMxatSaibMESktDJdQ84jINsE05ZVSjLMGjHFw7VI=";
+          version = "0.4.84";
+          hash = "sha256-x4CaSa/CRZgs7vGthFcn8UXYrbQhQXkULPBbGnj3zpw=";
         };
         meta = {
           description = "Simple way to run or debug a single (or multiple) tests from context-menu";
@@ -3840,8 +3840,8 @@ let
         mktplcRef = {
           publisher = "redhat";
           name = "java";
-          version = "1.45.0";
-          hash = "sha256-aLyAU5J+65Cw3UsYey9Y2/bSMWFiz3TNOwBBvjev8dY=";
+          version = "1.46.0";
+          hash = "sha256-i7Nac47aJVdxxRgM8KCCI8zmwTCGxxy0PrejgjOCYXE=";
         };
         buildInputs = [ jdk ];
         meta = {
@@ -5110,8 +5110,8 @@ let
         mktplcRef = {
           name = "vim";
           publisher = "vscodevim";
-          version = "1.30.1";
-          hash = "sha256-cKdVQTGj7R37YefQAaTspF1RVul/9wv7u9b5TpGZN5k=";
+          version = "1.31.0";
+          hash = "sha256-97dQeCFm2i5uRF45k1tVMWiXNh5xBw3MVYM8MSIeDFE=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -5468,8 +5468,8 @@ let
         mktplcRef = {
           name = "vscode-zig";
           publisher = "ziglang";
-          version = "0.6.13";
-          hash = "sha256-4DYsSGqWa+jbD8tguULFQLdhKluXK8skj9nSst9UX8U=";
+          version = "0.6.14";
+          hash = "sha256-Bp0WdHTew+AZVtlHY/BBngtWJ9F4MjPx5tcR4HgXBio=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ziglang.vscode-zig/changelog";

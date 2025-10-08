@@ -154,6 +154,27 @@ let
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
+    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
+    # reports of undefined behavior on previous versions. Note that this does //not// use
+    # `finalAttrs.version` in order to avoid infinite recursion.
+    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
+      let
+        interpositionFlags = [
+          "-fno-semantic-interposition"
+          "-Wl,-Bsymbolic-functions"
+        ];
+      in
+      # NOTE: By default GCC disables interprocedular optimizations (in particular inlining) for
+      # position-independent code and thus shared libraries.
+      # Since LD_PRELOAD tricks aren't worth losing out on optimizations, we disable it for good.
+      # This is not the case for Clang, where inlining is done by default even without -fno-semantic-interposition.
+      # https://reviews.llvm.org/D102453
+      # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+      prevAttrs.preConfigure or ""
+      + lib.optionalString stdenv.cc.isGNU ''
+        export CFLAGS="''${CFLAGS:-} ${toString interpositionFlags}"
+        export CXXFLAGS="''${CXXFLAGS:-} ${toString interpositionFlags}"
+      '';
     outputs = prevAttrs.outputs or [ "out" ] ++ [ "dev" ];
   };
 

@@ -44,6 +44,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    # Fix build with CMake 4
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   strictDeps = true;
 
   buildInputs = [

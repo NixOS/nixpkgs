@@ -4294,6 +4294,15 @@
   "sec-linux-kernel": [
     "index.html#sec-linux-kernel"
   ],
+  "sec-linux-kernel-maintainer-information": [
+    "index.html#sec-linux-kernel-maintainer-information"
+  ],
+  "sec-linux-updates": [
+    "index.html#sec-linux-updates"
+  ],
+  "sec-linux-add-new-kernel-version": [
+    "index.html#sec-linux-add-new-kernel-version"
+  ],
   "ex-overriding-kernel-derivation": [
     "index.html#ex-overriding-kernel-derivation"
   ],
