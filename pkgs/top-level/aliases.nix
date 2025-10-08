@@ -1797,6 +1797,7 @@ mapAliases {
   };
   nettools = net-tools; # Added 2025-06-11
   newt-go = fosrl-newt; # Added 2025-06-24
+  notes-up = throw "'notes-up' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   notify-sharp = throw "'notify-sharp' has been removed as it was unmaintained and depends on deprecated dbus-sharp versions"; # Added 2025-08-25
   nextcloud30 = throw ''
     Nextcloud v30 has been removed from `nixpkgs` as the support for is dropped
