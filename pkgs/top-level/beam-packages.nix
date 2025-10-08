@@ -52,7 +52,6 @@ in
       elixir_1_14
       elixir-ls
       lfe
-      lfe_2_1
       ;
   };
 

@@ -90,8 +90,7 @@ let
 
       elixir-ls = callPackage ./elixir-ls { inherit elixir; };
 
-      lfe = lfe_2_1;
-      lfe_2_1 = lib'.callLFE ../interpreters/lfe/2.1.nix { inherit erlang buildRebar3 buildHex; };
+      lfe = callPackage ../interpreters/lfe { inherit erlang buildRebar3 buildHex; };
 
       livebook = callPackage ./livebook { };
 

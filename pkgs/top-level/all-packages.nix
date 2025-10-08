@@ -5755,7 +5755,6 @@ with pkgs;
     rebar3WithPlugins
     fetchHex
     lfe
-    lfe_2_1
     ;
 
   beamPackages = dontRecurseIntoAttrs beam27Packages;
