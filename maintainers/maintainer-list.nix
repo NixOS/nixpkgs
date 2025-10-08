@@ -4363,6 +4363,12 @@
     github = "cdombroski";
     githubId = 244909;
   };
+  cedev-1 = {
+    name = "Cedev";
+    email = "cedev@ce-dev.eu";
+    github = "cedev-1";
+    githubId = 121963179;
+  };
   ceedubs = {
     email = "ceedubs@gmail.com";
     github = "ceedubs";
