@@ -25,14 +25,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   doCheck = false;
   dontFixup = true;
 
-  unpackPhase = ''
-    runHook preUnpack
-
-    dpkg-deb -x $src .
-
-    runHook postUnpack
-  '';
-
   installPhase = ''
     runHook preInstall
 
