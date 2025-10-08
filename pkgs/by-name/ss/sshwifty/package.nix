@@ -55,7 +55,14 @@ buildGo125Module (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) sshwifty; };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version=unstable"
+        "--version-regex=^([0-9.]+(?!.+-prebuild).+$)"
+        "--subpackage"
+        "sshwifty-ui"
+      ];
+    };
   };
 
   meta = {
