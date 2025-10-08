@@ -11957,8 +11957,6 @@ with pkgs;
     x11Support = true;
   };
 
-  rquickshare-legacy = rquickshare.override { app-type = "legacy"; };
-
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
 
