@@ -5,7 +5,6 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "securityreporter";
   version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dongit-org";
