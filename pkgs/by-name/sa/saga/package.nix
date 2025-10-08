@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     (lib.cmakeBool "OpenMP_SUPPORT" (!stdenv.hostPlatform.isDarwin))
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   meta = {

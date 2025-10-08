@@ -20,15 +20,19 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i appl_grid/serialise_base.h -e '1i#include <cstdint>'
+    substituteInPlace src/Makefile.in \
+    --replace rootcint rootcling
   '';
 
-  nativeBuildInputs = [ gfortran ];
+  nativeBuildInputs = [
+    gfortran
+    root
+  ];
 
   # For some reason zlib was only needed after bump to gfortran8
   buildInputs = [
     hoppet
     lhapdf
-    root
     zlib
   ];
 

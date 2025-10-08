@@ -61,6 +61,10 @@ stdenv.mkDerivation rec {
     ./cvc4-bash-patsub-replacement.patch
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   postPatch = ''
         # Fix missing size_t declarations by adding after pragma once or include guards
         sed -i '/#pragma once/a\

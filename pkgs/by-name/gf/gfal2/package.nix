@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoPatchelfHook,
   # Native build inputs
   cmake,
   pkg-config,
@@ -83,6 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
+    autoPatchelfHook
   ];
 
   buildInputs = lib.unique (
@@ -123,6 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals finalAttrs.passthru.enablePluginStatus.xrootd [
       "-DXROOTD_INCLUDE_DIR=${xrootd.dev}/include/xrootd"
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     ];
 
   doCheck = stdenv.hostPlatform.isLinux;

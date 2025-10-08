@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DASPCUD_GRINGO_PATH=${clingo}/bin/gringo"
     "-DASPCUD_CLASP_PATH=${clingo}/bin/clasp"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   doCheck = true;

@@ -60,6 +60,10 @@ stdenv.mkDerivation {
   ]
   ++ lib.optional (stdenv.hostPlatform.libc == "glibc") libtirpc;
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.hostPlatform.libc == "glibc"
   ) "-I${libtirpc.dev}/include/tirpc";
