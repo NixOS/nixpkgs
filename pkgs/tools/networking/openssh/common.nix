@@ -136,8 +136,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  hardeningEnable = [ "pie" ];
-
   doCheck = false;
   enableParallelChecking = false;
   nativeCheckInputs = [
