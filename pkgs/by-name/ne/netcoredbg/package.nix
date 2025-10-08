@@ -52,6 +52,9 @@ let
       "-DCORECLR_DIR=${coreclr-src}/src/coreclr"
       "-DDOTNET_DIR=${dotnet-sdk}/share/dotnet"
       "-DBUILD_MANAGED=0"
+      # CMake 4 dropped support of versions lower than 3.5,
+      # versions lower than 3.10 are deprecated.
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
     ];
   };
 
