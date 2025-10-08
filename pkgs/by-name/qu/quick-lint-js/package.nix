@@ -2,6 +2,7 @@
   buildPackages,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   lib,
   ninja,
   stdenv,
@@ -19,9 +20,17 @@ let
     hash = "sha256-L2LCRm1Fsg+xRdPc8YmgxDnuXJo92nxs862ewzObZ3I=";
   };
 
+  patches = [
+    # Patch the vendored googletest to build with CMake >=3.5
+    (fetchpatch {
+      url = "https://github.com/quick-lint/quick-lint-js/commit/adc7db66a434f7d0ec6a1ab17679c6f57e079566.patch";
+      hash = "sha256-2uswkHyqJB7X4NT9nMfn/u2/po5xeDDwN6nTMIH8JGU=";
+    })
+  ];
+
   quick-lint-js-build-tools = buildPackages.stdenv.mkDerivation {
     pname = "quick-lint-js-build-tools";
-    inherit version src;
+    inherit version src patches;
 
     nativeBuildInputs = [
       cmake
@@ -45,7 +54,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "quick-lint-js";
-  inherit version src;
+  inherit version src patches;
 
   nativeBuildInputs = [
     cmake
