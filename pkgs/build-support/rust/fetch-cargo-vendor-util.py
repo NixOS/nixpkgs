@@ -173,7 +173,13 @@ def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
 
 
 def try_get_crate_manifest_path_from_mainfest_path(manifest_path: Path, crate_name: str) -> Path | None:
-    metadata = get_manifest_metadata(manifest_path)
+    try:
+        metadata = get_manifest_metadata(manifest_path)
+    except subprocess.CalledProcessError:
+        # If the manifest isn't the topmost of its workspace, cargo metadata will fail.
+        # In that case, we return None so the next found manifest is attempted.
+        # See https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
+        return None
 
     for pkg in metadata["packages"]:
         if pkg["name"] == crate_name:
