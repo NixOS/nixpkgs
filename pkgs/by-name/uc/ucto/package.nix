@@ -14,6 +14,7 @@
   ticcutils,
   libfolia,
   uctodata,
+  frog,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -55,6 +56,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      /**
+        Reverse dependencies. Does not respect overrides.
+      */
+      reverseDependencies = lib.recurseIntoAttrs {
+        inherit frog;
+      };
+    };
   };
 
   meta = with lib; {
