@@ -1,0 +1,42 @@
+From 6f3691a84b7eb78fdb9ddf4ef74d72c4c8b8bfa3 Mon Sep 17 00:00:00 2001
+From: Peter Collingbourne <pcc@google.com>
+Date: Wed, 8 Oct 2025 13:10:45 -0700
+Subject: [PATCH] Fix cross compilation for x86 targets from non-x86
+
+When building on a non-x86 host the Makefile definitions for HAVE_* are
+never printed which leads to build failures and/or silently targeting the
+wrong microarchitecture. The issue is that INTEL_AMD is defined if the
+host architecture is x86, but for cross builds we need to test whether
+the target is x86. Test for that using the macro FORCE_INTEL.
+---
+ getarch.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/getarch.c b/getarch.c
+index 417a3d08c..2f0bccfaf 100644
+--- a/getarch.c
++++ b/getarch.c
+@@ -2046,10 +2046,9 @@ int main(int argc, char *argv[]){
+ #endif
+ 
+ 
+-#ifdef INTEL_AMD
+-#ifndef FORCE
++#if defined(INTEL_AMD) && !defined(FORCE)
+     get_sse();
+-#else
++#elif defined(FORCE_INTEL)
+ 
+     sprintf(buffer, "%s", ARCHCONFIG);
+ 
+@@ -2079,7 +2078,6 @@ int main(int argc, char *argv[]){
+       } else p ++;
+     }
+ #endif
+-#endif
+ 
+ #if defined(__BYTE_ORDER__) && __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
+ printf("__BYTE_ORDER__=__ORDER_BIG_ENDIAN__\n");
+-- 
+2.49.0
+
