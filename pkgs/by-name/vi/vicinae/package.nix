@@ -30,7 +30,7 @@ let
     repo = "vicinae";
     tag = "v0.14.3";
     hash = "sha256-cVzfx3S/no3Wdp7fnjiOuqEJ2p3rXcBIxHjOalZkK08=";
-};
+  };
   apiDeps = fetchNpmDeps {
     src = "${_src}/typescript/api";
     hash = "sha256-dSHEzw15lSRRbldl9PljuWFf2htdG+HgSeKPAB88RBg=";
