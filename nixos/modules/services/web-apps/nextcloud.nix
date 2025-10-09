@@ -1547,6 +1547,8 @@ in
             client_max_body_size ${cfg.maxUploadSize};
             fastcgi_buffers 64 4K;
             fastcgi_hide_header X-Powered-By;
+            # mirror upstream htaccess file https://github.com/nextcloud/server/blob/v32.0.0/.htaccess#L40-L41
+            fastcgi_hide_header X-Robots-Tag;
             gzip on;
             gzip_vary on;
             gzip_comp_level 4;
