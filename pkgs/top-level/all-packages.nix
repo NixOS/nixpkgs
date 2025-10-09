@@ -13711,10 +13711,6 @@ with pkgs;
 
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
-  warsow-engine = callPackage ../games/warsow/engine.nix { };
-
-  warsow = callPackage ../games/warsow { };
-
   inherit (callPackage ../games/xonotic { })
     xonotic-data
     xonotic
