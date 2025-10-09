@@ -1,0 +1,26 @@
+diff --git a/../smartmontools-6.5/configure b/./configure
+index acb028a..5e2c7a1 100755
+--- a/../smartmontools-6.5/configure
++++ b/./configure
+@@ -6703,7 +6703,7 @@ fi
+     ;;
+   *-*-darwin*)
+     os_deps='os_darwin.o'
+-    os_libs='-framework CoreFoundation -framework IOKit'
++    os_libs='-framework ApplicationServices -framework IOKit'
+     os_darwin=yes
+     os_man_filter=Darwin
+     ;;
+diff --git a/../smartmontools-6.5/configure.ac b/./configure.ac
+index 6bd61d7..32ff50c 100644
+--- a/../smartmontools-6.5/configure.ac
++++ b/./configure.ac
+@@ -508,7 +508,7 @@ case "${host}" in
+     ;;
+   *-*-darwin*)
+     os_deps='os_darwin.o'
+-    os_libs='-framework CoreFoundation -framework IOKit'
++    os_libs='-framework ApplicationServices -framework IOKit'
+     os_darwin=yes
+     os_man_filter=Darwin
+     ;;

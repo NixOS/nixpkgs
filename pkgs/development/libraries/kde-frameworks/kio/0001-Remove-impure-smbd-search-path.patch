@@ -1,0 +1,25 @@
+From af54a2a37655df26a33bc6783cb472c38f65322f Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 28 Mar 2021 10:31:12 -0500
+Subject: [PATCH 1/2] Remove impure smbd search path
+
+---
+ src/core/ksambashare.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/core/ksambashare.cpp b/src/core/ksambashare.cpp
+index e810ce4..7cfb4e6 100644
+--- a/src/core/ksambashare.cpp
++++ b/src/core/ksambashare.cpp
+@@ -61,7 +61,7 @@ KSambaSharePrivate::~KSambaSharePrivate()
+ bool KSambaSharePrivate::isSambaInstalled()
+ {
+     const bool daemonExists =
+-        !QStandardPaths::findExecutable(QStringLiteral("smbd"), {QStringLiteral("/usr/sbin/"), QStringLiteral("/usr/local/sbin/")}).isEmpty();
++        !QStandardPaths::findExecutable(QStringLiteral("smbd")).isEmpty();
+     if (!daemonExists) {
+         qCDebug(KIO_CORE_SAMBASHARE) << "KSambaShare: Could not find smbd";
+     }
+-- 
+2.30.1
+

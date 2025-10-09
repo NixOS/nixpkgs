@@ -1,0 +1,25 @@
+diff --git a/extensions/system-monitor/extension.js b/extensions/system-monitor/extension.js
+index 37d2eb1..232d0d5 100644
+--- a/extensions/system-monitor/extension.js
++++ b/extensions/system-monitor/extension.js
+@@ -6,9 +6,9 @@
+ 
+ import Clutter from 'gi://Clutter';
+ import Gio from 'gi://Gio';
++import GIRepository from "gi://GIRepository";
+ import GLib from 'gi://GLib';
+ import GObject from 'gi://GObject';
+-import GTop from 'gi://GTop';
+ import Pango from 'gi://Pango';
+ import Shell from 'gi://Shell';
+ import St from 'gi://St';
+@@ -19,6 +19,9 @@ import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
+ 
+ import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+ 
++GIRepository.Repository.prepend_search_path('@gtop_path@');
++const GTop = (await import("gi://GTop")).default;
++
+ const THRESHOLD_HIGH = 0.80;
+ 
+ // adapted from load-graph.cpp in gnome-system-monitor

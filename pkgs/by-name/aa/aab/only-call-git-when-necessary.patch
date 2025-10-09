@@ -1,0 +1,14 @@
+diff --git a/aab/builder.py b/aab/builder.py
+index 5c3805c..a181b27 100644
+--- a/aab/builder.py
++++ b/aab/builder.py
+@@ -67,8 +67,7 @@ class AddonBuilder:
+         self._version = Git().parse_version(version)
+         # git stash create comes up empty when no changes were made since the
+         # last commit. Don't use 'dev' as version in these cases.
+-        git_status = call_shell("git status --porcelain")
+-        if self._version == "dev" and git_status == "":
++        if self._version == "dev" and call_shell("git status --porcelain") == "":
+             self._version = Git().parse_version("current")
+         if not self._version:
+             logging.error("Error: Version could not be determined through Git")

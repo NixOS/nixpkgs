@@ -1,0 +1,14 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index fd8d446c8..870a2c19c 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -83,9 +83,6 @@ else()
+   message(STATUS "Bootstrapping vcpkg completed successfully.")
+ endif()
+ 
+-set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/3rd-party/vcpkg/scripts/buildsystems/vcpkg.cmake"
+-  CACHE STRING "Vcpkg toolchain file")
+-
+ project(Multipass)
+ 
+ option(MULTIPASS_ENABLE_TESTS "Build tests" ON)

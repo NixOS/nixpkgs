@@ -1,0 +1,39 @@
+From 5da393e32336534222c77659ff138a4e512e6a1f Mon Sep 17 00:00:00 2001
+From: Austin Horstman <khaneliman12@gmail.com>
+Date: Wed, 4 Dec 2024 13:23:15 -0600
+Subject: [PATCH] Disable autoUpdate
+
+---
+ source/index.ts | 12 ------------
+ 1 file changed, 12 deletions(-)
+
+diff --git a/source/index.ts b/source/index.ts
+index b8511949a..205c513fe 100644
+--- a/source/index.ts
++++ b/source/index.ts
+@@ -14,7 +14,6 @@ import {
+ 	nativeTheme,
+ } from 'electron';
+ import {ipcMain as ipc} from 'electron-better-ipc';
+-import {autoUpdater} from 'electron-updater';
+ import electronDl from 'electron-dl';
+ import electronContextMenu from 'electron-context-menu';
+ import electronLocalshortcut from 'electron-localshortcut';
+@@ -65,17 +64,6 @@ if (!config.get('hardwareAcceleration')) {
+ 	app.disableHardwareAcceleration();
+ }
+
+-if (!is.development && config.get('autoUpdate')) {
+-	(async () => {
+-		const FOUR_HOURS = 1000 * 60 * 60 * 4;
+-		setInterval(async () => {
+-			await autoUpdater.checkForUpdatesAndNotify();
+-		}, FOUR_HOURS);
+-
+-		await autoUpdater.checkForUpdatesAndNotify();
+-	})();
+-}
+-
+ let mainWindow: BrowserWindow;
+ let isQuitting = false;
+ let previousMessageCount = 0;

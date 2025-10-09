@@ -1,0 +1,19 @@
+commit 3ffe2d7842b62986e2267e6542068e6356b06fdf
+Author: r-vdp <ramses@well-founded.dev>
+Date:   Mon Oct 28 12:07:51 2024 +0100
+
+    Install fwupdplugin to out
+
+diff --git a/meson.build b/meson.build
+index 3a163331e..cb66be0cc 100644
+--- a/meson.build
++++ b/meson.build
+@@ -733,7 +733,7 @@ if build_standalone
+   if host_machine.system() == 'windows'
+     libdir_pkg = bindir
+   else
+-    libdir_pkg = join_paths(libdir, 'fwupd-@0@'.format(fwupd_version))
++    libdir_pkg = join_paths(prefix, 'lib', 'fwupd-@0@'.format(fwupd_version))
+   endif
+   conf.set_quoted('FWUPD_LIBDIR_PKG', libdir_pkg)
+ endif

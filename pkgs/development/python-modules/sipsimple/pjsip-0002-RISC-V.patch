@@ -1,0 +1,96 @@
+From da5a961150fc20e48fb83ec3a279266600f47472 Mon Sep 17 00:00:00 2001
+From: Guoguo <16666742+imguoguo@users.noreply.github.com>
+Date: Tue, 12 Aug 2025 16:08:22 +0200
+Subject: [PATCH 2/3] Fix build failure on RISC-V architecture (#4173)
+
+---
+ aconfigure                               | 3 +++
+ aconfigure.ac                            | 3 +++
+ config.guess                             | 3 +++
+ config.sub                               | 2 ++
+ third_party/webrtc/src/webrtc/typedefs.h | 7 +++++++
+ 5 files changed, 18 insertions(+)
+
+diff --git a/aconfigure b/aconfigure
+index eac120472..09cd7b901 100755
+--- a/aconfigure
++++ b/aconfigure
+@@ -9114,6 +9114,9 @@ $as_echo "Checking if libwebrtc is disabled...no" >&6; }
+                                  ac_webrtc_instset=neon
+                                  ac_webrtc_cflags="-DWEBRTC_ARCH_ARM64"
+                                  ;;
++                             riscv*)
++                                 ac_webrtc_instset=generic
++                                 ;;
+                              *)
+                                  ac_webrtc_instset=sse2
+                                  ;;
+diff --git a/aconfigure.ac b/aconfigure.ac
+index fc472c7de..81be8ed7b 100644
+--- a/aconfigure.ac
++++ b/aconfigure.ac
+@@ -2154,6 +2154,9 @@ AC_ARG_ENABLE(libwebrtc,
+                                      ac_webrtc_instset=generic
+                                  fi
+                                  ;;
++                             riscv*)
++                                 ac_webrtc_instset=generic
++                                 ;;
+                              *)
+                                  ac_webrtc_instset=sse2
+                                  ;;
+diff --git a/config.guess b/config.guess
+index aa04f04bd..b6f948fdc 100755
+--- a/config.guess
++++ b/config.guess
+@@ -979,6 +979,9 @@ EOF
+     ppc:Linux:*:*)
+ 	echo powerpc-unknown-linux-gnu
+ 	exit ;;
++    riscv32:Linux:*:* | riscv32be:Linux:*:* | riscv64:Linux:*:* | riscv64be:Linux:*:*)
++	echo ${UNAME_MACHINE}-unknown-linux-gnu
++	exit ;;
+     s390:Linux:*:* | s390x:Linux:*:*)
+ 	echo ${UNAME_MACHINE}-ibm-linux
+ 	exit ;;
+diff --git a/config.sub b/config.sub
+index a92e84680..3117281cb 100755
+--- a/config.sub
++++ b/config.sub
+@@ -304,6 +304,7 @@ case $basic_machine in
+ 	| pdp10 | pdp11 | pj | pjl \
+ 	| powerpc | powerpc64 | powerpc64le | powerpcle \
+ 	| pyramid \
++	| riscv | riscv32 | riscv32be | riscv64 | riscv64be \
+ 	| rl78 | rx \
+ 	| score \
+ 	| sh | sh[1234] | sh[24]a | sh[24]aeb | sh[23]e | sh[34]eb | sheb | shbe | shle | sh[1234]le | sh3ele \
+@@ -419,6 +420,7 @@ case $basic_machine in
+ 	| pdp10-* | pdp11-* | pj-* | pjl-* | pn-* | power-* \
+ 	| powerpc-* | powerpc64-* | powerpc64le-* | powerpcle-* \
+ 	| pyramid-* \
++	| riscv-* | riscv32-* | riscv32be-* | riscv64-* | riscv64be-* \
+ 	| rl78-* | romp-* | rs6000-* | rx-* \
+ 	| sh-* | sh[1234]-* | sh[24]a-* | sh[24]aeb-* | sh[23]e-* | sh[34]eb-* | sheb-* | shbe-* \
+ 	| shle-* | sh[1234]le-* | sh3ele-* | sh64-* | sh64le-* \
+diff --git a/third_party/webrtc/src/webrtc/typedefs.h b/third_party/webrtc/src/webrtc/typedefs.h
+index 3034c7e74..d8d9813fe 100644
+--- a/third_party/webrtc/src/webrtc/typedefs.h
++++ b/third_party/webrtc/src/webrtc/typedefs.h
+@@ -47,6 +47,13 @@
+ #elif defined(__pnacl__)
+ #define WEBRTC_ARCH_32_BITS
+ #define WEBRTC_ARCH_LITTLE_ENDIAN
++#elif defined(__riscv) || defined(__riscv__)
++#define WEBRTC_ARCH_LITTLE_ENDIAN
++#if __riscv_xlen == 64
++#define WEBRTC_ARCH_64_BITS
++#else
++#define WEBRTC_ARCH_32_BITS
++#endif
+ #else
+ #error Please add support for your architecture in typedefs.h
+ #endif
+-- 
+2.50.1
+

@@ -1,0 +1,7 @@
+diff --git a/lib_gen/_tags b/lib_gen/_tags
+index 7a7e632..7a4e0b7 100644
+--- a/lib_gen/_tags
++++ b/lib_gen/_tags
+@@ -1 +1 @@
+-<*.{ml,byte,native}>: package(ctypes.stubs)
++<*.{ml,byte,native}>: package(ctypes.stubs), package(bigarray)

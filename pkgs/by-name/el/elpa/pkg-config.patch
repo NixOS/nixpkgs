@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 0aa533a..da5d1f7 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -2336,7 +2336,7 @@ if test x"$have_loop_blocking" = x"yes"; then
+ fi
+ 
+ AC_SUBST([SUFFIX])
+-AC_SUBST([PKG_CONFIG_FILE],[elpa${SUFFIX}.pc])
++AC_SUBST([PKG_CONFIG_FILE],[elpa.pc])
+ 
+ AC_CONFIG_FILES([
+   Makefile

@@ -1,0 +1,26 @@
+diff --git a/src/Makefile.am b/src/Makefile.am
+index e4cac89..50d9b02 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -56,7 +56,7 @@ $(OBJ_CUDA):
+ 	cat Cuda/Sha2.cu >> Cuda.cu
+ 	cat Cuda/Whirlpool.cu >> Cuda.cu
+ 	
+-	$(COMPILER) -c Cuda.cu $(CFLAGS) --opencc-options -OPT:Olimit=0 $< -o $@
++	$(COMPILER) -c Cuda.cu $(CFLAGS) $< -o $@
+ 
+ $(OBJS_COMMON): %.o: Common/%.c
+ 	$(COMPILER) -c $(CFLAGS) $< -o $@
+diff --git a/src/Makefile.in b/src/Makefile.in
+index 86f76ad..7a5c77b 100644
+--- a/src/Makefile.in
++++ b/src/Makefile.in
+@@ -435,7 +435,7 @@ $(OBJ_CUDA):
+ 	cat Cuda/Sha2.cu >> Cuda.cu
+ 	cat Cuda/Whirlpool.cu >> Cuda.cu
+ 
+-	$(COMPILER) -c Cuda.cu $(CFLAGS) --opencc-options -OPT:Olimit=0 $< -o $@
++	$(COMPILER) -c Cuda.cu $(CFLAGS) $< -o $@
+ 
+ $(OBJS_COMMON): %.o: Common/%.c
+ 	$(COMPILER) -c $(CFLAGS) $< -o $@

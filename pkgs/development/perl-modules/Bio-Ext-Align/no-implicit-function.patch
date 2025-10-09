@@ -1,0 +1,13 @@
+diff --git a/Bio/Ext/Align/Makefile.PL b/Bio/Ext/Align/Makefile.PL
+index cc6c343..ea5cffa 100755
+--- a/Bio/Ext/Align/Makefile.PL
++++ b/Bio/Ext/Align/Makefile.PL
+@@ -5,7 +5,7 @@ WriteMakefile(
+     'NAME'	=> 'Bio::Ext::Align',
+     'VERSION'	=> '1.5.1',
+     'LIBS'	=> ['-lm'],   # e.g., '-lm' 
+-    'DEFINE'	=> '-DPOSIX -DNOERROR',     # e.g., '-DHAVE_SOMETHING' 
++    'DEFINE'	=> '-DPOSIX -DNOERROR -Wno-implicit-function-declaration',     # e.g., '-DHAVE_SOMETHING'
+     'INC'	=> '-I./libs',     # e.g., '-I/usr/include/other'
+     'MYEXTLIB'  => 'libs/libsw$(LIB_EXT)',
+     'clean'     => { 'FILES' => 'libs/*.o libs/*.a' }

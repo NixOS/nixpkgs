@@ -1,0 +1,33 @@
+From 3c06fb993ae628b5069c1f3e23f11c53815e1cbe Mon Sep 17 00:00:00 2001
+From: Eric Botcazou <ebotcazou@adacore.com>
+Date: Sat, 8 Mar 2025 00:09:57 +0100
+Subject: [PATCH] Adjust after category change for N_Formal_Package_Declaration
+
+Issue: eng/toolchain/gnat#1354
+---
+ src/why/gnat2why-borrow_checker.adb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/why/gnat2why-borrow_checker.adb b/src/why/gnat2why-borrow_checker.adb
+index a97f225b06..f3ab8be3e9 100644
+--- a/src/why/gnat2why-borrow_checker.adb
++++ b/src/why/gnat2why-borrow_checker.adb
+@@ -1693,6 +1693,7 @@ procedure Check_Declaration (Decl : Node_Id) is
+          --  Ignored constructs for pointer checking
+ 
+          when N_Formal_Object_Declaration
++            | N_Formal_Package_Declaration
+             | N_Formal_Type_Declaration
+             | N_Incomplete_Type_Declaration
+             | N_Private_Extension_Declaration
+@@ -3326,7 +3327,6 @@ procedure Check_Node (N : Node_Id) is
+             | N_Empty
+             | N_Enumeration_Representation_Clause
+             | N_Exception_Renaming_Declaration
+-            | N_Formal_Package_Declaration
+             | N_Formal_Subprogram_Declaration
+             | N_Freeze_Entity
+             | N_Freeze_Generic_Entity
+-- 
+2.48.1
+

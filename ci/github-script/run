@@ -1,0 +1,86 @@
+#!/usr/bin/env -S node --import ./run
+import { execSync } from 'node:child_process'
+import { closeSync, mkdtempSync, openSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { program } from 'commander'
+import * as core from '@actions/core'
+import { getOctokit } from '@actions/github'
+
+async function run(action, owner, repo, pull_number, options = {}) {
+  const token = execSync('gh auth token', { encoding: 'utf-8' }).trim()
+
+  const github = getOctokit(token)
+
+  const payload = !pull_number ? {} : {
+    pull_request: (await github.rest.pulls.get({
+      owner,
+      repo,
+      pull_number,
+    })).data
+  }
+
+  process.env['INPUT_GITHUB-TOKEN'] = token
+
+  closeSync(openSync('step-summary.md', 'w'))
+  process.env.GITHUB_STEP_SUMMARY = 'step-summary.md'
+
+  await action({
+    github,
+    context: {
+      payload,
+      repo: {
+        owner,
+        repo,
+      },
+    },
+    core,
+    dry: true,
+    ...options,
+  })
+}
+
+program
+  .command('prepare')
+  .description('Prepare relevant information of a pull request.')
+  .argument('<owner>', 'Owner of the GitHub repository to check (Example: NixOS)')
+  .argument('<repo>', 'Name of the GitHub repository to check (Example: nixpkgs)')
+  .argument('<pr>', 'Number of the Pull Request to check')
+  .option('--no-dry', 'Make actual modifications')
+  .action(async (owner, repo, pr, options) => {
+    const prepare = (await import('./prepare.js')).default
+    await run(prepare, owner, repo, pr, options)
+  })
+
+program
+  .command('commits')
+  .description('Check commit structure of a pull request.')
+  .argument('<owner>', 'Owner of the GitHub repository to check (Example: NixOS)')
+  .argument('<repo>', 'Name of the GitHub repository to check (Example: nixpkgs)')
+  .argument('<pr>', 'Number of the Pull Request to check')
+  .option('--no-cherry-picks', 'Do not expect cherry-picks.')
+  .action(async (owner, repo, pr, options) => {
+    const commits = (await import('./commits.js')).default
+    await run(commits, owner, repo, pr, options)
+  })
+
+program
+  .command('labels')
+  .description('Manage labels on pull requests.')
+  .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
+  .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
+  .argument('[pr]', 'Number of the Pull Request to label')
+  .option('--no-dry', 'Make actual modifications')
+  .action(async (owner, repo, pr, options) => {
+    const labels = (await import('./labels.js')).default
+    const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
+    try {
+      process.env.GITHUB_WORKSPACE = tmp
+      process.chdir(tmp)
+      await run(labels, owner, repo, pr, options)
+    } finally {
+      rmSync(tmp, { recursive: true })
+    }
+  })
+
+await program.parse()

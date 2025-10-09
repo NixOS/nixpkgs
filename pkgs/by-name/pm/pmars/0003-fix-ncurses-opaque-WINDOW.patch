@@ -1,0 +1,57 @@
+diff '--color=auto' -ruN a/src/curdisp.c b/src/curdisp.c
+--- a/src/curdisp.c	2025-05-08 23:23:48.070346219 +0200
++++ b/src/curdisp.c	2025-05-08 23:29:33.851400436 +0200
+@@ -28,12 +28,6 @@
+ #include "sim.h"
+ #endif
+ 
+-/* For window structure in BSD 4.4/Curses 8.x library */
+-#ifdef BSD44
+-#define _curx curx
+-#define _cury cury
+-#endif
+-
+ typedef struct win_st {
+   WINDOW *win;
+   int     page;
+@@ -428,18 +422,18 @@
+           str--;
+           maxchar++;
+           leaveok(curwin, TRUE);
+-          if (ox = curwin->_curx) {
++          if (ox = getcurx(curwin)) {
+ #if 0
+ #ifdef ATTRIBUTE
+-            mvwaddch(curwin, curwin->_cury, --ox, ' ' | attr);
++            mvwaddch(curwin, getcury(curwin), --ox, ' ' | attr);
+ #else
+-            mvwaddch(curwin, curwin->_cury, --ox, ' ');
++            mvwaddch(curwin, getcury(curwin), --ox, ' ');
+ #endif
+ #endif                                /* 0 */
+-            mvwaddch(curwin, curwin->_cury, --ox, ' ');
+-            wmove(curwin, curwin->_cury, ox);
++            mvwaddch(curwin, getcury(curwin), --ox, ' ');
++            wmove(curwin, getcury(curwin), ox);
+           } else {
+-            oy = curwin->_cury - 1;
++            oy = getcury(curwin) - 1;
+ #if 0
+ #ifdef ATTRIBUTE
+             mvwaddch(curwin, oy, COLS - 1, ' ' | attr);
+@@ -470,12 +464,12 @@
+           if (ox--)
+ #if 0
+ #ifdef ATTRIBUTE
+-            mvwaddch(curwin, curwin->_cury, ox, ' ' | attr);
++            mvwaddch(curwin, getcury(curwin), ox, ' ' | attr);
+ #else
+-            mvwaddch(curwin, curwin->_cury, ox, ' ');
++            mvwaddch(curwin, getcury(curwin), ox, ' ');
+ #endif
+ #endif                                /* 0 */
+-          mvwaddch(curwin, curwin->_cury, ox, ' ');
++          mvwaddch(curwin, getcury(curwin), ox, ' ');
+           else
+ #if 0
+ #ifdef ATTRIBUTE

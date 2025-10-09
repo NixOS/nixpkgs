@@ -1,0 +1,14 @@
+diff --git a/src/daemon/Greeter.cpp b/src/daemon/Greeter.cpp
+index 07fccde..dd22a07 100644
+--- a/src/daemon/Greeter.cpp
++++ b/src/daemon/Greeter.cpp
+@@ -83,7 +83,8 @@ namespace SDDM {
+     QString Greeter::greeterPathForQt(int qtVersion)
+     {
+         const QString suffix = qtVersion == 5 ? QString() : QStringLiteral("-qt%1").arg(qtVersion);
+-        return QStringLiteral(BIN_INSTALL_DIR "/sddm-greeter%1").arg(suffix);
++        const QString greeterDir = qEnvironmentVariable("SDDM_GREETER_DIR", QStringLiteral(BIN_INSTALL_DIR));
++        return QStringLiteral("%1/sddm-greeter%2").arg(greeterDir).arg(suffix);
+     }
+ 
+     bool Greeter::start() {

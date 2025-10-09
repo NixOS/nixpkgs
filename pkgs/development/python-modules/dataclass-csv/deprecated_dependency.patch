@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index b998ace..4fa4b90 100644
+--- a/setup.py
++++ b/setup.py
+@@ -13,9 +13,7 @@ with open("HISTORY.md") as history_file:
+ 
+ requirements = []
+ 
+-setup_requirements = [
+-    "pytest-runner",
+-]
++setup_requirements = []
+ 
+ test_requirements = [
+     "pytest",

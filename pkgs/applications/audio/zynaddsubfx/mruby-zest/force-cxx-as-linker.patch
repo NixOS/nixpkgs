@@ -1,0 +1,13 @@
+diff --git a/mruby/tasks/toolchains/gcc.rake b/mruby/tasks/toolchains/gcc.rake
+index 51bda6517..9bc96d0e2 100644
+--- a/mruby/tasks/toolchains/gcc.rake
++++ b/mruby/tasks/toolchains/gcc.rake
+@@ -23,7 +23,7 @@ MRuby::Toolchain.new(:gcc) do |conf, params|
+   end
+ 
+   conf.linker do |linker|
+-    linker.command = ENV['LD'] || ENV['CXX'] || ENV['CC'] || default_command
++    linker.command = ENV['CXX'] || ENV['CC'] || default_command
+     linker.flags = [ENV['LDFLAGS'] || %w()]
+     linker.libraries = %w(m)
+     linker.library_paths = []

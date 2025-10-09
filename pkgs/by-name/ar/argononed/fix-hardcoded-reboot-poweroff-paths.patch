@@ -1,0 +1,18 @@
+--- a/src/argononed.c
++++ b/src/argononed.c
+@@ -783,13 +783,13 @@
+     {
+         log_message(LOG_DEBUG, "EXEC REBOOT");
+         sync();
+-        system("/sbin/reboot");
++        system("/run/current-system/sw/bin/reboot");
+     }
+     if (count >= 39 && count <= 41)
+     {
+         log_message(LOG_DEBUG, "EXEC SHUTDOWN");
+         sync();
+-        system("/sbin/poweroff");
++        system("/run/current-system/sw/bin/poweroff");
+     }
+ #else
+     log_message(LOG_INFO,"Daemon Ready");

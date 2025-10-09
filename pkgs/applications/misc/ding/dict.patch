@@ -1,0 +1,26 @@
+Ding persists its settings to $HOME/.dingrc on startup, this sadly includes the path to the dictionary.
+On all other distributions, that would be /usr/share/dict/de-en.txt and would hardly ever change.
+On nixos, this will indeed change on ever update and would break it for all users.
+This just comments out the dictionary path in the .dingrc so the user can still set it if she wants to, but it will not affect normal operations.
+--- a/ding
++++ b/ding
+@@ -899,7 +899,9 @@ if { ! [info exists ding_version]} {
+         }
+ 
+         # Change path of default ger-eng.txt when upgrading from version 1.1
+-        if {$searchmeth($i,dictfile) == {/usr/dict/ger-eng.txt} &&
++        if {! [info exists searchmeth($i,dictfile)]} {
++            set searchmeth($i,dictfile) $default_searchmeth(0,dictfile)
++        } elseif {$searchmeth($i,dictfile) == {/usr/dict/ger-eng.txt} &&
+             $ding_version == {1.1}} {
+             set searchmeth($i,dictfile) $default_searchmeth(0,dictfile)
+             debug 2 "New path and name of ger-eng.txt configured: $default_searchmeth(0,dictfile)"
+@@ -5065,7 +5067,7 @@ proc saveOptions {} {
+     foreach i $searchmpos {
+         puts $fd "set searchmeth($n,name) {$searchmeth($i,name)}"
+         puts $fd "set searchmeth($n,type) {$searchmeth($i,type)}"
+-        puts $fd "set searchmeth($n,dictfile) {$searchmeth($i,dictfile)}"
++        puts $fd "#set searchmeth($n,dictfile) {$searchmeth($i,dictfile)}"
+         puts $fd "set searchmeth($n,separator) {$searchmeth($i,separator)}"
+         puts $fd "set searchmeth($n,language1) {$searchmeth($i,language1)}"
+         puts $fd "set searchmeth($n,language2) {$searchmeth($i,language2)}"

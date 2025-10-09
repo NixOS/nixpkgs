@@ -1,0 +1,10 @@
+--- a/src/pasco.c	2024-02-18 12:43:27.385857649 +0100
++++ b/src/pasco.c	2024-02-18 12:44:00.286087384 +0100
+@@ -36,6 +36,7 @@
+ #include <stdio.h>
+ #include <time.h>
+ #include <math.h>
++#include <string.h>
+ 
+ //
+ /* This is the default block size for an activity record */

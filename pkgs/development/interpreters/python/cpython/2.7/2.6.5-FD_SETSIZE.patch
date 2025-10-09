@@ -1,0 +1,41 @@
+--- Python-2.6.5.orig/Modules/selectmodule.c	2012-02-02 22:35:21.835125000 -0500
++++ Python-2.6.5/Modules/selectmodule.c	2012-02-02 22:41:41.210125000 -0500
+@@ -6,6 +6,21 @@
+    >= 0.
+ */
+ 
++/* Windows #defines FD_SETSIZE to 64 if FD_SETSIZE isn't already defined.
++   64 is too small (too many people have bumped into that limit).
++   Here we boost it.
++
++   Cygwin also defines FD_SETSIZE to 64, so also increase the limit on
++   Cygwin.  We must do this before sys/types.h is included, which otherwise
++   sets FD_SETSIZE to the default.
++
++   Users who want even more than the boosted limit should #define
++   FD_SETSIZE higher before this; e.g., via compiler /D switch.
++*/
++#if (defined(MS_WINDOWS) || defined(__CYGWIN__)) && !defined(FD_SETSIZE)
++#define FD_SETSIZE 512
++#endif
++
+ #include "Python.h"
+ #include <structmember.h>
+ 
+@@ -16,16 +31,6 @@
+ #undef HAVE_BROKEN_POLL
+ #endif
+ 
+-/* Windows #defines FD_SETSIZE to 64 if FD_SETSIZE isn't already defined.
+-   64 is too small (too many people have bumped into that limit).
+-   Here we boost it.
+-   Users who want even more than the boosted limit should #define
+-   FD_SETSIZE higher before this; e.g., via compiler /D switch.
+-*/
+-#if defined(MS_WINDOWS) && !defined(FD_SETSIZE)
+-#define FD_SETSIZE 512
+-#endif
+-
+ #if defined(HAVE_POLL_H)
+ #include <poll.h>
+ #elif defined(HAVE_SYS_POLL_H)

@@ -1,0 +1,13 @@
+diff --git a/scripts/install.sh b/scripts/install.sh
+index f88ae11..d6aae70 100755
+--- a/scripts/install.sh
++++ b/scripts/install.sh
+@@ -11,9 +11,9 @@ fi
+ 
+ TPL_DIR=$1
+ TPL_NAME=$2
+-DEST0=$DESTDIR/$(eliom-distillery -dir)
++DEST0=$out/eliom-distillery-templates
+ DEST=$DEST0/$TPL_NAME
+ 
+ mkdir -p $DEST0
