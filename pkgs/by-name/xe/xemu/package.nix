@@ -187,7 +187,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/xemu-project/xemu/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Plus;
     mainProgram = "xemu";
-    maintainers = with lib.maintainers; [ marcin-serwin ];
+    maintainers = with lib.maintainers; [
+      marcin-serwin
+      matteopacini
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
