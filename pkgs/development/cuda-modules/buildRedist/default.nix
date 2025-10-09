@@ -272,7 +272,7 @@ extendMkDerivation {
       # autoAddCudaCompatRunpath depends on cuda_compat and would cause
       # infinite recursion if applied to `cuda_compat` itself (beside the fact
       # that it doesn't make sense in the first place)
-      ++ lib.optionals (finalAttrs.pname != "cuda_compat" && flags.isJetsonBuild) [
+      ++ lib.optionals (finalAttrs.pname != "cuda_compat" && autoAddCudaCompatRunpath.enableHook) [
         # autoAddCudaCompatRunpath must appear AFTER autoAddDriverRunpath.
         # See its documentation in ./setup-hooks/extension.nix.
         autoAddCudaCompatRunpath
