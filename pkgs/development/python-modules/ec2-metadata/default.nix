@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "ec2-metadata";
-  version = "2.16.0";
+  version = "2.17.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "ec2_metadata";
     inherit version;
-    hash = "sha256-1Ca89aIVQ+B57Ov+0qoSNuUIgaGJENcya2J9WGE3mD8=";
+    hash = "sha256-rZilr9j09J9ojkiZ3FBSV9oyNzSHYezusPx/x9AMyQ0=";
   };
 
   build-system = [
