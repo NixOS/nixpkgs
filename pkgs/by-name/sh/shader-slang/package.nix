@@ -11,19 +11,11 @@
   libX11,
   glslang,
   unordered_dense,
-  llvmPackages,
   versionCheckHook,
   gitUpdater,
 
   # Required for compiling to SPIR-V or GLSL
   withGlslang ? true,
-  # Can be used for compiling shaders to CPU targets, see:
-  # https://github.com/shader-slang/slang/blob/master/docs/cpu-target.md
-  # If `withLLVM` is disabled, Slang will fall back to the C++ compiler found
-  # in the environment, if one exists.
-  withLLVM ? false,
-  # Dynamically link against libllvm and libclang++ (upstream defaults to static)
-  withSharedLLVM ? withLLVM,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,11 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9upf/4Ix4ReV4OlkPMzLMJo4DlAXydQLSEp+GM+tN2g=";
     fetchSubmodules = true;
   };
-
-  patches = lib.optionals withSharedLLVM [
-    # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
-    ./1-shared-llvm.patch
-  ];
 
   postPatch = ''
     # Header location has moved in glslang 15+
@@ -71,10 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
-  ]
-  ++ lib.optionals withLLVM [
-    llvmPackages.llvm
-    llvmPackages.libclang
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.
@@ -110,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSLANG_USE_SYSTEM_MINIZ=ON"
     "-DSLANG_USE_SYSTEM_LZ4=ON"
     (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
-    "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
+    "-DSLANG_SLANG_LLVM_FLAVOR=DISABLE"
     # slang-rhi tries to download headers and precompiled binaries for these backends
     "-DSLANG_RHI_ENABLE_OPTIX=OFF"
     "-DSLANG_RHI_ENABLE_VULKAN=OFF"
@@ -149,8 +132,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ niklaskorz ];
     mainProgram = "slangc";
     platforms = lib.platforms.all;
-    # Slang only supports LLVM 14:
-    # https://github.com/shader-slang/slang/blob/v2025.15/docs/building.md#llvm-support
-    broken = withLLVM;
   };
 })
