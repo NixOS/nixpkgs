@@ -38,7 +38,9 @@ not straightforward to include. These packages are:
   - `mft_oem`: unsure of purpose; contains FHS paths.
   - `mft`: unsure of purpose; contains FHS paths.
   - `nvidia_driver`: we don't use the drivers from the CUDA releases; irrelevant.
-  - `nvlsm`: contains FHS paths.
+  - `nvlsm`: contains FHS paths/NVSwitch and NVLINK software
+  - `libnvidia_nscq`: NVSwitch software
+  - `libnvsdm`: NVSwitch software
 - `cublasmp`:
   - `libcublasmp`: `nvshmem` isnt' packaged.
 - `cudnn`:
