@@ -552,7 +552,6 @@ let
         modifySumArgs
         innerClosePropagation
         closePropagation
-        mapAttrsFlatten
         nvs
         setAttr
         setAttrMerge
