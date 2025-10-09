@@ -248,35 +248,42 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    users.groups.${name} = { };
-    users.users.${name} = {
-      description = "HedgeDoc service user";
-      group = name;
-      isSystemUser = true;
+    users = {
+      groups.${name} = { };
+      users = {
+        nginx = lib.mkIf cfg.configureNginx {
+          extraGroups = [ "hedgedoc" ];
+        };
+        ${name} = {
+          description = "HedgeDoc service user";
+          group = name;
+          isSystemUser = true;
+        };
+      };
     };
 
     services = {
       hedgedoc.settings = {
         defaultNotePath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/default.md";
         docsPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/docs";
+        path = lib.mkIf cfg.configureNginx "/run/hedgedoc/hedgedoc.sock";
         viewPath = lib.mkDefault "${cfg.package}/share/hedgedoc/public/views";
       };
 
       nginx = lib.mkIf cfg.configureNginx {
         enable = true;
-        upstreams.hedgedoc.servers."unix:${config.services.hedgedoc.settings.path}" = { };
+        upstreams.hedgedoc.servers."unix:${cfg.settings.path}" = { };
         virtualHosts."${cfg.settings.domain}" = {
-          enableACME = true;
           forceSSL = true;
           locations = {
             "/" = {
               proxyPass = "http://hedgedoc";
-              recommendedProxySettings = true;
+              recommendedProxySettings = lib.mkDefault true;
             };
             "/socket.io/" = {
               proxyPass = "http://hedgedoc";
               proxyWebsockets = true;
-              recommendedProxySettings = true;
+              recommendedProxySettings = lib.mkDefault true;
             };
           };
         };
