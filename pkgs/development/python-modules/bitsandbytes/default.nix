@@ -196,6 +196,9 @@ buildPythonPackage {
     homepage = "https://github.com/bitsandbytes-foundation/bitsandbytes";
     changelog = "https://github.com/bitsandbytes-foundation/bitsandbytes/releases/tag/${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ bcdarwin ];
+    maintainers = with lib.maintainers; [
+      bcdarwin
+      jk
+    ];
   };
 }
