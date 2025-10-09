@@ -5,10 +5,18 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
+  inherit (lib)
+    literalExpression
+    mkDefault
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRenamedOptionModule
+    optionalAttrs
+    types
+    ;
+
   runDir = "/run/searx";
 
   cfg = config.services.searx;
@@ -394,7 +402,7 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [
+  meta.maintainers = with lib.maintainers; [
     SuperSandro2000
     _999eagle
   ];
