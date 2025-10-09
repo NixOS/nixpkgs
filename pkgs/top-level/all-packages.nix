@@ -13259,8 +13259,6 @@ with pkgs;
 
   ### GAMES
 
-  _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
-
   inherit (callPackages ../games/fteqw { })
     fteqw
     fteqw-dedicated
