@@ -1,8 +1,11 @@
 {
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   makeWrapper,
-  nix-update-script,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
   serve,
   stdenv,
   xsel,
@@ -48,8 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
       --chdir $out
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru = {
+    updateScriptSrc = unstableGitUpdater { };
+    updateScriptDeps = writeShellApplication {
+      name = "update-dokieli-berry-deps";
+      runtimeInputs = [
+        nix
+        yarn-berry.yarn-berry-fetcher
+      ];
+      text = lib.strings.readFile ./updateDeps.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc
+      (lib.getExe finalAttrs.passthru.updateScriptDeps)
+    ];
   };
 
   meta = {

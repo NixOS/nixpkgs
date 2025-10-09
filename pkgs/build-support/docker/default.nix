@@ -1270,11 +1270,11 @@ rec {
 
       staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
 
-      # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L493-L526
+      # https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L617-L651
       rcfile = writeText "nix-shell-rc" ''
         unset PATH
         dontAddDisableDepTrack=1
-        # TODO: https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L506
+        # TODO: https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L628
         [ -e $stdenv/setup ] && source $stdenv/setup
         PATH=${staticPath}:"$PATH"
         SHELL=${lib.escapeShellArg shell}
@@ -1294,7 +1294,7 @@ rec {
         ''}
       '';
 
-      # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
+      # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/include/nix/store/globals.hh#L778-L788
       sandboxBuildDir = "/build";
 
       drvEnv =
@@ -1311,18 +1311,18 @@ rec {
         SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
         NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1001-L1004
         # PATH = "/path-not-set";
         # Allows calling bash and `buildDerivation` as the Cmd
         PATH = staticPath;
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1006-L1012
         HOME = homeDirectory;
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1014-L1018
         NIX_STORE = storeDir;
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1020-L1021
         # TODO: Make configurable?
         NIX_BUILD_CORES = "1";
 
@@ -1330,23 +1330,23 @@ rec {
       // drvEnv
       // {
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1008-L1010
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1035-L1037
         NIX_BUILD_TOP = sandboxBuildDir;
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1039-L1040
         TMPDIR = sandboxBuildDir;
         TEMPDIR = sandboxBuildDir;
         TMP = sandboxBuildDir;
         TEMP = sandboxBuildDir;
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1042-L1046
         PWD = sandboxBuildDir;
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1071-L1074
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1079-L1082
         # We don't set it here because the output here isn't handled in any special way
         # NIX_LOG_FD = "2";
 
-        # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1084-L1085
         TERM = "xterm-256color";
       };
 
@@ -1358,7 +1358,7 @@ rec {
         usrBinEnv
         (fakeNss.override {
           # Allows programs to look up the build user's home directory
-          # https://github.com/NixOS/nix/blob/ffe155abd36366a870482625543f9bf924a58281/src/libstore/build/local-derivation-goal.cc#L906-L910
+          # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/linux-derivation-builder.cc#L409-L416
           # Slightly differs however: We use the passed-in homeDirectory instead of sandboxBuildDir.
           # We're doing this because it's arguably a bug in Nix that sandboxBuildDir is used here: https://github.com/NixOS/nix/issues/6379
           extraPasswdLines = [
@@ -1386,8 +1386,8 @@ rec {
       # Run this image as the given uid/gid
       config.User = "${toString uid}:${toString gid}";
       config.Cmd =
-        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L185-L186
-        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L534-L536
+        # https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L240-L241
+        # https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L659
         if run == null then
           [
             shell
