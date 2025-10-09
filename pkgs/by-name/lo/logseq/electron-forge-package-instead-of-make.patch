@@ -1,0 +1,13 @@
+diff --git a/resources/package.json b/resources/package.json
+index 3445cbb..03927d4 100644
+--- a/resources/package.json
++++ b/resources/package.json
+@@ -10,7 +10,7 @@
+   "scripts": {
+     "electron:dev": "electron-forge start",
+     "electron:debug": "electron-forge start --inspect-electron",
+-    "electron:make": "electron-forge make",
++    "electron:make": "electron-forge package",
+     "electron:make-linux-arm64": "electron-forge make --platform=linux --arch=arm64",
+     "electron:make-macos-arm64": "electron-forge make --platform=darwin --arch=arm64",
+     "electron:publish:github": "electron-forge publish",

@@ -1,0 +1,13 @@
+--- origsrc/Modules/_ssl.c	2009-01-26 10:55:41.000000000 -0600
++++ src/Modules/_ssl.c	2009-08-20 00:04:59.346816700 -0500
+@@ -15,6 +15,10 @@
+ 
+ #include "Python.h"
+ 
++#ifdef __CYGWIN__
++#undef WITH_THREAD
++#endif
++
+ #ifdef WITH_THREAD
+ #include "pythread.h"
+ #define PySSL_BEGIN_ALLOW_THREADS { \

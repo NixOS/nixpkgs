@@ -1,0 +1,35 @@
+diff --git a/src/arma3-unix-launcher-library/arma3client.cpp b/src/arma3-unix-launcher-library/arma3client.cpp
+index dbb17d0..ee8853c 100644
+--- a/src/arma3-unix-launcher-library/arma3client.cpp
++++ b/src/arma3-unix-launcher-library/arma3client.cpp
+@@ -63,7 +63,7 @@ namespace
+                       disable_esync);
+         if (!is_proton)
+         {
+-            StdUtils::StartBackgroundProcess(fmt::format("env {} {} {}", user_environment_variables, executable_path, arguments),
++            StdUtils::StartBackgroundProcess(fmt::format("@steamRun@ env {} {} {}", user_environment_variables, executable_path, arguments),
+                                              arma_path.string());
+             return;
+         }
+@@ -83,7 +83,7 @@ namespace
+
+             auto const environment = fmt::format(R"env({} SteamGameId={} LD_PRELOAD={} STEAM_COMPAT_DATA_PATH="{}")env",
+                                                  get_esync_prefix(disable_esync), arma3_id, ld_preload_path, steam_compat_data_path.string());
+-            auto const command = fmt::format(R"command(env {} {} {} {} {} "{}" {})command", environment, user_environment_variables,
++            auto const command = fmt::format(R"command(@steamRun@ env {} {} {} {} {} "{}" {})command", environment, user_environment_variables,
+                                              optional_steam_runtime(steam_utils), compatibility_tool.first,
+                                              get_verb(compatibility_tool.second), executable_path.string(), arguments);
+             spdlog::info("Running Arma:\n{}\n", command);
+diff --git a/src/dayz-linux-launcher-library/dayzclient.cpp b/src/dayz-linux-launcher-library/dayzclient.cpp
+index 5fc9027..d2b9e92 100644
+--- a/src/dayz-linux-launcher-library/dayzclient.cpp
++++ b/src/dayz-linux-launcher-library/dayzclient.cpp
+@@ -76,7 +76,7 @@ namespace
+
+             auto const environment = fmt::format(R"env({} SteamGameId={} LD_PRELOAD={} STEAM_COMPAT_DATA_PATH="{}")env",
+                                                  get_esync_prefix(disable_esync), dayz_id, ld_preload_path, steam_compat_data_path.string());
+-            auto const command = fmt::format(R"command(env {} {} {} {} {} "{}" {})command", environment, user_environment_variables,
++            auto const command = fmt::format(R"command(@steamRun@ env {} {} {} {} {} "{}" {})command", environment, user_environment_variables,
+                                              optional_steam_runtime(steam_utils), compatibility_tool.first,
+                                              get_verb(compatibility_tool.second), executable_path.string(), arguments);
+             spdlog::info("Running DayZ:\n{}\n", command);

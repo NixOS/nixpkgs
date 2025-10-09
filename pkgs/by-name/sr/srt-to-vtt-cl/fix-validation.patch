@@ -1,0 +1,13 @@
+--- a/Makefile
++++ b/Makefile
+@@ -1,9 +1,4 @@
+-ERR = $(shell which clang++ >/dev/null; echo $$?)
+-ifeq "$(ERR)" "0"
+-	CXX ?= clang++
+-else
+-	CXX ?= g++
+-endif
++CXX ?= g++
+ CXXFLAGS = -std=c++11 -O2 -MMD -I ./deps
+ OBJECTS := src/text_encoding_detect.o src/Utils.o src/Converter.o src/main.o
+ DEPENDS := $(OBJECTS:.o=.d)

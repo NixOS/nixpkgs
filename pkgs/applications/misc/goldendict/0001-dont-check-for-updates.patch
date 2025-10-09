@@ -1,0 +1,49 @@
+diff --git i/config.cc w/config.cc
+index 04b63f5..7a453d9 100644
+--- i/config.cc
++++ w/config.cc
+@@ -182,7 +182,7 @@ Preferences::Preferences():
+   pronounceOnLoadPopup( false ),
+   useInternalPlayer( InternalPlayerBackend::anyAvailable() ),
+   internalPlayerBackend( InternalPlayerBackend::defaultBackend() ),
+-  checkForNewReleases( true ),
++  checkForNewReleases( false ),
+   disallowContentFromOtherSites( false ),
+   enableWebPlugins( false ),
+   hideGoldenDictHeader( false ),
+@@ -867,8 +867,8 @@ Class load() THROW_SPEC( exError )
+       c.preferences.proxyServer.systemProxyPassword = proxy.namedItem( "systemProxyPassword" ).toElement().text();
+     }
+ 
+-    if ( !preferences.namedItem( "checkForNewReleases" ).isNull() )
+-      c.preferences.checkForNewReleases = ( preferences.namedItem( "checkForNewReleases" ).toElement().text() == "1" );
++    //if ( !preferences.namedItem( "checkForNewReleases" ).isNull() )
++    //  c.preferences.checkForNewReleases = ( preferences.namedItem( "checkForNewReleases" ).toElement().text() == "1" );
+ 
+     if ( !preferences.namedItem( "disallowContentFromOtherSites" ).isNull() )
+       c.preferences.disallowContentFromOtherSites = ( preferences.namedItem( "disallowContentFromOtherSites" ).toElement().text() == "1" );
+@@ -1819,9 +1819,9 @@ void save( Class const & c ) THROW_SPEC( exError )
+       proxy.appendChild( opt );
+     }
+ 
+-    opt = dd.createElement( "checkForNewReleases" );
+-    opt.appendChild( dd.createTextNode( c.preferences.checkForNewReleases ? "1" : "0" ) );
+-    preferences.appendChild( opt );
++    //opt = dd.createElement( "checkForNewReleases" );
++    //opt.appendChild( dd.createTextNode( c.preferences.checkForNewReleases ? "1" : "0" ) );
++    //preferences.appendChild( opt );
+ 
+     opt = dd.createElement( "disallowContentFromOtherSites" );
+     opt.appendChild( dd.createTextNode( c.preferences.disallowContentFromOtherSites ? "1" : "0" ) );
+diff --git i/preferences.cc w/preferences.cc
+index 72c3147..7e48f00 100644
+--- i/preferences.cc
++++ w/preferences.cc
+@@ -314,6 +314,7 @@ Preferences::Preferences( QWidget * parent, Config::Class & cfg_ ):
+            this, SLOT( customProxyToggled( bool ) ) );
+ 
+   ui.checkForNewReleases->setChecked( p.checkForNewReleases );
++  ui.checkForNewReleases->setEnabled( false );
+   ui.disallowContentFromOtherSites->setChecked( p.disallowContentFromOtherSites );
+   ui.enableWebPlugins->setChecked( p.enableWebPlugins );
+   ui.hideGoldenDictHeader->setChecked( p.hideGoldenDictHeader );

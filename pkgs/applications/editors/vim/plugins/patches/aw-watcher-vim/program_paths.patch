@@ -1,0 +1,13 @@
+diff --git a/plugin/activitywatch.vim b/plugin/activitywatch.vim
+index 6986553..7462b02 100644
+--- a/plugin/activitywatch.vim
++++ b/plugin/activitywatch.vim
+@@ -29,7 +29,7 @@ let s:heartbeat_apiurl = printf('%s/heartbeat?pulsetime=30', s:bucket_apiurl)
+ let s:http_response_code = {}
+ 
+ function! HTTPPostJson(url, data)
+-    let l:req = ['curl', '-s', a:url,
++    let l:req = ['@curl@', '-s', a:url,
+         \ '-H', 'Content-Type: application/json',
+         \ '-X', 'POST',
+         \ '-d', json_encode(a:data),

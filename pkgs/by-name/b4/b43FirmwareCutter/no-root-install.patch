@@ -1,0 +1,18 @@
+diff -Naur b43-fwcutter-015-orig/Makefile b43-fwcutter-015/Makefile
+--- b43-fwcutter-015-orig/Makefile	2011-08-21 08:17:01.000000000 -0400
++++ b43-fwcutter-015/Makefile	2012-07-13 17:57:53.002154557 -0400
+@@ -51,10 +51,10 @@
+ 	$(QUIET_CC) $(CFLAGS) -o $(BIN) $(call OBJS,$(SRCS)) $(LDFLAGS)
+ 
+ install: all
+-	install -d -o 0 -g 0 -m 755 $(PREFIX)/bin/
+-	install -o 0 -g 0 -m 755 $(BIN) $(PREFIX)/bin/
+-	install -d -o 0 -g 0 -m 755 $(PREFIX)/man/man1/
+-	install -o 0 -g 0 -m 644 $(BIN).1 $(PREFIX)/man/man1/
++	install -d -m 755 $(PREFIX)/bin/
++	install -m 755 $(BIN) $(PREFIX)/bin/
++	install -d -m 755 $(PREFIX)/man/man1/
++	install -m 644 $(BIN).1 $(PREFIX)/man/man1/
+ 
+ clean:
+ 	-rm -Rf obj dep *.orig *.rej *~

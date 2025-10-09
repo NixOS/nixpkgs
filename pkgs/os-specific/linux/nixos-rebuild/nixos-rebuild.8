@@ -1,0 +1,587 @@
+.Dd January 1, 1980
+.Dt nixos-rebuild 8
+.Os
+.Sh NAME
+.Nm nixos-rebuild
+.Nd reconfigure a NixOS machine
+.
+.
+.
+.Sh SYNOPSIS
+.Nm
+.Bro
+.Cm switch | boot | test | build | dry-build | dry-activate | edit | repl | build-vm | build-vm-with-bootloader | build-image | list-generations Op Fl -json
+.Brc
+.br
+.Op Fl -upgrade | -upgrade-all
+.Op Fl -install-bootloader
+.Op Fl -no-build-nix
+.Op Fl -fast
+.Op Fl -rollback
+.br
+.Op Fl -file | f Ar path
+.Op Fl -attr | A Ar attrPath
+.Op Fl -flake Ar flake-uri
+.Op Fl -no-flake
+.Op Fl -recreate-lock-file
+.Op Fl -no-update-lock-file
+.Op Fl -no-write-lock-file
+.Op Fl -no-registries
+.Op Fl -commit-lock-file
+.Op Fl -update-input Ar input-path
+.Op Fl -override-input Ar input-path flake-url
+.br
+.Op Fl -profile-name | p Ar name
+.Op Fl -specialisation | c Ar name
+.br
+.Op Fl -image-variant Ar variant
+.br
+.Op Fl -build-host Va host
+.Op Fl -target-host Va host
+.Op Fl -sudo
+.Op Fl -no-ssh-tty
+.br
+.Op Fl -verbose | v
+.Op Fl -quiet
+.Op Fl -log-format Ar format
+.Op Fl -no-build-output | Q
+.Op Fl -max-jobs | j Va number
+.Op Fl -cores Va number
+.Op Fl -keep-going | k
+.Op Fl -keep-failed | K
+.Op Fl -fallback
+.Op Fl I Va NIX_PATH
+.Op Fl -option Ar name value
+.Op Fl -repair
+.Op Fl -builders Va builder-spec
+.Op Fl -accept-flake-config
+.Op Fl -print-build-logs | L
+.Op Fl -show-trace
+.Op Fl -refresh
+.Op Fl -impure
+.Op Fl -offline
+.Op Fl -no-net
+.
+.
+.
+.Sh DESCRIPTION
+This command updates the system so that it corresponds to the
+configuration specified in
+.Pa /etc/nixos/configuration.nix Ns
+,
+.Pa /etc/nixos/flake.nix
+or the file and attribute specified by the
+.Fl -file
+and/or
+.Fl -attr
+options. Thus, every time you modify the configuration or any other NixOS
+module, you must run
+.Nm
+to make the changes take effect. It builds the new system in
+.Pa /nix/store Ns
+, runs its activation script, and stop and (re)starts any system services if
+needed. Please note that user services need to be started manually as they
+aren't detected by the activation script at the moment.
+.
+.Pp
+This command has one required argument, which specifies the desired
+operation. It must be one of the following:
+.Bl -tag -width indent
+.It Cm switch
+Build and activate the new configuration, and make it the boot default. That
+is, the configuration is added to the GRUB boot menu as the default
+menu entry, so that subsequent reboots will boot the system into the new
+configuration. Previous configurations activated with
+.Ic nixos-rebuild switch
+or
+.Ic nixos-rebuild boot
+remain available in the GRUB menu.
+.Pp
+Note that if you are using specializations, running just
+.Ic nixos-rebuild switch
+will switch you back to the unspecialized, base system \(em in that case, you
+might want to use this instead:
+.Bd -literal -offset indent
+$ nixos-rebuild switch --specialisation your-specialisation-name
+.Ed
+.Pp
+This command will build all specialisations and make them bootable just
+like regular
+.Ic nixos-rebuild switch
+does \(em the only thing different is that it will switch to given
+specialisation instead of the base system; it can be also used to switch from
+the base system into a specialised one, or to switch between specialisations.
+.
+.It Cm boot
+Build the new configuration and make it the boot default (as with
+.Ic nixos-rebuild switch Ns
+), but do not activate it. That is, the system continues to run the previous
+configuration until the next reboot.
+.
+.It Cm test
+Build and activate the new configuration, but do not add it to the GRUB
+boot menu. Thus, if you reboot the system (or if it crashes), you will
+automatically revert to the default configuration (i.e. the
+configuration resulting from the last call to
+.Ic nixos-rebuild switch
+or
+.Ic nixos-rebuild boot Ns
+).
+.Pp
+Note that if you are using specialisations, running just
+.Ic nixos-rebuild test
+will activate the unspecialised, base system \(em in that case, you might want
+to use this instead:
+.Bd -literal -offset indent
+$ nixos-rebuild test --specialisation your-specialisation-name
+.Ed
+.Pp
+This command can be also used to switch from the base system into a
+specialised one, or to switch between specialisations.
+.
+.It Cm build
+Build the new configuration, but neither activate it nor add it to the
+GRUB boot menu. It leaves a symlink named
+.Pa result
+in the current directory, which points to the output of the top-level
+.Dq system
+derivation. This is essentially the same as doing
+.Bd -literal -offset indent
+$ nix-build /path/to/nixpkgs/nixos -A system
+.Ed
+.Pp
+Note that you do not need to be root to run
+.Ic nixos-rebuild build Ns
+\&.
+.
+.It Cm dry-build
+Show what store paths would be built or downloaded by any of the
+operations above, but otherwise do nothing.
+.
+.It Cm dry-activate
+Build the new configuration, but instead of activating it, show what
+changes would be performed by the activation (i.e. by
+.Ic nixos-rebuild test Ns
+). For instance, this command will print which systemd units would be restarted.
+The list of changes is not guaranteed to be complete.
+.
+.It Cm edit
+Opens
+.Pa configuration.nix
+in the default editor.
+.
+.It Cm repl
+Opens the configuration in
+.Ic nix repl Ns .
+.
+.It Cm build-vm
+Build a script that starts a NixOS virtual machine with the desired
+configuration. It leaves a symlink
+.Pa result
+in the current directory that points (under
+.Ql result/bin/run\- Ns Va hostname Ns \-vm Ns
+)
+at the script that starts the VM. Thus, to test a NixOS configuration in
+a virtual machine, you should do the following:
+.Bd -literal -offset indent
+$ nixos-rebuild build-vm
+$ ./result/bin/run-*-vm
+.Ed
+.Pp
+The VM is implemented using the
+.Ql qemu
+package. For best performance, you should load the
+.Ql kvm-intel
+or
+.Ql kvm-amd
+kernel modules to get hardware virtualisation.
+.Pp
+The VM mounts the Nix store of the host through the 9P file system. The
+host Nix store is read-only, so Nix commands that modify the Nix store
+will not work in the VM. This includes commands such as
+.Nm Ns
+; to change the VM’s configuration, you must halt the VM and re-run the commands
+above.
+.Pp
+The VM has its own ext3 root file system, which is automatically created when
+the VM is first started, and is persistent across reboots of the VM. It is
+stored in
+.Ql ./ Ns Va hostname Ns .qcow2 Ns
+\&.
+.\" The entire file system hierarchy of the host is available in
+.\" the VM under
+.\" .Pa /hostfs Ns
+.\" .
+.
+.It Cm build-vm-with-bootloader
+Like
+.Cm build-vm Ns
+, but boots using the regular boot loader of your configuration (e.g. GRUB 1 or
+2), rather than booting directly into the kernel and initial ramdisk of the
+system. This allows you to test whether the boot loader works correctly. \
+However, it does not guarantee that your NixOS configuration will boot
+successfully on the host hardware (i.e., after running
+.Ic nixos-rebuild switch Ns
+), because the hardware and boot loader configuration in the VM are different.
+The boot loader is installed on an automatically generated virtual disk
+containing a
+.Pa /boot
+partition.
+.
+.It Cm build-image
+Build a disk-image variant, pre-configured for the given platform/provider.
+Select a variant with the
+.Fl -image-variant
+option or run without any options to get a list of available variants.
+
+.Bd -literal -offset indent
+$ nixos-rebuild build-image --image-variant proxmox
+.Ed
+.
+.It Cm list-generations Op Fl -json
+List the available generations in a similar manner to the boot loader
+menu. It shows the generation number, build date and time, NixOS version,
+kernel version and the configuration revision.
+There is also a json version of output available.
+.El
+.
+.
+.
+.Sh OPTIONS
+.Bl -tag -width indent
+.It Fl -upgrade , -upgrade-all
+Update the root user's channel named
+.Ql nixos
+before rebuilding the system.
+.Pp
+In addition to the
+.Ql nixos
+channel, the root user's channels which have a file named
+.Ql .update-on-nixos-rebuild
+in their base directory will also be updated.
+.Pp
+Passing
+.Fl -upgrade-all
+updates all of the root user's channels.
+.
+.It Fl -install-bootloader
+Causes the boot loader to be (re)installed on the device specified by the
+relevant configuration options.
+.
+.It Fl -no-build-nix
+Normally,
+.Nm
+first builds the
+.Ql nix
+attribute in Nixpkgs, and uses the resulting instance of the Nix package manager
+to build the new system configuration. This is necessary if the NixOS modules
+use features not provided by the currently installed version of Nix. This option
+disables building a new Nix.
+.
+.It Fl -fast
+Equivalent to
+.Fl -no-build-nix Ns
+\&. This option is useful if you call
+.Nm
+frequently (e.g. if you’re hacking on a NixOS module).
+.
+.It Fl -rollback
+Instead of building a new configuration as specified by
+.Pa /etc/nixos/configuration.nix Ns
+, roll back to the previous configuration. (The previous configuration is
+defined as the one before the “current” generation of the Nix profile
+.Pa /nix/var/nix/profiles/system Ns
+\&.)
+.
+.It Fl -builders Ar builder-spec
+Allow ad-hoc remote builders for building the new system. This requires
+the user executing
+.Nm
+(usually root) to be configured as a trusted user in the Nix daemon. This can be
+achieved by using the
+.Va nix.settings.trusted-users
+NixOS option. Examples values for that option are described in the
+.Dq Remote builds
+chapter in the Nix manual, (i.e.
+.Ql --builders \(dqssh://bigbrother x86_64-linux\(dq Ns
+). By specifying an empty string existing builders specified in
+.Pa /etc/nix/machines
+can be ignored:
+.Ql --builders \(dq\(dq
+for example when they are not reachable due to network connectivity.
+.
+.It Fl -profile-name Ar name , Fl p Ar name
+Instead of using the Nix profile
+.Pa /nix/var/nix/profiles/system
+to keep track of the current and previous system configurations, use
+.Pa /nix/var/nix/profiles/system-profiles/ Ns Va name Ns
+\&. When you use GRUB 2, for every system profile created with this flag, NixOS
+will create a submenu named
+.Dq NixOS - Profile Va name
+in GRUB’s boot menu, containing the current and previous configurations of this profile.
+.Pp
+For instance, if you want to test a configuration file named
+.Pa test.nix
+without affecting the default system profile, you would do:
+.Bd -literal -offset indent
+$ nixos-rebuild switch -p test -I nixos-config=./test.nix
+.Ed
+.Pp
+The new configuration will appear in the GRUB 2 submenu
+.Dq NixOS - Profile 'test' Ns
+\&.
+.
+.It Fl -specialisation Ar name , Fl c Ar name
+Activates given specialisation; when not specified, switching and testing
+will activate the base, unspecialised system.
+.
+.It Fl -image-variant Ar variant
+Selects an image variant to build from
+the
+.Va config.system.build.images
+attribute of the given configuration. A list of variants is printed if this option remains unset.
+.
+.It Fl -build-host Ar host
+Instead of building the new configuration locally, use the specified host
+to perform the build. The host needs to be accessible with
+.Ic ssh Ns ,
+and must be able to perform Nix builds. If the option
+.Fl -target-host
+is not set, the build will be copied back to the local machine when done.
+.Pp
+Note that, if
+.Fl -no-build-nix
+is not specified, Nix will be built both locally and remotely. This is because
+the configuration will always be evaluated locally even though the building
+might be performed remotely.
+.Pp
+You can include a remote user name in the host name
+.Ns ( Va user@host Ns
+). You can also set ssh options by defining the
+.Ev NIX_SSHOPTS
+environment variable.
+.
+.It Fl -target-host Ar host
+Specifies the NixOS target host. By setting this to something other than an
+empty string, the system activation will happen on the remote host instead of
+the local machine. The remote host needs to be accessible over
+.Ic ssh Ns ,
+and for the commands
+.Cm switch Ns
+,
+.Cm boot
+and
+.Cm test
+you need root access.
+.Pp
+If
+.Fl -build-host
+is not explicitly specified or empty, building will take place locally.
+.Pp
+You can include a remote user name in the host name
+.Ns ( Va user@host Ns
+). You can also set ssh options by defining the
+.Ev NIX_SSHOPTS
+environment variable.
+.Pp
+Note that
+.Nm
+honors the
+.Va nixpkgs.crossSystem
+setting of the given configuration but disregards the true architecture of the
+target host. Hence the
+.Va nixpkgs.crossSystem
+setting has to match the target platform or else activation will fail.
+.
+.It Fl -use-substitutes
+When set, nixos-rebuild will add
+.Fl -use-substitutes
+to each invocation of nix-copy-closure. This will only affect the behavior of
+nixos-rebuild if
+.Fl -target-host
+or
+.Fl -build-host
+is also set. This is useful when the target-host connection to cache.nixos.org
+is faster than the connection between hosts.
+.
+.It Fl -sudo
+When set, nixos-rebuild prefixes activation commands that run on the
+.Fl -target-host
+system with
+.Ic sudo Ns
+\&. Setting this option allows deploying as a non-root user.
+.
+.It Fl -no-ssh-tty
+When set, nixos-rebuild will not request a tty when executing commands on the
+.Fl -target-host
+system with
+.Ic ssh Ns
+\&. This may help avoid corrupted terminal output when running multiple
+nixos-rebuild commands in parallel, but may also prevent the remote
+.Ic sudo
+from working properly.
+.
+.It Fl -file Ar path , Fl f Ar path
+Enable and build the NixOS system from the specified file. The file must
+evaluate to an attribute set, and it must contain a valid NixOS configuration
+at attribute
+.Va attrPath Ns
+\&. This is useful for building a NixOS system from a nix file that is not
+a flake or a NixOS configuration module. Attribute set a with valid NixOS
+configuration can be made using
+.Va nixos
+function in nixpkgs or importing and calling
+.Pa nixos/lib/eval-config.nix
+from nixpkgs. If specified without
+.Fl -attr
+option, builds the configuration from the top-level
+attribute of the file.
+.
+.It Fl -attr Ar attrPath , Fl A Ar attrPath
+Enable and build the NixOS system from nix file and use the specified attribute
+path from file specified by the
+.Fl -file
+option. If specified without
+.Fl -file
+option, uses
+.Pa default.nix
+in current directory.
+.
+.It Fl -flake Va flake-uri Ns Op Va #name
+Build the NixOS system from the specified flake. It defaults to the directory
+containing the target of the symlink
+.Pa /etc/nixos/flake.nix Ns
+, if it exists. The flake must contain an output named
+.Ql nixosConfigurations. Ns Va name Ns
+\&. If
+.Va name
+is omitted, it default to the current host name.
+.
+.It Fl -no-flake
+Do not imply
+.Fl -flake
+if
+.Pa /etc/nixos/flake.nix
+exists. With this option, it is possible to build non-flake NixOS configurations
+even if the current NixOS systems uses flakes.
+.El
+.Pp
+In addition,
+.Nm
+accepts following options from nix commands that the tool calls:
+.
+.Pp
+flake-related options:
+.Bd -offset indent
+.Fl -recreate-lock-file Ns ,
+.Fl -no-update-lock-file Ns ,
+.Fl -no-write-lock-file Ns ,
+.Fl -no-registries Ns ,
+.Fl -commit-lock-file Ns ,
+.Fl -update-input Ar input-path Ns ,
+.Fl -override-input Ar input-path flake-url Ns
+.Ed
+.
+.Pp
+Builder options:
+.Bd -offset indent
+.Fl -verbose Ns ,
+.Fl v Ns ,
+.Fl -quiet Ns ,
+.Fl -log-format Ns ,
+.Fl -no-build-output Ns ,
+.Fl Q Ns ,
+.Fl -max-jobs Ns ,
+.Fl j Ns ,
+.Fl -cores Ns ,
+.Fl -keep-going Ns ,
+.Fl k Ns ,
+.Fl -keep-failed Ns ,
+.Fl K Ns ,
+.Fl -fallback Ns ,
+.Fl I Ns ,
+.Fl -option Ns ,
+.Fl -repair Ns ,
+.Fl -builders Ns ,
+.Fl -accept-flake-config Ns ,
+.Fl -print-build-logs Ns ,
+.Fl L Ns ,
+.Fl -show-trace Ns ,
+.Fl -refresh Ns ,
+.Fl -impure Ns ,
+.Fl -offline Ns ,
+.Fl -no-net Ns
+.Ed
+.
+.Pp
+See the Nix manual,
+.Ic nix flake lock --help
+or
+.Ic nix-build --help
+for details.
+.
+.
+.
+.Sh ENVIRONMENT
+.Bl -tag -width indent
+.It Ev NIXOS_CONFIG
+Path to the main NixOS configuration module. Defaults to
+.Pa /etc/nixos/configuration.nix Ns
+\&.
+.
+.It Ev NIX_PATH
+A colon-separated list of directories used to look up Nix expressions enclosed
+in angle brackets (e.g. <nixpkgs>). Example:
+.Bd -literal -offset indent
+nixpkgs=./my-nixpkgs
+.Ed
+.
+.It Ev NIX_SSHOPTS
+Additional options to be passed to
+.Ic ssh
+on the command line.
+.Ed
+.
+.It Ev NIXOS_SWITCH_USE_DIRTY_ENV
+Expose the the current environment variables to post activation scripts. Will
+skip usage of
+.Ic systemd-run
+during system activation. Possibly dangerous, specially in remote environments
+(e.g.: via SSH). Will be removed in the future.
+.El
+.
+.
+.
+.Sh FILES
+.Bl -tag -width indent
+.It Pa /etc/nixos/flake.nix
+If this file exists, then
+.Nm
+will use it as if the
+.Fl -flake
+option was given. This file may be a symlink to a
+.Pa flake.nix
+in an actual flake; thus
+.Pa /etc/nixos
+need not be a flake.
+.
+.It Pa /run/current-system
+A symlink to the currently active system configuration in the Nix store.
+.
+.It Pa /nix/var/nix/profiles/system
+The Nix profile that contains the current and previous system
+configurations. Used to generate the GRUB boot menu.
+.El
+.
+.
+.
+.Sh BUGS
+This command should be renamed to something more descriptive.
+.
+.
+.
+.Sh AUTHORS
+.An -nosplit
+.An Eelco Dolstra
+and
+.An the Nixpkgs/NixOS contributors

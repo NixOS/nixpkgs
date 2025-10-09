@@ -1,0 +1,1578 @@
+{ lib }:
+let
+  inherit (lib) optionalAttrs;
+
+  mkLicense =
+    lname:
+    {
+      shortName ? lname,
+      # Most of our licenses are Free, explicitly declare unfree additions as such!
+      free ? true,
+      deprecated ? false,
+      spdxId ? null,
+      url ? null,
+      fullName ? null,
+      redistributable ? free,
+    }@attrs:
+    {
+      inherit
+        shortName
+        free
+        deprecated
+        redistributable
+        ;
+    }
+    // optionalAttrs (attrs ? spdxId) {
+      inherit spdxId;
+      url = "https://spdx.org/licenses/${spdxId}.html";
+    }
+    // optionalAttrs (attrs ? url) {
+      inherit url;
+    }
+    // optionalAttrs (attrs ? fullName) {
+      inherit fullName;
+    };
+
+in
+lib.mapAttrs mkLicense (
+  {
+    /**
+      License identifiers from spdx.org where possible.
+      If you cannot find your license here, then look for a similar license or
+      add it to this list. The URL mentioned above is a good source for inspiration.
+    */
+
+    abstyles = {
+      spdxId = "Abstyles";
+      fullName = "Abstyles License";
+    };
+
+    acsl14 = {
+      fullName = "Anti-Capitalist Software License v1.4";
+      url = "https://anticapitalist.software/";
+      /**
+        restrictions on corporations apply for both use and redistribution
+      */
+      free = false;
+      redistributable = false;
+    };
+
+    activision = {
+      # https://doomwiki.org/wiki/Raven_source_code_licensing
+      fullName = "Activision EULA";
+      url = "https://www.doomworld.com/eternity/activision_eula.txt";
+      free = false;
+    };
+
+    adobeUtopia = {
+      fullName = "Adobe Utopia Font License";
+      spdxId = "Adobe-Utopia";
+    };
+
+    afl20 = {
+      spdxId = "AFL-2.0";
+      fullName = "Academic Free License v2.0";
+    };
+
+    afl21 = {
+      spdxId = "AFL-2.1";
+      fullName = "Academic Free License v2.1";
+    };
+
+    afl3 = {
+      spdxId = "AFL-3.0";
+      fullName = "Academic Free License v3.0";
+    };
+
+    agpl3Only = {
+      spdxId = "AGPL-3.0-only";
+      fullName = "GNU Affero General Public License v3.0 only";
+    };
+
+    agpl3Plus = {
+      spdxId = "AGPL-3.0-or-later";
+      fullName = "GNU Affero General Public License v3.0 or later";
+    };
+
+    aladdin = {
+      spdxId = "Aladdin";
+      fullName = "Aladdin Free Public License";
+      free = false;
+    };
+
+    amazonsl = {
+      fullName = "Amazon Software License";
+      url = "https://aws.amazon.com/asl/";
+      free = false;
+    };
+
+    amd = {
+      fullName = "AMD License Agreement";
+      url = "https://developer.amd.com/amd-license-agreement/";
+      free = false;
+    };
+
+    aml = {
+      spdxId = "AML";
+      fullName = "Apple MIT License";
+    };
+
+    ampas = {
+      spdxId = "AMPAS";
+      fullName = "Academy of Motion Picture Arts and Sciences BSD";
+    };
+
+    aom = {
+      fullName = "Alliance for Open Media Patent License 1.0";
+      url = "https://aomedia.org/license/patent-license/";
+    };
+
+    apple-psl10 = {
+      spdxId = "APSL-1.0";
+      fullName = "Apple Public Source License 1.0";
+    };
+
+    apple-psl20 = {
+      spdxId = "APSL-2.0";
+      fullName = "Apple Public Source License 2.0";
+    };
+
+    arphicpl = {
+      spdxId = "Arphic-1999";
+      fullName = "Arphic Public License";
+    };
+
+    artistic1 = {
+      spdxId = "Artistic-1.0";
+      fullName = "Artistic License 1.0";
+    };
+
+    artistic1-cl8 = {
+      spdxId = "Artistic-1.0-cl8";
+      fullName = "Artistic License 1.0 w/clause 8";
+    };
+
+    artistic2 = {
+      spdxId = "Artistic-2.0";
+      fullName = "Artistic License 2.0";
+    };
+
+    asl11 = {
+      spdxId = "Apache-1.1";
+      fullName = "Apache License 1.1";
+    };
+
+    asl20 = {
+      spdxId = "Apache-2.0";
+      fullName = "Apache License 2.0";
+    };
+
+    baekmuk = {
+      spdxId = "Baekmuk";
+      fullName = "Baekmuk License";
+    };
+
+    bitstreamVera = {
+      spdxId = "Bitstream-Vera";
+      fullName = "Bitstream Vera Font License";
+    };
+
+    bitTorrent10 = {
+      spdxId = "BitTorrent-1.0";
+      fullName = " BitTorrent Open Source License v1.0";
+    };
+
+    bitTorrent11 = {
+      spdxId = "BitTorrent-1.1";
+      fullName = " BitTorrent Open Source License v1.1";
+    };
+
+    boehmGC = {
+      spdxId = "Boehm-GC";
+      fullName = "Boehm-Demers-Weiser GC License";
+    };
+
+    bola11 = {
+      url = "https://blitiri.com.ar/p/bola/";
+      fullName = "Buena Onda License Agreement 1.1";
+    };
+
+    boost = {
+      spdxId = "BSL-1.0";
+      fullName = "Boost Software License 1.0";
+    };
+
+    beerware = {
+      spdxId = "Beerware";
+      fullName = "Beerware License";
+    };
+
+    blueOak100 = {
+      spdxId = "BlueOak-1.0.0";
+      fullName = "Blue Oak Model License 1.0.0";
+    };
+
+    bsd0 = {
+      spdxId = "0BSD";
+      fullName = "BSD Zero Clause License";
+    };
+
+    bsd1 = {
+      spdxId = "BSD-1-Clause";
+      fullName = "BSD 1-Clause License";
+    };
+
+    bsd2 = {
+      spdxId = "BSD-2-Clause";
+      fullName = ''BSD 2-clause "Simplified" License'';
+    };
+
+    bsd2Patent = {
+      spdxId = "BSD-2-Clause-Patent";
+      fullName = "BSD-2-Clause Plus Patent License";
+    };
+
+    bsd2WithViews = {
+      spdxId = "BSD-2-Clause-Views";
+      fullName = "BSD 2-Clause with views sentence";
+    };
+
+    bsd3 = {
+      spdxId = "BSD-3-Clause";
+      fullName = ''BSD 3-clause "New" or "Revised" License'';
+    };
+
+    bsd3Clear = {
+      spdxId = "BSD-3-Clause-Clear";
+      fullName = "BSD 3-Clause Clear License";
+    };
+
+    bsd3Lbnl = {
+      spdxId = "BSD-3-Clause-LBNL";
+      fullName = "Lawrence Berkeley National Labs BSD variant license";
+    };
+
+    bsd3ClauseTso = {
+      spdxId = "BSD-3-Clause-Tso";
+      fullName = "BSD 3-Clause Tso variant";
+    };
+
+    bsdAxisNoDisclaimerUnmodified = {
+      fullName = "BSD-Axis without Warranty Disclaimer with Unmodified requirement";
+      url = "https://scancode-licensedb.aboutcode.org/bsd-no-disclaimer-unmodified.html";
+    };
+
+    bsdOriginal = {
+      spdxId = "BSD-4-Clause";
+      fullName = ''BSD 4-clause "Original" or "Old" License'';
+    };
+
+    bsdOriginalShortened = {
+      spdxId = "BSD-4-Clause-Shortened";
+      fullName = "BSD 4 Clause Shortened";
+    };
+
+    bsdOriginalUC = {
+      spdxId = "BSD-4-Clause-UC";
+      fullName = "BSD 4-Clause University of California-Specific";
+    };
+
+    bsdProtection = {
+      spdxId = "BSD-Protection";
+      fullName = "BSD Protection License";
+    };
+
+    bsdSourceCode = {
+      spdxId = "BSD-Source-Code";
+      fullName = "BSD Source Code Attribution";
+    };
+
+    bsl11 = {
+      spdxId = "BUSL-1.1";
+      fullName = "Business Source License 1.1";
+      free = false;
+      redistributable = true;
+    };
+
+    cal10 = {
+      spdxId = "CAL-1.0";
+      fullName = "Cryptographic Autonomy License version 1.0 (CAL-1.0)";
+    };
+
+    caldera = {
+      spdxId = "Caldera";
+      fullName = "Caldera License";
+    };
+
+    capec = {
+      fullName = "Common Attack Pattern Enumeration and Classification";
+      url = "https://capec.mitre.org/about/termsofuse.html";
+    };
+
+    clArtistic = {
+      spdxId = "ClArtistic";
+      fullName = "Clarified Artistic License";
+    };
+
+    cc0 = {
+      spdxId = "CC0-1.0";
+      fullName = "Creative Commons Zero v1.0 Universal";
+    };
+
+    cc-by-nc-nd-30 = {
+      spdxId = "CC-BY-NC-ND-3.0";
+      fullName = "Creative Commons Attribution Non Commercial No Derivative Works 3.0 Unported";
+      free = false;
+    };
+
+    cc-by-nc-nd-40 = {
+      spdxId = "CC-BY-NC-ND-4.0";
+      fullName = "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International";
+      free = false;
+    };
+
+    cc-by-nc-sa-20 = {
+      spdxId = "CC-BY-NC-SA-2.0";
+      fullName = "Creative Commons Attribution Non Commercial Share Alike 2.0";
+      free = false;
+    };
+
+    cc-by-nc-sa-25 = {
+      spdxId = "CC-BY-NC-SA-2.5";
+      fullName = "Creative Commons Attribution Non Commercial Share Alike 2.5";
+      free = false;
+    };
+
+    cc-by-nc-sa-30 = {
+      spdxId = "CC-BY-NC-SA-3.0";
+      fullName = "Creative Commons Attribution Non Commercial Share Alike 3.0";
+      free = false;
+    };
+
+    cc-by-nc-sa-40 = {
+      spdxId = "CC-BY-NC-SA-4.0";
+      fullName = "Creative Commons Attribution Non Commercial Share Alike 4.0";
+      free = false;
+    };
+
+    cc-by-nc-30 = {
+      spdxId = "CC-BY-NC-3.0";
+      fullName = "Creative Commons Attribution Non Commercial 3.0 Unported";
+      free = false;
+    };
+
+    cc-by-nc-40 = {
+      spdxId = "CC-BY-NC-4.0";
+      fullName = "Creative Commons Attribution Non Commercial 4.0 International";
+      free = false;
+    };
+
+    cc-by-nd-30 = {
+      spdxId = "CC-BY-ND-3.0";
+      fullName = "Creative Commons Attribution-No Derivative Works v3.00";
+      free = false;
+    };
+
+    cc-by-nd-40 = {
+      spdxId = "CC-BY-ND-4.0";
+      fullName = "Creative Commons Attribution-No Derivative Works v4.0";
+      free = false;
+    };
+
+    cc-by-sa-10 = {
+      spdxId = "CC-BY-SA-1.0";
+      fullName = "Creative Commons Attribution Share Alike 1.0";
+    };
+
+    cc-by-sa-20 = {
+      spdxId = "CC-BY-SA-2.0";
+      fullName = "Creative Commons Attribution Share Alike 2.0";
+    };
+
+    cc-by-sa-25 = {
+      spdxId = "CC-BY-SA-2.5";
+      fullName = "Creative Commons Attribution Share Alike 2.5";
+    };
+
+    cc-by-10 = {
+      spdxId = "CC-BY-1.0";
+      fullName = "Creative Commons Attribution 1.0";
+    };
+
+    cc-by-20 = {
+      spdxId = "CC-BY-2.0";
+      fullName = "Creative Commons Attribution 2.0";
+    };
+
+    cc-by-30 = {
+      spdxId = "CC-BY-3.0";
+      fullName = "Creative Commons Attribution 3.0";
+    };
+
+    cc-by-sa-30 = {
+      spdxId = "CC-BY-SA-3.0";
+      fullName = "Creative Commons Attribution Share Alike 3.0";
+    };
+
+    cc-by-40 = {
+      spdxId = "CC-BY-4.0";
+      fullName = "Creative Commons Attribution 4.0";
+    };
+
+    cc-by-sa-40 = {
+      spdxId = "CC-BY-SA-4.0";
+      fullName = "Creative Commons Attribution Share Alike 4.0";
+    };
+
+    cc-sa-10 = {
+      spdxId = "CC-SA-1.0";
+      fullName = "Creative Commons Share Alike 1.0";
+    };
+
+    cddl = {
+      spdxId = "CDDL-1.0";
+      fullName = "Common Development and Distribution License 1.0";
+    };
+
+    cecill20 = {
+      spdxId = "CECILL-2.0";
+      fullName = "CeCILL Free Software License Agreement v2.0";
+    };
+
+    cecill21 = {
+      spdxId = "CECILL-2.1";
+      fullName = "CeCILL Free Software License Agreement v2.1";
+    };
+
+    cecill-b = {
+      spdxId = "CECILL-B";
+      fullName = "CeCILL-B Free Software License Agreement";
+    };
+
+    cecill-c = {
+      spdxId = "CECILL-C";
+      fullName = "CeCILL-C Free Software License Agreement";
+    };
+
+    classpathException20 = {
+      spdxId = "Classpath-exception-2.0";
+      fullName = "Classpath exception 2.0";
+    };
+
+    cockroachdb-community-license = {
+      fullName = "CockroachDB Community License Agreement";
+      url = "https://www.cockroachlabs.com/cockroachdb-community-license/";
+      free = false;
+    };
+
+    cpal10 = {
+      spdxId = "CPAL-1.0";
+      fullName = "Common Public Attribution License 1.0";
+    };
+
+    commons-clause = {
+      fullName = "Commons Clause License";
+      url = "https://commonsclause.com/";
+      free = false;
+    };
+
+    cpl10 = {
+      spdxId = "CPL-1.0";
+      fullName = "Common Public License 1.0";
+    };
+
+    cnri-python = {
+      spdxId = "CNRI-Python";
+      fullName = "CNRI Python License";
+    };
+
+    cronyx = {
+      spdxId = "Cronyx";
+      fullName = "Cronyx License";
+    };
+
+    curl = {
+      spdxId = "curl";
+      fullName = "curl License";
+    };
+
+    doc = {
+      spdxId = "DOC";
+      fullName = "DOC License";
+    };
+
+    drl10 = {
+      spdxId = "DRL-1.0";
+      fullName = "Detection Rule License 1.0";
+    };
+
+    dtoa = {
+      spdxId = "dtoa";
+      fullName = "dtoa License";
+    };
+
+    eapl = {
+      fullName = "EPSON AVASYS PUBLIC LICENSE";
+      url = "https://avasys.jp/hp/menu000000700/hpg000000603.htm";
+      free = false;
+    };
+
+    ecl20 = {
+      fullName = "Educational Community License, Version 2.0";
+      shortName = "ECL 2.0";
+      spdxId = "ECL-2.0";
+    };
+
+    efl10 = {
+      spdxId = "EFL-1.0";
+      fullName = "Eiffel Forum License v1.0";
+    };
+
+    efl20 = {
+      spdxId = "EFL-2.0";
+      fullName = "Eiffel Forum License v2.0";
+    };
+
+    elastic20 = {
+      spdxId = "Elastic-2.0";
+      fullName = "Elastic License 2.0";
+      free = false;
+    };
+
+    epl10 = {
+      spdxId = "EPL-1.0";
+      fullName = "Eclipse Public License 1.0";
+    };
+
+    epl20 = {
+      spdxId = "EPL-2.0";
+      fullName = "Eclipse Public License 2.0";
+    };
+
+    epson = {
+      fullName = "Seiko Epson Corporation Software License Agreement for Linux";
+      url = "https://download.ebz.epson.net/dsc/du/02/eula/global/LINUX_EN.html";
+      free = false;
+    };
+
+    eupl11 = {
+      spdxId = "EUPL-1.1";
+      fullName = "European Union Public License 1.1";
+    };
+
+    eupl12 = {
+      spdxId = "EUPL-1.2";
+      fullName = "European Union Public License 1.2";
+    };
+
+    fdl11Only = {
+      spdxId = "GFDL-1.1-only";
+      fullName = "GNU Free Documentation License v1.1 only";
+    };
+
+    fdl11Plus = {
+      spdxId = "GFDL-1.1-or-later";
+      fullName = "GNU Free Documentation License v1.1 or later";
+    };
+
+    fdl12Only = {
+      spdxId = "GFDL-1.2-only";
+      fullName = "GNU Free Documentation License v1.2 only";
+    };
+
+    fdl12Plus = {
+      spdxId = "GFDL-1.2-or-later";
+      fullName = "GNU Free Documentation License v1.2 or later";
+    };
+
+    fdl13Only = {
+      spdxId = "GFDL-1.3-only";
+      fullName = "GNU Free Documentation License v1.3 only";
+    };
+
+    fdl13Plus = {
+      spdxId = "GFDL-1.3-or-later";
+      fullName = "GNU Free Documentation License v1.3 or later";
+    };
+
+    ffsl = {
+      fullName = "Floodgap Free Software License";
+      url = "https://www.floodgap.com/software/ffsl/license.html";
+      free = false;
+    };
+
+    fontException = {
+      spdxId = "Font-exception-2.0";
+      fullName = "Font exception 2.0";
+    };
+
+    fraunhofer-fdk = {
+      fullName = "Fraunhofer FDK AAC Codec Library";
+      spdxId = "FDK-AAC";
+    };
+
+    free = {
+      fullName = "Unspecified free software license";
+    };
+
+    freeimage = {
+      spdxId = "FreeImage";
+      fullName = "FreeImage Public License v1.0";
+    };
+
+    fsl11Mit = {
+      fullName = "Functional Source License, Version 1.1, MIT Future License";
+      spdxId = "FSL-1.1-MIT";
+      free = false;
+      redistributable = true;
+    };
+
+    fsl11Asl20 = {
+      fullName = "Functional Source License, Version 1.1, Apache 2.0 Future License";
+      spdxId = "FSL-1.1-ALv2";
+      free = false;
+      redistributable = true;
+    };
+
+    ftl = {
+      spdxId = "FTL";
+      fullName = "Freetype Project License";
+    };
+
+    g4sl = {
+      fullName = "Geant4 Software License";
+      url = "https://geant4.web.cern.ch/geant4/license/LICENSE.html";
+    };
+
+    geogebra = {
+      fullName = "GeoGebra Non-Commercial License Agreement";
+      url = "https://www.geogebra.org/license";
+      free = false;
+    };
+
+    generaluser = {
+      fullName = "GeneralUser GS License v2.0";
+      url = "https://www.schristiancollins.com/generaluser.php"; # license included in sources
+    };
+
+    gfl = {
+      fullName = "GUST Font License";
+      url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-LICENSE.txt";
+    };
+
+    gfsl = {
+      fullName = "GUST Font Source License";
+      url = "https://www.gust.org.pl/projects/e-foundry/licenses/GUST-FONT-SOURCE-LICENSE.txt";
+    };
+
+    gpl1Only = {
+      spdxId = "GPL-1.0-only";
+      fullName = "GNU General Public License v1.0 only";
+    };
+
+    gpl1Plus = {
+      spdxId = "GPL-1.0-or-later";
+      fullName = "GNU General Public License v1.0 or later";
+    };
+
+    gpl2Only = {
+      spdxId = "GPL-2.0-only";
+      fullName = "GNU General Public License v2.0 only";
+    };
+
+    gpl2Plus = {
+      spdxId = "GPL-2.0-or-later";
+      fullName = "GNU General Public License v2.0 or later";
+    };
+
+    gpl3Only = {
+      spdxId = "GPL-3.0-only";
+      fullName = "GNU General Public License v3.0 only";
+    };
+
+    gpl3Plus = {
+      spdxId = "GPL-3.0-or-later";
+      fullName = "GNU General Public License v3.0 or later";
+    };
+
+    giftware = {
+      spdxId = "Giftware";
+      fullName = "Giftware License";
+    };
+
+    hpnd = {
+      spdxId = "HPND";
+      fullName = "Historic Permission Notice and Disclaimer";
+    };
+
+    hpndDifferentDisclaimer = {
+      fullName = "HPND with different disclaimer";
+      url = "https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/blob/1914233e662d23ffb3812b80fadd0bbd064ad91c/COPYING-x11proto#L69-88";
+      # TODO: if the license gets accepted to spdx then
+      #   add spdxId
+      # else
+      #   remove license
+      #   && replace reference with whatever this license is supposed to be then
+      # https://tools.spdx.org/app/license_requests/456
+      # https://github.com/spdx/license-list-xml/issues/2753
+    };
+
+    hpndSellVariant = {
+      fullName = "Historical Permission Notice and Disclaimer - sell variant";
+      spdxId = "HPND-sell-variant";
+    };
+
+    hpndDec = {
+      fullName = "Historical Permission Notice and Disclaimer - DEC variant";
+      spdxId = "HPND-DEC";
+    };
+
+    hpndDoc = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation variant";
+      spdxId = "HPND-doc";
+    };
+
+    hpndDocSell = {
+      fullName = "Historical Permission Notice and Disclaimer - documentation sell variant";
+      spdxId = "HPND-doc-sell";
+    };
+
+    hpndUc = {
+      spdxId = "HPND-UC";
+      fullName = "Historical Permission Notice and Disclaimer - University of California variant";
+    };
+
+    # Intel's license, seems free
+    iasl = {
+      spdxId = "Intel-ACPI";
+      fullName = "Intel ACPI Software License Agreement";
+    };
+
+    icu = {
+      spdxId = "ICU";
+      fullName = "ICU";
+    };
+
+    ijg = {
+      spdxId = "IJG";
+      fullName = "Independent JPEG Group License";
+    };
+
+    imagemagick = {
+      fullName = "ImageMagick License";
+      spdxId = "ImageMagick";
+    };
+
+    imlib2 = {
+      spdxId = "Imlib2";
+      fullName = "Imlib2 License";
+    };
+
+    info-zip = {
+      spdxId = "Info-ZIP";
+      fullName = "Info-ZIP License";
+    };
+
+    inria-compcert = {
+      fullName = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
+      url = "https://compcert.org/doc/LICENSE.txt";
+      free = false;
+    };
+
+    inria-icesl = {
+      fullName = "End User License Agreement for IceSL Software";
+      url = "https://icesl.loria.fr/assets/pdf/EULA_IceSL_binary.pdf";
+      free = false;
+    };
+
+    inria-zelus = {
+      fullName = "INRIA Non-Commercial License Agreement for the Zélus compiler";
+      url = "https://github.com/INRIA/zelus/raw/829f2b97cba93b0543a9ca0272269e6b8fdad356/LICENSE";
+      free = false;
+    };
+
+    interbase = {
+      spdxId = "Interbase-1.0";
+      fullName = "Interbase Public License v1.0";
+    };
+
+    ipa = {
+      spdxId = "IPA";
+      fullName = "IPA Font License";
+    };
+
+    ipl10 = {
+      spdxId = "IPL-1.0";
+      fullName = "IBM Public License v1.0";
+    };
+
+    isc = {
+      spdxId = "ISC";
+      fullName = "ISC License";
+    };
+
+    databricks = {
+      fullName = "Databricks License";
+      url = "https://www.databricks.com/legal/db-license";
+      free = false;
+    };
+
+    databricks-dbx = {
+      fullName = "DataBricks eXtensions aka dbx License";
+      url = "https://github.com/databrickslabs/dbx/blob/743b579a4ac44531f764c6e522dbe5a81a7dc0e4/LICENSE";
+      free = false;
+      redistributable = false;
+    };
+
+    databricks-license = {
+      fullName = "Databricks License";
+      url = "https://www.databricks.com/legal/db-license";
+      free = false;
+    };
+
+    fair = {
+      fullName = "Fair License";
+      spdxId = "Fair";
+      free = true;
+    };
+
+    fairsource09 = {
+      fullName = "Fair Source License, version 0.9";
+      url = "https://fair.io/v0.9.txt";
+      free = false;
+      redistributable = true;
+    };
+
+    hl3 = {
+      fullName = "Hippocratic License v3.0";
+      url = "https://firstdonoharm.dev/version/3/0/core.txt";
+      free = false;
+      redistributable = true;
+    };
+
+    issl = {
+      fullName = "Intel Simplified Software License";
+      url = "https://software.intel.com/en-us/license/intel-simplified-software-license";
+      free = false;
+    };
+
+    knuth = {
+      fullName = "Knuth CTAN License";
+      spdxId = "Knuth-CTAN";
+    };
+
+    lal12 = {
+      spdxId = "LAL-1.2";
+      fullName = "Licence Art Libre 1.2";
+    };
+
+    lal13 = {
+      spdxId = "LAL-1.3";
+      fullName = "Licence Art Libre 1.3";
+    };
+
+    lens = {
+      fullName = "Lens Terms of Service Agreement";
+      url = "https://k8slens.dev/legal/tos";
+      free = false;
+    };
+
+    lgpl2Only = {
+      spdxId = "LGPL-2.0-only";
+      fullName = "GNU Library General Public License v2 only";
+    };
+
+    lgpl2Plus = {
+      spdxId = "LGPL-2.0-or-later";
+      fullName = "GNU Library General Public License v2 or later";
+    };
+
+    lgpl21Only = {
+      spdxId = "LGPL-2.1-only";
+      fullName = "GNU Lesser General Public License v2.1 only";
+    };
+
+    lgpl21Plus = {
+      spdxId = "LGPL-2.1-or-later";
+      fullName = "GNU Lesser General Public License v2.1 or later";
+    };
+
+    lgpl3Only = {
+      spdxId = "LGPL-3.0-only";
+      fullName = "GNU Lesser General Public License v3.0 only";
+    };
+
+    lgpl3Plus = {
+      spdxId = "LGPL-3.0-or-later";
+      fullName = "GNU Lesser General Public License v3.0 or later";
+    };
+
+    lgpllr = {
+      spdxId = "LGPLLR";
+      fullName = "Lesser General Public License For Linguistic Resources";
+    };
+
+    libpng = {
+      spdxId = "Libpng";
+      fullName = "libpng License";
+    };
+
+    libpng2 = {
+      spdxId = "libpng-2.0"; # Used since libpng 1.6.36.
+      fullName = "PNG Reference Library version 2";
+    };
+
+    libtiff = {
+      spdxId = "libtiff";
+      fullName = "libtiff License";
+    };
+
+    llgpl21 = {
+      fullName = "Lisp LGPL; GNU Lesser General Public License version 2.1 with Franz Inc. preamble for clarification of LGPL terms in context of Lisp";
+      url = "https://opensource.franz.com/preamble.html";
+    };
+
+    llvm-exception = {
+      spdxId = "LLVM-exception";
+      fullName = "LLVM Exception"; # LLVM exceptions to the Apache 2.0 License
+    };
+
+    lppl1 = {
+      spdxId = "LPPL-1.0";
+      fullName = "LaTeX Project Public License v1.0";
+    };
+
+    lppl12 = {
+      spdxId = "LPPL-1.2";
+      fullName = "LaTeX Project Public License v1.2";
+    };
+
+    lppl13a = {
+      spdxId = "LPPL-1.3a";
+      fullName = "LaTeX Project Public License v1.3a";
+    };
+
+    lppl13c = {
+      spdxId = "LPPL-1.3c";
+      fullName = "LaTeX Project Public License v1.3c";
+    };
+
+    lpl-102 = {
+      spdxId = "LPL-1.02";
+      fullName = "Lucent Public License v1.02";
+    };
+
+    lsof = {
+      spdxId = "lsof";
+      fullName = "lsof License"; # also known as Purdue BSD-Style License
+    };
+
+    miros = {
+      spdxId = "MirOS";
+      fullName = "MirOS License";
+    };
+
+    mit = {
+      spdxId = "MIT";
+      fullName = "MIT License";
+    };
+
+    mit-cmu = {
+      spdxId = "MIT-CMU";
+      fullName = "CMU License";
+    };
+
+    mit-feh = {
+      spdxId = "MIT-feh";
+      fullName = "feh License";
+    };
+
+    mit-modern = {
+      # Also known as Zsh license
+      spdxId = "MIT-Modern-Variant";
+      fullName = "MIT License Modern Variant";
+    };
+
+    mitAdvertising = {
+      spdxId = "MIT-advertising";
+      fullName = "Enlightenment License (e16)";
+    };
+
+    mit0 = {
+      spdxId = "MIT-0";
+      fullName = "MIT No Attribution";
+    };
+
+    mitOpenGroup = {
+      spdxId = "MIT-open-group";
+      fullName = "MIT Open Group variant";
+    };
+
+    mpl10 = {
+      spdxId = "MPL-1.0";
+      fullName = "Mozilla Public License 1.0";
+    };
+
+    mpl11 = {
+      spdxId = "MPL-1.1";
+      fullName = "Mozilla Public License 1.1";
+    };
+
+    mpl20 = {
+      spdxId = "MPL-2.0";
+      fullName = "Mozilla Public License 2.0";
+    };
+
+    mplus = {
+      spdxId = "mplus";
+      fullName = "M+ Font License";
+    };
+
+    mspl = {
+      spdxId = "MS-PL";
+      fullName = "Microsoft Public License";
+    };
+
+    mulan-psl2 = {
+      spdxId = "MulanPSL-2.0";
+      fullName = "Mulan Permissive Software License, Version 2";
+    };
+
+    naist-2003 = {
+      spdxId = "NAIST-2003";
+      fullName = "Nara Institute of Science and Technology License (2003)";
+    };
+
+    nasa13 = {
+      spdxId = "NASA-1.3";
+      fullName = "NASA Open Source Agreement 1.3";
+      free = false;
+    };
+
+    ncbiPd = {
+      spdxId = "NCBI-PD";
+      fullName = "NCBI Public Domain Notice";
+      # Due to United States copyright law, anything with this "license" does not have a copyright in the
+      # jurisdiction of the United States. However, other jurisdictions may assign the United States
+      # government copyright to the work, and the license explicitly states that in such a case, no license
+      # is granted. This is nonfree and nonredistributable in most jurisdictions other than the United States.
+      free = false;
+      redistributable = false;
+    };
+
+    ncsa = {
+      spdxId = "NCSA";
+      fullName = "University of Illinois/NCSA Open Source License";
+    };
+
+    ncul1 = {
+      spdxId = "NCUL1";
+      fullName = "Netdata Cloud UI License v1.0";
+      free = false;
+      redistributable = true; # Only if used in Netdata products.
+    };
+
+    ngpl = {
+      spdxId = "NGPL";
+      fullName = "Nethack General Public License";
+    };
+
+    nistSoftware = {
+      spdxId = "NIST-Software";
+      fullName = "NIST Software License";
+    };
+
+    nlpl = {
+      spdxId = "NLPL";
+      fullName = "No Limit Public License";
+    };
+
+    nposl3 = {
+      spdxId = "NPOSL-3.0";
+      fullName = "Non-Profit Open Software License 3.0";
+    };
+
+    nvidiaCuda = {
+      shortName = "CUDA EULA";
+      fullName = "CUDA Toolkit End User License Agreement (EULA)";
+      url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+      free = false;
+    };
+
+    nvidiaCudaRedist = {
+      shortName = "CUDA EULA";
+      fullName = "CUDA Toolkit End User License Agreement (EULA)";
+      url = "https://docs.nvidia.com/cuda/eula/index.html#cuda-toolkit-supplement-license-agreement";
+      free = false;
+      redistributable = true;
+    };
+
+    obsidian = {
+      fullName = "Obsidian End User Agreement";
+      url = "https://obsidian.md/eula";
+      free = false;
+    };
+
+    ocamlLgplLinkingException = {
+      spdxId = "OCaml-LGPL-linking-exception";
+      fullName = "OCaml LGPL Linking Exception";
+    };
+
+    ocamlpro_nc = {
+      fullName = "OCamlPro Non Commercial license version 1";
+      url = "https://alt-ergo.ocamlpro.com/http/alt-ergo-2.2.0/OCamlPro-Non-Commercial-License.pdf";
+      free = false;
+    };
+
+    odbl = {
+      spdxId = "ODbL-1.0";
+      fullName = "Open Data Commons Open Database License v1.0";
+    };
+
+    ofl = {
+      spdxId = "OFL-1.1";
+      fullName = "SIL Open Font License 1.1";
+    };
+
+    oml = {
+      spdxId = "OML";
+      fullName = "Open Market License";
+    };
+
+    openldap = {
+      spdxId = "OLDAP-2.8";
+      fullName = "Open LDAP Public License v2.8";
+    };
+
+    openssl = {
+      spdxId = "OpenSSL";
+      fullName = "OpenSSL License";
+    };
+
+    opubl = {
+      spdxId = "OPUBL-1.0";
+      fullName = "Open Publication License v1.0";
+    };
+
+    osl2 = {
+      spdxId = "OSL-2.0";
+      fullName = "Open Software License 2.0";
+    };
+
+    osl21 = {
+      spdxId = "OSL-2.1";
+      fullName = "Open Software License 2.1";
+    };
+
+    osl3 = {
+      spdxId = "OSL-3.0";
+      fullName = "Open Software License 3.0";
+    };
+
+    paratype = {
+      fullName = "ParaType Free Font Licensing Agreement";
+      url = "https://web.archive.org/web/20161209023955/http://www.paratype.ru/public/pt_openlicense_eng.asp";
+    };
+
+    parity70 = {
+      spdxId = "Parity-7.0.0";
+      fullName = "Parity Public License 7.0.0";
+    };
+
+    php301 = {
+      spdxId = "PHP-3.01";
+      fullName = "PHP License v3.01";
+    };
+
+    postgresql = {
+      spdxId = "PostgreSQL";
+      fullName = "PostgreSQL License";
+    };
+
+    postman = {
+      fullName = "Postman EULA";
+      url = "https://www.getpostman.com/licenses/postman_base_app";
+      free = false;
+    };
+
+    psfl = {
+      spdxId = "Python-2.0";
+      fullName = "Python Software Foundation License version 2";
+    };
+
+    publicDomain = {
+      fullName = "Public Domain";
+    };
+
+    prosperity30 = {
+      fullName = "Prosperity-3.0.0";
+      free = false;
+      url = "https://prosperitylicense.com/versions/3.0.0.html";
+    };
+
+    qhull = {
+      spdxId = "Qhull";
+      fullName = "Qhull License";
+    };
+
+    qpl = {
+      spdxId = "QPL-1.0";
+      fullName = "Q Public License 1.0";
+    };
+
+    qwtException = {
+      spdxId = "Qwt-exception-1.0";
+      fullName = "Qwt exception 1.0";
+    };
+
+    ruby = {
+      spdxId = "Ruby";
+      fullName = "Ruby License";
+    };
+
+    sendmail = {
+      spdxId = "Sendmail";
+      fullName = "Sendmail License";
+    };
+
+    sfl = {
+      fullName = "Source First License 1.1";
+      url = "https://gitlab.futo.org/videostreaming/grayjay/-/blob/master/LICENSE.md";
+      free = false;
+      redistributable = true;
+    };
+
+    sgi-b-20 = {
+      spdxId = "SGI-B-2.0";
+      fullName = "SGI Free Software License B v2.0";
+    };
+
+    # Gentoo seems to treat it as a license:
+    # https://gitweb.gentoo.org/repo/gentoo.git/tree/licenses/SGMLUG?id=7d999af4a47bf55e53e54713d98d145f935935c1
+    sgmlug = {
+      fullName = "SGML UG SGML Parser Materials license";
+    };
+
+    sissl11 = {
+      spdxId = "SISSL";
+      fullName = "Sun Industry Standards Source License 1.1";
+    };
+
+    sleepycat = {
+      spdxId = "Sleepycat";
+      fullName = "Sleepycat License";
+    };
+
+    smail = {
+      spdxId = "SMAIL-GPL";
+      fullName = "SMAIL General Public License";
+    };
+
+    smlnj = {
+      spdxId = "SMLNJ";
+      fullName = "Standard ML of New Jersey License";
+    };
+
+    sspl = {
+      spdxId = "SSPL-1.0";
+      fullName = "Server Side Public License";
+      free = false;
+      # NOTE Debatable.
+      # The license a slightly modified AGPL but still considered unfree by the
+      # OSI for what seem like political reasons
+      redistributable = true; # Definitely redistributable though, it's an AGPL derivative
+    };
+
+    stk = {
+      shortName = "stk";
+      fullName = "Synthesis Tool Kit 4.3";
+      url = "https://github.com/thestk/stk/blob/master/LICENSE";
+    };
+
+    sudo = {
+      shortName = "sudo";
+      fullName = "Sudo License (ISC-style)";
+      url = "https://www.sudo.ws/about/license/";
+    };
+
+    sustainableUse = {
+      spdxId = "SUL-1.0";
+      fullName = "Sustainable Use License";
+      free = false;
+      redistributable = false; # only free to redistribute "for non-commercial purposes"
+    };
+
+    tcpWrappers = {
+      spdxId = "TCP-wrappers";
+      fullName = "TCP Wrappers License";
+    };
+
+    teamspeak = {
+      fullName = "Teamspeak client license";
+      url = "https://www.teamspeak.com/en/privacy-and-terms/";
+      free = false;
+      redistributable = true; # we got a permit to redistribute it:
+      # License issues:
+      # Date: Mon, 10 Dec 2007 19:55:16 -0500
+      # From: TeamSpeak Sales <sales@tritoncia.com>
+      # To: 'Marc Weber' <marco-oweber@gmx.de>
+      # Subject: RE: teamspeak on nix?
+      #
+      # Yes, that would be fine.  As long as you are not renting servers or selling
+      # TeamSpeak then you are more than welcome to distribute it.
+      #
+      # Thank you,
+      #
+      # TeamSpeak Sales Team
+      # ________________________________
+      # e-Mail: sales@tritoncia.com
+      # TeamSpeak: http://www.TeamSpeak.com
+      # Account Login: https://sales.TritonCIA.com/users
+      #
+      #
+      #
+      # -----Original Message-----
+      # From: Marc Weber [mailto:marco-oweber@gmx.de]
+      # Sent: Monday, December 10, 2007 5:03 PM
+      # To: sales@tritoncia.com
+      # Subject: teamspeak on nix?
+      #
+      # Hello,
+      #
+      # nix is very young software distribution system (http://nix.cs.uu.nl/)
+      # I'd like to ask wether you permit us to add teamspeak (server/ client?)
+      #
+      # Sincerly
+      # Marc Weber (small nix contributor)
+    };
+
+    tekHvcLicense = {
+      fullName = "TekHVC License";
+      url = "https://gitlab.freedesktop.org/xorg/lib/libx11/-/blob/7f8305c779ac6948d7261764f5ffb8ae9aa975b1/COPYING#L138-171";
+      # TODO: add spdxId when it gets accepted to spdx
+      # https://tools.spdx.org/app/license_requests/458
+      # https://github.com/spdx/license-list-XML/issues/2757
+    };
+
+    torque11 = {
+      spdxId = "TORQUE-1.1";
+      fullName = "TORQUE v2.5+ Software License v1.1";
+    };
+
+    tsl = {
+      shortName = "TSL";
+      fullName = "Timescale License Agreegment";
+      url = "https://github.com/timescale/timescaledb/blob/main/tsl/LICENSE-TIMESCALE";
+      free = false;
+    };
+
+    tcltk = {
+      spdxId = "TCL";
+      fullName = "TCL/TK License";
+    };
+
+    tost = {
+      fullName = "Tomorrow Open Source Technology License 1.0";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/blob/release/LICENSE.txt";
+    };
+
+    ubdlException = {
+      spdxId = "UBDL-exception";
+      fullName = "Unmodified Binary Distribution exception";
+    };
+
+    ucd = {
+      fullName = "Unicode Character Database License";
+      url = "https://fedoraproject.org/wiki/Licensing:UCD";
+    };
+
+    ufl = {
+      spdxId = "Ubuntu-font-1.0";
+      fullName = "Ubuntu Font License 1.0";
+    };
+
+    unfree = {
+      fullName = "Unfree";
+      free = false;
+    };
+
+    unfreeRedistributable = {
+      fullName = "Unfree redistributable";
+      free = false;
+      redistributable = true;
+    };
+
+    unfreeRedistributableFirmware = {
+      fullName = "Unfree redistributable firmware";
+      redistributable = true;
+      # Note: we currently consider these "free" for inclusion in the
+      # channel and NixOS images.
+    };
+
+    unicode-30 = {
+      spdxId = "Unicode-3.0";
+      fullName = "Unicode License v3";
+    };
+
+    unicode-dfs-2015 = {
+      spdxId = "Unicode-DFS-2015";
+      fullName = "Unicode License Agreement - Data Files and Software (2015)";
+    };
+
+    unicode-dfs-2016 = {
+      spdxId = "Unicode-DFS-2016";
+      fullName = "Unicode License Agreement - Data Files and Software (2016)";
+    };
+
+    unicodeTOU = {
+      spdxId = "Unicode-TOU";
+      fullName = "Unicode Terms of Use";
+    };
+
+    unlicense = {
+      spdxId = "Unlicense";
+      fullName = "The Unlicense";
+    };
+
+    upl = {
+      spdxId = "UPL-1.0";
+      fullName = "Universal Permissive License";
+    };
+
+    vim = {
+      spdxId = "Vim";
+      fullName = "Vim License";
+    };
+
+    virtualbox-puel = {
+      fullName = "Oracle VM VirtualBox Extension Pack Personal Use and Evaluation License (PUEL)";
+      url = "https://www.virtualbox.org/wiki/VirtualBox_PUEL";
+      free = false;
+    };
+
+    vol-sl = {
+      fullName = "Volatility Software License, Version 1.0";
+      url = "https://www.volatilityfoundation.org/license/vsl-v1.0";
+    };
+
+    vsl10 = {
+      spdxId = "VSL-1.0";
+      fullName = "Vovida Software License v1.0";
+    };
+
+    watcom = {
+      spdxId = "Watcom-1.0";
+      fullName = "Sybase Open Watcom Public License 1.0";
+      # Despite being OSI‐approved, this licence is not considered FOSS
+      # by Debian, Fedora, or the FSF, due to an onerous restriction that
+      # requires publication of even privately‐deployed modifications.
+      # This violates the FSF’s freedom 3 and Debian’s “desert island
+      # test” and “dissident test”.
+      #
+      # See: <https://en.wikipedia.org/wiki/Sybase_Open_Watcom_Public_License>
+      free = false;
+      redistributable = true;
+    };
+
+    w3c = {
+      spdxId = "W3C";
+      fullName = "W3C Software Notice and License";
+    };
+
+    wadalab = {
+      fullName = "Wadalab Font License";
+      url = "https://fedoraproject.org/wiki/Licensing:Wadalab?rd=Licensing/Wadalab";
+    };
+
+    wtfpl = {
+      spdxId = "WTFPL";
+      fullName = "Do What The F*ck You Want To Public License";
+    };
+
+    wxWindowsException31 = {
+      spdxId = "WxWindows-exception-3.1";
+      fullName = "wxWindows Library Licence, Version 3.1";
+    };
+
+    x11 = {
+      spdxId = "X11";
+      fullName = "X11 License";
+    };
+
+    xerox = {
+      spdxId = "Xerox";
+      fullName = "Xerox License";
+    };
+
+    xfig = {
+      spdxId = "Xfig";
+      fullName = "xfig";
+    };
+
+    xinetd = {
+      spdxId = "xinetd";
+      fullName = "xinetd License";
+    };
+
+    xskat = {
+      spdxId = "XSkat";
+      fullName = "XSkat License";
+    };
+
+    zlib = {
+      spdxId = "Zlib";
+      fullName = "zlib License";
+    };
+
+    zpl20 = {
+      spdxId = "ZPL-2.0";
+      fullName = "Zope Public License 2.0";
+    };
+
+    zpl21 = {
+      spdxId = "ZPL-2.1";
+      fullName = "Zope Public License 2.1";
+    };
+
+  }
+  // {
+    # TODO: remove legacy aliases
+    apsl10 = {
+      # deprecated for consistency with `apple-psl20`; use `apple-psl10`
+      spdxId = "APSL-1.0";
+      fullName = "Apple Public Source License 1.0";
+      deprecated = true;
+    };
+    apsl20 = {
+      # deprecated due to confusion with Apache-2.0; use `apple-psl20`
+      spdxId = "APSL-2.0";
+      fullName = "Apple Public Source License 2.0";
+      deprecated = true;
+    };
+    gpl2 = {
+      spdxId = "GPL-2.0";
+      fullName = "GNU General Public License v2.0";
+      deprecated = true;
+    };
+    gpl3 = {
+      spdxId = "GPL-3.0";
+      fullName = "GNU General Public License v3.0";
+      deprecated = true;
+    };
+    lgpl2 = {
+      spdxId = "LGPL-2.0";
+      fullName = "GNU Library General Public License v2";
+      deprecated = true;
+    };
+    lgpl21 = {
+      spdxId = "LGPL-2.1";
+      fullName = "GNU Lesser General Public License v2.1";
+      deprecated = true;
+    };
+    lgpl3 = {
+      spdxId = "LGPL-3.0";
+      fullName = "GNU Lesser General Public License v3.0";
+      deprecated = true;
+    };
+  }
+)

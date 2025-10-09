@@ -1,0 +1,16 @@
+diff --git a/srht-gen-oauth-tok b/srht-gen-oauth-tok
+index a05e209..f2949b5 100755
+--- a/srht-gen-oauth-tok
++++ b/srht-gen-oauth-tok
+@@ -78,7 +78,10 @@ $mech->submit_form( with_fields => { comment => $tok_comment } );
+ 
+ # Parse the response as XML and find the access token via an XPath expression
+ my $xpc = XML::LibXML::XPathContext->new(
+-    XML::LibXML->load_xml(string => $mech->content())
++    XML::LibXML->load_html(
++        string => $mech->content(),
++        recover => 1,
++    )
+ );
+ # The token is set as the description (<dd>) of a 'Personal Access Token' term (<dt>)
+ my $token = $xpc->find("//dt[text() = 'Personal Access Token']/following-sibling::dd/*/node()");

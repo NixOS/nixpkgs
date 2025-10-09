@@ -1,0 +1,148 @@
+diff --git a/src/file.c b/src/file.c
+index d1d1982..1655f6f 100644
+--- a/src/file.c
++++ b/src/file.c
+@@ -125,6 +125,8 @@ int			 hcompar(const void *, const void *);
+ int			 loadscores(char *);
+ static int		 parseline(char *, char **, char **);
+ void			 readconfig(void);
++void			 mkconfig(char *filename);
++void			 mkscore(char *filename);
+ static void		 readfile(char *, int);
+ static void		 setoptions(char *, char *, int);
+ 
+@@ -1125,7 +1127,7 @@ void
+ readconfig(void)
+ {
+ 	char *envhome;
+-	char userhigh[MAXPATHLEN], userconf[MAXPATHLEN];
++	char userhigh[MAXPATHLEN], userconf[MAXPATHLEN], confdir[MAXPATHLEN];
+ 	struct stat sb;
+ 
+ 	if (xsnprintf(ruledir, sizeof(ruledir), "%s", RULEDIR)) {
+@@ -1140,18 +1142,33 @@ readconfig(void)
+ 	readfile(CONFIGFILE, 1);
+ 
+ 	if ((envhome = getenv("HOME")) == NULL)
+-		return;
++		xerr(1, "readconfig: environment variable HOME not set");
+ 
+ 	if (xsnprintf(userconf, sizeof(userconf), "%s/.typespeed/config",
+-	    envhome))
+-		return;
++				envhome))
++		xerr(1, "readconfig: string error");
++	if (xsnprintf(userhigh, sizeof(userhigh), "%s/.typespeed/score",
++				envhome))
++		xerr(1, "readconfig: string error");
+ 
+ 	if (stat(userconf, &sb) || (sb.st_mode & S_IFMT) != S_IFREG)
+-		return;
+-
+-	if (xsnprintf(userhigh, sizeof(userhigh), "%s/.typespeed/score",
+-	    envhome))
+-		return;
++	{
++		if (xsnprintf(confdir, sizeof(confdir), "%s/.typespeed",
++					envhome))
++			xerr(1, "readconfig: string error");
++		if(stat(confdir, &sb) == -1)
++			if(mkdir(confdir, S_IRWXU | S_IRWXG | S_IRWXO))
++				xerr(1, "readconfig: could not create config directory %s",
++					confdir);
++		/* create the user configuration with default values */
++		mkconfig(userconf);
++	}
++  /* check for the high score file */
++	if (stat(userhigh, &sb) || (sb.st_mode & S_IFMT) != S_IFREG)
++	{
++		/* create a blank high score file */
++		mkscore(userhigh);
++	}
+ 
+ 	/*
+ 	 * Open a user writable high score.
+@@ -1159,14 +1176,48 @@ readconfig(void)
+ 	 * file. Protect system-wide high score file with group
+ 	 * write permissions: privileged gid already dropped.
+ 	 */
+-	if (close(hfd) == -1)
+-		xerr(1, "readconfig: close");
+-	if ((hfd = open(userhigh, O_RDWR, 0)) == -1)
++	if ((hfd = open(userhigh, O_RDWR)) == -1)
+ 		xerr(1, "readconfig: open: %s", userhigh);
+ 
+ 	readfile(userconf, 1);
+ }
+ 
++#define DEFAULT_CONFIG	"cheat = no\n" \
++			"highorder = score cps tcps\n" \
++			"ruledir = " RULEDIR "\n" \
++			"worddir = " WORDDIR "\n"
++
++/*
++ * Create the user configuration, with default values, at the given path.
++ */
++void
++mkconfig(char *filename)
++{
++	int cfd;
++
++	if((cfd = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO)) == -1)
++		xerr(1, "mkconfig: open: %s", filename);
++	if(write(cfd, DEFAULT_CONFIG, sizeof(DEFAULT_CONFIG)/sizeof(DEFAULT_CONFIG[0]) - 1) == -1)
++		xerr(1, "mkconfig: write: %s", filename);
++	if(close(cfd) == -1)
++		xerr(1, "mkconfig: close: %s", filename);
++}
++
++/*
++ * Create the user high score file, which is just a blank file.
++ */
++void
++mkscore(char *filename)
++{
++	int sfd;
++	if((sfd = open(filename, O_WRONLY | O_CREAT, S_IRWXU | S_IRWXG | S_IRWXO)) == -1)
++		xerr(1, "mkscore: open: %s", filename);
++	if(write(sfd, "", 0) == -1)
++		xerr(1, "mkconfig: write: %s", filename);
++	if(close(sfd) == -1)
++		xerr(1, "mkconfig: close: %s", filename);
++}
++
+ /*
+  * Function used to open configuration and game rule files and to
+  * set options with function setoptions.
+diff --git a/src/typespeed.c b/src/typespeed.c
+index 7ac5ee2..77e9acb 100644
+--- a/src/typespeed.c
++++ b/src/typespeed.c
+@@ -319,8 +319,13 @@ main(int argc, char **argv)
+ 		progname++;
+ 
+ 	/* just open high score file while being setgid games */
+-	if ((hfd = open(HIGHFILE, O_RDWR, 0)) == -1)
+-		xerr(1, "main: open: %s", HIGHFILE);
++  /*
++   * For NixOS, a global high score file doesn't make sense, so we just comment
++   * this out. A high score file in the user's home directory will be opened
++   * later in readconfig().
++   */
++/*	if ((hfd = open(HIGHFILE, O_RDWR, 0)) == -1)
++		xerr(1, "main: open: %s", HIGHFILE);  */
+ 
+ #ifndef WIN32
+ 	/* drop privileges */
+@@ -348,9 +353,9 @@ main(int argc, char **argv)
+ #endif /* WIN32 */
+ 
+ 	/* check file descriptors for consistency */
+-	if (hfd == STDIN_FILENO || hfd == STDOUT_FILENO ||
++/*	if (hfd == STDIN_FILENO || hfd == STDOUT_FILENO ||
+ 	    hfd == STDERR_FILENO)
+-		exit(1);
++		exit(1);  */
+ 	if (!isatty(STDIN_FILENO) || !isatty(STDOUT_FILENO) ||
+ 	    !isatty(STDERR_FILENO))
+ 		xerrx(1, "not fully connected to a terminal");

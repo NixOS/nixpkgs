@@ -1,0 +1,26 @@
+diff --git a/src/windows/pluginloader/pluginloader.c b/src/windows/pluginloader/pluginloader.c
+index 751e072..7a4589d 100644
+--- a/src/windows/pluginloader/pluginloader.c
++++ b/src/windows/pluginloader/pluginloader.c
+@@ -190,7 +190,7 @@ static inline WPARAM wParamFromX11State(uint32_t state){
+ 	if (state & Button3Mask) wParam |= MK_RBUTTON;
+ 	if (state & Button2Mask) wParam |= MK_MBUTTON;
+ 	if (state & ShiftMask)   wParam |= MK_SHIFT;
+-	if (state & ControlMask) wParam |= MK_CONTROL;
++	if (state & ControlMask_) wParam |= MK_CONTROL;
+ 	return wParam;
+ }
+ 
+diff --git a/src/windows/pluginloader/pluginloader.h b/src/windows/pluginloader/pluginloader.h
+index ffe89a7..a1ebabc 100644
+--- a/src/windows/pluginloader/pluginloader.h
++++ b/src/windows/pluginloader/pluginloader.h
+@@ -149,7 +149,7 @@ typedef unsigned long int XID;
+ 
+ #define ShiftMask	(1<<0)
+ #define LockMask	(1<<1)
+-#define ControlMask	(1<<2)
++#define ControlMask_	(1<<2)
+ #define Button1Mask	(1<<8)
+ #define Button2Mask	(1<<9)
+ #define Button3Mask	(1<<10)

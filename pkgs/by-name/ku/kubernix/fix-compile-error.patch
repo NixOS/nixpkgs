@@ -1,0 +1,13 @@
+diff --git a/src/crio.rs b/src/crio.rs
+index 36bf40b..97d5e57 100644
+--- a/src/crio.rs
++++ b/src/crio.rs
+@@ -34,7 +34,7 @@ impl Display for CriSocket {
+ impl CriSocket {
+     pub fn new(path: PathBuf) -> Result<CriSocket> {
+         if path.display().to_string().len() > 100 {
+-            bail!("Socket path '{}' is too long")
++            bail!("Socket path '{}' is too long", path.display().to_string())
+         }
+         Ok(CriSocket(path))
+     }

@@ -1,0 +1,33 @@
+diff --git a/pretix_passbook/apps.py b/pretix_passbook/apps.py
+index e34eee1..a7ad382 100644
+--- a/pretix_passbook/apps.py
++++ b/pretix_passbook/apps.py
+@@ -22,15 +22,6 @@ class PassbookApp(AppConfig):
+     def ready(self):
+         from . import signals  # NOQA
+ 
+-    @cached_property
+-    def compatibility_errors(self):
+-        import shutil
+-
+-        errs = []
+-        if not shutil.which("openssl"):
+-            errs.append("The OpenSSL binary is not installed or not in the PATH.")
+-        return errs
+-
+     @cached_property
+     def compatibility_warnings(self):
+         errs = []
+diff --git a/pretix_passbook/forms.py b/pretix_passbook/forms.py
+index 2a38604..aec38de 100644
+--- a/pretix_passbook/forms.py
++++ b/pretix_passbook/forms.py
+@@ -41,7 +41,7 @@ class CertificateFileField(forms.FileField):
+                 return SimpleUploadedFile("cert.pem", content, "text/plain")
+ 
+             openssl_cmd = [
+-                "openssl",
++                "@openssl@",
+                 "x509",
+                 "-inform",
+                 "DER",

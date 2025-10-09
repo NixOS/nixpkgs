@@ -1,0 +1,46 @@
+# This action periodically merges base branches into staging branches.
+# This is done to
+#  * prevent conflicts or rather resolve them early
+#  * make all potential breakage happen on the staging branch
+#  * and make sure that all major rebuilds happen before the staging
+#    branch get’s merged back into its base branch.
+
+name: "Periodic Merges (24h)"
+
+on:
+  schedule:
+    # * is a special character in YAML so you have to quote this string
+    # Merge every 24 hours
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  periodic-merge:
+    if: github.repository_owner == 'NixOS'
+    strategy:
+      # don't fail fast, so that all pairs are tried
+      fail-fast: false
+      # certain branches need to be merged in order, like master->staging-next->staging
+      # and disabling parallelism ensures the order of the pairs below.
+      max-parallel: 1
+      matrix:
+        pairs:
+          - from: release-25.05
+            into: staging-next-25.05
+          - from: staging-next-25.05
+            into: staging-25.05
+          - name: merge-base(master,staging) → haskell-updates
+            from: master staging
+            into: haskell-updates
+    uses: ./.github/workflows/periodic-merge.yml
+    with:
+      from: ${{ matrix.pairs.from }}
+      into: ${{ matrix.pairs.into }}
+    name: ${{ matrix.pairs.name || format('{0} → {1}', matrix.pairs.from, matrix.pairs.into) }}
+    secrets: inherit

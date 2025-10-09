@@ -1,0 +1,21 @@
+--- tccgen.c
++++ tccgen.c
+@@ -4941,7 +4941,7 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
+         next();
+         n = -1;
+         t1 = 0;
+-        if (td & TYPE_PARAM) while (1) {
++        while (1) {
+ 	    /* XXX The optional type-quals and static should only be accepted
+ 	       in parameter decls.  The '*' as well, and then even only
+ 	       in prototypes (not function defs).  */
+@@ -4972,7 +4972,8 @@ static int post_type(CType *type, AttributeDef *ad, int storage, int td)
+             }
+             break;
+ 
+-	} else if (tok != ']') {
++	}
++    if (tok != ']') {
+             if (!local_stack || (storage & VT_STATIC))
+                 vpushi(expr_const());
+             else {

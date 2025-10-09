@@ -1,0 +1,54 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  llm,
+  llm-anthropic,
+  anthropic,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-recording,
+  writableTmpDirAsHomeHook,
+}:
+
+buildPythonPackage rec {
+  pname = "llm-anthropic";
+  version = "0.19";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "simonw";
+    repo = "llm-anthropic";
+    tag = version;
+    hash = "sha256-2RGjcbT5Q9kuc89l/hyofg9EkYJUDXQGYbMx1xE/qn4=";
+  };
+
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
+    anthropic
+    llm
+  ];
+
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-recording
+    writableTmpDirAsHomeHook
+  ];
+
+  pythonImportsCheck = [ "llm_anthropic" ];
+
+  passthru.tests = llm.mkPluginTest llm-anthropic;
+
+  meta = {
+    description = "LLM access to models by Anthropic, including the Claude series";
+    homepage = "https://github.com/simonw/llm-anthropic";
+    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aos ];
+  };
+}

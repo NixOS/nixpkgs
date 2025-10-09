@@ -1,0 +1,38 @@
+From eb9fefe7eddee0b22c7c1104eb9133ed595c55f9 Mon Sep 17 00:00:00 2001
+From: adisbladis <adisbladis@gmail.com>
+Date: Fri, 23 Sep 2022 14:52:34 +1200
+Subject: [PATCH] Add missing (require)'s
+
+---
+ voicemacs-server.el | 2 ++
+ voicemacs.el        | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/voicemacs-server.el b/voicemacs-server.el
+index edfe74c..04ffdf2 100644
+--- a/voicemacs-server.el
++++ b/voicemacs-server.el
+@@ -1,5 +1,7 @@
+ (require 'cl-lib)
+ (require 'json-rpc-server)
++(require 'f)
++(require 'porthole)
+ 
+ 
+ (defvar voicemacs--update-response-timeout 3
+diff --git a/voicemacs.el b/voicemacs.el
+index b93e80b..d790636 100644
+--- a/voicemacs.el
++++ b/voicemacs.el
+@@ -18,6 +18,8 @@
+   (require 'voicemacs-extend-company))
+ 
+ 
++(require 'yasnippet)
++
+ (voicemacs-define-sync voicemacs
+   :update t
+   :enable nil
+-- 
+2.37.2
+
