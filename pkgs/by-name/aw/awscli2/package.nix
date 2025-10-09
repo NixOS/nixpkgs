@@ -23,6 +23,13 @@ let
             "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
           ];
         });
+        prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
+          version = "3.0.51";
+          src = prev.src.override {
+            inherit version;
+            hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
+          };
+        });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
           format = "setuptools";
