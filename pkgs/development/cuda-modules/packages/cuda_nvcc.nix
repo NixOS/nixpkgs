@@ -4,6 +4,7 @@
   buildRedist,
   cudaAtLeast,
   cudaOlder,
+  cuda_cccl,
   lib,
   libnvvm,
 }:
@@ -110,6 +111,16 @@ buildRedist (finalAttrs: {
           --replace-fail \
             '$(_TARGET_SIZE_)' \
             ""
+      ''
+      # CUDA 13.0+ introduced
+      # SYSTEM_INCLUDES +=  "-isystem" "$(TOP)/$(_TARGET_DIR_)/include/cccl" $(_SPACE_)
+      # so we need to make sure to patch the reference to cccl.
+      + lib.optionalString (cudaAtLeast "13.0") ''
+        nixLog "patching nvcc.profile to include correct path to cccl"
+        substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
+          --replace-fail \
+            '$(TOP)/$(_TARGET_DIR_)/include/cccl' \
+            "${lib.getOutput "include" cuda_cccl}/include"
       ''
       # Unconditional patching to switch to the correct include paths.
       # NOTE: _TARGET_DIR_ appears to be used for the target architecture, which is relevant for cross-compilation.
