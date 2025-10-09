@@ -13427,7 +13427,7 @@ with pkgs;
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
-  freeciv = callPackage ../games/freeciv {
+  freeciv = callPackage ../by-name/fr/freeciv/package.nix {
     sdl2Client = false;
     gtkClient = true;
     qtClient = false;
