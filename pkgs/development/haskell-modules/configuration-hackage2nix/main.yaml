@@ -196,6 +196,8 @@ package-maintainers:
     - hevm
   athas:
     - futhark
+  auscyber:
+    - kmonad
   bdesham:
     - pinboard-notes-backup
   berberman:
