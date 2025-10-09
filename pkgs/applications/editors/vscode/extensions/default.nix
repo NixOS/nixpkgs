@@ -3028,6 +3028,23 @@ let
         };
       };
 
+      meta.pyrefly = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          publisher = "meta";
+          name = "pyrefly";
+          version = "0.36.2";
+          hash = "sha256-w8D86OrPmxFA4dhShvaFpIbjE49TGoEOSHancwfEklI=";
+        };
+        meta = {
+          changelog = "https://github.com/facebook/pyrefly/releases";
+          description = "Python's fast type checker and langage server for Visual Studio Code";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=meta.pyrefly";
+          homepage = "https://pyrefly.org/";
+          maintainers = with lib.maintainers; [ FKouhai ];
+          license = lib.licenses.mit;
+        };
+      };
+
       mhutchie.git-graph = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "git-graph";
