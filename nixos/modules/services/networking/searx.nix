@@ -20,13 +20,13 @@ let
   runDir = "/run/searx";
 
   cfg = config.services.searx;
+  yamlFormat = pkgs.formats.yaml { };
+  tomlFormat = pkgs.formats.toml { };
 
-  settingsFile = pkgs.writeText "settings.yml" (
-    builtins.toJSON (removeAttrs cfg.settings [ "redis" ])
-  );
+  settingsFile = yamlFormat.generate "settings.yml" (builtins.removeAttrs cfg.settings [ "redis" ]);
 
-  faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
-  limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
+  faviconsSettingsFile = tomlFormat.generate "favicons.toml" cfg.faviconsSettings;
+  limiterSettingsFile = tomlFormat.generate "limiter.toml" cfg.limiterSettings;
 
   generateConfig = ''
     cd ${runDir}
@@ -37,20 +37,6 @@ let
       ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
     )
   '';
-
-  settingType =
-    with types;
-    (oneOf [
-      bool
-      int
-      float
-      str
-      (listOf settingType)
-      (attrsOf settingType)
-    ])
-    // {
-      description = "JSON value";
-    };
 in
 {
   options = {
@@ -115,7 +101,7 @@ in
               lib.warn "Obsolete option `services.searx.settings.redis' is used. It was renamed to `services.searx.settings.valkey'" config.redis
             );
 
-            freeformType = settingType;
+            freeformType = yamlFormat.type;
           }
         );
         default = { };
@@ -162,7 +148,7 @@ in
       };
 
       faviconsSettings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf tomlFormat.type;
         default = { };
         example = literalExpression ''
           {
@@ -190,7 +176,7 @@ in
       };
 
       limiterSettings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf tomlFormat.type;
         default = { };
         example = literalExpression ''
           {
