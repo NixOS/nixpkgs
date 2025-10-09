@@ -14,23 +14,23 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "anytype";
-  version = "0.50.3";
+  version = "0.50.4";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D2B8DY9VogRc0YP/NKEmg0uVT1ZaqQrOA/4AS845phU=";
+    hash = "sha256-S0zA6/55je/iLkgfPyxkFeyA3zHjI3Y9RlSS76eMWyk=";
   };
 
   locales = fetchFromGitHub {
     owner = "anyproto";
     repo = "l10n-anytype-ts";
-    rev = "27d713f500ed375aabb57b551dbc0561cd1983b3";
-    hash = "sha256-1SyCVwicUoxj/xxlYe3dElYYXWtzbw2bHiHZ0FKgYDw=";
+    rev = "eba098d97b271cb037beb3e3b349b15c0ffe9358";
+    hash = "sha256-lTT5n+uT+sw1GXP7wwvUb+JhjmjlCjxXiD9Mr1u4aHc=";
   };
 
-  npmDepsHash = "sha256-pC1hT85Lk4asGRkQf4ZGlNULtmdlKX/2X1eDHMi6BZ0=";
+  npmDepsHash = "sha256-RL4f9N0DX+qhxM4x5Vdku3EydRIa9IQUYB3R2wJbY4E=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
