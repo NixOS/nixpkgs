@@ -13,7 +13,6 @@
 }:
 
 let
-  enableFeature = yes: if yes then "ON" else "OFF";
   versions = lib.importJSON ./versions.json;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -47,14 +46,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withOdbc [ unixODBC ];
 
   cmakeFlags = [
-    "-DDUCKDB_EXTENSION_CONFIGS=${finalAttrs.src}/.github/config/in_tree_extensions.cmake"
-    "-DBUILD_ODBC_DRIVER=${enableFeature withOdbc}"
-    "-DJDBC_DRIVER=${enableFeature withJdbc}"
-    "-DOVERRIDE_GIT_DESCRIBE=v${finalAttrs.version}-0-g${finalAttrs.rev}"
+    (lib.cmakeFeature "DUCKDB_EXTENSION_CONFIGS" "${finalAttrs.src}/.github/config/in_tree_extensions.cmake")
+    (lib.cmakeBool "BUILD_ODBC_DRIVER" withOdbc)
+    (lib.cmakeBool "JDBC_DRIVER" withJdbc)
+    (lib.cmakeFeature "OVERRIDE_GIT_DESCRIBE" "v${finalAttrs.version}-0-g${finalAttrs.rev}")
   ]
   ++ lib.optionals finalAttrs.doInstallCheck [
     # development settings
-    "-DBUILD_UNITTESTS=ON"
+    (lib.cmakeBool "BUILD_UNITTESTS" true)
   ];
 
   doInstallCheck = true;
@@ -113,8 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
           # fails with incorrect result
           # Upstream issue https://github.com/duckdb/duckdb/issues/14294
           "test/sql/copy/file_size_bytes.test"
-          # https://github.com/duckdb/duckdb/issues/17757#issuecomment-3032080432
-          "test/issues/general/test_17757.test"
         ]
         ++ lib.optionals stdenv.hostPlatform.isAarch64 [
           "test/sql/aggregate/aggregates/test_kurtosis.test"
