@@ -984,7 +984,10 @@ with lib.maintainers;
   };
 
   ocaml = {
-    members = [ alizter ];
+    members = [
+      alizter
+      redianthus
+    ];
     githubTeams = [ "ocaml" ];
     scope = "Maintain the OCaml compiler and package set.";
     shortName = "OCaml";
