@@ -53,14 +53,16 @@ mkLibretroCore {
   ];
 
   makefile = "Makefile";
-  cmakeFlags = [
-    "-DLIBRETRO=ON"
-    "-DLIBRETRO_STATIC=1"
-    "-DENABLE_QT=OFF"
-    "-DENABLE_LTO=OFF"
-    "-DUSE_UPNP=OFF"
-    "-DUSE_DISCORD_PRESENCE=OFF"
+
+  cmakeFlags = with lib.strings; [
+    (cmakeBool "ENABLE_LTO" true)
+    (cmakeBool "ENABLE_NOGUI" false)
+    (cmakeBool "ENABLE_QT" false)
+    (cmakeBool "ENABLE_TESTS" false)
+    (cmakeBool "LIBRETRO" true)
+    (cmakeBool "USE_SHARED_ENET" false)
   ];
+
   dontUseCmakeBuildDir = true;
 
   meta = {
