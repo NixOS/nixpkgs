@@ -211,6 +211,8 @@ in
             User = if cfg.dropPrivileges then "consul" else null;
             Restart = "on-failure";
             TimeoutStartSec = "infinity";
+            StateDirectory = [ (baseNameOf dataDir) ];
+            StateDirectoryMode = "0700";
           }
           // (lib.optionalAttrs (cfg.leaveOnStop) {
             ExecStop = "${lib.getExe cfg.package} leave";
@@ -232,9 +234,6 @@ in
                   "";
             in
             ''
-              mkdir -m 0700 -p ${dataDir}
-              chown -R consul ${dataDir}
-
               # Determine interface addresses
               getAddrOnce () {
                 ip ${family} addr show dev "$1" scope global \
