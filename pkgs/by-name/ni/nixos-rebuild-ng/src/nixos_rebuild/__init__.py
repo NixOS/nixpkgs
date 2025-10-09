@@ -1,6 +1,5 @@
 import argparse
 import logging
-import os
 import sys
 from subprocess import CalledProcessError, run
 from typing import Final, assert_never
@@ -290,12 +289,7 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if (
-        WITH_REEXEC
-        and can_run
-        and not args.no_reexec
-        and not os.environ.get("_NIXOS_REBUILD_REEXEC")
-    ):
+    if WITH_REEXEC and can_run and not args.no_reexec:
         services.reexec(argv, args, build_flags, flake_build_flags)
 
     profile = Profile.from_arg(args.profile_name)

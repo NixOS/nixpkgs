@@ -13,6 +13,7 @@ from .process import Remote, cleanup_ssh
 from .utils import Args, tabulate
 
 NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
+NIXOS_REBUILD_REEXEC_ENV: Final = "_NIXOS_REBUILD_REEXEC"
 
 logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -24,6 +25,9 @@ def reexec(
     build_flags: Args,
     flake_build_flags: Args,
 ) -> None:
+    if os.environ.get(NIXOS_REBUILD_REEXEC_ENV):
+        return
+
     drv = None
     # Parsing the args here but ignore ask_sudo_password since it is not
     # needed and we would end up asking sudo password twice
@@ -57,7 +61,7 @@ def reexec(
             cleanup_ssh()
             tmpdir.TMPDIR.cleanup()
             try:
-                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+                os.execve(new, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
             except Exception:
                 # Possible errors that we can have here:
                 # - Missing the binary
@@ -69,7 +73,7 @@ def reexec(
                 )
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
-                os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+                os.execve(current, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
 
 
 def _validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
