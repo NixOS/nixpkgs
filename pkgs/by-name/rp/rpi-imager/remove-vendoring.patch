@@ -50,38 +50,3 @@ index de474c4d..36b6cf2c 100644
  include_directories(${CURL_INCLUDE_DIR} ${LibArchive_INCLUDE_DIR} ${LIBLZMA_INCLUDE_DIRS} ${LIBDRM_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS} ${ZSTD_INCLUDE_DIR} ${YESCRYPT_INCLUDE_DIR})
  
  # Link different Qt components based on build type
-diff --git i/src/downloadextractthread.cpp w/src/downloadextractthread.cpp
-index 580c8098..e970c9d9 100644
---- i/src/downloadextractthread.cpp
-+++ w/src/downloadextractthread.cpp
-@@ -638,7 +638,7 @@ bool DownloadExtractThread::_verify()
- 
- #ifdef Q_OS_LINUX
-     /* Make sure we are reading from the drive and not from cache */
--    posix_fadvise(_file.handle(), 0, 0, POSIX_FADV_DONTNEED);
-+    posix_fadvise(_file->GetHandle(), 0, 0, POSIX_FADV_DONTNEED);
- #endif
- 
-     if (!_firstBlock)
-diff --git i/src/linux/PlatformPackaging.cmake w/src/linux/PlatformPackaging.cmake
-index e91cd247..d5a3c8ba 100644
---- i/src/linux/PlatformPackaging.cmake
-+++ w/src/linux/PlatformPackaging.cmake
-@@ -16,13 +16,13 @@ install(TARGETS ${PROJECT_NAME} DESTINATION bin)
- 
- if(BUILD_CLI_ONLY)
-     # CLI-only build: install CLI-specific desktop file (marked as NoDisplay)
--    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../debian/com.raspberrypi.rpi-imager-cli.desktop" DESTINATION share/applications)
-+    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../../debian/com.raspberrypi.rpi-imager-cli.desktop" DESTINATION share/applications)
-     # Note: No icon or metainfo needed for CLI-only builds
- else()
-     # GUI build: install full desktop integration
--    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../debian/rpi-imager.png" DESTINATION share/icons/hicolor/128x128/apps)
--    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../debian/com.raspberrypi.rpi-imager.desktop" DESTINATION share/applications)
--    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../debian/com.raspberrypi.rpi-imager.metainfo.xml" DESTINATION share/metainfo)
-+    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../../debian/rpi-imager.png" DESTINATION share/icons/hicolor/128x128/apps)
-+    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../../debian/com.raspberrypi.rpi-imager.desktop" DESTINATION share/applications)
-+    install(FILES "${CMAKE_CURRENT_LIST_DIR}/../../debian/com.raspberrypi.rpi-imager.metainfo.xml" DESTINATION share/metainfo)
- endif()
- 
- 
