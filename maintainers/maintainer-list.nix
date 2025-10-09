@@ -27334,12 +27334,6 @@
     githubId = 1476338;
     name = "Viktor Illmer";
   };
-  vklquevs = {
-    email = "vklquevs@gmail.com";
-    github = "vklquevs";
-    githubId = 1771234;
-    name = "vklquevs";
-  };
   vlaci = {
     email = "laszlo.vasko@outlook.com";
     github = "vlaci";
