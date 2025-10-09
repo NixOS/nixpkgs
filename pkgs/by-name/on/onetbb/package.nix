@@ -94,6 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
     NIX_LDFLAGS = lib.optionalString (
       stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
     ) "--undefined-version";
+
+    # Some test fail because hwloc tries to read /sys on non-x86, which doesn't
+    # work in the build sandbox, so provide fake data to satisfy it
+    # See: https://www-lb.open-mpi.org/projects/hwloc/doc/v2.12.2/synthetic.html
+    HWLOC_SYNTHETIC = "node:1 core:1 pu:1";
   };
 
   meta = {

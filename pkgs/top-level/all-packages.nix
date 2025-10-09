@@ -1703,7 +1703,7 @@ with pkgs;
   };
 
   plausible = callPackage ../by-name/pl/plausible/package.nix {
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_18; });
+    beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
   };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
@@ -2748,6 +2748,10 @@ with pkgs;
   fcitx5-table-extra = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-extra.nix { };
 
   fcitx5-table-other = callPackage ../tools/inputmethods/fcitx5/fcitx5-table-other.nix { };
+
+  firezone-server = callPackage ../by-name/fi/firezone-server/package.nix {
+    beamPackages = beam27Packages;
+  };
 
   flannel = callPackage ../tools/networking/flannel { };
   cni-plugin-flannel = callPackage ../tools/networking/flannel/plugin.nix { };
@@ -5735,11 +5739,19 @@ with pkgs;
     erlang_28
     erlang_27
     erlang_26
-    elixir
+    ;
+
+  inherit (beam.packages.erlang_28.beamPackages)
     elixir_1_19
+    ;
+
+  inherit (beam.packages.erlang_27.beamPackages)
+    elixir
     elixir_1_18
     elixir_1_17
     elixir-ls
+    ex_doc
+    lfe
     ;
 
   inherit (beam.packages.erlang_26.beamPackages)
@@ -5748,18 +5760,16 @@ with pkgs;
     ;
 
   inherit (beam.packages.erlang)
-    ex_doc
     erlfmt
     elvis-erlang
     rebar
     rebar3
     rebar3WithPlugins
     fetchHex
-    lfe
     ;
 
-  beamPackages = dontRecurseIntoAttrs beam27Packages;
-  beamMinimalPackages = dontRecurseIntoAttrs beamMinimal27Packages;
+  beamPackages = dontRecurseIntoAttrs beam.packages.erlang.beamPackages;
+  beamMinimalPackages = dontRecurseIntoAttrs beam_minimal.packages.erlang.beamPackages;
 
   beam26Packages = recurseIntoAttrs beam.packages.erlang_26.beamPackages;
   beam27Packages = recurseIntoAttrs beam.packages.erlang_27.beamPackages;
