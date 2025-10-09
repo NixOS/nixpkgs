@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   zlib,
   cups,
@@ -17,6 +18,13 @@ stdenv.mkDerivation rec {
     tag = "v${version}";
     hash = "sha256-a+TjLmjqBz0b7v6kW1uxh4BGzrYOQ8aMdVo4orZeMT4=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/Owl-Maintain/brlaser/pull/43/commits/c50b645ca9dbd0fbb4dcbb914de0b7efb26c1c9b.patch";
+      hash = "sha256-1AAoaSGGeoXm5/8tW0j4z07G/K9iX1i4g22oTcBnmMI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
