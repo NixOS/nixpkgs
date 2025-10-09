@@ -13737,8 +13737,6 @@ with pkgs;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
 
-  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
-
   inherit
     (callPackage ../games/quake2/yquake2 {
     })

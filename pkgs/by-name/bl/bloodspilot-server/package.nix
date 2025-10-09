@@ -5,13 +5,13 @@
   expat,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bloodspilot-xpilot-fxi-server";
   version = "1.4.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bloodspilot/server/server%20v${version}/xpilot-${version}fxi.tar.gz";
-    sha256 = "0d7hnpshifq6gy9a0g6il6h1hgqqjyys36n8w84hr8d4nhg4d1ji";
+    url = "mirror://sourceforge/project/bloodspilot/server/server%20v${finalAttrs.version}/xpilot-${finalAttrs.version}fxi.tar.gz";
+    hash = "sha256-UYZGHrSkoQwJ4siaob2XGD8YoKHRPKCSfwa7CPW18DQ=";
   };
 
   buildInputs = [
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     ./bloodspilot-server-strcpy-fix.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer X11 space combat game (server part)";
     mainProgram = "xpilots";
     homepage = "http://bloodspilot.sf.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})
