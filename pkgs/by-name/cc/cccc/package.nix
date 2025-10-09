@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     homepage = "https://cccc.sourceforge.net/";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.linquize ];
+    maintainers = [ ];
   };
 }
