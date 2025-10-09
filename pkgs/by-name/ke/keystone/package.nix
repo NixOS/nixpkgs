@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Patches from https://github.com/keystone-engine/keystone/pull/593
+    ./gcc15.patch
     ./cmake-3.10.patch
   ];
 
