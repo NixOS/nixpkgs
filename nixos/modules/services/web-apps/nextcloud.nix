@@ -320,6 +320,9 @@ in
     (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
       Add port to services.nextcloud.config.dbhost instead.
     '')
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "nginx" "recommendedHttpHeaders" ] ''
+      This option has been removed to always follow upstream's security recommendation.
+    '')
     (lib.mkRenamedOptionModule
       [ "services" "nextcloud" "logLevel" ]
       [ "services" "nextcloud" "settings" "loglevel" ]
@@ -979,11 +982,6 @@ in
     };
 
     nginx = {
-      recommendedHttpHeaders = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable additional recommended HTTP response headers";
-      };
       hstsMaxAge = lib.mkOption {
         type = lib.types.ints.positive;
         default = 15552000;
@@ -1534,19 +1532,23 @@ in
           };
           extraConfig = ''
             index index.php index.html /index.php$request_uri;
-            ${lib.optionalString (cfg.nginx.recommendedHttpHeaders) ''
-              add_header X-Content-Type-Options nosniff;
-              add_header X-Robots-Tag "noindex, nofollow";
-              add_header X-Permitted-Cross-Domain-Policies none;
-              add_header X-Frame-Options sameorigin;
-              add_header Referrer-Policy no-referrer;
-            ''}
+            add_header X-Content-Type-Options nosniff;
+            add_header X-Robots-Tag "noindex, nofollow";
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options sameorigin;
+            add_header Referrer-Policy no-referrer;
             ${lib.optionalString (cfg.https) ''
               add_header Strict-Transport-Security "max-age=${toString cfg.nginx.hstsMaxAge}; includeSubDomains" always;
             ''}
             client_max_body_size ${cfg.maxUploadSize};
             fastcgi_buffers 64 4K;
             fastcgi_hide_header X-Powered-By;
+            # mirror upstream htaccess file https://github.com/nextcloud/server/blob/v32.0.0/.htaccess#L40-L41
+            fastcgi_hide_header Referrer-Policy;
+            fastcgi_hide_header X-Content-Type-Options;
+            fastcgi_hide_header X-Frame-Options;
+            fastcgi_hide_header X-Permitted-Cross-Domain-Policies;
+            fastcgi_hide_header X-Robots-Tag;
             gzip on;
             gzip_vary on;
             gzip_comp_level 4;
