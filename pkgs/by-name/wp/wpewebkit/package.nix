@@ -50,6 +50,7 @@
   sqlite,
   stdenv,
   systemd,
+  testers,
   unifdef,
   wayland,
   wayland-protocols,
@@ -150,7 +151,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_WPE_PLATFORM" true)
     (lib.cmakeBool "USE_LIBBACKTRACE" false)
   ];
-  
+
   postFixup = ''
     moveToOutput "share/doc" "$devdoc"
   '';
@@ -203,5 +204,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ eval-exec ];
     platforms = with lib.platforms; linux ++ darwin;
+    pkgConfigModules = [ "wpe-webkit-2.0" ];
   };
 })
