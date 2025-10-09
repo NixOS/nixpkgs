@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.ettercap-project.org/";
     changelog = "https://github.com/Ettercap/ettercap/releases/tag/${src.tag}";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
   };
