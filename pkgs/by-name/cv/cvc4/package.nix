@@ -72,6 +72,10 @@ stdenv.mkDerivation rec {
 
         sed -i '/#define CVC4__UTIL__REGEXP_H/a\
     #include <cstddef>' src/util/regexp.h
+
+    # Fix CMake 4 build
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   preConfigure = ''
