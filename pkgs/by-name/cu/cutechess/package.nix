@@ -3,8 +3,7 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
+  qt5,
   lib,
 }:
 
@@ -15,17 +14,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cutechess";
     repo = "cutechess";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-vhS3Eenxcq7D8E5WVON5C5hCTytcEVbYUeuCkfB0apA=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
+    qt5.qtbase
   ];
 
   postInstall = ''
@@ -35,12 +34,12 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm444 $src/docs/cutechess-engines.json.5 -t $out/share/man/man5/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GUI, CLI, and library for playing chess";
     homepage = "https://cutechess.com/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = with platforms; (linux ++ windows);
+    platforms = with lib.platforms; (linux ++ windows);
     mainProgram = "cutechess";
   };
 })
