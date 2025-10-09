@@ -4,10 +4,14 @@
   fetchurl,
   autoconf,
   automake,
-  allegro,
+  allegro4,
 }:
 
-stdenv.mkDerivation rec {
+let
+  allegro = allegro4;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "garden-of-coloured-lights";
   version = "1.0.9";
 
@@ -24,8 +28,8 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "mirror://sourceforge/garden/${version}/garden-${version}.tar.gz";
-    sha256 = "1qsj4d7r22m5f9f5f6cyvam1y5q5pbqvy5058r7w0k4s48n77y6s";
+    url = "mirror://sourceforge/garden/${finalAttrs.version}/garden-${finalAttrs.version}.tar.gz";
+    hash = "sha256-2vhzLCKaTMBPRgUUv/G6BRcfqtqeGVdccqUKkU8jUuM=";
   };
 
   # Workaround build failure on -fno-common toolchains:
@@ -33,12 +37,11 @@ stdenv.mkDerivation rec {
   #     `eclass'; eclass.o:src/eclass.c:21: first defined here
   env.NIX_CFLAGS_COMPILE = "-fcommon";
 
-  meta = with lib; {
+  meta = {
     description = "Old-school vertical shoot-em-up / bullet hell";
     mainProgram = "garden";
     homepage = "https://sourceforge.net/projects/garden/";
     maintainers = [ ];
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
   };
-
-}
+})
