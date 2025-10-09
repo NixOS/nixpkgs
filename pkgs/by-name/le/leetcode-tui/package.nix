@@ -1,10 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, pkgs
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage {
@@ -26,22 +26,21 @@ rustPlatform.buildRustPackage {
     "leetcode-tui-rs"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     pkg-config
   ];
 
   buildInputs = [
     openssl
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    pkgs.darwin.apple_sdk.frameworks.Security
-    pkgs.darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
+  # Tests require network access to LeetCode API
   doCheck = false;
 
-  meta = with lib; {
-    description = "Terminal UI for LeetCode - browse stats and manage problems from the terminal";
+  meta = {
+    description = "Terminal UI for LeetCode stats problems";
     longDescription = ''
       A lightweight, interactive terminal user interface for LeetCode that allows you to:
       - Browse questions grouped by categories
@@ -55,9 +54,9 @@ rustPlatform.buildRustPackage {
       maintaining full functionality for competitive programming practice.
     '';
     homepage = "https://github.com/akarsh1995/leetcode-tui";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "leetui";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ Ra77a3l3-jar ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ Ra77a3l3-jar ];
   };
 }
