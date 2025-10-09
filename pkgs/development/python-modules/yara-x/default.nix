@@ -3,16 +3,14 @@
   buildPythonPackage,
   rustPlatform,
   fetchFromGitHub,
-  pythonOlder,
   pytestCheckHook,
   pkgs,
 }:
+
 buildPythonPackage rec {
   pname = "yara-x";
   version = "1.8.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
@@ -42,7 +40,7 @@ buildPythonPackage rec {
   meta = {
     description = "Official Python library for YARA-X";
     homepage = "https://github.com/VirusTotal/yara-x/tree/main/py";
-    changelog = "https://github.com/VirusTotal/yara-x/tree/v${version}/py";
+    changelog = "https://github.com/VirusTotal/yara-x/tree/${src.tag}/py";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ ivyfanchiang ];
   };
