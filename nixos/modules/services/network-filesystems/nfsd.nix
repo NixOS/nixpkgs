@@ -129,26 +129,20 @@ in
     systemd.services.nfs-server = {
       enable = true;
       wantedBy = [ "multi-user.target" ];
-
-      preStart = ''
-        mkdir -p /var/lib/nfs/v4recovery
-      '';
+      serviceConfig.StateDirectory = [ "nfs/v4recovery" ];
     };
 
     systemd.services.nfs-mountd = {
       enable = true;
       restartTriggers = [ exports ];
+      serviceConfig.StateDirectory = [ "nfs" ];
 
-      preStart = ''
-        mkdir -p /var/lib/nfs
-
-        ${lib.optionalString cfg.createMountPoints ''
-          # create export directories:
-          # skip comments, take first col which may either be a quoted
-          # "foo bar" or just foo (-> man export)
-          sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
-          | xargs -d '\n' mkdir -p
-        ''}
+      preStart = lib.optionalString cfg.createMountPoints ''
+        # create export directories:
+        # skip comments, take first col which may either be a quoted
+        # "foo bar" or just foo (-> man export)
+        sed '/^#.*/d;s/^"\([^"]*\)".*/\1/;t;s/[ ].*//' ${exports} \
+        | xargs -d '\n' mkdir -p
       '';
     };
 
