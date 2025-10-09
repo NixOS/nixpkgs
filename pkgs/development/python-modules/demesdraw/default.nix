@@ -17,13 +17,13 @@
 
 buildPythonPackage rec {
   pname = "demesdraw";
-  version = "0.4.0";
+  version = "0.4.1";
   format = "pyproject";
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-n7dz+kYf2yyr66TBx452W6z4qT6bT81u0J4aMAYuGCc=";
+    hash = "sha256-sPxdSXWRh6qnUKmP9g/AghOX5Ydrxv2Le2iadefQDws=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];

@@ -73,9 +73,15 @@ vscode-utils.buildVscodeExtension {
   ];
 
   preInstall = lib.optionalString setDefaultServerPath ''
-    jq '(.contributes.configuration[] | select(.title == "server") | .properties."rust-analyzer.server.path".default) = $s' \
+    jq '(.contributes.configuration[] | select(.title == "Server") | .properties."rust-analyzer.server.path".default) = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
       package.json | sponge package.json
+
+    # Ensure that the previous modification worked, by searching for the binary path
+    grep -Fq ${rust-analyzer}/bin/rust-analyzer package.json || {
+      echo "Modifying 'rust-analyzer.server.path' in 'package.json' failed."
+      exit 1
+    }
   '';
 
   meta = {

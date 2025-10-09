@@ -25,13 +25,13 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigtable";
-  version = "2.32.0";
+  version = "2.33.0";
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "python-bigtable";
     tag = "v${version}";
-    hash = "sha256-9yU0xNh5GuVbQuAmoFEHJBmHCVvFOOxEw+b/3B9O1OY=";
+    hash = "sha256-32+UMTfnSncDsSnN54MjRE4eL1PXsUdblnxe/rj5Pqc=";
   };
 
   pyproject = true;
