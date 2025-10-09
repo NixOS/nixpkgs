@@ -17,7 +17,7 @@ let
     "channels"
     # Test flaky because of our RPATH patching
     # https://github.com/NixOS/nixpkgs/pull/230965#issuecomment-1545336489
-    "compiler/codegen"
+    "Compiler/codegen"
     # Test flaky
     "read"
   ]
@@ -33,6 +33,10 @@ let
     # https://github.com/JuliaLang/julia/issues/54280
     "loading"
     "cmdlineargs"
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "1.12") [
+    "precompile"
+    "compileall"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # Test flaky on ofborg
