@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ettercap";
     repo = "ettercap";
-    rev = "v${version}";
-    sha256 = "1sdf1ssa81ib6k0mc5m2jzbjl4jd1yv6ahv5dwx2x9w4b2pyqg1c";
+    tag = "v${version}";
+    hash = "sha256-LDzsr1iEpy46b2VDZbYPTRIq15eiFlbBNCsGpLQOruk=";
   };
 
   patches = [
@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
       analysis.
     '';
     homepage = "https://www.ettercap-project.org/";
+    changelog = "https://github.com/Ettercap/ettercap/releases/tag/${src.tag}";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
