@@ -3,6 +3,7 @@
   lib,
   fetchurl,
   gnuplot,
+  versionCheckHook,
 }:
 
 let
@@ -21,11 +22,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "iozone";
-  version = "3.507";
+  version = "3.508";
 
   src = fetchurl {
     url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
-    hash = "sha256-HoCHraBW9dgBjuC8dmhtQW/CJR7QMDgFXb0K940eXOM=";
+    hash = "sha256-7lWvMQpl7Jfh2yFK69de6H9Fi1Kc6j2jcIGmOXTorOM=";
   };
 
   license = fetchurl {
@@ -61,6 +62,10 @@ stdenv.mkDerivation rec {
       --replace 'gnuplot ' "${gnuplot}/bin/gnuplot " \
       --replace gnu3d.dem $out/libexec/gnu3d.dem
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-v";
+  doInstallCheck = true;
 
   meta = {
     description = "Filesystem benchmark tool";
