@@ -13297,8 +13297,6 @@ with pkgs;
 
   qgo = libsForQt5.callPackage ../games/qgo { };
 
-  amoeba = callPackage ../games/amoeba { };
-
   anki = callPackage ../games/anki {
     protobuf = protobuf_31;
   };
