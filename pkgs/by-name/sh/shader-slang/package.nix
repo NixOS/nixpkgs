@@ -86,25 +86,27 @@ stdenv.mkDerivation (finalAttrs: {
     "-GNinja Multi-Config"
     # The cmake setup hook only specifies `-DCMAKE_BUILD_TYPE=Release`,
     # which does nothing for "Ninja Multi-Config".
-    "-DCMAKE_CONFIGURATION_TYPES=RelWithDebInfo"
+    (lib.cmakeFeature "CMAKE_CONFIGURATION_TYPES" "RelWithDebInfo")
     # Handled by separateDebugInfo so we don't need special installation handling
-    "-DSLANG_ENABLE_SPLIT_DEBUG_INFO=OFF"
-    "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
-    "-DSLANG_USE_SYSTEM_MINIZ=ON"
-    "-DSLANG_USE_SYSTEM_LZ4=ON"
+    (lib.cmakeBool "SLANG_ENABLE_SPLIT_DEBUG_INFO" false)
+    (lib.cmakeFeature "SLANG_VERSION_FULL" "v${finalAttrs.version}-nixpkgs")
+    (lib.cmakeBool "SLANG_USE_SYSTEM_MINIZ" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_LZ4" true)
     (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
-    "-DSLANG_SLANG_LLVM_FLAVOR=DISABLE"
+    (lib.cmakeFeature "SLANG_SLANG_LLVM_FLAVOR" "DISABLE")
     # slang-rhi tries to download headers and precompiled binaries for these backends
-    "-DSLANG_RHI_ENABLE_OPTIX=OFF"
-    "-DSLANG_RHI_ENABLE_VULKAN=OFF"
-    "-DSLANG_RHI_ENABLE_METAL=OFF"
-    "-DSLANG_RHI_ENABLE_WGPU=OFF"
+    (lib.cmakeBool "SLANG_RHI_ENABLE_OPTIX" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_VULKAN" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_METAL" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_WGPU" false)
   ]
   ++ lib.optionals withGlslang [
-    "-DSLANG_USE_SYSTEM_SPIRV_TOOLS=ON"
-    "-DSLANG_USE_SYSTEM_GLSLANG=ON"
+    (lib.cmakeBool "SLANG_USE_SYSTEM_SPIRV_TOOLS" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_GLSLANG" true)
   ]
-  ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
+  ++ lib.optionals (!withGlslang) [
+    (lib.cmakeBool "SLANG_ENABLE_SLANG_GLSLANG" false)
+  ];
 
   postInstall = ''
     mkdir -p $dev/lib
