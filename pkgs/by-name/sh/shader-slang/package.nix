@@ -131,7 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      samestep
+    ];
     mainProgram = "slangc";
     platforms = lib.platforms.all;
   };
