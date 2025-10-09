@@ -387,9 +387,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
 
 # Docker tools
-/pkgs/build-support/docker                   @roberth
-/nixos/tests/docker-tools*                   @roberth
-/doc/build-helpers/images/dockertools.section.md  @roberth
+/pkgs/build-support/docker                       @roberth @jhol
+/nixos/tests/docker-tools*                       @roberth @jhol
+/doc/build-helpers/images/dockertools.section.md @roberth @jhol
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood

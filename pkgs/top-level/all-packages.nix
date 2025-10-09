@@ -3554,9 +3554,11 @@ with pkgs;
 
   inherit (callPackages ../servers/nextcloud { })
     nextcloud31
+    nextcloud32
     ;
 
   nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
+  nextcloud32Packages = callPackage ../servers/nextcloud/packages { ncVersion = "32"; };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
 
@@ -13365,10 +13367,6 @@ with pkgs;
 
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
-
-  cutechess = qt5.callPackage ../games/cutechess { };
-
-  cutemaze = qt6Packages.callPackage ../games/cutemaze { };
 
   ddnet-server = ddnet.override { buildClient = false; };
 
