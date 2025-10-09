@@ -279,3 +279,89 @@
   "bytes",
   "futures-util",
   "http 1.3.1",
+
+--- a/pagefind_web/Cargo.lock
++++ b/pagefind_web/Cargo.lock
+@@ -89,6 +89,12 @@ dependencies = [
+  "proc-macro2",
+ ]
+ 
++[[package]]
++name = "rustversion"
++version = "1.0.22"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "b39cdef0fa800fc44525c84ccb54a029961a8215f9619753635a9c0d2538d46d"
++
+ [[package]]
+ name = "syn"
+ version = "2.0.55"
+@@ -108,23 +114,25 @@ checksum = "3354b9ac3fae1ff6755cb6db53683adb661634f67557942dea4facebec0fee4b"
+ 
+ [[package]]
+ name = "wasm-bindgen"
+-version = "0.2.92"
++version = "0.2.104"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4be2531df63900aeb2bca0daaaddec08491ee64ceecbee5076636a3b026795a8"
++checksum = "c1da10c01ae9f1ae40cbfac0bac3b1e724b320abfcf52229f80b547c0d250e2d"
+ dependencies = [
+  "cfg-if",
++ "once_cell",
++ "rustversion",
+  "wasm-bindgen-macro",
++ "wasm-bindgen-shared",
+ ]
+ 
+ [[package]]
+ name = "wasm-bindgen-backend"
+-version = "0.2.92"
++version = "0.2.104"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "614d787b966d3989fa7bb98a654e369c762374fd3213d212cfc0251257e747da"
++checksum = "671c9a5a66f49d8a47345ab942e2cb93c7d1d0339065d4f8139c486121b43b19"
+ dependencies = [
+  "bumpalo",
+  "log",
+- "once_cell",
+  "proc-macro2",
+  "quote",
+  "syn",
+@@ -133,9 +141,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "wasm-bindgen-macro"
+-version = "0.2.92"
++version = "0.2.104"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a1f8823de937b71b9460c0c34e25f3da88250760bec0ebac694b49997550d726"
++checksum = "7ca60477e4c59f5f2986c50191cd972e3a50d8a95603bc9434501cf156a9a119"
+ dependencies = [
+  "quote",
+  "wasm-bindgen-macro-support",
+@@ -143,9 +151,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "wasm-bindgen-macro-support"
+-version = "0.2.92"
++version = "0.2.104"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "e94f17b526d0a461a191c78ea52bbce64071ed5c04c9ffe424dcb38f74171bb7"
++checksum = "9f07d2f20d4da7b26400c9f4a0511e6e0345b040694e8a75bd41d578fa4421d7"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -156,9 +164,12 @@ dependencies = [
+ 
+ [[package]]
+ name = "wasm-bindgen-shared"
+-version = "0.2.92"
++version = "0.2.104"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
++checksum = "bad67dc8b2a1a6e5448428adec4c3e84c43e561d8c9ee8a9e5aabeb193ec41d1"
++dependencies = [
++ "unicode-ident",
++]
+ 
+ [[package]]
+ name = "write-json" "http 1.3.1",
