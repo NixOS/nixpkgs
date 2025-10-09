@@ -24,20 +24,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "learn6502";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "JumpLink";
     repo = "Learn6502";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4u9+VrGDhVd6tPi7KyuW8vfHba2iXp8yar8euN+qFXg=";
+    hash = "sha256-Vk8IbTv7fivBrPeZ1Psvvym68F5lA1XV7p4kMfSqNrU=";
   };
 
   missingHashes = ./missing-hashes.json;
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-LomdUWcNziqyn0ty40p+RzZ4Paejs9g0AOaUQUOd2yY=";
+    hash = "sha256-0kKC0KCxiigk7LPLmCRaoJnz/rVg8/Tvkcae4XU/97w=";
   };
 
   nativeBuildInputs = [
