@@ -7,14 +7,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "argtable";
-  version = "3.2.2";
-  srcVersion = "v${finalAttrs.version}.f25c624";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner = "argtable";
     repo = "argtable3";
-    rev = finalAttrs.srcVersion;
-    hash = "sha256-X89xFLDs6NEgjzzwy8kplvTgukQd/CV3Xa9A3JXecf4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IW4pqOHKjwxQEmv/V40kIRLin+bQE6PAlfJemFgi5bQ=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -25,6 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     patchShebangs tools/build
+  '';
+
+  postInstall = ''
+    # Fix broken paths in .pc file
+    substituteInPlace $out/lib/pkgconfig/argtable3.pc \
+      --replace-fail '//nix' '/nix'
   '';
 
   meta = {
