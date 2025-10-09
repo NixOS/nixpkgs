@@ -9,7 +9,7 @@
 stdenv.mkDerivation rec {
   pname = "bpp-popgen";
 
-  inherit (bpp-core) version;
+  inherit (bpp-core) version postPatch;
 
   src = fetchFromGitHub {
     owner = "BioPP";

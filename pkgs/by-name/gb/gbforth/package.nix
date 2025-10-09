@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   gforth,
+  writableTmpDirAsHomeHook,
   unstableGitUpdater,
 }:
 
@@ -35,6 +36,11 @@ stdenv.mkDerivation {
   '';
 
   doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   installCheckPhase = ''
     runHook preInstallCheck
     $out/bin/gbforth examples/simon/simon.fs
