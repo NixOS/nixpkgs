@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
   cmakeFlags = [
-    (lib.cmakeBool "TOML11_BUILD_TOML_TESTS" true)
+    (lib.cmakeBool "TOML11_BUILD_TOML_TESTS" finalAttrs.finalPackage.doCheck)
   ];
   doCheck = true;
 
