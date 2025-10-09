@@ -54,7 +54,7 @@
   symlinkJoin,
   systemd,
   tzdata,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   which,
   xorg,
   zlib,
@@ -173,7 +173,7 @@ stdenv.mkDerivation rec {
     speex
     stdenv.cc.cc
     (lib.getLib systemd)
-    webkitgtk_4_0
+    # webkitgtk_4_0
     xorg.libXScrnSaver
     xorg.libXaw
     xorg.libXmu
@@ -313,6 +313,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     license = licenses.unfree;
     description = "Citrix Workspace";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];

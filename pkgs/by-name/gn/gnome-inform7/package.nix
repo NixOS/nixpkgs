@@ -20,7 +20,7 @@
   gobject-introspection,
   vala,
   gtk-doc,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   gtksourceview3,
   gspell,
   libxml2,
@@ -124,7 +124,7 @@ stdenv.mkDerivation {
     gtk3
     gtksourceview3
     gspell
-    webkitgtk_4_0
+    # webkitgtk_4_0
     libxml2
     goocanvas2
     libplist
@@ -137,6 +137,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Inform 7 for the Gnome platform";
     longDescription = ''
       This version of Inform 7 for the Gnome platform was created by Philip Chimento, based on a design by Graham Nelson and Andrew Hunter.
