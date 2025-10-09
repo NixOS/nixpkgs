@@ -22403,6 +22403,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  xeno-nvim = buildVimPlugin {
+    pname = "xeno.nvim";
+    version = "2025-08-27";
+    src = fetchFromGitHub {
+      owner = "kyza0d";
+      repo = "xeno.nvim";
+      rev = "4a1d3946b5c3b9b581e76a84746a06b0977b1fed";
+      sha256 = "1lbj321vz1gzgy4wdmzca74hrwzizy2i0645bqix0id4q3zm7lfd";
+    };
+    meta.homepage = "https://github.com/kyza0d/xeno.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   xmake-nvim = buildVimPlugin {
     pname = "xmake.nvim";
     version = "2025-04-28";
