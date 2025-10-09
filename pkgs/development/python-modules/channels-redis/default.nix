@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "channels-redis";
-  version = "4.2.1";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "channels_redis";
     tag = version;
-    hash = "sha256-jQkpuOQNU2KCWavXSE/n8gdpQhhAafQbZYfbX71Rcds=";
+    hash = "sha256-zn313s1rzypSR5D3iE/05PeBQkx/Se/yaA3NS9BY//Y=";
   };
 
   build-system = [ setuptools ];
