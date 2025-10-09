@@ -158,14 +158,19 @@ in
         default = { };
         example = literalExpression ''
           {
-            real_ip = {
-              x_for = 1;
+            botdetection = {
               ipv4_prefix = 32;
               ipv6_prefix = 56;
-            }
-            botdetection.ip_lists.block_ip = [
-              # "93.184.216.34" # example.org
-            ];
+
+              trusted_proxies = [
+                "127.0.0.0/8"
+                "::1"
+              ];
+
+              ip_lists.block_ip = [
+                # "93.184.216.34" # example.org
+              ];
+            };
           }
         '';
         description = ''
