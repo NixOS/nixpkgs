@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "discordo";
-  version = "0-unstable-2025-09-27";
+  version = "0-unstable-2025-09-30";
 
   src = fetchFromGitHub {
     owner = "ayn2op";
     repo = "discordo";
-    rev = "5cecfddae7a092a1cbb91a8bdec1ce27d013467f";
-    hash = "sha256-jbZJAUrwgbwcc1vugrTzW1P74Ll3OWh+5MQCdwnAVrw=";
+    rev = "6f670612e889dfcd7991d570b154d1039b1afc10";
+    hash = "sha256-0YdOKXiI/popKhMJgQXJCHIiCEST4aPcLXCQxx6WzzA=";
   };
 
-  vendorHash = "sha256-RASyQEesppDckC/bE1vbKiVqZ4f72RI8IAbSTGGgzmo=";
+  vendorHash = "sha256-9u861o/pF272PzspTdLkrXdCf/AquG2GmGQ4Nuvx7GE=";
 
   env.CGO_ENABLED = 0;
 

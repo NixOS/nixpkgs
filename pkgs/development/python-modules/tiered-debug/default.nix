@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tiered-debug";
-  version = "1.3.1";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "untergeek";
     repo = "tiered-debug";
     tag = "v${version}";
-    hash = "sha256-cvyqyyHAeRaCup4V2jbqT1Jx2/waQGtc+Sk3DJy5y8M=";
+    hash = "sha256-lGt2cnT5Pjb87msgnDawn2gg2VtWXwniHM1wTjHU/x4=";
   };
 
   build-system = [ hatchling ];

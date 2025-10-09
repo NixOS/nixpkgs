@@ -38,7 +38,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.2.1";
+  version = "1.2.2";
 
   outputs = [
     "out"
@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-LIJ8ZzOzpZMwgJOlOE/n6yiJ/mVKHI4pt/1Bm93gbG8=";
+    hash = "sha256-BTIH8G1GKrcoMasvlA3fje8f1vZvr4uuAUHfvZq6LVY=";
   };
 
   deps = callPackage ./deps.nix {
@@ -159,6 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) allTerminfo;
       nixos = nixosTests.terminal-emulators.ghostty;
     };
+    updateScript = ./update.nu;
   };
 
   meta = {
