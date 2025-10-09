@@ -17257,12 +17257,6 @@
     githubId = 64710;
     name = "Matthew O'Gorman";
   };
-  Mogria = {
-    email = "m0gr14@gmail.com";
-    github = "mogria";
-    githubId = 754512;
-    name = "Mogria";
-  };
   mohe2015 = {
     name = "Moritz Hedtke";
     email = "Moritz.Hedtke@t-online.de";
