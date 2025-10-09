@@ -90,5 +90,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/freeswitch/sofia-sip";
     platforms = platforms.unix;
     license = licenses.lgpl2;
+    teams = [ lib.teams.ngi ];
   };
 }
