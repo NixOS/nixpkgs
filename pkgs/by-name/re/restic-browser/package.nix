@@ -9,7 +9,7 @@
   npmHooks,
   pkg-config,
   wrapGAppsHook3,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   dbus,
   nix-update-script,
 }:
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    webkitgtk_4_0
+    # webkitgtk_4_0
     dbus
   ];
 
@@ -59,6 +59,8 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "GUI to browse and restore restic backup repositories";
     homepage = "https://github.com/emuell/restic-browser";
     changelog = "https://github.com/emuell/restic-browser/releases/tag/v${version}";
