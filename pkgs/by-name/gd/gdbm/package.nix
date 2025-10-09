@@ -4,6 +4,7 @@
   stdenv,
   testers,
   updateAutotoolsGnuConfigScriptsHook,
+  autoconf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,11 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-aiRQShTeSnRBA9y5Nr6Xbfb76IzP8mBl5UwcR5RvSl4=";
   };
 
-  nativeBuildInputs = [ updateAutotoolsGnuConfigScriptsHook ];
+  nativeBuildInputs = [
+    updateAutotoolsGnuConfigScriptsHook
+  ]
+  # needed for testsuite.at patch below
+  ++ lib.optional stdenv.buildPlatform.isCygwin autoconf;
 
   hardeningDisable = [ "strictflexarrays3" ];
 
   configureFlags = [ (lib.enableFeature true "libgdbm-compat") ];
+
+  buildFlags = lib.optionalString stdenv.hostPlatform.isCygwin "LDFLAGS=-no-undefined";
 
   outputs = [
     "out"
@@ -42,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/Makefile.in \
       --replace-fail '_LDADD = ../src/libgdbm.la ../compat/libgdbm_compat.la' \
                      '_LDADD = ../compat/libgdbm_compat.la ../src/libgdbm.la'
-    substituteInPlace tests/testsuite.at
+    substituteInPlace tests/testsuite.at \
       --replace-fail 'm4_include([dbmfetch03.at])' ""
   '';
 
