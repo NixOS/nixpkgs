@@ -80,7 +80,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "comet";
     maintainers = with lib.maintainers; [
       tomasajt
-      aidalgol
     ];
   };
 })
