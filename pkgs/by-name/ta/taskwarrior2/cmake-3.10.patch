@@ -1,0 +1,108 @@
+From 3bc624aef162766000a2cbb9ebaafd918d1546c3 Mon Sep 17 00:00:00 2001
+From: Dave Walker <dave@daviey.com>
+Date: Thu, 9 Oct 2025 09:55:56 +0100
+Subject: [PATCH] Update CMake minimum required version to 3.10
+
+CMake 4 no longer supports versions older than 3.5, and versions
+between 3.5-3.10 are deprecated. This updates the minimum required
+version to 3.10 to ensure compatibility with modern CMake versions.
+
+This issue is already affecting NixOS users (see
+https://github.com/NixOS/nixpkgs/issues/449826) and will likely
+impact other distributions as they upgrade to CMake 4.x.
+
+Fixes compatibility with CMake 4.x
+---
+ CMakeLists.txt              | 2 +-
+ doc/CMakeLists.txt          | 2 +-
+ performance/CMakeLists.txt  | 2 +-
+ scripts/CMakeLists.txt      | 2 +-
+ src/CMakeLists.txt          | 2 +-
+ src/columns/CMakeLists.txt  | 2 +-
+ src/commands/CMakeLists.txt | 2 +-
+ test/CMakeLists.txt         | 2 +-
+ 8 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cc8005aa0..793a462b8 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
+ 
+ include (CheckFunctionExists)
+diff --git a/doc/CMakeLists.txt b/doc/CMakeLists.txt
+index 81df9d08f..6089ffa7b 100644
+--- a/doc/CMakeLists.txt
++++ b/doc/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ message ("-- Configuring man pages")
+ set (man_FILES task-color.5 task-sync.5 taskrc.5 task.1)
+ foreach (man_FILE ${man_FILES})
+diff --git a/performance/CMakeLists.txt b/performance/CMakeLists.txt
+index a990911fe..de68ac3b3 100644
+--- a/performance/CMakeLists.txt
++++ b/performance/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ 
+ add_custom_target (performance ./run_perf
+                                DEPENDS task_executable
+diff --git a/scripts/CMakeLists.txt b/scripts/CMakeLists.txt
+index 6c95ca034..a457feb1a 100644
+--- a/scripts/CMakeLists.txt
++++ b/scripts/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ install (DIRECTORY bash fish vim hooks
+          DESTINATION ${TASK_DOCDIR}/scripts)
+ install (FILES zsh/_task
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 34cf9b487..96a8aa759 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ include_directories (${CMAKE_SOURCE_DIR}
+                      ${CMAKE_SOURCE_DIR}/src
+                      ${CMAKE_SOURCE_DIR}/src/commands
+diff --git a/src/columns/CMakeLists.txt b/src/columns/CMakeLists.txt
+index 79fc10af0..5dc2f303d 100644
+--- a/src/columns/CMakeLists.txt
++++ b/src/columns/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ include_directories (${CMAKE_SOURCE_DIR}
+                      ${CMAKE_SOURCE_DIR}/src
+                      ${CMAKE_SOURCE_DIR}/src/commands
+diff --git a/src/commands/CMakeLists.txt b/src/commands/CMakeLists.txt
+index 14f640ee2..8caf82e78 100644
+--- a/src/commands/CMakeLists.txt
++++ b/src/commands/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ include_directories (${CMAKE_SOURCE_DIR}
+                      ${CMAKE_SOURCE_DIR}/src
+                      ${CMAKE_SOURCE_DIR}/src/commands
+diff --git a/test/CMakeLists.txt b/test/CMakeLists.txt
+index 21b7dc444..1e3e88087 100644
+--- a/test/CMakeLists.txt
++++ b/test/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 3.0)
++cmake_minimum_required (VERSION 3.10)
+ 
+ # This is a work-around for the following CMake issue:
+ # https://gitlab.kitware.com/cmake/cmake/issues/16062
+-- 
+2.51.0
+

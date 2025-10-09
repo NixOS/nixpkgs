@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # Update CMake minimum required version for CMake 4 compatibility
+    # https://github.com/GothenburgBitFactory/taskwarrior/pull/3969
+    ./cmake-3.10.patch
+  ];
+
   postPatch = ''
     substituteInPlace src/commands/CmdNews.cpp \
       --replace "xdg-open" "${lib.getBin xdg-utils}/bin/xdg-open"
