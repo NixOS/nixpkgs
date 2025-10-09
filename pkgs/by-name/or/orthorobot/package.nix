@@ -12,20 +12,21 @@
   zip,
 }:
 
-stdenv.mkDerivation rec {
+let
+  icon = fetchurl {
+    url = "https://stabyourself.net/images/screenshots/orthorobot-5.png";
+    sha256 = "13fa4divdqz4vpdij1lcs5kf6w2c4jm3cc9q6bz5h7lkng31jzi6";
+  };
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "orthorobot";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "Stabyourself";
     repo = "orthorobot";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "1ca6hvd890kxmamsmsfiqzw15ngsvb4lkihjb6kabgmss61a6s5p";
-  };
-
-  icon = fetchurl {
-    url = "https://stabyourself.net/images/screenshots/orthorobot-5.png";
-    sha256 = "13fa4divdqz4vpdij1lcs5kf6w2c4jm3cc9q6bz5h7lkng31jzi6";
   };
 
   desktopItems = [
@@ -33,10 +34,14 @@ stdenv.mkDerivation rec {
       name = "orthorobot";
       exec = "orthorobot";
       icon = icon;
-      comment = "Robot game";
+      comment = "A perspective based puzzle game, where you flatten the view to move across gaps";
       desktopName = "Orthorobot";
-      genericName = "orthorobot";
-      categories = [ "Game" ];
+      genericName = "Perspective puzzle game";
+      categories = [
+        "Game"
+        "LogicGame"
+      ];
+      singleMainWindow = true;
     })
   ];
 
@@ -57,22 +62,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installPhase = ''
-    runHook preInstall
+  buildPhase = ''
+    runHook preBuild
     zip -9 -r orthorobot.love ./*
     strip-nondeterminism --type zip orthorobot.love
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
     install -Dm444 -t $out/share/games/lovegames/ orthorobot.love
     makeWrapper ${love}/bin/love $out/bin/orthorobot \
                 --add-flags $out/share/games/lovegames/orthorobot.love
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Recharge the robot";
     mainProgram = "orthorobot";
-    maintainers = with maintainers; [ leenaars ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ leenaars ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.wtfpl;
     downloadPage = "https://stabyourself.net/orthorobot/";
   };
-}
+})
