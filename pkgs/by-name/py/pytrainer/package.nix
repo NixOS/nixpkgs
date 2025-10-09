@@ -106,6 +106,8 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    # https://github.com/pytrainer/pytrainer/issues/280
+    broken = true;
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
     mainProgram = "pytrainer";
