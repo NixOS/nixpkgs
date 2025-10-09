@@ -18,7 +18,6 @@
   darwin,
   xcbuild,
   swiftPackages,
-  apple-sdk_13,
   openssl,
   getconf,
   python3,
@@ -112,15 +111,12 @@ stdenv.mkDerivation rec {
     krb5
     lttng-ust_2_12
   ]
-  ++ lib.optionals isDarwin (
-    [
-      xcbuild
-      swift
-      krb5
-      sigtool
-    ]
-    ++ lib.optional (lib.versionAtLeast version "10") apple-sdk_13
-  );
+  ++ lib.optionals isDarwin [
+    xcbuild
+    swift
+    krb5
+    sigtool
+  ];
 
   # This is required to fix the error:
   # > CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.

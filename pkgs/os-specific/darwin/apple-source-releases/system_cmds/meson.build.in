@@ -15,9 +15,11 @@ add_project_arguments(
     '-DPRIVATE=1',
     # From bsd/sys/private_event.h in xnu
     '-Dkqueue_id_t=uint64_t',
+    # These are not defined automatically by Clang. Not having them defined causes compilation failures.
+    '-DTARGET_OS_EXCLAVECORE=0',
+    '-DTARGET_OS_EXCLAVEKIT=0',
     language : 'c',
 )
-sdk_version = get_option('sdk_version')
 
 
 # Dependencies
@@ -39,15 +41,7 @@ dbm = cc.find_library('dbm')
 ncurses = dependency('ncurses')
 openbsm = cc.find_library('bsm')
 pam = cc.find_library('pam')
-
-# Feature Tests
-if sdk_version.version_compare('<12')
-    add_project_arguments(
-        '-DIOMainPort=IOMasterPort',
-        '-DkIOMainPortDefault=kIOMasterPortDefault',
-        language : 'c'
-    )
-endif
+util = cc.find_library('util')
 
 
 # Generators
@@ -278,14 +272,11 @@ executable(
 
 executable(
     'latency',
-    build_by_default : sdk_version.version_compare('>=12'),
-    dependencies : [ ncurses ],
-    install : sdk_version.version_compare('>=12'),
+    dependencies : [ util, ncurses ],
+    install : true,
     sources : 'latency/latency.c',
 )
-if sdk_version.version_compare('>=12')
-    install_man('latency/latency.1')
-endif
+install_man('latency/latency.1')
 
 executable(
     'login',
@@ -303,27 +294,21 @@ executable(
 
 executable(
     'lskq',
-    build_by_default : sdk_version.version_compare('>=12'),
-    install : sdk_version.version_compare('>=12'),
+    install : true,
     sources : 'lskq/lskq.c',
 )
-if sdk_version.version_compare('>=12')
-    install_man('lskq/lskq.1')
-endif
+install_man('lskq/lskq.1')
 
 executable(
     'lsmp',
-    build_by_default : sdk_version.version_compare('>=12'),
-    install : sdk_version.version_compare('>=12'),
+    install : true,
     sources : [
         'lsmp/lsmp.c',
         'lsmp/port_details.c',
         'lsmp/task_details.c'
     ]
 )
-if sdk_version.version_compare('>=12')
-    install_man('lsmp/lsmp.1')
-endif
+install_man('lsmp/lsmp.1')
 
 executable(
     'ltop',
@@ -469,14 +454,11 @@ install_man('sa/sa.8')
 
 executable(
     'sc_usage',
-    build_by_default : sdk_version.version_compare('>=12'),
-    dependencies : ncurses,
-    install : sdk_version.version_compare('>=12'),
+    dependencies : [ncurses, util],
+    install : true,
     sources : 'sc_usage/sc_usage.c',
 )
-if sdk_version.version_compare('>=12')
-    install_man('sc_usage/sc_usage.1')
-endif
+install_man('sc_usage/sc_usage.1')
 
 executable('shutdown',
     # Requires IOKitUser kext APIs
@@ -599,4 +581,3 @@ executable(
     sources : 'zprint/zprint.c',
 )
 # install_man('zprint/zprint.1')
-
