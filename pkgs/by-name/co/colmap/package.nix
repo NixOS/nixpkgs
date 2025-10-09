@@ -129,7 +129,7 @@ stdenv'.mkDerivation {
     mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = if cudaSupport then platforms.linux else platforms.unix;
     maintainers = with maintainers; [
       lebastr
       usertam
