@@ -255,7 +255,7 @@ in
           in
           "${cfg.package}/bin/asterisk -U ${asteriskUser} -C /etc/asterisk/asterisk.conf ${argString} -F";
         ExecReload = ''
-          ${cfg.package}/bin/asterisk -x "core reload"
+          ${cfg.package}/bin/asterisk -C /etc/asterisk/asterisk.conf -x "core reload"
         '';
         Type = "forking";
         PIDFile = "/run/asterisk/asterisk.pid";
