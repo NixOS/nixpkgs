@@ -35,7 +35,9 @@ let
     # write NixOS settings as JSON
     (
       umask 077
-      ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
+      ${lib.getExe pkgs.envsubst} < ${settingsFile} > settings.yml
+      ln -sf ${faviconsSettingsFile} favicons.toml
+      ln -sf ${limiterSettingsFile} limiter.toml
     )
   '';
 in
@@ -104,23 +106,6 @@ in
 
           ::: {.note}
           For available settings, see the Searx [docs](https://docs.searxng.org/admin/settings/index.html).
-          :::
-        '';
-      };
-
-      settingsFile = mkOption {
-        type = types.path;
-        default = "${runDir}/settings.yml";
-        description = ''
-          The path of the Searx server settings.yml file.
-          If no file is specified, a default file is used (default config file has debug mode enabled).
-
-          ::: {.note}
-          Setting this options overrides [](#opt-services.searx.settings).
-          :::
-
-          ::: {.warning}
-          This file, along with any secret key it contains, will be copied into the world-readable Nix store.
           :::
         '';
       };
@@ -306,7 +291,7 @@ in
           enable-threads = true;
           module = "searx.webapp";
           env = [
-            "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+            "SEARXNG_SETTINGS_PATH=${runDir}"
           ];
           buffer-size = 32768;
           pythonPackages = _: [ cfg.package ];
@@ -357,7 +342,7 @@ in
           EnvironmentFile = cfg.environmentFile;
         };
         environment = {
-          SEARXNG_SETTINGS_PATH = cfg.settingsFile;
+          SEARXNG_SETTINGS_PATH = runDir;
         };
       };
 
