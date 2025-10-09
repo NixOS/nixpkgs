@@ -128,6 +128,7 @@ stdenv.mkDerivation {
 
   cmakeDir = "../sources";
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DCMAKE_SKIP_BUILD_RPATH=ON"
     "-DTIFF_INCLUDE_DIR=${opentoonz-libtiff.dev}/include"
     "-DTIFF_LIBRARY=${opentoonz-libtiff.out}/lib/libtiff.so"
