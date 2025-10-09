@@ -5180,6 +5180,7 @@ with pkgs;
     julia_19-bin
     julia_110-bin
     julia_111-bin
+    julia_112-bin
     julia_19
     julia_110
     julia_111
@@ -5190,7 +5191,7 @@ with pkgs;
   julia = julia-stable;
 
   julia-lts-bin = julia_110-bin;
-  julia-stable-bin = julia_111-bin;
+  julia-stable-bin = julia_112-bin;
   julia-bin = julia-stable-bin;
 
   kotlin = callPackage ../development/compilers/kotlin { };
