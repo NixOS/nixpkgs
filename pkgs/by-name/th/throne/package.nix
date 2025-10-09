@@ -4,6 +4,7 @@
 
   buildGoModule,
   fetchFromGitHub,
+  fetchurl,
   makeDesktopItem,
 
   protobuf,
@@ -16,19 +17,22 @@
 
   qt6Packages,
 
-  sing-geoip,
-  sing-geosite,
+  # override if you want to have more up-to-date rulesets
+  throne-srslist ? fetchurl {
+    url = "https://raw.githubusercontent.com/throneproj/routeprofiles/60eb41122de3aa53c701ec948cd52d7a26adafea/srslist.h";
+    hash = "sha256-k9vPtcusML4GR81UVeJ7jhuDHGk5Qh0eKw/cSOxBd5g=";
+  },
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "throne";
-  version = "1.0.0";
+  version = "1.0.8-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "throneproj";
     repo = "Throne";
-    tag = finalAttrs.version;
-    hash = "sha256-CN0zf3Zp6G++fzvmsEfyZVM3pN08CorsejR1Q4ooGXo=";
+    rev = "54af50fc414ffaf98b3ff88e3dd8aa041c65e041";
+    hash = "sha256-kfvsGw0RUYHkOUSeSA4egLl+gQqN4KkZKXX3CQQzYks=";
   };
 
   strictDeps = true;
@@ -52,16 +56,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # if compiled with NKR_PACKAGE, Throne assumes geoip.db and geosite.db will be found in ~/.config/Throne
-    # we already package those two files in nixpkgs
-    # we can't place file at that location using our builder so we must change the search directory to be relative to the built executable
-    ./search-for-geodata-in-install-location.patch
-
     # disable suid request as it cannot be applied to throne-core in nix store
     # and prompt users to use NixOS module instead. And use throne-core from PATH
     # to make use of security wrappers
     ./nixos-disable-setuid-request.patch
   ];
+
+  preBuild = ''
+    ln -s ${throne-srslist} ./srslist.h
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -73,10 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$out/share/throne/Throne" "$out/bin/"
 
     ln -s ${finalAttrs.passthru.core}/bin/Core "$out/share/throne/Core"
-
-    # our patch makes Throne look for geodata files next to the executable
-    ln -s ${sing-geoip}/share/sing-box/geoip.db "$out/share/throne/geoip.db"
-    ln -s ${sing-geosite}/share/sing-box/geosite.db "$out/share/throne/geosite.db"
 
     runHook postInstall
   '';
@@ -104,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
     proxyVendor = true;
-    vendorHash = "sha256-W6T/vqZgWDVz1WCxx2eArnP7bVm2D2+RM/cZSSY+Hbo=";
+    vendorHash = "sha256-thMRkbs5fS7KsUSRSeUaB2xkTjs7kJ9AKXW0+OXN3io=";
 
     nativeBuildInputs = [
       protobuf
@@ -132,8 +131,8 @@ stdenv.mkDerivation (finalAttrs: {
       "with_quic"
       "with_wireguard"
       "with_utls"
-      "with_ech"
       "with_dhcp"
+      "with_tailscale"
     ];
   };
 
