@@ -4,6 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   gforth,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {
@@ -39,6 +40,8 @@ stdenv.mkDerivation {
     $out/bin/gbforth examples/simon/simon.fs
     runHook postInstallCheck
   '';
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://gbforth.org/";
