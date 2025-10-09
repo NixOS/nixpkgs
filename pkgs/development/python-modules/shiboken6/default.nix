@@ -17,7 +17,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://code.qt.io/pyside/pyside-setup.git";
-    rev = "97af685d5b777323690704fb9848f50aa2728ce9";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-zJV4rrqr2bzWFEG1CWOI+y6wbfQDvWAst6T3aSssj6M=";
   };
 
