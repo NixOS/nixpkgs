@@ -948,13 +948,13 @@
     "vendorHash": "sha256-AlB9tC3KejgUAjjT2pY7Q2mTS/AV4QRusSnyPiOheXE="
   },
   "opentelekomcloud": {
-    "hash": "sha256-o4RIRu4SqjA+8mI+XvB1m8ecm2blINkK59UJOYGCyKk=",
+    "hash": "sha256-3+ravOgTUzGXKd/e12opM/xcm0Vqaz4lLbpo3MLetrg=",
     "homepage": "https://registry.terraform.io/providers/opentelekomcloud/opentelekomcloud",
     "owner": "opentelekomcloud",
     "repo": "terraform-provider-opentelekomcloud",
-    "rev": "v1.36.48",
+    "rev": "v1.36.49",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-TwF/DxoPDtaXyLhE432Su7h/nGncAP8ArsbnvcnABH8="
+    "vendorHash": "sha256-Nvq1/t5TlLSBon8jlPmPUduQtFGKBLQRTZKBmpYHV1M="
   },
   "openwrt": {
     "hash": "sha256-z78IceF2VJtiQpVqC+rTUDsph73LZawIK+az3rEhljA=",
