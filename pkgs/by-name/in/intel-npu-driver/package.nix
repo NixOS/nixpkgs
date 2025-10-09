@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-npu-driver";
-  version = "1.23.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "linux-npu-driver";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-Lc+FsW0bM2cIqEXpCd9+nvFh70xCbY6aMSHZIjESxhs=";
+    hash = "sha256-pnQ4OV+7bKivhS5lVmdz5Zb9kqaSJK0eK0lK+68wzYU=";
   };
 
   buildInputs = [
