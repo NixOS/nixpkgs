@@ -21,11 +21,13 @@ let
   runDir = "/run/searx";
 
   cfg = config.services.searx;
+  yamlFormat = pkgs.formats.yaml { };
+  tomlFormat = pkgs.formats.toml { };
 
-  settingsFile = pkgs.writeText "settings.yml" (builtins.toJSON cfg.settings);
+  settingsFile = yamlFormat.generate "settings.yml" cfg.settings;
 
-  faviconsSettingsFile = (pkgs.formats.toml { }).generate "favicons.toml" cfg.faviconsSettings;
-  limiterSettingsFile = (pkgs.formats.toml { }).generate "limiter.toml" cfg.limiterSettings;
+  faviconsSettingsFile = tomlFormat.generate "favicons.toml" cfg.faviconsSettings;
+  limiterSettingsFile = tomlFormat.generate "limiter.toml" cfg.limiterSettings;
 
   generateConfig = ''
     cd ${runDir}
@@ -36,20 +38,6 @@ let
       ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
     )
   '';
-
-  settingType =
-    with types;
-    (oneOf [
-      bool
-      int
-      float
-      str
-      (listOf settingType)
-      (attrsOf settingType)
-    ])
-    // {
-      description = "JSON value";
-    };
 in
 {
   options = {
@@ -89,7 +77,7 @@ in
 
       settings = mkOption {
         type = types.submodule {
-          freeformType = settingType;
+          freeformType = yamlFormat.type;
           imports = [
             (mkRenamedOptionModule [ "redis" ] [ "valkey" ])
           ];
@@ -138,7 +126,7 @@ in
       };
 
       faviconsSettings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf tomlFormat.type;
         default = { };
         example = literalExpression ''
           {
@@ -166,7 +154,7 @@ in
       };
 
       limiterSettings = mkOption {
-        type = types.attrsOf settingType;
+        type = types.attrsOf tomlFormat.type;
         default = { };
         example = literalExpression ''
           {
