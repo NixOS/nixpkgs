@@ -29052,6 +29052,11 @@
     githubId = 332534;
     name = "Zach Shipko";
   };
+  zstg = {
+    email = "zestig@duck.com";
+    github = "zstg";
+    githubId = "69384921";
+  };
   ztzg = {
     email = "dd@crosstwine.com";
     github = "ztzg";
