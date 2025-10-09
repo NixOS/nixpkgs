@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libiio,
 }:
@@ -20,6 +21,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libiio ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/analogdevicesinc/libad9361-iio/pull/133/commits/81e91e78c8736f20efedf28de12820b5750735f4.patch";
+      hash = "sha256-puDOekOWg/pYhrVRP0W1FcSSbOnFLa72odf4ccXeias=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix iio include path on darwin to match linux
