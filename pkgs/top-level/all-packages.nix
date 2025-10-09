@@ -13737,7 +13737,6 @@ with pkgs;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
 
-  xpilot-ng = callPackage ../games/xpilot { };
   bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
   bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix { };
 
