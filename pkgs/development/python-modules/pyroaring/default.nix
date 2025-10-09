@@ -10,20 +10,15 @@
 
 buildPythonPackage rec {
   pname = "pyroaring";
-  version = "1.0.2";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Ezibenroc";
     repo = "PyRoaringBitMap";
     tag = version;
-    hash = "sha256-g+xpQ2DuVn8b0DiIOY69QOH6iwOYHG4bltX1zbDemdI=";
+    hash = "sha256-of4BuTHtIIwdpWUm0d9CByWc8YiaxXNQ1oDXUZYWRjU=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "cython>=3.0.2,<3.1.0" "cython"
-  '';
 
   build-system = [
     cython
