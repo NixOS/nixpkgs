@@ -28,26 +28,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.17.2";
+  version = "2025.18.2";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bviodruPqvw2L9E6qSO0ihg9L/qK33A03bpr1bI+xR8=";
+    hash = "sha256-9upf/4Ix4ReV4OlkPMzLMJo4DlAXydQLSEp+GM+tN2g=";
     fetchSubmodules = true;
   };
 
-  patches =
-    lib.optionals withSharedLLVM [
-      # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
-      ./1-shared-llvm.patch
-    ]
-    ++ lib.optionals withGlslang [
-      # Upstream depends on glslang 13 and there are minor breaking changes in glslang 15, the version
-      # we ship in nixpkgs.
-      ./2-glslang-15.patch
-    ];
+  patches = lib.optionals withSharedLLVM [
+    # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
+    ./1-shared-llvm.patch
+  ];
+
+  postPatch = ''
+    # Header location has moved in glslang 15+
+    substituteInPlace source/slang-glslang/slang-glslang.cpp \
+      --replace-fail '"SPIRV/GlslangToSpv.h"' '"glslang/SPIRV/GlslangToSpv.h"'
+  '';
 
   outputs = [
     "out"
@@ -124,7 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
 
   postInstall = ''
-    mv "$out/cmake" "$dev/cmake"
+    mkdir -p $dev/lib
+    mv {$out,$dev}/lib/cmake
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
