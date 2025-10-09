@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "GUI, CLI, and library for playing chess";
     homepage = "https://cutechess.com/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = with lib.platforms; (linux ++ windows);
     mainProgram = "cutechess";
   };
