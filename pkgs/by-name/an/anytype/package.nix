@@ -20,7 +20,7 @@ buildNpmPackage (finalAttrs: {
     owner = "anyproto";
     repo = "anytype-ts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S0zA6/55je/iLkgfPyxkFeyA3zHjI3Y9RlSS76eMWyk=";
+    hash = "sha256-HLYYuMtgvF0UHHnThEWSpLIZEvLxNrOtkoXEhSAT24A=";
   };
 
   locales = fetchFromGitHub {
@@ -30,7 +30,7 @@ buildNpmPackage (finalAttrs: {
     hash = "sha256-MOR7peovTYYQR96lOoxyETY0aOH6KcB9vXCqpXKxI/4=";
   };
 
-  npmDepsHash = "sha256-RL4f9N0DX+qhxM4x5Vdku3EydRIa9IQUYB3R2wJbY4E=";
+  npmDepsHash = "sha256-ohlHY7zw+GyaNuwI2t7dQj1bQkXH//LiyiHyi2B+/9I=";
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
