@@ -18,6 +18,15 @@ let
         };
         doCheck = false;
       });
+      # Pin setuptools_scm to a 8.x release compatible with pyproject requirements
+      setuptools_scm = prev.setuptools_scm.overridePythonAttrs (old: rec {
+        version = "8.1.0";
+        src = old.src.override {
+          inherit version;
+          # Replace this hash with the real sha256 from the sdist
+          hash = "sha256-Qt6htldxy6k7elFdZaZdgkblYHaKZrkQalksjn8myKc=";
+        };
+      });
     };
   };
 in
@@ -46,10 +55,14 @@ py.pkgs.buildPythonApplication rec {
 
   build-system = with py.pkgs; [
     setuptools
-    setuptools-scm
+    setuptools_scm
   ];
 
-  nativeBuildInputs = [ git ];
+  nativeBuildInputs = [
+    git
+    setuptools_scm
+    tomli
+  ];
 
   dependencies = with py.pkgs; [
     argcomplete
