@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "0a2dswbv4xddb2l2d55hc43lzvjwrjs5z9am7v6i0p0mi2fmc89s";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   # Fix build with CMake 4: https://github.com/NixOS/nixpkgs/issues/449801
