@@ -214,22 +214,17 @@ in
   };
 
   imports = [
+    (mkRemovedOptionModule [
+      "services"
+      "searx"
+      "settingsFile"
+    ] "This option has been removed to improve systemd service sandboxing.")
     (mkRenamedOptionModule [ "services" "searx" "configFile" ] [ "services" "searx" "settingsFile" ])
     (mkRenamedOptionModule [ "services" "searx" "runInUwsgi" ] [ "services" "searx" "configureUwsgi" ])
   ];
 
   config = mkIf cfg.enable {
-    environment = {
-      etc = {
-        "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
-          source = faviconsSettingsFile;
-        };
-        "searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
-          source = limiterSettingsFile;
-        };
-      };
-      systemPackages = [ cfg.package ];
-    };
+    environment.systemPackages = [ cfg.package ];
 
     services = {
       nginx = lib.mkIf cfg.configureNginx {
@@ -335,8 +330,50 @@ in
         ];
         serviceConfig = {
           User = "searx";
+          DynamicUser = true;
           Group = "searx";
           ExecStart = lib.getExe cfg.package;
+
+          CacheDirectory = "searx";
+          CacheDirectoryMode = "0700";
+
+          ReadOnlyPaths = [ runDir ];
+          ReadWritePaths = lib.optional cfg.redisCreateLocally config.services.redis.servers.searx.unixSocket;
+
+          CapabilityBoundingSet = null;
+          DevicePolicy = "closed";
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          PrivateIPC = true;
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          SystemCallArchitectures = "native";
+          SystemCallErrorNumber = "EPERM";
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
         }
         // optionalAttrs (cfg.environmentFile != null) {
           EnvironmentFile = cfg.environmentFile;
