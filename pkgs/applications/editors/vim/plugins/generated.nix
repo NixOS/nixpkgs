@@ -6180,6 +6180,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  headhunter-nvim = buildVimPlugin {
+    pname = "headhunter.nvim";
+    version = "2025-10-06";
+    src = fetchFromGitHub {
+      owner = "StackInTheWild";
+      repo = "headhunter.nvim";
+      rev = "45eff1653c27a19c47c8a2dfed4897d4a434408d";
+      sha256 = "14p5kcn5drbfsklyvdajfgxyax6d5rpkn8qdnabibsqrw31bkj91";
+    };
+    meta.homepage = "https://github.com/StackInTheWild/headhunter.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   headlines-nvim = buildVimPlugin {
     pname = "headlines.nvim";
     version = "2024-09-13";
