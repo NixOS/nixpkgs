@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   pydantic,
   typing-extensions,
   uv-build,
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-zlIZzfgHZPEuiZu3JNX74Cg1jPNaO1HUhMtpxoyOoqk=";
   };
+
+  patches = [
+    # https://github.com/astral-sh/sigstore-models/pull/4
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/Prince213/sigstore-models/commit/0cbd46ce7ebc8a5d2825b8fc98147a9ba4b3be70.patch?full_index=1";
+      hash = "sha256-6DLhhHkGW2Ok9xwKx6YT5BkCqQNH/Ja/KEO9FHl4NXo=";
+    })
+  ];
 
   build-system = [ uv-build ];
 
