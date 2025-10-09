@@ -6,17 +6,14 @@
   cryptography,
   fetchFromGitHub,
   msgpack,
-  pythonOlder,
-  redis,
   setuptools,
+  redis,
 }:
 
 buildPythonPackage rec {
   pname = "channels-redis";
   version = "4.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "django";
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Redis-backed ASGI channel layer implementation";
     homepage = "https://github.com/django/channels_redis/";
-    changelog = "https://github.com/django/channels_redis/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/django/channels_redis/blob/${src.tag}/CHANGELOG.txt";
     license = licenses.bsd3;
     maintainers = with maintainers; [ mmai ];
   };
