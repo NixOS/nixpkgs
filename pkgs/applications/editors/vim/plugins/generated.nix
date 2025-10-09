@@ -319,6 +319,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  Otree-nvim = buildVimPlugin {
+    pname = "Otree.nvim";
+    version = "2025-09-18";
+    src = fetchFromGitHub {
+      owner = "Eutrius";
+      repo = "Otree.nvim";
+      rev = "1540ea0a300916f1c43063fda185463b3e8f2f40";
+      sha256 = "0ydvjac2vw1afaz5wibc4ws1p6rng0d4hkb8z0ljdxbjrjqavdb4";
+    };
+    meta.homepage = "https://github.com/Eutrius/Otree.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   PreserveNoEOL = buildVimPlugin {
     pname = "PreserveNoEOL";
     version = "2013-06-14";
