@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   requests,
   polling,
@@ -16,8 +15,6 @@ buildPythonPackage rec {
   pname = "linode-api";
   version = "5.37.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   # Sources from Pypi exclude test fixtures
   src = fetchFromGitHub {
