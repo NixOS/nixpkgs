@@ -13499,11 +13499,6 @@ with pkgs;
 
   legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
 
-  lincity_ng = callPackage ../games/lincity/ng.nix {
-    # https://github.com/lincity-ng/lincity-ng/issues/25
-    physfs = physfs_2;
-  };
-
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;
   };
