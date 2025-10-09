@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Old-school vertical shoot-em-up / bullet hell";
     mainProgram = "garden";
     homepage = "https://sourceforge.net/projects/garden/";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     license = lib.licenses.gpl3;
   };
 })
