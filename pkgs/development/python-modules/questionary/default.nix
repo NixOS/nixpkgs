@@ -37,6 +37,7 @@ buildPythonPackage rec {
     "test_blank_line_fix"
 
     # TypeError: Attrs.__new__() missing 1 required positional argument: 'dim'
+    # https://github.com/tmbo/questionary/issues/461
     "test_print_with_style"
   ];
 
