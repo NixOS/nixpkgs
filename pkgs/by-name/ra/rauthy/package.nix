@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rauthy";
-  version = "0.32.4";
+  version = "0.32.5";
 
   src = fetchFromGitHub {
     owner = "sebadob";
     repo = "rauthy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bGBSwv2js9Bu8n904cIM5jwZwjXugoUkYSqL/5tbDeU=";
+    hash = "sha256-VrQ2GABWs+n7M01cLASSAkzWkqE1kAeFK+jCk5orl90=";
   };
 
-  cargoHash = "sha256-SUGmGWpJz1+gtie/jCZ7Ajt7jBtc5f1hZyaYXV8xgPY=";
+  cargoHash = "sha256-GRIHC8sKHL8szT5YWb8uVS8VuIOQW9LGvXlU/rUfqcg=";
 
   nativeBuildInputs = [
     pkg-config
@@ -57,7 +57,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       "-p2"
     ];
 
-    npmDepsHash = "sha256-khkHAkz6p6i9/b5ITKQMrSz2kyOPFHEBSAJY78j8Y+I=";
+    npmDepsHash = "sha256-I5R+9Xb5G8w/rxsuEBJE0DfPi7TXC0o0S0ZbTWJGFNY=";
   };
 
   passthru = {
