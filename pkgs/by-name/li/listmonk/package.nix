@@ -11,16 +11,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "listmonk";
-  version = "3.0.0";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "knadh";
     repo = "listmonk";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-eNX+2ens+mz2V8ZBHtFFHDVbi64AAiiREElMjh67Dd8=";
+    hash = "sha256-rb0/T7I6yLGJBXikOHuXwDdW20nFXpssXfgViHSIIOU=";
   };
 
-  vendorHash = "sha256-XAm2VfX1nHWTuAV2COEn8qrqPNv0xbaWgTYCpjrEfMw=";
+  vendorHash = "sha256-bFUWjaaFHB2pnGHBsvUBS2icQkMrB/CfXFa+3vGFFvU=";
 
   nativeBuildInputs = [
     stuffbin
@@ -44,6 +44,7 @@ buildGoModule (finalAttrs: {
         "config.toml.sample"
         "schema.sql"
         "queries.sql"
+        "permissions.json"
         "static/public:/public"
         "static/email-templates"
         "${finalAttrs.passthru.frontend}:/admin"
