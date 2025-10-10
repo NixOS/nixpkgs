@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/szechyjs/mbelib";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.aciceri ];
   };
 }
