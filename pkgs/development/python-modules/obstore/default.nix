@@ -18,51 +18,53 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "obstore";
-    tag = "py-v${version}";
-    hash = "sha256-usLIJsnH14Dtb8YNYu8CwHKZH8e0YVPMK44bjDkfOqE=";
+    rev = "bffc415b866f3329fd5a4ff51f0f0c09f401ebae";
+    hash = "sha256-leqLV7O1kf65yMoO4sG9VStuSoFj9WnCmhUIabD8gNc=";
+    # tag = "py-v${version}";
+    # hash = "sha256-usLIJsnH14Dtb8YNYu8CwHKZH8e0YVPMK44bjDkfOqE=";
   };
 
-  patches = [
-    ./update-object_store-dep.patch
-  ];
+  # patches = [
+  #   ./update-object_store-dep.patch
+  # ];
 
-  # sourceRoot = "${src.name}/obstore";
-  # cargoRoot = "..";
-  buildAndTestSubdir = "obstore";
+  sourceRoot = "${src.name}/obstore";
+  cargoRoot = "..";
+  # buildAndTestSubdir = "obstore";
 
-  postPatch = ''
-    # substituteInPlace Cargo.toml \
-    #   --replace-fail \
-    #     'object_store = "0.12.3"' \
-    #     'object_store = "0.12.4"'
-    #
-    # substituteInPlace pyo3-object_store/Cargo.toml \
-    #   --replace-fail \
-    #     'object_store = { version = "0.12"' \
-    #     'object_store = { version = "0.12.4"'
+  # postPatch = ''
+  #   # substituteInPlace Cargo.toml \
+  #   #   --replace-fail \
+  #   #     'object_store = "0.12.3"' \
+  #   #     'object_store = "0.12.4"'
+  #   #
+  #   # substituteInPlace pyo3-object_store/Cargo.toml \
+  #   #   --replace-fail \
+  #   #     'object_store = { version = "0.12"' \
+  #   #     'object_store = { version = "0.12.4"'
+  #
+  #   ln -sf ${./Cargo.lock} Cargo.lock
+  # '';
 
-    ln -sf ${./Cargo.lock} Cargo.lock
-  '';
-
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pyo3-file-0.13.0" = "sha256-XHeV4T+l5QDNTDAkQEfrSom90fRCgDDEAKrKrypk36k=";
-    };
-  };
-
-  # cargoDeps = rustPlatform.fetchCargoVendor {
-  #   inherit
-  #     pname
-  #     version
-  #     src
-  #     patches
-  #     # sourceRoot
-  #     # cargoRoot
-  #     # cargoPatches
-  #     ;
-  #   hash = "sha256-m3SNWjHsQcrH6v8Z6CnURhuXNQRgvtGreM0g91rOv6Q=";
+  # cargoDeps = rustPlatform.importCargoLock {
+  #   lockFile = ./Cargo.lock;
+  #   outputHashes = {
+  #     "pyo3-file-0.13.0" = "sha256-XHeV4T+l5QDNTDAkQEfrSom90fRCgDDEAKrKrypk36k=";
+  #   };
   # };
+
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      cargoRoot
+      # cargoPatches
+      ;
+    # hash = "sha256-m3SNWjHsQcrH6v8Z6CnURhuXNQRgvtGreM0g91rOv6Q=";
+    hash = "sha256-gwiJo7kwDTfmP3H+wuHoV5Z2jC/vMIYd7DHnGx3CCDk=";
+  };
 
   build-system = [
     rustPlatform.maturinBuildHook
