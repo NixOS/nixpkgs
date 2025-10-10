@@ -99,7 +99,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zed-editor";
-  version = "0.207.3";
+  version = "0.207.4";
 
   outputs = [
     "out"
@@ -112,7 +112,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-GvpdQvjXi61mCJeoAPZDRYcPAjDKlAvRu9mkvqCenaI=";
+    hash = "sha256-IKACHMKHIyq8UuqWlA6U/cdCi+wrevZwl2CINSWmmRc=";
   };
 
   patches = [
@@ -143,7 +143,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
     '';
 
-  cargoHash = "sha256-ChwzqOaPkQj4PCBiKPpuw+JfMiY3ajgmFc37/frUUKE=";
+  cargoHash = "sha256-z1mp4r/Is4jWMeEO3qwdDGVDVQ9wAsIJIg3FaMzaCfQ=";
 
   nativeBuildInputs = [
     cmake
