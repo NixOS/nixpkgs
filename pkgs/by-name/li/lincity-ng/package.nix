@@ -16,13 +16,18 @@
   libxml2,
   libxmlxx5,
   libxslt,
-  physfs,
+  physfs_2,
   pkg-config,
   xorgproto,
   zlib,
   gettext,
   include-what-you-use,
 }:
+
+let
+  # https://github.com/lincity-ng/lincity-ng/issues/25
+  physfs = physfs_2;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lincity-ng";
@@ -31,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lincity-ng";
     repo = "lincity-ng";
-    rev = "lincity-ng-${finalAttrs.version}";
+    tag = "lincity-ng-${finalAttrs.version}";
     hash = "sha256-ACJVhMq2IEJNrbAdmkgHxQV0uKSXpwR8a/5jcrQS+oI=";
   };
 
@@ -75,11 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
     -I${lib.getDev SDL2_mixer}/include/SDL2
   ";
 
-  meta = with lib; {
+  meta = {
     description = "City building game";
     mainProgram = "lincity-ng";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
 })
