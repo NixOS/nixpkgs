@@ -12735,6 +12735,13 @@ with pkgs;
     }
   );
 
+  helium = callPackage ../applications/networking/browsers/chromium (
+    (config.chromium or { })
+    // {
+      variant = "helium";
+    }
+  );
+
   unigine-tropics = pkgsi686Linux.callPackage ../applications/graphics/unigine-tropics { };
 
   unigine-sanctuary = pkgsi686Linux.callPackage ../applications/graphics/unigine-sanctuary { };
