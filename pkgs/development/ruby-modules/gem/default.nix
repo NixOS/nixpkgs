@@ -307,9 +307,6 @@ lib.makeOverridable (
         platforms = ruby.meta.platforms;
         mainProgram = gemName;
       }
-      // (lib.optionalAttrs ((attrs.src.meta or { }) ? identifiers) {
-        inherit (attrs.src.meta) identifiers;
-      })
       // meta;
     }
   )
