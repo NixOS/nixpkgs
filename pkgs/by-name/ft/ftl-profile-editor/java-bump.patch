@@ -1,0 +1,39 @@
+diff --git a/pom.xml b/pom.xml
+index ad3d57d..5264869 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -6,9 +6,9 @@
+ 	<name>FTL Profile Editor</name>
+ 
+ 	<properties>
+-		<jdk.version>1.6</jdk.version>
+-		<maven.compiler.source>1.6</maven.compiler.source>
+-		<maven.compiler.target>1.6</maven.compiler.target>
++    <jdk.version>1.8</jdk.version>
++    <maven.compiler.source>1.8</maven.compiler.source>
++    <maven.compiler.target>1.8</maven.compiler.target>
+ 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+ 	</properties>
+ 
+@@ -63,7 +63,19 @@
+ 		<dependency>
+ 			<groupId>com.beust</groupId>
+ 			<artifactId>jcommander</artifactId>
+-			<version>1.48</version>  <!-- Since 1.55, requires Java 7. Since 1.58, Java 8. -->
++      <version>1.48</version> <!-- Since 1.55, requires Java 7. Since 1.58, Java 8. -->
++    </dependency>
++    <dependency>
++      <groupId>jakarta.xml.bind</groupId>
++      <artifactId>jakarta.xml.bind-api</artifactId>
++      <version>2.3.2</version>
++    </dependency>
++
++    <!-- Runtime, com.sun.xml.bind module -->
++    <dependency>
++      <groupId>org.glassfish.jaxb</groupId>
++      <artifactId>jaxb-runtime</artifactId>
++      <version>2.3.2</version>
+ 		</dependency>
+ 	</dependencies>
+   
+
