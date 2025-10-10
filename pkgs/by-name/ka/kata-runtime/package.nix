@@ -11,7 +11,7 @@
 }:
 
 let
-  version = "3.16.0";
+  version = "3.21.0";
 
   kata-images = callPackage ./kata-images.nix { inherit version; };
 
