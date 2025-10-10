@@ -41,6 +41,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "passlib" ];
 
+  disabledTestPaths = [
+    # https://github.com/notypecheck/passlib/issues/18
+    "tests/test_handlers_bcrypt.py::bcrypt_bcrypt_test::test_70_hashes"
+    "tests/test_handlers_bcrypt.py::bcrypt_bcrypt_test::test_77_fuzz_input"
+    "tests/test_handlers_django.py::django_bcrypt_test::test_77_fuzz_input"
+    "tests/test_handlers_bcrypt.py::bcrypt_bcrypt_test::test_secret_w_truncate_size"
+    "tests/test_handlers_django.py::django_bcrypt_test::test_secret_w_truncate_size"
+  ];
+
   disabledTests = [
     # timming sensitive
     "test_dummy_verify"
