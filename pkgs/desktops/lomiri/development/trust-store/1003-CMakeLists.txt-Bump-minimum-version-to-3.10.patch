@@ -1,0 +1,25 @@
+From 7faa21b017ed7e6603102ad12a0aa254119fcf0e Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 10 Oct 2025 23:38:57 +0200
+Subject: [PATCH 2/2] CMakeLists.txt: Bump minimum version to 3.10
+
+Support for 3.5 is still there in current CMake 4, but is up next on the chopping block.
+
+Just bump it as well, while we're at it.
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 371d4d9..e277ad4 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.5)
++cmake_minimum_required(VERSION 3.10)
+ 
+ project(trust-store)
+ 
+-- 
+2.51.0
+

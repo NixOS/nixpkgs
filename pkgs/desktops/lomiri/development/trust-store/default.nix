@@ -56,6 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix compatibility with glog 0.7.x
     # Remove when https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/18 merged & in release
     ./1001-treewide-Switch-to-glog-CMake-module.patch
+
+    # Fix compatibility with CMake 4
+    # Remove when https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/20 merged & in release
+    ./1002-3rd_party-xdg-CMakeLists.txt-Bump-minimum-version-to.patch
+    ./1003-CMakeLists.txt-Bump-minimum-version-to-3.10.patch
   ];
 
   postPatch = ''
