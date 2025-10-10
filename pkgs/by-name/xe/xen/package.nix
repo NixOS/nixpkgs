@@ -186,6 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
 
+    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+    (fetchpatch {
+      url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
+      hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
+    })
+
     # XSA 472
     (fetchpatch {
       url = "https://xenbits.xen.org/xsa/xsa472-1.patch";
