@@ -103,7 +103,7 @@
       type = lib.types.nullOr lib.types.str;
       default = if config.socket.type == "unix" then "0600" else null;
       defaultText = lib.literalExpression ''
-        if services.gunicorn.instances.<name>.socket.type == "unix" then "0600" else null
+        if config.services.gunicorn.instances.<name>.socket.type == "unix" then "0600" else null
       '';
       description = ''
         Mode to be set on the UNIX socket.
