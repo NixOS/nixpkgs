@@ -200,6 +200,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+    substituteInPlace $dev/lib/cmake/wireshark/WiresharkTargets-release.cmake \
+      --replace-fail "\''${_IMPORT_PREFIX}" "$out"
   '';
 
   # This is done to remove some binary wrappers that wrapQtApps adds in *.app directories.
