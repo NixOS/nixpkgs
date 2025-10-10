@@ -1,0 +1,3012 @@
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+index 9082e1e..0dc24db 100644
+--- a/.github/workflows/ci.yml
++++ b/.github/workflows/ci.yml
+@@ -67,6 +67,12 @@ jobs:
+                     - python: "3.13"
+                       pybind11-branch: "v2.13"
+                       numpy-format: "numpy-array-use-type-var"
++                    - python: "3.13"
++                      pybind11-branch: "v3.0.0"
++                      numpy-format: "numpy-array-wrap-with-annotated"
++                    - python: "3.13"
++                      pybind11-branch: "v3.0.0"
++                      numpy-format: "numpy-array-use-type-var"
+ #                    # TODO: uncomment
+ #                    - python: "3.13"
+ #                      pybind11-branch: "master"
+diff --git a/pybind11_stubgen/parser/mixins/fix.py b/pybind11_stubgen/parser/mixins/fix.py
+index 8789890..71b356d 100644
+--- a/pybind11_stubgen/parser/mixins/fix.py
++++ b/pybind11_stubgen/parser/mixins/fix.py
+@@ -7,7 +7,7 @@ import re
+ import sys
+ import types
+ from logging import getLogger
+-from typing import Any, Sequence
++from typing import Any, Optional, Sequence
+ 
+ from pybind11_stubgen.parser.errors import (
+     InvalidExpressionError,
+@@ -40,7 +40,6 @@ logger = getLogger("pybind11_stubgen")
+ 
+ 
+ class RemoveSelfAnnotation(IParser):
+-
+     __any_t_name = QualifiedName.from_str("Any")
+     __typing_any_t_name = QualifiedName.from_str("typing.Any")
+ 
+@@ -169,6 +168,11 @@ class FixMissingImports(IParser):
+         if module_name is None:
+             self.report_error(NameResolutionError(name))
+             return
++        # Corner case: we know that annotations in numpy.typing.* are accessible from
++        # numpy and we want to avoid unnecessary imports once these annotations are
++        # replaced by subsequent numpy fixers.
++        if module_name == ("numpy", "typing"):
++            module_name = module_name.parent
+         self.__extra_imports.add(Import(name=None, origin=module_name))
+ 
+     def _get_parent_module(self, name: QualifiedName) -> QualifiedName | None:
+@@ -245,7 +249,7 @@ class FixMissing__all__Attribute(IParser):
+                                 for import_ in result.imports
+                                 if import_.name is not None
+                             ),
+-                            *(sub_module.name for sub_module in result.sub_modules),
++                            #*(sub_module.name for sub_module in result.sub_modules),
+                         ),
+                     ),
+                 )
+@@ -497,19 +501,21 @@ class FixValueReprRandomAddress(IParser):
+         return result
+ 
+ 
+-class FixNumpyArrayDimAnnotation(IParser):
++class _NumpyArrayAnnotation:
+     __array_names: set[QualifiedName] = {
+         QualifiedName.from_str("numpy.ndarray"),
++        QualifiedName.from_str("numpy.typing.ArrayLike"),
++        QualifiedName.from_str("numpy.typing.NDArray"),
+         *(
+             QualifiedName.from_str(f"scipy.sparse.{storage}_{arr}")
+             for storage in ["bsr", "coo", "csr", "csc", "dia", "dok", "lil"]
+             for arr in ["array", "matrix"]
+         ),
+     }
+-    # NB: Not using full name due to ambiguity `typing.Annotated` vs
+-    #     `typing_extension.Annotated` in different python versions
+-    #     Rely on later fix by `FixTypingTypeNames`
+-    __annotated_name = QualifiedName.from_str("Annotated")
++    __typing_annotated_names = {
++        QualifiedName.from_str("typing.Annotated"),
++        QualifiedName.from_str("typing_extensions.Annotated"),
++    }
+     numpy_primitive_types: set[QualifiedName] = set(
+         map(
+             QualifiedName.from_str,
+@@ -532,76 +538,187 @@ class FixNumpyArrayDimAnnotation(IParser):
+                         "complex32",
+                         "complex64",
+                         "longcomplex",
++                        "bool",
++                        "bool_",
+                     ),
+                 ),
+             ),
+         )
+     )
++    dim_vars: set[str] = {"n", "m"}
++    __dim_string_pattern = re.compile(r'"\[(.*?)\]"')
++
++    def __init__(
++        self,
++        array_type: ResolvedType,
++        scalar_type: ResolvedType,
++        dimensions: Optional[list[str | int]],
++        flags: list[ResolvedType | Value | InvalidExpression],
++    ):
++        self.array_type = array_type
++        self.scalar_type = scalar_type
++        self.dimensions = dimensions
++        self.flags = flags
++
++    def to_type_hint(
++        self, parser: IParser, on_dynamic_dim: Optional[callable[[str], None]] = None
++    ) -> tuple[ResolvedType, ResolvedType]:
++        scalar_type_name = self.scalar_type.name
++        # Pybind annotates a bool Python type, which cannot be used with
++        # numpy.dtype because it does not inherit from numpy.generic.
++        # Only numpy.bool_ works reliably with both NumPy 1.x and 2.x.
++        if str(scalar_type_name) in {"bool", "numpy.bool"}:
++            scalar_type_name = QualifiedName.from_str("numpy.bool_")
++        dtype = ResolvedType(
++            name=QualifiedName.from_str("numpy.dtype"),
++            parameters=[ResolvedType(name=scalar_type_name)],
++        )
+ 
+-    __DIM_VARS = ["n", "m"]
++        shape = parser.parse_annotation_str("Any")
++        if self.dimensions:
++            shape = parser.parse_annotation_str("Tuple")
++            assert isinstance(shape, ResolvedType)
++            shape.parameters = []
++            for dim in self.dimensions:
++                if isinstance(dim, int):
++                    literal_dim = parser.parse_annotation_str("Literal")
++                    assert isinstance(literal_dim, ResolvedType)
++                    literal_dim.parameters = [Value(repr=str(dim))]
++                    shape.parameters.append(literal_dim)
++                else:
++                    if on_dynamic_dim:
++                        on_dynamic_dim(dim)
++                    shape.parameters.append(
++                        ResolvedType(name=QualifiedName.from_str(dim.upper()))
++                    )
++        return shape, dtype
++
++    @classmethod
++    def from_annotation(
++        cls, resolved_type: ResolvedType
++    ) -> Optional[_NumpyArrayAnnotation]:
++        if resolved_type.name in cls.__typing_annotated_names:
++            return cls._from_new_style(resolved_type)
++        elif resolved_type.name in cls.__array_names:
++            return cls._from_old_style(resolved_type)
++        else:
++            return None
+ 
+-    def parse_annotation_str(
+-        self, annotation_str: str
+-    ) -> ResolvedType | InvalidExpression | Value:
+-        # Affects types of the following pattern:
+-        #       ARRAY_T[PRIMITIVE_TYPE[*DIMS], *FLAGS]
+-        # Replace with:
+-        #       Annotated[ARRAY_T, PRIMITIVE_TYPE, FixedSize/DynamicSize[*DIMS], *FLAGS]
++    @classmethod
++    def _from_old_style(
++        cls, resolved_type: ResolvedType
++    ) -> Optional[_NumpyArrayAnnotation]:
++        if resolved_type.parameters is None or len(resolved_type.parameters) == 0:
++            return None
++
++        scalar_with_dims = resolved_type.parameters[0]
++        flags = resolved_type.parameters[1:]
+ 
+-        result = super().parse_annotation_str(annotation_str)
+         if (
+-            not isinstance(result, ResolvedType)
+-            or result.name not in self.__array_names
+-            or result.parameters is None
+-            or len(result.parameters) == 0
++            not isinstance(scalar_with_dims, ResolvedType)
++            or scalar_with_dims.name not in cls.numpy_primitive_types
+         ):
+-            return result
+-
+-        scalar_with_dims = result.parameters[0]  # e.g. numpy.float64[32, 32]
+-        flags = result.parameters[1:]
++            return None
+ 
++        array_type = ResolvedType(name=resolved_type.name)
++        scalar_type = ResolvedType(name=scalar_with_dims.name)
++        dimensions: Optional[list[str | int]] = None
+         if (
+-            not isinstance(scalar_with_dims, ResolvedType)
+-            or scalar_with_dims.name not in self.numpy_primitive_types
++            scalar_with_dims.parameters is not None
++            and len(scalar_with_dims.parameters) > 0
+         ):
+-            return result
++            dimensions = cls._to_dims(scalar_with_dims.parameters)
+ 
+-        result = ResolvedType(
+-            name=self.__annotated_name,
+-            parameters=[
+-                self.parse_annotation_str(str(result.name)),
+-                ResolvedType(scalar_with_dims.name),
+-            ],
+-        )
++        return _NumpyArrayAnnotation(array_type, scalar_type, dimensions, flags)
++
++    @classmethod
++    def _from_new_style(
++        cls, resolved_type: ResolvedType
++    ) -> Optional[_NumpyArrayAnnotation]:
++        if resolved_type.parameters is None or len(resolved_type.parameters) == 0:
++            return None
+ 
+-        assert result.parameters is not None
++        # Handle nested Annotated: Annotated[Annotated[NDArray[...]], "[m, n]"]
+         if (
+-            scalar_with_dims.parameters is not None
+-            and len(scalar_with_dims.parameters) >= 0
++            len(resolved_type.parameters) > 1
++            and isinstance(resolved_type.parameters[0], ResolvedType)
++            and resolved_type.parameters[0].name in cls.__typing_annotated_names
+         ):
+-            dims = self.__to_dims(scalar_with_dims.parameters)
+-            if dims is not None and len(dims) > 0:
+-                result.parameters += [
+-                    self.handle_value(self.__wrap_with_size_helper(dims))
+-                ]
++            inner_annotated = resolved_type.parameters[0]
++            if inner_annotated.parameters is None:
++                return None
++            array_type_param = inner_annotated.parameters[0]
++            other_params = resolved_type.parameters[1:]
++        else:
++            array_type_param, *other_params = resolved_type.parameters
+ 
+-        result.parameters += flags
++        if not isinstance(array_type_param, ResolvedType):
++            return None
+ 
+-        return result
++        if array_type_param.name not in cls.__array_names:
++            return None
+ 
+-    def __wrap_with_size_helper(self, dims: list[int | str]) -> FixedSize | DynamicSize:
+-        if all(isinstance(d, int) for d in dims):
+-            return_t = FixedSize
++        array_type = ResolvedType(name=array_type_param.name)
++        scalar_type: Optional[ResolvedType] = None
++        dims_and_flags: list[ResolvedType | Value | InvalidExpression] = []
++
++        if array_type.name == QualifiedName.from_str("numpy.typing.ArrayLike"):
++            if not other_params:
++                return None
++            scalar_type_param, *dims_and_flags = other_params
++            if isinstance(scalar_type_param, ResolvedType):
++                scalar_type = scalar_type_param
++        elif array_type.name == QualifiedName.from_str("numpy.typing.NDArray"):
++            array_type = ResolvedType(name=QualifiedName.from_str("numpy.ndarray"))
++            if array_type_param.parameters:
++                scalar_type_param = array_type_param.parameters[0]
++                if isinstance(scalar_type_param, ResolvedType):
++                    scalar_type = scalar_type_param
++            dims_and_flags = other_params
++        elif array_type.name == QualifiedName.from_str("numpy.ndarray"):
++            if array_type_param.parameters and len(array_type_param.parameters) == 2:
++                _, dtype_param = array_type_param.parameters
++                if (
++                    isinstance(dtype_param, ResolvedType)
++                    and dtype_param.name == QualifiedName.from_str("numpy.dtype")
++                    and dtype_param.parameters
++                ):
++                    scalar_type = dtype_param.parameters[0]
++            dims_and_flags = other_params
+         else:
+-            return_t = DynamicSize
++            return None
+ 
+-        # TRICK: Use `self.handle_type` to make `FixedSize`/`DynamicSize`
+-        #        properly added to the list of imports
+-        self.handle_type(return_t)
+-        return return_t(*dims)  # type: ignore[arg-type]
++        if scalar_type is None or scalar_type.name not in cls.numpy_primitive_types:
++            return None
+ 
+-    def __to_dims(
+-        self, dimensions: Sequence[ResolvedType | Value | InvalidExpression]
++        dims: list[int | str] | None = None
++        flags: list[ResolvedType | Value | InvalidExpression] = []
++        if dims_and_flags:
++            dims_str_param = dims_and_flags[0]
++            if isinstance(dims_str_param, Value):
++                match = cls.__dim_string_pattern.search(dims_str_param.repr)
++                if match:
++                    dims_str_content = match.group(1)
++                    dims_list = [
++                        d.strip() for d in dims_str_content.split(",") if d.strip()
++                    ]
++                    if dims_list:
++                        dims = cls._to_dims_from_strings(dims_list)
++                    flags = dims_and_flags[1:]
++
++        for i, flag in enumerate(flags):
++            if isinstance(flag, Value):
++                flag_str = flag.repr.strip('"')
++                if flag_str.startswith("flags."):
++                    flags[i] = ResolvedType(
++                        name=QualifiedName.from_str(f"numpy.ndarray.{flag_str}")
++                    )
++
++        return cls(array_type, scalar_type, dims, flags)
++
++    @classmethod
++    def _to_dims(
++        cls, dimensions: Sequence[ResolvedType | Value | InvalidExpression]
+     ) -> list[int | str] | None:
+         result = []
+         for dim_param in dimensions:
+@@ -612,19 +729,86 @@ class FixNumpyArrayDimAnnotation(IParser):
+                     return None
+             elif isinstance(dim_param, ResolvedType):
+                 dim = str(dim_param)
+-                if dim not in self.__DIM_VARS:
++                if len(dim) > 1 and dim not in cls.dim_vars:
+                     return None
+             else:
+                 return None
+             result.append(dim)
+         return result
+ 
++    @staticmethod
++    def _to_dims_from_strings(dimensions: Sequence[str]) -> list[int | str] | None:
++        result: list[int | str] = []
++        for dim_str in dimensions:
++            try:
++                dim = int(dim_str)
++            except ValueError:
++                dim = dim_str
++            result.append(dim)
++        return result
++
++
++class FixNumpyArrayDimAnnotation(IParser):
++    # NB: Not using full name due to ambiguity `typing.Annotated` vs
++    #     `typing_extension.Annotated` in different python versions
++    #     Rely on later fix by `FixTypingTypeNames`
++    __annotated_name = QualifiedName.from_str("Annotated")
++
++    def parse_annotation_str(
++        self, annotation_str: str
++    ) -> ResolvedType | InvalidExpression | Value:
++        # Affects types of the following pattern:
++        #       ARRAY_T[PRIMITIVE_TYPE[*DIMS], *FLAGS]
++        # Replace with:
++        #       Annotated[ARRAY_T, PRIMITIVE_TYPE, FixedSize/DynamicSize[*DIMS], *FLAGS]
++
++        result = super().parse_annotation_str(annotation_str)
++        if not isinstance(result, ResolvedType):
++            return result
++
++        numpy_array = _NumpyArrayAnnotation.from_annotation(result)
++        if numpy_array is None:
++            return result
++
++        params = []
++        if numpy_array.array_type.name == QualifiedName.from_str(
++            "numpy.ndarray"
++        ) or numpy_array.array_type.name[:2] == ("scipy", "sparse"):
++            params.append(self.parse_annotation_str(str(numpy_array.array_type)))
++            params.append(self.parse_annotation_str(str(numpy_array.scalar_type)))
++        elif numpy_array.array_type.name == QualifiedName.from_str(
++            "numpy.typing.ArrayLike"
++        ):
++            params.append(self.parse_annotation_str(str(numpy_array.array_type)))
++            params.append(self.parse_annotation_str(str(numpy_array.scalar_type)))
++        else:
++            return result  # Should not happen
++
++        if numpy_array.dimensions:
++            params.append(
++                self.handle_value(self.__wrap_with_size_helper(numpy_array.dimensions))
++            )
++        params.extend(numpy_array.flags)
++
++        return ResolvedType(name=self.__annotated_name, parameters=params)
++
++    def __wrap_with_size_helper(self, dims: list[int | str]) -> FixedSize | DynamicSize:
++        if all(isinstance(d, int) for d in dims):
++            return_t = FixedSize
++        else:
++            return_t = DynamicSize
++
++        # TRICK: Use `self.handle_type` to make `FixedSize`/`DynamicSize`
++        #        properly added to the list of imports
++        self.handle_type(return_t)
++        return return_t(*dims)  # type: ignore[arg-type]
++
+     def report_error(self, error: ParserError) -> None:
+         if (
+             isinstance(error, NameResolutionError)
+             and len(error.name) == 1
+             and len(error.name[0]) == 1
+-            and error.name[0] in self.__DIM_VARS
++            and error.name[0] in _NumpyArrayAnnotation.dim_vars
+         ):
+             # Ignores all unknown 'm' and 'n' regardless of the context
+             return
+@@ -632,25 +816,26 @@ class FixNumpyArrayDimAnnotation(IParser):
+ 
+ 
+ class FixNumpyArrayDimTypeVar(IParser):
+-    __array_names: set[QualifiedName] = {QualifiedName.from_str("numpy.ndarray")}
+-    numpy_primitive_types = FixNumpyArrayDimAnnotation.numpy_primitive_types
+-
+-    __DIM_VARS: set[str] = set()
++    __MODULE_STACK: list[types.ModuleType] = []
++    __DIM_VARS: dict[types.ModuleType, set[str]] = dict()
+ 
+     def handle_module(
+         self, path: QualifiedName, module: types.ModuleType
+     ) -> Module | None:
++        self.__MODULE_STACK.append(module)
++        self.__DIM_VARS[module]: set[str] = set()
++
+         result = super().handle_module(path, module)
+         if result is None:
+             return None
+ 
+-        if self.__DIM_VARS:
++        if self.__DIM_VARS[module]:
+             # the TypeVar_'s generated code will reference `typing`
+             result.imports.add(
+                 Import(name=None, origin=QualifiedName.from_str("typing"))
+             )
+ 
+-            for name in self.__DIM_VARS:
++            for name in self.__DIM_VARS[module]:
+                 result.type_vars.append(
+                     TypeVar_(
+                         name=Identifier(name),
+@@ -658,20 +843,14 @@ class FixNumpyArrayDimTypeVar(IParser):
+                     ),
+                 )
+ 
+-        self.__DIM_VARS.clear()
+-
++        del self.__DIM_VARS[module]
++        self.__MODULE_STACK.pop()
+         return result
+ 
+     def parse_annotation_str(
+         self, annotation_str: str
+     ) -> ResolvedType | InvalidExpression | Value:
+-        # Affects types of the following pattern:
+-        #       numpy.ndarray[PRIMITIVE_TYPE[*DIMS], *FLAGS]
+-        # Replace with:
+-        #       numpy.ndarray[tuple[M, Literal[1]], numpy.dtype[numpy.float32]]
+-
+         result = super().parse_annotation_str(annotation_str)
+-
+         if not isinstance(result, ResolvedType):
+             return result
+ 
+@@ -679,88 +858,36 @@ class FixNumpyArrayDimTypeVar(IParser):
+         if len(result.name) == 1 and len(result.name[0]) == 1:
+             result.name = QualifiedName.from_str(result.name[0].upper())
+             self.__DIM_VARS.add(result.name[0])
+-
+-        if result.name not in self.__array_names:
+             return result
+ 
+-        # ndarray is generic and should have 2 type arguments
+-        if result.parameters is None or len(result.parameters) == 0:
+-            result.parameters = [
+-                self.parse_annotation_str("Any"),
+-                ResolvedType(
+-                    name=QualifiedName.from_str("numpy.dtype"),
+-                    parameters=[self.parse_annotation_str("Any")],
+-                ),
+-            ]
++        numpy_array = _NumpyArrayAnnotation.from_annotation(result)
++        if numpy_array is None:
+             return result
+ 
+-        scalar_with_dims = result.parameters[0]  # e.g. numpy.float64[32, 32]
+-
+-        if (
+-            not isinstance(scalar_with_dims, ResolvedType)
+-            or scalar_with_dims.name not in self.numpy_primitive_types
+-        ):
++        # scipy.sparse arrays/matrices are not currently generic and do not accept type
++        # arguments
++        if numpy_array.array_type.name[:2] == ("scipy", "sparse"):
+             return result
+ 
+-        name = scalar_with_dims.name
+-        # Pybind annotates a bool Python type, which cannot be used with
+-        # numpy.dtype because it does not inherit from numpy.generic.
+-        # Only numpy.bool_ works reliably with both NumPy 1.x and 2.x.
+-        if str(name) == "bool":
+-            name = QualifiedName.from_str("numpy.bool_")
+-        dtype = ResolvedType(
+-            name=QualifiedName.from_str("numpy.dtype"),
+-            parameters=[ResolvedType(name=name)],
+-        )
++        def on_dynamic_dim(dim: str) -> None:
++            if len(dim) == 1:  # Assuming single letter dims are type vars
++                self.__DIM_VARS[self.__current_module].add(dim.upper())
+ 
+-        shape = self.parse_annotation_str("Any")
+-        if (
+-            scalar_with_dims.parameters is not None
+-            and len(scalar_with_dims.parameters) > 0
+-        ):
+-            dims = self.__to_dims(scalar_with_dims.parameters)
+-            if dims is not None:
+-                shape = self.parse_annotation_str("Tuple")
+-                assert isinstance(shape, ResolvedType)
+-                shape.parameters = []
+-                for dim in dims:
+-                    if isinstance(dim, int):
+-                        # self.parse_annotation_str will qualify Literal with either
+-                        # typing or typing_extensions and add the import to the module
+-                        literal_dim = self.parse_annotation_str("Literal")
+-                        assert isinstance(literal_dim, ResolvedType)
+-                        literal_dim.parameters = [Value(repr=str(dim))]
+-                        shape.parameters.append(literal_dim)
+-                    else:
+-                        shape.parameters.append(
+-                            ResolvedType(name=QualifiedName.from_str(dim))
+-                        )
++        shape, dtype = numpy_array.to_type_hint(self, on_dynamic_dim)
++        return ResolvedType(
++            name=QualifiedName.from_str("numpy.ndarray"), parameters=[shape, dtype]
++        )
+ 
+-        result.parameters = [shape, dtype]
+-        return result
+-
+-    def __to_dims(
+-        self, dimensions: Sequence[ResolvedType | Value | InvalidExpression]
+-    ) -> list[int | str] | None:
+-        result: list[int | str] = []
+-        for dim_param in dimensions:
+-            if isinstance(dim_param, Value):
+-                try:
+-                    dim = int(dim_param.repr)
+-                except ValueError:
+-                    return None
+-            elif isinstance(dim_param, ResolvedType):
+-                dim = str(dim_param)
+-            else:
+-                return None
+-            result.append(dim)
+-        return result
++    @property
++    def __current_module(self) -> types.ModuleType | None:
++        if self.__MODULE_STACK:
++            return self.__MODULE_STACK[-1]
+ 
+     def report_error(self, error: ParserError) -> None:
+         if (
+             isinstance(error, NameResolutionError)
+             and len(error.name) == 1
+-            and error.name[0] in self.__DIM_VARS
++            and error.name[0] in self.__DIM_VARS[self.__current_module]
+         ):
+             # allow type variables, which are manually resolved in `handle_module`
+             return
+@@ -768,14 +895,15 @@ class FixNumpyArrayDimTypeVar(IParser):
+ 
+ 
+ class FixNumpyArrayRemoveParameters(IParser):
+-    __ndarray_name = QualifiedName.from_str("numpy.ndarray")
+-
+     def parse_annotation_str(
+         self, annotation_str: str
+     ) -> ResolvedType | InvalidExpression | Value:
+         result = super().parse_annotation_str(annotation_str)
+-        if isinstance(result, ResolvedType) and result.name == self.__ndarray_name:
+-            result.parameters = None
++        if isinstance(result, ResolvedType):
++            numpy_array = _NumpyArrayAnnotation.from_annotation(result)
++            if numpy_array is not None:
++                numpy_array.array_type.parameters = None
++                return numpy_array.array_type
+         return result
+ 
+ 
+diff --git a/pybind11_stubgen/parser/mixins/parse.py b/pybind11_stubgen/parser/mixins/parse.py
+index f886760..e88fe35 100644
+--- a/pybind11_stubgen/parser/mixins/parse.py
++++ b/pybind11_stubgen/parser/mixins/parse.py
+@@ -583,7 +583,7 @@ class ExtractSignaturesFromPybind11Docstrings(IParser):
+         assert isinstance(union_t, ResolvedType)
+         return ResolvedType(
+             name=union_t.name,
+-            parameters=[self.parse_type_str(variant) for variant in variants],
++            parameters=[self.parse_annotation_str(variant) for variant in variants],
+         )
+ 
+     def parse_type_str(
+diff --git a/tests/check-demo-errors-generation.sh b/tests/check-demo-errors-generation.sh
+index 71906c7..add3767 100755
+--- a/tests/check-demo-errors-generation.sh
++++ b/tests/check-demo-errors-generation.sh
+@@ -22,6 +22,7 @@ run_stubgen() {
+     pybind11-stubgen \
+       demo \
+       --output-dir=${STUBS_DIR} \
++      --numpy-array-wrap-with-annotated \
+       --exit-code \
+       2> "${DEMO_ERRORS_FILE}" \
+     || exit 0
+diff --git a/tests/demo.errors.stderr.txt b/tests/demo.errors.stderr.txt
+index f8fd843..e858fa4 100644
+--- a/tests/demo.errors.stderr.txt
++++ b/tests/demo.errors.stderr.txt
+@@ -1,10 +1,4 @@
+ pybind11_stubgen - [  ERROR] In demo._bindings.aliases.foreign_enum_default : Invalid expression '<ConsoleForegroundColor.Blue: 34>'
+-pybind11_stubgen - [  ERROR] In demo._bindings.eigen.dense_matrix_c : Can't find/import 'm'
+-pybind11_stubgen - [  ERROR] In demo._bindings.eigen.dense_matrix_c : Can't find/import 'n'
+-pybind11_stubgen - [  ERROR] In demo._bindings.eigen.dense_matrix_r : Can't find/import 'm'
+-pybind11_stubgen - [  ERROR] In demo._bindings.eigen.dense_matrix_r : Can't find/import 'n'
+-pybind11_stubgen - [  ERROR] In demo._bindings.eigen.four_col_matrix_r : Can't find/import 'm'
+-pybind11_stubgen - [  ERROR] In demo._bindings.eigen.four_row_matrix_r : Can't find/import 'n'
+ pybind11_stubgen - [  ERROR] In demo._bindings.enum.accept_defaulted_enum : Invalid expression '<ConsoleForegroundColor.None_: -1>'
+ pybind11_stubgen - [  ERROR] In demo._bindings.flawed_bindings.accept_unbound_enum : Invalid expression '(anonymous namespace)::Enum'
+ pybind11_stubgen - [  ERROR] In demo._bindings.flawed_bindings.accept_unbound_enum_defaulted : Invalid expression '<demo._bindings.flawed_bindings.Enum object at 0x1234abcd5678>'
+diff --git a/tests/install-demo-module.sh b/tests/install-demo-module.sh
+index 6209846..ffe8a3d 100755
+--- a/tests/install-demo-module.sh
++++ b/tests/install-demo-module.sh
+@@ -59,7 +59,10 @@ install_pybind11() {
+ }
+ 
+ install_demo() {
+-  cmake -S "${TESTS_ROOT}/demo-lib" -B "${BUILD_ROOT}/demo"
++  cmake \
++    -S "${TESTS_ROOT}/demo-lib" \
++    -B "${BUILD_ROOT}/demo" \
++    -DCMAKE_CXX_STANDARD=17
+   cmake --build "${BUILD_ROOT}/demo"
+   cmake --install "${BUILD_ROOT}/demo" \
+         --prefix "${INSTALL_PREFIX}"
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/__init__.pyi
+new file mode 100644
+index 0000000..86fb6b8
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/__init__.pyi
+@@ -0,0 +1,41 @@
++from __future__ import annotations
++
++from demo._bindings import (
++    aliases,
++    classes,
++    eigen,
++    enum,
++    flawed_bindings,
++    functions,
++    issues,
++    methods,
++    numpy,
++    properties,
++    stl,
++    stl_bind,
++    typing,
++    values,
++)
++
++from . import _bindings, core, pure_python
++
++__all__: list[str] = [
++    "aliases",
++    "classes",
++    "core",
++    "eigen",
++    "enum",
++    "flawed_bindings",
++    "functions",
++    "issues",
++    "methods",
++    "numpy",
++    "properties",
++    "pure_python",
++    "stl",
++    "stl_bind",
++    "typing",
++    "values",
++    "version",
++]
++version: str = "0.0.0"
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/__init__.pyi
+new file mode 100644
+index 0000000..c263078
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/__init__.pyi
+@@ -0,0 +1,35 @@
++from __future__ import annotations
++
++from . import (
++    aliases,
++    classes,
++    eigen,
++    enum,
++    flawed_bindings,
++    functions,
++    issues,
++    methods,
++    numpy,
++    properties,
++    stl,
++    stl_bind,
++    typing,
++    values,
++)
++
++__all__: list[str] = [
++    "aliases",
++    "classes",
++    "eigen",
++    "enum",
++    "flawed_bindings",
++    "functions",
++    "issues",
++    "methods",
++    "numpy",
++    "properties",
++    "stl",
++    "stl_bind",
++    "typing",
++    "values",
++]
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/__init__.pyi
+new file mode 100644
+index 0000000..8d6f4ce
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/__init__.pyi
+@@ -0,0 +1,53 @@
++from __future__ import annotations
++
++import typing
++
++import numpy
++from numpy import random
++
++import demo._bindings.enum
++from demo._bindings.aliases.foreign_method_arg import Bar2 as foreign_type_alias
++from demo._bindings.aliases.foreign_return import get_foo as foreign_class_alias
++
++from . import (
++    foreign_arg,
++    foreign_attr,
++    foreign_class_member,
++    foreign_method_arg,
++    foreign_method_return,
++    foreign_return,
++    missing_self_arg,
++)
++
++__all__: list[str] = [
++    "Color",
++    "Dummy",
++    "foreign_arg",
++    "foreign_attr",
++    "foreign_class_alias",
++    "foreign_class_member",
++    "foreign_enum_default",
++    "foreign_method_arg",
++    "foreign_method_return",
++    "foreign_return",
++    "foreign_type_alias",
++    "func",
++    "local_func_alias",
++    "local_type_alias",
++    "missing_self_arg",
++    "random",
++]
++
++class Color:
++    pass
++
++class Dummy:
++    linalg = numpy.linalg
++
++def foreign_enum_default(
++    color: typing.Any = demo._bindings.enum.ConsoleForegroundColor.Blue,
++) -> None: ...
++def func(arg0: typing.SupportsInt) -> int: ...
++
++local_func_alias = func
++local_type_alias = Color
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_arg.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_arg.pyi
+new file mode 100644
+index 0000000..de75e6f
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_arg.pyi
+@@ -0,0 +1,7 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["set_foo"]
++
++def set_foo(arg0: demo._bindings.classes.Foo) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_attr.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_attr.pyi
+new file mode 100644
+index 0000000..10c4a71
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_attr.pyi
+@@ -0,0 +1,6 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["value"]
++value: demo._bindings.classes.Foo  # value = <demo._bindings.classes.Foo object>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_class_member.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_class_member.pyi
+new file mode 100644
+index 0000000..497a4e2
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_class_member.pyi
+@@ -0,0 +1,12 @@
++from __future__ import annotations
++
++import typing
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar1"]
++
++class Bar1:
++    foo: typing.ClassVar[
++        demo._bindings.classes.Foo
++    ]  # value = <demo._bindings.classes.Foo object>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_method_arg.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_method_arg.pyi
+new file mode 100644
+index 0000000..8d4ed4a
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_method_arg.pyi
+@@ -0,0 +1,8 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar2"]
++
++class Bar2:
++    def set_foo(self, arg0: demo._bindings.classes.Foo) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_method_return.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_method_return.pyi
+new file mode 100644
+index 0000000..95d218e
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_method_return.pyi
+@@ -0,0 +1,9 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar3"]
++
++class Bar3:
++    @staticmethod
++    def get_foo() -> demo._bindings.classes.Foo: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_return.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_return.pyi
+new file mode 100644
+index 0000000..7b5b428
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/foreign_return.pyi
+@@ -0,0 +1,7 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["get_foo"]
++
++def get_foo() -> demo._bindings.classes.Foo: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/missing_self_arg.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/missing_self_arg.pyi
+new file mode 100644
+index 0000000..ee1a09e
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/aliases/missing_self_arg.pyi
+@@ -0,0 +1,8 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar4"]
++
++class Bar4:
++    def set_foo(self: demo._bindings.classes.Foo) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/classes.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/classes.pyi
+new file mode 100644
+index 0000000..addca14
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/classes.pyi
+@@ -0,0 +1,60 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = ["Base", "CppException", "Derived", "Foo", "Outer"]
++
++class Base:
++    class Inner:
++        pass
++    name: str
++
++class CppException(Exception):
++    pass
++
++class Derived(Base):
++    @property
++    def count(self) -> int: ...
++    @count.setter
++    def count(self, arg0: typing.SupportsInt) -> None: ...
++
++class Foo:
++    class FooChild:
++        def __init__(self) -> None: ...
++        def g(self) -> None: ...
++
++    def __init__(self) -> None: ...
++    def f(self) -> None: ...
++
++class Outer:
++    class Inner:
++        class NestedEnum:
++            """
++            Members:
++
++              ONE
++
++              TWO
++            """
++
++            ONE: typing.ClassVar[Outer.Inner.NestedEnum]  # value = <NestedEnum.ONE: 1>
++            TWO: typing.ClassVar[Outer.Inner.NestedEnum]  # value = <NestedEnum.TWO: 2>
++            __members__: typing.ClassVar[
++                dict[str, Outer.Inner.NestedEnum]
++            ]  # value = {'ONE': <NestedEnum.ONE: 1>, 'TWO': <NestedEnum.TWO: 2>}
++            def __eq__(self, other: typing.Any) -> bool: ...
++            def __getstate__(self) -> int: ...
++            def __hash__(self) -> int: ...
++            def __index__(self) -> int: ...
++            def __init__(self, value: typing.SupportsInt) -> None: ...
++            def __int__(self) -> int: ...
++            def __ne__(self, other: typing.Any) -> bool: ...
++            def __repr__(self) -> str: ...
++            def __setstate__(self, state: typing.SupportsInt) -> None: ...
++            def __str__(self) -> str: ...
++            @property
++            def name(self) -> str: ...
++            @property
++            def value(self) -> int: ...
++        value: Outer.Inner.NestedEnum
++    inner: Outer.Inner
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/eigen.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/eigen.pyi
+new file mode 100644
+index 0000000..742d2ee
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/eigen.pyi
+@@ -0,0 +1,70 @@
++from __future__ import annotations
++
++import typing
++
++import numpy
++import scipy.sparse
++
++__all__: list[str] = [
++    "accept_matrix_int",
++    "accept_vector_float64",
++    "dense_matrix_c",
++    "dense_matrix_r",
++    "fixed_mutator_a",
++    "fixed_mutator_c",
++    "fixed_mutator_r",
++    "four_col_matrix_r",
++    "four_row_matrix_r",
++    "get_matrix_int",
++    "get_vector_float64",
++    "sparse_matrix_c",
++    "sparse_matrix_r",
++]
++M = typing.TypeVar("M", bound=int)
++N = typing.TypeVar("N", bound=int)
++
++def accept_matrix_int(
++    arg0: numpy.ndarray[
++        tuple[typing.Literal[3], typing.Literal[3]], numpy.dtype[numpy.int32]
++    ]
++) -> None: ...
++def accept_vector_float64(
++    arg0: numpy.ndarray[
++        tuple[typing.Literal[3], typing.Literal[1]], numpy.dtype[numpy.float64]
++    ]
++) -> None: ...
++def dense_matrix_c(
++    arg0: numpy.ndarray[tuple[M, N], numpy.dtype[numpy.float32]]
++) -> numpy.ndarray[tuple[M, N], numpy.dtype[numpy.float32]]: ...
++def dense_matrix_r(
++    arg0: numpy.ndarray[tuple[M, N], numpy.dtype[numpy.float32]]
++) -> numpy.ndarray[tuple[M, N], numpy.dtype[numpy.float32]]: ...
++def fixed_mutator_a(
++    arg0: numpy.ndarray[
++        tuple[typing.Literal[5], typing.Literal[6]], numpy.dtype[numpy.float32]
++    ]
++) -> None: ...
++def fixed_mutator_c(
++    arg0: numpy.ndarray[
++        tuple[typing.Literal[5], typing.Literal[6]], numpy.dtype[numpy.float32]
++    ]
++) -> None: ...
++def fixed_mutator_r(
++    arg0: numpy.ndarray[
++        tuple[typing.Literal[5], typing.Literal[6]], numpy.dtype[numpy.float32]
++    ]
++) -> None: ...
++def four_col_matrix_r(
++    arg0: numpy.ndarray[tuple[M, typing.Literal[4]], numpy.dtype[numpy.float32]]
++) -> numpy.ndarray[tuple[M, typing.Literal[4]], numpy.dtype[numpy.float32]]: ...
++def four_row_matrix_r(
++    arg0: numpy.ndarray[tuple[typing.Literal[4], N], numpy.dtype[numpy.float32]]
++) -> numpy.ndarray[tuple[typing.Literal[4], N], numpy.dtype[numpy.float32]]: ...
++def get_matrix_int() -> numpy.ndarray[
++    tuple[typing.Literal[3], typing.Literal[3]], numpy.dtype[numpy.int32]
++]: ...
++def get_vector_float64() -> numpy.ndarray[
++    tuple[typing.Literal[3], typing.Literal[1]], numpy.dtype[numpy.float64]
++]: ...
++def sparse_matrix_c(arg0: scipy.sparse.csc_matrix) -> scipy.sparse.csc_matrix: ...
++def sparse_matrix_r(arg0: scipy.sparse.csr_matrix) -> scipy.sparse.csr_matrix: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/enum.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/enum.pyi
+new file mode 100644
+index 0000000..a994e39
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/enum.pyi
+@@ -0,0 +1,71 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "Blue",
++    "ConsoleForegroundColor",
++    "Green",
++    "Magenta",
++    "None_",
++    "Yellow",
++    "accept_defaulted_enum",
++]
++
++class ConsoleForegroundColor:
++    """
++    Members:
++
++      Green
++
++      Yellow
++
++      Blue
++
++      Magenta
++
++      None_
++    """
++
++    Blue: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Blue: 34>
++    Green: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Green: 32>
++    Magenta: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Magenta: 35>
++    None_: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.None_: -1>
++    Yellow: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Yellow: 33>
++    __members__: typing.ClassVar[
++        dict[str, ConsoleForegroundColor]
++    ]  # value = {'Green': <ConsoleForegroundColor.Green: 32>, 'Yellow': <ConsoleForegroundColor.Yellow: 33>, 'Blue': <ConsoleForegroundColor.Blue: 34>, 'Magenta': <ConsoleForegroundColor.Magenta: 35>, 'None_': <ConsoleForegroundColor.None_: -1>}
++    def __eq__(self, other: typing.Any) -> bool: ...
++    def __getstate__(self) -> int: ...
++    def __hash__(self) -> int: ...
++    def __index__(self) -> int: ...
++    def __init__(self, value: typing.SupportsInt) -> None: ...
++    def __int__(self) -> int: ...
++    def __ne__(self, other: typing.Any) -> bool: ...
++    def __repr__(self) -> str: ...
++    def __setstate__(self, state: typing.SupportsInt) -> None: ...
++    def __str__(self) -> str: ...
++    @property
++    def name(self) -> str: ...
++    @property
++    def value(self) -> int: ...
++
++def accept_defaulted_enum(
++    color: ConsoleForegroundColor = ConsoleForegroundColor.None_,
++) -> None: ...
++
++Blue: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Blue: 34>
++Green: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Green: 32>
++Magenta: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Magenta: 35>
++None_: ConsoleForegroundColor  # value = <ConsoleForegroundColor.None_: -1>
++Yellow: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Yellow: 33>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/flawed_bindings.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/flawed_bindings.pyi
+new file mode 100644
+index 0000000..d95bbb3
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/flawed_bindings.pyi
+@@ -0,0 +1,25 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "Enum",
++    "Unbound",
++    "accept_unbound_enum",
++    "accept_unbound_enum_defaulted",
++    "accept_unbound_type",
++    "accept_unbound_type_defaulted",
++    "get_unbound_type",
++]
++
++class Enum:
++    pass
++
++class Unbound:
++    pass
++
++def accept_unbound_enum(arg0: ...) -> int: ...
++def accept_unbound_enum_defaulted(x: Enum = ...) -> int: ...
++def accept_unbound_type(arg0: tuple[..., typing.SupportsInt]) -> int: ...
++def accept_unbound_type_defaulted(x: Unbound = ...) -> int: ...
++def get_unbound_type() -> ...: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/functions.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/functions.pyi
+new file mode 100644
+index 0000000..5888147
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/functions.pyi
+@@ -0,0 +1,74 @@
++from __future__ import annotations
++
++import collections.abc
++import typing
++
++__all__: list[str] = [
++    "Foo",
++    "accept_annotated_callable",
++    "accept_callable",
++    "accept_frozenset",
++    "accept_py_handle",
++    "accept_py_object",
++    "accept_set",
++    "add",
++    "default_custom_arg",
++    "default_int_arg",
++    "default_list_arg",
++    "default_optional_arg",
++    "func_w_anon_args",
++    "func_w_named_pos_args",
++    "generic",
++    "mul",
++    "pass_callback",
++    "pos_kw_only_mix",
++    "pos_kw_only_variadic_mix",
++]
++
++class Foo:
++    def __init__(self, arg0: typing.SupportsInt) -> None: ...
++
++def accept_annotated_callable(
++    arg0: collections.abc.Callable[[typing.SupportsInt, typing.SupportsInt], int]
++) -> typing.Any: ...
++def accept_callable(arg0: collections.abc.Callable) -> typing.Any: ...
++def accept_frozenset(arg0: frozenset) -> None: ...
++def accept_py_handle(arg0: typing.Any) -> str: ...
++def accept_py_object(arg0: typing.Any) -> str: ...
++def accept_set(arg0: set) -> None: ...
++def add(arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> int: ...
++def default_custom_arg(foo: Foo = Foo(5)) -> None: ...
++def default_int_arg(n: typing.SupportsInt = 5) -> None: ...
++def default_list_arg(l: list = [1, 2, 6, 18]) -> None: ...
++def default_optional_arg(n: typing.SupportsInt | None = None) -> None: ...
++def func_w_anon_args(
++    arg0: typing.SupportsInt, arg1: typing.SupportsInt, arg2: typing.SupportsInt
++) -> None: ...
++def func_w_named_pos_args(
++    x: typing.SupportsInt, y: typing.SupportsInt, z: typing.SupportsInt
++) -> None: ...
++def generic(*args, **kwargs) -> None: ...
++@typing.overload
++def mul(x: typing.SupportsInt, y: typing.SupportsInt) -> int:
++    """
++    Multiply x and y (int)
++    """
++
++@typing.overload
++def mul(p: typing.SupportsFloat, q: typing.SupportsFloat) -> float:
++    """
++    Multiply p and q (double)
++    """
++
++def pass_callback(arg0: collections.abc.Callable[[Foo], Foo]) -> Foo: ...
++def pos_kw_only_mix(
++    i: typing.SupportsInt, /, j: typing.SupportsInt, *, k: typing.SupportsInt
++) -> tuple: ...
++def pos_kw_only_variadic_mix(
++    i: typing.SupportsInt,
++    /,
++    j: typing.SupportsInt,
++    *args,
++    k: typing.SupportsInt,
++    **kwargs,
++) -> tuple: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/issues.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/issues.pyi
+new file mode 100644
+index 0000000..165940c
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/issues.pyi
+@@ -0,0 +1,39 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "backslashes_should_be_escaped",
++    "issue_51_catastrophic_regex",
++    "issue_73_utf8_doc_chars",
++]
++
++def backslashes_should_be_escaped() -> None:
++    """
++    \\brief A brief description of this function.
++
++    A detailed description of this function.
++
++    Here's some reStructuredText: :math:`x = [x, y, \\theta]^T`
++    """
++
++def issue_51_catastrophic_regex(
++    arg0: typing.SupportsInt, arg1: typing.SupportsInt
++) -> None:
++    """
++    Use-case:
++        issue_51(os.get_handle_inheritable, os.set_handle_inheritable)
++    """
++
++def issue_73_utf8_doc_chars() -> None:
++    """
++    Construct a Ramsete unicycle controller.
++
++    Tuning parameter (b > 0 rad²/m²) for which larger values make
++
++    convergence more aggressive like a proportional term.
++    Tuning parameter (0 rad⁻¹ < zeta < 1 rad⁻¹) for which larger
++    values provide more damping in response.
++    """
++
++_cleanup: typing.Any  # value = <capsule object>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/methods.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/methods.pyi
+new file mode 100644
+index 0000000..406a301
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/methods.pyi
+@@ -0,0 +1,10 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = ["Dummy"]
++
++class Dummy:
++    @staticmethod
++    def static_method(arg0: typing.SupportsInt) -> int: ...
++    def regular_method(self, arg0: typing.SupportsInt) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/numpy.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/numpy.pyi
+new file mode 100644
+index 0000000..08714c5
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/numpy.pyi
+@@ -0,0 +1,23 @@
++from __future__ import annotations
++
++import typing
++
++import numpy
++
++__all__: list[str] = [
++    "accept_ndarray_float64",
++    "accept_ndarray_int",
++    "get_ndarray_float64",
++    "get_ndarray_int",
++    "return_dtype",
++]
++
++def accept_ndarray_float64(
++    arg0: numpy.ndarray[typing.Any, numpy.dtype[numpy.float64]]
++) -> None: ...
++def accept_ndarray_int(
++    arg0: numpy.ndarray[typing.Any, numpy.dtype[numpy.int32]]
++) -> None: ...
++def get_ndarray_float64() -> numpy.ndarray[typing.Any, numpy.dtype[numpy.float64]]: ...
++def get_ndarray_int() -> numpy.ndarray[typing.Any, numpy.dtype[numpy.int32]]: ...
++def return_dtype() -> numpy.dtype[typing.Any]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/properties.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/properties.pyi
+new file mode 100644
+index 0000000..d7ae367
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/properties.pyi
+@@ -0,0 +1,105 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "WithGetterSetterDoc",
++    "WithPropAndGetterSetterDoc",
++    "WithPropDoc",
++    "WithoutDoc",
++]
++
++class WithGetterSetterDoc:
++    """
++    User docstring provided via pybind11::cpp_function(..., doc) to getters/setters, but NOT to `def_*(..., doc)` calls
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int:
++        """
++        getter doc token
++        """
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None:
++        """
++        setter doc token
++        """
++    @property
++    def def_property_readonly(self) -> int:
++        """
++        getter doc token
++        """
++
++class WithPropAndGetterSetterDoc:
++    """
++    User docstring provided via pybind11::cpp_function(..., doc) to getters/setters and to `def_*(, doc)` calls
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int:
++        """
++        prop doc token
++        """
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None: ...
++    @property
++    def def_property_readonly(self) -> int:
++        """
++        prop doc token
++        """
++
++class WithPropDoc:
++    """
++    User docstring provided only to `def_` calls
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int:
++        """
++        prop doc token
++        """
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None: ...
++    @property
++    def def_property_readonly(self) -> int:
++        """
++        prop doc token
++        """
++    @property
++    def def_readonly(self) -> int:
++        """
++        prop doc token
++        """
++    @property
++    def def_readwrite(self) -> int:
++        """
++        prop doc token
++        """
++    @def_readwrite.setter
++    def def_readwrite(self, arg0: typing.SupportsInt) -> None: ...
++
++class WithoutDoc:
++    """
++    No user docstring provided
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int: ...
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None: ...
++    @property
++    def def_property_readonly(self) -> int: ...
++    @property
++    def def_readonly(self) -> int: ...
++    @property
++    def def_readwrite(self) -> int: ...
++    @def_readwrite.setter
++    def def_readwrite(self, arg0: typing.SupportsInt) -> None: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/stl.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/stl.pyi
+new file mode 100644
+index 0000000..dbc3269
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/stl.pyi
+@@ -0,0 +1,24 @@
++from __future__ import annotations
++
++import collections.abc
++import typing
++
++__all__: list[str] = [
++    "std_array",
++    "std_map",
++    "std_optional",
++    "std_variant",
++    "std_vector",
++]
++
++def std_array(
++    arg0: typing.Annotated[collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"]
++) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
++def std_map() -> dict[int, complex]: ...
++def std_optional(arg0: typing.SupportsInt | None) -> None: ...
++def std_variant(
++    arg0: typing.SupportsInt
++    | typing.SupportsFloat
++    | tuple[typing.SupportsInt, typing.SupportsInt]
++) -> None: ...
++def std_vector() -> list[tuple[int, float]]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/stl_bind.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/stl_bind.pyi
+new file mode 100644
+index 0000000..0020e1d
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/stl_bind.pyi
+@@ -0,0 +1,129 @@
++from __future__ import annotations
++
++import collections.abc
++import typing
++
++__all__: list[str] = [
++    "MapStringComplex",
++    "VectorPairStringDouble",
++    "get_complex_map",
++    "get_vector_of_pairs",
++]
++
++class MapStringComplex:
++    def __bool__(self) -> bool:
++        """
++        Check whether the map is nonempty
++        """
++    @typing.overload
++    def __contains__(self, arg0: str) -> bool: ...
++    @typing.overload
++    def __contains__(self, arg0: typing.Any) -> bool: ...
++    def __delitem__(self, arg0: str) -> None: ...
++    def __getitem__(self, arg0: str) -> complex: ...
++    def __init__(self) -> None: ...
++    def __iter__(self) -> collections.abc.Iterator[str]: ...
++    def __len__(self) -> int: ...
++    def __repr__(self) -> str:
++        """
++        Return the canonical string representation of this map.
++        """
++    def __setitem__(self, arg0: str, arg1: complex) -> None: ...
++    def items(self) -> typing.ItemsView: ...
++    def keys(self) -> typing.KeysView: ...
++    def values(self) -> typing.ValuesView: ...
++
++class VectorPairStringDouble:
++    __hash__: typing.ClassVar[None] = None
++    def __bool__(self) -> bool:
++        """
++        Check whether the list is nonempty
++        """
++    def __contains__(self, x: tuple[str, typing.SupportsFloat]) -> bool:
++        """
++        Return true the container contains ``x``
++        """
++    @typing.overload
++    def __delitem__(self, arg0: typing.SupportsInt) -> None:
++        """
++        Delete the list elements at index ``i``
++        """
++    @typing.overload
++    def __delitem__(self, arg0: slice) -> None:
++        """
++        Delete list elements using a slice object
++        """
++    def __eq__(self, arg0: VectorPairStringDouble) -> bool: ...
++    @typing.overload
++    def __getitem__(self, s: slice) -> VectorPairStringDouble:
++        """
++        Retrieve list elements using a slice object
++        """
++    @typing.overload
++    def __getitem__(self, arg0: typing.SupportsInt) -> tuple[str, float]: ...
++    @typing.overload
++    def __init__(self) -> None: ...
++    @typing.overload
++    def __init__(self, arg0: VectorPairStringDouble) -> None:
++        """
++        Copy constructor
++        """
++    @typing.overload
++    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
++    def __iter__(self) -> collections.abc.Iterator[tuple[str, float]]: ...
++    def __len__(self) -> int: ...
++    def __ne__(self, arg0: VectorPairStringDouble) -> bool: ...
++    @typing.overload
++    def __setitem__(
++        self, arg0: typing.SupportsInt, arg1: tuple[str, typing.SupportsFloat]
++    ) -> None: ...
++    @typing.overload
++    def __setitem__(self, arg0: slice, arg1: VectorPairStringDouble) -> None:
++        """
++        Assign list elements using a slice object
++        """
++    def append(self, x: tuple[str, typing.SupportsFloat]) -> None:
++        """
++        Add an item to the end of the list
++        """
++    def clear(self) -> None:
++        """
++        Clear the contents
++        """
++    def count(self, x: tuple[str, typing.SupportsFloat]) -> int:
++        """
++        Return the number of times ``x`` appears in the list
++        """
++    @typing.overload
++    def extend(self, L: VectorPairStringDouble) -> None:
++        """
++        Extend the list by appending all the items in the given list
++        """
++    @typing.overload
++    def extend(self, L: collections.abc.Iterable) -> None:
++        """
++        Extend the list by appending all the items in the given list
++        """
++    def insert(
++        self, i: typing.SupportsInt, x: tuple[str, typing.SupportsFloat]
++    ) -> None:
++        """
++        Insert an item at a given position.
++        """
++    @typing.overload
++    def pop(self) -> tuple[str, float]:
++        """
++        Remove and return the last item
++        """
++    @typing.overload
++    def pop(self, i: typing.SupportsInt) -> tuple[str, float]:
++        """
++        Remove and return the item at index ``i``
++        """
++    def remove(self, x: tuple[str, typing.SupportsFloat]) -> None:
++        """
++        Remove the first item from the list whose value is x. It is an error if there is no such item.
++        """
++
++def get_complex_map() -> MapStringComplex: ...
++def get_vector_of_pairs() -> VectorPairStringDouble: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/typing.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/typing.pyi
+new file mode 100644
+index 0000000..98fd047
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/typing.pyi
+@@ -0,0 +1,8 @@
++from __future__ import annotations
++
++import collections.abc
++
++__all__: list[str] = ["get_buffer", "get_sequence"]
++
++def get_buffer(arg0: collections.abc.Buffer) -> collections.abc.Buffer: ...
++def get_sequence(arg0: collections.abc.Sequence) -> collections.abc.Sequence: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/values.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/values.pyi
+new file mode 100644
+index 0000000..7c36d3f
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/_bindings/values.pyi
+@@ -0,0 +1,36 @@
++from __future__ import annotations
++
++import datetime
++
++import numpy
++from numpy import random
++
++__all__: list[str] = [
++    "Dummy",
++    "Foo",
++    "add_day",
++    "foolist",
++    "foovar",
++    "list_with_none",
++    "none",
++    "random",
++    "t_10ms",
++    "t_20ns",
++    "t_30s",
++]
++
++class Dummy:
++    linalg = numpy.linalg
++
++class Foo:
++    pass
++
++def add_day(arg0: datetime.datetime) -> datetime.datetime: ...
++
++foolist: list  # value = [<demo._bindings.values.Foo object>, <demo._bindings.values.Foo object>]
++foovar: Foo  # value = <demo._bindings.values.Foo object>
++list_with_none: list = [None, 2, {}]
++none = None
++t_10ms: datetime.timedelta  # value = datetime.timedelta(microseconds=10000)
++t_20ns: datetime.timedelta  # value = datetime.timedelta(0)
++t_30s: datetime.timedelta  # value = datetime.timedelta(seconds=30)
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/core.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/core.pyi
+new file mode 100644
+index 0000000..95c1646
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/core.pyi
+@@ -0,0 +1,35 @@
++from __future__ import annotations
++
++from demo._bindings import (
++    aliases,
++    classes,
++    eigen,
++    enum,
++    flawed_bindings,
++    functions,
++    issues,
++    methods,
++    numpy,
++    properties,
++    stl,
++    stl_bind,
++    typing,
++    values,
++)
++
++__all__: list[str] = [
++    "aliases",
++    "classes",
++    "eigen",
++    "enum",
++    "flawed_bindings",
++    "functions",
++    "issues",
++    "methods",
++    "numpy",
++    "properties",
++    "stl",
++    "stl_bind",
++    "typing",
++    "values",
++]
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/__init__.pyi
+new file mode 100644
+index 0000000..10d343e
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/__init__.pyi
+@@ -0,0 +1,11 @@
++from __future__ import annotations
++
++from . import classes, functions, functions_3_8_plus, functions_3_9_plus, values
++
++__all__: list[str] = [
++    "classes",
++    "functions",
++    "functions_3_8_plus",
++    "functions_3_9_plus",
++    "values",
++]
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/classes.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/classes.pyi
+new file mode 100644
+index 0000000..32aa068
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/classes.pyi
+@@ -0,0 +1,21 @@
++from __future__ import annotations
++
++__all__: list[str] = ["A", "B", "C", "X"]
++
++class A:
++    """
++    A
++    """
++
++class B(A):
++    """
++    B
++    """
++
++class C(B):
++    """
++    C
++    """
++
++class X:
++    pass
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions.pyi
+new file mode 100644
+index 0000000..5ed9ef3
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions.pyi
+@@ -0,0 +1,31 @@
++from __future__ import annotations
++
++import sys as sys
++import typing as typing
++
++from demo.pure_python.functions_3_8_plus import args_mix
++from demo.pure_python.functions_3_9_plus import generic_alias_annotation
++
++__all__: list[str] = [
++    "accept_frozenset",
++    "args_mix",
++    "builtin_function_as_default_arg",
++    "function_as_default_arg",
++    "generic_alias_annotation",
++    "lambda_as_default_arg",
++    "search",
++    "static_method_as_default_arg",
++    "sys",
++    "typing",
++]
++
++class _Dummy:
++    @staticmethod
++    def foo(): ...
++
++def accept_frozenset(arg: frozenset[int | float]) -> int | None: ...
++def builtin_function_as_default_arg(func: type(len) = len): ...
++def function_as_default_arg(func: type(search) = search): ...
++def lambda_as_default_arg(callback=...): ...
++def search(a: int, b: list[int]) -> int: ...
++def static_method_as_default_arg(callback=_Dummy.foo): ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions_3_8_plus.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions_3_8_plus.pyi
+new file mode 100644
+index 0000000..e916422
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions_3_8_plus.pyi
+@@ -0,0 +1,15 @@
++from __future__ import annotations
++
++import typing as typing
++
++__all__: list[str] = ["args_mix", "typing"]
++
++def args_mix(
++    a: int,
++    b: float = 0.5,
++    c: str = "",
++    *args: int,
++    x: int = 1,
++    y=int,
++    **kwargs: typing.Dict[int, str],
++): ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions_3_9_plus.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions_3_9_plus.pyi
+new file mode 100644
+index 0000000..59b9b80
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/functions_3_9_plus.pyi
+@@ -0,0 +1,5 @@
++from __future__ import annotations
++
++__all__: list[str] = ["generic_alias_annotation"]
++
++def generic_alias_annotation(a: list[tuple[int]], b: dict[int, str]) -> list[float]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/values.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/values.pyi
+new file mode 100644
+index 0000000..0791339
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-use-type-var/demo/pure_python/values.pyi
+@@ -0,0 +1,4 @@
++from __future__ import annotations
++
++__all__: list[str] = ["callables_dict"]
++callables_dict: dict = {"len": len, "int": int}
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/__init__.pyi
+new file mode 100644
+index 0000000..86fb6b8
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/__init__.pyi
+@@ -0,0 +1,41 @@
++from __future__ import annotations
++
++from demo._bindings import (
++    aliases,
++    classes,
++    eigen,
++    enum,
++    flawed_bindings,
++    functions,
++    issues,
++    methods,
++    numpy,
++    properties,
++    stl,
++    stl_bind,
++    typing,
++    values,
++)
++
++from . import _bindings, core, pure_python
++
++__all__: list[str] = [
++    "aliases",
++    "classes",
++    "core",
++    "eigen",
++    "enum",
++    "flawed_bindings",
++    "functions",
++    "issues",
++    "methods",
++    "numpy",
++    "properties",
++    "pure_python",
++    "stl",
++    "stl_bind",
++    "typing",
++    "values",
++    "version",
++]
++version: str = "0.0.0"
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/__init__.pyi
+new file mode 100644
+index 0000000..c263078
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/__init__.pyi
+@@ -0,0 +1,35 @@
++from __future__ import annotations
++
++from . import (
++    aliases,
++    classes,
++    eigen,
++    enum,
++    flawed_bindings,
++    functions,
++    issues,
++    methods,
++    numpy,
++    properties,
++    stl,
++    stl_bind,
++    typing,
++    values,
++)
++
++__all__: list[str] = [
++    "aliases",
++    "classes",
++    "eigen",
++    "enum",
++    "flawed_bindings",
++    "functions",
++    "issues",
++    "methods",
++    "numpy",
++    "properties",
++    "stl",
++    "stl_bind",
++    "typing",
++    "values",
++]
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/__init__.pyi
+new file mode 100644
+index 0000000..8d6f4ce
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/__init__.pyi
+@@ -0,0 +1,53 @@
++from __future__ import annotations
++
++import typing
++
++import numpy
++from numpy import random
++
++import demo._bindings.enum
++from demo._bindings.aliases.foreign_method_arg import Bar2 as foreign_type_alias
++from demo._bindings.aliases.foreign_return import get_foo as foreign_class_alias
++
++from . import (
++    foreign_arg,
++    foreign_attr,
++    foreign_class_member,
++    foreign_method_arg,
++    foreign_method_return,
++    foreign_return,
++    missing_self_arg,
++)
++
++__all__: list[str] = [
++    "Color",
++    "Dummy",
++    "foreign_arg",
++    "foreign_attr",
++    "foreign_class_alias",
++    "foreign_class_member",
++    "foreign_enum_default",
++    "foreign_method_arg",
++    "foreign_method_return",
++    "foreign_return",
++    "foreign_type_alias",
++    "func",
++    "local_func_alias",
++    "local_type_alias",
++    "missing_self_arg",
++    "random",
++]
++
++class Color:
++    pass
++
++class Dummy:
++    linalg = numpy.linalg
++
++def foreign_enum_default(
++    color: typing.Any = demo._bindings.enum.ConsoleForegroundColor.Blue,
++) -> None: ...
++def func(arg0: typing.SupportsInt) -> int: ...
++
++local_func_alias = func
++local_type_alias = Color
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_arg.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_arg.pyi
+new file mode 100644
+index 0000000..de75e6f
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_arg.pyi
+@@ -0,0 +1,7 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["set_foo"]
++
++def set_foo(arg0: demo._bindings.classes.Foo) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_attr.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_attr.pyi
+new file mode 100644
+index 0000000..10c4a71
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_attr.pyi
+@@ -0,0 +1,6 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["value"]
++value: demo._bindings.classes.Foo  # value = <demo._bindings.classes.Foo object>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_class_member.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_class_member.pyi
+new file mode 100644
+index 0000000..497a4e2
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_class_member.pyi
+@@ -0,0 +1,12 @@
++from __future__ import annotations
++
++import typing
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar1"]
++
++class Bar1:
++    foo: typing.ClassVar[
++        demo._bindings.classes.Foo
++    ]  # value = <demo._bindings.classes.Foo object>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_method_arg.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_method_arg.pyi
+new file mode 100644
+index 0000000..8d4ed4a
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_method_arg.pyi
+@@ -0,0 +1,8 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar2"]
++
++class Bar2:
++    def set_foo(self, arg0: demo._bindings.classes.Foo) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_method_return.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_method_return.pyi
+new file mode 100644
+index 0000000..95d218e
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_method_return.pyi
+@@ -0,0 +1,9 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar3"]
++
++class Bar3:
++    @staticmethod
++    def get_foo() -> demo._bindings.classes.Foo: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_return.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_return.pyi
+new file mode 100644
+index 0000000..7b5b428
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/foreign_return.pyi
+@@ -0,0 +1,7 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["get_foo"]
++
++def get_foo() -> demo._bindings.classes.Foo: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/missing_self_arg.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/missing_self_arg.pyi
+new file mode 100644
+index 0000000..ee1a09e
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/aliases/missing_self_arg.pyi
+@@ -0,0 +1,8 @@
++from __future__ import annotations
++
++import demo._bindings.classes
++
++__all__: list[str] = ["Bar4"]
++
++class Bar4:
++    def set_foo(self: demo._bindings.classes.Foo) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/classes.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/classes.pyi
+new file mode 100644
+index 0000000..addca14
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/classes.pyi
+@@ -0,0 +1,60 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = ["Base", "CppException", "Derived", "Foo", "Outer"]
++
++class Base:
++    class Inner:
++        pass
++    name: str
++
++class CppException(Exception):
++    pass
++
++class Derived(Base):
++    @property
++    def count(self) -> int: ...
++    @count.setter
++    def count(self, arg0: typing.SupportsInt) -> None: ...
++
++class Foo:
++    class FooChild:
++        def __init__(self) -> None: ...
++        def g(self) -> None: ...
++
++    def __init__(self) -> None: ...
++    def f(self) -> None: ...
++
++class Outer:
++    class Inner:
++        class NestedEnum:
++            """
++            Members:
++
++              ONE
++
++              TWO
++            """
++
++            ONE: typing.ClassVar[Outer.Inner.NestedEnum]  # value = <NestedEnum.ONE: 1>
++            TWO: typing.ClassVar[Outer.Inner.NestedEnum]  # value = <NestedEnum.TWO: 2>
++            __members__: typing.ClassVar[
++                dict[str, Outer.Inner.NestedEnum]
++            ]  # value = {'ONE': <NestedEnum.ONE: 1>, 'TWO': <NestedEnum.TWO: 2>}
++            def __eq__(self, other: typing.Any) -> bool: ...
++            def __getstate__(self) -> int: ...
++            def __hash__(self) -> int: ...
++            def __index__(self) -> int: ...
++            def __init__(self, value: typing.SupportsInt) -> None: ...
++            def __int__(self) -> int: ...
++            def __ne__(self, other: typing.Any) -> bool: ...
++            def __repr__(self) -> str: ...
++            def __setstate__(self, state: typing.SupportsInt) -> None: ...
++            def __str__(self) -> str: ...
++            @property
++            def name(self) -> str: ...
++            @property
++            def value(self) -> int: ...
++        value: Outer.Inner.NestedEnum
++    inner: Outer.Inner
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/eigen.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/eigen.pyi
+new file mode 100644
+index 0000000..2f7b79f
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/eigen.pyi
+@@ -0,0 +1,110 @@
++from __future__ import annotations
++
++import typing
++
++import numpy
++import pybind11_stubgen.typing_ext
++import scipy.sparse
++
++__all__: list[str] = [
++    "accept_matrix_int",
++    "accept_vector_float64",
++    "dense_matrix_c",
++    "dense_matrix_r",
++    "fixed_mutator_a",
++    "fixed_mutator_c",
++    "fixed_mutator_r",
++    "four_col_matrix_r",
++    "four_row_matrix_r",
++    "get_matrix_int",
++    "get_vector_float64",
++    "sparse_matrix_c",
++    "sparse_matrix_r",
++]
++
++def accept_matrix_int(
++    arg0: typing.Annotated[
++        numpy.typing.ArrayLike, numpy.int32, pybind11_stubgen.typing_ext.FixedSize(3, 3)
++    ]
++) -> None: ...
++def accept_vector_float64(
++    arg0: typing.Annotated[
++        numpy.typing.ArrayLike,
++        numpy.float64,
++        pybind11_stubgen.typing_ext.FixedSize(3, 1),
++    ]
++) -> None: ...
++def dense_matrix_c(
++    arg0: typing.Annotated[
++        numpy.typing.ArrayLike,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.DynamicSize("m", "n"),
++    ]
++) -> typing.Annotated[
++    numpy.ndarray, numpy.float32, pybind11_stubgen.typing_ext.DynamicSize("m", "n")
++]: ...
++def dense_matrix_r(
++    arg0: typing.Annotated[
++        numpy.typing.ArrayLike,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.DynamicSize("m", "n"),
++    ]
++) -> typing.Annotated[
++    numpy.ndarray, numpy.float32, pybind11_stubgen.typing_ext.DynamicSize("m", "n")
++]: ...
++def fixed_mutator_a(
++    arg0: typing.Annotated[
++        numpy.ndarray,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.FixedSize(5, 6),
++        numpy.ndarray.flags.writeable,
++    ]
++) -> None: ...
++def fixed_mutator_c(
++    arg0: typing.Annotated[
++        numpy.ndarray,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.FixedSize(5, 6),
++        numpy.ndarray.flags.writeable,
++        numpy.ndarray.flags.f_contiguous,
++    ]
++) -> None: ...
++def fixed_mutator_r(
++    arg0: typing.Annotated[
++        numpy.ndarray,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.FixedSize(5, 6),
++        numpy.ndarray.flags.writeable,
++        numpy.ndarray.flags.c_contiguous,
++    ]
++) -> None: ...
++def four_col_matrix_r(
++    arg0: typing.Annotated[
++        numpy.typing.ArrayLike,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.DynamicSize("m", 4),
++    ]
++) -> typing.Annotated[
++    numpy.ndarray, numpy.float32, pybind11_stubgen.typing_ext.DynamicSize("m", 4)
++]: ...
++def four_row_matrix_r(
++    arg0: typing.Annotated[
++        numpy.typing.ArrayLike,
++        numpy.float32,
++        pybind11_stubgen.typing_ext.DynamicSize(4, "n"),
++    ]
++) -> typing.Annotated[
++    numpy.ndarray, numpy.float32, pybind11_stubgen.typing_ext.DynamicSize(4, "n")
++]: ...
++def get_matrix_int() -> typing.Annotated[
++    numpy.ndarray, numpy.int32, pybind11_stubgen.typing_ext.FixedSize(3, 3)
++]: ...
++def get_vector_float64() -> typing.Annotated[
++    numpy.ndarray, numpy.float64, pybind11_stubgen.typing_ext.FixedSize(3, 1)
++]: ...
++def sparse_matrix_c(
++    arg0: typing.Annotated[scipy.sparse.csc_matrix, numpy.float32]
++) -> typing.Annotated[scipy.sparse.csc_matrix, numpy.float32]: ...
++def sparse_matrix_r(
++    arg0: typing.Annotated[scipy.sparse.csr_matrix, numpy.float32]
++) -> typing.Annotated[scipy.sparse.csr_matrix, numpy.float32]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/enum.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/enum.pyi
+new file mode 100644
+index 0000000..a994e39
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/enum.pyi
+@@ -0,0 +1,71 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "Blue",
++    "ConsoleForegroundColor",
++    "Green",
++    "Magenta",
++    "None_",
++    "Yellow",
++    "accept_defaulted_enum",
++]
++
++class ConsoleForegroundColor:
++    """
++    Members:
++
++      Green
++
++      Yellow
++
++      Blue
++
++      Magenta
++
++      None_
++    """
++
++    Blue: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Blue: 34>
++    Green: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Green: 32>
++    Magenta: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Magenta: 35>
++    None_: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.None_: -1>
++    Yellow: typing.ClassVar[
++        ConsoleForegroundColor
++    ]  # value = <ConsoleForegroundColor.Yellow: 33>
++    __members__: typing.ClassVar[
++        dict[str, ConsoleForegroundColor]
++    ]  # value = {'Green': <ConsoleForegroundColor.Green: 32>, 'Yellow': <ConsoleForegroundColor.Yellow: 33>, 'Blue': <ConsoleForegroundColor.Blue: 34>, 'Magenta': <ConsoleForegroundColor.Magenta: 35>, 'None_': <ConsoleForegroundColor.None_: -1>}
++    def __eq__(self, other: typing.Any) -> bool: ...
++    def __getstate__(self) -> int: ...
++    def __hash__(self) -> int: ...
++    def __index__(self) -> int: ...
++    def __init__(self, value: typing.SupportsInt) -> None: ...
++    def __int__(self) -> int: ...
++    def __ne__(self, other: typing.Any) -> bool: ...
++    def __repr__(self) -> str: ...
++    def __setstate__(self, state: typing.SupportsInt) -> None: ...
++    def __str__(self) -> str: ...
++    @property
++    def name(self) -> str: ...
++    @property
++    def value(self) -> int: ...
++
++def accept_defaulted_enum(
++    color: ConsoleForegroundColor = ConsoleForegroundColor.None_,
++) -> None: ...
++
++Blue: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Blue: 34>
++Green: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Green: 32>
++Magenta: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Magenta: 35>
++None_: ConsoleForegroundColor  # value = <ConsoleForegroundColor.None_: -1>
++Yellow: ConsoleForegroundColor  # value = <ConsoleForegroundColor.Yellow: 33>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/flawed_bindings.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/flawed_bindings.pyi
+new file mode 100644
+index 0000000..d95bbb3
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/flawed_bindings.pyi
+@@ -0,0 +1,25 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "Enum",
++    "Unbound",
++    "accept_unbound_enum",
++    "accept_unbound_enum_defaulted",
++    "accept_unbound_type",
++    "accept_unbound_type_defaulted",
++    "get_unbound_type",
++]
++
++class Enum:
++    pass
++
++class Unbound:
++    pass
++
++def accept_unbound_enum(arg0: ...) -> int: ...
++def accept_unbound_enum_defaulted(x: Enum = ...) -> int: ...
++def accept_unbound_type(arg0: tuple[..., typing.SupportsInt]) -> int: ...
++def accept_unbound_type_defaulted(x: Unbound = ...) -> int: ...
++def get_unbound_type() -> ...: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/functions.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/functions.pyi
+new file mode 100644
+index 0000000..5888147
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/functions.pyi
+@@ -0,0 +1,74 @@
++from __future__ import annotations
++
++import collections.abc
++import typing
++
++__all__: list[str] = [
++    "Foo",
++    "accept_annotated_callable",
++    "accept_callable",
++    "accept_frozenset",
++    "accept_py_handle",
++    "accept_py_object",
++    "accept_set",
++    "add",
++    "default_custom_arg",
++    "default_int_arg",
++    "default_list_arg",
++    "default_optional_arg",
++    "func_w_anon_args",
++    "func_w_named_pos_args",
++    "generic",
++    "mul",
++    "pass_callback",
++    "pos_kw_only_mix",
++    "pos_kw_only_variadic_mix",
++]
++
++class Foo:
++    def __init__(self, arg0: typing.SupportsInt) -> None: ...
++
++def accept_annotated_callable(
++    arg0: collections.abc.Callable[[typing.SupportsInt, typing.SupportsInt], int]
++) -> typing.Any: ...
++def accept_callable(arg0: collections.abc.Callable) -> typing.Any: ...
++def accept_frozenset(arg0: frozenset) -> None: ...
++def accept_py_handle(arg0: typing.Any) -> str: ...
++def accept_py_object(arg0: typing.Any) -> str: ...
++def accept_set(arg0: set) -> None: ...
++def add(arg0: typing.SupportsInt, arg1: typing.SupportsInt) -> int: ...
++def default_custom_arg(foo: Foo = Foo(5)) -> None: ...
++def default_int_arg(n: typing.SupportsInt = 5) -> None: ...
++def default_list_arg(l: list = [1, 2, 6, 18]) -> None: ...
++def default_optional_arg(n: typing.SupportsInt | None = None) -> None: ...
++def func_w_anon_args(
++    arg0: typing.SupportsInt, arg1: typing.SupportsInt, arg2: typing.SupportsInt
++) -> None: ...
++def func_w_named_pos_args(
++    x: typing.SupportsInt, y: typing.SupportsInt, z: typing.SupportsInt
++) -> None: ...
++def generic(*args, **kwargs) -> None: ...
++@typing.overload
++def mul(x: typing.SupportsInt, y: typing.SupportsInt) -> int:
++    """
++    Multiply x and y (int)
++    """
++
++@typing.overload
++def mul(p: typing.SupportsFloat, q: typing.SupportsFloat) -> float:
++    """
++    Multiply p and q (double)
++    """
++
++def pass_callback(arg0: collections.abc.Callable[[Foo], Foo]) -> Foo: ...
++def pos_kw_only_mix(
++    i: typing.SupportsInt, /, j: typing.SupportsInt, *, k: typing.SupportsInt
++) -> tuple: ...
++def pos_kw_only_variadic_mix(
++    i: typing.SupportsInt,
++    /,
++    j: typing.SupportsInt,
++    *args,
++    k: typing.SupportsInt,
++    **kwargs,
++) -> tuple: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/issues.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/issues.pyi
+new file mode 100644
+index 0000000..165940c
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/issues.pyi
+@@ -0,0 +1,39 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "backslashes_should_be_escaped",
++    "issue_51_catastrophic_regex",
++    "issue_73_utf8_doc_chars",
++]
++
++def backslashes_should_be_escaped() -> None:
++    """
++    \\brief A brief description of this function.
++
++    A detailed description of this function.
++
++    Here's some reStructuredText: :math:`x = [x, y, \\theta]^T`
++    """
++
++def issue_51_catastrophic_regex(
++    arg0: typing.SupportsInt, arg1: typing.SupportsInt
++) -> None:
++    """
++    Use-case:
++        issue_51(os.get_handle_inheritable, os.set_handle_inheritable)
++    """
++
++def issue_73_utf8_doc_chars() -> None:
++    """
++    Construct a Ramsete unicycle controller.
++
++    Tuning parameter (b > 0 rad²/m²) for which larger values make
++
++    convergence more aggressive like a proportional term.
++    Tuning parameter (0 rad⁻¹ < zeta < 1 rad⁻¹) for which larger
++    values provide more damping in response.
++    """
++
++_cleanup: typing.Any  # value = <capsule object>
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/methods.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/methods.pyi
+new file mode 100644
+index 0000000..406a301
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/methods.pyi
+@@ -0,0 +1,10 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = ["Dummy"]
++
++class Dummy:
++    @staticmethod
++    def static_method(arg0: typing.SupportsInt) -> int: ...
++    def regular_method(self, arg0: typing.SupportsInt) -> int: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/numpy.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/numpy.pyi
+new file mode 100644
+index 0000000..3ee3357
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/numpy.pyi
+@@ -0,0 +1,23 @@
++from __future__ import annotations
++
++import typing
++
++import numpy
++
++__all__: list[str] = [
++    "accept_ndarray_float64",
++    "accept_ndarray_int",
++    "get_ndarray_float64",
++    "get_ndarray_int",
++    "return_dtype",
++]
++
++def accept_ndarray_float64(
++    arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.float64]
++) -> None: ...
++def accept_ndarray_int(
++    arg0: typing.Annotated[numpy.typing.ArrayLike, numpy.int32]
++) -> None: ...
++def get_ndarray_float64() -> numpy.typing.NDArray[numpy.float64]: ...
++def get_ndarray_int() -> numpy.typing.NDArray[numpy.int32]: ...
++def return_dtype() -> numpy.dtype[typing.Any]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/properties.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/properties.pyi
+new file mode 100644
+index 0000000..d7ae367
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/properties.pyi
+@@ -0,0 +1,105 @@
++from __future__ import annotations
++
++import typing
++
++__all__: list[str] = [
++    "WithGetterSetterDoc",
++    "WithPropAndGetterSetterDoc",
++    "WithPropDoc",
++    "WithoutDoc",
++]
++
++class WithGetterSetterDoc:
++    """
++    User docstring provided via pybind11::cpp_function(..., doc) to getters/setters, but NOT to `def_*(..., doc)` calls
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int:
++        """
++        getter doc token
++        """
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None:
++        """
++        setter doc token
++        """
++    @property
++    def def_property_readonly(self) -> int:
++        """
++        getter doc token
++        """
++
++class WithPropAndGetterSetterDoc:
++    """
++    User docstring provided via pybind11::cpp_function(..., doc) to getters/setters and to `def_*(, doc)` calls
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int:
++        """
++        prop doc token
++        """
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None: ...
++    @property
++    def def_property_readonly(self) -> int:
++        """
++        prop doc token
++        """
++
++class WithPropDoc:
++    """
++    User docstring provided only to `def_` calls
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int:
++        """
++        prop doc token
++        """
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None: ...
++    @property
++    def def_property_readonly(self) -> int:
++        """
++        prop doc token
++        """
++    @property
++    def def_readonly(self) -> int:
++        """
++        prop doc token
++        """
++    @property
++    def def_readwrite(self) -> int:
++        """
++        prop doc token
++        """
++    @def_readwrite.setter
++    def def_readwrite(self, arg0: typing.SupportsInt) -> None: ...
++
++class WithoutDoc:
++    """
++    No user docstring provided
++    """
++
++    def_property_readonly_static: typing.ClassVar[int] = 0
++    def_property_static: typing.ClassVar[int] = 0
++    @property
++    def def_property(self) -> int: ...
++    @def_property.setter
++    def def_property(self, arg1: typing.SupportsInt) -> None: ...
++    @property
++    def def_property_readonly(self) -> int: ...
++    @property
++    def def_readonly(self) -> int: ...
++    @property
++    def def_readwrite(self) -> int: ...
++    @def_readwrite.setter
++    def def_readwrite(self, arg0: typing.SupportsInt) -> None: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/stl.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/stl.pyi
+new file mode 100644
+index 0000000..dbc3269
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/stl.pyi
+@@ -0,0 +1,24 @@
++from __future__ import annotations
++
++import collections.abc
++import typing
++
++__all__: list[str] = [
++    "std_array",
++    "std_map",
++    "std_optional",
++    "std_variant",
++    "std_vector",
++]
++
++def std_array(
++    arg0: typing.Annotated[collections.abc.Sequence[typing.SupportsInt], "FixedSize(3)"]
++) -> typing.Annotated[list[int], "FixedSize(3)"]: ...
++def std_map() -> dict[int, complex]: ...
++def std_optional(arg0: typing.SupportsInt | None) -> None: ...
++def std_variant(
++    arg0: typing.SupportsInt
++    | typing.SupportsFloat
++    | tuple[typing.SupportsInt, typing.SupportsInt]
++) -> None: ...
++def std_vector() -> list[tuple[int, float]]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/stl_bind.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/stl_bind.pyi
+new file mode 100644
+index 0000000..0020e1d
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/stl_bind.pyi
+@@ -0,0 +1,129 @@
++from __future__ import annotations
++
++import collections.abc
++import typing
++
++__all__: list[str] = [
++    "MapStringComplex",
++    "VectorPairStringDouble",
++    "get_complex_map",
++    "get_vector_of_pairs",
++]
++
++class MapStringComplex:
++    def __bool__(self) -> bool:
++        """
++        Check whether the map is nonempty
++        """
++    @typing.overload
++    def __contains__(self, arg0: str) -> bool: ...
++    @typing.overload
++    def __contains__(self, arg0: typing.Any) -> bool: ...
++    def __delitem__(self, arg0: str) -> None: ...
++    def __getitem__(self, arg0: str) -> complex: ...
++    def __init__(self) -> None: ...
++    def __iter__(self) -> collections.abc.Iterator[str]: ...
++    def __len__(self) -> int: ...
++    def __repr__(self) -> str:
++        """
++        Return the canonical string representation of this map.
++        """
++    def __setitem__(self, arg0: str, arg1: complex) -> None: ...
++    def items(self) -> typing.ItemsView: ...
++    def keys(self) -> typing.KeysView: ...
++    def values(self) -> typing.ValuesView: ...
++
++class VectorPairStringDouble:
++    __hash__: typing.ClassVar[None] = None
++    def __bool__(self) -> bool:
++        """
++        Check whether the list is nonempty
++        """
++    def __contains__(self, x: tuple[str, typing.SupportsFloat]) -> bool:
++        """
++        Return true the container contains ``x``
++        """
++    @typing.overload
++    def __delitem__(self, arg0: typing.SupportsInt) -> None:
++        """
++        Delete the list elements at index ``i``
++        """
++    @typing.overload
++    def __delitem__(self, arg0: slice) -> None:
++        """
++        Delete list elements using a slice object
++        """
++    def __eq__(self, arg0: VectorPairStringDouble) -> bool: ...
++    @typing.overload
++    def __getitem__(self, s: slice) -> VectorPairStringDouble:
++        """
++        Retrieve list elements using a slice object
++        """
++    @typing.overload
++    def __getitem__(self, arg0: typing.SupportsInt) -> tuple[str, float]: ...
++    @typing.overload
++    def __init__(self) -> None: ...
++    @typing.overload
++    def __init__(self, arg0: VectorPairStringDouble) -> None:
++        """
++        Copy constructor
++        """
++    @typing.overload
++    def __init__(self, arg0: collections.abc.Iterable) -> None: ...
++    def __iter__(self) -> collections.abc.Iterator[tuple[str, float]]: ...
++    def __len__(self) -> int: ...
++    def __ne__(self, arg0: VectorPairStringDouble) -> bool: ...
++    @typing.overload
++    def __setitem__(
++        self, arg0: typing.SupportsInt, arg1: tuple[str, typing.SupportsFloat]
++    ) -> None: ...
++    @typing.overload
++    def __setitem__(self, arg0: slice, arg1: VectorPairStringDouble) -> None:
++        """
++        Assign list elements using a slice object
++        """
++    def append(self, x: tuple[str, typing.SupportsFloat]) -> None:
++        """
++        Add an item to the end of the list
++        """
++    def clear(self) -> None:
++        """
++        Clear the contents
++        """
++    def count(self, x: tuple[str, typing.SupportsFloat]) -> int:
++        """
++        Return the number of times ``x`` appears in the list
++        """
++    @typing.overload
++    def extend(self, L: VectorPairStringDouble) -> None:
++        """
++        Extend the list by appending all the items in the given list
++        """
++    @typing.overload
++    def extend(self, L: collections.abc.Iterable) -> None:
++        """
++        Extend the list by appending all the items in the given list
++        """
++    def insert(
++        self, i: typing.SupportsInt, x: tuple[str, typing.SupportsFloat]
++    ) -> None:
++        """
++        Insert an item at a given position.
++        """
++    @typing.overload
++    def pop(self) -> tuple[str, float]:
++        """
++        Remove and return the last item
++        """
++    @typing.overload
++    def pop(self, i: typing.SupportsInt) -> tuple[str, float]:
++        """
++        Remove and return the item at index ``i``
++        """
++    def remove(self, x: tuple[str, typing.SupportsFloat]) -> None:
++        """
++        Remove the first item from the list whose value is x. It is an error if there is no such item.
++        """
++
++def get_complex_map() -> MapStringComplex: ...
++def get_vector_of_pairs() -> VectorPairStringDouble: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/typing.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/typing.pyi
+new file mode 100644
+index 0000000..98fd047
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/typing.pyi
+@@ -0,0 +1,8 @@
++from __future__ import annotations
++
++import collections.abc
++
++__all__: list[str] = ["get_buffer", "get_sequence"]
++
++def get_buffer(arg0: collections.abc.Buffer) -> collections.abc.Buffer: ...
++def get_sequence(arg0: collections.abc.Sequence) -> collections.abc.Sequence: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/values.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/values.pyi
+new file mode 100644
+index 0000000..7c36d3f
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/_bindings/values.pyi
+@@ -0,0 +1,36 @@
++from __future__ import annotations
++
++import datetime
++
++import numpy
++from numpy import random
++
++__all__: list[str] = [
++    "Dummy",
++    "Foo",
++    "add_day",
++    "foolist",
++    "foovar",
++    "list_with_none",
++    "none",
++    "random",
++    "t_10ms",
++    "t_20ns",
++    "t_30s",
++]
++
++class Dummy:
++    linalg = numpy.linalg
++
++class Foo:
++    pass
++
++def add_day(arg0: datetime.datetime) -> datetime.datetime: ...
++
++foolist: list  # value = [<demo._bindings.values.Foo object>, <demo._bindings.values.Foo object>]
++foovar: Foo  # value = <demo._bindings.values.Foo object>
++list_with_none: list = [None, 2, {}]
++none = None
++t_10ms: datetime.timedelta  # value = datetime.timedelta(microseconds=10000)
++t_20ns: datetime.timedelta  # value = datetime.timedelta(0)
++t_30s: datetime.timedelta  # value = datetime.timedelta(seconds=30)
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/core.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/core.pyi
+new file mode 100644
+index 0000000..95c1646
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/core.pyi
+@@ -0,0 +1,35 @@
++from __future__ import annotations
++
++from demo._bindings import (
++    aliases,
++    classes,
++    eigen,
++    enum,
++    flawed_bindings,
++    functions,
++    issues,
++    methods,
++    numpy,
++    properties,
++    stl,
++    stl_bind,
++    typing,
++    values,
++)
++
++__all__: list[str] = [
++    "aliases",
++    "classes",
++    "eigen",
++    "enum",
++    "flawed_bindings",
++    "functions",
++    "issues",
++    "methods",
++    "numpy",
++    "properties",
++    "stl",
++    "stl_bind",
++    "typing",
++    "values",
++]
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/__init__.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/__init__.pyi
+new file mode 100644
+index 0000000..10d343e
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/__init__.pyi
+@@ -0,0 +1,11 @@
++from __future__ import annotations
++
++from . import classes, functions, functions_3_8_plus, functions_3_9_plus, values
++
++__all__: list[str] = [
++    "classes",
++    "functions",
++    "functions_3_8_plus",
++    "functions_3_9_plus",
++    "values",
++]
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/classes.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/classes.pyi
+new file mode 100644
+index 0000000..32aa068
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/classes.pyi
+@@ -0,0 +1,21 @@
++from __future__ import annotations
++
++__all__: list[str] = ["A", "B", "C", "X"]
++
++class A:
++    """
++    A
++    """
++
++class B(A):
++    """
++    B
++    """
++
++class C(B):
++    """
++    C
++    """
++
++class X:
++    pass
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions.pyi
+new file mode 100644
+index 0000000..5ed9ef3
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions.pyi
+@@ -0,0 +1,31 @@
++from __future__ import annotations
++
++import sys as sys
++import typing as typing
++
++from demo.pure_python.functions_3_8_plus import args_mix
++from demo.pure_python.functions_3_9_plus import generic_alias_annotation
++
++__all__: list[str] = [
++    "accept_frozenset",
++    "args_mix",
++    "builtin_function_as_default_arg",
++    "function_as_default_arg",
++    "generic_alias_annotation",
++    "lambda_as_default_arg",
++    "search",
++    "static_method_as_default_arg",
++    "sys",
++    "typing",
++]
++
++class _Dummy:
++    @staticmethod
++    def foo(): ...
++
++def accept_frozenset(arg: frozenset[int | float]) -> int | None: ...
++def builtin_function_as_default_arg(func: type(len) = len): ...
++def function_as_default_arg(func: type(search) = search): ...
++def lambda_as_default_arg(callback=...): ...
++def search(a: int, b: list[int]) -> int: ...
++def static_method_as_default_arg(callback=_Dummy.foo): ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions_3_8_plus.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions_3_8_plus.pyi
+new file mode 100644
+index 0000000..e916422
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions_3_8_plus.pyi
+@@ -0,0 +1,15 @@
++from __future__ import annotations
++
++import typing as typing
++
++__all__: list[str] = ["args_mix", "typing"]
++
++def args_mix(
++    a: int,
++    b: float = 0.5,
++    c: str = "",
++    *args: int,
++    x: int = 1,
++    y=int,
++    **kwargs: typing.Dict[int, str],
++): ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions_3_9_plus.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions_3_9_plus.pyi
+new file mode 100644
+index 0000000..59b9b80
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/functions_3_9_plus.pyi
+@@ -0,0 +1,5 @@
++from __future__ import annotations
++
++__all__: list[str] = ["generic_alias_annotation"]
++
++def generic_alias_annotation(a: list[tuple[int]], b: dict[int, str]) -> list[float]: ...
+diff --git a/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/values.pyi b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/values.pyi
+new file mode 100644
+index 0000000..0791339
+--- /dev/null
++++ b/tests/stubs/python-3.12/pybind11-v3.0.0/numpy-array-wrap-with-annotated/demo/pure_python/values.pyi
+@@ -0,0 +1,4 @@
++from __future__ import annotations
++
++__all__: list[str] = ["callables_dict"]
++callables_dict: dict = {"len": len, "int": int}
