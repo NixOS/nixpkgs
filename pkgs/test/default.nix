@@ -127,6 +127,7 @@ with pkgs;
   fetchDebianPatch = callPackages ../build-support/fetchdebianpatch/tests.nix { };
   fetchzip = callPackages ../build-support/fetchzip/tests.nix { };
   fetchgit = callPackages ../build-support/fetchgit/tests.nix { };
+  fetchNextcloudApp = callPackages ../build-support/fetchnextcloudapp/tests.nix { };
   fetchFirefoxAddon = callPackages ../build-support/fetchfirefoxaddon/tests.nix { };
   fetchPypiLegacy = callPackages ../build-support/fetchpypilegacy/tests.nix { };
 
