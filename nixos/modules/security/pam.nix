@@ -938,12 +938,21 @@ let
                     ];
                   }
                 )
-                {
-                  name = "fprintd";
-                  enable = cfg.fprintAuth;
-                  control = "sufficient";
-                  modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
-                }
+                (
+                  let
+                    fprint = config.security.pam.fprint;
+                  in
+                  {
+                    name = "fprintd";
+                    enable = cfg.fprintAuth;
+                    control = "sufficient";
+                    modulePath = "${config.services.fprintd.package}/lib/security/pam_fprintd.so";
+                    settings = {
+                      inherit (fprint) timeout;
+                      max-tries = fprint.maxTries;
+                    };
+                  }
+                )
               ]
               ++
                 # Modules in this block require having the password set in PAM_AUTHTOK.
@@ -1799,6 +1808,26 @@ in
         description = ''
           This controls the hostname for the 9front authentication server
           that users will be authenticated against.
+        '';
+      };
+    };
+
+    security.pam.fprint = {
+      maxTries = lib.mkOption {
+        default = 3;
+        type = lib.types.int;
+        description = ''
+          The number of attempts at fingerprint authentication to try
+          before returning an authentication failure. The minimum number
+          of tries is 1.
+        '';
+      };
+      timeout = lib.mkOption {
+        default = 30;
+        type = lib.types.int;
+        description = ''
+          The amount of time (in seconds) before returning an authentication
+          failure, with 10 seconds being the minimum.
         '';
       };
     };
