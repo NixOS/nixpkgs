@@ -12752,18 +12752,18 @@ with pkgs;
   kodiPackages = recurseIntoAttrs (kodi.packages);
 
   kodi = callPackage ../applications/video/kodi {
-    ffmpeg = ffmpeg_6;
+    ffmpeg = ffmpeg_8;
     jre_headless = buildPackages.jdk11_headless;
   };
 
   kodi-wayland = callPackage ../applications/video/kodi {
-    ffmpeg = ffmpeg_6;
+    ffmpeg = ffmpeg_8;
     jre_headless = buildPackages.jdk11_headless;
     waylandSupport = true;
   };
 
   kodi-gbm = callPackage ../applications/video/kodi {
-    ffmpeg = ffmpeg_6;
+    ffmpeg = ffmpeg_8;
     jre_headless = buildPackages.jdk11_headless;
     gbmSupport = true;
   };
