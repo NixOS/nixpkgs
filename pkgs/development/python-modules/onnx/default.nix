@@ -33,14 +33,14 @@ let
 in
 buildPythonPackage rec {
   pname = "onnx";
-  version = "1.19.0";
+  version = "1.19.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
     tag = "v${version}";
-    hash = "sha256-dDc7ugzQHcArf9TRcF9Ofv16jc3gqhMWCZrYKJ7Udfw=";
+    hash = "sha256-lIw65HAaNE+pOiHPpbOxzX+gk8ueJfuAHxs+DV99Jh0=";
   };
 
   build-system = [
