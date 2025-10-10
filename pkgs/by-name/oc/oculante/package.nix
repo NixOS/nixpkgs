@@ -17,21 +17,24 @@
   stdenv,
   gtk3,
   perl,
+  shaderc,
   wrapGAppsHook3,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "oculante";
-  version = "0.9.2";
+  version = "0.9.2.1-unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "woelper";
     repo = "oculante";
-    rev = version;
-    hash = "sha256-3kDrsD24/TNcA7NkwwCHN4ez1bC5MP7g28H3jaO/M7E=";
+    rev = "51b9f70b35e09850baee85971720b8d3ac49c80b";
+    hash = "sha256-YTrUucO1Fq2TgnV/HHkx2fcHvBupeoMpiBSwqIvyHaQ=";
   };
 
-  cargoHash = "sha256-lksAPT1nuwN5bh3x7+EN4B8ksGtvemt4tbm6/3gqdgE=";
+  cargoHash = "sha256-Bn2HxmFiqOeb3oUnUL/K0SahcFWRlY9RrbGU4orQz+Y=";
+
+  SHADERC_LIB_DIR = "${lib.getLib shaderc}/lib";
 
   nativeBuildInputs = [
     cmake
@@ -44,6 +47,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     openssl
     fontconfig
+    shaderc
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libGL

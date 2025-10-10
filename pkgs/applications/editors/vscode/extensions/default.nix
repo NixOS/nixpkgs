@@ -3758,6 +3758,8 @@ let
         };
       };
 
+      prince781.vala = callPackage ./prince781.vala { };
+
       prisma.prisma = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "prisma";
