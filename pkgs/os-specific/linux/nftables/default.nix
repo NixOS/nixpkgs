@@ -23,7 +23,6 @@
   iptables,
   nixosTests,
   gitUpdater,
-  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,8 +52,7 @@ stdenv.mkDerivation rec {
     docbook_xsl
     findXMLCatalogs
     libxslt
-  ]
-  ++ lib.optional stdenv.hostPlatform.isStatic ncurses;
+  ];
 
   buildInputs = [
     libmnl
@@ -65,8 +63,6 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCli libedit
   ++ lib.optional withXtables iptables;
-
-  env.NIX_LDFLAGS = if stdenv.hostPlatform.isStatic then "-lncursesw" else null;
 
   configureFlags = [
     "--with-json"
