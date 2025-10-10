@@ -1629,6 +1629,8 @@ let
 
           preview-dvisvgm = mkHome super.preview-dvisvgm;
 
+          procress = mkHome super.procress;
+
           # https://github.com/micdahl/projectile-trailblazer/issues/4
           projectile-trailblazer = addPackageRequires super.projectile-trailblazer [ self.projectile-rails ];
 
