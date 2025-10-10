@@ -18,8 +18,9 @@
   boost,
   avahi,
   lame,
+  exiv2,
   gettext,
-  pcre-cpp,
+  pcre2,
   yajl,
   fribidi,
   which,
@@ -37,7 +38,7 @@
   alsa-lib,
   libGLU,
   libGL,
-  ffmpeg,
+  ffmpeg_8,
   fontconfig,
   freetype,
   ftgl,
@@ -72,7 +73,7 @@
   libcec_platform,
   dcadec,
   libuuid,
-  libcrossguid,
+  crossguid,
   libmicrohttpd,
   bluez,
   doxygen,
@@ -88,7 +89,7 @@
   zlib,
   flatbuffers,
   fstrcmp,
-  rapidjson,
+  nlohmann_json,
   lirc,
   mesa-gl-headers,
   x11Support ? true,
@@ -244,14 +245,14 @@ stdenv.mkDerivation (
   in
   {
     pname = "kodi";
-    version = "21.3";
-    kodiReleaseName = "Omega";
+    version = "22.0a3";
+    kodiReleaseName = "Piers";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = "xbmc";
       rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash = "sha256-36wBAqGEDCRZ4t1ygTg03Pyk7Gg9quUTUGD3SBp6nCk=";
+      hash = "sha256-z9MnqMvo2jChmogYOmVz4D42NLgGbmjL19/sRs1AZSI=";
     };
 
     # make  derivations declared in the let binding available here, so
@@ -275,8 +276,9 @@ stdenv.mkDerivation (
       python3Packages.python
       boost
       libmicrohttpd
+      exiv2
       gettext
-      pcre-cpp
+      pcre2
       yajl
       fribidi
       libva
@@ -329,17 +331,17 @@ stdenv.mkDerivation (
       libgcrypt
       libgpg-error
       libunistring
-      libcrossguid
+      crossguid
       libplist
       bluez
       glib
       harfbuzz
       lcms2
       libpthread-stubs
-      ffmpeg
+      ffmpeg_8.dev
       flatbuffers
       fstrcmp
-      rapidjson
+      nlohmann_json
       lirc
       mesa-gl-headers
 
@@ -422,7 +424,7 @@ stdenv.mkDerivation (
       "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
-      "-DENABLE_INTERNAL_RapidJSON=OFF"
+      "-DENABLE_INTERNAL_NLOHMANNJ=OFF"
       "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
       "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
@@ -496,7 +498,7 @@ stdenv.mkDerivation (
 
     passthru = {
       pythonPackages = python3Packages;
-      ffmpeg = ffmpeg;
+      ffmpeg = ffmpeg_8;
       kodi = finalAttrs.finalPackage;
     };
 
