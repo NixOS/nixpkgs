@@ -1,16 +1,41 @@
 {
-  lib,
+  stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  qt5,
+  lib,
 }:
 
-libsForQt5.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qgo";
-  version = "unstable-2017-12-18";
+  version = "2.1.1";
 
-  meta = with lib; {
+  src = fetchFromGitHub {
+    owner = "johndaniels";
+    repo = "qgo";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-pW9QdHhOtih8gBIakqCdSjThpnYZo/2dmciLTH09+1A=";
+  };
+
+  patches = [ ./fix-paths.patch ];
+
+  postPatch = ''
+    sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
+  '';
+
+  qmakeFlags = [ "src/src.pro" ];
+
+  nativeBuildInputs = [
+    qt5.qmake
+    qt5.qttools
+    qt5.wrapQtAppsHook
+  ];
+  buildInputs = [
+    qt5.qtbase
+    qt5.qtmultimedia
+  ];
+
+  meta = {
     description = "Go client based on Qt5";
-    mainProgram = "qgo";
     longDescription = ''
       qGo is a Go Client based on Qt 5. It supports playing online at
       IGS-compatible servers (including some special tweaks for WING and LGS,
@@ -23,28 +48,10 @@ libsForQt5.mkDerivation {
       Go is an ancient Chinese board game. It's called "圍棋(Wei Qi)" in
       Chinese, "囲碁(Yi Go)" in Japanese, "바둑(Baduk)" in Korean.
     '';
-    homepage = "https://github.com/pzorin/qgo";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zalakain ];
+    homepage = "https://github.com/johndaniels/qgo";
+    mainProgram = "qgo";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zalakain ];
+    platforms = lib.platforms.linux;
   };
-
-  src = fetchFromGitHub {
-    owner = "pzorin";
-    repo = "qgo";
-    rev = "bef526dda4c79686edd95c88cc68de24f716703c";
-    sha256 = "1xzkayclmhsi07p9mnbf8185jw8n5ikxp2mik3x8qz1i6rmrfl5b";
-  };
-
-  patches = [ ./fix-paths.patch ];
-  postPatch = ''
-    sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
-  '';
-  nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.qttools
-  ];
-  buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qtmultimedia
-  ];
-}
+})
