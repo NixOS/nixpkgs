@@ -90,7 +90,13 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
+  cmakeFlags = [
+    "-DENABLE_OPENMP=ON"
+  ]
+  ++ lib.optionals (lib.versionOlder version "3.2") [
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   meta = {
     description = "Parametric 3d CAD program";
