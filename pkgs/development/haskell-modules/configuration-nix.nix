@@ -352,6 +352,7 @@ builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
+  # These require postgres and pass the connection string manually via the CLI in tests.
   consumers = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
     overrideCabal (drv: {
       preCheck = ''
@@ -399,6 +400,26 @@ builtins.intersectAttrs super {
         "--test-option=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
       ];
     }) (super.hpqtypes.override { libpq = pkgs.libpq; })
+  );
+  hpqtypes-effectful = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal
+      (drv: {
+        preCheck = ''
+          export postgresqlTestUserOptions="LOGIN SUPERUSER"
+          export PGDATABASE=hpqtypes-effectful
+        '';
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      (
+        super.hpqtypes-effectful.overrideAttrs (drv: {
+          postgresqlTestSetupPost = ''
+            export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
+          '';
+        })
+      )
   );
 
   shelly = overrideCabal (drv: {
