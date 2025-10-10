@@ -18,6 +18,7 @@ let
       composeSupport ? true,
       sbomSupport ? false,
       initSupport ? false,
+      extraPlugins ? [ ],
       # package dependencies
       stdenv,
       fetchFromGitHub,
@@ -246,11 +247,19 @@ let
         }
       );
 
-      plugins =
+      # compose is added later to avoid infinite recursion, since this list is
+      # also passed to compose derivation
+      pluginsWithoutCompose =
         lib.optionals buildxSupport [ docker-buildx ]
-        ++ lib.optionals composeSupport [ docker-compose ]
         ++ lib.optionals sbomSupport [ docker-sbom ]
-        ++ lib.optionals initSupport [ docker-init ];
+        ++ lib.optionals initSupport [ docker-init ]
+        ++ extraPlugins;
+
+      plugins =
+        pluginsWithoutCompose
+        ++ lib.optionals composeSupport [
+          (docker-compose.override { extraPlugins = pluginsWithoutCompose; })
+        ];
 
       pluginsRef = symlinkJoin {
         name = "docker-plugins";
