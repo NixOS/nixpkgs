@@ -4,8 +4,8 @@
 set -ex
 
 rev=$(
-  curl --location "https://raw.githubusercontent.com/NixOS/nixpkgs/refs/heads/master/pkgs/applications/networking/browsers/chromium/info.json" \
-  | jq -r ".chromium.deps.gn.rev"
+  curl --location "https://raw.githubusercontent.com/NixOS/nixpkgs/refs/heads/master/pkgs/applications/networking/browsers/chromium/variants/chromium/info.json" \
+  | jq -r ".deps.gn.rev"
 )
 
 commit_time=$(
