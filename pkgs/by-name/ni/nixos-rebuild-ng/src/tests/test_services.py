@@ -39,7 +39,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     mock_execve.assert_called_once_with(
         Path("/path/new/bin/nixos-rebuild-ng"),
         ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
+        {s.NIXOS_REBUILD_REEXEC_ENV: "1"},
     )
 
     mock_execve.reset_mock()
@@ -50,7 +50,7 @@ def test_reexec(mock_build: Mock, mock_execve: Mock, monkeypatch: MonkeyPatch) -
     mock_execve.assert_any_call(
         Path("/path/bin/nixos-rebuild-ng"),
         ["/path/bin/nixos-rebuild-ng", "switch", "--no-flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
+        {s.NIXOS_REBUILD_REEXEC_ENV: "1"},
     )
 
 
@@ -81,7 +81,7 @@ def test_reexec_flake(
     mock_execve.assert_called_once_with(
         Path("/path/new/bin/nixos-rebuild-ng"),
         ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
+        {s.NIXOS_REBUILD_REEXEC_ENV: "1"},
     )
 
     mock_execve.reset_mock()
@@ -92,5 +92,18 @@ def test_reexec_flake(
     mock_execve.assert_any_call(
         Path("/path/bin/nixos-rebuild-ng"),
         ["/path/bin/nixos-rebuild-ng", "switch", "--flake"],
-        {"_NIXOS_REBUILD_REEXEC": "1"},
+        {s.NIXOS_REBUILD_REEXEC_ENV: "1"},
     )
+
+
+@patch.dict(os.environ, {s.NIXOS_REBUILD_REEXEC_ENV: "1"}, clear=True)
+@patch("os.execve", autospec=True)
+@patch(get_qualified_name(s.nix.build_flake), autospec=True)
+def test_reexec_skip_if_already_reexec(mock_build: Mock, mock_execve: Mock) -> None:
+    argv = ["/path/bin/nixos-rebuild-ng", "switch", "--flake"]
+    args, _ = n.parse_args(argv)
+    mock_build.return_value = Path("/path")
+
+    s.reexec(argv, args, {"build": True}, {"flake": True})
+    mock_build.assert_not_called()
+    mock_execve.assert_not_called()
