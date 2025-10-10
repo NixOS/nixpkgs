@@ -97,4 +97,13 @@ in
       ];
     }) { }
   );
+  julia_112 = wrapJulia (
+    callPackage (import ./generic.nix {
+      version = "1.12.0";
+      hash = "sha256-LbpCs/FDVk+WxglI0RANsJAqo8uY6/icFWtAkfBdm4k=";
+      patches = [
+        ./patches/1.12/0001-skip-failing-and-flaky-tests.patch
+      ];
+    }) { }
+  );
 }
