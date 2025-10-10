@@ -13,6 +13,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HYrMIMTRPmgAac/vaZ1jaUFchyAl5B0quxgHH0DHJ84=";
   };
 
+  env.NIX_CFLAGS_COMPILE = "-D_FILE_OFFSET_BITS=64";
+
+  postPatch = ''
+    substituteInPlace src/{list,ntfsx,scrounge}.c \
+      --replace-fail "lseek64" "lseek"
+  '';
+
   patches = [
     ./darwin.diff
   ];

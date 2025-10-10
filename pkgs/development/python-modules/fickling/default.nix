@@ -48,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/trailofbits/fickling";
     changelog = "https://github.com/trailofbits/fickling/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

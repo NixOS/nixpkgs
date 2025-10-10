@@ -8,17 +8,14 @@
   glib,
 }:
 
-let
+stdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef-mpris2-plugin";
   version = "1.16";
-in
-stdenv.mkDerivation {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
-    repo = pname;
-    rev = "v${version}";
+    repo = "deadbeef-mpris2-plugin";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-f6iHgwLdzQJJEquyuUQGWFfOfpjH/Hxh9IqQ5HkYrog=";
   };
 
@@ -37,6 +34,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/DeaDBeeF-Player/deadbeef-mpris2-plugin/";
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
-}
+})

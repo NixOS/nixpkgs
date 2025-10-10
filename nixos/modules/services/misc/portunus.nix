@@ -117,12 +117,7 @@ in
     };
 
     ldap = {
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.openldap;
-        defaultText = lib.literalExpression "pkgs.openldap";
-        description = "The OpenLDAP package to use.";
-      };
+      package = lib.mkPackageOption pkgs "openldap" { };
 
       searchUserName = lib.mkOption {
         type = lib.types.str;
@@ -275,9 +270,9 @@ in
           PORTUNUS_SLAPD_USER = cfg.ldap.user;
           PORTUNUS_SLAPD_SCHEMA_DIR = "${cfg.ldap.package}/etc/schema";
         }
-        // (lib.optionalAttrs (cfg.seedPath != null) ({
+        // (lib.optionalAttrs (cfg.seedPath != null) {
           PORTUNUS_SEED_PATH = cfg.seedPath;
-        }))
+        })
         // (lib.optionalAttrs cfg.ldap.tls (
           let
             acmeDirectory = config.security.acme.certs."${cfg.domain}".directory;

@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchurl,
-  pythonOlder,
   replaceVars,
 
   # build
@@ -35,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.9";
+  version = "3.2.10";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-mMhfULdvqphwdEqynLNq+7XCNmqmf+zi1SGumC/6qAc=";
+    hash = "sha256-ZvqhvjDhrZ7uKi9fE/UYRaJblmfXXH6pYoUZ5u7cOu0=";
   };
 
   patches = [
@@ -116,9 +115,7 @@ in
 
 buildPythonPackage rec {
   inherit pname version src;
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   outputs = [
     "out"
@@ -143,15 +140,15 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    furo
     setuptools
-    shapely
   ]
   # building the docs fails with the following error when cross compiling
   #  AttributeError: module 'psycopg_c.pq' has no attribute '__impl__'
   ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [
+    furo
     sphinx-autodoc-typehints
     sphinxHook
+    shapely
   ];
 
   propagatedBuildInputs = [
@@ -200,6 +197,8 @@ buildPythonPackage rec {
     "test_package_version"
     # expects timeout, but we have no route in the sandbox
     "test_connect_error_multi_hosts_each_message_preserved"
+    # Flaky, fails intermittently
+    "test_break_attempts"
   ];
 
   disabledTestPaths = [
@@ -209,9 +208,6 @@ buildPythonPackage rec {
     # Mypy typing test
     "tests/test_typing.py"
     "tests/crdb/test_typing.py"
-    # https://github.com/psycopg/psycopg/pull/915
-    "tests/test_notify.py"
-    "tests/test_notify_async.py"
   ];
 
   pytestFlags = [

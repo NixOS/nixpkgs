@@ -23,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "cloudpathlib";
-  version = "0.21.1";
+  version = "0.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     owner = "drivendataorg";
     repo = "cloudpathlib";
     tag = "v${version}";
-    hash = "sha256-Bhr92xMK/WV3u0SG8q9SvO0kGnwSVXHzq6lK/RD2ssk=";
+    hash = "sha256-IeNYfYDvCALvK0CV4J6434E3lSz+/JvolQzQXZ8NizQ=";
   };
 
   postPatch = ''

@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  nixosTests,
   fetchFromGitHub,
   cmake,
   gmp,
@@ -12,7 +13,6 @@
   readline,
   xxd,
   iproute2,
-  ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-d1kpkBKuc30oIT1dRac8gkzh36Yyg80cizNRbyZ4424=";
   };
+
+  patches = [
+    # https://github.com/pi-hole/FTL/pull/2610: Fix authentication redirect when webhome is /
+    ./disable-redirect-root.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -73,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.settingsTemplate = ./pihole.toml;
+  passthru.tests = nixosTests.pihole-ftl;
 
   meta = {
     description = "Pi-hole FTL engine";

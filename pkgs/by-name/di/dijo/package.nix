@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   version = "0.2.7";
   buildInputs = [ ncurses ];
   src = fetchFromGitHub {
-    owner = "NerdyPepper";
+    owner = "oppiliappan";
     repo = "dijo";
     rev = "v${version}";
     sha256 = "sha256-g+A8BJxqoAvm9LTLrLnClVGtFJCQ2gT0mDGAov/6vXE=";
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Scriptable, curses-based, digital habit tracker";
-    homepage = "https://github.com/NerdyPepper/dijo";
+    homepage = "https://github.com/oppiliappan/dijo";
     license = licenses.mit;
     maintainers = [ ];
     mainProgram = "dijo";

@@ -62,8 +62,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_fireworks" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-fireworks==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-fireworks==";
+    };
   };
 
   meta = {

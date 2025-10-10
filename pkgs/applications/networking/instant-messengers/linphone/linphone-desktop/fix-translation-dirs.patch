@@ -1,0 +1,15 @@
+diff --git a/linphone-app/assets/languages/CMakeLists.txt b/linphone-app/assets/languages/CMakeLists.txt
+index ffe2b6a5b..12f02bdfe 100644
+--- a/linphone-app/assets/languages/CMakeLists.txt
++++ b/linphone-app/assets/languages/CMakeLists.txt
+@@ -32,8 +32,8 @@ file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/${I18N_FILENAME}" "${I18N_CONTENT}")
+ 
+ #Files or directories to inspect for translations references
+ set(TRANSLATION_SOURCES)
+-list(APPEND TRANSLATION_SOURCES "${PROJECT_SOURCE_DIR}/src")
+-list(APPEND TRANSLATION_SOURCES "${PROJECT_SOURCE_DIR}/ui")
++list(APPEND TRANSLATION_SOURCES "${PROJECT_SOURCE_DIR}/linphone-app/src")
++list(APPEND TRANSLATION_SOURCES "${PROJECT_SOURCE_DIR}/linphone-app/ui")
+ 
+ if (WIN32)
+   foreach (lang ${LANGUAGES})

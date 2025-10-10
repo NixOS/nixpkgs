@@ -3,6 +3,7 @@
   buildDunePackage,
   fetchFromGitLab,
   iri,
+  logs,
   re,
   sedlex,
   uutf,
@@ -10,18 +11,18 @@
 
 buildDunePackage rec {
   pname = "xtmpl";
-  version = "0.19.0";
-  duneVersion = "3";
+  version = "1.1.0";
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "zoggy";
     repo = "xtmpl";
-    rev = version;
-    sha256 = "sha256:0vwj0aayg60wm98d91fg3hmj90730liljy4cn8771dpxvz8m07bw";
+    tag = version;
+    hash = "sha256-CgVbSjHuRp+5IZdfkxGzaBP8p7pQdXu6S/MMgiPMw3E=";
   };
 
   propagatedBuildInputs = [
     iri
+    logs
     re
     sedlex
     uutf

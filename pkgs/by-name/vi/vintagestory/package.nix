@@ -16,16 +16,16 @@
   libglvnd,
   pipewire,
   libpulseaudio,
-  dotnet-runtime_7,
+  dotnet-runtime_8,
 }:
 
 stdenv.mkDerivation rec {
   pname = "vintagestory";
-  version = "1.20.12";
+  version = "1.21.4";
 
   src = fetchurl {
     url = "https://cdn.vintagestory.at/gamefiles/stable/vs_client_linux-x64_${version}.tar.gz";
-    hash = "sha256-h6YXEZoVVV9IuKkgtK9Z3NTvJogVNHmXdAcKxwfvqcE=";
+    hash = "sha256-npffJgxgUMefX9OiveNk1r4kVqsMaVCC1jcWaibz9l8=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,16 @@ stdenv.mkDerivation rec {
       comment = "Innovate and explore in a sandbox world";
       categories = [ "Game" ];
     })
+
+    (makeDesktopItem {
+      name = "vsmodinstall-handler";
+      desktopName = "Vintage Story 1-click Mod Install Handler";
+      comment = "Handler for vintagestorymodinstall:// URI scheme";
+      exec = "vintagestory -i %u";
+      mimeTypes = [ "x-scheme-handler/vintagestorymodinstall" ];
+      noDisplay = true;
+      terminal = false;
+    })
   ];
 
   installPhase = ''
@@ -76,12 +86,12 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory \
+    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --set-default mesa_glthread true \
       --add-flags $out/share/vintagestory/Vintagestory.dll
 
-    makeWrapper ${dotnet-runtime_7}/bin/dotnet $out/bin/vintagestory-server \
+    makeWrapper ${dotnet-runtime_8}/bin/dotnet $out/bin/vintagestory-server \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
       --set-default mesa_glthread true \
       --add-flags $out/share/vintagestory/VintagestoryServer.dll

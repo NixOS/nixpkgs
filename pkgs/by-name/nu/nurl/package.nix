@@ -6,7 +6,7 @@
   makeBinaryWrapper,
   gitMinimal,
   mercurial,
-  nixForLinking,
+  nix,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage rec {
         lib.makeBinPath [
           gitMinimal
           mercurial
-          nixForLinking
+          nix
         ]
       }
     installManPage artifacts/nurl.1

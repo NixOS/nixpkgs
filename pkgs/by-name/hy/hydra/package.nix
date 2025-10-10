@@ -131,14 +131,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2025-08-12";
+  version = "0-unstable-2025-09-13";
   # nixpkgs-update: no auto update
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "f7bda020c6144913f134ec616783e57817f7686f";
-    hash = "sha256-5fHXCFSCe2XQoXjqk25AIQo/5aUfaORf9lIszQ9KTyU=";
+    rev = "274027eb504c7fe090e00c16fd94f4b832981095";
+    hash = "sha256-d2e+WCO5vNIgSd7bzm4JD5zU3gZ8mepXKCvt5NGv0Zw=";
   };
 
   outputs = [

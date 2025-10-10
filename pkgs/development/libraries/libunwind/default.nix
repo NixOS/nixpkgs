@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunwind";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "libunwind";
     repo = "libunwind";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MsUReXFHlj15SgEZHOYhdSfAbSeVVl8LCi4NnUwvhpw=";
+    hash = "sha256-ed+FUPApDxNHxznXMhiTeNr8yRxRDSCyJJdIhouGNho=";
   };
 
   postPatch =
@@ -45,10 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Without latex2man, no man pages are installed despite being
     # prebuilt in the source tarball.
     "LATEX2MAN=${buildPackages.coreutils}/bin/true"
-  ]
-  # See https://github.com/libunwind/libunwind/issues/693
-  ++ lib.optionals (with stdenv.hostPlatform; isAarch64 && isMusl && !isStatic) [
-    "CFLAGS=-mno-outline-atomics"
   ];
 
   propagatedBuildInputs = [ xz ];
@@ -91,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       "loongarch64-linux"
       "mips64el-linux"
       "mipsel-linux"
+      "powerpc-linux"
       "powerpc64-linux"
       "powerpc64le-linux"
       "riscv64-linux"

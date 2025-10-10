@@ -36,7 +36,6 @@ deployAndroidPackage {
         nss
         nspr
         alsa-lib
-        llvmPackages_15.libllvm.lib
         waylandpp.lib
       ]
     )
@@ -68,10 +67,6 @@ deployAndroidPackage {
       # This library is linked against a version of libtiff that nixpkgs doesn't have
       for file in $out/libexec/android-sdk/emulator/*/qt/plugins/imageformats/libqtiffAndroidEmu.so; do
         patchelf --replace-needed libtiff.so.5 libtiff.so "$file" || true
-      done
-
-      for file in $out/libexec/android-sdk/emulator/lib64/vulkan/libvulkan_lvp.so; do
-        patchelf --replace-needed libLLVM-15.so.1 libLLVM-15.so "$file" || true
       done
 
       autoPatchelf $out

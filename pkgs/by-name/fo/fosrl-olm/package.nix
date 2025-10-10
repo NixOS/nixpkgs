@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "olm";
-  version = "1.0.0";
+  version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "fosrl";
     repo = "olm";
     tag = version;
-    hash = "sha256-a0gkEo5EuJpHpZ5fKAPBXSTRvZaQo6KOJu4Abi1EztU=";
+    hash = "sha256-Lv04rPZUz2thSs6/CgIj16YNKgRzeb4M4uGKGhAS4Kc=";
   };
 
-  vendorHash = "sha256-Ms8tLFKIa8GqmyFI7o+sQEpsZghNPIpq8BRCoY89Org=";
+  vendorHash = "sha256-4j7l1vvorcdbHE4XXOUH2MaOSIwS70l8w7ZBmp3a/XQ=";
 
   ldflags = [
     "-s"

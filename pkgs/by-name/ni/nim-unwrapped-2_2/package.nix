@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "nim";
     maintainers = with maintainers; [
-      ehmry
       eveeifyeve
     ];
   };

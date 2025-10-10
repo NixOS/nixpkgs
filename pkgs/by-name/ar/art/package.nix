@@ -40,14 +40,22 @@
 
 stdenv.mkDerivation rec {
   pname = "art";
-  version = "1.25.8";
+  version = "1.25.9";
 
   src = fetchFromGitHub {
     owner = "artpixls";
     repo = "ART";
     tag = version;
-    hash = "sha256-FsaTXGlQ390XgFrV4InF+xFr+Y9JgZefsR/AyHOuSsA=";
+    hash = "sha256-dg0msZ0aeyl4L7RqqGur9Lalu1QtE0igEc54WT5F+SQ=";
   };
+
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.9)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -109,7 +117,7 @@ stdenv.mkDerivation rec {
     homepage = "https://art.pixls.us";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ paperdigits ];
-    mainProgram = "art";
+    mainProgram = "ART";
     platforms = lib.platforms.linux;
   };
 }

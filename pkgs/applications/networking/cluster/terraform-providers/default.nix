@@ -2,7 +2,6 @@
   lib,
   stdenv,
   buildGoModule,
-  buildGo123Module,
   fetchFromGitHub,
   fetchFromGitLab,
   callPackage,
@@ -97,15 +96,12 @@ let
 
   # These are the providers that don't fall in line with the default model
   special-providers = {
-    aws = automated-providers.aws.override { mkProviderGoModule = buildGo123Module; };
     # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
     checkly = automated-providers.checkly.override { spdx = "MIT"; };
     gitlab = automated-providers.gitlab.override {
       mkProviderFetcher = fetchFromGitLab;
       owner = "gitlab-org";
     };
-    # actions update always fails but can't reproduce the failure.
-    heroku = automated-providers.heroku.override { spdx = "MPL-2.0"; };
     # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
     libvirt = automated-providers.libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
@@ -121,7 +117,13 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      fly = archived "fly" "2023/10";
+      _assert = archived "_assert" "2025/10";
+      azurestack = archived "azurestack" "2025/10";
+      googleworkspace = archived "googleworkspace" "2025/10";
+      huaweicloudstack = archived "huaweicloudstack" "2025/10";
+      metal = archived "metal" "2025/10";
+      stackpath = archived "stackpath" "2025/10";
+      vra7 = archived "vra7" "2025/10";
     };
 
   # excluding aliases, used by terraform-full

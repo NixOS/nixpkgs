@@ -12,18 +12,24 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.20.2";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    hash = "sha256-QkBSHkXP67khJa/Ju7yx97ibOU3BcBt6tOHnS0rYvZM=";
+    hash = "sha256-GZ+/NzOjcKTYOq4HajKGD68RNxIdXxfLo/pAewaZ8F8=";
   };
 
-  vendorHash = "sha256-O7T7DO3RCQVBBDvFSLAgoD8tJRMJpb4/3ch7OYk4bIk=";
+  vendorHash = "sha256-mhT5s1nIdX/57TDEaWwbni0E7DX0W0WwwvrSr7L66hI=";
 
   proxyVendor = true;
+
+  postPatch = ''
+    # Remove defunct github.com/hashicorp/go-cmp dependency
+    sed -i '/github\.com\/hashicorp\/go-cmp/d' go.mod
+    sed -i '/github\.com\/hashicorp\/go-cmp/d' go.sum
+  '';
 
   subPackages = [ "." ];
 
@@ -75,7 +81,6 @@ buildGoModule rec {
       rushmorem
       lnl7
       offline
-      pradeepchhetri
       Chili-Man
       techknowlogick
     ];

@@ -12,16 +12,18 @@
   cmake,
   gperf,
   nix-update-script,
+  withWhatsApp ? true,
+  apple-sdk_12,
 }:
 
 let
-  version = "5.8.4";
+  version = "5.10.15";
 
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
     tag = "v${version}";
-    hash = "sha256-PfiTIq8xomqp4ewawbX56hFgA4x5z8SI2w9husMtZPc=";
+    hash = "sha256-wA0sLOcCDPi3w1naIx/Q82DJk/tl/LTnrUBbMAPvvFU=";
   };
 
   libcgowm = buildGoModule {
@@ -29,7 +31,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/lib/wmchat/go";
-    vendorHash = "sha256-HC7tJRk7Pqw3AUDEP2fGqYQLjIGf0CgB36K3PBYsBMM=";
+    vendorHash = "sha256-u64b9z/B0j3qArMfxJ8QolgDc9k7Q+LqrQRle3nN7eM=";
 
     buildPhase = ''
       runHook preBuild
@@ -86,10 +88,15 @@ stdenv.mkDerivation rec {
     readline
     sqlite
     zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # For SecTrustCopyCertificateChain, see https://github.com/NixOS/nixpkgs/pull/445063#pullrequestreview-3261846621
+    apple-sdk_12
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "HAS_WHATSAPP" withWhatsApp)
   ];
 
   passthru = {

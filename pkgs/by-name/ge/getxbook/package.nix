@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ihwrx4gspj8l7fc8vxch6dpjrw1lvv9z3c19f0wxnmnxhv1cjvs";
   };
 
-  env.NIX_CFLAGS_COMPILE = builtins.toString (
+  env.NIX_CFLAGS_COMPILE = toString (
     [ "-Wno-error=deprecated-declarations" ]
     ++ lib.optionals (!stdenv.cc.isClang) [
       "-Wno-error=format-truncation"

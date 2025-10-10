@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "calibre-web";
-  version = "0.6.24";
+  version = "0.6.25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "janeczku";
     repo = "calibre-web";
     tag = version;
-    hash = "sha256-DYhlD3ly6U/e5cDlsubDyW1uKeCtB+HrpagJlNDJhyI=";
+    hash = "sha256-tmSp6ABQ4KnNdUHYZPnXGfhhyhM6aczEUPd57APZnLA=";
   };
 
   patches = [

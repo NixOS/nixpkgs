@@ -5,18 +5,19 @@
   nix-update-script,
   versionCheckHook,
 }:
+
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdwatch";
-  version = "0.1.11";
+  version = "0.1.15";
 
   src = fetchFromGitHub {
     owner = "santoshxshrestha";
     repo = "mdwatch";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-v+QsSPknUAFk+GC8D0wtA8VTcCWeb8DX6inL6WNl8gQ=";
+    hash = "sha256-zwlbWxvdtZJuz7gFdgmny6s1FsoxoBXkP4s7vF77oEo=";
   };
 
-  cargoHash = "sha256-4Xvi5DxlqxfwnIa00Dr7tRzYa8/52BH/SODiNenlFDg=";
+  cargoHash = "sha256-9XD8HbgnXhGsg1iZ/zYlk5080AhKqb8JxKKx5bxFE8M=";
 
   updateScript = nix-update-script { };
 
@@ -26,6 +27,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Simple CLI tool to live-preview Markdown files in your browser";
     homepage = "https://github.com/santoshxshrestha/mdwatch";
+    changelog = "https://github.com/santoshxshrestha/mdwatch/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ x123 ];
     mainProgram = "mdwatch";

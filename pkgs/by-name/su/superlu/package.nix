@@ -7,14 +7,11 @@
   ninja,
   gfortran,
   blas,
-  lapack,
 }:
-
-assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu";
-  version = "7.0.0";
+  version = "7.0.1";
 
   src = fetchFromGitHub {
     owner = "xiaoyeli";
@@ -27,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     # * <https://github.com/xiaoyeli/superlu/blob/0bbd6571bd839d866bff6a8ff1eaa812a8c31463/License.txt#L32-L65>
     # * <https://salsa.debian.org/science-team/superlu/-/blob/0acab1b41f332f2f2e3b0b5d28ba7fc9f7539533/debian/copyright>
     postFetch = "rm $out/SRC/mc64ad.* $out/DOC/*.pdf";
-    hash = "sha256-iJiVyY+/vr6kll8FCunvZ8rKBj+w+Rnj4F696XW9xFc=";
+    hash = "sha256-MiQPhYIGZbvmtpIojrNzTG4Xao7lc4Ks/FtxlfdAKmQ=";
   };
 
   patches = [
@@ -36,6 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-QUaNUDaRghTqr6jk1TE6a7CdXABqu7xAkYZDhL/lZBQ=";
     })
   ];
+
+  # Prevent clang from crashing when compiling slatms.c from SuperLU’s matgen test code.
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    echo 'target_compile_options(matgen PRIVATE -fno-vectorize)' >> TESTING/MATGEN/CMakeLists.txt
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,11 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     (lib.cmakeBool "enable_fortran" true)
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # prevent cmake from using Accelerate, which causes tests to segfault
     # https://github.com/xiaoyeli/superlu/issues/155
-    "-DBLA_VENDOR=Generic"
+    (lib.cmakeFeature "BLA_VENDOR" "Generic")
   ];
 
   doCheck = true;

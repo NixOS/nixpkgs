@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "mne";
-  version = "1.10.0";
+  version = "1.10.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -37,7 +37,7 @@ buildPythonPackage rec {
     owner = "mne-tools";
     repo = "mne-python";
     tag = "v${version}";
-    hash = "sha256-j0kPtw00gV50Nuh/b4+Jq6P7pQVRgr4/xMTwRSyzJcU=";
+    hash = "sha256-xxkv+8RAkpRyMWznUMpwc6E72mb9DUPW6O5hFHiNz98=";
   };
 
   postPatch = ''
@@ -112,7 +112,7 @@ buildPythonPackage rec {
     description = "Magnetoencephelography and electroencephalography in Python";
     mainProgram = "mne";
     homepage = "https://mne.tools";
-    changelog = "https://mne.tools/stable/changes/${version}.html";
+    changelog = "https://mne.tools/stable/changes/v${lib.versions.majorMinor version}.html";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin

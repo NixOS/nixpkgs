@@ -1,16 +1,23 @@
 {
-  stdenv,
-  lib,
-  fetchFromGitHub,
   autoconf,
   automake,
-  makeBinaryWrapper,
-  pkg-config,
-  pciutils,
-  libusb1,
+  bashNonInteractive,
+  coreutils,
+  fetchFromGitHub,
   fuse,
-  busybox,
+  gawk,
+  gnugrep,
+  gnused,
+  lib,
+  libusb1,
+  makeBinaryWrapper,
+  pciutils,
+  pkg-config,
+  procps,
   pv,
+  stdenv,
+  which,
+  util-linux,
   withBfbInstall ? true,
 }:
 
@@ -58,8 +65,16 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/bfb-install \
       --set PATH ${
         lib.makeBinPath [
-          busybox
+          bashNonInteractive
+          coreutils
+          gawk
+          gnugrep
+          gnused
+          pciutils
+          procps
           pv
+          util-linux
+          which
         ]
       }
   '';

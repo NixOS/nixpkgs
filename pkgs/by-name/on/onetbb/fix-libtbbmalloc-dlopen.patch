@@ -1,0 +1,69 @@
+From 791d42ddacad829d19a4f66b77dc9ca410008db9 Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Sat, 13 Sep 2025 03:16:16 +0100
+Subject: [PATCH] Use `dladdr` to keep `libtbbmalloc` loaded on POSIX
+
+This fixes issues that arise when `libtbbmalloc` cannot be loaded by
+relative path, makes the behaviour consistent with the Windows code
+path, and eliminates the duplication of `MALLOCLIB_NAME`.
+---
+ src/tbbmalloc/tbbmalloc.cpp | 34 +++++++++-------------------------
+ 1 file changed, 9 insertions(+), 25 deletions(-)
+
+diff --git a/src/tbbmalloc/tbbmalloc.cpp b/src/tbbmalloc/tbbmalloc.cpp
+index b72e03a74f..12d62445aa 100644
+--- a/src/tbbmalloc/tbbmalloc.cpp
++++ b/src/tbbmalloc/tbbmalloc.cpp
+@@ -1,5 +1,5 @@
+ /*
+-    Copyright (c) 2005-2023 Intel Corporation
++    Copyright (c) 2005-2025 Intel Corporation
+ 
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+@@ -32,25 +32,6 @@
+ namespace rml {
+ namespace internal {
+ 
+-#if TBB_USE_DEBUG
+-#define DEBUG_SUFFIX "_debug"
+-#else
+-#define DEBUG_SUFFIX
+-#endif /* TBB_USE_DEBUG */
+-
+-// MALLOCLIB_NAME is the name of the oneTBB memory allocator library.
+-#if _WIN32||_WIN64
+-#define MALLOCLIB_NAME "tbbmalloc" DEBUG_SUFFIX ".dll"
+-#elif __APPLE__
+-#define MALLOCLIB_NAME "libtbbmalloc" DEBUG_SUFFIX ".2.dylib"
+-#elif __FreeBSD__ || __NetBSD__ || __OpenBSD__ || __sun || _AIX || __ANDROID__
+-#define MALLOCLIB_NAME "libtbbmalloc" DEBUG_SUFFIX ".so"
+-#elif __unix__
+-#define MALLOCLIB_NAME "libtbbmalloc" DEBUG_SUFFIX  __TBB_STRING(.so.2)
+-#else
+-#error Unknown OS
+-#endif
+-
+ void init_tbbmalloc() {
+ #if __TBB_USE_ITT_NOTIFY
+     MallocInitializeITT();
+@@ -92,11 +73,14 @@ struct RegisterProcessShutdownNotification {
+     RegisterProcessShutdownNotification() {
+         // prevents unloading, POSIX case
+ 
+-        // We need better support for the library pinning
+-        // when dlopen can't find TBBmalloc library.
+-        // for example: void *ret = dlopen(MALLOCLIB_NAME, RTLD_NOW);
+-        // MALLOC_ASSERT(ret, "Allocator can't load itself.");
+-        dlopen(MALLOCLIB_NAME, RTLD_NOW);
++        Dl_info dlinfo;
++        int ret = dladdr((void*)&init_tbbmalloc, &dlinfo);
++        MALLOC_ASSERT(ret && dlinfo.dli_fname, "Allocator can't find itself.");
++        tbb::detail::suppress_unused_warning(ret);
++
++        void* lib = dlopen(dlinfo.dli_fname, RTLD_NOW);
++        MALLOC_ASSERT(lib, "Allocator can't load itself.");
++        tbb::detail::suppress_unused_warning(lib);
+     }
+ 
+     RegisterProcessShutdownNotification(RegisterProcessShutdownNotification&) = delete;

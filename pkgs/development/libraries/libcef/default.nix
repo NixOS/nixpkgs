@@ -92,14 +92,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcef";
-  version = "138.0.33";
-  gitRevision = "276ed6d";
-  chromiumVersion = "138.0.7204.169";
+  version = "140.1.14";
+  gitRevision = "eb1c06e";
+  chromiumVersion = "140.0.7339.185";
   buildType = "Release";
 
   srcHash = selectSystem {
-    aarch64-linux = "sha256-CWO0jwDstuLfyNLGSR/DDxB6LYl8IySn04FxQ9MI6qQ=";
-    x86_64-linux = "sha256-M1lpsDCGqm65bR6tTglkW6ENliEmLDk/Ko+NW7UTtoc=";
+    aarch64-linux = "sha256-psgs+RcEYWKN4NneU4eVIaV2b7y+doxdPs9QWsN8dTA=";
+    x86_64-linux = "sha256-CDVzU+GIAU6hEutot90GMlAS8xEqD3uNLppgGq9d4mE=";
   };
 
   src = fetchurl {

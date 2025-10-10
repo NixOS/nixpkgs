@@ -42,13 +42,13 @@
 
   mariadb = stdenv.mkDerivation rec {
     pname = "mariadb-connector-odbc";
-    version = "3.1.20";
+    version = "3.2.6";
 
     src = fetchFromGitHub {
       owner = "mariadb-corporation";
       repo = "mariadb-connector-odbc";
       rev = version;
-      hash = "sha256-l+HlS7/A0shwsEXYKDhi+QCmwHaMTeKrtcvo9yYpYws=";
+      hash = "sha256-FdnA3/xDxnk2910LCMPWQTcUUSYfUsnnZ3Hqj0uey5s=";
       # this driver only seems to build correctly when built against the mariadb-connect-c subrepo
       # (see https://github.com/NixOS/nixpkgs/issues/73258)
       fetchSubmodules = true;
@@ -57,6 +57,8 @@
     patches = [
       # Fix `call to undeclared function 'sleep'` with clang 16
       ./mariadb-connector-odbc-unistd.patch
+
+      ./mariadb-connector-odbc-musl.patch
     ];
 
     nativeBuildInputs = [ cmake ];

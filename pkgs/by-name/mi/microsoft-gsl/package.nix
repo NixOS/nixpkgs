@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   gtest,
   pkg-config,
@@ -10,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "microsoft-gsl";
-  version = "4.0.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "Microsoft";
     repo = "GSL";
     rev = "v${version}";
-    hash = "sha256-cXDFqt2KgMFGfdh6NGE+JmP4R0Wm9LNHM0eIblYe6zU=";
+    hash = "sha256-NrnYfCCeQ50oHYFbn9vh5Z4mfyxc0kAM3qnzQdq9gyM=";
   };
 
   nativeBuildInputs = [
@@ -25,17 +24,8 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [ gtest ];
 
-  # negate the `-Werror` flag as Microsoft doesn't build with clang
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error";
-
-  patches = [
-    # nvcc doesn't recognize the "gsl" attribute namespace (microsoft/onnxruntime#13573)
-    # only affects nvcc
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/microsoft/onnxruntime/4bfa69def85476b33ccfaf68cf070f3fb65d39f7/cmake/patches/gsl/1064.patch";
-      hash = "sha256-0jESA+VENWQms9HGE0jRiZZuWLJehBlbArxSaQbYOrM=";
-    })
-  ];
+  # C++17 required by latest gtest
+  env.NIX_CFLAGS_COMPILE = "-std=c++17";
 
   doCheck = true;
 

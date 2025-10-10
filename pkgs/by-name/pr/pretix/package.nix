@@ -42,13 +42,13 @@ let
   };
 
   pname = "pretix";
-  version = "2025.6.0";
+  version = "2025.8.0";
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bDE4ygTCX7hynWjoni9ZWMGujKvPk0TKaG42SQ6w9Rk=";
+    hash = "sha256-89BAQZpXyyTg6T9hxm4EV8QHZDcD3FcnGKxAulxziyg=";
   };
 
   npmDeps = buildNpmPackage {
@@ -56,7 +56,7 @@ let
     inherit version src;
 
     sourceRoot = "${src.name}/src/pretix/static/npm_dir";
-    npmDepsHash = "sha256-LQPbOC9SaolD/fyiFoObndx7pcS7iaYVytz6y+bQZqQ=";
+    npmDepsHash = "sha256-E2K9SYqRbhpQi83va8D02cwPnf51haoKv4P/ppU2m08=";
 
     dontBuild = true;
 
@@ -85,6 +85,8 @@ python.pkgs.buildPythonApplication rec {
     "celery"
     "css-inline"
     "django-bootstrap3"
+    "django-formset-js-improved"
+    "django-i18nfield"
     "django-localflavor"
     "django-phonenumber-field"
     "dnspython"
@@ -96,6 +98,7 @@ python.pkgs.buildPythonApplication rec {
     "phonenumberslite"
     "pillow"
     "protobuf"
+    "pycparser"
     "pycryptodome"
     "pyjwt"
     "pypdf"
@@ -105,6 +108,7 @@ python.pkgs.buildPythonApplication rec {
     "reportlab"
     "requests"
     "sentry-sdk"
+    "sepaxml"
     "ua-parser"
     "webauthn"
   ];
@@ -125,6 +129,10 @@ python.pkgs.buildPythonApplication rec {
     substituteInPlace pyproject.toml \
       --replace-fail '"backend"' '"setuptools.build_meta"' \
       --replace-fail 'backend-path = ["_build"]' ""
+
+    # npm ci would remove and try to reinstall node_modules
+    substituteInPlace src/pretix/_build.py \
+      --replace-fail "npm ci" "npm install"
   '';
 
   build-system = with python.pkgs; [

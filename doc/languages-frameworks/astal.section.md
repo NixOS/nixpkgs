@@ -4,7 +4,7 @@ Astal is a collection of building blocks for creating custom desktop shells.
 
 ## Bundling {#astal-bundling}
 
-Bundling Astal application is done using `ags` tool, you can use it like this:
+Bundling an Astal application is done using the `ags` tool. You can use it like this:
 
 ```nix
 ags.bundle {
@@ -19,7 +19,7 @@ ags.bundle {
   entry = "app.ts";
 
   dependencies = [
-    # list here astal modules, that your package depends on
+    # list here astal modules that your package depends on
     # `astal3`, `astal4` and `astal.io` are automatically included
     astal.apps
     astal.battery

@@ -77,7 +77,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipewire";
-  version = "1.4.6";
+  version = "1.4.8";
 
   outputs = [
     "out"
@@ -93,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pipewire";
     repo = "pipewire";
     rev = finalAttrs.version;
-    sha256 = "sha256-Hk43rKrKCJA6njQ9ap/Pje9AQKygrDc+GTlimaMh/pg=";
+    sha256 = "sha256-o4puApKXW4pQ0DRcLgZTDor8CAxKehn7Zi56/PzrSLU=";
   };
 
   patches = [
@@ -165,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals x11Support [
     libcanberra
     xorg.libX11
+    xorg.libxcb
     xorg.libXfixes
   ]
   ++ lib.optionals bluezSupport [
@@ -240,9 +241,12 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = true;
   doInstallCheck = true;
 
-  postUnpack = ''
-    patchShebangs ${finalAttrs.src.name}/doc/*.py
-    patchShebangs ${finalAttrs.src.name}/doc/input-filter-h.sh
+  postPatch = ''
+    patchShebangs doc/*.py
+    patchShebangs doc/input-filter-h.sh
+
+    # Remove installed-test that runs forever
+    sed -i -e "/test-pipewire-alsa-stress/d" pipewire-alsa/tests/meson.build
   '';
 
   postInstall = ''

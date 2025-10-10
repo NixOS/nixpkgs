@@ -2,20 +2,17 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "pathvalidate";
-  version = "3.2.3";
+  version = "3.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WbW5J44wOC1tITSXYjBD6+Y/EOKQVb5EGanATHIXOcs=";
+    hash = "sha256-sYwHISv+rWJDRbuOHWFBzc8Vo5c2mU6guUA1rSsboXc=";
   };
 
   build-system = [ setuptools-scm ];

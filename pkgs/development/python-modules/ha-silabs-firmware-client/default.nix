@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
+  pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -41,6 +42,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     aioresponses
+    pytest-asyncio
     pytestCheckHook
   ];
 

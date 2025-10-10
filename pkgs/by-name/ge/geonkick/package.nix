@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
-  version = "3.6.1";
+  version = "3.6.2";
 
   src = fetchFromGitLab {
     owner = "Geonkick-Synthesizer";
     repo = "geonkick";
     rev = "v${version}";
-    hash = "sha256-f5RJzkr98CygOT0O5igMnqetl8if81hKzGAJ2IrR5Hg=";
+    hash = "sha256-1khlAY9szKdwX/kMJvuD1CTO5M8GeMBVCSPmt52GJyA=";
   };
 
   nativeBuildInputs = [

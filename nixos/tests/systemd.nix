@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 {
   name = "systemd";
 
@@ -107,6 +107,14 @@
 
       # Will not succeed unless ConditionFirstBoot=yes
       machine.wait_for_unit("first-boot-complete.target")
+
+      machine.succeed(
+        "journalctl --system -o cat --grep 'systemd ${lib.escapeRegex pkgs.systemd.version} running'"
+      )
+
+      assert "systemd ${lib.versions.major pkgs.systemd.version} (${pkgs.systemd.version})" in machine.succeed(
+        "systemctl --version"
+      )
 
       # Make sure, a subsequent boot isn't a ConditionFirstBoot=yes.
       machine.reboot()

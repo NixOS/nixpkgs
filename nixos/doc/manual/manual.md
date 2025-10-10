@@ -7,11 +7,11 @@
   the manual structure extends the nixpkgs commonmark further with include
   blocks to allow better organization of input text. there are six types of
   include blocks: preface, parts, chapters, sections, appendix, and options.
-  each type except `options`` corresponds to the docbook elements of (roughly)
+  each type except `options` corresponds to the docbook elements of (roughly)
   the same name, and can itself can further include blocks to denote its
   substructure.
 
-  non-`options`` include blocks are fenced code blocks that list a number of
+  non-`options` include blocks are fenced code blocks that list a number of
   files to include, in the form
 
      ```{=include=} <type>

@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  sanitiseHeaderPathsHook,
 
   openssl,
   glog,
@@ -14,6 +13,7 @@
   zstd,
   gflags,
   libevent,
+  darwinMinVersionHook,
 
   folly,
   libsodium,
@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fizz";
-  version = "2025.04.21.00";
+  version = "2025.09.15.00";
 
   outputs = [
     "bin"
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookincubator";
     repo = "fizz";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-khaUbxcD8+9zznH0DE/BpweZeDKafTnr4EqPbmOpckU=";
+    hash = "sha256-8j8Nt8XCbMGui7bELhvP+o8E2bqYobkXLhvZVkzCMzU=";
   };
 
   patches = [
@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    sanitiseHeaderPathsHook
   ];
 
   buildInputs = [
@@ -58,6 +57,9 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
     gflags
     libevent
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   propagatedBuildInputs = [

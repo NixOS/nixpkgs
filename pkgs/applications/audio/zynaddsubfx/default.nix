@@ -71,8 +71,8 @@ stdenv.mkDerivation rec {
   version = "3.0.6";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "zynaddsubfx";
+    repo = "zynaddsubfx";
     tag = version;
     fetchSubmodules = true;
     hash = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGuiModule=${guiModule}"
     "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ]
   # OSS library is included in glibc.
   # Must explicitly disable if support is not wanted.

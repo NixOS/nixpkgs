@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "optax";
-  version = "0.2.5";
+  version = "0.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "optax";
     tag = "v${version}";
-    hash = "sha256-EGQeRYSxHdENqB3QPZFsjqwh4LYT5CF8E1K3fKFedPg=";
+    hash = "sha256-+9Q/Amb60m65ZiJsmH93e6tQmpJlMyzVUL0A7q3mS8Y=";
   };
 
   outputs = [

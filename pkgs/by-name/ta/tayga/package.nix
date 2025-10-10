@@ -16,6 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xOm4fetFq2UGuhOojrT8WOcX78c6MLTMVbDv+O62x2E=";
   };
 
+  makeFlags = [ "CC=${lib.getExe stdenv.cc}" ];
+
+  env = lib.optionalAttrs stdenv.hostPlatform.is32bit {
+    NIX_CFLAGS_COMPILE = "-D_TIME_BITS=64 -D_FILE_OFFSET_BITS=64";
+  };
+
   preBuild = ''
     echo "#define TAYGA_VERSION \"${finalAttrs.version}\"" > version.h
   '';

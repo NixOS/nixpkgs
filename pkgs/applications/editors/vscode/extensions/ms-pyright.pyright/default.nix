@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ms-pyright";
     name = "pyright";
-    version = "1.1.403";
-    hash = "sha256-t5YB1wO76XSnGCG8YKW1HR0aqv+JzefrtSBfVLzuDOU=";
+    version = "1.1.406";
+    hash = "sha256-Lz8x/op0RUluE7R6xssg2nVviT0O1tZXUopzKt0f99U=";
   };
 
   meta = {

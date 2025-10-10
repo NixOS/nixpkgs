@@ -39,7 +39,6 @@ buildNimPackage (finalAttrs: {
     changelog = "https://github.com/h3rald/min/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
     mainProgram = "min";
-    maintainers = with lib.maintainers; [ ehmry ];
   };
 
 })

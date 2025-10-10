@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "whisky";
-  version = "2.3.2";
+  version = "2.3.5";
 
   src = fetchzip {
     extension = "zip";
     name = "Whisky.app";
     url = "https://github.com/IsaacMarovitz/Whisky/releases/download/v${finalAttrs.version}/Whisky.zip";
-    hash = "sha256-rA2z3/So54KkXGc3CpF4m46ImL/SokSPxHmmXP0bfcY=";
+    hash = "sha256-tETDj83dCZJdJCGpXyK6pdhwr70sYWCknBHybMAWHzU=";
   };
 
   sourceRoot = ".";

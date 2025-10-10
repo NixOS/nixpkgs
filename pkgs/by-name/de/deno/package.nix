@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.4.3";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-zJGeVwuLY3fT/ShWvqKYnyCyVbRGoc/czXLmMNKRuyw=";
+    hash = "sha256-UqD9Va33XVX73bjwUdb6woZ3kP/Xz6iBVqV1ceRbXq0=";
   };
 
-  cargoHash = "sha256-SzKrkhxEIe+7oTL2lVb19wmTMEa395Fuq3xZB88ptLk=";
+  cargoHash = "sha256-OrKg3bOA5AyLQA+LIsHwWpk9DHodhcCVzdKW/S9+mNY=";
 
   patches = [
     # Patch out the remote upgrade (deno update) check.
@@ -53,20 +53,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
+    # some new TS tests don't identify `deno` location from parent actively
+    # running `deno` instance
+    # https://github.com/denoland/deno/pull/30914
+    ./patches/0005-tests-fix-deno-path.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
     tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
-  ''
-  +
-    lib.optionalString
-      (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
-      ''
-        # LTO crashes with the latest Rust + LLVM combination.
-        # https://github.com/rust-lang/rust/issues/141737
-        # TODO: remove this once LLVM is upgraded to 20.1.7
-        tomlq -ti '.profile.release.lto = false' Cargo.toml
-      '';
+  '';
 
   buildInputs = [
     libffi
@@ -187,6 +182,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=watcher"
     "--skip=node_unit_tests::_fs_watch_test"
     "--skip=js_unit_tests::fs_events_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
+    "--skip=tests::test_userspace_resolver"
   ];
 
   __darwinAllowLocalNetworking = true;

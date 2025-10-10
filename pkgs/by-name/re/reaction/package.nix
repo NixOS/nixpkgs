@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "reaction";
-  version = "2.1.2";
+  version = "2.2.1";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
     owner = "ppom";
     repo = "reaction";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-lcd0yY8o5eGa1bP5WsA9K/K7gtjRVorS/Rm0bno0AOY=";
+    hash = "sha256-81i0bkrf86adQWxeZgIoZp/zQQbRJwPqQqZci0ANRFw=";
   };
 
-  cargoHash = "sha256-ZRTgzVz8ia763cMBx9U1NIy9W6gDUVhwNr6wDqU1Ulo=";
+  cargoHash = "sha256-Bf9XmlY0IMPY4Convftd0Hv8mQbYoiE8WrkkAeaS6Z8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -27,7 +27,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # Those time-based tests behave poorly in low-resource environments (CI...)
     "--skip=daemon::filter::tests"
     "--skip=treedb::raw::tests::write_then_read_1000"
-    "--skip=simple"
+    "--skip=ip_pattern_matches"
+  ];
+  cargoTestFlags = [
+    # Skip integration tests for the same reason
+    "--lib"
   ];
 
   postInstall = ''

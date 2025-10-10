@@ -73,7 +73,7 @@ buildGoModule rec {
     "-skip TestCollectDockerfilePinning/Non-pinned_dockerfile|TestMixedPinning"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd scorecard \
       --bash <($out/bin/scorecard completion bash) \
       --fish <($out/bin/scorecard completion fish) \

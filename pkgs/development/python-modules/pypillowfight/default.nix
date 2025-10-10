@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitLab,
   pillow,
@@ -8,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "pypillowfight";
-  version = "0.3.0-unstable-2024-07-07";
+  version = "0.3.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -16,12 +17,11 @@ buildPythonPackage rec {
     group = "World";
     owner = "OpenPaperwork";
     repo = "libpillowfight";
-    # Currently no tagged release past 0.3.0 and we need these patches to fix Python 3.12 compat
-    rev = "4d5f739b725530cd61e709071d31e9f707c64bd6";
-    hash = "sha256-o5FzUSDq0lwkXGXRMsS5NB/Mp4Ie833wkxKPziR23f4=";
+    tag = version;
+    hash = "sha256-ZH1Eg8GLe3LZ7elohQCYCToEvx8bGaRSrcsT+qSY9s4=";
   };
 
-  prePatch = ''
+  postPatch = ''
     echo '#define INTERNAL_PILLOWFIGHT_VERSION "${version}"' > src/pillowfight/_version.h
   '';
 
@@ -32,6 +32,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
+    # Package has non-portable behavior that makes it not work on Darwin
+    # https://github.com/NixOS/nixpkgs/pull/433141#issuecomment-3180885173
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Library containing various image processing algorithms";
     inherit (src.meta) homepage;
     license = lib.licenses.gpl3Plus;

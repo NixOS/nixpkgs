@@ -31,20 +31,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "miracle-wm";
-  version = "0.6.2";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "miracle-wm-org";
     repo = "miracle-wm";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zUqW21gZC7J/E0cld11N6OyclpgKCh4F7m/soBi3N1E=";
+    hash = "sha256-AgzLv6HkmHmWLQuWv2QXWhzB8jxvEKLyznVj67J6Wl8=";
   };
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'DESTINATION /usr/lib' 'DESTINATION ''${CMAKE_INSTALL_LIBDIR}' \
       --replace-fail '-march=native' '# -march=native' \
-      --replace-fail '-flto' '# -flto'
   ''
   + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
     substituteInPlace CMakeLists.txt \
@@ -52,9 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   strictDeps = true;
-
-  # Source has a path "session/usr/local/...", don't break references to that
-  dontFixCmake = true;
 
   nativeBuildInputs = [
     cmake
@@ -89,13 +85,17 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [ gtest ];
 
   cmakeFlags = [
+    (lib.cmakeBool "ENABLE_LTO" true)
     (lib.cmakeBool "SYSTEMD_INTEGRATION" true)
+    (lib.cmakeBool "END_TO_END_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   checkPhase = ''
     runHook preCheck
+
+    export XDG_RUNTIME_DIR=$TMP
 
     ./tests/miracle-wm-tests
 

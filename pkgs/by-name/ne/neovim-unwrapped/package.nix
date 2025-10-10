@@ -95,7 +95,7 @@ stdenv.mkDerivation (
   in
   {
     pname = "neovim-unwrapped";
-    version = "0.11.3";
+    version = "0.11.4";
 
     __structuredAttrs = true;
 
@@ -103,7 +103,7 @@ stdenv.mkDerivation (
       owner = "neovim";
       repo = "neovim";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-B/An+SiRWC3Ea0T/sEk8aNBS1Ab9OENx/l4Z3nn8xE4=";
+      hash = "sha256-IpMHxIDpldg4FXiXPEY2E51DfO/Z5XieKdtesLna9Xw=";
     };
 
     patches = [
@@ -112,8 +112,6 @@ stdenv.mkDerivation (
       # it installs. See https://github.com/neovim/neovim/issues/9413.
       ./system_rplugin_manifest.patch
     ];
-
-    dontFixCmake = true;
 
     inherit lua;
     treesitter-parsers =
@@ -255,7 +253,7 @@ stdenv.mkDerivation (
           modifications to the core source
         - Improve extensibility with a new plugin architecture
       '';
-      homepage = "https://www.neovim.io";
+      homepage = "https://neovim.io";
       changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the

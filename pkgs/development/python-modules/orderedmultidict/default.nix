@@ -30,6 +30,5 @@ buildPythonPackage rec {
     description = "Ordered Multivalue Dictionary";
     homepage = "https://github.com/gruns/orderedmultidict";
     license = lib.licenses.unlicense;
-    maintainers = with lib.maintainers; [ vanzef ];
   };
 }

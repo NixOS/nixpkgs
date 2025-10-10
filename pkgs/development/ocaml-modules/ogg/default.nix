@@ -8,13 +8,13 @@
 
 buildDunePackage rec {
   pname = "ogg";
-  version = "0.7.4";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "savonet";
-    repo = "ocaml-ogg";
-    rev = "v${version}";
-    sha256 = "sha256-S6rJw90c//a9d63weCLuOBoQwNqbpTb+lRytvHUOZuc=";
+    repo = "ocaml-xiph";
+    tag = "v${version}";
+    hash = "sha256-mVMuPPjQRfwtQqpoUaEtTilMcGO0MJ4xiOd0D7ucOEQ=";
   };
 
   minimalOCamlVersion = "4.08";

@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
 
   postInstall = ''
     install -Dm444 40-streamdeck.rules -t $out/lib/udev/rules.d/

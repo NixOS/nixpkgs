@@ -7,17 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "starpls";
-  version = "0.1.21";
+  version = "0.1.22";
 
   src = fetchFromGitHub {
     owner = "withered-magic";
     repo = "starpls";
-    # https://github.com/withered-magic/starpls/commit/96ef5d0548748745756c421960e0ebb5cfbef963
-    rev = "96ef5d0548748745756c421960e0ebb5cfbef963";
-    hash = "sha256-PymdSITGeSxKwcLnsJPKc73E8VDS8SSRBRRNQSKvnbU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-t9kdpBKyGM61CKhtfO5urVVzyKpL0bX0pZuf0djDdCw=";
   };
 
-  cargoHash = "sha256-yovv8ox7TtSOxGW+YKYr/ED4cq7P7T7vSqoXBFhFGb4=";
+  cargoHash = "sha256-5xYfQRm7U7sEQiJEfjaLznoXUxHsxnLmIEA/OxTkjFg=";
 
   nativeBuildInputs = [
     protobuf

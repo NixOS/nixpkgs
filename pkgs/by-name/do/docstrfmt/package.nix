@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "docstrfmt";
-  version = "1.10.0";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "LilSpazJoekp";
     repo = "docstrfmt";
     tag = "v${version}";
-    hash = "sha256-L7zz9FJRSiBWthME0zsUWHxeA+zVuxQpkyEVbNSSEQs=";
+    hash = "sha256-5Yx+omXZSlpJSzA4dTY/JdfmHQshM7qI++OVvqYg1jc=";
   };
 
   build-system = [
@@ -29,11 +29,6 @@ python3.pkgs.buildPythonApplication rec {
     sphinx
     tabulate
     toml
-  ];
-
-  pythonRelaxDeps = [
-    "black"
-    "docutils"
   ];
 
   nativeCheckInputs = with python3.pkgs; [

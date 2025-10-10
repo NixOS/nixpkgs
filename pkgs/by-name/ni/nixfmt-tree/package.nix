@@ -95,7 +95,7 @@ treefmtWithConfig.overrideAttrs {
       You can achieve similar results by manually configuring `treefmt`:
       ```nix
       pkgs.treefmt.withConfig {
-        runtimeInputs = [ pkgs.nixfmt ];
+        runtimeInputs = [ pkgs.nixfmt-rfc-style ];
 
         settings = {
           # Log level for files treefmt won't format

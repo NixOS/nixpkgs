@@ -19,8 +19,6 @@
   reproc,
   platform-folders,
   ruby_3_2,
-  erlang,
-  elixir,
   beamPackages,
   alsa-lib,
   rtmidi,
@@ -52,14 +50,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "sonic-pi-net";
-    repo = pname;
+    repo = "sonic-pi";
     rev = "v${version}";
     hash = "sha256-JMextQY0jLShWmqRQoVAbqIzDhA1mOzI7vfsG7+jjX0=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     inherit version;
-    pname = "mix-deps-${pname}";
+    pname = "mix-deps-sonic-pi";
     mixEnv = "test";
     src = "${src}/app/server/beam/tau";
     hash = "sha256-7wqFI3f0CRVrXK2IUguqHNANwKMmTak/Xh9nr624TXc=";
@@ -73,8 +71,8 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     ruby
-    erlang
-    elixir
+    beamPackages.erlang
+    beamPackages.elixir
     beamPackages.hex
   ];
 
@@ -224,8 +222,8 @@ stdenv.mkDerivation rec {
     fi
 
     # Remove runtime Erlang references
-    for file in $(grep -FrIl '${erlang}/lib/erlang' $out/app/server/beam/tau); do
-      substituteInPlace "$file" --replace '${erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
+    for file in $(grep -FrIl '${beamPackages.erlang}/lib/erlang' $out/app/server/beam/tau); do
+      substituteInPlace "$file" --replace '${beamPackages.erlang}/lib/erlang' $out/app/server/beam/tau/_build/prod/rel/tau
     done
   '';
 

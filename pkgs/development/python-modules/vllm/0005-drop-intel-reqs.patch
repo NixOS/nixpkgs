@@ -1,25 +1,14 @@
-From 7511784ceb9252091a9d63ac6b54dcc67dd2b262 Mon Sep 17 00:00:00 2001
-From: Conroy Cheers <conroy@corncheese.org>
-Date: Fri, 13 Jun 2025 17:42:10 +1000
-Subject: [PATCH] drop intel reqs
-
----
- requirements/cpu.txt | 3 ---
- 1 file changed, 3 deletions(-)
-
 diff --git a/requirements/cpu.txt b/requirements/cpu.txt
-index d7b0fc6d8..be2df751b 100644
+index 2db6d87ee..37f816170 100644
 --- a/requirements/cpu.txt
 +++ b/requirements/cpu.txt
-@@ -24,8 +24,5 @@ datasets # for benchmark scripts
- # cpu cannot use triton 3.3.0
- triton==3.2.0; platform_machine == "x86_64"
+@@ -21,9 +21,6 @@ torchvision; platform_machine != "ppc64le" and platform_machine != "s390x"
+ torchvision==0.23.0; platform_machine == "ppc64le"
+ datasets # for benchmark scripts
  
 -# Intel Extension for PyTorch, only for x86_64 CPUs
 -intel-openmp==2024.2.1; platform_machine == "x86_64"
--intel_extension_for_pytorch==2.7.0; platform_machine == "x86_64"
- py-libnuma; platform_system != "Darwin"
- psutil; platform_system != "Darwin"
--- 
-2.49.0
-
+-intel_extension_for_pytorch==2.8.0; platform_machine == "x86_64"
+ triton==3.2.0; platform_machine == "x86_64" # Triton is required for torch 2.6+cpu, as it is imported in torch.compile.
+ 
+ # Use this to gather CPU info and optimize based on ARM Neoverse cores

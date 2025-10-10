@@ -11,6 +11,7 @@
   numactl,
   libffi,
   llvmPackages,
+  replaceVarsWith,
   coreutils,
   targetPackages,
 
@@ -214,6 +215,20 @@ let
     coreutils # for cat
   ]
   ++ lib.optionals useLLVM [
+    # Allow the use of newer LLVM versions; see the script for details.
+    (replaceVarsWith {
+      name = "subopt";
+      src = ./subopt.bash;
+      dir = "bin";
+      isExecutable = true;
+      preBuild = ''
+        name=opt
+      '';
+      replacements = {
+        inherit (stdenv) shell;
+        opt = lib.getExe' llvmPackages.llvm "opt";
+      };
+    })
     (lib.getBin llvmPackages.llvm)
   ]
   # On darwin, we need unwrapped bintools as well (for otool)
@@ -250,13 +265,13 @@ stdenv.mkDerivation {
           buildExeGlob = ''ghc-${version}*/"${binDistUsed.exePathForLibraryCheck}"'';
         in
         lib.concatStringsSep "\n" [
-          (''
+          ''
             shopt -u nullglob
             echo "Checking that ghc binary exists in bindist at ${buildExeGlob}"
             if ! test -e ${buildExeGlob}; then
               echo >&2 "GHC binary ${binDistUsed.exePathForLibraryCheck} could not be found in the bindist build directory (at ${buildExeGlob}) for arch ${stdenv.hostPlatform.system}, please check that ghcBinDists correctly reflect the bindist dependencies!"; exit 1;
             fi
-          '')
+          ''
           (lib.concatMapStringsSep "\n" (
             { fileToCheckFor, nixPackage }:
             lib.optionalString (fileToCheckFor != null) ''
@@ -281,7 +296,7 @@ stdenv.mkDerivation {
       for exe in $(find . -type f -executable); do
         isScript $exe && continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
     ''
     +
@@ -432,7 +447,7 @@ stdenv.mkDerivation {
       for exe in $(find "$out" -type f -executable); do
         isScript $exe && continue
         ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib -change /usr/local/lib/gcc/6/libgcc_s.1.dylib ${gcc.cc.lib}/lib/libgcc_s.1.dylib $exe
+        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
       done
 
       for file in $(find "$out" -name setup-config); do
@@ -501,7 +516,7 @@ stdenv.mkDerivation {
     hadrian = null;
   };
 
-  meta = rec {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;

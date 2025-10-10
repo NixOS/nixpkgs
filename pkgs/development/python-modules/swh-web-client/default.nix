@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "swh-web-client";
-  version = "0.9.0";
+  version = "0.9.1";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "devel";
     repo = "swh-web-client";
     tag = "v${version}";
-    hash = "sha256-/h3TaEwo2+B89KFpIKi9LH0tlGplsv3y18pC0TKM0jA=";
+    hash = "sha256-JTVu3fCYEDMWAqGwK+0a2AVyJv5DSGfItEss9CbzsRg=";
   };
 
   build-system = [
@@ -61,6 +61,6 @@ buildPythonPackage rec {
     description = "Client for Software Heritage Web applications, via their APIs";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-web-client";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

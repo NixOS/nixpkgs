@@ -25,12 +25,12 @@
 
 buildPythonPackage rec {
   pname = "pyinstaller";
-  version = "6.14.2";
+  version = "6.15.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-FCzOBxnnkxXwzCZADC5cRdm2sX5+BJH+5ESp+PFvSRc=";
+    hash = "sha256-pI/EZE7kqiqio157UfSW+PvX7s9qIVBka78WE60HvC0=";
   };
 
   build-system = [ setuptools ];

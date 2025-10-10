@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchMavenArtifact,
+  junixsocket-common,
+  junixsocket-native-common,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,6 +20,8 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
     install -m444 -D $src/share/java/*postgresql-${version}.jar $out/share/java/postgresql-jdbc.jar
+    ln -s ${junixsocket-common}/share/java/* $out/share/java/
+    ln -s ${junixsocket-native-common}/share/java/* $out/share/java/
     runHook postInstall
   '';
 

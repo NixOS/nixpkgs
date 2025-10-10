@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "corestore";
-  version = "7.4.5";
+  version = "7.4.7";
 
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "corestore";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wuf7bPxHuzic2B4HCH7emM1+jc7gw+l5Sm/LCYnpvs4=";
+    hash = "sha256-/UhiuEBoAJc1U2/VYVWLyEGcXUndH0QmM++FN4KCTHo=";
   };
 
   npmDepsHash = "sha256-hQYvQeTwlIWImdNhgpnJjDC24Fx4G0eST7tptWV1Xgw=";

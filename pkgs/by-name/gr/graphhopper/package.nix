@@ -11,7 +11,7 @@
   ...
 }:
 let
-  version = builtins.fromTOML (builtins.readFile ./version.toml);
+  version = fromTOML (builtins.readFile ./version.toml);
 
   src = fetchFromGitHub {
     owner = "graphhopper";

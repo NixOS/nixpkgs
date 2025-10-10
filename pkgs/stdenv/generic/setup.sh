@@ -25,7 +25,7 @@ if [[ ${NIX_DEBUG:-0} -ge 6 ]]; then
     set -x
 fi
 
-if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
+if [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
     __structuredAttrs=1
     echo "structuredAttrs is enabled"
 
@@ -33,16 +33,6 @@ if [ -f .attrs.sh ] || [[ -n "${NIX_ATTRS_JSON_FILE:-}" ]]; then
         # ex: out=/nix/store/...
         export "$outputName=${outputs[$outputName]}"
     done
-
-    # $NIX_ATTRS_JSON_FILE pointed to the wrong location in sandbox
-    # https://github.com/NixOS/nix/issues/6736; please keep around until the
-    # fix reaches *every patch version* that's >= lib/minver.nix
-    if ! [[ -e "${NIX_ATTRS_JSON_FILE:-}" ]]; then
-        export NIX_ATTRS_JSON_FILE="$NIX_BUILD_TOP/.attrs.json"
-    fi
-    if ! [[ -e "${NIX_ATTRS_SH_FILE:-}" ]]; then
-        export NIX_ATTRS_SH_FILE="$NIX_BUILD_TOP/.attrs.sh"
-    fi
 else
     __structuredAttrs=
     : "${outputs:=out}"
@@ -519,7 +509,7 @@ isELF() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
 }
@@ -530,7 +520,7 @@ isMachO() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 4 -u "$fd" magic
+    LANG=C read -r -n 4 -u "$fd" magic
     exec {fd}<&-
 
     # nix uses 'declare -F' in get-env.sh to retrieve the loaded functions.
@@ -559,7 +549,7 @@ isScript() {
     local fd
     local magic
     exec {fd}< "$fn"
-    read -r -n 2 -u "$fd" magic
+    LANG=C read -r -n 2 -u "$fd" magic
     exec {fd}<&-
     if [[ "$magic" =~ \#! ]]; then return 0; else return 1; fi
 }
@@ -1174,15 +1164,13 @@ substituteAllInPlace() {
 # What follows is the generic builder.
 
 
-# This function is useful for debugging broken Nix builds.  It dumps
-# all environment variables to a file `env-vars' in the build
-# directory.  If the build fails and the `-K' option is used, you can
-# then go to the build directory and source in `env-vars' to reproduce
-# the environment used for building.
+# This function is useful for debugging broken Nix builds. It dumps all environment variables to a
+# file `env-vars' in the Nix build directory. If the build fails and the `-K' option is used,
+# you can then go to the build directory and source the `env-vars' file to reproduce the environment
+# used for building. Set `noDumpEnvVars` in the derivation to avoid this, and if for whatever reason
+# `$NIX_BUILD_TOP` is not a directory, this function also does nothing.
 dumpVars() {
-    if [ "${noDumpEnvVars:-0}" != 1 ]; then
-        # Don't use `install` here to prevent executing a process each time.
-
+    if [[ "${noDumpEnvVars:-0}" != 1 && -d "$NIX_BUILD_TOP" ]]; then
         # Set umask to create env-vars file with 0600 permissions (owner read/write only)
         local old_umask
         old_umask=$(umask)

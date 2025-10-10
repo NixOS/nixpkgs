@@ -59,6 +59,9 @@ buildPythonPackage rec {
     rev-prefix = "google-cloud-kms-v";
   };
 
+  # picks the wrong tag
+  passthru.skipBulkUpdate = true;
+
   meta = {
     description = "Cloud Key Management Service (KMS) API API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-kms";

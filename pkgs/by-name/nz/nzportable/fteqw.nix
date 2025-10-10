@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libGL
+    xorg.libxcb
     xorg.libX11
     xorg.libXrandr
     xorg.libXcursor

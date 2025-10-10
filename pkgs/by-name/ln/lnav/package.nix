@@ -24,13 +24,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lnav";
-  version = "0.13.0";
+  version = "0.13.1";
 
   src = fetchFromGitHub {
     owner = "tstack";
     repo = "lnav";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1TS954ysXqSuMEGdzc2b9HTJ+ic0qfyc35j8RFzjLWA=";
+    hash = "sha256-Pi1S8tRY7Lv0R7sdLOFppuCbTb/6omyAsNW13dmWBqA=";
   };
 
   enableParallelBuilding = true;
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = "${finalAttrs.src}/src/third-party/prqlc-c";
-    hash = "sha256-svi+C3ELw6Ly0mtji8xOv+DDqR0z5shFNazHa3kDQVg=";
+    hash = "sha256-hXjn2CF4FxCfDzikWif9hGWRmlIJI+nxbcV8EBEWxis=";
   };
 
   cargoRoot = "src/third-party/prqlc-c";

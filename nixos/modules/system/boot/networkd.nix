@@ -22,6 +22,7 @@ let
           "SpeedMeterIntervalSec"
           "ManageForeignRoutingPolicyRules"
           "ManageForeignRoutes"
+          "ManageForeignNextHops"
           "RouteTable"
           "IPv6PrivacyExtensions"
           "IPv4Forwarding"
@@ -32,6 +33,7 @@ let
         (assertInt "SpeedMeterIntervalSec")
         (assertValueOneOf "ManageForeignRoutingPolicyRules" boolValues)
         (assertValueOneOf "ManageForeignRoutes" boolValues)
+        (assertValueOneOf "ManageForeignNextHops" boolValues)
         (assertValueOneOf "IPv6PrivacyExtensions" (
           boolValues
           ++ [
@@ -744,14 +746,14 @@ let
           "both"
           "any"
         ])
-        (assertValueOneOf "ActivationPolicy" ([
+        (assertValueOneOf "ActivationPolicy" [
           "up"
           "always-up"
           "manual"
           "always-down"
           "down"
           "bound"
-        ]))
+        ])
       ];
 
       sectionNetwork = checkUnitConfig "Network" [

@@ -36,7 +36,7 @@ For the purposes of CI, branches in the NixOS/nixpkgs repository are classified 
   - Pull Requests required.
   - Long-lived, no deletion, no force push.
 - **Secondary development** branches
-  - `staging-` prefix, `haskell-updates` and `python-updates`
+  - `staging-` prefix and `haskell-updates`
   - Pull Requests normally required, except when merging development branches into each other.
   - Long-lived, no deletion, no force push.
 - **Work-In-Progress** branches

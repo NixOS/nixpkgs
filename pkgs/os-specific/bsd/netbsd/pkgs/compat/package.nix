@@ -32,6 +32,10 @@ mkDerivation (
 
     preConfigure = ''
       make include/.stamp configure nbtool_config.h.in defs.mk.in
+    ''
+    + lib.optionalString stdenv.buildPlatform.isDarwin ''
+      # Fix cross-compilation from darwin, remove after update to netbsd 10.0
+      substituteInPlace Makefile --replace-warn "-no-cpp-precomp" ""
     '';
 
     configurePlatforms = [

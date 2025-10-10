@@ -330,9 +330,9 @@ rec {
   writeBash =
     name: argsOrScript:
     if lib.isAttrs argsOrScript && !lib.isDerivation argsOrScript then
-      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bash}"; }) name
+      makeScriptWriter (argsOrScript // { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; }) name
     else
-      makeScriptWriter { interpreter = "${lib.getExe pkgs.bash}"; } name argsOrScript;
+      makeScriptWriter { interpreter = "${lib.getExe pkgs.bashNonInteractive}"; } name argsOrScript;
 
   /**
     Like writeScriptBin but the first line is a shebang to bash
@@ -599,7 +599,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "babashka"
       ])
       // {
@@ -692,7 +692,7 @@ rec {
     in
     makeScriptWriter
       (
-        (builtins.removeAttrs config [
+        (removeAttrs config [
           "guile"
           "libraries"
           "r6rs"
@@ -728,7 +728,7 @@ rec {
             [ "--no-auto-compile" ]
             ++ lib.optional r6rs "--r6rs"
             ++ lib.optional r7rs "--r7rs"
-            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," builtins.toString srfi)
+            ++ lib.optional (srfi != [ ]) ("--use-srfi=" + concatMapStringsSep "," toString srfi)
             ++ [ "-s" ]
           ))
           "!#"
@@ -921,7 +921,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter =
           if libraries == [ ] then "${ruby}/bin/ruby" else "${(ruby.withPackages (ps: libraries))}/bin/ruby";
@@ -963,7 +963,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter = lua.interpreter;
         # if libraries == []
@@ -1134,7 +1134,7 @@ rec {
       ...
     }@args:
     makeScriptWriter (
-      (builtins.removeAttrs args [ "libraries" ])
+      (removeAttrs args [ "libraries" ])
       // {
         interpreter = "${lib.getExe (pkgs.perl.withPackages (p: libraries))}";
       }
@@ -1186,7 +1186,7 @@ rec {
           "--ignore ${concatMapStringsSep "," escapeShellArg flakeIgnore}";
     in
     makeScriptWriter (
-      (builtins.removeAttrs args [
+      (removeAttrs args [
         "libraries"
         "flakeIgnore"
         "doCheck"
@@ -1333,7 +1333,7 @@ rec {
     content:
     makeScriptWriter
       (
-        (builtins.removeAttrs args [
+        (removeAttrs args [
           "dotnet-sdk"
           "fsi-flags"
           "libraries"

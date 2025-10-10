@@ -19,7 +19,6 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
-  python3,
   testers,
   nixosTests,
   installShellFiles,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.25.3";
+  version = "1.31.7";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Nij4mOJPVA03u6mpyKsFR7vgQ9wihiNfnlSlh6MNXP0=";
+    hash = "sha256-gKtOyaDN9hQo45Rk9hMabKRefOG+ooaCrtLBCPx0fT8=";
   };
 
   nativeBuildInputs = [
@@ -66,19 +65,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-QkpsAQSoCmAihrE5YGzp9DalEQr+2djiPhLTXRn0u6U=";
+    hash = "sha256-INnv9kRgM8RRMwBnC6Vwj9S5FfI5gMscU//aNzHF+8w=";
   };
+
+  outputs = [
+    "out"
+    "dkms"
+  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "VERSION=${finalAttrs.version}"
     "INITRAMFS_DIR=${placeholder "out"}/etc/initramfs-tools"
+    "DKMSDIR=${placeholder "dkms"}"
 
     # Tries to install to the 'systemd-minimal' and 'udev' nix installation paths
     "PKGCONFIG_SERVICEDIR=$(out)/lib/systemd/system"
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ]
   ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+  installFlags = [
+    "install"
+    "install_dkms"
+  ];
 
   env = {
     CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
@@ -100,11 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
   checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
 
-  postInstall = ''
-    substituteInPlace $out/libexec/bcachefsck_all \
-      --replace-fail "/usr/bin/python3" "${python3.interpreter}"
-  ''
-  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd bcachefs \
       --bash <($out/sbin/bcachefs completions bash) \
       --zsh  <($out/sbin/bcachefs completions zsh) \
@@ -112,6 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    # See NOTE in linux-kernels.nix
+    kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
@@ -134,7 +142,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       davidak
       johnrtitor
-      Madouura
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";

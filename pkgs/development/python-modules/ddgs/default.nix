@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ddgs";
-  version = "9.5.2";
+  version = "9.5.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${version}";
-    hash = "sha256-UDmgRuMpLQu7I0t+0RmK0GkXpV5NTJ1NgsXYIl+A1i0=";
+    hash = "sha256-Pwl6fCEBj+eUXYEf4wCTw1fpKZh3j4IVC6SW0Vqcmf4=";
   };
 
   build-system = [ setuptools ];

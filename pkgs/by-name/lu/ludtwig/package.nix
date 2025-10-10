@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/MalteJanz/ludtwig";
     license = licenses.mit;
     maintainers = with maintainers; [
-      shyim
       maltejanz
     ];
     mainProgram = "ludtwig";

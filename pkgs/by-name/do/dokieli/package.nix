@@ -1,9 +1,12 @@
 {
   lib,
   fetchFromGitHub,
+  unstableGitUpdater,
   makeWrapper,
-  nix-update-script,
-  nodePackages,
+  writeShellApplication,
+  _experimental-update-script-combinators,
+  nix,
+  serve,
   stdenv,
   xsel,
   yarn-berry_4,
@@ -42,18 +45,26 @@ stdenv.mkDerivation (finalAttrs: {
     yarn-berry.yarnBerryConfigHook
   ];
 
-  postFixup =
-    let
-      serve = lib.getExe' nodePackages.serve "serve";
-    in
-    ''
-      makeWrapper ${serve} $out/bin/dokieli \
-        --prefix PATH : ${lib.makeBinPath [ xsel ]} \
-        --chdir $out
-    '';
+  postFixup = ''
+    makeWrapper ${lib.getExe serve} $out/bin/dokieli \
+      --prefix PATH : ${lib.makeBinPath [ xsel ]} \
+      --chdir $out
+  '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version=branch" ];
+  passthru = {
+    updateScriptSrc = unstableGitUpdater { };
+    updateScriptDeps = writeShellApplication {
+      name = "update-dokieli-berry-deps";
+      runtimeInputs = [
+        nix
+        yarn-berry.yarn-berry-fetcher
+      ];
+      text = lib.strings.readFile ./updateDeps.sh;
+    };
+    updateScript = _experimental-update-script-combinators.sequence [
+      finalAttrs.passthru.updateScriptSrc
+      (lib.getExe finalAttrs.passthru.updateScriptDeps)
+    ];
   };
 
   meta = {

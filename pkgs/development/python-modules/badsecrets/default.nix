@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "badsecrets";
-  version = "0.11.118";
+  version = "0.13.47";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "badsecrets";
     tag = "v${version}";
-    hash = "sha256-7jKhXFrtZI+Xzs7R8E3zJNN3wTEkuTuhc3PGn6JOzTU=";
+    hash = "sha256-Yvd9AGbVDOfXep8y+XzwYP2EpTvy+rwyz5hRIe7v4oc=";
   };
 
   build-system = [
@@ -39,6 +39,8 @@ buildPythonPackage rec {
     requests
     viewstate
   ];
+
+  pythonRelaxDeps = [ "viewstate" ];
 
   pythonImportsCheck = [ "badsecrets" ];
 

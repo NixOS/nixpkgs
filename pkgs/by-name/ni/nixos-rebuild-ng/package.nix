@@ -113,9 +113,9 @@ python3Packages.buildPythonApplication rec {
         with_nix_stable = nixos-rebuild-ng.override {
           nix = nixVersions.stable;
         };
-        with_nix_2_24 = nixos-rebuild-ng.override {
+        with_nix_2_28 = nixos-rebuild-ng.override {
           # oldest supported version in nixpkgs
-          nix = nixVersions.nix_2_24;
+          nix = nixVersions.nix_2_28;
         };
         with_lix_latest = nixos-rebuild-ng.override {
           nix = lixPackageSets.latest.lix;
@@ -134,14 +134,17 @@ python3Packages.buildPythonApplication rec {
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
         linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+          export MYPY_CACHE_DIR="$(mktemp -d)"
           export RUFF_CACHE_DIR="$(mktemp -d)"
 
+          pushd ${src}
           echo -e "\x1b[32m## run mypy\x1b[0m"
-          mypy ${src}
+          mypy .
           echo -e "\x1b[32m## run ruff\x1b[0m"
-          ruff check ${src}
+          ruff check .
           echo -e "\x1b[32m## run ruff format\x1b[0m"
-          ruff format --check ${src}
+          ruff format --check .
+          popd
 
           touch $out
         '';

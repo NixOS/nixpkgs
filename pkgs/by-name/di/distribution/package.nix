@@ -20,11 +20,15 @@ buildGoModule (finalAttrs: {
 
   vendorHash = null;
 
-  checkFlags = [
-    # TestHTTPChecker: requires internet access.
-    # TestInMemoryDriverSuite: timeout after 10 minutes, looks like a deadlock.
-    "-skip=^TestHTTPChecker$|^TestInMemoryDriverSuite$"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestHTTPChecker" # requires internet access
+        "TestInMemoryDriverSuite" # timeout after 10 minutes, looks like a deadlock
+        "TestGracefulShutdown" # fails on trace export, see https://github.com/distribution/distribution/issues/4696
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
   __darwinAllowLocalNetworking = true;
 
   passthru = {

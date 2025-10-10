@@ -29,10 +29,13 @@ let
 
   checkedConfig =
     file:
-    pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
-      ln -s ${file} $out
-      ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
-    '';
+    if cfg.checkConfig then
+      pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
+        ln -s ${file} $out
+        ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
+      ''
+    else
+      file;
 in
 {
   imports = [
@@ -116,6 +119,17 @@ in
         Extra args to pass to `vmagent`. See the docs:
         <https://docs.victoriametrics.com/vmagent.html#advanced-usage>
         or {command}`vmagent -help` for more information.
+      '';
+    };
+
+    checkConfig = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Check configuration.
+
+        If you use credentials stored in external files (`environmentFile`, etc),
+        they will not be visible  and it will report errors, despite a correct configuration.
       '';
     };
   };

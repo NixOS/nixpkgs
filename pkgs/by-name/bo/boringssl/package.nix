@@ -8,16 +8,21 @@
   buildGoModule,
 }:
 
-# reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
-buildGoModule {
+# reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
+buildGoModule (finalAttrs: {
   pname = "boringssl";
-  version = "unstable-2024-09-20";
+  version = "0.20250818.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
-    rev = "718900aeb84c601523e71abbd18fd70c9e2ad884";
-    hash = "sha256-TdSObRECiGRQcgz6N2LhKvSi9yRYOZYJdK6MyfJX2Bo=";
+    tag = finalAttrs.version;
+    hash = "sha256-lykIlC0tvjtjjS/rQTeX4vK9PgI+A8EnasEC+HYspvg=";
   };
+
+  patches = [
+    # Add SECP224R1 for backward compatibility
+    ./secp224r1-compat.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -25,7 +30,7 @@ buildGoModule {
     perl
   ];
 
-  vendorHash = "sha256-GlhLsPD+yp2LdqsIsfXNEaNKKlc76p0kBCyu4rlEmMg=";
+  vendorHash = "sha256-IXmnoCYLoiQ/XL2wjksRFv5Kwsje0VNkcupgGxG6rSY=";
   proxyVendor = true;
 
   # hack to get both go and cmake configure phase
@@ -59,13 +64,10 @@ buildGoModule {
 
     mkdir -p $bin/bin $dev $out/lib
 
-    mv tool/bssl $bin/bin
+    install -Dm755 bssl -t $bin/bin
+    install -Dm644 {libcrypto,libdecrepit,libpki,libssl}.a -t $out/lib
 
-    mv ssl/libssl.a           $out/lib
-    mv crypto/libcrypto.a     $out/lib
-    mv decrepit/libdecrepit.a $out/lib
-
-    mv ../include $dev
+    cp -r ../include $dev
 
     runHook postInstall
   '';
@@ -76,16 +78,16 @@ buildGoModule {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
-    maintainers = [ maintainers.thoughtpolice ];
-    license = with licenses; [
+    maintainers = [ lib.maintainers.thoughtpolice ];
+    license = with lib.licenses; [
       openssl
       isc
       mit
       bsd3
     ];
   };
-}
+})

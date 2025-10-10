@@ -10,6 +10,7 @@
   # optional/test dependencies
   gdcm,
   pillow,
+  pyjpegls,
   pylibjpeg-libjpeg,
   writableTmpDirAsHomeHook,
 }:
@@ -44,9 +45,9 @@ buildPythonPackage rec {
   optional-dependencies = {
     pixeldata = [
       pillow
-      #pyjpegls # not in nixpkgs
+      pyjpegls
       #pylibjpeg.optional-dependencies.openjpeg # infinite recursion
-      #pylibjpeg.optional-dependencies.rle # not in nixpkgs
+      #pylibjpeg.optional-dependencies.rle # infinite recursion
       pylibjpeg-libjpeg
       gdcm
     ];
@@ -57,6 +58,8 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ]
   ++ optional-dependencies.pixeldata;
+
+  passthru.pydicom-data = test_data;
 
   # Setting $HOME to prevent pytest to try to create a folder inside
   # /homeless-shelter which is read-only.

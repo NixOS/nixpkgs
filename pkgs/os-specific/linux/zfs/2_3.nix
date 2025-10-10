@@ -3,6 +3,7 @@
   lib,
   nixosTests,
   stdenv,
+  fetchpatch,
   ...
 }@args:
 
@@ -12,10 +13,18 @@ callPackage ./generic.nix args {
   kernelModuleAttribute = "zfs_2_3";
 
   kernelMinSupportedMajorMinor = "4.18";
-  kernelMaxSupportedMajorMinor = "6.15";
+  kernelMaxSupportedMajorMinor = "6.16";
 
   # this package should point to the latest release.
-  version = "2.3.3";
+  version = "2.3.4";
+
+  extraPatches = [
+    (fetchpatch {
+      name = "fix_llvm-21_-wuninitialized-const-pointer_warning.patch";
+      url = "https://github.com/openzfs/zfs/commit/9acedbaceec362d08a33ebfe7c4c7efcee81d094.patch";
+      hash = "sha256-bjMRuT8gsMuwCnrS5PfG9vYthRvcFaWCCfQbCTVZdpw=";
+    })
+  ];
 
   tests = {
     inherit (nixosTests.zfs) series_2_3;
@@ -29,5 +38,5 @@ callPackage ./generic.nix args {
     amarshall
   ];
 
-  hash = "sha256-NXAbyGBfpzWfm4NaP1/otTx8fOnoRV17343qUMdQp5U=";
+  hash = "sha256-8BSuDRDyqPGAiyGGxFyEZIcXB+cKsKk25jcFPrSK3GI=";
 }

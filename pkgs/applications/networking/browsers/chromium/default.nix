@@ -71,7 +71,7 @@ let
   chromium = rec {
     inherit stdenv upstream-info;
 
-    mkChromiumDerivation = callPackage ./common.nix ({
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit chromiumVersionAtLeast versionRange;
       inherit
         proprietaryCodecs
@@ -79,14 +79,8 @@ let
         pulseSupport
         ungoogled
         ;
-      gnChromium = buildPackages.gn.overrideAttrs (oldAttrs: {
-        version = if (upstream-info.deps.gn ? "version") then upstream-info.deps.gn.version else "0";
-        src = fetchgit {
-          url = "https://gn.googlesource.com/gn";
-          inherit (upstream-info.deps.gn) rev hash;
-        };
-      });
-    });
+      gnChromium = buildPackages.gn.override upstream-info.deps.gn;
+    };
 
     browser = callPackage ./browser.nix {
       inherit chromiumVersionAtLeast enableWideVine ungoogled;

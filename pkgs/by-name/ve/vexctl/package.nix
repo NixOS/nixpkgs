@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,13 +9,13 @@
 
 buildGoModule rec {
   pname = "vexctl";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "openvex";
     repo = "vexctl";
     tag = "v${version}";
-    hash = "sha256-rJK9OTaEF0PU12m7voMUHPHI2/Je7wh6w2Zr1Ug8+1w=";
+    hash = "sha256-ZPQsWTnVZ0B06QNQohUIvQN3/Wfk+LnYi/TOwDIKXug=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -27,7 +28,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-YVMg9tjwJmrqxB2GmVuLkzsGXGlpp5gmZZTmv+PGWPc=";
+  vendorHash = "sha256-G0w5auYmSED6ktTDayfOSu/9QQLTuFCkjW/f9ekn/Hw=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -44,7 +45,7 @@ buildGoModule rec {
     ldflags+=" -X sigs.k8s.io/release-utils/version.buildDate=$(cat SOURCE_DATE_EPOCH)"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd vexctl \
       --bash <($out/bin/vexctl completion bash) \
       --fish <($out/bin/vexctl completion fish) \

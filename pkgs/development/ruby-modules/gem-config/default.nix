@@ -46,6 +46,10 @@
   tzdata,
   icu,
   libffi,
+  libdeflate,
+  xz,
+  zstd,
+  libwebp,
   cmake,
   libssh2,
   openssl,
@@ -548,6 +552,10 @@ in
       fribidi
       gobject-introspection
       gtk3
+      libdeflate
+      xz
+      libwebp
+      zstd
       cairo
       harfbuzz
       lerc
@@ -1039,6 +1047,7 @@ in
       zlib
     ];
     dontUseCmakeConfigure = true;
+    buildFlags = [ "--with-ssh" ];
   };
 
   sassc = attrs: {

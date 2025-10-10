@@ -18,7 +18,7 @@ assert lib.elem allowPolkitPolicy [
 
 stdenvNoCC.mkDerivation rec {
   pname = "gnome-shell-extension-systemd-manager";
-  version = "18";
+  version = "19";
 
   # Upstream doesn't post new versions in extensions.gnome.org anymore, see also:
   # https://github.com/hardpixel/systemd-manager/issues/19
@@ -26,7 +26,7 @@ stdenvNoCC.mkDerivation rec {
     owner = "hardpixel";
     repo = "systemd-manager";
     rev = "v${version}";
-    hash = "sha256-V4vYv1nAjFjvkSYdOpcpt8h9L+g0ch4V2VZRVSbtSKE=";
+    hash = "sha256-qmRDTyI2Kyr+ViNNgmna/E8xH1qzPyxzdPXyrwrgQGY=";
   };
 
   nativeBuildInputs = [ glib ];

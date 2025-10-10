@@ -7,6 +7,7 @@
   ndeflib,
   pydes,
   pyserial,
+  pytest-tornasync,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
@@ -34,6 +35,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    pytest-tornasync
     mock
     pytest-mock
     pytestCheckHook

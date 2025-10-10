@@ -1,4 +1,5 @@
 {
+  lib,
   stdenv,
   fetchurl,
   runCommand,
@@ -10,7 +11,7 @@
   xz,
 }:
 let
-  version = "6.12.0";
+  version = "7.1.0";
 in
 runCommand "sfpi-${version}"
   {
@@ -31,12 +32,12 @@ runCommand "sfpi-${version}"
     src =
       {
         aarch64-linux = fetchurl {
-          url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi-aarch64_Linux.txz";
-          hash = "sha256-4RGwYhsEGx1/ANBUmNeSQcdmMRjFXN8Bg3DICLF6d5o=";
+          url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi_${version}_aarch64.txz";
+          hash = "sha256-MzI159hiitk1iyeGfQaDOQZhqGjfafpCMz6zmM3HrYs=";
         };
         x86_64-linux = fetchurl {
-          url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi-x86_64_Linux.txz";
-          hash = "sha256-hZvet4ErN1nNScjuU6YW7XEjvV9sR6xvb1IJjgMcXlg=";
+          url = "https://github.com/tenstorrent/sfpi/releases/download/v${version}/sfpi_${version}_x86_64.txz";
+          hash = "sha256-rQfFveg1ht+jLfk3ZOJadX26+ODE3WW5E0/18eIl7RQ=";
         };
       }
       ."${stdenv.hostPlatform.system}" or (throw "SFPI does not support ${stdenv.hostPlatform.system}");

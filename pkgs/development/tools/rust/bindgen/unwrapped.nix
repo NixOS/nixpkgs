@@ -21,11 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-K/iM79RfNU+3f2ae6wy/FMFAD68vfqzSUebqALPJpJY=";
 
-  buildInputs = [ (lib.getLib clang.cc) ];
-
   preConfigure = ''
     export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
   '';
+
+  # Disable the "runtime" feature, so libclang is linked.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "logging" ];
+  checkNoDefaultFeatures = buildNoDefaultFeatures;
+  checkFeatures = buildFeatures;
 
   doCheck = true;
   nativeCheckInputs = [ clang ];

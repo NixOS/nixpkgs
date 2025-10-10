@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nemomobile";
-    repo = pname;
+    repo = "qtdbusextended";
     rev = version;
     sha256 = "sha256-tUp7OhNBXwomR2tO4UOaR0vJQ3GTirMk/hRl1cMk61o=";
   };
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/nemomobile/qtdbusextended";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rewine ];
+    maintainers = with maintainers; [ wineee ];
   };
 }

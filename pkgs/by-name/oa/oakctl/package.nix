@@ -9,26 +9,26 @@
 }:
 
 let
-  version = "0.11.0";
+  version = "0.13.2";
 
   # Note: Extracted from install script
   # https://oakctl-releases.luxonis.com/oakctl-installer.sh
   sources = {
     x86_64-linux = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/linux_x86_64/oakctl";
-      hash = "sha256-AJo1xFKWtjMZNsY9M2cENe+3y9Simv+mT/fLKOWeIys=";
+      hash = "sha256-uS7CUnj9+/kBwGaaZA9P6R2//vhZ1cJW+lhkQePZ0is=";
     };
     aarch64-linux = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/linux_aarch64/oakctl";
-      hash = "sha256-sRHfmv1cUWCWkQHARpzTgSns464RlAkgw/JOKPQk//8=";
+      hash = "sha256-+WFSV3TALeJtdcxkcduaN8tWGLCrOxvs3UV6cOr1xAI=";
     };
     aarch64-darwin = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/darwin_arm64/oakctl";
-      hash = "sha256-AgvV8rgVaD+TrjTDvWPGXVSBk9YUVmh7OK3j5mNU+0s=";
+      hash = "sha256-OgVmfYcRNVcLGjEbxdVUtsV45vICj+jKPQJ578aRwZs=";
     };
     x86_64-darwin = fetchurl {
       url = "https://oakctl-releases.luxonis.com/data/${version}/darwin_x86_64/oakctl";
-      hash = "sha256-AgvV8rgVaD+TrjTDvWPGXVSBk9YUVmh7OK3j5mNU+0s=";
+      hash = "sha256-KjJxwMRLs0XqiOTHjke+dSVKBftwBDYppjrqsbf0Qe8=";
     };
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Note: The command 'oakctl self-update' won't work as the binary is located in the nix/store
   meta = {
     description = "Tool to interact with Luxonis OAK4 cameras";
-    homepage = "https://rvc4.docs.luxonis.com/software/tools/oakctl";
+    homepage = "https://docs.luxonis.com/software-v3/oak-apps/oakctl/";
     license = lib.licenses.unfree;
     platforms = [
       "x86_64-linux"

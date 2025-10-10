@@ -18,13 +18,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sherlock-launcher";
-  version = "0.1.14-2";
+  version = "0.1.14-3";
 
   src = fetchFromGitHub {
     owner = "Skxxtz";
     repo = "sherlock";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-k5v1eeRxwCpU7+nBU6/q8I6O2e0kXojyhNTeZ3k/Qxo=";
+    hash = "sha256-xycHf/3szP0NkSylAOxSQbaxt7Wc52Qg9N7g/YT+vT8=";
   };
 
   nativeBuildInputs = [
@@ -45,14 +45,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     librsvg
   ];
 
-  cargoHash = "sha256-fct2xHZmrPMn/HXPtMaYraODT0Yi/wZEPw5X8KwhnGk=";
+  cargoHash = "sha256-Ci/k4g0Zrtzx2IhKt5MjLtim/2qZA4wLIO3AtQ+TkpY=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Lightweight and efficient application launcher for Wayland built with Rust and GTK4";
     homepage = "https://github.com/Skxxtz/sherlock";
-    license = lib.licenses.cc-by-nc-40;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "sherlock";
     maintainers = with lib.maintainers; [ agvantibo ];
   };

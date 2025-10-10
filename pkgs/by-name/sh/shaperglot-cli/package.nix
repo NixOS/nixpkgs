@@ -2,23 +2,22 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
-  _experimental-update-script-combinators,
-  unstableGitUpdater,
+  versionCheckHook,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shaperglot-cli";
-  version = "0-unstable-2025-08-11";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
-    rev = "b7ba56e583e89a1c169f4ef7c3419e4e76e00974";
-    hash = "sha256-XFzsUzHa4KsyDWlOKlWHBNimn1hzdrtCPe+lFrs0EDc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Jh2/Rr7bIPFiblUZFS8KiQtMwmtMuOGCSV2w7LMCbq8=";
   };
 
-  cargoHash = "sha256-Md48ovCG8pEPbTz6R0nks6rZxO3UEdZ/SYRVgffCIKU=";
+  cargoHash = "sha256-3cHUSRvrvywfiYA/WpUrCIJV+hEQQwRNTPvSmCN50ho=";
 
   cargoBuildFlags = [
     "--package=shaperglot-cli"
@@ -29,6 +28,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
   installCheckPhase = ''
     runHook preInstallCheck
 
@@ -39,22 +42,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   '';
 
   passthru = {
-    updateScript = _experimental-update-script-combinators.sequence [
-      (unstableGitUpdater {
-        branch = "main";
-        # Git tag differs from CLI version: https://github.com/googlefonts/shaperglot/issues/138
-        hardcodeZeroVersion = true;
-      })
-      (nix-update-script {
-        # Updating `cargoHash`
-        extraArgs = [ "--version=skip" ];
-      })
-    ];
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Test font files for language support";
     homepage = "https://github.com/googlefonts/shaperglot";
+    # The CHANGELOG.md file exists in this repository but is not actually used.
+    changelog = "https://github.com/googlefonts/shaperglot/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kachick

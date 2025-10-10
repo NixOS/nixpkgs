@@ -21,13 +21,13 @@
 
 mkDerivation rec {
   pname = "anilibria-winmaclinux";
-  version = "2.2.29";
+  version = "2.2.30";
 
   src = fetchFromGitHub {
     owner = "anilibria";
     repo = "anilibria-winmaclinux";
     rev = version;
-    hash = "sha256-R/EP4AmKKUe2osycToeMAFQHsdL16vCRalzPh+kPZ2A=";
+    hash = "sha256-iueodizzG0r50ZO2aowR5hR3AyLv8RsSJL1xnnCNMJc=";
   };
 
   sourceRoot = "${src.name}/src";
@@ -87,7 +87,7 @@ mkDerivation rec {
   ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
-    (makeDesktopItem (rec {
+    (makeDesktopItem rec {
       name = "AniLibria";
       desktopName = name;
       icon = "anilibria";
@@ -101,7 +101,7 @@ mkDerivation rec {
       keywords = [ "anime" ];
       exec = name;
       terminal = false;
-    }))
+    })
   ];
 
   meta = with lib; {

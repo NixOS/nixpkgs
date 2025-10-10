@@ -131,7 +131,7 @@ let
         platforms = lib.platforms.linux;
         maintainers = with lib.maintainers; [
           synthetica
-          rewine
+          wineee
         ];
         pkgConfigModules = [
           (
@@ -145,7 +145,7 @@ let
     });
 
 in
-rec {
+{
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
@@ -169,8 +169,8 @@ rec {
   };
 
   wlroots_0_19 = generic {
-    version = "0.19.0";
-    hash = "sha256-I8z50yA/ukvXEC5TksG84+GrQpfC4drBJDRGw0R8RLk=";
+    version = "0.19.1";
+    hash = "sha256-Q4x6obwzYYncgoUzqFVzn/scjxsiUeAIlEWY43emdvA=";
     extraBuildInputs = [
       lcms2
     ];

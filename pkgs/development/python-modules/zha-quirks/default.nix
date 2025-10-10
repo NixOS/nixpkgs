@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "zha-quirks";
-  version = "0.0.143";
+  version = "0.0.146";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "zigpy";
     repo = "zha-device-handlers";
     tag = version;
-    hash = "sha256-txU1KJzQitSR7Y+/18dLo82K0SkPrJ4iQRBX9C4hgGU=";
+    hash = "sha256-eXT0intSWAYQ/DlIEIZDbv805aQCLXYXpvhWjnd3EVA=";
   };
 
   postPatch = ''
@@ -45,13 +45,14 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # RuntimeError: no running event loop
-    "test_mfg_cluster_events"
-    "test_co2_sensor"
-    "test_smart_air_sensor"
     # AssertionError: expected call not found
     "test_moes"
     "test_tuya_mcu_set_time"
+  ];
+
+  disabledTestPaths = [
+    # TypeError: unhashable type: 'dict'
+    "tests/test_quirks_v2.py"
   ];
 
   pythonImportsCheck = [ "zhaquirks" ];

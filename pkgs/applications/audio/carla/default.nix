@@ -75,13 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
     # --with-appname="$0" is evaluated with $0=.carla-wrapped instead of carla. Fix that.
     for file in $(grep -rl -- '--with-appname="$0"'); do
         filename="$(basename -- "$file")"
-        substituteInPlace "$file" --replace '--with-appname="$0"' "--with-appname=\"$filename\""
+        substituteInPlace "$file" --replace-fail '--with-appname="$0"' "--with-appname=\"$filename\""
     done
   ''
   + lib.optionalString withGtk2 ''
     # Will try to dlopen() libgtk-x11-2.0 at runtime when using the bridge.
     substituteInPlace source/bridges-ui/Makefile \
-        --replace '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
+        --replace-fail '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
   '';
 
   dontWrapQtApps = true;

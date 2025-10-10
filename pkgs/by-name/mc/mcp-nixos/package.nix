@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mcp-nixos";
-  version = "1.0.0";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${version}";
-    hash = "sha256-NwP+zM1VGLOzIm+mLZVK9/9ImFwuiWhRJ9QK3hGpQsY=";
+    hash = "sha256-SbmfP5Qo7liu39tTpIm6IC2qfwChooTYaPZiJqgwTzY=";
   };
 
   patches = [
@@ -25,9 +25,12 @@ python3Packages.buildPythonApplication rec {
 
   dependencies = with python3Packages; [
     beautifulsoup4
+    fastmcp
     mcp
     requests
   ];
+
+  pythonRelaxDeps = [ "fastmcp" ];
 
   nativeCheckInputs = with python3Packages; [
     anthropic
@@ -43,11 +46,11 @@ python3Packages.buildPythonApplication rec {
 
   disabledTestPaths = [
     # Require network access
-    "tests/test_nixhub_evals.py"
-    "tests/test_mcp_behavior_evals.py"
-    "tests/test_option_info_improvements.py"
+    "tests/test_nixhub.py"
+    "tests/test_mcp_behavior.py"
+    "tests/test_options.py"
     # Requires configured channels
-    "tests/test_dynamic_channels.py"
+    "tests/test_channels.py"
   ];
 
   pythonImportsCheck = [ "mcp_nixos" ];

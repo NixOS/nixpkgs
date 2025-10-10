@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "optuna";
-  version = "4.2.1";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "optuna";
     repo = "optuna";
     tag = "v${version}";
-    hash = "sha256-WLrdHrdfCtCZMW2J375N8vmod7FcKCMwQPGKicRA878=";
+    hash = "sha256-qaCOpqKRepm/a1Nh98PV6RcRkadLK5E429pn1zaWQDA=";
   };
 
   build-system = [
@@ -138,12 +138,26 @@ buildPythonPackage rec {
     "test_visualizations_with_single_objectives"
   ];
 
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/optuna_find_free_port.lock'
+    "tests/storages_tests/journal_tests/test_combination_with_grpc.py"
+    "tests/storages_tests/test_grpc.py"
+    "tests/storages_tests/test_storages.py"
+    "tests/study_tests/test_dataframe.py"
+    "tests/study_tests/test_optimize.py"
+    "tests/study_tests/test_study.py"
+    "tests/trial_tests/test_frozen.py"
+    "tests/trial_tests/test_trial.py"
+  ];
+
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "optuna" ];
 
   meta = {
     description = "Hyperparameter optimization framework";
     homepage = "https://optuna.org/";
-    changelog = "https://github.com/optuna/optuna/releases/tag/${version}";
+    changelog = "https://github.com/optuna/optuna/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "optuna";

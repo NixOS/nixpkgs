@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   openssl,
   cmake,
@@ -49,16 +50,24 @@ assert lib.assertOneOf "withAudioBackend" withAudioBackend [
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-player";
-  version = "0.20.7";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "aome510";
     repo = "spotify-player";
     tag = "v${version}";
-    hash = "sha256-g+SU6qDnafLiNOzZ75HUPgifuC8A+rb+KoqJoMHBJ04=";
+    hash = "sha256-nOswrYt9NrzJV6CFBWZCpj/wIJnIgmr3i2TreAKGGPI=";
   };
 
-  cargoHash = "sha256-rwWSKJMI/4fY60m+vGqTqrTijJN6d0PfQH417Ku9+0E=";
+  cargoHash = "sha256-YarKRApcQHom3AQIirqGdmUOuy5B+BRehLijvF/GRPc=";
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-failure.patch";
+      url = "https://github.com/aome510/spotify-player/commit/77af13b48b2a03e61fef1cffea899929057551dc.patch";
+      hash = "sha256-5q8W0X49iZLYdwrBiZJTESb628VPamrm0zEYwDm8CVk=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config

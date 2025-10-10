@@ -44,8 +44,8 @@ let
     );
 in
 lib.makeScope newScope (self: {
-  exercise = makeSeabornDataPackage ({
+  exercise = makeSeabornDataPackage {
     pname = "exercise";
     hash = "sha256-icoc2HkG303A8hCoW6kZxD5qhOKIpdxErLr288o04wE=";
-  });
+  };
 })

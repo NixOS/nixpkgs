@@ -117,7 +117,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [
-      drupol
       niklaskorz
     ];
     # doc = ./fider.md;

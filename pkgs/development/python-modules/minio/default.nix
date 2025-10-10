@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "minio";
-  version = "7.2.16";
+  version = "7.2.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio-py";
     tag = version;
-    hash = "sha256-NyHdZKHyok7CbzNZscUJm67+LK4hYkMp/p14M5vm7og=";
+    hash = "sha256-2SmqtCWOwmSxi9vsBvH2bhYiUwc2LyZ/zO2jJpnhPDw=";
   };
 
   postPatch = ''

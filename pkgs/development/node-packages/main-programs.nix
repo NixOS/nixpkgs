@@ -18,7 +18,6 @@
   "@webassemblyjs/wast-refmt-1.11.1" = "wast-refmt";
   aws-cdk = "cdk";
   cdk8s-cli = "cdk8s";
-  cdktf-cli = "cdktf";
   clipboard-cli = "clipboard";
   conventional-changelog-cli = "conventional-changelog";
   cpy-cli = "cpy";

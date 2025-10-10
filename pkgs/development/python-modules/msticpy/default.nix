@@ -50,7 +50,7 @@
 
 buildPythonPackage rec {
   pname = "msticpy";
-  version = "2.16.2.post";
+  version = "2.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -59,10 +59,13 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "msticpy";
     tag = "v${version}";
-    hash = "sha256-EUZAN56EXNnAFXiBhtjsu652+K3T/qMZoWt2N1C92mU=";
+    hash = "sha256-2p06WKqs0lApEjWhSrq2BL95OxbyBg0Jn2ziwxsNEEE=";
   };
 
-  pythonRelaxDeps = [ "bokeh" ];
+  pythonRelaxDeps = [
+    "azure-kusto-data"
+    "bokeh"
+  ];
 
   build-system = [ setuptools ];
 

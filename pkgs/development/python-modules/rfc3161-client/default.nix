@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "rfc3161-client";
-  version = "1.0.3";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "rfc3161-client";
     tag = "v${version}";
-    hash = "sha256-1TdJGaiDS+ktmry0c294likWj8bbwaNkcUM7Q2f1YPU=";
+    hash = "sha256-EF4d9MnBhWt99vy2MOK+u0aUQ3ZEH/8mYezlWQtGvhU=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

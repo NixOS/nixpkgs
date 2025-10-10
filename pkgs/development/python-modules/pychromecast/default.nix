@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pychromecast";
-  version = "14.0.7";
+  version = "14.0.9";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -20,12 +20,13 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "pychromecast";
     tag = version;
-    hash = "sha256-NB/KXKgmyLAhsL/CD463eNMO8brye5LKVCkkD3EloPU=";
+    hash = "sha256-SpoVgXJV/9SVAcZXfeqpB3jkt9UUWcY9NBDGeIFhh4w=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-       --replace-fail "setuptools>=65.6,<78.0" setuptools
+       --replace-fail "setuptools>=65.6,<81.0" setuptools \
+       --replace-fail "wheel>=0.37.1,<0.46.0" wheel
   '';
 
   build-system = [ setuptools ];
@@ -46,7 +47,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/home-assistant-libs/pychromecast";
     changelog = "https://github.com/home-assistant-libs/pychromecast/releases/tag/${src.tag}";
     license = licenses.mit;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -201,7 +201,7 @@ let
         echo "Tried for at least 30 seconds, giving up..."
         exit 1
       fi
-      count=$((count++))
+      count=$((++count))
     done
 
     ${recoverIdmAdmin}
@@ -996,6 +996,9 @@ in
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"
           "-/etc/hosts"
+          "-/etc/passwd"
+          "-/etc/group"
+          "-/etc/shadow"
           "-/etc/localtime"
           "-/etc/kanidm"
           "-/etc/static/kanidm"

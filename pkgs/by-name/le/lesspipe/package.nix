@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.19";
+  version = "2.20";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-V+fB5KkbBRhVSDgB/e7oVEyMKQ7HbR82XQYlqxcLZyQ=";
+    hash = "sha256-yb3IzdaMiv1PwqHOfSyHvmWXyStvK/XXC49saXVAJFU=";
   };
 
   nativeBuildInputs = [

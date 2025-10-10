@@ -29,14 +29,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "ocelot-desktop";
-  version = "1.13.1";
+  version = "1.14.1";
 
   __darwinAllowLocalNetworking = true;
 
   # Cannot build from source because sbt/scala support is completely non-existent in nixpkgs
   src = fetchurl {
     url = "https://gitlab.com/api/v4/projects/9941848/packages/generic/ocelot-desktop/v${finalAttrs.version}/ocelot-desktop-v${finalAttrs.version}.jar";
-    hash = "sha256-aXjz2H4vO8D7BGHxhanbmpxqd8op31v1Gwk/si4CBfg=";
+    hash = "sha256-OO+fgb9PO72znb2sU0olxFf+YuWZvgZkWdszFPpMZg8=";
   };
 
   dontUnpack = true;

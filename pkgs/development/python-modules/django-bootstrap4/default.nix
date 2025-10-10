@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # non-propagates
   django,
@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "django-bootstrap4";
-  version = "25.1";
+  version = "25.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zostera";
     repo = "django-bootstrap4";
     tag = "v${version}";
-    hash = "sha256-WIz7T2f3xvsT2rSq1MUFwHpvzgHyLgTRpzb9z98sUmo=";
+    hash = "sha256-+G9UHW4eUGl00A/kDj+iTP7ehjj/dwUENKffvGxE6/4=";
   };
 
-  build-system = [ hatchling ];
+  build-system = [ uv-build ];
 
   dependencies = [ beautifulsoup4 ];
 
@@ -48,7 +48,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Bootstrap 4 integration with Django";
     homepage = "https://github.com/zostera/django-bootstrap4";
-    changelog = "https://github.com/zostera/django-bootstrap4/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/zostera/django-bootstrap4/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     maintainers = with maintainers; [ hexa ];
   };

@@ -16,7 +16,7 @@ mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gyunaev";
-    repo = pname;
+    repo = "birdtray";
     rev = "v${version}";
     sha256 = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
   };
@@ -29,6 +29,12 @@ mkDerivation rec {
     qtbase
     qttools
     qtx11extras
+  ];
+
+  cmakeFlags = [
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   # Wayland support is broken.

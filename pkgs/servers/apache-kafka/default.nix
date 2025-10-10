@@ -14,6 +14,13 @@
 
 let
   versionMap = {
+    "4_1" = {
+      kafkaVersion = "4.1.0";
+      scalaVersion = "2.13";
+      sha256 = "sha256-hbRThHDR3LmNAnMoa/q4cXBlUi5Zfs//zU24OjAhdY4=";
+      jre = jdk17_headless;
+      nixosTest = nixosTests.kafka.base.kafka_4_1;
+    };
     "4_0" = {
       kafkaVersion = "4.0.0";
       scalaVersion = "2.13";
@@ -27,20 +34,6 @@ let
       sha256 = "sha256-3UOZgW5niUbKt2470WhhA1VeabyPKrhobNpxqhW8MaM=";
       jre = jdk17_headless;
       nixosTest = nixosTests.kafka.base.kafka_3_9;
-    };
-    "3_8" = {
-      kafkaVersion = "3.8.1";
-      scalaVersion = "2.13";
-      sha256 = "sha256-IhdChtYMqmKyVQbEhpRLxuBNjLLS8VCD0v60gjl3i2I=";
-      jre = jdk17_headless;
-      nixosTest = nixosTests.kafka.base.kafka_3_8;
-    };
-    "3_7" = {
-      kafkaVersion = "3.7.2";
-      scalaVersion = "2.13";
-      sha256 = "sha256-eZgLcO2D8R4so3qU1k6+QS1ImeI+YKAsJdQILzooLW8=";
-      jre = jdk17_headless;
-      nixosTest = nixosTests.kafka.base.kafka_3_7;
     };
   };
 

@@ -46,11 +46,11 @@ let
       libxml2,
       linux-pam,
       numactl,
-      fmt_11,
+      fmt,
       withStorageMroonga ? true,
       kytea,
       libsodium,
-      msgpack,
+      msgpack-cxx,
       zeromq,
       withStorageRocks ? true,
       withEmbedded ? false,
@@ -231,7 +231,7 @@ let
           ];
 
           buildInputs =
-            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+            common.buildInputs ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -283,10 +283,10 @@ let
           ++ lib.optionals withStorageMroonga [
             kytea
             libsodium
-            msgpack
+            msgpack-cxx
             zeromq
           ]
-          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
+          ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt ];
 
         propagatedBuildInputs = lib.optional withNuma numactl;
 
@@ -309,6 +309,10 @@ let
             "-DWITHOUT_EXAMPLE=1"
             "-DWITHOUT_FEDERATED=1"
             "-DWITHOUT_TOKUDB=1"
+          ]
+          ++ lib.optionals (lib.versionOlder version "11.4") [
+            # Fix the build with CMake 4.
+            "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
           ]
           ++ lib.optionals withNuma [
             "-DWITH_NUMA=ON"
@@ -365,22 +369,22 @@ self: {
   # see https://mariadb.org/about/#maintenance-policy for EOLs
   mariadb_106 = self.callPackage generic {
     # Supported until 2026-07-06
-    version = "10.6.22";
-    hash = "sha256-LKYA3H6F6tHzPCEvnXax8vgS0knIveAuXzjq0Jit5CA=";
+    version = "10.6.23";
+    hash = "sha256-uvS/N6BR6JLnFyTudSiRrbfPxpzSjQhzXDYH0wxpPCM=";
   };
   mariadb_1011 = self.callPackage generic {
     # Supported until 2028-02-16
-    version = "10.11.13";
-    hash = "sha256-+Lc0dJ+9ZS6k4lW+jMeID5jQe2p/604eqMc2y0gNI+Q=";
+    version = "10.11.14";
+    hash = "sha256-ilccsU+x1ONmPY6Y89QgDAQvyLKkqqq0lYYN6ot9BS8=";
   };
   mariadb_114 = self.callPackage generic {
     # Supported until 2029-05-29
-    version = "11.4.7";
-    hash = "sha256-vyBofKEvp+/ajficqx8qZhKIzqQaz49TGJtp1SlDR9A=";
+    version = "11.4.8";
+    hash = "sha256-UvpNyixfgK/BZn1SOifAYXbZhTIpimsMMe1zUF9J4Vw=";
   };
   mariadb_118 = self.callPackage generic {
     # Supported until 2028-06-04
-    version = "11.8.2";
-    hash = "sha256-shYs316TF9ioYhy+2oOZkyT8CsiUQhDhSrtf4Kn+o+8=";
+    version = "11.8.3";
+    hash = "sha256-EBSoXHaN6PnpxtS/C0JhfzsViL4a03H3FnTqMrhxGcA=";
   };
 }

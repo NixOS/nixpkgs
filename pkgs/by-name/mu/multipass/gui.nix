@@ -5,7 +5,7 @@
   version,
 
   autoPatchelfHook,
-  flutter,
+  flutter332,
   gtkmm3,
   keybinder3,
   lib,
@@ -15,7 +15,7 @@
   protoc-gen-dart,
   qt6,
 }:
-flutter.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit version;
   pname = "multipass-gui";
   src = multipass_src;

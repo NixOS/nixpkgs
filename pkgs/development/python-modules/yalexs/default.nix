@@ -17,7 +17,6 @@
   pytestCheckHook,
   python-dateutil,
   python-socketio,
-  pythonOlder,
   requests-mock,
   requests,
   typing-extensions,
@@ -25,16 +24,14 @@
 
 buildPythonPackage rec {
   pname = "yalexs";
-  version = "8.11.1";
+  version = "9.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "yalexs";
     tag = "v${version}";
-    hash = "sha256-J7fVj3vb6cLfjijEHJwWS+LmWGM74HoFs392+apdlrc=";
+    hash = "sha256-t7C2x3aH3ltDthBlt+ghSj9SEfZ4jm4Fgs0KAIm7cBA=";
   };
 
   build-system = [ poetry-core ];

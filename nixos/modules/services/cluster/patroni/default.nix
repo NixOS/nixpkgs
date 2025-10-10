@@ -148,8 +148,21 @@ in
     settings = lib.mkOption {
       type = format.type;
       default = { };
+      example = {
+        bootstrap = {
+          initdb = [
+            "encoding=UTF-8"
+            "data-checksums"
+          ];
+        };
+        postgresql = {
+          parameters = {
+            unix_socket_directories = "/tmp";
+          };
+        };
+      };
       description = ''
-        The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/SETTINGS.html)
+        The primary patroni configuration. See the [documentation](https://patroni.readthedocs.io/en/latest/yaml_configuration.html)
         for possible values.
         Secrets should be passed in by using the `environmentFiles` option.
       '';

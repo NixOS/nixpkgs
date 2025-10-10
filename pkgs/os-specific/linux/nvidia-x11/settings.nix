@@ -33,13 +33,9 @@ let
     inherit sha256;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.nvidia.com/object/unix.html";
     platforms = nvidia_x11.meta.platforms;
-    maintainers = with maintainers; [
-      abbradar
-      aidalgol
-    ];
   };
 
   libXNVCtrl = stdenv.mkDerivation {

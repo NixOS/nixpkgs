@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "oknozor";
     repo = "cocogitto";
-    rev = version;
+    tag = version;
     hash = "sha256-ij5vpIpqCYGNPNWPY47rWmMLEgBh+wtVmLRt11S14rE=";
   };
 

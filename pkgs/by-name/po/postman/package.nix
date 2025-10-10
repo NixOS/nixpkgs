@@ -2,12 +2,13 @@
   lib,
   stdenvNoCC,
   fetchurl,
+  writeScript,
   callPackage,
 }:
 
 let
   pname = "postman";
-  version = "11.56.4";
+  version = "11.58.4";
 
   src =
     let
@@ -26,12 +27,28 @@ let
       name = "postman-${version}.${if stdenvNoCC.hostPlatform.isLinux then "tar.gz" else "zip"}";
       url = "https://dl.pstmn.io/download/version/${version}/${system}";
       hash = selectSystem {
-        aarch64-darwin = "sha256-DNhTzTul3SZSsqc3g1oOSSl1sGQ3t6FD5bbL4dMHzEk=";
-        aarch64-linux = "sha256-8CaqyMuZEcdgKfE2OxHCEAVsTFBtFDOfdHfTWASJAU4=";
-        x86_64-darwin = "sha256-cRHyqNBW/1l2VsK89ue2K+X/Uszpzu9wXg4O91Adfy4=";
-        x86_64-linux = "sha256-bwvNmcSBbwLt3kNbd05Yy2IgNHUJx7qTvDMKrGmOOi0=";
+        aarch64-darwin = "sha256-J6vJNTfkBdPXUp3H3GmT85fnvNCs1xcgH+xa4StwPio=";
+        aarch64-linux = "sha256-4AaG5ifi/x0rftT3iKSERMvlGBKYrLZrnZIKvwlnqWg=";
+        x86_64-darwin = "sha256-YhdmpNl3TKJlVDG2UAAX4lAVSGdHBAQxFtjTqyMuHdw=";
+        x86_64-linux = "sha256-qoEShs3JJ51UOEdhDcFWd2qiMgd1RPdsMql1HqK7Q3s=";
       };
     };
+
+  passthru.updateScript = writeScript "update-postman" ''
+    #!/usr/bin/env nix-shell
+    #!nix-shell -i bash -p nix curl jq common-updater-scripts
+    set -eou pipefail
+    latestVersion=$(curl --fail --silent 'https://dl.pstmn.io/update/status?currentVersion=11.0.0&platform=osx_arm64' | jq --raw-output .version)
+    if [[ "$latestVersion" == "$UPDATE_NIX_OLD_VERSION" ]]; then
+      exit 0
+    fi
+    update-source-version postman $latestVersion
+    systems=$(nix eval --json -f . postman.meta.platforms | jq --raw-output '.[]')
+    for system in $systems; do
+      hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 $(nix-prefetch-url $(nix eval --raw -f . postman.src.url --system "$system")))
+      update-source-version postman $latestVersion $hash --system=$system --ignore-same-version --ignore-same-hash
+    done
+  '';
 
   meta = {
     changelog = "https://www.postman.com/release-notes/postman-app/#${
@@ -62,6 +79,7 @@ if stdenvNoCC.hostPlatform.isDarwin then
       pname
       version
       src
+      passthru
       meta
       ;
   }
@@ -71,6 +89,7 @@ else
       pname
       version
       src
+      passthru
       meta
       ;
   }

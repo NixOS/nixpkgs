@@ -35,7 +35,7 @@ let
   davinci = (
     stdenv.mkDerivation rec {
       pname = "davinci-resolve${lib.optionalString studioVariant "-studio"}";
-      version = "20.0.1";
+      version = "20.2.1";
 
       nativeBuildInputs = [
         (appimage-run.override { buildFHSEnv = buildFHSEnvChroot; })
@@ -57,9 +57,9 @@ let
             outputHashAlgo = "sha256";
             outputHash =
               if studioVariant then
-                "sha256-20ZmxkniX4rbKqxxjqGJOCSeZt6i+HN72Vm8HtsONUg="
+                "sha256-emAVfA9mclwJSiT9oVvLVhCy2GXGQVsvg4pj3vodxk8="
               else
-                "sha256-ZbiQdsm0zoVe0Riw8K6ZBRKd+v73OdplS0Db7P1DE6E=";
+                "sha256-/OQhi4y07TOyeIdD18URBr4qAfuPhd2mr0giqgTEfk0=";
 
             impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
@@ -150,7 +150,7 @@ let
           test -e ${lib.escapeShellArg appimageName}
           appimage-run ${lib.escapeShellArg appimageName} -i -y -n -C $out
 
-          mkdir -p $out/{configs,DolbyVision,easyDCP,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
+          mkdir -p $out/{"Apple Immersive/Calibration",configs,DolbyVision,easyDCP,Extras,Fairlight,GPUCache,logs,Media,"Resolve Disk Database",.crashreport,.license,.LUT}
           runHook postInstall
         '';
 
@@ -186,6 +186,7 @@ let
             "Video"
             "Graphics"
           ];
+          startupWMClass = "resolve";
         })
       ];
     }
@@ -248,10 +249,12 @@ buildFHSEnv {
 
   extraPreBwrapCmds = lib.optionalString studioVariant ''
     mkdir -p ~/.local/share/DaVinciResolve/license || exit 1
+    mkdir -p ~/.local/share/DaVinciResolve/Extras || exit 1
   '';
 
   extraBwrapArgs = lib.optionals studioVariant [
-    "--bind \"$HOME\"/.local/share/DaVinciResolve/license ${davinci}/.license"
+    ''--bind "$HOME"/.local/share/DaVinciResolve/license ${davinci}/.license''
+    ''--bind "$HOME"/.local/share/DaVinciResolve/Extras ${davinci}/Extras''
   ];
 
   runScript = "${bash}/bin/bash ${writeText "davinci-wrapper" ''

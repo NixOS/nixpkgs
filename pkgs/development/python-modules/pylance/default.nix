@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.32.1";
+  version = "0.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-P40m8ak0A2l4zGAYcbvXGidQpIT3+ayERbleWcVuLbE=";
+    hash = "sha256-H4HQzLmQdDS8aS/OMsIHjWEogmctkF+5N5ClozeuITU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-rCaLREl2LSfpu0vwa1Vx2rQ7phWsGz58RTjo6yfHKLU=";
+    hash = "sha256-A4qZERrYm8FELuJNqy/fhbJxLxTp73oY7jc5bZavFFI=";
   };
 
   nativeBuildInputs = [
@@ -100,6 +100,9 @@ buildPythonPackage rec {
   '';
 
   disabledTests = [
+    # Hangs indefinitely
+    "test_all_permutations"
+
     # Writes to read-only build directory
     "test_add_data_storage_version"
     "test_fix_data_storage_version"
@@ -110,6 +113,10 @@ buildPythonPackage rec {
 
     # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
     # ModuleNotFoundError: No module named 'lance'
+    "test_lance_log_file"
+    "test_lance_log_file_invalid_path"
+    "test_lance_log_file_with_directory_creation"
+    "test_timestamp_precision"
     "test_tracing"
 
     # Flaky (AssertionError)

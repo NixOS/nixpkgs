@@ -1,0 +1,21 @@
+diff --git a/crates/common/src/lib.rs b/crates/common/src/lib.rs
+index 18172b9..6fc7e82 100644
+--- a/crates/common/src/lib.rs
++++ b/crates/common/src/lib.rs
+@@ -1,3 +1,4 @@
++#![warn(dangerous_implicit_autorefs)]
+ pub mod clean;
+ pub mod dir_ops;
+ pub mod file_atomic;
+diff --git a/src/lib.rs b/src/lib.rs
+index 068c65d..82609e9 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -6,6 +6,7 @@
+ #![allow(clippy::needless_range_loop)]
+ #![allow(clippy::single_match)]
+ #![allow(clippy::too_many_arguments)]
++#![warn(dangerous_implicit_autorefs)]
+ 
+ mod bgworker;
+ mod datatype;

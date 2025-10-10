@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "VeryFastTree";
     homepage = "https://github.com/citiususc/veryfasttree";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ thyol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

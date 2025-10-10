@@ -30,13 +30,13 @@ lib.checkListOfEnum "${pname}: available color variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-26";
+    version = "2025-08-21";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "Fluent-icon-theme";
       tag = version;
-      hash = "sha256-nL9hk+H2ees2grBvVULvJs54FlFTXrA7o1STbDDJGhQ=";
+      hash = "sha256-qAKNAbmSfVuzUGDJGVU0QF3LMc5tRzAy+l0ZwEXaJ28=";
     };
 
     nativeBuildInputs = [
@@ -60,7 +60,7 @@ lib.checkListOfEnum "${pname}: available color variants"
 
       ./install.sh --dest $out/share/icons \
         --name Fluent \
-        ${builtins.toString colorVariants} \
+        ${toString colorVariants} \
         ${lib.optionalString allColorVariants "--all"} \
         ${lib.optionalString roundedIcons "--round"} \
         ${lib.optionalString blackPanelIcons "--black"}

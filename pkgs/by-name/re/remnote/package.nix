@@ -6,10 +6,10 @@
 }:
 let
   pname = "remnote";
-  version = "1.19.56";
+  version = "1.21.5";
   src = fetchurl {
     url = "https://download2.remnote.io/remnote-desktop2/RemNote-${version}.AppImage";
-    hash = "sha256-ZH8sbfoBf1s97O36Q9Lf5Q07CTEkM45NXT8VJgAOe4I=";
+    hash = "sha256-Tq8qyjlyB/1tQkB5rLVSLy8HbpnfBZ4QmNQB/CVEiN0=";
   };
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in

@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "crispy-doom";
-  version = "7.0";
+  version = "7.1";
 
   src = fetchFromGitHub {
     owner = "fabiangreffrath";
     repo = "crispy-doom";
     tag = "crispy-doom-${finalAttrs.version}";
-    hash = "sha256-+rNZsb4GAjzNcIU5xZGBpmP+nXNOP16oVg68nfecMrw=";
+    hash = "sha256-LJLqlPSOarmm5oqSLMilxNMJl4+uKukDl/b58NpZ8VI=";
   };
 
   postPatch = ''
@@ -65,7 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       Gliczy
       keenanweaver
-      neonfuz
     ];
   };
 })

@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
       shackra
     ];
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" ];
+    inherit (obs-studio.meta) platforms;
   };
 }

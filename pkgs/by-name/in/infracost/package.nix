@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -43,7 +44,7 @@ buildGoModule rec {
     "-short"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export INFRACOST_SKIP_UPDATE_CHECK=true
     installShellCompletion --cmd infracost \
       --bash <($out/bin/infracost completion --shell bash) \

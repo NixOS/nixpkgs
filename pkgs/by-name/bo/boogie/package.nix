@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "Boogie";
-  version = "3.5.4";
+  version = "3.5.5";
 
   src = fetchFromGitHub {
     owner = "boogie-org";
     repo = "boogie";
     tag = "v${version}";
-    hash = "sha256-aTt8lZgGRp+9rFldEJUWlXHosjhRhgj/jfb+N7s1E7I=";
+    hash = "sha256-OuNzxzcoWrDCmUfQNXEif5wIY+L5jql14231m7nNBe4=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

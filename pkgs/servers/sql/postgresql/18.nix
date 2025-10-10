@@ -1,7 +1,7 @@
 import ./generic.nix {
-  version = "18beta2";
-  rev = "refs/tags/REL_18_BETA2";
-  hash = "sha256-n3NA0XJE2wvbOwrQOMXbzKn+7HLGAQSXgDU9ObhddZQ=";
+  version = "18.0";
+  rev = "refs/tags/REL_18_0";
+  hash = "sha256-xA6gbJe4tIV9bYRFrdI4Rfy20ZwTkvyyjt7ZxvCFEec=";
   muslPatches = {
     dont-use-locale-a = {
       url = "https://git.alpinelinux.org/aports/plain/main/postgresql17/dont-use-locale-a-on-musl.patch?id=d69ead2c87230118ae7f72cef7d761e761e1f37e";

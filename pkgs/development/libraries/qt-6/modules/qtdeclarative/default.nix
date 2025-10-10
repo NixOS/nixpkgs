@@ -10,7 +10,6 @@
   lib,
   pkgsBuildBuild,
   replaceVars,
-  fetchpatch,
 }:
 
 qtModule {
@@ -34,20 +33,15 @@ qtModule {
     # store paths and disallows saving caches of bare qml files in the store.
     (replaceVars ./invalidate-caches-from-mismatched-store-paths.patch {
       nixStore = builtins.storeDir;
-      nixStoreLength = builtins.toString ((builtins.stringLength builtins.storeDir) + 1); # trailing /
+      nixStoreLength = toString ((builtins.stringLength builtins.storeDir) + 1); # trailing /
     })
     # add version specific QML import path
     ./use-versioned-import-path.patch
-    # This should make it into the 6.9.2 release.
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtdeclarative/-/commit/672e6777e8e6a8fd.diff";
-      hash = "sha256-nPczX6SHZPcdg7AqpRIwPCrcS3PId+Ibb0iPSiHUdaw=";
-    })
   ];
 
   preConfigure =
     let
-      storePrefixLen = builtins.toString ((builtins.stringLength builtins.storeDir) + 1);
+      storePrefixLen = toString ((builtins.stringLength builtins.storeDir) + 1);
     in
     ''
       # "NIX:" is reserved for saved qmlc files in patch 0001, "QTDHASH:" takes the place

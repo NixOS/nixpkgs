@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "libraries";
-    repo = pname;
+    repo = "kquickimageeditor";
     rev = "v${version}";
     sha256 = "sha256-+BByt07HMb4u6j9bVZqkUPvyRaElKvJ2MjKlPakL87E=";
   };

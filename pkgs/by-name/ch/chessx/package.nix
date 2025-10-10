@@ -3,18 +3,17 @@
   lib,
   pkg-config,
   zlib,
-  fetchpatch,
   fetchurl,
   libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chessx";
-  version = "1.6.0";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/chessx/chessx-${finalAttrs.version}.tgz";
-    hash = "sha256-76YOe1WpB+vdEoEKGTHeaWJLpCVE4RoyYu1WLy3Dxhg=";
+    hash = "sha256-uwkdhJywLWMJl4/ihMnxqFwnTzUSL+kca5wwiabiD4A=";
   };
 
   nativeBuildInputs = [
@@ -35,30 +34,20 @@ stdenv.mkDerivation (finalAttrs: {
     qttools
   ]);
 
-  patches =
-    # needed to backport patches to successfully build, due to broken release
-    let
-      repo = "https://github.com/Isarhamster/chessx/";
-    in
-    [
-      (fetchpatch {
-        url = "${repo}/commit/9797d46aa28804282bd58ce139b22492ab6881e6.diff";
-        hash = "sha256-RnIf6bixvAvyp1CKuri5LhgYFqhDNiAVYWUmSUDMgVw=";
-      })
-      (fetchpatch {
-        url = "${repo}/commit/4fab4d2f649d1cae2b54464c4e28337d1f20c214.diff";
-        hash = "sha256-EJVHricN+6uabKLfn77t8c7JjO7tMmZGsj7ZyQUGcXA=";
-      })
-    ];
-
   enableParallelBuilding = true;
+
+  # Fails to start on Native Wayland.
+  # See https://sourceforge.net/p/chessx/bugs/299/
+  qtWrapperArgs = [
+    "--set"
+    "QT_QPA_PLATFORM"
+    "xcb"
+  ];
 
   installPhase = ''
     runHook preInstall
-
     install -Dm555 release/chessx -t "$out/bin"
     install -Dm444 unix/chessx.desktop -t "$out/share/applications"
-
     runHook postInstall
   '';
 

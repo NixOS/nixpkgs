@@ -16,8 +16,9 @@
   libxml2,
   libyaml,
   libffi,
-  llvmPackages_15,
-  llvmPackages_18,
+  llvmPackages_19,
+  llvmPackages_20,
+  llvmPackages_21,
   makeWrapper,
   openssl,
   pcre2,
@@ -168,11 +169,7 @@ let
         export threads=$NIX_BUILD_CORES
         export CRYSTAL_CACHE_DIR=$TMP
         export MACOSX_DEPLOYMENT_TARGET=10.11
-
-        # Available since 1.13.0 https://github.com/crystal-lang/crystal/pull/14574
-        if [[ -f src/SOURCE_DATE_EPOCH ]]; then
-          export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
-        fi
+        export SOURCE_DATE_EPOCH="$(<src/SOURCE_DATE_EPOCH)"
       '';
 
       strictDeps = true;
@@ -247,8 +244,7 @@ let
         ln -s $bin/bin $out/bin
         ln -s $bin/share/bash-completion $out/share/bash-completion
         ln -s $bin/share/zsh $out/share/zsh
-        # fish completion was introduced in 1.6.0
-        test -f etc/completion.fish && ln -s $bin/share/fish $out/share/fish
+        ln -s $bin/share/fish $out/share/fish
         ln -s $lib $out/lib
 
         runHook postInstall
@@ -297,19 +293,11 @@ rec {
     };
   };
 
-  # When removing this version, also remove checks for src/SOURCE_DATE_EPOCH existence
-  crystal_1_11 = generic {
-    version = "1.11.2";
-    sha256 = "sha256-BBEDWqFtmFUNj0kuGBzv71YHO3KjxV4d2ySTCD4HhLc=";
-    binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_15;
-  };
-
   crystal_1_14 = generic {
     version = "1.14.1";
     sha256 = "sha256-cQWK92BfksOW8GmoXn4BmPGJ7CLyLAeKccOffQMh5UU=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
     doCheck = false; # Some compiler spec problems on x86-64_linux with the .0 release
   };
 
@@ -317,7 +305,7 @@ rec {
     version = "1.15.1";
     sha256 = "sha256-L/Q8yZdDq/wn4kJ+zpLfi4pxznAtgjxTCbLnEiCC2K0=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_19;
     doCheck = false;
   };
 
@@ -325,7 +313,15 @@ rec {
     version = "1.16.3";
     sha256 = "sha256-U9H1tHUMyDNicZnXzEccDki5bGXdV0B2Wu2PyCksPVI=";
     binary = binaryCrystal_1_10;
-    llvmPackages = llvmPackages_18;
+    llvmPackages = llvmPackages_20;
+    doCheck = false;
+  };
+
+  crystal_1_17 = generic {
+    version = "1.17.1";
+    sha256 = "sha256-+wHhozPhpIsfQy1Lw+V48zvuWCfXzT4IC9KA1AU/DLw=";
+    binary = binaryCrystal_1_10;
+    llvmPackages = llvmPackages_21;
     doCheck = false;
   };
 

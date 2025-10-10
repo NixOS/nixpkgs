@@ -18,7 +18,6 @@
   fetchgit,
   runCommand,
   llvmPackages,
-  llvmPackages_15,
   patchelf,
   openbox,
   xorg,
@@ -86,7 +85,7 @@ let
 
   llvm = symlinkJoin {
     name = "llvm";
-    paths = with llvmPackages; [
+    paths = [
       clang
       llvmPackages.llvm
     ];
@@ -217,7 +216,7 @@ stdenv.mkDerivation (finalAttrs: {
     cp -pr --reflink=auto $swiftshader src/flutter/third_party/swiftshader
     chmod -R u+w -- src/flutter/third_party/swiftshader
 
-    ln -s ${llvmPackages_15.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
+    ln -s ${llvmPackages.llvm.monorepoSrc} src/flutter/third_party/swiftshader/third_party/llvm-project
 
     mkdir -p src/flutter/buildtools/${constants.alt-platform}
     ln -s ${llvm} src/flutter/buildtools/${constants.alt-platform}/clang
@@ -347,21 +346,19 @@ stdenv.mkDerivation (finalAttrs: {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta =
-    with lib;
-    {
-      # Very broken on Darwin
-      broken = stdenv.hostPlatform.isDarwin;
-      description = "Flutter engine";
-      homepage = "https://flutter.dev";
-      maintainers = with maintainers; [ RossComputerGuy ];
-      license = licenses.bsd3;
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
-    }
-    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta = {
+    # Very broken on Darwin
+    broken = stdenv.hostPlatform.isDarwin;
+    description = "Flutter engine";
+    homepage = "https://flutter.dev";
+    maintainers = with lib.maintainers; [ RossComputerGuy ];
+    license = lib.licenses.bsd3;
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+  }
+  // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

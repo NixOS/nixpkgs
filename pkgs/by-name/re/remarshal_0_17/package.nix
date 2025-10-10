@@ -7,26 +7,27 @@
 }:
 
 let
-  python = python3Packages.python.override {
-    self = python3Packages.python;
-    packageOverrides = self: super: {
-      tomlkit = super.tomlkit.overridePythonAttrs (oldAttrs: rec {
-        version = "0.12.5";
-        src = fetchPypi {
-          pname = "tomlkit";
-          inherit version;
-          hash = "sha256-7vNPujmDTU1rc8m6fz5NHEF6Tlb4mn6W4JDdDSS4+zw=";
-        };
-        patches = [
-          (fetchpatch {
-            url = "https://github.com/python-poetry/tomlkit/commit/05d9be1c2b2a95a4eb3a53d999f1483dd7abae5a.patch";
-            hash = "sha256-9pLGxcGHs+XoKrqlh7Q0dyc07XrK7J6u2T7Kvfd0ICc=";
-            excludes = [ ".github/workflows/tests.yml" ];
-          })
-        ];
-      });
-    };
+  packageOverrides = self: super: {
+    tomlkit = super.tomlkit.overridePythonAttrs (oldAttrs: rec {
+      version = "0.12.5";
+      src = fetchPypi {
+        pname = "tomlkit";
+        inherit version;
+        hash = "sha256-7vNPujmDTU1rc8m6fz5NHEF6Tlb4mn6W4JDdDSS4+zw=";
+      };
+      patches = [
+        (fetchpatch {
+          url = "https://github.com/python-poetry/tomlkit/commit/05d9be1c2b2a95a4eb3a53d999f1483dd7abae5a.patch";
+          hash = "sha256-9pLGxcGHs+XoKrqlh7Q0dyc07XrK7J6u2T7Kvfd0ICc=";
+          excludes = [ ".github/workflows/tests.yml" ];
+        })
+      ];
+    });
   };
+  python = python3Packages.python.override (oa: {
+    self = python3Packages.python;
+    packageOverrides = lib.composeExtensions (oa.packageOverrides or (_: _: { })) packageOverrides;
+  });
   pythonPackages = python.pkgs;
 in
 pythonPackages.buildPythonApplication rec {

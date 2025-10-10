@@ -27,14 +27,16 @@ let
       content_hash = "1111111111111111111111111111111111111111";
     };
   };
+
+  dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
 in
-buildDartApplication.override { inherit dart; } rec {
+buildDartApplication.override { inherit dart; } {
   pname = "flutter-tools";
-  inherit version;
+  inherit version dartEntryPoints;
   dartOutputType = "jit-snapshot";
 
   src = flutterSrc;
-  sourceRoot = "${src.name}/packages/flutter_tools";
+  sourceRoot = "${flutterSrc.name}/packages/flutter_tools";
   postUnpack = ''chmod -R u+w "$NIX_BUILD_TOP/source"'';
 
   inherit patches;
@@ -69,7 +71,6 @@ buildDartApplication.override { inherit dart; } rec {
     ln -s '${dart}' "$FLUTTER_ROOT/bin/cache/dart-sdk"
   '';
 
-  dartEntryPoints."flutter_tools.snapshot" = "bin/flutter_tools.dart";
   dartCompileFlags = [ "--define=NIX_FLUTTER_HOST_PLATFORM=${systemPlatform}" ];
 
   # The Dart wrapper launchers are useless for the Flutter tool - it is designed

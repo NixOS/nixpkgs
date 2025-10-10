@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "osc-placement";
-  version = "4.6.0";
+  version = "4.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "openstack";
     repo = "osc-placement";
     tag = version;
-    hash = "sha256-8D/8WRUZnVTCXL/I+KmIGKtnfyjM7evux808+XY3ciw=";
+    hash = "sha256-OLvi/eIgEEUoZKxowU7On5m2OkRsCEsU/Me7rPruIdM=";
   };
 
   env.PBR_VERSION = version;
@@ -65,7 +65,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "osc_placement" ];
 
   meta = {
-    homepage = "https://opendev.org/openstack/osc-placement";
+    homepage = "https://github.com/openstack/osc-placement";
     description = "OpenStackClient plugin for the Placement service";
     license = lib.licenses.asl20;
     teams = [ lib.teams.openstack ];
