@@ -35,8 +35,9 @@ buildPythonPackage rec {
   meta = {
     description = "Easy interface to query the EC2 metadata API, with caching";
     homepage = "https://pypi.org/project/ec2-metadata/";
+    changelog = "https://github.com/adamchainz/ec2-metadata/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers._9999years ];
+    maintainers = with lib.maintainers; [ _9999years ];
     mainProgram = "ec2-metadata";
   };
 }
