@@ -26043,6 +26043,12 @@
     github = "tilpner";
     githubId = 4322055;
   };
+  timasoft = {
+    name = "Timofey Klester";
+    email = "tima.klester@yandex.ru";
+    github = "timasoft";
+    githubId = 74288993;
+  };
   timbertson = {
     email = "tim@gfxmonk.net";
     github = "timbertson";
