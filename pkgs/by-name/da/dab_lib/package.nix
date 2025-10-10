@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/library";
 
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
