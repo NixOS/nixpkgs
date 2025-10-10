@@ -1,11 +1,15 @@
 {
   lib,
   stdenv,
+  fetchFromGitHub,
   fetchurl,
+  fetchpatch2,
   love,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  strip-nondeterminism,
+  zip,
 }:
 
 let
@@ -33,23 +37,41 @@ stdenv.mkDerivation rec {
   inherit pname desktopItems;
   version = "1.01b";
 
-  src = fetchurl {
-    url = "https://github.com/SimonLarsen/90-Second-Portraits/releases/download/${version}/${pname}-${version}.love";
-    sha256 = "0jj3k953r6vb02212gqcgqpb4ima87gnqgls43jmylxq2mcm33h5";
+  src = fetchFromGitHub {
+    owner = "SimonLarsen";
+    repo = "90-Second-Portraits";
+    tag = version;
+    hash = "sha256-xxgB8Aw7QTK9lPus7Q4E7iP2/rRfCwwiYbk5NqzujHI=";
+    fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Love 11 support
+      url = "https://github.com/SimonLarsen/90-Second-Portraits/commit/0ae7ba046f14cef9857fd6c05d9072455097441f.patch?full_index=true";
+      hash = "sha256-/C4gqzwHQqZCuTA/m6WX8mvTxmLxOcHRItVLA3bty3Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
+    strip-nondeterminism
+    zip
   ];
 
-  dontUnpack = true;
+  buildPhase = ''
+    runHook preBuild
+    zip -9 -r 90secondportraits.love ./*
+    strip-nondeterminism --type zip 90secondportraits.love
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 $src $out/share/games/lovegames/${pname}.love
-    makeWrapper ${love}/bin/love $out/bin/${pname} \
-      --add-flags $out/share/games/lovegames/${pname}.love
+    install -Dm444 90secondportraits.love $out/share/games/lovegames/90secondportraits.love
+    makeWrapper ${love}/bin/love $out/bin/90secondportraits \
+      --add-flags $out/share/games/lovegames/90secondportraits.love
     runHook postInstall
   '';
 

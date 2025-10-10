@@ -32,21 +32,21 @@
   sqlite,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeciv";
   version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "freeciv";
     repo = "freeciv";
-    rev = "R${lib.replaceStrings [ "." ] [ "_" ] version}";
+    tag = "R${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-IlJ51ryoQ7qzIY9n8dmPQdwH8aPjXvRXXO2COOxWRcc=";
   };
 
   postPatch = ''
     for f in {common,utility}/*.py; do
       substituteInPlace $f \
-        --replace '/usr/bin/env python3' ${python3.interpreter}
+        --replace-fail '/usr/bin/env python3' ${python3.interpreter}
     done
     for f in bootstrap/*.sh; do
       patchShebangs $f
@@ -127,11 +127,11 @@ stdenv.mkDerivation rec {
       prehistory and your mission is to lead your tribe from the stone age
       to the space age...
     '';
-    homepage = "http://www.freeciv.org"; # http only
+    homepage = "https://freeciv.org/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ pierron ];
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
     broken = qtClient && stdenv.hostPlatform.isDarwin; # Missing Qt5 development files
   };
-}
+})

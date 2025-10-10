@@ -4,6 +4,7 @@
   jekyll,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   gtest,
 }:
 
@@ -21,6 +22,14 @@ stdenv.mkDerivation rec {
     repo = "jsonnet";
     sha256 = "sha256-QHp0DOu/pqcgN7di219cHzfFb7fWtdGGE6J1ZXgbOGQ=";
   };
+
+  patches = [
+    # ref. https://github.com/google/jsonnet/pull/1249 merged upstream
+    (fetchpatch {
+      url = "https://github.com/google/jsonnet/commit/6c87c1b0e1e18d25898be071c1b231e264f05a8c.patch";
+      hash = "sha256-KprhMKwUCpvLiMT/grfqZ8Vt9rbosIizQgNMStuV8/U=";
+    })
+  ];
 
   nativeBuildInputs = [
     jekyll

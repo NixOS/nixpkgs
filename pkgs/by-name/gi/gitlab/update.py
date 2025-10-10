@@ -22,7 +22,7 @@ click_log.basic_config(logger)
 
 
 class GitLabRepo:
-    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?")
+    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?$")
 
     def __init__(self, owner: str = "gitlab-org", repo: str = "gitlab"):
         self.owner = owner
