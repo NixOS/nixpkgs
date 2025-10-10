@@ -14,12 +14,12 @@
   zlib,
   libXxf86misc,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xpilot-ng";
   version = "4.7.3";
   src = fetchurl {
-    url = "mirror://sourceforge/xpilot/xpilot_ng/${pname}-${version}/${pname}-${version}.tar.gz";
-    sha256 = "02a7pnp88kh88fzda5q8mzlckk6y9r5fw47j00h26wbsfly0k1zj";
+    url = "mirror://sourceforge/xpilot/xpilot_ng/xpilot-ng-${finalAttrs.version}/xpilot-ng-${finalAttrs.version}.tar.gz";
+    hash = "sha256-8ocJPHV6cSMgAPIQ7kpO3szJ6K8IF9W+QwhOhK69Rwk=";
   };
   buildInputs = [
     libX11
@@ -40,11 +40,11 @@ stdenv.mkDerivation rec {
     ./xpilot-ng-sdl-window-fix.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Multiplayer X11 space combat game";
     homepage = "http://xpilot.sf.net/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})
