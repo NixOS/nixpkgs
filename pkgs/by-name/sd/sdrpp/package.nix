@@ -80,7 +80,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-R4xWeqdHEAaje37VQaGlg+L2iYIOH4tXMHvZkZq4SDU=";
   };
 
-  patches = [ ./runtime-prefix.patch ];
+  patches = [
+    ./runtime-prefix.patch
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    ./cmake4.patch
+  ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
