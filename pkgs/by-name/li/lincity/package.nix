@@ -12,13 +12,13 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lincity";
   version = "1.13.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lincity/${pname}-${version}.tar.gz";
-    sha256 = "0p81wl7labyfb6rgp0hi42l2akn3n7r2bnxal1wyvjylzw8vsk3v";
+    url = "mirror://sourceforge/lincity/lincity-${finalAttrs.version}.tar.gz";
+    hash = "sha256-e0y9Ef/Uy+15oKrbJfKxw04lqCARgvuyWc4vRQ/lAV0=";
   };
 
   buildInputs = [
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://sources.debian.net/data/main/l/lincity/1.13.1-13/debian/patches/extern-inline-functions-777982";
-      sha256 = "06dp3zwk0z5wr5a3xaaj2my75vcjcy98vc22hsag7ggd9jwrkcp0";
+      hash = "sha256-4LKZuUztvfOUhkKwjZJnku1yfBVSqT5Uybx8MPkftxk=";
     })
     (fetchpatch {
       url = "https://sources.debian.net/data/main/l/lincity/1.13.1-13/debian/patches/clang-ftbfs-757859";
-      sha256 = "098rnywcsyc0m11x4a5m3dza8i0jmfh6pacfgma1vvxpsfkb6ngp";
+      hash = "sha256-91mzptO37x1UfY6pa6CrEkSkfhu1KNJDqIB5zbi3GSU=";
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/l/lincity/1.13.1-16/debian/patches/fix-implicit-declarations-823432";
@@ -68,13 +68,13 @@ stdenv.mkDerivation rec {
     sed -e 's@\[MPS_INFO_CHARS\]@[MPS_INFO_CHARS+8]@' -i mps.c -i mps.h
   '';
 
-  meta = with lib; {
+  meta = {
     description = "City simulation game";
     mainProgram = "xlincity";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
     broken = stdenv.hostPlatform.isDarwin;
   };
-}
+})

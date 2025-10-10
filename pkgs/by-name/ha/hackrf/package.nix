@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libusb1,
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libusb1
     fftwSinglePrec
+  ];
+
+  patches = [
+    # CMake < 3.5 fix. Remove upon next version bump.
+    (fetchpatch {
+      url = "https://github.com/greatscottgadgets/hackrf/commit/5c394520403c40b656a7400681e4ae167943e43f.patch";
+      hash = "sha256-FRzb+Bt5fQm94d1EDbMv8oUFwD93VZQHFpQpMDe/BAA=";
+    })
   ];
 
   cmakeFlags = [
