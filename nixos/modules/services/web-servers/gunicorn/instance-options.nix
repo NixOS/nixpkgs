@@ -74,7 +74,7 @@
       type = lib.types.str;
       default = "/run/${config.process.unit}.sock";
       defaultText = lib.literalExpression ''
-        /run/''${services.gunicorn.instances.<name>.process.unit}.sock
+        /run/''${config.services.gunicorn.instances.<name>.process.unit}.sock
       '';
       example = "1.2.3.4:5678";
       description = ''
