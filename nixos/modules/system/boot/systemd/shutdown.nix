@@ -71,9 +71,21 @@ in
 
       serviceConfig = {
         Type = "oneshot";
+        ExecStart = "${pkgs.makeInitrdNGTool}/bin/make-initrd-ng ${ramfsContents} /run/initramfs";
+
+        # Sandboxing
         ProtectSystem = "strict";
         ReadWritePaths = "/run/initramfs";
-        ExecStart = "${pkgs.makeInitrdNGTool}/bin/make-initrd-ng ${ramfsContents} /run/initramfs";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = true;
+        PrivateNetwork = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
       };
     };
   };
