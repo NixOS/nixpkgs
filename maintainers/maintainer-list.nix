@@ -16174,6 +16174,12 @@
     githubId = 18228995;
     name = "Matúš Ferech";
   };
+  maukkis = {
+    email = "luna@girlsmell.xyz";
+    github = "maukkis";
+    githubId = 82530388;
+    name = "Luna Laurie";
+  };
   maurer = {
     email = "matthew.r.maurer+nix@gmail.com";
     github = "maurer";
