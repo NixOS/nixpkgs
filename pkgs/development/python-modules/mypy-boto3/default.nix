@@ -1397,8 +1397,8 @@ in
       "sha256-r1Z15ZcuHUFEr7yUhnksIfPtxMlCrCiQw4TfRFfSW/U=";
 
   mypy-boto3-wafv2 =
-    buildMypyBoto3Package "wafv2" "1.40.16"
-      "sha256-pog2ynsKrud7qCCW19DbXVNbyZBqvqnEecdxpxkuNEY=";
+    buildMypyBoto3Package "wafv2" "1.40.49"
+      "sha256-OM6g8hX/ZPIg9cEMmCqEJfCXU/tsNUN2deqEm6HoFd4=";
 
   mypy-boto3-wellarchitected =
     buildMypyBoto3Package "wellarchitected" "1.40.17"
