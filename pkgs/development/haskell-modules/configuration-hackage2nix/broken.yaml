@@ -2947,7 +2947,6 @@ broken-packages:
   - hpio # failure in job https://hydra.nixos.org/build/233215789 at 2023-09-02
   - hplaylist # failure in job https://hydra.nixos.org/build/233219978 at 2023-09-02
   - hpodder # failure in job https://hydra.nixos.org/build/233207276 at 2023-09-02
-  - hpqtypes # failure in job https://hydra.nixos.org/build/233256283 at 2023-09-02
   - hps-kmeans # failure in job https://hydra.nixos.org/build/233207461 at 2023-09-02
   - hPushover # failure in job https://hydra.nixos.org/build/233215804 at 2023-09-02
   - hpygments # failure in job https://hydra.nixos.org/build/233258827 at 2023-09-02

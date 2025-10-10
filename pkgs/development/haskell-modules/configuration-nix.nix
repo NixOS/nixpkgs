@@ -352,6 +352,21 @@ builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
+  hpqtypes = overrideCabal (drv: {
+    preCheck = ''
+      export postgresqlTestUserOptions="LOGIN SUPERUSER"
+      export PGDATABASE=hpqtypes
+    '';
+    testToolDepends = drv.testToolDepends or [ ] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+    testTargets = [
+      "hpqtypes-tests"
+      "--test-option=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+    ];
+  }) (super.hpqtypes.override { libpq = pkgs.libpq; });
+
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
     preCheck = drv.preCheck or "" + ''
