@@ -122,6 +122,8 @@ lib.makeScope pkgs.newScope (
 
     granite7 = callPackage ./libraries/granite/7 { };
 
+    live-chart = callPackage ./libraries/live-chart { };
+
     pantheon-wayland = callPackage ./libraries/pantheon-wayland { };
 
     #### SERVICES
