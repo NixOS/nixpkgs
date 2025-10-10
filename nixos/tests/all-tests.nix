@@ -1483,6 +1483,7 @@ in
   systemd-pstore = runTest ./systemd-pstore.nix;
   systemd-repart = handleTest ./systemd-repart.nix { };
   systemd-resolved = runTest ./systemd-resolved.nix;
+  systemd-resolved-dnssd = runTest ./systemd-resolved-dnssd.nix;
   systemd-shutdown = runTest ./systemd-shutdown.nix;
   systemd-ssh-proxy = runTest ./systemd-ssh-proxy.nix;
   systemd-sysupdate = runTest ./systemd-sysupdate.nix;
