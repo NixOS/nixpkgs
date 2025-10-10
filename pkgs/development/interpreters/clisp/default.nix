@@ -122,11 +122,6 @@ stdenv.mkDerivation {
     cd builddir
   '';
 
-  # ;; Loading file ../src/defmacro.lisp ...
-  # *** - handle_fault error2 ! address = 0x8 not in [0x1000000c0000,0x1000000c0000) !
-  # SIGSEGV cannot be cured. Fault address = 0x8.
-  hardeningDisable = [ "pie" ];
-
   doCheck = true;
 
   postInstall = lib.optionalString (withModules != [ ]) ''

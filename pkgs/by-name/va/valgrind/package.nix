@@ -41,7 +41,6 @@ stdenv.mkDerivation rec {
   ];
 
   hardeningDisable = [
-    "pie"
     "stackprotector"
   ];
 

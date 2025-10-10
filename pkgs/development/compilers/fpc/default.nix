@@ -80,9 +80,6 @@ stdenv.mkDerivation rec {
     "FPC=${startFPC}/bin/fpc"
   ];
 
-  # disabled by default in fpcsrc/compiler/llvm/agllvm.pas
-  hardeningDisable = [ "pie" ];
-
   installFlags = [ "INSTALL_PREFIX=\${out}" ];
 
   postInstall = ''

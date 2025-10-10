@@ -573,7 +573,6 @@ lib.makeOverridable (
           "fortify"
           "stackprotector"
           "pic"
-          "pie"
         ];
 
         makeFlags = [

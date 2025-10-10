@@ -151,7 +151,6 @@ let
     "nostrictaliasing"
     "pacret"
     "pic"
-    "pie"
     "relro"
     "stackprotector"
     "glibcxxassertions"
@@ -439,7 +438,7 @@ let
         else
           subtractLists hardeningDisable' (defaultHardeningFlags ++ hardeningEnable);
       # hardeningDisable additionally supports "all".
-      erroneousHardeningFlags = subtractLists knownHardeningFlags (
+      erroneousHardeningFlags = subtractLists (knownHardeningFlags ++ [ "pie" ]) (
         hardeningEnable ++ remove "all" hardeningDisable
       );
 
@@ -637,7 +636,9 @@ let
               else
                 null
             } =
-              builtins.concatStringsSep " " enabledHardeningOptions;
+              lib.warnIf ((builtins.elem "pie" hardeningEnable) || (builtins.elem "pie" hardeningDisable))
+                "The 'pie' hardening flag has been removed in favor of enabling PIE by default in compilers and should no longer be used. PIE can be disabled with the -no-pie compiler flag, but this is usually not necessary as most build systems pass this if needed. Usage of the 'pie' hardening flag will become an error in future."
+                (builtins.concatStringsSep " " enabledHardeningOptions);
 
             # TODO: remove platform condition
             # Enabling this check could be a breaking change as it requires to edit nix.conf

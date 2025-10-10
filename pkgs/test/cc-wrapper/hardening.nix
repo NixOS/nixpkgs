@@ -696,7 +696,6 @@ nameDrvAfterAttrName (
     relROExplicitDisabled = brokenIf true (
       checkTestBin
         (f2exampleWithStdEnv stdenv {
-          hardeningDisable = [ "pie" ];
         })
         {
           ignoreRelRO = false;
@@ -1202,7 +1201,6 @@ nameDrvAfterAttrName (
         hardeningDisable = [ "all" ];
         hardeningEnable = [
           "fortify"
-          "pie"
         ];
       };
     in

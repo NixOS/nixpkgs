@@ -24,8 +24,6 @@ buildGoModule rec {
     "-w"
   ];
 
-  hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
-
   passthru.updateScript = nix-update-script { };
 
   meta = {
