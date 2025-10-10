@@ -87,7 +87,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional useCeph ceph;
 
   postPatch = ''
-    substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
+    substituteInPlace src/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6.3)" \
+      "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace src/tools/mount.9P --replace-fail "/bin/mount" "/usr/bin/env mount"
   '';
 
   postFixup = ''
