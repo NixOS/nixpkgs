@@ -49,6 +49,20 @@ let
     ) settings;
 
   resolvedConf = settingsToSections (transformSettings cfg.settings);
+
+  escapeDnsTxt =
+    let
+      dictionary = {
+        "\t" = "\\t";
+        "\n" = "\\n";
+        "\r" = "\\r";
+        " " = "\\x20";
+        "\"" = ''\\"'';
+        "\\" = "\\\\";
+      };
+      names = builtins.attrNames dictionary;
+    in
+    builtins.replaceStrings names (map (n: builtins.getAttr n dictionary) names);
 in
 {
   imports = [
@@ -82,6 +96,8 @@ in
   options = {
     services.resolved = {
       enable = lib.mkEnableOption "the Systemd DNS resolver daemon (systemd-resolved)";
+
+      openFirewallMdns = lib.mkEnableOption "opening the Multicast DNS port (UDP 5353) in the firewall";
 
       settings.Resolve = mkOption {
         description = ''
@@ -130,6 +146,20 @@ in
                 List of search domains used to complete unqualified name lookups.
               '';
             };
+
+            MulticastDNS = mkOption {
+              type = unitOption;
+              default = true;
+              example = false;
+              description = ''
+                Controls Multicast DNS support (RFC 6762) on the local host.
+
+                If set to
+                - `true`: Enables full Multicast DNS responder and resolver support.
+                - `false`: Disables both.
+                - `"resolve"`: Only resolution support is enabled, but responding is disabled.
+              '';
+            };
           };
         };
       };
@@ -154,7 +184,110 @@ in
           }
         );
       };
+    };
 
+    services.resolved.dnssd = mkOption {
+      default = { };
+      example = {
+        http = {
+          Service = {
+            Name = "%H";
+            Type = "_http._tcp";
+            Port = 80;
+            TxtText = [
+              "path=/stats/index.html"
+              "t=temperature_sensor"
+            ];
+          };
+        };
+      };
+      description = ''
+        DNS-SD configurations which specify discoverable network services
+        announced in a local network with Multicast DNS broadcasts
+      '';
+      type = types.attrsOf (
+        types.submodule (
+          { name, ... }:
+          {
+            freeformType = types.attrsOf unitOption;
+            options = {
+              Service.Name = mkOption {
+                type = unitOption;
+                default = name;
+                example = "webserver";
+                description = ''
+                  An instance name of the network service as defined in the section 4.1.1 of RFC 6763
+
+                  If undefined, the name of the attribute will be used.
+
+                  The option supports simple specifier expansion, like %H for the hostname of the running system,
+                  the list of available specifiers is documented in {manpage}`systemd.dnssd(5)`.
+                '';
+              };
+
+              Service.Type = mkOption {
+                type = unitOption;
+                example = "_http._tcp";
+                description = "A type of the network service as defined in the section 4.1.2 of RFC 6763";
+              };
+
+              Service.SubType = mkOption {
+                type = unitOption;
+                default = null;
+                example = "_printer";
+                description = "A subtype of the network service as defined in the section 7.1 of RFC 6763";
+              };
+
+              Service.Port = mkOption {
+                type = unitOption;
+                example = 80;
+                description = "An IP port number of the network service";
+              };
+
+              Service.Priority = mkOption {
+                type = unitOption;
+                default = null;
+                description = "A priority number set in SRV resource records corresponding to the network service";
+              };
+
+              Service.Weight = mkOption {
+                type = unitOption;
+                default = null;
+                description = "A weight number set in SRV resource records corresponding to the network service";
+              };
+
+              Service.TxtText = mkOption {
+                type = unitOption;
+                example = [ "path=/portal/index.html" ];
+                default = [ ];
+                apply = x: concatStringsSep " " (map escapeDnsTxt x);
+                description = ''
+                  A list of arbitrary key/value pairs conveying additional information about the named service
+                  in the corresponding TXT resource record
+                '';
+              };
+
+              Service.TxtData = mkOption {
+                type = unitOption;
+                example = [ "path=L3BvcnRhbC9pbmRleC5odG1s" ];
+                default = [ ];
+                apply = x: concatStringsSep " " (map escapeDnsTxt x);
+                description = ''
+                  A list of arbitrary key/value pairs conveying additional information about the named service
+                  in the corresponding TXT resource record where the values are base64-encoded string
+                  representation of binary data
+
+                  Note that you can avoid "Import From Derivation" by directly writing a .conf file
+                  with just the Service section and a TxtData field in the "drop-in" directory for a service, i.e.
+                  ```
+                  environment.etc."systemd/dnssd/<name>.dnssd.d/extra.conf".source = pkgs.runCommand ...
+                  ```
+                '';
+              };
+            };
+          }
+        )
+      );
     };
 
     boot.initrd.services.resolved.enable = mkOption {
@@ -176,6 +309,14 @@ in
           assertion = !config.networking.useHostResolvConf;
           message = "Using host resolv.conf is not supported with systemd-resolved";
         }
+        {
+          assertion = cfg.settings.Resolve.MulticastDNS != false -> !config.services.avahi.enable;
+          message = "services.resolved.multicastDns and services.avahi are incompatible";
+        }
+        {
+          assertion = cfg.dnssd != { } -> cfg.settings.Resolve.MulticastDNS == true;
+          message = "Resolve.MulticastDNS must be enabled to support DNS-SD configurations";
+        }
       ];
 
       users.users.systemd-resolve.group = "systemd-resolve";
@@ -195,7 +336,8 @@ in
         ]
         ++ mapAttrsToList (
           name: _: config.environment.etc."systemd/dns-delegate.d/${name}.dns-delegate".source
-        ) cfg.dnsDelegates;
+        ) cfg.dnsDelegates
+        ++ mapAttrsToList (name: _: config.environment.etc."systemd/dnssd/${name}.dnssd".source) cfg.dnssd;
         stopIfChanged = false;
       };
 
@@ -214,7 +356,15 @@ in
         nameValuePair "systemd/dns-delegate.d/${name}.dns-delegate" {
           text = settingsToSections (transformSettings value);
         }
-      ) cfg.dnsDelegates;
+      ) cfg.dnsDelegates
+      // mapAttrs' (name: contents: {
+        name = "systemd/dnssd/${name}.dnssd";
+        value.text = settingsToSections contents;
+      }) cfg.dnssd;
+
+      networking.firewall = mkIf cfg.openFirewallMdns {
+        allowedUDPPorts = [ 5353 ];
+      };
 
       # If networkmanager is enabled, ask it to interface with resolved.
       networking.networkmanager.dns = "systemd-resolved";

@@ -1659,6 +1659,7 @@ in
   systemd-pstore = runTest ./systemd-pstore.nix;
   systemd-repart = handleTest ./systemd-repart.nix { };
   systemd-resolved = runTest ./systemd-resolved.nix;
+  systemd-resolved-dnssd = runTest ./systemd-resolved-dnssd.nix;
   systemd-shutdown = runTest {
     imports = [ ./systemd-shutdown.nix ];
     _module.args.systemdStage1 = false;

@@ -28,6 +28,9 @@ import ../make-test-python.nix (
                 userServices = true;
               };
             };
+
+            # Disable systemd-resolved's MDNS service
+            services.resolved.settings.Resolve.MulticastDNS = false;
           };
       in
       {
