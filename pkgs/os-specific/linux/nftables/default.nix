@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withCli libedit
   ++ lib.optional withXtables iptables;
 
-  env.NIX_LDFLAGS = if stdenv.hostPlatform.isStatic then "-lncursesw" else null;
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-lncursesw";
 
   configureFlags = [
     "--with-json"
