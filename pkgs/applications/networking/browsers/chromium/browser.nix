@@ -81,14 +81,19 @@ mkChromiumDerivation (base: rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  meta = (import ./variants/meta.nix lib)."${variant}".meta // {
-    license = if enableWideVine then lib.licenses.unfree else lib.licenses.bsd3;
-    platforms = lib.platforms.linux;
-    mainProgram = "chromium";
-    hydraPlatforms = [
-      "aarch64-linux"
-      "x86_64-linux"
-    ];
-    timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
-  };
+  meta =
+    let
+      upstreamMeta = (import ./variants/meta.nix lib)."${variant}".meta;
+    in
+    upstreamMeta
+    // {
+      license = if enableWideVine then lib.licenses.unfree else upstreamMeta.license;
+      platforms = lib.platforms.linux;
+      mainProgram = "chromium";
+      hydraPlatforms = [
+        "aarch64-linux"
+        "x86_64-linux"
+      ];
+      timeout = 172800; # 48 hours (increased from the Hydra default of 10h)
+    };
 })

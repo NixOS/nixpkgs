@@ -10,6 +10,7 @@ lib: rec {
         of source code for Google Chrome (which has some additional features).
       '';
       homepage = "https://www.chromium.org/";
+      license = lib.licenses.bsd3;
       mainProgram = "chromium";
       maintainers = with lib.maintainers; [
         networkexception
@@ -22,7 +23,24 @@ lib: rec {
     meta = {
       description = "Open source web browser from Google, with dependencies on Google web services removed";
       homepage = "https://github.com/ungoogled-software/ungoogled-chromium";
-      inherit (chromium.meta) longDescription mainProgram maintainers;
+      inherit (chromium.meta)
+        longDescription
+        mainProgram
+        maintainers
+        license
+        ;
+    };
+  };
+  helium = {
+    pname = "helium";
+    meta = {
+      description = "Private, fast, and honest web browser based on Chromium";
+      homepage = "https://helium.computer/";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "helium";
+      maintainers = with lib.maintainers; [
+        asterismono
+      ];
     };
   };
 }

@@ -96,6 +96,7 @@
   libpulseaudio ? null,
   variant ? "chromium",
   ungoogled-chromium,
+  helium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -177,7 +178,12 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
+  ungoogleScripts = {
+    ungoogled = ungoogled-chromium;
+    inherit helium;
+  };
+
+  script = ungoogleScripts."${variant}" {
     inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
@@ -657,14 +663,14 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString (variant == "ungoogled") ''
+      + lib.optionalString (variant == "ungoogled" || variant == "helium") ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
-        ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
+        ${script}/utils/prune_binaries.py . ${script}/pruning.list || echo "some errors"
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
         mkdir -p third_party/node/linux/node-linux-x64/bin${
-          lib.optionalString (variant == "ungoogled") " third_party/jdk/current/bin/"
+          lib.optionalString (variant == "ungoogled" || variant == "helium") " third_party/jdk/current/bin/"
         }
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
@@ -679,9 +685,19 @@ let
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
           ''
-      + lib.optionalString (variant == "ungoogled") ''
-        ${ungoogler}/utils/patches.py . ${ungoogler}/patches
-        ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+      + lib.optionalString (variant == "ungoogled" || variant == "helium") ''
+        ${script}/utils/patches.py . ${script}/patches
+        ${script}/utils/domain_substitution.py apply -r ${script}/domain_regex.list -f ${script}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+      ''
+      + lib.optionalString (variant == "helium") ''
+        # helium_substitution
+        ${script}/utils/name_substitution.py --sub -t .
+
+        # helium_version
+        ${script}/utils/helium_version.py --tree ${script} --chromium-tree .
+
+        # helium_resources
+        ${script}/utils/replace_resources.py ${script}/resources/helium_resources.txt ${script}/resources .
       '';
 
     llvmCcAndBintools = symlinkJoin {
@@ -811,6 +827,7 @@ let
       // lib.optionalAttrs (variant == "ungoogled") (
         lib.importTOML ./variants/ungoogled/ungoogled-flags.toml
       )
+      // lib.optionalAttrs (variant == "helium") (lib.importTOML ./variants/helium/helium-flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 

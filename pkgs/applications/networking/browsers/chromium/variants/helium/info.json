@@ -11,8 +11,8 @@
       "hash": "sha256-WERLGrReUATmn3RhxtmyZcJBxdIY/WZqBDranCLDYEg="
     },
     "ungoogled-patches": {
-      "rev": "141.0.7390.76-1",
-      "hash": "sha256-AFbZ3GP/mPCCbYTkYIYRE8+wlxEoMc4XTq3ZSh8Qgxg="
+      "rev": "0.5.5",
+      "hash": "sha256-kP2fCRpPD9SegLjMVX4tMQxScFp5iynsS9/RM7VB2nU="
     },
     "npmHash": "sha256-i1eQ4YlrWSgY522OlFtGDDPmxE2zd1hDM03AzR8RafE="
   },
@@ -802,6 +802,21 @@
       "url": "https://chromium.googlesource.com/v8/v8.git",
       "rev": "ad8af0fc661d278e87627fcaa3a7cf795ee80dd8",
       "hash": "sha256-NOhavmx5NYJx6MSDwRS6RXHcn3DB7kNlTjIFZr6rMMY="
+    },
+    "src/third_party/search_engines_data/resources_internal": {
+      "url": "https://gist.githubusercontent.com/wukko/2a591364dda346e10219e4adabd568b1/raw/e75ae3c4a1ce940ef7627916a48bc40882d24d40/nonfree-search-engines-data.tar.gz",
+      "hash": "sha256-G83WwfoNmzI0ib9SRfjoDEoULnwgOTMQurlr1fKIpoo=",
+      "stripRoot": false
+    },
+    "src/third_party/ublock": {
+      "url": "https://github.com/imputnet/ublock-origin-crx/releases/download/1.66.4/uBlock0_1.66.4.crx",
+      "hash": "sha256-CMPHVEpSeKA1ZJX3Ia5gccIr+4KDFs6OF+IgO0Zhq74=",
+      "stripRoot": false
+    },
+    "src/components/helium_onboarding": {
+      "url": "https://github.com/imputnet/helium-onboarding/releases/download/202509241653/helium-onboarding-202509241653.tar.gz",
+      "hash": "sha256-AeGc6psN4nzbjSG/UF1GNiZ7ZhcgA5GwBrGTg2Rt3Ns=",
+      "stripRoot": false
     }
   }
 }
