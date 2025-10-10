@@ -108,6 +108,15 @@ self: super:
         + (drv.postPatch or "");
       }
     ) super.crypton-x509-system;
+    HsOpenSSL-x509-system = overrideCabal (
+      drv:
+      lib.optionalAttrs (!pkgs.stdenv.cc.nativeLibc) {
+        postPatch = ''
+          substituteInPlace OpenSSL/X509/SystemStore/MacOSX.hs --replace-fail security /usr/bin/security
+        ''
+        + (drv.postPatch or "");
+      }
+    ) super.HsOpenSSL-x509-system;
 
     # https://github.com/haskell-foundation/foundation/pull/412
     foundation = dontCheck super.foundation;
