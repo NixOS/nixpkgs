@@ -76,6 +76,8 @@ lib.makeScope pkgs.newScope (
 
     elementary-maps = callPackage ./apps/elementary-maps { };
 
+    elementary-monitor = callPackage ./apps/elementary-monitor { };
+
     elementary-music = callPackage ./apps/elementary-music { };
 
     elementary-photos = callPackage ./apps/elementary-photos { };
