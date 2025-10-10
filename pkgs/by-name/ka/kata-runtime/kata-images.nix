@@ -4,6 +4,7 @@
   lib,
   stdenv,
   version,
+  zstd,
 }:
 
 let
@@ -26,6 +27,7 @@ fetchzip {
   name = "kata-images-${version}";
   url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${imageSuffix}.tar.zst";
   hash = imageHash;
+  nativeBuildInputs = [ zstd ];
 
   postFetch = ''
     mv $out/kata/share/kata-containers kata-containers
