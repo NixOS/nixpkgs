@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [ (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
+
   meta = with lib; {
     description = "Software for rapid LiDAR processing";
     homepage = "http://lastools.org/";
