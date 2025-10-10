@@ -92,7 +92,7 @@
   proprietaryCodecs ? true,
   pulseSupport ? false,
   libpulseaudio ? null,
-  ungoogled ? false,
+  variant ? "chromium",
   ungoogled-chromium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
@@ -175,7 +175,11 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
+  ungooglers = {
+    ungoogled = ungoogled-chromium;
+  };
+
+  ungoogler = ungooglers.${variant} {
     inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
@@ -267,7 +271,7 @@ let
   );
 
   base = rec {
-    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
+    inherit ((import ./variants/meta.nix lib).${variant}) pname;
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -645,13 +649,15 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString (variant == "ungoogled") ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
+        mkdir -p third_party/node/linux/node-linux-x64/bin${
+          lib.optionalString (variant == "ungoogled") " third_party/jdk/current/bin/"
+        }
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
@@ -665,7 +671,7 @@ let
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
           ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString (variant == "ungoogled") ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
       '';
@@ -794,7 +800,9 @@ let
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
-      // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
+      // lib.optionalAttrs (variant == "ungoogled") (
+        lib.importTOML ./variants/ungoogled/ungoogled-flags.toml
+      )
       // (extraAttrs.gnFlags or { })
     );
 
