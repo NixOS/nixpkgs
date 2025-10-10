@@ -224,7 +224,7 @@ lib.fix (
 
       postBuild = # generate ls-R database
         ''
-          mktexlsr "$out"
+          mktexlsr --sort "$out"
         '';
     };
 
