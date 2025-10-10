@@ -4,7 +4,6 @@
   fetchPypi,
   setuptools,
   requests,
-  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -29,8 +28,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [
     "ec2_metadata"
   ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Easy interface to query the EC2 metadata API, with caching";
