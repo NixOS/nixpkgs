@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Ranger-like file navigation for zsh";
     homepage = "https://github.com/Vifon/deer";
     license = licenses.gpl3Plus;
-    maintainers = [ maintainers.vyp ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

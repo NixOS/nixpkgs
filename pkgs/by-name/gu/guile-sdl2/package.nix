@@ -49,7 +49,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [
       seppeljordan
-      vyp
     ];
     platforms = platforms.all;
   };
