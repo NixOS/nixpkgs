@@ -123,6 +123,7 @@
   libsysprof-capture,
   imlib2,
   autoSignDarwinBinariesHook,
+  llvmPackages_19,
 }@args:
 
 let
@@ -818,6 +819,7 @@ in
         ];
       }
       // lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+        stdenv = llvmPackages_19.stdenv;
         buildInputs = [ libxml2 ];
 
         # libxml 2.12 upgrade requires these fixes
