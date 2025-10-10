@@ -2,13 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  blueprint-compiler,
   meson,
   ninja,
   pkg-config,
   vala,
   wrapGAppsHook4,
+  libadwaita,
   libgee,
-  live-chart,
   ryokucha,
   pantheon,
   gst_all_1,
@@ -16,16 +18,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "reco";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchFromGitHub {
     owner = "ryonakano";
     repo = "reco";
     rev = finalAttrs.version;
-    hash = "sha256-uZAcZJLQH0MTI4NSJnZvzYPBFVXGBqAhsjVLAVP/ZwI=";
+    hash = "sha256-o3I0gJYS4OrxMuOgX2Nyew6Zo0zTm35BiS6qb7/dr+s=";
   };
 
+  patches = [
+    # feat: Add support for livechart-2
+    # https://github.com/ryonakano/reco/issues/351
+    (fetchpatch {
+      url = "https://github.com/ryonakano/reco/commit/d2dbbc6bd1533f4756ed0f2f0bf051d3f1360e4b.patch";
+      hash = "sha256-B/maiftFouE92ux1qb6h7QDQ8EBNHmJPLukhZOztQ4I=";
+    })
+  ];
+
   nativeBuildInputs = [
+    blueprint-compiler
     meson
     ninja
     pkg-config
@@ -34,10 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    libadwaita
     libgee
-    live-chart
+    pantheon.live-chart
     ryokucha
-    pantheon.granite7
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
