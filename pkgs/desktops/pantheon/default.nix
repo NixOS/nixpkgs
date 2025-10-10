@@ -29,6 +29,7 @@ lib.makeScope pkgs.newScope (
     ];
 
     wingpanelIndicators = [
+      elementary-monitor
       wingpanel-applications-menu
       wingpanel-indicator-bluetooth
       wingpanel-indicator-datetime
