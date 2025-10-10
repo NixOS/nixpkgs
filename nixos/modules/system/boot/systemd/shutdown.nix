@@ -17,6 +17,7 @@ in
     enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // {
       default = true;
     };
+
     contents = lib.mkOption {
       description = "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''
@@ -34,6 +35,22 @@ in
       type = utils.systemdUtils.types.initrdStorePath;
       default = [ ];
     };
+
+    shell.enable = lib.mkEnableOption "" // {
+      default = config.environment.shell.enable;
+      internal = true;
+      description = ''
+        Whether to enable a shell in the shutdown ramfs.
+
+        In contrast to `environment.shell.enable`, this option actually
+        strictly disables all shells in the shutdown ramfs because they're not
+        copied into it anymore. Paths that use a shell (e.g. via the `script`
+        option), will break if this option is set.
+
+        Only set this option if you're sure that you can recover from potential
+        issues.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -43,8 +60,10 @@ in
       "/etc/os-release".source = config.environment.etc.os-release.source;
     };
     systemd.shutdownRamfs.storePaths = [
-      pkgs.runtimeShell
       "${pkgs.coreutils}/bin"
+    ]
+    ++ lib.optionals cfg.shell.enable [
+      pkgs.runtimeShell
     ]
     ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
 

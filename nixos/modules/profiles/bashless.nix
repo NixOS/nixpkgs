@@ -32,8 +32,6 @@
   boot.kexec.enable = lib.mkDefault false;
   # Relies on bash scripts
   powerManagement.enable = lib.mkDefault false;
-  # Has some bash inside
-  systemd.shutdownRamfs.enable = lib.mkDefault false;
   # Relies on the gzip command which depends on bash
   services.logrotate.enable = lib.mkDefault false;
 
