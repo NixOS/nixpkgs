@@ -6,6 +6,7 @@
   callPackage,
   stuffbin,
   nixosTests,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
@@ -57,6 +58,12 @@ buildGoModule (finalAttrs: {
   passthru = {
     frontend = callPackage ./frontend.nix { inherit (finalAttrs) meta version src; };
     tests = { inherit (nixosTests) listmonk; };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "-s"
+        "frontend"
+      ];
+    };
   };
 
   meta = {
