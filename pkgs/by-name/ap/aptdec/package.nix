@@ -24,10 +24,13 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     libpng
     libsndfile
   ];
+
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
 
   meta = with lib; {
     description = "NOAA APT satellite imagery decoding library";
