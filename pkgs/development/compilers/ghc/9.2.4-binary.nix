@@ -49,27 +49,6 @@ let
     # Binary distributions for the default libc (e.g. glibc, or libSystem on Darwin)
     # nixpkgs uses for the respective system.
     defaultLibc = {
-      i686-linux = {
-        variantSuffix = "";
-        src = {
-          url = "${downloadsUrl}/${version}/ghc-${version}-i386-deb9-linux.tar.xz";
-          sha256 = "5dc1eb9c65f01b1e5c5693af72af07a4e9e75c6920e620fd598daeefa804487a";
-        };
-        exePathForLibraryCheck = "ghc/stage2/build/tmp/ghc-stage2";
-        archSpecificLibraries = [
-          {
-            nixPackage = gmp;
-            fileToCheckFor = null;
-          }
-          # The i686-linux bindist provided by GHC HQ is currently built on Debian 9,
-          # which link it against `libtinfo.so.5` (ncurses 5).
-          # Other bindists are linked `libtinfo.so.6` (ncurses 6).
-          {
-            nixPackage = ncurses5;
-            fileToCheckFor = "libtinfo.so.5";
-          }
-        ];
-      };
       x86_64-linux = {
         variantSuffix = "";
         src = {
