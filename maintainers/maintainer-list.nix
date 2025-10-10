@@ -26994,6 +26994,12 @@
     github = "deviant";
     githubId = 68829907;
   };
+  v3rm1n0 = {
+    name = "Niklas Choinowski";
+    email = "niklas.choinowski@proton.me";
+    github = "v3rm1n0";
+    githubId = 57269010;
+  };
   vaavaav = {
     name = "Pedro Peixoto";
     github = "vaavaav";
