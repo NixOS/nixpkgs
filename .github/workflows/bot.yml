@@ -3,7 +3,7 @@
 # access to the GitHub API. This means that it should not evaluate user input in
 # a way that allows code injection.
 
-name: Labels
+name: Bot
 
 on:
   schedule:
@@ -21,7 +21,7 @@ on:
 concurrency:
   # This explicitly avoids using `run_id` for the concurrency key to make sure that only
   # *one* scheduled run can run at a time.
-  group: labels-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number }}
+  group: bot-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number }}
   # PR-triggered runs will be cancelled, but scheduled runs will be queued.
   cancel-in-progress: ${{ github.event_name != 'schedule' }}
 
@@ -36,7 +36,7 @@ defaults:
     shell: bash
 
 jobs:
-  update:
+  run:
     runs-on: ubuntu-24.04-arm
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
     steps:
@@ -64,13 +64,13 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
         run: gh api /rate_limit | jq
 
-      - name: Labels from API data and Eval results
+      - name: Run bot
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           github-token: ${{ steps.app-token.outputs.token || github.token }}
           retries: 3
           script: |
-            require('./ci/github-script/labels.js')({
+            require('./ci/github-script/bot.js')({
               github,
               context,
               core,
