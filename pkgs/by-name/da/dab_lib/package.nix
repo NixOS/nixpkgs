@@ -38,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "DAB/DAB+ decoding library";
     homepage = "https://github.com/JvanKatwijk/dab-cmdline";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
+    maintainers = with maintainers; [
+      aciceri
+      alexwinter
+    ];
     platforms = platforms.unix;
   };
 })
