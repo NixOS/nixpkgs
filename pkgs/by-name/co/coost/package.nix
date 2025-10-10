@@ -40,7 +40,10 @@ stdenv.mkDerivation (finalAttrs: {
     "out"
     "dev"
   ];
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    allowedVersions = "^[0-9]";
+  };
 
   meta = with lib; {
     description = "Tiny boost library in C++11";
