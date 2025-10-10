@@ -11,7 +11,8 @@
   pkg-config,
   autoconf-archive,
   libxml2,
-  icu60,
+  icu,
+  libexttextcat,
   ticcutils,
   timbl,
   mbt,
@@ -22,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frog";
-  version = "0.13.7";
+  version = "0.34";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "frog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-khc2uZ/dOtWPTnt/ZD6ILxD386MaZt6fsvNTWTCbs+c=";
+    hash = "sha256-+oao0aOhXAnXnWbfZXcCzBFER8Q8TaYciAVQHlZ1D+E=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     autoconf-archive
     libxml2
-    icu60
+    icu
+    libexttextcat
     ticcutils
     timbl
     mbt

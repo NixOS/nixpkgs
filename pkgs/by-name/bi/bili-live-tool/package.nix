@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.3.9";
+  version = "0.3.10";
 in
 python3Packages.buildPythonApplication {
   pname = "bili-live-tool";
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication {
     owner = "chenxi-Eumenides";
     repo = "bilibili_live_tool";
     tag = "v${version}";
-    hash = "sha256-gNzR9cDy4sixQOSWAXeX5qOoGkaFOjBU//+iHvG0lG8=";
+    hash = "sha256-0VqNGw3SUCPqJocHh5u6r0isj1Rg+guP2x/LsWqH4Ug=";
   };
 
   postPatch = ''

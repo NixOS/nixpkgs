@@ -11,7 +11,7 @@
 }:
 let
   pname = "sphinx-sitemap";
-  version = "2.7.2";
+  version = "2.9.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "jdillard";
     repo = "sphinx-sitemap";
     tag = "v${version}";
-    hash = "sha256-b8eo77Ab9w8JR6mLqXcIWeTkuJFTHjJBk440fksBbyw=";
+    hash = "sha256-TiR6F9wMWOGYexSKDzbSPPq0oiIDrZwSiO3a9DajL+0=";
   };
 
   build-system = [ setuptools ];
