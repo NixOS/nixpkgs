@@ -24,7 +24,7 @@ let
 in
 fetchzip {
   name = "kata-images-${version}";
-  url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${imageSuffix}.tar.xz";
+  url = "https://github.com/kata-containers/kata-containers/releases/download/${version}/kata-static-${version}-${imageSuffix}.tar.zst";
   hash = imageHash;
 
   postFetch = ''
