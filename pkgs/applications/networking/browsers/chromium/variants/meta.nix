@@ -31,4 +31,16 @@ lib: rec {
         ;
     };
   };
+  helium = {
+    pname = "helium";
+    meta = {
+      description = "Private, fast, and honest web browser based on Chromium";
+      homepage = "https://helium.computer/";
+      license = lib.licenses.gpl3Only;
+      mainProgram = "helium";
+      maintainers = with lib.maintainers; [
+        asterismono
+      ];
+    };
+  };
 }
