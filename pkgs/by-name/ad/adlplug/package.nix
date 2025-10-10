@@ -52,6 +52,19 @@ stdenv.mkDerivation {
     (lib.cmakeBool "ADLplug_Jack" withJack)
   ];
 
+  # See https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace thirdparty/{libADLMIDI,libOPNMIDI}/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required (VERSION 3.2)' \
+      'cmake_minimum_required (VERSION 3.10)'
+  '';
+
+  patches = [
+    # fix for CMake v4
+    # https://github.com/jpcima/ADLplug/pull/100
+    ./cmake-v4.patch
+  ];
+
   NIX_LDFLAGS = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [
       # Framework that JUCE needs which don't get linked properly

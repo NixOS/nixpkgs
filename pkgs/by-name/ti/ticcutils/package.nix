@@ -8,6 +8,7 @@
   pkg-config,
   autoconf-archive,
   libxml2,
+  icu,
   zlib,
   bzip2,
   libtar,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ticcutils";
-  version = "0.15";
+  version = "0.36";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "ticcutils";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1+Plo2yZyDJWn/Yk4pawQGzwdx2UBfER9ZYAYLgYGh0=";
+    hash = "sha256-iehbLpVdcJ9PPI4iwUweZjsD+r1dNFoOr38W53JpGdU=";
   };
 
   nativeBuildInputs = [
@@ -35,6 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     autoconf-archive
     libxml2
+    icu
     # optional:
     zlib
     bzip2

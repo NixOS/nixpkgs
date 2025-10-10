@@ -11,13 +11,13 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "foxglove-cli";
-  version = "1.0.26";
+  version = "1.0.27";
 
   src = fetchFromGitHub {
     owner = "foxglove";
     repo = "foxglove-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-WDCxkfWzx/tCnzQGP1MZRKfwM3PbwOHyyLUKgVTLmFU=";
+    hash = "sha256-c1Kpy5lT1DCyCq4qcmv+crGgNJ3WSP8TO94NgixY2fQ=";
   };
 
   vendorHash = "sha256-GjgDRFzW4zqVooHx9WEgWkcnZ+zQsr09OuZxtc9rZD4=";

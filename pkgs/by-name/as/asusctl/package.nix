@@ -43,6 +43,9 @@ rustPlatform.buildRustPackage rec {
       substituteInPlace $file --replace-fail /usr/share $out/share
     done
 
+    substituteInPlace rog-control-center/src/main.rs \
+      --replace-fail 'std::env::var("RUST_TRANSLATIONS").is_ok()' 'true'
+
     substituteInPlace data/asusd.rules --replace-fail /usr/bin/systemctl ${lib.getExe' systemd "systemctl"}
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
