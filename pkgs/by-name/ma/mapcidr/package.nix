@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "mapcidr";
-  version = "1.1.95";
+  version = "1.1.96";
 
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "mapcidr";
     tag = "v${version}";
-    hash = "sha256-u3PWmevFELltq28Kdx7QV1yYBOXudWR6tdRbzfJf3Aw=";
+    hash = "sha256-wEx1HDMl2y3di3k5Mb4lnX5adYYd7wPyaF2bw+5ivSY=";
   };
 
-  vendorHash = "sha256-zPRl40Ex/tBAW32fJ+oqJyXOuDTuWJfG6wHTYUu1ZUE=";
+  vendorHash = "sha256-W647ne516UVhQ3ctrr+LsAEwzxeVHBjshW1pG1Wb/gU=";
 
   modRoot = ".";
   subPackages = [
