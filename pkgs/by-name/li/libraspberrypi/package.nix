@@ -17,6 +17,12 @@ stdenv.mkDerivation {
     hash = "sha512-f7tBgIykcIdkwcFjBKk5ooD/5Bsyrd/0OFr7LNCwWFYeE4DH3XA7UR7YjArkwqUVCVBByr82EOaacw0g1blOkw==";
   };
 
+  patches = [
+    # fix for CMake v4
+    # https://github.com/raspberrypi/userland is archived, so no luck getting this merged
+    ./cmake-v4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

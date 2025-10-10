@@ -1,0 +1,112 @@
+From 260c2039cfeb5efaf94a7b31424679c15e943eb6 Mon Sep 17 00:00:00 2001
+From: SkohTV <contact@skoh.dev>
+Date: Fri, 10 Oct 2025 18:45:27 -0400
+Subject: [PATCH] Increase `cmake_minimum_required` to 3.10
+
+---
+ CMakeLists.txt                                        | 2 +-
+ helpers/dtoverlay/CMakeLists.txt                      | 2 +-
+ host_applications/android/apps/vidtex/CMakeLists.txt  | 2 +-
+ host_applications/linux/apps/dtmerge/CMakeLists.txt   | 2 +-
+ host_applications/linux/apps/dtoverlay/CMakeLists.txt | 2 +-
+ host_applications/linux/apps/gencmd/CMakeLists.txt    | 2 +-
+ host_applications/linux/apps/smem/CMakeLists.txt      | 2 +-
+ interface/vcos/CMakeLists.txt                         | 2 +-
+ middleware/openmaxil/CMakeLists.txt                   | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index fe67fc874..ca0de5a3b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ 
+ project(vmcs_host_apps)
+ 
+diff --git a/helpers/dtoverlay/CMakeLists.txt b/helpers/dtoverlay/CMakeLists.txt
+index b3bd30f10..9346ddf89 100644
+--- a/helpers/dtoverlay/CMakeLists.txt
++++ b/helpers/dtoverlay/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ # CMake build file for dtoverlay library.
+ # =============================================================================
+ 
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required (VERSION 2.8...3.10)
+ 
+ include_directories (${VIDEOCORE_ROOT}
+                      ${VIDEOCORE_ROOT}/helpers
+diff --git a/host_applications/android/apps/vidtex/CMakeLists.txt b/host_applications/android/apps/vidtex/CMakeLists.txt
+index e7206cc83..c6d39051f 100644
+--- a/host_applications/android/apps/vidtex/CMakeLists.txt
++++ b/host_applications/android/apps/vidtex/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ 
+ SET(COMPILE_DEFINITIONS -Werror -Wall)
+ 
+diff --git a/host_applications/linux/apps/dtmerge/CMakeLists.txt b/host_applications/linux/apps/dtmerge/CMakeLists.txt
+index d3f7e36c2..951e61c96 100755
+--- a/host_applications/linux/apps/dtmerge/CMakeLists.txt
++++ b/host_applications/linux/apps/dtmerge/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ 
+ get_filename_component (VIDEOCORE_ROOT ../../../.. ABSOLUTE)
+ include (${VIDEOCORE_ROOT}/makefiles/cmake/global_settings.cmake)
+diff --git a/host_applications/linux/apps/dtoverlay/CMakeLists.txt b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
+index 97bcadcf9..72afe141f 100755
+--- a/host_applications/linux/apps/dtoverlay/CMakeLists.txt
++++ b/host_applications/linux/apps/dtoverlay/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ 
+ get_filename_component (VIDEOCORE_ROOT ../../../.. ABSOLUTE)
+ include (${VIDEOCORE_ROOT}/makefiles/cmake/global_settings.cmake)
+diff --git a/host_applications/linux/apps/gencmd/CMakeLists.txt b/host_applications/linux/apps/gencmd/CMakeLists.txt
+index 0c2c32a4c..f5151ebec 100644
+--- a/host_applications/linux/apps/gencmd/CMakeLists.txt
++++ b/host_applications/linux/apps/gencmd/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ 
+ if (WIN32)
+    set(VCOS_PLATFORM win32)
+diff --git a/host_applications/linux/apps/smem/CMakeLists.txt b/host_applications/linux/apps/smem/CMakeLists.txt
+index 0fa8328c9..39907b9a2 100644
+--- a/host_applications/linux/apps/smem/CMakeLists.txt
++++ b/host_applications/linux/apps/smem/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 2.8...3.10)
+ 
+ get_filename_component (VIDEOCORE_ROOT ../../../.. ABSOLUTE)
+ include (${VIDEOCORE_ROOT}/makefiles/cmake/global_settings.cmake)
+diff --git a/interface/vcos/CMakeLists.txt b/interface/vcos/CMakeLists.txt
+index 23a8d724d..7ccb165d9 100644
+--- a/interface/vcos/CMakeLists.txt
++++ b/interface/vcos/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required (VERSION 2.8...3.10)
+ 
+ get_filename_component (VIDEOCORE_ROOT "../.." ABSOLUTE)
+ include (${VIDEOCORE_ROOT}/makefiles/cmake/global_settings.cmake)
+diff --git a/middleware/openmaxil/CMakeLists.txt b/middleware/openmaxil/CMakeLists.txt
+index 3e9c5f9d1..c4cdacab0 100644
+--- a/middleware/openmaxil/CMakeLists.txt
++++ b/middleware/openmaxil/CMakeLists.txt
+@@ -6,7 +6,7 @@
+ # CMake build file for OpenMAX IL.
+ # =============================================================================
+ 
+-cmake_minimum_required (VERSION 2.8)
++cmake_minimum_required (VERSION 2.8...3.10)
+ 
+ if (VIDEOCORE_SIMULATION)
