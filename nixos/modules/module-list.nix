@@ -296,6 +296,7 @@
   ./programs/qdmr.nix
   ./programs/qgroundcontrol.nix
   ./programs/qt5ct.nix
+  ./programs/qtcreator.nix
   ./programs/quark-goldleaf.nix
   ./programs/regreet.nix
   ./programs/rog-control-center.nix
