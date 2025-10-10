@@ -40,6 +40,8 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
+  # Needs to match microlens == 0.4.* in Stackage LTS 24
+  - microlens-pro < 0.2.0.4
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -143,14 +145,12 @@ package-maintainers:
     - generics-sop
     - ghcjs-base
     - ghcjs-dom
-    - ghcjs-dom-hello
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
     - haveibeenpwned
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
-    - jsaddle-hello
     - jsaddle-warp
     - jsaddle-wkwebview
     - json-sop
@@ -378,6 +378,11 @@ package-maintainers:
     - amazonka
     - libssh2
     - sitemap
+    - ihp-openai
+    - ihp
+    - ihp-ide
+    - ihp-migrate
+    - ihp-postgresql-simple-extra
   ncfavier:
     - Agda
     - agda2hs
@@ -930,7 +935,9 @@ dont-distribute-packages:
   - yices-painless
 
   # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-hello
   - jsaddle-webkit2gtk
+  - ghcjs-dom-hello
   - gi-javascriptcore4
   - gi-soup2
   - gi-webkit2

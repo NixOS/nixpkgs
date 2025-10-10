@@ -317,7 +317,6 @@ let
         nix-output-monitor
         nix-script
         nix-tree
-        nixfmt-classic
         nixfmt
         nota
         nvfetcher

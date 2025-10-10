@@ -105,11 +105,6 @@ self: super: {
   # Jailbreaks & Version Updates
   hashable-time = doJailbreak super.hashable-time;
 
-  # Depends on utf8-light which isn't maintained / doesn't support base >= 4.16
-  # https://github.com/haskell-infra/hackage-trustees/issues/347
-  # https://mail.haskell.org/pipermail/haskell-cafe/2022-October/135613.html
-  language-javascript_0_7_0_0 = dontCheck super.language-javascript_0_7_0_0;
-
   # Needs to match ghc-lib version
   ghc-tags = doDistribute (doJailbreak self.ghc-tags_1_7);
 

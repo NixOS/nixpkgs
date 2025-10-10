@@ -98,6 +98,9 @@ self: super: {
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
   hiedb = dontCheck super.hiedb;
 
+  # Tests require skeletest which doesn't support GHC 9.4
+  toml-reader = dontCheck super.toml-reader;
+
   # 2022-10-06: https://gitlab.haskell.org/ghc/ghc/-/issues/22260
   ghc-check = dontHaddock super.ghc-check;
 

@@ -210,7 +210,7 @@
         ]
       ++ lib.optionals (lib.versionAtLeast version "9.6" && lib.versionOlder version "9.8") [
         # Fix unlit being installed under a different name than is used in the
-        # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317
+        # settings file: https://gitlab.haskell.org/ghc/ghc/-/issues/23317 krank:ignore-line
         (fetchpatch {
           name = "ghc-9.6-fix-unlit-path.patch";
           url = "https://gitlab.haskell.org/ghc/ghc/-/commit/8fde4ac84ec7b1ead238cb158bbef48555d12af9.patch";
@@ -223,7 +223,7 @@
         #
         # These cause problems as they're not eliminated by GHC's dead code
         # elimination on aarch64-darwin. (see
-        # https://github.com/NixOS/nixpkgs/issues/140774 for details).
+        # https://github.com/NixOS/nixpkgs/issues/140774 for details). krank:ignore-line
         (
           if lib.versionOlder version "9.10" then
             ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
@@ -244,7 +244,8 @@
       # impossible to import an existing flavour in UserSettings, so patching
       # the defaults is actually simpler and less maintenance intensive
       # compared to keeping an entire flavour definition in sync with upstream
-      # manually. See also https://gitlab.haskell.org/ghc/ghc/-/issues/23625
+      # manually.
+      # See also https://gitlab.haskell.org/ghc/ghc/-/issues/23625 krank:ignore-line
       ++ lib.optionals (!enableHyperlinkedSource) [
         (
           if lib.versionOlder version "9.8" then
@@ -279,7 +280,7 @@
           ]
       # Fixes stack overrun in rts which crashes an process whenever
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
-      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25485 krank:ignore-line
       # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13599
       ++ lib.optionals (lib.versionOlder version "9.13") [
         (fetchpatch {
@@ -783,7 +784,7 @@ stdenv.mkDerivation (
     # GHC cannot currently produce outputs that are ready for `-pie` linking.
     # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
     # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
+    # * https://github.com/NixOS/nixpkgs/issues/129247 krank:ignore-line
     # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     hardeningDisable = [
       "format"
@@ -808,7 +809,8 @@ stdenv.mkDerivation (
 
     ''
     # the bindist configure script uses different env variables than the GHC configure script
-    # see https://github.com/NixOS/nixpkgs/issues/267250 and https://gitlab.haskell.org/ghc/ghc/-/issues/24211
+    # see https://github.com/NixOS/nixpkgs/issues/267250 krank:ignore-line
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/24211  krank:ignore-line
     + lib.optionalString (stdenv.targetPlatform.linker == "cctools") ''
       export InstallNameToolCmd=$INSTALL_NAME_TOOL
       export OtoolCmd=$OTOOL
