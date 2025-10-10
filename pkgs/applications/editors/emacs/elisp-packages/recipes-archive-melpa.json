@@ -8926,11 +8926,14 @@
   "repo": "lapislazuli/blue.el",
   "unstable": {
    "version": [
-    20251009,
-    1324
+    20251010,
+    1137
    ],
-   "commit": "67b058ca787bb173e0ae8becdf217e611759d36d",
-   "sha256": "00jx7mc3hg4887xsq3zsphna32qsy4jlqxiyn2py6ar36i6ngs9a"
+   "deps": [
+    "magit-section"
+   ],
+   "commit": "6f2162a0a8a94f76c22beeffa8b10f36579cc0d0",
+   "sha256": "1viiqaij9dbkn3qnbnwvq660swgzhnf2cn0rc662zk4ldhb88vqx"
   }
  },
  {
