@@ -4,7 +4,6 @@
   fetchPypi,
   googleapis-common-protos,
   protobuf,
-  pythonOlder,
   setuptools,
 }:
 
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "google-cloud-audit-log";
   version = "0.3.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_audit_log";
