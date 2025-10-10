@@ -7,6 +7,7 @@
   sphinx,
   krb5,
   xfsprogs,
+  btrfs-progs,
   jemalloc,
   libcap,
   ntirpc,
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
     acl
     krb5
     xfsprogs
+    btrfs-progs
     jemalloc
     dbus.lib
     libcap
