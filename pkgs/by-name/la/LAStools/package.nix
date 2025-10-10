@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "LAStools";
-  version = "2.0.3";
+  version = "2.0.3-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "LAStools";
     repo = "LAStools";
-    rev = "v${version}";
-    sha256 = "sha256-IyZjM8YvIVB0VPNuEhmHHw7EuKw5RanB2qhCnBD1fRY=";
+    rev = "718f0032e14499a0fa54f6ecef483ab98a6da286";
+    sha256 = "sha256-j8K6aB7uYWEQtefOj2gPGuplBY61SryKJtdFmoBBv9o=";
   };
 
   patches = [
@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
   ];
-
-  cmakeFlags = [ (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5") ];
 
   meta = with lib; {
     description = "Software for rapid LiDAR processing";
