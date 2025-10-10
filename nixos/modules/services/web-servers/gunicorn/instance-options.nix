@@ -71,7 +71,7 @@
     };
 
     socket.address = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/run/${config.process.unit}.sock";
       defaultText = lib.literalExpression ''
         /run/''${config.services.gunicorn.instances.<name>.process.unit}.sock
