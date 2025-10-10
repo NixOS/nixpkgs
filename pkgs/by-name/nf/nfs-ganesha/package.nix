@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
+    install -Dm755 ../tools/mount.9P $tools/bin/mount.9P
   ''
   + lib.optionalString useDbus ''
     # Policy for D-Bus statistics interface
