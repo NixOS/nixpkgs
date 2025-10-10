@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    kdePackages.wrapQtAppsNoGuiHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optionals (withGstreamer || withOmemo) [
     pkg-config
