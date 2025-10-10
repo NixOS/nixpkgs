@@ -167,12 +167,7 @@ lib.makeOverridable (
       // passthruAttrs
       // {
         inherit name;
-
-        # fetchurl / fetchzip is not a function, but fetchurlBoot is - ensure that the parameter is accepted and passed through
-        ${
-          if (!builtins.isFunction fetcher || (builtins.functionArgs fetcher) ? meta) then "meta" else null
-        } =
-          newMeta;
+        meta = newMeta;
       };
   in
 
