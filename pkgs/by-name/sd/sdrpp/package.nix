@@ -69,9 +69,9 @@ stdenv.mkDerivation rec {
   # SDR++ uses a rolling release model.
   # Choose a git hash from head and use the date from that commit as
   # version qualifier
-  git_hash = "27ab5bf3c194169ddf60ca312723fce96149cc8e";
-  git_date = "2024-01-22";
-  version = "1.1.0-unstable-" + git_date;
+  git_hash = "4658a1ade6707dee6f2ae09ba9eb71097223ea93";
+  git_date = "2025-10-09";
+  version = "1.2.1-unstable-" + git_date;
 
   src = fetchFromGitHub {
     owner = "AlexandreRouma";
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
       --replace "codec2.h" "codec2/codec2.h"
     # Since the __TIME_ and __DATE__ is canonicalized in the build,
     # use our qualified version shown in the programs window title.
-    substituteInPlace core/src/version.h --replace "1.1.0" "$version"
+    substituteInPlace core/src/version.h --replace "1.2.1" "$version"
   '';
 
   nativeBuildInputs = [
