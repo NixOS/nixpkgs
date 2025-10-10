@@ -37,7 +37,10 @@ stdenv.mkDerivation rec {
     mainProgram = "aptdec";
     homepage = "https://github.com/Xerbo/aptdec";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
+    maintainers = with maintainers; [
+      aciceri
+      alexwinter
+    ];
     platforms = platforms.unix;
   };
 }
