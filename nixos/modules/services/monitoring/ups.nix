@@ -668,10 +668,9 @@ in
 
     systemd.services.ups-killpower = lib.mkIf (cfg.upsmon.settings.POWERDOWNFLAG != null) {
       enable = cfg.upsd.enable;
-      description = "UPS Kill Power";
-      wantedBy = [ "shutdown.target" ];
-      after = [ "shutdown.target" ];
-      before = [ "final.target" ];
+      description = "Initiate delayed UPS shutdown";
+      wantedBy = [ "final.target" ];
+      before = [ "umount.target" ];
       unitConfig = {
         ConditionPathExists = cfg.upsmon.settings.POWERDOWNFLAG;
         DefaultDependencies = "no";
@@ -679,8 +678,11 @@ in
       environment = envVars;
       serviceConfig = {
         Type = "oneshot";
-        ExecStart = "${cfg.package}/bin/upsdrvctl shutdown";
-        Slice = "system-ups.slice";
+        ExecStart = "${cfg.package}/bin/upsdrvctl -u root shutdown";
+        # ups-killpower should not be in the system-ups slice.
+        # If it is in a slice, the shutdown command
+        # will not be executed as a Late Shutdown Service
+        # Slice = "";
       };
     };
 
