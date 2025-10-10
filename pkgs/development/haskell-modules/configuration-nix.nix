@@ -352,34 +352,54 @@ builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
 
-  hpqtypes-extras = overrideCabal (drv: {
-    preCheck = ''
-      export postgresqlTestUserOptions="LOGIN SUPERUSER"
-      export PGDATABASE=hpqtypes-extras
-    '';
-    testToolDepends = drv.testToolDepends or [ ] ++ [
-      pkgs.postgresql
-      pkgs.postgresqlTestHook
-    ];
-    testTargets = [
-      "hpqtypes-extras-tests"
-      "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
-    ];
-  }) super.hpqtypes-extras;
-  hpqtypes = overrideCabal (drv: {
-    preCheck = ''
-      export postgresqlTestUserOptions="LOGIN SUPERUSER"
-      export PGDATABASE=hpqtypes
-    '';
-    testToolDepends = drv.testToolDepends or [ ] ++ [
-      pkgs.postgresql
-      pkgs.postgresqlTestHook
-    ];
-    testTargets = [
-      "hpqtypes-tests"
-      "--test-option=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
-    ];
-  }) (super.hpqtypes.override { libpq = pkgs.libpq; });
+  consumers = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=consumers
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "consumers-test"
+        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) super.consumers
+  );
+  hpqtypes-extras = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=hpqtypes-extras
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "hpqtypes-extras-tests"
+        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) super.hpqtypes-extras
+  );
+  hpqtypes = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=hpqtypes
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "hpqtypes-tests"
+        "--test-option=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) (super.hpqtypes.override { libpq = pkgs.libpq; })
+  );
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
