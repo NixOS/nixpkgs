@@ -18,12 +18,17 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     repo = "FeynGame";
     tag = finalAttrs.version;
     leaveDotGit = true; # the build script uses git log to find last commit date
-    hash = "sha256-PhdspIr0Lnuv4e8bjMEAXnVDK1YVlrI5XI+rP9qXNQ0=";
+    hash = "sha256-ySBEka978jRWRRI6WpKNEfwsB3kZMhOrcotbstTAhzQ=";
+    postFetch = ''
+      git --git-dir=$out/.git log -1 --date=format:"%d.%m.%Y %H:%M:%S" --format="%ad" > $out/.gitdate
+      rm -rf $out/.git
+    '';
   };
 
   postPatch = ''
     patchShebangs buildfile
     substituteInPlace buildfile \
+      --replace-fail 'git log -1 --date=format:"%d.%m.%Y %H:%M:%S" --format="%ad"' 'cat .gitdate' \
       --replace-fail '$Prefix/bin/feyngame %U' 'feyngame %U' \
       --replace-fail '$Prefix/share/pixmaps/fglogo.png' 'fglogo'
   '';
@@ -40,7 +45,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   nativeBuildInputs = [
-    git
     jdk
     desktop-file-utils
   ];
