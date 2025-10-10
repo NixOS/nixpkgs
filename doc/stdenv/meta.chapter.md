@@ -333,8 +333,8 @@ This attribute contains an attribute set of all parts of the pURL for this packa
 
 #### `meta.identifiers.purl` {#var-meta-identifiers-purl}
 
-A readonly attribute which is built based on purlParts. It is the main identifier, consumers should consider using the pURL's list interface to be prepared for edge cases.
+An extendable attribute which is built based on purlParts. It is the main identifier, consumers should consider using the pURL's list interface to be prepared for edge cases.
 
 #### `meta.identifiers.purls` {#var-meta-identifiers-purls}
 
-A readonly attribute list which defaults to a single element equal to the main pURL. It provides an interface for additional identifiers of mkDerivation.src and / or vendored dependencies inside mkDerivation.src, which maintainers can conciously decide to use on top. Identifiers different to the default src identifier are not recommended by default as they might cause maintenance overhead or may diverge (e.g. differences between source distribution pkg:github and binary distribution like pkg:pypi).
+An extendable attribute list which defaults to a single element equal to the main pURL. It provides an interface for additional identifiers of mkDerivation.src and / or vendored dependencies inside mkDerivation.src, which maintainers can conciously decide to use on top. Identifiers different to the default src identifier are not recommended by default as they might cause maintenance overhead or may diverge (e.g. differences between source distribution pkg:github and binary distribution like pkg:pypi).
