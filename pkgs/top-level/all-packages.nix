@@ -13255,8 +13255,6 @@ with pkgs;
 
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
-  qgo = libsForQt5.callPackage ../games/qgo { };
-
   anki = callPackage ../games/anki {
     protobuf = protobuf_31;
   };
