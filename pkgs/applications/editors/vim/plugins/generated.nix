@@ -319,6 +319,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  Otree-nvim = buildVimPlugin {
+    pname = "Otree.nvim";
+    version = "2025-09-18";
+    src = fetchFromGitHub {
+      owner = "Eutrius";
+      repo = "Otree.nvim";
+      rev = "1540ea0a300916f1c43063fda185463b3e8f2f40";
+      sha256 = "0ydvjac2vw1afaz5wibc4ws1p6rng0d4hkb8z0ljdxbjrjqavdb4";
+    };
+    meta.homepage = "https://github.com/Eutrius/Otree.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   PreserveNoEOL = buildVimPlugin {
     pname = "PreserveNoEOL";
     version = "2013-06-14";
@@ -3114,6 +3127,19 @@ final: prev: {
       sha256 = "11nab2bvna9q8h87ikjj44mzc4irf80xa2hh3r2lmq65z6p1kpdw";
     };
     meta.homepage = "https://github.com/metakirby5/codi.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  colibri-vim = buildVimPlugin {
+    pname = "colibri.vim";
+    version = "2019-06-15";
+    src = fetchFromGitHub {
+      owner = "archseer";
+      repo = "colibri.vim";
+      rev = "ad82132e0cbbdfa194d722f15c2df8f0d04b5b71";
+      sha256 = "1aknwa8gacinvfq9vnpqx3xjwjl8qddih8cvf878nf2xhp59gff0";
+    };
+    meta.homepage = "https://github.com/archseer/colibri.vim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -6164,6 +6190,19 @@ final: prev: {
       sha256 = "09998lnfcshqis5m062wlag6y476imq9jday9gp4ayjjl1cp3cwx";
     };
     meta.homepage = "https://github.com/travitch/hasksyn/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  headhunter-nvim = buildVimPlugin {
+    pname = "headhunter.nvim";
+    version = "2025-10-06";
+    src = fetchFromGitHub {
+      owner = "StackInTheWild";
+      repo = "headhunter.nvim";
+      rev = "45eff1653c27a19c47c8a2dfed4897d4a434408d";
+      sha256 = "14p5kcn5drbfsklyvdajfgxyax6d5rpkn8qdnabibsqrw31bkj91";
+    };
+    meta.homepage = "https://github.com/StackInTheWild/headhunter.nvim/";
     meta.hydraPlatforms = [ ];
   };
 
@@ -22361,6 +22400,19 @@ final: prev: {
       sha256 = "0cr28yw7zg568qig3b0fpavrj15f3rx7vxihbkbd29x98f0xlpx3";
     };
     meta.homepage = "https://github.com/piersolenski/wtf.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
+  xeno-nvim = buildVimPlugin {
+    pname = "xeno.nvim";
+    version = "2025-08-27";
+    src = fetchFromGitHub {
+      owner = "kyza0d";
+      repo = "xeno.nvim";
+      rev = "4a1d3946b5c3b9b581e76a84746a06b0977b1fed";
+      sha256 = "1lbj321vz1gzgy4wdmzca74hrwzizy2i0645bqix0id4q3zm7lfd";
+    };
+    meta.homepage = "https://github.com/kyza0d/xeno.nvim/";
     meta.hydraPlatforms = [ ];
   };
 

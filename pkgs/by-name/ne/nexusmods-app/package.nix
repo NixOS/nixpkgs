@@ -22,13 +22,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.17.2";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "Nexus-Mods";
     repo = "NexusMods.App";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2B5n1yN42birMJ1YaUU/KjzhHIJTv8nwrupc0ULc8Hc=";
+    hash = "sha256-+ayYRNclxbBedH6gIWTh5wI/AIvMzSq4x5fQXzxOT5c=";
     fetchSubmodules = true;
   };
 

@@ -42,8 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     icu
     protobuf
-  ]
-  ++ lib.optionals enableTests [
+  ];
+
+  propagatedBuildInputs = lib.optionals enableTests [
     boost
   ];
 

@@ -8,6 +8,7 @@
   pkg-config,
   autoconf-archive,
   libxml2,
+  icu,
   bzip2,
   libtar,
   ticcutils,
@@ -17,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timbl";
-  version = "6.4.9";
+  version = "6.10";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "timbl";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-6hg/NiA5c5txyB7xYSlxA2WzAyNTF6JpupLpmzfxOYg=";
+    hash = "sha256-kAPYKAlgr9c4OU6ARTizOmWvQa1mrK0IoOWshJ4Ctjg=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     libtool
     autoconf-archive
     libxml2
+    icu
     ticcutils
   ];
 

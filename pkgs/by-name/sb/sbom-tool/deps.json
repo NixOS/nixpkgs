@@ -26,23 +26,23 @@
   },
   {
     "pname": "Microsoft.ComponentDetection.Common",
-    "version": "5.2.19",
-    "hash": "sha256-O2sOTEeoidVHa3dpA3pGend+0TgO8cx4KKJjfm8svRE="
+    "version": "5.2.27",
+    "hash": "sha256-GJ6Aluv8yM2un91SFjEQLP1hqdsCfV/ef+GNw7XJVRM="
   },
   {
     "pname": "Microsoft.ComponentDetection.Contracts",
-    "version": "5.2.19",
-    "hash": "sha256-Mh0zivIRcGdo5bpj8tyvX3ewohGtvqHAUdIiCITH5Ok="
+    "version": "5.2.27",
+    "hash": "sha256-9VcdMKAzvw63QuDpF/UJV64pDBc/1OHORQIfiaD73Bg="
   },
   {
     "pname": "Microsoft.ComponentDetection.Detectors",
-    "version": "5.2.19",
-    "hash": "sha256-ozskMXd2x6bv3ZwSBzi6H3mMr1q970lqKY2/MdyP86U="
+    "version": "5.2.27",
+    "hash": "sha256-fUDPlEBAQz6wEh0f5t5bGI6vY8N5Bds920nZzcedbRQ="
   },
   {
     "pname": "Microsoft.ComponentDetection.Orchestrator",
-    "version": "5.2.19",
-    "hash": "sha256-Z8cGeThlltsWM6/B4qS2z05bXSpnM+tjKH9pTEwBmYQ="
+    "version": "5.2.27",
+    "hash": "sha256-2I0UQ/Wajd1p09OWudm7XuPb8Qq6ZTBSLHCIepk0nw0="
   },
   {
     "pname": "Microsoft.CSharp",
@@ -291,8 +291,8 @@
   },
   {
     "pname": "Microsoft.VisualStudio.Threading.Analyzers",
-    "version": "17.12.19",
-    "hash": "sha256-7EteBGfUDOOpDihazJ4XGuPA2dvdc7HkpV8zTVl3FdQ="
+    "version": "17.14.15",
+    "hash": "sha256-wv0Hi7pjPYeSwDFyaa8baIOyiUraVfudmVtpm0okoYU="
   },
   {
     "pname": "Microsoft.Win32.Primitives",
@@ -316,8 +316,8 @@
   },
   {
     "pname": "Newtonsoft.Json",
-    "version": "13.0.3",
-    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+    "version": "13.0.4",
+    "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
   },
   {
     "pname": "NuGet.Common",
@@ -326,13 +326,13 @@
   },
   {
     "pname": "NuGet.Common",
-    "version": "6.13.2",
-    "hash": "sha256-ASLa/Jigg5Eop0ZrXPl98RW2rxnJRC7pbbxhuV74hFw="
+    "version": "6.14.0",
+    "hash": "sha256-jDOwt3veI1GSG8CfBnf2+dJxD3E/Nmlc+vHtD4J76Ms="
   },
   {
     "pname": "NuGet.Configuration",
-    "version": "6.13.2",
-    "hash": "sha256-z8VW1YdRDanyyRTDYRvRkSv/XPR3c/hMM1y8cNNjx0Y="
+    "version": "6.14.0",
+    "hash": "sha256-1PN9s6fhCw3wd2260U6hQ4vG3jIvcG8GIn1oQgxMXA0="
   },
   {
     "pname": "NuGet.DependencyResolver.Core",
@@ -341,13 +341,8 @@
   },
   {
     "pname": "NuGet.Frameworks",
-    "version": "6.10.0",
-    "hash": "sha256-E88PUsK5J0b9c0sN+xNZU+X1MOCfJaIvByr1H4ZHLUM="
-  },
-  {
-    "pname": "NuGet.Frameworks",
-    "version": "6.13.2",
-    "hash": "sha256-caDyc+WgYOo43AUTjtbP0MyvYDb6JweEKDdIul61Cac="
+    "version": "6.14.0",
+    "hash": "sha256-3ViM3R1ucQMEL2hQYsivT86kI6veMQK2xDsiAcFcVQk="
   },
   {
     "pname": "NuGet.LibraryModel",
@@ -656,8 +651,8 @@
   },
   {
     "pname": "Scrutor",
-    "version": "6.0.1",
-    "hash": "sha256-nQur/kft8JVqRyofsEnzLrJLg8F1DxFMPb4aL9Dn2cs="
+    "version": "6.1.0",
+    "hash": "sha256-BQ84t3OOP/Vf6Zp5DbJJZP9H/P70m4lAV0o+ME5dmbk="
   },
   {
     "pname": "SemanticVersioning",
@@ -846,8 +841,8 @@
   },
   {
     "pname": "System.IO.Pipelines",
-    "version": "9.0.2",
-    "hash": "sha256-uxM7J0Q/dzEsD0NGcVBsOmdHiOEawZ5GNUKBwpdiPyE="
+    "version": "9.0.9",
+    "hash": "sha256-bRMt0ib0KwKzHXgeAXZgegou5eX8lsm80Eu38bHBxBs="
   },
   {
     "pname": "System.Linq",
@@ -1066,8 +1061,8 @@
   },
   {
     "pname": "System.Text.Encodings.Web",
-    "version": "9.0.2",
-    "hash": "sha256-tZhc/Xe+SF9bCplthph2QmQakWxKVjMfQJZzD1Xbpg8="
+    "version": "9.0.9",
+    "hash": "sha256-euYrJAKiTDCj/Rf1KVWI6IophDX828x5T9As9vAf81A="
   },
   {
     "pname": "System.Text.Json",
@@ -1076,8 +1071,8 @@
   },
   {
     "pname": "System.Text.Json",
-    "version": "9.0.2",
-    "hash": "sha256-kftKUuGgZtF4APmp77U79ws76mEIi+R9+DSVGikA5y8="
+    "version": "9.0.9",
+    "hash": "sha256-I+GCgXZZUtgAta94BIBqy72HnZJ3egzNBOTxnVy2Ur8="
   },
   {
     "pname": "System.Text.RegularExpressions",
@@ -1096,8 +1091,8 @@
   },
   {
     "pname": "System.Threading.Channels",
-    "version": "9.0.2",
-    "hash": "sha256-Ubs57l7OtgMyC/N1qiAFcfqAxqghRVXs9tB7Jws30t8="
+    "version": "9.0.8",
+    "hash": "sha256-2gKEpEc10gRfKvPSbxb//Oa5JRm5whWcXu1SqpNnoC0="
   },
   {
     "pname": "System.Threading.Tasks",
@@ -1111,8 +1106,8 @@
   },
   {
     "pname": "System.Threading.Tasks.Extensions",
-    "version": "4.6.1",
-    "hash": "sha256-uCNLRvztz92N+hjrnHOpzwkmoYr3+H2ZY51qvB9pkxo="
+    "version": "4.6.3",
+    "hash": "sha256-GrySx1F6Ah6tfnnQt/PHC+dbzg+sfP47OOFX0yJF/xo="
   },
   {
     "pname": "System.Threading.ThreadPool",

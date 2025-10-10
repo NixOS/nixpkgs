@@ -9,11 +9,11 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "magento-cloud";
-  version = "1.46.1";
+  version = "1.47.0";
 
   src = fetchurl {
     url = "https://accounts.magento.cloud/sites/default/files/magento-cloud-v${finalAttrs.version}.phar";
-    hash = "sha256-QrrD5pz6Juov1u3QYcuLr6aEKe/4DX5wFKs+hp6KjJ8=";
+    hash = "sha256-/CzHWQa/O1gW4x+b0acR0Cj8AE8Olhpgn7YcaDrLk9E=";
   };
 
   dontUnpack = true;
