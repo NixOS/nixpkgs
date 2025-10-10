@@ -12,13 +12,13 @@
   SDL_image,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "1.5.0";
   pname = "bloodspilot-client";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bloodspilot/client-sdl/v${version}/bloodspilot-client-sdl-${version}.tar.gz";
-    sha256 = "1qwl95av5an2zl01m7saj6fyy49xpixga7gbn4lwbpgpqs1rbwxj";
+    url = "mirror://sourceforge/project/bloodspilot/client-sdl/v${finalAttrs.version}/bloodspilot-client-sdl-${finalAttrs.version}.tar.gz";
+    hash = "sha256-svOVg8b33cUpsesd9Xq8PRHvnZFKnxoA/cKqslVJlOM=";
   };
 
   patches = [ ./bloodspilot-sdl-window-fix.patch ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     mainProgram = "bloodspilot-client-sdl";
     homepage = "http://bloodspilot.sf.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = [ lib.maintainers.raskin ];
+    maintainers = with lib.maintainers; [ raskin ];
     platforms = lib.platforms.linux;
   };
-}
+})

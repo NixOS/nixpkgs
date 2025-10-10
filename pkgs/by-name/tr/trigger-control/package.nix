@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   makeWrapper,
   pkg-config,
@@ -11,21 +10,19 @@
   dbus,
   libdecor,
   libnotify,
-  dejavu_fonts,
   zenity,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trigger-control";
-  version = "1.5.1";
+  version = "1.5.1-unstable-2024-12-16";
 
   src = fetchFromGitHub {
     owner = "Etaash-mathamsetty";
     repo = "trigger-control";
-    # upstream does not use consistent tags pattern, so we use git commit hash
-    # https://github.com/Etaash-mathamsetty/trigger-control/tags
-    rev = "7b46e743227830d3a97720067d0a6cf20133af90";
-    hash = "sha256-nWSvsgksZ4Cxy1+i0xy8pNalgsiAuaqxNVwT/CThaBI=";
+    rev = "ed9b6f994b050e8890cb73e7d2997723fdd0ca2c";
+    hash = "sha256-pwI6hHae3yJpUx3v4yVLUW2t4LKQcWqiMPM9Q9NjY3Q=";
   };
 
   nativeBuildInputs = [
@@ -44,18 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
     libdecor
   ];
 
-  patches = [
-    # Fix build on clang https://github.com/Etaash-mathamsetty/trigger-control/pull/23
-    (fetchpatch {
-      name = "clang.patch";
-      url = "https://github.com/Etaash-mathamsetty/trigger-control/commit/bbec33296fdac7e2ca0398ae19ca8de8ad883407.patch";
-      hash = "sha256-x6RymdzBlzAJ8O8QGqXQtvkZkjdTaC5X8syFPunqZik=";
-    })
-  ];
-
-  # The app crashes without a changed fontdir and upstream recommends dejavu as font
+  # cmake 4 compatibility
   postPatch = ''
-    substituteInPlace trigger-control.cpp --replace "/usr/share/fonts/" "${dejavu_fonts}/share/fonts/"
+    substituteInPlace CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   installPhase = ''
@@ -70,6 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/trigger-control \
       --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex=[^0-9]*([0-9][0-9.]*-unstable-.*)"
+    ];
+  };
 
   meta = with lib; {
     description = "Control the dualsense's triggers on Linux (and Windows) with a gui and C++ api";

@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  gitMinimal,
   makeBinaryWrapper,
   installShellFiles,
   rustPlatform,
@@ -15,7 +16,7 @@
 }:
 
 let
-  version = "1.9.1";
+  version = "1.10";
   devenvNixVersion = "2.30.4";
 
   devenv_nix =
@@ -42,10 +43,10 @@ rustPlatform.buildRustPackage {
     owner = "cachix";
     repo = "devenv";
     tag = "v${version}";
-    hash = "sha256-v86pQGIWHJPkRryglJSXOp0aEoU6ZtURuURsXLqfqSE=";
+    hash = "sha256-rsb+6Wca43guzLL4Czoc89L394ZW9JZF2MShxaz2Sx4=";
   };
 
-  cargoHash = "sha256-41VmzZvoRd2pL5/o6apHztpS2XrL4HGPIJPBkUbPL1I=";
+  cargoHash = "sha256-Wt47YdBEtFXQACk1ByDwQyXzHU4/nGVQKY7gaZeQrQ4=";
 
   buildAndTestSubdir = "devenv";
 
@@ -59,6 +60,16 @@ rustPlatform.buildRustPackage {
     openssl
     dbus
   ];
+
+  nativeCheckInputs = [
+    gitMinimal
+  ];
+
+  preCheck = ''
+    git init
+    git config user.email "test@example.com"
+    git config user.name "Test User"
+  '';
 
   postInstall =
     let
