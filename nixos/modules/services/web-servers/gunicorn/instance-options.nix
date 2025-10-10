@@ -42,7 +42,7 @@
     process.unit = lib.mkOption {
       type = lib.types.str;
       default = "gunicorn-${config._module.args.name}";
-      defaultText = lib.literalExpression ''gunicorn-''${services.gunicorn.instances.<name>.name}'';
+      defaultText = lib.literalExpression ''gunicorn-''${config.services.gunicorn.instances.<name>.name}'';
       description = "Name for the systemd unit of this instance.";
     };
 
