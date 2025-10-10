@@ -13295,8 +13295,6 @@ with pkgs;
 
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
-  qgo = libsForQt5.callPackage ../games/qgo { };
-
   amoeba = callPackage ../games/amoeba { };
   amoeba-data = callPackage ../games/amoeba/data.nix { };
 

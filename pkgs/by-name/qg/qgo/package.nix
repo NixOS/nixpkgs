@@ -1,14 +1,10 @@
 {
   lib,
-  mkDerivation,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qttools,
+  libsForQt5,
 }:
 
-mkDerivation {
+libsForQt5.mkDerivation {
   pname = "qgo";
   version = "unstable-2017-12-18";
 
@@ -44,11 +40,11 @@ mkDerivation {
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
   ];
   buildInputs = [
-    qtbase
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
   ];
 }
