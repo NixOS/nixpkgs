@@ -58,10 +58,10 @@ jobs:
 
             if (files.some(file => [
               '.github/actions/checkout/action.yml',
+              '.github/workflows/bot.yml',
               '.github/workflows/build.yml',
               '.github/workflows/check.yml',
               '.github/workflows/eval.yml',
-              '.github/workflows/labels.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/pull-request-target.yml',
               '.github/workflows/reviewers.yml',

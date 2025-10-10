@@ -484,7 +484,7 @@ module.exports = async ({ github, context, core, dry }) => {
       const lastRun = (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
-          workflow_id: 'labels.yml',
+          workflow_id: 'bot.yml',
           event: 'schedule',
           status: 'success',
           exclude_pull_requests: true,

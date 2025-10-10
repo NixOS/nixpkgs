@@ -1,4 +1,4 @@
-# This file is used by .github/workflows/labels.yml
+# This file is used by .github/workflows/bot.yml
 # This version uses `sync-labels: false`, meaning that a non-match will NOT remove the label
 
 # keep-sorted start case=no numeric=yes newline_separated=yes skip_lines=1
