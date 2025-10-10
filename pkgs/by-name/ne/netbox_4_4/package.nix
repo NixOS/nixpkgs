@@ -16,14 +16,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.3.7";
+  version = "4.4.2";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "netbox";
     tag = "v${version}";
-    hash = "sha256-xVOP1D3C12M0M8oTrCA0M17NLuor+46UwiaKymSAVJM=";
+    hash = "sha256-1POwxp7BTCZo7JlGrLVGNzBGCplmhZ0Y6wujunIVGsA=";
   };
 
   patches = [
@@ -34,6 +34,7 @@ py.pkgs.buildPythonApplication rec {
     (
       with py.pkgs;
       [
+        colorama
         django
         django-cors-headers
         django-debug-toolbar
@@ -63,6 +64,7 @@ py.pkgs.buildPythonApplication rec {
         requests
         social-auth-core
         social-auth-app-django
+        sorl-thumbnail
         strawberry-graphql
         strawberry-django
         svgwrite
@@ -121,9 +123,6 @@ py.pkgs.buildPythonApplication rec {
     description = "IP address management (IPAM) and data center infrastructure management (DCIM) tool";
     mainProgram = "netbox";
     license = lib.licenses.asl20;
-    knownVulnerabilities = [
-      "Netbox Version ${version} is EOL; please upgrade by following the current release notes instructions"
-    ];
     maintainers = with lib.maintainers; [
       minijackson
       raitobezarius
