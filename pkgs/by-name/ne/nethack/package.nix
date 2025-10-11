@@ -236,7 +236,7 @@ stdenvUsed.mkDerivation (finalAttrs: {
     homepage = "http://nethack.org/";
     license = lib.licenses.ngpl;
     platforms = if x11Mode then lib.platforms.linux else lib.platforms.unix;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "nethack";
   };
 })
