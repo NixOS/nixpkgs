@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "httpx-sse";
-  version = "0.4.1";
+  version = "0.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "florimondmanca";
     repo = "httpx-sse";
     tag = version;
-    hash = "sha256-bSozSZmbRU5sc3jvVUOAXQWVBA8GhzM2R26uPdabS+w=";
+    hash = "sha256-f/1Uzn5MhktoMeHPCPH6hqRZXwCuY9wOyfHHvGXFaHI=";
   };
 
   build-system = [
