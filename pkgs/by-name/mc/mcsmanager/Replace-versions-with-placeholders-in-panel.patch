@@ -1,0 +1,62 @@
+From 336d5e3a7669c092452dfa77db4de46e9eb82c41 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Wed, 2 Jul 2025 00:31:31 +0800
+Subject: [PATCH] Replace versions with placeholders in panel
+
+---
+ src/app/version.ts | 29 ++---------------------------
+ 1 file changed, 2 insertions(+), 27 deletions(-)
+
+diff --git a/src/app/version.ts b/src/app/version.ts
+index 493b5baa..632c3349 100755
+--- a/src/app/version.ts
++++ b/src/app/version.ts
+@@ -1,32 +1,12 @@
+-import * as fs from "fs-extra";
+ import { GlobalVariable } from "mcsmanager-common";
+ import { logger } from "./service/log";
+ import storage from "./common/system_storage";
+ 
+-interface IPackageInfo {
+-  name: string;
+-  version: string;
+-  daemonVersion: string;
+-  description: string;
+-}
+-
+-const PACKAGE_JSON = "package.json";
+ const VERSION_LOG_TEXT_NAME = "current-version.txt";
+ let currentVersion = "";
+ 
+ export function initVersionManager() {
+-  try {
+-    GlobalVariable.set("version", "Unknown");
+-    if (fs.existsSync(PACKAGE_JSON)) {
+-      const data: IPackageInfo = JSON.parse(fs.readFileSync(PACKAGE_JSON, { encoding: "utf-8" }));
+-      if (data.version) {
+-        GlobalVariable.set("version", data.version);
+-        currentVersion = String(data.version);
+-      }
+-    }
+-  } catch (error: any) {
+-    logger.error("Version Check failure:", error);
+-  }
++  GlobalVariable.set("version", "@panelVersion@");
+ 
+   if (currentVersion && storage.fileExists(VERSION_LOG_TEXT_NAME)) {
+     const LastLaunchedVersion = storage.readFile(VERSION_LOG_TEXT_NAME);
+@@ -43,10 +23,5 @@ export function getVersion(): string {
+ }
+ 
+ export function specifiedDaemonVersion() {
+-  try {
+-    const data: any = JSON.parse(fs.readFileSync(PACKAGE_JSON, { encoding: "utf-8" }));
+-    return data.daemonVersion ?? "1.0.0";
+-  } catch (error: any) {
+-    return "1.0.0";
+-  }
++  return "@daemonVersion@";
+ }
+-- 
+2.50.1
+
