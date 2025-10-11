@@ -4096,7 +4096,7 @@ with pkgs;
     w3m = w3m-batch;
   };
 
-  systemdgenie = libsForQt5.callPackage ../applications/system/systemdgenie { };
+  systemdgenie = callPackage ../applications/system/systemdgenie { };
 
   tartube = callPackage ../applications/video/tartube { };
 
