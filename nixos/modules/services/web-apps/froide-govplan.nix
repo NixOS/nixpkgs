@@ -84,7 +84,7 @@ in
     };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/froide-govplan";
       description = "Directory to store the Froide-Govplan server data.";
     };
