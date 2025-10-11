@@ -15,6 +15,7 @@
   docutils,
   makeWrapper,
   fuse3,
+  macfuse-stubs,
   glib,
   which,
   python3Packages,
