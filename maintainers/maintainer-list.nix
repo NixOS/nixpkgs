@@ -21949,6 +21949,11 @@
     githubId = 13792812;
     name = "James Leitch";
   };
+  rickyelopez = {
+    github = "rickyelopez";
+    githubId = 31072564;
+    name = "Ricky";
+  };
   rickynils = {
     email = "rickynils@gmail.com";
     github = "rickynils";
