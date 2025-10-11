@@ -76,6 +76,7 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  stdenv,
 }:
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
@@ -104,12 +105,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5WS4CZ+aOuMkCVObKQu9KtCE6ZttItSqxeUeRVTfi8I=";
   };
 
-  patches = lib.optionals clangStdenv.hostPlatform.isLinux [
-    (replaceVars ./fix-bubblewrap-paths.patch {
-      inherit (builtins) storeDir;
-      inherit (addDriverRunpath) driverLink;
-    })
-  ];
+  patches =
+    lib.optionals clangStdenv.hostPlatform.isLinux [
+      (replaceVars ./fix-bubblewrap-paths.patch {
+        inherit (builtins) storeDir;
+        inherit (addDriverRunpath) driverLink;
+      })
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isRiscV [
+      # Workaround to fix cross-compilation for RiscV
+      # error: ‘toB3Type’ was not declared in this scope
+      # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+      ./fix-ftbfs-riscv64.patch
+    ];
 
   nativeBuildInputs = [
     bison

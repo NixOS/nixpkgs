@@ -1,0 +1,40 @@
+From: Alberto Garcia <berto@igalia.com>
+Description: Use WTF_CPU_UNKNOWN when building for riscv64
+ WebKitGTK doesn't build on riscv64 even with the JIT disabled.
+ Treating the CPU as unknown is perhaps a bit severe, but it allows us
+ to get the build done until someone steps up to maintain this
+ properly.
+Bug: https://bugs.webkit.org/show_bug.cgi?id=271371
+Forwarded: no
+Index: webkitgtk/Source/WTF/wtf/PlatformCPU.h
+===================================================================
+--- webkitgtk.orig/Source/WTF/wtf/PlatformCPU.h
++++ webkitgtk/Source/WTF/wtf/PlatformCPU.h
+@@ -292,14 +292,6 @@
+ 
+ #endif /* ARM */
+ 
+-/* CPU(RISCV64) - RISC-V 64-bit */
+-#if    defined(__riscv) \
+-    && defined(__riscv_xlen) \
+-    && (__riscv_xlen == 64)
+-#define WTF_CPU_RISCV64 1
+-#define WTF_CPU_KNOWN 1
+-#endif
+-
+ #if !CPU(KNOWN)
+ #define WTF_CPU_UNKNOWN 1
+ #endif
+Index: webkitgtk/Source/cmake/WebKitCommon.cmake
+===================================================================
+--- webkitgtk.orig/Source/cmake/WebKitCommon.cmake
++++ webkitgtk/Source/cmake/WebKitCommon.cmake
+@@ -127,8 +127,6 @@ if (NOT HAS_RUN_WEBKIT_COMMON)
+         set(WTF_CPU_PPC64 1)
+     elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "ppc64le")
+         set(WTF_CPU_PPC64LE 1)
+-    elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^riscv64")
+-        set(WTF_CPU_RISCV64 1)
+     elseif (LOWERCASE_CMAKE_SYSTEM_PROCESSOR MATCHES "^loongarch64")
+         set(WTF_CPU_LOONGARCH64 1)
+     else ()
