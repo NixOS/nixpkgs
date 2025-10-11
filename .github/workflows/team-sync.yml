@@ -1,0 +1,70 @@
+name: sync
+
+on:
+  schedule:
+    # Every Tuesday at 19:42 (randomly chosen)
+    - cron: '42 19 * * 1'
+
+  # Allows manual trigger
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  sync:
+    name: sync
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        id: team-token
+        with:
+          app-id: ${{ vars.OWNER_APP_ID }}
+          private-key: ${{ secrets.OWNER_APP_PRIVATE_KEY }}
+          # This app is for repo admin-level permissions (for getting teams with repo access) and organisation-level (for getting team members)
+          # None of which seem expressible with the permission-* settings
+          # permission-???
+      - name: Fetch source
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: |
+            ci/get-teams.sh
+            maintainers/github-teams.json
+      - name: Synchronise teams
+        run: ci/get-teams.sh "$ORG" "$REPO" > maintainers/github-teams.json
+        env:
+          ORG: ${{ github.repository_owner }}
+          REPO: ${{ github.event.repository.name }}
+          GH_TOKEN: ${{ steps.team-token.outputs.token }}
+
+      # Use a GitHub App to create the PR so that CI gets triggered
+      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        id: sync-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+      - name: Get GitHub App User Git String
+        id: user
+        run: |
+          name="$APP_SLUG[bot]"
+          userId=$(gh api "/users/$name" --jq .id)
+          email="$userId+$name@users.noreply.github.com"
+          echo "git-string=$name <$email>" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.sync-token.outputs.token }}
+          APP_SLUG: ${{ steps.sync-token.outputs.app-slug }}
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        with:
+          token: ${{ steps.sync-token.outputs.token }}
+          author: ${{ steps.user.outputs.git-string }}
+          committer: ${{ steps.user.outputs.git-string }}
+          commit-message: "maintainers/github-teams.json: Automated sync"
+          branch: github-team-sync
+          title: Automated GitHub team sync
+          body: |
+            This is an automated PR to sync the GitHub teams with access to this repository to the `lib.teams` list.
+
+            This PR can be merged without taking any further action.
+
