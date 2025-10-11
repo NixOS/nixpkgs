@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "beszel";
-  version = "0.12.3";
+  version = "0.13.2";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-rthaufUL0JX3sE2hdrcJ8J73DLK4/2wMR+uOs8GoX2A=";
+    hash = "sha256-5akfgX3533NkeszP/by9ZfwTmMPdG5/JKFjswP1FRp8=";
   };
 
   webui = buildNpmPackage {
@@ -45,18 +45,16 @@ buildGoModule rec {
       runHook postInstall
     '';
 
-    sourceRoot = "${src.name}/beszel/site";
+    sourceRoot = "${src.name}/internal/site";
 
-    npmDepsHash = "sha256-6J1LwRzwbQyXVBHNgG7k8CQ67JZIDqYreDbgfm6B4w4=";
+    npmDepsHash = "sha256-7+3K8MhA+FXWRXQR5edUYbL/XcxPmUqWQPxl5k8u1xs=";
   };
 
-  sourceRoot = "${src.name}/beszel";
-
-  vendorHash = "sha256-Nd2jDlq+tdGrgxU6ZNgj9awAb+G/yDqY1J15dpMcjtw=";
+  vendorHash = "sha256-IfwgL4Ms5Uho1l0yGCyumbr1N/SN+j5HaFl4hACkTsQ=";
 
   preBuild = ''
-    mkdir -p site/dist
-    cp -r ${webui}/* site/dist
+    mkdir -p internal/site/dist
+    cp -r ${webui}/* internal/site/dist
   '';
 
   postInstall = ''
@@ -64,7 +62,12 @@ buildGoModule rec {
     mv $out/bin/hub $out/bin/beszel-hub
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--subpackage"
+      "webui"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/henrygd/beszel";
