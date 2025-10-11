@@ -634,6 +634,7 @@
   ./services/hardware/actkbd.nix
   ./services/hardware/amdgpu.nix
   ./services/hardware/argonone.nix
+  ./services/hardware/arsenik.nix
   ./services/hardware/asusd.nix
   ./services/hardware/auto-cpufreq.nix
   ./services/hardware/auto-epp.nix
