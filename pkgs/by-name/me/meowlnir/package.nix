@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "meowlnir";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "maunium";
     repo = "meowlnir";
     tag = "v${version}";
-    hash = "sha256-S0GrM8uKfWJh0/oAQp2f7P+yj99N0bovCNscM8b7tB8=";
+    hash = "sha256-4SGTSKeB6E6VmnW4trpDGgjRsRXGN0fBye0e3BSmIkQ=";
   };
 
   buildInputs = [ olm ];
 
-  vendorHash = "sha256-gzigJ2gg9jaREbFdX+38sUV8I/gcB5x+lYaABnS2Mbk=";
+  vendorHash = "sha256-mprhG74+jRtuGorFuoaD/oSmlThN6m6P4ygYONA/Tz4=";
 
   doCheck = true;
   doInstallCheck = true;
