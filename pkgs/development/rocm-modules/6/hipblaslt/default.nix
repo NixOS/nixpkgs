@@ -111,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Support loading zstd compressed .dat files, required to keep output under
     # hydra size limit
     ./messagepack-compression-support.patch
+    # excessive comments are written to temporary asm files in build dir
+    # TODO: report upstream, find a better solution
+    ./reduce-comment-spam.patch
   ];
 
   postPatch = ''
