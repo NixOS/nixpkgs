@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.8";
+  version = "3.7.9";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VbOu8p7Bq6UJBr05PVZein4LWzpdLo4838G1jXGNLAw=";
+    hash = "sha256-aE2gtAGzLBcUk+Heg+ZOMLd1wX6VEbrSpxkWETmlEZc=";
   };
 
   nativeBuildInputs = with kdePackages; [
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = with lib.strings; [
-    (cmakeBool "BUILD_QT5" false)
+    (cmakeBool "BUILD_WITH_QT6" true)
     (cmakeFeature "INDI_PREFIX" "${indi-full}")
     (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
     (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")
