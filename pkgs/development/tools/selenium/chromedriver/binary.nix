@@ -9,8 +9,8 @@
 
 let
   upstream-info =
-    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json)
-    .chromium.chromedriver;
+    (lib.importJSON ../../../../applications/networking/browsers/chromium/variants/chromium/info.json)
+    .chromedriver;
 
   # See ./source.nix for Linux
   allSpecs = {
