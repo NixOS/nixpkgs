@@ -1,0 +1,50 @@
+diff --git a/glycin/src/sandbox.rs b/glycin/src/sandbox.rs
+index a8d35c23da..c9e15b896a 100644
+--- a/glycin/src/sandbox.rs
++++ b/glycin/src/sandbox.rs
+@@ -213,12 +213,9 @@
+ 
+         let (mut command, seccomp_fd) = match self.sandbox_mechanism {
+             SandboxMechanism::Bwrap => {
+-                let seccomp_memfd = Self::seccomp_export_bpf(&self.seccomp_filter()?)?;
+-                let command = self.bwrap_command(&seccomp_memfd).await?;
+-
+-                shared_fds.push(seccomp_memfd.as_raw_fd());
+-
+-                (command, Some(seccomp_memfd))
++                let command = self.bwrap_command().await?;
++
++                (command, None)
+             }
+             SandboxMechanism::FlatpakSpawn => {
+                 let command = self.flatpak_spawn_command();
+@@ -267,7 +264,7 @@
+         })
+     }
+ 
+-    async fn bwrap_command(&self, seccomp_memfd: &Memfd) -> Result<Command, Error> {
++    async fn bwrap_command(&self) -> Result<Command, Error> {
+         let mut command = Command::new("@bwrap@");
+ 
+         command.args([
+@@ -417,10 +414,6 @@
+             tracing::warn!("Failed to load fonftconfig environment");
+         }
+ 
+-        // Configure seccomp
+-        command.arg("--seccomp");
+-        command.arg(seccomp_memfd.as_raw_fd().to_string());
+-
+         // Loader binary
+         command.arg(self.exec());
+ 
+@@ -647,8 +640,7 @@
+         let (dbus_socket, _) = UnixStream::pair()?;
+         let sandbox = Self::new(SandboxMechanism::Bwrap, config_entry, dbus_socket);
+ 
+-        let seccomp_memfd = Self::seccomp_export_bpf(&sandbox.seccomp_filter()?)?;
+-        let mut command = sandbox.bwrap_command(&seccomp_memfd).await?;
++        let mut command = sandbox.bwrap_command().await?;
+ 
+         tracing::debug!("Testing bwrap availability with: {command:?}");
+ 
