@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.4.1";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-AGulExhA+dmRbCjrLJngRee8yT+q/djyNe7toY1FeFg=";
+    hash = "sha256-VhWqYYGZRsEPW4g9kQznr50ujGhLcTs+TS3atxsqCng=";
   };
 
   postPatch = ''
