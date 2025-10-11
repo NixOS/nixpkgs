@@ -10,6 +10,7 @@
   nixosTests,
   yarn-berry_4,
   writableTmpDirAsHomeHook,
+  enableSoftBreaks ? false,
 }:
 
 let
@@ -43,6 +44,8 @@ stdenv.mkDerivation {
   buildInputs = [
     nodejs # for shebangs
   ];
+
+  patches = [ ] ++ (if enableSoftBreaks then [ ./hedgedoc_soft_breaks_false_default.patch ] else [ ]);
 
   buildPhase = ''
     runHook preBuild
