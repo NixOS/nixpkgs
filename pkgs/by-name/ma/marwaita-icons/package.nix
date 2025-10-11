@@ -6,6 +6,7 @@
   breeze-icons,
   hicolor-icon-theme,
   pantheon,
+  kdePackages,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "darkomarko42";
     repo = "marwaita-icons";
-    rev = version;
+    tag = version;
     hash = "sha256-UehujziT13kA9ltjyCvbSDTEpR8ISxoBpoLj22Zih8k=";
   };
 
@@ -24,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
     pantheon.elementary-icon-theme
   ];
@@ -53,6 +54,6 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/darkomarko42/Marwaita-Icons";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.romildo ];
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
