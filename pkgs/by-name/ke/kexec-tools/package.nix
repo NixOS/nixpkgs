@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
       url = "https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=daa29443819d3045338792b5ba950ed90e79d7a5";
       hash = "sha256-Nq5HIcLY6KSvvrs2sbfE/vovMbleJYElHW9AVRU5rSA=";
     })
+    # Fix kexec_test linking with LLVM linker (will be in 2.0.32)
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/utils/kernel/kexec/kexec-tools.git/patch/?id=efb97b509b1a43fce8fe150135cf8167aa0db440";
+      hash = "sha256-NiiiJM6+knsfrMqzcfqbedIBK+apBjDCZwIb4tSj0ho=";
+    })
   ]
   ++ lib.optionals (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isAbiElfv2) [
     # Use ELFv2 ABI on ppc64be
