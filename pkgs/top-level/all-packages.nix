@@ -9213,7 +9213,7 @@ with pkgs;
 
   rstudioServerWrapper = rstudioWrapper.override { rstudio = rstudio-server; };
 
-  rPackages = dontRecurseIntoAttrs (
+  rPackages = recurseIntoAttrs (
     callPackage ../development/r-modules {
       overrides = (config.rPackageOverrides or (_: { })) pkgs;
     }
