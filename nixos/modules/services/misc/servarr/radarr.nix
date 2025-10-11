@@ -16,7 +16,7 @@ in
       package = lib.mkPackageOption pkgs "radarr" { };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/radarr/.config/Radarr";
         description = "The directory where Radarr stores its data files.";
       };
