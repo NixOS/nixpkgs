@@ -26,19 +26,13 @@ import ../make-test-python.nix (
       copyToRoot = pkgs.hello;
       config.Entrypoint = [ "${pkgs.hello}/bin/hello" ];
     };
-    testJobYaml = pkgs.writeText "test.yaml" ''
-      apiVersion: batch/v1
-      kind: Job
-      metadata:
-        name: test
-      spec:
-        template:
-          spec:
-            containers:
-            - name: test
-              image: "test.local/hello:local"
-            restartPolicy: Never
-    '';
+    # A ConfigMap in regular yaml format
+    cmFile = (pkgs.formats.yaml { }).generate "rke2-manifest-from-file.yaml" {
+      apiVersion = "v1";
+      kind = "ConfigMap";
+      metadata.name = "from-file";
+      data.username = "foo-file";
+    };
   in
   {
     name = "${rke2.name}-single-node";
@@ -51,19 +45,6 @@ import ../make-test-python.nix (
         ...
       }:
       {
-        # Setup image archives to be imported by rke2
-        systemd.tmpfiles.settings."10-rke2" = {
-          "/var/lib/rancher/rke2/agent/images/rke2-images-core.tar.zst" = {
-            "L+".argument = "${coreImages}";
-          };
-          "/var/lib/rancher/rke2/agent/images/rke2-images-canal.tar.zst" = {
-            "L+".argument = "${canalImages}";
-          };
-          "/var/lib/rancher/rke2/agent/images/hello.tar.zst" = {
-            "L+".argument = "${helloImage}";
-          };
-        };
-
         # RKE2 needs more resources than the default
         virtualisation.cores = 4;
         virtualisation.memorySize = 4096;
@@ -84,6 +65,47 @@ import ../make-test-python.nix (
             "rke2-snapshot-controller-crd"
             "rke2-snapshot-validation-webhook"
           ];
+          images = [
+            coreImages
+            canalImages
+            helloImage
+          ];
+          manifests = {
+            test-job.content = {
+              apiVersion = "batch/v1";
+              kind = "Job";
+              metadata.name = "test";
+              spec.template.spec = {
+                containers = [
+                  {
+                    name = "hello";
+                    image = "${helloImage.imageName}:${helloImage.imageTag}";
+                  }
+                ];
+                restartPolicy = "Never";
+              };
+            };
+            disabled = {
+              enable = false;
+              content = {
+                apiVersion = "v1";
+                kind = "ConfigMap";
+                metadata.name = "disabled";
+                data.username = "foo";
+              };
+            };
+            from-file.source = "${cmFile}";
+            custom-target = {
+              enable = true;
+              target = "my-manifest.json";
+              content = {
+                apiVersion = "v1";
+                kind = "ConfigMap";
+                metadata.name = "custom-target";
+                data.username = "foo-custom";
+              };
+            };
+          };
         };
       };
 
@@ -95,14 +117,28 @@ import ../make-test-python.nix (
       ''
         start_all()
 
-        machine.wait_for_unit("rke2-server")
-        machine.succeed("${kubectl} cluster-info")
+        with subtest("Start cluster"):
+          machine.wait_for_unit("rke2-server")
+          machine.succeed("${kubectl} cluster-info")
+          machine.wait_until_succeeds("${kubectl} get serviceaccount default")
 
-        machine.wait_until_succeeds("${kubectl} get serviceaccount default")
-        machine.succeed("${kubectl} apply -f ${testJobYaml}")
-        machine.wait_until_succeeds("${kubectl} wait --for 'condition=complete' job/test")
-        output = machine.succeed("${kubectl} logs -l batch.kubernetes.io/job-name=test")
-        assert output.rstrip() == "Hello, world!", f"unexpected output of test job: {output}"
+        with subtest("Test job completes successfully"):
+          machine.wait_until_succeeds("${kubectl} wait --for 'condition=complete' job/test")
+          output = machine.succeed("${kubectl} logs -l batch.kubernetes.io/job-name=test").rstrip()
+          assert output == "Hello, world!", f"unexpected output of test job: {output}"
+
+        with subtest("ConfigMap from-file exists"):
+          output = machine.succeed("${kubectl} get cm from-file -o=jsonpath='{.data.username}'").rstrip()
+          assert output == "foo-file", f"Unexpected data in Configmap from-file: {output}"
+
+        with subtest("ConfigMap custom-target exists"):
+          # Check that the file exists at the custom target path
+          machine.succeed("ls /var/lib/rancher/rke2/server/manifests/my-manifest.json")
+          output = machine.succeed("${kubectl} get cm custom-target -o=jsonpath='{.data.username}'").rstrip()
+          assert output == "foo-custom", f"Unexpected data in Configmap custom-target: {output}"
+
+        with subtest("Disabled ConfigMap doesn't exist"):
+          machine.fail("${kubectl} get cm disabled")
       '';
   }
 )
