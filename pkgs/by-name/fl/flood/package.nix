@@ -9,13 +9,13 @@
 
 buildNpmPackage rec {
   pname = "flood";
-  version = "4.9.5";
+  version = "4.10.0";
 
   src = fetchFromGitHub {
     owner = "jesec";
     repo = "flood";
     rev = "v${version}";
-    hash = "sha256-UXapL26PsSJvWX4Vjj/JJC/FsUBLuGEoqv2dSRSQqNg=";
+    hash = "sha256-+mVfaCxSHGy4r3ULO2bnV5X2xG7LJT27Bce0y55i6DA=";
   };
 
   npmConfigHook = pnpm_9.configHook;
@@ -24,7 +24,7 @@ buildNpmPackage rec {
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-xoCRZUJkdR4X5hszM5gaOyWXLNCbzG5CzF+6OXGEy1k=";
+    hash = "sha256-MnsUTXcLMT0Q2bQ/rRD4FfJx8XP9TLiv1oTHIgnMZCQ=";
   };
 
   passthru = {
