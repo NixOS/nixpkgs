@@ -1,0 +1,44 @@
+From 5aca1c2147825420dca2d69d0338a616755d38dc Mon Sep 17 00:00:00 2001
+From: Dave Walker <dave@daviey.com>
+Date: Thu, 9 Oct 2025 15:14:54 +0100
+Subject: [PATCH] Update CMake minimum required version to 3.10
+
+CMake 4 removed compatibility with CMake versions < 3.5, and versions
+between 3.5-3.10 are deprecated.
+
+This change updates the minimum required version to 3.10 to ensure
+compatibility with modern CMake versions including CMake 4.x.
+
+This issue is affecting NixOS users (see
+https://github.com/NixOS/nixpkgs/issues/450258) and will likely impact
+other distributions as they upgrade to CMake 4.x.
+
+Inspired by: https://github.com/OpenNMT/CTranslate2/pull/1907
+---
+ CMakeLists.txt                   | 2 +-
+ examples/wngt2020/CMakeLists.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 62b99d1..ecc085c 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.7)
++cmake_minimum_required(VERSION 3.10)
+ 
+ # Set policy for setting the MSVC runtime library for static MSVC builds
+ if(POLICY CMP0091)
+diff --git a/examples/wngt2020/CMakeLists.txt b/examples/wngt2020/CMakeLists.txt
+index d0a527d..da1e57d 100644
+--- a/examples/wngt2020/CMakeLists.txt
++++ b/examples/wngt2020/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.7)
++cmake_minimum_required(VERSION 3.10)
+ project(wngt2020)
+ set(CMAKE_CXX_STANDARD 11)
+ set(CMAKE_BUILD_TYPE Release)
+-- 
+2.51.0
+
