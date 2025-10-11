@@ -77,7 +77,10 @@ stdenv.mkDerivation {
     homepage = "https://pingus.seul.org/";
     mainProgram = "pingus";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      SchweGELBin
+    ];
     license = lib.licenses.gpl3;
   };
 }
