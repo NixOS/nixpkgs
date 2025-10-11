@@ -469,6 +469,39 @@ checkConfigError 'infinite recursion encountered' config.nonLazyResult ./lazy-at
 checkConfigOutput '^"mergedName.<id>.nested"$' config.result ./name-merge-attrsWith-1.nix
 checkConfigError 'The option .mergedName. in .*\.nix. is already declared in .*\.nix' config.mergedName ./name-merge-attrsWith-2.nix
 
+# Check option type extending
+checkConfigOutput '^"simple"$' options.simpleOption.type.name ./option-type-extending.nix
+
+checkConfigOutput '^"description-based"$' options.descriptionBasedOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"description-based"$' options.descriptionBasedOption.type.description ./option-type-extending.nix
+
+checkConfigOutput '^"parametric-name-suffix"$' options.parametricOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"parametric"$' options.parametricOption.type.description ./option-type-extending.nix
+
+checkConfigOutput '^"parametricUncall-too-name-suffix"$' options.parametricUncallOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"parametricUncall"$' options.parametricUncallOption.type.description ./option-type-extending.nix
+
+checkConfigOutput '^"extendedParametric"$' options.extendedParametricOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"extendedParametric-description-suffix"$' options.extendedParametricOption.type.description ./option-type-extending.nix
+
+checkConfigOutput '^"extendedParametricUncall"$' options.extendedParametricUncallOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"extendedParametricUncall-description-suffix"$' options.extendedParametricUncallOption.type.description ./option-type-extending.nix
+
+checkConfigOutput '^"simple"$' options.simpleUncallOption.type.name ./option-type-extending.nix
+
+checkConfigOutput '^"description-based"$' options.descriptionBasedUncallOption.type.name ./option-type-extending.nix
+
+checkConfigOutput '^"extendedSimple \(extended simple\)"$' options.extendedSimpleOption.type.name ./option-type-extending.nix
+
+checkConfigOutput '^"description-based-extendedDescription"$' options.extendedDescriptionOption.type.name ./option-type-extending.nix
+checkConfigOutput '^"description-based-extendedDescription"$' options.extendedDescriptionOption.type.description ./option-type-extending.nix
+
+# Check option type merging with addCheck types
+checkConfigError 'Always fails. No value allowed.' config.foo ./option-type-merging-with-add-check.nix
+
+# Check option type merging with extended types
+checkConfigError 'A definition for option .foo. is not of type .string.. Definition values:\n\s*- In .*: "wrong start"' config.foo ./option-type-merging-with-extended.nix
+
 # Test type.functor.wrapped deprecation warning
 # should emit the warning on:
 # - merged types

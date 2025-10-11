@@ -1,10 +1,12 @@
 { lib, ... }:
 let
-  docFile = lib.types.path // {
-    # Returns tuples of
-    #   { file = "module location"; value = <path/to/doc.xml>; }
-    merge = loc: defs: defs;
-  };
+  docFile = lib.types.path.extend (
+    final: prev: {
+      # Returns tuples of
+      #   { file = "module location"; value = <path/to/doc.xml>; }
+      merge = loc: defs: defs;
+    }
+  );
 in
 
 {
@@ -24,9 +26,11 @@ in
       };
 
       buildDocsInSandbox = lib.mkOption {
-        type = lib.types.bool // {
-          merge = loc: defs: defs;
-        };
+        type = lib.types.bool.extend (
+          final: prev: {
+            merge = loc: defs: defs;
+          }
+        );
         internal = true;
         default = true;
         description = ''
