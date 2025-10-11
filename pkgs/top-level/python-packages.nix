@@ -10981,6 +10981,8 @@ self: super: with self; {
     }
   );
 
+  openeo = callPackage ../development/python-modules/openeo { };
+
   openerz-api = callPackage ../development/python-modules/openerz-api { };
 
   openevsewifi = callPackage ../development/python-modules/openevsewifi { };
