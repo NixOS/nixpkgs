@@ -25,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix missing char8_t support
+    # https://github.com/nlohmann/json/pull/4736
+    (fetchpatch {
+      name = "fix-char8_t.patch";
+      url = "https://github.com/nlohmann/json/commit/34868f90149de02432ea758a29227a6ad74f098c.patch?full_index=1";
+      hash = "sha256-PyplzOpqhdE7XeAuhZKRQndIqlOh2DfrhWDVqzGv0TY=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Musl does not support LC_NUMERIC, causing a test failure.
     # Turn the error into a warning to make the test succeed.
     # https://github.com/nlohmann/json/pull/4770
