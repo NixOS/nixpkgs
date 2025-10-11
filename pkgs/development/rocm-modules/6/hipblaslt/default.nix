@@ -22,6 +22,7 @@
   ncurses,
   ninja,
   libffi,
+  jemalloc,
   zlib,
   zstd,
   rocmUpdateScript,
@@ -54,7 +55,6 @@ let
     ps.setuptools
     ps.packaging
     ps.nanobind
-    ps.joblib
     ps.msgpack
   ]);
   # workaround: build for one working target if no targets are supported
@@ -86,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
   env.ROCM_PATH = "${clr}";
   env.TENSILE_ROCM_ASSEMBLER_PATH = lib.getExe' clr "amdclang++";
   env.TENSILE_GEN_ASSEMBLY_TOOLCHAIN = lib.getExe' clr "amdclang++";
+  env.LD_PRELOAD = "${jemalloc}/lib/libjemalloc.so";
+  env.MALLOC_CONF = "background_thread:true,metadata_thp:auto,dirty_decay_ms:10000,muzzy_decay_ms:10000";
   requiredSystemFeatures = [ "big-parallel" ];
 
   __structuredAttrs = true;
@@ -114,6 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     # excessive comments are written to temporary asm files in build dir
     # TODO: report upstream, find a better solution
     ./reduce-comment-spam.patch
+    # [hipblaslt] Refactor Parallel.py to drop joblib, massively reduce peak disk space usage
+    # https://github.com/ROCm/rocm-libraries/pull/2073
+    ./TensileCreateLibrary-refactor.patch
+    ./Tensile-interning.patch
   ];
 
   postPatch = ''
@@ -155,7 +161,6 @@ stdenv.mkDerivation (finalAttrs: {
     msgpack-cxx
     libxml2
     python3Packages.msgpack
-    python3Packages.joblib
     zlib
     zstd
   ]
