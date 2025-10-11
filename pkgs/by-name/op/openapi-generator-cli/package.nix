@@ -10,7 +10,7 @@
 let
   jre = jre_headless;
   this = stdenv.mkDerivation (finalAttrs: {
-    version = "7.15.0";
+    version = "7.16.0";
     pname = "openapi-generator-cli";
 
     jarfilename = "openapi-generator-cli-${finalAttrs.version}.jar";
@@ -21,7 +21,7 @@ let
 
     src = fetchurl {
       url = "mirror://maven/org/openapitools/openapi-generator-cli/${finalAttrs.version}/${finalAttrs.jarfilename}";
-      sha256 = "sha256-TaGnzbeMOkOx6rBkiJETXow1R9Lu26Ddadrzd/hl82Y=";
+      sha256 = "sha256-aZmxjOzltY9dWyRv71pDvfYSOUkcTw7WUTIU4PboRks=";
     };
 
     dontUnpack = true;
