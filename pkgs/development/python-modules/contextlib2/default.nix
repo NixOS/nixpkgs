@@ -9,7 +9,7 @@
 
 buildPythonPackage {
   pname = "contextlib2";
-  version = "21.6.0-unstable-2024-05-23";
+  version = "21.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
