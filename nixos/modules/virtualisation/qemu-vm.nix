@@ -1120,6 +1120,83 @@ in
       '';
     };
 
+    virtualisation.credentials = mkOption {
+      description = ''
+        Credentials to pass to the VM using systemd's credential system.
+
+        See {manpage}`systemd.exec(5)` , {manpage}`systemd-creds(1)` and https://systemd.io/CREDENTIALS/ for more
+        information about systemd credentials.
+      '';
+      default = { };
+      example = {
+        database-password = {
+          text = "my-secret-password";
+        };
+        ssl-cert = {
+          source = "./cert.pem";
+        };
+        binary-key = {
+          binary = true;
+          source = "./private.der";
+        };
+        config-file = {
+          text = ''
+            [database]
+            host=localhost
+            port=5432
+          '';
+        };
+      };
+      type = types.attrsOf (
+        lib.types.submodule (
+          {
+            name,
+            options,
+            config,
+            ...
+          }:
+          {
+            options = {
+              binary = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = ''
+                  Whether the credential contains binary data.
+
+                  When `true`, the credential is treated as binary data and appropriate
+                  handling is used during transfer and storage. When `false` (default),
+                  the credential is treated as text data.
+
+                  Binary credentials are useful for certificates, keys, or other
+                  non-text files that need to be passed to the VM.
+                '';
+              };
+              source = lib.mkOption {
+                type = lib.types.nullOr (lib.types.pathWith { });
+                default = null;
+                description = ''
+                  Source file on the host containing the credential data.
+                '';
+              };
+              text = lib.mkOption {
+                default = null;
+                type = lib.types.nullOr lib.types.str;
+                description = ''
+                  Text content of the credential.
+
+                  For binary data or when the credential content should come from
+                  an existing file, use `source` instead.
+                '';
+              };
+            };
+            config.source = lib.mkIf (config.text != null) (
+              lib.mkDerivedConfig options.text (pkgs.writeText name)
+            );
+          }
+        )
+      );
+    };
+
   };
 
   config = {
@@ -1308,6 +1385,20 @@ in
         "-global"
         "driver=cfi.pflash01,property=secure,value=on"
       ])
+      (
+        let
+          # Build SMBIOS credentials entries
+          credentialEntries = lib.mapAttrsToList (
+            name: cred:
+            let
+              credentialType = if cred.binary then "io.systemd.credential.binary" else "io.systemd.credential";
+              credentialContent = if cred.binary then "base64 -w0 '${cred.source}'" else "cat '${cred.source}'";
+            in
+            "-smbios type=11,path=<(echo '${credentialType}:${name}='; ${credentialContent})"
+          ) cfg.credentials;
+        in
+        credentialEntries
+      )
     ];
 
     virtualisation.qemu.drives = mkMerge [
