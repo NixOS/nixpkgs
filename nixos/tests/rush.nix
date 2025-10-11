@@ -1,8 +1,4 @@
 { pkgs, ... }:
-let
-  inherit (import ./ssh-keys.nix pkgs) snakeOilEd25519PrivateKey snakeOilEd25519PublicKey;
-  username = "nix-remote-builder";
-in
 {
   name = "rush";
   meta = { inherit (pkgs.rush.meta) maintainers platforms; };
@@ -12,31 +8,60 @@ in
       { ... }:
       {
         nix.settings.extra-experimental-features = [ "nix-command" ];
+
+        environment.etc."profiles/per-user/root/.ssh/id_ed25519" = {
+          mode = "0400";
+          source = ./initrd-network-ssh/id_ed25519;
+        };
+
+        programs.ssh = {
+          extraConfig = "IdentityFile /etc/profiles/per-user/%u/.ssh/id_ed25519";
+          knownHosts.server.publicKeyFile = ./initrd-network-ssh/ssh_host_ed25519_key.pub;
+        };
       };
 
     server =
       { config, ... }:
       {
-        nix.settings.trusted-users = [ "${username}" ];
+        environment.etc."ssh/ssh_host_ed25519_key" = {
+          mode = "0400";
+          source = ./initrd-network-ssh/ssh_host_ed25519_key;
+        };
+
+        nix.settings = {
+          extra-experimental-features = [ "nix-command" ];
+          trusted-users = [ "test" ];
+        };
 
         programs.rush = {
           enable = true;
-          global = "debug 1";
+
+          global = ''
+            debug 1
+            sleep-time 0
+          '';
 
           rules = {
-            daemon = ''
+            accounting = ''
+              acct on
+              clrenv
+              keepenv SSH_*
+              fall-through
+            '';
+
+            nix-ssh-ng = ''
+              match $user == "test"
               match $# == 2
               match $0 == "nix-daemon"
-              match $1 == "--stdio"
-              match $user == "${username}"
+              match $1 in ("--help" "--stdio")
+              set command = "nix daemon $1"
               chdir "${config.nix.package}/bin"
             '';
 
-            whoami = ''
-              match $# == 1
-              match $0 == "whoami"
-              match $user == "${username}"
-              chdir "${dirOf config.environment.usrbinenv}"
+            rush = ''
+              match $user == "test"
+              match $0 in ("rushlast" "rushwho")
+              chdir "${config.programs.rush.package}/bin"
             '';
           };
         };
@@ -45,7 +70,7 @@ in
           enable = true;
 
           extraConfig = ''
-            Match User ${username}
+            Match User test
               AllowAgentForwarding no
               AllowTcpForwarding no
               PermitTTY no
@@ -56,13 +81,13 @@ in
         };
 
         users = {
-          groups."${username}" = { };
+          groups.test = { };
 
-          users."${username}" = {
+          users.test = {
             inherit (config.programs.rush) shell;
-            group = "${username}";
+            group = "test";
             isSystemUser = true;
-            openssh.authorizedKeys.keys = [ snakeOilEd25519PublicKey ];
+            openssh.authorizedKeys.keyFiles = [ ./initrd-network-ssh/id_ed25519.pub ];
           };
         };
       };
@@ -71,18 +96,15 @@ in
   testScript = ''
     start_all()
 
-    client.succeed("mkdir -m 700 /root/.ssh")
-    client.succeed("cat '${snakeOilEd25519PrivateKey}' | tee /root/.ssh/id_ed25519")
-    client.succeed("chmod 600 /root/.ssh/id_ed25519")
+    with subtest("server-side"):
+      server.fail("rush -c 'nix-daemon --help'")
+      server.fail("rush -c 'rushlast'")
+      server.succeed("su -u test -c 'nix-daemon --help'")
+      server.succeed("su -u test -c 'rushlast'")
 
-    server.wait_for_unit("sshd")
-
-    client.succeed("ssh-keyscan -H server | tee -a /root/.ssh/known_hosts")
-
-    client.succeed("ssh ${username}@server -- whoami")
-    client.succeed("nix store info --store 'ssh-ng://${username}@server'")
-
-    client.fail("ssh ${username}@server -- date")
-    client.fail("nix store info --store 'ssh://${username}@server'")
+    with subtest("client-side"):
+      server.wait_for_unit("sshd")
+      client.fail("nix store info --store 'ssh://test@server'")
+      client.succeed("nix store info --store 'ssh-ng://test@server'")
   '';
 }
