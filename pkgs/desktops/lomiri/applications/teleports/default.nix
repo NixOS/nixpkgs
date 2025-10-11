@@ -68,6 +68,19 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-zxxFvoj6jluGPCA9GQsxuYYweaSOVrkD01hZwCtq52U=";
     })
 
+    # Fix CMake 4 compatibility
+    # Remove when version > 1.21
+    (fetchpatch {
+      name = "0002-teleports-CMakeLists.txt-Support-building-with-CMake-4.patch";
+      url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/ffb4e745889a473a208a86a29b7e439129930b01.patch";
+      hash = "sha256-EdcCHH/0Zq8wcF6UPyvy16wntDeSqTV9LWQat91LNRo=";
+    })
+    (fetchpatch {
+      name = "0003-teleports-libs-qtdlib-CMakeLists.txt-Support-building-with-CMake-4.patch";
+      url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/fe7f0cb304ddaefae9f97917d3edc89de5f21b1f.patch";
+      hash = "sha256-yIc/l6iHb5qWI0QZOx8Hhd0lgEYyPozL+AjrmF2L89k=";
+    })
+
     # Remove when https://gitlab.com/ubports/development/apps/teleports/-/merge_requests/586 merged & in release
     ./1001-app-CMakeLists.txt-Drop-explicit-dependency-on-rlottie.patch
   ];
