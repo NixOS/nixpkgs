@@ -8,6 +8,25 @@
 let
   cfg = config.services.lldap;
   format = pkgs.formats.toml { };
+
+  ldapUserPassSources = lib.length (
+    lib.filter (x: x) [
+      (cfg.credentials ? LLDAP_LDAP_USER_PASS_FILE)
+      ((cfg.environment.LLDAP_LDAP_USER_PASS or null) != null)
+      ((cfg.environment.LLDAP_LDAP_USER_PASS_FILE or null) != null)
+      ((cfg.settings.ldap_user_pass or null) != null)
+      ((cfg.settings.ldap_user_pass_file or null) != null)
+    ]
+  );
+  jwtSecretSources = lib.length (
+    lib.filter (x: x) [
+      (cfg.credentials ? LLDAP_JWT_SECRET_FILE)
+      ((cfg.environment.LLDAP_JWT_SECRET or null) != null)
+      ((cfg.environment.LLDAP_JWT_SECRET_FILE or null) != null)
+      ((cfg.settings.jwt_secret or null) != null)
+      ((cfg.settings.jwt_secret_file or null) != null)
+    ]
+  );
 in
 {
   options.services.lldap = with lib; {
@@ -15,16 +34,33 @@ in
 
     package = mkPackageOption pkgs "lldap" { };
 
+    credentials = mkOption {
+      type = with types; attrsOf path;
+      default = { };
+      example = {
+        LLDAP_JWT_SECRET_FILE = "/run/secrets/lldap-jwt-secret";
+        LLDAP_LDAP_USER_PASS_FILE = "/run/secrets/lldap-admin-password";
+        LLDAP_SMTP_OPTIONS__PASSWORD_FILE = "/run/secrets/smtp-password";
+      };
+      description = ''
+        Environment variables with absolute paths to credential files to load
+        on service startup.
+      '';
+    };
+
     environment = mkOption {
       type = with types; attrsOf str;
       default = { };
-      example = {
-        LLDAP_JWT_SECRET_FILE = "/run/lldap/jwt_secret";
-        LLDAP_LDAP_USER_PASS_FILE = "/run/lldap/user_password";
-      };
       description = ''
         Environment variables passed to the service.
         Any config option name prefixed with `LLDAP_` takes priority over the one in the configuration file.
+
+        See [lldap configuration docs] for more environment variables.
+
+        [lldap configuration docs]: https://github.com/lldap/lldap/blob/main/lldap_config.docker_template.toml
+
+        Note: When using the `credentials` option, the corresponding environment variables
+        will be set automatically and should not be specified here.
       '';
     };
 
@@ -108,7 +144,7 @@ in
             description = ''
               Password for default admin password.
 
-              Unsecure: Use `ldap_user_pass_file` settings instead.
+              Unsecure: Use `credentials.LLDAP_LDAP_USER_PASS_FILE` instead.
             '';
           };
 
@@ -174,24 +210,18 @@ in
   config = lib.mkIf cfg.enable {
     assertions = [
       {
-        assertion =
-          (cfg.settings.ldap_user_pass_file or null) != null
-          || (cfg.settings.ldap_user_pass or null) != null
-          || (cfg.environment.LLDAP_LDAP_USER_PASS_FILE or null) != null;
-        message = "lldap: Default admin user password must be set. Please set the `ldap_user_pass` or better the `ldap_user_pass_file` setting. Alternatively, you can set the `LLDAP_LDAP_USER_PASS_FILE` environment variable.";
+        assertion = ldapUserPassSources <= 1;
+        message = "lldap: Admin password should be configured via only one method.";
       }
       {
-        assertion =
-          (cfg.settings.ldap_user_pass_file or null) == null || (cfg.settings.ldap_user_pass or null) == null;
-        message = "lldap: Both `ldap_user_pass` and `ldap_user_pass_file` settings should not be set at the same time. Set one to `null`.";
+        assertion = jwtSecretSources <= 1;
+        message = "lldap: JWT secret should be configured via only one method.";
       }
     ];
 
     warnings =
       lib.optionals (cfg.settings.ldap_user_pass or null != null) [
-        ''
-          lldap: Unsecure `ldap_user_pass` setting is used. Prefer `ldap_user_pass_file` instead.
-        ''
+        "lldap: Using insecure `settings.ldap_user_pass`. Use `credentials.LLDAP_LDAP_USER_PASS_FILE` instead."
       ]
       ++
         lib.optionals
@@ -212,16 +242,14 @@ in
       wantedBy = [ "multi-user.target" ];
       # lldap defaults to a hardcoded `jwt_secret` value if none is provided, which is bad, because
       # an attacker could create a valid admin jwt access token fairly trivially.
-      # Because there are 3 different ways `jwt_secret` can be provided, we check if any one of them is present,
+      # Because there are multiple ways `jwt_secret` can be provided, we check if any one of them is present,
       # and if not, bootstrap a secret in `/var/lib/lldap/jwt_secret_file` and give that to lldap.
       script =
-        lib.optionalString (!cfg.settings ? jwt_secret) ''
-          if [[ -z "$LLDAP_JWT_SECRET_FILE" ]] && [[ -z "$LLDAP_JWT_SECRET" ]]; then
-            if [[ ! -e "./jwt_secret_file" ]]; then
-              ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
-            fi
-            export LLDAP_JWT_SECRET_FILE="./jwt_secret_file"
+        lib.optionalString (jwtSecretSources == 0) ''
+          if [[ ! -e "./jwt_secret_file" ]]; then
+            ${lib.getExe pkgs.openssl} rand -base64 -out ./jwt_secret_file 32
           fi
+          export LLDAP_JWT_SECRET_FILE="./jwt_secret_file"
         ''
         + ''
           ${lib.getExe cfg.package} run --config-file ${format.generate "lldap_config.toml" cfg.settings}
@@ -235,6 +263,8 @@ in
         Group = "lldap";
         DynamicUser = true;
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        Environment = lib.mapAttrsToList (name: _: "${name}=%d/${name}") cfg.credentials;
+        LoadCredential = lib.mapAttrsToList (name: value: "${name}:${value}") cfg.credentials;
       };
       inherit (cfg) environment;
     };
