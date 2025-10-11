@@ -231,7 +231,7 @@ in
         };
 
         birdSocket = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.path;
           default = "/var/run/bird/bird.ctl";
           description = "Bird control socket path.";
         };
