@@ -106,6 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-WTpe/eT3himlCHN/R78w1sF0HG859mE2ZN70U+9N8Ag=";
       stripLen = 1;
     })
+
+    (fetchpatch2 {
+      name = "arrow-cpp-19-cmake-4-compat.patch";
+      url = "https://github.com/apache/arrow/commit/48c0bbbd4a2eedcca518caeb7f7547c7988dc740.patch?full_index=1";
+      hash = "sha256-i/vZy/61VYP+mo1AxfoiBSjTip04vhFOh3hGjHCJy6g=";
+      stripLen = 1;
+    })
   ];
 
   # versions are all taken from
