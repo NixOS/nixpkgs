@@ -65,7 +65,7 @@ in
 
       stateDir = lib.mkOption {
         default = "/var/lib/opencloud";
-        type = types.str;
+        type = types.path;
         description = "OpenCloud data directory.";
       };
 
