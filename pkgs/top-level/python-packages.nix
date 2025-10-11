@@ -18839,6 +18839,8 @@ self: super: with self; {
 
   tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
 
+  tt-topology = callPackage ../development/python-modules/tt-topology { };
+
   ttach = callPackage ../development/python-modules/ttach { };
 
   ttfautohint-py = callPackage ../development/python-modules/ttfautohint-py { };
