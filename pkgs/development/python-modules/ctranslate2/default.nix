@@ -18,10 +18,24 @@
   transformers,
   writableTmpDirAsHomeHook,
   wurlitzer,
+
+  config,
+  cudaSupport ? config.cudaSupport,
 }:
 
+let
+  ctranslate2-cpp' =
+    if !cudaSupport then
+      ctranslate2-cpp
+    else
+      ctranslate2-cpp.override {
+        withCUDA = true;
+        withCuDNN = true;
+      };
+in
+
 buildPythonPackage rec {
-  inherit (ctranslate2-cpp) pname version src;
+  inherit (ctranslate2-cpp') pname version src;
   pyproject = true;
 
   # https://github.com/OpenNMT/CTranslate2/tree/master/python
@@ -32,7 +46,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  buildInputs = [ ctranslate2-cpp ];
+  buildInputs = [ ctranslate2-cpp' ];
 
   dependencies = [
     numpy
