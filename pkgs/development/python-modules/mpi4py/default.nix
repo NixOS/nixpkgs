@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "4.1.0";
+  version = "4.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     repo = "mpi4py";
     owner = "mpi4py";
     tag = version;
-    hash = "sha256-Hm+x79utOrjAbprud2MECgakyOzgShSwNuoyZUcTluQ=";
+    hash = "sha256-I7b4x3pxtfbmlbno5OIxo4HutRX3/RjdsoNtBRKgE5w=";
   };
 
   build-system = [
