@@ -17,13 +17,13 @@ in
       enable = lib.mkEnableOption "Tautulli Plex Monitor";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/plexpy";
         description = "The directory where Tautulli stores its data files.";
       };
 
       configFile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/plexpy/config.ini";
         description = "The location of Tautulli's config file.";
       };
