@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     # Don't leak kernel version into the build output for reproducibility
-    "-DCMAKE_SYSTEM_VERSION="
+    (lib.cmakeFeature "CMAKE_SYSTEM_VERSION" "")
     (lib.cmakeBool "ENABLE_MPI" mpiSupport)
   ];
 
