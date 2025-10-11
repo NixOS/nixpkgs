@@ -312,127 +312,127 @@ stdenv.mkDerivation {
     '';
 
   patchPhase = ''
-     # Just patch all the things for now, we can focus this later.
-     # TODO: eliminate use of env.
-     find -type f -print0 | xargs -0 sed -i \
-     ${lib.optionalString stdenv.hostPlatform.isDarwin "-e 's|/usr/libexec/PlistBuddy|${xcbuild}/bin/PlistBuddy|g'"} \
-       -e 's|/usr/bin/env|${coreutils}/bin/env|g' \
-       -e 's|/usr/bin/make|${gnumake}/bin/make|g' \
-       -e 's|/bin/mkdir|${coreutils}/bin/mkdir|g' \
-       -e 's|/bin/cp|${coreutils}/bin/cp|g' \
-       -e 's|/usr/bin/file|${file}/bin/file|g'
+    # Just patch all the things for now, we can focus this later.
+    # TODO: eliminate use of env.
+    find -type f -print0 | xargs -0 sed -i \
+    ${lib.optionalString stdenv.hostPlatform.isDarwin "-e 's|/usr/libexec/PlistBuddy|${xcbuild}/bin/PlistBuddy|g'"} \
+      -e 's|/usr/bin/env|${coreutils}/bin/env|g' \
+      -e 's|/usr/bin/make|${gnumake}/bin/make|g' \
+      -e 's|/bin/mkdir|${coreutils}/bin/mkdir|g' \
+      -e 's|/bin/cp|${coreutils}/bin/cp|g' \
+      -e 's|/usr/bin/file|${file}/bin/file|g'
 
-     patch -p1 -d swift -i ${./patches/swift-wrap.patch}
-     patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
-     patch -p1 -d swift -i ${
-       replaceVars ./patches/swift-linux-fix-linking.patch {
-         inherit clang;
-       }
-     }
-     patch -p1 -d swift -i ${
-       replaceVars ./patches/swift-darwin-plistbuddy-workaround.patch {
-         inherit swiftArch;
-       }
-     }
-     patch -p1 -d swift -i ${
-       replaceVars ./patches/swift-prevent-sdk-dirs-warning.patch {
-         inherit (builtins) storeDir;
-       }
-     }
+    patch -p1 -d swift -i ${./patches/swift-wrap.patch}
+    patch -p1 -d swift -i ${./patches/swift-linux-fix-libc-paths.patch}
+    patch -p1 -d swift -i ${
+      replaceVars ./patches/swift-linux-fix-linking.patch {
+        inherit clang;
+      }
+    }
+    patch -p1 -d swift -i ${
+      replaceVars ./patches/swift-darwin-plistbuddy-workaround.patch {
+        inherit swiftArch;
+      }
+    }
+    patch -p1 -d swift -i ${
+      replaceVars ./patches/swift-prevent-sdk-dirs-warning.patch {
+        inherit (builtins) storeDir;
+      }
+    }
 
-     # This patch needs to know the lib output location, so must be substituted
-     # in the same derivation as the compiler.
-     storeDir="${builtins.storeDir}" \
-       substituteAll ${./patches/swift-separate-lib.patch} $TMPDIR/swift-separate-lib.patch
-     patch -p1 -d swift -i $TMPDIR/swift-separate-lib.patch
+    # This patch needs to know the lib output location, so must be substituted
+    # in the same derivation as the compiler.
+    storeDir="${builtins.storeDir}" \
+      substituteAll ${./patches/swift-separate-lib.patch} $TMPDIR/swift-separate-lib.patch
+    patch -p1 -d swift -i $TMPDIR/swift-separate-lib.patch
 
-     patch -p1 -d llvm-project/llvm -i ${./patches/llvm-module-cache.patch}
+    patch -p1 -d llvm-project/llvm -i ${./patches/llvm-module-cache.patch}
 
-     for lldbPatch in ${
-       lib.escapeShellArgs [
-         # Fix the build with modern libc++.
-         (fetchpatch {
-           name = "add-cstdio.patch";
-           url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
-           stripLen = 1;
-           hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
-         })
-         (fetchpatch {
-           url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
-           stripLen = 1;
-           hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
-         })
-       ]
-     }; do
-       patch -p1 -d llvm-project/lldb -i $lldbPatch
-     done
+    for lldbPatch in ${
+      lib.escapeShellArgs [
+        # Fix the build with modern libc++.
+        (fetchpatch {
+          name = "add-cstdio.patch";
+          url = "https://github.com/llvm/llvm-project/commit/73e15b5edb4fa4a77e68c299a6e3b21e610d351f.patch";
+          stripLen = 1;
+          hash = "sha256-eFcvxZaAuBsY/bda1h9212QevrXyvCHw8Cr9ngetDr0=";
+        })
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/68744ffbdd7daac41da274eef9ac0d191e11c16d.patch";
+          stripLen = 1;
+          hash = "sha256-QCGhsL/mi7610ZNb5SqxjRGjwJeK2rwtsFVGeG3PUGc=";
+        })
+      ]
+    }; do
+      patch -p1 -d llvm-project/lldb -i $lldbPatch
+    done
 
-     patch -p1 -d llvm-project/clang -i ${./patches/clang-toolchain-dir.patch}
-     patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
-     patch -p1 -d llvm-project/clang -i ${./patches/clang-purity.patch}
+    patch -p1 -d llvm-project/clang -i ${./patches/clang-toolchain-dir.patch}
+    patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
+    patch -p1 -d llvm-project/clang -i ${./patches/clang-purity.patch}
 
-     patch -p1 -d llvm-project/cmake -i ${
-       fetchpatch2 {
-         name = "cmake-fix.patch";
-         url = "https://github.com/llvm/llvm-project/commit/3676a86a4322e8c2b9c541f057b5d3704146b8f3.patch?full_index=1";
-         stripLen = 1;
-         hash = "sha256-zP9dQOmWs7qrxkBRj70DyQBbRjH78B6tNJVy6ilA1xM=";
-       }
-     }
+    patch -p1 -d llvm-project/cmake -i ${
+      fetchpatch2 {
+        name = "cmake-fix.patch";
+        url = "https://github.com/llvm/llvm-project/commit/3676a86a4322e8c2b9c541f057b5d3704146b8f3.patch?full_index=1";
+        stripLen = 1;
+        hash = "sha256-zP9dQOmWs7qrxkBRj70DyQBbRjH78B6tNJVy6ilA1xM=";
+      }
+    }
 
-     ${lib.optionalString stdenv.hostPlatform.isLinux ''
-       substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
-         --replace-fail 'LibDir = "lib";' 'LibDir = "${glibc}/lib";' \
-         --replace-fail 'LibDir = "lib64";' 'LibDir = "${glibc}/lib";' \
-         --replace-fail 'LibDir = X32 ? "libx32" : "lib64";' 'LibDir = "${glibc}/lib";'
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
+        --replace-fail 'LibDir = "lib";' 'LibDir = "${glibc}/lib";' \
+        --replace-fail 'LibDir = "lib64";' 'LibDir = "${glibc}/lib";' \
+        --replace-fail 'LibDir = X32 ? "libx32" : "lib64";' 'LibDir = "${glibc}/lib";'
 
-       # uuid.h is not part of glibc, but of libuuid.
-       sed -i 's|''${GLIBC_INCLUDE_PATH}/uuid/uuid.h|${libuuid.dev}/include/uuid/uuid.h|' \
-         swift/stdlib/public/Platform/glibc.modulemap.gyb
-     ''}
+      # uuid.h is not part of glibc, but of libuuid.
+      sed -i 's|''${GLIBC_INCLUDE_PATH}/uuid/uuid.h|${libuuid.dev}/include/uuid/uuid.h|' \
+        swift/stdlib/public/Platform/glibc.modulemap.gyb
+    ''}
 
-     # Remove tests for cross compilation, which we don't currently support.
-     rm swift/test/Interop/Cxx/class/constructors-copy-irgen-*.swift
-     rm swift/test/Interop/Cxx/class/constructors-irgen-*.swift
+    # Remove tests for cross compilation, which we don't currently support.
+    rm swift/test/Interop/Cxx/class/constructors-copy-irgen-*.swift
+    rm swift/test/Interop/Cxx/class/constructors-irgen-*.swift
 
-     # TODO: consider fixing and re-adding. This test fails due to a non-standard "install_prefix".
-     rm swift/validation-test/Python/build_swift.swift
+    # TODO: consider fixing and re-adding. This test fails due to a non-standard "install_prefix".
+    rm swift/validation-test/Python/build_swift.swift
 
-     # We cannot handle the SDK location being in "Weird Location" due to Nix isolation.
-     rm swift/test/DebugInfo/compiler-flags.swift
+    # We cannot handle the SDK location being in "Weird Location" due to Nix isolation.
+    rm swift/test/DebugInfo/compiler-flags.swift
 
-     # TODO: Fix issue with ld.gold invoked from script finding crtbeginS.o and crtendS.o.
-     rm swift/test/IRGen/ELF-remove-autolink-section.swift
+    # TODO: Fix issue with ld.gold invoked from script finding crtbeginS.o and crtendS.o.
+    rm swift/test/IRGen/ELF-remove-autolink-section.swift
 
-     # The following two tests fail because we use don't use the bundled libicu:
-     # [SOURCE_DIR/utils/build-script] ERROR: can't find source directory for libicu (tried /build/src/icu)
-     rm swift/validation-test/BuildSystem/default_build_still_performs_epilogue_opts_after_split.test
-     rm swift/validation-test/BuildSystem/test_early_swift_driver_and_infer.swift
+    # The following two tests fail because we use don't use the bundled libicu:
+    # [SOURCE_DIR/utils/build-script] ERROR: can't find source directory for libicu (tried /build/src/icu)
+    rm swift/validation-test/BuildSystem/default_build_still_performs_epilogue_opts_after_split.test
+    rm swift/validation-test/BuildSystem/test_early_swift_driver_and_infer.swift
 
-     # TODO: This test fails for some unknown reason
-     rm swift/test/Serialization/restrict-swiftmodule-to-revision.swift
+    # TODO: This test fails for some unknown reason
+    rm swift/test/Serialization/restrict-swiftmodule-to-revision.swift
 
-     # This test was flaky in ofborg, see #186476
-     rm swift/test/AutoDiff/compiler_crashers_fixed/issue-56649-missing-debug-scopes-in-pullback-trampoline.swift
+    # This test was flaky in ofborg, see #186476
+    rm swift/test/AutoDiff/compiler_crashers_fixed/issue-56649-missing-debug-scopes-in-pullback-trampoline.swift
 
-     patchShebangs .
+    patchShebangs .
 
-     ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-       patch -p1 -d swift-corelibs-libdispatch -i ${
-         # Fix the build with modern Clang.
-         fetchpatch {
-           url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/30bb8019ba79cdae0eb1dc0c967c17996dd5cc0a.patch";
-           hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
-         }
-       }
-       patch -p1 -d swift-corelibs-libdispatch -i ${
-         # Fix the build with modern Clang.
-         fetchpatch {
-           url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/38872e2d44d66d2fb94186988509defc734888a5.patch";
-           hash = "sha256-GABwDeTjciV36Sa0FS10mCfFCqRoBBstgW/OiKdPahA=";
-         }
-       }
-     ''}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      patch -p1 -d swift-corelibs-libdispatch -i ${
+        # Fix the build with modern Clang.
+        fetchpatch {
+          url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/30bb8019ba79cdae0eb1dc0c967c17996dd5cc0a.patch";
+          hash = "sha256-wPZQ4wtEWk8HaKMfzjamlU6p/IW5EFiTssY63rGM+ZA=";
+        }
+      }
+      patch -p1 -d swift-corelibs-libdispatch -i ${
+        # Fix the build with modern Clang.
+        fetchpatch {
+          url = "https://github.com/swiftlang/swift-corelibs-libdispatch/commit/38872e2d44d66d2fb94186988509defc734888a5.patch";
+          hash = "sha256-GABwDeTjciV36Sa0FS10mCfFCqRoBBstgW/OiKdPahA=";
+        }
+      }
+    ''}
   '';
 
   # > clang-15-unwrapped: error: unsupported option '-fzero-call-used-regs=used-gpr' for target 'arm64-apple-macosx10.9.0'
