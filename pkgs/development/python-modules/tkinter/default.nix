@@ -86,6 +86,7 @@ buildPythonPackage {
   pythonImportsCheck = [ "tkinter" ];
 
   meta = {
+    broken = pythonOlder "3.12"; # tommath.h: No such file or directory
     # Based on first sentence from https://docs.python.org/3/library/tkinter.html
     description = "Standard Python interface to the Tcl/Tk GUI toolkit";
     longDescription = ''
