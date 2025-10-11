@@ -61,6 +61,7 @@ let
         "bundled-libs"
       ]
       ++ lib.optional (lib.versionOlder version "1.0") "sled"
+      ++ lib.optional (lib.versionAtLeast version "1.2") "journald"
       ++ [
         "metrics"
         "k2v"
@@ -79,6 +80,7 @@ let
         "bundled-libs"
       ]
       ++ lib.optional (lib.versionOlder version "1.0") "sled"
+      ++ lib.optional (lib.versionAtLeast version "1.2") "journald"
       ++ [
         "lmdb"
         "sqlite"
