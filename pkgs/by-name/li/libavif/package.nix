@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   libaom,
   cmake,
   pkg-config,
@@ -44,6 +45,13 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-0J56wpXa2AVh9JUp5UY2kzWijNE3i253RKhpG5oDFJE=";
   };
+
+  patches = [
+    # Correct include directory path in CMake files, cf.
+    # <https://github.com/AOMediaCodec/libavif/pull/2848>.
+    # Remove this once merged upstream.
+    ./libavif-cmake-installdir.patch
+  ];
 
   postPatch = ''
     substituteInPlace contrib/gdk-pixbuf/avif.thumbnailer.in \
@@ -103,11 +111,6 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     makeWrapper ${gdk-pixbuf}/bin/gdk-pixbuf-thumbnailer "$out/libexec/gdk-pixbuf-thumbnailer-avif" \
       --set GDK_PIXBUF_MODULE_FILE ${gdkPixbufModuleFile}
-  '';
-
-  postFixup = ''
-    substituteInPlace $dev/lib/cmake/libavif/libavif-config.cmake \
-      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
   '';
 
   meta = {
