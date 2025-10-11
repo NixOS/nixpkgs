@@ -4096,8 +4096,6 @@ with pkgs;
     w3m = w3m-batch;
   };
 
-  systemdgenie = callPackage ../applications/system/systemdgenie { };
-
   tartube = callPackage ../applications/video/tartube { };
 
   tartube-yt-dlp = callPackage ../applications/video/tartube {
