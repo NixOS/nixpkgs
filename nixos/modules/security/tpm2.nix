@@ -162,7 +162,7 @@ in
         description = ''
           Directory that contains all cryptographic profiles known to FAPI.
         '';
-        type = lib.types.str;
+        type = lib.types.path;
         default = "${pkgs.tpm2-tss}/etc/tpm2-tss/fapi-profiles/";
         defaultText = lib.literalExpression "\${pkgs.tpm2-tss}/etc/fapi-profiles/";
       };
@@ -179,7 +179,7 @@ in
         description = ''
           The directory where system objects, policies, and imported objects are stored.
         '';
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/tpm2-tss/keystore";
       };
 
@@ -211,7 +211,7 @@ in
         description = ''
           The directory for the event log.
         '';
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/log/tpm2-tss/eventlog/";
       };
 
@@ -250,7 +250,7 @@ in
         description = ''
           The binary bios measurements.
         '';
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/sys/kernel/security/tpm0/binary_bios_measurements";
       };
 
@@ -258,7 +258,7 @@ in
         description = ''
           The binary IMA measurements (Integrity Measurement Architecture).
         '';
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/sys/kernel/security/ima/binary_runtime_measurements";
       };
     };
