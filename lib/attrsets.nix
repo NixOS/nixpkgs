@@ -6,12 +6,7 @@
 let
   inherit (builtins) head length typeOf;
   inherit (lib.asserts) assertMsg;
-  inherit (lib.trivial)
-    oldestSupportedReleaseIsAtLeast
-    mergeAttrs
-    warn
-    warnIf
-    ;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -2234,16 +2229,4 @@ rec {
       ) intersection;
     in
     (x // y) // mask;
-
-  # DEPRECATED
-  zipWithNames = warn "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
-
-  # DEPRECATED
-  zip = warn "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
-
-  # DEPRECATED
-  cartesianProductOfSets =
-    warnIf (oldestSupportedReleaseIsAtLeast 2405)
-      "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct."
-      cartesianProduct;
 }
