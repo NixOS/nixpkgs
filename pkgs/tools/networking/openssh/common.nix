@@ -51,6 +51,12 @@ assert withFIDO -> withSecurityKey;
 stdenv.mkDerivation (finalAttrs: {
   inherit pname version src;
 
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
+
   patches = [
     # Making openssh pass the LOCALE_ARCHIVE variable to the forked session processes,
     # so the session 'bash' will receive the proper locale archive, and thus process
@@ -221,7 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Install ssh-copy-id, it's very useful.
     cp contrib/ssh-copy-id $out/bin/
     chmod +x $out/bin/ssh-copy-id
-    cp contrib/ssh-copy-id.1 $out/share/man/man1/
+    cp contrib/ssh-copy-id.1 $man/share/man/man1/
   '';
 
   installTargets = [ "install-nokeys" ];
