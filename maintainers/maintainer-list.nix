@@ -12871,6 +12871,12 @@
     github = "jthulhu";
     githubId = 23179762;
   };
+  jtliang24 = {
+    name = "Jiatao Liang";
+    email = "jtliang24@gmail.com";
+    github = "jtliang24";
+    githubId = 170479425;
+  };
   jtobin = {
     email = "jared@jtobin.io";
     github = "jtobin";
