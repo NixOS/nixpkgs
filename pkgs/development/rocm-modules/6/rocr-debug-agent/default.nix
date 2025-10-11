@@ -5,7 +5,6 @@
   rocmUpdateScript,
   cmake,
   clr,
-  git,
   rocdbgapi,
   elfutils,
 }:
@@ -24,7 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     clr
-    git
   ];
 
   buildInputs = [

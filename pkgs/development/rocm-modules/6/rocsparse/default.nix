@@ -9,7 +9,6 @@
   rocprim,
   clr,
   gfortran,
-  git,
   gtest,
   boost,
   python3Packages,
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     rocprim
-    git
   ]
   ++ lib.optionals (buildTests || buildBenchmarks) [
     gtest

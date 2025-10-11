@@ -1007,7 +1007,6 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-sysusers-mutable
             systemd-sysusers-immutable
             systemd-sysusers-password-option-override-ordering
-            systemd-timesyncd
             systemd-timesyncd-nscd-dnssec
             systemd-user-linger
             systemd-user-tmpfiles-rules
