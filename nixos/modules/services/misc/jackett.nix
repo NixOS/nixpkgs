@@ -22,7 +22,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/jackett/.config/Jackett";
         description = "The directory where Jackett stores its data files.";
       };
