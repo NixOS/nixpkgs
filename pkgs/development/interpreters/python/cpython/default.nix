@@ -11,6 +11,7 @@
   nukeReferences,
   pkg-config,
   python-setup-hook,
+  llvmPackages_19,
 
   # high level switches
   withMinimalDeps ? false,
@@ -74,6 +75,10 @@
   noldconfigPatch ? ./. + "/${sourceVersion.major}.${sourceVersion.minor}/no-ldconfig.patch",
   enableGIL ? true,
   enableDebug ? false,
+
+  # Experimental JIT toggle. Defaults: before 3.14 -> "no"; from 3.14(gil) -> "yes-off"
+  # https://docs.python.org/3/using/configure.html#cmdoption-enable-experimental-jit
+  enableExperimentalJit ? null,
 
   # pgo (not reproducible) + -fno-semantic-interposition
   # https://docs.python.org/3/using/configure.html#cmdoption-enable-optimizations
@@ -150,6 +155,14 @@ let
 
   tzdataSupport = !withMinimalDeps && tzdata != null && passthru.pythonAtLeast "3.9";
 
+  enableExperimentalJitEffective =
+    if enableExperimentalJit != null then
+      enableExperimentalJit
+    else if passthru.pythonAtLeast "3.14" && enableGIL then
+      "yes-off"
+    else
+      "no";
+
   passthru =
     let
       # When we override the interpreter we also need to override the spliced versions of the interpreter
@@ -217,6 +230,11 @@ let
       [
         pkg-config
       ]
+  ++ optionals (enableExperimentalJitEffective != "no") [
+    pkgsBuildBuild.python3
+    llvmPackages_19.clang
+    llvmPackages_19.llvm
+  ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     buildPackages.stdenv.cc
     pythonOnBuildForHost
@@ -482,6 +500,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (pythonAtLeast "3.13") [
     (enableFeature enableGIL "gil")
+  ]
+  ++ optionals (enableExperimentalJitEffective != "no") [
+    "--enable-experimental-jit=${enableExperimentalJitEffective}"
   ]
   ++ optionals enableOptimizations [
     "--enable-optimizations"
