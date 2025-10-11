@@ -1414,7 +1414,7 @@ final: prev: {
       meta = {
         homepage = "https://www.inf.puc-rio.br/~roberto/lpeg.html";
         description = "Parsing Expression Grammars For Lua";
-        maintainers = with lib.maintainers; [ vyp ];
+        maintainers = [ ];
         license.fullName = "MIT/X11";
       };
     }
@@ -1571,7 +1571,7 @@ final: prev: {
       meta = {
         homepage = "https://github.com/rrthomas/lrexlib";
         description = "Regular expression library binding (PCRE flavour).";
-        maintainers = with lib.maintainers; [ vyp ];
+        maintainers = [ ];
         license.fullName = "MIT/X11";
       };
     }
@@ -2870,7 +2870,6 @@ final: prev: {
         homepage = "https://github.com/luaposix/luaposix/";
         description = "Lua bindings for POSIX";
         maintainers = with lib.maintainers; [
-          vyp
           lblasc
         ];
         license.fullName = "MIT/X11";
@@ -3197,7 +3196,7 @@ final: prev: {
       meta = {
         homepage = "https://lunarmodules.github.io/luasql/";
         description = "Database connectivity for Lua (SQLite3 driver)";
-        maintainers = with lib.maintainers; [ vyp ];
+        maintainers = [ ];
         license.fullName = "MIT/X11";
       };
     }
@@ -4903,7 +4902,7 @@ final: prev: {
       meta = {
         homepage = "http://lua-stdlib.github.io/lua-stdlib";
         description = "General Lua Libraries";
-        maintainers = with lib.maintainers; [ vyp ];
+        maintainers = [ ];
         license.fullName = "MIT/X11";
       };
     }

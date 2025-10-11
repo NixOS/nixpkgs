@@ -27535,12 +27535,6 @@
     githubId = 988849;
     name = "Vasiliy Yorkin";
   };
-  vyp = {
-    email = "elisp.vim@gmail.com";
-    github = "vyp";
-    githubId = 3889405;
-    name = "vyp";
-  };
   w-lfchen = {
     email = "w-lfchen@posteo.net";
     github = "w-lfchen";
