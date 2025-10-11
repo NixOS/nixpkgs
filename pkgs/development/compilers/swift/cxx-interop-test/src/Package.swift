@@ -1,4 +1,4 @@
-// swift-tools-version: 5.8
+// swift-tools-version: 5.10
 
 import PackageDescription
 
@@ -9,7 +9,7 @@ let package = Package(
             name: "CxxInteropTest",
             path: "Sources",
             swiftSettings: [
-                .unsafeFlags(["-enable-experimental-cxx-interop"])
+                .interoperabilityMode(.Cxx)
             ]
         )
     ]
