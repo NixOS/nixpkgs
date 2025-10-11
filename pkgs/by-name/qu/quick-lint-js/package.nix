@@ -24,6 +24,10 @@ let
 
     # Temporary workaround for https://github.com/NixOS/nixpkgs/pull/108496#issuecomment-1192083379
     (lib.cmakeBool "CMAKE_SKIP_BUILD_RPATH" true)
+
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ];
 
   quick-lint-js-build-tools = buildPackages.stdenv.mkDerivation {
