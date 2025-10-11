@@ -1,6 +1,6 @@
 {
   lib,
-  llvmPackages,
+  llvmPackages_20,
   fetchFromGitHub,
   cmake,
   ninja,
@@ -17,8 +17,6 @@
   buildEnv,
   writeText,
   pkgsCross,
-  libclang,
-  libllvm,
   alsa-lib,
   libdrm,
   libGL,
@@ -29,6 +27,8 @@
 }:
 
 let
+  llvmPackages = llvmPackages_20;
+
   # Headers required to build the ThunkLibs subtree
   libForwardingInputs = lib.map lib.getInclude [
     alsa-lib
@@ -44,6 +44,10 @@ let
 
   pkgsCross32 = pkgsCross.gnu32;
   pkgsCross64 = pkgsCross.gnu64;
+
+  llvmPackages32 = pkgsCross32.buildPackages.llvmPackages_20;
+  llvmPackages64 = pkgsCross64.buildPackages.llvmPackages_20;
+
   devRootFS = buildEnv {
     name = "fex-dev-rootfs";
     paths = [
@@ -72,8 +76,8 @@ let
     set(CMAKE_SYSTEM_PROCESSOR i686)
     set(CMAKE_C_COMPILER clang)
     set(CMAKE_CXX_COMPILER clang++)
-    set(CMAKE_C_COMPILER ${pkgsCross32.buildPackages.clang}/bin/i686-unknown-linux-gnu-clang)
-    set(CMAKE_CXX_COMPILER ${pkgsCross32.buildPackages.clang}/bin/i686-unknown-linux-gnu-clang++)
+    set(CMAKE_C_COMPILER ${llvmPackages32.clang}/bin/i686-unknown-linux-gnu-clang)
+    set(CMAKE_CXX_COMPILER ${llvmPackages32.clang}/bin/i686-unknown-linux-gnu-clang++)
     set(CLANG_FLAGS "-nodefaultlibs -nostartfiles -target i686-linux-gnu -msse2 -mfpmath=sse --sysroot=${devRootFS} -iwithsysroot/usr/include")
     set(CMAKE_C_FLAGS "''${CMAKE_C_FLAGS} ''${CLANG_FLAGS}")
     set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} ''${CLANG_FLAGS}")
@@ -86,8 +90,8 @@ let
     set(CMAKE_SYSTEM_PROCESSOR x86_64)
     set(CMAKE_C_COMPILER clang)
     set(CMAKE_CXX_COMPILER clang++)
-    set(CMAKE_C_COMPILER ${pkgsCross64.buildPackages.clang}/bin/x86_64-unknown-linux-gnu-clang)
-    set(CMAKE_CXX_COMPILER ${pkgsCross64.buildPackages.clang}/bin/x86_64-unknown-linux-gnu-clang++)
+    set(CMAKE_C_COMPILER ${llvmPackages64.clang}/bin/x86_64-unknown-linux-gnu-clang)
+    set(CMAKE_CXX_COMPILER ${llvmPackages64.clang}/bin/x86_64-unknown-linux-gnu-clang++)
     set(CLANG_FLAGS "-nodefaultlibs -nostartfiles -target x86_64-linux-gnu --sysroot=${devRootFS} -iwithsysroot/usr/include")
     set(CMAKE_C_FLAGS "''${CMAKE_C_FLAGS} ''${CLANG_FLAGS}")
     set(CMAKE_CXX_FLAGS "''${CMAKE_CXX_FLAGS} ''${CLANG_FLAGS}")
@@ -95,13 +99,13 @@ let
 in
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "fex";
-  version = "2509.1";
+  version = "2510";
 
   src = fetchFromGitHub {
     owner = "FEX-Emu";
     repo = "FEX";
     tag = "FEX-${finalAttrs.version}";
-    hash = "sha256-eTm1ee8eS+OwzEUoklrrQDRIAJVX0FWBaWi2/TJrx48=";
+    hash = "sha256-C6Yeqo+KqA6OezxnpBAncTekOrPTgIq0vikQOmxaORA=";
 
     leaveDotGit = true;
     postFetch = ''
@@ -180,8 +184,8 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
     range-v3
     pkgsCross64.buildPackages.clang
     pkgsCross32.buildPackages.clang
-    libclang
-    libllvm
+    llvmPackages.libclang
+    llvmPackages.libllvm
   ]
   ++ libForwardingInputs
   ++ lib.optionals withQt [
