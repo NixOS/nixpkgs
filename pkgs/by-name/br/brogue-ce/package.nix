@@ -44,9 +44,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [
     "DATADIR=$(out)/opt/brogue-ce"
-    "TERMINAL=${if terminal then "YES" else "NO"}"
-    "GRAPHICS=${if graphics then "YES" else "NO"}"
-    "MAC_APP=${if stdenv.isDarwin then "YES" else "NO"}"
+    "TERMINAL=${lib.toUpper (lib.boolToYesNo terminal)}"
+    "GRAPHICS=${lib.toUpper (lib.boolToYesNo graphics)}"
+    "MAC_APP=${lib.toUpper (lib.boolToYesNo stdenv.isDarwin)}"
   ];
 
   postBuild = lib.optionalString (stdenv.isDarwin && graphics) ''

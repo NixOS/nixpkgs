@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "PROCESSORS=$(NIX_BUILD_CORES)"
-    "ENABLE_SHARED=${if enableShared then "yes" else "no"}"
+    "ENABLE_SHARED=${lib.boolToYesNo enableShared}"
     "GPR2_BUILD=release"
   ]
   ++ lib.optionals (gpr2kbdir != null) [

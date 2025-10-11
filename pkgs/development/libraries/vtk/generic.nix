@@ -112,7 +112,7 @@ let
     cgns = self.callPackage cgns.override { };
     viskores = self.callPackage viskores.override { };
   });
-  vtkBool = feature: bool: lib.cmakeFeature feature "${if bool then "YES" else "NO"}";
+  vtkBool = feature: bool: lib.cmakeFeature feature (lib.toUpper (lib.boolToYesNo bool));
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vtk";
