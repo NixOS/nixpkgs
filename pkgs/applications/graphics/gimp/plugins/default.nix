@@ -364,7 +364,8 @@ lib.makeScope pkgs.newScope (
 
     # also have a look at enblend-enfuse in all-packages.nix
     exposureBlend = scriptDerivation {
-      name = "exposure-blend";
+      pname = "exposure-blend";
+      version = "0-unstable-2009-02-16";
       src = fetchurl {
         url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
         sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
@@ -373,7 +374,8 @@ lib.makeScope pkgs.newScope (
     };
 
     lightning = scriptDerivation {
-      name = "Lightning";
+      pname = "Lightning";
+      version = "0-unstable-2017-08-25";
       src = fetchurl {
         url = "https://github.com/pixlsus/registry.gimp.org_static/raw/master/registry.gimp.org/files/Lightning.scm";
         sha256 = "c14a8f4f709695ede3f77348728a25b3f3ded420da60f3f8de3944b7eae98a49";
