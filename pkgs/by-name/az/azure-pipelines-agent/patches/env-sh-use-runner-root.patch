@@ -1,0 +1,64 @@
+diff --git a/src/Agent.Listener/Program.cs b/src/Agent.Listener/Program.cs
+index cd1c3cc9..b0000801 100644
+--- a/src/Agent.Listener/Program.cs
++++ b/src/Agent.Listener/Program.cs
+@@ -114,7 +114,9 @@ namespace Microsoft.VisualStudio.Services.Agent.Listener
+                 }
+ 
+                 // Add environment variables from .env file
+-                string envFile = Path.Combine(context.GetDirectory(WellKnownDirectory.Root), ".env");
++                var binDir = Path.Combine(context.GetDirectory(WellKnownDirectory.Root));
++                var rootDir = Environment.GetEnvironmentVariable("AGENT_ROOT") ?? new DirectoryInfo(binDir).Parent.FullName;
++                string envFile = Path.Combine(rootDir, ".env");
+                 if (File.Exists(envFile))
+                 {
+                     var envContents = File.ReadAllLines(envFile);
+diff --git a/src/Misc/layoutbin/runsvc.sh b/src/Misc/layoutbin/runsvc.sh
+index 09d6028e..266d3a11 100755
+--- a/src/Misc/layoutbin/runsvc.sh
++++ b/src/Misc/layoutbin/runsvc.sh
+@@ -4,9 +4,9 @@
+ # for more info on how to propagate SIGTERM to a child process see: http://veithen.github.io/2014/11/16/sigterm-propagation.html
+ trap 'kill -INT $PID' TERM INT
+ 
+-if [ -f ".path" ]; then
++if [ -f "${AGENT_ROOT:-"."}/.path" ]; then
+     # configure
+-    export PATH=`cat .path`
++    export PATH=`cat "${AGENT_ROOT:-"."}/.path"`
+     echo ".path=${PATH}"
+ fi
+ 
+diff --git a/src/Misc/layoutroot/env.sh b/src/Misc/layoutroot/env.sh
+index 6710a5a3..14eed362 100755
+--- a/src/Misc/layoutroot/env.sh
++++ b/src/Misc/layoutroot/env.sh
+@@ -19,10 +19,10 @@ varCheckList=(
+ 
+ envContents=""
+ 
+-if [ -f ".env" ]; then
+-    envContents=`cat .env`
++if [ -f "${AGENT_ROOT:-"."}/.env" ]; then
++    envContents=`cat "${AGENT_ROOT:-"."}/.env"`
+ else
+-    touch .env
++    touch "${AGENT_ROOT:-"."}/.env"
+ fi
+ 
+ function writeVar()
+@@ -32,12 +32,12 @@ function writeVar()
+     if test "${envContents#*$checkDelim}" = "$envContents"
+     then
+         if [ ! -z "${!checkVar}" ]; then
+-            echo "${checkVar}=${!checkVar}">>.env
++            echo "${checkVar}=${!checkVar}">>"${AGENT_ROOT:-"."}/.env"
+         fi
+     fi
+ }
+ 
+-echo $PATH>.path
++echo $PATH>"${AGENT_ROOT:-"."}/.path"
+ 
+ for var_name in ${varCheckList[@]}
+ do
