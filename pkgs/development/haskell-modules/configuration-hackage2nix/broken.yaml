@@ -672,7 +672,6 @@ broken-packages:
   - cabal-install-bundle # failure in job https://hydra.nixos.org/build/233194629 at 2023-09-02
   - cabal-install-ghc72 # failure in job https://hydra.nixos.org/build/233246160 at 2023-09-02
   - cabal-install-ghc74 # failure in job https://hydra.nixos.org/build/233226625 at 2023-09-02
-  - cabal-macosx # failure in job https://hydra.nixos.org/build/307517203 at 2025-09-19
   - cabal-meta # failure in job https://hydra.nixos.org/build/233194466 at 2023-09-02
   - cabal-mon # failure in job https://hydra.nixos.org/build/233217320 at 2023-09-02
   - cabal-nirvana # failure in job https://hydra.nixos.org/build/233222083 at 2023-09-02

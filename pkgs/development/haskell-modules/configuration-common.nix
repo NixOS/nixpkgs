@@ -1712,6 +1712,14 @@ with haskellLib;
         }
       );
 
+  # https://github.com/danfran/cabal-macosx/pull/19
+  cabal-macosx = appendPatch (fetchpatch {
+    name = "support-cabal-3.14.patch";
+    url = "https://github.com/danfran/cabal-macosx/commit/24ef850a4c743e525433a6f9eaa3f8924408db10.patch";
+    excludes = [ ".gitignore" ];
+    sha256 = "sha256-ORonk31yStWH0I83B4hCpnap7KK4o49UVrwdrZjCRaU=";
+  }) super.cabal-macosx;
+
   # 2020-06-24: Jailbreaking because of restrictive test dep bounds
   # Upstream issue: https://github.com/kowainik/trial/issues/62
   trial = doJailbreak super.trial;
