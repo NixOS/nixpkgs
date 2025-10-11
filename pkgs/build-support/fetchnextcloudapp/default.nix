@@ -9,6 +9,7 @@
   url,
   hash ? "",
   sha256 ? "",
+  sha512 ? "",
   appName ? null,
   appVersion ? null,
   license,
@@ -23,7 +24,12 @@ applyPatches (
   {
     inherit patches;
     src = (if unpack then fetchzip else fetchurl) {
-      inherit url hash sha256;
+      inherit
+        url
+        hash
+        sha256
+        sha512
+        ;
       meta = {
         license = lib.licenses.${license};
         longDescription = description;
