@@ -49,13 +49,15 @@ buildPythonPackage {
     pyyaml
     # keymap-drawer currently requires tree-sitter 0.24.0
     # See https://github.com/caksoylar/keymap-drawer/issues/183
-    (tree-sitter.overrideAttrs rec {
+    (tree-sitter.overridePythonAttrs rec {
       version = "0.24.0";
       src = fetchPypi {
         inherit version;
         inherit (tree-sitter) pname;
         hash = "sha256-q9la9lyi9Pfso1Y0M5HtZp52Tzd0i1NSlG8A9/x45zQ=";
       };
+      # No tests in the pypi source
+      doCheck = false;
     })
     tree-sitter-grammars.tree-sitter-devicetree
   ];
