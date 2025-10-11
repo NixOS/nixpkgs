@@ -1,24 +1,26 @@
 {
-  lib,
   stdenv,
+  lib,
   fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
   vala,
+  xvfb-run,
   gtk4,
   libgee,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "live-chart";
-  version = "1.10.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
-    owner = "lcallarec";
+    owner = "elementary";
     repo = "live-chart";
-    rev = finalAttrs.version;
-    hash = "sha256-SOZJ9sVrmsZybs5BVXWmqBJ/P7SZI/X8TGWHXGvXAU8=";
+    tag = finalAttrs.version;
+    hash = "sha256-X/wdmKw381Fkjcvj7k2AmA/nXWKFFNx5KDNxeWEiqzs=";
   };
 
   outputs = [
@@ -26,11 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     vala
+    xvfb-run
   ];
 
   buildInputs = [
@@ -38,13 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     libgee
   ];
 
-  strictDeps = true;
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Real-time charting library for Vala and GTK4 based on Cairo";
-    homepage = "https://github.com/lcallarec/live-chart";
+    homepage = "https://github.com/elementary/live-chart";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ aleksana ];
-    platforms = lib.platforms.unix;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 })

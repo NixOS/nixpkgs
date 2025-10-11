@@ -11900,10 +11900,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
   };
 
-  monitor = callPackage ../applications/system/monitor {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
-  };
-
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
   mopidyPackages =
