@@ -1,0 +1,398 @@
+From 0fd815b7cae40478f7d34c6003be7525b2ca2687 Mon Sep 17 00:00:00 2001
+From: renesat <self@renesat.me>
+Date: Sat, 12 Jul 2025 02:31:35 +0200
+Subject: [PATCH] update datalad buildsupport scrypts
+
+---
+ _datalad_buildsupport/formatters.py |  18 ++-
+ _datalad_buildsupport/setup.py      | 227 +++++++++++++++++++++++-----
+ 2 files changed, 200 insertions(+), 45 deletions(-)
+
+diff --git a/_datalad_buildsupport/formatters.py b/_datalad_buildsupport/formatters.py
+index 5ac01de..fb21875 100644
+--- a/_datalad_buildsupport/formatters.py
++++ b/_datalad_buildsupport/formatters.py
+@@ -7,7 +7,10 @@
+ 
+ import argparse
+ import datetime
++import os
+ import re
++import time
++from textwrap import wrap
+ 
+ 
+ class ManPageFormatter(argparse.HelpFormatter):
+@@ -24,7 +27,7 @@ def __init__(self,
+                  authors=None,
+                  version=None
+                  ):
+-
++        from datalad import cfg
+         super(ManPageFormatter, self).__init__(
+             prog,
+             indent_increment=indent_increment,
+@@ -33,7 +36,10 @@ def __init__(self,
+ 
+         self._prog = prog
+         self._section = 1
+-        self._today = datetime.date.today().strftime('%Y\\-%m\\-%d')
++        self._today = datetime.datetime.fromtimestamp(
++            cfg.obtain('datalad.source.epoch'),
++            datetime.timezone.utc
++        ).strftime('%Y\\-%m\\-%d')
+         self._ext_sections = ext_sections
+         self._version = version
+ 
+@@ -75,7 +81,7 @@ def _mk_title(self, prog):
+ 
+     def _mk_name(self, prog, desc):
+         """
+-        this method is in consitent with others ... it relies on
++        this method is in consistent with others ... it relies on
+         distribution
+         """
+         desc = desc.splitlines()[0] if desc else 'it is in the name'
+@@ -195,7 +201,9 @@ def _mk_synopsis(self, parser):
+                                    parser._mutually_exclusive_groups, '')
+ 
+         usage = usage.replace('%s ' % self._prog, '')
+-        usage = 'Synopsis\n--------\n::\n\n  %s %s\n' \
++        usage = '\n'.join(wrap(
++            usage, break_on_hyphens=False, subsequent_indent=6*' '))
++        usage = 'Synopsis\n--------\n::\n\n  %s %s\n\n' \
+                 % (self._markup(self._prog), usage)
+         return usage
+ 
+@@ -251,7 +259,7 @@ def _mk_options(self, parser):
+ 
+     def _format_action(self, action):
+         # determine the required width and the entry label
+-        action_header = self._format_action_invocation(action)
++        action_header = self._format_action_invocation(action, doubledash='-\\-')
+ 
+         if action.help:
+             help_text = self._expand_help(action)
+diff --git a/_datalad_buildsupport/setup.py b/_datalad_buildsupport/setup.py
+index 27e0821..e3ba793 100644
+--- a/_datalad_buildsupport/setup.py
++++ b/_datalad_buildsupport/setup.py
+@@ -8,19 +8,51 @@
+ 
+ import datetime
+ import os
+-
+-from os.path import (
+-    dirname,
+-    join as opj,
++import platform
++import sys
++from os import (
++    linesep,
++    makedirs,
+ )
+-from setuptools import Command, DistutilsOptionError
+-from setuptools.config import read_configuration
+-
+-import versioneer
++from os.path import dirname
++from os.path import join as opj
++from os.path import sep as pathsep
++from os.path import splitext
++
++import setuptools
++from genericpath import exists
++from packaging.version import Version
++from setuptools import (
++    Command,
++    find_namespace_packages,
++    findall,
++    setup,
++)
++from setuptools.errors import OptionError
+ 
+ from . import formatters as fmt
+ 
+ 
++def _path_rel2file(*p):
++    # dirname instead of joining with pardir so it works if
++    # datalad_build_support/ is just symlinked into some extension
++    # while developing
++    return opj(dirname(dirname(__file__)), *p)
++
++
++def get_version(name):
++    """Determine version via importlib_metadata
++
++    Parameters
++    ----------
++    name: str
++      Name of the folder (package) where from to read version.py
++    """
++    # delay import so we do not require it for a simple setup stage
++    from importlib.metadata import version as importlib_version
++    return importlib_version(name)
++
++
+ class BuildManPage(Command):
+     # The BuildManPage code was originally distributed
+     # under the same License of Python
+@@ -29,33 +61,27 @@ class BuildManPage(Command):
+     description = 'Generate man page from an ArgumentParser instance.'
+ 
+     user_options = [
+-        ('manpath=', None,
+-         'output path for manpages (relative paths are relative to the '
+-         'datalad package)'),
+-        ('rstpath=', None,
+-         'output path for RST files (relative paths are relative to the '
+-         'datalad package)'),
++        ('manpath=', None, 'output path for manpages'),
++        ('rstpath=', None, 'output path for RST files'),
+         ('parser=', None, 'module path to an ArgumentParser instance'
+          '(e.g. mymod:func, where func is a method or function which return'
+          'a dict with one or more arparse.ArgumentParser instances.'),
+-        ('cmdsuite=', None, 'module path to an extension command suite '
+-         '(e.g. mymod:command_suite) to limit the build to the contained '
+-         'commands.'),
+     ]
+ 
+     def initialize_options(self):
+         self.manpath = opj('build', 'man')
+         self.rstpath = opj('docs', 'source', 'generated', 'man')
+-        self.parser = 'datalad.cmdline.main:setup_parser'
+-        self.cmdsuite = None
++        self.parser = 'datalad.cli.parser:setup_parser'
+ 
+     def finalize_options(self):
+         if self.manpath is None:
+-            raise DistutilsOptionError('\'manpath\' option is required')
++            raise OptionError('\'manpath\' option is required')
+         if self.rstpath is None:
+-            raise DistutilsOptionError('\'rstpath\' option is required')
++            raise OptionError('\'rstpath\' option is required')
+         if self.parser is None:
+-            raise DistutilsOptionError('\'parser\' option is required')
++            raise OptionError('\'parser\' option is required')
++        self.manpath = _path_rel2file(self.manpath)
++        self.rstpath = _path_rel2file(self.rstpath)
+         mod_name, func_name = self.parser.split(':')
+         fromlist = mod_name.split('.')
+         try:
+@@ -64,18 +90,10 @@ def finalize_options(self):
+                 ['datalad'],
+                 formatter_class=fmt.ManPageFormatter,
+                 return_subparsers=True,
+-                # ignore extensions only for the main package to avoid pollution
+-                # with all extension commands that happen to be installed
+-                help_ignore_extensions=self.distribution.get_name() == 'datalad')
++                help_ignore_extensions=True)
+ 
+         except ImportError as err:
+             raise err
+-        if self.cmdsuite:
+-            mod_name, suite_name = self.cmdsuite.split(':')
+-            mod = __import__(mod_name, fromlist=mod_name.split('.'))
+-            suite = getattr(mod, suite_name)
+-            self.cmdlist = [c[2] if len(c) > 2 else c[1].replace('_', '-').lower()
+-                            for c in suite[1]]
+ 
+         self.announce('Writing man page(s) to %s' % self.manpath)
+         self._today = datetime.date.today()
+@@ -125,12 +143,9 @@ def run(self):
+         #appname = self._parser.prog
+         appname = 'datalad'
+ 
+-        cfg = read_configuration(
+-            opj(dirname(dirname(__file__)), 'setup.cfg'))['metadata']
+-
+         sections = {
+             'Authors': """{0} is developed by {1} <{2}>.""".format(
+-                appname, cfg['author'], cfg['author_email']),
++                appname, dist.get_author(), dist.get_author_email()),
+         }
+ 
+         for cls, opath, ext in ((fmt.ManPageFormatter, self.manpath, '1'),
+@@ -138,8 +153,6 @@ def run(self):
+             if not os.path.exists(opath):
+                 os.makedirs(opath)
+             for cmdname in getattr(self, 'cmdline_names', list(self._parser)):
+-                if hasattr(self, 'cmdlist') and cmdname not in self.cmdlist:
+-                    continue
+                 p = self._parser[cmdname]
+                 cmdname = "{0}{1}".format(
+                     'datalad ' if cmdname != 'datalad' else '',
+@@ -147,7 +160,7 @@ def run(self):
+                 format = cls(
+                     cmdname,
+                     ext_sections=sections,
+-                    version=versioneer.get_version())
++                    version=get_version(getattr(self, 'mod_name', appname)))
+                 formatted = format.format_man_page(p)
+                 with open(opj(opath, '{0}.{1}'.format(
+                         cmdname.replace(' ', '-'),
+@@ -156,6 +169,42 @@ def run(self):
+                     f.write(formatted)
+ 
+ 
++class BuildRSTExamplesFromScripts(Command):
++    description = 'Generate RST variants of example shell scripts.'
++
++    user_options = [
++        ('expath=', None, 'path to look for example scripts'),
++        ('rstpath=', None, 'output path for RST files'),
++    ]
++
++    def initialize_options(self):
++        self.expath = opj('docs', 'examples')
++        self.rstpath = opj('docs', 'source', 'generated', 'examples')
++
++    def finalize_options(self):
++        if self.expath is None:
++            raise OptionError('\'expath\' option is required')
++        if self.rstpath is None:
++            raise OptionError('\'rstpath\' option is required')
++        self.expath = _path_rel2file(self.expath)
++        self.rstpath = _path_rel2file(self.rstpath)
++        self.announce('Converting example scripts')
++
++    def run(self):
++        opath = self.rstpath
++        if not os.path.exists(opath):
++            os.makedirs(opath)
++
++        from glob import glob
++        for example in glob(opj(self.expath, '*.sh')):
++            exname = os.path.basename(example)[:-3]
++            with open(opj(opath, '{0}.rst'.format(exname)), 'w') as out:
++                fmt.cmdline_example_to_rst(
++                    open(example),
++                    out=out,
++                    ref='_example_{0}'.format(exname))
++
++
+ class BuildConfigInfo(Command):
+     description = 'Generate RST documentation for all config items.'
+ 
+@@ -168,7 +217,8 @@ def initialize_options(self):
+ 
+     def finalize_options(self):
+         if self.rstpath is None:
+-            raise DistutilsOptionError('\'rstpath\' option is required')
++            raise OptionError('\'rstpath\' option is required')
++        self.rstpath = _path_rel2file(self.rstpath)
+         self.announce('Generating configuration documentation')
+ 
+     def run(self):
+@@ -176,8 +226,8 @@ def run(self):
+         if not os.path.exists(opath):
+             os.makedirs(opath)
+ 
+-        from datalad.interface.common_cfg import definitions as cfgdefs
+         from datalad.dochelpers import _indent
++        from datalad.interface.common_cfg import definitions as cfgdefs
+ 
+         categories = {
+             'global': {},
+@@ -218,3 +268,100 @@ def run(self):
+                         desc_tmpl += 'undocumented\n'
+                     v.update(docs)
+                     rst.write(_indent(desc_tmpl.format(**v), '    '))
++
++
++def get_long_description_from_README():
++    """Read README.md, convert to .rst using pypandoc
++
++    If pypandoc is not available or fails - just output original .md.
++
++    Returns
++    -------
++    dict
++      with keys long_description and possibly long_description_content_type
++      for newer setuptools which support uploading of markdown as is.
++    """
++    # PyPI used to not render markdown. Workaround for a sane appearance
++    # https://github.com/pypa/pypi-legacy/issues/148#issuecomment-227757822
++    # is still in place for older setuptools
++
++    README = opj(_path_rel2file('README.md'))
++
++    ret = {}
++    if Version(setuptools.__version__) >= Version('38.6.0'):
++        # check than this
++        ret['long_description'] = open(README).read()
++        ret['long_description_content_type'] = 'text/markdown'
++        return ret
++
++    # Convert or fall-back
++    try:
++        import pypandoc
++        return {'long_description': pypandoc.convert(README, 'rst')}
++    except (ImportError, OSError) as exc:
++        # attempting to install pandoc via brew on OSX currently hangs and
++        # pypandoc imports but throws OSError demanding pandoc
++        print(
++                "WARNING: pypandoc failed to import or thrown an error while "
++                "converting"
++                " README.md to RST: %r   .md version will be used as is" % exc
++        )
++        return {'long_description': open(README).read()}
++
++
++def findsome(subdir, extensions):
++    """Find files under subdir having specified extensions
++
++    Leading directory (datalad) gets stripped
++    """
++    return [
++        f.split(pathsep, 1)[1] for f in findall(opj('datalad', subdir))
++        if splitext(f)[-1].lstrip('.') in extensions
++    ]
++
++
++def datalad_setup(name, **kwargs):
++    """A helper for a typical invocation of setuptools.setup.
++
++    If not provided in kwargs, following fields will be autoset to the defaults
++    or obtained from the present on the file system files:
++
++    - author
++    - author_email
++    - packages -- all found packages which start with `name`
++    - long_description -- converted to .rst using pypandoc README.md
++    - version -- parsed `__version__` within `name/version.py`
++
++    Parameters
++    ----------
++    name: str
++        Name of the Python package
++    **kwargs:
++        The rest of the keyword arguments passed to setuptools.setup as is
++    """
++    # Simple defaults
++    for k, v in {
++        'author': "The DataLad Team and Contributors",
++        'author_email': "team@datalad.org"
++    }.items():
++        if kwargs.get(k) is None:
++            kwargs[k] = v
++
++    # More complex, requiring some function call
++
++    # Only recentish versions of find_packages support include
++    # packages = find_packages('.', include=['datalad*'])
++    # so we will filter manually for maximal compatibility
++    if kwargs.get('packages') is None:
++        # Use find_namespace_packages() in order to include folders that
++        # contain data files but no Python code
++        kwargs['packages'] = [pkg for pkg in find_namespace_packages('.') if pkg.startswith(name)]
++    if kwargs.get('long_description') is None:
++        kwargs.update(get_long_description_from_README())
++
++    cmdclass = kwargs.get('cmdclass', {})
++    # Check if command needs some module specific handling
++    for v in cmdclass.values():
++        if hasattr(v, 'handle_module'):
++            getattr(v, 'handle_module')(name, **kwargs)
++    return setup(name=name, **kwargs)
+

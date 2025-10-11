@@ -73,6 +73,9 @@ python3.pkgs.buildPythonApplication rec {
     lib.optionals enableQt [
       pyqt6
     ];
+  disabledTestPaths = lib.optionals (!enableQt) [
+    "tests/test_qml_types.py"
+  ];
 
   postPatch =
     if enableQt then
