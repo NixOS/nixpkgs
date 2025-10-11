@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = false;
-  doInstallCheck = false;
+  doInstallCheck = true;
 
   nativeBuildInputs = [
     cmake
@@ -211,6 +211,18 @@ stdenv.mkDerivation (finalAttrs: {
         mv $out/bin/example-* $sample/bin
       ''}
       rmdir $out/bin
+    '';
+
+  installCheckPhase =
+    # Verify compression worked and .dat files aren't huge
+    ''
+      runHook preInstallCheck
+      find "$out" -type f -name "*.dat" -size "+2M" -exec sh -c '
+          echo "ERROR: oversized .dat file, check for issues with install compression: {}" >&2
+          exit 1
+      ' {} \;
+      echo "Verified .dat files in $out are not huge"
+      runHook postInstallCheck
     '';
 
   # If this is false there are no kernels in the output lib
