@@ -131,6 +131,14 @@ let
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
 
+    # reduce memory usage in CI
+    monA.succeed(
+        # autotune has a minimum target of ~1Gi, manual cache management is required for lower values
+        "ceph config set osd bluestore_cache_autotune false",
+        # 16MiB should be enough for writing literally no data
+        "ceph config set osd bluestore_cache_size 16Mi",
+    )
+
     # Bootstrap OSDs
     monA.succeed(
         "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
