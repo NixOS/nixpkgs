@@ -34,6 +34,7 @@ let
     extends
     toFunction
     id
+    defaultTo
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -864,4 +865,94 @@ rec {
         transformDrv
         ;
     };
+
+  /**
+    Get informative message string about attribute missing under `finalAttrs.passthru`
+    due to accidental overriting `passthru` when calling `<pkg>.overrideAttrs`.
+
+    # Inputs
+
+    `getFinalPassthruMissingMessage`-specific configurations
+    : `attrName`: the missing attribute name.
+    : `finalAttrs`: the final state of the [fixed-point arguments](#chap-build-helpers-finalAttrs), to get possible possition of incorrect overriding.
+    : `prefix`: Additional prefix to the message for the name of the package and/or the build helper.
+
+    # Type
+
+    ```
+    getFinalPassthruMissingMessage ::
+    {
+      attrName :: String,
+      finalAttrs :: null or { passthru :: AttrSet, ... },
+      prefix :: String,
+    }
+    -> String
+    ```
+  */
+  getFinalPassthruMissingMessage =
+    {
+      attrName,
+      finalAttrs ? null,
+      prefix ? "",
+    }:
+    let
+      pos = unsafeGetAttrPos "passthru" finalAttrs;
+    in
+    "${prefix}passthru.${attrName} missing after overrideAttrs overriding."
+    + optionalString (
+      finalAttrs != null && pos != null
+    ) " Last overridden at ${pos.file}:${toString pos.line}";
+
+  /**
+    Get attribute from finalAttrs.passthru, falling back to a custom default and an optional message.
+
+    `getFinalPassthruWith` roughly resembles
+
+    ```nix
+    finalAttrs.passthru.${attrName} or (handler "message" default)
+    ```
+
+    Where [`getFinalPassthruMissingMessage`](#function-library-lib.customisation.getFinalPassthruMissingMessage) provides the message.
+
+    # Inputs
+
+    `getFinalPassthruWith`-specific configurations
+    : `handler`: Function to take the message and the default value in case the attribute is missing. Typical values include `throw`, `lib.warn` and `null`, where `null` means silently using the default value.
+    : `prefix`: Additional prefix to the message for the name of the package and/or the build helper.
+
+    `finalAttrs`
+    : The final state of the [fixed-point arguments](#chap-build-helpers-finalAttrs).
+
+    `attrName`
+    : The attribute name to get from `finalAttrs.passthru`.
+
+    # Type
+
+    ```
+    getFinalPassthruWith ::
+    {
+      handler :: String -> a -> a,
+      prefix :: String,
+    }
+    -> { passthru :: AttrSet, ... }
+    -> String
+    -> a
+    ```
+  */
+  getFinalPassthruWith =
+    {
+      handler ? throw,
+      prefix ? "",
+    }:
+    finalAttrs: attrName:
+    if finalAttrs.passthru ? ${attrName} then
+      default: finalAttrs.passthru.${attrName}
+    else
+      (defaultTo (m: d: d) handler) (getFinalPassthruMissingMessage {
+        inherit
+          prefix
+          finalAttrs
+          attrName
+          ;
+      });
 }
