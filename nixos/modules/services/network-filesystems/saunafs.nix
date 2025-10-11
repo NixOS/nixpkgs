@@ -136,7 +136,7 @@ in
             freeformType = settingsFormat.type;
 
             options.DATA_PATH = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/saunafs/master";
               description = "Data storage directory.";
             };
@@ -154,7 +154,7 @@ in
             freeformType = settingsFormat.type;
 
             options.DATA_PATH = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/saunafs/metalogger";
               description = "Data storage directory";
             };
@@ -193,7 +193,7 @@ in
             freeformType = settingsFormat.type;
 
             options.DATA_PATH = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/saunafs/chunkserver";
               description = "Directory for chunck meta data";
             };
