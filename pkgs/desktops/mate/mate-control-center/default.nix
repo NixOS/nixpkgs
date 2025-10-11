@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     pkg-config
     gettext
     itstool
+    libxml2 # xmllint
     desktop-file-utils
     mate-common # mate-common.m4 macros
     wrapGAppsHook3
@@ -61,7 +62,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     accountsservice
-    libxml2
     dbus-glib
     libxklavier
     libcanberra-gtk3

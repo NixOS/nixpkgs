@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkg-config
+    dbus-glib # dbus-binding-tool
     gettext
-    xtrans
     wrapGAppsHook3
   ];
 
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     libepoxy
     polkit
+    xtrans
   ];
 
   enableParallelBuilding = true;
