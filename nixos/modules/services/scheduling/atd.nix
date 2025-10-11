@@ -79,7 +79,6 @@ in
     };
 
     users.groups.atd.gid = config.ids.gids.atd;
-
     systemd.services.atd = {
       description = "Job Execution Daemon (atd)";
       documentation = [ "man:atd(8)" ];
@@ -91,8 +90,6 @@ in
         # Snippets taken and adapted from the original `install' rule of
         # the makefile.
 
-        # We assume these values are those actually used in Nixpkgs for
-        # `at'.
         spooldir=/var/spool/atspool
         jobdir=/var/spool/atjobs
         etcdir=/etc/at
@@ -115,6 +112,14 @@ in
       script = "atd";
 
       serviceConfig.Type = "forking";
+
+      # --- TZ fix for system timezone ---
+      environment = lib.mkIf (config.time.timeZone != null) {
+        TZ = config.time.timeZone;
+      };
+
+      # Restart atd if timezone changes
+      restartTriggers = [ config.time.timeZone ];
     };
   };
 }
