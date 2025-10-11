@@ -59,7 +59,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "plantuml";
     maintainers = with lib.maintainers; [
       bjornfor
-      Mogria
       anthonyroussel
     ];
     platforms = lib.platforms.unix;
