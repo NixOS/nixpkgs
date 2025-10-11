@@ -12,6 +12,8 @@ in
   options.services.windmill = {
     enable = lib.mkEnableOption "windmill service";
 
+    package = lib.mkPackageOption pkgs "windmill" { };
+
     serverPort = lib.mkOption {
       type = lib.types.port;
       default = 8001;
@@ -132,7 +134,7 @@ in
           DynamicUser = true;
           # using the same user to simplify db connection
           User = cfg.database.user;
-          ExecStart = "${pkgs.windmill}/bin/windmill";
+          ExecStart = lib.getExe cfg.package;
           Restart = "always";
         }
         // lib.optionalAttrs useUrlPath {
