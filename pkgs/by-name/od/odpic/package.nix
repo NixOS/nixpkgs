@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "5.6.2";
+  version = "5.6.3";
   libPath = lib.makeLibraryPath [ oracle-instantclient.lib ];
 
 in
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     owner = "oracle";
     repo = "odpi";
     rev = "v${version}";
-    sha256 = "sha256-UBLv7iTqwjxDuLc09zxACYQxoU3/AKNPfNOwgMJ2qjw=";
+    sha256 = "sha256-iUK9/hZWh3ZMJMnp/GPMgjd3pskAx130uusm8HXnuOU=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
