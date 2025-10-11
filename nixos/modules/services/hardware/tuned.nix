@@ -53,7 +53,7 @@ let
       };
 
       profile_dirs = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/etc/tuned/profiles";
         # Ensure we always have the vendored profiles available
         apply = dirs: "${cfg.package}/lib/tuned/profiles," + dirs;
