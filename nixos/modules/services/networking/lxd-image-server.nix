@@ -78,6 +78,8 @@ in
           ${pkgs.lxd-image-server}/bin/lxd-image-server watch
         '';
 
+        reloadTriggers = [ config.environment.etc."lxd-image-server/config.toml".source ];
+
         serviceConfig = {
           User = "lxd-image-server";
           Group = cfg.group;
