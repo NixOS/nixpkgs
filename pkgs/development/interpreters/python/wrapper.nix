@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildEnv,
+  runCommand,
   makeBinaryWrapper,
 
   # manually pased
@@ -22,7 +23,11 @@
 let
   env =
     let
-      paths = requiredPythonModules (extraLibs ++ [ python ]);
+      paths = requiredPythonModules (extraLibs ++ [ python ]) ++ [
+        (runCommand "bin" { } ''
+          mkdir -p $out/bin
+        '')
+      ];
       pythonPath = "${placeholder "out"}/${python.sitePackages}";
       pythonExecutable = "${placeholder "out"}/bin/${python.executable}";
     in
@@ -36,21 +41,26 @@ let
       nativeBuildInputs = [ makeBinaryWrapper ];
 
       postBuild = ''
-        if [ -L "$out/bin" ]; then
-            unlink "$out/bin"
-        fi
-        mkdir -p "$out/bin"
-
         for path in ${lib.concatStringsSep " " paths}; do
           if [ -d "$path/bin" ]; then
             cd "$path/bin"
             for prg in *; do
-              if [ -f "$prg" ]; then
+              if [ -f "$prg" ] && [ -x "$prg" ]; then
                 rm -f "$out/bin/$prg"
-                if [ -x "$prg" ]; then
-                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set NIX_PYTHONPREFIX "$out" --set NIX_PYTHONEXECUTABLE ${pythonExecutable} --set NIX_PYTHONPATH ${pythonPath} ${
-                    lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''
-                  } ${lib.concatStringsSep " " makeWrapperArgs}
+                if [ "$prg" = "${python.executable}" ]; then
+                  makeWrapper "${python.interpreter}" "$out/bin/$prg" \
+                    --inherit-argv0 \
+                    ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} \
+                    ${lib.concatStringsSep " " makeWrapperArgs}
+                elif [ "$(readlink "$prg")" = "${python.executable}" ]; then
+                  ln -s "${python.executable}" "$out/bin/$prg"
+                else
+                  makeWrapper "$path/bin/$prg" "$out/bin/$prg" \
+                    --set NIX_PYTHONPREFIX "$out" \
+                    --set NIX_PYTHONEXECUTABLE ${pythonExecutable} \
+                    --set NIX_PYTHONPATH ${pythonPath} \
+                    ${lib.optionalString (!permitUserSite) ''--set PYTHONNOUSERSITE "true"''} \
+                    ${lib.concatStringsSep " " makeWrapperArgs}
                 fi
               fi
             done
