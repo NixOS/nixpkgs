@@ -33,6 +33,7 @@ let
       provider-source-address ?
         lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ]
           homepage,
+      namespaced ? "${owner}_${lib.removePrefix "terraform-provider-" repo}",
       ...
     }@attrs:
     assert lib.stringLength provider-source-address > 0;
@@ -74,7 +75,7 @@ let
       postInstall = ''
         dir=$out/libexec/terraform-providers/${provider-source-address}/${version}/''${GOOS}_''${GOARCH}
         mkdir -p "$dir"
-        mv $out/bin/* "$dir/terraform-provider-$(basename ${provider-source-address})_${version}"
+        mv $out/bin/* "$dir/terraform-provider-${namespaced}_${version}"
         rmdir $out/bin
       '';
 
@@ -82,8 +83,7 @@ let
       passthru = attrs // {
         inherit provider-source-address;
         updateScript = writeShellScript "update" ''
-          provider="$(basename ${provider-source-address})"
-          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
+          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "${namespaced}"
         '';
       };
     }
