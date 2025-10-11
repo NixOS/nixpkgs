@@ -17,41 +17,35 @@
 let
   inherit (cudaPackages) cudnn;
 
-  shouldUsePkg =
-    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg = lib.mapNullable (pkg: if pkg.meta.available or true then pkg else null);
 
   # some packages are not available on all platforms
   cuda_nvprof = shouldUsePkg (cudaPackages.nvprof or null);
-  cutensor = shouldUsePkg (cudaPackages.cutensor or null);
+  libcutensor = shouldUsePkg (cudaPackages.libcutensor or null);
   nccl = shouldUsePkg (cudaPackages.nccl or null);
 
-  outpaths = with cudaPackages; [
-    cuda_cccl # <nv/target>
-    cuda_cudart
-    cuda_nvcc # <crt/host_defines.h>
-    cuda_nvprof
-    cuda_nvrtc
-    cuda_nvtx
-    cuda_profiler_api
-    libcublas
-    libcufft
-    libcurand
-    libcusolver
-    libcusparse
-
-    # Missing:
-    # cusparselt
-  ];
+  outpaths = lib.filter (outpath: outpath != null) (
+    with cudaPackages;
+    [
+      cuda_cccl # <nv/target>
+      cuda_cudart
+      cuda_nvcc # <crt/host_defines.h>
+      cuda_nvprof
+      cuda_nvrtc
+      cuda_nvtx
+      cuda_profiler_api
+      libcublas
+      libcufft
+      libcurand
+      libcusolver
+      libcusparse
+      libcusparse_lt
+    ]
+  );
   cudatoolkit-joined = symlinkJoin {
     name = "cudatoolkit-joined-${cudaPackages.cudaMajorMinorVersion}";
     paths =
-      outpaths
-      ++ lib.concatMap (f: lib.map f outpaths) [
-        lib.getLib
-        lib.getDev
-        (lib.getOutput "static")
-        (lib.getOutput "stubs")
-      ];
+      outpaths ++ lib.concatMap (outpath: lib.map (output: outpath.${output}) outpath.outputs) outpaths;
   };
 in
 buildPythonPackage rec {
@@ -87,17 +81,17 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     addDriverRunpath
-    cudaPackages.cuda_nvcc
+    cudatoolkit-joined
   ];
 
   buildInputs = [
     cudatoolkit-joined
     cudnn
-    cutensor
+    libcutensor
     nccl
   ];
 
-  NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
+  # NVCC = "${lib.getExe cudaPackages.cuda_nvcc}"; # FIXME: splicing/buildPackages
   CUDA_PATH = "${cudatoolkit-joined}";
 
   dependencies = [

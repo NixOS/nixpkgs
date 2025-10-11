@@ -10,38 +10,41 @@ package set by [cuda-packages.nix](../../top-level/cuda-packages.nix).
 
 ## Top-level directories
 
-- `cuda`: CUDA redistributables! Provides extension to `cudaPackages` scope.
-- `cudatoolkit`: monolithic CUDA Toolkit run-file installer. Provides extension
-    to `cudaPackages` scope.
-- `cudnn`: NVIDIA cuDNN library.
-- `cutensor`: NVIDIA cuTENSOR library.
-- `fixups`: Each file or directory (excluding `default.nix`) should contain a
-    `callPackage`-able expression to be provided to the `overrideAttrs` attribute
-    of a package produced by the generic manifest builder.
-    These fixups are applied by `pname`, so packages with multiple versions
-    (e.g., `cudnn`, `cudnn_8_9`, etc.) all share a single fixup function
-    (i.e., `fixups/cudnn.nix`).
-- `generic-builders`:
-  - Contains a builder `manifest.nix` which operates on the `Manifest` type
-      defined in `modules/generic/manifests`. Most packages are built using this
-      builder.
-  - Contains a builder `multiplex.nix` which leverages the Manifest builder. In
-      short, the Multiplex builder adds multiple versions of a single package to
-      single instance of the CUDA Packages package set. It is used primarily for
-      packages like `cudnn` and `cutensor`.
-- `modules`: Nixpkgs modules to check the shape and content of CUDA
-    redistributable and feature manifests. These modules additionally use shims
-    provided by some CUDA packages to allow them to re-use the
-    `genericManifestBuilder`, even if they don't have manifest files of their
-    own. `cudnn` and `tensorrt` are examples of packages which provide such
-    shims. These modules are further described in the
-    [Modules](./modules/README.md) documentation.
+- `_cuda`: Fixed-point used to configure, construct, and extend the CUDA package
+    set. This includes NVIDIA manifests.
+- `buildRedist`: Contains the logic to build packages using NVIDIA's manifests.
 - `packages`: Contains packages which exist in every instance of the CUDA
     package set. These packages are built in a `by-name` fashion.
-- `setup-hooks`: Nixpkgs setup hooks for CUDA.
-- `tensorrt`: NVIDIA TensorRT library.
+- `tests`: Contains tests which can be run against the CUDA package set.
+
+Many redistributable packages are in the `packages` directory. Their presence
+ensures that, even if a CUDA package set which no longer includes a given package
+is being constructed, the attribute for that package will still exist (but refer
+to a broken package). This prevents missing attribute errors as the package set
+evolves.
 
 ## Distinguished packages
+
+Some packages are purposefully not in the `packages` directory. These are packages
+which do not make sense for Nixpkgs, require further investigation, or are otherwise
+not straightforward to include. These packages are:
+
+- `cuda`:
+  - `collectx_bringup`: missing `libssl.so.1.1` and `libcrypto.so.1.1`; not sure how
+    to provide them or what the package does.
+  - `cuda_sandbox_dev`: unclear on purpose.
+  - `driver_assistant`: we don't use the drivers from the CUDA releases; irrelevant.
+  - `mft_autocomplete`: unsure of purpose; contains FHS paths.
+  - `mft_oem`: unsure of purpose; contains FHS paths.
+  - `mft`: unsure of purpose; contains FHS paths.
+  - `nvidia_driver`: we don't use the drivers from the CUDA releases; irrelevant.
+  - `nvlsm`: contains FHS paths/NVSwitch and NVLINK software
+  - `libnvidia_nscq`: NVSwitch software
+  - `libnvsdm`: NVSwitch software
+- `cublasmp`:
+  - `libcublasmp`: `nvshmem` isnt' packaged.
+- `cudnn`:
+  - `cudnn_samples`: requires FreeImage, which is abandoned and not packaged.
 
 ### CUDA Compatibility
 
