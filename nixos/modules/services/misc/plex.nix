@@ -21,7 +21,7 @@ in
       enable = lib.mkEnableOption "Plex Media Server";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/plex";
         description = ''
           The directory where Plex stores its data files.
