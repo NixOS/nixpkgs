@@ -237,7 +237,6 @@ with lib.maintainers;
     members = [ floriansanderscc ];
     scope = "Maintain Clever Cloud related packages.";
     shortName = "CleverCloud";
-    github = "CleverCloud";
   };
 
   cloudposse = {
@@ -367,7 +366,11 @@ with lib.maintainers;
   };
 
   docs = {
-    members = [ ];
+    members = [
+      alejandrosame
+      wamirez
+      hsjobeki
+    ];
     github = "documentation-team";
     scope = "Maintain nixpkgs/NixOS documentation and tools for building it.";
     shortName = "Docs";
@@ -634,6 +637,7 @@ with lib.maintainers;
       fliegendewurst
       infinidoge
       tomodachi94
+      msgilligan
     ];
     shortName = "Java";
     scope = "Maintainers of the Nixpkgs Java ecosystem (JDK, JVM, Java, Gradle, Maven, Ant, and adjacent projects)";
@@ -802,6 +806,13 @@ with lib.maintainers;
   };
 
   lua = {
+    members = [
+      raskin
+      khaneliman
+      teto
+      arobyn
+      scoder12
+    ];
     github = "lua";
     scope = "Maintain the lua ecosystem.";
     shortName = "lua";
@@ -987,6 +998,8 @@ with lib.maintainers;
     members = [
       alizter
       redianthus
+      romildo
+      ulrikstrid
     ];
     github = "ocaml";
     scope = "Maintain the OCaml compiler and package set.";
@@ -1096,6 +1109,11 @@ with lib.maintainers;
       nickcao
       SuperSandro2000
       ttuegel
+      fridh
+      shamilton
+      bkchr
+      peterhoeg
+      nyanloutre
     ];
     github = "qt-kde";
     scope = "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects.";
@@ -1169,7 +1187,7 @@ with lib.maintainers;
       marcin-serwin
       pbsds
     ];
-    github = "SDL";
+    github = "sdl";
     scope = "Maintain core SDL libraries.";
     shortName = "SDL";
     enableFeatureFreezePing = true;
