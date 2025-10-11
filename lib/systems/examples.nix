@@ -370,7 +370,7 @@ rec {
   };
 
   # LLVM-based urct64s
-  clang64 = {
+  ucrtLLVM64 = {
     config = "x86_64-w64-mingw32";
     libc = "ucrt";
     rust.rustcTarget = "x86_64-pc-windows-gnullvm";
