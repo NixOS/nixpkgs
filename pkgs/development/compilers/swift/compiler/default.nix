@@ -371,6 +371,15 @@ stdenv.mkDerivation {
      patch -p1 -d llvm-project/clang -i ${./patches/clang-wrap.patch}
      patch -p1 -d llvm-project/clang -i ${./patches/clang-purity.patch}
 
+     patch -p1 -d llvm-project/cmake -i ${
+       fetchpatch2 {
+         name = "cmake-fix.patch";
+         url = "https://github.com/llvm/llvm-project/commit/3676a86a4322e8c2b9c541f057b5d3704146b8f3.patch?full_index=1";
+         stripLen = 1;
+         hash = "sha256-zP9dQOmWs7qrxkBRj70DyQBbRjH78B6tNJVy6ilA1xM=";
+       }
+     }
+
      ${lib.optionalString stdenv.hostPlatform.isLinux ''
        substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
          --replace 'SysRoot + "/lib' '"${glibc}/lib" "' \
