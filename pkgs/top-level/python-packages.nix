@@ -6023,6 +6023,8 @@ self: super: with self; {
 
   google = callPackage ../development/python-modules/google { };
 
+  google-adk = callPackage ../development/python-modules/google-adk { };
+
   google-ai-generativelanguage =
     callPackage ../development/python-modules/google-ai-generativelanguage
       { };
@@ -6040,6 +6042,8 @@ self: super: with self; {
   google-cloud-access-context-manager =
     callPackage ../development/python-modules/google-cloud-access-context-manager
       { };
+
+  google-cloud-aiplatform = callPackage ../development/python-modules/google-cloud-aiplatform { };
 
   google-cloud-appengine-logging =
     callPackage ../development/python-modules/google-cloud-appengine-logging
@@ -6144,6 +6148,18 @@ self: super: with self; {
   google-cloud-speech = callPackage ../development/python-modules/google-cloud-speech { };
 
   google-cloud-storage = callPackage ../development/python-modules/google-cloud-storage { };
+
+  google-cloud-storage_2_19 = google-cloud-storage.overridePythonAttrs (old: rec {
+    version = "2.19.0";
+    src = pkgs.fetchFromGitHub {
+      owner = "googleapis";
+      repo = "python-storage";
+      rev = "v${version}";
+      hash = "sha256-8jYP8w+bawF3TnBS9D6eYIWP3DmVeiGRozwyIsUGgac=";
+    };
+
+    doCheck = false;
+  });
 
   google-cloud-tasks = callPackage ../development/python-modules/google-cloud-tasks { };
 
@@ -11034,6 +11050,10 @@ self: super: with self; {
 
   opentelemetry-api = callPackage ../development/python-modules/opentelemetry-api { };
 
+  opentelemetry-exporter-gcp-trace =
+    callPackage ../development/python-modules/opentelemetry-exporter-gcp-trace
+      { };
+
   opentelemetry-exporter-otlp =
     callPackage ../development/python-modules/opentelemetry-exporter-otlp
       { };
@@ -11127,6 +11147,10 @@ self: super: with self; {
       { };
 
   opentelemetry-proto = callPackage ../development/python-modules/opentelemetry-proto { };
+
+  opentelemetry-resourcedetector-gcp =
+    callPackage ../development/python-modules/opentelemetry-resourcedetector-gcp
+      { };
 
   opentelemetry-sdk = callPackage ../development/python-modules/opentelemetry-sdk { };
 
