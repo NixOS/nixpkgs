@@ -26,7 +26,7 @@
   which,
   openssl,
   gperf,
-  tinyxml2,
+  tinyxml,
   tinyxml-2,
   taglib,
   libssh,
@@ -299,7 +299,7 @@ stdenv.mkDerivation (
       libdrm
       openssl
       gperf
-      tinyxml2
+      tinyxml
       tinyxml-2
       taglib
       libssh
