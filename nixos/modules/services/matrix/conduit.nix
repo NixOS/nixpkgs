@@ -92,7 +92,7 @@ in
             description = "Address to listen on for connections by the reverse proxy/tls terminator.";
           };
           global.database_path = lib.mkOption {
-            type = lib.types.str;
+            type = lib.types.path;
             default = "/var/lib/matrix-conduit/";
             readOnly = true;
             description = ''
