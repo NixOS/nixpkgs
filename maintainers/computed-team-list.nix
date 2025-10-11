@@ -43,6 +43,7 @@ lib.mapAttrs (
       members =
         maintainerSetToList attrs.github githubTeam.maintainers
         ++ maintainerSetToList attrs.github githubTeam.members;
+      githubMaintainers = maintainerSetToList attrs.github githubTeam.maintainers;
     }
   else
     attrs
