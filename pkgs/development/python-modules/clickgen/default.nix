@@ -52,7 +52,7 @@ buildPythonPackage rec {
       .png files. clickgen is using anicursorgen and xcursorgen under the hood.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ AdsonCicilioti ];
+    maintainers = [ ];
     # fails with:
     # ld: unknown option: -zdefs
     broken = stdenv.hostPlatform.isDarwin;
