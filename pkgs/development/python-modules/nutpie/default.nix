@@ -10,10 +10,13 @@
   rustc,
 
   # dependencies
+  arro3-core,
   arviz,
+  # obstore,
   pandas,
   pyarrow,
   xarray,
+  zarr,
 
   # tests
   # bridgestan, (not packaged)
@@ -31,19 +34,19 @@
 
 buildPythonPackage rec {
   pname = "nutpie";
-  version = "0.15.2";
+  version = "0.16.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "nutpie";
     tag = "v${version}";
-    hash = "sha256-9rcQtEdaafMyuNb/ezcqUmrwXbQFa9hdajGAtANdHOw=";
+    hash = "sha256-woFDUEj8whpCWU0GnS/yhC7ZCGDbBaFi7O4BzOxw0jI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-6JWBJYGhSNUL8KYiEE2ZBW9xP4CmkCcwwhsO6aOvZyA=";
+    hash = "sha256-2H0HPnkBGy1kZxCo4GHUHkBe3w5vXEE8BrL7e46DARg=";
   };
 
   build-system = [
@@ -55,14 +58,18 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
-    "xarray"
+    # TODO remove?
+    # "xarray"
   ];
 
   dependencies = [
+    arro3-core
     arviz
+    # obstore
     pandas
     pyarrow
     xarray
+    zarr
   ];
 
   pythonImportsCheck = [ "nutpie" ];
@@ -79,10 +86,6 @@ buildPythonPackage rec {
     pytestCheckHook
     setuptools
     writableTmpDirAsHomeHook
-  ];
-
-  pytestFlags = [
-    "-v"
   ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
