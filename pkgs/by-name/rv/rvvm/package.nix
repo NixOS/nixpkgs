@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  unstableGitUpdater,
 
   pkg-config,
 
@@ -44,6 +45,12 @@ stdenv.mkDerivation {
     "USE_SDL=2"
     "PREFIX=$(out)"
   ];
+
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+    # Match tags ending in digit to avoid tags like v0.7-git which are not releases
+    tagFormat = "v*.*[0-9]";
+  };
 
   meta = with lib; {
     homepage = "https://github.com/LekKit/RVVM";
