@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildPackages,
+  buildStdenv,
   extraMakeFlags ? [ ],
 }:
 # Absolute paths for compilers avoid any PATH-clobbering issues.
@@ -18,10 +18,10 @@
   "OBJCOPY=${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}objcopy"}"
   "OBJDUMP=${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}objdump"}"
   "READELF=${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}readelf"}"
-  "HOSTCC=${lib.getExe' buildPackages.stdenv.cc "${buildPackages.stdenv.cc.targetPrefix}cc"}"
-  "HOSTCXX=${lib.getExe' buildPackages.stdenv.cc "${buildPackages.stdenv.cc.targetPrefix}c++"}"
-  "HOSTAR=${lib.getExe' buildPackages.stdenv.cc.bintools "${buildPackages.stdenv.cc.targetPrefix}ar"}"
-  "HOSTLD=${lib.getExe' buildPackages.stdenv.cc.bintools "${buildPackages.stdenv.cc.targetPrefix}ld"}"
+  "HOSTCC=${lib.getExe' buildStdenv.cc "${buildStdenv.cc.targetPrefix}cc"}"
+  "HOSTCXX=${lib.getExe' buildStdenv.cc "${buildStdenv.cc.targetPrefix}c++"}"
+  "HOSTAR=${lib.getExe' buildStdenv.cc.bintools "${buildStdenv.cc.targetPrefix}ar"}"
+  "HOSTLD=${lib.getExe' buildStdenv.cc.bintools "${buildStdenv.cc.targetPrefix}ld"}"
   "ARCH=${stdenv.hostPlatform.linuxArch}"
   "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
 ]
@@ -36,5 +36,4 @@
     "CFLAGS_KERNEL=-I${clangLib}/lib/clang/${majorVer}/include"
   ]
 )
-++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
 ++ extraMakeFlags

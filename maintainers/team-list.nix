@@ -729,6 +729,7 @@ with lib.maintainers;
       ma27
       nequissimus
       qyliss
+      kloenk
     ];
     scope = "Maintain the Linux kernel.";
     shortName = "Linux Kernel";

@@ -813,7 +813,7 @@ in
     linux_mptcp = throw "'linux_mptcp' has been moved to https://github.com/teto/mptcp-flake";
   };
 
-  manualConfig = callPackage ../os-specific/linux/kernel/manual-config.nix { };
+  manualConfig = callPackage ../os-specific/linux/kernel/build.nix { };
 
   customPackage =
     {
