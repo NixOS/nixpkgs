@@ -139,6 +139,33 @@ let
           null;
     };
 
+    npmRegistryOverrides = mkOption {
+      type = types.attrsOf types.str;
+      description = ''
+        The default NPM registry overrides for all `fetchNpmDeps` calls, as an attribute set.
+
+        For each attribute, all files fetched from the host corresponding to the name will instead be fetched from the host (and sub-path) specified in the value.
+
+        For example, an override like `"registry.npmjs.org" = "my-mirror.local/registry.npmjs.org"` will replace a URL like `https://registry.npmjs.org/foo.tar.gz` with `https://my-mirror.local/registry.npmjs.org/foo.tar.gz`.
+
+        To set the string directly, see [`npmRegistryOverridesString`)](#opt-npmRegistryOverridesString).
+      '';
+      default = { };
+      example = {
+        "registry.npmjs.org" = "my-mirror.local/registry.npmjs.org";
+      };
+    };
+
+    npmRegistryOverridesString = mkOption {
+      type = types.nullOr types.str;
+      description = ''
+        A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
+
+        This overrides the [`npmRegistryOverrides`](#opt-npmRegistryOverrides) option, see its documentation for more details.
+      '';
+      default = builtins.toJSON config.npmRegistryOverrides;
+    };
+
     doCheckByDefault = mkMassRebuild {
       feature = "run `checkPhase` by default";
     };
