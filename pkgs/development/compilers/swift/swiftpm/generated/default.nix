@@ -2,13 +2,15 @@
 {
   workspaceStateFile = ./workspace-state.json;
   hashes = {
-    "swift-argument-parser" = "1jph9w7lk9nr20fsv2c8p4hisx3dda817fh7pybd0r0j1jwa9nmw";
-    "swift-collections" = "1k6sjx5rqmp3gklny77b480hyzy6gkhpi23r0s8ljfbrcwawgnan";
-    "swift-crypto" = "0kllp7j0hd8k67l9b9zr2c3ddc5bvshldchzivhcz3q31qvq9ag8";
-    "swift-driver" = "0cbvddj54k3sbw0vzlmzhccs7h43hi5kq6i3n2i0mysz3bf0c6zg";
-    "swift-llbuild" = "106vnssh6pgy5s9dnq1hi1c9v2wkfydqgncg5dy7c9n23iisjy3s";
-    "swift-system" = "0402hkx2q2dv27gccnn8ma79ngvwiwzkhcv4zlcdldmy6cgi0px7";
-    "swift-tools-support-core" = "1qvblyiazv58qwyxgyk2dh5ymbab3y70vm2q81qs6rmv43hs8ciz";
-    "Yams" = "0b4lprxl4f6yqq0djnp394mxgmsxm2pljr7fh4f6ihdhnpwfsfvl";
+    "swift-argument-parser" = "sha256-qEJ329hqQyQVxtHScD7qPmWW9ZDf9bX+4xgpDlX0w5A=";
+    "swift-asn1" = "sha256-6NqPGUuM55YOXCMqNsqPm/3smKhSC2UIYHJSwtIiuoc=";
+    "swift-certificates" = "sha256-n5dE5J8f7PAVoJkIpiKrrDvB0xIil5VwtzC2mx6vz80=";
+    "swift-collections" = "sha256-WNj19mRvDSZNcDzZvmtS+jZxngBooiHekh3IsPZnKUQ=";
+    "swift-crypto" = "sha256-lcB497b/T1bHShPrjNjHthrs76pDFpU+4uN0uW4tz+4=";
+    "swift-driver" = "sha256-Xaz9gZuOspDb+PB67d6tXfpcs+kkDCPSkhu+eIfrb0A=";
+    "swift-llbuild" = "sha256-kUm8/+DWDBhuqU/kJBleqSl8/Vz478pMhx5QK2g7k0o=";
+    "swift-system" = "sha256-p18QHzO+NtoY/WQzOD+PfD+bjqrIWsbeEbsJLPqEAhA=";
+    "swift-tools-support-core" = "sha256-Pqy01AyDg7ZTyDM6lV69e6nhfhxwFTOhGFTfhcA1e9E=";
+    "Yams" = "sha256-AY/fIvB7THrl9GWzGJL8eDBbkcLw27tSRTGtUqmYw8k=";
   };
 }
