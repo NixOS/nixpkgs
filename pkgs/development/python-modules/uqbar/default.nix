@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
+  pytest-asyncio,
   pythonAtLeast,
   pythonOlder,
   defusedxml,
@@ -37,7 +38,10 @@ buildPythonPackage rec {
     sphinx
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+  ];
 
   checkInputs = [
     defusedxml
