@@ -76,21 +76,20 @@ let
     ''
       set -efu
 
-      # be careful not to leak secrets in the filesystem or in process listings
-      umask 0077
-
       curl() {
-          # get the api key by parsing the config.xml
-          while
-              ! ${pkgs.libxml2}/bin/xmllint \
-                  --xpath 'string(configuration/gui/apikey)' \
-                  ${cfg.configDir}/config.xml \
-                  >"$RUNTIME_DIRECTORY/api_key"
-          do sleep 1; done
-          (printf "X-API-Key: "; cat "$RUNTIME_DIRECTORY/api_key") >"$RUNTIME_DIRECTORY/headers"
-          ${pkgs.curl}/bin/curl -sSLk -H "@$RUNTIME_DIRECTORY/headers" \
-              --retry 1000 --retry-delay 1 --retry-all-errors \
-              "$@"
+        # get the api key by parsing the config.xml
+        until ST_API_KEY="$(${pkgs.libxml2}/bin/xmllint \
+          --xpath 'string(configuration/gui/apikey)' \
+          ${cfg.configDir}/config.xml)" \
+          && [ -n "$ST_API_KEY" ]; do
+          sleep 1
+        done
+
+        ${pkgs.curl}/bin/curl --fail-with-body -sSLk \
+          -H @<(printf 'X-API-Key: %s\n' "$ST_API_KEY") \
+          --retry 60 --retry-delay 1 \
+          --retry-connrefused --retry-all-errors \
+          "$@"
       }
     ''
     +
@@ -246,7 +245,7 @@ let
           "guiPasswordFile"
         ])
         (map (subOption: ''
-          curl -X PUT -d ${
+          curl -X PUT --json ${
             lib.escapeShellArg (builtins.toJSON cleanedConfig.${subOption})
           } ${curlAddressArgs "/rest/config/${subOption}"}
         ''))
@@ -255,8 +254,11 @@ let
     +
       # Now we hash the contents of guiPasswordFile and use the result to update the gui password
       (lib.optionalString (cfg.guiPasswordFile != null) ''
-        ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
-        curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+        pw_bcrypt="$(${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}")"
+        curl -X PATCH \
+          --variable pw_bcrypt@<(printf %s "$pw_bcrypt") \
+          --expand-json '{ "password": "{{pw_bcrypt}}" }' \
+          ${curlAddressArgs "/rest/config/gui"}
       '')
     + ''
       # restart Syncthing if required
@@ -954,14 +956,13 @@ in
       };
       syncthing-init = mkIf (cleanedConfig != { }) {
         description = "Syncthing configuration updater";
-        requisite = [ "syncthing.service" ];
+        wantedBy = [ "syncthing.service" ];
+        partOf = [ "syncthing.service" ];
         after = [ "syncthing.service" ];
-        wantedBy = [ "multi-user.target" ];
 
         serviceConfig = {
           User = cfg.user;
           RemainAfterExit = true;
-          RuntimeDirectory = "syncthing-init";
           Type = "oneshot";
           ExecStart = updateConfig;
         };
