@@ -126,6 +126,12 @@ cfgplasma6 = """  # Enable the X11 windowing system.
 
 """
 
+cfgcosmic = """  # Enable the COSMIC Desktop Environment.
+  services.displayManager.cosmic-greeter.enable = true;
+  services.desktopManager.cosmic.enable = true;
+
+"""
+
 cfgxfce = """  # Enable the X11 windowing system.
   services.xserver.enable = true;
 
@@ -564,6 +570,8 @@ def run():
         cfg += cfggnome
     elif gs.value("packagechooser_packagechooser") == "plasma6":
         cfg += cfgplasma6
+    elif gs.value("packagechooser_packagechooser") == "cfgcosmic":
+        cfg += cfgcosmic
     elif gs.value("packagechooser_packagechooser") == "xfce":
         cfg += cfgxfce
     elif gs.value("packagechooser_packagechooser") == "pantheon":
