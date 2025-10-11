@@ -11,6 +11,8 @@ in
   options.services.etesync-dav = {
     enable = lib.mkEnableOption "etesync-dav, end-to-end encrypted sync for contacts, calendars and tasks";
 
+    package = lib.mkPackageOption pkgs "etesync-dav" { };
+
     host = lib.mkOption {
       type = lib.types.str;
       default = "localhost";
@@ -64,7 +66,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.etesync-dav ];
+      path = [ cfg.package ];
       environment = {
         ETESYNC_LISTEN_ADDRESS = cfg.host;
         ETESYNC_LISTEN_PORT = toString cfg.port;
@@ -76,7 +78,7 @@ in
         Type = "simple";
         DynamicUser = true;
         StateDirectory = "etesync-dav";
-        ExecStart = "${pkgs.etesync-dav}/bin/etesync-dav";
+        ExecStart = "${cfg.package}/bin/etesync-dav";
         ExecStartPre = lib.mkIf (cfg.sslCertificate != null || cfg.sslCertificateKey != null) (
           pkgs.writers.writeBash "etesync-dav-copy-keys" ''
             ${lib.optionalString (cfg.sslCertificate != null) ''
