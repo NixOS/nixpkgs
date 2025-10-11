@@ -218,6 +218,23 @@ in
   ];
 
   config = lib.mkIf cfg.enable {
+    environment.systemPackages = [
+      # we try to eumulate parts of the pkgr script that are relevant to NixOS
+      (pkgs.writeShellScriptBin "zammad" ''
+        if [[ ''${1:-} != run ]]; then
+          echo "This script only supports the run subcommand".
+          exit 1
+        fi
+        shift
+
+        prog="$1"
+        shift
+        sudo -u ${cfg.user} -- env ${
+          lib.concatMapAttrsStringSep " " (n: v: "${n}=${v}") environment
+        } bash -c "cd ${cfg.package}; ${cfg.package}/bin/$prog $(printf " %q" "$@")"
+      '')
+    ];
+
     services.zammad.database.settings = {
       production = lib.mapAttrs (_: v: lib.mkDefault v) (filterNull {
         adapter = "postgresql";
