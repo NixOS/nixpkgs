@@ -3221,6 +3221,12 @@
     githubId = 752835;
     name = "Dario Bertini";
   };
+  berezowski = {
+    email = "nix@berezowski.de";
+    github = "berezowski";
+    githubId = 2563136;
+    name = "Hubert Berezowski";
+  };
   bergey = {
     email = "bergey@teallabs.org";
     github = "bergey";
