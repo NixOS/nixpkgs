@@ -66,7 +66,7 @@ in
       enable = lib.mkEnableOption "Monero node daemon";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/monero";
         description = ''
           The directory where Monero stores its data files.
