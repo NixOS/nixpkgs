@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
-    "-Dxkb-config-extra-path=/etc/xkb" # default=$sysconfdir/xkb ($out/etc)
+    "-Dxkb-config-extra-path=/etc/X11/xkb" # default=$sysconfdir/xkb ($out/etc)
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
     "-Denable-docs=true"
     "-Denable-wayland=${lib.boolToString withWaylandTools}"
