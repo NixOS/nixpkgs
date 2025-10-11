@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.21-unstable-2025-07-11";
+  version = "0.0.20";
   format = "setuptools";
 
   src = fetchFromGitHub {
