@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  makeBinaryWrapper,
+  makeShellWrapper,
 }:
 
 buildGoModule rec {
@@ -25,7 +25,7 @@ buildGoModule rec {
     "cmd/slim-sensor"
   ];
 
-  nativeBuildInputs = [ makeBinaryWrapper ];
+  nativeBuildInputs = [ makeShellWrapper ];
 
   preBuild = ''
     go generate ./...
