@@ -14738,12 +14738,6 @@
     matrix = "@link2xt:matrix.org";
     name = "link2xt";
   };
-  linquize = {
-    email = "linquize@yahoo.com.hk";
-    github = "linquize";
-    githubId = 791115;
-    name = "Linquize";
-  };
   linsui = {
     email = "linsui555@gmail.com";
     github = "linsui";
