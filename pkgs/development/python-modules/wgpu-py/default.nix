@@ -29,6 +29,7 @@
   psutil,
   pypng,
   pytest,
+  rendercanvas,
   ruff,
   trio,
 
@@ -38,14 +39,14 @@
 }:
 buildPythonPackage rec {
   pname = "wgpu-py";
-  version = "0.23.0";
+  version = "0.25.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pygfx";
     repo = "wgpu-py";
     tag = "v${version}";
-    hash = "sha256-z9MRnhPSI+9lGS0UQ5VnSwdCGdYdNnqlDQmb8JAqmyc=";
+    hash = "sha256-TErwgzujuHafvSiNpfmga9GQtvGFFkDjBqe8eX/dlP8=";
   };
 
   postPatch =
@@ -63,11 +64,6 @@ buildPythonPackage rec {
     + ''
       substituteInPlace examples/compute_textures.py \
         --replace-fail 'import wgpu' 'import wgpu # run_example = false'
-    ''
-    # Tweak tests that fail due to a dependency of `wgpu-native`, `naga`, adding an `ir` module
-    + ''
-      substituteInPlace tests/test_wgpu_native_errors.py \
-        --replace-fail 'naga::' 'naga::ir::'
     '';
 
   # wgpu-py expects to have an appropriately named wgpu-native library in wgpu/resources
@@ -111,6 +107,8 @@ buildPythonPackage rec {
     psutil
     pypng
     pytest
+    # break circular dependency cycle
+    (rendercanvas.overrideAttrs { doInstallCheck = false; })
     ruff
     trio
   ];
@@ -145,5 +143,18 @@ buildPythonPackage rec {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd2;
     maintainers = [ lib.maintainers.bengsparks ];
+
+    # No suitable graphics adapter found;
+    #   noop support not compiled in
+    #   vulkan support not compiled in
+    #   metal found no adapters
+    #   dx12 support not compiled in
+    #   gl support not compiled in
+    #   webgpu support not compiled in
+    #
+    # Since v0.25.0, the tests fail on all platforms under sandbox with the error message above.
+    # As the tests are always entirely skipped on Linux, Hydra can provide builds for Linux anyway,
+    # but we cannot do so for Darwin.
+    hydraPlatforms = lib.platforms.linux;
   };
 }
