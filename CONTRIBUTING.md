@@ -539,6 +539,12 @@ The relevant PRs from this branch must be backported manually.
   - [Commit conventions](./nixos/README.md#commit-conventions) for changes to `nixos`.
   - [Commit conventions](./pkgs/README.md#commit-conventions) for changes to `pkgs`.
 
+- When reverting a commit, use the generated summary line `Revert "..."` and `Reapply "..."`.
+  For repeated reverts and reapply commits, the summary line it may be simplified if it gets too complex.
+  Include an explanation for why the revert is needed in the commit message body.
+  If there are any additional fixes, put the fixes in separate commits.
+  The revert commit should only revert the original change.
+
 ### Writing good commit messages
 [writing-good-commit-messages]: #writing-good-commit-messages
 
