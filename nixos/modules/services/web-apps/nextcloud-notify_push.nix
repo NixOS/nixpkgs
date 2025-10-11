@@ -17,7 +17,7 @@ in
     package = lib.mkPackageOption pkgs "nextcloud-notify_push" { };
 
     socketPath = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/run/nextcloud-notify_push/sock";
       description = "Socket path to use for notify_push";
     };
