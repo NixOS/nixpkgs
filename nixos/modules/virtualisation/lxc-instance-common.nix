@@ -27,7 +27,7 @@
   services.openssh.startWhenNeeded = lib.mkDefault true;
 
   # As this is intended as a standalone image, undo some of the minimal profile stuff
-  documentation.enable = true;
-  documentation.nixos.enable = true;
+  documentation.enable = lib.mkDefault true;
+  documentation.nixos.enable = lib.mkDefault true;
   services.logrotate.enable = true;
 }

@@ -1,51 +1,82 @@
 {
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../../.. { inherit system config; },
-  lts ? true,
-  ...
+  package,
+  runTest,
 }:
 let
-  incusTest = import ./incus-tests.nix;
+  incusRunTest =
+    config:
+    runTest {
+      imports = [
+        ./incus-tests-module.nix
+        ./incus-tests.nix
+      ];
+
+      tests.incus = {
+        inherit package;
+      }
+      // config;
+    };
 in
 {
-  all = incusTest {
-    inherit lts pkgs system;
-    allTests = true;
+  all = incusRunTest {
+    feature.user = true;
+
+    instances = {
+      c1 = {
+        type = "container";
+      };
+
+      vm1 = {
+        type = "virtual-machine";
+      };
+    };
+
+    network = {
+      ovs = true;
+    };
+
+    storage = {
+      lvm = true;
+      zfs = true;
+    };
   };
 
-  container = incusTest {
-    inherit lts pkgs system;
-    instanceContainer = true;
+  # appArmor = incusRunTest {
+  #   all = true;
+  #   appArmor = true;
+  # };
+
+  container = incusRunTest {
+    instances.c1 = {
+      type = "container";
+    };
   };
 
-  lvm = incusTest {
-    inherit lts pkgs system;
-    storageLvm = true;
+  lvm = incusRunTest { storage.lvm = true; };
+
+  openvswitch = incusRunTest { network.ovs = true; };
+
+  ui = runTest {
+    imports = [ ./ui.nix ];
+
+    _module.args = { inherit package; };
   };
 
-  openvswitch = incusTest {
-    inherit lts pkgs system;
-    networkOvs = true;
+  virtual-machine = incusRunTest {
+    instances = {
+      vm1 = {
+        type = "virtual-machine";
+      };
+
+      # TODO never becomes available
+      # csm = {
+      #   type = "virtual-machine";
+      #   incusConfig.config = {
+      #     "security.csm" = true;
+      #   };
+      # };
+    };
   };
 
-  ui = import ./ui.nix {
-    inherit lts pkgs system;
-  };
-
-  virtual-machine = incusTest {
-    inherit lts pkgs system;
-    instanceVm = true;
-  };
-
-  zfs = incusTest {
-    inherit lts pkgs system;
-    storageZfs = true;
-  };
-
-  appArmor = incusTest {
-    inherit lts pkgs system;
-    appArmor = true;
-    allTests = true;
-  };
+  zfs = incusRunTest { storage.zfs = true; };
 }
