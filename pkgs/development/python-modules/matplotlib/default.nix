@@ -4,7 +4,6 @@
   fetchPypi,
   buildPythonPackage,
   isPyPy,
-  pythonAtLeast,
   pythonOlder,
 
   # build-system
@@ -53,8 +52,7 @@
 
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
-  # tkinter fails to build on Python 3.11
-  enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy && pythonAtLeast "3.12"),
+  enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
   tkinter,
 
   # Qt
