@@ -4,13 +4,13 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "amoeba-data";
   version = "1.1";
 
   src = fetchurl {
-    url = "http://http.debian.net/debian/pool/non-free/a/amoeba-data/amoeba-data_${version}.orig.tar.gz";
-    sha256 = "1bgclr1v63n14bj9nwzm5zxg48nm0cla9bq1rbd5ylxra18k0jbg";
+    url = "http://http.debian.net/debian/pool/non-free/a/amoeba-data/amoeba-data_${finalAttrs.version}.orig.tar.gz";
+    hash = "sha256-b0kwUVC5U1/aygGvpCgD1SLy+i/1c5vkIsEOs0Om7K0=";
   };
 
   installPhase = ''
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     cp demo.dat $out/share/amoeba/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fast-paced, polished OpenGL demonstration by Excess (data files)";
     homepage = "https://packages.qa.debian.org/a/amoeba-data.html";
-    license = licenses.unfree;
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.all;
   };
-}
+})
