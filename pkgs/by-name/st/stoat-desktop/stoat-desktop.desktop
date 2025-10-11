@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Stoat
+Comment=Open source user-first chat platform
+Exec=stoat-desktop
+Terminal=false
+Type=Application
+Icon=stoat-desktop
+Categories=Network;Chat;InstantMessaging;
+StartupWMClass=Stoat
