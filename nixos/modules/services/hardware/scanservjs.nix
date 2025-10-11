@@ -58,7 +58,7 @@ in
   options.services.scanservjs = {
     enable = lib.mkEnableOption "scanservjs";
     stateDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/scanservjs";
       description = ''
         State directory for scanservjs.
