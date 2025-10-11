@@ -9,7 +9,7 @@
   gettext,
   fuse,
   openssl,
-  tinyxml2,
+  tinyxml-2,
   gtest,
 }:
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fuse
     openssl
-    tinyxml2
+    tinyxml-2
     gtest
   ];
   nativeBuildInputs = [
