@@ -11,7 +11,6 @@
   libjack2,
   libGLU,
   lv2,
-  gtk2,
   cairo,
   pango,
   fftwFloat,
@@ -37,7 +36,6 @@ stdenv.mkDerivation rec {
     libsndfile
     libsamplerate
     lv2
-    gtk2
     cairo
     pango
     fftwFloat
