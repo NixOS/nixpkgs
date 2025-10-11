@@ -1,16 +1,17 @@
 {
+  lib,
+
+  fetchFromGitHub,
+  fetchpatch,
+  nix-update-script,
+  stdenv,
+
   cmake,
+  pkg-config,
   crocoddyl,
   ctestCheckHook,
-  fetchFromGitHub,
-  lib,
   llvmPackages,
-  pkg-config,
   proxsuite,
-  python3Packages,
-  pythonSupport ? false,
-  stdenv,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,45 +25,40 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1Mqu9Hfy65HUIOVG/gJBpSMlOwDWVcH+LrR8CaWz0BE=";
   };
 
-  # eigenpy is not used without python support
-  postPatch = lib.optionalString (!pythonSupport) ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "add_project_dependency(eigenpy 2.7.10 REQUIRED)" \
-      ""
+  patches = [
+    # ref. https://github.com/machines-in-motion/mim_solvers/pull/71
+    (fetchpatch {
+      name = "build_standalone_python_interface.patch";
+      url = "https://github.com/machines-in-motion/mim_solvers/commit/fd758ed0c550705609734945c0c053e221cc4feb.patch";
+      hash = "sha256-/OiMzyDVEbpC/Dr/HcguwAdhmbQNxnIRsHAVkX68xqA=";
+    })
+  ];
+
+  postPatch = ''
+    sed -i '1i #include <memory>' src/kkt.cpp src/ddp.cpp
   '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-  ++ lib.optional pythonSupport python3Packages.pythonImportsCheckHook;
+  ];
+
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
-  propagatedBuildInputs =
-    lib.optionals pythonSupport [
-      python3Packages.crocoddyl
-      python3Packages.osqp
-      python3Packages.proxsuite
-      python3Packages.scipy
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      crocoddyl
-      proxsuite
-    ];
+
+  propagatedBuildInputs = [
+    crocoddyl
+    proxsuite
+  ];
 
   cmakeFlags = [
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
     (lib.cmakeBool "BUILD_WITH_PROXSUITE" true)
-  ]
-  ++ lib.optional (stdenv.hostPlatform.isDarwin) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'py-test-clqr-osqp'"
-  )
-  ++ lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) (
-    lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;'test_solvers'"
-  );
+  ];
 
   nativeCheckInputs = [
     ctestCheckHook
   ];
+
   disabledTests = [
     # Fails with osqp>=1.0.0
     # See https://github.com/machines-in-motion/mim_solvers/pull/66
@@ -77,8 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     "test_solvers"
   ];
   doCheck = true;
-
-  pythonImportsCheck = [ "mim_solvers" ];
 
   passthru.updateScript = nix-update-script { };
 
