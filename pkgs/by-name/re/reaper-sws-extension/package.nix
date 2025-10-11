@@ -9,7 +9,7 @@ in
 callPackage p {
 
   pname = "reaper-sws-extension";
-  version = "2.14.0.3";
+  version = "2.14.0.7";
   meta = {
     description = "Reaper Plugin Extension";
     longDescription = ''
@@ -25,5 +25,6 @@ callPackage p {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
+    broken = stdenvNoCC.hostPlatform.isDarwin;
   };
 }
