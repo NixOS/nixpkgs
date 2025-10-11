@@ -222,7 +222,9 @@ in
         User = "pgadmin";
         DynamicUser = true;
         LogsDirectory = "pgadmin";
+        LogsDirectoryMode = "750";
         StateDirectory = "pgadmin";
+        StateDirectoryMode = "750";
         ExecStart = "${cfg.package}/bin/pgadmin4";
         LoadCredential = [
           "initial_password:${cfg.initialPasswordFile}"
@@ -232,17 +234,20 @@ in
         CapabilityBoundingSet = "";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
+        ProtectProc = "invisible";
         ProtectSystem = "full";
         RemoveIPC = true;
         RestrictAddressFamilies = [
