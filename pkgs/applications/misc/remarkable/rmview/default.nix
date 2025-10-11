@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rmview";
-  version = "3.1.3";
+  version = "3.1.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bordaigorl";
     repo = "rmview";
     tag = "v${version}";
-    sha256 = "sha256-V26zmu8cQkLs0IMR7eFO8x34McnT3xYyzlZfntApYkk=";
+    sha256 = "sha256-yae86PR/TZKApqrMP7MdS8941J9wqlKzkOnFyIhUk4o=";
   };
 
   nativeBuildInputs = with python3Packages; [
