@@ -3645,6 +3645,8 @@ self: super: with self; {
 
   distro = callPackage ../development/python-modules/distro { };
 
+  distro-info = callPackage ../development/python-modules/distro-info { };
+
   distutils =
     if pythonOlder "3.12" then null else callPackage ../development/python-modules/distutils { };
 
