@@ -334,8 +334,8 @@ $subUidsPrevUsed{$_} = 1 foreach values %{$subUidMap};
 sub allocSubUid {
     my ($name, @rest) = @_;
 
-    # TODO: No upper bounds?
-    my ($min, $max, $delta) = (100000, 100000 + 100 * 65536, 65536);
+    # uid_t/gid_t are 32-bit unsigned on Linux => theoretical range 0 ... 4,294,967,295.
+    my ($min, $max, $delta) = (100000, 100000 + 10000 * 65536, 65536);
     my $prevId = $subUidMap->{$name};
     if (defined $prevId && !defined $subUidsUsed{$prevId}) {
         $subUidsUsed{$prevId} = 1;
