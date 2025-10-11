@@ -18747,8 +18747,6 @@ self: super: with self; {
 
   treelog = callPackage ../development/python-modules/treelog { };
 
-  treeo = callPackage ../development/python-modules/treeo { };
-
   treescope = callPackage ../development/python-modules/treescope { };
 
   treq = callPackage ../development/python-modules/treq { };
