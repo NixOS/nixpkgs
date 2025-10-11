@@ -146,7 +146,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/terraria";
         example = "/srv/terraria";
         description = "Path to variable state data directory for terraria.";
