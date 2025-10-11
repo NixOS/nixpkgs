@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/apps/teleports/-/commit/dd537c08453be9bfcdb2ee1eb692514c7e867e41.patch";
       hash = "sha256-zxxFvoj6jluGPCA9GQsxuYYweaSOVrkD01hZwCtq52U=";
     })
+
+    # Remove when https://gitlab.com/ubports/development/apps/teleports/-/merge_requests/586 merged & in release
+    ./1001-app-CMakeLists.txt-Drop-explicit-dependency-on-rlottie.patch
   ];
 
   postPatch = ''
