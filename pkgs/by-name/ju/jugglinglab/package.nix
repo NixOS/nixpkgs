@@ -6,6 +6,8 @@
   makeWrapper,
   wrapGAppsHook3,
   jre,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -42,6 +44,7 @@ maven.buildMavenPackage rec {
   nativeBuildInputs = [
     makeWrapper
     wrapGAppsHook3
+    copyDesktopItems
   ];
 
   dontWrapGApps = true;
@@ -54,6 +57,10 @@ maven.buildMavenPackage rec {
       install -Dm755 bin/ortools-lib/ortools-${platformName}/* -t $out/lib/ortools-lib
     ''}
 
+    install -Dm644 \
+      "bin/packaging/debian/Juggling Lab.png" \
+      "$out/share/icons/hicolor/256x256/apps/jugglinglab.png"
+
     runHook postInstall
   '';
 
@@ -64,6 +71,21 @@ maven.buildMavenPackage rec {
         --add-flags "-Xss2048k -Djava.library.path=$out/lib/ortools-lib" \
         --add-flags "-jar $out/share/jugglinglab/JugglingLab.jar"
   '';
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "jugglinglab";
+      exec = "jugglinglab";
+      icon = "jugglinglab";
+      desktopName = "Juggling Lab";
+      comment = "Juggling visualizer";
+      categories = [
+        "Simulation"
+        "Sports"
+        "Graphics"
+      ];
+    })
+  ];
 
   meta = with lib; {
     description = "Program to visualize different juggling pattens";
