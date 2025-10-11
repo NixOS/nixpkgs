@@ -25,6 +25,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
+    # Fix missing char8_t support
+    # https://github.com/nlohmann/json/pull/4736
+    (fetchpatch {
+      name = "fix-char8_t.patch";
+      url = "https://github.com/nlohmann/json/commit/756ca22ec5b0d89b5d107b4c30891d1293650c87.patch?full_index=1";
+      hash = "sha256-OK8FIXClj5paZNiEvPwJWr5PxyVYtJ3zkRlcZoe8d20=";
+    })
     # Musl does not support LC_NUMERIC, causing a test failure.
     # Turn the error into a warning to make the test succeed.
     # https://github.com/nlohmann/json/pull/4770
