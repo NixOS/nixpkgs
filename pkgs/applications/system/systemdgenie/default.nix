@@ -2,32 +2,34 @@
   stdenv,
   lib,
   cmake,
-  extra-cmake-modules,
-  kxmlgui,
   fetchFromGitLab,
-  kdelibs4support,
-  wrapQtAppsHook,
+  kdePackages,
+  pkg-config,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "systemdgenie";
-  version = "0.99.0";
+  version = "0.99.0-unstable-2025-10-11";
+
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "SystemdGenie";
     owner = "system";
-    rev = "v${version}";
-    hash = "sha256-y+A2OuK1ZooPY5W0SsXEb1aaOAJ2b7QSwiumolmAaR4=";
+    rev = "dcfd937a711fb124da6c717c51334dbbb430e48e";
+    hash = "sha256-X/qUWStT3vRvJNQMdzUV818bsZkbxaaAd7RHJcK+WEE=";
   };
 
   nativeBuildInputs = [
     cmake
-    extra-cmake-modules
-    wrapQtAppsHook
+    pkg-config
+    kdePackages.extra-cmake-modules
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    kxmlgui
-    kdelibs4support
+    kdePackages.kirigami-addons
+    kdePackages.kio
+    kdePackages.ktexteditor
+    kdePackages.kxmlgui
   ];
 
   meta = with lib; {
