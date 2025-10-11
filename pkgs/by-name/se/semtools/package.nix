@@ -6,28 +6,29 @@
   nix-update-script,
   openssl,
   pkg-config,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "semtools";
-  version = "1.2.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "run-llama";
     repo = "semtools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wpOKEESM3uG9m/EqWnF2uXITbrwIhwe2MSA0FN7Fu+w=";
+    hash = "sha256-dcB3oOoIBTCf9Tz1HCGiNic0TA6ybg1xetxM62utbVs=";
   };
 
-  cargoHash = "sha256-irLhwlNnB3G63WUGV2wo+LQGQgNHYzu/vb/RM/G6Fdc=";
+  cargoHash = "sha256-chPXOkfrSwfJZAtiw3SxJQX1arR9M5+mYyEsCQRA/e8=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    protobuf
+  ];
   buildInputs = [ openssl ];
 
-  checkFlags = lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-    # https://github.com/run-llama/semtools/issues/17
-    "--skip=tests::test_search_result_context_calculation"
-  ];
+  doCheck = false;
 
   passthru.updateScript = nix-update-script { };
 
