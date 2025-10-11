@@ -128,6 +128,18 @@ let
 
     NIX_DISK_IMAGE=$(readlink -f "''${NIX_DISK_IMAGE:-${toString config.virtualisation.diskImage}}") || test -z "$NIX_DISK_IMAGE"
 
+    # If the disk image is in the Nix store (read-only), create a writable qcow2 copy in $TMPDIR
+    if [[ "$NIX_DISK_IMAGE" == ${builtins.storeDir}/* ]]; then
+        # Create a directory for storing temporary data of the running VM if not already created
+        if [ -z "$TMPDIR" ] || [ -z "$USE_TMPDIR" ]; then
+            TMPDIR=$(mktemp -d nix-vm.XXXXXXXXXX --tmpdir)
+        fi
+        TMP_DISK_IMAGE="$TMPDIR/root-disk.qcow2"
+        echo "Detected Nix store disk image, creating writable qcow2 copy at $TMP_DISK_IMAGE"
+        ${qemu}/bin/qemu-img create -f qcow2 -b "$NIX_DISK_IMAGE" -F raw "$TMP_DISK_IMAGE"
+        NIX_DISK_IMAGE="$TMP_DISK_IMAGE"
+    fi
+
     if test -n "$NIX_DISK_IMAGE" && ! test -e "$NIX_DISK_IMAGE"; then
         echo "Disk image does not exist, creating the virtualisation disk image..."
 
