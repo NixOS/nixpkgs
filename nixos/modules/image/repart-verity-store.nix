@@ -47,7 +47,7 @@ in
     enable = lib.mkEnableOption "building images with a dm-verity protected nix store";
 
     ukiPath = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/EFI/Linux/${config.system.boot.loader.ukiFile}";
       defaultText = "/EFI/Linux/\${config.system.boot.loader.ukiFile}";
       description = ''
