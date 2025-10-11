@@ -23,8 +23,11 @@ in
       tt-kmd
     ];
 
+    environment.systemPackages = with pkgs; [
+      tt-system-tools
+    ];
+
     # TODO: add tt-smi to environment.systemPackages once https://github.com/NixOS/nixpkgs/pull/444714 is merged
-    # TODO: add tt-system-tools to environment.systemPackages once https://github.com/NixOS/nixpkgs/pull/444748 is merged
   };
 
   meta.maintainers = with lib.maintainers; [ RossComputerGuy ];
