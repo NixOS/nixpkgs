@@ -223,6 +223,15 @@ checkConfigError 'A definition for option .* is not of type .path in the Nix sto
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: ".*/store/.links"' config.pathInStore.bad4 ./types.nix
 checkConfigError 'A definition for option .* is not of type .path in the Nix store.. Definition values:\n\s*- In .*: "/foo/bar"' config.pathInStore.bad5 ./types.nix
 
+# types.externalPath
+checkConfigOutput '".*/foo/bar"' config.externalPath.ok1 ./types.nix
+checkConfigOutput '".*/"' config.externalPath.ok2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad1 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad2 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad3 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad4 ./types.nix
+checkConfigError 'A definition for option .* is not of type .absolute path not in the Nix store.' config.externalPath.bad5 ./types.nix
+
 # Check boolean option.
 checkConfigOutput '^false$' config.enable ./declare-enable.nix
 checkConfigError 'The option .* does not exist. Definition values:\n\s*- In .*: true' config.enable ./define-enable.nix
