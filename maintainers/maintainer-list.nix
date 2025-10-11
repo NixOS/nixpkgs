@@ -2876,12 +2876,6 @@
     githubId = 127523;
     name = "Herman Fries";
   };
-  BarinovMaxim = {
-    name = "Barinov Maxim";
-    email = "barinov274@gmail.com";
-    github = "barinov274";
-    githubId = 54442153;
-  };
   BarrOff = {
     name = "BarrOff";
     github = "BarrOff";
