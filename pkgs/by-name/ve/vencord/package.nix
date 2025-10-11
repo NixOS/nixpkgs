@@ -95,6 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
       Gliczy
       NotAShelf
       Scrumplex
+      ryand56
     ];
   };
 })
