@@ -35,8 +35,8 @@ buildGoModule rec {
       used to provide a secure endpoint into your network.
     '';
     homepage = "https://github.com/jpillora/chisel";
-    changelog = "https://github.com/jpillora/chisel/releases/tag/v${version}";
-    license = with lib.licenses; [ mit ];
+    changelog = "https://github.com/jpillora/chisel/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };
 }
