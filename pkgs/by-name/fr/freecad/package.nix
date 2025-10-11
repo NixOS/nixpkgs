@@ -133,15 +133,6 @@ freecad-utils.makeCustomizable (
       "-DFREECAD_USE_PYBIND11=ON"
       "-DBUILD_QT5=OFF"
       "-DBUILD_QT6=ON"
-      "-DSHIBOKEN_INCLUDE_DIR=${python3Packages.shiboken6}/include"
-      "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
-      (
-        "-DPYSIDE_INCLUDE_DIR=${python3Packages.pyside6}/include"
-        + ";${python3Packages.pyside6}/include/PySide6/QtCore"
-        + ";${python3Packages.pyside6}/include/PySide6/QtWidgets"
-        + ";${python3Packages.pyside6}/include/PySide6/QtGui"
-      )
-      "-DPYSIDE_LIBRARY=PySide6::pyside6"
     ];
 
     # This should work on both x86_64, and i686 linux
