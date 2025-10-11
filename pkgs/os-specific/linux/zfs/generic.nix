@@ -287,7 +287,7 @@ let
               smartmon
               sysstat
             ]
-          }:$PATH";
+          }:/run/wrappers/bin:$PATH";
         in
         ''
           for i in $out/libexec/zfs/zpool.d/*; do
