@@ -35,6 +35,9 @@ in
     };
 
     extraSessionCommands = lib.mkOption {
+      example = ''
+        foot --server &
+      '';
       default = "";
       type = lib.types.lines;
       description = ''
@@ -59,13 +62,40 @@ in
     environment.etc."xdg/dwl-session" = {
       text = ''
         #!${pkgs.runtimeShell}
-        # Import environment variables
-        ${cfg.extraSessionCommands}
-        # Setup systemd user environment
-        systemctl --user import-environment DISPLAY WAYLAND_DISPLAY
+        set -euo pipefail
+
+        # Set session info
+        export XDG_SESSION_TYPE=wayland
+        export XDG_CURRENT_DESKTOP=dwl
+
+        # Path to compositor and socket
+        DWL_BIN="${lib.getExe cfg.package}"
+        WAYLAND_SOCKET_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u)}"
+        WAYLAND_SOCKET_PATH="$WAYLAND_SOCKET_DIR/wayland-0"
+
+        # Start dwl in background
+        "$DWL_BIN" &
+        DWL_PID=$!
+
+        # Wait for dwl to create the Wayland socket
+        echo "Waiting for dwl to initialize..."
+        for _ in $(seq 1 50); do
+            if [ -S "$WAYLAND_SOCKET_PATH" ]; then
+                echo "dwl socket detected: $WAYLAND_SOCKET_PATH"
+                break
+            fi
+            sleep 0.1
+        done
+
+        # Export and import environment
+        systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE XDG_CURRENT_DESKTOP
         systemctl --user start dwl-session.target
-        # Start dwl
-        exec ${lib.getExe cfg.package}
+
+        # Launch extraSessionCommands
+        ${cfg.extraSessionCommands}
+
+        # Wait for dwl to exit (cleans up properly)
+        wait "$DWL_PID"
       '';
       mode = "0755"; # Make it executable
     };
