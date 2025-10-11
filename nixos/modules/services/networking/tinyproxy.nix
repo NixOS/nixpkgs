@@ -63,7 +63,7 @@ in
             freeformType = settingsFormat.type;
             options = {
               Listen = mkOption {
-                type = types.str;
+                type = types.nullOr types.str;
                 default = "127.0.0.1";
                 description = ''
                   Specify which address to listen to.
