@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   llvmPackages,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     "CC=$(CXX)"
     "PREFIX=${placeholder "out"}"
   ];
+
+  passthru.updateScript = nix-update-script {};
 
   meta = {
     description = "High performance block-sorting data compression library";
