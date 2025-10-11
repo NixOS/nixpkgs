@@ -1,0 +1,13 @@
+diff --git a/custom_components/scene_presets/file_utils.py b/custom_components/scene_presets/file_utils.py
+index 3658fd1..da799c2 100644
+--- a/custom_components/scene_presets/file_utils.py
++++ b/custom_components/scene_presets/file_utils.py
+@@ -12,7 +12,7 @@ VERSION = MANIFEST['version']
+ 
+ 
+ 
+-os.makedirs(os.path.join(BASE_PATH, 'userdata/custom/assets'), exist_ok=True)
++# os.makedirs(os.path.join(BASE_PATH, 'userdata/custom/assets'), exist_ok=True)
+ 
+ PRESET_DATA = json.load(
+     open(os.path.join(BASE_PATH, 'presets.json'))
