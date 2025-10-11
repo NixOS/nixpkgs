@@ -237,6 +237,9 @@ stdenv.mkDerivation (
         parse C/C++ code.
       '';
       mainProgram = "clang";
+      badPlatforms = (llvm_meta.badPlatforms or [ ]) ++ [
+        "powerpc-linux"
+      ];
     };
   }
   // lib.optionalAttrs enableManpages {
