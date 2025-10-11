@@ -1,66 +1,66 @@
 /*
   List of active NixOS maintainers.
-   ```nix
-   handle = {
-     # Required
-     name = "Your name";
-     github = "GithubUsername";
-     githubId = your-github-id;
+  ```nix
+  handle = {
+    # Required
+    name = "Your name";
+    github = "GithubUsername";
+    githubId = your-github-id;
 
-     # Optional
-     email = "address@example.org";
-     matrix = "@user:example.org";
-     keys = [{
-       fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
-     }];
-   };
-   ```
+    # Optional
+    email = "address@example.org";
+    matrix = "@user:example.org";
+    keys = [{
+      fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
+    }];
+  };
+  ```
 
-   where
+  where
 
-   - `handle` is the handle you are going to use in nixpkgs expressions,
-   - `name` is a name that people would know and recognize you by,
-   - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
-   - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
-   - `email` is your maintainer email address,
-   - `matrix` is your Matrix user ID,
-   - `keys` is a list of your PGP/GPG key fingerprints.
+  - `handle` is the handle you are going to use in nixpkgs expressions,
+  - `name` is a name that people would know and recognize you by,
+  - `github` is your GitHub handle (as it appears in the URL of your profile page, `https://github.com/<userhandle>`),
+  - `githubId` is your GitHub user ID, which can be found at `https://api.github.com/users/<userhandle>`,
+  - `email` is your maintainer email address,
+  - `matrix` is your Matrix user ID,
+  - `keys` is a list of your PGP/GPG key fingerprints.
 
-   Specifying a GitHub account is required, because:
-   - you will get invited to the @NixOS/nixpkgs-maintainers team;
-   - once you are part of the @NixOS org, you can be requested for review;
-   - once you can be requested for review, CI will request you review pull requests that modify a package for which you are a maintainer.
+  Specifying a GitHub account is required, because:
+  - you will get invited to the @NixOS/nixpkgs-maintainers team;
+  - once you are part of the @NixOS org, you can be requested for review;
+  - once you can be requested for review, CI will request you review pull requests that modify a package for which you are a maintainer.
 
-   `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
+  `handle == github` is strongly preferred whenever `github` is an acceptable attribute name and is short and convenient.
 
-   If `github` begins with a numeral, `handle` should be prefixed with an underscore.
-   ```nix
-   _1example = {
-     github = "1example";
-   };
-   ```
+  If `github` begins with a numeral, `handle` should be prefixed with an underscore.
+  ```nix
+  _1example = {
+    github = "1example";
+  };
+  ```
 
-   Add PGP/GPG keys only if you actually use them to sign commits and/or mail.
+  Add PGP/GPG keys only if you actually use them to sign commits and/or mail.
 
-   To get the required PGP/GPG values for a key run
-   ```shell
-   gpg --fingerprint <email> | head -n 2
-   ```
+  To get the required PGP/GPG values for a key run
+  ```shell
+  gpg --fingerprint <email> | head -n 2
+  ```
 
-   !!! Note that PGP/GPG values stored here are for informational purposes only, don't use this file as a source of truth.
+  !!! Note that PGP/GPG values stored here are for informational purposes only, don't use this file as a source of truth.
 
-   More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
+  More fields may be added in the future, however, in order to comply with GDPR this file should stay as minimal as possible.
 
-   When editing this file:
-    * keep the list alphabetically sorted
-    * test the validity of the format with:
-        nix-build lib/tests/maintainers.nix
+  When editing this file:
+   * keep the list alphabetically sorted
+   * test the validity of the format with:
+       nix-build lib/tests/maintainers.nix
 
-   See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
+  See `./scripts/check-maintainer-github-handles.sh` for an example on how to work with this data.
 
-   When adding a new maintainer, be aware of the current commit conventions
-   documented at [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#commit-conventions)
-   file located in the root of the Nixpkgs repo.
+  When adding a new maintainer, be aware of the current commit conventions
+  documented at [CONTRIBUTING.md](https://github.com/NixOS/nixpkgs/blob/master/CONTRIBUTING.md#commit-conventions)
+  file located in the root of the Nixpkgs repo.
 */
 {
   # keep-sorted start case=no numeric=no block=yes
@@ -504,11 +504,7 @@
     github = "acaloiaro";
     matrix = "@adriano@beeper.com";
     name = "Adriano Caloiaro";
-    keys = [
-      {
-        fingerprint = "DCBD 2175 8A30 9C1F 41D7  A0FC 890F FDB1 1860 FE1C";
-      }
-    ];
+    keys = [ { fingerprint = "DCBD 2175 8A30 9C1F 41D7  A0FC 890F FDB1 1860 FE1C"; } ];
   };
   Acconut = {
     email = "marius@transloadit.com";
@@ -1069,11 +1065,7 @@
     githubId = 16022854;
     matrix = "@albertodvp:matrix.org";
     name = "Alberto Fanton";
-    keys = [
-      {
-        fingerprint = "63FD 3A4F 4832 946C B808  8E3C C852 4052 69E7 A087";
-      }
-    ];
+    keys = [ { fingerprint = "63FD 3A4F 4832 946C B808  8E3C C852 4052 69E7 A087"; } ];
   };
   aldenparker = {
     github = "aldenparker";
@@ -1251,11 +1243,7 @@
     githubId = 36565196;
     name = "Alikind System";
 
-    keys = [
-      {
-        fingerprint = "7D31 15DC D912 C15A 2781  F7BB 511C B44B C752 2A89";
-      }
-    ];
+    keys = [ { fingerprint = "7D31 15DC D912 C15A 2781  F7BB 511C B44B C752 2A89"; } ];
   };
   alirezameskin = {
     email = "alireza.meskin@gmail.com";
@@ -1637,6 +1625,14 @@
     githubId = 106511;
     name = "Andrew Kelley";
   };
+  andrewzah = {
+    name = "Andrew Zah";
+    github = "andrewzah";
+    githubId = 9789467;
+    email = "nix@andrewzah.com";
+    matrix = "@andrewzah:matrix.abare.party";
+    keys = [ { fingerprint = "D87B D9DC F11B ACD6 CDB4 0CB2 1373 2FB1 3E61 E0BE"; } ];
+  };
   Andy3153 = {
     name = "Andrei Dobrete";
     email = "andy3153@protonmail.com";
@@ -1673,7 +1669,7 @@
     name = "Stanislas Lange";
   };
   AngryAnt = {
-    name = "Emil \"AngryAnt\" Johansen";
+    name = ''Emil "AngryAnt" Johansen'';
     email = "git@eej.dk";
     matrix = "@angryant:envs.net";
     github = "AngryAnt";
@@ -1756,7 +1752,9 @@
     matrix = "@anpin:matrix.org";
     name = "Pavel Anpin";
     keys = [
-      { fingerprint = "06E8 4FF6 0CCF 7AFD 5101  76C9 0FBC D3EE 6310 7407"; }
+      {
+        fingerprint = "06E8 4FF6 0CCF 7AFD 5101  76C9 0FBC D3EE 6310 7407";
+      }
       # compare with https://keybase.io/anpin/pgp_keys.asc
       { fingerprint = "DADF F3EA 06DC 8C1B 100A  24DB 312E 8F17 91C5 DA8C"; }
     ];
@@ -3246,7 +3244,11 @@
     name = "Jonathan Berrisch";
     github = "BerriJ";
     githubId = 37799358;
-    keys = [ { fingerprint = "42 B6 CC90 6 A91 EA4F 8 A7E 315 B 30 DC 5398 152 C 5310"; } ];
+    keys = [
+      {
+        fingerprint = "42 B6 CC90 6 A91 EA4F 8 A7E 315 B 30 DC 5398 152 C 5310";
+      }
+    ];
   };
   berryp = {
     email = "berryphillips@gmail.com";
@@ -4051,9 +4053,7 @@
     github = "cageyv";
     githubId = 51059484;
     name = "Vladmir Samoylov";
-    keys = [
-      { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; }
-    ];
+    keys = [ { fingerprint = "8916 F727 734E 77AB 437F  A33A 19AB 76F5 CEE1 1392"; } ];
   };
   CaiqueFigueiredo = {
     email = "public@caiquefigueiredo.me";
@@ -4120,11 +4120,7 @@
     matrix = "@cameo007:mintux.de";
     github = "Cameo007";
     githubId = 80521473;
-    keys = [
-      {
-        fingerprint = "2D62 24B9 1250 86AF E318 12A0 F1D1 5228 0511 FB91";
-      }
-    ];
+    keys = [ { fingerprint = "2D62 24B9 1250 86AF E318 12A0 F1D1 5228 0511 FB91"; } ];
   };
   cameroncuttingedge = {
     email = "buckets-taxiway5l@icloud.com";
@@ -5842,9 +5838,7 @@
     github = "DataHearth";
     githubId = 28595242;
     name = "DataHearth";
-    keys = [
-      { fingerprint = "E8F9 0B80 908E 723D 0EDF  0916 5803 CDA5 9C26 A96A"; }
-    ];
+    keys = [ { fingerprint = "E8F9 0B80 908E 723D 0EDF  0916 5803 CDA5 9C26 A96A"; } ];
   };
   dav-wolff = {
     email = "nixpkgs@dav.dev";
@@ -6324,11 +6318,7 @@
     email = "deudzdev@gmail.com";
     github = "deudz";
     githubId = 77695632;
-    keys = [
-      {
-        fingerprint = "42B9 5F7C 4FC2 CA13 FD4E  86B6 F0D8 B7CE 0B7E C148";
-      }
-    ];
+    keys = [ { fingerprint = "42B9 5F7C 4FC2 CA13 FD4E  86B6 F0D8 B7CE 0B7E C148"; } ];
   };
   developer-guy = {
     name = "Batuhan Apaydın";
@@ -8148,11 +8138,7 @@
     name = "Jakob Beckmann";
     github = "f4z3r";
     githubId = 32326425;
-    keys = [
-      {
-        fingerprint = "358A 6251 E2ED EDC1 9717  14A7 96A8 BA6E C871 2183";
-      }
-    ];
+    keys = [ { fingerprint = "358A 6251 E2ED EDC1 9717  14A7 96A8 BA6E C871 2183"; } ];
   };
   fab = {
     email = "mail@fabian-affolter.ch";
@@ -8473,11 +8459,7 @@
     github = "FirelightFlagboy";
     githubId = 30697622;
     name = "Firelight Flagboy";
-    keys = [
-      {
-        fingerprint = "D6E2 4BD5 680C 609D D146  99B4 4304 CE0B A5E8 67D1";
-      }
-    ];
+    keys = [ { fingerprint = "D6E2 4BD5 680C 609D D146  99B4 4304 CE0B A5E8 67D1"; } ];
   };
   FireyFly = {
     email = "nix@firefly.nu";
@@ -9380,11 +9362,7 @@
     github = "gileri";
     githubId = 493438;
     name = "Éric Gillet";
-    keys = [
-      {
-        fingerprint = "E478 85DC 8F33 FA86 D3FC  183D 80A8 14DB 8ED5 70BC";
-      }
-    ];
+    keys = [ { fingerprint = "E478 85DC 8F33 FA86 D3FC  183D 80A8 14DB 8ED5 70BC"; } ];
   };
   gilice = {
     email = "gilice@proton.me";
@@ -11628,22 +11606,14 @@
     github = "jasonxue1";
     githubId = 103628493;
     name = "jasonxue";
-    keys = [
-      {
-        fingerprint = "D6D8 A0A8 6FAC 3D8E D85C  523D F7BA 32A3 FCB0 260A";
-      }
-    ];
+    keys = [ { fingerprint = "D6D8 A0A8 6FAC 3D8E D85C  523D F7BA 32A3 FCB0 260A"; } ];
   };
   jaspersurmont = {
     email = "jasper@surmont.dev";
     github = "jaspersurmont";
     githubId = 28810440;
     name = "Jasper Surmont";
-    keys = [
-      {
-        fingerprint = "D70D 66E3 3D82 C3F8 0F31  BE15 D213 BED5 67B1 9AF5";
-      }
-    ];
+    keys = [ { fingerprint = "D70D 66E3 3D82 C3F8 0F31  BE15 D213 BED5 67B1 9AF5"; } ];
   };
   javaes = {
     email = "jan+dev@vanesdonk.de";
@@ -11935,11 +11905,7 @@
     email = "jess+nix@jessie.cafe";
     github = "ttrssreal";
     githubId = 43591752;
-    keys = [
-      {
-        fingerprint = "8092 3BD1 ECD0 E436 671D  C8E9 BA33 5068 6C91 8606";
-      }
-    ];
+    keys = [ { fingerprint = "8092 3BD1 ECD0 E436 671D  C8E9 BA33 5068 6C91 8606"; } ];
   };
   jessemoore = {
     email = "jesse@jessemoore.dev";
@@ -12120,11 +12086,7 @@
     github = "jiriks74";
     githubId = 54378412;
     matrix = "@jiriks74:matrix.org";
-    keys = [
-      {
-        fingerprint = "563AC7887FD6414714A6ACAC1D5E30D3DB2264DE";
-      }
-    ];
+    keys = [ { fingerprint = "563AC7887FD6414714A6ACAC1D5E30D3DB2264DE"; } ];
   };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
@@ -12260,7 +12222,9 @@
     name = "João Figueira";
     keys = [
       # GitHub signing key
-      { fingerprint = "EC08 7AA3 DEAD A972 F015  6371 DC7A E56A E98E 02D7"; }
+      {
+        fingerprint = "EC08 7AA3 DEAD A972 F015  6371 DC7A E56A E98E 02D7";
+      }
       # Email encryption
       { fingerprint = "816D 23F5 E672 EC58 7674  4A73 197F 9A63 2D13 9E30"; }
     ];
@@ -15355,11 +15319,7 @@
     github = "Lykos153";
     githubId = 6453662;
     name = "Silvio Ankermann";
-    keys = [
-      {
-        fingerprint = "8D47 6294 7205 541C 62A4  9C88 F422 6CA3 971C 4E97";
-      }
-    ];
+    keys = [ { fingerprint = "8D47 6294 7205 541C 62A4  9C88 F422 6CA3 971C 4E97"; } ];
   };
   lyn = {
     name = "Lyn";
@@ -15578,11 +15538,7 @@
     github = "mahtaran";
     githubId = 22727323;
     name = "Luka Leer";
-    keys = [
-      {
-        fingerprint = "C7FF B72E 0527 423A D470  E132 AA82 C4EB CB16 82E0";
-      }
-    ];
+    keys = [ { fingerprint = "C7FF B72E 0527 423A D470  E132 AA82 C4EB CB16 82E0"; } ];
   };
   mahyarmirrashed = {
     email = "mah.mirr@gmail.com";
@@ -15595,9 +15551,7 @@
     github = "MaikoTan";
     githubId = 19927330;
     name = "Maiko Tan";
-    keys = [
-      { fingerprint = "9C68 989F ECF9 8993 3225  96DD 970A 6794 990C 52AE"; }
-    ];
+    keys = [ { fingerprint = "9C68 989F ECF9 8993 3225  96DD 970A 6794 990C 52AE"; } ];
   };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
@@ -15986,11 +15940,7 @@
     github = "mateusauler";
     githubId = 24767687;
     name = "Mateus Auler";
-    keys = [
-      {
-        fingerprint = "A09D C093 3C37 4BFC 2B5A  269F 80A5 D62F 6EB7 D9F0";
-      }
-    ];
+    keys = [ { fingerprint = "A09D C093 3C37 4BFC 2B5A  269F 80A5 D62F 6EB7 D9F0"; } ];
   };
   math-42 = {
     email = "matheus.4200@gmail.com";
@@ -16068,11 +16018,7 @@
     github = "mattfield";
     githubId = 686826;
     name = "Matt Field";
-    keys = [
-      {
-        fingerprint = "8BEE 1295 D9EC 9560 0273  7E57 45B8 21B5 CB29 C07A";
-      }
-    ];
+    keys = [ { fingerprint = "8BEE 1295 D9EC 9560 0273  7E57 45B8 21B5 CB29 C07A"; } ];
   };
   matthew-levan = {
     email = "matthew@coeli.network";
@@ -16837,7 +16783,7 @@
     email = "mightyiampresence@gmail.com";
     github = "mightyiam";
     githubId = 635591;
-    name = "Shahar \"Dawn\" Or";
+    name = ''Shahar "Dawn" Or'';
   };
   mihaimaruseac = {
     email = "mihaimaruseac@gmail.com";
@@ -17839,7 +17785,11 @@
     email = "nate@n8henrie.com";
     github = "n8henrie";
     githubId = 1234956;
-    "keys" = [ { "fingerprint" = "F21A 6194 C9DB 9899 CD09 E24E 434B 2C14 B8C3 3422"; } ];
+    "keys" = [
+      {
+        "fingerprint" = "F21A 6194 C9DB 9899 CD09 E24E 434B 2C14 B8C3 3422";
+      }
+    ];
   };
   nadiaholmquist = {
     name = "Nadia Holmquist Pedersen";
@@ -18716,11 +18666,7 @@
     email = "normalc@posteo.net";
     github = "normalcea";
     githubId = 190049873;
-    keys = [
-      {
-        fingerprint = "6057 1155 7BA4 B922 66D6 2064 3DE3 BCB2 142A 8C71";
-      }
-    ];
+    keys = [ { fingerprint = "6057 1155 7BA4 B922 66D6 2064 3DE3 BCB2 142A 8C71"; } ];
     matrix = "@normalcea:matrix.org";
   };
   norpol = {
@@ -18899,9 +18845,7 @@
     github = "nukdokplex";
     githubId = 25458915;
     name = "Viktor Titov";
-    keys = [
-      { fingerprint = "7CE2 4C42 942D 58EA 99F6  F00A A47E 7374 3EF6 FCC4"; }
-    ];
+    keys = [ { fingerprint = "7CE2 4C42 942D 58EA 99F6  F00A A47E 7374 3EF6 FCC4"; } ];
   };
   nullcube = {
     email = "nullcub3@gmail.com";
@@ -18929,9 +18873,13 @@
     githubId = 369111;
     keys = [
       # >=2025, stays in one place
-      { fingerprint = "FD28 F9C9 81C5 D78E 56E8  8311 5C3E B94D 198F 1491"; }
+      {
+        fingerprint = "FD28 F9C9 81C5 D78E 56E8  8311 5C3E B94D 198F 1491";
+      }
       # >=2025, travels with me
-      { fingerprint = "C48F 475F 30A9 B192 3213  D5D5 C6E2 4809 77B2 F2F4"; }
+      {
+        fingerprint = "C48F 475F 30A9 B192 3213  D5D5 C6E2 4809 77B2 F2F4";
+      }
       # <=2024
       { fingerprint = "190B DA97 F616 DE35 6899  ED17 F819 F1AF 2FC1 C1FF"; }
     ];
@@ -20771,11 +20719,7 @@
     matrix = "@prince213:matrix.org";
     github = "Prince213";
     githubId = 25235514;
-    keys = [
-      {
-        fingerprint = "2589 45E5 C556 7B4D B36C  3E28 A64B 5235 356E 16D1";
-      }
-    ];
+    keys = [ { fingerprint = "2589 45E5 C556 7B4D B36C  3E28 A64B 5235 356E 16D1"; } ];
   };
   princemachiavelli = {
     name = "Josh Hoffer";
@@ -21717,9 +21661,7 @@
     github = "re1n0";
     githubId = 227051429;
     name = "rein";
-    keys = [
-      { fingerprint = "66A8 1706 2227 9BD9 586A  CEDD 5B29 A881 3F47 65C4"; }
-    ];
+    keys = [ { fingerprint = "66A8 1706 2227 9BD9 586A  CEDD 5B29 A881 3F47 65C4"; } ];
   };
   relrod = {
     email = "ricky@elrod.me";
@@ -21925,11 +21867,7 @@
     githubId = 6893043;
     name = "Richard J. Acton";
     matrix = "@richardjacton:matrix.org";
-    keys = [
-      {
-        fingerprint = "5EE1 1764 8462 E5A3 610C  1964 8E5D EFCF C330 7916";
-      }
-    ];
+    keys = [ { fingerprint = "5EE1 1764 8462 E5A3 610C  1964 8E5D EFCF C330 7916"; } ];
   };
   richiejp = {
     email = "io@richiejp.com";
@@ -22033,9 +21971,7 @@
     matrix = "@ritiek:matrix.org";
     github = "ritiek";
     githubId = 20314742;
-    keys = [
-      { fingerprint = "66FF 6099 7B04 845F F4C0  CB4F EB6F C9F9 FC96 4257"; }
-    ];
+    keys = [ { fingerprint = "66FF 6099 7B04 845F F4C0  CB4F EB6F C9F9 FC96 4257"; } ];
   };
   rixed = {
     email = "rixed-github@happyleptic.org";
@@ -24784,7 +24720,7 @@
     email = "strager.nds@gmail.com";
     github = "strager";
     githubId = 48666;
-    name = "Matthew \"strager\" Glazar";
+    name = ''Matthew "strager" Glazar'';
   };
   strawbee = {
     email = "henigingames@gmail.com";
@@ -24974,11 +24910,7 @@
     email = "leon@swarsel.win";
     github = "Swarsel";
     githubId = 32304731;
-    keys = [
-      {
-        fingerprint = "4BE7 9252 6228 9B47 6DBB  C17B 76FD 3810 215A E097";
-      }
-    ];
+    keys = [ { fingerprint = "4BE7 9252 6228 9B47 6DBB  C17B 76FD 3810 215A E097"; } ];
   };
   swdunlop = {
     email = "swdunlop@gmail.com";
@@ -25004,12 +24936,8 @@
     githubId = 124390044;
     name = "Stefan Weigl-Bosker";
     keys = [
-      {
-        fingerprint = "B520 0ABF BD21 3FC9 C17C  6DB9 1291 CBBC F3B9 F225";
-      }
-      {
-        fingerprint = "7783 298E CC2A 778E AC7E  F1C8 C430 A3B6 C376 10D1";
-      }
+      { fingerprint = "B520 0ABF BD21 3FC9 C17C  6DB9 1291 CBBC F3B9 F225"; }
+      { fingerprint = "7783 298E CC2A 778E AC7E  F1C8 C430 A3B6 C376 10D1"; }
     ];
   };
   swendel = {
@@ -25244,11 +25172,7 @@
     github = "talhaHavadar";
     githubId = 6908462;
     name = "Talha Can Havadar";
-    keys = [
-      {
-        fingerprint = "1E13 12DF 4B71 58B6 EBF9  DE78 2574 3879 62FE B0D1";
-      }
-    ];
+    keys = [ { fingerprint = "1E13 12DF 4B71 58B6 EBF9  DE78 2574 3879 62FE B0D1"; } ];
   };
   taliyahwebb = {
     email = "taliyahmail@proton.me";
@@ -25849,9 +25773,7 @@
     github = "thevar1able";
     githubId = 875885;
     name = "Konstantin Bogdanov";
-    keys = [
-      { fingerprint = "3221 7A73 EB95 0E9E E550  36A3 DB39 9448 D9FE 52F1"; }
-    ];
+    keys = [ { fingerprint = "3221 7A73 EB95 0E9E E550  36A3 DB39 9448 D9FE 52F1"; } ];
   };
   theverygaming = {
     name = "theverygaming";
@@ -26417,11 +26339,7 @@
     email = "transcaffeine@finally.coffee";
     github = "transcaffeine";
     githubId = 139544537;
-    keys = [
-      {
-        fingerprint = "5E0A 9CB3 9806 57CB 9AB9  4AE6 790E AEC8 F99A B41F";
-      }
-    ];
+    keys = [ { fingerprint = "5E0A 9CB3 9806 57CB 9AB9  4AE6 790E AEC8 F99A B41F"; } ];
   };
   traverseda = {
     email = "traverse.da@gmail.com";
@@ -27893,11 +27811,7 @@
     email = "contact@thewizard.link";
     github = "wizardlink";
     githubId = 26727907;
-    keys = [
-      {
-        fingerprint = "A1D3 A2B4 E14B D7C0 445B  B749 A576 7B54 367C FBDF";
-      }
-    ];
+    keys = [ { fingerprint = "A1D3 A2B4 E14B D7C0 445B  B749 A576 7B54 367C FBDF"; } ];
   };
   wizeman = {
     email = "rcorreia@wizy.org";
@@ -28552,9 +28466,7 @@
     github = "YoganshSharma";
     githubId = 38936915;
     name = "Yogansh Sharma";
-    keys = [
-      { fingerprint = "D2A8 A906 ACA7 B6D6 575E 9A2F 3A49 5054 6EA6 9E5C"; }
-    ];
+    keys = [ { fingerprint = "D2A8 A906 ACA7 B6D6 575E 9A2F 3A49 5054 6EA6 9E5C"; } ];
   };
   yomaq = {
     name = "yomaq";
@@ -28731,11 +28643,7 @@
     email = "kamil@monicz.dev";
     github = "Zaczero";
     githubId = 10835147;
-    keys = [
-      {
-        fingerprint = "4E67 A4AC 2FA4 2A28 DB40  1FC8 F9FB 19F1 C1DC 9C23";
-      }
-    ];
+    keys = [ { fingerprint = "4E67 A4AC 2FA4 2A28 DB40  1FC8 F9FB 19F1 C1DC 9C23"; } ];
   };
   Zaechus = {
     email = "zaechus@proton.me";

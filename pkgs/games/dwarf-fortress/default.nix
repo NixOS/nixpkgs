@@ -8,7 +8,6 @@
   newScope,
   perlPackages,
 }:
-
 # To whomever it may concern:
 #
 # This directory menaces with spikes of Nix code. It is terrifying.
@@ -40,7 +39,6 @@
 # you un-symlink them and edit, then the scripts will avoid overwriting your
 # changes on later launches, but consider extending the wrapper with your
 # desired options instead.
-
 let
   inherit (lib)
     attrNames
@@ -151,17 +149,13 @@ let
     soundSense = callPackage ./soundsense.nix { };
 
     legends-browser = callPackage ./legends-browser { };
+    legends-browser2 = callPackage ./legends-browser2 { };
 
-    themes = recurseIntoAttrs (
-      callPackage ./themes {
-        stdenv = stdenvNoCC;
-      }
-    );
+    themes = recurseIntoAttrs (callPackage ./themes { stdenv = stdenvNoCC; });
 
     # Theme aliases
     phoebus-theme = themes.phoebus;
     cla-theme = themes.cla;
   };
-
 in
 self // df-games
