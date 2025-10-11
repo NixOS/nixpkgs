@@ -15398,8 +15398,6 @@ self: super: with self; {
 
   pyvolumio = callPackage ../development/python-modules/pyvolumio { };
 
-  pyvoro = callPackage ../development/python-modules/pyvoro { };
-
   pyvows = callPackage ../development/python-modules/pyvows { };
 
   pyw215 = callPackage ../development/python-modules/pyw215 { };
