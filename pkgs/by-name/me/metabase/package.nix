@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "metabase";
-  version = "0.56.6";
+  version = "0.56.8";
 
   src = fetchurl {
     url = "https://downloads.metabase.com/v${finalAttrs.version}/metabase.jar";
-    hash = "sha256-OQ9B1KpuYrtTL46cKJtKyuiHEwGSkF+PlAjb8FOv4zo=";
+    hash = "sha256-+85AwRND35xlrV11bRQqaBrQ3A1Yo9j9RXWXi35Adlg=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
