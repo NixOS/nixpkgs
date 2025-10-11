@@ -5,9 +5,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   top = config.services.kubernetes;
   otop = options.services.kubernetes;
@@ -15,58 +12,58 @@ let
 in
 {
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "kubernetes" "proxy" "address" ]
       [ "services" "kubernetes" "proxy" "bindAddress" ]
     )
   ];
 
   ###### interface
-  options.services.kubernetes.proxy = with lib.types; {
+  options.services.kubernetes.proxy = {
 
-    bindAddress = mkOption {
+    bindAddress = lib.mkOption {
       description = "Kubernetes proxy listening address.";
       default = "0.0.0.0";
-      type = str;
+      type = lib.types.str;
     };
 
-    enable = mkEnableOption "Kubernetes proxy";
+    enable = lib.mkEnableOption "Kubernetes proxy";
 
-    extraOpts = mkOption {
+    extraOpts = lib.mkOption {
       description = "Kubernetes proxy extra command line options.";
       default = "";
-      type = separatedString " ";
+      type = lib.types.separatedString " ";
     };
 
-    featureGates = mkOption {
+    featureGates = lib.mkOption {
       description = "Attribute set of feature gates.";
       default = top.featureGates;
-      defaultText = literalExpression "config.${otop.featureGates}";
-      type = attrsOf bool;
+      defaultText = lib.literalExpression "config.${otop.featureGates}";
+      type = lib.types.attrsOf lib.types.bool;
     };
 
-    hostname = mkOption {
+    hostname = lib.mkOption {
       description = "Kubernetes proxy hostname override.";
       default = config.networking.hostName;
-      defaultText = literalExpression "config.networking.hostName";
-      type = str;
+      defaultText = lib.literalExpression "config.networking.hostName";
+      type = lib.types.str;
     };
 
     kubeconfig = top.lib.mkKubeConfigOptions "Kubernetes proxy";
 
-    verbosity = mkOption {
+    verbosity = lib.mkOption {
       description = ''
         Optional glog verbosity level for logging statements. See
         <https://github.com/kubernetes/community/blob/master/contributors/devel/logging.md>
       '';
       default = null;
-      type = nullOr int;
+      type = lib.types.nullOr lib.types.int;
     };
 
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.kube-proxy = {
       description = "Kubernetes Proxy Service";
       wantedBy = [ "kubernetes.target" ];
@@ -80,18 +77,18 @@ in
         ExecStart = ''
           ${top.package}/bin/kube-proxy \
           --bind-address=${cfg.bindAddress} \
-          ${optionalString (top.clusterCidr != null) "--cluster-cidr=${top.clusterCidr}"} \
+          ${lib.optionalString (top.clusterCidr != null) "--cluster-cidr=${top.clusterCidr}"} \
           ${
-            optionalString (cfg.featureGates != { })
+            lib.optionalString (cfg.featureGates != { })
               "--feature-gates=${
-                concatStringsSep "," (
-                  builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates)
+                lib.concatStringsSep "," (
+                  builtins.attrValues (lib.mapAttrs (n: v: "${n}=${lib.trivial.boolToString v}") cfg.featureGates)
                 )
               }"
           } \
           --hostname-override=${cfg.hostname} \
           --kubeconfig=${top.lib.mkKubeConfig "kube-proxy" cfg.kubeconfig} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+          ${lib.optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
           ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
@@ -103,7 +100,7 @@ in
       };
     };
 
-    services.kubernetes.proxy.hostname = with config.networking; mkDefault hostName;
+    services.kubernetes.proxy.hostname = lib.mkDefault config.networking.hostName;
 
     services.kubernetes.pki.certs = {
       kubeProxyClient = top.lib.mkCert {
@@ -113,7 +110,7 @@ in
       };
     };
 
-    services.kubernetes.proxy.kubeconfig.server = mkDefault top.apiserverAddress;
+    services.kubernetes.proxy.kubeconfig.server = lib.mkDefault top.apiserverAddress;
   };
 
   meta.buildDocsInSandbox = false;
