@@ -229,6 +229,36 @@ let
       '';
     };
 
+    allowlistedLicenses = mkOption {
+      description = ''
+        Allow licenses that are specifically acceptable. `allowlistedLicenses` only applies to unfree licenses unless
+        `allowUnfree` is enabled. It is not a generic allowlist for all types of licenses.
+      '';
+      default = [ ];
+      type = types.listOf (types.attrsOf types.anything);
+      example = literalExpression ''
+        with lib.licenses; [
+          amd
+          wtfpl
+        ]
+      '';
+    };
+
+    blocklistedLicenses = mkOption {
+      description = ''
+        Block licenses that are specifically unacceptable. Unlike `allowlistedLicenses`, `blocklistedLicenses`
+        applies to all licenses.
+      '';
+      default = [ ];
+      type = types.listOf (types.attrsOf types.anything);
+      example = literalExpression ''
+        with lib.licenses; [
+          agpl3Only
+          gpl3Only
+        ]
+      '';
+    };
+
     cudaSupport = mkMassRebuild {
       feature = "build packages with CUDA support by default";
     };

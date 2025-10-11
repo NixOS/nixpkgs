@@ -3,18 +3,23 @@
 # coming from the cuda_compat package by adding it to the RUNPATH.
 echo "Sourcing auto-add-cuda-compat-runpath-hook"
 
+if [[ -z "@libcudaPath@" ]]; then
+  echo "auto-add-cuda-compat-runpath-hook: cuda_compat not available, skipping hook"
+  return
+fi
+
 addCudaCompatRunpath() {
   local libPath
   local origRpath
 
   if [[ $# -eq 0 ]]; then
-    echo "addCudaCompatRunpath: no library path provided" >&2
+    nixLog "no library path provided" >&2
     exit 1
   elif [[ $# -gt 1 ]]; then
-    echo "addCudaCompatRunpath: too many arguments" >&2
+    nixLog "too many arguments" >&2
     exit 1
   elif [[ "$1" == "" ]]; then
-    echo "addCudaCompatRunpath: empty library path" >&2
+    nixLog "empty library path" >&2
     exit 1
   else
     libPath="$1"
