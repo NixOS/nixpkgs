@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Recursive content discovery tool";
     homepage = "https://github.com/epi052/feroxbuster";
-    changelog = "https://github.com/epi052/feroxbuster/releases/tag/v${src.tag}";
+    changelog = "https://github.com/epi052/feroxbuster/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
     platforms = platforms.unix;
