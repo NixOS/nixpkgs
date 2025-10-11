@@ -145,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
+    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })
