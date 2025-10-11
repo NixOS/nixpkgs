@@ -68,6 +68,8 @@ buildPythonPackage {
       libcufft # libcufft.so.XX
       cudnn # libcudnn.soXX
       cuda_cudart # libcudart.so.XX
+    ]
+    ++ lib.optionals onnxruntime.passthru.ncclSupport [
       nccl # libnccl.so.XX
     ]
   );

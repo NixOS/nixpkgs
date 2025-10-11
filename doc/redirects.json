@@ -58,9 +58,8 @@
   ],
   "cuda-updating-redistributables": [
     "index.html#cuda-updating-redistributables",
-    "index.html#updating-cuda-redistributables"
-  ],
-  "cuda-updating-cutensor": [
+    "index.html#updating-cuda-redistributables",
+    "index.html#updating-the-cuda-toolkit",
     "index.html#cuda-updating-cutensor",
     "index.html#updating-cutensor"
   ],
@@ -71,10 +70,6 @@
   "cuda-updating-the-cuda-package-set": [
     "index.html#cuda-updating-the-cuda-package-set",
     "index.html#updating-the-cuda-package-set"
-  ],
-  "cuda-updating-the-cuda-toolkit": [
-    "index.html#cuda-updating-the-cuda-toolkit",
-    "index.html#updating-the-cuda-toolkit"
   ],
   "cuda-user-guide": [
     "index.html#cuda-user-guide"

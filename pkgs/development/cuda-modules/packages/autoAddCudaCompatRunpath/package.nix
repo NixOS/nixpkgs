@@ -6,24 +6,24 @@
 {
   autoFixElfFiles,
   cuda_compat,
+  lib,
   makeSetupHook,
 }:
+let
+  # cuda_compat can be null or broken, depending on the platform, CUDA release, and compute capability.
+  # To avoid requiring all consumers of this hook to do these checks, we do them here; the hook is a no-op if
+  # cuda_compat is not available.
+  enableHook = cuda_compat != null && cuda_compat.meta.available;
+in
 makeSetupHook {
   name = "auto-add-cuda-compat-runpath-hook";
-  propagatedBuildInputs = [ autoFixElfFiles ];
+  propagatedBuildInputs = lib.optionals enableHook [ autoFixElfFiles ];
 
   substitutions = {
-    libcudaPath = "${cuda_compat}/compat";
+    libcudaPath = lib.optionalString enableHook "${cuda_compat}/compat";
   };
 
-  meta =
-    let
-      # Handle `null`s in pre-`cuda_compat` releases,
-      # and `badPlatform`s for `!isJetsonBuild`.
-      platforms = cuda_compat.meta.platforms or [ ];
-      badPlatforms = cuda_compat.meta.badPlatforms or platforms;
-    in
-    {
-      inherit badPlatforms platforms;
-    };
+  passthru = {
+    inherit enableHook;
+  };
 } ./auto-add-cuda-compat-runpath.sh

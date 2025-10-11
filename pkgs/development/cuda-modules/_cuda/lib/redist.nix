@@ -111,26 +111,39 @@
   /**
     Maps a Nix system to a NVIDIA redistributable system.
 
-    NOTE: We swap out the default `linux-sbsa` redist (for server-grade ARM chips) with the `linux-aarch64` redist
-    (which is for Jetson devices) if we're building any Jetson devices. Since both are based on aarch64, we can only
-    have one or the other, otherwise there's an ambiguity as to which should be used.
+    NOTE: Certain Nix systems can map to multiple NVIDIA redistributable systems. In particular, ARM systems can map to
+    either `linux-sbsa` (for server-grade ARM chips) or `linux-aarch64` (for Jetson devices). Complicating matters
+    further, as of CUDA 13.0, Jetson Thor devices use `linux-sbsa` instead of `linux-aarch64`. (It is unknown whether
+    NVIDIA plans to make the Orin series use `linux-sbsa` as well for the CUDA 13.0 release.)
 
     NOTE: This function *will* be called by unsupported systems because `cudaPackages` is evaluated on all systems. As
     such, we need to handle unsupported systems gracefully.
 
+    NOTE: This function does not check whether the provided CUDA capabilities are valid for the given CUDA version.
+    The heavy validation work to ensure consistency of CUDA capabilities is performed by backendStdenv.
+
     # Type
 
     ```
-    getRedistSystem :: (hasJetsonCudaCapability :: Bool) -> (nixSystem :: String) -> String
+    getRedistSystem ::
+      { cudaCapabilities :: List String
+      , cudaMajorMinorVersion :: String
+      , system :: String
+      }
+      -> String
     ```
 
     # Inputs
 
-    `hasJetsonCudaCapability`
+    `cudaCapabilities`
 
-    : If configured for a Jetson device
+    : The list of CUDA capabilities to build GPU code for
 
-    `nixSystem`
+    `cudaMajorMinorVersion`
+
+    : The major and minor version of CUDA (e.g. "12.6")
+
+    `system`
 
     : The Nix system
 
@@ -140,22 +153,53 @@
     ## `cudaLib.getRedistSystem` usage examples
 
     ```nix
-    getRedistSystem true "aarch64-linux"
+    getRedistSystem {
+      cudaCapabilities = [ "8.7" ];
+      cudaMajorMinorVersion = "12.6";
+      system = "aarch64-linux";
+    }
     => "linux-aarch64"
     ```
 
     ```nix
-    getRedistSystem false "aarch64-linux"
+    getRedistSystem {
+      cudaCapabilities = [ "11.0" ];
+      cudaMajorMinorVersion = "13.0";
+      system = "aarch64-linux";
+    }
+    => "linux-sbsa"
+    ```
+
+    ```nix
+    getRedistSystem {
+      cudaCapabilities = [ "8.0" "8.9" ];
+      cudaMajorMinorVersion = "12.6";
+      system = "aarch64-linux";
+    }
     => "linux-sbsa"
     ```
     :::
   */
   getRedistSystem =
-    hasJetsonCudaCapability: nixSystem:
-    if nixSystem == "x86_64-linux" then
+    {
+      cudaCapabilities,
+      cudaMajorMinorVersion,
+      system,
+    }:
+    if system == "x86_64-linux" then
       "linux-x86_64"
-    else if nixSystem == "aarch64-linux" then
-      if hasJetsonCudaCapability then "linux-aarch64" else "linux-sbsa"
+    else if system == "aarch64-linux" then
+      # If all the Jetson devices are at least 10.1 (Thor, CUDA 12.9; CUDA 13.0 and later use 11.0 for Thor), then
+      # we've got SBSA.
+      if
+        lib.all (
+          cap: _cuda.db.cudaCapabilityToInfo.${cap}.isJetson -> lib.versionAtLeast cap "10.1"
+        ) cudaCapabilities
+      then
+        "linux-sbsa"
+      # Otherwise we've got some Jetson devices older than Thor and need to use linux-aarch64.
+      else
+        "linux-aarch64"
     else
       "unsupported";
 

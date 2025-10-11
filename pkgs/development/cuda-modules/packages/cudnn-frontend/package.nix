@@ -1,21 +1,23 @@
 {
   autoAddDriverRunpath,
+  backendStdenv,
   catch2_3,
   cmake,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cuda_nvrtc,
+  cudaNamePrefix,
+  cudnn,
   fetchFromGitHub,
   gitUpdater,
   lib,
+  libcublas,
   ninja,
   nlohmann_json,
-  stdenv,
-  cuda_cccl ? null,
-  cuda_cudart ? null,
-  cuda_nvcc ? null,
-  cuda_nvrtc ? null,
-  cudnn ? null,
-  libcublas ? null,
 }:
 let
+  inherit (lib) licenses maintainers teams;
   inherit (lib.lists) optionals;
   inherit (lib.strings)
     cmakeBool
@@ -23,9 +25,14 @@ let
     optionalString
     ;
 in
-
 # TODO(@connorbaker): This should be a hybrid C++/Python package.
-stdenv.mkDerivation (finalAttrs: {
+backendStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
+  name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
+
   pname = "cudnn-frontend";
   version = "1.9.0";
 
@@ -46,9 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   # nlohmann_json should be the only vendored dependency.
   postPatch = ''
-    echo "patching source to use nlohmann_json from nixpkgs"
-    rm -rf include/cudnn_frontend/thirdparty/nlohmann
-    rmdir include/cudnn_frontend/thirdparty
+    nixLog "patching source to use nlohmann_json from nixpkgs"
+    rm -rfv include/cudnn_frontend/thirdparty/nlohmann
+    rmdir -v include/cudnn_frontend/thirdparty
     substituteInPlace include/cudnn_frontend_utils.h \
       --replace-fail \
         '#include "cudnn_frontend/thirdparty/nlohmann/json.hpp"' \
@@ -120,13 +127,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A c++ wrapper for the cudnn backend API";
     homepage = "https://github.com/NVIDIA/cudnn-frontend";
-    license = lib.licenses.mit;
-    badPlatforms = optionals (cudnn == null) finalAttrs.meta.platforms;
+    license = licenses.mit;
+    # TODO(@connorbaker): How tightly coupled is this library to specific cuDNN versions?
+    # Should it be marked as broken if it doesn't match our expected version?
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
     ];
-    maintainers = with lib.maintainers; [ connorbaker ];
-    teams = [ lib.teams.cuda ];
+    maintainers = [ maintainers.connorbaker ];
+    teams = [ teams.cuda ];
   };
 })

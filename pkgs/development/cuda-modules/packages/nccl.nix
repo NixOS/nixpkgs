@@ -2,57 +2,62 @@
 # the names of dependencies from that package set directly to avoid evaluation errors
 # in the case redistributable packages are not available.
 {
-  lib,
+  _cuda,
+  backendStdenv,
+  cuda_cccl,
+  cuda_cudart,
+  cuda_nvcc,
+  cudaNamePrefix,
   fetchFromGitHub,
+  flags,
+  lib,
   python3,
   which,
-  autoAddDriverRunpath,
-  cudaPackages,
   # passthru.updateScript
   gitUpdater,
 }:
 let
-  inherit (cudaPackages)
-    backendStdenv
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cudaAtLeast
-    flags
+  inherit (_cuda.lib) _mkMetaBadPlatforms;
+  inherit (backendStdenv) hasJetsonCudaCapability requestedJetsonCudaCapabilities;
+  inherit (lib) licenses maintainers teams;
+  inherit (lib.attrsets)
+    getBin
+    getLib
+    getOutput
     ;
-  version = "2.27.6-1";
-  hash = "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  strictDeps = true;
+
+  # NOTE: Depends on the CUDA package set, so use cudaNamePrefix.
+  name = "${cudaNamePrefix}-${finalAttrs.pname}-${finalAttrs.version}";
   pname = "nccl";
-  version = version;
+  version = "2.27.6-1";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "nccl";
-    rev = "v${finalAttrs.version}";
-    hash = hash;
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU=";
   };
-
-  __structuredAttrs = true;
-  strictDeps = true;
 
   outputs = [
     "out"
     "dev"
+    "static"
   ];
 
   nativeBuildInputs = [
-    which
-    autoAddDriverRunpath
-    python3
     cuda_nvcc
+    python3
+    which
   ];
 
   buildInputs = [
-    cuda_nvcc # crt/host_config.h
-    cuda_cudart
+    (getOutput "include" cuda_nvcc)
     cuda_cccl
+    cuda_cudart
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-unused-function" ];
@@ -60,35 +65,56 @@ backendStdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs ./src/device/generate.py
     patchShebangs ./src/device/symmetric/generate.py
+
+    nixLog "patching $PWD/makefiles/common.mk to remove NVIDIA's ccbin declaration"
+    substituteInPlace ./makefiles/common.mk \
+      --replace-fail \
+        '-ccbin $(CXX)' \
+        ""
   '';
 
+  # TODO: This would likely break under cross; need to delineate between build and host packages.
   makeFlags = [
-    "PREFIX=$(out)"
+    "CUDA_HOME=${getBin cuda_nvcc}"
+    "CUDA_INC=${getOutput "include" cuda_cudart}/include"
+    "CUDA_LIB=${getLib cuda_cudart}/lib"
     "NVCC_GENCODE=${flags.gencodeString}"
-    "CUDA_HOME=${cuda_nvcc}"
-    "CUDA_LIB=${lib.getLib cuda_cudart}/lib"
-    "CUDA_INC=${lib.getDev cuda_cudart}/include"
+    "PREFIX=$(out)"
   ];
 
   enableParallelBuilding = true;
 
   postFixup = ''
-    moveToOutput lib/libnccl_static.a $dev
+    moveToOutput lib/libnccl_static.a "$static"
   '';
 
-  passthru.updateScript = gitUpdater {
-    inherit (finalAttrs) pname version;
-    rev-prefix = "v";
+  passthru = {
+    platformAssertions = [
+      {
+        message = "Pre-Thor Jetson devices (CUDA capabilities < 10.1) are not supported by NCCL";
+        assertion =
+          !hasJetsonCudaCapability
+          || lib.all (lib.flip lib.versionAtLeast "10.1") requestedJetsonCudaCapabilities;
+      }
+    ];
+
+    updateScript = gitUpdater {
+      inherit (finalAttrs) pname version;
+      rev-prefix = "v";
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
     license = licenses.bsd3;
-    platforms = platforms.linux;
-    # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    # NCCL is not supported on Pre-Thor Jetsons, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
-    badPlatforms = lib.optionals flags.isJetsonBuild [ "aarch64-linux" ];
+    badPlatforms = _mkMetaBadPlatforms finalAttrs;
     maintainers = with maintainers; [
       mdaiter
       orivej
