@@ -124,7 +124,7 @@ in
           log_path = mkOption {
             description = "Directory Gancio logs into";
             readOnly = true;
-            type = types.str;
+            type = types.path;
             default = "/var/log/gancio";
           };
         };
