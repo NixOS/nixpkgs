@@ -5,15 +5,21 @@
   nix-update-script,
   buildNpmPackage,
 }:
+let
+  githubTag = "0.12.9";
+  sourceHash = "sha256-uyNY8vvagIINEVFKzoGB4oxvOIYwIg80yso8UDc1e/w=";
+  npmHash = "sha256-2zpJgkDXZoMWI6SkcfrhzozAITUR9ZUVtMbRtYKM13w=";
+  goHash = "sha256-8Sr7MYQnIfNx9hvfjCTYKQOUZIBxpGPbsR75jEB0mbk=";
+in
 buildGoModule rec {
   pname = "beszel";
-  version = "0.12.3";
+  version = githubTag;
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-rthaufUL0JX3sE2hdrcJ8J73DLK4/2wMR+uOs8GoX2A=";
+    hash = sourceHash;
   };
 
   webui = buildNpmPackage {
@@ -45,18 +51,21 @@ buildGoModule rec {
       runHook postInstall
     '';
 
-    sourceRoot = "${src.name}/beszel/site";
+    sourceRoot = "${src.name}/internal/site";
 
-    npmDepsHash = "sha256-6J1LwRzwbQyXVBHNgG7k8CQ67JZIDqYreDbgfm6B4w4=";
+    npmDepsHash = npmHash;
   };
 
-  sourceRoot = "${src.name}/beszel";
+  sourceRoot = "${src.name}";
 
-  vendorHash = "sha256-Nd2jDlq+tdGrgxU6ZNgj9awAb+G/yDqY1J15dpMcjtw=";
+  vendorHash = goHash;
+
+  # TODO remove when #441125 is merged into master
+  postPatch = ''substituteInPlace go.mod --replace "go 1.25.1" "go 1.25.0"'';
 
   preBuild = ''
-    mkdir -p site/dist
-    cp -r ${webui}/* site/dist
+    mkdir -p internal/site/dist
+    cp -r ${webui}/* internal/site/dist
   '';
 
   postInstall = ''
