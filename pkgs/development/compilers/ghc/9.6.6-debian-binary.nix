@@ -96,13 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
     # version used in `archSpecificLibraries`.
     lib.optionalString (debUsed.exePathForLibraryCheck != null) (
       lib.concatStringsSep "\n" [
-        (''
+        ''
           shopt -u nullglob
           echo "Checking that ghc binary exists in deb at ${debUsed.exePathForLibraryCheck}"
           if ! test -e ${debUsed.exePathForLibraryCheck}; then
             echo >&2 "GHC binary ${debUsed.exePathForLibraryCheck} could not be found in the deb unpack directory for arch ${stdenv.hostPlatform.system}, please check that ghcDebs correctly reflect the deb dependencies!"; exit 1;
           fi
-        '')
+        ''
         (lib.concatMapStringsSep "\n" (
           { fileToCheckFor, nixPackage }:
           lib.optionalString (fileToCheckFor != null) ''
@@ -282,7 +282,7 @@ stdenv.mkDerivation (finalAttrs: {
     hadrian = null;
   };
 
-  meta = rec {
+  meta = {
     homepage = "http://haskell.org/ghc";
     description = "Glasgow Haskell Compiler";
     license = lib.licenses.bsd3;
