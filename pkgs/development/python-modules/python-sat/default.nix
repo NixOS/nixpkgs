@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchFromGitHub,
+  fetchPypi,
   lib,
   six,
   pypblib,
@@ -8,23 +8,17 @@
 }:
 buildPythonPackage {
   pname = "python-sat";
-  version = "0.1.8.dev20";
+  version = "1.8.dev21";
   format = "setuptools";
 
-  src = fetchFromGitHub {
-    owner = "pysathq";
-    repo = "pysat";
-    rev = "d94f51e5eff2feef35abbc25480659eafa615cc0"; # upstream does not tag releases
-    hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
+  src = fetchPypi {
+    inherit version;
+    pname = "python_sat";
+    hash = "sha256-AA8TZS7rcc199BnAqyGGkCRNbgAkyQTG9JVGxVHUdHI=";
   };
 
-  # Build SAT solver backends in parallel and fix hard-coded g++ reference for
-  # darwin, where stdenv uses clang
-  postPatch = ''
-    substituteInPlace solvers/prepare.py \
-      --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
-    substituteInPlace solvers/patches/glucose421.patch \
-      --replace-fail "+CXX      := g++" "+CXX      := c++"
+  preBuild = ''
+    export MAKEFLAGS="-j$NIX_BUILD_CORES"
   '';
 
   propagatedBuildInputs = [
@@ -32,9 +26,22 @@ buildPythonPackage {
     pypblib
   ];
 
+  pythonImportsCheck = [
+    "pysat"
+    "pysat.examples"
+    "pysat.allies"
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTestPaths = [ "tests/test_unique_mus.py" ];
+  # Due to `python -m pytest` appending the local directory to `PYTHONPATH`,
+  # importing `pysat.examples` in the tests fails. Removing the `pysat`
+  # directory fixes since then only the installed version in `$out` is
+  # imported, which has `pysat.examples` correctly installed.
+  # See https://github.com/NixOS/nixpkgs/issues/255262
+  preCheck = ''
+    rm -r pysat
+  '';
 
   meta = with lib; {
     description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
