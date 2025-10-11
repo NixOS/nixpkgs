@@ -4,7 +4,7 @@
   gobject-introspection,
   gtk3,
   gtksourceview4,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   wrapGAppsHook3,
   python3Packages,
 }:
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     # webkitgtk is used for rendering interactive statistics graph which
     # can be seen by opening a ROM, entering Pokemon section, selecting
     # any Pokemon, and clicking Stats and Moves tab.
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   nativeBuildInputs = [
@@ -68,6 +68,8 @@ python3Packages.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     homepage = "https://github.com/SkyTemple/skytemple";
     description = "ROM hacking tool for Pokémon Mystery Dungeon Explorers of Sky";
     mainProgram = "skytemple";

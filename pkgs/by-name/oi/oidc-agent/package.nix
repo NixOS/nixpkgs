@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   curl,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   libmicrohttpd,
   libsecret,
   qrencode,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    webkitgtk_4_0
+    # webkitgtk_4_0
     libmicrohttpd
     libsecret
     qrencode
@@ -62,6 +62,8 @@ stdenv.mkDerivation rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Manage OpenID Connect tokens on the command line";
     homepage = "https://github.com/indigo-dc/oidc-agent";
     maintainers = with maintainers; [ xinyangli ];

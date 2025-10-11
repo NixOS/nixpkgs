@@ -19,7 +19,7 @@
   ninja,
   pkg-config,
   sqlite,
-  webkitgtk_4_0,
+  # webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsecret
     openssl
     sqlite
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   mesonFlags = [
@@ -78,6 +78,8 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   meta = {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "E-mail client for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/balsa";
     changelog = "https://gitlab.gnome.org/GNOME/balsa/-/blob/master/ChangeLog";
