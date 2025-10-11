@@ -120,7 +120,7 @@ in
     };
 
     stateDir = mkOption {
-      type = types.str;
+      type = types.path;
       default = "/var/lib/dolibarr";
       description = ''
         State and configuration directory dolibarr will use.
