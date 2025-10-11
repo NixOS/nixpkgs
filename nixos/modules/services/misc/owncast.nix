@@ -14,7 +14,7 @@ in
     enable = lib.mkEnableOption "owncast, a video live streaming solution";
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/owncast";
       description = ''
         The directory where owncast stores its data files. If left as the default value this directory will automatically be created before the owncast server starts, otherwise the sysadmin is responsible for ensuring the directory exists with appropriate ownership and permissions.
