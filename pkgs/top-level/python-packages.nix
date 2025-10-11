@@ -16750,6 +16750,8 @@ self: super: with self; {
 
   shiny = callPackage ../development/python-modules/shiny { };
 
+  shinychat = callPackage ../development/python-modules/shinychat { };
+
   shippinglabel = callPackage ../development/python-modules/shippinglabel { };
 
   shiv = callPackage ../development/python-modules/shiv { };
