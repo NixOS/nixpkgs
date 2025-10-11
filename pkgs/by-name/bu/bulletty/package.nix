@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bulletty";
-  version = "0.1.7";
+  version = "0.1.8";
 
   src = fetchFromGitHub {
     owner = "CrociDB";
     repo = "bulletty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ceXHrsxUSDx4orlHTOdynYKDID/uvp8NxVMei1EqDA8=";
+    hash = "sha256-MVXz3ozAL26EYWAsarFbRR0cmAtaRpxcQROsLye56yE=";
   };
 
-  cargoHash = "sha256-vhZaklpNIGSMRSjD+WINphMVsAcepUJfw9WBnaxoK4c=";
+  cargoHash = "sha256-Q9h9VUTeFvP6pkQKj7y2pKVpoeg1hyoAbXMhAaO5zh8=";
 
   # perl is required for bulletty package build for openssl
   nativeBuildInputs = with pkgs; [
