@@ -1058,6 +1058,12 @@ in
     _module.args.withNg = true;
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
+  nixpkgs-config-allow-unfree =
+    pkgs.callPackage ../modules/misc/nixpkgs/test-nixpkgs-config-allow-unfree.nix
+      {
+        inherit evalMinimalConfig;
+        inherit evalSystem;
+      };
   nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
