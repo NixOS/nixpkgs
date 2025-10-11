@@ -33,6 +33,7 @@ let
       provider-source-address ?
         lib.replaceStrings [ "https://registry" ".io/providers" ] [ "registry" ".io" ]
           homepage,
+      namespaced ? "${owner}_${lib.removePrefix "terraform-provider-" repo}",
       ...
     }@attrs:
     assert lib.stringLength provider-source-address > 0;
@@ -74,7 +75,7 @@ let
       postInstall = ''
         dir=$out/libexec/terraform-providers/${provider-source-address}/${version}/''${GOOS}_''${GOARCH}
         mkdir -p "$dir"
-        mv $out/bin/* "$dir/terraform-provider-$(basename ${provider-source-address})_${version}"
+        mv $out/bin/* "$dir/terraform-provider-${namespaced}_${version}"
         rmdir $out/bin
       '';
 
@@ -82,8 +83,7 @@ let
       passthru = attrs // {
         inherit provider-source-address;
         updateScript = writeShellScript "update" ''
-          provider="$(basename ${provider-source-address})"
-          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "$provider"
+          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "${namespaced}"
         '';
       };
     }
@@ -97,16 +97,16 @@ let
   # These are the providers that don't fall in line with the default model
   special-providers = {
     # github api seems to be broken, doesn't just fail to recognize the license, it's ignored entirely.
-    checkly = automated-providers.checkly.override { spdx = "MIT"; };
-    gitlab = automated-providers.gitlab.override {
+    checkly_checkly = automated-providers.checkly_checkly.override { spdx = "MIT"; };
+    gitlabhq_gitlab = automated-providers.gitlabhq_gitlab.override {
       mkProviderFetcher = fetchFromGitLab;
       owner = "gitlab-org";
     };
     # mkisofs needed to create ISOs holding cloud-init data and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
-    libvirt = automated-providers.libvirt.overrideAttrs (_: {
+    dmacvicar_libvirt = automated-providers.dmacvicar_libvirt.overrideAttrs (_: {
       propagatedBuildInputs = [ cdrtools ];
     });
-    minio = automated-providers.minio.override { spdx = "AGPL-3.0-only"; };
+    aminueza_minio = automated-providers.aminueza_minio.override { spdx = "AGPL-3.0-only"; };
   };
 
   # Put all the providers we not longer support in this list.
@@ -117,13 +117,13 @@ let
       removed = name: date: throw "the ${name} terraform provider removed from nixpkgs on ${date}";
     in
     lib.optionalAttrs config.allowAliases {
-      _assert = archived "_assert" "2025/10";
-      azurestack = archived "azurestack" "2025/10";
-      googleworkspace = archived "googleworkspace" "2025/10";
-      huaweicloudstack = archived "huaweicloudstack" "2025/10";
-      metal = archived "metal" "2025/10";
-      stackpath = archived "stackpath" "2025/10";
-      vra7 = archived "vra7" "2025/10";
+      hashicorp_assert = archived "hashicorp_assert" "2025/10";
+      hashicorp_azurestack = archived "hashicorp_azurestack" "2025/10";
+      hashicorp_googleworkspace = archived "hashicorp_googleworkspace" "2025/10";
+      huaweicloud_huaweicloudstack = archived "huaweicloud_huaweicloudstack" "2025/10";
+      equinix_metal = archived "equinix_metal" "2025/10";
+      stackpath_stackpath = archived "stackpath_stackpath" "2025/10";
+      vmware_vra7 = archived "vmware_vra7" "2025/10";
     };
 
   # excluding aliases, used by terraform-full
