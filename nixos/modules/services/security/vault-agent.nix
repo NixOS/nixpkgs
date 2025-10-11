@@ -53,7 +53,7 @@ let
                     options = {
                       pid_file = lib.mkOption {
                         default = "/run/${flavour}/${name}.pid";
-                        type = types.str;
+                        type = types.path;
                         description = ''
                           Path to use for the pid file.
                         '';
