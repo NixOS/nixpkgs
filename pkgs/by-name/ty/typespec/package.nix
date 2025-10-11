@@ -14,13 +14,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "typespec";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "typespec";
     tag = "typespec-stable@${finalAttrs.version}";
-    hash = "sha256-huyEQA+XhlGVxnxUzQH1aIZUE4EbCN6HakitzuDyR18=";
+    hash = "sha256-tVFkS5DFP2a9Ib8ntwDRZdYDw6G0IrAd0B2RO2brC4Y=";
   };
 
   nativeBuildInputs = [
@@ -39,14 +39,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       postPatch
       ;
     fetcherVersion = 1;
-    hash = "sha256-/Y7KhdNeyUV2CQQWjhYBDDT24oE6UdBO6HTweUUaNqc=";
+    hash = "sha256-5q8tYiY2lhuyfD0Dy/WspY20Tdsqzo9gCSjLK8OoNvM=";
   };
 
   postPatch = ''
     # The `packageManager` attribute matches the version _exactly_, which makes
     # the build fail if it doesn't match exactly.
     substituteInPlace package.json \
-      --replace-fail '"packageManager": "pnpm@10.11.0"' '"packageManager": "pnpm"'
+      --replace-fail '"packageManager": "pnpm@10.15.1"' '"packageManager": "pnpm"'
     # `fetchFromGitHub` doesn't clone via git and thus installing would otherwise fail.
     substituteInPlace packages/compiler/scripts/generate-manifest.js \
       --replace-fail 'execSync("git rev-parse HEAD").toString().trim()' '"${finalAttrs.src.rev}"'
