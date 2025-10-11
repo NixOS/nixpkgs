@@ -1,0 +1,127 @@
+From f56d0ae1b602e210bc4cdfda6ab9781dd125b325 Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Fri, 3 Oct 2025 13:54:02 +0200
+Subject: [PATCH] unvendor
+
+---
+ CMakeLists.txt                     | 12 ++++--------
+ code/AssetLib/IFC/IFCLoader.cpp    |  2 +-
+ code/CMakeLists.txt                | 18 +++++++++++-------
+ code/Common/ZipArchiveIOSystem.cpp |  2 +-
+ 4 files changed, 17 insertions(+), 17 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index cd8f51537..174e53967 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -96,11 +96,8 @@ ENDIF()
+ option(ASSIMP_HUNTER_ENABLED "Enable Hunter package manager support" OFF)
+ 
+ IF(ASSIMP_HUNTER_ENABLED)
+-  include("cmake-modules/HunterGate.cmake")
+-  HunterGate(
+-    URL "https://github.com/cpp-pm/hunter/archive/v0.25.8.tar.gz"
+-    SHA1 "26c79d587883ec910bce168e25f6ac4595f97033"
+-  )
++  macro(hunter_add_package)
++  endmacro()
+   ADD_DEFINITIONS(-DASSIMP_USE_HUNTER)
+ ENDIF()
+ 
+@@ -537,12 +534,11 @@ ENDIF()
+ # Search for zlib
+ IF(ASSIMP_HUNTER_ENABLED)
+   hunter_add_package(ZLIB)
+-  find_package(ZLIB CONFIG REQUIRED)
++  cmake_pkg_config(IMPORT zlib REQUIRED)
+ 
+   add_definitions(-DASSIMP_BUILD_NO_OWN_ZLIB)
+   SET(ZLIB_FOUND TRUE)
+-  SET(ZLIB_LIBRARIES ZLIB::zlib)
+-  SET(ASSIMP_BUILD_MINIZIP TRUE)
++  SET(ZLIB_LIBRARIES PkgConfig::zlib)
+ ELSE()
+   # If the zlib is already found outside, add an export in case assimpTargets can't find it.
+   IF( ZLIB_FOUND AND ASSIMP_INSTALL)
+diff --git a/code/AssetLib/IFC/IFCLoader.cpp b/code/AssetLib/IFC/IFCLoader.cpp
+index 373752609..3a7c36261 100644
+--- a/code/AssetLib/IFC/IFCLoader.cpp
++++ b/code/AssetLib/IFC/IFCLoader.cpp
+@@ -51,7 +51,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+ #ifndef ASSIMP_BUILD_NO_COMPRESSED_IFC
+ #ifdef ASSIMP_USE_HUNTER
+-#include <minizip/unzip.h>
++#include <minizip-ng/unzip.h>
+ #else
+ #include <unzip.h>
+ #endif
+diff --git a/code/CMakeLists.txt b/code/CMakeLists.txt
+index 8728188b7..aa3c6c773 100644
+--- a/code/CMakeLists.txt
++++ b/code/CMakeLists.txt
+@@ -1173,7 +1173,7 @@ ENDIF()
+ # minizip/unzip
+ IF(ASSIMP_HUNTER_ENABLED)
+   hunter_add_package(minizip)
+-  find_package(minizip CONFIG REQUIRED)
++  find_package(minizip-ng CONFIG REQUIRED)
+ ELSE()
+   SET( unzip_SRCS
+     ../contrib/unzip/crypt.h
+@@ -1289,6 +1289,7 @@ ENDIF ()
+ IF(ASSIMP_HUNTER_ENABLED)
+   hunter_add_package(RapidJSON)
+   find_package(RapidJSON CONFIG REQUIRED)
++  add_library(RapidJSON::rapidjson ALIAS RapidJSON)
+ ELSE()
+   INCLUDE_DIRECTORIES("../contrib/rapidjson/include")
+   ADD_DEFINITIONS( -DRAPIDJSON_HAS_STDSTRING=1)
+@@ -1301,7 +1302,6 @@ ENDIF()
+ # stb
+ IF(ASSIMP_HUNTER_ENABLED)
+   hunter_add_package(stb)
+-  find_package(stb CONFIG REQUIRED)
+ ELSE()
+   SET( stb_SRCS
+     ../contrib/stb/stb_image.h
+@@ -1488,14 +1488,18 @@ TARGET_INCLUDE_DIRECTORIES ( assimp PUBLIC
+ IF(ASSIMP_HUNTER_ENABLED)
+   TARGET_LINK_LIBRARIES(assimp
+       PUBLIC
+-      openddlparser::openddl_parser
+-      minizip::minizip
+-      ZLIB::zlib
++      openddlparser::openddlparser
++      MINIZIP::minizip-ng
++      PkgConfig::zlib
+       RapidJSON::rapidjson
+-      utf8cpp
++      utf8cpp::utf8cpp
+       pugixml
+-      stb::stb
+   )
++  TARGET_INCLUDE_DIRECTORIES(assimp
++          PUBLIC
++          "@stb@/include"
++  )
++
+   if(TARGET zip::zip)
+     target_link_libraries(assimp PUBLIC zip::zip)
+   endif()
+diff --git a/code/Common/ZipArchiveIOSystem.cpp b/code/Common/ZipArchiveIOSystem.cpp
+index e2234e27e..972d0b9c6 100644
+--- a/code/Common/ZipArchiveIOSystem.cpp
++++ b/code/Common/ZipArchiveIOSystem.cpp
+@@ -52,7 +52,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ #include <memory>
+ 
+ #ifdef ASSIMP_USE_HUNTER
+-#    include <minizip/unzip.h>
++#    include <minizip-ng/unzip.h>
+ #else
+ #    include <unzip.h>
+ #endif
+-- 
+2.51.0
+

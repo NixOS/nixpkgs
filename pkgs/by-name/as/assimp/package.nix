@@ -1,15 +1,38 @@
 {
   lib,
+
   stdenv,
   fetchFromGitHub,
-  cmake,
-  zlib,
   nix-update-script,
+  replaceVars,
+
+  # nativeBuildInputs
+  cmake,
+  pkg-config,
+
+  # buildInputs
+  bzip2,
+  kuba-zip,
+  minizip-ng,
+  openddl-parser,
+  openssl,
+  pugixml,
+  stb,
+  utf8cpp,
+  zip,
+  zlib,
+  xz,
+  zstd,
+
+  # checkInputs
+  gtest,
+  rapidjson,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "assimp";
   version = "6.0.2";
+
   outputs = [
     "out"
     "lib"
@@ -23,10 +46,47 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
   };
 
-  nativeBuildInputs = [ cmake ];
+  patches = [
+    (replaceVars ./unvendor.patch {
+      inherit stb;
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace code/AssetLib/OpenGEX/OpenGEXImporter.cpp --replace-fail \
+      "prop->m_key->m_text.m_buffer" \
+      "prop->m_key->m_buffer"
+    substituteInPlace /build/source/code/AssetLib/OpenGEX/OpenGEXImporter.cpp --replace-fail \
+      "currentName->m_id->m_text.m_buffer" \
+      "currentName->m_id->m_buffer" 
+    substituteInPlace /build/source/code/AssetLib/OpenGEX/OpenGEXImporter.cpp --replace-fail \
+      "&prop->m_key->m_text" \
+      "prop->m_key"
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [
+    bzip2
+    kuba-zip
+    minizip-ng
+    openddl-parser
+    openssl
+    pugixml
+    stb
+    utf8cpp
+    xz
+    zip
     zlib
+    zstd
+  ];
+
+  checkInputs = [
+    gtest
+    rapidjson
   ];
 
   strictDeps = true;
@@ -34,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
+    (lib.cmakeBool "ASSIMP_HUNTER_ENABLED" true) # Tell assimp we have a package manager. But we wont use it.
   ];
 
   # Some matrix tests fail on non-86_64-linux:
@@ -54,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "assimp";
     homepage = "https://www.assimp.org/";
     license = lib.licenses.bsd3;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.nim65s ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })
