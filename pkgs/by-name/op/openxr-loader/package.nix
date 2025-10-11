@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openxr-loader";
-  version = "1.1.51";
+  version = "1.1.52";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "OpenXR-SDK-Source";
     tag = "release-${version}";
-    hash = "sha256-NEArzegPZNL0zRbnUHrNbNhBtj0IJP+uha1ehzwB7wA=";
+    hash = "sha256-YLf5ZPViWWz+wwCOUESBNfNH4oV1/BY8RwCKs2nEnR4=";
   };
 
   nativeBuildInputs = [
