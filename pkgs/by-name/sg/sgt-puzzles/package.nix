@@ -16,18 +16,18 @@
   isMobile ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sgt-puzzles";
   version = "20250926.e00cb46";
 
   src = fetchurl {
-    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
+    url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${finalAttrs.version}.tar.gz";
     hash = "sha256-CsMrhYpaTRMz364kt5b/bCY67PCoYwS50Fxw8mi2QCY=";
   };
 
   sgt-puzzles-menu = fetchurl {
     url = "https://raw.githubusercontent.com/gentoo/gentoo/720e614d0107e86fc1e520bac17726578186843d/games-puzzle/sgt-puzzles/files/sgt-puzzles.menu";
-    sha256 = "088w0x9g3j8pn725ix8ny8knhdsfgjr3hpswsh9fvfkz5vlg2xkm";
+    hash = "sha256-dXbx6C5/uu0S1FxfOLJ8TjdoJ/IW9VjEsRfJ8VIHHCE=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
         --set-key Type --set-value Application \
         --set-key Exec --set-value $i \
         --set-key Name --set-value $i \
-        --set-key Comment --set-value "${meta.description}" \
+        --set-key Comment --set-value "${finalAttrs.meta.description}" \
         --set-key Categories --set-value "Game;LogicGame;X-sgt-puzzles;" \
         --set-key Icon --set-value $out/share/icons/hicolor/96x96/apps/$i-96d24.png \
         $i.desktop
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
       --set-key Icon --set-value $out/share/icons/hicolor/48x48/apps/sgt-puzzles_map \
       sgt-puzzles.directory
 
-    install -Dm644 ${sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
+    install -Dm644 ${finalAttrs.sgt-puzzles-menu} -t $out/etc/xdg/menus/applications-merged/
   '';
 
   passthru = {
@@ -88,14 +88,14 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simon Tatham's portable puzzle collection";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       raskin
       tomfitzhenry
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
   };
-}
+})
