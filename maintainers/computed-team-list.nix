@@ -28,6 +28,11 @@ lib.mapAttrs (
     // {
       shortName = githubTeam.name;
       scope = githubTeam.description;
+      githubMaintainers = lib.mapAttrsToList (
+        login: id:
+        maintainersById.${toString id}
+        or (lib.warn "lib.teams: No maintainer entry for GitHub user @${login} who's part of the @NixOS/${attrs.github} team" null)
+      ) githubTeam.maintainers;
       members = lib.mapAttrsToList (
         login: id:
         maintainersById.${toString id}
