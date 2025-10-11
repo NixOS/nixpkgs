@@ -14,7 +14,7 @@ in
       enable = lib.mkEnableOption "Lidarr, a Usenet/BitTorrent music downloader";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/lidarr/.config/Lidarr";
         description = "The directory where Lidarr stores its data files.";
       };
