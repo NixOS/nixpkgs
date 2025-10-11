@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "dbus-fast";
-  version = "2.44.3";
+  version = "2.44.5";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
     tag = "v${version}";
-    hash = "sha256-ZpTQjAmrLoenDWzd/0NpD7fqTd6Dv1J0Ks0db4twwYk=";
+    hash = "sha256-dDUZjV6bwSlWclKmJAROB4OQsCzTUswmYe2LmFiIiz0=";
   };
 
   postPatch = ''
