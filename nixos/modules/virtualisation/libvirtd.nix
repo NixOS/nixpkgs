@@ -480,6 +480,7 @@ in
         ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
         # Symlink to OVMF firmware code and variable template images distributed with QEMU
+        # shellcheck disable=SC2046
         cp -sfv $(
           ${pkgs.jq}/bin/jq -rs \
             '[.[] | .mapping.executable.filename, .mapping."nvram-template".filename] | unique | .[]' \
