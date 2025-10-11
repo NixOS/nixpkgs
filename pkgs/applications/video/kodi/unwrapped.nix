@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchzip,
-  fetchpatch,
   autoconf,
   automake,
   libtool,
@@ -19,8 +18,9 @@
   boost,
   avahi,
   lame,
+  exiv2,
   gettext,
-  pcre-cpp,
+  pcre2,
   yajl,
   fribidi,
   which,
@@ -73,7 +73,7 @@
   libcec_platform,
   dcadec,
   libuuid,
-  libcrossguid,
+  crossguid,
   libmicrohttpd,
   bluez,
   doxygen,
@@ -89,7 +89,7 @@
   zlib,
   flatbuffers,
   fstrcmp,
-  rapidjson,
+  nlohmann_json,
   lirc,
   mesa-gl-headers,
   x11Support ? true,
@@ -245,30 +245,15 @@ stdenv.mkDerivation (
   in
   {
     pname = "kodi";
-    version = "21.2";
-    kodiReleaseName = "Omega";
+    version = "22.0a1";
+    kodiReleaseName = "Piers";
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = "xbmc";
       rev = "${finalAttrs.version}-${finalAttrs.kodiReleaseName}";
-      hash = "sha256-RdTJcq6FPerQx05dU3r8iyaorT4L7162hg5RdywsA88=";
+      hash = "sha256-xpbyhKtGmAg5OjPihWTVUsei3/DGqSYqegDYveMEWSo=";
     };
-
-    patches = [
-      # Backport to fix build with Pipewire 1.4
-      # FIXME: remove in the next update
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/269053ebbfd3cc4a3156a511f54ab7f08a09a730.patch";
-        hash = "sha256-JzzrMJvAufrxTxtWnzknUS9JLJEed+qdtVnIYYe9LCw=";
-      })
-      # Backport to fix build with cURL 8.16
-      # FIXME: remove in the next update
-      (fetchpatch {
-        url = "https://github.com/xbmc/xbmc/commit/957b4faa0b765bc91e64c6d33f07e853decae0d0.patch";
-        hash = "sha256-zsqcZSjsApcgs/oEdFFlcwldGCVZxCsDG02ogs+q2uw=";
-      })
-    ];
 
     # make  derivations declared in the let binding available here, so
     # they can be overridden
@@ -291,8 +276,9 @@ stdenv.mkDerivation (
       python3Packages.python
       boost
       libmicrohttpd
+      exiv2
       gettext
-      pcre-cpp
+      pcre2
       yajl
       fribidi
       libva
@@ -345,7 +331,7 @@ stdenv.mkDerivation (
       libgcrypt
       libgpg-error
       libunistring
-      libcrossguid
+      crossguid
       libplist
       bluez
       glib
@@ -355,7 +341,7 @@ stdenv.mkDerivation (
       ffmpeg
       flatbuffers
       fstrcmp
-      rapidjson
+      nlohmann_json
       lirc
       mesa-gl-headers
 
@@ -438,7 +424,7 @@ stdenv.mkDerivation (
       "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
-      "-DENABLE_INTERNAL_RapidJSON=OFF"
+      "-DENABLE_INTERNAL_NLOHMANNJ=OFF"
       "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
       "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
