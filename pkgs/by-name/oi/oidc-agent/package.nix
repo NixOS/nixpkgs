@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   curl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   libmicrohttpd,
   libsecret,
   qrencode,
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    webkitgtk_4_0
+    webkitgtk_4_1
     libmicrohttpd
     libsecret
     qrencode
@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     "BIN_PATH=$(out)"
     "PROMPT_BIN_PATH=$(out)"
     "LIB_PATH=$(out)/lib"
+    "WEBKITGTK=webkit2gtk-4.1"
   ];
 
   installTargets = [
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Override with patched binary to be used by help2man
     cp -r $out/bin/* bin
-    make install_man PREFIX=$out MAN_PATH=$out/share/man PROMPT_MAN_PATH=$out/share/man
+    make install_man PREFIX=$out MAN_PATH=$out/share/man PROMPT_MAN_PATH=$out/share/man WEBKITGTK=webkit2gtk-4.1
   '';
 
   passthru.updateScript = nix-update-script { };
