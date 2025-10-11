@@ -1581,6 +1581,7 @@ in
   vault-dev = runTest ./vault-dev.nix;
   vault-postgresql = runTest ./vault-postgresql.nix;
   vaultwarden = discoverTests (import ./vaultwarden.nix);
+  vaultwarden-litestream = handleTest ./vaultwarden-litestream.nix { };
   vdirsyncer = runTest ./vdirsyncer.nix;
   vector = import ./vector { inherit runTest; };
   velocity = runTest ./velocity.nix;
