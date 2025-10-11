@@ -9331,6 +9331,8 @@ with pkgs;
   etcd = etcd_3_5;
   etcd_3_5 = callPackage ../servers/etcd/3_5 { };
 
+  firejail-disable-sandbox-check = callPackage ../by-name/fi/firejail/disable-sandbox-check.nix { };
+
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];
     withExtraLuaPackages = _: [ ];
