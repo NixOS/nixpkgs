@@ -2346,9 +2346,6 @@
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
   ],
-  "aws-c-common": [
-    "index.html#aws-c-common"
-  ],
   "bmake-hook": [
     "index.html#bmake-hook"
   ],
