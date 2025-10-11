@@ -21,7 +21,9 @@
   boost,
   msgpack-cxx,
   sqlite,
-  oneDNN,
+  # TODO(@LunNova): Swap to `oneDNN` once v3 is supported
+  # Upstream issue: https://github.com/ROCm/AMDMIGraphX/issues/4351
+  oneDNN_2,
   blaze,
   texliveSmall,
   doxygen,
@@ -53,15 +55,6 @@ let
       ]
     )
   );
-  oneDNN' = oneDNN.overrideAttrs rec {
-    version = "2.7.5";
-    src = fetchFromGitHub {
-      owner = "oneapi-src";
-      repo = "oneDNN";
-      tag = "v${version}";
-      hash = "sha256-oMPBORAdL2rk2ewyUrInYVHYBRvuvNX4p4rwykO3Rhs=";
-    };
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
@@ -120,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     msgpack-cxx
     sqlite
-    oneDNN'
+    oneDNN_2
     blaze
     python3Packages.pybind11
     python3Packages.onnx
