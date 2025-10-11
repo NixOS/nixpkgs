@@ -39,7 +39,7 @@ in
       };
 
       stateDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/heartbeat";
         description = "The state directory. heartbeat's own logs and other data are stored here.";
       };
