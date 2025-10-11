@@ -14,7 +14,7 @@ in
       enable = lib.mkEnableOption "NZBHydra2, Usenet meta search";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/nzbhydra2";
         description = "The directory where NZBHydra2 stores its data files.";
       };
