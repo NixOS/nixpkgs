@@ -19,7 +19,7 @@
 }:
 
 let
-  stuntrally_mygui = callPackage ./mygui.nix { };
+  mygui = callPackage ./mygui.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "stuntrally";
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     boost
     ogre-next
-    stuntrally_mygui
+    mygui
     rapidjson
     SDL2
     libvorbis
@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = { inherit stuntrally_mygui; };
+  passthru = { inherit mygui; };
 
   meta = with lib; {
     description = "Stunt Rally game with Track Editor, based on VDrift and OGRE";
