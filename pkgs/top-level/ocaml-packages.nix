@@ -232,8 +232,6 @@ let
 
         cfstream = callPackage ../development/ocaml-modules/cfstream { };
 
-        chacha = callPackage ../development/ocaml-modules/chacha { };
-
         checkseum = callPackage ../development/ocaml-modules/checkseum { };
 
         chrome-trace = callPackage ../development/ocaml-modules/chrome-trace { };
@@ -2234,6 +2232,7 @@ let
       }
       // lib.optionalAttrs config.allowAliases {
         biocaml = throw "biocaml has been removed"; # 2025-06-04
+        chacha = throw "chacha has been removed because it has been marked as broken since at least November 2024. It is now vendored inside mirage-crypto, consider using that instead."; # Added 2025-10-11
         gd4o = throw "ocamlPackages.gd4o is not maintained, use ocamlPackages.gd instead";
         ocaml-vdom = throw "2023-10-09: ocamlPackages.ocaml-vdom was renamed to ocamlPackages.vdom";
       }
