@@ -110,7 +110,12 @@ let
   startVM = ''
     #! ${hostPkgs.runtimeShell}
 
-    export PATH=${makeBinPath [ hostPkgs.coreutils ]}''${PATH:+:}$PATH
+    export PATH=${
+      makeBinPath [
+        hostPkgs.coreutils
+        hostPkgs.jq
+      ]
+    }''${PATH:+:}$PATH
 
     set -e
 
@@ -136,14 +141,20 @@ let
             ''
               # Create a writable qcow2 image using the systemImage as a backing
               # image.
+              BACKING_SIZE_BYTES=$(${qemu}/bin/qemu-img info ${systemImage}/nixos.qcow2 --output=json | jq -r '."virtual-size"')
+              DISK_SIZE_BYTES=$((${toString cfg.diskSize} * 1024 * 1024))
+              if (( DISK_SIZE_BYTES < BACKING_SIZE_BYTES )); then
+                NEW_BYTES=$BACKING_SIZE_BYTES
+              else
+                NEW_BYTES=$DISK_SIZE_BYTES
+              fi
 
-              # CoW prevent size to be attributed to an image.
-              # FIXME: raise this issue to upstream.
               ${qemu}/bin/qemu-img create \
                 -f qcow2 \
                 -b ${systemImage}/nixos.qcow2 \
                 -F qcow2 \
-                "$NIX_DISK_IMAGE"
+                "$NIX_DISK_IMAGE" \
+                 $NEW_BYTESb
             ''
           else if cfg.useDefaultFilesystems then
             ''
