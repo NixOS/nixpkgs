@@ -4,11 +4,12 @@
   lib,
   rustPlatform,
   testers,
+  mold,
 }:
 
 let
   pname = "gfold";
-  version = "2025.7.0";
+  version = "2025.9.0";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -17,10 +18,12 @@ rustPlatform.buildRustPackage {
     owner = "nickgerace";
     repo = "gfold";
     rev = version;
-    hash = "sha256-EWQ17aEOEZnYEe3WJpyNuC+r4tv8DP1fYFH6fII2p+8=";
+    hash = "sha256-sPvhZaDGInXH2PT8fg28m7wyDZiIE4fFScNO8WIjV9s=";
   };
 
-  cargoHash = "sha256-3hzcYPD/w2vbsSuuHNAD2Oyqw0B0PIdERGgCAvAiQpk=";
+  cargoHash = "sha256-pbIE8QXY8lYsDGdmGVsOPesVTaHRjDBSd7ihQhN2XrI=";
+
+  nativeBuildInputs = [ mold ];
 
   passthru.tests.version = testers.testVersion {
     package = gfold;
