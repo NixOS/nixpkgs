@@ -12155,6 +12155,11 @@
     githubId = 3908945;
     name = "Juho Törmä";
   };
+  jjy = {
+    github = "jjyr";
+    githubId = 1695400;
+    name = "Jinyang Jiang";
+  };
   jk = {
     email = "hello+nixpkgs@j-k.io";
     matrix = "@j-k:matrix.org";
