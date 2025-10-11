@@ -94,6 +94,9 @@ in
           pop-icon-theme
           pop-launcher
           xdg-user-dirs
+          pulseaudio
+          glib
+          networkmanagerapplet
         ]
         ++ lib.optionals config.services.flatpak.enable [
           # User may have Flatpaks enabled but might not want the `cosmic-store` package.
