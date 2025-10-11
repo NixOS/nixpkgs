@@ -66,7 +66,7 @@ rec {
   */
   convertToPackagePlatformAttrs =
     packagePlatformPaths:
-    builtins.filter (x: x != null) (builtins.map convertToPackagePlatformAttr packagePlatformPaths);
+    builtins.filter (x: x != null) (map convertToPackagePlatformAttr packagePlatformPaths);
 
   /*
     Converts a list of `packagePlatformPath`s directly to a list of (unique) package names
@@ -91,7 +91,7 @@ rec {
     let
       packagePlatformAttrs = convertToPackagePlatformAttrs (uniqueStrings packagePlatformPaths);
     in
-    uniqueStrings (builtins.map (p: p.name) packagePlatformAttrs);
+    uniqueStrings (map (p: p.name) packagePlatformAttrs);
 
   /*
     Group a list of `packagePlatformAttr`s by platforms
