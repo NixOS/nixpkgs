@@ -18,6 +18,10 @@
       or larger ecosystems within nixpkgs.
   - `github` will ping the specified GitHub team and sync the `members`, `scope` and `shortName` fields from it
 
+  If `github` is specified and you'd like to be added to the team, contact one of the `githubMaintainers` of the team:
+
+      nix eval -f lib teams.someTeam.githubMaintainers --json | jq
+
   More fields may be added in the future.
 
   When editing this file:
