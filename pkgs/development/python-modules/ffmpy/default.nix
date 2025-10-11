@@ -25,14 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/Ch00k/ffmpy/commit/11a053d11939b488ce7ac362589372904218a798.patch?full_index=1";
-      hash = "sha256-78D64uSX03zp2VM7h3hg493Vtow8fh+tQWXkzVgokDA=";
-    })
-  ];
-
   postPatch =
     # Default to store ffmpeg.
     ''
