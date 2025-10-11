@@ -260,6 +260,11 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
+      # curl 8.16 upgrade breakage
+      (fetchpatch {
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
+        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
+      })
     ];
 
   postPatch = ''
