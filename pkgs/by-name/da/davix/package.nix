@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_IPV6=${boolToUpper enableIpv6}"
     "-DENABLE_TCP_NODELAY=${boolToUpper enableTcpNodelay}"
     "-DENABLE_THIRD_PARTY_COPY=${boolToUpper enableThirdPartyCopy}"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   meta = with lib; {
