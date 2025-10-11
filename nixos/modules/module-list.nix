@@ -202,6 +202,7 @@
   ./programs/droidcam.nix
   ./programs/dublin-traceroute.nix
   ./programs/ecryptfs.nix
+  ./programs/ente-auth.nix
   ./programs/environment.nix
   ./programs/envision.nix
   ./programs/evince.nix
