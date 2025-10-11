@@ -7,7 +7,7 @@
   hidapi,
   pkg-config,
   coreutils,
-  mbedtls_2,
+  mbedtls,
   symlinkJoin,
 }:
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     libusb1
     hidapi
-    mbedtls_2
+    mbedtls
   ]
   ++ (with libsForQt5; [
     qtbase
