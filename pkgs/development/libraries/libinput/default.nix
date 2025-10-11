@@ -9,6 +9,7 @@
   libevdev,
   mtdev,
   udev,
+  wacomSupport ? true,
   libwacom,
   documentationSupport ? false,
   doxygen,
@@ -85,7 +86,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libevdev
     mtdev
-    libwacom
     (python3.withPackages (
       pp: with pp; [
         pp.libevdev # already in scope
@@ -94,6 +94,9 @@ stdenv.mkDerivation rec {
         setuptools
       ]
     ))
+  ]
+  ++ lib.optionals wacomSupport [
+    libwacom
   ]
   ++ lib.optionals eventGUISupport [
     # GUI event viewer
@@ -116,6 +119,7 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    (mkFlag wacomSupport "libwacom")
     "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
