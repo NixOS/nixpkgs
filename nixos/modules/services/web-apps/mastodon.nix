@@ -415,7 +415,7 @@ in
           exist, it and this file will be created with a new keypair.
         '';
         default = "/var/lib/mastodon/secrets/vapid-public-key";
-        type = lib.types.str;
+        type = lib.types.path;
       };
 
       vapidPrivateKeyFile = lib.mkOption {
@@ -430,7 +430,7 @@ in
           private key.
         '';
         default = "/var/lib/mastodon/secrets/vapid-private-key";
-        type = lib.types.str;
+        type = lib.types.path;
       };
 
       localDomain = lib.mkOption {
@@ -451,7 +451,7 @@ in
           keys.
         '';
         default = "/var/lib/mastodon/secrets/active-record-encryption-deterministic-key";
-        type = lib.types.str;
+        type = lib.types.path;
       };
 
       activeRecordEncryptionKeyDerivationSaltFile = lib.mkOption {
@@ -466,7 +466,7 @@ in
           keys.
         '';
         default = "/var/lib/mastodon/secrets/active-record-encryption-key-derivation-salt";
-        type = lib.types.str;
+        type = lib.types.path;
       };
 
       activeRecordEncryptionPrimaryKeyFile = lib.mkOption {
@@ -481,7 +481,7 @@ in
           keys.
         '';
         default = "/var/lib/mastodon/secrets/active-record-encryption-primary-key";
-        type = lib.types.str;
+        type = lib.types.path;
       };
 
       secretKeyBaseFile = lib.mkOption {
@@ -494,7 +494,7 @@ in
           If this file does not exist, it will be created with a new secret key base.
         '';
         default = "/var/lib/mastodon/secrets/secret-key-base";
-        type = lib.types.str;
+        type = lib.types.path;
       };
 
       trustedProxy = lib.mkOption {
