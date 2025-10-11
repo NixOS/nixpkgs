@@ -20,19 +20,19 @@
     ]
   },
   "calendar": {
-    "hash": "sha256-YWoaCt8X4yCDtAoFw6/AxtaHYQKrX6jKnrDR1pEDLfM=",
-    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.5.5/calendar-v5.5.5.tar.gz",
-    "version": "5.5.5",
-    "description": "A Calendar app for Nextcloud. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Like Contacts, Talk, Tasks, Deck and Circles\n* 🌐 **WebCal Support!** Want to see your favorite team's matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 **Search!** Find your events at ease\n* ☑️ **Tasks!** See tasks or Deck cards with a due date directly in the calendar\n* 🔈 **Talk rooms!** Create an associated Talk room when booking a meeting with just one click\n* 📆 **Appointment booking** Send people a link so they can book an appointment with you [using this app](https://apps.nextcloud.com/apps/appointments)\n* 📎 **Attachments!** Add, upload and view event attachments\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
+    "hash": "sha256-G/cGq9rxdP9bJEMXSf2Vc+cECDPAS4Gbg/YPGiD4xAY=",
+    "url": "https://github.com/nextcloud-releases/calendar/releases/download/v5.5.6/calendar-v5.5.6.tar.gz",
+    "version": "5.5.6",
+    "description": "The Calendar app is a user interface for Nextcloud's CalDAV server. Easily sync events from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Contacts - more to come.\n* 🌐 **WebCal Support!** Want to see your favorite team’s matchdays in your calendar? No problem!\n* 🙋 **Attendees!** Invite people to your events\n* ⌚️ **Free/Busy!** See when your attendees are available to meet\n* ⏰ **Reminders!** Get alarms for events inside your browser and via email\n* 🔍 Search! Find your events at ease\n* ☑️ Tasks! See tasks with a due date directly in the calendar\n* 🙈 **We’re not reinventing the wheel!** Based on the great [c-dav library](https://github.com/nextcloud/cdav-library), [ical.js](https://github.com/mozilla-comm/ical.js) and [fullcalendar](https://github.com/fullcalendar/fullcalendar) libraries.",
     "homepage": "https://github.com/nextcloud/calendar/",
     "licenses": [
       "agpl"
     ]
   },
   "collectives": {
-    "hash": "sha256-W/bXZAMpDdFZ1AeBq9RtKEebyq4FQ8uWBn0YSmzQuos=",
-    "url": "https://github.com/nextcloud/collectives/releases/download/v3.1.2/collectives-3.1.2.tar.gz",
-    "version": "3.1.2",
+    "hash": "sha256-VQawIQzg8+/W1NsKtnFY7noIQuYJXZV84S7NkOPb3xQ=",
+    "url": "https://github.com/nextcloud/collectives/releases/download/v3.2.0/collectives-3.2.0.tar.gz",
+    "version": "3.2.0",
     "description": "Collectives is a Nextcloud App for activist and community projects to organize together.\nCome and gather in collectives to build shared knowledge.\n\n* 👥 **Collective and non-hierarchical workflow by heart**: Collectives are\n  tied to a [Nextcloud Team](https://github.com/nextcloud/circles) and\n  owned by the collective.\n* 📝 **Collaborative page editing** like known from Etherpad thanks to the\n  [Text app](https://github.com/nextcloud/text).\n* 🔤 **Well-known [Markdown](https://en.wikipedia.org/wiki/Markdown) syntax**\n  for page formatting.\n\n## Installation\n\nIn your Nextcloud instance, simply navigate to **»Apps«**, find the\n**»Teams«** and **»Collectives«** apps and enable them.",
     "homepage": "https://github.com/nextcloud/collectives",
     "licenses": [
@@ -40,9 +40,9 @@
     ]
   },
   "contacts": {
-    "hash": "sha256-WPswtqD9vOLZCnKMHv9hA3NbAthj50zaxc3ocXK4POY=",
-    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.2/contacts-v7.3.2.tar.gz",
-    "version": "7.3.2",
+    "hash": "sha256-E9CV7fJzIFmSyfdUxQrol9mr/VJKxEJTqsaSWbHw3yg=",
+    "url": "https://github.com/nextcloud-releases/contacts/releases/download/v7.3.3/contacts-v7.3.3.tar.gz",
+    "version": "7.3.3",
     "description": "The Nextcloud contacts app is a user interface for Nextcloud's CardDAV server. Easily sync contacts from various devices with your Nextcloud and edit them online.\n\n* 🚀 **Integration with other Nextcloud apps!** Currently Mail and Calendar – more to come.\n* 🎉 **Never forget a birthday!** You can sync birthdays and other recurring events with your Nextcloud Calendar.\n* 👥 **Sharing of Adressbooks!** You want to share your contacts with your friends or coworkers? No problem!\n* 🙈 **We’re not reinventing the wheel!** Based on the great and open SabreDAV library.",
     "homepage": "https://github.com/nextcloud/contacts#readme",
     "licenses": [
@@ -140,9 +140,9 @@
     ]
   },
   "gpoddersync": {
-    "hash": "sha256-PyyqE2mCClEQkW2cg3541VboCDtxKN2lwPRVRE9ewJs=",
-    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.12.0/gpoddersync.tar.gz",
-    "version": "3.12.0",
+    "hash": "sha256-anBa8RiQ4oEM95fp08elIMu3jO0pIelRp35JxK7UflQ=",
+    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.13.1/gpoddersync.tar.gz",
+    "version": "3.13.1",
     "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
     "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
     "licenses": [
@@ -200,9 +200,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-7quVg4jNTt1R+rH6/D3lDVOL+i+i+BQAGYg0z5kLapE=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.5.6/mail-v5.5.6.tar.gz",
-    "version": "5.5.6",
+    "hash": "sha256-8/J1oQ7aVaroYYy2HtQyDpDw7vTtgkE+Rzzy6ySC2Tg=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v5.5.7/mail-v5.5.7.tar.gz",
+    "version": "5.5.7",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://www.horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -460,9 +460,9 @@
     ]
   },
   "whiteboard": {
-    "hash": "sha256-/tzGi1uq+1L74cLzGTdrnl+A9SMUrXOoyJPmijCOAN0=",
-    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.2.1/whiteboard-v1.2.1.tar.gz",
-    "version": "1.2.1",
+    "hash": "sha256-2CSc9gRXAHaKiq4KfVl+44eWhtBFgjHYbMeTwE18xuA=",
+    "url": "https://github.com/nextcloud-releases/whiteboard/releases/download/v1.3.0/whiteboard-v1.3.0.tar.gz",
+    "version": "1.3.0",
     "description": "The official whiteboard app for Nextcloud. It allows users to create and share whiteboards with other users and collaborate in real-time.\n\n**Whiteboard requires a separate collaboration server to work.** Please see the [documentation](https://github.com/nextcloud/whiteboard?tab=readme-ov-file#backend) on how to install it.\n\n- 🎨 Drawing shapes, writing text, connecting elements\n- 📝 Real-time collaboration\n- 🖼️ Add images with drag and drop\n- 📊 Easily add mermaid diagrams\n- ✨ Use the Smart Picker to embed other elements from Nextcloud\n- 📦 Image export\n- 💪 Strong foundation: We use Excalidraw as our base library",
     "homepage": "https://github.com/nextcloud/whiteboard",
     "licenses": [
