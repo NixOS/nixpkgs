@@ -8,7 +8,6 @@
   fetchFromGitHub,
   fetchpatch,
   fmt,
-  gfortran,
   gts,
   hdf5,
   libGLU,
@@ -19,13 +18,11 @@
   ninja,
   ode,
   opencascade-occt,
+  microsoft-gsl,
   pkg-config,
   python3Packages,
-  spaceNavSupport ? stdenv.hostPlatform.isLinux,
   stdenv,
   swig,
-  vtk,
-  wrapGAppsHook3,
   xercesc,
   yaml-cpp,
   zlib,
@@ -50,6 +47,7 @@ let
     pyyaml # (at least for) PyrateWorkbench
     scipy
     shiboken6
+    vtk
   ];
 
   freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
@@ -71,10 +69,8 @@ freecad-utils.makeCustomizable (
       cmake
       ninja
       pkg-config
-      gfortran
       swig
       doxygen
-      wrapGAppsHook3
       qt6.wrapQtAppsHook
     ];
 
@@ -86,21 +82,21 @@ freecad-utils.makeCustomizable (
       hdf5
       libGLU
       libXmu
+      libspnav
       medfile
       ode
-      vtk
       xercesc
       yaml-cpp
       zlib
       opencascade-occt
+      microsoft-gsl
       qt6.qtbase
       qt6.qtsvg
       qt6.qttools
       qt6.qtwayland
       qt6.qtwebengine
     ]
-    ++ pythonDeps
-    ++ lib.optionals spaceNavSupport [ libspnav ];
+    ++ pythonDeps;
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -135,13 +131,6 @@ freecad-utils.makeCustomizable (
       "-DBUILD_QT6=ON"
     ];
 
-    # This should work on both x86_64, and i686 linux
-    preBuild = ''
-      export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
-    '';
-
-    dontWrapGApps = true;
-
     qtWrapperArgs =
       let
         binPath = lib.makeBinPath [
@@ -153,7 +142,6 @@ freecad-utils.makeCustomizable (
         "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
         "--prefix PATH : ${binPath}"
         "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-        "\${gappsWrapperArgs[@]}"
       ];
 
     postFixup = ''
