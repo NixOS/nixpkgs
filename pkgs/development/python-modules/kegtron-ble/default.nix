@@ -7,7 +7,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "kegtron-ble";
   version = "1.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
@@ -43,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Kegtron BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/kegtron-ble";
-    changelog = "https://github.com/Bluetooth-Devices/kegtron-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Bluetooth-Devices/kegtron-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
