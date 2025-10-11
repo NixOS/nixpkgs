@@ -22,6 +22,7 @@
   cohttp-lwt-unix,
   lwt_log,
   re,
+  logs-syslog,
   cryptokit,
   xml-light,
   ipaddr,
@@ -51,8 +52,8 @@ let
   ];
 in
 
-buildDunePackage rec {
-  version = "6.0.0";
+buildDunePackage {
+  version = "6.0.0-unstable-2025-08-11";
   pname = "ocsigenserver";
 
   minimalOCamlVersion = "4.08";
@@ -60,11 +61,11 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
-    tag = version;
-    hash = "sha256-T3bgPZpDO6plgebLJDBtBuR2eR/bN3o24UAUv1VwgtI=";
+    rev = "0d3c74d71fbdf738d1e45a98814b7ebdd1efe6c1";
+    hash = "sha256-KEHTw4cCPRJSE4SAnUFWzeoiEz8y9nUQFpaFiNxAsiU=";
   };
 
-  patches = [ ./conduit.patch ];
+  duneVersion = "3";
 
   nativeBuildInputs = [
     makeWrapper
@@ -84,22 +85,13 @@ buildDunePackage rec {
     lwt_log
     lwt_ssl
     re
+    logs-syslog
     xml-light
-  ];
-
-  configureFlags = [
-    "--root $(out)"
-    "--prefix /"
-    "--temproot ''"
   ];
 
   dontAddPrefix = true;
   dontAddStaticConfigureFlags = true;
   configurePlatforms = [ ];
-
-  postConfigure = ''
-    make -C src confs
-  '';
 
   postInstall = ''
     make install.files
