@@ -26318,6 +26318,12 @@
     githubId = 67477750;
     name = "Tomkoid";
   };
+  TomMD = {
+    name = "Thomas M. DuBuisson";
+    email = "thomas.dubuisson@gmail.com";
+    github = "TomMD";
+    githubId = 137806;
+  };
   Tommimon = {
     name = "Tommaso Montanari";
     email = "sefymw7q8@mozmail.com";
