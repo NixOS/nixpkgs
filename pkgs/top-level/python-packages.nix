@@ -10879,6 +10879,12 @@ self: super: with self; {
 
   onedrive-personal-sdk = callPackage ../development/python-modules/onedrive-personal-sdk { };
 
+  onelogin = callPackage ../development/python-modules/onelogin { };
+
+  onelogin_2 = callPackage ../development/python-modules/onelogin/2.nix { };
+
+  onelogin-aws-assume-role = callPackage ../development/python-modules/onelogin-aws-assume-role { };
+
   onetimepad = callPackage ../development/python-modules/onetimepad { };
 
   onetimepass = callPackage ../development/python-modules/onetimepass { };
