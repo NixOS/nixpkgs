@@ -18,20 +18,29 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vencord";
-  version = "1.13.1";
+  version = "1.13.3";
 
   src = fetchFromGitHub {
     owner = "Vendicated";
     repo = "Vencord";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-FqRRpsS1NPpxJr6iaDvQJ3fuX07oo08lZ6f+oEQb3MM=";
+    hash = "sha256-wKLI2YE1rEzkRjDeM85XAx2DIrWYGoZrQT8OHtsNJ7E=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs) pname src;
-    fetcherVersion = 2;
-    hash = "sha256-JP9HOaP3DG+2F89tC77JZFD0ls35u/MzxNmvMCbBo9Y=";
-  };
+  patches = [ ./fix-deps.patch ];
+
+  postPatch = ''
+    substituteInPlace packages/vencord-types/package.json \
+      --replace-fail '"@types/react": "18.3.1"' '"@types/react": "19.0.12"'
+  '';
+
+  pnpmDeps =
+    (pnpm_10.fetchDeps {
+      inherit (finalAttrs) pname src;
+      fetcherVersion = 2;
+      hash = "sha256-5MjxEs+jbowJJbJ9+Z+vppFImpB+PZzEhntwRAgv+xM=";
+    }).overrideAttrs
+      { inherit (finalAttrs) patches postPatch; };
 
   nativeBuildInputs = [
     git
@@ -96,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
       Gliczy
       NotAShelf
       Scrumplex
+      ryand56
     ];
   };
 })

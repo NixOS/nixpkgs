@@ -24,6 +24,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     cd sources/pyside2-tools
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.1)" \
+      "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
