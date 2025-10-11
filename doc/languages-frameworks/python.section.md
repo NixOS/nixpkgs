@@ -230,34 +230,28 @@ because their behaviour is different:
 The `buildPythonPackage` function has a `overridePythonAttrs` method that can be
 used to override the package. In the following example we create an environment
 where we have the `blaze` package using an older version of `pandas`. We
-override first the Python interpreter and pass `packageOverrides` which contains
-the overrides for packages in the package set.
+override first the Python package set, then instance an interpreter with
+that package set.
 
 ```nix
 with import <nixpkgs> { };
 
 (
   let
-    python =
-      let
-        packageOverrides = self: super: {
-          pandas = super.pandas.overridePythonAttrs (old: rec {
-            version = "0.19.1";
-            src = fetchPypi {
-              pname = "pandas";
-              inherit version;
-              hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
-            };
-          });
-        };
-      in
-      pkgs.python3.override {
-        inherit packageOverrides;
-        self = python;
-      };
-
+    pythonPackages = python3Packages.overrideScope (
+      self: super: {
+        pandas = super.pandas.overridePythonAttrs (old: rec {
+          version = "0.19.1";
+          src = fetchPypi {
+            pname = "pandas";
+            inherit version;
+            hash = "sha256-JQn+rtpy/OA2deLszSKEuxyttqBzcAil50H+JDHUdCE=";
+          };
+        });
+      }
+    );
   in
-  python.withPackages (ps: [ ps.blaze ])
+  pythonPackages.python.withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -266,13 +260,14 @@ be used through out all of the Python package set:
 
 ```nix
 {
-  python3MyBlas = pkgs.python3.override {
-    packageOverrides = self: super: {
-      # We need toPythonModule for the package set to evaluate this
-      blas = super.toPythonModule (super.pkgs.blas.override { blasProvider = super.pkgs.mkl; });
-      lapack = super.toPythonModule (super.pkgs.lapack.override { lapackProvider = super.pkgs.mkl; });
-    };
-  };
+  python3MyBlas =
+    (python3Packages.overrideScope (
+      self: super: {
+        # We need toPythonModule for the package set to evaluate this
+        blas = self.toPythonModule (super.blas.override { blasProvider = super.mkl; });
+        lapack = self.toPythonModule (super.lapack.override { lapackProvider = super.mkl; });
+      }
+    )).python;
 }
 ```
 
@@ -578,14 +573,6 @@ be used as a library, i.e., of primary interest are the modules in
 In the Nixpkgs tree Python applications can be found throughout, depending on
 what they do, and are called from the main package set. Python libraries,
 however, are in separate sets, with one set per interpreter version.
-
-The interpreters have several common attributes. One of these attributes is
-`pkgs`, which is a package set of Python libraries for this specific
-interpreter. E.g., the `toolz` package corresponding to the default interpreter
-is `python3.pkgs.toolz`, and the CPython 3.13 version is `python313.pkgs.toolz`.
-The main package set contains aliases to these package sets, e.g.
-`pythonPackages` refers to `python.pkgs` and `python313Packages` to
-`python313.pkgs`.
 
 #### Installing Python and packages {#installing-python-and-packages}
 
@@ -1652,26 +1639,23 @@ should also be done when packaging `A`.
 
 ### How to override a Python package? {#how-to-override-a-python-package}
 
-We can override the interpreter and pass `packageOverrides`. In the following
-example we rename the `pandas` package and build it.
+We can override the python package set, then instance an interpreter with it.
+In the following example we rename the `pandas` package and build it.
 
 ```nix
 with import <nixpkgs> { };
 
 (
   let
-    python =
-      let
-        packageOverrides = self: super: {
-          pandas = super.pandas.overridePythonAttrs (old: {
-            name = "foo";
-          });
+    pythonPackages = python3Packages.overrideScope (
+      self: super: {
+        pandas = super.pandas.overridePythonAttrs {
+          name = "foo";
         };
-      in
-      pkgs.python310.override { inherit packageOverrides; };
-
+      }
+    );
   in
-  python.withPackages (ps: [ ps.pandas ])
+  pythonPackages.python.withPackages (ps: [ ps.pandas ])
 ).env
 ```
 
@@ -1690,9 +1674,9 @@ with import <nixpkgs> { };
 
 (
   let
-    packageOverrides = self: super: { scipy = super.scipy_0_17; };
+    pythonPackages = python310Packages.overrideScope (_: super: { scipy = super.scipy_0_17; });
   in
-  (pkgs.python310.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
+  pythonPackages.python3.withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -1707,14 +1691,16 @@ let
   pkgs = import <nixpkgs> { };
   newpkgs = import pkgs.path {
     overlays = [
-      (self: super: {
+      (_: super: {
         python310 =
           let
-            packageOverrides = python-self: python-super: {
-              numpy = python-super.numpy_1_18;
-            };
+            pythonPackages = super.python310Packages.overrideScope (
+              _: super: {
+                numpy = super.numpy_1_18;
+              }
+            );
           in
-          super.python310.override { inherit packageOverrides; };
+          pythonPackages.python3;
       })
     ];
   };
@@ -1913,18 +1899,19 @@ If you need to change a package's attribute(s) from `configuration.nix` you coul
 ```nix
 {
   nixpkgs.config.packageOverrides = super: {
-    python3 = super.python3.override {
-      packageOverrides = python-self: python-super: {
-        twisted = python-super.twisted.overridePythonAttrs (oldAttrs: {
-          src = super.fetchPypi {
-            pname = "Twisted";
-            version = "19.10.0";
-            hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
-            extension = "tar.bz2";
+    python3 =
+      (super.python3Packages.overrideScope (
+        _: python-super: {
+          twisted = python-super.twisted.overridePythonAttrs {
+            src = super.fetchPypi {
+              pname = "Twisted";
+              version = "19.10.0";
+              hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
+              extension = "tar.bz2";
+            };
           };
-        });
-      };
-    };
+        }
+      )).python3;
   };
 }
 ```
@@ -1950,18 +1937,19 @@ Use the following overlay template:
 
 ```nix
 self: super: {
-  python = super.python.override {
-    packageOverrides = python-self: python-super: {
-      twisted = python-super.twisted.overrideAttrs (oldAttrs: {
-        src = super.fetchPypi {
-          pname = "Twisted";
-          version = "19.10.0";
-          hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
-          extension = "tar.bz2";
+  python =
+    (super.python3Packages.overrideScope (
+      py-self: py-super: {
+        twisted = py-super.twisted.overrideAttrs {
+          src = self.fetchPypi {
+            pname = "Twisted";
+            version = "19.10.0";
+            hash = "sha256-c5S6fycq5yKnTz2Wnc9Zm8TvCTvDkgOHSKSQ8XJKUV0=";
+            extension = "tar.bz2";
+          };
         };
-      });
-    };
-  };
+      }
+    )).python;
 }
 ```
 
