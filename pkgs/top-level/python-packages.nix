@@ -18833,6 +18833,8 @@ self: super: with self; {
 
   tsplib95 = callPackage ../development/python-modules/tsplib95 { };
 
+  tt-burnin = callPackage ../development/python-modules/tt-burnin { };
+
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
   tt-smi = callPackage ../development/python-modules/tt-smi { };
