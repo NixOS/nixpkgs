@@ -46,7 +46,7 @@ in
         freeformType = settingsFormatIni.type;
         options.server = {
           data-dir = mkOption {
-            type = types.str;
+            type = types.path;
             default = "/var/lib/typesense";
             description = "Path to the directory where data will be stored on disk.";
           };
