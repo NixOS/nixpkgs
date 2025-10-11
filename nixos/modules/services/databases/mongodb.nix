@@ -80,13 +80,13 @@ in
       };
 
       dbpath = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/db/mongodb";
         description = "Location where MongoDB stores its files";
       };
 
       pidFile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/run/mongodb.pid";
         description = "Location of MongoDB pid file";
       };
