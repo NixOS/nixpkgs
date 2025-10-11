@@ -39,7 +39,7 @@ in
     };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/microbin";
       description = "Default data folder for MicroBin.";
     };
