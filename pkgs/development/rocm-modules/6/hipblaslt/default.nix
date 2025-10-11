@@ -136,6 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     ninja
     rocm-smi
+    zstd
   ];
 
   buildInputs = [
