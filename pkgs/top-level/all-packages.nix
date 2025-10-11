@@ -14903,6 +14903,8 @@ with pkgs;
 
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
+  calibrePlugins = recurseIntoAttrs (callPackage ../by-name/ca/calibre/plugins { });
+
   dillo = callPackage ../by-name/di/dillo/package.nix {
     fltk = fltk13;
   };
