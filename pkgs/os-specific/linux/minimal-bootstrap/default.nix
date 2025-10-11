@@ -75,7 +75,7 @@ lib.makeScope
 
       gawk-mes = callPackage ./gawk/mes.nix {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
         gnused = gnused-mes;
       };
 
@@ -123,7 +123,7 @@ lib.makeScope
         tinycc = tinycc-mes;
       };
 
-      gnumake = callPackage ./gnumake { tinycc = tinycc-mes; };
+      gnumake = callPackage ./gnumake { tinycc = tinycc-bootstrappable; };
 
       gnumake-musl = callPackage ./gnumake/musl.nix {
         bash = bash_2_05;
@@ -141,7 +141,7 @@ lib.makeScope
       };
       gnused-mes = callPackage ./gnused/mes.nix {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
       };
 
       gnutar = callPackage ./gnutar/mes.nix {
@@ -165,13 +165,13 @@ lib.makeScope
 
       gzip = callPackage ./gzip {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
         gnused = gnused-mes;
       };
 
       heirloom = callPackage ./heirloom {
         bash = bash_2_05;
-        tinycc = tinycc-mes;
+        tinycc = tinycc-bootstrappable;
       };
 
       heirloom-devtools = callPackage ./heirloom-devtools { tinycc = tinycc-mes; };
