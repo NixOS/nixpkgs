@@ -41,6 +41,9 @@ let
 
     exec @out@/libexec/fallout-ce "$@"
   '';
+
+  osx_arch =
+    if stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isDarwin then "arm64" else "x86_64";
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,22 +69,39 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ SDL2 ];
 
+  cmakeFlags = [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-DCMAKE_OSX_ARCHITECTURES=${osx_arch}"
+  ];
+
   hardeningDisable = [ "format" ];
 
   postPatch = ''
     substituteInPlace third_party/fpattern/CMakeLists.txt \
       --replace-fail "FetchContent_Populate" "#FetchContent_Populate" \
       --replace-fail "\''${fpattern_SOURCE_DIR}" "${fpattern}/include"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "add_subdirectory(\"third_party/sdl2\")" "find_package(SDL2 REQUIRED)"
   '';
 
   installPhase = ''
     runHook preInstall
 
+    runHook postInstallLinux
+    runHook postInstallDarwin
+  '';
+
+  postInstallLinux = lib.optionalString stdenv.hostPlatform.isLinux ''
     install -D fallout-ce $out/libexec/fallout-ce
     install -D ${launcher} $out/bin/fallout-ce
     substituteInPlace $out/bin/fallout-ce --subst-var out
+  '';
 
-    runHook postInstall
+  postInstallDarwin = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications/Fallout-CE
+    cp -r "Fallout Community Edition.app" "$out/Applications/Fallout-CE/Fallout Community Edition.app"
   '';
 
   passthru.updateScript = nix-update-script { };
@@ -98,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       hughobrien
       iedame
     ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     mainProgram = "fallout-ce";
   };
 })
