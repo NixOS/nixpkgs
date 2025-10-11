@@ -26,7 +26,7 @@ in
     '';
 
     root = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/keter";
       description = "Mutable state folder for keter";
     };
