@@ -48,7 +48,7 @@ let
 
     outputHash =
       {
-        "aarch64-linux" = "sha256-92UFGgYLmtN13hW0/BV0gJa6ImrVyn+zRpDp5KeRRhs=";
+        "aarch64-linux" = "sha256-fa/WGRb4lWSXMqBmGhCd+N2fZr1YZKsskr3Oowp8gRE=";
         "x86_64-linux" = "sha256-jVi+pgcz96Dj25T4e/s+SHqsZfonzXs1WZYe0lCI48Q=";
       }
       .${stdenvNoCC.hostPlatform.system} or (throw "authentik-website-deps: unsupported host platform");
