@@ -1093,6 +1093,17 @@
     githubId = 1078000;
     name = "Alejandro Sánchez Medina";
   };
+  alejoheu = {
+    email = "alex@alejoh.eu";
+    github = "alejoheu";
+    githubId = 144659394;
+    name = "Alexander Johansen";
+    keys = [
+      {
+        fingerprint = "602C 67BD 90DE 3A4A 2318 75AD BF7F 4F95 FE2D 3F0B";
+      }
+    ];
+  };
   aleksana = {
     email = "me@aleksana.moe";
     github = "Aleksanaa";
