@@ -34,6 +34,7 @@ let
     toList
     isList
     elem
+    flatten
     ;
 
   inherit (lib.meta)
@@ -710,14 +711,49 @@ let
                   cpe = makeCPE guessedParts;
                 }
               ) possibleCPEPartsFuns;
+
+          # search for a pURL in the following order:
+          # - locally set
+          # - src.meta.pURL
+          # - srcs[].meta.pURL (for pURLs only)
+          purlParts = attrs.meta.identifiers.purlParts or { };
+          purl =
+            if purlParts ? type && purlParts ? spec then
+              "pkg:${purlParts.type}/${purlParts.spec}"
+            else
+              (attrs.src.meta.identifiers.purl or null);
+          purls =
+            attrs.meta.identifiers.purls or (
+              if purl != null then
+                [ purl ]
+              else
+                (attrs.src.meta.identifiers.purls or (
+                  # some of the srcs may not have a pURL
+                  builtins.filter (purl: purl != null) (
+                    map
+                      # get the pURLs from a single derivation
+                      (derivation: derivation.meta.identifiers.purls or null)
+
+                      # sometimes srcs is a single derivation
+                      (flatten (attrs.srcs or [ ]))
+                  )
+                )
+                )
+            );
+
           v1 = {
-            inherit cpeParts possibleCPEs;
+            inherit
+              cpeParts
+              possibleCPEs
+              purls
+              ;
             ${if cpe != null then "cpe" else null} = cpe;
+            ${if purl != null then "purl" else null} = purl;
           };
         in
         v1
         // {
-          inherit v1;
+          inherit v1 purlParts;
         };
 
       # Expose the result of the checks for everyone to see.
