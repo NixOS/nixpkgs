@@ -65,7 +65,7 @@ let
       # optionally be compressed with gzip or bzip2.
       kernelPatches ? [ ],
       ignoreConfigErrors ?
-        !lib.elem stdenv.hostPlatform.linux-kernel.name [
+        !lib.elem stdenv.hostPlatform.linux-kernel.name or "" [
           "aarch64-multiplatform"
           "pc"
         ],
@@ -78,7 +78,7 @@ let
       isHardened ? false,
 
       # easy overrides to stdenv.hostPlatform.linux-kernel members
-      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules,
+      autoModules ? stdenv.hostPlatform.linux-kernel.autoModules or true,
       preferBuiltin ? stdenv.hostPlatform.linux-kernel.preferBuiltin or false,
       kernelArch ? stdenv.hostPlatform.linuxArch,
       kernelTests ? { },
@@ -205,10 +205,9 @@ let
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
-        platformName = stdenv.hostPlatform.linux-kernel.name;
         # e.g. "defconfig"
         kernelBaseConfig =
-          if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
+          if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig or "defconfig";
 
         makeFlags = import ./common-flags.nix {
           inherit

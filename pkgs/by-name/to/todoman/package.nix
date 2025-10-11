@@ -32,17 +32,19 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dependencies = with python3.pkgs; [
-    atomicwrites
     click
     click-log
-    click-repl
     humanize
     icalendar
     parsedatetime
+    python-dateutil
     pyxdg
-    tabulate
     urwid
   ];
+
+  optional-dependencies = with python3.pkgs; {
+    repl = [ click-repl ];
+  };
 
   nativeCheckInputs = with python3.pkgs; [
     freezegun

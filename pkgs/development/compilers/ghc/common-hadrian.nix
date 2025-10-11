@@ -261,6 +261,22 @@
           hash = "sha256-L3FQvcm9QB59BOiR2g5/HACAufIG08HiT53EIOjj64g=";
         })
       ]
+      # Fix build with gcc15
+      # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
+      # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
+      ++
+        lib.optionals
+          (
+            lib.versionOlder version "9.12.3"
+            && !(lib.versionAtLeast version "9.10.2" && lib.versionOlder version "9.12")
+          )
+          [
+            (fetchpatch {
+              name = "ghc-hp2ps-c-gnu17.patch";
+              url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
+              hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
+            })
+          ]
       # Fixes stack overrun in rts which crashes an process whenever
       # freeHaskellFunPtr is called with nixpkgs' hardening flags.
       # https://gitlab.haskell.org/ghc/ghc/-/issues/25485
@@ -764,14 +780,8 @@ stdenv.mkDerivation (
 
     checkTarget = "test";
 
-    # GHC cannot currently produce outputs that are ready for `-pie` linking.
-    # Thus, disable `pie` hardening, otherwise `recompile with -fPIE` errors appear.
-    # See:
-    # * https://github.com/NixOS/nixpkgs/issues/129247
-    # * https://gitlab.haskell.org/ghc/ghc/-/issues/19580
     hardeningDisable = [
       "format"
-      "pie"
     ];
 
     # big-parallel allows us to build with more than 2 cores on

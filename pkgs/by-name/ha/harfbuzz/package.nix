@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "harfbuzz${lib.optionalString withIcu "-icu"}";
-  version = "11.2.1";
+  version = "12.1.0";
 
   src = fetchurl {
     url = "https://github.com/harfbuzz/harfbuzz/releases/download/${finalAttrs.version}/harfbuzz-${finalAttrs.version}.tar.xz";
-    hash = "sha256-CTcUyFSKKFCUaF8L3JmeIC1ma1nus98v+SGraLgzakk=";
+    hash = "sha256-5cgbf24LEC37AAz6QkU4uOiWq3ii9Lil7IyuYqtDNp4=";
   };
 
   postPatch = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # ApplicationServices.framework headers have cast-align warnings.
     substituteInPlace src/hb.hh \
-      --replace '#pragma GCC diagnostic error   "-Wcast-align"' ""
+      --replace-fail '#pragma GCC diagnostic error   "-Wcast-align"' ""
   '';
 
   outputs = [

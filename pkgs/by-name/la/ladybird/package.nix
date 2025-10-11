@@ -27,7 +27,6 @@
   skia,
   nixosTests,
   unstableGitUpdater,
-  apple-sdk_14,
   libtommath,
   sdl3,
 }:
@@ -107,9 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional stdenv.hostPlatform.isLinux [
     libpulseaudio.dev
     qt6Packages.qtwayland
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_14
   ];
 
   cmakeFlags = [

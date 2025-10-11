@@ -53,8 +53,6 @@ stdenv.mkDerivation rec {
     "PKG_CONFIG=${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config"
   ];
 
-  hardeningEnable = [ "pie" ];
-
   postBuild = lib.optionalString stdenv.hostPlatform.isLinux ''
     make -C contrib/lease-tools
   '';

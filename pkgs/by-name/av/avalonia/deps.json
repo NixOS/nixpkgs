@@ -290,11 +290,6 @@
     "hash": "sha256-/LclaFA/8uKIWg0Diw2kD/k0o5y2tKFA/HzzrAFQ+b4="
   },
   {
-    "pname": "Microsoft.Build.Tasks.Git",
-    "version": "1.1.1",
-    "hash": "sha256-PHxHmsCty8Si5dCUQSizeHkJrHa9+j2nRsg6Sz+5Za0="
-  },
-  {
     "pname": "Microsoft.Build.Traversal",
     "version": "4.1.0",
     "hash": "sha256-N7N8s8Jb488mvuvN9+fl5leMJ1FZyPNKAS54/YC272Y="
@@ -784,16 +779,6 @@
     "pname": "Microsoft.Rest.ClientRuntime.Azure",
     "version": "3.3.18",
     "hash": "sha256-zisaNDp0uHprZmhTokn/Gsr0bBzkiC3gcEls0jGJ0ho="
-  },
-  {
-    "pname": "Microsoft.SourceLink.Common",
-    "version": "1.1.1",
-    "hash": "sha256-b4FaNFneDVDbvJVX1iNyhhLTrnxUfnmyypeJr47GbXY="
-  },
-  {
-    "pname": "Microsoft.SourceLink.GitHub",
-    "version": "1.1.1",
-    "hash": "sha256-3hc9ym5ReONp00ruCKio/Ka1gYXo/jDlUHtfK1wZPiU="
   },
   {
     "pname": "Microsoft.TestPlatform.ObjectModel",

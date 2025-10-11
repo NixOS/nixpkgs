@@ -24,6 +24,30 @@ let
   targetCC = pkgsBuildTarget.targetPackages.stdenv.cc;
 
   isCross = stdenv.buildPlatform != stdenv.targetPlatform;
+
+  # In order for buildmode=pie to work either Go's internal linker must know how
+  # to produce position-independent executables or Go must be using an external linker.
+  #
+  # go-default-pie.patch tries to enable position-independent codegen (PIE) only when the platform
+  # reports support (via BuildModeSupported(..., "pie", ...)).
+  #
+  # That probe is not fully reliable: for example, `pkgsi686Linux.go` can fail during bootstrap
+  # with message 'default PIE binary requires external (cgo) linking, but cgo is not enabled'
+  # despite CGO being enabled. (we set `CGO_ENABLED=1`).
+  #
+  # To avoid such breakage, limit this patch to a small set of explicitly tested platforms
+  # rather than relying on the general BuildModeSupported("pie") check.
+  supportsDefaultPie =
+    let
+      hasPie = {
+        "amd64" = true;
+        "arm64" = true;
+        "ppc64le" = true;
+        "riscv64" = true;
+      };
+    in
+    hasPie.${stdenv.hostPlatform.go.GOARCH} or false
+    && hasPie.${stdenv.targetPlatform.go.GOARCH} or false;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
@@ -64,6 +88,12 @@ stdenv.mkDerivation (finalAttrs: {
     })
     ./remove-tools-1.11.patch
     ./go_no_vendor_checks-1.23.patch
+    ./go-env-go_ldso.patch
+  ]
+  ++ lib.optionals supportsDefaultPie [
+    (replaceVars ./go-default-pie.patch {
+      inherit (stdenv.targetPlatform.go) GOARCH;
+    })
   ];
 
   inherit (stdenv.targetPlatform.go) GOOS GOARCH GOARM;
@@ -99,6 +129,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
     export GOCACHE=$TMPDIR/go-cache
+    if [ -f "$NIX_CC/nix-support/dynamic-linker" ]; then
+      export GO_LDSO=$(cat $NIX_CC/nix-support/dynamic-linker)
+    fi
 
     export PATH=$(pwd)/bin:$PATH
 
@@ -106,6 +139,12 @@ stdenv.mkDerivation (finalAttrs: {
       # Independent from host/target, CC should produce code for the building system.
       # We only set it when cross-compiling.
       export CC=${buildPackages.stdenv.cc}/bin/cc
+      # Prefer external linker for cross when CGO is supported, since
+      # we haven't taught go's internal linker to pick the correct ELF
+      # interpreter for cross
+      # When CGO is not supported we rely on static binaries being built
+      # since they don't need an ELF interpreter
+      export GO_EXTLINK_ENABLED=${toString finalAttrs.CGO_ENABLED}
     ''}
     ulimit -a
 

@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
+  patches = [
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    ./cmake4.patch
+  ];
+
   meta = with lib; {
     description = "Object-oriented C++ input system";
     maintainers = [ maintainers.raskin ];

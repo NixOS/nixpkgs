@@ -35,8 +35,6 @@ stdenv.mkDerivation (finalAttrs: {
     "DESTROOT=$(out)"
   ];
 
-  hardeningEnable = [ "pie" ];
-
   unpackCmd = ''
     mkdir cron
     pushd cron

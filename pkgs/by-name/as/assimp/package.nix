@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   zlib,
   nix-update-script,
@@ -22,6 +23,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-ixtqK+3iiL17GEbEVHz5S6+gJDDQP7bVuSfRMJMGEOY=";
   };
+
+  patches = [
+    # Fix build with gcc15
+    # https://github.com/assimp/assimp/pull/6283
+    (fetchpatch {
+      name = "assimp-fix-invalid-vector-gcc15.patch";
+      url = "https://github.com/assimp/assimp/commit/59bc03d931270b6354690512d0c881eec8b97678.patch";
+      hash = "sha256-O+JPwcOdyFtmFE7eZojHo1DUavF5EhLYlUyxtYo/KF4=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ schneefux ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

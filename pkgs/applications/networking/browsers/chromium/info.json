@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "141.0.7390.65",
+    "version": "141.0.7390.76",
     "chromedriver": {
-      "version": "141.0.7390.66",
-      "hash_darwin": "sha256-0LLARLPwlZ3KB5xCq4Yx5S6vtnhVddJ62IdgEy0vp7o=",
-      "hash_darwin_aarch64": "sha256-rLW5FOMNyFEn1Du2VN2sGfWri2erjN7SENa01vA2Vp8="
+      "version": "141.0.7390.77",
+      "hash_darwin": "sha256-lLzkO+PkVPZsnD00Ag/NSmpe7DbYPxHEQgsgqpvFijs=",
+      "hash_darwin_aarch64": "sha256-py6zFm8HhmijU6Z3SP8FO6w/DIIMVyP51jOPpqme0YE="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "b2ec783d2b51a396804a4e3e33f6586be09a4e2d",
-        "hash": "sha256-9jZ7411NThelyL0R5yoLXB0lOkydOI3v6K5ORhjqfF4=",
+        "rev": "d6fcfbb51aac4df61d06692d4a62fd8b9aaf3c3a",
+        "hash": "sha256-PefndHEz3LALHSCsw6tuNiobQVzsTrseUmf4lqnpNpM=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -808,7 +808,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "141.0.7390.65",
+    "version": "141.0.7390.76",
     "deps": {
       "depot_tools": {
         "rev": "3f41e54ae17d53d4a39feecad64c3d3e6871b219",
@@ -820,16 +820,16 @@
         "hash": "sha256-WERLGrReUATmn3RhxtmyZcJBxdIY/WZqBDranCLDYEg="
       },
       "ungoogled-patches": {
-        "rev": "141.0.7390.65-1",
-        "hash": "sha256-xjfr2nSoytbbAEQg9WkWQCp4TuPadrBx8JSxJzjPZMI="
+        "rev": "141.0.7390.76-1",
+        "hash": "sha256-AFbZ3GP/mPCCbYTkYIYRE8+wlxEoMc4XTq3ZSh8Qgxg="
       },
       "npmHash": "sha256-i1eQ4YlrWSgY522OlFtGDDPmxE2zd1hDM03AzR8RafE="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "b2ec783d2b51a396804a4e3e33f6586be09a4e2d",
-        "hash": "sha256-9jZ7411NThelyL0R5yoLXB0lOkydOI3v6K5ORhjqfF4=",
+        "rev": "d6fcfbb51aac4df61d06692d4a62fd8b9aaf3c3a",
+        "hash": "sha256-PefndHEz3LALHSCsw6tuNiobQVzsTrseUmf4lqnpNpM=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {

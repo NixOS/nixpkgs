@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   uv-build,
@@ -28,6 +29,15 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-+G9UHW4eUGl00A/kDj+iTP7ehjj/dwUENKffvGxE6/4=";
   };
+
+  patches = [
+    # https://github.com/zostera/django-bootstrap4/pull/826
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/Prince213/django-bootstrap4/commit/e3e6b7cc6720568177d37ff0998007c84c294c5a.patch?full_index=1";
+      hash = "sha256-ZW9y8n0ZCOP37EoP32e7ue6h93KgGw1pW8Q1Q8IuNk8=";
+    })
+  ];
 
   build-system = [ uv-build ];
 

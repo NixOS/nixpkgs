@@ -549,8 +549,10 @@ let
   }
   // env
   # Implicit pointer to integer conversions are errors by default since clang 15.
-  # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456.
-  // optionalAttrs (stdenv.hasCC && stdenv.cc.isClang) {
+  # Works around https://gitlab.haskell.org/ghc/ghc/-/issues/23456. krank:ignore-line
+  # A fix was included in GHC 9.10.* and backported to 9.6.5 and 9.8.2 (but we no longer
+  # ship 9.8.1).
+  // optionalAttrs (lib.versionOlder ghc.version "9.6.5" && stdenv.hasCC && stdenv.cc.isClang) {
     NIX_CFLAGS_COMPILE =
       "-Wno-error=int-conversion"
       + lib.optionalString (env ? NIX_CFLAGS_COMPILE) (" " + env.NIX_CFLAGS_COMPILE);
@@ -728,13 +730,7 @@ lib.fix (
       # package specifies `hardeningDisable`.
       hardeningDisable =
         lib.optionals (args ? hardeningDisable) hardeningDisable
-        ++ lib.optional (ghc.isHaLVM or false) "all"
-        # Static libraries (ie. all of pkgsStatic.haskellPackages) fail to build
-        # because by default Nix adds `-pie` to the linker flags: this
-        # conflicts with the `-r` and `-no-pie` flags added by GHC (see
-        # https://gitlab.haskell.org/ghc/ghc/-/issues/19580). hardeningDisable
-        # changes the default Nix behavior regarding adding "hardening" flags.
-        ++ lib.optional enableStaticLibraries "pie";
+        ++ lib.optional (ghc.isHaLVM or false) "all";
 
       configurePhase = ''
         runHook preConfigure

@@ -23108,12 +23108,6 @@
     github = "schmittlauch";
     githubId = 1479555;
   };
-  schneefux = {
-    email = "schneefux+nixos_pkg@schneefux.xyz";
-    github = "schneefux";
-    githubId = 15379000;
-    name = "schneefux";
-  };
   schnow265 = {
     email = "thesnowbox@icloud.com";
     github = "schnow265";
@@ -26042,6 +26036,12 @@
     matrix = "@tilpner:tx0.co";
     github = "tilpner";
     githubId = 4322055;
+  };
+  timasoft = {
+    name = "Timofey Klester";
+    email = "tima.klester@yandex.ru";
+    github = "timasoft";
+    githubId = 74288993;
   };
   timbertson = {
     email = "tim@gfxmonk.net";

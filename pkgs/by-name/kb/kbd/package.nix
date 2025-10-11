@@ -20,11 +20,12 @@
   zstd,
   gitUpdater,
   pkgsCross,
-  withVlock ? true,
+  withVlock ? false,
+  kbdVlock,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "kbd";
+  pname = "kbd" + lib.optionalString withVlock "-vlock";
   version = "2.9.0";
 
   __structuredAttrs = true;
@@ -35,16 +36,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uUECxFdm/UhoHKLHLFe6/ygCQ+4mrQOZExKl+ReaTNw=";
   };
 
-  # vlock is moved into its own output, since it depends on pam. This
-  # reduces closure size for most use cases.
   outputs = [
     "out"
     "dev"
     "scripts"
     "man"
-  ]
-  ++ lib.optionals withVlock [
-    "vlock"
   ];
 
   patches = [
@@ -112,10 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     moveToOutput bin/unicode_start $scripts
     moveToOutput bin/unicode_stop $scripts
-  ''
-  + lib.optionalString withVlock ''
-    moveToOutput bin/vlock $vlock
-    moveToOutput etc/pam.d/vlock $vlock
   '';
 
   outputChecks.out.disallowedRequisites = [
@@ -137,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
         pkgsCross.${systemString}.kbd;
       inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
     };
+    # For backwards compatibility. Remove after 26.05.
+    vlock = kbdVlock;
   };
 
   meta = {
