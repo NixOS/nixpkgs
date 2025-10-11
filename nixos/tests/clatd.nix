@@ -128,9 +128,7 @@
         };
       };
 
-      services.resolved.extraConfig = ''
-        DNSStubListener=no
-      '';
+      services.resolved.settings.DNSStubListener = false;
 
       networking.extraHosts = ''
         192.0.0.171 ipv4only.arpa
