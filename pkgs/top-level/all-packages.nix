@@ -12956,7 +12956,7 @@ with pkgs;
   };
 
   wayfire = callPackage ../applications/window-managers/wayfire/default.nix {
-    wlroots = wlroots_0_17;
+    wlroots = wlroots_0_19;
   };
   wf-config = callPackage ../applications/window-managers/wayfire/wf-config.nix { };
 
