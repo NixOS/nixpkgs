@@ -53,7 +53,9 @@ let
       ]
     )
   );
-  oneDNN' = oneDNN.overrideAttrs rec {
+  # TODO(@LunNova): stop overriding here once oneDNN 3 is supported
+  # Upstream issue: https://github.com/ROCm/AMDMIGraphX/issues/4351
+  oneDNN' = oneDNN.overrideAttrs (old: rec {
     version = "2.7.5";
     src = fetchFromGitHub {
       owner = "oneapi-src";
@@ -61,7 +63,12 @@ let
       tag = "v${version}";
       hash = "sha256-oMPBORAdL2rk2ewyUrInYVHYBRvuvNX4p4rwykO3Rhs=";
     };
-  };
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      # Flag rather than patch because this is an override
+      # with a different version
+      (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+    ];
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
