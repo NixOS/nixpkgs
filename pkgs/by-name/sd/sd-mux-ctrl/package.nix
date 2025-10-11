@@ -30,6 +30,10 @@ stdenv.mkDerivation {
     popt
   ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
+
   postInstall = ''
     install -D -m 644 ../doc/man/sd-mux-ctrl.1 $out/share/man/man1/sd-mux-ctrl.1
     installShellCompletion --cmd sd-mux-ctrl \
