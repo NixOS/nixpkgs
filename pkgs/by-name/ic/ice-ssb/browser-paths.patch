@@ -1,0 +1,26 @@
+--- a/usr/bin/ice
++++ b/usr/bin/ice
+@@ -22,6 +22,7 @@
+ import urllib.error
+ import os.path
+ import string
++import shutil ## added by sunworms ##
+ import gi  ## added by MG ##
+ gi.require_version('Gtk','3.0') ## added by MG ##
+ from gi.repository import Gtk
+@@ -38,10 +39,10 @@
+ _PROFILES_DIR = "{0}/profiles".format(_ICE_DIR)
+ _FF_PROFILES_DIR = "{0}/firefox".format(_ICE_DIR)
+ _ICE_ICON = "/usr/share/pixmaps/ice.png"
+-_CHROME_BIN = "/usr/bin/google-chrome"
+-_CHROMIUM_BIN = "/usr/bin/chromium-browser"
+-_VIVALDI_BIN = "/usr/bin/vivaldi"
+-_FIREFOX_BIN = "/usr/bin/firefox"
++_CHROME_BIN = shutil.which("google-chrome-stable") or shutil.which("google-chrome") or "google-chrome"
++_CHROMIUM_BIN = shutil.which("chromium-browser") or shutil.which("chromium") or "chromium"
++_VIVALDI_BIN = shutil.which("vivaldi-stable") or shutil.which("vivaldi") or "vivaldi"
++_FIREFOX_BIN = shutil.which("firefox") or "firefox"
+ 
+ gettext.bindtextdomain('messages', os.path.dirname(__file__)+ '/../share/ice/locale/')
+ gettext.textdomain('messages')
+
