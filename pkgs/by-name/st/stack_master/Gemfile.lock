@@ -1,0 +1,167 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activesupport (7.1.3.4)
+      base64
+      bigdecimal
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      connection_pool (>= 2.2.5)
+      drb
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      mutex_m
+      tzinfo (~> 2.0)
+    attribute_struct (0.4.4)
+      bogo (>= 0.1.31, < 0.3.0)
+    aws-eventstream (1.3.0)
+    aws-partitions (1.944.0)
+    aws-sdk-acm (1.69.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-cloudformation (1.110.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-core (3.197.0)
+      aws-eventstream (~> 1, >= 1.3.0)
+      aws-partitions (~> 1, >= 1.651.0)
+      aws-sigv4 (~> 1.8)
+      jmespath (~> 1, >= 1.6.1)
+    aws-sdk-ec2 (1.460.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-ecr (1.73.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-iam (1.99.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-kms (1.83.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-s3 (1.152.2)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sdk-kms (~> 1)
+      aws-sigv4 (~> 1.8)
+    aws-sdk-sns (1.77.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sdk-ssm (1.170.0)
+      aws-sdk-core (~> 3, >= 3.197.0)
+      aws-sigv4 (~> 1.1)
+    aws-sigv4 (1.8.0)
+      aws-eventstream (~> 1, >= 1.0.2)
+    base64 (0.2.0)
+    bigdecimal (3.1.8)
+    bogo (0.2.16)
+      hashie
+      multi_json
+    cfn-model (0.6.6)
+      kwalify (= 0.7.2)
+      psych (~> 3)
+    cfn-nag (0.8.10)
+      aws-sdk-s3 (~> 1.76)
+      cfn-model (= 0.6.6)
+      lightly (~> 0.3.2)
+      logging (~> 2.2.2)
+      netaddr (~> 2.0.4)
+      optimist (~> 3.0.0)
+      rexml
+    cfndsl (1.6.0)
+      hana (~> 1.3)
+    commander (5.0.0)
+      highline (~> 3.0.0)
+    concurrent-ruby (1.3.3)
+    connection_pool (2.4.1)
+    deep_merge (1.2.2)
+    diff-lcs (1.5.1)
+    diffy (3.4.2)
+    dotgpg (0.7.0)
+      gpgme
+      thor
+    drb (2.2.1)
+    ejson (1.4.1)
+    ejson_wrapper (0.5.0)
+      aws-sdk-kms
+      base64
+      ejson
+    erubis (2.7.0)
+    gpgme (2.0.24)
+      mini_portile2 (~> 2.7)
+    hana (1.3.7)
+    hashdiff (1.1.0)
+    hashie (5.0.0)
+    highline (3.0.1)
+    i18n (1.14.5)
+      concurrent-ruby (~> 1.0)
+    jmespath (1.6.2)
+    kwalify (0.7.2)
+    lightly (0.3.3)
+    little-plugger (1.1.4)
+    logging (2.2.2)
+      little-plugger (~> 1.1)
+      multi_json (~> 1.10)
+    mini_portile2 (2.8.7)
+    minitest (5.23.1)
+    multi_json (1.15.0)
+    mutex_m (0.2.0)
+    netaddr (2.0.6)
+    optimist (3.0.1)
+    os (1.1.4)
+    psych (3.3.4)
+    rainbow (3.1.1)
+    rbtree (0.4.6)
+    rexml (3.3.0)
+      strscan
+    ruby-progressbar (1.13.0)
+    set (1.1.0)
+    sorted_set (1.0.3)
+      rbtree
+      set (~> 1.0)
+    sparkle_formation (3.0.40)
+      attribute_struct (>= 0.4.3, < 0.5)
+      bogo
+      multi_json
+    stack_master (2.14.1)
+      activesupport (>= 4)
+      aws-sdk-acm (~> 1)
+      aws-sdk-cloudformation (~> 1)
+      aws-sdk-ec2 (~> 1)
+      aws-sdk-ecr (~> 1)
+      aws-sdk-iam (~> 1)
+      aws-sdk-s3 (~> 1)
+      aws-sdk-sns (~> 1)
+      aws-sdk-ssm (~> 1)
+      cfn-nag (>= 0.6.7, < 0.9.0)
+      cfndsl (~> 1)
+      commander (>= 4.6.0, < 6)
+      deep_merge
+      diff-lcs
+      diffy
+      ejson_wrapper
+      erubis
+      hashdiff (~> 1)
+      multi_json
+      os
+      rainbow
+      ruby-progressbar
+      sorted_set
+      sparkle_formation (~> 3)
+      table_print
+    stack_master-gpg_parameter_resolver (1.0.0)
+      dotgpg
+      stack_master (>= 2)
+    strscan (3.1.0)
+    table_print (1.5.7)
+    thor (1.3.1)
+    tzinfo (2.0.6)
+      concurrent-ruby (~> 1.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  stack_master
+  stack_master-gpg_parameter_resolver
+
+BUNDLED WITH
+   2.5.9
