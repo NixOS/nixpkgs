@@ -18206,6 +18206,8 @@ self: super: with self; {
     callPackage ../development/python-modules/tensorflow-estimator/bin.nix
       { };
 
+  tensorflow-gnn = callPackage ../development/python-modules/tensorflow-gnn { };
+
   tensorflow-metadata = callPackage ../development/python-modules/tensorflow-metadata { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
