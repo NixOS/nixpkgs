@@ -3202,6 +3202,8 @@ with pkgs;
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
 
+  kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
+
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
@@ -8335,14 +8337,13 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../development/libraries/libressl { })
-    libressl_3_9
     libressl_4_0
     libressl_4_1
     ;
 
   libressl = libressl_4_1;
 
-  openssl = openssl_3_5;
+  openssl = openssl_3_6;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -8351,7 +8352,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_5
+    openssl_3_6
     ;
 
   pcre = callPackage ../development/libraries/pcre { };
@@ -13037,8 +13038,6 @@ with pkgs;
   };
 
   xca = qt6Packages.callPackage ../applications/misc/xca { };
-
-  inherit (xorg) xcompmgr;
 
   xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
 

@@ -166,7 +166,6 @@ in
           spectacle
           ffmpegthumbs
           krdp
-          xwaylandvideobridge # exposes Wayland windows to X11 screen capture
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6

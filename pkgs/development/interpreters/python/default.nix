@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "7";
+          patch = "8";
           suffix = "";
         };
-        hash = "sha256-VGL5CZ39MOI43vg8cdkYl9jKpf9uvHpQ8U1IAs2qp5o=";
+        hash = "sha256-uZEHMFJrKYKZtGs1WVztkFVyLfYMBq1jAfak4scoolI=";
       };
     };
 
@@ -36,9 +36,9 @@
         major = "2";
         minor = "7";
         patch = "18";
-        suffix = ".8"; # ActiveState's Python 2 extended support
+        suffix = ".12"; # ActiveState's Python 2 extended support
       };
-      hash = "sha256-HUOzu3uJbtd+3GbmGD35KOk/CDlwL4S7hi9jJGRFiqI=";
+      hash = "sha256-RuEgfpags9wJm9Xe0daotqUx4knABEUc7DvtgnQXEfE=";
       inherit passthruFun;
     };
 

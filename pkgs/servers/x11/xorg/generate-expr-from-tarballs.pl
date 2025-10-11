@@ -62,17 +62,31 @@ $pcMap{"xcb-cursor"} = "xcbutilcursor";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
+$pcMap{"xcomposite"} = "libXcomposite";
 $pcMap{"xcursor"} = "libXcursor";
+$pcMap{"xdamage"} = "libXdamage";
 $pcMap{"xdmcp"} = "libXdmcp";
 $pcMap{"xext"} = "libXext";
 $pcMap{"xfixes"} = "libXfixes";
+$pcMap{"xfont"} = "libXfont";
+$pcMap{"xfont2"} = "libXfont2";
+$pcMap{"xft"} = "libXft";
+$pcMap{"xi"} = "libXi";
+$pcMap{"xinerama"} = "libXinerama";
+$pcMap{"xkbfile"} = "libxkbfile";
 $pcMap{"xmu"} = "libXmu";
 $pcMap{"xmuu"} = "libXmu";
+$pcMap{"xp"} = "libXp";
 $pcMap{"xpm"} = "libXpm";
+$pcMap{"xpresent"} = "libXpresent";
 $pcMap{"xrandr"} = "libXrandr";
 $pcMap{"xrender"} = "libXrender";
+$pcMap{"xres"} = "libXres";
+$pcMap{"xscrnsaver"} = "libXScrnSaver";
+$pcMap{"xshmfence"} = "libxshmfence";
 $pcMap{"xt"} = "libXt";
 $pcMap{"xtrans"} = "xtrans";
+$pcMap{"xtst"} = "libXtst";
 $pcMap{"xv"} = "libXv";
 $pcMap{"xvmc"} = "libXvMC";
 $pcMap{"xvmc-wrapper"} = "libXvMC";
@@ -318,6 +332,7 @@ print OUT <<EOF;
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 {
   lib,
+  appres,
   bdftopcf,
   font-adobe-100dpi,
   font-adobe-75dpi,
@@ -325,11 +340,29 @@ print OUT <<EOF;
   font-adobe-utopia-75dpi,
   font-adobe-utopia-type1,
   font-alias,
+  font-bh-100dpi,
+  font-bh-75dpi,
+  font-bh-lucidatypewriter-100dpi,
+  font-bh-lucidatypewriter-75dpi,
   font-bh-ttf,
   font-bh-type1,
+  font-bitstream-100dpi,
+  font-bitstream-75dpi,
+  font-bitstream-type1,
+  font-cronyx-cyrillic,
   font-encodings,
+  font-isas-misc,
+  font-micro-misc,
+  font-misc-cyrillic,
+  font-misc-ethiopic,
   font-mutt-misc,
+  font-schumacher-misc,
+  font-screen-cyrillic,
+  font-sony-misc,
+  font-sun-misc,
   font-util,
+  font-winitzki-cyrillic,
+  font-xfree86-type1,
   gccmakedep,
   ico,
   imake,
@@ -341,6 +374,7 @@ print OUT <<EOF;
   libpciaccess,
   libpthread-stubs,
   libsm,
+  libwindowswm,
   libx11,
   libxau,
   libxaw,
@@ -352,16 +386,30 @@ print OUT <<EOF;
   libxcb-render-util,
   libxcb-util,
   libxcb-wm,
-  libxcvt,
+  libxcomposite,
   libxcursor,
+  libxcvt,
+  libxdamage,
   libxdmcp,
   libxext,
   libxfixes,
+  libxfont_1,
+  libxfont_2,
+  libxft,
+  libxi,
+  libxinerama,
+  libxkbfile,
   libxmu,
+  libxp,
   libxpm,
+  libxpresent,
   libxrandr,
   libxrender,
+  libxres,
+  libxscrnsaver,
+  libxshmfence,
   libxt,
+  libxtst,
   libxv,
   libxvmc,
   libxxf86dga,
@@ -379,16 +427,20 @@ print OUT <<EOF;
   transset,
   util-macros,
   viewres,
+  x11perf,
   xauth,
   xbacklight,
   xbitmaps,
+  xcalc,
   xcb-proto,
   xcmsdb,
+  xcompmgr,
   xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
   xev,
+  xeyes,
   xfontsel,
   xfsinfo,
   xgamma,
@@ -424,6 +476,7 @@ print OUT <<EOF;
 self: with self; {
 
   inherit
+    appres
     bdftopcf
     gccmakedep
     ico
@@ -433,6 +486,8 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    libxkbfile
+    libxshmfence
     listres
     lndir
     luit
@@ -443,14 +498,18 @@ self: with self; {
     smproxy
     transset
     viewres
+    x11perf
     xauth
     xbacklight
     xbitmaps
+    xcalc
     xcmsdb
+    xcompmgr
     xconsole
     xcursorgen
     xdriinfo
     xev
+    xeyes
     xfontsel
     xfsinfo
     xgamma
@@ -485,27 +544,58 @@ self: with self; {
   fontadobeutopia75dpi = font-adobe-utopia-75dpi;
   fontadobeutopiatype1 = font-adobe-utopia-type1;
   fontalias = font-alias;
+  fontbh100dpi = font-bh-100dpi;
+  fontbh75dpi = font-bh-75dpi;
+  fontbhlucidatypewriter100dpi = font-bh-lucidatypewriter-100dpi;
+  fontbhlucidatypewriter75dpi = font-bh-lucidatypewriter-75dpi;
   fontbhttf = font-bh-ttf;
   fontbhtype1 = font-bh-type1;
+  fontbitstream100dpi = font-bitstream-100dpi;
+  fontbitstream75dpi = font-bitstream-75dpi;
+  fontbitstreamtype1 = font-bitstream-type1;
+  fontcronyxcyrillic = font-cronyx-cyrillic;
+  fontisasmisc = font-isas-misc;
+  fontmicromisc = font-micro-misc;
+  fontmisccyrillic = font-misc-cyrillic;
+  fontmiscethiopic = font-misc-ethiopic;
   fontmuttmisc = font-mutt-misc;
+  fontschumachermisc = font-schumacher-misc;
+  fontscreencyrillic = font-screen-cyrillic;
+  fontsonymisc = font-sony-misc;
+  fontsunmisc = font-sun-misc;
   fontutil = font-util;
+  fontwinitzkicyrillic = font-winitzki-cyrillic;
+  fontxfree86type1 = font-xfree86-type1;
   libAppleWM = libapplewm;
   libFS = libfs;
   libICE = libice;
   libpthreadstubs = libpthread-stubs;
   libSM = libsm;
+  libWindowsWM = libwindowswm;
   libX11 = libx11;
   libXau = libxau;
   libXaw = libxaw;
+  libXcomposite = libxcomposite;
   libXcursor = libxcursor;
+  libXdamage = libxdamage;
   libXdmcp = libxdmcp;
   libXext = libxext;
   libXfixes = libxfixes;
+  libXfont2 = libxfont_2;
+  libXfont = libxfont_1;
+  libXft = libxft;
+  libXi = libxi;
+  libXinerama = libxinerama;
   libXmu = libxmu;
+  libXp = libxp;
   libXpm = libxpm;
+  libXpresent = libxpresent;
   libXrandr = libxrandr;
   libXrender = libxrender;
+  libXres = libxres;
+  libXScrnSaver = libxscrnsaver;
   libXt = libxt;
+  libXtst = libxtst;
   libXv = libxv;
   libXvMC = libxvmc;
   libXxf86dga = libxxf86dga;

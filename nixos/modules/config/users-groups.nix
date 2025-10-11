@@ -871,6 +871,7 @@ in
         render.gid = ids.gids.render;
         sgx.gid = ids.gids.sgx;
         shadow.gid = ids.gids.shadow;
+        clock.gid = ids.gids.clock;
       };
 
       system.activationScripts.users =
@@ -1033,6 +1034,7 @@ in
           cdrom = { };
           tape = { };
           kvm = { };
+          clock = { };
         };
       };
 

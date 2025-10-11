@@ -160,6 +160,8 @@ lib.makeOverridable (
         isModular = config.isYes "MODULES";
         withRust = config.isYes "RUST";
 
+        target = kernelConf.target or "vmlinux";
+
         buildDTBs = kernelConf.DTB or false;
 
         # Dependencies that are required to build kernel modules
@@ -332,7 +334,7 @@ lib.makeOverridable (
 
         buildFlags = [
           "KBUILD_BUILD_VERSION=1-NixOS"
-          kernelConf.target
+          target
           "vmlinux" # for "perf" and things like that
           "scripts_gdb"
         ]
@@ -413,14 +415,10 @@ lib.makeOverridable (
         # Some image types need special install targets (e.g. uImage is installed with make uinstall on arm)
         installTargets = [
           (kernelConf.installTarget or (
-            if kernelConf.target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
+            if target == "uImage" && stdenv.hostPlatform.linuxArch == "arm" then
               "uinstall"
             else if
-              (
-                kernelConf.target == "zImage"
-                || kernelConf.target == "Image.gz"
-                || kernelConf.target == "vmlinuz.efi"
-              )
+              (target == "zImage" || target == "Image.gz" || target == "vmlinuz.efi")
               && builtins.elem stdenv.hostPlatform.linuxArch [
                 "arm"
                 "arm64"

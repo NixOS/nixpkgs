@@ -166,7 +166,7 @@ in
     machine.succeed("ping -n -c 1 ${containerName}");
 
     # Test systemd-nspawn uses a user namespace
-    machine.succeed("test $(machinectl status ${containerName} | grep 'UID Shift: ' | wc -l) = 1")
+    machine.succeed("test $(machinectl status ${containerName} | grep 'ID Shift: ' | wc -l) = 1")
 
     # Test systemd-nspawn reboot
     machine.succeed("machinectl shell ${containerName} /run/current-system/sw/bin/reboot");
