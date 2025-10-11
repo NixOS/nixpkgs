@@ -66,6 +66,8 @@
       "adamcstephens": 2071575,
       "ankhers": 750786,
       "gleber": 33185,
+      "minijackson": 1200507,
+      "savtrip": 42227195,
       "yurrriq": 1866448
     },
     "name": "Beam"
@@ -151,7 +153,7 @@
     "name": "crystal-lang"
   },
   "cuda-maintainers": {
-    "description": "All things CUDA and deep learning!",
+    "description": "Maintain CUDA-enabled packages",
     "id": 5704451,
     "maintainers": {
       "ConnorBaker": 3880346,
@@ -159,12 +161,13 @@
       "samuela": 226872
     },
     "members": {
-      "GaetanLepage": 33058747
+      "GaetanLepage": 33058747,
+      "prusnak": 42201
     },
     "name": "cuda-maintainers"
   },
   "darwin-core": {
-    "description": "Maintains core platform support and packages for macOS and other Apple platforms.",
+    "description": "Maintain core platform support and packages for macOS and other Apple platforms",
     "id": 11265438,
     "maintainers": {
       "emilazy": 18535642
@@ -278,11 +281,10 @@
     "name": "darwin-maintainers"
   },
   "documentation-team": {
-    "description": "https://nixos.org/community/teams/documentation",
+    "description": "Maintain nixpkgs/NixOS documentation and tools for building it. https://nixos.org/community/teams/documentation",
     "id": 6590023,
     "maintainers": {
-      "alejandrosame": 1078000,
-      "fricklerhandwerk": 6599296
+      "alejandrosame": 1078000
     },
     "members": {
       "hsjobeki": 50398876,
@@ -323,7 +325,7 @@
     "name": "emacs"
   },
   "enlightenment": {
-    "description": "Maintainers of the Enlightenment Desktop Environment",
+    "description": "Maintain Enlightenment desktop environment and related packages",
     "id": 5937665,
     "maintainers": {
       "romildo": 1217934
@@ -350,7 +352,7 @@
     "name": "exotic-platform-maintainers"
   },
   "flutter": {
-    "description": "",
+    "description": "Maintain Flutter and Dart-related packages and build tools",
     "id": 7718198,
     "maintainers": {
       "RossComputerGuy": 19699320
@@ -372,13 +374,14 @@
     "name": "Freedesktop"
   },
   "geospatial": {
-    "description": "Maintain geospatial packages",
+    "description": "Maintain geospatial, remote sensing and OpenStreetMap software",
     "id": 7084621,
     "maintainers": {
       "imincik": 476346
     },
     "members": {
-      "das-g": 97746,
+      "autra": 1576598,
+      "l0b0": 168301,
       "nh2": 399535,
       "nialov": 47318483,
       "sikmir": 688044,
@@ -404,13 +407,15 @@
     "id": 3806133,
     "maintainers": {},
     "members": {
+      "bobby285271": 20080233,
+      "dasj19": 7589338,
       "hedning": 71978,
       "jtojnar": 705123
     },
     "name": "GNOME"
   },
   "golang": {
-    "description": "",
+    "description": "Maintain Golang compilers",
     "id": 4020424,
     "maintainers": {
       "Mic92": 96200,
@@ -425,16 +430,14 @@
     "name": "golang"
   },
   "haskell": {
-    "description": "The nixpkgs Haskell team",
+    "description": "Maintain Haskell packages and infrastructure",
     "id": 4769723,
     "maintainers": {
       "cdepillabout": 64804,
       "maralorn": 1651325,
-      "peti": 28323,
       "sternenseemann": 3154475
     },
     "members": {
-      "expipiplus1": 857308,
       "wolfgangwalther": 9132420
     },
     "name": "Haskell"
@@ -468,18 +471,18 @@
     "name": "Java"
   },
   "k3s": {
-    "description": "Lightweight Kubernetes maintainer team (k3s)",
+    "description": "Maintain K3s package, NixOS module, NixOS tests, update script",
     "id": 7725877,
     "maintainers": {
       "Mic92": 96200,
       "euank": 2147649,
       "marcusramberg": 5526,
-      "wrmilling": 6162814,
-      "yajo": 973709
+      "wrmilling": 6162814
     },
     "members": {
       "frederictobiasc": 26125115,
-      "superherointj": 5861043
+      "heywoodlh": 18178614,
+      "rorosen": 76747196
     },
     "name": "k3s"
   },
@@ -525,7 +528,7 @@
     "name": "Linux kernel"
   },
   "lisp": {
-    "description": "The nixpkgs Lisp team",
+    "description": "Maintain the Lisp ecosystem",
     "id": 7678368,
     "maintainers": {
       "7c6f434c": 1891350,
@@ -583,7 +586,7 @@
     "name": "loongarch64"
   },
   "lua": {
-    "description": "Deals with lua ecosystem",
+    "description": "Maintain the lua ecosystem",
     "id": 5255750,
     "maintainers": {
       "teto": 886074
@@ -597,7 +600,7 @@
     "name": "lua"
   },
   "lumina": {
-    "description": "Maintainers of the Lumina Desktop Environment",
+    "description": "Maintain lumina desktop environment and related packages",
     "id": 5937661,
     "maintainers": {
       "romildo": 1217934
@@ -620,13 +623,26 @@
     "name": "LXC"
   },
   "lxqt": {
-    "description": "Maintainers of the LXQt Desktop Environment",
+    "description": "Maintain LXQt desktop environment and related packages",
     "id": 5937679,
     "maintainers": {
       "romildo": 1217934
     },
     "members": {},
     "name": "LXQt"
+  },
+  "marketing-team": {
+    "description": "Marketing team [leader=@djacu]",
+    "id": 7709512,
+    "maintainers": {
+      "djacu": 7043297,
+      "tomberek": 178444
+    },
+    "members": {
+      "flyfloh": 74379,
+      "thilobillerbeck": 7442383
+    },
+    "name": "Marketing Team"
   },
   "mate": {
     "description": "Maintainers of the MATE Desktop Environment",
@@ -640,7 +656,7 @@
     "name": "MATE"
   },
   "neovim": {
-    "description": "Maintains neovim ecosystem",
+    "description": "Maintain the vim and neovim text editors and related packages",
     "id": 6748534,
     "maintainers": {
       "GaetanLepage": 33058747
@@ -683,7 +699,7 @@
     "name": "Nix team"
   },
   "nixos-release-managers": {
-    "description": "Team of Release Managers.",
+    "description": "Manage the current nixpkgs/NixOS release",
     "id": 3620128,
     "maintainers": {
       "jopejoe1": 34899572,
@@ -693,7 +709,7 @@
     "name": "nixos-release-managers"
   },
   "nixpkgs-ci": {
-    "description": "Maintaining Nixpkgs CI",
+    "description": "Maintain Nixpkgs' in-tree Continuous Integration, including GitHub Actions",
     "id": 13362067,
     "maintainers": {
       "philiptaron": 43863,
@@ -736,12 +752,11 @@
     "name": "Node"
   },
   "ocaml": {
-    "description": "Maintain the ecosystem around OCaml in Nixpkgs",
+    "description": "Maintain the OCaml compiler and package set",
     "id": 7553013,
     "maintainers": {
       "Alizter": 8614547,
       "romildo": 1217934,
-      "superherointj": 5861043,
       "ulrikstrid": 1607770
     },
     "members": {
@@ -750,7 +765,7 @@
     "name": "OCaml"
   },
   "pantheon": {
-    "description": "Maintainers of the Pantheon desktop",
+    "description": "Maintain Pantheon desktop environment and platform",
     "id": 4786995,
     "maintainers": {
       "davidak": 91113
@@ -767,8 +782,7 @@
     "members": {
       "Ma27": 6025220,
       "aanderse": 7755101,
-      "drupol": 252042,
-      "globin": 1447245,
+      "piotrkwiecinski": 2151333,
       "talyz": 63433
     },
     "name": "php"
@@ -795,15 +809,21 @@
     "name": "postgres"
   },
   "qt-kde": {
-    "description": "Maintain the Qt framework, KDE Frameworks and Applications, and Plasma desktop",
+    "description": "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects",
     "id": 4341481,
     "maintainers": {
       "ttuegel": 563054
     },
     "members": {
       "FRidh": 2129135,
+      "K900": 386765,
+      "LunNova": 782440,
+      "NickCao": 15247171,
       "SCOTT-HAMILTON": 24496705,
+      "SuperSandro2000": 7258858,
       "bkchr": 5718007,
+      "ilya-fedin": 17829319,
+      "mjm": 1181,
       "nyanloutre": 7677321,
       "peterhoeg": 722550
     },
@@ -840,7 +860,7 @@
     "name": "RISC-V"
   },
   "rocm": {
-    "description": "AMD ROCm stack and related",
+    "description": "Maintain ROCm and related packages",
     "id": 6921873,
     "maintainers": {
       "mschwaig": 3856390
@@ -853,7 +873,7 @@
     "name": "rocm"
   },
   "rust": {
-    "description": "",
+    "description": "Maintain the Rust compiler toolchain and nixpkgs integration",
     "id": 7304571,
     "maintainers": {
       "Mic92": 96200,
@@ -940,7 +960,7 @@
     "name": "stdenv"
   },
   "systemd": {
-    "description": "systemd on NixOS.",
+    "description": "Maintain systemd for NixOS",
     "id": 3894007,
     "maintainers": {
       "flokli": 183879
@@ -954,7 +974,7 @@
     "name": "systemd"
   },
   "xen-project": {
-    "description": "Maintains the Xen Project ecosystem on Nixpkgs. Members listed as \"Maintainers\" are recipients of Xen Security Advisories sent to xsa@nixos.org.",
+    "description": "Maintain the Xen Project Hypervisor and the related tooling ecosystem. Members listed as \"Maintainers\" are recipients of Xen Security Advisories sent to xsa@nixos.org.",
     "id": 11127725,
     "maintainers": {
       "CertainLach": 6235312,
