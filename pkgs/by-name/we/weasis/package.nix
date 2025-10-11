@@ -22,12 +22,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "weasis";
-  version = "4.6.3";
+  version = "4.6.5";
 
   # Their build instructions indicate to use the packaging script
   src = fetchzip {
     url = "https://github.com/nroduit/Weasis/releases/download/v${finalAttrs.version}/weasis-native.zip";
-    hash = "sha256-1dvBKxInuk8FpZjo59+LkIuEBTr57wkLaHfvvvT6bOg=";
+    hash = "sha256-wUkHHbqlFl4L0l4Bd6iXXjEgDwVay2zCJ7ucSvfAGWw=";
     stripRoot = false;
   };
 
