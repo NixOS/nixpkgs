@@ -43,6 +43,7 @@
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -120,6 +121,8 @@ buildPythonPackage rec {
   ];
 
   __darwinAllowLocalNetworking = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Build fast, beautiful web applications in Python";
