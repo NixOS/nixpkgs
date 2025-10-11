@@ -4,7 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   cmake,
-  icu74,
+  icu,
   pkg-config,
   testers,
   validatePkgConfig,
@@ -22,9 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-baM6EX9D0yfrKxuPXyUUV9RqdrVLyygeG6x57xN8lc4=";
   };
 
-  propagatedBuildInputs = lib.optionals enableUnicodeHelp [ icu74.dev ];
+  propagatedBuildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];
   cmakeFlags = [
     "-DCXXOPTS_BUILD_EXAMPLES=OFF"
+    "-DCXXOPTS_CXX_STANDARD=17"
   ]
   ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
   nativeBuildInputs = [
