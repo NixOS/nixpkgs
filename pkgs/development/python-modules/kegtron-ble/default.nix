@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "kegtron-ble";
-  version = "0.4.0";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "kegtron-ble";
     tag = "v${version}";
-    hash = "sha256-O5I5shW8nL2RAQptS2Bp/GI/4L6o0xXXmwYvRq0MM8o=";
+    hash = "sha256-aPWf+EHr6Et4OHJ8ZN9M1NxKhaf7piEQilzAsBO3d5E=";
   };
 
   build-system = [ poetry-core ];
