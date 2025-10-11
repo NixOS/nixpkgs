@@ -17,15 +17,6 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-SdGnhHk8MelX6hqKQmZnQYXBJ5VpjPBe+PWUxaGsxC4=";
   };
 
-  patches = [
-    # https://github.com/acarapetis/jj-pre-push/pull/2
-    (fetchpatch2 {
-      name = "uv-build.patch";
-      url = "https://github.com/Prince213/jj-pre-push/commit/aa2d917ec9560318178fbc1040281228db7b7ec1.patch?full_index=1";
-      hash = "sha256-uNqOO0yVHShcXxYMPFcPCDM5YlL4IcmpUAfClmDlJ4Q=";
-    })
-  ];
-
   build-system = [
     python3Packages.uv-build
   ];
