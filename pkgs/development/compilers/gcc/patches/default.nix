@@ -52,10 +52,7 @@ in
 
 ## 1. Patches relevant on every platform ####################################
 
-[ ]
-# Pass the path to a C++ compiler directly in the Makefile.in
-++ optional (!lib.systems.equals targetPlatform hostPlatform) ./libstdc++-target.patch
-++ optionals noSysDirs (
+optionals noSysDirs (
   [
     # Do not try looking for binaries and libraries in /lib and /usr/lib
     ./gcc-12-no-sys-dirs.patch
