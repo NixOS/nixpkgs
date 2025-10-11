@@ -72,20 +72,7 @@ module.exports = async ({ github, context, core, dry }) => {
           exclude_pull_requests: true,
           head_sha: pull_request.head.sha,
         })
-      ).data.workflow_runs[0] ??
-      // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
-      (
-        await github.rest.actions.listWorkflowRuns({
-          ...context.repo,
-          // In older PRs, we need eval.yml instead of pr.yml.
-          workflow_id: 'eval.yml',
-          event: 'pull_request_target',
-          status: 'success',
-          exclude_pull_requests: true,
-          head_sha: pull_request.head.sha,
-        })
-      ).data.workflow_runs[0] ??
-      {}
+      ).data.workflow_runs[0] ?? {}
 
     // Newer PRs might not have run Eval to completion, yet.
     // Older PRs might not have an eval.yml workflow, yet.
@@ -159,20 +146,11 @@ module.exports = async ({ github, context, core, dry }) => {
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
       ).labels
 
-      Object.assign(
-        prLabels,
-        // Ignore `evalLabels` if it's an array.
-        // This can happen for older eval runs, before we switched to objects.
-        // The old eval labels would have been set by the eval run,
-        // so now they'll be present in `before`.
-        // TODO: Simplify once old eval results have expired (~2025-10)
-        Array.isArray(evalLabels) ? undefined : evalLabels,
-        {
-          '12.approved-by: package-maintainer': Array.from(maintainers).some(
-            (m) => approvals.has(m),
-          ),
-        },
-      )
+      Object.assign(prLabels, evalLabels, {
+        '12.approved-by: package-maintainer': Array.from(maintainers).some(
+          (m) => approvals.has(m),
+        ),
+      })
     }
 
     return prLabels
@@ -372,7 +350,7 @@ module.exports = async ({ github, context, core, dry }) => {
             `updated:>=${cutoff.toISOString()}`,
           ].join(' AND '),
           per_page: 100,
-          // TODO: Remove in 2025-10, when it becomes the default.
+          // TODO: Remove after 2025-11-04, when it becomes the default.
           advanced_search: true,
         },
       )
