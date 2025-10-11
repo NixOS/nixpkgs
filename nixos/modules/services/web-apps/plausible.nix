@@ -43,7 +43,7 @@ in
         };
         socket = mkOption {
           default = "/run/postgresql";
-          type = types.str;
+          type = types.path;
           description = ''
             Path to the UNIX domain-socket to communicate with `postgres`.
           '';
