@@ -1,5 +1,5 @@
 {
-  rustPlatform,
+  rustPackages_1_89,
   lib,
   fetchFromGitHub,
   cmake,
@@ -18,18 +18,18 @@ let
     buildSharedLibs = false;
   };
 in
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_89.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ringrtc";
-  version = "2.57.0";
+  version = "2.58.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "ringrtc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-m73SXjTES1sHGbQRtn9CjurFd/Xby5Yyn6uLVLigfiU=";
+    hash = "sha256-HI+HVDv+nuJp2BPIAVY+PI6Pof1pnB8L6CIAgBT+tJA=";
   };
 
-  cargoHash = "sha256-LRCgK/w+GcYBCWUKjytErQCxDtS15EnsVOr5Uq6F8ww=";
+  cargoHash = "sha256-n+1pe202U2lljisSRBWeVvuBLyp7jhXG+ovDDi5WV8Q=";
 
   cargoBuildFlags = [
     "-p"
