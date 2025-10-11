@@ -4665,8 +4665,6 @@ self: super: with self; {
 
   electrum-ecc = callPackage ../development/python-modules/electrum-ecc { };
 
-  elegy = callPackage ../development/python-modules/elegy { };
-
   elementpath = callPackage ../development/python-modules/elementpath { };
 
   elevate = callPackage ../development/python-modules/elevate { };
@@ -18749,11 +18747,7 @@ self: super: with self; {
 
   treelog = callPackage ../development/python-modules/treelog { };
 
-  treeo = callPackage ../development/python-modules/treeo { };
-
   treescope = callPackage ../development/python-modules/treescope { };
-
-  treex = callPackage ../development/python-modules/treex { };
 
   treq = callPackage ../development/python-modules/treq { };
 
