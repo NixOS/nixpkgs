@@ -101,4 +101,29 @@
     cargoCheckType = "release";
     doCheck = true;
   };
+
+  cargoDocHook = stdenv.mkDerivation {
+    name = "test-cargoDocHook";
+    src = ./example-rust-project;
+    outputs = [
+      "out"
+      "devdoc"
+    ];
+    cargoBuildType = "release";
+    nativeBuildInputs = [
+      rustPlatform.cargoDocHook
+      cargo
+    ];
+    buildPhase = ''
+      runHook postBuild
+    '';
+    installPhase = ''
+      mkdir -p "$out"
+      runHook postInstall
+    '';
+    doInstallCheck = true;
+    installCheckPhase = ''
+      test -d "$devdoc/share/rustdoc/hello"
+    '';
+  };
 }
