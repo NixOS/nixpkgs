@@ -69,12 +69,6 @@ in
         description = "Host address.";
       };
 
-      openPorts = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to open firewall ports for Zammad";
-      };
-
       port = lib.mkOption {
         type = lib.types.port;
         default = 3000;
@@ -176,6 +170,19 @@ in
         };
       };
 
+      nginx = {
+        configure = lib.mkOption {
+          type = lib.types.bool;
+          default = false;
+          description = "Whether to configure a local nginx for Zammad.";
+        };
+
+        domain = lib.mkOption {
+          type = lib.types.str;
+          description = "The domain under which zammad will be reachable.";
+        };
+      };
+
       secretKeyBaseFile = lib.mkOption {
         type = lib.types.nullOr lib.types.path;
         default = null;
@@ -202,6 +209,14 @@ in
     };
   };
 
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "zammad"
+      "openPorts"
+    ] "The openPorts option was removed in favor of the nginx.configure option.")
+  ];
+
   config = lib.mkIf cfg.enable {
     services.zammad.database.settings = {
       production = lib.mapAttrs (_: v: lib.mkDefault v) (filterNull {
@@ -215,11 +230,6 @@ in
         port = cfg.database.port;
       });
     };
-
-    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openPorts [
-      config.services.zammad.port
-      config.services.zammad.websocketPort
-    ];
 
     users.users.${cfg.user} = {
       group = "${cfg.group}";
@@ -245,6 +255,39 @@ in
     ];
 
     services = {
+      nginx = lib.mkIf cfg.nginx.configure {
+        enable = true;
+        virtualHosts."${cfg.nginx.domain}" = {
+          forceSSL = true;
+          locations = {
+            "/" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              root = "${config.services.zammad.package}/public/";
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+            "/cable" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.port}";
+              proxyWebsockets = true;
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+            "/ws" = {
+              proxyPass = "http://127.0.0.1:${toString config.services.zammad.websocketPort}";
+              proxyWebsockets = true;
+              extraConfig = # nginx
+                ''
+                  proxy_set_header CLIENT_IP $remote_addr;
+                '';
+            };
+          };
+        };
+      };
+
       postgresql = lib.optionalAttrs cfg.database.createLocally {
         enable = true;
         ensureDatabases = [ cfg.database.name ];
