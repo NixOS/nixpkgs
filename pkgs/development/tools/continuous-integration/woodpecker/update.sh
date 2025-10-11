@@ -19,7 +19,7 @@ version="$1"
 set -euo pipefail
 
 if [ -z "$version" ]; then
-    version="$(wget -q -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/woodpecker-ci/woodpecker/releases?per_page=1" | jq -r '.[0].tag_name')"
+    version="$(wget -q -O- "${TOKEN_ARGS[@]}" "https://api.github.com/repos/woodpecker-ci/woodpecker/releases?per_page=10" | jq -r '[.[] | select(.prerelease == false)][0].tag_name')"
 fi
 
 # strip leading "v"
