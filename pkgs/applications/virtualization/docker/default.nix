@@ -407,12 +407,12 @@ in
 
   docker_28 =
     let
-      version = "28.4.0";
+      version = "28.5.0";
     in
     callPackage dockerGen {
       inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-SgePAc+GvjZgymu7VA2whwIFEYAfMVUz9G0ppxeOi7M=";
+      cliHash = "sha256-c2a+TqEmssxD8G0AbCVxZAmCe975DhNG+XPAaTc8u4s=";
       mobyRev = "v${version}";
       mobyHash = "sha256-hiuwdemnjhi/622xGcevG4rTC7C+DyUijE585a9APSM=";
       runcRev = "v1.3.0";
