@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "${finalAttrs.hash}";
   };
 
-  patches = [ ./no-cp-etc-usr.patch ];
+  patches = [ ./no-cp-usr.patch ];
 
   postInstall = ''
     echo "Running postInstallhook"
