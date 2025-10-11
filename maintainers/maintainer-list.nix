@@ -14234,6 +14234,17 @@
     githubId = 55911173;
     name = "Gwendolyn Quasebarth";
   };
+  lajp = {
+    email = "lajp@iki.fi";
+    github = "lajp";
+    githubId = 31856315;
+    name = "Luukas Pörtfors";
+    keys = [
+      {
+        fingerprint = "24E8 E4CC 0295 F4ED B9E0  B4A6 C913 9B8D EA65 BD82";
+      }
+    ];
+  };
   lamarios = {
     matrix = "@lamarios:matrix.org";
     github = "lamarios";
