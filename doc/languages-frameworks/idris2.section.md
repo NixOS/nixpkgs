@@ -56,3 +56,20 @@ lspPkg.executable
 ```
 
 The above uses the default value of `withSource = false` for the `idris2Api` but could be modified to include that library's source by passing `(idris2Api { withSource = true; })` to `idrisLibraries` instead. `idris2Api` in the above derivation comes built in with `idris2Packages`. This library exposes many of the otherwise internal APIs of the Idris2 compiler.
+
+The compiler package can be instantiated with packages on its `IDRIS2_PACKAGES` path from the `idris2Packages` set.
+
+```nix
+{
+  idris2,
+  devShell,
+}:
+let
+  myIdris = idris2.withPackages (p: [ p.idris2Api ]);
+in
+devShell {
+  packages = [ myIdris ];
+}
+```
+
+This search path is extended from the path already in the user's environment.

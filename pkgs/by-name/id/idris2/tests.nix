@@ -2,9 +2,9 @@
   stdenv,
   runCommand,
   lib,
-  pname,
   idris2,
   idris2Packages,
+  chez,
   zsh,
   tree,
 }:
@@ -18,6 +18,7 @@ let
       packages ? [ ],
     }:
     let
+      inherit (idris2) pname;
       packageString = builtins.concatStringsSep " " (map (p: "--package " + p) packages);
     in
     runCommand "${pname}-${testName}"
@@ -28,7 +29,8 @@ let
         # is not the case with pure nix environments. Thus, we need to include zsh
         # when we build for darwin in tests. While this is impure, this is also what
         # we find in real darwin hosts.
-        nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
+        strictDeps = true;
+        nativeBuildInputs = [ chez ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ zsh ];
       }
       ''
         set -eo pipefail
@@ -39,6 +41,7 @@ let
 
         ${idris2}/bin/idris2 ${packageString} -o packageTest packageTest.idr
 
+        patchShebangs --build ./build/exec/packageTest
         GOT=$(./build/exec/packageTest)
 
         if [ "$GOT" = "${want}" ]; then
@@ -61,12 +64,14 @@ let
       expectedTree,
     }:
     let
+      inherit (idris2) pname;
       idrisPkg = transformBuildIdrisOutput (idris2Packages.buildIdris buildIdrisArgs);
     in
     runCommand "${pname}-${testName}"
       {
         meta.timeout = 60;
 
+        strictDeps = true;
         nativeBuildInputs = [ tree ];
       }
       ''
