@@ -578,8 +578,6 @@ dont-distribute-packages:
  - constraint-manip
  - constraint-reflection
  - constructible
- - consumers
- - consumers-metrics-prometheus
  - container
  - containers-accelerate
  - content-store
@@ -1620,8 +1618,6 @@ dont-distribute-packages:
  - hplayground
  - HPlot
  - HPong
- - hpqtypes-effectful
- - hpqtypes-extras
  - hprotoc
  - hprotoc-fork
  - hps
@@ -2113,9 +2109,7 @@ dont-distribute-packages:
  - local-search
  - localize
  - locked-poll
- - log
  - log-effect-syslog
- - log-postgres
  - log-utils
  - log4hs
  - logging-effect-extra
