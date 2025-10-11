@@ -1,0 +1,26 @@
+From 9f56dd9ae017faae38c4e58ec7100ddb531c7fbb Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 10 Oct 2025 23:37:42 +0200
+Subject: [PATCH 1/2] 3rd_party/xdg/CMakeLists.txt: Bump minimum version to
+ 3.10
+
+Support for older versions was removed with CMake 4.
+---
+ 3rd_party/xdg/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/3rd_party/xdg/CMakeLists.txt b/3rd_party/xdg/CMakeLists.txt
+index fa4d229..96f55ad 100644
+--- a/3rd_party/xdg/CMakeLists.txt
++++ b/3rd_party/xdg/CMakeLists.txt
+@@ -1,6 +1,6 @@
+ project(xdg)
+ 
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.10)
+ 
+ find_package(Boost COMPONENTS filesystem system unit_test_framework)
+ 
+-- 
+2.51.0
+
