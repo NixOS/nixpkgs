@@ -13264,6 +13264,9 @@ with pkgs;
 
   vanillara = callPackage ../by-name/va/vanillatd/package.nix { appName = "vanillara"; };
 
+  xash3d-unwrapped = callPackage ../games/xash3d/default.nix { };
+  xash3dGames = recurseIntoAttrs (callPackage ../games/xash3d/games.nix { });
+
   ### GAMES/DOOM-PORTS
 
   doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
