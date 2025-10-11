@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+kpackagetool5 -t Plasma/Applet -r PACKAGE_DIR
