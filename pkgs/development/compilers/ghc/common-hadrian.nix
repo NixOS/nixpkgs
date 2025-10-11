@@ -333,7 +333,9 @@ let
     # documentation) makes the GHC RTS able to load static libraries, which may
     # be needed for TemplateHaskell. This solution was described in
     # https://www.tweag.io/blog/2020-09-30-bazel-static-haskell
-    lib.optionals enableRelocatedStaticLibs [
+    #
+    # Note `-fexternal-dynamic-refs` causes `undefined reference` errors when building GHC cross compiler for windows
+    lib.optionals (enableRelocatedStaticLibs && !targetPlatform.isWindows) [
       "*.*.ghc.*.opts += -fPIC -fexternal-dynamic-refs"
     ]
     ++ lib.optionals targetPlatform.useAndroidPrebuilt [
