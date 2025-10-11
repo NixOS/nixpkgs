@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     copyDesktopItems
     pkg-config
-    qt6Packages.wrapQtAppsNoGuiHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   postInstall = ''
