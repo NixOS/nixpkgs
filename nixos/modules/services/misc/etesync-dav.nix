@@ -13,6 +13,19 @@ in
 
     package = lib.mkPackageOption pkgs "etesync-dav" { };
 
+    dataDir = lib.mkOption {
+      type = lib.types.str // {
+        check =
+          dir:
+          if (lib.hasPrefix "/var/lib/" dir) then
+            true
+          else
+            throw "The option config.services.etesync-dav.dataDir has to be a directory in \"/var/lib/\", not ${dir}.";
+      };
+      default = "/var/lib/etesync-dav";
+      description = "Directory to store the EteSync-DAV data.";
+    };
+
     host = lib.mkOption {
       type = lib.types.str;
       default = "localhost";
@@ -71,21 +84,21 @@ in
         ETESYNC_LISTEN_ADDRESS = cfg.host;
         ETESYNC_LISTEN_PORT = toString cfg.port;
         ETESYNC_URL = cfg.apiUrl;
-        ETESYNC_DATA_DIR = "/var/lib/etesync-dav";
+        ETESYNC_DATA_DIR = cfg.dataDir;
       };
 
       serviceConfig = {
         Type = "simple";
         DynamicUser = true;
-        StateDirectory = "etesync-dav";
+        StateDirectory = (lib.strings.removePrefix "/var/lib/" cfg.dataDir);
         ExecStart = "${cfg.package}/bin/etesync-dav";
         ExecStartPre = lib.mkIf (cfg.sslCertificate != null || cfg.sslCertificateKey != null) (
           pkgs.writers.writeBash "etesync-dav-copy-keys" ''
             ${lib.optionalString (cfg.sslCertificate != null) ''
-              cp ${toString cfg.sslCertificate} $STATE_DIRECTORY/etesync.crt
+              cp ${toString cfg.sslCertificate} ${cfg.dataDir}/etesync.crt
             ''}
             ${lib.optionalString (cfg.sslCertificateKey != null) ''
-              cp ${toString cfg.sslCertificateKey} $STATE_DIRECTORY/etesync.key
+              cp ${toString cfg.sslCertificateKey} ${cfg.dataDir}/etesync.key
             ''}
           ''
         );
