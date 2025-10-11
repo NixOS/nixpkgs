@@ -39,7 +39,7 @@ let
       isCross
       && !(iservProxyDependency pname)
       && stdenv.hostPlatform.emulatorAvailable buildPackages
-      && (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) # TODO: add windows support via wine
+      && stdenv.hostPlatform.isLinux # TODO: add windows support via wine
     ;
 
     # In practice we need the iserv-proxy setup for cross testing since many
