@@ -90,6 +90,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
+  # Remove when >1.7.1
+  NIX_LDFLAGS = lib.optionalString (
+    stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17"
+  ) "--undefined-version";
+
   mesonAutoFeatures = "auto";
   mesonFlags = [
     (lib.mesonEnable "logind" withLogind)
