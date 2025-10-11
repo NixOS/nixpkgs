@@ -7,17 +7,14 @@
   mold,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gfold";
   version = "2025.9.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
 
   src = fetchFromGitHub {
     owner = "nickgerace";
     repo = "gfold";
-    rev = version;
+    rev = finalAttrs.version;
     hash = "sha256-sPvhZaDGInXH2PT8fg28m7wyDZiIE4fFScNO8WIjV9s=";
   };
 
@@ -28,15 +25,15 @@ rustPlatform.buildRustPackage {
   passthru.tests.version = testers.testVersion {
     package = gfold;
     command = "gfold --version";
-    inherit version;
+    inherit (finalAttrs) version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to help keep track of your Git repositories, written in Rust";
     homepage = "https://github.com/nickgerace/gfold";
-    license = licenses.asl20;
-    maintainers = [ maintainers.sigmanificient ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    platforms = lib.platforms.unix;
     mainProgram = "gfold";
   };
-}
+})
