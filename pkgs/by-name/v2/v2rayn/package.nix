@@ -21,13 +21,13 @@
 
 buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.14.4";
+  version = "7.14.12";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = finalAttrs.version;
-    hash = "sha256-zfQza07GhYFEHwl4w5hqqE9JP/0yY5KIj0zRRNmAECA=";
+    hash = "sha256-THJr7eqo8rT1S7ox9zooxjqejmS28T5yd86JXCyR3zk=";
     fetchSubmodules = true;
   };
 
@@ -41,13 +41,11 @@ buildDotnetModule (finalAttrs: {
     chmod +x v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
     patchShebangs v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
     substituteInPlace v2rayN/ServiceLib/Global.cs \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
     substituteInPlace v2rayN/ServiceLib/Manager/CoreAdminManager.cs \
-      --replace-fail "/bin/bash" "${bash}/bin/bash"
+      --replace-fail "/bin/bash" "${lib.getExe bash}"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
-    substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
-      --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
     substituteInPlace v2rayN/ServiceLib/Manager/CoreManager.cs \
       --replace-fail 'Environment.GetEnvironmentVariable(Global.LocalAppData) == "1"' "false"
   '';
