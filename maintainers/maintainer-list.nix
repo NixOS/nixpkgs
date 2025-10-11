@@ -16883,6 +16883,12 @@
     githubId = 123373126;
     name = "Mike Horn";
   };
+  mikeodr = {
+    email = "mike@unusedbytes.ca";
+    github = "mikeodr";
+    githubId = 61757;
+    name = "Mike O'Driscoll";
+  };
   mikesperber = {
     email = "sperber@deinprogramm.de";
     github = "mikesperber";
