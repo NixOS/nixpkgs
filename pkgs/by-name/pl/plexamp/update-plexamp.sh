@@ -11,8 +11,8 @@ cleanup() {
 trap cleanup EXIT
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-if [ ! -f "$ROOT/default.nix" ]; then
-  echo "ERROR: cannot find default.nix in $ROOT"
+if [ ! -f "$ROOT/package.nix" ]; then
+  echo "ERROR: cannot find package.nix in $ROOT"
   exit 1
 fi
 
@@ -30,8 +30,8 @@ curl "$VERSION_URL" -o "$VERSION_FILE"
 VERSION="$(yq -r .version "$VERSION_FILE")"
 SHA512="$(yq -r .sha512 "$VERSION_FILE")"
 
-DEFAULT_NIX="$ROOT/default.nix"
-WORKING_NIX="$TMPDIR/default.nix"
+DEFAULT_NIX="$ROOT/package.nix"
+WORKING_NIX="$TMPDIR/package.nix"
 cp "$DEFAULT_NIX" "$WORKING_NIX"
 
 sed -i "s@version = .*;@version = \"$VERSION\";@g" "$WORKING_NIX"

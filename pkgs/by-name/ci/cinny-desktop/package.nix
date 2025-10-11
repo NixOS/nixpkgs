@@ -94,6 +94,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "cinny";
     # Waiting for update to Tauri v2, webkitgtk_4_0 is deprecated
     # See https://github.com/cinnyapp/cinny-desktop/issues/398 and https://github.com/NixOS/nixpkgs/pull/450065
-    broken = true;
+    broken = stdenv.hostPlatform.isLinux;
   };
 })
