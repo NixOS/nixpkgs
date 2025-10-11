@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libsForQt5,
   libusb1,
   hidapi,
   pkg-config,
   coreutils,
   mbedtls,
   symlinkJoin,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,21 +22,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
+  patches = [
+    ./qlist-include.patch
+  ];
+
   nativeBuildInputs = [
     pkg-config
   ]
-  ++ (with libsForQt5; [
+  ++ (with kdePackages; [
     qmake
     wrapQtAppsHook
   ]);
 
   buildInputs = [
-
     libusb1
     hidapi
     mbedtls
   ]
-  ++ (with libsForQt5; [
+  ++ (with kdePackages; [
     qtbase
     qttools
     qtwayland
@@ -56,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  qmakeFlags = [
+    "QT_TOOL.lrelease.binary=${lib.getDev kdePackages.qttools}/bin/lrelease"
+  ];
 
   passthru.withPlugins =
     plugins:
