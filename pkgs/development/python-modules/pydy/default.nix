@@ -9,6 +9,7 @@
   pytestCheckHook,
   cython,
   fetchpatch2,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -48,6 +49,8 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "pydy" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Python tool kit for multi-body dynamics";
