@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.11.2";
+  version = "0.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
+    hash = "sha256-0/1yD8BaKTM949xr45SrJ6cNU3+nv3D5FEtBtIE1UzE=";
   };
 
   build-system = [
@@ -28,8 +28,11 @@ python3Packages.buildPythonApplication rec {
     "flask"
     "flask-limiter"
     "flask-migrate"
-    "nh3"
+    "humanize"
+    "jsonschema"
     "lxml"
+    "mistune"
+    "nh3"
     "pyopenssl"
     "pytz"
     "sqlalchemy"
@@ -43,8 +46,10 @@ python3Packages.buildPythonApplication rec {
       click
       dramatiq
       dramatiq-abort
+      feedgenerator
       fitdecode
       flask
+      flask-babel
       flask-bcrypt
       flask-dramatiq
       flask-limiter
@@ -55,6 +60,7 @@ python3Packages.buildPythonApplication rec {
       humanize
       jsonschema
       nh3
+      mistune
       psycopg2-binary
       pyjwt
       pyopenssl
