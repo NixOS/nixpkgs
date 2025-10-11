@@ -42,6 +42,10 @@ in
 
     systemd.timers.fstrim = {
       timerConfig = {
+        # https://github.com/util-linux/util-linux/blob/master/sys-utils/fstrim.timer
+        AccuracySec = lib.mkDefault "1h";
+        Persistent = lib.mkDefault true;
+        RandomizedDelaySec = lib.mkDefault "100min";
         OnCalendar = [
           ""
           cfg.interval
