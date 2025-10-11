@@ -43,7 +43,7 @@ in
       package = lib.mkPackageOption pkgs "tarsnap" { };
 
       keyfile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/root/tarsnap.key";
         description = ''
           The keyfile which associates this machine with your tarsnap
@@ -76,7 +76,7 @@ in
             {
               options = {
                 keyfile = lib.mkOption {
-                  type = lib.types.str;
+                  type = lib.types.path;
                   default = gcfg.keyfile;
                   defaultText = lib.literalExpression "config.${opt.keyfile}";
                   description = ''
