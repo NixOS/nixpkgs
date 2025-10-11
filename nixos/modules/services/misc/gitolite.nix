@@ -25,7 +25,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/gitolite";
         description = ''
           The gitolite home directory used to store all repositories. If left as the default value
