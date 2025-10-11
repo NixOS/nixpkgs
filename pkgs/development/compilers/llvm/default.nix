@@ -32,7 +32,7 @@ let
     "18.1.8".officialRelease.sha256 = "sha256-iiZKMRo/WxJaBXct9GdAcAT3cz9d9pnAcO1mmR6oPNE=";
     "19.1.7".officialRelease.sha256 = "sha256-cZAB5vZjeTsXt9QHbP5xluWNQnAHByHtHnAhVDV0E6I=";
     "20.1.8".officialRelease.sha256 = "sha256-ysyB/EYxi2qE9fD5x/F2zI4vjn8UDoo1Z9ukiIrjFGw=";
-    "21.1.0-rc1".officialRelease.sha256 = "sha256-EZMG3kNqGTvKSuvslbrtNnyqBCG5C2gN9Y2qHbiuh8Q=";
+    "21.1.1".officialRelease.sha256 = "sha256-IB9Z3bIMwfgw2W2Vxo89CmtCM9DfOyV2Ei64nqgHrgc=";
     "22.0.0-git".gitRelease = {
       rev = "550b2ef041ba16ee8b5f55b5f2307f501b2c15a0";
       rev-version = "22.0.0-unstable-2025-10-05";
