@@ -12,16 +12,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "typst";
-  version = "0.13.1";
+  version = "0.14.0-rc.1";
 
   src = fetchFromGitHub {
     owner = "typst";
     repo = "typst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vbBwIQt4xWZaKpXgFwDsRQIQ0mmsQPRR39m8iZnnuj0=";
+    hash = "sha256-06mccrTmCp0CPStpWWta5Zhlbsn3AfZNxbCTmu2cFVk=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd $out
+      git rev-parse HEAD > COMMIT
+      rm -rf .git
+    '';
   };
 
-  cargoHash = "sha256-4kVj2BODEFjLcrh5sxfcgsdLF2Zd3K1GnhA4DEz1Nl4=";
+  cargoHash = "sha256-2ny1TxXfg8AIYzDq7ipB1Xv0/cw6Q3iGnKmRp+RGFa8=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -35,14 +41,19 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     GEN_ARTIFACTS = "artifacts";
     OPENSSL_NO_VENDOR = true;
-    # to not have "unknown hash" in help output
-    TYPST_VERSION = finalAttrs.version;
   };
 
   # Fix for "Found argument '--test-threads' which wasn't expected, or isn't valid in this context"
   postPatch = ''
-    substituteInPlace tests/src/tests.rs --replace-fail 'ARGS.num_threads' 'ARGS.test_threads'
-    substituteInPlace tests/src/args.rs --replace-fail 'num_threads' 'test_threads'
+    substituteInPlace tests/src/tests.rs --replace-fail \
+      'ARGS.num_threads' \
+      'ARGS.test_threads'
+    substituteInPlace tests/src/args.rs --replace-fail \
+      'num_threads' \
+      'test_threads'
+    substituteInPlace crates/typst-cli/build.rs --replace-fail \
+      '"cargo:rustc-env=TYPST_COMMIT_SHA={}", typst_commit_sha()' \
+      "\"cargo:rustc-env=TYPST_COMMIT_SHA={}\", \"$(cat COMMIT | cut -c1-8)\""
   '';
 
   postInstall = ''
