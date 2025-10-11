@@ -18,6 +18,7 @@ let
     )).config.result;
 
   testModules = [
+    ./alternate-vm-host.nix
     ./call-test.nix
     ./driver.nix
     ./interactive.nix
