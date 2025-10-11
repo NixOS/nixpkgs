@@ -63,7 +63,7 @@ in
       };
 
       home = lib.mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/lib/ollama";
         example = "/home/foo";
         description = ''
@@ -71,7 +71,7 @@ in
         '';
       };
       models = lib.mkOption {
-        type = types.str;
+        type = types.path;
         default = "${cfg.home}/models";
         defaultText = "\${config.services.ollama.home}/models";
         example = "/path/to/ollama/models";
