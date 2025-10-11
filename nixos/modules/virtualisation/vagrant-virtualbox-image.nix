@@ -45,20 +45,20 @@
     VAGRANTFILE
 
     # 3. add the exported VM files
-    tar xvf ${config.system.build.virtualBoxOVA}/*.ova
+    tar xvf "${config.system.build.virtualBoxOVA}"/*.ova
 
     # 4. move the ovf to the fixed location
-    mv *.ovf box.ovf
+    mv -- *.ovf box.ovf
 
     # 5. generate OVF manifest file
-    rm *.mf
+    rm -- *.mf
     touch box.mf
     for fname in *; do
-      checksum=$(sha256sum $fname | cut -d' ' -f 1)
+      checksum=$(sha256sum "$fname" | cut -d' ' -f 1)
       echo "SHA256($fname)= $checksum" >> box.mf
     done
 
     # 6. compress everything back together
-    tar --owner=0 --group=0 --sort=name --numeric-owner -czf $out .
+    tar --owner=0 --group=0 --sort=name --numeric-owner -czf "$out" .
   '';
 }
