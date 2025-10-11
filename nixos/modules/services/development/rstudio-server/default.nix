@@ -29,7 +29,7 @@ in
     enable = lib.mkEnableOption "RStudio server";
 
     serverWorkingDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/rstudio-server";
       description = ''
         Default working directory for server (server-working-dir in rserver.conf).
