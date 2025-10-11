@@ -3,38 +3,34 @@
   stdenv,
   fetchFromGitHub,
   llvmPackages,
+  cmake,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bsc";
-  version = "3.3.6";
+  version = "3.3.12";
 
   src = fetchFromGitHub {
     owner = "IlyaGrebnov";
     repo = "libbsc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iUFKTDSAg2/57TPvR0nlmfVN2Z6O9kZKIg+BQQKvr/o=";
+    hash = "sha256-3dFwmThnDzbXB6m/rDfbSz4DZAlIsm4gUOT7YwexpKA=";
   };
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
-  postPatch = lib.optional (!stdenv.hostPlatform.isx86) ''
-    substituteInPlace makefile \
-      --replace-fail "-mavx2" ""
-
-    substituteInPlace makefile.cuda \
-      --replace-fail "-mavx2" ""
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "check_c_compiler_flag(-march=native COMPILER_SUPPORTS_MARCH_NATIVE_C)" "" \
+      --replace-fail "check_cxx_compiler_flag(-march=native COMPILER_SUPPORTS_MARCH_NATIVE_CXX)" ""
   '';
 
-  makeFlags = [
-    "CC=$(CXX)"
-    "PREFIX=${placeholder "out"}"
-  ];
-
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "High performance block-sorting data compression library";
