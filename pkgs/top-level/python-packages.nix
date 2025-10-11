@@ -5435,6 +5435,8 @@ self: super: with self; {
 
   flexcache = callPackage ../development/python-modules/flexcache { };
 
+  flexible-schema = callPackage ../development/python-modules/flexible-schema { };
+
   flexit-bacnet = callPackage ../development/python-modules/flexit-bacnet { };
 
   flexmock = callPackage ../development/python-modules/flexmock { };
@@ -9197,6 +9199,12 @@ self: super: with self; {
 
   medpy = callPackage ../development/python-modules/medpy { };
 
+  meds = callPackage ../development/python-modules/meds { };
+
+  meds-testing-helpers = callPackage ../development/python-modules/meds-testing-helpers { };
+
+  meds-transforms = callPackage ../development/python-modules/meds-transforms { };
+
   medvol = callPackage ../development/python-modules/medvol { };
 
   meeko = callPackage ../development/python-modules/meeko { };
@@ -12150,6 +12158,8 @@ self: super: with self; {
   pretend = callPackage ../development/python-modules/pretend { };
 
   pretty-errors = callPackage ../development/python-modules/pretty-errors { };
+
+  pretty-print-directory = callPackage ../development/python-modules/pretty-print-directory { };
 
   prettytable = callPackage ../development/python-modules/prettytable { };
 
