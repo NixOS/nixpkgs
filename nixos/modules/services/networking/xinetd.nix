@@ -144,7 +144,7 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.xinetd ];
-      script = "exec xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
+      serviceConfig.ExecStart = "xinetd -syslog daemon -dontfork -stayalive -f ${configFile}";
     };
   };
 }
