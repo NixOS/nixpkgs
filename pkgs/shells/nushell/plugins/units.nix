@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/JosephTLyons/nu_plugin_units";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ mgttlinger ];
+    broken = true;
   };
 })
