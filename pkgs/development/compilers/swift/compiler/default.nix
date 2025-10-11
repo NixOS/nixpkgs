@@ -382,8 +382,6 @@ stdenv.mkDerivation {
 
      ${lib.optionalString stdenv.hostPlatform.isLinux ''
        substituteInPlace llvm-project/clang/lib/Driver/ToolChains/Linux.cpp \
-         --replace-fail 'SysRoot + "/lib' '"${glibc}/lib" "' \
-         --replace-fail 'SysRoot + "/usr/lib' '"${glibc}/lib" "' \
          --replace-fail 'LibDir = "lib";' 'LibDir = "${glibc}/lib";' \
          --replace-fail 'LibDir = "lib64";' 'LibDir = "${glibc}/lib";' \
          --replace-fail 'LibDir = X32 ? "libx32" : "lib64";' 'LibDir = "${glibc}/lib";'
