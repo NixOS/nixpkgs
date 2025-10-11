@@ -2345,6 +2345,51 @@ runTests {
     someFunc = a: a + 1;
   });
 
+  testAttrNamesRecursive = {
+    expr = lib.attrsets.attrNamesRecursive {
+      a = {
+        b = 1;
+        c = 2;
+      };
+      d = 3;
+      e.f = "g";
+      h = { };
+    };
+    expected = [
+      [
+        "a"
+        "b"
+      ]
+      [
+        "a"
+        "c"
+      ]
+      [ "d" ]
+      [
+        "e"
+        "f"
+      ]
+    ];
+  };
+
+  testAttrValuesRecursive = {
+    expr = lib.attrsets.attrValuesRecursive {
+      a = {
+        b = 1;
+        c = 2;
+      };
+      d = 3;
+      e.f = "g";
+      h = { };
+    };
+    expected = [
+      1
+      2
+      3
+      "g"
+    ];
+  };
+
   # FIXED-POINTS
 
   testFix = {
