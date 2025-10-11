@@ -59,6 +59,7 @@ jobs:
         with:
           app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
           private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-contents: write
           permission-issues: write
           permission-pull-requests: write
 
