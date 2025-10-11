@@ -39,7 +39,8 @@ let
     "FileWatching"
     # Test requires pbcopy
     "InteractiveUtils"
-    # Test requires network access
+    # Tests require network access
+    "Distributed"
     "Sockets"
   ]
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
@@ -110,7 +111,13 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   preInstallCheck = ''
-    export JULIA_TEST_USE_MULTIPLE_WORKERS=true
+    # On Darwin, Nix build environment cannot access localhost, so disable multiple Julia workers.
+    # This prevents "Unable to read host:port string from worker" errors during test phase.
+    if [[ "$hostPlatform" == *darwin* ]]; then
+      export JULIA_TEST_USE_MULTIPLE_WORKERS=false
+    else
+      export JULIA_TEST_USE_MULTIPLE_WORKERS=true
+    fi
     # Some tests require read/write access to $HOME.
     # And $HOME cannot be equal to $TMPDIR as it causes test failures
     export HOME=$(mktemp -d)

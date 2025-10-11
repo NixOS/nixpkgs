@@ -51,6 +51,17 @@ in
       };
     }) { }
   );
+  julia_112-bin = wrapJulia (
+    callPackage (import ./generic-bin.nix {
+      version = "1.12.0";
+      sha256 = {
+        x86_64-linux = "6f87b8fcf5ef6a7371e8c79d948aedfa0ba28ce44447c446d7d82e70f0158da8";
+        aarch64-linux = "0fb44de10c3a9da719b4962c2158fe4484d98377e521318b692e91a1bea5716b";
+        x86_64-darwin = "373abf275872269f2ca97452e583a4aaf565e6f0572f7072b189aa3dc1b29429";
+        aarch64-darwin = "d1aaa44a9507c7eaa500d41460f06694bffd0ca366dbc23b38c09bb3290f52c8";
+      };
+    }) { }
+  );
   julia_19 = wrapJulia (
     callPackage (import ./generic.nix {
       version = "1.9.4";
@@ -83,6 +94,15 @@ in
       hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
       patches = [
         ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
+      ];
+    }) { }
+  );
+  julia_112 = wrapJulia (
+    callPackage (import ./generic.nix {
+      version = "1.12.0";
+      hash = "sha256-LbpCs/FDVk+WxglI0RANsJAqo8uY6/icFWtAkfBdm4k=";
+      patches = [
+        ./patches/1.12/0001-skip-failing-and-flaky-tests.patch
       ];
     }) { }
   );
