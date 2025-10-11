@@ -52,7 +52,7 @@ let
     shiboken6
   ];
 
-  freecad-utils = callPackage ./freecad-utils.nix { };
+  freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
 in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
