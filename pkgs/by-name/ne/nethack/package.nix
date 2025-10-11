@@ -5,6 +5,7 @@
   coreutils,
   ncurses,
   gzip,
+  gccStdenv,
   flex,
   bison,
   less,
@@ -23,19 +24,21 @@
 }:
 
 let
+  stdenvUsed = if qtMode then gccStdenv else stdenv;
+
   platform =
-    if stdenv.hostPlatform.isUnix then
+    if stdenvUsed.hostPlatform.isUnix then
       "unix"
     else
-      throw "Unknown platform for NetHack: ${stdenv.hostPlatform.system}";
+      throw "Unknown platform for NetHack: ${stdenvUsed.hostPlatform.system}";
   unixHint =
     if x11Mode then
       "linux-x11"
     else if qtMode then
       "linux-qt4"
-    else if stdenv.hostPlatform.isLinux then
+    else if stdenvUsed.hostPlatform.isLinux then
       "linux"
-    else if stdenv.hostPlatform.isDarwin then
+    else if stdenvUsed.hostPlatform.isDarwin then
       "macosx10.14"
     # We probably want something different for Darwin
     else
@@ -47,7 +50,7 @@ let
   ];
 
 in
-stdenv.mkDerivation rec {
+stdenvUsed.mkDerivation (finalAttrs: {
   version = "3.6.7";
   pname =
     if x11Mode then
@@ -58,10 +61,10 @@ stdenv.mkDerivation rec {
       "nethack";
 
   src = fetchurl {
-    url = "https://nethack.org/download/${version}/nethack-${
-      lib.replaceStrings [ "." ] [ "" ] version
+    url = "https://nethack.org/download/${finalAttrs.version}/nethack-${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
     }-src.tgz";
-    sha256 = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
+    hash = "sha256-mM9n323r+WaKYXRaqEwJvKs2Ll0z9blE7FFV1E0qrLI=";
   };
 
   buildInputs = [
@@ -116,7 +119,7 @@ stdenv.mkDerivation rec {
       -i sys/unix/hints/linux
     sed \
       -e 's,^#WANT_WIN_CURSES=1$,WANT_WIN_CURSES=1,' \
-      -e 's,^CC=.*$,CC=${stdenv.cc.targetPrefix}cc,' \
+      -e 's,^CC=.*$,CC=${stdenvUsed.cc.targetPrefix}cc,' \
       -e 's,^HACKDIR=.*$,HACKDIR=\$(PREFIX)/games/lib/\$(GAME)dir,' \
       -e 's,^SHELLDIR=.*$,SHELLDIR=\$(PREFIX)/games,' \
       -e 's,^CFLAGS=-g,CFLAGS=,' \
@@ -132,7 +135,7 @@ stdenv.mkDerivation rec {
         -e 's,moc-qt4,moc,' \
         -i sys/unix/hints/linux-qt4
     ''}
-    ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
+    ${lib.optionalString (stdenvUsed.buildPlatform != stdenvUsed.hostPlatform)
       # If we're cross-compiling, replace the paths to the data generation tools
       # with the ones from the build platform's nethack package, since we can't
       # run the ones we've built here.
@@ -171,7 +174,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     cat <<EOF >$out/bin/nethack
-    #! ${stdenv.shell} -e
+    #! ${stdenvUsed.shell} -e
     PATH=${binPath}:\$PATH
 
     if [ ! -d ${userDir} ]; then
@@ -228,12 +231,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Rogue-like game";
     homepage = "http://nethack.org/";
     license = lib.licenses.ngpl;
-    platforms = if x11Mode then platforms.linux else platforms.unix;
-    maintainers = [ ];
+    platforms = if x11Mode then lib.platforms.linux else lib.platforms.unix;
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "nethack";
   };
-}
+})
