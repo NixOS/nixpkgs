@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     # On Hydra this makes installation fail (sometimes?),
     # and nix store doesn't allow such fancy permission bits anyway.
     ''
-      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+      substituteInPlace Makefile.in --replace-fail '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
   strictDeps = true;
@@ -186,13 +186,13 @@ stdenv.mkDerivation (finalAttrs: {
 
       # explicitly enable the PermitUserEnvironment feature
       substituteInPlace regress/test-exec.sh \
-        --replace \
+        --replace-fail \
           'cat << EOF > $OBJ/sshd_config' \
           $'cat << EOF > $OBJ/sshd_config\n\tPermitUserEnvironment yes'
 
       # some tests want to use files under /bin as example files
       for f in regress/sftp-cmds.sh regress/forwarding.sh; do
-        substituteInPlace $f --replace '/bin' "$(dirname $(type -p ls))"
+        substituteInPlace $f --replace-fail '/bin' "$(dirname $(type -p ls))"
       done
 
       # set up NIX_REDIRECTS for direct invocations
@@ -205,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
           # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
           substituteInPlace regress/test-exec.sh \
-            --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+            --replace-fail /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
         ''
   );
   # integration tests hard to get working on darwin with its shaky
