@@ -13516,15 +13516,6 @@ with pkgs;
 
   blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
 
-  nethack = callPackage ../games/nethack { };
-
-  nethack-qt = callPackage ../games/nethack {
-    qtMode = true;
-    stdenv = gccStdenv;
-  };
-
-  nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
-
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
 
