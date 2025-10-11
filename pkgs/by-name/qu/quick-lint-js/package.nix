@@ -5,8 +5,7 @@
   lib,
   ninja,
   stdenv,
-  testers,
-  quick-lint-js,
+  versionCheckHook,
 }:
 
 let
@@ -63,13 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru = {
     # Expose quick-lint-js-build-tools to nix repl as quick-lint-js.build-tools.
     build-tools = quick-lint-js-build-tools;
-
-    tests = {
-      version = testers.testVersion { package = quick-lint-js; };
-    };
   };
 
   meta = {
