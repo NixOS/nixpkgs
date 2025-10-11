@@ -791,6 +791,12 @@ lib.mapAttrs mkLicense (
       free = false;
     };
 
+    intel-eula = {
+      fullName = "Intel End User License Agreement for Developer Tools";
+      url = "https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/WordDocuments/intelamtsdklicense.htm";
+      free = false;
+    };
+
     interbase = {
       spdxId = "Interbase-1.0";
       fullName = "Interbase Public License v1.0";
