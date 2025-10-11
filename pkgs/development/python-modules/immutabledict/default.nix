@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "immutabledict";
-  version = "4.2.1";
+  version = "4.2.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "corenting";
     repo = "immutabledict";
     tag = "v${version}";
-    hash = "sha256-v2oOzvAa8KONZDQuxouai2B9d1RY4kZG/px2wl0KAyM=";
+    hash = "sha256-ymzOSPVe0Z82FAgVIagY9lyNiMiubXjSBnXIEwzwC20=";
   };
 
   nativeBuildInputs = [ poetry-core ];
