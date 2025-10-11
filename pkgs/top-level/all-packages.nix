@@ -5181,7 +5181,6 @@ with pkgs;
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })
-    julia_19-bin
     julia_110-bin
     julia_111-bin
     julia_19

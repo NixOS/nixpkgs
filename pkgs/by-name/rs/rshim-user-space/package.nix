@@ -94,5 +94,8 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       thillux
     ];
+    # Requires https://github.com/Mellanox/rshim-user-space/pull/276 for glibc-2.42,
+    # patch appears broken though.
+    broken = true;
   };
 }

@@ -498,6 +498,7 @@ mapAliases {
   aumix = throw "'aumix' has been removed due to lack of maintenance upstream. Consider using 'pamixer' for CLI or 'pavucontrol' for GUI"; # Added 2024-09-14
   authy = throw "'authy' has been removed since it reached end of life"; # Added 2024-04-19
   autoadb = throw "'autoadb' has been removed due to lack of maintenance upstream"; # Added 2025-01-25
+  autobase = throw "'autobase' is a Node library, use buildNpmPackage for that"; # Added 2025-09-26
   av-98 = throw "'av-98' has been removed because it has been broken since at least November 2024."; # Added 2025-10-03
   avldrums-lv2 = throw "'avldrums-lv2' has been renamed to/replaced by 'x42-avldrums'"; # Converted to throw 2024-10-17
   avr-sim = throw "'avr-sim' has been removed as it was broken and unmaintained. Possible alternatives are 'simavr', SimulAVR and AVRStudio."; # Added 2025-05-31
@@ -1266,6 +1267,7 @@ mapAliases {
 
   # Julia
   julia_16-bin = throw "'julia_16-bin' has been removed from nixpkgs as it has reached end of life"; # Added 2024-10-08
+  julia_19-bin = throw "'julia_19-bin' is not supported by upstream anymore and breaks with glibc 2.41+"; # Added 2025-09-28
 
   jush = throw "jush has been removed from nixpkgs because it is unmaintained"; # Added 2024-05-28
 
@@ -1792,6 +1794,7 @@ mapAliases {
   mpris-discord-rpc = throw "'mpris-discord-rpc' has been renamed to 'music-discord-rpc'."; # Added 2025-09-14
   mq-cli = throw "'mq-cli' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   mrkd = throw "'mrkd' has been removed as it is unmaintained since 2021"; # Added 2024-12-21
+  mrpeach = throw "'mrpeach' has been removed as it is unmaintained"; # Added 2025-10-06
   mrxvt = throw "'mrxvt' has been removed due to lack of maintainence upstream"; # Added 2025-09-25
   msp430NewlibCross = msp430Newlib; # Added 2024-09-06
   msgpack = throw "msgpack has been split into msgpack-c and msgpack-cxx"; # Added 2025-09-14
@@ -2149,6 +2152,7 @@ mapAliases {
   posix_man_pages = throw "'posix_man_pages' has been renamed to/replaced by 'man-pages-posix'"; # Converted to throw 2024-10-17
   powerdns = pdns; # Added 2022-03-28
   postfixadmin = throw "'postfixadmin' has been removed due to lack of maintenance and missing support for PHP >8.1"; # Added 2025-10-03
+  powwow = throw "'powwow' has been removed, since it's unmaintained since 2021 and doesn't build with glibc 2.42"; # Added 2025-09-28
   presage = throw "presage has been removed, as it has been unmaintained since 2018"; # Added 2024-03-24
   preserves-nim = throw "'preserves-nim' has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   projectm = throw "Since version 4, 'projectm' has been split into 'libprojectm' (the library) and 'projectm-sdl-cpp' (the SDL2 frontend). ProjectM 3 has been moved to 'projectm_3'"; # Added 2024-11-10
@@ -2845,6 +2849,7 @@ mapAliases {
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = throw "'xvfb_run' has been renamed to/replaced by 'xvfb-run'"; # Converted to throw 2024-10-17
   xwaylandvideobridge = makePlasma5Throw "xwaylandvideobridge"; # Added 2024-09-27
+  xxgdb = throw "'xxgdb' seems inactive and doesn't compile with glibc 2.42"; # Added 2025-09-28
   xxv = throw "'xxv' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
 
   ### Y ###
