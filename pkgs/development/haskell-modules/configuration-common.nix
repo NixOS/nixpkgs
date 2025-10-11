@@ -931,6 +931,18 @@ with haskellLib;
   # https://github.com/ekmett/structures/issues/3
   structures = dontCheck super.structures;
 
+  # ships broken Setup.hs https://github.com/facebook/Haxl/issues/165
+  # https://github.com/facebook/Haxl/pull/164
+  haxl = overrideCabal (drv: {
+    postPatch = ''
+      ${drv.postPatch or ""}
+      rm Setup.hs
+    '';
+    # non-deterministic failure https://github.com/facebook/Haxl/issues/85
+    # doesn't compile with text-2.1.2 in <2.5.1.2
+    doCheck = false;
+  }) super.haxl;
+
   # Disable test suites to fix the build.
   acme-year = dontCheck super.acme-year; # http://hydra.cryp.to/build/497858/log/raw
   aeson-lens = dontCheck super.aeson-lens; # http://hydra.cryp.to/build/496769/log/raw
@@ -973,7 +985,6 @@ with haskellLib;
   hadoop-formats = dontCheck super.hadoop-formats;
   hashed-storage = dontCheck super.hashed-storage;
   hashring = dontCheck super.hashring;
-  haxl = dontCheck super.haxl; # non-deterministic failure https://github.com/facebook/Haxl/issues/85
   haxl-facebook = dontCheck super.haxl-facebook; # needs facebook credentials for testing
   hdbi-postgresql = dontCheck super.hdbi-postgresql;
   hedis = dontCheck super.hedis;
