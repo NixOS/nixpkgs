@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.6.2";
+  version = "0.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Ch00k";
     repo = "ffmpy";
     tag = version;
-    hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
+    hash = "sha256-AbE2vSSgrcnaG09B16lrDMY7ORQVRaJWEF+0OgzE0lI=";
   };
 
   postPatch =
