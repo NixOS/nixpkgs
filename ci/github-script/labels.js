@@ -147,9 +147,8 @@ module.exports = async ({ github, context, core, dry }) => {
       ).labels
 
       Object.assign(prLabels, evalLabels, {
-        '12.approved-by: package-maintainer': Array.from(maintainers).some(
-          (m) => approvals.has(m),
-        ),
+        '12.approved-by: package-maintainer':
+          maintainers.intersection(approvals).size > 0,
       })
     }
 
