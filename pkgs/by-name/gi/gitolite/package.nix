@@ -1,7 +1,7 @@
 {
   stdenv,
   coreutils,
-  fetchFromGitHub,
+  fetchFromGitea,
   git,
   lib,
   makeWrapper,
@@ -10,14 +10,15 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gitolite";
   version = "3.6.14";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitea {
+    domain = "codeberg.org";
     owner = "sitaramc";
     repo = "gitolite";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-BwpqvjpHzoypV91W/QReAgiNrmpxZ0IE3W/bpCVO1GE=";
   };
 
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     perl ./install -to $out/bin
-    echo ${version} > $out/bin/VERSION
+    echo ${finalAttrs.version} > $out/bin/VERSION
   '';
 
   passthru.tests = {
@@ -73,4 +74,4 @@ stdenv.mkDerivation rec {
       maintainers.tomberek
     ];
   };
-}
+})
