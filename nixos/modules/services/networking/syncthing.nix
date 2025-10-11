@@ -918,7 +918,7 @@ in
           ExecStart =
             let
               args = lib.escapeShellArgs (
-                (lib.cli.toGNUCommandLine { } {
+                (lib.cli.toCommandLine lib.cli.gnuOptionFormat {
                   "no-browser" = true;
                   "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
                   "config" = cfg.configDir;

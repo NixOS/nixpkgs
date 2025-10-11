@@ -151,7 +151,7 @@ in
       serviceConfig = {
         ExecStart = ''
           ${pkgs.fcgiwrap}/sbin/fcgiwrap ${
-            cli.toGNUCommandLineShell { } (
+            cli.toCommandLineShell lib.cli.gnuOptionFormat (
               {
                 c = cfg.process.prefork;
               }
