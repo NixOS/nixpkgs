@@ -57,7 +57,7 @@ in
       default = { };
     };
     runtimeDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/run/taler-system-runtime/";
       description = ''
         Runtime directory shared between the taler services.
