@@ -102,7 +102,7 @@ in
             description = "Startup script.";
           };
           options.saves = lib.mkOption {
-            type = lib.types.nullOr lib.types.str;
+            type = lib.types.nullOr lib.types.path;
             default = "/var/lib/freeciv/saves/";
             description = ''
               Save games to given directory,
