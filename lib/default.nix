@@ -128,6 +128,7 @@ let
         bitNot
         boolToString
         boolToYesNo
+        boolToBit
         mergeAttrs
         flip
         defaultTo
