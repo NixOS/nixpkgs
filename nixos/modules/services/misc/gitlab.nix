@@ -318,7 +318,7 @@ in
       packages.pages = mkPackageOption pkgs "gitlab-pages" { };
 
       statePath = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/gitlab/state";
         description = ''
           GitLab state directory. Configuration, repositories and
