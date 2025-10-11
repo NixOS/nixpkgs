@@ -4,6 +4,8 @@
   fetchFromGitHub,
   gitUpdater,
   cmake,
+  gtest,
+  nlohmann_json,
   pdal,
   curl,
   openssl,
@@ -11,16 +13,18 @@
 
 stdenv.mkDerivation rec {
   pname = "entwine";
-  version = "3.1.1";
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "connormanning";
     repo = "entwine";
     rev = version;
-    sha256 = "sha256-1dy5NafKX0E4MwFIggnr7bQIeB1KvqnNaQQUUAs6Bq8=";
+    hash = "sha256-RpUV75Dlyd3wTWGC3btpAFSjqpgK9zLXTl670Oh0Z2o=";
   };
 
   buildInputs = [
+    gtest
+    nlohmann_json
     openssl
     pdal
     curl
