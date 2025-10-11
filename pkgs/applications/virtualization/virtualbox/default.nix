@@ -216,10 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
       --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
 
-    # this works in conjunction with fix-graphics-driver-loading.patch
-    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-dx-dx11.cpp \
-      --replace-fail \"VBoxDxVk\" \"$out/libexec/virtualbox/VBoxDxVk.so\"
-
     export USER=nix
     set +x
   '';
