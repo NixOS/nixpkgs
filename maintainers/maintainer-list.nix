@@ -8280,6 +8280,12 @@
     githubId = 541748;
     name = "Felipe Espinoza";
   };
+  fe3dback = {
+    email = "fe3dback@protonmail.com";
+    github = "fe3dback";
+    githubId = 2073883;
+    name = "fe3dback";
+  };
   feathecutie = {
     name = "feathecutie";
     github = "feathecutie";
