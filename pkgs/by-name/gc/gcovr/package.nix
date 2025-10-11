@@ -6,22 +6,26 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "gcovr";
-  version = "8.3";
+  version = "8.4";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+qNx+cSn94yYANplUQfU+Z8EtxjRwNn0jK/cvvAEkHk=";
+    hash = "sha256-jqDPIxdrECnyjbZ51xLKZHezgHCXw3VcE1vcU7Uc+nI=";
   };
 
-  build-system = [ python3Packages.hatchling ];
+  build-system = with python3Packages; [
+    hatchling
+    hatch-fancy-pypi-readme
+    hatch-vcs
+  ];
 
   # pythonRelaxDeps do not work on pyproject.toml
   preBuild = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "hatchling==1.26.1" "hatchling"
+      --replace-fail "hatchling==1.26.3" "hatchling"
     substituteInPlace pyproject.toml \
       --replace-fail "hatch-fancy-pypi-readme==24.1.0" "hatch-fancy-pypi-readme>=24.1.0"
     substituteInPlace pyproject.toml \
@@ -36,8 +40,6 @@ python3Packages.buildPythonPackage rec {
         jinja2
         lxml
         pygments
-        hatch-fancy-pypi-readme
-        hatch-vcs
       ]
       ++ lib.optionals (pythonOlder "3.11") [ tomli ]
     );
