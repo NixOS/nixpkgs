@@ -86,7 +86,7 @@ in
     };
 
     datastorePath = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/kasmweb";
       description = ''
         The directory used to store all data for kasmweb.
