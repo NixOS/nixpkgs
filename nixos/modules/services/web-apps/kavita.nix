@@ -41,7 +41,7 @@ in
 
     dataDir = lib.mkOption {
       default = "/var/lib/kavita";
-      type = lib.types.str;
+      type = lib.types.path;
       description = "The directory where Kavita stores its state.";
     };
 
