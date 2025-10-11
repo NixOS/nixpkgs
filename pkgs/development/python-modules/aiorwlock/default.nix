@@ -5,6 +5,7 @@
   pytest-asyncio,
   pytestCheckHook,
   poetry-core,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -20,6 +21,15 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
+
+  patches = [
+    # Fix cross-event-loop race condition in lock acquisition
+    # https://github.com/aio-libs/aiorwlock/pull/503
+    (fetchpatch {
+      url = "https://github.com/aio-libs/aiorwlock/commit/05608d401e4a68c69c6b9f421dd20535a9dbe523.patch?full_index=1";
+      hash = "sha256-97c6Li6nq7ViNvUIdPL8f/ATOSsmiAMaJeBFj+jPJcM=";
+    })
+  ];
 
   nativeCheckInputs = [
     pytest-asyncio
