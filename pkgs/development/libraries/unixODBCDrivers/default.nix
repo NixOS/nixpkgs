@@ -1,4 +1,5 @@
 {
+  config,
   fetchurl,
   stdenv,
   unixODBC,
@@ -98,39 +99,6 @@
       homepage = "https://downloads.mariadb.org/connector-odbc/";
       license = licenses.gpl2;
       platforms = platforms.linux ++ platforms.darwin;
-    };
-  };
-
-  mysql = stdenv.mkDerivation rec {
-    pname = "mysql-connector-odbc";
-    majorVersion = "5.3";
-    version = "${majorVersion}.6";
-
-    src = fetchurl {
-      url = "https://dev.mysql.com/get/Downloads/Connector-ODBC/${majorVersion}/${pname}-${version}-src.tar.gz";
-      sha256 = "1smi4z49i4zm7cmykjkwlxxzqvn7myngsw5bc35z6gqxmi8c55xr";
-    };
-
-    nativeBuildInputs = [ cmake ];
-    buildInputs = [
-      unixODBC
-      mariadb
-    ];
-
-    cmakeFlags = [ "-DWITH_UNIXODBC=1" ];
-
-    # see the top of the file for an explanation
-    passthru = {
-      fancyName = "MySQL";
-      driver = "lib/libmyodbc3-3.51.12.so";
-    };
-
-    meta = with lib; {
-      description = "MySQL ODBC database driver";
-      homepage = "https://dev.mysql.com/downloads/connector/odbc/";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-      broken = true;
     };
   };
 
@@ -379,4 +347,7 @@
       maintainers = with maintainers; [ sir4ur0n ];
     };
   };
+}
+// lib.optionalAttrs config.allowAliases {
+  mysql = throw "unixODBCDrivers.mysql has been removed because it has been marked as broken since 2016."; # Added 2025-10-11
 }
