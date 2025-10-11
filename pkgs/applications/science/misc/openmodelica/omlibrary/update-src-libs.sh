@@ -1,5 +1,5 @@
-#!/usr/bin/env nix-shell
-#! nix-shell -i bash -p bash
+#! /usr/bin/env nix-shell
+#! nix-shell -i bash -p bash jq busybox unzip
 
 CWD=$PWD
 
@@ -12,16 +12,16 @@ chko() {
 with import <nixpkgs> {};
 fetchgit `cat $CWD/../mkderivation/src-main.nix`
 EOF
-    nix-build check.nix
-    cat result/libraries/Makefile.libs
+    nix build -f check.nix
+    jq -s "[.[]|del(.mirrors)|.[].[].[].[].zipfile]|unique|.[]" result/libraries/index.json result/libraries/install-index.json
   )
 }
 
 getsha256() {
-  URL=$(echo "$1" | sed 's/^"\(.*\)"$/\1/')
-  REV=$(echo "$2" | sed 's/^"\(.*\)"$/\1/')
-  SHA=$(nix run nixpkgs.nix-prefetch-git -c nix-prefetch-git --fetch-submodules "$URL" "$REV" 2>/dev/null | sed -n 's/.*"sha256": "\(.*\)",/\1/g p')
-  echo "{ url = $1; rev = $2; sha256 = \"$SHA\"; fetchSubmodules = true; }"
+  SHA=$(nix-prefetch-url $1 --unpack 2>/dev/null)
+  # This was the least annoying way I could come up with to recover the root folder name, since nix-prefetch-url has no stripRoot=false option
+  foldername=$(curl -L $1 2>/dev/null | busybox unzip -qql - | sed -r '1 {s/([ ]+[^ ]+){3}\s+//;q}' | sed 's:/*$::')
+  echo "{ url = \"$1\"; sha256 = \"$SHA\"; folderName = \"$foldername\"; stripRoot = true; }"
 }
 
 OUT=src-libs.nix
@@ -29,11 +29,12 @@ OUT=src-libs.nix
 echo '[' > $OUT
 
 chko |
-grep checkout-git.sh |
-tr \' \" |
-while read NM TGT URL BR REV ; do
-  echo Trying $TGT $URL $REV >&2
-  getsha256 $URL $REV >> $OUT || exit 1
+tr -d '"' |
+tail -n +2 |
+while read URL ; do
+  # read encases everything in single quotes, so this is safe
+  echo Trying $URL >&2
+  getsha256 $URL >> $OUT || exit 1
 done
 
 echo ']' >> $OUT
