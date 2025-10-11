@@ -41,12 +41,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       })
     ];
 
-  dontUnpack = true;
+  unpackCmd = ''
+    cp $curSrc $(stripHash $curSrc)
+  '';
 
   installPhase = ''
     runHook preInstall
-    install -D *.py -t $out/Scripts
-    install -D *.dylib -t $out/UserPlugins
+    install -D -t $out/Scripts *.py
+    install -D -t $out/UserPlugins *.dylib
     runHook postInstall
   '';
 })

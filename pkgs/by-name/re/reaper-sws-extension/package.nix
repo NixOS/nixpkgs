@@ -25,6 +25,5 @@ callPackage p {
       "x86_64-darwin"
       "aarch64-darwin"
     ];
-    broken = stdenvNoCC.hostPlatform.isDarwin;
   };
 }
