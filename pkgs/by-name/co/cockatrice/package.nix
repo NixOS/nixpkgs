@@ -1,38 +1,40 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
-  mkDerivation,
   cmake,
-  protobuf,
-  qtbase,
-  qtmultimedia,
-  qttools,
-  qtwebsockets,
-  wrapQtAppsHook,
+  protobuf_21,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+let
+  protobuf = protobuf_21;
+in
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "cockatrice";
   version = "2025-04-03-Release-2.10.2";
 
   src = fetchFromGitHub {
     owner = "Cockatrice";
     repo = "Cockatrice";
-    rev = version;
-    sha256 = "sha256-zXAK830SdGT3xN3ST8h9LLy/oWr4MH6TZf57gLfI0e8=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-zXAK830SdGT3xN3ST8h9LLy/oWr4MH6TZf57gLfI0e8=";
   };
 
   buildInputs = [
+    protobuf
+  ]
+  ++ (with libsForQt5; [
     qtbase
     qtmultimedia
-    protobuf
     qttools
     qtwebsockets
-  ];
+  ]);
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   meta = {
@@ -40,6 +42,7 @@ mkDerivation rec {
     description = "Cross-platform virtual tabletop for multiplayer card games";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ evanjs ];
-    platforms = with lib.platforms; linux;
+    mainProgram = "cockatrice";
+    platforms = lib.platforms.linux;
   };
-}
+})
