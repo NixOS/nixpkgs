@@ -16430,8 +16430,6 @@ self: super: with self; {
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
 
-  schemainspect = callPackage ../development/python-modules/schemainspect { };
-
   schemdraw = callPackage ../development/python-modules/schemdraw { };
 
   schiene = callPackage ../development/python-modules/schiene { };
