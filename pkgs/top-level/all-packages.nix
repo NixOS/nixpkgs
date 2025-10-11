@@ -11826,18 +11826,21 @@ with pkgs;
 
   magic-wormhole = with python3Packages; toPythonApplication magic-wormhole;
 
-  magnetophonDSP = lib.recurseIntoAttrs {
-    CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
-    CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
-    ConstantDetuneChorus = callPackage ../applications/audio/magnetophonDSP/ConstantDetuneChorus { };
-    faustCompressors = callPackage ../applications/audio/magnetophonDSP/faustCompressors { };
-    LazyLimiter = callPackage ../applications/audio/magnetophonDSP/LazyLimiter { };
-    MBdistortion = callPackage ../applications/audio/magnetophonDSP/MBdistortion { };
-    pluginUtils = callPackage ../applications/audio/magnetophonDSP/pluginUtils { };
-    RhythmDelay = callPackage ../applications/audio/magnetophonDSP/RhythmDelay { };
-    VoiceOfFaust = callPackage ../applications/audio/magnetophonDSP/VoiceOfFaust { };
-    shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
-  };
+  magnetophonDSP =
+    lib.recurseIntoAttrs {
+      CharacterCompressor = callPackage ../applications/audio/magnetophonDSP/CharacterCompressor { };
+      CompBus = callPackage ../applications/audio/magnetophonDSP/CompBus { };
+      faustCompressors = callPackage ../applications/audio/magnetophonDSP/faustCompressors { };
+      LazyLimiter = callPackage ../applications/audio/magnetophonDSP/LazyLimiter { };
+      MBdistortion = callPackage ../applications/audio/magnetophonDSP/MBdistortion { };
+      pluginUtils = callPackage ../applications/audio/magnetophonDSP/pluginUtils { };
+      RhythmDelay = callPackage ../applications/audio/magnetophonDSP/RhythmDelay { };
+      VoiceOfFaust = callPackage ../applications/audio/magnetophonDSP/VoiceOfFaust { };
+      shelfMultiBand = callPackage ../applications/audio/magnetophonDSP/shelfMultiBand { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      ConstantDetuneChorus = throw "magnetophonDSP.ConstantDetuneChorus has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
+    };
 
   mastodon-bot = nodePackages.mastodon-bot;
 
