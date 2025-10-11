@@ -71,11 +71,11 @@ in
 stdenv.mkDerivation rec {
   pname = "gap";
   # https://www.gap-system.org/Releases/
-  version = "4.14.0";
+  version = "4.15.0";
 
   src = fetchurl {
     url = "https://github.com/gap-system/gap/releases/download/v${version}/gap-${version}.tar.gz";
-    sha256 = "sha256-hF9ScsJv6xuOue8pS/BUXyZMH+WhmwYBu8ZdedlQZIc=";
+    sha256 = "sha256-k8ffl98SZcD56mqbVXixIonVqzrtKTbP1ZJxDPpzYJ4=";
   };
 
   # remove all non-essential packages (which take up a lot of space)
