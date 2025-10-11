@@ -25819,6 +25819,11 @@
     githubId = 91203390;
     name = "Felix Kimmel";
   };
+  thesn = {
+    github = "thesn10";
+    githubId = 38666407;
+    name = "TheSN";
+  };
   thesola10 = {
     email = "me@thesola.io";
     github = "Thesola10";
