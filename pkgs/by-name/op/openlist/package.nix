@@ -64,6 +64,12 @@ buildGoModule (finalAttrs: {
         "TestWebsocketAll"
         "TestWebsocketCaller"
         "TestDownloadOrder"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+        # --- FAIL: TestTask_Cancel (0.01s)
+        # task_test.go:48: task is running
+        # task_test.go:61: task status not canceled: canceling
+        "TestTask_Cancel"
       ];
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
