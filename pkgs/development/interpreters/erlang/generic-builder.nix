@@ -35,6 +35,7 @@
   openjdk11,
   openssl,
   perl,
+  pkgsBuildBuild,
   runtimeShell,
   stdenv,
   systemd,
@@ -62,6 +63,9 @@ let
         xorg.libX11
         wrapGAppsHook3
       ];
+
+  erlBuilder = pkgsBuildBuild.beam_minimal.interpreters."erlang_${lib.versions.major version}";
+  isCross = stdenv.hostPlatform != stdenv.buildPlatform;
 
   major = builtins.head (builtins.splitVersion version);
 
@@ -93,11 +97,15 @@ stdenv.mkDerivation {
     LANG = "C.UTF-8";
   };
 
+  depsBuildBuild = [
+    perl
+    libxslt
+  ]
+  ++ optionals isCross [ erlBuilder ];
+
   nativeBuildInputs = [
     makeWrapper
-    perl
     gnum4
-    libxslt
     libxml2
   ];
 
@@ -114,6 +122,10 @@ stdenv.mkDerivation {
   # disksup requires a shell
   postPatch = ''
     substituteInPlace lib/os_mon/src/disksup.erl --replace-fail '"sh ' '"${runtimeShell} '
+  ''
+  + optionalString isCross ''
+    substituteInPlace erts/emulator/Makefile.in \
+      --replace-fail '`utils/find_cross_ycf`' '${pkgsBuildBuild.beam_minimal.interpreters.erlang}/lib/erlang/erts-*/bin/yielding_c_fun'
   '';
 
   debugInfo = enableDebugInfo;
@@ -135,7 +147,8 @@ stdenv.mkDerivation {
   ++ optional enableSystemd "--enable-systemd"
   ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
   # make[3]: *** [yecc.beam] Segmentation fault: 11
-  ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit";
+  ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
+  ++ optionals isCross [ "erl_xcomp_sysroot=${stdenv.cc.libc}" ];
 
   installTargets = [
     "install"
