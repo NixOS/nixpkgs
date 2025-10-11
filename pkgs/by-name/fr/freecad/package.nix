@@ -33,6 +33,7 @@
   nix-update-script,
   gmsh,
   which,
+  xmlstarlet,
 }:
 let
   pythonDeps = with python3Packages; [
@@ -50,6 +51,7 @@ let
     pyyaml # (at least for) PyrateWorkbench
     scipy
     shiboken6
+    netgen-mesher
   ];
 
   freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
@@ -76,6 +78,7 @@ freecad-utils.makeCustomizable (
       doxygen
       wrapGAppsHook3
       qt6.wrapQtAppsHook
+      xmlstarlet
     ];
 
     buildInputs = [
@@ -123,6 +126,17 @@ freecad-utils.makeCustomizable (
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
         --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+    ''
+    # uncheck 'Legacy Netgen' as it is known broken on linux platform
+    # https://github.com/FreeCAD/FreeCAD/pull/23387
+    + ''
+      xmlstarlet ed -L \
+        -u '//widget[@class="Gui::PrefCheckBox"][@name="ckb_legacy"]/property[@name="checked"]/bool' \
+        -v false \
+        src/Mod/Fem/Gui/Resources/ui/DlgSettingsNetgen.ui
+
+      substituteInPlace src/Mod/Fem/femcommands/commands.py \
+        --replace-fail 'GetBool("UseLegacyNetgen", 1)' 'GetBool("UseLegacyNetgen", 0)'
     '';
 
     cmakeFlags = [
