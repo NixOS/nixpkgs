@@ -4,6 +4,7 @@ module.exports = async ({ github, context, core, dry }) => {
   const { readFile, writeFile } = require('node:fs/promises')
   const withRateLimit = require('./withRateLimit.js')
   const { classify } = require('../supportedBranches.js')
+  const { handleMerge } = require('./merge.js')
 
   const artifactClient = new DefaultArtifactClient()
 
@@ -95,7 +96,7 @@ module.exports = async ({ github, context, core, dry }) => {
     return maintainerMaps[branch]
   }
 
-  async function handlePullRequest({ item, stats }) {
+  async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
     const pull_number = item.number
@@ -108,6 +109,19 @@ module.exports = async ({ github, context, core, dry }) => {
         pull_number,
       })
     ).data
+
+    const maintainers = await getMaintainerMap(pull_request.base.ref)
+
+    await handleMerge({
+      github,
+      context,
+      core,
+      log,
+      dry,
+      pull_request,
+      events,
+      maintainers,
+    })
 
     // When the same change has already been merged to the target branch, a PR will still be
     // open and display the same changes - but will not actually have any effect. This causes
@@ -305,8 +319,6 @@ module.exports = async ({ github, context, core, dry }) => {
         )
       }
 
-      const maintainers = await getMaintainerMap(pull_request.base.ref)
-
       Object.assign(prLabels, evalLabels, {
         '11.by: package-maintainer':
           packages.length &&
@@ -377,9 +389,21 @@ module.exports = async ({ github, context, core, dry }) => {
 
       const itemLabels = {}
 
+      const events = await github.paginate(
+        github.rest.issues.listEventsForTimeline,
+        {
+          ...context.repo,
+          issue_number,
+          per_page: 100,
+        },
+      )
+
       if (item.pull_request || context.payload.pull_request) {
         stats.prs++
-        Object.assign(itemLabels, await handlePullRequest({ item, stats }))
+        Object.assign(
+          itemLabels,
+          await handlePullRequest({ item, stats, events }),
+        )
       } else {
         stats.issues++
         if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
@@ -391,13 +415,7 @@ module.exports = async ({ github, context, core, dry }) => {
       }
 
       const latest_event_at = new Date(
-        (
-          await github.paginate(github.rest.issues.listEventsForTimeline, {
-            ...context.repo,
-            issue_number,
-            per_page: 100,
-          })
-        )
+        events
           .filter(({ event }) =>
             [
               // These events are hand-picked from:
