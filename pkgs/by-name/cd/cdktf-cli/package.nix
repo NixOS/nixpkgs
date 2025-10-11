@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cdktf-cli";
-  version = "0.21.0";
+  version = "0.22.0-pre.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "terraform-cdk";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iqy8j1bqwjSRBOj8kjFtAq9dLiv6dDbJsiFGQUhGW7k=";
+    hash = "sha256-zBWon3REgOEP7pnrZmuU7mPpfhU5vvq3zVF1tYzBeJI=";
   };
 
   offlineCache = fetchYarnDeps {
