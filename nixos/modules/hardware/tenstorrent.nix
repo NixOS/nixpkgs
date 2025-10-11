@@ -24,10 +24,9 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
+      python3Packages.tt-smi
       tt-system-tools
     ];
-
-    # TODO: add tt-smi to environment.systemPackages once https://github.com/NixOS/nixpkgs/pull/444714 is merged
   };
 
   meta.maintainers = with lib.maintainers; [ RossComputerGuy ];
