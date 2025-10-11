@@ -8516,6 +8516,8 @@ self: super: with self; {
 
   lit = callPackage ../development/python-modules/lit { };
 
+  litecli = callPackage ../development/python-modules/litecli { };
+
   litellm = callPackage ../development/python-modules/litellm { };
 
   litemapy = callPackage ../development/python-modules/litemapy { };
