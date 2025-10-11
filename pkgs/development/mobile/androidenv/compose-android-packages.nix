@@ -110,7 +110,9 @@ in
             1
           else
             coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
+        latestPlatformVersionInt = lib.max minPlatformVersionInt (
+          coerceInt (lib.versions.major repo.latest.platforms)
+        );
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
