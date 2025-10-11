@@ -62,7 +62,5 @@ buildPythonPackage rec {
     license = licenses.bsdOriginal;
     maintainers = [ ];
     mainProgram = "mayavi2";
-    # segfault
-    broken = pythonAtLeast "3.13";
   };
 }
