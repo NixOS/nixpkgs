@@ -40,7 +40,7 @@ in
       };
 
       basePath = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/cook-cli";
         description = ''
           Path to the directory cook-cli will look for recipes.
