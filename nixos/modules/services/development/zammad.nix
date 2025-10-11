@@ -32,7 +32,6 @@ let
   };
 in
 {
-
   options = {
     services.zammad = {
       enable = lib.mkEnableOption "Zammad, a web-based, open source user support/ticketing solution";
@@ -245,21 +244,23 @@ in
       }
     ];
 
-    services.postgresql = lib.optionalAttrs (cfg.database.createLocally) {
-      enable = true;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.database.user;
-          ensureDBOwnership = true;
-        }
-      ];
-    };
-
-    services.redis = lib.optionalAttrs cfg.redis.createLocally {
-      servers."${cfg.redis.name}" = {
+    services = {
+      postgresql = lib.optionalAttrs cfg.database.createLocally {
         enable = true;
-        port = cfg.redis.port;
+        ensureDatabases = [ cfg.database.name ];
+        ensureUsers = [
+          {
+            name = cfg.database.user;
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+
+      redis = lib.optionalAttrs cfg.redis.createLocally {
+        servers."${cfg.redis.name}" = {
+          enable = true;
+          port = cfg.redis.port;
+        };
       };
     };
 
@@ -273,13 +274,13 @@ in
         "network.target"
         "systemd-tmpfiles-setup.service"
       ]
-      ++ lib.optionals (cfg.database.createLocally) [
+      ++ lib.optionals cfg.database.createLocally [
         "postgresql.target"
       ]
       ++ lib.optionals cfg.redis.createLocally [
         "redis-${cfg.redis.name}.service"
       ];
-      requires = lib.optionals (cfg.database.createLocally) [
+      requires = lib.optionals cfg.database.createLocally [
         "postgresql.target"
       ];
       description = "Zammad web";
