@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "biliass";
-  version = "2.2.2";
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
     repo = "yutto";
     tag = "biliass@${version}";
-    hash = "sha256-IQokpJbUhR8FMCJcxPSDD1X1o+Lb2j1G7d/jFEsR/Eg=";
+    hash = "sha256-PlZD+988KdJqYC1I1K7i+YAH1Tzr6zfXcJFR/M4mQRA=";
   };
 
   sourceRoot = "${src.name}/packages/biliass";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
       sourceRoot
       cargoRoot
       ;
-    hash = "sha256-tkHl6z0En+od//fCGJXK/p8Dz5KDOXltHrXhxHmHL6U=";
+    hash = "sha256-P9Rskt4dXTCF64uIsd0kAIrg9Zj2nIyHuUSbNpysSrE=";
   };
 
   nativeBuildInputs = with rustPlatform; [
