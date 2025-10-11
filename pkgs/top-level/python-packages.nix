@@ -61,6 +61,8 @@ self: super: with self; {
 
   acunetix = callPackage ../development/python-modules/acunetix { };
 
+  acvl-utils = callPackage ../development/python-modules/acvl-utils { };
+
   adafruit-board-toolkit = callPackage ../development/python-modules/adafruit-board-toolkit { };
 
   adafruit-io = callPackage ../development/python-modules/adafruit-io { };
@@ -1756,6 +1758,8 @@ self: super: with self; {
   basswood-av = callPackage ../development/python-modules/basswood-av { };
 
   batchgenerators = callPackage ../development/python-modules/batchgenerators { };
+
+  batchgeneratorsv2 = callPackage ../development/python-modules/batchgeneratorsv2 { };
 
   batchspawner = callPackage ../development/python-modules/batchspawner { };
 
@@ -4546,6 +4550,10 @@ self: super: with self; {
 
   dynalite-panel = callPackage ../development/python-modules/dynalite-panel { };
 
+  dynamic-network-architectures =
+    callPackage ../development/python-modules/dynamic-network-architectures
+      { };
+
   dynd = callPackage ../development/python-modules/dynd { };
 
   e2b = callPackage ../development/python-modules/e2b { };
@@ -5162,6 +5170,8 @@ self: super: with self; {
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   ffmpy = callPackage ../development/python-modules/ffmpy { };
+
+  fft-conv-pytorch = callPackage ../development/python-modules/fft-conv-pytorch { };
 
   fhir-py = callPackage ../development/python-modules/fhir-py { };
 
@@ -10601,6 +10611,8 @@ self: super: with self; {
   nmcli = callPackage ../development/python-modules/nmcli { };
 
   nnpdf = toPythonModule (pkgs.nnpdf.override { python3 = python; });
+
+  nnunetv2 = callPackage ../development/python-modules/nnunetv2 { };
 
   noaa-coops = callPackage ../development/python-modules/noaa-coops { };
 
