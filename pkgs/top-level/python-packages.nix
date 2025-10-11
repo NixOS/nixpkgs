@@ -1751,6 +1751,8 @@ self: super: with self; {
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
+  basic-colormath = callPackage ../development/python-modules/basic-colormath { };
+
   basiciw = callPackage ../development/python-modules/basiciw { };
 
   basswood-av = callPackage ../development/python-modules/basswood-av { };
@@ -2852,6 +2854,8 @@ self: super: with self; {
   collections-extended = callPackage ../development/python-modules/collections-extended { };
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
+
+  color-manager = callPackage ../development/python-modules/color-manager { };
 
   color-operations = callPackage ../development/python-modules/color-operations { };
 
