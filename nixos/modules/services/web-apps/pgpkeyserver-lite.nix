@@ -61,7 +61,7 @@ in
 
     services.nginx.virtualHosts =
       let
-        hkpPort = builtins.toString cfg.hkpPort;
+        hkpPort = toString cfg.hkpPort;
       in
       {
         ${cfg.hostname} = {

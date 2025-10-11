@@ -174,7 +174,7 @@ let
 
   baseIsolinuxCfg = ''
     SERIAL 0 115200
-    TIMEOUT ${builtins.toString syslinuxTimeout}
+    TIMEOUT ${toString syslinuxTimeout}
     UI vesamenu.c32
     MENU BACKGROUND /isolinux/background.png
 
