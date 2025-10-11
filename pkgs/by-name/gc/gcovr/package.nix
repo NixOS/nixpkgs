@@ -1,7 +1,10 @@
 {
+  stdenv,
   lib,
   python3Packages,
-  fetchPypi,
+  fetchFromGitHub,
+  writableTmpDirAsHomeHook,
+  gitMinimal,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -11,9 +14,11 @@ python3Packages.buildPythonPackage rec {
 
   disabled = python3Packages.pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-jqDPIxdrECnyjbZ51xLKZHezgHCXw3VcE1vcU7Uc+nI=";
+  src = fetchFromGitHub {
+    owner = "gcovr";
+    repo = "gcovr";
+    tag = version;
+    hash = "sha256-v3jNODYD9qa3mwttfuldhhIHrfR5LcsZ+WNWiOWb35E=";
   };
 
   build-system = with python3Packages; [
@@ -44,15 +49,34 @@ python3Packages.buildPythonPackage rec {
       ++ lib.optionals (pythonOlder "3.11") [ tomli ]
     );
 
-  # There are no unit tests in the pypi tarball. Most of the unit tests on the
-  # github repository currently only work with gcc5, so we just disable them.
-  # See also: https://github.com/gcovr/gcovr/issues/206
-  # Despite the CI passing many GCC version, ~300 tests are failing on nixos
-  doCheck = false;
-
   pythonImportsCheck = [
     "gcovr"
     "gcovr.configuration"
+  ];
+
+  preCheck = ''
+    rm -rf src # this causes some pycache issues
+    rm -rf admin/bump_version.py
+    export CC_REFERENCE="gcc-${lib.versions.major stdenv.cc.version}"
+  '';
+
+  nativeCheckInputs = with python3Packages; [
+    writableTmpDirAsHomeHook
+    pytestCheckHook
+    pytest-timeout
+    yaxmldiff
+    nox
+    requests
+    gitMinimal
+  ];
+
+  disabledTests = [
+    # too fragile
+    "test_build"
+    "test_example"
+    # assert 40 == 30 on log levels
+    "test_multiple_output_formats_to_stdout"
+    "test_multiple_output_formats_to_stdout_1"
   ];
 
   meta = {
