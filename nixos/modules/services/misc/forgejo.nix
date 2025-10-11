@@ -134,14 +134,14 @@ in
 
       stateDir = mkOption {
         default = "/var/lib/forgejo";
-        type = types.str;
+        type = types.path;
         description = "Forgejo data directory.";
       };
 
       customDir = mkOption {
         default = "${cfg.stateDir}/custom";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
-        type = types.str;
+        type = types.path;
         description = ''
           Base directory for custom templates and other options.
 
@@ -228,7 +228,7 @@ in
         };
 
         path = mkOption {
-          type = types.str;
+          type = types.path;
           default = "${cfg.stateDir}/data/forgejo.db";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/forgejo.db"'';
           description = "Path to the sqlite3 database file.";
@@ -257,7 +257,7 @@ in
         };
 
         backupDir = mkOption {
-          type = types.str;
+          type = types.path;
           default = "${cfg.stateDir}/dump";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the directory where the dump archives will be stored.";
@@ -303,7 +303,7 @@ in
       };
 
       repositoryRoot = mkOption {
-        type = types.str;
+        type = types.path;
         default = "${cfg.stateDir}/repositories";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";

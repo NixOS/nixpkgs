@@ -113,19 +113,19 @@ in
             };
 
             certificate = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/private/umurmur/cert.crt";
               description = "Path to your SSL certificate. Generates self-signed automatically if not exists.";
             };
 
             private_key = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/private/umurmur/key.key";
               description = "Path to your SSL key. Generates self-signed automatically if not exists.";
             };
 
             ca_path = lib.mkOption {
-              type = lib.types.nullOr lib.types.str;
+              type = lib.types.nullOr lib.types.path;
               default = null;
               description = "Path to your SSL CA certificate.";
             };

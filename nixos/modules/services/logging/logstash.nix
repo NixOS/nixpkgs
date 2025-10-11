@@ -76,7 +76,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/logstash";
         description = ''
           A path to directory writable by logstash that it uses to store data.

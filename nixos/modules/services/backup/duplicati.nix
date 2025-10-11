@@ -29,7 +29,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/duplicati";
         description = ''
           The directory where Duplicati stores its data files.

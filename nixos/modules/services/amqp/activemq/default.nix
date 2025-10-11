@@ -36,7 +36,7 @@ in
       configurationDir = lib.mkOption {
         default = "${pkgs.activemq}/conf";
         defaultText = lib.literalExpression ''"''${pkgs.activemq}/conf"'';
-        type = lib.types.str;
+        type = lib.types.path;
         description = ''
           The base directory for ActiveMQ's configuration.
           By default, this directory is searched for a file named activemq.xml,
@@ -55,7 +55,7 @@ in
         '';
       };
       baseDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/activemq";
         description = ''
           The base directory where ActiveMQ stores its persistent data and logs.

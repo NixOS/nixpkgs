@@ -373,12 +373,12 @@ in
       description = "FQDN for the nextcloud instance.";
     };
     home = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/nextcloud";
       description = "Storage path of nextcloud.";
     };
     datadir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = config.services.nextcloud.home;
       defaultText = lib.literalExpression "config.services.nextcloud.home";
       description = ''

@@ -30,7 +30,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/ipfs-cluster";
         description = "The data dir for ipfs-cluster.";
       };

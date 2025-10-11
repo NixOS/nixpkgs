@@ -1681,7 +1681,7 @@ in
     };
 
     security.pam.makeHomeDir.skelDirectory = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/empty";
       example = "/etc/skel";
       description = ''

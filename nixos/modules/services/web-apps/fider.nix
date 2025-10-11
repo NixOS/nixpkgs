@@ -16,7 +16,7 @@ in
       package = lib.mkPackageOption pkgs "fider" { };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/fider";
         description = "Default data folder for Fider.";
         example = "/mnt/fider";

@@ -108,7 +108,7 @@ in
         };
 
         storagePassFile = lib.mkOption {
-          type = with lib.types; nullOr str;
+          type = with lib.types; nullOr path;
           default = null;
           description = ''
             Path to file with database password. The content of this will be used to
@@ -230,7 +230,7 @@ in
       };
 
       stateSaveLocation = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/spool/slurmctld";
         description = ''
           Directory into which the Slurm controller, slurmctld, saves its state.
@@ -260,7 +260,7 @@ in
       mpi = {
         PmixCliTmpDirBase = lib.mkOption {
           default = "/tmp/pmix";
-          type = lib.types.str;
+          type = lib.types.path;
           description = ''
             Base path for PMIx temporary files.
           '';

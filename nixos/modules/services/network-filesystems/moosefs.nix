@@ -142,7 +142,7 @@ in
             freeformType = settingsFormat.type;
 
             options.DATA_PATH = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/mfs";
               description = "Directory for storing master metadata.";
             };
@@ -159,7 +159,7 @@ in
             freeformType = settingsFormat.type;
 
             options.DATA_PATH = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/mfs";
               description = "Directory for storing metalogger data.";
             };
@@ -178,7 +178,7 @@ in
         };
 
         hdds = lib.mkOption {
-          type = with lib.types; listOf str;
+          type = with lib.types; listOf path;
           default = null;
           description = "Mount points used by chunkserver for data storage (see mfshdd.cfg).";
           example = [
@@ -192,7 +192,7 @@ in
             freeformType = settingsFormat.type;
 
             options.DATA_PATH = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/mfs";
               description = "Directory for lock files and other runtime data.";
             };

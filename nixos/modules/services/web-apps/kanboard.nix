@@ -19,7 +19,7 @@ in
     package = lib.mkPackageOption pkgs "kanboard" { };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/kanboard";
       description = "Default data folder for Kanboard.";
       example = "/mnt/kanboard";

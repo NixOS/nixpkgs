@@ -40,7 +40,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/lib/rutorrent";
         description = "Storage path of ruTorrent.";
       };

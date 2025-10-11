@@ -14,7 +14,7 @@ in
     package = lib.mkPackageOption pkgs "cloudflare-warp" { };
 
     rootDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/cloudflare-warp";
       description = ''
         Working directory for the warp-svc daemon.

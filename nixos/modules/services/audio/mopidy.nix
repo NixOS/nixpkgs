@@ -38,7 +38,7 @@ in
 
       dataDir = lib.mkOption {
         default = "/var/lib/mopidy";
-        type = lib.types.str;
+        type = lib.types.path;
         description = ''
           The directory where Mopidy stores its state.
         '';

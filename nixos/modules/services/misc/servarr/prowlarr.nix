@@ -15,7 +15,7 @@ in
       enable = lib.mkEnableOption "Prowlarr, an indexer manager/proxy for Torrent trackers and Usenet indexers";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/prowlarr";
         description = ''
           The directory where Prowlarr stores its data files.

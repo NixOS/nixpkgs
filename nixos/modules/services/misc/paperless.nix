@@ -147,7 +147,7 @@ in
     };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/paperless";
       description = "Directory to store the Paperless data.";
     };

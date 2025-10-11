@@ -26,7 +26,7 @@ in
       };
 
       cacheDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/cache/fscache";
         description = "Directory to contain filesystem cache.";
       };

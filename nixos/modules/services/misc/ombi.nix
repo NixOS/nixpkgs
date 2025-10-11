@@ -22,7 +22,7 @@ in
       package = lib.mkPackageOption pkgs "ombi" { };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/ombi";
         description = "The directory where Ombi stores its data files.";
       };

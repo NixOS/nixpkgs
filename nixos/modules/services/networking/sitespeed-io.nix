@@ -22,7 +22,7 @@ in
 
     dataDir = lib.mkOption {
       default = "/var/lib/sitespeed-io";
-      type = lib.types.str;
+      type = lib.types.path;
       description = "The base sitespeed-io data directory.";
     };
 

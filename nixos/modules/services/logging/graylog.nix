@@ -55,7 +55,7 @@ in
       };
 
       nodeIdFile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/graylog/server/node-id";
         description = "Path of the file containing the graylog node-id";
       };
@@ -94,13 +94,13 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/graylog/data";
         description = "Directory used to store Graylog server state.";
       };
 
       messageJournalDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/graylog/data/journal";
         description = "The directory which will be used to store the message journal. The directory must be exclusively used by Graylog and must not contain any other files than the ones created by Graylog itself";
       };

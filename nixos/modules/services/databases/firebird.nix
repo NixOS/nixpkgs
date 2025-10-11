@@ -69,7 +69,7 @@ in
 
       baseDir = lib.mkOption {
         default = "/var/lib/firebird";
-        type = lib.types.str;
+        type = lib.types.path;
         description = ''
           Location containing data/ and system/ directories.
           data/ stores the databases, system/ stores the password database security2.fdb.

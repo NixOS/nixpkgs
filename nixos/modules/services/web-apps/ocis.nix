@@ -92,7 +92,7 @@ in
 
       stateDir = lib.mkOption {
         default = "/var/lib/ocis";
-        type = types.str;
+        type = types.path;
         description = "ownCloud data directory.";
       };
 

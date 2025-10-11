@@ -72,7 +72,7 @@ in
 
       workDir = mkOption {
         default = "/var/lib/go-server";
-        type = types.str;
+        type = types.path;
         description = ''
           Specifies the working directory in which the Go.CD server java archive resides.
         '';

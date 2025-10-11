@@ -14,7 +14,7 @@ in
       enable = lib.mkEnableOption "Readarr, a Usenet/BitTorrent ebook downloader";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/readarr/";
         description = "The directory where Readarr stores its data files.";
       };

@@ -103,14 +103,14 @@ in
 
       stateDir = mkOption {
         default = "/var/lib/gitea";
-        type = types.str;
+        type = types.path;
         description = "Gitea data directory.";
       };
 
       customDir = mkOption {
         default = "${cfg.stateDir}/custom";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/custom"'';
-        type = types.str;
+        type = types.path;
         description = "Gitea custom directory. Used for config, custom templates and other options.";
       };
 
@@ -202,7 +202,7 @@ in
         };
 
         path = mkOption {
-          type = types.str;
+          type = types.path;
           default = "${cfg.stateDir}/data/gitea.db";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/gitea.db"'';
           description = "Path to the sqlite3 database file.";
@@ -296,7 +296,7 @@ in
         };
 
         backupDir = mkOption {
-          type = types.str;
+          type = types.path;
           default = "${cfg.stateDir}/dump";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/dump"'';
           description = "Path to the dump files.";
@@ -335,7 +335,7 @@ in
         };
 
         contentDir = mkOption {
-          type = types.str;
+          type = types.path;
           default = "${cfg.stateDir}/data/lfs";
           defaultText = literalExpression ''"''${config.${opt.stateDir}}/data/lfs"'';
           description = "Where to store LFS files.";
@@ -349,42 +349,42 @@ in
       };
 
       repositoryRoot = mkOption {
-        type = types.str;
+        type = types.path;
         default = "${cfg.stateDir}/repositories";
         defaultText = literalExpression ''"''${config.${opt.stateDir}}/repositories"'';
         description = "Path to the git repositories.";
       };
 
       camoHmacKeyFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/gitea/camoHmacKey";
         description = "Path to a file containing the camo HMAC key.";
       };
 
       mailerPasswordFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/gitea/mailpw";
         description = "Path to a file containing the SMTP password.";
       };
 
       metricsTokenFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/gitea/metrics_token";
         description = "Path to a file containing the metrics authentication token.";
       };
 
       minioAccessKeyId = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/gitea/minio_access_key_id";
         description = "Path to a file containing the Minio access key id.";
       };
 
       minioSecretAccessKey = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr types.path;
         default = null;
         example = "/var/lib/secrets/gitea/minio_secret_access_key";
         description = "Path to a file containing the Minio secret access key.";
@@ -425,7 +425,7 @@ in
                 ROOT_PATH = mkOption {
                   default = "${cfg.stateDir}/log";
                   defaultText = literalExpression ''"''${config.${opt.stateDir}}/log"'';
-                  type = types.str;
+                  type = types.path;
                   description = "Root path for log files.";
                 };
                 LEVEL = mkOption {

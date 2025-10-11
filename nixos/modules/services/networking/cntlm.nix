@@ -52,7 +52,7 @@ in
 
     password = lib.mkOption {
       default = "/etc/cntlm.password";
-      type = lib.types.str;
+      type = lib.types.path;
       description = "Proxy account password. Note: use chmod 0600 on /etc/cntlm.password for security.";
     };
 

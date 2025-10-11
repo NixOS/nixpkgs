@@ -113,7 +113,7 @@ in
         };
 
         dataPath = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.path;
           default = "/var/lib/ncps";
           description = ''
             The local directory for storing configuration and cached store paths
@@ -165,7 +165,7 @@ in
         };
 
         secretKeyPath = lib.mkOption {
-          type = lib.types.nullOr lib.types.str;
+          type = lib.types.nullOr lib.types.path;
           default = null;
           description = ''
             The path to load the secretKey for signing narinfos. Leave this
@@ -174,7 +174,7 @@ in
         };
 
         tempPath = lib.mkOption {
-          type = lib.types.str;
+          type = lib.types.path;
           default = "/tmp";
           description = ''
             The path to the temporary directory that is used by the cache to download NAR files

@@ -40,7 +40,7 @@ in
     };
 
     stateDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/crossfire";
       description = ''
         Where to store runtime data (save files, persistent items, etc).

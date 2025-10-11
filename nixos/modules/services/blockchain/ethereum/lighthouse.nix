@@ -18,7 +18,7 @@ in
             enable = lib.mkEnableOption "Lightouse Beacon node";
 
             dataDir = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/lighthouse-beacon";
               description = ''
                 Directory where data will be stored. Each chain will be stored under it's own specific subdirectory.
@@ -147,7 +147,7 @@ in
             };
 
             dataDir = lib.mkOption {
-              type = lib.types.str;
+              type = lib.types.path;
               default = "/var/lib/lighthouse-validator";
               description = ''
                 Directory where data will be stored. Each chain will be stored under it's own specific subdirectory.

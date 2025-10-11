@@ -28,7 +28,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/home/${user}/";
         defaultText = lib.literalExpression ''
           "/home/''${config.${opt.user}}/"

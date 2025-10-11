@@ -134,7 +134,7 @@ in
       };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/pangolin";
         example = "/srv/pangolin";
         description = "Path to variable state data directory for Pangolin.";

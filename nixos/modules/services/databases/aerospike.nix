@@ -46,7 +46,7 @@ in
       package = lib.mkPackageOption pkgs "aerospike" { };
 
       workDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/aerospike";
         description = "Location where Aerospike stores its files";
       };

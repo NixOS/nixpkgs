@@ -54,7 +54,7 @@ in
       package = lib.mkPackageOption pkgs "etebase-server" { };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/etebase-server";
         description = "Directory to store the Etebase server data.";
       };

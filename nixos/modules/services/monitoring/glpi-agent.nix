@@ -62,7 +62,7 @@ in
       };
 
       stateDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/glpi-agent";
         description = "Directory where GLPI Agent stores its state.";
       };

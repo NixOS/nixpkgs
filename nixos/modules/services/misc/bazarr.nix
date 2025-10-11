@@ -15,7 +15,7 @@ in
       package = lib.mkPackageOption pkgs "bazarr" { };
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/bazarr";
         description = "The directory where Bazarr stores its data files.";
       };

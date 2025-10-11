@@ -73,7 +73,7 @@ in
         freeformType = settingsFormat.type;
         options = {
           dataDir = lib.mkOption {
-            type = lib.types.str;
+            type = lib.types.path;
             default = "/var/lib/paisa/";
             description = "Path to paisa data directory.";
           };

@@ -225,7 +225,7 @@ in
       };
 
       directory = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/run/named";
         description = "Working directory of BIND.";
       };

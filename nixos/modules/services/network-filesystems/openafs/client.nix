@@ -109,7 +109,7 @@ in
 
         directory = mkOption {
           default = "/var/cache/openafs";
-          type = types.str;
+          type = types.path;
           description = "Cache directory.";
         };
 
@@ -162,7 +162,7 @@ in
 
       mountPoint = mkOption {
         default = "/afs";
-        type = types.str;
+        type = types.path;
         description = ''
           Mountpoint of the AFS file tree, conventionally
           `/afs`. When set to a different value, only

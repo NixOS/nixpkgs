@@ -173,7 +173,7 @@ in
 
         passwordFile = mkOption {
           default = "/etc/ldap/bind.password";
-          type = types.str;
+          type = types.path;
           description = ''
             The path to a file containing the credentials to use when binding
             to the LDAP server (if not binding anonymously).

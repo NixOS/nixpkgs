@@ -26,7 +26,7 @@ in
       };
 
       device = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/dev/input/event0";
         description = "Device watched for activities.";
       };

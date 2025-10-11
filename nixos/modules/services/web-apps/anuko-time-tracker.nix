@@ -155,7 +155,7 @@ in
     };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/anuko-time-tracker";
       description = "Default data folder for Anuko Time Tracker.";
       example = "/mnt/anuko-time-tracker";

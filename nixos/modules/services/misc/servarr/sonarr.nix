@@ -15,7 +15,7 @@ in
       enable = lib.mkEnableOption "Sonarr";
 
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/sonarr/.config/NzbDrone";
         description = "The directory where Sonarr stores its data files.";
       };

@@ -19,7 +19,7 @@ in
     services.artalk = {
       enable = lib.mkEnableOption "artalk, a comment system";
       configFile = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/etc/artalk/config.yml";
         description = "Artalk config file path. If it is not exist, Artalk will generate one.";
       };
@@ -29,7 +29,7 @@ in
         description = "allow Artalk store the settings to config file persistently";
       };
       workdir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/lib/artalk";
         description = "Artalk working directory";
       };

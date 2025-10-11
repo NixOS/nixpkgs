@@ -130,7 +130,7 @@ in
     };
 
     sqlRoot = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/pgmanage";
       description = ''
         This tells pgmanage where to put the SQL file history. All tabs are saved

@@ -69,7 +69,7 @@ in
     #
 
     secretKeyFile = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/outline/secret_key";
       description = ''
         File path that contains the application secret key. It must be 32
@@ -79,7 +79,7 @@ in
     };
 
     utilsSecretFile = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/outline/utils_secret";
       description = ''
         File path that contains the utility secret key. If the file does not

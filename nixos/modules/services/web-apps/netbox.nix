@@ -97,7 +97,7 @@ in
     };
 
     unixSocket = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
+      type = lib.types.nullOr lib.types.path;
       default = null;
       description = ''
         Enable Unix Socket for the server to listen on.
@@ -148,7 +148,7 @@ in
     };
 
     dataDir = lib.mkOption {
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/netbox";
       description = ''
         Storage path of netbox.

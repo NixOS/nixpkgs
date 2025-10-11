@@ -88,7 +88,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.str;
+        type = types.path;
         default = "/var/lib/rss-bridge";
         description = ''
           Location in which cache directory will be created.

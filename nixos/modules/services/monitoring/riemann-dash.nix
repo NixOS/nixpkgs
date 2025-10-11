@@ -39,7 +39,7 @@ in
         '';
       };
       dataDir = lib.mkOption {
-        type = lib.types.str;
+        type = lib.types.path;
         default = "/var/riemann-dash";
         description = ''
           Location of the riemann-base dir. The dashboard configuration file is
