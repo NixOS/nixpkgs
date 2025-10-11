@@ -5,6 +5,7 @@
   rustPlatform,
   testers,
   mold,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -22,10 +23,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   nativeBuildInputs = [ mold ];
 
-  passthru.tests.version = testers.testVersion {
-    package = gfold;
-    command = "gfold --version";
-    inherit (finalAttrs) version;
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.version = testers.testVersion {
+      package = gfold;
+      command = "gfold --version";
+      inherit (finalAttrs) version;
+    };
   };
 
   meta = {
