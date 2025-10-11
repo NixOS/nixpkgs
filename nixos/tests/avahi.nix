@@ -31,6 +31,7 @@
             useNetworkd = true;
             useDHCP = false;
           };
+          services.resolved.settings.Resolve.MulticastDNS = "false";
         };
     in
     {
