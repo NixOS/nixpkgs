@@ -39,6 +39,8 @@
   glib,
   harfbuzz,
   icu,
+  withJemalloc ? true,
+  jemalloc,
   libX11,
   libXcomposite,
   libXext,
@@ -115,6 +117,12 @@ stdenv.mkDerivation rec {
     md4c
     double-conversion
   ]
+  ++ lib.optional withJemalloc (
+    jemalloc.override {
+      # pyside explodes otherwise
+      disableInitExecTls = true;
+    }
+  )
   ++ lib.optionals (!stdenv.hostPlatform.isMinGW) [
     libproxy
     dbus
@@ -183,7 +191,6 @@ stdenv.mkDerivation rec {
     gperf
     lndir
     perl
-    pkg-config
     which
     cmake
     ninja
@@ -192,6 +199,7 @@ stdenv.mkDerivation rec {
 
   propagatedNativeBuildInputs = [
     lndir
+    pkg-config
   ]
   # I’m not sure if this is necessary, but the macOS mkspecs stuff
   # tries to call `xcrun xcodebuild`, so better safe than sorry.
@@ -297,6 +305,7 @@ stdenv.mkDerivation rec {
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"
     "-DQt6HostInfo_DIR=${pkgsBuildBuild.qt6.qtbase}/lib/cmake/Qt6HostInfo"
   ]
+  ++ lib.optional withJemalloc "-DQT_FEATURE_jemalloc=ON"
   ++ lib.optional (
     qttranslations != null && !isCrossBuild
   ) "-DINSTALL_TRANSLATIONSDIR=${qttranslations}/translations";

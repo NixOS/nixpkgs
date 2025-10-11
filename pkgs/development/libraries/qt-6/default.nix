@@ -161,7 +161,10 @@ let
       qttools = callPackage ./modules/qttools { };
       qttranslations = callPackage ./modules/qttranslations.nix {
         qttools = self.qttools.override {
-          qtbase = self.qtbase.override { qttranslations = null; };
+          qtbase = self.qtbase.override {
+            qttranslations = null;
+            withJemalloc = false;
+          };
           qtdeclarative = null;
         };
       };
