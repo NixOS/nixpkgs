@@ -50,6 +50,7 @@ let
     pyyaml # (at least for) PyrateWorkbench
     scipy
     shiboken6
+    netgen-mesher
   ];
 
   freecad-utils = callPackage ./freecad-utils.nix { inherit (python3Packages) python; };
@@ -123,6 +124,12 @@ freecad-utils.makeCustomizable (
     postPatch = ''
       substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
         --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+    ''
+    # uncheck 'Legacy Netgen' as it is known broken on linux platform
+    # https://github.com/FreeCAD/FreeCAD/pull/23387
+    + ''
+      substituteInPlace src/Mod/Fem/Gui/Resources/ui/DlgSettingsNetgen.ui \
+      --replace-fail "true" "false"
     '';
 
     cmakeFlags = [
