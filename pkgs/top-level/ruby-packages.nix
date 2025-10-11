@@ -2001,6 +2001,16 @@
     };
     version = "2.4.3";
   };
+  levenshtein = {
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "165zy7a7gi3w66sdqjp761c86l4wv3sl6bw1q540wiplxbj8q272";
+      type = "gem";
+    };
+    version = "0.2.2";
+  };
   libxml-ruby = {
     groups = [ "default" ];
     platforms = [ ];
