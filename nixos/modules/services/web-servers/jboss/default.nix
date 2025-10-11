@@ -44,26 +44,26 @@ in
 
       tempDir = mkOption {
         default = "/tmp";
-        type = types.str;
+        type = types.path;
         description = "Location where JBoss stores its temp files";
       };
 
       logDir = mkOption {
         default = "/var/log/jboss";
-        type = types.str;
+        type = types.path;
         description = "Location of the logfile directory of JBoss";
       };
 
       serverDir = mkOption {
         description = "Location of the server instance files";
         default = "/var/jboss/server";
-        type = types.str;
+        type = types.path;
       };
 
       deployDir = mkOption {
         description = "Location of the deployment files";
         default = "/nix/var/nix/profiles/default/server/default/deploy/";
-        type = types.str;
+        type = types.path;
       };
 
       libUrl = mkOption {
