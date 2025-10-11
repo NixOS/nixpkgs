@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "friture";
-  version = "0.51";
+  version = "0.54";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tlecomte";
     repo = "friture";
     rev = "v${version}";
-    hash = "sha256-1Swkk7bhQTSo17Gj0i1VNiIt+fSXgDIeWfJ9LpoUEHg=";
+    hash = "sha256-KWj2AhPloomjYwd7besX5QIG8snZe1L2hATEfm/HaIE=";
   };
 
   postPatch = ''
@@ -34,6 +34,8 @@ python3Packages.buildPythonApplication rec {
   buildInputs = with qt5; [ qtquickcontrols2 ];
 
   propagatedBuildInputs = with python3Packages; [
+    platformdirs
+    pyinstaller
     sounddevice
     pyopengl
     pyopengl-accelerate
