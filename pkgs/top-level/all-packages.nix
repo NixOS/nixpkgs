@@ -13282,9 +13282,6 @@ with pkgs;
 
   qgo = libsForQt5.callPackage ../games/qgo { };
 
-  amoeba = callPackage ../games/amoeba { };
-  amoeba-data = callPackage ../games/amoeba/data.nix { };
-
   anki = callPackage ../games/anki {
     protobuf = protobuf_31;
   };
@@ -13506,15 +13503,6 @@ with pkgs;
 
   blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
 
-  nethack = callPackage ../games/nethack { };
-
-  nethack-qt = callPackage ../games/nethack {
-    qtMode = true;
-    stdenv = gccStdenv;
-  };
-
-  nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
-
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
 
@@ -13603,9 +13591,7 @@ with pkgs;
     lure-of-the-temptress
     ;
 
-  sgt-puzzles = callPackage ../games/sgt-puzzles { };
-
-  sgt-puzzles-mobile = callPackage ../games/sgt-puzzles {
+  sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {
     isMobile = true;
   };
 
