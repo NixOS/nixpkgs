@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation {
   pname = "corto";
-  version = "0-unstable-2024-04-05";
+  version = "2025.07-unstable-2025-09-22";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "corto";
-    rev = "d880519c490c88a39d12c31a914b6a687a7019c3";
-    hash = "sha256-0OUijrf+0ZNv3oYko2r8Kp9zgtg8b9RPL7DXHf15Ryc=";
+    rev = "c0c80fe9357cd4f5c3428a2fe73361a6e9ea40c3";
+    hash = "sha256-ZI0Dji8pcBqRfs70a/opnYAlrnJ2wN46m2WshWvzLvA=";
   };
 
   nativeBuildInputs = [ cmake ];
