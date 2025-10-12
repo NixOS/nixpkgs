@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   cryptography,
+  fetchpatch2,
   uv-build,
 }:
 
@@ -12,6 +13,17 @@ buildPythonPackage rec {
   pyproject = true;
 
   sourceRoot = "${src.name}/vectors";
+
+  patches = [
+    # https://github.com/NixOS/nixpkgs/pull/449568
+    (fetchpatch2 {
+      name = "uv-build.patch";
+      url = "https://github.com/pyca/cryptography/commit/5f311c1cbe09ddea6136b0bb737fb7df6df1b923.patch?full_index=1";
+      stripLen = 1;
+      includes = [ "pyproject.toml" ];
+      hash = "sha256-OdHK0OGrvOi3mS0q+v8keDLvKxtgQkDkHQSYnmC/vd4=";
+    })
+  ];
 
   build-system = [ uv-build ];
 
