@@ -507,11 +507,11 @@
     "vendorHash": "sha256-29uvPCepGHRPohGY7viaPD9VQPPj9XB/plragACC4e4="
   },
   "google": {
-    "hash": "sha256-463G4/NtViaBH1B1XVzHT6KVQu+4HnqGWX7hw4CjgNA=",
+    "hash": "sha256-lJ5XBL983pKdZdN8scof+uJ16CJAOXp1NIxWmJCa4O0=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/google",
     "owner": "hashicorp",
     "repo": "terraform-provider-google",
-    "rev": "v7.5.0",
+    "rev": "v7.6.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-cQybnUaDLVmQrtFkiI5k3OwqN9Oks+J1H2kbkNjO4jc="
   },
@@ -1209,13 +1209,13 @@
     "vendorHash": "sha256-skswuFKhN4FFpIunbom9rM/FVRJVOFb1WwHeAIaEjn8="
   },
   "sops": {
-    "hash": "sha256-SBg46q9kggwXR142MpzwM5R4L2WfM07aJkGSLngAcFk=",
+    "hash": "sha256-0dYL/4R3nb9pjAjooilRNEgUmDwxCNLUwxdsMyHfTgc=",
     "homepage": "https://registry.terraform.io/providers/carlpett/sops",
     "owner": "carlpett",
     "repo": "terraform-provider-sops",
-    "rev": "v1.2.1",
+    "rev": "v1.3.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-4gtM8U//RXpYc4klCgpZS/3ZRzAHfcbOPTnNqlX4H7M="
+    "vendorHash": "sha256-iEQdSvQOCwvxhqh+veQ59uDVoXjCxsysxzkF4DHAf1E="
   },
   "spacelift": {
     "hash": "sha256-pYe8xmqudCkRvXNHJ4bSm9uitcDfpRlaGij7CrjQjd8=",

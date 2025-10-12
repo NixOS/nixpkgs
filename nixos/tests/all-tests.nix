@@ -468,6 +468,8 @@ in
   docling-serve = runTest ./docling-serve.nix;
   documentation = pkgs.callPackage ../modules/misc/documentation/test.nix { inherit nixosLib; };
   documize = runTest ./documize.nix;
+  docuseal-psql = runTest ./docuseal-postgres.nix;
+  docuseal-sqlite = runTest ./docuseal-sqlite.nix;
   doh-proxy-rust = runTest ./doh-proxy-rust.nix;
   dokuwiki = runTest ./dokuwiki.nix;
   dolibarr = runTest ./dolibarr.nix;
@@ -843,6 +845,7 @@ in
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
+  local-content-share = runTest ./local-content-share.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;

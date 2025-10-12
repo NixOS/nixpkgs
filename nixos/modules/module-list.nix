@@ -868,6 +868,7 @@
   ./services/misc/lifecycled.nix
   ./services/misc/litellm.nix
   ./services/misc/llama-cpp.nix
+  ./services/misc/local-content-share.nix
   ./services/misc/logkeys.nix
   ./services/misc/mame.nix
   ./services/misc/mbpfan.nix
@@ -1570,6 +1571,7 @@
   ./services/web-apps/dex.nix
   ./services/web-apps/discourse.nix
   ./services/web-apps/documize.nix
+  ./services/web-apps/docuseal.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/dolibarr.nix
   ./services/web-apps/drupal.nix
