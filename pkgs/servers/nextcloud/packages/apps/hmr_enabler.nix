@@ -19,7 +19,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   composerNoDev = false;
 
-  vendorHash = "sha256-H+yxviMYc6AuerhYtcHRluRWdS1mmqcSMlN2Q24G1m8=";
+  vendorHash = "sha256-KWvHgPeTLy/a6NusLpKBgYJWjSzc+MNF7cE5u31JqKs=";
 
   postInstall = ''
     chmod -R u+w $out/share
@@ -31,7 +31,7 @@ php.buildComposerProject2 (finalAttrs: {
     description = "Development Nextcloud app to enable apps to use hot module reloading";
     homepage = "https://github.com/nextcloud/hmr_enabler";
     changelog = "https://github.com/nextcloud/hmr_enabler/blob/master/CHANGELOG.md";
-    license = lib.licenses.agpl3Only;
+    license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ onny ];
   };
 

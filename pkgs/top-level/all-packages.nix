@@ -12446,8 +12446,6 @@ with pkgs;
 
   spotify-qt = qt6Packages.callPackage ../applications/audio/spotify-qt { };
 
-  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
-
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
   };

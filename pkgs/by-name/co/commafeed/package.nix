@@ -101,6 +101,6 @@ maven.buildMavenPackage {
     homepage = "https://github.com/Athou/commafeed";
     license = lib.licenses.asl20;
     mainProgram = "commafeed";
-    maintainers = [ lib.maintainers.raroh73 ];
+    maintainers = [ ];
   };
 }
