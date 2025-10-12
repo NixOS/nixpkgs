@@ -8,12 +8,13 @@
   cmake,
   pkg-config,
   catch2_3,
+  ncurses,
   kdePackages,
   kissfftFloat,
   crossguid,
   reproc,
   platform-folders,
-  ruby_3_2,
+  ruby,
   beamPackages,
   alsa-lib,
   rtmidi,
@@ -31,11 +32,15 @@
   gl3w,
   SDL2,
   fmt,
-}:
+}@args:
 
-# Sonic Pi fails to build with Ruby 3.3.
 let
-  ruby = ruby_3_2;
+  ruby = args.ruby.withPackages (ps: [
+    ps.prime
+    ps.racc
+    ps.rake
+    ps.rexml
+  ]);
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    ncurses
     kdePackages.qtbase
     kdePackages.qtsvg
     kdePackages.qttools
