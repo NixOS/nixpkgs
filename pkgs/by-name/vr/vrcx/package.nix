@@ -11,35 +11,38 @@
   stdenv,
 }:
 let
-  dotnet = dotnetCorePackages.dotnet_9;
   electron = electron_37;
+  dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.09.10";
+  version = "2025.10.11";
 
   src = fetchFromGitHub {
-    owner = "vrcx-team";
     repo = "VRCX";
-    rev = "b233bbc299fca9a956db387b83d90a4dbba61175";
-    hash = "sha256-7axYnsImG+VllQE1rhr8NmuMCm5t3bgNYGIIn9j2wMk=";
+    owner = "vrcx-team";
+    rev = "cb6bc979d9371b89b289b6cb0bb8b6f60b350bc7";
+    hash = "sha256-0LnFXSLyby5b2gSIse7Qld4cQlwNAFHSuGGqk6B9TZY=";
   };
 
-  npmDepsHash = "sha256-VFYWXPhZrg3q2PW4kWfVr5/DY8W6Uf1mvnwfB4mVBrs=";
-  npmFlags = [ "--ignore-scripts" ];
   makeCacheWritable = true;
+  npmFlags = [ "--ignore-scripts" ];
+  npmDepsHash = "sha256-giWeXrsiFaZOh5zs7L4L0w3wcnD/F3TyrMM/POfOTvE=";
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
 
+  preBuild = ''
+    # Build fails at executing dart from sass-embedded
+    rm -r node_modules/sass-embedded*
+  '';
+
   buildPhase = ''
     runHook preBuild
 
-    # need to run vue-demi postinstall for pinia
-    node ./node_modules/vue-demi/scripts/postinstall.js
-    env PLATFORM=linux npm exec webpack -- --config webpack.config.js --mode production
+    env PLATFORM=linux npm exec vite build src
     node ./src-electron/patch-package-version.js
     npm exec electron-builder -- --dir \
       -c.electronDist=${electron.dist} \
@@ -64,7 +67,7 @@ buildNpmPackage (finalAttrs: {
       --set DOTNET_ROOT ${dotnet.runtime}/share/dotnet      \
       --prefix PATH : ${lib.makeBinPath [ dotnet.runtime ]}
 
-    install -Dm644 VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
+    install -Dm644 images/VRCX.png "$out/share/icons/hicolor/256x256/apps/vrcx.png"
 
     runHook postInstall
   '';
