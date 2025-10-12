@@ -606,6 +606,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  accent-vim = buildVimPlugin {
+    pname = "accent.vim";
+    version = "2025-01-29";
+    src = fetchFromGitHub {
+      owner = "Alligator";
+      repo = "accent.vim";
+      rev = "54e0b255cb2c93555014197c8adc59d631c25696";
+      sha256 = "0mpap9348rmnnr3gma85xk5py84ax8gc54aj3n0w075yla5x0m0d";
+    };
+    meta.homepage = "https://github.com/Alligator/accent.vim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   ack-vim = buildVimPlugin {
     pname = "ack.vim";
     version = "2018-02-27";
