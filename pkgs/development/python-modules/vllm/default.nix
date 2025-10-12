@@ -497,6 +497,11 @@ buildPythonPackage rec {
       daniel-fahey
     ];
     badPlatforms = [
+      # CMake Error at cmake/cpu_extension.cmake:188 (message):
+      #   vLLM CPU backend requires AVX512, AVX2, Power9+ ISA, S390X ISA, ARMv8 or
+      #   RISC-V support.
+      "aarch64-darwin"
+
       # CMake Error at cmake/cpu_extension.cmake:78 (find_isa):
       # find_isa Function invoked with incorrect arguments for function named:
       # find_isa
