@@ -1,9 +1,9 @@
 {
   lib,
+  pkgs,
   stdenv,
   fetchurl,
   buildPackages,
-  perl,
   coreutils,
   writeShellScript,
   makeBinaryWrapper,
@@ -111,7 +111,7 @@ let
 
       nativeBuildInputs =
         lib.optional (!stdenv.hostPlatform.isWindows) makeBinaryWrapper
-        ++ [ perl ]
+        ++ [ (pkgs.perl.override { inherit fetchurl; }) ]
         ++ lib.optionals static [ removeReferencesTo ];
       buildInputs = lib.optional withCryptodev cryptodev ++ lib.optional withZlib zlib;
 

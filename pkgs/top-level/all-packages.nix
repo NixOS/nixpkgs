@@ -618,7 +618,6 @@ with pkgs;
               };
               inherit perl;
             };
-            inherit perl;
           };
           libssh2 = buildPackages.libssh2.override {
             fetchurl = stdenv.fetchurlBoot;
