@@ -837,6 +837,13 @@ checkConfigError 'A definition for option .* is not of type .RON character.*' co
 checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidTooLong ./ronChar.nix
 checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidEmpty ./ronChar.nix
 
+# types.ronEnum
+checkConfigOutput '{"_type":"ron-enum","variant":"Red"}' config.validRed ./ronEnum.nix
+checkConfigOutput '{"_type":"ron-enum","variant":"Green"}' config.validGreen ./ronEnum.nix
+checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidVariant ./ronEnum.nix
+checkConfigError 'A definition for option .* is not of type .RON enum, one of "Point", "Line".*' config.invalidWithValues ./ronEnum.nix
+checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidNotRonEnum ./ronEnum.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

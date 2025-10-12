@@ -1036,6 +1036,31 @@ let
         merge = mergeEqualOption;
       };
 
+      ronEnum =
+        variants:
+        let
+          inherit (lib.lists) unique;
+          show = v: ''"${v}"'';
+        in
+        mkOptionType rec {
+          name = "ronEnum";
+          description =
+            if variants == [ ] then
+              "impossible (empty RON enum)"
+            else if builtins.length variants == 1 then
+              "RON enum variant ${show (builtins.head variants)} (singular enum)"
+            else
+              "RON enum, one of ${concatMapStringsSep ", " show variants}";
+          descriptionClass = if builtins.length variants < 2 then "noun" else "conjunction";
+          check = x: isType "ron-enum" x && isString x.variant && !(x ? values) && elem x.variant variants;
+          merge = mergeEqualOption;
+          functor = defaultFunctor name // {
+            payload = { inherit variants; };
+            type = payload: types.ronEnum payload.variants;
+            binOp = a: b: { variants = unique (a.variants ++ b.variants); };
+          };
+        };
+
       uniq = unique { message = ""; };
 
       unique =
