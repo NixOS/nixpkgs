@@ -1,4 +1,10 @@
-async function runChecklist({ github, context, pull_request, maintainers }) {
+async function runChecklist({
+  github,
+  context,
+  pull_request,
+  events,
+  maintainers,
+}) {
   const pull_number = context.payload.pull_request.number
 
   const files = await github.paginate(github.rest.pulls.listFiles, {
@@ -38,6 +44,17 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
     }
   }
 
+  const approvals = events.filter(
+    ({ event, state, commit_id }) =>
+      event === 'reviewed' &&
+      state === 'approved' &&
+      commit_id === pull_request.head.sha,
+  )
+
+  const committers = (
+    await Promise.all(approvals.map(({ user }) => isCommitter(user.login)))
+  ).filter(Boolean)
+
   const checklist = {
     'PR targets one of the allowed branches: master, staging, staging-next.': [
       'master',
@@ -47,9 +64,10 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
     'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
       filename.startsWith('pkgs/by-name/'),
     ),
-    'PR authored by r-ryantm or committer.':
+    'PR authored or approved by r-ryantm or committer.':
       pull_request.user.login === 'r-ryantm' ||
-      (await isCommitter(pull_request.user.login)),
+      (await isCommitter(pull_request.user.login)) ||
+      committers.length > 0,
     'PR has maintainers eligible for merge.': eligible.size > 0,
   }
 
@@ -86,6 +104,7 @@ async function handleMerge({
     github,
     context,
     pull_request,
+    events,
     maintainers,
   })
   log('checklist', JSON.stringify(checklist))
