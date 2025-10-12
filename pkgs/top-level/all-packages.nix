@@ -6897,8 +6897,6 @@ with pkgs;
     nvml = cudaPackages.cuda_nvml_dev;
   };
 
-  snowman = qt5.callPackage ../development/tools/analysis/snowman { };
-
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
   splint = callPackage ../development/tools/analysis/splint {
