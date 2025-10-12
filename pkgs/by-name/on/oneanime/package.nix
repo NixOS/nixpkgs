@@ -2,7 +2,7 @@
   lib,
   stdenv,
   buildGoModule,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   autoPatchelfHook,
   desktop-file-utils,
@@ -55,16 +55,16 @@ let
     };
   });
 
-  version = "1.4.1";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "oneAnime";
     tag = version;
-    hash = "sha256-VZdqbdKxzfGlS27WUSvSR2x7wU8uYMkWRU9QvxW22uQ=";
+    hash = "sha256-dDXDBem2G/CSGOiHTAtMZ9PrTj8b1zIiqabh/dNiSkQ=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   pname = "oneanime";
   inherit version src;
 
@@ -108,10 +108,11 @@ flutter332.buildFlutterApplication {
         inherit (src) passthru;
 
         postPatch = ''
-          sed -i '/set(LIBMPV_ZIP_URL/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{//!d; /set(LIBMPV_ZIP_URL/d}' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_PATH "${mpv-unwrapped}/lib")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(ARCH_NAME STREQUAL "x86_64")/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{ /if(MEDIA_KIT_LIBS_AVAILABLE)/!d; /set(LIBMPV_ZIP_URL/d }' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i \
+            set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_PATH "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
         '';
 
         installPhase = ''
