@@ -15,6 +15,7 @@ let
   cfg = config.services.desktopManager.cosmic;
   notExcluded = pkg: utils.disablePackageByName pkg config.environment.cosmic.excludePackages;
   excludedCorePkgs = lib.lists.intersectLists corePkgs config.environment.cosmic.excludePackages;
+  ronFormat = pkgs.formats.ron { };
   # **ONLY ADD PACKAGES WITHOUT WHICH COSMIC CRASHES, NOTHING ELSE**
   corePkgs =
     with pkgs;
@@ -49,6 +50,37 @@ in
     services.desktopManager.cosmic = {
       enable = lib.mkEnableOption "COSMIC desktop environment";
 
+      settings = lib.mkOption {
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              entries = lib.mkOption {
+                type = lib.types.attrsOf ronFormat.type;
+                default = { };
+                example = {
+                  autotile = true;
+                };
+                description = "Configuration entries";
+              };
+
+              version = lib.mkOption {
+                type = lib.types.ints.unsigned;
+                example = 1;
+                description = "Configuration version";
+              };
+            };
+          }
+        );
+        default = { };
+        example = {
+          "com.system76.CosmicComp" = {
+            entries.autotile = true;
+            version = 1;
+          };
+        };
+        description = "System-wide settings for the COSMIC desktop.";
+      };
+
       showExcludedPkgsWarning = lib.mkEnableOption "the warning for excluding core packages" // {
         default = true;
       };
@@ -72,32 +104,53 @@ in
       "/share/backgrounds"
       "/share/cosmic"
     ];
-    environment.systemPackages = utils.removePackagesByName (
-      corePkgs
-      ++ (
-        with pkgs;
-        [
-          adwaita-icon-theme
-          alsa-utils
-          cosmic-edit
-          cosmic-icons
-          cosmic-player
-          cosmic-randr
-          cosmic-screenshot
-          cosmic-term
-          cosmic-wallpapers
-          hicolor-icon-theme
-          playerctl
-          pop-icon-theme
-          pop-launcher
-          xdg-user-dirs
-        ]
-        ++ lib.optionals config.services.flatpak.enable [
-          # User may have Flatpaks enabled but might not want the `cosmic-store` package.
-          cosmic-store
-        ]
-      )
-    ) config.environment.cosmic.excludePackages;
+    environment.systemPackages =
+      lib.optionals (cfg.settings != { }) [
+        (lib.hiPrio (
+          pkgs.runCommandLocal "cosmic-nixos-system-configurations" { } ''
+            mkdir -p $out/share/cosmic
+
+            ${builtins.concatStringsSep "\n" (
+              lib.mapAttrsToList (name: value: ''
+                mkdir -p $out/share/cosmic/${name}/v${toString value.version}
+
+                ${builtins.concatStringsSep "\n" (
+                  lib.mapAttrsToList (
+                    entryName: entryValue:
+                    "cp ${ronFormat.generate entryName entryValue} $out/share/cosmic/${name}/v${toString value.version}/${entryName}"
+                  ) value.entries
+                )}
+              '') cfg.settings
+            )}
+          ''
+        ))
+      ]
+      ++ utils.removePackagesByName (
+        corePkgs
+        ++ (
+          with pkgs;
+          [
+            adwaita-icon-theme
+            alsa-utils
+            cosmic-edit
+            cosmic-icons
+            cosmic-player
+            cosmic-randr
+            cosmic-screenshot
+            cosmic-term
+            cosmic-wallpapers
+            hicolor-icon-theme
+            playerctl
+            pop-icon-theme
+            pop-launcher
+            xdg-user-dirs
+          ]
+          ++ lib.optionals config.services.flatpak.enable [
+            # User may have Flatpaks enabled but might not want the `cosmic-store` package.
+            cosmic-store
+          ]
+        )
+      ) config.environment.cosmic.excludePackages;
 
     # Distro-wide defaults for graphical sessions
     services.graphical-desktop.enable = true;
