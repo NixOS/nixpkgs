@@ -825,6 +825,11 @@ checkConfigError 'Please use.*lib.types.addCheck.*instead' config.adhocFail.foo 
 checkConfigError 'A definition for option .* is not of type .*' config.addCheckFail.bar.baz ./v2-check-coherence.nix
 checkConfigOutput '^true$' config.result ./v2-check-coherence.nix
 
+# types.rawRon
+checkConfigOutput '{"_type":"ron-raw","value":"raw_value"}' config.validRaw ./rawRon.nix
+checkConfigOutput '{"_type":"ron-raw","value":"MyEnum::Variant\(1\)"}' config.anotherValidRaw ./rawRon.nix
+checkConfigError 'A definition for option .* is not of type .raw RON value.*' config.invalidNotRonRaw ./rawRon.nix
+
 # types.ronChar
 checkConfigOutput '{"_type":"ron-char","value":"a"}' config.validChar ./ronChar.nix
 checkConfigOutput '{"_type":"ron-char","value":"z"}' config.anotherValidChar ./ronChar.nix

@@ -1020,6 +1020,14 @@ let
         merge = mergeEqualOption;
       };
 
+      rawRon = mkOptionType {
+        name = "rawRon";
+        description = "raw RON value";
+        descriptionClass = "noun";
+        check = x: isType "ron-raw" x && isString x.value;
+        merge = mergeEqualOption;
+      };
+
       ronChar = mkOptionType {
         name = "ronChar";
         description = "RON character";
