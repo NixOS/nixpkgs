@@ -844,6 +844,13 @@ checkConfigError 'A definition for option .* is not of type .RON enum, one of "R
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Point", "Line".*' config.invalidWithValues ./ronEnum.nix
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidNotRonEnum ./ronEnum.nix
 
+# types.ronNamedStructOf
+checkConfigOutput '{"_type":"ron-named-struct","name":"Point","value":{"x":10,"y":20}}' config.validPoint ./ronNamedStructOf.nix
+checkConfigOutput '{"_type":"ron-named-struct","name":"Person","value":{"age":"30","name":"Alice"}}' config.validPerson ./ronNamedStructOf.nix
+checkConfigError 'A definition for option .* is not of type .RON named struct of signed integer.*' config.invalidNotRonNamedStruct ./ronNamedStructOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronNamedStructOf.nix
+checkConfigError 'The option .* has conflicting struct names' config.invalidMixedNames ./ronNamedStructOf.nix
+
 # types.ronOptionalOf
 checkConfigOutput '{"_type":"ron-optional","value":null}' config.validNone ./ronOptionalOf.nix
 checkConfigOutput '{"_type":"ron-optional","value":42}' config.validSome ./ronOptionalOf.nix

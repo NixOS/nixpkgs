@@ -1061,6 +1061,89 @@ let
           };
         };
 
+      ronNamedStructOf =
+        elemType:
+        let
+          # Push down position info from the value attribute set
+          pushPositions = map (
+            def:
+            mapAttrs (n: v: {
+              inherit (def) file;
+              value = v;
+            }) def.value.value
+          );
+        in
+        mkOptionType rec {
+          name = "ronNamedStructOf";
+          description = "RON named struct of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          descriptionClass = "composite";
+          check = x: isType "ron-named-struct" x && isString x.name && isAttrs x.value;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+              in
+              if headError != null then
+                {
+                  inherit headError;
+                  value = null;
+                  valueMeta = { };
+                }
+              else
+                let
+                  # Check that all names are equal
+                  firstName = (builtins.head defs).value.name;
+                  allNamesEqual = builtins.all (def: def.value.name == firstName) defs;
+                in
+                if !allNamesEqual then
+                  {
+                    headError = {
+                      message = "The option `${showOption loc}` has conflicting struct names in ${showFiles (getFiles defs)}.";
+                    };
+                    value = null;
+                    valueMeta = { };
+                  }
+                else
+                  let
+                    # Merge the inner attribute sets
+                    evals = filterAttrs (n: v: v.optionalValue ? value) (
+                      zipAttrsWith (name: defs: mergeDefinitions (loc ++ [ name ]) elemType defs) (pushPositions defs)
+                    );
+                    mergedAttrs = mapAttrs (n: v: v.optionalValue.value) evals;
+                  in
+                  {
+                    headError = null;
+                    value = {
+                      _type = "ron-named-struct";
+                      name = firstName;
+                      value = mergedAttrs;
+                    };
+                    valueMeta.attrs = mapAttrs (n: v: v.checkedAndMerged.valueMeta) evals;
+                  };
+          };
+          getSubOptions =
+            prefix:
+            elemType.getSubOptions (
+              prefix
+              ++ [
+                "value"
+                "<name>"
+              ]
+            );
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronNamedStructOf (elemType.substSubModules m);
+          functor = elemTypeFunctor name { inherit elemType; } // {
+            type = payload: types.ronNamedStructOf payload.elemType;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
       ronOptionalOf =
         elemType:
         mkOptionType rec {
