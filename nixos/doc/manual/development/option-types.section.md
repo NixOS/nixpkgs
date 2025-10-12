@@ -277,6 +277,13 @@ merging is handled.
     *`size`* elements. Multiple definitions cannot be merged. Use `lib.ron.mkEnum` to create
     values of this type, e.g. `types.ronTupleEnumOf int [ "Point" "Line" ] 2`.
 
+`types.ronTupleOf` *`elemType`* *`size`*
+
+:   A RON tuple where all *`size`* values are of *`elemType`* type. This type accepts attribute sets
+    with `_type = "ron-tuple"` and a `values` field containing exactly *`size`* elements. Multiple
+    definitions cannot be merged. Use `lib.ron.mkTuple` to create values of this type, e.g.
+    `types.ronTupleOf int 3`.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
