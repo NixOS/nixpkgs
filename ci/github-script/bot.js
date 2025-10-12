@@ -54,6 +54,9 @@ module.exports = async ({ github, context, core, dry }) => {
       // The second pass will then read the result from the first pass and set the label.
       '2.status: merge conflict':
         merge_commit_sha_valid && !pull_request.merge_commit_sha,
+      // Force this to false as long as we don't have non-expired artifacts.
+      // Will be set again below.
+      '4.workflow: merge-bot eligible': false,
       '12.approvals: 1': approvals.size === 1,
       '12.approvals: 2': approvals.size === 2,
       '12.approvals: 3+': approvals.size >= 3,
@@ -148,19 +151,18 @@ module.exports = async ({ github, context, core, dry }) => {
       ).labels
 
       Object.assign(prLabels, evalLabels, {
+        '4.workflow: merge-bot eligible': await handleMerge({
+          github,
+          context,
+          core,
+          log,
+          dry,
+          pull_request,
+          events,
+          maintainers,
+        }),
         '12.approved-by: package-maintainer':
           maintainerIds.intersection(approvals).size > 0,
-      })
-
-      await handleMerge({
-        github,
-        context,
-        core,
-        log,
-        dry,
-        pull_request,
-        events,
-        maintainers,
       })
     }
 
