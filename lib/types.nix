@@ -1061,6 +1061,52 @@ let
           };
         };
 
+      ronOptionalOf =
+        elemType:
+        mkOptionType rec {
+          name = "ronOptionalOf";
+          description = "RON optional of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "conjunction") elemType
+          }";
+          descriptionClass = "conjunction";
+          check = x: isType "ron-optional" x && (x.value == null || elemType.check x.value);
+          merge =
+            loc: defs:
+            let
+              nrNones = count (def: def.value.value == null) defs;
+            in
+            if nrNones == length defs then
+              {
+                _type = "ron-optional";
+                value = null;
+              }
+            else if nrNones != 0 then
+              throw "The option `${showOption loc}` is defined both None and Some, in ${showFiles (getFiles defs)}."
+            else
+              let
+                # Extract the inner values and merge them
+                innerDefs = map (def: def // { value = def.value.value; }) defs;
+                mergedValue = elemType.merge loc innerDefs;
+              in
+              {
+                _type = "ron-optional";
+                value = mergedValue;
+              };
+          emptyValue = {
+            value = {
+              _type = "ron-optional";
+              value = null;
+            };
+          };
+          getSubOptions = prefix: elemType.getSubOptions (prefix ++ [ "value" ]);
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronOptionalOf (elemType.substSubModules m);
+          functor = elemTypeFunctor name { inherit elemType; } // {
+            type = payload: types.ronOptionalOf payload.elemType;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
       ronTupleEnumOf =
         elemType: variants: size:
         let

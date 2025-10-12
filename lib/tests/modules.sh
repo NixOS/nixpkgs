@@ -844,6 +844,13 @@ checkConfigError 'A definition for option .* is not of type .RON enum, one of "R
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Point", "Line".*' config.invalidWithValues ./ronEnum.nix
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidNotRonEnum ./ronEnum.nix
 
+# types.ronOptionalOf
+checkConfigOutput '{"_type":"ron-optional","value":null}' config.validNone ./ronOptionalOf.nix
+checkConfigOutput '{"_type":"ron-optional","value":42}' config.validSome ./ronOptionalOf.nix
+checkConfigError 'A definition for option .* is not of type .RON optional of signed integer.*' config.invalidNotRonOptional ./ronOptionalOf.nix
+checkConfigError 'A definition for option .* is not of type .RON optional of signed integer.*' config.invalidWrongType ./ronOptionalOf.nix
+checkConfigError 'The option .* is defined both None and Some' config.invalidMixed ./ronOptionalOf.nix
+
 # types.ronTupleEnumOf
 checkConfigOutput '{"_type":"ron-enum","values":\[10,20\],"variant":"Point"}' config.validPoint ./ronTupleEnumOf.nix
 checkConfigOutput '{"_type":"ron-enum","values":\[0,100\],"variant":"Line"}' config.validLine ./ronTupleEnumOf.nix
