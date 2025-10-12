@@ -859,6 +859,13 @@ checkConfigError 'A definition for option .* is not of type .RON tuple enum with
 checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronTupleEnumOf.nix
 checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidNotRonEnum ./ronTupleEnumOf.nix
 
+# types.ronTupleOf
+checkConfigOutput '{"_type":"ron-tuple","values":\[1,2,3\]}' config.validTuple ./ronTupleOf.nix
+checkConfigOutput '{"_type":"ron-tuple","values":\[10,20\]}' config.anotherValidTuple ./ronTupleOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple of 3 signed integer.*' config.invalidNotRonTuple ./ronTupleOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple of 3 signed integer.*' config.invalidWrongSize ./ronTupleOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronTupleOf.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

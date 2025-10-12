@@ -1209,6 +1209,84 @@ let
           nestedTypes.elemType = elemType;
         };
 
+      ronTupleOf =
+        elemType: size:
+        mkOptionType rec {
+          name = "ronTupleOf";
+          description = "RON tuple of ${toString size} ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          descriptionClass = "composite";
+          check = x: isType "ron-tuple" x && isList x.values && builtins.length x.values == size;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+                # Merge each value in the tuple through elemType
+                evals = filter (x: x.optionalValue ? value) (
+                  concatLists (
+                    imap1 (
+                      n: def:
+                      imap1 (
+                        m: def':
+                        mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                          {
+                            inherit (def) file;
+                            value = def';
+                          }
+                        ]
+                      ) def.value.values
+                    ) defs
+                  )
+                );
+                # Reconstruct the tuple with merged values
+                mergedValues = map (x: x.optionalValue.value or x.mergedValue) evals;
+              in
+              {
+                inherit headError;
+                value = {
+                  _type = "ron-tuple";
+                  values = mergedValues;
+                };
+                valueMeta.values = map (v: v.checkedAndMerged.valueMeta) evals;
+              };
+          };
+          getSubOptions =
+            prefix:
+            elemType.getSubOptions (
+              prefix
+              ++ [
+                "values"
+                "*"
+              ]
+            );
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronTupleOf (elemType.substSubModules m) size;
+          functor = defaultFunctor name // {
+            payload = {
+              inherit elemType size;
+            };
+            type = payload: types.ronTupleOf payload.elemType payload.size;
+            binOp =
+              a: b:
+              let
+                mergedElemType = a.elemType.typeMerge b.elemType.functor;
+              in
+              if a.size == b.size && mergedElemType != null then
+                {
+                  elemType = mergedElemType;
+                  inherit (a) size;
+                }
+              else
+                null;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
       uniq = unique { message = ""; };
 
       unique =
