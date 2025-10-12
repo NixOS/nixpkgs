@@ -59,10 +59,10 @@ rustPlatform.buildRustPackage {
       --replace-fail '"/var/tmp", "/tmp"' '"/run/clash-verge-rev", &std::env::var("XDG_RUNTIME_DIR").unwrap_or_else(|_| std::env::var("UID").map(|uid| format!("/run/user/{}", uid)).unwrap_or_else(|_| "/tmp".to_string()))' \
       --replace-fail 'base_dir.join("verge")' 'base_dir'
 
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+    substituteInPlace $cargoDepsCopy/*/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
-    substituteInPlace $cargoDepsCopy/sysproxy-*/src/linux.rs \
+    substituteInPlace $cargoDepsCopy/*/sysproxy-*/src/linux.rs \
       --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
       --replace-fail '"kreadconfig5"' '"${libsForQt5.kconfig}/bin/kreadconfig5"' \
       --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
