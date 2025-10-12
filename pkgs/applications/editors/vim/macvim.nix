@@ -7,9 +7,9 @@
   gettext,
   pkg-config,
   cscope,
-  ruby_3_2,
+  ruby,
   tcl,
-  perl540,
+  perl,
   luajit,
   darwin,
   libiconv,
@@ -18,9 +18,9 @@
 
 # Try to match MacVim's documented script interface compatibility
 let
-  perl = perl540;
-  # Ruby 3.2
-  ruby = ruby_3_2;
+  #perl = perl540;
+  # Ruby 3.3
+  #ruby = ruby_3_3;
 
   # Building requires a few system tools to be in PATH.
   # Some of these we could patch into the relevant source files (such as xcodebuild and
