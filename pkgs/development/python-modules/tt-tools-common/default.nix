@@ -17,14 +17,14 @@
 }:
 buildPythonPackage rec {
   pname = "tt-tools-common";
-  version = "1.4.28";
+  version = "1.4.30";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-tools-common";
     tag = "v${version}";
-    hash = "sha256-L7MYrzQXb0LakQCx5CMlgTo0EjBoLLKC8u38eXksvoo=";
+    hash = "sha256-MY6yFf580jw7V0rsQyLAi1ZfMjrOLD9bDhltcElLDE0=";
   };
 
   build-system = [
