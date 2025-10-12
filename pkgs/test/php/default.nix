@@ -125,4 +125,18 @@ in
       checking "if second override is there"
       ${check (builtins.match ".*oAs-second.*" customPhp.unwrapped.postInstall != null)}
     '';
+
+  builder-check-stable-fods =
+    let
+      testPackage = php.buildComposerProject2 {
+        pname = "nix-stable-fods";
+        version = "1.0.0";
+        src = ./tests/stable-fods;
+        vendorHash = "sha256-EiBM9UZZ4yDleoMwfRqYCiGo791arF1AqAjEadPfhig=";
+      };
+    in
+    runTest "php-test-builder-check-stable-fods" ''
+      checking "if vendorHash stays the same for package: ${testPackage}"
+      ${check (testPackage.vendorHash == "sha256-EiBM9UZZ4yDleoMwfRqYCiGo791arF1AqAjEadPfhig=")}
+    '';
 }

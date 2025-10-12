@@ -1,0 +1,13 @@
+{
+  "name": "nix/stable-fods",
+  "description": "A trivial test package",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "Nix\\StableFods\\": "src/"
+    }
+  },
+  "require": {
+    "php": "^8"
+  }
+}
