@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.45.0";
+  version = "1.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "govee-ble";
     tag = "v${version}";
-    hash = "sha256-SUxK4H0Vo8C4GykIv8duFhhiGBA860QofVQDO37Ubdw=";
+    hash = "sha256-CYxPb5v7T+sp+2HJojGEVPIIaC0ySobiSK8qtHeuv7s=";
   };
 
   build-system = [ poetry-core ];
