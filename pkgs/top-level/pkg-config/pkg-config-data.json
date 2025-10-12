@@ -746,11 +746,6 @@
         "python3"
       ]
     },
-    "ruby-3.1": {
-      "attrPath": [
-        "ruby_3_1"
-      ]
-    },
     "sdl2": {
       "attrPath": [
         "SDL2"

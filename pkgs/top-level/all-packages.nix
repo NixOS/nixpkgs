@@ -6038,8 +6038,6 @@ with pkgs;
     })
     mkRubyVersion
     mkRuby
-    ruby_3_1
-    ruby_3_2
     ruby_3_3
     ruby_3_4
     ruby_3_5
@@ -6048,8 +6046,6 @@ with pkgs;
   ruby = ruby_3_3;
   rubyPackages = rubyPackages_3_3;
 
-  rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
-  rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
   rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
@@ -13285,10 +13281,6 @@ with pkgs;
   anki-bin = callPackage ../games/anki/bin.nix { };
   anki-sync-server = callPackage ../games/anki/sync-server.nix { };
 
-  armagetronad = callPackage ../games/armagetronad { };
-
-  armagetronad-dedicated = callPackage ../games/armagetronad { dedicatedServer = true; };
-
   art = callPackage ../by-name/ar/art/package.nix {
     fftw = fftwSinglePrec;
   };
@@ -14888,10 +14880,6 @@ with pkgs;
 
   libkazv = callPackage ../by-name/li/libkazv/package.nix {
     libcpr = libcpr_1_10_5;
-  };
-
-  tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
-    ruby = ruby_3_1;
   };
 
   biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {

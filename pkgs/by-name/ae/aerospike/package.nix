@@ -37,7 +37,11 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     patchShebangs build/gen_version
-    substituteInPlace build/gen_version --replace 'git describe' 'echo ${version}'
+    substituteInPlace build/gen_version \
+      --replace-fail 'VERSION="$(git describe --abbrev=7)"' 'VERSION="${version}"' \
+      --replace-fail 'CE_SHA="$(git rev-parse HEAD)"' 'CE_SHA="${version}"' \
+      --replace-fail '$(date)' '$(date -u -d "@$SOURCE_DATE_EPOCH" 2>/dev/null || date -u -r "$SOURCE_DATE_EPOCH")'
+    patchShebangs build/os_version
   '';
 
   installPhase = ''
