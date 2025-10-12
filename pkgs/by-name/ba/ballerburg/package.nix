@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchgit,
   cmake,
   SDL,
   makeDesktopItem,
@@ -19,11 +20,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "ballerburg";
-  version = "1.2.0";
+  version = "1.2.3";
 
-  src = fetchurl {
-    url = "https://download.tuxfamily.org/baller/ballerburg-${version}.tar.gz";
-    sha256 = "sha256-BiX0shPBGA8sshee8rxs41x+mdsrJzBqhpDDic6sYwA=";
+  src = fetchgit {
+    url = "https://framagit.org/baller/ballerburg.git";
+    tag = "v${version}";
+    hash = "sha256-4rO7ixLE+EV6zd0EryHU6QZeVoa6N4fvxwoJWa0aO70=";
   };
 
   nativeBuildInputs = [
