@@ -9,6 +9,7 @@
   glib,
   gnome-desktop,
   gnome-settings-daemon,
+  gobject-introspection,
   graphene,
   gst_all_1,
   gtk-doc,
@@ -20,7 +21,7 @@
   libGL,
   libgudev,
   libnotify,
-  libpeas,
+  libpeas2,
   libpulseaudio,
   libuuid,
   libwacom,
@@ -47,14 +48,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "budgie-desktop";
-  version = "10.9.3";
+  version = "10.9.3-unstable-2025-09-13";
 
   src = fetchFromGitHub {
     owner = "BuddiesOfBudgie";
     repo = "budgie-desktop";
-    tag = "v${finalAttrs.version}";
+    rev = "68d5136613fa1b15d39cc67ada3085590ec162ae";
     fetchSubmodules = true;
-    hash = "sha256-hiDEsDV/meYMORZ4aSPD7UP28SQVcv6cM7N89fOZeT8=";
+    hash = "sha256-xqN06CGS4xyUwnJCsLplYzKtO/V8hDmb6UNJu/nhQHs=";
   };
 
   outputs = [
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     docbook-xsl-nons
+    gobject-introspection
     gtk-doc
     intltool
     meson
@@ -113,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     # budgie-1.0.pc, budgie-raven-plugin-1.0.pc
-    libpeas
+    libpeas2
   ];
 
   mesonFlags = [
