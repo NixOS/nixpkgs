@@ -191,6 +191,11 @@ let
             "--openssldir=/.$(etc)/etc/ssl"
         )
       ]
+      # Tell build system it's cross environment. This allows to skip tests
+      # that would fail when libc is different. Otherwise, run the tests.
+      ++ lib.optional (
+        !lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform
+      ) "--cross-compile-prefix=${lib.getBin stdenv.cc}/bin/"
       ++ lib.optionals withCryptodev [
         "-DHAVE_CRYPTODEV"
         "-DUSE_CRYPTODEV_DIGESTS"
