@@ -120,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDRangel is an Open Source Qt6 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
     maintainers = with lib.maintainers; [
+      aciceri
       alkeryn
       Tungsten842
     ];
