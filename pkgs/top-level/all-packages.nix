@@ -6036,7 +6036,6 @@ with pkgs;
     })
     mkRubyVersion
     mkRuby
-    ruby_3_2
     ruby_3_3
     ruby_3_4
     ruby_3_5
@@ -6045,7 +6044,6 @@ with pkgs;
   ruby = ruby_3_3;
   rubyPackages = rubyPackages_3_3;
 
-  rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
   rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
