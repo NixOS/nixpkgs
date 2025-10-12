@@ -15,11 +15,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-SRtl8FPMI0VBz0hzmyvtGYPO3mdnm60gu2zlStb5r98=";
   };
 
-  phases = [
-    "installPhase"
-    "fixupPhase"
-    "installCheckPhase"
-  ];
+  dontUnpack = true;
 
   strictDeps = true;
 
