@@ -71,6 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       keksgesicht
       xaverdh
       XBagon
+      wetisobe
     ];
     platforms = lib.platforms.linux;
   };
