@@ -1,4 +1,4 @@
-name: Review dismissed
+name: Reviewed
 
 on:
   pull_request_review:
