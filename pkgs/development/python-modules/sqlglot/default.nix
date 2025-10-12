@@ -13,6 +13,8 @@
   # tests
   pytestCheckHook,
   duckdb,
+  numpy,
+  pandas,
 }:
 
 buildPythonPackage rec {
@@ -40,6 +42,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     duckdb
+    numpy
+    pandas
   ];
 
   pythonImportsCheck = [ "sqlglot" ];
