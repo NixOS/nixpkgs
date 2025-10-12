@@ -8,12 +8,17 @@
   libjpeg,
   libpng,
   libtiff,
+  libwebp,
+  libjxl,
+  libheif,
   opencolorio,
   openexr,
   openjph,
   robin-map,
   unzip,
   fmt,
+  bzip2,
+  ptex,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,13 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     giflib
+    libheif
     libjpeg
+    libjxl
     libpng
     libtiff
+    libwebp
     opencolorio
     openexr
     openjph
     robin-map
+    bzip2
+    ptex
   ];
 
   propagatedBuildInputs = [
