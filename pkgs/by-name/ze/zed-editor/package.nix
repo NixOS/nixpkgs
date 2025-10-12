@@ -115,15 +115,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-IKACHMKHIyq8UuqWlA6U/cdCi+wrevZwl2CINSWmmRc=";
   };
 
-  patches = [
-    # Upstream delegates linking on Linux to clang to make use of mold,
-    # but builds fine with our standard linker.
-    # This patch removes their linker override from the cargo config.
-    ./0001-linux-linker.patch
-  ];
-
   cargoPatches = [
-    ./0002-fix-duplicate-reqwest.patch
+    ./0001-fix-duplicate-reqwest.patch
   ];
 
   postPatch =
@@ -143,7 +136,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail '$CARGO_ABOUT_VERSION' '${cargo-about.version}'
     '';
 
-  cargoHash = "sha256-z1mp4r/Is4jWMeEO3qwdDGVDVQ9wAsIJIg3FaMzaCfQ=";
+  depsExtraArgs = {
+    # remove package that has a broken Cargo.toml
+    # see: https://github.com/NixOS/nixpkgs/pull/445924#issuecomment-3334648753
+    postBuild = ''
+      rm -r $out/git/*/candle-book/
+    '';
+  };
+
+  cargoHash = "sha256-jv8ytsttXFG5VlFWI885zLJsZn8rFkiFdPhUvNKOwpY=";
 
   nativeBuildInputs = [
     cmake
