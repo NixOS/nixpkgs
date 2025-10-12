@@ -10,6 +10,7 @@
   direnv,
   git,
   pkg-config,
+  cmake,
   openssl,
   cacert,
   usage,
@@ -21,20 +22,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.9.10";
+  version = "2025.10.7";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-CPi0scFKv8+K/s7wh6cdURyzKA3frSPf59kq6Y2XDV0=";
+    hash = "sha256-Ccc2kYQa0LkLKuQEV4bOSbMU/IHkUVQdtSVmiCSWeyc=";
   };
 
-  cargoHash = "sha256-lbSGcnkiJYTI0VyUskxH+sxAUr+loI2mhyWaK/DgMN8=";
+  cargoHash = "sha256-/wv7moY3Ix0+Kxk8gI7fsaeX6O5oB1H/ugUBaBHyTSw=";
 
   nativeBuildInputs = [
     installShellFiles
     pkg-config
+    cmake
+    rustPlatform.bindgenHook
   ];
 
   buildInputs = [ openssl ];
