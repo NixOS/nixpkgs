@@ -112,7 +112,7 @@ module.exports = async ({ github, context, core, dry }) => {
 
     const maintainers = await getMaintainerMap(pull_request.base.ref)
 
-    await handleMerge({
+    const merge_bot_eligible = await handleMerge({
       github,
       context,
       core,
@@ -199,6 +199,7 @@ module.exports = async ({ github, context, core, dry }) => {
       // The second pass will then read the result from the first pass and set the label.
       '2.status: merge conflict':
         merge_commit_sha_valid && !pull_request.merge_commit_sha,
+      '2.status: merge-bot eligible': merge_bot_eligible,
       '12.approvals: 1': approvals.size === 1,
       '12.approvals: 2': approvals.size === 2,
       '12.approvals: 3+': approvals.size >= 3,
