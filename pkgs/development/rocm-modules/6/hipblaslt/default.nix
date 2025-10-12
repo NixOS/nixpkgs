@@ -113,9 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Support loading zstd compressed .dat files, required to keep output under
     # hydra size limit
     ./messagepack-compression-support.patch
-    # excessive comments are written to temporary asm files in build dir
-    # TODO: report upstream, find a better solution
-    ./reduce-comment-spam.patch
     # [hipblaslt] Refactor Parallel.py to drop joblib, massively reduce peak disk space usage
     # https://github.com/ROCm/rocm-libraries/pull/2073
     ./TensileCreateLibrary-refactor.patch
