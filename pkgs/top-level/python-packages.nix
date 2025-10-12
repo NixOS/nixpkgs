@@ -9753,6 +9753,8 @@ self: super: with self; {
 
   mpmath = callPackage ../development/python-modules/mpmath { };
 
+  mprisify = callPackage ../development/python-modules/mprisify { };
+
   mpv = callPackage ../development/python-modules/mpv { inherit (pkgs) mpv; };
 
   mpyq = callPackage ../development/python-modules/mpyq { };
