@@ -28,8 +28,8 @@ let
   _src = fetchFromGitHub {
     owner = "vicinaehq";
     repo = "vicinae";
-    tag = "v0.14.3";
-    hash = "sha256-cVzfx3S/no3Wdp7fnjiOuqEJ2p3rXcBIxHjOalZkK08=";
+    tag = "v0.14.5";
+    hash = "sha256-yO2gMpx1mnSJrGooXWpVcSlK3XVL9Empr4uaR6OnlSI=";
   };
   apiDeps = fetchNpmDeps {
     src = "${_src}/typescript/api";
@@ -40,12 +40,12 @@ let
   '';
   extensionManagerDeps = fetchNpmDeps {
     src = "${_src}/typescript/extension-manager";
-    hash = "sha256-dSHEzw15lSRRbldl9PljuWFf2htdG+HgSeKPAB88RBg=";
+    hash = "sha256-TCT7uZRZn4rsLA/z2yLeK5Bt4DJPmdSC4zkmuCxTtc8=";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vicinae";
-  version = "0.14.3";
+  version = "0.14.5";
 
   src = _src;
 
