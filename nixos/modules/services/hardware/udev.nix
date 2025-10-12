@@ -156,7 +156,7 @@ let
 
         # Verify all the udev rules
         echo "Verifying udev rules using udevadm verify..."
-        udevadm verify --resolve-names=never --no-style $out
+        udevadm verify --resolve-names=late --no-style $out
         echo "OK"
 
         # If auto-configuration is disabled, then remove
