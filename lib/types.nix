@@ -1008,6 +1008,14 @@ let
         merge = mergeEqualOption;
       };
 
+      ronChar = mkOptionType {
+        name = "ronChar";
+        description = "RON character";
+        descriptionClass = "noun";
+        check = x: isType "ron-char" x && isString x.value && builtins.stringLength x.value == 1;
+        merge = mergeEqualOption;
+      };
+
       uniq = unique { message = ""; };
 
       unique =

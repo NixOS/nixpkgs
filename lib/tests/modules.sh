@@ -806,6 +806,13 @@ checkConfigError 'A definition for option .* is not of type .signed integer.*' c
 checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
 checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
 
+# types.ronChar
+checkConfigOutput '{"_type":"ron-char","value":"a"}' config.validChar ./ronChar.nix
+checkConfigOutput '{"_type":"ron-char","value":"z"}' config.anotherValidChar ./ronChar.nix
+checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidNotRonChar ./ronChar.nix
+checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidTooLong ./ronChar.nix
+checkConfigError 'A definition for option .* is not of type .RON character.*' config.invalidEmpty ./ronChar.nix
+
 
 cat <<EOF
 ====== module tests ======
