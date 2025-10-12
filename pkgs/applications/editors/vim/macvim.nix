@@ -217,5 +217,31 @@ stdenv.mkDerivation (finalAttrs: {
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
     # Needs updating to a newer MacVim for Python and Ruby version support
     broken = true;
+    knownVulnerabilities = [
+      "CVE-2023-46246"
+      "CVE-2023-48231"
+      "CVE-2023-48232"
+      "CVE-2023-48233"
+      "CVE-2023-48234"
+      "CVE-2023-48235"
+      "CVE-2023-48236"
+      "CVE-2023-48237"
+      "CVE-2023-48706"
+      "CVE-2023-5344"
+      "CVE-2023-5441"
+      "CVE-2023-5535"
+      "CVE-2024-22667"
+      "CVE-2024-41957"
+      "CVE-2024-41965"
+      "CVE-2024-43374"
+      "CVE-2024-47814"
+      "CVE-2025-1215"
+      "CVE-2025-22134"
+      "CVE-2025-24014"
+      "CVE-2025-26603"
+      "CVE-2025-29768"
+      "CVE-2025-53905"
+      "CVE-2025-53906"
+    ];
   };
 })
