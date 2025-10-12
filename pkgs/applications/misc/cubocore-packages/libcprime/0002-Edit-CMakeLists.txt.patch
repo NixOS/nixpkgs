@@ -1,0 +1,23 @@
+From 505931e9634d1b55ea97bdaa0f68dcd51faaea39 Mon Sep 17 00:00:00 2001
+From: rahmanshaber <rahmanshaber@yahoo.com>
+Date: Mon, 31 Mar 2025 18:04:16 +0000
+Subject: [PATCH] Edit CMakeLists.txt
+
+---
+ CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index b2a4381..02c94c2 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ project( cprime )
+-cmake_minimum_required( VERSION 3.3 )
++cmake_minimum_required( VERSION 3.16 )
+ 
+ set( PROJECT_VERSION 5.0.0 )
+ set( PROJECT_VERSION_MAJOR 5 )
+-- 
+GitLab
+

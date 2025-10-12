@@ -21,6 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-fix-application-dirs.patch
+    ./0002-Edit-CMakeLists.txt.patch
   ];
 
   nativeBuildInputs = [
