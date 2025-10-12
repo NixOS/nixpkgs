@@ -215,5 +215,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = platforms.darwin;
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
+    # Needs updating to a newer MacVim for Python and Ruby version support
+    broken = true;
   };
 })
