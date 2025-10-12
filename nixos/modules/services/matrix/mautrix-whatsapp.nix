@@ -10,7 +10,7 @@ let
   registrationFile = "${dataDir}/whatsapp-registration.yaml";
   settingsFile = "${dataDir}/config.yaml";
   settingsFileUnsubstituted = settingsFormat.generate "mautrix-whatsapp-config-unsubstituted.json" cfg.settings;
-  settingsFormat = pkgs.formats.json { };
+  settingsFormat = pkgs.formats.yaml { };
   appservicePort = 29318;
 
   # to be used with a list of lib.mkIf values
