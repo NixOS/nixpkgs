@@ -2,17 +2,22 @@
   lib,
   ninja,
   meson,
+  libdrm,
   fetchFromGitLab,
   systemd,
   libgudev,
   pkg-config,
   glib,
   python3Packages,
+  wrapGAppsNoGuiHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+let
+  version = "3.0";
+in
+python3Packages.buildPythonApplication {
   pname = "switcheroo-control";
-  version = "2.6";
+  inherit version;
 
   format = "other";
 
@@ -20,18 +25,27 @@ python3Packages.buildPythonApplication rec {
     domain = "gitlab.freedesktop.org";
     owner = "hadess";
     repo = "switcheroo-control";
-    rev = version;
-    hash = "sha256-F+5HhMxM8pcnAGmVBARKWNCL0rIEzHW/jsGHHqYZJug=";
+    tag = version;
+    hash = "sha256-7P0o8fBYe4izRmNL7DimUSJfzj13KXW9we6c/A2iNo8=";
   };
 
   nativeBuildInputs = [
     ninja
     meson
     pkg-config
+    wrapGAppsNoGuiHook
   ];
+
+  dontWrapGApps = true;
+
+  # Arguments to be passed to `makeWrapper`, only used by buildPython*
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   buildInputs = [
     systemd
+    libdrm
     libgudev
     glib
   ];
@@ -43,15 +57,16 @@ python3Packages.buildPythonApplication rec {
   mesonFlags = [
     "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "-Dhwdbdir=${placeholder "out"}/etc/udev/hwdb.d"
+    "-Drulesdir=${placeholder "out"}/lib/udev/rules.d"
   ];
 
-  meta = {
+  meta = with lib; {
     description = "D-Bus service to check the availability of dual-GPU";
     mainProgram = "switcherooctl";
     homepage = "https://gitlab.freedesktop.org/hadess/switcheroo-control/";
     changelog = "https://gitlab.freedesktop.org/hadess/switcheroo-control/-/blob/${version}/NEWS";
-    license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
-    platforms = lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ caniko ];
+    platforms = platforms.linux;
   };
 }
