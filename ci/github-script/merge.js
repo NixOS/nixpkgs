@@ -1,3 +1,5 @@
+const { classify } = require('../supportedBranches.js')
+
 async function runChecklist({ github, context, pull_request, maintainers }) {
   const pull_number = context.payload.pull_request.number
 
@@ -39,16 +41,14 @@ async function runChecklist({ github, context, pull_request, maintainers }) {
   }
 
   const checklist = {
-    'PR targets one of the allowed branches: master, staging, staging-next.': [
-      'master',
-      'staging',
-      'staging-next',
-    ].includes(pull_request.base.ref),
+    'PR targets development branch.': classify(
+      pull_request.base.ref,
+    ).type.includes('development'),
     'PR touches only files in `pkgs/by-name/`.': files.every(({ filename }) =>
       filename.startsWith('pkgs/by-name/'),
     ),
-    'PR authored by r-ryantm or committer.':
-      pull_request.user.login === 'r-ryantm' ||
+    'PR authored by bot or committer.':
+      ['nixpkgs-ci[bot]', 'r-ryantm'].includes(pull_request.user.login) ||
       (await isCommitter(pull_request.user.login)),
     'PR has maintainers eligible for merge.': eligible.size > 0,
   }
