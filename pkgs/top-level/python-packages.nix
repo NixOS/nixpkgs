@@ -12914,6 +12914,8 @@ self: super: with self; {
 
   pydmd = callPackage ../development/python-modules/pydmd { };
 
+  pydo = callPackage ../development/python-modules/pydo { };
+
   pydocstyle = callPackage ../development/python-modules/pydocstyle { };
 
   pydocumentdb = callPackage ../development/python-modules/pydocumentdb { };
