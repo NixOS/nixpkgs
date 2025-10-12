@@ -261,6 +261,14 @@ merging is handled.
     to create values of this type. Similar to `types.enum` but for RON enum values.
     Multiple definitions cannot be merged.
 
+`types.ronOptionalOf` *`elemType`*
+
+:   RON optional of *`elemType`* type. This type accepts attribute sets with `_type = "ron-optional"`
+    and a `value` field that is either `null` (representing `None`) or a value of type *`elemType`*
+    (representing `Some`). If all definitions are `None`, the merged value is `None`. If any
+    definitions are `Some`, they must all be `Some` and their values are merged through *`elemType`*.
+    Use `lib.ron.mkOptional` to create values of this type, e.g. `types.ronOptionalOf int`.
+
 `types.ronTupleEnumOf` *`elemType`* *`variants`* *`size`*
 
 :   A RON (Rusty Object Notation) tuple enum where all tuple values are of *`elemType`* type.
