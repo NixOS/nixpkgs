@@ -16,6 +16,6 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://github.com/cline/cline";
     homepage = "https://github.com/cline/cline";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.matteopacini ];
   };
 }
