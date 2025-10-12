@@ -6810,6 +6810,8 @@ with pkgs;
 
   premake = premake4;
 
+  pycobertura = with python3Packages; toPythonApplication pycobertura;
+
   pycritty = with python3Packages; toPythonApplication pycritty;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
