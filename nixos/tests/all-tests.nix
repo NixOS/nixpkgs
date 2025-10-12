@@ -186,6 +186,9 @@ in
   acme = import ./acme/default.nix { inherit runTest; };
   acme-dns = runTest ./acme-dns.nix;
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-bashless = runTest ./activation/bashless.nix;
+  activation-bashless-closure = pkgs.callPackage ./activation/bashless-closure.nix { };
+  activation-bashless-image = runTest ./activation/bashless-image.nix;
   activation-etc-overlay-immutable = runTest ./activation/etc-overlay-immutable.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
   activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };

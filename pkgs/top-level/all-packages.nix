@@ -2225,8 +2225,6 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
-  rare = python3Packages.callPackage ../games/rare { };
-
   renpy = callPackage ../by-name/re/renpy/package.nix { python3 = python312; };
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };

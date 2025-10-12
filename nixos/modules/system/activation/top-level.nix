@@ -376,7 +376,9 @@ in
       );
       # End if legacy environment variables
 
-      preSwitchCheck = config.system.preSwitchChecksScript;
+      preSwitchCheck = lib.mkIf (
+        config.system.preSwitchChecks != { }
+      ) config.system.preSwitchChecksScript;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the
