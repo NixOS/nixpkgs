@@ -65,6 +65,8 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Tests fail to build
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Personalized AI powered by what you've seen, said, or heard";
     homepage = "https://github.com/louis030195/screen-pipe";
     license = licenses.mit;

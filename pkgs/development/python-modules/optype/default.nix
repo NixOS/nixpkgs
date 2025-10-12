@@ -49,6 +49,8 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Opinionated typing package for precise type hints in Python";
     homepage = "https://github.com/jorenham/optype";
     license = lib.licenses.bsd3;

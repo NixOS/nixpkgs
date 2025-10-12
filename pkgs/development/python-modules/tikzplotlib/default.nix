@@ -37,6 +37,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Save matplotlib figures as TikZ/PGFplots for smooth integration into LaTeX";
     homepage = "https://github.com/nschloe/tikzplotlib";
     license = licenses.mit;

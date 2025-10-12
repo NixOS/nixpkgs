@@ -15,6 +15,9 @@ let
   };
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
     description = "Graph database written in rust";
     homepage = "https://github.com/indradb/indradb";
     license = licenses.mpl20;

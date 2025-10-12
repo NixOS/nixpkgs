@@ -54,6 +54,8 @@ rustPlatform.buildRustPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
     license = licenses.gpl3;

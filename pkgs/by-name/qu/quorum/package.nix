@@ -31,6 +31,8 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) quorum; };
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://consensys.net/quorum/";
     license = licenses.lgpl3;

@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "Library that aims todecouple high-performance simulation codes from I/O concerns";
     homepage = "https://pdi.dev/master/";
     changelog = "https://github.com/pdidev/pdi/releases/tag/${finalAttrs.version}";

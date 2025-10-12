@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
   meta = with lib; {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     description = "General Environment for the Treatment of Discrete Problems";
     mainProgram = "getdp";
     longDescription = ''

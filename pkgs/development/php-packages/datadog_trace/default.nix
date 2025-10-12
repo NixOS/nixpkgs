@@ -47,6 +47,8 @@ buildPecl rec {
   ];
 
   meta = {
+    # Marked broken 2025-11-01 because it has failed on Hydra for nearly a year.
+    broken = true;
     changelog = "https://github.com/DataDog/dd-trace-php/blob/${src.rev}/CHANGELOG.md";
     description = "Datadog Tracing PHP Client";
     homepage = "https://github.com/DataDog/dd-trace-php";
@@ -55,6 +57,5 @@ buildPecl rec {
       bsd3
     ];
     teams = [ lib.teams.php ];
-    broken = lib.versionAtLeast php.version "8.4";
   };
 }
