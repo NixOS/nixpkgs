@@ -12361,6 +12361,8 @@ self: super: with self; {
 
   pubnubsub-handler = callPackage ../development/python-modules/pubnubsub-handler { };
 
+  puccinialin = callPackage ../development/python-modules/puccinialin { };
+
   pudb = callPackage ../development/python-modules/pudb { };
 
   pueblo = callPackage ../development/python-modules/pueblo { };
