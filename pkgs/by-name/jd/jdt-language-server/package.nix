@@ -60,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Java language server";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.epl20;
-    maintainers = with lib.maintainers; [ matt-snider ];
+    maintainers = with lib.maintainers; [
+      matt-snider
+      wenjinnn
+    ];
     platforms = lib.platforms.all;
     mainProgram = "jdtls";
   };
