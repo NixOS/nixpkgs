@@ -230,6 +230,8 @@ async function handleMerge({
       try {
         body.push(`:heavy_check_mark: ${await merge()} (#306934)`)
       } catch (e) {
+        // Remove the HTML comment with node_id reference to allow retrying this merge on the next run.
+        body.shift()
         body.push(`:x: Merge failed with: ${e} (#371492)`)
       }
     } else {
