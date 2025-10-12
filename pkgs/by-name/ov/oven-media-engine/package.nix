@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    # Marked broken 2025-11-14 because it has failed on Hydra for at least one year.
+    broken = true;
     description = "Open-source streaming video service with sub-second latency";
     mainProgram = "OvenMediaEngine";
     homepage = "https://ovenmediaengine.com";
