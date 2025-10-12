@@ -56,12 +56,12 @@
   libffi,
   stdenv,
 }:
-intel-oneapi.mkIntelOneApi rec {
+intel-oneapi.mkIntelOneApi (fa: {
   pname = "intel-oneapi-base-toolkit";
 
   src = fetchurl {
     url = "https://registrationcenter-download.intel.com/akdlm/IRC_NAS/3b7a16b3-a7b0-460f-be16-de0d64fa6b1e/intel-oneapi-base-toolkit-2025.2.1.44_offline.sh";
-    sha256 = "0fg4mcp6syhmp2fhariv3raxlikakvm557w7ppc9vfdsj4ji2md1";
+    hash = "sha256-oVURJZG6uZ3YvYefUuqeakbaVR47ZgWduBV6bS6r5Dk=";
   };
 
   versionYear = "2025";
@@ -176,7 +176,7 @@ intel-oneapi.mkIntelOneApi rec {
   ];
 
   passthru.updateScript = intel-oneapi.mkUpdateScript {
-    inherit pname;
+    inherit (fa) pname;
     file = "base.nix";
     downloadPage = "https://www.intel.com/content/www/us/en/developer/tools/oneapi/base-toolkit-download.html?packages=oneapi-toolkit&oneapi-toolkit-os=linux&oneapi-lin=offline";
   };
@@ -191,7 +191,7 @@ intel-oneapi.mkIntelOneApi rec {
       nativeBuildInputs = [
         pkg-config
       ];
-      buildInputs = [ intel-oneapi ];
+      buildInputs = [ intel-oneapi.base ];
 
       buildPhase = ''
         # This will fail if no libs with mkl- in their name are found
@@ -225,7 +225,7 @@ intel-oneapi.mkIntelOneApi rec {
       # mpirun: can't find mpiexec.hydra for some reason
       # sycl-ls, sycl-trace: doesn't respect --help
       regex_skip="(.*-32)|(IMB-.*)|fi_info|fi_pingpong|gdb-oneapi|hydra_bstrap_proxy|hydra_nameserver|hydra_pmi_proxy|mpirun|sycl-ls|sycl-trace"
-      export I_MPI_ROOT="${intel-oneapi}/mpi/latest"
+      export I_MPI_ROOT="${intel-oneapi.base}/mpi/latest"
       for bin in "${intel-oneapi}"/bin/*; do
         if [[ "$bin" =~ $regex_skip ]] || [ ! -f "$bin" ] || [[ ! -x "$bin" ]]; then
           echo "skipping $bin"
@@ -238,7 +238,7 @@ intel-oneapi.mkIntelOneApi rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Intel oneAPI Base Toolkit";
     homepage = "https://software.intel.com/content/www/us/en/develop/tools/oneapi/base-toolkit.html";
     license = with lib.licenses; [
@@ -251,4 +251,4 @@ intel-oneapi.mkIntelOneApi rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

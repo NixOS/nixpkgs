@@ -12,28 +12,43 @@
   writeShellScript,
   writeText,
   writeTextFile,
+
+  # For the updater script
+  writeShellApplication,
+  curl,
+  jq,
+  htmlq,
+  common-updater-scripts,
+  writableTmpDirAsHomeHook,
 }:
 
 {
-  mkIntelOneApi =
-    {
-      pname,
-      versionYear,
-      versionMajor,
-      versionMinor,
-      versionRel,
-      src,
-      meta,
-      depsByComponent ? { },
-      postInstall ? "",
-      components ? [ "default" ],
-      ...
-    }@args:
-    let
-      shortName = name: builtins.elemAt (lib.splitString "." name) 3;
-    in
-    stdenv.mkDerivation (
+  mkIntelOneApi = lib.extendMkDerivation {
+    constructDrv = stdenv.mkDerivation;
+
+    excludeDrvArgNames = [
+      "depsByComponent"
+      "components"
+    ];
+
+    extendDrvArgs =
       fa:
+      {
+        pname,
+        versionYear,
+        versionMajor,
+        versionMinor,
+        versionRel,
+        src,
+        meta,
+        depsByComponent ? { },
+        postInstall ? "",
+        components ? [ "default" ],
+        ...
+      }@args:
+      let
+        shortName = name: builtins.elemAt (lib.splitString "." name) 3;
+      in
       {
         version = "${fa.versionYear}.${fa.versionMajor}.${fa.versionMinor}.${fa.versionRel}";
 
@@ -45,21 +60,21 @@
           bubblewrap
 
           autoPatchelfHook
-
-          # For patchShebangs
-          python3
+          writableTmpDirAsHomeHook
         ];
 
+        buildInputs = [
+          # For patchShebangs
+          python3
+        ]
         # autoPatchelfHook will add these libraries to RPATH as required
-        buildInputs = lib.concatLists (
-          map (
-            comp:
-            if comp == "all" || comp == "default" then
-              lib.concatLists (builtins.attrValues depsByComponent)
-            else
-              depsByComponent.${shortName comp} or [ ]
-          ) components
-        );
+        ++ lib.concatMap (
+          comp:
+          if comp == "all" || comp == "default" then
+            lib.concatLists (builtins.attrValues depsByComponent)
+          else
+            depsByComponent.${shortName comp} or [ ]
+        ) components;
 
         phases = [
           "installPhase"
@@ -69,9 +84,6 @@
         # See https://software.intel.com/content/www/us/en/develop/documentation/installation-guide-for-intel-oneapi-toolkits-linux/top/installation/install-with-command-line.html
         installPhase = ''
           runHook preInstall
-          # The installer expects a writeable home directory, even if installing elsewhere
-          export HOME="$(mktemp -d)"
-
           # The installer expects that the installation directory is already present
           mkdir -p "$out"
 
@@ -111,12 +123,8 @@
 
           runHook postInstall
         '';
-      }
-      // (builtins.removeAttrs args [
-        "depsByComponent"
-        "components"
-      ])
-    );
+      };
+  };
 
   mkUpdateScript =
     {
@@ -124,13 +132,15 @@
       downloadPage,
       file,
     }:
-    writeTextFile {
+    writeShellApplication {
       name = "update-intel-oneapi";
-      executable = true;
+      runtimeInputs = [
+        curl
+        jq
+        htmlq
+        common-updater-scripts
+      ];
       text = ''
-        #!/usr/bin/env nix-shell
-        #!nix-shell -i bash -p curl jq htmlq common-updater-scripts
-
         download_page=${lib.escapeShellArg downloadPage}
         pname=${lib.escapeShellArg pname}
         nixpkgs="$(git rev-parse --show-toplevel)"
@@ -158,11 +168,10 @@
         fi
 
         if [[ "$(grep 'url =' "$file")" =~ "$url" ]] && [[ "''${BASH_REMATCH[0]}" == "$url" ]]; then
-            echo "The URL is the same ($url), skipping prefetch" >&2
-            sha256="$(jq .sha256 < "$outFile")"
+            echo "The URL is the same ($url), skipping update" >&2
         else
             echo "The new download URL is $url, prefetching it to store" >&2
-            sha256=$(nix-prefetch-url --quiet "$url")
+            hash="$(nix-hash --to-sri --type sha256 "$(nix-prefetch-url --quiet "$url")")"
         fi
 
         sed -i "s|versionYear = \".*\";|versionYear = \"$versionYear\";|" "$file"
@@ -170,7 +179,7 @@
         sed -i "s|versionMinor = \".*\";|versionMinor = \"$versionMinor\";|" "$file"
         sed -i "s|versionRel = \".*\";|versionRel = \"$versionRel\";|" "$file"
         sed -i "s|url = \".*\";|url = \"$url\";|" "$file"
-        sed -i "s|sha256 = \".*\";|sha256 = \"$sha256\";|" "$file"
+        sed -i "s|hash = \".*\";|hash = \"$hash\";|" "$file"
       '';
     };
 
