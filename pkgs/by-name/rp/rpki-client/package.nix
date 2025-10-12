@@ -15,22 +15,23 @@
 }:
 
 let
+  version = "9.6";
   openbsd = fetchFromGitHub {
     name = "portable";
     owner = "rpki-client";
     repo = "rpki-client-openbsd";
-    tag = "rpki-client-9.6";
-    sha256 = "sha256-mdg2gbwG+sm+a3HtLhzVy1pHtuTf8RmkrQFq5yKfrKA=";
+    tag = "rpki-client-${version}";
+    hash = "sha256-Zef7uxD0jh1xdqPh+7R0bMNSPHucfXkDDU0q2JC6kGg=";
   };
 in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "rpki-client";
-  version = "9.6";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "rpki-client";
     repo = "rpki-client-portable";
-    tag = "${finalAttrs.version}";
+    tag = version;
     hash = "sha256-emwYvo4sayLOBMLuqwk+HiJfyZ+UsVh4wZsk6ol0k1M=";
   };
 
@@ -61,4 +62,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ seike ];
     platforms = lib.platforms.linux;
   };
-})
+}
