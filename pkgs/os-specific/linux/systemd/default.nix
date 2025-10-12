@@ -163,6 +163,7 @@
   # on their live NixOS system, we disable it by default.
   withKernelInstall ? false,
   withLibarchive ? true,
+  withVConsole ? true,
   # tests assume too much system access for them to be feasible for us right now
   withTests ? false,
   # build only libudev and libsystemd
@@ -466,10 +467,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
 
-    # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
-
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
     (lib.mesonOption "sbat-distro-summary" "NixOS")
@@ -571,6 +568,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "man" true)
     (lib.mesonEnable "nspawn" withNspawn)
 
+    (lib.mesonBool "vconsole" withVConsole)
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
     (lib.mesonBool "localed" withLocaled)
@@ -597,7 +595,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
-
+  ]
+  ++ lib.optionals withVConsole [
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
   ]
   ++ lib.optionals (withShellCompletions == false) [
     (lib.mesonOption "bashcompletiondir" "no")

@@ -10351,6 +10351,7 @@ with pkgs;
     withVmspawn = false;
     withQrencode = false;
     withLibarchive = false;
+    withVConsole = false;
   };
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
