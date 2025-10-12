@@ -47,7 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   depsBuildBuild = [
     zuo # Used as the build driver
-    buildPackages.stdenv.cc # Needed for cross
   ];
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [
@@ -86,8 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--threads"
     "--installprefix=${placeholder "out"}"
     "--installman=${placeholder "out"}/share/man"
+    "--installabsolute"
     "--enable-libffi"
-    "CC_FOR_BUILD=cc"
+    "CC_FOR_BUILD=${lib.getExe buildPackages.stdenv.cc}"
     # Use Nixpkgs dependencies
     "ZUO=zuo"
     "ZLIB=${zlib}/lib/libz${extensions.sharedLibrary}"
@@ -111,6 +111,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   setupHook = ./setup-hook.sh;
+
+  doInstallCheck = true;
+  installCheckPhase = ''
+    echo "(exit)" | "$out/bin/scheme"
+  '';
 
   passthru.tests.version = testers.testVersion {
     package = finalAttrs.finalPackage;
