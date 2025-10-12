@@ -123,7 +123,9 @@ in
       ghc98 = compiler.ghc984;
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
         bootPkgs =
-          if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
@@ -141,7 +143,9 @@ in
       };
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs =
-          if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
@@ -159,7 +163,9 @@ in
       };
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
         bootPkgs =
-          if stdenv.buildPlatform.isDarwin then
+          if stdenv.buildPlatform.isAarch64 && stdenv.buildPlatform.isMusl then
+            bb.packages.ghc984Binary
+          else if stdenv.buildPlatform.isDarwin then
             # it seems like the GHC 9.6.* bindists are built with a different
             # toolchain than we are using (which I'm guessing from the fact
             # that 9.6.4 bindists pass linker flags our ld doesn't support).
