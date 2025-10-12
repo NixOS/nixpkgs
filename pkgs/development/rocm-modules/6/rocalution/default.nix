@@ -10,7 +10,6 @@
   rocprim,
   rocrand,
   clr,
-  git,
   pkg-config,
   openmp,
   openmpi,
@@ -49,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     rocm-cmake
     clr
-    git
     pkg-config
   ];
 

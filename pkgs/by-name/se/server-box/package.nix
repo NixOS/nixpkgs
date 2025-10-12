@@ -34,6 +34,9 @@ flutter335.buildFlutterApplication {
     autoPatchelfHook
   ];
 
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "server-box";

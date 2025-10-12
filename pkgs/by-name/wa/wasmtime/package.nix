@@ -37,6 +37,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "lib"
   ];
 
   nativeBuildInputs = [
@@ -55,27 +56,24 @@ rustPlatform.buildRustPackage (finalAttrs: {
       # error: linker `rust-lld` not found
       !isAarch64;
 
-  # prevent $out from being propagated to $dev:
-  # the library and header files are not dependent on the binaries
-  propagatedBuildOutputs = [ ];
-
   postInstall =
     let
       inherit (stdenv.hostPlatform.rust) cargoShortTarget;
     in
     ''
-      moveToOutput lib $dev
-      ${lib.optionalString (!enableShared) "rm -f $dev/lib/*.so{,.*}"}
-      ${lib.optionalString (!enableStatic) "rm -f $dev/lib/*.a"}
+      moveToOutput lib $lib
+      ${lib.optionalString (!enableShared) "rm -f $lib/lib/*.so{,.*}"}
+      ${lib.optionalString (!enableStatic) "rm -f $lib/lib/*.a"}
 
       # copy the build.rs generated c-api headers
       # https://github.com/rust-lang/cargo/issues/9661
+      mkdir $dev
       cp -r target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include $dev/include
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \
-        $dev/lib/libwasmtime.dylib \
-        $dev/lib/libwasmtime.dylib
+        $lib/lib/libwasmtime.dylib \
+        $lib/lib/libwasmtime.dylib
     ''
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd wasmtime \

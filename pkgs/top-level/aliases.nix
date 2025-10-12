@@ -1972,6 +1972,7 @@ mapAliases {
   o = orbiton; # Added 2023-04-09
   oathToolkit = oath-toolkit; # Added 2022-04-04
   oauth2_proxy = throw "'oauth2_proxy' has been renamed to/replaced by 'oauth2-proxy'"; # Converted to throw 2024-10-17
+  obb = throw "obb has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   obliv-c = throw "obliv-c has been removed from Nixpkgs, as it has been unmaintained upstream for 4 years and does not build with supported GCC versions"; # Added 2025-08-18
   ocis-bin = throw "ocis-bin has been renamed to ocis_5-bin'. Future major.minor versions will be made available as separate packages"; # Added 2025-03-30
   oclgrind = throw "oclgrind has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
@@ -2608,6 +2609,7 @@ mapAliases {
   timescale-prometheus = throw "'timescale-prometheus' has been renamed to/replaced by 'promscale'"; # Converted to throw 2024-10-17
   tightvnc = throw "'tightvnc' has been removed as the version 1.3 is not maintained upstream anymore and is insecure"; # Added 2024-08-22
   timelens = throw "'timelens' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  tinyxml2 = throw "The 'tinyxml2' alias has been removed, use 'tinyxml' for https://sourceforge.net/projects/tinyxml/ or 'tinyxml-2' for https://github.com/leethomason/tinyxml2"; # Added 2025-10-11
   tix = tclPackages.tix; # Added 2024-10-02
   tkcvs = tkrev; # Added 2022-03-07
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17

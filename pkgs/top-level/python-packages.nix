@@ -3278,7 +3278,23 @@ self: super: with self; {
 
   cynthion = callPackage ../development/python-modules/cynthion { };
 
-  cypari = callPackage ../development/python-modules/cypari { };
+  cypari = callPackage ../development/python-modules/cypari {
+
+    inherit (pkgs.pkgsStatic) gmp;
+
+    pari = pkgs.pari.overrideAttrs rec {
+      version = "2.15.4";
+      src = pkgs.fetchurl {
+        url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor version}/pari-${version}.tar.gz";
+        hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
+      };
+      installTargets = [
+        "install"
+        "install-lib-sta"
+      ];
+    };
+
+  };
 
   cypari2 = callPackage ../development/python-modules/cypari2 { };
 
@@ -15064,6 +15080,8 @@ self: super: with self; {
 
   python-pam = callPackage ../development/python-modules/python-pam { inherit (pkgs) pam; };
 
+  python-path = callPackage ../development/python-modules/python-path { };
+
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
   python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
@@ -18833,6 +18851,8 @@ self: super: with self; {
 
   tt-flash = callPackage ../development/python-modules/tt-flash { };
 
+  tt-smi = callPackage ../development/python-modules/tt-smi { };
+
   tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
 
   ttach = callPackage ../development/python-modules/ttach { };
@@ -19506,8 +19526,6 @@ self: super: with self; {
   unearth = callPackage ../development/python-modules/unearth { };
 
   unicode-rbnf = callPackage ../development/python-modules/unicode-rbnf { };
-
-  unicode-slugify = callPackage ../development/python-modules/unicode-slugify { };
 
   unicodecsv = callPackage ../development/python-modules/unicodecsv { };
 

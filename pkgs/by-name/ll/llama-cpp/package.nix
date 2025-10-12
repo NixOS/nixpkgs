@@ -75,21 +75,19 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6670";
+  version = "6729";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-B4Qog7RLcre8KB9N+aVUZSJwlkHIIcCxR8jySoxbXoQ=";
+    hash = "sha256-CkPLgzSsiCkSIAp4XetUJszt0+WjPRt+9V9SvRogbVU=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  patches = lib.optionals vulkanSupport [ ./disable_bfloat16.patch ];
 
   nativeBuildInputs = [
     cmake

@@ -1093,6 +1093,13 @@
     githubId = 1078000;
     name = "Alejandro Sánchez Medina";
   };
+  alejo7797 = {
+    email = "alex@epelde.net";
+    matrix = "@alex:epelde.net";
+    github = "alejo7797";
+    githubId = 17302493;
+    name = "Alex Epelde";
+  };
   aleksana = {
     email = "me@aleksana.moe";
     github = "Aleksanaa";
@@ -27703,6 +27710,12 @@
     github = "wesnel";
     githubId = 43357387;
     keys = [ { fingerprint = "F844 80B2 0CA9 D6CC C7F5  2479 A776 D2AD 099E 8BC0"; } ];
+  };
+  wetrustinprize = {
+    email = "git@wetrustinprize.com";
+    github = "wetrustinprize";
+    githubId = 38386927;
+    name = "Peterson 'Prize' Adami Candido";
   };
   wexder = {
     email = "wexder19@gmail.com";
