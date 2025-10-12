@@ -10,10 +10,6 @@
   pkg-config,
   jansson,
   swift-corelibs-libdispatch,
-  # deadbeef can use either gtk2 or gtk3
-  gtk2Support ? false,
-  gtk2,
-  gtk3Support ? true,
   gtk3,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
@@ -65,8 +61,6 @@
   curl,
 }:
 
-assert gtk2Support || gtk3Support;
-
 let
   inherit (lib) optionals;
 
@@ -87,11 +81,6 @@ clangStdenv.mkDerivation {
   buildInputs = [
     jansson
     swift-corelibs-libdispatch
-  ]
-  ++ optionals gtk2Support [
-    gtk2
-  ]
-  ++ optionals gtk3Support [
     gtk3
     gsettings-desktop-schemas
   ]
@@ -163,8 +152,6 @@ clangStdenv.mkDerivation {
     intltool
     libtool
     pkg-config
-  ]
-  ++ optionals gtk3Support [
     wrapGAppsHook3
   ];
 
