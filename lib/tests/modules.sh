@@ -806,6 +806,11 @@ checkConfigError 'A definition for option .* is not of type .signed integer.*' c
 checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
 checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
 
+# types.rawRon
+checkConfigOutput '{"_type":"ron-raw","value":"raw_value"}' config.validRaw ./rawRon.nix
+checkConfigOutput '{"_type":"ron-raw","value":"MyEnum::Variant\(1\)"}' config.anotherValidRaw ./rawRon.nix
+checkConfigError 'A definition for option .* is not of type .raw RON value.*' config.invalidNotRonRaw ./rawRon.nix
+
 # types.ronChar
 checkConfigOutput '{"_type":"ron-char","value":"a"}' config.validChar ./ronChar.nix
 checkConfigOutput '{"_type":"ron-char","value":"z"}' config.anotherValidChar ./ronChar.nix
