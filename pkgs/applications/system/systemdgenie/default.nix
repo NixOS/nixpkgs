@@ -5,7 +5,9 @@
   fetchFromGitLab,
   kdePackages,
   pkg-config,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation {
   pname = "systemdgenie";
   version = "0.99.0-unstable-2025-10-11";
@@ -33,6 +35,8 @@ stdenv.mkDerivation {
     kdePackages.ktexteditor
     kdePackages.kxmlgui
   ];
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Systemd management utility";
