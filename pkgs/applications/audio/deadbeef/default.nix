@@ -3,8 +3,7 @@
   config,
   clangStdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   libtool,
   intltool,
   pkg-config,
@@ -147,8 +146,7 @@ clangStdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     intltool
     libtool
     pkg-config
@@ -156,17 +154,6 @@ clangStdenv.mkDerivation {
   ];
 
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  postPatch = ''
-    # Fix the build on c++17 compiler:
-    #   https://github.com/DeaDBeeF-Player/deadbeef/issues/3012
-    # TODO: remove after 1.9.5 release.
-    substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
-  '';
 
   meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";
