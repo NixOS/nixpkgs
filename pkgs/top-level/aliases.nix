@@ -2354,6 +2354,8 @@ mapAliases {
   rquickshare-legacy = throw "The legacy version depends on insecure package libsoup2, please use the main version"; # Added 2025-10-09
   rr-unstable = rr; # Added 2022-09-17
   rtx = mise; # Added 2024-01-05
+  ruby_3_1 = throw "ruby_3_1 has been removed, as it is has reached end‐of‐life upstream"; # Added 2025-10-12
+  rubyPackages_3_1 = throw "rubyPackages_3_1 has been removed, as it is has reached end‐of‐life upstream"; # Added 2025-10-12
   ruby-zoom = throw "'ruby-zoom' has been removed due to lack of maintaince and had not been updated since 2020"; # Added 2025-08-24
   runCommandNoCC = runCommand; # Added 2021-08-15
   runCommandNoCCLocal = runCommandLocal; # Added 2021-08-15

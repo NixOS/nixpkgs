@@ -57,13 +57,9 @@ let
     }:
     let
       ver = version;
-      atLeast32 = lib.versionAtLeast ver.majMin "3.2";
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        atLeast32
-        && (
-          stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
-        );
+        stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64);
       rubyDrv = lib.makeOverridable (
         {
           stdenv,
@@ -187,17 +183,13 @@ let
           # make: *** [uncommon.mk:373: do-install-all] Error 1
           enableParallelInstalling = false;
 
-          patches =
-            op useBaseRuby (
-              if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch else ./do-not-update-gems-baseruby.patch
-            )
-            ++ [
-              # When using a baseruby, ruby always sets "libdir" to the build
-              # directory, which nix rejects due to a reference in to /build/ in
-              # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compilation.
-              ./dont-refer-to-build-dir.patch
-            ];
+          patches = op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch ++ [
+            # When using a baseruby, ruby always sets "libdir" to the build
+            # directory, which nix rejects due to a reference in to /build/ in
+            # the final product. Removing this reference doesn't seem to break
+            # anything and fixes cross compilation.
+            ./dont-refer-to-build-dir.patch
+          ];
 
           cargoRoot = opString yjitSupport "yjit";
 
@@ -400,11 +392,6 @@ in
 {
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
-
-  ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "7" "";
-    hash = "sha256-BVas1p8UHdrOA/pd2NdufqDY9SMu3wEkKVebzaqzDns=";
-  };
 
   ruby_3_2 = generic {
     version = rubyVersion "3" "2" "9" "";
