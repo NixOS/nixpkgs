@@ -23,8 +23,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/reaper_sws-${arch}.dylib";
         hash =
           {
-            x86_64-darwin = "sha256-B185QWS9FaC/0XDhxUBbgr9zu2Ot8OIsfaPQ3sUHh4s=";
-            aarch64-darwin = "sha256-8gbyPlnIXdWtSD+Aj70xzacJhO34edTTG2IOryB67os=";
+            x86_64-darwin = "sha256-c0enRIXFN+dMDdxTQ3hFv0almTF0dfrSHILNigJp2Js=";
+            aarch64-darwin = "sha256-jmuob0qslYhxiE2ShfTwY4RJAKBLJSUb+VBEM0sQPbo=";
           }
           .${stdenvNoCC.hostPlatform.system};
       };
@@ -33,11 +33,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       plugin
       (fetchurl {
         url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python64.py";
-        hash = "sha256-Yujj60+jOEfdSZ74cRU1Wxoh7RL2fo/IhJIpa+BDYV0=";
+        hash = "sha256-GDlvfARg1g5oTH2itEug6Auxr9iFlPDdGueInGmHqSI=";
       })
       (fetchurl {
         url = "https://github.com/reaper-oss/sws/releases/download/v${finalAttrs.version}/sws_python32.py";
-        hash = "sha256-QktzdIDpTvNs9IrH7TOI6LTIBkfuQ3cqw06iqLxSSTI=";
+        hash = "sha256-np2r568csSdIS7VZHDASroZlXhpfxXwNn0gROTinWU4=";
       })
     ];
 
