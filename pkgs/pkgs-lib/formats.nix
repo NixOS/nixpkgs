@@ -1125,4 +1125,58 @@ optionalAttrs allowAliases aliases
     else
       throw "pkgs.formats.xml: Unknown format: ${format}";
 
+  ron =
+    { }:
+    {
+      type =
+        let
+          inherit (lib.types)
+            rawRon
+            ronChar
+            ronEnum
+            ronMapOf
+            ronNamedStructOf
+            ronOptionalOf
+            ronTupleEnumOf
+            ronTupleOf
+            ;
+
+          valueType = oneOf [
+            bool
+            int
+            float
+            str
+            path
+            rawRon
+            ronChar
+            (attrsOf valueType)
+            (listOf valueType)
+            (ronOptionalOf valueType)
+            (ronMapOf valueType valueType)
+            (ronNamedStructOf valueType)
+            (ronTupleOf valueType 0)
+            # Override check to accept any enum variant
+            (
+              (ronEnum [ ])
+              // {
+                check = x: lib.types.isType "ron-enum" x && isString x.variant && !(x ? values);
+              }
+            )
+            # Override check to accept any tuple enum
+            (
+              (ronTupleEnumOf valueType [ ] 0)
+              // {
+                check = x: lib.types.isType "ron-enum" x && isString x.variant && x ? values && isList x.values;
+              }
+            )
+          ]
+          // {
+            description = "RON value";
+          };
+        in
+        valueType;
+
+      generate = name: value: pkgs.writeText name (lib.ron.toRON { } value);
+    };
+
 }
