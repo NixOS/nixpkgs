@@ -2331,6 +2331,8 @@ self: super: with self; {
 
   camelot = callPackage ../development/python-modules/camelot { };
 
+  camoufox = callPackage ../development/python-modules/camoufox { };
+
   can-isotp = callPackage ../development/python-modules/can-isotp { };
 
   canals = callPackage ../development/python-modules/canals { };
@@ -7074,7 +7076,7 @@ self: super: with self; {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
-  impit = callPackage ../development/python-modules/impit {};
+  impit = callPackage ../development/python-modules/impit { };
 
   import-expression = callPackage ../development/python-modules/import-expression { };
 
