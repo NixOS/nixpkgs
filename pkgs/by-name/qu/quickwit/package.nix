@@ -140,6 +140,7 @@ rustPlatform.buildRustPackage rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "Sub-second search & analytics engine on cloud storage";
     homepage = "https://quickwit.io/";
     license = licenses.agpl3Only;
