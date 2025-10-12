@@ -844,6 +844,13 @@ checkConfigError 'A definition for option .* is not of type .RON enum, one of "R
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Point", "Line".*' config.invalidWithValues ./ronEnum.nix
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidNotRonEnum ./ronEnum.nix
 
+# types.ronMapOf
+checkConfigOutput '{"_type":"ron-map","attrs":\[{"key":"a","value":1},{"key":"b","value":2}\]}' config.validStringIntMap ./ronMapOf.nix
+checkConfigOutput '{"_type":"ron-map","attrs":\[{"key":1,"value":"one"},{"key":2,"value":"two"}\]}' config.validIntStrMap ./ronMapOf.nix
+checkConfigError 'A definition for option .* is not of type .RON map of string to signed integer.*' config.invalidNotRonMap ./ronMapOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongKeyType ./ronMapOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongValueType ./ronMapOf.nix
+
 # types.ronNamedStructOf
 checkConfigOutput '{"_type":"ron-named-struct","name":"Point","value":{"x":10,"y":20}}' config.validPoint ./ronNamedStructOf.nix
 checkConfigOutput '{"_type":"ron-named-struct","name":"Person","value":{"age":"30","name":"Alice"}}' config.validPerson ./ronNamedStructOf.nix

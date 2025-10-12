@@ -261,6 +261,13 @@ merging is handled.
     to create values of this type. Similar to `types.enum` but for RON enum values.
     Multiple definitions cannot be merged.
 
+`types.ronMapOf` *`keyType`* *`valueType`*
+
+:   A RON map of *`keyType`* to *`valueType`*. This type accepts attribute sets with `_type = "ron-map"`
+    and an `attrs` field containing a list of key-value pairs, where each pair is an attribute set with
+    `key` and `value` fields. Multiple definitions are concatenated. Use `lib.ron.mkMap` to create values
+    of this type, e.g. `types.ronMapOf str int`.
+
 `types.ronNamedStructOf` *`elemType`*
 
 :   A RON named struct where all fields are of *`elemType`* type. This type accepts attribute sets with

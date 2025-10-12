@@ -1061,6 +1061,102 @@ let
           };
         };
 
+      ronMapOf =
+        keyType: valueType:
+        mkOptionType rec {
+          name = "ronMapOf";
+          description = "RON map of ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") keyType
+          } to ${optionDescriptionPhrase (class: class == "noun" || class == "composite") valueType}";
+          descriptionClass = "composite";
+          check =
+            x:
+            isType "ron-map" x
+            && isList x.attrs
+            && builtins.all (pair: isAttrs pair && pair ? key && pair ? value) x.attrs;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+              in
+              if headError != null then
+                {
+                  inherit headError;
+                  value = null;
+                  valueMeta = { };
+                }
+              else
+                let
+                  # Merge each key-value pair
+                  allPairs = concatLists (map (def: def.value.attrs) defs);
+                  # Merge keys
+                  keyEvals = filter (x: x.optionalValue ? value) (
+                    imap1 (
+                      idx: pair:
+                      mergeDefinitions (loc ++ [ "[pair ${toString idx}].key" ]) keyType [
+                        {
+                          file = "<generated>";
+                          value = pair.key;
+                        }
+                      ]
+                    ) allPairs
+                  );
+                  # Merge values
+                  valueEvals = filter (x: x.optionalValue ? value) (
+                    imap1 (
+                      idx: pair:
+                      mergeDefinitions (loc ++ [ "[pair ${toString idx}].value" ]) valueType [
+                        {
+                          file = "<generated>";
+                          value = pair.value;
+                        }
+                      ]
+                    ) allPairs
+                  );
+                  mergedPairs = lib.lists.zipListsWith (keyEval: valueEval: {
+                    key = keyEval.optionalValue.value or keyEval.mergedValue;
+                    value = valueEval.optionalValue.value or valueEval.mergedValue;
+                  }) keyEvals valueEvals;
+                in
+                {
+                  headError = null;
+                  value = {
+                    _type = "ron-map";
+                    attrs = mergedPairs;
+                  };
+                  valueMeta.pairs = lib.lists.zipListsWith (keyEval: valueEval: {
+                    key = keyEval.checkedAndMerged.valueMeta;
+                    value = valueEval.checkedAndMerged.valueMeta;
+                  }) keyEvals valueEvals;
+                };
+          };
+          functor = defaultFunctor name // {
+            payload = {
+              inherit keyType valueType;
+            };
+            type = payload: types.ronMapOf payload.keyType payload.valueType;
+            binOp =
+              a: b:
+              let
+                mergedKeyType = a.keyType.typeMerge b.keyType.functor;
+                mergedValueType = a.valueType.typeMerge b.valueType.functor;
+              in
+              if mergedKeyType != null && mergedValueType != null then
+                {
+                  keyType = mergedKeyType;
+                  valueType = mergedValueType;
+                }
+              else
+                null;
+          };
+          nestedTypes.keyType = keyType;
+          nestedTypes.valueType = valueType;
+        };
+
       ronNamedStructOf =
         elemType:
         let
