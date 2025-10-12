@@ -904,6 +904,21 @@ fetchFromRadicle {
 }
 ```
 
+## `fetchRadiclePatch` {#fetchradiclepatch}
+
+`fetchRadiclePatch` works very similarly to `fetchFromRadicle` with almost the same arguments
+expected. However, instead of a `rev` or `tag` argument, a `revision` argument is expected, which
+contains the full revision id of the Radicle patch to fetch.
+
+```nix
+fetchRadiclePatch {
+  seed = "rosa.radicle.xyz";
+  repo = "z4V1sjrXqjvFdnCUbxPFqd5p4DtH5"; # radicle-explorer
+  revision = "d97d872386c70607beda2fb3fc2e60449e0f4ce4"; # patch: d77e064
+  hash = "sha256-ttnNqj0lhlSP6BGzEhhUOejKkkPruM9yMwA5p9Di4bk=";
+}
+```
+
 ## `requireFile` {#requirefile}
 
 `requireFile` allows requesting files that cannot be fetched automatically, but whose content is known.
