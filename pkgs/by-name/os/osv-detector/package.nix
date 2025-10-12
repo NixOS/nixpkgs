@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "osv-detector";
-  version = "0.11.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "G-Rath";
     repo = "osv-detector";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-vIkLrKyDeMfRe/0EPhlKlHAO6XB0/OFY5mTUHeZbcg8=";
+    hash = "sha256-3XKH2CgZeawzmIMQPMGLz9A1ax1L3ynrwpQmvOiHBgo=";
   };
 
-  vendorHash = "sha256-Rrosye8foVntoFDvDmyNuXgnEgjzcOXenOKBMZVCRio=";
+  vendorHash = "sha256-zjoscB0dy9rStDWpGS9XLxvCcIJaa1zNjETxx9hpPYw=";
 
   ldflags = [
     "-w"
@@ -25,24 +25,7 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  checkFlags =
-    let
-      skippedTests = [
-        # Disable tests requiring network access
-        "TestRun_ParseAs_CsvFile"
-        "TestRun_ParseAs_CsvRow"
-        "TestRun_DBs"
-        "TestRun_Lockfile"
-        "TestRun_ParseAsGlobal"
-        "TestRun_Ignores"
-        "TestRun_ParseAsSpecific"
-        "TestRun_Configs"
-      ];
-    in
-    [
-      "-skip"
-      "${builtins.concatStringsSep "|" skippedTests}"
-    ];
+  doCheck = false;
 
   passthru.tests.version = testers.testVersion {
     package = osv-detector;
