@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "tt-metal";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-h2pbMJtyK7xedy3L2y8VN39p4Fyu6xS+9pzDrrE6+54=";
+    hash = "sha256-ZIUjZLifRVmpWpG8Ty+I+pwgpIf5r9gJkI8ULTau4OE=";
   };
 
   cpm = fetchurl {
