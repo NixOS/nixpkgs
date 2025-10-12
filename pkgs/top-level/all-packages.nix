@@ -13282,10 +13282,6 @@ with pkgs;
   anki-bin = callPackage ../games/anki/bin.nix { };
   anki-sync-server = callPackage ../games/anki/sync-server.nix { };
 
-  armagetronad = callPackage ../games/armagetronad { };
-
-  armagetronad-dedicated = callPackage ../games/armagetronad { dedicatedServer = true; };
-
   art = callPackage ../by-name/ar/art/package.nix {
     fftw = fftwSinglePrec;
   };
