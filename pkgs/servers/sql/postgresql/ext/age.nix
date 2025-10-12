@@ -26,9 +26,7 @@ postgresqlBuildExtension (finalAttrs: {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "age";
-    tag = "PG${lib.versions.major postgresql.version}/v${
-      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
-    }";
+    tag = "PG${lib.versions.major postgresql.version}/v${finalAttrs.version}";
     hash =
       hashes.${lib.versions.major postgresql.version}
       or (throw "Source for Age is not available for ${postgresql.version}");
