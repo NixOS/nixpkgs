@@ -62,6 +62,10 @@ buildPythonPackage rec {
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
 
+  preBuild = ''
+    export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
+  '';
+
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
   preCheck =
