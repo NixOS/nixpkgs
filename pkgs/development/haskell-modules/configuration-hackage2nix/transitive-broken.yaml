@@ -679,7 +679,6 @@ dont-distribute-packages:
  - datadog-tracing
  - datafix
  - dataflow
- - dataframe_0_3_0_4
  - datasets
  - date-conversions
  - dbjava

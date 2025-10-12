@@ -2169,7 +2169,6 @@ broken-packages:
   - gi-gstapp # failure in job https://hydra.nixos.org/build/253686159 at 2024-03-31
   - gi-gsttag # failure in job https://hydra.nixos.org/build/233197576 at 2023-09-02
   - gi-gtk-declarative # failure in job https://hydra.nixos.org/build/307610571 at 2025-09-19
-  - gi-gtk-hs # failure in job https://hydra.nixos.org/build/307610574 at 2025-09-19
   - gi-gtk4-layer-shell # failure in job https://hydra.nixos.org/build/302803068 at 2025-07-27
   - gi-gtksheet # failure in job https://hydra.nixos.org/build/233211386 at 2023-09-02
   - gi-ibus # failure in job https://hydra.nixos.org/build/233220272 at 2023-09-02
