@@ -819,7 +819,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
+      "conjure-spec.client.common-lisp.swank_spec"
       "conjure-spec.client.fennel.nfnl_spec"
+      "conjure-spec.client.guile.socket_spec"
+      "conjure-spec.client.scheme.stdio_spec"
       # No parser for fennel
       "conjure.client.fennel.def-str-util"
     ];
@@ -3684,6 +3687,14 @@ assertNoAdditions {
       maintainers = with lib.maintainers; [ hugolgst ];
     };
   });
+
+  vimtex = super.vimtex.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      fzf-lua
+      snacks-nvim
+    ];
+  };
 
   vimproc-vim = super.vimproc-vim.overrideAttrs {
     buildInputs = [ which ];
