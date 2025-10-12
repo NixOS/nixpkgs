@@ -442,6 +442,8 @@ let
             ]
             # Those are annoyingly flaky, but not enough to be marked as such upstream.
             ++ lib.optional (majorVersion == "22") "test-child-process-stdout-flush-exit"
+            # This is failing on newer macOS versions, no fix has yet been provided upstream:
+            ++ lib.optional (majorVersion == "24" && stdenv.buildPlatform.isDarwin) "test-cluster-dgram-1"
           )
         }"
       ];
