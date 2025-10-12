@@ -844,6 +844,14 @@ checkConfigError 'A definition for option .* is not of type .RON enum, one of "R
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Point", "Line".*' config.invalidWithValues ./ronEnum.nix
 checkConfigError 'A definition for option .* is not of type .RON enum, one of "Red", "Green", "Blue".*' config.invalidNotRonEnum ./ronEnum.nix
 
+# types.ronTupleEnumOf
+checkConfigOutput '{"_type":"ron-enum","values":\[10,20\],"variant":"Point"}' config.validPoint ./ronTupleEnumOf.nix
+checkConfigOutput '{"_type":"ron-enum","values":\[0,100\],"variant":"Line"}' config.validLine ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidWrongVariant ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidWrongSize ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .signed integer.*' config.invalidWrongType ./ronTupleEnumOf.nix
+checkConfigError 'A definition for option .* is not of type .RON tuple enum with 2 signed integer values, one of "Point", "Line".*' config.invalidNotRonEnum ./ronTupleEnumOf.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

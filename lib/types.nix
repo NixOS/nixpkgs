@@ -1061,6 +1061,108 @@ let
           };
         };
 
+      ronTupleEnumOf =
+        elemType: variants: size:
+        let
+          inherit (lib.lists) unique;
+          show = v: ''"${v}"'';
+        in
+        mkOptionType rec {
+          name = "ronTupleEnumOf";
+          description =
+            if variants == [ ] then
+              "impossible (empty RON tuple enum with ${toString size} ${
+                optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+              } values)"
+            else if builtins.length variants == 1 then
+              "RON tuple enum variant ${show (builtins.head variants)} with ${toString size} ${
+                optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+              } values (singular enum)"
+            else
+              "RON tuple enum with ${toString size} ${
+                optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+              } values, one of ${concatMapStringsSep ", " show variants}";
+          descriptionClass = if builtins.length variants < 2 then "noun" else "conjunction";
+          check =
+            x:
+            isType "ron-enum" x
+            && isString x.variant
+            && x ? values
+            && isList x.values
+            && builtins.length x.values == size
+            && elem x.variant variants;
+          merge = {
+            __functor =
+              self: loc: defs:
+              (self.v2 { inherit loc defs; }).value;
+            v2 =
+              { loc, defs }:
+              let
+                headError = checkDefsForError check loc defs;
+                # Merge each value in the tuple through elemType
+                evals = filter (x: x.optionalValue ? value) (
+                  concatLists (
+                    imap1 (
+                      n: def:
+                      imap1 (
+                        m: def':
+                        mergeDefinitions (loc ++ [ "[definition ${toString n}-entry ${toString m}]" ]) elemType [
+                          {
+                            inherit (def) file;
+                            value = def';
+                          }
+                        ]
+                      ) def.value.values
+                    ) defs
+                  )
+                );
+                # Reconstruct the enum value with merged values
+                mergedValues = map (x: x.optionalValue.value or x.mergedValue) evals;
+                firstDef = builtins.head defs;
+              in
+              {
+                inherit headError;
+                value = {
+                  _type = "ron-enum";
+                  variant = firstDef.value.variant;
+                  values = mergedValues;
+                };
+                valueMeta.values = map (v: v.checkedAndMerged.valueMeta) evals;
+              };
+          };
+          getSubOptions =
+            prefix:
+            elemType.getSubOptions (
+              prefix
+              ++ [
+                "values"
+                "*"
+              ]
+            );
+          inherit (elemType) getSubModules;
+          substSubModules = m: ronTupleEnumOf (elemType.substSubModules m) variants size;
+          functor = defaultFunctor name // {
+            payload = {
+              inherit elemType variants size;
+            };
+            type = payload: types.ronTupleEnumOf payload.elemType payload.variants payload.size;
+            binOp =
+              a: b:
+              let
+                mergedElemType = a.elemType.typeMerge b.elemType.functor;
+              in
+              if a.size == b.size && mergedElemType != null then
+                {
+                  elemType = mergedElemType;
+                  variants = unique (a.variants ++ b.variants);
+                  inherit (a) size;
+                }
+              else
+                null;
+          };
+          nestedTypes.elemType = elemType;
+        };
+
       uniq = unique { message = ""; };
 
       unique =
