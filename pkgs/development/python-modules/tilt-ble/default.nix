@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "tilt-ble";
-  version = "0.3.1";
+  version = "1.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "tilt-ble";
     tag = "v${version}";
-    hash = "sha256-sT8tMsA9w3HwM/wPsqKTgHWvhf83zxQ5P/bQHlqolH4=";
+    hash = "sha256-u40xpjwxOdM7FUIPQG9g8q86cZHv21HCxbtnvAAgfgU=";
   };
 
   build-system = [ poetry-core ];
