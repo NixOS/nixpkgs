@@ -239,6 +239,14 @@ merging is handled.
 :   A string wrapped using `lib.mkLuaInline`. Allows embedding lua expressions
     inline within generated lua. Multiple definitions cannot be merged.
 
+`types.rawRon`
+
+:   A RON (Rusty Object Notation) raw value. This type accepts attribute sets
+    with `_type = "ron-raw"` and a `value` field containing a string that will be
+    injected directly as raw RON syntax. Use `lib.ron.mkRaw` to create values of
+    this type. Useful for injecting complex RON expressions or features not natively
+    supported by the RON builder. Multiple definitions cannot be merged.
+
 `types.ronChar`
 
 :   A RON (Rusty Object Notation) character value. This type accepts attribute sets
