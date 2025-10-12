@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
   cryptography,
   uv-build,
 }:
@@ -9,14 +8,10 @@
 buildPythonPackage rec {
   pname = "cryptography-vectors";
   # The test vectors must have the same version as the cryptography package
-  inherit (cryptography) version;
+  inherit (cryptography) version src;
   pyproject = true;
 
-  src = fetchPypi {
-    pname = "cryptography_vectors";
-    inherit version;
-    hash = "sha256-B40Sh84rRdJGtCxs+545Dh96+hdsGZsL1t6p1s6Jou4=";
-  };
+  sourceRoot = "${src.name}/vectors";
 
   build-system = [ uv-build ];
 
