@@ -446,7 +446,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
-    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
@@ -599,6 +598,9 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withVConsole [
     (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
     (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+  ]
+  ++ lib.optionals withKmod [
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
   ++ lib.optionals (withShellCompletions == false) [
     (lib.mesonOption "bashcompletiondir" "no")
