@@ -239,6 +239,12 @@ merging is handled.
 :   A string wrapped using `lib.mkLuaInline`. Allows embedding lua expressions
     inline within generated lua. Multiple definitions cannot be merged.
 
+`types.ronChar`
+
+:   A RON (Rusty Object Notation) character value. This type accepts attribute sets
+    with `_type = "ron-char"` and a `value` field containing a single character string.
+    Use `lib.ron.mkChar` to create values of this type. Multiple definitions cannot be merged.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
