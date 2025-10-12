@@ -14891,10 +14891,6 @@ with pkgs;
     libcpr = libcpr_1_10_5;
   };
 
-  tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
-    ruby = ruby_3_1;
-  };
-
   biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {
     webkitgtk = webkitgtk_6_0;
   };
