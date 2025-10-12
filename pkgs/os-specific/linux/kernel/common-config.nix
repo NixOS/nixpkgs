@@ -714,8 +714,8 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
-      BCACHEFS_QUOTA = whenBetween "6.7" "6.18" (option yes);
-      BCACHEFS_POSIX_ACL = whenBetween "6.7" "6.18" (option yes);
+      # Provided by external module
+      BCACHEFS_FS = whenBetween "6.7" "6.18" no;
 
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
