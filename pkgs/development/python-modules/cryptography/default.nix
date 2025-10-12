@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "46.0.1"; # Also update the hash in vectors.nix
+  version = "46.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "pyca";
     repo = "cryptography";
     tag = version;
-    hash = "sha256-saTHFKSJa9gjtEp6uGAHsvzFE3yPeck1WGdIE1+9kgs=";
+    hash = "sha256-gsEHKEYiMw2eliEpxwzFGDetOp77PivlMoBD3HBbbFA=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -83,7 +83,7 @@ buildPythonPackage rec {
     vectors = cryptography-vectors;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Package which provides cryptographic recipes and primitives";
     longDescription = ''
       Cryptography includes both high level recipes and low level interfaces to
@@ -91,13 +91,12 @@ buildPythonPackage rec {
       digests, and key derivation functions.
     '';
     homepage = "https://github.com/pyca/cryptography";
-    changelog =
-      "https://cryptography.io/en/latest/changelog/#v" + replaceStrings [ "." ] [ "-" ] version;
-    license = with licenses; [
+    changelog = "https://cryptography.io/en/latest/changelog/#v" + lib.replaceString "." "-" version;
+    license = with lib.licenses; [
       asl20
       bsd3
       psfl
     ];
-    maintainers = with maintainers; [ mdaniels5757 ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }
