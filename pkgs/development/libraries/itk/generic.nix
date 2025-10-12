@@ -183,6 +183,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    broken = true;
     description = "Insight Segmentation and Registration Toolkit";
     homepage = "https://www.itk.org";
     license = lib.licenses.asl20;

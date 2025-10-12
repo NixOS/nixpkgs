@@ -31,6 +31,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) quorum; };
 
   meta = with lib; {
+    broken = true;
     description = "Permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://consensys.net/quorum/";
     license = licenses.lgpl3;

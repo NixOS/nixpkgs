@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
   noAuditTmpdir = true;
 
   meta = {
+    broken = true;
     description = "TT-NN operator library, and TT-Metalium low level kernel programming model";
     homepage = "https://github.com/tenstorrent/tt-metal";
     maintainers = with lib.maintainers; [ RossComputerGuy ];

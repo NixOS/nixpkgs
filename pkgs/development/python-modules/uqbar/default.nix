@@ -71,6 +71,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "uqbar" ];
 
   meta = with lib; {
+    broken = true;
     description = "Tools for creating Sphinx and Graphviz documentation";
     homepage = "https://github.com/josiah-wolf-oberholtzer/uqbar";
     changelog = "https://github.com/josiah-wolf-oberholtzer/uqbar/releases/tag/v${version}";

@@ -67,6 +67,7 @@ stdenv.mkDerivation {
   ];
 
   meta = {
+    broken = true;
     homepage = "https://github.com/BioMedIA/MIRTK";
     description = "Medical image registration library and tools";
     mainProgram = "mirtk";

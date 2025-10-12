@@ -57,6 +57,7 @@ stdenv.mkDerivation {
   passthru.updateScript = ./update.py;
 
   meta = with lib; {
+    broken = true;
     homepage = "https://chromium.googlesource.com/chromiumos/platform2/+/refs/heads/main/vm_tools/sommelier/";
     description = "Nested Wayland compositor with support for X11 forwarding";
     maintainers = with maintainers; [ qyliss ];
