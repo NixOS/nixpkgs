@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     makeWrapper $out/lib/slack/slack $out/bin/slack \
       --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \
