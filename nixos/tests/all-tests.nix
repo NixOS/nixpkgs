@@ -843,6 +843,7 @@ in
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
+  local-content-share = runTest ./local-content-share.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;

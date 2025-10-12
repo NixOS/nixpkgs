@@ -868,6 +868,7 @@
   ./services/misc/lifecycled.nix
   ./services/misc/litellm.nix
   ./services/misc/llama-cpp.nix
+  ./services/misc/local-content-share.nix
   ./services/misc/logkeys.nix
   ./services/misc/mame.nix
   ./services/misc/mbpfan.nix
