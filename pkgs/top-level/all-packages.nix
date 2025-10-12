@@ -8347,7 +8347,10 @@ with pkgs;
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
   };
 
-  inherit (callPackages ../development/libraries/openssl { })
+  inherit
+    (callPackages ../development/libraries/openssl {
+      perl = (if stdenv.targetPlatform.isMusl then pkgsMusl.perl else perl);
+    })
     openssl_1_1
     openssl_3
     openssl_3_6
