@@ -10352,6 +10352,11 @@ with pkgs;
     withQrencode = false;
     withLibarchive = false;
     withVConsole = false;
+    # withKmod = false; # breaks udevCheckHook of bcache-tools
+    withFirstboot = false;
+    withKexectools = false;
+    withLibseccomp = false;
+    withNspawn = false;
   };
   systemdLibs = systemdMinimal.override {
     pname = "systemd-minimal-libs";
