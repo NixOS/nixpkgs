@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "variant-lite";
-  version = "2.0.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "martinmoene";
     repo = "variant-lite";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zLyzNzeD0C4e7CYqCCsPzkqa2cH5pSbL9vNVIxdkEfc=";
+    hash = "sha256-+1eSnn7eN8iN6vZg3Qz2m7u1ukWimhUQ+WHXQL4rQco=";
   };
 
   nativeBuildInputs = [

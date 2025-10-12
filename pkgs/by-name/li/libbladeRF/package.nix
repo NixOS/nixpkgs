@@ -10,25 +10,21 @@
   ncurses,
   tecla,
   libusb1,
+  curl,
   udev,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libbladeRF";
-  version = "2.5.0";
+  version = "2025.10";
 
   src = fetchFromGitHub {
     owner = "Nuand";
     repo = "bladeRF";
-    tag = "libbladeRF_v${version}";
-    hash = "sha256-H40w5YKp6M3QLrsPhILEnJiWutCYLtbgC4a63sV397Q=";
+    tag = version;
+    hash = "sha256-gp+OnAlECGZs4+JEWNX5Gt7LYdTFJUItpmDdJgeoJO4=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # https://github.com/Nuand/bladeRF/issues/994
-    ./gcc-14-calloc-fixes.diff
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -41,9 +37,10 @@ stdenv.mkDerivation rec {
   buildInputs = [
     tecla
     libusb1
+    curl
+    ncurses
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ ncurses ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ udev ];
 
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";

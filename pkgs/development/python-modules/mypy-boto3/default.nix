@@ -797,8 +797,8 @@ in
       "sha256-pfIQS9as02Gm4mHUc3q3gMKRHz+wT/lRKHWUc2ugt1s=";
 
   mypy-boto3-license-manager-user-subscriptions =
-    buildMypyBoto3Package "license-manager-user-subscriptions" "1.40.35"
-      "sha256-SvXSGmSDMCmseJkD7QYE0SgeTO/AWKK/ROT32KP1RsE=";
+    buildMypyBoto3Package "license-manager-user-subscriptions" "1.40.48"
+      "sha256-hp2jCL1IkXluhEyexdawQvwLfk+9pUVjKlnE9dkVnxc=";
 
   mypy-boto3-lightsail =
     buildMypyBoto3Package "lightsail" "1.40.39"
@@ -993,8 +993,8 @@ in
       "sha256-XS7wWZReJC9tVuVCZg91tDj1iWCuUfKUup8Jf4oxS8g=";
 
   mypy-boto3-outposts =
-    buildMypyBoto3Package "outposts" "1.40.0"
-      "sha256-iZ8rz+esBOvQSDwfbF/eaGUWt5Dvfh+lFvCn7XXK4BY=";
+    buildMypyBoto3Package "outposts" "1.40.48"
+      "sha256-9N7I4XQQP/vUvGvMYT8SnYRJFWEKm7YMjtTgkTMnY8I=";
 
   mypy-boto3-panorama =
     buildMypyBoto3Package "panorama" "1.40.15"
@@ -1073,8 +1073,8 @@ in
       "sha256-g5Mh+Uz/YrF4v7GV3kPUarzTr0miTUioaMaxwYUX4p0=";
 
   mypy-boto3-quicksight =
-    buildMypyBoto3Package "quicksight" "1.40.46"
-      "sha256-Hx/CzF02rKQeNgZIz0A/TT4+H+BEP4DXTGE2FuAHZcw=";
+    buildMypyBoto3Package "quicksight" "1.40.49"
+      "sha256-skz5HFlXRIhqefMOSN8lvhmAuu+COBC/hl8YGJawXSI=";
 
   mypy-boto3-ram =
     buildMypyBoto3Package "ram" "1.40.18"
@@ -1233,8 +1233,8 @@ in
       "sha256-1YK+zUZhTf37giAyXYuZDJ8Gmg4LUZO1FwaAGViIXos=";
 
   mypy-boto3-service-quotas =
-    buildMypyBoto3Package "service-quotas" "1.40.0"
-      "sha256-ZQlzItKRMNpMjBDsMdYXeZxc53GA4ODsYXT8Q/RfR7U=";
+    buildMypyBoto3Package "service-quotas" "1.40.48"
+      "sha256-9lvZvist3G5plkmsvZ4iHM2iBim8V3BmCYTbk6xDrmc=";
 
   mypy-boto3-servicecatalog =
     buildMypyBoto3Package "servicecatalog" "1.40.0"
@@ -1397,8 +1397,8 @@ in
       "sha256-r1Z15ZcuHUFEr7yUhnksIfPtxMlCrCiQw4TfRFfSW/U=";
 
   mypy-boto3-wafv2 =
-    buildMypyBoto3Package "wafv2" "1.40.16"
-      "sha256-pog2ynsKrud7qCCW19DbXVNbyZBqvqnEecdxpxkuNEY=";
+    buildMypyBoto3Package "wafv2" "1.40.49"
+      "sha256-OM6g8hX/ZPIg9cEMmCqEJfCXU/tsNUN2deqEm6HoFd4=";
 
   mypy-boto3-wellarchitected =
     buildMypyBoto3Package "wellarchitected" "1.40.17"

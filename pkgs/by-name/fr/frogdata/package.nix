@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "frogdata";
-  version = "0.13";
+  version = "0.22";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "frogdata";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-f3rPjc8iYPVJsL6pez2WBw+rCxy6xm3DzOi8S+PDkvg=";
+    hash = "sha256-N5AA3y18nPpqrnkDpnTweucz6l1aabQyosX4OwPBUzo=";
   };
 
   nativeBuildInputs = [

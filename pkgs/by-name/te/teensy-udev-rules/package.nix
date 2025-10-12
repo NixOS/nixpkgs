@@ -34,6 +34,5 @@ stdenv.mkDerivation {
     '';
     platforms = platforms.linux;
     license = licenses.unfree; # No license specified.
-    maintainers = with maintainers; [ aidalgol ];
   };
 }

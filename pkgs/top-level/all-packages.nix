@@ -2225,8 +2225,6 @@ with pkgs;
 
   psrecord = python3Packages.callPackage ../tools/misc/psrecord { };
 
-  rare = python3Packages.callPackage ../games/rare { };
-
   renpy = callPackage ../by-name/re/renpy/package.nix { python3 = python312; };
 
   rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
@@ -2703,9 +2701,7 @@ with pkgs;
 
   emborg = python3Packages.callPackage ../development/python-modules/emborg { };
 
-  encfs = callPackage ../tools/filesystems/encfs {
-    tinyxml2 = tinyxml-2;
-  };
+  encfs = callPackage ../tools/filesystems/encfs { };
 
   ethercalc = callPackage ../servers/web-apps/ethercalc { };
 
@@ -3554,9 +3550,11 @@ with pkgs;
 
   inherit (callPackages ../servers/nextcloud { })
     nextcloud31
+    nextcloud32
     ;
 
   nextcloud31Packages = callPackage ../servers/nextcloud/packages { ncVersion = "31"; };
+  nextcloud32Packages = callPackage ../servers/nextcloud/packages { ncVersion = "32"; };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
 
@@ -5863,8 +5861,6 @@ with pkgs;
 
   ### End of CuboCore
 
-  obb = callPackage ../development/interpreters/clojure/obb.nix { };
-
   octave = callPackage ../development/interpreters/octave { };
 
   octaveFull = octave.override {
@@ -6812,6 +6808,8 @@ with pkgs;
 
   premake = premake4;
 
+  pycobertura = with python3Packages; toPythonApplication pycobertura;
+
   pycritty = with python3Packages; toPythonApplication pycritty;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
@@ -6898,8 +6896,6 @@ with pkgs;
   slurm = callPackage ../by-name/sl/slurm/package.nix {
     nvml = cudaPackages.cuda_nvml_dev;
   };
-
-  snowman = qt5.callPackage ../development/tools/analysis/snowman { };
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 
@@ -8735,8 +8731,6 @@ with pkgs;
 
   structuresynth = libsForQt5.callPackage ../development/libraries/structuresynth { };
 
-  svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
-
   szurubooru = callPackage ../servers/web-apps/szurubooru { };
 
   tclap = tclap_1_2;
@@ -8745,9 +8739,7 @@ with pkgs;
 
   tclap_1_4 = callPackage ../development/libraries/tclap/1.4.nix { };
 
-  tinyxml = tinyxml2;
-
-  tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
+  tinyxml = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
 
   tk = tk-8_6;
 
@@ -11795,9 +11787,6 @@ with pkgs;
     withFonts = true;
   };
 
-  libutp = callPackage ../applications/networking/p2p/libutp { };
-  libutp_3_4 = callPackage ../applications/networking/p2p/libutp/3.4.nix { };
-
   lmms = libsForQt5.callPackage ../applications/audio/lmms {
     lame = null;
     libsoundio = null;
@@ -11966,8 +11955,6 @@ with pkgs;
   rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
     x11Support = true;
   };
-
-  rquickshare-legacy = rquickshare.override { app-type = "legacy"; };
 
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
@@ -12224,8 +12211,6 @@ with pkgs;
   };
 
   pineapple-pictures = qt6Packages.callPackage ../applications/graphics/pineapple-pictures { };
-
-  plexamp = callPackage ../applications/audio/plexamp { };
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
 
@@ -13259,8 +13244,6 @@ with pkgs;
 
   ### GAMES
 
-  _90secondportraits = callPackage ../games/90secondportraits { love = love_0_10; };
-
   inherit (callPackages ../games/fteqw { })
     fteqw
     fteqw-dedicated
@@ -13296,9 +13279,6 @@ with pkgs;
   pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
   qgo = libsForQt5.callPackage ../games/qgo { };
-
-  amoeba = callPackage ../games/amoeba { };
-  amoeba-data = callPackage ../games/amoeba/data.nix { };
 
   anki = callPackage ../games/anki {
     protobuf = protobuf_31;
@@ -13366,10 +13346,6 @@ with pkgs;
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
 
-  cutechess = qt5.callPackage ../games/cutechess { };
-
-  cutemaze = qt6Packages.callPackage ../games/cutemaze { };
-
   ddnet-server = ddnet.override { buildClient = false; };
 
   duckmarines = callPackage ../games/duckmarines { love = love_0_10; };
@@ -13391,9 +13367,6 @@ with pkgs;
     d1x-rebirth-full
     d2x-rebirth-full
     ;
-
-  fallout-ce = callPackage ../games/fallout-ce/fallout-ce.nix { };
-  fallout2-ce = callPackage ../games/fallout-ce/fallout2-ce.nix { };
 
   fltrator = callPackage ../games/fltrator {
     fltk = fltk-minimal;
@@ -13431,7 +13404,7 @@ with pkgs;
 
   flightgear = libsForQt5.callPackage ../games/flightgear { };
 
-  freeciv = callPackage ../games/freeciv {
+  freeciv = callPackage ../by-name/fr/freeciv/package.nix {
     sdl2Client = false;
     gtkClient = true;
     qtClient = false;
@@ -13499,13 +13472,6 @@ with pkgs;
 
   legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
 
-  lincity = callPackage ../games/lincity { };
-
-  lincity_ng = callPackage ../games/lincity/ng.nix {
-    # https://github.com/lincity-ng/lincity-ng/issues/25
-    physfs = physfs_2;
-  };
-
   liquidwar = callPackage ../games/liquidwar {
     guile = guile_2_0;
   };
@@ -13527,8 +13493,6 @@ with pkgs;
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
-  mrrescue = callPackage ../games/mrrescue { love = love_0_10; };
-
   mudlet = libsForQt5.callPackage ../games/mudlet {
     lua = lua5_1;
   };
@@ -13536,15 +13500,6 @@ with pkgs;
   blightmud = callPackage ../games/blightmud { };
 
   blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
-
-  nethack = callPackage ../games/nethack { };
-
-  nethack-qt = callPackage ../games/nethack {
-    qtMode = true;
-    stdenv = gccStdenv;
-  };
-
-  nethack-x11 = callPackage ../games/nethack { x11Mode = true; };
 
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
@@ -13582,8 +13537,6 @@ with pkgs;
     # https://github.com/OpenXRay/xray-16/issues/1224
     stdenv = gccStdenv;
   };
-
-  orthorobot = callPackage ../games/orthorobot { love = love_0_10; };
 
   papermcServers = callPackages ../games/papermc { };
 
@@ -13636,9 +13589,7 @@ with pkgs;
     lure-of-the-temptress
     ;
 
-  sgt-puzzles = callPackage ../games/sgt-puzzles { };
-
-  sgt-puzzles-mobile = callPackage ../games/sgt-puzzles {
+  sgt-puzzles-mobile = callPackage ../by-name/sg/sgt-puzzles/package.nix {
     isMobile = true;
   };
 
@@ -13736,10 +13687,6 @@ with pkgs;
   xonotic-sdl-unwrapped = xonotic-sdl.xonotic-unwrapped;
   xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
   xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
-
-  xpilot-ng = callPackage ../games/xpilot { };
-  bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix { };
-  bloodspilot-client = callPackage ../games/xpilot/bloodspilot-client.nix { };
 
   inherit
     (callPackage ../games/quake2/yquake2 {

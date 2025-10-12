@@ -505,10 +505,10 @@
    "module": "sha256-2jn02k/u133+ELmAnVyysvO0Ra6nG2nhUjKkJpiThzs=",
    "pom": "sha256-chJrr7gKEse1WFJNCRkj5pYSODxHQay34Aw1ybBUazQ="
   },
-  "io/sentry#sentry/8.20.0": {
-   "jar": "sha256-G5KZBtERVbA9gwY1XrEGlWL2elwljF0R0h0vnT1GMbQ=",
-   "module": "sha256-b0XfKu8KxMoppcQye5sR6eCsVc1Neh3t52K5PtrLFe4=",
-   "pom": "sha256-Qtrqy+K+8NqVqkWbSLhZ+7nYfbYMswEgWCmRP4VJwkA="
+  "io/sentry#sentry/8.22.0": {
+   "jar": "sha256-7QJzzosBRsvyeZkmkyqLWXiAlUkABQcC646p8eM6GOE=",
+   "module": "sha256-5ZOJtyrsJgmO9B7sNS7xLKh945o/o3sWdyKisjW5Zr8=",
+   "pom": "sha256-9wniVOh/5PhDESS1X9IEwhgiBqrl5PVCFINpVIr9HBE="
   },
   "jakarta/json/bind#jakarta.json.bind-api/2.0.0": {
    "jar": "sha256-peYGtYiLQStIkHrWiLNN/k4wroGJxvJ8wEkbjzwDYoc=",

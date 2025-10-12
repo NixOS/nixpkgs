@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # On Darwin only, Swift uses arm64 as cpu arch.
     substituteInPlace cmake/modules/SwiftSupport.cmake \
-      --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
+      --replace-fail '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
   '';
 
   preConfigure = ''

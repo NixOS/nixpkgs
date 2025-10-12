@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "msrplib";
-  version = "0.20.1-unstable-2021-06-01";
+  version = "0.21.0-unstable-2021-06-01";
   pyproject = true;
 
   src = fetchFromGitHub {

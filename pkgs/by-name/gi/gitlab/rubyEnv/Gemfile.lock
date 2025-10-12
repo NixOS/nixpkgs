@@ -739,7 +739,7 @@ GEM
     gitlab-experiment (0.9.1)
       activesupport (>= 3.0)
       request_store (>= 1.0)
-    gitlab-fog-azure-rm (2.3.0)
+    gitlab-fog-azure-rm (2.4.0)
       faraday (~> 2.0)
       faraday-follow_redirects (~> 0.3.0)
       faraday-net_http_persistent (~> 2.0)
@@ -2170,7 +2170,7 @@ DEPENDENCIES
   gitlab-dangerfiles (~> 4.10.0)
   gitlab-duo-workflow-service-client (~> 0.3)!
   gitlab-experiment (~> 0.9.1)
-  gitlab-fog-azure-rm (~> 2.3.0)
+  gitlab-fog-azure-rm (~> 2.4.0)
   gitlab-glfm-markdown (~> 0.0.33)
   gitlab-housekeeper!
   gitlab-http!

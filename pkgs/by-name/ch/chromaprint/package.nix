@@ -53,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_EXAMPLES" withExamples)
     (lib.cmakeBool "BUILD_TOOLS" withTools)
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    # special-cased to avoid a mass-rebuild: remove from `lib.optionals` as part of next update
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   passthru = {

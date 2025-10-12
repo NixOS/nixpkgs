@@ -79,7 +79,7 @@
   withGTK3 ? withPgtk && !noGui,
   withGlibNetworking ? withPgtk || withGTK3 || (withX && withXwidgets),
   withGpm ? stdenv.hostPlatform.isLinux,
-  # https://github.com/emacs-mirror/emacs/blob/master/etc/NEWS.27#L140-L142
+  # https://github.com/emacs-mirror/emacs/blob/emacs-27.2/etc/NEWS#L118-L120
   withImageMagick ? false,
   # Emacs 30+ has native JSON support
   withJansson ? lib.versionOlder version "30",

@@ -55,7 +55,6 @@ buildNpmPackage (finalAttrs: {
     homepage = "https://github.com/microsoft/vscode-vsce";
     description = "Visual Studio Code Extension Manager";
     maintainers = with lib.maintainers; [
-      aaronjheng
       xiaoxiangmoe
     ];
     license = lib.licenses.mit;

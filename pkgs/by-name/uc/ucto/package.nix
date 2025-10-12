@@ -8,9 +8,10 @@
   pkg-config,
   autoconf-archive,
   libxml2,
-  icu60,
+  icu,
   bzip2,
   libtar,
+  libexttextcat,
   ticcutils,
   libfolia,
   uctodata,
@@ -19,13 +20,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ucto";
-  version = "0.9.6";
+  version = "0.35";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "ucto";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DFQ4ePE3n3zg0mrqUNHzE3Hi81n1IurYjhh6YVAghEE=";
+    hash = "sha256-DaLoq+FBNZG4J+h9fRh9HHl2TKVXUTrt9RAzwmv6lIc=";
   };
 
   nativeBuildInputs = [
@@ -36,13 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     bzip2
     libtool
     autoconf-archive
-    icu60
+    icu
     libtar
     libxml2
+    libexttextcat
     ticcutils
     libfolia
     uctodata
-    # TODO textcat from libreoffice? Pulls in X11 dependencies?
   ];
 
   postInstall = ''

@@ -239,16 +239,15 @@ in
     ```
   */
   listFilesRecursive =
-    dir:
-    lib.flatten (
-      lib.mapAttrsToList (
-        name: type:
-        if type == "directory" then
-          lib.filesystem.listFilesRecursive (dir + "/${name}")
-        else
-          dir + "/${name}"
-      ) (builtins.readDir dir)
-    );
+    let
+      # We only flatten at the very end, as flatten is recursive.
+      internalFunc =
+        dir:
+        (lib.mapAttrsToList (
+          name: type: if type == "directory" then internalFunc (dir + "/${name}") else dir + "/${name}"
+        ) (builtins.readDir dir));
+    in
+    dir: lib.flatten (internalFunc dir);
 
   /**
     Transform a directory tree containing package files suitable for

@@ -1,0 +1,47 @@
+diff --git a/projects/hipblaslt/tensilelite/rocisa/rocisa/include/format.hpp b/projects/hipblaslt/tensilelite/rocisa/rocisa/include/format.hpp
+index b7dcb6f59a..b0625ba769 100644
+--- a/tensilelite/rocisa/rocisa/include/format.hpp
++++ b/tensilelite/rocisa/rocisa/include/format.hpp
+@@ -8,11 +8,13 @@ namespace rocisa
+     // Text format functions
+     inline std::string slash(const std::string& comment)
+     {
++        return "";
+         return "// " + comment + "\n";
+     }
+ 
+     inline std::string slash50(const std::string& comment)
+     {
++        return "";
+         std::ostringstream oss;
+         oss << std::setw(50) << ""
+             << " // " << comment << "\n";
+@@ -21,16 +23,19 @@ namespace rocisa
+ 
+     inline std::string block(const std::string& comment)
+     {
++        return "";
+         return "/* " + comment + " */\n";
+     }
+ 
+     inline std::string blockNewLine(const std::string& comment)
+     {
++        return "";
+         return "\n/* " + comment + " */\n";
+     }
+ 
+     inline std::string block3Line(const std::string& comment)
+     {
++        return "";
+         std::ostringstream oss;
+         oss << "\n/******************************************/\n";
+         std::istringstream iss(comment);
+@@ -52,7 +57,7 @@ namespace rocisa
+         {
+             formattedStr = "\"" + formattedStr + "\\n\\t\"";
+         }
+-        if(!comment.empty())
++        if(false)
+         {
+             std::string buffer = formattedStr
+                                  + std::string(std::max(0, 50 - int(formattedStr.length())), ' ')

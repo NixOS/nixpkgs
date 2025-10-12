@@ -39,8 +39,7 @@
 let
   llvmPackages = llvmPackages_20;
 
-  stdenv =
-    if llvmPackages.stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else llvmPackages.stdenv;
+  stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
     isLinux

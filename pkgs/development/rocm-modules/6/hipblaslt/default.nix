@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  writableTmpDirAsHomeHook,
   cmake,
   rocm-cmake,
   rocm-smi,
@@ -11,6 +10,7 @@
   gfortran,
   gtest,
   boost,
+  llvm,
   msgpack-cxx,
   amd-blis,
   libxml2,
@@ -111,6 +111,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Support loading zstd compressed .dat files, required to keep output under
     # hydra size limit
     ./messagepack-compression-support.patch
+    # excessive comments are written to temporary asm files in build dir
+    # TODO: report upstream, find a better solution
+    ./reduce-comment-spam.patch
   ];
 
   postPatch = ''
@@ -136,6 +139,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm.llvm
     clr
     rocm-cmake
     hipblas-common

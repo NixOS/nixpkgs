@@ -19,7 +19,6 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
-  python3,
   testers,
   nixosTests,
   installShellFiles,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.31.6";
+  version = "1.31.7";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9oiXMMrMMfu9VR0zSFM4yCAQaBgThDdEILSrxH9a84k=";
+    hash = "sha256-gKtOyaDN9hQo45Rk9hMabKRefOG+ooaCrtLBCPx0fT8=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-E2d9uAaja6OsCMhmWFyqIVbGdad5fJ+tw3S7+X7YzpM=";
+    hash = "sha256-INnv9kRgM8RRMwBnC6Vwj9S5FfI5gMscU//aNzHF+8w=";
   };
 
   outputs = [

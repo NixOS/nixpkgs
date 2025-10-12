@@ -108,6 +108,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DENABLE_DESKTOP_INTEGRATION=ON"
     "-DENABLE_UPDATER=OFF"
     "-DUSE_SHARED_CMARK=ON"

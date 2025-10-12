@@ -3,7 +3,6 @@
   stdenv,
   python,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   fetchpatch,
   symlinkJoin,
@@ -290,6 +289,17 @@ buildPythonPackage rec {
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
+    # TODO: Remove the below patches when included in vLLM release
+    (fetchpatch {
+      url = "https://github.com/vllm-project/vllm/commit/9705fba7b727a3b9c275b012258608531e2223d1.patch";
+      hash = "sha256-DxRGLiwkegMlMjqFmFc0igpaVv06/Y2WjL+ISoIOET4=";
+    })
+    # patch above is previous commit needed to apply patch below
+    # oneDNN / CPU fix from https://github.com/vllm-project/vllm/pull/26401
+    (fetchpatch {
+      url = "https://github.com/vllm-project/vllm/commit/d7be1f2a480bdc62a6a1ec0126a401e3d42985fe.patch";
+      hash = "sha256-Zi1k5wiOPjsbWHFKpcLq9Ns43wIP37Mbvesi5K80zaQ=";
+    })
   ];
 
   postPatch = ''
@@ -441,9 +451,6 @@ buildPythonPackage rec {
     (lib.cmakeFeature "CAFFE2_USE_CUDNN" "ON")
     (lib.cmakeFeature "CAFFE2_USE_CUFILE" "ON")
     (lib.cmakeFeature "CUTLASS_ENABLE_CUBLAS" "ON")
-  ]
-  ++ lib.optionals cpuSupport [
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_ONEDNN" "${lib.getDev oneDNN}")
   ];
 
   env =
@@ -459,6 +466,7 @@ buildPythonPackage rec {
     }
     // lib.optionalAttrs cpuSupport {
       VLLM_TARGET_DEVICE = "cpu";
+      FETCHCONTENT_SOURCE_DIR_ONEDNN = "${oneDNN.src}";
     };
 
   preConfigure = ''
@@ -488,11 +496,12 @@ buildPythonPackage rec {
       lach
       daniel-fahey
     ];
-    # Python 3.12 vLLM v0.10.2+CPU blake3 1.0.7 incompatibility
-    # discovered during https://github.com/NixOS/nixpkgs/pull/447722
-    # reported upstream in https://github.com/vllm-project/vllm/issues/26229
-    broken = (cpuSupport && pythonOlder "3.13");
     badPlatforms = [
+      # CMake Error at cmake/cpu_extension.cmake:188 (message):
+      #   vLLM CPU backend requires AVX512, AVX2, Power9+ ISA, S390X ISA, ARMv8 or
+      #   RISC-V support.
+      "aarch64-darwin"
+
       # CMake Error at cmake/cpu_extension.cmake:78 (find_isa):
       # find_isa Function invoked with incorrect arguments for function named:
       # find_isa

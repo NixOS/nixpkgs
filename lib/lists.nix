@@ -1814,7 +1814,7 @@ rec {
     => [ "13" "14" "23" "24" ]
     ```
 
-    The following function call is equivalent to the one deprecated above:
+    If you have an attrset already, consider mapCartesianProduct:
 
     ```nix
     mapCartesianProduct (x: "${toString x.a}${toString x.b}") { a = [1 2]; b = [3 4]; }
@@ -1822,19 +1822,7 @@ rec {
     ```
     :::
   */
-  crossLists = warn ''
-    lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
-
-    For example, the following function call:
-
-    nix-repl> lib.crossLists (x: y: x+y) [[1 2] [3 4]]
-    [ 4 5 5 6 ]
-
-    Can now be replaced by the following one:
-
-    nix-repl> lib.mapCartesianProduct ({x,y}: x+y) { x = [1 2]; y = [3 4]; }
-    [ 4 5 5 6 ]
-  '' (f: foldl (fs: args: concatMap (f: map f args) fs) [ f ]);
+  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [ f ];
 
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.

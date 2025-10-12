@@ -186,6 +186,9 @@ in
   acme = import ./acme/default.nix { inherit runTest; };
   acme-dns = runTest ./acme-dns.nix;
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
+  activation-bashless = runTest ./activation/bashless.nix;
+  activation-bashless-closure = pkgs.callPackage ./activation/bashless-closure.nix { };
+  activation-bashless-image = runTest ./activation/bashless-image.nix;
   activation-etc-overlay-immutable = runTest ./activation/etc-overlay-immutable.nix;
   activation-etc-overlay-mutable = runTest ./activation/etc-overlay-mutable.nix;
   activation-lib = pkgs.callPackage ../modules/system/activation/lib/test.nix { };
@@ -840,6 +843,7 @@ in
   lk-jwt-service = runTest ./matrix/lk-jwt-service.nix;
   llama-swap = runTest ./web-servers/llama-swap.nix;
   lldap = runTest ./lldap.nix;
+  local-content-share = runTest ./local-content-share.nix;
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
@@ -1159,7 +1163,6 @@ in
   peerflix = runTest ./peerflix.nix;
   peering-manager = runTest ./web-apps/peering-manager.nix;
   peertube = handleTestOn [ "x86_64-linux" ] ./web-apps/peertube.nix { };
-  peroxide = runTest ./peroxide.nix;
   pgadmin4 = runTest ./pgadmin4.nix;
   pgbackrest = import ./pgbackrest { inherit runTest; };
   pgbouncer = runTest ./pgbouncer.nix;
@@ -1278,6 +1281,7 @@ in
   radarr = runTest ./radarr.nix;
   radicale = runTest ./radicale.nix;
   radicle = runTest ./radicle.nix;
+  radicle-ci-broker = runTest ./radicle-ci-broker.nix;
   ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
@@ -1483,7 +1487,6 @@ in
   systemd-sysusers-immutable = runTest ./systemd-sysusers-immutable.nix;
   systemd-sysusers-mutable = runTest ./systemd-sysusers-mutable.nix;
   systemd-sysusers-password-option-override-ordering = runTest ./systemd-sysusers-password-option-override-ordering.nix;
-  systemd-timesyncd = runTest ./systemd-timesyncd.nix;
   systemd-timesyncd-nscd-dnssec = runTest ./systemd-timesyncd-nscd-dnssec.nix;
   systemd-user-linger = runTest ./systemd-user-linger.nix;
   systemd-user-tmpfiles-rules = runTest ./systemd-user-tmpfiles-rules.nix;

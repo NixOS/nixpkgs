@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   runCommand,
+  stdenv,
+  clang_20,
   buildNpmPackage,
   docify,
   testers,
@@ -37,7 +39,8 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     docify
     pkg-config
-  ];
+  ]
+  ++ lib.optional stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
   buildInputs = [ libsecret ];
 

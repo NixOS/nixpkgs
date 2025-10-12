@@ -1316,7 +1316,9 @@ let
 
         monolith = callPackage ../development/ocaml-modules/monolith { };
 
-        mopsa = callPackage ../development/ocaml-modules/mopsa { };
+        mopsa = callPackage ../development/ocaml-modules/mopsa {
+          inherit (pkgs.llvmPackages_19) clang libclang libllvm;
+        };
 
         morbig = callPackage ../development/ocaml-modules/morbig { };
 

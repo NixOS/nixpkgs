@@ -11,43 +11,30 @@
   libX11,
   glslang,
   unordered_dense,
-  llvmPackages,
   versionCheckHook,
   gitUpdater,
 
   # Required for compiling to SPIR-V or GLSL
   withGlslang ? true,
-  # Can be used for compiling shaders to CPU targets, see:
-  # https://github.com/shader-slang/slang/blob/master/docs/cpu-target.md
-  # If `withLLVM` is disabled, Slang will fall back to the C++ compiler found
-  # in the environment, if one exists.
-  withLLVM ? false,
-  # Dynamically link against libllvm and libclang++ (upstream defaults to static)
-  withSharedLLVM ? withLLVM,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.17.2";
+  version = "2025.18.2";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bviodruPqvw2L9E6qSO0ihg9L/qK33A03bpr1bI+xR8=";
+    hash = "sha256-9upf/4Ix4ReV4OlkPMzLMJo4DlAXydQLSEp+GM+tN2g=";
     fetchSubmodules = true;
   };
 
-  patches =
-    lib.optionals withSharedLLVM [
-      # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
-      ./1-shared-llvm.patch
-    ]
-    ++ lib.optionals withGlslang [
-      # Upstream depends on glslang 13 and there are minor breaking changes in glslang 15, the version
-      # we ship in nixpkgs.
-      ./2-glslang-15.patch
-    ];
+  postPatch = ''
+    # Header location has moved in glslang 15+
+    substituteInPlace source/slang-glslang/slang-glslang.cpp \
+      --replace-fail '"SPIRV/GlslangToSpv.h"' '"glslang/SPIRV/GlslangToSpv.h"'
+  '';
 
   outputs = [
     "out"
@@ -71,10 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libX11
-  ]
-  ++ lib.optionals withLLVM [
-    llvmPackages.llvm
-    llvmPackages.libclang
   ]
   ++ lib.optionals withGlslang [
     # SPIRV-tools is included in glslang.
@@ -103,28 +86,31 @@ stdenv.mkDerivation (finalAttrs: {
     "-GNinja Multi-Config"
     # The cmake setup hook only specifies `-DCMAKE_BUILD_TYPE=Release`,
     # which does nothing for "Ninja Multi-Config".
-    "-DCMAKE_CONFIGURATION_TYPES=RelWithDebInfo"
+    (lib.cmakeFeature "CMAKE_CONFIGURATION_TYPES" "RelWithDebInfo")
     # Handled by separateDebugInfo so we don't need special installation handling
-    "-DSLANG_ENABLE_SPLIT_DEBUG_INFO=OFF"
-    "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
-    "-DSLANG_USE_SYSTEM_MINIZ=ON"
-    "-DSLANG_USE_SYSTEM_LZ4=ON"
+    (lib.cmakeBool "SLANG_ENABLE_SPLIT_DEBUG_INFO" false)
+    (lib.cmakeFeature "SLANG_VERSION_FULL" "v${finalAttrs.version}-nixpkgs")
+    (lib.cmakeBool "SLANG_USE_SYSTEM_MINIZ" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_LZ4" true)
     (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
-    "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
+    (lib.cmakeFeature "SLANG_SLANG_LLVM_FLAVOR" "DISABLE")
     # slang-rhi tries to download headers and precompiled binaries for these backends
-    "-DSLANG_RHI_ENABLE_OPTIX=OFF"
-    "-DSLANG_RHI_ENABLE_VULKAN=OFF"
-    "-DSLANG_RHI_ENABLE_METAL=OFF"
-    "-DSLANG_RHI_ENABLE_WGPU=OFF"
+    (lib.cmakeBool "SLANG_RHI_ENABLE_OPTIX" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_VULKAN" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_METAL" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_WGPU" false)
   ]
   ++ lib.optionals withGlslang [
-    "-DSLANG_USE_SYSTEM_SPIRV_TOOLS=ON"
-    "-DSLANG_USE_SYSTEM_GLSLANG=ON"
+    (lib.cmakeBool "SLANG_USE_SYSTEM_SPIRV_TOOLS" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_GLSLANG" true)
   ]
-  ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
+  ++ lib.optionals (!withGlslang) [
+    (lib.cmakeBool "SLANG_ENABLE_SLANG_GLSLANG" false)
+  ];
 
   postInstall = ''
-    mv "$out/cmake" "$dev/cmake"
+    mkdir -p $dev/lib
+    mv {$out,$dev}/lib/cmake
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -145,11 +131,11 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      samestep
+    ];
     mainProgram = "slangc";
     platforms = lib.platforms.all;
-    # Slang only supports LLVM 14:
-    # https://github.com/shader-slang/slang/blob/v2025.15/docs/building.md#llvm-support
-    broken = withLLVM;
   };
 })

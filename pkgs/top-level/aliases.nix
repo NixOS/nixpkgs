@@ -665,6 +665,7 @@ mapAliases {
   code-browser-gtk = throw "'code-browser-gtk' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-gtk2 = throw "'code-browser-gtk2' has been removed, as it was broken since 22.11"; # Added 2025-08-22
   code-browser-qt = throw "'code-browser-qt' has been removed, as it was broken since 22.11"; # Added 2025-08-22
+  cog = throw "'cog' has been removed as it depends on unmaintained libraries"; # Added 2025-10-08
   collada2gltf = throw "collada2gltf has been removed from Nixpkgs, as it has been unmaintained upstream for 5 years and does not build with supported GCC versions"; # Addd 2025-08-08
   colloid-kde = throw "'colloid-kde' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   colorpicker = throw "'colorpicker' has been removed due to lack of maintenance upstream. Consider using 'xcolor', 'gcolor3', 'eyedropper' or 'gpick' instead"; # Added 2024-10-19
@@ -808,8 +809,7 @@ mapAliases {
   dtv-scan-tables_linuxtv = dtv-scan-tables; # Added 2023-03-03
   dtv-scan-tables_tvheadend = dtv-scan-tables; # Added 2023-03-03
   du-dust = dust; # Added 2024-01-19
-  duckstation = throw "'duckstation' has been removed due to being unmaintained"; # Added 2025-08-03
-  duckstation-bin = throw "'duckstation-bin' has been removed due to being unmaintained"; # Added 2025-08-03
+  duckstation-bin = duckstation; # Added 2025-09-20
   dumb = throw "'dumb' has been archived by upstream. Upstream recommends libopenmpt as a replacement."; # Added 2025-09-14
   dump1090 = dump1090-fa; # Added 2024-02-12
   dwfv = throw "'dwfv' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
@@ -1443,6 +1443,7 @@ mapAliases {
   Literate = literate; # Added 2024-06-12
   littlenavmap = throw "littlenavmap has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
   llama = walk; # Added 2023-01-23
+  lincity_ng = lib.warnOnInstantiate "lincity_ng has been renamed to lincity-ng" lincity-ng; # Added 2025-10-09
 
   # Linux kernels
   linux-rt_5_10 = linuxKernel.kernels.linux_rt_5_10;
@@ -1733,6 +1734,7 @@ mapAliases {
   memorymappingHook = throw "memorymapping has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
   memstream = throw "memstream has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
   memstreamHook = throw "memstream has been removed, as it was only useful on old macOS versions that are no longer supported"; # Added 2024-10-05
+  meteo = throw "'meteo' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   mhwaveedit = throw "'mkwaveedit' has been removed due to lack of maintenance upstream. Consider using 'audacity' or 'tenacity' instead"; # Added 2024-09-15
   microcodeAmd = microcode-amd; # Added 2024-09-08
   microcodeIntel = microcode-intel; # Added 2024-09-08
@@ -1806,6 +1808,7 @@ mapAliases {
   n98-magerun = throw "n98-magerun doesn't support new PHP newer than 8.1"; # Added 2025-10-03
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
   nanoblogger = throw "nanoblogger has been removed as upstream stopped developement in 2013"; # Added 2025-09-10
+  nasc = throw "'nasc' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   ncdu_2 = ncdu; # Added 2022-07-22
   neardal = throw "neardal has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
   neocities-cli = neocities; # Added 2024-07-31
@@ -1833,6 +1836,7 @@ mapAliases {
   };
   nettools = net-tools; # Added 2025-06-11
   newt-go = fosrl-newt; # Added 2025-06-24
+  notes-up = throw "'notes-up' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   notify-sharp = throw "'notify-sharp' has been removed as it was unmaintained and depends on deprecated dbus-sharp versions"; # Added 2025-08-25
   nextcloud30 = throw ''
     Nextcloud v30 has been removed from `nixpkgs` as the support for is dropped
@@ -1968,13 +1972,13 @@ mapAliases {
   o = orbiton; # Added 2023-04-09
   oathToolkit = oath-toolkit; # Added 2022-04-04
   oauth2_proxy = throw "'oauth2_proxy' has been renamed to/replaced by 'oauth2-proxy'"; # Converted to throw 2024-10-17
+  obb = throw "obb has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
   obliv-c = throw "obliv-c has been removed from Nixpkgs, as it has been unmaintained upstream for 4 years and does not build with supported GCC versions"; # Added 2025-08-18
   ocis-bin = throw "ocis-bin has been renamed to ocis_5-bin'. Future major.minor versions will be made available as separate packages"; # Added 2025-03-30
   oclgrind = throw "oclgrind has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   odoo15 = throw "odoo15 has been removed from nixpkgs as it is unsupported; migrate to a newer version of odoo"; # Added 2025-05-06
   offrss = throw "offrss has been removed due to lack of upstream maintenance; consider using another rss reader"; # Added 2025-06-01
   oil = lib.warnOnInstantiate "Oil has been replaced with the faster native C++ version and renamed to 'oils-for-unix'. See also https://github.com/oils-for-unix/oils/wiki/Oils-Deployments" oils-for-unix; # Added 2024-10-22
-  oneDNN_2 = throw "oneDNN_2 has been removed as it was only used by rocmPackages.migraphx"; # added 2025-07-18
   onevpl-intel-gpu = lib.warnOnInstantiate "onevpl-intel-gpu has been renamed to vpl-gpu-rt" vpl-gpu-rt; # Added 2024-06-04
   onthespot = throw "onethespot has been removed due to lack of upstream maintenance"; # Added 2025-09-26
   openai-triton-llvm = triton-llvm; # added 2024-07-18
@@ -2210,6 +2214,7 @@ mapAliases {
   pocket-updater-utility = pupdate; # Added 2024-01-25
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
   poppler_utils = poppler-utils; # Added 2025-02-27
+  pot = throw "'pot' has been removed as it requires libsoup 2.4 which is EOL"; # Added 2025-10-09
   powerline-rs = throw "'powerline-rs' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   prboom-plus = throw "'prboom-plus' has been removed since it is unmaintained upstream."; # Added 2025-09-14
   premake3 = throw "'premake3' has been removed since it is unmaintained. Consider using 'premake' instead"; # Added 2025-05-10
@@ -2285,6 +2290,7 @@ mapAliases {
   qtile-unwrapped = python3.pkgs.qtile; # Added 2023-05-12
   quantum-espresso-mpi = quantum-espresso; # Added 2023-11-23
   quaternion-qt5 = throw "'quaternion-qt5' has been removed as quaternion dropped Qt5 support with v0.0.97.1"; # Added 2025-05-24
+  qubes-core-vchan-xen = throw "'qubes-core-vchan-xen' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   quickbms = throw "'quickbms' has been removed due to being unmaintained for many years."; # Added 2025-05-17
   quicklispPackages = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   quicklispPackagesABCL = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
@@ -2345,6 +2351,7 @@ mapAliases {
   rote = throw "rote has been removed due to lack of upstream maintenance"; # Added 2025-09-10
   rnix-hashes = throw "'rnix-hashes' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
+  rquickshare-legacy = throw "The legacy version depends on insecure package libsoup2, please use the main version"; # Added 2025-10-09
   rr-unstable = rr; # Added 2022-09-17
   rtx = mise; # Added 2024-01-05
   ruby-zoom = throw "'ruby-zoom' has been removed due to lack of maintaince and had not been updated since 2020"; # Added 2025-08-24
@@ -2436,6 +2443,7 @@ mapAliases {
   snapcraft = throw "snapcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # added 2025-09-18
   snapTools = throw "snapTools was removed because makeSnap produced broken snaps and it was the only function in snapTools. See https://github.com/NixOS/nixpkgs/issues/100618 for more details."; # Added 2024-03-04
   snort2 = throw "snort2 has been removed as it is deprecated and unmaintained by upstream. Consider using snort (snort3) package instead."; # 2025-05-21
+  snowman = throw "snowman has been removed as it is unmaintained by upstream"; # 2025-10-12
   soldat-unstable = opensoldat; # Added 2022-07-02
   soulseekqt = throw "'soulseekqt' has been removed due to lack of maintenance in Nixpkgs in a long time. Consider using 'nicotine-plus' or 'slskd' instead."; # Added 2025-06-07
   soundkonverter = throw "'soundkonverter' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
@@ -2602,6 +2610,7 @@ mapAliases {
   timescale-prometheus = throw "'timescale-prometheus' has been renamed to/replaced by 'promscale'"; # Converted to throw 2024-10-17
   tightvnc = throw "'tightvnc' has been removed as the version 1.3 is not maintained upstream anymore and is insecure"; # Added 2024-08-22
   timelens = throw "'timelens' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  tinyxml2 = throw "The 'tinyxml2' alias has been removed, use 'tinyxml' for https://sourceforge.net/projects/tinyxml/ or 'tinyxml-2' for https://github.com/leethomason/tinyxml2"; # Added 2025-10-11
   tix = tclPackages.tix; # Added 2024-10-02
   tkcvs = tkrev; # Added 2022-03-07
   tkgate = throw "'tkgate' has been removed as it is unmaintained"; # Added 2025-05-17
@@ -2729,6 +2738,7 @@ mapAliases {
   viper4linux-gui = throw "'viper4linux-gui' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
   viper4linux = throw "'viper4linux' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
   virt-manager-qt = throw "'virt-manager-qt' has been dropped as it depends on KDE Gear 5, and is unmaintained"; # Added 2025-08-20
+  virtkey = throw "'virtkey' has been removed, as it was unmaintained, abandoned upstream, and relied on gtk2."; # Added 2025-10-12
   virtscreen = throw "'virtscreen' has been removed, as it was broken and unmaintained"; # Added 2024-10-17
   vistafonts = vista-fonts; # Added 2025-02-03
   vistafonts-chs = vista-fonts-chs; # Added 2025-02-03

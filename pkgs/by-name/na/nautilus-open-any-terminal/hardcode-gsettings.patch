@@ -1,45 +1,67 @@
-diff --git a/nautilus_open_any_terminal/nautilus_open_any_terminal.py b/nautilus_open_any_terminal/nautilus_open_any_terminal.py
-index 05b6514..b5541dc 100644
---- a/nautilus_open_any_terminal/nautilus_open_any_terminal.py
-+++ b/nautilus_open_any_terminal/nautilus_open_any_terminal.py
-@@ -413,9 +413,10 @@ if API_VERSION in ("3.0", "2.0"):
-         """Provide keyboard shortcuts for opening terminals in Nautilus."""
-
-         def __init__(self):
+diff --git i/nautilus_open_any_terminal/nautilus_open_any_terminal.py w/nautilus_open_any_terminal/nautilus_open_any_terminal.py
+index 559c923..45585d6 100644
+--- i/nautilus_open_any_terminal/nautilus_open_any_terminal.py
++++ w/nautilus_open_any_terminal/nautilus_open_any_terminal.py
+@@ -434,9 +434,12 @@ if API_VERSION == "4.0":
+             super().__init__()
+             self.previous_cwd = expanduser("~")
+ 
 -            gsettings_source = Gio.SettingsSchemaSource.get_default()
 -            if gsettings_source.lookup(GSETTINGS_PATH, True):
 -                self._gsettings = Gio.Settings.new(GSETTINGS_PATH)
-+            gsettings_source = Gio.SettingsSchemaSource.new_from_directory("@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True)
++            gsettings_source = Gio.SettingsSchemaSource.new_from_directory(
++                "@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True
++            )
 +            if True:
 +                _schema = gsettings_source.lookup(GSETTINGS_PATH, False)
-+                self._gsettings = Gio.Settings.new_full(_schema, None, None);
++                self._gsettings = Gio.Settings.new_full(_schema, None, None)
+                 self._setup_keybindings()
+ 
+         def get_background_items(self, current_folder: FileManager.FileInfo):
+@@ -500,10 +503,12 @@ elif API_VERSION in ("3.0", "2.0"):
+         """Provide keyboard shortcuts for opening terminals in Nautilus/Caja."""
+ 
+         def __init__(self):
+-            super().__init__()
+-            gsettings_source = Gio.SettingsSchemaSource.get_default()
+-            if gsettings_source.lookup(GSETTINGS_PATH, True):
+-                self._gsettings = Gio.Settings.new(GSETTINGS_PATH)
++            gsettings_source = Gio.SettingsSchemaSource.new_from_directory(
++                "@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True
++            )
++            if True:
++                _schema = gsettings_source.lookup(GSETTINGS_PATH, False)
++                self._gsettings = Gio.Settings.new_full(_schema, None, None)
                  self._gsettings.connect("changed", self._bind_shortcut)
                  self._create_accel_group()
              self._window = None
-@@ -452,9 +453,10 @@ class OpenAnyTerminalExtension(GObject.GObject, FileManager.MenuProvider):
+@@ -540,10 +545,12 @@ class OpenAnyTerminalExtension(GObject.GObject, FileManager.MenuProvider):
      """Provide context menu items for opening terminals in Nautilus."""
-
+ 
      def __init__(self):
+-        super().__init__()
 -        gsettings_source = Gio.SettingsSchemaSource.get_default()
 -        if gsettings_source.lookup(GSETTINGS_PATH, True):
 -            self._gsettings = Gio.Settings.new(GSETTINGS_PATH)
-+        gsettings_source = Gio.SettingsSchemaSource.new_from_directory("@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True)
++        gsettings_source = Gio.SettingsSchemaSource.new_from_directory(
++            "@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True
++        )
 +        if True:
 +            _schema = gsettings_source.lookup(GSETTINGS_PATH, False)
-+            self._gsettings = Gio.Settings.new_full(_schema, None, None);
-
++            self._gsettings = Gio.Settings.new_full(_schema, None, None)
+ 
      def _get_terminal_name(self):
          if self._gsettings.get_boolean(GSETTINGS_USE_GENERIC_TERMINAL_NAME):
-@@ -512,8 +514,9 @@ class OpenAnyTerminalExtension(GObject.GObject, FileManager.MenuProvider):
+@@ -603,8 +610,9 @@ class OpenAnyTerminalExtension(GObject.GObject, FileManager.MenuProvider):
          )
-
-
+ 
+ 
 -source = Gio.SettingsSchemaSource.get_default()
 -if source is not None and source.lookup(GSETTINGS_PATH, True):
 -    _gsettings = Gio.Settings.new(GSETTINGS_PATH)
 +source = Gio.SettingsSchemaSource.new_from_directory("@gsettings_path@", Gio.SettingsSchemaSource.get_default(), True)
 +if True:
 +    _schema = source.lookup(GSETTINGS_PATH, False)
-+    _gsettings = Gio.Settings.new_full(_schema, None, None);
++    _gsettings = Gio.Settings.new_full(_schema, None, None)
      _gsettings.connect("changed", set_terminal_args)
      set_terminal_args()

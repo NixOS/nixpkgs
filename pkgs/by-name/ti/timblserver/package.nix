@@ -5,6 +5,7 @@
   gitUpdater,
   autoreconfHook,
   bzip2,
+  icu,
   libtar,
   libtool,
   pkg-config,
@@ -16,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "timblserver";
-  version = "1.11";
+  version = "1.19";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "timblserver";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-TE6fsgr/L5GcBjFKlU6S1DiT8OKP6i7TVirxj/OfhlM=";
+    hash = "sha256-GNHPr8l+j1HNDyb6ZrfeBgd2kN5oUN6M9a8Gs+7v79w=";
   };
 
   nativeBuildInputs = [
@@ -31,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs = [
     bzip2
+    icu
     libtar
     libtool
     autoconf-archive

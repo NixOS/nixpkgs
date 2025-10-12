@@ -235,15 +235,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit withKerberos;
-    tests = {
-      borgbackup-integration = nixosTests.borgbackup;
-      nixosTest = nixosTests.openssh;
-      initrd-network-openssh = nixosTests.initrd-network-ssh;
-      openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
-        pname = previousAttrs.pname + "-test";
-        doCheck = true;
-      });
-    };
+    tests =
+      let
+        withThisSsh =
+          test:
+          test.extendNixOS {
+            module = {
+              services.openssh.package = lib.mkForce finalAttrs.finalPackage;
+            };
+          };
+      in
+      {
+        borgbackup-integration = withThisSsh nixosTests.borgbackup;
+        nixosTest = withThisSsh nixosTests.openssh;
+        initrd-network-openssh = withThisSsh nixosTests.initrd-network-ssh;
+        openssh = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+          pname = previousAttrs.pname + "-test";
+          doCheck = true;
+        });
+      };
   };
 
   meta = {

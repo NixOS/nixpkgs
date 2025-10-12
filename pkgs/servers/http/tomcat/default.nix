@@ -60,17 +60,17 @@ let
 in
 {
   tomcat9 = common {
-    version = "9.0.109";
-    hash = "sha256-/masqdxAAgA4VwluYMSCsfAFr1RXx2fKnFgE9zLePMI=";
+    version = "9.0.110";
+    hash = "sha256-lDk+uSjtAdWACK9pJWYNen03JmHeXO+NY8ZqGqoolhg=";
   };
 
   tomcat10 = common {
-    version = "10.1.46";
-    hash = "sha256-RenV71YatGt0x19AwzuD9J4T556Z9zbf+OiUhVfpaNo=";
+    version = "10.1.47";
+    hash = "sha256-pqPfam1tuW5J4gxZc6WyNKEYW88cGn7zo2yuTDaM+FI=";
   };
 
   tomcat11 = common {
-    version = "11.0.11";
-    hash = "sha256-KpG4DB6n279K8Fux+Aq7l15d5BXAyAPep0XlqhEm4IE=";
+    version = "11.0.12";
+    hash = "sha256-GmW8ga7V1ME60iUlj110bC1jaZ3JagT/4z4W4y9CDFU=";
   };
 }

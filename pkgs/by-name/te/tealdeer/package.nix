@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tealdeer";
-  version = "1.7.2";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
-    owner = "dbrgn";
+    owner = "tealdeer-rs";
     repo = "tealdeer";
     rev = "v${version}";
-    hash = "sha256-GZN7WE12f3MEoBfswag0O04UOCmZeYwt5CbYwddmwHs=";
+    hash = "sha256-TJdmcxxUmAiEb4lLrLrRIJIGs1iC0mjHBOECOHDB1Uc=";
   };
 
-  cargoHash = "sha256-Zk2L4cq7j9CkSc+cnZRWwhtfWP6y5faiMVGFFNkBwwA=";
+  cargoHash = "sha256-HJFJWJezEUE2/ZukDfEROegdPxakpu+TX6W+2x0KmkQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -37,11 +37,13 @@ rustPlatform.buildRustPackage rec {
     "--skip test_quiet_old_cache"
     "--skip test_spaces_find_command"
     "--skip test_update_cache"
+    "--skip test_update_language_arg"
   ];
 
   meta = with lib; {
     description = "Very fast implementation of tldr in Rust";
-    homepage = "https://github.com/dbrgn/tealdeer";
+    homepage = "https://github.com/tealdeer-rs/tealdeer";
+    changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [
       davidak
       newam

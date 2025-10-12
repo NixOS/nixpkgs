@@ -8,7 +8,7 @@
   pkg-config,
   autoconf-archive,
   libxml2,
-  icu60,
+  icu,
   bzip2,
   libtar,
   ticcutils,
@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libfolia";
-  version = "1.7";
+  version = "2.21.1";
 
   src = fetchFromGitHub {
     owner = "LanguageMachines";
     repo = "libfolia";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fH+XqTaMf7/8ZA0lwWiD7s7fmGkjni83Q7lv5sh50H4=";
+    hash = "sha256-p1caLiYcmokrjiDXLEkPpTOIPIR8Ofv/JsRkHs4PsPE=";
   };
 
   nativeBuildInputs = [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     autoconf-archive
     libtar
     libxml2
-    icu60
+    icu
     ticcutils
   ];
 
