@@ -251,6 +251,10 @@ async function handleMerge({
 
     if (canMerge) break
   }
+
+  // Returns a boolean, which indicates whether the PR is merge-bot eligible in principle.
+  // This is used to set the respective label in bot.js.
+  return result
 }
 
 module.exports = {
