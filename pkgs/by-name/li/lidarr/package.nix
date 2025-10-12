@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  mono,
   libmediainfo,
   sqlite,
   curl,
-  chromaprint,
   makeWrapper,
   icu,
   dotnet-runtime,
@@ -34,13 +32,14 @@ let
     }
     ."${arch}-${os}_hash";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lidarr";
   version = "2.14.5.4836";
 
   src = fetchurl {
-    url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
-    sha256 = hash;
+    inherit hash;
+
+    url = "https://github.com/lidarr/Lidarr/releases/download/v${finalAttrs.version}/Lidarr.master.${finalAttrs.version}.${os}-core-${arch}.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,10 +47,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}/.
+    mkdir -p $out/{bin,share/${finalAttrs.pname}-${finalAttrs.version}}
+    cp -r * $out/share/${finalAttrs.pname}-${finalAttrs.version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Lidarr \
-      --add-flags "$out/share/${pname}-${version}/Lidarr.dll" \
+      --add-flags "$out/share/${finalAttrs.pname}-${finalAttrs.version}/Lidarr.dll" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           curl
@@ -71,10 +70,10 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.lidarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ramonacat ];
     mainProgram = "Lidarr";
     platforms = [
@@ -84,4 +83,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})
