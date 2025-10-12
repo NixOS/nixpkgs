@@ -19822,8 +19822,6 @@ self: super: with self; {
 
   virt-firmware = callPackage ../development/python-modules/virt-firmware { };
 
-  virtkey = callPackage ../development/python-modules/virtkey { };
-
   virtual-glob = callPackage ../development/python-modules/virtual-glob { };
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
