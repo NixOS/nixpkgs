@@ -779,6 +779,10 @@ self: super: with self; {
 
   apeye-core = callPackage ../development/python-modules/apeye-core { };
 
+  apify-fingerprint-datapoints =
+    callPackage ../development/python-modules/apify-fingerprint-datapoints
+      { };
+
   apipkg = callPackage ../development/python-modules/apipkg { };
 
   apischema = callPackage ../development/python-modules/apischema { };
@@ -2327,6 +2331,8 @@ self: super: with self; {
 
   camelot = callPackage ../development/python-modules/camelot { };
 
+  camoufox = callPackage ../development/python-modules/camoufox { };
+
   can-isotp = callPackage ../development/python-modules/can-isotp { };
 
   canals = callPackage ../development/python-modules/canals { };
@@ -3086,6 +3092,8 @@ self: super: with self; {
   crashtest = callPackage ../development/python-modules/crashtest { };
 
   crate = callPackage ../development/python-modules/crate { };
+
+  crawlee = callPackage ../development/python-modules/crawlee { };
 
   crayons = callPackage ../development/python-modules/crayons { };
 
@@ -7070,6 +7078,8 @@ self: super: with self; {
 
   impacket = callPackage ../development/python-modules/impacket { };
 
+  impit = callPackage ../development/python-modules/impit { };
+
   import-expression = callPackage ../development/python-modules/import-expression { };
 
   importlab = callPackage ../development/python-modules/importlab { };
@@ -9099,6 +9109,8 @@ self: super: with self; {
   matrix-nio = callPackage ../development/python-modules/matrix-nio { };
 
   mattermostdriver = callPackage ../development/python-modules/mattermostdriver { };
+
+  maturin = callPackage ../development/python-modules/maturin { };
 
   maubot = callPackage ../tools/networking/maubot { };
 
@@ -12356,6 +12368,8 @@ self: super: with self; {
   pubnub = callPackage ../development/python-modules/pubnub { };
 
   pubnubsub-handler = callPackage ../development/python-modules/pubnubsub-handler { };
+
+  puccinialin = callPackage ../development/python-modules/puccinialin { };
 
   pudb = callPackage ../development/python-modules/pudb { };
 
