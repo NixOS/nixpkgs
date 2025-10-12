@@ -261,6 +261,14 @@ merging is handled.
     to create values of this type. Similar to `types.enum` but for RON enum values.
     Multiple definitions cannot be merged.
 
+`types.ronNamedStructOf` *`elemType`*
+
+:   A RON named struct where all fields are of *`elemType`* type. This type accepts attribute sets with
+    `_type = "ron-named-struct"`, a `name` field containing the struct type name, and a `value`
+    field containing an attribute set. Multiple definitions with the same name are merged by joining
+    their field attribute sets. Use `lib.ron.mkNamedStruct` to create values of this type, e.g.
+    `types.ronNamedStructOf int`.
+
 `types.ronOptionalOf` *`elemType`*
 
 :   RON optional of *`elemType`* type. This type accepts attribute sets with `_type = "ron-optional"`
