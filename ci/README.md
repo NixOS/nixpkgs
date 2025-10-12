@@ -45,8 +45,9 @@ To ensure security and a focused utility, the bot adheres to specific limitation
 - The PR targets one of the [development branches](#branch-classification).
 - The PR only touches packages located under `pkgs/by-name/*`.
 - The PR is either:
-  - authored by a [committer][@NixOS/nixpkgs-committers],
-  - backported via label, or
+  - approved by a [committer][@NixOS/nixpkgs-committers].
+  - authored by a [committer][@NixOS/nixpkgs-committers].
+  - backported via label.
   - created by [@r-ryantm](https://nix-community.github.io/nixpkgs-update/r-ryantm/).
 - The user attempting to merge is a member of [@NixOS/nixpkgs-maintainers].
 - The user attempting to merge is a maintainer of all packages touched by the PR.
