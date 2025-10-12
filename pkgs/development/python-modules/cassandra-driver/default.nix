@@ -6,6 +6,7 @@
   cython,
   eventlet,
   fetchFromGitHub,
+  fetchpatch,
   geomet,
   gevent,
   gremlinpython,
@@ -21,7 +22,6 @@
   twisted,
   setuptools,
   distutils,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +35,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
   };
+
+  patches = [
+    # https://github.com/datastax/python-driver/pull/1242
+    (fetchpatch {
+      name = "Maintain-compatibility-with-CPython-3.13.patch";
+      url = "https://github.com/datastax/python-driver/commit/b144a84a1f97002c4545b335efaac719519cd9fa.patch";
+      hash = "sha256-60ki6i1SiGxK+J4x/8voS7Hh2x249ykpjU9EMYKD8kc=";
+    })
+  ];
 
   pythonRelaxDeps = [ "geomet" ];
 
@@ -120,8 +129,6 @@ buildPythonPackage rec {
   };
 
   meta = {
-    # cassandra/io/libevwrapper.c:668:10: error: implicit declaration of function ‘PyEval_ThreadsInitialized’ []
-    broken = pythonAtLeast "3.13";
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";
