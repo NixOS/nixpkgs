@@ -253,6 +253,14 @@ merging is handled.
     with `_type = "ron-char"` and a `value` field containing a single character string.
     Use `lib.ron.mkChar` to create values of this type. Multiple definitions cannot be merged.
 
+`types.ronEnum` *`variants`*
+
+:   A RON (Rusty Object Notation) enum value restricted to simple variants (without associated data).
+    This type accepts attribute sets with `_type = "ron-enum"`, a `variant` field containing one
+    of the allowed variant names from *`variants`*, and no `values` field. Use `lib.ron.mkEnum`
+    to create values of this type. Similar to `types.enum` but for RON enum values.
+    Multiple definitions cannot be merged.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
