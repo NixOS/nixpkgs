@@ -82,6 +82,12 @@ buildPythonPackage rec {
     "-Dpython-exe=${python.pythonOnBuildForHost.interpreter}"
   ];
 
+  preConfigure = ''
+    if [ -z "$doInstallCheck" ]; then
+      mesonFlagsArray+=("-Dtests=disabled")
+    fi
+  '';
+
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
