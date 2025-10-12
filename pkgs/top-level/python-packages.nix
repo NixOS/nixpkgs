@@ -12766,6 +12766,8 @@ self: super: with self; {
 
   pycmus = callPackage ../development/python-modules/pycmus { };
 
+  pycobertura = callPackage ../development/python-modules/pycobertura { };
+
   pycocotools = callPackage ../development/python-modules/pycocotools { };
 
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
