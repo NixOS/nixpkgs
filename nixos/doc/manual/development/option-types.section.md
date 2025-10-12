@@ -261,6 +261,14 @@ merging is handled.
     to create values of this type. Similar to `types.enum` but for RON enum values.
     Multiple definitions cannot be merged.
 
+`types.ronTupleEnumOf` *`elemType`* *`variants`* *`size`*
+
+:   A RON (Rusty Object Notation) tuple enum where all tuple values are of *`elemType`* type.
+    This type accepts attribute sets with `_type = "ron-enum"`, a `variant` field containing
+    one of the allowed variant names from *`variants`*, and a `values` field containing exactly
+    *`size`* elements. Multiple definitions cannot be merged. Use `lib.ron.mkEnum` to create
+    values of this type, e.g. `types.ronTupleEnumOf int [ "Point" "Line" ] 2`.
+
 ## Submodule types {#sec-option-types-submodule}
 
 Submodules are detailed in [Submodule](#section-option-types-submodule).
