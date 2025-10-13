@@ -8,11 +8,11 @@
 
 buildDunePackage rec {
   pname = "domain-name";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "https://github.com/hannesm/domain-name/releases/download/v${version}/domain-name-${version}.tbz";
-    sha256 = "sha256-Hboy81p81cyBh9IeLMIaC2Z6ZFRHoO7+V6/jyiW8RWY=";
+    sha256 = "sha256-nseuLCJ3LBULhM+j8h2b8l+uFKeW8x4g31LYb0ZJnYk=";
   };
 
   minimalOCamlVersion = "4.04";
