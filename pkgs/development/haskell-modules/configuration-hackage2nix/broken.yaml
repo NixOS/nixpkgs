@@ -3914,7 +3914,6 @@ broken-packages:
   - marshal-contt # failure in job https://hydra.nixos.org/build/233231755 at 2023-09-02
   - marvin-interpolate # failure in job https://hydra.nixos.org/build/233201000 at 2023-09-02
   - MASMGen # failure in job https://hydra.nixos.org/build/233213454 at 2023-09-02
-  - mason # failure in job https://hydra.nixos.org/build/295095242 at 2025-04-22
   - massiv-scheduler # failure in job https://hydra.nixos.org/build/233196778 at 2023-09-02
   - massiv-serialise # failure in job https://hydra.nixos.org/build/233242284 at 2023-09-02
   - master-plan # failure in job https://hydra.nixos.org/build/233208718 at 2023-09-02
