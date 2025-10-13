@@ -325,6 +325,22 @@ in
       '';
     };
 
+    shell.enable = lib.mkEnableOption "" // {
+      default = config.environment.shell.enable;
+      internal = true;
+      description = ''
+        Whether to enable a shell in the initrd.
+
+        In contrast to `environment.shell.enable`, this option actually
+        strictly disables all shells in the initrd because they're not copied
+        into it anymore. Paths that use a shell (e.g. via the `script` option),
+        will break if this option is set.
+
+        Only set this option if you're sure that you can recover from potential
+        issues.
+      '';
+    };
+
     units = mkOption {
       description = "Definition of systemd units.";
       default = { };
@@ -460,13 +476,15 @@ in
     ++ lib.optional (config.boot.initrd.systemd.root == "gpt-auto") "rw";
 
     boot.initrd.systemd = {
-      # bashInteractive is easier to use and also required by debug-shell.service
       initrdBin = [
-        pkgs.bashInteractive
         pkgs.coreutils
         cfg.package
       ]
-      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod;
+      ++ lib.optional (config.system.build.kernel.config.isYes "MODULES") cfg.package.kmod
+      ++ lib.optionals cfg.shell.enable [
+        # bashInteractive is easier to use and also required by debug-shell.service
+        pkgs.bashInteractive
+      ];
       extraBin = {
         less = "${pkgs.less}/bin/less";
         mount = "${cfg.package.util-linux}/bin/mount";
@@ -550,11 +568,6 @@ in
         "${cfg.package.util-linux}/bin/umount"
         "${cfg.package.util-linux}/bin/sulogin"
 
-        # required for services generated with writeShellScript and friends
-        pkgs.runtimeShell
-        # some tools like xfs still want the sh symlink
-        "${pkgs.bashNonInteractive}/bin"
-
         # so NSS can look up usernames
         "${pkgs.glibc}/lib/libnss_files.so.2"
 
@@ -565,6 +578,12 @@ in
       ]
       ++ lib.optionals config.system.nixos-init.enable [
         "${config.system.nixos-init.package}/bin/initrd-init"
+      ]
+      ++ lib.optionals cfg.shell.enable [
+        # required for services generated with writeShellScript and friends
+        pkgs.runtimeShell
+        # some tools like xfs still want the sh symlink
+        "${pkgs.bashNonInteractive}/bin"
       ]
       ++ jobScripts
       ++ map (c: builtins.removeAttrs c [ "text" ]) (builtins.attrValues cfg.contents);
