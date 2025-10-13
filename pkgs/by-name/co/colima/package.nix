@@ -20,7 +20,7 @@ buildGoModule rec {
     owner = "abiosoft";
     repo = "colima";
     tag = "v${version}";
-    hash = "sha256-H+hWmhj1raZun7oqDa2p/F1CEEdSzBFDaSSnNByM+Kw=";
+    hash = "sha256-oRhpABYyP4T6kfmvJ4llPXcXWrSbxU7uUfvXQhm2huc=";
     # We need the git revision
     leaveDotGit = true;
     postFetch = ''
