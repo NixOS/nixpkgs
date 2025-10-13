@@ -159,27 +159,24 @@ in
       "::1" = [ cfgN.hostName ];
     };
 
-    services = lib.mkMerge [
-      {
-        nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
-          proxyPass = "http://unix:${cfg.socketPath}";
-          proxyWebsockets = true;
-          recommendedProxySettings = lib.mkDefault true;
-          extraConfig = # nginx
-            ''
-              # disable in case it was configured on a higher level
-              keepalive_timeout 0;
-              proxy_buffering off;
-            '';
-        };
-      }
-
-      (lib.mkIf cfg.bendDomainToLocalhost {
-        nextcloud.settings.trusted_proxies = [
+    services = {
+      nginx.virtualHosts.${cfgN.hostName}.locations."^~ /push/" = {
+        proxyPass = "http://unix:${cfg.socketPath}";
+        proxyWebsockets = true;
+        recommendedProxySettings = lib.mkDefault true;
+        extraConfig = # nginx
+          ''
+            # disable in case it was configured on a higher level
+            keepalive_timeout 0;
+            proxy_buffering off;
+          '';
+      };
+      nextcloud = {
+        settings.trusted_proxies = lib.mkIf cfg.bendDomainToLocalhost [
           "127.0.0.1"
           "::1"
         ];
-      })
-    ];
+      };
+    };
   };
 }
