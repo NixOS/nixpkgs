@@ -82,6 +82,15 @@ stdenv.mkDerivation (finalAttrs: {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/share/applications
+    mv $src/res/mgba-qt.desktop $out/share/applications
+
+    runHook postInstall
+  '';
+
   meta = {
     homepage = "https://mgba.io";
     description = "Modern GBA emulator with a focus on accuracy";
