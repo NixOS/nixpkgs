@@ -2,26 +2,19 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-
-  withCExtensions ? true,
-
-  # build-system
-  setuptools,
-  setuptools-scm,
-
-  # tests
   hypothesis,
   pytest-cov-stub,
   pytestCheckHook,
+  pythonOlder,
+  setuptools-scm,
+  setuptools,
+  withCExtensions ? true,
 }:
 
 buildPythonPackage rec {
   pname = "cbor2";
   version = "5.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
@@ -32,8 +25,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  pythonImportsCheck = [ "cbor2" ];
 
   nativeCheckInputs = [
     hypothesis
@@ -49,12 +40,15 @@ buildPythonPackage rec {
     inherit withCExtensions;
   };
 
-  meta = with lib; {
-    changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
+  pythonImportsCheck = [ "cbor2" ];
+
+  meta = {
     description = "Python CBOR (de)serializer with extensive tag support";
-    mainProgram = "cbor2";
+    changelog = "https://github.com/agronholm/cbor2/releases/tag/${version}";
     homepage = "https://github.com/agronholm/cbor2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
+    mainProgram = "cbor2";
+
   };
 }
