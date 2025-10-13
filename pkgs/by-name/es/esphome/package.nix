@@ -66,7 +66,7 @@ python.pkgs.buildPythonApplication rec {
     "platformio"
     # esp-idf v5.1 uses esp-idf-kconfig instead:
     # https://github.com/espressif/esp-idf/blob/release/v5.1/tools/requirements/requirements.core.txt#L15
-    # Can be removed one this pr is released: https://github.com/esphome/esphome/pull/11210
+    # Can be removed once this pr is released: https://github.com/esphome/esphome/pull/11210
     "kconfiglib"
   ];
 
