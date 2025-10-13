@@ -444,7 +444,6 @@ stdenv.mkDerivation (
       export AR_STAGE0="$AR_FOR_BUILD"
 
       echo -n "${buildMK}" > mk/build.mk
-      sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
     # Haddock and sphinx need a working locale
     + lib.optionalString (enableDocs || enableHaddockProgram) (
