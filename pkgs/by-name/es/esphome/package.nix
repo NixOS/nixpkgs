@@ -179,7 +179,7 @@ python.pkgs.buildPythonApplication rec {
   passthru = {
     dashboard = python.pkgs.esphome-dashboard;
     updateScript = callPackage ./update.nix { };
-    tests = { inherit (nixosTests) esphome; };
+    tests = { inherit (nixosTests) esphome-dashboard; };
   };
 
   meta = {
