@@ -14,8 +14,6 @@
 }:
 
 let
-  mkFlag = b: if b then "yes" else "no";
-
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
   wrapper = import ./wrapper.nix {
@@ -58,7 +56,7 @@ let
     ++ lib.optional openalSupport openal;
 
     makeFlags = [
-      "WITH_OPENAL=${mkFlag openalSupport}"
+      "WITH_OPENAL=${lib.boolToYesNo openalSupport}"
       "WITH_SYSTEMWIDE=yes"
       "WITH_SYSTEMDIR=$\{out}/share/games/quake2"
     ];

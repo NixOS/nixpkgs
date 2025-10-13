@@ -211,9 +211,7 @@ let
         ''
           worker "${value.type}" {
             type = "${value.type}";
-            ${optionalString (value.enable != null)
-              "enabled = ${if value.enable != false then "yes" else "no"};"
-            }
+            ${optionalString (value.enable != null) "enabled = ${lib.boolToYesNo (value.enable != false)};"}
             ${mkBindSockets value.enable value.bindSockets}
             ${optionalString (value.count != null) "count = ${toString value.count};"}
             ${concatStringsSep "\n  " (map (each: ".include \"${each}\"") value.includes)}

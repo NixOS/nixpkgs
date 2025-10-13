@@ -12,7 +12,6 @@ let
   opt = options.services.mediatomb;
   name = cfg.package.pname;
   pkg = cfg.package;
-  optionYesNo = option: if option then "yes" else "no";
   # configuration on media directory
   mediaDirectory = {
     options = {
@@ -36,7 +35,7 @@ let
   };
   toMediaDirectory =
     d:
-    "<directory location=\"${d.path}\" mode=\"inotify\" recursive=\"${optionYesNo d.recursive}\" hidden-files=\"${optionYesNo d.hidden-files}\" />\n";
+    "<directory location=\"${d.path}\" mode=\"inotify\" recursive=\"${lib.boolToYesNo d.recursive}\" hidden-files=\"${lib.boolToYesNo d.hidden-files}\" />\n";
 
   transcodingConfig =
     if cfg.transcoding then
@@ -89,13 +88,13 @@ let
           <home>${cfg.dataDir}</home>
           <interface>${cfg.interface}</interface>
           <webroot>${pkg}/share/${name}/web</webroot>
-          <pc-directory upnp-hide="${optionYesNo cfg.pcDirectoryHide}"/>
+          <pc-directory upnp-hide="${lib.boolToYesNo cfg.pcDirectoryHide}"/>
           <storage>
             <sqlite3 enabled="yes">
               <database-file>${name}.db</database-file>
             </sqlite3>
           </storage>
-          <protocolInfo extend="${optionYesNo cfg.ps3Support}"/>
+          <protocolInfo extend="${lib.boolToYesNo cfg.ps3Support}"/>
           ${lib.optionalString cfg.dsmSupport ''
             <custom-http-headers>
               <add header="X-User-Agent: redsonic"/>

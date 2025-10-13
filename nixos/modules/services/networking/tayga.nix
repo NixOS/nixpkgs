@@ -28,7 +28,7 @@ let
       log ${concatStringsSep " " cfg.log}
     ''}
 
-    wkpf-strict ${if cfg.wkpfStrict then "yes" else "no"}
+    wkpf-strict ${boolToYesNo cfg.wkpfStrict}
   '';
 
   addrOpts =

@@ -484,7 +484,6 @@ in
               };
               UseDns = lib.mkOption {
                 type = lib.types.nullOr lib.types.bool;
-                # apply if cfg.useDns then "yes" else "no"
                 default = false;
                 description = ''
                   Specifies whether {manpage}`sshd(8)` should look up the remote host name, and to check that the resolved host name for

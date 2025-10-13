@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   ];
 
   makeFlags = [
-    "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
+    "ENABLE_SHARED=${lib.boolToYesNo (!stdenv.hostPlatform.isStatic)}"
     "PROCESSORS=$(NIX_BUILD_CORES)"
     # confusingly, for gprbuild --target is autoconf --host
     "TARGET=${stdenv.hostPlatform.config}"
