@@ -2227,8 +2227,6 @@ let
 
         hol_light = callPackage ../applications/science/logic/hol_light { };
 
-        ocamlnat = callPackage ../development/ocaml-modules/ocamlnat { };
-
         ### End ###
 
       }
