@@ -1,8 +1,10 @@
 {
   lib,
+  stdenv,
   fetchzip,
   npm-lockfile-fix,
   buildNpmPackage,
+  clang_20,
 
   name,
   url,
@@ -21,6 +23,10 @@ buildNpmPackage {
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    clang_20 # clang_21 breaks keytar
+  ];
 
   postPatch = ''
     sed -i '/preinstall/d' package.json
