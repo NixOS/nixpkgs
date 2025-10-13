@@ -7,12 +7,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "veusz";
-  version = "4.1";
+  version = "4.2";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-s7TaDnt+nEIAmAqiZf9aYPFWVtSX22Ruz8eMpxMRr0U=";
+    hash = "sha256-jyghPk/u4THHnXrG/UDzHfW4AkS6n0CEd3VK+GX9he0=";
   };
 
   nativeBuildInputs = [
