@@ -123,6 +123,8 @@ let
           hash = tiniHash;
         };
 
+        patches = [ ];
+
         # Do not remove static from make files as we want a static binary
         postPatch = "";
 

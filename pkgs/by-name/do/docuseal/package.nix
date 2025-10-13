@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      inherit (nixosTests) docuseal-postgresql docuseal-sqlite;
+      inherit (nixosTests) docuseal-psql docuseal-sqlite;
     };
     updateScript = ./update.sh;
   };
