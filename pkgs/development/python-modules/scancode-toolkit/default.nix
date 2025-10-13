@@ -137,7 +137,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  # Pre-genrating license index
   postInstall = ''
+    $out/bin/scancode-reindex-licenses
   '';
 
   pythonImportsCheck = [ "scancode" ];
