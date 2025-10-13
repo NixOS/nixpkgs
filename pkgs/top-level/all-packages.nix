@@ -13325,12 +13325,6 @@ with pkgs;
     inherit libGL libGLU libglut;
   };
 
-  crawlTiles = callPackage ../games/crawl {
-    tileMode = true;
-  };
-
-  crawl = callPackage ../games/crawl { };
-
   curseofwar = callPackage ../games/curseofwar { SDL = null; };
   curseofwar-sdl = callPackage ../games/curseofwar { ncurses = null; };
 
