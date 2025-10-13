@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
       url = "https://gitlab.com/nick87720z/tint2/uploads/7de4501a4fa4fffa5ba8bb0fa3d19f78/glib.patch";
       hash = "sha256-K547KYlRkVl1s2THi3ZCRuM447EFJwTqUEBjKQnV8Sc=";
     })
+    ./fix-cmake-version.patch
   ];
 
   # Fix build with gcc14
