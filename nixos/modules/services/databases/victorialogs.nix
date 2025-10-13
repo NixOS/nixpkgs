@@ -29,7 +29,7 @@ in
 {
   options.services.victorialogs = {
     enable = mkEnableOption "VictoriaLogs is an open source user-friendly database for logs from VictoriaMetrics";
-    package = mkPackageOption pkgs "victoriametrics" { };
+    package = mkPackageOption pkgs "victorialogs" { };
     listenAddress = mkOption {
       default = ":9428";
       type = types.str;
