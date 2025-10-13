@@ -25,10 +25,13 @@ buildDotnetModule rec {
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
-  dotnet-tools = [];
+  dotnet-tools = [ ];
   nugetDeps = ./deps.json;
 
-  nativeBuildInputs = [makeWrapper desktop-file-utils];
+  nativeBuildInputs = [
+    makeWrapper
+    desktop-file-utils
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -40,7 +43,7 @@ buildDotnetModule rec {
     mkdir -p $out/bin
 
     makeWrapper $out/lib/${pname}/WheelWizard $out/bin/WheelWizard \
-      --prefix PATH : ${lib.makeBinPath [dotnet-runtime]}
+      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
 
     install -D $desktopItem/share/applications/* -t $out/share/applications
 
@@ -52,7 +55,7 @@ buildDotnetModule rec {
     exec = "WheelWizard";
     comment = "Manage your wheels with the wizard.";
     desktopName = "Wheel Wizard";
-    categories = ["Utility"];
+    categories = [ "Utility" ];
   };
 
   meta = with lib; {
