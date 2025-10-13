@@ -15362,6 +15362,8 @@ self: super: with self; {
 
   pytun = callPackage ../development/python-modules/pytun { };
 
+  pytun-pmd3 = callPackage ../development/python-modules/pytun-pmd3 { };
+
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
 
   pytweening = callPackage ../development/python-modules/pytweening { };
