@@ -2612,7 +2612,6 @@ broken-packages:
   - haven # failure in job https://hydra.nixos.org/build/233216806 at 2023-09-02
   - haverer # failure in job https://hydra.nixos.org/build/233210491 at 2023-09-02
   - hax # failure in job https://hydra.nixos.org/build/233212147 at 2023-09-02
-  - haxl # failure in job https://hydra.nixos.org/build/233243740 at 2023-09-02
   - haxparse # failure in job https://hydra.nixos.org/build/233205900 at 2023-09-02
   - haxr-th # failure in job https://hydra.nixos.org/build/233250109 at 2023-09-02
   - hayland # failure in job https://hydra.nixos.org/build/233201482 at 2023-09-02

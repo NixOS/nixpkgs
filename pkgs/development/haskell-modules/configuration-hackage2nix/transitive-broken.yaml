@@ -478,7 +478,6 @@ dont-distribute-packages:
  - cless
  - cleveland
  - click-clack
- - clickhouse-haskell
  - clifford
  - clippings
  - cloud-haskell
@@ -1439,8 +1438,6 @@ dont-distribute-packages:
  - HaVSA
  - hawitter
  - Hawk
- - haxl-amazonka
- - haxl-facebook
  - haxy
  - Hayoo
  - hback
@@ -2884,7 +2881,6 @@ dont-distribute-packages:
  - reddit
  - redHandlers
  - redis-io
- - rediscaching-haxl
  - refh
  - reflex-animation
  - reflex-backend-wai
@@ -3076,7 +3072,6 @@ dont-distribute-packages:
  - scotty-fay
  - scotty-form
  - scotty-hastache
- - scotty-haxl
  - scotty-params-parser
  - scp-streams
  - scrabble-bot
@@ -3135,7 +3130,6 @@ dont-distribute-packages:
  - servant-db-postgresql
  - servant-ede
  - servant-examples
- - servant-haxl-client
  - servant-js
  - servant-matrix-param
  - servant-oauth2
