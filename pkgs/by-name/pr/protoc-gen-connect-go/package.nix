@@ -26,6 +26,18 @@ buildGoModule rec {
     unset subPackages
   '';
 
+  checkFlags =
+    let
+      skippedTests = [
+        # other tests work, could be related to sandboxing or timings
+        # got:  unavailable
+        # want: deadline_exceeded
+        # client_ext_test.go:789: actual receive error from /connect.ping.v1.PingService/Sum: unavailable: io: read/write on closed pipe
+        "TestClientDeadlineHandling/read-write"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   meta = {
     description = "Simple, reliable, interoperable, better gRPC";
     mainProgram = "protoc-gen-connect-go";
