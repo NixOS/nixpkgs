@@ -9471,6 +9471,8 @@ self: super: with self; {
 
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
 
+  mkdocs-gen-files = callPackage ../development/python-modules/mkdocs-gen-files { };
+
   mkdocs-get-deps = callPackage ../development/python-modules/mkdocs-get-deps { };
 
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
