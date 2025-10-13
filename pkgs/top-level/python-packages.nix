@@ -8910,6 +8910,8 @@ self: super: with self; {
 
   lzallright = callPackage ../development/python-modules/lzallright { };
 
+  lzfse = callPackage ../development/python-modules/lzfse { };
+
   lzstring = callPackage ../development/python-modules/lzstring { };
 
   m2crypto = callPackage ../development/python-modules/m2crypto { };
