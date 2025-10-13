@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "logseq";
-  version = "0.10.12";
+  version = "0.10.14";
 
   src = fetchFromGitHub {
     owner = "logseq";
     repo = "logseq";
     tag = finalAttrs.version;
-    hash = "sha256-SUzt4hYHE6XJOEMxFp2a0om2oVUk1MHQUteGFiM9Lkc=";
+    hash = "sha256-jIkAiSCYIO5w/jM/Bv/odTuluRi3W/w4tTaUTmaYvEA=";
   };
 
   patches = [
@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   yarnOfflineCacheRoot = fetchYarnDeps {
     name = "logseq-${finalAttrs.version}-yarn-deps-root";
     inherit (finalAttrs) src;
-    hash = "sha256-sbC6WQLjEHIKTuejSQXplQOWZwUmBJdGXuAkilQGjYs=";
+    hash = "sha256-eSMtHA4Ob7EVb5qEzAj+WjGyyFjA0ZEvTsaoMx0bgjc=";
   };
 
   # ./static and ./resources are combined into ./static by the build process
