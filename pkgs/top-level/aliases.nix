@@ -1812,6 +1812,7 @@ mapAliases {
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
   nanoblogger = throw "nanoblogger has been removed as upstream stopped developement in 2013"; # Added 2025-09-10
   nasc = throw "'nasc' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
+  nats-streaming-server = throw "'nats-streaming-server' has been removed as critical bug fixes and security fixes will no longer be performed as of June of 2023"; # added 2025-10-13
   ncdu_2 = ncdu; # Added 2022-07-22
   neardal = throw "neardal has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
   neocities-cli = neocities; # Added 2024-07-31
