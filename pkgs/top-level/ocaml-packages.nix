@@ -2211,6 +2211,10 @@ let
 
         zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
 
+        ### _ ###
+
+        _0install-solver = callPackage ../development/ocaml-modules/0install-solver { };
+
         ### Exceptional packages kept out of order ###
 
         # Libs
