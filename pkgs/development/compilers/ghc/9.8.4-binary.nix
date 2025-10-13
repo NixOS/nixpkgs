@@ -100,10 +100,6 @@ let
             nixPackage = ncurses6;
             fileToCheckFor = "libtinfo.so.6";
           }
-          {
-            nixPackage = numactl;
-            fileToCheckFor = null;
-          }
         ];
       };
       x86_64-darwin = {
