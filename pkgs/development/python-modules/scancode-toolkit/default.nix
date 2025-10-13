@@ -55,6 +55,7 @@
   typecode,
   typecode-libmagic,
   urlpy,
+  writableTmpDirAsHomeHook,
   xmltodict,
   zipp,
 }:
@@ -130,12 +131,13 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.9") [ zipp ];
 
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
   postInstall = ''
-    export HOME=$(mktemp -d)
   '';
 
   pythonImportsCheck = [ "scancode" ];
