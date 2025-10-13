@@ -18,17 +18,18 @@
   judy,
   prometheus-cpp,
   libz,
+  gtest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "5.1.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-56PlUeXHqNhKYokKWqLCeaP3FZBdefhQFQQoP8YytQQ=";
+    hash = "sha256-FS3USnNs6hmR8kExMxvgjCikLCuiZBdyxIdArshwqM0=";
   };
 
   patches = [
@@ -59,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     judy
     prometheus-cpp
     libz
+    gtest
   ];
 
   cmakeFlags = [
