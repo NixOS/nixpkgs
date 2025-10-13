@@ -409,10 +409,22 @@ optionalAttrs allowAliases aliases
     let
       mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
+
+      rawFormat = ini {
+        listsAsDuplicateKeys = true;
+        inherit mkKeyValue;
+      };
     in
-    ini {
-      listsAsDuplicateKeys = true;
-      inherit mkKeyValue;
+    rawFormat
+    // {
+      generate =
+        name: value:
+        lib.warn
+          "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
+          rawFormat.generate
+          name
+          value;
+      __functor = self: { }: rawFormat;
     };
 
   keyValue =

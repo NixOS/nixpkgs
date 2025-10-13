@@ -1854,42 +1854,6 @@ mapAliases {
     first on 25.05 because Nextcloud doesn't support upgrades across multiple major versions!
   ''; # Added 2025-09-25
   nextcloud30Packages = throw "Nextcloud 30 is EOL!"; # Added 2025-09-25
-  nextcloud29 = throw ''
-    Nextcloud v29 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2025-04. Please upgrade to at least Nextcloud v30 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud30;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 28 you have to upgrade to Nextcloud 29
-    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2025-04-11
-  nextcloud29Packages = throw "Nextcloud 29 is EOL!"; # Added 2025-04-11
-  nextcloud28 = throw ''
-    Nextcloud v28 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2025-01. Please upgrade to at least Nextcloud v29 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud29;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 27 you have to upgrade to Nextcloud 28
-    first on 24.11 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2025-01-19
-  nextcloud28Packages = throw "Nextcloud 28 is EOL!"; # Added 2025-01-19
-  nextcloud27 = throw ''
-    Nextcloud v27 has been removed from `nixpkgs` as the support for is dropped
-    by upstream in 2024-06. Please upgrade to at least Nextcloud v28 by declaring
-
-        services.nextcloud.package = pkgs.nextcloud28;
-
-    in your NixOS config.
-
-    WARNING: if you were on Nextcloud 26 you have to upgrade to Nextcloud 27
-    first on 24.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2024-06-25
-  nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
   nextcloud-news-updater = throw "nextcloud-news-updater has been removed because the project is unmaintained"; # Added 2025-03-28
   nixForLinking = throw "nixForLinking has been removed, use `nixVersions.nixComponents_<version>` instead"; # Added 2025-08-14
   nagiosPluginsOfficial = monitoring-plugins; # Added 2017-08-07
