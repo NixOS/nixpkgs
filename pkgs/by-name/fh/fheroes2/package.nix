@@ -42,7 +42,6 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   makeFlags = [
-    "FHEROES2_STRICT_COMPILATION=1"
     "FHEROES2_DATA=\"${placeholder "out"}/share/fheroes2\""
   ];
 
