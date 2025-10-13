@@ -15903,6 +15903,8 @@ self: super: with self; {
 
   remotezip = callPackage ../development/python-modules/remotezip { };
 
+  remotezip2 = callPackage ../development/python-modules/remotezip2 { };
+
   renault-api = callPackage ../development/python-modules/renault-api { };
 
   rencode = callPackage ../development/python-modules/rencode { };
