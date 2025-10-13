@@ -1,0 +1,32 @@
+diff --git a/src/main/versions.ts b/src/main/versions.ts
+index 501ba1a..0c11ff7 100644
+--- a/src/main/versions.ts
++++ b/src/main/versions.ts
+@@ -5,7 +5,6 @@ import { IpcMainInvokeEvent, app } from 'electron';
+ import fs from 'fs-extra';
+ 
+ import { ipcMainManager } from './ipc';
+-import releases from '../../static/releases.json';
+ import { InstallState, Version } from '../interfaces';
+ import { IpcEvents } from '../ipc-events';
+ 
+@@ -72,7 +71,6 @@ export async function fetchVersions(): Promise<Version[]> {
+ 
+ export async function setupVersions() {
+   knownVersions = await ElectronVersions.create({
+-    initialVersions: releases,
+     paths: {
+       versionsCache: path.join(app.getPath('userData'), 'releases.json'),
+     },
+diff --git a/tools/fetch-releases.ts b/tools/fetch-releases.ts
+index 744b814..94fd971 100644
+--- a/tools/fetch-releases.ts
++++ b/tools/fetch-releases.ts
+@@ -6,6 +6,7 @@ import { ElectronVersions } from '@electron/fiddle-core';
+ const file = path.join(__dirname, '..', 'static', 'releases.json');
+ 
+ export async function populateReleases() {
++  return;
+   const elves = await ElectronVersions.create({ ignoreCache: true });
+   const releases = elves.versions.map(({ version }) =>
+     elves.getReleaseInfo(version),

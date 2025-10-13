@@ -1,0 +1,33 @@
+diff --git a/cmake/SearchForStuff.cmake b/cmake/SearchForStuff.cmake
+index ff66f9c..e177c90 100644
+--- a/cmake/SearchForStuff.cmake
++++ b/cmake/SearchForStuff.cmake
+@@ -100,9 +100,8 @@ if(USE_VULKAN)
+ 	add_subdirectory(3rdparty/vulkan EXCLUDE_FROM_ALL)
+ endif()
+ 
+-add_subdirectory(3rdparty/cubeb EXCLUDE_FROM_ALL)
+-disable_compiler_warnings_for_target(cubeb)
+-disable_compiler_warnings_for_target(speex)
++find_package(cubeb REQUIRED GLOBAL)
++add_library(cubeb ALIAS cubeb::cubeb)
+ 
+ # Find the Qt components that we need.
+ find_package(Qt6 6.7.2 COMPONENTS CoreTools Core GuiTools Gui WidgetsTools Widgets LinguistTools REQUIRED)
+diff --git a/pcsx2/Host/CubebAudioStream.cpp b/pcsx2/Host/CubebAudioStream.cpp
+index 4cd9993..74c2f5a 100644
+--- a/pcsx2/Host/CubebAudioStream.cpp
++++ b/pcsx2/Host/CubebAudioStream.cpp
+@@ -288,9 +288,9 @@ std::vector<std::pair<std::string, std::string>> AudioStream::GetCubebDriverName
+ 	std::vector<std::pair<std::string, std::string>> names;
+ 	names.emplace_back(std::string(), TRANSLATE_STR("AudioStream", "Default"));
+ 
+-	const char** cubeb_names = cubeb_get_backend_names();
+-	for (u32 i = 0; cubeb_names[i] != nullptr; i++)
+-		names.emplace_back(cubeb_names[i], cubeb_names[i]);
++	cubeb_backend_names backends = cubeb_get_backend_names();
++	for (u32 i = 0; i < backends.count; i++)
++		names.emplace_back(backends.names[i], backends.names[i]);
+ 
+ 	return names;
+ }

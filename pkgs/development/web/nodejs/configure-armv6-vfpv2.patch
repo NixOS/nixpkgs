@@ -1,0 +1,15 @@
+Allows ARM FPU to be set to vfpv2, e.g. for Raspberry Pi.
+
+See https://github.com/nodejs/node/issues/44357#issuecomment-1235821878
+
+--- a/configure.py
++++ b/configure.py
+@@ -50,7 +50,7 @@
+ valid_arch = ('arm', 'arm64', 'ia32', 'mips', 'mipsel', 'mips64el', 'ppc',
+               'ppc64', 'x64', 'x86', 'x86_64', 's390x', 'riscv64', 'loong64')
+ valid_arm_float_abi = ('soft', 'softfp', 'hard')
+-valid_arm_fpu = ('vfp', 'vfpv3', 'vfpv3-d16', 'neon')
++valid_arm_fpu = ('vfp', 'vfpv2', 'vfpv3', 'vfpv3-d16', 'neon')
+ valid_mips_arch = ('loongson', 'r1', 'r2', 'r6', 'rx')
+ valid_mips_fpu = ('fp32', 'fp64', 'fpxx')
+ valid_mips_float_abi = ('soft', 'hard')

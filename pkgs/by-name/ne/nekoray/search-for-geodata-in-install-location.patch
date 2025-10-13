@@ -1,0 +1,13 @@
+diff --git a/src/global/NekoGui.cpp b/src/global/NekoGui.cpp
+index d9be515..15de64b 100644
+--- a/src/global/NekoGui.cpp
++++ b/src/global/NekoGui.cpp
+@@ -426,8 +426,6 @@ namespace NekoGui {
+     };
+ 
+     QString GetBasePath() {
+-        if (dataStore->flag_use_appdata) return QStandardPaths::writableLocation(
+-              QStandardPaths::AppConfigLocation);
+         return qApp->applicationDirPath();
+     }
+ 

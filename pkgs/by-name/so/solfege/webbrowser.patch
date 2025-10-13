@@ -1,0 +1,8 @@
+Fix startup.
+
+--- a/solfege/mainwin.py
++++ b/solfege/mainwin.py
+@@ -27,2 +27,3 @@ import textwrap
+ try:
++    webbrowser.register_standard_browsers()
+     i = webbrowser._tryorder.index("x-www-browser")

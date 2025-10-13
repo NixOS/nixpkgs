@@ -1,0 +1,13 @@
+{
+  "url": "https://github.com/uncenter/tree-sitter-tera",
+  "rev": "d006172998fa8b81f96b0f2fc7fa2bf25207c46b",
+  "date": "2025-04-16T08:51:56-04:00",
+  "path": "/nix/store/364masbjrvf29v30h4hbzwds1j438k7a-tree-sitter-tera",
+  "sha256": "0cwihdzlm8jk8g006j234pjnw0apv3l8ixn4kmdc60hzh3bb9ypr",
+  "hash": "sha256-+fq01oAfAsNancT2iOjYVwFu5SVDSAPAQ1OiSn+DkTM=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false
+}

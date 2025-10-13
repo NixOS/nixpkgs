@@ -1,0 +1,13 @@
+diff --git a/src/HyperionProperties.cpp b/src/HyperionProperties.cpp
+index b585702..3fd308c 100644
+--- a/src/HyperionProperties.cpp
++++ b/src/HyperionProperties.cpp
+@@ -59,7 +59,7 @@ HyperionProperties::HyperionProperties(QWidget *parent)
+ 	signal_handler_connect(handler, "log", logger_message, this);
+ 
+ 	connect(ui->ButtonStart, &QPushButton::clicked, this, &HyperionProperties::saveSettings);
+-	connect(ui->AutoStart, &QCheckBox::stateChanged, this, &HyperionProperties::saveSettings);
++	connect(ui->AutoStart, &QCheckBox::checkStateChanged, this, &HyperionProperties::saveSettings);
+ 
+ 	connect(ui->ButtonStart, &QPushButton::clicked, this, &HyperionProperties::onStart);
+ 	connect(ui->ButtonStop, &QPushButton::clicked, this, &HyperionProperties::onStop);

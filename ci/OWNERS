@@ -1,0 +1,501 @@
+# This file is used to describe who owns what in this repository.
+# Users/teams will get review requests for PRs that change their files.
+#
+# This file does not replace `meta.maintainers`
+# but is instead used for other things than derivations and modules,
+# like documentation, package sets, and other assets.
+#
+# This file uses the same syntax as the natively supported CODEOWNERS file,
+# see https://help.github.com/articles/about-codeowners/ for documentation.
+# However it comes with some notable differences:
+# - There is no need for user/team listed here to have write access.
+# - No reviews will be requested for PRs that target the wrong base branch.
+#
+# Processing of this file is implemented in workflows/codeowners-v2.yml
+
+# CI
+/.github/*_TEMPLATE*                    @SigmaSquadron
+/.github/actions                        @NixOS/nixpkgs-ci
+/.github/workflows                      @NixOS/nixpkgs-ci
+/ci                                     @NixOS/nixpkgs-ci
+/ci/OWNERS                              @infinisil @philiptaron
+
+# Development support
+/.editorconfig @Mic92 @zowoq
+/shell.nix @infinisil @NixOS/Security
+
+# Libraries
+/lib                        @infinisil @hsjobeki
+/lib/generators.nix         @infinisil @hsjobeki @Profpatsch
+/lib/cli.nix                @infinisil @hsjobeki @Profpatsch
+/lib/debug.nix              @infinisil @hsjobeki @Profpatsch
+/lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
+/lib/path/*                 @infinisil @hsjobeki
+/lib/fileset                @infinisil @hsjobeki
+## Standard environment–related libraries
+/lib/customisation.nix      @alyssais @NixOS/stdenv
+/lib/derivations.nix        @alyssais @NixOS/stdenv
+/lib/fetchers.nix           @alyssais @NixOS/stdenv
+/lib/meta.nix               @alyssais @NixOS/stdenv
+/lib/source-types.nix       @alyssais @NixOS/stdenv
+/lib/systems                @alyssais @NixOS/stdenv
+## Libraries / Module system
+/lib/modules.nix            @infinisil @roberth @hsjobeki
+/lib/types.nix              @infinisil @roberth @hsjobeki
+/lib/options.nix            @infinisil @roberth @hsjobeki
+/lib/tests/modules.sh       @infinisil @roberth @hsjobeki
+/lib/tests/modules          @infinisil @roberth @hsjobeki
+
+# Nixpkgs Internals
+/default.nix                                     @Ericson2314
+/pkgs/top-level/default.nix                      @Ericson2314
+/pkgs/top-level/impure.nix                       @Ericson2314
+/pkgs/top-level/stage.nix                        @Ericson2314
+/pkgs/top-level/splice.nix                       @Ericson2314
+/pkgs/top-level/release-cross.nix                @Ericson2314
+/pkgs/top-level/by-name-overlay.nix              @infinisil @philiptaron
+/pkgs/stdenv                                     @philiptaron @NixOS/stdenv
+/pkgs/stdenv/generic                             @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/generic/check-meta.nix              @Ericson2314 @NixOS/stdenv
+/pkgs/stdenv/cross                               @Ericson2314 @NixOS/stdenv
+/pkgs/build-support                              @philiptaron
+/pkgs/build-support/cc-wrapper                   @Ericson2314
+/pkgs/build-support/bintools-wrapper             @Ericson2314
+/pkgs/build-support/setup-hooks                  @Ericson2314
+/pkgs/build-support/setup-hooks/arrayUtilities   @ConnorBaker
+/pkgs/build-support/setup-hooks/auto-patchelf.sh @layus
+/pkgs/by-name/au/auto-patchelf                   @layus
+
+## Format generators/serializers
+/pkgs/pkgs-lib                                   @Stunkymonkey @h7x4
+
+# Nixpkgs build-support
+/pkgs/build-support/writers @lassulus @Profpatsch
+
+# Nixpkgs make-disk-image
+/doc/build-helpers/images/makediskimage.section.md  @raitobezarius
+/nixos/lib/make-disk-image.nix                 @raitobezarius
+
+# Nix, the package manager
+# @raitobezarius is not "code owner", but is listed here to be notified of changes
+# pertaining to the Nix package manager.
+# i.e. no authority over those files.
+pkgs/tools/package-management/nix/                    @NixOS/nix-team @raitobezarius
+nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobezarius
+
+# Nixpkgs documentation
+/maintainers/scripts/db-to-md.sh @jtojnar @ryantm
+/maintainers/scripts/doc @jtojnar @ryantm
+
+# Contributor documentation
+/CONTRIBUTING.md @infinisil
+/.github/PULL_REQUEST_TEMPLATE.md @infinisil
+/doc/contributing/ @infinisil
+/doc/contributing/contributing-to-documentation.chapter.md @jtojnar @infinisil
+/lib/README.md @infinisil
+/doc/README.md @infinisil
+/nixos/README.md @infinisil
+/pkgs/README.md @infinisil
+/pkgs/by-name/README.md @infinisil
+/maintainers/README.md @infinisil
+
+# User-facing development documentation
+/doc/development.md @infinisil
+/doc/development @infinisil
+
+# NixOS Internals
+/nixos/default.nix                                    @infinisil
+/nixos/lib/from-env.nix                               @infinisil
+/nixos/lib/eval-config.nix                            @infinisil
+/nixos/modules/misc/ids.nix                           @R-VdP
+/nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
+/nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
+
+# NixOS Render Docs
+/pkgs/by-name/ni/nixos-render-docs @fricklerhandwerk @GetPsyched @hsjobeki
+/doc/redirects.json                @fricklerhandwerk @GetPsyched @hsjobeki
+/nixos/doc/manual/redirects.json   @fricklerhandwerk @GetPsyched @hsjobeki
+
+# NixOS integration test driver
+/nixos/lib/test-driver  @tfc
+
+# NixOS QEMU virtualisation
+/nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
+/nixos/modules/services/backup/libvirtd-autosnapshot.nix  @6543
+
+# ACME
+/nixos/modules/security/acme                @NixOS/acme
+
+# Systemd
+/nixos/modules/system/boot/systemd.nix      @NixOS/systemd
+/nixos/modules/system/boot/systemd          @NixOS/systemd
+/nixos/lib/systemd-*.nix                    @NixOS/systemd
+/pkgs/os-specific/linux/systemd             @NixOS/systemd
+
+# Systemd-boot
+/nixos/modules/system/boot/loader/systemd-boot      @JulienMalka
+
+# Limine
+/nixos/modules/system/boot/loader/limine        @lzcunt @phip1611 @programmerlexi @johnrtitor
+/nixos/tests/limine                             @johnrtitor
+
+# Images and installer media
+/nixos/modules/profiles/installation-device.nix @ElvishJerricco
+/nixos/modules/installer/cd-dvd/                @ElvishJerricco
+/nixos/modules/installer/sd-card/
+
+# Amazon
+/nixos/modules/virtualisation/amazon-init.nix                  @arianvp
+/nixos/modules/virtualisation/ec2-data.nix                     @arianvp
+/nixos/modules/virtualisation/amazon-options.nix               @arianvp
+/nixos/modules/virtualisation/amazon-image.nix                 @arianvp
+/nixos/maintainers/scripts/ec2/                                @arianvp
+/nixos/modules/services/misc/amazon-ssm-agent.nix              @arianvp
+/nixos/tests/amazon-ssm-agent.nix                              @arianvp
+/nixos/modules/system/boot/grow-partition.nix                  @arianvp
+/nixos/modules/services/monitoring/amazon-cloudwatch-agent.nix @philipmw
+/nixos/tests/amazon-cloudwatch-agent.nix                       @philipmw
+
+# Monitoring
+/nixos/modules/services/monitoring/fluent-bit.nix @arianvp
+/nixos/tests/fluent-bit.nix                       @arianvp
+
+# nixos-rebuild-ng
+/pkgs/by-name/ni/nixos-rebuild-ng                 @thiagokokada
+
+# Updaters
+## update.nix
+/maintainers/scripts/update.nix   @jtojnar
+/maintainers/scripts/update.py    @jtojnar
+## common-updater-scripts
+/pkgs/common-updater/scripts/update-source-version    @jtojnar
+
+# Android tools, libraries, and environments
+/pkgs/development/android*                    @NixOS/android
+/pkgs/development/mobile/android*             @NixOS/android
+/pkgs/applications/editors/android-studio*    @NixOS/android
+/doc/languages-frameworks/android*            @NixOS/android
+/pkgs/by-name/an/android*                     @NixOS/android
+
+# Python-related code and docs
+/doc/languages-frameworks/python.section.md   @mweinelt @natsukium
+/maintainers/scripts/update-python-libraries  @mweinelt @natsukium
+/pkgs/by-name/up/update-python-libraries      @mweinelt @natsukium
+/pkgs/development/interpreters/python         @mweinelt @natsukium
+/pkgs/top-level/python-packages.nix                     @natsukium
+/pkgs/top-level/release-python.nix                      @natsukium
+
+# CUDA
+/pkgs/top-level/cuda-packages.nix             @NixOS/cuda-maintainers
+/pkgs/top-level/release-cuda.nix              @NixOS/cuda-maintainers
+/pkgs/development/cuda-modules                @NixOS/cuda-maintainers
+
+# Haskell
+/doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
+/maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
+/pkgs/development/compilers/ghc               @sternenseemann @maralorn @wolfgangwalther
+/pkgs/development/haskell-modules             @sternenseemann @maralorn @wolfgangwalther
+/pkgs/test/haskell                            @sternenseemann @maralorn @wolfgangwalther
+/pkgs/top-level/release-haskell.nix           @sternenseemann @maralorn @wolfgangwalther
+/pkgs/top-level/haskell-packages.nix          @sternenseemann @maralorn @wolfgangwalther
+
+# Perl
+/pkgs/development/interpreters/perl @stigtsp @zakame @marcusramberg
+/pkgs/top-level/perl-packages.nix   @stigtsp @zakame @marcusramberg
+/pkgs/development/perl-modules      @stigtsp @zakame @marcusramberg
+
+# R
+/pkgs/applications/science/math/R   @jbedo
+/pkgs/development/r-modules         @jbedo
+
+# Rust
+/pkgs/development/compilers/rust @alyssais @Mic92 @zowoq @winterqt @figsoda
+/pkgs/build-support/rust @zowoq @winterqt @figsoda
+/pkgs/build-support/rust/fetch-cargo-vendor* @TomaSajt
+/doc/languages-frameworks/rust.section.md @zowoq @winterqt @figsoda
+
+# Tcl
+/pkgs/development/interpreters/tcl  @fgaz
+/pkgs/development/libraries/tk      @fgaz
+/pkgs/top-level/tcl-packages.nix    @fgaz
+/pkgs/development/tcl-modules       @fgaz
+/doc/languages-frameworks/tcl.section.md @fgaz
+
+# C compilers
+/pkgs/development/compilers/gcc
+/pkgs/development/compilers/llvm @NixOS/llvm
+/pkgs/development/compilers/emscripten @raitobezarius
+/doc/toolchains/llvm.chapter.md @NixOS/llvm
+/doc/languages-frameworks/emscripten.section.md @raitobezarius
+
+# Audio
+/nixos/modules/services/audio/botamusique.nix @mweinelt
+/nixos/modules/services/audio/snapserver.nix @mweinelt
+/nixos/tests/botamusique.nix @mweinelt
+/nixos/tests/snapcast.nix @mweinelt
+
+# Browsers
+/pkgs/build-support/build-mozilla-mach @mweinelt
+/pkgs/applications/networking/browsers/firefox/update.nix
+/pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
+/pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
+/pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
+/pkgs/applications/networking/browsers/chromium @emilylange @networkException
+/nixos/tests/chromium.nix @emilylange @networkException
+
+# Certificate Authorities
+pkgs/by-name/ca/cacert @ajs124 @lukegb @mweinelt
+pkgs/development/libraries/nss/ @ajs124 @lukegb @mweinelt
+pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
+
+# Java
+/doc/languages-frameworks/java.section.md @NixOS/java
+/doc/languages-frameworks/gradle.section.md @NixOS/java
+/doc/languages-frameworks/maven.section.md @NixOS/java
+/nixos/modules/programs/java.nix @NixOS/java
+/pkgs/top-level/java-packages.nix @NixOS/java
+
+# Jetbrains
+/pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
+
+# Licenses
+/lib/licenses.nix @alyssais @emilazy @jopejoe1
+
+# Qt
+/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
+
+# KDE Frameworks 5
+/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
+
+# KDE / Plasma 6
+/pkgs/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+
+# PostgreSQL and related stuff
+/pkgs/by-name/po/postgresqlTestHook @NixOS/postgres
+/pkgs/by-name/ps/psqlodbc @NixOS/postgres
+/pkgs/servers/sql/postgresql @NixOS/postgres
+/pkgs/development/tools/rust/cargo-pgrx @NixOS/postgres
+/nixos/modules/services/databases/postgresql.md @NixOS/postgres
+/nixos/modules/services/databases/postgresql.nix @NixOS/postgres
+/nixos/tests/postgresql @NixOS/postgres
+
+# MySQL/MariaDB and related stuff
+/nixos/modules/services/databases/mysql.nix     @6543
+/nixos/modules/services/backup/mysql-backup.nix @6543
+
+# Hardened profile & related modules
+/nixos/modules/profiles/hardened.nix                       @joachifm
+/nixos/modules/security/lock-kernel-modules.nix            @joachifm
+/nixos/modules/security/misc.nix                           @joachifm
+/nixos/tests/hardened.nix                                  @joachifm
+/pkgs/os-specific/linux/kernel/hardened/        @fabianhjr @joachifm
+
+# Home Automation
+/nixos/modules/services/home-automation/home-assistant.nix @mweinelt
+/nixos/modules/services/home-automation/zigbee2mqtt.nix @mweinelt
+/nixos/tests/home-assistant.nix @mweinelt
+/nixos/tests/zigbee2mqtt.nix @mweinelt
+/pkgs/servers/home-assistant @mweinelt
+/pkgs/by-name/es/esphome @mweinelt
+
+# Linux kernel
+/pkgs/top-level/linux-kernels.nix @NixOS/linux-kernel
+/pkgs/os-specific/linux/kernel/ @NixOS/linux-kernel
+
+# Network Time Daemons
+/pkgs/by-name/ch/chrony @thoughtpolice
+/pkgs/by-name/nt/ntp @thoughtpolice
+/pkgs/by-name/op/openntpd @thoughtpolice
+/nixos/modules/services/networking/ntp @thoughtpolice
+
+# Network
+/pkgs/by-name/ke/kea @mweinelt
+/pkgs/by-name/ba/babeld @mweinelt
+/nixos/modules/services/networking/babeld.nix @mweinelt
+/nixos/modules/services/networking/kea.nix @mweinelt
+/nixos/modules/services/networking/knot.nix @mweinelt
+/nixos/modules/services/monitoring/prometheus/exporters/kea.nix @mweinelt
+/nixos/tests/babeld.nix @mweinelt
+/nixos/tests/kea.nix @mweinelt
+/nixos/tests/knot.nix @mweinelt
+
+# Web servers
+/doc/packages/nginx.section.md @raitobezarius
+/pkgs/servers/http/nginx/ @raitobezarius
+/nixos/modules/services/web-servers/nginx/ @raitobezarius
+
+# D
+/pkgs/build-support/dlang @jtbx @TomaSajt
+
+# Dhall
+/pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
+/pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
+
+# Idris
+/pkgs/development/idris-modules @Infinisil
+/pkgs/development/compilers/idris2 @mattpolzin
+
+# Bazel
+/pkgs/by-name/ba/bazel_7 @Profpatsch
+
+# NixOS modules for e-mail and dns services
+/nixos/modules/services/mail/mailman.nix    @peti
+/nixos/modules/services/mail/postfix.nix    @peti
+/nixos/modules/services/networking/bind.nix @peti
+/nixos/modules/services/mail/rspamd.nix     @peti
+
+# Emacs
+/pkgs/applications/editors/emacs/elisp-packages @NixOS/emacs
+/pkgs/applications/editors/emacs                @NixOS/emacs
+/pkgs/top-level/emacs-packages.nix              @NixOS/emacs
+/doc/packages/emacs.section.md                  @NixOS/emacs
+/nixos/modules/services/editors/emacs.md        @NixOS/emacs
+
+# Kakoune
+/pkgs/applications/editors/kakoune     @philiptaron
+
+# LuaPackages
+/pkgs/development/lua-modules         @NixOS/lua
+
+# Neovim
+/pkgs/applications/editors/neovim      @NixOS/neovim
+
+# VimPlugins
+/pkgs/applications/editors/vim/plugins         @NixOS/neovim
+
+# VsCode Extensions
+/pkgs/applications/editors/vscode/extensions
+
+# PHP interpreter, packages, extensions, tests and documentation
+/doc/languages-frameworks/php.section.md          @aanderse @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
+
+# Docker tools
+/pkgs/build-support/docker                   @roberth
+/nixos/tests/docker-tools*                   @roberth
+/doc/build-helpers/images/dockertools.section.md  @roberth
+
+# Blockchains
+/pkgs/applications/blockchains  @mmahut @RaghavSood
+
+# Go
+/doc/languages-frameworks/go.section.md @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/build-support/go @kalbasit @katexochen @Mic92 @zowoq
+/pkgs/development/compilers/go @kalbasit @katexochen @Mic92 @zowoq
+
+# GNOME
+/pkgs/desktops/gnome                              @jtojnar
+/pkgs/desktops/gnome/extensions                   @jtojnar
+/pkgs/build-support/make-hardcode-gsettings-patch @jtojnar
+
+# Cinnamon
+/pkgs/by-name/ci/cinnamon-*    @mkg20001
+/pkgs/by-name/cj/cjs           @mkg20001
+/pkgs/by-name/mu/muffin        @mkg20001
+/pkgs/by-name/ne/nemo          @mkg20001
+/pkgs/by-name/ne/nemo-*        @mkg20001
+
+# Xfce
+/doc/hooks/xfce4-dev-tools.section.md @NixOS/xfce
+
+# terraform providers
+/pkgs/applications/networking/cluster/terraform-providers @zowoq
+
+# Forgejo
+nixos/modules/services/misc/forgejo.nix @adamcstephens @bendlas @emilylange
+pkgs/by-name/fo/forgejo/                @adamcstephens @bendlas @emilylange
+
+# Dotnet
+/pkgs/build-support/dotnet                  @corngood
+/pkgs/development/compilers/dotnet          @corngood
+/pkgs/test/dotnet                           @corngood
+/doc/languages-frameworks/dotnet.section.md @corngood
+
+# Node.js
+/pkgs/build-support/node/build-npm-package      @winterqt
+/pkgs/build-support/node/fetch-npm-deps         @winterqt
+/doc/languages-frameworks/javascript.section.md @winterqt
+/pkgs/development/tools/pnpm                    @Scrumplex @gepbird
+
+# OCaml
+/pkgs/build-support/ocaml           @ulrikstrid
+/pkgs/development/compilers/ocaml   @ulrikstrid
+/pkgs/development/ocaml-modules     @ulrikstrid
+
+# ZFS
+/nixos/modules/tasks/filesystems/zfs.nix @adamcstephens @amarshall
+/nixos/tests/zfs.nix                     @adamcstephens @amarshall
+/pkgs/os-specific/linux/zfs              @adamcstephens @amarshall
+
+# Zig
+/pkgs/development/compilers/zig @figsoda @RossComputerGuy
+/doc/hooks/zig.section.md       @figsoda @RossComputerGuy
+
+# Buildbot
+nixos/modules/services/continuous-integration/buildbot @Mic92 @zowoq
+nixos/tests/buildbot.nix                               @Mic92 @zowoq
+pkgs/development/tools/continuous-integration/buildbot @Mic92 @zowoq
+
+# Pretix
+pkgs/by-name/pr/pretix/ @mweinelt
+pkgs/by-name/pr/pretalx/ @mweinelt
+nixos/modules/services/web-apps/pretix.nix @mweinelt
+nixos/modules/services/web-apps/pretalx.nix @mweinelt
+nixos/tests/web-apps/pretix.nix @mweinelt
+nixos/tests/web-apps/pretalx.nix @mweinelt
+
+# incus/lxc
+nixos/maintainers/scripts/incus/        @adamcstephens
+nixos/modules/virtualisation/incus.nix  @adamcstephens
+nixos/modules/virtualisation/lxc*       @adamcstephens
+nixos/tests/incus/                      @adamcstephens
+pkgs/by-name/in/incus/                  @adamcstephens
+pkgs/by-name/lx/lxc*                    @adamcstephens
+
+# ExpidusOS, Flutter
+/pkgs/development/compilers/flutter @RossComputerGuy
+/pkgs/desktops/expidus              @RossComputerGuy
+
+# GNU Tar & Zip
+/pkgs/tools/archivers/gnutar        @RossComputerGuy
+/pkgs/by-name/zi/zip           @RossComputerGuy
+
+# SELinux
+/pkgs/by-name/ch/checkpolicy @RossComputerGuy
+/pkgs/by-name/li/libselinux  @RossComputerGuy
+/pkgs/by-name/li/libsepol    @RossComputerGuy
+
+# installShellFiles
+/pkgs/by-name/in/installShellFiles/*     @Ericson2314
+/pkgs/test/install-shell-files/*         @Ericson2314
+/doc/hooks/installShellFiles.section.md  @Ericson2314
+
+# Darwin
+/pkgs/by-name/ap/apple-sdk                     @NixOS/darwin-core
+/pkgs/os-specific/darwin/apple-source-releases @NixOS/darwin-core
+/pkgs/stdenv/darwin                            @NixOS/darwin-core
+
+# BEAM
+pkgs/development/beam-modules/          @NixOS/beam
+pkgs/development/interpreters/erlang/   @NixOS/beam
+pkgs/development/interpreters/elixir/   @NixOS/beam
+pkgs/development/interpreters/lfe/      @NixOS/beam
+
+# Authelia
+pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
+
+# OctoDNS
+pkgs/by-name/oc/octodns/ @anthonyroussel
+
+# Teleport
+/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+
+# Warp-terminal
+pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor

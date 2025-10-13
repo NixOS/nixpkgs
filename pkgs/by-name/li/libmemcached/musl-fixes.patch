@@ -1,0 +1,58 @@
+diff --git a/libhashkit/fnv_64.cc b/libhashkit/fnv_64.cc
+index 68e4dd0..64656b7 100644
+--- a/libhashkit/fnv_64.cc
++++ b/libhashkit/fnv_64.cc
+@@ -37,8 +37,9 @@
+ 
+ 
+ #include <libhashkit/common.h>
++#include <limits.h>
+ 
+-#if __WORDSIZE == 64 && defined(HAVE_FNV64_HASH)
++#if (LONG_BITS == 64) && defined(HAVE_FNV64_HASH)
+ 
+ /* FNV hash'es lifted from Dustin Sallings work */
+ static uint64_t FNV_64_INIT= 0xcbf29ce484222325;
+diff --git a/libhashkit/has.cc b/libhashkit/has.cc
+index 843e32e..4153e5e 100644
+--- a/libhashkit/has.cc
++++ b/libhashkit/has.cc
+@@ -37,6 +37,7 @@
+ 
+ 
+ #include <libhashkit/common.h>
++#include <limits.h>
+ 
+ bool libhashkit_has_algorithm(const hashkit_hash_algorithm_t algo)
+ {
+@@ -44,7 +45,7 @@ bool libhashkit_has_algorithm(const hashkit_hash_algorithm_t algo)
+   {
+   case HASHKIT_HASH_FNV1_64:
+   case HASHKIT_HASH_FNV1A_64:
+-#if __WORDSIZE == 64 && defined(HAVE_FNV64_HASH)
++#if (LONG_BITS == 64) && defined(HAVE_FNV64_HASH)
+     return true;
+ #else
+     return false;
+diff --git a/libtest/cmdline.cc b/libtest/cmdline.cc
+index 29a22de..161c646 100644
+--- a/libtest/cmdline.cc
++++ b/libtest/cmdline.cc
+@@ -61,7 +61,7 @@ using namespace libtest;
+ #include <algorithm>
+ #include <stdexcept>
+ 
+-#ifndef __USE_GNU
++#ifndef _GNU_SOURCE
+ static char **environ= NULL;
+ #endif
+ 
+@@ -201,7 +201,7 @@ Application::error_t Application::run(const char *args[])
+ 
+   fatal_assert(posix_spawnattr_setsigmask(&spawnattr, &mask) == 0);
+ 
+-#if defined(POSIX_SPAWN_USEVFORK) || defined(__linux__)
++#if defined(POSIX_SPAWN_USEVFORK) || defined(__GLIBC__)
+   // Use USEVFORK on linux
+   flags |= POSIX_SPAWN_USEVFORK;
+ #endif

@@ -1,0 +1,13 @@
+# https://aur.archlinux.org/cgit/aur.git/tree/arrpc.service?h=arrpc
+
+[Unit]
+Description=arRPC Discord RPC daemon
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=@arrpc@
+Restart=on-failure
+
+[Install]
+WantedBy=default.target

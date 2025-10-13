@@ -1,0 +1,12 @@
+diff -u a/src/Makefile b/src/Makefile
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -45,7 +45,7 @@
+ endif
+ 
+ libnums.$(A): $(COBJS)
+-	$(OCAMLMKLIB) -oc nums $(COBJS)
++	$(OCAMLMKLIB) -custom -oc nums $(COBJS)
+ 
+ nums.cma: $(CMOS)
+	 $(OCAMLMKLIB) -o nums -oc nums -linkall $(CMOS)

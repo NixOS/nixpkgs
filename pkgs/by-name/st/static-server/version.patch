@@ -1,0 +1,23 @@
+--- a/internal/server/server.go
++++ b/internal/server/server.go
+@@ -15,7 +15,6 @@ import (
+ 	"net"
+ 	"net/http"
+ 	"os"
+-	"runtime/debug"
+ 	"strings"
+ )
+ 
+@@ -50,11 +49,7 @@ func Main() int {
+ 	flags.Parse(os.Args[1:])
+ 
+ 	if *versionFlag {
+-		if buildInfo, ok := debug.ReadBuildInfo(); ok {
+-			fmt.Printf("%v %v\n", programName, buildInfo.Main.Version)
+-		} else {
+-			errorLog.Printf("version info unavailable! run 'go version -m %v'", programName)
+-		}
++		fmt.Printf("%v %v\n", programName, "@version@")
+ 		os.Exit(0)
+ 	}
+ 

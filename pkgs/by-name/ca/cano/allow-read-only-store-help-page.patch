@@ -1,0 +1,42 @@
+diff --git a/src/main.c b/src/main.c
+index 993a76f..de5b2c5 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -6,12 +6,8 @@ _Static_assert(sizeof(string_modes)/sizeof(*string_modes) == MODE_COUNT, "Number
+ char *get_help_page(char *page) {
+     if (page == NULL) return NULL;
+ 
+-    char *env = getenv("HOME");
+-    if(env == NULL) CRASH("could not get HOME");
+-
+-    char *help_page = calloc(128, sizeof(char));
+-    if (help_page == NULL) CRASH("could not calloc memory for help page");
+-    snprintf(help_page, 128, "%s/.local/share/cano/help/%s", env, page);
++    char *help_page;
++    asprintf(&help_page, "@help@/%s", page);
+ 
+     // check if file exists
+     struct stat st;
+diff --git a/src/tools.c b/src/tools.c
+index 220d7a1..4ce211e 100644
+--- a/src/tools.c
++++ b/src/tools.c
+@@ -63,6 +63,9 @@ void free_undo_stack(Undo_Stack *undo) {
+ 
+ void handle_save(Buffer *buffer) {
+     FILE *file = fopen(buffer->filename, "w");
++
++    if (file == NULL)
++        return;
+     fwrite(buffer->data.data, buffer->data.count, sizeof(char), file);
+     fclose(file);
+ }
+@@ -72,7 +75,7 @@ Buffer *load_buffer_from_file(char *filename) {
+     size_t filename_s = strlen(filename)+1;
+     buffer->filename = calloc(filename_s, sizeof(char));
+     strncpy(buffer->filename, filename, filename_s);
+-    FILE *file = fopen(filename, "a+");
++    FILE *file = fopen(filename, "r");
+     if(file == NULL) CRASH("Could not open file");
+     fseek(file, 0, SEEK_END);
+     size_t length = ftell(file);
