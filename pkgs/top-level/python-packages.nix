@@ -7151,6 +7151,8 @@ self: super: with self; {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  inquirer3 = callPackage ../development/python-modules/inquirer3 { };
+
   inquirerpy = callPackage ../development/python-modules/inquirerpy { };
 
   inscriptis = callPackage ../development/python-modules/inscriptis { };
