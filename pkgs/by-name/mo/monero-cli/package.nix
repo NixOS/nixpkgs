@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.2";
+  version = "0.18.4.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-ibwcvEHlJkMjXoJQMPVrlir5irdclJsmV7aBB4/m190=";
+    hash = "sha256-tu8PHTiz3ScJ0uQh1ztkFmEthjb+BERtPMxCyQhuZPw=";
   };
 
   patches = [
