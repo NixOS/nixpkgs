@@ -144,12 +144,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "scancode" ];
 
-  disabledTestPaths = [
-    # Tests are outdated
-    "src/formattedcode/output_spdx.py"
-    "src/scancode/cli.py"
-  ];
-
   # Takes a long time and doesn't appear to do anything
   dontStrip = true;
 
