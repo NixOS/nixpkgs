@@ -4,14 +4,14 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "protoc-gen-connect-go";
   version = "1.19.1";
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-go";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-VW7FHZk7FAux2Jn03gGm9gdkjCzvofC/ukXOWaplWBo=";
   };
 
@@ -42,11 +42,11 @@ buildGoModule rec {
     description = "Simple, reliable, interoperable, better gRPC";
     mainProgram = "protoc-gen-connect-go";
     homepage = "https://github.com/connectrpc/connect-go";
-    changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
+    changelog = "https://github.com/connectrpc/connect-go/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       kilimnik
       jk
     ];
   };
-}
+})
