@@ -1070,10 +1070,6 @@ in
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if lib.versionOlder stateVersion "24.05" then
-            pkgs.nextcloud27
-          else if lib.versionOlder stateVersion "24.11" then
-            pkgs.nextcloud29
           else if lib.versionOlder stateVersion "25.05" then
             pkgs.nextcloud30
           else if lib.versionOlder stateVersion "25.11" then
