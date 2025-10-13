@@ -13571,6 +13571,8 @@ self: super: with self; {
 
   pymitv = callPackage ../development/python-modules/pymitv { };
 
+  pymobiledevice3 = callPackage ../development/python-modules/pymobiledevice3 { };
+
   pymochad = callPackage ../development/python-modules/pymochad { };
 
   pymodbus = callPackage ../development/python-modules/pymodbus { };
