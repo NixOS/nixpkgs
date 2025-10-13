@@ -45,14 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    # disable some platform specified code used by downstream ngsolve
-    # can be enabled with -march=armv8.3-a+simd when compiling ngsolve
-    # note compiling netgen itself is not influenced by this feature
-    (fetchpatch2 {
-      url = "https://github.com/NGSolve/netgen/pull/197/commits/1d93dfba00f224787cfc2cde1af2ab5d7f5b87f7.patch";
-      hash = "sha256-3Nom4uGhGLtSGn/k+qKKSxVxrGtGTHqPtcNn3D/gkZU";
-    })
-
     (fetchpatch2 {
       url = "${patchSource}/use-local-catch2.patch";
       hash = "sha256-h4ob8tl6mvGt5B0qXRFNcl9MxPXxRhYw+PrGr5iRGGk=";

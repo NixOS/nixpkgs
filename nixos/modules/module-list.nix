@@ -496,6 +496,8 @@
   ./services/continuous-integration/jenkins/default.nix
   ./services/continuous-integration/jenkins/job-builder.nix
   ./services/continuous-integration/jenkins/slave.nix
+  ./services/continuous-integration/radicle/adapters/native.nix
+  ./services/continuous-integration/radicle/ci-broker.nix
   ./services/continuous-integration/woodpecker/agents.nix
   ./services/continuous-integration/woodpecker/server.nix
   ./services/databases/aerospike.nix
