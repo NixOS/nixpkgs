@@ -4,6 +4,7 @@
   fetchurl,
   iptables-legacy,
   libuuid,
+  linuxHeaders,
   openssl,
   pkg-config,
   which,
@@ -71,6 +72,8 @@ stdenv.mkDerivation rec {
   # ./configure is not a standard configure file, errors with:
   # Option not recognized : --prefix=
   dontAddPrefix = true;
+  # Similar for cross flags --host/--build
+  configurePlatforms = [ ];
   configureFlags = [
     "--firewall=${firewall}"
     # allow using various config options
@@ -80,6 +83,9 @@ stdenv.mkDerivation rec {
     "--vendorcfg"
     # hardening
     "--portinuse"
+    "--host-os=${stdenv.hostPlatform.uname.system}"
+    "--host-os-version=${linuxHeaders.version}"
+    "--host-machine=${stdenv.hostPlatform.uname.processor}"
   ];
 
   installFlags = [
