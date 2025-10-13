@@ -225,7 +225,6 @@ dont-distribute-packages:
  - bbi
  - bdcs
  - bdcs-api
- - beam-large-records
  - beam-th
  - beautifHOL
  - bech32-th
@@ -679,7 +678,6 @@ dont-distribute-packages:
  - datadog-tracing
  - datafix
  - dataflow
- - dataframe_0_3_0_4
  - datasets
  - date-conversions
  - dbjava
@@ -2762,7 +2760,6 @@ dont-distribute-packages:
  - proplang
  - prosidyc
  - proto-lens-descriptors
- - proto3-suite
  - protobuf-native
  - protocol-buffers-descriptor
  - protocol-buffers-descriptor-fork
