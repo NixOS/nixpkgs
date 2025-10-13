@@ -74,7 +74,7 @@ postgresqlBuildExtension (finalAttrs: {
     broken = !builtins.elem (lib.versions.major postgresql.version) (builtins.attrNames hashes);
     description = "Graph database extension for PostgreSQL";
     homepage = "https://age.apache.org/";
-    changelog = "https://github.com/apache/age/raw/v${finalAttrs.src.rev}/RELEASE";
+    changelog = "https://github.com/apache/age/raw/PG${lib.versions.major postgresql.version}/v${finalAttrs.version}/RELEASE";
     maintainers = [ ];
     platforms = postgresql.meta.platforms;
     license = lib.licenses.asl20;
