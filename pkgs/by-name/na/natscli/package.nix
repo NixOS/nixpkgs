@@ -36,7 +36,7 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/nats";
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "NATS Command Line Interface";
