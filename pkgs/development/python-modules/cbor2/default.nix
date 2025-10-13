@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "cbor2";
-  version = "5.6.5";
+  version = "5.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-toKCBnfuHbukX32hGJjScg+S4Gvjas7CkIZ9Xr89fgk=";
+    hash = "sha256-P22EP0200OxQHEZFPCKk++uxq/tbdA4byrNMYVzXQGs=";
   };
 
   build-system = [
