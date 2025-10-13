@@ -262,55 +262,39 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isGnu) [
     ./0020-timesyncd-disable-NSCD-when-DNSSEC-validation-is-dis.patch
   ]
-  ++ lib.optionals stdenv.hostPlatform.isMusl (
-    let
-      # NOTE: the master-next branch does not have stable URLs.
-      # If we need patches that aren't in master yet, they'll have to be
-      # vendored.
-      oe-core = fetchzip {
-        url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-4891f47cdaf919033bf1c02cc12e4805e5db99a0.tar.gz";
-        hash = "sha256-YKL/oC+rPZ2EEVNidEV+pJihZgUv7vLb0OASplgktn4=";
-      };
-    in
-    map (patch: "${oe-core}/meta/recipes-core/systemd/systemd/${patch}") [
-      "0003-missing_type.h-add-comparison_fn_t.patch"
-      "0004-add-fallback-parse_printf_format-implementation.patch"
-      "0005-don-t-fail-if-GLOB_BRACE-and-GLOB_ALTDIRFUNC-is-not-.patch"
-      "0006-add-missing-FTW_-macros-for-musl.patch"
-      "0007-Use-uintmax_t-for-handling-rlim_t.patch"
-      "0008-Define-glibc-compatible-basename-for-non-glibc-syste.patch"
-      "0009-Do-not-disable-buffering-when-writing-to-oom_score_a.patch"
-      "0010-distinguish-XSI-compliant-strerror_r-from-GNU-specif.patch"
-      "0011-avoid-redefinition-of-prctl_mm_map-structure.patch"
-      "0012-do-not-disable-buffer-in-writing-files.patch"
-      "0013-Handle-__cpu_mask-usage.patch"
-      "0014-Handle-missing-gshadow.patch"
-      "0015-missing_syscall.h-Define-MIPS-ABI-defines-for-musl.patch"
-      "0016-pass-correct-parameters-to-getdents64.patch"
-      "0017-Adjust-for-musl-headers.patch"
-      "0018-test-bus-error-strerror-is-assumed-to-be-GNU-specifi.patch"
-      "0019-errno-util-Make-STRERROR-portable-for-musl.patch"
-      "0020-sd-event-Make-malloc_trim-conditional-on-glibc.patch"
-      "0021-shared-Do-not-use-malloc_info-on-musl.patch"
-      "0022-avoid-missing-LOCK_EX-declaration.patch"
-      "0023-include-signal.h-to-avoid-the-undeclared-error.patch"
-      "0024-undef-stdin-for-references-using-stdin-as-a-struct-m.patch"
-      "0025-adjust-header-inclusion-order-to-avoid-redeclaration.patch"
-      "0026-build-path.c-avoid-boot-time-segfault-for-musl.patch"
-    ]
-    ++ [
-      # add a missing include
-      (fetchpatch {
-        url = "https://github.com/systemd/systemd/commit/34fcd3638817060c79e1186b370e46d9b3a7409f.patch";
-        hash = "sha256-Uaewo3jPrZGJttlLcqO6cCj1w3IGZmvbur4+TBdIPxc=";
-        excludes = [ "src/udev/udevd.c" ];
-      })
-      (fetchpatch {
-        url = "https://gitlab.postmarketos.org/postmarketOS/systemd/-/commit/5760be33bd26d7e7c66a7294c5f6fd6c7044683f.patch";
-        hash = "sha256-Om+OhGyZJfZNpbtMInm3vGagLbbtOY71fDMZXj6pbPY=";
-      })
-    ]
-  );
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    # Patchset to build with musl by an upstream systemd contributor:
+    # https://github.com/systemd/systemd/pull/37788
+    # This is vendored here because of the lack of permanent patch urls for the unmerged PR
+    ./musl/0001-musl-meson-allow-to-choose-libc-implementation.patch
+    ./musl/0002-musl-meson-do-not-use-libcrypt-libxcrypt.patch
+    ./musl/0003-musl-meson-explicitly-link-with-libintl-when-necessa.patch
+    ./musl/0004-musl-meson-explicitly-set-_LARGEFILE64_SOURCE.patch
+    ./musl/0005-musl-meson-make-musl-not-define-wchar_t-in-their-hea.patch
+    ./musl/0006-musl-meson-check-existence-of-renameat2.patch
+    ./musl/0007-musl-meson-gracefully-disable-gshadow-idn-nss-and-ut.patch
+    ./musl/0008-musl-introduce-dummy-gshadow-header-file-for-userdb.patch
+    ./musl/0009-musl-add-fallback-parse_printf_format-implementation.patch
+    ./musl/0010-musl-introduce-GNU-specific-version-of-strerror_r.patch
+    ./musl/0011-musl-make-strptime-accept-z.patch
+    ./musl/0012-musl-make-strtoll-accept-strings-start-with-dot.patch
+    ./musl/0013-musl-introduce-strerrorname_np.patch
+    ./musl/0014-musl-introduce-dummy-functions-for-mallinfo-malloc_i.patch
+    ./musl/0015-musl-introduce-dummy-function-for-gnu_get_libc_versi.patch
+    ./musl/0016-musl-define-__THROW-when-not-defined.patch
+    ./musl/0017-musl-replace-sys-prctl.h-with-our-own-implementation.patch
+    ./musl/0018-musl-replace-netinet-if_ether.h-with-our-own-impleme.patch
+    ./musl/0019-musl-add-missing-FTW_CONTINUE-macro.patch
+    ./musl/0020-musl-add-several-missing-statx-macros.patch
+    ./musl/0021-musl-avoid-conflict-between-fcntl.h-and-our-forward..patch
+    ./musl/0022-musl-redefine-HOST_NAME_MAX-as-64.patch
+    ./musl/0023-musl-avoid-multiple-evaluations-in-CPU_ISSET_S-macro.patch
+    ./musl/0024-musl-core-there-is-one-less-usable-signal-when-built.patch
+    ./musl/0025-musl-build-path-fix-reading-DT_RUNPATH-or-DT_RPATH.patch
+    ./musl/0026-musl-format-util-use-llu-for-formatting-rlim_t.patch
+    ./musl/0027-musl-time-util-skip-tm.tm_wday-check.patch
+    ./musl/0028-musl-glob-util-filter-out-.-and-.-even-if-GLOB_ALTDI.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/basic/path-util.h --replace "@defaultPathNormal@" "${placeholder "out"}/bin/"
@@ -622,6 +606,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "zshcompletiondir" "no")
   ]
   ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (lib.mesonOption "libc" "musl")
     (lib.mesonBool "gshadow" false)
     (lib.mesonBool "idn" false)
   ];
