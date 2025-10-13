@@ -1,5 +1,6 @@
 {
   stdenv,
+  clangStdenv,
   lib,
   binutils,
   fetchFromGitHub,
@@ -60,7 +61,10 @@ let
   opencascade-override' =
     if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 in
-stdenv.mkDerivation (finalAttrs: {
+# Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
+# on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
+# with --cores 32 on clang).
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
   version = "2.9.3";
 
