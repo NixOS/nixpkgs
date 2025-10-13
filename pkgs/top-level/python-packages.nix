@@ -801,6 +801,8 @@ self: super: with self; {
 
   appium-python-client = callPackage ../development/python-modules/appium-python-client { };
 
+  apple-compress = callPackage ../development/python-modules/apple-compress { };
+
   apple-weatherkit = callPackage ../development/python-modules/apple-weatherkit { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
