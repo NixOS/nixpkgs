@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qus/RjwdAl9SuDXfLVKTPImqrvPF3xSDVlbXYLM3JNE=";
   };
 
+  patches = [
+    ### Fix cmake minimum version
+    ./0000-fix-cmake-min.patch
+  ];
+
   buildInputs = [
     SDL2
     SDL2_image
