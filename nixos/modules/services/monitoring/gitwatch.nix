@@ -21,6 +21,7 @@ let
         getvar = flag: var: optionalString (cfg."${var}" != null) "${flag} ${cfg."${var}"}";
         branch = getvar "-b" "branch";
         remote = getvar "-r" "remote";
+        message = getvar "-m" "message";
       in
       rec {
         inherit (cfg) enable;
@@ -37,7 +38,7 @@ let
           if [ -n "${cfg.remote}" ] && ! [ -d "${cfg.path}" ]; then
             git clone ${branch} "${cfg.remote}" "${cfg.path}"
           fi
-          gitwatch ${remote} ${branch} ${cfg.path}
+          gitwatch ${remote} ${message} ${branch} ${cfg.path}
         '';
         serviceConfig.User = cfg.user;
       }
@@ -56,6 +57,7 @@ in
         user = "user";
         path = "/home/user/watched-project";
         remote = "git@github.com:me/my-project.git";
+        message = "Auto-commit by gitwatch on %d";
       };
       disabled-repo = {
         enable = false;
@@ -81,6 +83,11 @@ in
           };
           remote = mkOption {
             description = "Optional url of remote repository";
+            type = nullOr str;
+            default = null;
+          };
+          message = lib.mkOption {
+            description = "Optional text to use in as commit message; all occurrences of `%d` will be replaced by formatted date/time";
             type = nullOr str;
             default = null;
           };
