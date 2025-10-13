@@ -476,8 +476,7 @@ stdenv.mkDerivation (
       grep linux-musl llvm-targets | sed 's/^/  /'
 
       echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
+      for x in aclocal.m4; do
         substituteInPlace $x \
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
