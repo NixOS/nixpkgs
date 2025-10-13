@@ -7239,6 +7239,8 @@ self: super: with self; {
 
   iplotx = callPackage ../development/python-modules/iplotx { };
 
+  ipsw-parser = callPackage ../development/python-modules/ipsw-parser { };
+
   iptools = callPackage ../development/python-modules/iptools { };
 
   ipv8-rust-tunnels = callPackage ../development/python-modules/ipv8-rust-tunnels { };
