@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   version = "unstable-2019-11-30";
 
   src = fetchFromGitHub {
-    owner = "kitone";
+    owner = "subtitleeditor";
     repo = "subtitleeditor";
     rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
     sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
@@ -71,7 +71,7 @@ stdenv.mkDerivation {
       and refine existing subtitle. This program also shows sound waves, which
       makes it easier to synchronise subtitles to voices.
     '';
-    homepage = "http://kitone.github.io/subtitleeditor/";
+    homepage = "https://subtitleeditor.github.io/subtitleeditor/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.plcplc ];
