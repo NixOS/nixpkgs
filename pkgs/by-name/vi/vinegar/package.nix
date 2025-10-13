@@ -50,6 +50,11 @@ let
             url = "https://raw.githubusercontent.com/flathub/org.vinegarhq.Vinegar/3e07606350d803fa386eb4c358836a230819380d/patches/wine/loader-prefer-winedllpath.patch";
             hash = "sha256-89wnr2rIbyw490hHwckB9g1GKCXm6BERnplfwEUlNOg=";
           })
+          (fetchpatch {
+            url = "https://raw.githubusercontent.com/vinegarhq/wine-builds/7b88b2e2d1d77a514793a5c9668f027c6caa6de4/dont-load-bitmap-only-ttf-fonts.patch";
+            hash = "sha256-SKLD+E9EtdictvuEd63FtNf19C+JScG/NV+M1+sfJ3E=";
+          })
+          ./xfixes-hide-cursor.patch
         ];
 
         postInstall = ''
@@ -59,16 +64,16 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "vinegar";
-  version = "1.8.1";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "vinegarhq";
     repo = "vinegar";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7rc6LKZx0OOZDedtTpHIQT4grx1FejRiVnJnVDUddy4=";
+    hash = "sha256-QM5/nZEkGDm7Jp6X9YksiALCTSSBXbPSuny8HPRAQkw=";
   };
 
-  vendorHash = "sha256-TZhdwHom4DTgLs4z/eADeoKakMtyFrvVljDg4JJp7dc=";
+  vendorHash = "sha256-o1pXB8liOaOd8Nkl5jJ4wP0Q9LDACv/KH8O4iLMsUIQ=";
 
   nativeBuildInputs = [
     glib
