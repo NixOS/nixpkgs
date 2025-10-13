@@ -14,14 +14,12 @@
 
   # build-tools
   bootPkgs,
-  autoconf,
-  automake,
+  autoreconfHook,
   coreutils,
   fetchpatch,
   fetchurl,
   perl,
   python3,
-  m4,
   sphinx,
   xattr,
   autoSignDarwinBinariesHook,
@@ -546,10 +544,8 @@ stdenv.mkDerivation (
     dontAddExtraLibs = true;
 
     nativeBuildInputs = [
+      autoreconfHook
       perl
-      autoconf
-      automake
-      m4
       python3
       bootPkgs.alex
       bootPkgs.happy
