@@ -230,8 +230,8 @@ in
       "sha256-PYL1UEOCyGrRlaG4CiqC9zWHw34bY2hk67hd1DvXmls=";
 
   mypy-boto3-cloudfront =
-    buildMypyBoto3Package "cloudfront" "1.40.23"
-      "sha256-uh7A5QPl5fZsP7AEvN8rZ/pX5l9944/Y0FH3lb6CJWo=";
+    buildMypyBoto3Package "cloudfront" "1.40.50"
+      "sha256-jw169fraZHj0tHiu8ZJTqLu/FrBWVBnePNvtp6V3UUs=";
 
   mypy-boto3-cloudhsm =
     buildMypyBoto3Package "cloudhsm" "1.40.15"
@@ -574,8 +574,8 @@ in
       "sha256-DS2Bb39wrP+k2H2oxkm13WzRyF6cX96P0JgF2OXAdMA=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.40.46"
-      "sha256-WhupCfYxYfqqAnUFw96o2vPmrrj6N+7sZFRyTuBbd70=";
+    buildMypyBoto3Package "glue" "1.40.50"
+      "sha256-1LgvvSs/ZFxrCT/7MhZDATFUI6az5yTAhuc41QQ1kGk=";
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.40.0"
       "sha256-KQqyk9PFUttzDrZW7viev8xbumdud05EBdNoxz//hEY=";
@@ -769,8 +769,8 @@ in
       "sha256-NMF0B6cBjIFJl7CKrwxj89oFJeYnDhpdkmCTJdXa3w0=";
 
   mypy-boto3-lambda =
-    buildMypyBoto3Package "lambda" "1.40.7"
-      "sha256-6L7fA6Z/reXbhh/pAt8GMGQpI1Lu1feF90zQ5ZGUjbk=";
+    buildMypyBoto3Package "lambda" "1.40.50"
+      "sha256-pwngrGlAeDqtCP9c+Yx4miFYQLqxfkaMpeIjBa0K6gU=";
 
   mypy-boto3-lex-models =
     buildMypyBoto3Package "lex-models" "1.40.19"
@@ -1085,8 +1085,8 @@ in
       "sha256-zye0xv5P6GemZiH+T/cIyzx9qaeOKitEWpW6LOkc8KM=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.40.46"
-      "sha256-h7+fF67fsQX82i1XcPQcxCvg3qLUKdnsr7V5DqHdod4=";
+    buildMypyBoto3Package "rds" "1.40.50"
+      "sha256-fVUGv36rK1kmb5MmEEnCrCXEYPfgn1g6u4aYBpnDvtU=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.40.0"
