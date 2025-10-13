@@ -13251,6 +13251,8 @@ self: super: with self; {
 
   pyicumessageformat = callPackage ../development/python-modules/pyicumessageformat { };
 
+  pyimg4 = callPackage ../development/python-modules/pyimg4 { };
+
   pyimgbox = callPackage ../development/python-modules/pyimgbox { };
 
   pyimpfuzzy = callPackage ../development/python-modules/pyimpfuzzy { inherit (pkgs) ssdeep; };
