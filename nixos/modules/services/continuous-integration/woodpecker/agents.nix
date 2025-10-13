@@ -110,7 +110,10 @@ let
   };
 in
 {
-  meta.maintainers = with lib.maintainers; [ ambroisie ];
+  meta.maintainers = with lib.maintainers; [
+    ambroisie
+    marcusramberg
+  ];
 
   options = {
     services.woodpecker-agents = {

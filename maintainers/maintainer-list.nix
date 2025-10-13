@@ -2482,6 +2482,12 @@
     githubId = 574938;
     name = "Jonathan Glines";
   };
+  auscyber = {
+    email = "ivyp@outlook.com.au";
+    github = "auscyber";
+    name = "Ivy Pierlot";
+    githubId = 12080502;
+  };
   austin-artificial = {
     email = "austin.platt@artificial.io";
     github = "austin-artificial";
@@ -21429,6 +21435,12 @@
     githubId = 14829269;
     name = "Ram Kromberg";
   };
+  ramonacat = {
+    email = "ramona@luczkiewi.cz";
+    github = "ramonacat";
+    githubId = 303398;
+    name = "ramona";
+  };
   rampoina = {
     email = "rampoina@protonmail.com";
     matrix = "@rampoina:matrix.org";
@@ -21481,12 +21493,6 @@
     github = "rardiol";
     githubId = 11351304;
     name = "Ricardo Ardissone";
-  };
-  raroh73 = {
-    email = "me@raroh73.com";
-    github = "Raroh73";
-    githubId = 96078496;
-    name = "Raroh73";
   };
   rasendubi = {
     email = "rasen.dubi@gmail.com";

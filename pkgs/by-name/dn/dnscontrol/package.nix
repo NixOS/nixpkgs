@@ -1,25 +1,25 @@
 {
   lib,
   stdenv,
-  buildGo125Module,
+  buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   testers,
   dnscontrol,
 }:
 
-buildGo125Module rec {
+buildGoModule rec {
   pname = "dnscontrol";
-  version = "4.25.0";
+  version = "4.26.0";
 
   src = fetchFromGitHub {
     owner = "StackExchange";
     repo = "dnscontrol";
     tag = "v${version}";
-    hash = "sha256-8VNo2IPchplTlI97BzsGcc6i0z7V79oHkSVtCLY8558=";
+    hash = "sha256-yDjxAQDqe9LIvzVy255rzKs7r7Xb4RAD1CFuKSrnQS8=";
   };
 
-  vendorHash = "sha256-Ob6TP81pnsX/uzEh0ekz+koVoC/tqC/3P4wAShnQOVc=";
+  vendorHash = "sha256-Ee4RagjYDngsMbTLjyeVFYv9O5cJuc9J2XRUP0FAe+w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +28,7 @@ buildGo125Module rec {
   ldflags = [
     "-s"
     "-w"
-    "-X=github.com/StackExchange/dnscontrol/v4/pkg/version.version=${version}"
+    "-X=github.com/StackExchange/dnscontrol/v${lib.versions.major version}/pkg/version.version=${version}"
   ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -54,7 +54,10 @@ buildGo125Module rec {
     homepage = "https://dnscontrol.org/";
     changelog = "https://github.com/StackExchange/dnscontrol/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ SuperSandro2000 ];
+    maintainers = with lib.maintainers; [
+      SuperSandro2000
+      zowoq
+    ];
     mainProgram = "dnscontrol";
   };
 }
