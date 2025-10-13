@@ -48,5 +48,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd2;
     platforms = lib.platforms.unix;
     mainProgram = "ee";
+    maintainers = with lib.maintainers; [ qweered ];
   };
 }
