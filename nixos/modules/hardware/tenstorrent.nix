@@ -24,7 +24,7 @@ in
     ];
 
     environment.systemPackages = with pkgs; [
-      python3Packages.tt-smi
+      tt-smi
       tt-system-tools
     ];
   };
