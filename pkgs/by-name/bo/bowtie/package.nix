@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fix_compilation_on_arm64";
       url = "https://github.com/BenLangmead/bowtie/commit/091d72f4cb69ca0713704d38bd7f9b37e6c4ff2d.patch";
-      sha256 = "sha256-XBvgICUBnE5HKpJ36IHTDiKjJgLFKETsIaJC46uN+2I=";
+      hash = "sha256-XBvgICUBnE5HKpJ36IHTDiKjJgLFKETsIaJC46uN+2I=";
     })
 
     # Without this patch, compilation adds the current source directory to the
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fix_include_search_path";
       url = "https://github.com/BenLangmead/bowtie/commit/c208b9db936eab0bc3ffdf0182b4f59a9017a1c4.patch";
-      sha256 = "sha256-772EE+oWFWXssSMabPryb0AfIS1tC10mPTRCBm7RrUs=";
+      hash = "sha256-772EE+oWFWXssSMabPryb0AfIS1tC10mPTRCBm7RrUs=";
     })
   ];
 

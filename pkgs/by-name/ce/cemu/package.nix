@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./0002-cemu-imgui.patch
     (fetchpatch2 {
       url = "https://github.com/cemu-project/Cemu/commit/c1c2962b6633017cd956c6925288e2529c532ee4.diff?full_index=1";
-      sha256 = "sha256-Dz7WnCf5+Vbr/ETX71wIo/x/zPWdrsOtPH7bsL5Bd+A=";
+      hash = "sha256-Dz7WnCf5+Vbr/ETX71wIo/x/zPWdrsOtPH7bsL5Bd+A=";
     })
   ];
 

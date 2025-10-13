@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "musl-includes.patch";
       url = "https://git.alpinelinux.org/aports/plain/main/bridge-utils/fix-PATH_MAX-on-ppc64le.patch?id=12c9046eee3a0a35665dc4e280c1f5ae2af5845d";
-      sha256 = "sha256-uY1tgJhcm1DFctg9scmC8e+mgowgz4f/oF0+k+x+jqw=";
+      hash = "sha256-uY1tgJhcm1DFctg9scmC8e+mgowgz4f/oF0+k+x+jqw=";
     })
   ];
 

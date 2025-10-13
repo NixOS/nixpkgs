@@ -28,7 +28,7 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/Thriftpy/thriftpy2/commit/0127d259eb4b96acb060cd158ca709f0597b148c.patch";
-      sha256 = "sha256-UBcbd8NTkPyko1s9jTjKlQ7HprwtyOZS0m66u1CPH3A=";
+      hash = "sha256-UBcbd8NTkPyko1s9jTjKlQ7HprwtyOZS0m66u1CPH3A=";
     })
   ];
   build-system = [ setuptools ];

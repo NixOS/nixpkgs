@@ -241,7 +241,7 @@ self: super:
     inline-c-cpp = appendPatch (pkgs.fetchpatch {
       url = "https://github.com/fpco/inline-c/commit/e8dc553b13bb847409fdced649a6a863323cff8a.patch";
       name = "revert-use-system-cxx-std-lib.patch";
-      sha256 = "sha256-ql1/+8bvmWexyCdFR0VS4M4cY2lD0Px/9dHYLqlKyNA=";
+      hash = "sha256-ql1/+8bvmWexyCdFR0VS4M4cY2lD0Px/9dHYLqlKyNA=";
       revert = true;
       stripLen = 1;
     }) super.inline-c-cpp;

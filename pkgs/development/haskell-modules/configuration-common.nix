@@ -415,7 +415,7 @@ with haskellLib;
   # support for transformers >= 0.6
   lifted-base = appendPatch (fetchpatch {
     url = "https://github.com/basvandijk/lifted-base/commit/6b61483ec7fd0d5d5d56ccb967860d42740781e8.patch";
-    sha256 = "sha256-b29AVDiEMcShceRJyKEauK/411UkOh3ME9AnKEYvcEs=";
+    hash = "sha256-b29AVDiEMcShceRJyKEauK/411UkOh3ME9AnKEYvcEs=";
   }) super.lifted-base;
 
   leveldb-haskell = overrideCabal (drv: {
@@ -455,7 +455,7 @@ with haskellLib;
       (pkgs.fetchpatch {
         name = "hourglass-pr-56.patch";
         url = "https://github.com/vincenthz/hs-hourglass/commit/cfc2a4b01f9993b1b51432f0a95fa6730d9a558a.patch";
-        sha256 = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
+        hash = "sha256-gntZf7RkaR4qzrhjrXSC69jE44SknPDBmfs4z9rVa5Q=";
       })
     ] super.hourglass
   );
@@ -475,7 +475,7 @@ with haskellLib;
         (pkgs.fetchpatch {
           name = "env-extra-no-parallel-setenv.patch";
           url = "https://github.com/d12frosted/env-extra/commit/4fcbc031b210e71e4243fcfe7c48d381e2f51d78.patch";
-          sha256 = "sha256-EbXk+VOmxMJAMCMTXpTiW8fkbNI9za7f1alzCeaJaV4=";
+          hash = "sha256-EbXk+VOmxMJAMCMTXpTiW8fkbNI9za7f1alzCeaJaV4=";
           excludes = [ "package.yaml" ];
         })
       ]
@@ -904,7 +904,7 @@ with haskellLib;
   xml-picklers = appendPatch (pkgs.fetchpatch {
     name = "xml-picklers-fix-prop-xp-attribute.patch";
     url = "https://github.com/Philonous/xml-picklers/commit/887e5416b5e61c589cadf775d82013eb87751ea2.patch";
-    sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
+    hash = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
   }) super.xml-picklers;
 
   # 2025-08-03: Too strict bounds on open-browser, data-default and containers
@@ -1468,7 +1468,7 @@ with haskellLib;
   optics = appendPatch (fetchpatch {
     name = "optics-fix-inspection-testing-bound";
     url = "https://github.com/well-typed/optics/commit/d16b1ac5476c89cc94fb108fe1be268791affca6.patch";
-    sha256 = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
+    hash = "sha256-w0L/EXSWRQkCkFnvXYel0BNgQQhxn6zATkD3GZS5gz8=";
     relative = "optics";
   }) super.optics;
 
@@ -1788,7 +1788,7 @@ with haskellLib;
         (pkgs.fetchpatch {
           name = "dhall-lsp-server-lsp-2.7.patch";
           url = "https://github.com/dhall-lang/dhall-haskell/commit/a621e1438df5865d966597e2e1b0bb37e8311447.patch";
-          sha256 = "sha256-7edxNIeIM/trl2SUXybvSzkscvr1kj5+tZF50IeTOgY=";
+          hash = "sha256-7edxNIeIM/trl2SUXybvSzkscvr1kj5+tZF50IeTOgY=";
           relative = "dhall-lsp-server";
         })
         # Fix build with text >= 2.1.2
@@ -1820,13 +1820,13 @@ with haskellLib;
     name = "fix-on-firefox.patch";
     url = "https://github.com/ghcjs/jsaddle/commit/71ef7f0cbc60a380ba0dc299e758c8f90cc4b526.patch";
     relative = "jsaddle";
-    sha256 = "sha256-IBOX74r+lyywVWp0ZucoseeevFrGiInkq7V6RoWADNU=";
+    hash = "sha256-IBOX74r+lyywVWp0ZucoseeevFrGiInkq7V6RoWADNU=";
   }) super.jsaddle;
   jsaddle-warp = appendPatch (fetchpatch {
     name = "fix-on-firefox.patch";
     url = "https://github.com/ghcjs/jsaddle/commit/71ef7f0cbc60a380ba0dc299e758c8f90cc4b526.patch";
     relative = "jsaddle-warp";
-    sha256 = "sha256-jYEUOkP4Kv3yBjo3SbN7sruV+T5R5XWbRFcCUAa6HvE=";
+    hash = "sha256-jYEUOkP4Kv3yBjo3SbN7sruV+T5R5XWbRFcCUAa6HvE=";
   }) super.jsaddle-warp;
 
   # https://github.com/ghcjs/jsaddle/issues/151
@@ -1902,7 +1902,7 @@ with haskellLib;
   # Support ansi-terminal 1.1: https://github.com/facebookincubator/retrie/pull/73
   retrie = appendPatch (fetchpatch {
     url = "https://github.com/facebookincubator/retrie/commit/b0df07178133b5b049e3e7764acba0e5e3fa57af.patch";
-    sha256 = "sha256-Ea/u6PctSxy4h8VySjOwD2xW3TbwY1qE49dG9Av1SbQ=";
+    hash = "sha256-Ea/u6PctSxy4h8VySjOwD2xW3TbwY1qE49dG9Av1SbQ=";
   }) super.retrie;
 
   # Fails with encoding problems, likely needs locale data.
@@ -1916,7 +1916,7 @@ with haskellLib;
   Spock-core = appendPatches [
     (fetchpatch {
       url = "https://github.com/agrafix/Spock/commit/d0b51fa60a83bfa5c1b5fc8fced18001e7321701.patch";
-      sha256 = "sha256-l9voiczOOdYVBP/BNEUvqARb21t0Rp2kpsNbRFUWSLg=";
+      hash = "sha256-l9voiczOOdYVBP/BNEUvqARb21t0Rp2kpsNbRFUWSLg=";
       stripLen = 1;
     })
   ] (doJailbreak super.Spock-core);
@@ -1997,7 +1997,7 @@ with haskellLib;
       (appendPatches [
         (fetchpatch {
           url = "https://github.com/expipiplus1/update-nix-fetchgit/commit/dfa34f9823e282aa8c5a1b8bc95ad8def0e8d455.patch";
-          sha256 = "sha256-yBjn1gVihVTlLewKgJc2I9gEj8ViNBAmw0bcsb5rh1A=";
+          hash = "sha256-yBjn1gVihVTlLewKgJc2I9gEj8ViNBAmw0bcsb5rh1A=";
           excludes = [ "cabal.project" ];
         })
         # Fix for GHC >= 9.8
@@ -2013,7 +2013,7 @@ with haskellLib;
   binary-strict = appendPatches [
     (fetchpatch {
       url = "https://github.com/idontgetoutmuch/binary-low-level/pull/16/commits/c16d06a1f274559be0dea0b1f7497753e1b1a8ae.patch";
-      sha256 = "sha256-deSbudy+2je1SWapirWZ1IVWtJ0sJVR5O/fnaAaib2g=";
+      hash = "sha256-deSbudy+2je1SWapirWZ1IVWtJ0sJVR5O/fnaAaib2g=";
     })
   ] super.binary-strict;
 
@@ -2071,7 +2071,7 @@ with haskellLib;
   pipes-aeson = appendPatch (fetchpatch {
     url = "https://github.com/k0001/pipes-aeson/commit/08c25865ef557b41d7e4a783f52e655d2a193e18.patch";
     relative = "pipes-aeson";
-    sha256 = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
+    hash = "sha256-kFV6CcwKdMq+qSgyc+eIApnaycq5A++pEEVr2A9xvts=";
   }) super.pipes-aeson;
 
   moto-postgresql = appendPatches [
@@ -2080,7 +2080,7 @@ with haskellLib;
       name = "moto-postgresql-monadfail.patch";
       url = "https://gitlab.com/k0001/moto/-/commit/09cc1c11d703c25f6e81325be6482dc7ec6cbf58.patch";
       relative = "moto-postgresql";
-      sha256 = "sha256-f2JVX9VveShCeV+T41RQgacpUoh1izfyHlE6VlErkZM=";
+      hash = "sha256-f2JVX9VveShCeV+T41RQgacpUoh1izfyHlE6VlErkZM=";
     })
   ] super.moto-postgresql;
 
@@ -2090,7 +2090,7 @@ with haskellLib;
       name = "moto-ghc-9.0.patch";
       url = "https://gitlab.com/k0001/moto/-/commit/5b6f015a1271765005f03762f1f1aaed3a3198ed.patch";
       relative = "moto";
-      sha256 = "sha256-RMa9tk+2ip3Ks73UFv9Ea9GEnElRtzIjdpld1Fx+dno=";
+      hash = "sha256-RMa9tk+2ip3Ks73UFv9Ea9GEnElRtzIjdpld1Fx+dno=";
     })
   ] super.moto;
 
@@ -2213,7 +2213,7 @@ with haskellLib;
         (fetchpatch {
           name = "llvm-hs-pure-bytestring-0.11.patch";
           url = "https://github.com/llvm-hs/llvm-hs/commit/fe8fd556e8d2cc028f61d4d7b4b6bf18c456d090.patch";
-          sha256 = "sha256-1d4wQg6JEJL3GwmXQpvbW7VOY5DwjUPmIsLEEur0Kps=";
+          hash = "sha256-1d4wQg6JEJL3GwmXQpvbW7VOY5DwjUPmIsLEEur0Kps=";
           relative = "llvm-hs-pure";
           excludes = [ "**/Triple.hs" ]; # doesn't exist in 9.0.0
         })
@@ -2486,12 +2486,12 @@ with haskellLib;
       (pkgs.fetchpatch {
         name = "use-crypton-connection.patch";
         url = "https://github.com/minio/minio-hs/commit/786cf1881f0b62b7539e63547e76afc3c1ade36a.patch";
-        sha256 = "sha256-zw0/jhKzShpqV1sUyxWTl73sQOzm6kA/yQOZ9n0L1Ag";
+        hash = "sha256-zw0/jhKzShpqV1sUyxWTl73sQOzm6kA/yQOZ9n0L1Ag";
       })
       (pkgs.fetchpatch {
         name = "compatibility-with-crypton-connection-0-4-0.patch";
         url = "https://github.com/minio/minio-hs/commit/e2169892a5fea444aaf9e551243da811003d3188.patch";
-        sha256 = "sha256-hWphiArv7gZWiDewLHDeU4RASGOE9Z1liahTmAGQIgQ=";
+        hash = "sha256-hWphiArv7gZWiDewLHDeU4RASGOE9Z1liahTmAGQIgQ=";
       })
     ];
   }) (super.minio-hs.override { connection = self.crypton-connection; });
@@ -2671,7 +2671,7 @@ with haskellLib;
     # https://github.com/well-typed/basic-sop/pull/13
     name = "increase-upper-bounds.patch";
     url = "https://github.com/well-typed/basic-sop/commit/f1873487dd3e3955a82d6d9f37a6b164be36851f.patch";
-    sha256 = "sha256-uBH+LmiSO91diVe4uX75/DdWT2wuyqEL+XUlSHnJk5k=";
+    hash = "sha256-uBH+LmiSO91diVe4uX75/DdWT2wuyqEL+XUlSHnJk5k=";
   }) super.basic-sop;
 
   # Unmaintained
@@ -2912,7 +2912,7 @@ with haskellLib;
     (pkgs.fetchpatch {
       name = "heist-fix-ghc-errorr-message-test.patch";
       url = "https://github.com/snapframework/heist/commit/9c8c963021608f09e93d486e5339e45073c757bc.patch";
-      sha256 = "sha256-lenMCb6o0aAJ8D450JB76cZ49o+LVl2UO9hhAZYPacI=";
+      hash = "sha256-lenMCb6o0aAJ8D450JB76cZ49o+LVl2UO9hhAZYPacI=";
     })
   ] super.heist;
 
@@ -3185,15 +3185,15 @@ with haskellLib;
   hailgun = appendPatches [
     (fetchpatch {
       url = "https://bitbucket.org/nh2/hailgun/commits/ac2bc2a3003e4b862625862c4565fece01c0cf57/raw";
-      sha256 = "sha256-MWeK9nzMVP6cQs2GBFkohABgL8iWcT7YzwF+tLOkIjo=";
+      hash = "sha256-MWeK9nzMVP6cQs2GBFkohABgL8iWcT7YzwF+tLOkIjo=";
     })
     (fetchpatch {
       url = "https://bitbucket.org/nh2/hailgun/commits/583daaf87265a7fa67ce5171fe1077e61be9b39c/raw";
-      sha256 = "sha256-6WITonLoONxZzzkS7EI79LwmwSdkt6TCgvHA2Hwy148=";
+      hash = "sha256-6WITonLoONxZzzkS7EI79LwmwSdkt6TCgvHA2Hwy148=";
     })
     (fetchpatch {
       url = "https://bitbucket.org/nh2/hailgun/commits/b9680b82f6d58f807828c1bbb57e26c7af394501/raw";
-      sha256 = "sha256-MnOc51tTNg8+HDu1VS2Ct7Mtu0vuuRd3DjzOAOF+t7Q=";
+      hash = "sha256-MnOc51tTNg8+HDu1VS2Ct7Mtu0vuuRd3DjzOAOF+t7Q=";
     })
   ] super.hailgun;
 
@@ -3244,7 +3244,7 @@ with haskellLib;
     # https://github.com/sjakobi/bsb-http-chunked/pull/49
     (appendPatch (fetchpatch {
       url = "https://github.com/sjakobi/bsb-http-chunked/commit/689bf9ce12b8301d0e13a68e4a515c2779b62947.patch";
-      sha256 = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
+      hash = "sha256-ZdCXMhni+RGisRODiElObW5c4hKy2giWQmWnatqeRJo=";
     }))
   ];
 
@@ -3255,7 +3255,7 @@ with haskellLib;
     # Fixes syntax error in tests
     (appendPatch (fetchpatch {
       url = "https://bitbucket.org/HList/hlist/commits/e688f11d7432c812c2b238464401a86f588f81e1/raw";
-      sha256 = "sha256-XIBIrR2MFmhKaocZJ4p57CgmAaFmMU5Z5a0rk2CjIcM=";
+      hash = "sha256-XIBIrR2MFmhKaocZJ4p57CgmAaFmMU5Z5a0rk2CjIcM=";
     }))
   ];
 
@@ -3376,7 +3376,7 @@ with haskellLib;
             name = "base-4.20-foldl'.patch";
             url = "https://github.com/GaloisInc/crucible/commit/10f372e4b0389dd3966e04163dcd67d71e651709.patch";
             relative = "crucible";
-            sha256 = "sha256-frxTs5SB1ENjH+X0lIlQ8k6pDIDOANylrqIOQpEtObU=";
+            hash = "sha256-frxTs5SB1ENjH+X0lIlQ8k6pDIDOANylrqIOQpEtObU=";
           }
         ))
       ];
@@ -3528,7 +3528,7 @@ with haskellLib;
   # https://github.com/haskell-cryptography/botan/pull/17
   botan-bindings = appendPatch (pkgs.fetchpatch2 {
     url = "https://github.com/haskell-cryptography/botan/commit/99de68c3938187b7ab740c6534ec032a4a236747.patch";
-    sha256 = "sha256-v255WFO9HsRuTAWFZG27TYbpoK7rJ1AuiCFNFIV18mI=";
+    hash = "sha256-v255WFO9HsRuTAWFZG27TYbpoK7rJ1AuiCFNFIV18mI=";
     stripLen = 1;
   }) super.botan-bindings;
 

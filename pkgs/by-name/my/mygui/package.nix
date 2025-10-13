@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       name = "darwin-mygui-framework-fix.patch";
       url = "https://gitlab.com/OpenMW/openmw-dep/-/raw/ade30e6e98c051ac2a505f6984518f5f41fa87a5/macos/mygui.patch";
-      sha256 = "sha256-Tk+O4TFgPZOqWAY4c0Q69bZfvIB34wN9e7h0tXhLULU=";
+      hash = "sha256-Tk+O4TFgPZOqWAY4c0Q69bZfvIB34wN9e7h0tXhLULU=";
     })
   ];
 

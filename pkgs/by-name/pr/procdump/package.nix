@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "parallel.patch";
       url = "https://github.com/Sysinternals/ProcDump-for-Linux/commit/0d735836f11281cc6134be93eac8acb302f2055e.patch";
-      sha256 = "sha256-zsqllPHF8ZuXAIDSAPvbzdKa43uSSx9ilUKM1vFVW90=";
+      hash = "sha256-zsqllPHF8ZuXAIDSAPvbzdKa43uSSx9ilUKM1vFVW90=";
     })
   ];
 

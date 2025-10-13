@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     # fix makefile destinations
     (fetchpatch {
       url = "https://github.com/Nefelim4ag/Ananicy/commit/dbda0f50670de3f249991706ef1cc107c5197a2f.patch";
-      sha256 = "sha256-vMcJxekg2QUbm253CLAv3tmo5kedSlw+/PI/LamNWwc=";
+      hash = "sha256-vMcJxekg2QUbm253CLAv3tmo5kedSlw+/PI/LamNWwc=";
       # only used for debian packaging. lets exclude it so the patch applies even when that file is changed
       excludes = [ "package.sh" ];
     })

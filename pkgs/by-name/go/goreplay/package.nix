@@ -21,7 +21,7 @@ buildGoModule rec {
     # Fix build on arm64-linux, see https://github.com/buger/goreplay/pull/1140
     (fetchpatch {
       url = "https://github.com/buger/goreplay/commit/a01afa1e322ef06f36995abc3fda3297bdaf0140.patch";
-      sha256 = "sha256-w3aVe/Fucwd2OuK5Fu2jJTbmMci8ilWaIjYjsWuLRlo=";
+      hash = "sha256-w3aVe/Fucwd2OuK5Fu2jJTbmMci8ilWaIjYjsWuLRlo=";
     })
   ];
 

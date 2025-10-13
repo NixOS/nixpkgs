@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     # Update to tdlib 1.8.0
     (fetchpatch {
       url = "https://github.com/ars3niy/tdlib-purple/commit/8c87b899ddbec32ec6ab4a34ddf0dc770f97d396.patch";
-      sha256 = "sha256-sysPYPno+wS8mZwQAXtX5eVnhwKAZrtr5gXuddN3mko=";
+      hash = "sha256-sysPYPno+wS8mZwQAXtX5eVnhwKAZrtr5gXuddN3mko=";
     })
   ];
 

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "binutils-2.36.patch";
       url = "https://github.com/ArcticaProject/nx-libs/commit/605a266911b50ababbb3f8a8b224efb42743379c.patch";
-      sha256 = "sha256-kk5ms3i0PrHL74I4OlsqDrdDcCJ0us03cQcBy4zjAoQ=";
+      hash = "sha256-kk5ms3i0PrHL74I4OlsqDrdDcCJ0us03cQcBy4zjAoQ=";
     })
   ];
 

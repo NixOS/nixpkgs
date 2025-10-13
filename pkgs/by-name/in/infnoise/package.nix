@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Patch providing version info at compile time
     (fetchpatch {
       url = "https://github.com/leetronics/infnoise/commit/04d52a975bf78d2aff2bb4c176c286715e1948ba.patch";
-      sha256 = "sha256-vtPAR6gCyny9UP+U6/7X8CPEUuMDl7RIyICIwiaWyfc=";
+      hash = "sha256-vtPAR6gCyny9UP+U6/7X8CPEUuMDl7RIyICIwiaWyfc=";
     })
   ];
 

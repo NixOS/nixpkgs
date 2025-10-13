@@ -387,7 +387,7 @@ rec {
       (fetchpatch {
         name = "lua_fixed_hash.patch";
         url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=1009196;filename=lua_fixed_hash.patch;msg=45";
-        sha256 = "sha256-FTu1eRd3AUU7IRs2/7e7uwHuvZsrzTBPypbcEZkU7y4=";
+        hash = "sha256-FTu1eRd3AUU7IRs2/7e7uwHuvZsrzTBPypbcEZkU7y4=";
       })
       # The original LuaJIT version number used here is 2.1.1736781742.
       # The patch number in this is the unix epoch timestamp of the commit used.

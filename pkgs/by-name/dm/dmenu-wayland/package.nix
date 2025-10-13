@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     (fetchpatch {
       name = "support-cross-compilation.patch";
       url = "https://github.com/nyyManni/dmenu-wayland/commit/3434410de5dcb007539495395f7dc5421923dd3a.patch";
-      sha256 = "sha256-im16kU8RWrCY0btYOYjDp8XtfGEivemIPlhwPX0C77o=";
+      hash = "sha256-im16kU8RWrCY0btYOYjDp8XtfGEivemIPlhwPX0C77o=";
     })
   ];
 

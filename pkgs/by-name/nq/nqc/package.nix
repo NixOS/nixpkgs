@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     ./nqc-unistd.patch
     (fetchpatch {
       url = "https://sourceforge.net/p/bricxcc/patches/_discuss/thread/00b427dc/b84b/attachment/nqc-01-Linux_usb_and_tcp.diff";
-      sha256 = "sha256-UZmmhhhfLAUus36TOBhiDQ8KUeEdYhGHVFwqKqDIqII=";
+      hash = "sha256-UZmmhhhfLAUus36TOBhiDQ8KUeEdYhGHVFwqKqDIqII=";
     })
   ];
 

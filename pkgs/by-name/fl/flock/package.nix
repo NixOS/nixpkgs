@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "fix-format-specifier.patch";
       url = "https://github.com/discoteq/flock/commit/408bad42eb8d76cdd0c504c2f97f21c0b424c3b1.patch";
-      sha256 = "sha256-YuFKXWTBu9A2kBNqkg1Oek6vDbVo/y8dB1k9Fuh3QmA";
+      hash = "sha256-YuFKXWTBu9A2kBNqkg1Oek6vDbVo/y8dB1k9Fuh3QmA";
     })
   ];
 

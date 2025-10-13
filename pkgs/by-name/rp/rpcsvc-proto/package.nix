@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "follow-RPCGEN_CPP-env-var";
       url = "https://github.com/thkukuk/rpcsvc-proto/commit/e772270774ff45172709e39f744cab875a816667.diff";
-      sha256 = "sha256-KrUD6YwdyxW9S99h4TB21ahnAOgQmQr2tYz++MIbk1Y=";
+      hash = "sha256-KrUD6YwdyxW9S99h4TB21ahnAOgQmQr2tYz++MIbk1Y=";
     })
   ];
 

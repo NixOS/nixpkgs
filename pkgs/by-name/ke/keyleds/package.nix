@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   patches = [
     (fetchpatch {
       url = "https://github.com/keyleds/keyleds/commit/bffed5eb181127df915002b6ed830f85f15feafd.patch";
-      sha256 = "sha256-i2N3D/K++34JVqJloNK2UcN473NarIjdjAz6PUhXcNY=";
+      hash = "sha256-i2N3D/K++34JVqJloNK2UcN473NarIjdjAz6PUhXcNY=";
     })
   ];
 

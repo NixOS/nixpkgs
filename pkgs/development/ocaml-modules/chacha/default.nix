@@ -25,7 +25,7 @@ buildDunePackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/abeaumont/ocaml-chacha/commit/fbe4a0a808226229728a68f278adf370251196fd.patch";
-      sha256 = "sha256-y7X9toFDrgdv3qmFmUs7K7QS+Gy45rRLulKy48m7uqc=";
+      hash = "sha256-y7X9toFDrgdv3qmFmUs7K7QS+Gy45rRLulKy48m7uqc=";
     })
   ];
 

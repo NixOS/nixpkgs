@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     # fixes build errors due to missing declarations in headers
     (fetchpatch {
       url = "https://patch-diff.githubusercontent.com/raw/Mellanox/mstflint/pull/1131.patch";
-      sha256 = "sha256-tn8EO9HkDrMroV6byUPgjclBIK8tq4xGyi4Kx/rIj+w=";
+      hash = "sha256-tn8EO9HkDrMroV6byUPgjclBIK8tq4xGyi4Kx/rIj+w=";
     })
   ];
 

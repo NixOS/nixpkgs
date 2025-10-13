@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/20-CVE-2014-9862.patch";
-      sha256 = "sha256-3UuUfNvShQ8fLqxCKUTb/n4BmjL4+Nl7aEqCxYrrERQ=";
+      hash = "sha256-3UuUfNvShQ8fLqxCKUTb/n4BmjL4+Nl7aEqCxYrrERQ=";
     })
     ./CVE-2020-14315.patch
     ./include-systypes.patch
@@ -27,15 +27,15 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     (fetchpatch {
       url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/30-bug-632585-mmap-src-file-instead-of-malloc-read-it.patch";
-      sha256 = "sha256-esbhz2/efUiuQDuF7LGfSeEn3/f1WbqCxQpTs2A0ulI=";
+      hash = "sha256-esbhz2/efUiuQDuF7LGfSeEn3/f1WbqCxQpTs2A0ulI=";
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/31-bug-632585-mmap-dst-file-instead-of-malloc-read-it.patch";
-      sha256 = "sha256-Of4aOcI0rsgdRzPqyw2VRn2p9wQuo3hdlgDTBdXGzoc=";
+      hash = "sha256-Of4aOcI0rsgdRzPqyw2VRn2p9wQuo3hdlgDTBdXGzoc=";
     })
     (fetchpatch {
       url = "https://sources.debian.org/data/main/b/bsdiff/4.3-22/debian/patches/32-bug-632585-use-int32_t-instead-off_t-for-file-size.patch";
-      sha256 = "sha256-SooFnFK4uKNXvXQb/LEcH8GocnRtkryExI4b3BZTsAY=";
+      hash = "sha256-SooFnFK4uKNXvXQb/LEcH8GocnRtkryExI4b3BZTsAY=";
     })
   ];
 

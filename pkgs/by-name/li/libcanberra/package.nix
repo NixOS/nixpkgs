@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (fetchpatch {
       url = "https://github.com/macports/macports-ports/raw/5a7965dfea7727d1ceedee46c7b0ccee9cb23468/audio/libcanberra/files/patch-configure.diff";
-      sha256 = "sha256-pEJy1krciUEg5BFIS8FJ4BubjfS/nt9aqi6BLnS1+4M=";
+      hash = "sha256-pEJy1krciUEg5BFIS8FJ4BubjfS/nt9aqi6BLnS1+4M=";
       extraPrefix = "";
     })
     (fetchpatch {
       url = "https://github.com/macports/macports-ports/raw/5a7965dfea7727d1ceedee46c7b0ccee9cb23468/audio/libcanberra/files/dynamic_lookup-11.patch";
-      sha256 = "sha256-nUjha2pKh5VZl0ZZzcr9NTo1TVuMqF4OcLiztxW+ofQ=";
+      hash = "sha256-nUjha2pKh5VZl0ZZzcr9NTo1TVuMqF4OcLiztxW+ofQ=";
       extraPrefix = "";
     })
   ];

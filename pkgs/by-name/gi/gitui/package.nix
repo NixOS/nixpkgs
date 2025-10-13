@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage {
     # TOREMOVE for gitui > 0.27.0
     (fetchpatch {
       url = "https://github.com/gitui-org/gitui/commit/950e703cab1dd37e3d02e7316ec99cc0dc70513c.patch";
-      sha256 = "sha256-KDgOPLKGuJaF0Nc6rw9FPFmcI07I8Gyp/KNX8x6+2xw=";
+      hash = "sha256-KDgOPLKGuJaF0Nc6rw9FPFmcI07I8Gyp/KNX8x6+2xw=";
     })
   ];
 
