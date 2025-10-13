@@ -327,17 +327,13 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  hardeningDisable = [
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
-    "trivialautovarinit"
-  ]
-  ++ (lib.optionals withLibBPF [
+  hardeningDisable = lib.optionals withLibBPF [
     # breaks clang -target bpf; should be fixed to not use
     # a wrapped clang?
     "zerocallusedregs"
     "shadowstack"
     "pacret"
-  ]);
+  ];
 
   nativeBuildInputs = [
     pkg-config
