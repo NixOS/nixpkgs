@@ -7072,6 +7072,7 @@ with pkgs;
     botan2
     botan3
     ;
+  botanEsdm = botan3.override { withEsdm = true; };
 
   c-ares = callPackage ../development/libraries/c-ares { };
 
