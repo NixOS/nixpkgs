@@ -28817,6 +28817,12 @@
     githubId = 450885;
     name = "Francesco Zanini";
   };
+  zareix = {
+    email = "contact@raphael-catarino.fr";
+    github = "zareix";
+    githubId = 29818713;
+    name = "Raphaël Catarino";
+  };
   zarelit = {
     email = "david@zarel.net";
     github = "zarelit";

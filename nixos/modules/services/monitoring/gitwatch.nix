@@ -100,5 +100,8 @@ in
       });
   };
   config.systemd.services = mapAttrs' mkSystemdService config.services.gitwatch;
-  meta.maintainers = with maintainers; [ shved ];
+  meta.maintainers = with maintainers; [
+    shved
+    zareix
+  ];
 }
