@@ -61,6 +61,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
     "-DENABLE_TOOLS=${boolToUpper enableTools}"
     "-DEMBEDDED_LIBCURL=OFF"
     "-DLIBCURL_BACKEND_BY_DEFAULT=${boolToUpper defaultToLibcurl}"
