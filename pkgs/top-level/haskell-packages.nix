@@ -14,7 +14,6 @@ let
     "native-bignum"
     # Binary GHCs
     "ghc902Binary"
-    "ghc924Binary"
     "ghc984Binary"
   ];
 
@@ -77,8 +76,6 @@ in
         inherit llvmPackages;
       };
 
-      ghc924Binary = callPackage ../development/compilers/ghc/9.2.4-binary.nix { };
-
       ghc984Binary = callPackage ../development/compilers/ghc/9.8.4-binary.nix { };
 
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
@@ -95,7 +92,7 @@ in
       };
       ghc94 = compiler.ghc948;
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
-        bootPkgs = bb.packages.ghc924Binary;
+        bootPkgs = bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
         # Need to use apple's patched xattr until
         # https://github.com/xattr/xattr/issues/44 and
@@ -203,12 +200,6 @@ in
         buildHaskellPackages = bh.packages.ghc902Binary;
         ghc = bh.compiler.ghc902Binary;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.0.x.nix { };
-        packageSetConfig = bootstrapPackageSet;
-      };
-      ghc924Binary = callPackage ../development/haskell-modules {
-        buildHaskellPackages = bh.packages.ghc924Binary;
-        ghc = bh.compiler.ghc924Binary;
-        compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.2.x.nix { };
         packageSetConfig = bootstrapPackageSet;
       };
       ghc984Binary = callPackage ../development/haskell-modules {
