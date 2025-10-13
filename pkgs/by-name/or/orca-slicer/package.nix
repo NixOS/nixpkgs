@@ -1,5 +1,6 @@
 {
   stdenv,
+  clangStdenv,
   lib,
   binutils,
   fetchFromGitHub,
@@ -56,7 +57,10 @@ let
         ];
       });
 in
-stdenv.mkDerivation (finalAttrs: {
+# Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
+# on this particular code base (OOM with 32GB memory and --cores 16 on GCC, succeeds
+# with --cores 32 on clang).
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "orca-slicer";
   version = "v2.3.1";
 
