@@ -11449,6 +11449,8 @@ self: super: with self; {
 
   paramax = callPackage ../development/python-modules/paramax { };
 
+  parameter-decorators = callPackage ../development/python-modules/parameter-decorators { };
+
   parameter-expansion-patched =
     callPackage ../development/python-modules/parameter-expansion-patched
       { };
