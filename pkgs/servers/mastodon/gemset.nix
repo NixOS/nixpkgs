@@ -2549,10 +2549,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "054d6ybgjdzxw567m7rbnd46yp6gkdbc5ihr536vxd3p15vbhjrw";
+      sha256 = "0pikdkih381qwaq91v1nfnpmi4bj0kq4ykb15q3amk2awcwn2d9w";
       type = "gem";
     };
-    version = "3.2.0";
+    version = "3.2.2";
   };
   openssl-signature_algorithm = {
     dependencies = [ "openssl" ];
@@ -3204,10 +3204,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1pcr8sn02lwzv3z6vx5n41b6ybcnw9g9h05s3lkv4vqdm0f2mq2z";
+      sha256 = "0w3iq14y3ldjq29qv2ll7y1dj7adxl9p9m0312h30ll4li3k9nl5";
       type = "gem";
     };
-    version = "2.2.17";
+    version = "2.2.20";
   };
   rack-attack = {
     dependencies = [ "rack" ];
@@ -4581,10 +4581,10 @@
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "0mz4hxi8lxh8rs6aph1mrihczvvz8ag9zlin1gzvq490cmp1jmx5";
+      sha256 = "19qy5sdl7c7h793r8dy8r06avz7y4srwqvaxlhvj8q3kbg0naigd";
       type = "gem";
     };
-    version = "0.13.2";
+    version = "0.13.3";
   };
   validate_email = {
     dependencies = [
@@ -4739,18 +4739,24 @@
     version = "1.2.11";
   };
   websocket-driver = {
-    dependencies = [ "websocket-extensions" ];
-    groups = [ "default" ];
+    dependencies = [
+      "base64"
+      "websocket-extensions"
+    ];
+    groups = [ "test" ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1nyh873w4lvahcl8kzbjfca26656d5c6z3md4sbqg5y1gfz0157n";
+      sha256 = "0qj9dmkmgahmadgh88kydb7cv15w13l1fj3kk9zz28iwji5vl3gd";
       type = "gem";
     };
-    version = "0.7.6";
+    version = "0.8.0";
   };
   websocket-extensions = {
-    groups = [ "default" ];
+    groups = [
+      "default"
+      "test"
+    ];
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
