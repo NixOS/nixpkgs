@@ -7,7 +7,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "sensorpro-ble";
   version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
