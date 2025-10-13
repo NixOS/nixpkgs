@@ -5,7 +5,7 @@ let
   unixSocket = "/run/esphome/esphome.sock";
 in
 {
-  name = "esphome";
+  name = "esphome-dashboard";
   meta.maintainers = with lib.maintainers; [ oddlama ];
 
   nodes = {
