@@ -7,7 +7,6 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "tilt-ble";
   version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
@@ -43,7 +40,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Tilt BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/tilt-ble";
-    changelog = "https://github.com/Bluetooth-Devices/tilt-ble/releases/tag/v${version}";
+    changelog = "https://github.com/Bluetooth-Devices/tilt-ble/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
