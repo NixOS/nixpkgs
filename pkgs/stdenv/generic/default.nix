@@ -17,6 +17,7 @@ let
 
       shell,
       allowedRequisites ? null,
+      # Extra package attributes, like passthru. Not passed to `derivation`.
       extraAttrs ? { },
       overrides ? (self: super: { }),
       config,
@@ -63,6 +64,9 @@ let
       # This is convenient to have as a parameter so the stdenv "adapters" work better
       mkDerivationFromStdenv ?
         stdenv: (import ./make-derivation.nix { inherit lib config; } stdenv).mkDerivation,
+
+      # callPackage for "passthru" utilities only
+      callPackage ? null,
     }:
 
     let
@@ -90,6 +94,11 @@ let
 
       stdenv = (stdenv-overridable argsStdenv);
 
+      devShellTools =
+        if callPackage == null then
+          null
+        else
+          callPackage ../../build-support/dev-shell-tools { inherit stdenv; };
     in
     # The stdenv that we are producing.
     derivation (
@@ -212,6 +221,8 @@ let
       # without running any commands. Because this will also skip `shopt -s extglob`
       # commands and extglob affects the Bash parser, we enable extglob always.
       shellDryRun = "${stdenv.shell} -n -O extglob";
+
+      buildShellEnv = if devShellTools ? buildShellEnv then devShellTools.buildShellEnv else _: null;
 
       tests = {
         succeedOnFailure = import ../tests/succeedOnFailure.nix { inherit stdenv; };
