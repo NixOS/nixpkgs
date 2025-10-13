@@ -192,8 +192,7 @@ let
               # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
             ]
-            # TODO: drop the isClang condition
-            ++ ops (lib.versionOlder ver.majMin "3.4" && stdenv.cc.isClang) [
+            ++ ops (lib.versionOlder ver.majMin "3.4") [
               (fetchpatch {
                 name = "ruby-3.3-fix-llvm-21.patch";
                 url = "https://github.com/ruby/ruby/commit/5a8d7642168f4ea0d9331fded3033c225bbc36c5.patch";
