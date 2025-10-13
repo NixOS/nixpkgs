@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+
   buildInputs = [ qtbase ];
 
   meta = with lib; {

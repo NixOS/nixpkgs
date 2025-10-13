@@ -98,13 +98,13 @@
   },
   {
     "pname": "Microsoft.AspNetCore.Cryptography.Internal",
-    "version": "8.0.16",
-    "hash": "sha256-uw/5GAPpefPeMrfG69EBOVciSHxBKs0E8Txkf+rttzs="
+    "version": "8.0.17",
+    "hash": "sha256-CS/I8fajxwimZC2WNpN5ai/hEVU6Pk4El8hKNr/QgfU="
   },
   {
     "pname": "Microsoft.AspNetCore.Cryptography.KeyDerivation",
-    "version": "8.0.16",
-    "hash": "sha256-Zpt7vlY0xdrk/6XDRtXb0t9MK6SiPP6sr3fC6gQ1/YQ="
+    "version": "8.0.17",
+    "hash": "sha256-fXjTm7dua1WoGVSkGX6swTFvsNwdhAJvI3Y6onrR3p4="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",
@@ -599,8 +599,8 @@
   },
   {
     "pname": "Polly",
-    "version": "8.5.2",
-    "hash": "sha256-IrN06ddOIJ0VYuVefe3LvfW0kX20ATRQkEBg9CBomRA="
+    "version": "8.6.0",
+    "hash": "sha256-wlvYcfcOExa3LopwRFO4axW682jkUZvioHe+kznspHk="
   },
   {
     "pname": "Polly.Contrib.WaitAndRetry",
@@ -609,8 +609,8 @@
   },
   {
     "pname": "Polly.Core",
-    "version": "8.5.2",
-    "hash": "sha256-PAwsWqrCieCf/7Y87fV7XMKoaY2abCQNtI+4oyyMifk="
+    "version": "8.6.0",
+    "hash": "sha256-NEGMMQ+3+i4ytsGekKfP1trUe0mRZP7MV0eBiSFXHW8="
   },
   {
     "pname": "RestSharp",
@@ -970,8 +970,8 @@
   },
   {
     "pname": "SixLabors.ImageSharp",
-    "version": "3.1.9",
-    "hash": "sha256-sB1wGc419iqT+Stm+RFMFhBy3LM0YnHhrgmhYiGlf4Q="
+    "version": "3.1.11",
+    "hash": "sha256-MlRF+3SGfahbsB1pZGKMOrsfUCx//hCo7ECrXr03DpA="
   },
   {
     "pname": "Swashbuckle.AspNetCore.Annotations",

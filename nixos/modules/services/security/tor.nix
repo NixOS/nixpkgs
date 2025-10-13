@@ -1410,7 +1410,14 @@ in
         RootDirectoryStartOnly = true;
         #InaccessiblePaths = [ "-+${runDir}/root" ];
         UMask = "0066";
-        BindPaths = [ stateDir ];
+        BindPaths = [
+          stateDir
+        ]
+        ++ lib.catAttrs "unix" (
+          lib.catAttrs "target" (
+            lib.concatMap (onionService: onionService.map) (lib.attrValues cfg.relay.onionServices)
+          )
+        );
         BindReadOnlyPaths = [
           builtins.storeDir
           "/etc"

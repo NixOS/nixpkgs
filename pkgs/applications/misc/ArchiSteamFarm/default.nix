@@ -63,7 +63,7 @@ buildDotnetModule rec {
 
   doCheck = true;
 
-  installPhase = ''
+  preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
 
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -71,14 +71,15 @@ buildDotnetModule rec {
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
+  '';
 
-    dotnetInstallPhase
-
+  postInstall = ''
     buildPlugin() {
       echo "Publishing plugin $1"
-      dotnetProjectFiles=("$1")
-      dotnetInstallPath="$out/lib/ArchiSteamFarm/plugins/$1"
-      dotnetInstallPhase
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        --no-restore --no-build --runtime $dotnetRuntimeIds \
+        $dotnetFlags $dotnetInstallFlags
     }
 
   ''

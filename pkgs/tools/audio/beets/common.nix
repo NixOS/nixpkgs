@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication {
 
   build-system = [
     python3Packages.poetry-core
+    python3Packages.poetry-dynamic-versioning
   ];
 
   dependencies =
