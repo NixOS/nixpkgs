@@ -2454,9 +2454,6 @@ with haskellLib;
     ))
   ];
 
-  # 2025-02-11: Too strict bounds on base < 4.17
-  ema = doJailbreak super.ema;
-
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection

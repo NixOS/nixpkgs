@@ -1824,8 +1824,6 @@ builtins.intersectAttrs super {
       }))
       super.tailwind;
 
-  emanote = addBuildDepend pkgs.stork super.emanote;
-
   keid-render-basic = addBuildTool pkgs.glslang super.keid-render-basic;
 
   # Disable checks to break dependency loop with SCalendar

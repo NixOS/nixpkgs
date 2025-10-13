@@ -698,7 +698,6 @@ unsupported-platforms:
   Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
   coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
   cut-the-crap:                                 [ platforms.darwin ]
-  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   essence-of-live-coding-PortMidi:              [ platforms.darwin ]
   Euterpea:                                     [ platforms.darwin ]
   follow-file:                                  [ platforms.darwin ]
