@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
     install -Dm0755 build/mobical "$out/bin/mobical"
     install -Dm0644 src/ccadical.h "$dev/include/ccadical.h"
     install -Dm0644 src/cadical.hpp "$dev/include/cadical.hpp"
+    install -Dm0644 src/cadical.hpp "$dev/include/cadical/cadical.hpp"
+    install -Dm0644 src/tracer.hpp "$dev/include/cadical/tracer.hpp"
     install -Dm0644 build/libcadical.a "$lib/lib/libcadical.a"
     mkdir -p "$out/share/doc/${pname}/"
     install -Dm0755 {LICEN?E,README*,VERSION} "$out/share/doc/${pname}/"
