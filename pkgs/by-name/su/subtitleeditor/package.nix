@@ -19,15 +19,15 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "subtitleeditor";
-  version = "unstable-2019-11-30";
+  version = "0.55.0";
 
   src = fetchFromGitHub {
     owner = "subtitleeditor";
     repo = "subtitleeditor";
-    rev = "4c215f4cff4483c44361a2f1d45efc4c6670787f";
-    sha256 = "sha256-1Q1nd3GJ6iDGQv4SM2S1ehVW6kPdbqTn8KTtTb0obiQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-jhKewfhJ97zxUPp1P2twmgNkMQa/hi2ZZZ8mOFcCOlQ=";
   };
 
   nativeBuildInputs = [
@@ -77,4 +77,4 @@ stdenv.mkDerivation {
     maintainers = [ lib.maintainers.plcplc ];
     mainProgram = "subtitleeditor";
   };
-}
+})
