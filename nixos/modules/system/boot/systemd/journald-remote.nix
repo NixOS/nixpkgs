@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.journald.remote;
-  format = pkgs.formats.systemd;
+  format = pkgs.formats.systemd { };
 
   cliArgs = lib.cli.toGNUCommandLineShell { } {
     inherit (cfg) output;
