@@ -132,6 +132,6 @@ stdenv.mkDerivation rec {
       zlib
       cc0
     ];
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
   };
 }
