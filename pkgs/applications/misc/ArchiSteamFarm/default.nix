@@ -6,6 +6,7 @@
   libkrb5,
   zlib,
   openssl,
+  stdenv,
   callPackage,
 }:
 
@@ -20,13 +21,13 @@ in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.2.0.5";
+  version = "6.2.2.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-CNnSsFBeO3BHUbom0eytfz02Q7QBv8JEmHbgPSL7I3Y=";
+    hash = "sha256-FV9dYp3E8MHra5pyrh8dqZ/85TDwNbdiLV/XdAWiJsg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
@@ -61,7 +62,8 @@ buildDotnetModule rec {
     openssl
   ];
 
-  doCheck = true;
+  # times out when trying to connect to something even with relaxed sandbox
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
