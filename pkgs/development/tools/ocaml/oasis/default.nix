@@ -57,7 +57,6 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0") "oasis is not available for
       license = licenses.lgpl21;
       maintainers = with maintainers; [
         vbgl
-        maggesi
       ];
       mainProgram = "oasis";
       inherit (ocaml.meta) platforms;

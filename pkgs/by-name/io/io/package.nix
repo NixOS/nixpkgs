@@ -115,7 +115,6 @@ stdenv.mkDerivation {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       raskin
-      maggesi
     ];
     platforms = [ "x86_64-linux" ];
   };

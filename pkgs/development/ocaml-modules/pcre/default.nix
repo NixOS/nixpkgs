@@ -28,7 +28,6 @@ buildDunePackage rec {
     description = "Efficient C-library for pattern matching with Perl-style regular expressions in OCaml";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [
-      maggesi
       vbmithr
     ];
   };

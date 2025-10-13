@@ -15547,12 +15547,6 @@
     githubId = 1140462;
     name = "magenbluten";
   };
-  maggesi = {
-    email = "marco.maggesi@gmail.com";
-    github = "maggesi";
-    githubId = 1809783;
-    name = "Marco Maggesi";
-  };
   magicquark = {
     name = "magicquark";
     github = "magicquark";

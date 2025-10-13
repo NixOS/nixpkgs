@@ -162,7 +162,6 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       andersk
-      maggesi
       spacefrogg
     ];
     broken = kernel.isHardened;
