@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "comfyui-embedded-docs";
-  version = "0.2.6";
+  version = "0.3.0";
   pyproject = true;
 
   # no tags on github
   src = fetchPypi {
     pname = "comfyui_embedded_docs";
     inherit version;
-    hash = "sha256-ild/PuIWvo3NbAjpZYxvJX/7np6B9A8NNt6bSZJJdWo=";
+    hash = "sha256-pUUVY0QS98J6ChHwwyiHKJnTeVjrrqv+qfepp03OpnA=";
   };
   build-system = [ setuptools ];
 
