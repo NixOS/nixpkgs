@@ -26,8 +26,8 @@ let
       services.nginx = {
         enable = true;
         additionalModules = [ pkgs.nginxModules.acme ];
+        resolver.addresses = [ "127.0.0.53:53" ];
         appendHttpConfig = ''
-          resolver 127.0.0.53:53;
           acme_issuer default {
             uri         https://${nodes.acme.test-support.acme.caDomain}/dir;
             state_path  /var/cache/nginx/acme;
