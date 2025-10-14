@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "zulip";
-  version = "0.9.0";
+  version = "0.9.1";
 
   disabled = pythonOlder "3.8";
 
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "zulip";
     repo = "python-zulip-api";
     rev = version;
-    hash = "sha256-YnNXduZ2KOjRHGwhojkqpMP2mwhflk8/f4FVZL8NvHU=";
+    hash = "sha256-mcqIfha+4nsqlshayLQ2Sd+XOYVKf1FkoczjiFRNybc=";
   };
   sourceRoot = "${src.name}/zulip";
 
