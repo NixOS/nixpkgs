@@ -460,36 +460,6 @@ stdenv.mkDerivation (
           url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/cb049d377f54f6b747667a93e4b719380c3e9475";
           hash = "sha256-sxRXKKgUak5vsQTiV7ge8vp+N22CdTIvuczNgVRP72c=";
         })
-        (fetchpatch2 {
-          name = "CVE-2024-31582.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/99debe5f823f45a482e1dc08de35879aa9c74bd2";
-          hash = "sha256-+CQ9FXR6Vr/AmsbXFiCUXZcxKj1s8nInEdke/Oc/kUA=";
-        })
-        (fetchpatch2 {
-          name = "CVE-2024-31578.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/3bb00c0a420c3ce83c6fafee30270d69622ccad7";
-          hash = "sha256-oZMZysBA+/gwaGEM1yvI+8wCadXWE7qLRL6Emap3b8Q=";
-        })
-        (fetchpatch2 {
-          name = "CVE-2023-49501.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/4adb93dff05dd947878c67784d98c9a4e13b57a7";
-          hash = "sha256-7cwktto3fPMDGvCZCVtB01X8Q9S/4V4bDLUICSNfGgw=";
-        })
-        (fetchpatch2 {
-          name = "CVE-2023-49502.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/737ede405b11a37fdd61d19cf25df296a0cb0b75";
-          hash = "sha256-mpSJwR9TX5ENjjCKvzuM/9e1Aj/AOiQW0+72oOMl9v8=";
-        })
-        (fetchpatch2 {
-          name = "CVE-2023-50007.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/b1942734c7cbcdc9034034373abcc9ecb9644c47";
-          hash = "sha256-v0hNcqBtm8GCGAU9UbRUCE0slodOjZCHrkS8e4TrVcQ=";
-        })
-        (fetchpatch2 {
-          name = "CVE-2023-50008.patch";
-          url = "https://git.ffmpeg.org/gitweb/ffmpeg.git/patch/5f87a68cf70dafeab2fb89b42e41a4c29053b89b";
-          hash = "sha256-sqUUSOPTPLwu2h8GbAw4SfEf+0oWioz52BcpW1n4v3Y=";
-        })
       ]
       ++ optionals (lib.versionOlder version "7.1.1") [
         (fetchpatch2 {
