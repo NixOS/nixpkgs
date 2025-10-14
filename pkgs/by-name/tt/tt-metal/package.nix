@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "CPM_USE_LOCAL_PACKAGES" true)
     (lib.cmakeFeature "VERSION_NUMERIC" finalAttrs.version)
     (lib.cmakeBool "ENABLE_TRACY" true)
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
   preConfigure = ''
