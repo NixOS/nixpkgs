@@ -9,7 +9,7 @@
   wayland,
   pkg-config,
   udev,
-  v4l-utils,
+  libv4l,
   dbus,
   nix-update-script,
 }:
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     udev
-    v4l-utils
+    libv4l
     vulkan-loader
     dbus
   ];
