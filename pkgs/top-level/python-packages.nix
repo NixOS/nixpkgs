@@ -15116,6 +15116,8 @@ self: super: with self; {
 
   python-path = callPackage ../development/python-modules/python-path { };
 
+  python-pcapng = callPackage ../development/python-modules/python-pcapng { };
+
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
   python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
