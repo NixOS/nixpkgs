@@ -7164,6 +7164,12 @@
     githubId = 15128988;
     name = "Maksim Dzabraev";
   };
+  dzervas = {
+    name = "Dimitris Zervas";
+    email = "dzervas@dzervas.gr";
+    github = "dzervas";
+    githubId = 1029195;
+  };
   dzmitry-lahoda = {
     email = "dzmitry@lahoda.pro";
     github = "dzmitry-lahoda";
@@ -19295,6 +19301,12 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onatustun = {
+    email = "contact@onatustun.com";
+    name = "Onat Ustun";
+    github = "onatustun";
+    githubId = 41642110;
+  };
   ondt = {
     name = "Ondrej Telka";
     email = "nix@ondt.dev";
@@ -21459,6 +21471,12 @@
     email = "randomdude16671@proton.me";
     github = "randomdude16671";
     githubId = 210965013;
+  };
+  randoneering = {
+    name = "randoneering";
+    email = "justin@randoneering.tech";
+    github = "randoneering";
+    githubId = 127273550;
   };
   rane = {
     name = "Rane";

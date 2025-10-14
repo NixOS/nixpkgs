@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   alsa-lib,
   gpsd,
@@ -27,6 +28,14 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-Vbxc6a6CK+wrBfs15dtjfRa1LJDKKyHMrg8tqsF7EX4=";
   };
+
+  patches = [
+    # Fix the build with CMake 4.
+    (fetchpatch {
+      url = "https://github.com/wb2osz/direwolf/commit/c499496bbc237d0efdcacec5786607f5e17c1c7e.patch";
+      hash = "sha256-/gKi5dswMQM2nGHS3P72gAcHaT0nEF9O91heF8xmy2Y=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
