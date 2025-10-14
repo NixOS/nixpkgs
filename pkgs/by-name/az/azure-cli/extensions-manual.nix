@@ -95,6 +95,19 @@
     meta.maintainers = with lib.maintainers; [ giggio ];
   };
 
+  k8s-extension = mkAzExtension rec {
+    pname = "k8s-extension";
+    version = "1.7.0";
+    url = "https://azcliprod.blob.core.windows.net/cli-extensions/k8s_extension-${version}-py3-none-any.whl";
+    hash = "sha256-gyQxHfsXd+V6w2jMBNiYpE1MrqFeHei9RlsVhXgOjW8=";
+    description = "Microsoft Azure Command-Line Tools K8s-extension Extension";
+    propagatedBuildInputs = with python3Packages; [
+      kubernetes
+      oras
+    ];
+    meta.maintainers = [ ];
+  };
+
   rdbms-connect = mkAzExtension rec {
     pname = "rdbms-connect";
     version = "1.0.7";
