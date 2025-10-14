@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "asn1";
-  version = "3.1.0";
+  version = "3.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "andrivet";
     repo = "python-asn1";
     tag = "v${version}";
-    hash = "sha256-yDX2TydMtqIE4A4QUmKPJKLM1UdXxp0qFBJx08Ri2YQ=";
+    hash = "sha256-aICQO2pAZKO+F9o5/sPyZGtIAlXaOUxe9qkb6sQX60U=";
   };
 
   build-system = [ setuptools ];
@@ -34,7 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python ASN.1 encoder and decoder";
     homepage = "https://github.com/andrivet/python-asn1";
-    changelog = "https://github.com/andrivet/python-asn1/blob/${src.tag}/CHANGELOG.rst";
+    changelog = "https://github.com/andrivet/python-asn1/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
