@@ -13,7 +13,7 @@
 
 let
   pname = "bitcomet";
-  version = "2.16.0";
+  version = "2.17.0";
 
   meta = {
     homepage = "https://www.bitcomet.com";
@@ -45,8 +45,8 @@ let
       fetchurl {
         url = "https://download.bitcomet.com/linux/${arch}/BitComet-${version}-${arch}.deb";
         hash = selectSystem {
-          x86_64-linux = "sha256-0uo8XYUN4VDdArYpoyGEpBwKKnKUzLDfprANKc0ruE4=";
-          aarch64-linux = "sha256-Au6XMblRYo/11b6u3FUUTjI5exTPBy+vpODM3sZeOqU=";
+          x86_64-linux = "sha256-pkCqX+TP05LU2yNZLeMYl3h/xSWJ43tqZbt/dO1G4i8=";
+          aarch64-linux = "sha256-Li5dfdiwxUtjHTU0lyMmw/IZcwOuXKFrkBgn3WuZ2zE=";
         };
       };
 
