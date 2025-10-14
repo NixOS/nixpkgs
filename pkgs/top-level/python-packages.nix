@@ -7954,6 +7954,8 @@ self: super: with self; {
 
   l18n = callPackage ../development/python-modules/l18n { };
 
+  la-panic = callPackage ../development/python-modules/la-panic { };
+
   labelbox = callPackage ../development/python-modules/labelbox { };
 
   labgrid = callPackage ../development/python-modules/labgrid { };
