@@ -11,6 +11,9 @@ on:
       systems:
         required: true
         type: string
+      defaultVersion:
+        required: true
+        type: string
       testVersions:
         required: false
         default: false
@@ -105,7 +108,7 @@ jobs:
       - name: Evaluate the ${{ matrix.system }} output paths at the merge commit
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
-          MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
+          MATRIX_VERSION: ${{ matrix.version || inputs.defaultVersion }}
         run: |
           nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned  -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
@@ -119,12 +122,14 @@ jobs:
         if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
+          # This must match the default version set in the Merge Queue.
+          VERSION: lixPackageSets.latest.lix
         # This is very quick, because it pulls the eval results from Cachix.
         run: |
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
-            --argstr nixPath "nixVersions.latest" \
+            --argstr nixPath "$VERSION" \
             --out-link target
 
       - name: Compare outpaths against the target branch
