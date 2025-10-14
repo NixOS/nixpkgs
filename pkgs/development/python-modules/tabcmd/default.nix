@@ -1,13 +1,11 @@
 {
   lib,
   appdirs,
-  argparse,
   buildPythonPackage,
   doit,
-  fetchPypi,
+  fetchFromGitHub,
   ftfy,
   mock,
-  pyinstaller-versionfile,
   pytest-order,
   pytestCheckHook,
   python,
@@ -28,9 +26,11 @@ buildPythonPackage rec {
   version = "2.0.18";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-erGngJ3CW+c3PuVq4BTrPGSZ2L/M0EykSoZocku0lOE=";
+  src = fetchFromGitHub {
+    owner = "tableau";
+    repo = "tabcmd";
+    tag = "v${version}";
+    hash = "sha256-Eb9ZboYdco6opKW3Tz0+U9VREWdEyt2xuG62n9WIXPk=";
   };
 
   prePatch = ''
