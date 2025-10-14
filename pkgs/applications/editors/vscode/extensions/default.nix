@@ -3676,8 +3676,6 @@ let
 
       oops418.nix-env-picker = callPackage ./oops418.nix-env-picker { };
 
-      oracle.oracle-java = callPackage ./oracle.oracle-java { };
-
       ph-hawkins.arc-plus = callPackage ./ph-hawkins.arc-plus { };
 
       phind.phind = buildVscodeMarketplaceExtension {
