@@ -13339,6 +13339,8 @@ self: super: with self; {
 
   pykcs11 = callPackage ../development/python-modules/pykcs11 { };
 
+  pykdebugparser = callPackage ../development/python-modules/pykdebugparser { };
+
   pykdl = callPackage ../development/python-modules/pykdl { };
 
   pykdtree = callPackage ../development/python-modules/pykdtree {
