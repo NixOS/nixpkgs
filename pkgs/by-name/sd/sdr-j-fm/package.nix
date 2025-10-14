@@ -41,7 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     libsndfile
   ];
-  cmakeFlags = lib.mapAttrsToList lib.cmakeBool finalAttrs.passthru.features;
+  cmakeFlags = lib.mapAttrsToList lib.cmakeBool finalAttrs.passthru.features ++ [
+    # https://github.com/JvanKatwijk/sdr-j-fm/issues/27#issuecomment-3371932903
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
 
   passthru = {
     features = {
