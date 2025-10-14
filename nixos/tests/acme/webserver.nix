@@ -226,5 +226,18 @@
           # Ensure the timer works, due to our shenanigans with
           # RemainAfterExit=true
           webserver.wait_until_succeeds(f"journalctl --cursor-file=/tmp/cursor | grep 'Starting Order (and renew) ACME certificate for zeroconf3.{domain}...'")
-    '';
+    ''
+    +
+      lib.optionalString
+        (config.nodes.webserver.services.nginx.enable && config.nodes.webserver.services.nginx.enableReload)
+        ''
+          with subtest("Ensure that adding a second vhost does not restart nginx"):
+              switch_to(webserver, "zeroconf")
+              webserver.wait_for_unit("renew-triggered.target")
+              webserver.succeed("journalctl --cursor-file=/tmp/cursor")
+              switch_to(webserver, "zeroconf3")
+              webserver.wait_for_unit("renew-triggered.target")
+              output = webserver.succeed("journalctl --cursor-file=/tmp/cursor")
+              t.assertNotIn("Stopping Nginx Web Server...", output)
+        '';
 }
