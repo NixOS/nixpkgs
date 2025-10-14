@@ -7370,12 +7370,6 @@
     github = "eigengrau";
     githubId = 4939947;
   };
-  eihqnh = {
-    email = "eihqnh@outlook.com";
-    github = "eihqnh";
-    githubId = 40905037;
-    name = "eihqnh";
-  };
   eikek = {
     email = "eike.kettner@posteo.de";
     github = "eikek";
