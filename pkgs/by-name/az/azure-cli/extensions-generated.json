@@ -932,9 +932,9 @@
   },
   "scvmm": {
     "pname": "scvmm",
-    "version": "1.2.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/scvmm-1.2.0-py2.py3-none-any.whl",
-    "hash": "sha256-Cq6dSNRIM/vWgwDCaxTRhosVR9dCD5URYQUI+eBpN0Y=",
+    "version": "1.2.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/scvmm-1.2.1-py2.py3-none-any.whl",
+    "hash": "sha256-D1T8ZJCOC/GRph4117z8FsQKFgrA1o/l6S6JveP3Los=",
     "description": "Microsoft Azure Command-Line Tools SCVMM Extension"
   },
   "self-help": {
