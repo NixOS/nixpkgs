@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "add-trailing-comma";
-  version = "3.2.0";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "asottile";
     repo = "add-trailing-comma";
     tag = "v${version}";
-    hash = "sha256-b9EHlx149NUAo9UHDZLE3BwSJY5WpxsUYi1mqz7rnHA=";
+    hash = "sha256-Ts04kjhGE0lgrHyT+EuJsVLIYU/842azG1ZUHTyFijc=";
   };
 
   build-system = [ setuptools ];
