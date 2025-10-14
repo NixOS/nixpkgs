@@ -20,8 +20,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nicklan";
     repo = "pnmixer";
-    rev = "v${finalAttrs.version}";
-    sha256 = "0416pa933ddf4b7ph9zxhk5jppkk7ppcq1aqph6xsrfnka4yb148";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iITliZrWZd0NvFgFzO49c94ry4T9J3jPIq61MZK6JhA=";
   };
 
   patches = [
