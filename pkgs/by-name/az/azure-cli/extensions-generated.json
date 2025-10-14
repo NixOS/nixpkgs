@@ -449,9 +449,9 @@
   },
   "firmwareanalysis": {
     "pname": "firmwareanalysis",
-    "version": "1.0.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/firmwareanalysis-1.0.0-py3-none-any.whl",
-    "hash": "sha256-HD3xRB3nbtsIvtBawnndKwK9b6tooLmkld/X7M4+kss=",
+    "version": "2.0.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/firmwareanalysis-2.0.1-py3-none-any.whl",
+    "hash": "sha256-3qo7mm+ZyPXZ7l2ggaOde+JimEbpYG//Te54yNc5oXE=",
     "description": "Microsoft Azure Command-Line Tools Firmwareanalysis Extension"
   },
   "fleet": {
