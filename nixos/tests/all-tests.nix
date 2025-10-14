@@ -288,10 +288,12 @@ in
   };
   bind = runTest ./bind.nix;
   bird2 = import ./bird.nix {
+    inherit (pkgs) lib;
     inherit runTest;
     package = pkgs.bird2;
   };
   bird3 = import ./bird.nix {
+    inherit (pkgs) lib;
     inherit runTest;
     package = pkgs.bird3;
   };
@@ -975,11 +977,18 @@ in
   mollysocket = runTest ./mollysocket.nix;
   monado = runTest ./monado.nix;
   monetdb = runTest ./monetdb.nix;
-  mongodb = runTest ./mongodb.nix;
+  mongodb = runTest (
+    { config, ... }:
+    {
+      imports = [ ./mongodb.nix ];
+      _module.args.testName = "mongodb";
+    }
+  );
   mongodb-ce = runTest (
     { config, ... }:
     {
       imports = [ ./mongodb.nix ];
+      _module.args.testName = "mongodb-ce";
       defaults.services.mongodb.package = config.node.pkgs.mongodb-ce;
     }
   );
@@ -1028,13 +1037,18 @@ in
   navidrome = runTest ./navidrome.nix;
   nbd = runTest ./nbd.nix;
   ncdns = runTest ./ncdns.nix;
-  ncps = runTest ./ncps.nix;
+  ncps = runTest {
+    imports = [ ./ncps.nix ];
+    _module.args.testName = "ncps";
+  };
   ncps-custom-sqlite-directory = runTest {
     imports = [ ./ncps.nix ];
+    _module.args.testName = "ncps-custom-sqlite-directory";
     defaults.services.ncps.cache.databaseURL = "sqlite:/path/to/ncps/db.sqlite";
   };
   ncps-custom-storage-local = runTest {
     imports = [ ./ncps.nix ];
+    _module.args.testName = "ncps-custom-storage-local";
     defaults.services.ncps.cache.storage.local = "/path/to/ncps";
   };
   ncps-ha = runTest ./ncps-ha.nix;
@@ -1282,21 +1296,25 @@ in
   pretix = runTest ./web-apps/pretix.nix;
   printing-service = runTest {
     imports = [ ./printing.nix ];
+    _module.args.testName = "printing-service";
     _module.args.socket = false;
     _module.args.listenTcp = true;
   };
   printing-service-notcp = runTest {
     imports = [ ./printing.nix ];
+    _module.args.testName = "printing-service-notcp";
     _module.args.socket = false;
     _module.args.listenTcp = false;
   };
   printing-socket = runTest {
     imports = [ ./printing.nix ];
+    _module.args.testName = "printing-socket";
     _module.args.socket = true;
     _module.args.listenTcp = true;
   };
   printing-socket-notcp = runTest {
     imports = [ ./printing.nix ];
+    _module.args.testName = "printing-socket-notcp";
     _module.args.socket = true;
     _module.args.listenTcp = false;
   };

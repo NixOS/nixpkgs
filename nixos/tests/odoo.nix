@@ -5,7 +5,7 @@
   ...
 }:
 {
-  name = "odoo";
+  name = "odoo-${package.version}";
   meta.maintainers = with lib.maintainers; [ mkg20001 ];
 
   _module.args.package = lib.mkDefault pkgs.odoo;

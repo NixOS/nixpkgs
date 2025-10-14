@@ -8,7 +8,7 @@ import ../make-test-python.nix (
   }:
   with pkgs.lib;
   {
-    name = "hadoop-hbase";
+    name = "hadoop-${package.version}-hbase";
 
     nodes =
       let
