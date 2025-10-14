@@ -339,6 +339,16 @@
       "agpl"
     ]
   },
+  "repod": {
+    "hash": "sha256-k+Y+KMQ15AEJ5hk5GlGg3vOKKRgEql49hrLCoammwoE=",
+    "url": "https://git.crystalyx.net/Xefir/repod/releases/download/3.8.1/repod.tar.gz",
+    "version": "3.8.1",
+    "description": "## Features\n- 🔍 Browse and subscribe huge collection of podcasts\n- 🔊 Listen to episodes directly in Nextcloud\n- 🌐 Sync your activity with [AntennaPod](https://antennapod.org/) and [other apps](https://git.crystalyx.net/Xefir/repod#clients-supporting-sync-of-gpoddersync)\n- 📱 Mobile friendly interface\n- 📡 Import and export your subscriptions\n- ➡️ Full features comparison [here](https://git.crystalyx.net/Xefir/repod#comparaison-with-similar-apps-for-nextcloud)\n\n## Requirements\nYou need to have [GPodderSync](https://apps.nextcloud.com/apps/gpoddersync) installed to use this app!",
+    "homepage": "https://git.crystalyx.net/Xefir/repod",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "richdocuments": {
     "hash": "sha256-jXYNk3adLm+Umxx/pCrKeNidq6M9ayTquJFMU3eM8Rw=",
     "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.7.5/richdocuments-v8.7.5.tar.gz",

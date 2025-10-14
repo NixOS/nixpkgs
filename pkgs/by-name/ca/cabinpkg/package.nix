@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
     homepage = "https://cabinpkg.com";
     description = "Package manager and build system for C++";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.eihqnh ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     mainProgram = "cabin";
   };

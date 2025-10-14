@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "parsnip";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "glotzerlab";
     repo = "parsnip";
     rev = "v${version}";
-    hash = "sha256-Nac0afep7+HkpSBpqClHpPFSc8H3g8l4q067RQe5K54=";
+    hash = "sha256-P1Ls+UtWdhYmuwISpPCZYsXFJTBqS6uVaU2PV072BOE=";
   };
 
   build-system = [
