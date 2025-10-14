@@ -32,7 +32,7 @@
   nodes.machine = {
     services.nixseparatedebuginfod2 = {
       enable = true;
-      substituter = "http://cache";
+      substituters = [ "http://cache" ];
     };
     environment.systemPackages = [
       pkgs.valgrind
