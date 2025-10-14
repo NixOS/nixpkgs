@@ -13,14 +13,14 @@
   pcre,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pnmixer";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "nicklan";
     repo = "pnmixer";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "0416pa933ddf4b7ph9zxhk5jppkk7ppcq1aqph6xsrfnka4yb148";
   };
 
