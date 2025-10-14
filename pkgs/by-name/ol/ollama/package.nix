@@ -3,7 +3,6 @@
   buildGoModule,
   fetchFromGitHub,
   buildEnv,
-  linkFarm,
   makeWrapper,
   stdenv,
   addDriverRunpath,
