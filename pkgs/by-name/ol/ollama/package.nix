@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildEnv,
-  makeWrapper,
+  makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
   nix-update-script,
@@ -147,7 +147,7 @@ goBuild (finalAttrs: {
   ]
   ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals (enableRocm || enableCuda) [
-    makeWrapper
+    makeBinaryWrapper
     autoAddDriverRunpath
   ];
 
