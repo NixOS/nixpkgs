@@ -70,11 +70,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_JEMALLOC" true)
   ];
 
-  postInstall = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    rm $out/lib/*.a
-
-    ln -s $out/bin/sfsmount $out/bin/mount.saunafs
-  '';
+  postInstall =
+    lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      rm $out/lib/*.a
+    ''
+    + ''
+      ln -s $out/bin/sfsmount $out/bin/mount.saunafs
+    '';
 
   passthru.tests = nixosTests.saunafs;
 
