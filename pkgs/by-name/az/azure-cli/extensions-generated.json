@@ -1023,9 +1023,9 @@
   },
   "storage-mover": {
     "pname": "storage-mover",
-    "version": "1.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_mover-1.1.0-py3-none-any.whl",
-    "hash": "sha256-fXaKylCqmJeKDZKcRs/+YL9IilJ2ZUhdpjGzNETK4kw=",
+    "version": "1.2.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_mover-1.2.0-py3-none-any.whl",
+    "hash": "sha256-jIZ2WTXHeK2+DeBOfU8tKN5abXARPzDu45YP5nSNzXA=",
     "description": "Microsoft Azure Command-Line Tools StorageMover Extension"
   },
   "storagesync": {
