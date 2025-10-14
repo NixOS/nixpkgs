@@ -1614,6 +1614,8 @@ let
 
         otr = callPackage ../development/ocaml-modules/otr { };
 
+        oui = callPackage ../development/ocaml-modules/oui { };
+
         ounit = callPackage ../development/ocaml-modules/ounit { };
 
         ounit2 = callPackage ../development/ocaml-modules/ounit2 { };
