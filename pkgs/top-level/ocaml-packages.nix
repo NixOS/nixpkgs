@@ -1574,6 +1574,8 @@ let
 
         omd = callPackage ../development/ocaml-modules/omd { };
 
+        opam-0install-cudf = callPackage ../development/ocaml-modules/opam-0install-cudf { };
+
         opam-core = callPackage ../development/ocaml-modules/opam-core {
           inherit (pkgs) opam;
         };
