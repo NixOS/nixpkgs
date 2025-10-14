@@ -86,6 +86,7 @@ jobs:
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
       systems: ${{ needs.prepare.outputs.systems }}
+      defaultVersion: nixVersions.latest
       testVersions: ${{ contains(fromJSON(needs.prepare.outputs.touched), 'pinned') && !contains(fromJSON(needs.prepare.outputs.headBranch).type, 'development') }}
 
   labels:
