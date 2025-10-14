@@ -1459,6 +1459,7 @@ in
   vector = handleTest ./vector { };
   velocity = runTest ./velocity.nix;
   vengi-tools = handleTest ./vengi-tools.nix { };
+  victorialogs = runTest ./victorialogs.nix;
   victoriametrics = handleTest ./victoriametrics { };
   vikunja = handleTest ./vikunja.nix { };
   virtualbox = handleTestOn [ "x86_64-linux" ] ./virtualbox.nix { };
