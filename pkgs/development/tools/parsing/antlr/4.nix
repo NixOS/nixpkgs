@@ -184,6 +184,9 @@ in
         (lib.cmakeBool "ANTLR4_INSTALL" true)
         (lib.cmakeBool "ANTLR_BUILD_CPP_TESTS" false)
       ];
+      extraPatches = [
+        ./4.10.runtime.cpp.cmake.patch
+      ];
     }).antlr;
 
   antlr4_9 =
