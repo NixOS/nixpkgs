@@ -890,9 +890,9 @@
   },
   "redisenterprise": {
     "pname": "redisenterprise",
-    "version": "1.2.1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/redisenterprise-1.2.1-py3-none-any.whl",
-    "hash": "sha256-Yu06kpzoZJLt8l5Ft9R6Au9VS6rFr9v9bmrqlp0IDGg=",
+    "version": "1.2.3",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/redisenterprise-1.2.3-py3-none-any.whl",
+    "hash": "sha256-HTioMOjcy0gBdlrP5Ffd9Pf0SByAiRzkBM9zdPBM/Pw=",
     "description": "Microsoft Azure Command-Line Tools RedisEnterprise Extension"
   },
   "reservation": {
