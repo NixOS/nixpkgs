@@ -23211,6 +23211,12 @@
     githubId = 11320;
     name = "Sergiu Ivanov";
   };
+  scottstephens = {
+    email = "stephens.js@gmail.com";
+    github = "scottstephens";
+    githubId = 526260;
+    name = "Scott Stephens";
+  };
   scraptux = {
     email = "git@thomasjasny.de";
     github = "scraptux";
