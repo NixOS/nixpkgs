@@ -9113,7 +9113,7 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit buildPythonPackage pythonOlder pythonAtLeast;
+    inherit buildPythonPackage pythonOlder;
     inherit (self)
       pyface
       pygments
@@ -9470,6 +9470,8 @@ self: super: with self; {
   mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
 
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
+
+  mkdocs-gen-files = callPackage ../development/python-modules/mkdocs-gen-files { };
 
   mkdocs-get-deps = callPackage ../development/python-modules/mkdocs-get-deps { };
 
