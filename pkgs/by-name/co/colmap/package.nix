@@ -55,7 +55,7 @@ let
   ]
   ++ lib.optionals cudaSupport [
     cudatoolkit
-    cudaPackages.cuda_cudart.static
+    (lib.getOutput "static" cudaPackages.cuda_cudart)
   ]
   ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
 
