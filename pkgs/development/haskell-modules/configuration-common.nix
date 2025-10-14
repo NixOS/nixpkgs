@@ -276,6 +276,8 @@ with haskellLib;
     # Ironically, we still need to build the doctest suite.
     # vector-0.13.2.0 has a doctest < 0.24 constraint
     jailbreak = true;
+    # inspection-testing doesn't work on all archs & ABIs
+    doCheck = !self.inspection-testing.meta.broken;
   }) super.vector;
 
   # https://github.com/lspitzner/data-tree-print/issues/4
