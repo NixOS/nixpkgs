@@ -731,12 +731,14 @@ let
                 (attrs.src.meta.identifiers.purls or (
                   # some of the srcs may not have a PURL
                   filter (purl: purl != null) (
-                    map
-                      # get the PURLs from a single derivation
-                      (drv: drv.meta.identifiers.purls or null)
+                    flatten (
+                      map
+                        # get the PURLs from a single derivation
+                        (drv: drv.meta.identifiers.purls or null)
 
-                      # sometimes srcs is a single derivation
-                      (flatten (attrs.srcs or [ ]))
+                        # sometimes srcs is a single derivation
+                        (flatten (attrs.srcs or [ ]))
+                    )
                   )
                 )
                 )
