@@ -251,15 +251,15 @@ let
       # Don't put these into `propagatedBuildInputs` unless you want PATH/PYTHONPATH issues!
       # See: https://rocm.docs.amd.com/en/docs-5.7.1/_images/image.004.png
       # See: https://rocm.docs.amd.com/en/docs-5.7.1/deploy/linux/os-native/package_manager_integration.html
-      meta = with self; rec {
+      meta = {
         # eval all pkgsRocm release attrs with
         # nix-eval-jobs --force-recurse pkgs/top-level/release.nix -I . --select "p: p.pkgsRocm" --no-instantiate
-        release-attrPaths = (builtins.fromJSON (builtins.readFile ./release-attrPaths.json)).attrPaths;
         release-packagePlatforms =
           let
             platforms = [
               "x86_64-linux"
             ];
+            attrPaths = (builtins.fromJSON (builtins.readFile ./release-attrPaths.json)).attrPaths;
           in
           lib.foldl' (
             acc: path:
@@ -267,7 +267,7 @@ let
               lib.recursiveUpdate acc (lib.setAttrByPath (lib.splitString "." path) platforms)
             else
               acc
-          ) { } self.meta.release-attrPaths;
+          ) { } attrPaths;
 
         rocm-developer-tools = symlinkJoin {
           name = "rocm-developer-tools-meta";
