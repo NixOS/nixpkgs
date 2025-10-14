@@ -25117,6 +25117,12 @@
     githubId = 58266;
     name = "Sebastián Zaffarano";
   };
+  szanko = {
+    email = "szanko_dev@proton.me";
+    github = "SZanko";
+    githubId = 38001059;
+    name = "Stefan Zanko";
+  };
   szczyp = {
     email = "qb@szczyp.com";
     github = "Szczyp";
