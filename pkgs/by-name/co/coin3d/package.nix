@@ -31,6 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DCOIN_USE_CPACK=OFF" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.0...3.31)' \
+      'cmake_minimum_required(VERSION 3.31)'
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/coin3d/coin";
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
