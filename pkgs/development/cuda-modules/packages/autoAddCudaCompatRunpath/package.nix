@@ -13,7 +13,7 @@ let
   # cuda_compat can be null or broken, depending on the platform, CUDA release, and compute capability.
   # To avoid requiring all consumers of this hook to do these checks, we do them here; the hook is a no-op if
   # cuda_compat is not available.
-  enableHook = cuda_compat != null && cuda_compat.meta.available;
+  enableHook = cuda_compat.meta.available or false;
 in
 makeSetupHook {
   name = "auto-add-cuda-compat-runpath-hook";
