@@ -35,6 +35,7 @@ let
     isList
     elem
     flatten
+    filter
     ;
 
   inherit (lib.meta)
@@ -300,7 +301,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
     ''
       The package ${getNameWithVersion attrs} has set meta.outputsToInstall to: ${builtins.concatStringsSep ", " expectedOutputs}
@@ -476,7 +477,7 @@ let
     let
       expectedOutputs = attrs.meta.outputsToInstall or [ ];
       actualOutputs = attrs.outputs or [ "out" ];
-      missingOutputs = builtins.filter (output: !builtins.elem output actualOutputs) expectedOutputs;
+      missingOutputs = filter (output: !builtins.elem output actualOutputs) expectedOutputs;
     in
     if config.checkMeta then builtins.length missingOutputs > 0 else false;
 
@@ -712,10 +713,10 @@ let
                 }
               ) possibleCPEPartsFuns;
 
-          # search for a pURL in the following order:
+          # search for a PURL in the following order:
           # - locally set
-          # - src.meta.pURL
-          # - srcs[].meta.pURL (for pURLs only)
+          # - src.meta.PURL
+          # - srcs[].meta.PURL (for PURL only)
           purlParts = attrs.meta.identifiers.purlParts or { };
           purl =
             if purlParts ? type && purlParts ? spec then
@@ -728,11 +729,11 @@ let
                 [ purl ]
               else
                 (attrs.src.meta.identifiers.purls or (
-                  # some of the srcs may not have a pURL
-                  builtins.filter (purl: purl != null) (
+                  # some of the srcs may not have a PURL
+                  filter (purl: purl != null) (
                     map
-                      # get the pURLs from a single derivation
-                      (derivation: derivation.meta.identifiers.purls or null)
+                      # get the PURLs from a single derivation
+                      (drv: drv.meta.identifiers.purls or null)
 
                       # sometimes srcs is a single derivation
                       (flatten (attrs.srcs or [ ]))
