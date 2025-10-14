@@ -183,7 +183,10 @@ in
   # keep-sorted start case=no numeric=no block=yes
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
-  acme = import ./acme/default.nix { inherit runTest; };
+  acme = import ./acme/default.nix {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   acme-dns = runTest ./acme-dns.nix;
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   activation-bashless = runTest ./activation/bashless.nix;
