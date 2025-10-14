@@ -6203,7 +6203,6 @@ with pkgs;
   antlr3 = antlr3_5;
 
   inherit (callPackages ../development/tools/parsing/antlr/4.nix { })
-    antlr4_8
     antlr4_9
     antlr4_10
     antlr4_11
