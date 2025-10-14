@@ -825,13 +825,6 @@
     "hash": "sha256-/k47qFwfZZZqBZKR5G6+t8lW8o2isVtUGwSSdltiOZI=",
     "description": "Microsoft Azure Command-Line Tools PeeringManagementClient Extension"
   },
-  "playwright-cli-extension": {
-    "pname": "playwright-cli-extension",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/playwright_cli_extension-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-bxsHF5TdEdT97up3pngs5HrNKOUJgHQpTrpxgWu42i0=",
-    "description": "Microsoft Azure Command-Line Tools PlaywrightCliExtension Extension"
-  },
   "portal": {
     "pname": "portal",
     "version": "1.0.0b2",
