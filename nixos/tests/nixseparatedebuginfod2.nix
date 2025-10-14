@@ -45,7 +45,7 @@
     cache.wait_for_unit("nginx.service")
     cache.wait_for_open_port(80)
     machine.wait_for_unit("nixseparatedebuginfod2.service")
-    machine.wait_for_open_port(1950)
+    machine.wait_for_open_port(1949)
 
     with subtest("check that the binary cache works"):
       machine.succeed("nix-store --extra-substituters http://cache --option require-sigs false -r ${pkgs.sl}")

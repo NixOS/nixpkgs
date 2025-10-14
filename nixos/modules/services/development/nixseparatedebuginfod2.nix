@@ -20,7 +20,7 @@ in
       enable = lib.mkEnableOption "nixseparatedebuginfod2, a debuginfod server providing source and debuginfo for nix packages";
       port = lib.mkOption {
         description = "port to listen";
-        default = 1950;
+        default = 1949;
         type = lib.types.port;
       };
       package = lib.mkPackageOption pkgs "nixseparatedebuginfod2" { };
