@@ -28,6 +28,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace external/gflags/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.0.2 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;
