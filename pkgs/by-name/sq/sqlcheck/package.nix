@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     mainProgram = "sqlcheck";
     license = licenses.asl20;
     platforms = with platforms; unix ++ windows;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = [ ];
   };
 }
