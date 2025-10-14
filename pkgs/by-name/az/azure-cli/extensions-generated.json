@@ -309,9 +309,9 @@
   },
   "datamigration": {
     "pname": "datamigration",
-    "version": "1.0.0b6",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datamigration-1.0.0b6-py3-none-any.whl",
-    "hash": "sha256-4YPJCSMBr+10f+FRQtOiqwbhE6POAHpYFQcdESJppzg=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/datamigration-1.0.0-py3-none-any.whl",
+    "hash": "sha256-V1WEF92FjdcBBiaCjxs/DteG3c43sqb3qKCY+eiEg4c=",
     "description": "Microsoft Azure Command-Line Tools DataMigrationManagementClient Extension"
   },
   "dataprotection": {
