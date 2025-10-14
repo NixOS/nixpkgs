@@ -254,11 +254,11 @@ stdenv'.mkDerivation (finalAttrs: {
     openpgl
     (opensubdiv.override { inherit cudaSupport; })
     openvdb
+    onetbb
     potrace
     pugixml
     python3
     python3Packages.materialx
-    onetbb
     zlib
     zstd
   ]
