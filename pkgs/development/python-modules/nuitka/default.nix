@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "nuitka";
-  version = "2.7.15";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Nuitka";
     repo = "Nuitka";
     rev = version;
-    hash = "sha256-o+rXk8Qh9SeBpuSppPBap9TL69gy9ag7PCArFSNSv7g=";
+    hash = "sha256-YlBJ9xNn9X/7jMVH4m0JeJJn8x0WDmKVJJNqsmBELPQ=";
   };
 
   build-system = [
