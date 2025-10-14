@@ -12,17 +12,10 @@ buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_nvcc";
 
-  # NOTE: May need to restrict cuda_nvcc to a single output to avoid breaking consumers which expect NVCC
-  # to be within a single directory structure. This happens partly because NVCC is also home to NVVM.
+  # NOTE: We restrict cuda_nvcc to a single output to avoid breaking consumers which expect NVCC to be within a single
+  # directory structure. This happens partly because NVCC is also home to NVVM.
   outputs = [
     "out"
-  ]
-  # CUDA 13.0 has essentially nothing other than binaries.
-  ++ lib.optionals (cudaOlder "13.0") [
-    "bin"
-    "dev"
-    "include"
-    "static"
   ];
 
   # The nvcc and cicc binaries contain hard-coded references to /usr
@@ -134,7 +127,6 @@ buildRedist (finalAttrs: {
       # Fixup the nvcc.profile to use the correct paths for NVVM.
       # NOTE: In our replacement substitution, we use double quotes to allow for variable expansion.
       # NOTE: We use a trailing slash only on the NVVM directory replacement to prevent partial matches.
-      # + lib.optionalString (cudaOlder "13.0") ''
       + ''
         nixLog "patching nvcc.profile to use the correct NVVM paths"
         substituteInPlace "''${!outputBin:?}/bin/nvcc.profile" \
