@@ -2,35 +2,27 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  unstableGitUpdater,
+  gitUpdater,
   pytestCheckHook,
   fonttools,
-  poetry-core,
-  configparser,
+  hatchling,
   biplist,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "opentype-feature-freezer";
-  version = "0-unstable-2022-07-09";
+  version = "1.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "twardoch";
     repo = "fonttools-opentype-feature-freezer";
-    rev = "2ae16853bc724c3e377726f81d9fc661d3445827";
-    hash = "sha256-mIWQF9LTVKxIkwHLCTVK1cOuiaduJyX8pyBZ/0RKIVE=";
+    tag = "v${version}";
+    hash = "sha256-8aJYQyUpcEOyzVHZ0LXfGJ1Tsxe5HICcfkFUdsI+/GI=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail poetry.masonry.api poetry.core.masonry.api \
-      --replace-fail "poetry>=" "poetry-core>="
-  '';
-
   build-system = [
-    poetry-core
-    configparser
+    hatchling
   ];
 
   dependencies = [ fonttools ];
@@ -41,17 +33,24 @@ buildPythonPackage {
   ];
 
   disabledTestPaths = [
-    # Wants to check path outside of nix store
+    # import file mismatch
     "src/opentype_feature_freezer/cli.py"
     # NameError: name 'defines' is not defined
     "app/dmgbuild_settings.py"
     # Missing module
     "app/OTFeatureFreezer.py"
-    # AttributeError: 'types.SimpleNamespace' object has no attribute 'suffix'
-    "tests/test_rename.py"
   ];
 
-  passthru.updateScript = unstableGitUpdater { };
+  disabledTests = [
+    # File not found
+    "test_freeze"
+    # AssertionError: assert '' == '# Scripts an...m,pnum,tnum\n'
+    "test_report"
+    # assert False
+    "test_warn_substituting_glyphs_without_unicode"
+  ];
+
+  passthru.updateScript = gitUpdater { rev = "v"; };
 
   meta = {
     description = "Permanently \"apply\" OpenType features to fonts, by remapping their Unicode assignments";
