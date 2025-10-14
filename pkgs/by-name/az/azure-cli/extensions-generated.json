@@ -659,9 +659,9 @@
   },
   "managednetworkfabric": {
     "pname": "managednetworkfabric",
-    "version": "8.1.0",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-8.1.0-py3-none-any.whl",
-    "hash": "sha256-HWfTuuYq3P02F3zaK8s8HLkqRcdP7/dWwCy/nX/y4u8=",
+    "version": "8.2.1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/managednetworkfabric-8.2.1-py3-none-any.whl",
+    "hash": "sha256-lVW++ZSooBiMtWpiFpxpaBygDBckM7OZPYZNZko7/Cs=",
     "description": "Support for managednetworkfabric commands based on 2024-06-15-preview API version"
   },
   "managementpartner": {
