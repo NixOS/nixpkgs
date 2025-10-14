@@ -14,6 +14,35 @@ let
   # https://jqlang.org/manual/#object-identifier-index
   attrPathToIndex = attrPath: "." + lib.concatStringsSep "." attrPath;
 
+  adminWrapper = pkgs.writeShellApplication {
+    name = "immich-admin";
+
+    text = ''
+      echo "This is a wrapper provided by NixOS that tries to mimic the execution environment of Immich itself."
+      echo "However, not all aspects are replicated fully at the moment, so some commands might fail, especially new additions."
+      echo "Therefore, please report issues with this wrapper in the Nixpkgs issue tracker: github.com/NixOS/nixpkgs/issues"
+      echo
+
+      exec ${lib.getExe' config.systemd.package "systemd-run"} \
+        --collect \
+        --pty \
+        --service-type=exec \
+        --quiet \
+        ${lib.optionalString (cfg.secretsFile != null) "-p EnvironmentFile=${cfg.secretsFile}"} \
+        ${lib.concatMapAttrsStringSep " " (n: v: "-E ${n}=${v}") config.services.immich.environment} \
+        -p User="${cfg.user}" \
+        -p Group="${cfg.group}" \
+        ${
+          lib.optionalString (
+            cfg.redis.enable && isRedisUnixSocket
+          ) "-p SupplementaryGroups=${config.services.redis.servers.immich.group}"
+        } \
+        -- \
+        ${lib.getExe' config.services.immich.package "immich-admin"} \
+        "$@"
+    '';
+  };
+
   commonServiceConfig = {
     Type = "simple";
     Restart = "on-failure";
@@ -58,6 +87,12 @@ in
   options.services.immich = {
     enable = mkEnableOption "Immich";
     package = lib.mkPackageOption pkgs "immich" { };
+
+    enableAdminWrapper =
+      mkEnableOption "Whether to expose a wrapper around immich-admin in the system path that mimics the execution environment of the systemd service."
+      // {
+        default = true;
+      };
 
     mediaLocation = mkOption {
       type = types.path;
@@ -454,6 +489,8 @@ in
         Group = cfg.group;
       };
     };
+
+    environment.systemPackages = lib.optional cfg.enableAdminWrapper adminWrapper;
 
     systemd.tmpfiles.settings = {
       immich = {
