@@ -377,7 +377,7 @@ in
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
   containers-bridge = runTest ./containers-bridge.nix;
-  containers-custom-pkgs.nix = runTest ./containers-custom-pkgs.nix;
+  containers-custom-pkgs = runTest ./containers-custom-pkgs.nix;
   containers-ephemeral = runTest ./containers-ephemeral.nix;
   containers-extra_veth = runTest ./containers-extra_veth.nix;
   containers-hosts = runTest ./containers-hosts.nix;
