@@ -3436,15 +3436,6 @@ with pkgs;
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
-    availablePlugins = {
-      # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
-      # Use the attributes here as arguments to `plugins` list
-      goa = callPackage ../applications/networking/mailreaders/mailnag/goa-plugin.nix { };
-    };
-  };
-  mailnagWithPlugins = mailnag.withPlugins (builtins.attrValues mailnag.availablePlugins);
-
   man = man-db;
 
   mangohud = callPackage ../tools/graphics/mangohud {
@@ -8609,8 +8600,6 @@ with pkgs;
 
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
-
-  sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
 
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 

@@ -146,6 +146,12 @@ let
       runHook postInstall
     '';
   };
+
+  # Without this thumbnail generation for raw photos fails with
+  #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
+  vips' = vips.overrideAttrs (prev: {
+    mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
+  });
 in
 stdenv.mkDerivation {
   pname = "immich";
@@ -182,7 +188,7 @@ stdenv.mkDerivation {
     pango
     pixman
     # Required for sharp
-    vips
+    vips'
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;

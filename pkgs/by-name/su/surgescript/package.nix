@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   versionCheckHook,
@@ -18,6 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-m6H9cyoUY8Mgr0FDqPb98PRJTgF7DgSa+jC+EM0TDEw=";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/alemart/surgescript/commit/21a9c0696d592b7cc21e07db828fb93a12c95a7e.patch?full_index=1";
+      hash = "sha256-d0l0xSrhJPIE5dMpEHdRlAMaD3f9x1IGBUpvjcMwDMs=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
