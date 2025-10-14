@@ -67,7 +67,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail \
         "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml" \
-        "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia"
+        "find_package(Qt5 REQUIRED COMPONENTS Core Widgets Xml Multimedia" \
+      --replace-fail \
+        "cmake_minimum_required(VERSION 3.0.2)" \
+        "cmake_minimum_required(VERSION 3.5)"
     grep -rl 'qwt' . | xargs sed -i 's@<qwt/qwt_slider.h>@<qwt_slider.h>@g'
   '';
 
