@@ -11,7 +11,62 @@ Updated for perl v5.40.0 by marcus@means.no
 
 ---
 
- # safe if given an unblessed reference
+diff --git a/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements/Range.pm b/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements/Range.pm
+index b0e83b0d2d..dab4907704 100644
+--- a/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements/Range.pm
++++ b/cpan/CPAN-Meta-Requirements/lib/CPAN/Meta/Requirements/Range.pm
+@@ -52,21 +52,38 @@
+ # from version::vpp
+ sub _find_magic_vstring {
+   my $value = shift;
+-  my $tvalue = '';
+-  require B;
+-  my $sv = B::svref_2object(\$value);
+-  my $magic = ref($sv) eq 'B::PVMG' ? $sv->MAGIC : undef;
+-  while ( $magic ) {
+-    if ( $magic->TYPE eq 'V' ) {
+-      $tvalue = $magic->PTR;
+-      $tvalue =~ s/^v?(.+)$/v$1/;
+-      last;
+-    }
+-    else {
+-      $magic = $magic->MOREMAGIC;
++
++  # B is not available in miniperl (it depends on XS), so try to load it safely
++  my $has_B = eval { require B; 1 };
++
++  if ($has_B) {
++     my $sv = B::svref_2object(\$value);
++     my $magic = ref($sv) eq 'B::PVMG' ? $sv->MAGIC : undef;
++     while ($magic) {
++       if ($magic->TYPE eq 'V') {
++         my $tvalue = $magic->PTR;
++         $tvalue =~ s/^v?(.+)$/v$1/;
++         return $tvalue;
++       }
++       $magic = $magic->MOREMAGIC;
+     }
+   }
+-  return $tvalue;
++
++  # --- Fallback for miniperl ---
++  # Perl represents vstrings internally as sequences of bytes like "\x01\x02\x03"
++  # and only shows them as "v1.2.3" when printed.
++  # Try to detect that pattern heuristically.
++  use builtin qw/reftype/;
++  if (!ref($value) && reftype(\$value) eq 'VSTRING') {
++    return sprintf("v%vd", $value);
++  }
++
++  # If it's already a "v1.2.3" string, just return it as is
++  if ($value =~ /^v\d+(?:\.\d+)*$/) {
++    return $value;
++  }
++
++  return '';
+ }
+
+ # Perl 5.10.0 didn't have "is_qv" in version.pm
 diff --git a/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm b/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm
 index 746abd63bc..c55d7cd2d0 100644
 --- a/cpan/CPAN-Meta-YAML/lib/CPAN/Meta/YAML.pm
@@ -21,7 +76,7 @@ index 746abd63bc..c55d7cd2d0 100644
  use strict;
  use warnings;
 +no warnings 'experimental::builtin';
- package CPAN::Meta::YAML; # git description: v1.68-2-gcc5324e
+ package CPAN::Meta::YAML; # git description: v1.75-3-g85169f1
  # XXX-INGY is 5.8.1 too old/broken for utf8?
  # XXX-XDG Lancaster consensus was that it was sufficient until
 @@ -650,27 +651,29 @@ sub _dump_string {
@@ -221,3 +276,24 @@ index fc8fcbc8f0..cda7b90c65 100644
  #use Devel::Peek;
 
 
+diff --git a/cpan/CPAN-Meta/lib/Parse/CPAN/Meta.pm b/cpan/CPAN-Meta/lib/Parse/CPAN/Meta.pm
+--- a/cpan/CPAN-Meta/lib/Parse/CPAN/Meta.pm
++++ b/cpan/CPAN-Meta/lib/Parse/CPAN/Meta.pm
+@@ -53,7 +53,8 @@ sub load_json_string {
+   my ($class, $string) = @_;
+   require Encode;
+   # load_json_string takes characters, decode_json expects bytes
+-  my $encoded = Encode::encode('UTF-8', $string, Encode::PERLQQ());
++  my $encoded = $string;
++  utf8::encode($encoded); # Miniperl workaround
+   my $data = eval { $class->json_decoder()->can('decode_json')->($encoded) };
+   croak $@ if $@;
+   return $data || {};
+@@ -122,7 +122,7 @@ sub _slurp {
+   open my $fh, "<:raw", "$_[0]" ## no critic
+     or die "can't open $_[0] for reading: $!";
+   my $content = do { local $/; <$fh> };
+-  $content = Encode::decode('UTF-8', $content, Encode::PERLQQ());
++  utf8::decode($content); # Workaround for miniperl
+   return $content;
+ }
