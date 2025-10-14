@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "0416pa933ddf4b7ph9zxhk5jppkk7ppcq1aqph6xsrfnka4yb148";
   };
 
+  patches = [
+    # https://github.com/nicklan/pnmixer/pull/197
+    ./fix-cmake-version.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
