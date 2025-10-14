@@ -27,7 +27,7 @@ index 746abd63bc..c55d7cd2d0 100644
 @@ -650,27 +651,29 @@ sub _dump_string {
      join '', map { "$_\n" } @lines;
  }
- 
+
 -sub _has_internal_string_value {
 +# taken from cpan/JSON-PP/lib/JSON/PP.pm
 +sub _looks_like_number {
@@ -46,7 +46,7 @@ index 746abd63bc..c55d7cd2d0 100644
 +    return 1 if $value * 0 == 0;
 +    return -1; # inf/nan
  }
- 
+
  sub _dump_scalar {
      my $string = $_[1];
      my $is_key = $_[2];
@@ -69,8 +69,8 @@ index 746abd63bc..c55d7cd2d0 100644
          $string =~ s/\\/\\\\/g;
 @@ -800,9 +803,6 @@ sub errstr {
  # Helper functions. Possibly not needed.
- 
- 
+
+
 -# Use to detect nv or iv
 -use B;
 -
@@ -80,7 +80,7 @@ index 746abd63bc..c55d7cd2d0 100644
 @@ -822,35 +822,8 @@ sub _can_flock {
      }
  }
- 
+
 -
 -# XXX-INGY Is this core in 5.8.1? Can we remove this?
 -# XXX-XDG Scalar::Util 1.18 didn't land until 5.8.8, so we need this
@@ -112,7 +112,7 @@ index 746abd63bc..c55d7cd2d0 100644
 -    }
 +    *refaddr = *builtin::refaddr;
  }
- 
+
  delete $CPAN::Meta::YAML::{refaddr};
 diff --git a/cpan/CPAN-Meta/lib/CPAN/Meta/Merge.pm b/cpan/CPAN-Meta/lib/CPAN/Meta/Merge.pm
 index 3604eae402..991f69d275 100644
@@ -122,16 +122,16 @@ index 3604eae402..991f69d275 100644
  use strict;
  use warnings;
 +no warnings 'experimental::builtin';
- 
+
  package CPAN::Meta::Merge;
- 
+
  our $VERSION = '2.150010';
- 
+
  use Carp qw/croak/;
 -use Scalar::Util qw/blessed/;
 +use builtin qw/blessed/;
  use CPAN::Meta::Converter 2.141170;
- 
+
  sub _is_identical {
 diff --git a/cpan/CPAN-Meta/lib/CPAN/Meta/Prereqs.pm b/cpan/CPAN-Meta/lib/CPAN/Meta/Prereqs.pm
 index d4e93fd8a5..809da68d02 100644
@@ -143,40 +143,27 @@ index d4e93fd8a5..809da68d02 100644
  use warnings;
 +no warnings 'experimental::builtin';
  package CPAN::Meta::Prereqs;
- 
+
  our $VERSION = '2.150010';
-@@ -14,7 +15,6 @@ our $VERSION = '2.150010';
+@@ -14,7 +14,7 @@ our $VERSION = '2.150010';
  #pod =cut
- 
+
  use Carp qw(confess);
 -use Scalar::Util qw(blessed);
++use builtin qw(blessed);
  use CPAN::Meta::Requirements 2.121;
- 
+
  #pod =method new
-@@ -168,7 +168,12 @@ sub types_in {
- sub with_merged_prereqs {
-   my ($self, $other) = @_;
- 
--  my @other = blessed($other) ? $other : @$other;
-+  eval 'require Scalar::Util';
-+  my @other = unless($@){
-+    Scalar::Util::blessed($other) ? $other : @$other;
-+  }else{
-+    builtin::blessed($other) ? $other : @$other;
-+  }
- 
-   my @prereq_objs = ($self, @other);
- 
 diff --git a/cpan/JSON-PP/lib/JSON/PP.pm b/cpan/JSON-PP/lib/JSON/PP.pm
 index fc8fcbc8f0..cda7b90c65 100644
 --- a/cpan/JSON-PP/lib/JSON/PP.pm
 +++ b/cpan/JSON-PP/lib/JSON/PP.pm
 @@ -4,6 +4,7 @@ package JSON::PP;
- 
+
  use 5.008;
  use strict;
 +no warnings 'experimental::builtin';
- 
+
  use Exporter ();
  BEGIN { our @ISA = ('Exporter') }
 diff --git a/dist/Data-Dumper/Dumper.pm b/dist/Data-Dumper/Dumper.pm
@@ -184,34 +171,34 @@ index bb6d3caedb..0c2fde4743 100644
 --- a/dist/Data-Dumper/Dumper.pm
 +++ b/dist/Data-Dumper/Dumper.pm
 @@ -11,6 +11,7 @@ package Data::Dumper;
- 
+
  use strict;
  use warnings;
 +no warnings 'experimental::builtin';
- 
+
  #$| = 1;
- 
+
 @@ -125,8 +126,7 @@ sub new {
  # Packed numeric addresses take less memory. Plus pack is faster than sprintf
- 
+
  sub format_refaddr {
 -    require Scalar::Util;
 -    pack "J", Scalar::Util::refaddr(shift);
 +    pack "J", builtin::refaddr(shift);
  };
- 
+
  #
 @@ -282,9 +282,8 @@ sub _dump {
        warn "WARNING(Freezer method call failed): $@" if $@;
      }
- 
+
 -    require Scalar::Util;
 -    my $realpack = Scalar::Util::blessed($val);
 -    my $realtype = $realpack ? Scalar::Util::reftype($val) : ref $val;
 +    my $realpack = builtin::blessed($val);
 +    my $realtype = $realpack ? builtin::reftype($val) : ref $val;
      $id = format_refaddr($val);
- 
+
      # Note: By this point $name is always defined and of non-zero length.
 @@ -576,7 +575,7 @@ sub _dump {
      # here generates a different result. So there are actually "three" different
@@ -222,3 +209,15 @@ index bb6d3caedb..0c2fde4743 100644
        $out .= sprintf "v%vd", $val;
      }
      # \d here would treat "1\x{660}" as a safe decimal number
+diff --git a/cpan/JSON-PP/lib/JSON/PP.pm b/cpan/JSON-PP/lib/JSON/PP.pm
+index fc8fcbc8f0..cda7b90c65 100644
+--- a/cpan/JSON-PP/lib/JSON/PP.pm
++++ b/cpan/JSON-PP/lib/JSON/PP.pm
+@@ -12,6 +12,6 @@ package JSON::PP;
+
+ use Carp ();
+-use Scalar::Util qw(blessed reftype refaddr);
++use builtin qw(blessed reftype refaddr);
+ #use Devel::Peek;
+
+
