@@ -41,7 +41,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "folly";
-  version = "2025.09.15.00";
+  version = "2025.10.13.00";
 
   # split outputs to reduce downstream closure sizes
   outputs = [
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "folly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-//gx081nMFXAcUgkHQToiFHhECfLW22Fl0eXEsObxUs=";
+    hash = "sha256-k7PGxYF3HlNc5nPBV+MkELya/4yllkaMA37vcfES4NE=";
   };
 
   nativeBuildInputs = [
@@ -145,16 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-QGNpS5UNEm+0PW9+agwUVILzpK9t020KXDGyP03OAwE=";
     })
 
-    # Fix an upstream regression with libstdc++.
-    #
-    # See:
-    #
-    # * <https://github.com/facebook/folly/issues/2487>
-    # * <https://github.com/facebook/folly/commit/bdbb73e0069b4084c83b7dd9b02c3118d37e2a8d>
-    # * <https://github.com/facebook/folly/pull/2490>
-    # * <https://github.com/facebook/folly/pull/2497>
-    ./fix-stdexcept-include.patch
-
     # Fix a GCC‐incompatible use of a private trait.
     #
     # Per Folly’s own documentation:
@@ -237,6 +227,7 @@ stdenv.mkDerivation (finalAttrs: {
       pierreis
       emily
       techknowlogick
+      lf-
     ];
   };
 })
