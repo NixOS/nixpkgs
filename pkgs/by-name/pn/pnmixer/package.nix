@@ -44,15 +44,15 @@ stdenv.mkDerivation (finalAttrs: {
     pcre
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/nicklan/pnmixer";
     description = "ALSA volume mixer for the system tray";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       campadrenalin
       romildo
     ];
     mainProgram = "pnmixer";
   };
-}
+})
