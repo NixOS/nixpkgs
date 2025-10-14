@@ -418,6 +418,8 @@ let
 
         dnssec = callPackage ../development/ocaml-modules/dns/dnssec.nix { };
 
+        dockerfile = callPackage ../development/ocaml-modules/dockerfile { };
+
         dolmen = callPackage ../development/ocaml-modules/dolmen { };
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
