@@ -10042,6 +10042,12 @@
     githubId = 34658064;
     name = "Grace Dinh";
   };
+  GearKite = {
+    email = "onyx-commute-quit@duck.com";
+    github = "GearKite";
+    githubId = 29222413;
+    name = "GearKite";
+  };
   geekiot-hub = {
     email = "geekiot@proton.me";
     github = "geekiot-hub";
