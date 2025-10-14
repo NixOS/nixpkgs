@@ -193,6 +193,8 @@ package-maintainers:
     - hevm
   athas:
     - futhark
+  auscyber:
+    - kmonad
   berberman:
     - nvfetcher
     - arch-web
