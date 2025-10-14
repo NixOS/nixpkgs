@@ -65,6 +65,16 @@ in
         '';
       };
 
+      limit = mkOption {
+        default = null;
+        type = types.nullOr (types.strMatching "[0-9]+[KMGT]?");
+        example = "100M";
+        description = ''
+          The scrub throughput limit applied on all scrubbed filesystems.
+          The value is bytes per second, and accepts the usual KMGT prefixes.
+        '';
+      };
+
     };
   };
 
@@ -185,7 +195,9 @@ in
                 Type = "simple";
                 Nice = 19;
                 IOSchedulingClass = "idle";
-                ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${fs}";
+                ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${
+                  lib.optionalString (cfgScrub.limit != null) "--limit ${cfgScrub.limit}"
+                } ${fs}";
                 # if the service is stopped before scrub end, cancel it
                 ExecStop = pkgs.writeShellScript "btrfs-scrub-maybe-cancel" ''
                   (${pkgs.btrfs-progs}/bin/btrfs scrub status ${fs} | ${pkgs.gnugrep}/bin/grep finished) || ${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}
