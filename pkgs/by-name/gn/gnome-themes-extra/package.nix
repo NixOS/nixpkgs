@@ -10,7 +10,6 @@
   pkg-config,
   pango,
   atk,
-  gtk2,
   gdk-pixbuf,
   hicolor-icon-theme,
 }:
@@ -35,17 +34,22 @@ stdenv.mkDerivation rec {
     intltool
     gtk3
   ];
+
   buildInputs = [
     gtk3
     librsvg
     pango
     atk
-    gtk2
     gdk-pixbuf
   ];
+
   propagatedBuildInputs = [
     adwaita-icon-theme
     hicolor-icon-theme
+  ];
+
+  configureFlags = [
+    (lib.enableFeature false "gtk2-engine")
   ];
 
   dontDropIconThemeCache = true;
