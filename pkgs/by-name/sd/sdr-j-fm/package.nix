@@ -12,6 +12,11 @@
   libusb1,
   libsndfile,
   featuresOverride ? { },
+  airspy,
+  hackrf,
+  libiio,
+  limesuite,
+  rtl-sdr,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -61,12 +66,25 @@ stdenv.mkDerivation (finalAttrs: {
       # but they don't actually make a difference.
     }
     // featuresOverride;
+    runtimeDependencies = [
+      airspy
+      hackrf
+      libiio
+      limesuite
+      rtl-sdr
+    ];
   };
 
   postInstall = ''
     # Weird default of upstream
     mv $out/linux-bin $out/bin
     mv $out/bin/fmreceiver{-3.15,}
+
+    # Ideally, upstream's cmake files should link these libraries to the
+    # executable, but it'd require a bit of work. See:
+    # https://github.com/JvanKatwijk/sdr-j-fm/issues/27
+    wrapProgram $out/bin/fmreceiver \
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath finalAttrs.finalPackage.passthru.runtimeDependencies}
   '';
 
   meta = {
