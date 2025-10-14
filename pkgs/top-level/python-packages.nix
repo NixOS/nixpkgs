@@ -11984,6 +11984,8 @@ self: super: with self; {
 
   plugincode = callPackage ../development/python-modules/plugincode { };
 
+  pluginlib = callPackage ../development/python-modules/pluginlib { };
+
   plugnplay = callPackage ../development/python-modules/plugnplay { };
 
   plugp100 = callPackage ../development/python-modules/plugp100 { };
@@ -18854,8 +18856,6 @@ self: super: with self; {
   tsplib95 = callPackage ../development/python-modules/tsplib95 { };
 
   tt-flash = callPackage ../development/python-modules/tt-flash { };
-
-  tt-smi = callPackage ../development/python-modules/tt-smi { };
 
   tt-tools-common = callPackage ../development/python-modules/tt-tools-common { };
 
