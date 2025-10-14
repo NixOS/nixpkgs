@@ -1,8 +1,16 @@
 {
   lib,
+
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+
+  # nativeBuildInputs
   cmake,
+
+  # propagatedBuildInputs
+  nlohmann_json,
+  stb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,6 +27,17 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ];
+
+  propagatedBuildInputs = [
+    nlohmann_json
+    stb
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "TINYGLTF_INSTALL_VENDOR" false)
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Header only C++11 tiny glTF 2.0 library";
