@@ -58,6 +58,7 @@ in
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
 
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
