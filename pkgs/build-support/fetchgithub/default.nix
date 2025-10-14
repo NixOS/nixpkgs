@@ -42,9 +42,8 @@ lib.makeOverridable (
         builtins.unsafeGetAttrPos "rev" args
     );
     baseUrl = "https://${githubBase}/${owner}/${repo}";
-    newMeta =
-      meta
-      // {
+    newMeta = lib.recursiveUpdate (
+      {
         homepage = meta.homepage or baseUrl;
         identifiers.purlParts =
           if githubBase == "github.com" then
@@ -63,7 +62,8 @@ lib.makeOverridable (
       // lib.optionalAttrs (position != null) {
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
-      };
+      }
+    ) meta;
 
     passthruAttrs = removeAttrs args [
       "owner"
