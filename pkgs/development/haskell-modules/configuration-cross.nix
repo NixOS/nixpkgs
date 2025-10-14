@@ -19,8 +19,8 @@ self: super: {
   pandoc = dontCheck super.pandoc;
 
   # Tests take a long time or maybe hang
-  # bitvec = dontCheck super.bitvec;
-  # crypton = dontCheck super.crypton;
+  bitvec = dontCheck super.bitvec;
+  crypton = dontCheck super.crypton;
   crypton-x509-validation = dontCheck super.crypton-x509-validation;
   tls = dontCheck super.tls;
 
