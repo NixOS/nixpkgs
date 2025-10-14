@@ -39,6 +39,16 @@ stdenv.mkDerivation rec {
       includes = [ "src/ast/passes/clang_parser.cpp" ];
       hash = "sha256-xk+/eBNJJJSUqNTs0HFr0BAaqRB5B7CNWRSmnoBMTs0=";
     })
+    (fetchpatch {
+      name = "increase-RLIMIT_NOFILE-if-needed.patch";
+      url = "https://github.com/bpftrace/bpftrace/pull/4716.patch";
+      includes = [
+        "src/bpftrace.cpp"
+        "src/main.cpp"
+        "src/required_resources.h"
+      ];
+      hash = "sha256-kRFyfuLf2CUR5QNJljLFNwmAzAoa8I3DNIW4SWwSUd0=";
+    })
   ];
 
   buildInputs = with llvmPackages; [
