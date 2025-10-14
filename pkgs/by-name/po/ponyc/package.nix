@@ -164,7 +164,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [
       kamilchm
-      patternspandemic
       redvers
       numinit
     ];
