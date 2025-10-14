@@ -6,6 +6,7 @@
   bundlerEnv,
   bundlerUpdateScript,
   writeText,
+  krb5,
   sslLegacyProvider ? false,
 }:
 let
@@ -57,7 +58,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = lib.optionalString sslLegacyProvider ''
-    wrapProgram $out/bin/evil-winrm --prefix OPENSSL_CONF : "${openssl_conf}"
+    wrapProgram $out/bin/evil-winrm \
+      --prefix OPENSSL_CONF : "${openssl_conf}" \
+      --prefix LD_LIBRARY_PATH : ${krb5.lib}/lib
   '';
 
   passthru.updateScript = bundlerUpdateScript "evil-winrm";
