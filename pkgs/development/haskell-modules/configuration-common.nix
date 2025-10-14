@@ -694,6 +694,12 @@ with haskellLib;
     hash = "sha256-feGEuALVJ0Zl8zJPIfgEFry9eH/MxA0Aw7zlDq0PC/s=";
   }) super.algebraic-graphs;
 
+  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+  inspection-testing = overrideCabal (drv: {
+    broken = with pkgs.stdenv.hostPlatform; !(isx86 || (isPower64 && isAbiElfv2) || isAarch64);
+  }) super.inspection-testing;
+
   # Too strict bounds on filepath, hpsec, tasty, tasty-quickcheck, transformers
   # https://github.com/illia-shkroba/pfile/issues/3
   pfile = doJailbreak super.pfile;
