@@ -739,6 +739,22 @@ with haskellLib;
         }) super.algebraic-graphs
       );
 
+  # Relies on DWARF <-> register mappings in GHC, not available for every arch & ABI
+  # (check dwarfReturnRegNo in compiler/GHC/CmmToAsm/Dwarf/Constants.hs, that's where ppc64 elfv1 gives up)
+  inspection-testing = overrideCabal (drv: {
+    broken =
+      with pkgs.stdenv.hostPlatform;
+      !(
+        isx86
+        || (isPower64 && isAbiElfv2)
+        || isAarch64
+        # https://gitlab.haskell.org/ghc/ghc/-/commit/1c479c01d909c5a234cc17b0b308a400c2e0a6f6
+        || (lib.versionAtLeast self.ghc.version "9.12.1" && isRiscV64)
+        # https://gitlab.haskell.org/ghc/ghc/-/commit/652cba7ee71d2ebd0af912fcc218bc0f27237738
+        || (lib.versionAtLeast self.ghc.version "9.14.1" && isLoongArch64)
+      );
+  }) super.inspection-testing;
+
   # Too strict bounds on hspec
   # https://github.com/illia-shkroba/pfile/issues/2
   pfile = doJailbreak super.pfile;
