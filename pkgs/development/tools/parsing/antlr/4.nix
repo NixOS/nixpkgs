@@ -194,9 +194,11 @@ in
       extraCppBuildInputs = [ utf8cpp ] ++ lib.optional stdenv.hostPlatform.isLinux libuuid;
       extraCppCmakeFlags = [
         (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${lib.getDev utf8cpp}/include/utf8cpp")
+        (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
       ];
       extraPatches = [
         ./utf8cpp.patch
+        ./4.9.runtime.cpp.cmake.patch
       ];
     }).antlr;
 
