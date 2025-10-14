@@ -10,6 +10,10 @@ let
     mkKeyValue = lib.generators.mkKeyValueDefault { } " ";
     listsAsDuplicateKeys = true;
   };
+  assertKey = key: {
+    assertion = cfg.settings ? ${key};
+    message = "Please set services.gonic.settings.${key}. See https://github.com/sentriz/gonic#configuration-options for supported values.";
+  };
 in
 {
   options = {
@@ -29,6 +33,7 @@ in
         example = {
           music-path = [ "/mnt/music" ];
           podcast-path = "/mnt/podcasts";
+          playlists-path = "/mnt/playlists";
         };
         description = ''
           Configuration for Gonic, see <https://github.com/sentriz/gonic#configuration-options> for supported values.
@@ -39,6 +44,12 @@ in
   };
 
   config = lib.mkIf cfg.enable {
+    assertions = [
+      (assertKey "music-path")
+      (assertKey "podcast-path")
+      (assertKey "playlists-path")
+    ];
+
     systemd.services.gonic = {
       description = "Gonic Media Server";
       after = [ "network.target" ];
