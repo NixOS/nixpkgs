@@ -17,7 +17,6 @@
 
   # buildInputs
   guvcview,
-  v4l-utils,
 
   ffmpeg,
 }:
@@ -58,7 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtxmlpatterns
     libsForQt5.qwt
     libv4l
-    v4l-utils
   ];
 
   postPatch = ''
