@@ -43,7 +43,10 @@ stdenvNoCC.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/share
     cp -r $src/jars $out/share/java
-    makeWrapper ${jre}/bin/java $out/bin/gprojector --add-flags "-jar $out/share/java/G.Projector.jar" --add-flags "${extraJavaArgs}"
+    makeWrapper ${jre}/bin/java $out/bin/gprojector \
+      --add-flags "-jar $out/share/java/G.Projector.jar" \
+      --add-flags "${extraJavaArgs}" \
+      --set GTK_THEME 'Adwaita'
     runHook postInstall
   '';
 
