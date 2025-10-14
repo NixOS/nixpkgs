@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edencommon";
-  version = "2025.09.15.00";
+  version = "2025.10.13.00";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebookexperimental";
     repo = "edencommon";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KyJAosCLGnpEG968GV9BOyOrsoHS7BbRatTfBqzTelU=";
+    hash = "sha256-yR0J1tfzdAFopApKsiv9yUXlU0W0Q6n6ZlmKlcVbi0E=";
   };
 
   patches = [
@@ -76,9 +76,16 @@ stdenv.mkDerivation (finalAttrs: {
     ctest -j $NIX_BUILD_CORES --output-on-failure ${
       lib.escapeShellArgs [
         "--exclude-regex"
-        (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
-          "ProcessInfoCache.addFromMultipleThreads"
-        ])
+        (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") (
+          [
+            "ProcessInfoCache.addFromMultipleThreads"
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [
+            # https://git.lix.systems/lix-project/lix/issues/913 and CppNix
+            # equivalent; remove after those are fixed.
+            "UnixSocket.sendDataAndFiles"
+          ]
+        ))
       ]
     }
 
