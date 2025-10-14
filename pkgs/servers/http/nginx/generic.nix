@@ -296,6 +296,7 @@ stdenv.mkDerivation {
         ;
       variants = lib.recurseIntoAttrs nixosTests.nginx-variants;
       acme-integration = nixosTests.acme.nginx;
+      acme-integration-without-reload = nixosTests.acme.nginx-without-reload;
     }
     // passthru.tests;
   };
