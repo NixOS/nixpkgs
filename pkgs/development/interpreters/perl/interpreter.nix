@@ -166,10 +166,14 @@ stdenv.mkDerivation (
     configureScript = lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
     # !canExecute cross uses miniperl which doesn't have this
-    postConfigure = lib.optionalString (!crossCompiling && stdenv.cc.targetPrefix != "") ''
-      substituteInPlace Makefile \
-        --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
-    '';
+    postConfigure =
+      lib.optionalString (!crossCompiling && stdenv.cc.targetPrefix != "") ''
+        substituteInPlace Makefile \
+          --replace-fail "AR = ar" "AR = ${stdenv.cc.targetPrefix}ar"
+      ''
+      + lib.optionalString crossCompiling ''
+        substituteInPlace miniperl_top --replace-fail '-I$top/lib' '-I$top/cpan/JSON-PP/lib -I$top/cpan/CPAN-Meta-YAML/lib -I$top/lib'
+      '';
 
     dontAddStaticConfigureFlags = true;
 
