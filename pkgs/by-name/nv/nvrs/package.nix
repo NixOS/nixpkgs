@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nvrs";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "adamperkowski";
     repo = "nvrs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JnVDZdf+/ktBNrRC7Yn9VmxZZcYSsZRORK4rN+60Pc0=";
+    hash = "sha256-6ATkebFYuOOvhzSO+gClPbtaz9/Zph4m8/cqkufRYFw=";
   };
 
-  cargoHash = "sha256-R+mVnUxiUagU5TBemZqwRQ6/phdFvwVQT9vp+uYKOSI=";
+  cargoHash = "sha256-h3egaj4RQImxIf0MB8ZM9V92Xlml5BK++s7RJQwAk+E=";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
