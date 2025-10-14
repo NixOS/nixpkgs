@@ -677,6 +677,8 @@ let
 
         gen_js_api = callPackage ../development/ocaml-modules/gen_js_api { };
 
+        gendarme = callPackage ../development/ocaml-modules/gendarme { };
+
         genspio = callPackage ../development/ocaml-modules/genspio { };
 
         get-activity = callPackage ../development/ocaml-modules/get-activity { };
