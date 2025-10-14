@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  clang_20,
 
   fetchFromGitHub,
   fetchYarnDeps,
@@ -153,6 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
       cctools
       darwin.autoSignDarwinBinariesHook
       xcbuild
+      clang_20 # newer clang breaks node-addon-api on darwin
     ];
 
   # we'll run the hook manually multiple times
