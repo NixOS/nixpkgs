@@ -19,9 +19,11 @@
   autoAddDriverRunpath,
   apple-sdk_15,
 
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+
   # passthru
   nixosTests,
-  testers,
   ollama,
   ollama-rocm,
   ollama-cuda,
@@ -234,13 +236,17 @@ goBuild (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = "HOME";
+  versionCheckProgramArg = "--version";
+
   passthru = {
     tests = {
       inherit ollama;
-      version = testers.testVersion {
-        inherit (finalAttrs) version;
-        package = ollama;
-      };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit ollama-rocm ollama-cuda;
