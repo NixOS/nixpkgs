@@ -46,6 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = with platforms; unix ++ windows;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = [ ];
+    maintainers = with maintainers; [ h7x4 ];
   };
 }
