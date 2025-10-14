@@ -94,7 +94,6 @@ in
         ];
         RestrictRealtime = true;
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
         UMask = "0066";
         ProtectHostname = true;
       };
