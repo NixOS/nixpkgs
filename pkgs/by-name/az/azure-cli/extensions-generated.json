@@ -1016,9 +1016,9 @@
   },
   "storage-discovery": {
     "pname": "storage-discovery",
-    "version": "1.0.0b1",
-    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_discovery-1.0.0b1-py3-none-any.whl",
-    "hash": "sha256-qa4B0qEbeg09vZRN1E4J2E5LvwbrPd2OG1V/WOhfI1o=",
+    "version": "1.0.0",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/storage_discovery-1.0.0-py3-none-any.whl",
+    "hash": "sha256-kr/NvTWq4HyZa1hlPI8Gv0HFhkVS2iZIqtpsN/t/Yug=",
     "description": "Microsoft Azure Command-Line Tools StorageDiscovery Extension"
   },
   "storage-mover": {
