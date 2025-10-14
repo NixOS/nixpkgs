@@ -172,6 +172,9 @@ in
         # not available in a sandboxed build.
         (lib.cmakeBool "ANTLR_BUILD_CPP_TESTS" false)
       ];
+      extraPatches = [
+        ./4.11.runtime.cpp.cmake.patch
+      ];
     }).antlr;
 
   antlr4_10 =
