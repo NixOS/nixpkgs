@@ -951,6 +951,13 @@
     "hash": "sha256-VRFUS040KwOkpCY2F8YD2HRCrVF5zp2MDR/RCRX5O3o=",
     "description": "Microsoft Azure Command-Line Tools Sentinel Extension"
   },
+  "site": {
+    "pname": "site",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/site-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-OZ2569Gt1U+UzNHe4jsO3nTMUjipqGaCKoKbN0PDXpA=",
+    "description": "Microsoft Azure Command-Line Tools Site Extension"
+  },
   "site-recovery": {
     "pname": "site-recovery",
     "version": "1.0.0",
