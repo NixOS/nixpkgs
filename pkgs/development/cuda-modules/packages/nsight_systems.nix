@@ -96,7 +96,7 @@ buildRedist {
     (qt6.qtwebengine or qt6.full)
     (qt6.qtwayland or qt6.full)
     boost178
-    cuda_cudart.stubs
+    (lib.getOutput "stubs" cuda_cudart)
     e2fsprogs
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer

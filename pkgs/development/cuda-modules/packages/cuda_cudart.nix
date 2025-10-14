@@ -15,16 +15,11 @@ buildRedist (finalAttrs: {
   redistName = "cuda";
   pname = "cuda_cudart";
 
-  # NOTE: A number of packages expect cuda_cudart to be in a single directory.
-  # NOTE: CMake expects the static libraries to exist alongside the dynamic libraries,
-  # so we may need to revisit whether we have a static output at all.
+  # NOTE: A number of packages expect cuda_cudart to be in a single directory. We restrict the package to a single
+  # output to avoid breaking these assumptions. As an example, CMake expects the static libraries to exist alongside
+  # the dynamic libraries.
   outputs = [
     "out"
-    "dev"
-    "include"
-    "lib"
-    "static"
-    "stubs"
   ];
 
   propagatedBuildOutputs =
