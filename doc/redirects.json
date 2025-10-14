@@ -222,6 +222,9 @@
   "sec-darwin-libcxx-versions": [
     "index.html#sec-darwin-libcxx-versions"
   ],
+  "sec-functions-library-linkedLists": [
+    "index.html#sec-functions-library-linkedLists"
+  ],
   "sec-functions-library-treefmt": [
     "index.html#sec-functions-library-treefmt"
   ],
