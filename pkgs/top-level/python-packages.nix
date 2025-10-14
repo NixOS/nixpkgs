@@ -9354,12 +9354,7 @@ self: super: with self; {
 
   millheater = callPackage ../development/python-modules/millheater { };
 
-  mim-solvers = toPythonModule (
-    pkgs.mim-solvers.override {
-      python3Packages = self;
-      pythonSupport = true;
-    }
-  );
+  mim-solvers = callPackage ../development/python-modules/mim-solvers { inherit (pkgs) mim-solvers; };
 
   minari = callPackage ../development/python-modules/minari { };
 
