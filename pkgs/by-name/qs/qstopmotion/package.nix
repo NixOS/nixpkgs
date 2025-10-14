@@ -18,7 +18,6 @@
   # buildInputs
   guvcview,
   pcre,
-  v4l-utils,
 
   ffmpeg,
 }:
@@ -60,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qwt
     libv4l
     pcre
-    v4l-utils
   ];
 
   postPatch = ''
