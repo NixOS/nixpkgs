@@ -4,6 +4,7 @@
   doxygen,
   example-robot-data,
   fetchFromGitHub,
+  fetchpatch,
   ipopt,
   lapack,
   lib,
@@ -24,6 +25,15 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-m7UiCa8ydjsAIhsFiShTi3/JaKgq2TCQ1XYAMyTNg1U=";
   };
+
+  patches = [
+    # ref. https://github.com/loco-3d/crocoddyl/pull/1440 merged upstream
+    (fetchpatch {
+      name = "add-missing-include.patch";
+      url = "https://github.com/loco-3d/crocoddyl/commit/6994bea7bb3ae6027f5b611ef1635768538150fd.patch";
+      hash = "sha256-XbQKRWpWm5Rk4figoA2swId4Pz2xKDpU4NFP46p8WO0=";
+    })
+  ];
 
   outputs = [
     "out"
