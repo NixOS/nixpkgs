@@ -29,8 +29,8 @@ let
     license = licenses.mit;
     maintainers = with maintainers; [
       liammurphy14
-      yayayayaka
     ];
+    teams = [ teams.electron ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

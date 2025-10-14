@@ -387,6 +387,17 @@ with lib.maintainers;
     shortName = "dotnet";
   };
 
+  electron = {
+    members = [
+      tomasajt
+      yayayayaka
+      teutat3s
+    ];
+    scope = "Maintainers of electron packages";
+    shortName = "electron";
+    enableFeatureFreezePing = true;
+  };
+
   emacs = {
     members = [
       AndersonTorres
