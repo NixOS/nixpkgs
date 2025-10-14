@@ -31,19 +31,19 @@
   # The list can be found at https://github.com/bitcoinknots/guix.sigs/tree/knots/builder-keys
   builderKeys ? [
     "1A3E761F19D2CC7785C5502EA291A2C45D0C504A" # luke-jr.gpg
-    "55058E8947E136A64F9E8AD5C4512A878E4AC2BF" # nsvrn
+    "C1BCB7169AF1A07A0C5E471A047509FA0A6D7350" # ataraxia
     "DAED928C727D3E613EC46635F5073C4F4882FFFC" # leo-haf.gpg
   ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = if withGui then "bitcoin-knots" else "bitcoind-knots";
-  version = "29.1.knots20250903";
+  version = "29.2.knots20251010";
 
   src = fetchurl {
     url = "https://bitcoinknots.org/files/29.x/${finalAttrs.version}/bitcoin-${finalAttrs.version}.tar.gz";
     # hash retrieved from signed SHA256SUMS
-    hash = "sha256-2DlJlGNrCOe8UouZ+TLdZ2OahU18AWL6K/KI1YA29QY=";
+    hash = "sha256-p3omcfgX57reHXQX3IG8FPmMy8MHSCN0+D9Hhb24Wck=";
   };
 
   nativeBuildInputs = [
@@ -87,18 +87,18 @@ stdenv.mkDerivation (finalAttrs: {
       publicKeys = fetchFromGitHub {
         owner = "bitcoinknots";
         repo = "guix.sigs";
-        rev = "d441685d5179b91070fadbc764be3a41616f36df";
-        sha256 = "sha256-XO/E51yOFrRYrGnxsyH/ZPF4Yf192x+lT2FPdilkacA=";
+        rev = "7ee29a9ffbd1c26ba065ba06055242a01c3e63ff";
+        sha256 = "sha256-ZW1I7Y35Pi4WZhgCCYSI5gPhcvbfnpBObhOUTqZGVvM=";
       };
 
       checksums = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS";
-        hash = "sha256-CH5p+u2XvIpWC/yv+UrP3JSq/dcAxq/eCZ+fPzqaI+Q=";
+        hash = "sha256-DQQg2Iahp2H5jDYA9XX5n/ypRzmFggincGNoIH2t5iU=";
       };
 
       signatures = fetchurl {
         url = "https://bitcoinknots.org/files/${majorVersion}.x/${finalAttrs.version}/SHA256SUMS.asc";
-        hash = "sha256-abCiaE3etiXfqC1nrmHMP77HO94L+ZZv4B2s08p1d2k=";
+        hash = "sha256-jy4gxuczCSsJQkkH3axMljuf7k2VdmLp4PkgRoQnoSY=";
       };
 
       verifyBuilderKeys =
