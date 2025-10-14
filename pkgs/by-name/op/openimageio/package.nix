@@ -1,25 +1,25 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   boost,
+  bzip2,
   cmake,
+  fetchFromGitHub,
+  fmt,
   giflib,
+  libheif,
   libjpeg,
+  libjxl,
   libpng,
   libtiff,
-  libwebp,
-  libjxl,
-  libheif,
   libultrahdr,
+  libwebp,
   opencolorio,
   openexr,
   openjph,
-  robin-map,
-  unzip,
-  fmt,
-  bzip2,
   ptex,
+  robin-map,
+  stdenv,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    bzip2
     giflib
     libheif
     libjpeg
@@ -58,9 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     opencolorio
     openexr
     openjph
-    robin-map
-    bzip2
     ptex
+    robin-map
   ];
 
   propagatedBuildInputs = [
