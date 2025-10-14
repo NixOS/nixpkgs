@@ -8601,8 +8601,6 @@ with pkgs;
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
 
-  sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
-
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 
   sev-snp-measure = with python3Packages; toPythonApplication sev-snp-measure;
