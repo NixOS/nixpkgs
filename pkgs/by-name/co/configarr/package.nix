@@ -29,11 +29,17 @@ stdenvNoCC.mkDerivation {
   pname = "configarr";
   inherit version;
 
-  src = fetchurl (systemMap.${stdenvNoCC.hostPlatform.system} or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}"));
+  src = fetchurl (systemMap.${stdenvNoCC.hostPlatform.system} or
+    (throw "Configarr does not support system: ${stdenvNoCC.hostPlatform.system}"));
+
+  dontConfigure = true;
+  dontBuild = true;
+  sourceRoot = ".";
 
   installPhase = ''
     runHook preInstall
 
+    mkdir -p $out/bin
     install -Dm755 configarr $out/bin/configarr
 
     runHook postInstall
@@ -46,6 +52,7 @@ stdenvNoCC.mkDerivation {
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ BlackDark ];
     mainProgram = "configarr";
-    platforms = with lib.platforms; [ x86_64-linux aarch64-linux x86_64-darwin aarch64-darwin ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
