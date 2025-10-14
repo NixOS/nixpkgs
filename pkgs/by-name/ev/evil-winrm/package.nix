@@ -35,13 +35,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "evil-winrm";
-  version = "3.5";
+  version = "3.7";
 
   src = fetchFromGitHub {
     owner = "Hackplayers";
     repo = "evil-winrm";
     tag = "v${version}";
-    hash = "sha256-8Lyo7BgypzrHMEcbYlxo/XWwOtBqs2tczYnc3+XEbeA=";
+    hash = "sha256-jr8glS732UvSt+qFkhhLFZUB7OIRpRj3SzXm6mVikrE=";
   };
 
   nativeBuildInputs = [
