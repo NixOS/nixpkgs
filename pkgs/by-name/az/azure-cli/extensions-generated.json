@@ -951,6 +951,13 @@
     "hash": "sha256-VRFUS040KwOkpCY2F8YD2HRCrVF5zp2MDR/RCRX5O3o=",
     "description": "Microsoft Azure Command-Line Tools Sentinel Extension"
   },
+  "sftp": {
+    "pname": "sftp",
+    "version": "1.0.0b1",
+    "url": "https://azcliprod.blob.core.windows.net/cli-extensions/sftp-1.0.0b1-py3-none-any.whl",
+    "hash": "sha256-cE8b2ZgoG9DO64ekT3FpcRuTAOYX94pzESYJ9lUe7LI=",
+    "description": "Secure access to Azure Storage blob data via SFTP with SSH certificates"
+  },
   "site": {
     "pname": "site",
     "version": "1.0.0b1",
