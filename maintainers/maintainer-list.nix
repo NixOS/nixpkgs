@@ -19295,6 +19295,12 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onatustun = {
+    email = "contact@onatustun.com";
+    name = "Onat Ustun";
+    github = "onatustun";
+    githubId = 41642110;
+  };
   ondt = {
     name = "Ondrej Telka";
     email = "nix@ondt.dev";
