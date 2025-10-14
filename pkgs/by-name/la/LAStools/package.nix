@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./drop-64-suffix.patch # necessary to prevent '64' from being appended to the names of the executables
+    # https://github.com/lastools/LAStools/pull/234
+    ./cmake.diff
   ];
 
   hardeningDisable = [
