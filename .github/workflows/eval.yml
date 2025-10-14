@@ -139,7 +139,7 @@ jobs:
         if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
-        # This should be very quick, because it pulls the eval results from Cachix.
+        # This is very quick, because it pulls the eval results from Cachix.
         run: |
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
