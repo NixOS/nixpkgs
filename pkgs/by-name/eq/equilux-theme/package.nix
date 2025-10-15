@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   gnome-shell,
-  gnome-themes-extra,
   glib,
   libxml2,
   gtk-engine-murrine,
@@ -30,7 +29,6 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome-themes-extra
     gdk-pixbuf
     librsvg
   ];
