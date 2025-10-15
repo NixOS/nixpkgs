@@ -458,7 +458,7 @@ in
               default = "docker";
               description = ''
                 Select executor, eg. shell, docker, etc.
-                See [runner documentation](https://docs.gitlab.com/runner/executors/README.html) for more information.
+                See [runner executor documentation](https://docs.gitlab.com/runner/executors/) for more information.
               '';
             };
             buildsDir = mkOption {
