@@ -23039,12 +23039,6 @@
     githubId = 73446695;
     name = "Savinien Petitjean";
   };
-  savannidgerinel = {
-    email = "savanni@luminescent-dreams.com";
-    github = "savannidgerinel";
-    githubId = 8534888;
-    name = "Savanni D'Gerinel";
-  };
   savedra1 = {
     email = "michaelsavedra@gmail.com";
     github = "savedra1";
