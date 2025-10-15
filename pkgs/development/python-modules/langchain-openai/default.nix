@@ -92,6 +92,10 @@ buildPythonPackage rec {
     "test_get_token_ids"
     "test_init_o1"
     "test_openai_get_num_tokens"
+
+    # TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    # TODO: Remove after 1.0 release
+    "test_init_minimal_reasoning_effort"
   ];
 
   disabledTestPaths = [
