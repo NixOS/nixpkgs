@@ -19,7 +19,7 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
-  testers,
+  versionCheckHook,
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.bindgenHook
     makeWrapper
     installShellFiles
-    udevCheckHook
   ];
 
   buildInputs = [
@@ -98,6 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false; # needs bcachefs module loaded on builder
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    udevCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -121,11 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
 
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "${finalAttrs.meta.mainProgram} version";
-        version = "${finalAttrs.version}";
-      };
       smoke-test = nixosTests.bcachefs;
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
