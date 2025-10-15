@@ -12364,8 +12364,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  rclone = callPackage ../applications/networking/sync/rclone { };
-
   reaper = callPackage ../applications/audio/reaper {
     jackLibrary = libjack2; # Another option is "pipewire.jack".
     ffmpeg = ffmpeg_4-headless;
