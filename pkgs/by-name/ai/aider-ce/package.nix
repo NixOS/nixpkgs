@@ -1,12 +1,23 @@
-{ lib, stdenv, python312Packages, fetchFromGitHub, replaceVars, gitMinimal
-, portaudio, playwright-driver, nix-update-script, }:
+{
+  lib,
+  stdenv,
+  python312Packages,
+  fetchFromGitHub,
+  replaceVars,
+  gitMinimal,
+  portaudio,
+  playwright-driver,
+  nix-update-script,
+}:
 
 let
   # dont support python 3.13 (Aider-AI/aider#3037)
   python3Packages = python312Packages;
 
-  aider-nltk-data =
-    python3Packages.nltk.dataDir (d: [ d.punkt-tab d.stopwords ]);
+  aider-nltk-data = python3Packages.nltk.dataDir (d: [
+    d.punkt-tab
+    d.stopwords
+  ]);
 
   version = "0.87.11.dev";
   aider-ce = python3Packages.buildPythonApplication {
@@ -130,7 +141,10 @@ let
 
     buildInputs = [ portaudio ];
 
-    nativeCheckInputs = [ python3Packages.pytestCheckHook gitMinimal ];
+    nativeCheckInputs = [
+      python3Packages.pytestCheckHook
+      gitMinimal
+    ];
 
     patches = [
       # ./fix-tree-sitter.patch
@@ -175,7 +189,8 @@ let
       "test_main_exit_calls_version_check"
       # AssertionError: assert 2 == 1
       "test_simple_send_non_retryable_error"
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Tests fails on darwin
       "test_dark_mode_sets_code_theme"
       "test_default_env_file_sets_automatic_variable"
@@ -198,62 +213,93 @@ let
     '';
 
     optional-dependencies = with python3Packages; {
-      playwright = [ greenlet playwright pyee typing-extensions ];
+      playwright = [
+        greenlet
+        playwright
+        pyee
+        typing-extensions
+      ];
       browser = [ streamlit ];
-      help = [ llama-index-core llama-index-embeddings-huggingface torch nltk ];
+      help = [
+        llama-index-core
+        llama-index-embeddings-huggingface
+        torch
+        nltk
+      ];
       bedrock = [ boto3 ];
     };
 
     passthru = {
-      withOptional = { withAll ? false, withPlaywright ? withAll
-        , withBrowser ? withAll, withHelp ? withAll, withBedrock ? withAll, ...
+      withOptional =
+        {
+          withAll ? false,
+          withPlaywright ? withAll,
+          withBrowser ? withAll,
+          withHelp ? withAll,
+          withBedrock ? withAll,
+          ...
         }:
-        aider-ce.overridePythonAttrs ({ pname, dependencies, makeWrapperArgs
-          , propagatedBuildInputs ? [ ], ... }:
+        aider-ce.overridePythonAttrs (
+          {
+            pname,
+            dependencies,
+            makeWrapperArgs,
+            propagatedBuildInputs ? [ ],
+            ...
+          }:
 
           {
-            pname = pname + lib.optionalString withPlaywright "-playwright"
+            pname =
+              pname
+              + lib.optionalString withPlaywright "-playwright"
               + lib.optionalString withBrowser "-browser"
               + lib.optionalString withHelp "-help"
               + lib.optionalString withBedrock "-bedrock";
 
-            dependencies = dependencies ++ lib.optionals withPlaywright
-              aider-ce.optional-dependencies.playwright
-              ++ lib.optionals withBrowser
-              aider-ce.optional-dependencies.browser
+            dependencies =
+              dependencies
+              ++ lib.optionals withPlaywright aider-ce.optional-dependencies.playwright
+              ++ lib.optionals withBrowser aider-ce.optional-dependencies.browser
               ++ lib.optionals withHelp aider-ce.optional-dependencies.help
-              ++ lib.optionals withBedrock
-              aider-ce.optional-dependencies.bedrock;
+              ++ lib.optionals withBedrock aider-ce.optional-dependencies.bedrock;
 
-            propagatedBuildInputs = propagatedBuildInputs
-              ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
+            propagatedBuildInputs =
+              propagatedBuildInputs ++ lib.optionals withPlaywright [ playwright-driver.browsers ];
 
-            makeWrapperArgs = makeWrapperArgs ++ lib.optionals withPlaywright [
-              "--set"
-              "PLAYWRIGHT_BROWSERS_PATH"
-              "${playwright-driver.browsers}"
-              "--set"
-              "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
-              "true"
-            ] ++ lib.optionals withHelp [
-              "--set"
-              "NLTK_DATA"
-              "${aider-nltk-data}"
-            ];
-          });
+            makeWrapperArgs =
+              makeWrapperArgs
+              ++ lib.optionals withPlaywright [
+                "--set"
+                "PLAYWRIGHT_BROWSERS_PATH"
+                "${playwright-driver.browsers}"
+                "--set"
+                "PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS"
+                "true"
+              ]
+              ++ lib.optionals withHelp [
+                "--set"
+                "NLTK_DATA"
+                "${aider-nltk-data}"
+              ];
+          }
+        );
 
-      updateScript =
-        nix-update-script { extraArgs = [ "--version-regex" "^v([0-9.]+)$" ]; };
+      updateScript = nix-update-script {
+        extraArgs = [
+          "--version-regex"
+          "^v([0-9.]+)$"
+        ];
+      };
     };
 
     meta = {
       description = "AI pair programming in your terminal (Aider Fork)";
       homepage = "https://github.com/dwash96/aider-ce";
-      changelog =
-        "https://github.com/dwash96/aider-ce/blob/v${version}/HISTORY.md";
+      changelog = "https://github.com/dwash96/aider-ce/blob/v${version}/HISTORY.md";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
       mainProgram = "aider-ce";
     };
   };
-in aider-ce
+in
+aider-ce
