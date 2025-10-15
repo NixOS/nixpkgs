@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
+  cmakeFlags = [
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
+  ];
 
   buildInputs = [
     pcre
