@@ -30,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-tests";
-  version = "0.3.21";
+  version = "0.3.22";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-tests==${version}";
-    hash = "sha256-CufnUFhYTENuq4/32u0w3UZb7TdZxEpshyQqLH6NEZo=";
+    hash = "sha256-YgdaSnLyf+p8+mdRCFBk5Ec99B77RMfXI7fIhCBPUxk=";
   };
 
   sourceRoot = "${src.name}/libs/standard-tests";
