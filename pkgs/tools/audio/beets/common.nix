@@ -103,6 +103,10 @@ python3Packages.buildPythonApplication {
       platformdirs
       pyyaml
       unidecode
+      # Can be built without it, but is useful on btrfs systems, and doesn't
+      # add too much to the closure. See:
+      # https://github.com/NixOS/nixpkgs/issues/437308
+      reflink
       typing-extensions
       lap
     ]
@@ -202,6 +206,9 @@ python3Packages.buildPythonApplication {
     "test_reject_different_art"
     # touches network
     "test_merge_duplicate_album"
+    # The existence of the dependency reflink (see comment above), causes this
+    # test to be run, and it fails in the sandbox.
+    "test_successful_reflink"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.
