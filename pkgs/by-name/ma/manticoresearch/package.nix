@@ -1,6 +1,7 @@
 {
   bison,
   boost,
+  callPackage,
   cmake,
   croaring,
   fetchFromGitHub,
@@ -18,24 +19,7 @@
 }:
 
 let
-  columnar = stdenv.mkDerivation (finalAttrs: {
-    pname = "columnar";
-    version = "c26-s18-k9"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API/NEED_KNN_API in Manticore's cmake/GetColumnar.cmake
-    src = fetchFromGitHub {
-      owner = "manticoresoftware";
-      repo = "columnar";
-      rev = finalAttrs.version;
-      hash = "sha256-DnqixxvUltajZBBs/kFHjIr6dFpYkgrKVoQJe3Rtfag=";
-    };
-    nativeBuildInputs = [ cmake ];
-    cmakeFlags = [ "-DAPI_ONLY=ON" ];
-    meta = {
-      description = "Column-oriented storage and secondary indexing library";
-      homepage = "https://github.com/manticoresoftware/columnar/";
-      license = lib.licenses.asl20;
-      platforms = lib.platforms.all;
-    };
-  });
+  columnar = callPackage ./columnar.nix { };
   uni-algo = stdenv.mkDerivation (finalAttrs: {
     pname = "uni-algo";
     version = "0.7.2";
@@ -63,12 +47,11 @@ let
       rev = "cf11f758e2532161c9e21c3ec2461b0fafb15853";
       hash = "sha256-oXn6YowOg+9jaXXSX1fggkgE9o9xZ4hlmrpdpEHot68=";
     };
+
+    patches = [ ./cctz-cmake-policy.patch ];
+
     nativeBuildInputs = [ cmake ];
     cmakeBuildDir = "build_dir"; # Avoid conflicts with the pre-existing `BUILD` file on case-insensitive FS
-    cmakeFlags = [
-      # Fix the build with CMake 4.
-      "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
-    ];
 
     meta = {
       description = "Library for translating between absolute and civil times using the rules of a time zone";
@@ -120,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     cctz
-    columnar
+    columnar.dev
     croaring
     icu.dev
     libstemmer
@@ -164,6 +147,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
       --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
       --replace-fail "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
+
+    mkdir $out/share/manticore/modules
+    cp ${columnar}/share/manticore/modules/* $out/share/manticore/modules
   '';
 
   passthru.tests.version = testers.testVersion {
