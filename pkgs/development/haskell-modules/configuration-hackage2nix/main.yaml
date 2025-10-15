@@ -70,6 +70,7 @@ extra-packages:
   - ghc-exactprint == 1.7.*             # 2025-03-09: needed for GHC == 9.6
   - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
   - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
+  - ghc-exactprint == 1.12.*            # 2025-10-15: needed for GHC == 9.12
   - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.0
   - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.2, 9.4
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
