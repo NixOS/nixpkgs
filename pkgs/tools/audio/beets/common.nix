@@ -112,6 +112,8 @@ python3Packages.buildPythonApplication {
     gobject-introspection
     sphinxHook
     python3Packages.pydata-sphinx-theme
+    python3Packages.sphinx-design
+    python3Packages.sphinx-copybutton
   ]
   ++ extraNativeBuildInputs;
 
@@ -132,6 +134,12 @@ python3Packages.buildPythonApplication {
     "html"
     "man"
   ];
+  # Causes an installManPage error. Not clear why this directory gets generated
+  # with the manpages. The same directory is observed correctly in
+  # $doc/share/doc/beets-${version}/html
+  preInstallSphinx = ''
+    rm -r .sphinx/man/man/_sphinx_design_static
+  '';
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
