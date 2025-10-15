@@ -15,15 +15,15 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kapitainsky";
     repo = "RcloneBrowser";
-    rev = version;
-    sha256 = "14ckkdypkfyiqpnz0y2b73wh1py554iyc3gnymj4smy0kg70ai33";
+    tag = version;
+    hash = "sha256-Y0QFzpvAV01k9fYN5iMpxd8A+ThLePDtxdG7eX2bk5E=";
   };
 
   patches = [
     # patch for Qt 5.15, https://github.com/kapitainsky/RcloneBrowser/pull/126
     (fetchpatch {
       url = "https://github.com/kapitainsky/RcloneBrowser/commit/ce9cf52e9c584a2cc85a5fa814b0fd7fa9cf0152.patch";
-      sha256 = "0nm42flmaq7mva9j4dpp18i1xcv8gr08zfyb9apz1zwn79h1w0c8";
+      hash = "sha256-iAEeYDqW//CvSsu7j0B+aLMeIgr3NiKT2vVgVakTpFo=";
     })
   ];
 
@@ -32,16 +32,17 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.10" ];
 
   buildInputs = [ qtbase ];
 
-  meta = with lib; {
-    inherit (src.meta) homepage;
+  meta = {
+    changelog = "https://github.com/kapitainsky/RcloneBrowser/blob/${src.tag}/CHANGELOG.md";
+    homepage = "https://github.com/kapitainsky/RcloneBrowser";
     description = "Graphical Frontend to Rclone written in Qt";
     mainProgram = "rclone-browser";
-    license = licenses.unlicense;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ dotlambda ];
+    license = lib.licenses.unlicense;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ dotlambda ];
   };
 }
