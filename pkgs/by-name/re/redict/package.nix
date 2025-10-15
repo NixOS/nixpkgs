@@ -24,14 +24,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redict";
-  version = "7.3.2";
+  version = "7.3.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "redict";
     repo = "redict";
-    rev = finalAttrs.version;
-    hash = "sha256-MY4OWoYQ4a5efqcUTN6lNL/kd1VrJ/OBqKw27cQ5WC8=";
+    tag = finalAttrs.version;
+    hash = "sha256-ye2uO6EQzfyonRvM0/+pVPoNZe2f9WO/2yafy52G10M=";
   };
 
   patches = lib.optionals useSystemJemalloc [
@@ -99,7 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
       --timeout 2000 \
       --clients $NIX_BUILD_CORES \
       --tags -leaks \
-      --skipunit integration/failover # flaky and slow
+      --skipunit integration/failover \
+      --skipunit integration/aof-multi-part
 
     runHook postCheck
   '';

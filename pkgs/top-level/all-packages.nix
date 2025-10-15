@@ -5944,6 +5944,11 @@ with pkgs;
     pythonAttr = "python314FreeThreading";
     enableGIL = false;
   };
+  python315FreeThreading = python315.override {
+    self = python315FreeThreading;
+    pythonAttr = "python315FreeThreading";
+    enableGIL = false;
+  };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
@@ -5953,6 +5958,7 @@ with pkgs;
     python312
     python313
     python314
+    python315
     python3Minimal
     pypy27
     pypy310
@@ -5969,6 +5975,7 @@ with pkgs;
   python312Packages = recurseIntoAttrs python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
   python314Packages = python314.pkgs;
+  python315Packages = python315.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
