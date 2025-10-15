@@ -134,7 +134,6 @@ self: super: {
   relude = dontCheck super.relude;
 
   haddock-library = doJailbreak super.haddock-library;
-  apply-refact = addBuildDepend self.data-default-class super.apply-refact;
   path = self.path_0_9_5;
   inherit
     (
@@ -146,23 +145,26 @@ self: super: {
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        haskell-language-server = allowInconsistentDependencies (
-          addBuildDepends [ self.retrie self.floskell ] super.haskell-language-server
-        );
-        fourmolu = doJailbreak (dontCheck self.fourmolu_0_14_0_0); # ansi-terminal, Diff
-        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
-        hlint = self.hlint_3_6_1;
-        stylish-haskell = self.stylish-haskell_0_14_5_0;
-        retrie = doJailbreak (unmarkBroken super.retrie);
+        apply-refact = addBuildDepend self.data-default-class super.apply-refact;
         floskell = doJailbreak super.floskell;
+        fourmolu = doJailbreak (dontCheck self.fourmolu_0_14_0_0); # ansi-terminal, Diff
+        haskell-language-server = addBuildDepends [
+          self.retrie
+          self.floskell
+        ] super.haskell-language-server;
+        hlint = self.hlint_3_6_1;
+        ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
+        retrie = doJailbreak (unmarkBroken super.retrie);
+        stylish-haskell = self.stylish-haskell_0_14_5_0;
       }
     )
-    retrie
+    apply-refact
     floskell
-    haskell-language-server
     fourmolu
-    ormolu
+    haskell-language-server
     hlint
+    ormolu
+    retrie
     stylish-haskell
     ;
 
