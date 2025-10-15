@@ -4,6 +4,7 @@
   fetchFromGitLab,
   testers,
   commitmsgfmt,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "commitmsgfmt";
@@ -22,6 +23,7 @@ rustPlatform.buildRustPackage rec {
     package = commitmsgfmt;
     command = "commitmsgfmt -V";
   };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gitlab.com/mkjeldsen/commitmsgfmt";
