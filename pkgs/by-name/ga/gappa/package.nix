@@ -6,6 +6,8 @@
   mpfr,
   boost,
   version ? "1.6.1",
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation {
@@ -25,6 +27,11 @@ stdenv.mkDerivation {
 
   buildPhase = "./remake";
   installPhase = "./remake install";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://gappa.gitlabpages.inria.fr/";
