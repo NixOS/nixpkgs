@@ -10,12 +10,12 @@
 
   # dependencies
   anyio,
+  docstring-parser,
   distro,
   httpx,
   jiter,
   pydantic,
   sniffio,
-  tokenizers,
   typing-extensions,
 
   # optional dependencies
@@ -23,6 +23,7 @@
 
   # test
   dirty-equals,
+  inline-snapshot,
   nest-asyncio,
   pytest-asyncio,
   pytest-xdist,
@@ -32,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "anthropic";
-  version = "0.62.0";
+  version = "0.70.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
     tag = "v${version}";
-    hash = "sha256-EVLSC6ClHnmGqMoefMXj3M4dh812ZN5t9nF3gfCLyCo=";
+    hash = "sha256-eASFLiZHsOXh5lz3eZ6NNBrjZMIS7G0mgM5RPEx12Es=";
   };
 
   postPatch = ''
@@ -54,12 +55,12 @@ buildPythonPackage rec {
 
   dependencies = [
     anyio
+    docstring-parser
     distro
     httpx
     jiter
     pydantic
     sniffio
-    tokenizers
     typing-extensions
   ];
 
@@ -69,6 +70,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     dirty-equals
+    inline-snapshot
     nest-asyncio
     pytest-asyncio
     pytest-xdist
