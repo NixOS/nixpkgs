@@ -13677,7 +13677,7 @@
     github = "kkoniuszy";
     githubId = 120419423;
   };
-  klaus933 = {
+  klaus993 = {
     name = "Klaus Lungwitz";
     github = "klaus993";
     githubId = 18153834;
