@@ -25,10 +25,9 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # https://github.com/zostera/django-bootstrap5/pull/769
     (fetchpatch2 {
       name = "uv-build.patch";
-      url = "https://github.com/Prince213/django-bootstrap5/commit/e588b25e0c81d9133ca2b9391c125b41d485aefc.patch?full_index=1";
+      url = "https://github.com/zostera/django-bootstrap5/commit/d1d54f5fc8041d2781189321402b4f3937f77913.patch?full_index=1";
       hash = "sha256-cFOY+pu2TAZXpAipSIQh1nPPC0ipfncvpObcH667+ac=";
     })
   ];
