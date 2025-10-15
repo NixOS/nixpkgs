@@ -169,6 +169,50 @@ in
         '';
       };
 
+      accentColor = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "blue"
+            "teal"
+            "green"
+            "yellow"
+            "orange"
+            "red"
+            "pink"
+            "purple"
+            "slate"
+          ] # https://github.com/GNOME/gsettings-desktop-schemas/blob/master/schemas/org.gnome.desktop.interface.gschema.xml.in
+        );
+        default = null;
+        description = ''
+          If not null, set the accent color for GDM.
+          This is useful if you use a custom accent color and want to have the same in GDM.
+        '';
+      };
+
+      cursorTheme = lib.mkOption {
+        type = lib.types.nullOr (
+          lib.types.submodule {
+            options = {
+              name = lib.mkOption {
+                type = lib.types.str;
+                description = "Name of the cursor theme.";
+              };
+              package = lib.mkOption {
+                type = lib.types.nullOr lib.types.package;
+                default = null;
+                description = "If not null, the package providing the cursor theme. If null it is assumed to be in the system profile.";
+              };
+            };
+          }
+        );
+        default = null;
+        description = ''
+          If not null, set the cursor theme for GDM.
+          This is useful if you use a custom cursor theme and want to have the same in GDM.
+        '';
+      };
+
     };
 
   };
@@ -241,6 +285,11 @@ in
     environment.systemPackages = [
       pkgs.adwaita-icon-theme
       pkgs.gdm # For polkit rules
+      lib.optionals
+      (cfg.cursorTheme != null && cfg.cursorTheme.package != null)
+      [
+        cfg.cursorTheme.package
+      ] # For cursor theme
     ];
 
     # We dont use the upstream gdm service
@@ -314,6 +363,20 @@ in
           settings."org/gnome/login-screen" = {
             banner-message-enable = true;
             banner-message-text = cfg.banner;
+          };
+        }
+      ]
+      ++ lib.optionals (cfg.cursorTheme != null) [
+        {
+          settings."org/gnome/desktop/interface" = {
+            cursor-theme = cfg.cursorTheme.name;
+          };
+        }
+      ]
+      ++ lib.optionals (cfg.accentColor != null) [
+        {
+          settings."org/gnome/desktop/interface" = {
+            accent-color = cfg.accentColor;
           };
         }
       ]
