@@ -5,19 +5,20 @@
   gmp,
   mpfr,
   boost,
-  version ? "1.6.1",
   versionCheckHook,
   nix-update-script,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gappa";
-  inherit version;
+  version = "1.6.1";
 
   src = fetchurl {
-    url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${version}.tar.gz";
+    url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${finalAttrs.version}.tar.gz";
     hash = "sha256-1ux5ImKR8edXyvL21w3jY2o4/fATEjO2SMzS8B0o8Ok=";
   };
+
+  strictDeps = true;
 
   buildInputs = [
     gmp
@@ -25,8 +26,21 @@ stdenv.mkDerivation {
     boost.dev
   ];
 
-  buildPhase = "./remake";
-  installPhase = "./remake install";
+  buildPhase = ''
+    runHook preBuild
+
+    ./remake
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    ./remake install
+
+    runHook postInstall
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -44,4 +58,4 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ vbgl ];
     platforms = lib.platforms.all;
   };
-}
+})
