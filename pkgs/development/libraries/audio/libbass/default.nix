@@ -15,16 +15,16 @@
 let
   allBass = {
     bass = {
-      h = "bass.h";
-      version = "2.4.17";
+      h = "c/bass.h";
+      version = "2.4.18";
       so = {
         i686_linux = "libs/x86/libbass.so";
         x86_64-linux = "libs/x86_64/libbass.so";
         armv7l-linux = "libs/armhf/libbass.so";
         aarch64-linux = "libs/aarch64/libbass.so";
       };
-      url = "https://web.archive.org/web/20240501180538/http://www.un4seen.com/files/bass24-linux.zip";
-      hash = "sha256-/JAlvtZtnzuzZjWy3n1WT8Q5ZVLO0BJJAJT7/dELS3o=";
+      url = "https://web.archive.org/web/20251015113436/https://www.un4seen.com/files/bass24-linux.zip";
+      hash = "sha256-Iq2jRo9i3CBuR72I+bC0quLkeGX83H7hqUHxXv/NzP4=";
     };
 
     bass_fx = {
