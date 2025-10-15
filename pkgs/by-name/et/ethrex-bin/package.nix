@@ -57,6 +57,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = builtins.attrNames urls;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     changelog = "https://github.com/lambdaclass/ethrex/releases/tag/v${version}";
-    maintainers = with maintainers; [ samoht9277 klaus993 ];
+    maintainers = with maintainers; [ samoht9277 klaus993 juanbono lferrigno ];
   };
 })

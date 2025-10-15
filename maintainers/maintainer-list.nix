@@ -12915,6 +12915,11 @@
     githubId = 589502;
     name = "James Szalay";
   };
+  juanbono = {
+    name = "Juan Bono";
+    github = "juanbono";
+    githubId = 2772065;
+  };
   juancmuller = {
     email = "nix@juancmuller.com";
     githubId = 208500;
@@ -14585,6 +14590,11 @@
     github = "lf-";
     githubId = 6652840;
     matrix = "@jade_:matrix.org";
+  };
+  lferrigno = {
+    name = "Leando Ferrigno";
+    github = "lferrigno";
+    githubId = 5018415;
   };
   lgbishop = {
     email = "lachlan.bishop@hotmail.com";
