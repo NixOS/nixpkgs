@@ -4,8 +4,6 @@
   pkgs ? import ../.. { inherit system config; },
 }@args:
 
-with pkgs.lib;
-
 let
   testsForLinuxPackages =
     linuxPackages:
@@ -13,13 +11,7 @@ let
       { pkgs, ... }:
       {
         name = "kernel-${linuxPackages.kernel.version}";
-        meta = with pkgs.lib.maintainers; {
-          maintainers = [
-            nequissimus
-            atemu
-            ma27
-          ];
-        };
+        meta = { inherit maintainers; };
 
         nodes.machine =
           { ... }:
@@ -33,7 +25,11 @@ let
         '';
       }
     ) args);
-  kernels = pkgs.linuxKernel.vanillaPackages // {
+
+  # Skip kernels whose definition is `throw`.
+  kernelShallowlyEvals = name: kernel: (builtins.tryEval kernel).success;
+
+  kernels = (pkgs.lib.filterAttrs kernelShallowlyEvals pkgs.linuxKernel.vanillaPackages) // {
     inherit (pkgs.linuxKernel.packages)
       linux_6_12_hardened
       linux_rt_5_4
@@ -42,19 +38,24 @@ let
       linux_rt_6_1
       linux_rt_6_6
       linux_libre
-
       linux_testing
       ;
   };
 
+  maintainers = with pkgs.lib.maintainers; [
+    nequissimus
+    atemu
+    ma27
+  ];
+
 in
-mapAttrs (_: lP: testsForLinuxPackages lP) kernels
+builtins.mapAttrs (_: lP: testsForLinuxPackages lP) kernels
 // {
   passthru = {
     inherit testsForLinuxPackages;
 
     # Useful for development testing of all Kernel configs without building full Kernel
-    configfiles = mapAttrs (_: lP: lP.kernel.configfile) kernels;
+    configfiles = builtins.mapAttrs (_: lP: lP.kernel.configfile) kernels;
 
     testsForKernel = kernel: testsForLinuxPackages (pkgs.linuxPackagesFor kernel);
   };
