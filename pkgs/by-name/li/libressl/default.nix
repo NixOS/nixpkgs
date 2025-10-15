@@ -37,9 +37,6 @@ let
         # .note.GNU-stack section, and if that section is missing from any object,
         # the linker will make the stack executable.
         "-DCMAKE_C_FLAGS=-DHAVE_GNU_STACK"
-        # libressl will append this to the regular prefix for libdir
-        "-DCMAKE_INSTALL_LIBDIR=lib"
-
         "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
       ]
       ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
@@ -50,9 +47,6 @@ let
       # removing ./configure pre-config.
       preConfigure = ''
         rm configure
-        substituteInPlace CMakeLists.txt \
-          --replace-fail 'exec_prefix \''${prefix}' "exec_prefix ${placeholder "bin"}" \
-          --replace-fail 'libdir      \''${exec_prefix}' 'libdir \''${prefix}'
       '';
 
       inherit patches;
@@ -116,6 +110,11 @@ let
         ];
       };
     };
+  # https://github.com/libressl/portable/pull/1206
+  common-cmake-install-full-dirs-patch = fetchpatch {
+    url = "https://github.com/libressl/portable/commit/a15ea0710398eaeed3be53cf643e80a1e80c981d.patch";
+    hash = "sha256-Mlf4SrGCCqALQicbGtmVGdkdfcE8DEGYkOuVyG2CozM=";
+  };
 in
 {
   libressl_3_9 = generic {
@@ -129,6 +128,9 @@ in
         url = "https://github.com/libressl/portable/commit/e6c7de3f03c51fbdcf5ad88bf12fe9e128521f0d.patch";
         hash = "sha256-LJy3fjbnc9h5DG3/+8bLECwJeBpPxy3hU8sPuhovmcw=";
       })
+      # common-cmake-install-full-dirs-patch doesn't apply for this version, so
+      # this is a manual backport
+      ./cmake-install-full-dirs.3.9.patch
     ];
   };
 
@@ -149,6 +151,7 @@ in
         '';
         hash = "sha256-dEdtmHHiR7twAqgebXv1Owle/KYCak71NhDCp0PdseU=";
       })
+      common-cmake-install-full-dirs-patch
     ];
   };
 
@@ -166,10 +169,16 @@ in
         }
       } include/arch/loongarch64/opensslconf.h
     '';
+    patches = [
+      common-cmake-install-full-dirs-patch
+    ];
   };
 
   libressl_4_2 = generic {
     version = "4.2.0";
     hash = "sha256-D326RNfLjfjVPyz78ZVSVLwSjgCJWV8aui+s+u6ECLI=";
+    patches = [
+      common-cmake-install-full-dirs-patch
+    ];
   };
 }

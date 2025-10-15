@@ -1,0 +1,17 @@
+diff --git c/CMakeLists.txt w/CMakeLists.txt
+index 01a42fb..1a9a505 100644
+--- c/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -515,9 +515,9 @@ if(ENABLE_LIBRESSL_INSTALL)
+ 	if(NOT MSVC)
+ 		# Create pkgconfig files.
+ 		set(prefix      ${CMAKE_INSTALL_PREFIX})
+-		set(exec_prefix \${prefix})
+-		set(libdir      \${exec_prefix}/${CMAKE_INSTALL_LIBDIR})
+-		set(includedir  \${prefix}/include)
++		set(exec_prefix ${CMAKE_INSTALL_FULL_BINDIR})
++		set(libdir      ${CMAKE_INSTALL_FULL_LIBDIR})
++		set(includedir  ${CMAKE_INSTALL_FULL_INCLUDEDIR})
+ 		if(PLATFORM_LIBS)
+ 			string(REGEX REPLACE ";" " -l" PLATFORM_LDADD ";${PLATFORM_LIBS}")
+ 		endif()
