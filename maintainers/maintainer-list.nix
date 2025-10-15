@@ -19852,12 +19852,6 @@
     githubId = 3074260;
     name = "Patryk Sondej";
   };
-  patternspandemic = {
-    email = "patternspandemic@live.com";
-    github = "patternspandemic";
-    githubId = 15645854;
-    name = "Brad Christensen";
-  };
   patwid = {
     email = "patrick.widmer@tbwnet.ch";
     github = "patwid";
