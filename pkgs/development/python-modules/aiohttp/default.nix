@@ -6,6 +6,7 @@
   replaceVars,
   isPy310,
   isPyPy,
+  pythonOlder,
 
   # build-system
   cython,
@@ -24,6 +25,7 @@
   multidict,
   propcache,
   yarl,
+  zstandard,
 
   # optional dependencies
   aiodns,
@@ -49,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.12.15";
+  version = "3.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-nVDGSbzjCdyJFCsHq8kJigNA4vGs4Pg1Vyyvw+gKg2w=";
+    hash = "sha256-X4igOjBeAGDfUGwZAsjUWOWt3EFt53QSuUcdJ/5vBVU=";
   };
 
   patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
@@ -104,6 +106,9 @@ buildPythonPackage rec {
   optional-dependencies.speedups = [
     aiodns
     (if isPyPy then brotlicffi else brotli)
+  ]
+  ++ lib.optionals (pythonOlder "3.14") [
+    zstandard
   ];
 
   nativeCheckInputs = [
