@@ -32,8 +32,7 @@ rustPlatform.buildRustPackage (final: {
     mkdir -p $out/lib
     cp -r runtime $out/lib
     # copy tree-sitter grammars from helix package
-    # TODO: build it from source instead
-    cp -r ${helix}/lib/runtime/grammars/* $out/lib/runtime/grammars/
+    cp -r ${helix.runtime}/grammars/* $out/lib/runtime/grammars/
     installShellCompletion contrib/completion/hx.{bash,fish,zsh}
     mkdir -p $out/share/{applications,icons/hicolor/256x256/apps}
     cp contrib/Helix.desktop $out/share/applications
