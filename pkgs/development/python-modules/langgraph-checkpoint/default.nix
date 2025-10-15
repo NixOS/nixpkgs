@@ -18,6 +18,7 @@
   pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
+  redis,
 
   # passthru
   gitUpdater,
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "2.1.1";
+  version = "2.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
     tag = "checkpoint==${version}";
-    hash = "sha256-UY3AChShKfOrtOQzOm5vi3Yy3rlBc+TAje9L2L6My/U=";
+    hash = "sha256-91q+U1KfE5eXm6jAd1PNZzZZgpTyNCaF1YVoHYwOrRA=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
@@ -55,12 +56,21 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-mock
     pytestCheckHook
+    redis
   ];
 
   disabledTests = [
     # assert 1.0000000000000004 == 1.0000000000000002
     # https://github.com/langchain-ai/langgraph/issues/5845
     "test_embed_with_path"
+  ];
+
+  disabledTestPaths = [
+    # psycopg.errors.FeatureNotSupported: extension "vector" is not available
+    "tests/test_store.py::test_non_ascii[vector-cosine]"
+    "tests/test_store.py::test_non_ascii[vector-inner_product]"
+    "tests/test_store.py::test_non_ascii[halfvec-cosine]"
+    "tests/test_store.py::test_non_ascii[halfvec-inner_product]"
   ];
 
   passthru = {
