@@ -118,6 +118,19 @@
           '';
         };
 
+        waitForDevices = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = ''
+            Device paths to wait for before the CDI spec is generated.
+            These should be absolute paths to device files (e.g., /dev/nvidia0).
+          '';
+          example = [
+            "/dev/nvidia0"
+            "/dev/nvidia1"
+          ];
+        };
+
         package = lib.mkPackageOption pkgs "nvidia-container-toolkit" { };
 
         extraArgs = lib.mkOption {
@@ -287,31 +300,74 @@
           ]);
       };
 
-      systemd.services.nvidia-container-toolkit-cdi-generator = {
-        description = "Container Device Interface (CDI) for Nvidia generator";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "systemd-udev-settle.service" ];
-        serviceConfig = {
-          RuntimeDirectory = "cdi";
-          RemainAfterExit = true;
-          ExecStart =
-            let
-              script = pkgs.callPackage ./cdi-generate.nix {
-                inherit (config.hardware.nvidia-container-toolkit)
-                  csv-files
-                  device-name-strategy
-                  discovery-mode
-                  mounts
-                  extraArgs
-                  ;
-                nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
-                nvidia-driver = config.hardware.nvidia.package;
+      systemd.paths = lib.mkMerge (
+        lib.imap0 (
+          idx: devicePath:
+          let
+            pathUnitName = "nvidia-container-toolkit-wait-dev-nvidia${toString idx}";
+          in
+          {
+            ${pathUnitName} = {
+              description = "Wait for ${devicePath} to exist";
+              wantedBy = [ "nvidia-container-toolkit-cdi-generator.service" ];
+              pathConfig = {
+                PathExists = devicePath;
               };
-            in
-            lib.getExe script;
-          Type = "oneshot";
-        };
-      };
+            };
+          }
+        ) config.hardware.nvidia-container-toolkit.waitForDevices
+      );
+
+      systemd.services = lib.mkMerge (
+        [
+          {
+            nvidia-container-toolkit-cdi-generator = {
+              description = "Container Device Interface (CDI) for Nvidia generator";
+              requires = lib.mkMerge [
+                (lib.imap0 (
+                  idx: _: "nvidia-container-toolkit-wait-dev-nvidia${toString idx}.path"
+                ) config.hardware.nvidia-container-toolkit.waitForDevices)
+              ];
+              requiredBy = lib.mkMerge [
+                (lib.mkIf config.virtualisation.docker.enable [ "docker.service" ])
+                (lib.mkIf config.virtualisation.podman.enable [ "podman.service" ])
+              ];
+              wantedBy = [ "multi-user.target" ];
+              serviceConfig = {
+                RuntimeDirectory = "cdi";
+                RemainAfterExit = true;
+                ExecStart =
+                  let
+                    script = pkgs.callPackage ./cdi-generate.nix {
+                      inherit (config.hardware.nvidia-container-toolkit)
+                        csv-files
+                        device-name-strategy
+                        discovery-mode
+                        mounts
+                        extraArgs
+                        ;
+                      nvidia-container-toolkit = config.hardware.nvidia-container-toolkit.package;
+                      nvidia-driver = config.hardware.nvidia.package;
+                    };
+                  in
+                  lib.getExe script;
+                Type = "oneshot";
+              };
+            };
+          }
+        ]
+        ++ (lib.imap0 (
+          idx: _:
+          let
+            pathUnitName = "nvidia-container-toolkit-wait-dev-nvidia${toString idx}";
+          in
+          {
+            ${pathUnitName} = {
+              description = "Trigger service for ${pathUnitName}.path";
+            };
+          }
+        ) config.hardware.nvidia-container-toolkit.waitForDevices)
+      );
     })
   ];
 
