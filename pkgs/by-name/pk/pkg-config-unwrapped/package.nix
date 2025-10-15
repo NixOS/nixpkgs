@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   libiconv,
+  autoreconfHook,
   vanilla ? false,
 }:
 
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     ./gcc-15.patch
   ]
   ++ lib.optional (!vanilla) ./requires-private.patch
+  # this is done upstream in recent glib versions using meson
   ++ lib.optional stdenv.hostPlatform.isCygwin ./2.36.3-not-win32.patch;
 
   # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
@@ -41,6 +43,12 @@ stdenv.mkDerivation rec {
     + lib.optionalString (!vanilla) ''
       rm -f check/check-requires-private check/check-gtk check/missing
     '';
+
+  autoreconfFlags = lib.optional stdenv.hostPlatform.isCygwin "glib";
+
+  nativeBuildInputs =
+    # required for cygwin patch
+    lib.optional stdenv.hostPlatform.isCygwin autoreconfHook;
 
   buildInputs = [ libiconv ];
 
