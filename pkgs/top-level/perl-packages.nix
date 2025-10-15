@@ -65,19 +65,22 @@ with self;
     args:
     buildPerlPackage (
       {
+        # In case of cross-compilation, generated ./Build have host perl shebang, not build one
+        # so run it with build perl explicitly
         buildPhase = ''
           runHook preBuild
-          perl Build.PL --prefix=$out; ./Build build
+          perl Build.PL --prefix=$out;
+          perl ./Build build
           runHook postBuild
         '';
         installPhase = ''
           runHook preInstall
-          ./Build install
+          perl ./Build install
           runHook postInstall
         '';
         checkPhase = ''
           runHook preCheck
-          ./Build test
+          perl ./Build test
           runHook postCheck
         '';
       }
