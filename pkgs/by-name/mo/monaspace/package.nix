@@ -3,31 +3,20 @@
   stdenvNoCC,
   fetchzip,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
-  version = "1.200";
+  version = "1.301";
 
   src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
+    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-static-v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-j1xQYVxfTNDVuzCKvT5FbU29t8XsH4XqcZ477sjydts=";
+    hash = "sha256-H6J4InGyXabZuslywuzNYqw14zymzF90JKxa7CikOIM=";
   };
-
-  outputs = [
-    "out"
-    "woff"
-  ];
 
   installPhase = ''
     runHook preInstall
 
-    pushd monaspace-v${finalAttrs.version}/fonts/
-    install -Dm644 frozen/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 otf/*.otf -t $out/share/fonts/opentype
-    install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 webfonts/*.woff -t $woff/share/fonts/woff
-    popd
+    install -Dm644 Static\ Fonts/**/*.otf -t $out/share/fonts/opentype
 
     runHook postInstall
   '';
