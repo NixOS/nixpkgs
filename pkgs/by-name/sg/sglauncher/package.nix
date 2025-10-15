@@ -24,10 +24,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp sglauncher $out/bin
   '';
 
-  meta = with pkgs.lib; {
+  meta = {
     description = "Simple GTK Launcher";
     homepage = "https://codeberg.org/ItsZariep/SGLauncher";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ reylak ];
     mainProgram = "sglauncher";
   })
