@@ -10959,10 +10959,6 @@ with pkgs;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
-  direwolf = callPackage ../applications/radio/direwolf {
-    hamlib = hamlib_4;
-  };
-
   djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
 
   djview4 = djview;
