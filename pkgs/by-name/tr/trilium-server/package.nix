@@ -55,7 +55,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Hierarchical note taking application with focus on building large personal knowledge bases";
-    homepage = "https://github.com/TriliumNext/Notes";
+    homepage = "https://triliumnotes.org/";
     license = lib.licenses.agpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
