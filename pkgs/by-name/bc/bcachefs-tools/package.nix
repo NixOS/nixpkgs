@@ -19,10 +19,11 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
-  testers,
+  versionCheckHook,
   nixosTests,
   installShellFiles,
   fuseSupport ? false,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -95,6 +96,13 @@ stdenv.mkDerivation (finalAttrs: {
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    udevCheckHook
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
+
   postPatch = ''
     substituteInPlace Makefile \
       --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
@@ -117,11 +125,6 @@ stdenv.mkDerivation (finalAttrs: {
     kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
 
     tests = {
-      version = testers.testVersion {
-        package = finalAttrs.finalPackage;
-        command = "${finalAttrs.meta.mainProgram} version";
-        version = "${finalAttrs.version}";
-      };
       smoke-test = nixosTests.bcachefs;
       inherit (nixosTests.installer) bcachefsSimple bcachefsEncrypted bcachefsMulti;
     };
