@@ -8,13 +8,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "everforest-gtk-theme";
-  version = "0-unstable-2023-03-20";
+  version = "0-unstable-2025-10-15";
 
   src = fetchFromGitHub {
     owner = "Fausto-Korpsvart";
     repo = "Everforest-GTK-Theme";
-    rev = "8481714cf9ed5148694f1916ceba8fe21e14937b";
-    hash = "sha256-NO12ku8wnW/qMHKxi5TL/dqBxH0+cZbe+fU0iicb9JU=";
+    rev = "930a5dc57f7a06e8c6538d531544e41c56dbb27a";
+    hash = "sha256-mlJE7gVElWUjJIZnAL5ztchphmaU82llol+YdKqnSxg=";
   };
 
   propagatedUserEnvPkgs = [
