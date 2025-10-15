@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ente-web-${enteApp}";
-  version = "1.2.8";
+  version = "1.2.11";
 
   src = fetchFromGitHub {
     owner = "ente-io";
@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     sparseCheckout = [ "web" ];
     tag = "photos-v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-OIpqGFp10ncgM8OBJF+Eer3ESnvcuvWihl5cu5SuOvs=";
+    hash = "sha256-h+Bkz41rOAQhRqDdzUx+CWNq2QYvGFw+TE0ryps63bI=";
   };
   sourceRoot = "${finalAttrs.src.name}/web";
 
