@@ -1,6 +1,7 @@
 {
   bison,
   boost,
+  callPackage,
   cmake,
   croaring,
   fetchFromGitHub,
@@ -18,24 +19,7 @@
 }:
 
 let
-  columnar = stdenv.mkDerivation (finalAttrs: {
-    pname = "columnar";
-    version = "c26-s18-k9"; # see NEED_COLUMNAR_API/NEED_SECONDARY_API/NEED_KNN_API in Manticore's cmake/GetColumnar.cmake
-    src = fetchFromGitHub {
-      owner = "manticoresoftware";
-      repo = "columnar";
-      rev = finalAttrs.version;
-      hash = "sha256-DnqixxvUltajZBBs/kFHjIr6dFpYkgrKVoQJe3Rtfag=";
-    };
-    nativeBuildInputs = [ cmake ];
-    cmakeFlags = [ "-DAPI_ONLY=ON" ];
-    meta = {
-      description = "Column-oriented storage and secondary indexing library";
-      homepage = "https://github.com/manticoresoftware/columnar/";
-      license = lib.licenses.asl20;
-      platforms = lib.platforms.all;
-    };
-  });
+  columnar = callPackage ./columnar.nix { };
   uni-algo = stdenv.mkDerivation (finalAttrs: {
     pname = "uni-algo";
     version = "0.7.2";
@@ -120,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     boost
     cctz
-    columnar
+    columnar.dev
     croaring
     icu.dev
     libstemmer
@@ -164,6 +148,9 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "@CMAKE_INSTALL_FULL_RUNSTATEDIR@" "/var/lib/manticore" \
       --replace-fail "@CMAKE_INSTALL_FULL_BINDIR@" "$out/bin" \
       --replace-fail "@CMAKE_INSTALL_FULL_SYSCONFDIR@" "$out/etc"
+
+    mkdir $out/share/manticore/modules
+    cp ${columnar}/share/manticore/modules/* $out/share/manticore/modules
   '';
 
   passthru.tests.version = testers.testVersion {
