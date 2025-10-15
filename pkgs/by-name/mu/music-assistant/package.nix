@@ -68,6 +68,9 @@ python.pkgs.buildPythonApplication rec {
 
     # Disable interactive dependency resolution, which clashes with the immutable Python environment
     ./dont-install-deps.patch
+
+    # Fix running the built-in snapcast server
+    ./builtin-snapcast-server.patch
   ];
 
   postPatch = ''

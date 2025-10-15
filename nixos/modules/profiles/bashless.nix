@@ -32,12 +32,8 @@
   boot.kexec.enable = lib.mkDefault false;
   # Relies on bash scripts
   powerManagement.enable = lib.mkDefault false;
-  # Has some bash inside
-  systemd.shutdownRamfs.enable = lib.mkDefault false;
   # Relies on the gzip command which depends on bash
   services.logrotate.enable = lib.mkDefault false;
-  # Service relies on bash scripts
-  services.timesyncd.enable = lib.mkDefault false;
 
   # Check that the system does not contain a Nix store path that contains the
   # string "bash".
