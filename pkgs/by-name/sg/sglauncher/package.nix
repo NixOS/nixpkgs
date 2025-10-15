@@ -1,11 +1,15 @@
-{ stdenv, fetchgit, }:
+{ stdenv, fetchFromGitea, }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sglauncher";
-  version = "1.0";
-  src = fetchgit {
-    url = "https://codeberg.org/ItsZariep/SGLauncher";
-    hash = "sha256-NEAEqH4r7GG8f41ysbmGEyiWPYrc792rTlmMBp2csmw=";
+  version = "1.1";
+
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "ItsZariep";
+    repo = "SGLauncher";
+    rev = finalAttrs.version;
+    hash = "sha256-zIhutvtNA0UJ8+nMWv2t6hMpO9wkYI2sjSNT78ggn58=";
   };
 
   nativeBuildInputs = [ pkgs.pkg-config ];
@@ -22,6 +26,9 @@ stdenv.mkDerivation {
 
   meta = with pkgs.lib; {
     description = "Simple GTK Launcher";
+    homepage = "https://codeberg.org/ItsZariep/SGLauncher";
     license = licenses.gpl3Only;
-  };
+    maintainers = with lib.maintainers; [ reylak ];
+    mainProgram = "sglauncher";
+  })
 }
