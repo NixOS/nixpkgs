@@ -10361,12 +10361,7 @@ self: super: with self; {
 
   nclib = callPackage ../development/python-modules/nclib { };
 
-  ndcurves = toPythonModule (
-    pkgs.ndcurves.override {
-      python3Packages = self;
-      pythonSupport = true;
-    }
-  );
+  ndcurves = callPackage ../development/python-modules/ndcurves { inherit (pkgs) ndcurves; };
 
   ndeflib = callPackage ../development/python-modules/ndeflib { };
 
