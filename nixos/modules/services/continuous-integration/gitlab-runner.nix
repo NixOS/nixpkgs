@@ -275,7 +275,8 @@ in
       type = types.listOf types.package;
       default = [ ];
       description = ''
-        Extra packages to add to PATH for the gitlab-runner process.
+        Extra packages to add to `PATH` for the `gitlab-runner` process.
+        These packages won't be added to the system, use `environment.systemPackages` for that.
       '';
     };
     services = mkOption {
