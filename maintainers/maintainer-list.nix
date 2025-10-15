@@ -13677,6 +13677,11 @@
     github = "kkoniuszy";
     githubId = 120419423;
   };
+  klaus933 = {
+    name = "Klaus Lungwitz";
+    github = "klaus993";
+    githubId = 18153834;
+  };
   klchen0112 = {
     name = "klchen0112";
     email = "klchen0112@gmail.com";
@@ -22906,6 +22911,11 @@
     github = "SamLukeYes";
     githubId = 12882091;
     name = "Sam L. Yes";
+  };
+  samoht9277 = {
+    name = "Tomas Casagrande";
+    github = "samoht9277";
+    githubId = 53660242;
   };
   samrose = {
     email = "samuel.rose@gmail.com";
