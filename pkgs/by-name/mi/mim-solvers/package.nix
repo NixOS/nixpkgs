@@ -30,6 +30,9 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/machines-in-motion/mim_solvers/commit/796eecf05dd9165dd0795aa562ead17de4f19633.patch";
       hash = "sha256-/OiMzyDVEbpC/Dr/HcguwAdhmbQNxnIRsHAVkX68xqA=";
     })
+    # Fix for crocoddyl 3.1.0
+    # ref. https://github.com/machines-in-motion/mim_solvers/pull/72
+    ./fix-croco-310.patch
   ];
 
   nativeBuildInputs = [
