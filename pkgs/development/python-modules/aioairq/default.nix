@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "aioairq";
-  version = "0.4.6";
+  version = "0.4.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "CorantGmbH";
     repo = "aioairq";
     tag = "v${version}";
-    hash = "sha256-XlOVCDWbcdh8VjNxlEcVNttRN3mw19AXlIIQJ1II144=";
+    hash = "sha256-CliY2MfkRfpOmWM70vDRxG6tY2eoaPiRFHb0qt2Kmyw=";
   };
 
   build-system = [ setuptools ];
