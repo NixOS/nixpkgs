@@ -4,7 +4,7 @@
   fetchFromGitHub,
   m4,
   installShellFiles,
-  util-linux,
+  util-linuxMinimal,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/shutdown.cc \
-      --replace-fail '"/bin/umount"' '"${util-linux}/bin/umount"' \
-      --replace-fail '"/sbin/swapoff"' '"${util-linux}/bin/swapoff"'
+      --replace-fail '"/bin/umount"' '"${util-linuxMinimal}/bin/umount"' \
+      --replace-fail '"/sbin/swapoff"' '"${util-linuxMinimal}/bin/swapoff"'
   '';
 
   nativeBuildInputs = [
