@@ -69,6 +69,7 @@ rustPlatform.buildRustPackage (
 
     passthru = {
       updateScript = ./update.sh;
+      runtime = runtimeDir;
       inherit tree-sitter-grammars;
     };
 
