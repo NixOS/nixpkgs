@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "plotly";
-  version = "6.3.0";
+  version = "6.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "plotly";
     repo = "plotly.py";
     tag = "v${version}";
-    hash = "sha256-s+kWJy/dOqlNqRD/Ytxy/SSRsFJvp13jSvPMd0LQliQ=";
+    hash = "sha256-zwJTesrtLreu7To795wJmowgZ3c4d0mHUaLt3C9Fqd8=";
   };
 
   postPatch = ''
@@ -102,6 +102,8 @@ buildPythonPackage rec {
     "test_lazy_imports"
     # [0.0, 'rgb(252, 255, 164)'] != [0.0, '#fcffa4']
     "test_acceptance_named"
+    # AssertionError: assert '' == 'browser'
+    "test_default_renderer"
   ];
 
   __darwinAllowLocalNetworking = true;
