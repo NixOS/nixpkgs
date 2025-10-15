@@ -8320,13 +8320,12 @@ with pkgs;
   watcherclient = with python313Packages; toPythonApplication python-watcherclient;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
-  inherit (callPackages ../development/libraries/libressl { })
+  inherit (callPackages ../by-name/li/libressl { })
     libressl_3_9
     libressl_4_0
     libressl_4_1
+    libressl_4_2
     ;
-
-  libressl = libressl_4_1;
 
   openssl = openssl_3_5;
 
