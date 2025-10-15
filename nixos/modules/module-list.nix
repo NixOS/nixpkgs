@@ -1054,6 +1054,7 @@
   ./services/monitoring/zabbix-agent.nix
   ./services/monitoring/zabbix-proxy.nix
   ./services/monitoring/zabbix-server.nix
+  ./services/network-filesystems/a2boot.nix
   ./services/network-filesystems/cachefilesd.nix
   ./services/network-filesystems/ceph.nix
   ./services/network-filesystems/davfs2.nix

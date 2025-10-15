@@ -7,7 +7,8 @@
   alsa-lib,
   gpsd,
   gpsdSupport ? false,
-  hamlib,
+  hamlib_4,
+  hamlib ? hamlib_4,
   hamlibSupport ? true,
   perl,
   portaudio,
@@ -15,17 +16,19 @@
   espeak,
   udev,
   udevCheckHook,
+  versionCheckHook,
+  nix-update-script,
   extraScripts ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "direwolf";
   version = "1.7";
 
   src = fetchFromGitHub {
     owner = "wb2osz";
     repo = "direwolf";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-Vbxc6a6CK+wrBfs15dtjfRa1LJDKKyHMrg8tqsF7EX4=";
   };
 
@@ -57,6 +60,7 @@ stdenv.mkDerivation rec {
       perl
       espeak
     ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   preConfigure = lib.optionals (!extraScripts) ''
     echo "" > scripts/CMakeLists.txt
@@ -64,35 +68,39 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace conf/CMakeLists.txt \
-      --replace /etc/udev/rules.d/ $out/lib/udev/rules.d/
+      --replace-fail /etc/udev/rules.d/ $out/lib/udev/rules.d/
     substituteInPlace src/symbols.c \
-      --replace /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
-      --replace /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
+      --replace-fail /usr/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt \
+      --replace-fail /opt/local/share/direwolf/symbols-new.txt $out/share/direwolf/symbols-new.txt
     substituteInPlace src/decode_aprs.c \
-      --replace /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
-      --replace /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
+      --replace-fail /usr/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt \
+      --replace-fail /opt/local/share/direwolf/tocalls.txt $out/share/direwolf/tocalls.txt
     substituteInPlace cmake/cpack/direwolf.desktop.in \
-      --replace 'Terminal=false' 'Terminal=true' \
-      --replace 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
-    substituteInPlace src/dwgpsd.c \
-      --replace 'GPSD_API_MAJOR_VERSION > 11' 'GPSD_API_MAJOR_VERSION > 14'
+      --replace-fail 'Terminal=false' 'Terminal=true' \
+      --replace-fail 'Exec=@APPLICATION_DESKTOP_EXEC@' 'Exec=direwolf'
   ''
   + lib.optionalString extraScripts ''
     patchShebangs scripts/dwespeak.sh
     substituteInPlace scripts/dwespeak.sh \
-      --replace espeak ${espeak}/bin/espeak
+      --replace-fail espeak ${espeak}/bin/espeak
   '';
 
   doInstallCheck = true;
 
-  meta = with lib; {
+  versionCheckProgramArg = [ "-u" ];
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Soundcard Packet TNC, APRS Digipeater, IGate, APRStt gateway";
     homepage = "https://github.com/wb2osz/direwolf/";
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    mainProgram = "direwolf";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       lasandell
       sarcasticadmin
+      pandapip1
     ];
   };
-}
+})
