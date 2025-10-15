@@ -1,11 +1,5 @@
 { stdenv, fetchgit, pkgs, }:
 
-let
-  nixpkgs = fetchTarball "https://github.com/NixOS/nixpkgs/tarball/nixos-24.05";
-
-  pkgs = import nixpkgs { config = {}; overlays = []; };
-in
-
 stdenv.mkDerivation {
   pname = "sglauncher";
   version = "1.0";
