@@ -7,7 +7,7 @@
   python3Packages,
   nix-update-script,
   nixos-icons,
-  withBranding ? true,
+  customLogo ? "${nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png",
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
@@ -20,9 +20,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-J1PZVaEdI6gx/qzsoVW1ehRQ/ZDKzdC1NgIGgBqxQ+0=";
   };
 
-  postPatch = lib.optionalString withBranding ''
-    ln -s ${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png data/custom_128.png
-    ln -s ${nixos-icons}/share/icons/hicolor/256x256/apps/nix-snowflake.png data/custom_256.png
+  postPatch = lib.optionalString (customLogo != null) ''
+    magick ${customLogo} -resize 128x128 data/custom_128.png
+    magick ${customLogo} -resize 256x256 data/custom_256.png
   '';
 
   nativeBuildInputs = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "ARCH=${stdenv.cc.targetPrefix}"
     "RELEASE=1"
-    (lib.optionalString withBranding "LOGO=custom")
+    (lib.optionalString (customLogo != null) "LOGO=custom")
   ];
 
   enableParallelBuilding = true;
@@ -94,6 +94,11 @@ stdenv.mkDerivation (finalAttrs: {
          - Initramfs images (compressed CPIO archives)
          - Kernel images in Linux ARM64 boot format (optionally compressed)
          - Configuration statements
+
+      The default Nix logo can be disabled by setting the `customLogo`
+      argument to `null` or can be replaced by setting `customLogo` to
+      a path to the desired image file which will be resized by
+      ImageMagick to the correct sizes.
     '';
     homepage = "https://github.com/AsahiLinux/m1n1";
     changelog = "https://github.com/AsahiLinux/m1n1/releases/tag/${finalAttrs.src.tag}";

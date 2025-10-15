@@ -12,6 +12,7 @@
   python3Packages,
   openmpi,
   stdenv,
+  pkgs,
 }:
 
 let
@@ -251,6 +252,8 @@ let
       # See: https://rocm.docs.amd.com/en/docs-5.7.1/_images/image.004.png
       # See: https://rocm.docs.amd.com/en/docs-5.7.1/deploy/linux/os-native/package_manager_integration.html
       meta = with self; rec {
+        # eval all pkgsRocm release attrs with
+        # nix-eval-jobs --force-recurse pkgs/top-level/release.nix -I . --select "p: p.pkgsRocm" --no-instantiate
         release-attrPaths = (builtins.fromJSON (builtins.readFile ./release-attrPaths.json)).attrPaths;
         release-packagePlatforms =
           let
@@ -259,7 +262,11 @@ let
             ];
           in
           lib.foldl' (
-            acc: path: lib.recursiveUpdate acc (lib.setAttrByPath (lib.splitString "." path) platforms)
+            acc: path:
+            if lib.hasAttrByPath (lib.splitString "." path) pkgs then
+              lib.recursiveUpdate acc (lib.setAttrByPath (lib.splitString "." path) platforms)
+            else
+              acc
           ) { } self.meta.release-attrPaths;
 
         rocm-developer-tools = symlinkJoin {

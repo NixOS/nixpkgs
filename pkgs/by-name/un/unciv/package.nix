@@ -9,6 +9,7 @@
   libGL,
   libpulseaudio,
   libXxf86vm,
+  nix-update-script,
 }:
 let
   version = "4.18.4";
@@ -65,6 +66,8 @@ stdenv.mkDerivation rec {
   '';
 
   desktopItems = [ desktopItem ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Open-source Android/Desktop remake of Civ V";

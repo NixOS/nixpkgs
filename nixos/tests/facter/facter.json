@@ -1,0 +1,31 @@
+{
+  "version": 1,
+  "system": "x86_64-linux",
+  "virtualisation": "kvm",
+  "hardware": {
+    "bios": {
+      "smbios_version": 520
+    },
+    "cpu": [
+      {
+        "architecture": "x86_64",
+        "vendor_name": "AuthenticAMD",
+        "family": 25,
+        "model": 33
+      }
+    ],
+    "system": {
+      "form_factor": "desktop"
+    }
+  },
+  "smbios": {
+    "bios": {
+      "vendor": "SeaBIOS",
+      "version": "test"
+    },
+    "system": {
+      "manufacturer": "QEMU",
+      "product": "Standard PC"
+    }
+  }
+}

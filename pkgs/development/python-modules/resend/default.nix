@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "resend";
-  version = "2.14.0";
+  version = "2.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "resend";
     repo = "resend-python";
     tag = "v${version}";
-    hash = "sha256-rRaW32hKfbYOKuh5lcPWiq6sD35tUzRS8ZCsyAyy4Mo=";
+    hash = "sha256-BXvy/6LaCQ+fyL6ubWZqIXn/IueE3IEhP07n2oT4cZQ=";
   };
 
   build-system = [ setuptools ];

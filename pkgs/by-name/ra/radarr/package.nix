@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "5.26.2.10099";
+  version = "5.28.0.10274";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,7 +29,7 @@ let
       owner = "Radarr";
       repo = "Radarr";
       tag = "v${version}";
-      hash = "sha256-7tU9oxE1F/dcR5bwb/qHyux3WA6lEwdozLloDgOMVbU=";
+      hash = "sha256-iETtSByI9VjZdVjFHdfDcfSHUGz5Es8K8/HiB99KUqc=";
     };
     postPatch = ''
       mv src/NuGet.config NuGet.Config
@@ -41,12 +41,12 @@ let
       # However, the patches cleanly apply to v5 as well.
       (fetchpatch {
         name = "dotnet8-compatibility";
-        url = "https://github.com/Radarr/Radarr/commit/490891c63de589604bdc3373cfc85068c3826648.patch";
-        hash = "sha256-SCP7MPUkEZLSrls8ouekSXpXdgAJTwNFPirHjaMkQ6s=";
+        url = "https://github.com/Radarr/Radarr/commit/2235823af313ea1f39fd1189b69a75fc5d380c41.patch";
+        hash = "sha256-3YgQV4xc2i5DNWp2KxVz6M5S8n//a/Js7pckGZ06fWc=";
       })
       (fetchpatch {
         name = "dotnet8-darwin-compatibility";
-        url = "https://github.com/Radarr/Radarr/commit/f38a129289c49a242d8901dc2f041f9dc8bfc303.patch";
+        url = "https://github.com/Radarr/Radarr/commit/2a886fb26a70b4d48a4ad08d7ee23e5e4d81f522.patch";
         hash = "sha256-SAMUHqlSj8FPq20wY8NWbRytVZXTPtMXMfM3CoM8kSA=";
       })
     ];

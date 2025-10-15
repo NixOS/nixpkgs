@@ -1715,6 +1715,7 @@ with pkgs;
   androidndkPkgs = androidndkPkgs_27;
   androidndkPkgs_27 = (callPackage ../development/androidndk-pkgs { })."27";
   androidndkPkgs_28 = (callPackage ../development/androidndk-pkgs { })."28";
+  androidndkPkgs_29 = (callPackage ../development/androidndk-pkgs { })."29";
 
   androidsdk = androidenv.androidPkgs.androidsdk;
 
@@ -3434,15 +3435,6 @@ with pkgs;
   xz = callPackage ../tools/compression/xz { };
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
-
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
-    availablePlugins = {
-      # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
-      # Use the attributes here as arguments to `plugins` list
-      goa = callPackage ../applications/networking/mailreaders/mailnag/goa-plugin.nix { };
-    };
-  };
-  mailnagWithPlugins = mailnag.withPlugins (builtins.attrValues mailnag.availablePlugins);
 
   man = man-db;
 
@@ -6036,8 +6028,6 @@ with pkgs;
     })
     mkRubyVersion
     mkRuby
-    ruby_3_1
-    ruby_3_2
     ruby_3_3
     ruby_3_4
     ruby_3_5
@@ -6046,8 +6036,6 @@ with pkgs;
   ruby = ruby_3_3;
   rubyPackages = rubyPackages_3_3;
 
-  rubyPackages_3_1 = recurseIntoAttrs ruby_3_1.gems;
-  rubyPackages_3_2 = recurseIntoAttrs ruby_3_2.gems;
   rubyPackages_3_3 = recurseIntoAttrs ruby_3_3.gems;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
   rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
@@ -6264,9 +6252,9 @@ with pkgs;
       electron-source.electron_38
     else
       electron_38-bin;
-  electron = electron_37;
-  electron-bin = electron_37-bin;
-  electron-chromedriver = electron-chromedriver_37;
+  electron = electron_38;
+  electron-bin = electron_38-bin;
+  electron-chromedriver = electron-chromedriver_38;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
@@ -7076,6 +7064,7 @@ with pkgs;
     botan2
     botan3
     ;
+  botanEsdm = botan3.override { withEsdm = true; };
 
   c-ares = callPackage ../development/libraries/c-ares { };
 
@@ -8231,7 +8220,6 @@ with pkgs;
 
   nss_latest = callPackage ../development/libraries/nss/latest.nix { };
   nss_3_115 = callPackage ../development/libraries/nss/3_115.nix { };
-  nss_3_114 = callPackage ../development/libraries/nss/3_114.nix { };
   nss_esr = callPackage ../development/libraries/nss/esr.nix { };
   nss = nss_esr;
   nssTools = nss.tools;
@@ -8612,8 +8600,6 @@ with pkgs;
 
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
-
-  sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
 
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 
@@ -10973,10 +10959,6 @@ with pkgs;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
-  direwolf = callPackage ../applications/radio/direwolf {
-    hamlib = hamlib_4;
-  };
-
   djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
 
   djview4 = djview;
@@ -11407,8 +11389,6 @@ with pkgs;
   hledger-utils = with python3.pkgs; toPythonApplication hledger-utils;
 
   hpack = haskell.lib.compose.justStaticExecutables haskellPackages.hpack;
-
-  hpmyroom = libsForQt5.callPackage ../applications/networking/hpmyroom { };
 
   hugin = callPackage ../applications/graphics/hugin {
     wxGTK = wxGTK32;
@@ -11888,10 +11868,6 @@ with pkgs;
 
   monotoneViz = callPackage ../applications/version-management/monotone-viz {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
-  };
-
-  monitor = callPackage ../applications/system/monitor {
-    libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
@@ -13141,7 +13117,7 @@ with pkgs;
     withGui = false;
   };
 
-  bitcoin = libsForQt5.callPackage ../applications/blockchains/bitcoin {
+  bitcoin = qt6Packages.callPackage ../applications/blockchains/bitcoin {
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
@@ -13285,10 +13261,6 @@ with pkgs;
   ankiAddons = recurseIntoAttrs (callPackage ../games/anki/addons { });
   anki-bin = callPackage ../games/anki/bin.nix { };
   anki-sync-server = callPackage ../games/anki/sync-server.nix { };
-
-  armagetronad = callPackage ../games/armagetronad { };
-
-  armagetronad-dedicated = callPackage ../games/armagetronad { dedicatedServer = true; };
 
   art = callPackage ../by-name/ar/art/package.nix {
     fftw = fftwSinglePrec;
@@ -14529,7 +14501,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nixComponents = nixVersions.nixComponents_2_31;
+    nixComponents = nixVersions.nixComponents_2_32;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
@@ -14889,10 +14861,6 @@ with pkgs;
 
   libkazv = callPackage ../by-name/li/libkazv/package.nix {
     libcpr = libcpr_1_10_5;
-  };
-
-  tree-from-tags = callPackage ../by-name/tr/tree-from-tags/package.nix {
-    ruby = ruby_3_1;
   };
 
   biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {

@@ -12,7 +12,7 @@
 let
   paraviewFilesUrl = "https://www.paraview.org/files";
   doc = fetchurl {
-    url = "${paraviewFilesUrl}/v6.0/ParaViewGettingStarted-6.0.0.pdf";
+    url = "${paraviewFilesUrl}/v6.0/ParaViewGettingStarted-6.0.1.pdf";
     name = "GettingStarted.pdf";
     hash = "sha256-2ghvb0UXa0Z/YGWzCchB1NKowRdlC/ZQCI3y0tZUdbo=";
   };
@@ -24,11 +24,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "paraview";
-  version = "6.0.0";
+  version = "6.0.1";
 
   src = fetchurl {
     url = "${paraviewFilesUrl}/v${lib.versions.majorMinor finalAttrs.version}/ParaView-v${finalAttrs.version}.tar.xz";
-    hash = "sha256-DuB65jd+Xpd2auv4WOuXWGaKUt8EHzGefJdQN6Y78Yk=";
+    hash = "sha256-XlasevXpJbPP0/q4JHCTPLq8fo/ah+FK9k+ZXWBk6wY=";
   };
 
   # When building paraview with external vtk, we can not infer resource_dir

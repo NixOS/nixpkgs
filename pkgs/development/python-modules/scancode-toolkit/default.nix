@@ -55,6 +55,7 @@
   typecode,
   typecode-libmagic,
   urlpy,
+  writableTmpDirAsHomeHook,
   xmltodict,
   zipp,
 }:
@@ -130,21 +131,18 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (pythonOlder "3.9") [ zipp ];
 
+  nativeBuildInputs = [
+    writableTmpDirAsHomeHook
+  ];
+
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
+  # Pre-genrating license index
   postInstall = ''
-    export HOME=$(mktemp -d)
+    $out/bin/scancode-reindex-licenses
   '';
 
   pythonImportsCheck = [ "scancode" ];
-
-  disabledTestPaths = [
-    # Tests are outdated
-    "src/formattedcode/output_spdx.py"
-    "src/scancode/cli.py"
-  ];
 
   # Takes a long time and doesn't appear to do anything
   dontStrip = true;

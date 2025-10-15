@@ -22,12 +22,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.14.7";
+  version = "0.15.2";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Sf74H2ptZoKkOyqy3JU71B2r2DBdosChiWA0dNpiV0=";
+    hash = "sha256-oH0WVQpq+OOMooV21p2gR/WLDtrf9wdKvOZ5fLtzqPk=";
   };
 
   tui = buildGoModule {
@@ -75,18 +75,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-       # Disable post-install scripts to avoid shebang issues
-       bun install \
-         --filter=opencode \
-         --force \
-         --ignore-scripts \
-         --no-progress
-         # Remove `--frozen-lockfile` and `--production` — they erroneously report the lockfile needs updating even though `bun install` does not change it.
-         # Related to  https://github.com/oven-sh/bun/issues/19088
-         # --frozen-lockfile \
-         # --production
+      # NOTE: Disabling post-install scripts with `--ignore-scripts` to avoid
+      # shebang issues
+      # NOTE: `--linker=hoisted` temporarily disables Bun's isolated installs,
+      # which became the default in Bun 1.3.0.
+      # See: https://bun.com/blog/bun-v1.3#isolated-installs-are-now-the-default-for-workspaces
+      # This workaround is required because the 'yargs' dependency is currently
+      # missing when building opencode. Remove this flag once upstream is
+      # compatible with Bun 1.3.0.
+      bun install \
+        --filter=opencode \
+        --force \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --linker=hoisted \
+        --no-progress \
+        --production
 
       runHook postBuild
     '';
@@ -105,10 +111,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHash =
       {
-        x86_64-linux = "sha256-j6p52NXqKsOiySJO83r3qUvxLs1yt8dPG8q5ClOPLA8=";
-        aarch64-linux = "sha256-gxAwc34PIN1ErVchyoX7Fv/VhPHzxVOC/F6P8hSeO/w=";
-        x86_64-darwin = "sha256-0I6nTjc7gChk2Djv4hFfKMp0wM3ZX57/pCsPVHSDPqk=";
-        aarch64-darwin = "sha256-a/WWhsOP4pZfj5+Vlsyt/adaTTgMt2SlH3UOA+sXNgA=";
+        x86_64-linux = "sha256-kXsLJ/Ck9epH9md6goCj3IYpWog/pOkfxJDYAxI14Fg=";
+        aarch64-linux = "sha256-DHzDyk7BWYgBNhYDlK3dLZglUN7bMiB3acdoU7djbxU=";
+        x86_64-darwin = "sha256-OTEK9SV9IxBHrJlf+F4lI7gF0Gtvik3c7d1mp+4a3Zk=";
+        aarch64-darwin = "sha256-qlLfus/cyrI0HtwVLTjPTdL7OeIYjmH9yoNKa6YNBkg=";
       }
       .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";
