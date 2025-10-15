@@ -133,15 +133,15 @@
   },
   {
     "pname": "Microsoft.DotNet.Arcade.Sdk",
-    "version": "11.0.0-beta.25469.3",
-    "hash": "sha256-OOyYn8tt/lqeZvJ+HzEq2LvvnkO/yLShEzOodLqZBIg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.25469.3/microsoft.dotnet.arcade.sdk.11.0.0-beta.25469.3.nupkg"
+    "version": "11.0.0-beta.25504.3",
+    "hash": "sha256-UkkFqvq5HLl5EY4nhY4x1FvKj7QVlgC1yz25Juv9cOE=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.arcade.sdk/11.0.0-beta.25504.3/microsoft.dotnet.arcade.sdk.11.0.0-beta.25504.3.nupkg"
   },
   {
     "pname": "Microsoft.DotNet.XliffTasks",
-    "version": "11.0.0-beta.25469.3",
-    "hash": "sha256-ZyNid1Ur78TyCAD4524+HgGC8agFPD0l9RuKdu/87ts=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.25469.3/microsoft.dotnet.xlifftasks.11.0.0-beta.25469.3.nupkg"
+    "version": "11.0.0-beta.25504.3",
+    "hash": "sha256-L4iPZRQHMW+YGda7op4orP87OyuXY5+QlpE/EmMoKd4=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/1a5f89f6-d8da-4080-b15f-242650c914a8/nuget/v3/flat2/microsoft.dotnet.xlifftasks/11.0.0-beta.25504.3/microsoft.dotnet.xlifftasks.11.0.0-beta.25504.3.nupkg"
   },
   {
     "pname": "Microsoft.Extensions.Configuration",
@@ -511,9 +511,9 @@
   },
   {
     "pname": "System.CommandLine",
-    "version": "2.0.0-rc.2.25468.104",
-    "hash": "sha256-fqMHo4QbUqZRv0KgdRHIBOlksVs3vwEfAP3ThqZqcLg=",
-    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/2.0.0-rc.2.25468.104/system.commandline.2.0.0-rc.2.25468.104.nupkg"
+    "version": "2.0.0-rc.1.25502.108",
+    "hash": "sha256-O1uciBJ6ig7JWzj/U7N40om77qtBt3fnBkbKSDGJkEU=",
+    "url": "https://pkgs.dev.azure.com/dnceng/9ee6d478-d288-47f7-aacc-f6e6d082ae6d/_packaging/516521bf-6417-457e-9a9c-0a4bdfde03e7/nuget/v3/flat2/system.commandline/2.0.0-rc.1.25502.108/system.commandline.2.0.0-rc.1.25502.108.nupkg"
   },
   {
     "pname": "System.ComponentModel.Composition",
