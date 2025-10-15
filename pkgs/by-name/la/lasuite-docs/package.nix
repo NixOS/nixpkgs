@@ -26,12 +26,12 @@ let
     };
   };
 
-  version = "3.6.0";
+  version = "3.8.0-preprod";
   src = fetchFromGitHub {
     owner = "suitenumerique";
     repo = "docs";
     tag = "v${version}";
-    hash = "sha256-8bD+rBEN0GEQz3tiPEQYmf/mpijPefFmQchGhYkVBVY=";
+    hash = "sha256-3G2pLCg5dME8wZnpO3Ibo4sKwbmwjxqCLYgZUwV9SSw=";
   };
 
   mail-templates = stdenv.mkDerivation {
