@@ -13,7 +13,6 @@
   josepy,
   parsedatetime,
   pyrfc3339,
-  pytz,
   setuptools,
   dialog,
   gnureadline,
@@ -25,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "4.1.1";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-nlNjBbXd4ujzVx10+UwqbXliuLVVf+UHR8Dl5CQzsZo=";
+    hash = "sha256-jKhdclLBeWv6IxIZQtD8VWbSQ3SDZePA/kTxjiBXJ4o=";
   };
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
@@ -48,8 +47,6 @@ buildPythonPackage rec {
     josepy
     parsedatetime
     pyrfc3339
-    pytz
-    setuptools # for pkg_resources
   ];
 
   buildInputs = [
