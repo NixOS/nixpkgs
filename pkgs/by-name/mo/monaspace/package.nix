@@ -3,7 +3,6 @@
   stdenvNoCC,
   fetchFromGitHub,
 }:
-
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
   version = "1.301";
@@ -14,11 +13,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-8tPwm92ZtaXL9qeDL+ay9PdXLUBBsspdk7/0U8VO0Tg=";
   };
-
-  outputs = [
-    "out"
-    "woff"
-  ];
 
   installPhase = ''
     # Install TrueType fonts
