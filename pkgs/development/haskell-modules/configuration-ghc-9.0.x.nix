@@ -135,13 +135,10 @@ self: super: {
   ghc-lib = doDistribute self.ghc-lib_9_2_8_20230729;
 
   # Test suite sometimes segfaults with GHC 9.0.1 and 9.0.2
-  # https://github.com/ekmett/reflection/issues/51
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141
+  # due to a GHC bug that has been fixed for GHC >= 9.2.2
+  # https://github.com/ekmett/reflection/issues/51    krank:ignore-line
+  # https://gitlab.haskell.org/ghc/ghc/-/issues/21141 krank:ignore-line
   reflection = dontCheck super.reflection;
-
-  # Disable tests pending resolution of
-  # https://github.com/Soostone/retry/issues/71
-  retry = dontCheck super.retry;
 
   ghc-api-compat = unmarkBroken super.ghc-api-compat;
 
@@ -155,12 +152,6 @@ self: super: {
 
   # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
   aeson = dontCheck super.aeson;
-
-  # We use a GHC patch to support the fix for https://github.com/fpco/inline-c/issues/127
-  # which means that the upstream cabal file isn't allowed to add the flag.
-  inline-c-cpp =
-    (if isDarwin then appendConfigureFlags [ "--ghc-option=-fcompact-unwind" ] else x: x)
-      super.inline-c-cpp;
 
   # 2022-05-31: weeder 2.4.* requires GHC 9.2
   weeder = doDistribute self.weeder_2_3_1;

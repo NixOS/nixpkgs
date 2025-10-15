@@ -58,7 +58,7 @@ stdenv.mkDerivation (
     # Non-NixOS git needs cert
     GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-    # Fixes https://github.com/commercialhaskell/stack/issues/2358
+    # Fixes https://github.com/commercialhaskell/stack/issues/2358 krank:ignore-line
     LANG = "en_US.UTF-8";
 
     preferLocalBuild = true;

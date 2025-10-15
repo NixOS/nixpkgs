@@ -40,6 +40,8 @@ default-package-overrides:
   # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
   - liquidhaskell == 0.9.10.*
   - liquidhaskell-boot == 0.9.10.*
+  # Needs to match microlens == 0.4.* in Stackage LTS 24
+  - microlens-pro < 0.2.0.4
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
@@ -68,13 +70,13 @@ extra-packages:
   - ghc-exactprint == 1.7.*             # 2025-03-09: needed for GHC == 9.6
   - ghc-exactprint == 1.8.*             # 2024-05-20: needed for GHC == 9.8
   - ghc-exactprint == 1.9.*             # 2024-08-27: needed for GHC == 9.10
-  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 8.10, 9.0
+  - ghc-lib == 9.2.*                    # 2022-02-17: preserve for GHC 9.0
   - ghc-lib == 9.6.*                    # 2022-02-17: preserve for GHC 9.2, 9.4
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
-  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
+  - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 9.0
   - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.2, 9.4
   - ghc-lib-parser == 9.8.*            # 2024-12-26: preserve for GHC 9.6, 9.8
-  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
+  - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 9.0
   - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.2, 9.4
   - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
@@ -143,14 +145,12 @@ package-maintainers:
     - generics-sop
     - ghcjs-base
     - ghcjs-dom
-    - ghcjs-dom-hello
     - ghcjs-dom-javascript
     - ghcjs-dom-jsaddle
     - haveibeenpwned
     - jsaddle
     - jsaddle-clib
     - jsaddle-dom
-    - jsaddle-hello
     - jsaddle-warp
     - jsaddle-wkwebview
     - json-sop
@@ -380,6 +380,11 @@ package-maintainers:
     - amazonka
     - libssh2
     - sitemap
+    - ihp-openai
+    - ihp
+    - ihp-ide
+    - ihp-migrate
+    - ihp-postgresql-simple-extra
   ncfavier:
     - Agda
     - agda2hs
@@ -695,7 +700,6 @@ unsupported-platforms:
   Codec-Image-DevIL:                            [ platforms.darwin ] # depends on mesa
   coinor-clp:                                   [ aarch64-linux ] # aarch64-linux is not supported by required system dependency clp
   cut-the-crap:                                 [ platforms.darwin ]
-  emanote:                                      [ x86_64-darwin ] # Depends on stork which is broken on macOS sdk < 10.14
   essence-of-live-coding-PortMidi:              [ platforms.darwin ]
   Euterpea:                                     [ platforms.darwin ]
   follow-file:                                  [ platforms.darwin ]
@@ -932,7 +936,9 @@ dont-distribute-packages:
   - yices-painless
 
   # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-hello
   - jsaddle-webkit2gtk
+  - ghcjs-dom-hello
   - gi-javascriptcore4
   - gi-soup2
   - gi-webkit2

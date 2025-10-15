@@ -81,12 +81,9 @@ in
       ghc948 = callPackage ../development/compilers/ghc/9.4.8.nix {
         bootPkgs =
           # Building with 9.2 is broken due to
-          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914
+          # https://gitlab.haskell.org/ghc/ghc/-/issues/21914 krank:ignore-line
           bb.packages.ghc902Binary;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
@@ -94,9 +91,6 @@ in
       ghc967 = callPackage ../development/compilers/ghc/9.6.7.nix {
         bootPkgs = bb.packages.ghc948;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
@@ -104,9 +98,6 @@ in
       ghc984 = callPackage ../development/compilers/ghc/9.8.4.nix {
         bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc948 else bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
@@ -114,18 +105,12 @@ in
       ghc9102 = callPackage ../development/compilers/ghc/9.10.2.nix {
         bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
       ghc9103 = callPackage ../development/compilers/ghc/9.10.3.nix {
         bootPkgs = if stdenv.buildPlatform.isi686 then bb.packages.ghc967 else bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
@@ -135,9 +120,6 @@ in
           # No suitable bindist packaged yet
           bb.packages.ghc9103;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
@@ -146,9 +128,6 @@ in
           # No suitable bindist packaged yet
           bb.packages.ghc9103;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };
@@ -156,9 +135,6 @@ in
       ghcHEAD = callPackage ../development/compilers/ghc/head.nix {
         bootPkgs = bb.packages.ghc984Binary;
         inherit (buildPackages.python3Packages) sphinx;
-        # Need to use apple's patched xattr until
-        # https://github.com/xattr/xattr/issues/44 and
-        # https://github.com/xattr/xattr/issues/55 are solved.
         inherit (buildPackages.darwin) xattr autoSignDarwinBinariesHook;
         inherit buildTargetLlvmPackages llvmPackages;
       };

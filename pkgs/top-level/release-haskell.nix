@@ -254,9 +254,10 @@ let
         cachix
         # carp broken on 2024-04-09
         changelog-d
-        cornelis
         cedille
         client-ip-echo
+        cornelis
+        codd
         darcs
         dconf2nix
         dhall
@@ -270,7 +271,6 @@ let
         diagrams-builder
         echidna
         elm2nix
-        emanote
         fffuu
         futhark
         ghcid
@@ -316,7 +316,6 @@ let
         nix-output-monitor
         nix-script
         nix-tree
-        nixfmt-classic
         nixfmt
         nota
         nvfetcher

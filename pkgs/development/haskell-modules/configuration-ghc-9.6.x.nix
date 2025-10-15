@@ -148,6 +148,9 @@ in
   # Tests require nothunks < 0.3 (conflicting with Stackage) for GHC < 9.8
   aeson = dontCheck super.aeson;
 
+  # Tests require skeletest which no longer supports GHC 9.6
+  toml-reader = dontCheck super.toml-reader;
+
   # Apply patch from PR with mtl-2.3 fix.
   ConfigFile = overrideCabal (drv: {
     editedCabalFile = null;
@@ -200,7 +203,6 @@ in
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_5_20250214;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
   haddock-library = doJailbreak super.haddock-library;
-  apply-refact = addBuildDepend self.data-default-class super.apply-refact;
   inherit
     (
       let
@@ -211,23 +213,26 @@ in
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        haskell-language-server = allowInconsistentDependencies (
-          addBuildDepends [ self.retrie self.floskell ] super.haskell-language-server
-        );
-        ormolu = doDistribute self.ormolu_0_7_4_0;
-        fourmolu = doDistribute (dontCheck (doJailbreak self.fourmolu_0_15_0_0));
-        hlint = doDistribute self.hlint_3_8;
-        stylish-haskell = self.stylish-haskell_0_14_6_0;
-        retrie = doJailbreak (unmarkBroken super.retrie);
+        apply-refact = addBuildDepend self.data-default-class super.apply-refact;
         floskell = doJailbreak super.floskell;
+        fourmolu = dontCheck (doJailbreak self.fourmolu_0_15_0_0);
+        haskell-language-server = addBuildDepends [
+          self.retrie
+          self.floskell
+        ] super.haskell-language-server;
+        hlint = self.hlint_3_8;
+        ormolu = self.ormolu_0_7_4_0;
+        retrie = doJailbreak (unmarkBroken super.retrie);
+        stylish-haskell = self.stylish-haskell_0_14_6_0;
       }
     )
-    retrie
+    apply-refact
     floskell
-    haskell-language-server
     fourmolu
-    ormolu
+    haskell-language-server
     hlint
+    ormolu
+    retrie
     stylish-haskell
     ;
 }

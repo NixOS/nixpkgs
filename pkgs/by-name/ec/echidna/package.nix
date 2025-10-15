@@ -96,7 +96,7 @@ haskellPackages.mkDerivation rec {
     makeWrapper
   ];
 
-  preConfigure = ''
+  prePatch = ''
     hpack
   '';
 
