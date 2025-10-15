@@ -6,7 +6,6 @@
   pycryptodome,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "aioairq";
   version = "0.4.7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CorantGmbH";
@@ -30,9 +27,6 @@ buildPythonPackage rec {
     aiohttp
     pycryptodome
   ];
-
-  # Module has no tests
-  #doCheck = false;
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -49,6 +43,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library to retrieve data from air-Q devices";
     homepage = "https://github.com/CorantGmbH/aioairq";
+    changelog = "https://github.com/CorantGmbH/aioairq/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };
