@@ -238,7 +238,7 @@ with haskellLib;
             preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
           }) lself.cabal-add_0_1;
           # Need a newer version of extensions to be compatible with the newer Cabal
-          extensions = doJailbreak lself.extensions_0_1_0_3;
+          extensions = doJailbreak lself.extensions_0_1_1_0;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
           # because some packages, like ormolu, need a newer Cabal version.
           # ghc-paths is special because it depends on Cabal for building
@@ -869,12 +869,7 @@ with haskellLib;
     sha256 = "sha256-EAyTVkAqCvJ0lRD0+q/htzBJ8iD5qP47j5i2fKhRrlw=";
   }) super.xml-picklers;
 
-  # 2025-08-03: Too strict bounds on open-browser, data-default and containers
-  # https://github.com/lierdakil/pandoc-crossref/issues/478 krank:ignore-line
   pandoc-crossref = lib.pipe super.pandoc-crossref [
-    (warnAfterVersion "0.3.21")
-    doJailbreak
-
     # We are still using pandoc == 3.7.*
     (appendPatch (
       lib.warnIf (lib.versionAtLeast self.pandoc.version "3.8")
@@ -1638,8 +1633,8 @@ with haskellLib;
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  hledger_1_50_1 = super.hledger_1_50_1.override {
-    hledger-lib = self.hledger-lib_1_50_1;
+  hledger_1_50_2 = super.hledger_1_50_2.override {
+    hledger-lib = self.hledger-lib_1_50_2;
   };
 
   # it wants to build a statically linked binary by default
@@ -1802,7 +1797,7 @@ with haskellLib;
   # Fails with encoding problems, likely needs locale data.
   # Test can be executed by adding which to testToolDepends and
   # $PWD/dist/build/haskeline-examples-Test to $PATH.
-  haskeline_0_8_4_0 = doDistribute (dontCheck super.haskeline_0_8_4_0);
+  haskeline_0_8_4_1 = doDistribute (dontCheck super.haskeline_0_8_4_1);
 
   # Test suite fails to compile https://github.com/agrafix/Spock/issues/177
   Spock = dontCheck super.Spock;
@@ -3131,12 +3126,6 @@ with haskellLib;
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   chimera = warnAfterVersion "0.4.1.0" (doJailbreak super.chimera);
-
-  # 2025-09-03: allow QuickCheck 2.15, containers 0.7, filepath 1.5, witch 1.3
-  hevm = lib.pipe super.hevm [
-    (warnAfterVersion "0.55.1")
-    doJailbreak
-  ];
 
   # 2025-04-09: jailbreak to allow tasty-quickcheck >= 0.11
   bzlib = warnAfterVersion "0.5.2.0" (doJailbreak super.bzlib);
