@@ -1,0 +1,21 @@
+{
+  "version": "0.55.0",
+  "openjdk": {
+    "owner": "ibmruntimes",
+    "repo": "openj9-openjdk-jdk25",
+    "tag": "openj9-0.55.0",
+    "hash": "sha256-hZXlmebTYwfkBNbM0q7DhfRSNKvUUplWFcwp/nXXhgk="
+  },
+  "openj9": {
+    "owner": "eclipse-openj9",
+    "repo": "openj9",
+    "tag": "openj9-0.55.0",
+    "hash": "sha256-PlSLDCSOfH4pnV6cPzaOjn6X9wHtY8YMh9ClHpr0nlQ="
+  },
+  "omr": {
+    "owner": "eclipse-openj9",
+    "repo": "openj9-omr",
+    "tag": "openj9-0.55.0",
+    "hash": "sha256-hFW91Zy9hj6BW+4g9Ept4Z8fGLgxIpJARBFbTmKjokQ="
+  }
+}
