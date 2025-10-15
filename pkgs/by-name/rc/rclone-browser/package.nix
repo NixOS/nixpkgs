@@ -4,8 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
-  wrapQtAppsHook,
-  qtbase,
+  qt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,12 +28,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.10" ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qt5.qtbase ];
 
   meta = {
     changelog = "https://github.com/kapitainsky/RcloneBrowser/blob/${src.tag}/CHANGELOG.md";

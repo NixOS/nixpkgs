@@ -12366,8 +12366,6 @@ with pkgs;
 
   rclone = callPackage ../applications/networking/sync/rclone { };
 
-  rclone-browser = libsForQt5.callPackage ../applications/networking/sync/rclone/browser.nix { };
-
   reaper = callPackage ../applications/audio/reaper {
     jackLibrary = libjack2; # Another option is "pipewire.jack".
     ffmpeg = ffmpeg_4-headless;
