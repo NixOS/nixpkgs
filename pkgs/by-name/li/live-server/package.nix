@@ -33,7 +33,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/lomirus/live-server/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     mainProgram = "live-server";
-    maintainers = [ lib.maintainers.philiptaron ];
+    maintainers = with lib.maintainers; [
+      philiptaron
+      doronbehar
+    ];
     platforms = lib.platforms.unix;
   };
 })
