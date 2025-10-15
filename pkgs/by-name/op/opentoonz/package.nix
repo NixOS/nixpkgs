@@ -24,13 +24,13 @@
 }:
 let
   libtiff-ver = "4.0.3"; # The version in thirdparty/tiff-*
-  opentoonz-ver = "1.7.1";
+  opentoonz-ver = "1.7.1.1";
 
   src = fetchFromGitHub {
     owner = "opentoonz";
     repo = "opentoonz";
     rev = "v${opentoonz-ver}";
-    hash = "sha256-5iXOvh4QTv+G0fjEHU62u7QCee+jbvKhK0+fQXbdJis=";
+    hash = "sha256-tyRZoOBW2wJgNc0+J/LeQgOJUtQATkyA6KWLKkztujU=";
   };
 
   opentoonz-opencv = opencv.override {
