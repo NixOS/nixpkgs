@@ -104,6 +104,15 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/raboof/samba/-/commit/9995c5c234ece6888544cdbe6578d47e83dea0b5.patch";
       hash = "sha256-TVKK/7wGsfP1pVf8o1NwazobiR8jVJCCMj/FWji3f2A=";
     })
+    (fetchpatch {
+      name = "CVE-2025-9640_CVE-2025-10230.patch";
+      url = "https://www.samba.org/samba/ftp/patches/security/samba-4.21.9-security-2025-10-15.patch";
+      hash = "sha256-AFYffcep1EgdkjOkQUki8XCBLgrWeTqVbfXL5gVPcaY=";
+      excludes = [
+        # does not exist in 4.20.x
+        "selftest/knownfail.d/samba4.nbt.wins.wins_bad_names"
+      ];
+    })
   ];
 
   nativeBuildInputs = [
