@@ -15,8 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ pkgs.pkg-config ];
   buildInputs = [ pkgs.gtk3 ];
 
-  buildPhase = ''
+  preBuild = ''
     cd src
+  '';
+
+  buildPhase = ''
     ${pkgs.gnumake}/bin/make sglauncher SHELL=${pkgs.bash}/bin/bash
   '';
   installPhase = ''
