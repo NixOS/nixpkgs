@@ -167,4 +167,9 @@ in
       } include/arch/loongarch64/opensslconf.h
     '';
   };
+
+  libressl_4_2 = generic {
+    version = "4.2.0";
+    hash = "sha256-D326RNfLjfjVPyz78ZVSVLwSjgCJWV8aui+s+u6ECLI=";
+  };
 }
