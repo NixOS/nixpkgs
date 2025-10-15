@@ -1001,8 +1001,6 @@ self: super: with self; {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
-  astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
-
   astropy-healpix = callPackage ../development/python-modules/astropy-healpix { };
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };

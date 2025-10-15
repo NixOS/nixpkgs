@@ -87,6 +87,7 @@ mapAliases {
   argon2_cffi = argon2-cffi; # added 2022-05-09
   arnparse = throw "arnparse has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   APScheduler = apscheduler; # added 2023-02-19
+  astropy-extension-helpers = extension-helpers; # Added 2025-10-15
   async_generator = async-generator; # added 2023-08-08
   async_stagger = async-stagger; # added 2023-08-08
   asyncio-mqtt = throw "asyncio-mqtt has been replaced by aiomqtt, which is not API compatible."; # added 2024-07-07
