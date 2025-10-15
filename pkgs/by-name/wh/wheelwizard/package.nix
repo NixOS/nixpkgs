@@ -25,7 +25,7 @@ buildDotnetModule rec {
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
-  dotnet-tools = [];
+  dotnet-tools = [ ];
   nugetDeps = ./deps.json;
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildDotnetModule rec {
     mkdir -p $out/bin
 
     makeWrapper $out/lib/${pname}/WheelWizard $out/bin/WheelWizard \
-      --prefix PATH : ${lib.makeBinPath [dotnet-runtime]}
+      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
 
     install -D $desktopItem/share/applications/* -t $out/share/applications
 
@@ -55,7 +55,7 @@ buildDotnetModule rec {
     exec = "WheelWizard";
     comment = "WheelWizard, Retro Rewind Launcher";
     desktopName = "Wheel Wizard";
-    categories = ["Utility"];
+    categories = [ "Utility" ];
   };
 
   meta = with lib; {
@@ -64,5 +64,6 @@ buildDotnetModule rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     mainProgram = "bin/WheelWizard";
+    maintainers = with maintainers; [ DerHalbGrieche ];
   };
 }
