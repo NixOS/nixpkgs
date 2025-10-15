@@ -26,7 +26,7 @@ let
     set:
     if builtins.isAttrs set then
       if (set.type or "") == "derivation" then
-        set // { meta = builtins.removeAttrs (set.meta or { }) [ "maintainers" ]; }
+        set // { meta = removeAttrs (set.meta or { }) [ "maintainers" ]; }
       else
         pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else
@@ -43,7 +43,7 @@ rec {
     }
   );
 
-  nixpkgs = builtins.removeAttrs (removeMaintainers (
+  nixpkgs = removeAttrs (removeMaintainers (
     import ../pkgs/top-level/release.nix {
       inherit supportedSystems;
       nixpkgs = nixpkgsSrc;

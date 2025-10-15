@@ -116,7 +116,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         Type = "simple";
-        ExecStart = "${lib.getExe cfg.package} server --config ${cfg.configFile} --workdir ${cfg.workdir} --host ${cfg.settings.host} --port ${builtins.toString cfg.settings.port}";
+        ExecStart = "${lib.getExe cfg.package} server --config ${cfg.configFile} --workdir ${cfg.workdir} --host ${cfg.settings.host} --port ${toString cfg.settings.port}";
         Restart = "on-failure";
         RestartSec = "5s";
         ConfigurationDirectory = [ "artalk" ];

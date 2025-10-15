@@ -1044,7 +1044,7 @@ in
                   serviceConfig = serviceDirectives containerConfig;
                   unitConfig.RequiresMountsFor =
                     lib.optional (!containerConfig.ephemeral) "${stateDirectory}/%i"
-                    ++ builtins.map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
+                    ++ map (d: if d.hostPath != null then d.hostPath else d.mountPoint) (
                       builtins.attrValues cfg.bindMounts
                     );
                   environment.root =
