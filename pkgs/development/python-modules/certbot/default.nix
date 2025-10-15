@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   python,
   runCommand,
@@ -19,6 +20,7 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  writeShellScriptBin,
 }:
 
 buildPythonPackage rec {
@@ -59,6 +61,11 @@ buildPythonPackage rec {
     python-dateutil
     pytestCheckHook
     pytest-xdist
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (writeShellScriptBin "sw_vers" ''
+      echo 'ProductVersion: 13.0'
+    '')
   ];
 
   pytestFlags = [
@@ -70,6 +77,8 @@ buildPythonPackage rec {
     # network access
     "test_lock_order"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 
