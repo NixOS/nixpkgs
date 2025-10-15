@@ -119,6 +119,27 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/no-osmesa.patch
   ];
 
+  # Please remove CMake patches after the upstream issue gets resolved.
+  # https://github.com/bambulab/BambuStudio/issues/8415
+  postPatch = ''
+    substituteInPlace src/{admesh,boost,clipper,miniz,glu-libtess,Shiny,semver,imgui,imguizmo}/CMakeLists.txt \
+      --replace-fail \
+      'cmake_minimum_required(VERSION 2.8.12)' \
+      'cmake_minimum_required(VERSION 3.5)'
+
+    substituteInPlace src/{minilzo,qhull}/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6)' \
+      'cmake_minimum_required(VERSION 3.5)'
+
+    substituteInPlace cmake/modules/FindOpenVDB.cmake --replace-fail \
+      'cmake_minimum_required(VERSION 3.3)' \
+      'cmake_minimum_required(VERSION 3.5)'
+
+    substituteInPlace src/libigl/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.0)' \
+      'cmake_minimum_required(VERSION 3.5)'
+  '';
+
   doCheck = true;
   checkInputs = [ gtest ];
 
