@@ -7,6 +7,7 @@
   m4,
   autoreconfHook,
   help2man,
+  gettext,
 }:
 
 # Avoid 'fetchpatch' to allow 'flex' to be used as a possible 'gcc'
@@ -51,7 +52,11 @@ stdenv.mkDerivation rec {
     autoreconfHook
     help2man
   ];
-  buildInputs = [ bison ];
+  # TODO: instead of adding gettext, maybe just enable strictDeps?
+  # gettext on cygwin includes libintl, which is found through
+  # nativeBuildInputs, but if it's not in buildInputs it's unable to find
+  # cygintl-8.dll.
+  buildInputs = [ bison ] ++ lib.optional stdenv.hostPlatform.isCygwin gettext;
   propagatedBuildInputs = [ m4 ];
 
   preConfigure = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -59,7 +64,11 @@ stdenv.mkDerivation rec {
     export ac_cv_func_realloc_0_nonnull=yes
   '';
 
-  postConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isCygwin) ''
+  configureFlags =
+    # from flex.cygport
+    lib.optional stdenv.hostPlatform.isCygwin "--disable-shared";
+
+  postConfigure = lib.optionalString (stdenv.hostPlatform.isDarwin) ''
     sed -i Makefile -e 's/-no-undefined//;'
   '';
 
