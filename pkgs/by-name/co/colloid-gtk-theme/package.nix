@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome-themes-extra,
   gtk-engine-murrine,
   jdupes,
   sassc,
@@ -69,10 +68,6 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
     nativeBuildInputs = [
       jdupes
       sassc
-    ];
-
-    buildInputs = [
-      gnome-themes-extra
     ];
 
     propagatedUserEnvPkgs = [
