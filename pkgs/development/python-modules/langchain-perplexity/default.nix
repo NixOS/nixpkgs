@@ -46,6 +46,9 @@ buildPythonPackage rec {
     # Each component release requests the exact latest core.
     # That prevents us from updating individual components.
     "langchain-core"
+    # TODO: remove next two after 1.0.0 release
+    "openai"
+    "perplexity"
   ];
 
   nativeCheckInputs = [
