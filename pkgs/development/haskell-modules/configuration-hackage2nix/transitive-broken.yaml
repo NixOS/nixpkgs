@@ -294,6 +294,7 @@ dont-distribute-packages:
  - bits-extra
  - bittorrent
  - bla
+ - blacktip
  - blakesum-demo
  - Blammo
  - Blammo-wai
@@ -458,6 +459,8 @@ dont-distribute-packages:
  - claferIG
  - claferwiki
  - clash
+ - clash-ghc
+ - clash-shake
  - classify-frog
  - classy-effects
  - classy-effects-th
@@ -648,6 +651,7 @@ dont-distribute-packages:
  - cypher
  - dahdit-audio
  - dahdit-midi
+ - dahdit-network
  - dahdit-test
  - daino
  - Dangerous
@@ -906,6 +910,7 @@ dont-distribute-packages:
  - exference
  - exist
  - exist-instances
+ - expand
  - expat-enumerator
  - expiring-containers
  - explicit-iomodes-bytestring
@@ -1930,6 +1935,7 @@ dont-distribute-packages:
  - karakuri
  - katip-rollbar
  - keelung
+ - keera-hails-i18n
  - keera-hails-mvc-environment-gtk
  - keera-hails-mvc-model-lightmodel
  - keera-hails-mvc-model-protectedmodel
@@ -2062,6 +2068,7 @@ dont-distribute-packages:
  - librato
  - libxml-enumerator
  - lifted-base-tf
+ - lifted-stm
  - lightning-haskell
  - lightstep-haskell
  - lighttpd-conf
@@ -2077,6 +2084,7 @@ dont-distribute-packages:
  - linnet-conduit
  - linux-ptrace
  - lio-eci11
+ - lion
  - liquid-base
  - liquid-bytestring
  - liquid-containers
@@ -2273,6 +2281,7 @@ dont-distribute-packages:
  - mole
  - monad-connect
  - monad-exception
+ - monad-finally
  - monad-http
  - monad-state
  - monad-stlike-stm
@@ -2478,6 +2487,7 @@ dont-distribute-packages:
  - oath
  - oauth2-jwt-bearer
  - obdd
+ - oberon0
  - obj
  - objectid
  - objective
@@ -3259,7 +3269,9 @@ dont-distribute-packages:
  - snaplet-stripe
  - snaplet-tasks
  - snaplet-wordpress
+ - snappy-framing
  - snappy-iteratee
+ - snappy-lazy
  - sndfile-enumerators
  - sneakyterm
  - sneathlane-haste
@@ -3459,6 +3471,8 @@ dont-distribute-packages:
  - telegram-raw-api
  - ten-lens
  - ten-unordered-containers
+ - tensorflow-records
+ - tensorflow-records-conduit
  - terminal-text
  - terrahs
  - test-sandbox-compose
