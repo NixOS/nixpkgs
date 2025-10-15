@@ -33,19 +33,23 @@
 
 buildPythonPackage rec {
   pname = "instructor";
-  version = "1.10.0";
+  version = "1.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "jxnl";
+    owner = "567-labs";
     repo = "instructor";
-    tag = version;
-    hash = "sha256-vknPfRHyLoLo2838p/fbjrqyaBORZzLp9+fN98yVDz0=";
+    tag = "v${version}";
+    hash = "sha256-VWFrMgfe92bHUK1hueqJLHQ7G7ATCgK7wXr+eqrVWcw=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "jiter"
+    "openai"
+    "rich"
+  ];
 
   dependencies = [
     aiohttp
@@ -79,6 +83,7 @@ buildPythonPackage rec {
     "successfully"
     "test_mode_functions_deprecation_warning"
     "test_partial"
+    "test_provider_invalid_type_raises_error"
 
     # Requires unpackaged `vertexai`
     "test_json_preserves_description_of_non_english_characters_in_json_mode"
