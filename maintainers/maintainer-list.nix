@@ -8,7 +8,7 @@
      githubId = your-github-id;
 
      # Optional
-
+     email =  "address@example.org";
      matrix = "@user:example.org";
      keys = [{
        fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
