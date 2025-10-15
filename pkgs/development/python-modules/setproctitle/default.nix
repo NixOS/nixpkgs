@@ -5,6 +5,7 @@
   setuptools,
   pytestCheckHook,
   procps,
+  stdenv,
 }:
 
 buildPythonPackage rec {
@@ -25,6 +26,9 @@ buildPythonPackage rec {
     pytestCheckHook
     procps
   ];
+
+  # Setting the process title fails on macOS in the Nix builder environment (regardless of sandboxing)
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_setproctitle_darwin" ];
 
   pythonImportsCheck = [ "setproctitle" ];
 
