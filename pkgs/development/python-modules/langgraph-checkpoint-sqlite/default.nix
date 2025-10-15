@@ -79,6 +79,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "checkpointsqlite==";
+      ignoredVersions = "[0-9]+\.?(a|dev|rc)[0-9]+$";
     };
   };
 

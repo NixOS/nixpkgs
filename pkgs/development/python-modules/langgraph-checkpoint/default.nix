@@ -68,6 +68,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "checkpoint==";
+      ignoredVersions = "[0-9]+\.?(a|dev|rc)[0-9]+$";
     };
   };
 
