@@ -189,12 +189,12 @@ in
         LogDirectoryMode = "0755";
         StateDirectory = [
           "glusterd"
-          "glusterd/glusterd/hooks"
+          "glusterd/hooks"
 
           # `glusterfind` needs dirs that upstream installs at `make install` phase
           # https://github.com/gluster/glusterfs/blob/v3.10.2/tools/glusterfind/Makefile.am#L16-L17
           "glusterd/glusterfind/.keys"
-          "glusterd/glusterd/hooks/1/delete/post"
+          "glusterd/hooks/1/delete/post"
         ];
       };
     };
