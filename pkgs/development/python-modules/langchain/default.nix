@@ -131,6 +131,9 @@ buildPythonPackage rec {
     # AssertionError: (failed string match due to terminal control chars in output)
     # https://github.com/langchain-ai/langchain/issues/32150
     "test_filecallback"
+    # Requires access to langchain api
+    "test_deduplication"
+    "test_indexing_force_update"
   ];
 
   disabledTestPaths = [
