@@ -51,20 +51,17 @@
 
 buildPythonPackage rec {
   pname = "datalad";
-  version = "1.2.1";
+  version = "1.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "datalad";
     repo = "datalad";
     tag = version;
-    hash = "sha256-QcKhMiJNlETlxmRoPwKKGYK7zKbJ0pQpbRZDyJ+yrN0=";
+    hash = "sha256-OjWOWdfAQoCQzc2EH5hBhJ3G/Z62U9oRgv8tp23L/Qw=";
   };
 
   postPatch = ''
-    # remove after release with https://github.com/datalad/datalad/commit/d8eac5682d794b2460d732a2c7637acefecfeb82
-    substituteInPlace datalad/distribution/create_sibling.py \
-      --replace-fail "/bin/ls" "${coreutils}/bin/ls"
     # Remove vendorized versioneer.py
     rm versioneer.py
   '';
