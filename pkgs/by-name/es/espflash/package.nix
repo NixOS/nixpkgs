@@ -9,14 +9,14 @@
   openssl,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "espflash";
   version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espflash";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Ia7o2u7egBTlzQAWnME6+/8V+5Go70wwXi/nJLKbGZM=";
   };
 
@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Serial flasher utility for Espressif SoCs and modules based on esptool.py";
     homepage = "https://github.com/esp-rs/espflash";
-    changelog = "https://github.com/esp-rs/espflash/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/esp-rs/espflash/blob/v${finalAttrs.version}/CHANGELOG.md";
     mainProgram = "espflash";
     license = with lib.licenses; [
       mit # or
@@ -57,4 +57,4 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [ matthiasbeyer ];
   };
-}
+})
