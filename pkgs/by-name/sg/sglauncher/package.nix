@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [ pkgs.gtk3 ];
 
   buildPhase = ''
-    cd ./src
+    cd src
     ${pkgs.gnumake}/bin/make sglauncher SHELL=${pkgs.bash}/bin/bash
   '';
   installPhase = ''
