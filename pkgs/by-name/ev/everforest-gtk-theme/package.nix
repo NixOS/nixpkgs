@@ -35,11 +35,11 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Everforest colour palette for GTK";
     homepage = "https://github.com/Fausto-Korpsvart/Everforest-GTK-Theme";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jn-sena ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ jn-sena ];
+    platforms = lib.platforms.unix;
   };
 }
