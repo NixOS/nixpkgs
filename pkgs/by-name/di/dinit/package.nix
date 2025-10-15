@@ -49,7 +49,10 @@ stdenv.mkDerivation rec {
     description = "Service manager / supervision system, which can (on Linux) also function as a system manager and init";
     homepage = "https://davmac.org/projects/dinit";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aanderse ];
+    maintainers = with lib.maintainers; [
+      aanderse
+      lillecarl
+    ];
     platforms = lib.platforms.unix;
   };
 }
