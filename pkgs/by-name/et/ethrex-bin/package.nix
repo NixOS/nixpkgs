@@ -4,15 +4,9 @@ let
   version = "3.0.0";
 
   urls = {
-    "x86_64-linux" = {
-      plain = "https://github.com/lambdaclass/ethrex/releases/download/v${version}/ethrex-linux_x86_64";
-    };
-    "aarch64-linux" = {
-      plain = "https://github.com/lambdaclass/ethrex/releases/download/v${version}/ethrex-linux_aarch64";
-    };
-    "aarch64-darwin" = {
-      plain = "https://github.com/lambdaclass/ethrex/releases/download/v${version}/ethrex-macos_aarch64";
-    };
+    "x86_64-linux".plain   = "https://github.com/lambdaclass/ethrex/releases/download/v${version}/ethrex-linux_x86_64";
+    "aarch64-linux".plain  = "https://github.com/lambdaclass/ethrex/releases/download/v${version}/ethrex-linux_aarch64";
+    "aarch64-darwin".plain = "https://github.com/lambdaclass/ethrex/releases/download/v${version}/ethrex-macos_aarch64";
   };
 
   hashes = {
@@ -31,7 +25,7 @@ let
   srcHash = hashes.${sys}.plain;
 
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "ethrex-bin";
   inherit version;
 
@@ -47,8 +41,16 @@ stdenvNoCC.mkDerivation rec {
     "$out/bin/ethrex" --version >/dev/null
   '';
 
+  passthru.tests.version = stdenvNoCC.mkDerivation {
+    name = "ethrex-version-test";
+    buildCommand = ''
+      export PATH=${finalAttrs.finalPackage}/bin:$PATH
+      ethrex --version | tee $out
+    '';
+  };
+
   meta = with lib; {
-    description = "A lightweight, performant, and modular Ethereum execution client powering next-gen L1 and L2 solutions.";
+    description = "Ethereum execution client (official prebuilt binary)";
     homepage = "https://ethrex.xyz/";
     license = licenses.asl20;
     mainProgram = "ethrex";
@@ -57,4 +59,4 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/lambdaclass/ethrex/releases/tag/v${version}";
     maintainers = with maintainers; [ samoht9277 klaus993 ];
   };
-}
+})
