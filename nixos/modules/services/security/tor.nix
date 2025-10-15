@@ -1413,9 +1413,13 @@ in
         BindPaths = [
           stateDir
         ]
-        ++ lib.catAttrs "unix" (
-          lib.catAttrs "target" (
-            lib.concatMap (onionService: onionService.map) (lib.attrValues cfg.relay.onionServices)
+        ++ lib.filter (x: x != null) (
+          lib.catAttrs "unix" (
+            lib.filter (x: x != null) (
+              lib.catAttrs "target" (
+                lib.concatMap (onionService: onionService.map) (lib.attrValues cfg.relay.onionServices)
+              )
+            )
           )
         );
         BindReadOnlyPaths = [

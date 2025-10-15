@@ -50,7 +50,7 @@ buildPythonPackage rec {
     "test_warn_substituting_glyphs_without_unicode"
   ];
 
-  passthru.updateScript = gitUpdater { rev = "v"; };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Permanently \"apply\" OpenType features to fonts, by remapping their Unicode assignments";
