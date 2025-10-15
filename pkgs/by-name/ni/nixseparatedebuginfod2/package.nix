@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nixseparatedebuginfod2";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "symphorien";
     repo = "nixseparatedebuginfod2";
     tag = "v${version}";
-    hash = "sha256-r/lmnYdnqyc0Mx1ZVzebiz8V04bmKb8lJBv/ndIzQYM=";
+    hash = "sha256-INY9mLJ+7i3BoShqFZMELm9aXiDbZkuLyokgm42kEbo=";
   };
 
-  cargoHash = "sha256-bj5OOj/PpoBU745hbhN1YqiVBikNIzT6/WrNGklRqy4=";
+  cargoHash = "sha256-6JyC0CLGnkbQWp8l27DXZ04Gt0nsNNSBFfcvAQtllE4=";
 
   buildInputs = [
     libarchive
