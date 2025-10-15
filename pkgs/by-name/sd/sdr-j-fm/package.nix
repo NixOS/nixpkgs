@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdr-j-fm";
-  version = "3.20-2025-10-07";
+  version = "3.20-unstable-2025-10-07";
 
   src = fetchFromGitHub {
     owner = "JvanKatwijk";

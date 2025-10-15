@@ -72,6 +72,8 @@ let
         (with pkgs; [
           # ld-linux-x86-64-linux.so.2 and others
           glibc
+          # required by at least https://github.com/zed-industries/package-version-server
+          openssl
         ])
         ++ additionalPkgs pkgs;
 
