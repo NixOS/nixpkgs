@@ -7,7 +7,7 @@
   ppx_deriving,
   ppx_sexp_conv,
   ppxlib,
-  version ? if lib.versionAtLeast ocaml.version "4.11" then "1.11.0" else "1.9.1",
+  version ? if lib.versionAtLeast ocaml.version "4.11" then "1.12.0" else "1.9.1",
 }:
 
 lib.throwIfNot (lib.versionAtLeast ppxlib.version "0.24.0")
@@ -30,7 +30,7 @@ lib.throwIfNot (lib.versionAtLeast ppxlib.version "0.24.0")
       hash =
         {
           "1.9.1" = "sha256-0bSY4u44Ds84XPIbcT5Vt4AG/4PkzFKMl9CDGFZyIdI=";
-          "1.11.0" = "sha256-Jmfv1IkQoaTkyxoxp9FI0ChNESqCaoDsA7D4ZUbOrBo=";
+          "1.12.0" = "sha256-1vpYHFl0rEdG3hE+6BCpWmfLvdLvoEx+Jxq0DFrRdJc=";
         }
         ."${version}";
     };
