@@ -152,6 +152,7 @@ buildPythonPackage rec {
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "langchain==";
+    ignoredVersions = "[0-9]+\.?(a|dev|rc)[0-9]+$";
   };
 
   __darwinAllowLocalNetworking = true;

@@ -79,6 +79,7 @@ buildPythonPackage rec {
     skipBulkUpdate = true;
     updateScript = gitUpdater {
       rev-prefix = "langchain-azure-dynamic-sessions==";
+      ignoredVersions = "[0-9]+\.?(a|dev|rc)[0-9]+$";
     };
   };
 
