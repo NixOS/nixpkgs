@@ -16,13 +16,13 @@ let
 in
 buildGoModule (finalAttrs: {
   pname = "llama-swap";
-  version = "156";
+  version = "165";
 
   src = fetchFromGitHub {
     owner = "mostlygeek";
     repo = "llama-swap";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-z0262afVjsdGe6WPoWO1wbccLO538fXBuxOOqLnJHRU=";
+    hash = "sha256-3NlA4LnAJ1qCy1+Jcv6wrPg/7trQhpwx00Sk98V7ZdY=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -38,11 +38,14 @@ buildGoModule (finalAttrs: {
   vendorHash = "sha256-5mmciFAGe8ZEIQvXejhYN+ocJL3wOVwevIieDuokhGU=";
 
   passthru.ui = callPackage ./ui.nix { llama-swap = finalAttrs.finalPackage; };
-  passthru.npmDepsHash = "sha256-Sbvz3oudMVf+PxOJ6s7LsDaxFwvftNc8ZW5KPpbI/cA=";
+  passthru.npmDepsHash = "sha256-F6izMZY4554M6PqPYjKcjNol3A6BZHHYA0CIcNrU5JA=";
 
   nativeBuildInputs = [
     versionCheckHook
   ];
+
+  # required for testing
+  __darwinAllowLocalNetworking = true;
 
   ldflags = [
     "-s"
@@ -70,6 +73,29 @@ buildGoModule (finalAttrs: {
     # it's unneeded
     "misc/simple-responder"
   ];
+
+  checkFlags =
+    let
+      skippedTests = lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+        # Fail only on x86_64-darwin intermittently
+        # https://github.com/mostlygeek/llama-swap/issues/320
+        "TestProcess_AutomaticallyStartsUpstream"
+        "TestProcess_WaitOnMultipleStarts"
+        "TestProcess_BrokenModelConfig"
+        "TestProcess_UnloadAfterTTL"
+        "TestProcess_LowTTLValue"
+        "TestProcess_HTTPRequestsHaveTimeToFinish"
+        "TestProcess_SwapState"
+        "TestProcess_ShutdownInterruptsHealthCheck"
+        "TestProcess_ExitInterruptsHealthCheck"
+        "TestProcess_ConcurrencyLimit"
+        "TestProcess_StopImmediately"
+        "TestProcess_ForceStopWithKill"
+        "TestProcess_StopCmd"
+        "TestProcess_EnvironmentSetCorrectly"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   # some tests expect to execute `simple-something` and proxy/helpers_test.go
   # checks the file exists
