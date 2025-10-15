@@ -45,6 +45,8 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/libgit2/libgit2/commit/1b348a31349e847b1d8548281aa92f26b9783f2f.patch";
       hash = "sha256-CBaUuEr3nPdUuOdyJtmPgyqR0MNnVyOFYbYXF3ncupU=";
     })
+    # https://github.com/libgit2/libgit2/pull/7146
+    ./fix-ssh-custom-heap-buffer-overflow.patch
   ];
 
   cmakeFlags = [
