@@ -5,7 +5,7 @@
   gmp,
   mpfr,
   boost,
-  version ? "1.6.0",
+  version ? "1.6.1",
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://gappa.gitlabpages.inria.fr/releases/gappa-${version}.tar.gz";
-    hash = "sha256-aNht0Ttv+gzS9eLzu4PQitRK/zQN9QQ4YOEjQ2d9xIM=";
+    hash = "sha256-1ux5ImKR8edXyvL21w3jY2o4/fATEjO2SMzS8B0o8Ok=";
   };
 
   buildInputs = [
