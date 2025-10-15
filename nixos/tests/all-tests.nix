@@ -575,6 +575,7 @@ in
   fluent-bit = runTest ./fluent-bit.nix;
   fluentd = runTest ./fluentd.nix;
   fluidd = runTest ./fluidd.nix;
+  fontconfig-bitmap-fonts = runTest ./fontconfig-bitmap-fonts.nix;
   fontconfig-default-fonts = runTest ./fontconfig-default-fonts.nix;
   forgejo = import ./forgejo.nix {
     inherit runTest;
