@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ./fix_incompatible_pointer_type.patch
     ./fix_build_on_i686.patch
     ./fix_recent_glib_deprecation_warning.patch
+    ./fix_cmake_min_version.patch
   ];
 
   prePatch = ''

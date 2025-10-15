@@ -3436,15 +3436,6 @@ with pkgs;
 
   madlang = haskell.lib.compose.justStaticExecutables haskellPackages.madlang;
 
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
-    availablePlugins = {
-      # More are listed here: https://github.com/pulb/mailnag/#desktop-integration
-      # Use the attributes here as arguments to `plugins` list
-      goa = callPackage ../applications/networking/mailreaders/mailnag/goa-plugin.nix { };
-    };
-  };
-  mailnagWithPlugins = mailnag.withPlugins (builtins.attrValues mailnag.availablePlugins);
-
   man = man-db;
 
   mangohud = callPackage ../tools/graphics/mangohud {
@@ -6261,9 +6252,9 @@ with pkgs;
       electron-source.electron_38
     else
       electron_38-bin;
-  electron = electron_37;
-  electron-bin = electron_37-bin;
-  electron-chromedriver = electron-chromedriver_37;
+  electron = electron_38;
+  electron-bin = electron_38-bin;
+  electron-chromedriver = electron-chromedriver_38;
 
   autoconf = callPackage ../development/tools/misc/autoconf { };
   autoconf269 = callPackage ../development/tools/misc/autoconf/2.69.nix { };
@@ -7073,6 +7064,7 @@ with pkgs;
     botan2
     botan3
     ;
+  botanEsdm = botan3.override { withEsdm = true; };
 
   c-ares = callPackage ../development/libraries/c-ares { };
 
@@ -8225,7 +8217,6 @@ with pkgs;
 
   nss_latest = callPackage ../development/libraries/nss/latest.nix { };
   nss_3_115 = callPackage ../development/libraries/nss/3_115.nix { };
-  nss_3_114 = callPackage ../development/libraries/nss/3_114.nix { };
   nss_esr = callPackage ../development/libraries/nss/esr.nix { };
   nss = nss_esr;
   nssTools = nss.tools;
@@ -8606,8 +8597,6 @@ with pkgs;
 
   SDL = SDL_compat;
   SDL2 = sdl2-compat;
-
-  sdr-j-fm = libsForQt5.callPackage ../applications/radio/sdr-j-fm { };
 
   sigdigger = libsForQt5.callPackage ../applications/radio/sigdigger { };
 
@@ -14513,7 +14502,7 @@ with pkgs;
     );
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nixComponents = nixVersions.nixComponents_2_31;
+    nixComponents = nixVersions.nixComponents_2_32;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;

@@ -1671,6 +1671,8 @@ mapAliases {
   mailcore2 = throw "'mailcore2' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   mailctl = throw "mailctl has been renamed to oama"; # Added 2024-08-19
   mailman-rss = throw "The mailman-rss package was dropped since it was unmaintained."; # Added 2024-06-21
+  mailnag = throw "mailnag has been removed because it has been marked as broken since 2022."; # Added 2025-10-12
+  mailnagWithPlugins = throw "mailnagWithPlugins has been removed because mailnag has been marked as broken since 2022."; # Added 2025-10-12
   melmatcheq.lv2 = melmatcheq-lv2; # Added 2025-09-27
   mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'."; # Added 2025-04-26
   mariadb_110 = throw "mariadb_110 has been removed from nixpkgs, please switch to another version like mariadb_114"; # Added 2024-08-15
@@ -1820,6 +1822,7 @@ mapAliases {
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
   netbox_3_7 = throw "netbox 3.7 series has been removed as it was EOL"; # Added 2025-04-23
+  netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
   netsurf = recurseIntoAttrs {
     browser = lib.warnOnInstantiate "'netsurf.browser' has been renamed to 'netsurf-browser'" netsurf-browser; # Added 2025-03-26
     buildsystem = lib.warnOnInstantiate "'netsurf.buildsystem' has been renamed to 'netsurf-buildsystem'" netsurf-buildsystem; # Added 2025-03-26

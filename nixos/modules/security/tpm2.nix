@@ -388,5 +388,8 @@ in
   );
 
   meta.doc = ./tpm2.md;
-  meta.maintainers = with lib.maintainers; [ lschuermann ];
+  meta.maintainers = with lib.maintainers; [
+    lschuermann
+    scottstephens
+  ];
 }

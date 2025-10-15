@@ -183,7 +183,10 @@ in
   # keep-sorted start case=no numeric=no block=yes
   _3proxy = runTest ./3proxy.nix;
   aaaaxy = runTest ./aaaaxy.nix;
-  acme = import ./acme/default.nix { inherit runTest; };
+  acme = import ./acme/default.nix {
+    inherit runTest;
+    inherit (pkgs) lib;
+  };
   acme-dns = runTest ./acme-dns.nix;
   activation = pkgs.callPackage ../modules/system/activation/test.nix { };
   activation-bashless = runTest ./activation/bashless.nix;
@@ -377,7 +380,7 @@ in
   consul = runTest ./consul.nix;
   consul-template = runTest ./consul-template.nix;
   containers-bridge = runTest ./containers-bridge.nix;
-  containers-custom-pkgs.nix = runTest ./containers-custom-pkgs.nix;
+  containers-custom-pkgs = runTest ./containers-custom-pkgs.nix;
   containers-ephemeral = runTest ./containers-ephemeral.nix;
   containers-extra_veth = runTest ./containers-extra_veth.nix;
   containers-hosts = runTest ./containers-hosts.nix;
@@ -517,6 +520,7 @@ in
   etebase-server = runTest ./etebase-server.nix;
   etesync-dav = runTest ./etesync-dav.nix;
   evcc = runTest ./evcc.nix;
+  facter = runTest ./facter;
   fail2ban = runTest ./fail2ban.nix;
   fakeroute = runTest ./fakeroute.nix;
   fancontrol = runTest ./fancontrol.nix;
@@ -988,7 +992,6 @@ in
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
-  netbox_4_1 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_1; };
   netbox_4_2 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_2; };
   netbox_4_3 = handleTest ./web-apps/netbox/default.nix { netbox = pkgs.netbox_4_3; };
   netdata = runTest ./netdata.nix;

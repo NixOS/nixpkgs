@@ -8241,6 +8241,8 @@ self: super: with self; {
 
   libear = callPackage ../development/python-modules/libear { };
 
+  liberty-parser = callPackage ../development/python-modules/liberty-parser { };
+
   libevdev = callPackage ../development/python-modules/libevdev { };
 
   libfdt = toPythonModule (
@@ -9113,7 +9115,7 @@ self: super: with self; {
   maya = callPackage ../development/python-modules/maya { };
 
   mayavi = pkgs.libsForQt5.callPackage ../development/python-modules/mayavi {
-    inherit buildPythonPackage pythonOlder pythonAtLeast;
+    inherit buildPythonPackage pythonOlder;
     inherit (self)
       pyface
       pygments
@@ -9470,6 +9472,8 @@ self: super: with self; {
   mkdocs-drawio-file = callPackage ../development/python-modules/mkdocs-drawio-file { };
 
   mkdocs-exclude = callPackage ../development/python-modules/mkdocs-exclude { };
+
+  mkdocs-gen-files = callPackage ../development/python-modules/mkdocs-gen-files { };
 
   mkdocs-get-deps = callPackage ../development/python-modules/mkdocs-get-deps { };
 
@@ -18439,6 +18443,8 @@ self: super: with self; {
   timeago = callPackage ../development/python-modules/timeago { };
 
   timecop = callPackage ../development/python-modules/timecop { };
+
+  timelength = callPackage ../development/python-modules/timelength { };
 
   timelib = callPackage ../development/python-modules/timelib { };
 

@@ -7164,6 +7164,12 @@
     githubId = 15128988;
     name = "Maksim Dzabraev";
   };
+  dzervas = {
+    name = "Dimitris Zervas";
+    email = "dzervas@dzervas.gr";
+    github = "dzervas";
+    githubId = 1029195;
+  };
   dzmitry-lahoda = {
     email = "dzmitry@lahoda.pro";
     github = "dzmitry-lahoda";
@@ -7363,12 +7369,6 @@
     name = "Sebastian Reuße";
     github = "eigengrau";
     githubId = 4939947;
-  };
-  eihqnh = {
-    email = "eihqnh@outlook.com";
-    github = "eihqnh";
-    githubId = 40905037;
-    name = "eihqnh";
   };
   eikek = {
     email = "eike.kettner@posteo.de";
@@ -15839,7 +15839,7 @@
     githubId = 13599169;
   };
   marius851000 = {
-    email = "mariusdavid@laposte.net";
+    email = "nix@mariusdavid.fr";
     name = "Marius David";
     github = "marius851000";
     githubId = 22586596;
@@ -19295,6 +19295,12 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onatustun = {
+    email = "contact@onatustun.com";
+    name = "Onat Ustun";
+    github = "onatustun";
+    githubId = 41642110;
+  };
   ondt = {
     name = "Ondrej Telka";
     email = "nix@ondt.dev";
@@ -19845,12 +19851,6 @@
     github = "patryk4815";
     githubId = 3074260;
     name = "Patryk Sondej";
-  };
-  patternspandemic = {
-    email = "patternspandemic@live.com";
-    github = "patternspandemic";
-    githubId = 15645854;
-    name = "Brad Christensen";
   };
   patwid = {
     email = "patrick.widmer@tbwnet.ch";
@@ -21459,6 +21459,12 @@
     email = "randomdude16671@proton.me";
     github = "randomdude16671";
     githubId = 210965013;
+  };
+  randoneering = {
+    name = "randoneering";
+    email = "justin@randoneering.tech";
+    github = "randoneering";
+    githubId = 127273550;
   };
   rane = {
     name = "Rane";
@@ -23198,6 +23204,12 @@
     github = "scolobb";
     githubId = 11320;
     name = "Sergiu Ivanov";
+  };
+  scottstephens = {
+    email = "stephens.js@gmail.com";
+    github = "scottstephens";
+    githubId = 526260;
+    name = "Scott Stephens";
   };
   scraptux = {
     email = "git@thomasjasny.de";
@@ -26188,6 +26200,12 @@
     githubId = 48209000;
     name = "Anna Gillert";
   };
+  tlvince = {
+    email = "nixos@tlvince.com";
+    github = "tlvince";
+    githubId = 323761;
+    name = "Tom Vincent";
+  };
   tm-drtina = {
     email = "tm.drtina@gmail.com";
     github = "tm-drtina";
@@ -28828,6 +28846,12 @@
     github = "zaninime";
     githubId = 450885;
     name = "Francesco Zanini";
+  };
+  zareix = {
+    email = "contact@raphael-catarino.fr";
+    github = "zareix";
+    githubId = 29818713;
+    name = "Raphaël Catarino";
   };
   zarelit = {
     email = "david@zarel.net";
