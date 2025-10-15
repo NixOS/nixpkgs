@@ -1365,8 +1365,8 @@ in
       "sha256-SfZ4sYKJic9iQfWxUQEdV233Y5NbITHWjC3Vt+hFpHA=";
 
   mypy-boto3-transcribe =
-    buildMypyBoto3Package "transcribe" "1.40.8"
-      "sha256-i50560hic1ItkD0zJjAyHraepEyxioFBvHwMWkfg0kk=";
+    buildMypyBoto3Package "transcribe" "1.40.52"
+      "sha256-A93BHo29EHovA2v+hACbOhN+ckTL8JAGgftBBFzXBfM=";
 
   mypy-boto3-transfer =
     buildMypyBoto3Package "transfer" "1.40.42"
