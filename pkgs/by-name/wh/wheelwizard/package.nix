@@ -8,7 +8,7 @@
   desktop-file-utils,
 }:
 buildDotnetModule rec {
-  pname = "WheelWizard";
+  pname = "wheelwizard";
   version = "2.3.3";
 
   src = fetchFromGitHub {
@@ -25,7 +25,7 @@ buildDotnetModule rec {
   buildType = "Release";
   dotnet-sdk = dotnetCorePackages.sdk_8_0-bin;
   dotnet-runtime = dotnetCorePackages.runtime_8_0-bin;
-  dotnet-tools = [ ];
+  dotnet-tools = [];
   nugetDeps = ./deps.json;
 
   nativeBuildInputs = [
@@ -43,7 +43,7 @@ buildDotnetModule rec {
     mkdir -p $out/bin
 
     makeWrapper $out/lib/${pname}/WheelWizard $out/bin/WheelWizard \
-      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime ]}
+      --prefix PATH : ${lib.makeBinPath [dotnet-runtime]}
 
     install -D $desktopItem/share/applications/* -t $out/share/applications
 
@@ -53,15 +53,16 @@ buildDotnetModule rec {
   desktopItem = makeDesktopItem {
     name = "wheelwizard";
     exec = "WheelWizard";
-    comment = "Manage your wheels with the wizard.";
+    comment = "WheelWizard, Retro Rewind Launcher";
     desktopName = "Wheel Wizard";
-    categories = [ "Utility" ];
+    categories = ["Utility"];
   };
 
   meta = with lib; {
-    description = "A wizard for managing wheels";
+    description = "WheelWizard, Retro Rewind Launcher";
     homepage = "https://github.com/TeamWheelWizard/WheelWizard";
     license = licenses.gpl3;
     platforms = platforms.linux;
+    mainProgram = "bin/WheelWizard";
   };
 }
