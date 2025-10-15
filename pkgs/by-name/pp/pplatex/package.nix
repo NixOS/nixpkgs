@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pplatex";
-  version = "unstable-2023-04-18";
+  version = "1.0-unstable-2025-05-07";
 
   src = fetchFromGitHub {
     owner = "stefanhepp";
     repo = "pplatex";
-    rev = "8487b00b25127d9a4883e878000f4be6f89d56d5";
-    sha256 = "sha256-wPPJBn/UfmTWsD5JOg6po83Qn4qlpwgsPUV3iJzw5KU=";
+    rev = "9f6cfb23c3b578f14ad2664cd754cb4a66dc790e";
+    sha256 = "sha256-vI7CujOn2J4qWiykTQj8wyRmfeTDvR0eiFKB2ElTNUk=";
   };
 
   nativeBuildInputs = [
