@@ -5063,6 +5063,8 @@ self: super: with self; {
 
   fastapi = callPackage ../development/python-modules/fastapi { };
 
+  fastapi-azure-auth = callPackage ../development/python-modules/fastapi-azure-auth { };
+
   fastapi-cli = callPackage ../development/python-modules/fastapi-cli { };
 
   fastapi-github-oidc = callPackage ../development/python-modules/fastapi-github-oidc { };
