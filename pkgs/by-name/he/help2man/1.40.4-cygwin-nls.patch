@@ -11,16 +11,17 @@ that we're trying to help2man).
 
 --- help2man-1.46.5/Makefile.in	2014-10-09 13:03:01.000000000 +0200
 +++ help2man-1.46.5/Makefile.in	2015-05-12 14:46:52.995521900 +0200
-@@ -76,7 +76,8 @@
-        fi
+@@ -76,8 +76,9 @@
+ 	fi
 
- install_preload: install_dirs preload
+ install_preload: preload
+ 	$(MKINSTALLDIRS) $(DESTDIR)$(pkglibdir)
 -	$(INSTALL_PROGRAM) $(preload).so $(DESTDIR)$(pkglibdir)
 +	$(INSTALL_PROGRAM) lib/cygintl-9.dll $(DESTDIR)$(pkglibdir)
 +	ln -sf cygintl-9.dll $(DESTDIR)$(pkglibdir)/$(preload).so
 
- install_l10n: install_dirs msg_l10n man_l10n info_l10n
-        set -e; \
+ install_l10n: msg_l10n man_l10n info_l10n
+ 	set -e; \
 @@ -144,7 +146,9 @@
 
  preload: $(preload).so
