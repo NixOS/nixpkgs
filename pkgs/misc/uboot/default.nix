@@ -58,6 +58,7 @@ let
       installDir ? "$out",
       defconfig,
       extraConfig ? "",
+      descriptionEnd ? "embedded systems",
       extraPatches ? [ ],
       extraMakeFlags ? [ ],
       extraMeta ? { },
@@ -149,7 +150,7 @@ let
           with lib;
           {
             homepage = "https://www.denx.de/wiki/U-Boot/";
-            description = "Boot loader for embedded systems";
+            description = "Boot loader (U-Boot) for ${descriptionEnd}";
             license = licenses.gpl2Plus;
             maintainers = with maintainers; [
               dezgeg
@@ -159,6 +160,7 @@ let
           // extraMeta;
       }
       // removeAttrs args [
+        "descriptionEnd"
         "extraMeta"
         "pythonScriptsToInstall"
       ]
@@ -173,7 +175,10 @@ in
     installDir = "$out/bin";
     hardeningDisable = [ ];
     dontStrip = false;
-    extraMeta.platforms = lib.platforms.linux;
+    extraMeta = {
+      description = "Tools for working with U-Boot";
+      platforms = lib.platforms.linux;
+    };
 
     crossTools = true;
     extraMakeFlags = [
@@ -217,18 +222,21 @@ in
   ubootPythonTools = lib.recurseIntoAttrs (callPackages ./python.nix { });
 
   ubootA20OlinuxinoLime = buildUBoot {
+    descriptionEnd = "the A20-OLinuXino-LIME from Olimex";
     defconfig = "A20-OLinuXino-Lime_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootA20OlinuxinoLime2EMMC = buildUBoot {
+    descriptionEnd = "the A20-OLinuXino-LIME2-eMMC from Olimex";
     defconfig = "A20-OLinuXino-Lime2-eMMC_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootAmx335xEVM = buildUBoot {
+    descriptionEnd = "the AM335x Evaluation Module (EVM) from Texas Instruments";
     defconfig = "am335x_evm_defconfig";
     extraMeta = {
       platforms = [ "armv7l-linux" ];
@@ -241,24 +249,28 @@ in
   };
 
   ubootBananaPi = buildUBoot {
+    descriptionEnd = "the Banana Pi";
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootBananaPim2Zero = buildUBoot {
+    descriptionEnd = "the Banana Pi M2 Zero";
     defconfig = "bananapi_m2_zero_defconfig";
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
     extraMeta.platforms = [ "armv7l-linux" ];
   };
 
   ubootBananaPim3 = buildUBoot {
+    descriptionEnd = "the Banana Pi M3";
     defconfig = "Sinovoip_BPI_M3_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootBananaPim64 = buildUBoot {
+    descriptionEnd = "the Banana Pi M64";
     defconfig = "bananapi_m64_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -268,12 +280,14 @@ in
 
   # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
   ubootClearfog = buildUBoot {
+    descriptionEnd = "the ClearFog Base and Pro from SolidRun";
     defconfig = "clearfog_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-with-spl.kwb" ];
   };
 
   ubootCM3588NAS = buildUBoot {
+    descriptionEnd = "the CM3588 NAS Kit from FriendlyElec";
     defconfig = "cm3588-nas-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -286,18 +300,21 @@ in
   };
 
   ubootCubieboard2 = buildUBoot {
+    descriptionEnd = "the Cubieboard2 from CubieTech";
     defconfig = "Cubieboard2_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootGuruplug = buildUBoot {
+    descriptionEnd = "the GuruPlug from Globalscale";
     defconfig = "guruplug_defconfig";
     extraMeta.platforms = [ "armv5tel-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootJetsonTK1 = buildUBoot {
+    descriptionEnd = "the Nvidia Jetson TK1";
     defconfig = "jetson-tk1_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [
@@ -327,6 +344,7 @@ in
       };
     in
     buildUBoot {
+      descriptionEnd = "the LibreTech CC ‘LePotato’ from the Libre Computer Project";
       defconfig = "libretech-cc_defconfig";
       extraMeta = {
         broken = stdenv.buildPlatform.system != "x86_64-linux"; # aml_encrypt_gxl is a x86_64 binary
@@ -358,6 +376,8 @@ in
     };
 
   ubootNanoPCT4 = buildUBoot rec {
+    descriptionEnd = "the NanoPC-T4 from FriendlyElec";
+
     rkbin = fetchFromGitHub {
       owner = "armbian";
       repo = "rkbin";
@@ -383,6 +403,7 @@ in
   };
 
   ubootNanoPCT6 = buildUBoot {
+    descriptionEnd = "the NanoPC-T6 from FriendlyElec";
     defconfig = "nanopc-t6-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -396,6 +417,7 @@ in
   };
 
   ubootNovena = buildUBoot {
+    descriptionEnd = "the Novena from Kosagi";
     defconfig = "novena_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [
@@ -419,6 +441,7 @@ in
       };
     in
     buildUBoot {
+      descriptionEnd = "the ODROID-C2 from Hardkernel";
       defconfig = "odroid-c2_defconfig";
       extraMeta.platforms = [ "aarch64-linux" ];
       filesToInstall = [
@@ -457,12 +480,14 @@ in
     };
 
   ubootOdroidXU3 = buildUBoot {
+    descriptionEnd = "the ODROID-XU3/XU4/HC1/HC2 from Hardkernel";
     defconfig = "odroid-xu3_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-dtb.bin" ];
   };
 
   ubootOlimexA64Olinuxino = buildUBoot {
+    descriptionEnd = "the A64-OLinuXino from Olimex";
     defconfig = "a64-olinuxino-emmc_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -471,6 +496,7 @@ in
   };
 
   ubootOlimexA64Teres1 = buildUBoot {
+    descriptionEnd = "the TERES-I from Olimex";
     defconfig = "teres_i_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -480,6 +506,7 @@ in
   };
 
   ubootOrangePi5 = buildUBoot {
+    descriptionEnd = "the Orange Pi 5";
     defconfig = "orangepi-5-rk3588s_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -493,6 +520,7 @@ in
   };
 
   ubootOrangePi5Max = buildUBoot {
+    descriptionEnd = " the Orange Pi 5 Max";
     defconfig = "orangepi-5-max-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -506,6 +534,7 @@ in
   };
 
   ubootOrangePi5Plus = buildUBoot {
+    descriptionEnd = "the Orange Pi 5 Plus";
     defconfig = "orangepi-5-plus-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -519,12 +548,14 @@ in
   };
 
   ubootOrangePiPc = buildUBoot {
+    descriptionEnd = "the Orange Pi PC";
     defconfig = "orangepi_pc_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootOrangePiZeroPlus2H5 = buildUBoot {
+    descriptionEnd = "the Orange Pi Zero Plus2";
     defconfig = "orangepi_zero_plus2_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -533,12 +564,14 @@ in
   };
 
   ubootOrangePiZero = buildUBoot {
+    descriptionEnd = "the Orange Pi Zero";
     defconfig = "orangepi_zero_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootOrangePiZero2 = buildUBoot {
+    descriptionEnd = "the Orange Pi Zero2";
     defconfig = "orangepi_zero2_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinnerH616}/bl31.bin";
@@ -546,6 +579,7 @@ in
   };
 
   ubootOrangePiZero3 = buildUBoot {
+    descriptionEnd = "the Orange Pi Zero3";
     defconfig = "orangepi_zero3_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     # According to https://linux-sunxi.org/H616 the H618 "is a minor update with a larger (1MB) L2 cache" (compared to the H616)
@@ -556,6 +590,7 @@ in
   };
 
   ubootOrangePi3 = buildUBoot {
+    descriptionEnd = "the Orange Pi 3";
     defconfig = "orangepi_3_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinnerH6}/bl31.bin";
@@ -564,6 +599,7 @@ in
   };
 
   ubootOrangePi3B = buildUBoot {
+    descriptionEnd = "the Orange Pi 3B";
     defconfig = "orangepi-3b-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     ROCKCHIP_TPL = rkbin.TPL_RK3568;
@@ -577,12 +613,14 @@ in
   };
 
   ubootPcduino3Nano = buildUBoot {
+    descriptionEnd = "the LinkSprite pcDuino3 Nano";
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-sunxi-with-spl.bin" ];
   };
 
   ubootPine64 = buildUBoot {
+    descriptionEnd = "the PINE A64 and PINE A64+ by Pine64";
     defconfig = "pine64_plus_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -591,6 +629,7 @@ in
   };
 
   ubootPine64LTS = buildUBoot {
+    descriptionEnd = "the PINE A64-LTS by Pine64";
     defconfig = "pine64-lts_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -599,6 +638,7 @@ in
   };
 
   ubootPinebook = buildUBoot {
+    descriptionEnd = "the Pinebook by Pine64";
     defconfig = "pinebook_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -607,6 +647,7 @@ in
   };
 
   ubootPinebookPro = buildUBoot {
+    descriptionEnd = "the Pinebook Pro by Pine64";
     defconfig = "pinebook-pro-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
@@ -617,24 +658,28 @@ in
   };
 
   ubootQemuAarch64 = buildUBoot {
+    descriptionEnd = "QEMU ARM64";
     defconfig = "qemu_arm64_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootQemuArm = buildUBoot {
+    descriptionEnd = "QEMU ARM (32-bit)";
     defconfig = "qemu_arm_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootQemuRiscv64Smode = buildUBoot {
+    descriptionEnd = "QEMU RISC-V 64-bit S-Mode";
     defconfig = "qemu-riscv64_smode_defconfig";
     extraMeta.platforms = [ "riscv64-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootQemuX86 = buildUBoot {
+    descriptionEnd = "QEMU x86 (32-bit)";
     defconfig = "qemu-x86_defconfig";
     extraConfig = ''
       CONFIG_USB_UHCI_HCD=y
@@ -650,6 +695,7 @@ in
   };
 
   ubootQemuX86_64 = buildUBoot {
+    descriptionEnd = "QEMU x86 (64-bit)";
     defconfig = "qemu-x86_64_defconfig";
     extraConfig = ''
       CONFIG_USB_UHCI_HCD=y
@@ -662,6 +708,7 @@ in
   };
 
   ubootQuartz64B = buildUBoot {
+    descriptionEnd = "the Quartz64 Model B by Pine64";
     defconfig = "quartz64-b-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
@@ -676,6 +723,7 @@ in
   };
 
   ubootRadxaZero3W = buildUBoot {
+    descriptionEnd = "the Radxa ZERO 3W";
     defconfig = "radxa-zero-3-rk3566_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3568}/bl31.elf";
@@ -688,48 +736,56 @@ in
   };
 
   ubootRaspberryPi = buildUBoot {
+    descriptionEnd = "the Raspberry Pi (all BCM2835 variants)";
     defconfig = "rpi_defconfig";
     extraMeta.platforms = [ "armv6l-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRaspberryPi2 = buildUBoot {
+    descriptionEnd = "the Raspberry Pi 2";
     defconfig = "rpi_2_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRaspberryPi3_32bit = buildUBoot {
+    descriptionEnd = "the Raspberry Pi 3 (32-bit build)";
     defconfig = "rpi_3_32b_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRaspberryPi3_64bit = buildUBoot {
+    descriptionEnd = "the Raspberry Pi 3 (64-bit build)";
     defconfig = "rpi_3_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRaspberryPi4_32bit = buildUBoot {
+    descriptionEnd = "the Raspberry Pi 4 (32-bit build)";
     defconfig = "rpi_4_32b_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRaspberryPi4_64bit = buildUBoot {
+    descriptionEnd = "the Raspberry Pi 4 (64-bit build)";
     defconfig = "rpi_4_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRaspberryPiZero = buildUBoot {
+    descriptionEnd = "the Raspberry Pi Zero and Zero W";
     defconfig = "rpi_0_w_defconfig";
     extraMeta.platforms = [ "armv6l-linux" ];
     filesToInstall = [ "u-boot.bin" ];
   };
 
   ubootRock4CPlus = buildUBoot {
+    descriptionEnd = "the Radxa ROCK 4C+";
     defconfig = "rock-4c-plus-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
@@ -740,6 +796,7 @@ in
   };
 
   ubootRock5ModelB = buildUBoot {
+    descriptionEnd = "the Radxa ROCK 5B";
     defconfig = "rock5b-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -753,6 +810,7 @@ in
   };
 
   ubootRock64 = buildUBoot {
+    descriptionEnd = "the ROCK64 by Pine64";
     defconfig = "rock64-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3328}/bl31.elf";
@@ -770,6 +828,7 @@ in
   # see if it works better for you. The only disadvantage is lowered memory
   # bandwidth.
   ubootRock64v2 = buildUBoot {
+    descriptionEnd = "the ROCK64 V2 by Pine64";
     prePatch = ''
       substituteInPlace arch/arm/dts/rk3328-rock64-u-boot.dtsi \
         --replace rk3328-sdram-lpddr3-1600.dtsi rk3328-sdram-lpddr3-666.dtsi
@@ -785,6 +844,7 @@ in
   };
 
   ubootRockPiE = buildUBoot {
+    descriptionEnd = "the Radxa ROCK Pi E";
     defconfig = "rock-pi-e-rk3328_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3328}/bl31.elf";
@@ -796,6 +856,7 @@ in
   };
 
   ubootRockPro64 = buildUBoot {
+    descriptionEnd = "the ROCKPro64 by Pine64";
     defconfig = "rockpro64-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
@@ -806,6 +867,7 @@ in
   };
 
   ubootROCPCRK3399 = buildUBoot {
+    descriptionEnd = "the ROC-RK3399-PC from Firefly";
     defconfig = "roc-pc-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     filesToInstall = [
@@ -817,6 +879,7 @@ in
   };
 
   ubootSheevaplug = buildUBoot {
+    descriptionEnd = "the Sheevaplug from Globalscale";
     defconfig = "sheevaplug_defconfig";
     extraMeta = {
       platforms = [ "armv5tel-linux" ];
@@ -826,6 +889,7 @@ in
   };
 
   ubootSopine = buildUBoot {
+    descriptionEnd = "the SOPINE by Pine64";
     defconfig = "sopine_baseboard_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
@@ -834,6 +898,7 @@ in
   };
 
   ubootTuringRK1 = buildUBoot {
+    descriptionEnd = "the Turing RK1";
     defconfig = "turing-rk1-rk3588_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3588}/bl31.elf";
@@ -846,6 +911,7 @@ in
   };
 
   ubootUtilite = buildUBoot {
+    descriptionEnd = "the CompuLab Utilite";
     defconfig = "cm_fx6_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [ "u-boot-with-nand-spl.imx" ];
@@ -858,6 +924,7 @@ in
   };
 
   ubootVisionFive2 = buildUBoot {
+    descriptionEnd = "the StarFive VisionFive 2";
     defconfig = "starfive_visionfive2_defconfig";
     extraMeta.platforms = [ "riscv64-linux" ];
     OPENSBI = "${opensbi}/share/opensbi/lp64/generic/firmware/fw_dynamic.bin";
@@ -868,6 +935,7 @@ in
   };
 
   ubootWandboard = buildUBoot {
+    descriptionEnd = "the Wandboard";
     defconfig = "wandboard_defconfig";
     extraMeta.platforms = [ "armv7l-linux" ];
     filesToInstall = [
@@ -877,6 +945,7 @@ in
   };
 
   ubootRockPi4 = buildUBoot {
+    descriptionEnd = "the Radxa Rock Pi 4";
     defconfig = "rock-pi-4-rk3399_defconfig";
     extraMeta.platforms = [ "aarch64-linux" ];
     BL31 = "${armTrustedFirmwareRK3399}/bl31.elf";
