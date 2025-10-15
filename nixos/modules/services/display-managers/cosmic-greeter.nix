@@ -25,8 +25,9 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [
-      pkgs.cosmic-comp
       cfg.package
+      pkgs.cosmic-comp
+      pkgs.cosmic-randr
     ];
 
     services.greetd = {
