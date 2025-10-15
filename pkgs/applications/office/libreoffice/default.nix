@@ -314,6 +314,19 @@ stdenv.mkDerivation (finalAttrs: {
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
 
+    # Backport patch to fix build with Poppler 25.09
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
+      includes = [ "sdext/*" ];
+      hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
+    })
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "25.8") [
+    # Fix build with Poppler 25.10
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/41e58e117c356af2be83993595caf61f9f30cc89/poppler-25.10.patch";
+      hash = "sha256-KMsjDtRRH8Vy/FXaVwxUo0Ww10PCE0sK8+ZL0Ja2kJQ=";
+    })
   ]
   ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.05
