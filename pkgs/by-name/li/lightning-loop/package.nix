@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
   lib,
 }:
 
@@ -22,10 +23,16 @@ buildGoModule rec {
     "cmd/loopd"
   ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   ldflags = [
     "-s"
     "-w"
   ];
+
+  postInstall = ''
+    installManPage docs/loop.1
+  '';
 
   meta = with lib; {
     description = "Lightning Loop Client";
