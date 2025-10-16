@@ -6,6 +6,9 @@
   openssl,
   pkg-config,
   stdenv,
+  swift,
+  swiftpm,
+  writeShellScriptBin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
@@ -22,11 +25,24 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkgconfig.
   OPENSSL_NO_VENDOR = 1;
 
+  patches = [
+    ./fix-swift-lib-path.patch
+  ];
+
   buildInputs = [ openssl ];
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ];
+  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+      swift
+      swiftpm
+      (writeShellScriptBin "xcode-select" ''
+        echo $DEVELOPER_DIR
+      '')
+  ]);
+
+  # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
+  dontUseSwiftpmBuild = true;
 
   cargoHash = "sha256-6AM1oGX4q6kHePiS0fsoXPt0b89O9WItIBukPIwapJQ=";
 

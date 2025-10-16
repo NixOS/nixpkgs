@@ -1,0 +1,13 @@
+diff --git a/apple-catalog-parsing/build.rs b/apple-catalog-parsing/build.rs
+index 2ab4c71b..80301b1a 100644
+--- a/apple-catalog-parsing/build.rs
++++ b/apple-catalog-parsing/build.rs
+@@ -30,7 +30,7 @@ fn main() {
+     // Add necessary libraries to the linker search path. Without this line, compiling fails
+     // on systems without Xcode installed (xcode-select is still required).
+     println!(
+-        "cargo:rustc-link-search=native=/Library/Developer/CommandLineTools/usr/lib/swift/macosx"
++        "cargo:rustc-link-search=native=/usr/lib/swift/macosx"
+     );
+ 
+     let out_dir = env::var("OUT_DIR").expect("OUT_DIR is set for build scripts");
