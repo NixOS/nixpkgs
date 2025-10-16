@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  autoPatchelfHook,
   dotnet-runtime_8,
   makeWrapper,
 }:
@@ -17,12 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
     makeWrapper
-  ];
-  buildInputs = [
-    stdenv.cc.cc.lib
-    dotnet-runtime_8
   ];
 
   sourceRoot = ".";
