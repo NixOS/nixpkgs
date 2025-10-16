@@ -667,7 +667,6 @@ with lib.maintainers;
       mic92
       rorosen
       wrmilling
-      yajo
     ];
     scope = "Maintain K3s package, NixOS module, NixOS tests, update script";
     shortName = "K3s";
