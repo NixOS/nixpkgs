@@ -45,12 +45,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ASSIMP_BUILD_ASSIMP_TOOLS" true)
+    (lib.cmakeBool "ASSIMP_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   # Some matrix tests fail on non-86_64-linux:
   # https://github.com/assimp/assimp/issues/6246
   # https://github.com/assimp/assimp/issues/6247
-  doCheck = !(stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isx86_64);
+  # On Darwin, the bundled googletest is not compatible with Clang 21.
+  #  contrib/googletest/googletest/include/gtest/gtest-printers.h:498:35:
+  #  error: implicit conversion from 'char16_t' to 'char32_t' may change the meaning of the represented code unit
+  #  [-Werror,-Wcharacter-conversion]
+  doCheck = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86_64;
   checkPhase = ''
     runHook preCheck
     bin/unit
