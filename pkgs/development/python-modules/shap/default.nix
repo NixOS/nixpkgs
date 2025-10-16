@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "shap";
-  version = "0.48.0";
+  version = "0.49.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "slundberg";
     repo = "shap";
     tag = "v${version}";
-    hash = "sha256-eWZhyrFpEFlmTFPTHZng9V+uMRMXDVzFdgrqIzRQTws=";
+    hash = "sha256-1pe+vDc85p6oeHPg9Y0siXOldnN4fyT5VRRXulfq4i8=";
   };
 
   postPatch = ''
