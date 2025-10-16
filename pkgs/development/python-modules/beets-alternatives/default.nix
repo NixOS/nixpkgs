@@ -2,12 +2,25 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  beets,
-  python3Packages,
+  buildPythonPackage,
+
+  # build-system
+  poetry-core,
+
+  # nativeBuildInputs
+  beets-minimal,
+
+  # tests
+  pytestCheckHook,
+  pytest-cov-stub,
+  mock,
+  pillow,
+  tomli,
+  typeguard,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "beets-alternatives";
   version = "0.13.4";
   pyproject = true;
@@ -31,26 +44,22 @@ python3Packages.buildPythonApplication rec {
   ];
 
   build-system = [
-    python3Packages.poetry-core
+    poetry-core
   ];
 
   nativeBuildInputs = [
-    beets
+    beets-minimal
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      pytestCheckHook
-      pytest-cov-stub
-      mock
-      pillow
-      tomli
-      typeguard
-    ]
-    ++ [
-      writableTmpDirAsHomeHook
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+    mock
+    pillow
+    tomli
+    typeguard
+    writableTmpDirAsHomeHook
+  ];
 
   meta = {
     description = "Beets plugin to manage external files";

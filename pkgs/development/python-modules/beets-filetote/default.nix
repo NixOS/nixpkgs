@@ -1,13 +1,26 @@
 {
   lib,
   fetchFromGitHub,
-  python3Packages,
-  beets,
-  beetsPackages,
+  buildPythonPackage,
+
+  # build-system
+  poetry-core,
+
+  # nativeBuildInputs
+  beets-minimal,
+
+  # tests
+  pytestCheckHook,
+  beets-audible,
+  mediafile,
+  pytest,
+  reflink,
+  toml,
+  typeguard,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "beets-filetote";
   version = "1.1.0";
   pyproject = true;
@@ -24,33 +37,29 @@ python3Packages.buildPythonApplication rec {
   '';
 
   build-system = [
-    python3Packages.poetry-core
+    poetry-core
   ];
 
   nativeBuildInputs = [
-    beets
+    beets-minimal
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     mediafile
     reflink
     toml
     typeguard
   ];
 
-  nativeCheckInputs =
-    with python3Packages;
-    [
-      pytestCheckHook
-      beetsPackages.audible
-      mediafile
-      reflink
-      toml
-      typeguard
-    ]
-    ++ [
-      writableTmpDirAsHomeHook
-    ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    beets-audible
+    mediafile
+    reflink
+    toml
+    typeguard
+    writableTmpDirAsHomeHook
+  ];
 
   pytestFlags = [
     # This is the same as:
@@ -70,7 +79,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/gtronset/beets-filetote/blob/${src.tag}/CHANGELOG.md";
     maintainers = with lib.maintainers; [ dansbandit ];
     license = lib.licenses.mit;
-    inherit (beets.meta) platforms;
+    inherit (beets-minimal.meta) platforms;
     # https://github.com/gtronset/beets-filetote/issues/211
     broken = true;
   };
