@@ -61,6 +61,12 @@ python3Packages.buildPythonApplication rec {
     dev = optional-dependencies.lint ++ optional-dependencies.test ++ [ python3Packages.tox ];
   };
 
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.test;
+
   pytestFlags = [
     # This is the same as:
     #   -r fEs
@@ -72,12 +78,6 @@ python3Packages.buildPythonApplication rec {
     "tests/test_pruning.py"
     "tests/test_version.py"
   ];
-
-  nativeCheckInputs = [
-    python3Packages.pytestCheckHook
-    writableTmpDirAsHomeHook
-  ]
-  ++ optional-dependencies.test;
 
   meta = {
     description = "Beets plugin to move non-music files during the import process";
