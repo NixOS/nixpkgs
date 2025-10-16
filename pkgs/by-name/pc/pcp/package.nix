@@ -121,7 +121,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pcp";
-  version = "7.0.1";
+  version = "7.0.2";
 
   outputs = [
     # TODO: cycle detected on Darwin, references 'dev' from 'out'
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "performancecopilot";
     repo = "pcp";
     tag = finalAttrs.version;
-    hash = "sha256-AfMqlgAPRkSL3ZIhjgEjEbhP0N0hjH2e74qO0x0oKXk=";
+    hash = "sha256-OqeOblvYSGxj7JKAdFQZa+f2j/qAk2D3M9cw/Fy2oeE=";
   };
 
   patches = [
