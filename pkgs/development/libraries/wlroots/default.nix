@@ -174,5 +174,14 @@ in
     extraBuildInputs = [
       lcms2
     ];
+    patches = [
+      (fetchpatch {
+        # https://gitlab.freedesktop.org/wlroots/wlroots/-/merge_requests/5134
+        # > backend, output: send commit events after applying all in wlr_backend_commit()
+        # fixes potential crash in sway. Remove once a new release is made of wlroots
+        url = "https://gitlab.freedesktop.org/wlroots/wlroots/-/commit/7392b3313a7b483c61f4fea648ba8f2aa4ce8798.patch";
+        sha256 = "sha256-SK463pnIX2qjwRblCJRbvJeZTL6wAXho6wBIJ10OuNk=";
+      })
+    ];
   };
 }
