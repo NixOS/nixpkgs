@@ -1,6 +1,6 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
   alsa-utils,
   gobject-introspection,
@@ -17,7 +17,7 @@
   nix-update-script,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "safeeyes";
   version = "3.2.0";
   pyproject = true;
@@ -38,9 +38,9 @@ python3.pkgs.buildPythonApplication rec {
     libnotify
   ];
 
-  build-system = with python3.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  dependencies = with python3.pkgs; [
+  dependencies = with python3Packages; [
     babel
     psutil
     xlib
@@ -49,7 +49,7 @@ python3.pkgs.buildPythonApplication rec {
     packaging
   ];
 
-  optional-dependencies = with python3.pkgs; {
+  optional-dependencies = with python3Packages; {
     healthstats = [ croniter ];
     wayland = [ pywayland ];
   };
@@ -85,8 +85,13 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = {
     homepage = "http://slgobinath.github.io/SafeEyes";
-    description = "Protect your eyes from eye strain using this simple and beautiful, yet extensible break reminder. A Free and Open Source Linux alternative to EyeLeo";
-    license = lib.licenses.gpl3;
+    description = "Break reminder to prevent eye strain";
+    longDescription = ''
+      Protect your eyes from eye strain using this simple and
+      beautiful, yet extensible break reminder.  Free GNU/Linux
+      alternative to EyeLeo.
+    '';
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "safeeyes";
   };
