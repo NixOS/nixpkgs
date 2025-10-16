@@ -73,7 +73,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Thin wrapper around libyubihsm providing both an interactive and command-line interface to a YubiHSM";
     homepage = "https://github.com/Yubico/yubihsm-shell";
-    maintainers = with maintainers; [ matthewcroughan ];
+    maintainers = with maintainers; [
+      matthewcroughan
+      numinit
+    ];
     license = licenses.asl20;
     platforms = platforms.all;
   };
