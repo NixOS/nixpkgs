@@ -6,10 +6,10 @@
 
 let
   pname = "Jan";
-  version = "0.6.10";
+  version = "0.7.2";
   src = fetchurl {
     url = "https://github.com/menloresearch/jan/releases/download/v${version}/jan_${version}_amd64.AppImage";
-    hash = "sha256-eag8c/Jp2ahV71kEuFoT2rmz0S9RPbiqy5YBO0Z+ICY=";
+    hash = "sha256-tz0it9NYT+HOjJ0xxsxfTh0Vw0p+Mfp1SZbT5M5DM+0=";
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
