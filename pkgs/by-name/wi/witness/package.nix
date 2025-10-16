@@ -4,13 +4,10 @@
   buildGoModule,
   fetchFromGitHub,
 
-  # testing
-  testers,
-  witness,
-
+  buildPackages,
   installShellFiles,
 
-  buildPackages,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -60,11 +57,11 @@ buildGoModule rec {
         --zsh <(${exe} completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = witness;
-    command = "witness version";
-    version = "v${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
