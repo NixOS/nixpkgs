@@ -17,6 +17,7 @@
 
   # tests
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -42,7 +43,15 @@ buildPythonPackage rec {
     torch
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Permission denied: '/tmp/my_saved_cp_graph/trace_data.csv'
+    "test_critical_path_breakdown_and_save_restore"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Makes assumptions about the filesystem layout
