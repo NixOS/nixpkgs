@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r * $out/
+    mkdir -p $out/bin $out/share/vintagestory
+    cp -r * $out/share/vintagestory/
 
     makeWrapper '${lib.getExe dotnet-runtime_8}' "$out/bin/${meta.mainProgram}" \
-      --add-flags "$out/VintagestoryServer.dll"
+      --add-flags "$out/share/vintagestory/VintagestoryServer.dll"
 
     runHook postInstall
   '';
