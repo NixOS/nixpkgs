@@ -610,6 +610,8 @@ let
 
         farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+        farith = callPackage ../development/ocaml-modules/farith { };
+
         fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
 
         ff = callPackage ../development/ocaml-modules/ff { };
