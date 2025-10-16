@@ -5416,6 +5416,12 @@
     githubId = 398996;
     name = "Christopher Singley";
   };
+  cspeardev = {
+    email = "cspeardev@gmail.com";
+    github = "cspeardev";
+    githubId = 66444285;
+    name = "Connor Spear";
+  };
   cswank = {
     email = "craigswank@gmail.com";
     github = "cswank";
