@@ -5,7 +5,6 @@
   changedattrs,
   changedpathsjson,
   removedattrs,
-  byName ? false,
 }:
 let
   pkgs = import ../../.. {
@@ -89,7 +88,7 @@ let
     }) pkg.maintainers
   ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
+  byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
     maintainer: packages: map (pkg: pkg.packageName) packages
