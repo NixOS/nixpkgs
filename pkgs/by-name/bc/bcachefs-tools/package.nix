@@ -37,6 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-CnRB/iS1NZ0Ebsi12wXFvVb0qdv0V9q1oC3nLj13mqs=";
   };
 
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-50xy1nqDctgz/lXd5JsfaU6yxDoRCQRtiYBwuEuiKFA=";
+  };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
+  '';
+
   nativeBuildInputs = [
     pkg-config
     cargo
@@ -51,7 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
     libaio
     keyutils
     lz4
-
     libsodium
     liburcu
     libuuid
@@ -61,16 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     udev
   ]
   ++ lib.optional fuseSupport fuse3;
-
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    src = finalAttrs.src;
-    hash = "sha256-50xy1nqDctgz/lXd5JsfaU6yxDoRCQRtiYBwuEuiKFA=";
-  };
-
-  outputs = [
-    "out"
-    "dkms"
-  ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -83,6 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
     "PKGCONFIG_UDEVDIR=$(out)/lib/udev"
   ]
   ++ lib.optional fuseSupport "BCACHEFS_FUSE=1";
+
+  enableParallelBuilding = true;
+
   installFlags = [
     "install"
     "install_dkms"
@@ -96,6 +98,11 @@ stdenv.mkDerivation (finalAttrs: {
   # FIXME: Try enabling this once the default linux kernel is at least 6.7
   doCheck = false; # needs bcachefs module loaded on builder
 
+  preCheck = lib.optionalString (!fuseSupport) ''
+    rm tests/test_fuse.py
+  '';
+  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
+
   doInstallCheck = true;
   nativeInstallCheckInputs = [
     udevCheckHook
@@ -103,22 +110,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   versionCheckProgramArg = "version";
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail "target/release/bcachefs" "target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/bcachefs"
-  '';
-
-  preCheck = lib.optionalString (!fuseSupport) ''
-    rm tests/test_fuse.py
-  '';
-  checkFlags = [ "BCACHEFS_TEST_USE_VALGRIND=no" ];
-
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd bcachefs \
       --bash <($out/sbin/bcachefs completions bash) \
       --zsh  <($out/sbin/bcachefs completions zsh) \
       --fish <($out/sbin/bcachefs completions fish)
   '';
+
+  outputs = [
+    "out"
+    "dkms"
+  ];
 
   passthru = {
     # See NOTE in linux-kernels.nix
@@ -132,11 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  enableParallelBuilding = true;
-
   meta = {
     description = "Tool for managing bcachefs filesystems";
     homepage = "https://bcachefs.org/";
+    downloadPage = "https://github.com/koverstreet/bcachefs-tools";
     license = lib.licenses.gpl2Only;
     maintainers = with lib.maintainers; [
       davidak
