@@ -2091,6 +2091,8 @@ let
 
         ### U ###
 
+        ubase = callPackage ../development/ocaml-modules/ubase { };
+
         uchar = callPackage ../development/ocaml-modules/uchar { };
 
         uecc = callPackage ../development/ocaml-modules/uecc { };
