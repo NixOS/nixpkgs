@@ -21,6 +21,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DLEATHERMAN_ENABLE_TESTING=OFF" ];
 
+  # CMake4 3.2.2 is deprecated and no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.2.2)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   nativeBuildInputs = [ cmake ];
