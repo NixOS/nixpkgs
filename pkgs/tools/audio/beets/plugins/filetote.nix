@@ -23,11 +23,13 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace pyproject.toml --replace-fail "poetry-core<2.0.0" "poetry-core"
   '';
 
+  build-system = [
+    python3Packages.poetry-core
+  ];
+
   nativeBuildInputs = [
     beets
   ];
-
-  build-system = [ python3Packages.poetry-core ];
 
   dependencies = with python3Packages; [
     mediafile
