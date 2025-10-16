@@ -47,7 +47,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    description = "Toolkit to provide interface for various SAT (without optional dependancy py-aiger-cnf)";
+    description = "A toolkit for SAT-based prototyping in Python (without optional dependencies)";
     homepage = "https://github.com/pysathq/pysat";
     changelog = "https://pysathq.github.io/updates/";
     license = licenses.mit;
