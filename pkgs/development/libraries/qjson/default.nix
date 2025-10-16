@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "1f4wnxzx0qdmxzc7hqk28m0sva7z9p9xmxm6aifvjlp0ha6pmfxs";
   };
 
+  patches = [
+    ./cmake-build-fix.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qtbase ];
   dontWrapQtApps = true;
