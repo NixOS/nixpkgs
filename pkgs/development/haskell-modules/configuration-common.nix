@@ -844,6 +844,16 @@ with haskellLib;
     ))
   ];
 
+  pandoc = appendPatches [
+    # Adjust text fixtures for djot >= 0.1.2.3, patch extracted from unrelated change.
+    (pkgs.fetchpatch {
+      name = "pandoc-djot-0.1.2.3.patch";
+      url = "https://github.com/jgm/pandoc/commit/643712ca70b924c0edcc059699aa1ee42234be34.patch";
+      hash = "sha256-khDkb1PzC0fTaWTq3T04UvgoI+XefOJMaTV1d3Du8BU=";
+      includes = [ "test/djot-reader.native" ];
+    })
+  ] super.pandoc;
+
   # Too strict bounds on QuickCheck (<2.15), containers (<0.7), hashable (<1.5), pandoc (<3.7)
   # https://github.com/jaspervdj/patat/issues/194
   patat = doJailbreak super.patat;
