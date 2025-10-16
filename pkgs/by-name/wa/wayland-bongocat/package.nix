@@ -29,13 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
   ];
 
-  # Build phases
-  # Ensure that the Makefile has the correct directory with the Wayland protocols
-  preBuild = ''
-    export WAYLAND_PROTOCOLS_DIR="${wayland-protocols}/share/wayland-protocols"
-  '';
+  makeFlags = [
+    "WAYLAND_PROTOCOLS_DIR=${wayland-protocols}/share/wayland-protocols"
+    "release"
+  ];
 
-  makeFlags = [ "release" ];
   installPhase = ''
     runHook preInstall
 
