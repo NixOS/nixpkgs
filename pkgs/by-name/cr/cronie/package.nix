@@ -41,6 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     mainProgram = "crond";
     maintainers = [ ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux;
   };
 })
