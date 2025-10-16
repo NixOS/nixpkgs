@@ -30,7 +30,7 @@ let
       ) set
     ));
 
-  packages = packagesWith (
+  packages = builtins.trace "evaluating list of packages for maintainer: ${maintainer}" packagesWith (
     name: pkg:
     (
       if builtins.hasAttr "meta" pkg && builtins.hasAttr "maintainers" pkg.meta then
