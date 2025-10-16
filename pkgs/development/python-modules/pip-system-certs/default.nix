@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "pip-system-certs";
-  version = "5.2";
+  version = "5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "pip_system_certs";
-    hash = "sha256-gLd2tc8XGRv5nTE2mbf84v24Tre7siX9E0EJqCcGQG8=";
+    hash = "sha256-Gci/mVe8zn1pxNvC0LLvE94ZhNU/UKWQEubbutCvZ8Y=";
   };
 
   build-system = [
