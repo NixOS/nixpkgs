@@ -139,32 +139,6 @@ in
             systemd
           ];
 
-      # The sshguard ipsets must exist before we invoke
-      # iptables. sshguard creates the ipsets after startup if
-      # necessary, but if we let sshguard do it, we can't reliably add
-      # the iptables rules because postStart races with the creation
-      # of the ipsets. So instead, we create both the ipsets and
-      # firewall rules before sshguard starts.
-      preStart =
-        lib.optionalString config.networking.firewall.enable ''
-          ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet
-          ${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP
-        ''
-        + lib.optionalString (config.networking.firewall.enable && config.networking.enableIPv6) ''
-          ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6
-          ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
-        '';
-
-      postStop =
-        lib.optionalString config.networking.firewall.enable ''
-          ${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP
-          ${pkgs.ipset}/bin/ipset -quiet destroy sshguard4
-        ''
-        + lib.optionalString (config.networking.firewall.enable && config.networking.enableIPv6) ''
-          ${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP
-          ${pkgs.ipset}/bin/ipset -quiet destroy sshguard6
-        '';
-
       documentation = [
         "man:sshguard(8)"
         "man:sshguard-setup(8)"
@@ -172,6 +146,22 @@ in
 
       serviceConfig = {
         Type = "simple";
+
+        # The sshguard ipsets must exist before we invoke
+        # iptables. sshguard creates the ipsets after startup if
+        # necessary, but if we let sshguard do it, we can't reliably add
+        # the iptables rules because postStart races with the creation
+        # of the ipsets. So instead, we create both the ipsets and
+        # firewall rules before sshguard starts.
+        ExecStartPre =
+          lib.optionals config.networking.firewall.enable [
+            "${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet"
+            "${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP"
+          ]
+          ++ lib.optionals (config.networking.firewall.enable && config.networking.enableIPv6) [
+            "${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6"
+            "${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP"
+          ];
         ExecStart =
           let
             args = lib.concatStringsSep " " (
@@ -187,6 +177,15 @@ in
             );
           in
           "${pkgs.sshguard}/bin/sshguard ${args}";
+        ExecStopPost =
+          lib.optionals config.networking.firewall.enable [
+            "${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP"
+            "${pkgs.ipset}/bin/ipset -quiet destroy sshguard4"
+          ]
+          ++ lib.optionals (config.networking.firewall.enable && config.networking.enableIPv6) [
+            "${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP"
+            "${pkgs.ipset}/bin/ipset -quiet destroy sshguard6"
+          ];
         Restart = "always";
         ProtectSystem = "strict";
         ProtectHome = "tmpfs";
