@@ -7,18 +7,13 @@
   removedattrs,
 }:
 let
-  pkgs = import ../../.. {
-    system = "x86_64-linux";
-    config = { };
-    overlays = [ ];
-  };
+  pkgs = import ../../.. { system = "x86_64-linux"; };
 
-  changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
+  changedpaths = lib.importJSON changedpathsjson;
 
-  anyMatchingFile =
-    filename: builtins.any (changed: lib.strings.hasSuffix changed filename) changedpaths;
+  anyMatchingFile = filename: lib.any (changed: lib.hasSuffix changed filename) changedpaths;
 
-  anyMatchingFiles = files: builtins.any anyMatchingFile files;
+  anyMatchingFiles = files: lib.any anyMatchingFile files;
 
   attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
     (map (
@@ -39,24 +34,19 @@ let
     # No need to match up packages without maintainers with their files.
     # This also filters out attributes where `packge = null`, which is the
     # case for libintl, for example.
-    (builtins.filter (pkg: pkg.maintainers != [ ]))
+    (lib.filter (pkg: pkg.maintainers != [ ]))
   ];
 
   relevantFilenames =
     drv:
-    (lib.lists.unique (
-      map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
-        builtins.filter (x: x != null) [
-          ((drv.meta or { }).maintainersPosition or null)
-          ((drv.meta or { }).teamsPosition or null)
-          (builtins.unsafeGetAttrPos "src" drv)
-          # broken because name is always set by stdenv:
-          #    # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
-          #    # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          #    name = assert validity.handled; name + lib.optionalString
-          #(builtins.unsafeGetAttrPos "name" drv)
-          (builtins.unsafeGetAttrPos "pname" drv)
-          (builtins.unsafeGetAttrPos "version" drv)
+    (lib.unique (
+      map (pos: lib.removePrefix (toString ../..) pos.file) (
+        lib.filter (x: x != null) [
+          (drv.meta.maintainersPosition or null)
+          (drv.meta.teamsPosition or null)
+          (lib.unsafeGetAttrPos "src" drv)
+          (lib.unsafeGetAttrPos "pname" drv)
+          (lib.unsafeGetAttrPos "version" drv)
 
           # Use ".meta.position" for cases when most of the package is
           # defined in a "common" section and the only place where
@@ -76,7 +66,7 @@ let
     pkg: pkg // { filenames = relevantFilenames pkg.package; }
   ) attrsWithMaintainers;
 
-  attrsWithModifiedFiles = builtins.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
+  attrsWithModifiedFiles = lib.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
   listToPing = lib.concatMap (
     pkg:
@@ -90,7 +80,7 @@ let
 
   byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
 
-  packagesPerMaintainer = lib.attrsets.mapAttrs (
+  packagesPerMaintainer = lib.mapAttrs (
     maintainer: packages: map (pkg: pkg.packageName) packages
   ) byMaintainer;
 in
