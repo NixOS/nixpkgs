@@ -58,11 +58,14 @@ pkgs.stdenvNoCC.mkDerivation {
     echo "----------------------------------------------------------------"
     exit 1
   '';
-  shellHook = ''
-    unset shellHook # do not contaminate nested shells
-    echo "Please stand by"
-    echo nix-shell -p hydra-check --run "hydra-check ${builtins.concatStringsSep " " packages}"
-    nix-shell -p hydra-check --run "hydra-check ${builtins.concatStringsSep " " packages}"
-    exit $?
-  '';
+  shellHook =
+    let
+      command = "hydra-check ${lib.escapeShellArgs packages}";
+    in
+    ''
+      echo "Please stand by"
+      echo "${command}"
+      ${command}
+      exit $?
+    '';
 }
