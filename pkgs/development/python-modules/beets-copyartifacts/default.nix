@@ -1,12 +1,23 @@
 {
   lib,
-  beets,
   fetchFromGitHub,
-  python3Packages,
+  buildPythonPackage,
+
+  # build-system
+  setuptools,
+
+  # nativeBuildInputs
+  beets-minimal,
+
+  # dependencies
+  six,
+
+  # tests
+  pytestCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonPackage rec {
   pname = "beets-copyartifacts";
   version = "0.1.5";
   pyproject = true;
@@ -27,20 +38,20 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's/util\.py3_path/os.fsdecode/g' tests/_common.py
   '';
 
-  build-system = with python3Packages; [
+  build-system = [
     setuptools
   ];
 
   nativeBuildInputs = [
-    beets
+    beets-minimal
   ];
 
-  dependencies = with python3Packages; [
+  dependencies = [
     six
   ];
 
   nativeCheckInputs = [
-    python3Packages.pytestCheckHook
+    pytestCheckHook
     writableTmpDirAsHomeHook
   ];
 
@@ -55,7 +66,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/adammillerio/beets-copyartifacts";
     changelog = "https://github.com/adammillerio/beets-copyartifacts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    inherit (beets.meta) platforms;
+    inherit (beets-minimal.meta) platforms;
     # Isn't compatible with beets >= 2.3
     broken = true;
   };
