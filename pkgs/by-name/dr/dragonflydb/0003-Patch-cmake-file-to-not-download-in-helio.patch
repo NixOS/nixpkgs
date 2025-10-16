@@ -1,0 +1,178 @@
+From 43b316117fc72ae4c71e68ca1c1202033c333f4a Mon Sep 17 00:00:00 2001
+From: Michael Daniels <mdaniels5757@gmail.com>
+Date: Wed, 15 Oct 2025 18:27:29 -0400
+Subject: [PATCH] Patch cmake file to not download in helio
+
+---
+ cmake/third_party.cmake | 59 +++++++++++------------------------------
+ 1 file changed, 15 insertions(+), 44 deletions(-)
+
+diff --git a/helio/cmake/third_party.cmake b/helio/cmake/third_party.cmake
+index 1ca9045..76a9273 100644
+--- a/helio/cmake/third_party.cmake
++++ b/helio/cmake/third_party.cmake
+@@ -167,7 +167,7 @@ endfunction()
+ 
+ FetchContent_Declare(
+   gtest
+-  URL https://github.com/google/googletest/archive/v1.15.2.tar.gz
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(gtest)
+@@ -178,7 +178,7 @@ endif ()
+ 
+ FetchContent_Declare(
+   benchmark
+-  URL https://github.com/google/benchmark/archive/v1.9.1.tar.gz
++  DOWNLOAD_COMMAND true
+ )
+ 
+ FetchContent_GetProperties(benchmark)
+@@ -194,37 +194,14 @@ if (NOT benchmark_POPULATED)
+     add_subdirectory(${benchmark_SOURCE_DIR} ${benchmark_BINARY_DIR})
+ endif ()
+ 
+-
+-FetchContent_Declare(
+-  abseil_cpp
+-  URL https://github.com/abseil/abseil-cpp/releases/download/20250512.1/abseil-cpp-20250512.1.tar.gz
+-  PATCH_COMMAND patch -p1 < "${CMAKE_CURRENT_LIST_DIR}/../patches/abseil-20250512.1.patch"
+-)
+-
+-FetchContent_GetProperties(abseil_cpp)
+-if(NOT abseil_cpp_POPULATED)
+-  FetchContent_Populate(abseil_cpp)
+-  set(BUILD_TESTING OFF CACHE INTERNAL "")
+-  set(ABSL_PROPAGATE_CXX_STD ON CACHE INTERNAL "")
+-
+-  # If we want to override a variable in a subproject, we can temporary change the var
+-  # and then restore it if we use it ourselves.
+-  set(CMAKE_CXX_FLAGS_RELEASE_OLD ${CMAKE_CXX_FLAGS_RELEASE})
+-  set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
+-  add_subdirectory(${abseil_cpp_SOURCE_DIR} ${abseil_cpp_BINARY_DIR})
+-  set(CMAKE_CXX_FLAGS_RELEASE ${CMAKE_CXX_FLAGS_RELEASE_OLD})
+-endif()
++find_package(absl REQUIRED)
+ 
+ if (LEGACY_GLOG)
+   set(FETCHCONTENT_UPDATES_DISCONNECTED_GLOG ON CACHE BOOL "")
+ 
+   FetchContent_Declare(
+     glog
+-    GIT_REPOSITORY https://github.com/romange/glog
+-    GIT_TAG Absl
+-
+-    GIT_PROGRESS    TRUE
+-    GIT_SHALLOW     TRUE
++    DOWNLOAD_COMMAND true
+   )
+ 
+   FetchContent_GetProperties(glog)
+@@ -294,7 +271,7 @@ if (WITH_GPERF)
+ 
+   add_third_party(
+     gperf
+-    URL https://github.com/gperftools/gperftools/archive/gperftools-2.16.tar.gz
++    DOWNLOAD_COMMAND true
+ 
+     # GIT_SHALLOW TRUE
+     # Remove building the unneeded programs (they fail on macos)
+@@ -328,9 +305,7 @@ set(MIMALLOC_INCLUDE_DIR ${THIRD_PARTY_LIB_DIR}/mimalloc/include)
+ set (MIMALLOC_PATCH_COMMAND patch -p1 -d ${THIRD_PARTY_DIR}/mimalloc/ -i ${CMAKE_CURRENT_LIST_DIR}/../patches/mimalloc-v2.1.6.patch)
+ 
+ add_third_party(mimalloc
+-   #GIT_REPOSITORY https://github.com/microsoft/mimalloc.git
+-   #GIT_TAG 0f6d8293c74796fa913e4b5eb4361f1e4734f7c6
+-   URL https://github.com/microsoft/mimalloc/archive/refs/tags/v2.1.6.tar.gz
++   DOWNLOAD_COMMAND true
+    PATCH_COMMAND "${MIMALLOC_PATCH_COMMAND}"
+    # -DCMAKE_BUILD_TYPE=Release
+    # Add -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_FLAGS=-O0 to debug
+@@ -344,7 +319,7 @@ add_third_party(mimalloc
+ )
+ 
+ add_third_party(jemalloc
+-  URL https://github.com/jemalloc/jemalloc/releases/download/5.2.1/jemalloc-5.2.1.tar.bz2
++  DOWNLOAD_COMMAND true
+   PATCH_COMMAND ./autogen.sh
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${THIRD_PARTY_LIB_DIR}/jemalloc --with-jemalloc-prefix=je_ --disable-libdl
+ )
+@@ -352,7 +327,7 @@ add_third_party(jemalloc
+ 
+ add_third_party(
+   xxhash
+-  URL https://github.com/Cyan4973/xxHash/archive/v0.8.3.tar.gz
++  DOWNLOAD_COMMAND true
+ 
+   # A bug in xxhash 0.8.1 that searches for a file that doesn't exist
+   PATCH_COMMAND touch <SOURCE_DIR>/xxhsum.1
+@@ -363,7 +338,7 @@ add_third_party(
+ 
+ add_third_party(
+   uring
+-  URL https://github.com/axboe/liburing/archive/refs/tags/liburing-2.8.tar.gz
++  DOWNLOAD_COMMAND true
+ 
+   CONFIGURE_COMMAND <SOURCE_DIR>/configure --prefix=${THIRD_PARTY_LIB_DIR}/uring
+   BUILD_COMMAND make -C src
+@@ -372,7 +347,7 @@ add_third_party(
+ 
+ add_third_party(
+   pugixml
+-  URL https://github.com/zeux/pugixml/archive/refs/tags/v1.15.tar.gz
++  DOWNLOAD_COMMAND true
+ )
+ 
+ if (WITH_AWS)
+@@ -380,9 +355,7 @@ if (WITH_AWS)
+ 
+   add_third_party(
+     aws
+-    GIT_REPOSITORY https://github.com/aws/aws-sdk-cpp.git
+-    GIT_TAG 3e51fa016655eeb6b6610bdf8fe7cf33ebbf3e00
+-    GIT_SHALLOW TRUE
++    DOWNLOAD_COMMAND true
+     PATCH_COMMAND "${AWS_PATCH_COMMAND}"
+     CMAKE_PASS_FLAGS "-DBUILD_ONLY=s3 -DNO_HTTP_CLIENT=ON -DENABLE_TESTING=OFF  -DAUTORUN_UNIT_TESTS=OFF -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+     LIB libaws-cpp-sdk-s3.a libaws-cpp-sdk-core.a libaws-crt-cpp.a libaws-c-mqtt.a libaws-c-event-stream.a libaws-c-s3.a libaws-c-auth.a  libaws-c-http.a libaws-c-io.a libs2n.a libaws-c-compression.a libaws-c-cal.a libaws-c-sdkutils.a libaws-checksums.a libaws-c-common.a
+@@ -392,8 +365,7 @@ endif()
+ if (WITH_GCP)
+   add_third_party(
+     rapidjson
+-    GIT_REPOSITORY https://github.com/Tencent/rapidjson.git
+-    GIT_TAG ab1842a
++    DOWNLOAD_COMMAND true
+     CMAKE_PASS_FLAGS "-DRAPIDJSON_BUILD_TESTS=OFF -DRAPIDJSON_BUILD_EXAMPLES=OFF \
+                       -DRAPIDJSON_BUILD_DOC=OFF -DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+     LIB "none"
+@@ -402,14 +374,14 @@ endif()
+ 
+ add_third_party(
+   cares
+-  URL https://codeload.github.com/c-ares/c-ares/tar.gz/refs/tags/v1.34.5
++  DOWNLOAD_COMMAND true
+   CMAKE_PASS_FLAGS "-DCARES_SHARED:BOOL=OFF -DCARES_STATIC:BOOL=ON -DCARES_STATIC_PIC:BOOL=ON \
+                     -DCMAKE_INSTALL_LIBDIR=lib"
+ )
+ 
+ add_third_party(
+   zstd
+-  URL https://github.com/facebook/zstd/releases/download/v1.5.7/zstd-1.5.7.tar.zst
++  DOWNLOAD_COMMAND true
+   SOURCE_SUBDIR "build/cmake"
+   
+   # for debug pass : "CFLAGS=-fPIC -O0 -ggdb"
+@@ -418,8 +390,7 @@ add_third_party(
+ 
+ add_third_party(
+   expected
+-  GIT_REPOSITORY https://github.com/martinmoene/expected-lite.git
+-  GIT_TAG f17940fabae07063cabb67abf2c8d164d3146044 # Important fixes for monadic functions
++  DOWNLOAD_COMMAND true
+   CMAKE_PASS_FLAGS "-DEXPECTED_LITE_OPT_BUILD_TESTS=0"
+   LIB "none"
+ )
+-- 
+2.50.1
+
