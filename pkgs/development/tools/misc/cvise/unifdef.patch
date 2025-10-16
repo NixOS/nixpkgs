@@ -1,6 +1,7 @@
---- a/cvise.py
-+++ b/cvise.py
-@@ -93,4 +93,5 @@ def find_external_programs():
+--- a/cvise/utils/externalprograms.py
++++ b/cvise/utils/externalprograms.py
+@@ -43,5 +43,6 @@ def find_external_programs():
+ 
      # Special case for clang-format
      programs['clang-format'] = '@CLANG_FORMAT_PATH@'
 +    programs['unifdef'] = '@UNIFDEF@'
