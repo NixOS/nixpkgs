@@ -11,21 +11,29 @@ let
 
   changedpaths = lib.importJSON changedpathsjson;
 
-  anyMatchingFile = filename: lib.any (changed: changed == filename) changedpaths;
+  anyMatchingFile = filename: lib.any (lib.hasPrefix filename) changedpaths;
 
   anyMatchingFiles = files: lib.any anyMatchingFile files;
+
+  sharded = name: "${lib.substring 0 2 name}/${name}";
 
   attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
     (map (
       name:
       let
+        path = lib.splitString "." name;
         # Some packages might be reported as changed on a different platform, but
         # not even have an attribute on the platform the maintainers are requested on.
         # Fallback to `null` for these to filter them out below.
-        package = lib.attrByPath (lib.splitString "." name) null pkgs;
+        package = lib.attrByPath path null pkgs;
       in
       {
         inherit name package;
+        # Adds all files in by-name to each package, no matter whether they are discoverable
+        # via meta attributes below. For example, this allows pinging maintainers for
+        # updates to .json files.
+        # TODO: Support by-name package sets.
+        filenames = lib.optional (lib.length path == 1) "pkgs/by-name/${sharded (lib.head path)}/";
         # TODO: Refactor this so we can ping entire teams instead of the individual members.
         # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
         maintainers = package.meta.maintainers or [ ];
@@ -63,7 +71,7 @@ let
     ));
 
   attrsWithFilenames = map (
-    pkg: pkg // { filenames = relevantFilenames pkg.package; }
+    pkg: pkg // { filenames = pkg.filenames ++ relevantFilenames pkg.package; }
   ) attrsWithMaintainers;
 
   attrsWithModifiedFiles = lib.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
