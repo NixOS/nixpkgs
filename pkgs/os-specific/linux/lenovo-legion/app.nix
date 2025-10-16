@@ -5,12 +5,13 @@
   wrapQtAppsHook,
   python3,
   nix-update-script,
+  qtbase,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
   version = "0.0.20-unstable-2025-07-11";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
@@ -21,10 +22,14 @@ python3.pkgs.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/python/legion_linux";
 
-  nativeBuildInputs = [ wrapQtAppsHook ];
+  build-system = with python3.pkgs; [
+    setuptools
+    wrapQtAppsHook
+  ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3.pkgs; [
     pyqt6
+    qtbase
     argcomplete
     pillow
     pyyaml
