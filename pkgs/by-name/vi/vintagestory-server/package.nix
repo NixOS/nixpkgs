@@ -33,12 +33,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -r * $out/
 
-    makeWrapper '${lib.getExe dotnet-runtime_8}' "$out/bin/vintagestory-server" --append-flags "$out/VintagestoryServer.dll"
-
-    chmod +x $out/bin/vintagestory-server
-
-    wrapProgram $out/bin/vintagestory-server \
-      --prefix PATH : ${lib.makeBinPath [ dotnet-runtime_8 ]}
+    makeWrapper '${lib.getExe dotnet-runtime_8}' "$out/bin/vintagestory-server" \
+      --append-flags "$out/VintagestoryServer.dll"
 
     runHook postInstall
   '';
