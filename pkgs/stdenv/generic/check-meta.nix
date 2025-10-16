@@ -713,33 +713,36 @@ let
                 }
               ) possibleCPEPartsFuns;
 
-          # search for a PURL in the following order:
-          # - locally set
-          # - src.meta.PURL
-          # - srcs[].meta.PURL (for PURL only)
           purlParts = attrs.meta.identifiers.purlParts or { };
-          purl =
-            if purlParts ? type && purlParts ? spec then
-              "pkg:${purlParts.type}/${purlParts.spec}"
-            else
-              (attrs.src.meta.identifiers.purl or null);
-          purls =
-            attrs.meta.identifiers.purls or (
-              if purl != null then
-                [ purl ]
-              else
-                (attrs.src.meta.identifiers.purls or (
-                  # some of the srcs may not have a PURL
-                  filter (purl: purl != null) (
-                    flatten (
-                      map
-                        # get the PURLs from a single derivation
-                        (drv: drv.meta.identifiers.purls or null)
+          purlPartsFormatted =
+            if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
 
-                        # sometimes srcs is a single derivation
-                        (flatten (attrs.srcs or [ ]))
-                    )
-                  )
+          # search for a PURL in the following order:
+          purl =
+            # 1) locally set through API
+            if purlPartsFormatted != null then
+              purlPartsFormatted
+            else
+              # 2) locally overwritten through meta.identifiers.purl
+              (attrs.src.meta.identifiers.purl or null);
+
+          # search for a PURL in the following order:
+          purls =
+            # 1) locally overwritten through meta.identifiers.purls (e.g. extension of list)
+            attrs.meta.identifiers.purls or (
+              # 2) locally set through API
+              if purlPartsFormatted != null then
+                [ purlPartsFormatted ]
+              else
+                # 3) src.meta.PURL
+                (attrs.src.meta.identifiers.purls or (
+                  # 4) srcs.meta.PURL
+                  if !attrs ? srcs then
+                    [ ]
+                  else if isList attrs.srcs then
+                    concatMap (drv: drv.meta.identifiers.purls or [ ]) attrs.srcs
+                  else
+                    attrs.srcs.meta.identifiers.purls or [ ]
                 )
                 )
             );
