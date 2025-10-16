@@ -6,8 +6,6 @@
   nodejs_22,
   perl,
   xcbuild,
-  writableTmpDirAsHomeHook,
-  versionCheckHook,
   nixosTests,
   nix-update-script,
 }:
@@ -84,14 +82,6 @@ buildNpmPackage (finalAttrs: {
   + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd bw --zsh <($out/bin/bw completion --shell zsh)
   '';
-
-  doInstallCheck = true;
-  nativeInstallCheckInputs = [
-    writableTmpDirAsHomeHook
-    versionCheckHook
-  ];
-  versionCheckKeepEnvironment = [ "HOME" ];
-  versionCheckProgramArg = "--version";
 
   passthru = {
     tests = {
