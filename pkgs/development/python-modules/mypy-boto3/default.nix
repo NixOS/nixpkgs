@@ -130,8 +130,8 @@ in
       "sha256-LNfDzqjQNQkvt61VHFc8aFdEBicRACvSmuM9W/SWQng=";
 
   mypy-boto3-appstream =
-    buildMypyBoto3Package "appstream" "1.40.38"
-      "sha256-YM34Xd3WnYAgCnUsZX6d3oO/z3TRtLHOuv7o2qfpZRo=";
+    buildMypyBoto3Package "appstream" "1.40.52"
+      "sha256-l1Zrigv4T4W9z+9MrZTTcTeeVISb5wnjepBpfSv554g=";
 
   mypy-boto3-appsync =
     buildMypyBoto3Package "appsync" "1.40.0"
@@ -158,8 +158,8 @@ in
       "sha256-euF2rskAknxAxRrkS7mOXWZkb9NR70kGGRe5kqTcNgs=";
 
   mypy-boto3-backup =
-    buildMypyBoto3Package "backup" "1.40.46"
-      "sha256-ISPplrUnN2jZ9V+24V7N9xW2kJTY4yIWe17Y/o+FRis=";
+    buildMypyBoto3Package "backup" "1.40.52"
+      "sha256-bo+tgMbUCf1uL8fNB/5UBgUtIiYMMQpd/uaj/LUuZ6U=";
 
   mypy-boto3-backup-gateway =
     buildMypyBoto3Package "backup-gateway" "1.40.15"
@@ -338,8 +338,8 @@ in
       "sha256-MIxmEy+/mlDwWKpHrb0jo8Yu1C7+xP6JRNvUeDmlfZ0=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.40.40"
-      "sha256-k9Q5WmeCTzqlhjIsPUPlbZXB6kB2Ll6sNdhybOWrUHk=";
+    buildMypyBoto3Package "connect" "1.40.52"
+      "sha256-Y4inB+VA4aWEsef389vf2K0K6uvGxsAugtetxnKCSfU=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.40.0"
@@ -446,8 +446,8 @@ in
       "sha256-jtkx0kbI7SB74U5uWyGdVhKMlsy/T82lz3P89k8LMPA=";
 
   mypy-boto3-ec2 =
-    buildMypyBoto3Package "ec2" "1.40.40"
-      "sha256-I+YOlaDhTIFN3fd8f5MctMEFEQNKR+lyMTyPXiPqaRo=";
+    buildMypyBoto3Package "ec2" "1.40.52"
+      "sha256-5X7I+IrUOxothFVyw3gPP7xCq5gPXTQplA372U6rwRc=";
 
   mypy-boto3-ec2-instance-connect =
     buildMypyBoto3Package "ec2-instance-connect" "1.40.20"
@@ -1365,12 +1365,12 @@ in
       "sha256-SfZ4sYKJic9iQfWxUQEdV233Y5NbITHWjC3Vt+hFpHA=";
 
   mypy-boto3-transcribe =
-    buildMypyBoto3Package "transcribe" "1.40.8"
-      "sha256-i50560hic1ItkD0zJjAyHraepEyxioFBvHwMWkfg0kk=";
+    buildMypyBoto3Package "transcribe" "1.40.52"
+      "sha256-A93BHo29EHovA2v+hACbOhN+ckTL8JAGgftBBFzXBfM=";
 
   mypy-boto3-transfer =
-    buildMypyBoto3Package "transfer" "1.40.42"
-      "sha256-1jkEh4zfoBl1sOPdAY++CheU6by2ps53OqBTN+FhwAc=";
+    buildMypyBoto3Package "transfer" "1.40.52"
+      "sha256-Z00yi43t9SMR1hsAG5EkvjaRKLqUU4uYwdn3KVVo+6w=";
 
   mypy-boto3-translate =
     buildMypyBoto3Package "translate" "1.40.17"
