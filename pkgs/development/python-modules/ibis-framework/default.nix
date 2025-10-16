@@ -98,14 +98,14 @@ in
 
 buildPythonPackage rec {
   pname = "ibis-framework";
-  version = "10.8.0";
+  version = "11.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ibis-project";
     repo = "ibis";
     tag = version;
-    hash = "sha256-Uuqm9Exu/oK3BGBL4ViUOGArMWhVutUn1gFRj1I4vt4=";
+    hash = "sha256-hf5guWeX9WQbKaNrs7ALwwDxV1Rgeb5Z0PedTQ4P7S0=";
   };
 
   build-system = [
