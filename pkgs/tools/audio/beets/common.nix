@@ -121,13 +121,11 @@ python3Packages.buildPythonApplication {
   ]
   ++ extraNativeBuildInputs;
 
-  buildInputs = [
-  ]
-  ++ (with gst_all_1; [
+  buildInputs = with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
-  ]);
+  ];
 
   outputs = [
     "out"
