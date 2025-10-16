@@ -1,7 +1,6 @@
 {
   lib,
   fetchurl,
-  fetchpatch,
   ncurses,
   pcre2,
   stdenv,
@@ -55,8 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     mainProgram = "less";
     maintainers = with lib.maintainers; [
-      # not active
-      dtzWill
+      dtzWill # not active
     ];
     platforms = lib.platforms.unix;
   };
