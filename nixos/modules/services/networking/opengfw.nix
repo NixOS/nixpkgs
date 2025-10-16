@@ -374,12 +374,12 @@ in
         after = [ "network.target" ];
         path = with pkgs; [ iptables ];
 
-        preStart = ''
-          ${optionalString (rules != null) "ln -sf ${rules} rules.yaml"}
-          ${optionalString (settings != null) "ln -sf ${settings} config.yaml"}
-        '';
-
         serviceConfig = rec {
+          ExecStartPre =
+            lib.optionals (rules != null) [ "${lib.getExe' pkgs.coreutils "ln"} -sf ${rules} rules.yaml" ]
+            ++ lib.optionals (settings != null) [
+              "${lib.getExe' pkgs.coreutils "ln"} -sf ${settings} config.yaml"
+            ];
           ExecStart =
             let
               args = lib.cli.toCommandLineShellGNU { } {
