@@ -2100,6 +2100,7 @@ mapAliases {
   platypus = throw "platypus is unmaintained and has not merged Python3 support"; # Added 2025-03-20
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
+  pn = throw "'pn' has been removed as upstream was archived in 2020"; # Added 2025-10-17
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
   pltScheme = racket; # Added 2013-02-24
   poac = cabinpkg; # Added 2025-01-22
