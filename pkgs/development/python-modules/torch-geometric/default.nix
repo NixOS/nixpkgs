@@ -246,6 +246,10 @@ buildPythonPackage rec {
 
     # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
     "test_feature_store"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # NotImplementedError: The operator 'aten::logspace.out' is not currently implemented for the MPS device.
+    "test_positional_encoding"
   ];
 
   meta = {
