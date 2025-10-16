@@ -12,15 +12,15 @@
 
 buildGoModule rec {
   pname = "witness";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
     rev = "v${version}";
-    sha256 = "sha256-0Q+6nG5N3Xp5asmRMPZccLxw6dWiZVX6fuIUf1rT+mI=";
+    sha256 = "sha256-MKiPIZFeCWOT4zTbG7SjwdNUHFuqsL4pGu4VvVwyn3s=";
   };
-  vendorHash = "sha256-oH/aWt8Hl/BIN+IYLcuVYWDpQZaYABAOGxXyLssjQg0=";
+  vendorHash = "sha256-V3SuhBbhXyA0SFOGfBrV/qH+cROr2obHOBcivkgRO6U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,6 +38,8 @@ buildGoModule rec {
   # want but also limits the tests
   preCheck = ''
     unset subPackages
+    # tests expect no version set
+    unset ldflags
   '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
