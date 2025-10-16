@@ -5942,6 +5942,11 @@ with pkgs;
     pythonAttr = "python314FreeThreading";
     enableGIL = false;
   };
+  python315FreeThreading = python315.override {
+    self = python315FreeThreading;
+    pythonAttr = "python315FreeThreading";
+    enableGIL = false;
+  };
 
   pythonInterpreters = callPackage ./../development/interpreters/python { };
   inherit (pythonInterpreters)
@@ -5951,6 +5956,7 @@ with pkgs;
     python312
     python313
     python314
+    python315
     python3Minimal
     pypy27
     pypy310
@@ -5967,6 +5973,7 @@ with pkgs;
   python312Packages = recurseIntoAttrs python312.pkgs;
   python313Packages = recurseIntoAttrs python313.pkgs;
   python314Packages = python314.pkgs;
+  python315Packages = python315.pkgs;
   pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
@@ -8388,6 +8395,7 @@ with pkgs;
 
   inherit
     ({
+      protobuf_33 = callPackage ../development/libraries/protobuf/33.nix { };
       protobuf_32 = callPackage ../development/libraries/protobuf/32.nix { };
       protobuf_31 = callPackage ../development/libraries/protobuf/31.nix { };
       protobuf_30 = callPackage ../development/libraries/protobuf/30.nix { };
@@ -8401,6 +8409,7 @@ with pkgs;
         abseil-cpp = abseil-cpp_202103;
       };
     })
+    protobuf_33
     protobuf_32
     protobuf_31
     protobuf_30
@@ -10955,10 +10964,6 @@ with pkgs;
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
   dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
-
-  direwolf = callPackage ../applications/radio/direwolf {
-    hamlib = hamlib_4;
-  };
 
   djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
 
