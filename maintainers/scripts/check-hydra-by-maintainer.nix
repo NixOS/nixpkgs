@@ -1,4 +1,8 @@
-{ maintainer }:
+{
+  maintainer, # --argstr
+  short ? false, # use --arg short true
+  extra ? "", # --argstr
+}:
 let
   pkgs = import ./../../default.nix {
     config.allowAliases = false;
@@ -53,14 +57,21 @@ pkgs.stdenvNoCC.mkDerivation {
     echo ""
     echo "----------------------------------------------------------------"
     echo ""
-    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer SuperSandro2000"
+    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer yourname"
+    echo ""
+    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer yourname --arg short true"
+    echo ""
+    echo "nix-shell maintainers/scripts/check-hydra-by-maintainer.nix --argstr maintainer yourname --argstr extra \"--json\""
     echo ""
     echo "----------------------------------------------------------------"
     exit 1
   '';
   shellHook =
     let
-      command = "hydra-check ${lib.escapeShellArgs packages}";
+      # trying to only add spaces as necessary for optional args
+      # with optStr don't need spaces between nix templating
+      optStr = cond: string: lib.optionalString cond "${string} ";
+      command = "hydra-check ${optStr short "--short"}${optStr (extra != "") extra}${lib.escapeShellArgs packages}";
     in
     ''
       # if user presses ctrl-c during run
