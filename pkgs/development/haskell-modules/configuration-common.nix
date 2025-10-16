@@ -586,14 +586,6 @@ with haskellLib;
     '';
   } super.containers-unicode-symbols;
 
-  # 2025-09-03: support text 2.1.1
-  hs-opentelemetry-api = appendPatch (pkgs.fetchpatch2 {
-    name = "fix-building-with-the-latest-text-and-persistent-releases.patch";
-    url = "https://github.com/iand675/hs-opentelemetry/commit/ee8a6dad7db306eb67748ddcd77df4974ad8259e.patch";
-    hash = "sha256-CdDrEdm5rCKydTxk42dcURZWcVukgHG+7kfOLiNxhoI=";
-    relative = "api";
-  }) super.hs-opentelemetry-api;
-
   # Test file not included on hackage
   numerals-base = dontCheck (doJailbreak super.numerals-base);
 
