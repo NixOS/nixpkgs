@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.74.0";
+  version = "7.75.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-ahFc/AOBfgW34S1zcLZYj9pie/2aAK/tdZzC7An4lNU=";
+    hash = "sha256-Abt0Rh+6hDLIfHtiTZZCZuKf4SCBLu917wopV6H7n+I=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -134,15 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-h1F9/lKtcT8Gce+EVj8RrPzHtjqp11ycHAkf7xldHeM="
+        "sha256-b13di3TdaS6CT8gAZfBqlu4WheIHL+X8LvAo148H8kI="
       else
-        "sha256-tDlQTOSUkCjRXtA7NIUgI+ax+GCPFXK+eZLe0fXVhJY=";
+        "sha256-/Yy9R+MRN5e5vGU0XgwJa7oFpHn8bi8B0y89aaT2LQI=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1759960657;
+    SOURCE_DATE_EPOCH = 1760562217;
   };
 
   preBuild = ''
