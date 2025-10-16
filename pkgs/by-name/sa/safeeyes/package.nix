@@ -6,27 +6,26 @@
   gobject-introspection,
   libnotify,
   wlrctl,
-  gtk3,
+  gtk4,
+  gettext,
   safeeyes,
   testers,
   xprintidle,
   xprop,
   wrapGAppsHook3,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "safeeyes";
-  version = "2.2.3";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-VE+pcCSblj5CADJppyM1mUchOibUtr7NrVwINrSprY0=";
+    hash = "sha256-t8PMQxQjfyW3t0bamo8kAlminAMfUe0ThtzrgUc33Xo=";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py --replace-fail "root_dir = sys.prefix" "root_dir = '/'"
-  '';
 
   nativeBuildInputs = [
     wrapGAppsHook3
@@ -34,7 +33,8 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gtk3
+    gtk4
+    gettext
     libnotify
   ];
 
@@ -46,16 +46,16 @@ python3.pkgs.buildPythonApplication rec {
     xlib
     pygobject3
     dbus-python
-    croniter
     packaging
   ];
 
+  optional-dependencies = with python3.pkgs; {
+    healthstats = [ croniter ];
+    wayland = [ pywayland ];
+  };
+
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.
   dontWrapGApps = true;
-
-  postInstall = ''
-    mv $out/lib/python*/site-packages/share $out/share
-  '';
 
   preFixup = ''
     makeWrapperArgs+=(
@@ -75,7 +75,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "safeeyes" ];
 
-  passthru.tests.version = testers.testVersion { package = safeeyes; };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion { package = safeeyes; };
+  };
 
   meta = {
     homepage = "http://slgobinath.github.io/SafeEyes";
