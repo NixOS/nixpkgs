@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "less";
     maintainers = with lib.maintainers; [
       dtzWill # not active
+      yiyu
     ];
     platforms = lib.platforms.unix;
   };
