@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "nu_plugin_highlight";
-  version = "1.4.8+0.106.0";
+  version = "1.4.9+0.107.0";
 
   src = fetchFromGitHub {
     owner = "cptpiepmatz";
     repo = "nu-plugin-highlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-H7bCX13miQECEPCOT2eF+TBkUU3qff+LhOiA008GLdI=";
+    hash = "sha256-y+IGbgQ2DOHMKlImqvt819aeXrQ5td00rjHFimzrOz8=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-Qf6qEY6imcI0rfktGl5ErsbT+HCDgTohl+NKFsrQbzA=";
+  cargoHash = "sha256-vTxDgdwoKRM4AIMqQPWKqYsO7tvdeHpunq6nsctoblg=";
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals stdenv.cc.isClang [ rustPlatform.bindgenHook ];
 
@@ -33,7 +33,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "nu_plugin_highlight";
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
     license = lib.licenses.mit;
-    broken = true;
-    maintainers = with lib.maintainers; [ aciceri mgttlinger ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      mgttlinger
+    ];
   };
 })
