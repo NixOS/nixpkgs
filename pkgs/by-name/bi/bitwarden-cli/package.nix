@@ -13,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2025.4.0";
+  version = "2025.5.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     tag = "cli-v${version}";
-    hash = "sha256-sWphSdxh07GS7GPlNVxK7zoXMTGLjT7qTLfH1nsIiQQ=";
+    hash = "sha256-8jVKwqKhTfhur226SER4sb1i4dY+TjJRYmOY8YtO6CY=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-/BOzDt+wgnWedWfShPkAhaeujBBQTDlZdtiKl3wrOqE=";
+  npmDepsHash = "sha256-0IoBPRGdtkMeTrT5cqZLHB/WrUCONtsJ6YHh0y4K5Ls=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -97,6 +97,8 @@ buildNpmPackage rec {
   };
 
   meta = {
+    # https://github.com/NixOS/nixpkgs/issues/339576
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
