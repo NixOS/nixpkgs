@@ -226,7 +226,7 @@ intel-oneapi.mkIntelOneApi (fa: {
       # sycl-ls, sycl-trace: doesn't respect --help
       regex_skip="(.*-32)|(IMB-.*)|fi_info|fi_pingpong|gdb-oneapi|hydra_bstrap_proxy|hydra_nameserver|hydra_pmi_proxy|mpirun|sycl-ls|sycl-trace"
       export I_MPI_ROOT="${intel-oneapi.base}/mpi/latest"
-      for bin in "${intel-oneapi}"/bin/*; do
+      for bin in "${intel-oneapi.base}"/bin/*; do
         if [[ "$bin" =~ $regex_skip ]] || [ ! -f "$bin" ] || [[ ! -x "$bin" ]]; then
           echo "skipping $bin"
           continue
