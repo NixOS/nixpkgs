@@ -4,6 +4,7 @@
   callPackage,
   python312,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   rocmPackages,
   sqlite-vec,
@@ -62,7 +63,15 @@ python.pkgs.buildPythonApplication rec {
 
   inherit src;
 
-  patches = [ ./constants.patch ];
+  patches = [
+    ./constants.patch
+
+    (fetchpatch {
+      name = "CVE-2025-62382.patch";
+      url = "https://github.com/blakeblackshear/frigate/commit/4d582062fba09f69fb40658fbe02b4f527dc46af.patch";
+      hash = "sha256-AqIpE3CHI/YADr3wb6bdvZGxrtBy26+dsrMt9CZTA40=";
+    })
+  ];
 
   postPatch = ''
     echo 'VERSION = "${version}"' > frigate/version.py
