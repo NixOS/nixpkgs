@@ -229,7 +229,7 @@ let
                     RewriteEngine on
                     RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge [NC]
                     RewriteCond %{HTTPS} off
-                    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+                    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
                 </IfModule>
               ''
             else
