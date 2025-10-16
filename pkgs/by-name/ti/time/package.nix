@@ -18,10 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     # fixes cross-compilation to riscv64-linux
     ./time-1.9-implicit-func-decl-clang.patch
     # fix compilation with gcc15
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/time/raw/191440912c2e9a63af87802e507ca3ccb923e805/f/time-1.9-Fix-compiling-with-GCC15.patch";
-      hash = "sha256-4Qp3mV8XuCmz518GPtrW52gyaPOb+97RE6FDPKNCyJw=";
-    })
+    ./c23-fix.patch
   ];
 
   meta = {
