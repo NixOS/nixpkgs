@@ -2,6 +2,7 @@
   buildPythonPackage,
   fetchPypi,
   lib,
+  setuptools,
   six,
   pypblib,
   pytestCheckHook,
@@ -9,7 +10,9 @@
 buildPythonPackage rec {
   pname = "python-sat";
   version = "1.8.dev24";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ setuptools ];
 
   src = fetchPypi {
     inherit version;
