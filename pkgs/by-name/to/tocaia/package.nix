@@ -1,32 +1,27 @@
 {
   lib,
   stdenv,
-  fetchgit,
+  fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tocaia";
   version = "0.9.0";
 
-  src = fetchgit {
-    url = "https://github.com/manipuladordedados/tocaia.git";
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-Np+Awn5KGoAbeoUEkcAeVwnNCqI2Iy+19Zj1RkNfgXU=";
+  src = fetchFromGitHub {
+    owner = "manipuladordedados";
+    repo = "tocaia";
+    tag = finalAttrs.version;
+    hash = "sha256-Np+Awn5KGoAbeoUEkcAeVwnNCqI2Iy+19Zj1RkNfgXU=";
   };
 
-  buildPhase = ''
-    make
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -a tocaia $out/bin
-  '';
-
+  meta = {
   meta = with lib; {
-    description = "Portable TUI Gopher client written in C89 for POSIX systems";
     homepage = "https://github.com/manipuladordedados/tocaia";
-    license = licenses.bsd2;
+    changelog = "https://github.com/manipuladordedados/tocaia/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ manipuladordedados ];
+    platforms = lib.platforms.unix;
     maintainers = with maintainers; [ manipuladordedados ];
     platforms = platforms.unix;
   };
