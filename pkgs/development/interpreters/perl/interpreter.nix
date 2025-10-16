@@ -33,6 +33,16 @@ assert (enableCrypt -> (libxcrypt != null));
 
 let
   crossCompiling = !(stdenv.buildPlatform.canExecute stdenv.hostPlatform);
+  commonPatches = [
+    ./no-sys-dirs.patch
+  ]
+  ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ./cpp-precomp.patch
+    ./sw_vers.patch
+  ]
+  ++ lib.optional crossCompiling ./cross.patch;
+
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
@@ -71,15 +81,7 @@ stdenv.mkDerivation (
 
     disallowedReferences = [ stdenv.cc ];
 
-    patches = [
-      ./no-sys-dirs.patch
-    ]
-    ++ lib.optional stdenv.hostPlatform.isSunOS ./ld-shared.patch
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      ./cpp-precomp.patch
-      ./sw_vers.patch
-    ]
-    ++ lib.optional crossCompiling ./cross.patch;
+    patches = commonPatches;
 
     # This is not done for native builds because pwd may need to come from
     # bootstrap tools when building bootstrap perl.
@@ -322,7 +324,7 @@ stdenv.mkDerivation (
       rev = crossVersion;
       hash = "sha256-mG9ny+eXGBL4K/rXqEUPSbar+4Mq4IaQrGRFIHIyAAw=";
     };
-    patches = [
+    patches = commonPatches ++ [
       # fixes build failure due to missing d_fdopendir/HAS_FDOPENDIR configure option
       # https://github.com/arsv/perl-cross/pull/159
       ./cross-fdopendir.patch
