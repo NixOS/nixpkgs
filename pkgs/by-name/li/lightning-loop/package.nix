@@ -38,6 +38,9 @@ buildGoModule rec {
     description = "Lightning Loop Client";
     homepage = "https://github.com/lightninglabs/loop";
     license = licenses.mit;
-    maintainers = with maintainers; [ proofofkeags ];
+    maintainers = with maintainers; [
+      proofofkeags
+      starius
+    ];
   };
 }
