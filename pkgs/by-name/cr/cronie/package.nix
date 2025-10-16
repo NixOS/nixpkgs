@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WrzdpE9t7vWpc8QFoFs+S/HgHwsidRNmfcHp7ltSWQw=";
   };
 
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [
