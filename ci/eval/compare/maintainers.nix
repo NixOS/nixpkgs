@@ -11,13 +11,24 @@ let
 
   changedpaths = lib.importJSON changedpathsjson;
 
+  # Extract attributes that changed from by-name paths.
+  # This allows pinging reviewers for pure refactors.
+  touchedattrs = lib.pipe changedpaths [
+    (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed))
+    (map (lib.splitString "/"))
+    (map (path: lib.elemAt path 3))
+    lib.unique
+  ];
+
   anyMatchingFile = filename: lib.any (lib.hasPrefix filename) changedpaths;
 
   anyMatchingFiles = files: lib.any anyMatchingFile files;
 
   sharded = name: "${lib.substring 0 2 name}/${name}";
 
-  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
+  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs ++ touchedattrs) [
+    # An attribute can appear in changed/removed *and* touched
+    lib.unique
     (map (
       name:
       let
