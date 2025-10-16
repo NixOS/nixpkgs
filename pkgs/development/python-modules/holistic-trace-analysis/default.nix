@@ -1,8 +1,9 @@
 {
+  lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   jupyterlab,
-  lib,
   numpy,
   pandas,
   plotly,
@@ -36,6 +37,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Makes assumptions about the filesystem layout
+    "tests/test_config.py"
+  ];
 
   pythonImportsCheck = [ "hta" ];
 
