@@ -3,15 +3,9 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  olm,
   libsignal-ffi,
+  zlib,
   versionCheckHook,
-  # This option enables the use of an experimental pure-Go implementation of
-  # the Olm protocol instead of libolm for end-to-end encryption. Using goolm
-  # is not recommended by the mautrix developers, but they are interested in
-  # people trying it out in non-production-critical environments and reporting
-  # any issues they run into.
-  withGoolm ? false,
 }:
 
 let
@@ -19,39 +13,40 @@ let
 in
 buildGoModule rec {
   pname = "mautrix-signal";
-  version = "0.8.7";
+  version = "25.10";
+  tag = "v0.2510.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "signal";
-    tag = "v${version}";
-    hash = "sha256-dzE6CncAja/6GoeYFuCcxRfd60ybNnCL9HzdMXyfh0k=";
+    tag = tag;
+    hash = "sha256-Bz4jBI/lLhCxZW7JmaX6dlVwbB3dLXn5v/8gMKcFKSE=";
   };
 
-  buildInputs =
-    (lib.optional (!withGoolm) olm)
-    ++ (lib.optional withGoolm stdenv.cc.cc.lib)
-    ++ [
-      # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
-      # see https://github.com/mautrix/signal/issues/401
-      libsignal-ffi
-    ];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    # must match the version used in https://github.com/mautrix/signal/tree/main/pkg/libsignalgo
+    # see https://github.com/mautrix/signal/issues/401
+    libsignal-ffi
+    zlib
+  ];
 
-  tags = lib.optional withGoolm "goolm";
+  tags = "goolm";
 
-  CGO_LDFLAGS = lib.optional withGoolm [ cppStdLib ];
+  CGO_LDFLAGS = cppStdLib;
 
-  vendorHash = "sha256-BYTAXhm7hjNa2DN/dcd77zOiDUGb7FC6y3I8FxwQvMI=";
+  vendorHash = "sha256-Sur29i5ih7xK85maVAaq9cwWJVGtwS7hPOxQI4YduNI=";
+
+  ldflags = [
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   doCheck = true;
   preCheck = ''
     # Needed by the tests to be able to find libstdc++
     export LD_LIBRARY_PATH="${stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
-  ''
-  + (lib.optionalString (!withGoolm) ''
-    # When using libolm, the tests need explicit linking to libstdc++
-    export CGO_LDFLAGS="${cppStdLib}"
-  '');
+  '';
 
   postCheck = ''
     unset LD_LIBRARY_PATH
