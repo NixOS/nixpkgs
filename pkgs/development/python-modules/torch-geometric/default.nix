@@ -17,26 +17,27 @@
   requests,
   torch,
   tqdm,
+  xxhash,
 
   # optional-dependencies
+  # benchmark
   matplotlib,
   networkx,
   pandas,
   protobuf,
   wandb,
+  # dev
   ipython,
   matplotlib-inline,
   pre-commit,
   torch-geometric,
+  # full
   ase,
-  # captum,
   graphviz,
   h5py,
   numba,
   opt-einsum,
-  pgmpy,
   pynndescent,
-  # pytorch-memlab,
   rdflib,
   rdkit,
   scikit-image,
@@ -47,9 +48,18 @@
   tabulate,
   torchmetrics,
   trimesh,
+  # graphgym
   pytorch-lightning,
   yacs,
+  # modelhub
   huggingface-hub,
+  # rag
+  # pcst-fast,
+  datasets,
+  transformers,
+  sentencepiece,
+  accelerate,
+  # test
   onnx,
   onnxruntime,
   pytest,
@@ -63,14 +73,14 @@
 
 buildPythonPackage rec {
   pname = "torch-geometric";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
     tag = version;
-    hash = "sha256-Zw9YqPQw2N0ZKn5i5Kl4Cjk9JDTmvZmyO/VvIVr6fTU=";
+    hash = "sha256-xlOzpoYRoEfIRWSQoZbEPvUW43AMr3rCgIYnxwG/z3A=";
   };
 
   build-system = [
@@ -87,6 +97,7 @@ buildPythonPackage rec {
     requests
     torch
     tqdm
+    xxhash
   ];
 
   optional-dependencies = {
@@ -113,7 +124,7 @@ buildPythonPackage rec {
       numba
       opt-einsum
       pandas
-      pgmpy
+      # pgmpy
       pynndescent
       # pytorch-memlab
       rdflib
@@ -136,9 +147,19 @@ buildPythonPackage rec {
     modelhub = [
       huggingface-hub
     ];
+    rag = [
+      # pcst-fast (unpackaged)
+      datasets
+      transformers
+      pandas
+      sentencepiece
+      accelerate
+      torchmetrics
+    ];
     test = [
       onnx
       onnxruntime
+      # onnxscript (unpackaged)
       pytest
       pytest-cov-stub
     ];
@@ -151,6 +172,14 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     writableTmpDirAsHomeHook
+  ];
+
+  pytestFlags = [
+    # DeprecationWarning: Failing to pass a value to the 'type_params' parameter of
+    # 'typing._eval_type' is deprecated, as it leads to incorrect behaviour when calling
+    # typing._eval_type on a stringified annotation that references a PEP 695 type parameter.
+    # It will be disallowed in Python 3.15.
+    "-Wignore::DeprecationWarning"
   ];
 
   disabledTests = [

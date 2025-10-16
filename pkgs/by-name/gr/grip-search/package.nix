@@ -48,6 +48,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sc0ty/grip";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ tex ];
+    maintainers = [ ];
   };
 }
