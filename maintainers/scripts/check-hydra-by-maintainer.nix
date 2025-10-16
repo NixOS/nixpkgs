@@ -46,7 +46,7 @@ let
   ) (name: name) "" pkgs;
 
 in
-pkgs.stdenv.mkDerivation {
+pkgs.stdenvNoCC.mkDerivation {
   name = "check-hydra-by-maintainer";
   buildInputs = [ pkgs.hydra-check ];
   buildCommand = ''
