@@ -133,6 +133,10 @@ buildPythonPackage rec {
     # KeyError: 'dask'
     "tests/dask/test_dask.py::test_series_schema"
     "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
+
+    # TypeError: memtable() got an unexpected keyword argument 'name'
+    # https://github.com/unionai-oss/pandera/issues/2154
+    "tests/ibis/test_ibis_container.py"
   ];
 
   disabledTests = [
