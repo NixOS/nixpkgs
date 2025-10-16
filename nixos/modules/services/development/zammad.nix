@@ -368,7 +368,7 @@ in
         # cleanup state directory from module before refactoring in
         # https://github.com/NixOS/nixpkgs/pull/277456
         if [[ -e ${cfg.dataDir}/node_modules ]]; then
-          rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded")
+          rm -rf ${cfg.dataDir}/!("tmp"|"config"|"log"|"state_dir_migrated"|"db_seeded"|"storage")
           rm -rf ${cfg.dataDir}/config/!("database.yml"|"secrets.yml")
           # state directory cleanup required --> zammad was already installed --> do not seed db
           echo true > ${cfg.dataDir}/db_seeded
@@ -392,8 +392,9 @@ in
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir}                               0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/config                        0750 ${cfg.user} ${cfg.group} - -"
-      "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
       "d ${cfg.dataDir}/log                           0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/storage                       0750 ${cfg.user} ${cfg.group} - -"
+      "d ${cfg.dataDir}/tmp                           0750 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config/secrets.yml            0640 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/config/database.yml           0640 ${cfg.user} ${cfg.group} - -"
       "f ${cfg.dataDir}/db_seeded                     0640 ${cfg.user} ${cfg.group} - -"
