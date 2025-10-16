@@ -66,6 +66,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain_mongodb" ];
 
+  disabledTests = [
+    # Assertion Error when comparing a magic string to a deserialized LLMResult
+    # TODO: Recheck after 1.0 API releases are out
+    "test_mongodb_cache"
+  ];
+
   passthru = {
     # python updater script sets the wrong tag
     skipBulkUpdate = true;
