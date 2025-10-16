@@ -1,8 +1,14 @@
-commit 954e41500e1b409a24fca43ae3bdc1c6a890db48
-Author: r-vdp <ramses@well-founded.dev>
-Date:   Tue Oct 15 14:49:53 2024 +0200
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: r-vdp <ramses@well-founded.dev>
+Date: Tue, 15 Oct 2024 14:49:53 +0200
+Subject: [PATCH] Add output for installed tests
 
-    Add output for installed tests
+---
+ data/tests/meson.build             | 2 +-
+ meson.build                        | 5 +++--
+ meson_options.txt                  | 4 ++++
+ src/tests/host-emulate/meson.build | 2 +-
+ 4 files changed, 9 insertions(+), 4 deletions(-)
 
 diff --git a/data/tests/meson.build b/data/tests/meson.build
 index 3eba65eea..cf3931bb7 100644

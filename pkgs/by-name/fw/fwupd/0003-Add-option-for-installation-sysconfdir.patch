@@ -1,8 +1,18 @@
-commit 56507892ff7a03ed283d7fd2d7ff2000fc9c17d7
-Author: r-vdp <ramses@well-founded.dev>
-Date:   Tue Oct 15 11:46:38 2024 +0200
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: r-vdp <ramses@well-founded.dev>
+Date: Tue, 15 Oct 2024 11:46:38 +0200
+Subject: [PATCH] Add option for installation sysconfdir
 
-    Add option for installation sysconfdir
+---
+ data/bios-settings.d/meson.build |  2 +-
+ data/meson.build                 |  2 +-
+ data/pki/meson.build             |  8 ++++----
+ data/remotes.d/meson.build       |  8 ++++----
+ docs/meson.build                 | 16 ++++++++--------
+ meson.build                      |  6 ++++++
+ meson_options.txt                |  5 +++++
+ plugins/uefi-capsule/meson.build |  4 ++--
+ 8 files changed, 31 insertions(+), 20 deletions(-)
 
 diff --git a/data/bios-settings.d/meson.build b/data/bios-settings.d/meson.build
 index 2a2a07016..99df55afb 100644

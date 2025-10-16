@@ -158,21 +158,21 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Install plug-ins and libfwupdplugin to $out output,
     # they are not really part of the library.
-    ./install-fwupdplugin-to-out.patch
+    ./0001-Install-fwupdplugin-to-out.patch
 
     # Installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle.
-    ./installed-tests-path.patch
+    ./0002-Add-output-for-installed-tests.patch
 
     # Since /etc is the domain of NixOS, not Nix,
     # we cannot install files there.
     # Let’s install the files to $prefix/etc
     # while still reading them from /etc.
     # NixOS module for fwupd will take take care of copying the files appropriately.
-    ./add-option-for-installation-sysconfdir.patch
+    ./0003-Add-option-for-installation-sysconfdir.patch
 
     # EFI capsule is located in fwupd-efi now.
-    ./efi-app-path.patch
+    ./0004-Get-the-efi-app-from-fwupd-efi.patch
   ];
 
   postPatch = ''
