@@ -27,12 +27,12 @@ python3Packages.buildPythonApplication rec {
     sed -i -e 's/util\.py3_path/os.fsdecode/g' tests/_common.py
   '';
 
-  nativeBuildInputs = [
-    beets
-  ];
-
   build-system = with python3Packages; [
     setuptools
+  ];
+
+  nativeBuildInputs = [
+    beets
   ];
 
   dependencies = with python3Packages; [
