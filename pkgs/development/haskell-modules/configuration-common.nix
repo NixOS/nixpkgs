@@ -127,34 +127,7 @@ with haskellLib;
           # to bogus references to some dependencies.
           overrideCabal (
             old:
-            {
-              # Ignore unix bound intended to prevent an unix bug on 32bit systems.
-              # We apply a patch for this issue to the GHC core packages directly.
-              # See unix-fix-ctimeval-size-32-bit.patch in ../compilers/ghc/common-*.nix
-              patches =
-                old.patches or [ ]
-                ++
-                  lib.optionals
-                    (
-                      scope.unix == null
-                      && lib.elem self.ghc.version [
-                        "9.6.1"
-                        "9.6.2"
-                        "9.6.3"
-                        "9.6.4"
-                        "9.6.5"
-                        "9.6.6"
-                        "9.8.1"
-                        "9.8.2"
-                        "9.8.3"
-                        "9.10.1"
-                      ]
-                    )
-                    [
-                      ./patches/cabal-install-3.16-lift-unix-bound.patch
-                    ];
-            }
-            // lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
+            lib.optionalAttrs (pkgs.stdenv.hostPlatform.isDarwin && pkgs.stdenv.hostPlatform.isAarch64) {
               postInstall = ''
                 ${old.postInstall or ""}
                 remove-references-to -t ${scope.HTTP} "$out/bin/.cabal-wrapped"
@@ -529,19 +502,14 @@ with haskellLib;
 
   # Fixes compilation for basement on i686
   # https://github.com/haskell-foundation/foundation/pull/573
-  # Don't apply patch for GHC == 9.2.* on 64bit where it breaks compilation:
-  # https://github.com/haskell-foundation/foundation/pull/573#issuecomment-1669468867
-  basement = appendPatches (lib.optionals
-    (pkgs.stdenv.hostPlatform.is32bit || lib.versions.majorMinor self.ghc.version != "9.2")
-    [
-      (fetchpatch {
-        name = "basement-i686-ghc-9.4.patch";
-        url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
-        sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
-        stripLen = 1;
-      })
-    ]
-  ) super.basement;
+  basement = appendPatches [
+    (fetchpatch {
+      name = "basement-i686-ghc-9.4.patch";
+      url = "https://github.com/haskell-foundation/foundation/pull/573/commits/38be2c93acb6f459d24ed6c626981c35ccf44095.patch";
+      sha256 = "17kz8glfim29vyhj8idw8bdh3id5sl9zaq18zzih3schfvyjppj7";
+      stripLen = 1;
+    })
+  ] super.basement;
 
   # Fixes compilation of memory with GHC >= 9.4 on 32bit platforms
   # https://github.com/vincenthz/hs-memory/pull/99
