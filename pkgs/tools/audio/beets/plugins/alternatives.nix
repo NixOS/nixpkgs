@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   beets,
   python3Packages,
   writableTmpDirAsHomeHook,
@@ -17,6 +18,17 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-jGHRoBBXqJq0r/Gbp7gkuaEFPVMGE6cqQRi84AHTXxQ=";
   };
+
+  patches = [
+    # Fixes build failure by ignoring DeprecationWarning during tests.
+    (fetchpatch {
+      url = "https://github.com/geigerzaehler/beets-alternatives/commit/3c15515edfe62d5d6c8f3fb729bf3dcef41c1ffa.patch";
+      hash = "sha256-gZXftDI5PXJ0c65Z1HLABJ2SlDnXU78xxIEt7IGp8RQ=";
+      excludes = [
+        "poetry.lock"
+      ];
+    })
+  ];
 
   nativeBuildInputs = [
     beets
