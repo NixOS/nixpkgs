@@ -11,7 +11,7 @@ let
 
   changedpaths = lib.importJSON changedpathsjson;
 
-  anyMatchingFile = filename: lib.any (changed: lib.hasSuffix changed filename) changedpaths;
+  anyMatchingFile = filename: lib.any (changed: changed == filename) changedpaths;
 
   anyMatchingFiles = files: lib.any anyMatchingFile files;
 
@@ -40,7 +40,7 @@ let
   relevantFilenames =
     drv:
     (lib.unique (
-      map (pos: lib.removePrefix (toString ../..) pos.file) (
+      map (pos: lib.removePrefix "${toString ../../..}/" pos.file) (
         lib.filter (x: x != null) [
           (drv.meta.maintainersPosition or null)
           (drv.meta.teamsPosition or null)
