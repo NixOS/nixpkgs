@@ -1,0 +1,144 @@
+diff --git a/3rdparty/google-breakpad/CMakeLists.txt b/3rdparty/google-breakpad/CMakeLists.txt
+index ab59e41f9..b71d8b733 100644
+--- a/3rdparty/google-breakpad/CMakeLists.txt
++++ b/3rdparty/google-breakpad/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+ 
+diff --git a/3rdparty/libmygpo-qt5/CMakeLists.txt b/3rdparty/libmygpo-qt5/CMakeLists.txt
+index a78972870..bd73fdf93 100644
+--- a/3rdparty/libmygpo-qt5/CMakeLists.txt
++++ b/3rdparty/libmygpo-qt5/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required( VERSION 3.0.0 FATAL_ERROR )
++cmake_minimum_required( VERSION 3.5.0 FATAL_ERROR )
+ 
+ set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
+ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
+diff --git a/3rdparty/libprojectm/CMakeLists.txt b/3rdparty/libprojectm/CMakeLists.txt
+index a70f8a2b2..bd0982269 100644
+--- a/3rdparty/libprojectm/CMakeLists.txt
++++ b/3rdparty/libprojectm/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ PROJECT(projectM)
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "The projectM core library.")
+ 
+ include(CheckCXXCompilerFlag)
+diff --git a/3rdparty/qsqlite/CMakeLists.txt b/3rdparty/qsqlite/CMakeLists.txt
+index 0f1fba525..03515f43b 100644
+--- a/3rdparty/qsqlite/CMakeLists.txt
++++ b/3rdparty/qsqlite/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ add_definitions(-DQT_STATICPLUGIN)
+ 
+diff --git a/3rdparty/qtiocompressor/CMakeLists.txt b/3rdparty/qtiocompressor/CMakeLists.txt
+index 98d6445f8..947c613ea 100644
+--- a/3rdparty/qtiocompressor/CMakeLists.txt
++++ b/3rdparty/qtiocompressor/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ set(IOCOMPRESSOR-SOURCES
+     qtiocompressor.cpp
+diff --git a/3rdparty/qtsingleapplication/CMakeLists.txt b/3rdparty/qtsingleapplication/CMakeLists.txt
+index c405256f9..dab675e57 100644
+--- a/3rdparty/qtsingleapplication/CMakeLists.txt
++++ b/3rdparty/qtsingleapplication/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ set(SINGLEAPP-SOURCES
+     qtlocalpeer.cpp
+diff --git a/3rdparty/qxt/CMakeLists.txt b/3rdparty/qxt/CMakeLists.txt
+index b3348c4b8..22aaee1a4 100644
+--- a/3rdparty/qxt/CMakeLists.txt
++++ b/3rdparty/qxt/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ set(CMAKE_CXX_STANDARD 11)
+ 
+ set(QXT-SOURCES
+diff --git a/3rdparty/taglib/CMakeLists.txt b/3rdparty/taglib/CMakeLists.txt
+index 39ffb9534..d09c656f7 100644
+--- a/3rdparty/taglib/CMakeLists.txt
++++ b/3rdparty/taglib/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ set(CMAKE_CXX_STANDARD 11)
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-delete-non-virtual-dtor")
+ 
+diff --git a/3rdparty/utf8-cpp/CMakeLists.txt b/3rdparty/utf8-cpp/CMakeLists.txt
+index 14e7fcdc2..dfe733fd4 100644
+--- a/3rdparty/utf8-cpp/CMakeLists.txt
++++ b/3rdparty/utf8-cpp/CMakeLists.txt
+@@ -1,2 +1,2 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ set(CMAKE_CXX_STANDARD 11)
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 48b55f4c5..b681e8d88 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,7 +1,7 @@
+ cmake_minimum_required(VERSION 3.13.0)
+ project(clementine)
+ 
+-cmake_policy(SET CMP0053 OLD)
++cmake_policy(SET CMP0053 NEW)
+ 
+ include(CheckCXXCompilerFlag)
+ include(FindPkgConfig)
+diff --git a/cmake/ParseArguments.cmake b/cmake/ParseArguments.cmake
+index fd5f9987e..034e6906e 100644
+--- a/cmake/ParseArguments.cmake
++++ b/cmake/ParseArguments.cmake
+@@ -1,6 +1,6 @@
+ # From http://www.cmake.org/Wiki/CMakeMacroParseArguments
+ 
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ MACRO(PARSE_ARGUMENTS prefix arg_names option_names)
+   SET(DEFAULT_ARGS)
+diff --git a/cmake/Translations.cmake b/cmake/Translations.cmake
+index a16bcc390..bcf10ed7a 100644
+--- a/cmake/Translations.cmake
++++ b/cmake/Translations.cmake
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ set (XGETTEXT_OPTIONS --qt --keyword=tr:1,2c --keyword=tr --flag=tr:1:pass-c-format --flag=tr:1:pass-qt-format
+     --keyword=trUtf8 --flag=tr:1:pass-c-format --flag=tr:1:pass-qt-format
+diff --git a/gst/moodbar/CMakeLists.txt b/gst/moodbar/CMakeLists.txt
+index 0bb87e884..f1ceab05c 100644
+--- a/gst/moodbar/CMakeLists.txt
++++ b/gst/moodbar/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Woverloaded-virtual -Wall")
+diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
+index 81031b072..b76222108 100644
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.0.0)
++cmake_minimum_required(VERSION 3.5.0)
+ 
+ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fpermissive -Wno-c++11-narrowing")
+ 

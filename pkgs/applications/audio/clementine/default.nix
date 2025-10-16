@@ -105,6 +105,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals withCD [ libcdio ]
   ++ lib.optionals withCloud [ sparsehash ];
 
+  patches = [ ./cmake-build-fix.patch ];
+
   postPatch = ''
     sed -i src/CMakeLists.txt \
       -e 's,-Werror,,g' \
