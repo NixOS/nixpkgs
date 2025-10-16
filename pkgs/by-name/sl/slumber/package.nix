@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   rustPlatform,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -16,6 +18,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-Nz/Z2KJ8jJAsTASwnvleRpJ88UHGe7dktO0FkCOPdu4=";
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Terminal-based HTTP/REST client";
