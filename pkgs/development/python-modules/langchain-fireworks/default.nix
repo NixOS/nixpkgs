@@ -79,5 +79,7 @@ buildPythonPackage rec {
     maintainers = [
       lib.maintainers.sarahec
     ];
+    # TODO Remove after the rest of langchain reaches 1.0
+    broken = true;
   };
 }
