@@ -63,6 +63,12 @@ pkgs.stdenvNoCC.mkDerivation {
       command = "hydra-check ${lib.escapeShellArgs packages}";
     in
     ''
+      # if user presses ctrl-c during run
+      # pass on ctrl-c to fully quit rather than exiting to nix-shell
+      function ctrl_c() {
+        exit 130
+      }
+      trap ctrl_c INT
       echo "Please stand by"
       echo "${command}"
       ${command}
