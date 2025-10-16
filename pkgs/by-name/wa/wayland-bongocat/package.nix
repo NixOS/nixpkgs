@@ -34,6 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     "release"
   ];
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'CC = gcc' 'CC ?= gcc'
+  '';
+
   installPhase = ''
     runHook preInstall
 
