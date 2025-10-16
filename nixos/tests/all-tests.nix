@@ -835,6 +835,7 @@ in
     _module.args.firefoxPackage = pkgs.librewolf;
   };
   libuiohook = runTest ./libuiohook.nix;
+  libvirt-dbus = runTest ./libvirt-dbus.nix;
   libvirtd = runTest ./libvirtd.nix;
   lidarr = runTest ./lidarr.nix;
   lightdm = runTest ./lightdm.nix;
