@@ -20,6 +20,8 @@ in
 
       enable = mkEnableOption "mjpg-streamer webcam streamer";
 
+      package = mkPackageOption pkgs "mjpg-streamer" { };
+
       inputPlugin = mkOption {
         type = types.str;
         default = "input_uvc.so";
@@ -77,7 +79,7 @@ in
         IPLUGIN="${cfg.inputPlugin}"
         OPLUGIN="${cfg.outputPlugin}"
         OPLUGIN="''${OPLUGIN//@www@/${pkgs.mjpg-streamer}/share/mjpg-streamer/www}"
-        exec ${pkgs.mjpg-streamer}/bin/mjpg_streamer -i "$IPLUGIN" -o "$OPLUGIN"
+        exec ${lib.getExe cfg.package} -i "$IPLUGIN" -o "$OPLUGIN"
       '';
     };
 
