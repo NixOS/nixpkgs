@@ -352,42 +352,6 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix { };
 
       env = callPackage ../qt-env.nix { };
-      full =
-        callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
-          # `with self` is ok to use here because having these spliced is unnecessary
-          (
-            with self;
-            [
-              qt3d
-              qtcharts
-              qtconnectivity
-              qtdeclarative
-              qtdoc
-              qtgraphicaleffects
-              qtimageformats
-              qtlocation
-              qtmultimedia
-              qtquickcontrols
-              qtquickcontrols2
-              qtscript
-              qtsensors
-              qtserialport
-              qtsvg
-              qttools
-              qttranslations
-              qtvirtualkeyboard
-              qtwebchannel
-              qtwebengine
-              qtwebsockets
-              qtwebview
-              qtx11extras
-              qtxmlpatterns
-              qtlottie
-              qtdatavis3d
-            ]
-            ++ lib.optional (!stdenv.hostPlatform.isDarwin) qtwayland
-            ++ lib.optional (stdenv.hostPlatform.isDarwin) qtmacextras
-          );
 
       qmake = callPackage (
         { qtbase }:
@@ -422,6 +386,9 @@ let
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
         } ../hooks/wrap-qt-apps-hook.sh
       ) { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      full = throw "libsForQt5.full has been removed. Please use individual packages instead."; # Added 2025-10-18
     };
 
   baseScope = makeScopeWithSplicing' {
