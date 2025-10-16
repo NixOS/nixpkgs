@@ -10,14 +10,14 @@
   versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "witness";
   version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-MKiPIZFeCWOT4zTbG7SjwdNUHFuqsL4pGu4VvVwyn3s=";
   };
   vendorHash = "sha256-V3SuhBbhXyA0SFOGfBrV/qH+cROr2obHOBcivkgRO6U=";
@@ -30,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/in-toto/witness/cmd.Version=v${version}"
+    "-X github.com/in-toto/witness/cmd.Version=v${finalAttrs.version}"
   ];
 
   # Feed in all tests for testing
@@ -76,11 +76,11 @@ buildGoModule rec {
     '';
     mainProgram = "witness";
     homepage = "https://github.com/testifysec/witness";
-    changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
+    changelog = "https://github.com/testifysec/witness/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fkautz
       jk
     ];
   };
-}
+})
