@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenBoardView/OpenBoardView/commit/b03d0f69ec1611f5eb93f81291b4ba8c58cd29eb.patch";
       hash = "sha256-Hp7KgzulPC2bPtRsd6HJrTLu0oVoQEoBHl0p2DcOLQw=";
     })
+    (fetchpatch {
+      name = "fix-compatibility-with-cmake4.patch";
+      url = "https://github.com/OpenBoardView/OpenBoardView/commit/55ba0afca413189e8611b2861fe6653499028e47.patch?full_index=1";
+      hash = "sha256-InzfX2aU20oyyImDdmjCS+FGm0aQOMbN//Vwty1VCpI=";
+    })
   ];
 
   nativeBuildInputs = [
