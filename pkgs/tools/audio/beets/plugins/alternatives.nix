@@ -30,12 +30,12 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [
-    beets
+  build-system = [
+    python3Packages.poetry-core
   ];
 
-  dependencies = [
-    python3Packages.poetry-core
+  nativeBuildInputs = [
+    beets
   ];
 
   nativeCheckInputs =
