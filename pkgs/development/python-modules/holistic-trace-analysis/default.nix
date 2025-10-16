@@ -3,14 +3,20 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build system
+  setuptools,
+
+  # dependencies
   jupyterlab,
   numpy,
   pandas,
   plotly,
   pydot,
-  pytestCheckHook,
-  setuptools,
   torch,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
