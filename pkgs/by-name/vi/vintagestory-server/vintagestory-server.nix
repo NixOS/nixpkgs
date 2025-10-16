@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://vintagestory.at/";
     description = "Dedicated server for Vintage Story, an in-development indie sandbox game about innovation and exploration";
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     mainProgram = "VintageStoryServer";
