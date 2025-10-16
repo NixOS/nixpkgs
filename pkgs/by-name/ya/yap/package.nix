@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation {
   pname = "yap";
-  version = "8.0.1-unstable-2025-09-16";
+  version = "8.0.1-unstable-2025-09-24";
 
   src = fetchFromGitHub {
     owner = "vscosta";
     repo = "yap";
-    rev = "5bc1624420311502972f0338688a09aa7662dc02";
-    hash = "sha256-iPC4uCyOGqQjqI/2F4YsxHlsL8pv3/BLdE2dB7FCHwE=";
+    rev = "7d70886888a77446694f21b609517d98e5a1145c";
+    hash = "sha256-38UHCnCsJXqIkEGRX/Ll2lgF4ZIDW2DUVUpWXG1wHpI=";
   };
 
   nativeBuildInputs = [
