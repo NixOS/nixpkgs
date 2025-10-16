@@ -17,7 +17,7 @@ buildGoModule (finalAttrs: {
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-MKiPIZFeCWOT4zTbG7SjwdNUHFuqsL4pGu4VvVwyn3s=";
   };
   vendorHash = "sha256-V3SuhBbhXyA0SFOGfBrV/qH+cROr2obHOBcivkgRO6U=";
@@ -30,7 +30,7 @@ buildGoModule (finalAttrs: {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/in-toto/witness/cmd.Version=v${finalAttrs.version}"
+    "-X github.com/in-toto/witness/cmd.Version=${finalAttrs.src.tag}"
   ];
 
   # Feed in all tests for testing
@@ -76,7 +76,7 @@ buildGoModule (finalAttrs: {
     '';
     mainProgram = "witness";
     homepage = "https://github.com/testifysec/witness";
-    changelog = "https://github.com/testifysec/witness/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/testifysec/witness/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fkautz
