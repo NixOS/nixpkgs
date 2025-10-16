@@ -64,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Utility to control Lenovo Legion laptop";
     homepage = "https://github.com/johnfanv2/LenovoLegionLinux";
     license = lib.licenses.gpl2Only;
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [
       ulrikstrid
       logger
