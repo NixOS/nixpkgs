@@ -38,34 +38,19 @@ python3Packages.buildPythonApplication rec {
     typeguard
   ];
 
-  optional-dependencies = {
-    lint = with python3Packages; [
-      black
-      check-manifest
-      flake8
-      flake8-bugbear
-      flake8-bugbear-pyi
-      isort
-      mypy
-      pylint
-      typing_extensions
-    ];
-    test = with python3Packages; [
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytestCheckHook
       beetsPackages.audible
       mediafile
-      pytest
       reflink
       toml
       typeguard
+    ]
+    ++ [
+      writableTmpDirAsHomeHook
     ];
-    dev = optional-dependencies.lint ++ optional-dependencies.test ++ [ python3Packages.tox ];
-  };
-
-  nativeCheckInputs = [
-    python3Packages.pytestCheckHook
-    writableTmpDirAsHomeHook
-  ]
-  ++ optional-dependencies.test;
 
   pytestFlags = [
     # This is the same as:
