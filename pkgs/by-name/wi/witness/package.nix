@@ -3,11 +3,14 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  installShellFiles,
 
   # testing
   testers,
   witness,
+
+  installShellFiles,
+
+  buildPackages,
 }:
 
 buildGoModule rec {
@@ -42,12 +45,20 @@ buildGoModule rec {
     unset ldflags
   '';
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd witness \
-      --bash <($out/bin/witness completion bash) \
-      --fish <($out/bin/witness completion fish) \
-      --zsh <($out/bin/witness completion zsh)
-  '';
+  postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/witness"
+        else
+          lib.getExe buildPackages.witness;
+    in
+    ''
+      installShellCompletion --cmd witness \
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
 
   passthru.tests.version = testers.testVersion {
     package = witness;
