@@ -275,12 +275,9 @@ in
       wants = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      preStart = ''
-        ${lib.getExe cfg.dbmatePackage} --migrations-dir=${cfg.package}/share/ncps/db/migrations --url=${cfg.cache.databaseURL} up
-      '';
-
       serviceConfig = lib.mkMerge [
         {
+          ExecStartPre = "${lib.getExe cfg.dbmatePackage} --migrations-dir=${cfg.package}/share/ncps/db/migrations --url=${cfg.cache.databaseURL} up";
           ExecStart = "${lib.getExe cfg.package} ${globalFlags} serve ${serveFlags}";
           User = "ncps";
           Group = "ncps";
