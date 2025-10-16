@@ -47,7 +47,7 @@ let
 
 in
 pkgs.stdenv.mkDerivation {
-  name = "nixpkgs-update-script";
+  name = "check-hydra-by-maintainer";
   buildInputs = [ pkgs.hydra-check ];
   buildCommand = ''
     echo ""
