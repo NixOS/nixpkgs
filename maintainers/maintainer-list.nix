@@ -5853,6 +5853,12 @@
       { fingerprint = "E8F9 0B80 908E 723D 0EDF  0916 5803 CDA5 9C26 A96A"; }
     ];
   };
+  datosh = {
+    email = "fabian@kammel.dev";
+    github = "datosh";
+    githubId = 6423339;
+    name = "Fabian Kammel";
+  };
   dav-wolff = {
     email = "nixpkgs@dav.dev";
     github = "dav-wolff";
