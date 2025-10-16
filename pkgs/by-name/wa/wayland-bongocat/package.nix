@@ -3,6 +3,7 @@
   stdenv,
   bash,
   fetchFromGitHub,
+  gitUpdater,
   pkg-config,
   wayland,
   wayland-protocols,
@@ -62,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  # Package information
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
+
   meta = {
     description = "Delightful Wayland overlay that displays an animated bongo cat reacting to keyboard input";
     homepage = "https://github.com/saatvik333/wayland-bongocat";
