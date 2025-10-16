@@ -83,8 +83,6 @@ buildRedist (finalAttrs: {
       nixLog "creating versioned symlink for libcuda.so stub"
       ln -srv libcuda.so libcuda.so.1
     fi
-    nixLog "creating symlinks for stubs in lib directory"
-    ln -srvt "''${!outputStubs:?}/lib/" *.so *.so.*
     popd >/dev/null
   '';
 
