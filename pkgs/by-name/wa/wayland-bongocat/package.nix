@@ -54,6 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
 
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    $out/bin/bongocat-find-devices --help
+
+    runHook postInstallCheck
+  '';
+
   # Package information
   meta = {
     description = "Delightful Wayland overlay that displays an animated bongo cat reacting to keyboard input";
