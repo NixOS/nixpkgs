@@ -30,8 +30,6 @@ buildRedist (finalAttrs: {
       nixLog "creating versioned symlink for libnvidia-ml.a stub"
       ln -sr libnvidia-ml.a libnvidia-ml.a.1
     fi
-    nixLog "creating symlinks for stubs in lib directory"
-    ln -srt "''${!outputStubs:?}/lib/" *.so *.so.*
     popd >/dev/null
   '';
 
