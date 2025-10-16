@@ -7,7 +7,7 @@
   installShellFiles,
   testers,
   makeWrapper,
-  python310,
+  python3,
 }:
 
 buildGoModule (finalAttrs: {
@@ -52,7 +52,7 @@ buildGoModule (finalAttrs: {
       mv $out/bin/{cmd,kluctl}
       wrapProgram $out/bin/kluctl \
         --set KLUCTL_USE_SYSTEM_PYTHON 1 \
-        --prefix PATH : '${lib.makeBinPath [ python310 ]}'
+        --prefix PATH : '${lib.makeBinPath [ python3 ]}'
       installShellCompletion --cmd kluctl \
         --bash <(${emulator} $out/bin/kluctl completion bash) \
         --fish <(${emulator} $out/bin/kluctl completion fish) \
