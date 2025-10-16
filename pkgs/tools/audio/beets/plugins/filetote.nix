@@ -77,12 +77,12 @@ python3Packages.buildPythonApplication rec {
   ]
   ++ optional-dependencies.test;
 
-  meta = with lib; {
+  meta = {
     description = "Beets plugin to move non-music files during the import process";
     homepage = "https://github.com/gtronset/beets-filetote";
     changelog = "https://github.com/gtronset/beets-filetote/blob/${src.tag}/CHANGELOG.md";
-    maintainers = with maintainers; [ dansbandit ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ dansbandit ];
+    license = lib.licenses.mit;
     inherit (beets.meta) platforms;
     # https://github.com/gtronset/beets-filetote/issues/211
     broken = true;
