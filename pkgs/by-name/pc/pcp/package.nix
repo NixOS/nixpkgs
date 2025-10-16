@@ -71,43 +71,47 @@ let
 
   libc = if isDarwin then "/usr/lib/libSystem.B.dylib" else "${stdenv.cc.libc}/lib/libc.so.6";
 
-  pythonDeps = scopedPkgs: with scopedPkgs; [
-    # To build Python API
-    setuptools
+  pythonDeps =
+    scopedPkgs:
+    with scopedPkgs;
+    [
+      # To build Python API
+      setuptools
 
-    openpyxl # pcp2xlsx
-    pyarrow # pcp2arrow
-    setuptools
+      openpyxl # pcp2xlsx
+      pyarrow # pcp2arrow
+      setuptools
 
-    requests # InfluxDB support
-    six # json
-    jsonpointer # json
-    libvirt # libvirt
-    lxml # libvirt
-    psycopg2 # postgresql
-    pymongo # mongodb
-  ]
-  ++ lib.optionals isLinux [
-    bcc # bcc TODO -- nixpkgs package doesn't have the library?
-    rtslib-fb # LIO
-  ]
-  # mssql (SQL Server) PMDA -- Upgrade script looks for perl
-  ++ lib.optional withPerl pyodbc;
+      requests # InfluxDB support
+      six # json
+      jsonpointer # json
+      libvirt # libvirt
+      lxml # libvirt
+      psycopg2 # postgresql
+      pymongo # mongodb
+    ]
+    ++ lib.optionals isLinux [
+      bcc # bcc TODO -- nixpkgs package doesn't have the library?
+      rtslib-fb # LIO
+    ]
+    # mssql (SQL Server) PMDA -- Upgrade script looks for perl
+    ++ lib.optional withPerl pyodbc;
 
-  perlDeps = scopedPkgs: with scopedPkgs; [
-    NetSNMP # SNMP
-    DBI # oracle, mysql
-    DBDmysql # mysql
-    LWP # nginx, activemg
-  ];
+  perlDeps =
+    scopedPkgs: with scopedPkgs; [
+      NetSNMP # SNMP
+      DBI # oracle, mysql
+      DBDmysql # mysql
+      LWP # nginx, activemg
+    ];
 
   wrappedPython = python3.withPackages pythonDeps;
   wrappedPerl = perl.withPackages perlDeps;
 
   # Maps the name of a PCP Qt program to a shell expression for its path.
-  getGuiExe = name: if isDarwin
-    then "$out/Applications/${name}.app/Contents/MacOS/${name}"
-    else "$out/bin/${name}";
+  getGuiExe =
+    name:
+    if isDarwin then "$out/Applications/${name}.app/Contents/MacOS/${name}" else "$out/bin/${name}";
 
   # List of all Qt programs in PCP.
   guiExes = lib.map getGuiExe [
@@ -264,11 +268,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.optional withPerl wrappedPerl)
 
     # pmchart, pmgadgets, pmview, etc
-    (lib.optionals withQt (with qtPackages; [
-      qtbase
-      qtsvg
-      qt3d
-    ]))
+    (lib.optionals withQt (
+      with qtPackages;
+      [
+        qtbase
+        qtsvg
+        qt3d
+      ]
+    ))
   ];
 
   makeFlags = lib.optional isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/libpcp.dylib";
@@ -335,10 +342,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = { inherit (nixosTests) pcp; };
-    interpreters = lib.listToAttrs (lib.concatLists [
-      (lib.optional withPython (lib.nameValuePair "python" wrappedPython))
-      (lib.optional withPerl (lib.nameValuePair "perl" wrappedPerl))
-    ]);
+    interpreters = lib.listToAttrs (
+      lib.concatLists [
+        (lib.optional withPython (lib.nameValuePair "python" wrappedPython))
+        (lib.optional withPerl (lib.nameValuePair "perl" wrappedPerl))
+      ]
+    );
   };
 
   meta = {
