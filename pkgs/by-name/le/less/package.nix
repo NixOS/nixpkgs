@@ -55,6 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       dtzWill # not active
       mdaniels5757
+      yiyu
     ];
     platforms = lib.platforms.unix;
   };
