@@ -284,10 +284,6 @@ jobs:
                           diff.removed,
                           diff.changed,
                           diff.rebuilds
-                        ).filter(attr =>
-                          // Exceptions related to dev shells, which changed at some time between 2.18 and 2.24.
-                          !attr.startsWith('tests.devShellTools.nixos.') &&
-                          !attr.startsWith('tests.devShellTools.unstructuredDerivationInputEnv.')
                         )
                         if (attrs.length > 0) {
                           core.setFailed(
