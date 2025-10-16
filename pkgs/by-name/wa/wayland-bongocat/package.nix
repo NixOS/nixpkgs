@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  bash,
   fetchFromGitHub,
   pkg-config,
   wayland,
@@ -25,6 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
   buildInputs = [
+    bash
     wayland
     wayland-protocols
   ];
