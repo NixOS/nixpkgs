@@ -4,11 +4,12 @@
   xorg,
   wrapQtAppsHook,
   python3,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.21-unstable-2025-07-11";
+  version = "0.0.20-unstable-2025-07-11";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -51,6 +52,8 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Utility to control Lenovo Legion laptop";
