@@ -3,6 +3,7 @@
   stdenv,
   callPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   useMinimalFeatures ? false,
   useArmadillo ? (!useMinimalFeatures),
@@ -91,6 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-CFQF3vDhhXsAnIfUcn6oTQ4Xm+GH/36dqSGc0HvyEJ0=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "fix-build-poppler-25.10.0.patch";
+      url = "https://github.com/OSGeo/gdal/commit/a716a6cd5ffd779b30950f046fce91878fc97b9d.patch";
+      hash = "sha256-dSotpnTiMjt3Bz63hpNjF5juZ3JsjIpD59/67cR9rNU=";
+    })
+  ];
 
   nativeBuildInputs = [
     bison
