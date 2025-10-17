@@ -39,7 +39,8 @@ let
       libcurand
       libcusolver
       libcusparse
-      libcusparse_lt
+      # NOTE: libcusparse_lt is too new for CuPy, so we must do without.
+      # libcusparse_lt
     ]
   );
   cudatoolkit-joined = symlinkJoin {
