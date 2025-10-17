@@ -17929,6 +17929,8 @@ self: super: with self; {
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
 
+  swagger-ui-py = callPackage ../development/python-modules/swagger-ui-py { };
+
   swcgeom = callPackage ../development/python-modules/swcgeom { };
 
   swh-auth = callPackage ../development/python-modules/swh-auth { };
