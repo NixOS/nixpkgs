@@ -649,10 +649,14 @@ assertNoAdditions {
       blink-cmp
       nvim-cmp
       # Optional pickers
-      fzf-lua
       mini-nvim
       snacks-nvim
       telescope-nvim
+    ] ++ lib.optionals !stdenv.hostPlatform.isDarwin [
+      #FIXME: https://github.com/NixOS/nixpkgs/issues/431458
+      # fzf-lua throws `address already in use` on darwin      
+      # Optional pickers
+      fzf-lua
     ];
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
@@ -664,6 +668,10 @@ assertNoAdditions {
       "codecompanion.providers.actions.fzf_lua"
       # Test
       "minimal"
+    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      #FIXME: https://github.com/NixOS/nixpkgs/issues/431458
+      # fzf-lua throws `address already in use` on darwin
+      "codecompanion.providers.actions.fzf_lua"
     ];
   };
 
