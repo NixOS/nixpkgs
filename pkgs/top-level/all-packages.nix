@@ -13297,10 +13297,6 @@ with pkgs;
 
   chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };
 
-  cockatrice = libsForQt5.callPackage ../games/cockatrice {
-    protobuf = protobuf_21;
-  };
-
   construoBase = lowPrio (
     callPackage ../games/construo {
       libGL = null;
