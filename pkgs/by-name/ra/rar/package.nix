@@ -4,6 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   installShellFiles,
+  perl,
 }:
 
 let
@@ -24,11 +25,6 @@ let
       hash = "sha256-Wzp5Izpc4usNldBEb3OZCeNyByTTJegoxbDD8HNnCPo=";
     };
   };
-  manSrc = fetchurl {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/rar.1?h=rar&id=8e39a12e88d8a3b168c496c44c18d443c876dd10";
-    name = "rar.1";
-    hash = "sha256-93cSr9oAsi+xHUtMsUvICyHJe66vAImS2tLie7nt8Uw=";
-  };
 in
 stdenv.mkDerivation {
   pname = "rar";
@@ -44,8 +40,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     installShellFiles
+    perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
+  postPatch = ''
+    perl -0777 -i -pe 's/ ([\w .-]+\n) ~+\n/=head1 \U$1/g' rar.txt
+    perl -0777 -i -pe 's/ (Copyrights)/=head1 \U$1/g;' rar.txt
+    mv rar.txt rar.1.pod
+    pod2man -c "RAR User's Manual" -n "RAR" -r "rar ${version}" -s 1 rar.1.pod > rar.1
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -54,12 +58,9 @@ stdenv.mkDerivation {
     install -Dm755 default.sfx -t "$out/lib"
     install -Dm644 {acknow.txt,license.txt} -t "$out/share/doc/rar"
     install -Dm644 rarfiles.lst -t "$out/etc"
+    installManPage rar.1
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    installManPage ${manSrc}
   '';
 
   passthru.updateScript = ./update.sh;
