@@ -23527,6 +23527,12 @@
     githubId = 5512096;
     name = "Sébastien Guimmara";
   };
+  sh4k095 = {
+    email = "carlofedep@gmail.com";
+    github = "sh4k095";
+    githubId = 86348751;
+    name = "Carlo Federico Pauletti";
+  };
   shackra = {
     name = "Jorge Javier Araya Navarro";
     email = "jorge@esavara.cr";
