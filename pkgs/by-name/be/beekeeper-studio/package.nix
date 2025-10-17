@@ -1,10 +1,13 @@
 {
   lib,
   stdenv,
+  stdenvNoCC,
   fetchurl,
   dpkg,
+  unzip,
   autoPatchelfHook,
   makeWrapper,
+  runtimeShell,
   glibc,
   gcc,
   glib,
@@ -29,33 +32,39 @@
   krb5,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "beekeeper-studio";
-  version = "5.3.4";
+  version = "5.4.1";
 
   src =
     let
-      selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
-      arch = selectSystem {
-        x86_64-linux = "amd64";
-        aarch64-linux = "arm64";
+      selectSystem = attrs: attrs.${stdenvNoCC.hostPlatform.system};
+      asset = selectSystem {
+        x86_64-linux = "beekeeper-studio_${finalAttrs.version}_amd64.deb";
+        aarch64-linux = "beekeeper-studio_${finalAttrs.version}_arm64.deb";
+        x86_64-darwin = "Beekeeper-Studio-${finalAttrs.version}-mac.zip";
+        aarch64-darwin = "Beekeeper-Studio-${finalAttrs.version}-arm64-mac.zip";
       };
     in
     fetchurl {
-      url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/beekeeper-studio_${finalAttrs.version}_${arch}.deb";
+      url = "https://github.com/beekeeper-studio/beekeeper-studio/releases/download/v${finalAttrs.version}/${asset}";
       hash = selectSystem {
-        x86_64-linux = "sha256-JSgZ/rDR3d2aKWuclE9tB5538fcMSShjx9gkzkp/7GA=";
-        aarch64-linux = "sha256-RsBw4jXcTA2WS1eMleAdljdw8ur0kf2WoQW3dNol2FA=";
+        x86_64-linux = "sha256-K2/pAZw3kdhiFUboJSeWrqq0HT5aS4b+NPSJR56rM3A=";
+        aarch64-linux = "sha256-AAPgLqY2LFGjVIEGJqDCwP9i7y3rywuQ7/Ri5NsfeNc=";
+        x86_64-darwin = "sha256-o6i3yWz4ecVTcEjGLeHBRjRjy0ylIABi/pTRgr7g2pU=";
+        aarch64-darwin = "sha256-i4+Tb/jfpDPHTMVdSN6Z5Sb74NignRDmujyNP3icwvo=";
       };
     };
 
-  nativeBuildInputs = [
-    dpkg
-    autoPatchelfHook
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenvNoCC.hostPlatform.isLinux [
+      dpkg
+      autoPatchelfHook
+      makeWrapper
+    ]
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ unzip ];
 
-  buildInputs = [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     (lib.getLib stdenv.cc.cc)
     xorg.libX11
     xorg.libXcomposite
@@ -86,23 +95,42 @@ stdenv.mkDerivation (finalAttrs: {
     krb5
   ];
 
-  runtimeDependencies = map lib.getLib [ systemd ];
+  runtimeDependencies = lib.optionals stdenvNoCC.hostPlatform.isLinux (map lib.getLib [ systemd ]);
 
   installPhase = ''
     runHook preInstall
 
-    cp -r usr $out
-    substituteInPlace $out/share/applications/beekeeper-studio.desktop \
-      --replace-fail '"/opt/Beekeeper Studio/beekeeper-studio"' "beekeeper-studio"
-    mkdir -p $out/opt $out/bin
-    cp -r opt/"Beekeeper Studio" $out/opt/beekeeper-studio
-    makeWrapper $out/opt/beekeeper-studio/beekeeper-studio-bin $out/bin/beekeeper-studio \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    ${lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
+      cp -r usr $out
+      substituteInPlace $out/share/applications/beekeeper-studio.desktop \
+        --replace-fail '"/opt/Beekeeper Studio/beekeeper-studio"' "beekeeper-studio"
+      mkdir -p $out/opt $out/bin
+      cp -r opt/"Beekeeper Studio" $out/opt/beekeeper-studio
+      makeWrapper $out/opt/beekeeper-studio/beekeeper-studio-bin $out/bin/beekeeper-studio \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+    ''}
+    ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin (
+      ''
+        mkdir -p "$out/Applications" "$out/bin"
+        cp -R . "$out/Applications/Beekeeper Studio.app"
+      ''
+      +
+        # Create a launcher script to run from the command line
+        ''
+          cat > "$out/bin/beekeeper-studio" << EOF
+          #!${runtimeShell}
+          open -na "$out/Applications/Beekeeper Studio.app" --args "\$@"
+          EOF
+          chmod +x "$out/bin/beekeeper-studio"
+        ''
+    )}
 
     runHook postInstall
   '';
 
-  preFixup = ''
+  dontFixup = stdenvNoCC.hostPlatform.isDarwin;
+
+  preFixup = lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
     patchelf --add-needed libGL.so.1 \
       --add-needed libEGL.so.1 \
       --add-rpath ${
@@ -124,10 +152,13 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       milogert
       alexnortung
+      iamanaws
     ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
     ];
     knownVulnerabilities = [ "Electron version 31 is EOL" ];
   };
