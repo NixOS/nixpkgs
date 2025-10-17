@@ -1405,6 +1405,7 @@ in
     inherit runTest;
     lib = pkgs.lib;
   };
+  svnserve = runTest ./svnserve.nix;
   swap-file-btrfs = runTest ./swap-file-btrfs.nix;
   swap-partition = runTest ./swap-partition.nix;
   swap-random-encryption = runTest ./swap-random-encryption.nix;
