@@ -11,7 +11,7 @@
 
 buildPythonPackage {
   pname = "pescea";
-  version = "1.0.12";
+  version = "1.0.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
