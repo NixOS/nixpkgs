@@ -19,7 +19,11 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = [ python3Packages.gpgme ];
   installPhase = ''
+    runHook preInstall
+
     install -Dm755 $src/zeyple/zeyple.py $out/bin/zeyple
+
+    runHook postInstall
   '';
 
   meta = with lib; {
