@@ -6,7 +6,6 @@
   fetchFromGitHub,
   orjson,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   requests,
   schema,
@@ -17,8 +16,6 @@ buildPythonPackage rec {
   pname = "policy-sentry";
   version = "0.14.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "salesforce";
