@@ -750,6 +750,8 @@ in
     };
 
     virtualisation.qemu = {
+      enableSharedMemory = mkEnableOption "shared memory";
+
       package = mkOption {
         type = types.package;
         default =
@@ -1382,6 +1384,10 @@ in
         "-device usb-ehci,id=usb0"
         "-device usb-kbd"
         "-device usb-tablet"
+      ])
+      (mkIf cfg.qemu.enableSharedMemory [
+        "-object memory-backend-memfd,id=mem0,size=${toString config.virtualisation.memorySize}M,share=on"
+        "-machine memory-backend=mem0"
       ])
       (
         let
