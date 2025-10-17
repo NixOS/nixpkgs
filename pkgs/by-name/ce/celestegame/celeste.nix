@@ -8,10 +8,11 @@
   unzip,
   yq,
   dotnet-runtime_8,
+  everest,
 
   executableName ? "Celeste",
   desktopItems ? null,
-  everest ? null,
+  withEverest ? false,
   overrideSrc ? null,
   writableDir ? null,
   launchFlags ? "",
@@ -36,12 +37,12 @@ let
   phome = "$out/lib/Celeste";
 
   launchFlags' =
-    if launchFlags != "" && everest == null then
+    if launchFlags != "" && !withEverest then
       lib.warn "launchFlags is useless without Everest." ""
     else
       launchFlags;
   launchEnv' =
-    if launchEnv != "" && everest == null then
+    if launchEnv != "" && !withEverest then
       lib.warn "launchEnv is useless without Everest." ""
     else
       ''
@@ -91,7 +92,7 @@ stdenvNoCC.mkDerivation {
     mkdir -p ${phome}
     unzip -q $src -d ${phome}
   ''
-  + lib.optionalString (everest != null) ''
+  + lib.optionalString withEverest ''
     cp -r ${everest}/* $out
     chmod -R +w ${phome} # Files copied from other derivations are not writable by default
 
@@ -137,7 +138,7 @@ stdenvNoCC.mkDerivation {
       # https://github.com/EverestAPI/Everest/blob/7bd41c26850bbdfef937e2ed929174e864101c4c/Celeste.Mod.mm/Mod/Everest/BOOT.cs#L188-L201
       # It is hardcoded that it launches Celeste instead of Celeste-unwrapped.
       # Therefore, we need to prevent it from restarting.
-      lib.optionalString (everest != null) "--prefix LD_LIBRARY_PATH : ${phome}/lib64-linux"
+      lib.optionalString withEverest "--prefix LD_LIBRARY_PATH : ${phome}/lib64-linux"
     } --chdir ${phome}
 
     icon=$out/share/icons/hicolor/512x512/apps/Celeste.png
@@ -149,7 +150,7 @@ stdenvNoCC.mkDerivation {
   dontStrip = true;
   dontPatchShebangs = true;
   postFixup =
-    lib.optionalString (everest != null) ''
+    lib.optionalString withEverest ''
       rm -r ${phome}/Mods # Currently it is empty.
       ln -s "${writableDir}"/{Mods,LogHistory,CrashLogs,${everestLogFilename}} -t ${phome}
     ''
