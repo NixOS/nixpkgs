@@ -29,9 +29,13 @@ let
       };
 
       freeform = mkOption {
-        type = types.nullOr types.str // {
-          merge = mergeEqualOption;
-        };
+        type = types.nullOr (
+          types.str.extend (
+            final: prev: {
+              merge = mergeEqualOption;
+            }
+          )
+        );
         default = null;
         example = ''MMC_BLOCK_MINORS.freeform = "32";'';
         description = ''
@@ -40,9 +44,11 @@ let
       };
 
       optional = mkOption {
-        type = types.bool // {
-          merge = mergeFalseByDefault;
-        };
+        type = types.bool.extend (
+          final: prev: {
+            merge = mergeFalseByDefault;
+          }
+        );
         default = false;
         description = ''
           Whether option should generate a failure when unused.
