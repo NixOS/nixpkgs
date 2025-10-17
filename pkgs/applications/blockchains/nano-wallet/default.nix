@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
+  #fetchpatch,
   cmake,
   pkg-config,
   wrapQtAppsHook,
@@ -15,26 +15,28 @@
 stdenv.mkDerivation rec {
 
   pname = "nano-wallet";
-  version = "25.1";
+  version = "28.2";
 
   src = fetchFromGitHub {
     owner = "nanocurrency";
     repo = "nano-node";
-    rev = "V${version}";
+    tag = "V${version}";
     fetchSubmodules = true;
-    hash = "sha256-YvYEXHC8kxviZLQwINs+pS61wITSfqfrrPmlR+zNRoE=";
+    hash = "sha256-Wo1Gd6dOnCoPiGmuJQhZmKKSg7LrKpfdvLNNKBYTUWI=";
   };
 
-  patches = [
-    # Fix gcc-13 build failure due to missing <cstdint> includes.
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/facebook/rocksdb/commit/88edfbfb5e1cac228f7cc31fbec24bb637fe54b1.patch";
-      stripLen = 1;
-      extraPrefix = "submodules/rocksdb/";
-      hash = "sha256-HhlIYyPzIZFuyzHTUPz3bXgXiaFSQ8pVrLLMzegjTgE=";
-    })
-  ];
+  #patches = [
+  #  # Fix gcc-13 build failure due to missing <cstdint> includes.
+  #  (fetchpatch {
+  #    name = "gcc-13.patch";
+  #    url = "https://github.com/facebook/rocksdb/commit/88edfbfb5e1cac228f7cc31fbec24bb637fe54b1.patch";
+  #    stripLen = 1;
+  #    extraPrefix = "submodules/rocksdb/";
+  #    hash = "sha256-HhlIYyPzIZFuyzHTUPz3bXgXiaFSQ8pVrLLMzegjTgE=";
+  #  })
+  #];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   cmakeFlags =
     let
