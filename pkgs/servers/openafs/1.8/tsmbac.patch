@@ -1,18 +1,31 @@
-diff -ru openafs-1.8.0/src/butc/afsxbsa.c openafs-1.8.0.new/src/butc/afsxbsa.c
---- openafs-1.8.0/src/butc/afsxbsa.c	2018-04-06 03:21:12.000000000 +0200
-+++ openafs-1.8.0.new/src/butc/afsxbsa.c	2018-06-12 16:26:26.272522305 +0200
-@@ -651,7 +651,7 @@
+diff -ru openafs-1.8.13.2/src/butc/afsxbsa.c openafs-1.8.13.2.new/src/butc/afsxbsa.c
+--- openafs-1.8.13.2/src/butc/afsxbsa.c	2025-01-23 12:12:55.000000000 -0500
++++ openafs-1.8.13.2.new/src/butc/afsxbsa.c	2025-07-13 19:30:19.513895421 -0400
+@@ -631,7 +631,7 @@
  #if defined(AFS_AIX_ENV)
          dynlib = dlopen("/usr/lib/libApiDS.a(dsmapish.o)", RTLD_NOW | RTLD_LOCAL | RTLD_MEMBER);
- #elif defined (AFS_AMD64_LINUX26_ENV)
+ #elif defined (AFS_AMD64_LINUX_ENV)
 -	dynlib = dlopen("/usr/lib64/libApiTSM64.so", RTLD_NOW | RTLD_LOCAL);
 +	dynlib = dlopen(XBSA_TSMLIB, RTLD_NOW | RTLD_LOCAL);
- #elif defined(AFS_SUN5_ENV) || defined(AFS_LINUX26_ENV)
+ #elif defined(AFS_SUN5_ENV) || defined(AFS_LINUX_ENV)
          dynlib = dlopen("/usr/lib/libApiDS.so", RTLD_NOW | RTLD_LOCAL);
  #else
-diff -ru openafs-1.8.0/src/cf/tivoli.m4 openafs-1.8.0.new/src/cf/tivoli.m4
---- openafs-1.8.0/src/cf/tivoli.m4	2018-04-06 03:21:12.000000000 +0200
-+++ openafs-1.8.0.new/src/cf/tivoli.m4	2018-06-12 16:26:26.072522485 +0200
+diff -ru openafs-1.8.13.2/src/butc/lwps.c openafs-1.8.13.2.new/src/butc/lwps.c
+--- openafs-1.8.13.2/src/butc/lwps.c	2025-01-23 12:12:55.000000000 -0500
++++ openafs-1.8.13.2.new/src/butc/lwps.c	2025-07-14 01:02:51.409677422 -0400
+@@ -53,7 +53,7 @@
+ /* XBSA Global Parameters */
+ extern afs_int32 xbsaType;
+ #ifdef xbsa
+-struct butx_transactionInfo butxInfo;
++extern struct butx_transactionInfo butxInfo;
+ #endif
+ 
+ static struct TapeBlock {		/* A 16KB tapeblock */
+Only in openafs-1.8.13.2.new/src/butc: lwps.c~
+diff -ru openafs-1.8.13.2/src/cf/tivoli.m4 openafs-1.8.13.2.new/src/cf/tivoli.m4
+--- openafs-1.8.13.2/src/cf/tivoli.m4	2025-01-23 12:12:55.000000000 -0500
++++ openafs-1.8.13.2.new/src/cf/tivoli.m4	2025-07-13 19:30:39.350794275 -0400
 @@ -1,45 +1,7 @@
  AC_DEFUN([OPENAFS_TIVOLI_TESTS],[
  dnl check for tivoli
