@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation rec {
     url = "https://iterm2.com/downloads/stable/iTerm2-${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "";
+    hash = "sha256-mqGXl6qEgK6b/hOW6r4I+p0/rit3a63CWMDFBoVoicI=";
   };
 
   dontFixup = true;
