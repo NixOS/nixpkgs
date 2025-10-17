@@ -3,6 +3,7 @@
   stdenv,
   meson,
   ninja,
+  apple-sdk_26,
 }:
 
 stdenv.mkDerivation {
@@ -13,6 +14,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     meson
     ninja
+  ];
+
+  buildInputs = [
+    apple-sdk_26
   ];
 
   meta.mainProgram = "apple-sdk_26-test";
