@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     mainProgram = "udebugd";
     homepage = "https://git.openwrt.org/?p=project/udebug.git;a=summary";
     license = licenses.free;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ mkg20001 ];
   };
 }
