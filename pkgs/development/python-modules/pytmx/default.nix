@@ -12,7 +12,7 @@
 
 buildPythonPackage {
   pname = "pytmx";
-  version = "3.32";
+  version = "3.31";
 
   pyproject = true;
 
