@@ -280,23 +280,11 @@ def update_mail_receiver(rev):
 def update_plugins():
     """Update plugins to their latest revision."""
     plugins = [
-        {'name': 'discourse-assign'},
         {'name': 'discourse-bbcode-color'},
-        {'name': 'discourse-calendar'},
-        {'name': 'discourse-canned-replies'},
-        {'name': 'discourse-chat-integration'},
-        {'name': 'discourse-checklist'},
-        {'name': 'discourse-data-explorer'},
         {'name': 'discourse-docs'},
-        {'name': 'discourse-github'},
         {'name': 'discourse-ldap-auth', 'owner': 'jonmbake'},
-        {'name': 'discourse-math'},
-        {'name': 'discourse-openid-connect'},
         {'name': 'discourse-prometheus'},
-        {'name': 'discourse-reactions'},
         {'name': 'discourse-saved-searches'},
-        {'name': 'discourse-solved'},
-        {'name': 'discourse-spoiler-alert'},
         {'name': 'discourse-yearly-review'},
     ]
 
