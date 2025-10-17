@@ -1353,8 +1353,8 @@ in
       "sha256-hMLxKQ6aMwdquw2oOgeB33OigX25MOQFJhGEBfEyf7U=";
 
   mypy-boto3-timestream-query =
-    buildMypyBoto3Package "timestream-query" "1.40.20"
-      "sha256-EHQ0m8Pr8I+CxxOolkFP6LtY4V0qGosNQTPukYg8PQ8=";
+    buildMypyBoto3Package "timestream-query" "1.40.54"
+      "sha256-QXykPDFwDXTY44JyYNYRBvG9/rBVmtisFKrmp6UKIQM=";
 
   mypy-boto3-timestream-write =
     buildMypyBoto3Package "timestream-write" "1.40.19"
