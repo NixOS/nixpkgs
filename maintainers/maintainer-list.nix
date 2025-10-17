@@ -17586,6 +17586,12 @@
     name = "Sean Gilligan";
     keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
   };
+  mshnwq = {
+    email = "mshnwq.com@gmail.com";
+    github = "mshnwq";
+    githubId = 68467027;
+    name = "Hayan Al-Machnouk";
+  };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
     github = "msiedlarek";
