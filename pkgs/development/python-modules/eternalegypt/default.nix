@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "eternalegypt";
-  version = "0.0.16";
+  version = "0.0.18";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "amelchio";
     repo = "eternalegypt";
     tag = "v${version}";
-    hash = "sha256-ubKepd3yBaoYrIUe5WCt1zd4CjvU7SeftOR+2cBaEf0=";
+    hash = "sha256-dS4APZWOI8im1Ls1A5750FedTWBy3UpXvJmYpd1po94=";
   };
 
   propagatedBuildInputs = [
