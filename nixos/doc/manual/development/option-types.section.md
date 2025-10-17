@@ -31,6 +31,11 @@ merging is handled.
 :   A path that is contained in the Nix store. This can be a top-level store
     path like `pkgs.hello` or a descendant like `"${pkgs.hello}/bin/hello"`.
 
+`types.externalPath`
+
+:   A path that is not contained in the Nix store. Typical use cases are:
+    secrets, password or any other external file.
+
 `types.pathWith` { *`inStore`* ? `null`, *`absolute`* ? `null` }
 
 :   A filesystem path. Either a string or something that can be coerced
