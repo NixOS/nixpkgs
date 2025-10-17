@@ -610,6 +610,8 @@ let
 
         farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+        farith = callPackage ../development/ocaml-modules/farith { };
+
         fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
 
         ff = callPackage ../development/ocaml-modules/ff { };
@@ -2090,6 +2092,8 @@ let
         tyxml-lwd = callPackage ../development/ocaml-modules/lwd/tyxml-lwd.nix { };
 
         ### U ###
+
+        ubase = callPackage ../development/ocaml-modules/ubase { };
 
         uchar = callPackage ../development/ocaml-modules/uchar { };
 

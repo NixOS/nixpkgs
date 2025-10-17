@@ -787,7 +787,7 @@ in
   keepalived = runTest ./keepalived.nix;
   keepassxc = runTest ./keepassxc.nix;
   kerberos = handleTest ./kerberos/default.nix { };
-  kernel-generic = handleTest ./kernel-generic.nix { };
+  kernel-generic = handleTest ./kernel-generic { };
   kernel-latest-ath-user-regd = runTest ./kernel-latest-ath-user-regd.nix;
   kernel-rust = handleTest ./kernel-rust.nix { };
   keter = runTest ./keter.nix;
@@ -1150,6 +1150,7 @@ in
   oxidized = handleTest ./oxidized.nix { };
   pacemaker = runTest ./pacemaker.nix;
   packagekit = runTest ./packagekit.nix;
+  pairdrop = runTest ./web-apps/pairdrop.nix;
   paisa = runTest ./paisa.nix;
   pam-file-contents = runTest ./pam/pam-file-contents.nix;
   pam-lastlog = runTest ./pam/pam-lastlog.nix;
