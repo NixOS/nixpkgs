@@ -20,6 +20,12 @@ let
       };
       # Prelude libraries
       mkPrelude = callPackage ./mkPrelude.nix { }; # Build helper
+      prelude = callPackage ./prelude.nix { };
+      base = callPackage ./base.nix { };
+      linear = callPackage ./linear.nix { };
+      network = callPackage ./network.nix { };
+      contrib = callPackage ./contrib.nix { };
+      test = callPackage ./test.nix { };
 
       libidris2_support = callPackage ./libidris2_support.nix { };
       idris2-unwrapped = callPackage ./unwrapped.nix { };
