@@ -6,7 +6,7 @@
   fetchpatch2,
   lib,
   pam,
-  python311,
+  python3,
   libxslt,
   perl,
   perlPackages,
@@ -367,7 +367,7 @@ stdenv.mkDerivation (finalAttrs: {
     perlPackages.ArchiveZip
     perlPackages.IOCompress
     pkg-config
-    python311
+    python3
     unzip
     zip
   ]
@@ -464,7 +464,7 @@ stdenv.mkDerivation (finalAttrs: {
       pam
       poppler
       libpq
-      python311
+      python3
       sane-backends
       unixODBC
       util-linux
@@ -679,7 +679,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit srcs;
     jdk = if withJava then jre' else null;
-    python = python311; # for unoconv
+    python = python3; # for unoconv
     updateScript = [
       ./update.sh
       # Pass it this file name as argument
