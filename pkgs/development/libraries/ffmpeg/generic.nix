@@ -15,11 +15,9 @@
   # NOTICE: Always use this argument to override the version. Do not use overrideAttrs.
   version, # ffmpeg ABI version. Also declare this if you're overriding the source.
   hash ? "", # hash of the upstream source for the given ABI version
-  source ? fetchFromGitea {
-    domain = "code.ffmpeg.org";
-    owner = "FFmpeg";
-    repo = "FFmpeg";
-    tag = "n${version}";
+  source ? fetchgit {
+    url = "https://git.ffmpeg.org/ffmpeg.git";
+    rev = "n${version}";
     inherit hash;
   },
 
@@ -42,7 +40,7 @@
   # instead.
   withFullDeps ? ffmpegVariant == "full",
 
-  fetchFromGitea,
+  fetchgit,
   fetchpatch2,
 
   # Feature flags
