@@ -40,7 +40,7 @@
   libsecret,
   libsoup_2_4,
   libvorbis,
-  libxml2,
+  libxml2_13,
   llvmPackages,
   more,
   nspr,
@@ -89,19 +89,6 @@ let
       done
     '';
   };
-
-  libxml2' = libxml2.overrideAttrs (oldAttrs: rec {
-    version = "2.13.8";
-    src = fetchurl {
-      url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-      hash = "sha256-J3KUyzMRmrcbK8gfL0Rem8lDW4k60VuyzSsOhZoO6Eo=";
-    };
-    meta = oldAttrs.meta // {
-      knownVulnerabilities = oldAttrs.meta.knownVulnerabilities or [ ] ++ [
-        "CVE-2025-6021"
-      ];
-    };
-  });
 
 in
 
@@ -174,7 +161,7 @@ stdenv.mkDerivation rec {
     libsecret
     libsoup_2_4
     libvorbis
-    libxml2'
+    libxml2_13
     llvmPackages.libunwind
     nspr
     nss

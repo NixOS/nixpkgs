@@ -20,27 +20,27 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optional buildDocs "devdoc";
+  ]
+  ++ lib.optional buildDocs "devdoc";
 
   src = fetchurl {
     url = "mirror://sourceforge/pidgin/${pname}-${version}.tar.xz";
     hash = "sha256-GVkzqacx01dXkbiBulzArSpxXh6cTCPMqqKhfhZMluw=";
   };
 
-  nativeBuildInputs =
-    [
-      glib
-      meson
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals buildDocs [
-      gtk-doc
-      docbook-xsl-nons
-    ]
-    ++ lib.optionals (buildDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    glib
+    meson
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals buildDocs [
+    gtk-doc
+    docbook-xsl-nons
+  ]
+  ++ lib.optionals (buildDocs && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib

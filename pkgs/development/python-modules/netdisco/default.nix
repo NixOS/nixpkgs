@@ -1,26 +1,26 @@
 {
   lib,
   buildPythonPackage,
-  isPy3k,
   fetchPypi,
-  requests,
-  zeroconf,
   pytestCheckHook,
+  requests,
+  setuptools,
+  zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "netdisco";
   version = "3.0.0";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-TbtZBILzd8zEYeAXQnB8y+jx0tGyhXivkdybf+vNy9I=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     requests
     zeroconf
   ];

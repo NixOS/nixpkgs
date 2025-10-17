@@ -8,15 +8,12 @@
   zlib,
   libnetfilter_queue,
   libnfnetlink,
-
-  iptables,
-  nftables,
-  gawk,
+  libmnl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zapret";
-  version = "71";
+  version = "72";
 
   src = fetchFromGitHub {
     owner = "bol-van";
@@ -30,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cwwj0xGEiR3sg2WheurtQo6Hy5JAARcZJNHEHMfAoOE=";
+    hash = "sha256-u9vtxkFxh7JK6Zb/IuS4qldf8ysDYospqOEuPObGyps=";
   };
 
   buildInputs = [
@@ -38,12 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libnetfilter_queue
     libnfnetlink
-  ];
-
-  nativeBuildInputs = [
-    iptables
-    nftables
-    gawk
+    libmnl
   ];
 
   preBuild = ''

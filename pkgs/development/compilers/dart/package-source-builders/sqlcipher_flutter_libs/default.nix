@@ -20,6 +20,8 @@ let
             "https://fsn1.your-objectstorage.com/simon-public/assets/sqlcipher/${version}.c";
       })
       {
+        v4_10_0 = "sha256-3njvCHy8Juj+WE3gXxeQ8+NIl9uHMegVTcZ00/LfKMs=";
+        v4_9_0 = "sha256-uqvW5BgMjCS0GzeEDeGskb4It0NkWjNUpyXpGlBSIlc=";
         v4_8_0 = "sha256-nfYmi9PJlMbLqiFRksOIUXYHgD8LL2AVey9GCUc03Jw=";
         v4_6_1 = "sha256-8kBJiy8g1odpBQQUF5A7f9g3+WStbJTARyfvAi84YVE=";
         v4_5_7 = "sha256-lDgSEVGZcoruF7nAp0C2kr6TN7XllpMzMVi/R1XfGP4=";

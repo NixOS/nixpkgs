@@ -16,12 +16,10 @@
   zlib,
   zstd,
 
-  # Because lerc is C++ and static libraries don't track dependencies,
-  # that every downstream dependent of libtiff has to link with a C++
-  # compiler, or the C++ standard library won't be linked, resulting
-  # in undefined symbol errors.  Without systematic support for this
-  # in build systems, fixing this would require modifying the build
-  # system of every libtiff user.  Hopefully at some point build
+  # Because lerc is C++ and static libraries don't track dependencies, every downstream dependent of
+  # libtiff has to link with a C++ compiler, or the C++ standard library won't be linked, resulting
+  # in undefined symbol errors. Without systematic support for this in build systems, fixing this
+  # would require modifying the build system of every libtiff user. Hopefully at some point build
   # systems will figure this out, and then we can enable this.
   #
   # See https://github.com/mesonbuild/meson/issues/14234
@@ -40,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libtiff";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitLab {
     owner = "libtiff";
     repo = "libtiff";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-SuK9/a6OUAumEe1kz1itFJGKxJzbmHkBVLMnyXhIwmQ=";
+    hash = "sha256-UiC6s86i7UavW86EKm74oPVlEacvoKmwW7KETjpnNaI=";
   };
 
   patches = [
@@ -83,24 +81,17 @@ stdenv.mkDerivation (finalAttrs: {
     sphinx
   ];
 
-  buildInputs =
-    [
-      zstd
-    ]
-    ++ lib.optionals withLerc [
-      lerc
-    ];
-
-  # TODO: opengl support (bogus configure detection)
-  propagatedBuildInputs = [
+  buildInputs = [
     libdeflate
     libjpeg
-    # libwebp depends on us; this will cause infinite
-    # recursion otherwise
+    # libwebp depends on us; this will cause infinite recursion otherwise
     (libwebp.override { tiffSupport = false; })
     xz
     zlib
     zstd
+  ]
+  ++ lib.optionals withLerc [
+    lerc
   ];
 
   cmakeFlags = [
@@ -110,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
 
   doCheck = true;
+
   # Avoid flakiness like https://gitlab.com/libtiff/libtiff/-/commit/94f6f7315b1
   enableParallelChecking = false;
 
@@ -123,7 +115,9 @@ stdenv.mkDerivation (finalAttrs: {
         openimageio
         freeimage
         ;
+
       inherit (python3Packages) pillow imread;
+
       pkg-config = testers.hasPkgConfigModules {
         package = finalAttrs.finalPackage;
       };

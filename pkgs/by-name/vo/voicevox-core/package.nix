@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "voicevox-core";
-  version = "0.15.7";
+  version = "0.15.9";
 
   src = finalAttrs.passthru.sources.${stdenv.hostPlatform.system};
 
@@ -42,19 +42,19 @@ stdenv.mkDerivation (finalAttrs: {
     {
       "x86_64-linux" = fetchCoreArtifact {
         id = "linux-x64";
-        hash = "sha256-7FgrJ1HlB8l5MHd2KM4lYRx2bYdxrD2+su1G33/ugUA=";
+        hash = "sha256-dEikEQcGL6h59nTxY833XGBawUjceq8NxIUVhRdQ2I8=";
       };
       "aarch64-linux" = fetchCoreArtifact {
         id = "linux-arm64";
-        hash = "sha256-fD7YMTo9jeB4vJibnVwX8VrukCUeAwS6VXGOr3VXG+c=";
+        hash = "sha256-92aZEb2bz7xXA4uSo3lWy/cApr88I+yNqDlAWo6nFpg=";
       };
       "x86_64-darwin" = fetchCoreArtifact {
         id = "osx-x64";
-        hash = "sha256-5h9qEKbdcvip50TLs3vf6lXkSv24VEjOrx6CTUo7Q4Q=";
+        hash = "sha256-/5MghfgI8wup+o+eYMgcjI9Mjkjt1NPuN0x3JnqAlxg=";
       };
       "aarch64-darwin" = fetchCoreArtifact {
         id = "osx-arm64";
-        hash = "sha256-0bFLhvP7LqDzuk3pyM9QZfc8eLMW0IgqVkaXsuS3qlY=";
+        hash = "sha256-UrgI4dy/VQCLZ/gyMX0D0YPabtw3IA76CpjLmbFLQeY=";
       };
     };
 
@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/VOICEVOX/voicevox_core";
     license = with lib.licenses; [
       mit
-      ({
+      {
         name = "VOICEVOX Core Library Terms of Use";
         url = "https://github.com/VOICEVOX/voicevox_resource/blob/main/core/README.md";
         free = false;
         redistributable = true;
-      })
+      }
     ];
     maintainers = with lib.maintainers; [
       tomasajt

@@ -13,7 +13,7 @@
   which,
   getopt,
   libpaper,
-  nettools,
+  net-tools,
   qprint,
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
@@ -178,7 +178,7 @@ stdenv.mkDerivation rec {
           --prefix PATH ":" \
           "${
             lib.makeBinPath [
-              nettools
+              net-tools
               gnupg
             ]
           }"
@@ -307,7 +307,7 @@ stdenv.mkDerivation rec {
       gpl2Plus
       gpl3Plus
     ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "tifffile";
-  version = "2025.5.10";
+  version = "2025.6.11";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AYM100KDqj/YwmO65cPCtmHrxFVI/eMVBAFvyue/EQM=";
+    hash = "sha256-Ds5MLnoQZWlX1Wigk7B1E8ByjTDBvYzBJyWQH//bcUM=";
   };
 
   build-system = [ setuptools ];
@@ -58,11 +58,11 @@ buildPythonPackage rec {
   # flaky, often killed due to OOM or timeout
   env.SKIP_LARGE = "1";
 
-  meta = with lib; {
+  meta = {
     description = "Read and write image data from and to TIFF files";
     homepage = "https://github.com/cgohlke/tifffile/";
     changelog = "https://github.com/cgohlke/tifffile/blob/v${version}/CHANGES.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lebastr ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lebastr ];
   };
 }

@@ -1,7 +1,10 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  cmake,
   bzip2,
   curl,
   zlib,
@@ -9,15 +12,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cfitsio";
-  version = "4.4.1";
+  version = "4.6.2";
 
-  src = fetchurl {
-    url = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/cfitsio-${finalAttrs.version}.tar.gz";
-    hash = "sha256-ZqHcPyGAD57qvZ6sV3uR/N2aq7pnj7ujuFJzGRENHSU=";
+  src = fetchFromGitHub {
+    owner = "HEASARC";
+    repo = finalAttrs.pname;
+    tag = "${finalAttrs.pname}-${finalAttrs.version}";
+    hash = "sha256-WLsX23hNhaITjCvMEV7NUEvyDfQiObSJt1qFC12z7wY=";
   };
 
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+  ];
+
   patches = [
-    ./darwin-rpath-universal.patch
+    ./cfitsio-pc-cmake.patch
+
+    (fetchpatch {
+      name = "cfitsio-fix-cmake-4.patch";
+      url = "https://github.com/HEASARC/cfitsio/commit/101e0880fca41e2223df7eec56d9e84e90b9ed56.patch";
+      hash = "sha256-rufuqOBfE7ItTYwsGdu9G4BXSz4vZd52XmJi09kqrCM=";
+    })
+  ];
+
+  nativeBuildInputs = [
+    cmake
   ];
 
   buildInputs = [
@@ -26,9 +48,11 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
   ];
 
-  configureFlags = [
-    "--with-bzip2=${bzip2.out}"
-    "--enable-reentrant"
+  cmakeFlags = [
+    "-DUSE_PTHREADS=ON"
+    "-DTESTS=ON"
+    "-DUTILS=ON"
+    "-DUSE_BZIP2=ON"
   ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isFreeBSD {
@@ -36,15 +60,30 @@ stdenv.mkDerivation (finalAttrs: {
     # not showing us gethostbyname()
     NIX_CFLAGS_COMPILE = "-D__BSD_VISIBLE=1";
   };
-
   hardeningDisable = [ "format" ];
 
-  # Shared-only build
-  buildFlags = [ "shared" ];
+  doCheck = true;
+  doInstallCheck = true;
 
-  postPatch = ''
-    sed -e '/^install:/s/libcfitsio.a //' -e 's@/bin/@@g' -i Makefile.in
+  # On testing cfitsio: https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/README
+  installCheckPhase = ''
+    ./TestProg > testprog.lis
+    diff -s testprog.lis ../testprog.out
+    cmp testprog.fit ../testprog.std
   '';
+
+  # Fixup installation
+  # Remove installed test tools and benchmark
+  postInstall = ''
+    install -Dm644 -t "$out/share/doc/${finalAttrs.pname}" ../docs/*.pdf
+    rm "$out/bin/cookbook"
+    rmdir "$out/bin"
+    rm "$bin/bin/smem" "$bin/bin/speed"
+  '';
+
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "${finalAttrs.pname}-"; };
+  };
 
   meta = {
     homepage = "https://heasarc.gsfc.nasa.gov/fitsio/";
@@ -61,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://heasarc.gsfc.nasa.gov/FTP/software/fitsio/c/docs/changes.txt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      returntoreality
       xbreak
-      hjones2199
     ];
     platforms = lib.platforms.unix;
   };

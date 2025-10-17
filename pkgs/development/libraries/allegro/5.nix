@@ -4,9 +4,11 @@
   cmake,
   enet,
   fetchFromGitHub,
+  fetchpatch2,
   fixDarwinDylibNames,
   flac,
   freetype,
+  gitUpdater,
   gtk3,
   libGL,
   libGLU,
@@ -35,7 +37,12 @@
   texinfo,
   xorgproto,
   zlib,
+  # https://github.com/liballeg/allegro5/blob/master/README_sdl.txt
+  useSDL ? false,
+  sdl2-compat ? null,
 }:
+
+assert useSDL -> sdl2-compat != null;
 
 stdenv.mkDerivation rec {
   pname = "allegro";
@@ -48,50 +55,59 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  patches = [
+    (fetchpatch2 {
+      name = "Bump-CMake-minimum-version-to-3.5";
+      url = "https://github.com/liballeg/allegro5/commit/6e93fcaabaafd81701f4cd1b74f4b69dd598bc9b.patch?full_index=1";
+      hash = "sha256-IEnn66bS2m6MVFCNf341yLtd7jTl2gflL5EFJFmbEt4=";
+    })
+  ];
 
-  buildInputs =
-    [
-      enet
-      flac
-      freetype
-      gtk3
-      libGL
-      libGLU
-      libjpeg
-      libpng
-      libtheora
-      libvorbis
-      libwebp
-      openal
-      physfs
-      texinfo
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpthreadstubs
-      libpulseaudio
-      libX11
-      libXcursor
-      libXdmcp
-      libXext
-      libXfixes
-      libXi
-      libXpm
-      libXt
-      libXxf86dga
-      libXxf86misc
-      libXxf86vm
-      xorgproto
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
+
+  buildInputs = [
+    enet
+    flac
+    freetype
+    gtk3
+    libGL
+    libGLU
+    libjpeg
+    libpng
+    libtheora
+    libvorbis
+    libwebp
+    openal
+    physfs
+    texinfo
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpthreadstubs
+    libpulseaudio
+    libX11
+    libXcursor
+    libXdmcp
+    libXext
+    libXfixes
+    libXi
+    libXpm
+    libXt
+    libXxf86dga
+    libXxf86misc
+    libXxf86vm
+    xorgproto
+  ]
+  ++ lib.optionals useSDL [
+    sdl2-compat
+  ];
 
   postPatch = ''
     sed -e 's@/XInput2.h@/XI2.h@g' -i CMakeLists.txt "src/"*.c
@@ -99,12 +115,21 @@ stdenv.mkDerivation rec {
     sed -e 's@OpenAL/@AL/@g' -i addons/audio/openal.c
   '';
 
-  cmakeFlags = [ "-DCMAKE_SKIP_RPATH=ON" ];
+  cmakeFlags = [
+    "-DCMAKE_SKIP_RPATH=ON"
+  ]
+  ++ lib.optionals useSDL [
+    "ALLEGRO_SDL=ON"
+  ];
 
   outputs = [
     "out"
     "dev"
   ];
+
+  strictDeps = true;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Game programming library";

@@ -9,7 +9,7 @@
   flit-core,
   mock,
   pytestCheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytest-vcr,
   pythonOlder,
   requests-toolbelt,
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    pytest-asyncio_0
     pytest-vcr
     vcrpy
     requests-toolbelt

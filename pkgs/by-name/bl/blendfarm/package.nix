@@ -90,7 +90,8 @@ buildDotnetModule rec {
     libgdiplus
     glib
     libXrandr
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ blender ];
 
   # there is no "*.so.3" or "*.so.5" in nixpkgs. So ignore the warning
   # and add it later

@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zizmor";
-  version = "1.11.0";
+  version = "1.15.2";
 
   src = fetchFromGitHub {
     owner = "zizmorcore";
     repo = "zizmor";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zxEF76zpqwLroC5GjSkwIC3+XdXmErvabIEqhVe0zCA=";
+    hash = "sha256-fl3Z4jgeqNxNjcdYQRt02oR7nDrYPN2dhzKeBium7Ug=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-vxDyao9pX/CfS08vFmq3vXtgDIg5NXlEwpzroGW48dA=";
+  cargoHash = "sha256-4+1EURDrDYG4luaNV9KdRVojXY++H9LNNl2oINfWeLc=";
 
   nativeBuildInputs = lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
     installShellFiles

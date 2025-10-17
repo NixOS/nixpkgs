@@ -50,7 +50,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.28.1";
+  version = "1.29.1";
 
   outputs = [
     "bin"
@@ -63,47 +63,45 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-kte5BzGEz7taW/ccnxmkJjXn3FeikzuD6Hm10l+X7c0=";
+    hash = "sha256-wNiI6QPwuK0gUJRadSJx+FOx84kpVC4bXhuQ3ybewoY=";
   };
 
   patches = [
     ./udev-absolute-path.patch
   ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      meson
-      ninja
-      udevCheckHook
-    ]
-    ++ lib.optionals documentationSupport [
-      doxygen
-      graphviz
-      sphinx-build
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    udevCheckHook
+  ]
+  ++ lib.optionals documentationSupport [
+    doxygen
+    graphviz
+    sphinx-build
+  ];
 
-  buildInputs =
-    [
-      libevdev
-      mtdev
-      libwacom
-      (python3.withPackages (
-        pp: with pp; [
-          pp.libevdev # already in scope
-          pyudev
-          pyyaml
-          setuptools
-        ]
-      ))
-    ]
-    ++ lib.optionals eventGUISupport [
-      # GUI event viewer
-      cairo
-      glib
-      gtk3
-      wayland-scanner
-    ];
+  buildInputs = [
+    libevdev
+    mtdev
+    libwacom
+    (python3.withPackages (
+      pp: with pp; [
+        pp.libevdev # already in scope
+        pyudev
+        pyyaml
+        setuptools
+      ]
+    ))
+  ]
+  ++ lib.optionals eventGUISupport [
+    # GUI event viewer
+    cairo
+    glib
+    gtk3
+    wayland-scanner
+  ];
 
   propagatedBuildInputs = [
     udev
@@ -154,5 +152,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ codyopel ];
     teams = [ teams.freedesktop ];
     changelog = "https://gitlab.freedesktop.org/libinput/libinput/-/releases/${version}";
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 }

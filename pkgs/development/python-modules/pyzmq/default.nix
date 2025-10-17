@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "pyzmq";
-  version = "26.4.0";
+  version = "27.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-S9E/hfgJYvkaZRpzVv4EcnkaX3qS8ieCK1rPRHlcYm0=";
+    hash = "sha256-RcVJIEvCDnSE/9JVX2zwLlckQOzy873WDUQEsg/d9ks=";
   };
 
   build-system = [
@@ -40,7 +40,8 @@ buildPythonPackage rec {
     packaging
     pathspec
     scikit-build-core
-  ] ++ (if isPyPy then [ cffi ] else [ cython ]);
+  ]
+  ++ (if isPyPy then [ cffi ] else [ cython ]);
 
   dontUseCmakeConfigure = true;
 
@@ -63,9 +64,8 @@ buildPythonPackage rec {
     rm -r zmq
   '';
 
-  pytestFlagsArray = [
-    "-m"
-    "'not flaky'"
+  disabledTestMarks = [
+    "flaky"
   ];
 
   disabledTests = [

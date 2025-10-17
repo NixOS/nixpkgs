@@ -1,12 +1,11 @@
 import argparse
 import logging
-import os
 import sys
 from subprocess import CalledProcessError, run
 from typing import Final, assert_never
 
 from . import nix, services
-from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
+from .constants import EXECUTABLE, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -270,9 +269,6 @@ def parse_args(
 def execute(argv: list[str]) -> None:
     args, args_groups = parse_args(argv)
 
-    if not WITH_NIX_2_18:
-        logger.warning("you're using Nix <2.18, some features will not work correctly")
-
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])
     build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
@@ -281,7 +277,7 @@ def execute(argv: list[str]) -> None:
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
     if args.upgrade or args.upgrade_all:
-        nix.upgrade_channels(bool(args.upgrade_all))
+        nix.upgrade_channels(args.upgrade_all, args.sudo)
 
     action = Action(args.action)
     # Only run shell scripts from the Nixpkgs tree if the action is
@@ -293,12 +289,7 @@ def execute(argv: list[str]) -> None:
 
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
-    if (
-        WITH_REEXEC
-        and can_run
-        and not args.no_reexec
-        and not os.environ.get("_NIXOS_REBUILD_REEXEC")
-    ):
+    if WITH_REEXEC and can_run and not args.no_reexec:
         services.reexec(argv, args, build_flags, flake_build_flags)
 
     profile = Profile.from_arg(args.profile_name)

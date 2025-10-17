@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pylint-plugin-utils";
-  version = "0.8.2";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "PyCQA";
     repo = "pylint-plugin-utils";
     tag = version;
-    hash = "sha256-xuPU1txfB+6+zJjtlfvNA950S5n7/PWPPFn1F3RtvCc=";
+    hash = "sha256-8C6vJDu60uSb6G0kvwiO0RAY9dU0yf955mAJAKhIkaQ=";
   };
 
   nativeBuildInputs = [ poetry-core ];

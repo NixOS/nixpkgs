@@ -26,7 +26,7 @@ let
 in
 stdenv.mkDerivation {
   pname = "sharpsat-td";
-  version = "unstable-2021-09-05";
+  version = "0-unstable-2021-09-05";
 
   src = fetchFromGitHub {
     owner = "Laakeri";

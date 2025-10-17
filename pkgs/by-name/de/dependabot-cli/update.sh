@@ -21,7 +21,7 @@ if [ "$OLD_VERSION" = "$VERSION" ]; then
 fi
 
 SHA256="$(nix-prefetch-url --quiet --unpack https://github.com/dependabot/cli/archive/refs/tags/v${VERSION}.tar.gz)"
-HASH="$(nix hash convert --hash-algo sha256 --to sri "$SHA256")"
+HASH="$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri "$SHA256")"
 
 nix-prefetch-docker --json --quiet --final-image-name dependabot-update-job-proxy --final-image-tag "nixpkgs-dependabot-cli-$VERSION" ghcr.io/github/dependabot-update-job-proxy/dependabot-update-job-proxy latest > "$temp_dir/dependabot-update-job-proxy.json"
 

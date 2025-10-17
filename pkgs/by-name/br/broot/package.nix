@@ -16,17 +16,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.47.0";
+  version = "1.49.1";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-BX54J43bUa73WCxCmYQ2VgXhURRiJG5Do1ofsFFY38Y=";
+    hash = "sha256-zDy494qIoo4r+oCnrMvYSetmqsWCWfS5PAVlp8sU8Zk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7F93oPDXHznwkZZVqdgEuIb5sxa7uElBkwUr/PDIsdo=";
+  cargoHash = "sha256-zHvfZAsEoCtdxtFP7yqrC9t49UIMji2qTm+I1bhu63A=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -34,13 +33,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libgit2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-    ];
+  buildInputs = [
+    libgit2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    zlib
+  ];
 
   buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
 

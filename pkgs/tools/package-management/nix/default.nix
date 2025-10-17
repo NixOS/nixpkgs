@@ -5,7 +5,6 @@
   nixDependencies,
   generateSplicesForMkScope,
   fetchFromGitHub,
-  fetchpatch2,
   runCommand,
   pkgs,
   pkgsi686Linux,
@@ -17,25 +16,6 @@
   confDir ? "/etc",
 }:
 let
-
-  # Called for Nix < 2.26
-  commonAutoconf =
-    args:
-    nixDependencies.callPackage
-      (import ./common-autoconf.nix ({ inherit lib fetchFromGitHub; } // args))
-      {
-        inherit
-          storeDir
-          stateDir
-          confDir
-          ;
-        aws-sdk-cpp =
-          if lib.versionAtLeast args.version "2.12pre" then
-            nixDependencies.aws-sdk-cpp
-          else
-            nixDependencies.aws-sdk-cpp-old;
-      };
-
   # Called for Nix == 2.28. Transitional until we always use
   # per-component packages.
   commonMeson =
@@ -47,13 +27,6 @@ let
         confDir
         ;
     };
-
-  # https://github.com/NixOS/nix/pull/7585
-  patch-monitorfdhup = fetchpatch2 {
-    name = "nix-7585-monitor-fd-hup.patch";
-    url = "https://github.com/NixOS/nix/commit/1df3d62c769dc68c279e89f68fdd3723ed3bcb5a.patch";
-    hash = "sha256-f+F0fUO+bqyPXjt+IXJtISVr589hdc3y+Cdrxznb+Nk=";
-  };
 
   # Intentionally does not support overrideAttrs etc
   # Use only for tests that are about the package relation to `pkgs` and/or NixOS.
@@ -146,104 +119,98 @@ let
       nixComponentsAttributeName
     ];
 
+  maintainers = [
+    lib.maintainers.artturin
+    lib.maintainers.philiptaron
+    lib.maintainers.lovesegfault
+  ];
+  teams = [ lib.teams.nix ];
+
 in
 lib.makeExtensible (
   self:
   (
     {
-      nix_2_3 =
-        (commonAutoconf {
-          version = "2.3.18";
-          hash = "sha256-jBz2Ub65eFYG+aWgSI3AJYvLSghio77fWQiIW1svA9U=";
-          patches = [
-            patch-monitorfdhup
-          ];
-          self_attribute_name = "nix_2_3";
-          knownVulnerabilities = [
-            "CVE-2024-38531"
-            "CVE-2024-47174"
-            "CVE-2025-46415"
-            "CVE-2025-46416"
-            "CVE-2025-52991"
-            "CVE-2025-52992"
-            "CVE-2025-52993"
-          ];
-          maintainers = with lib.maintainers; [ flokli ];
-          teams = [ ];
-        }).overrideAttrs
-          {
-            # https://github.com/NixOS/nix/issues/10222
-            # spurious test/add.sh failures
-            enableParallelChecking = false;
-          };
-
-      nix_2_24 = commonAutoconf {
-        version = "2.24.15";
-        hash = "sha256-SthMCsj6POjawLnJq9+lj/UzObX9skaeN1UGmMZiwTY=";
-        self_attribute_name = "nix_2_24";
-      };
-
-      nix_2_26 = commonMeson {
-        version = "2.26.4";
-        hash = "sha256-WmGMiwwC9RLomNtpDeRoe5bqBAH84A6pLcqi1MbcQi4=";
-        self_attribute_name = "nix_2_26";
-      };
-
       nix_2_28 = commonMeson {
-        version = "2.28.4";
-        hash = "sha256-V1tPrBkPteqF8VWUgpotNFYJ2Xm6WmB3aMPexuEHl9I=";
+        version = "2.28.5";
+        hash = "sha256-oIfAHxO+BCtHXJXLHBnsKkGl1Pw+Uuq1PwNxl+lZ+Oc=";
         self_attribute_name = "nix_2_28";
       };
 
-      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix {
-        version = "2.29.1";
-        inherit (self.nix_2_24.meta) maintainers teams;
+      nixComponents_2_29 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.29.2";
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_29";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "2.29.1";
-          hash = "sha256-rCL3l4t20jtMeNjCq6fMaTzWvBKgj+qw1zglLrniRfY=";
+          tag = version;
+          hash = "sha256-50p2sG2RFuRnlS1/Vr5et0Rt+QDgfpNE2C2WWRztnbQ=";
         };
       };
 
       nix_2_29 = addTests "nix_2_29" self.nixComponents_2_29.nix-everything;
 
+      nixComponents_2_30 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.30.3";
+        inherit maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_30";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-kBuwzMgIE9Tmve0Rpp+q+YCsE2mw9d62M/950ViWeJ0=";
+        };
+      };
+
+      nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
+
+      nixComponents_2_31 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.31.2";
+        inherit (self.nix_2_30.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
+        };
+      };
+
+      nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
+
+      nixComponents_2_32 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.32.0";
+        inherit (self.nix_2_31.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-OOd7dFe0tX0CVPygR7U6cqs5fiJAvFO1el1QmjDG1GM=";
+        };
+      };
+
+      nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
+
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.30pre20250624_${lib.substring 0 8 src.rev}";
-        inherit (self.nix_2_24.meta) maintainers teams;
+        version = "2.32pre20250919_${lib.substring 0 8 src.rev}";
+        inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "448cfb71eafbb3f2932b025aa2600c80b6d383f1";
-          hash = "sha256-tk1H8lOA5lIvhNP/izZ6JzT0EuDmCOX5RBhOeHdc2cM=";
+          rev = "07b96c1d14ab8695e5071fb73e19049fce8f3b6b";
+          hash = "sha256-9tR08zFwQ9JNohdfeb40wcLfRnicXpKrHF+FHFva/WA=";
         };
       };
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_28;
-
-      # The minimum Nix version supported by Nixpkgs
-      # Note that some functionality *might* have been backported into this Nix version,
-      # making this package an inaccurate representation of what features are available
-      # in the actual lowest minver.nix *patch* version.
-      minimum =
-        let
-          minver = import ../../../../lib/minver.nix;
-          major = lib.versions.major minver;
-          minor = lib.versions.minor minver;
-          attribute = "nix_${major}_${minor}";
-          nix = self.${attribute};
-        in
-        if !self ? ${attribute} then
-          throw "The minimum supported Nix version is ${minver} (declared in lib/minver.nix), but pkgs.nixVersions.${attribute} does not exist."
-        else
-          nix;
+      latest = self.nix_2_32;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_28;
+      stable = addFallbackPathsCheck self.nix_2_31;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (
@@ -257,9 +224,12 @@ lib.makeExtensible (
       )
       // {
         nixComponents_2_27 = throw "nixComponents_2_27 has been removed. use nixComponents_git.";
+        nix_2_24 = throw "nix_2_24 has been removed. use nix_2_28.";
+        nix_2_26 = throw "nix_2_26 has been removed. use nix_2_28.";
         nix_2_27 = throw "nix_2_27 has been removed. use nix_2_28.";
         nix_2_25 = throw "nix_2_25 has been removed. use nix_2_28.";
 
+        minimum = throw "nixVersions.minimum has been removed. Use a specific version instead.";
         unstable = throw "nixVersions.unstable has been removed. use nixVersions.latest or the nix flake.";
       }
     )

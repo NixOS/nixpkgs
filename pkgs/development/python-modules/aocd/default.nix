@@ -62,7 +62,7 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/"
   ];
 

@@ -6,22 +6,24 @@
   ninja,
   zlib,
   zstd,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdwarf";
-  version = "2.0.0";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "davea42";
     repo = "libdwarf-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-SsFg+7zGBEGxDSzfiIP5bxdttlBkhEiEQWaU12hINas=";
+    hash = "sha256-PJhhrNsYZNDKzLYJzF+eSJfEH1ehF/aeJrNjiEdFEas=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
   ];
 
   buildInputs = [

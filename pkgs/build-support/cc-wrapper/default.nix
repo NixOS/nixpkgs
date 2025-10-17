@@ -15,7 +15,6 @@
   bintools,
   coreutils ? null,
   apple-sdk ? null,
-  zlib ? null,
   nativeTools,
   noLibc ? false,
   nativeLibc,
@@ -94,18 +93,20 @@ let
     getLib
     getName
     getVersion
+    hasPrefix
     mapAttrsToList
     optional
     optionalAttrs
     optionals
     optionalString
     removePrefix
+    removeSuffix
     replaceStrings
     toList
     versionAtLeast
     ;
 
-  inherit (stdenvNoCC) hostPlatform targetPlatform;
+  inherit (stdenvNoCC) buildPlatform hostPlatform targetPlatform;
 
   includeFortifyHeaders' =
     if includeFortifyHeaders != null then
@@ -125,6 +126,7 @@ let
   libc_dev = optionalString (libc != null) (getDev libc);
   libc_lib = optionalString (libc != null) (getLib libc);
   cc_solib = getLib cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+  cc_bin = getBin cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
@@ -363,6 +365,22 @@ let
     else
       targetPlatform.darwinPlatform
   );
+
+  # Header files that use `__FILE__` (e.g., for error reporting) lead
+  # to unwanted references to development packages and outputs in built
+  # binaries, like C++ programs depending on GCC and Boost at runtime.
+  #
+  # We use `-fmacro-prefix-map` to avoid the store references in these
+  # situations while keeping them in compiler diagnostics and debugging
+  # and profiling output.
+  #
+  # Unfortunately, doing this with GCC runs into issues with compiler
+  # argument length limits due to <https://gcc.gnu.org/PR111527>, so we
+  # disable it there in favour of our existing patch.
+  #
+  # TODO: Drop `mangle-NIX_STORE-in-__FILE__.patch` from GCC and make
+  # this unconditional once the upstream bug is fixed.
+  useMacroPrefixMap = !isGNU;
 in
 
 assert includeFortifyHeaders' -> fortify-headers != null;
@@ -381,12 +399,13 @@ stdenvNoCC.mkDerivation {
 
   preferLocalBuild = true;
 
-  outputs =
-    [ "out" ]
-    ++ optionals propagateDoc [
-      "man"
-      "info"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ optionals propagateDoc [
+    "man"
+    "info"
+  ];
 
   # Cannot be in "passthru" due to "substituteAll"
   inherit isArocc;
@@ -427,6 +446,13 @@ stdenvNoCC.mkDerivation {
     inherit nixSupport;
 
     inherit defaultHardeningFlags;
+  }
+  // optionalAttrs cc.langGo or false {
+    # So gccgo looks more like go for buildGoModule
+
+    inherit (targetPlatform.go) GOOS GOARCH GOARM;
+
+    CGO_ENABLED = 1;
   };
 
   dontBuild = true;
@@ -443,139 +469,145 @@ stdenvNoCC.mkDerivation {
 
   wrapper = ./cc-wrapper.sh;
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/nix-support
+  installPhase = ''
+    mkdir -p $out/bin $out/nix-support
 
-      wrap() {
-        local dst="$1"
-        local wrapper="$2"
-        export prog="$3"
-        export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
-        substituteAll "$wrapper" "$out/bin/$dst"
-        chmod +x "$out/bin/$dst"
-      }
-    ''
+    wrap() {
+      local dst="$1"
+      local wrapper="$2"
+      export prog="$3"
+      export use_response_file_by_default=${if isClang && !isCcache then "1" else "0"}
+      substituteAll "$wrapper" "$out/bin/$dst"
+      chmod +x "$out/bin/$dst"
+    }
 
-    + (
-      if nativeTools then
-        ''
-          echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
+    include() {
+      printf -- '%s %s\n' "$1" "$2"
+      ${lib.optionalString useMacroPrefixMap ''
+        local scrubbed="$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-''${2#"$NIX_STORE"/*-}"
+        printf -- '-fmacro-prefix-map=%s=%s\n' "$2" "$scrubbed"
+      ''}
+    }
+  ''
 
-          ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
-        ''
-      else
-        ''
-          echo $cc > $out/nix-support/orig-cc
+  + (
+    if nativeTools then
+      ''
+        echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
 
-          ccPath="${cc}/bin"
-        ''
-    )
+        ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
+      ''
+    else
+      ''
+        echo $cc > $out/nix-support/orig-cc
 
-    # Create symlinks to everything in the bintools wrapper.
-    + ''
-      for bbin in $bintools/bin/*; do
-        mkdir -p "$out/bin"
-        ln -s "$bbin" "$out/bin/$(basename $bbin)"
-      done
-    ''
+        ccPath="${cc}/bin"
+      ''
+  )
 
-    # We export environment variables pointing to the wrapped nonstandard
-    # cmds, lest some lousy configure script use those to guess compiler
-    # version.
-    + ''
-      export named_cc=${targetPrefix}cc
-      export named_cxx=${targetPrefix}c++
+  # Create symlinks to everything in the bintools wrapper.
+  + ''
+    for bbin in $bintools/bin/*; do
+      mkdir -p "$out/bin"
+      ln -s "$bbin" "$out/bin/$(basename $bbin)"
+    done
+  ''
 
-      if [ -e $ccPath/${targetPrefix}gcc ]; then
-        wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
-        ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
-        export named_cc=${targetPrefix}gcc
-        export named_cxx=${targetPrefix}g++
-      elif [ -e $ccPath/clang ]; then
-        wrap ${targetPrefix}clang $wrapper $ccPath/clang
-        ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
-        export named_cc=${targetPrefix}clang
-        export named_cxx=${targetPrefix}clang++
-      elif [ -e $ccPath/arocc ]; then
-        wrap ${targetPrefix}arocc $wrapper $ccPath/arocc
-        ln -s ${targetPrefix}arocc $out/bin/${targetPrefix}cc
-        export named_cc=${targetPrefix}arocc
-      fi
+  # We export environment variables pointing to the wrapped nonstandard
+  # cmds, lest some lousy configure script use those to guess compiler
+  # version.
+  + ''
+    export named_cc=${targetPrefix}cc
+    export named_cxx=${targetPrefix}c++
 
-      if [ -e $ccPath/${targetPrefix}g++ ]; then
-        wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
-        ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
-      elif [ -e $ccPath/clang++ ]; then
-        wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
-        ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
-      fi
+    if [ -e $ccPath/${targetPrefix}gcc ]; then
+      wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
+      ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
+      export named_cc=${targetPrefix}gcc
+      export named_cxx=${targetPrefix}g++
+    elif [ -e $ccPath/clang ]; then
+      wrap ${targetPrefix}clang $wrapper $ccPath/clang
+      ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
+      export named_cc=${targetPrefix}clang
+      export named_cxx=${targetPrefix}clang++
+    elif [ -e $ccPath/arocc ]; then
+      wrap ${targetPrefix}arocc $wrapper $ccPath/arocc
+      ln -s ${targetPrefix}arocc $out/bin/${targetPrefix}cc
+      export named_cc=${targetPrefix}arocc
+    fi
 
-      if [ -e $ccPath/${targetPrefix}cpp ]; then
-        wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
-      elif [ -e $ccPath/cpp ]; then
-        wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
-      fi
-    ''
+    if [ -e $ccPath/${targetPrefix}g++ ]; then
+      wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
+      ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
+    elif [ -e $ccPath/clang++ ]; then
+      wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
+      ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
+    fi
 
-    # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
-    + optionalString cc.langAda or false ''
-      for cmd in gnatbind gnatchop gnatclean gnatlink gnatls gnatmake; do
-        wrap ${targetPrefix}$cmd ${./gnat-wrapper.sh} $ccPath/${targetPrefix}$cmd
-      done
+    if [ -e $ccPath/${targetPrefix}cpp ]; then
+      wrap ${targetPrefix}cpp $wrapper $ccPath/${targetPrefix}cpp
+    elif [ -e $ccPath/cpp ]; then
+      wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
+    fi
+  ''
 
-      for cmd in gnat gnatkr gnatname gnatprep; do
-        ln -s $ccPath/${targetPrefix}$cmd $out/bin/${targetPrefix}$cmd
-      done
+  # No need to wrap gnat, gnatkr, gnatname or gnatprep; we can just symlink them in
+  + optionalString cc.langAda or false ''
+    for cmd in gnatbind gnatchop gnatclean gnatlink gnatls gnatmake; do
+      wrap ${targetPrefix}$cmd ${./gnat-wrapper.sh} $ccPath/${targetPrefix}$cmd
+    done
 
-      # this symlink points to the unwrapped gnat's output "out". It is used by
-      # our custom gprconfig compiler description to find GNAT's ada runtime. See
-      # ../../development/ada-modules/gprbuild/{boot.nix, nixpkgs-gnat.xml}
-      ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
-    ''
+    for cmd in gnat gnatkr gnatname gnatprep; do
+      ln -s $ccPath/${targetPrefix}$cmd $out/bin/${targetPrefix}$cmd
+    done
 
-    + optionalString cc.langD or false ''
-      wrap ${targetPrefix}gdc $wrapper $ccPath/${targetPrefix}gdc
-    ''
+    # this symlink points to the unwrapped gnat's output "out". It is used by
+    # our custom gprconfig compiler description to find GNAT's ada runtime. See
+    # ../../development/ada-modules/gprbuild/{boot.nix, nixpkgs-gnat.xml}
+    ln -sf ${cc} $out/nix-support/gprconfig-gnat-unwrapped
+  ''
 
-    + optionalString cc.langFortran or false ''
-      wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
-      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
-      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
-      export named_fc=${targetPrefix}gfortran
-    ''
+  + optionalString cc.langFortran or false ''
+    wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
+    ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
+    ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
+    export named_fc=${targetPrefix}gfortran
+  ''
 
-    + optionalString cc.langJava or false ''
-      wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
-    ''
-
-    + optionalString cc.langGo or false ''
-      wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
-      wrap ${targetPrefix}go ${./go-wrapper.sh} $ccPath/${targetPrefix}go
-    '';
+  + optionalString cc.langGo or false ''
+    wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
+    wrap ${targetPrefix}go ${./go-wrapper.sh} $ccPath/${targetPrefix}go
+  '';
 
   strictDeps = true;
-  propagatedBuildInputs =
-    [ bintools ] ++ extraTools ++ optionals cc.langD or cc.langJava or false [ zlib ];
+  propagatedBuildInputs = [
+    bintools
+  ]
+  ++ extraTools;
   depsTargetTargetPropagated = optional (libcxx != null) libcxx ++ extraPackages;
 
-  setupHooks =
-    [
-      ../setup-hooks/role.bash
-    ]
-    ++ optional (cc.langC or true) ./setup-hook.sh
-    ++ optional (cc.langFortran or false) ./fortran-hook.sh
-    ++ optional (targetPlatform.isWindows) (
-      stdenvNoCC.mkDerivation {
-        name = "win-dll-hook.sh";
-        dontUnpack = true;
-        installPhase = ''
-          echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
-          echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
-          echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
-        '';
-      }
-    );
+  setupHooks = [
+    ../setup-hooks/role.bash
+  ]
+  ++ optional (cc.langC or true) ./setup-hook.sh
+  ++ optional (cc.langFortran or false) ./fortran-hook.sh
+  ++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (
+    stdenvNoCC.mkDerivation {
+      name = "win-dll-hook.sh";
+      dontUnpack = true;
+      installPhase =
+        if targetPlatform.isCygwin then
+          ''
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_bin}/lib" >> $out
+          ''
+        else
+          ''
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib64" >> $out
+            echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib32" >> $out
+          '';
+    }
+  );
 
   postFixup =
     # Ensure flags files exists, as some other programs cat them. (That these
@@ -658,7 +690,7 @@ stdenvNoCC.mkDerivation {
     #
     # Unfortunately, setting -B appears to override the default search
     # path. Thus, the gcc-specific "../includes-fixed" directory is
-    # now longer searched and glibc's <limits.h> header fails to
+    # no longer searched and glibc's <limits.h> header fails to
     # compile, because it uses "#include_next <limits.h>" to find the
     # limits.h file in ../includes-fixed. To remedy the problem,
     # another -idirafter is necessary to add that directory again.
@@ -670,15 +702,20 @@ stdenvNoCC.mkDerivation {
       + optionalString (!isArocc) ''
         echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-crt1-cflags
       ''
-      + optionalString (!(cc.langD or false)) ''
-        echo "-${
+      + ''
+        include "-${
           if isArocc then "I" else "idirafter"
-        } ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+        }" "${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
       ''
-      + optionalString (isGNU && (!(cc.langD or false))) ''
+      + optionalString isGNU ''
         for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
-          echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
+          include '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
         done
+      ''
+      + optionalString (libc.w32api or null != null) ''
+        echo '-idirafter ${lib.getDev libc.w32api}${
+          libc.incdir or "/include/w32api"
+        }' >> $out/nix-support/libc-cflags
       ''
       + ''
 
@@ -693,7 +730,7 @@ stdenvNoCC.mkDerivation {
       # like option that forces the libc headers before all -idirafter,
       # hence -isystem here.
       + optionalString includeFortifyHeaders' ''
-        echo "-isystem ${fortify-headers}/include" >> $out/nix-support/libc-cflags
+        include -isystem "${fortify-headers}/include" >> $out/nix-support/libc-cflags
       ''
     )
 
@@ -716,15 +753,19 @@ stdenvNoCC.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
       for dir in ${gccForLibs}/include/c++/*; do
-        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
       for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        echo "-isystem $dir" >> $out/nix-support/libcxx-cxxflags
+        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
       done
     ''
     + optionalString (libcxx.isLLVM or false) ''
-      echo "-isystem ${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
+      include -isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
+    ''
+    # GCC NG friendly libc++
+    + optionalString (libcxx != null && libcxx.isGNU or false) ''
+      include -isystem "${getDev libcxx}/include" >> $out/nix-support/libcxx-cxxflags
     ''
 
     ##
@@ -790,9 +831,6 @@ stdenvNoCC.mkDerivation {
       ln -s ${cc.man} $man
       ln -s ${cc.info} $info
     ''
-    + optionalString (cc.langD or cc.langJava or false && !isArocc) ''
-      echo "-B${zlib}${zlib.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
-    ''
 
     ##
     ## Hardening support
@@ -804,9 +842,13 @@ stdenvNoCC.mkDerivation {
     # Do not prevent omission of framepointers on x86 32bit due to the small
     # number of general purpose registers. Keeping EBP available provides
     # non-trivial performance benefits.
+    # Also skip s390/s390x as it fails to build glibc and causes
+    # performance regressions:
+    #   https://bugs.launchpad.net/ubuntu-z-systems/+bug/2064538
+    #   https://github.com/NixOS/nixpkgs/issues/428260
     + (
       let
-        enable_fp = !targetPlatform.isx86_32;
+        enable_fp = !targetPlatform.isx86_32 && !targetPlatform.isS390;
         enable_leaf_fp =
           enable_fp
           && (
@@ -847,10 +889,10 @@ stdenvNoCC.mkDerivation {
     + optionalString cc.langAda or false ''
       hardening_unsupported_flags+=" format stackprotector strictoverflow"
     ''
-    + optionalString cc.langD or false ''
+    + optionalString cc.langFortran or false ''
       hardening_unsupported_flags+=" format"
     ''
-    + optionalString cc.langFortran or false ''
+    + optionalString cc.langGo or false ''
       hardening_unsupported_flags+=" format"
     ''
     + optionalString targetPlatform.isWasm ''
@@ -891,12 +933,24 @@ stdenvNoCC.mkDerivation {
     ## General Clang support
     ## Needs to go after ^ because the for loop eats \n and makes this file an invalid script
     ##
-    + optionalString isClang ''
-      # Escape twice: once for this script, once for the one it gets substituted into.
-      export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
-      export defaultTarget=${targetPlatform.config}
-      substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
-    ''
+    + optionalString isClang (
+      let
+        hasUnsupportedGnuSuffix = hasPrefix "gnuabielfv" targetPlatform.parsed.abi.name;
+        clangCompatibleConfig =
+          if hasUnsupportedGnuSuffix then
+            removeSuffix (removePrefix "gnu" targetPlatform.parsed.abi.name) targetPlatform.config
+          else
+            targetPlatform.config;
+        explicitAbiValue = if hasUnsupportedGnuSuffix then targetPlatform.parsed.abi.abi else "";
+      in
+      ''
+        # Escape twice: once for this script, once for the one it gets substituted into.
+        export machineFlags=${escapeShellArg (escapeShellArgs machineFlags)}
+        export defaultTarget=${clangCompatibleConfig}
+        export explicitAbiValue=${explicitAbiValue}
+        substituteAll ${./add-clang-cc-cflags-before.sh} $out/nix-support/add-local-cc-cflags-before.sh
+      ''
+    )
 
     ##
     ## Extra custom steps
@@ -906,37 +960,37 @@ stdenvNoCC.mkDerivation {
       mapAttrsToList (name: value: "echo ${toString value} >> $out/nix-support/${name}") nixSupport
     );
 
-  env =
-    {
-      inherit isClang;
+  env = {
+    inherit isClang;
 
-      # for substitution in utils.bash
-      # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
-      expandResponseParams = lib.optionalString (expand-response-params != "") (
-        lib.getExe expand-response-params
-      );
-      # TODO(@sternenseemann): rename env var via stdenv rebuild
-      shell = getBin runtimeShell + runtimeShell.shellPath or "";
-      gnugrep_bin = optionalString (!nativeTools) gnugrep;
-      rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
-      mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
-      # stdenv.cc.cc should not be null and we have nothing better for now.
-      # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
-      cc = optionalString (!nativeTools) cc;
-      wrapperName = "CC_WRAPPER";
-      inherit suffixSalt coreutils_bin bintools;
-      inherit libc_bin libc_dev libc_lib;
-      inherit darwinPlatformForCC;
-      default_hardening_flags_str = builtins.toString defaultHardeningFlags;
-    }
-    // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
-      # These will become empty strings when not targeting Darwin.
-      inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
-    }
-    // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
-      # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
-      fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
-    };
+    # for substitution in utils.bash
+    # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
+    expandResponseParams = lib.optionalString (expand-response-params != "") (
+      lib.getExe expand-response-params
+    );
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = getBin runtimeShell + runtimeShell.shellPath or "";
+    gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
+    # stdenv.cc.cc should not be null and we have nothing better for now.
+    # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
+    cc = optionalString (!nativeTools) cc;
+    wrapperName = "CC_WRAPPER";
+    inherit suffixSalt coreutils_bin bintools;
+    inherit libc_bin libc_dev libc_lib;
+    inherit darwinPlatformForCC;
+    default_hardening_flags_str = toString defaultHardeningFlags;
+    inherit useMacroPrefixMap;
+  }
+  // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
+    # These will become empty strings when not targeting Darwin.
+    inherit (targetPlatform) darwinMinVersion darwinMinVersionVariable;
+  }
+  // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
+  };
 
   meta =
     let

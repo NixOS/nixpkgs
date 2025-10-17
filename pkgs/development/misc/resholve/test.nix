@@ -42,7 +42,6 @@
   bashup-events32,
   dgoss,
   git-ftp,
-  ix,
   lesspipe,
   locate-dominating-file,
   mons,
@@ -77,6 +76,7 @@ let
     rlwrap
     gnutar
     bc
+    msmtp
   ];
 in
 rec {
@@ -218,27 +218,26 @@ rec {
     # explicit interpreter for demo suite; maybe some better way...
     INTERP = "${bash}/bin/bash";
 
-    checkPhase =
-      ''
-        patchShebangs .
-        mkdir empty_lore
-        touch empty_lore/{execers,wrappers}
-        export EMPTY_LORE=$PWD/empty_lore
-        printf "\033[33m============================= resholve test suite ===================================\033[0m\n" > test.ansi
-        if ./test.sh &>> test.ansi; then
-          cat test.ansi
-        else
-          cat test.ansi && exit 1
-        fi
-      ''
-      + lib.optionalString runDemo ''
-        printf "\033[33m============================= resholve demo ===================================\033[0m\n" > demo.ansi
-        if ./demo &>> demo.ansi; then
-          cat demo.ansi
-        else
-          cat demo.ansi && exit 1
-        fi
-      '';
+    checkPhase = ''
+      patchShebangs .
+      mkdir empty_lore
+      touch empty_lore/{execers,wrappers}
+      export EMPTY_LORE=$PWD/empty_lore
+      printf "\033[33m============================= resholve test suite ===================================\033[0m\n" > test.ansi
+      if ./test.sh &>> test.ansi; then
+        cat test.ansi
+      else
+        cat test.ansi && exit 1
+      fi
+    ''
+    + lib.optionalString runDemo ''
+      printf "\033[33m============================= resholve demo ===================================\033[0m\n" > demo.ansi
+      if ./demo &>> demo.ansi; then
+        cat demo.ansi
+      else
+        cat demo.ansi && exit 1
+      fi
+    '';
   };
 
   # Caution: ci.nix asserts the equality of both of these w/ diff
@@ -276,22 +275,21 @@ rec {
   loreOverrides =
     resholve.writeScriptBin "verify-overrides"
       {
-        inputs =
-          [
-            coreutils
-            esh
-            getconf
-            libarchive
-            locale
-            mount
-            ncurses
-            procps
-            ps
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            nixos-install-tools
-            nixos-rebuild
-          ];
+        inputs = [
+          coreutils
+          esh
+          getconf
+          libarchive
+          locale
+          mount
+          ncurses
+          procps
+          ps
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [
+          nixos-install-tools
+          nixos-rebuild
+        ];
         interpreter = "none";
         execer = [
           "cannot:${esh}/bin/esh"
@@ -326,7 +324,6 @@ rec {
   inherit bashup-events32;
   inherit bats;
   inherit git-ftp;
-  inherit ix;
   inherit lesspipe;
   inherit locate-dominating-file;
   inherit mons;

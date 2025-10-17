@@ -37,13 +37,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "vgmstream";
-  version = "2023";
+  version = "2055";
 
   src = fetchFromGitHub {
     owner = "vgmstream";
     repo = "vgmstream";
     tag = "r${version}";
-    hash = "sha256-RyVh9twBZqFs4bKRZKmat0JB25R+rQtnAARo0dvCS+8=";
+    hash = "sha256-GNsoWCTLDd49T639lKkLoyBWpWYocDP6gZB2e8ZUyEU=";
   };
 
   passthru.updateScript = nix-update-script {
@@ -74,30 +74,28 @@ stdenv.mkDerivation rec {
     audacious-bare
   ];
 
-  preConfigure =
-    ''
-      substituteInPlace cmake/dependencies/audacious.cmake \
-        --replace-fail "pkg_get_variable(AUDACIOUS_PLUGIN_DIR audacious plugin_dir)" "set(AUDACIOUS_PLUGIN_DIR \"$audacious/lib/audacious\")"
-    ''
-    +
-      # cmake/dependencies/celt.cmake uses configure_file to modify ${CELT_0110_PATH}/libcelt/ecintrin.h.
-      # Therefore, CELT_0110_PATH needs to point to a mutable directory.
-      lib.optionalString (stdenv.system == "x86_64-linux") ''
-        mkdir -p dependencies/celt-0.11.0/
-        cp -r ${celt-0_11_0-src}/* dependencies/celt-0.11.0/
-        chmod -R +w dependencies/celt-0.11.0/
-      '';
+  preConfigure = ''
+    substituteInPlace cmake/dependencies/audacious.cmake \
+      --replace-fail "pkg_get_variable(AUDACIOUS_PLUGIN_DIR audacious plugin_dir)" "set(AUDACIOUS_PLUGIN_DIR \"$audacious/lib/audacious\")"
+  ''
+  +
+    # cmake/dependencies/celt.cmake uses configure_file to modify ${CELT_0110_PATH}/libcelt/ecintrin.h.
+    # Therefore, CELT_0110_PATH needs to point to a mutable directory.
+    lib.optionalString (stdenv.system == "x86_64-linux") ''
+      mkdir -p dependencies/celt-0.11.0/
+      cp -r ${celt-0_11_0-src}/* dependencies/celt-0.11.0/
+      chmod -R +w dependencies/celt-0.11.0/
+    '';
 
-  cmakeFlags =
-    [
-      "-DATRAC9_PATH=${atrac9-src}"
-    ]
-    # Only supported on x86_64-linux
-    ++ lib.optionals (stdenv.system == "x86_64-linux") [
-      "-DCELT_0061_PATH=${celt-0_6_1-src}"
-      "-DCELT_0110_PATH=../dependencies/celt-0.11.0"
-      # libg719_decode omitted because it doesn't have a free software license
-    ];
+  cmakeFlags = [
+    "-DATRAC9_PATH=${atrac9-src}"
+  ]
+  # Only supported on x86_64-linux
+  ++ lib.optionals (stdenv.system == "x86_64-linux") [
+    "-DCELT_0061_PATH=${celt-0_6_1-src}"
+    "-DCELT_0110_PATH=../dependencies/celt-0.11.0"
+    # libg719_decode omitted because it doesn't have a free software license
+  ];
 
   meta = with lib; {
     description = "Library for playback of various streamed audio formats used in video games";

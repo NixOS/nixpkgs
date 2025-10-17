@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "codecrafters-cli";
-  version = "36";
+  version = "42";
 
   src = fetchFromGitHub {
     owner = "codecrafters-io";
     repo = "cli";
-    rev = "v${version}";
-    hash = "sha256-YgQPDc5BUIoEd44NLpRluxCKooW99qvcSTrFPm6qJKM=";
+    tag = "v${version}";
+    hash = "sha256-vkugNHeajGv/2t3/4eZbcsXXuaD7/fUM/3Cg0AO+6H0=";
     # A shortened git commit hash is part of the version output, and is
     # needed at build time. Use the `.git` directory to retrieve the
     # commit SHA, and remove the directory afterwards since it is not needed
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-5t/bRx3mT66e/efjWbb527ZdKOn3qV3hroqiLwP180g=";
+  vendorHash = "sha256-LfchGzJPgPVa4wTXoViIEx8B17HMoPPME/2RLkatGUQ=";
 
   ldflags = [
     "-s"

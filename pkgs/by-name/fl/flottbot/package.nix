@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "flottbot";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "target";
     repo = "flottbot";
     rev = version;
-    hash = "sha256-Z17CkJhxIwoF3Fa0doDfE6N2eUtiBeEEhDwDUoWCCQ8=";
+    hash = "sha256-gOy03qrAzkZk99hVNe/tG1YLoUD5CMCE9AeONAJyeE4=";
   };
 
   patches = [
@@ -24,7 +24,7 @@ buildGoModule rec {
     })
   ];
 
-  vendorHash = "sha256-q4oMlrCN6mjfTTnDc5Q4ncLjKstNttzlEzcXPVw5cLc=";
+  vendorHash = "sha256-vXezNFEM/m5doVgt6T2+Q0PwP3lYALkhHD0cP4ul+JE=";
 
   subPackages = [ "cmd/flottbot" ];
 

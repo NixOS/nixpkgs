@@ -94,7 +94,7 @@ rec {
         preferLocalBuild = true;
         allowSubstitutes = false;
       })
-      // builtins.removeAttrs derivationArgs [ "passAsFile" ]
+      // removeAttrs derivationArgs [ "passAsFile" ]
     );
 
   # Docs in doc/build-helpers/trivial-build-helpers.chapter.md
@@ -182,7 +182,7 @@ rec {
     path: text:
     writeTextFile {
       inherit text;
-      name = builtins.baseNameOf path;
+      name = baseNameOf path;
       destination = "/${path}";
     };
 
@@ -203,6 +203,7 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
+      meta.mainProgram = name;
     };
 
   # See doc/build-helpers/trivial-build-helpers.chapter.md
@@ -344,27 +345,26 @@ rec {
       destination = "/bin/${name}";
       allowSubstitutes = true;
       preferLocalBuild = false;
-      text =
-        ''
-          #!${runtimeShell}
-          ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
-        ''
-        + lib.optionalString (runtimeEnv != null) (
-          lib.concatStrings (
-            lib.mapAttrsToList (name: value: ''
-              ${lib.toShellVar name value}
-              export ${name}
-            '') runtimeEnv
-          )
+      text = ''
+        #!${runtimeShell}
+        ${lib.concatMapStringsSep "\n" (option: "set -o ${option}") bashOptions}
+      ''
+      + lib.optionalString (runtimeEnv != null) (
+        lib.concatStrings (
+          lib.mapAttrsToList (name: value: ''
+            ${lib.toShellVar name value}
+            export ${name}
+          '') runtimeEnv
         )
-        + lib.optionalString (runtimeInputs != [ ]) ''
+      )
+      + lib.optionalString (runtimeInputs != [ ]) ''
 
-          export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
-        ''
-        + ''
+        export PATH="${lib.makeBinPath runtimeInputs}${lib.optionalString inheritPath ":$PATH"}"
+      ''
+      + ''
 
-          ${text}
-        '';
+        ${text}
+      '';
 
       checkPhase =
         let
@@ -671,8 +671,8 @@ rec {
           throw "linkFarm entries must be either attrs or a list!";
 
       linkCommands = lib.mapAttrsToList (name: path: ''
-        mkdir -p "$(dirname ${lib.escapeShellArg "${name}"})"
-        ln -s ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
+        mkdir -p -- "$(dirname -- ${lib.escapeShellArg "${name}"})"
+        ln -s -- ${lib.escapeShellArg "${path}"} ${lib.escapeShellArg "${name}"}
       '') entries';
     in
     runCommand name
@@ -740,6 +740,7 @@ rec {
       name ? lib.warn "calling makeSetupHook without passing a name is deprecated." "hook",
       # hooks go in nativeBuildInputs so these will be nativeBuildInputs
       propagatedBuildInputs ? [ ],
+      propagatedNativeBuildInputs ? [ ],
       # these will be buildInputs
       depsTargetTargetPropagated ? [ ],
       meta ? { },
@@ -758,6 +759,7 @@ rec {
           inherit meta;
           inherit depsTargetTargetPropagated;
           inherit propagatedBuildInputs;
+          inherit propagatedNativeBuildInputs;
           strictDeps = true;
           # TODO 2023-01, no backport: simplify to inherit passthru;
           passthru =
@@ -981,7 +983,7 @@ rec {
 
   # TODO: move copyPathsToStore docs to the Nixpkgs manual
   # Copy a list of paths to the Nix store.
-  copyPathsToStore = builtins.map copyPathToStore;
+  copyPathsToStore = map copyPathToStore;
 
   # TODO: move applyPatches docs to the Nixpkgs manual
   /*
@@ -1007,7 +1009,7 @@ rec {
       name ?
         (
           if builtins.typeOf src == "path" then
-            builtins.baseNameOf src
+            baseNameOf src
           else if builtins.isAttrs src && builtins.hasAttr "name" src then
             src.name
           else

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     kguiaddons
     ki18n
     kio
-    libkexiv2
+    # libkexiv2
     phonon
     solid
     syntax-highlighting

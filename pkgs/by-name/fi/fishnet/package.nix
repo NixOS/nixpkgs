@@ -28,13 +28,13 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "fishnet";
-  version = "2.9.5";
+  version = "2.11.0";
 
   src = fetchFromGitHub {
     owner = "lichess-org";
     repo = "fishnet";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+JkqxO7wwYZHwWRMboKGe8uo/F223efR+9pIsAIoFpU=";
+    hash = "sha256-hdeg8fqrzBwXgGteapFt0Aec5/yxmRRY2ZvKl2JoJV4=";
     fetchSubmodules = true;
   };
 
@@ -45,8 +45,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     cp -v '${nnueSmall}' 'Fairy-Stockfish/src/${nnueSmallFile}'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-WjBrv4GApT7LTnexLDhY7Zni5kLtvUzaGs2YuA3UiHE=";
+  cargoHash = "sha256-zceH1Ctj4p5deMWQYpoSSvkbT9Y3bcaBw4Pti62ckqU=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -68,7 +67,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
       runtimeEnv = {
         PNAME = finalAttrs.pname;
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
         GITHUB_REPOSITORY = "${finalAttrs.src.owner}/${finalAttrs.src.repo}";
         NNUE_BIG_FILE = nnueBigFile;
         NNUE_BIG_HASH = nnueBigHash;

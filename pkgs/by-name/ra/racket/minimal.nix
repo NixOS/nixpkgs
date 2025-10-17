@@ -67,26 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureScript = "../configure";
 
-  configureFlags =
-    [
-      # > docs failure: ftype-ref: ftype mismatch for #<ftype-pointer>
-      # "--enable-check"
-      "--enable-csonly"
-      "--enable-liblz4"
-      "--enable-libz"
-    ]
-    ++ lib.optional disableDocs "--disable-docs"
-    ++ lib.optionals (!(finalAttrs.dontDisableStatic or false)) [
-      # instead of `--disable-static` that `stdenv` assumes
-      "--disable-libs"
-      # "not currently supported" in `configure --help-cs` but still emphasized in README
-      "--enable-shared"
-    ]
-    ++ lib.optionals isDarwin [
-      "--disable-strip"
-      # "use Unix style (e.g., use Gtk) for Mac OS", which eliminates many problems
-      "--enable-xonx"
-    ];
+  configureFlags = [
+    # > docs failure: ftype-ref: ftype mismatch for #<ftype-pointer>
+    # "--enable-check"
+    "--enable-csonly"
+    "--enable-liblz4"
+    "--enable-libz"
+  ]
+  ++ lib.optional disableDocs "--disable-docs"
+  ++ lib.optionals (!(finalAttrs.dontDisableStatic or false)) [
+    # instead of `--disable-static` that `stdenv` assumes
+    "--disable-libs"
+    # "not currently supported" in `configure --help-cs` but still emphasized in README
+    "--enable-shared"
+  ]
+  ++ lib.optionals isDarwin [
+    "--disable-strip"
+    # "use Unix style (e.g., use Gtk) for Mac OS", which eliminates many problems
+    "--enable-xonx"
+  ];
 
   # The upstream script builds static libraries by default.
   dontAddStaticConfigureFlags = true;
@@ -119,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
       }@config:
       assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
       writers.makeScriptWriter (
-        builtins.removeAttrs config [ "libraries" ]
+        removeAttrs config [ "libraries" ]
         // {
           interpreter = "${lib.getExe finalAttrs.finalPackage}";
         }

@@ -10,9 +10,9 @@
 }:
 
 let
-  version_4 = "4.9.2";
+  version_4 = "4.10.3";
   version_3 = "3.8.7";
-  hash_4 = "sha256-MZB70hgPiQuHHLibhrGZ11vcvtZsCDkqR1NxSq8bXps=";
+  hash_4 = "sha256-sPA9XxWuYvxw/eYAsePuHOaaY2jIBRAv5YfDgVUF6YY=";
   hash_3 = "sha256-vRrk+Fs/7dZha3h7yI5NpMfd1xezesnigpFgTRCACZo=";
 in
 
@@ -60,7 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
       };
     };
-  } // (callPackage ./fetcher { yarn-berry = finalAttrs; });
+  }
+  // (callPackage ./fetcher { yarn-berry = finalAttrs; });
 
   meta = with lib; {
     homepage = "https://yarnpkg.com/";

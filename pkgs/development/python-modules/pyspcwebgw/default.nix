@@ -38,7 +38,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   pythonImportsCheck = [ "pyspcwebgw" ];
 

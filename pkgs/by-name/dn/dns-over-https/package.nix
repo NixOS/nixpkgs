@@ -34,7 +34,7 @@ buildGoModule rec {
     changelog = "https://github.com/m13253/dns-over-https/releases/tag/v${version}";
     description = "High performance DNS over HTTPS client & server";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

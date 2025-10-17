@@ -26,13 +26,13 @@
 #     ];
 # };
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "qogir-kde";
   version = "0-unstable-2024-12-21";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "qogir-kde";
     rev = "31e7bbf94e905ef40d262d2bc6063156df252470";
     hash = "sha256-zgXwYmpD31vs2Gyg21m0MdOkwqzSn6V21Kva+nvNeVI=";
   };

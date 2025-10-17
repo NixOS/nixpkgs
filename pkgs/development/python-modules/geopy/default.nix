@@ -4,7 +4,7 @@
   docutils,
   fetchFromGitHub,
   geographiclib,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonAtLeast,
   pythonOlder,
   pytz,
@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     docutils
-    pytestCheckHook
+    pytest7CheckHook
     pytz
   ];
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [ "test/test_init.py" ];
 
-  pytestFlagsArray = [ "--skip-tests-requiring-internet" ];
+  pytestFlags = [ "--skip-tests-requiring-internet" ];
 
   pythonImportsCheck = [ "geopy" ];
 
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Python Geocoding Toolbox";
     changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
   };
 }

@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "nebula";
-  version = "1.9.5";
+  version = "1.9.7";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = "nebula";
     tag = "v${version}";
-    hash = "sha256-IJMmVKdgYCXCaRndlcoozFBr+RsUhzC1Eqo427K1k+o=";
+    hash = "sha256-U6PCHRSETkrA/nulTqIn9vvj3zks10kJ1k2syFsPMnM=";
   };
 
   vendorHash = "sha256-oXhq+s5gDKPVClZpOzYi7BaYwcDqbCLBEO5BNGy9LJA=";

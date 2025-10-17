@@ -17,26 +17,27 @@
   requests,
   torch,
   tqdm,
+  xxhash,
 
   # optional-dependencies
+  # benchmark
   matplotlib,
   networkx,
   pandas,
   protobuf,
   wandb,
+  # dev
   ipython,
   matplotlib-inline,
   pre-commit,
   torch-geometric,
+  # full
   ase,
-  # captum,
   graphviz,
   h5py,
   numba,
   opt-einsum,
-  pgmpy,
   pynndescent,
-  # pytorch-memlab,
   rdflib,
   rdkit,
   scikit-image,
@@ -47,9 +48,18 @@
   tabulate,
   torchmetrics,
   trimesh,
+  # graphgym
   pytorch-lightning,
   yacs,
+  # modelhub
   huggingface-hub,
+  # rag
+  # pcst-fast,
+  datasets,
+  transformers,
+  sentencepiece,
+  accelerate,
+  # test
   onnx,
   onnxruntime,
   pytest,
@@ -63,14 +73,14 @@
 
 buildPythonPackage rec {
   pname = "torch-geometric";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
     tag = version;
-    hash = "sha256-Zw9YqPQw2N0ZKn5i5Kl4Cjk9JDTmvZmyO/VvIVr6fTU=";
+    hash = "sha256-xlOzpoYRoEfIRWSQoZbEPvUW43AMr3rCgIYnxwG/z3A=";
   };
 
   build-system = [
@@ -87,6 +97,7 @@ buildPythonPackage rec {
     requests
     torch
     tqdm
+    xxhash
   ];
 
   optional-dependencies = {
@@ -113,7 +124,7 @@ buildPythonPackage rec {
       numba
       opt-einsum
       pandas
-      pgmpy
+      # pgmpy
       pynndescent
       # pytorch-memlab
       rdflib
@@ -136,9 +147,19 @@ buildPythonPackage rec {
     modelhub = [
       huggingface-hub
     ];
+    rag = [
+      # pcst-fast (unpackaged)
+      datasets
+      transformers
+      pandas
+      sentencepiece
+      accelerate
+      torchmetrics
+    ];
     test = [
       onnx
       onnxruntime
+      # onnxscript (unpackaged)
       pytest
       pytest-cov-stub
     ];
@@ -153,36 +174,79 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # RuntimeError: addmm: computation on CPU is not implemented for SparseCsr + SparseCsr @ SparseCsr without MKL.
-      # PyTorch built with MKL has better support for addmm with sparse CPU tensors.
-      "test_asap"
-      "test_graph_unet"
+  pytestFlags = [
+    # DeprecationWarning: Failing to pass a value to the 'type_params' parameter of
+    # 'typing._eval_type' is deprecated, as it leads to incorrect behaviour when calling
+    # typing._eval_type on a stringified annotation that references a PEP 695 type parameter.
+    # It will be disallowed in Python 3.15.
+    "-Wignore::DeprecationWarning"
+  ];
 
-      # AttributeError: type object 'Any' has no attribute '_name'
-      "test_type_repr"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # This test uses `torch.jit` which might not be working on darwin:
-      # RuntimeError: required keyword attribute 'value' has the wrong type
-      "test_traceable_my_conv_with_self_loops"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeError: Dynamo is not supported on Python 3.13+
-      "test_compile"
+  disabledTests = [
+    # RuntimeError: addmm: computation on CPU is not implemented for SparseCsr + SparseCsr @ SparseCsr without MKL.
+    # PyTorch built with MKL has better support for addmm with sparse CPU tensors.
+    "test_asap"
+    "test_graph_unet"
 
-      # RuntimeError: Python 3.13+ not yet supported for torch.compile
-      "test_compile_graph_breaks"
-      "test_compile_multi_aggr_sage_conv"
-      "test_compile_hetero_conv_graph_breaks"
+    # AttributeError: type object 'Any' has no attribute '_name'
+    "test_type_repr"
 
-      # AttributeError: module 'typing' has no attribute 'io'. Did you mean: 'IO'?
-      "test_packaging"
+    # AttributeError: module 'torch.fx._symbolic_trace' has no attribute 'List'
+    "test_set_clear_mask"
+    "test_sequential_to_hetero"
+    "test_to_fixed_size"
+    "test_to_hetero_basic"
+    "test_to_hetero_with_gcn"
+    "test_to_hetero_with_basic_model"
+    "test_to_hetero_and_rgcn_equal_output"
+    "test_graph_level_to_hetero"
+    "test_hetero_transformer_self_loop_error"
+    "test_to_hetero_validate"
+    "test_to_hetero_on_static_graphs"
+    "test_to_hetero_with_bases"
+    "test_to_hetero_with_bases_and_rgcn_equal_output"
+    "test_to_hetero_with_bases_validate"
+    "test_to_hetero_with_bases_on_static_graphs"
+    "test_to_hetero_with_bases_save"
 
-      # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
-      "test_feature_store"
-    ];
+    # Failed: DID NOT WARN.
+    "test_to_hetero_validate"
+    "test_to_hetero_with_bases_validate"
+
+    # Failed: DID NOT RAISE
+    "test_scatter_backward"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # This test uses `torch.jit` which might not be working on darwin:
+    # RuntimeError: required keyword attribute 'value' has the wrong type
+    "test_traceable_my_conv_with_self_loops"
+
+    # RuntimeError: no response from torch_shm_manager
+    "test_data_loader"
+    "test_data_share_memory"
+    "test_dataloader"
+    "test_edge_index_dataloader"
+    "test_heterogeneous_dataloader"
+    "test_index_dataloader"
+    "test_multiprocessing"
+    "test_share_memory"
+    "test_storage_tensor_methods"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Dynamo is not supported on Python 3.13+
+    "test_compile"
+
+    # RuntimeError: Python 3.13+ not yet supported for torch.compile
+    "test_compile_graph_breaks"
+    "test_compile_multi_aggr_sage_conv"
+    "test_compile_hetero_conv_graph_breaks"
+
+    # AttributeError: module 'typing' has no attribute 'io'. Did you mean: 'IO'?
+    "test_packaging"
+
+    # RuntimeError: Boolean value of Tensor with more than one value is ambiguous
+    "test_feature_store"
+  ];
 
   meta = {
     description = "Graph Neural Network Library for PyTorch";

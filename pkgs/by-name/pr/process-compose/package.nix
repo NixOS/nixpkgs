@@ -2,22 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch2,
   installShellFiles,
 }:
 
 let
   config-module = "github.com/f1bonacc1/process-compose/src/config";
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "process-compose";
-  version = "1.64.1";
+  version = "1.75.2";
 
   src = fetchFromGitHub {
     owner = "F1bonacc1";
     repo = "process-compose";
-    rev = "v${version}";
-    hash = "sha256-qv/fVfuQD7Nan5Nn1RkwXoGZuPYSRWQaojEn6MCF9BQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-BKf8FrgpGhYzuukAFP+OCjvp5bMCQL6BmZ+Tk/E8RIY=";
+
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -30,15 +30,6 @@ buildGoModule rec {
     '';
   };
 
-  patches = [
-    # Fix a linker issue with dlopen on x86_64-darwin
-    # https://github.com/f1bonacc1/process-compose/pull/342
-    (fetchpatch2 {
-      url = "https://github.com/F1bonacc1/process-compose/commit/af82749c5dacaa20f2c3b07ca4e081d1b38e40c4.patch";
-      hash = "sha256-5Hgvwn2GEp/lINPefxXdJUGb2TJfufqAPm+/3gdi6XY=";
-    })
-  ];
-
   # ldflags based on metadata from git and source
   preBuild = ''
     ldflags+=" -X ${config-module}.Commit=$(cat COMMIT)"
@@ -46,7 +37,7 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X ${config-module}.Version=v${version}"
+    "-X ${config-module}.Version=v${finalAttrs.version}"
     "-s"
     "-w"
   ];
@@ -55,7 +46,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  vendorHash = "sha256-qkfJo+QGqcqiZMLuWbj0CpgRWxbqTu6DGAW8pBu4O/0=";
+  vendorHash = "sha256-AXmULIWtEsNhSZ764BH5AkXlh49HNKT1jZABzhPIzPQ=";
 
   doCheck = false;
 
@@ -71,9 +62,9 @@ buildGoModule rec {
   meta = {
     description = "Simple and flexible scheduler and orchestrator to manage non-containerized applications";
     homepage = "https://github.com/F1bonacc1/process-compose";
-    changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${version}";
+    changelog = "https://github.com/F1bonacc1/process-compose/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thenonameguy ];
     mainProgram = "process-compose";
   };
-}
+})

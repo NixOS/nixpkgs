@@ -19,10 +19,10 @@ let
   # we aim to support.
   environmentTests =
     let
-      envs =
+      environments =
         let
           inherit python;
-          pythonEnv = python.withPackages (ps: with ps; [ ]);
+          pythonEnv = python.withPackages (ps: [ ]);
           pythonVirtualEnv =
             if python.isPy3k then
               python.withPackages (ps: with ps; [ virtualenv ])
@@ -36,8 +36,8 @@ let
         {
           # Plain Python interpreter
           plain = rec {
-            env = python;
-            interpreter = env.interpreter;
+            environment = python;
+            interpreter = environment.interpreter;
             is_venv = "False";
             is_nixenv = "False";
             is_virtualenv = "False";
@@ -48,11 +48,11 @@ let
           # Fails on darwin with
           #   virtualenv: error: argument dest: the destination . is not write-able at /nix/store
           nixenv-virtualenv = rec {
-            env = runCommand "${python.name}-virtualenv" { } ''
+            environment = runCommand "${python.name}-virtualenv" { } ''
               ${pythonVirtualEnv.interpreter} -m virtualenv venv
               mv venv $out
             '';
-            interpreter = "${env}/bin/${python.executable}";
+            interpreter = "${environment}/bin/${python.executable}";
             is_venv = "False";
             is_nixenv = "True";
             is_virtualenv = "True";
@@ -61,8 +61,8 @@ let
         // lib.optionalAttrs (python.implementation != "graal") {
           # Python Nix environment (python.buildEnv)
           nixenv = rec {
-            env = pythonEnv;
-            interpreter = env.interpreter;
+            environment = pythonEnv;
+            interpreter = environment.interpreter;
             is_venv = "False";
             is_nixenv = "True";
             is_virtualenv = "False";
@@ -73,10 +73,10 @@ let
           # Python 2 does not support venv
           # TODO: PyPy executable name is incorrect, it should be pypy-c or pypy-3c instead of pypy and pypy3.
           plain-venv = rec {
-            env = runCommand "${python.name}-venv" { } ''
+            environment = runCommand "${python.name}-venv" { } ''
               ${python.interpreter} -m venv $out
             '';
-            interpreter = "${env}/bin/${python.executable}";
+            interpreter = "${environment}/bin/${python.executable}";
             is_venv = "True";
             is_nixenv = "False";
             is_virtualenv = "False";
@@ -88,10 +88,10 @@ let
           # TODO: Cannot create venv from a  nix env
           # Error: Command '['/nix/store/ddc8nqx73pda86ibvhzdmvdsqmwnbjf7-python3-3.7.6-venv/bin/python3.7', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
           nixenv-venv = rec {
-            env = runCommand "${python.name}-venv" { } ''
+            environment = runCommand "${python.name}-venv" { } ''
               ${pythonEnv.interpreter} -m venv $out
             '';
-            interpreter = "${env}/bin/${pythonEnv.executable}";
+            interpreter = "${environment}/bin/${pythonEnv.executable}";
             is_venv = "True";
             is_nixenv = "True";
             is_virtualenv = "False";
@@ -117,7 +117,7 @@ let
           '';
 
     in
-    lib.mapAttrs testfun envs;
+    lib.mapAttrs testfun environments;
 
   # Integration tests involving the package set.
   # All PyPy package builds are broken at the moment
@@ -254,12 +254,13 @@ let
             url = "https://repo.anaconda.com/pkgs/main/noarch/requests-2.24.0-py_0.tar.bz2";
             sha256 = "02qzaf6gwsqbcs69pix1fnjxzgnngwzvrsy65h1d521g750mjvvp";
           };
-          nativeBuildInputs =
-            [ autoPatchelfHook ]
-            ++ (with python.pkgs; [
-              condaUnpackHook
-              condaInstallHook
-            ]);
+          nativeBuildInputs = [
+            autoPatchelfHook
+          ]
+          ++ (with python.pkgs; [
+            condaUnpackHook
+            condaInstallHook
+          ]);
           buildInputs = [
             pythonCondaPackages.condaPatchelfLibs
           ];

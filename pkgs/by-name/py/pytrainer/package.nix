@@ -12,7 +12,7 @@
   perl,
   sqlite,
   tzdata,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   xvfb-run,
 }:
@@ -32,7 +32,7 @@ in
 python.pkgs.buildPythonApplication rec {
   pname = "pytrainer";
   version = "2.2.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytrainer";
@@ -41,12 +41,13 @@ python.pkgs.buildPythonApplication rec {
     hash = "sha256-t61vHVTKN5KsjrgbhzljB7UZdRask7qfYISd+++QbV0=";
   };
 
-  propagatedBuildInputs = with python.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python.pkgs; [
     sqlalchemy
     python-dateutil
     matplotlib
     lxml
-    setuptools
     requests
     gdal
   ];
@@ -59,7 +60,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     sqlite
     gtk3
-    webkitgtk_4_0
+    webkitgtk_4_1
     glib-networking
     adwaita-icon-theme
     gdk-pixbuf
@@ -75,20 +76,23 @@ python.pkgs.buildPythonApplication rec {
     ])
   ];
 
-  nativeCheckInputs =
-    [
-      glibcLocales
-      perl
-      xvfb-run
-    ]
-    ++ (with python.pkgs; [
-      mysqlclient
-      psycopg2
-    ]);
+  nativeCheckInputs = [
+    glibcLocales
+    perl
+    xvfb-run
+  ]
+  ++ (with python.pkgs; [
+    mysqlclient
+    psycopg2
+  ]);
 
   postPatch = ''
     substituteInPlace pytrainer/platform.py \
-        --replace 'sys.prefix' "\"$out\""
+        --replace-fail 'sys.prefix' "\"$out\""
+
+    # https://github.com/pytrainer/pytrainer/pull/281
+    substituteInPlace pytrainer/extensions/mapviewer.py \
+        --replace-fail "gi.require_version('WebKit2', '4.0')" "gi.require_version('WebKit2', '4.1')"
   '';
 
   checkPhase = ''
@@ -102,6 +106,8 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    # https://github.com/pytrainer/pytrainer/issues/280
+    broken = true;
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
     mainProgram = "pytrainer";

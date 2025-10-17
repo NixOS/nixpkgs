@@ -18,16 +18,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-polkit-agent";
-  version = "0.3";
+  version = "0.3.1";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-polkit-agent";
     tag = finalAttrs.version;
-    hash = "sha256-3x2gwKhRDXE6tuwM7pXIwsWg/8pQrKLJ1zds8Ljtk+I=";
+    hash = "sha256-6n/NIUstXODq1fGPF6ioXOWR39kTlzKWdAdW1LbnFy0=";
   };
 
   strictDeps = true;
+
+  postPatch = ''
+    # CMake 4 compat
+    # Remove when https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/commit/cb81d853ce6dd3bb11030f5a23b6a13f926779a1 in release
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'VERSION 3.5' 'VERSION 3.10'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -68,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Policy kit agent for the Lomiri desktop";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-polkit-agent/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];

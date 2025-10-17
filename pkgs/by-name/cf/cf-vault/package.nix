@@ -30,9 +30,7 @@ buildGoModule rec {
   };
 
   meta = with lib; {
-    description = ''
-      A tool for managing your Cloudflare credentials, securely..
-    '';
+    description = "Tool for managing your Cloudflare credentials, securely";
     homepage = "https://github.com/jacobbednarz/cf-vault/";
     license = licenses.mit;
     maintainers = with maintainers; [ viraptor ];

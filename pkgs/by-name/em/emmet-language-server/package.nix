@@ -9,18 +9,19 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "emmet-language-server";
-  version = "2.6.1";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "olrtg";
     repo = "emmet-language-server";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2ptIdZPGLjKsdFJKjt5LZ8JQNNBU5KR62Yw78qzfRxg=";
+    hash = "sha256-EY/xfrf6sGnZPbkbf9msauOoZ0h0EjLSwQC0aiS/Kco=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-hh5PEtmSHPs6QBgwWHS0laGU21e82JckIP3mB/P9/vE=";
+    fetcherVersion = 1;
+    hash = "sha256-sMOC5MQmJKwXZoUZnOmBy2I83SNMdrPc6WQKmeVGiCc=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +40,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # remove unnecessary and non-deterministic files
   preInstall = ''
-    pnpm --ignore-scripts --prod prune
+    CI=true pnpm --ignore-scripts --prod prune
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules -xtype l -delete

@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   replaceVars,
   makeWrapper,
@@ -17,29 +16,31 @@
   webkitgtk_4_1,
   gst_all_1,
   libayatana-appindicator,
+  udevCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "slimevr";
-  version = "0.15.0";
+  version = "0.16.3";
 
   src = fetchFromGitHub {
     owner = "SlimeVR";
     repo = "SlimeVR-Server";
-    rev = "v${version}";
-    hash = "sha256-Sc51fGUXc9FCTO7wVy9hkZiOe0RYefVasp+jCeWl844=";
+    tag = "v${version}";
+    hash = "sha256-RYHt0njzzom1wrHTP/7ch/D+YZcixqOeLMcfsGi+Kg8=";
     # solarxr
     fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "gui/src-tauri";
 
-  cargoHash = "sha256-+WrBVL4/XslJSOwuxs4IzqXG9l1/lMSbKil/8OHc9Xw=";
+  cargoHash = "sha256-w2z+EQqkVGLmXQS+AzeJwkGG4ovpz9+ovmLOcUks734=";
 
   pnpmDeps = pnpm_9.fetchDeps {
     pname = "${pname}-pnpm-deps";
     inherit version src;
-    hash = "sha256-xCID9JOFEswsTbE5Dh6ZAkhhyy4eMuqkme54IdWfcks=";
+    fetcherVersion = 1;
+    hash = "sha256-b0oCOjxrUQqWmUR6IzTEO75pvJZB7MQD14DNbQm95sA=";
   };
 
   nativeBuildInputs = [
@@ -49,21 +50,21 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     wrapGAppsHook3
     makeWrapper
+    udevCheckHook
   ];
 
-  buildInputs =
-    [
-      openssl
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glib-networking
-      libayatana-appindicator
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glib-networking
+    libayatana-appindicator
+    webkitgtk_4_1
+  ];
 
   patches = [
     # Upstream code uses Git to find the program version.
@@ -74,30 +75,18 @@ rustPlatform.buildRustPackage rec {
     ./no-java-tool-options-warning.patch
   ];
 
-  postPatch =
-    ''
-      # Tauri bundler expects slimevr.jar to exist.
-      mkdir -p server/desktop/build/libs
-      touch server/desktop/build/libs/slimevr.jar
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-      substituteInPlace gui/src-tauri/src/tray.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-
-      # tao < version 0.31 has a GTK crash. Manually apply the fix.
-      pushd $cargoDepsCopy/tao-0.30.*
-      patch -p1 < ${
-        fetchpatch {
-          name = "fix-gtk-crash.patch";
-          url = "https://github.com/tauri-apps/tao/commit/83e35e961f4893790b913ee2efc15ae33fd16fb2.diff";
-          hash = "sha256-FNXWzsg4lO6VbLsqS6NevX8kVj26YtcYdKbbFejq9hM=";
-        }
-      }
-      popd
-    '';
+  postPatch = ''
+    # Tauri bundler expects slimevr.jar to exist.
+    mkdir -p server/desktop/build/libs
+    touch server/desktop/build/libs/slimevr.jar
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    # Both libappindicator-rs and SlimeVR need to know where Nix's appindicator lib is.
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+    substituteInPlace gui/src-tauri/src/tray.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
 
   # solarxr needs to be installed after compiling its Typescript files. This isn't
   # done the first time, because `pnpm_9.configHook` ignores `package.json` scripts.
@@ -106,11 +95,14 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doCheck = false; # No tests
+  doInstallCheck = true; # Check udev
 
   # Get rid of placeholder slimevr.jar
   postInstall = ''
     rm $out/share/slimevr/slimevr.jar
     rm -d $out/share/slimevr
+
+    install -Dm644 -t $out/lib/udev/rules.d/ gui/src-tauri/69-slimevr-devices.rules
   '';
 
   # `JAVA_HOME`, `JAVA_TOOL_OPTIONS`, and `--launch-from-path` are so the GUI can

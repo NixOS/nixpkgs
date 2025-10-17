@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "mongoaudit";
   version = "0.1.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = python3.pythonOlder "3.8";
 
@@ -18,7 +18,11 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "17k4vw5d3kr961axl49ywid4cf3n7zxvm885c4lv15w7s2al1425";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pymongo
     setuptools
     urwid

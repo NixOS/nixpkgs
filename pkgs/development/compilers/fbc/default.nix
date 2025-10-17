@@ -35,19 +35,18 @@ stdenv.mkDerivation rec {
     buildPackages.libffi
   ];
 
-  buildInputs =
-    [
-      ncurses
-      libffi
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gpm
-      libGL
-      libX11
-      libXext
-      libXpm
-      libXrandr
-    ];
+  buildInputs = [
+    ncurses
+    libffi
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gpm
+    libGL
+    libX11
+    libXext
+    libXpm
+    libXrandr
+  ];
 
   enableParallelBuilding = true;
 

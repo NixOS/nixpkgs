@@ -5,33 +5,35 @@
   icalendar,
   lxml,
   pytestCheckHook,
-  pythonOlder,
   python,
   recurring-ical-events,
   requests,
-  setuptools,
-  setuptools-scm,
+  hatchling,
+  hatch-vcs,
+  proxy-py,
+  pyfakefs,
   toPythonModule,
   tzlocal,
   vobject,
   xandikos,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "caldav";
-  version = "1.6.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-caldav";
     repo = "caldav";
     tag = "v${version}";
-    hash = "sha256-SWecaXiXp8DSOLVWzgPsbL7UGCtTBfNXYmuDQGdyqbQ=";
+    hash = "sha256-n7ZKTBXg66firbS34J41NrTM/PL/OrKMnS4iguRz4Ho=";
   };
 
   build-system = [
-    setuptools
-    setuptools-scm
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
@@ -43,9 +45,17 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    proxy-py
+    pyfakefs
     pytestCheckHook
     tzlocal
     (toPythonModule (xandikos.override { python3Packages = python.pkgs; }))
+    writableTmpDirAsHomeHook
+  ];
+
+  disabledTestPaths = [
+    "tests/test_docs.py"
+    "tests/test_examples.py"
   ];
 
   pythonImportsCheck = [ "caldav" ];
@@ -53,7 +63,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "CalDAV (RFC4791) client library";
     homepage = "https://github.com/python-caldav/caldav";
-    changelog = "https://github.com/python-caldav/caldav/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/python-caldav/caldav/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [
       marenz

@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "np2kai";
-  version = "0.86rev22-unstable-2024-12-22";
+  version = "0.86rev22-unstable-2025-09-13";
 
   src = fetchFromGitHub {
     owner = "AZO234";
     repo = "NP2kai";
-    rev = "da219658c24c610ba82d5a07ea9897e8e0eef670";
-    hash = "sha256-b0KOfqUgVtFuZxw8js6JCnzMh6Wh+f7o/IHcD6TiG1s=";
+    rev = "02b08deb3833305251fb3ee6c5d59b0efb5b52ff";
+    hash = "sha256-5aGlqYS05rUh+mD9TdCC9H+5JkOQCTn45UlEu7xcxLw=";
   };
 
   # Don't require Git
@@ -61,29 +61,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals enableX11 [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals enableX11 [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      libusb1
-      openssl
-      SDL2
-      SDL2_ttf
-      SDL2_mixer
-    ]
-    ++ lib.optionals enableX11 [
-      fontconfig
-      freetype
-      glib
-      gtk2
-      libX11
-    ];
+  buildInputs = [
+    libusb1
+    openssl
+    SDL2
+    SDL2_ttf
+    SDL2_mixer
+  ]
+  ++ lib.optionals enableX11 [
+    fontconfig
+    freetype
+    glib
+    gtk2
+    libX11
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SDL" true)

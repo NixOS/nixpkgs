@@ -3,7 +3,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
-  fetchpatch,
+  gitUpdater,
   nodejs,
   pnpm_9,
   makeWrapper,
@@ -13,29 +13,22 @@
   ffmpeg-headless,
   writeShellScript,
   xcbuild,
-  ...
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "misskey";
-
-  version = "2024.11.0";
+  version = "2025.7.0";
 
   src = fetchFromGitHub {
     owner = "misskey-dev";
     repo = "misskey";
-    rev = finalAttrs.version;
-    hash = "sha256-uei5Ojx39kCbS8DCjHZ5PoEAsqJ5vC6SsFqIEIJ16n8=";
+    tag = finalAttrs.version;
+    hash = "sha256-LtBggq60buNPnGPSbh+TcFODxCoqX+rFdX0P7dYMYI0=";
     fetchSubmodules = true;
   };
 
   patches = [
-    (fetchpatch {
-      # https://github.com/misskey-dev/misskey/security/advisories/GHSA-w98m-j6hq-cwjm
-      name = "CVE-2025-24896.patch";
-      url = "https://github.com/misskey-dev/misskey/commit/ba9f295ef2bf31cc90fa587e20b9a7655b7a1824.patch";
-      hash = "sha256-jNl2AdLaG3v8QB5g/UPTupdyP1yGR0WcWull7EA7ogs=";
-    })
+    ./pnpm-lock.yaml.patch
   ];
 
   nativeBuildInputs = [
@@ -43,12 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm_9.configHook
     makeWrapper
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
   # https://nixos.org/manual/nixpkgs/unstable/#javascript-pnpm
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src;
-    hash = "sha256-YWZhm5eKjB6JGP45WC3UrIkr7vuBUI4Q3oiK8Lst3dI=";
+    inherit (finalAttrs)
+      pname
+      version
+      src
+      patches
+      ;
+    fetcherVersion = 2;
+    hash = "sha256-5yuM56sLDSo4M5PDl3gUZOdSexW1YjfYBR3BJMqNHzU=";
   };
 
   buildPhase = ''
@@ -123,13 +123,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     inherit (finalAttrs) pnpmDeps;
     tests.misskey = nixosTests.misskey;
+    updateScript = gitUpdater { };
   };
 
   meta = {
-    description = "🌎 An interplanetary microblogging platform 🚀";
+    description = "Open source, federated social media platform";
     homepage = "https://misskey-hub.net/";
     license = lib.licenses.agpl3Only;
     maintainers = [ lib.maintainers.feathecutie ];
+    teams = [ lib.teams.ngi ];
     platforms = lib.platforms.unix;
     mainProgram = "misskey";
   };

@@ -11,7 +11,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "tideways-cli";
-  version = "1.2.10";
+  version = "1.2.12";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -38,19 +38,19 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-dUWwX+0rDQce/AklrBU4ALRSmHbBnbQQGlUtfK+Foeg=";
+        hash = "sha256-SsXVDNXaxppF9E9CGJBwdWoseV7YXbuWfsVrkB+R5To=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_linux_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-a/0H64NSJZG2ixJCeCAp1SD/2l6HGCT1oECTSsgfu2E=";
+        hash = "sha256-MUUsDNN03i3+ZrKLKptex+P7SWjZ+YIUkXHkZf21Q+0=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_amd64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-B5K7CvBVdSpgRfPXxYraPIZwkwW/kxlkPmaDEy1cOuE=";
+        hash = "sha256-ue0RV57rpL5KIhCEVy6/J3cwZKOEg5Kq+490ABJrxXE=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://s3-eu-west-1.amazonaws.com/tideways/cli/${finalAttrs.version}/tideways-cli_macos_arm64-${finalAttrs.version}.tar.gz";
-        hash = "sha256-xstTc8y03uWmN33Oi8h7zmoMm4XtY8kl3taLlaJCYmk=";
+        hash = "sha256-OEtEjo8/qFt/iQlUBho7G5uBdCqFrHWpoTXrCzyO/oo=";
       };
     };
 

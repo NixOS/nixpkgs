@@ -58,27 +58,26 @@ stdenv.mkDerivation (finalAttrs: {
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
-  jamFlags =
-    [
-      "-sEXEC=bin.unix"
-      "-sCROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      "-sMALLOC_OVERRIDE=no"
-      "-sSSLINCDIR=${lib.getDev opensslStatic}/include"
-      "-sSSLLIBDIR=${lib.getLib opensslStatic}/lib"
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      "-sOSCOMP=clang"
-      "-sCLANGVER=${stdenv.cc.cc.version}"
-    ]
-    ++ lib.optionals stdenv.cc.isGNU [
-      "-sOSCOMP=gcc"
-      "-sGCCVER=${stdenv.cc.cc.version}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "-sOSVER=1013"
-      "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
-    ];
+  jamFlags = [
+    "-sEXEC=bin.unix"
+    "-sCROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    "-sMALLOC_OVERRIDE=no"
+    "-sSSLINCDIR=${lib.getDev opensslStatic}/include"
+    "-sSSLLIBDIR=${lib.getLib opensslStatic}/lib"
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    "-sOSCOMP=clang"
+    "-sCLANGVER=${stdenv.cc.cc.version}"
+  ]
+  ++ lib.optionals stdenv.cc.isGNU [
+    "-sOSCOMP=gcc"
+    "-sGCCVER=${stdenv.cc.cc.version}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "-sOSVER=1013"
+    "-sLIBC++DIR=${lib.getLib stdenv.cc.libcxx}/lib"
+  ];
 
   CCFLAGS =
     # The file contrib/optimizations/slide_hash_neon.h is missing from the

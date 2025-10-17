@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/wb9688/wwp-switcher";
     description = "Plugin to switch active window";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     inherit (wayfire.meta) platforms;
   };
 })

@@ -7,6 +7,7 @@
   ncurses,
   perl,
   flex,
+  testers,
   texinfo,
   qhull,
   libsndfile,
@@ -97,76 +98,74 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "10.2.0";
+  version = "10.3.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-B/ttkznS81BzXJFnG+jodNFgAYzGtoj579nVWNI39p8=";
+    sha256 = "sha256-L8s43AYuRA8eBsBpu8qEDtRtzI+YPkc+FVj8w4OE7ms=";
   };
 
   postPatch = ''
     patchShebangs --build build-aux/*.pl
   '';
 
-  buildInputs =
-    [
-      readline
-      ncurses
-      flex
-      qhull
-      graphicsmagick
-      pcre2
-      fltk
-      zlib
-      curl
-      rapidjson
-      blas'
-      lapack'
-      libsndfile
-      fftw
-      fftwSinglePrec
-      portaudio
-      qrupdate'
-      arpack'
-      libwebp
-      gl2ps
-      ghostscript
-      hdf5
-      glpk
-      suitesparse'
-      sundials
-      gnuplot
-      python3
-    ]
-    ++ lib.optionals enableQt [
-      libsForQt5.qtbase
-      libsForQt5.qtsvg
-      libsForQt5.qscintilla
-    ]
-    ++ lib.optionals (enableJava) [
-      jdk
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libGL
-      libGLU
-      libX11
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
-  nativeBuildInputs =
-    [
-      perl
-      pkg-config
-      gfortran
-      texinfo
-    ]
-    ++ lib.optionals enableQt [
-      libsForQt5.wrapQtAppsHook
-      libsForQt5.qtscript
-      libsForQt5.qttools
-    ];
+  buildInputs = [
+    readline
+    ncurses
+    flex
+    qhull
+    graphicsmagick
+    pcre2
+    fltk
+    zlib
+    curl
+    rapidjson
+    blas'
+    lapack'
+    libsndfile
+    fftw
+    fftwSinglePrec
+    portaudio
+    qrupdate'
+    arpack'
+    libwebp
+    gl2ps
+    ghostscript
+    hdf5
+    glpk
+    suitesparse'
+    sundials
+    gnuplot
+    python3
+  ]
+  ++ lib.optionals enableQt [
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
+    libsForQt5.qscintilla
+  ]
+  ++ lib.optionals enableJava [
+    jdk
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    libGL
+    libGLU
+    libX11
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+    gfortran
+    texinfo
+  ]
+  ++ lib.optionals enableQt [
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qtscript
+    libsForQt5.qttools
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
@@ -178,15 +177,14 @@ stdenv.mkDerivation (finalAttrs: {
   # See https://savannah.gnu.org/bugs/?50339
   F77_INTEGER_8_FLAG = lib.optionalString use64BitIdx "-fdefault-integer-8";
 
-  configureFlags =
-    [
-      "--with-blas=blas"
-      "--with-lapack=lapack"
-      (if use64BitIdx then "--enable-64" else "--disable-64")
-    ]
-    ++ lib.optionals enableReadline [ "--enable-readline" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
-    ++ lib.optionals enableQt [ "--with-qt=5" ];
+  configureFlags = [
+    "--with-blas=blas"
+    "--with-lapack=lapack"
+    (if use64BitIdx then "--enable-64" else "--disable-64")
+  ]
+  ++ lib.optionals enableReadline [ "--enable-readline" ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ "--with-x=no" ]
+  ++ lib.optionals enableQt [ "--with-qt=5" ];
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
@@ -229,6 +227,12 @@ stdenv.mkDerivation (finalAttrs: {
     withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };
     pkgs = octavePackages;
     interpreter = "${finalAttrs.finalPackage}/bin/octave";
+    tests = {
+      wrapper = testers.testVersion {
+        package = finalAttrs.finalPackage.withPackages (ps: [ ps.doctest ]);
+        command = "octave --version";
+      };
+    };
   };
 
   meta = {

@@ -85,21 +85,20 @@ in
       wants = [ "network-online.target" ];
       description = "blendfarm server";
       path = [ cfg.blenderPackage ];
-      preStart =
-        ''
-          rm -f ServerSettings
-          install -m640 ${configFile} ServerSettings
-          if [ ! -d "BlenderData/nix-blender-linux64" ]; then
-            mkdir -p BlenderData/nix-blender-linux64
-            echo "nix-blender" > VersionCustom
-          fi
-          rm -f BlenderData/nix-blender-linux64/blender
-          ln -s ${lib.getExe cfg.blenderPackage} BlenderData/nix-blender-linux64/blender
-        ''
-        + lib.optionalString (cfg.basicSecurityPasswordFile != null) ''
-          BLENDFARM_PASSWORD=$(${pkgs.systemd}/bin/systemd-creds cat BLENDFARM_PASS_FILE)
-          sed -i "s/null/\"$BLENDFARM_PASSWORD\"/g" ServerSettings
-        '';
+      preStart = ''
+        rm -f ServerSettings
+        install -m640 ${configFile} ServerSettings
+        if [ ! -d "BlenderData/nix-blender-linux64" ]; then
+          mkdir -p BlenderData/nix-blender-linux64
+          echo "nix-blender" > VersionCustom
+        fi
+        rm -f BlenderData/nix-blender-linux64/blender
+        ln -s ${lib.getExe cfg.blenderPackage} BlenderData/nix-blender-linux64/blender
+      ''
+      + lib.optionalString (cfg.basicSecurityPasswordFile != null) ''
+        BLENDFARM_PASSWORD=$(${pkgs.systemd}/bin/systemd-creds cat BLENDFARM_PASS_FILE)
+        sed -i "s/null/\"$BLENDFARM_PASSWORD\"/g" ServerSettings
+      '';
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/LogicReinc.BlendFarm.Server";
         DynamicUser = true;

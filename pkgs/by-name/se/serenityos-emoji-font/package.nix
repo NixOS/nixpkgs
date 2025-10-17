@@ -64,16 +64,15 @@ stdenvNoCC.mkDerivation {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pixart2svg
-      parallel
-    ]
-    ++ (with python3Packages; [
-      imageio
-      nanoemoji
-      numpy
-    ]);
+  nativeBuildInputs = [
+    pixart2svg
+    parallel
+  ]
+  ++ (with python3Packages; [
+    imageio
+    nanoemoji
+    numpy
+  ]);
 
   buildPhase = ''
     runHook preBuild

@@ -52,7 +52,7 @@ let
             or (throw "scudo not supported on ${pkgs.stdenv.hostPlatform.system}");
       in
       {
-        libPath = "${pkgs.llvmPackages_14.compiler-rt}/lib/linux/libclang_rt.scudo-${systemPlatform}.so";
+        libPath = "${pkgs.llvmPackages.compiler-rt}/lib/linux/libclang_rt.scudo_standalone-${systemPlatform}.so";
         description = ''
           A user-mode allocator based on LLVM Sanitizer’s CombinedAllocator,
           which aims at providing additional mitigations against heap based

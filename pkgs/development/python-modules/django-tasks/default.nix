@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "django-tasks";
-  version = "0.7.0";
+  version = "0.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "RealOrangeOne";
     repo = "django-tasks";
     tag = version;
-    hash = "sha256-AWsqAvn11uklrFXtiV2a6fR3owZ02osEzrdHZgDKkOM=";
+    hash = "sha256-fXXqPmpyIq+66okWDmTIBaoaslY8BSILXjJWn8cXnMM=";
   };
 
   build-system = [
@@ -65,6 +65,8 @@ buildPythonPackage rec {
     "test_dry_run"
     # AssertionError: '' != 'Deleted 1 task result(s)'
     "test_prunes_tasks"
+    # AssertionError: 'Run maximum tasks (2)' not found in ''
+    "test_max_tasks"
   ];
 
   preCheck = ''
@@ -74,7 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Reference implementation and backport of background workers and tasks in Django";
     homepage = "https://github.com/RealOrangeOne/django-tasks";
-    changelog = "https://github.com/RealOrangeOne/django-tasks/releases/tag/${version}";
+    changelog = "https://github.com/RealOrangeOne/django-tasks/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };

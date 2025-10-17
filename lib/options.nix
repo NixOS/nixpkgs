@@ -113,7 +113,11 @@ rec {
       : Optional boolean indicating whether the option is for NixOS developers only.
 
       `visible`
-      : Optional boolean indicating whether the option shows up in the manual. Default: true. Use false to hide the option and any sub-options from submodules. Use "shallow" to hide only sub-options.
+      : Optional, whether the option and/or sub-options show up in the manual.
+        Use false to hide the option and any sub-options from submodules.
+        Use "shallow" to hide only sub-options.
+        Use "transparent" to hide this option, but not its sub-options.
+        Default: true.
 
       `readOnly`
       : Optional boolean indicating whether the option can be set only once.
@@ -267,9 +271,9 @@ rec {
 
     mkPackageOption pkgs "GHC" {
       default = [ "ghc" ];
-      example = "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])";
+      example = "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])";
     }
-    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskell.packages.ghc92.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
+    => { ...; default = pkgs.ghc; defaultText = literalExpression "pkgs.ghc"; description = "The GHC package to use."; example = literalExpression "pkgs.haskellPackages.ghc.withPackages (hkgs: [ hkgs.primes ])"; type = package; }
 
     mkPackageOption pkgs [ "python3Packages" "pytorch" ] {
       extraDescription = "This is an example and doesn't actually do anything.";
@@ -339,13 +343,6 @@ rec {
         );
       }
     );
-
-  /**
-    Deprecated alias of mkPackageOption, to be removed in 25.05.
-
-    Previously used to create options with markdown documentation, which is no longer required.
-  */
-  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
 
   /**
     This option accepts arbitrary definitions, but it does not produce an option value.
@@ -499,7 +496,7 @@ rec {
     loc: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    # Return early if we only have one element
+    # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then
@@ -572,37 +569,37 @@ rec {
       opt:
       let
         name = showOption opt.loc;
-        docOption =
-          {
-            loc = opt.loc;
-            inherit name;
-            description = opt.description or null;
-            declarations = filter (x: x != unknownModule) opt.declarations;
-            internal = opt.internal or false;
-            visible = if (opt ? visible && opt.visible == "shallow") then true else opt.visible or true;
-            readOnly = opt.readOnly or false;
-            type = opt.type.description or "unspecified";
-          }
-          // optionalAttrs (opt ? example) {
-            example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
-              renderOptionValue opt.example
-            );
-          }
-          // optionalAttrs (opt ? defaultText || opt ? default) {
-            default = builtins.addErrorContext "while evaluating the ${
-              if opt ? defaultText then "defaultText" else "default value"
-            } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
-          }
-          // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
-            inherit (opt) relatedPackages;
-          };
+        visible = opt.visible or true;
+        docOption = {
+          loc = opt.loc;
+          inherit name;
+          description = opt.description or null;
+          declarations = filter (x: x != unknownModule) opt.declarations;
+          internal = opt.internal or false;
+          visible = if isBool visible then visible else visible == "shallow";
+          readOnly = opt.readOnly or false;
+          type = opt.type.description or "unspecified";
+        }
+        // optionalAttrs (opt ? example) {
+          example = builtins.addErrorContext "while evaluating the example of option `${name}`" (
+            renderOptionValue opt.example
+          );
+        }
+        // optionalAttrs (opt ? defaultText || opt ? default) {
+          default = builtins.addErrorContext "while evaluating the ${
+            if opt ? defaultText then "defaultText" else "default value"
+          } of option `${name}`" (renderOptionValue (opt.defaultText or opt.default));
+        }
+        // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) {
+          inherit (opt) relatedPackages;
+        };
 
         subOptions =
           let
             ss = opt.type.getSubOptions opt.loc;
           in
           if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
-        subOptionsVisible = docOption.visible && opt.visible or null != "shallow";
+        subOptionsVisible = if isBool visible then visible else visible == "transparent";
       in
       # To find infinite recursion in NixOS option docs:
       # builtins.trace opt.loc

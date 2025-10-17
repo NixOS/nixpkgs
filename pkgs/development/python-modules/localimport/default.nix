@@ -20,6 +20,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/NiklasRosenstein/py-localimport";
     description = "Isolated import of Python modules";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

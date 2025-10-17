@@ -13,26 +13,27 @@
 }:
 stdenv.mkDerivation rec {
   pname = "narsil";
-  version = "1.4.0-62-g781c0f9c3";
+  version = "1.4.0-93-g3d8664466";
 
   src = fetchFromGitHub {
     owner = "NickMcConnell";
     repo = "NarSil";
     tag = version;
-    hash = "sha256-FdQqvxj7K5wcF6eeqj18H8MVkytkNiB5fxrzyt/EnZ4=";
+    hash = "sha256-PsSotj2lkQcgyQ1rSJpuH+TvTWehgJsI9nWhDrQ/4Zk=";
   };
 
   passthru.updateScript = nix-update-script { };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs =
-    [ ncurses ]
-    ++ lib.optionals enableSdl2 [
-      SDL2
-      SDL2_image
-      SDL2_mixer
-      SDL2_ttf
-    ];
+  buildInputs = [
+    ncurses
+  ]
+  ++ lib.optionals enableSdl2 [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+  ];
 
   enableParallelBuilding = true;
 

@@ -26,20 +26,26 @@ stdenv.mkDerivation rec {
     sha256 = "1hkpdl4zgycag5k8njvqpx01apxmm8m8pvhlsxgxpqiqy9a38ccg";
   };
 
+  # substitute for CMake 4 compat
+  # "OpenHMD is currently NOT ACTIVELY MAINTAINED" in upstream README
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs =
-    [
-      hidapi
-    ]
-    ++ lib.optionals withExamples [
-      SDL2
-      glew
-      libGL
-    ];
+  buildInputs = [
+    hidapi
+  ]
+  ++ lib.optionals withExamples [
+    SDL2
+    glew
+    libGL
+  ];
 
   cmakeFlags = [
     "-DBUILD_BOTH_STATIC_SHARED_LIBS=ON"

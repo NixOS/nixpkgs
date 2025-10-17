@@ -6,21 +6,18 @@
   pydantic,
   pytestCheckHook,
   pytest-cov-stub,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "4.0.1";
+  version = "5.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sanders41";
     repo = "camel-converter";
     tag = "v${version}";
-    hash = "sha256-cHrMaf5PyFWacoi4t+Clow9qFAxbdn71p8ckuYMt27w=";
+    hash = "sha256-ADjgs72+tzMUdg2OS2bs1sMb0kMgVqBlUfYo+RRtsvg=";
   };
 
   build-system = [ hatchling ];
@@ -32,7 +29,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-cov-stub
-  ] ++ optional-dependencies.pydantic;
+  ]
+  ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "camel_converter" ];
 
@@ -44,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to convert strings from snake case to camel case or camel case to snake case";
     homepage = "https://github.com/sanders41/camel-converter";
-    changelog = "https://github.com/sanders41/camel-converter/releases/tag/v${version}";
+    changelog = "https://github.com/sanders41/camel-converter/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

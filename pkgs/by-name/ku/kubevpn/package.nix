@@ -1,19 +1,21 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   go,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "kubevpn";
-  version = "2.7.18";
+  version = "2.9.9";
 
   src = fetchFromGitHub {
     owner = "KubeNetworks";
     repo = "kubevpn";
-    rev = "v${version}";
-    hash = "sha256-fvdGqnjIC13S5rhrruWKz5nU+lM4UIoG9/cw0G9Szlc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-iGharffqrN5Vh9GhoajRjh+2R6hevhvrjtH4WIUq8nw=";
   };
 
   vendorHash = null;
@@ -23,7 +25,7 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-X github.com/wencaiwulue/kubevpn/v2/pkg/config.Version=v${version}"
+    "-X github.com/wencaiwulue/kubevpn/v2/pkg/config.Version=v${finalAttrs.version}"
     "-X github.com/wencaiwulue/kubevpn/v2/cmd/kubevpn/cmds.OsArch=${go.GOOS}/${go.GOARCH}"
   ];
 
@@ -32,26 +34,37 @@ buildGoModule rec {
     export HOME=$(mktemp -d)
   '';
 
-  # Disable network tests
-  checkFlags = [
-    "-skip=^Test(Route|Functions|ByDumpClusterInfo|ByCreateSvc|Elegant)$"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        # Disable network tests
+        "TestRoute"
+        "TestFunctions"
+        "TestByDumpClusterInfo"
+        "TestByCreateSvc"
+        "TestElegant"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Not sure why these test fail on darwin with __darwinAllowLocalNetworking.
+        "TestHttpOverUnix"
+        "TestConnectionRefuse"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
+  __darwinAllowLocalNetworking = true;
 
   doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckKeepEnvironment = [ "HOME" ];
+  versionCheckProgramArg = "version";
 
-  installCheckPhase = ''
-    runHook preInstallCheck
-    $out/bin/kubevpn help
-    $out/bin/kubevpn version | grep -e "Version: v${version}"
-    runHook postInstallCheck
-  '';
-
-  meta = with lib; {
-    changelog = "https://github.com/KubeNetworks/kubevpn/releases/tag/${src.rev}";
+  meta = {
+    changelog = "https://github.com/KubeNetworks/kubevpn/releases/tag/${finalAttrs.src.rev}";
     description = "Create a VPN and connect to Kubernetes cluster network, access resources, and more";
     mainProgram = "kubevpn";
     homepage = "https://github.com/KubeNetworks/kubevpn";
-    license = licenses.mit;
-    maintainers = with maintainers; [ mig4ng ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ mig4ng ];
   };
-}
+})

@@ -22,14 +22,14 @@
   procps,
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "ponyc";
   version = "0.59.0";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = "ponyc";
-    rev = version;
+    tag = version;
     hash = "sha256-4gDv8UWTk0RWVNC4PU70YKSK9fIMbWBsQbHboVls2BA=";
     fetchSubmodules = true;
   };
@@ -50,37 +50,35 @@ stdenv.mkDerivation (rec {
     hash = "sha256-1OJ2SeSscRBNr7zZ/a8bJGIqAnhkg45re0j3DtPfcXM=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      makeWrapper
-      which
-      python3
-      git
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Keep in sync with `PONY_OSX_PLATFORM`.
-      apple-sdk_13
-      (darwinMinVersionHook "13.0")
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    which
+    python3
+    git
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Keep in sync with `PONY_OSX_PLATFORM`.
+    apple-sdk_13
+    (darwinMinVersionHook "13.0")
+    cctools.libtool
+  ];
 
   buildInputs = [
     libxml2
     z3
   ];
 
-  patches =
-    [
-      # Sandbox disallows network access, so disabling problematic networking tests
-      ./disable-networking-tests.patch
-      ./disable-process-tests.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (replaceVars ./fix-darwin-build.patch {
-        apple-sdk = apple-sdk_13;
-      })
-    ];
+  patches = [
+    # Sandbox disallows network access, so disabling problematic networking tests
+    ./disable-networking-tests.patch
+    ./disable-process-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (replaceVars ./fix-darwin-build.patch {
+      apple-sdk = apple-sdk_13;
+    })
+  ];
 
   postUnpack = ''
     mkdir -p $NIX_BUILD_TOP/deps
@@ -104,24 +102,24 @@ stdenv.mkDerivation (rec {
         --replace-fail "https://github.com/google/googletest/archive/refs/tags/v$googletestRev.tar.gz" "$NIX_BUILD_TOP/deps/googletest-$googletestRev.tar"
   '';
 
-  preBuild =
-    ''
-      extraFlags=(build_flags=-j$NIX_BUILD_CORES)
-    ''
-    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-      # See this relnote about building on Raspbian:
-      # https://github.com/ponylang/ponyc/blob/0.46.0/.release-notes/0.45.2.md
-      extraFlags+=(pic_flag=-fPIC)
-    ''
-    + ''
-      make libs "''${extraFlags[@]}"
-      make configure "''${extraFlags[@]}"
-    '';
+  preBuild = ''
+    extraFlags=(build_flags=-j$NIX_BUILD_CORES)
+  ''
+  + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+    # See this relnote about building on Raspbian:
+    # https://github.com/ponylang/ponyc/blob/0.46.0/.release-notes/0.45.2.md
+    extraFlags+=(pic_flag=-fPIC)
+  ''
+  + ''
+    make libs "''${extraFlags[@]}"
+    make configure "''${extraFlags[@]}"
+  '';
 
   makeFlags = [
     "PONYC_VERSION=${version}"
     "prefix=${placeholder "out"}"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin ([ "bits=64" ] ++ lib.optional (!lto) "lto=no");
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=redundant-move"
@@ -132,29 +130,28 @@ stdenv.mkDerivation (rec {
 
   nativeCheckInputs = [ procps ];
 
-  installPhase =
-    ''
-      makeArgs=(config=release prefix=$out)
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      makeArgs+=(bits=64)
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && !lto) ''
-      makeArgs+=(lto=no)
-    ''
-    + ''
-      make "''${makeArgs[@]}" install
-      wrapProgram $out/bin/ponyc \
-        --prefix PATH ":" "${stdenv.cc}/bin" \
-        --set-default CC "$CC" \
-        --prefix PONYPATH : "${
-          lib.makeLibraryPath [
-            pcre2
-            openssl
-            (placeholder "out")
-          ]
-        }"
-    '';
+  installPhase = ''
+    makeArgs=(config=release prefix=$out)
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeArgs+=(bits=64)
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && !lto) ''
+    makeArgs+=(lto=no)
+  ''
+  + ''
+    make "''${makeArgs[@]}" install
+    wrapProgram $out/bin/ponyc \
+      --prefix PATH ":" "${stdenv.cc}/bin" \
+      --set-default CC "$CC" \
+      --prefix PONYPATH : "${
+        lib.makeLibraryPath [
+          pcre2
+          openssl
+          (placeholder "out")
+        ]
+      }"
+  '';
 
   # Stripping breaks linking for ponyc
   dontStrip = true;
@@ -167,7 +164,6 @@ stdenv.mkDerivation (rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [
       kamilchm
-      patternspandemic
       redvers
       numinit
     ];
@@ -178,4 +174,4 @@ stdenv.mkDerivation (rec {
       "aarch64-darwin"
     ];
   };
-})
+}

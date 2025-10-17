@@ -27,17 +27,17 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite${lib.optionalString interactive "-interactive"}";
-  version = "3.50.1";
+  version = "3.50.4";
 
   # nixpkgs-update: no auto update
   # NB! Make sure to update ./tools.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2025/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    hash = "sha256-AKZRFNaXz6qP4GMCgddv0bd6/Nlc1eQOxqAsu62/6nE=";
+    hash = "sha256-o9tYehuS7l3awvZrPttBsm+chnJ1eC1Gw6CIl31qWxg=";
   };
   docsrc = fetchurl {
     url = "https://sqlite.org/2025/sqlite-doc-${archiveVersion version}.zip";
-    hash = "sha256-ZiIF9jOC5X0Qceqr08eQjdchFKggqOvPGg1xqdazgrQ=";
+    hash = "sha256-+KA89GFQAxDHp4XJ1vhhIayUZWAZgs3Kxt4MWYfb/C8=";
   };
 
   outputs = [
@@ -56,12 +56,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     unzip
   ];
-  buildInputs =
-    [ zlib ]
-    ++ lib.optionals interactive [
-      readline
-      ncurses
-    ];
+  buildInputs = [
+    zlib
+  ]
+  ++ lib.optionals interactive [
+    readline
+    ncurses
+  ];
 
   # required for aarch64 but applied for all arches for simplicity
   preConfigure = ''
@@ -73,14 +74,15 @@ stdenv.mkDerivation rec {
   # on a per-output basis.
   setOutputFlags = false;
 
-  configureFlags =
-    [
-      "--bindir=${placeholder "bin"}/bin"
-      "--includedir=${placeholder "dev"}/include"
-      "--libdir=${placeholder "out"}/lib"
-    ]
-    ++ lib.optional (!interactive) "--disable-readline"
-    ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
+  configureFlags = [
+    "--bindir=${placeholder "bin"}/bin"
+    "--includedir=${placeholder "dev"}/include"
+    "--libdir=${placeholder "out"}/lib"
+  ]
+  ++ lib.optional (!interactive) "--disable-readline"
+  # autosetup only looks up readline.h in predefined set of directories.
+  ++ lib.optional interactive "--with-readline-header=${lib.getDev readline}/include/readline/readline.h"
+  ++ lib.optional (stdenv.hostPlatform.isStatic) "--disable-shared";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
@@ -107,19 +109,6 @@ stdenv.mkDerivation rec {
 
   # Test for features which may not be available at compile time
   preBuild = ''
-    # Use pread(), pread64(), pwrite(), pwrite64() functions for better performance if they are available.
-    if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread_pwrite_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread(0, NULL, 0, 0);\n  pwrite(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD"
-    fi
-    if cc -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64"
-    elif cc -D_LARGEFILE64_SOURCE -Werror=implicit-function-declaration -x c - -o "$TMPDIR/pread64_pwrite64_test" <<< \
-      ''$'#include <unistd.h>\nint main()\n{\n  pread64(0, NULL, 0, 0);\n  pwrite64(0, NULL, 0, 0);\n  return 0;\n}'; then
-      export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DUSE_PREAD64 -D_LARGEFILE64_SOURCE"
-    fi
-
     # Necessary for FTS5 on Linux
     export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lm"
 

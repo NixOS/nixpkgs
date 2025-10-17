@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "uritemplate";
-  version = "4.1.1";
+  version = "4.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Q0bt/Fw7efaUvM1tYJmjIrvrYo2/LNhu6lWkVs5RJPA=";
+    hash = "sha256-SAwu0YCHiVWGMyPuoxsO3maHld4YJhf++cbKCebsnQ4=";
   };
 
   nativeBuildInputs = [ setuptools ];

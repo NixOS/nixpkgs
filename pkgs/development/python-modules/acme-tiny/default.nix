@@ -11,12 +11,13 @@
 
 buildPythonPackage rec {
   pname = "acme-tiny";
-  version = "5.0.1";
+  version = "5.0.2";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "378549808eece574c3b5dcea82b216534949423d5c7ac241d9419212d676bc8d";
+    pname = "acme_tiny";
+    inherit version;
+    hash = "sha256-s84ZVYPcLxOnxvqQBS+Ks0myMtvCZ62cv0co6u2E3dg=";
   };
 
   patchPhase = ''
@@ -35,14 +36,12 @@ buildPythonPackage rec {
     fuse
   ];
 
-  doCheck = false; # seems to hang, not sure
-
   pythonImportsCheck = [ "acme_tiny" ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny script to issue and renew TLS certs from Let's Encrypt";
     mainProgram = "acme-tiny";
     homepage = "https://github.com/diafygi/acme-tiny";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

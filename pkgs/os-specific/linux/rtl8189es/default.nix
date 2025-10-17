@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     bc
     nukeReferences
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   hardeningDisable = [
     "pic"

@@ -13,7 +13,7 @@
   graphviz,
 
   # propagatedBuildInputs
-  cereal_1_3_2,
+  cereal,
   eigen,
   jrl-cmakemodules,
   simde,
@@ -36,6 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1+a5tFOlEwzhGZtll35EMFceD0iUOOQCbwJd9NcFDlk=";
   };
 
+  # ref. https://github.com/Simple-Robotics/proxsuite/pull/408 merged upstream
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.10)" \
+      "cmake_minimum_required(VERSION 3.22)"
+  '';
+
   outputs = [
     "doc"
     "out"
@@ -49,32 +56,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-      graphviz
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    graphviz
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pythonImportsCheckHook
+  ];
 
   propagatedBuildInputs = [
-    cereal_1_3_2
+    cereal
     eigen
     jrl-cmakemodules
     simde
-  ] ++ lib.optionals pythonSupport [ python3Packages.nanobind ];
+  ]
+  ++ lib.optionals pythonSupport [ python3Packages.nanobind ];
 
   nativeCheckInputs = [ ctestCheckHook ];
 
-  checkInputs =
-    [ matio ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.scipy
-    ];
+  checkInputs = [
+    matio
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.numpy
+    python3Packages.scipy
+  ];
 
   ctestFlags = lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
     "--exclude-regex"

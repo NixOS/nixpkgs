@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  jmespath,
   jsonschema,
   jxmlease,
   ncclient,
@@ -24,7 +25,7 @@
 
 let
   pname = "ansible";
-  version = "11.7.0";
+  version = "12.1.0";
 in
 buildPythonPackage {
   inherit pname version;
@@ -34,7 +35,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+d83xx1Af2W8ucXAbJkY4pfZ6nS1za9ZJsTJqp5E218=";
+    hash = "sha256-It6hk41DP6UVswAc+tZcswjvl8mA8VIBdNBU3TjzLIM=";
   };
 
   # we make ansible-core depend on ansible, not the other way around,
@@ -62,6 +63,10 @@ buildPythonPackage {
       ttp
       xmltodict
       # ansible.windows
+
+      # Default ansible collections dependencies
+      # community.general
+      jmespath
 
       # lots of collections with dedicated requirements.txt and pyproject.toml files,
       # add the dependencies for the collections you need conditionally and install

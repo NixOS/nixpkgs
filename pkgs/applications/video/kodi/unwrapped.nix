@@ -26,7 +26,7 @@
   which,
   openssl,
   gperf,
-  tinyxml2,
+  tinyxml,
   tinyxml-2,
   taglib,
   libssh,
@@ -35,7 +35,6 @@
   ncurses,
   spdlog,
   libxml2,
-  systemd,
   alsa-lib,
   libGLU,
   libGL,
@@ -263,6 +262,12 @@ stdenv.mkDerivation (
         url = "https://github.com/xbmc/xbmc/commit/269053ebbfd3cc4a3156a511f54ab7f08a09a730.patch";
         hash = "sha256-JzzrMJvAufrxTxtWnzknUS9JLJEed+qdtVnIYYe9LCw=";
       })
+      # Backport to fix build with cURL 8.16
+      # FIXME: remove in the next update
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/957b4faa0b765bc91e64c6d33f07e853decae0d0.patch";
+        hash = "sha256-zsqcZSjsApcgs/oEdFFlcwldGCVZxCsDG02ogs+q2uw=";
+      })
     ];
 
     # make  derivations declared in the let binding available here, so
@@ -276,189 +281,185 @@ stdenv.mkDerivation (
       apache_commons_text
       ;
 
-    buildInputs =
-      [
-        gnutls
-        libidn2
-        libtasn1
-        nasm
-        p11-kit
-        libxml2
-        python3Packages.python
-        boost
-        libmicrohttpd
-        gettext
-        pcre-cpp
-        yajl
-        fribidi
-        libva
-        libdrm
-        openssl
-        gperf
-        tinyxml2
-        tinyxml-2
-        taglib
-        libssh
-        gtest
-        ncurses
-        spdlog
-        alsa-lib
-        libGL
-        libGLU
-        fontconfig
-        freetype
-        ftgl
-        libjpeg
-        libpng
-        libtiff
-        libmpeg2
-        libsamplerate
-        libmad
-        libogg
-        libvorbis
-        flac
-        libxslt
-        systemd
-        lzo
-        libcdio
-        libmodplug
-        libass
-        libbluray
-        libudfread
-        sqlite
-        libmysqlclient
-        avahi
-        lame
-        curl
-        bzip2
-        zip
-        unzip
-        mesa-demos
-        libcec
-        libcec_platform
-        dcadec
-        libuuid
-        libxcrypt
-        libgcrypt
-        libgpg-error
-        libunistring
-        libcrossguid
-        libplist
-        bluez
-        glib
-        harfbuzz
-        lcms2
-        libpthreadstubs
-        ffmpeg
-        flatbuffers
-        fstrcmp
-        rapidjson
-        lirc
-        mesa-gl-headers
+    buildInputs = [
+      gnutls
+      libidn2
+      libtasn1
+      nasm
+      p11-kit
+      libxml2
+      python3Packages.python
+      boost
+      libmicrohttpd
+      gettext
+      pcre-cpp
+      yajl
+      fribidi
+      libva
+      libdrm
+      openssl
+      gperf
+      tinyxml
+      tinyxml-2
+      taglib
+      libssh
+      gtest
+      ncurses
+      spdlog
+      alsa-lib
+      libGL
+      libGLU
+      fontconfig
+      freetype
+      ftgl
+      libjpeg
+      libpng
+      libtiff
+      libmpeg2
+      libsamplerate
+      libmad
+      libogg
+      libvorbis
+      flac
+      libxslt
+      lzo
+      libcdio
+      libmodplug
+      libass
+      libbluray
+      libudfread
+      sqlite
+      libmysqlclient
+      avahi
+      lame
+      curl
+      bzip2
+      zip
+      unzip
+      mesa-demos
+      libcec
+      libcec_platform
+      dcadec
+      libuuid
+      libxcrypt
+      libgcrypt
+      libgpg-error
+      libunistring
+      libcrossguid
+      libplist
+      bluez
+      glib
+      harfbuzz
+      lcms2
+      libpthreadstubs
+      ffmpeg
+      flatbuffers
+      fstrcmp
+      rapidjson
+      lirc
+      mesa-gl-headers
 
-        # Deps needed by TexturePacker, which is built and installed in normal
-        # kodi build, however the one used during the build is not this one
-        # in order to support cross-compilation.
-        giflib
-        zlib
-      ]
-      ++ lib.optionals x11Support [
-        libX11
-        xorgproto
-        libXt
-        libXmu
-        libXext.dev
-        libXdmcp
-        libXinerama
-        libXrandr.dev
-        libXtst
-        libXfixes
-      ]
-      ++ lib.optional dbusSupport dbus
-      ++ lib.optional joystickSupport cwiid
-      ++ lib.optional nfsSupport libnfs
-      ++ lib.optional pulseSupport libpulseaudio
-      ++ lib.optional pipewireSupport pipewire
-      ++ lib.optional rtmpSupport rtmpdump
-      ++ lib.optional sambaSupport samba
-      ++ lib.optional udevSupport udev
-      ++ lib.optional usbSupport libusb-compat-0_1
-      ++ lib.optional vdpauSupport libvdpau
-      ++ lib.optionals waylandSupport [
-        wayland
-        waylandpp.dev
-        wayland-protocols
-        # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
-        libxkbcommon.dev
-      ]
-      ++ lib.optionals gbmSupport [
-        libxkbcommon.dev
-        libgbm
-        libinput.dev
-        libdisplay-info
-      ];
+      # Deps needed by TexturePacker, which is built and installed in normal
+      # kodi build, however the one used during the build is not this one
+      # in order to support cross-compilation.
+      giflib
+      zlib
+    ]
+    ++ lib.optionals x11Support [
+      libX11
+      xorgproto
+      libXt
+      libXmu
+      libXext.dev
+      libXdmcp
+      libXinerama
+      libXrandr.dev
+      libXtst
+      libXfixes
+    ]
+    ++ lib.optional dbusSupport dbus
+    ++ lib.optional joystickSupport cwiid
+    ++ lib.optional nfsSupport libnfs
+    ++ lib.optional pulseSupport libpulseaudio
+    ++ lib.optional pipewireSupport pipewire
+    ++ lib.optional rtmpSupport rtmpdump
+    ++ lib.optional sambaSupport samba
+    ++ lib.optional udevSupport udev
+    ++ lib.optional usbSupport libusb-compat-0_1
+    ++ lib.optional vdpauSupport libvdpau
+    ++ lib.optionals waylandSupport [
+      wayland
+      waylandpp.dev
+      wayland-protocols
+      # Not sure why ".dev" is needed here, but CMake doesn't find libxkbcommon otherwise
+      libxkbcommon.dev
+    ]
+    ++ lib.optionals gbmSupport [
+      libxkbcommon.dev
+      libgbm
+      libinput.dev
+      libdisplay-info
+    ];
 
-    nativeBuildInputs =
-      [
-        cmake
-        doxygen
-        makeWrapper
-        which
-        pkg-config
-        autoconf
-        automake
-        libtool # still needed for some components. Check if that is the case with 19.0
-        jre_headless
-        yasm
-        gettext
-        python3Packages.python
-        flatbuffers
-      ]
-      ++ lib.optionals waylandSupport [
-        wayland-protocols
-        waylandpp.bin
-      ];
+    nativeBuildInputs = [
+      cmake
+      doxygen
+      makeWrapper
+      which
+      pkg-config
+      autoconf
+      automake
+      libtool # still needed for some components. Check if that is the case with 19.0
+      jre_headless
+      yasm
+      gettext
+      python3Packages.python
+      flatbuffers
+    ]
+    ++ lib.optionals waylandSupport [
+      wayland-protocols
+      waylandpp.bin
+    ];
 
     depsBuildBuild = [
       buildPackages.stdenv.cc
     ];
 
-    cmakeFlags =
-      [
-        "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
-        "-Dlibdvdcss_URL=${finalAttrs.libdvdcss}"
-        "-Dlibdvdnav_URL=${finalAttrs.libdvdnav}"
-        "-Dlibdvdread_URL=${finalAttrs.libdvdread}"
-        "-Dgroovy_SOURCE_DIR=${finalAttrs.groovy}"
-        "-Dapache-commons-lang_SOURCE_DIR=${finalAttrs.apache_commons_lang}"
-        "-Dapache-commons-text_SOURCE_DIR=${finalAttrs.apache_commons_text}"
-        # Upstream derives this from the git HEADs hash and date.
-        # LibreElec (minimal distro for kodi) uses the equivalent to this.
-        "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
-        "-DENABLE_EVENTCLIENTS=ON"
-        "-DENABLE_INTERNAL_CROSSGUID=OFF"
-        "-DENABLE_INTERNAL_RapidJSON=OFF"
-        "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
-        "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
-        "-DLIRC_DEVICE=/run/lirc/lircd"
-        "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
-        "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
-        "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
-        "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
-        "-DWITH_JSONSCHEMABUILDER=${lib.getExe jsonSchemaBuilder}"
-        # When wrapped KODI_HOME will likely contain symlinks to static assets
-        # that Kodi's built in webserver will cautiously refuse to serve up
-        # (because their realpaths are outside of KODI_HOME and the other
-        # whitelisted directories). This adds the entire nix store to the Kodi
-        # webserver whitelist to avoid this problem.
-        "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
-      ]
-      ++ lib.optionals waylandSupport [
-        "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
-      ];
+    cmakeFlags = [
+      "-DAPP_RENDER_SYSTEM=${if gbmSupport then "gles" else "gl"}"
+      "-Dlibdvdcss_URL=${finalAttrs.libdvdcss}"
+      "-Dlibdvdnav_URL=${finalAttrs.libdvdnav}"
+      "-Dlibdvdread_URL=${finalAttrs.libdvdread}"
+      "-Dgroovy_SOURCE_DIR=${finalAttrs.groovy}"
+      "-Dapache-commons-lang_SOURCE_DIR=${finalAttrs.apache_commons_lang}"
+      "-Dapache-commons-text_SOURCE_DIR=${finalAttrs.apache_commons_text}"
+      # Upstream derives this from the git HEADs hash and date.
+      # LibreElec (minimal distro for kodi) uses the equivalent to this.
+      "-DGIT_VERSION=${finalAttrs.version}-${finalAttrs.kodiReleaseName}"
+      "-DENABLE_EVENTCLIENTS=ON"
+      "-DENABLE_INTERNAL_CROSSGUID=OFF"
+      "-DENABLE_INTERNAL_RapidJSON=OFF"
+      "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
+      "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
+      "-DLIRC_DEVICE=/run/lirc/lircd"
+      "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
+      "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
+      "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
+      "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
+      "-DWITH_JSONSCHEMABUILDER=${lib.getExe jsonSchemaBuilder}"
+      # When wrapped KODI_HOME will likely contain symlinks to static assets
+      # that Kodi's built in webserver will cautiously refuse to serve up
+      # (because their realpaths are outside of KODI_HOME and the other
+      # whitelisted directories). This adds the entire nix store to the Kodi
+      # webserver whitelist to avoid this problem.
+      "-DKODI_WEBSERVER_EXTRA_WHITELIST=${builtins.storeDir}"
+    ]
+    ++ lib.optionals waylandSupport [
+      "-DWAYLANDPP_SCANNER=${buildPackages.waylandpp}/bin/wayland-scanner++"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "-DWITH_TEXTUREPACKER=${lib.getExe texturePacker}"
+    ];
 
     # 14 tests fail but the biggest issue is that every test takes 30 seconds -
     # I'm guessing there is a thing waiting to time out
@@ -486,7 +487,6 @@ stdenv.mkDerivation (
             lib.makeLibraryPath (
               [
                 curl
-                systemd
                 libmad
                 libcec
                 libcec_platform

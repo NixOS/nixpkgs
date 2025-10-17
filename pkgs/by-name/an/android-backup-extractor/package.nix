@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "android-backup-extractor";
-  version = "0-unstable-2025-01-15-62310d4";
+  version = "0-unstable-2025-01-15";
 
   src = fetchurl {
     url = "https://github.com/nelenkov/android-backup-extractor/releases/download/latest/abe-62310d4.jar";

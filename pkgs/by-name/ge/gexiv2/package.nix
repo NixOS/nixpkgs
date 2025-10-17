@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gexiv2";
-  version = "0.14.5";
+  version = "0.14.6";
 
   outputs = [
     "out"
@@ -29,24 +29,23 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "CRPFPaq6sfGrWGr9VbtVNweW8rirzG43ZAq3cErZnOE=";
+    sha256 = "YGwoqq57Hz71yOq+Xn3/18WhyGbSW3Zx+4R/4oenK4s=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gobject-introspection
-      vala
-      gtk-doc
-      docbook-xsl-nons
-      docbook_xml_dtd_43
-      (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gobject-introspection
+    vala
+    gtk-doc
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    (python3.pythonOnBuildForHost.withPackages (ps: [ ps.pygobject3 ]))
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     glib

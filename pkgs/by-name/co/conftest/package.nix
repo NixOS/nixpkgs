@@ -1,23 +1,27 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
   versionCheckHook,
   writableTmpDirAsHomeHook,
+  buildPackages,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "conftest";
-  version = "0.59.0";
+  version = "0.63.0";
+
+  __darwinAllowLocalNetworking = true; # required for tests
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "conftest";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bmZp1cPNTm6m30YxjlWdnfv2437nDXH+taDNFZ0OKIY=";
+    hash = "sha256-gmfzMup4fdsbdyUufxjcJRPF2faj3RUlvIn2ciyalaQ=";
   };
-  vendorHash = "sha256-aPvGbtAucb9OdcydO4dMLJrrM3XretPI7zyJULlm1fg=";
+  vendorHash = "sha256-pBUWM6st5FhhOki3n9NIN4/U8JB7Kq3Aph3AtQs+Ogg=";
 
   ldflags = [
     "-s"
@@ -29,12 +33,20 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd conftest \
-      --bash <($out/bin/conftest completion bash) \
-      --fish <($out/bin/conftest completion fish) \
-      --zsh <($out/bin/conftest completion zsh)
-  '';
+  postInstall =
+    let
+      conftest =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          placeholder "out"
+        else
+          buildPackages.conftest;
+    in
+    ''
+      installShellCompletion --cmd conftest \
+        --bash <(${conftest}/bin/conftest completion bash) \
+        --fish <(${conftest}/bin/conftest completion fish) \
+        --zsh <(${conftest}/bin/conftest completion zsh)
+    '';
 
   nativeCheckInputs = [
     writableTmpDirAsHomeHook

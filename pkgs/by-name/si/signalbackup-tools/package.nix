@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
 
+  darwinMinVersionHook,
   dbus,
   openssl,
   sqlite,
@@ -13,31 +14,32 @@
 
 stdenv.mkDerivation rec {
   pname = "signalbackup-tools";
-  version = "20250630-2";
+  version = "20251015";
 
   src = fetchFromGitHub {
     owner = "bepaald";
     repo = "signalbackup-tools";
-    rev = version;
-    hash = "sha256-/zbBiVWqHoKG2h6ExIDIP6ZQH1F8LByZYWbx8wysGDw=";
+    tag = version;
+    hash = "sha256-/rqYM0KLBcvYt2lpkOZKipb/lpVtkUevGFNWVenPbOk=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      openssl
-      sqlite
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      dbus
-    ];
+  buildInputs = [
+    openssl
+    sqlite
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    dbus
+  ];
 
   installPhase = ''
     runHook preInstall

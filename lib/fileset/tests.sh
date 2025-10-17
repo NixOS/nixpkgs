@@ -1336,14 +1336,6 @@ expectFailure 'gitTrackedWith {} ./.' 'lib.fileset.gitTrackedWith: Expected the 
 # recurseSubmodules has to be a boolean
 expectFailure 'gitTrackedWith { recurseSubmodules = null; } ./.' 'lib.fileset.gitTrackedWith: Expected the attribute `recurseSubmodules` of the first argument to be a boolean, but it'\''s a null instead.'
 
-# recurseSubmodules = true is not supported on all Nix versions
-if [[ "$(nix-instantiate --eval --expr "$prefixExpression (versionAtLeast builtins.nixVersion _fetchGitSubmodulesMinver)")" == true ]]; then
-    fetchGitSupportsSubmodules=1
-else
-    fetchGitSupportsSubmodules=
-    expectFailure 'gitTrackedWith { recurseSubmodules = true; } ./.' 'lib.fileset.gitTrackedWith: Setting the attribute `recurseSubmodules` to `true` is only supported for Nix version 2.4 and after, but Nix version [0-9.]+ is used.'
-fi
-
 # Checks that `gitTrackedWith` contains the same files as `git ls-files`
 # for the current working directory.
 # If --recurse-submodules is passed, the flag is passed through to `git ls-files`
@@ -1393,9 +1385,7 @@ checkGitTrackedWith() {
 # Allows testing both variants together
 checkGitTracked() {
     checkGitTrackedWith
-    if [[ -n "$fetchGitSupportsSubmodules" ]]; then
-        checkGitTrackedWith --recurse-submodules
-    fi
+    checkGitTrackedWith --recurse-submodules
 }
 
 createGitRepo() {
@@ -1416,10 +1406,10 @@ echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > defaul
 git add .
 
 ## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
-expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./.).outPath'
+expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(fetchGit ./.).outPath'
 
 ## We can also evaluate when importing from fetched store paths
-storePath=$(expectStorePath 'builtins.fetchGit ./.')
+storePath=$(expectStorePath 'fetchGit ./.')
 expectEqual '(import '"$storePath"' { fs = lib.fileset; }).outPath' \""$storePath"\"
 
 ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
@@ -1430,51 +1420,45 @@ expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTracked: T
 [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 
 ## Even with submodules
-if [[ -n "$fetchGitSupportsSubmodules" ]]; then
-    ## Both the main repo with the submodule
-    echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTrackedWith { recurseSubmodules = true; } ./.; }' > default.nix
-    createGitRepo sub
-    git submodule add ./sub sub >/dev/null
-    ## But also the submodule itself
-    echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > sub/default.nix
-    git -C sub add .
+## Both the main repo with the submodule
+echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTrackedWith { recurseSubmodules = true; } ./.; }' > default.nix
+createGitRepo sub
+git submodule add ./sub sub >/dev/null
+## But also the submodule itself
+echo '{ fs }: fs.toSource { root = ./.; fileset = fs.gitTracked ./.; }' > sub/default.nix
+git -C sub add .
 
-    ## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
-    expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(builtins.fetchGit { url = ./.; submodules = true; }).outPath'
-    expectEqual '(import ./sub { fs = lib.fileset; }).outPath' '(builtins.fetchGit ./sub).outPath'
+## We can evaluate it locally just fine, `fetchGit` is used underneath to filter git-tracked files
+expectEqual '(import ./. { fs = lib.fileset; }).outPath' '(fetchGit { url = ./.; submodules = true; }).outPath'
+expectEqual '(import ./sub { fs = lib.fileset; }).outPath' '(fetchGit ./sub).outPath'
 
-    ## We can also evaluate when importing from fetched store paths
-    storePathWithSub=$(expectStorePath 'builtins.fetchGit { url = ./.; submodules = true; }')
-    expectEqual '(import '"$storePathWithSub"' { fs = lib.fileset; }).outPath' \""$storePathWithSub"\"
-    storePathSub=$(expectStorePath 'builtins.fetchGit ./sub')
-    expectEqual '(import '"$storePathSub"' { fs = lib.fileset; }).outPath' \""$storePathSub"\"
+## We can also evaluate when importing from fetched store paths
+storePathWithSub=$(expectStorePath 'fetchGit { url = ./.; submodules = true; }')
+expectEqual '(import '"$storePathWithSub"' { fs = lib.fileset; }).outPath' \""$storePathWithSub"\"
+storePathSub=$(expectStorePath 'fetchGit ./sub')
+expectEqual '(import '"$storePathSub"' { fs = lib.fileset; }).outPath' \""$storePathSub"\"
 
-    ## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
-    expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
-    [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-    [[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
-    [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
-    [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
-    expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
-    [[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
-    [[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
-    [[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
-    [[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
-fi
+## But it fails if the path is imported with a fetcher that doesn't remove .git (like just using "${./.}")
+expectFailure 'import "${./.}" { fs = lib.fileset; }' 'lib.fileset.gitTrackedWith: The second argument \(.*\) is a store path within a working tree of a Git repository.
+[[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+[[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+[[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
+expectFailure 'import "${./.}/sub" { fs = lib.fileset; }' 'lib.fileset.gitTracked: The argument \(.*/sub\) is a store path within a working tree of a Git repository.
+[[:blank:]]*This indicates that a source directory was imported into the store using a method such as `import "\$\{./.\}"` or `path:.`.
+[[:blank:]]*This function currently does not support such a use case, since it currently relies on `builtins.fetchGit`.
+[[:blank:]]*You could make this work by using a fetcher such as `fetchGit` instead of copying the whole repository.
+[[:blank:]]*If you can'\''t avoid copying the repo to the store, see https://github.com/NixOS/nix/issues/9292.'
 rm -rf -- *
 
-# shallow = true is not supported on all Nix versions
-# and older versions don't support shallow clones at all
-if [[ "$(nix-instantiate --eval --expr "$prefixExpression (versionAtLeast builtins.nixVersion _fetchGitShallowMinver)")" == true ]]; then
-    createGitRepo full
-    # Extra commit such that there's a commit that won't be in the shallow clone
-    git -C full commit --allow-empty -q -m extra
-    git clone -q --depth 1 "file://${PWD}/full" shallow
-    cd shallow
-    checkGitTracked
-    cd ..
-    rm -rf -- *
-fi
+createGitRepo full
+# Extra commit such that there's a commit that won't be in the shallow clone
+git -C full commit --allow-empty -q -m extra
+git clone -q --depth 1 "file://${PWD}/full" shallow
+cd shallow
+checkGitTracked
+cd ..
+rm -rf -- *
 
 # Go through all stages of Git files
 # See https://www.git-scm.com/book/en/v2/Git-Basics-Recording-Changes-to-the-Repository

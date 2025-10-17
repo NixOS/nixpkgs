@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bzmenu";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "e-tho";
     repo = "bzmenu";
     tag = "v${version}";
-    hash = "sha256-42ZiENkqFXFhtqn26r9AIsG9sE+W0nGxm2zKdcbY5ss=";
+    hash = "sha256-5Xb/7DhwZ3hLO1rAceMaR3ifgI36Sn+W+S7PN8EOdOQ=";
   };
 
-  cargoHash = "sha256-DvnWw4yH4ghFb368cms981pENez0zTgvpMghDTrah50=";
+  cargoHash = "sha256-zTwgWk5ix1TGTi8rZjznJqdHbgnRHjA42Ly7PQQiMZw=";
 
   nativeBuildInputs = [
     pkg-config

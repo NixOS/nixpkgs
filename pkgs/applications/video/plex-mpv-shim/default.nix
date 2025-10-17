@@ -14,25 +14,17 @@
   mpv-shim-default-shaders,
 }:
 
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "plex-mpv-shim";
-  version = "1.11.0";
+  version = "1.11.0-unstable-2025-03-17";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "iwalton3";
-    repo = pname;
-    tag = "v${version}";
-    sha256 = "sha256-hUGKOJEDZMK5uhHoevFt1ay6QQEcoN4F8cPxln5uMRo=";
+    repo = "plex-mpv-shim";
+    rev = "fb1f1f3325285e33f9ce3425e9361f5f99277d9a"; # Fetch from this commit to include fixes for python library issues. Should be reverted to release 1.12.0
+    hash = "sha256-tk+bIS93Y726sbrRXEyS7+4ku+g40Z7Aj0++wItjW2s=";
   };
-
-  patches = [
-    # pull in upstream commit to fix python-mpv dependency name -- remove when version > 1.11.0
-    (fetchpatch {
-      url = "https://github.com/iwalton3/plex-mpv-shim/commit/d8643123a8ec79216e02850b08f63b06e4e0a2ea.diff";
-      hash = "sha256-nc+vwYnAtMjVzL2fIQeTAqhf3HBseL+2pFEtv8zNUXo=";
-    })
-  ];
 
   nativeBuildInputs = [
     wrapGAppsHook3

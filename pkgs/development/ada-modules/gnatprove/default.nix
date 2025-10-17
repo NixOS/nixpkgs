@@ -29,6 +29,10 @@ let
         };
       });
 
+  # TODO:
+  # Build why3 (github.com/AdaCore/why3) as separate package and not as submodule.
+  # The relevant tags on why3 may get changed without the submodule pointer being updated.
+
   fetchSpark2014 =
     { rev, hash }:
     fetchFromGitHub {
@@ -52,6 +56,10 @@ let
         hash = "sha256-mZWP9yF1O4knCiXx8CqolnS+93bM+hTQy40cd0HZmwI=";
       };
       commit_date = "2023-01-05";
+      patches = [
+        # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
+        ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
+      ];
     };
     "14" = {
       src = fetchSpark2014 {
@@ -60,7 +68,7 @@ let
       };
       patches = [
         # Disable Coq related targets which are missing in the fsf-14 branch
-        ./0001-fix-install.patch
+        ./0001-fix-install-fsf-14.patch
 
         # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
         ./0002-mute-aarch64-warnings.patch
@@ -70,11 +78,22 @@ let
       ];
       commit_date = "2024-01-11";
     };
+    "15" = {
+      src = fetchSpark2014 {
+        rev = "22bf1510e0829ba74f9d8d686badb65c7365ee91";
+        hash = "sha256-KjAWMgMT3Tp/s/DQ20ZZajty9Zrv8aPFocwgv5LkjSw=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-15 branch
+        ./0001-fix-install-fsf-15.patch
+      ];
+      commit_date = "2025-06-10";
+    };
   };
 
   thisSpark =
     spark2014.${gnat_version}
-      or (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+      or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
 stdenv.mkDerivation {
@@ -85,38 +104,39 @@ stdenv.mkDerivation {
 
   patches = thisSpark.patches or [ ];
 
-  nativeBuildInputs =
-    [
-      gnat
-      gprbuild
-      python3
-      makeWrapper
-    ]
-    ++ (with ocamlPackages; [
-      ocaml
-      findlib
-      menhir
-    ]);
+  nativeBuildInputs = [
+    gnat
+    gprbuild
+    python3
+    makeWrapper
+  ]
+  ++ (with ocamlPackages; [
+    ocaml
+    findlib
+    menhir
+  ]);
 
-  buildInputs =
-    [
-      gnatcoll-core
-    ]
-    ++ (with ocamlPackages; [
-      ocamlgraph
-      zarith
-      ppx_deriving
-      ppx_sexp_conv
-      camlzip
-      menhirLib
-      num
-      re
-      sexplib
-      yojson
-    ])
-    ++ (lib.optionals (gnat_version == "14") [
-      gpr2_24_2_next
-    ]);
+  buildInputs = [
+    gnatcoll-core
+  ]
+  ++ (with ocamlPackages; [
+    ocamlgraph
+    zarith
+    ppx_deriving
+    ppx_sexp_conv
+    camlzip
+    menhirLib
+    num
+    re
+    sexplib
+    yojson
+  ])
+  ++ (lib.optionals (gnat_version == "14") [
+    gpr2_24_2_next
+  ])
+  ++ (lib.optionals (gnat_version == "15") [
+    gpr2
+  ]);
 
   propagatedBuildInputs = [
     gprbuild

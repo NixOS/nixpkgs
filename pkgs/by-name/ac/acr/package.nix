@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "acr";
-  version = "2.2.0";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "radareorg";
     repo = "acr";
     rev = finalAttrs.version;
-    hash = "sha256-GgF2sen7RcnuXrtLzkeGllMvY65LffR+jPPqUhbsOGk=";
+    hash = "sha256-ASdXxkHqrxs4xVKB9LJDU5Y12+1Gv+NgFHC+tEC5p+E=";
   };
 
   preConfigure = ''
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
       m4. This means that ACR is faster, smaller and easy to use.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

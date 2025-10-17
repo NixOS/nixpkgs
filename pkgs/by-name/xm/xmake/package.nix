@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xmake";
-  version = "3.0.0";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "xmake-io";
     repo = "xmake";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JY94DaSZ12pRrcCPxoPaECRA8rMK6/fNNyr/F8Htu8A=";
+    hash = "sha256-DXSqdiVw+40Ii1/j7SJ/SYoji3dLRYjhJTuAEN+6ekQ=";
     fetchSubmodules = true;
   };
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xmake.io";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      rewine
+      wineee
       rennsax
     ];
     mainProgram = "xmake";

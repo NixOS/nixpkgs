@@ -28,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.18.4.0";
+  version = "0.18.4.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero-gui";
     rev = "v${version}";
-    hash = "sha256-JwYx5TjGp3VPPSgjN0+w1A4RoZGm7A73Gpg44fre1/c=";
+    hash = "sha256-uByiwIyR1pVmIrmu0Jdwb7aZE07hop4bP+PuEvJaIrE=";
   };
 
   nativeBuildInputs = [
@@ -44,36 +44,35 @@ stdenv.mkDerivation rec {
     (lib.getDev qt5.qttools)
   ];
 
-  buildInputs =
-    [
-      boost186 # uses boost/asio/io_service.hpp
-      libgcrypt
-      libgpg-error
-      libsodium
-      miniupnpc
-      qt5.qtbase
-      qt5.qtdeclarative
-      qt5.qtgraphicaleffects
-      qt5.qtmultimedia
-      qt5.qtquickcontrols
-      qt5.qtquickcontrols2
-      qt5.qtxmlpatterns
-      quirc
-      randomx
-      rapidjson
-      unbound
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ qt5.qtmacextras ]
-    ++ lib.optionals trezorSupport [
-      hidapi
-      libusb1
-      protobuf_21
-      python3
-    ]
-    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
-      udev
-    ];
+  buildInputs = [
+    boost186 # uses boost/asio/io_service.hpp
+    libgcrypt
+    libgpg-error
+    libsodium
+    miniupnpc
+    qt5.qtbase
+    qt5.qtdeclarative
+    qt5.qtgraphicaleffects
+    qt5.qtmultimedia
+    qt5.qtquickcontrols
+    qt5.qtquickcontrols2
+    qt5.qtxmlpatterns
+    quirc
+    randomx
+    rapidjson
+    unbound
+    zeromq
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ qt5.qtmacextras ]
+  ++ lib.optionals trezorSupport [
+    hidapi
+    libusb1
+    protobuf_21
+    python3
+  ]
+  ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [
+    udev
+  ];
 
   postUnpack = ''
     # copy monero sources here
@@ -104,12 +103,13 @@ stdenv.mkDerivation rec {
       --replace 'add_subdirectory(external)' ""
   '';
 
-  cmakeFlags =
-    [ "-DARCH=default" ]
-    ++ lib.optional trezorSupport [
-      # fix build on recent gcc versions
-      "-DCMAKE_CXX_FLAGS=-fpermissive"
-    ];
+  cmakeFlags = [
+    "-DARCH=default"
+  ]
+  ++ lib.optional trezorSupport [
+    # fix build on recent gcc versions
+    "-DCMAKE_CXX_FLAGS=-fpermissive"
+  ];
 
   desktopItem = makeDesktopItem {
     name = "monero-wallet-gui";

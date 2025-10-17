@@ -9,7 +9,6 @@
   limesuite,
   libiio,
   libbladeRF,
-  imagemagick,
   makeDesktopItem,
   copyDesktopItems,
   qt5,
@@ -20,36 +19,37 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.9.8";
-  format = "setuptools";
+  version = "2.9.8-unstable-2025-07-31";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jopohl";
     repo = "urh";
-    tag = "v${version}";
-    hash = "sha256-r3d80dzGwgf5Tuwt1IWGcmNbblwBNKTKKm+GGx1r2HE=";
+    rev = "4979a5c94d7c0c728fa2ff3fda8f564e6ed6c7b4";
+    hash = "sha256-oLtMyk9szXiHSPzEzhG58FQ2HAG4JTAPhJvk2rfycAc=";
   };
+
+  build-system = [ python3Packages.setuptools ];
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
     wrapGAppsHook3
     copyDesktopItems
   ];
-  buildInputs =
-    [
-      hackrf
-      rtl-sdr
-      airspy
-      limesuite
-      libiio
-      libbladeRF
-    ]
-    ++ lib.optional USRPSupport uhd
-    ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
+  buildInputs = [
+    hackrf
+    rtl-sdr
+    airspy
+    limesuite
+    libiio
+    libbladeRF
+  ]
+  ++ lib.optional USRPSupport uhd
+  ++ lib.optional stdenv.hostPlatform.isLinux qt5.qtwayland;
 
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     pyqt5
-    numpy_1
+    numpy
     psutil
     cython
     pyzmq
@@ -88,11 +88,11 @@ python3Packages.buildPythonApplication rec {
     install -Dm644 data/icons/appicon.png $out/share/pixmaps/urh.png
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/jopohl/urh";
     description = "Universal Radio Hacker: investigate wireless protocols like a boss";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fpletz ];
   };
 }

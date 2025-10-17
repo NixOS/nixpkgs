@@ -21,25 +21,24 @@ let
     syncstorage = {
       database_url = dbURL;
     };
-    tokenserver =
-      {
-        node_type = "mysql";
-        database_url = dbURL;
-        fxa_email_domain = "api.accounts.firefox.com";
-        fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
-        run_migrations = true;
-        # if JWK caching is not enabled the token server must verify tokens
-        # using the fxa api, on a thread pool with a static size.
-        additional_blocking_threads_for_fxa_requests = 10;
-      }
-      // lib.optionalAttrs cfg.singleNode.enable {
-        # Single-node mode is likely to be used on small instances with little
-        # capacity. The default value (0.1) can only ever release capacity when
-        # accounts are removed if the total capacity is 10 or larger to begin
-        # with.
-        # https://github.com/mozilla-services/syncstorage-rs/issues/1313#issuecomment-1145293375
-        node_capacity_release_rate = 1;
-      };
+    tokenserver = {
+      node_type = "mysql";
+      database_url = dbURL;
+      fxa_email_domain = "api.accounts.firefox.com";
+      fxa_oauth_server_url = "https://oauth.accounts.firefox.com/v1";
+      run_migrations = true;
+      # if JWK caching is not enabled the token server must verify tokens
+      # using the fxa api, on a thread pool with a static size.
+      additional_blocking_threads_for_fxa_requests = 10;
+    }
+    // lib.optionalAttrs cfg.singleNode.enable {
+      # Single-node mode is likely to be used on small instances with little
+      # capacity. The default value (0.1) can only ever release capacity when
+      # accounts are removed if the total capacity is 10 or larger to begin
+      # with.
+      # https://github.com/mozilla-services/syncstorage-rs/issues/1313#issuecomment-1145293375
+      node_capacity_release_rate = 1;
+    };
   };
   configFile = format.generate "syncstorage.toml" (lib.recursiveUpdate settings cfg.settings);
   setupScript = pkgs.writeShellScript "firefox-syncserver-setup" ''
@@ -102,14 +101,7 @@ in
         {option}`${opt.singleNode.enable}` does this automatically when enabled
       '';
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.syncstorage-rs;
-        defaultText = lib.literalExpression "pkgs.syncstorage-rs";
-        description = ''
-          Package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "syncstorage-rs" { };
 
       database.name = lib.mkOption {
         # the mysql module does not allow `-quoting without resorting to shell

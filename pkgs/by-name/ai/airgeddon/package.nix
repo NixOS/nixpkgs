@@ -58,70 +58,69 @@
   supportX11 ? false, # Allow using xterm instead of tmux, hard to test
 }:
 let
-  deps =
-    [
-      aircrack-ng
-      bash
-      coreutils-full
-      curl
-      gawk
-      glibc
-      gnugrep
-      gnused
-      iproute2
-      iw
-      networkmanager
-      ncurses
-      pciutils
-      procps
-      tmux
-      usbutils
-      wget
-      ethtool
-      util-linux
-      ccze
-      systemd
-    ]
-    ++ lib.optionals supportWpaWps [
-      bully
-      pixiewps
-      reaverwps-t6x
-    ]
-    ++ lib.optionals supportHashCracking [
-      asleap
-      crunch
-      hashcat
-      hcxdumptool
-      hcxtools
-      john
-      wireshark-cli
-    ]
-    ++ lib.optionals supportEvilTwin [
-      bettercap
-      dnsmasq
-      ettercap
-      hostapd
-      lighttpd
-      openssl
-      mdk4
-      nftables
-      apparmor-bin-utils
-    ]
-    ++ lib.optionals supportX11 [
-      xterm
-      xorg.xset
-      xorg.xdpyinfo
-    ];
+  deps = [
+    aircrack-ng
+    bash
+    coreutils-full
+    curl
+    gawk
+    glibc
+    gnugrep
+    gnused
+    iproute2
+    iw
+    networkmanager
+    ncurses
+    pciutils
+    procps
+    tmux
+    usbutils
+    wget
+    ethtool
+    util-linux
+    ccze
+    systemd
+  ]
+  ++ lib.optionals supportWpaWps [
+    bully
+    pixiewps
+    reaverwps-t6x
+  ]
+  ++ lib.optionals supportHashCracking [
+    asleap
+    crunch
+    hashcat
+    hcxdumptool
+    hcxtools
+    john
+    wireshark-cli
+  ]
+  ++ lib.optionals supportEvilTwin [
+    bettercap
+    dnsmasq
+    ettercap
+    hostapd
+    lighttpd
+    openssl
+    mdk4
+    nftables
+    apparmor-bin-utils
+  ]
+  ++ lib.optionals supportX11 [
+    xterm
+    xorg.xset
+    xorg.xdpyinfo
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "airgeddon";
-  version = "11.50";
+  version = "11.52";
 
   src = fetchFromGitHub {
     owner = "v1s1t0r1sh3r3";
     repo = "airgeddon";
     tag = "v${version}";
-    hash = "sha256-hy6q25hWGEFlih0IuwoqDRjbUk1/iShj6uY+mz6hlFU=";
+    hash = "sha256-FQB348wOXi89CnjS32cwZwTewjkguTbhK5Izvh/74Q0=";
   };
 
   strictDeps = true;
@@ -168,7 +167,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/v1s1t0r1sh3r3/airgeddon";
     changelog = "https://github.com/v1s1t0r1sh3r3/airgeddon/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

@@ -9,15 +9,15 @@
 
 buildLua {
   pname = "mpv_sponsorblock_minimal";
-  version = "0-unstable-2023-08-20";
+  version = "0-unstable-2025-09-09";
   scriptPath = "sponsorblock_minimal.lua";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "jouni";
     repo = "mpv_sponsorblock_minimal";
-    rev = "ca2844b8cf7674bfccd282d389a50427742251d3";
-    hash = "sha256-28HWZ6nOhKiE+5Ya1N3Vscd8aeH9OKS0t72e/xPfFQQ=";
+    rev = "fc0db1fbffc873ca02ced7602274393fde8857e5";
+    hash = "sha256-DOgJ1gZybfIFJQ5qt4B93ugHz1o+RJ7E8Cnb7itYfTs=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

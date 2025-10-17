@@ -9,18 +9,18 @@
   libpthreadstubs,
   withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
   libpciaccess,
-  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
   valgrind-light,
   gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.124";
+  version = "2.4.125";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-rDYpP2HKSq+vSxaip6//MSqk9cN8n715fenjwIY8o3k=";
+    hash = "sha256-1LrpJ5elD4GpNSR2LgQQpJzYTPoPmXeVvAFyrI+x2Wo=";
   };
 
   outputs = [
@@ -35,25 +35,25 @@ stdenv.mkDerivation rec {
     ninja
     docutils
   ];
-  buildInputs =
-    [ libpthreadstubs ]
-    ++ lib.optional withIntel libpciaccess
-    ++ lib.optional withValgrind valgrind-light;
+  buildInputs = [
+    libpthreadstubs
+  ]
+  ++ lib.optional withIntel libpciaccess
+  ++ lib.optional withValgrind valgrind-light;
 
-  mesonFlags =
-    [
-      "-Dinstall-test-programs=true"
-      "-Dcairo-tests=disabled"
-      (lib.mesonEnable "intel" withIntel)
-      (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
-      (lib.mesonEnable "valgrind" withValgrind)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch [
-      "-Dtegra=enabled"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Detnaviv=disabled"
-    ];
+  mesonFlags = [
+    "-Dinstall-test-programs=true"
+    "-Dcairo-tests=disabled"
+    (lib.mesonEnable "intel" withIntel)
+    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+    (lib.mesonEnable "valgrind" withValgrind)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch [
+    "-Dtegra=enabled"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Detnaviv=disabled"
+  ];
 
   passthru = {
     updateScript = gitUpdater {
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

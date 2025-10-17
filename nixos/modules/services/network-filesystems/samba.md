@@ -7,9 +7,7 @@
 A minimal configuration looks like this:
 
 ```nix
-{
-  services.samba.enable = true;
-}
+{ services.samba.enable = true; }
 ```
 
 This configuration automatically enables `smbd`, `nmbd` and `winbindd` services by default.

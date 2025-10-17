@@ -8,7 +8,7 @@ from typing import Any, ClassVar, Self, TypedDict, override
 
 from .process import Remote, run_wrapper
 
-type ImageVariants = list[str]
+type ImageVariants = dict[str, str]
 
 
 class NixOSRebuildError(Exception):
@@ -61,46 +61,7 @@ class BuildAttr:
         return cls(Path(file or "default.nix"), attr)
 
 
-def discover_git(location: Path) -> Path | None:
-    """
-    Discover the current git repository in the given location.
-    """
-    current = location.resolve()
-    previous = None
-
-    while current.is_dir() and current != previous:
-        dotgit = current / ".git"
-        if dotgit.is_dir():
-            return current
-        elif dotgit.is_file():  # this is a worktree
-            with dotgit.open() as f:
-                dotgit_content = f.read().strip()
-                if dotgit_content.startswith("gitdir: "):
-                    return Path(dotgit_content.split("gitdir: ")[1])
-        previous = current
-        current = current.parent
-
-    return None
-
-
-def discover_closest_flake(location: Path) -> Path | None:
-    """
-    Discover the closest flake.nix file starting from the given location upwards.
-    """
-    current = location.resolve()
-    previous = None
-
-    while current.is_dir() and current != previous:
-        flake_file = current / "flake.nix"
-        if flake_file.is_file():
-            return current
-        previous = current
-        current = current.parent
-
-    return None
-
-
-def get_hostname(target_host: Remote | None) -> str | None:
+def _get_hostname(target_host: Remote | None) -> str | None:
     if target_host:
         try:
             return run_wrapper(
@@ -116,7 +77,7 @@ def get_hostname(target_host: Remote | None) -> str | None:
 
 @dataclass(frozen=True)
 class Flake:
-    path: Path | str
+    path: str
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
 
@@ -133,25 +94,10 @@ class Flake:
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
         nixos_attr = (
-            f'nixosConfigurations."{attr or get_hostname(target_host) or "default"}"'
+            f'nixosConfigurations."{attr or _get_hostname(target_host) or "default"}"'
         )
-        path_str = m.group("path")
-        if ":" in path_str:
-            return cls(path_str, nixos_attr)
-        else:
-            path = Path(path_str)
-            git_repo = discover_git(path)
-            if git_repo is not None:
-                url = f"git+file://{git_repo}"
-                flake_path = discover_closest_flake(path)
-                if (
-                    flake_path is not None
-                    and flake_path != git_repo
-                    and flake_path.is_relative_to(git_repo)
-                ):
-                    url += f"?dir={flake_path.relative_to(git_repo)}"
-                return cls(url, nixos_attr)
-            return cls(path, nixos_attr)
+        path = m.group("path")
+        return cls(path, nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:  # noqa: ANN401
@@ -171,6 +117,12 @@ class Flake:
                     return cls.parse(str(default_path.parent), target_host)
                 else:
                     return None
+
+    def resolve_path_if_exists(self) -> str:
+        try:
+            return str(Path(self.path).resolve(strict=True))
+        except FileNotFoundError:
+            return self.path
 
 
 @dataclass(frozen=True)

@@ -62,21 +62,20 @@ stdenv.mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qtserialport
-      qt5compat
-      boost
-      libgit2
-      quazip
-      libngspice
-      clipper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtserialport
+    qt5compat
+    boost
+    libgit2
+    quazip
+    libngspice
+    clipper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
   postPatch = ''
     # Use packaged quazip, libgit and ngspice

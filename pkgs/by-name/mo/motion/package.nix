@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "motion";
-  version = "4.7.0";
+  version = "4.7.1";
 
   src = fetchFromGitHub {
     owner = "Motion-Project";
     repo = "motion";
     rev = "release-${version}";
-    sha256 = "sha256-bGjiO14a7xKRgoeo5JlexXlKggE+agRMmQViBXagmt8=";
+    sha256 = "sha256-NAzVFWWbys+jYYOifCOOoucAKfa19njIzXBQbtgGX9M=";
   };
 
   nativeBuildInputs = [

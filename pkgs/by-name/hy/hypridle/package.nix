@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
@@ -16,15 +16,15 @@
   nix-update-script,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hypridle";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hypridle";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-uChAGmceKS9F9jqs1xb58BLTVZLF+sFU00MWDEVfYLg=";
+    hash = "sha256-YzRWE3rCnsY0WDRJcn4KvyWUoe+5zdkUYNIaHGP9BZ4=";
   };
 
   nativeBuildInputs = [
@@ -53,9 +53,6 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's idle daemon";
     homepage = "https://github.com/hyprwm/hypridle";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [
-      iogamaster
-    ];
     teams = [ lib.teams.hyprland ];
     mainProgram = "hypridle";
     platforms = [

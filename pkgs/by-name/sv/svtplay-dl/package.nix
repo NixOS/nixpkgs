@@ -22,7 +22,7 @@ let
     requests-mock
     ;
 
-  version = "4.113";
+  version = "4.137";
 
 in
 
@@ -35,7 +35,7 @@ buildPythonApplication {
     owner = "spaam";
     repo = "svtplay-dl";
     rev = version;
-    hash = "sha256-Yiw76PDnOpK4HAnO9VqmvmqdT4PdxAgu1MwbZ15pEyM=";
+    hash = "sha256-KBX2YfDyEu9nwlaZlOw+4FKy+hhLncVr8xhXn7XhvAU=";
   };
 
   build-system = [ setuptools ];
@@ -59,8 +59,11 @@ buildPythonApplication {
     requests-mock
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--doctest-modules"
+  ];
+
+  enabledTestPaths = [
     "lib"
   ];
 

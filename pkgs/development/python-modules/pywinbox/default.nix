@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -7,6 +8,8 @@
   ewmhlib,
   xlib,
   typing-extensions,
+  pyobjc-core,
+  pyobjc-framework-Cocoa,
 }:
 
 buildPythonPackage rec {
@@ -27,6 +30,10 @@ buildPythonPackage rec {
     ewmhlib
     xlib
     typing-extensions
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-Cocoa
   ];
 
   # requires x session (use ewmhlib)

@@ -17,15 +17,14 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      which
-    ]
-    ++ (with ocamlPackages; [
-      findlib
-      ocaml
-    ]);
+  nativeBuildInputs = [
+    autoreconfHook
+    which
+  ]
+  ++ (with ocamlPackages; [
+    findlib
+    ocaml
+  ]);
 
   buildInputs = with ocamlPackages; [
     functory

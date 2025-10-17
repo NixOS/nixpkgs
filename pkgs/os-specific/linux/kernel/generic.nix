@@ -11,9 +11,9 @@
   pahole,
   lib,
   stdenv,
-  rustc,
+  rustc-unwrapped,
   rustPlatform,
-  rust-bindgen,
+  rust-bindgen-unwrapped,
   # testing
   emptyFile,
   nixos,
@@ -38,8 +38,8 @@ let
       # Additional make flags passed to kbuild
       extraMakeFlags ? [ ],
 
-      # enables the options in ./common-config.nix; if `false` then only
-      # `structuredExtraConfig` is used
+      # enables the options in ./common-config.nix and lib/systems/platform.nix;
+      # if `false` then only `structuredExtraConfig` is used
       enableCommonConfig ? true
 
       , # kernel intermediate config overrides, as a set
@@ -72,6 +72,7 @@ let
       extraMeta ? { },
       extraPassthru ? { },
 
+      isLTS ? false,
       isZen ? false,
       isLibre ? false,
       isHardened ? false,
@@ -94,8 +95,6 @@ let
     # cgit) that are needed here should be included directly in Nixpkgs as
     # files.
 
-    assert stdenv.hostPlatform.isLinux;
-
     let
       # Dirty hack to make sure that `version` & `src` have
       # `<nixpkgs/pkgs/os-specific/linux/kernel/linux-x.y.nix>` as position
@@ -105,7 +104,7 @@ let
       # and pings all maintainers.
       #
       # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
-      basicArgs = builtins.removeAttrs args (
+      basicArgs = removeAttrs args (
         lib.filter (
           x:
           !(builtins.elem x [
@@ -128,7 +127,7 @@ let
 
       commonStructuredConfig = import ./common-config.nix {
         inherit lib stdenv version;
-        rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc;
+        rustAvailable = lib.meta.availableOn stdenv.hostPlatform rustc-unwrapped;
 
         features = kernelFeatures; # Ensure we know of all extra patches, etc.
       };
@@ -137,16 +136,24 @@ let
         configfile.moduleStructuredConfig.intermediateNixConfig
         # extra config in legacy string format
         + extraConfig
-        + stdenv.hostPlatform.linux-kernel.extraConfig or "";
+        # need the 'or ""' at the end in case enableCommonConfig = true and extraConfig is not present
+        + lib.optionalString enableCommonConfig stdenv.hostPlatform.linux-kernel.extraConfig or "";
 
       structuredConfigFromPatches = map (
         {
-          extraStructuredConfig ? { },
+          structuredExtraConfig ? { },
           ...
-        }:
-        {
-          settings = extraStructuredConfig;
-        }
+        }@args:
+        if args ? extraStructuredConfig then
+          throw ''
+            Passing `extraStructuredConfig` to the Linux kernel (e.g.
+            via `boot.kernelPatches` in NixOS) is not supported anymore. Use
+            `structuredExtraConfig` instead.
+          ''
+        else
+          {
+            settings = structuredExtraConfig;
+          }
       ) kernelPatches;
 
       # appends kernel patches extraConfig
@@ -182,20 +189,19 @@ let
         passAsFile = [ "kernelConfig" ];
 
         depsBuildBuild = [ buildPackages.stdenv.cc ];
-        nativeBuildInputs =
-          [
-            perl
-            gmp
-            libmpc
-            mpfr
-            bison
-            flex
-          ]
-          ++ lib.optional (lib.versionAtLeast version "5.2") pahole
-          ++ lib.optionals withRust [
-            rust-bindgen
-            rustc
-          ];
+        nativeBuildInputs = [
+          perl
+          gmp
+          libmpc
+          mpfr
+          bison
+          flex
+        ]
+        ++ lib.optional (lib.versionAtLeast version "5.2") pahole
+        ++ lib.optionals withRust [
+          rust-bindgen-unwrapped
+          rustc-unwrapped
+        ];
 
         RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
@@ -204,19 +210,20 @@ let
         kernelBaseConfig =
           if defconfig != null then defconfig else stdenv.hostPlatform.linux-kernel.baseConfig;
 
-        makeFlags =
-          lib.optionals (
-            stdenv.hostPlatform.linux-kernel ? makeFlags
-          ) stdenv.hostPlatform.linux-kernel.makeFlags
-          ++ extraMakeFlags;
+        makeFlags = import ./common-flags.nix {
+          inherit
+            lib
+            stdenv
+            buildPackages
+            extraMakeFlags
+            ;
+        };
 
-        postPatch =
-          kernel.postPatch
-          + ''
-            # Patch kconfig to print "###" after every question so that
-            # generate-config.pl from the generic builder can answer them.
-            sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
-          '';
+        postPatch = kernel.postPatch + ''
+          # Patch kconfig to print "###" after every question so that
+          # generate-config.pl from the generic builder can answer them.
+          sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
+        '';
 
         preUnpack = kernel.preUnpack or "";
 
@@ -238,6 +245,24 @@ let
             KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
             PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
             perl -w $generateConfig
+        ''
+        + lib.optionalString stdenv.cc.isClang ''
+          if ! grep -Fq CONFIG_CC_IS_CLANG=y $buildRoot/.config; then
+            echo "Kernel config didn't recognize the clang compiler?"
+            exit 1
+          fi
+        ''
+        + lib.optionalString stdenv.cc.bintools.isLLVM ''
+          if ! grep -Fq CONFIG_LD_IS_LLD=y $buildRoot/.config; then
+            echo "Kernel config didn't recognize the LLVM linker?"
+            exit 1
+          fi
+        ''
+        + lib.optionalString withRust ''
+          if ! grep -Fq CONFIG_RUST_IS_AVAILABLE=y $buildRoot/.config; then
+            echo "Kernel config didn't find Rust toolchain?"
+            exit 1
+          fi
         '';
 
         installPhase = "mv $buildRoot/.config $out";
@@ -252,23 +277,22 @@ let
           # The result is a set of two attributes
           moduleStructuredConfig =
             (lib.evalModules {
-              modules =
-                [
-                  module
-                ]
-                ++ lib.optionals enableCommonConfig [
-                  {
-                    settings = commonStructuredConfig;
-                    _file = "pkgs/os-specific/linux/kernel/common-config.nix";
-                  }
-                ]
-                ++ [
-                  {
-                    settings = structuredExtraConfig;
-                    _file = "structuredExtraConfig";
-                  }
-                ]
-                ++ structuredConfigFromPatches;
+              modules = [
+                module
+              ]
+              ++ lib.optionals enableCommonConfig [
+                {
+                  settings = commonStructuredConfig;
+                  _file = "pkgs/os-specific/linux/kernel/common-config.nix";
+                }
+              ]
+              ++ [
+                {
+                  settings = structuredExtraConfig;
+                  _file = "structuredExtraConfig";
+                }
+              ]
+              ++ structuredConfigFromPatches;
             }).config;
 
           structuredConfig = moduleStructuredConfig.settings;
@@ -310,6 +334,7 @@ let
               commonStructuredConfig
               structuredExtraConfig
               extraMakeFlags
+              isLTS
               isZen
               isHardened
               isLibre

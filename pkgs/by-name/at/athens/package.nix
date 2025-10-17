@@ -2,22 +2,22 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
-  athens,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "athens";
-  version = "0.16.0";
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner = "gomods";
     repo = "athens";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vynO6J69VTJ/CYp/W7BNzFWMLQG8PHXfS90uCCIp8rA=";
+    hash = "sha256-qF5sSpWtw1qTxfaZkQse882JjE5idP2Wk0RVsPmzIlY=";
   };
 
-  vendorHash = "sha256-XM/ft+1u4KH77uOEh6ZO2YKy7jK2UUn+w7CDZeYqjFc=";
+  vendorHash = "sha256-bn3He7ImXxrl+Or2pqzVpM8VxbfqDDupwtZbdSMd4HI=";
 
   env.CGO_ENABLED = "0";
   ldflags = [
@@ -31,9 +31,10 @@ buildGoModule (finalAttrs: {
     mv $out/bin/proxy $out/bin/athens
   '';
 
-  passthru = {
-    tests.version = testers.testVersion { package = athens; };
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Go module datastore and proxy";

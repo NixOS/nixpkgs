@@ -369,7 +369,8 @@ in
           RuntimeDirectoryMode = "0400";
           LoadCredential = [
             "credentials.json:${tunnel.credentialsFile}"
-          ] ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
+          ]
+          ++ (lib.optional (certFile != null) "cert.pem:${certFile}");
 
           ExecStart = "${cfg.package}/bin/cloudflared tunnel --config=${mkConfigFile} --no-autoupdate run";
           Restart = "on-failure";

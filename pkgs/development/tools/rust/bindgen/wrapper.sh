@@ -27,10 +27,8 @@ fi;
 if [[ -n "$NIX_DEBUG" ]]; then
   set -x;
 fi;
-export LIBCLANG_PATH="@libclang@/lib"
 # shellcheck disable=SC2086
 # cxxflags and NIX_CFLAGS_COMPILE should be word-split
 exec -a "$0" @unwrapped@/bin/bindgen "$@" $sep $cxxflags @cincludes@ $NIX_CFLAGS_COMPILE
 # note that we add the flags after $@ which is incorrect. This is only for the sake
 # of simplicity.
-

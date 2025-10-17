@@ -26,9 +26,7 @@ The default applications used in NixOS are very minimal, inspired by the default
 If you’d like to only use the GNOME desktop and not the apps, you can disable them with:
 
 ```nix
-{
-  services.gnome.core-apps.enable = false;
-}
+{ services.gnome.core-apps.enable = false; }
 ```
 
 and none of them will be installed.
@@ -55,9 +53,7 @@ Note, however, that doing so is not supported and might break some applications.
 You can install all of the GNOME games with:
 
 ```nix
-{
-  services.gnome.games.enable = true;
-}
+{ services.gnome.games.enable = true; }
 ```
 
 ### GNOME core developer tools {#sec-gnome-core-developer-tools}
@@ -65,9 +61,7 @@ You can install all of the GNOME games with:
 You can install GNOME core developer tools with:
 
 ```nix
-{
-  services.gnome.core-developer-tools.enable = true;
-}
+{ services.gnome.core-developer-tools.enable = true; }
 ```
 
 ## Enabling GNOME Flashback {#sec-gnome-enable-flashback}
@@ -75,9 +69,7 @@ You can install GNOME core developer tools with:
 GNOME Flashback provides a desktop environment based on the classic GNOME 2 architecture. You can enable the default GNOME Flashback session, which uses the Metacity window manager, with:
 
 ```nix
-{
-  services.desktopManager.gnome.flashback.enableMetacity = true;
-}
+{ services.desktopManager.gnome.flashback.enableMetacity = true; }
 ```
 
 It is also possible to create custom sessions that replace Metacity with a different window manager using [](#opt-services.desktopManager.gnome.flashback.customSessions).
@@ -121,9 +113,9 @@ You can install them like any other package:
 ```nix
 {
   environment.systemPackages = [
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.gsconnect
-    gnomeExtensions.mpris-indicator-button
+    pkgs.gnomeExtensions.dash-to-dock
+    pkgs.gnomeExtensions.gsconnect
+    pkgs.gnomeExtensions.mpris-indicator-button
   ];
 }
 ```

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://cbftp.eu/";
-    description = " An advanced multi-purpose FTP/FXP client";
+    description = "Advanced multi-purpose FTP/FXP client";
     longDescription = ''
       Cbftp is an advanced multi-purpose FTP/FXP client that focuses on
       efficient large-scale data spreading, while also supporting most regular
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       semi-graphical user interface through ncurses.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

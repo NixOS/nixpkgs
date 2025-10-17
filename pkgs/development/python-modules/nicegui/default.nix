@@ -1,64 +1,58 @@
 {
   lib,
-  buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  poetry-core,
-  setuptools,
-
-  # dependencies
   aiofiles,
   aiohttp,
+  buildPythonPackage,
   certifi,
   docutils,
   fastapi,
+  fetchFromGitHub,
   httpx,
   ifaddr,
   itsdangerous,
   jinja2,
+  libsass,
   markdown2,
+  matplotlib,
   orjson,
+  pandas,
+  pkgs,
+  plotly,
+  poetry-core,
+  polars,
+  pyecharts,
   pygments,
+  pytest-asyncio,
+  pytest-selenium,
+  pytestCheckHook,
   python-multipart,
   python-socketio,
+  pywebview,
+  redis,
   requests,
+  setuptools,
   typing-extensions,
   urllib3,
   uvicorn,
   vbuild,
   watchfiles,
-
-  # optional-dependencies
-  matplotlib,
-  pywebview,
-  plotly,
-  libsass,
-  redis,
-
-  # tests
-  pandas,
-  pkgs,
-  polars,
-  pyecharts,
-  pytest-asyncio,
-  pytest-selenium,
-  pytestCheckHook,
   webdriver-manager,
   writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "nicegui";
-  version = "2.15.0";
+  version = "3.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zauberzeug";
     repo = "nicegui";
     tag = "v${version}";
-    hash = "sha256-pwR+9QBCIMZXFK9n8GRESl9UFsh7zcgOxTngdgdyMuc=";
+    hash = "sha256-tD12XUyIk2lSJwEN78EWmI2pHvpriycMvQ/v8Aphods=";
   };
+
+  pythonRelaxDeps = [ "requests" ];
 
   build-system = [
     poetry-core
@@ -108,7 +102,8 @@ buildPythonPackage rec {
     pytestCheckHook
     webdriver-manager
     writableTmpDirAsHomeHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "nicegui" ];
 

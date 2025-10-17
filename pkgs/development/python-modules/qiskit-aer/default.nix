@@ -29,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-aer";
-  version = "0.16.0.1";
+  version = "0.17.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = "qiskit-aer";
     tag = version;
-    hash = "sha256-YF5X//X0fvJyALEB4gqsKRNWSoEsOrZFLVQUgHOA+0A=";
+    hash = "sha256-jvapuARJUHgAKFUzGb5MUft01LNefVIXtStJqFnCo90=";
   };
 
   postPatch = ''
@@ -127,7 +127,7 @@ buildPythonPackage rec {
     testtools
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--timeout=30"
     "--durations=10"
   ];
@@ -151,6 +151,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-aer/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

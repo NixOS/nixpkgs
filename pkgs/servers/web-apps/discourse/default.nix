@@ -8,16 +8,16 @@
   fetchFromGitHub,
   bundlerEnv,
   callPackage,
+  nixosTests,
 
   ruby_3_3,
-  replace,
   gzip,
   gnutar,
   git,
   cacert,
   util-linux,
   gawk,
-  nettools,
+  net-tools,
   imagemagick,
   optipng,
   pngquant,
@@ -35,7 +35,7 @@
   rsync,
   icu,
   pnpm_9,
-  nodePackages,
+  svgo,
   nodejs,
   jq,
   moreutils,
@@ -43,16 +43,16 @@
   uglify-js,
 
   plugins ? [ ],
-}@args:
+}:
 
 let
-  version = "3.4.4";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "discourse";
     repo = "discourse";
     rev = "v${version}";
-    sha256 = "sha256-rA42fOhSJVrNPcFSB2+On7JVeZch8t2yNo+36UK+QcA=";
+    sha256 = "sha256-vidv5aa2r1YOcnvkqrk7ttuIk1bN5Ct7kMANl8kpEm0=";
   };
 
   ruby = ruby_3_3;
@@ -72,7 +72,7 @@ let
     procps # For ps and kill
     util-linux # For renice
     gawk
-    nettools # For hostname
+    net-tools # For hostname
 
     # Image optimization
     imagemagick
@@ -82,7 +82,7 @@ let
     libjpeg
     jpegoptim
     gifsicle
-    nodePackages.svgo
+    svgo
     jhead
   ];
 
@@ -117,35 +117,34 @@ let
       );
     in
     stdenv.mkDerivation (
-      builtins.removeAttrs args [ "bundlerEnvArgs" ]
+      removeAttrs args [ "bundlerEnvArgs" ]
       // {
         pluginName = if name != null then name else "${pname}-${version}";
         dontConfigure = true;
         dontBuild = true;
-        installPhase =
-          ''
-            runHook preInstall
-            mkdir -p $out
-            cp -r * $out/
-          ''
-          + lib.optionalString (bundlerEnvArgs != { }) (
-            if preserveGemsDir then
-              ''
-                cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
-              ''
-            else
-              ''
-                if [[ -e $out/gems ]]; then
-                  echo "Warning: The repo contains a 'gems' directory which will be removed!"
-                  echo "         If you need to preserve it, set 'preserveGemsDir = true'."
-                  rm -r $out/gems
-                fi
-                ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
-              ''
-              + ''
-                runHook postInstall
-              ''
-          );
+        installPhase = ''
+          runHook preInstall
+          mkdir -p $out
+          cp -r * $out/
+        ''
+        + lib.optionalString (bundlerEnvArgs != { }) (
+          if preserveGemsDir then
+            ''
+              cp -r ${rubyEnv}/lib/ruby/gems/* $out/gems/
+            ''
+          else
+            ''
+              if [[ -e $out/gems ]]; then
+                echo "Warning: The repo contains a 'gems' directory which will be removed!"
+                echo "         If you need to preserve it, set 'preserveGemsDir = true'."
+                rm -r $out/gems
+              fi
+              ln -sf ${rubyEnv}/lib/ruby/gems $out/gems
+            ''
+            + ''
+              runHook postInstall
+            ''
+        );
       }
     );
 
@@ -233,6 +232,7 @@ let
     pnpmDeps = pnpm_9.fetchDeps {
       pname = "discourse-assets";
       inherit version src;
+      fetcherVersion = 1;
       hash = "sha256-WyRBnuKCl5NJLtqy3HK/sJcrpMkh0PjbasGPNDV6+7Y=";
     };
 
@@ -433,19 +433,19 @@ let
       enabledPlugins = plugins;
       plugins = callPackage ./plugins/all-plugins.nix { inherit mkDiscoursePlugin; };
       ruby = rubyEnv.wrappedRuby;
-      tests = import ../../../../nixos/tests/discourse.nix {
-        inherit (stdenv) system;
-        inherit pkgs;
-        package = pkgs.discourse.override args;
+      tests = {
+        inherit (nixosTests)
+          discourse
+          discourseAllPlugins
+          ;
       };
     };
-
     meta = with lib; {
       homepage = "https://www.discourse.org/";
       platforms = platforms.linux;
       maintainers = with maintainers; [ talyz ];
       license = licenses.gpl2Plus;
-      description = "Discourse is an open source discussion platform";
+      description = "Open source discussion platform";
     };
   };
 in

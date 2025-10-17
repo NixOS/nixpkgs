@@ -25,7 +25,7 @@
   doxygen,
   opencl-headers,
   ncurses,
-  msgpack,
+  msgpack-c,
   fftw,
   zeromq,
   ocl-icd,
@@ -140,7 +140,7 @@ let
     pname = "pinkindexer";
     version = "15caa21191e27e989b750b29566e4379bc5cd21a";
     src = fetchurl {
-      url = "https://gitlab.desy.de/thomas.white/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
+      url = "https://gitlab.desy.de/thomas.white/pinkindexer/-/archive/${version}/pinkindexer-${version}.tar.gz";
       hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
     };
 
@@ -168,12 +168,12 @@ let
     buildInputs = [ eigen ];
   };
 
-  hdf5-external-filter-plugins = stdenv.mkDerivation rec {
+  hdf5-external-filter-plugins = stdenv.mkDerivation {
     pname = "HDF5-External-Filter-Plugins";
     version = "0.1.0";
     src = fetchFromGitHub {
       owner = "nexusformat";
-      repo = pname;
+      repo = "HDF5-External-Filter-Plugins";
       rev = "49e3b65eca772bca77af13ba047d8b577673afba";
       hash = "sha256-bEzfWdZuHmb0PDzCqy8Dey4tLtq+4coO0sT0GzqrTYI=";
     };
@@ -229,31 +229,31 @@ stdenv.mkDerivation rec {
     doxygen
     opencl-headers
     makeWrapper
-  ] ++ lib.optionals withGui [ wrapGAppsHook3 ];
-  buildInputs =
-    [
-      hdf5
-      gsl
-      ncurses
-      msgpack
-      fftw
-      fdip
-      zeromq
-      ocl-icd
-      libccp4
-      mosflm
-      pinkIndexer
-      xgandalf
-      pandoc
-    ]
-    ++ lib.optionals withGui [
-      gtk3
-      gdk-pixbuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      argp-standalone
-    ]
-    ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
+  ]
+  ++ lib.optionals withGui [ wrapGAppsHook3 ];
+  buildInputs = [
+    hdf5
+    gsl
+    ncurses
+    msgpack-c
+    fftw
+    fdip
+    zeromq
+    ocl-icd
+    libccp4
+    mosflm
+    pinkIndexer
+    xgandalf
+    pandoc
+  ]
+  ++ lib.optionals withGui [
+    gtk3
+    gdk-pixbuf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ]
+  ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
   patches = [
     # on darwin at least, we need to link to a separate argp library;

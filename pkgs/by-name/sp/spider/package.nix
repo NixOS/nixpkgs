@@ -14,17 +14,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "spider";
-  version = "2.37.120";
+  version = "2.37.159";
 
   src = fetchFromGitHub {
     owner = "spider-rs";
     repo = "spider";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Aa041j8BHJ6s+R5zy8LYBo7rVKY9Xp2L9q4GdPS5Bo4=";
+    hash = "sha256-5e6PK+PQnIEm7qpJGW8kmO6GugQMU3phWIsqFSGIj48=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Xnd4vqs8GwIlmC6HYZtC7xehF6HNkjs35QocCIZmQe8=";
+  cargoHash = "sha256-ffT8SQh6CjIqxMSGahGSiUha1e8wwUbbC3eTEUMx14s=";
 
   nativeBuildInputs = [
     pkg-config
@@ -43,28 +42,27 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ZSTD_SYS_USE_PKG_CONFIG = true;
   };
 
-  checkFlags =
-    [
-      # Sandbox limitation: no network or io_uring
-      "--skip=website::crawl"
-      "--skip=website::scrape"
-      "--skip=website::test_crawl_subdomains"
-      "--skip=website::test_crawl_tld"
-      "--skip=website::test_respect_robots_txt"
-      "--skip=page::parse_links"
-      "--skip=page::test_status_code"
-      "--skip=pdl_is_fresh"
-      "--skip=verify_revision_available"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Sandbox limitation: attempted to create a NULL object
-      "--skip=website::test_link_duplicates"
-      "--skip=website::not_crawl_blacklist"
-      "--skip=website::test_crawl_budget"
-      "--skip=website::test_crawl_subscription"
-      "--skip=website::Website::subscribe_guard"
-      "--skip=website::Website::subscribe"
-    ];
+  checkFlags = [
+    # Sandbox limitation: no network or io_uring
+    "--skip=website::crawl"
+    "--skip=website::scrape"
+    "--skip=website::test_crawl_subdomains"
+    "--skip=website::test_crawl_tld"
+    "--skip=website::test_respect_robots_txt"
+    "--skip=page::parse_links"
+    "--skip=page::test_status_code"
+    "--skip=pdl_is_fresh"
+    "--skip=verify_revision_available"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Sandbox limitation: attempted to create a NULL object
+    "--skip=website::test_link_duplicates"
+    "--skip=website::not_crawl_blacklist"
+    "--skip=website::test_crawl_budget"
+    "--skip=website::test_crawl_subscription"
+    "--skip=website::Website::subscribe_guard"
+    "--skip=website::Website::subscribe"
+  ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];

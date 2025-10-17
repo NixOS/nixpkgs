@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "fitdecode";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "polyvertex";
     repo = "fitdecode";
     tag = "v${version}";
-    hash = "sha256-pW1PgJGqFL2reOYYfpGnQ4WoYFKGMNY8iQJzyHYOly8=";
+    hash = "sha256-3NoJHPql5mVQ+h2InM8tp7LIuR2znJyaawISarr688Q=";
   };
 
   build-system = [

@@ -7,11 +7,9 @@
   build,
   ruff,
   dill,
-  fastapi,
   granian,
   hatchling,
   httpx,
-  jinja2,
   numpy,
   packaging,
   pandas,
@@ -32,6 +30,7 @@
   rich,
   sqlmodel,
   starlette-admin,
+  stdenv,
   typer,
   typing-extensions,
   unzip,
@@ -43,14 +42,14 @@
 
 buildPythonPackage rec {
   pname = "reflex";
-  version = "0.7.14";
+  version = "0.8.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "reflex-dev";
     repo = "reflex";
     tag = "v${version}";
-    hash = "sha256-yuVBQYP0YlvAIWF/+oSfCLbfj1GLtnYajU3WoolyTjY=";
+    hash = "sha256-w3qikUqo61UBJHVjbzeNCf97AZyBHLI+PkkXrVQBNAk=";
   };
 
   # 'rich' is also somehow checked when building the wheel,
@@ -59,9 +58,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     # needed
+    "click"
+    "starlette"
     "rich"
-    # preventative
-    "fastapi"
   ];
 
   build-system = [ hatchling ];
@@ -70,11 +69,9 @@ buildPythonPackage rec {
     alembic
     build # used in custom_components/custom_components.py
     dill # used in state.py
-    fastapi
     granian
     granian.optional-dependencies.reload
     httpx
-    jinja2
     packaging # used in utils/prerequisites.py
     platformdirs
     psutil
@@ -125,6 +122,15 @@ buildPythonPackage rec {
     "test_state_with_invalid_yield"
     # tries to run bun or npm
     "test_output_system_info"
+    # Comparison with magic string
+    "test_background_task_no_block"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 1] Operation not permitted (fails in sandbox)
+    "test_is_process_on_port_free_port"
+    "test_is_process_on_port_occupied_port"
+    "test_is_process_on_port_both_protocols"
+    "test_is_process_on_port_concurrent_access"
   ];
 
   disabledTestPaths = [

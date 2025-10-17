@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
+    fetcherVersion = 1;
     hash = "sha256-57KDZ9cHb7uqnypC0auIltmYMmIhs4PWyf0HTRWEFiU=";
   };
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
 
     # remove devDependencies that are only required to build
     #  and package the typescript code
-    pnpm prune --prod
+    CI=true pnpm prune --prod
 
     # Clean up broken symlinks left behind by `pnpm prune`
     # https://github.com/pnpm/pnpm/issues/3645

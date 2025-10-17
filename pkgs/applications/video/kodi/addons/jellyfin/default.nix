@@ -17,13 +17,13 @@ in
 buildKodiAddon rec {
   pname = "jellyfin";
   namespace = "plugin.video.jellyfin";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin-kodi";
     rev = "v${version}";
-    sha256 = "sha256-7PgE1KrKmSBWzzi6tZp1Pou/82P1mPX8iE/IQlBi1Cc=";
+    sha256 = "sha256-5CJenvNmyNwrlNfF4jPap99oj21T96TeExbod8+KKTA=";
   };
 
   nativeBuildInputs = [ python ];

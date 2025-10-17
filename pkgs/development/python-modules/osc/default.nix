@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "osc";
-  version = "1.9.1";
+  version = "1.21.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "osc";
     rev = version;
-    hash = "sha256-03EDarU7rmsiE96IYHXFuPtD8nWur0qwj8NDzSj8OX0=";
+    hash = "sha256-VNDDb67zWkY1RDEjCgB29sVhtVZtY3KMB1T8N2d+xGQ=";
   };
 
   buildInputs = [ bashInteractive ]; # needed for bash-completion helper
@@ -49,7 +49,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://github.com/openSUSE/osc";
-    description = "opensuse-commander with svn like handling";
+    description = "Opensuse-commander with svn like handling";
     mainProgram = "osc";
     maintainers = with maintainers; [
       peti

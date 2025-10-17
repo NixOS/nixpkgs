@@ -241,6 +241,8 @@ class Machine:
     # Store last serial console lines for use
     # of wait_for_console_text
     last_lines: Queue = Queue()
+    # Store all console output for full log retrieval
+    full_console_log: list[str]
     callbacks: list[Callable]
 
     def __repr__(self) -> str:
@@ -263,6 +265,7 @@ class Machine:
         self.start_command = start_command
         self.callbacks = callbacks if callbacks is not None else []
         self.logger = logger
+        self.full_console_log = []
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -819,9 +822,8 @@ class Machine:
 
             while True:
                 chunk = self.shell.recv(1024)
-                # No need to print empty strings, it means we are waiting.
                 if len(chunk) == 0:
-                    continue
+                    raise RuntimeError("Shell disconnected")
                 self.log(f"Guest shell says: {chunk!r}")
                 # NOTE: for this to work, nothing must be printed after this line!
                 if b"Spawning backdoor root shell..." in chunk:
@@ -996,6 +998,8 @@ class Machine:
         Wait until the supplied regular expressions match a line of the
         serial console output.
         This method is useful when OCR is not possible or inaccurate.
+
+        When this method returns, the console output that includes the match has already become part of get_console_log().
         """
         # Buffer the console output, this is needed
         # to match multiline regexes.
@@ -1019,6 +1023,13 @@ class Machine:
             else:
                 while not console_matches(False):
                     pass
+
+    def get_console_log(self) -> str:
+        """
+        Get the full console output from the machine since boot.
+        Returns all serial console output as a single string.
+        """
+        return "\n".join(self.full_console_log)
 
     def send_key(
         self, key: str, delay: float | None = 0.01, log: bool | None = True
@@ -1086,6 +1097,8 @@ class Machine:
         # Store last serial console lines for use
         # of wait_for_console_text
         self.last_lines: Queue = Queue()
+        # Re-initialize (if this is not the first start)
+        self.full_console_log: list[str] = []
 
         def process_serial_output() -> None:
             assert self.process
@@ -1093,6 +1106,8 @@ class Machine:
             for _line in self.process.stdout:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()
+                self.full_console_log.append(line)
+                # Put on queue after adding to full_console_log to guarantee ordering
                 self.last_lines.put(line)
                 self.log_serial(line)
 

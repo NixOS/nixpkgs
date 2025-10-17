@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-JFvC9V0xS8SZSdLsOtpyTrFzXjYAOaPQaJHdcnJzK3s=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd hyprkeys \
       --bash <($out/bin/hyprkeys completion bash) \
       --fish <($out/bin/hyprkeys completion fish) \

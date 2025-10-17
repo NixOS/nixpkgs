@@ -29,7 +29,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "fablabnbg";
-    repo = pname;
+    repo = "inkscape-silhouette";
     tag = "v${version}";
     sha256 = "sha256-MfR88BuaAx6n5XRIjslpIk4PnDf6TLU9AsmHxKkcFS0=";
   };
@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     umockdev
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "test"
   ];
 

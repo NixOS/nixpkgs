@@ -1,10 +1,102 @@
-{ callPackage, ... }@args:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  cctools,
+  ninja,
+  python3,
 
-callPackage ./generic.nix args {
   # Note: Please use the recommended version for Chromium stable, i.e. from
   # <nixpkgs>/pkgs/applications/networking/browsers/chromium/info.json
-  rev = "85cc21e94af590a267c1c7a47020d9b420f8a033";
-  revNum = "2233"; # git describe $rev --match initial-commit | cut -d- -f3
-  version = "2025-04-28";
-  sha256 = "sha256-+nKP2hBUKIqdNfDz1vGggXSdCuttOt0GwyGUQ3Z1ZHI=";
+  version ?
+    # This is a workaround for update-source-version to be able to update this
+    let
+      _version = "0-unstable-2025-07-29";
+    in
+    _version,
+  rev ? "3a4f5cea73eca32e9586e8145f97b04cbd4a1aee",
+  hash ? "sha256-Z7bTto8BHnJzjvmKmcVAZ0/BrXimcAETV6YGKNTorQw=",
+}:
+
+stdenv.mkDerivation {
+  pname = "gn";
+  inherit version;
+
+  src = fetchgit {
+    url = "https://gn.googlesource.com/gn";
+    inherit rev hash;
+    leaveDotGit = true;
+    deepClone = true;
+    postFetch = ''
+      cd "$out"
+      mkdir .nix-files
+      git rev-parse --short=12 HEAD > .nix-files/REV_SHORT
+      git describe --match initial-commit | cut -d- -f3 > .nix-files/REV_NUM
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
+  };
+
+  nativeBuildInputs = [
+    ninja
+    python3
+  ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
+  # Relax hardening as otherwise gn unstable 2024-06-06 and later fail with:
+  # cc1plus: error: '-Wformat-security' ignored without '-Wformat' [-Werror=format-security]
+  hardeningDisable = [ "format" ];
+
+  configurePhase = ''
+    runHook preConfigure
+
+    python build/gen.py --no-last-commit-position
+    cat > out/last_commit_position.h << EOF
+    #ifndef OUT_LAST_COMMIT_POSITION_H_
+    #define OUT_LAST_COMMIT_POSITION_H_
+
+    #define LAST_COMMIT_POSITION_NUM $(<.nix-files/REV_NUM)
+    #define LAST_COMMIT_POSITION "$(<.nix-files/REV_NUM) ($(<.nix-files/REV_SHORT))"
+
+    #endif  // OUT_LAST_COMMIT_POSITION_H_
+    EOF
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    ninja -v -j $NIX_BUILD_CORES -C out gn
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -vD out/gn "$out/bin/gn"
+
+    runHook postInstall
+  '';
+
+  setupHook = ./setup-hook.sh;
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
+    description = "Meta-build system that generates build files for Ninja";
+    mainProgram = "gn";
+    homepage = "https://gn.googlesource.com/gn";
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
+      stesie
+      matthewbauer
+      marcin-serwin
+      emilylange
+    ];
+  };
 }

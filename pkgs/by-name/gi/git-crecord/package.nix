@@ -7,7 +7,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "git-crecord";
   version = "20230226.0";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "andrewshadura";
@@ -16,7 +16,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "sha256-zsrMAD9EU+TvkWfWl9x6WbMXuw7YEz50LxQzSFVkKdQ=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [ docutils ];
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [ docutils ];
 
   # has no tests
   doCheck = false;

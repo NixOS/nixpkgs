@@ -13,7 +13,7 @@
   pkg-config,
   python3,
   wrapGAppsHook4,
-  zint,
+  libzint,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace src/model/meson.build \
-      --replace-fail /app/lib ${lib.getLib zint}/lib
+      --replace-fail /app/lib ${lib.getLib libzint}/lib
   '';
 
   strictDeps = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtk4
     libadwaita
-    zint
+    libzint
   ];
 
   meta = with lib; {

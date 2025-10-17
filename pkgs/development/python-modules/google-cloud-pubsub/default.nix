@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-pubsub";
-  version = "2.30.0";
+  version = "2.31.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_pubsub";
     inherit version;
-    hash = "sha256-Jpde1yjSIJR59PsmZ+OzvXDedgWrrfSzAcZRw57YMEI=";
+    hash = "sha256-9CFPaS2kNa/N+0HnfPqWIjjbluSkumRjeqpxBELZxTI=";
   };
 
   build-system = [ setuptools ];
@@ -43,7 +43,8 @@ buildPythonPackage rec {
     opentelemetry-sdk
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   optional-dependencies = {
     libcst = [ libcst ];

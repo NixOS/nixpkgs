@@ -18,7 +18,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0jpElAj4TDC52BEjfnGHYiro6MT6Jzcb0evvmroxLn8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Ii9Fn6J5qpqigH7oWIfOX+JKkzQ2BNpeNg1sF+ONCrM=";
 
   nativeBuildInputs = [
@@ -39,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tarkah/tickrs";
     changelog = "https://github.com/tarkah/tickrs/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tickrs";
   };
 }

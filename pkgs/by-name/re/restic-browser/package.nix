@@ -4,50 +4,50 @@
   rustPlatform,
   fetchFromGitHub,
   fetchNpmDeps,
-  cargo-tauri_1,
+  cargo-tauri,
   nodejs,
   npmHooks,
   pkg-config,
   wrapGAppsHook3,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   dbus,
   nix-update-script,
+  restic,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "restic-browser";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "emuell";
     repo = "restic-browser";
     rev = "v${version}";
-    hash = "sha256-magf19hA5PVAZafRcQXFaAD50qGofztpiluVc2aCeOk=";
+    hash = "sha256-K8JEt1kOvu/G3S1O6W/ee2JM968bgPR/FeGaBKP6elU=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-5wSxa8jgto+v+tJHbenc2nvGlLaOBYyRrCqFyCPnncc=";
+  cargoHash = "sha256-/EgSr46mJV84s/MG/3nUnU6XQ8RtEWiWo0gFtegblEQ=";
 
   npmDeps = fetchNpmDeps {
     name = "${pname}-npm-deps-${version}";
     inherit src;
-    hash = "sha256-U82hVPfVd12vBeDT3PHexwmc9OitkuxTugYRe4Z/3eo=";
+    hash = "sha256-uyn5cXMKm7+LLuF+n94pBTypLiPvfAs5INDEtd9cHs0=";
   };
 
-  nativeBuildInputs =
-    [
-      cargo-tauri_1.hook
+  nativeBuildInputs = [
+    cargo-tauri.hook
 
-      nodejs
-      npmHooks.npmConfigHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      pkg-config
-      wrapGAppsHook3
-    ];
+    nodejs
+    npmHooks.npmConfigHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    webkitgtk_4_0
+    webkitgtk_4_1
     dbus
+    restic
   ];
 
   cargoRoot = "src-tauri";

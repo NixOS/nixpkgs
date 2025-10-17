@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";
-  version = "2.5.307";
+  version = "2.5.308";
 
   src = fetchurl {
     url = "https://github.com/Requarks/wiki/releases/download/v${version}/${pname}.tar.gz";
-    sha256 = "sha256-wElXBEVLqrK+WtsCUw1IefWBqG6d6LP0eVylPb4qXY0=";
+    sha256 = "sha256-DvMkzGET5UcnmWcBmhiFk4MictkE3LYa621QWxBu190=";
   };
 
   # Unpack the tarball into a subdir. All the contents are copied into `$out`.
@@ -44,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage = "https://js.wiki/";
     description = "Modern and powerful wiki app built on Node.js";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = [ ];
   };
 }

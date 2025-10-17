@@ -1,27 +1,32 @@
 {
   stdenv,
   lib,
+  gnused,
   apple-sdk_13,
   darwinMinVersionHook,
   rustPlatform,
+  karabiner-dk,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
+  common-updater-scripts,
+  yq,
+  curl,
+  jq,
+  writeShellApplication,
   writeShellScriptBin,
   withCmd ? false,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "kanata";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "jtroo";
     repo = "kanata";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     sha256 = "sha256-xxAIwiwCQugDXpWga9bQ9ZGfem46rwDlmf64dX/tw7g=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-LfjuQHR3vVUr2e0efVymnfCnyYkFRx7ZiNdSIjBZc5s=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
@@ -47,7 +52,26 @@ rustPlatform.buildRustPackage rec {
   ];
 
   passthru = {
-    updateScript = nix-update-script { };
+    darwinDriverVersion = "5.0.0"; # needs to be updated if karabiner-driverkit changes
+    updateScript = lib.getExe (writeShellApplication {
+      name = "update-script-kanata";
+      runtimeInputs = [
+        curl
+        gnused
+        yq
+        jq
+        common-updater-scripts
+      ];
+      text = builtins.readFile ./update.sh;
+    });
+
+    darwinDriver =
+      if stdenv.hostPlatform.isDarwin then
+        (karabiner-dk.override {
+          driver-version = finalAttrs.passthru.darwinDriverVersion;
+        })
+      else
+        null;
   };
 
   meta = with lib; {
@@ -55,10 +79,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
     maintainers = with maintainers; [
-      bmanuel
       linj
+      auscyber
     ];
     platforms = platforms.unix;
     mainProgram = "kanata";
   };
-}
+})

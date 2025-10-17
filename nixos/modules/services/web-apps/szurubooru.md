@@ -31,7 +31,7 @@ Here is a basic configuration:
 
 ## Reverse proxy configuration {#module-services-szurubooru-reverse-proxy-configuration}
 
-The prefered method to run this service is behind a reverse proxy not to expose an open port. For example, here is a minimal Nginx configuration:
+The preferred method to run this service is behind a reverse proxy not to expose an open port. For example, here is a minimal Nginx configuration:
 
 ```nix
 {
@@ -40,10 +40,10 @@ The prefered method to run this service is behind a reverse proxy not to expose 
 
     server = {
       port = 8080;
-      ...
+      # ...
     };
 
-    ...
+    # ...
   };
 
   services.nginx.virtualHosts."szurubooru.domain.tld" = {

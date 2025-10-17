@@ -8,16 +8,16 @@
 }:
 buildGoModule rec {
   pname = "conduktor-ctl";
-  version = "0.6.0";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "conduktor";
     repo = "ctl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z0D7+/mrtQhD5zrVCVqXLHJwArhXfE6R/XSjfWmr6Pg=";
+    hash = "sha256-zaguB4LLkzXlMQCEVOWkUUsEovU53F0B51w3BnVjre8=";
   };
 
-  vendorHash = "sha256-kPCBzLU6aH6MNlKZcKKFcli99ZmdOtPV5+5gxPs5GH4=";
+  vendorHash = "sha256-h9NSOkqpkZ3sKcfsPjF+T2JgX0N8CIAP6y1NVIb/r0E=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,16 +27,15 @@ buildGoModule rec {
     go test ./...
   '';
 
-  postInstall =
-    ''
-      mv $out/bin/ctl $out/bin/conduktor
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd conduktor \
-        --bash <($out/bin/conduktor completion bash) \
-        --fish <($out/bin/conduktor completion fish) \
-        --zsh <($out/bin/conduktor completion zsh)
-    '';
+  postInstall = ''
+    mv $out/bin/ctl $out/bin/conduktor
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd conduktor \
+      --bash <($out/bin/conduktor completion bash) \
+      --fish <($out/bin/conduktor completion fish) \
+      --zsh <($out/bin/conduktor completion zsh)
+  '';
 
   doInstallCheck = true;
 

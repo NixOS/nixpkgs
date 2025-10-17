@@ -266,6 +266,18 @@ in
         '';
       };
 
+      extraArgs = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
+        description = ''
+          Additional command-line arguments to pass to named.
+        '';
+        example = [
+          "-n"
+          "4"
+        ];
+      };
+
       configFile = lib.mkOption {
         type = lib.types.path;
         default = confFile;
@@ -315,7 +327,7 @@ in
 
       serviceConfig = {
         Type = "forking"; # Set type to forking, see https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=900788
-        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile}";
+        ExecStart = "${bindPkg.out}/sbin/named ${lib.optionalString cfg.ipv4Only "-4"} -c ${cfg.configFile} ${lib.concatStringsSep " " cfg.extraArgs}";
         ExecReload = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' reload";
         ExecStop = "${bindPkg.out}/sbin/rndc -k '/etc/bind/rndc.key' stop";
         User = bindUser;
@@ -324,7 +336,7 @@ in
         ConfigurationDirectory = "bind";
         ReadWritePaths = [
           (lib.mapAttrsToList (
-            name: config: if (lib.hasPrefix "/" config.file) then ("-${dirOf config.file}") else ""
+            name: config: if (lib.hasPrefix "/" config.file) then "-${dirOf config.file}" else ""
           ) cfg.zones)
           cfg.directory
         ];

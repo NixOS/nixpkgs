@@ -4,40 +4,22 @@
   fetchFromGitHub,
   nixosTests,
   nix-update-script,
-  version ? "1.15.2",
 }:
 
-let
-  # Version 1.11 is kept here as it was the last version not to support dumpless
-  # upgrades, meaning NixOS systems that have set up their data before 25.05
-  # would not be able to update to 1.12+ without manual data migration.
-  # We're planning to remove it towards NixOS 25.11. Make sure to update
-  # the meilisearch module accordingly and to remove the meilisearch_1_11
-  # attribute from all-packages.nix at that point too.
-  hashes = {
-    "1.15.2" = "sha256-aTgfgPuyRcjr/DxxyuKOFXfBcDponVmKz5PpGbnsmd0=";
-    "1.11.3" = "sha256-CVofke9tOGeDEhRHEt6EYwT52eeAYNqlEd9zPpmXQ2U=";
-  };
-  cargoHashes = {
-    "1.15.2" = "sha256-eBGxVtE25txA17zxXdlSC6Vbrm+/v1fA7iTIBDvQ71M=";
-    "1.11.3" = "sha256-cEJTokDJQuc9Le5+3ObMDNJmEhWEb+Qh0TV9xZkD9D8=";
-  };
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "meilisearch";
-  inherit version;
+  version = "1.22.1";
 
   src = fetchFromGitHub {
     owner = "meilisearch";
     repo = "meiliSearch";
-    tag = "v${version}";
-    hash = hashes.${version};
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RWHu77/GoSMzRU7KyKmu23DFwWn6RD3MUWUc5ICY1d8=";
   };
 
   cargoBuildFlags = [ "--package=meilisearch" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = cargoHashes.${version};
+  cargoHash = "sha256-xKBYumdb1vJS+UQF3yD/p+7FvWRfBKbLjOFiT7DVJ+o=";
 
   # Default features include mini dashboard which downloads something from the internet.
   buildNoDefaultFeatures = true;
@@ -58,7 +40,7 @@ rustPlatform.buildRustPackage {
     description = "Powerful, fast, and an easy to use search engine";
     mainProgram = "meilisearch";
     homepage = "https://docs.meilisearch.com/";
-    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${version}";
+    changelog = "https://github.com/meilisearch/meilisearch/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       happysalada
@@ -71,4 +53,4 @@ rustPlatform.buildRustPackage {
       "x86_64-darwin"
     ];
   };
-}
+})

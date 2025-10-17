@@ -17,31 +17,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "n8n";
-  version = "1.98.2";
+  version = "1.114.4";
 
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
     tag = "n8n@${finalAttrs.version}";
-    hash = "sha256-V+8iTaTPld3Fr+n7xpXrI7bkBiS2HZkMkYzRocssc8g=";
+    hash = "sha256-GIY8Gokbp03LJT0kBx3KR8U/4bi10WrXAzO2zuctlFY=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-WD5iLBbfXRDiGjc6h23AfOTwiEUb6cg1Q40dfHItQXc=";
+    fetcherVersion = 2;
+    hash = "sha256-Kw3t+B0+zoxhpCr5INvWrJwSBqHwFzlTCcZknFNbOg0=";
   };
 
-  nativeBuildInputs =
-    [
-      pnpm_10.configHook
-      python3 # required to build sqlite3 bindings
-      node-gyp # required to build sqlite3 bindings
-      makeWrapper
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      cctools
-      xcbuild
-    ];
+  nativeBuildInputs = [
+    pnpm_10.configHook
+    python3 # required to build sqlite3 bindings
+    node-gyp # required to build sqlite3 bindings
+    makeWrapper
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    cctools
+    xcbuild
+  ];
 
   buildInputs = [
     nodejs
@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     rm -rf node_modules/.pnpm/{typescript*,prettier*}
     shopt -s globstar
@@ -112,6 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
+      AdrienLemaire
     ];
     license = lib.licenses.sustainableUse;
     mainProgram = "n8n";

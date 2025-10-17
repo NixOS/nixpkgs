@@ -396,50 +396,49 @@ let
     name = "initrd-${kernel-name}";
     inherit (config.boot.initrd) compressor compressorArgs prepend;
 
-    contents =
-      [
-        {
-          object = bootStage1;
-          symlink = "/init";
-        }
-        {
-          object = "${modulesClosure}/lib";
-          symlink = "/lib";
-        }
-        {
-          object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
-          symlink = "/etc/modprobe.d/ubuntu.conf";
-        }
-        {
-          object = config.environment.etc."modprobe.d/nixos.conf".source;
-          symlink = "/etc/modprobe.d/nixos.conf";
-        }
-        {
-          object = pkgs.kmod-debian-aliases;
-          symlink = "/etc/modprobe.d/debian.conf";
-        }
-      ]
-      ++ lib.optionals config.services.multipath.enable [
-        {
-          object =
-            pkgs.runCommand "multipath.conf"
-              {
-                src = config.environment.etc."multipath.conf".text;
-                preferLocalBuild = true;
-              }
-              ''
-                target=$out
-                printf "$src" > $out
-                substituteInPlace $out \
-                  --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
-              '';
-          symlink = "/etc/multipath.conf";
-        }
-      ]
-      ++ (lib.mapAttrsToList (symlink: options: {
-        inherit symlink;
-        object = options.source;
-      }) config.boot.initrd.extraFiles);
+    contents = [
+      {
+        object = bootStage1;
+        symlink = "/init";
+      }
+      {
+        object = "${modulesClosure}/lib";
+        symlink = "/lib";
+      }
+      {
+        object = "${pkgs.kmod-blacklist-ubuntu}/modprobe.conf";
+        symlink = "/etc/modprobe.d/ubuntu.conf";
+      }
+      {
+        object = config.environment.etc."modprobe.d/nixos.conf".source;
+        symlink = "/etc/modprobe.d/nixos.conf";
+      }
+      {
+        object = pkgs.kmod-debian-aliases;
+        symlink = "/etc/modprobe.d/debian.conf";
+      }
+    ]
+    ++ lib.optionals config.services.multipath.enable [
+      {
+        object =
+          pkgs.runCommand "multipath.conf"
+            {
+              src = config.environment.etc."multipath.conf".text;
+              preferLocalBuild = true;
+            }
+            ''
+              target=$out
+              printf "$src" > $out
+              substituteInPlace $out \
+                --replace ${config.services.multipath.package}/lib ${extraUtils}/lib
+            '';
+        symlink = "/etc/multipath.conf";
+      }
+    ]
+    ++ (lib.mapAttrsToList (symlink: options: {
+      inherit symlink;
+      object = options.source;
+    }) config.boot.initrd.extraFiles);
   };
 
   # Script to add secret files to the initrd at bootloader update time
@@ -768,7 +767,7 @@ in
             source: builtins.isPath source || (builtins.isString source && hasPrefix builtins.storeDir source)
           ) (attrValues config.boot.initrd.secrets);
         message = ''
-          boot.loader.initrd.secrets values must be unquoted paths when
+          boot.initrd.secrets values must be unquoted paths when
           using a bootloader that doesn't natively support initrd
           secrets, e.g.:
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
 
@@ -28,7 +29,7 @@
   protobuf,
   pugixml,
   snappy,
-  tbb_2022,
+  onetbb,
   cudaPackages,
 }:
 
@@ -71,27 +72,34 @@ stdenv.mkDerivation rec {
     hash = "sha256-EtXHMOIk4hGcLiaoC0ZWYF6XZCD2qNtt1HeJoJIuuTA=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "cmake4-compat.patch";
+      url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
+      hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
+    })
+  ];
+
   outputs = [
     "out"
     "python"
   ];
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      autoPatchelfHook
-      cmake
-      git
-      libarchive
-      patchelf
-      pkg-config
-      python
-      scons'
-      shellcheck
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_nvcc
-    ];
+  nativeBuildInputs = [
+    addDriverRunpath
+    autoPatchelfHook
+    cmake
+    git
+    libarchive
+    patchelf
+    pkg-config
+    python
+    scons'
+    shellcheck
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_nvcc
+  ];
 
   postPatch = ''
     mkdir -p temp/tbbbind_${tbbbind_version}
@@ -147,22 +155,21 @@ stdenv.mkDerivation rec {
   # src/graph/src/plugins/intel_gpu/src/graph/include/reorder_inst.h:24:8: error: type 'struct typed_program_node' violates the C++ One Definition Rule [-Werror=odr]
   env.NIX_CFLAGS_COMPILE = "-Wno-odr";
 
-  buildInputs =
-    [
-      flatbuffers
-      gflags
-      level-zero
-      libusb1
-      libxml2
-      ocl-icd
-      opencv
-      pugixml
-      snappy
-      tbb_2022
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-    ];
+  buildInputs = [
+    flatbuffers
+    gflags
+    level-zero
+    libusb1
+    libxml2
+    ocl-icd
+    opencv
+    pugixml
+    snappy
+    onetbb
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cudart
+  ];
 
   enableParallelBuilding = true;
 
@@ -181,7 +188,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
-    description = "OpenVINO™ Toolkit repository";
+    description = "Open-source toolkit for optimizing and deploying AI inference";
     longDescription = ''
       This toolkit allows developers to deploy pre-trained deep learning models through a high-level C++ Inference Engine API integrated with application logic.
 
@@ -193,6 +200,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
-    maintainers = with maintainers; [ tfmoraes ];
   };
 }

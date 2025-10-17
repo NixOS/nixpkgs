@@ -25,21 +25,20 @@
     drv:
     drv.overrideAttrs (orig: {
       builder = buildPackages.bash;
-      args =
-        [
-          (replaceVars ./expect-failure.sh {
-            coreutils = buildPackages.coreutils;
-            vars = lib.toShellVars {
-              outputNames = (orig.outputs or [ "out" ]);
-            };
-          })
-          orig.realBuilder or stdenv.shell
-        ]
-        ++ orig.args or [
-          "-e"
-          ../../stdenv/generic/source-stdenv.sh
-          (orig.builder or ../../stdenv/generic/default-builder.sh)
-        ];
+      args = [
+        (replaceVars ./expect-failure.sh {
+          coreutils = buildPackages.coreutils;
+          vars = lib.toShellVars {
+            outputNames = (orig.outputs or [ "out" ]);
+          };
+        })
+        orig.realBuilder or stdenv.shell
+      ]
+      ++ orig.args or [
+        "-e"
+        ../../stdenv/generic/source-stdenv.sh
+        (orig.builder or ../../stdenv/generic/default-builder.sh)
+      ];
     });
 
   # See https://nixos.org/manual/nixpkgs/unstable/#tester-testBuildFailurePrime
@@ -57,10 +56,16 @@
       assertion,
       actual,
       expected,
+      postFailureMessage ? null,
     }:
     runCommand "equal-contents-${lib.strings.toLower assertion}"
       {
-        inherit assertion actual expected;
+        inherit
+          assertion
+          actual
+          expected
+          postFailureMessage
+          ;
         nativeBuildInputs = [ diffoscopeMinimal ];
       }
       ''
@@ -70,6 +75,10 @@
         then
           echo
           echo 'Contents must be equal, but were not!'
+          if [[ -n "''${postFailureMessage:-}" ]]; then
+            echo
+            echo "$postFailureMessage"
+          fi
           echo
           echo "+: expected,   at $expected"
           echo "-: unexpected, at $actual"
@@ -149,17 +158,16 @@
     runCommandWith {
       inherit name stdenv;
 
-      derivationArgs =
-        {
-          outputHash = hash;
-          outputHashMode = "recursive";
-        }
-        // lib.removeAttrs args [
-          "hash"
-          "name"
-          "script"
-          "stdenv"
-        ];
+      derivationArgs = {
+        outputHash = hash;
+        outputHashMode = "recursive";
+      }
+      // lib.removeAttrs args [
+        "hash"
+        "name"
+        "script"
+        "stdenv"
+      ];
     } script
   );
 
@@ -217,7 +225,7 @@
       "testers.hasPkgConfigModule has been deprecated in favor of testers.hasPkgConfigModules. It accepts a list of strings via the moduleNames argument instead of a single moduleName."
       (
         testers.hasPkgConfigModules (
-          builtins.removeAttrs args [ "moduleName" ]
+          removeAttrs args [ "moduleName" ]
           // {
             moduleNames = [ moduleName ];
           }

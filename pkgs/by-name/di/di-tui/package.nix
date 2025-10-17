@@ -6,13 +6,13 @@
 }:
 buildGoModule rec {
   pname = "di-tui";
-  version = "1.11.1";
+  version = "1.11.3";
 
   src = fetchFromGitHub {
     owner = "acaloiaro";
     repo = "di-tui";
     rev = "v${version}";
-    hash = "sha256-jX+2wdnkJPEtCWoMNbwgn3c+LsEktYa5lIfSXY0Wsew=";
+    hash = "sha256-Qd+Rwyw0aC5RGucvl3v3mHbV6dB9VHvk9/nh/glWU90=";
   };
 
   vendorHash = "sha256-b7dG0nSjPQpjWUbOlIxWudPZWKqtq96sQaJxKvsQT9I=";

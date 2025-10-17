@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A library of extensible and modular CLI prompt elements";
+    description = "Library of extensible and modular CLI prompt elements";
     homepage = "https://github.com/petereon/questo";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ doronbehar ];

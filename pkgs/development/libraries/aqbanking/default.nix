@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/${pname}-${version}.tar.gz";
+    url = "https://www.aquamaniac.de/rdm/attachments/download/${releaseId}/aqbanking-${version}.tar.gz";
     inherit hash;
   };
 

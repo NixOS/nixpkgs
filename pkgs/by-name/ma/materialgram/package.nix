@@ -11,13 +11,13 @@ telegram-desktop.override {
   unwrapped = telegram-desktop.unwrapped.overrideAttrs (
     finalAttrs: previousAttrs: {
       pname = "materialgram-unwrapped";
-      version = "5.14.3.1";
+      version = "6.2.3.1";
 
       src = fetchFromGitHub {
         owner = "kukuruzka165";
         repo = "materialgram";
-        rev = "refs/tags/v${finalAttrs.version}";
-        hash = "sha256-wnhEnhNeuY7eRvmsDnpZ2CiKHXFvgIYpZp2ftjq54/Q=";
+        hash = "sha256-wWg45n6Da/f2j3rT8PNNEN5uuX8rMzZNbHAA2wL8NLA=";
+        tag = "v${finalAttrs.version}";
         fetchSubmodules = true;
       };
 

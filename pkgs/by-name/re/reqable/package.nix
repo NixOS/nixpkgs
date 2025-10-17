@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "reqable";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 })

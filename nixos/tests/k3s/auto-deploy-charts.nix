@@ -1,4 +1,5 @@
-# Tests whether container images are imported and auto deploying Helm charts work
+# Tests whether container images are imported and auto deploying Helm charts,
+# including the bundled traefik, work
 import ../make-test-python.nix (
   {
     k3s,
@@ -64,11 +65,10 @@ import ../make-test-python.nix (
             "--disable local-storage"
             "--disable metrics-server"
             "--disable servicelb"
-            "--disable traefik"
           ];
           images = [
             # Provides the k3s Helm controller
-            k3s.airgapImages
+            k3s.airgap-images
             testImage
           ];
           autoDeployCharts = {
@@ -77,6 +77,20 @@ import ../make-test-python.nix (
             # disabled chart that should not get installed
             disabled = testChart // {
               enable = false;
+            };
+            # chart with values set via YAML file
+            values-file = testChart // {
+              # Remove unsafeDiscardStringContext workaround when Nix can convert a string to a path
+              # https://github.com/NixOS/nix/issues/12407
+              values = /.
+              + builtins.unsafeDiscardStringContext (
+                builtins.toFile "k3s-test-chart-values.yaml" ''
+                  runCommand: "echo 'Hello, file!'"
+                  image:
+                    repository: test.local/test
+                    tag: local
+                ''
+              );
             };
             # advanced chart that should get installed in the "test" namespace with a custom
             # timeout and overridden values
@@ -117,19 +131,25 @@ import ../make-test-python.nix (
         # check existence/absence of chart manifest files
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/hello.yaml")
         machine.succeed("test ! -e /var/lib/rancher/k3s/server/manifests/disabled.yaml")
+        machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/values-file.yaml")
         machine.succeed("test -e /var/lib/rancher/k3s/server/manifests/advanced.yaml")
         # check that the timeout is set correctly, select only the first doc in advanced.yaml
         advancedManifest = json.loads(machine.succeed("yq -o json 'select(di == 0)' /var/lib/rancher/k3s/server/manifests/advanced.yaml"))
-        assert advancedManifest["spec"]["timeout"] == "69s", f"unexpected value for spec.timeout: {advancedManifest["spec"]["timeout"]}"
+        t.assertEqual(advancedManifest["spec"]["timeout"], "69s", "unexpected value for spec.timeout")
         # wait for test jobs to complete
         machine.wait_until_succeeds("kubectl wait --for=condition=complete job/hello", timeout=180)
+        machine.wait_until_succeeds("kubectl wait --for=condition=complete job/values-file", timeout=180)
         machine.wait_until_succeeds("kubectl -n test wait --for=condition=complete job/advanced", timeout=180)
         # check output of test jobs
         hello_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=hello")
+        values_file_output = machine.succeed("kubectl logs -l batch.kubernetes.io/job-name=values-file")
         advanced_output = machine.succeed("kubectl -n test logs -l batch.kubernetes.io/job-name=advanced")
         # strip the output to remove trailing whitespaces
-        assert hello_output.rstrip() == "Hello, world!", f"unexpected output of hello job: {hello_output}"
-        assert advanced_output.rstrip() == "advanced hello", f"unexpected output of advanced job: {advanced_output}"
+        t.assertEqual(hello_output.rstrip(), "Hello, world!", "unexpected output of hello job")
+        t.assertEqual(values_file_output.rstrip(), "Hello, file!", "unexpected output of values file job")
+        t.assertEqual(advanced_output.rstrip(), "advanced hello", "unexpected output of advanced job")
+        # wait for bundled traefik deployment
+        machine.wait_until_succeeds("kubectl -n kube-system rollout status deployment traefik", timeout=180)
       '';
   }
 )

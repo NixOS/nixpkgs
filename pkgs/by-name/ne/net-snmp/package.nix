@@ -6,7 +6,7 @@
   file,
   openssl,
   perl,
-  nettools,
+  net-tools,
   autoreconfHook,
   withPerlTools ? false,
 }:
@@ -65,10 +65,11 @@ stdenv.mkDerivation rec {
     "--with-openssl=${openssl.dev}"
     "--disable-embedded-perl"
     "--without-perl-modules"
-  ] ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux "--with-mnttab=/proc/mounts";
 
   postPatch = ''
-    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${nettools}/bin/netstat"
+    substituteInPlace testing/fulltests/support/simple_TESTCONF.sh --replace "/bin/netstat" "${net-tools}/bin/netstat"
   '';
 
   postConfigure = ''
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    nettools
+    net-tools
     file
     autoreconfHook
   ];
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
-    homepage = "http://www.net-snmp.org/";
+    homepage = "https://www.net-snmp.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

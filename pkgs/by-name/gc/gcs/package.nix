@@ -2,10 +2,8 @@
   lib,
   stdenv,
   buildGoModule,
-  buildNpmPackage,
   fetchFromGitHub,
-  cacert,
-  unzip,
+  nix-update-script,
   pkg-config,
   libGL,
   libX11,
@@ -21,28 +19,13 @@
 
 buildGoModule rec {
   pname = "gcs";
-  version = "5.28.1";
+  version = "5.39.0";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
     tag = "v${version}";
-
-    nativeBuildInputs = [
-      cacert
-      unzip
-    ];
-
-    # also fetch pdf.js files
-    # note: the version is locked in the file
-    postFetch = ''
-      cd $out/server/pdf
-      substituteInPlace refresh-pdf.js.sh \
-          --replace-fail '/bin/rm' 'rm'
-      . refresh-pdf.js.sh
-    '';
-
-    hash = "sha256-ArJ+GveG2Y1PYeCuIFJoQ3eVyqvAi4HEeAEd4X03yu4=";
+    hash = "sha256-R0IFIGDSpKxNmcDUMVdtKV+M3I8tglBhyHj5XXe2rjg=";
   };
 
   modPostBuild = ''
@@ -50,44 +33,24 @@ buildGoModule rec {
     sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
   '';
 
-  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
-
-  frontend = buildNpmPackage {
-    name = "${pname}-${version}-frontend";
-
-    inherit src;
-    sourceRoot = "${src.name}/server/frontend";
-    npmDepsHash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r dist $out/dist
-      runHook postInstall
-    '';
-  };
-
-  postPatch = ''
-    cp -r ${frontend}/dist server/frontend/dist
-  '';
+  vendorHash = "sha256-llbBYO1dNPm+k8WEfao6qyDtQZbcmueNwFBuIpaMvFQ=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      mupdf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libGL
-      libX11
-      libXcursor
-      libXrandr
-      libXinerama
-      libXi
-      libXxf86vm
-      fontconfig
-      freetype
-    ];
+  buildInputs = [
+    mupdf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libGL
+    libX11
+    libXcursor
+    libXrandr
+    libXinerama
+    libXi
+    libXxf86vm
+    fontconfig
+    freetype
+  ];
 
   # flags are based on https://github.com/richardwilkes/gcs/blob/master/build.sh
   flags = [ "-a" ];
@@ -102,6 +65,8 @@ buildGoModule rec {
     install -Dm755 $GOPATH/bin/gcs -t $out/bin
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";

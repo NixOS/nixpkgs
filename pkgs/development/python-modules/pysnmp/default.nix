@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  flit-core,
 
   # dependencies
   pyasn1,
@@ -19,17 +19,17 @@
 
 buildPythonPackage rec {
   pname = "pysnmp";
-  version = "7.1.16";
+  version = "7.1.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lextudio";
     repo = "pysnmp";
     tag = "v${version}";
-    hash = "sha256-HGIbxvq4twyZavtjkf2Uu9SEFIXzPCT34lAJEeprwXU=";
+    hash = "sha256-IbVs/fjNRDhp4a78ZbgqUOxyrlZjEwsKSlQV3+mmCjo=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [
     pyasn1
@@ -71,6 +71,7 @@ buildPythonPackage rec {
     "test_syntax_integer"
     "test_syntax_unsigned"
     "test_add_asn1_mib_source"
+    "test_syntax_fixed_length_octet_string"
   ];
 
   disabledTestPaths = [

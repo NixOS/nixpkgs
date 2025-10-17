@@ -23,7 +23,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = [
     copyDesktopItems
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   build-system = with python3Packages; [
     setuptools

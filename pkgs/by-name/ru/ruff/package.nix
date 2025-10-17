@@ -16,19 +16,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.12.1";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-iD9avLPPT8V6ZU1qoWEqPLp8jDk/EhcaTk7FtKLRsyM=";
+    hash = "sha256-Vueccz5lkUTdgqqZl/+PB0kVYezvPKIVxee8EJYcz4g=";
   };
 
   cargoBuildFlags = [ "--package=ruff" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-GICd8yQlh3gcxLh1Rfc3xB6rZ8ZsbCAk5C577l5+ogk=";
+  cargoHash = "sha256-bnSTiQzlZrS2tqQiRHr6gNDq40Naqxrxcyc8zcVlt7A=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -67,6 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--exclude=ty_project"
     "--exclude=ty_python_semantic"
     "--exclude=ty_server"
+    "--exclude=ty_static"
     "--exclude=ty_test"
     "--exclude=ty_vendored"
     "--exclude=ty_wasm"
@@ -82,6 +82,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
       nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
     };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 

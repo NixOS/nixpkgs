@@ -7,25 +7,66 @@
   makeDesktopItem,
   nix-update-script,
   npm-lockfile-fix,
+  prefetch-npm-deps,
+  rsync,
   stdenv,
 }:
 
 buildNpmPackage rec {
   pname = "super-productivity";
-  version = "13.0.10";
+  version = "15.2.2";
 
   src = fetchFromGitHub {
     owner = "johannesjo";
     repo = "super-productivity";
     tag = "v${version}";
-    hash = "sha256-2K/6T4f9tLlrKimT/DPSdoz8LHij5nsaF6BWSQf6u7U=";
+    hash = "sha256-jnHPlKA2I/HIUoxDn+h4F9BDTr5G0mLcq6pAlFgxTv8=";
 
     postFetch = ''
-      ${lib.getExe npm-lockfile-fix} -r $out/package-lock.json
+      find $out -name package-lock.json -exec ${lib.getExe npm-lockfile-fix} -r {} \;
     '';
   };
 
-  npmDepsHash = "sha256-l9P11ZvLYiTu/cVPQIw391ZTJ0K+cNPUzoVMsdze2uo=";
+  # Use custom fetcher for deps because super-productivity uses multiple
+  # package-lock.json files to manage plugins.  It checks all lock
+  # files and produces a merged output.  This should still be compatible
+  # with nix-update.
+  npmDeps = stdenv.mkDerivation (
+    lib.fetchers.normalizeHash { } {
+      pname = "super-productivity-deps";
+      inherit version src;
+
+      nativeBuildInputs = [
+        prefetch-npm-deps
+        rsync
+      ];
+
+      # Some lockfiles do not include any dependencies to install so
+      # prefertch-npm-deps produces an error.  Those can be ignored with
+      # this flag.
+      env.FORCE_EMPTY_CACHE = true;
+
+      buildPhase = ''
+        mkdir -p $out
+        find -name package-lock.json | while read -r lockfile; do
+          prefetch-npm-deps $lockfile /tmp/cache
+          # Merge output
+          rsync -a /tmp/cache/ $out
+          rm -rf /tmp/cache
+        done
+        # Ensure that the root package-lock.json is placed in the output.
+        # This means only the root lockfile is checked for consistancy,
+        # but that should not be an issue.
+        cp package-lock.json $out
+      '';
+
+      dontInstall = true;
+
+      outputHashMode = "recursive";
+      hash = "sha256-0HQ0+/1gxlODdHeLxgj0y5RtWUOizB+9SULtOmi0DFk=";
+    }
+  );
+
   makeCacheWritable = true;
 
   env = {
@@ -43,6 +84,14 @@ buildNpmPackage rec {
 
   buildPhase = ''
     runHook preBuild
+
+    # Npm hooks do not install packages for the plugins. The build
+    # script does install the packages, but it does not handle patching
+    # the shebangs.
+    find packages -name package-lock.json | while read -r p; do
+      npm --prefix "$(dirname $p)" ci --ignore-scripts
+    done
+    patchShebangs packages
 
     # electronDist needs to be modifiable on Darwin
     cp -r ${electron.dist} electron-dist
@@ -64,13 +113,13 @@ buildNpmPackage rec {
       if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
-          cp -r "app-builds/mac"*"/Super Productivity.app" "$out/Applications"
+          cp -r ".tmp/app-builds/mac"*"/Super Productivity.app" "$out/Applications"
           makeWrapper "$out/Applications/Super Productivity.app/Contents/MacOS/Super Productivity" "$out/bin/super-productivity"
         ''
       else
         ''
           mkdir -p $out/share/{super-productivity,icons/hicolor/scalable/apps}
-          cp -r app-builds/*-unpacked/resources/app.asar $out/share/super-productivity
+          cp -r .tmp/app-builds/*-unpacked/resources/app.asar $out/share/super-productivity
           cp electron/assets/icons/ico-circled.svg $out/share/icons/hicolor/scalable/apps/super-productivity.svg
 
           makeWrapper '${lib.getExe electron}' "$out/bin/super-productivity" \

@@ -39,7 +39,8 @@ let
         username = cfg.databaseUsername;
         encoding = "utf8";
         pool = cfg.databasePool;
-      } // cfg.extraDatabaseConfig;
+      }
+      // cfg.extraDatabaseConfig;
     in
     {
       production =
@@ -141,15 +142,14 @@ let
       omniauth.enabled = false;
       shared.path = "${cfg.statePath}/shared";
       gitaly.client_path = "${cfg.packages.gitaly}/bin";
-      backup =
-        {
-          gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
-          path = cfg.backup.path;
-          keep_time = cfg.backup.keepTime;
-        }
-        // (optionalAttrs (cfg.backup.uploadOptions != { }) {
-          upload = cfg.backup.uploadOptions;
-        });
+      backup = {
+        gitaly_backup_path = "${cfg.packages.gitaly}/bin/gitaly-backup";
+        path = cfg.backup.path;
+        keep_time = cfg.backup.keepTime;
+      }
+      // (optionalAttrs (cfg.backup.uploadOptions != { }) {
+        upload = cfg.backup.uploadOptions;
+      });
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";
@@ -209,17 +209,18 @@ let
     }
     // cfg.extraEnv;
 
-  runtimeDeps =
-    [ git ]
-    ++ (with pkgs; [
-      nodejs
-      gzip
-      gnutar
-      postgresqlPackage
-      coreutils
-      procps
-      findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
-    ]);
+  runtimeDeps = [
+    git
+  ]
+  ++ (with pkgs; [
+    nodejs
+    gzip
+    gnutar
+    postgresqlPackage
+    coreutils
+    procps
+    findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
+  ]);
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
@@ -637,7 +638,7 @@ in
           description = "External address used to access registry from the internet";
         };
         externalPort = mkOption {
-          type = types.int;
+          type = types.port;
           description = "External port used to access registry from the internet";
         };
       };
@@ -1431,13 +1432,14 @@ in
     systemd.services.gitlab-config = {
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          jq
-          openssl
-          replace-secret
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        jq
+        openssl
+        replace-secret
+      ]);
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
@@ -1614,23 +1616,24 @@ in
           SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
           SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
         });
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          postgresqlPackage
-          ruby
-          openssh
-          nodejs
-          gnupg
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        postgresqlPackage
+        ruby
+        openssh
+        nodejs
+        gnupg
 
-          "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
+        "${cfg.packages.gitlab}/share/gitlab/vendor/gems/sidekiq-${cfg.packages.gitlab.rubyEnv.gems.sidekiq.version}"
 
-          # Needed for GitLab project imports
-          gnutar
-          gzip
+        # Needed for GitLab project imports
+        gnutar
+        gzip
 
-          procps # Sidekiq MemoryKiller
-        ]);
+        procps # Sidekiq MemoryKiller
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1666,13 +1669,14 @@ in
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          openssh
-          gzip
-          bzip2
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        openssh
+        gzip
+        bzip2
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1695,7 +1699,7 @@ in
         filteredConfig = filterAttrs (_: v: v != null) cfg.pages.settings;
         isSecret = v: isAttrs v && v ? _secret && isString v._secret;
         mkPagesKeyValue = lib.generators.toKeyValue {
-          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" rec {
+          mkKeyValue = lib.flip lib.generators.mkKeyValueDefault "=" {
             mkValueString =
               v:
               if isInt v then
@@ -1771,17 +1775,18 @@ in
       after = [ "network.target" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          remarshal
-          exiftool
-          git
-          gnutar
-          gzip
-          openssh
-          cfg.packages.gitlab-workhorse
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        remarshal
+        exiftool
+        git
+        gnutar
+        gzip
+        openssh
+        cfg.packages.gitlab-workhorse
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1851,16 +1856,17 @@ in
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
-      path =
-        [ git ]
-        ++ (with pkgs; [
-          postgresqlPackage
-          openssh
-          nodejs
-          procps
-          gnupg
-          gzip
-        ]);
+      path = [
+        git
+      ]
+      ++ (with pkgs; [
+        postgresqlPackage
+        openssh
+        nodejs
+        procps
+        gnupg
+        gzip
+      ]);
       serviceConfig = {
         Type = "notify";
         User = cfg.user;
@@ -1886,14 +1892,13 @@ in
       after = [ "gitlab.service" ];
       bindsTo = [ "gitlab.service" ];
       startAt = cfg.backup.startAt;
-      environment =
-        {
-          RAILS_ENV = "production";
-          CRON = "1";
-        }
-        // optionalAttrs (stringLength cfg.backup.skip > 0) {
-          SKIP = cfg.backup.skip;
-        };
+      environment = {
+        RAILS_ENV = "production";
+        CRON = "1";
+      }
+      // optionalAttrs (stringLength cfg.backup.skip > 0) {
+        SKIP = cfg.backup.skip;
+      };
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;

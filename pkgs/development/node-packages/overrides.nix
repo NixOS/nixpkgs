@@ -56,14 +56,13 @@ final: prev: {
   };
 
   joplin = prev.joplin.override (oldAttrs: {
-    nativeBuildInputs =
-      [
-        pkgs.pkg-config
-        (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        pkgs.xcbuild
-      ];
+    nativeBuildInputs = [
+      pkgs.pkg-config
+      (pkgs.python3.withPackages (ps: [ ps.setuptools ]))
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      pkgs.xcbuild
+    ];
     buildInputs = with pkgs; [
       # required by sharp
       # https://sharp.pixelplumbing.com/install
@@ -90,7 +89,8 @@ final: prev: {
           sha512 = "mNcltoe1R8o7STTegSOHdnJNN7s5EUvhoS7ShnTHDyOSd+8H+UdWODq6qSv67PjC8Zc5JRT8+oLAMCr0SIXw7g==";
         };
       }
-    ] ++ oldAttrs.dependencies;
+    ]
+    ++ oldAttrs.dependencies;
 
     meta = oldAttrs.meta // {
       # ModuleNotFoundError: No module named 'distutils'
@@ -168,7 +168,7 @@ final: prev: {
 
   pulp = prev.pulp.override {
     # tries to install purescript
-    npmFlags = builtins.toString [ "--ignore-scripts" ];
+    npmFlags = toString [ "--ignore-scripts" ];
 
     nativeBuildInputs = [ pkgs.buildPackages.makeWrapper ];
     postInstall = ''

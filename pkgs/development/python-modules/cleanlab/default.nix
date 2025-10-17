@@ -79,26 +79,25 @@ buildPythonPackage rec {
     wget
   ];
 
-  disabledTests =
-    [
-      # Incorrect snapshots (AssertionError)
-      "test_color_sentence"
+  disabledTests = [
+    # Incorrect snapshots (AssertionError)
+    "test_color_sentence"
 
-      # Requires the datasets we prevent from downloading
-      "test_create_imagelab"
+    # Requires the datasets we prevent from downloading
+    "test_create_imagelab"
 
-      # Non-trivial numpy2 incompatibilities
-      # assert np.float64(0.492) == 0.491
-      "test_duplicate_points_have_similar_scores"
-      # AssertionError: assert 'Annotators [1] did not label any examples.'
-      "test_label_quality_scores_multiannotator"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      # AttributeError: 'called_once_with' is not a valid assertion.
-      # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
-      # Did you mean: 'assert_called_once_with'?
-      "test_custom_issue_manager_not_registered"
-    ];
+    # Non-trivial numpy2 incompatibilities
+    # assert np.float64(0.492) == 0.491
+    "test_duplicate_points_have_similar_scores"
+    # AssertionError: assert 'Annotators [1] did not label any examples.'
+    "test_label_quality_scores_multiannotator"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    # AttributeError: 'called_once_with' is not a valid assertion.
+    # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
+    # Did you mean: 'assert_called_once_with'?
+    "test_custom_issue_manager_not_registered"
+  ];
 
   disabledTestPaths = [
     # Requires internet
@@ -115,5 +114,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/cleanlab/cleanlab/releases/tag/v${version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ happysalada ];
+    # cleanlab is incompatible with datasets>=4.0.0
+    # cleanlab/datalab/internal/data.py:313: AssertionError
+    # https://github.com/cleanlab/cleanlab/issues/1244
+    broken = lib.versionAtLeast datasets.version "4.0.0";
   };
 }

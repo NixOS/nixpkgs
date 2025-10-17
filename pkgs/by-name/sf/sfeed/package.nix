@@ -17,13 +17,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ ncurses ];
 
-  makeFlags =
-    [
-      "RANLIB:=$(RANLIB)"
-      "SFEED_CURSES_LDFLAGS:=-lncurses"
-    ]
-    # use macOS's strlcat() and strlcpy() instead of vendored ones
-    ++ lib.optional stdenv.hostPlatform.isDarwin "COMPATOBJ:=";
+  makeFlags = [
+    "RANLIB:=$(RANLIB)"
+    "SFEED_CURSES_LDFLAGS:=-lncurses"
+  ]
+  # use macOS's strlcat() and strlcpy() instead of vendored ones
+  ++ lib.optional stdenv.hostPlatform.isDarwin "COMPATOBJ:=";
 
   installFlags = [ "PREFIX=$(out)" ];
 

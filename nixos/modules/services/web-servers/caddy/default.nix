@@ -14,13 +14,11 @@ let
   virtualHosts = attrValues cfg.virtualHosts;
   acmeEnabledVhosts = filter (hostOpts: hostOpts.useACMEHost != null) virtualHosts;
   vhostCertNames = unique (map (hostOpts: hostOpts.useACMEHost) acmeEnabledVhosts);
-  dependentCertNames = filter (cert: certs.${cert}.dnsProvider == null) vhostCertNames; # those that might depend on the HTTP server
-  independentCertNames = filter (cert: certs.${cert}.dnsProvider != null) vhostCertNames; # those that don't depend on the HTTP server
 
   mkVHostConf =
     hostOpts:
     let
-      sslCertDir = config.security.acme.certs.${hostOpts.useACMEHost}.directory;
+      sslCertDir = certs.${hostOpts.useACMEHost}.directory;
     in
     ''
       ${hostOpts.hostName} ${concatStringsSep " " hostOpts.serverAliases} {
@@ -30,9 +28,11 @@ let
         ${optionalString (
           hostOpts.useACMEHost != null
         ) "tls ${sslCertDir}/cert.pem ${sslCertDir}/key.pem"}
-        log {
-          ${hostOpts.logFormat}
-        }
+        ${optionalString (hostOpts.logFormat != null) ''
+          log {
+            ${hostOpts.logFormat}
+          }
+        ''}
 
         ${hostOpts.extraConfig}
       }
@@ -381,21 +381,20 @@ in
   # implementation
   config = mkIf cfg.enable {
 
-    assertions =
-      [
-        {
-          assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
-          message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
-        }
-      ]
-      ++ map (
-        name:
-        mkCertOwnershipAssertion {
-          cert = config.security.acme.certs.${name};
-          groups = config.users.groups;
-          services = [ config.systemd.services.caddy ];
-        }
-      ) vhostCertNames;
+    assertions = [
+      {
+        assertion = cfg.configFile == configFile -> cfg.adapter == "caddyfile" || cfg.adapter == null;
+        message = "To specify an adapter other than 'caddyfile' please provide your own configuration via `services.caddy.configFile`";
+      }
+    ]
+    ++ map (
+      name:
+      mkCertOwnershipAssertion {
+        cert = certs.${name};
+        groups = config.users.groups;
+        services = [ config.systemd.services.caddy ];
+      }
+    ) vhostCertNames;
 
     services.caddy.globalConfig = ''
       ${optionalString (cfg.email != null) "email ${cfg.email}"}
@@ -411,11 +410,8 @@ in
 
     systemd.packages = [ cfg.package ];
     systemd.services.caddy = {
-      wants = map (certName: "acme-finished-${certName}.target") vhostCertNames;
-      after =
-        map (certName: "acme-selfsigned-${certName}.service") vhostCertNames
-        ++ map (certName: "acme-${certName}.service") independentCertNames; # avoid loading self-signed key w/ real cert, or vice-versa
-      before = map (certName: "acme-${certName}.service") dependentCertNames;
+      wants = map (certName: "acme-${certName}.service") vhostCertNames;
+      after = map (certName: "acme-${certName}.service") vhostCertNames;
 
       wantedBy = [ "multi-user.target" ];
       startLimitIntervalSec = 14400;
@@ -440,7 +436,8 @@ in
           # Validating the configuration before applying it ensures we’ll get a proper error that will be reported when switching to the configuration
           ExecReload = [
             ""
-          ] ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
+          ]
+          ++ lib.optional cfg.enableReload "${lib.getExe cfg.package} reload ${runOptions} --force";
           User = cfg.user;
           Group = cfg.group;
           ReadWritePaths = [ cfg.dataDir ];

@@ -9,15 +9,14 @@
   makeWrapper,
   writeScript,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.1.1550";
+  version = "1.12.2.1565";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-kGxiVnnHLnA1h1mIpGOSodg9Fu4d9ZmlYaL9M0JLDT8=";
+    hash = "sha256-qj0RqgIL+pgbqdMnG+vCfHirazBVA8ro2zCKOlDzYXk=";
   };
 
   nativeBuildInputs = [

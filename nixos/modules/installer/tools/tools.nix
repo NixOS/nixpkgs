@@ -108,9 +108,9 @@ let
 
     $bootLoaderConfig
       # networking.hostName = "nixos"; # Define your hostname.
-      # Pick only one of the below networking options.
-      # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-      # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+
+      # Configure network connections interactively with nmcli or nmtui.
+      networking.networkmanager.enable = true;
 
       # Set your time zone.
       # time.timeZone = "Europe/Amsterdam";
@@ -341,8 +341,6 @@ in
     system.build = {
       inherit nixos-generate-config nixos-install;
       nixos-rebuild = if config.system.rebuild.enableNg then nixos-rebuild-ng else nixos-rebuild;
-      nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
-      nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
     };
   };
 }

@@ -37,17 +37,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeInputs =
-    [
-      gnugrep
-      gnused
-      curl
-      fzf
-      ffmpeg
-      aria2
-    ]
-    ++ lib.optional chromecastSupport catt
-    ++ lib.optional syncSupport syncplay;
+  runtimeInputs = [
+    gnugrep
+    gnused
+    curl
+    fzf
+    ffmpeg
+    aria2
+  ]
+  ++ lib.optional chromecastSupport catt
+  ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall

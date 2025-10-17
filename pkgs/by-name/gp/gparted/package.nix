@@ -5,7 +5,6 @@
   gettext,
   coreutils,
   gnused,
-  gnome,
   adwaita-icon-theme,
   gnugrep,
   parted,
@@ -17,7 +16,7 @@
   gpart,
   hdparm,
   procps,
-  util-linux,
+  util-linuxMinimal,
   polkit,
   wrapGAppsHook3,
   replaceVars,
@@ -26,13 +25,13 @@
   xhost,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gparted";
   version = "1.7.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gparted/gparted-${version}.tar.gz";
-    sha256 = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
+    url = "mirror://sourceforge/gparted/gparted-${finalAttrs.version}.tar.gz";
+    hash = "sha256-hK47mXPkQ6IXXweqDcKs7q2xUB4PiVPOyDsOwzR7fVI=";
   };
 
   # Tries to run `pkexec --version` to get version.
@@ -77,7 +76,7 @@ stdenv.mkDerivation rec {
          lib.makeBinPath [
            gpart
            hdparm
-           util-linux
+           util-linuxMinimal
            procps
            coreutils
            gnused
@@ -108,4 +107,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "gparted";
   };
-}
+})

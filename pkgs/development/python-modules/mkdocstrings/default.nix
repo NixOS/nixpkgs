@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "mkdocstrings";
-  version = "0.29.1";
+  version = "0.30.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mkdocstrings";
     repo = "mkdocstrings";
     tag = version;
-    hash = "sha256-i3rGPKptsFD/IE4vGpWC0HTKoqAtjQ6gkVhZbfYn2bo=";
+    hash = "sha256-BfqxL35prq+pvD21w0BOJx/ls8og+LjtGdOAZlHYGVE=";
   };
 
   postPatch = ''
@@ -34,18 +34,17 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-  dependencies =
-    [
-      jinja2
-      markdown
-      markupsafe
-      mkdocs
-      mkdocs-autorefs
-      pymdown-extensions
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      importlib-metadata
-    ];
+  dependencies = [
+    jinja2
+    markdown
+    markupsafe
+    mkdocs
+    mkdocs-autorefs
+    pymdown-extensions
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    importlib-metadata
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -71,7 +70,7 @@ buildPythonPackage rec {
   meta = {
     description = "Automatic documentation from sources for MkDocs";
     homepage = "https://github.com/mkdocstrings/mkdocstrings";
-    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/mkdocstrings/mkdocstrings/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ fab ];
   };

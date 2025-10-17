@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3,
   python3Packages,
   fetchFromGitHub,
@@ -7,7 +8,7 @@
 }:
 let
   pname = "whisper-ctranslate2";
-  version = "0.5.3";
+  version = "0.5.4";
 in
 python3Packages.buildPythonApplication {
   inherit pname version;
@@ -17,7 +18,7 @@ python3Packages.buildPythonApplication {
     owner = "Softcatala";
     repo = "whisper-ctranslate2";
     tag = version;
-    hash = "sha256-rRxadVYv69Jgzai+ANS6oKHOArTI9vPDPeTybtOySww=";
+    hash = "sha256-FunrxIZaKecn2g2ZZ9aBN8IMqwfJG2oEQyH8lv7Tjzo=";
   };
 
   build-system = [ python3Packages.setuptools ];
@@ -41,6 +42,9 @@ python3Packages.buildPythonApplication {
     ${python3.interpreter} -m nose2 -s tests
     runHook postCheck
   '';
+  # Tests fail in build sandbox on aarch64-linux, but the program still works at
+  # runtime. See https://github.com/microsoft/onnxruntime/issues/10038.
+  doCheck = with stdenv.buildPlatform; !(isAarch && isLinux);
 
   passthru.updateScript = nix-update-script { };
 
@@ -51,10 +55,5 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
     mainProgram = "whisper-ctranslate2";
-    badPlatforms = [
-      # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
-      #   what():  /build/source/include/onnxruntime/core/common/logging/logging.h:320 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
-      "aarch64-linux"
-    ];
   };
 }

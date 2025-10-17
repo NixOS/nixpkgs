@@ -42,7 +42,7 @@ let
     inherit flashbackEnabled nixos-background-dark nixos-background-light;
   };
 
-  nixos-background-info = pkgs.writeTextFile rec {
+  nixos-background-info = pkgs.writeTextFile {
     name = "nixos-background-info";
     text = ''
       <?xml version="1.0"?>
@@ -297,23 +297,23 @@ in
 
       systemd.packages = [
         pkgs.gnome-flashback
-      ] ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
+      ]
+      ++ map pkgs.gnome-flashback.mkSystemdTargetForWm flashbackWms;
 
-      environment.systemPackages =
-        [
-          pkgs.gnome-flashback
-          (pkgs.gnome-panel-with-modules.override {
-            panelModulePackages = cfg.flashback.panelModulePackages;
-          })
-        ]
-        # For /share/applications/${wmName}.desktop
-        ++ (map (
-          wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
-        ) flashbackWms)
-        # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
-        ++ (map (
-          wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
-        ) flashbackWms);
+      environment.systemPackages = [
+        pkgs.gnome-flashback
+        (pkgs.gnome-panel-with-modules.override {
+          panelModulePackages = cfg.flashback.panelModulePackages;
+        })
+      ]
+      # For /share/applications/${wmName}.desktop
+      ++ (map (
+        wm: pkgs.gnome-flashback.mkWmApplication { inherit (wm) wmName wmLabel wmCommand; }
+      ) flashbackWms)
+      # For /share/pkgs.gnome-session/sessions/gnome-flashback-${wmName}.session
+      ++ (map (
+        wm: pkgs.gnome-flashback.mkGnomeSession { inherit (wm) wmName wmLabel enableGnomePanel; }
+      ) flashbackWms);
     })
 
     (lib.mkIf serviceCfg.core-os-services.enable {

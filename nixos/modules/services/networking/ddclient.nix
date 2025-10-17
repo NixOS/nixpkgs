@@ -18,12 +18,16 @@ let
     ${lib.optionalString (cfg.use != "") "use=${cfg.use}"}
     ${lib.optionalString (cfg.use == "" && cfg.usev4 != "") "usev4=${cfg.usev4}"}
     ${lib.optionalString (cfg.use == "" && cfg.usev6 != "") "usev6=${cfg.usev6}"}
-    login=${cfg.username}
-    password=${
+    ${lib.optionalString (cfg.username != "") "login=${cfg.username}"}
+    ${
       if cfg.protocol == "nsupdate" then
         "/run/${RuntimeDirectory}/ddclient.key"
+      else if (cfg.passwordFile != null) then
+        "password=@password_placeholder@"
+      else if (cfg.secretsFile != null) then
+        "@secrets_placeholder@"
       else
-        "@password_placeholder@"
+        ""
     }
     protocol=${cfg.protocol}
     ${lib.optionalString (cfg.script != "") "script=${cfg.script}"}
@@ -48,6 +52,10 @@ let
       else if (cfg.passwordFile != null) then
         ''
           "${pkgs.replace-secret}/bin/replace-secret" "@password_placeholder@" "${cfg.passwordFile}" "/run/${RuntimeDirectory}/ddclient.conf"
+        ''
+      else if (cfg.secretsFile != null) then
+        ''
+          "${pkgs.replace-secret}/bin/replace-secret" "@secrets_placeholder@" "${cfg.secretsFile}" "/run/${RuntimeDirectory}/ddclient.conf"
         ''
       else
         ''
@@ -123,6 +131,16 @@ in
         type = nullOr str;
         description = ''
           A file containing the password or a TSIG key in named format when using the nsupdate protocol.
+        '';
+      };
+
+      secretsFile = lib.mkOption {
+        default = null;
+        type = nullOr str;
+        description = ''
+          A file containing the secrets for the dynamic DNS provider.
+          This file should contain lines of valid secrets in the format specified by the ddclient documentation.
+          If this option is set, it overrides the `passwordFile` option.
         '';
       };
 
@@ -243,6 +261,17 @@ in
     warnings =
       lib.optional (cfg.use != "")
         "Setting `use` is deprecated, ddclient now supports `usev4` and `usev6` for separate IPv4/IPv6 configuration.";
+
+    assertions = [
+      {
+        assertion = !((cfg.passwordFile != null) && (cfg.secretsFile != null));
+        message = "You cannot use both services.ddclient.passwordFile and services.ddclient.secretsFile at the same time.";
+      }
+      {
+        assertion = (cfg.protocol != "nsupdate") || (cfg.secretsFile == null);
+        message = "You cannot use services.ddclient.secretsFile when services.ddclient.protocol is \"nsupdate\". Use services.ddclient.passwordFile instead.";
+      }
+    ];
 
     systemd.services.ddclient = {
       description = "Dynamic DNS Client";

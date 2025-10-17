@@ -34,15 +34,17 @@ let
     pygit2
     pygments
     setuptools
+    setuptools-scm
+    pip
     ;
 
   self = python3Packages.buildPythonApplication rec {
     pname = "mercurial${lib.optionalString fullBuild "-full"}";
-    version = "6.9.4";
+    version = "7.1";
 
     src = fetchurl {
       url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
-      hash = "sha256-fqDoOeyDRSd90Z0HJQtEJhNNxdZoL/iAqGorCbTjjs0=";
+      hash = "sha256-6NkgyDw4xHXY6XO+YHYKSdw1w3ldZL1oduVq26Yi5cs=";
     };
 
     format = "other";
@@ -54,7 +56,7 @@ let
         rustPlatform.fetchCargoVendor {
           inherit src;
           name = "mercurial-${version}";
-          hash = "sha256-k/K1BupCqnlB++2T7hJxu82yID0jG8HwLNmb2eyx29o=";
+          hash = "sha256-REMgZ1TiVTDbvT8TCd4EeHfYT/xMJfC4E6weLJFT6Rw=";
           sourceRoot = "mercurial-${version}/rust";
         }
       else
@@ -65,18 +67,19 @@ let
       lib.optional re2Support fb-re2
       ++ lib.optional gitSupport pygit2
       ++ lib.optional highlightSupport pygments;
-    nativeBuildInputs =
-      [
-        makeWrapper
-        gettext
-        installShellFiles
-        setuptools
-      ]
-      ++ lib.optionals rustSupport [
-        rustPlatform.cargoSetupHook
-        cargo
-        rustc
-      ];
+    nativeBuildInputs = [
+      makeWrapper
+      gettext
+      installShellFiles
+      setuptools
+      setuptools-scm
+      pip
+    ]
+    ++ lib.optionals rustSupport [
+      rustPlatform.cargoSetupHook
+      cargo
+      rustc
+    ];
     buildInputs = [ docutils ];
 
     makeFlags = [ "PREFIX=$(out)" ] ++ lib.optional rustSupport "PURE=--rust";
@@ -114,18 +117,18 @@ let
       mercurial-tests = makeTests { flags = "--with-hg=$MERCURIAL_BASE/bin/hg"; };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Fast, lightweight SCM system for very large distributed projects";
       homepage = "https://www.mercurial-scm.org";
       downloadPage = "https://www.mercurial-scm.org/release/";
-      changelog = "https://wiki.mercurial-scm.org/Release${versions.majorMinor version}";
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [
+      changelog = "https://wiki.mercurial-scm.org/Release${lib.versions.majorMinor version}";
+      license = lib.licenses.gpl2Plus;
+      maintainers = with lib.maintainers; [
         lukegb
         euxane
         techknowlogick
       ];
-      platforms = platforms.unix;
+      platforms = lib.platforms.unix;
       mainProgram = "hg";
     };
   };

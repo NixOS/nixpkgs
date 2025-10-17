@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
+  flit-core,
   sphinx,
 }:
 
 buildPythonPackage rec {
   pname = "sphinx-reredirects";
-  version = "0.1.6";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "sphinx_reredirects";
     inherit version;
-    hash = "sha256-xJHLpUX2e+lpdQhyeBjYYmYmNmJFrmRFb+KfN+m76mQ=";
+    hash = "sha256-fJutqfEzBIn89Mcpei1toqScpId9P0LROIrh3hAZv1w=";
   };
 
   build-system = [
-    setuptools
+    flit-core
   ];
 
   dependencies = [
@@ -36,6 +36,6 @@ buildPythonPackage rec {
       bsd3
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

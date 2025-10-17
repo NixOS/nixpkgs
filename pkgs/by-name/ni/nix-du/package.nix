@@ -20,18 +20,17 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/Afp0InA/0xXdombAzylYJF9wcv5WwYizVsP+fHTDrM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Q/woxGh1I6FpgJ5D0x7KovSwuRXfZzqjzwljaoKj0/Y=";
 
   doCheck = true;
   nativeCheckInputs = [
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     graphviz
   ];
 
   buildInputs = [
     boost
-    nixVersions.nix_2_24
+    nixVersions.nix_2_28
     nlohmann_json
   ];
 

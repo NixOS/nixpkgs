@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "ubuntu-mate";
-    repo = pname;
+    repo = "mate-tweak";
     rev = version;
     sha256 = "emeNgCzMhHMeLOyUkXe+8OzQMEWuwNdD4xkGXIFgbh4=";
   };

@@ -1,12 +1,14 @@
 {
-  "url": "https://github.com/ikatyang/tree-sitter-yaml",
-  "rev": "0e36bed171768908f331ff7dff9d956bae016efb",
-  "date": "2021-05-11T12:47:24+08:00",
-  "path": "/nix/store/7d7m4zs4ydnwbn3xnfm3pvpy7gvkrmg8-tree-sitter-yaml",
-  "sha256": "0wyvjh62zdp5bhd2y8k7k7x4wz952l55i1c8d94rhffsbbf9763f",
-  "hash": "sha256-bpiT3FraOZhJaoiFWAoVJX1O+plnIi8aXOW2LwyU23M=",
+  "url": "https://github.com/tree-sitter-grammars/tree-sitter-yaml",
+  "rev": "9632edc32eb86966a482fcb3c9a7f4bb78ae0ddb",
+  "date": "2025-05-22T16:31:05+03:00",
+  "path": "/nix/store/rz2zq4cpjgkcnl9b3y0wckcz91a4b7lz-tree-sitter-yaml",
+  "sha256": "0j03miv56d0sh9cnnrxjxwzwjiypw9pqxpx698f9zjc80mlzyqk7",
+  "hash": "sha256-Z2L/aQWIyZ8cSqbfjm/i10fJP++yZ2tZgho0U3asA0g=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
-  "leaveDotGit": false
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
 }

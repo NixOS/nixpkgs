@@ -23,8 +23,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-8XWwzR9TiSCU6fKbrulKpCDFDEyzQpaT2nrahF8iac8=";
   };
 
-  useFetchCargoVendor = true;
-
   cargoPatches = [
     # https://github.com/PurpleBooth/git-mit/pull/1543
     ./libgit2-update.patch

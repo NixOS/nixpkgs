@@ -12,7 +12,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.20.2";
+  version = "0.20.5";
 
   outputs = [
     "out"
@@ -24,15 +24,14 @@ rustPlatform.buildRustPackage rec {
     owner = "skim-rs";
     repo = "skim";
     tag = "v${version}";
-    hash = "sha256-fEd6t+adYI1jpRapZ/XHpxVWtX0nwUl9ZurIwywSFgk=";
+    hash = "sha256-BX0WW7dNpNLwxlclFCxj0QnrQ58lchKiEnmethzceqk=";
   };
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-oRcqaXWa/eh5QQtTk0NQr90aL/Q0zgxQbPIoMLMtHe8=";
+  cargoHash = "sha256-t2hkWTb/GhesNCWe2/YunZFo26xcXMjoNCiaKaFLOBk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -52,6 +51,11 @@ rustPlatform.buildRustPackage rec {
 
     installBin sk-share
     installManPage $(find man -type f)
+    installShellCompletion \
+      --cmd sk \
+      --bash shell/completion.bash \
+      --fish shell/completion.fish \
+      --zsh shell/completion.zsh
   '';
 
   # Doc tests are broken on aarch64

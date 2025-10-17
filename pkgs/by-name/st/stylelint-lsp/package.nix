@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-PVA6sXbiuxqvi9u3sPoeVIJSSpSbFQHQQnTFO3w31WE=";
   };
 
@@ -41,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preInstall = ''
     # remove unnecessary files
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     rm -rf node_modules/.pnpm/typescript*
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645

@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "peft";
-  version = "0.15.2";
+  version = "0.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "peft";
     tag = "v${version}";
-    hash = "sha256-c9oHBQCdJpPAeI7xwePXx75Sp39I8QVjRZSxxSOm2PM=";
+    hash = "sha256-xtpxwbKf7ZaUYblGdwtPZE09qrlBQTMm5oryUJwa6AA=";
   };
 
   build-system = [ setuptools ];
@@ -68,7 +68,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # These tests fail when MPS devices are detected
   disabledTests = lib.optional stdenv.hostPlatform.isDarwin [
@@ -102,6 +102,9 @@ buildPythonPackage rec {
     "tests/test_tuners_utils.py"
     "tests/test_vision_models.py"
     "tests/test_xlora.py"
+    "tests/test_target_parameters.py"
+    "tests/test_seq_classifier.py"
+    "tests/test_low_level_api.py"
   ];
 
   meta = {

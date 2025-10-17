@@ -22,13 +22,12 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
 
-  installPhase =
-    ''
-      install -Dm755 -t $out/bin easypdkprog
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 -t $out/etc/udev/rules.d Linux_udevrules/70-stm32vcp.rules
-    '';
+  installPhase = ''
+    install -Dm755 -t $out/bin easypdkprog
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 -t $out/etc/udev/rules.d Linux_udevrules/70-stm32vcp.rules
+  '';
 
   meta = with lib; {
     description = "Read, write and execute programs on PADAUK microcontroller";

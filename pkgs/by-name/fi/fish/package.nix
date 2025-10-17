@@ -152,13 +152,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish";
-  version = "4.0.2";
+  version = "4.1.2";
 
   src = fetchFromGitHub {
     owner = "fish-shell";
     repo = "fish-shell";
     tag = finalAttrs.version;
-    hash = "sha256-UpoZPipXZbzLWCOXzDjfyTDrsKyXGbh3Rkwj5IeWeY4=";
+    hash = "sha256-oNRC1NWYE0LEK2a/7nHtlmp20f8hn/1FZgaySqzwSbg=";
   };
 
   env = {
@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-FkJB33vVVz7Kh23kfmjQDn61X2VkKLG9mUt8f3TrCHg=";
+    hash = "sha256-7mYWCHH6DBWTIJV8GPRjjf6QulwlYjwv0slablDvBF8=";
   };
 
   patches = [
@@ -191,55 +191,55 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Fix FHS paths in tests
-  postPatch =
-    ''
-      substituteInPlace src/builtins/tests/test_tests.rs \
-        --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
+  postPatch = ''
+    substituteInPlace src/builtins/tests/test_tests.rs \
+      --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-      substituteInPlace src/tests/highlight.rs \
-        --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
-        --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
-        --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
-        --replace-fail '/usr' '/'
+    substituteInPlace src/highlight/tests.rs \
+      --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
+      --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
+      --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
+      --replace-fail '/usr' '/'
 
-      substituteInPlace tests/checks/cd.fish \
-        --replace-fail '/bin/pwd' '${lib.getExe' coreutils "pwd"}'
+    substituteInPlace tests/checks/cd.fish \
+      --replace-fail '/bin/pwd' '${lib.getExe' coreutils "pwd"}'
 
-      substituteInPlace tests/checks/redirect.fish \
-        --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+    substituteInPlace tests/checks/redirect.fish \
+      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-      substituteInPlace tests/checks/vars_as_commands.fish \
-        --replace-fail '/usr/bin' '${coreutils}/bin'
+    substituteInPlace tests/checks/vars_as_commands.fish \
+      --replace-fail '/usr/bin' '${coreutils}/bin'
 
-      substituteInPlace tests/checks/jobs.fish \
-        --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
-        --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+    substituteInPlace tests/checks/jobs.fish \
+      --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
+      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-      substituteInPlace tests/checks/job-control-noninteractive.fish \
-        --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
+    substituteInPlace tests/checks/job-control-noninteractive.fish \
+      --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-      substituteInPlace tests/checks/complete.fish \
-        --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
+    substituteInPlace tests/checks/complete.fish \
+      --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
 
-      # Several pexpect tests are flaky
-      # See https://github.com/fish-shell/fish-shell/issues/8789
-      rm tests/pexpects/exit_handlers.py
-      rm tests/pexpects/private_mode.py
-      rm tests/pexpects/history.py
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Tests use pkill/pgrep which are currently not built on Darwin
-      # See https://github.com/NixOS/nixpkgs/pull/103180
-      # and https://github.com/NixOS/nixpkgs/issues/141157
-      rm tests/pexpects/exit.py
-      rm tests/pexpects/job_summary.py
-      rm tests/pexpects/signals.py
-      rm tests/pexpects/fg.py
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
-      # This test seems to consistently fail on aarch64 and darwin
-      rm tests/checks/cd.fish
-    '';
+    # Several pexpect tests are flaky
+    # See https://github.com/fish-shell/fish-shell/issues/8789
+    rm tests/pexpects/exit_handlers.py
+    rm tests/pexpects/private_mode.py
+    rm tests/pexpects/history.py
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Tests use pkill/pgrep which are currently not built on Darwin
+    # See https://github.com/NixOS/nixpkgs/pull/103180
+    # and https://github.com/NixOS/nixpkgs/issues/141157
+    rm tests/pexpects/exit.py
+    rm tests/pexpects/job_summary.py
+    rm tests/pexpects/signals.py
+    rm tests/pexpects/fg.py
+    rm tests/checks/fish_exit.fish
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isDarwin) ''
+    # This test seems to consistently fail on aarch64 and darwin
+    rm tests/checks/cd.fish
+  '';
 
   outputs = [
     "out"
@@ -265,14 +265,13 @@ stdenv.mkDerivation (finalAttrs: {
     pcre2
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "${placeholder "doc"}/share/doc/fish")
-      (lib.cmakeFeature "Rust_CARGO_TARGET" stdenv.hostPlatform.rust.rustcTarget)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeBool "MAC_CODESIGN_ID" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_INSTALL_DOCDIR" "${placeholder "doc"}/share/doc/fish")
+    (lib.cmakeFeature "Rust_CARGO_TARGET" stdenv.hostPlatform.rust.rustcTarget)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "MAC_CODESIGN_ID" false)
+  ];
 
   # Fish’s test suite needs to be able to look up process information and send signals.
   sandboxProfile = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -284,14 +283,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Fish needs coreutils as a runtime dependency, and it gets put into
   # CMAKE_PREFIX_PATH, which cmake uses to look up build time programs, so it
   # was clobbering the PATH. It probably needs to be fixed at a lower level.
-  preConfigure =
-    ''
-      patchShebangs ./build_tools/git_version_gen.sh
-      patchShebangs ./tests/test_driver.py
-    ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      export CMAKE_PREFIX_PATH=
-    '';
+  preConfigure = ''
+    patchShebangs ./build_tools/git_version_gen.sh
+    patchShebangs ./tests/test_driver.py
+  ''
+  + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    export CMAKE_PREFIX_PATH=
+  '';
 
   # Required binaries during execution
   propagatedBuildInputs = [
@@ -300,22 +298,22 @@ stdenv.mkDerivation (finalAttrs: {
     gnused
     groff
     gettext
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) man-db;
 
   doCheck = true;
 
-  nativeCheckInputs =
-    [
-      coreutils
-      glibcLocales
-      (python3.withPackages (ps: [ ps.pexpect ]))
-      procps
-      sphinx
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # For the getconf command, used in default-setup-path.fish
-      darwin.system_cmds
-    ];
+  nativeCheckInputs = [
+    coreutils
+    glibcLocales
+    (python3.withPackages (ps: [ ps.pexpect ]))
+    procps
+    sphinx
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # For the getconf command, used in default-setup-path.fish
+    darwin.system_cmds
+  ];
 
   # we target the top-level make target which runs all the cmake/ctest
   # tests, including test_cargo-test
@@ -340,42 +338,41 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  postInstall =
-    ''
-      substituteInPlace "$out/share/fish/functions/grep.fish" \
-        --replace-fail "command grep" "command ${lib.getExe gnugrep}"
+  postInstall = ''
+    substituteInPlace "$out/share/fish/functions/grep.fish" \
+      --replace-fail "command grep" "command ${lib.getExe gnugrep}"
 
-      substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
-        --replace-fail "nroff" "${lib.getExe' groff "nroff"}"
+    substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
+      --replace-fail "nroff" "${lib.getExe' groff "nroff"}"
 
-      substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
-        --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
-    ''
-    + lib.optionalString usePython ''
-      cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
-      function __fish_anypython
-          echo ${python3.interpreter}
-          return 0
-      end
-      EOF
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      for cur in $out/share/fish/functions/*.fish; do
-        substituteInPlace "$cur" \
-          --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
-          --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
-      done
-      for cur in $out/share/fish/completions/*.fish; do
-        substituteInPlace "$cur" \
-          --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
-      done
-    ''
-    + lib.optionalString useOperatingSystemEtc ''
-      tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
-    ''
-    + ''
-      tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
-    '';
+    substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
+      --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
+  ''
+  + lib.optionalString usePython ''
+    cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
+    function __fish_anypython
+        echo ${python3.interpreter}
+        return 0
+    end
+    EOF
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    for cur in $out/share/fish/functions/*.fish; do
+      substituteInPlace "$cur" \
+        --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
+        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+    done
+    for cur in $out/share/fish/completions/*.fish; do
+      substituteInPlace "$cur" \
+        --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+    done
+  ''
+  + lib.optionalString useOperatingSystemEtc ''
+    tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
+  ''
+  + ''
+    tee -a $out/share/fish/__fish_build_paths.fish < ${fishPreInitHooks}
+  '';
 
   meta = {
     description = "Smart and user-friendly command line shell";

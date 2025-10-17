@@ -7,11 +7,7 @@
 let
   imcfg = config.i18n.inputMethod;
   cfg = imcfg.fcitx5;
-  fcitx5Package =
-    if cfg.plasma6Support then
-      pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
-    else
-      pkgs.libsForQt5.fcitx5-with-addons.override { inherit (cfg) addons; };
+  fcitx5Package = pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; };
   settingsFormat = pkgs.formats.ini { };
 in
 {
@@ -31,15 +27,6 @@ in
         description = ''
           Use the Wayland input method frontend.
           See [Using Fcitx 5 on Wayland](https://fcitx-im.org/wiki/Using_Fcitx_5_on_Wayland).
-        '';
-      };
-      plasma6Support = lib.mkOption {
-        type = lib.types.bool;
-        default = config.services.desktopManager.plasma6.enable;
-        defaultText = lib.literalExpression "config.services.desktopManager.plasma6.enable";
-        description = ''
-          Use qt6 versions of fcitx5 packages.
-          Required for configuring fcitx5 in KDE System Settings.
         '';
       };
       quickPhrase = lib.mkOption {
@@ -109,6 +96,9 @@ in
     (lib.mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx5" "enableRimeData" ] ''
       RIME data is now included in `fcitx5-rime` by default, and can be customized using `fcitx5-rime.override { rimeDataPkgs = ...; }`
     '')
+    (lib.mkRemovedOptionModule [ "i18n" "inputMethod" "fcitx5" "plasma6Support" ] ''
+      qt6 is the only one used for fcitx5-configtool now.
+    '')
   ];
 
   config = lib.mkIf (imcfg.enable && imcfg.type == "fcitx5") {
@@ -127,7 +117,7 @@ in
       ++ lib.optionals (cfg.quickPhraseFiles != { }) [
         (pkgs.linkFarm "quickPhraseFiles" (
           lib.mapAttrs' (
-            name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value
+            name: value: lib.nameValuePair "share/fcitx5/data/quickphrase.d/${name}.mb" value
           ) cfg.quickPhraseFiles
         ))
       ];
@@ -147,17 +137,17 @@ in
         ) cfg.settings.addons)
       ];
 
-    environment.variables =
-      {
-        XMODIFIERS = "@im=fcitx";
-        QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
-      }
-      // lib.optionalAttrs (!cfg.waylandFrontend) {
-        GTK_IM_MODULE = "fcitx";
-        QT_IM_MODULE = "fcitx";
-      }
-      // lib.optionalAttrs cfg.ignoreUserConfig {
-        SKIP_FCITX_USER_PATH = "1";
-      };
+    environment.variables = {
+      XMODIFIERS = "@im=fcitx";
+      QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+    }
+    // lib.optionalAttrs (!cfg.waylandFrontend) {
+      GTK_IM_MODULE = "fcitx";
+      QT_IM_MODULE = "fcitx";
+    };
+
+    environment.sessionVariables = lib.mkIf cfg.ignoreUserConfig {
+      SKIP_FCITX_USER_PATH = "1";
+    };
   };
 }

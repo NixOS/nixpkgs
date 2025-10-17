@@ -46,7 +46,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   # Tests require a running Redis backend
   disabledTests = [

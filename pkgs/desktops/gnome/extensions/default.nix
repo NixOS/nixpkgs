@@ -39,7 +39,6 @@ let
     lib.trivial.pipe extensions [
       (map (extension: lib.nameValuePair extension.extensionUuid extension))
       builtins.listToAttrs
-      (attrs: attrs // { __attrsFailEvaluation = true; })
     ];
 
   # Map the list of extensions to an attrset based on the pname as key, which is more human readable than the UUID
@@ -80,14 +79,13 @@ rec {
 
   # Keep the last three versions in here
   gnomeExtensions = lib.trivial.pipe (gnome46Extensions // gnome47Extensions // gnome48Extensions) [
-    (v: builtins.removeAttrs v [ "__attrsFailEvaluation" ])
     # Apply some custom patches for automatically packaged extensions
     (callPackage ./extensionOverrides.nix { })
     # Add all manually packaged extensions
     (extensions: extensions // (import ./manuallyPackaged.nix { inherit callPackage; }))
     # Map the extension UUIDs to readable names
     (lib.attrValues)
-    (mapReadableNames)
+    mapReadableNames
     # Add some aliases
     (
       extensions:
@@ -95,7 +93,6 @@ rec {
       // lib.optionalAttrs config.allowAliases {
         unite-shell = gnomeExtensions.unite; # added 2021-01-19
         arc-menu = gnomeExtensions.arcmenu; # added 2021-02-14
-        disable-unredirect = gnomeExtensions.disable-unredirect-fullscreen-windows; # added 2021-11-20
 
         icon-hider = throw "gnomeExtensions.icon-hider was removed on 2024-03-15. The extension has not received any updates since 2020/3.34.";
         nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";

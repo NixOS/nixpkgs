@@ -31,20 +31,19 @@ clangStdenv.mkDerivation (finalAttrs: {
     postgresql.pg_config
   ];
 
-  buildInputs =
-    [
-      boehmgc
-      libkrb5
-      openssl
-      postgresql
-      readline
-      sqlite
-      zlib
-      python3Packages.sphinxHook
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      pam
-    ];
+  buildInputs = [
+    boehmgc
+    libkrb5
+    openssl
+    postgresql
+    readline
+    sqlite
+    zlib
+    python3Packages.sphinxHook
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    pam
+  ];
 
   hardeningDisable = [ "format" ];
 

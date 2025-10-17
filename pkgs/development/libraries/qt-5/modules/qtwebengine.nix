@@ -9,7 +9,6 @@
 
   bison,
   flex,
-  git,
   gperf,
   ninja,
   pkg-config,
@@ -92,31 +91,29 @@ in
 qtModule (
   {
     pname = "qtwebengine";
-    nativeBuildInputs =
-      [
-        bison
-        flex
-        git
-        gperf
-        ninja
-        pkg-config
-        (python.withPackages (ps: [ ps.html5lib ]))
-        which
-        gn
-        nodejs
-      ]
-      ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-        perl
-        lndir
-        (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
-        pkgsBuildBuild.pkg-config
-        (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
-        pkg-config-wrapped-without-prefix
-      ]
-      ++ lib.optional stdenv.hostPlatform.isDarwin [
-        bootstrap_cmds
-        xcbuild
-      ];
+    nativeBuildInputs = [
+      bison
+      flex
+      gperf
+      ninja
+      pkg-config
+      (python.withPackages (ps: [ ps.html5lib ]))
+      which
+      gn
+      nodejs
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      perl
+      lndir
+      (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtbase)
+      pkgsBuildBuild.pkg-config
+      (lib.getDev pkgsBuildTarget.targetPackages.qt5.qtquickcontrols)
+      pkg-config-wrapped-without-prefix
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      bootstrap_cmds
+      xcbuild
+    ];
     doCheck = true;
     outputs = [
       "bin"
@@ -220,188 +217,186 @@ qtModule (
         hash = "sha256-DcAYOV9b30ogPCiedvQimEmiZpUJquk5j6WLjJxR54U=";
         extraPrefix = "";
       })
+
+      # Fix the build with gperf ≥ 3.2 and Clang 19.
+      ./qtwebengine-gperf-3.2.patch
     ];
 
-    postPatch =
-      ''
-        # Patch Chromium build tools
-        (
-          cd src/3rdparty/chromium;
+    postPatch = ''
+      # Patch Chromium build tools
+      (
+        cd src/3rdparty/chromium;
 
-          patch -p1 < ${
-            (fetchpatch {
-              # support for building with python 3.12
-              name = "python312-six.patch";
-              url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
-              hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
-            })
-          }
+        patch -p1 < ${
+          (fetchpatch {
+            # support for building with python 3.12
+            name = "python312-six.patch";
+            url = "https://gitlab.archlinux.org/archlinux/packaging/packages/qt5-webengine/-/raw/6b0c0e76e0934db2f84be40cb5978cee47266e78/python3.12-six.patch";
+            hash = "sha256-YgP9Sq5+zTC+U7+0hQjZokwb+fytk0UEIJztUXFhTkI=";
+          })
+        }
 
-          # Manually fix unsupported shebangs
-          substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
-            --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
+        # Manually fix unsupported shebangs
+        substituteInPlace third_party/harfbuzz-ng/src/src/update-unicode-tables.make \
+          --replace "/usr/bin/env -S make -f" "/usr/bin/make -f" || true
 
-          # TODO: be more precise
-          patchShebangs .
-        )
-      ''
-      # Prevent Chromium build script from making the path to `clang` relative to
-      # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
-      # from `src/core/config/mac_osx.pri`.
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        substituteInPlace ./src/3rdparty/chromium/build/toolchain/mac/BUILD.gn \
-          --replace 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
-      ''
-      # Patch library paths in Qt sources
-      + ''
-        sed -i \
-          -e "s,QLibraryInfo::location(QLibraryInfo::DataPath),QLatin1String(\"$out\"),g" \
-          -e "s,QLibraryInfo::location(QLibraryInfo::TranslationsPath),QLatin1String(\"$out/translations\"),g" \
-          -e "s,QLibraryInfo::location(QLibraryInfo::LibraryExecutablesPath),QLatin1String(\"$out/libexec\"),g" \
-          src/core/web_engine_library_info.cpp
-      ''
-      # Patch library paths in Chromium sources
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
-          src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
+        # TODO: be more precise
+        patchShebangs .
+      )
+    ''
+    # Prevent Chromium build script from making the path to `clang` relative to
+    # the build directory.  `clang_base_path` is the value of `QMAKE_CLANG_DIR`
+    # from `src/core/config/mac_osx.pri`.
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace ./src/3rdparty/chromium/build/toolchain/mac/BUILD.gn \
+        --replace 'prefix = rebase_path("$clang_base_path/bin/", root_build_dir)' 'prefix = "$clang_base_path/bin/"'
+    ''
+    # Patch library paths in Qt sources
+    + ''
+      sed -i \
+        -e "s,QLibraryInfo::location(QLibraryInfo::DataPath),QLatin1String(\"$out\"),g" \
+        -e "s,QLibraryInfo::location(QLibraryInfo::TranslationsPath),QLatin1String(\"$out/translations\"),g" \
+        -e "s,QLibraryInfo::location(QLibraryInfo::LibraryExecutablesPath),QLatin1String(\"$out/libexec\"),g" \
+        src/core/web_engine_library_info.cpp
+    ''
+    # Patch library paths in Chromium sources
+    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+      sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
+        src/3rdparty/chromium/device/udev_linux/udev?_loader.cc
 
-        sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
-          src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
-      ''
-      + lib.optionalString stdenv.hostPlatform.isDarwin (''
-        substituteInPlace src/buildtools/config/mac_osx.pri \
-          --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
+      sed -i -e '/libpci_loader.*Load/s!"\(libpci\.so\)!"${pciutils}/lib/\1!' \
+        src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace src/buildtools/config/mac_osx.pri \
+        --replace 'QMAKE_CLANG_DIR = "/usr"' 'QMAKE_CLANG_DIR = "${stdenv.cc}"'
 
-        # Use system ffmpeg
-        echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
-        echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
-      '')
-      + postPatch;
+      # Use system ffmpeg
+      echo "gn_args += use_system_ffmpeg=true" >> src/core/config/mac_osx.pri
+      echo "LIBS += -lavformat -lavcodec -lavutil" >> src/core/core_common.pri
+    ''
+    + postPatch;
 
-    env =
-      {
-        NIX_CFLAGS_COMPILE = toString (
-          lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-            "-w "
-          ]
-          ++ lib.optionals stdenv.cc.isGNU [
-            # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
-            "-Wno-class-memaccess"
-          ]
-          ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
-            # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
-            # TODO: investigate and fix properly
-            "-march=westmere"
-          ]
-          ++ lib.optionals stdenv.cc.isClang [
-            "-Wno-elaborated-enum-base"
-            # 5.15.17: need to silence these two warnings
-            # https://trac.macports.org/ticket/70850
-            "-Wno-enum-constexpr-conversion"
-            "-Wno-unused-but-set-variable"
-            # Clang 19
-            "-Wno-error=missing-template-arg-list-after-template-kw"
-          ]
-        );
-      }
-      // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
-        NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
-        "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
-      };
+    env = {
+      NIX_CFLAGS_COMPILE = toString (
+        lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+          "-w "
+        ]
+        ++ lib.optionals stdenv.cc.isGNU [
+          # with gcc8, -Wclass-memaccess became part of -Wall and this exceeds the logging limit
+          "-Wno-class-memaccess"
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.gcc.arch or "" == "sandybridge") [
+          # it fails when compiled with -march=sandybridge https://github.com/NixOS/nixpkgs/pull/59148#discussion_r276696940
+          # TODO: investigate and fix properly
+          "-march=westmere"
+        ]
+        ++ lib.optionals stdenv.cc.isClang [
+          "-Wno-elaborated-enum-base"
+          # 5.15.17: need to silence these two warnings
+          # https://trac.macports.org/ticket/70850
+          "-Wno-enum-constexpr-conversion"
+          "-Wno-unused-but-set-variable"
+          # Clang 19
+          "-Wno-error=missing-template-arg-list-after-template-kw"
+        ]
+      );
+    }
+    // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
+      NIX_CFLAGS_LINK = "-Wl,--no-warn-search-mismatch";
+      "NIX_CFLAGS_LINK_${buildPackages.stdenv.cc.suffixSalt}" = "-Wl,--no-warn-search-mismatch";
+    };
 
-    preConfigure =
-      ''
-        export NINJAFLAGS=-j$NIX_BUILD_CORES
+    preConfigure = ''
+      export NINJAFLAGS=-j$NIX_BUILD_CORES
 
-        if [ -d "$PWD/tools/qmake" ]; then
-            QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
-        fi
-      ''
-      + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-        export QMAKE_CC=$CC
-        export QMAKE_CXX=$CXX
-        export QMAKE_LINK=$CXX
-        export QMAKE_AR=$AR
-      '';
+      if [ -d "$PWD/tools/qmake" ]; then
+          QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
+      fi
+    ''
+    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+      export QMAKE_CC=$CC
+      export QMAKE_CXX=$CXX
+      export QMAKE_LINK=$CXX
+      export QMAKE_AR=$AR
+    '';
 
-    qmakeFlags =
-      [
-        "--"
-        "-system-ffmpeg"
-      ]
-      ++ lib.optional (
-        pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
-      ) "-webengine-webrtc-pipewire"
-      ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
+    qmakeFlags = [
+      "--"
+      "-system-ffmpeg"
+    ]
+    ++ lib.optional (
+      pipewireSupport && stdenv.buildPlatform == stdenv.hostPlatform
+    ) "-webengine-webrtc-pipewire"
+    ++ lib.optional enableProprietaryCodecs "-proprietary-codecs";
 
-    propagatedBuildInputs =
-      [
-        qtdeclarative
-        qtquickcontrols
-        qtlocation
-        qtwebchannel
+    propagatedBuildInputs = [
+      qtdeclarative
+      qtquickcontrols
+      qtlocation
+      qtwebchannel
 
-        # Image formats
-        libjpeg
-        libpng
-        libtiff
-        libwebp
+      # Image formats
+      libjpeg
+      libpng
+      libtiff
+      libwebp
 
-        # Video formats
-        srtp
-        libvpx
+      # Video formats
+      srtp
+      libvpx
 
-        # Audio formats
-        libopus
+      # Audio formats
+      libopus
 
-        # Text rendering
-        harfbuzz
-        icu
+      # Text rendering
+      harfbuzz
+      icu
 
-        libevent
-        ffmpeg
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        dbus
-        zlib
-        minizip
-        snappy
-        nss
-        protobuf
-        jsoncpp
+      libevent
+      ffmpeg
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      dbus
+      zlib
+      minizip
+      snappy
+      nss
+      protobuf
+      jsoncpp
 
-        # Audio formats
-        alsa-lib
-        pulseaudio
+      # Audio formats
+      alsa-lib
+      pulseaudio
 
-        # Text rendering
-        fontconfig
-        freetype
+      # Text rendering
+      fontconfig
+      freetype
 
-        libcap
-        pciutils
+      libcap
+      pciutils
 
-        # X11 libs
-        xorg.xrandr
-        libXScrnSaver
-        libXcursor
-        libXrandr
-        xorg.libpciaccess
-        libXtst
-        xorg.libXcomposite
-        xorg.libXdamage
-        libdrm
-        xorg.libxkbfile
+      # X11 libs
+      xorg.xrandr
+      libXScrnSaver
+      libXcursor
+      libXrandr
+      xorg.libpciaccess
+      libXtst
+      xorg.libXcomposite
+      xorg.libXdamage
+      libdrm
+      xorg.libxkbfile
 
-      ]
-      ++ lib.optionals pipewireSupport [
-        # Pipewire
-        pipewire
-      ]
+    ]
+    ++ lib.optionals pipewireSupport [
+      # Pipewire
+      pipewire
+    ]
 
-      # FIXME These dependencies shouldn't be needed but can't find a way
-      # around it. Chromium pulls this in while bootstrapping GN.
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
+    # FIXME These dependencies shouldn't be needed but can't find a way
+    # around it. Chromium pulls this in while bootstrapping GN.
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cctools.libtool ];
 
     buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
       cups
@@ -467,6 +462,43 @@ qtModule (
 
       # This build takes a long time; particularly on slow architectures
       timeout = 24 * 3600;
+
+      knownVulnerabilities = [
+        ''
+          qt5 qtwebengine is unmaintained upstream since april 2025.
+          It is based on chromium 87.0.4280.144, and supposedly patched up to 135.0.7049.95 which is outdated.
+
+          Security issues are frequently discovered in chromium.
+          The following list of CVEs was fixed in the life cycle of chromium 138 and likely also affects qtwebengine:
+          - CVE-2025-8879
+          - CVE-2025-8880
+          - CVE-2025-8901
+          - CVE-2025-8881
+          - CVE-2025-8882
+          - CVE-2025-8576
+          - CVE-2025-8577
+          - CVE-2025-8578
+          - CVE-2025-8579
+          - CVE-2025-8580
+          - CVE-2025-8581
+          - CVE-2025-8582
+          - CVE-2025-8583
+          - CVE-2025-8292
+          - CVE-2025-8010
+          - CVE-2025-8011
+          - CVE-2025-7656
+          - CVE-2025-6558 (known to be exploited in the wild)
+          - CVE-2025-7657
+          - CVE-2025-6554
+          - CVE-2025-6555
+          - CVE-2025-6556
+          - CVE-2025-6557
+
+          The actual list of CVEs affecting qtwebengine is likely much longer,
+          as this list is missing issues fixed in chromium 136/137 and even more
+          issues are continuously discovered and lack upstream fixes in qtwebengine.
+        ''
+      ];
     };
 
   }

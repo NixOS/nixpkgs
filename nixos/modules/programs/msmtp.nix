@@ -16,6 +16,8 @@ in
     programs.msmtp = {
       enable = lib.mkEnableOption "msmtp - an SMTP client";
 
+      package = lib.mkPackageOption pkgs "msmtp" { };
+
       setSendmail = lib.mkOption {
         type = lib.types.bool;
         default = true;
@@ -75,11 +77,11 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = [ pkgs.msmtp ];
+    environment.systemPackages = [ cfg.package ];
 
     services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail {
       program = "sendmail";
-      source = "${pkgs.msmtp}/bin/sendmail";
+      source = "${cfg.package}/bin/sendmail";
       setuid = false;
       setgid = false;
       owner = "root";

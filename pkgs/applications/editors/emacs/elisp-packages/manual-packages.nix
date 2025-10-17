@@ -15,6 +15,14 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
+  eaf-browser = callPackage ./manual-packages/eaf-browser {
+    inherit (pkgs) aria2;
+  };
+
+  eaf-git = callPackage ./manual-packages/eaf-git {
+    inherit (pkgs) ripgrep;
+  };
+
   elpaca = callPackage ./manual-packages/elpaca { inherit (pkgs) git; };
 
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {

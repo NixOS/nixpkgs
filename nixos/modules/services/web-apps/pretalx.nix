@@ -428,28 +428,34 @@ in
       {
         pretalx-web = lib.recursiveUpdate commonUnitConfig {
           description = "pretalx web service";
-          after =
-            [
-              "network.target"
-              "redis-pretalx.service"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-              "postgresql.target"
-            ]
-            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-              "mysql.service"
-            ];
+          after = [
+            "network.target"
+            "redis-pretalx.service"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+            "postgresql.target"
+          ]
+          ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+            "mysql.service"
+          ];
           wantedBy = [ "multi-user.target" ];
-          preStart = ''
-            versionFile="${cfg.settings.filesystem.data}/.version"
-            version=$(cat "$versionFile" 2>/dev/null || echo 0)
+          preStart =
+            let
+              versionString = lib.concatStringsSep "\n" (
+                [ "pretalx-${cfg.package.version}" ]
+                ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
+              );
+            in
+            ''
+              versionFile="${cfg.settings.filesystem.data}/.version"
+              version="$(cat "$versionFile" 2>/dev/null || echo 0)"
 
-            if [[ $version != ${cfg.package.version} ]]; then
-              ${lib.getExe' pythonEnv "pretalx-manage"} migrate
+              if [[ "$version" != "${versionString}" ]]; then
+                ${lib.getExe' pythonEnv "pretalx-manage"} migrate
 
-              echo "${cfg.package.version}" > "$versionFile"
-            fi
-          '';
+                echo "${versionString}" > "$versionFile"
+              fi
+            '';
           serviceConfig = {
             ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi";
             RuntimeDirectory = "pretalx";
@@ -478,17 +484,16 @@ in
         pretalx-worker = lib.mkIf cfg.celery.enable (
           lib.recursiveUpdate commonUnitConfig {
             description = "pretalx asynchronous job runner";
-            after =
-              [
-                "network.target"
-                "redis-pretalx.service"
-              ]
-              ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
-                "postgresql.target"
-              ]
-              ++ lib.optionals (cfg.settings.database.backend == "mysql") [
-                "mysql.service"
-              ];
+            after = [
+              "network.target"
+              "redis-pretalx.service"
+            ]
+            ++ lib.optionals (cfg.settings.database.backend == "postgresql") [
+              "postgresql.target"
+            ]
+            ++ lib.optionals (cfg.settings.database.backend == "mysql") [
+              "mysql.service"
+            ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig.ExecStart = "${lib.getExe' pythonEnv "celery"} -A pretalx.celery_app worker ${cfg.celery.extraArgs}";
           }

@@ -12,10 +12,7 @@ def perform_ocr_on_screenshot(screenshot_path: Path) -> str:
     Perform OCR on a screenshot that contains text.
     Returns a string with all words that could be found.
     """
-    variants = perform_ocr_variants_on_screenshot(screenshot_path, False)[0]
-    if len(variants) != 1:
-        raise MachineError(f"Received wrong number of OCR results: {len(variants)}")
-    return variants[0]
+    return perform_ocr_variants_on_screenshot(screenshot_path, False)[0]
 
 
 def perform_ocr_variants_on_screenshot(
@@ -104,7 +101,9 @@ def _preprocess_screenshot(screenshot_path: Path, negate: bool = False) -> Path:
 
     if negate:
         magick_args.append("-negate")
-        out_file = out_file.with_suffix(".negative")
+        out_file = out_file.with_name(f"{out_file.stem}.negative.png")
+    else:
+        out_file = out_file.with_name(f"{out_file.stem}.positive.png")
 
     magick_args += [
         "-gamma",
@@ -112,7 +111,6 @@ def _preprocess_screenshot(screenshot_path: Path, negate: bool = False) -> Path:
         "-blur",
         "1x65535",
     ]
-    out_file = out_file.with_suffix(".png")
 
     ret = subprocess.run(
         ["magick", "convert"] + magick_args + [screenshot_path, out_file],

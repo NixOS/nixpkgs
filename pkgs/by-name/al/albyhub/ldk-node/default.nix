@@ -8,19 +8,18 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ldk-node";
-  version = "0-unstable-2025-05-21";
+  version = "0-unstable-2025-09-03";
 
   src = fetchFromGitHub {
     owner = "getAlby";
     repo = "ldk-node";
-    rev = "9bb381ad38dbaa71e17816738789d993158fc1a2";
-    hash = "sha256-Ie7FOSOd12mwmkEjD4r0p1ZmeYkXm5eN1LlQhWl0VG4=";
+    rev = "75825474e5a551bb5ae5d1cf62cc434a26c30259";
+    hash = "sha256-8LhR2Ep7y+zXTKKwVdqmAqedq1FoTfdL3GyhCruHnz8=";
   };
 
   buildFeatures = [ "uniffi" ];
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-hM6VCU0kIg5ZmJM8C4HoybSc/VXNj6GTE/oFLfqGMcY=";
+  cargoHash = "sha256-VLQohnbuEdnu2E+BXe2mDKFUnDVlSY09rIIvHMIQ+Hg=";
 
   # Skip tests because they download bitcoin-core and electrs zip files, and then fail
   doCheck = false;

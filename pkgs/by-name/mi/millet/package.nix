@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Ffna9qsCTRHnUstgCDZxHweHteYVA/xiAtOkzCw2ltI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-eQobRfvVdL68FeV/P/BL824sHEibC5eQoPeo6m6XJcI=";
 
   postPatch = ''
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       lib.licenses.mit # or
       lib.licenses.asl20
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "millet-ls";
   };
 }

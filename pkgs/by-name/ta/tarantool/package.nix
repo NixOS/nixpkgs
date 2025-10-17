@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  autoreconfHook,
   cmake,
   zlib,
   openssl,
@@ -11,19 +12,28 @@
   git,
   gbenchmark,
   nghttp2,
+  nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tarantool";
-  version = "2.10.4";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
     owner = "tarantool";
     repo = "tarantool";
-    rev = version;
-    hash = "sha256-yCRU5IxC6gNS+O2KYtKWjFk35EHkBnnzWy5UnyuB9f4=";
+    tag = finalAttrs.version;
+    hash = "sha256-NU+0R07Qrnew7+HeeJu6QnGfktEXFRxSZFwl48vjGZE=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    cat <<'EOF' > third_party/luajit/test/cmake/GetLinuxDistro.cmake
+    macro(GetLinuxDistro output)
+      set(''${output} linux)
+    endmacro()
+    EOF
+  '';
 
   buildInputs = [
     nghttp2
@@ -37,20 +47,33 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [ gbenchmark ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    autoreconfHook
+    cmake
+  ];
+
+  preAutoreconf = ''
+    pushd third_party/libunwind
+  '';
+
+  postAutoreconf = ''
+    popd
+  '';
 
   cmakeBuildType = "RelWithDebInfo";
 
   cmakeFlags = [
     "-DENABLE_DIST=ON"
-    "-DTARANTOOL_VERSION=${version}.builtByNix" # expects the commit hash as well
+    "-DTARANTOOL_VERSION=${finalAttrs.version}.builtByNix" # expects the commit hash as well
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { extraArgs = [ "--use-github-releases" ]; };
+
+  meta = {
     description = "In-memory computing platform consisting of a database and an application server";
     homepage = "https://www.tarantool.io/";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "tarantool";
-    maintainers = with maintainers; [ dit7ya ];
+    maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

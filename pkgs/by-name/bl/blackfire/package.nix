@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "blackfire";
-  version = "2.28.28";
+  version = "2.29.1";
 
   src =
     passthru.sources.${stdenv.hostPlatform.system}
@@ -35,15 +35,15 @@ stdenv.mkDerivation rec {
       # Fix ExecStart path and replace deprecated directory creation method,
       # use dynamic user.
       substituteInPlace "$out/lib/systemd/system/blackfire-agent.service" \
-        --replace '/usr/' "$out/" \
-        --replace 'ExecStartPre=/bin/mkdir -p /var/run/blackfire' 'RuntimeDirectory=blackfire' \
-        --replace 'ExecStartPre=/bin/chown blackfire: /var/run/blackfire' "" \
-        --replace 'User=blackfire' 'DynamicUser=yes' \
-        --replace 'PermissionsStartOnly=true' ""
+        --replace-fail '/usr/' "$out/" \
+        --replace-fail 'ExecStartPre=/bin/mkdir -p /var/run/blackfire' 'RuntimeDirectory=blackfire' \
+        --replace-fail 'ExecStartPre=/bin/chown blackfire: /var/run/blackfire' "" \
+        --replace-fail 'User=blackfire' 'DynamicUser=yes' \
+        --replace-fail 'PermissionsStartOnly=true' ""
 
       # Modernize socket path.
       substituteInPlace "$out/etc/blackfire/agent" \
-        --replace '/var/run' '/run'
+        --replace-fail '/var/run' '/run'
     else
       mkdir $out
 
@@ -60,23 +60,23 @@ stdenv.mkDerivation rec {
     sources = {
       "x86_64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_amd64.deb";
-        sha256 = "luMpquZCnK6eFffPLoHNt7XUyBgJNqzeNkC4mhdYVqQ=";
+        sha256 = "n4jG21FgJbRtxhQSxXNKNFJHPqb9CmQFMd2P3+vnHVE=";
       };
       "i686-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_i386.deb";
-        sha256 = "K8/AYVpz25Pwe4Vf1sxwYd/l6yu6hgG/LETbiH1VxgQ=";
+        sha256 = "eX8kMQM9ofssQ9USft69ZzMV/pl1CV5EnUMgxOLuIcA=";
       };
       "aarch64-linux" = fetchurl {
         url = "https://packages.blackfire.io/debian/pool/any/main/b/blackfire/blackfire_${version}_arm64.deb";
-        sha256 = "COXdRnO0PAV1XbpK6VusBSiwMkP/WAfDfBDRGDpF2OY=";
+        sha256 = "LCqGWc/KJHa5YA1Ex35qI/wVbe1leBwPeG6SUlxrpvY=";
       };
       "aarch64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_arm64.pkg.tar.gz";
-        sha256 = "WZsF4SJ3BinPx9hhSG4Bi028qXUQXjdtqf2j/0/FN1w=";
+        sha256 = "RlTCB0lARb94dwDnDh9L6QYMZXTD/v5Ae756RETias0=";
       };
       "x86_64-darwin" = fetchurl {
         url = "https://packages.blackfire.io/blackfire/${version}/blackfire-darwin_amd64.pkg.tar.gz";
-        sha256 = "l19yB2cA7JK7oUl4MnxLKoqA8RFD1KLq/NXsAkWmxFQ=";
+        sha256 = "PGfBHkKOSd4uRKWW95MwyFRD7SWQzck9g6Jk/mWC384=";
       };
     };
 
@@ -103,11 +103,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "Blackfire Profiler agent and client";
+    description = "Profiler agent and client";
     homepage = "https://blackfire.io/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ shyim ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

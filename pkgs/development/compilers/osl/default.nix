@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "openshadinglanguage";
-  version = "1.14.5.1";
+  version = "1.14.7.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenShadingLanguage";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-dmGVCx4m2bkeKhAJbU1mrzEDAmnL++7GA5okb9wwk/Y=";
+    hash = "sha256-w78x0e9T0lYCAPDPkx6T/4TzAs/mpJ/24uQ+yH5gB5I=";
   };
 
   cmakeFlags = [
@@ -62,23 +62,22 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  buildInputs =
-    [
-      boost_static
-      libclang
-      llvm
-      openexr
-      openimageio
-      partio
-      pugixml
-      python3.pkgs.pybind11
-      robin-map
-      util-linux # needed just for hexdump
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libxml2
-    ];
+  buildInputs = [
+    boost_static
+    libclang
+    llvm
+    openexr
+    openimageio
+    partio
+    pugixml
+    python3.pkgs.pybind11
+    robin-map
+    util-linux # needed just for hexdump
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxml2
+  ];
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/*.pc \

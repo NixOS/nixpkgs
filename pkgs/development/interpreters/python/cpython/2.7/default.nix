@@ -87,6 +87,10 @@ let
       pythonOnBuildForTarget = pkgsBuildTarget.${pythonAttr};
       pythonOnHostForHost = pkgsHostHost.${pythonAttr};
       pythonOnTargetForTarget = pkgsTargetTarget.${pythonAttr} or { };
+      pythonABITags = [
+        "none"
+        "cp${sourceVersion.major}${sourceVersion.minor}"
+      ];
     }
     // {
       inherit ucsEncoding;
@@ -104,113 +108,111 @@ let
   };
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
-  patches =
-    [
-      # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
-      ./search-path.patch
+  patches = [
+    # Look in C_INCLUDE_PATH and LIBRARY_PATH for stuff.
+    ./search-path.patch
 
-      # Python recompiles a Python if the mtime stored *in* the
-      # pyc/pyo file differs from the mtime of the source file.  This
-      # doesn't work in Nix because Nix changes the mtime of files in
-      # the Nix store to 1.  So treat that as a special case.
-      ./nix-store-mtime.patch
+    # Python recompiles a Python if the mtime stored *in* the
+    # pyc/pyo file differs from the mtime of the source file.  This
+    # doesn't work in Nix because Nix changes the mtime of files in
+    # the Nix store to 1.  So treat that as a special case.
+    ./nix-store-mtime.patch
 
-      # patch python to put zero timestamp into pyc
-      # if DETERMINISTIC_BUILD env var is set
-      ./deterministic-build.patch
+    # patch python to put zero timestamp into pyc
+    # if DETERMINISTIC_BUILD env var is set
+    ./deterministic-build.patch
 
-      # Fix python bug #27177 (https://bugs.python.org/issue27177)
-      # The issue is that `match.group` only recognizes python integers
-      # instead of everything that has `__index__`.
-      # This bug was fixed upstream, but not backported to 2.7
-      (fetchpatch {
-        name = "re_match_index.patch";
-        url = "https://bugs.python.org/file43084/re_match_index.patch";
-        sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
-      })
+    # Fix python bug #27177 (https://bugs.python.org/issue27177)
+    # The issue is that `match.group` only recognizes python integers
+    # instead of everything that has `__index__`.
+    # This bug was fixed upstream, but not backported to 2.7
+    (fetchpatch {
+      name = "re_match_index.patch";
+      url = "https://bugs.python.org/file43084/re_match_index.patch";
+      sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
+    })
 
-      # Fix race-condition during pyc creation. Has a slight backwards
-      # incompatible effect: pyc symlinks will now be overridden
-      # (https://bugs.python.org/issue17222). Included in python >= 3.4,
-      # backported in debian since 2013.
-      # https://bugs.python.org/issue13146
-      ./atomic_pyc.patch
+    # Fix race-condition during pyc creation. Has a slight backwards
+    # incompatible effect: pyc symlinks will now be overridden
+    # (https://bugs.python.org/issue17222). Included in python >= 3.4,
+    # backported in debian since 2013.
+    # https://bugs.python.org/issue13146
+    ./atomic_pyc.patch
 
-      # Backport from CPython 3.8 of a good list of tests to run for PGO.
-      ./profile-task.patch
+    # Backport from CPython 3.8 of a good list of tests to run for PGO.
+    ./profile-task.patch
 
-      # The workaround is for unittests on Win64, which we don't support.
-      # It does break aarch64-darwin, which we do support. See:
-      # * https://bugs.python.org/issue35523
-      # * https://github.com/python/cpython/commit/e6b247c8e524
-      ../3.7/no-win64-workaround.patch
+    # The workaround is for unittests on Win64, which we don't support.
+    # It does break aarch64-darwin, which we do support. See:
+    # * https://bugs.python.org/issue35523
+    # * https://github.com/python/cpython/commit/e6b247c8e524
+    ../3.7/no-win64-workaround.patch
 
-      # fix openssl detection by reverting irrelevant change for us, to enable hashlib which is required by pip
-      (fetchpatch {
-        url = "https://github.com/ActiveState/cpython/pull/35/commits/20ea5b46aaf1e7bdf9d6905ba8bece2cc73b05b0.patch";
-        revert = true;
-        hash = "sha256-Lp5fGlcfJJ6p6vKmcLckJiAA2AZz4prjFE0aMEJxotw=";
-      })
-    ]
-    ++ lib.optionals (x11Support && stdenv.hostPlatform.isDarwin) [
-      ./use-correct-tcl-tk-on-darwin.patch
+    # fix openssl detection by reverting irrelevant change for us, to enable hashlib which is required by pip
+    (fetchpatch {
+      url = "https://github.com/ActiveState/cpython/pull/35/commits/20ea5b46aaf1e7bdf9d6905ba8bece2cc73b05b0.patch";
+      revert = true;
+      hash = "sha256-Lp5fGlcfJJ6p6vKmcLckJiAA2AZz4prjFE0aMEJxotw=";
+    })
+  ]
+  ++ lib.optionals (x11Support && stdenv.hostPlatform.isDarwin) [
+    ./use-correct-tcl-tk-on-darwin.patch
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
 
-      # Disable the use of ldconfig in ctypes.util.find_library (since
-      # ldconfig doesn't work on NixOS), and don't use
-      # ctypes.util.find_library during the loading of the uuid module
-      # (since it will do a futile invocation of gcc (!) to find
-      # libuuid, slowing down program startup a lot).
-      ./no-ldconfig.patch
+    # Disable the use of ldconfig in ctypes.util.find_library (since
+    # ldconfig doesn't work on NixOS), and don't use
+    # ctypes.util.find_library during the loading of the uuid module
+    # (since it will do a futile invocation of gcc (!) to find
+    # libuuid, slowing down program startup a lot).
+    ./no-ldconfig.patch
 
-      # Fix ctypes.util.find_library with gcc10.
-      ./find_library-gcc10.patch
+    # Fix ctypes.util.find_library with gcc10.
+    ./find_library-gcc10.patch
 
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isCygwin [
-      ./2.5.2-ctypes-util-find_library.patch
-      ./2.5.2-tkinter-x11.patch
-      ./2.6.2-ssl-threads.patch
-      ./2.6.5-export-PySignal_SetWakeupFd.patch
-      ./2.6.5-FD_SETSIZE.patch
-      ./2.6.5-ncurses-abi6.patch
-      ./2.7.3-dbm.patch
-      ./2.7.3-dylib.patch
-      ./2.7.3-getpath-exe-extension.patch
-      ./2.7.3-no-libm.patch
-    ]
-    ++ lib.optionals hasDistutilsCxxPatch [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isCygwin [
+    ./2.5.2-ctypes-util-find_library.patch
+    ./2.5.2-tkinter-x11.patch
+    ./2.6.2-ssl-threads.patch
+    ./2.6.5-export-PySignal_SetWakeupFd.patch
+    ./2.6.5-FD_SETSIZE.patch
+    ./2.6.5-ncurses-abi6.patch
+    ./2.7.3-dbm.patch
+    ./2.7.3-dylib.patch
+    ./2.7.3-getpath-exe-extension.patch
+    ./2.7.3-no-libm.patch
+  ]
+  ++ lib.optionals hasDistutilsCxxPatch [
 
-      # Patch from http://bugs.python.org/issue1222585 adapted to work with
-      # `patch -p1' and with a last hunk removed
-      # Upstream distutils is calling C compiler to compile C++ code, which
-      # only works for GCC and Apple Clang. This makes distutils to call C++
-      # compiler when needed.
-      ./python-2.7-distutils-C++.patch
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      ./cross-compile.patch
-    ];
+    # Patch from http://bugs.python.org/issue1222585 adapted to work with
+    # `patch -p1' and with a last hunk removed
+    # Upstream distutils is calling C compiler to compile C++ code, which
+    # only works for GCC and Apple Clang. This makes distutils to call C++
+    # compiler when needed.
+    ./python-2.7-distutils-C++.patch
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    ./cross-compile.patch
+  ];
 
-  preConfigure =
-    ''
-      # Purity.
-      for i in /usr /sw /opt /pkg; do
-        substituteInPlace ./setup.py --replace $i /no-such-path
-      done
-    ''
-    + lib.optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
-      for i in Lib/plat-*/regen; do
-        substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
-      substituteInPlace Lib/multiprocessing/__init__.py \
-        --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
-    '';
+  preConfigure = ''
+    # Purity.
+    for i in /usr /sw /opt /pkg; do
+      substituteInPlace ./setup.py --replace $i /no-such-path
+    done
+  ''
+  + lib.optionalString (stdenv ? cc && stdenv.cc.libc != null) ''
+    for i in Lib/plat-*/regen; do
+      substituteInPlace $i --replace /usr/include/ ${stdenv.cc.libc}/include/
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
+    substituteInPlace Lib/multiprocessing/__init__.py \
+      --replace 'os.popen(comm)' 'os.popen("${coreutils}/bin/nproc")'
+  '';
 
   configureFlags =
     lib.optionals enableOptimizations [
@@ -279,12 +281,13 @@ let
       tk
       libX11
     ];
-  nativeBuildInputs =
-    [ autoreconfHook ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      buildPackages.stdenv.cc
-      buildPackages.python27
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    buildPackages.stdenv.cc
+    buildPackages.python27
+  ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = lib.makeSearchPathOutput "dev" "include" paths;
@@ -329,68 +332,66 @@ stdenv.mkDerivation (
       substituteInPlace "Lib/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tclPackages.tix}/lib'"
     '';
 
-    postInstall =
-      ''
-        # needed for some packages, especially packages that backport
-        # functionality to 2.x from 3.x
-        for item in $out/lib/${libPrefix}/test/*; do
-          if [[ "$item" != */test_support.py*
-             && "$item" != */test/support
-             && "$item" != */test/regrtest.py* ]]; then
-            rm -rf "$item"
-          else
-            echo $item
-          fi
-        done
-        touch $out/lib/${libPrefix}/test/__init__.py
-        ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb
-        ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
-        ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
+    postInstall = ''
+      # needed for some packages, especially packages that backport
+      # functionality to 2.x from 3.x
+      for item in $out/lib/${libPrefix}/test/*; do
+        if [[ "$item" != */test_support.py*
+           && "$item" != */test/support
+           && "$item" != */test/regrtest.py* ]]; then
+          rm -rf "$item"
+        else
+          echo $item
+        fi
+      done
+      touch $out/lib/${libPrefix}/test/__init__.py
+      ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb
+      ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
+      ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
-        rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
+      rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
 
-        # Determinism: Windows installers were not deterministic.
-        # We're also not interested in building Windows installers.
-        find "$out" -name 'wininst*.exe' | xargs -r rm -f
-      ''
-      + lib.optionalString stripBytecode ''
-        # Determinism: deterministic bytecode
-        # First we delete all old bytecode.
-        find $out -name "*.pyc" -delete
-      ''
-      + lib.optionalString rebuildBytecode ''
-        # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
-        # is not reproducible yet. https://bugs.python.org/issue29708
-        # Not creating bytecode will result in a large performance loss however, so we do build it.
-        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
-        find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
-      ''
-      + lib.optionalString stdenv.hostPlatform.isCygwin ''
-        cp libpython2.7.dll.a $out/lib
-      '';
+      # Determinism: Windows installers were not deterministic.
+      # We're also not interested in building Windows installers.
+      find "$out" -name 'wininst*.exe' | xargs -r rm -f
+    ''
+    + lib.optionalString stripBytecode ''
+      # Determinism: deterministic bytecode
+      # First we delete all old bytecode.
+      find $out -name "*.pyc" -delete
+    ''
+    + lib.optionalString rebuildBytecode ''
+      # We build 3 levels of optimized bytecode. Note the default level, without optimizations,
+      # is not reproducible yet. https://bugs.python.org/issue29708
+      # Not creating bytecode will result in a large performance loss however, so we do build it.
+      find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -m compileall -q -f -x "lib2to3" -i -
+      find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -O  -m compileall -q -f -x "lib2to3" -i -
+      find $out -name "*.py" | ${pythonOnBuildForHostInterpreter} -OO -m compileall -q -f -x "lib2to3" -i -
+    ''
+    + lib.optionalString stdenv.hostPlatform.isCygwin ''
+      cp libpython2.7.dll.a $out/lib
+    '';
 
     inherit passthru;
 
-    postFixup =
-      ''
-        # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
-        cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-      ''
-      + lib.optionalString strip2to3 ''
-        rm -R $out/bin/2to3 $out/lib/python*/lib2to3
-      ''
-      + lib.optionalString stripConfig ''
-        rm -R $out/bin/python*-config $out/lib/python*/config*
-      ''
-      + lib.optionalString stripIdlelib ''
-        # Strip IDLE
-        rm -R $out/bin/idle* $out/lib/python*/idlelib
-      ''
-      + lib.optionalString stripTests ''
-        # Strip tests
-        rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
-      '';
+    postFixup = ''
+      # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
+      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    ''
+    + lib.optionalString strip2to3 ''
+      rm -R $out/bin/2to3 $out/lib/python*/lib2to3
+    ''
+    + lib.optionalString stripConfig ''
+      rm -R $out/bin/python*-config $out/lib/python*/config*
+    ''
+    + lib.optionalString stripIdlelib ''
+      # Strip IDLE
+      rm -R $out/bin/idle* $out/lib/python*/idlelib
+    ''
+    + lib.optionalString stripTests ''
+      # Strip tests
+      rm -R $out/lib/python*/test $out/lib/python*/**/test{,s}
+    '';
 
     enableParallelBuilding = true;
 

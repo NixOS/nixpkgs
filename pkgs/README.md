@@ -38,7 +38,9 @@ Before adding a new package, please consider the following questions:
 * How realistic is it that it will be used by other people?
   It's good that nixpkgs caters to various niches, but if it's a niche of 5 people it's probably too small.
   A good estimate is checking upstream issues and pull requests, or other software repositories.
-  Library packages should have at least one dependent.
+    * Library packages should have at least one dependent.
+      If possible, that dependent should be packaged in the same PR the library is added in, as a sanity check.
+      If it is not possible to package the dependent, a minimal test program should be added to `passthru.tests`.
 * Is the software actively maintained upstream?
   Especially packages that are security-critical, rely on fast-moving dependencies, or affect data integrity should see regular maintenance.
 * Are you willing to maintain the package?
@@ -125,7 +127,7 @@ To add a package to Nixpkgs:
    - Apache HTTPD: [`pkgs/servers/http/apache-httpd/2.4.nix`](servers/http/apache-httpd/2.4.nix).
      A bunch of optional features, variable substitutions in the configure flags, a post-install hook, and miscellaneous hackery.
 
-   - buildMozillaMach: [`pkgs/applications/networking/browser/firefox/common.nix`](applications/networking/browsers/firefox/common.nix).
+   - buildMozillaMach: [`pkgs/build-support/build-mozilla-mach/default.nix`](./build-support/build-mozilla-mach/default.nix).
      A reusable build function for Firefox, Thunderbird and Librewolf.
 
    - JDiskReport, a Java utility: [`pkgs/by-name/jd/jdiskreport/package.nix`](./by-name/jd/jdiskreport/package.nix).
@@ -186,6 +188,27 @@ To add a package to Nixpkgs:
     https://www.mozilla.org/en-US/firefox/55.0/releasenotes/
 
 (using "→" instead of "->" is also accepted)
+
+Using the `(pkg-name):` prefix is important beyond just being a convention: it queues automatic builds by CI.
+More sophisticated prefixes are also possible:
+
+| Message                                                                  | Automatic Builds                                           |
+|--------------------------------------------------------------------------|------------------------------------------------------------|
+| `vim: 1.0.0 -> 2.0.0`                                                    | `vim`                                                      |
+| `vagrant: fix dependencies for version 2.0.2`                            | `vagrant`                                                  |
+| `python3{9,10}Packages.requests: 1.0.0 -> 2.0.0`                         | `python39Packages.requests`, `python310Packages.requests`  |
+| `python312.pkgs.numpy,python313.pkgs.scipy: fix build`                   | `python312.pkgs.numpy` , `python313.pkgs.scipy`            |
+
+When opening a PR with multiple commits, CI creates a single build job for all detected packages.
+If `passthru.tests` attributes are available, these will be built as well.
+
+If the title of the _PR_ begins with `WIP:` or contains `[WIP]` anywhere, its packages are not built automatically.
+Other than that, PR titles have meaning only for humans.
+It is recommended to keep the PR title in sync with the commit title, to make it easier to find.
+For PRs with multiple commits, the PR title should be a general summary of these commits.
+
+> [!NOTE]
+> Marking a PR as a draft does not prevent automatic builds.
 
 ## Category Hierarchy
 [categories]: #category-hierarchy
@@ -478,6 +501,8 @@ The `meta` attribute set should always be placed last in the derivativion and an
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
+* `meta.sourceProvenance` must be set if the package is not built from source.
+  * If you are repackaging a `.deb`, `.rpm`, `.whl`, or any other format provided by your upstream, this should almost always be set to `lib.sourceTypes.binaryNativeCode`.
 * `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
   * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`.
     For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.
@@ -496,6 +521,23 @@ See the Nixpkgs manual for more details on [standard meta-attributes](https://ni
 [Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
 
 Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.
+
+## `overrideAttrs` and `overridePythonAttrs`
+
+Please do not introduce new uses of `overrideAttrs` or `overridePythonAttrs` in Nixpkgs.
+These functions are useful for out-of-tree code because they allow easy overriding a package without changing its source in Nixpkgs, but when contributing to Nixpkgs you *can* change the source of other packages. So instead of using the escape hatch that is overriding, you should try to provide proper support for the functionality you need, in ways that are visible and can be understood and accounted for by the maintainers of the patched package.
+Using `overrideAttrs` and `overridePythonAttrs` in Nixpkgs causes maintainability problems:
+
+* It's easy for multiple packages to end up duplicating basically the same override without noticing.
+* It's not clear when working on an overridden package that it's being overridden elsewhere in Nixpkgs, so `overrideAttrs` and `overridePythonAttrs` are fragile and can break accidentally when the overridden package is changed.
+* Package maintainers will not be requested for review of overrides, even though they are likely to have important knowledge about the package.
+* It is easy for overridden packages to be forgotten and remain around long after they are no longer necessary.
+* Dependency closures end up being bigger than necessary due to unnecessarily including multiple versions of the same package.
+
+Instead, keep all instances of the same package next to each other, and try to minimize how many different instances of a package are in Nixpkgs.
+If you need a patch applied to a dependency, discuss with the maintainer of that dependency whether it would be acceptable to apply to the main version of the package.
+If you need a different version of a dependency, first try modifying your package to work with the version in Nixpkgs — it's often not very hard! — and if that's not possible, try to factor out a function that can build multiple versions of the package, including the main version.
+If you need to enable or disable optional functionality of a dependency, add an explicit flag to the package and use `override` instead.
 
 ## Sources
 
@@ -610,9 +652,7 @@ In the following cases, a `.patch` file _should_ be added to Nixpkgs repository,
 The latter avoids link rot when the upstream abandons, squashes or rebases their change, in which case the commit may get garbage-collected.
 
 ```nix
-{
-  patches = [ ./0001-add-missing-include.patch ];
-}
+{ patches = [ ./0001-add-missing-include.patch ]; }
 ```
 
 If you do need to do create this sort of patch file, one way to do so is with git:
@@ -719,13 +759,14 @@ Here in the nixpkgs manual we describe mostly _package tests_; for _module tests
 For very simple tests, they can be written inline:
 
 ```nix
-{ /* ... , */ yq-go }:
+# ... ,
+{ yq-go }:
 
 buildGoModule rec {
   # …
 
   passthru.tests = {
-    simple = runCommand "${pname}-test" {} ''
+    simple = runCommand "${pname}-test" { } ''
       echo "test: 1" | ${yq-go}/bin/yq eval -j > $out
       [ "$(cat $out | tr -d $'\n ')" = '{"test":1}' ]
     '';
@@ -749,16 +790,26 @@ stdenv.mkDerivation (finalAttrs: {
 
 ```nix
 # my-package/example.nix
-{ runCommand, lib, my-package, ... }:
-runCommand "my-package-test" {
-  nativeBuildInputs = [ my-package ];
-  src = lib.sources.sourcesByRegex ./. [ ".*.in" ".*.expected" ];
-} ''
-  my-package --help
-  my-package <example.in >example.actual
-  diff -U3 --color=auto example.expected example.actual
-  mkdir $out
-''
+{
+  runCommand,
+  lib,
+  my-package,
+  ...
+}:
+runCommand "my-package-test"
+  {
+    nativeBuildInputs = [ my-package ];
+    src = lib.sources.sourcesByRegex ./. [
+      ".*.in"
+      ".*.expected"
+    ];
+  }
+  ''
+    my-package --help
+    my-package <example.in >example.actual
+    diff -U3 --color=auto example.expected example.actual
+    mkdir $out
+  ''
 ```
 
 ### Writing larger package tests
@@ -769,7 +820,12 @@ This is an example using the `phoronix-test-suite` package with the current best
 Add the tests in `passthru.tests` to the package definition like this:
 
 ```nix
-{ stdenv, lib, fetchurl, callPackage }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  callPackage,
+}:
 
 stdenv.mkDerivation {
   # …
@@ -778,7 +834,9 @@ stdenv.mkDerivation {
     simple-execution = callPackage ./tests.nix { };
   };
 
-  meta = { /* … */ };
+  meta = {
+    # …
+  };
 }
 ```
 
@@ -789,22 +847,21 @@ Create `tests.nix` in the package directory:
 
 let
   inherit (phoronix-test-suite) pname version;
-in
 
-runCommand "${pname}-tests" { meta.timeout = 60; }
-  ''
-    # automatic initial setup to prevent interactive questions
-    ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
-    # get version of installed program and compare with package version
-    if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
-      echo "Error: program version does not match package version"
-      exit 1
-    fi
-    # run dummy command
-    ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
-    # needed for Nix to register the command as successful
-    touch $out
-  ''
+in
+runCommand "${pname}-tests" { meta.timeout = 60; } ''
+  # automatic initial setup to prevent interactive questions
+  ${phoronix-test-suite}/bin/phoronix-test-suite enterprise-setup >/dev/null
+  # get version of installed program and compare with package version
+  if [[ `${phoronix-test-suite}/bin/phoronix-test-suite version` != *"${version}"*  ]]; then
+    echo "Error: program version does not match package version"
+    exit 1
+  fi
+  # run dummy command
+  ${phoronix-test-suite}/bin/phoronix-test-suite dummy_module.dummy-command >/dev/null
+  # needed for Nix to register the command as successful
+  touch $out
+''
 ```
 
 ### Running package tests
@@ -833,7 +890,11 @@ Like [package tests][larger-package-tests] as shown above, [NixOS module tests](
 For example, assuming we're packaging `nginx`, we can link its module test via `passthru.tests`:
 
 ```nix
-{ stdenv, lib, nixosTests }:
+{
+  stdenv,
+  lib,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   # ...
@@ -902,7 +963,11 @@ The `passthru.updateScript` attribute can contain one of the following:
   { stdenv }:
   stdenv.mkDerivation {
     # ...
-    passthru.updateScript = [ ../../update.sh pname "--requested-release=unstable" ];
+    passthru.updateScript = [
+      ../../update.sh
+      pname
+      "--requested-release=unstable"
+    ];
   }
   ```
 
@@ -927,9 +992,14 @@ The `passthru.updateScript` attribute can contain one of the following:
       pname = "my-package";
       # ...
       passthru.updateScript = {
-        command = [ ../../update.sh pname ];
+        command = [
+          ../../update.sh
+          pname
+        ];
         attrPath = pname;
-        supportedFeatures = [ /* ... */ ];
+        supportedFeatures = [
+          # ...
+        ];
       };
     }
     ```
@@ -940,7 +1010,8 @@ Update scripts are to be invoked by the [automatic package update script](../mai
 You can run `nix-shell maintainers/scripts/update.nix` in the root of Nixpkgs repository for information on how to use it.
 `update.nix` offers several modes for selecting packages to update, and it will execute update scripts for all matched packages that have an `updateScript` attribute.
 
-Each update script will be passed the following environment variables:
+Update scripts will be run inside the [Nixpkgs development shell](../shell.nix), providing access to some useful tools for CI.
+Furthermore each update script will be passed the following environment variables:
 
 - [`UPDATE_NIX_NAME`] – content of the `name` attribute of the updated package
 - [`UPDATE_NIX_PNAME`] – content of the `pname` attribute of the updated package
@@ -1066,7 +1137,7 @@ Sample template for a package update review is provided below.
 ### New packages
 
 New packages are a common type of pull requests.
-These pull requests consists in adding a new nix-expression for a package.
+These pull requests consist in adding a new nix-expression for a package.
 
 Review process:
 
@@ -1081,7 +1152,7 @@ Review process:
   - Maintainers must be set.
     This can be the package submitter or a community member that accepts taking up maintainership of the package.
   - The `meta.mainProgram` must be set if a main executable exists.
-- Ensure any special packaging choices and required context are documented in i.e. the name of a patch or in a comment.
+- Ensure any special packaging choices and required context are documented in, i.e., the name of a patch or in a comment.
   - If a special version of a package is pinned, document why, so others know if/when it can be unpinned.
   - If any (especially opinionated) patch or `substituteInPlace` is applied, document why.
   - If any non-default build flags are set, document why.
@@ -1154,7 +1225,7 @@ Currently opened ones can be found using the following:
 
 [github.com/NixOS/nixpkgs/issues?q=is:issue+is:open+"Vulnerability+roundup"](https://github.com/NixOS/nixpkgs/issues?q=is%3Aissue+is%3Aopen+%22Vulnerability+roundup%22)
 
-Each issue correspond to a vulnerable version of a package; As a consequence:
+Each issue corresponds to a vulnerable version of a package; as a consequence:
 
 - One issue can contain several CVEs;
 - One CVE can be shared across several issues;

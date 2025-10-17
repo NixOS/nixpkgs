@@ -22,7 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
+  ]
+  ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp-igd/${lib.versions.majorMinor finalAttrs.version}/gupnp-igd-${finalAttrs.version}.tar.xz";

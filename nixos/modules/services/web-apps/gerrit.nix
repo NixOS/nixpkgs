@@ -5,20 +5,18 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.services.gerrit;
 
   # NixOS option type for git-like configs
   gitIniType =
-    with types;
     let
-      primitiveType = either str (either bool int);
-      multipleType = either primitiveType (listOf primitiveType);
-      sectionType = lazyAttrsOf multipleType;
-      supersectionType = lazyAttrsOf (either multipleType sectionType);
+      primitiveType = lib.types.either lib.types.str (lib.types.either lib.types.bool lib.types.int);
+      multipleType = lib.types.either primitiveType (lib.types.listOf primitiveType);
+      sectionType = lib.types.lazyAttrsOf multipleType;
+      supersectionType = lib.types.lazyAttrsOf (lib.types.either multipleType sectionType);
     in
-    lazyAttrsOf supersectionType;
+    lib.types.lazyAttrsOf supersectionType;
 
   gerritConfig = pkgs.writeText "gerrit.conf" (lib.generators.toGitINI cfg.settings);
 
@@ -64,14 +62,14 @@ in
 {
   options = {
     services.gerrit = {
-      enable = mkEnableOption "Gerrit service";
+      enable = lib.mkEnableOption "Gerrit service";
 
-      package = mkPackageOption pkgs "gerrit" { };
+      package = lib.mkPackageOption pkgs "gerrit" { };
 
-      jvmPackage = mkPackageOption pkgs "jdk21_headless" { };
+      jvmPackage = lib.mkPackageOption pkgs "jdk21_headless" { };
 
-      jvmOpts = mkOption {
-        type = types.listOf types.str;
+      jvmOpts = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [
           "-Dflogger.backend_factory=com.google.common.flogger.backend.log4j.Log4jBackendFactory#getInstance"
           "-Dflogger.logging_context=com.google.gerrit.server.logging.LoggingContext#getInstance"
@@ -79,16 +77,16 @@ in
         description = "A list of JVM options to start gerrit with.";
       };
 
-      jvmHeapLimit = mkOption {
-        type = types.str;
+      jvmHeapLimit = lib.mkOption {
+        type = lib.types.str;
         default = "1024m";
         description = ''
           How much memory to allocate to the JVM heap
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "[::]:8080";
         description = ''
           `hostname:port` to listen for HTTP traffic.
@@ -97,7 +95,7 @@ in
         '';
       };
 
-      settings = mkOption {
+      settings = lib.mkOption {
         type = gitIniType;
         default = { };
         description = ''
@@ -106,7 +104,7 @@ in
         '';
       };
 
-      replicationSettings = mkOption {
+      replicationSettings = lib.mkOption {
         type = gitIniType;
         default = { };
         description = ''
@@ -115,8 +113,8 @@ in
         '';
       };
 
-      plugins = mkOption {
-        type = types.listOf types.package;
+      plugins = lib.mkOption {
+        type = lib.types.listOf lib.types.package;
         default = [ ];
         description = ''
           List of plugins to add to Gerrit. Each derivation is a jar file
@@ -124,8 +122,8 @@ in
         '';
       };
 
-      builtinPlugins = mkOption {
-        type = types.listOf (types.enum cfg.package.passthru.plugins);
+      builtinPlugins = lib.mkOption {
+        type = lib.types.listOf (lib.types.enum cfg.package.passthru.plugins);
         default = [ ];
         description = ''
           List of builtins plugins to install. Those are shipped in the
@@ -133,8 +131,8 @@ in
         '';
       };
 
-      serverId = mkOption {
-        type = types.str;
+      serverId = lib.mkOption {
+        type = lib.types.str;
         description = ''
           Set a UUID that uniquely identifies the server.
 
@@ -145,11 +143,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
-        assertion = cfg.replicationSettings != { } -> elem "replication" cfg.builtinPlugins;
+        assertion = cfg.replicationSettings != { } -> lib.elem "replication" cfg.builtinPlugins;
         message = "Gerrit replicationSettings require enabling the replication plugin";
       }
     ];
@@ -221,28 +219,33 @@ in
       '';
 
       serviceConfig = {
-        CacheDirectory = "gerrit";
         DynamicUser = true;
         ExecStart = "${gerrit-cli}/bin/gerrit daemon --console-log";
         LimitNOFILE = 4096;
         StandardInput = "socket";
         StandardOutput = "journal";
         StateDirectory = "gerrit";
+        StateDirectoryMode = "750";
+        CacheDirectory = "gerrit";
+        CacheDirectoryMode = "750";
         WorkingDirectory = "%S/gerrit";
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
         ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_UNIX"

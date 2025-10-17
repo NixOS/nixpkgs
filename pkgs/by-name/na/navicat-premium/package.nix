@@ -6,17 +6,17 @@
 }:
 let
   pname = "navicat-premium";
-  version = "17.2.3";
+  version = "17.3.1";
 
   src =
     {
       x86_64-linux = fetchurl {
-        url = "https://web.archive.org/web/20250516003452/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
-        hash = "sha256-QGz+0D0rNkuzkLxLO/tFlif4X4Zuzpb+btkqKNOBi7c=";
+        url = "https://web.archive.org/web/20250904095427/https://dn.navicat.com/download/navicat17-premium-en-x86_64.AppImage";
+        hash = "sha256-5vGctpbAg3mVhalr+Yg3iFZNCyY+0+a98sldhUcHkm0=";
       };
       aarch64-linux = fetchurl {
-        url = "https://web.archive.org/web/20250516004158/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
-        hash = "sha256-hxaqK9dPm/0mL3+LoQFeVSe14AD+tfYSNvEC9JsUvRE=";
+        url = "https://web.archive.org/web/20250904095643/https://dn.navicat.com/download/navicat17-premium-en-aarch64.AppImage";
+        hash = "sha256-r31u/b/3HO9PEQtIr9AZ/5NVrRcgJ+GACHPWCICZYec=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -40,7 +40,7 @@ appimageTools.wrapType2 {
     description = "Database development tool that allows you to simultaneously connect to many databases";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

@@ -38,7 +38,8 @@ buildPythonPackage rec {
     libcst
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock
@@ -56,8 +57,12 @@ buildPythonPackage rec {
     "google.cloud.iam_credentials_v1"
   ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "google-cloud-iam-v";
+  passthru = {
+    # bulk updater selects wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "google-cloud-iam-v";
+    };
   };
 
   meta = {

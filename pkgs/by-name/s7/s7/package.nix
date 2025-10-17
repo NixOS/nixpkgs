@@ -3,39 +3,48 @@
   fetchFromGitLab,
   stdenv,
 
-  flint3,
+  flint,
   gmp,
   libmpc,
   mpfr,
   notcurses,
+  windows,
 
   gsl,
   man,
   pkg-config,
+  writableTmpDirAsHomeHook,
 
   unstableGitUpdater,
   writeScript,
+
+  static ? false,
+  withGMP ? !static,
+  withArb ? !static,
+  withNrepl ? if stdenv.hostPlatform.isMinGW then false else true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "s7";
-  version = "11.5-unstable-2025-06-25";
+  version = "11.7-unstable-2025-10-14";
 
   src = fetchFromGitLab {
     domain = "cm-gitlab.stanford.edu";
     owner = "bil";
     repo = "s7";
-    rev = "0030b5a1e968bc0d6d3cdfd083703c9f5dcf93aa";
-    hash = "sha256-SqRzPSzahZeWxbWhQIUyXzRBq0x6gxb6Sd7oVqTIaF4=";
+    rev = "e338a5d36920e006d45880d9a89a2fb85068b0aa";
+    hash = "sha256-UpjJf45xuyn7zIMK/vj8UMmRYUuDcYe7GpLaOuxctNM=";
   };
 
-  buildInputs = [
-    notcurses
-    gmp
-    mpfr
-    libmpc
-    flint3
-  ];
+  buildInputs =
+    lib.optional withArb flint
+    ++ lib.optionals withGMP [
+      gmp
+      mpfr
+      libmpc
+    ]
+    ++ lib.optional withNrepl notcurses
+    ++ lib.optional stdenv.hostPlatform.isMinGW windows.pthreads;
 
   # The following scripts are modified from [Guix's](https://packages.guix.gnu.org/packages/s7/).
 
@@ -43,45 +52,83 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace s7.c \
         --replace-fail libc_s7.so $out/lib/libc_s7.so
   '';
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-I."
+      "-O2"
+    ]
+    ++ lib.optionals withGMP [
+      "-DWITH_GMP"
+    ]
+    ++ lib.optional static "-static"
+  );
+  env.NIX_LDFLAGS = toString (
+    [
+      "-lm"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+      "-ldl"
+      "--export-dynamic"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+      "-lpthread"
+      "--export-all-symbols"
+    ]
+    ++ lib.optional (!static && stdenv.hostPlatform.isMinGW) [ "--out-implib,libs7dll.a" ]
+    ++ lib.optional withArb "-lflint"
+    ++ lib.optionals withGMP [
+      "-lgmp"
+      "-lmpfr"
+      "-lmpc"
+    ]
+  );
 
   buildPhase = ''
     runHook preBuild
 
     # The older REPL
-    cc s7.c -o s7-repl \
-        -O2 -I. \
-        -Wl,-export-dynamic \
-        -lm -ldl \
+    $CC s7.c -o s7-repl \
         -DWITH_MAIN \
         -DS7_LOAD_PATH=\"$out/share/s7/scm\"
+
+    $CC s7.c -c -o s7.o
+
+    # Static library (Unix: .a, Windows: .a)
+    ${lib.optionalString static ''
+      $AR rcs libs7.a s7.o
+    ''}
+
+    # Dynamic library (Unix: .so, Windows: .dll)
+    ${lib.optionalString (!static && stdenv.hostPlatform.isLinux) ''
+      $CC s7.o -o libs7.so \
+        -shared -fPIC
+    ''}
+    ${lib.optionalString (!static && stdenv.hostPlatform.isMinGW) ''
+      $CC s7.o -o libs7.dll \
+        -shared
+    ''}
+
+    ${lib.optionalString withArb ''
+      $CC libarb_s7.c s7.o -o libarb_s7.so \
+          -shared -fPIC
+    ''}
 
     # The newer REPL powered by Notcurses
-    cc s7.c -o s7-nrepl \
-        -O2 -I. \
-        -Wl,-export-dynamic \
-        -lm -ldl \
-        -DWITH_MAIN \
-        -DWITH_NOTCURSES -lnotcurses-core \
-        -DS7_LOAD_PATH=\"$out/share/s7/scm\"
+    ${lib.optionalString withNrepl ''
+      $CC s7.c -o s7-nrepl \
+          -DWITH_MAIN \
+          -DWITH_NOTCURSES -lnotcurses-core \
+          -DS7_LOAD_PATH=\"$out/share/s7/scm\"
 
-    cc libarb_s7.c -o libarb_s7.so \
-        -O2 -I. \
-        -shared \
-        -lflint -lmpc \
-        -fPIC
+      $CC notcurses_s7.c -o libnotcurses_s7.so \
+          -Wno-error=implicit-function-declaration \
+          -lnotcurses-core \
+          -shared -fPIC
+    ''}
 
-    cc notcurses_s7.c -o libnotcurses_s7.so \
-        -O2 -I. \
-        -Wno-error=implicit-function-declaration \
-        -shared \
-        -lnotcurses-core \
-        -fPIC
-
-    cc s7.c -c -o s7.o \
-        -O2 -I. \
-        -ldl -lm
-
-    ./s7-repl libc.scm
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      ./s7-repl libc.scm
+    ''}
 
     runHook postBuild
   '';
@@ -97,9 +144,33 @@ stdenv.mkDerivation (finalAttrs: {
     dst_doc=$out/share/doc/s7
     mkdir -p $dst_bin $dst_lib $dst_inc $dst_share $dst_scm $dst_doc
 
-    mv -t $dst_bin s7-repl s7-nrepl
-    ln -s s7-nrepl $dst_bin/s7
-    mv -t $dst_lib libarb_s7.so libnotcurses_s7.so libc_s7.so
+    ${lib.optionalString static ''
+      mv -t $dst_lib libs7.a
+    ''}
+    ${lib.optionalString (!static && stdenv.hostPlatform.isLinux) ''
+      mv -t $dst_lib libs7.so
+    ''}
+    ${lib.optionalString (!static && stdenv.hostPlatform.isMinGW) ''
+      mv -t $dst_lib libs7.dll libs7dll.a
+    ''}
+
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
+      mv -t $dst_bin s7-repl
+      mv -t $dst_lib libc_s7.so
+    ''}
+    ${lib.optionalString stdenv.hostPlatform.isMinGW ''
+      mv -t $dst_bin s7-repl.exe
+    ''}
+
+    ${lib.optionalString withArb ''
+      mv -t $dst_lib libarb_s7.so
+    ''}
+    ${lib.optionalString withNrepl ''
+      mv -t $dst_bin s7-nrepl
+      ln -s s7-nrepl $dst_bin/s7
+      mv -t $dst_lib libnotcurses_s7.so
+    ''}
+
     cp -pr -t $dst_share s7.c
     cp -pr -t $dst_inc s7.h
     cp -pr -t $dst_scm *.scm
@@ -113,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     man
     pkg-config
+    writableTmpDirAsHomeHook
   ];
 
   installCheckInputs = [
@@ -120,23 +192,27 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   /*
-    XXX: The upstream assumes that `$HOME` is `/home/$USER`, and the source files
-    lie in `$HOME/cl` . The script presented here uses a fake `$USER` and a
-    symbolic linked `$HOME/cl` , which make the test suite work but do not meet
-    the conditions completely.
+    The test suite assumes that "there are two subdirectories of the home directory referred to: cl and test",
+    where `cl` is "the s7 source directory" and `test` is "a safe place to write temp files".
   */
   installCheckPhase = ''
     runHook preInstallCheck
 
-    cc ffitest.c s7.o -o ffitest \
-        -I. \
-        -Wl,-export-dynamic \
-        -ldl -lm
-    mv ffitest $dst_bin
-    mkdir -p nix-build/home
-    ln -sr . nix-build/home/cl
+    ln -sr . $HOME/cl
+    mkdir $HOME/test
 
-    USER=nix-s7-builder PATH="$dst_bin:$PATH" HOME=$PWD/nix-build/home \
+    $CC s7.c -c -o s7.o
+    $CC ffitest.c s7.o -o ffitest
+    mv ffitest $dst_bin
+
+    ${lib.optionalString withArb ''
+      substituteInPlace s7test.scm \
+          --replace-fail '(system "gcc -fPIC -c libarb_s7.c")' "" \
+          --replace-fail '(system "gcc libarb_s7.o -shared -o libarb_s7.so -lflint -larb")' ""
+      cp $out/lib/libarb_s7.so .
+    ''}
+
+    PATH="$dst_bin:$PATH" \
         s7-repl s7test.scm
 
     rm $dst_bin/ffitest
@@ -176,8 +252,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://ccrma.stanford.edu/software/s7/";
     license = lib.licenses.bsd0;
-    maintainers = with lib.maintainers; [ rc-zb ];
+    maintainers = with lib.maintainers; [
+      rc-zb
+      jinser
+    ];
     mainProgram = "s7";
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.windows;
   };
 })

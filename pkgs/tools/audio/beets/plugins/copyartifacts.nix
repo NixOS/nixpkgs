@@ -44,7 +44,11 @@ python3Packages.buildPythonApplication rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "-r fEs" ];
+  pytestFlags = [
+    # This is the same as:
+    #   -r fEs
+    "-rfEs"
+  ];
 
   meta = {
     description = "Beets plugin to move non-music files during the import process";
@@ -52,5 +56,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/adammillerio/beets-copyartifacts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     inherit (beets.meta) platforms;
+    # Isn't compatible with beets >= 2.3
+    broken = true;
   };
 }

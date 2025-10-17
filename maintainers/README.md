@@ -8,7 +8,7 @@ This more fluid approach is one reason why we scale to so many packages.
 The main responsibility of a maintainer is to keep the packages they maintain in a functioning state, and keep up with updates.
 In order to do that, they are empowered to make decisions over the packages they maintain.
 
-That being said, the maintainer is not alone proposing changes to the packages.
+That being said, the maintainer is not alone in proposing changes to the packages.
 Anybody (both bots and humans) can send PRs to bump or tweak the package.
 
 We also allow other non-maintainer committers to merge changes to the package, provided enough time and priority has been given to the maintainer.
@@ -34,15 +34,15 @@ In order to do so, add yourself to the [`maintainer-list.nix`](./maintainer-list
 If you're adding yourself as a maintainer as part of another PR (in which you become a maintainer of a package, for example), make your change to
 `maintainer-list.nix` in a separate commit titled `maintainers: add <name>`.
 
-### How to lose maintainer status
+### Losing maintainer status
 
-Maintainers who have become inactive on a given package can be removed.
+Maintainers who have become inactive can be removed.
 This helps us keep an accurate view of the state of maintenance in Nixpkgs.
 
 The inactivity measure is currently not strictly enforced.
 We would typically look at it if we notice that the author hasn't reacted to package-related notifications for more than 3 months.
 
-Removing the maintainer happens by making a PR on the package, adding that person as a reviewer, and then waiting a week for a reaction.
+Removing the maintainer happens by making a PR, adding that person as a reviewer, and then waiting a week for a reaction.
 
 The maintainer is welcome to come back at any time.
 
@@ -86,14 +86,12 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 
   Given a maintainer entry like this:
 
-  ``` nix
+  ```nix
   {
     example = {
       email = "user@example.com";
       name = "Example User";
-      keys = [{
-        fingerprint = "0000 0000 2A70 6423 0AED  3C11 F04F 7A19 AAA6 3AFE";
-      }];
+      keys = [ { fingerprint = "0000 0000 2A70 6423 0AED  3C11 F04F 7A19 AAA6 3AFE"; } ];
     };
   }
   ```
@@ -121,9 +119,8 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 
   Note: GitHub's "Verified" label does not display the user's full key fingerprint, and should not be used for validating the key matches.
 
-- If the user has specified a `github` account name, ensure they have also specified a `githubId` and verify the two match.
+- Ensure that the user has specified a `github` account name and a `githubId` and verify the two match.
 
-  Maintainer entries that include a `github` field must also include their `githubId`.
   People can and do change their GitHub name frequently, and the ID is used as the official and stable identity of the maintainer.
 
   Given a maintainer entry like this:
@@ -141,12 +138,12 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 
   First, make sure that the listed GitHub handle matches the author of the commit.
 
-  Then, visit the URL `https://api.github.com/users/ghost` and validate that the `id` field matches the provided `githubId`.
+  Then, visit the URL `https://api.github.com/user/10137` and validate that the `login` field matches the provided `github` handle.
 
 ### Maintainer teams
 
 Feel free to create a new maintainer team in [`team-list.nix`](./team-list.nix) when a group is collectively responsible for a collection of packages.
-Use taste and personal judgement when deciding if a team is warranted.
+Use taste and personal judgment when deciding if a team is warranted.
 
 Teams are allowed to define their own rules about membership.
 
@@ -158,8 +155,15 @@ When reviewing changes to a team, read the team's scope and the context around t
 In any case, request reviews from the existing team members.
 If the team lists no specific membership policy, feel free to merge changes to the team after giving the existing members a few days to respond.
 
-*Important:* If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
+> [!IMPORTANT]
+> If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
 
+A corresponding GitHub team can be created by any org member.
+When creating the team it should be created with the `nixpkgs-maintainers` team as parent.
+Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
+
+> [!TIP]
+> The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
 
 # Maintainer scripts
 

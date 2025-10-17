@@ -58,6 +58,11 @@ buildPythonPackage {
   preCheck = ''
     export PGUSER="nixbld";
   '';
+
+  enabledTestPaths = [
+    "tests"
+  ];
+
   disabledTests = [
     # These all fail with "List argument must consist only of tuples or dictionaries":
     # Related issue: https://github.com/djrobstep/sqlbag/issues/14
@@ -70,10 +75,9 @@ buildPythonPackage {
     "test_transaction_separation"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "-x"
     "-svv"
-    "tests"
   ];
 
   pythonImportsCheck = [ "sqlbag" ];

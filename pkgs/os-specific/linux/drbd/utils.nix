@@ -26,11 +26,11 @@
 
 stdenv.mkDerivation rec {
   pname = "drbd";
-  version = "9.27.0";
+  version = "9.32.0";
 
   src = fetchurl {
     url = "https://pkg.linbit.com/downloads/drbd/utils/${pname}-utils-${version}.tar.gz";
-    sha256 = "1qwdrjrgas8z8vc6c85xcrqaczjwyqd61yig01n44wa5z0j3v4aq";
+    hash = "sha256-szOM7jSbXEZZ4p1P73W6tK9Put0+wOZar+cUiUNC6M0=";
   };
 
   nativeBuildInputs = [
@@ -58,7 +58,8 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "SOURCE_DATE_EPOCH=1"
     "WANT_DRBD_REPRODUCIBLE_BUILD=1"
-  ] ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
+  ]
+  ++ lib.optional (!forOCF) "OCF_ROOT=${ocf-resource-agents}/usr/lib/ocf}";
 
   installFlags = [
     "prefix="

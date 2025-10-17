@@ -34,7 +34,8 @@ let
         ldflags = [
           "-s"
           "-w"
-        ] ++ extraLdflags;
+        ]
+        ++ extraLdflags;
       }
       // args
     );
@@ -134,7 +135,7 @@ let
       ;
   };
 
-  pulumi-gen = mkBasePackage rec {
+  pulumi-gen = mkBasePackage {
     inherit
       src
       version

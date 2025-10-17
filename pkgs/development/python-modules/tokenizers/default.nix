@@ -21,6 +21,7 @@
   # tests
   datasets,
   numpy,
+  pytest-asyncio,
   pytestCheckHook,
   requests,
   tiktoken,
@@ -75,40 +76,25 @@ let
 in
 buildPythonPackage rec {
   pname = "tokenizers";
-  version = "0.21.2";
+  version = "0.22.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "tokenizers";
     tag = "v${version}";
-    hash = "sha256-HO7Zg/yLY6yxjOo5Jf6Iu2zCreCyv7IaNrWtBKrspqQ=";
+    hash = "sha256-1ijP16Fw/dRgNXXX9qEymXNaamZmlNFqbfZee82Qz6c=";
   };
 
-  # Cargo.lock shipped with 0.21.2 is invalid:
-  # error: no matching package found
-  # searched package name: `ahash`
-  # perhaps you meant:      wasi
-  # location searched: directory source `/build/tokenizers-0.21.2-vendor` (which is replacing registry `crates-io`)
-  # required by package `tokenizers-python v0.21.2 (/build/source/bindings/python)`
-  #
-  # Hence, I (@GaetanLepage) re-generated the lockfile and embedded it here for now.
-  # TODO: Try to switch back to `rustPlatform.fetchCargoVendor` at the next release.
-  postPatch = ''
-    ln -sf '${./Cargo.lock}' Cargo.lock
-  '';
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-CKbnFtwsEtJ11Wnn8JFpHd7lnUzQMTwJ1DmmB44qciM=";
   };
-  # cargoDeps = rustPlatform.fetchCargoVendor {
-  #   inherit
-  #     pname
-  #     version
-  #     src
-  #     sourceRoot
-  #     ;
-  #   hash = "sha256-EKiHjcXUjU8CWe2CB2EgAQlRcZebwe4EpD7P8lWbCjw=";
-  # };
 
   sourceRoot = "${src.name}/bindings/python";
 
@@ -132,6 +118,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     datasets
     numpy
+    pytest-asyncio
     pytestCheckHook
     requests
     tiktoken
@@ -152,6 +139,23 @@ buildPythonPackage rec {
     "test_encode_special_tokens"
     "test_splitting"
     "TestTrainFromIterators"
+
+    # Require downloading from huggingface
+    # huggingface_hub.errors.LocalEntryNotFoundError
+    "test_async_methods_existence"
+    "test_basic_encoding"
+    "test_concurrency"
+    "test_decode"
+    "test_decode_skip_special_tokens"
+    "test_decode_stream_fallback"
+    "test_encode"
+    "test_error_handling"
+    "test_large_batch"
+    "test_numpy_inputs"
+    "test_performance_comparison"
+    "test_various_input_formats"
+    "test_with_special_tokens"
+    "test_with_truncation_padding"
 
     # Those tests require more data
     "test_from_pretrained"

@@ -29,6 +29,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # lxml 6.0 compat issue
+    "test_api_diff_texts"
+  ];
+
   pythonImportsCheck = [ "xmldiff" ];
 
   meta = {

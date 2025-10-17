@@ -12,16 +12,17 @@
 
 buildNpmPackage rec {
   pname = "ytDownloader";
-  version = "3.19.1";
+  version = "3.19.3";
 
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "ytDownloader";
     tag = "v${version}";
-    hash = "sha256-EweQgKA0CNgiO7q+WTLsUJHpiuRJBQox2FEgjh6CHDQ=";
+    hash = "sha256-6HYVNtjGOQICiby4je3iYG9mPGMEXWTY+87HuUMaA2A=";
   };
 
-  npmDepsHash = "sha256-moOxzvzBFNqEe2xd2jVyotxaSsIi+F7J6Dwvqp2Bs08=";
+  npmDepsHash = "sha256-FiWtZBixg7iz/9YgqnhIIG6MYNql7ITOUXH7aBBv7Co=";
+  makeCacheWritable = true;
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -58,7 +59,7 @@ buildNpmPackage rec {
     substituteInPlace src/renderer.js \
       --replace-fail $\{__dirname}/../ffmpeg '${lib.getExe ffmpeg-headless}' \
       --replace-fail 'path.join(os.homedir(), ".ytDownloader", "ytdlp")' '`${lib.getExe yt-dlp}`' \
-      --replace-fail '!!localStorage.getItem("fullYtdlpBinPresent")' 'true'
+      --replace-fail 'let ytDlpIsPresent = false;' 'let ytDlpIsPresent = true;'
     # Disable auto-updates
     substituteInPlace src/preferences.js \
       --replace-warn 'const autoUpdateDisabled = getId("autoUpdateDisabled");' 'const autoUpdateDisabled = "true";'

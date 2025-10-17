@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-IAgrCkhUC2Tkh+OM1lorpmD0GpsHUauLgU0KcmsvKb4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-SiZIp0rJXl0ZqKaxLPtV1nypxSqKXW+NoFLxCVpW4OY=";
 
   checkFlags = [
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/uutils/diffutils";
     license = lib.licenses.mit;
     mainProgram = "diffutils";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = with lib.maintainers; [ defelo ];
     platforms = lib.platforms.unix;
   };
 })

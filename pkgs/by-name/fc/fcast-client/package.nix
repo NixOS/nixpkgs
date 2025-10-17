@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   sourceRoot = "${src.name}/clients/terminal";
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-yzsAe+fr1yX8RBJPtXSr/R7W0iJpeF3JW3E4ius+8nU=";
 
   meta = {
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
       receiver devices or integrate the FCast protocol into their own apps.
     '';
     mainProgram = "fcast";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

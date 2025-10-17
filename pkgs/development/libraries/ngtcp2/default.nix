@@ -1,28 +1,24 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   cmake,
   brotli,
   libev,
   nghttp3,
-  quictls,
+  openssl,
   withJemalloc ? false,
   jemalloc,
-  curlHTTP3,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ngtcp2";
-  version = "1.13.0";
+  version = "1.15.1";
 
-  src = fetchFromGitHub {
-    owner = "ngtcp2";
-    repo = "ngtcp2";
-    # must match version usage in meta.changelog
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-SnzKCPNfa42fV+fNdbgOe588JoaPdDVNtb2AStAsK9k=";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/ngtcp2/ngtcp2/releases/download/v${finalAttrs.version}/ngtcp2-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-Bbf6cvldAd3fvDVuHL89VPx1h1wvY2CGW5gIsDNM75c=";
   };
 
   outputs = [
@@ -36,17 +32,28 @@ stdenv.mkDerivation (finalAttrs: {
     brotli
     libev
     nghttp3
-    quictls
-  ] ++ lib.optional withJemalloc jemalloc;
+    openssl
+  ]
+  ++ lib.optional withJemalloc jemalloc;
 
-  cmakeFlags = [
-    (lib.cmakeBool "ENABLE_STATIC_LIB" false)
-  ];
+  cmakeFlags =
+    if stdenv.hostPlatform.isStatic then
+      [
+        # The examples try to link against `ngtcp2_crypto_ossl` and `ngtcp2` libraries.
+        # This works in the dynamic case where the targets have the same name, but not here where they're suffixed with `_static`.
+        (lib.cmakeBool "ENABLE_LIB_ONLY" true)
+        (lib.cmakeBool "ENABLE_SHARED_LIB" false)
+        (lib.cmakeBool "ENABLE_STATIC_LIB" true)
+      ]
+    else
+      [
+        (lib.cmakeBool "ENABLE_STATIC_LIB" false)
+      ];
 
   doCheck = true;
 
   passthru.tests = {
-    inherit curlHTTP3;
+    inherit curl;
   };
 
   meta = {

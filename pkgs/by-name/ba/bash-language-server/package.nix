@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       src
       pnpmWorkspaces
       ;
+    fetcherVersion = 1;
     hash = "sha256-NvyqPv5OKgZi3hW98Da8LhsYatmrzrPX8kLOfLr+BrI=";
   };
 
@@ -48,14 +49,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   preInstall = ''
     # remove unnecessary files
     rm node_modules/.modules.yaml
-    pnpm --ignore-scripts --prod prune
+    CI=true pnpm --ignore-scripts --prod prune
     rm -r node_modules/.pnpm/@mixmark-io*/node_modules/@mixmark-io/domino/{test,.yarn}
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
     find node_modules server/node_modules -xtype l -delete
 
     # remove non-deterministic files
-    rm node_modules/{.modules.yaml,.pnpm-workspace-state.json}
+    rm node_modules/.modules.yaml
   '';
 
   installPhase = ''

@@ -19,14 +19,7 @@ in
     services.mautrix-discord = {
       enable = lib.mkEnableOption "Mautrix-Discord, a Matrix-Discord puppeting/relay-bot bridge";
 
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.mautrix-discord;
-        defaultText = lib.literalExpression "pkgs.mautrix-discord";
-        description = ''
-          The mautrix-discord package to use.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "mautrix-discord" { };
 
       settings = lib.mkOption {
         type = lib.types.submodule {
@@ -57,37 +50,51 @@ in
             appservice = lib.mkOption {
               type = lib.types.attrs;
               default = {
-                address = "http://localhost:8009";
-                port = 8009;
+                address = "http://localhost:29334";
+                hostname = "0.0.0.0";
+                port = 29334;
+                database = {
+                  type = "sqlite3";
+                  uri = "file:/var/lib/mautrix-discord/mautrix-discord.db?_txlock=immediate";
+                  max_open_conns = 20;
+                  max_idle_conns = 2;
+                  max_conn_idle_time = null;
+                  max_conn_lifetime = null;
+                };
                 id = "discord";
                 bot = {
                   username = "discordbot";
                   displayname = "Discord bridge bot";
                   avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
                 };
-                as_token = "generate";
-                hs_token = "generate";
-                database = {
-                  type = "sqlite3";
-                  uri = "file:/var/lib/mautrix-discord/mautrix-discord.db?_txlock=immediate";
-                };
+                ephemeral_events = true;
+                async_transactions = false;
+                as_token = "This value is generated when generating the registration";
+                hs_token = "This value is generated when generating the registration";
               };
               defaultText = lib.literalExpression ''
                 {
-                  address = "http://localhost:8009";
-                  port = 8009;
+                  address = "http://localhost:29334";
+                  hostname = "0.0.0.0";
+                  port = 29334;
+                  database = {
+                    type = "sqlite3";
+                    uri = "file:''${config.services.mautrix-discord.dataDir}/mautrix-discord.db?_txlock=immediate";
+                    max_open_conns = 20;
+                    max_idle_conns = 2;
+                    max_conn_idle_time = null;
+                    max_conn_lifetime = null;
+                  };
                   id = "discord";
                   bot = {
                     username = "discordbot";
                     displayname = "Discord bridge bot";
                     avatar = "mxc://maunium.net/nIdEykemnwdisvHbpxflpDlC";
                   };
-                  as_token = "generate";
-                  hs_token = "generate";
-                  database = {
-                    type = "sqlite3";
-                    uri = "file:''${config.services.mautrix-discord.dataDir}/mautrix-discord.db?_txlock=immediate";
-                  };
+                  ephemeral_events = true;
+                  async_transactions = false;
+                  as_token = "This value is generated when generating the registration";
+                  hs_token = "This value is generated when generating the registration";
                 }
               '';
               description = ''
@@ -101,7 +108,7 @@ in
               type = lib.types.attrs;
               default = {
                 username_template = "discord_{{.}}";
-                displayname_template = "{{or .GlobalName .Username}}{{if .Bot}} (bot){{end}}";
+                displayname_template = "{{if .Webhook}}Webhook{{else}}{{or .GlobalName .Username}}{{if .Bot}} (bot){{end}}{{end}}";
                 channel_name_template = "{{if or (eq .Type 3) (eq .Type 4)}}{{.Name}}{{else}}#{{.Name}}{{end}}";
                 guild_name_template = "{{.Name}}";
                 private_chat_portal_meta = "default";
@@ -122,13 +129,15 @@ in
                 delete_portal_on_channel_delete = false;
                 delete_guild_on_leave = true;
                 federate_rooms = true;
-                prefix_webhook_messages = false;
-                enable_webhook_avatars = true;
+                prefix_webhook_messages = true;
+                enable_webhook_avatars = false;
                 use_discord_cdn_upload = true;
+                #proxy =
                 cache_media = "unencrypted";
                 direct_media = {
                   enabled = false;
-                  server_name = "discord-media.example.com";
+                  #server_name = "discord-media.example.com";
+                  #well_known_response =
                   allow_proxy = true;
                   server_key = "generate";
                 };
@@ -139,6 +148,13 @@ in
                     height = 320;
                     fps = 25;
                   };
+                };
+                double_puppet_server_map = {
+                  #"example.com" = "https://example.com";
+                };
+                double_puppet_allow_discovery = false;
+                login_shared_secret_map = {
+                  #"example.com" = "foobar";
                 };
                 command_prefix = "!discord";
                 management_room_text = {
@@ -199,12 +215,28 @@ in
                 };
                 permissions = {
                   "*" = "relay";
-                  # "example.com" = "user";
-                  # "@admin:example.com": "admin";
+                  #"example.com" = "user";
+                  #"@admin:example.com": "admin";
                 };
               };
               description = ''
                 Bridge configuration.
+                See [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
+                for more information.
+              '';
+            };
+            logging = lib.mkOption {
+              type = lib.types.attrs;
+              default = {
+                min_level = "info";
+                writers = lib.singleton {
+                  type = "stdout";
+                  format = "pretty-colored";
+                  time_format = " ";
+                };
+              };
+              description = ''
+                Logging configuration.
                 See [example-config.yaml](https://github.com/mautrix/discord/blob/main/example-config.yaml)
                 for more information.
               '';
@@ -225,7 +257,7 @@ in
             };
 
             bridge.permissions = {
-              "example.com" = "full";
+              "example.com" = "user";
               "@admin:example.com" = "admin";
             };
           }
@@ -298,11 +330,12 @@ in
 
       serviceDependencies = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default =
-          [ cfg.registrationServiceUnit ]
-          ++ (lib.lists.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
-          ++ (lib.lists.optional config.services.matrix-conduit.enable "matrix-conduit.service")
-          ++ (lib.lists.optional config.services.dendrite.enable "dendrite.service");
+        default = [
+          cfg.registrationServiceUnit
+        ]
+        ++ (lib.lists.optional config.services.matrix-synapse.enable config.services.matrix-synapse.serviceUnit)
+        ++ (lib.lists.optional config.services.matrix-conduit.enable "matrix-conduit.service")
+        ++ (lib.lists.optional config.services.dendrite.enable "dendrite.service");
 
         defaultText = ''
           [ cfg.registrationServiceUnit ] ++
@@ -331,18 +364,6 @@ in
         assertion = cfg.settings.bridge.permissions or { } != { };
         message = ''
           The option `services.mautrix-discord.settings.bridge.permissions` has to be set.
-        '';
-      }
-      {
-        assertion = cfg.settings.appservice.id != "";
-        message = ''
-          The option `services.mautrix-discord.settings.appservice.id` has to be set.
-        '';
-      }
-      {
-        assertion = cfg.settings.appservice.bot.username != "";
-        message = ''
-          The option `services.mautrix-discord.settings.appservice.bot.username` has to be set.
         '';
       }
     ];

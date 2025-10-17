@@ -3,7 +3,9 @@
   beautifulsoup4,
   buildPythonPackage,
   fetchFromGitHub,
+  iniconfig,
   numpy,
+  psutil,
   pytest-console-scripts,
   pytestCheckHook,
   pythonOlder,
@@ -14,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "scooby";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,13 +25,21 @@ buildPythonPackage rec {
     owner = "banesullivan";
     repo = "scooby";
     tag = "v${version}";
-    hash = "sha256-ldDmw2TDvXgfu0fMj6dSr2zh9WfYGNpBGZb3MixKq+k=";
+    hash = "sha256-vOcCs8U8HeBgO86bgS/kqYrNai1IsQ0upQveV06YfoE=";
   };
 
   build-system = [ setuptools-scm ];
 
+  optional-dependencies = {
+    cpu = [
+      psutil
+      # mkl
+    ];
+  };
+
   nativeCheckInputs = [
     beautifulsoup4
+    iniconfig
     numpy
     pytest-console-scripts
     pytestCheckHook
@@ -51,6 +61,8 @@ buildPythonPackage rec {
     "test_import_time"
     # TypeError: expected str, bytes or os.PathLike object, not list
     "test_cli"
+    # Fails to find iniconfig in environment
+    "test_auto_report"
   ];
 
   meta = with lib; {

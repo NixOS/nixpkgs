@@ -23,14 +23,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pan";
-  version = "0.163";
+  version = "0.164";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "pan";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zClHwIvrWqAn8l1hpcy3FgScRmVUUk8UPQkT0KD59hM=";
+    hash = "sha256-fVhjgnDvDf5rmhuW27UpEp3m7o8FFcpakVcGBhBic0Y=";
   };
 
   nativeBuildInputs = [
@@ -43,18 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      gtk3
-      gmime3
-      libnotify
-      gnutls
-    ]
-    ++ lib.optionals spellChecking [ gspell ]
-    ++ lib.optionals gnomeSupport [
-      libsecret
-      gcr
-    ];
+  buildInputs = [
+    gtk3
+    gmime3
+    libnotify
+    gnutls
+  ]
+  ++ lib.optionals spellChecking [ gspell ]
+  ++ lib.optionals gnomeSupport [
+    libsecret
+    gcr
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "WANT_GSPELL" spellChecking)
@@ -75,7 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://pan.rebelbase.com";
     maintainers = with lib.maintainers; [
       aleksana
-      emaryn
     ];
     platforms = lib.platforms.linux;
     license = with lib.licenses; [

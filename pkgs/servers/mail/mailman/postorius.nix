@@ -20,7 +20,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     django-mailman3
     readme-renderer
-  ] ++ readme-renderer.optional-dependencies.md;
+  ]
+  ++ readme-renderer.optional-dependencies.md;
   nativeCheckInputs = [
     beautifulsoup4
     vcrpy

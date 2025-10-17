@@ -4,15 +4,15 @@ let
   base = callPackage ./generic.nix (
     _args
     // {
-      version = "8.2.28";
-      hash = "sha256-KRnMG5IZCljcF5BLkuYmYAuWzkmkxy53UTeGpEBqzOU=";
+      version = "8.2.29";
+      hash = "sha256-UZeejRmMut4qrU/+n1PdPwT5YC0wieWXmYXgWK3kJnw=";
     }
   );
 in
 base.withExtensions (
   { all, ... }:
   with all;
-  ([
+  [
     bcmath
     calendar
     curl
@@ -55,5 +55,5 @@ base.withExtensions (
     xmlwriter
     zip
     zlib
-  ])
+  ]
 )

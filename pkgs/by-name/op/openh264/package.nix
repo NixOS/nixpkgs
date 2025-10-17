@@ -43,13 +43,12 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      gtest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      windows.pthreads
-    ];
+  buildInputs = [
+    gtest
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    windows.pthreads
+  ];
 
   strictDeps = true;
 
@@ -58,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Codec library which supports H.264 encoding and decoding";
     changelog = "https://github.com/cisco/openh264/releases/tag/${finalAttrs.src.rev}";
     license = with lib.licenses; [ bsd2 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     # See meson.build
     platforms =
       lib.platforms.windows
@@ -68,6 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
         ++ lib.platforms.aarch64
         ++ lib.platforms.loongarch64
         ++ lib.platforms.riscv64
+        ++ lib.platforms.power
       ) lib.platforms.unix;
   };
 })

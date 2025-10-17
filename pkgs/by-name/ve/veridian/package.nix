@@ -8,7 +8,7 @@
   pkg-config,
 
   boost,
-  fmt_11,
+  fmt,
   openssl,
   sv-lang,
   mimalloc,
@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-3KjUunXTqdesvgDSeQMoXL0LRGsGQXZJGDt+xLWGovM=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-qJQD9HjSrrHdppbLNgLnXCycgzbmPePydZve3A8zGtU=";
 
   buildFeatures = [ "slang" ];
@@ -41,7 +40,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     openssl
     sv-lang
     mimalloc

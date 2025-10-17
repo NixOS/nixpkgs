@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "junos-eznc";
-  version = "2.7.4";
+  version = "2.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "Juniper";
     repo = "py-junos-eznc";
     tag = version;
-    hash = "sha256-iuCVfzS8k/TZ58v/OPJfSpIMYwwKRj1zyd4FF/KLjjI=";
+    hash = "sha256-1OOXhhY3fBG00PptUSfIPI906YLgludr9PRMoWBbPnU=";
   };
 
   build-system = [ setuptools ];
@@ -62,7 +62,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTests = [
     # jnpr.junos.exception.FactLoopError: A loop was detected while gathering the...

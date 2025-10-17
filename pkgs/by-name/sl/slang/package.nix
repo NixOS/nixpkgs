@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     libpng
     readline
     zlib
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ libiconv ];
 
   propagatedBuildInputs = [ ncurses ];
 
@@ -101,7 +102,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://www.jedsoft.org/slang/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "slsh";
     platforms = platforms.unix;
   };

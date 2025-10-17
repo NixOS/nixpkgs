@@ -83,18 +83,17 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  buildInputs =
-    [
-      # NB we use OpenSSL instead of CommonCrypto on Darwin.
-      openssl
-      zlib
-      libxml2
-      bzip2
-      xz
-      e2fsprogs
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux acl
-    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+  buildInputs = [
+    # NB we use OpenSSL instead of CommonCrypto on Darwin.
+    openssl
+    zlib
+    libxml2
+    bzip2
+    xz
+    e2fsprogs
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux acl
+  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   passthru =
     let

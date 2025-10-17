@@ -1,63 +1,60 @@
 {
   lib,
+  stdenv,
+  python3Packages,
   fetchFromGitHub,
-  fetchpatch,
-  python3,
+  versionCheckHook,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ansible-doctor";
-  version = "2.0.4";
-  format = "pyproject";
+  version = "7.2.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "ansible-doctor";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nZv1PdR0kGrke2AjcDWjDWBdsw64UpHYFNDFAe/UoJo=";
+    tag = "v${version}";
+    hash = "sha256-2cJ1wV3hqoqSvLq3c7/J5nh1GTTcj9sexRhX3hfPoTc=";
   };
 
-  patches = [
-    # https://github.com/thegeeklab/ansible-doctor/pull/541
-    (fetchpatch {
-      name = "poetry-dynamic-versioning-pep517.patch";
-      url = "https://github.com/thegeeklab/ansible-doctor/commit/b77ba9dccaef4b386bd54b128136c948665eb61a.patch";
-      hash = "sha256-XfdTkRk9B857V5DQnxlbwxTb098YwHzKGzNQBTQzWCM=";
-    })
-  ];
-
-  pythonRelaxDeps = true;
-
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3Packages; [
     poetry-core
     poetry-dynamic-versioning
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  dependencies = with python3Packages; [
     anyconfig
     appdirs
     colorama
+    dynaconf
     environs
+    gitpython
     jinja2
     jsonschema
     nested-lookup
     pathspec
     python-json-logger
     ruamel-yaml
+    structlog
   ];
 
-  # Module has no tests
-  doCheck = false;
+  pythonRelaxDeps = true;
 
-  pythonImportsCheck = [
-    "ansibledoctor"
-  ];
+  doCheck = true;
+
+  pythonImportsCheck = [ "ansibledoctor" ];
+
+  # ansible.errors.AnsibleError: Unable to create local directories(/private/var/empty/.ansible/tmp)
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ versionCheckHook ];
+
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Annotation based documentation for your Ansible roles";
     mainProgram = "ansible-doctor";
     homepage = "https://github.com/thegeeklab/ansible-doctor";
-    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/v${version}";
+    changelog = "https://github.com/thegeeklab/ansible-doctor/releases/tag/${src.tag}";
     license = lib.licenses.lgpl3Only;
     maintainers = with lib.maintainers; [ tboerger ];
   };

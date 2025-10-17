@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "arviz";
-  version = "0.21.0";
+  version = "0.22.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "arviz-devs";
     repo = "arviz";
     tag = "v${version}";
-    hash = "sha256-rrOvdyZE0wo3iiiQ2hHklAtLU38mXs3hLsb+Fwy9eAk=";
+    hash = "sha256-ZzZZKEtpVy44119H+upU36VLriZjjwPz3gqgKrL+gRI=";
   };
 
   build-system = [
@@ -84,13 +84,15 @@ buildPythonPackage rec {
     zarr
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "arviz/tests/base_tests/"
+  ];
 
+  disabledTestPaths = [
     # AttributeError: module 'zarr.storage' has no attribute 'DirectoryStore'
     # https://github.com/arviz-devs/arviz/issues/2357
-    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
-    "--deselect=arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
+    "arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_function"
+    "arviz/tests/base_tests/test_data_zarr.py::TestDataZarr::test_io_method"
   ];
 
   disabledTests = [

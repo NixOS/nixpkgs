@@ -46,7 +46,8 @@ buildPythonPackage rec {
     sphinx-autodoc-typehints
     sphinx-rtd-theme
     sphinxHook
-  ] ++ optional-dependencies.doc;
+  ]
+  ++ optional-dependencies.doc;
 
   propagatedBuildInputs = [ packaging ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
@@ -63,7 +64,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Python tool configuration";

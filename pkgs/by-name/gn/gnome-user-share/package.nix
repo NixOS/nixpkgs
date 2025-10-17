@@ -26,11 +26,11 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-user-share";
-  version = "48.0";
+  version = "48.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-user-share/${lib.versions.major finalAttrs.version}/gnome-user-share-${finalAttrs.version}.tar.xz";
-    hash = "sha256-tVgFBwGVwvZYQVuc0shbLNFOqYHWGCOlANTWK4v4OAE=";
+    hash = "sha256-grz9TvPqf9eyr3+6mkW0dOF03NgowcS/5/+KLvhYunc=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
@@ -39,21 +39,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-tQoP0yBOCesj2kwgBUoqmcVtFttwML2N+wfSULtfC4w=";
   };
 
-  preConfigure =
-    ''
-      substituteInPlace data/dav_user_2.4.conf \
-        --replace-fail \
-          'LoadModule dnssd_module ''${HTTP_MODULES_PATH}/mod_dnssd.so' \
-          'LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so' \
-        --replace-fail \
-          '${"$"}{HTTP_MODULES_PATH}' \
-          '${apacheHttpd}/modules'
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      substituteInPlace meson.build --replace-fail \
-        "run_command([httpd, '-v']" \
-        "run_command(['${stdenv.hostPlatform.emulator buildPackages}', httpd, '-v']"
-    '';
+  preConfigure = ''
+    substituteInPlace data/dav_user_2.4.conf \
+      --replace-fail \
+        'LoadModule dnssd_module ''${HTTP_MODULES_PATH}/mod_dnssd.so' \
+        'LoadModule dnssd_module ${mod_dnssd}/modules/mod_dnssd.so' \
+      --replace-fail \
+        '${"$"}{HTTP_MODULES_PATH}' \
+        '${apacheHttpd}/modules'
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace meson.build --replace-fail \
+      "run_command([httpd, '-v']" \
+      "run_command(['${stdenv.hostPlatform.emulator buildPackages}', httpd, '-v']"
+  '';
 
   mesonFlags = [
     "-Dhttpd=${apacheHttpd.out}/bin/httpd"
@@ -78,6 +77,14 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     glib
   ];
+
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "'cp', 'src' / rust_target / meson.project_name(), '@OUTPUT@'," "'cp', 'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(), '@OUTPUT@',"
+  '';
+
+  # For https://gitlab.gnome.org/GNOME/gnome-user-share/-/blob/7ffb23dd5af0fda75c66f03756798dc10e253c36/src/meson.build#L47
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   doCheck = true;
   strictDeps = true;

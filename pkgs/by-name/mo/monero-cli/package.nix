@@ -40,13 +40,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "monero-cli";
-  version = "0.18.4.0";
+  version = "0.18.4.3";
 
   src = fetchFromGitHub {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    hash = "sha256-0byMtX2f+8FqNhLPN1oLxIUTWg5RSbHfwiL8pUIAcgQ=";
+    hash = "sha256-tu8PHTiz3ScJ0uQh1ztkFmEthjb+BERtPMxCyQhuZPw=";
   };
 
   patches = [
@@ -67,41 +67,39 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      boost186 # uses boost/asio/io_service.hpp
-      libsodium
-      miniupnpc
-      openssl
-      randomx
-      rapidjson
-      readline
-      unbound
-      zeromq
-    ]
-    ++ lib.optionals trezorSupport [
-      python3
-      hidapi
-      libusb1
-      protobuf_21
-    ]
-    ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [ udev ];
+  buildInputs = [
+    boost186 # uses boost/asio/io_service.hpp
+    libsodium
+    miniupnpc
+    openssl
+    randomx
+    rapidjson
+    readline
+    unbound
+    zeromq
+  ]
+  ++ lib.optionals trezorSupport [
+    python3
+    hidapi
+    libusb1
+    protobuf_21
+  ]
+  ++ lib.optionals (trezorSupport && stdenv.hostPlatform.isLinux) [ udev ];
 
-  cmakeFlags =
-    [
-      # skip submodules init
-      "-DMANUAL_SUBMODULES=ON"
-      # required by monero-gui
-      "-DBUILD_GUI_DEPS=ON"
-      "-DReadline_ROOT_DIR=${readline.dev}"
-      "-Wno-dev"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
-    ++ lib.optional trezorSupport [
-      "-DUSE_DEVICE_TREZOR=ON"
-      # fix build on recent gcc versions
-      "-DCMAKE_CXX_FLAGS=-fpermissive"
-    ];
+  cmakeFlags = [
+    # skip submodules init
+    "-DMANUAL_SUBMODULES=ON"
+    # required by monero-gui
+    "-DBUILD_GUI_DEPS=ON"
+    "-DReadline_ROOT_DIR=${readline.dev}"
+    "-Wno-dev"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "-DBoost_USE_MULTITHREADED=OFF"
+  ++ lib.optional trezorSupport [
+    "-DUSE_DEVICE_TREZOR=ON"
+    # fix build on recent gcc versions
+    "-DCMAKE_CXX_FLAGS=-fpermissive"
+  ];
 
   outputs = [
     "out"

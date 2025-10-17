@@ -1,6 +1,7 @@
 #! /usr/bin/env nix-shell
+#! nix-shell -I nixpkgs=.
 #! nix-shell -p "haskellPackages.ghcWithPackages (p: [p.aeson p.req])"
-#! nix-shell -p hydra
+#! nix-shell -p nix-eval-jobs
 #! nix-shell -i runhaskell
 
 {-
@@ -33,19 +34,23 @@ Because step 1) is quite expensive and takes roughly ~5 minutes the result is ca
 import Control.Monad (forM_, forM, (<=<))
 import Control.Monad.Trans (MonadIO (liftIO))
 import Data.Aeson (
-   FromJSON,
+   FromJSON (..),
+   withObject,
+   (.:),
    FromJSONKey,
    ToJSON,
    decodeFileStrict',
-   eitherDecodeStrict',
    encodeFile,
  )
-import Data.Foldable (Foldable (toList), foldl')
+import Data.Aeson.Decoding (eitherDecodeStrictText)
+import Data.Foldable (Foldable (toList))
+import Data.Either (rights)
+import Data.Functor ((<&>))
 import Data.List.NonEmpty (NonEmpty, nonEmpty)
 import qualified Data.List.NonEmpty as NonEmpty
 import Data.Map.Strict (Map)
 import qualified Data.Map.Strict as Map
-import Data.Maybe (fromMaybe, mapMaybe, isNothing)
+import Data.Maybe (fromMaybe, mapMaybe, isNothing, catMaybes)
 import Data.Monoid (Sum (Sum, getSum))
 import Data.Sequence (Seq)
 import qualified Data.Sequence as Seq
@@ -53,7 +58,6 @@ import Data.Set (Set)
 import qualified Data.Set as Set
 import Data.Text (Text)
 import qualified Data.Text as Text
-import Data.Text.Encoding (encodeUtf8)
 import qualified Data.Text.IO as Text
 import Data.Time (defaultTimeLocale, formatTime, getCurrentTime)
 import Data.Time.Clock (UTCTime)
@@ -206,7 +210,7 @@ hydraQuery responseType option query = do
   let customHeaderOpt =
         header
           "User-Agent"
-          "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell) pls fix https://github.com/NixOS/nixos-org-configurations/issues/270"
+          "hydra-report.hs/v1 (nixpkgs;maintainers/scripts/haskell)"
       customTimeoutOpt = responseTimeout 900_000_000 -- 15 minutes
       opts = customHeaderOpt <> customTimeoutOpt <> option
       url = foldl' (/:) (https "hydra.nixos.org") query
@@ -218,11 +222,22 @@ hydraJSONQuery = hydraQuery jsonResponse
 hydraPlainQuery :: [Text] -> Req ByteString
 hydraPlainQuery = hydraQuery bsResponse mempty
 
-hydraEvalCommand :: FilePath
-hydraEvalCommand = "hydra-eval-jobs"
+nixEvalJobsCommand :: FilePath
+nixEvalJobsCommand = "nix-eval-jobs"
 
-hydraEvalParams :: [String]
-hydraEvalParams = ["-I", ".", "pkgs/top-level/release-haskell.nix"]
+nixEvalJobsParams :: [String]
+nixEvalJobsParams =
+  [
+    -- options necessary to make nix-eval-jobs behave like hydra-eval-jobs used to
+    -- https://github.com/NixOS/hydra/commit/d84ff32ce600204c6473889a3ff16cd6053533c9
+    "--meta",
+    "--force-recurse",
+    "--no-instantiate",
+    "--workers", "3",
+
+    "-I", ".",
+   "pkgs/top-level/release-haskell.nix"
+  ]
 
 nixExprCommand :: FilePath
 nixExprCommand = "nix-instantiate"
@@ -230,47 +245,27 @@ nixExprCommand = "nix-instantiate"
 nixExprParams :: [String]
 nixExprParams = ["--eval", "--strict", "--json"]
 
--- | This newtype is used to parse a Hydra job output from @hydra-eval-jobs@.
--- The only field we are interested in is @maintainers@, which is why this
--- is just a newtype.
+-- | Holds a list of the GitHub handles of the maintainers of a given 'JobName'.
 --
--- Note that there are occasionally jobs that don't have a maintainers
--- field, which is why this has to be @Maybe Text@.
-newtype Maintainers = Maintainers { maintainers :: Maybe Text }
+--   @
+--     JobMaintainers (JobName "haskellPackages.cabal-install.x86_64-linux") ["sternenseemann"]
+--   @
+data JobMaintainers = JobMaintainers JobName [Text]
   deriving stock (Generic, Show)
-  deriving anyclass (FromJSON, ToJSON)
 
--- | This is a 'Map' from Hydra job name to maintainer email addresses.
---
--- It has values similar to the following:
---
--- @@
---  fromList
---    [ ("arion.aarch64-linux", Maintainers (Just "robert@example.com"))
---    , ("bench.x86_64-linux", Maintainers (Just ""))
---    , ("conduit.x86_64-linux", Maintainers (Just "snoy@man.com, web@ber.com"))
---    , ("lens.x86_64-darwin", Maintainers (Just "ek@category.com"))
---    ]
--- @@
---
--- Note that Hydra jobs without maintainers will have an empty string for the
--- maintainer list.
-type HydraJobs = Map JobName Maintainers
+-- | Parse the entries produced by @nix-eval-jobs@, discarding all information
+--   except the name of the job (@attr@) and the @github@ attributes of the
+--   maintainer objects in @meta.maintainers@.
+instance FromJSON JobMaintainers where
+  parseJSON = withObject "HydraJob" $ \h -> do
+    jobName <- h .: "attr"
+    maintainers <- (h .: "meta")
+      >>= (withObject "Meta" $ \meta ->
+        meta .: "maintainers"
+        >>= mapM (withObject "Maintainer" $ \mt -> mt .: "github"))
+    pure $ JobMaintainers jobName maintainers
 
--- | Map of email addresses to GitHub handles.
--- This is built from the file @../../maintainer-list.nix@.
---
--- It has values similar to the following:
---
--- @@
---  fromList
---    [ ("robert@example.com", "rob22")
---    , ("ek@category.com", "edkm")
---    ]
--- @@
-type EmailToGitHubHandles = Map Text Text
-
--- | Map of Hydra jobs to maintainer GitHub handles.
+-- | Map of maintained Hydra jobs to maintainer GitHub handles.
 --
 -- It has values similar to the following:
 --
@@ -331,22 +326,16 @@ calculateReverseDependencies depMap =
        go pkg = IntSet.unions (oneStep:((resultList IntMap.!) <$> IntSet.toList oneStep))
         where oneStep = IntMap.findWithDefault mempty pkg oneStepMap
 
--- | Generate a mapping of Hydra job names to maintainer GitHub handles. Calls
--- hydra-eval-jobs and the nix script ./maintainer-handles.nix.
+-- | Generate a mapping of Hydra job names to maintainer GitHub handles.
 getMaintainerMap :: IO MaintainerMap
-getMaintainerMap = do
-   hydraJobs :: HydraJobs <-
-      readJSONProcess hydraEvalCommand hydraEvalParams "Failed to decode hydra-eval-jobs output: "
-   handlesMap :: EmailToGitHubHandles <-
-      readJSONProcess nixExprCommand ("maintainers/scripts/haskell/maintainer-handles.nix":nixExprParams) "Failed to decode nix output for lookup of github handles: "
-   pure $ Map.mapMaybe (splitMaintainersToGitHubHandles handlesMap) hydraJobs
-  where
-   -- Split a comma-spearated string of Maintainers into a NonEmpty list of
-   -- GitHub handles.
-   splitMaintainersToGitHubHandles
-      :: EmailToGitHubHandles -> Maintainers -> Maybe (NonEmpty Text)
-   splitMaintainersToGitHubHandles handlesMap (Maintainers maint) =
-      nonEmpty .  mapMaybe (`Map.lookup` handlesMap) .  Text.splitOn ", " $ fromMaybe "" maint
+getMaintainerMap =
+  readJSONLinesProcess nixEvalJobsCommand nixEvalJobsParams
+  -- we ignore unparseable lines since fromJSON will fail on { "attr": …, "error": … }
+  -- entries since they don't have a @meta@ attribute.
+  <&> rights
+  <&> map (\(JobMaintainers name maintainers) -> (,) name <$> nonEmpty maintainers)
+  <&> catMaybes
+  <&> Map.fromList
 
 -- | Get the a map of all dependencies of every package by calling the nix
 -- script ./dependencies.nix.
@@ -369,10 +358,22 @@ readJSONProcess
    -> IO a
 readJSONProcess exe args err = do
    output <- readProcess exe args ""
-   let eitherDecodedOutput = eitherDecodeStrict' . encodeUtf8 . Text.pack $ output
+   let eitherDecodedOutput = eitherDecodeStrictText . Text.pack $ output
    case eitherDecodedOutput of
      Left decodeErr -> error $ err <> decodeErr <> "\nRaw: '" <> take 1000 output <> "'"
      Right decodedOutput -> pure decodedOutput
+
+-- | Run a process that produces many JSON values, one per line.
+--   Error and success is reported per line via a list of 'Either's.
+readJSONLinesProcess
+   :: FromJSON a
+   => FilePath -- ^ Filename of executable.
+   -> [String] -- ^ Arguments
+   -> IO [Either String a]
+readJSONLinesProcess exe args = do
+  output <- readProcess exe args ""
+  -- TODO: slow, doesn't stream at all
+  pure . map (eitherDecodeStrictText . Text.pack) . lines $ output
 
 -- BuildStates are sorted by subjective importance/concerningness
 data BuildState

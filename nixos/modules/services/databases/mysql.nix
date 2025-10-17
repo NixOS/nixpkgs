@@ -406,30 +406,29 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    assertions =
-      [
-        {
-          assertion = !cfg.galeraCluster.enable || isMariaDB;
-          message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
-        }
-      ]
-      # galeraCluster options checks
-      ++ lib.optionals cfg.galeraCluster.enable [
-        {
-          assertion =
-            cfg.galeraCluster.localAddress != ""
-            && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
-          message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
-        }
-        {
-          assertion = cfg.galeraCluster.clusterPassword == "" || cfg.galeraCluster.clusterAddress == "";
-          message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
-        }
-        {
-          assertion = cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "";
-          message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
-        }
-      ];
+    assertions = [
+      {
+        assertion = !cfg.galeraCluster.enable || isMariaDB;
+        message = "'services.mysql.galeraCluster.enable' expect services.mysql.package to be an mariadb variant";
+      }
+    ]
+    # galeraCluster options checks
+    ++ lib.optionals cfg.galeraCluster.enable [
+      {
+        assertion =
+          cfg.galeraCluster.localAddress != ""
+          && (cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "");
+        message = "mariadb galera cluster is enabled but the localAddress and (nodeAddresses or clusterAddress) are not set";
+      }
+      {
+        assertion = cfg.galeraCluster.clusterPassword == "" || cfg.galeraCluster.clusterAddress == "";
+        message = "mariadb galera clusterPassword is set but overwritten by clusterAddress";
+      }
+      {
+        assertion = cfg.galeraCluster.nodeAddresses != [ ] || cfg.galeraCluster.clusterAddress != "";
+        message = "When services.mysql.galeraCluster.clusterAddress is set, setting services.mysql.galeraCluster.nodeAddresses is redundant and will be overwritten by clusterAddress. Choose one approach.";
+      }
+    ];
 
     services.mysql.dataDir = lib.mkDefault (
       if lib.versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql" else "/var/mysql"
@@ -521,29 +520,28 @@ in
 
       unitConfig.RequiresMountsFor = cfg.dataDir;
 
-      path =
-        [
-          # Needed for the mysql_install_db command in the preStart script
-          # which calls the hostname command.
-          pkgs.nettools
-        ]
-        # tools 'wsrep_sst_rsync' needs
-        ++ lib.optionals cfg.galeraCluster.enable [
-          cfg.package
-          pkgs.bash
-          pkgs.gawk
-          pkgs.gnutar
-          pkgs.gzip
-          pkgs.inetutils
-          pkgs.iproute2
-          pkgs.netcat
-          pkgs.procps
-          pkgs.pv
-          pkgs.rsync
-          pkgs.socat
-          pkgs.stunnel
-          pkgs.which
-        ];
+      path = [
+        # Needed for the mysql_install_db command in the preStart script
+        # which calls the hostname command.
+        pkgs.hostname-debian
+      ]
+      # tools 'wsrep_sst_rsync' needs
+      ++ lib.optionals cfg.galeraCluster.enable [
+        cfg.package
+        pkgs.bash
+        pkgs.gawk
+        pkgs.gnutar
+        pkgs.gzip
+        pkgs.inetutils
+        pkgs.iproute2
+        pkgs.netcat
+        pkgs.procps
+        pkgs.pv
+        pkgs.rsync
+        pkgs.socat
+        pkgs.stunnel
+        pkgs.which
+      ];
 
       preStart =
         if isMariaDB then
@@ -693,7 +691,7 @@ in
       serviceConfig = lib.mkMerge [
         {
           Type = if hasNotify then "notify" else "simple";
-          Restart = "on-abort";
+          Restart = "on-abnormal";
           RestartSec = "5s";
 
           # User and group

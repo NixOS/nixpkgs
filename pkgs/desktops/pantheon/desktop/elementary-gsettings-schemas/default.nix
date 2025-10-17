@@ -24,7 +24,8 @@ let
     gsettings-desktop-schemas
     gtk3
     mutter
-  ] ++ extraGSettingsOverridePackages;
+  ]
+  ++ extraGSettingsOverridePackages;
 
 in
 

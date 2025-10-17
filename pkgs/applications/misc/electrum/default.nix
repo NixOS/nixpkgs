@@ -6,21 +6,12 @@
   wrapQtAppsHook,
   python3,
   zbar,
-  secp256k1,
   enableQt ? true,
   callPackage,
   qtwayland,
 }:
 
 let
-  libsecp256k1_name =
-    if stdenv.hostPlatform.isLinux then
-      "libsecp256k1.so.{v}"
-    else if stdenv.hostPlatform.isDarwin then
-      "libsecp256k1.{v}.dylib"
-    else
-      "libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}";
-
   libzbar_name =
     if stdenv.hostPlatform.isLinux then
       "libzbar.so.0"
@@ -28,17 +19,15 @@ let
       "libzbar.0.dylib"
     else
       "libzbar${stdenv.hostPlatform.extensions.sharedLibrary}";
-
 in
-
 python3.pkgs.buildPythonApplication rec {
   pname = "electrum";
-  version = "4.5.8";
+  version = "4.6.0";
   format = "setuptools";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    hash = "sha256-3YWVoTgTLe6Hzuds52Ch1iL8L9ZdO2rH335Tt/tup+g=";
+    hash = "sha256-aQqZXyfqFgc1j2r836eaaayOmSzDijHlYXmF+OBw418=";
   };
 
   build-system = [ protobuf ] ++ lib.optionals enableQt [ wrapQtAppsHook ];
@@ -63,8 +52,9 @@ python3.pkgs.buildPythonApplication rec {
       requests
       certifi
       jsonpatch
+      electrum-aionostr
+      electrum-ecc
       # plugins
-      btchip-python
       ledger-bitcoin
       ckcc-protocol
       keepkey
@@ -74,7 +64,7 @@ python3.pkgs.buildPythonApplication rec {
       pyserial
     ]
     ++ lib.optionals enableQt [
-      pyqt5
+      pyqt6
       qdarkstyle
     ];
 
@@ -83,40 +73,20 @@ python3.pkgs.buildPythonApplication rec {
     lib.optionals enableQt [
       pyqt6
     ];
+  disabledTestPaths = lib.optionals (!enableQt) [
+    "tests/test_qml_types.py"
+  ];
 
   postPatch =
-    ''
-      # fix compatibility with recent aiorpcx version
-      # (remove as soon as https://github.com/spesmilo/electrum/commit/171aa5ee5ad4e25b9da10f757d9d398e905b4945 is included in source tarball)
-      substituteInPlace ./contrib/requirements/requirements.txt \
-        --replace-fail "aiorpcx>=0.22.0,<0.24" "aiorpcx>=0.22.0,<0.25"
-      substituteInPlace ./run_electrum \
-        --replace-fail "if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):" "if not ((0, 22, 0) <= aiorpcx._version < (0, 25)):" \
-        --replace-fail "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24" "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.25"
-      substituteInPlace ./electrum/electrum \
-        --replace-fail "if not ((0, 22, 0) <= aiorpcx._version < (0, 24)):" "if not ((0, 22, 0) <= aiorpcx._version < (0, 25)):" \
-        --replace-fail "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.24" "aiorpcX version {aiorpcx._version} does not match required: 0.22.0<=ver<0.25"
-
-      # make compatible with protobuf4 by easing dependencies ...
-      substituteInPlace ./contrib/requirements/requirements.txt \
-        --replace-fail "protobuf>=3.20,<4" "protobuf>=3.20"
-      # ... and regenerating the paymentrequest_pb2.py file
-      protoc --python_out=. electrum/paymentrequest.proto
-
-      substituteInPlace ./electrum/ecc_fast.py \
-        --replace-fail ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
-    ''
-    + (
-      if enableQt then
-        ''
-          substituteInPlace ./electrum/qrscanner.py \
-            --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
-        ''
-      else
-        ''
-          sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
-        ''
-    );
+    if enableQt then
+      ''
+        substituteInPlace ./electrum/qrscanner.py \
+          --replace-fail ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      ''
+    else
+      ''
+        sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
+      '';
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace $out/share/applications/electrum.desktop \
@@ -134,7 +104,12 @@ python3.pkgs.buildPythonApplication rec {
     pycryptodomex
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
+
+  # avoid homeless-shelter error in tests
+  preCheck = ''
+    export HOME="$(mktemp -d)"
+  '';
 
   postCheck = ''
     $out/bin/electrum help >/dev/null

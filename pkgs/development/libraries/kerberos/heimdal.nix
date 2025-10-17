@@ -72,18 +72,17 @@ stdenv.mkDerivation {
     texinfo
   ];
 
-  buildInputs =
-    [
-      db
-      libedit
-      pam
-    ]
-    ++ lib.optionals (withCJSON) [ cjson ]
-    ++ lib.optionals (withCapNG) [ libcap_ng ]
-    ++ lib.optionals (withMicroHTTPD) [ libmicrohttpd ]
-    ++ lib.optionals (withOpenLDAP) [ openldap ]
-    ++ lib.optionals (withOpenSSL) [ openssl ]
-    ++ lib.optionals (withSQLite3) [ sqlite ];
+  buildInputs = [
+    db
+    libedit
+    pam
+  ]
+  ++ lib.optionals withCJSON [ cjson ]
+  ++ lib.optionals withCapNG [ libcap_ng ]
+  ++ lib.optionals withMicroHTTPD [ libmicrohttpd ]
+  ++ lib.optionals withOpenLDAP [ openldap ]
+  ++ lib.optionals withOpenSSL [ openssl ]
+  ++ lib.optionals withSQLite3 [ sqlite ];
 
   doCheck = true;
   nativeCheckInputs = [
@@ -93,33 +92,32 @@ stdenv.mkDerivation {
     which
   ];
 
-  configureFlags =
-    [
-      "--with-hdbdir=/var/lib/heimdal"
+  configureFlags = [
+    "--with-hdbdir=/var/lib/heimdal"
 
-      "--with-libedit-include=${libedit.dev}/include"
-      "--with-libedit-lib=${libedit}/lib"
-      "--with-berkeley-db-include=${db.dev}/include"
-      "--with-berkeley-db"
+    "--with-libedit-include=${libedit.dev}/include"
+    "--with-libedit-lib=${libedit}/lib"
+    "--with-berkeley-db-include=${db.dev}/include"
+    "--with-berkeley-db"
 
-      "--without-x"
-      "--disable-afs-string-to-key"
-    ]
-    ++ lib.optionals (withCapNG) [
-      "--with-capng"
-    ]
-    ++ lib.optionals (withCJSON) [
-      "--with-cjson=${cjson}"
-    ]
-    ++ lib.optionals (withOpenLDAP) [
-      "--with-openldap=${openldap.dev}"
-    ]
-    ++ lib.optionals (withOpenLDAPAsHDBModule) [
-      "--enable-hdb-openldap-module"
-    ]
-    ++ lib.optionals (withSQLite3) [
-      "--with-sqlite3=${sqlite.dev}"
-    ];
+    "--without-x"
+    "--disable-afs-string-to-key"
+  ]
+  ++ lib.optionals withCapNG [
+    "--with-capng"
+  ]
+  ++ lib.optionals withCJSON [
+    "--with-cjson=${cjson}"
+  ]
+  ++ lib.optionals withOpenLDAP [
+    "--with-openldap=${openldap.dev}"
+  ]
+  ++ lib.optionals withOpenLDAPAsHDBModule [
+    "--enable-hdb-openldap-module"
+  ]
+  ++ lib.optionals withSQLite3 [
+    "--with-sqlite3=${sqlite.dev}"
+  ];
 
   patches = [
     # Proposed @ https://github.com/heimdal/heimdal/pull/1262

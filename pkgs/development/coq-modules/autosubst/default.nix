@@ -18,20 +18,14 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.14" "9.0";
-        out = "1.9";
-      }
-      {
-        case = range "8.14" "8.18";
-        out = "1.8";
-      }
-      {
-        case = range "8.10" "8.13";
-        out = "1.7";
-      }
+      (case (range "8.14" "9.1") "1.9")
+      (case (range "8.14" "8.18") "1.8")
+      (case (range "8.10" "8.13") "1.7")
     ] null;
 
   propagatedBuildInputs = [

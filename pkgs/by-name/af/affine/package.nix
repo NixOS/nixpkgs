@@ -4,7 +4,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_35,
+  electron_37,
   nodejs_22,
   yarn-berry_4,
   cacert,
@@ -26,15 +26,9 @@
 }:
 let
   hostPlatform = stdenvNoCC.hostPlatform;
-  nodePlatform = hostPlatform.parsed.kernel.name; # nodejs's `process.platform`
-  nodeArch = # nodejs's `process.arch`
-    {
-      "x86_64" = "x64";
-      "aarch64" = "arm64";
-    }
-    .${hostPlatform.parsed.cpu.name}
-      or (throw "affine(${buildType}): unsupported CPU family ${hostPlatform.parsed.cpu.name}");
-  electron = electron_35;
+  nodePlatform = hostPlatform.node.platform;
+  nodeArch = hostPlatform.node.arch;
+  electron = electron_37;
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
@@ -43,17 +37,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = binName;
 
-  version = "0.22.4";
+  version = "0.24.1";
   src = fetchFromGitHub {
     owner = "toeverything";
     repo = "AFFiNE";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IvVNnh8EDRSnIGeomLkO+I9fpbzrxC8jOStCh//RF8A=";
+    hash = "sha256-Yq5TD5yInv+0d1S6M58I8CneCAGUwH0ThGrEJfLIrX0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-kAhT2yXFbUuV34ukdUmLQbO00LSaYk7gpsp0nmO138o=";
+    hash = "sha256-tRDc7Rky59Rh08QTNiG3yopErHJzARxN8BZGrSUECLE=";
   };
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "yarn-offline-cache";
@@ -98,33 +92,32 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     dontInstall = true;
     outputHashMode = "recursive";
-    outputHash = "sha256-6Co65RkzLnk4U9ibiN0cO0bWRvbUHECzd+GQ8pwIxBE=";
+    outputHash = "sha256-U2FGvdtGiM97aXmbfNIfi87hvwDkd1dvlAABYiDgAGI=";
   };
 
   buildInputs = lib.optionals hostPlatform.isDarwin [
     apple-sdk_15
   ];
 
-  nativeBuildInputs =
-    [
-      nodejs
-      yarn-berry
-      cargo
-      rustc
-      findutils
-      zip
-      jq
-      rsync
-      writableTmpDirAsHomeHook
-    ]
-    ++ lib.optionals hostPlatform.isLinux [
-      copyDesktopItems
-      makeWrapper
-    ]
-    ++ lib.optionals hostPlatform.isDarwin [
-      # bindgenHook is needed to build `coreaudio-sys` on darwin
-      rustPlatform.bindgenHook
-    ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+    cargo
+    rustc
+    findutils
+    zip
+    jq
+    rsync
+    writableTmpDirAsHomeHook
+  ]
+  ++ lib.optionals hostPlatform.isLinux [
+    copyDesktopItems
+    makeWrapper
+  ]
+  ++ lib.optionals hostPlatform.isDarwin [
+    # bindgenHook is needed to build `coreaudio-sys` on darwin
+    rustPlatform.bindgenHook
+  ];
 
   env = {
     # force yarn install run in CI mode
@@ -142,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = ''
-    runHook preConfigurePhase
+    runHook preConfigure
 
     # cargo config
     mkdir -p .cargo
@@ -162,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cd $HOME/.electron-prebuilt-zip-tmp && zip --recurse-paths - .) > $ELECTRON_FORGE_ELECTRON_ZIP_DIR/electron-v$ELECTRON_VERSION_IN_LOCKFILE-${nodePlatform}-${nodeArch}.zip
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 
-    runHook postConfigurePhase
+    runHook postConfigure
   '';
 
   buildPhase = ''

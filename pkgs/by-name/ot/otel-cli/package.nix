@@ -21,19 +21,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-fWQz7ZrU8gulhpOHSN8Prn4EMC0KXy942FZD/PMsLxc=";
 
-  preCheck =
-    ''
-      ln -s $GOPATH/bin/otel-cli .
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      substituteInPlace main_test.go \
-        --replace-fail 'const minimumPath = `/bin:/usr/bin`' 'const minimumPath = `${
-          lib.makeBinPath [
-            getent
-            coreutils
-          ]
-        }`'
-    '';
+  preCheck = ''
+    ln -s $GOPATH/bin/otel-cli .
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace main_test.go \
+      --replace-fail 'const minimumPath = `/bin:/usr/bin`' 'const minimumPath = `${
+        lib.makeBinPath [
+          getent
+          coreutils
+        ]
+      }`'
+  '';
 
   patches = [ ./patches/bin-echo-patch.patch ];
 

@@ -39,23 +39,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/xI3v7LNhpgfjv/m+sZwYDhhYvS6kQYxiiiG3+EF8Mw=";
   };
 
-  cmakeFlags =
-    [
-      "-DREGEX_BACKEND=pcre2"
-      "-DUSE_HTTP_PARSER=llhttp"
-      "-DUSE_SSH=ON"
-      (lib.cmakeBool "USE_GSSAPI" withGssapi)
-      "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isWindows [
-      "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
-      # For ws2_32, referred to by a `*.pc` file
-      "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
-      # openbsd headers fail with default c90
-      "-DCMAKE_C_STANDARD=99"
-    ];
+  cmakeFlags = [
+    "-DREGEX_BACKEND=pcre2"
+    "-DUSE_HTTP_PARSER=llhttp"
+    "-DUSE_SSH=ON"
+    (lib.cmakeBool "USE_GSSAPI" withGssapi)
+    "-DBUILD_SHARED_LIBS=${if staticBuild then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isWindows [
+    "-DDLLTOOL=${stdenv.cc.bintools.targetPrefix}dlltool"
+    # For ws2_32, referred to by a `*.pc` file
+    "-DCMAKE_LIBRARY_PATH=${stdenv.cc.libc}/lib"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isOpenBSD [
+    # openbsd headers fail with default c90
+    "-DCMAKE_C_STANDARD=99"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -69,7 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pcre2
     llhttp
-  ] ++ lib.optional withGssapi krb5;
+  ]
+  ++ lib.optional withGssapi krb5;
 
   propagatedBuildInputs = lib.optional (!stdenv.hostPlatform.isLinux) libiconv;
 

@@ -4,14 +4,14 @@
   fetchurl,
   cabextract,
 }:
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xow_dongle-firmware";
   version = "0-unstable-2025-04-22";
 
   srcs = [
     (fetchurl {
       name = "xow_dongle.cab";
-      url = "http://download.windowsupdate.com/c/msdownload/update/driver/drvs/2017/07/1cd6a87c-623f-4407-a52d-c31be49e925c_e19f60808bdcbfbd3c3df6be3e71ffc52e43261e.cab";
+      url = "https://catalog.s.download.windowsupdate.com/c/msdownload/update/driver/drvs/2017/07/1cd6a87c-623f-4407-a52d-c31be49e925c_e19f60808bdcbfbd3c3df6be3e71ffc52e43261e.cab";
       hash = "sha256-ZXNqhP9ANmRbj47GAr7ZGrY1MBnJyzIz3sq5/uwPbwQ=";
     })
     (fetchurl {

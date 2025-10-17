@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "aiocomelit";
-  version = "1.0.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "chemelli74";
     repo = "aiocomelit";
     tag = "v${version}";
-    hash = "sha256-jne+epQQ3fvy1QqAnBcxdihd9/VJkLU5xoiT/WRTMh0=";
+    hash = "sha256-/loKnKmLF8EDuZVWdSgxQUslrTKU4DxNmJlFZ0Xv9v8=";
   };
 
   build-system = [ poetry-core ];

@@ -28,12 +28,13 @@ buildPythonPackage rec {
       --replace docs/README.md README.md
   '';
 
-  nativeCheckInputs =
-    [ pytest ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      xclip
-      xvfb-run
-    ];
+  nativeCheckInputs = [
+    pytest
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    xclip
+    xvfb-run
+  ];
 
   checkPhase = ''
     runHook preCheck
@@ -47,6 +48,6 @@ buildPythonPackage rec {
     mainProgram = "pyclip";
     homepage = "https://github.com/spyoungtech/pyclip";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

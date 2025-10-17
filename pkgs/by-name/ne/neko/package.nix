@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     mbedtls
     openssl
     libpthreadstubs
-  ] ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux gtk3;
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
       lib.licenses.zlib # zlib.ndll
       lib.licenses.asl20 # mod_neko, mod_tora, mbedTLS
       lib.licenses.mit # overall, other libs
-      "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
+      lib.licenses.boehmGC # boehm gc
     ];
     maintainers = with lib.maintainers; [
       marcweber

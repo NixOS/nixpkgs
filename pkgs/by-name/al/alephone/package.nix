@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "alephone";
     homepage = "https://alephone.lhowon.org/";
     license = [ lib.licenses.gpl3 ];
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 

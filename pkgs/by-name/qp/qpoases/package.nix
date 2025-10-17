@@ -1,42 +1,52 @@
 {
   lib,
   stdenv,
+
   fetchFromGitHub,
   fetchpatch,
+  nix-update-script,
+
   cmake,
+
+  withShared ? (!stdenv.hostPlatform.isStatic),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpoases";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = "qpOASES";
-    rev = "releases/${finalAttrs.version}";
-    hash = "sha256-NWKwKYdXJD8lGorhTFWJmYeIhSCO00GHiYx+zHEJk0M=";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-L6uBRXaPJZinIRTm+x+wnXmlVkSlWm4XMB5yX/wxg2A=";
   };
 
   patches = [
-    # Allow building as shared library.
-    # This was merged upstream, and can be removed on next version
     (fetchpatch {
-      name = "shared-libs.patch";
-      url = "https://github.com/coin-or/qpOASES/pull/109/commits/cb49b52c17e0b638c88ff92f4c59e347cd82a332.patch";
-      hash = "sha256-6IoJHCFVCZpf3+Im1f64VwV5vj+bbbwCSF0vqpdd5Os=";
+      name = "qpoases-fix-cmake-4.patch";
+      url = "https://github.com/coin-or/qpOASES/commit/35b762ba3fee2e009d9e99650c68514da05585c5.patch";
+      hash = "sha256-I6l+ah1j45VEMokZqX6DYVmE55uWlVi0rx2B+HQv5Ik=";
     })
   ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" withShared)
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "releases/(.*)"
+    ];
+  };
 
   meta = with lib; {
     description = "Open-source C++ implementation of the recently proposed online active set strategy";
     homepage = "https://github.com/coin-or/qpOASES";
-    changelog = "https://github.com/coin-or/qpOASES/blob/${finalAttrs.src.rev}/VERSIONS.txt";
+    changelog = "https://github.com/coin-or/qpOASES/blob/${finalAttrs.src.tag}/VERSIONS.txt";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ nim65s ];
   };

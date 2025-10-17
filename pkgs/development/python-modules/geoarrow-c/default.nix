@@ -12,7 +12,7 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-c";
-  version = "0.1.3";
+  version = "0.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,16 +21,28 @@ buildPythonPackage rec {
     repo = "geoarrow-c";
     owner = "geoarrow";
     tag = "geoarrow-c-python-${version}";
-    hash = "sha256-kQCD3Vptl7GtRFigr4darvdtwnaHRLZWvBBpZ0xHMgM=";
+    hash = "sha256-cSvFCIMHuwDh83DT3R3V86S+RjPzhqcnTaFXqKL43Ns=";
   };
 
   sourceRoot = "${src.name}/python/geoarrow-c";
+
+  preConfigure = ''
+    export CFLAGS="-I../../src/src/geoarrow"
+  '';
 
   build-system = [
     cython
     setuptools
     setuptools-scm
   ];
+
+  # upstream needs a bootstrap.py file to copy some source around to build the project.
+  # This file is executed by setup.py, so at build time, when sources are readonly!
+  # So we execute this file at patch time instead, and remove it to prevent setup.py to execute it again.
+  postPatch = ''
+    python ./bootstrap.py
+    rm -v ./bootstrap.py
+  '';
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
@@ -49,5 +61,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       cpcloud
     ];
+    teams = [ lib.teams.geospatial ];
   };
 }

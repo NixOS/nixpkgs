@@ -3,6 +3,8 @@
   lib,
   fetchFromGitHub,
   gfortran,
+  buildType ? "meson",
+  cmake,
   meson,
   ninja,
   pkg-config,
@@ -15,6 +17,12 @@
 }:
 
 assert !blas.isILP64 && !lapack.isILP64;
+assert (
+  builtins.elem buildType [
+    "meson"
+    "cmake"
+  ]
+);
 
 stdenv.mkDerivation rec {
   pname = "dftd4";
@@ -30,22 +38,35 @@ stdenv.mkDerivation rec {
   patches = [
     # Make sure fortran headers are installed directly in /include
     ./fortran-module-dir.patch
+
+    # Fix wrong generation of package config include paths
+    ./cmake.patch
   ];
 
   nativeBuildInputs = [
     gfortran
-    meson
-    ninja
     pkg-config
     python3
-  ];
+  ]
+  ++ lib.optionals (buildType == "meson") [
+    meson
+    ninja
+  ]
+  ++ lib.optional (buildType == "cmake") cmake;
 
   buildInputs = [
     blas
     lapack
+  ];
+
+  propagatedBuildInputs = [
     mctc-lib
     mstore
     multicharge
+  ];
+
+  cmakeFlags = [
+    (lib.strings.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
   outputs = [

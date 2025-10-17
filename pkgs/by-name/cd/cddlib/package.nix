@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation rec {
   pname = "cddlib";
-  version = "0.94m";
+  version = "0.94n";
   src = fetchFromGitHub {
     owner = "cddlib";
     repo = "cddlib";
     rev = version;
-    sha256 = "09s8323h5w9j6mpl1yc6lm770dkskfxd2ayyafkcjllmnncxzfa0";
+    sha256 = "sha256-j4gXrxsWWiJH5gZc2ZzfYGsBCMJ7G7SQ1xEgurRWZrQ=";
   };
   buildInputs = [ gmp ];
   nativeBuildInputs = [

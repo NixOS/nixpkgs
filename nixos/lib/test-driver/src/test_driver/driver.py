@@ -13,6 +13,7 @@ from unittest import TestCase
 
 from colorama import Style
 
+from test_driver.debug import DebugAbstract, DebugNop
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
@@ -53,7 +54,7 @@ def get_tmp_dir() -> Path:
 
 
 def pythonize_name(name: str) -> str:
-    return re.sub(r"^[^A-z_]|[^A-z0-9_]", "_", name)
+    return re.sub(r"^[^A-Za-z_]|[^A-Za-z0-9_]", "_", name)
 
 
 class Driver:
@@ -67,6 +68,7 @@ class Driver:
     global_timeout: int
     race_timer: threading.Timer
     logger: AbstractLogger
+    debug: DebugAbstract
 
     def __init__(
         self,
@@ -77,12 +79,14 @@ class Driver:
         logger: AbstractLogger,
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
+        debug: DebugAbstract = DebugNop(),
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
+        self.debug = debug
 
         tmp_dir = get_tmp_dir()
 
@@ -159,6 +163,7 @@ class Driver:
             polling_condition=self.polling_condition,
             Machine=Machine,  # for typing
             t=AssertionTester(),
+            debug=self.debug,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -224,7 +229,13 @@ class Driver:
                 for line in f"{exc_prefix}: {exc}".splitlines():
                     self.logger.log_test_error(line)
 
+                self.debug.breakpoint()
+
                 sys.exit(1)
+
+            except Exception:
+                self.debug.breakpoint()
+                raise
 
     def run_tests(self) -> None:
         """Run the test script (for non-interactive test runs)"""

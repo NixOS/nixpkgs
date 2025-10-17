@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pg8000";
-  version = "1.31.2";
+  version = "1.31.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-HqRs8J2Oygf+fqre/XlR43vuf6vmdd8WTxpXL/swCHY=";
+    hash = "sha256-5+zOQzmJHyewsi4veeue/kQRi9OEIHNZ/Bg1D3iKzgA=";
   };
 
   build-system = [
@@ -32,7 +32,8 @@ buildPythonPackage rec {
     passlib
     python-dateutil
     scramp
-  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Tests require a running PostgreSQL instance
   doCheck = false;
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tlocke/pg8000";
     changelog = "https://github.com/tlocke/pg8000#release-notes";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

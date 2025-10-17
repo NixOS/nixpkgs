@@ -127,6 +127,7 @@ let
         bitXor
         bitNot
         boolToString
+        boolToYesNo
         mergeAttrs
         flip
         defaultTo
@@ -206,7 +207,10 @@ let
         concatMapAttrs
         mapAttrsRecursive
         mapAttrsRecursiveCond
+        mapAttrsToListRecursive
+        mapAttrsToListRecursiveCond
         genAttrs
+        genAttrs'
         isDerivation
         toDerivation
         optionalAttrs
@@ -228,12 +232,9 @@ let
         getInclude
         getMan
         chooseDevOutputs
-        zipWithNames
-        zip
         recurseIntoAttrs
         dontRecurseIntoAttrs
         cartesianProduct
-        cartesianProductOfSets
         mapCartesianProduct
         updateManyAttrsByPath
         listToAttrs
@@ -287,6 +288,7 @@ let
         init
         crossLists
         unique
+        uniqueStrings
         allUnique
         intersectLists
         subtractLists
@@ -326,6 +328,7 @@ let
         hasInfix
         hasPrefix
         hasSuffix
+        join
         stringToCharacters
         stringAsChars
         escape
@@ -499,7 +502,6 @@ let
         unknownModule
         mkOption
         mkPackageOption
-        mkPackageOptionMD
         literalMD
         ;
       inherit (self.types)
@@ -547,7 +549,6 @@ let
         modifySumArgs
         innerClosePropagation
         closePropagation
-        mapAttrsFlatten
         nvs
         setAttr
         setAttrMerge
@@ -566,6 +567,9 @@ let
         ;
       inherit (self.versions)
         splitVersion
+        ;
+      inherit (self.network.ipv6)
+        mkEUI64Suffix
         ;
     }
   );

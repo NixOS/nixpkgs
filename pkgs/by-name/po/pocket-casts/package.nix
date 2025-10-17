@@ -5,21 +5,23 @@
   makeDesktopItem,
   copyDesktopItems,
   makeWrapper,
-  electron,
+  electron_36,
 }:
-
+let
+  electron = electron_36;
+in
 buildNpmPackage rec {
   pname = "pocket-casts";
-  version = "0.10.3";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "felicianotech";
     repo = "pocket-casts-desktop-app";
     rev = "v${version}";
-    hash = "sha256-IhH5nZ2kXVW2D8cMmVyMX4xZLnzfMAp2gwQgZgHOItY=";
+    hash = "sha256-LB0SOAcgCZuNKOWhL9m4cDF9q+voVd+2OYVeKTq7OB0=";
   };
 
-  npmDepsHash = "sha256-oLZ81SA+eO20sUc2cwba3cc6vu1Qf/lNkIfzK2CQdrw=";
+  npmDepsHash = "sha256-i8IKH3sacYWLa2GtcJSoWCy5eV9vC79dP9WVN2Iy7DE=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

@@ -57,14 +57,13 @@ stdenv.mkDerivation {
     wpa_supplicant
   ];
 
-  mesonFlags =
-    [
-      "-Dbuild-tests=true"
-      "-Dip-binary=${iproute2}/bin/ip"
-    ]
-    ++ lib.optionals relyUdev [
-      "-Drely-udev=true"
-    ];
+  mesonFlags = [
+    "-Dbuild-tests=true"
+    "-Dip-binary=${iproute2}/bin/ip"
+  ]
+  ++ lib.optionals relyUdev [
+    "-Drely-udev=true"
+  ];
 
   postPatch = ''
     substituteInPlace res/miracle-gst \

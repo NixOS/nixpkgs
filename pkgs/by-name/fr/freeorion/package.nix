@@ -23,17 +23,15 @@
   libxslt,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "freeorion";
-  version = "0.5.0.1-unstable-2024-07-28";
+  version = "0.5.1.1";
 
   src = fetchFromGitHub {
     owner = "freeorion";
     repo = "freeorion";
-    # Current `release-0.5` commit to pick up Boost and GCC 14 fixes
-    # until another release is cut.
-    rev = "dc3d6a4f01aa78229c419fa17b4e383f73b024e2";
-    hash = "sha256-9yPk77YeYkGMJqrlDYRTUMDKMWpxUXhVCnHhomiUc/A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-0z3EPiSlViWQzpUu6+4IZ3ih0pbwdkZWAiVPsVcJr8o=";
   };
 
   buildInputs = [
@@ -91,6 +89,6 @@ stdenv.mkDerivation {
       cc-by-sa-30
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tex ];
+    maintainers = [ ];
   };
-}
+})

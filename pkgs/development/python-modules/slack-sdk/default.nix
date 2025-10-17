@@ -6,7 +6,6 @@
   boto3,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   moto,
   pytest-asyncio,
   pytestCheckHook,
@@ -19,23 +18,15 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.35.0";
+  version = "3.37.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     tag = "v${version}";
-    hash = "sha256-yjYpALyHSTLQSuwd6xth7nqfi3m1C9tqnWrrVRmI220=";
+    hash = "sha256-yckw0qA/NhnqN9HvF06Q5IqDmUTsPuo4JSKMrKXUGuc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-aiohttp-test_init_with_loop.patch";
-      url = "https://github.com/slackapi/python-slack-sdk/pull/1697.patch";
-      hash = "sha256-rHaJBH/Yxm3Sz/jmzc4G1pVJJXz0PL2880bz5n7w3ck=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -55,7 +46,8 @@ buildPythonPackage rec {
     moto
     pytest-asyncio
     pytestCheckHook
-  ] ++ optional-dependencies.optional;
+  ]
+  ++ optional-dependencies.optional;
 
   disabledTests = [
     # Requires internet access (to slack API)

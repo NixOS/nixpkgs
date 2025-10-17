@@ -31,7 +31,7 @@
 #   [ pkgset -> (args to stage/default.nix) or ({ __raw = true; } // pkgs) ]
 #   -> pkgset
 #
-# In english: This takes a list of function from the previous stage pkgset and
+# In English: This takes a list of function from the previous stage pkgset and
 # returns the final pkgset. Each of those functions returns, if `__raw` is
 # undefined or false, args for this stage's pkgset (the most complex and
 # important arg is the stdenv), or, if `__raw = true`, simply this stage's
@@ -108,7 +108,7 @@ let
           args'
         else
           allPackages (
-            (builtins.removeAttrs args' [ "selfBuild" ])
+            (removeAttrs args' [ "selfBuild" ])
             // {
               adjacentPackages =
                 if args.selfBuild or true then

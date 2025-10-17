@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sscg";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "sgallagher";
     repo = "sscg";
     tag = "sscg-${finalAttrs.version}";
-    hash = "sha256-e9/ruYBn206J0snQSo5uS9mvWmNh9AaZdZshSADEd4M=";
+    hash = "sha256-vHZuBjFs7sGIMGFWyqaW0SzzDDsrszlLmLREJtjLH2g=";
   };
 
   nativeBuildInputs = [

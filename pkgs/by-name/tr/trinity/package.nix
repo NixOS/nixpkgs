@@ -7,19 +7,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "trinity";
-  version = "1.9-unstable-2024-09-19";
+  version = "1.9-unstable-2025-09-02";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";
     repo = "trinity";
-    rev = "ba2360ed84a8c521d9c34af9c909315ea7c62aad";
-    hash = "sha256-lj27EtMzj+ULrAJh27rjiuL3/SzW/NRMG65l8sBi8k4=";
+    rev = "294c46522620afffd7b57af7ef743131ff55a488";
+    hash = "sha256-Fm9bwJ/ofDgSbe/YUgl22Rf0F+NCV32xLPA2kw36zFs=";
   };
 
   postPatch = ''
     patchShebangs configure
     patchShebangs scripts
   '';
+
+  # https://salsa.debian.org/debian/trinity/-/merge_requests/2
+  env.NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
 
   enableParallelBuilding = true;
 

@@ -3,51 +3,58 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  lm_sensors,
   yaml-cpp,
   pkg-config,
   procps,
-  coreutils,
   smartSupport ? false,
   libatasmart,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thinkfan";
-  version = "1.3.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "vmatare";
     repo = "thinkfan";
-    rev = version;
-    sha256 = "sha256-aREZv+t4QhtfLKOMrneLiRxgnu0fzB8UV8dvr1dnhx4=";
+    tag = finalAttrs.version;
+    hash = "sha256-QqDWPOXy8E+TY5t0fFRAS8BGA7ZH90xecv5UsFfDssk=";
   };
 
-  postPatch = ''
-    # fix hardcoded install path
-    substituteInPlace CMakeLists.txt --replace /etc $out/etc
-
-    # fix command paths in unit files
-    for unit in rcscripts/systemd/*; do
-      substituteInPlace "$unit" \
-        --replace /bin/kill ${procps}/bin/kill \
-        --replace /usr/bin/pkill ${procps}/bin/pkill \
-        --replace /usr/bin/sleep ${coreutils}/bin/sleep
-    done
+  postPatch = # fix hardcoded install path
+  ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "/etc" "$out/etc"
+  ''
+  # fix command paths in unit files
+  + ''
+    substituteInPlace rcscripts/systemd/thinkfan-sleep.service \
+      --replace-fail "/usr/bin/pkill" "${lib.getExe' procps "pkill"}"
+    substituteInPlace rcscripts/systemd/thinkfan-wakeup.service \
+      --replace-fail "/usr/bin/pkill" "${lib.getExe' procps "pkill"}"
+    substituteInPlace rcscripts/systemd/thinkfan.service.cmake \
+      --replace-fail "/bin/kill" "${lib.getExe' procps "kill"}"
   '';
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
+    "-DCMAKE_INSTALL_DOCDIR=share/doc/thinkfan"
     "-DUSE_NVML=OFF"
     # force install unit files
     "-DSYSTEMD_FOUND=ON"
-  ] ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
+  ]
+  ++ lib.optional smartSupport "-DUSE_ATASMART=ON";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [ yaml-cpp ] ++ lib.optional smartSupport libatasmart;
+  buildInputs = [
+    lm_sensors
+    yaml-cpp
+  ]
+  ++ lib.optional smartSupport libatasmart;
 
   meta = {
     description = "Simple, lightweight fan control program";
@@ -64,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     mainProgram = "thinkfan";
   };
-}
+})

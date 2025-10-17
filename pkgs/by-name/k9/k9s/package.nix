@@ -10,22 +10,21 @@
   writableTmpDirAsHomeHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "k9s";
-  version = "0.50.6";
+  version = "0.50.15";
 
   src = fetchFromGitHub {
     owner = "derailed";
     repo = "k9s";
-    rev = "v${version}";
-    hash = "sha256-cL7OD9OtkVx325KcANU8FudcOk6HMct6ve2p0qSkEoc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rTG2UtrVLlF+dFFJiNErYG6GL4ZQdwPlj1kdaLxh6TI=";
   };
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/derailed/k9s/cmd.version=${version}"
-    "-X github.com/derailed/k9s/cmd.commit=${src.rev}"
+    "-X github.com/derailed/k9s/cmd.version=${finalAttrs.version}"
+    "-X github.com/derailed/k9s/cmd.commit=${finalAttrs.src.rev}"
     "-X github.com/derailed/k9s/cmd.date=1970-01-01T00:00:00Z"
   ];
 
@@ -33,7 +32,7 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  vendorHash = "sha256-dATWFH5XKicdP8sftGGm2zopTef189MJWd9AM/Gxsjw=";
+  vendorHash = "sha256-Djz23/Ef7T7giE/KDsnbWnihwW37o40jevwVt8CbiQE=";
 
   # TODO investigate why some config tests are failing
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
@@ -44,7 +43,7 @@ buildGoModule rec {
     tests.version = testers.testVersion {
       package = k9s;
       command = "HOME=$(mktemp -d) k9s version -s";
-      inherit version;
+      inherit (finalAttrs) version;
     };
     updateScript = nix-update-script { };
   };
@@ -60,6 +59,9 @@ buildGoModule rec {
       --bash <($out/bin/k9s completion bash) \
       --fish <($out/bin/k9s completion fish) \
       --zsh <($out/bin/k9s completion zsh)
+
+    mkdir -p $out/share/k9s/skins
+    cp -r $src/skins/* $out/share/k9s/skins/
   '';
 
   nativeCheckInputs = [ writableTmpDirAsHomeHook ];
@@ -67,7 +69,7 @@ buildGoModule rec {
   meta = {
     description = "Kubernetes CLI To Manage Your Clusters In Style";
     homepage = "https://github.com/derailed/k9s";
-    changelog = "https://github.com/derailed/k9s/releases/tag/v${version}";
+    changelog = "https://github.com/derailed/k9s/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.asl20;
     mainProgram = "k9s";
     maintainers = with lib.maintainers; [
@@ -79,4 +81,4 @@ buildGoModule rec {
       ryan4yin
     ];
   };
-}
+})

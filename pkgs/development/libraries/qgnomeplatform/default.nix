@@ -43,31 +43,32 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      gtk3
-      qtbase
-      qtwayland
-    ]
-    ++ lib.optionals (!useQt6) [
-      adwaita-qt
-    ]
-    ++ lib.optionals useQt6 [
-      adwaita-qt6
-    ];
+  buildInputs = [
+    glib
+    gtk3
+    qtbase
+    qtwayland
+  ]
+  ++ lib.optionals (!useQt6) [
+    adwaita-qt
+  ]
+  ++ lib.optionals useQt6 [
+    adwaita-qt6
+  ];
 
   # Qt setup hook complains about missing `wrapQtAppsHook` otherwise.
   dontWrapQtApps = true;
 
-  cmakeFlags =
-    [
-      "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
-      "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
-    ]
-    ++ lib.optionals useQt6 [
-      "-DUSE_QT6=true"
-    ];
+  cmakeFlags = [
+    "-DGLIB_SCHEMAS_DIR=${glib.getSchemaPath gsettings-desktop-schemas}"
+    "-DQT_PLUGINS_DIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
+
+    # Workaround CMake 4 compat
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.31")
+  ]
+  ++ lib.optionals useQt6 [
+    "-DUSE_QT6=true"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

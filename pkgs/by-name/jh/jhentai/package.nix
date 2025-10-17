@@ -1,6 +1,6 @@
 {
   lib,
-  flutter324,
+  flutter329,
   fetchFromGitHub,
   autoPatchelfHook,
   webkitgtk_4_1,
@@ -12,15 +12,15 @@
   gitUpdater,
 }:
 
-flutter324.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "jhentai";
-  version = "8.0.7";
+  version = "8.0.10+299";
 
   src = fetchFromGitHub {
     owner = "jiangtian616";
     repo = "JHenTai";
     tag = "v${version}";
-    hash = "sha256-+ZXLtlZ7YPD8CvraDHga4DsTyksFOx6QehdcmZIEFfw=";
+    hash = "sha256-gRWYwWKGFeEsBUk4zkGYe8eAnJsf1lk6msEWK9bzk6U=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -83,7 +83,7 @@ flutter324.buildFlutterApplication rec {
     homepage = "https://github.com/jiangtian616/JHenTai";
     mainProgram = "jhentai";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

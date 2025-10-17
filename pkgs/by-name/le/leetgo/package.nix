@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "leetgo";
-  version = "1.4.14";
+  version = "1.4.15";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
     rev = "v${version}";
-    hash = "sha256-RRKQlCGVE8/RS1jPZBmzDXrv0dTW1zKR5mugByfIzsU=";
+    hash = "sha256-9GM4V7NOYMsvWwBgJSnGl4/S+UexdlVL/NyIiMRnL8A=";
   };
 
-  vendorHash = "sha256-VNJe+F/lbW+9fX6Fie91LLSs5H4Rn+kmHhsMd5mbYtA=";
+  vendorHash = "sha256-I3H2uVIvOGM6aQelM/69LpwJvg3TBZwq3i4R913etH4=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -28,7 +29,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd leetgo \
       --bash <($out/bin/leetgo completion bash) \
       --fish <($out/bin/leetgo completion fish) \

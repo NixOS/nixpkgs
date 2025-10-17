@@ -29,13 +29,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "famistudio";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     tag = finalAttrs.version;
-    hash = "sha256-QKgKPXb7NgbN37oCrwW9cLn701nsu55EsVXzOOKyc0A=";
+    hash = "sha256-A4tC1khtCLTfacdEq5z8ulRzhoItNgBe438TAaPdyLA=";
   };
 
   postPatch =
@@ -60,56 +60,55 @@ buildDotnetModule (finalAttrs: {
           expectedName = "${libPrefix}${args.depname}";
           ourName = "${libPrefix}${args.depname}";
         };
-      librariesToReplace =
-        [
-          # Unmodified native libraries that we can fully substitute
-          {
-            package = glfw;
-            expectedName = "libglfw";
-            ourName = "libglfw";
-          }
-          {
-            package = rtmidi;
-            expectedName = "librtmidi";
-            ourName = "librtmidi";
-          }
-        ]
-        ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
-          {
-            package = openal;
-            expectedName = "libopenal32";
-            ourName = "libopenal";
-          }
-        ]
-        ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
-          {
-            package = portaudio;
-            expectedName = "libportaudio.2";
-            ourName = "libportaudio.2";
-          }
-        ]
-        ++ [
-          # Native libraries, with extra code for the C# wrapping
-          (nativeWrapperToReplaceFormat { depname = "GifDec"; })
-          (nativeWrapperToReplaceFormat { depname = "NesSndEmu"; })
-          (nativeWrapperToReplaceFormat {
-            depname = "NotSoFatso";
-            extraPostPatch = ''
-              # C++17 does not allow register storage class specifier
-              substituteInPlace build.sh \
-                --replace-fail "$CXX" "$CXX -std=c++14"
-            '';
-          })
-          (nativeWrapperToReplaceFormat { depname = "ShineMp3"; })
-          (nativeWrapperToReplaceFormat { depname = "Stb"; })
-          (nativeWrapperToReplaceFormat {
-            depname = "Vorbis";
-            buildInputs = [
-              libogg
-              libvorbis
-            ];
-          })
-        ];
+      librariesToReplace = [
+        # Unmodified native libraries that we can fully substitute
+        {
+          package = glfw;
+          expectedName = "libglfw";
+          ourName = "libglfw";
+        }
+        {
+          package = rtmidi;
+          expectedName = "librtmidi";
+          ourName = "librtmidi";
+        }
+      ]
+      ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
+        {
+          package = openal;
+          expectedName = "libopenal32";
+          ourName = "libopenal";
+        }
+      ]
+      ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+        {
+          package = portaudio;
+          expectedName = "libportaudio.2";
+          ourName = "libportaudio.2";
+        }
+      ]
+      ++ [
+        # Native libraries, with extra code for the C# wrapping
+        (nativeWrapperToReplaceFormat { depname = "GifDec"; })
+        (nativeWrapperToReplaceFormat { depname = "NesSndEmu"; })
+        (nativeWrapperToReplaceFormat {
+          depname = "NotSoFatso";
+          extraPostPatch = ''
+            # C++17 does not allow register storage class specifier
+            substituteInPlace build.sh \
+              --replace-fail "$CXX" "$CXX -std=c++14"
+          '';
+        })
+        (nativeWrapperToReplaceFormat { depname = "ShineMp3"; })
+        (nativeWrapperToReplaceFormat { depname = "Stb"; })
+        (nativeWrapperToReplaceFormat {
+          depname = "Vorbis";
+          buildInputs = [
+            libogg
+            libvorbis
+          ];
+        })
+      ];
       libraryReplaceArgs = lib.strings.concatMapStringsSep " " (
         library:
         "--replace-fail '${libname library.expectedName}' '${lib.getLib library.package}/lib/${libname library.ourName}'"

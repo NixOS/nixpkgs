@@ -50,6 +50,17 @@ let
     ];
   };
 
+  collectdConfigFile = format.generate "tlsrpt-collectd.cfg" {
+    tlsrpt_collectd = dropNullValues cfg.collectd.settings;
+  };
+  fetcherConfigFile = format.generate "tlsrpt-fetcher.cfg" {
+    tlsrpt_fetcher = dropNullValues cfg.fetcher.settings;
+  };
+  reportdConfigFile = format.generate "tlsrpt-reportd.cfg" {
+    tlsrpt_reportd = dropNullValues cfg.reportd.settings;
+  };
+
+  withPostfix = config.services.postfix.enable && cfg.configurePostfix;
 in
 
 {
@@ -115,14 +126,6 @@ in
           List of extra flags to pass to the tlsrpt-reportd executable.
 
           See {manpage}`tlsrpt-collectd(1)` for possible flags.
-        '';
-      };
-
-      configurePostfix = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to modify the local Postfix service to grant access to the collectd socket.
         '';
       };
     };
@@ -219,6 +222,17 @@ in
               '';
             };
 
+            http_script = mkOption {
+              type = with types; nullOr str;
+              default = "${lib.getExe pkgs.curl} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-";
+              defaultText = lib.literalExpression ''
+                ''${lib.getExe pkgs.curl} --silent --header 'Content-Type: application/tlsrpt+gzip' --data-binary @-
+              '';
+              description = ''
+                Call to an HTTPS client, that accepts the URL on the commandline and the request body from stdin.
+              '';
+            };
+
             sender_address = mkOption {
               type = types.str;
               example = "noreply@example.com";
@@ -229,9 +243,16 @@ in
 
             sendmail_script = mkOption {
               type = with types; nullOr str;
-              default = if config.services.postfix.enable then "sendmail" else null;
+              default =
+                if config.services.postfix.enable && config.services.postfix.setSendmail then
+                  "/run/wrappers/bin/sendmail -i -t"
+                else
+                  null;
               defaultText = lib.literalExpression ''
-                if any [ config.services.postfix.enable ] then "sendmail" else null
+                if config.services.postfix.enable && config.services.postfix.setSendmail then
+                  "/run/wrappers/bin/sendmail -i -t"
+                else
+                  null
               '';
               description = ''
                 Path to a sendmail-compatible executable for delivery reports.
@@ -255,24 +276,32 @@ in
         '';
       };
     };
+
+    configurePostfix = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether to configure permissions to allow integration with Postfix.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
     environment.etc = {
-      "tlsrpt/collectd.cfg".source = format.generate "tlsrpt-collectd.cfg" {
-        tlsrpt_collectd = dropNullValues cfg.collectd.settings;
-      };
-      "tlsrpt/fetcher.cfg".source = format.generate "tlsrpt-fetcher.cfg" {
-        tlsrpt_fetcher = dropNullValues cfg.fetcher.settings;
-      };
-      "tlsrpt/reportd.cfg".source = format.generate "tlsrpt-reportd.cfg" {
-        tlsrpt_reportd = dropNullValues cfg.reportd.settings;
-      };
+      "tlsrpt/collectd.cfg".source = collectdConfigFile;
+      "tlsrpt/fetcher.cfg".source = fetcherConfigFile;
+      "tlsrpt/reportd.cfg".source = reportdConfigFile;
     };
 
-    systemd.services.postfix.serviceConfig.SupplementaryGroups = mkIf (
-      config.services.postfix.enable && cfg.collectd.configurePostfix
-    ) [ "tlsrpt" ];
+    users.users.tlsrpt = {
+      isSystemUser = true;
+      group = "tlsrpt";
+    };
+    users.groups.tlsrpt = { };
+
+    users.users.postfix.extraGroups = lib.mkIf withPostfix [
+      "tlsrpt"
+    ];
 
     systemd.services.tlsrpt-collectd = {
       description = "TLSRPT datagram collector";
@@ -280,7 +309,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = [ "/etc/tlsrpt/collectd.cfg" ];
+      restartTriggers = [ collectdConfigFile ];
 
       serviceConfig = commonServiceSettings // {
         ExecStart = toString (
@@ -304,7 +333,7 @@ in
 
       wantedBy = [ "multi-user.target" ];
 
-      restartTriggers = [ "/etc/tlsrpt/reportd.cfg" ];
+      restartTriggers = [ reportdConfigFile ];
 
       serviceConfig = commonServiceSettings // {
         ExecStart = toString (
@@ -316,7 +345,10 @@ in
         RestrictAddressFamilies = [
           "AF_INET"
           "AF_INET6"
+          "AF_NETLINK"
         ];
+        ReadWritePaths = lib.optionals withPostfix [ "/var/lib/postfix/queue/maildrop" ];
+        SupplementaryGroups = lib.optionals withPostfix [ "postdrop" ];
         UMask = "0077";
       };
     };

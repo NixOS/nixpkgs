@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "bellows";
-  version = "0.45.0";
+  version = "0.46.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "bellows";
     tag = version;
-    hash = "sha256-wIi6LXfo1ykNT9DMmlRORspiWnBzJUAn6kA/t4rdTpY=";
+    hash = "sha256-YQt9imL9poGLrkVj9LmR+XPUufRMOgVhAr+Bw+/VdI0=";
   };
 
   postPatch = ''
@@ -39,7 +39,8 @@ buildPythonPackage rec {
     click-log
     voluptuous
     zigpy
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -5,6 +5,7 @@
   callPackage,
   fetchFromGitHub,
   lib,
+  nixosTests,
   stdenvNoCC,
 }:
 
@@ -110,14 +111,13 @@ let
     # already vendored
     vendorHash = null;
 
-    preBuild =
-      ''
-        cp -r ../locale/en pkg/locale/src/
-        cp -r ${server-webconsole}/* webconsole/dist/
-      ''
-      + lib.optionalString withLocales ''
-        cp -r ${corteza-locale}/src/* pkg/locale/src/
-      '';
+    preBuild = ''
+      cp -r ../locale/en pkg/locale/src/
+      cp -r ${server-webconsole}/* webconsole/dist/
+    ''
+    + lib.optionalString withLocales ''
+      cp -r ${corteza-locale}/src/* pkg/locale/src/
+    '';
 
     subPackages = [ "cmd/corteza" ];
 
@@ -161,6 +161,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   passthru = {
     srcs = { inherit corteza-server corteza-webapp; };
+    tests = { inherit (nixosTests) corteza; };
   };
 
   inherit (corteza-server) meta;

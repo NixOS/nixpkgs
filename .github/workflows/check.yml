@@ -9,6 +9,15 @@ on:
       headBranch:
         required: true
         type: string
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
 
 permissions: {}
 
@@ -17,148 +26,79 @@ defaults:
     shell: bash
 
 jobs:
-  no-channel-base:
-    name: no channel base
-    if: contains(fromJSON(inputs.baseBranch).type, 'channel')
-    runs-on: ubuntu-24.04-arm
-    steps:
-      - run: |
-          cat <<EOF
-          The nixos-* and nixpkgs-* branches are pushed to by the channel
-          release script and should not be merged into directly.
-
-          Please target the equivalent release-* branch or master instead.
-          EOF
-          exit 1
-
-  cherry-pick:
-    if: |
-      github.event_name == 'pull_request' ||
-      (fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development'))
+  commits:
     permissions:
       pull-requests: write
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 3
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          fetch-depth: 0
-          filter: tree:0
           path: trusted
+          sparse-checkout: |
+            ci/github-script
 
-      - name: Check cherry-picks
+      - name: Install dependencies
+        run: npm install bottleneck
+
+      - name: Log current API rate limits
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Check commits
         id: check
-        continue-on-error: true
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
-        run: |
-          ./trusted/ci/check-cherry-picks.sh "$BASE_SHA" "$HEAD_SHA" checked-cherry-picks.md
+          TARGETS_STABLE: ${{ fromJSON(inputs.baseBranch).stable && !contains(fromJSON(inputs.headBranch).type, 'development') }}
+        with:
+          script: |
+            const targetsStable = JSON.parse(process.env.TARGETS_STABLE)
+            require('./trusted/ci/github-script/commits.js')({
+              github,
+              context,
+              core,
+              dry: context.eventName == 'pull_request',
+              cherryPicks: context.eventName == 'pull_request' || targetsStable,
+            })
 
       - name: Log current API rate limits
         env:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-      - name: Prepare review
-        if: steps.check.outcome == 'failure'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+  owners:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          script: |
-            const { readFile, writeFile } = require('node:fs/promises')
-
-            const job_url = (await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId
-            })).data.jobs[0].html_url + '?pr=' + context.payload.pull_request.number
-
-            const header = await readFile('trusted/ci/check-cherry-picks.md')
-            const body = await readFile('checked-cherry-picks.md')
-            const footer =
-              `\n_Hint: The full diffs are also available in the [runner logs](${job_url}) with slightly better highlighting._`
-
-            const review = header + body + footer
-            await writeFile('review.md', review)
-            core.summary.addRaw(review)
-            core.summary.write()
-
-      - name: Request changes
-        if: ${{ github.event_name == 'pull_request_target' && steps.check.outcome == 'failure' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+          sparse-checkout: .github/actions
+      - name: Checkout merge and target commits
+        uses: ./.github/actions/checkout
         with:
-          script: |
-            const { readFile } = require('node:fs/promises')
-            const body = await readFile('review.md', 'utf-8')
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-            const pendingReview = (await github.paginate(github.rest.pulls.listReviews, {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pull_number: context.payload.pull_request.number
-            })).find(review =>
-              review.user.login == 'github-actions[bot]' && (
-                // If a review is still pending, we can just update this instead
-                // of posting a new one.
-                review.state == 'CHANGES_REQUESTED' ||
-                // No need to post a new review, if an older one with the exact
-                // same content had already been dismissed.
-                review.body == body
-              )
-            )
+      - uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
-            // Either of those two requests could fail for very long comments. This can only happen
-            // with multiple commits all hitting the truncation limit for the diff. If you ever hit
-            // this case, consider just splitting up those commits into multiple PRs.
-            if (pendingReview) {
-              await github.rest.pulls.updateReview({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                review_id: pendingReview.id,
-                body
-              })
-            } else {
-              await github.rest.pulls.createReview({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number,
-                event: 'REQUEST_CHANGES',
-                body
-              })
-            }
-
-      - name: Dismiss old reviews
-        if: ${{ github.event_name == 'pull_request_target' && steps.check.outcome == 'success' }}
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
-          script: |
-            await Promise.all(
-              (await github.paginate(github.rest.pulls.listReviews, {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pull_number: context.payload.pull_request.number
-              })).filter(review =>
-                review.user.login == 'github-actions[bot]'
-              ).map(async (review) => {
-                if (review.state == 'CHANGES_REQUESTED') {
-                  await github.rest.pulls.dismissReview({
-                    owner: context.repo.owner,
-                    repo: context.repo.repo,
-                    pull_number: context.payload.pull_request.number,
-                    review_id: review.id,
-                    message: 'All cherry-picks are good now, thank you!'
-                  })
-                }
-                await github.graphql(`mutation($node_id:ID!) {
-                  minimizeComment(input: {
-                    classifier: RESOLVED,
-                    subjectId: $node_id
-                  })
-                  { clientMutationId }
-                }`, { node_id: review.node_id })
-              })
-            )
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: -source$
 
-      - name: Log current API rate limits
+      - name: Build codeowners validator
+        run: nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A codeownersValidator
+
+      - name: Validate codeowners
         env:
-          GH_TOKEN: ${{ github.token }}
-        run: gh api /rate_limit | jq
+          OWNERS_FILE: nixpkgs/untrusted/ci/OWNERS
+          REPOSITORY_PATH: nixpkgs/untrusted
+          # Omits "owners", which checks whether GitHub handles exist, but fails with nested team
+          # structures.
+          CHECKS: "duppatterns,files,syntax"
+          # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
+          EXPERIMENTAL_CHECKS: "avoid-shadowing"
+        run: result/bin/codeowners-validator

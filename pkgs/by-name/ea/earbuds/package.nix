@@ -25,7 +25,6 @@ rustPlatform.buildRustPackage {
     ./fix-daemon.patch
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Y1pMmWxfXGcEFPj05/BpXQvd199O5l6hJmePNxMQc/Y=";
 
   nativeBuildInputs = [

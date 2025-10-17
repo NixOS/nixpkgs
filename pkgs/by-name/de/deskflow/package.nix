@@ -34,13 +34,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "deskflow";
-  version = "1.22.0";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "deskflow";
     repo = "deskflow";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-tNHQHReeOUc5lCs4dI3a5UzeJao+RPWXH4KdWhPwESI=";
+    hash = "sha256-eXQXHi8TMMwyIkZ7gQ9GHIzSOM2rtzV+w1R7hxS+WSA=";
   };
 
   postPatch = ''
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   postInstall = ''
-    install -Dm644 ../README.md ../doc/configuration.md -t $out/share/doc/deskflow
+    install -Dm644 ../README.md ../doc/user/configuration.md -t $out/share/doc/deskflow
   '';
 
   passthru.updateScript = nix-update-script {

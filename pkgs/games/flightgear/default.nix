@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   wrapQtAppsHook,
+  callPackage,
   libglut,
   freealut,
   libGLU,
@@ -10,7 +11,6 @@
   libICE,
   libjpeg,
   openal,
-  openscenegraph,
   plib,
   libSM,
   libunwind,
@@ -55,6 +55,7 @@ let
       cp ${src}/* -a "$out/share/FlightGear/"
     '';
   };
+  openscenegraph = callPackage ./openscenegraph-flightgear.nix { };
 in
 stdenv.mkDerivation rec {
   pname = "flightgear";
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
     libXi
     libXmu
     libXt
-    simgear
+    (simgear.override { openscenegraph = openscenegraph; })
     zlib
     boost
     libpng
@@ -104,9 +105,7 @@ stdenv.mkDerivation rec {
     curl
   ];
 
-  qtWrapperArgs = [
-    "--set FG_ROOT ${data}/share/FlightGear"
-  ];
+  qtWrapperArgs = [ "--set FG_ROOT ${data}/share/FlightGear" ];
 
   meta = with lib; {
     description = "Flight simulator";

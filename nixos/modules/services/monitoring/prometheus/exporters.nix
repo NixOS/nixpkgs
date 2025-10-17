@@ -79,6 +79,7 @@ let
         "jitsi"
         "json"
         "junos-czerwonk"
+        "kafka"
         "kea"
         "keylight"
         "klipper"
@@ -123,6 +124,7 @@ let
         "snmp"
         "sql"
         "statsd"
+        "storagebox"
         "surfboard"
         "systemd"
         "tibber"
@@ -342,7 +344,7 @@ let
         "-m comment --comment ${name}-exporter -j nixos-fw-accept"
       ]);
       networking.firewall.extraInputRules = mkIf (conf.openFirewall && nftables) conf.firewallRules;
-      systemd.services."prometheus-${name}-exporter" = mkMerge ([
+      systemd.services."prometheus-${name}-exporter" = mkMerge [
         {
           wantedBy = [ "multi-user.target" ];
           after = [ "network.target" ];
@@ -379,14 +381,14 @@ let
           serviceConfig.UMask = "0077";
         }
         serviceOpts
-      ]);
+      ];
     };
 in
 {
 
   options.services.prometheus.exporters = mkOption {
     type = types.submodule {
-      options = (mkSubModules);
+      options = mkSubModules;
       imports = [
         ../../../misc/assertions.nix
         (lib.mkRenamedOptionModule [ "unifi-poller" ] [ "unpoller" ])
@@ -415,134 +417,133 @@ in
   config = mkMerge (
     [
       {
-        assertions =
-          [
-            {
-              assertion =
-                cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (!(lib.hasPrefix "/tmp/" cfg.ipmi.configFile));
-              message = ''
-                Config file specified in `services.prometheus.exporters.ipmi.configFile' must
-                  not reside within /tmp - it won't be visible to the systemd service.
-              '';
-            }
-            {
-              assertion =
-                cfg.ipmi.enable
-                -> (cfg.ipmi.webConfigFile != null)
-                -> (!(lib.hasPrefix "/tmp/" cfg.ipmi.webConfigFile));
-              message = ''
-                Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
-                  not reside within /tmp - it won't be visible to the systemd service.
-              '';
-            }
-            {
-              assertion =
-                cfg.restic.enable -> ((cfg.restic.repository == null) != (cfg.restic.repositoryFile == null));
-              message = ''
-                Please specify either 'services.prometheus.exporters.restic.repository'
-                  or 'services.prometheus.exporters.restic.repositoryFile'.
-              '';
-            }
-            {
-              assertion =
-                cfg.snmp.enable -> ((cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null));
-              message = ''
-                Please ensure you have either `services.prometheus.exporters.snmp.configuration'
-                  or `services.prometheus.exporters.snmp.configurationPath' set!
-              '';
-            }
-            {
-              assertion =
-                cfg.mikrotik.enable -> ((cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null));
-              message = ''
-                Please specify either `services.prometheus.exporters.mikrotik.configuration'
-                  or `services.prometheus.exporters.mikrotik.configFile'.
-              '';
-            }
-            {
-              assertion = cfg.mail.enable -> ((cfg.mail.configFile == null) != (cfg.mail.configuration == null));
-              message = ''
-                Please specify either 'services.prometheus.exporters.mail.configuration'
-                  or 'services.prometheus.exporters.mail.configFile'.
-              '';
-            }
-            {
-              assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
-              message = ''
-                The exporter is configured to run as 'services.mysql.user', but
-                  'services.mysql.enable' is set to false.
-              '';
-            }
-            {
-              assertion =
-                cfg.nextcloud.enable -> ((cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null));
-              message = ''
-                Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
-                  'services.prometheus.exporters.nextcloud.tokenFile'
-              '';
-            }
-            {
-              assertion = cfg.sql.enable -> ((cfg.sql.configFile == null) != (cfg.sql.configuration == null));
-              message = ''
-                Please specify either 'services.prometheus.exporters.sql.configuration' or
-                  'services.prometheus.exporters.sql.configFile'
-              '';
-            }
-            {
-              assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
-              message = ''
-                Scaphandre only support x86_64 architectures.
-              '';
-            }
-            {
-              assertion =
-                cfg.scaphandre.enable
-                -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
-              message = ''
-                Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
-              '';
-            }
-            {
-              assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
-              message = ''
-                Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
-              '';
-            }
-            {
-              assertion =
-                cfg.idrac.enable -> ((cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null));
-              message = ''
-                Please ensure you have either `services.prometheus.exporters.idrac.configuration'
-                  or `services.prometheus.exporters.idrac.configurationPath' set!
-              '';
-            }
-            {
-              assertion =
-                cfg.deluge.enable
-                -> ((cfg.deluge.delugePassword == null) != (cfg.deluge.delugePasswordFile == null));
-              message = ''
-                Please ensure you have either `services.prometheus.exporters.deluge.delugePassword'
-                  or `services.prometheus.exporters.deluge.delugePasswordFile' set!
-              '';
-            }
-            {
-              assertion =
-                cfg.pgbouncer.enable
-                -> (xor (cfg.pgbouncer.connectionEnvFile == null) (cfg.pgbouncer.connectionString == null));
-              message = ''
-                Options `services.prometheus.exporters.pgbouncer.connectionEnvFile` and
-                `services.prometheus.exporters.pgbouncer.connectionString` are mutually exclusive!
-              '';
-            }
-          ]
-          ++ (flip map (attrNames exporterOpts) (exporter: {
-            assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
+        assertions = [
+          {
+            assertion =
+              cfg.ipmi.enable -> (cfg.ipmi.configFile != null) -> (!(lib.hasPrefix "/tmp/" cfg.ipmi.configFile));
             message = ''
-              The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
-              `openFirewall' is set to `true'!
+              Config file specified in `services.prometheus.exporters.ipmi.configFile' must
+                not reside within /tmp - it won't be visible to the systemd service.
             '';
-          }))
-          ++ config.services.prometheus.exporters.assertions;
+          }
+          {
+            assertion =
+              cfg.ipmi.enable
+              -> (cfg.ipmi.webConfigFile != null)
+              -> (!(lib.hasPrefix "/tmp/" cfg.ipmi.webConfigFile));
+            message = ''
+              Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
+                not reside within /tmp - it won't be visible to the systemd service.
+            '';
+          }
+          {
+            assertion =
+              cfg.restic.enable -> ((cfg.restic.repository == null) != (cfg.restic.repositoryFile == null));
+            message = ''
+              Please specify either 'services.prometheus.exporters.restic.repository'
+                or 'services.prometheus.exporters.restic.repositoryFile'.
+            '';
+          }
+          {
+            assertion =
+              cfg.snmp.enable -> ((cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null));
+            message = ''
+              Please ensure you have either `services.prometheus.exporters.snmp.configuration'
+                or `services.prometheus.exporters.snmp.configurationPath' set!
+            '';
+          }
+          {
+            assertion =
+              cfg.mikrotik.enable -> ((cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null));
+            message = ''
+              Please specify either `services.prometheus.exporters.mikrotik.configuration'
+                or `services.prometheus.exporters.mikrotik.configFile'.
+            '';
+          }
+          {
+            assertion = cfg.mail.enable -> ((cfg.mail.configFile == null) != (cfg.mail.configuration == null));
+            message = ''
+              Please specify either 'services.prometheus.exporters.mail.configuration'
+                or 'services.prometheus.exporters.mail.configFile'.
+            '';
+          }
+          {
+            assertion = cfg.mysqld.runAsLocalSuperUser -> config.services.mysql.enable;
+            message = ''
+              The exporter is configured to run as 'services.mysql.user', but
+                'services.mysql.enable' is set to false.
+            '';
+          }
+          {
+            assertion =
+              cfg.nextcloud.enable -> ((cfg.nextcloud.passwordFile == null) != (cfg.nextcloud.tokenFile == null));
+            message = ''
+              Please specify either 'services.prometheus.exporters.nextcloud.passwordFile' or
+                'services.prometheus.exporters.nextcloud.tokenFile'
+            '';
+          }
+          {
+            assertion = cfg.sql.enable -> ((cfg.sql.configFile == null) != (cfg.sql.configuration == null));
+            message = ''
+              Please specify either 'services.prometheus.exporters.sql.configuration' or
+                'services.prometheus.exporters.sql.configFile'
+            '';
+          }
+          {
+            assertion = cfg.scaphandre.enable -> (pkgs.stdenv.targetPlatform.isx86_64 == true);
+            message = ''
+              Scaphandre only support x86_64 architectures.
+            '';
+          }
+          {
+            assertion =
+              cfg.scaphandre.enable
+              -> ((lib.kernel.whenHelpers pkgs.linux.version).whenOlder "5.11" true).condition == false;
+            message = ''
+              Scaphandre requires a kernel version newer than '5.11', '${pkgs.linux.version}' given.
+            '';
+          }
+          {
+            assertion = cfg.scaphandre.enable -> (builtins.elem "intel_rapl_common" config.boot.kernelModules);
+            message = ''
+              Scaphandre needs 'intel_rapl_common' kernel module to be enabled. Please add it in 'boot.kernelModules'.
+            '';
+          }
+          {
+            assertion =
+              cfg.idrac.enable -> ((cfg.idrac.configurationPath == null) != (cfg.idrac.configuration == null));
+            message = ''
+              Please ensure you have either `services.prometheus.exporters.idrac.configuration'
+                or `services.prometheus.exporters.idrac.configurationPath' set!
+            '';
+          }
+          {
+            assertion =
+              cfg.deluge.enable
+              -> ((cfg.deluge.delugePassword == null) != (cfg.deluge.delugePasswordFile == null));
+            message = ''
+              Please ensure you have either `services.prometheus.exporters.deluge.delugePassword'
+                or `services.prometheus.exporters.deluge.delugePasswordFile' set!
+            '';
+          }
+          {
+            assertion =
+              cfg.pgbouncer.enable
+              -> (xor (cfg.pgbouncer.connectionEnvFile == null) (cfg.pgbouncer.connectionString == null));
+            message = ''
+              Options `services.prometheus.exporters.pgbouncer.connectionEnvFile` and
+              `services.prometheus.exporters.pgbouncer.connectionString` are mutually exclusive!
+            '';
+          }
+        ]
+        ++ (flip map (attrNames exporterOpts) (exporter: {
+          assertion = cfg.${exporter}.firewallFilter != null -> cfg.${exporter}.openFirewall;
+          message = ''
+            The `firewallFilter'-option of exporter ${exporter} doesn't have any effect unless
+            `openFirewall' is set to `true'!
+          '';
+        }))
+        ++ config.services.prometheus.exporters.assertions;
         warnings = [
           (mkIf
             (
@@ -555,7 +556,8 @@ in
               Consider using `services.prometheus.exporters.idrac.configuration` instead.
             ''
           )
-        ] ++ config.services.prometheus.exporters.warnings;
+        ]
+        ++ config.services.prometheus.exporters.warnings;
       }
     ]
     ++ [

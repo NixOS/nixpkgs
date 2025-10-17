@@ -1,8 +1,8 @@
 [
   {
     "pname": "CocoR",
-    "version": "2014.12.24",
-    "hash": "sha256-Qh3bhGKcXHD7FQa9KvXbN4D1KR0BWgxCCoxNrtSBSF8="
+    "version": "2014.12.25",
+    "hash": "sha256-qxTcnqh7jziriMHwos5/YArRYUG2+3nNoYYmFyPo8E0="
   },
   {
     "pname": "Microsoft.Bcl.AsyncInterfaces",

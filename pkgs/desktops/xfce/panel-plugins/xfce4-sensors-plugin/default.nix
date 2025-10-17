@@ -50,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
     xfce4-panel
     libnotify
     lm_sensors
-  ] ++ lib.optionals nvidiaSupport [ libXNVCtrl ];
+  ]
+  ++ lib.optionals nvidiaSupport [ libXNVCtrl ];
 
   mesonFlags = [
     (lib.mesonEnable "xnvctrl" nvidiaSupport)

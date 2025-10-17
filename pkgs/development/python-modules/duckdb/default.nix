@@ -11,6 +11,7 @@
   psutil,
   pybind11,
   setuptools-scm,
+  pytest-reraise,
   pytestCheckHook,
 }:
 
@@ -24,32 +25,33 @@ buildPythonPackage rec {
     ;
   pyproject = true;
 
-  postPatch =
-    (duckdb.postPatch or "")
-    + ''
-      # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
-      cd tools/pythonpkg
+  postPatch = (duckdb.postPatch or "") + ''
+    # we can't use sourceRoot otherwise patches don't apply, because the patches apply to the C++ library
+    cd tools/pythonpkg
 
-      # 1. let nix control build cores
-      # 2. default to extension autoload & autoinstall disabled
-      substituteInPlace setup.py \
-        --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
-        --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "pass"
-    '';
+    # 1. let nix control build cores
+    # 2. default to extension autoload & autoinstall disabled
+    substituteInPlace setup.py \
+      --replace-fail "ParallelCompile()" 'ParallelCompile("NIX_BUILD_CORES")' \
+      --replace-fail "define_macros.extend([('DUCKDB_EXTENSION_AUTOLOAD_DEFAULT', '1'), ('DUCKDB_EXTENSION_AUTOINSTALL_DEFAULT', '1')])" "pass"
+
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools_scm>=6.4,<8.0' 'setuptools_scm'
+  '';
 
   env = {
     DUCKDB_BUILD_UNITY = 1;
     OVERRIDE_GIT_DESCRIBE = "v${version}-0-g${rev}";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     pybind11
     setuptools-scm
   ];
 
   buildInputs = [ openssl ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     pandas
   ];
@@ -58,11 +60,15 @@ buildPythonPackage rec {
     fsspec
     google-cloud-storage
     psutil
+    pytest-reraise
     pytestCheckHook
   ];
 
+  pytestFlags = [ "--verbose" ];
+
   # test flags from .github/workflows/Python.yml
-  pytestFlagsArray = [ "--verbose" ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "tests/fast" ];
+  pytestFlagsArray = [ "--verbose" ];
+  enabledTestPaths = if stdenv.hostPlatform.isDarwin then [ "tests/fast" ] else [ "tests" ];
 
   disabledTestPaths = [
     # avoid dependency on mypy
@@ -81,6 +87,9 @@ buildPythonPackage rec {
     # causing a later test to fail with a spurious KeyboardInterrupt
     "test_connection_interrupt"
     "test_query_interruption"
+
+    # flaky due to a race condition in checking whether a thread is alive
+    "test_query_progress"
   ];
 
   # remove duckdb dir to prevent import confusion by pytest

@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liberio";
-  version = "unstable-2019-12-11";
+  version = "0-unstable-2019-12-11";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";

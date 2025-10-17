@@ -24,11 +24,12 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  dependencies =
-    [ six ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
-      distutils
-    ];
+  dependencies = [
+    six
+  ]
+  ++ lib.optionals (pythonAtLeast "3.12") [
+    distutils
+  ];
 
   pythonImportsCheck = [ "dockerpycreds" ];
 

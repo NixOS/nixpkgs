@@ -111,13 +111,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.0.2";
-
+  version = "9.0.5";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-xmRUUMjQt3CFJ0GxlUsUqmp//XTRWik3jSD4auql7Nk=";
+    hash = "sha256-F5d4u3Nq/+yYiOgkH/bwWPhZDxgBpJ5ktee0Hc5UmEo=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -134,61 +133,58 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-downloading-stb_image.patch
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      pkg-config
-      python3
-      imagemagick
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-      copyDesktopItems
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-      darwin.sigtool
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    python3
+    imagemagick
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+    copyDesktopItems
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
+    darwin.sigtool
+    fixDarwinDylibNames
+  ];
 
-  buildInputs =
-    [
-      boost
-      glew
-      SDL2
-      SDL2_net
-      libpng
-      libzip
-      nlohmann_json
-      tinyxml-2
-      spdlog
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      zenity
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Metal.hpp requires macOS 13.x min.
-      apple-sdk_13
-    ];
+  buildInputs = [
+    boost
+    glew
+    SDL2
+    SDL2_net
+    libpng
+    libzip
+    nlohmann_json
+    tinyxml-2
+    spdlog
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    zenity
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Metal.hpp requires macOS 13.x min.
+    apple-sdk_13
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
-      (lib.cmakeBool "NON_PORTABLE" true)
-      (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_METALCPP" "${metalcpp}")
-      (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SPDLOG" "${spdlog}")
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
+    (lib.cmakeBool "NON_PORTABLE" true)
+    (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_METALCPP" "${metalcpp}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_SPDLOG" "${spdlog}")
+  ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int -Wno-elaborated-enum-base";
 

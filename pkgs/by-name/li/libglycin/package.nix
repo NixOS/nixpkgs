@@ -15,6 +15,8 @@
   gtk4,
   gobject-introspection,
   gnome,
+  common-updater-scripts,
+  _experimental-update-script-combinators,
   buildPackages,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
@@ -22,40 +24,40 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "libglycin";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "glycin";
     tag = finalAttrs.version;
-    hash = "sha256-M4DcWLE40OPB7zIkv4uLj6xTac3LTDcZ2uAO2S/cUz4=";
+    hash = "sha256-O7Z7kzC0BU7FAF1UZC6LbXVIXPDertsAUNYwHAjkzPI=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      rustc
-      cargo
-      rustPlatform.cargoSetupHook
-    ]
-    ++ lib.optionals withIntrospection [
-      vala
-      gi-docgen
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    rustc
+    cargo
+    rustPlatform.cargoSetupHook
+  ]
+  ++ lib.optionals withIntrospection [
+    vala
+    gi-docgen
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-iNSpLvIi3oZKSRlkwkDJp5i8MdixRvmWIOCzbFHIdHw=";
+    hash = "sha256-g2tsQ6q+sUxn3itu3IgZ5EGtDorPzhaO5B1hlEW5xzs=";
   };
 
   buildInputs = [
     libseccomp
     lcms2
     gtk4
-  ] ++ lib.optionals withIntrospection [ gobject-introspection ];
+  ]
+  ++ lib.optionals withIntrospection [ gobject-introspection ];
 
   propagatedBuildInputs = [
     libseccomp
@@ -71,10 +73,33 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   passthru = {
-    updateScript = gnome.updateScript {
-      attrPath = "libglycin";
-      packageName = "glycin";
-    };
+    updateScript =
+      let
+        updateSource = gnome.updateScript {
+          attrPath = "libglycin";
+          packageName = "glycin";
+        };
+        updateLockfile = {
+          command = [
+            "sh"
+            "-c"
+            ''
+              PATH=${
+                lib.makeBinPath [
+                  common-updater-scripts
+                ]
+              }
+              update-source-version libglycin --ignore-same-version --source-key=cargoDeps.vendorStaging > /dev/null
+            ''
+          ];
+          # Experimental feature: do not copy!
+          supportedFeatures = [ "silent" ];
+        };
+      in
+      _experimental-update-script-combinators.sequence [
+        updateSource
+        updateLockfile
+      ];
   };
 
   meta = {

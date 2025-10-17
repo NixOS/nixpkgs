@@ -5,15 +5,18 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spirv-headers";
-  version = "1.4.313.0";
+  version = "1.4.321.0-unstable-2025-06-24";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-bUgt7m3vJYoozxgrA5hVTRcbPg3OAzht0e+MgTH7q9k=";
+    # The release for Vulkan SDK 1.4.321.0 is missing a PR required for
+    # LLVM 21 support in SPIRV-LLVM-Translator; return to the
+    # `vulkan-sdk-*` tags on the next stable release.
+    rev = "9e3836d7d6023843a72ecd3fbf3f09b1b6747a9e";
+    hash = "sha256-N8NBAkkpOcbgap4loPJJW6E5bjG+TixCh/HN259RyjI=";
   };
 
   nativeBuildInputs = [ cmake ];

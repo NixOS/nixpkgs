@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   python3,
   nodejs,
   closurecompiler,
@@ -18,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "4.0.10";
+  version = "4.0.12";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -34,7 +33,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-kObMqg7hyy7E3F+wbdZoeDy5GOgpE2iNTuDVkFvq5ig=";
+    npmDepsHash = "sha256-Pos7pSboTIpGKtlBm56hJPYb1lDydmUwW1urHetFfeQ=";
 
     dontBuild = true;
 
@@ -47,14 +46,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-b+7NYKRm0IsZ2cK2Vqz8zKhqYlxjlhVSdpdFq0LaUPU=";
+    hash = "sha256-MwCUilfyum1yJb6nHEViYiYWufXlz2+krHZmXw2NAck=";
     rev = version;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+  ];
   buildInputs = [
     nodejs
-    python3
   ];
 
   patches = [
@@ -68,8 +71,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 4 requires LLVM tip-of-tree instead of LLVM 20
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 21/EXPECTED_LLVM_VERSION = 20.1/g" tools/shared.py
+    # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py

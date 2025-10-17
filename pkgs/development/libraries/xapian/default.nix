@@ -42,13 +42,12 @@ let
 
       doCheck = true;
 
-      env =
-        {
-          AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
-        }
-        // lib.optionalAttrs stdenv.hostPlatform.is32bit {
-          NIX_CFLAGS_COMPILE = "-fpermissive";
-        };
+      env = {
+        AUTOMATED_TESTING = true; # https://trac.xapian.org/changeset/8be35f5e1/git
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.is32bit {
+        NIX_CFLAGS_COMPILE = "-fpermissive";
+      };
 
       # the configure script thinks that Darwin has ___exp10
       # but it’s not available on my systems (or hydra apparently)

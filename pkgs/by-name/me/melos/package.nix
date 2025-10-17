@@ -4,17 +4,17 @@
   buildDartApplication,
 }:
 let
-  pname = "melos";
-  version = "6.3.2";
+  version = "7.1.1";
   src = fetchFromGitHub {
     owner = "invertase";
     repo = "melos";
-    rev = "melos-v${version}";
-    hash = "sha256-hD4UlQPFugRqtOZecyT/6wV3vFocoQ6OO5w+SZsYdO0=";
+    tag = "melos-v${version}";
+    hash = "sha256-i75fbo0lqDszo2pDtkWXQMt+3IoWsK7t05YU2IjqTmw=";
   };
 in
 buildDartApplication {
-  inherit pname version src;
+  pname = "melos";
+  inherit version src;
 
   sourceRoot = "${src.name}/packages/melos";
 
@@ -28,15 +28,17 @@ buildDartApplication {
 
   # hard code the path to the melos templates
   preBuild = ''
-    substituteInPlace lib/src/common/utils.dart --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
-    substituteInPlace lib/src/common/utils.dart --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
-    mkdir -p $out
-    cp -r templates $out/
+    substituteInPlace lib/src/common/utils.dart \
+      --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
+    substituteInPlace lib/src/common/utils.dart \
+      --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
+    mkdir --parents $out
+    cp --recursive templates $out/
   '';
 
   meta = {
     homepage = "https://github.com/invertase/melos";
-    description = "Tool for managing Dart projects with multiple packages. With IntelliJ and Vscode IDE support. Supports automated versioning, changelogs & publishing via Conventional Commits. ";
+    description = "Tool for managing Dart projects with multiple packages";
     mainProgram = "melos";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.eymeric ];

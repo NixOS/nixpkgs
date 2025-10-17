@@ -1,5 +1,6 @@
 {
   aacgain,
+  chromaprint,
   ffmpeg,
   flac,
   imagemagick,
@@ -55,6 +56,9 @@
   chroma = {
     propagatedBuildInputs = [ python3Packages.pyacoustid ];
     testPaths = [ ];
+    wrapperBins = [
+      chromaprint
+    ];
   };
   convert.wrapperBins = [ ffmpeg ];
   deezer = {
@@ -129,12 +133,14 @@
     propagatedBuildInputs = [ python3Packages.mpd2 ];
     testPaths = [ ];
   };
+  musicbrainz = { };
   parentwork = { };
   permissions = { };
   play = { };
   playlist.propagatedBuildInputs = [ python3Packages.requests ];
   plexupdate = { };
   random = { };
+  replace = { };
   replaygain.wrapperBins = [
     aacgain
     ffmpeg
@@ -174,4 +180,5 @@
   _typing = {
     testPaths = [ ];
   };
+  _utils = { };
 }

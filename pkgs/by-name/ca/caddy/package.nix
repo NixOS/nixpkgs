@@ -1,6 +1,6 @@
 {
   lib,
-  buildGoModule,
+  buildGo125Module,
   callPackage,
   fetchFromGitHub,
   nixosTests,
@@ -8,17 +8,18 @@
   testers,
   installShellFiles,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 let
-  version = "2.10.0";
+  version = "2.10.2";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
     tag = "v${version}";
-    hash = "sha256-us1TnszA/10OMVSDsNvzRb6mcM4eMR3pQ5EF4ggA958=";
+    hash = "sha256-D1qI7TDJpSvtgpo1FsPZk6mpqRvRharFZ8soI7Mn3RE=";
   };
 in
-buildGoModule {
+buildGo125Module {
   pname = "caddy";
   inherit version;
 
@@ -26,12 +27,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     tag = "v${version}";
-    hash = "sha256-hzDd2BNTZzjwqhc/STbSAHnNlP7g1cFuMehqU1LumQE=";
+    hash = "sha256-KvikafRYPFZ0xCXqDdji1rxlkThEDEOHycK8GP5e8vk=";
   };
 
-  vendorHash = "sha256-9Iu4qmBVkGeSAywLgQuDR7y+TwCBqwhVxhfaXhCDnUc=";
-
-  subPackages = [ "cmd/caddy" ];
+  vendorHash = "sha256-wjcmWKVmLBAybILUi8tKEDnFbhtybf042ODH7jEq6r8=";
 
   ldflags = [
     "-s"
@@ -48,27 +47,30 @@ buildGoModule {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall =
-    ''
-      install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
 
-      substituteInPlace $out/lib/systemd/system/caddy.service \
-        --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
-      substituteInPlace $out/lib/systemd/system/caddy-api.service \
-        --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      # Generating man pages and completions fail on cross-compilation
-      # https://github.com/NixOS/nixpkgs/issues/308283
+  __darwinAllowLocalNetworking = true;
 
-      $out/bin/caddy manpage --directory manpages
-      installManPage manpages/*
+  postInstall = ''
+    install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system
 
-      installShellCompletion --cmd caddy \
-        --bash <($out/bin/caddy completion bash) \
-        --fish <($out/bin/caddy completion fish) \
-        --zsh <($out/bin/caddy completion zsh)
-    '';
+    substituteInPlace $out/lib/systemd/system/caddy.service \
+      --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
+    substituteInPlace $out/lib/systemd/system/caddy-api.service \
+      --replace-fail "/usr/bin/caddy" "$out/bin/caddy"
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    # Generating man pages and completions fail on cross-compilation
+    # https://github.com/NixOS/nixpkgs/issues/308283
+
+    $out/bin/caddy manpage --directory manpages
+    installManPage manpages/*
+
+    installShellCompletion --cmd caddy \
+      --bash <($out/bin/caddy completion bash) \
+      --fish <($out/bin/caddy completion fish) \
+      --zsh <($out/bin/caddy completion zsh)
+  '';
 
   passthru = {
     tests = {

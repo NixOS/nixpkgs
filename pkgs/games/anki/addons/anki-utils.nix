@@ -54,7 +54,7 @@
         installPhase = ''
           runHook preInstall
 
-          mkdir -p "$out/$installPrefix"
+          mkdir -p "$out/$installPrefix/user_files"
           find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
 
           runHook postInstall
@@ -89,7 +89,6 @@
                 rm -f meta.json
                 ln -s ${addonMetaConfig} meta.json
 
-                mkdir -p user_files
                 ${
                   if (userFiles != null) then
                     ''
@@ -102,11 +101,13 @@
                 ${processUserFiles}
               '';
             };
-        } // passthru;
+        }
+        // passthru;
 
         meta = {
           platforms = lib.platforms.all;
-        } // meta;
+        }
+        // meta;
       };
   };
 

@@ -44,12 +44,12 @@ let
     preConfigure =
       prevAttrs.preConfigure or ""
       +
-        # Update the repo-global .version file.
-        # Symlink ./.version points there, but by default only workDir is writable.
-        ''
-          chmod u+w ./.version
-          echo ${finalAttrs.version} > ./.version
-        '';
+      # Update the repo-global .version file.
+      # Symlink ./.version points there, but by default only workDir is writable.
+      ''
+        chmod u+w ./.version
+        echo ${finalAttrs.version} > ./.version
+      '';
   };
 
   localSourceLayer =
@@ -138,7 +138,8 @@ let
     nativeBuildInputs = [
       meson
       ninja
-    ] ++ prevAttrs.nativeBuildInputs or [ ];
+    ]
+    ++ prevAttrs.nativeBuildInputs or [ ];
     mesonCheckFlags = prevAttrs.mesonCheckFlags or [ ] ++ [
       "--print-errorlogs"
     ];
@@ -150,17 +151,30 @@ let
     ];
     separateDebugInfo = !stdenv.hostPlatform.isStatic;
     hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
-    env =
-      prevAttrs.env or { }
-      // lib.optionalAttrs (
-        stdenv.isLinux
-        && !(stdenv.hostPlatform.isStatic && stdenv.system == "aarch64-linux")
-        && !(stdenv.system == "loongarch64-linux")
-        && !(stdenv.hostPlatform.useLLVM or false)
-      ) { LDFLAGS = "-fuse-ld=gold"; };
   };
 
   mesonLibraryLayer = finalAttrs: prevAttrs: {
+    # See https://github.com/NixOS/nix/pull/14105 -- enabling this only for Nix 2.32+ as there are
+    # reports of undefined behavior on previous versions. Note that this does //not// use
+    # `finalAttrs.version` in order to avoid infinite recursion.
+    ${if lib.versionOlder version "2.32" then null else "preConfigure"} =
+      let
+        interpositionFlags = [
+          "-fno-semantic-interposition"
+          "-Wl,-Bsymbolic-functions"
+        ];
+      in
+      # NOTE: By default GCC disables interprocedular optimizations (in particular inlining) for
+      # position-independent code and thus shared libraries.
+      # Since LD_PRELOAD tricks aren't worth losing out on optimizations, we disable it for good.
+      # This is not the case for Clang, where inlining is done by default even without -fno-semantic-interposition.
+      # https://reviews.llvm.org/D102453
+      # https://fedoraproject.org/wiki/Changes/PythonNoSemanticInterpositionSpeedup
+      prevAttrs.preConfigure or ""
+      + lib.optionalString stdenv.cc.isGNU ''
+        export CFLAGS="''${CFLAGS:-} ${toString interpositionFlags}"
+        export CXXFLAGS="''${CXXFLAGS:-} ${toString interpositionFlags}"
+      '';
     outputs = prevAttrs.outputs or [ "out" ] ++ [ "dev" ];
   };
 

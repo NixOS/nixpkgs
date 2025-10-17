@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/hydra-cli";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JnfonNdy87Ol6j8x3270RrVv/13vNLEa1n+/aeEbc7U=";
 
   nativeBuildInputs = [ pkg-config ];

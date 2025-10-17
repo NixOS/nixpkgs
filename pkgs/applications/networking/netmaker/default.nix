@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "netmaker";
-  version = "0.99.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "gravitl";
-    repo = pname;
+    repo = "netmaker";
     rev = "v${version}";
-    hash = "sha256-DUD6JTnTM3QVLhWIoRZ0Jc+Jre8GXtuKkV6MzLYCg4U=";
+    hash = "sha256-acsIe3N6F76KktfPOHreFwDatyuv1q7ui6MMhVXfj7c=";
   };
 
-  vendorHash = "sha256-QD9jkpsANzJeFHd4miShgACNOvI6sy38fs7pZNkPhms=";
+  vendorHash = "sha256-Ur8cuE0jToOme79BTaYbaLDl2cRMjsr1DTvZjm8zmtc=";
 
   inherit subPackages;
 

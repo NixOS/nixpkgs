@@ -12,6 +12,7 @@
   grafana-clickhouse-datasource = callPackage ./grafana-clickhouse-datasource { };
   grafana-clock-panel = callPackage ./grafana-clock-panel { };
   grafana-discourse-datasource = callPackage ./grafana-discourse-datasource { };
+  grafana-exploretraces-app = callPackage ./grafana-exploretraces-app { };
   grafana-github-datasource = callPackage ./grafana-github-datasource { };
   grafana-googlesheets-datasource = callPackage ./grafana-googlesheets-datasource { };
   grafana-lokiexplore-app = callPackage ./grafana-lokiexplore-app { };
@@ -21,6 +22,8 @@
   grafana-opensearch-datasource = callPackage ./grafana-opensearch-datasource { };
   grafana-piechart-panel = callPackage ./grafana-piechart-panel { };
   grafana-polystat-panel = callPackage ./grafana-polystat-panel { };
+  grafana-pyroscope-app = callPackage ./grafana-pyroscope-app { };
+  grafana-sentry-datasource = callPackage ./grafana-sentry-datasource { };
   grafana-worldmap-panel = callPackage ./grafana-worldmap-panel { };
   marcusolsson-calendar-panel = callPackage ./marcusolsson-calendar-panel { };
   marcusolsson-csv-datasource = callPackage ./marcusolsson-csv-datasource { };

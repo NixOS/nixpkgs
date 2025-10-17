@@ -66,22 +66,30 @@ let
       xorg.libxcb
       xorg.libXcursor
       xorg.libXi
-    ] ++ lib.optionals waylandSupport [ wayland ];
+    ]
+    ++ lib.optionals waylandSupport [ wayland ];
 
-    installPhase =
-      ''
-        runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-        mkdir $out
-        cp -r opt usr/* $out
+      mkdir $out
+      cp -r opt usr/* $out
 
-      ''
-      + lib.optionalString waylandSupport ''
-        wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
-      ''
-      + ''
-        runHook postInstall
-      '';
+    ''
+    + lib.optionalString waylandSupport ''
+      wrapProgram $out/bin/warp-terminal --set WARP_ENABLE_WAYLAND 1
+    ''
+    + ''
+      runHook postInstall
+    '';
+
+    postFixup = ''
+      # Link missing libfontconfig to fix font discovery
+      # https://github.com/warpdotdev/Warp/issues/5793
+      patchelf \
+        --add-needed libfontconfig.so.1 \
+        $out/opt/warpdotdev/warp-terminal/warp
+    '';
   });
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -112,10 +120,10 @@ let
     license = licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [
-      emilytrau
       imadnyc
-      donteatoreo
+      FlameFlag
       johnrtitor
+      logger
     ];
     platforms = platforms.darwin ++ [
       "x86_64-linux"

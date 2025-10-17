@@ -17,22 +17,22 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "ripgrep";
-  version = "14.1.1";
+  version = "15.0.0";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "ripgrep";
     rev = version;
-    hash = "sha256-gyWnahj1A+iXUQlQ1O1H1u7K5euYQOld9qWm99Vjaeg=";
+    hash = "sha256-pYQw4LuKBZdLTc/aBpruwrd9U9s++yXbSXfq2JZ/jyI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-9atn5qyBDy4P6iUoHFhg+TV6Ur71fiah4oTJbBMeEy4=";
+  cargoHash = "sha256-vh5adpwdZHjEXLyiMKvL3LHNPZaiB4TWuypTXsieyek=";
 
   nativeBuildInputs = [
     installShellFiles
     writableTmpDirAsHomeHook # required for wine when cross-compiling to Windows
-  ] ++ lib.optional withPCRE2 pkg-config;
+  ]
+  ++ lib.optional withPCRE2 pkg-config;
   buildInputs = lib.optional withPCRE2 pcre2;
 
   buildFeatures = lib.optional withPCRE2 "pcre2";
@@ -48,16 +48,15 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = true;
-  installCheckPhase =
-    ''
-      file="$(mktemp)"
-      echo "abc\nbcd\ncde" > "$file"
-      ${rg} -N 'bcd' "$file"
-      ${rg} -N 'cd' "$file"
-    ''
-    + lib.optionalString withPCRE2 ''
-      echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
-    '';
+  installCheckPhase = ''
+    file="$(mktemp)"
+    echo "abc\nbcd\ncde" > "$file"
+    ${rg} -N 'bcd' "$file"
+    ${rg} -N 'cd' "$file"
+  ''
+  + lib.optionalString withPCRE2 ''
+    echo '(a(aa)aa)' | ${rg} -P '\((a*|(?R))*\)'
+  '';
 
   meta = {
     description = "Utility that combines the usability of The Silver Searcher with the raw speed of grep";

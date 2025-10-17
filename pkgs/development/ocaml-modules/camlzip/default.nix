@@ -63,13 +63,11 @@ stdenv.mkDerivation {
 
   inherit (param) patches;
 
-  postPatch =
-    param.postPatchInit
-    + ''
-      substituteInPlace Makefile \
-        --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
-        --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
-    '';
+  postPatch = param.postPatchInit + ''
+    substituteInPlace Makefile \
+      --subst-var-by ZLIB_LIBDIR "${zlib.out}/lib" \
+      --subst-var-by ZLIB_INCLUDE "${zlib.dev}/include"
+  '';
 
   buildFlags = [
     "all"
@@ -92,7 +90,10 @@ stdenv.mkDerivation {
       ZIP and GZIP format, as well as to Java JAR files.  It provides functions
       for reading from and writing to compressed files in these formats.
     '';
-    license = "LGPL+linking exceptions";
+    license = with lib.licenses; [
+      lgpl21Plus
+      ocamlLgplLinkingException
+    ];
     inherit (ocaml.meta) platforms;
     maintainers = with maintainers; [ maggesi ];
   };

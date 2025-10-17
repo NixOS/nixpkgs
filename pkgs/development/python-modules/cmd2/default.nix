@@ -1,9 +1,7 @@
 {
   lib,
   stdenv,
-  attrs,
   buildPythonPackage,
-  colorama,
   fetchPypi,
   glibcLocales,
   gnureadline,
@@ -12,30 +10,31 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  rich-argparse,
   setuptools-scm,
   wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "2.6.1";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ZQpYkr8psjPT1ndbXjzIE2SM/w15E09weYH2a6rtn0I=";
+    hash = "sha256-gdgTW0YhDh0DpagQuvhZBppiIUeIzu7DWI9E7thvvus=";
   };
 
   build-system = [ setuptools-scm ];
 
   dependencies = [
-    attrs
-    colorama
     pyperclip
+    rich-argparse
     wcwidth
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin gnureadline;
 
   doCheck = true;
 

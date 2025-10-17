@@ -35,16 +35,15 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-      astroid
-      jinja2
-      pyyaml
-      sphinx
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      stdlib-list
-    ];
+  dependencies = [
+    astroid
+    jinja2
+    pyyaml
+    sphinx
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    stdlib-list
+  ];
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -68,6 +67,6 @@ buildPythonPackage rec {
       import the project being documented.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

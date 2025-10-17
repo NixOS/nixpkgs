@@ -7,6 +7,7 @@
   gcc,
   pkg-config,
   makeWrapper,
+  nixosTests,
   stdenv,
   systemdMinimal,
 }:
@@ -23,13 +24,13 @@ let
 in
 buildGoModule rec {
   pname = "nixos-facter";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "numtide";
     repo = "nixos-facter";
-    rev = "v${version}";
-    hash = "sha256-SuD6FTyCGT+H5uEPkPmBSI00R87weAoO5xZHPJElSu8=";
+    tag = "v${version}";
+    hash = "sha256-4kER7CyFvMKVpKxCYHuf9fkkYVzVK9AWpF55cBNzPc0=";
   };
 
   vendorHash = "sha256-A7ZuY8Gc/a0Y8O6UG2WHWxptHstJOxi4n9F8TY6zqiw=";
@@ -60,6 +61,10 @@ buildGoModule rec {
     "-X git.numtide.com/numtide/nixos-facter/build.Version=v${version}"
     "-X github.com/numtide/nixos-facter/pkg/build.System=${stdenv.hostPlatform.system}"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) facter;
+  };
 
   meta = {
     description = "Declarative hardware configuration for NixOS";

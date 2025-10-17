@@ -53,7 +53,8 @@ buildPythonPackage rec {
     tiktoken
     torch
     tqdm
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -61,19 +62,18 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  disabledTests =
-    [
-      # requires network access to download models
-      "test_transcribe"
+  disabledTests = [
+    # requires network access to download models
+    "test_transcribe"
 
-      # requires NVIDIA drivers
-      "test_dtw_cuda_equivalence"
-      "test_median_filter_equivalence"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # Fatal Python error: Segmentation fault
-      "test_dtw"
-    ];
+    # requires NVIDIA drivers
+    "test_dtw_cuda_equivalence"
+    "test_median_filter_equivalence"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Segmentation fault
+    "test_dtw"
+  ];
 
   meta = {
     changelog = "https://github.com/openai/whisper/blob/v${version}/CHANGELOG.md";

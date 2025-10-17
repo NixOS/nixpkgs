@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pydruid";
-  version = "0.6.5";
+  version = "0.6.8";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -26,12 +26,12 @@ buildPythonPackage rec {
     repo = "pydruid";
     owner = "druid-io";
     tag = version;
-    hash = "sha256-9+xomjSwWDVHkret/mqAZKWOPFRMvVB3CWtFPzrT81k=";
+    hash = "sha256-em4UuNnGdfT6KC9XiWSkCmm4DxdvDS+DGY9kw25iepo=";
   };
 
   # patch out the CLI because it doesn't work with newer versions of pygments
   postPatch = ''
-    substituteInPlace setup.py --replace '"console_scripts": ["pydruid = pydruid.console:main"],' ""
+    substituteInPlace setup.py --replace-fail '"console_scripts": ["pydruid = pydruid.console:main"],' ""
   '';
 
   nativeBuildInputs = [ setuptools ];
@@ -41,7 +41,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pycurl
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pydruid" ];
 

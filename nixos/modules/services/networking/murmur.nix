@@ -7,7 +7,7 @@
 
 let
   cfg = config.services.murmur;
-  forking = cfg.logFile != null;
+  forking = cfg.logToFile;
   configFile = pkgs.writeText "murmurd.ini" ''
     database=${cfg.stateDir}/murmur.sqlite
     dbDriver=QSQLITE
@@ -16,7 +16,7 @@ let
     autobanTimeframe=${toString cfg.autobanTimeframe}
     autobanTime=${toString cfg.autobanTime}
 
-    logfile=${lib.optionalString (cfg.logFile != null) cfg.logFile}
+    logfile=${lib.optionalString cfg.logToFile "/var/log/murmur/murmurd.log"}
     ${lib.optionalString forking "pidfile=/run/murmur/murmurd.pid"}
 
     welcometext="${cfg.welcometext}"
@@ -41,9 +41,9 @@ let
     ${lib.optionalString (cfg.registerHostname != "") "registerHostname=${cfg.registerHostname}"}
 
     certrequired=${lib.boolToString cfg.clientCertRequired}
-    ${lib.optionalString (cfg.sslCert != "") "sslCert=${cfg.sslCert}"}
-    ${lib.optionalString (cfg.sslKey != "") "sslKey=${cfg.sslKey}"}
-    ${lib.optionalString (cfg.sslCa != "") "sslCA=${cfg.sslCa}"}
+    ${lib.optionalString (cfg.sslCert != null) "sslCert=${cfg.sslCert}"}
+    ${lib.optionalString (cfg.sslKey != null) "sslKey=${cfg.sslKey}"}
+    ${lib.optionalString (cfg.sslCa != null) "sslCA=${cfg.sslCa}"}
 
     ${lib.optionalString (cfg.dbus != null) "dbus=${cfg.dbus}"}
 
@@ -51,6 +51,15 @@ let
   '';
 in
 {
+
+  imports = [
+    (lib.mkRemovedOptionModule [
+      "services"
+      "murmur"
+      "logFile"
+    ] "This option has been superseded by services.murmur.logToFile")
+  ];
+
   options = {
     services.murmur = {
       enable = lib.mkEnableOption "Mumble server";
@@ -108,12 +117,7 @@ in
         description = "The amount of time an IP ban lasts (in seconds).";
       };
 
-      logFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
-        default = null;
-        example = "/var/log/murmur/murmurd.log";
-        description = "Path to the log file for Murmur daemon. Empty means log to journald.";
-      };
+      logToFile = lib.mkEnableOption "logging to a file instead of journald, which is stored in /var/log/murmur";
 
       welcometext = lib.mkOption {
         type = lib.types.str;
@@ -234,20 +238,20 @@ in
       clientCertRequired = lib.mkEnableOption "requiring clients to authenticate via certificates";
 
       sslCert = lib.mkOption {
-        type = lib.types.str;
-        default = "";
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = "Path to your SSL certificate.";
       };
 
       sslKey = lib.mkOption {
-        type = lib.types.str;
-        default = "";
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = "Path to your SSL key.";
       };
 
       sslCa = lib.mkOption {
-        type = lib.types.str;
-        default = "";
+        type = lib.types.nullOr lib.types.path;
+        default = null;
         description = "Path to your SSL CA certificate.";
       };
 
@@ -329,6 +333,8 @@ in
         EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
         ExecStart = "${cfg.package}/bin/mumble-server -ini /run/murmur/murmurd.ini";
         Restart = "always";
+        LogsDirectory = lib.mkIf cfg.logToFile "murmur";
+        LogsDirectoryMode = "0750";
         RuntimeDirectory = "murmur";
         RuntimeDirectoryMode = "0700";
         User = cfg.user;
@@ -339,18 +345,28 @@ in
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
+        PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProtectClock = true;
-        ProtectControlGroups = true;
+        ProtectControlGroups = "strict";
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectSystem = "full";
-        RestrictAddressFamilies = "~AF_PACKET AF_NETLINK";
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.stateDir
+        ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
         RestrictRealtime = true;
@@ -384,44 +400,43 @@ in
       })
     ];
 
-    security.apparmor.policies."bin.mumble-server".profile =
-      ''
-        include <tunables/global>
+    security.apparmor.policies."bin.mumble-server".profile = ''
+      include <tunables/global>
 
-        ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
-          include <abstractions/base>
-          include <abstractions/nameservice>
-          include <abstractions/ssl_certs>
-          include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
-          pix ${cfg.package}/bin/.mumble-server-wrapped,
+      ${cfg.package}/bin/{mumble-server,.mumble-server-wrapped} {
+        include <abstractions/base>
+        include <abstractions/nameservice>
+        include <abstractions/ssl_certs>
+        include "${pkgs.apparmorRulesFromClosure { name = "mumble-server"; } cfg.package}"
+        pix ${cfg.package}/bin/.mumble-server-wrapped,
 
-          r ${config.environment.etc."os-release".source},
-          r ${config.environment.etc."lsb-release".source},
-          owner rwk ${cfg.stateDir}/murmur.sqlite,
-          owner rw ${cfg.stateDir}/murmur.sqlite-journal,
-          owner r ${cfg.stateDir}/,
-          r /run/murmur/murmurd.pid,
-          r /run/murmur/murmurd.ini,
-          r ${configFile},
-      ''
-      + lib.optionalString (cfg.logFile != null) ''
-        rw ${cfg.logFile},
-      ''
-      + lib.optionalString (cfg.sslCert != "") ''
-        r ${cfg.sslCert},
-      ''
-      + lib.optionalString (cfg.sslKey != "") ''
-        r ${cfg.sslKey},
-      ''
-      + lib.optionalString (cfg.sslCa != "") ''
-        r ${cfg.sslCa},
-      ''
-      + lib.optionalString (cfg.dbus != null) ''
-        dbus bus=${cfg.dbus}
-      ''
-      + ''
-        }
-      '';
+        r ${config.environment.etc."os-release".source},
+        r ${config.environment.etc."lsb-release".source},
+        owner rwk ${cfg.stateDir}/murmur.sqlite,
+        owner rw ${cfg.stateDir}/murmur.sqlite-journal,
+        owner r ${cfg.stateDir}/,
+        r /run/murmur/murmurd.pid,
+        r /run/murmur/murmurd.ini,
+        r ${configFile},
+    ''
+    + lib.optionalString cfg.logToFile ''
+      rw /var/log/murmur/murmurd.log,
+    ''
+    + lib.optionalString (cfg.sslCert != null) ''
+      r ${cfg.sslCert},
+    ''
+    + lib.optionalString (cfg.sslKey != null) ''
+      r ${cfg.sslKey},
+    ''
+    + lib.optionalString (cfg.sslCa != null) ''
+      r ${cfg.sslCa},
+    ''
+    + lib.optionalString (cfg.dbus != null) ''
+      dbus bus=${cfg.dbus}
+    ''
+    + ''
+      }
+    '';
   };
 
   meta.maintainers = with lib.maintainers; [ felixsinger ];

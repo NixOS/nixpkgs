@@ -34,7 +34,7 @@ i3lock-color.overrideAttrs (oldAttrs: rec {
     description = "Improved screenlocker based upon XCB and PAM with background blurring filter";
     homepage = "https://github.com/karulont/i3lock-blur/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/i3lock-blur.x86_64-darwin
   };

@@ -54,7 +54,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "gevent-cooperative child processes and IPC";
+    description = "Gevent-cooperative child processes and IPC";
     longDescription = ''
       Usage of Python's multiprocessing package in a gevent-powered
       application may raise problems and most likely breaks the application

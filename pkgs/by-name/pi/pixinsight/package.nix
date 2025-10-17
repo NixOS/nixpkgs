@@ -61,59 +61,58 @@ stdenv.mkDerivation (finalAttrs: {
     bubblewrap
   ];
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc)
-      stdenv.cc
-      libGL
-      libpulseaudio
-      alsa-lib
-      nss
-      gd
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      nspr
-      expat
-      fontconfig
-      dbus
-      glib
-      zlib
-      openssl
-      libdrm
-      wayland
-      cups
-      avahi-compat
-      libjpeg8
-      gdk-pixbuf
-      gtk3
-      pango
-      # Qt stuff
-      qt6Packages.qt3d
-      qt6Packages.mlt
-      qt6Packages.qtbase
-      #qtgamepad
-      qt6Packages.qtserialport
-      qt6Packages.qtserialbus
-      qt6Packages.qtvirtualkeyboard
-      qt6Packages.qtmultimedia
-      qt6Packages.qtlocation
-      qt6Packages.qtwebengine
-      qt6Packages.qtquick3d
-      qt6Packages.qtwayland
-      qt6Packages.qtwebview
-      qt6Packages.qtscxml
-    ]
-    ++ (with xorg; [
-      libX11
-      libXdamage
-      xrandr
-      libXtst
-      libXcomposite
-      libXext
-      libXfixes
-      libXrandr
-      libxkbfile
-    ]);
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+    stdenv.cc
+    libGL
+    libpulseaudio
+    alsa-lib
+    nss
+    gd
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    nspr
+    expat
+    fontconfig
+    dbus
+    glib
+    zlib
+    openssl
+    libdrm
+    wayland
+    cups
+    avahi-compat
+    libjpeg8
+    gdk-pixbuf
+    gtk3
+    pango
+    # Qt stuff
+    qt6Packages.qt3d
+    qt6Packages.mlt
+    qt6Packages.qtbase
+    #qtgamepad
+    qt6Packages.qtserialport
+    qt6Packages.qtserialbus
+    qt6Packages.qtvirtualkeyboard
+    qt6Packages.qtmultimedia
+    qt6Packages.qtlocation
+    qt6Packages.qtwebengine
+    qt6Packages.qtquick3d
+    qt6Packages.qtwayland
+    qt6Packages.qtwebview
+    qt6Packages.qtscxml
+  ]
+  ++ (with xorg; [
+    libX11
+    libXdamage
+    xrandr
+    libXtst
+    libXcomposite
+    libXext
+    libXfixes
+    libXrandr
+    libxkbfile
+  ]);
 
   postPatch = ''
     patchelf ./installer \
@@ -163,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   dontWrapQtApps = true;
   postFixup = ''
-    wrapProgram $out/opt/PixInsight/bin/PixInsight ${builtins.toString finalAttrs.qtWrapperArgs}
+    wrapProgram $out/opt/PixInsight/bin/PixInsight ${toString finalAttrs.qtWrapperArgs}
   '';
 
   meta = with lib; {

@@ -129,7 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonFlags = [
     (lib.mesonOption "b_ndebug" "if-release")
-  ] ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
+  ]
+  ++ lib.optionals (targetPrefix != "") [ (lib.mesonOption "target_prefix" targetPrefix) ];
 
   postInstall = ''
     ln -s ${targetPrefix}libtool "$out/bin/${targetPrefix}ranlib"

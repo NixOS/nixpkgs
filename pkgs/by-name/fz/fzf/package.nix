@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.63.0";
+  version = "0.66.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf";
     rev = "v${version}";
-    hash = "sha256-XfqqvWlwv8L0FiWbGSim3W6g/hn7Lh+YMKqrTAOwC+w=";
+    hash = "sha256-4cspznuGPhTFSUM9yYvPoytX27CKenp/oAMqWpT5JrE=";
   };
 
-  vendorHash = "sha256-1wxi+wfTSSgJQLNbCdoFTz9G4XLgEX7PpzqpuVjEYL8=";
+  vendorHash = "sha256-uFXHoseFOxGIGPiWxWfDl339vUv855VHYgSs9rnDyuI=";
 
   env.CGO_ENABLED = 0;
 
@@ -65,12 +65,6 @@ buildGoModule rec {
 
     # Install shell integrations
     install -D shell/* -t $out/share/fzf/
-    install -D shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    mkdir -p $out/share/fish/vendor_conf.d
-    cat << EOF > $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
-      status is-interactive; or exit 0
-      fzf_key_bindings
-    EOF
 
     cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}

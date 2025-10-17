@@ -1,6 +1,6 @@
 {
   lib,
-  bazel_6,
+  bazel_7,
   bazel-gazelle,
   buildBazelPackage,
   fetchFromGitHub,
@@ -12,20 +12,25 @@
   rustPlatform,
   cmake,
   gn,
-  go,
-  jdk,
+  go_1_24,
+  openjdk11_headless,
   ninja,
   patchelf,
-  python3,
+  python312,
   linuxHeaders,
   nixosTests,
   runCommandLocal,
   gnutar,
   gnugrep,
   envoy,
+  git,
 
   # v8 (upstream default), wavm, wamr, wasmtime, disabled
-  wasmRuntime ? "wamr",
+  wasmRuntime ? "wasmtime",
+
+  # Allows overriding the deps hash used for building - you will likely need to
+  # set this if you have changed the 'wasmRuntime' setting.
+  depsHash ? null,
 }:
 
 let
@@ -34,24 +39,30 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.34.0";
-    rev = "d7809ba2b07fd869d49bfb122b27f6a7977b4d94";
-    hash = "sha256-SKdUrBXe0E3fMo73NROFO9Ck5FZidF/awP+QRA5t3VM=";
+    version = "1.35.2";
+    rev = "2c2cd7efd119a5c9028b68a97d88a540248f8d18";
+    hash = "sha256-HhjIewZMOr9hzcnFPIckfK5PIozqdypSdmYgvb7ccds=";
   };
 
   # these need to be updated for any changes to fetchAttrs
-  depsHash =
-    {
-      x86_64-linux = "sha256-CiP9qH8/+nNZM8BNz84eVwWphVyDNo2KOYcK0wOsXn0=";
-      aarch64-linux = "sha256-9HGg68R546JY1EOm22tg9CuPt0nU+FooFcLG9A2hkzE=";
-    }
-    .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+  depsHash' =
+    if depsHash != null then
+      depsHash
+    else
+      {
+        x86_64-linux = "sha256-xBSSDxvp6VjZt+Fc62/eP5Z2WWfpkAGl1Z+PupyDpg4=";
+        aarch64-linux = "sha256-2g8x12zkyZyjkv5NubG4bVmiLiN8uoEZ33e6Azd1guw=";
+      }
+      .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
+  python3 = python312;
+  jdk = openjdk11_headless;
 
 in
 buildBazelPackage rec {
   pname = "envoy";
   inherit (srcVer) version;
-  bazel = bazel_6;
+  bazel = bazel_7;
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -92,16 +103,16 @@ buildBazelPackage rec {
     ln -sf "${cargo}/bin/cargo" bazel/nix/cargo
     ln -sf "${rustc}/bin/rustc" bazel/nix/rustc
     ln -sf "${rustc}/bin/rustdoc" bazel/nix/rustdoc
-    ln -sf "${rustPlatform.rustLibSrc}" bazel/nix/ruststd
+    ln -sf "${rustc.unwrapped}" bazel/nix/rustcroot
     substituteInPlace bazel/dependency_imports.bzl \
       --replace-fail 'crate_universe_dependencies()' 'crate_universe_dependencies(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc")' \
       --replace-fail 'crates_repository(' 'crates_repository(rust_toolchain_cargo_template="@@//bazel/nix:cargo", rust_toolchain_rustc_template="@@//bazel/nix:rustc",'
 
-    # patch rules_rust for envoy specifics, but also to support old Bazel
-    # (Bazel 6 doesn't have ctx.watch, but ctx.path is sufficient for our use)
+    # patch rules_rust for envoy specifics
     cp ${./rules_rust.patch} bazel/rules_rust.patch
     substituteInPlace bazel/repositories.bzl \
-      --replace-fail ', "@envoy//bazel:rules_rust_ppc64le.patch"' ""
+      --replace-fail ', "@envoy//bazel:rules_rust_ppc64le.patch"' "" \
+      --replace-fail '"@envoy//bazel:emsdk.patch"' ""
 
     substitute ${./rules_rust_extra.patch} bazel/nix/rules_rust_extra.patch \
       --subst-var-by bash "$(type -p bash)"
@@ -113,28 +124,41 @@ buildBazelPackage rec {
     cmake
     python3
     gn
-    go
+    go_1_24
     jdk
     ninja
     patchelf
     cacert
+    git
   ];
 
   buildInputs = [ linuxHeaders ];
 
   fetchAttrs = {
-    sha256 = depsHash;
+    sha256 = depsHash';
     env.CARGO_BAZEL_REPIN = true;
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     postPatch = ''
       ${postPatch}
 
+      echo "common --repository_cache=\"$bazelOut/external/repository_cache\"" >> .bazelrc
+
       substituteInPlace bazel/dependency_imports.bzl \
         --replace-fail 'crate_universe_dependencies(' 'crate_universe_dependencies(bootstrap=True, ' \
         --replace-fail 'crates_repository(' 'crates_repository(generator="@@cargo_bazel_bootstrap//:cargo-bazel", '
     '';
     preInstall = ''
+      mkdir $NIX_BUILD_TOP/empty
+      pushd $NIX_BUILD_TOP/empty
+      touch MODULE.bazel
+      # Unfortunately, we need to fetch a lot of irrelevant junk to make this work.
+      # This really bloats the size of the FOD.
+      # TODO: lukegb - figure out how to make this suck less.
+      bazel fetch --repository_cache="$bazelOut/external/repository_cache"
+      bazel sync --repository_cache="$bazelOut/external/repository_cache"
+      popd
+
       # Strip out the path to the build location (by deleting the comment line).
       find $bazelOut/external -name requirements.bzl | while read requirements; do
         sed -i '/# Generated from /d' "$requirements"
@@ -151,7 +175,6 @@ buildBazelPackage rec {
         $bazelOut/external/rules_rust/util/process_wrapper/private/process_wrapper.sh \
         $bazelOut/external/rules_rust/crate_universe/src/metadata/cargo_tree_rustc_wrapper.sh
 
-      rm -r $bazelOut/external/go_sdk
       rm -r $bazelOut/external/local_jdk
       rm -r $bazelOut/external/bazel_gazelle_go_repository_tools/bin
 
@@ -175,7 +198,11 @@ buildBazelPackage rec {
     dontUseCmakeConfigure = true;
     dontUseGnConfigure = true;
     dontUseNinjaInstall = true;
+    bazel = null;
     preConfigure = ''
+      echo "common --repository_cache=\"$bazelOut/external/repository_cache\"" >> .bazelrc
+      echo "common --repository_disable_download" >> .bazelrc
+
       # Make executables work, for the most part.
       find $bazelOut/external -type f -executable | while read execbin; do
         file "$execbin" | grep -q ': ELF .*, dynamically linked,' || continue
@@ -211,40 +238,43 @@ buildBazelPackage rec {
   removeLocalConfigCc = true;
   removeLocal = false;
   bazelTargets = [ "//source/exe:envoy-static" ];
-  bazelBuildFlags =
-    [
-      "-c opt"
-      "--spawn_strategy=standalone"
-      "--noexperimental_strict_action_env"
-      "--cxxopt=-Wno-error"
-      "--linkopt=-Wl,-z,noexecstack"
-      "--config=gcc"
-      "--verbose_failures"
+  bazelFlags = [
+    "--repo_env=BAZEL_HTTP_RULES_URLS_AS_DEFAULT_CANONICAL_ID=0"
+  ];
+  bazelBuildFlags = [
+    "-c opt"
+    "--spawn_strategy=standalone"
+    "--noexperimental_strict_action_env"
+    "--cxxopt=-Wno-error"
+    "--linkopt=-Wl,-z,noexecstack"
+    "--config=gcc"
+    "--verbose_failures"
+    "--incompatible_enable_cc_toolchain_resolution=true"
 
-      # Force use of system Java.
-      "--extra_toolchains=@local_jdk//:all"
-      "--java_runtime_version=local_jdk"
-      "--tool_java_runtime_version=local_jdk"
+    # Force use of system Java.
+    "--extra_toolchains=@local_jdk//:all"
+    "--java_runtime_version=local_jdk"
+    "--tool_java_runtime_version=local_jdk"
 
-      # Force use of system Rust.
-      "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
+    # Force use of system Rust.
+    "--extra_toolchains=//bazel/nix:rust_nix_aarch64,//bazel/nix:rust_nix_x86_64"
 
-      # undefined reference to 'grpc_core::*Metadata*::*Memento*
-      #
-      # During linking of the final binary, we see undefined references to grpc_core related symbols.
-      # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
-      # "ParseMemento" and "MementoToValue" are only implemented for some types
-      # and appear unused and unimplemented for the undefined cases reported by the linker.
-      "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
+    # undefined reference to 'grpc_core::*Metadata*::*Memento*
+    #
+    # During linking of the final binary, we see undefined references to grpc_core related symbols.
+    # The missing symbols would be instantiations of a template class from https://github.com/grpc/grpc/blob/v1.59.4/src/core/lib/transport/metadata_batch.h
+    # "ParseMemento" and "MementoToValue" are only implemented for some types
+    # and appear unused and unimplemented for the undefined cases reported by the linker.
+    "--linkopt=-Wl,--unresolved-symbols=ignore-in-object-files"
 
-      "--define=wasm=${wasmRuntime}"
-    ]
-    ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
-      # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
-      #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
-      #       |         ^
-      "--define=tcmalloc=disabled"
-    ]);
+    "--define=wasm=${wasmRuntime}"
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isAarch64 [
+    # external/com_github_google_tcmalloc/tcmalloc/internal/percpu_tcmalloc.h:611:9: error: expected ':' or '::' before '[' token
+    #   611 |       : [end_ptr] "=&r"(end_ptr), [cpu_id] "=&r"(cpu_id),
+    #       |         ^
+    "--define=tcmalloc=disabled"
+  ]);
 
   bazelFetchFlags = [
     "--define=wasm=${wasmRuntime}"

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     python3Packages.pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   meta = with lib; {
     description = "Storage conversion and expression calculator";

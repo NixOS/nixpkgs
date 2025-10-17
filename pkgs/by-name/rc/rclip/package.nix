@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rclip";
-  version = "2.0.5";
+  version = "2.0.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yurijmikhalevich";
     repo = "rclip";
     tag = "v${version}";
-    hash = "sha256-d/jEtcBvOiebdI4DgWNWtP8ZfOy2x7EaQt/6mo7o2Ok=";
+    hash = "sha256-TXJpaMCSKCeOiWPVb9//czux+JV8VlJsiWH8fUb1tkw=";
   };
 
   build-system = with python3Packages; [
@@ -33,6 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "numpy"
+    "open_clip_torch"
     "pillow"
     "rawpy"
     "torch"
@@ -43,7 +44,8 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = [
     versionCheckHook
-  ] ++ (with python3Packages; [ pytestCheckHook ]);
+  ]
+  ++ (with python3Packages; [ pytestCheckHook ]);
   versionCheckProgramArg = "--version";
 
   disabledTestPaths = [

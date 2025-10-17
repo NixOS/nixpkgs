@@ -34,7 +34,7 @@ rec {
           nativeBuildInputs = [ texLive ] ++ attrs.nativeBuildInputs or [ ];
           text = builtins.toFile "${name}.tex" text;
         }
-        // builtins.removeAttrs attrs [
+        // removeAttrs attrs [
           "nativeBuildInputs"
           "text"
           "texLive"
@@ -443,7 +443,8 @@ rec {
 
         # 'Error initialising QuantumRenderer: no suitable pipeline found'
         "tlcockpit"
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
+      ]
+      ++ lib.optional stdenv.hostPlatform.isDarwin "epspdftk"; # wish shebang is a script, not a binary!
 
       # (1) binaries requiring -v
       shortVersion = [
@@ -635,6 +636,9 @@ rec {
       needScheme = [
         # pfarrei: require working kpse to find lua module
         "a5toa4"
+
+        # show-pdf-tags: require working kpse to find lualatex and lua modules
+        "show-pdf-tags"
 
         # bibexport: requires kpsewhich
         "bibexport"

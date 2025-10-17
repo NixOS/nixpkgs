@@ -20,7 +20,7 @@
   net-snmp,
   openssl,
   perl,
-  nettools,
+  net-tools,
   avahi,
   bash,
   util-linux,
@@ -72,12 +72,6 @@ let
 
 in
 
-assert
-  withPlugin
-  ->
-    builtins.elem hplipArch pluginArches
-    || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
-
 python3Packages.buildPythonApplication {
   inherit pname version;
   format = "other";
@@ -93,24 +87,23 @@ python3Packages.buildPythonApplication {
 
   sourceRoot = "${pname}-${version}";
 
-  buildInputs =
-    [
-      libjpeg
-      cups
-      libusb1
-      sane-backends
-      dbus
-      file
-      ghostscript
-      net-snmp
-      openssl
-      perl
-      zlib
-      avahi
-    ]
-    ++ lib.optionals withQt5 [
-      qt5.qtwayland
-    ];
+  buildInputs = [
+    libjpeg
+    cups
+    libusb1
+    sane-backends
+    dbus
+    file
+    ghostscript
+    net-snmp
+    openssl
+    perl
+    zlib
+    avahi
+  ]
+  ++ lib.optionals withQt5 [
+    qt5.qtwayland
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -118,7 +111,8 @@ python3Packages.buildPythonApplication {
     autoreconfHook
     gobject-introspection
     wrapGAppsHook3
-  ] ++ lib.optional withQt5 qt5.wrapQtAppsHook;
+  ]
+  ++ lib.optional withQt5 qt5.wrapQtAppsHook;
 
   pythonPath =
     with python3Packages;
@@ -141,7 +135,7 @@ python3Packages.buildPythonApplication {
     "--prefix"
     "PATH"
     ":"
-    "${nettools}/bin"
+    "${net-tools}/bin"
   ];
 
   patches = [
@@ -251,54 +245,53 @@ python3Packages.buildPythonApplication {
   # Running `hp-diagnose_plugin -g` can be used to diagnose
   # issues with plugins.
   #
-  postInstall =
-    ''
-      for resolution in 16x16 32x32 64x64 128x128 256x256; do
-        mkdir -p $out/share/icons/hicolor/$resolution/apps
-        ln -s $out/share/hplip/data/images/$resolution/hp_logo.png \
-          $out/share/icons/hicolor/$resolution/apps/hp_logo.png
-      done
-    ''
-    + lib.optionalString withPlugin ''
-      pushd $NIX_BUILD_TOP/plugin_tmp
+  postInstall = ''
+    for resolution in 16x16 32x32 64x64 128x128 256x256; do
+      mkdir -p $out/share/icons/hicolor/$resolution/apps
+      ln -s $out/share/hplip/data/images/$resolution/hp_logo.png \
+        $out/share/icons/hicolor/$resolution/apps/hp_logo.png
+    done
+  ''
+  + lib.optionalString withPlugin ''
+    pushd $NIX_BUILD_TOP/plugin_tmp
 
-      cp plugin.spec $out/share/hplip/
+    cp plugin.spec $out/share/hplip/
 
-      mkdir -p $out/share/hplip/data/firmware
-      cp *.fw.gz $out/share/hplip/data/firmware
+    mkdir -p $out/share/hplip/data/firmware
+    cp *.fw.gz $out/share/hplip/data/firmware
 
-      mkdir -p $out/share/hplip/data/plugins
-      cp license.txt $out/share/hplip/data/plugins
+    mkdir -p $out/share/hplip/data/plugins
+    cp license.txt $out/share/hplip/data/plugins
 
-      mkdir -p $out/share/hplip/prnt/plugins
-      for plugin in lj hbpl1; do
-        cp $plugin-${hplipArch}.so $out/share/hplip/prnt/plugins
-        chmod 0755 $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so
-        ln -s $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so \
-          $out/share/hplip/prnt/plugins/$plugin.so
-      done
+    mkdir -p $out/share/hplip/prnt/plugins
+    for plugin in lj hbpl1; do
+      cp $plugin-${hplipArch}.so $out/share/hplip/prnt/plugins
+      chmod 0755 $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/prnt/plugins/$plugin-${hplipArch}.so \
+        $out/share/hplip/prnt/plugins/$plugin.so
+    done
 
-      mkdir -p $out/share/hplip/scan/plugins
-      for plugin in bb_soap bb_marvell bb_soapht bb_escl; do
-        cp $plugin-${hplipArch}.so $out/share/hplip/scan/plugins
-        chmod 0755 $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so
-        ln -s $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so \
-          $out/share/hplip/scan/plugins/$plugin.so
-      done
+    mkdir -p $out/share/hplip/scan/plugins
+    for plugin in bb_soap bb_marvell bb_soapht bb_escl; do
+      cp $plugin-${hplipArch}.so $out/share/hplip/scan/plugins
+      chmod 0755 $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/scan/plugins/$plugin-${hplipArch}.so \
+        $out/share/hplip/scan/plugins/$plugin.so
+    done
 
-      mkdir -p $out/share/hplip/fax/plugins
-      for plugin in fax_marvell; do
-        cp $plugin-${hplipArch}.so $out/share/hplip/fax/plugins
-        chmod 0755 $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so
-        ln -s $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so \
-          $out/share/hplip/fax/plugins/$plugin.so
-      done
+    mkdir -p $out/share/hplip/fax/plugins
+    for plugin in fax_marvell; do
+      cp $plugin-${hplipArch}.so $out/share/hplip/fax/plugins
+      chmod 0755 $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so
+      ln -s $out/share/hplip/fax/plugins/$plugin-${hplipArch}.so \
+        $out/share/hplip/fax/plugins/$plugin.so
+    done
 
-      mkdir -p $out/var/lib/hp
-      cp ${hplipState} $out/var/lib/hp/hplip.state
+    mkdir -p $out/var/lib/hp
+    cp ${hplipState} $out/var/lib/hp/hplip.state
 
-      popd
-    '';
+    popd
+  '';
 
   # The installed executables are just symlinks into $out/share/hplip,
   # but wrapPythonPrograms ignores symlinks. We cannot replace the Python
@@ -362,13 +355,7 @@ python3Packages.buildPythonApplication {
           bsd2
           gpl2Plus
         ];
-    platforms = [
-      "i686-linux"
-      "x86_64-linux"
-      "armv6l-linux"
-      "armv7l-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.attrNames hplipPlatforms;
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 }

@@ -5,11 +5,12 @@
   fetchFromGitHub,
 
   # build-system
-  hatchling,
+  uv-build,
 
   # dependencies
   deprecated,
-  matplotlib,
+  einops,
+  humanize,
   nibabel,
   numpy,
   packaging,
@@ -20,30 +21,37 @@
   tqdm,
   typer,
 
+  # optional dependencies
+  colorcet,
+  matplotlib,
+  pandas,
+  ffmpeg-python,
+  scikit-learn,
+
   # tests
-  humanize,
   parameterized,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "torchio";
-  version = "0.20.6";
+  version = "0.20.23";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "TorchIO-project";
     repo = "torchio";
     tag = "v${version}";
-    hash = "sha256-240MM9w0AdhaUp70JrkmKGQI1abrFrbfybCF4wYX8fg=";
+    hash = "sha256-OSqXV8aINqi7MstUy4RfIWLH4NxJB+r1tdzMrSgo7pg=";
   };
 
   build-system = [
-    hatchling
+    uv-build
   ];
 
   dependencies = [
     deprecated
+    einops
     humanize
     nibabel
     numpy
@@ -56,21 +64,30 @@ buildPythonPackage rec {
     typer
   ];
 
+  optional-dependencies = {
+    csv = [ pandas ];
+    plot = [
+      colorcet
+      matplotlib
+    ];
+    video = [ ffmpeg-python ];
+    sklearn = [ scikit-learn ];
+  };
+
   nativeCheckInputs = [
     matplotlib
     parameterized
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # tries to download models:
-      "test_load_all"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-      # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
-      "test_queue_multiprocessing"
-    ];
+  disabledTests = [
+    # tries to download models:
+    "test_load_all"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+    # RuntimeError: DataLoader worker (pid(s) <...>) exited unexpectedly
+    "test_queue_multiprocessing"
+  ];
 
   pythonImportsCheck = [
     "torchio"
@@ -79,7 +96,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Medical imaging toolkit for deep learning";
-    homepage = "https://torchio.readthedocs.io";
+    homepage = "https://docs.torchio.org";
     changelog = "https://github.com/TorchIO-project/torchio/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.bcdarwin ];

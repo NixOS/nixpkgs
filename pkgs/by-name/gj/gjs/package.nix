@@ -64,22 +64,27 @@ stdenv.mkDerivation (finalAttrs: {
     # Disable introspection test in installed tests
     # (minijasmine:1317): GLib-GIO-WARNING **: 17:33:39.556: Error creating IO channel for /proc/self/mountinfo: No such file or directory (g-io-error-quark, 1)
     ./disable-introspection-test.patch
+
+    # The reason is unclear, but a test that creates a file named "öäü-3" fails only on ZFS filesystems:
+    # 24/78 gjs:JS / GIMarshalling  FAIL  0.59s  726/727 subtests passed
+    # not ok 796 Filename tests various types of path existing
+    # Message: Error opening file “/build/.UGHEA3/öäü-3”: Invalid or incomplete multibyte or wide character in /build/gjs-1.84.2/build/../installed-tests/js/testGIMarshalling.js (line 2937)
+    ./disable-umlaut-test.patch
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      makeWrapper
-      which # for locale detection
-      libxml2 # for xml-stripblanks
-      dbus # for dbus-run-session
-      gobject-introspection
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+    which # for locale detection
+    libxml2 # for xml-stripblanks
+    dbus # for dbus-run-session
+    gobject-introspection
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     cairo
@@ -90,31 +95,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     xvfb-run
-  ] ++ testDeps;
+  ]
+  ++ testDeps;
 
   propagatedBuildInputs = [
     glib
   ];
 
-  mesonFlags =
-    [
-      "-Dinstalled_test_prefix=${placeholder "installedTests"}"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
-      "-Dprofiler=disabled"
-    ];
+  mesonFlags = [
+    "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isMusl) [
+    "-Dprofiler=disabled"
+  ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  postPatch =
-    ''
-      patchShebangs build/choose-tests-locale.sh
-      substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
-    ''
-    + lib.optionalString stdenv.hostPlatform.isMusl ''
-      substituteInPlace installed-tests/js/meson.build \
-        --replace "'Encoding'," "#'Encoding',"
-    '';
+  postPatch = ''
+    patchShebangs build/choose-tests-locale.sh
+    substituteInPlace installed-tests/debugger-test.sh --subst-var-by gjsConsole $out/bin/gjs-console
+  ''
+  + lib.optionalString stdenv.hostPlatform.isMusl ''
+    substituteInPlace installed-tests/js/meson.build \
+      --replace "'Encoding'," "#'Encoding',"
+  '';
 
   preCheck = ''
     # Our gobject-introspection patches make the shared library paths absolute

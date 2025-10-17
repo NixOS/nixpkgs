@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.15";
+  version = "0.6.33";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-MD7d+5JuTzChqKLxXyZFLyPktXFta1EOe4Oj4uEGaho=";
+    hash = "sha256-+dxE+rYqVzjuTgV/PYb9fOW0kE4o+uf+h1IB0b1SU1M=";
   };
 
   frontend = buildNpmPackage rec {
@@ -26,13 +26,19 @@ let
     # must match lock file in open-webui
     # TODO: should we automate this?
     # TODO: with JQ? "jq -r '.packages["node_modules/pyodide"].version' package-lock.json"
-    pyodideVersion = "0.27.3";
+    pyodideVersion = "0.28.2";
     pyodide = fetchurl {
-      hash = "sha256-SeK3RKqqxxLLf9DN5xXuPw6ZPblE6OX9VRXMzdrmTV4=";
+      hash = "sha256-MQIRdOj9yVVsF+nUNeINnAfyA6xULZFhyjuNnV0E5+c=";
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-rUFCFYbthr0IJ5oIMgb3tr5kTqmZN40EPn05xR3LL+A=";
+    npmDepsHash = "sha256-ztoLi386RTJXTxt8PjRQtrqY4y7clSOc7UbxdtoXFaI=";
+
+    # See https://github.com/open-webui/open-webui/issues/15880
+    npmFlags = [
+      "--force"
+      "--legacy-peer-deps"
+    ];
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -79,12 +85,6 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  pythonRemoveDeps = [
-    "docker"
-    "pytest"
-    "pytest-docker"
-  ];
-
   dependencies =
     with python3Packages;
     [
@@ -107,19 +107,16 @@ python3Packages.buildPythonApplication rec {
       black
       boto3
       chromadb
-      colbert-ai
+      cryptography
+      ddgs
       docx2txt
-      duckduckgo-search
       einops
-      elasticsearch
       extract-msg
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
-      gcp-storage-emulator
       google-api-python-client
       google-auth-httplib2
       google-auth-oauthlib
@@ -127,15 +124,16 @@ python3Packages.buildPythonApplication rec {
       google-genai
       google-generativeai
       googleapis-common-protos
+      httpx
       iso-639
+      itsdangerous
       langchain
       langchain-community
       langdetect
-      langfuse
       ldap3
       loguru
       markdown
-      moto
+      mcp
       nltk
       onnxruntime
       openai
@@ -159,15 +157,12 @@ python3Packages.buildPythonApplication rec {
       peewee-migrate
       pgvector
       pillow
-      pinecone-client
-      playwright
       psutil
-      psycopg2-binary
+      pyarrow
+      pycrdt
       pydub
       pyjwt
       pymdown-extensions
-      pymilvus
-      pymongo
       pymysql
       pypandoc
       pypdf
@@ -178,7 +173,6 @@ python3Packages.buildPythonApplication rec {
       python-socketio
       pytube
       pyxlsb
-      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -188,7 +182,7 @@ python3Packages.buildPythonApplication rec {
       sentencepiece
       soundfile
       starlette-compress
-      tencentcloud-sdk-python
+      starsessions
       tiktoken
       transformers
       unstructured
@@ -197,7 +191,32 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ moto.optional-dependencies.s3;
+    ++ pyjwt.optional-dependencies.crypto
+    ++ starsessions.optional-dependencies.redis;
+
+  optional-dependencies = with python3Packages; rec {
+    postgres = [
+      pgvector
+      psycopg2-binary
+    ];
+
+    all = [
+      colbert-ai
+      elasticsearch
+      firecrawl-py
+      gcp-storage-emulator
+      moto
+      oracledb
+      pinecone-client
+      playwright
+      pymilvus
+      pymongo
+      qdrant-client
+      tencentcloud-sdk-python
+    ]
+    ++ moto.optional-dependencies.s3
+    ++ postgres;
+  };
 
   pythonImportsCheck = [ "open_webui" ];
 
@@ -234,8 +253,8 @@ python3Packages.buildPythonApplication rec {
     '';
     mainProgram = "open-webui";
     maintainers = with lib.maintainers; [
-      drupol
       shivaraj-bh
+      codgician
     ];
   };
 }

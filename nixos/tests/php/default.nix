@@ -13,6 +13,10 @@ in
     imports = [ ./fpm.nix ];
     _module.args.php = php';
   };
+  fpm-modular = runTest {
+    imports = [ ./fpm-modular.nix ];
+    _module.args.php = php';
+  };
   httpd = runTest {
     imports = [ ./httpd.nix ];
     _module.args.php = php';

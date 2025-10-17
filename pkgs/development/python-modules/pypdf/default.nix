@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "pypdf";
-  version = "5.6.0";
+  version = "6.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     tag = version;
     # fetch sample files used in tests
     fetchSubmodules = true;
-    hash = "sha256-tXcpts/7eEmbt5FSXp3f6mS2al01sU9SnzkTAMbD0yc=";
+    hash = "sha256-qfLN6g2+3j35E4m9vGcWXL1BLiFdDZEFmxYgnknlW3M=";
   };
 
   outputs = [
@@ -73,12 +73,12 @@ buildPythonPackage rec {
     (fpdf2.overridePythonAttrs { doCheck = false; }) # avoid reference loop
     pytestCheckHook
     pytest-timeout
-  ] ++ optional-dependencies.full;
+  ]
+  ++ optional-dependencies.full;
 
-  pytestFlagsArray = [
+  disabledTestMarks = [
     # don't access the network
-    "-m"
-    "'not enable_socket'"
+    "enable_socket"
   ];
 
   meta = with lib; {

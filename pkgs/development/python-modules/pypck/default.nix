@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.8.9";
+  version = "0.8.12";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "alengwenus";
     repo = "pypck";
     tag = version;
-    hash = "sha256-8ho4p+gS04NOIcXelcy97nR7NBwbt66mA+FUw9IuhQk=";
+    hash = "sha256-XXlHgr8/Cl3eu1vIDl/XykB2gv8PPkPIFEBG30yUue0=";
   };
 
   postPatch = ''
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--asyncio-mode=auto" ];
+  pytestFlags = [ "--asyncio-mode=auto" ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [ "test_connection_lost" ];
 

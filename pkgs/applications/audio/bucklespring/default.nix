@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "zevv";
-    repo = pname;
+    repo = "bucklespring";
     rev = "v${version}";
     sha256 = "0prhqibivxzmz90k79zpwx3c97h8wa61rk5ihi9a5651mnc46mna";
   };
@@ -34,16 +34,15 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      openal
-      alure
-    ]
-    ++ optionals (legacy) [
-      libXtst
-      libX11
-    ]
-    ++ optionals (!legacy) [ libinput ];
+  buildInputs = [
+    openal
+    alure
+  ]
+  ++ optionals legacy [
+    libXtst
+    libX11
+  ]
+  ++ optionals (!legacy) [ libinput ];
 
   makeFlags = optionals (!legacy) [ "libinput=1" ];
 
@@ -70,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zevv/bucklespring";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.evils ];
+    maintainers = [ ];
   };
 }

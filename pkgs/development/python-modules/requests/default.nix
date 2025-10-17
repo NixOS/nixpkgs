@@ -5,38 +5,34 @@
   certifi,
   chardet,
   charset-normalizer,
-  fetchPypi,
+  fetchFromGitHub,
   idna,
   pysocks,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
   urllib3,
 }:
 
 buildPythonPackage rec {
   pname = "requests";
-  version = "2.32.3";
-  format = "setuptools";
+  version = "2.32.5";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   __darwinAllowLocalNetworking = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VTZUF3NOsYJVWQqf+euX6eHaho1MzWQCOZ6vaK8gp2A=";
+  src = fetchFromGitHub {
+    owner = "psf";
+    repo = "requests";
+    tag = "v${version}";
+    hash = "sha256-cEBalMFoYFaGG8M48k+OEBvzLegzrTNP1NxH2ljP6qg=";
   };
 
-  patches = [
-    # https://github.com/psf/requests/issues/6730
-    # https://github.com/psf/requests/pull/6731
-    ./ca-load-regression.patch
-
-    # https://seclists.org/fulldisclosure/2025/Jun/2
-    ./CVE-2024-47081.patch
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     certifi
@@ -55,29 +51,29 @@ buildPythonPackage rec {
     pytest-mock
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.socks;
+  ]
+  ++ optional-dependencies.socks;
 
-  disabledTests =
-    [
-      # Disable tests that require network access and use httpbin
-      "requests.api.request"
-      "requests.models.PreparedRequest"
-      "requests.sessions.Session"
-      "requests"
-      "test_redirecting_to_bad_url"
-      "test_requests_are_updated_each_time"
-      "test_should_bypass_proxies_pass_only_hostname"
-      "test_urllib3_pool_connection_closed"
-      "test_urllib3_retries"
-      "test_use_proxy_from_environment"
-      "TestRequests"
-      "TestTimeout"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      # Fatal Python error: Aborted
-      "test_basic_response"
-      "test_text_response"
-    ];
+  disabledTests = [
+    # Disable tests that require network access and use httpbin
+    "requests.api.request"
+    "requests.models.PreparedRequest"
+    "requests.sessions.Session"
+    "requests"
+    "test_redirecting_to_bad_url"
+    "test_requests_are_updated_each_time"
+    "test_should_bypass_proxies_pass_only_hostname"
+    "test_urllib3_pool_connection_closed"
+    "test_urllib3_retries"
+    "test_use_proxy_from_environment"
+    "TestRequests"
+    "TestTimeout"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Aborted
+    "test_basic_response"
+    "test_text_response"
+  ];
 
   disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Fatal Python error: Aborted

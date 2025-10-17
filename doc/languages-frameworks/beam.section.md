@@ -8,7 +8,7 @@ In this document and related Nix expressions, we use the term, _BEAM_, to descri
 
 ### Elixir {#elixir}
 
-nixpkgs follows the [official elixir deprecation schedule](https://hexdocs.pm/elixir/compatibility-and-deprecations.html) and keeps the last 5 released versions of Elixir available.
+Nixpkgs follows the [official elixir deprecation schedule](https://hexdocs.pm/elixir/compatibility-and-deprecations.html) and keeps the last 5 released versions of Elixir available.
 
 ## Structure {#beam-structure}
 
@@ -65,9 +65,7 @@ let
     overlays = [ ];
   };
 in
-pkgs.mkShell {
-  packages = [ pkgs.beamPackages.rebar3 ];
-}
+pkgs.mkShell { packages = [ pkgs.beamPackages.rebar3 ]; }
 ```
 :::
 
@@ -91,11 +89,11 @@ Erlang.mk functions similarly to Rebar3, except we use `buildErlangMk` instead o
 
 #### mixRelease - Elixir Phoenix example {#mix-release-elixir-phoenix-example}
 
-there are 3 steps, frontend dependencies (javascript), backend dependencies (elixir) and the final derivation that puts both of those together
+there are 3 steps: frontend dependencies (javascript), backend dependencies (elixir), and the final derivation that puts both of those together
 
 ##### mixRelease - Frontend dependencies (javascript) {#mix-release-javascript-deps}
 
-For phoenix projects, inside of nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
+For phoenix projects, inside of Nixpkgs you can either use yarn2nix (mkYarnModule) or node2nix. An example with yarn2nix can be found [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/web-apps/plausible/default.nix#L39). An example with node2nix will follow. To package something outside of nixpkgs, you have alternatives like [npmlock2nix](https://github.com/nix-community/npmlock2nix) or [nix-npm-buildpackage](https://github.com/serokell/nix-npm-buildpackage)
 
 ##### mixRelease - backend dependencies (mix) {#mix-release-mix-deps}
 
@@ -103,7 +101,7 @@ There are 2 ways to package backend dependencies. With mix2nix and with a fixed-
 
 ###### mix2nix {#mix2nix}
 
-`mix2nix` is a cli tool available in nixpkgs. it will generate a nix expression from a mix.lock file. It is quite standard in the 2nix tool series.
+`mix2nix` is a cli tool available in Nixpkgs. It will generate a Nix expression from a `mix.lock` file. It is quite standard in the 2nix tool series.
 
 Note that currently mix2nix can't handle git dependencies inside the mix.lock file. If you have git dependencies, you can either add them manually (see [example](https://github.com/NixOS/nixpkgs/blob/master/pkgs/servers/pleroma/default.nix#L20)) or use the FOD method.
 
@@ -175,7 +173,7 @@ Note that if after you've replaced the value, nix suggests another hash, then mi
 
 ##### mixRelease - example {#mix-release-example}
 
-Here is how your `default.nix` file would look for a phoenix project.
+Here is how your `default.nix` file would look for a Phoenix project.
 
 ```nix
 with import <nixpkgs> { };
@@ -295,6 +293,8 @@ in
       '';
       Restart = "on-failure";
       RestartSec = 5;
+    };
+    unitConfig = {
       StartLimitBurst = 3;
       StartLimitInterval = 10;
     };
@@ -311,7 +311,7 @@ in
 
 ### Creating a Shell {#creating-a-shell}
 
-Usually, we need to create a `shell.nix` file and do our development inside of the environment specified therein. Just install your version of Erlang and any other interpreters, and then use your normal build tools. As an example with Elixir:
+Usually, we need to create a `shell.nix` file and do our development inside the environment specified therein. Just install your version of Erlang and any other interpreters, and then use your normal build tools. As an example, with Elixir:
 
 ```nix
 {
@@ -322,14 +322,12 @@ with pkgs;
 let
   elixir = beam.packages.erlang_27.elixir_1_18;
 in
-mkShell {
-  buildInputs = [ elixir ];
-}
+mkShell { buildInputs = [ elixir ]; }
 ```
 
 ### Using an overlay {#beam-using-overlays}
 
-If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in nixpkgs, you can override attributes such as `version` (and the corresponding `hash`) and then use this overlay in your development environment:
+If you need to use an overlay to change some attributes of a derivation, e.g. if you need a bugfix from a version that is not yet available in Nixpkgs, you can override attributes such as `version` (and the corresponding `hash`) and then use this overlay in your development environment:
 
 #### `shell.nix` {#beam-using-overlays-shell.nix}
 
@@ -346,11 +344,7 @@ let
   pkgs = import <nixpkgs> { overlays = [ elixir_1_18_1_overlay ]; };
 in
 with pkgs;
-mkShell {
-  buildInputs = [
-    elixir_1_18
-  ];
-}
+mkShell { buildInputs = [ elixir_1_18 ]; }
 ```
 
 #### Elixir - Phoenix project {#elixir---phoenix-project}
@@ -418,4 +412,4 @@ Initializing the project will require the following steps:
 - create the db `createdb db`
 - start the postgres instance `pg_ctl -l "$PGDATA/server.log" start`
 - add the `/db` folder to your `.gitignore`
-- you can start your phoenix server and get a shell with `iex -S mix phx.server`
+- you can start your Phoenix server and get a shell with `iex -S mix phx.server`

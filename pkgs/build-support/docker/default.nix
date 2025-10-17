@@ -582,7 +582,7 @@ rec {
       ...
     }@args:
     let
-      stream = streamLayeredImage (builtins.removeAttrs args [ "compressor" ]);
+      stream = streamLayeredImage (removeAttrs args [ "compressor" ]);
       compress = compressorForImage compressor name;
     in
     runCommand "${baseNameOf name}.tar${compress.ext}" {
@@ -719,7 +719,8 @@ rec {
               jshon
               jq
               moreutils
-            ] ++ compress.nativeInputs;
+            ]
+            ++ compress.nativeInputs;
             # Image name must be lowercase
             imageName = lib.toLower name;
             imageTag = lib.optionalString (tag != null) tag;
@@ -893,14 +894,13 @@ rec {
     runCommand "merge-docker-images"
       {
         inherit images;
-        nativeBuildInputs =
-          [
-            file
-            jq
-          ]
-          ++ compressors.none.nativeInputs
-          ++ compressors.gz.nativeInputs
-          ++ compressors.zstd.nativeInputs;
+        nativeBuildInputs = [
+          file
+          jq
+        ]
+        ++ compressors.none.nativeInputs
+        ++ compressors.gz.nativeInputs
+        ++ compressors.zstd.nativeInputs;
       }
       ''
         mkdir image inputs
@@ -1043,12 +1043,13 @@ rec {
       );
 
       contentsList = if builtins.isList contents then contents else [ contents ];
-      bind-paths = builtins.toString (
-        builtins.map (path: "--bind=${path}:${path}!") [
+      bind-paths = toString (
+        map (path: "--bind=${path}:${path}!") [
           "/dev/"
           "/proc/"
           "/sys/"
           "${builtins.storeDir}/"
+          "$NIX_BUILD_TOP"
           "$out/layer.tar"
         ]
       );
@@ -1061,13 +1062,12 @@ rec {
         paths = contentsList;
         extraCommands = (lib.optionalString includeNixDB (mkDbExtraCommand contents)) + extraCommands;
         inherit fakeRootCommands;
-        nativeBuildInputs =
-          [
-            fakeroot
-          ]
-          ++ optionals enableFakechroot [
-            proot
-          ];
+        nativeBuildInputs = [
+          fakeroot
+        ]
+        ++ optionals enableFakechroot [
+          proot
+        ];
         postBuild = ''
           mv $out old_out
           (cd old_out; eval "$extraCommands" )
@@ -1086,6 +1086,7 @@ rec {
                     --exclude=./proc \
                     --exclude=./sys \
                     --exclude=.${builtins.storeDir} \
+                    --exclude=".$NIX_BUILD_TOP" \
                     --numeric-owner --mtime "@$SOURCE_DATE_EPOCH" \
                     --hard-dereference \
                     -cf $out/layer.tar .
@@ -1112,24 +1113,32 @@ rec {
         '';
       };
 
-      layersJsonFile = buildPackages.dockerMakeLayers {
-        inherit debug;
-        closureRoots = optionals includeStorePaths [
-          baseJson
-          customisationLayer
-        ];
-        excludePaths = [
-          baseJson
-          customisationLayer
-        ];
-        pipeline =
-          if layeringPipeline != null then
-            layeringPipeline
-          else
-            import ./popularity-contest-layering-pipeline.nix { inherit lib jq runCommand; } {
-              inherit fromImage maxLayers;
-            };
-      };
+      closureRoots = optionals includeStorePaths [
+        baseJson
+        customisationLayer
+      ];
+
+      excludePaths = [
+        baseJson
+        customisationLayer
+      ];
+
+      layersJsonFile =
+        if layeringPipeline == null then
+          buildPackages.dockerAutoLayer {
+            inherit
+              closureRoots
+              debug
+              excludePaths
+              fromImage
+              maxLayers
+              ;
+          }
+        else
+          buildPackages.dockerMakeLayers {
+            inherit closureRoots debug excludePaths;
+            pipeline = layeringPipeline;
+          };
 
       conf =
         runCommand "${baseName}-conf.json"
@@ -1261,11 +1270,11 @@ rec {
 
       staticPath = "${dirOf shell}:${lib.makeBinPath [ builder ]}";
 
-      # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L493-L526
+      # https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L617-L651
       rcfile = writeText "nix-shell-rc" ''
         unset PATH
         dontAddDisableDepTrack=1
-        # TODO: https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L506
+        # TODO: https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L628
         [ -e $stdenv/setup ] && source $stdenv/setup
         PATH=${staticPath}:"$PATH"
         SHELL=${lib.escapeShellArg shell}
@@ -1285,7 +1294,7 @@ rec {
         ''}
       '';
 
-      # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/globals.hh#L464-L465
+      # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/include/nix/store/globals.hh#L778-L788
       sandboxBuildDir = "/build";
 
       drvEnv =
@@ -1296,51 +1305,50 @@ rec {
         };
 
       # Environment variables set in the image
-      envVars =
-        {
+      envVars = {
 
-          # Root certificates for internet access
-          SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-          NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        # Root certificates for internet access
+        SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+        NIX_SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1027-L1030
-          # PATH = "/path-not-set";
-          # Allows calling bash and `buildDerivation` as the Cmd
-          PATH = staticPath;
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1001-L1004
+        # PATH = "/path-not-set";
+        # Allows calling bash and `buildDerivation` as the Cmd
+        PATH = staticPath;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1032-L1038
-          HOME = homeDirectory;
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1006-L1012
+        HOME = homeDirectory;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1040-L1044
-          NIX_STORE = storeDir;
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1014-L1018
+        NIX_STORE = storeDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1046-L1047
-          # TODO: Make configurable?
-          NIX_BUILD_CORES = "1";
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1020-L1021
+        # TODO: Make configurable?
+        NIX_BUILD_CORES = "1";
 
-        }
-        // drvEnv
-        // {
+      }
+      // drvEnv
+      // {
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1008-L1010
-          NIX_BUILD_TOP = sandboxBuildDir;
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1035-L1037
+        NIX_BUILD_TOP = sandboxBuildDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1012-L1013
-          TMPDIR = sandboxBuildDir;
-          TEMPDIR = sandboxBuildDir;
-          TMP = sandboxBuildDir;
-          TEMP = sandboxBuildDir;
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1039-L1040
+        TMPDIR = sandboxBuildDir;
+        TEMPDIR = sandboxBuildDir;
+        TMP = sandboxBuildDir;
+        TEMP = sandboxBuildDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1015-L1019
-          PWD = sandboxBuildDir;
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1042-L1046
+        PWD = sandboxBuildDir;
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1071-L1074
-          # We don't set it here because the output here isn't handled in any special way
-          # NIX_LOG_FD = "2";
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1079-L1082
+        # We don't set it here because the output here isn't handled in any special way
+        # NIX_LOG_FD = "2";
 
-          # https://github.com/NixOS/nix/blob/2.8.0/src/libstore/build/local-derivation-goal.cc#L1076-L1077
-          TERM = "xterm-256color";
-        };
+        # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/derivation-builder.cc#L1084-L1085
+        TERM = "xterm-256color";
+      };
 
     in
     streamLayeredImage {
@@ -1350,7 +1358,7 @@ rec {
         usrBinEnv
         (fakeNss.override {
           # Allows programs to look up the build user's home directory
-          # https://github.com/NixOS/nix/blob/ffe155abd36366a870482625543f9bf924a58281/src/libstore/build/local-derivation-goal.cc#L906-L910
+          # https://github.com/NixOS/nix/blob/2.32.0/src/libstore/unix/build/linux-derivation-builder.cc#L409-L416
           # Slightly differs however: We use the passed-in homeDirectory instead of sandboxBuildDir.
           # We're doing this because it's arguably a bug in Nix that sandboxBuildDir is used here: https://github.com/NixOS/nix/issues/6379
           extraPasswdLines = [
@@ -1378,8 +1386,8 @@ rec {
       # Run this image as the given uid/gid
       config.User = "${toString uid}:${toString gid}";
       config.Cmd =
-        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L185-L186
-        # https://github.com/NixOS/nix/blob/2.8.0/src/nix-build/nix-build.cc#L534-L536
+        # https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L240-L241
+        # https://github.com/NixOS/nix/blob/2.32.0/src/nix/nix-build/nix-build.cc#L659
         if run == null then
           [
             shell
@@ -1405,7 +1413,7 @@ rec {
       ...
     }@args:
     let
-      stream = streamNixShellImage (builtins.removeAttrs args [ "compressor" ]);
+      stream = streamNixShellImage (removeAttrs args [ "compressor" ]);
       compress = compressorForImage compressor drv.name;
     in
     runCommand "${drv.name}-env.tar${compress.ext}" {

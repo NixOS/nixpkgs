@@ -32,6 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-dhEpn0oaqZqeiRMfcSiaqhud/RsKd6Wm5RR5iyQp1I8=";
   };
 
@@ -100,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.prisma.io/";
     license = licenses.asl20;
     maintainers = with maintainers; [ aqrln ];
+    mainProgram = "prisma";
     platforms = platforms.unix;
   };
 })

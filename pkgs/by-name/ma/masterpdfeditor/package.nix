@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "masterpdfeditor";
-  version = "5.9.89";
+  version = "5.9.94";
 
   src =
     let
@@ -29,8 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
         aarch64-linux = "https://code-industry.net/public/master-pdf-editor-${finalAttrs.version}-qt5.arm64.tar.gz";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-HTYFo3tZD1JiYpsx/q9mr1Sp9JIWA6Kp0ThzmDcvxmo=";
-        aarch64-linux = "sha256-uxCp9iv4923Qbyd2IldHm1/a50GU6VISSG6jfVzQqq4=";
+        x86_64-linux = "sha256-WKMk0uzcjI4/dwjas4Ws3S6VBcUZYO9/WDXgKY22EeE=";
+        aarch64-linux = "sha256-DKNOvEAjCzOHRAn8PRiT/1tv6/NggoWCHgHf5OWOHSA=";
       };
     };
 
@@ -76,8 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeShellScript "update-masterpdfeditor" ''
     latestVersion=$(curl -s https://code-industry.net/downloads/ | grep -A1 "fa-linux" | grep -oP 'Version\s+\K[\d.]+' | head -n 1)
-    ${lib.getExe nix-update} masterpdfeditor --version $latestVersion --system x86_64-linux
-    ${lib.getExe' common-updater-scripts "update-source-version"} masterpdfeditor $latestVersion --system=aarch64-linux --ignore-same-version
+    ${lib.getExe nix-update} pkgsCross.gnu64.masterpdfeditor --version $latestVersion
+    ${lib.getExe' common-updater-scripts "update-source-version"} pkgsCross.aarch64-multiplatform.masterpdfeditor --ignore-same-version
   '';
 
   meta = {

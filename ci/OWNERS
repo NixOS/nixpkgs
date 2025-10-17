@@ -120,7 +120,8 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/lib/test-driver  @tfc
 
 # NixOS QEMU virtualisation
-/nixos/modules/virtualisation/qemu-vm.nix           @raitobezarius
+/nixos/modules/virtualisation/qemu-vm.nix                 @raitobezarius
+/nixos/modules/services/backup/libvirtd-autosnapshot.nix  @6543
 
 # ACME
 /nixos/modules/security/acme                @NixOS/acme
@@ -189,6 +190,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/release-cuda.nix              @NixOS/cuda-maintainers
 /pkgs/development/cuda-modules                @NixOS/cuda-maintainers
 
+# ROCm
+/pkgs/development/rocm-modules                @NixOS/rocm
+
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
@@ -222,9 +226,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 
 # C compilers
 /pkgs/development/compilers/gcc
-/pkgs/development/compilers/llvm @alyssais @RossComputerGuy @NixOS/llvm
+/pkgs/development/compilers/llvm @NixOS/llvm
 /pkgs/development/compilers/emscripten @raitobezarius
-/doc/toolchains/llvm.chapter.md @alyssais @RossComputerGuy @NixOS/llvm
+/doc/toolchains/llvm.chapter.md @NixOS/llvm
 /doc/languages-frameworks/emscripten.section.md @raitobezarius
 
 # Audio
@@ -234,8 +238,11 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/tests/snapcast.nix @mweinelt
 
 # Browsers
+/pkgs/build-support/build-mozilla-mach @mweinelt
+/pkgs/applications/networking/browsers/firefox/update.nix
+/pkgs/applications/networking/browsers/firefox/packages/firefox.nix @mweinelt
+/pkgs/applications/networking/browsers/firefox/packages/firefox-esr-*.nix @mweinelt
 /pkgs/applications/networking/browsers/librewolf @squalus @DominicWrege @fpletz @LordGrimmauld
-/pkgs/applications/networking/browsers/firefox @mweinelt
 /pkgs/applications/networking/browsers/chromium @emilylange @networkException
 /nixos/tests/chromium.nix @emilylange @networkException
 
@@ -255,15 +262,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/jetbrains @edwtjo @leona-ya @theCapypara
 
 # Licenses
-/lib/licenses.nix @alyssais @emilazy
+/lib/licenses.nix @alyssais @emilazy @jopejoe1
 
 # Qt
 /pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
 /pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
 
-# KDE / Plasma 5
-/pkgs/applications/kde @K900 @NickCao @SuperSandro2000 @ttuegel
-/pkgs/desktops/plasma-5 @K900 @NickCao @SuperSandro2000 @ttuegel
+# KDE Frameworks 5
 /pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
 
 # KDE / Plasma 6
@@ -331,12 +336,19 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
 
+# Agda
+/pkgs/build-support/agda                  @NixOS/agda
+/pkgs/top-level/agda-packages.nix         @NixOS/agda
+/pkgs/development/libraries/agda          @NixOS/agda
+/doc/languages-frameworks/agda.section.md @NixOS/agda
+/nixos/tests/agda.nix                     @NixOS/agda
+
 # Idris
 /pkgs/development/idris-modules @Infinisil
 /pkgs/development/compilers/idris2 @mattpolzin
 
 # Bazel
-/pkgs/development/tools/build-managers/bazel @Profpatsch
+/pkgs/by-name/ba/bazel_7 @Profpatsch
 
 # NixOS modules for e-mail and dns services
 /nixos/modules/services/mail/mailman.nix    @peti
@@ -367,18 +379,17 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/applications/editors/vscode/extensions
 
 # PHP interpreter, packages, extensions, tests and documentation
-/doc/languages-frameworks/php.section.md          @aanderse @drupol @globin @ma27 @talyz
-/nixos/tests/php                                  @aanderse @drupol @globin @ma27 @talyz
-/pkgs/build-support/php/build-pecl.nix            @aanderse @drupol @globin @ma27 @talyz
-/pkgs/build-support/php                                     @drupol
-/pkgs/development/interpreters/php       @jtojnar @aanderse @drupol @globin @ma27 @talyz
-/pkgs/development/php-packages                    @aanderse @drupol @globin @ma27 @talyz
-/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @drupol @globin @ma27 @talyz
+/doc/languages-frameworks/php.section.md          @aanderse @globin @ma27 @talyz
+/nixos/tests/php                                  @aanderse @globin @ma27 @talyz
+/pkgs/build-support/php/build-pecl.nix            @aanderse @globin @ma27 @talyz
+/pkgs/development/interpreters/php       @jtojnar @aanderse @globin @ma27 @talyz
+/pkgs/development/php-packages                    @aanderse @globin @ma27 @talyz
+/pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
 
 # Docker tools
-/pkgs/build-support/docker                   @roberth
-/nixos/tests/docker-tools*                   @roberth
-/doc/build-helpers/images/dockertools.section.md  @roberth
+/pkgs/build-support/docker                       @roberth @jhol
+/nixos/tests/docker-tools*                       @roberth @jhol
+/doc/build-helpers/images/dockertools.section.md @roberth @jhol
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood
@@ -493,7 +504,8 @@ pkgs/servers/authelia/ @06kellyjac @dit7ya @nicomem
 pkgs/by-name/oc/octodns/ @anthonyroussel
 
 # Teleport
-pkgs/by-name/te/teleport*   @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+/pkgs/build-support/teleport  @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
+pkgs/by-name/te/teleport*     @arianvp @justinas @sigma @tomberek @freezeboy @techknowlogick @JuliusFreudenberger
 
 # Warp-terminal
-pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @donteatoreo @johnrtitor
+pkgs/by-name/wa/warp-terminal/  @emilytrau @imadnyc @FlameFlag @johnrtitor

@@ -29,32 +29,35 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "3.5.0";
+  version = "6.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-mr/pzW6EhB+STtVHW1a/+CivzPINHEvvYWnCizycjeo=";
+    hash = "sha256-3KxSuyfczyulbpysAO8mF7wvzd+807Lj6l6g0TygBnI=";
   };
 
   build-system = [ poetry-core ];
 
-  dependencies =
-    [
-      markdown-it-py
-      platformdirs
-      rich
-      typing-extensions
-    ]
-    ++ markdown-it-py.optional-dependencies.plugins
-    ++ markdown-it-py.optional-dependencies.linkify;
+  pythonRelaxDeps = [
+    "rich"
+  ];
+  dependencies = [
+    markdown-it-py
+    platformdirs
+    rich
+    typing-extensions
+  ]
+  ++ markdown-it-py.optional-dependencies.plugins
+  ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [
       tree-sitter
-    ] ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
+    ]
+    ++ lib.optionals (!tree-sitter-languages.meta.broken) [ tree-sitter-languages ];
   };
 
   nativeCheckInputs = [
@@ -78,14 +81,11 @@ buildPythonPackage rec {
     # Assertion issues
     "test_textual_env_var"
 
-    # Fail since tree-sitter-markdown was updated to 0.5.0
-    # ValueError: Incompatible Language version 15. Must be between 13 and 14
-    # https://github.com/Textualize/textual/issues/5868
-    "test_setting_builtin_language_via_attribute"
-    "test_setting_builtin_language_via_constructor"
+    # fixture 'snap_compare' not found
+    "test_progress_bar_width_1fr"
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Some tests in groups require state from previous tests
     # See https://github.com/Textualize/textual/issues/4924#issuecomment-2304889067
     "--dist=loadgroup"

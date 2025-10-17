@@ -26,34 +26,32 @@ stdenv.mkDerivation rec {
     flex
   ];
 
-  buildInputs =
-    [
-      zlib.dev
-      libxcrypt
-    ]
-    ++ lib.optionals useSSL [ openssl ]
-    ++ lib.optionals usePAM [ pam ];
+  buildInputs = [
+    zlib.dev
+    libxcrypt
+  ]
+  ++ lib.optionals useSSL [ openssl ]
+  ++ lib.optionals usePAM [ pam ];
 
-  configureFlags =
-    [
-      (lib.withFeature usePAM "pam")
-    ]
-    ++ (
-      if useSSL then
-        [
-          "--with-ssl-incl-dir=${openssl.dev}/include"
-          "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
-        ]
-      else
-        [
-          "--without-ssl"
-        ]
-    )
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      # will need to check both these are true for musl
-      "libmonit_cv_setjmp_available=yes"
-      "libmonit_cv_vsnprintf_c99_conformant=yes"
-    ];
+  configureFlags = [
+    (lib.withFeature usePAM "pam")
+  ]
+  ++ (
+    if useSSL then
+      [
+        "--with-ssl-incl-dir=${openssl.dev}/include"
+        "--with-ssl-lib-dir=${lib.getLib openssl}/lib"
+      ]
+    else
+      [
+        "--without-ssl"
+      ]
+  )
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    # will need to check both these are true for musl
+    "libmonit_cv_setjmp_available=yes"
+    "libmonit_cv_vsnprintf_c99_conformant=yes"
+  ];
 
   meta = {
     homepage = "https://mmonit.com/monit/";

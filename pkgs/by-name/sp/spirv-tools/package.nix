@@ -7,15 +7,18 @@
   spirv-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spirv-tools";
-  version = "1.4.313.0";
+  version = "1.4.321.0-unstable-2025-06-25";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-nGyEOREua/W2mdb8DhmqXW0gDThnXnIlhnURAUhCO2g=";
+    # The SPIRV-Headers release for Vulkan SDK 1.4.321.0 is missing
+    # a PR required for LLVM 21 support in SPIRV-LLVM-Translator;
+    # return to the `vulkan-sdk-*` tags on the next stable release.
+    rev = "28a883ba4c67f58a9540fb0651c647bb02883622";
+    hash = "sha256-yRzpEBGyTr9oovsh3TUnJsR/luHNAPkotcJFWh7R1Fc=";
   };
 
   # The cmake options are sufficient for turning on static building, but not
@@ -38,16 +41,16 @@ stdenv.mkDerivation rec {
   # https://github.com/KhronosGroup/SPIRV-Tools/issues/3905
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace '-P ''${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake' \
-                '-DCMAKE_INSTALL_FULL_LIBDIR=''${CMAKE_INSTALL_FULL_LIBDIR}
-                 -DCMAKE_INSTALL_FULL_INCLUDEDIR=''${CMAKE_INSTALL_FULL_INCLUDEDIR}
-                 -P ''${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake'
+      --replace-fail '-P ''${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake' \
+                     '-DCMAKE_INSTALL_FULL_LIBDIR=''${CMAKE_INSTALL_FULL_LIBDIR}
+                     -DCMAKE_INSTALL_FULL_INCLUDEDIR=''${CMAKE_INSTALL_FULL_INCLUDEDIR}
+                     -P ''${CMAKE_CURRENT_SOURCE_DIR}/cmake/write_pkg_config.cmake'
     substituteInPlace cmake/SPIRV-Tools.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
     substituteInPlace cmake/SPIRV-Tools-shared.pc.in \
-      --replace '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
-      --replace '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_LIBDIR@ @CMAKE_INSTALL_FULL_LIBDIR@ \
+      --replace-fail '$'{prefix}/@CMAKE_INSTALL_INCLUDEDIR@ @CMAKE_INSTALL_FULL_INCLUDEDIR@
   '';
 
   meta = with lib; {

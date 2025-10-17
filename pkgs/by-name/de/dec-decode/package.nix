@@ -6,12 +6,12 @@
 
 buildGoModule {
   pname = "dec-decode";
-  version = "unstable-2022-12-24";
+  version = "0-unstable-2022-12-24";
 
   src = fetchFromGitHub {
     owner = "sammiq";
     repo = "dec-decode";
-    rev = "6ee103c";
+    rev = "6ee103cfaa9365f930da65b13f2e296c4e1ef8c3";
     hash = "sha256-vOYKVl00oaXwp77pRLqUPnXQT5QuJfqnGGkQVBMq5W0=";
   };
 

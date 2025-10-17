@@ -25,13 +25,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "nextcloud-talk-desktop";
-  version = "1.2.3";
+  version = "2.0.2";
 
   # Building from source would require building also building Server and Talk components
   # See https://github.com/nextcloud/talk-desktop?tab=readme-ov-file#%EF%B8%8F-prerequisites
   src = fetchzip {
     url = "https://github.com/nextcloud-releases/talk-desktop/releases/download/v${finalAttrs.version}/Nextcloud.Talk-linux-x64.zip";
-    hash = "sha256-St0frZpSjAHnF6MJWMRm4Md0TxNnNSAbLf+Sz9EDgS4=";
+    hash = "sha256-r/1YTGBv6fqd95TIRqLLssk30KeWkHlMY51cp7YQp9o=";
     stripRoot = false;
   };
 
@@ -45,29 +45,28 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
   ];
 
-  buildInputs =
-    [
-      nss
-      cairo
-      alsa-lib
-      at-spi2-core
-      pango
-      libdrm
-      libxkbcommon
-      gtk3
-      vivaldi-ffmpeg-codecs
-      libgbm
-      libGL
-      libglvnd
-    ]
-    ++ (with xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXrandr
-      libXfixes
-      libXcursor
-    ]);
+  buildInputs = [
+    nss
+    cairo
+    alsa-lib
+    at-spi2-core
+    pango
+    libdrm
+    libxkbcommon
+    gtk3
+    vivaldi-ffmpeg-codecs
+    libgbm
+    libGL
+    libglvnd
+  ]
+  ++ (with xorg; [
+    libX11
+    libXcomposite
+    libXdamage
+    libXrandr
+    libXfixes
+    libXcursor
+  ]);
 
   # Required to launch the application and proceed past the zygote_linux fork() process
   # Fixes `Zygote could not fork`

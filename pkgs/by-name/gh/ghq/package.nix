@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +30,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion \
       --bash $src/misc/bash/_ghq \
       --fish $src/misc/fish/ghq.fish \

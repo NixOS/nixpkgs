@@ -15,13 +15,19 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Nitrokey";
     repo = "libnitrokey";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-4PEZ31QyVOmdhpKqTN8fwcHoLuu+w+OJ3fZeqwlE+io=";
     # On OSX, libnitrokey depends on a custom version of hidapi in a submodule.
     # Monitor https://github.com/Nitrokey/libnitrokey/issues/140 to see if we
     # can remove this extra work one day.
     fetchSubmodules = true;
   };
+
+  patches = [
+    # fix for CMake v4
+    # https://github.com/Nitrokey/libnitrokey/pull/226
+    ./cmake-v4.patch
+  ];
 
   nativeBuildInputs = [
     cmake

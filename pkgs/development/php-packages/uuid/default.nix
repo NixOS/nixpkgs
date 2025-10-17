@@ -27,7 +27,7 @@ buildPecl {
 
   meta = {
     changelog = "https://github.com/php/pecl-networking-uuid/releases/tag/v${version}";
-    description = "A wrapper around Universally Unique IDentifier library (libuuid).";
+    description = "Wrapper around Universally Unique IDentifier library (libuuid)";
     license = lib.licenses.php301;
     homepage = "https://github.com/php/pecl-networking-uuid";
     teams = [ lib.teams.php ];

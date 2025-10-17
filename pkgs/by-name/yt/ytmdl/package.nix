@@ -2,14 +2,14 @@
   lib,
   python3Packages,
   fetchPypi,
-  yt-dlp,
   ffmpeg,
+  writableTmpDirAsHomeHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "ytmdl";
   version = "2023.11.26";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname;
@@ -19,13 +19,13 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "bs4" "beautifulsoup4" \
-      --replace "/etc/bash_completion.d" "share/bash-completion/completions" \
-      --replace "/usr/share/zsh/functions/Completion/Unix" "share/zsh/site-functions"
-    sed -i '/python_requires=/d' setup.py
+      --replace-fail "/etc/bash_completion.d" "share/bash-completion/completions" \
+      --replace-fail "/usr/share/zsh/functions/Completion/Unix" "share/zsh/site-functions"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     ffmpeg-python
     musicbrainzngs
     rich
@@ -51,8 +51,11 @@ python3Packages.buildPythonApplication rec {
     (lib.makeBinPath [ ffmpeg ])
   ];
 
-  # This application has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    writableTmpDirAsHomeHook # the app tries to log stuff into xdg_cache_home
+  ];
+
+  pythonImportsCheck = [ "ytmdl" ];
 
   meta = with lib; {
     homepage = "https://github.com/deepjyoti30/ytmdl";

@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.2.1";
+  version = "3.2.3";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-l1xrp+Gl26kiWqh5pIKp4QiETrzr5mTrUP10T0DhUCw=";
+    hash = "sha256-0LlZsyUSVuDakbNUzJ1ZUBe9KxWNd0ONKkPafwbCINY=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -118,7 +118,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "r2modman";
     maintainers = with lib.maintainers; [
-      aidalgol
       huantian
     ];
     inherit (electron.meta) platforms;

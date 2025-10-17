@@ -10,42 +10,38 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wl-clipboard-rs";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "YaLTeR";
     repo = "wl-clipboard-rs";
     rev = "v${version}";
-    hash = "sha256-jGTWcVR6atkEeEUunystJ4B6I3GzYiCOMs0MC6pvPfI=";
+    hash = "sha256-IC19J3S4QP6eEH4zWDrTh/lQcsDzopjWGO6Vm+/cl78=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6HNSQ27PGhF6tt12jdu6llDUZ/tYsFwx2pCJx3mKm/E=";
+  cargoHash = "sha256-bkCrAyYxYkgeS0BSUzKipN21ZZL+RJzNyg7Mx+7V8Pg=";
 
-  cargoBuildFlags =
-    [
-      "--package=wl-clipboard-rs"
-      "--package=wl-clipboard-rs-tools"
-    ]
-    ++ lib.optionals withNativeLibs [
-      "--features=native_lib"
-    ];
+  cargoBuildFlags = [
+    "--package=wl-clipboard-rs"
+    "--package=wl-clipboard-rs-tools"
+  ]
+  ++ lib.optionals withNativeLibs [
+    "--features=native_lib"
+  ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals withNativeLibs [
-      pkg-config
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withNativeLibs [
+    pkg-config
+  ];
 
-  buildInputs =
-    [
-      installShellFiles
-    ]
-    ++ lib.optionals withNativeLibs [
-      wayland
-    ];
+  buildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals withNativeLibs [
+    wayland
+  ];
 
   preCheck = ''
     export XDG_RUNTIME_DIR=$(mktemp -d)

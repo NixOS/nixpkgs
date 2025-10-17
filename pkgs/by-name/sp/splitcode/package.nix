@@ -8,7 +8,7 @@
   nix-update-script,
 }:
 let
-  version = "0.31.2";
+  version = "0.31.3";
 in
 stdenv.mkDerivation {
   pname = "splitcode";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     owner = "pachterlab";
     repo = "splitcode";
     tag = "v${version}";
-    hash = "sha256-fIx8EXdhkIkWmb86HKlUPSgsKvbGcrKsuNMWo8kU+Aw=";
+    hash = "sha256-EEYjBo52jPCSnv5WSGsXhfZEjsBCHdGerVPOZfShXBU=";
   };
 
   nativeBuildInputs = [ cmake ];

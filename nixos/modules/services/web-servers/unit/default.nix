@@ -76,7 +76,7 @@ in
             }
           }
         '';
-        description = "Unit configuration in JSON format. More details here https://unit.nginx.org/configuration";
+        description = "Unit configuration in JSON format. More details here <https://unit.nginx.org/configuration>";
       };
     };
   };

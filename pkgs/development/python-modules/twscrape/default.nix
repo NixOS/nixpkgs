@@ -10,6 +10,7 @@
   loguru,
   pyotp,
   pytestCheckHook,
+  pytest-asyncio,
   pytest-httpx,
   pythonOlder,
 }:
@@ -43,13 +44,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-httpx
   ];
 
   pythonImportsCheck = [ "twscrape" ];
 
   meta = {
-    description = "Twitter API scrapper with authorization support.";
+    description = "Twitter API scrapper with authorization support";
     homepage = "https://github.com/vladkens/twscrape";
     changelog = "https://github.com/vladkens/twscrape/releases/tag/v${version}";
     license = lib.licenses.mit;

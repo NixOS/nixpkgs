@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  utils,
+  ...
+}:
 let
 
   cfg = config.systemd.oomd;
@@ -10,6 +15,7 @@ in
       [ "systemd" "oomd" "enableUserServices" ]
       [ "systemd" "oomd" "enableUserSlices" ]
     )
+    (lib.mkRenamedOptionModule [ "systemd" "oomd" "extraConfig" ] [ "systemd" "oomd" "settings" "OOM" ])
   ];
 
   options.systemd.oomd = {
@@ -23,20 +29,18 @@ in
     enableSystemSlice = lib.mkEnableOption "oomd on the system slice (`system.slice`)";
     enableUserSlices = lib.mkEnableOption "oomd on all user slices (`user@.slice`) and all user owned slices";
 
-    extraConfig = lib.mkOption {
-      type =
-        with lib.types;
-        attrsOf (oneOf [
-          str
-          int
-          bool
-        ]);
-      default = { };
-      example = lib.literalExpression ''{ DefaultMemoryPressureDurationSec = "20s"; }'';
+    settings.OOM = lib.mkOption {
       description = ''
-        Extra config options for `systemd-oomd`. See {command}`man oomd.conf`
-        for available options.
+        Settings option for systemd-oomd.
+        See {manpage}`oomd.conf(5)` for available options.
       '';
+      type = lib.types.submodule {
+        freeformType = lib.types.attrsOf utils.systemdUtils.unitOptions.unitOption;
+      };
+      default = { };
+      example = {
+        DefaultMemoryPressureLimit = "60%";
+      };
     };
   };
 
@@ -45,13 +49,14 @@ in
       "systemd-oomd.service"
       "systemd-oomd.socket"
     ];
+
+    systemd.services.systemd-oomd.after = [
+      "swap.target" # TODO: drop after systemd v258
+      "systemd-sysusers.service" # TODO: drop after systemd v257.8
+    ];
     systemd.services.systemd-oomd.wantedBy = [ "multi-user.target" ];
 
-    environment.etc."systemd/oomd.conf".text = lib.generators.toINI { } {
-      OOM = cfg.extraConfig;
-    };
-
-    systemd.oomd.extraConfig.DefaultMemoryPressureDurationSec = lib.mkDefault "20s"; # Fedora default
+    environment.etc."systemd/oomd.conf".text = utils.systemdUtils.lib.settingsToSections cfg.settings;
 
     users.users.systemd-oom = {
       description = "systemd-oomd service user";

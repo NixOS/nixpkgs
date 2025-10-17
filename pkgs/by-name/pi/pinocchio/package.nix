@@ -5,29 +5,29 @@
   cmake,
   collisionSupport ? true,
   console-bridge,
+  ctestCheckHook,
   doxygen,
   eigen,
   example-robot-data,
   fetchFromGitHub,
+  fetchpatch,
   coal,
   jrl-cmakemodules,
   lib,
   pkg-config,
-  pythonSupport ? false,
-  python3Packages,
   stdenv,
   urdfdom,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pinocchio";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchFromGitHub {
     owner = "stack-of-tasks";
     repo = "pinocchio";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-MykHbHSXY/eJ1+8v0hptiXeVmglU9/wImimiuByw0tE=";
+    hash = "sha256-2oMP653fJ7Msk+IB8whRk2L8xkAmRdDeMLPJyyD99OQ=";
   };
 
   outputs = [
@@ -35,18 +35,16 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
-  prePatch = lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) ''
-    substituteInPlace unittest/algorithm/utils/CMakeLists.txt \
-      --replace-fail "add_pinocchio_unit_test(force)" ""
-  '';
+  patches = [
+    # ref. https://github.com/stack-of-tasks/pinocchio/pull/2771
+    (fetchpatch {
+      name = "fix-viser-path.patch";
+      url = "https://github.com/stack-of-tasks/pinocchio/commit/36a04bddb6980a7bcd28ebcc55d4e442f7920d87.patch";
+      hash = "sha256-9oENiMmRqJLU4ZiyGojm7suqdwTDGfk56aS2kcZiGaI=";
+    })
+  ];
 
   postPatch = ''
-    # example-robot-data models are used in checks.
-    # Upstream provide them as git submodule, but we can use our own version instead.
-    test -d models/example-robot-data && rmdir models/example-robot-data
-    ln -s ${example-robot-data.src} models/example-robot-data
-
     # allow package:// uri use in examples
     export ROS_PACKAGE_PATH=${example-robot-data}/share
 
@@ -56,54 +54,50 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ];
 
-  propagatedBuildInputs =
-    [
-      console-bridge
-      jrl-cmakemodules
-      urdfdom
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
-    ++ lib.optionals (!pythonSupport && collisionSupport) [ coal ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.boost
-      python3Packages.eigenpy
-    ]
-    ++ lib.optionals (pythonSupport && collisionSupport) [ python3Packages.coal ]
-    ++ lib.optionals (!pythonSupport && casadiSupport) [ casadi ]
-    ++ lib.optionals (pythonSupport && casadiSupport) [ python3Packages.casadi ];
+  propagatedBuildInputs = [
+    boost
+    coal
+    console-bridge
+    eigen
+    jrl-cmakemodules
+    urdfdom
+  ]
+  ++ lib.optionals collisionSupport [ coal ]
+  ++ lib.optionals casadiSupport [ casadi ];
 
-  checkInputs = lib.optionals (pythonSupport && casadiSupport) [ python3Packages.matplotlib ];
+  nativeCheckInputs = [
+    ctestCheckHook
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
-      (lib.cmakeBool "BUILD_WITH_LIBPYTHON" pythonSupport)
-      (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
-      (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
-      (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+  checkInputs = [
+    example-robot-data
+  ];
+
+  disabledTests =
+    lib.optionals stdenv.hostPlatform.isDarwin [
       # Disable test that fails on darwin
       # https://github.com/stack-of-tasks/pinocchio/blob/42306ed023b301aafef91e2e76cb070c5e9c3f7d/flake.nix#L24C1-L27C17
+      "pinocchio-example-py-casadi-quadrotor-ocp"
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "--exclude-regex;pinocchio-example-py-casadi-quadrotor-ocp")
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      # test failure, ref https://github.com/stack-of-tasks/pinocchio/issues/2277
+      "test-cpp-algorithm-utils-force"
     ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
+    (lib.cmakeBool "BUILD_WITH_CASADI_SUPPORT" casadiSupport)
+    (lib.cmakeBool "BUILD_WITH_COLLISION_SUPPORT" collisionSupport)
+    (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
+  ];
+
   doCheck = true;
-  pythonImportsCheck = [ "pinocchio" ];
 
   meta = {
     description = "Fast and flexible implementation of Rigid Body Dynamics algorithms and their analytical derivatives";

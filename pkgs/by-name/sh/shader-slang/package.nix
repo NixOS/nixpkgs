@@ -10,51 +10,31 @@
   libxml2,
   libX11,
   glslang,
-  llvmPackages_13,
+  unordered_dense,
   versionCheckHook,
   gitUpdater,
 
   # Required for compiling to SPIR-V or GLSL
   withGlslang ? true,
-  # Can be used for compiling shaders to CPU targets, see:
-  # https://github.com/shader-slang/slang/blob/master/docs/cpu-target.md
-  # If `withLLVM` is disabled, Slang will fall back to the C++ compiler found
-  # in the environment, if one exists.
-  withLLVM ? false,
-  # Dynamically link against libllvm and libclang++ (upstream defaults to static)
-  withSharedLLVM ? withLLVM,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shader-slang";
-  version = "2025.8.1";
+  version = "2025.19";
 
   src = fetchFromGitHub {
     owner = "shader-slang";
     repo = "slang";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PScbMkJJ4rh8I8ID709GKtLmd5+4Z2x2BlFEdWpoesI=";
+    hash = "sha256-WG+yW76iFrrYFldCp85LcbwQ8cz61NkAvdlvIfaPgac=";
     fetchSubmodules = true;
   };
 
-  patches =
-    [
-      # Slang's build definitions do not support using system provided cmake packages
-      # for its dependencies.
-      # While it does come with "SLANG_USE_SYSTEM_XYZ" flags, these expect Slang to be
-      # imported into some other CMake build that already provides the necessary target.
-      # This patch adds the required `find_package` calls and sets up target aliases where needed.
-      ./1-find-packages.patch
-    ]
-    ++ lib.optionals withSharedLLVM [
-      # Upstream statically links libllvm and libclang++, resulting in a ~5x increase in binary size.
-      ./2-shared-llvm.patch
-    ]
-    ++ lib.optionals withGlslang [
-      # Upstream depends on glslang 13 and there are minor breaking changes in glslang 15, the version
-      # we ship in nixpkgs.
-      ./3-glslang-15.patch
-    ];
+  postPatch = ''
+    # Header location has moved in glslang 15+
+    substituteInPlace source/slang-glslang/slang-glslang.cpp \
+      --replace-fail '"SPIRV/GlslangToSpv.h"' '"glslang/SPIRV/GlslangToSpv.h"'
+  '';
 
   outputs = [
     "out"
@@ -70,25 +50,19 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      miniz
-      lz4
-      libxml2
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-    ]
-    ++ lib.optionals withLLVM [
-      # Slang only supports LLVM 13:
-      # https://github.com/shader-slang/slang/blob/master/docs/building.md#llvm-support
-      llvmPackages_13.llvm
-      llvmPackages_13.libclang
-    ]
-    ++ lib.optionals withGlslang [
-      # SPIRV-tools is included in glslang.
-      glslang
-    ];
+  buildInputs = [
+    miniz
+    lz4
+    libxml2
+    unordered_dense
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+  ]
+  ++ lib.optionals withGlslang [
+    # SPIRV-tools is included in glslang.
+    glslang
+  ];
 
   separateDebugInfo = true;
 
@@ -108,28 +82,36 @@ stdenv.mkDerivation (finalAttrs: {
       prependToVar cmakeFlags "-DCMAKE_CXX_COMPILER_RANLIB=$(command -v $RANLIB)"
     '';
 
-  cmakeFlags =
-    [
-      "-GNinja Multi-Config"
-      # The cmake setup hook only specifies `-DCMAKE_BUILD_TYPE=Release`,
-      # which does nothing for "Ninja Multi-Config".
-      "-DCMAKE_CONFIGURATION_TYPES=RelWithDebInfo"
-      # Handled by separateDebugInfo so we don't need special installation handling
-      "-DSLANG_ENABLE_SPLIT_DEBUG_INFO=OFF"
-      "-DSLANG_VERSION_FULL=v${finalAttrs.version}-nixpkgs"
-      # slang-rhi tries to download WebGPU dawn binaries, and as stated on
-      # https://github.com/shader-slang/slang-rhi is "under active refactoring
-      # and development, and is not yet ready for general use."
-      "-DSLANG_ENABLE_SLANG_RHI=OFF"
-      "-DSLANG_USE_SYSTEM_MINIZ=ON"
-      "-DSLANG_USE_SYSTEM_LZ4=ON"
-      "-DSLANG_SLANG_LLVM_FLAVOR=${if withLLVM then "USE_SYSTEM_LLVM" else "DISABLE"}"
-    ]
-    ++ lib.optionals withGlslang [
-      "-DSLANG_USE_SYSTEM_SPIRV_TOOLS=ON"
-      "-DSLANG_USE_SYSTEM_GLSLANG=ON"
-    ]
-    ++ lib.optional (!withGlslang) "-DSLANG_ENABLE_SLANG_GLSLANG=OFF";
+  cmakeFlags = [
+    "-GNinja Multi-Config"
+    # The cmake setup hook only specifies `-DCMAKE_BUILD_TYPE=Release`,
+    # which does nothing for "Ninja Multi-Config".
+    (lib.cmakeFeature "CMAKE_CONFIGURATION_TYPES" "RelWithDebInfo")
+    # Handled by separateDebugInfo so we don't need special installation handling
+    (lib.cmakeBool "SLANG_ENABLE_SPLIT_DEBUG_INFO" false)
+    (lib.cmakeFeature "SLANG_VERSION_FULL" "v${finalAttrs.version}-nixpkgs")
+    (lib.cmakeBool "SLANG_USE_SYSTEM_MINIZ" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_LZ4" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_UNORDERED_DENSE" true)
+    (lib.cmakeFeature "SLANG_SLANG_LLVM_FLAVOR" "DISABLE")
+    # slang-rhi tries to download headers and precompiled binaries for these backends
+    (lib.cmakeBool "SLANG_RHI_ENABLE_OPTIX" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_VULKAN" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_METAL" false)
+    (lib.cmakeBool "SLANG_RHI_ENABLE_WGPU" false)
+  ]
+  ++ lib.optionals withGlslang [
+    (lib.cmakeBool "SLANG_USE_SYSTEM_SPIRV_TOOLS" true)
+    (lib.cmakeBool "SLANG_USE_SYSTEM_GLSLANG" true)
+  ]
+  ++ lib.optionals (!withGlslang) [
+    (lib.cmakeBool "SLANG_ENABLE_SLANG_GLSLANG" false)
+  ];
+
+  postInstall = ''
+    mkdir -p $dev/lib
+    mv {$out,$dev}/lib/cmake
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/slangc";
@@ -149,7 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
       asl20
       llvm-exception
     ];
-    maintainers = with lib.maintainers; [ niklaskorz ];
+    maintainers = with lib.maintainers; [
+      niklaskorz
+      samestep
+    ];
     mainProgram = "slangc";
     platforms = lib.platforms.all;
   };

@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gosmore";
-  version = "unstable-2014-03-17";
+  version = "0-unstable-2014-03-17";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";

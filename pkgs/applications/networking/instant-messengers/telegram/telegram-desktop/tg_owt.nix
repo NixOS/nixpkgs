@@ -43,6 +43,12 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix build with abseil 202508
+    # upstream PR: https://github.com/desktop-app/tg_owt/pull/164
+    ./abseil-202508.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/modules/desktop_capture/linux/wayland/egl_dmabuf.cc \
       --replace-fail '"libEGL.so.1"' '"${lib.getLib libGL}/lib/libEGL.so.1"' \
@@ -63,35 +69,34 @@ stdenv.mkDerivation {
     python3
   ];
 
-  propagatedBuildInputs =
-    [
-      libjpeg
-      openssl
-      libopus
-      ffmpeg_6
-      openh264
-      crc32c
-      libvpx
-      abseil-cpp
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXtst
-      libXcomposite
-      libXdamage
-      libXext
-      libXrender
-      libXrandr
-      libXi
-      glib
-      pipewire
-      libgbm
-      libdrm
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-    ];
+  propagatedBuildInputs = [
+    libjpeg
+    openssl
+    libopus
+    ffmpeg_6
+    openh264
+    crc32c
+    libvpx
+    abseil-cpp
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXtst
+    libXcomposite
+    libXdamage
+    libXext
+    libXrender
+    libXrandr
+    libXi
+    glib
+    pipewire
+    libgbm
+    libdrm
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
   passthru.updateScript = unstableGitUpdater { };
 

@@ -2,7 +2,6 @@
   lib,
   anyio,
   buildPythonPackage,
-  curio,
   fetchFromGitHub,
   httpx,
   hypothesis,
@@ -18,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "returns";
-  version = "0.24.0";
+  version = "0.26.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -27,7 +26,7 @@ buildPythonPackage rec {
     owner = "dry-python";
     repo = "returns";
     tag = version;
-    hash = "sha256-qmBxW1XxUlFpAqf2t2ix01TN5NSxOtnYqLyE5ovZU58=";
+    hash = "sha256-VQzsa/uNTQVND0kc20d25to/6LELEiS3cqvG7a1kDw4=";
   };
 
   postPatch = ''
@@ -42,7 +41,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     anyio
-    curio
     httpx
     hypothesis
     pytestCheckHook
@@ -58,12 +56,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "returns" ];
 
-  pytestFlagsArray = [ "--ignore=typesafety" ];
+  disabledTestPaths = [ "typesafety" ];
 
   meta = with lib; {
-    description = "Make your functions return something meaningful, typed, and safe!";
+    description = "Make your functions return something meaningful, typed, and safe";
     homepage = "https://github.com/dry-python/returns";
-    changelog = "https://github.com/dry-python/returns/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dry-python/returns/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd2;
     maintainers = with maintainers; [ jessemoore ];
   };

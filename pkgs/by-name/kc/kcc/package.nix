@@ -1,51 +1,90 @@
 {
-  stdenv,
   lib,
-  qt6,
+  python3,
   fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+
+  qt6,
+  archiveSupport ? true,
   p7zip,
+
   versionCheckHook,
   nix-update-script,
-  python3,
-  archiveSupport ? true,
 }:
+
 python3.pkgs.buildPythonApplication rec {
   pname = "kcc";
-  version = "7.5.1";
-  format = "setuptools";
+  version = "9.1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ciromattia";
     repo = "kcc";
     tag = "v${version}";
-    hash = "sha256-XB+xss/QiZuo6gWphyjFh9DO74O5tNqfX5LUzsa4gqo=";
+    hash = "sha256-FGRd2JVcz45KVjQCTEKIjKlkLJS/AsSsopeW9tXHWwk=";
   };
 
-  nativeBuildInputs = [ qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qt6.wrapQtAppsHook
+    copyDesktopItems
+  ];
 
-  buildInputs = [ qt6.qtbase ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
-  propagatedBuildInputs = with python3.pkgs; [
-    packaging
+  buildInputs = [
+    qt6.qtbase
+    qt6.qtwayland
+  ];
+
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
+    packaging # undeclared dependency
+    pymupdf
+    pyside6
     pillow
     psutil
     python-slugify
     raven
     requests
-    natsort
     mozjpeg_lossless_optimization
+    natsort
     distro
-    pyside6
     numpy
   ];
 
-  qtWrapperArgs = lib.optionals archiveSupport [ ''--prefix PATH : ${lib.makeBinPath [ p7zip ]}'' ];
+  # Note: python scripts wouldn't get wrapped anyway, but let's be explicit about it
+  dontWrapQtApps = true;
+
+  makeWrapperArgs = [
+    "\${qtWrapperArgs[@]}"
+  ]
+  ++ lib.optionals archiveSupport [
+    ''--prefix PATH : ${lib.makeBinPath [ p7zip ]}''
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgram = "${placeholder "out"}/bin/kcc-c2e";
 
+  postInstall = ''
+    install -Dm644 \
+      icons/comic2ebook.png \
+      "$out/share/icons/hicolor/256x256/apps/kcc.png"
+  '';
+
   passthru = {
     updateScript = nix-update-script { };
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "kcc";
+      exec = "kcc";
+      icon = "kcc";
+      desktopName = "Kindle Comic Converter";
+      comment = "A comic and manga converter for ebook readers";
+      categories = [ "Graphics" ];
+    })
+  ];
 
   meta = {
     description = "Python app to convert comic/manga files or folders to EPUB, Panel View MOBI or E-Ink optimized CBZ";

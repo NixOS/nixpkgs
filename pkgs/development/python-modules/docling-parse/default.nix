@@ -5,7 +5,7 @@
   cmake,
   pkg-config,
   cxxopts,
-  poetry-core,
+  setuptools,
   pybind11,
   zlib,
   nlohmann_json,
@@ -23,15 +23,22 @@
 
 buildPythonPackage rec {
   pname = "docling-parse";
-  version = "4.0.5";
+  version = "4.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "docling-project";
     repo = "docling-parse";
     tag = "v${version}";
-    hash = "sha256-H8/T9gwQ6MeNsNcJ5I9cVnQVFEXHfmqYCxhkxszD8/w=";
+    hash = "sha256-8eHYMvfjPuGgrgrlqEh061ug+yer+1nQLbeDR1dQu68=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"cmake>=3.27.0,<4.0.0"' \
+        '"cmake>=3.27.0"'
+  '';
 
   dontUseCmakeConfigure = true;
 
@@ -41,7 +48,7 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
+    setuptools
   ];
 
   env.NIX_CFLAGS_COMPILE = "-I${lib.getDev utf8cpp}/include/utf8cpp";
@@ -75,6 +82,12 @@ buildPythonPackage rec {
     "pillow"
   ];
 
+  # Listed as runtime dependencies but only used in CI to build wheels
+  preBuild = ''
+    sed -i '/cibuildwheel/d' pyproject.toml
+    sed -i '/delocate/d' pyproject.toml
+  '';
+
   pythonImportsCheck = [
     "docling_parse"
   ];
@@ -88,6 +101,6 @@ buildPythonPackage rec {
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

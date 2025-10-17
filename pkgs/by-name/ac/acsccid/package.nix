@@ -1,8 +1,9 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchurl,
   autoconf,
+  autoconf-archive,
   automake,
   libtool,
   gettext,
@@ -14,20 +15,19 @@
   libiconv,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.1.8";
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.1.12";
   pname = "acsccid";
 
-  src = fetchFromGitHub {
-    owner = "acshk";
-    repo = "acsccid";
-    tag = "v${version}";
-    sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
+  src = fetchurl {
+    url = "mirror://sourceforge/acsccid/acsccid-${finalAttrs.version}.tar.bz2";
+    sha256 = "sha256-KPYHWlSUpWjOL9hmbEifb0pRWZtE+8k5Dh3bSNPMxb0=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoconf
+    autoconf-archive
     automake
     libtool
     gettext
@@ -35,14 +35,13 @@ stdenv.mkDerivation rec {
     perl
   ];
 
-  buildInputs =
-    [
-      pcsclite
-      libusb1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    pcsclite
+    libusb1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   configureFlags = [
     "--enable-usbdropdir=${placeholder "out"}/pcsc/drivers"
@@ -51,17 +50,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   postPatch = ''
-    sed -e s_/bin/echo_echo_g -i src/Makefile.am
+    substituteInPlace src/Makefile.in \
+      --replace-fail '$(INSTALL_UDEV_RULE_FILE)' ""
     patchShebangs src/convert_version.pl
     patchShebangs src/create_Info_plist.pl
-  '';
-
-  preConfigure = ''
-    libtoolize --force
-    aclocal
-    autoheader
-    automake --force-missing --add-missing
-    autoconf
   '';
 
   meta = {
@@ -79,9 +71,9 @@ stdenv.mkDerivation rec {
         services.pcscd.enable = true;
         services.pcscd.plugins = [ pkgs.acsccid ];
     '';
-    homepage = src.meta.homepage;
+    homepage = "http://acsccid.sourceforge.net";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
-}
+})

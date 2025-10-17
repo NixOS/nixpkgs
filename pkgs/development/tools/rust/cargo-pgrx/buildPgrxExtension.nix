@@ -29,7 +29,6 @@
 
 {
   lib,
-  cargo-pgrx,
   pkg-config,
   rustPlatform,
   stdenv,
@@ -64,6 +63,8 @@ lib.extendMkDerivation {
       buildFeatures ? [ ],
       cargoBuildFlags ? [ ],
       cargoPgrxFlags ? [ ],
+      # pinned dependencies
+      cargo-pgrx,
       postgresql,
       # cargo-pgrx calls rustfmt on generated bindings, this is not strictly necessary, so we avoid the
       # dependency here. Set to false and provide rustfmt in nativeBuildInputs, if you need it, e.g.

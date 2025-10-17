@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.40.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-cCgWKH4DzENTI1vwxOU+GRp/poUe55XqSPY8UHYy9PI=";
+    hash = "sha256-peD5CLp5YCLPrOmXnoezT+gAJLf7zSb0xdhV+PhC/XI=";
   };
 
   build-system = [ hatchling ];
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 
@@ -67,11 +68,15 @@ buildPythonPackage rec {
     # Timezone issue
     "test_to_datetime"
     "test_unary_two_elements"
+    # Test requires pyspark binary
+    "test_datetime_w_tz_pyspark"
+    "test_convert_time_zone_to_connection_tz_pyspark"
+    "test_replace_time_zone_to_connection_tz_pyspark"
+    "test_lazy"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

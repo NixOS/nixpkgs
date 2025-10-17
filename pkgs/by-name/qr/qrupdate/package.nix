@@ -47,6 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-zch1dn-test.patch
   ];
 
+  postPatch = ''
+    sed '/^cmake_minimum_required/Is/VERSION [0-9]\.[0-9]/VERSION 3.5/' -i ./CMakeLists.txt
+  '';
+
   doCheck = true;
 
   nativeBuildInputs = [

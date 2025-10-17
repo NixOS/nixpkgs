@@ -2,20 +2,20 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  hahomematic,
+  aiohomematic,
   home-assistant,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "SukramJ";
   domain = "homematicip_local";
-  version = "1.84.0";
+  version = "1.89.1";
 
   src = fetchFromGitHub {
     owner = "SukramJ";
     repo = "custom_homematic";
     tag = version;
-    hash = "sha256-vOMd+C+Is/bj4ZwNu1jkgEvS9EvwdvwxGnmqahMJg8k=";
+    hash = "sha256-40t64RAJy/isLfcP71pKiqh3cFXy/s1Mv35NosPnh48=";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildHomeAssistantComponent rec {
   '';
 
   dependencies = [
-    hahomematic
+    aiohomematic
   ];
 
   meta = {

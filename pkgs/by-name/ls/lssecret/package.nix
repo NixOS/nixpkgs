@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitLab {
     owner = "GrantMoyer";
     repo = "lssecret";
-    rev = "20fd771a";
+    rev = "20fd771a678a241abbb57152e3c2d9a8eee353cb";
     hash = "sha256-yU70WZj4EC/sFJxyq2SQ0YQ6RCQHYiW/aQiYWo7+ujk=";
   };
 

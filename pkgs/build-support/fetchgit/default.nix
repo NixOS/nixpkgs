@@ -1,6 +1,8 @@
 {
+  config,
   lib,
   stdenvNoCC,
+  writeText,
   git,
   git-lfs,
   cacert,
@@ -8,12 +10,16 @@
 
 let
   urlToName =
-    url: rev:
+    {
+      url,
+      rev,
+      append,
+    }:
     let
       shortRev = lib.sources.shortRev rev;
       appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
     in
-    "${lib.sources.urlToName url}${appendShort}";
+    "${lib.sources.urlToName url}${if append == "" then appendShort else append}";
 in
 
 lib.makeOverridable (
@@ -24,15 +30,20 @@ lib.makeOverridable (
       url,
       tag ? null,
       rev ? null,
-      name ? urlToName url (lib.revOrTag rev tag),
+      name ? urlToName {
+        inherit url;
+        rev = lib.revOrTag rev tag;
+        # when rootDir is specified, avoid invalidating the result when rev changes
+        append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
+      },
       leaveDotGit ? deepClone || fetchTags,
       outputHash ? lib.fakeHash,
       outputHashAlgo ? null,
       fetchSubmodules ? true,
       deepClone ? false,
       branchName ? null,
-      sparseCheckout ? [ ],
-      nonConeMode ? false,
+      sparseCheckout ? lib.optional (rootDir != "") rootDir,
+      nonConeMode ? rootDir != "",
       nativeBuildInputs ? [ ],
       # Shell code executed before the file has been fetched.  This, in
       # particular, can do things like set NIX_PREFETCH_GIT_CHECKOUT_HOOK to
@@ -53,6 +64,10 @@ lib.makeOverridable (
       allowedRequisites ? null,
       # fetch all tags after tree (useful for git describe)
       fetchTags ? false,
+      # make this subdirectory the root of the result
+      rootDir ? "",
+      # GIT_CONFIG_GLOBAL (as a file)
+      gitConfigFile ? config.gitConfigFile,
     }:
 
     /*
@@ -80,6 +95,7 @@ lib.makeOverridable (
 
     assert nonConeMode -> (sparseCheckout != [ ]);
     assert fetchTags -> leaveDotGit;
+    assert rootDir != "" -> !leaveDotGit;
 
     let
       revWithTag =
@@ -109,13 +125,12 @@ lib.makeOverridable (
         builder = ./builder.sh;
         fetcher = ./nix-prefetch-git;
 
-        nativeBuildInputs =
-          [
-            git
-            cacert
-          ]
-          ++ lib.optionals fetchLFS [ git-lfs ]
-          ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          git
+          cacert
+        ]
+        ++ lib.optionals fetchLFS [ git-lfs ]
+        ++ nativeBuildInputs;
 
         inherit outputHash outputHashAlgo;
         outputHashMode = "recursive";
@@ -136,6 +151,8 @@ lib.makeOverridable (
           preFetch
           postFetch
           fetchTags
+          rootDir
+          gitConfigFile
           ;
         rev = revWithTag;
 
@@ -158,6 +175,19 @@ lib.makeOverridable (
             "GIT_PROXY_COMMAND"
             "NIX_GIT_SSL_CAINFO"
             "SOCKS_SERVER"
+
+            # This is a parameter intended to be set by setup hooks or preFetch
+            # scripts that want per-URL control over HTTP proxies used by Git
+            # (if per-URL control isn't needed, `http_proxy` etc. will
+            # suffice). It must be a whitespace-separated (with backslash as an
+            # escape character) list of pairs like this:
+            #
+            #   http://domain1/path1 proxy1 https://domain2/path2 proxy2
+            #
+            # where the URLs are as documented in the `git-config` manual page
+            # under `http.<url>.*`, and the proxies are as documented on the
+            # same page under `http.proxy`.
+            "FETCHGIT_HTTP_PROXIES"
           ];
 
         inherit preferLocalBuild meta allowedRequisites;

@@ -6,14 +6,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "posting";
-  version = "2.7.0";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "darrenburns";
     repo = "posting";
     tag = version;
-    hash = "sha256-FkeQSU/gktCsCFoKAk0igfHj16WpxQG01WyAmBYLwX4=";
+    hash = "sha256-YaN7kuGRZ6UJTuf2vYDnIinyzMzsKDQEA4B5SmmggA4=";
   };
 
   pythonRelaxDeps = true;

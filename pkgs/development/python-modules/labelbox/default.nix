@@ -29,14 +29,14 @@
 }:
 
 let
-  version = "6.10.0";
+  version = "7.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    tag = "v.${version}";
-    hash = "sha256-EstHsY9yFeUhQAx3pgvKk/o3EMkr3JeHDDg/p6meDIE=";
+    tag = "v${version}";
+    hash = "sha256-2of/yiw+wBHc0BFLKFdWV4Xm1Dcs4SsT8DkpmruaLT0=";
   };
 
   lbox-clients = buildPythonPackage {
@@ -111,7 +111,8 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.data;
+  ]
+  ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access

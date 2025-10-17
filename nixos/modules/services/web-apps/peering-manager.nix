@@ -19,19 +19,17 @@ let
     settingsFile
     extraConfigFile
   ];
+  finalConfigFile =
+    if (cfg.environmentFile != null) then "/var/lib/peering-manager/configuration.py" else configFile;
 
   pkg =
     (pkgs.peering-manager.overrideAttrs (old: {
-      postInstall =
-        ''
-          ln -s ${configFile} $out/opt/peering-manager/peering_manager/configuration.py
-        ''
-        + lib.optionalString cfg.enableLdap ''
-          ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
-        ''
-        + lib.optionalString cfg.enableOidc ''
-          ln -s ${cfg.oidcConfigPath} $out/opt/peering-manager/peering_manager/oidc_config.py
-        '';
+      postInstall = ''
+        ln -s ${finalConfigFile} $out/opt/peering-manager/peering_manager/configuration.py
+      ''
+      + lib.optionalString cfg.enableLdap ''
+        ln -s ${cfg.ldapConfigPath} $out/opt/peering-manager/peering_manager/ldap_config.py
+      '';
     })).override
       {
         inherit (cfg) plugins;
@@ -53,6 +51,32 @@ in
 
         This module requires a reverse proxy that serves `/static` separately.
         See this [example](https://github.com/peering-manager/contrib/blob/main/nginx.conf) on how to configure this.
+      '';
+    };
+
+    environmentFile = mkOption {
+      type = with types; nullOr path;
+      default = null;
+      example = "/run/secrets/peering-manager.env";
+      description = ''
+        Environment file as defined in {manpage}`systemd.exec(5)`.
+
+        Secrets may be passed to the service without adding them to the world-readable
+        Nix store, by specifying placeholder variables as the option value in Nix and
+        setting these variables accordingly in the environment file.
+
+        ```
+          # snippet of peering-manager-related config
+          services.peering-manager.settings.SOCIAL_AUTH_OIDC_SECRET = "$PM_OIDC_SECRET";
+        ```
+
+        ```
+          # content of the environment file
+          PM_OIDC_SECRET=topsecret
+        ```
+
+        Note that this file needs to be available on the host on which
+        `peering-manager` is running.
       '';
     };
 
@@ -156,25 +180,22 @@ in
         See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6-ldap/#configuration) for possible options.
       '';
     };
-
-    enableOidc = mkOption {
-      type = types.bool;
-      default = false;
-      description = ''
-        Enable OIDC-Authentication for Peering Manager.
-
-        This requires a configuration file being pass through `oidcConfigPath`.
-      '';
-    };
-
-    oidcConfigPath = mkOption {
-      type = types.path;
-      description = ''
-        Path to the Configuration-File for OIDC-Authentication, will be loaded as `oidc_config.py`.
-        See the [documentation](https://peering-manager.readthedocs.io/en/stable/setup/6b-oidc/#configuration) for possible options.
-      '';
-    };
   };
+
+  imports = [
+    (lib.mkRemovedOptionModule [ "services" "peering-manager" "enableOidc" ] ''
+      The enableOidc option has been removed, since peering-manager has OIDC support builtin since version >= 1.9.0.
+
+      Make sure to update your OIDC configuration according to the documentation:
+      https://peering-manager.readthedocs.io/en/v1.9.3/administration/authentication/oidc/
+    '')
+    (lib.mkRemovedOptionModule [ "services" "peering-manager" "oidcConfigPath" ] ''
+      The oidcConfigPath option has been removed, since peering-manager has OIDC support builtin since version >= 1.9.0.
+
+      The new config settings for OIDC are explained in the documentation:
+      https://peering-manager.readthedocs.io/en/v1.9.3/administration/authentication/oidc/
+    '')
+  ];
 
   config = lib.mkIf cfg.enable {
     services.peering-manager = {
@@ -200,28 +221,16 @@ in
         };
       };
 
-      extraConfig =
-        ''
-          with open("${cfg.secretKeyFile}", "r") as file:
-            SECRET_KEY = file.readline()
-        ''
-        + lib.optionalString (cfg.peeringdbApiKeyFile != null) ''
-          with open("${cfg.peeringdbApiKeyFile}", "r") as file:
-            PEERINGDB_API_KEY = file.readline()
-        '';
+      extraConfig = ''
+        with open("${cfg.secretKeyFile}", "r") as file:
+          SECRET_KEY = file.readline()
+      ''
+      + lib.optionalString (cfg.peeringdbApiKeyFile != null) ''
+        with open("${cfg.peeringdbApiKeyFile}", "r") as file:
+          PEERINGDB_API_KEY = file.readline()
+      '';
 
-      plugins = (
-        ps:
-        (lib.optionals cfg.enableLdap [ ps.django-auth-ldap ])
-        ++ (lib.optionals cfg.enableOidc (
-          with ps;
-          [
-            mozilla-django-oidc
-            pyopenssl
-            josepy
-          ]
-        ))
-      );
+      plugins = (ps: (lib.optionals cfg.enableLdap [ ps.django-auth-ldap ]));
     };
 
     system.build.peeringManagerPkg = pkg;
@@ -268,9 +277,22 @@ in
         };
       in
       {
+        peering-manager-config = lib.mkIf (cfg.environmentFile != null) (
+          lib.recursiveUpdate defaults {
+            description = "Peering Manager config file setup";
+            wantedBy = [ "peering-manager.target" ];
+            serviceConfig = {
+              Type = "oneshot";
+              EnvironmentFile = [ cfg.environmentFile ];
+              ExecStart = "${lib.getExe pkgs.envsubst} -i ${configFile} -o ${finalConfigFile}";
+            };
+          }
+        );
+
         peering-manager-migration = lib.recursiveUpdate defaults {
           description = "Peering Manager migrations";
           wantedBy = [ "peering-manager.target" ];
+          after = lib.mkIf (cfg.environmentFile != null) [ "peering-manager-config.service" ];
           serviceConfig = {
             Type = "oneshot";
             ExecStart = "${pkg}/bin/peering-manager migrate";
@@ -280,7 +302,10 @@ in
         peering-manager = lib.recursiveUpdate defaults {
           description = "Peering Manager WSGI Service";
           wantedBy = [ "peering-manager.target" ];
-          after = [ "peering-manager-migration.service" ];
+          after = [
+            "peering-manager-migration.service"
+          ]
+          ++ lib.optionals (cfg.environmentFile != null) [ "peering-manager-config.service" ];
 
           preStart = ''
             ${pkg}/bin/peering-manager remove_stale_contenttypes --no-input
@@ -343,7 +368,7 @@ in
           after = [ "peering-manager.service" ];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${pkg}/bin/peering-manager poll_bgp_sessions --all";
+            ExecStart = "${pkg}/bin/peering-manager poll_bgp_sessions";
           };
         };
       };

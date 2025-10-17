@@ -56,14 +56,14 @@
 
 buildPythonPackage rec {
   pname = "tinygrad";
-  version = "0.10.3";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tinygrad";
     repo = "tinygrad";
     tag = "v${version}";
-    hash = "sha256-IQ0EAjj8kYUwzvMsAiNnvRm/twC40r9JWXUocaETjC8=";
+    hash = "sha256-VG2rhkiwPFN3JYSBbqrwCdqhdGE8GY6oEatMSCydhw8=";
   };
 
   patches = [
@@ -107,8 +107,8 @@ buildPythonPackage rec {
     + lib.optionalString cudaSupport ''
       substituteInPlace tinygrad/runtime/support/compiler_cuda.py \
         --replace-fail \
-        ', "-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include/"' \
-        ', "-I${lib.getDev cudaPackages.cuda_cudart}/include/"'
+        '"-I/usr/local/cuda/include", "-I/usr/include", "-I/opt/cuda/include"' \
+        '"-I${lib.getDev cudaPackages.cuda_cudart}/include/"'
     ''
     + lib.optionalString rocmSupport ''
       substituteInPlace tinygrad/runtime/autogen/hip.py \
@@ -132,13 +132,12 @@ buildPythonPackage rec {
     triton = [ triton ];
   };
 
-  pythonImportsCheck =
-    [
-      "tinygrad"
-    ]
-    ++ lib.optionals cudaSupport [
-      "tinygrad.runtime.ops_nv"
-    ];
+  pythonImportsCheck = [
+    "tinygrad"
+  ]
+  ++ lib.optionals cudaSupport [
+    "tinygrad.runtime.ops_nv"
+  ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -166,63 +165,67 @@ buildPythonPackage rec {
     tqdm
     transformers
     z3-solver
-  ] ++ networkx.optional-dependencies.extra;
+  ]
+  ++ networkx.optional-dependencies.extra;
 
-  disabledTests =
-    [
-      # RuntimeError: Attempting to relocate against an undefined symbol 'fmaxf'
-      "test_backward_sum_acc_dtype"
-      "test_failure_27"
+  disabledTests = [
+    # RuntimeError: Attempting to relocate against an undefined symbol 'fmaxf'
+    "test_backward_sum_acc_dtype"
+    "test_failure_27"
 
-      # Flaky:
-      # AssertionError: 2.1376906810000946 not less than 2.0
-      "test_recursive_pad"
+    # Flaky:
+    # AssertionError: 2.1376906810000946 not less than 2.0
+    "test_recursive_pad"
 
-      # Since updated onnx to 1.18.0:
-      # onnxruntime.capi.onnxruntime_pybind11_state.Fail: [ONNXRuntimeError] : 1 : FAIL : Load model from ...
-      # Unsupported model IR version: 11, max supported IR version: 10
-      "test_quant_128"
-
-      # Require internet access
-      "test_benchmark_openpilot_model"
-      "test_bn_alone"
-      "test_bn_linear"
-      "test_bn_mnist"
-      "test_car"
-      "test_chicken"
-      "test_chicken_bigbatch"
-      "test_conv_mnist"
-      "testCopySHMtoDefault"
-      "test_data_parallel_resnet"
-      "test_e2e_big"
-      "test_fetch_small"
-      "test_huggingface_enet_safetensors"
-      "test_index_mnist"
-      "test_linear_mnist"
-      "test_load_convnext"
-      "test_load_enet"
-      "test_load_enet_alt"
-      "test_load_llama2bfloat"
-      "test_load_resnet"
-      "test_mnist_val"
-      "test_openpilot_model"
-      "test_resnet"
-      "test_shufflenet"
-      "test_transcribe_batch12"
-      "test_transcribe_batch21"
-      "test_transcribe_file1"
-      "test_transcribe_file2"
-      "test_transcribe_long"
-      "test_transcribe_long_no_batch"
-      "test_vgg7"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
-      # Fail with AssertionError
-      "test_casts_from"
-      "test_casts_to"
-      "test_int8"
-      "test_int8_to_uint16_negative"
-    ];
+    # Require internet access
+    "testCopySHMtoDefault"
+    "test_benchmark_openpilot_model"
+    "test_bn_alone"
+    "test_bn_linear"
+    "test_bn_mnist"
+    "test_car"
+    "test_chicken"
+    "test_chicken_bigbatch"
+    "test_conv_mnist"
+    "test_data_parallel_resnet"
+    "test_dataset_is_realized"
+    "test_e2e_big"
+    "test_fetch_small"
+    "test_huggingface_enet_safetensors"
+    "test_index_mnist"
+    "test_linear_mnist"
+    "test_llama_basic"
+    "test_llama_bytes"
+    "test_llama_control_char"
+    "test_llama_early_tokenize"
+    "test_llama_pat"
+    "test_llama_repeat"
+    "test_llama_special1"
+    "test_llama_special2"
+    "test_load_convnext"
+    "test_load_enet"
+    "test_load_enet_alt"
+    "test_load_llama2bfloat"
+    "test_load_resnet"
+    "test_mnist_val"
+    "test_openpilot_model"
+    "test_resnet"
+    "test_shufflenet"
+    "test_transcribe_batch12"
+    "test_transcribe_batch21"
+    "test_transcribe_file1"
+    "test_transcribe_file2"
+    "test_transcribe_long"
+    "test_transcribe_long_no_batch"
+    "test_vgg7"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-linux") [
+    # Fail with AssertionError
+    "test_casts_from"
+    "test_casts_to"
+    "test_int8"
+    "test_int8_to_uint16_negative"
+  ];
 
   disabledTestPaths = [
     # Require internet access

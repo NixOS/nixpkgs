@@ -1,11 +1,12 @@
 diff --git a/build_llvm.py b/build_llvm.py
-index 9d5a26a7..0be02a89 100644
+index aee0a9f1..bf281f6d 100644
 --- a/build_llvm.py
 +++ b/build_llvm.py
-@@ -389,15 +389,4 @@ def build_warp_clang_for_arch(args, lib_name, arch):
+@@ -402,16 +402,4 @@ def build_warp_clang_for_arch(args, lib_name: str, arch: str) -> None:
  
- 
- def build_warp_clang(args, lib_name):
+ def build_warp_clang(args, lib_name: str) -> None:
+     """Build the CPU-only Warp library using Clang/LLVM."""
+-
 -    if sys.platform == "darwin":
 -        # create a universal binary by combining x86-64 and AArch64 builds
 -        build_warp_clang_for_arch(args, lib_name + "-x86_64", "x86_64")
@@ -20,31 +21,31 @@ index 9d5a26a7..0be02a89 100644
 -        build_warp_clang_for_arch(args, lib_name, machine_architecture())
 +    build_warp_clang_for_arch(args, lib_name, machine_architecture())
 diff --git a/warp/build_dll.py b/warp/build_dll.py
-index 4d411e1b..4cf4a6c2 100644
+index 2218ff13..c0d978ce 100644
 --- a/warp/build_dll.py
 +++ b/warp/build_dll.py
-@@ -317,7 +317,7 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, libs, arch, mode=None
+@@ -410,7 +410,7 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, arch, libs: Optional[
          includes = cpp_includes + cuda_includes
  
          if sys.platform == "darwin":
 -            version = f"--target={arch}-apple-macos11"
 +            version = ""
          else:
-             version = "-fabi-version=13"  # GCC 8.2+
+             if cpp_compiler == "g++":
+                 version = "-fabi-version=13"  # GCC 8.2+
+@@ -491,14 +491,4 @@ def build_dll_for_arch(args, dll_path, cpp_paths, cu_path, arch, libs: Optional[
  
-@@ -392,14 +392,4 @@ def build_dll(args, dll_path, cpp_paths, cu_path, libs=None):
-     if libs is None:
-         libs = []
  
+ def build_dll(args, dll_path, cpp_paths, cu_path, libs=None):
 -    if sys.platform == "darwin":
 -        # create a universal binary by combining x86-64 and AArch64 builds
--        build_dll_for_arch(args, dll_path + "-x86_64", cpp_paths, cu_path, libs, "x86_64")
--        build_dll_for_arch(args, dll_path + "-aarch64", cpp_paths, cu_path, libs, "aarch64")
+-        build_dll_for_arch(args, dll_path + "-x86_64", cpp_paths, cu_path, "x86_64", libs)
+-        build_dll_for_arch(args, dll_path + "-aarch64", cpp_paths, cu_path, "aarch64", libs)
 -
 -        run_cmd(f"lipo -create -output {dll_path} {dll_path}-x86_64 {dll_path}-aarch64")
 -        os.remove(f"{dll_path}-x86_64")
 -        os.remove(f"{dll_path}-aarch64")
 -
 -    else:
--        build_dll_for_arch(args, dll_path, cpp_paths, cu_path, libs, machine_architecture())
-+    build_dll_for_arch(args, dll_path, cpp_paths, cu_path, libs, machine_architecture())
+-        build_dll_for_arch(args, dll_path, cpp_paths, cu_path, machine_architecture(), libs)
++    build_dll_for_arch(args, dll_path, cpp_paths, cu_path, machine_architecture(), libs)

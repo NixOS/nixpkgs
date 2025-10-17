@@ -51,14 +51,13 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  configureFlags =
-    [
-      "--disable-bench"
-      "--with-boost-libdir=${boost.out}/lib"
-    ]
-    ++ lib.optionals (!doCheck) [
-      "--enable-tests=no"
-    ];
+  configureFlags = [
+    "--disable-bench"
+    "--with-boost-libdir=${boost.out}/lib"
+  ]
+  ++ lib.optionals (!doCheck) [
+    "--enable-tests=no"
+  ];
 
   # Always check during Hydra builds
   doCheck = true;

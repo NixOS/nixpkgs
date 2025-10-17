@@ -68,13 +68,13 @@ lib.checkListOfEnum "${pname}: colorVariants" colorVariantList colorVariants lib
   stdenvNoCC.mkDerivation
   {
     inherit pname;
-    version = "0-unstable-2025-04-24";
+    version = "0-unstable-2025-09-09";
 
     src = fetchFromGitHub {
       owner = "Fausto-Korpsvart";
       repo = "Gruvbox-GTK-Theme";
-      rev = "fbced4ba03975dadd1d74d6b73cccdcbbd5e8b90";
-      hash = "sha256-zhY3uwvtHNKNrdWiD5Le/AMz1lgV39K/RNhFGnIMpzg=";
+      rev = "4a8a67574ef227efa9c129ce57d510c2634d53e5";
+      hash = "sha256-cass0sAc6/FzNF/R8HjjGU6mFigD6hjZR/R1Nj+tk38=";
     };
 
     propagatedUserEnvPkgs = [ gtk-engine-murrine ];

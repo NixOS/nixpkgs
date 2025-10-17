@@ -40,6 +40,10 @@ stdenv.mkDerivation rec {
       -e "s,GDK_PIXBUF_DIR=.*,GDK_PIXBUF_DIR=$out/lib/gdk-pixbuf-2.0/2.10.0/loaders,"
   '';
 
+  configureFlags = [
+    "--with-boost=${lib.getDev boost}"
+  ];
+
   meta = with lib; {
     description = "RAW camerafile decoding library";
     homepage = "https://libopenraw.freedesktop.org";

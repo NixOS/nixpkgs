@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-data-tools";
-  version = "1.28.1";
+  version = "1.28.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-data-tools";
     tag = "v${version}";
-    hash = "sha256-citrK/PkWrFB62+xTZFPwr/se5Kiz30qzAMVYROYnS8=";
+    hash = "sha256-xeBqxGOyxjR/O593ctyfwASxBZIeRBTdpVI981gOw5o=";
   };
 
   # The project can build both an optimized cython version and an unoptimized
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "bluetooth_data_tools" ];
 

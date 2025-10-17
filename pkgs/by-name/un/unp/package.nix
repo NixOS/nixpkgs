@@ -1,7 +1,8 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchFromGitLab,
+  installShellFiles,
   makeWrapper,
   perl,
   unzip,
@@ -16,41 +17,51 @@ let
     file
     unzip
     gzip
-  ] ++ extraBackends;
+  ]
+  ++ extraBackends;
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "unp";
-  version = "2.0-pre9";
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ perl ];
+  version = "2.0";
 
-  src = fetchurl {
-    url = "mirror://debian/pool/main/u/unp/unp_2.0~pre9.tar.xz";
-    sha256 = "1lp5vi9x1qi3b21nzv0yqqacj6p74qkl5zryzwq30rjkyvahjya1";
-    name = "unp_2.0_pre9.tar.xz";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "blade";
+    repo = "unp";
+    tag = "debian/${finalAttrs.version}";
+    hash = "sha256-6lYyKnNUkz9PKdn++zHe2SMdFsgaajStIdSaenbXIRo=";
   };
 
-  dontConfigure = true;
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/man/man1
-    install ./unp $out/bin/unp
-    install ./ucat $out/bin/ucat
-    cp debian/unp.1 $out/share/man/man1
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
+  buildInputs = [ perl ];
+
+  dontConfigure = true;
+
+  dontBuild = true;
+
+  installPhase = ''
+    runHook preInstall
+
+    installBin unp ucat
+    installManPage debian/unp.1
     wrapProgram $out/bin/unp \
       --prefix PATH : ${lib.makeBinPath runtime_bins}
     wrapProgram $out/bin/ucat \
       --prefix PATH : ${lib.makeBinPath runtime_bins}
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for unpacking archives easily";
     homepage = "https://packages.qa.debian.org/u/unp.html";
-    license = with licenses; [ gpl2Only ];
-    maintainers = [ maintainers.timor ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = [ lib.maintainers.timor ];
+    platforms = lib.platforms.all;
   };
-}
+})

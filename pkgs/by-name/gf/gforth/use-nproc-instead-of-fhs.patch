@@ -1,0 +1,16 @@
+diff --git i/cilk.fs w/cilk.fs
+index 9c675d06..df858f3d 100644
+--- i/cilk.fs
++++ w/cilk.fs
+@@ -25,9 +25,8 @@ e? os-type 2dup s" darwin" string-prefix? -rot s" openbsd" string-prefix? or [IF
+     s>number drop
+     r> free throw
+ [ELSE] e? os-type s" linux" search nip nip [IF]
+-	s" /sys/devices/system/cpu/present" slurp-file over >r
+-	#lf -scan '-' $split 2nip
+-	s>number drop 1+
++	s" nproc" r/o open-pipe throw slurp-fid over >r
++	s>number drop
+ 	r> free throw
+     [ELSE]
+ 	1 \ we don't know

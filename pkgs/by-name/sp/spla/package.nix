@@ -52,29 +52,27 @@ stdenv.mkDerivation rec {
     gfortran
   ];
 
-  buildInputs =
-    [
-      blas
-      mpi
-    ]
-    ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
-    ++ lib.optionals (gpuBackend == "rocm") [
-      rocmPackages.clr
-      rocmPackages.rocblas
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
+  buildInputs = [
+    blas
+    mpi
+  ]
+  ++ lib.optional (gpuBackend == "cuda") cudaPackages.cudatoolkit
+  ++ lib.optionals (gpuBackend == "rocm") [
+    rocmPackages.clr
+    rocmPackages.rocblas
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin llvmPackages.openmp;
 
-  cmakeFlags =
-    [
-      "-DSPLA_OMP=ON"
-      "-DSPLA_FORTRAN=ON"
-      "-DSPLA_INSTALL=ON"
-      # Required due to broken CMake files
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optional (gpuBackend == "cuda") "-DSPLA_GPU_BACKEND=CUDA"
-    ++ lib.optional (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ];
+  cmakeFlags = [
+    "-DSPLA_OMP=ON"
+    "-DSPLA_FORTRAN=ON"
+    "-DSPLA_INSTALL=ON"
+    # Required due to broken CMake files
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optional (gpuBackend == "cuda") "-DSPLA_GPU_BACKEND=CUDA"
+  ++ lib.optional (gpuBackend == "rocm") [ "-DSPLA_GPU_BACKEND=ROCM" ];
 
   preFixup = ''
     substituteInPlace $out/lib/cmake/SPLA/SPLASharedTargets-release.cmake \

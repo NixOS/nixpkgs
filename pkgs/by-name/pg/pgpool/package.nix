@@ -11,25 +11,27 @@
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchurl {
     url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
     name = "pgpool-II-${version}.tar.gz";
-    hash = "sha256-EWye1HXv0CZTKckCcwU6H6ahjuaNXFTtRnl80OAB9kg=";
+    hash = "sha256-RmiGaLKs5n2BYaMgJWJS2YaYvH2XiMxnJyadVyApnyw=";
   };
 
   buildInputs = [
     libpq
     openssl
     libxcrypt
-  ] ++ lib.optional withPam pam;
+  ]
+  ++ lib.optional withPam pam;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl"
-  ] ++ lib.optional withPam "--with-pam";
+  ]
+  ++ lib.optional withPam "--with-pam";
 
   installFlags = [
     "sysconfdir=\${out}/etc"

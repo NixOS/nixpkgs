@@ -7,7 +7,7 @@
   openssl,
   zeromq,
   cppzmq,
-  tbb_2021,
+  onetbb,
   spdlog,
   libsodium,
   fmt,
@@ -43,45 +43,43 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals enableWayland [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals enableWayland [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      openssl
-      zeromq
-      cppzmq
-      tbb_2021
-      spdlog
-      libsodium
-      fmt
-      vips
-      nlohmann_json
-      libsixel
-      microsoft-gsl
-      chafa
-      cli11
-      libexif
-      range-v3
-    ]
-    ++ lib.optionals enableOpencv [
-      opencv
-    ]
-    ++ lib.optionals enableWayland [
-      extra-cmake-modules
-      wayland
-      wayland-protocols
-    ]
-    ++ lib.optionals enableX11 [
-      xorg.libX11
-      xorg.xcbutilimage
-    ];
+  buildInputs = [
+    openssl
+    zeromq
+    cppzmq
+    onetbb
+    spdlog
+    libsodium
+    fmt
+    vips
+    nlohmann_json
+    libsixel
+    microsoft-gsl
+    chafa
+    cli11
+    libexif
+    range-v3
+  ]
+  ++ lib.optionals enableOpencv [
+    opencv
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
+    wayland
+    wayland-protocols
+  ]
+  ++ lib.optionals enableX11 [
+    xorg.libX11
+    xorg.xcbutilimage
+  ];
 
   cmakeFlags =
     lib.optionals (!enableOpencv) [

@@ -264,20 +264,19 @@ in
     #
     # See this for how Pydantic maps file names/env vars to config settings:
     # https://docs.pydantic.dev/latest/concepts/pydantic_settings/#parsing-environment-variable-values
-    systemd.tmpfiles.rules =
-      [
-        "Z  ${secretsDir} 700 canaille canaille - -"
-        "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
-      ]
-      ++ optional (
-        cfg.smtpPasswordFile != null
-      ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
-      ++ optional (
-        cfg.jwtPrivateKeyFile != null
-      ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
-      ++ optional (
-        cfg.ldapBindPasswordFile != null
-      ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
+    systemd.tmpfiles.rules = [
+      "Z  ${secretsDir} 700 canaille canaille - -"
+      "L+ ${secretsDir}/SECRET_KEY - - - - ${cfg.secretKeyFile}"
+    ]
+    ++ optional (
+      cfg.smtpPasswordFile != null
+    ) "L+ ${secretsDir}/CANAILLE_SMTP__PASSWORD - - - - ${cfg.smtpPasswordFile}"
+    ++ optional (
+      cfg.jwtPrivateKeyFile != null
+    ) "L+ ${secretsDir}/CANAILLE_OIDC__JWT__PRIVATE_KEY - - - - ${cfg.jwtPrivateKeyFile}"
+    ++ optional (
+      cfg.ldapBindPasswordFile != null
+    ) "L+ ${secretsDir}/CANAILLE_LDAP__BIND_PW - - - - ${cfg.ldapBindPasswordFile}";
 
     # This is not a migration, just an initial setup of schemas
     systemd.services.canaille-install = {
@@ -296,7 +295,8 @@ in
       after = [
         "network.target"
         "canaille-install.service"
-      ] ++ optional createLocalPostgresqlDb "postgresql.target";
+      ]
+      ++ optional createLocalPostgresqlDb "postgresql.target";
       requires = [
         "canaille-install.service"
         "canaille.socket"
@@ -349,7 +349,6 @@ in
 
         add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
         add_header X-Frame-Options                      "SAMEORIGIN"    always;
-        add_header X-XSS-Protection                     "1; mode=block" always;
         add_header X-Content-Type-Options               "nosniff"       always;
         add_header Referrer-Policy                      "same-origin"   always;
       '';

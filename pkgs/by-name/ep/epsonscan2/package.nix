@@ -15,8 +15,7 @@
   libtool,
   libusb1,
   makeDesktopItem,
-  qtbase,
-  wrapQtAppsHook,
+  qt5,
 
   withGui ? true,
   withNonFreePlugins ? false,
@@ -76,66 +75,65 @@ stdenv.mkDerivation {
       --replace-fail '@OCR_ENGINE_GETROTATE@' $out/libexec/epsonscan2-ocr/ocr-engine-getrotate
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withGui [
-      imagemagick # to make icons
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withNonFreePlugins [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withGui [
+    imagemagick # to make icons
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals withNonFreePlugins [
+    autoPatchelfHook
+  ];
 
-  buildInputs =
-    [
-      boost186 # uses Boost.Optional but epsonscan2 is pre-C++11.
-      libjpeg
-      libpng
-      libtiff
-      libusb1
-    ]
-    ++ lib.optionals withGui [
-      copyDesktopItems
-      qtbase
-    ]
-    ++ lib.optionals withNonFreePlugins [
-      libtool.lib
-    ];
+  buildInputs = [
+    boost186 # uses Boost.Optional but epsonscan2 is pre-C++11.
+    libjpeg
+    libpng
+    libtiff
+    libusb1
+  ]
+  ++ lib.optionals withGui [
+    copyDesktopItems
+    qt5.qtbase
+  ]
+  ++ lib.optionals withNonFreePlugins [
+    libtool.lib
+  ];
 
-  cmakeFlags =
-    [
-      # The non-free (Debian) packages uses this directory structure so do the same when compiling
-      # from source so we can easily merge them.
-      "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
-    ]
-    ++ lib.optionals (!withGui) [
-      "-DNO_GUI=ON"
-    ];
+  cmakeFlags = [
+    # The non-free (Debian) packages uses this directory structure so do the same when compiling
+    # from source so we can easily merge them.
+    "-DCMAKE_INSTALL_LIBDIR=lib/${system}-gnu"
+    # There are many CMakeLists.txt files with various minimum versions. It's much easier to set this
+    # here, instead of substituting those everywhere
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+  ]
+  ++ lib.optionals (!withGui) [
+    "-DNO_GUI=ON"
+  ];
 
   doInstallCheck = true;
 
-  postInstall =
-    ''
-      # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the
-      # required libraries so create a symlink to where it expects them to be.
-      mkdir -p $out/lib/sane
-      for file in $out/lib/${system}-gnu/sane/*.so.*; do
-        ln -s $file $out/lib/sane/
-      done
-    ''
-    + lib.optionalString withGui ''
-      # The icon file extension is .ico but it's actually a png!
-      mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
-      magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
-      magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
-    ''
-    + lib.optionalString withNonFreePlugins ''
-      ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
-      tar Jxf data.tar.xz
-      cp -r usr/* $out
-    '';
+  postInstall = ''
+    # But when we put all the libraries in lib/${system}-gnu, then SANE can't find the
+    # required libraries so create a symlink to where it expects them to be.
+    mkdir -p $out/lib/sane
+    for file in $out/lib/${system}-gnu/sane/*.so.*; do
+      ln -s $file $out/lib/sane/
+    done
+  ''
+  + lib.optionalString withGui ''
+    # The icon file extension is .ico but it's actually a png!
+    mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
+    magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
+    magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
+  ''
+  + lib.optionalString withNonFreePlugins ''
+    ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
+    tar Jxf data.tar.xz
+    cp -r usr/* $out
+  '';
 
   desktopItems = lib.optionals withGui [
     (makeDesktopItem {

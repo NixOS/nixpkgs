@@ -13,11 +13,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitLab {
     owner = "imp";
     repo = "cargo-info";
-    rev = version;
+    tag = version;
     hash = "sha256-MrkYGUd1jsAqIVYWe7YDZaq7NPv/mHQqLS7GFrYYIo8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-C8BIgJeUPvFzf0LTBMZ3oyE0eWh5HH6aobhUAHBxxKU=";
 
   nativeBuildInputs = [

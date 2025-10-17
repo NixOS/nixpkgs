@@ -31,7 +31,7 @@ buildPythonPackage {
   '';
 
   meta = with lib; {
-    description = "simple and sensible display of images";
+    description = "Simple and sensible display of images";
     homepage = "https://github.com/freeman-lab/showit";
     license = licenses.mit;
     maintainers = [ ];

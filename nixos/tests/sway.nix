@@ -3,7 +3,6 @@
   name = "sway";
   meta = {
     maintainers = with lib.maintainers; [
-      primeos
       synthetica
     ];
   };

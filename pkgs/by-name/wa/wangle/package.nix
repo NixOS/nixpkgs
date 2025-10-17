@@ -6,7 +6,6 @@
 
   cmake,
   ninja,
-  removeReferencesTo,
 
   folly,
   fizz,
@@ -16,6 +15,8 @@
   libevent,
   double-conversion,
 
+  ctestCheckHook,
+
   gtest,
 
   nix-update-script,
@@ -23,7 +24,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wangle";
-  version = "2025.04.21.00";
+  version = "2025.09.15.00";
 
   outputs = [
     "out"
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "wangle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-t3b+R2tb4VTsjDL9Jzjcaehs5k+BLNLilm3+nXxyjj0=";
+    hash = "sha256-S2L3ifQTwyidz3x5pPrVEGEJXvM1czqTRXYsYUqIeRY=";
   };
 
   patches = [
@@ -44,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     ninja
-    removeReferencesTo
   ];
 
   buildInputs = [
@@ -55,6 +55,10 @@ stdenv.mkDerivation (finalAttrs: {
     gflags
     libevent
     double-conversion
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   checkInputs = [
@@ -73,53 +77,20 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_DIR" "${placeholder "dev"}/lib/cmake/wangle")
   ];
 
-  env.GTEST_FILTER =
-    "-"
-    + lib.concatStringsSep ":" (
-      [
-        # these depend on example pem files from the folly source tree (?)
-        "SSLContextManagerTest.TestSingleClientCAFileSet"
-        "SSLContextManagerTest.TestMultipleClientCAsSet"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        # flaky
-        "BroadcastPoolTest.ThreadLocalPool"
-        "Bootstrap.UDPClientServerTest"
-      ]
-    );
-
   __darwinAllowLocalNetworking = true;
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
+  dontUseNinjaCheck = true;
 
-    ctest -j $NIX_BUILD_CORES --output-on-failure ${
-      # Deterministic glibc abort 🫠
-      # SSLContextManagerTest uses 15+ GB of RAM
-      lib.optionalString stdenv.hostPlatform.isLinux (
-        lib.escapeShellArgs [
-          "--exclude-regex"
-          "^(BootstrapTest|BroadcastPoolTest|SSLContextManagerTest)$"
-        ]
-      )
-    }
+  disabledTests = [
+    # Deterministic glibc abort 🫠
+    "BootstrapTest"
+    "BroadcastPoolTest"
 
-    runHook postCheck
-  '';
-
-  postFixup = ''
-    # Sanitize header paths to avoid runtime dependencies leaking in
-    # through `__FILE__`.
-    (
-      shopt -s globstar
-      for header in "$dev/include"/**/*.h; do
-        sed -i "1i#line 1 \"$header\"" "$header"
-        remove-references-to -t "$dev" "$header"
-      done
-    )
-  '';
+    # SSLContextManagerTest uses 15+ GB of RAM
+    "SSLContextManagerTest"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

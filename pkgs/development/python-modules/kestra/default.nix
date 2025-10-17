@@ -4,19 +4,22 @@
   fetchFromGitHub,
   setuptools,
   requests,
+  amazon-ion,
+  python-dateutil,
   pytestCheckHook,
+  pytest-mock,
   requests-mock,
 }:
 buildPythonPackage rec {
   pname = "kestra";
-  version = "0.21.0";
+  version = "0.23.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kestra-io";
     repo = "libs";
     tag = "v${version}";
-    hash = "sha256-WaAw/PKoHPjbNrpCV6CuqUIb2Ysv4rHYFJbgGyU6li0=";
+    hash = "sha256-WtwvOSgAcN+ly0CnkL0Y7lrO4UhSSiXmoAyGXP/hFtE=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -25,14 +28,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  preBuild = ''
-    # Required for building the library (https://github.com/kestra-io/libs/blob/v0.20.0/python/setup.py#L20)
-    # The path resolve to CWD, so README.md isn't picked in the parent folder
-    ln -s ../README.md README.md
-  '';
-
   dependencies = [
     requests
+    amazon-ion
+    python-dateutil
   ];
 
   pythonImportsCheck = [
@@ -42,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
+    pytest-mock
   ];
 
   meta = {

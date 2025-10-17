@@ -36,12 +36,14 @@
 
 stdenv.mkDerivation {
   pname = "io";
-  version = "2017.09.06";
+  version = "2019.05.22-alpha";
+
   src = fetchFromGitHub {
     owner = "stevedekorte";
     repo = "io";
-    rev = "b8a18fc199758ed09cd2f199a9bc821f6821072a";
-    sha256 = "07rg1zrz6i6ghp11cm14w7bbaaa1s8sb0y5i7gr2sds0ijlpq223";
+    tag = "2019.05.22-alpha";
+    fetchSubmodules = true;
+    hash = "sha256-6w0JZE9H30X5j83YgSn7hG2l0LdhdRZfe/kWpx1/aoM=";
   };
 
   patches = [
@@ -107,15 +109,11 @@ stdenv.mkDerivation {
     $out/bin/io_static
   '';
 
-  # for gcc5; c11 inline semantics breaks the build
-  env.NIX_CFLAGS_COMPILE = "-fgnu89-inline";
-
-  meta = with lib; {
+  meta = {
     description = "Io programming language";
     homepage = "https://iolanguage.org/";
-    license = licenses.bsd3;
-
-    maintainers = with maintainers; [
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [
       raskin
       maggesi
     ];

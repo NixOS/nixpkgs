@@ -18,17 +18,17 @@ let
 in
 flutter324.buildFlutterApplication rec {
   pname = "ente-auth";
-  version = "4.4.0";
+  version = "4.4.4";
 
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    sparseCheckout = [ "auth" ];
+    sparseCheckout = [ "mobile/apps/auth" ];
     tag = "auth-v${version}";
-    hash = "sha256-bwLEOmdDiD7X2o9PshDBf+Y1s6KYT7xGhqCu4nNAchI=";
+    hash = "sha256-VpxF6BMofCgMWcxsscbYC3uYse0QZyTBf84zN03leC4=";
   };
 
-  sourceRoot = "${src.name}/auth";
+  sourceRoot = "${src.name}/mobile/apps/auth";
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
   gitHashes = lib.importJSON ./git-hashes.json;
@@ -59,6 +59,9 @@ flutter324.buildFlutterApplication rec {
     # unsuccessful.
     jdk17_headless # JDK version used by upstream CI
   ];
+
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
 
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
   # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
@@ -111,6 +114,7 @@ flutter324.buildFlutterApplication rec {
       schnow265
       zi3m5f
       gepbird
+      iedame
     ];
     mainProgram = "enteauth";
     platforms = [

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "A client library for OAuth2";
+    description = "Client library for OAuth2";
     homepage = "https://pypi.org/project/oauth2-client/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ kranzes ];

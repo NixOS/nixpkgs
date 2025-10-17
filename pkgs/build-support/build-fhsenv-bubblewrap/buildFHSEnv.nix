@@ -170,18 +170,17 @@ let
 
   paths =
     let
-      basePaths =
-        [
-          etcProfile
-          # ldconfig wrapper must come first so it overrides the original ldconfig
-          ldconfig
-          # magic package that just creates a directory, to ensure that
-          # the entire directory can't be a symlink, as we will write
-          # compiled schemas to it
-          ensureGsettingsSchemasIsDirectory
-        ]
-        ++ baseTargetPaths
-        ++ targetPaths;
+      basePaths = [
+        etcProfile
+        # ldconfig wrapper must come first so it overrides the original ldconfig
+        ldconfig
+        # magic package that just creates a directory, to ensure that
+        # the entire directory can't be a symlink, as we will write
+        # compiled schemas to it
+        ensureGsettingsSchemasIsDirectory
+      ]
+      ++ baseTargetPaths
+      ++ targetPaths;
     in
     pickOutputs basePaths [
       "out"

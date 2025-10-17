@@ -7,28 +7,22 @@
 
 buildGoModule (finalAttrs: {
   pname = "jdd";
-  version = "0.2.0";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "mahyarmirrashed";
     repo = "jdd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-uyccIqQL3uZaq0t/tEZbSf67Hr6KxcGCljE33GTs/fI=";
+    hash = "sha256-3keJrKbR3+J3z22W8Xoabz9YhvjRRBBMo59l/eJo7Hs=";
   };
 
-  vendorHash = "sha256-MBj2z+C9wMPhLMf5pA8RCycLK+cqsaGlYF8t7rGk+jU=";
-
-  subPackages = [ "cmd/daemon" ];
+  vendorHash = "sha256-KEg5X2wHx7KPHEL1zJd/DeDnR69FyB6pajpHIYdep2k=";
 
   ldflags = [ "-X=main.version=${finalAttrs.version}" ];
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
-
-  postInstall = ''
-    install -Dm755 $out/bin/daemon $out/bin/jdd
-  '';
 
   meta = {
     description = "Johnny Decimal daemon for automatically organizing files into the correct drawer using their filename";

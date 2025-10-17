@@ -27,7 +27,6 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-YMUeHr9eUOYIcO7PbaFgZa0Ib10GMF+jT10ZCSG7PNo=";
 
   # TODO: somehow respect https://nixos.org/manual/nixpkgs/stable/#var-passthru-updateScript-commit
@@ -55,7 +54,8 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ python312 ];
   env.NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isDarwin "-L${python312}/lib/python3.12/config-3.12-darwin -lpython3.12";
 
   passthru.tests = {

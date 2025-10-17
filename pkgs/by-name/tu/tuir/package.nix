@@ -7,34 +7,19 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "tuir";
-  version = "1.31.0";
-  format = "setuptools";
+  version = "1.31.1";
+  pyproject = true;
 
   src = fetchFromGitLab {
     owner = "Chocimier";
     repo = "tuir";
     rev = "v${version}";
-    hash = "sha256-VYBtD3Ex6+iIRNvX6jF0b0iPvno41/58xCRydiyssvk=";
+    hash = "sha256-lUK6gXwvVjiYrJXMSFlzp07Yt+nSkU933J4vBJWOLlg=";
   };
 
-  # Tests try to access network
-  doCheck = false;
+  build-system = with python3Packages; [ setuptools ];
 
-  checkPhase = ''
-    py.test
-  '';
-
-  nativeCheckInputs = [
-    coverage
-    coveralls
-    docopt
-    mock
-    pylint
-    pytest
-    vcrpy
-  ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
     decorator
     kitchen
@@ -42,6 +27,27 @@ buildPythonApplication rec {
     requests
     six
   ];
+
+  nativeCheckInputs = [
+    coverage
+    coveralls
+    docopt
+    mock
+    pylint
+    pytestCheckHook
+    vcrpy
+  ];
+
+  __darwinAllowLocalNetworking = true; # for oauth tests
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: assert ['pbcopy', 'w'] == ['xclip', '-s..., 'clipboard']
+    "test_copy_nix"
+    # AttributeError: Can't get local object 'Terminal.open_browser.open_browser.<locals>.open_url_silent'
+    "test_terminal_open_browser_display"
+  ];
+
+  pythonImportsCheck = [ "tuir" ];
 
   meta = with lib; {
     description = "Browse Reddit from your Terminal (fork of rtv)";

@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "cython";
-  version = "3.0.12";
+  version = "3.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "cython";
     repo = "cython";
     tag = version;
-    hash = "sha256-clJXjQb6rVECirKRUGX0vD5a6LILzPwNo7+6KKYs2pI=";
+    hash = "sha256-lP8ILCzAZuoPzFhCqGXwIpifN8XoWz93SJ7c3XVe69Y=";
   };
 
   build-system = [
@@ -49,22 +49,23 @@ buildPythonPackage rec {
 
   checkPhase =
     let
-      excludedTests =
-        [ "reimport_from_subinterpreter" ]
-        # cython's testsuite is not working very well with libc++
-        # We are however optimistic about things outside of testsuite still working
-        ++ lib.optionals (stdenv.cc.isClang or false) [
-          "cpdef_extern_func"
-          "libcpp_algo"
-        ]
-        # Some tests in the test suite aren't working on aarch64.
-        # Disable them for now until upstream finds a workaround.
-        # Upstream issue: https://github.com/cython/cython/issues/2308
-        ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
-        ++ lib.optionals stdenv.hostPlatform.isi686 [
-          "future_division"
-          "overflow_check_longlong"
-        ];
+      excludedTests = [
+        "reimport_from_subinterpreter"
+      ]
+      # cython's testsuite is not working very well with libc++
+      # We are however optimistic about things outside of testsuite still working
+      ++ lib.optionals (stdenv.cc.isClang or false) [
+        "cpdef_extern_func"
+        "libcpp_algo"
+      ]
+      # Some tests in the test suite aren't working on aarch64.
+      # Disable them for now until upstream finds a workaround.
+      # Upstream issue: https://github.com/cython/cython/issues/2308
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
+      ++ lib.optionals stdenv.hostPlatform.isi686 [
+        "future_division"
+        "overflow_check_longlong"
+      ];
       commandline = builtins.concatStringsSep " " (
         [
           "-j$NIX_BUILD_CORES"
@@ -121,7 +122,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/cython/cython/blob/${version}/CHANGES.rst";
     license = lib.licenses.asl20;
     mainProgram = "cython";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }
 # TODO: investigate recursive loop when doCheck is true

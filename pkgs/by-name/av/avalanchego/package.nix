@@ -1,25 +1,25 @@
 {
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   lib,
   nix-update-script,
 }:
 
-buildGo123Module (finalAttrs: {
+buildGoModule (finalAttrs: {
   pname = "avalanchego";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AyYBPkMPwgbxgr5Q/mpAUpsXhQ9Y++91XkPHScZ1MtI=";
+    hash = "sha256-XGRGjoZyhvcQFhfZIYdljT77SUxrWhD46F6ckxD602Q=";
   };
 
   # https://github.com/golang/go/issues/57529
   proxyVendor = true;
 
-  vendorHash = "sha256-pMrkXv9vgED6e1qtgz+pJj3T0Nyemy0PKr8w7ZiKbgk=";
+  vendorHash = "sha256-mff3Hlkp6gfq8HS7ypz9QikbDo98SwHF3g3Bq3i9RMY=";
 
   subPackages = [ "main" ];
 

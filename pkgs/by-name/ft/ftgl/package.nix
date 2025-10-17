@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
       rendering modes.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

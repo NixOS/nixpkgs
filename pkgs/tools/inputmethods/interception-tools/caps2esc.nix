@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch,
   cmake,
 }:
 
@@ -16,7 +17,12 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     hash = "sha256-gPFElAixiDTTwcl2XKM7MbTkpRrg8ToO5K7H8kz3DHk=";
   };
-
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.com/interception/linux/plugins/caps2esc/-/commit/47ea8022df47b23d5d9603f9fe71b3715e954e4c.patch";
+      sha256 = "sha256-lB+pDwmFWW1fpjOPC6GLpxvrs87crDCNk1s9KnfrDD4=";
+    })
+  ];
   nativeBuildInputs = [ cmake ];
 
   meta = with lib; {

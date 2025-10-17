@@ -15,12 +15,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YCE0DXuOT5tCOfLlemMH7I2F8c7HEK1NEUJvtfqnCg8=";
   };
 
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework CoreFoundation";
+
   makeFlags = [ "PREFIX=$(out)" ];
 
-  installTargets =
-    [ "install_hdrs" ]
-    ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
-    ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
+  installTargets = [
+    "install_hdrs"
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "install_shared_lib"
+  ++ lib.optional stdenv.hostPlatform.isStatic "install_lib";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id $out/lib/libcctz.so $out/lib/libcctz.so

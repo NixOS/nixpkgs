@@ -5,7 +5,8 @@
   fetchurl,
   ffmpeg,
   lib,
-  libsForQt5,
+  stdenv,
+  qt5,
   openssl,
   pkg-config,
   rubyPackages,
@@ -17,24 +18,24 @@
 }:
 
 let
-  version = "1.18.1";
+  version = "1.18.2";
   # Using two URLs as the first one will break as soon as a new version is released
   src_bin = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-bin-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-bin-${version}.tar.gz"
     ];
-    hash = "sha256-sWV2ZR6t7DWF6BeEOioaDryqcTuJ3R4CDYsdBW3bL9Y=";
+    hash = "sha256-v8THzrwPAEl2cf/Vbmo08HcKnmr37/LwEn76FD8oY24=";
   };
   src_oss = fetchurl {
     urls = [
       "http://www.makemkv.com/download/makemkv-oss-${version}.tar.gz"
       "http://www.makemkv.com/download/old/makemkv-oss-${version}.tar.gz"
     ];
-    hash = "sha256-3Efu+x5o99U55LB5u5POZBRBBK0jPeVoGJOYEOzQO3s=";
+    hash = "sha256-uUl/VVXCV/XTx/GLarA8dM/z6kQ36ANJ1hjRFb9fpEU=";
   };
 in
-libsForQt5.mkDerivation {
+stdenv.mkDerivation {
   pname = "makemkv";
   inherit version;
 
@@ -52,12 +53,13 @@ libsForQt5.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     pkg-config
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     ffmpeg
     openssl
-    libsForQt5.qtbase
+    qt5.qtbase
     zlib
   ];
 

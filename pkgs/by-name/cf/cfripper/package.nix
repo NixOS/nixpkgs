@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "cfripper";
-  version = "1.17.2";
+  version = "1.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Skyscanner";
     repo = "cfripper";
     tag = "v${version}";
-    hash = "sha256-HhgOpjqWtnwx9u6EsDr/ba0g3lAmEi/slXQnBqu3h3Y=";
+    hash = "sha256-9cnOy7XBN3BRjUh6ST9RsKpAPJ8wrzJHtKMKhp7sg1g=";
   };
 
   pythonRelaxDeps = [
@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
+  nativeBuildInputs = [
   ];
 
   dependencies = with python3.pkgs; [

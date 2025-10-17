@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  fetchpatch,
   mkDerivation,
   stdenv,
   SDL2,
@@ -38,24 +39,29 @@ mkDerivation rec {
     ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
+
+    # cmake 4 compatibility
+    (fetchpatch {
+      url = "https://github.com/jellyfin/jellyfin-media-player/commit/6c5c603a1db489872832ed560581d98fdee89d6f.patch";
+      hash = "sha256-Blq7y7kOygbZ6uKxPJl9aDXJWqhE0jnM5GNEAwyQEA0=";
+    })
   ];
 
-  buildInputs =
-    [
-      SDL2
-      libGL
-      libX11
-      libXrandr
-      libvdpau
-      mpv
-      qtbase
-      qtwebchannel
-      qtwebengine
-      qtx11extras
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ];
+  buildInputs = [
+    SDL2
+    libGL
+    libX11
+    libXrandr
+    libvdpau
+    mpv
+    qtbase
+    qtwebchannel
+    qtwebengine
+    qtx11extras
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,14 +70,13 @@ mkDerivation rec {
     python3
   ];
 
-  cmakeFlags =
-    [
-      "-DQTROOT=${qtbase}"
-      "-GNinja"
-    ]
-    ++ lib.optionals (!withDbus) [
-      "-DLINUX_X11POWER=ON"
-    ];
+  cmakeFlags = [
+    "-DQTROOT=${qtbase}"
+    "-GNinja"
+  ]
+  ++ lib.optionals (!withDbus) [
+    "-DLINUX_X11POWER=ON"
+  ];
 
   preConfigure = ''
     # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)

@@ -90,14 +90,13 @@ stdenv.mkDerivation (finalAttrs: {
     ./build-without-dbus-launch.patch
   ];
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals (!libOnly) [
-      "installedTests"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals (!libOnly) [
+    "installedTests"
+  ];
 
   postPatch = ''
     # Maintainer does not want to create separate tarballs for final release candidate and release versions,
@@ -114,36 +113,35 @@ stdenv.mkDerivation (finalAttrs: {
 
   preAutoreconf = "touch ChangeLog";
 
-  configureFlags =
-    [
-      # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
-      # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
-      # https://github.com/NixOS/nixpkgs/issues/21751
-      "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
-      "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
-      "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
-      "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
-      "--disable-memconf"
-      "--disable-gtk2"
-      "--with-python=${python3BuildEnv.interpreter}"
-      (lib.enableFeature (!libOnly && dconf != null) "dconf")
-      (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
-      (lib.enableFeature withWayland "wayland")
-      (lib.enableFeature enableUI "ui")
-      (lib.enableFeature (!libOnly) "gtk3")
-      (lib.enableFeature (!libOnly) "gtk4")
-      (lib.enableFeature (!libOnly) "xim")
-      (lib.enableFeature (!libOnly) "appindicator")
-      (lib.enableFeature (!libOnly) "tests")
-      (lib.enableFeature (!libOnly) "install-tests")
-      (lib.enableFeature (!libOnly) "emoji-dict")
-      (lib.enableFeature (!libOnly) "unicode-dict")
-    ]
-    ++ lib.optionals (!libOnly) [
-      "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
-      "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
-      "--with-ucd-dir=${unicode-character-database}/share/unicode"
-    ];
+  configureFlags = [
+    # The `AX_PROG_{CC,CXX}_FOR_BUILD` autoconf macros can pick up unwrapped GCC binaries,
+    # so we set `{CC,CXX}_FOR_BUILD` to override that behavior.
+    # https://github.com/NixOS/nixpkgs/issues/21751
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "CXX_FOR_BUILD=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++"
+    "GLIB_COMPILE_RESOURCES=${lib.getDev buildPackages.glib}/bin/glib-compile-resources"
+    "PKG_CONFIG_VAPIGEN_VAPIGEN=${lib.getBin buildPackages.vala}/bin/vapigen"
+    "--disable-memconf"
+    "--disable-gtk2"
+    "--with-python=${python3BuildEnv.interpreter}"
+    (lib.enableFeature (!libOnly && dconf != null) "dconf")
+    (lib.enableFeature (!libOnly && libnotify != null) "libnotify")
+    (lib.enableFeature withWayland "wayland")
+    (lib.enableFeature enableUI "ui")
+    (lib.enableFeature (!libOnly) "gtk3")
+    (lib.enableFeature (!libOnly) "gtk4")
+    (lib.enableFeature (!libOnly) "xim")
+    (lib.enableFeature (!libOnly) "appindicator")
+    (lib.enableFeature (!libOnly) "tests")
+    (lib.enableFeature (!libOnly) "install-tests")
+    (lib.enableFeature (!libOnly) "emoji-dict")
+    (lib.enableFeature (!libOnly) "unicode-dict")
+  ]
+  ++ lib.optionals (!libOnly) [
+    "--with-unicode-emoji-dir=${unicode-emoji}/share/unicode/emoji"
+    "--with-emoji-annotation-dir=${cldr-annotations}/share/unicode/cldr/common/annotations"
+    "--with-ucd-dir=${unicode-character-database}/share/unicode"
+  ];
 
   makeFlags = lib.optionals (!libOnly) [
     "test_execsdir=${placeholder "installedTests"}/libexec/installed-tests/ibus"
@@ -154,53 +152,52 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      gtk-doc
-      gettext
-      makeWrapper
-      pkg-config
-      python3BuildEnv
-      dbus-launch
-      glib # required to satisfy AM_PATH_GLIB_2_0
-      vala
-      gobject-introspection
-    ]
-    ++ lib.optionals (!libOnly) [
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals withWayland [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+    gettext
+    makeWrapper
+    pkg-config
+    python3BuildEnv
+    dbus-launch
+    glib # required to satisfy AM_PATH_GLIB_2_0
+    vala
+    gobject-introspection
+  ]
+  ++ lib.optionals (!libOnly) [
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals withWayland [
+    wayland-scanner
+  ];
 
   propagatedBuildInputs = [
     glib
   ];
 
-  buildInputs =
-    [
-      dbus
-      systemd
-      dconf
-      python3.pkgs.pygobject3 # for pygobject overrides
-      isocodes
-      json-glib
-      libX11
-    ]
-    ++ lib.optionals (!libOnly) [
-      gtk3
-      gtk4
-      gdk-pixbuf
-      libdbusmenu-gtk3
-      libnotify
-      vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
-    ]
-    ++ lib.optionals withWayland [
-      libxkbcommon
-      wayland
-      wayland-protocols
-    ];
+  buildInputs = [
+    dbus
+    systemd
+    dconf
+    python3.pkgs.pygobject3 # for pygobject overrides
+    isocodes
+    json-glib
+    libX11
+    vala # for share/vala/Makefile.vapigen (PKG_CONFIG_VAPIGEN_VAPIGEN)
+  ]
+  ++ lib.optionals (!libOnly) [
+    gtk3
+    gtk4
+    gdk-pixbuf
+    libdbusmenu-gtk3
+    libnotify
+  ]
+  ++ lib.optionals withWayland [
+    libxkbcommon
+    wayland
+    wayland-protocols
+    wayland-scanner # For cross, build uses $PKG_CONFIG to look for wayland-scanner
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;
@@ -238,6 +235,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Intelligent Input Bus, input method framework";
     license = lib.licenses.lgpl21Plus;
     platforms = lib.platforms.linux;
+    mainProgram = "ibus";
     maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

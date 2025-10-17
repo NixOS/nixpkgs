@@ -37,14 +37,14 @@
 
 stdenv.mkDerivation rec {
   pname = "mame";
-  version = "0.277";
+  version = "0.281";
   srcVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 
   src = fetchFromGitHub {
     owner = "mamedev";
     repo = "mame";
     rev = "mame${srcVersion}";
-    hash = "sha256-mGKTZ8/gvGQv9oXK4pgbJk580GAAXUS16hRQu4uHhdA=";
+    hash = "sha256-GWb6yu62WDoHz9mWhwjtDUN06r22pXit8pXYhFp/LBw=";
   };
 
   outputs = [
@@ -74,33 +74,32 @@ stdenv.mkDerivation rec {
   ];
 
   # https://docs.mamedev.org/initialsetup/compilingmame.html
-  buildInputs =
-    [
-      expat
-      zlib
-      flac
-      portmidi
-      portaudio
-      utf8proc
-      libjpeg
-      rapidjson
-      pugixml
-      glm
-      SDL2
-      SDL2_ttf
-      sqlite
-      qtbase
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-      libXinerama
-      libXi
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpcap
-    ];
+  buildInputs = [
+    expat
+    zlib
+    flac
+    portmidi
+    portaudio
+    utf8proc
+    libjpeg
+    rapidjson
+    pugixml
+    glm
+    SDL2
+    SDL2_ttf
+    sqlite
+    qtbase
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+    libXinerama
+    libXi
+    fontconfig
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpcap
+  ];
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -121,29 +120,28 @@ stdenv.mkDerivation rec {
 
   # Since the bug described in https://github.com/NixOS/nixpkgs/issues/135438,
   # it is not possible to use substituteAll
-  postPatch =
-    ''
-      for file in src/emu/emuopts.cpp src/osd/modules/lib/osdobj_common.cpp; do
-        substituteInPlace "$file" \
-          --subst-var-by mamePath "$out/opt/mame"
+  postPatch = ''
+    for file in src/emu/emuopts.cpp src/osd/modules/lib/osdobj_common.cpp; do
+      substituteInPlace "$file" \
+        --subst-var-by mamePath "$out/opt/mame"
+    done
+  ''
+  # MAME's build system uses `sw_vers` to test whether it needs to link with
+  # the Metal framework or not. However:
+  # a) that would return the build system's version, not the target's, and
+  # b) it can't actually find `sw_vers` in $PATH, so it thinks it's on macOS
+  #    version 0, and doesn't link with Metal - causing missing symbol errors
+  #    when it gets to the link step, because other parts of the build system
+  #    _do_ use the correct target version number.
+  # This replaces the `sw_vers` call with the macOS version actually being
+  # targeted, so everything gets linked correctly.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for file in scripts/src/osd/{mac,sdl}.lua; do
+      substituteInPlace "$file" --replace-fail \
+        'backtick("sw_vers -productVersion")' \
+        "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
       done
-    ''
-    # MAME's build system uses `sw_vers` to test whether it needs to link with
-    # the Metal framework or not. However:
-    # a) that would return the build system's version, not the target's, and
-    # b) it can't actually find `sw_vers` in $PATH, so it thinks it's on macOS
-    #    version 0, and doesn't link with Metal - causing missing symbol errors
-    #    when it gets to the link step, because other parts of the build system
-    #    _do_ use the correct target version number.
-    # This replaces the `sw_vers` call with the macOS version actually being
-    # targeted, so everything gets linked correctly.
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for file in scripts/src/osd/{mac,sdl}.lua; do
-        substituteInPlace "$file" --replace-fail \
-          'backtick("sw_vers -productVersion")' \
-          "os.getenv('MACOSX_DEPLOYMENT_TARGET') or '$darwinMinVersion'"
-        done
-    '';
+  '';
 
   desktopItems = [
     (makeDesktopItem {

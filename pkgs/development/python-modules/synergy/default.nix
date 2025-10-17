@@ -43,19 +43,18 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  disabledTests =
-    [
-      # flaky: hypothesis.errors.FailedHealthCheck
-      "test_asymptotic_limits"
-      "test_inverse"
-      # AssertionError: synthetic_BRAID_reference_1.csv
-      #  E3=0 not in (0.10639582639915163, 1.6900177333904622)
-      "test_BRAID_fit_bootstrap"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # AssertionError: np.False_ is not true
-      "test_fit_loewe_antagonism"
-    ];
+  disabledTests = [
+    # flaky: hypothesis.errors.FailedHealthCheck
+    "test_asymptotic_limits"
+    "test_inverse"
+    # AssertionError: synthetic_BRAID_reference_1.csv
+    #  E3=0 not in (0.10639582639915163, 1.6900177333904622)
+    "test_BRAID_fit_bootstrap"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # AssertionError: np.False_ is not true
+    "test_fit_loewe_antagonism"
+  ];
 
   pythonImportsCheck = [ "synergy" ];
 

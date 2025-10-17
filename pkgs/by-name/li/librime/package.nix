@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "librime";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "rime";
     repo = "librime";
     rev = version;
-    sha256 = "sha256-pv1I/YFzPLOmBDcT4HcrJWSikPEErEB5UzGrGqfJBvg=";
+    sha256 = "sha256-dks8Ab2YQ8t4hZRneMP9aU0VFZgIg+meh8RI0pp0lR0=";
   };
 
   nativeBuildInputs = [
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
     yaml-cpp
     gtest
     capnproto
-  ] ++ plugins; # for propagated build inputs
+  ]
+  ++ plugins; # for propagated build inputs
 
   preConfigure = copyPlugins;
 

@@ -16,14 +16,12 @@
   libspnav,
   libXmu,
   medfile,
-  mpi,
   ninja,
   ode,
   opencascade-occt,
   pkg-config,
   python3Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  ifcSupport ? false,
   stdenv,
   swig,
   vtk,
@@ -33,42 +31,39 @@
   zlib,
   qt6,
   nix-update-script,
+  gmsh,
+  which,
 }:
 let
-  pythonDeps =
-    with python3Packages;
-    [
-      boost
-      gitpython # for addon manager
-      matplotlib
-      opencamlib
-      pivy
-      ply # for openSCAD file support
-      py-slvs
-      pybind11
-      pycollada
-      pyside6
-      python
-      pyyaml # (at least for) PyrateWorkbench
-      scipy
-      shiboken6
-    ]
-    ++ lib.optionals ifcSupport [
-      ifcopenshell
-    ];
+  pythonDeps = with python3Packages; [
+    boost
+    gitpython # for addon manager
+    ifcopenshell
+    matplotlib
+    opencamlib
+    pivy
+    ply # for openSCAD file support
+    pybind11
+    pycollada
+    pyside6
+    python
+    pyyaml # (at least for) PyrateWorkbench
+    scipy
+    shiboken6
+  ];
 
   freecad-utils = callPackage ./freecad-utils.nix { };
 in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.1";
+    version = "1.0.2";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
-      rev = finalAttrs.version;
-      hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
+      tag = finalAttrs.version;
+      hash = "sha256-J//O/ABMFa3TFYwR0wc8d1UTA5iSFnEP2thOjuCN+uE=";
       fetchSubmodules = true;
     };
 
@@ -83,31 +78,29 @@ freecad-utils.makeCustomizable (
       qt6.wrapQtAppsHook
     ];
 
-    buildInputs =
-      [
-        coin3d
-        eigen
-        fmt
-        gts
-        hdf5
-        libGLU
-        libXmu
-        medfile
-        mpi
-        ode
-        vtk
-        xercesc
-        yaml-cpp
-        zlib
-        opencascade-occt
-        qt6.qtbase
-        qt6.qtsvg
-        qt6.qttools
-        qt6.qtwayland
-        qt6.qtwebengine
-      ]
-      ++ pythonDeps
-      ++ lib.optionals spaceNavSupport [ libspnav ];
+    buildInputs = [
+      coin3d
+      eigen
+      fmt
+      gts
+      hdf5
+      libGLU
+      libXmu
+      medfile
+      ode
+      vtk
+      xercesc
+      yaml-cpp
+      zlib
+      opencascade-occt
+      qt6.qtbase
+      qt6.qtsvg
+      qt6.qttools
+      qt6.qtwayland
+      qt6.qtwebengine
+    ]
+    ++ pythonDeps
+    ++ lib.optionals spaceNavSupport [ libspnav ];
 
     patches = [
       ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
@@ -119,11 +112,21 @@ freecad-utils.makeCustomizable (
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
       })
+      # Inform Coin to use EGL when on Wayland
+      # https://github.com/FreeCAD/FreeCAD/pull/21917
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
+        hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
+      })
     ];
+
+    postPatch = ''
+      substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
+        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+    '';
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DBUILD_DRAWING=ON"
       "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DINSTALL_TO_SITEPACKAGES=OFF"
@@ -148,12 +151,19 @@ freecad-utils.makeCustomizable (
 
     dontWrapGApps = true;
 
-    qtWrapperArgs = [
-      "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-      "--prefix PATH : ${libredwg}/bin"
-      "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
-      "\${gappsWrapperArgs[@]}"
-    ];
+    qtWrapperArgs =
+      let
+        binPath = lib.makeBinPath [
+          libredwg
+          which # for locating tools
+        ];
+      in
+      [
+        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+        "--prefix PATH : ${binPath}"
+        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "\${gappsWrapperArgs[@]}"
+      ];
 
     postFixup = ''
       mv $out/share/doc $out

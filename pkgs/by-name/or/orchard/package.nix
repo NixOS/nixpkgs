@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -7,13 +8,13 @@
 
 buildGoModule rec {
   pname = "orchard";
-  version = "0.34.0";
+  version = "0.38.1";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "orchard";
     rev = version;
-    hash = "sha256-7XKiFViGjz0/jrvN6JdCFy1lw4fN2Bz43WWKcgZ7ZzU=";
+    hash = "sha256-pobhMJkCa8GiaBjpOq5y6FTaoBBq97NlByLcOfbdDLI=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -24,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-LExITpIVaMIxt+CkH7SRkbSPRO842Pl9lgSqZenE4uA=";
+  vendorHash = "sha256-cdOuMX1PRRCFWfIf6Z2tVSgJDsuj6aC99qnnCKJzPQQ=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -41,7 +42,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/orchard" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     export HOME="$(mktemp -d)"
     installShellCompletion --cmd orchard \
       --bash <($out/bin/orchard completion bash) \

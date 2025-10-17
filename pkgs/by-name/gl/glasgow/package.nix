@@ -6,61 +6,77 @@
   yosys,
   icestorm,
   nextpnr,
-  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "glasgow";
-  version = "0-unstable-2025-01-26";
-  # from `pdm show`
-  realVersion =
+  version = "0-unstable-2025-07-28";
+  # Similar to `pdm show`, but without the commit counter
+  pdmVersion =
     let
       tag = builtins.elemAt (lib.splitString "-" version) 0;
       rev = lib.substring 0 7 src.rev;
     in
-    "${tag}.1.dev2085+g${rev}";
+    "${tag}.1.dev0+g${rev}";
+  # the latest commit ID touching the `firmware` directory, can differ from rev!
+  firmwareGitRev = "4fe35360";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GlasgowEmbedded";
     repo = "glasgow";
-    rev = "2a67f79d6025a06e98277956cbb036c4237960f1";
-    sha256 = "sha256-THunn3Oz+eldjQ72TGuq4Egnn6fiMiGG/UtYVRc/tfU=";
+    rev = "18442e9684cdda4bb2cbd2be9c31b3c6dffc625a";
+    hash = "sha256-b0kpgCHMk5Ylj4hY29sHRzY/zI1JXReHioHxHSO4h5E=";
   };
 
   nativeBuildInputs = [
-    python3.pkgs.pdm-backend
     sdcc
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    typing-extensions
+  build-system = [
+    python3.pkgs.pdm-backend
+  ];
+
+  dependencies = with python3.pkgs; [
+    aiohttp
     amaranth
+    cobs
+    fx2
+    importlib-resources
+    libusb1
     packaging
     platformdirs
-    fx2
-    libusb1
     pyvcd
-    aiohttp
+    typing-extensions
   ];
 
   nativeCheckInputs = [
+    # pytestCheckHook discovers way less tests
     python3.pkgs.unittestCheckHook
-    yosys
     icestorm
     nextpnr
+    yosys
   ];
+
+  unittestFlags = [ "-v" ];
 
   enableParallelBuilding = true;
 
   __darwinAllowLocalNetworking = true;
 
   preBuild = ''
-    make -C firmware LIBFX2=${python3.pkgs.fx2}/share/libfx2
-    cp firmware/glasgow.ihex software/glasgow
+    make -C firmware GIT_REV_SHORT=${firmwareGitRev} LIBFX2=${python3.pkgs.fx2}/share/libfx2
+
+    # Normalize the .ihex file, see ./software/deploy-firmware.sh.
+    ${python3.withPackages (p: [ p.fx2 ])}/bin/python firmware/normalize.py \
+      firmware/glasgow.ihex firmware/glasgow.ihex
+
+    # Ensure the compiled firmware is exactly the same as the one shipped in the repo.
+    cmp -s firmware/glasgow.ihex software/glasgow/hardware/firmware.ihex
+
     cd software
-    export PDM_BUILD_SCM_VERSION="${realVersion}"
+    export PDM_BUILD_SCM_VERSION="${pdmVersion}"
   '';
 
   # installCheck tries to build_ext again
@@ -92,15 +108,14 @@ python3.pkgs.buildPythonApplication rec {
     "${nextpnr}/bin/nextpnr-ice40"
   ];
 
-  passthru.updateScript = unstableGitUpdater {
-    hardcodeZeroVersion = true;
-  };
-
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ thoughtpolice ];
+    maintainers = with maintainers; [
+      flokli
+      thoughtpolice
+    ];
     mainProgram = "glasgow";
   };
 }

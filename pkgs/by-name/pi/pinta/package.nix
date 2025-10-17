@@ -12,13 +12,13 @@
 
 buildDotnetModule rec {
   pname = "Pinta";
-  version = "3.0.1";
+  version = "3.0.4";
 
   src = fetchFromGitHub {
     owner = "PintaProject";
     repo = "Pinta";
     rev = version;
-    hash = "sha256-TU4WBrWnhTQQM+OrBq9hpvrihittKTSS0Zo5laL98mE=";
+    hash = "sha256-enCVn52wy42a1cXM2YYCg7RHpkzZoDHc52L6xlxQOo0=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ buildDotnetModule rec {
 
     # Build translations
     dotnet build Pinta \
+      --no-restore \
       -p:ContinuousIntegrationBuild=true \
       -p:Deterministic=true \
       -target:CompileTranslations,PublishTranslations \

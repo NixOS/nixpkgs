@@ -14,18 +14,19 @@
   sortedcontainers,
   toml,
   tqdm,
+  wordfreq,
 }:
 
 buildPythonPackage rec {
   pname = "binsync";
-  version = "5.3.0";
+  version = "5.7.10";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "binsync";
     tag = "v${version}";
-    hash = "sha256-f0pPuNTrZ5+iuJgtxLXJF89C9hKXwplhBA/olyhfsQ4=";
+    hash = "sha256-QDOfbo2yjfjLsLILMhl/ckKwXDusXfE8+YmFpW5djN0=";
   };
 
   build-system = [ setuptools ];
@@ -39,6 +40,7 @@ buildPythonPackage rec {
     sortedcontainers
     toml
     tqdm
+    wordfreq
   ];
 
   optional-dependencies = {
@@ -52,16 +54,16 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
-    # Test tries to import angrmanagement
+    # Test tries to import angr-management
     "tests/test_angr_gui.py"
   ];
 
   pythonImportsCheck = [ "binsync" ];
 
   meta = {
-    description = "A reversing plugin for cross-decompiler collaboration, built on git";
+    description = "Reversing plugin for cross-decompiler collaboration, built on git";
     homepage = "https://github.com/binsync/binsync";
-    changelog = "https://github.com/binsync/binsync/releases/tag/v${version}";
+    changelog = "https://github.com/binsync/binsync/releases/tag/${src.tag}";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [ scoder12 ];
   };

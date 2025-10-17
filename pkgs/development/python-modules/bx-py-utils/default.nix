@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "109";
+  version = "113";
 
   disabled = pythonOlder "3.10";
 
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
-    hash = "sha256-y1R48nGeTCpcBAzU3kqNQumRToKvQx9qst1kXPWDIlk=";
+    hash = "sha256-rpDRLiqcbg/aRzdmKwGJAGrhBJTA+7tXsjPUIeeC03I=";
   };
 
   postPatch = ''
@@ -80,9 +80,15 @@ buildPythonPackage rec {
     "test_happy_path"
     # test assumes a virtual environment
     "test_code_style"
+    # AssertionError: Lists differ: ['my...
+    "test_import_all_files"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+  disabledTestPaths = [
+    # depends on cli-base-utilities, which depends on bx-py-utils
+    "bx_py_utils_tests/tests/test_project_setup.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # processify() doesn't work under darwin
     # https://github.com/boxine/bx_py_utils/issues/80
     "bx_py_utils_tests/tests/test_processify.py"

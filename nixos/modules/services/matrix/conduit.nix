@@ -11,7 +11,10 @@ let
   configFile = format.generate "conduit.toml" cfg.settings;
 in
 {
-  meta.maintainers = with lib.maintainers; [ pstn ];
+  meta.maintainers = with lib.maintainers; [
+    pstn
+    SchweGELBin
+  ];
   options.services.matrix-conduit = {
     enable = lib.mkEnableOption "matrix-conduit";
 
@@ -25,6 +28,22 @@ in
     };
 
     package = lib.mkPackageOption pkgs "matrix-conduit" { };
+
+    secretFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      example = "/run/secrets/matrix-conduit.env";
+      description = ''
+        Path to a file containing sensitive environment as described in {manpage}`systemd.exec(5).
+        Some variables that can be considered secrets are:
+
+        - CONDUIT_JWT_SECRET:
+          The secret used to enable JWT login. Without it a 400 error will be returned.
+
+        - CONDUIT_TURN_SECRET:
+          The TURN secret
+      '';
+    };
 
     settings = lib.mkOption {
       type = lib.types.submodule {
@@ -112,6 +131,7 @@ in
         <https://docs.conduit.rs/configuration.html>
         for details on supported values.
         Note that database_path can not be edited because the service's reliance on systemd StateDir.
+        For secrets use the `secretFile` option instead.
       '';
     };
   };
@@ -123,10 +143,10 @@ in
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
-      environment = lib.mkMerge ([
+      environment = lib.mkMerge [
         { CONDUIT_CONFIG = configFile; }
         cfg.extraEnvironment
-      ]);
+      ];
       serviceConfig = {
         DynamicUser = true;
         User = "conduit";
@@ -157,8 +177,13 @@ in
         ExecStart = "${cfg.package}/bin/conduit";
         Restart = "on-failure";
         RestartSec = 10;
-        StartLimitBurst = 5;
         UMask = "077";
+      }
+      // lib.optionalAttrs (cfg.secretFile != null) {
+        EnvironmentFile = cfg.secretFile;
+      };
+      unitConfig = {
+        StartLimitBurst = 5;
       };
     };
   };

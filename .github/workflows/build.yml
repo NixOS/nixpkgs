@@ -26,60 +26,72 @@ jobs:
       matrix:
         include:
           - runner: ubuntu-24.04
-            system: x86_64-linux
-            builds: [shell, manual-nixos, lib-tests]
+            name: x86_64-linux
+            systems: x86_64-linux
+            builds: [shell, manual-nixos, lib-tests, tarball]
+            desc: shell, docs, lib, tarball
           - runner: ubuntu-24.04-arm
-            system: aarch64-linux
+            name: aarch64-linux
+            systems: aarch64-linux
             builds: [shell, manual-nixos, manual-nixpkgs, manual-nixpkgs-tests]
-          - runner: macos-13
-            system: x86_64-darwin
-            builds: [shell]
+            desc: shell, docs
           - runner: macos-14
-            system: aarch64-darwin
+            name: darwin
+            systems: aarch64-darwin x86_64-darwin
             builds: [shell]
-    name: ${{ matrix.system }}
+            desc: shell
+    name: '${{ matrix.name }}: ${{ matrix.desc }}'
     runs-on: ${{ matrix.runner }}
+    timeout-minutes: 60
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           sparse-checkout: .github/actions
-      - name: Check if the PR can be merged and checkout the merge commit
-        uses: ./.github/actions/get-merge-commit
+      - name: Checkout the merge commit
+        uses: ./.github/actions/checkout
         with:
-          mergedSha: ${{ inputs.mergedSha }}
-          merged-as-untrusted: true
+          merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
-      - uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
+      - uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
         with:
+          # Sandbox is disabled on MacOS by default.
           extra_nix_config: sandbox = true
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
-          # This cache is for the nixpkgs repo checks and should not be trusted or used elsewhere.
-          name: nixpkgs-ci
-          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+          # The nixpkgs-ci cache should not be trusted or used outside of Nixpkgs and its forks' CI.
+          name: ${{ vars.CACHIX_NAME || 'nixpkgs-ci' }}
+          extraPullNames: nixpkgs-ci
+          authToken: ${{ secrets.CACHIX_AUTH_TOKEN }}
+          pushFilter: '(-source$|-nixpkgs-tarball-)'
+
+      - run: nix-env --install -f nixpkgs/untrusted-pinned -A nix-build-uncached
 
       - name: Build shell
         if: contains(matrix.builds, 'shell')
-        run: nix-build untrusted/ci -A shell
+        run: echo "${{ matrix.systems }}" | xargs -n1 nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A shell --argstr system
 
       - name: Build NixOS manual
         if: |
           contains(matrix.builds, 'manual-nixos') && !cancelled() &&
           contains(fromJSON(inputs.baseBranch).type, 'primary')
-        run: nix-build untrusted/ci -A manual-nixos --argstr system ${{ matrix.system }} --out-link nixos-manual
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixos --out-link nixos-manual
 
       - name: Build Nixpkgs manual
         if: contains(matrix.builds, 'manual-nixpkgs') && !cancelled()
-        run: nix-build untrusted/ci -A manual-nixpkgs -A manual-nixpkgs-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs -A manual-nixpkgs-tests
 
       - name: Build Nixpkgs manual tests
         if: contains(matrix.builds, 'manual-nixpkgs-tests') && !cancelled()
-        run: nix-build untrusted/ci -A manual-nixpkgs-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A manual-nixpkgs-tests
 
       - name: Build lib tests
         if: contains(matrix.builds, 'lib-tests') && !cancelled()
-        run: nix-build untrusted/ci -A lib-tests
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A lib-tests
+
+      - name: Build tarball
+        if: contains(matrix.builds, 'tarball') && !cancelled()
+        run: nix-build-uncached nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A tarball
 
       - name: Upload NixOS manual
         if: |
@@ -87,6 +99,5 @@ jobs:
           contains(fromJSON(inputs.baseBranch).type, 'primary')
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
-          name: nixos-manual-${{ matrix.system }}
+          name: nixos-manual-${{ matrix.name }}
           path: nixos-manual
-          if-no-files-found: error

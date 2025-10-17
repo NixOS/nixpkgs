@@ -20,14 +20,10 @@
   protobuf,
   openalSoft,
   minizip,
-  libopus,
-  alsa-lib,
-  libpulseaudio,
   range-v3,
   tl-expected,
   hunspell,
   gobject-introspection,
-  jemalloc,
   rnnoise,
   microsoft-gsl,
   boost,
@@ -46,70 +42,55 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "telegram-desktop-unwrapped";
-  version = "5.15.4";
+  version = "6.2.3";
 
   src = fetchFromGitHub {
     owner = "telegramdesktop";
     repo = "tdesktop";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-C7mUV/Jc0OJnVXxRGVx/l2T7APOsY05t5MLW8laIwnA=";
+    hash = "sha256-ojhZgzxNXUkJaXoERuOti4E2vaGLsEoQp3eSuYtvhrY=";
   };
 
-  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioInputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioOutputALSA.cpp \
-      --replace-fail '"libasound.so.2"' '"${lib.getLib alsa-lib}/lib/libasound.so.2"'
-    substituteInPlace Telegram/ThirdParty/libtgvoip/os/linux/AudioPulse.cpp \
-      --replace-fail '"libpulse.so.0"' '"${lib.getLib libpulseaudio}/lib/libpulse.so.0"'
-  '';
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # to build bundled libdispatch
+    clang
+    gobject-introspection
+  ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      ninja
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # to build bundled libdispatch
-      clang
-      gobject-introspection
-    ];
-
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      lz4
-      xxHash
-      ffmpeg_6
-      openalSoft
-      minizip
-      libopus
-      range-v3
-      tl-expected
-      rnnoise
-      tg_owt
-      microsoft-gsl
-      boost
-      ada
-      (tdlib.override { tde2eOnly = true; })
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      protobuf
-      qtwayland
-      kcoreaddons
-      alsa-lib
-      libpulseaudio
-      hunspell
-      jemalloc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      libicns
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    lz4
+    xxHash
+    ffmpeg_6
+    openalSoft
+    minizip
+    range-v3
+    tl-expected
+    rnnoise
+    tg_owt
+    microsoft-gsl
+    boost
+    ada
+    (tdlib.override { tde2eOnly = true; })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    protobuf
+    qtwayland
+    kcoreaddons
+    hunspell
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+    libicns
+  ];
 
   dontWrapQtApps = true;
 

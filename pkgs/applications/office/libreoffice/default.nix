@@ -35,7 +35,6 @@
   cairo,
   which,
   icu,
-  boost,
   jdk21,
   ant,
   cups,
@@ -71,7 +70,6 @@
   libcdr,
   lcms2,
   unixODBC,
-  mdds,
   sane-backends,
   mythes,
   libexttextcat,
@@ -99,7 +97,6 @@
   abseil-cpp,
   libepubgen,
   libetonyek,
-  liborcus,
   libpng,
   libxcrypt,
   langs ? [
@@ -133,17 +130,12 @@
   ],
   withFonts ? false,
   withHelp ? true,
+  withJava ? true,
   kdeIntegration ? false,
-  qtbase ? null,
-  qtx11extras ? null,
-  qtwayland ? null,
-  ki18n ? null,
-  kconfig ? null,
-  kcoreaddons ? null,
-  kio ? null,
-  kwindowsystem ? null,
   variant ? "fresh",
   debugLogging ? variant == "still",
+  qt6,
+  kdePackages,
   symlinkJoin,
   libpq,
   makeFontsConf,
@@ -164,24 +156,6 @@
   lp_solve,
   xmlsec,
   libcmis,
-  # The rest are used only in passthru, for the wrapper
-  kauth ? null,
-  kcompletion ? null,
-  kconfigwidgets ? null,
-  kglobalaccel ? null,
-  kitemviews ? null,
-  knotifications ? null,
-  ktextwidgets ? null,
-  kwidgetsaddons ? null,
-  kxmlgui ? null,
-  phonon ? null,
-  qtdeclarative ? null,
-  qtmultimedia ? null,
-  qtquickcontrols ? null,
-  qtsvg ? null,
-  qttools ? null,
-  solid ? null,
-  sonnet ? null,
 }:
 
 assert builtins.elem variant [
@@ -249,13 +223,13 @@ let
     translations = importVariant "translations.nix";
     deps = (importVariant "deps.nix") ++ [
       # TODO: Why is this needed?
-      (rec {
+      rec {
         name = "unowinreg.dll";
         url = "https://dev-www.libreoffice.org/extern/${md5name}";
         sha256 = "1infwvv1p6i21scywrldsxs22f62x85mns4iq8h6vr6vlx3fdzga";
         md5 = "185d60944ea767075d27247c3162b3bc";
         md5name = "${md5}-${name}";
-      })
+      }
     ];
   };
   srcs = {
@@ -272,8 +246,6 @@ let
     help = srcsAttributes.help { inherit fetchurl fetchgit; };
   };
 
-  qtMajor = lib.versions.major qtbase.version;
-
   # See `postPatch` for details
   kdeDeps = symlinkJoin {
     name = "libreoffice-kde-dependencies-${version}";
@@ -284,14 +256,13 @@ let
           (getLib e)
         ])
         [
-          qtbase
-          qtmultimedia
-          qtx11extras
-          kconfig
-          kcoreaddons
-          ki18n
-          kio
-          kwindowsystem
+          qt6.qtbase
+          qt6.qtmultimedia
+          kdePackages.kconfig
+          kdePackages.kcoreaddons
+          kdePackages.ki18n
+          kdePackages.kio
+          kdePackages.kwindowsystem
         ]
     );
   };
@@ -304,65 +275,64 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = srcsAttributes.main { inherit fetchurl fetchgit; };
 
-  postUnpack =
-    ''
-      mkdir -v $sourceRoot/${tarballPath}
+  postUnpack = ''
+    mkdir -v $sourceRoot/${tarballPath}
 
-      ${flip concatMapStrings srcs.third_party (f: ''
-        ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
-        ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
-      '')}
+    ${flip concatMapStrings srcs.third_party (f: ''
+      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.md5name}
+      ln -sfv ${f} $sourceRoot/${tarballPath}/${f.name}
+    '')}
 
-    ''
-    + (
-      if (variant != "collabora") then
-        ''
-          ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
-          ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
+  ''
+  + (
+    if (variant != "collabora") then
+      ''
+        ln -sv ${srcs.help} $sourceRoot/${tarballPath}/${srcs.help.name}
+        ln -svf ${srcs.translations} $sourceRoot/${tarballPath}/${srcs.translations.name}
 
-          tar -xf ${srcs.help}
-          tar -xf ${srcs.translations}
-        ''
-      else
-        ''
-          cp -r --no-preserve=mode ${srcs.help}/. $sourceRoot/helpcontent2/
-          cp -r --no-preserve=mode ${srcs.translations}/. $sourceRoot/translations/
-        ''
-    );
+        tar -xf ${srcs.help}
+        tar -xf ${srcs.translations}
+      ''
+    else
+      ''
+        cp -r --no-preserve=mode ${srcs.help}/. $sourceRoot/helpcontent2/
+        cp -r --no-preserve=mode ${srcs.translations}/. $sourceRoot/translations/
+      ''
+  );
 
-  patches =
-    [
-      # Skip some broken tests:
-      # - tdf160386 does not fall back to a CJK font properly for some reason
-      # - the remaining tests have notes in the patches
-      # FIXME: get rid of this ASAP
-      ./skip-broken-tests.patch
-      (./skip-broken-tests- + variant + ".patch")
+  patches = [
+    # Skip some broken tests:
+    # - tdf160386 does not fall back to a CJK font properly for some reason
+    # - the remaining tests have notes in the patches
+    # FIXME: get rid of this ASAP
+    ./skip-broken-tests.patch
+    (./skip-broken-tests- + variant + ".patch")
 
-      # Don't detect Qt paths from qmake, so our patched-in onese are used
-      ./dont-detect-qt-paths-from-qmake.patch
+    # Don't detect Qt paths from qmake, so our patched-in onese are used
+    ./dont-detect-qt-paths-from-qmake.patch
 
-      # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
-      ./readd-explicit-zlib-link.patch
+    # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
+    ./readd-explicit-zlib-link.patch
 
-      # Backport patch to fix build with Poppler 25.05
-      # FIXME: conditionalize/remove as upstream updates
-      (fetchpatch2 {
-        url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
-        includes = [ "sdext/*" ];
-        hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
-      })
-    ]
-    ++ lib.optionals (lib.versionOlder version "24.8") [
-      (fetchpatch2 {
-        name = "icu74-compat.patch";
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/main/libreoffice-7.5.8.2-icu-74-compatibility.patch?ref_type=heads.patch";
-        hash = "sha256-OGBPIVQj8JTYlkKywt4QpH7ULAzKmet5jTLztGpIS0Y=";
-      })
-    ]
-    ++ lib.optionals (variant == "collabora") [
-      ./fix-unpack-collabora.patch
-    ];
+  ]
+  ++ lib.optionals (lib.versionOlder version "25.8") [
+    # Backport patch to fix build with Poppler 25.05
+    (fetchpatch2 {
+      url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
+      includes = [ "sdext/*" ];
+      hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
+    })
+  ]
+  ++ lib.optionals (lib.versionOlder version "24.8") [
+    (fetchpatch2 {
+      name = "icu74-compat.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/main/libreoffice-7.5.8.2-icu-74-compatibility.patch?ref_type=heads.patch";
+      hash = "sha256-OGBPIVQj8JTYlkKywt4QpH7ULAzKmet5jTLztGpIS0Y=";
+    })
+  ]
+  ++ lib.optionals (variant == "collabora") [
+    ./fix-unpack-collabora.patch
+  ];
 
   postPatch = ''
     # configure checks for header 'gpgme++/gpgmepp_version.h',
@@ -379,34 +349,35 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace configure.ac --replace-fail distutils.sysconfig sysconfig
   '';
 
-  nativeBuildInputs =
-    [
-      ant
-      autoconf
-      automake
-      bison
-      flex
-      fontforge
-      gdb
-      gettext
-      gperf
-      icu
-      jdk21
-      libmysqlclient
-      libtool
-      libxml2
-      libxslt
-      perl
-      perlPackages.ArchiveZip
-      perlPackages.IOCompress
-      pkg-config
-      python311
-      unzip
-      zip
-    ]
-    ++ optionals kdeIntegration [
-      qtbase
-    ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    bison
+    flex
+    fontforge
+    gdb
+    gettext
+    gperf
+    icu
+    libmysqlclient
+    libtool
+    libxml2
+    libxslt
+    perl
+    perlPackages.ArchiveZip
+    perlPackages.IOCompress
+    pkg-config
+    python311
+    unzip
+    zip
+  ]
+  ++ optionals kdeIntegration [
+    qt6.qtbase
+  ]
+  ++ optionals withJava [
+    ant
+    jdk21
+  ];
 
   buildInputs =
     finalAttrs.passthru.gst_packages
@@ -419,7 +390,6 @@ stdenv.mkDerivation (finalAttrs: {
       coinmp
       abseil-cpp
       bluez5
-      boost
       box2d_2
       cairo
       clucene_core_2
@@ -442,7 +412,6 @@ stdenv.mkDerivation (finalAttrs: {
       (harfbuzz.override { withIcu = true; })
       hunspell
       icu
-      jre'
       lcms2
       libGL
       libGLU
@@ -469,7 +438,6 @@ stdenv.mkDerivation (finalAttrs: {
       libmspack
       libmwaw
       libodfgen
-      liborcus
       xorg.libpthreadstubs
       librdf_redland
       librevenge
@@ -486,7 +454,6 @@ stdenv.mkDerivation (finalAttrs: {
       libzmf
       libwebp
       lp_solve
-      mdds
       mythes
       ncurses
       neon
@@ -506,144 +473,151 @@ stdenv.mkDerivation (finalAttrs: {
       zlib
     ]
     ++ optionals kdeIntegration [
-      qtbase
-      qtx11extras
-      kcoreaddons
-      kio
+      qt6.qtbase
+      kdePackages.kcoreaddons
+      kdePackages.kio
+    ]
+    ++ optionals withJava [
+      jre'
     ];
 
-  preConfigure =
-    ''
-      configureFlagsArray=(
-        "--with-parallelism=$NIX_BUILD_CORES"
-        # here because we need to be very specific about spaces
-        "--with-lang=${concatStringsSep " " langs}"
-      );
-
-      patchShebangs .
-
-      NOCONFIGURE=1 ./autogen.sh
-    ''
-    + optionalString kdeIntegration ''
-      # configure.ac assumes that the first directory that contains headers and
-      # libraries during its checks contains *all* the relevant headers/libs which
-      # obviously doesn't work for us, so we have 2 options:
-      #
-      # 1. patch configure.ac in order to specify the direct paths to various Qt/KDE
-      # dependencies which is ugly and brittle, or
-      #
-      # 2. use symlinkJoin to pull in the relevant dependencies and just patch in
-      # that path which is *also* ugly, but far less likely to break
-      #
-      # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
-      # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
-      # add the missing dependencies to it).
-      export QT${qtMajor}INC=${kdeDeps}/include
-      export QT${qtMajor}LIB=${kdeDeps}/lib
-      export KF${qtMajor}INC="${kdeDeps}/include ${kdeDeps}/include/KF${qtMajor}"
-      export KF${qtMajor}LIB=${kdeDeps}/lib
-    '';
-
-  configureFlags =
-    [
-      # Explicitly passing in --host even on non-cross, because
-      # LibreOffice will attempt to detect WSL and cross-compile
-      # itself to Windows automatically, and we don't want it
-      # doing that.
-      "--host=${stdenv.hostPlatform.config}"
-      "--without-buildconfig-recorded"
-
-      (lib.withFeature withHelp "help")
-      "--with-boost=${getDev boost}"
-      "--with-boost-libdir=${getLib boost}/lib"
-      "--with-beanshell-jar=${bsh}"
-      "--with-vendor=NixOS"
-      "--disable-report-builder"
-      "--disable-online-update"
-      "--enable-python=system"
-      "--enable-dbus"
-      "--enable-release-build"
-      "--enable-epm"
-      "--with-ant-home=${ant.home}"
-
-      # Without these, configure does not finish
-      "--without-junit"
-
-      # Schema files for validation are not included in the source tarball
-      "--without-export-validation"
-
-      # We do tarball prefetching ourselves
-      "--disable-fetch-external"
-      "--enable-build-opensymbol"
-
-      # I imagine this helps. Copied from go-oo.
-      # Modified on every upgrade, though
-      "--disable-odk"
-      "--disable-firebird-sdbc"
-      (lib.withFeature withFonts "fonts")
-      "--without-doxygen"
-
-      "--with-system-beanshell"
-      "--with-system-cairo"
-      "--with-system-coinmp"
-      "--with-system-headers"
-      "--with-system-libabw"
-      "--with-system-libcmis"
-      "--with-system-libepubgen"
-      "--with-system-libetonyek"
-      "--with-system-liblangtag"
-      "--with-system-libs"
-      "--with-system-libwps"
-      "--with-system-lpsolve"
-      "--with-system-mdds"
-      "--with-system-openldap"
-      "--with-system-openssl"
-      "--with-system-orcus"
-      "--with-system-postgresql"
-      "--with-system-xmlsec"
-
-      # TODO: package these as system libraries
-      "--without-system-altlinuxhyph"
-      "--without-system-frozen"
-      "--without-system-libfreehand"
-      "--without-system-libmspub"
-      "--without-system-libnumbertext"
-      "--without-system-libpagemaker"
-      "--without-system-libstaroffice"
-      "--without-system-libqxp"
-      "--without-system-dragonbox"
-      "--without-system-libfixmath"
-
-      # requires an oddly specific, old version
-      "--without-system-hsqldb"
-
-      # searches hardcoded paths that are wrong
-      "--without-system-zxing"
-
-      # is packaged but headers can't be found because there is no pkg-config file
-      "--without-system-zxcvbn"
-    ]
-    ++ optionals kdeIntegration [
-      "--enable-kf${qtMajor}"
-      "--enable-qt${qtMajor}"
-    ]
-    ++ optionals (kdeIntegration && qtMajor == "5") [
-      "--enable-gtk3-kde5"
-    ]
-    ++ (
-      if variant == "fresh" || variant == "collabora" then
-        [
-          "--with-system-rhino"
-          "--with-rhino-jar=${rhino}/share/java/js.jar"
-
-          "--without-system-java-websocket"
-        ]
-      else
-        [
-          # our Rhino is too new for older versions
-          "--without-system-rhino"
-        ]
+  preConfigure = ''
+    configureFlagsArray=(
+      "--with-parallelism=$NIX_BUILD_CORES"
+      # here because we need to be very specific about spaces
+      "--with-lang=${concatStringsSep " " langs}"
     );
+
+    patchShebangs .
+
+    NOCONFIGURE=1 ./autogen.sh
+  ''
+  + optionalString kdeIntegration ''
+    # configure.ac assumes that the first directory that contains headers and
+    # libraries during its checks contains *all* the relevant headers/libs which
+    # obviously doesn't work for us, so we have 2 options:
+    #
+    # 1. patch configure.ac in order to specify the direct paths to various Qt/KDE
+    # dependencies which is ugly and brittle, or
+    #
+    # 2. use symlinkJoin to pull in the relevant dependencies and just patch in
+    # that path which is *also* ugly, but far less likely to break
+    #
+    # The 2nd option is not very Nix'y, but I'll take robust over nice any day.
+    # Additionally, it's much easier to fix if LO breaks on the next upgrade (just
+    # add the missing dependencies to it).
+    export QT6INC=${kdeDeps}/include
+    export QT6LIB=${kdeDeps}/lib
+    export KF6INC="${kdeDeps}/include ${kdeDeps}/include/KF6"
+    export KF6LIB=${kdeDeps}/lib
+  '';
+
+  configureFlags = [
+    # Explicitly passing in --host even on non-cross, because
+    # LibreOffice will attempt to detect WSL and cross-compile
+    # itself to Windows automatically, and we don't want it
+    # doing that.
+    "--host=${stdenv.hostPlatform.config}"
+    "--without-buildconfig-recorded"
+
+    (lib.withFeature withHelp "help")
+    "--with-vendor=NixOS"
+    "--disable-report-builder"
+    "--disable-online-update"
+    "--enable-python=system"
+    "--enable-dbus"
+    "--enable-release-build"
+    "--enable-epm"
+    (lib.withFeature withJava "java")
+
+    # Without these, configure does not finish
+    "--without-junit"
+
+    # Schema files for validation are not included in the source tarball
+    "--without-export-validation"
+
+    # We do tarball prefetching ourselves
+    "--disable-fetch-external"
+    "--enable-build-opensymbol"
+
+    # I imagine this helps. Copied from go-oo.
+    # Modified on every upgrade, though
+    "--disable-odk"
+    "--disable-firebird-sdbc"
+    (lib.withFeature withFonts "fonts")
+    "--without-doxygen"
+
+    "--with-system-cairo"
+    "--with-system-coinmp"
+    "--with-system-headers"
+    "--with-system-libabw"
+    "--with-system-libcmis"
+    "--with-system-libepubgen"
+    "--with-system-libetonyek"
+    "--with-system-liblangtag"
+    "--with-system-libs"
+    "--with-system-libwps"
+    "--with-system-lpsolve"
+    "--with-system-openldap"
+    "--with-system-openssl"
+    "--with-system-orcus"
+    "--with-system-postgresql"
+    "--with-system-xmlsec"
+
+    # TODO: package these as system libraries
+    "--without-system-altlinuxhyph"
+    "--without-system-frozen"
+    "--without-system-libeot"
+    "--without-system-libfreehand"
+    "--without-system-libmspub"
+    "--without-system-libnumbertext"
+    "--without-system-libpagemaker"
+    "--without-system-libstaroffice"
+    "--without-system-libqxp"
+    "--without-system-dragonbox"
+    "--without-system-libfixmath"
+
+    # TODO: bump this to 0.20
+    "--without-system-orcus"
+
+    # TODO: bump this to 3.0 (#382851)
+    "--without-system-mdds"
+
+    # requires an oddly specific, old version
+    "--without-system-hsqldb"
+
+    # searches hardcoded paths that are wrong
+    "--without-system-zxing"
+
+    # is packaged but headers can't be found because there is no pkg-config file
+    "--without-system-zxcvbn"
+
+    # cannot find headers, no idea why
+    "--without-system-boost"
+  ]
+  ++ optionals kdeIntegration [
+    "--enable-kf6"
+    "--enable-qt6"
+  ]
+  ++ optionals withJava [
+    "--with-system-beanshell"
+    "--with-ant-home=${ant.home}"
+    "--with-beanshell-jar=${bsh}"
+  ]
+  ++ (
+    if variant == "fresh" || variant == "collabora" then
+      [
+        "--with-system-rhino"
+        "--with-rhino-jar=${rhino}/share/java/js.jar"
+
+        "--without-system-java-websocket"
+      ]
+    else
+      [
+        # our Rhino is too new for older versions
+        "--without-system-rhino"
+      ]
+  );
 
   env = {
     # FIXME: this is a hack, because the right cflags are not being picked up
@@ -662,9 +636,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  # Disable tests for the Qt5 build, as they seem even more flaky
-  # than usual, and we will drop the Qt5 build after 24.11 anyway.
-  doCheck = !(kdeIntegration && qtMajor == "5");
+  doCheck = true;
 
   preCheck = ''
     export HOME=$(pwd)
@@ -706,7 +678,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit srcs;
-    jdk = jre';
+    jdk = if withJava then jre' else null;
     python = python311; # for unoconv
     updateScript = [
       ./update.sh
@@ -720,7 +692,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit gtk3;
     # Although present in qtPackages, we need qtbase.qtPluginPrefix and
     # qtbase.qtQmlPrefix
-    inherit qtbase;
+    inherit (qt6) qtbase;
     gst_packages = with gst_all_1; [
       gst-libav
       gst-plugins-bad
@@ -730,35 +702,34 @@ stdenv.mkDerivation (finalAttrs: {
       gstreamer
     ];
     qmlPackages = [
-      ki18n
-      knotifications
-      qtdeclarative
-      qtmultimedia
-      qtquickcontrols
-      qtwayland
-      solid
-      sonnet
+      kdePackages.ki18n
+      kdePackages.knotifications
+      qt6.qtdeclarative
+      qt6.qtmultimedia
+      qt6.qtwayland
+      kdePackages.solid
+      kdePackages.sonnet
     ];
     qtPackages = [
-      kauth
-      kcompletion
-      kconfigwidgets
-      kglobalaccel
-      ki18n
-      kio
-      kitemviews
-      ktextwidgets
-      kwidgetsaddons
-      kwindowsystem
-      kxmlgui
-      phonon
-      qtbase
-      qtdeclarative
-      qtmultimedia
-      qtsvg
-      qttools
-      qtwayland
-      sonnet
+      kdePackages.kauth
+      kdePackages.kcompletion
+      kdePackages.kconfigwidgets
+      kdePackages.kglobalaccel
+      kdePackages.ki18n
+      kdePackages.kio
+      kdePackages.kitemviews
+      kdePackages.ktextwidgets
+      kdePackages.kwidgetsaddons
+      kdePackages.kwindowsystem
+      kdePackages.kxmlgui
+      kdePackages.phonon
+      qt6.qtbase
+      qt6.qtdeclarative
+      qt6.qtmultimedia
+      qt6.qtsvg
+      qt6.qttools
+      qt6.qtwayland
+      kdePackages.sonnet
     ];
   };
 

@@ -7,8 +7,6 @@
 
 { lib, pkgs, ... }:
 
-with lib;
-
 {
 
   config = {
@@ -36,7 +34,7 @@ with lib;
         pkgs.which
         pkgs.openssl
         pkgs.xorg.xauth
-        pkgs.nettools
+        pkgs.net-tools
         pkgs.shadow
         pkgs.procps
         pkgs.util-linux

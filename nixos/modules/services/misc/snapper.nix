@@ -257,22 +257,21 @@ in
 
         # Note: snapper/config-templates/default is only needed for create-config
         #       which is not the NixOS way to configure.
-        etc =
-          {
+        etc = {
 
-            "sysconfig/snapper".text = ''
-              SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
-            '';
+          "sysconfig/snapper".text = ''
+            SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
+          '';
+        }
+        // (lib.mapAttrs' (
+          name: subvolume:
+          lib.nameValuePair "snapper/configs/${name}" {
+            text = lib.generators.toKeyValue { inherit mkKeyValue; } (
+              lib.filterAttrs (k: v: v != defaultOf k) subvolume
+            );
           }
-          // (lib.mapAttrs' (
-            name: subvolume:
-            lib.nameValuePair "snapper/configs/${name}" ({
-              text = lib.generators.toKeyValue { inherit mkKeyValue; } (
-                lib.filterAttrs (k: v: v != defaultOf k) subvolume
-              );
-            })
-          ) cfg.configs)
-          // (lib.optionalAttrs (cfg.filters != null) { "snapper/filters/default.txt".text = cfg.filters; });
+        ) cfg.configs)
+        // (lib.optionalAttrs (cfg.filters != null) { "snapper/filters/default.txt".text = cfg.filters; });
       };
 
       services.dbus.packages = [ pkgs.snapper ];

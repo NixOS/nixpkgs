@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   pname = "shapelib";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchurl {
     url = "https://download.osgeo.org/shapelib/shapelib-${version}.tar.gz";
-    hash = "sha256-XakKYOJUQPEI9OjpVzK/qD7eE8jgwrz4CuQQBsyOvCA=";
+    hash = "sha256-S3SjbO2U6ae+pAEVfmZK3cxb4lHn33+I1GdDYdoBLCE=";
   };
 
   doCheck = true;
@@ -22,7 +22,6 @@ stdenv.mkDerivation rec {
     description = "C Library for reading, writing and updating ESRI Shapefiles";
     homepage = "http://shapelib.maptools.org/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ehmry ];
     teams = [ teams.geospatial ];
     changelog = "http://shapelib.maptools.org/release.html";
   };

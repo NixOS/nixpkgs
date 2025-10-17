@@ -1,0 +1,30 @@
+diff --git a/app/utils/generic.py b/app/utils/generic.py
+index f23aa5c..9ff4a04 100644
+--- a/app/utils/generic.py
++++ b/app/utils/generic.py
+@@ -260,6 +260,10 @@ def launch_game_process(game_install_path: Path, args: list[str]) -> None:
+                 + str(args)
+                 + "`"
+             )
++
++            args = [executable_path, *args]
++            executable_path = "@steam-run@/bin/steam-run"
++
+             pid, popen_args = launch_process(
+                 executable_path, args, str(game_install_path)
+             )
+diff --git a/app/utils/steam/steamcmd/wrapper.py b/app/utils/steam/steamcmd/wrapper.py
+index 398e0fd..79bb162 100644
+--- a/app/utils/steam/steamcmd/wrapper.py
++++ b/app/utils/steam/steamcmd/wrapper.py
+@@ -317,8 +317,8 @@ class SteamcmdInterface:
+                 script_output.write("\n".join(script))
+             runner.message(f"Compiled & using script: {script_path}")
+             runner.execute(
+-                self.steamcmd,
+-                [f'+runscript "{script_path}"'],
++                "@steam-run@/bin/steam-run",
++                [self.steamcmd,  f'+runscript "{script_path}"'],
+                 len(publishedfileids),
+             )
+         else:

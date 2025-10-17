@@ -7,7 +7,7 @@
   tk,
   addDriverRunpath,
 
-  apple-sdk_12,
+  apple-sdk_13,
 
   koboldLiteSupport ? true,
 
@@ -41,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.94";
+  version = "1.99.4";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-qWH8yGjDTkMPLHjfMopfQKyBA5T1HHgllEH9Joceq3s=";
+    hash = "sha256-ilBrTMtY6bhns2GcwDckGq4+RqzgzBCg0HJJ4QUx8Co=";
   };
 
   enableParallelBuilding = true;
@@ -59,24 +59,25 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
-  buildInputs =
-    [ tk ]
-    ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals cublasSupport [
-      cudaPackages.libcublas
-      cudaPackages.cuda_nvcc
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_cccl
-    ]
-    ++ lib.optionals clblastSupport [
-      clblast
-      ocl-icd
-    ]
-    ++ lib.optionals vulkanSupport [
-      vulkan-loader
-      shaderc
-    ];
+  buildInputs = [
+    tk
+  ]
+  ++ finalAttrs.pythonInputs
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_13 ]
+  ++ lib.optionals cublasSupport [
+    cudaPackages.libcublas
+    cudaPackages.cuda_nvcc
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_cccl
+  ]
+  ++ lib.optionals clblastSupport [
+    clblast
+    ocl-icd
+  ]
+  ++ lib.optionals vulkanSupport [
+    vulkan-loader
+    shaderc
+  ];
 
   pythonPath = finalAttrs.pythonInputs;
 
@@ -125,7 +126,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     mainProgram = "koboldcpp";
     maintainers = with lib.maintainers; [
       maxstrid
-      donteatoreo
+      FlameFlag
     ];
     platforms = lib.platforms.unix;
   };

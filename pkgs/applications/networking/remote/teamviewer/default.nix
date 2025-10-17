@@ -30,7 +30,7 @@ mkDerivation rec {
     "out"
     "dev"
   ];
-  version = "15.66.5";
+  version = "15.70.4";
 
   src =
     let
@@ -39,11 +39,11 @@ mkDerivation rec {
     {
       x86_64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_amd64.deb";
-        hash = "sha256-yQD2iFFFHlR6vX/5vEtBqmIOtGXa4eHbE7v7MdXgBds=";
+        hash = "sha256-VF/afz1PUnoPhc/Bi2P3eTAz6l0aecWEnl0Tcehv4RA=";
       };
       aarch64-linux = fetchurl {
         url = "${base_url}/teamviewer_${version}_arm64.deb";
-        hash = "sha256-WqC4/5egq3pHgb4v8EPevJDDNmashuQr+VBQuFLdr7Q=";
+        hash = "sha256-XronqLbPnXrCUF8v6oVjUO2xv4OM8MyJLffbv8/FEcg=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -159,7 +159,10 @@ mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with maintainers; [
       jagajaga
       jraygauthier

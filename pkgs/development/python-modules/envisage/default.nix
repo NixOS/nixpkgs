@@ -31,7 +31,8 @@ buildPythonPackage rec {
     setuptools
     traits
     traitsui
-  ] ++ apptools.optional-dependencies.preferences;
+  ]
+  ++ apptools.optional-dependencies.preferences;
 
   preCheck = ''
     export HOME=$PWD/HOME
@@ -45,6 +46,6 @@ buildPythonPackage rec {
     description = "Framework for building applications whose functionalities can be extended by adding plug-ins";
     homepage = "https://github.com/enthought/envisage";
     license = licenses.bsdOriginal;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

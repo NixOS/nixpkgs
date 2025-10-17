@@ -50,7 +50,8 @@
 
           meta = {
             platforms = lib.platforms.all;
-          } // meta;
+          }
+          // meta;
         }
       );
     in

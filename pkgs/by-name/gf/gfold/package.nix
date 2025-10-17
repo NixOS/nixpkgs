@@ -4,37 +4,41 @@
   lib,
   rustPlatform,
   testers,
+  mold,
+  nix-update-script,
 }:
 
-let
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "gfold";
-  version = "2025.4.0";
-in
-rustPlatform.buildRustPackage {
-  inherit pname version;
+  version = "2025.9.0";
 
   src = fetchFromGitHub {
     owner = "nickgerace";
     repo = "gfold";
-    rev = version;
-    hash = "sha256-7PnqhS80Ozh5ZQNQ8iYgCiFT0JDLzhA09NV1HgrCOww=";
+    rev = finalAttrs.version;
+    hash = "sha256-sPvhZaDGInXH2PT8fg28m7wyDZiIE4fFScNO8WIjV9s=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-nGHJ96jFqG1pe3WUILPzm52HxrZYde2Z1p8N4DTaxlw=";
+  cargoHash = "sha256-pbIE8QXY8lYsDGdmGVsOPesVTaHRjDBSd7ihQhN2XrI=";
 
-  passthru.tests.version = testers.testVersion {
-    package = gfold;
-    command = "gfold --version";
-    inherit version;
+  nativeBuildInputs = [ mold ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+
+    tests.version = testers.testVersion {
+      package = gfold;
+      command = "gfold --version";
+      inherit (finalAttrs) version;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to help keep track of your Git repositories, written in Rust";
     homepage = "https://github.com/nickgerace/gfold";
-    license = licenses.asl20;
-    maintainers = [ maintainers.sigmanificient ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    platforms = lib.platforms.unix;
     mainProgram = "gfold";
   };
-}
+})

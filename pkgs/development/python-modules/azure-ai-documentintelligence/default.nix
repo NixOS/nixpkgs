@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Azure AI Document Intelligence client library for Python";
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/documentintelligence/azure-ai-documentintelligence/azure/ai/documentintelligence";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

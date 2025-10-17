@@ -1,12 +1,14 @@
 { pkgs, ... }:
 
 let
-  db-pass = "Test2Test2";
   app-key = "TestTestTestTestTestTestTestTest";
 in
 {
   name = "bookstack";
-  meta.maintainers = [ pkgs.lib.maintainers.savyajha ];
+  meta = {
+    maintainers = [ pkgs.lib.maintainers.savyajha ];
+    platforms = pkgs.lib.platforms.linux;
+  };
 
   nodes.bookstackMysql = {
     services.bookstack = {
@@ -19,7 +21,6 @@ in
         SITE_OWNER = "mail@example.com";
         DB_DATABASE = "bookstack";
         DB_USERNAME = "bookstack";
-        DB_PASSWORD_FILE = pkgs.writeText "mysql-pass" db-pass;
         DB_SOCKET = "/run/mysqld/mysqld.sock";
       };
     };
@@ -27,12 +28,18 @@ in
     services.mysql = {
       enable = true;
       package = pkgs.mariadb;
-      initialScript = pkgs.writeText "bookstack-init.sql" ''
-        create database bookstack DEFAULT CHARACTER SET utf8mb4;
-        create user 'bookstack'@'localhost' identified by '${db-pass}';
-        grant all on bookstack.* to 'bookstack'@'localhost';
-      '';
       settings.mysqld.character-set-server = "utf8mb4";
+      ensureDatabases = [
+        "bookstack"
+      ];
+      ensureUsers = [
+        {
+          name = "bookstack";
+          ensurePermissions = {
+            "bookstack.*" = "ALL PRIVILEGES";
+          };
+        }
+      ];
     };
   };
 

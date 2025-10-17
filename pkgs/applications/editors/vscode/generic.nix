@@ -1,6 +1,8 @@
 {
   stdenv,
   lib,
+  coreutils,
+  gnugrep,
   copyDesktopItems,
   makeDesktopItem,
   unzip,
@@ -15,7 +17,7 @@
   nss,
   nspr,
   xorg,
-  systemd,
+  systemdLibs,
   fontconfig,
   libdbusmenu,
   glib,
@@ -96,11 +98,37 @@ stdenv.mkDerivation (
 
             # mono
             krb5
+
+            # Needed for headless browser-in-vscode based plugins such as
+            # anything based on Puppeteer https://pptr.dev .
+            # e.g. Roo Code
+            glib
+            nspr
+            nss
+            dbus
+            at-spi2-atk
+            cups
+            expat
+            libxkbcommon
+            xorg.libX11
+            xorg.libXcomposite
+            xorg.libXdamage
+            xorg.libxcb
+            xorg.libXext
+            xorg.libXfixes
+            xorg.libXrandr
+            cairo
+            pango
+            alsa-lib
+            libgbm
+            udev
+            libudev0-shim
           ])
           ++ additionalPkgs pkgs;
 
         extraBwrapArgs = [
           "--bind-try /etc/nixos/ /etc/nixos/"
+          "--ro-bind-try /etc/xdg/ /etc/xdg/"
         ];
 
         # symlink shared assets, including icons and desktop entries
@@ -120,10 +148,7 @@ stdenv.mkDerivation (
         };
 
         meta = meta // {
-          description = ''
-            Wrapped variant of ${pname} which launches in a FHS compatible environment.
-            Should allow for easy usage of extensions without nix-specific modifications.
-          '';
+          description = "Wrapped variant of ${pname} which launches in a FHS compatible environment, should allow for easy usage of extensions without nix-specific modifications";
         };
       };
   in
@@ -137,21 +162,20 @@ stdenv.mkDerivation (
       dontFixup
       ;
 
-    passthru =
-      {
-        inherit
-          executableName
-          longName
-          tests
-          updateScript
-          vscodeVersion
-          ;
-        fhs = fhs { };
-        fhsWithPackages = f: fhs { additionalPkgs = f; };
-      }
-      // lib.optionalAttrs (vscodeServer != null) {
-        inherit rev vscodeServer;
-      };
+    passthru = {
+      inherit
+        executableName
+        longName
+        tests
+        updateScript
+        vscodeVersion
+        ;
+      fhs = fhs { };
+      fhsWithPackages = f: fhs { additionalPkgs = f; };
+    }
+    // lib.optionalAttrs (vscodeServer != null) {
+      inherit rev vscodeServer;
+    };
 
     desktopItems = [
       (makeDesktopItem {
@@ -197,41 +221,41 @@ stdenv.mkDerivation (
       })
     ];
 
-    buildInputs =
-      [
-        libsecret
-        libXScrnSaver
-        libxshmfence
-      ]
-      ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-        alsa-lib
-        at-spi2-atk
-        libkrb5
-        libgbm
-        nss
-        nspr
-        systemd
-        xorg.libxkbfile
-      ];
+    buildInputs = [
+      libsecret
+      libXScrnSaver
+      libxshmfence
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      alsa-lib
+      at-spi2-atk
+      libkrb5
+      libgbm
+      nss
+      nspr
+      systemdLibs
+      xorg.libxkbfile
+    ];
 
     runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.getLib systemd)
+      systemdLibs
       fontconfig.lib
       libdbusmenu
       wayland
       libsecret
     ];
 
-    nativeBuildInputs =
-      [ unzip ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        autoPatchelfHook
-        asar
-        copyDesktopItems
-        # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
-        # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
-        (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
-      ];
+    nativeBuildInputs = [
+      unzip
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+      asar
+      copyDesktopItems
+      # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+      # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+      (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
+    ];
 
     dontBuild = true;
     dontConfigure = true;
@@ -242,45 +266,45 @@ stdenv.mkDerivation (
       "lib/vscode/resources/app/node_modules/@vscode/vsce-sign/bin/vsce-sign"
     ];
 
-    installPhase =
-      ''
-        runHook preInstall
-      ''
-      + (
-        if stdenv.hostPlatform.isDarwin then
-          ''
-            mkdir -p "$out/Applications/${longName}.app" "$out/bin"
-            cp -r ./* "$out/Applications/${longName}.app"
-            ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
-          ''
-        else
+    installPhase = ''
+      runHook preInstall
+    ''
+    + (
+      if stdenv.hostPlatform.isDarwin then
+        ''
+          mkdir -p "$out/Applications/${longName}.app" "$out/bin"
+          cp -r ./* "$out/Applications/${longName}.app"
+          ln -s "$out/Applications/${longName}.app/Contents/Resources/app/bin/${sourceExecutableName}" "$out/bin/${executableName}"
+        ''
+      else
+        (
           ''
             mkdir -p "$out/lib/${libraryName}" "$out/bin"
             cp -r ./* "$out/lib/${libraryName}"
 
             ln -s "$out/lib/${libraryName}/bin/${sourceExecutableName}" "$out/bin/${executableName}"
-
-            # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
+          ''
+          # These are named vscode.png, vscode-insiders.png, etc to match the name in upstream *.deb packages.
+          + ''
             mkdir -p "$out/share/pixmaps"
             cp "$out/lib/${libraryName}/resources/app/resources/linux/code.png" "$out/share/pixmaps/${iconName}.png"
-
           ''
-          + (lib.optionalString patchVSCodePath ''
-            # Override the previously determined VSCODE_PATH with the one we know to be correct
-            sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
-            grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
-          '')
-          + ''
-
-            # Remove native encryption code, as it derives the key from the executable path which does not work for us.
-            # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
-            # in the first place.
-            rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
-          ''
-      )
-      + ''
-        runHook postInstall
-      '';
+        )
+        # Override the previously determined VSCODE_PATH with the one we know to be correct
+        + (lib.optionalString patchVSCodePath ''
+          sed -i "/ELECTRON=/iVSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}"
+          grep -q "VSCODE_PATH='$out/lib/${libraryName}'" "$out/bin/${executableName}" # check if sed succeeded
+        '')
+        # Remove native encryption code, as it derives the key from the executable path which does not work for us.
+        # The credentials should be stored in a secure keychain already, so the benefit of this is questionable
+        # in the first place.
+        + ''
+          rm -rf $out/lib/${libraryName}/resources/app/node_modules/vscode-encrypt
+        ''
+    )
+    + ''
+      runHook postInstall
+    '';
 
     preFixup = ''
       gappsWrapperArgs+=(
@@ -289,9 +313,17 @@ stdenv.mkDerivation (
             lib.optionalString stdenv.hostPlatform.isLinux
               "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libdbusmenu ]}"
           }
-        # Add gio to PATH so that moving files to the trash works when not using a desktop environment
-        --prefix PATH : ${glib.bin}/bin
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+        --prefix PATH : ${
+          lib.makeBinPath [
+            # for moving files to trash
+            glib
+
+            # for launcher script
+            gnugrep
+            coreutils
+          ]
+        }
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}"
         --add-flags ${lib.escapeShellArg commandLineArgs}
       )
     '';
@@ -299,22 +331,25 @@ stdenv.mkDerivation (
     # See https://github.com/NixOS/nixpkgs/issues/49643#issuecomment-873853897
     # linux only because of https://github.com/NixOS/nixpkgs/issues/138729
     postPatch =
-      lib.optionalString stdenv.hostPlatform.isLinux ''
-        # this is a fix for "save as root" functionality
-        packed="resources/app/node_modules.asar"
-        unpacked="resources/app/node_modules"
-        asar extract "$packed" "$unpacked"
-        substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
-          --replace "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
-          --replace "/bin/bash" "${bash}/bin/bash"
-        rm -rf "$packed"
-
+      # this is a fix for "save as root" functionality
+      lib.optionalString stdenv.hostPlatform.isLinux (
+        ''
+          packed="resources/app/node_modules.asar"
+          unpacked="resources/app/node_modules"
+          asar extract "$packed" "$unpacked"
+          substituteInPlace $unpacked/@vscode/sudo-prompt/index.js \
+            --replace-fail "/usr/bin/pkexec" "/run/wrappers/bin/pkexec" \
+            --replace-fail "/bin/bash" "${bash}/bin/bash"
+          rm -rf "$packed"
+        ''
         # without this symlink loading JsChardet, the library that is used for auto encoding detection when files.autoGuessEncoding is true,
         # fails to load with: electron/js2c/renderer_init: Error: Cannot find module 'jschardet'
         # and the window immediately closes which renders VSCode unusable
         # see https://github.com/NixOS/nixpkgs/issues/152939 for full log
-        ln -rs "$unpacked" "$packed"
-      ''
+        + ''
+          ln -rs "$unpacked" "$packed"
+        ''
+      )
       + (
         let
           vscodeRipgrep =

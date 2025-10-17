@@ -50,6 +50,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/altdesktop/python-dbus-next";
     changelog = "https://github.com/altdesktop/python-dbus-next/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

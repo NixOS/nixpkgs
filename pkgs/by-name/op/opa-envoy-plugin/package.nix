@@ -10,17 +10,17 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
 buildGoModule rec {
   pname = "opa-envoy-plugin";
-  version = "1.5.1-envoy";
+  version = "1.9.0-envoy";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa-envoy-plugin";
     tag = "v${version}";
-    hash = "sha256-rctYzH47R3vFk/Xl9YwTrTHU6K1pZ3QcimH1JfDecDs=";
+    hash = "sha256-Arc0aVDcGZqCrrUrAB9yVXSXzdtOlXEFGZ8pJ578oKk=";
   };
 
   vendorHash = null;

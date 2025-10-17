@@ -7,25 +7,21 @@
   libsodium,
   libxeddsa,
   pytestCheckHook,
+  pytest-cov-stub,
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "xeddsa";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-xeddsa";
     tag = "v${version}";
-    hash = "sha256-636zsJXD8EtLDXMIkJTON0g3sg0EPrMzcfR7SUrURac=";
+    hash = "sha256-5s6ERazWnwYEc0d5e+eSdvOCTklBQVrjzvlNifC2zKU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "setuptools<74" "setuptools"
-  '';
 
   passthru.updateScript = nix-update-script { };
 
@@ -40,6 +36,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "xeddsa" ];
@@ -50,6 +47,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/Syndace/python-xeddsa/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

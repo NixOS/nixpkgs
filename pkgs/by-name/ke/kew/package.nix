@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.3.3";
+  version = "3.5.3";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1PUvUFlRhGrZLjLwQrNb0kE695m5poSqrAIOBAnm3xk=";
+    hash = "sha256-7bO9IvSTJJKiNYQzcTSI2Ugjhw1ibbyE5/fe6EDYqvI=";
   };
 
   postPatch = ''
@@ -48,13 +48,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '$(shell uname -m)' '${stdenv.hostPlatform.parsed.cpu.name}'
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   buildInputs = [
     fftwFloat.dev

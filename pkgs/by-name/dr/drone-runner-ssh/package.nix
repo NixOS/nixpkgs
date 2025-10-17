@@ -21,7 +21,6 @@ buildGoModule {
     description = "Experimental Drone runner that executes a pipeline on a remote machine";
     homepage = "https://github.com/drone-runners/drone-runner-ssh";
     license = licenses.unfreeRedistributable;
-    teams = [ teams.c3d2 ];
     mainProgram = "drone-runner-ssh";
   };
 }

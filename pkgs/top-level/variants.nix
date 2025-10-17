@@ -28,7 +28,8 @@ self: super: {
       (self': super': {
         pkgsLLVM = super';
       })
-    ] ++ overlays;
+    ]
+    ++ overlays;
     # Bootstrap a cross stdenv using the LLVM toolchain.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
@@ -43,7 +44,8 @@ self: super: {
       (self': super': {
         pkgsArocc = super';
       })
-    ] ++ overlays;
+    ]
+    ++ overlays;
     # Bootstrap a cross stdenv using the Aro C compiler.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
@@ -58,7 +60,8 @@ self: super: {
       (self': super': {
         pkgsZig = super';
       })
-    ] ++ overlays;
+    ]
+    ++ overlays;
     # Bootstrap a cross stdenv using the Zig toolchain.
     # This is currently not possible when compiling natively,
     # so we don't need to check hostPlatform != buildPlatform.
@@ -78,7 +81,8 @@ self: super: {
           (self': super': {
             pkgsMusl = super';
           })
-        ] ++ overlays;
+        ]
+        ++ overlays;
         ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} = {
           config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
         };
@@ -86,14 +90,66 @@ self: super: {
     else
       throw "Musl libc only supports 64-bit Linux systems.";
 
+  # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
+  pkgsx86_64Darwin =
+    if stdenv.hostPlatform.isDarwin then
+      nixpkgsFun {
+        overlays = [
+          (self': super': {
+            pkgsx86_64Darwin = super';
+          })
+        ]
+        ++ overlays;
+        localSystem = {
+          config = lib.systems.parse.tripleFromSystem (
+            stdenv.hostPlatform.parsed
+            // {
+              cpu = lib.systems.parse.cpuTypes.x86_64;
+            }
+          );
+        };
+      }
+    else
+      throw "x86_64 Darwin package set can only be used on Darwin systems.";
+
   # Full package set with rocm on cuda off
   # Mostly useful for asserting pkgs.pkgsRocm.torchWithRocm == pkgs.torchWithRocm and similar
-  pkgsRocm = nixpkgsFun ({
+  pkgsRocm = nixpkgsFun {
     config = super.config // {
       cudaSupport = false;
       rocmSupport = true;
     };
-  });
+  };
+
+  # Full package set with cuda on rocm off
+  # Mostly useful for asserting pkgs.pkgsCuda.torchWithCuda == pkgs.torchWithCuda and similar
+  pkgsCuda = nixpkgsFun {
+    config = super.config // {
+      cudaSupport = true;
+      rocmSupport = false;
+    };
+  };
+
+  # `pkgsForCudaArch` maps each CUDA capability in _cuda.db.cudaCapabilityToInfo to a Nixpkgs variant configured for
+  # that target system. For example, `pkgsForCudaArch.sm_90a.python3Packages.torch` refers to PyTorch built for the
+  # Hopper architecture, leveraging architecture-specific features.
+  # NOTE: Not every package set is supported on every architecture!
+  # See `Using pkgsForCudaArch` in doc/languages-frameworks/cuda.section.md for more information.
+  pkgsForCudaArch = lib.listToAttrs (
+    lib.map (cudaCapability: {
+      name = self._cuda.lib.mkRealArchitecture cudaCapability;
+      value = nixpkgsFun {
+        config = super.config // {
+          cudaSupport = true;
+          rocmSupport = false;
+          # Not supported by architecture-specific feature sets, so disable for all.
+          # Users can choose to build for family-specific feature sets if they wish.
+          cudaForwardCompat = false;
+          cudaCapabilities = [ cudaCapability ];
+        };
+      };
+    }) (lib.attrNames self._cuda.db.cudaCapabilityToInfo)
+  );
 
   pkgsExtraHardening = nixpkgsFun {
     overlays = [
@@ -108,6 +164,7 @@ self: super: {
               "shadowstack"
               "nostrictaliasing"
               "pacret"
+              "glibcxxassertions"
               "trivialautovarinit"
             ]
           ) super'.stdenv;
@@ -122,6 +179,7 @@ self: super: {
           pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
         }
       )
-    ] ++ overlays;
+    ]
+    ++ overlays;
   };
 }

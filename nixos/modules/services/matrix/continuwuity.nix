@@ -210,7 +210,7 @@ in
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       environment = lib.mkMerge [
-        { CONDUWUIT_CONFIG = configFile; }
+        { CONTINUWUITY_CONFIG = configFile; }
         cfg.extraEnvironment
       ];
       startLimitBurst = 5;

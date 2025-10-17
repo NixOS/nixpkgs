@@ -57,6 +57,7 @@
   fontconfig,
   freetype,
   openssl,
+  openxr-loader,
   sqlite,
   gst-plugins-base,
   gst-plugins-bad,
@@ -75,12 +76,13 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  fetchpatch,
 }:
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.48.3";
+  version = "2.50.1";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -100,7 +102,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-1NxZcPD8alKf9/1nvL+rK7tekb54my6SeWQLMhengsM=";
+    hash = "sha256-M+kS7m4820uYA3FfUGhq+Fpgr0fxz3KmrMai2xuz2f4=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -108,96 +110,105 @@ clangStdenv.mkDerivation (finalAttrs: {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
     })
+
+    # Workaround to fix cross-compilation for RiscV
+    # error: ‘toB3Type’ was not declared in this scope
+    # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+    (fetchpatch {
+      url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
+      hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
+      name = "fix_ftbfs_riscv64.patch";
+    })
   ];
 
-  nativeBuildInputs =
-    [
-      bison
-      cmake
-      gettext
-      gobject-introspection
-      gperf
-      ninja
-      perl
-      perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
-      pkg-config
-      python3
-      ruby
-      gi-docgen
-      glib # for gdbus-codegen
-      unifdef
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    bison
+    cmake
+    gettext
+    gobject-introspection
+    gperf
+    ninja
+    perl
+    perl.pkgs.FileCopyRecursive # used by copy-user-interface-resources.pl
+    pkg-config
+    python3
+    ruby
+    gi-docgen
+    glib # for gdbus-codegen
+    unifdef
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      cairo # required even when using skia
-      enchant2
-      flite
-      libavif
-      libepoxy
-      libjxl
-      gnutls
-      gst-plugins-bad
-      gst-plugins-base
-      harfbuzz
-      hyphen
-      icu
-      libGL
-      libGLU
-      libgbm
-      libgcrypt
-      libgpg-error
-      libidn
-      libintl
-      lcms2
-      libpthreadstubs
-      libsysprof-capture
-      libtasn1
-      libwebp
-      libxkbcommon
-      libxml2
-      libxslt
-      libbacktrace
-      nettle
-      p11-kit
-      sqlite
-      woff2
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
-      # https://bugs.webkit.org/show_bug.cgi?id=274032
-      fontconfig
-      freetype
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
-      libedit
-      readline
-    ]
-    ++ lib.optionals clangStdenv.hostPlatform.isLinux [
-      libseccomp
-      libmanette
-      wayland
-      xorg.libX11
-    ]
-    ++ lib.optionals systemdSupport [
-      systemd
-    ]
-    ++ lib.optionals enableGeoLocation [
-      geoclue2
-    ]
-    ++ lib.optionals enableExperimental [
-      # For ENABLE_WEB_RTC
-      openssl
-    ]
-    ++ lib.optionals withLibsecret [
-      libsecret
-    ]
-    ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
-      wayland-protocols
-    ];
+  buildInputs = [
+    at-spi2-core
+    cairo # required even when using skia
+    enchant2
+    flite
+    libavif
+    libepoxy
+    libjxl
+    gnutls
+    gst-plugins-bad
+    gst-plugins-base
+    harfbuzz
+    hyphen
+    icu
+    libGL
+    libGLU
+    libgbm
+    libgcrypt
+    libgpg-error
+    libidn
+    libintl
+    lcms2
+    libpthreadstubs
+    libsysprof-capture
+    libtasn1
+    libwebp
+    libxkbcommon
+    libxml2
+    libxslt
+    libbacktrace
+    nettle
+    p11-kit
+    sqlite
+    woff2
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isBigEndian [
+    # https://bugs.webkit.org/show_bug.cgi?id=274032
+    fontconfig
+    freetype
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
+    libedit
+    readline
+  ]
+  ++ lib.optionals clangStdenv.hostPlatform.isLinux [
+    libseccomp
+    libmanette
+    wayland
+    xorg.libX11
+  ]
+  ++ lib.optionals systemdSupport [
+    systemd
+  ]
+  ++ lib.optionals enableGeoLocation [
+    geoclue2
+  ]
+  ++ lib.optionals enableExperimental [
+    # For ENABLE_WEB_RTC
+    openssl
+    # For ENABLE_WEBXR
+    openxr-loader
+  ]
+  ++ lib.optionals withLibsecret [
+    libsecret
+  ]
+  ++ lib.optionals (lib.versionAtLeast gtk3.version "4.0") [
+    wayland-protocols
+  ];
 
   propagatedBuildInputs = [
     gtk3

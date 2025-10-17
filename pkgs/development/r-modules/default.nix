@@ -358,14 +358,13 @@ let
   # `self` is `_self` with overridden packages;
   # packages in `_self` may depends on overridden packages.
   self = (defaultOverrides _self self) // overrides;
-  _self =
-    {
-      inherit buildRPackage;
-    }
-    // mkPackageSet deriveBioc biocPackagesGenerated
-    // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
-    // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
-    // mkPackageSet deriveCran cranPackagesGenerated;
+  _self = {
+    inherit buildRPackage;
+  }
+  // mkPackageSet deriveBioc biocPackagesGenerated
+  // mkPackageSet deriveBiocAnn biocAnnotationPackagesGenerated
+  // mkPackageSet deriveBiocExp biocExperimentPackagesGenerated
+  // mkPackageSet deriveCran cranPackagesGenerated;
 
   # Takes in a generated JSON file's imported contents
   # and transforms it by swapping each element of the depends array with the dependency's derivation
@@ -452,7 +451,10 @@ let
       libjpeg
     ];
     bnpmr = [ pkgs.gsl ];
-    caviarpd = [ pkgs.cargo ];
+    caviarpd = with pkgs; [
+      cargo
+      rustc
+    ];
     cairoDevice = [ pkgs.gtk2.dev ];
     Cairo = with pkgs; [
       libtiff
@@ -501,7 +503,7 @@ let
       pkg-config
       gmp.dev
       mpfr.dev
-      flint3
+      flint
     ];
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
@@ -520,7 +522,7 @@ let
         xorg.libXdmcp
       ];
     GeneralizedWendland = [ pkgs.gsl ];
-    ggiraph = with pkgs; [ pkgs.libpng.dev ];
+    ggiraph = [ pkgs.libpng.dev ];
     git2r = with pkgs; [
       zlib.dev
       openssl.dev
@@ -570,6 +572,11 @@ let
     ];
     Rigraphlib = [ pkgs.cmake ];
     HiCseg = [ pkgs.gsl ];
+    hypergeo2 = with pkgs; [
+      gmp.dev
+      mpfr.dev
+      pkg-config
+    ];
     imager = [ pkgs.xorg.libX11.dev ];
     imbibe = [ pkgs.zlib.dev ];
     image_CannyEdges = with pkgs; [
@@ -587,7 +594,10 @@ let
     leidenAlg = [ pkgs.gmp.dev ];
     Libra = [ pkgs.gsl ];
     libstable4u = [ pkgs.gsl ];
-    heck = [ pkgs.cargo ];
+    heck = with pkgs; [
+      cargo
+      rustc
+    ];
     LOMAR = [ pkgs.gmp.dev ];
     littler = [ pkgs.libdeflate ];
     lpsymphony = with pkgs; [
@@ -679,6 +689,11 @@ let
     gdalcubes = [ pkgs.pkg-config ];
     rgeos = [ pkgs.geos ];
     Rglpk = [ pkgs.glpk ];
+    RcppPlanc = with pkgs; [
+      which
+      cmake
+      pkg-config
+    ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = with pkgs; [ zlib.dev ];
@@ -1107,7 +1122,10 @@ let
       fftw.dev
     ];
     specklestar = [ pkgs.fftw.dev ];
-    cartogramR = [ pkgs.fftw.dev ];
+    cartogramR = with pkgs; [
+      fftw.dev
+      pkg-config
+    ];
     jqr = [ pkgs.jq.out ];
     kza = [ pkgs.pkg-config ];
     igraph = with pkgs; [
@@ -1115,7 +1133,10 @@ let
       libxml2.dev
       glpk
     ];
-    interpolation = [ pkgs.gmp ];
+    interpolation = with pkgs; [
+      gmp
+      mpfr
+    ];
     image_textlinedetector = with pkgs; [
       pkg-config
       opencv
@@ -1365,6 +1386,10 @@ let
     crandep = [ pkgs.gsl ];
     catSurv = [ pkgs.gsl ];
     ccfindR = [ pkgs.gsl ];
+    RcppPlanc = with pkgs; [
+      hwloc
+      hdf5.dev
+    ];
     screenCounter = [ pkgs.zlib.dev ];
     SPARSEMODr = [ pkgs.gsl ];
     RKHSMetaMod = [ pkgs.gsl ];
@@ -1425,7 +1450,11 @@ let
     ];
     DropletUtils = [ pkgs.zlib.dev ];
     RMariaDB = [ pkgs.libmysqlclient.dev ];
-    ijtiff = [ pkgs.libtiff ];
+    ijtiff = with pkgs; [
+      libtiff
+      libjpeg
+      zlib
+    ];
     ragg =
       with pkgs;
       [
@@ -1645,6 +1674,7 @@ let
     "minired" # deprecated on CRAN
 
     # Impure network access during build
+    "BulkSignalR"
     "waddR"
     "tiledb"
     "switchr"
@@ -1754,6 +1784,14 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    arcgisplaces = old.arcgisplaces.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    cartogramR = old.cartogramR.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
     rshift = old.rshift.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
@@ -1789,6 +1827,10 @@ let
           'python_cmds <- c(python_cmds, file.path("${lib.getBin pkgs.python3}", "bin", "python3"))
            python_cmds[which(python_cmds != "")]'
       '';
+    });
+
+    fcl = old.fcl.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
     });
 
     fio = old.fio.overrideAttrs (attrs: {
@@ -1977,7 +2019,11 @@ let
     });
 
     zoomerjoin = old.zoomerjoin.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      nativeBuildInputs = [
+        pkgs.cargo
+        pkgs.rustc
+      ]
+      ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
@@ -1998,13 +2044,6 @@ let
         ]
         ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
-    });
-
-    graper = old.graper.overrideAttrs (attrs: {
-      postPatch = ''
-        substituteInPlace "src/Makevars" \
-          --replace-fail "CXX_STD=CXX11" "CXX_STD=CXX14"
-      '';
     });
 
     ocf = old.ocf.overrideAttrs (attrs: {
@@ -2199,6 +2238,17 @@ let
     RAppArmor = old.RAppArmor.overrideAttrs (attrs: {
       patches = [ ./patches/RAppArmor.patch ];
       LIBAPPARMOR_HOME = pkgs.libapparmor;
+    });
+
+    # Append cargo path to path variable
+    # This will provide cargo in case it's not set by the user
+    rextendr = old.rextendr.overrideAttrs (attrs: {
+      postPatch = ''
+        substituteInPlace R/zzz.R --replace-fail \
+          ".onLoad <- function(...) {" \
+          '.onLoad <- function(...) {
+           Sys.setenv(PATH = paste0(Sys.getenv("PATH"), ":${lib.getBin pkgs.cargo}/bin"))'
+      '';
     });
 
     RMySQL = old.RMySQL.overrideAttrs (attrs: {
@@ -2504,7 +2554,8 @@ let
           icu
           which
           zstd.dev
-        ] ++ attrs.buildInputs;
+        ]
+        ++ attrs.buildInputs;
         postInstall = ''
           install -d $out/bin $out/share/man/man1
           ln -s ../library/littler/bin/r $out/bin/r
@@ -2692,6 +2743,10 @@ let
         substituteInPlace R/pandoc.R \
           --replace-fail '"~/opt/pandoc"' '"~/opt/pandoc", "${pkgs.pandoc}/bin"'
       '';
+    });
+
+    webfakes = old.webfakes.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
     });
 
     redland = old.redland.overrideAttrs (_: {

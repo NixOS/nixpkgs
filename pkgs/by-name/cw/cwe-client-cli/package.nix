@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     dbus
     openssl_3
   ];
-  useFetchCargoVendor = true;
+
   cargoHash = "sha256-ml6anuAJru2zVIHNf/z4gdQjplRrXL4FO44cxfaDRns=";
 
   meta = {

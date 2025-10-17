@@ -56,22 +56,29 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix compatibility with glog 0.7.x
     # Remove when https://gitlab.com/ubports/development/core/trust-store/-/merge_requests/18 merged & in release
     ./1001-treewide-Switch-to-glog-CMake-module.patch
+
+    # Fix compatibility with CMake 4 and beyond (for now)
+    # Remove when version > 2.0.2
+    (fetchpatch {
+      name = "1002-trust-store-CMakeLists.txt-Bump-minimum-version-to-3.10.patch";
+      url = "https://gitlab.com/ubports/development/core/trust-store/-/commit/64bc51f45e1407f16d389120508c2bcddf9e0d5b.patch";
+      hash = "sha256-+ZkTQd6wphd29dTmEIBI7nADFjPQD5012/FVFOtdGbI=";
+    })
   ];
 
-  postPatch =
-    ''
-      # pkg-config patching hook expects prefix variable
-      substituteInPlace data/trust-store.pc.in \
-        --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  postPatch = ''
+    # pkg-config patching hook expects prefix variable
+    substituteInPlace data/trust-store.pc.in \
+      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
 
-      substituteInPlace src/core/trust/terminal_agent.h \
-        --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      substituteInPlace CMakeLists.txt \
-        --replace-fail 'add_subdirectory(tests)' ""
-    '';
+    substituteInPlace src/core/trust/terminal_agent.h \
+      --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' ""
+  '';
 
   strictDeps = true;
 

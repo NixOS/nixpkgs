@@ -2,32 +2,23 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  testers,
-  nix-update-script,
-  fetchpatch,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "mongosh";
-  version = "2.5.2";
+  version = "2.5.8";
 
   src = fetchFromGitHub {
     owner = "mongodb-js";
     repo = "mongosh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-0rol41XNdpfVRGY8KXFmQ0GHg5QqgnCaF21ZFyxfKeQ=";
+    hash = "sha256-VQJkhaPXy2Mg9uoV6qKFzACtJ6TMDWZj52wUvP/7SLg=";
   };
 
-  npmDepsHash = "sha256-J4/CU+gdT/qecM1JwafLBewQjYdaONq/k4ax3Jw34XY=";
+  npmDepsHash = "sha256-BnuzrIS/RtKReTPrSY/yQ5LRmA3PIGkv80rS+6IJZxQ=";
 
   patches = [
     ./disable-telemetry.patch
-
-    # For tagged version 2.5.2
-    (fetchpatch {
-      url = "https://github.com/mongodb-js/mongosh/commit/8e775b58b95f1d7c0a3de9c677e957a40213da6a.patch";
-      hash = "sha256-Q80QuzC7JN6uqyjk7YuUljXm+365AwYRV5cct9TefUc=";
-    })
   ];
 
   npmFlags = [
@@ -45,15 +36,9 @@ buildNpmPackage (finalAttrs: {
   '';
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
-    updateScript = nix-update-script {
-      extraArgs = [
-        "--version-regex"
-        "^v(\\d+\\.\\d+\\.\\d+)$"
-      ];
-    };
+    # Version testing is skipped because upstream often forgets to update the version.
+
+    updateScript = ./update.sh;
   };
 
   meta = {

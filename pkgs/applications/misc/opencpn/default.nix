@@ -38,98 +38,99 @@
   pkg-config,
   portaudio,
   rapidjson,
+  shapelib,
   sqlite,
   tinyxml,
   util-linux,
   wxGTK32,
   xorg,
+  xz,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "opencpn";
-  version = "5.10.2";
+  version = "5.12.4";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
     rev = "Release_${finalAttrs.version}";
-    hash = "sha256-VuMClQ5k1mTMF5yWstTi9YTF4tEN68acH5OPhjdzIwM=";
+    hash = "sha256-1JCb2aYyjaiUvtYkBFtEdlClmiMABN3a/Hts9V1sbgc=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     sed -i '/fixup_bundle/d; /NO_DEFAULT_PATH/d' CMakeLists.txt
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      gtest
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      lsb-release
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      DarwinTools
-      makeWrapper
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    gtest
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    lsb-release
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    DarwinTools
+    makeWrapper
+  ];
 
-  buildInputs =
-    [
-      at-spi2-core
-      curl
-      dbus
-      flac
-      gitMinimal
-    ]
-    ++ [
-      glew
-      jasper
-      libGLU
-      libarchive
-      libdatrie
-      libepoxy
-      libexif
-      libogg
-      libopus
-      libsndfile
-      libthai
-      libunarr
-      libusb1
-      libvorbis
-      libxkbcommon
-      lz4
-      libmpg123
-      portaudio
-      rapidjson
-      sqlite
-      tinyxml
-      wxGTK32
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-utils
-      libselinux
-      libsepol
-      util-linux
-      xorg.libXdmcp
-      xorg.libXtst
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      lame
-    ];
+  buildInputs = [
+    at-spi2-core
+    curl
+    dbus
+    flac
+    gitMinimal
+    shapelib
+  ]
+  ++ [
+    glew
+    jasper
+    libGLU
+    libarchive
+    libdatrie
+    libepoxy
+    libexif
+    libogg
+    libopus
+    libsndfile
+    libthai
+    libunarr
+    libusb1
+    libvorbis
+    libxkbcommon
+    lz4
+    libmpg123
+    portaudio
+    rapidjson
+    sqlite
+    tinyxml
+    wxGTK32
+    xz
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-utils
+    libselinux
+    libsepol
+    util-linux
+    xorg.libXdmcp
+    xorg.libXtst
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lame
+  ];
 
-  cmakeFlags =
-    [
-      "-DOCPN_BUNDLE_DOCS=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # Override OpenCPN platform detection.
-      "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
-    ];
+  cmakeFlags = [
+    "-DOCPN_BUNDLE_DOCS=true"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Override OpenCPN platform detection.
+    "-DOCPN_TARGET_TUPLE=unknown;unknown;${stdenv.hostPlatform.linuxArch}"
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals (!stdenv.hostPlatform.isx86) [

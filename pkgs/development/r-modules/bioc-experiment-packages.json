@@ -899,8 +899,8 @@
     },
     "PhyloProfileData": {
       "name": "PhyloProfileData",
-      "version": "1.22.0",
-      "sha256": "0zbs9aaf8xmz3is9vf54d0iib00ypa6vly5s207dbcj7l1x4h0yc",
+      "version": "1.22.3",
+      "sha256": "0bc702idbsnqs2fga4jd9qwqphc0hrv3j1hidwz26awkfwb8yv59",
       "depends": ["BiocStyle", "Biostrings", "ExperimentHub"]
     },
     "ProData": {
@@ -911,8 +911,8 @@
     },
     "ProteinGymR": {
       "name": "ProteinGymR",
-      "version": "1.2.1",
-      "sha256": "1xwva9gnfldgx2bw62zwz3wlc84k4jlnybq81nr0xqa6xdr9fycl",
+      "version": "1.2.4",
+      "sha256": "0czlxm1z5bpb096alwb96a3gwpv9244h0b8isbbfdiy70rcd21rm",
       "depends": ["AnnotationHub", "ComplexHeatmap", "ExperimentHub", "bio3d", "circlize", "dplyr", "forcats", "ggExtra", "ggdist", "gghalves", "ggplot2", "htmltools", "lifecycle", "pals", "purrr", "queryup", "r3dmol", "rlang", "spdl", "stringr", "tidyr", "tidyselect"]
     },
     "PtH2O2lipids": {

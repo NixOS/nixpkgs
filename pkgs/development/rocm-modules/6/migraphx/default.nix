@@ -18,9 +18,12 @@
   abseil-cpp,
   half,
   nlohmann_json,
-  msgpack,
+  boost,
+  msgpack-cxx,
   sqlite,
-  oneDNN,
+  # TODO(@LunNova): Swap to `oneDNN` once v3 is supported
+  # Upstream issue: https://github.com/ROCm/AMDMIGraphX/issues/4351
+  oneDNN_2,
   blaze,
   texliveSmall,
   doxygen,
@@ -28,6 +31,7 @@
   docutils,
   ghostscript,
   python3Packages,
+  writableTmpDirAsHomeHook,
   buildDocs ? false,
   buildTests ? false,
   gpuTargets ? clr.gpuTargets,
@@ -51,55 +55,49 @@ let
       ]
     )
   );
-  oneDNN' = oneDNN.overrideAttrs rec {
-    version = "2.7.5";
-    src = fetchFromGitHub {
-      owner = "oneapi-src";
-      repo = "oneDNN";
-      tag = "v${version}";
-      hash = "sha256-oMPBORAdL2rk2ewyUrInYVHYBRvuvNX4p4rwykO3Rhs=";
-    };
-  };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildDocs [
-      "doc"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildDocs [
+    "doc"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-h9cTbrMwHeRGVJS/uHQnCXplNcrBqxbhwz2AcAEso0M=";
+    hash = "sha256-8iOBoRBygTvn9eX5f9cG0kBHKgKSeflqHkV6Qwh/ruA=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      cmake
-      rocm-cmake
-      clr
-      python3Packages.python
-    ]
-    ++ lib.optionals buildDocs [
-      latex
-      doxygen
-      sphinx
-      docutils
-      ghostscript
-      python3Packages.sphinx-rtd-theme
-      python3Packages.breathe
-    ];
+  patches = [
+    ./msgpack-6-compat.patch
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    rocm-cmake
+    clr
+    python3Packages.python
+  ]
+  ++ lib.optionals buildDocs [
+    latex
+    doxygen
+    sphinx
+    docutils
+    ghostscript
+    python3Packages.sphinx-rtd-theme
+    python3Packages.breathe
+    writableTmpDirAsHomeHook
+  ];
 
   buildInputs = [
     openmp
@@ -112,9 +110,10 @@ stdenv.mkDerivation (finalAttrs: {
     protobuf
     half
     nlohmann_json
-    msgpack
+    boost
+    msgpack-cxx
     sqlite
-    oneDNN'
+    oneDNN_2
     blaze
     python3Packages.pybind11
     python3Packages.onnx
@@ -138,9 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
     # migraphxs relies on miopen which relies on current composable_kernel
     # impossible to build with this ON; we can't link both of them even if we package both
     "-DMIGRAPHX_USE_COMPOSABLEKERNEL=OFF"
-    "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-    "-DOpenMP_omp_LIBRARY=${openmp}/lib"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"
@@ -149,27 +145,25 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
   ];
 
-  postPatch =
-    ''
-      export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${abseil-cpp}/include -I${hipblas-common}/include"
-      patchShebangs tools
+  postPatch = ''
+    export CXXFLAGS+=" -w -isystem${rocmlir}/include/rocmlir -I${half}/include -I${abseil-cpp}/include -I${hipblas-common}/include"
+    patchShebangs tools
 
-      # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
-      substituteInPlace CMakeLists.txt \
-        --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
-    ''
-    + lib.optionalString (!buildDocs) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(doc)" ""
-    ''
-    + lib.optionalString (!buildTests) ''
-      substituteInPlace CMakeLists.txt \
-        --replace "add_subdirectory(test)" ""
-    '';
+    # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
+    substituteInPlace CMakeLists.txt \
+      --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
+  ''
+  + lib.optionalString (!buildDocs) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(doc)" ""
+  ''
+  + lib.optionalString (!buildTests) ''
+    substituteInPlace CMakeLists.txt \
+      --replace "add_subdirectory(test)" ""
+  '';
 
   # Unfortunately, it seems like we have to call make on this manually
   preInstall = lib.optionalString buildDocs ''
-    export HOME=$(mktemp -d)
     make -j$NIX_BUILD_CORES doc
     cd ../doc/pdf
     make -j$NIX_BUILD_CORES

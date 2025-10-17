@@ -12,7 +12,7 @@ The compatible shells for each hook are:
  - `patchRcPathBash`: [Bash](https://www.gnu.org/software/bash/), [ksh](http://www.kornshell.org/), [zsh](https://www.zsh.org/) and other shells supporting the Bash-like parameter expansions.
  - `patchRcPathCsh`: Csh scripts, such as those targeting [tcsh](https://www.tcsh.org/).
  - `patchRcPathFish`: [Fish](https://fishshell.com/) scripts.
- - `patchRcPathPosix`: POSIX-conformant shells supporting the limited parameter expansions specified by the POSIX standard. Current implementation uses the parameter expansion `${foo-}` only.
+ - `patchRcPathPosix`: POSIX-conformant shells supporting the limited parameter expansions specified by the POSIX standard. The current implementation uses the parameter expansion `${foo-}` only.
 
 For each supported shell, it modifies the script with a `PATH` prefix that is later removed when the script ends.
 It allows nested patching, which guarantees that a patched script may source another patched script.
@@ -38,9 +38,7 @@ stdenv.mkDerivation {
 
   # ...
 
-  nativeBuildInputs = [
-    patchRcPathFish
-  ];
+  nativeBuildInputs = [ patchRcPathFish ];
 
   postFixup = ''
     patchRcPathFish $out/bin/this-foo.fish ${

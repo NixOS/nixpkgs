@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-mistralai";
-  version = "0.2.10";
+  version = "0.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${version}";
-    hash = "sha256-1oH9GRvjYv/YzedKXeWgw5nwNgMQ9mSNkmZ2xwPekXc=";
+    hash = "sha256-eZyoveKn4S0nkK/2q8+HK0bpFAQEez4PyRETQeZItMo=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mistralai";
@@ -58,12 +58,16 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/unit_tests" ];
+  enabledTestPaths = [ "tests/unit_tests" ];
 
   pythonImportsCheck = [ "langchain_mistralai" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain-mistralai==";
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain-mistralai==";
+    };
   };
 
   meta = {

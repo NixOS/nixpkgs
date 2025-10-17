@@ -20,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-0VvZFclqwAcKN95eusQ3lgV0pp1NRUDcVXpVUC0P4QI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-iRsmB+ak6pWFtAdXEmGSc9dGdIuSbgLp3UT3SdOUOGQ=";
 
   nativeBuildInputs = [
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nixci \
       --bash <($out/bin/nixci completion bash) \
       --fish <($out/bin/nixci completion fish) \

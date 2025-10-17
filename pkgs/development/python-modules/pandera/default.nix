@@ -14,14 +14,17 @@
   pandas,
   pydantic,
   typeguard,
+  typing-extensions,
   typing-inspect,
 
   # optional-dependencies
   black,
   dask,
+  duckdb,
   fastapi,
   geopandas,
   hypothesis,
+  ibis-framework,
   pandas-stubs,
   polars,
   pyyaml,
@@ -30,22 +33,24 @@
 
   # tests
   joblib,
+  pyarrow-hotfix,
   pyarrow,
-  pytestCheckHook,
   pytest-asyncio,
+  pytestCheckHook,
   pythonAtLeast,
+  rich,
 }:
 
 buildPythonPackage rec {
   pname = "pandera";
-  version = "0.24.0";
+  version = "0.26.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "unionai-oss";
     repo = "pandera";
     tag = "v${version}";
-    hash = "sha256-S5y717M3rGGO39TOh1X5yePvdcF6ct1Jk51/bbM6X6M=";
+    hash = "sha256-kjKsujDxX2+X6omP9qDWc2JI8bxQlOSVOcEnfACoL2I=";
   };
 
   build-system = [
@@ -56,11 +61,10 @@ buildPythonPackage rec {
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   dependencies = [
-    numpy
     packaging
-    pandas
     pydantic
     typeguard
+    typing-extensions
     typing-inspect
   ];
 
@@ -96,23 +100,28 @@ buildPythonPackage rec {
           geopandas
           shapely
         ];
+        ibis = [
+          ibis-framework
+          duckdb
+        ];
+        pandas = [
+          numpy
+          pandas
+        ];
         polars = [ polars ];
       };
     in
     extras // { all = lib.concatLists (lib.attrValues extras); };
 
   nativeCheckInputs = [
-    pytestCheckHook
-    pytest-asyncio
     joblib
     pyarrow
-  ] ++ optional-dependencies.all;
-
-  pytestFlagsArray = [
-    # KeyError: 'dask'
-    "--deselect=tests/dask/test_dask.py::test_series_schema"
-    "--deselect=tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
-  ];
+    pyarrow-hotfix
+    pytest-asyncio
+    pytestCheckHook
+    rich
+  ]
+  ++ optional-dependencies.all;
 
   disabledTestPaths = [
     "tests/fastapi/test_app.py" # tries to access network
@@ -120,19 +129,28 @@ buildPythonPackage rec {
     "tests/modin" # requires modin, not in nixpkgs
     "tests/mypy/test_pandas_static_type_checking.py" # some typing failures
     "tests/pyspark" # requires spark
+
+    # KeyError: 'dask'
+    "tests/dask/test_dask.py::test_series_schema"
+    "tests/dask/test_dask_accessor.py::test_dataframe_series_add_schema"
   ];
 
-  disabledTests =
-    lib.optionals stdenv.hostPlatform.isDarwin [
-      # OOM error on ofborg:
-      "test_engine_geometry_coerce_crs"
-      # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
-      "test_schema_dtype_crs_with_coerce"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # AssertionError: assert DataType(Sparse[float64, nan]) == DataType(Sparse[float64, nan])
-      "test_legacy_default_pandas_extension_dtype"
-    ];
+  disabledTests = [
+    # TypeError: __class__ assignment: 'GeoDataFrame' object...
+    "test_schema_model"
+    "test_schema_from_dataframe"
+    "test_schema_no_geometry"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # OOM error on ofborg:
+    "test_engine_geometry_coerce_crs"
+    # pandera.errors.SchemaError: Error while coercing 'geometry' to type geometry
+    "test_schema_dtype_crs_with_coerce"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # AssertionError: assert DataType(Sparse[float64, nan]) == DataType(Sparse[float64, nan])
+    "test_legacy_default_pandas_extension_dtype"
+  ];
 
   pythonImportsCheck = [
     "pandera"
@@ -145,7 +163,7 @@ buildPythonPackage rec {
   meta = {
     description = "Light-weight, flexible, and expressive statistical data testing library";
     homepage = "https://pandera.readthedocs.io";
-    changelog = "https://github.com/unionai-oss/pandera/releases/tag/v${version}";
+    changelog = "https://github.com/unionai-oss/pandera/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

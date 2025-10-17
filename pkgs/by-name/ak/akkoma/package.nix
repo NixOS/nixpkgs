@@ -23,6 +23,16 @@ beamPackages.mixRelease rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ file ];
 
+  patches = [
+    # See <https://akkoma.dev/AkkomaGang/akkoma/pulls/854>
+    # Akkoma uses the deprecated “convert” command instead of “magick”, which
+    # results in the logs being spammed with warning messages. Upstream is
+    # reluctant to change this, to ensure compatibility with Debian stable,
+    # which does not yet provide ImageMagick 7.
+    # Remove this patch once merged upstream.
+    ./akkoma-imagemagick.patch
+  ];
+
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;

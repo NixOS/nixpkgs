@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pythonOlder,
 
   # build-system
@@ -20,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "home-assistant-bluetooth";
-  version = "1.13.1";
+  version = "2.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -29,17 +28,8 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "home-assistant-bluetooth";
     tag = "v${version}";
-    hash = "sha256-piX812Uzd2F8A8+IF/17N+xy6ENpfRVJ1BxsAxL5aj0=";
+    hash = "sha256-A29Jezj9kQ/v4irvpcpCiZlrNQBQwByrSJOx4HaXTdc=";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-tests-with-habluetooth-3.42.0.patch";
-      url = "https://github.com/home-assistant-libs/home-assistant-bluetooth/commit/515516bf9b2577c5d4af25cd2f052023ccb8b108.patch";
-      includes = [ "tests/test_models.py" ];
-      hash = "sha256-9t8VRKQSDxSYiy7bFII62B4O5w5Hx9AbRgvzcT6z1BQ=";
-    })
-  ];
 
   build-system = [
     poetry-core
@@ -47,6 +37,8 @@ buildPythonPackage rec {
   ];
 
   dependencies = [ habluetooth ];
+
+  doCheck = false; # broken with habluetooth>=4.0
 
   nativeCheckInputs = [
     bleak

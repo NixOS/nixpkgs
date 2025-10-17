@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  requireFile,
   autoPatchelfHook,
   undmg,
   fetchurl,
@@ -18,26 +17,28 @@
   openal,
   libmpg123,
   libxmp,
+  libiconv,
+  darwin,
 }:
 
 let
-  version = "469e-rc8";
+  version = "469e-rc9";
   srcs = rec {
     x86_64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-amd64.tar.bz2";
-      hash = "sha256-VR4Ldb2LVqO/6kIZINLyndaxf1qzmB1xJrzZHAaoOU0=";
+      hash = "sha256-1hEWiUjgzb1mKTs/2p2/Whj8FdpqpvfaDtXf63S/W44=";
     };
     aarch64-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-arm64.tar.bz2";
-      hash = "sha256-vMZfmdD0THSIt//ku90bmURqGIRAcsOojJncis2Cr4w=";
+      hash = "sha256-ZYbwwefn5ifzz9rkx9X8PSVy1c8t2Z24VXt6dignUtg=";
     };
     i686-linux = fetchurl {
       url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-Linux-x86.tar.bz2";
-      hash = "sha256-Qel/p5wDLsrmD+Nd/+6+s4b6rjcPFDbRw18VHsMH47M=";
+      hash = "sha256-afpDtlU01tEpGnfgichWqsUj80Lk2K//s/6iyqS/Vq8=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS-.dmg";
-      hash = "sha256-Vtp/b+00La0U/jh+UC0SkPnHi0G5+7h7wjsy7FxWdNY=";
+      url = "https://github.com/OldUnreal/UnrealTournamentPatches/releases/download/v${version}/OldUnreal-UTPatch${builtins.elemAt (lib.strings.splitString "-" version) 0}-macOS.dmg";
+      hash = "sha256-rFbgSQNeYwgd3Dzs/F+ljUFaGRwHCddLEuJBCehKktQ=";
     };
     # fat binary
     aarch64-darwin = x86_64-darwin;
@@ -84,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     libmpg123
     libxmp
     stdenv.cc.cc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   nativeBuildInputs =
@@ -94,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
       undmg
+      darwin.autoSignDarwinBinariesHook
     ];
 
   installPhase =
@@ -116,6 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r "UnrealTournament.app" $out/Applications/
       makeWrapper $out/Applications/UnrealTournament.app/Contents/MacOS/UnrealTournament \
         $out/bin/${finalAttrs.meta.mainProgram}
+      # If the darwin build sandbox is enabled, system libiconv is not available
+      # https://github.com/OldUnreal/UnrealTournamentPatches/issues/1902
+      # Even though ut1999 is able to unpack the map files at runtime, upstream advised to still do it at install time
+      # which is why the UCC binary is fixed to access a copy of iconv from the nix store
+      install_name_tool -change /usr/lib/libiconv.2.dylib \
+        ${libiconv}/lib/libiconv.2.dylib \
+        $out/Applications/UnrealTournament.app/Contents/MacOS/UCC
+      # Needs manual re-signing, as UCC is used during the build, and the auto signer is part of the fixup phase
+      signDarwinBinariesInAllOutputs
     ''
     + ''
       chmod -R 755 $out
@@ -198,7 +212,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";
     license = licenses.unfree;
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ eliandoran ];
+    maintainers = with maintainers; [
+      eliandoran
+      dwt
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };

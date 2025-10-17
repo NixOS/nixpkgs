@@ -4,8 +4,11 @@
   fetchFromGitHub,
   lib,
   nixosTests,
+  ghostunnel,
   apple-sdk_12,
   darwinMinVersionHook,
+  writeScript,
+  runtimeShell,
 }:
 
 buildGoModule rec {
@@ -37,6 +40,15 @@ buildGoModule rec {
   passthru.tests = {
     nixos = nixosTests.ghostunnel;
     podman = nixosTests.podman-tls-ghostunnel;
+  };
+
+  passthru.services.default = {
+    imports = [
+      (lib.modules.importApply ./service.nix {
+        inherit writeScript runtimeShell;
+      })
+    ];
+    ghostunnel.package = ghostunnel; # FIXME: finalAttrs.finalPackage
   };
 
   meta = {

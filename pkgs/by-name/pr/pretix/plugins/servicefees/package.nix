@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pretix-servicefees";
-  version = "1.14.1";
+  version = "1.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "pretix-servicefees";
     tag = "v${version}";
-    hash = "sha256-iceFpmuWlq4LnZpG57d4Fwx9bXJDGwx+ox58s8oxupU=";
+    hash = "sha256-oxuxlwNYJsuYj5zm2VYRMn8wz3vF92SzGxD8w3N7ZIM=";
   };
 
   build-system = [

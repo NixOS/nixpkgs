@@ -75,29 +75,29 @@ assert (eri3Deriv >= 0 && eri3Deriv <= 4);
 # Ensure valid arguments for generated angular momenta in ERI derivatives are used.
 assert (
   builtins.length eriAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eriAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eriAm)
 );
 assert (
   builtins.length eri3Am == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri3Am)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri3Am)
 );
 assert (
   builtins.length eri2Am == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri2Am)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri2Am)
 );
 
 # Ensure valid arguments for generated angular momenta in optimised ERI derivatives are used.
 assert (
   builtins.length eriOptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eriOptAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eriOptAm)
 );
 assert (
   builtins.length eri3OptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri3OptAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri3OptAm)
 );
 assert (
   builtins.length eri2OptAm == eriDeriv + 1
-  && builtins.foldl' (a: b: a && b) true (builtins.map (a: a <= maxAm && a >= 0) eri2OptAm)
+  && builtins.foldl' (a: b: a && b) true (map (a: a <= maxAm && a >= 0) eri2OptAm)
 );
 
 # Ensure a valid derivative order for one-electron integrals
@@ -128,7 +128,7 @@ assert (
 
 let
   pname = "libint";
-  version = "2.11.1";
+  version = "2.11.2";
 
   meta = {
     description = "Library for the evaluation of molecular integrals of many-body operators over Gaussian functions";
@@ -149,9 +149,9 @@ let
 
     src = fetchFromGitHub {
       owner = "evaleev";
-      repo = pname;
+      repo = "libint";
       rev = "v${version}";
-      hash = "sha256-oV/RWWfD0Kf2egI40fV8z2atG+4Cs+9+Wvy0euNNjtM=";
+      hash = "sha256-pqv3lpaLtbSNi1oC361YeCg57Bb8jQ8eNzU3q4US1vc=";
     };
 
     # Replace hardcoded "/bin/rm" with normal "rm"
@@ -176,39 +176,39 @@ let
       python3
       perl
       gmpxx
-    ] ++ lib.optional enableFortran gfortran;
+    ]
+    ++ lib.optional enableFortran gfortran;
 
     buildInputs = [
       boost
       eigen
     ];
 
-    configureFlags =
-      [
-        "--with-max-am=${builtins.toString maxAm}"
-        "--with-eri-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriAm)}"
-        "--with-eri3-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3Am)}"
-        "--with-eri2-max-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2Am)}"
-        "--with-eri-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eriOptAm)}"
-        "--with-eri3-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri3OptAm)}"
-        "--with-eri2-opt-am=${lib.concatStringsSep "," (builtins.map builtins.toString eri2OptAm)}"
-        "--with-cartgauss-ordering=${cartGaussOrd}"
-        "--with-shgauss-ordering=${shGaussOrd}"
-        "--with-shell-set=${shellSet}"
-      ]
-      ++ lib.optional enableFMA "--enable-fma"
-      ++ lib.optional (eriDeriv > 0) "--enable-eri=${builtins.toString eriDeriv}"
-      ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${builtins.toString eri2Deriv}"
-      ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${builtins.toString eri3Deriv}"
-      ++ lib.optionals enableOneBody [
-        "--enable-1body=${builtins.toString oneBodyDerivOrd}"
-        "--enable-1body-property-derivs"
-      ]
-      ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${builtins.toString multipoleOrd}"
-      ++ lib.optional enableGeneric "--enable-generic"
-      ++ lib.optional enableContracted "--enable-contracted-ints"
-      ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"
-      ++ lib.optional eri2PureSh "--enable-eri2-pure-sh";
+    configureFlags = [
+      "--with-max-am=${toString maxAm}"
+      "--with-eri-max-am=${lib.concatStringsSep "," (map toString eriAm)}"
+      "--with-eri3-max-am=${lib.concatStringsSep "," (map toString eri3Am)}"
+      "--with-eri2-max-am=${lib.concatStringsSep "," (map toString eri2Am)}"
+      "--with-eri-opt-am=${lib.concatStringsSep "," (map toString eriOptAm)}"
+      "--with-eri3-opt-am=${lib.concatStringsSep "," (map toString eri3OptAm)}"
+      "--with-eri2-opt-am=${lib.concatStringsSep "," (map toString eri2OptAm)}"
+      "--with-cartgauss-ordering=${cartGaussOrd}"
+      "--with-shgauss-ordering=${shGaussOrd}"
+      "--with-shell-set=${shellSet}"
+    ]
+    ++ lib.optional enableFMA "--enable-fma"
+    ++ lib.optional (eriDeriv > 0) "--enable-eri=${toString eriDeriv}"
+    ++ lib.optional (eri2Deriv > 0) "--enable-eri2=${toString eri2Deriv}"
+    ++ lib.optional (eri3Deriv > 0) "--enable-eri3=${toString eri3Deriv}"
+    ++ lib.optionals enableOneBody [
+      "--enable-1body=${toString oneBodyDerivOrd}"
+      "--enable-1body-property-derivs"
+    ]
+    ++ lib.optional (multipoleOrd > 0) "--with-multipole-max-order=${toString multipoleOrd}"
+    ++ lib.optional enableGeneric "--enable-generic"
+    ++ lib.optional enableContracted "--enable-contracted-ints"
+    ++ lib.optional eri3PureSh "--enable-eri3-pure-sh"
+    ++ lib.optional eri2PureSh "--enable-eri2-pure-sh";
 
     preConfigure = ''
       ./autogen.sh
@@ -218,7 +218,7 @@ let
 
     installPhase = ''
       mkdir -p $out
-      cp ${pname}-${version}.tgz $out/.
+      cp libint-${version}.tgz $out/.
     '';
 
     enableParallelBuilding = true;
@@ -229,12 +229,13 @@ let
   codeComp = stdenv.mkDerivation {
     inherit pname version;
 
-    src = "${codeGen}/${pname}-${version}.tgz";
+    src = "${codeGen}/libint-${version}.tgz";
 
     nativeBuildInputs = [
       python3
       cmake
-    ] ++ lib.optional enableFortran gfortran;
+    ]
+    ++ lib.optional enableFortran gfortran;
 
     buildInputs = [
       boost
@@ -244,12 +245,11 @@ let
     # Default is just "double", but SSE2 is available on all x86_64 CPUs.
     # AVX support is advertised, but does not work.
     # Fortran interface is incompatible with changing the LIBINT2_REALTYPE.
-    cmakeFlags =
-      [
-        "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
-      ]
-      ++ lib.optional enableFortran "-DENABLE_FORTRAN=ON"
-      ++ lib.optional enableSSE "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble";
+    cmakeFlags = [
+      "-DLIBINT2_SHGAUSS_ORDERING=${shGaussOrd}"
+    ]
+    ++ lib.optional enableFortran "-DENABLE_FORTRAN=ON"
+    ++ lib.optional enableSSE "-DLIBINT2_REALTYPE=libint2::simd::VectorSSEDouble";
 
     # Can only build in the source-tree. A lot of preprocessing magic fails otherwise.
     dontUseCmakeBuildDir = true;

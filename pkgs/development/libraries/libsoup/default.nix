@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/libsoup/${lib.versions.majorMinor version}/libsoup-${version}.tar.xz";
     sha256 = "sha256-5Ld8Qc/EyMWgNfzcMgx7xs+3XvfFoDQVPfFBP6HZLxM=";
   };
 
@@ -68,46 +68,43 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      glib
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      vala
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    glib
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    vala
+  ];
 
-  buildInputs =
-    [
-      sqlite
-      libpsl
-      glib.out
-      brotli
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libsysprof-capture
-    ];
+  buildInputs = [
+    sqlite
+    libpsl
+    glib.out
+    brotli
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libsysprof-capture
+  ];
 
   propagatedBuildInputs = [
     glib
     libxml2
   ];
 
-  mesonFlags =
-    [
-      "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
-      "-Dgssapi=disabled"
-      "-Dvapi=${if withIntrospection then "enabled" else "disabled"}"
-      "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-      "-Dgnome=${lib.boolToString gnomeSupport}"
-      "-Dntlm=disabled"
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-      "-Dsysprof=disabled"
-    ];
+  mesonFlags = [
+    "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
+    "-Dgssapi=disabled"
+    "-Dvapi=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+    "-Dgnome=${lib.boolToString gnomeSupport}"
+    "-Dntlm=disabled"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+    "-Dsysprof=disabled"
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-lpthread";
 
@@ -127,7 +124,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "libsoup_2_4";
-      packageName = pname;
+      packageName = "libsoup";
       versionPolicy = "odd-unstable";
       freeze = true;
     };
@@ -141,6 +138,32 @@ stdenv.mkDerivation rec {
     pkgConfigModules = [
       "libsoup-2.4"
       "libsoup-gnome-2.4"
+    ];
+    knownVulnerabilities = [
+      ''
+        libsoup 2 is EOL, with many known unfixed CVEs.
+        The last release happened 2023-10-11,
+        with few security backports since and no stable release.
+
+        Vulnerabilities likely include (incomplete list):
+        - CVE-2025-4948: https://gitlab.gnome.org/GNOME/libsoup/-/issues/449
+        - CVE-2025-46421: https://gitlab.gnome.org/GNOME/libsoup/-/issues/439
+        - CVE-2025-32914: https://gitlab.gnome.org/GNOME/libsoup/-/issues/436
+        - CVE-2025-32913: https://gitlab.gnome.org/GNOME/libsoup/-/issues/435
+        - CVE-2025-32912: https://gitlab.gnome.org/GNOME/libsoup/-/issues/434
+        - CVE-2025-32911: https://gitlab.gnome.org/GNOME/libsoup/-/issues/433
+        - CVE-2025-32910: https://gitlab.gnome.org/GNOME/libsoup/-/issues/432
+        - CVE-2025-32909: https://gitlab.gnome.org/GNOME/libsoup/-/issues/431
+        - CVE-2025-32907: https://gitlab.gnome.org/GNOME/libsoup/-/issues/428
+        - CVE-2025-32053: https://gitlab.gnome.org/GNOME/libsoup/-/issues/426
+        - CVE-2025-32052: https://gitlab.gnome.org/GNOME/libsoup/-/issues/425
+        - CVE-2025-32050: https://gitlab.gnome.org/GNOME/libsoup/-/issues/424
+        - CVE-2024-52531: https://gitlab.gnome.org/GNOME/libsoup/-/issues/423
+        - CVE-2025-2784: https://gitlab.gnome.org/GNOME/libsoup/-/issues/422
+
+        These vulnerabilities were fixed in libsoup 3,
+        with the vulnerable code present in libsoup 2 versions.
+      ''
     ];
   };
 }

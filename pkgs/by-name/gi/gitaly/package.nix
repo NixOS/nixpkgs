@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "18.1.1";
+  version = "18.4.2";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -21,10 +21,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-R79UV6QIEO/B7xQ3ds4scm7twHmalziksKBJ97tYVJM=";
+      hash = "sha256-jwImYofmGfpnj43FinFmo9SQP6vpM0C4K6fmUECifG0=";
     };
 
-    vendorHash = "sha256-BTpcnaHNyLgdAA9KqqA+mBo18fmQ0+OwLGNOPHRJ/IE=";
+    vendorHash = "sha256-DNZgdP7juELUX0cs0tnyqdf1yiUJ0S17nm0xqTk3KHQ=";
 
     ldflags = [
       "-X ${gitaly_package}/internal/version.version=${version}"
@@ -32,6 +32,8 @@ let
     ];
 
     tags = [ "static" ];
+
+    nativeBuildInputs = [ pkg-config ];
 
     doCheck = false;
   };
@@ -41,6 +43,7 @@ let
       pname = "gitaly-aux";
 
       subPackages = [
+        # Can be determined by looking at the `go:embed` calls in https://gitlab.com/gitlab-org/gitaly/-/blob/master/packed_binaries.go
         "cmd/gitaly-hooks"
         "cmd/gitaly-ssh"
         "cmd/gitaly-lfs-smudge"
@@ -59,12 +62,31 @@ buildGoModule (
       "cmd/gitaly-backup"
     ];
 
+    dontStrip = true;
+
     preConfigure = ''
+      rm -r tools
+
       mkdir -p _build/bin
       cp -r ${auxBins}/bin/* _build/bin
-      for f in ${git}/bin/git-*; do
-        cp "$f" "_build/bin/gitaly-$(basename $f)";
+
+      # Add git that will be embedded
+      echo 'print-%:;@echo $($*)' >> Makefile
+      sed -i 's:/usr/bin/env ::g' Makefile
+      for bin in $(make print-GIT_PACKED_EXECUTABLES); do
+        from="$(basename "$bin")"
+        from="''${from#gitaly-}"
+        from="${git}/libexec/git-core/''${from%-*}"
+        cp "$from" "$bin"
       done
+
+    '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      HOME=/build PAGER=cat ${git}/bin/git config -l
+      runHook postInstallCheck
     '';
 
     outputs = [ "out" ];

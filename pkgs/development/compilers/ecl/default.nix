@@ -38,18 +38,17 @@ stdenv.mkDerivation rec {
     texinfo
     makeWrapper
   ];
-  propagatedBuildInputs =
-    [
-      libffi
-      gmp
-      mpfr
-      cc
-      # replaces ecl's own gc which other packages can depend on, thus propagated
-    ]
-    ++ lib.optionals useBoehmgc [
-      # replaces ecl's own gc which other packages can depend on, thus propagated
-      boehmgc
-    ];
+  propagatedBuildInputs = [
+    libffi
+    gmp
+    mpfr
+    cc
+    # replaces ecl's own gc which other packages can depend on, thus propagated
+  ]
+  ++ lib.optionals useBoehmgc [
+    # replaces ecl's own gc which other packages can depend on, thus propagated
+    boehmgc
+  ];
 
   patches = [
     # https://gitlab.com/embeddable-common-lisp/ecl/-/merge_requests/1
@@ -59,19 +58,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags =
-    [
-      (if threadSupport then "--enable-threads" else "--disable-threads")
-      "--with-gmp-incdir=${lib.getDev gmp}/include"
-      "--with-gmp-libdir=${lib.getLib gmp}/lib"
-      "--with-libffi-incdir=${lib.getDev libffi}/include"
-      "--with-libffi-libdir=${lib.getLib libffi}/lib"
-    ]
-    ++ lib.optionals useBoehmgc [
-      "--with-libgc-incdir=${lib.getDev boehmgc}/include"
-      "--with-libgc-libdir=${lib.getLib boehmgc}/lib"
-    ]
-    ++ lib.optional (!noUnicode) "--enable-unicode";
+  configureFlags = [
+    (if threadSupport then "--enable-threads" else "--disable-threads")
+    "--with-gmp-incdir=${lib.getDev gmp}/include"
+    "--with-gmp-libdir=${lib.getLib gmp}/lib"
+    "--with-libffi-incdir=${lib.getDev libffi}/include"
+    "--with-libffi-libdir=${lib.getLib libffi}/lib"
+  ]
+  ++ lib.optionals useBoehmgc [
+    "--with-libgc-incdir=${lib.getDev boehmgc}/include"
+    "--with-libgc-libdir=${lib.getLib boehmgc}/lib"
+  ]
+  ++ lib.optional (!noUnicode) "--enable-unicode";
 
   hardeningDisable = [ "format" ];
 

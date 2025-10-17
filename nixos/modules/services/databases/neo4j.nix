@@ -714,6 +714,6 @@ in
     };
 
   meta = {
-    maintainers = with lib.maintainers; [ patternspandemic ];
+    maintainers = [ ];
   };
 }

@@ -4,20 +4,27 @@
   fetchFromGitHub,
   buildGoModule,
   versionCheckHook,
+  nix-update-script,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "gost";
-  version = "3.0.0";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "go-gost";
     repo = "gost";
-    tag = "v${version}";
-    hash = "sha256-ep3ZjD+eVKl3PuooDuYeur8xDAcyy6ww2I7f3cYG03o=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-voVk4zzNm2UZWQ3c/n0YOwuaE9JcIlEmJ881nTXXyrY=";
   };
 
-  vendorHash = "sha256-lzyr6Q8yXsuer6dRUlwHEeBewjwGxDslueuvIiZUW70=";
+  vendorHash = "sha256-73gjw0oW8i7Vp6ZxxqkO42/atdde4J+lu/pCHK/xY+8=";
+
+  # Based on ldflags in upstream's .goreleaser.yaml
+  ldflags = [
+    "-s"
+    "-X main.version=v${finalAttrs.version}"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -30,6 +37,8 @@ buildGoModule rec {
 
   versionCheckProgramArg = "-V";
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Simple tunnel written in golang";
     homepage = "https://github.com/go-gost/gost";
@@ -37,7 +46,8 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [
       pmy
       ramblurr
+      moraxyc
     ];
     mainProgram = "gost";
   };
-}
+})

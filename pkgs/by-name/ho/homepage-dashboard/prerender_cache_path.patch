@@ -1,10 +1,10 @@
 diff --git a/package.json b/package.json
-index bb093c43..deeb4b8b 100644
+index 28b86649..16f71f77 100644
 --- a/package.json
 +++ b/package.json
-@@ -66,6 +66,9 @@
-   "pnpm": {
+@@ -74,6 +74,9 @@
      "onlyBuiltDependencies": [
+       "osx-temperature-sensor",
        "sharp"
 -    ]
 +    ],
@@ -15,12 +15,12 @@ index bb093c43..deeb4b8b 100644
  }
 diff --git a/patches/next.patch b/patches/next.patch
 new file mode 100644
-index 00000000..dd1d8b7c
+index 00000000..39b17f16
 --- /dev/null
 +++ b/patches/next.patch
 @@ -0,0 +1,13 @@
 +diff --git a/dist/server/lib/incremental-cache/file-system-cache.js b/dist/server/lib/incremental-cache/file-system-cache.js
-+index c5bbdefd8aa2e97df91df00d1686d63fe54c8c0d..4dcdd8760e5ed135f7509c289abb33b5005ed470 100644
++index cc2cc2506668435d817eaa9f0aa32b568b6aa331..26f0321efcadb4f4255dbd660825759721e799eb 100644
 +--- a/dist/server/lib/incremental-cache/file-system-cache.js
 ++++ b/dist/server/lib/incremental-cache/file-system-cache.js
 +@@ -24,7 +24,7 @@ class FileSystemCache {
@@ -30,10 +30,10 @@ index 00000000..dd1d8b7c
 +-        this.serverDistDir = ctx.serverDistDir;
 ++        this.serverDistDir = require("path").join((process.env.NIXPKGS_HOMEPAGE_CACHE_DIR || "/var/cache/homepage-dashboard"), "homepage");
 +         this.revalidatedTags = ctx.revalidatedTags;
-+         this.debug = !!process.env.NEXT_PRIVATE_DEBUG_CACHE;
 +         if (ctx.maxMemoryCacheSize) {
++             if (!FileSystemCache.memoryCache) {
 diff --git a/pnpm-lock.yaml b/pnpm-lock.yaml
-index e3387dea..05918fa6 100644
+index 113bacff..5dde94f0 100644
 --- a/pnpm-lock.yaml
 +++ b/pnpm-lock.yaml
 @@ -4,6 +4,11 @@ settings:
@@ -42,7 +42,7 @@ index e3387dea..05918fa6 100644
  
 +patchedDependencies:
 +  next:
-+    hash: 9673472f3289a59e3cf64a56303c75752c2556c0d74d2a648eca3576b2695cab
++    hash: 9fc5fd5a09692f0ba1ffb8a979978da9595ed6c3f9bcb0a01205f20fdc39b68c
 +    path: patches/next.patch
 +
  importers:
@@ -51,61 +51,39 @@ index e3387dea..05918fa6 100644
 @@ -52,10 +57,10 @@ importers:
          version: 1.2.2
        next:
-         specifier: ^15.3.1
--        version: 15.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-+        version: 15.3.1(patch_hash=9673472f3289a59e3cf64a56303c75752c2556c0d74d2a648eca3576b2695cab)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+         specifier: ^15.5.2
+-        version: 15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++        version: 15.5.2(patch_hash=9fc5fd5a09692f0ba1ffb8a979978da9595ed6c3f9bcb0a01205f20fdc39b68c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
        next-i18next:
          specifier: ^12.1.0
--        version: 12.1.0(next@15.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-+        version: 12.1.0(next@15.3.1(patch_hash=9673472f3289a59e3cf64a56303c75752c2556c0d74d2a648eca3576b2695cab)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+-        version: 12.1.0(next@15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++        version: 12.1.0(next@15.5.2(patch_hash=9fc5fd5a09692f0ba1ffb8a979978da9595ed6c3f9bcb0a01205f20fdc39b68c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
        ping:
          specifier: ^0.4.4
          version: 0.4.4
-@@ -98,10 +103,6 @@ importers:
-       xml-js:
-         specifier: ^1.6.11
-         version: 1.6.11
--    optionalDependencies:
--      osx-temperature-sensor:
--        specifier: ^1.0.8
--        version: 1.0.8
-     devDependencies:
-       '@tailwindcss/forms':
-         specifier: ^0.5.10
-@@ -151,6 +152,10 @@ importers:
-       typescript:
-         specifier: ^5.7.3
-         version: 5.7.3
-+    optionalDependencies:
-+      osx-temperature-sensor:
-+        specifier: ^1.0.8
-+        version: 1.0.8
+@@ -5162,7 +5167,7 @@ snapshots:
  
- packages:
+   net@1.0.2: {}
  
-@@ -4901,7 +4906,7 @@ snapshots:
- 
-   natural-compare@1.4.0: {}
- 
--  next-i18next@12.1.0(next@15.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-+  next-i18next@12.1.0(next@15.3.1(patch_hash=9673472f3289a59e3cf64a56303c75752c2556c0d74d2a648eca3576b2695cab)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+-  next-i18next@12.1.0(next@15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
++  next-i18next@12.1.0(next@15.5.2(patch_hash=9fc5fd5a09692f0ba1ffb8a979978da9595ed6c3f9bcb0a01205f20fdc39b68c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
      dependencies:
        '@babel/runtime': 7.26.9
        '@types/hoist-non-react-statics': 3.3.6
-@@ -4909,14 +4914,14 @@ snapshots:
+@@ -5170,14 +5175,14 @@ snapshots:
        hoist-non-react-statics: 3.3.2
        i18next: 21.10.0
        i18next-fs-backend: 1.2.0
--      next: 15.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-+      next: 15.3.1(patch_hash=9673472f3289a59e3cf64a56303c75752c2556c0d74d2a648eca3576b2695cab)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+-      next: 15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
++      next: 15.5.2(patch_hash=9fc5fd5a09692f0ba1ffb8a979978da9595ed6c3f9bcb0a01205f20fdc39b68c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
        react: 18.3.1
        react-i18next: 11.18.6(i18next@21.10.0)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
      transitivePeerDependencies:
        - react-dom
        - react-native
  
--  next@15.3.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
-+  next@15.3.1(patch_hash=9673472f3289a59e3cf64a56303c75752c2556c0d74d2a648eca3576b2695cab)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+-  next@15.5.2(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
++  next@15.5.2(patch_hash=9fc5fd5a09692f0ba1ffb8a979978da9595ed6c3f9bcb0a01205f20fdc39b68c)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
      dependencies:
-       '@next/env': 15.3.1
-       '@swc/counter': 0.1.3
+       '@next/env': 15.5.2
+       '@swc/helpers': 0.5.15

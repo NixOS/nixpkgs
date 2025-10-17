@@ -29,17 +29,16 @@ buildLuarocksPackage rec {
     rm -rf deps/lua deps/luajit deps/libuv
   '';
 
-  patches =
-    [
-      # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
-      # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
-      # uv_stream userdata)"
-      ./disable-failing-tests.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
-      ./disable-failing-darwin-tests.patch
-    ];
+  patches = [
+    # Fails with "Uncaught Error: ./tests/test-dns.lua:164: assertion failed!"
+    # and "./tests/test-tty.lua:19: bad argument #1 to 'is_readable' (Expected
+    # uv_stream userdata)"
+    ./disable-failing-tests.patch
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails with "Uncaught Error: ./tests/test-udp.lua:261: EHOSTUNREACH"
+    ./disable-failing-darwin-tests.patch
+  ];
 
   buildInputs = [ libuv ];
   nativeBuildInputs = [ cmake ];

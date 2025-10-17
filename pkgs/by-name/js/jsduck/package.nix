@@ -5,26 +5,26 @@
   makeWrapper,
   bundlerUpdateScript,
 }:
-
-stdenv.mkDerivation rec {
-  pname = "jsduck";
-  version = (import ./gemset.nix).jsduck.version;
-
-  env = bundlerEnv {
-    name = pname;
+let
+  rubyEnv = bundlerEnv {
+    name = "jsduck";
     gemfile = ./Gemfile;
     lockfile = ./Gemfile.lock;
     gemset = ./gemset.nix;
   };
+in
+stdenv.mkDerivation {
+  pname = "jsduck";
+  version = (import ./gemset.nix).jsduck.version;
 
   dontUnpack = true;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ env ];
+  buildInputs = [ rubyEnv ];
 
   installPhase = ''
     mkdir -p $out/bin
-    makeWrapper ${env}/bin/jsduck $out/bin/jsduck
+    makeWrapper ${rubyEnv}/bin/jsduck $out/bin/jsduck
   '';
 
   passthru.updateScript = bundlerUpdateScript "jsduck";

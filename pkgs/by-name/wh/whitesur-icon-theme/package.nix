@@ -6,7 +6,6 @@
   hicolor-icon-theme,
   jdupes,
   boldPanelIcons ? false,
-  blackPanelIcons ? false,
   alternativeIcons ? false,
   themeVariants ? [ ],
 }:
@@ -32,13 +31,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2025-02-10";
+    version = "2025-08-02";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "WhiteSur-icon-theme";
-      tag = "v${version}";
-      hash = "sha256-spTmS9Cn/HAnbgf6HppwME63cxWEbcKwWYMMj8ajFyY=";
+      tag = "${version}";
+      hash = "sha256-oBKDvCVHEjN6JT0r0G+VndzijEWU9L8AvDhHQTmw2E4=";
     };
 
     nativeBuildInputs = [
@@ -62,10 +61,9 @@ lib.checkListOfEnum "${pname}: theme variants"
 
       ./install.sh --dest $out/share/icons \
         --name WhiteSur \
-        --theme ${builtins.toString themeVariants} \
+        --theme ${toString themeVariants} \
         ${lib.optionalString alternativeIcons "--alternative"} \
         ${lib.optionalString boldPanelIcons "--bold"} \
-        ${lib.optionalString blackPanelIcons "--black"}
 
       jdupes --link-soft --recurse $out/share
 

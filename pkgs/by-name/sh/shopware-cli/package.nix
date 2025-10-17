@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -10,12 +11,12 @@
 
 buildGoModule rec {
   pname = "shopware-cli";
-  version = "0.6.16";
+  version = "0.6.22";
   src = fetchFromGitHub {
     repo = "shopware-cli";
     owner = "FriendsOfShopware";
     tag = version;
-    hash = "sha256-oEWJ51XeAOE92u6U2Cjj875mn47R8IRbZ2BHy1zLblw=";
+    hash = "sha256-u5hFjDLGBXVvAp4WYWBb3HCzGDjkg9jj251LaV1zA8I=";
   };
 
   nativeBuildInputs = [
@@ -27,9 +28,9 @@ buildGoModule rec {
     dart-sass
   ];
 
-  vendorHash = "sha256-am8tGpevz5KXX+8ckhlNVtoUbG3g739O9KP6rLsF0y8=";
+  vendorHash = "sha256-Ckn6+DzHPX+UG5YxYqvkdaio/elRQssbDSR+zAfxzdE=";
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd shopware-cli \
       --bash <($out/bin/shopware-cli completion bash) \
       --zsh <($out/bin/shopware-cli completion zsh) \
@@ -46,6 +47,8 @@ buildGoModule rec {
     "-w"
     "-X 'github.com/FriendsOfShopware/shopware-cli/cmd.version=${version}'"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Command line tool for Shopware 6";

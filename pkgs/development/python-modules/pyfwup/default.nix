@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyfwup";
-  version = "0.5.2";
+  version = "0.5.3";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "greatscottgadgets";
     repo = "pyfwup";
     tag = version;
-    hash = "sha256-Kyc3f8beTg0W1+U7SvZuNPN1pdsco9rBUfoEtR7AI44=";
+    hash = "sha256-Dy/mO5dWvuuzas9XPY8ibZCuPUP8NGaUVt0j2cvhZrM=";
   };
 
   postPatch = ''

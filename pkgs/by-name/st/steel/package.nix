@@ -19,17 +19,16 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "steel";
-  version = "0-unstable-2025-06-15";
+  version = "0-unstable-2025-10-14";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "123adb314702d6520f8ab04115e79308d2400c38";
-    hash = "sha256-o1RZBlAGUht0Q7UVF+yPlrWW7B016fpBBcoaxuzRQo4=";
+    rev = "c83d48f657f28017912cc3c1b604c33ab5de0a41";
+    hash = "sha256-VVrMXpJwcaUTSR6AElkc7Xu8If0/bUzKklOyo87CdLI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/vPDVVOhLO7mnULyU8QLW+YHh+kGd+BSiPi55jrOWps=";
+  cargoHash = "sha256-CrmQhOfh7SQ5GvBywmYkfU6wMlgZq2x61+T+mIeQ7z4=";
 
   nativeBuildInputs = [
     curl
@@ -52,45 +51,43 @@ rustPlatform.buildRustPackage {
     rm .cargo/config.toml
   '';
 
-  cargoBuildFlags =
-    [
-      "--package"
-      "steel-interpreter"
-      "--package"
-      "cargo-steel-lib"
-    ]
-    ++ lib.optionals includeLSP [
-      "--package"
-      "steel-language-server"
-    ]
-    ++ lib.optionals includeForge [
-      "--package"
-      "forge"
-    ];
+  cargoBuildFlags = [
+    "--package"
+    "steel-interpreter"
+    "--package"
+    "cargo-steel-lib"
+  ]
+  ++ lib.optionals includeLSP [
+    "--package"
+    "steel-language-server"
+  ]
+  ++ lib.optionals includeForge [
+    "--package"
+    "steel-forge"
+  ];
 
   # Tests are disabled since they always fail when building with Nix
   doCheck = false;
 
-  postInstall =
-    ''
-      mkdir -p $out/lib/steel
+  postInstall = ''
+    mkdir -p $out/lib/steel
 
-      substituteInPlace cogs/installer/download.scm \
-        --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
+    substituteInPlace crates/forge/installer/download.scm \
+      --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
 
-      pushd cogs
-      $out/bin/steel install.scm
-      popd
+    pushd cogs
+    $out/bin/steel install.scm
+    popd
 
-      mv $out/lib/steel/bin/repl-connect $out/bin
-      rm -rf $out/lib/steel/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      installShellCompletion --cmd steel \
-        --bash <($out/bin/steel completions bash) \
-        --fish <($out/bin/steel completions fish) \
-        --zsh <($out/bin/steel completions zsh)
-    '';
+    mv $out/lib/steel/bin/repl-connect $out/bin
+    rm -rf $out/lib/steel/bin
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd steel \
+      --bash <($out/bin/steel completions bash) \
+      --fish <($out/bin/steel completions fish) \
+      --zsh <($out/bin/steel completions zsh)
+  '';
 
   postFixup = ''
     wrapProgram $out/bin/steel --set-default STEEL_HOME "$out/lib/steel"

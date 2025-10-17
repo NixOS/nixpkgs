@@ -1,26 +1,26 @@
 {
   lib,
-  flutter329,
+  flutter332,
   fetchFromGitHub,
   autoPatchelfHook,
 }:
 
-flutter329.buildFlutterApplication rec {
+flutter332.buildFlutterApplication rec {
   pname = "proxypin";
-  version = "1.1.9";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "wanghongenpin";
     repo = "proxypin";
     tag = "v${version}";
-    hash = "sha256-yYZUXgWM7e1+TUvOid1X3WXlAGbUzDHrMXptPXKhuA8=";
+    hash = "sha256-PRknUOCaaDE4Ri70EAROx1K3g2bLKI/HKIvo1W1D8ko=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   gitHashes = {
     desktop_multi_window = "sha256-Tbl0DOxW1F8V2Kj34gcNRbBqr5t9Iq74qCT26deqFdQ=";
-    flutter_code_editor = "sha256-w8SbgvfpKbfCr0Y82r/k9pDsZjLOdVJ6D93dzKXct8c=";
+    flutter_code_editor = "sha256-B9aJh6e6iLBZAcacucsT9szWWBwWVBBPDhbKQfnxc6I=";
   };
 
   postPatch = ''
@@ -46,6 +46,6 @@ flutter329.buildFlutterApplication rec {
     mainProgram = "ProxyPin";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

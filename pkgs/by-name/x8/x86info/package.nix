@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "x86info";
-  version = "unstable-2021-08-07";
+  version = "0-unstable-2021-08-07";
 
   src = fetchFromGitHub {
     owner = "kernelslacker";

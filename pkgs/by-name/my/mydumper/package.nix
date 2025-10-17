@@ -6,7 +6,6 @@
   installShellFiles,
   pkg-config,
   glib,
-  pcre,
   pcre2,
   util-linux,
   libsysprof-capture,
@@ -24,13 +23,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.19.3-1";
+  version = "0.20.1-2";
 
   src = fetchFromGitHub {
     owner = "mydumper";
     repo = "mydumper";
     tag = "v${version}";
-    hash = "sha256-96AFq6wEALRRqD6+n/XMOAus3v9GX/eZOVZQdgUtf+w=";
+    hash = "sha256-ypFXxmKnG1yiJjvHGmYJJz5ZjhhGHCRklG7y83jypms=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
@@ -50,22 +49,20 @@ stdenv.mkDerivation rec {
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  buildInputs =
-    [
-      glib
-      pcre
-      pcre2
-      util-linux
-      libmysqlclient
-      libressl
-      libsysprof-capture
-      zlib
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libselinux
-      libsepol
-    ];
+  buildInputs = [
+    glib
+    pcre2
+    util-linux
+    libmysqlclient
+    libressl
+    libsysprof-capture
+    zlib
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libselinux
+    libsepol
+  ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=ON"

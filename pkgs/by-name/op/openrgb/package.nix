@@ -2,13 +2,13 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  libsForQt5,
   libusb1,
   hidapi,
   pkg-config,
   coreutils,
-  mbedtls_2,
+  mbedtls,
   symlinkJoin,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,27 +22,28 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-XBLj4EfupyeVHRc0pVI7hrXFoCNJ7ak2yO0QSfhBsGU=";
   };
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ (with libsForQt5; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  patches = [
+    ./qlist-include.patch
+  ];
 
-  buildInputs =
-    [
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with kdePackages; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
-      libusb1
-      hidapi
-      mbedtls_2
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qttools
-      qtwayland
-    ]);
+  buildInputs = [
+    libusb1
+    hidapi
+    mbedtls
+  ]
+  ++ (with kdePackages; [
+    qtbase
+    qttools
+    qtwayland
+  ]);
 
   postPatch = ''
     patchShebangs scripts/build-udev-rules.sh
@@ -58,6 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  qmakeFlags = [
+    "QT_TOOL.lrelease.binary=${lib.getDev kdePackages.qttools}/bin/lrelease"
+  ];
 
   passthru.withPlugins =
     plugins:

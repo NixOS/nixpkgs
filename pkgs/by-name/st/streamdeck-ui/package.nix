@@ -55,13 +55,14 @@ python3Packages.buildPythonApplication rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
-  nativeCheckInputs =
-    [ xvfb-run ]
-    ++ (with python3Packages; [
-      pytest
-      pytest-qt
-      pytest-mock
-    ]);
+  nativeCheckInputs = [
+    xvfb-run
+  ]
+  ++ (with python3Packages; [
+    pytest
+    pytest-qt
+    pytest-mock
+  ]);
 
   checkPhase = ''
     runHook preCheck
@@ -102,7 +103,7 @@ python3Packages.buildPythonApplication rec {
         categories = [ "Utility" ];
       };
     in
-    builtins.map makeDesktopItem [
+    map makeDesktopItem [
       common
       (
         common

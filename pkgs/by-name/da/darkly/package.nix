@@ -13,13 +13,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "darkly-qt${qtMajorVersion}";
-  version = "0.5.21";
+  version = "0.5.23";
 
   src = fetchFromGitHub {
     owner = "Bali10050";
     repo = "Darkly";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-1WErpDYTlMW/889Efe3OUM3uwt5w+EttjOGoBolBZvE=";
+    hash = "sha256-BENROvRjnKLjCc1qwGgScfk6WIdHGwz4vZhsmfa///Q=";
   };
 
   nativeBuildInputs = [
@@ -57,16 +57,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta =
-    {
-      description = "Modern style for Qt applications (fork of Lightly)";
-      homepage = "https://github.com/Bali10050/Darkly";
-      changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
-      platforms = lib.platforms.linux;
-      license = with lib.licenses; [ gpl2Plus ];
-      maintainers = with lib.maintainers; [ pluiedev ];
-    }
-    // lib.optionalAttrs (qtMajorVersion == "6") {
-      mainProgram = "darkly-settings6";
-    };
+  meta = {
+    description = "Modern style for Qt applications (fork of Lightly)";
+    homepage = "https://github.com/Bali10050/Darkly";
+    changelog = "https://github.com/Bali10050/Darkly/releases/tag/v${finalAttrs.version}";
+    platforms = lib.platforms.linux;
+    license = with lib.licenses; [ gpl2Plus ];
+    maintainers = with lib.maintainers; [ pluiedev ];
+  }
+  // lib.optionalAttrs (qtMajorVersion == "6") {
+    mainProgram = "darkly-settings6";
+  };
 })

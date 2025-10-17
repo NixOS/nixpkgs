@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchFromGitHub,
   cmake,
   zlib,
@@ -11,7 +10,7 @@
   scipopt-papilo,
   scipopt-zimpl,
   ipopt,
-  tbb_2021,
+  onetbb,
   boost,
   gfortran,
   criterion,
@@ -20,14 +19,19 @@
 
 stdenv.mkDerivation rec {
   pname = "scipopt-scip";
-  version = "9.2.2";
+  version = "9.2.3";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "scip";
     tag = "v${lib.replaceStrings [ "." ] [ "" ] version}";
-    hash = "sha256-gxR308XrlmuUym/ujwGcD9a7Z+Z7vQNHaK4zO/PWPBQ=";
+    hash = "sha256-Zc1AXNpHQXXFO8jkMaJj6xYkmkQxAM8G+SiPiH9xCAw=";
   };
+
+  patches = [
+    # https://github.com/scipopt/scip/pull/169
+    ./0001-check-fix-invalid-ctest-invocation.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -39,14 +43,12 @@ stdenv.mkDerivation rec {
     gmp
     readline
     zlib
-    tbb_2021
+    onetbb
     boost
     gfortran
     criterion
     mpfr # if not included, throws fatal error: mpfr.h not found
   ];
-
-  cmakeFlags = [ ];
 
   doCheck = true;
 

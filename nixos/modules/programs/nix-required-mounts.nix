@@ -47,13 +47,17 @@ let
     );
 
   driverPaths = [
+    # opengl:
+    # NOTE: Since driverLink is just a symlink, we need to include its target as well.
     pkgs.addDriverRunpath.driverLink
+    config.systemd.tmpfiles.settings.graphics-driver."/run/opengl-driver"."L+".argument
 
     # mesa:
     config.hardware.graphics.package
 
     # nvidia_x11, etc:
-  ] ++ config.hardware.graphics.extraPackages; # nvidia_x11
+  ]
+  ++ config.hardware.graphics.extraPackages; # nvidia_x11
 
   defaults = {
     nvidia-gpu.onFeatures = package.allowedPatterns.nvidia-gpu.onFeatures;
@@ -76,7 +80,7 @@ in
     '';
     allowedPatterns =
       with lib.types;
-      lib.mkOption rec {
+      lib.mkOption {
         type = attrsOf Pattern;
         description = "The hook config, describing which paths to mount for which system features";
         default = { };

@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.18.1";
+  version = "3.18.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = "peewee";
     tag = version;
-    hash = "sha256-7MLDhMiW9LaedPMQ2QqSqos4SegzUmTX1joyV18MkEg=";
+    hash = "sha256-BIOY3vAHzSonxXYFmfFbVxbbUWnUVtcBRsTVMRo7peE=";
   };
 
   build-system = [ setuptools ];
@@ -36,12 +36,11 @@ buildPythonPackage rec {
     cython
   ];
 
-  propagatedBuildInputs =
-    [
-      apsw
-    ]
-    ++ lib.optionals withPostgres [ psycopg2 ]
-    ++ lib.optionals withMysql [ mysql-connector ];
+  propagatedBuildInputs = [
+    apsw
+  ]
+  ++ lib.optionals withPostgres [ psycopg2 ]
+  ++ lib.optionals withMysql [ mysql-connector ];
 
   nativeCheckInputs = [ flask ];
 

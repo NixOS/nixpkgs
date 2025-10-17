@@ -17,18 +17,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "karakeep";
-  version = "0.25.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "karakeep-app";
     repo = "karakeep";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-eAiRvesUZIwTaj7CSxtI4rkGlTkgVjbzzwjYaXlhSuo=";
+    hash = "sha256-KkRCMS/g+xCQyVh1qB/kf5Seqrn2McYBaUHqKOeigCA=";
   };
 
   patches = [
     ./patches/use-local-font.patch
-    ./patches/fix-migrations-path.patch
     ./patches/dont-lock-pnpm-version.patch
   ];
   postPatch = ''
@@ -53,7 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
       '';
     };
 
-    hash = "sha256-yf8A0oZ0Y4A5k7gfinIU02Lbqp/ygyvIBlldS0pv5+0=";
+    fetcherVersion = 1;
+    hash = "sha256-74jLff9v2+qc09b8ArooUX6qpFt2tDNW3ZayHPcDVj0=";
   };
   buildPhase = ''
     runHook preBuild
@@ -73,6 +73,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     echo "Building apps/cli"
     pushd apps/cli
+    pnpm run build
+    popd
+
+    echo "Building apps/workers"
+    pushd apps/workers
     pnpm run build
     popd
 
@@ -132,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
         package = finalAttrs.finalPackage;
         # remove hardcoded version if upstream syncs general version with cli
         # version
-        version = "0.23.0";
+        version = "0.25.0";
       };
     };
     updateScript = nix-update-script { };

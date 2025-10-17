@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "0xacx";
     repo = "chatgpt-shell-cli";
-    rev = version;
+    tag = version;
     hash = "sha256-hYLrUya4UCsIB1J/n+jp1jFRCEqnGFJOr3ATxm0zwdY=";
   };
 
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     homepage = "https://github.com/0xacx/chatGPT-shell-cli";
-    description = "Simple shell script to use OpenAI's ChatGPT and DALL-E from the terminal. No Python or JS required.";
+    description = "Simple shell script to use OpenAI's ChatGPT and DALL-E from the terminal. No Python or JS required";
     license = licenses.mit;
     maintainers = with maintainers; [ jfvillablanca ];
   };

@@ -24,23 +24,23 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "libsignal-node";
-  version = "0.74.1";
+  version = "0.81.1";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "libsignal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZMi+/d051CS7TcWVZnVItNpok0ac+vAvvZL/buNrtL0=";
+    hash = "sha256-uhxfVFsoB+c1R5MUOgpJFm8ZD3vgU8BIn35QSfbEp5w=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-pRMFWJSRjhZYfX7dmOQXK3BjhJKzPR1Pg+TZzTfPnd4=";
+
+  cargoHash = "sha256-Q3GSeaW3YveLxLeJPpPXUVwlJ0QLRkAmRGSJetxKl4Y=";
 
   npmRoot = "node";
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-npm-deps";
     inherit (finalAttrs) version src;
     sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
-    hash = "sha256-9x1oCzZLBeX0AN+R4qcyBNwsJ/AY6mebCEEfQ5JKpl8=";
+    hash = "sha256-6Mr3SJn4pO0p6PISXvEOhN9uPk1TIEU03ssclNUg2No=";
   };
 
   nativeBuildInputs = [
@@ -62,22 +62,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./dont-strip-absolute-paths.patch
   ];
   postPatch = ''
-    substituteInPlace node/binding.gyp \
-      --replace-fail "'--out-dir', '<(PRODUCT_DIR)/'," \
-                     "'--out-dir', '$out/lib/<(NODE_OS_NAME)-<(target_arch)/'," \
-      --replace-fail "'target_name': 'libsignal_client_<(NODE_OS_NAME)_<(target_arch).node'," \
-                     "'target_name': '@signalapp+libsignal-client',"
-
     substituteInPlace node/build_node_bridge.py \
-      --replace-fail "dst_base = 'libsignal_client_%s_%s' % (node_os_name, node_arch)" \
-                     "dst_base = '@signalapp+libsignal-client'"
+      --replace-fail "'prebuilds'" "'$out/lib'" \
+      --replace-fail "objcopy = shutil.which('%s-linux-gnu-objcopy' % cargo_target.split('-')[0]) or 'objcopy'" \
+                     "objcopy = os.getenv('OBJCOPY', 'objcopy')"
   '';
 
   buildPhase = ''
     runHook preBuild
 
     pushd node
-    npx node-gyp rebuild
+    npm run build -- --copy-to-prebuilds --node-arch ${stdenv.hostPlatform.node.arch}
     popd
 
     runHook postBuild

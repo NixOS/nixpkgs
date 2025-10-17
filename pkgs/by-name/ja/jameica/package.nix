@@ -9,14 +9,14 @@
   ant,
   jdk,
   jre,
-  gtk2,
+  gtk3,
   glib,
   libXtst,
 }:
 
 let
-  _version = "2.10.4";
-  _build = "487";
+  _version = "2.10.5";
+  _build = "488";
   version = "${_version}-${_build}";
 
   swtSystem =
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings [ "." ] [ "_" ] _version}_BUILD_${_build}";
-    hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
+    hash = "sha256-xzSyq5Cse/TCzyb/eQNZyQS/I3mcPsvzWk3VjZg95gE=";
   };
 
   nativeBuildInputs = [
@@ -61,8 +61,9 @@ stdenv.mkDerivation rec {
     makeWrapper
     stripJavaArchivesHook
   ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    gtk2
+    gtk3
     glib
     libXtst
   ];
@@ -77,33 +78,32 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
+    mkdir -p $out/libexec $out/lib $out/bin $out/share/{applications,jameica-${version},java}/
 
-      # copy libraries except SWT
-      cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
-      # copy platform-specific SWT
-      cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
+    # copy libraries except SWT
+    cp $(find lib -type f -iname '*.jar' | grep -ve 'swt/.*/swt.jar') $out/share/jameica-${version}/
+    # copy platform-specific SWT
+    cp lib/swt/${swtSystem}/swt.jar $out/share/jameica-${version}/
 
-      install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
-      install -Dm644 plugin.xml $out/share/java/
-      install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
-      cp ${desktopItem}/share/applications/* $out/share/applications/
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    install -Dm644 releases/${_version}-*/jameica/jameica.jar $out/share/java/
+    install -Dm644 plugin.xml $out/share/java/
+    install -Dm644 build/jameica-icon.png $out/share/pixmaps/jameica.png
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
 
-      # Create .app bundle for macOS
-      mkdir -p $out/Applications
-      chmod +x releases/${_version}-${_build}-${_build}/tmp/jameica.app/jameica*.sh
-      cp -r releases/${_version}-${_build}-${_build}/tmp/jameica.app $out/Applications/Jameica.app
-    ''
-    + ''
+    # Create .app bundle for macOS
+    mkdir -p $out/Applications
+    chmod +x releases/${_version}-${_build}-${_build}/tmp/jameica.app/jameica*.sh
+    cp -r releases/${_version}-${_build}-${_build}/tmp/jameica.app $out/Applications/Jameica.app
+  ''
+  + ''
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   postFixup = ''
     makeWrapper ${jre}/bin/java $out/bin/jameica \
@@ -113,20 +113,20 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.willuhn.de/products/jameica/";
     description = "Free Runtime Environment for Java Applications";
     longDescription = ''
       Runtime Environment for plugins like Hibiscus (HBCI Online Banking),
       SynTAX (accounting) and JVerein (club management).
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       flokli
       r3dl3g
     ];

@@ -28,14 +28,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "7zz";
-  version = "24.09";
+  version = "25.01";
 
   src = fetchzip {
     url = "https://7-zip.org/a/7z${lib.replaceStrings [ "." ] [ "" ] finalAttrs.version}-src.tar.xz";
     hash =
       {
-        free = "sha256-iQJ2m2OZrdkzf2sDIbKuyu0wIUktfvySTpsGFSLDZOM=";
-        unfree = "sha256-HVSu5GvdCY3lVXLUkHxaXco22WO52J2ldkGgfsyMVVg=";
+        free = "sha256-A1BBdSGepobpguzokL1zpjce5EOl0zqABYciv9zCOac=";
+        unfree = "sha256-Jkj6T4tMols33uyJSOCcVmxh5iBYYCO/rq9dF4NDMko=";
       }
       .${if enableUnfree then "unfree" else "free"};
     stripRoot = false;
@@ -75,24 +75,27 @@ stdenv.mkDerivation (finalAttrs: {
         "-Wno-unsafe-buffer-usage"
         "-Wno-cast-function-type-strict"
       ])
+      # These three probably started to appear with clang 20 or 21:
+      "-Wno-c++-keyword"
+      "-Wno-implicit-void-ptr-cast"
+      "-Wno-nrvo"
     ]
   );
 
   inherit makefile;
 
-  makeFlags =
-    [
-      "CC=${stdenv.cc.targetPrefix}cc"
-      "CXX=${stdenv.cc.targetPrefix}c++"
-    ]
-    ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
-    ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
-    # it's the compression code with the restriction, see DOC/License.txt
-    ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
-    ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
-      "IS_MINGW=1"
-      "MSYSTEM=1"
-    ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ]
+  ++ lib.optionals useUasm [ "MY_ASM=uasm" ]
+  ++ lib.optionals (!useUasm && stdenv.hostPlatform.isx86) [ "USE_ASM=" ]
+  # it's the compression code with the restriction, see DOC/License.txt
+  ++ lib.optionals (!enableUnfree) [ "DISABLE_RAR_COMPRESS=true" ]
+  ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
+    "IS_MINGW=1"
+    "MSYSTEM=1"
+  ];
 
   nativeBuildInputs = lib.optionals useUasm [ uasm ];
 

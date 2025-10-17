@@ -52,25 +52,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7WKKRUEEF3NL8S1xg8E1WcD3dGasrw49pydeC4CyL+c=";
   };
 
-  postPatch =
-    ''
-      # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
-      # Patch out failure if QMake is not found, since we don't use it
-      substituteInPlace CMakeLists.txt \
-        --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
-        --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
+  postPatch = ''
+    # Queries qmake for the QML installation path, which returns a reference to Qt5's build directory
+    # Patch out failure if QMake is not found, since we don't use it
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "\''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML" "echo $out/${qtbase.qtQmlPrefix}" \
+      --replace-fail 'QMAKE_EXECUTABLE STREQUAL "QMAKE_EXECUTABLE-NOTFOUND"' 'FALSE'
 
-    ''
-    + lib.optionalString finalAttrs.finalPackage.doCheck ''
-      substituteInPlace tests/common/dbus-services/CMakeLists.txt \
-        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
-        ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
-        ${replaceDbusService dconf "ca.desrt.dconf.service"}
+  ''
+  + lib.optionalString finalAttrs.finalPackage.doCheck ''
+    substituteInPlace tests/common/dbus-services/CMakeLists.txt \
+      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.MissionControl5.service"} \
+      ${replaceDbusService telepathy-mission-control "org.freedesktop.Telepathy.AccountManager.service"} \
+      ${replaceDbusService dconf "ca.desrt.dconf.service"}
 
-      substituteInPlace cmake/modules/GenerateTest.cmake \
-        --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
-        --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
-    '';
+    substituteInPlace cmake/modules/GenerateTest.cmake \
+      --replace-fail '/usr/lib/dconf' '${lib.getLib dconf}/libexec' \
+      --replace-fail '/usr/lib/telepathy' '${lib.getLib telepathy-mission-control}/libexec'
+  '';
 
   strictDeps = true;
 
@@ -148,11 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     ))
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     "-I${lib.getDev telepathy-glib}/include/telepathy-1.0" # it's in telepathy-farstream's Requires.private, so it & its dependencies don't get pulled in
     "-I${lib.getDev dbus-glib}/include/dbus-1.0" # telepathy-glib dependency
     "-I${lib.getDev dbus}/include/dbus-1.0" # telepathy-glib dependency
-  ]);
+  ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

@@ -49,32 +49,31 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      coreutils
-      db
-      openssl
-      perl'
-      pcre2
-      libxcrypt
-    ]
-    ++ lib.optional enableLDAP openldap
-    ++ lib.optionals enableMySQL [
-      libmysqlclient
-      zlib
-    ]
-    ++ lib.optional enablePgSQL libpq
-    ++ lib.optionals enableSqlite [
-      sqlite
-      sqlite.dev
-      zlib
-    ]
-    ++ lib.optional enableAuthDovecot dovecot
-    ++ lib.optional enablePAM pam
-    ++ lib.optional enableSPF libspf2
-    ++ lib.optional enableDMARC opendmarc
-    ++ lib.optional enableRedis hiredis
-    ++ lib.optional enableJSON jansson;
+  buildInputs = [
+    coreutils
+    db
+    openssl
+    perl'
+    pcre2
+    libxcrypt
+  ]
+  ++ lib.optional enableLDAP openldap
+  ++ lib.optionals enableMySQL [
+    libmysqlclient
+    zlib
+  ]
+  ++ lib.optional enablePgSQL libpq
+  ++ lib.optionals enableSqlite [
+    sqlite
+    sqlite.dev
+    zlib
+  ]
+  ++ lib.optional enableAuthDovecot dovecot
+  ++ lib.optional enablePAM pam
+  ++ lib.optional enableSPF libspf2
+  ++ lib.optional enableDMARC opendmarc
+  ++ lib.optional enableRedis hiredis
+  ++ lib.optional enableJSON jansson;
 
   configurePhase = ''
     runHook preConfigure

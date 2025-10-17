@@ -32,9 +32,8 @@ buildPythonPackage rec {
     trio
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::trio.TrioDeprecationWarning"
+  pytestFlags = [
+    "-Wignore::trio.TrioDeprecationWarning"
   ];
 
   disabledTests = [

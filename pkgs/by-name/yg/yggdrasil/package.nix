@@ -39,7 +39,6 @@ buildGoModule rec {
     homepage = "https://yggdrasil-network.github.io/";
     license = licenses.lgpl3;
     maintainers = with maintainers; [
-      ehmry
       gazally
       lassulus
       peigongdsd

@@ -50,14 +50,13 @@ python3.pkgs.buildPythonApplication {
   # Needs tox
   doCheck = false;
 
-  buildInputs =
-    [
-      qt6Packages.qtbase
-      glib-networking
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qt6Packages.qtwayland
-    ];
+  buildInputs = [
+    qt6Packages.qtbase
+    glib-networking
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qt6Packages.qtwayland
+  ];
 
   build-system = with python3.pkgs; [
     setuptools
@@ -70,7 +69,8 @@ python3.pkgs.buildPythonApplication {
     docbook_xsl
     libxml2
     libxslt
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
   dependencies = with python3.pkgs; [
     colorama
@@ -97,15 +97,14 @@ python3.pkgs.buildPythonApplication {
 
   dontWrapQtApps = true;
 
-  postPatch =
-    ''
-      substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+  postPatch = ''
+    substituteInPlace qutebrowser/misc/quitter.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
 
-      sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
-    ''
-    + lib.optionalString withPdfReader ''
-      sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
-    '';
+    sed -i "s,/usr,$out,g" qutebrowser/utils/standarddir.py
+  ''
+  + lib.optionalString withPdfReader ''
+    sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -146,7 +145,7 @@ python3.pkgs.buildPythonApplication {
         # avoid persistant warning on starup
         --set QT_STYLE_OVERRIDE Fusion
         ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
-        ${lib.optionalString (enableVulkan) ''
+        ${lib.optionalString enableVulkan ''
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
           --set-default QSG_RHI_BACKEND vulkan
         ''}

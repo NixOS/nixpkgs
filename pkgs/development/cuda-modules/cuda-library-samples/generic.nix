@@ -7,8 +7,6 @@
   cuda_cccl ? null,
   cuda_cudart ? null,
   cuda_nvcc ? null,
-  cudaAtLeast,
-  cudaOlder,
   cudatoolkit,
   cusparselt ? null,
   cutensor ? null,
@@ -77,16 +75,14 @@ in
       buildInputs = prevAttrs.buildInputs or [ ] ++ [ cutensor ];
 
       cmakeFlags = prevAttrs.cmakeFlags or [ ] ++ [
-        "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${builtins.placeholder "out"}/bin"
+        "-DCUTENSOR_EXAMPLE_BINARY_INSTALL_DIR=${placeholder "out"}/bin"
       ];
 
       # CUTENSOR_ROOT is double escaped
-      postPatch =
-        prevAttrs.postPatch or ""
-        + ''
-          substituteInPlace CMakeLists.txt \
-            --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
-        '';
+      postPatch = prevAttrs.postPatch or "" + ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail "\''${CUTENSOR_ROOT}/include" "${lib.getDev cutensor}/include"
+      '';
 
       CUTENSOR_ROOT = cutensor;
 
@@ -102,40 +98,27 @@ in
 
       sourceRoot = "${finalAttrs.src.name}/cuSPARSELt/matmul";
 
-      buildInputs = prevAttrs.buildInputs or [ ] ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ];
+      nativeBuildInputs = prevAttrs.nativeBuildInputs or [ ] ++ [
+        cmake
+        addDriverRunpath
+        (lib.getDev cusparselt)
+        (lib.getDev libcusparse)
+        cuda_nvcc
+        (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
+        cuda_cccl # <nv/target>
+      ];
 
-      nativeBuildInputs =
-        prevAttrs.nativeBuildInputs or [ ]
-        ++ [
-          cmake
-          addDriverRunpath
-          (lib.getDev cusparselt)
-          (lib.getDev libcusparse)
-        ]
-        ++ lib.optionals (cudaOlder "11.4") [ cudatoolkit ]
-        ++ lib.optionals (cudaAtLeast "11.4") [
-          cuda_nvcc
-          (lib.getDev cuda_cudart) # <cuda_runtime_api.h>
-        ]
-        ++ lib.optionals (cudaAtLeast "12.0") [
-          cuda_cccl # <nv/target>
-        ];
+      postPatch = prevAttrs.postPatch or "" + ''
+        substituteInPlace CMakeLists.txt \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
+          --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
+      '';
 
-      postPatch =
-        prevAttrs.postPatch or ""
-        + ''
-          substituteInPlace CMakeLists.txt \
-            --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt.so" "${lib.getLib cusparselt}/lib/libcusparseLt.so" \
-            --replace-fail "''${CUSPARSELT_ROOT}/lib64/libcusparseLt_static.a" "${lib.getStatic cusparselt}/lib/libcusparseLt_static.a"
-        '';
-
-      postInstall =
-        prevAttrs.postInstall or ""
-        + ''
-          mkdir -p $out/bin
-          cp matmul_example $out/bin/
-          cp matmul_example_static $out/bin/
-        '';
+      postInstall = prevAttrs.postInstall or "" + ''
+        mkdir -p $out/bin
+        cp matmul_example $out/bin/
+        cp matmul_example_static $out/bin/
+      '';
 
       CUDA_TOOLKIT_PATH = lib.getLib cudatoolkit;
       CUSPARSELT_PATH = lib.getLib cusparselt;
@@ -143,11 +126,11 @@ in
       meta = prevAttrs.meta or { } // {
         broken =
           # Base dependencies
-          (cusparselt == null || libcusparse == null)
-          # CUDA 11.4+ dependencies
-          || (cudaAtLeast "11.4" && (cuda_nvcc == null || cuda_cudart == null))
-          # CUDA 12.0+ dependencies
-          || (cudaAtLeast "12.0" && cuda_cccl == null);
+          cusparselt == null
+          || libcusparse == null
+          || cuda_nvcc == null
+          || cuda_cudart == null
+          || cuda_cccl == null;
       };
     }
   );

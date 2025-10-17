@@ -46,7 +46,7 @@ lib.fix (
     buildEnv' =
       args:
       (
-        buildEnv ({ inherit (args) name paths; })
+        buildEnv { inherit (args) name paths; }
         // lib.optionalAttrs (args ? extraOutputsToInstall) { inherit (args) extraOutputsToInstall; }
       ).overrideAttrs
         (
@@ -418,7 +418,8 @@ lib.fix (
         # use attrNames, attrValues to ensure the two lists are sorted in the same way
         outputs = [
           "out"
-        ] ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
+        ]
+        ++ lib.optionals (!__combine && __formatsOf == null) (builtins.attrNames nonEnvOutputs);
         otherOutputs = lib.optionals (!__combine && __formatsOf == null) (
           builtins.attrValues nonEnvOutputs
         );
@@ -451,7 +452,8 @@ lib.fix (
           gawk
           gnugrep
           gnused
-        ] ++ lib.optional needsGhostscript ghostscript;
+        ]
+        ++ lib.optional needsGhostscript ghostscript;
 
         inherit meta passthru __combine;
         __formatsOf = __formatsOf.pname or null;

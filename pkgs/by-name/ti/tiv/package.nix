@@ -2,40 +2,38 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  makeWrapper,
+  makeBinaryWrapper,
   imagemagick,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tiv";
-  version = "1.1.1";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "stefanhaustein";
     repo = "TerminalImageViewer";
-    rev = "v${version}";
-    sha256 = "sha256-mCgybL4af19zqECN1pBV+WnxMq2ZtlK5GDTQO3u9CK0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-xuJpl/tGWlyo8aKKy0yYzGladLs3ayKcRCodDNyZI9w=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  sourceRoot = "${finalAttrs.src.name}/src";
 
-  buildInputs = [ imagemagick ];
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  makeFlags = [ "prefix=$(out)" ];
-
-  preConfigure = "cd src/main/cpp";
+  makeFlags = [ "prefix=${placeholder "out"}" ];
 
   postFixup = ''
     wrapProgram $out/bin/tiv \
       --prefix PATH : ${lib.makeBinPath [ imagemagick ]}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/stefanhaustein/TerminalImageViewer";
     description = "Small C++ program to display images in a (modern) terminal using RGB ANSI codes and unicode block graphics characters";
     mainProgram = "tiv";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ magnetophon ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ magnetophon ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})

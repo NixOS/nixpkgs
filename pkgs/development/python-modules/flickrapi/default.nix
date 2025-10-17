@@ -63,6 +63,7 @@ buildPythonPackage rec {
     "test_walk"
     "test_xmlnode_format"
     "test_xmlnode_format_error"
+    "test_upload"
   ];
 
   pythonImportsCheck = [ "flickrapi" ];

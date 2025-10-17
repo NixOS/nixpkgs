@@ -8,16 +8,16 @@
 
 php83.buildComposerProject2 (finalAttrs: {
   pname = "bookstack";
-  version = "25.05.1";
+  version = "25.07.3";
 
   src = fetchFromGitHub {
     owner = "bookstackapp";
     repo = "bookstack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wQ5i9A+uCD9srSuEnTWWgALzlbciPVwfYhy8ZKVsX7E=";
+    hash = "sha256-DR15EkvoFzAFo8Gv1bqD9ry4WtbNSIiR7qii1Va2b2g=";
   };
 
-  vendorHash = "sha256-ApLBU21CrmYVW1lOX1wFTo5UMWUEErWumn8x742iMT0=";
+  vendorHash = "sha256-OTsH7MOmbhu6xeBg9YfUk08bjQEFU0Br+oXcuZUCVME=";
 
   passthru = {
     phpPackage = php83;
@@ -27,10 +27,11 @@ php83.buildComposerProject2 (finalAttrs: {
   postInstall = ''
     chmod -R u+w $out/share
     mv $out/share/php/bookstack/* $out
-    rm -R $out/share $out/storage $out/bootstrap/cache $out/public/uploads
+    rm -R $out/share $out/storage $out/bootstrap/cache $out/public/uploads $out/themes
     ln -s ${dataDir}/storage $out/storage
     ln -s ${dataDir}/cache $out/bootstrap/cache
     ln -s ${dataDir}/public/uploads $out/public/uploads
+    ln -s ${dataDir}/themes $out/themes
   '';
 
   meta = {

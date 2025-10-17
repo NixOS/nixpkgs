@@ -94,13 +94,7 @@ in
     };
 
     emailServer = {
-      enable = lib.mkOption {
-        description = ''
-          Enable SMTP email server. This is necessary, if you want to use password recovery or change your own password
-        '';
-        type = lib.types.bool;
-        default = false;
-      };
+      enable = lib.mkEnableOption "SMTP email server. This is necessary, if you want to use password recovery or change your own password";
       address = lib.mkOption {
         description = "SMTP server for email delivery";
         type = lib.types.str;
@@ -111,16 +105,8 @@ in
         type = lib.types.port;
         default = 25;
       };
-      useSSL = lib.mkOption {
-        description = "SMTP server should use SSL";
-        type = lib.types.bool;
-        default = false;
-      };
-      useTLS = lib.mkOption {
-        description = "SMTP server should use TLS";
-        type = lib.types.bool;
-        default = false;
-      };
+      useSSL = lib.mkEnableOption "SSL for connecting to the SMTP server";
+      useTLS = lib.mkEnableOption "TLS for connecting to the SMTP server";
       username = lib.mkOption {
         description = "SMTP server username for email delivery";
         type = lib.types.nullOr lib.types.str;
@@ -157,24 +143,23 @@ in
   config = lib.mkIf (cfg.enable) {
     networking.firewall.allowedTCPPorts = lib.mkIf (cfg.openFirewall) [ cfg.port ];
 
-    services.pgadmin.settings =
-      {
-        DEFAULT_SERVER_PORT = cfg.port;
-        PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
-        SERVER_MODE = true;
-        UPGRADE_CHECK_ENABLED = false;
-      }
-      // (lib.optionalAttrs cfg.openFirewall {
-        DEFAULT_SERVER = lib.mkDefault "::";
-      })
-      // (lib.optionalAttrs cfg.emailServer.enable {
-        MAIL_SERVER = cfg.emailServer.address;
-        MAIL_PORT = cfg.emailServer.port;
-        MAIL_USE_SSL = cfg.emailServer.useSSL;
-        MAIL_USE_TLS = cfg.emailServer.useTLS;
-        MAIL_USERNAME = cfg.emailServer.username;
-        SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
-      });
+    services.pgadmin.settings = {
+      DEFAULT_SERVER_PORT = cfg.port;
+      PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
+      SERVER_MODE = true;
+      UPGRADE_CHECK_ENABLED = false;
+    }
+    // (lib.optionalAttrs cfg.openFirewall {
+      DEFAULT_SERVER = lib.mkDefault "::";
+    })
+    // (lib.optionalAttrs cfg.emailServer.enable {
+      MAIL_SERVER = cfg.emailServer.address;
+      MAIL_PORT = cfg.emailServer.port;
+      MAIL_USE_SSL = cfg.emailServer.useSSL;
+      MAIL_USE_TLS = cfg.emailServer.useTLS;
+      MAIL_USERNAME = cfg.emailServer.username;
+      SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
+    });
 
     systemd.services.pgadmin = {
       wantedBy = [ "multi-user.target" ];
@@ -223,11 +208,44 @@ in
         User = "pgadmin";
         DynamicUser = true;
         LogsDirectory = "pgadmin";
+        LogsDirectoryMode = "750";
         StateDirectory = "pgadmin";
+        StateDirectoryMode = "750";
         ExecStart = "${cfg.package}/bin/pgadmin4";
         LoadCredential = [
           "initial_password:${cfg.initialPasswordFile}"
-        ] ++ lib.optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
+        ]
+        ++ lib.optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
+        AmbientCapabilities = "";
+        CapabilityBoundingSet = "";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        MountAPIVFS = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        PrivateUsers = true;
+        ProtectClock = true;
+        ProtectControlGroups = "strict";
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "full";
+        RemoveIPC = true;
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        UMask = 27;
       };
     };
 

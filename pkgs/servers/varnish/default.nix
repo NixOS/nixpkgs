@@ -41,19 +41,18 @@ let
         sphinx
         makeWrapper
       ];
-      buildInputs =
-        [
-          libxslt
-          groff
-          ncurses
-          readline
-          libedit
-          python3
-        ]
-        ++ lib.optional (lib.versionOlder version "7") pcre
-        ++ lib.optional (lib.versionAtLeast version "7") pcre2
-        ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
-        ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
+      buildInputs = [
+        libxslt
+        groff
+        ncurses
+        readline
+        libedit
+        python3
+      ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/run" ];
 
@@ -110,12 +109,12 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.14";
-    hash = "sha256-tZlBf3ppntxxYSufEJ86ot6ujvnbfIyZOu9B3kDJ72k=";
+    version = "6.0.16";
+    hash = "sha256-ZVJxDHp9LburwlJ1LCR5CKPRaSbNixiEch/l3ZP0QyQ=";
   };
   # EOL 2026-03-15
   varnish77 = common {
-    version = "7.7.1";
-    hash = "sha256-TAbFyZaApCm3KTT5/VE5Y/fhuoVTszyn7BLIWlwrdRo=";
+    version = "7.7.3";
+    hash = "sha256-6W7q/Ez+KlWO0vtU8eIr46PZlfRvjADaVF1YOq74AjY=";
   };
 }

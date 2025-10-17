@@ -48,7 +48,8 @@ buildPythonPackage rec {
     chameleon
     mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = lib.optionals isPyPy [
     # https://github.com/sqlalchemy/mako/issues/315
@@ -67,6 +68,6 @@ buildPythonPackage rec {
     changelog = "https://docs.makotemplates.org/en/latest/changelog.html";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

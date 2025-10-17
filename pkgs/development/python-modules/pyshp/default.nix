@@ -2,23 +2,23 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pyshp";
-  version = "2.3.1";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  version = "3.0.2.post1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeospatialPython";
     repo = "pyshp";
-    rev = version;
-    hash = "sha256-yfxhgk8a1rdpGVkE1sjJqT6tiFLimhu2m2SjGxLI6wo=";
+    tag = version;
+    hash = "sha256-iW8zE/ZRDzSD+uzcHhxey7MxRvWDML3t0/mevz/cvXQ=";
   };
+
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

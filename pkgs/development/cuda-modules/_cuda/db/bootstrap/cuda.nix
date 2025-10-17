@@ -100,22 +100,6 @@
         }
       )
       {
-        # Tesla K40
-        "3.5" = {
-          archName = "Kepler";
-          minCudaMajorMinorVersion = "10.0";
-          dontDefaultAfterCudaMajorMinorVersion = "11.0";
-          maxCudaMajorMinorVersion = "11.8";
-        };
-
-        # Tesla K80
-        "3.7" = {
-          archName = "Kepler";
-          minCudaMajorMinorVersion = "10.0";
-          dontDefaultAfterCudaMajorMinorVersion = "11.0";
-          maxCudaMajorMinorVersion = "11.8";
-        };
-
         # Tesla/Quadro M series
         "5.0" = {
           archName = "Maxwell";
@@ -156,16 +140,6 @@
           # Removed from TensorRT 10.5, which corresponds to CUDA 12.6 release.
           # https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-1050/support-matrix/index.html
           dontDefaultAfterCudaMajorMinorVersion = "12.5";
-        };
-
-        # Jetson AGX Xavier, Drive AGX Pegasus, Xavier NX
-        "7.2" = {
-          archName = "Volta";
-          minCudaMajorMinorVersion = "10.0";
-          # Note: without `cuda_compat`, maxCudaMajorMinorVersion is 11.8
-          # https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html#deployment-considerations-for-cuda-upgrade-package
-          maxCudaMajorMinorVersion = "12.2";
-          isJetson = true;
         };
 
         # GTX/RTX Turing – GTX 1660 Ti, RTX 2060, RTX 2070, RTX 2080, Titan RTX, Quadro RTX 4000,

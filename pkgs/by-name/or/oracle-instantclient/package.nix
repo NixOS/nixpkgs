@@ -25,7 +25,8 @@ let
     "sdk"
     "sqlplus"
     "tools"
-  ] ++ optional odbcSupport "odbc";
+  ]
+  ++ optional odbcSupport "odbc";
 
   # determine the version number, there might be different ones per architecture
   version =
@@ -142,20 +143,18 @@ in
 stdenv.mkDerivation {
   inherit pname version srcs;
 
-  buildInputs =
-    [
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ optional stdenv.hostPlatform.isLinux libaio
-    ++ optional odbcSupport unixODBC;
+  buildInputs = [
+    (lib.getLib stdenv.cc.cc)
+  ]
+  ++ optional stdenv.hostPlatform.isLinux libaio
+  ++ optional odbcSupport unixODBC;
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      (if isDarwinAarch64 then _7zz else unzip)
-    ]
-    ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
-    ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [
+    makeWrapper
+    (if isDarwinAarch64 then _7zz else unzip)
+  ]
+  ++ optional stdenv.hostPlatform.isLinux autoPatchelfHook
+  ++ optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   outputs = [
     "out"

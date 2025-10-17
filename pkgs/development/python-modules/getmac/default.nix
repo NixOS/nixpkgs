@@ -45,7 +45,7 @@ buildPythonPackage rec {
     "test_initialize_method_cache_valid_types"
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "getmac" ];
 
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/GhostofGoes/getmac";
     changelog = "https://github.com/GhostofGoes/getmac/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "getmac";
   };
 }

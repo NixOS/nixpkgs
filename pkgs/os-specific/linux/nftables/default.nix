@@ -23,15 +23,16 @@
   iptables,
   nixosTests,
   gitUpdater,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.3";
+  version = "1.1.5";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-nIpktZyQsIJeVAqbj8udLZQsY2+BulAZnwaP3kTzTtg=";
+    hash = "sha256-Ha8Q8yLhT9kKAXU4qvLANNfMHrHMQY3tR0RdcU6haNQ=";
   };
 
   patches = [
@@ -52,32 +53,32 @@ stdenv.mkDerivation rec {
     docbook_xsl
     findXMLCatalogs
     libxslt
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic ncurses;
 
-  buildInputs =
-    [
-      libmnl
-      libnftnl
-      libpcap
-      gmp
-      jansson
-    ]
-    ++ lib.optional withCli libedit
-    ++ lib.optional withXtables iptables;
+  buildInputs = [
+    libmnl
+    libnftnl
+    libpcap
+    gmp
+    jansson
+  ]
+  ++ lib.optional withCli libedit
+  ++ lib.optional withXtables iptables;
 
-  configureFlags =
-    [
-      "--with-json"
-      (lib.withFeatureAs withCli "cli" "editline")
-    ]
-    ++ lib.optional (!withDebugSymbols) "--disable-debug"
-    ++ lib.optional withXtables "--with-xtables";
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-lncursesw";
+
+  configureFlags = [
+    "--with-json"
+    (lib.withFeatureAs withCli "cli" "editline")
+  ]
+  ++ lib.optional (!withDebugSymbols) "--disable-debug"
+  ++ lib.optional withXtables "--with-xtables";
 
   enableParallelBuilding = true;
 
   passthru.tests = {
     inherit (nixosTests) firewall-nftables;
-    lxd-nftables = nixosTests.lxd.nftables;
     nat = { inherit (nixosTests.nat.nftables) firewall standalone; };
   };
 

@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "cloudsmith-api";
-  version = "2.0.20";
+  version = "2.0.21";
   format = "wheel";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cloudsmith_api";
     inherit format version;
-    hash = "sha256-ZZeXXWcefJK8iSdSs8+48UBaytoaVy89Aue9QQYQNKs=";
+    hash = "sha256-tReoNsSg90wReH/SVa2LAdy5q7DCnWJwnamisPkIuXs=";
   };
 
   propagatedBuildInputs = [
@@ -34,10 +34,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cloudsmith_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cloudsmith API Client";
     homepage = "https://github.com/cloudsmith-io/cloudsmith-api";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ usertam ];
   };
 }

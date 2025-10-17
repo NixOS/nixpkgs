@@ -2,37 +2,39 @@
   lib,
   bitvector-for-humans,
   buildPythonPackage,
+  busylight-core,
+  fastapi,
   fetchFromGitHub,
+  hatchling,
   hidapi,
+  httpx,
   loguru,
-  poetry-core,
   pyserial,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   typer,
-  webcolors,
   udevCheckHook,
+  uvicorn,
+  webcolors,
 }:
 
 buildPythonPackage rec {
   pname = "busylight-for-humans";
-  version = "0.35.2";
+  version = "0.45.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "JnyJny";
     repo = "busylight";
     tag = "v${version}";
-    hash = "sha256-0jmaVMN4wwqoO5wGMaV4kJefNUPOuJpWbsqHcZZ0Nh4=";
+    hash = "sha256-G+l+jkHZzz3tX1CcC7Cq1iCFZPbeQ6CI4xCMkTWA5EE=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     bitvector-for-humans
+    busylight-core
     hidapi
     loguru
     pyserial
@@ -40,11 +42,20 @@ buildPythonPackage rec {
     webcolors
   ];
 
+  optional-dependencies = {
+    webapi = [
+      fastapi
+      uvicorn
+    ];
+  };
+
   nativeCheckInputs = [
+    httpx
     pytestCheckHook
     pytest-mock
     udevCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/test_pydantic_models.py" ];
 
@@ -58,7 +69,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Control USB connected presence lights from multiple vendors via the command-line or web API";
     homepage = "https://github.com/JnyJny/busylight";
-    changelog = "https://github.com/JnyJny/busylight/releases/tag/${version}";
+    changelog = "https://github.com/JnyJny/busylight/releases/tag/${src.tag}";
     license = licenses.asl20;
     teams = [ teams.helsinki-systems ];
     mainProgram = "busylight";

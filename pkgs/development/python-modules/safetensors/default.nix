@@ -19,6 +19,7 @@
   pytest,
   pytest-benchmark,
   hypothesis,
+  fsspec,
 
   # tests
   pytestCheckHook,
@@ -26,25 +27,27 @@
 
 buildPythonPackage rec {
   pname = "safetensors";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "safetensors";
     tag = "v${version}";
-    hash = "sha256-wAr/jvr0w+vOHjjqE7cPcAM/IMz+58YhfoJ2XC4987M=";
+    hash = "sha256-IyKk29jMAbYW+16mrpqQWjnsmNFEvUwkB048AAx/Cvw=";
   };
 
   sourceRoot = "${src.name}/bindings/python";
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit
+      pname
+      version
+      src
+      sourceRoot
+      ;
+    hash = "sha256-+92fCILZwk/TknGXgR9lRN55WnmkgUJfCszFthstzXs=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
@@ -79,6 +82,7 @@ buildPythonPackage rec {
       pytest
       pytest-benchmark
       hypothesis
+      fsspec
     ];
     all = self.torch ++ self.numpy ++ self.pinned-tf ++ self.jax ++ self.paddlepaddle ++ self.testing;
     dev = self.all;
@@ -89,8 +93,11 @@ buildPythonPackage rec {
     numpy
     pytestCheckHook
     torch
+    fsspec
   ];
-  pytestFlagsArray = [ "tests" ];
+
+  enabledTestPaths = [ "tests" ];
+
   disabledTests = [
     # AttributeError: module 'torch' has no attribute 'float4_e2m1fn_x2'
     "test_odd_dtype_fp4"
@@ -103,17 +110,17 @@ buildPythonPackage rec {
     # != 'Erro[41 chars] 5]:  SliceOutOfRange { dim_index: 1, asked: 20, dim_size: 5 }'
     "test_numpy_slice"
   ];
+
   # don't require PaddlePaddle (not in Nixpkgs), Flax, or Tensorflow (onerous) to run tests:
-  disabledTestPaths =
-    [
-      "tests/test_flax_comparison.py"
-      "tests/test_paddle_comparison.py"
-      "tests/test_tf_comparison.py"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # don't require mlx (not in Nixpkgs) to run tests
-      "tests/test_mlx_comparison.py"
-    ];
+  disabledTestPaths = [
+    "tests/test_flax_comparison.py"
+    "tests/test_paddle_comparison.py"
+    "tests/test_tf_comparison.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # don't require mlx (not in Nixpkgs) to run tests
+    "tests/test_mlx_comparison.py"
+  ];
 
   pythonImportsCheck = [ "safetensors" ];
 

@@ -11,7 +11,7 @@
   gnutar,
   libsForQt5,
   makeDesktopItem,
-  nettools,
+  net-tools,
   protobuf,
   python312Packages,
   system-config-printer,
@@ -23,7 +23,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "rcu";
-  version = "4.0.24";
+  version = "4.0.29";
 
   format = "other";
 
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     let
       src-tarball = requireFile {
         name = "rcu-${version}-source.tar.gz";
-        hash = "sha256-3rZiqg8Uuta3kI2m+2rBZ1XzN9bFds+emhivH5X7sJg=";
+        hash = "sha256-qbHjRKH9GOwBduyod8AOm2SYOjGUH1mYSpCTifOehVM=";
         url = "https://www.davisr.me/projects/rcu/";
       };
     in
@@ -42,7 +42,7 @@ python3Packages.buildPythonApplication rec {
     '';
 
   patches = [
-    ./Port-to-paramiko-3.x.patch
+    ./Port-to-paramiko-4.x.patch
   ];
 
   postPatch = ''
@@ -61,15 +61,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail '/sbin/ifconfig' 'ifconfig'
   '';
 
-  nativeBuildInputs =
-    [
-      copyDesktopItems
-      protobuf
-      libsForQt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      desktopToDarwinBundle
-    ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    protobuf
+    libsForQt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    desktopToDarwinBundle
+  ];
 
   buildInputs = [
     libsForQt5.qtbase
@@ -103,67 +102,65 @@ python3Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -p $out/{bin,share}
-      cp -r src $out/share/rcu
+    mkdir -p $out/{bin,share}
+    cp -r src $out/share/rcu
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      install -Dm644 package_support/gnulinux/50-remarkable.rules $out/etc/udev/rules.d/50-remarkable.rules
-    ''
-    + ''
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    install -Dm644 package_support/gnulinux/50-remarkable.rules $out/etc/udev/rules.d/50-remarkable.rules
+  ''
+  + ''
 
-      # Keep source from being GC'd by linking into it
+    # Keep source from being GC'd by linking into it
 
-      for icondir in $(find icons -type d -name '[0-9]*x[0-9]*'); do
-        iconsize=$(basename $icondir)
-        mkdir -p $out/share/icons/hicolor/$iconsize/apps
-        ln -s ${src}/icons/$iconsize/rcu-icon-$iconsize.png $out/share/icons/hicolor/$iconsize/apps/rcu.png
-      done
+    for icondir in $(find icons -type d -name '[0-9]*x[0-9]*'); do
+      iconsize=$(basename $icondir)
+      mkdir -p $out/share/icons/hicolor/$iconsize/apps
+      ln -s ${src}/icons/$iconsize/rcu-icon-$iconsize.png $out/share/icons/hicolor/$iconsize/apps/rcu.png
+    done
 
-      mkdir -p $out/share/icons/hicolor/scalable/apps
-      ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
 
-      mkdir -p $out/share/doc/rcu
-      for docfile in {COPYING,manual.pdf}; do
-        ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
-      done
+    mkdir -p $out/share/doc/rcu
+    for docfile in {COPYING,manual.pdf}; do
+      ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
+    done
 
-      mkdir -p $out/share/licenses/rcu
-      ln -s ${src}/COPYING $out/share/licenses/rcu/COPYING
+    mkdir -p $out/share/licenses/rcu
+    ln -s ${src}/COPYING $out/share/licenses/rcu/COPYING
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   # Manually creating wrapper, hook struggles with lack of shebang & symlink
   dontWrapPythonPrograms = true;
 
-  preFixup =
-    ''
-      makeWrapperArgs+=(
-        "''${qtWrapperArgs[@]}"
-        --prefix PATH : ${
-          lib.makeBinPath [
-            coreutils
-            gnutar
-            wget
-          ]
-        }
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+  preFixup = ''
+    makeWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
       --prefix PATH : ${
         lib.makeBinPath [
-          nettools
-          system-config-printer
+          coreutils
+          gnutar
+          wget
         ]
       }
-    ''
-    + ''
-      )
-    '';
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    --prefix PATH : ${
+      lib.makeBinPath [
+        net-tools
+        system-config-printer
+      ]
+    }
+  ''
+  + ''
+    )
+  '';
 
   postFixup = ''
     makeWrapper ${lib.getExe python3Packages.python} $out/bin/rcu \
@@ -185,6 +182,9 @@ python3Packages.buildPythonApplication rec {
           lib.strings.substring versionSuffixPos 1 rcu.version
         })";
     };
+
+    # Python stuff automatically adds an updateScript that just fails
+    updateScript = null;
   };
 
   meta = {
@@ -192,7 +192,10 @@ python3Packages.buildPythonApplication rec {
     description = "All-in-one offline/local management software for reMarkable e-paper tablets";
     homepage = "http://www.davisr.me/projects/rcu/";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ OPNA2608 ];
+    maintainers = with lib.maintainers; [
+      OPNA2608
+      m0streng0
+    ];
     hydraPlatforms = [ ]; # requireFile used as src
   };
 }

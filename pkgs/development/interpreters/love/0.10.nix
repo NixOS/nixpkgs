@@ -8,7 +8,6 @@
   libGL,
   openal,
   luajit,
-  libdevil,
   freetype,
   physfs,
   libmodplug,
@@ -46,7 +45,6 @@ stdenv.mkDerivation rec {
     libGL
     openal
     luajit
-    libdevil
     freetype
     physfs
     libmodplug

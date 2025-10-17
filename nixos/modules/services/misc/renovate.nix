@@ -75,7 +75,7 @@ in
         Extra environment variables to export to the Renovate process
         from the systemd unit configuration.
 
-        See https://docs.renovatebot.com/config-overview for available environment variables.
+        See <https://docs.renovatebot.com/config-overview> for available environment variables.
       '';
       example = {
         LOG_LEVEL = "debug";
@@ -104,7 +104,7 @@ in
         Renovate's global configuration.
         If you want to pass secrets to renovate, please use {option}`services.renovate.credentials` for that.
 
-        See https://docs.renovatebot.com/config-overview for available settings.
+        See <https://docs.renovatebot.com/config-overview> for available settings.
       '';
     };
   };
@@ -129,7 +129,8 @@ in
       path = [
         config.systemd.package
         pkgs.git
-      ] ++ cfg.runtimePackages;
+      ]
+      ++ cfg.runtimePackages;
       inherit (cfg) environment;
 
       serviceConfig = {

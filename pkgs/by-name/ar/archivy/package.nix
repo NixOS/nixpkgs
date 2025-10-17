@@ -22,21 +22,23 @@ let
     };
   };
 in
-with py.pkgs;
-
-buildPythonApplication rec {
+py.pkgs.buildPythonApplication rec {
   pname = "archivy";
-  version = "1.7.3";
-  format = "setuptools";
+  version = "1.7.7";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
+    hash = "sha256-XFzWD4KAW5jt5BwXZvO0iZdJKpzC6dRkxNLv5N8XUfc=";
   };
+
+  build-system = with py.pkgs; [
+    setuptools
+  ];
 
   pythonRelaxDeps = true;
 
-  propagatedBuildInputs = [
+  dependencies = with py.pkgs; [
     appdirs
     attrs
     beautifulsoup4
@@ -50,7 +52,7 @@ buildPythonApplication rec {
     python-frontmatter
     readability-lxml
     requests
-    setuptools
+    setuptools # uses pkg_resources during runtime
     tinydb
     validators
     wtforms

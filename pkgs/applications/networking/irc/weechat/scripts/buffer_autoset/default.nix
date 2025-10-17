@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     inherit (weechat.meta) platforms;
-    description = "buffer_autoset.py is a weechat script which auto-set buffer properties when a buffer is opened";
+    description = "WeeChat script which auto-set buffer properties when a buffer is opened";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ govanify ];
   };

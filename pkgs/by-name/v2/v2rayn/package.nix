@@ -19,15 +19,15 @@
   nix-update-script,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "v2rayn";
-  version = "7.12.7";
+  version = "7.14.4";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
-    tag = version;
-    hash = "sha256-pYkUbctdN3qaGxI5DbreoOGmXyIVrpHqYlN3BFRCcZ8=";
+    tag = finalAttrs.version;
+    hash = "sha256-zfQza07GhYFEHwl4w5hqqE9JP/0yY5KIj0zRRNmAECA=";
     fetchSubmodules = true;
   };
 
@@ -38,15 +38,17 @@ buildDotnetModule rec {
   postPatch = ''
     chmod +x v2rayN/ServiceLib/Sample/proxy_set_linux_sh
     patchShebangs v2rayN/ServiceLib/Sample/proxy_set_linux_sh
+    chmod +x v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
+    patchShebangs v2rayN/ServiceLib/Sample/kill_as_sudo_linux_sh
     substituteInPlace v2rayN/ServiceLib/Global.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
-    substituteInPlace v2rayN/ServiceLib/Handler/CoreAdminHandler.cs \
-      --replace-fail "/bin/sh" "${bash}/bin/bash"
+    substituteInPlace v2rayN/ServiceLib/Manager/CoreAdminManager.cs \
+      --replace-fail "/bin/bash" "${bash}/bin/bash"
     substituteInPlace v2rayN/ServiceLib/Handler/AutoStartupHandler.cs \
       --replace-fail "Utils.GetExePath())" '"v2rayN")'
     substituteInPlace v2rayN/ServiceLib/ViewModels/MainWindowViewModel.cs \
       --replace-fail "nautilus" "${xdg-utils}/bin/xdg-open"
-    substituteInPlace v2rayN/ServiceLib/Handler/CoreHandler.cs \
+    substituteInPlace v2rayN/ServiceLib/Manager/CoreManager.cs \
       --replace-fail 'Environment.GetEnvironmentVariable(Global.LocalAppData) == "1"' "false"
   '';
 
@@ -90,30 +92,27 @@ buildDotnetModule rec {
       icon = "v2rayn";
       genericName = "v2rayN";
       desktopName = "v2rayN";
-      categories = [
-        "Network"
-        "Application"
-      ];
+      categories = [ "Network" ];
       terminal = false;
       comment = "A GUI client for Windows and Linux, support Xray core and sing-box-core and others";
     })
   ];
 
   postInstall = ''
-    install -Dm644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/pixmaps/v2rayn.png
+    install -D --mode 0644 v2rayN/v2rayN.Desktop/v2rayN.png $out/share/icons/hicolor/256x256/apps/v2rayn.png
   '';
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";
+    description = "GUI client support Xray core and sing-box-core and others";
     homepage = "https://github.com/2dust/v2rayN";
     mainProgram = "v2rayN";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
     ];
   };
-}
+})

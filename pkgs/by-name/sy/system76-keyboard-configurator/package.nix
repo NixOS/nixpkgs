@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage rec {
     udev
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-0UmEWQz+8fKx8Z1slVuVZeiWN9JKjEKINgXzZ6a4jkE=";
 
   postInstall = ''

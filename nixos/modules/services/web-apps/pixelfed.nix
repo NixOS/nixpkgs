@@ -173,7 +173,7 @@ in
           default = "mysql";
           description = ''
             Database engine to use.
-            Note that PGSQL is not well supported: https://github.com/pixelfed/pixelfed/issues/2727
+            Note that PGSQL is not well supported: <https://github.com/pixelfed/pixelfed/issues/2727>
           '';
         };
 
@@ -243,7 +243,7 @@ in
 
     services.redis.servers.pixelfed.enable = lib.mkIf cfg.redis.createLocally true;
     services.pixelfed.settings = mkMerge [
-      ({
+      {
         APP_ENV = mkDefault "production";
         APP_DEBUG = mkDefault false;
         # https://github.com/pixelfed/pixelfed/blob/dev/app/Console/Commands/Installer.php#L312-L316
@@ -270,7 +270,7 @@ in
         LOG_CHANNEL = mkDefault "stderr";
         # TODO: find out the correct syntax?
         # TRUST_PROXIES = mkDefault "127.0.0.1/8, ::1/128";
-      })
+      }
       (mkIf (cfg.redis.createLocally) {
         BROADCAST_DRIVER = mkDefault "redis";
         CACHE_DRIVER = mkDefault "redis";
@@ -346,17 +346,17 @@ in
         "listen.group" = group;
         "listen.mode" = "0660";
         "catch_workers_output" = "yes";
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     systemd.services.phpfpm-pixelfed.after = [ "pixelfed-data-setup.service" ];
-    systemd.services.phpfpm-pixelfed.requires =
-      [
-        "pixelfed-horizon.service"
-        "pixelfed-data-setup.service"
-      ]
-      ++ lib.optional cfg.database.createLocally dbUnit
-      ++ lib.optional cfg.redis.createLocally redisService;
+    systemd.services.phpfpm-pixelfed.requires = [
+      "pixelfed-horizon.service"
+      "pixelfed-data-setup.service"
+    ]
+    ++ lib.optional cfg.database.createLocally dbUnit
+    ++ lib.optional cfg.redis.createLocally redisService;
     # Ensure image optimizations programs are available.
     systemd.services.phpfpm-pixelfed.path = extraPrograms;
 
@@ -366,10 +366,11 @@ in
         "network.target"
         "pixelfed-data-setup.service"
       ];
-      requires =
-        [ "pixelfed-data-setup.service" ]
-        ++ (lib.optional cfg.database.createLocally dbUnit)
-        ++ (lib.optional cfg.redis.createLocally redisService);
+      requires = [
+        "pixelfed-data-setup.service"
+      ]
+      ++ (lib.optional cfg.database.createLocally dbUnit)
+      ++ (lib.optional cfg.redis.createLocally redisService);
       wantedBy = [ "multi-user.target" ];
       # Ensure image optimizations programs are available.
       path = extraPrograms;
@@ -523,7 +524,6 @@ in
           '';
           extraConfig = ''
             add_header X-Frame-Options "SAMEORIGIN";
-            add_header X-XSS-Protection "1; mode=block";
             add_header X-Content-Type-Options "nosniff";
             index index.html index.htm index.php;
             error_page 404 /index.php;

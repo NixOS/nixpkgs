@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pysuezv2";
-  version = "2.0.5";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "jb101010-2";
     repo = "pySuez";
     tag = version;
-    hash = "sha256-U5INSk3tcEgDJyRx17YaSDjPWgNwGeHIs2VB87E0l44=";
+    hash = "sha256-nPRHpT5j/AAxhCJen4mFzoyUWi/+0hIWK2dnpfhP/Gk=";
   };
 
   build-system = [ hatchling ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jb101010-2/pySuez";
     changelog = "https://github.com/jb101010-2/pySuez/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

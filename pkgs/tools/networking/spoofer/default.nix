@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     protobuf
     libpcap
     traceroute
-  ] ++ optional withGUI qt5.qtbase;
+  ]
+  ++ optional withGUI qt5.qtbase;
 
   dontWrapQtApps = true;
 

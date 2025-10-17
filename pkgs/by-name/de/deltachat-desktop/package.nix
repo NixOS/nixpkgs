@@ -1,7 +1,7 @@
 {
   lib,
   copyDesktopItems,
-  electron_34,
+  electron_37,
   fetchFromGitHub,
   deltachat-rpc-server,
   makeDesktopItem,
@@ -19,53 +19,54 @@
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.159.4";
+    version = "2.15.0";
     src = fetchFromGitHub {
       owner = "chatmail";
       repo = "core";
       tag = "v${version}";
-      hash = "sha256-OLE3BoQNgpOHYuMUFBmk+raXimJGOsXySkfP+UTDk/8=";
+      hash = "sha256-sFAE90ptPBzT/w4wlGgQe1ERMD2ZAvf4pZ8YW8NEkLU=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "deltachat-core-rust";
+      pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-+h93tSiKxnnNXPGk7elMQrcIuw3G/j2/gugqSbqOrDw=";
+      hash = "sha256-MmSjIn4x3b2gpagJnl2r4Z5DXSufZMoohvAf0v5VUbE=";
     };
   };
-  electron = electron_34;
+  electron = electron_37;
   pnpm = pnpm_9;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.58.2";
+  version = "2.15.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JYuYuv+OmAQzdw2AM0Qn0Z0+qq8G1JrW5jl2MI21x6M=";
+    hash = "sha256-7AERqu2M/WeTDw62SF921vXROttZyvC1LmRZG3+aDPI=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-pW8SKplbXLQ5OWLOrG36aAnP/j0y9QaYGIg+Q2/Ulfk=";
+    fetcherVersion = 1;
+    hash = "sha256-wdexath7r2roBVw1SSpJcMp8LSs/X5QNiLNHxQF60Lg=";
   };
 
-  nativeBuildInputs =
-    [
-      yq
-      makeWrapper
-      nodejs
-      pkg-config
-      pnpm.configHook
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    yq
+    makeWrapper
+    nodejs
+    pkg-config
+    pnpm.configHook
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    copyDesktopItems
+  ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    SKIP_FUSES = true; # EACCES: permission denied
     VERSION_INFO_GIT_REF = finalAttrs.src.tag;
   };
 

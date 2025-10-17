@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  nix-update-script,
   ffmpeg-full,
   gtk3,
   pango,
@@ -9,11 +10,10 @@
   wrapGAppsHook3,
 }:
 
-with python3Packages;
-buildPythonApplication {
+python3Packages.buildPythonApplication {
   pname = "escrotum";
-  version = "unstable-2020-12-07";
-  format = "setuptools";
+  version = "1.0.1-unstable-2020-12-07";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Roger";
@@ -32,7 +32,11 @@ buildPythonApplication {
     wrapGAppsHook3
   ];
 
-  propagatedBuildInputs = [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     pygobject3
     xcffib
     pycairo
@@ -53,6 +57,10 @@ buildPythonApplication {
     mkdir -p $man/share/man/man1
     cp man/escrotum.1 $man/share/man/man1/
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     homepage = "https://github.com/Roger/escrotum";

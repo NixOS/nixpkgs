@@ -41,19 +41,18 @@ buildPythonPackage {
     hash = "sha256-TxsQPhnI5WhQvKKkDEYZ8xnyg/qf+N9Icej6d6A0jC0=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace webapp/graphite/settings.py \
-        --replace-fail \
-          "join(WEBAPP_DIR, 'content')" \
-          "join('$out/webapp', 'content')"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace webapp/tests/test_dashboard.py \
-        --replace-fail "test_dashboard_email" "_dont_test_dashboard_email"
-      substituteInPlace webapp/tests/test_render.py \
-        --replace-fail "test_render_view" "_dont_test_render_view"
-    '';
+  postPatch = ''
+    substituteInPlace webapp/graphite/settings.py \
+      --replace-fail \
+        "join(WEBAPP_DIR, 'content')" \
+        "join('$out/webapp', 'content')"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace webapp/tests/test_dashboard.py \
+      --replace-fail "test_dashboard_email" "_dont_test_dashboard_email"
+    substituteInPlace webapp/tests/test_render.py \
+      --replace-fail "test_render_view" "_dont_test_render_view"
+  '';
 
   dependencies = [
     cairocffi

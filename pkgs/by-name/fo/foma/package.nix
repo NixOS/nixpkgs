@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "foma";
-  version = "0.10.0alpha-unstable-03-13-2024";
+  version = "0.10.0alpha-unstable-2024-03-13";
 
   src = fetchFromGitHub {
     owner = "mhulden";

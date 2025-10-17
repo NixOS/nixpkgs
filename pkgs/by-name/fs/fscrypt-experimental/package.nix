@@ -57,6 +57,6 @@ buildGoModule rec {
     changelog = "https://github.com/google/fscrypt/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

@@ -23,7 +23,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-vnjhveX3EVIfJLiHWhlvhoPcRx1a8Nnjj7hIaPgU3Zw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-b1sMO5BF3js1WxUM80kowyb+6bpXiUKoTgg0QtKaXJY=";
 
   nativeBuildInputs = [
@@ -63,6 +62,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://pizarra.categulario.xyz/en/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mglolenstine ];
+    maintainers = [ ];
   };
 }

@@ -1,82 +1,71 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  makeDesktopItem,
-  wrapGAppsHook3,
-  atk,
+  copyDesktopItems,
+  makeWrapper,
+  alsa-lib,
   at-spi2-atk,
   at-spi2-core,
-  alsa-lib,
+  atk,
   cairo,
   cups,
+  curlWithGnuTls,
   dbus,
   expat,
+  fontconfig,
+  freetype,
   gdk-pixbuf,
   glib,
   gtk3,
-  freetype,
-  fontconfig,
-  nss,
-  nspr,
-  pango,
-  udev,
-  libsecret,
-  libuuid,
   libX11,
-  libxcb,
-  libXi,
+  libXcomposite,
   libXcursor,
   libXdamage,
-  libXrandr,
-  libXcomposite,
   libXext,
   libXfixes,
+  libXi,
+  libXrandr,
   libXrender,
-  libXtst,
   libXScrnSaver,
-  libxkbcommon,
+  libXtst,
   libdrm,
   libgbm,
+  libGL,
+  libsecret,
+  libuuid,
+  libxkbcommon,
+  nspr,
+  nss,
+  pango,
+  udev,
+  xorg,
+  bintools,
+  makeDesktopItem,
   # It's unknown which version of openssl that postman expects but it seems that
   # OpenSSL 3+ seems to work fine (cf.
   # https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
   # around OpenSSL stuff then try changing this dependency version.
   openssl,
-  xorg,
   pname,
   version,
+  src,
+  passthru,
   meta,
-  copyDesktopItems,
-  makeWrapper,
 }:
 
-let
-  dist =
-    {
-      aarch64-linux = {
-        arch = "arm64";
-        sha256 = "sha256-XOQam1W7YT0YDesDR51G/cH318DcxpnAEiJg2JZU3Q4=";
-      };
+stdenv.mkDerivation {
+  inherit
+    pname
+    version
+    src
+    passthru
+    meta
+    ;
 
-      x86_64-linux = {
-        arch = "64";
-        sha256 = "sha256-TE/AMWkj80+22WaOG2BK6vt4NnMSpBq9hQMwSPiQ12A=";
-      };
-    }
-    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-in
-stdenv.mkDerivation rec {
-  inherit pname version meta;
-
-  src = fetchurl {
-    url = "https://dl.pstmn.io/download/version/${version}/linux${dist.arch}";
-    inherit (dist) sha256;
-    name = "${pname}-${version}.tar.gz";
-  };
-
-  dontConfigure = true;
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -87,81 +76,74 @@ stdenv.mkDerivation rec {
       desktopName = "Postman";
       genericName = "Postman";
       categories = [ "Development" ];
+      mimeTypes = [ "x-scheme-handler/postman" ];
+      startupNotify = true;
+      startupWMClass = "postman";
     })
-  ];
-
-  buildInputs = [
-    (lib.getLib stdenv.cc.cc)
-    atk
-    at-spi2-atk
-    at-spi2-core
-    alsa-lib
-    cairo
-    cups
-    dbus
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    freetype
-    fontconfig
-    libgbm
-    nss
-    nspr
-    pango
-    udev
-    libdrm
-    libsecret
-    libuuid
-    libX11
-    libxcb
-    libXi
-    libXcursor
-    libXdamage
-    libXrandr
-    libXcomposite
-    libXext
-    libXfixes
-    libXrender
-    libXtst
-    libXScrnSaver
-    libxkbcommon
-    xorg.libxshmfence
-  ];
-
-  nativeBuildInputs = [
-    wrapGAppsHook3
-    copyDesktopItems
   ];
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/postman
-    cp -R app/* $out/share/postman
+
+    mkdir -p $out/share $out/bin
+    cp --recursive app $out/share/postman
     rm $out/share/postman/Postman
-
-    mkdir -p $out/bin
-    ln -s $out/share/postman/postman $out/bin/postman
-
-    source "${makeWrapper}/nix-support/setup-hook"
-    wrapProgram $out/bin/${pname} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
-
+    makeWrapper $out/share/postman/postman $out/bin/postman \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --prefix PATH : ${lib.makeBinPath [ openssl ]}
     mkdir -p $out/share/icons/hicolor/128x128/apps
     ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/postman.png
     ln -s $out/share/postman/resources/app/assets/icon.png $out/share/icons/hicolor/128x128/apps/postman.png
+
     runHook postInstall
   '';
 
   postFixup = ''
-    pushd $out/share/postman
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" postman
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" chrome_crashpad_handler
-    for file in $(find . -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
-      ORIGIN=$(patchelf --print-rpath $file); \
-      patchelf --set-rpath "${lib.makeLibraryPath buildInputs}:$ORIGIN" $file
+    patchelf --set-interpreter ${bintools.dynamicLinker} --add-needed libGL.so.1 $out/share/postman/postman
+    patchelf --set-interpreter ${bintools.dynamicLinker} $out/share/postman/chrome_crashpad_handler
+    for file in $(find $out/share/postman -type f \( -name \*.node -o -name postman -o -name \*.so\* \) ); do
+      patchelf --add-rpath "${
+        lib.makeLibraryPath [
+          (lib.getLib stdenv.cc.cc)
+          alsa-lib
+          atk
+          at-spi2-atk
+          at-spi2-core
+          cairo
+          cups
+          curlWithGnuTls
+          dbus
+          expat
+          fontconfig
+          freetype
+          gdk-pixbuf
+          glib
+          gtk3
+          libdrm
+          libgbm
+          libGL
+          libsecret
+          libuuid
+          libX11
+          libXcomposite
+          libXcursor
+          libXdamage
+          libXext
+          libXfixes
+          libXi
+          libXrandr
+          libXrender
+          libXScrnSaver
+          libxkbcommon
+          libXtst
+          nspr
+          nss
+          pango
+          udev
+          xorg.libxcb
+          xorg.libxshmfence
+        ]
+      }" $file
     done
-    popd
-    wrapProgram $out/bin/postman --set PATH ${lib.makeBinPath [ openssl ]}
   '';
 }

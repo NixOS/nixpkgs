@@ -21,7 +21,7 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Japanese font package with Mincho and Gothic fonts";
     longDescription = ''
       IPAex font is a Japanese font developed by the Information-technology
@@ -31,7 +31,7 @@ stdenvNoCC.mkDerivation {
       This is the successor to the IPA fonts.
     '';
     homepage = "https://moji.or.jp/ipafont/";
-    license = licenses.ipa;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.ipa;
+    maintainers = with lib.maintainers; [ stephen-huan ];
   };
 }

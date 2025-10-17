@@ -31,7 +31,7 @@ buildDunePackage {
     atdgen-codec-runtime
   ];
 
-  meta = (builtins.removeAttrs atd.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs atd.meta [ "mainProgram" ]) // {
     description = "Generates efficient JSON serializers, deserializers and validators";
   };
 }

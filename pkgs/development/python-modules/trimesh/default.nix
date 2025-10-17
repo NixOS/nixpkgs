@@ -24,12 +24,11 @@
   scipy,
   pillow,
   mapbox-earcut,
-  embreex,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.6.12";
+  version = "4.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +37,7 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-GjwAtbijzIp2Lec+oCYah3+e2bgscHpZrXJXjqC5x9Y=";
+    hash = "sha256-ywLbXOE3qO3+hrqy/+cVGZA4V202eHaMUnn3Wz1iNLI=";
   };
 
   build-system = [ setuptools ];
@@ -46,28 +45,25 @@ buildPythonPackage rec {
   dependencies = [ numpy ];
 
   optional-dependencies = {
-    easy =
-      [
-        colorlog
-        manifold3d
-        charset-normalizer
-        lxml
-        jsonschema
-        networkx
-        svg-path
-        pycollada
-        shapely
-        xxhash
-        rtree
-        httpx
-        scipy
-        pillow
-        # vhacdx # not packaged
-        mapbox-earcut
-      ]
-      ++ lib.optionals embreex.meta.available [
-        embreex
-      ];
+    easy = [
+      colorlog
+      manifold3d
+      charset-normalizer
+      lxml
+      jsonschema
+      networkx
+      svg-path
+      pycollada
+      shapely
+      xxhash
+      rtree
+      httpx
+      scipy
+      pillow
+      # vhacdx # not packaged
+      mapbox-earcut
+      # embreex # not packaged
+    ];
   };
 
   nativeCheckInputs = [
@@ -80,7 +76,7 @@ buildPythonPackage rec {
     "test_load"
   ];
 
-  pytestFlagsArray = [ "tests/test_minimal.py" ];
+  enabledTestPaths = [ "tests/test_minimal.py" ];
 
   pythonImportsCheck = [
     "trimesh"

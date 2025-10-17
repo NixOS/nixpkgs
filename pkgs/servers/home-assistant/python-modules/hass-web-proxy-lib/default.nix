@@ -69,7 +69,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "A library to proxy web traffic through Home Assistant integrations";
+    description = "Library to proxy web traffic through Home Assistant integrations";
     homepage = "https://github.com/dermotduffy/hass-web-proxy-lib";
     license = lib.licenses.mit;
     maintainers = home-assistant-custom-components.frigate.meta.maintainers;

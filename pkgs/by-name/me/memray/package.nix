@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "memray";
-  version = "1.17.2";
+  version = "1.19.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
     tag = "v${version}";
-    hash = "sha256-n000m2jIJJFZFTjfECS3gFrO6xHauZW46xe1tDqI6Lg=";
+    hash = "sha256-yOiN4KES+zCHp/n0pN73Yv6ibEtUGy1pqiH/3WECqkA=";
   };
 
   build-system = with python3Packages; [
@@ -31,7 +31,8 @@ python3Packages.buildPythonApplication rec {
     elfutils # for `-ldebuginfod`
     libunwind
     lz4
-  ] ++ (with python3Packages; [ cython ]);
+  ]
+  ++ (with python3Packages; [ cython ]);
 
   dependencies = with python3Packages; [
     pkgconfig
@@ -52,7 +53,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "memray" ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # Import issue
@@ -76,7 +77,7 @@ python3Packages.buildPythonApplication rec {
   meta = {
     description = "Memory profiler for Python";
     homepage = "https://bloomberg.github.io/memray/";
-    changelog = "https://github.com/bloomberg/memray/releases/tag/v${src.tag}";
+    changelog = "https://github.com/bloomberg/memray/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fab ];
     platforms = lib.platforms.linux;

@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyBigWig" ];
 
-  pytestFlagsArray = [ "pyBigWigTest/test*.py" ];
+  enabledTestPaths = [ "pyBigWigTest/test*.py" ];
 
   disabledTests = [
     # Test file is downloaded from GitHub

@@ -13,13 +13,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "cosign";
-  version = "2.5.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "sigstore";
     repo = "cosign";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QvU+JpIcE9EX+ehRWvs2bS2VGgGVekNX8f5+mITIwU0=";
+    hash = "sha256-5jCO2LW7nzbzo+de0fpxBcVASDmINB6yFerkQZlo2o8=";
   };
 
   buildInputs = lib.optional (stdenv.hostPlatform.isLinux && pivKeySupport) (lib.getDev pcsclite);
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  vendorHash = "sha256-qIi+Pp4XZg1GxOhM9fCyD9rPaIiQHhoQudB50gzWgrM=";
+  vendorHash = "sha256-hedkslhyAsictu9Cbw7CgreoWa1StLpTt8oTPNLr5fc=";
 
   subPackages = [
     "cmd/cosign"
@@ -50,13 +50,20 @@ buildGoModule (finalAttrs: {
   preCheck = ''
     # test all paths
     unset subPackages
-
-    rm pkg/cosign/ctlog_test.go # Require network access
-    rm pkg/cosign/tlog_test.go # Require network access
-    rm cmd/cosign/cli/verify/verify_test.go # Require network access
-    rm cmd/cosign/cli/verify/verify_blob_attestation_test.go # Require network access
-    rm cmd/cosign/cli/verify/verify_blob_test.go # Require network access
   '';
+
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestLoadCertsKeylessVerification/default_fulcio"
+        "TestGetCTLogPubKeys"
+        "TestGetRekorPubKeys"
+        "TestVerifyEmbeddedSCT"
+        "TestValidateAndUnpackCertWithSCT"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cosign \

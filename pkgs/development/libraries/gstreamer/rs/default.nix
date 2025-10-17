@@ -13,6 +13,7 @@
   cargo-c,
   lld,
   nasm,
+  cmake,
   gstreamer,
   gst-plugins-base,
   gst-plugins-bad,
@@ -115,6 +116,7 @@ let
         ++ lib.optionals stdenv.hostPlatform.isDarwin [
           "reqwest" # tests hang on darwin
           "threadshare" # tests cannot bind to localhost on darwin
+          "uriplaylistbin" # thread reqwest-internal-sync-runtime attempred to create a NULL object (in test_cache)
           "webp" # not supported on darwin (upstream crate issue)
         ]
         ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
@@ -127,18 +129,6 @@ let
       ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
-
-  # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
-  cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or [ ]) ++ [
-      (fetchpatch {
-        name = "cargo-c-test-rlib-fix.patch";
-        url = "https://github.com/lu-zero/cargo-c/commit/8421f2da07cd066d2ae8afbb027760f76dc9ee6c.diff";
-        hash = "sha256-eZSR4DKSbS5HPpb9Kw8mM2ZWg7Y92gZQcaXUEu1WNj0=";
-        revert = true;
-      })
-    ];
-  });
 in
 assert lib.assertMsg (invalidPlugins == [ ])
   "Invalid gst-plugins-rs plugin${
@@ -147,7 +137,7 @@ assert lib.assertMsg (invalidPlugins == [ ])
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.13.5";
+  version = "0.14.1";
 
   outputs = [
     "out"
@@ -159,7 +149,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-5jR/YLCBeFnB0+O2OOCLBEKwikiQ5e+SbOeQCijnd8Q=";
+    hash = "sha256-gCT/ZcXR9VePXYtEENXxgBNvA84KT1OYUR8kSyLBzrI=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -184,56 +174,56 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-ErQ5Um0e7bWhzDErEN9vmSsKTpTAm4MA5PZ7lworVKU=";
+    hash = "sha256-sX3P5qrG0M/vJkvzvJGzv4fcMn6FvrLPOUh++vKJ/gY=";
   };
 
   patches = [
-    # Disable uriplaylistbin test that requires network access.
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/676
-    # TODO: Remove in 0.14, it has been replaced by a different fix:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2140
-    ./ignore-network-tests.patch
-
-    # Fix reqwest tests failing due to broken TLS lookup in native-tls dependency.
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/675
-    # Cannot be upstreamed due to MSRV bump in native-tls:
-    # https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/merge_requests/2142
-    ./reqwest-init-tls.patch
+    # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
+    ./ignore-tests.patch
+    (fetchpatch {
+      name = "x264enc-test-fix.patch";
+      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/commit/c0c9888d66e107f9e0b6d96cd3a85961c7e97d9a.diff";
+      hash = "sha256-/ILdPDjI20k5l9Qf/klglSuhawmFUs9mR+VhBnQqsWw=";
+    })
   ];
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      rustPlatform.cargoSetupHook
-      meson
-      ninja
-      python3
-      python3.pkgs.tomli
-      pkg-config
-      rustc
-      cargo
-      cargo-c'
-      nasm
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      lld
-    ]
-    ++ lib.optionals enableDocumentation [
-      hotdoc
-    ];
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    meson
+    ninja
+    python3
+    python3.pkgs.tomli
+    pkg-config
+    rustc
+    cargo
+    cargo-c
+    nasm
+  ]
+  # aws-lc-rs has no pregenerated bindings for exotic platforms
+  # https://aws.github.io/aws-lc-rs/platform_support.html
+  ++ lib.optionals (!(stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)) [
+    cmake
+    rustPlatform.bindgenHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    lld
+  ]
+  ++ lib.optionals enableDocumentation [
+    hotdoc
+  ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin { NIX_CFLAGS_LINK = "-fuse-ld=lld"; };
 
-  buildInputs =
-    [
-      gstreamer
-      gst-plugins-base
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_gstreamer
-    ]
-    ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
+  buildInputs = [
+    gstreamer
+    gst-plugins-base
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
+  ]
+  ++ lib.concatMap (plugin: lib.getAttr plugin validPlugins) selectedPlugins;
 
   checkInputs = [
     gst-plugins-good
@@ -252,15 +242,14 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # csound lib dir must be manually specified for it to build
-  preConfigure =
-    ''
-      export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
+  preConfigure = ''
+    export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
 
-      patchShebangs dependencies.py
-    ''
-    + lib.optionalString (lib.elem "csound" selectedPlugins) ''
-      export CSOUND_LIB_DIR=${lib.getLib csound}/lib
-    '';
+    patchShebangs dependencies.py
+  ''
+  + lib.optionalString (lib.elem "csound" selectedPlugins) ''
+    export CSOUND_LIB_DIR=${lib.getLib csound}/lib
+  '';
 
   mesonCheckFlags = [ "--verbose" ];
 
@@ -278,12 +267,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests = {
-      # Applies patches.
-      # TODO: remove with 0.14
-      inherit mopidy;
-    };
-
     updateScript = nix-update-script {
       # use numbered releases rather than gstreamer-* releases
       # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772

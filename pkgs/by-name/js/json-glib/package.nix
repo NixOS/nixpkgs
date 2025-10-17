@@ -23,17 +23,18 @@
 
 stdenv.mkDerivation rec {
   pname = "json-glib";
-  version = "1.10.6";
+  version = "1.10.8";
 
   outputs = [
     "out"
     "dev"
     "installedTests"
-  ] ++ lib.optional withIntrospection "devdoc";
+  ]
+  ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-d/S8v5M5Uo8Wa4BzRYaT8KILd7cFnbwtthdGoZKLApM=";
+    hash = "sha256-VcXBQaVkJFuPj752mGY8h6RaczPCosVvBvgRq3OyEt0=";
   };
 
   patches = [
@@ -47,26 +48,25 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      docutils # for rst2man, rst2html5
-      meson
-      ninja
-      pkg-config
-      gettext
-      glib
-      libxslt
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gi-docgen
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    docutils # for rst2man, rst2html5
+    meson
+    ninja
+    pkg-config
+    gettext
+    glib
+    libxslt
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gi-docgen
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   propagatedBuildInputs = [
     glib

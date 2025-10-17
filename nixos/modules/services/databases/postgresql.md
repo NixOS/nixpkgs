@@ -41,9 +41,7 @@ alice=>
 
 By default, PostgreSQL stores its databases in {file}`/var/lib/postgresql/$psqlSchema`. You can override this using [](#opt-services.postgresql.dataDir), e.g.
 ```nix
-{
-  services.postgresql.dataDir = "/data/postgresql";
-}
+{ services.postgresql.dataDir = "/data/postgresql"; }
 ```
 
 ## Initializing {#module-services-postgres-initializing}
@@ -58,8 +56,8 @@ invalidated most of its previous use cases:
 - psql >= 15 instead gives only the database owner create permissions
 - Even on psql < 15 (or databases migrated to >= 15), it is
   recommended to manually assign permissions along these lines
-  - https://www.postgresql.org/docs/release/15.0/
-  - https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV
+  - <https://www.postgresql.org/docs/release/15.0/>
+  - <https://www.postgresql.org/docs/15/ddl-schemas.html#DDL-SCHEMAS-PRIV>
 
 ### Assigning ownership {#module-services-postgres-initializing-ownership}
 
@@ -94,13 +92,13 @@ database migrations.
 `ensureUsers` is run in `postgresql-setup`, so this is where `postStart` must be added to:
 
 ```nix
-  {
-    systemd.services.postgresql-setup.postStart = ''
-      psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-      psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-      # ....
-    '';
-  }
+{
+  systemd.services.postgresql-setup.postStart = ''
+    psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+    psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+    # ....
+  '';
+}
 ```
 
 #### in intermediate oneshot service {#module-services-postgres-initializing-extra-permissions-superuser-oneshot}
@@ -114,22 +112,22 @@ They differ in two aspects:
 Both can lead to unexpected errors either during initial database creation or restore, when using `postgresql.service`.
 
 ```nix
-  {
-    systemd.services."migrate-service1-db1" = {
-      serviceConfig.Type = "oneshot";
-      requiredBy = "service1.service";
-      before = "service1.service";
-      after = "postgresql.target";
-      serviceConfig.User = "postgres";
-      environment.PGPORT = toString services.postgresql.settings.port;
-      path = [ postgresql ];
-      script = ''
-        psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
-        psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
-        # ....
-      '';
-    };
-  }
+{
+  systemd.services."migrate-service1-db1" = {
+    serviceConfig.Type = "oneshot";
+    requiredBy = "service1.service";
+    before = "service1.service";
+    after = "postgresql.target";
+    serviceConfig.User = "postgres";
+    environment.PGPORT = toString services.postgresql.settings.port;
+    path = [ postgresql ];
+    script = ''
+      psql service1 -c 'GRANT SELECT ON ALL TABLES IN SCHEMA public TO "extraUser1"'
+      psql service1 -c 'GRANT SELECT ON ALL SEQUENCES IN SCHEMA public TO "extraUser1"'
+      # ....
+    '';
+  };
+}
 ```
 
 ## Authentication {#module-services-postgres-authentication}
@@ -147,13 +145,15 @@ Assume that your app creates a role `admin` and you want the `root` user to be a
 You can then use [](#opt-services.postgresql.identMap) to define the map and [](#opt-services.postgresql.authentication) to enable it:
 
 ```nix
-services.postgresql = {
-  identMap = ''
-    admin root admin
-  '';
-  authentication = ''
-    local all admin peer map=admin
-  '';
+{
+  services.postgresql = {
+    identMap = ''
+      admin root admin
+    '';
+    authentication = ''
+      local all admin peer map=admin
+    '';
+  };
 }
 ```
 
@@ -181,36 +181,44 @@ $ nix-instantiate --eval -A postgresql_13.psqlSchema
 ```
 For an upgrade, a script like this can be used to simplify the process:
 ```nix
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   environment.systemPackages = [
-    (let
-      # XXX specify the postgresql package you'd like to upgrade to.
-      # Do not forget to list the extensions you need.
-      newPostgres = pkgs.postgresql_13.withPackages (pp: [
-        # pp.plv8
-      ]);
-      cfg = config.services.postgresql;
-    in pkgs.writeScriptBin "upgrade-pg-cluster" ''
-      set -eux
-      # XXX it's perhaps advisable to stop all services that depend on postgresql
-      systemctl stop postgresql
+    (
+      let
+        # XXX specify the postgresql package you'd like to upgrade to.
+        # Do not forget to list the extensions you need.
+        newPostgres = pkgs.postgresql_13.withPackages (pp: [
+          # pp.plv8
+        ]);
+        cfg = config.services.postgresql;
+      in
+      pkgs.writeScriptBin "upgrade-pg-cluster" ''
+        set -eux
+        # XXX it's perhaps advisable to stop all services that depend on postgresql
+        systemctl stop postgresql
 
-      export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
-      export NEWBIN="${newPostgres}/bin"
+        export NEWDATA="/var/lib/postgresql/${newPostgres.psqlSchema}"
+        export NEWBIN="${newPostgres}/bin"
 
-      export OLDDATA="${cfg.dataDir}"
-      export OLDBIN="${cfg.finalPackage}/bin"
+        export OLDDATA="${cfg.dataDir}"
+        export OLDBIN="${cfg.finalPackage}/bin"
 
-      install -d -m 0700 -o postgres -g postgres "$NEWDATA"
-      cd "$NEWDATA"
-      sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
+        install -d -m 0700 -o postgres -g postgres "$NEWDATA"
+        cd "$NEWDATA"
+        sudo -u postgres "$NEWBIN/initdb" -D "$NEWDATA" ${lib.escapeShellArgs cfg.initdbArgs}
 
-      sudo -u postgres "$NEWBIN/pg_upgrade" \
-        --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
-        --old-bindir "$OLDBIN" --new-bindir "$NEWBIN" \
-        "$@"
-    '')
+        sudo -u postgres "$NEWBIN/pg_upgrade" \
+          --old-datadir "$OLDDATA" --new-datadir "$NEWDATA" \
+          --old-bindir "$OLDBIN" --new-bindir "$NEWBIN" \
+          "$@"
+      ''
+    )
   ];
 }
 ```
@@ -251,14 +259,38 @@ PostgreSQL's versioning policy is described [here](https://www.postgresql.org/su
 
 Technically, we'd not want to have EOL'ed packages in a stable NixOS release, which is to be supported until one month after the previous release. Thus, with NixOS' release schedule in May and November, the oldest PostgreSQL version in nixpkgs would have to be supported until December. It could be argued that a soon-to-be-EOL-ed version should thus be removed in May for the .05 release already. But since new security vulnerabilities are first disclosed in February of the following year, we agreed on keeping the oldest PostgreSQL major version around one more cycle in [#310580](https://github.com/NixOS/nixpkgs/pull/310580#discussion_r1597284693).
 
-Thus:
-- In September/October the new major version will be released and added to nixos-unstable.
+Thus, our release workflow is as follows:
+
+- In May, `nixpkgs` packages the beta release for an upcoming major version. This is packaged for nixos-unstable only and will not be part of any stable NixOS release.
+- In September/October the new major version will be released, replacing the beta package in nixos-unstable.
 - In November the last minor version for the oldest major will be released.
 - Both the current stable .05 release and nixos-unstable should be updated to the latest minor that will usually be released in November.
   - This is relevant for people who need to use this major for as long as possible. In that case its desirable to be able to pin nixpkgs to a commit that still has it, at the latest minor available.
 - In November, before branch-off for the .11 release and after the update to the latest minor, the EOL-ed major will be removed from nixos-unstable.
 
 This leaves a small gap of a couple of weeks after the latest minor release and the end of our support window for the .05 release, in which there could be an emergency release to other major versions of PostgreSQL - but not the oldest major we have in that branch. In that case: If we can't trivially patch the issue, we will mark the package/version as insecure **immediately**.
+
+## `pg_config` {#module-services-postgres-pg_config}
+
+`pg_config` is not part of the `postgresql`-package itself.
+It is available under `postgresql_<major>.pg_config` and `libpq.pg_config`.
+Use the `pg_config` from the postgresql package you're using in your build.
+
+Also, `pg_config` is a shell-script that replicates the behavior of the upstream `pg_config` and ensures at build-time that the output doesn't change.
+
+This approach is done for the following reasons:
+
+* By using a shell script, cross compilation of extensions is made easier.
+
+* The separation allowed a massive reduction of the runtime closure's size.
+  Any attempts to move `pg_config` into `$dev` resulted in brittle and more complex solutions
+  (see commits [`0c47767`](https://github.com/NixOS/nixpkgs/commit/0c477676412564bd2d5dadc37cf245fe4259f4d9), [`435f51c`](https://github.com/NixOS/nixpkgs/commit/435f51c37faf74375134dfbd7c5a4560da2a9ea7)).
+
+* `pg_config` is only needed to build extensions or in some exceptions for building client libraries linking to `libpq.so`.
+  If such a build works without `pg_config`, this is strictly preferable over adding `pg_config` to the build environment.
+
+  With the current approach it's now explicit that this is needed.
+
 
 ## Options {#module-services-postgres-options}
 
@@ -287,10 +319,11 @@ To add plugins via NixOS configuration, set `services.postgresql.extensions`:
 ```nix
 {
   services.postgresql.package = pkgs.postgresql_17;
-  services.postgresql.extensions = ps: with ps; [
-    pg_repack
-    postgis
-  ];
+  services.postgresql.extensions =
+    ps: with ps; [
+      pg_repack
+      postgis
+    ];
 }
 ```
 
@@ -307,7 +340,7 @@ self: super: {
 Here's a recipe on how to override a particular plugin through an overlay:
 ```nix
 self: super: {
-  postgresql_15 = super.postgresql_15// {
+  postgresql_15 = super.postgresql_15 // {
     pkgs = super.postgresql_15.pkgs // {
       pg_repack = super.postgresql_15.pkgs.pg_repack.overrideAttrs (_: {
         name = "pg_repack-v20181024";
@@ -327,11 +360,12 @@ PostgreSQL ships the additional procedural languages PL/Perl, PL/Python and PL/T
 They are packaged as plugins and can be made available in the same way as external extensions:
 ```nix
 {
-  services.postgresql.extensions = ps: with ps; [
-    plperl
-    plpython3
-    pltcl
-  ];
+  services.postgresql.extensions =
+    ps: with ps; [
+      plperl
+      plpython3
+      pltcl
+    ];
 }
 ```
 
@@ -340,9 +374,8 @@ Each procedural language plugin provides a `.withPackages` helper to make langua
 For example, to make `python3Packages.base58` available:
 ```nix
 {
-  services.postgresql.extensions = pgps: with pgps; [
-    (plpython3.withPackages (pyps: with pyps; [ base58 ]))
-  ];
+  services.postgresql.extensions =
+    pgps: with pgps; [ (plpython3.withPackages (pyps: with pyps; [ base58 ])) ];
 }
 ```
 
@@ -359,9 +392,7 @@ is disabled by default because of the ~600MiB closure-size increase from the LLV
 can be optionally enabled in PostgreSQL with the following config option:
 
 ```nix
-{
-  services.postgresql.enableJIT = true;
-}
+{ services.postgresql.enableJIT = true; }
 ```
 
 This makes sure that the [`jit`](https://www.postgresql.org/docs/current/runtime-config-query.html#GUC-JIT)-setting
@@ -380,7 +411,9 @@ overlay) since all modifications are propagated to `withJIT`. I.e.
 with import <nixpkgs> {
   overlays = [
     (self: super: {
-      postgresql = super.postgresql.overrideAttrs (_: { pname = "foobar"; });
+      postgresql = super.postgresql.overrideAttrs (_: {
+        pname = "foobar";
+      });
     })
   ];
 };
@@ -402,9 +435,7 @@ several common hardening options from `systemd`, most notably:
   * When using [`TABLESPACE`](https://www.postgresql.org/docs/current/manage-ag-tablespaces.html)s, make sure to add the filesystem paths to `ReadWritePaths` like this:
     ```nix
     {
-      systemd.services.postgresql.serviceConfig.ReadWritePaths = [
-        "/path/to/tablespace/location"
-      ];
+      systemd.services.postgresql.serviceConfig.ReadWritePaths = [ "/path/to/tablespace/location" ];
     }
     ```
 

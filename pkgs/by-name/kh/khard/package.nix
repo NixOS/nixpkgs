@@ -7,26 +7,27 @@
 }:
 
 python3.pkgs.buildPythonApplication rec {
-  version = "0.19.1";
-  format = "setuptools";
   pname = "khard";
+  version = "0.20.0";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WfMKDaPD2j6wT02+GO5HY5E7aF2Z7IQY/VdKiMSRxJA=";
+    hash = "sha256-F48yzPAcBQtc2ec2KCWD3ppkRf2Y4AOI33kiB2KbvdA=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
     setuptools-scm
     sphinxHook
+    sphinx-argparse
     sphinx-autoapi
     sphinx-autodoc-typehints
   ];
 
   sphinxBuilders = [ "man" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    atomicwrites
+  dependencies = with python3.pkgs; [
     configobj
     ruamel-yaml
     unidecode

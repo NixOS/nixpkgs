@@ -45,51 +45,49 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-iyK2txutlWe67CyfKuyesBrYQypkS5FOf1ZWUkRCq24=";
   };
 
-  nativeBuildInputs =
-    [
-      gobject-introspection
-      makeWrapper
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals documentationSupport [
-      help2man
-      python3.pkgs.sphinx
-      python3.pkgs.sphinx-rtd-theme
-    ]
-    ++ lib.optional translationSupport gettext;
+  nativeBuildInputs = [
+    gobject-introspection
+    makeWrapper
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals documentationSupport [
+    help2man
+    python3.pkgs.sphinx
+    python3.pkgs.sphinx-rtd-theme
+  ]
+  ++ lib.optional translationSupport gettext;
 
-  buildInputs =
-    [
-      iconTheme
-      gtk3
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ])
-    ++ (with python3.pkgs; [
-      berkeleydb
-      dbus-python
-      mutagen
-      pygobject3
-      pycairo
-      gst-python
-    ])
-    ++ lib.optional deviceDetectionSupport udisks
-    ++ lib.optional notificationSupport libnotify
-    ++ lib.optional scalableIconSupport librsvg
-    ++ lib.optional ipythonSupport python3.pkgs.ipython
-    ++ lib.optional cdMetadataSupport python3.pkgs.discid
-    ++ lib.optional lastfmSupport python3.pkgs.pylast
-    ++ lib.optional lyricsManiaSupport python3.pkgs.lxml
-    ++ lib.optional multimediaKeySupport keybinder3
-    ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
-    ++ lib.optional podcastSupport python3.pkgs.feedparser
-    ++ lib.optional wikipediaSupport webkitgtk_4_1;
+  buildInputs = [
+    iconTheme
+    gtk3
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ])
+  ++ (with python3.pkgs; [
+    berkeleydb
+    dbus-python
+    mutagen
+    pygobject3
+    pycairo
+    gst-python
+  ])
+  ++ lib.optional deviceDetectionSupport udisks
+  ++ lib.optional notificationSupport libnotify
+  ++ lib.optional scalableIconSupport librsvg
+  ++ lib.optional ipythonSupport python3.pkgs.ipython
+  ++ lib.optional cdMetadataSupport python3.pkgs.discid
+  ++ lib.optional lastfmSupport python3.pkgs.pylast
+  ++ lib.optional lyricsManiaSupport python3.pkgs.lxml
+  ++ lib.optional multimediaKeySupport keybinder3
+  ++ lib.optional (musicBrainzSupport || cdMetadataSupport) python3.pkgs.musicbrainzngs
+  ++ lib.optional podcastSupport python3.pkgs.feedparser
+  ++ lib.optional wikipediaSupport webkitgtk_4_1;
 
   nativeCheckInputs = with python3.pkgs; [
     pytest

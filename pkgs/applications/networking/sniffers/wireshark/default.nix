@@ -56,7 +56,7 @@ assert withQt -> qt6 != null;
 
 stdenv.mkDerivation rec {
   pname = "wireshark-${if withQt then "qt" else "cli"}";
-  version = "4.4.7";
+  version = "4.4.9";
 
   outputs = [
     "out"
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     repo = "wireshark";
     owner = "wireshark";
     rev = "v${version}";
-    hash = "sha256-9h25vfjw8QIrRZ6APTsvhW4D5O6fkhkiy/1bj7hGwwY=";
+    hash = "sha256-0+uPXSNabsYNGn+4753WNoUBe9lJ2EH3i3J36lqI4Ak=";
   };
 
   patches = [
@@ -78,96 +78,92 @@ stdenv.mkDerivation rec {
     buildPackages.stdenv.cc
   ];
 
-  nativeBuildInputs =
-    [
-      asciidoctor
-      bison
-      cmake
-      flex
-      makeWrapper
-      ninja
-      perl
-      pkg-config
-      python3
-    ]
-    ++ lib.optionals withQt [
-      qt6.wrapQtAppsHook
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    asciidoctor
+    bison
+    cmake
+    flex
+    makeWrapper
+    ninja
+    perl
+    pkg-config
+    python3
+  ]
+  ++ lib.optionals withQt [
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
-  buildInputs =
+  buildInputs = [
+    bcg729
+    c-ares
+    gettext
+    glib
+    gnutls
+    libgcrypt
+    libgpg-error
+    libkrb5
+    libmaxminddb
+    libopus
+    libpcap
+    libsmi
+    libssh
+    lua5_4
+    lz4
+    minizip
+    nghttp2
+    nghttp3
+    opencore-amr
+    openssl
+    pcre2
+    snappy
+    spandsp3
+    speexdsp
+    zlib-ng
+    zstd
+  ]
+  ++ lib.optionals withQt (
+    with qt6;
     [
-      bcg729
-      c-ares
-      gettext
-      glib
-      gnutls
-      libgcrypt
-      libgpg-error
-      libkrb5
-      libmaxminddb
-      libopus
-      libpcap
-      libsmi
-      libssh
-      lua5_4
-      lz4
-      minizip
-      nghttp2
-      nghttp3
-      opencore-amr
-      openssl
-      pcre2
-      snappy
-      spandsp3
-      speexdsp
-      zlib-ng
-      zstd
+      qt5compat
+      qtbase
+      qtmultimedia
+      qtsvg
+      qttools
     ]
-    ++ lib.optionals withQt (
-      with qt6;
-      [
-        qt5compat
-        qtbase
-        qtmultimedia
-        qtsvg
-        qttools
-      ]
-    )
-    ++ lib.optionals (withQt && stdenv.hostPlatform.isLinux) [
-      qt6.qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libcap
-      libnl
-      sbc
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      gmp
-    ];
+  )
+  ++ lib.optionals (withQt && stdenv.hostPlatform.isLinux) [
+    qt6.qtwayland
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libcap
+    libnl
+    sbc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    gmp
+  ];
 
   strictDeps = true;
 
-  cmakeFlags =
-    [
-      "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
-      # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DENABLE_APPLICATION_BUNDLE=${if isAppBundle then "ON" else "OFF"}"
-      "-DLEMON_C_COMPILER=cc"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
-      "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
-    ];
+  cmakeFlags = [
+    "-DBUILD_wireshark=${if withQt then "ON" else "OFF"}"
+    # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DENABLE_APPLICATION_BUNDLE=${if isAppBundle then "ON" else "OFF"}"
+    "-DLEMON_C_COMPILER=cc"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "-DHAVE_C99_VSNPRINTF_EXITCODE__TRYRUN_OUTPUT="
+    "-DHAVE_C99_VSNPRINTF_EXITCODE=0"
+  ];
 
   # Avoid referencing -dev paths because of debug assertions.
   env.NIX_CFLAGS_COMPILE = toString [ "-DQT_NO_DEBUG" ];
 
-  dontFixCmake = true;
   dontWrapGApps = true;
 
   shellHook = ''
@@ -179,29 +175,28 @@ stdenv.mkDerivation rec {
     sed -i -e '1i cmake_policy(SET CMP0025 NEW)' CMakeLists.txt
   '';
 
-  postInstall =
-    ''
-      cmake --install . --prefix "''${!outputDev}" --component Development
-    ''
-    + lib.optionalString isAppBundle ''
-      mkdir -p $out/Applications
-      mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
+  postInstall = ''
+    cmake --install . --prefix "''${!outputDev}" --component Development
+  ''
+  + lib.optionalString isAppBundle ''
+    mkdir -p $out/Applications
+    mv $out/bin/Wireshark.app $out/Applications/Wireshark.app
 
-      ln -s $out/Applications/Wireshark.app/Contents/MacOS/Wireshark $out/bin/wireshark
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      local flags=()
-      for file in $out/lib/*.dylib; do
-        flags+=(-change @rpath/"$(basename "$file")" "$file")
-      done
+    ln -s $out/Applications/Wireshark.app/Contents/MacOS/Wireshark $out/bin/wireshark
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    local flags=()
+    for file in $out/lib/*.dylib; do
+      flags+=(-change @rpath/"$(basename "$file")" "$file")
+    done
 
-      for file in $out/lib/wireshark/extcap/*; do
-        if [ -L "$file" ]; then continue; fi
-        echo "$file: fixing dylib references"
-        # note that -id does nothing on binaries
-        install_name_tool -id "$file" "''${flags[@]}" "$file"
-      done
-    '';
+    for file in $out/lib/wireshark/extcap/*; do
+      if [ -L "$file" ]; then continue; fi
+      echo "$file: fixing dylib references"
+      # note that -id does nothing on binaries
+      install_name_tool -id "$file" "''${flags[@]}" "$file"
+    done
+  '';
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")

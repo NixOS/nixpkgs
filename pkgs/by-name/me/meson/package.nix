@@ -16,14 +16,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
-  version = "1.8.0";
+  version = "1.9.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "mesonbuild";
     repo = "meson";
     tag = version;
-    hash = "sha256-Y1G3kHSv1krlJjR7oHcN8GavzYj2C25GLq8lvYpnMKA=";
+    hash = "sha256-VMLcGtyJIH3jsTkHrIUhCpjwm6ljsRSyRECYhaafjD8=";
   };
 
   patches = [
@@ -87,26 +87,24 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  nativeCheckInputs =
-    [
-      ninja
-      pkg-config
-    ]
-    ++ lib.optionals python3.isPyPy [
-      # Several tests hardcode python3.
-      (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
-    ];
+  nativeCheckInputs = [
+    ninja
+    pkg-config
+  ]
+  ++ lib.optionals python3.isPyPy [
+    # Several tests hardcode python3.
+    (writeShellScriptBin "python3" ''exec pypy3 "$@"'')
+  ];
 
-  checkInputs =
-    [
-      zlib
-    ]
-    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
-      # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
-      llvmPackages.openmp
-      # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
-      libblocksruntime
-    ];
+  checkInputs = [
+    zlib
+  ]
+  ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
+    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+    llvmPackages.openmp
+    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+    libblocksruntime
+  ];
 
   checkPhase = lib.concatStringsSep "\n" (
     [
@@ -120,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
       ''
     ]
     # Remove problematic tests
-    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+    ++ (map (f: ''rm -vr "${f}";'') (
       [
         # requires git, creating cyclic dependency
         ''test cases/common/66 vcstag''

@@ -19,30 +19,29 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "2.6.1";
+  version = "2.12.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     tag = "v${version}";
-    hash = "sha256-GR/TmBuZbt/8cB9gtRPgzSVnzdrB1BKhYjahfJ3ErgQ=";
+    hash = "sha256-5yYcclJBb5kKaDr9irkLQBa6Tg8yO1LWh89ntBiMQho=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-/u7xyd1+RXNN7khVOglzYGMCI+fPjyiuSF2BSZAqEtI=";
+  npmDepsHash = "sha256-mLl8igkdujzI4Fz4SoUrCdnI2KUo6DsNtPdAhwjYpac=";
   npmFlags = [ "--legacy-peer-deps" ];
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      makeWrapper
-      copyDesktopItems
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [
     pixman
@@ -101,6 +100,7 @@ buildNpmPackage rec {
     npm run build --workspace=packages/bruno-converters
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+    npm run build --workspace=packages/bruno-filestore
     npm run build --workspace=packages/bruno-requests
 
     npm run sandbox:bundle-libraries --workspace=packages/bruno-js
@@ -189,6 +189,7 @@ buildNpmPackage rec {
       mattpolzin
       redyf
       water-sucks
+      starsep
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

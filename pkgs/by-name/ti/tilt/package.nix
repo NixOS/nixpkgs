@@ -9,13 +9,13 @@ let
       running in development environment and try to serve assets from the
       source tree, which is not there once build completes.
     */
-    version = "0.35.0";
+    version = "0.35.1";
 
     src = fetchFromGitHub {
       owner = "tilt-dev";
       repo = "tilt";
       tag = "v${version}";
-      hash = "sha256-IXmycwZFeDbCNFtLh126FvVSuugFoElj1TfU5Bdl5rc=";
+      hash = "sha256-rM5INMOECbnuWd4ealBcIuMwZij7MthrXfohOBavl8Y=";
     };
   };
 

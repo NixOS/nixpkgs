@@ -122,83 +122,82 @@ let
           };
         };
 
-      testScript =
-        ''
-          machine.wait_for_unit("multi-user.target")
-          machine.succeed(
-              "zpool status",
-              "parted --script /dev/vdb mklabel msdos",
-              "parted --script /dev/vdb -- mkpart primary 1024M -1s",
-              "parted --script /dev/vdc mklabel msdos",
-              "parted --script /dev/vdc -- mkpart primary 1024M -1s",
-          )
+      testScript = ''
+        machine.wait_for_unit("multi-user.target")
+        machine.succeed(
+            "zpool status",
+            "parted --script /dev/vdb mklabel msdos",
+            "parted --script /dev/vdb -- mkpart primary 1024M -1s",
+            "parted --script /dev/vdc mklabel msdos",
+            "parted --script /dev/vdc -- mkpart primary 1024M -1s",
+        )
 
-          with subtest("sharesmb works"):
-              machine.succeed(
-                  "zpool create rpool /dev/vdb1",
-                  "zfs create -o mountpoint=legacy rpool/root",
-                  # shared datasets cannot have legacy mountpoint
-                  "zfs create rpool/shared_smb",
-                  "bootctl set-default nixos-generation-1-specialisation-samba.conf",
-                  "sync",
-              )
-              machine.crash()
-              machine.wait_for_unit("multi-user.target")
-              machine.succeed("zfs set sharesmb=on rpool/shared_smb")
-              machine.succeed(
-                  "smbclient -gNL localhost | grep rpool_shared_smb",
-                  "umount /tmp/mnt",
-                  "zpool destroy rpool",
-              )
+        with subtest("sharesmb works"):
+            machine.succeed(
+                "zpool create rpool /dev/vdb1",
+                "zfs create -o mountpoint=legacy rpool/root",
+                # shared datasets cannot have legacy mountpoint
+                "zfs create rpool/shared_smb",
+                "bootctl set-default nixos-generation-1-specialisation-samba.conf",
+                "sync",
+            )
+            machine.crash()
+            machine.wait_for_unit("multi-user.target")
+            machine.succeed("zfs set sharesmb=on rpool/shared_smb")
+            machine.succeed(
+                "smbclient -gNL localhost | grep rpool_shared_smb",
+                "umount /tmp/mnt",
+                "zpool destroy rpool",
+            )
 
-          with subtest("encryption works"):
-              machine.succeed(
-                  'echo password | zpool create -O mountpoint=legacy '
-                  + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdb1",
-                  "zpool create -O mountpoint=legacy manual /dev/vdc1",
-                  "echo otherpass | zfs create "
-                  + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
-                  "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
-                  + "-o keylocation=http://localhost/zfskey manual/httpkey",
-                  "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
-                  "sync",
-                  "zpool export automatic",
-                  "zpool export manual",
-              )
-              machine.crash()
-              machine.start()
-              machine.wait_for_console_text("Starting password query on")
-              machine.send_console("password\n")
-              machine.wait_for_unit("multi-user.target")
-              machine.succeed(
-                  "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
-                  "echo otherpass | zfs load-key manual/encrypted",
-                  "systemctl start manual-encrypted.mount",
-                  "zfs load-key manual/httpkey",
-                  "systemctl start manual-httpkey.mount",
-                  "umount /automatic /manual/encrypted /manual/httpkey /manual",
-                  "zpool destroy automatic",
-                  "zpool destroy manual",
-              )
+        with subtest("encryption works"):
+            machine.succeed(
+                'echo password | zpool create -O mountpoint=legacy '
+                + "-O encryption=aes-256-gcm -O keyformat=passphrase automatic /dev/vdb1",
+                "zpool create -O mountpoint=legacy manual /dev/vdc1",
+                "echo otherpass | zfs create "
+                + "-o encryption=aes-256-gcm -o keyformat=passphrase manual/encrypted",
+                "zfs create -o encryption=aes-256-gcm -o keyformat=passphrase "
+                + "-o keylocation=http://localhost/zfskey manual/httpkey",
+                "bootctl set-default nixos-generation-1-specialisation-encryption.conf",
+                "sync",
+                "zpool export automatic",
+                "zpool export manual",
+            )
+            machine.crash()
+            machine.start()
+            machine.wait_for_console_text("Starting password query on")
+            machine.send_console("password\n")
+            machine.wait_for_unit("multi-user.target")
+            machine.succeed(
+                "zfs get -Ho value keystatus manual/encrypted | grep -Fx unavailable",
+                "echo otherpass | zfs load-key manual/encrypted",
+                "systemctl start manual-encrypted.mount",
+                "zfs load-key manual/httpkey",
+                "systemctl start manual-httpkey.mount",
+                "umount /automatic /manual/encrypted /manual/httpkey /manual",
+                "zpool destroy automatic",
+                "zpool destroy manual",
+            )
 
-          with subtest("boot.zfs.forceImportAll works"):
-              machine.succeed(
-                  "rm /etc/hostid",
-                  "zgenhostid deadcafe",
-                  "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
-                  "bootctl set-default nixos-generation-1-specialisation-forcepool.conf",
-                  "rm /etc/hostid",
-                  "sync",
-              )
-              machine.crash()
-              machine.wait_for_unit("multi-user.target")
-              machine.fail("zpool import forcepool")
-              machine.succeed(
-                  "systemctl start forcepool.mount",
-                  "mount | grep forcepool",
-              )
-        ''
-        + extraTest;
+        with subtest("boot.zfs.forceImportAll works"):
+            machine.succeed(
+                "rm /etc/hostid",
+                "zgenhostid deadcafe",
+                "zpool create forcepool /dev/vdb1 -O mountpoint=legacy",
+                "bootctl set-default nixos-generation-1-specialisation-forcepool.conf",
+                "rm /etc/hostid",
+                "sync",
+            )
+            machine.crash()
+            machine.wait_for_unit("multi-user.target")
+            machine.fail("zpool import forcepool")
+            machine.succeed(
+                "systemctl start forcepool.mount",
+                "mount | grep forcepool",
+            )
+      ''
+      + extraTest;
 
     };
 
@@ -215,12 +214,12 @@ in
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstable = makeZfsTest rec {
+  unstable = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest rec {
+  unstableWithSystemdStage1 = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
     enableSystemdStage1 = true;

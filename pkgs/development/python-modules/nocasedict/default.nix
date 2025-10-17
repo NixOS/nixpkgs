@@ -3,23 +3,24 @@
   buildPythonPackage,
   fetchPypi,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "nocasedict";
-  version = "2.0.4";
+  version = "2.1.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-TKk09l31exDQ/KtfDDnp3MuTV3/58ivvmCZd2/EvivE=";
+    hash = "sha256-tWPVhRy7DgsQ+7YYm6h+BhLSLlpvOgBKRXOrWziqqn0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

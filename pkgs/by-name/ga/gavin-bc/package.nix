@@ -1,58 +1,33 @@
 {
   lib,
   stdenv,
-  fetchFromGitea,
-  editline,
-  readline,
-  historyType ? "internal",
-  predefinedBuildType ? "BSD",
+  fetchFromGitHub,
+  nix-update-script,
+  versionCheckHook,
 }:
-
-assert lib.elem historyType [
-  "editline"
-  "readline"
-  "internal"
-];
-assert lib.elem predefinedBuildType [
-  "BSD"
-  "GNU"
-  "GDH"
-  "DBG"
-  ""
-];
 stdenv.mkDerivation (finalAttrs: {
   pname = "gavin-bc";
-  version = "6.5.0";
+  version = "7.1.0";
 
-  src = fetchFromGitea {
-    domain = "git.gavinhoward.com";
-    owner = "gavin";
+  src = fetchFromGitHub {
+    owner = "gavinhoward";
     repo = "bc";
     rev = finalAttrs.version;
-    hash = "sha256-V0L5OmpcI0Zu5JvESjuhp4wEs5Bu/CvjF6B5WllTEqo=";
+    hash = "sha256-bIQk0HzUzL1Ju4+iDpFj1n+GKCj9a3AUAbYA3yX5TNg=";
   };
 
-  buildInputs =
-    (lib.optional (historyType == "editline") editline)
-    ++ (lib.optional (historyType == "readline") readline);
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgram = "${placeholder "out"}/bin/bc";
+  doInstallCheck = true;
 
-  configureFlags =
-    [
-      "--disable-nls"
-    ]
-    ++ (lib.optional (predefinedBuildType != "") "--predefined-build-type=${predefinedBuildType}")
-    ++ (lib.optional (historyType == "editline") "--enable-editline")
-    ++ (lib.optional (historyType == "readline") "--enable-readline")
-    ++ (lib.optional (historyType == "internal") "--enable-internal-history");
+  passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://git.gavinhoward.com/gavin/bc";
+    homepage = "https://github.com/gavinhoward/bc";
     description = "Gavin Howard's BC calculator implementation";
-    changelog = "https://git.gavinhoward.com/gavin/bc/raw/tag/${finalAttrs.version}/NEWS.md";
+    changelog = "https://github.com/gavinhoward/bc/blob/${finalAttrs.version}/NEWS.md";
     license = lib.licenses.bsd2;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ delafthi ];
     platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
-# TODO: cover most of configure settings

@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rundeck";
-  version = "5.13.0-20250625";
+  version = "5.16.0-20251006";
 
   src = fetchurl {
     url = "https://packagecloud.io/pagerduty/rundeck/packages/java/org.rundeck/rundeck-${finalAttrs.version}.war/artifacts/rundeck-${finalAttrs.version}.war/download?distro_version_id=167";
-    hash = "sha256-RqyJ0/gZQ1gIYSPoYfGGN5VB5ubUMl00pHPlw6v6tBQ=";
+    hash = "sha256-ws84HDqowYz2ouvN7E3SlouGZdZUDVDK4LUmzKXOyec=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$full_version" ]]; then
       download_url="https://packagecloud.io/pagerduty/rundeck/packages/java/org.rundeck/rundeck-$full_version.war/artifacts/rundeck-$full_version.war/download?distro_version_id=167"
-      hash=$(curl -L "$download_url" | nix-hash --flat --type sha256 --base32 - | nix hash to-sri --type sha256)
+      hash=$(curl -L "$download_url" | nix-hash --flat --type sha256 --base32 - | nix --extra-experimental-features nix-command hash to-sri --type sha256)
       update-source-version "$UPDATE_NIX_ATTR_PATH" "$full_version" "$hash"
     fi
   '';

@@ -1,6 +1,8 @@
---- a/ctdb/wscript	2019-01-15 02:07:00.000000000 -0800
-+++ b/ctdb/wscript	2019-01-20 20:21:08.800187459 -0800
-@@ -814,7 +814,7 @@
+diff --git a/ctdb/wscript b/ctdb/wscript
+index e9cd89436a3..893b9a4c59e 100644
+--- a/ctdb/wscript
++++ b/ctdb/wscript
+@@ -862,7 +862,7 @@ def build(bld):
      for t in etc_subdirs:
          files = SUBDIR_MODE('%s/%s' % (configdir, t), trim_path=configdir)
          for fmode in files:
@@ -9,7 +11,7 @@
                                destname=fmode[0], chmod=fmode[1])
  
      # If this is a direct install and there are no event scripts
-@@ -852,24 +852,20 @@
+@@ -901,17 +901,13 @@ def build(bld):
      ]
  
      for t in etc_scripts:
@@ -17,16 +19,8 @@
 +        bld.INSTALL_FILES('${EXEC_PREFIX}${CTDB_ETCDIR}', 'config/%s' % t,
                            destname=t, chmod=MODE_755)
  
-     bld.SAMBA_GENERATOR('ctdb-sudoers',
-                         source='config/ctdb.sudoers',
-                         target='ctdb.sudoers',
-                         rule='sed %s ${SRC} > ${TGT}' % (sed_cmdline))
--    bld.INSTALL_FILES('${SYSCONFDIR}/sudoers.d', 'ctdb.sudoers',
-+    bld.INSTALL_FILES('${EXEC_PREFIX}${SYSCONFDIR}/sudoers.d', 'ctdb.sudoers',
-                       destname='ctdb')
- 
 -    bld.INSTALL_FILES('${CTDB_ETCDIR}/events/notification',
-+    bld.INSTALL_FILES('${EXEC_PREFIX}${CTDB_ETCDIR}/events/notification',
++    bld.INSTALL_FILES('${EXEC_PREFIX}$${CTDB_ETCDIR}/events/notification',
                        'config/notification.README',
                        destname='README')
  

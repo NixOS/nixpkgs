@@ -22,6 +22,7 @@
   libXext,
   libXi,
   libXxf86vm,
+  libxcb,
   ninja,
   pcre2,
   pixman,
@@ -87,6 +88,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libXext
     libXi
     libXxf86vm
+    libxcb
     pcre2
     pixman
     skia-aseprite
@@ -106,6 +108,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DENABLE_DESKTOP_INTEGRATION=ON"
     "-DENABLE_UPDATER=OFF"
     "-DUSE_SHARED_CMARK=ON"

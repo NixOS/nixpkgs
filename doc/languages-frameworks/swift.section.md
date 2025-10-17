@@ -34,13 +34,13 @@ look for the following directories:
   (Where `linux` and `x86_64` are from lowercase `uname -sm`.)
 - For convenience, Nixpkgs also adds `lib/swift` to the search path.
   This can save a bit of work packaging Swift modules, because many Nix builds
-  will produce output for just one target any way.
+  will produce output for just one target anyway.
 
 ## Core libraries {#ssec-swift-core-libraries}
 
 In addition to the standard library, the Swift toolchain contains some
 additional 'core libraries' that, on Apple platforms, are normally distributed
-as part of the OS or Xcode. These are packaged separately in Nixpkgs, and can
+as part of the OS or Xcode. These are packaged separately in Nixpkgs and can
 be found (for use in `buildInputs`) as:
 
 - `swiftPackages.Dispatch`
@@ -80,8 +80,8 @@ expression. The next step is to write that expression:
 let
   # Pass the generated files to the helper.
   generated = swiftpm2nix.helpers ./nix;
-in
 
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "myproject";
   version = "0.0.0";
@@ -131,17 +131,13 @@ stdenv.mkDerivation (finalAttrs: {
 If you'd like to build a different configuration than `release`:
 
 ```nix
-{
-  swiftpmBuildConfig = "debug";
-}
+{ swiftpmBuildConfig = "debug"; }
 ```
 
 It is also possible to provide additional flags to `swift build`:
 
 ```nix
-{
-  swiftpmFlags = [ "--disable-dead-strip" ];
-}
+{ swiftpmFlags = [ "--disable-dead-strip" ]; }
 ```
 
 The default `buildPhase` already passes `-j` for parallel building.
@@ -155,9 +151,7 @@ Including `swiftpm` in your `nativeBuildInputs` also provides a default
 `checkPhase`, but it must be enabled with:
 
 ```nix
-{
-  doCheck = true;
-}
+{ doCheck = true; }
 ```
 
 This essentially runs: `swift test -c release`
@@ -195,7 +189,7 @@ with a writable copy:
 
 The `swift` package has a separate `lib` output containing just the Swift
 standard library, to prevent Swift applications needing a dependency on the
-full Swift compiler at run-time. Linking with the Nixpkgs Swift toolchain
+full Swift compiler at runtime. Linking with the Nixpkgs Swift toolchain
 already ensures binaries correctly reference the `lib` output.
 
 Sometimes, Swift is used only to compile part of a mixed codebase, and the

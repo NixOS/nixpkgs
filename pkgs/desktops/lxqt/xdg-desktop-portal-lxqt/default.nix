@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "xdg-desktop-portal-lxqt";
     rev = version;
     hash = "sha256-y3VqDuFagKcG8O5m5qjRGtlUZXfIXV0tclvZLChhWkg=";
   };
@@ -37,7 +37,8 @@ stdenv.mkDerivation rec {
     lxqt-qtplugin
     menu-cache
     qtbase
-  ] ++ extraQtStyles;
+  ]
+  ++ extraQtStyles;
 
   passthru.updateScript = gitUpdater { };
 

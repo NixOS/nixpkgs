@@ -1,7 +1,7 @@
 { pkgs, ... }:
 {
   name = "timezone";
-  meta.maintainers = with pkgs.lib.maintainers; [ ];
+  meta.maintainers = [ ];
 
   nodes = {
     node_eutz =

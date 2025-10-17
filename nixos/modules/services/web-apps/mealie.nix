@@ -39,6 +39,18 @@ in
       };
     };
 
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      default = [ ];
+      example = [
+        "--log-level"
+        "debug"
+      ];
+      description = ''
+        Specifies extra command line arguments to pass to mealie (Gunicorn).
+      '';
+    };
+
     credentialsFile = lib.mkOption {
       type = with lib.types; nullOr path;
       default = null;
@@ -77,13 +89,14 @@ in
         BASE_URL = "http://localhost:${toString cfg.port}";
         DATA_DIR = "/var/lib/mealie";
         NLTK_DATA = pkgs.nltk-data.averaged-perceptron-tagger-eng;
-      } // (builtins.mapAttrs (_: val: toString val) cfg.settings);
+      }
+      // (builtins.mapAttrs (_: val: toString val) cfg.settings);
 
       serviceConfig = {
         DynamicUser = true;
         User = "mealie";
         ExecStartPre = "${pkg}/libexec/init_db";
-        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port}";
+        ExecStart = "${lib.getExe pkg} -b ${cfg.listenAddress}:${builtins.toString cfg.port} ${lib.escapeShellArgs cfg.extraOptions}";
         EnvironmentFile = lib.mkIf (cfg.credentialsFile != null) cfg.credentialsFile;
         StateDirectory = "mealie";
         StandardOutput = "journal";

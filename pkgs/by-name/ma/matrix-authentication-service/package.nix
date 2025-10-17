@@ -12,26 +12,27 @@
   stdenv,
   open-policy-agent,
   cctools,
+  nix-update-script,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "matrix-authentication-service";
-  version = "0.17.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "matrix-authentication-service";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-iBDvvKy5alaieIm+Jv9WnqHVGjItDSvJAk+ClTRj3v0=";
+    hash = "sha256-9mQXWpGy+oFK5cEWeW88CSZQqfpmOAUS1x9KkyEMg+0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-rHlzLawpCD9onhca9NzgUXmA2vDmW48cQrV05qs+tn8=";
+  cargoHash = "sha256-3ODOJY8/hksbMak8SsQP87rOnCd7+1G0wD4m5daPrbk=";
 
   npmDeps = fetchNpmDeps {
     name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
     src = "${finalAttrs.src}/${finalAttrs.npmRoot}";
-    hash = "sha256-0rJAU4PZAshTu6KD4EzIltUT8PO4dnWCY5oM3kyxBBk=";
+    hash = "sha256-UgvT81DR4pWlQRfQgmecp+AOUSih4+/v7c1ApIDf3Ts=";
   };
 
   npmRoot = "frontend";
@@ -43,7 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     npmHooks.npmConfigHook
     nodejs
     (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin cctools; # libtool used by gyp;
 
   buildInputs = [
     sqlite
@@ -61,13 +63,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postPatch = ''
     substituteInPlace crates/config/src/sections/http.rs \
-      --replace ./frontend/dist/    "$out/share/$pname/assets/"
+      --replace-fail ./share/assets/    "$out/share/$pname/assets/"
     substituteInPlace crates/config/src/sections/templates.rs \
-      --replace ./share/templates/    "$out/share/$pname/templates/" \
-      --replace ./share/translations/    "$out/share/$pname/translations/" \
-      --replace ./share/manifest.json "$out/share/$pname/assets/manifest.json"
+      --replace-fail ./share/templates/    "$out/share/$pname/templates/" \
+      --replace-fail ./share/translations/    "$out/share/$pname/translations/" \
+      --replace-fail ./share/manifest.json "$out/share/$pname/assets/manifest.json"
     substituteInPlace crates/config/src/sections/policy.rs \
-      --replace ./share/policy.wasm "$out/share/$pname/policy.wasm"
+      --replace-fail ./share/policy.wasm "$out/share/$pname/policy.wasm"
   '';
 
   preBuild = ''
@@ -75,13 +77,25 @@ rustPlatform.buildRustPackage (finalAttrs: {
     (cd "$npmRoot" && npm run build)
   '';
 
-  # Adopted from https://github.com/element-hq/matrix-authentication-service/blob/main/Dockerfile
+  # Adapted from https://github.com/element-hq/matrix-authentication-service/blob/v0.20.0/.github/workflows/build.yaml#L75-L84
   postInstall = ''
     install -Dm444 -t "$out/share/$pname"        "policies/policy.wasm"
+    install -Dm444 -t "$out/share/$pname"        "$npmRoot/dist/manifest.json"
     install -Dm444 -t "$out/share/$pname/assets" "$npmRoot/dist/"*
     cp -r templates   "$out/share/$pname/templates"
     cp -r translations   "$out/share/$pname/translations"
   '';
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      # avoid unstable pre‐releases
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "OAuth2.0 + OpenID Provider for Matrix Homeservers";

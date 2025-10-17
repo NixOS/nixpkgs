@@ -26,8 +26,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
+  pytestFlags = [
+    "-pno:cacheprovider"
   ];
 
   meta = certbot.meta // {

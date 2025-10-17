@@ -8,7 +8,6 @@
   libXpm,
   imake,
   installShellFiles,
-  ...
 }:
 
 stdenv.mkDerivation rec {

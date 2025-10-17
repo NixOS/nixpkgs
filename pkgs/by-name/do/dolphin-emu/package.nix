@@ -17,7 +17,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt_10,
+  fmt,
   gtest,
   hidapi,
   libXdmcp,
@@ -26,7 +26,7 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
@@ -54,13 +54,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dolphin-emu";
-  version = "2506";
+  version = "2509";
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
     tag = finalAttrs.version;
-    hash = "sha256-JEp1rc5nNJY4GfNCR2Vi4ctQ14p+LZWuFPFirv6foUM=";
+    hash = "sha256-ZTNg8DRgtC1jS3MoYK1wwzjJbMkLNdkRub+KOg3NmYM=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -73,79 +73,79 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      qt6.wrapQtAppsHook
-      wrapGAppsHook3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild # for plutil
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qt6.wrapQtAppsHook
+    wrapGAppsHook3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild # for plutil
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      cubeb
-      curl
-      enet
-      ffmpeg
-      fmt_10
-      gtest
-      hidapi
-      libXdmcp
-      libpulseaudio
-      libspng
-      libusb1
-      lz4
-      lzo
-      mbedtls_2
-      miniupnpc
-      minizip-ng
-      openal
-      pugixml
-      qt6.qtbase
-      qt6.qtsvg
-      SDL2
-      sfml
-      xxHash
-      xz
-      # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
-      #zlib-ng
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      bluez
-      libGL
-      libXext
-      libXrandr
-      libevdev
-      # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
-      #mgba # Derivation doesn't support Darwin
-      udev
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      moltenvk
-    ];
+  buildInputs = [
+    bzip2
+    cubeb
+    curl
+    enet
+    ffmpeg
+    fmt
+    gtest
+    hidapi
+    libXdmcp
+    libpulseaudio
+    libspng
+    libusb1
+    lz4
+    lzo
+    mbedtls
+    miniupnpc
+    minizip-ng
+    openal
+    pugixml
+    qt6.qtbase
+    qt6.qtsvg
+    SDL2
+    sfml
+    xxHash
+    xz
+    # Causes linker errors with minizip-ng, prefer vendored. Possible reason why: https://github.com/dolphin-emu/dolphin/pull/12070#issuecomment-1677311838
+    #zlib-ng
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    bluez
+    libGL
+    libXext
+    libXrandr
+    libevdev
+    # FIXME: Vendored version is newer than mgba's stable release, remove the comment on next mgba's version
+    #mgba # Derivation doesn't support Darwin
+    udev
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    moltenvk
+  ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
-      (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
-      (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
-      (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
-      (lib.cmakeBool "MACOS_CODE_SIGNING" false)
-      # Bundles the application folder into a standalone executable, so we cannot devendor libraries
-      (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
-      # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
-      # Note: The updater isn't available on linux, so we don't need to disable it there.
-      (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
-    ];
+  cmakeFlags = [
+    (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
+    (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
+    (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)
+    (lib.cmakeBool "USE_BUNDLED_MOLTENVK" false)
+    (lib.cmakeBool "MACOS_CODE_SIGNING" false)
+    # Bundles the application folder into a standalone executable, so we cannot devendor libraries
+    (lib.cmakeBool "SKIP_POSTPROCESS_BUNDLE" true)
+    # Needs xcode so compilation fails with it enabled. We would want the version to be fixed anyways.
+    # Note: The updater isn't available on linux, so we don't need to disable it there.
+    (lib.cmakeBool "ENABLE_AUTOUPDATE" false)
+  ];
   preConfigure = ''
     appendToVar cmakeFlags "-DDOLPHIN_WC_REVISION=$(cat COMMIT)"
     rm COMMIT

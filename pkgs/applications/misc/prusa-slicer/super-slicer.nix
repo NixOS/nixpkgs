@@ -20,23 +20,50 @@ let
       hash = "sha256-fh31qrqjQiRQL03pQl4KJAEtbKMwG8/nJroqIDOIePw=";
     })
     ./super-slicer-use-boost186.patch
+    ./super-slicer-fix-cereal-1.3.1.patch
   ];
+
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
+    pname = "wxwidgets-prusa3d-patched";
+    version = "3.1.4";
+    src = fetchFromGitHub {
+      owner = "prusa3d";
+      repo = "wxWidgets";
+      rev = "489f6118256853cf5b299d595868641938566cdb";
+      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
+      fetchSubmodules = true;
+    };
+    patches = [
+      ../../../by-name/wx/wxGTK31/0001-fix-assertion-using-hide-in-destroy.patch
+    ];
+  });
 
   versions = {
     stable = {
       version = "2.5.59.13";
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
+      overrides = {
+        wxGTK-override = wxGTK31-prusa;
+      };
     };
     latest = {
       version = "2.5.59.13";
       hash = "sha256-FkoGcgVoBeHSZC3W5y30TBPmPrWnZSlO66TgwskgqAU=";
       inherit patches;
+      overrides = {
+        wxGTK-override = wxGTK31-prusa;
+      };
     };
     beta = {
-      version = "2.5.60.0";
-      hash = "sha256-dDRK07SatLLhuoc2fJKbHUwAofRRvBUoXWO61W2blFM=";
-      inherit patches;
+      version = "2.7.61.6";
+      hash = "sha256-j9er2/z4jl04HI6aOMJ6YCXwhZ6qEhgMJjW117cLnz0=";
+      # this can be removed once prusa-slicer natively supports WayLand
+      # https://github.com/prusa3d/PrusaSlicer/issues/8284
+      # https://github.com/prusa3d/PrusaSlicer/pull/13307
+      # https://gitlab.archlinux.org/schiele/prusa-slicer/-/blob/d839bb84345c0f3ab3eb151a5777f0ca85b5f318/allow_wayland.patch
+      # https://gitlab.archlinux.org/archlinux/packaging/packages/prusa-slicer/-/issues/3
+      patches = [ ./super-slicer-allow-wayland.patch ];
     };
   };
 
@@ -44,7 +71,8 @@ let
     {
       version,
       hash,
-      patches,
+      patches ? [ ],
+      ...
     }:
     super: {
       inherit version pname patches;
@@ -59,21 +87,19 @@ let
 
       # - wxScintilla is not used on macOS
       # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
-      postPatch =
-        (super.postPatch or "")
-        + ''
-          substituteInPlace src/CMakeLists.txt \
-            --replace "scintilla" "" \
-            --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
+      postPatch = (super.postPatch or "") + ''
+        substituteInPlace src/CMakeLists.txt \
+          --replace "scintilla" "" \
+          --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
 
-          substituteInPlace src/libslic3r/CMakeLists.txt \
-            --replace "libexpat" "EXPAT::EXPAT"
+        substituteInPlace src/libslic3r/CMakeLists.txt \
+          --replace "libexpat" "EXPAT::EXPAT"
 
-          # fixes GCC 14 error
-          substituteInPlace src/libslic3r/MeshBoolean.cpp \
-            --replace-fail 'auto &face' 'auto face' \
-            --replace-fail 'auto &vi' 'auto vi'
-        '';
+        # fixes GCC 14 error
+        substituteInPlace src/libslic3r/MeshBoolean.cpp \
+          --replace-fail 'auto &face' 'auto face' \
+          --replace-fail 'auto &vi' 'auto vi'
+      '';
 
       # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary
       # but we do still need to move OCCTWrapper.so to the lib directory
@@ -115,23 +141,12 @@ let
       passthru = allVersions;
 
     };
-  wxGTK31-prusa = wxGTK31.overrideAttrs (old: {
-    pname = "wxwidgets-prusa3d-patched";
-    version = "3.1.4";
-    src = fetchFromGitHub {
-      owner = "prusa3d";
-      repo = "wxWidgets";
-      rev = "489f6118256853cf5b299d595868641938566cdb";
-      hash = "sha256-xGL5I2+bPjmZGSTYe1L7VAmvLHbwd934o/cxg9baEvQ=";
-      fetchSubmodules = true;
-    };
-  });
   prusa-slicer-deps-override = prusa-slicer.override {
-    wxGTK-override = wxGTK31-prusa;
     opencascade-override = opencascade-occt_7_6;
   };
   allVersions = builtins.mapAttrs (
-    _name: version: (prusa-slicer-deps-override.overrideAttrs (override version))
+    _name: version:
+    (prusa-slicer-deps-override.override (version.overrides or { })).overrideAttrs (override version)
   ) versions;
 in
 allVersions.stable

@@ -34,26 +34,27 @@ python.pkgs.buildPythonApplication rec {
 
   build-system = with python.pkgs; [ poetry-core ];
 
-  dependencies =
-    [ awscli ]
-    ++ (with python.pkgs; [
-      awscli
-      boto3
-      botocore
-      chalice
-      dsnap
-      jq
-      policyuniverse
-      pycognito
-      pyyaml
-      qrcode
-      requests
-      sqlalchemy
-      sqlalchemy-utils
-      toml
-      typing-extensions
-      urllib3
-    ]);
+  dependencies = [
+    awscli
+  ]
+  ++ (with python.pkgs; [
+    awscli
+    boto3
+    botocore
+    chalice
+    dsnap
+    jq
+    policyuniverse
+    pycognito
+    pyyaml
+    qrcode
+    requests
+    sqlalchemy
+    sqlalchemy-utils
+    toml
+    typing-extensions
+    urllib3
+  ]);
 
   nativeCheckInputs = with python.pkgs; [
     moto

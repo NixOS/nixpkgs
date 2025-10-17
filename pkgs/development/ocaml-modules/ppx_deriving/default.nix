@@ -12,7 +12,9 @@
   ounit2,
   ocaml-migrate-parsetree,
   version ?
-    if lib.versionAtLeast ppxlib.version "0.32" then
+    if lib.versionAtLeast ppxlib.version "0.36" then
+      "6.1.1"
+    else if lib.versionAtLeast ppxlib.version "0.32" then
       "6.0.3"
     else if lib.versionAtLeast ppxlib.version "0.20" then
       "5.2.1"
@@ -25,6 +27,7 @@
 let
   hash =
     {
+      "6.1.1" = "sha256-yR0epeFeaSii+JR9vRNbn3ZcwOLXK+JxQnmBr801DCQ=";
       "6.0.3" = "sha256-N0qpezLF4BwJqXgQpIv6IYwhO1tknkRSEBRVrBnJSm0=";
       "5.2.1" = "sha256:11h75dsbv3rs03pl67hdd3lbim7wjzh257ij9c75fcknbfr5ysz9";
       "5.1" = "sha256:1i64fd7qrfzbam5hfbl01r0sx4iihsahcwqj13smmrjlnwi3nkxh";
@@ -38,7 +41,9 @@ buildDunePackage rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-${lib.optionalString (lib.versionOlder version "6.0") "v"}${version}.tbz";
+    url = "https://github.com/ocaml-ppx/ppx_deriving/releases/download/v${version}/ppx_deriving-${lib.optionalString (lib.versionOlder version "6.0") "v"}${version}.${
+      if lib.versionAtLeast version "6.1.1" then "tar.gz" else "tbz"
+    }";
     inherit hash;
   };
 
@@ -47,12 +52,12 @@ buildDunePackage rec {
   nativeBuildInputs = [ cppo ];
   buildInputs = [
     findlib
-    ppxlib
   ];
   propagatedBuildInputs =
     lib.optional (lib.versionOlder version "5.2") ocaml-migrate-parsetree
     ++ [
       ppx_derivers
+      ppxlib
     ]
     ++ lib.optional (lib.versionOlder version "6.0") result;
 
@@ -62,7 +67,7 @@ buildDunePackage rec {
   ];
 
   meta = with lib; {
-    description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02";
+    description = "Library simplifying type-driven code generation on OCaml >=4.02";
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;
   };

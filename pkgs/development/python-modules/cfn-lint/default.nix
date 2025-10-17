@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "1.32.1";
+  version = "1.38.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "aws-cloudformation";
     repo = "cfn-lint";
     tag = "v${version}";
-    hash = "sha256-s0CYQ6r3rA1PEiZ9LLFL3RC2PdfCgZHTqQ9nZUi1m+Q=";
+    hash = "sha256-n3NHmbo3qRhP7oqUOokw8oGnNXo4rhRhuAgL66hvfog=";
   };
 
   build-system = [ setuptools ];
@@ -69,26 +69,23 @@ buildPythonPackage rec {
     defusedxml
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
 
+  disabledTestPaths = [
+    # tests fail starting on 2025-10-01
+    # related: https://github.com/aws-cloudformation/cfn-lint/issues/4125
+    "test/integration/test_quickstart_templates.py"
+    "test/integration/test_quickstart_templates_non_strict.py"
+  ];
+
   disabledTests = [
     # Requires git directory
     "test_update_docs"
-    # Tests depend on network access (fails in getaddrinfo)
-    "test_update_resource_specs_python_2"
-    "test_update_resource_specs_python_3"
-    "test_sarif_formatter"
-    # Some CLI tests fails
-    "test_bad_config"
-    "test_override_parameters"
-    "test_positional_template_parameters"
-    "test_template_config"
-    # Assertion error
-    "test_build_graph"
   ];
 
   pythonImportsCheck = [ "cfnlint" ];

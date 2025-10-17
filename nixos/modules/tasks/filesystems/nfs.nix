@@ -35,26 +35,24 @@ let
       lockd.udp-port = cfg.server.lockdPort;
     };
 
-  nfsConfDeprecated =
-    cfg.extraConfig
-    + ''
-      [nfsd]
-      threads=${toString cfg.server.nproc}
-      ${lib.optionalString (cfg.server.hostName != null) "host=${cfg.server.hostName}"}
-      ${cfg.server.extraNfsdConfig}
+  nfsConfDeprecated = cfg.extraConfig + ''
+    [nfsd]
+    threads=${toString cfg.server.nproc}
+    ${lib.optionalString (cfg.server.hostName != null) "host=${cfg.server.hostName}"}
+    ${cfg.server.extraNfsdConfig}
 
-      [mountd]
-      ${lib.optionalString (cfg.server.mountdPort != null) "port=${toString cfg.server.mountdPort}"}
+    [mountd]
+    ${lib.optionalString (cfg.server.mountdPort != null) "port=${toString cfg.server.mountdPort}"}
 
-      [statd]
-      ${lib.optionalString (cfg.server.statdPort != null) "port=${toString cfg.server.statdPort}"}
+    [statd]
+    ${lib.optionalString (cfg.server.statdPort != null) "port=${toString cfg.server.statdPort}"}
 
-      [lockd]
-      ${lib.optionalString (cfg.server.lockdPort != null) ''
-        port=${toString cfg.server.lockdPort}
-        udp-port=${toString cfg.server.lockdPort}
-      ''}
-    '';
+    [lockd]
+    ${lib.optionalString (cfg.server.lockdPort != null) ''
+      port=${toString cfg.server.lockdPort}
+      udp-port=${toString cfg.server.lockdPort}
+    ''}
+  '';
 
   nfsConfFile =
     if cfg.settings != { } then

@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 let
@@ -14,28 +15,35 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json";
-  version = "3.11.3";
+  version = "3.12.0";
 
   src = fetchFromGitHub {
     owner = "nlohmann";
     repo = "json";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-7F0Jon+1oWL7uqet5i1IgHX0fUw/+z0QwEcA3zs5xHg=";
+    hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
 
-  patches = lib.optionals stdenv.cc.isClang [
-    # tests fail to compile on clang-19
-    # https://github.com/nlohmann/json/issues/4490
-    ./make-tests-build-clang-19.diff
+  patches = lib.optionals stdenv.hostPlatform.isMusl [
+    # Musl does not support LC_NUMERIC, causing a test failure.
+    # Turn the error into a warning to make the test succeed.
+    # https://github.com/nlohmann/json/pull/4770
+    (fetchpatch {
+      url = "https://github.com/nlohmann/json/commit/0a8b48ac6a89131deaeb0d57047c9462a23b34a2.diff";
+      hash = "sha256-gOZfRyDRI6USdUIY+sH7cygPrSIKGIo8AWcjqc/GQNI=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
+    # .pc file uses INCLUDEDIR as a relative path
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DJSON_BuildTests=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DJSON_FastTests=ON"
     "-DJSON_MultipleHeaders=ON"
-  ] ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
+  ]
+  ++ lib.optional finalAttrs.finalPackage.doCheck "-DJSON_TestDataDirectory=${testData}";
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 

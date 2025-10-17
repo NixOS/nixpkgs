@@ -63,35 +63,34 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "freerdp";
-  version = "3.16.0";
+  version = "3.17.1";
 
   src = fetchFromGitHub {
     owner = "FreeRDP";
     repo = "FreeRDP";
     rev = finalAttrs.version;
-    hash = "sha256-HF4Is3ak2nYD2Fq6HGHwyM5OTBVqYqbB22otOprzfiQ=";
+    hash = "sha256-KAlxpoGOqvHTqKkb/yMrquSckFfMXgbEfxr2IuLPZFQ=";
   };
 
-  postPatch =
-    ''
-      # skip NIB file generation on darwin
-      substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
-        --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
+  postPatch = ''
+    # skip NIB file generation on darwin
+    substituteInPlace "client/Mac/CMakeLists.txt" "client/Mac/cli/CMakeLists.txt" \
+      --replace-fail "if(NOT IS_XCODE)" "if(FALSE)"
 
-      substituteInPlace "libfreerdp/freerdp.pc.in" \
-        --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
+    substituteInPlace "libfreerdp/freerdp.pc.in" \
+      --replace-fail "Requires:" "Requires: @WINPR_PKG_CONFIG_FILENAME@"
 
-      substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
-        --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
-    ''
-    + lib.optionalString (pcsclite != null) ''
-      substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
-        --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
-    ''
-    + lib.optionalString nocaps ''
-      substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
-        --replace-fail "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
-    '';
+    substituteInPlace client/SDL/SDL2/dialogs/{sdl_input.cpp,sdl_select.cpp,sdl_widget.cpp,sdl_widget.hpp} \
+      --replace-fail "<SDL_ttf.h>" "<SDL2/SDL_ttf.h>"
+  ''
+  + lib.optionalString (pcsclite != null) ''
+    substituteInPlace "winpr/libwinpr/smartcard/smartcard_pcsc.c" \
+      --replace-fail "libpcsclite.so" "${lib.getLib pcsclite}/lib/libpcsclite.so"
+  ''
+  + lib.optionalString nocaps ''
+    substituteInPlace "libfreerdp/locale/keyboard_xkbfile.c" \
+      --replace-fail "RDP_SCANCODE_CAPSLOCK" "RDP_SCANCODE_LCONTROL"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -102,87 +101,85 @@ stdenv.mkDerivation (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
-  buildInputs =
-    [
-      cairo
-      cjson
-      cups
-      faad2
-      ffmpeg
-      glib
-      icu
-      libX11
-      libXcursor
-      libXdamage
-      libXdmcp
-      libXext
-      libXi
-      libXinerama
-      libXrandr
-      libXrender
-      libXtst
-      libXv
-      libjpeg_turbo
-      libkrb5
-      libopus
-      libpulseaudio
-      libunwind
-      libusb1
-      libxkbcommon
-      libxkbfile
-      openh264
-      openssl
-      orc
-      pcre2
-      pcsclite
-      pkcs11helper
-      SDL2
-      SDL2_ttf
-      SDL2_image
-      uriparser
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      fuse3
-      systemd
-      wayland
-      wayland-scanner
-    ]
-    ++ lib.optionals withUnfree [
-      faac
-    ];
+  buildInputs = [
+    cairo
+    cjson
+    cups
+    faad2
+    ffmpeg
+    glib
+    icu
+    libX11
+    libXcursor
+    libXdamage
+    libXdmcp
+    libXext
+    libXi
+    libXinerama
+    libXrandr
+    libXrender
+    libXtst
+    libXv
+    libjpeg_turbo
+    libkrb5
+    libopus
+    libpulseaudio
+    libunwind
+    libusb1
+    libxkbcommon
+    libxkbfile
+    openh264
+    openssl
+    orc
+    pcre2
+    pcsclite
+    pkcs11helper
+    SDL2
+    SDL2_ttf
+    SDL2_image
+    uriparser
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    fuse3
+    systemd
+    wayland
+    wayland-scanner
+  ]
+  ++ lib.optionals withUnfree [
+    faac
+  ];
 
   # https://github.com/FreeRDP/FreeRDP/issues/8526#issuecomment-1357134746
-  cmakeFlags =
-    [
-      "-Wno-dev"
-      (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
-      (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
-    ]
-    ++ lib.mapAttrsToList lib.cmakeBool {
-      BUILD_TESTING = false; # false is recommended by upstream
-      WITH_CAIRO = cairo != null;
-      WITH_CUPS = cups != null;
-      WITH_FAAC = withUnfree && faac != null;
-      WITH_FAAD2 = faad2 != null;
-      WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
-      WITH_JPEG = libjpeg_turbo != null;
-      WITH_KRB5 = libkrb5 != null;
-      WITH_OPENH264 = openh264 != null;
-      WITH_OPUS = libopus != null;
-      WITH_OSS = false;
-      WITH_MANPAGES = withManPages;
-      WITH_PCSC = pcsclite != null;
-      WITH_PULSE = libpulseaudio != null;
-      WITH_SERVER = buildServer;
-      WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
-      WITH_VAAPI = false; # false is recommended by upstream
-      WITH_X11 = true;
-    }
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
-    ];
+  cmakeFlags = [
+    "-Wno-dev"
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeFeature "DOCBOOKXSL_DIR" "${docbook-xsl-nons}/xml/xsl/docbook")
+  ]
+  ++ lib.mapAttrsToList lib.cmakeBool {
+    BUILD_TESTING = false; # false is recommended by upstream
+    WITH_CAIRO = cairo != null;
+    WITH_CUPS = cups != null;
+    WITH_FAAC = withUnfree && faac != null;
+    WITH_FAAD2 = faad2 != null;
+    WITH_FUSE = stdenv.hostPlatform.isLinux && fuse3 != null;
+    WITH_JPEG = libjpeg_turbo != null;
+    WITH_KRB5 = libkrb5 != null;
+    WITH_OPENH264 = openh264 != null;
+    WITH_OPUS = libopus != null;
+    WITH_OSS = false;
+    WITH_MANPAGES = withManPages;
+    WITH_PCSC = pcsclite != null;
+    WITH_PULSE = libpulseaudio != null;
+    WITH_SERVER = buildServer;
+    WITH_WEBVIEW = false; # avoid introducing webkit2gtk-4.0
+    WITH_VAAPI = false; # false is recommended by upstream
+    WITH_X11 = true;
+  }
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    (lib.cmakeBool "SDL_USE_COMPILED_RESOURCES" false)
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [

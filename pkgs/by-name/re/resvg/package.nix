@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-sz1fAvg5HiBJpAgH7Vy0j5eAkvW8egcHyUXCsZzOWT8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-jUq1BvHgs3tEI+ye04FykdunHcMMatE3Gamr3grNWQw=";
 
   cargoBuildFlags = [
@@ -33,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/RazrFalcon/resvg";
     changelog = "https://github.com/RazrFalcon/resvg/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "resvg";
   };
 }

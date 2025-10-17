@@ -66,21 +66,21 @@ let
       certConfig = outerConfig.security.acme.certs.${config.useACMEHost};
     in
     {
-      imports =
-        [
-          ../../misc/assertions.nix
+      imports = [
+        ../../misc/assertions.nix
 
-          (lib.mkRenamedOptionModule
-            [
-              "enableHTTPS"
-            ]
-            [
-              "listen"
-              "enableHTTPS"
-            ]
-          )
-        ]
-        ++ lib.map
+        (lib.mkRenamedOptionModule
+          [
+            "enableHTTPS"
+          ]
+          [
+            "listen"
+            "enableHTTPS"
+          ]
+        )
+      ]
+      ++
+        lib.map
           (
             option:
             lib.mkRemovedOptionModule [ option ] ''
@@ -205,11 +205,11 @@ let
   clientSubmodule =
     { config, ... }:
     {
-      imports =
-        [
-          ../../misc/assertions.nix
-        ]
-        ++ lib.map
+      imports = [
+        ../../misc/assertions.nix
+      ]
+      ++
+        lib.map
           (
             option:
             lib.mkRemovedOptionModule [ option ] ''

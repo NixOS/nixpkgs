@@ -6,6 +6,7 @@
 }:
 let
   inherit (lib)
+    literalExpression
     mkOption
     types
     ;
@@ -52,10 +53,8 @@ let
       mkEntry = name: value: "${escape name} =${mkVal value}";
     in
     lib.concatStringsSep "\n" (
-      lib.mapAttrsToList mkEntry (lib.filterAttrsRecursive (_: value: value != null) cfg.config)
-    )
-    + "\n"
-    + cfg.extraConfig;
+      lib.mapAttrsToList mkEntry (lib.filterAttrsRecursive (_: value: value != null) cfg.settings.main)
+    );
 
   masterCfOptions =
     {
@@ -236,7 +235,7 @@ let
         ""
       ];
 
-      masterCf = lib.mapAttrsToList (lib.const (lib.getAttr "rawEntry")) cfg.masterConfig;
+      masterCf = lib.mapAttrsToList (lib.const (lib.getAttr "rawEntry")) cfg.settings.master;
 
       # A list of the maximum width of the columns across all lines and labels
       maxWidths =
@@ -252,7 +251,8 @@ let
           lines = [
             labels
             labelDefaults
-          ] ++ (map (l: lib.init l ++ [ "" ]) masterCf);
+          ]
+          ++ (map (l: lib.init l ++ [ "" ]) masterCf);
         in
         lib.foldr foldLine (lib.genList (lib.const 0) (lib.length labels)) lines;
 
@@ -340,6 +340,11 @@ in
 
 {
 
+  meta.maintainers = with lib.maintainers; [
+    dotlambda
+    hexa
+  ];
+
   ###### interface
 
   options = {
@@ -352,26 +357,52 @@ in
         description = "Whether to run the Postfix mail server.";
       };
 
+      package = lib.mkPackageOption pkgs "postfix" { };
+
       enableSmtp = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether to enable smtp in master.cf.";
+        description = ''
+          Whether to enable the `smtp` service configured in the master.cf.
+
+          This service listens for plain text SMTP connections on port 25
+          and supports explicit TLS via StartTLS.
+
+          It is the primary port used by SMTP servers to exchange mail.
+        '';
       };
 
       enableSubmission = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description = "Whether to enable smtp submission.";
+        description = "
+          Whether to enable the `submission` service configured in master.cf.
+
+          This service listens for plain text SMTP connections on port 587
+          and supports explicit TLS via StartTLS.
+
+          It is a way for clients to login and submit mails after an inband
+          connection upgrade using StartTLS.
+
+          ::: {.warning}
+          [RFC 8314](https://www.rfc-editor.org/rfc/rfc8314) discourages the use
+          of explicit TLS for mail submissionn.
+          :::
+        ";
       };
 
       enableSubmissions = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to enable smtp submission via smtps.
+          Whether to enable the `submissions` service configured in master.cf.
 
-          According to RFC 8314 this should be preferred
-          over STARTTLS for submission of messages by end user clients.
+          This service listen for implicit TLS connections on port 465.
+
+          ::: {.info}
+          Per [RFC 8314](https://www.rfc-editor.org/rfc/rfc8314) implicit TLS
+          is recommended for mail submission.
+          :::
         '';
       };
 
@@ -443,95 +474,6 @@ in
         '';
       };
 
-      networks = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "192.168.0.1/24" ];
-        description = ''
-          Net masks for trusted - allowed to relay mail to third parties -
-          hosts. Leave empty to use mynetworks_style configuration or use
-          default (localhost-only).
-        '';
-      };
-
-      networksStyle = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Name of standard way of trusted network specification to use,
-          leave blank if you specify it explicitly or if you want to use
-          default (localhost-only).
-        '';
-      };
-
-      hostname = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Hostname to use. Leave blank to use just the hostname of machine.
-          It should be FQDN.
-        '';
-      };
-
-      domain = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Domain to use. Leave blank to use hostname minus first component.
-        '';
-      };
-
-      origin = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Origin to use in outgoing e-mail. Leave blank to use hostname.
-        '';
-      };
-
-      destination = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "localhost" ];
-        description = ''
-          Full (!) list of domains we deliver locally. Leave blank for
-          acceptable Postfix default.
-        '';
-      };
-
-      relayDomains = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
-        default = null;
-        example = [ "localdomain" ];
-        description = ''
-          List of domains we agree to relay to. Default is empty.
-        '';
-      };
-
-      relayHost = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        description = ''
-          Mail relay for outbound mail.
-        '';
-      };
-
-      relayPort = lib.mkOption {
-        type = lib.types.int;
-        default = 25;
-        description = ''
-          SMTP port for relay mail relay.
-        '';
-      };
-
-      lookupMX = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-          Whether relay specified is just domain whose MX must be used.
-        '';
-      };
-
       postmasterAlias = lib.mkOption {
         type = lib.types.str;
         default = "root";
@@ -571,93 +513,255 @@ in
         description = "The format the alias map should have. Use regexp if you want to use regular expressions.";
       };
 
-      config = lib.mkOption {
-        type = lib.types.submodule {
-          freeformType =
-            with types;
-            attrsOf (
-              nullOr (oneOf [
-                bool
-                int
-                str
-                (listOf str)
-              ])
-            );
-          options = {
-            smtpd_tls_chain_files = mkOption {
-              type = with types; listOf path;
-              default = [ ];
-              example = [
-                "/var/lib/acme/mail.example.com/privkey.pem"
-                "/var/lib/acme/mail.example.com/fullchain.pem"
-              ];
-              description = ''
-                List of paths to the server private keys and certificates.
+      settings = {
+        main = lib.mkOption {
+          type = lib.types.submodule {
+            freeformType =
+              with types;
+              attrsOf (
+                nullOr (oneOf [
+                  bool
+                  int
+                  str
+                  (listOf str)
+                ])
+              );
+            options = {
+              message_size_limit = mkOption {
+                type = with types; nullOr int;
+                default = 10240000; # 10 MiB
+                example = 52428800; # 50 MiB
+                description = ''
+                  Maximum size of an email message in bytes.
 
-                ::: {.caution}
-                The order of items matters and a private key must always be followed by the corresponding certificate.
-                :::
+                  <https://www.postfix.org/postconf.5.html#message_size_limit>
+                '';
+              };
 
-                <https://www.postfix.org/postconf.5.html#smtpd_tls_chain_files>
-              '';
+              mydestination = mkOption {
+                type =
+                  with types;
+                  nullOr (oneOf [
+                    str
+                    (listOf str)
+                  ]);
+                default = [
+                  "$myhostname"
+                  "localhost.$mydomain"
+                  "localhost"
+                ];
+                description = ''
+                  List of domain names intended for local delivery using /etc/passwd and /etc/aliases.
+
+                  ::: {.warning}
+                  Do not include [virtual](https://www.postfix.org/VIRTUAL_README.html) domains in this list.
+                  :::
+
+                  <https://www.postfix.org/postconf.5.html#mydestination>
+                '';
+              };
+
+              myhostname = mkOption {
+                type = with types; nullOr types.str;
+                default = null;
+                example = "mail.example.com";
+                description = ''
+                  The internet hostname of this mail system.
+
+                  Leave unset to default to the system hostname with the {option}`mydomain` suffix.
+
+                  <https://www.postfix.org/postconf.5.html#myhostname>
+                '';
+              };
+
+              mynetworks = mkOption {
+                type = with types; nullOr (listOf str);
+                default = null;
+                example = [
+                  "127.0.0.0/8"
+                  "::1"
+                ];
+                description = ''
+                  List of trusted remote SMTP clients, that are allowed to relay mail.
+
+                  Leave unset to let Postfix populate this list based on the {option}`mynetworks_style` setting.
+
+                  <https://www.postfix.org/postconf.5.html#mynetworks>
+                '';
+              };
+
+              mynetworks_style = mkOption {
+                type =
+                  with types;
+                  nullOr (enum [
+                    "host"
+                    "subnet"
+                    "class"
+                  ]);
+                default = "host";
+                description = ''
+                  The method used for generating the default value for {option}`mynetworks`, if that option is unset.
+
+                  <https://www.postfix.org/postconf.5.html#mynetworks_style>
+                '';
+              };
+
+              recipient_delimiter = lib.mkOption {
+                type = with types; nullOr str;
+                default = "";
+                example = "+";
+                description = ''
+                  Set of characters used as the delimiters for address extensions.
+
+                  This allows creating different forwarding rules per extension.
+
+                  <https://www.postfix.org/postconf.5.html#recipient_delimiter>
+                '';
+              };
+
+              relayhost = mkOption {
+                type = with types; nullOr (listOf str);
+                default = [ ];
+                example = [ "[relay.example.com]:587" ];
+                description = ''
+                  List of hosts to use for relaying outbound mail.
+
+                  ::: {.note}
+                  Putting the hostname in angled brackets, e.g. `[relay.example.com]`, turns off MX and SRV lookups for the hostname.
+                  :::
+
+                  <https://www.postfix.org/postconf.5.html#relayhost>
+                '';
+              };
+
+              relay_domains = mkOption {
+                type = with types; nullOr (listOf str);
+                default = [ ];
+                example = [ "lists.example.com" ];
+                description = ''
+                  List of domains delivered via the relay transport.
+
+                  <https://www.postfix.org/postconf.5.html#relay_domains>
+                '';
+              };
+
+              smtp_tls_CAfile = mkOption {
+                type = types.path;
+                default = config.security.pki.caBundle;
+                defaultText = literalExpression ''
+                  config.security.pki.caBundle
+                '';
+                example = literalExpression ''
+                  ''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+                '';
+                description = ''
+                  File containing CA certificates of root CAs trusted to sign either remote SMTP server certificates or intermediate CA certificates.
+
+                  Defaults to the system CA bundle that is managed through the `security.pki` options.
+
+                  <https://www.postfix.org/postconf.5.html#smtp_tls_CAfile>
+                '';
+              };
+
+              smtp_tls_security_level = mkOption {
+                type = types.enum [
+                  "none"
+                  "may"
+                  "encrypt"
+                  "dane"
+                  "dane-only"
+                  "fingerprint"
+                  "verify"
+                  "secure"
+                ];
+                default = "may";
+                description = ''
+                  The client TLS security level.
+
+                  ::: {.tip}
+                  Use `dane` with a local DNSSEC validating DNS resolver enabled.
+                  :::
+
+                  <https://www.postfix.org/postconf.5.html#smtp_tls_security_level>
+                '';
+              };
+
+              smtpd_tls_chain_files = mkOption {
+                type = with types; listOf path;
+                default = [ ];
+                example = [
+                  "/var/lib/acme/mail.example.com/privkey.pem"
+                  "/var/lib/acme/mail.example.com/fullchain.pem"
+                ];
+                description = ''
+                  List of paths to the server private keys and certificates.
+
+                  ::: {.caution}
+                  The order of items matters and a private key must always be followed by the corresponding certificate.
+                  :::
+
+                  <https://www.postfix.org/postconf.5.html#smtpd_tls_chain_files>
+                '';
+              };
+
+              smtpd_tls_security_level = mkOption {
+                type = types.enum [
+                  "none"
+                  "may"
+                  "encrypt"
+                ];
+                default =
+                  if config.services.postfix.settings.main.smtpd_tls_chain_files != [ ] then "may" else "none";
+                defaultText = lib.literalExpression ''
+                  if config.services.postfix.settings.main.smtpd_tls_chain_files != [ ] then "may" else "none"
+                '';
+                example = "may";
+                description = ''
+                  The server TLS security level. Enable TLS by configuring at least `may`.
+
+                  <https://www.postfix.org/postconf.5.html#smtpd_tls_security_level>
+                '';
+              };
             };
+          };
 
-            smtpd_tls_security_level = mkOption {
-              type = types.enum [
-                "none"
-                "may"
-                "encrypt"
-              ];
-              default = if config.services.postfix.config.smtpd_tls_chain_files != [ ] then "may" else "none";
-              defaultText = lib.literalExpression ''
-                if config.services.postfix.config.smtpd_tls_chain_files != [ ] then "may" else "none"
-              '';
-              example = "may";
-              description = ''
-                The server TLS security level. Enable TLS by configuring at least `may`.
+          description = ''
+            The main.cf configuration file as key value set.
 
-                <https://www.postfix.org/postconf.5.html#smtpd_tls_security_level>
-              '';
-            };
+            Null values will not be rendered.
+
+            ::: {.tip}
+            Check `postconf -d` for the default values of all settings.
+            :::
+          '';
+          example = {
+            mail_owner = "postfix";
+            smtp_tls_security_level = "may";
           };
         };
 
-        description = ''
-          The main.cf configuration file as key value set.
+        master = lib.mkOption {
+          type = lib.types.attrsOf (lib.types.submodule masterCfOptions);
+          default = { };
+          example = {
+            submission = {
+              type = "inet";
+              args = [
+                "-o"
+                "smtpd_tls_security_level=encrypt"
+              ];
+            };
+          };
+          description = ''
+            The {file}`master.cf` configuration file as an attribute set of service
+            defitions
 
-          Null values will not be rendered.
-        '';
-        example = {
-          mail_owner = "postfix";
-          smtp_tls_security_level = "may";
+            ::: {.tip}
+            Check <https://www.postfix.org/master.5.html> for possible settings.
+            :::
+          '';
         };
-      };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-          Extra lines to be added verbatim to the main.cf configuration file.
-        '';
-      };
-
-      tlsTrustedAuthorities = lib.mkOption {
-        type = lib.types.str;
-        default = config.security.pki.caBundle;
-        defaultText = lib.literalExpression "config.security.pki.caBundle";
-        example = lib.literalExpression ''"''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"'';
-        description = ''
-          File containing trusted certification authorities (CA) to verify certificates of mailservers contacted for mail delivery. This sets [smtp_tls_CAfile](https://www.postfix.org/postconf.5.html#smtp_tls_CAfile). Defaults to system trusted certificates (see `security.pki.*` options).
-        '';
-      };
-
-      recipientDelimiter = lib.mkOption {
-        type = lib.types.str;
-        default = "";
-        example = "+";
-        description = ''
-          Delimiter for address extension: so mail to user+test can be handled by ~user/.forward+test
-        '';
       };
 
       canonical = lib.mkOption {
@@ -705,7 +809,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Entries for the transport map, cf. man-page {manpage}`transport(8)`.
+          Entries for the transport map, cf. man-page {manpage}`transport(5)`.
         '';
       };
 
@@ -719,25 +823,6 @@ in
         default = "";
         type = lib.types.lines;
         description = "contents of check_client_access for overriding dnsBlacklists";
-      };
-
-      masterConfig = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.submodule masterCfOptions);
-        default = { };
-        example = {
-          submission = {
-            type = "inet";
-            args = [
-              "-o"
-              "smtpd_tls_security_level=encrypt"
-            ];
-          };
-        };
-        description = ''
-          An attribute set of service options, which correspond to the service
-          definitions usually done within the Postfix
-          {file}`master.cf` file.
-        '';
       };
 
       extraMasterConf = lib.mkOption {
@@ -785,12 +870,6 @@ in
         description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
-      useSrs = lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = "Whether to enable sender rewriting scheme";
-      };
-
     };
 
   };
@@ -805,14 +884,12 @@ in
           etc.postfix.source = "/var/lib/postfix/conf";
 
           # This makes it comfortable to run 'postqueue/postdrop' for example.
-          systemPackages = [ pkgs.postfix ];
+          systemPackages = [ cfg.package ];
         };
-
-        services.pfix-srsd.enable = config.services.postfix.useSrs;
 
         services.mail.sendmailSetuidWrapper = lib.mkIf config.services.postfix.setSendmail {
           program = "sendmail";
-          source = "${pkgs.postfix}/bin/sendmail";
+          source = lib.getExe' cfg.package "sendmail";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -821,7 +898,7 @@ in
 
         security.wrappers.mailq = {
           program = "mailq";
-          source = "${pkgs.postfix}/bin/mailq";
+          source = lib.getExe' cfg.package "mailq";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -830,7 +907,7 @@ in
 
         security.wrappers.postqueue = {
           program = "postqueue";
-          source = "${pkgs.postfix}/bin/postqueue";
+          source = lib.getExe' cfg.package "postqueue";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -839,7 +916,7 @@ in
 
         security.wrappers.postdrop = {
           program = "postdrop";
-          source = "${pkgs.postfix}/bin/postdrop";
+          source = lib.getExe' cfg.package "postdrop";
           owner = "root";
           group = setgidGroup;
           setuid = false;
@@ -873,7 +950,7 @@ in
               mv /var/postfix /var/lib/postfix
             fi
 
-            # All permissions set according ${pkgs.postfix}/etc/postfix/postfix-files script
+            # All permissions set according ${cfg.package}/etc/postfix/postfix-files script
             mkdir -p /var/lib/postfix /var/lib/postfix/queue/{pid,public,maildrop}
             chmod 0755 /var/lib/postfix
             chown root:root /var/lib/postfix
@@ -881,20 +958,20 @@ in
             rm -rf /var/lib/postfix/conf
             mkdir -p /var/lib/postfix/conf
             chmod 0755 /var/lib/postfix/conf
-            ln -sf ${pkgs.postfix}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
+            ln -sf ${cfg.package}/etc/postfix/postfix-files /var/lib/postfix/conf/postfix-files
             ln -sf ${mainCfFile} /var/lib/postfix/conf/main.cf
             ln -sf ${masterCfFile} /var/lib/postfix/conf/master.cf
 
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postalias -o -p /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postalias"} -o -p /var/lib/postfix/conf/${to}
               '') cfg.aliasFiles
             )}
             ${lib.concatStringsSep "\n" (
               lib.mapAttrsToList (to: from: ''
                 ln -sf ${from} /var/lib/postfix/conf/${to}
-                ${pkgs.postfix}/bin/postmap /var/lib/postfix/conf/${to}
+                ${lib.getExe' cfg.package "postmap"} -o -p /var/lib/postfix/conf/${to}
               '') cfg.mapFiles
             )}
 
@@ -904,7 +981,7 @@ in
             ln -sf /var/spool/mail /var/
 
             #Finally delegate to postfix checking remain directories in /var/lib/postfix and set permissions on them
-            ${pkgs.postfix}/bin/postfix set-permissions config_directory=/var/lib/postfix/conf
+            ${lib.getExe' cfg.package "postfix"} set-permissions config_directory=/var/lib/postfix/conf
           '';
         };
 
@@ -918,15 +995,15 @@ in
             "postfix-setup.service"
           ];
           requires = [ "postfix-setup.service" ];
-          path = [ pkgs.postfix ];
+          path = [ cfg.package ];
 
           serviceConfig = {
             Type = "forking";
             Restart = "always";
             PIDFile = "/var/lib/postfix/queue/pid/master.pid";
-            ExecStart = "${pkgs.postfix}/bin/postfix start";
-            ExecStop = "${pkgs.postfix}/bin/postfix stop";
-            ExecReload = "${pkgs.postfix}/bin/postfix reload";
+            ExecStart = "${lib.getExe' cfg.package "postfix"} start";
+            ExecStop = "${lib.getExe' cfg.package "postfix"} stop";
+            ExecReload = "${lib.getExe' cfg.package "postfix"} reload";
 
             # Hardening
             PrivateTmp = true;
@@ -948,9 +1025,9 @@ in
           };
         };
 
-        services.postfix.config =
+        services.postfix.settings.main =
           (lib.mapAttrs (_: v: lib.mkDefault v) {
-            compatibility_level = pkgs.postfix.version;
+            compatibility_level = cfg.package.version;
             mail_owner = cfg.user;
             default_privs = "nobody";
 
@@ -959,38 +1036,20 @@ in
             queue_directory = "/var/lib/postfix/queue";
 
             # Default location of everything in package
-            meta_directory = "${pkgs.postfix}/etc/postfix";
-            command_directory = "${pkgs.postfix}/bin";
+            meta_directory = "${cfg.package}/etc/postfix";
+            command_directory = "${cfg.package}/bin";
             sample_directory = "/etc/postfix";
-            newaliases_path = "${pkgs.postfix}/bin/newaliases";
-            mailq_path = "${pkgs.postfix}/bin/mailq";
+            newaliases_path = lib.getExe' cfg.package "newaliases";
+            mailq_path = lib.getExe' cfg.package "mailq";
             readme_directory = false;
-            sendmail_path = "${pkgs.postfix}/bin/sendmail";
-            daemon_directory = "${pkgs.postfix}/libexec/postfix";
-            manpage_directory = "${pkgs.postfix}/share/man";
-            html_directory = "${pkgs.postfix}/share/postfix/doc/html";
+            sendmail_path = lib.getExe' cfg.package "sendmail";
+            daemon_directory = "${cfg.package}/libexec/postfix";
+            manpage_directory = "${cfg.package}/share/man";
+            html_directory = "${cfg.package}/share/postfix/doc/html";
             shlib_directory = false;
             mail_spool_directory = "/var/spool/mail/";
             setgid_group = cfg.setgidGroup;
           })
-          // lib.optionalAttrs (cfg.relayHost != "") {
-            relayhost =
-              if cfg.lookupMX then
-                "${cfg.relayHost}:${toString cfg.relayPort}"
-              else
-                "[${cfg.relayHost}]:${toString cfg.relayPort}";
-          }
-          // lib.optionalAttrs (!config.networking.enableIPv6) { inet_protocols = lib.mkDefault "ipv4"; }
-          // lib.optionalAttrs (cfg.networks != null) { mynetworks = cfg.networks; }
-          // lib.optionalAttrs (cfg.networksStyle != "") { mynetworks_style = cfg.networksStyle; }
-          // lib.optionalAttrs (cfg.hostname != "") { myhostname = cfg.hostname; }
-          // lib.optionalAttrs (cfg.domain != "") { mydomain = cfg.domain; }
-          // lib.optionalAttrs (cfg.origin != "") { myorigin = cfg.origin; }
-          // lib.optionalAttrs (cfg.destination != null) { mydestination = cfg.destination; }
-          // lib.optionalAttrs (cfg.relayDomains != null) { relay_domains = cfg.relayDomains; }
-          // lib.optionalAttrs (cfg.recipientDelimiter != "") {
-            recipient_delimiter = cfg.recipientDelimiter;
-          }
           // lib.optionalAttrs haveAliases { alias_maps = [ "${cfg.aliasMapType}:/etc/postfix/aliases" ]; }
           // lib.optionalAttrs haveTransport { transport_maps = [ "hash:/etc/postfix/transport" ]; }
           // lib.optionalAttrs haveVirtual {
@@ -999,155 +1058,145 @@ in
           // lib.optionalAttrs haveLocalRecipients {
             local_recipient_maps = [
               "hash:/etc/postfix/local_recipients"
-            ] ++ lib.optional haveAliases "$alias_maps";
+            ]
+            ++ lib.optional haveAliases "$alias_maps";
           }
           // lib.optionalAttrs (cfg.dnsBlacklists != [ ]) { smtpd_client_restrictions = clientRestrictions; }
-          // lib.optionalAttrs cfg.useSrs {
-            sender_canonical_maps = [ "tcp:127.0.0.1:10001" ];
-            sender_canonical_classes = [ "envelope_sender" ];
-            recipient_canonical_maps = [ "tcp:127.0.0.1:10002" ];
-            recipient_canonical_classes = [ "envelope_recipient" ];
-          }
           // lib.optionalAttrs cfg.enableHeaderChecks {
             header_checks = [ "regexp:/etc/postfix/header_checks" ];
-          }
-          // lib.optionalAttrs (cfg.tlsTrustedAuthorities != "") {
-            smtp_tls_CAfile = cfg.tlsTrustedAuthorities;
-            smtp_tls_security_level = lib.mkDefault "may";
           };
 
-        services.postfix.masterConfig =
-          {
-            pickup = {
-              private = false;
-              wakeup = 60;
-              maxproc = 1;
-            };
-            cleanup = {
-              private = false;
-              maxproc = 0;
-            };
-            qmgr = {
-              private = false;
-              wakeup = 300;
-              maxproc = 1;
-            };
-            tlsmgr = {
-              wakeup = 1000;
-              wakeupUnusedComponent = false;
-              maxproc = 1;
-            };
-            rewrite = {
-              command = "trivial-rewrite";
-            };
-            bounce = {
-              maxproc = 0;
-            };
-            defer = {
-              maxproc = 0;
-              command = "bounce";
-            };
-            trace = {
-              maxproc = 0;
-              command = "bounce";
-            };
-            verify = {
-              maxproc = 1;
-            };
-            flush = {
-              private = false;
-              wakeup = 1000;
-              wakeupUnusedComponent = false;
-              maxproc = 0;
-            };
-            proxymap = {
-              command = "proxymap";
-            };
-            proxywrite = {
-              maxproc = 1;
-              command = "proxymap";
-            };
-            showq = {
-              private = false;
-            };
-            error = { };
-            retry = {
-              command = "error";
-            };
-            discard = { };
-            local = {
-              privileged = true;
-            };
-            virtual = {
-              privileged = true;
-            };
-            lmtp = {
-            };
-            anvil = {
-              maxproc = 1;
-            };
-            scache = {
-              maxproc = 1;
-            };
-          }
-          // lib.optionalAttrs cfg.enableSubmission {
-            submission = {
-              type = "inet";
-              private = false;
-              command = "smtpd";
-              args =
-                let
-                  mkKeyVal = opt: val: [
-                    "-o"
-                    (opt + "=" + val)
-                  ];
-                in
-                lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
-            };
-          }
-          // lib.optionalAttrs cfg.enableSmtp {
-            smtp_inet = {
-              name = "smtp";
-              type = "inet";
-              private = false;
-              command = "smtpd";
-            };
-            smtp = { };
-            relay = {
-              command = "smtp";
-              args = [
-                "-o"
-                "smtp_fallback_relay="
-              ];
-            };
-          }
-          // lib.optionalAttrs cfg.enableSubmissions {
-            submissions = {
-              type = "inet";
-              private = false;
-              command = "smtpd";
-              args =
-                let
-                  mkKeyVal = opt: val: [
-                    "-o"
-                    (opt + "=" + val)
-                  ];
-                  adjustSmtpTlsSecurityLevel =
-                    !(cfg.submissionsOptions ? smtpd_tls_security_level)
-                    || cfg.submissionsOptions.smtpd_tls_security_level == "none"
-                    || cfg.submissionsOptions.smtpd_tls_security_level == "may";
-                  submissionsOptions =
-                    cfg.submissionsOptions
-                    // {
-                      smtpd_tls_wrappermode = "yes";
-                    }
-                    // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
-                      smtpd_tls_security_level = "encrypt";
-                    };
-                in
-                lib.concatLists (lib.mapAttrsToList mkKeyVal submissionsOptions);
-            };
+        services.postfix.settings.master = {
+          pickup = {
+            private = false;
+            wakeup = 60;
+            maxproc = 1;
           };
+          cleanup = {
+            private = false;
+            maxproc = 0;
+          };
+          qmgr = {
+            private = false;
+            wakeup = 300;
+            maxproc = 1;
+          };
+          tlsmgr = {
+            wakeup = 1000;
+            wakeupUnusedComponent = false;
+            maxproc = 1;
+          };
+          rewrite = {
+            command = "trivial-rewrite";
+          };
+          bounce = {
+            maxproc = 0;
+          };
+          defer = {
+            maxproc = 0;
+            command = "bounce";
+          };
+          trace = {
+            maxproc = 0;
+            command = "bounce";
+          };
+          verify = {
+            maxproc = 1;
+          };
+          flush = {
+            private = false;
+            wakeup = 1000;
+            wakeupUnusedComponent = false;
+            maxproc = 0;
+          };
+          proxymap = {
+            command = "proxymap";
+          };
+          proxywrite = {
+            maxproc = 1;
+            command = "proxymap";
+          };
+          showq = {
+            private = false;
+          };
+          error = { };
+          retry = {
+            command = "error";
+          };
+          discard = { };
+          local = {
+            privileged = true;
+          };
+          virtual = {
+            privileged = true;
+          };
+          lmtp = {
+          };
+          anvil = {
+            maxproc = 1;
+          };
+          scache = {
+            maxproc = 1;
+          };
+        }
+        // lib.optionalAttrs cfg.enableSubmission {
+          submission = {
+            type = "inet";
+            private = false;
+            command = "smtpd";
+            args =
+              let
+                mkKeyVal = opt: val: [
+                  "-o"
+                  (opt + "=" + val)
+                ];
+              in
+              lib.concatLists (lib.mapAttrsToList mkKeyVal cfg.submissionOptions);
+          };
+        }
+        // lib.optionalAttrs cfg.enableSmtp {
+          smtp_inet = {
+            name = "smtp";
+            type = "inet";
+            private = false;
+            command = "smtpd";
+          };
+          smtp = { };
+          relay = {
+            command = "smtp";
+            args = [
+              "-o"
+              "smtp_fallback_relay="
+            ];
+          };
+        }
+        // lib.optionalAttrs cfg.enableSubmissions {
+          submissions = {
+            type = "inet";
+            private = false;
+            command = "smtpd";
+            args =
+              let
+                mkKeyVal = opt: val: [
+                  "-o"
+                  (opt + "=" + val)
+                ];
+                adjustSmtpTlsSecurityLevel =
+                  !(cfg.submissionsOptions ? smtpd_tls_security_level)
+                  || cfg.submissionsOptions.smtpd_tls_security_level == "none"
+                  || cfg.submissionsOptions.smtpd_tls_security_level == "may";
+                submissionsOptions =
+                  cfg.submissionsOptions
+                  // {
+                    smtpd_tls_wrappermode = "yes";
+                  }
+                  // lib.optionalAttrs adjustSmtpTlsSecurityLevel {
+                    smtpd_tls_security_level = "encrypt";
+                  };
+              in
+              lib.concatLists (lib.mapAttrsToList mkKeyVal submissionsOptions);
+          };
+        };
       }
 
       (lib.mkIf haveAliases {
@@ -1176,19 +1225,76 @@ in
 
   imports = [
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslCACert" ]
-      "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.extraConfig."
+      "services.postfix.sslCACert was replaced by services.postfix.tlsTrustedAuthorities. In case you intend that your server should validate requested client certificates use services.postfix.settings.main.smtp_tls_CAfile."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslCert" ]
-      "services.postfix.sslCert was removed. Use services.postfix.config.smtpd_tls_chain_files for the server certificate, or services.postfix.config.smtp_tls_chain_files for the client certificate."
+      "services.postfix.sslCert was removed. Use services.postfix.settings.main.smtpd_tls_chain_files for the server certificate, or services.postfix.settings.main.smtp_tls_chain_files for the client certificate."
     )
     (lib.mkRemovedOptionModule [ "services" "postfix" "sslKey" ]
-      "services.postfix.sslKey was removed. Use services.postfix.config.smtpd_tls_chain_files for server private key, or services.postfix.config.smtp_tls_chain_files for the client private key."
+      "services.postfix.sslKey was removed. Use services.postfix.settings.main.smtpd_tls_chain_files for server private key, or services.postfix.settings.main.smtp_tls_chain_files for the client private key."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "lookupMX" ]
+      "services.postfix.lookupMX was removed. Use services.postfix.settings.main.relayhost and put the hostname in angled brackets, if you need to turn off MX and SRV lookups."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "relayHost" ]
+      "services.postfix.relayHost was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host:port."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "relayPort" ]
+      "services.postfix.relayPort was removed in favor of services.postfix.settings.main.relayhost, which now takes a list of host:port."
+    )
+    (lib.mkRemovedOptionModule [ "services" "postfix" "extraConfig" ]
+      "services.postfix.extraConfig was replaced by the structured freeform service.postfix.settings.main option."
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "networks" ]
+      [ "services" "postfix" "settings" "main" "mynetworks" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "networksStyle" ]
+      [ "services" "postfix" "settings" "main" "mynetworks_style" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "hostname" ]
+      [ "services" "postfix" "settings" "main" "myhostname" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "domain" ]
+      [ "services" "postfix" "settings" "main" "mydomain" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "origin" ]
+      [ "services" "postfix" "settings" "main" "myorigin" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "destination" ]
+      [ "services" "postfix" "settings" "main" "mydestination" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "relayDomains" ]
+      [ "services" "postfix" "settings" "main" "relay_domains" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "recipientDelimiter" ]
+      [ "services" "postfix" "settings" "main" "recipient_delimiter" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "tlsTrustedAuthoriies" ]
+      [ "services" "postfix" "settings" "main" "smtp_tls_CAfile" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "config" ]
+      [ "services" "postfix" "settings" "main" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "postfix" "masterConfig" ]
+      [ "services" "postfix" "settings" "master" ]
     )
 
     (lib.mkChangedOptionModule
       [ "services" "postfix" "useDane" ]
-      [ "services" "postfix" "config" "smtp_tls_security_level" ]
+      [ "services" "postfix" "settings" "main" "smtp_tls_security_level" ]
       (config: lib.mkIf config.services.postfix.useDane "dane")
     )
+    (lib.mkRenamedOptionModule [ "services" "postfix" "useSrs" ] [ "services" "pfix-srsd" "enable" ])
   ];
 }

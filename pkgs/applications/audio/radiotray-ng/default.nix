@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   # Transport
@@ -51,13 +50,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "radiotray-ng";
-  version = "0.2.8";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "ebruck";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-/0GlQdSsIPKGrDT9CgxvaH8TpAbqxFduwL2A2+BSrEI=";
+    repo = "radiotray-ng";
+    tag = "v${version}";
+    hash = "sha256-rRD/IfVnOxowr2mO2BB2hcHK5ByZSmTbcgYdULogYUs=";
   };
 
   nativeBuildInputs = [
@@ -67,33 +66,28 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      curl
-      boost
-      jsoncpp
-      libbsd
-      glibmm
-      hicolor-icon-theme
-      gsettings-desktop-schemas
-      libappindicator-gtk3
-      libnotify
-      libxdg_basedir
-      lsb-release
-      wxGTK
-      # for https gstreamer / libsoup
-      glib-networking
-    ]
-    ++ gstInputs
-    ++ pythonInputs;
+  buildInputs = [
+    curl
+    boost
+    jsoncpp
+    libbsd
+    glibmm
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libappindicator-gtk3
+    libnotify
+    libxdg_basedir
+    lsb-release
+    wxGTK
+    # for https gstreamer / libsoup
+    glib-networking
+  ]
+  ++ gstInputs
+  ++ pythonInputs;
 
   patches = [
     ./no-dl-googletest.patch
-    (fetchpatch {
-      name = "gcc13-fixes.patch";
-      url = "https://github.com/ebruck/radiotray-ng/commit/7a99bfa784f77be8f160961d25ab63dc2d5ccde0.patch";
-      hash = "sha256-7x3v0dp9WPgd/vsnxezgXIZGsBrIHkTwIiu+FMlLmyA=";
-    })
+    ./tests-c++17.patch
   ];
 
   postPatch = ''
@@ -124,11 +118,11 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/rt2rtng --prefix PYTHONPATH : $PYTHONPATH
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Internet radio player for linux";
     homepage = "https://github.com/ebruck/radiotray-ng";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

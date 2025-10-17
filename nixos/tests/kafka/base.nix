@@ -9,81 +9,80 @@ let
       kafkaPackage,
       mode ? "kraft",
     }:
-    (import ../make-test-python.nix ({
+    (import ../make-test-python.nix {
       inherit name;
       meta = with pkgs.lib.maintainers; {
         maintainers = [ nequissimus ];
       };
 
-      nodes =
-        {
-          kafka =
-            { ... }:
-            {
-              services.apache-kafka = mkMerge [
-                ({
-                  enable = true;
-                  package = kafkaPackage;
-                  settings = {
-                    "offsets.topic.replication.factor" = 1;
-                    "log.dirs" = [
-                      "/var/lib/kafka/logdir1"
-                      "/var/lib/kafka/logdir2"
-                    ];
-                  };
-                })
-                (mkIf (mode == "zookeeper") {
-                  settings = {
-                    "zookeeper.session.timeout.ms" = 600000;
-                    "zookeeper.connect" = [ "zookeeper1:2181" ];
-                  };
-                })
-                (mkIf (mode == "kraft") {
-                  clusterId = "ak2fIHr4S8WWarOF_ODD0g";
-                  formatLogDirs = true;
-                  settings = {
-                    "node.id" = 1;
-                    "process.roles" = [
-                      "broker"
-                      "controller"
-                    ];
-                    "listeners" = [
-                      "PLAINTEXT://:9092"
-                      "CONTROLLER://:9093"
-                    ];
-                    "listener.security.protocol.map" = [
-                      "PLAINTEXT:PLAINTEXT"
-                      "CONTROLLER:PLAINTEXT"
-                    ];
-                    "controller.quorum.voters" = [
-                      "1@kafka:9093"
-                    ];
-                    "controller.listener.names" = [ "CONTROLLER" ];
-                  };
-                })
-              ];
-
-              networking.firewall.allowedTCPPorts = [
-                9092
-                9093
-              ];
-              virtualisation.diskSize = 1024;
-              # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
-              virtualisation.memorySize = 2047;
-            };
-        }
-        // optionalAttrs (mode == "zookeeper") {
-          zookeeper1 =
-            { ... }:
-            {
-              services.zookeeper = {
+      nodes = {
+        kafka =
+          { ... }:
+          {
+            services.apache-kafka = mkMerge [
+              {
                 enable = true;
-              };
+                package = kafkaPackage;
+                settings = {
+                  "offsets.topic.replication.factor" = 1;
+                  "log.dirs" = [
+                    "/var/lib/kafka/logdir1"
+                    "/var/lib/kafka/logdir2"
+                  ];
+                };
+              }
+              (mkIf (mode == "zookeeper") {
+                settings = {
+                  "zookeeper.session.timeout.ms" = 600000;
+                  "zookeeper.connect" = [ "zookeeper1:2181" ];
+                };
+              })
+              (mkIf (mode == "kraft") {
+                clusterId = "ak2fIHr4S8WWarOF_ODD0g";
+                formatLogDirs = true;
+                settings = {
+                  "node.id" = 1;
+                  "process.roles" = [
+                    "broker"
+                    "controller"
+                  ];
+                  "listeners" = [
+                    "PLAINTEXT://:9092"
+                    "CONTROLLER://:9093"
+                  ];
+                  "listener.security.protocol.map" = [
+                    "PLAINTEXT:PLAINTEXT"
+                    "CONTROLLER:PLAINTEXT"
+                  ];
+                  "controller.quorum.voters" = [
+                    "1@kafka:9093"
+                  ];
+                  "controller.listener.names" = [ "CONTROLLER" ];
+                };
+              })
+            ];
 
-              networking.firewall.allowedTCPPorts = [ 2181 ];
-              virtualisation.diskSize = 1024;
+            networking.firewall.allowedTCPPorts = [
+              9092
+              9093
+            ];
+            virtualisation.diskSize = 1024;
+            # i686 tests: qemu-system-i386 can simulate max 2047MB RAM (not 2048)
+            virtualisation.memorySize = 2047;
+          };
+      }
+      // optionalAttrs (mode == "zookeeper") {
+        zookeeper1 =
+          { ... }:
+          {
+            services.zookeeper = {
+              enable = true;
             };
-        };
+
+            networking.firewall.allowedTCPPorts = [ 2181 ];
+            virtualisation.diskSize = 1024;
+          };
+      };
 
       testScript = ''
         start_all()
@@ -114,23 +113,16 @@ let
             + "--from-beginning --max-messages 1"
         )
       '';
-    }));
+    });
 
 in
 with pkgs;
 {
-  kafka_3_7 = makeKafkaTest "kafka_3_7" {
-    kafkaPackage = apacheKafka_3_7;
-    mode = "zookeeper";
-  };
-  kafka_3_8 = makeKafkaTest "kafka_3_8" {
-    kafkaPackage = apacheKafka_3_8;
-    mode = "zookeeper";
-  };
   kafka_3_9 = makeKafkaTest "kafka_3_9" {
     kafkaPackage = apacheKafka_3_9;
     mode = "zookeeper";
   };
   kafka_4_0 = makeKafkaTest "kafka_4_0" { kafkaPackage = apacheKafka_4_0; };
+  kafka_4_1 = makeKafkaTest "kafka_4_1" { kafkaPackage = apacheKafka_4_1; };
   kafka = makeKafkaTest "kafka" { kafkaPackage = apacheKafka; };
 }

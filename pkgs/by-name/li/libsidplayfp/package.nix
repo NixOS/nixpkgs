@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   makeFontsConf,
-  nix-update-script,
+  gitUpdater,
   testers,
   autoreconfHook,
   docSupport ? true,
@@ -13,20 +13,19 @@
   libgcrypt,
   perl,
   pkg-config,
-  unittest-cpp,
   xa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libsidplayfp";
-  version = "2.14.0";
+  version = "2.15.1";
 
   src = fetchFromGitHub {
     owner = "libsidplayfp";
     repo = "libsidplayfp";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-q1cUv4gpzL3wfssP7pWtDfDzFO47+kzpGy4GYLzEM50=";
+    hash = "sha256-wnbQy0PHHpkgNm3SC7GZyxSAUYd5eexVY9Dg1oiCjRo=";
   };
 
   outputs = [ "out" ] ++ lib.optionals docSupport [ "doc" ];
@@ -37,24 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      autoreconfHook
-      perl
-      pkg-config
-      xa
-    ]
-    ++ lib.optionals docSupport [
-      doxygen
-      graphviz
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    perl
+    pkg-config
+    xa
+  ]
+  ++ lib.optionals docSupport [
+    doxygen
+    graphviz
+  ];
 
   buildInputs = [
     libexsid
     libgcrypt
   ];
-
-  checkInputs = [ unittest-cpp ];
 
   enableParallelBuilding = true;
 
@@ -86,7 +82,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-    updateScript = nix-update-script { };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+    };
   };
 
   meta = {

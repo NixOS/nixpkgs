@@ -64,23 +64,22 @@ let
           python3
         ];
 
-        buildInputs =
-          [
-            zlib
-            apr
-            aprutil
-            sqlite
-            openssl
-            lz4
-            utf8proc
-          ]
-          ++ lib.optional httpSupport serf
-          ++ lib.optionals pythonBindings [
-            python3
-            py3c
-          ]
-          ++ lib.optional perlBindings perl
-          ++ lib.optional saslSupport sasl;
+        buildInputs = [
+          zlib
+          apr
+          aprutil
+          sqlite
+          openssl
+          lz4
+          utf8proc
+        ]
+        ++ lib.optional httpSupport serf
+        ++ lib.optionals pythonBindings [
+          python3
+          py3c
+        ]
+        ++ lib.optional perlBindings perl
+        ++ lib.optional saslSupport sasl;
 
         patches = [ ./apr-1.patch ] ++ extraPatches;
 
@@ -99,22 +98,21 @@ let
           ./autogen.sh
         '';
 
-        configureFlags =
-          [
-            (lib.withFeature bdbSupport "berkeley-db")
-            (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
-            (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
-            (lib.withFeatureAs saslSupport "sasl" sasl)
-            (lib.withFeatureAs httpSupport "serf" serf)
-            "--with-zlib=${zlib.dev}"
-            "--with-sqlite=${sqlite.dev}"
-            "--with-apr=${apr.dev}"
-            "--with-apr-util=${aprutil.dev}"
-          ]
-          ++ lib.optionals javahlBindings [
-            "--enable-javahl"
-            "--with-jdk=${jdk}"
-          ];
+        configureFlags = [
+          (lib.withFeature bdbSupport "berkeley-db")
+          (lib.withFeatureAs httpServer "apxs" "${apacheHttpd.dev}/bin/apxs")
+          (lib.withFeatureAs (pythonBindings || perlBindings) "swig" swig)
+          (lib.withFeatureAs saslSupport "sasl" sasl)
+          (lib.withFeatureAs httpSupport "serf" serf)
+          "--with-zlib=${zlib.dev}"
+          "--with-sqlite=${sqlite.dev}"
+          "--with-apr=${apr.dev}"
+          "--with-apr-util=${aprutil.dev}"
+        ]
+        ++ lib.optionals javahlBindings [
+          "--enable-javahl"
+          "--with-jdk=${jdk}"
+        ];
 
         preBuild = ''
           makeFlagsArray=(APACHE_LIBEXECDIR=$out/modules)

@@ -25,7 +25,7 @@ pkgs.linux_latest.override {
   ignoreConfigErrors = true;
   autoModules = false;
   kernelPreferBuiltin = true;
-  extraStructuredConfig = with lib.kernel; {
+  structuredExtraConfig = with lib.kernel; {
     DEBUG_KERNEL = yes;
     FRAME_POINTER = yes;
     KGDB = yes;
@@ -105,3 +105,56 @@ $ make -C $dev/lib/modules/*/build M=$(pwd)/drivers/net/ethernet/mellanox module
 ```
 
 :::
+
+## Maintainer information {#sec-linux-kernel-maintainer-information}
+
+### Updating kernels {#sec-linux-updates}
+
+Updating all kernels can be done with the following script:
+
+```ShellSession
+$ pkgs/os-specific/linux/kernel/update.sh
+```
+
+The change gets submitted like this:
+
+* File a PR against `staging-nixos`.
+  * Add a `backport release-XX.XX` label for an automated backport.
+    We don't expect many other changes on that branch to require a backport, hence there's no such branch for stable.
+    By using an additional PR, we get the automatic backport against stable without manual cherry-picks.
+* Merge into `staging-nixos`.
+* File as PR from `staging-nixos` against `master`.
+* When all status checks are green, merge.
+
+### Add a new (major) version of the Linux kernel {#sec-linux-add-new-kernel-version}
+
+* When running `./pkgs/os-specific/linux/kernel/update.sh`, new kernel majors get discovered automatically.
+* Prepare all Nix expressions for the new kernel
+  * Instantiate the new kernel in `pkgs/top-level/linux-kernels.nix` in the `kernels`-section.
+    ```nix
+    {
+      linux_X_Y = callPackage ../os-specific/linux/kernel/mainline.nix {
+        branch = "X.Y";
+        kernelPatches = [
+          # any new patches required (it makes to look which patches are used by its predecessor)
+        ];
+      };
+    }
+    ```
+  * Instantiate the package-set in `vanillaPackages`:
+    ```nix
+    {
+      linux_X_Y = recurseIntoAttrs (packagesFor kernels.linux_X_Y);
+    }
+    ```
+  * Update `linux_latest` to the new attribute.
+* __SQUASH__ the changes into the `linux: init at …` commit.
+* If a new hardened is available:
+  * Instantiate a `linux_X_Y_hardened = hardenedKernelsFor kernels.linux_X_Y { };` in `kernels` and
+    `linux_X_Y_hardened = hardenedKernelFor kernels.linux_X_Y { };` in the `packages`-section.
+  * Make sure to remove the hardened variant of the previous kernel version unless it's LTS.
+    We only support the latest and latest LTS version of hardened.
+* If no new hardened kernel is available:
+  * Keep the previously latest kernel until its mainline counterpart gets removed.
+    After that `linux_hardened` points to the latest LTS supported by hardened.
+* __SQUASH__ the changes into the `linux_X_Y_hardened: init at …` commit.

@@ -6,27 +6,27 @@
   dnsutils,
   coreutils,
   openssl,
-  nettools,
+  net-tools,
   util-linux,
   procps,
 }:
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.2.1";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = "testssl.sh";
     rev = "v${version}";
-    sha256 = "sha256-jVrEgTgAvu/N0Ijdl4Lya05Q/af7jGTlJBNiYt1X3tI=";
+    sha256 = "sha256-zPqGCcWRwTYl7cGnrv9a5KOMe75xzU2xvf5z+Nqwfb0=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     coreutils # for printf
     dnsutils # for dig
-    nettools # for hostname
+    net-tools # for hostname
     openssl # for openssl
     procps # for ps
     util-linux # for hexdump
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://testssl.sh/";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ etu ];
+    maintainers = [ ];
     mainProgram = "testssl.sh";
   };
 }

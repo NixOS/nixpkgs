@@ -33,7 +33,7 @@
   netcdf,
   cfitsio,
   libcerf,
-  cantor,
+  # cantor,
   zlib,
   lz4,
   readstat,
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     netcdf
     cfitsio
     libcerf
-    cantor
+    # cantor
     zlib
     lz4
     readstat
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    description = "LabPlot is a FREE, open source and cross-platform Data Visualization and Analysis software accessible to everyone";
+    description = "Free, open source and cross-platform data visualization and analysis software accessible to everyone";
     homepage = "https://labplot.kde.org";
     license = with licenses; [
       asl20

@@ -102,21 +102,32 @@ let
           hash = "sha256-X4fbYTMS+kHfZRbeGzSdBW5jQKw8UN44FEyFRUtw0qo=";
         })
       ];
-      postPatch = "";
+      postPatch = ''
+        # Fix multiple definition errors by using C++17 instead of C++11
+        substituteInPlace CMakeLists.txt \
+          --replace "set(CMAKE_CXX_STANDARD 11)" "set(CMAKE_CXX_STANDARD 17)"
+        # Fix the build with CMake 4.
+        # See:
+        # * <https://github.com/webmproject/sjpeg/commit/9990bdceb22612a62f1492462ef7423f48154072>
+        # * <https://github.com/webmproject/sjpeg/commit/94e0df6d0f8b44228de5be0ff35efb9f946a13c9>
+        substituteInPlace third_party/sjpeg/CMakeLists.txt \
+          --replace-fail \
+            'cmake_minimum_required(VERSION 2.8.7)' \
+            'cmake_minimum_required(VERSION 3.5...3.10)'
+      '';
       postInstall = "";
 
-      cmakeFlags =
-        [
-          "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
-          "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
-          "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isStatic [
-          "-DJPEGXL_STATIC=ON"
-        ]
-        ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-          "-DJPEGXL_FORCE_NEON=ON"
-        ];
+      cmakeFlags = [
+        "-DJPEGXL_FORCE_SYSTEM_BROTLI=ON"
+        "-DJPEGXL_FORCE_SYSTEM_HWY=ON"
+        "-DJPEGXL_FORCE_SYSTEM_GTEST=ON"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isStatic [
+        "-DJPEGXL_STATIC=ON"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+        "-DJPEGXL_FORCE_NEON=ON"
+      ];
     }
   );
   webkit-linux = stdenv.mkDerivation {
@@ -126,8 +137,8 @@ let
       stripRoot = false;
       hash =
         {
-          x86_64-linux = "sha256-lwH783B3/laqw0IdGBnVzvySRoF0AwZsSolaqUKmsM4=";
-          aarch64-linux = "sha256-qtvP0bc5rcZcz6SqigfdrjhTWEmvT4k11I1GW1Eoj/Q=";
+          x86_64-linux = "sha256-OSVHFGdcQrzmhLPdXF61tKmip/6/D+uaQgSBBQiOIZI=";
+          aarch64-linux = "sha256-b8XwVMCwSbujyqgkJKIPAVNX83Qmmsthprr2x9XSb10=";
         }
         .${system} or throwSystem;
     };
@@ -207,8 +218,8 @@ let
     stripRoot = false;
     hash =
       {
-        x86_64-darwin = "sha256-p1+Pk+Zhf2OPEmEWCEd0tA7CdoMcOgYp69SnQXufFJ0=";
-        aarch64-darwin = "sha256-tEfKvJuGe4htZLSOn94eKeBtWXYkjl73iJSY4BWJMKo=";
+        x86_64-darwin = "sha256-shjhozJS2VbBjpjJVlM9hwBzGWwgva1qhfEUhY8t9Bk=";
+        aarch64-darwin = "sha256-ZRl86L/OOTNPWfZDl6JQfuXL41kI/Wir99/JIbf7T7M=";
       }
       .${system} or throwSystem;
   };

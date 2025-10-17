@@ -30,44 +30,43 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "7.6.2";
+  version = "7.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KD9gZ0ForX1iYQMYlsle2fJ+zlmQOymDf71p17aCr1k=";
+    hash = "sha256-S0Y+BylUR9BwOWZP524oCBskGRNHpQNDfwQqjDniGc4=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      defusedxml
-      lxml
-      relatorio
-      genshi
-      python-dateutil
-      polib
-      python-sql
-      werkzeug
-      passlib
+  dependencies = [
+    defusedxml
+    lxml
+    relatorio
+    genshi
+    python-dateutil
+    polib
+    python-sql
+    werkzeug
+    passlib
 
-      # extra dependencies
-      pydot
-      levenshtein
-      html2text
-      weasyprint
-      gevent
-      pillow
-      pwdlib
-      simpleeval
-    ]
-    ++ relatorio.optional-dependencies.fodt
-    ++ passlib.optional-dependencies.bcrypt
-    ++ passlib.optional-dependencies.argon2
-    ++ lib.optional withPostgresql psycopg2;
+    # extra dependencies
+    pydot
+    levenshtein
+    html2text
+    weasyprint
+    gevent
+    pillow
+    pwdlib
+    simpleeval
+  ]
+  ++ relatorio.optional-dependencies.fodt
+  ++ passlib.optional-dependencies.bcrypt
+  ++ passlib.optional-dependencies.argon2
+  ++ lib.optional withPostgresql psycopg2;
 
   # Fontconfig error: Cannot load default config file: No such file: (null)
   doCheck = false;

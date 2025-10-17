@@ -34,7 +34,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--benchmark-disable"
   ];
 

@@ -11,32 +11,17 @@ mkCoqDerivation {
   owner = "snu-sf";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.14" "9.0";
-        out = "4.2.3";
-      }
-      {
-        case = isEq "8.13";
-        out = "4.2.2";
-      }
-      {
-        case = range "8.12" "8.17";
-        out = "4.1.2";
-      }
-      {
-        case = range "8.9" "8.13";
-        out = "4.1.1";
-      }
-      {
-        case = range "8.6" "8.13";
-        out = "4.0.2";
-      }
-      {
-        case = isEq "8.5";
-        out = "1.2.8";
-      }
+      (case (range "8.14" "9.1") "4.2.3")
+      (case (isEq "8.13") "4.2.2")
+      (case (range "8.12" "8.17") "4.1.2")
+      (case (range "8.9" "8.13") "4.1.1")
+      (case (range "8.6" "8.13") "4.0.2")
+      (case (isEq "8.5") "1.2.8")
     ] null;
   release."4.2.3".sha256 = "sha256-ldUjNd5daUu2B3v4tk20/iXFgyUuW4XHlbubTInpwcs=";
   release."4.2.2".sha256 = "sha256-qr6o45Q90FK+kkBUJ+W7QhiA0YQRb1RUwwXUpTTFt8A=";

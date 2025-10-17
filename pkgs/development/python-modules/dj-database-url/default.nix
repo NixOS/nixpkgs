@@ -4,27 +4,23 @@
   fetchFromGitHub,
   django,
   setuptools,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "dj-database-url";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "dj-database-url";
     tag = "v${version}";
-    hash = "sha256-olE1tufGXOl8rOKN+Pa0eXhYEzeQxTqj50X6AVwYkM8=";
+    hash = "sha256-wiPTszgix4QjF82f5mmNvDKGspYl15jScK2TAsP5zP8=";
   };
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    django
-    typing-extensions
-  ];
+  dependencies = [ django ];
 
   # Tests access a DB via network
   doCheck = false;

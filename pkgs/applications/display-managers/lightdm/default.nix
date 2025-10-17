@@ -8,8 +8,8 @@
   plymouth,
   pam,
   pkg-config,
-  autoconf,
-  automake,
+  autoreconfHook,
+  gettext,
   libtool,
   libxcb,
   glib,
@@ -44,14 +44,14 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "canonical";
-    repo = pname;
+    repo = "lightdm";
     rev = version;
     sha256 = "sha256-ttNlhWD0Ran4d3QvZ+PxbFbSUGMkfrRm+hJdQxIDJvM=";
   };
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
+    gettext
     yelp-tools
     yelp-xsl
     gobject-introspection
@@ -73,7 +73,8 @@ stdenv.mkDerivation rec {
     libxklavier
     pam
     polkit
-  ] ++ lib.optional withQt5 qtbase;
+  ]
+  ++ lib.optional withQt5 qtbase;
 
   patches = [
     # Adds option to disable writing dmrc files
@@ -88,6 +89,9 @@ stdenv.mkDerivation rec {
     (replaceVars ./fix-paths.patch {
       plymouth = "${plymouth}/bin/plymouth";
     })
+
+    # glib gettext is deprecated and broken, so use regular gettext instead
+    ./use-regular-gettext.patch
   ];
 
   dontWrapQtApps = true;
@@ -99,7 +103,8 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--disable-tests"
     "--disable-dmrc"
-  ] ++ lib.optional withQt5 "--enable-liblightdm-qt5";
+  ]
+  ++ lib.optional withQt5 "--enable-liblightdm-qt5";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"

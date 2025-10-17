@@ -43,44 +43,42 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    (lib.enableFeature (withJitterEntropy) "jitterentropy")
-    (lib.withFeature (withNistBeacon) "nistbeacon")
-    (lib.withFeature (withPkcs11) "pkcs11")
-    (lib.withFeature (withRtlsdr) "rtlsdr")
-    (lib.withFeature (withQrypt) "qrypt")
+    (lib.enableFeature withJitterEntropy "jitterentropy")
+    (lib.withFeature withNistBeacon "nistbeacon")
+    (lib.withFeature withPkcs11 "pkcs11")
+    (lib.withFeature withRtlsdr "rtlsdr")
+    (lib.withFeature withQrypt "qrypt")
   ];
 
-  buildInputs =
-    [
-      openssl
-      libcap
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
-    ++ lib.optionals withJitterEntropy [ jitterentropy ]
-    ++ lib.optionals withNistBeacon [
-      curl
-      jansson
-      libxml2
-    ]
-    ++ lib.optionals withPkcs11 [
-      libp11
-      libp11.passthru.openssl
-    ]
-    ++ lib.optionals withRtlsdr [ rtl-sdr ]
-    ++ lib.optionals withQrypt [
-      curl
-      jansson
-    ];
+  buildInputs = [
+    openssl
+    libcap
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ argp-standalone ]
+  ++ lib.optionals withJitterEntropy [ jitterentropy ]
+  ++ lib.optionals withNistBeacon [
+    curl
+    jansson
+    libxml2
+  ]
+  ++ lib.optionals withPkcs11 [
+    libp11
+    libp11.passthru.openssl
+  ]
+  ++ lib.optionals withRtlsdr [ rtl-sdr ]
+  ++ lib.optionals withQrypt [
+    curl
+    jansson
+  ];
 
   enableParallelBuilding = true;
 
-  makeFlags =
-    [
-      "AR:=$(AR)" # For cross-compilation
-    ]
-    ++ lib.optionals withPkcs11 [
-      "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
-    ];
+  makeFlags = [
+    "AR:=$(AR)" # For cross-compilation
+  ]
+  ++ lib.optionals withPkcs11 [
+    "PKCS11_ENGINE=${opensc}/lib/opensc-pkcs11.so" # Overrides configure script paths
+  ];
 
   doCheck = true;
   preCheck = ''

@@ -19,7 +19,9 @@
 
 let
   pythonEnv = python3.withPackages (
-    pp: with pp; [
+    pp:
+    with pp;
+    [
       grpcio-tools
       protobuf
       pygobject3
@@ -35,17 +37,18 @@ let
       ifaddr
       qrcode
     ]
+    ++ qrcode.optional-dependencies.pil
   );
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.8";
+  version = "1.8.10";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "warpinator";
     rev = version;
-    hash = "sha256-aqqKCYlCAL/6srbyYRoVQlIFKpTmwYZsdfLibRyAUXg=";
+    hash = "sha256-OSZYjCnFIHmWCwVcWP1MLmezt5HL4Njf0WMyCRmPP58=";
   };
 
   nativeBuildInputs = [

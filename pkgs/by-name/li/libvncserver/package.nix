@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libjpeg,
   openssl,
@@ -34,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # fix generated pkg-config files
     ./pkgconfig.patch
+
+    (fetchpatch {
+      name = "libvncserver-fix-cmake-4.patch";
+      url = "https://github.com/LibVNC/libvncserver/commit/e64fa928170f22a2e21b5bbd6d46c8f8e7dd7a96.patch";
+      hash = "sha256-AAZ3H34+nLqQggb/sNSx2gIGK96m4zatHX3wpyjNLOA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -55,16 +62,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'add_test(NAME includetest COMMAND' '# add_test(NAME includetest COMMAND'
   '';
 
-  buildInputs =
-    [
-      libjpeg
-      openssl
-      libgcrypt
-      libpng
-    ]
-    ++ lib.optionals withSystemd [
-      systemd
-    ];
+  buildInputs = [
+    libjpeg
+    openssl
+    libgcrypt
+    libpng
+  ]
+  ++ lib.optionals withSystemd [
+    systemd
+  ];
 
   propagatedBuildInputs = [
     zlib

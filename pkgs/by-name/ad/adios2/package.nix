@@ -22,6 +22,7 @@
   zfp,
   zlib,
   ucx,
+  libffi,
   yaml-cpp,
   nlohmann_json,
   llvmPackages,
@@ -39,7 +40,12 @@ let
       cppSupport = !mpiSupport;
     };
     catalyst = catalyst.override {
-      inherit mpi mpiSupport pythonSupport;
+      inherit
+        mpi
+        mpiSupport
+        python3Packages
+        pythonSupport
+        ;
     };
     mpi4py = python3Packages.mpi4py.override { inherit mpi; };
   };
@@ -55,55 +61,55 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NVyw7xoPutXeUS87jjVv1YxJnwNGZAT4QfkBLzvQbwg=";
   };
 
-  postPatch =
-    ''
-      chmod +x cmake/install/post/adios2-config.pre.sh.in
-      patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
-    ''
-    # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace bindings/Python/py11{Attribute,Engine,Variable}.cpp \
-        --replace-fail "dynamic_cast" "reinterpret_cast"
-    '';
+  postPatch = ''
+    chmod +x cmake/install/post/adios2-config.pre.sh.in
+    patchShebangs cmake/install/post/{generate-adios2-config,adios2-config.pre}.sh.in
+  ''
+  # Dynamic cast to nullptr on darwin platform, switch to unsafe reinterpret cast.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace bindings/Python/py11{Attribute,Engine,Variable}.cpp \
+      --replace-fail "dynamic_cast" "reinterpret_cast"
+  '';
 
-  nativeBuildInputs =
-    [
-      perl
-      cmake
-      ninja
-      gfortran
-      pkg-config
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.python
-      python3Packages.pybind11
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    perl
+    cmake
+    ninja
+    gfortran
+    pkg-config
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.python
+    python3Packages.pybind11
+    python3Packages.pythonImportsCheckHook
+  ];
 
-  buildInputs =
-    [
-      bzip2
-      c-blosc2
-      adios2Packages.catalyst
-      adios2Packages.hdf5
-      libfabric
-      libpng
-      libsodium
-      pugixml
-      sqlite
-      zeromq
-      zfp
-      zlib
-      yaml-cpp
-      nlohmann_json
+  buildInputs = [
+    bzip2
+    c-blosc2
+    adios2Packages.catalyst
+    adios2Packages.hdf5
+    libfabric
+    libpng
+    libsodium
+    pugixml
+    sqlite
+    zeromq
+    zlib
+    yaml-cpp
+    nlohmann_json
 
-      # Todo: add these optional dependencies in nixpkgs.
-      # sz
-      # mgard
-    ]
-    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
-    # openmp required by zfp
-    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
+    # Todo: add these optional dependencies in nixpkgs.
+    # sz
+    # mgard
+  ]
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform ucx) ucx
+  ++ lib.optional (stdenv.hostPlatform.isLoongArch64) libffi
+  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform zfp) zfp
+  # openmp required by zfp
+  ++ lib.optional (
+    lib.meta.availableOn stdenv.hostPlatform zfp && stdenv.cc.isClang
+  ) llvmPackages.openmp;
 
   propagatedBuildInputs =
     lib.optional mpiSupport mpi
@@ -120,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ADIOS2_USE_EXTERNAL_DEPENDENCIES" true)
     (lib.cmakeBool "ADIOS2_USE_Blosc2" true)
     (lib.cmakeBool "ADIOS2_USE_BZip2" true)
-    (lib.cmakeBool "ADIOS2_USE_ZFP" true)
+    (lib.cmakeBool "ADIOS2_USE_ZFP" (lib.meta.availableOn stdenv.hostPlatform zfp))
     (lib.cmakeBool "ADIOS2_USE_SZ" false)
     (lib.cmakeBool "ADIOS2_USE_LIBPRESSIO" false)
     (lib.cmakeBool "ADIOS2_USE_MGARD" false)
@@ -155,6 +161,9 @@ stdenv.mkDerivation (finalAttrs: {
     # Enable support for Little/Big Endian Interoperability
     (lib.cmakeBool "ADIOS2_USE_Endian_Reverse" true)
 
+    # force use of "-fallow-argument-mismatch"
+    (lib.cmakeBool "ADIOS2_USE_Fortran_flag_argument_mismatch" true)
+
     (lib.cmakeBool "ADIOS2_BUILD_EXAMPLES" withExamples)
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
@@ -171,6 +180,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   enableParallelChecking = false;
+
+  enabledTestPaths = [
+    "../testing/adios2/python/Test*.py"
+  ];
 
   __darwinAllowLocalNetworking = finalAttrs.finalPackage.doCheck && mpiSupport;
 

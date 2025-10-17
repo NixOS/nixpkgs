@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation {
   pname = "mbidled";
-  version = "unstable-2023-09-30";
+  version = "0-unstable-2023-09-30";
 
   src = fetchFromGitHub {
     owner = "zsugabubus";
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with lib; {
-    description = "run command on mailbox change";
+    description = "Run command on mailbox change";
     homepage = "https://github.com/zsugabubus/mbidled";
     license = licenses.unlicense;
     maintainers = with maintainers; [ laalsaas ];

@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Waitress WSGI server";
     mainProgram = "waitress-serve";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -68,7 +68,7 @@ in
         '';
         description = ''
           Password file for the postgresql connection.
-          Must be formatted according to PostgreSQL .pgpass standard (see https://www.postgresql.org/docs/current/libpq-pgpass.html)
+          Must be formatted according to PostgreSQL .pgpass standard (see <https://www.postgresql.org/docs/current/libpq-pgpass.html>)
           but only one line, no comments and readable by user `nginx`.
           Ignored if `database.host` is set to `localhost`, as peer authentication will be used.
         '';
@@ -129,7 +129,7 @@ in
   config = lib.mkIf cfg.enable {
     # backward compatibility: if password is set but not passwordFile, make one.
     services.roundcube.database.passwordFile = lib.mkIf (!localDB && cfg.database.password != "") (
-      lib.mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}")
+      lib.mkDefault "${pkgs.writeText "roundcube-password" cfg.database.password}"
     );
     warnings =
       lib.optional (!localDB && cfg.database.password != "")

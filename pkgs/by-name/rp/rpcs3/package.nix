@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   nix-update-script,
   cmake,
   pkg-config,
@@ -34,6 +33,13 @@
   waylandSupport ? true,
   wayland,
   wrapGAppsHook3,
+  miniupnpc,
+  rtmidi,
+  asmjit,
+  glslang,
+  zstd,
+  hidapi,
+  vulkan-memory-allocator,
 }:
 
 let
@@ -46,23 +52,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rpcs3";
-  version = "0.0.37";
+  version = "0.0.38";
 
   src = fetchFromGitHub {
     owner = "RPCS3";
     repo = "rpcs3";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/ve1qe76Rc+mXHemq8DI2U9IP6+tPV5m5SNh/wmppEw=";
+    hash = "sha256-HaguOzCN0/FvAb0b4RZWnw9yvVum14wEj26WnqOnSag=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    (fetchpatch2 {
-      # https://github.com/RPCS3/rpcs3/pull/17316
-      url = "https://github.com/RPCS3/rpcs3/commit/bad6e992586264344ee1a3943423863d2bd39b45.patch?full_index=1";
-      hash = "sha256-rSyA1jcmRiV6m8rPKqTnDFuBh9WYFTGmyTSU2qrd+Go=";
-    })
-  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -89,6 +87,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_SDL" true)
     (lib.cmakeBool "USE_SYSTEM_OPENCV" true)
     (lib.cmakeBool "USE_SYSTEM_CUBEB" true)
+    (lib.cmakeBool "USE_SYSTEM_MINIUPNPC" true)
+    (lib.cmakeBool "USE_SYSTEM_RTMIDI" true)
+    (lib.cmakeBool "USE_SYSTEM_GLSLANG" true)
+    (lib.cmakeBool "USE_SYSTEM_ZSTD" true)
+    (lib.cmakeBool "USE_SYSTEM_HIDAPI" true)
+    (lib.cmakeBool "USE_SYSTEM_VULKAN_MEMORY_ALLOCATOR" true)
     (lib.cmakeBool "USE_SDL" true)
     (lib.cmakeBool "WITH_LLVM" true)
     (lib.cmakeBool "BUILD_LLVM" false)
@@ -107,36 +111,42 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtmultimedia
-      openal
-      glew
-      vulkan-headers
-      vulkan-loader
-      libpng
-      ffmpeg
-      libevdev
-      zlib
-      libusb1
-      curl
-      wolfssl
-      python3
-      pugixml
-      SDL2 # Still needed by FAudio's CMake
-      sdl3
-      flatbuffers
-      llvm_18
-      libSM
-      opencv.cxxdev
-      cubeb
-    ]
-    ++ lib.optional faudioSupport faudio
-    ++ lib.optionals waylandSupport [
-      wayland
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+    openal
+    glew
+    vulkan-headers
+    vulkan-loader
+    libpng
+    ffmpeg
+    libevdev
+    zlib
+    libusb1
+    curl
+    wolfssl
+    python3
+    pugixml
+    SDL2 # Still needed by FAudio's CMake
+    sdl3
+    flatbuffers
+    llvm_18
+    libSM
+    opencv.cxxdev
+    cubeb
+    miniupnpc
+    rtmidi
+    asmjit
+    glslang
+    zstd
+    hidapi
+    vulkan-memory-allocator
+  ]
+  ++ lib.optional faudioSupport faudio
+  ++ lib.optionals waylandSupport [
+    wayland
+    qtwayland
+  ];
 
   doInstallCheck = true;
 
@@ -155,8 +165,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
     maintainers = with maintainers; [
-      abbradar
-      neonfuz
       ilian
     ];
     license = licenses.gpl2Only;

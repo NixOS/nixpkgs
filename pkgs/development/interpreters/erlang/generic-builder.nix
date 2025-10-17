@@ -1,254 +1,181 @@
 {
-  lib,
-  stdenv,
+  # options set through beam-packages
+  # systemd support for epmd only
+  systemdSupport ? null,
+  wxSupport ? true,
+
+  # options set by version specific files, e.g. 28.nix
+  version,
+  hash ? null,
+
+}:
+{
+  # overridable options
+  enableDebugInfo ? false,
+  enableHipe ? true,
+  enableKernelPoll ? true,
+  enableSmpSupport ? true,
+  enableThreads ? true,
+  javacSupport ? false,
+  odbcSupport ? false,
+  parallelBuild ? true,
+
   fetchFromGitHub,
-  makeWrapper,
   gawk,
   gnum4,
   gnused,
+  lib,
+  libGL,
+  libGLU,
   libxml2,
   libxslt,
+  makeWrapper,
   ncurses,
   nix-update-script,
+  openjdk11,
   openssl,
   perl,
   runtimeShell,
-  openjdk11 ? null, # javacSupport
-  unixODBC ? null, # odbcSupport
-  libGL ? null,
-  libGLU ? null,
-  wxGTK ? null,
-  xorg ? null,
-  parallelBuild ? false,
+  stdenv,
   systemd,
-  wxSupport ? true,
-  # systemd support for epmd
-  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  unixODBC,
   wrapGAppsHook3,
+  wxGTK32,
+  xorg,
   zlib,
 }:
-{
-  baseName ? "erlang",
-  version,
-  sha256 ? null,
-  rev ? "OTP-${version}",
-  src ? fetchFromGitHub {
-    inherit rev sha256;
-    owner = "erlang";
-    repo = "otp";
-  },
-  enableHipe ? true,
-  enableDebugInfo ? false,
-  enableThreads ? true,
-  enableSmpSupport ? true,
-  enableKernelPoll ? true,
-  javacSupport ? false,
-  javacPackages ? [ openjdk11 ],
-  odbcSupport ? false,
-  odbcPackages ? [ unixODBC ],
-  opensslPackage ? openssl,
-  wxPackages ? [
-    libGL
-    libGLU
-    wxGTK
-    xorg.libX11
-    wrapGAppsHook3
-  ],
-  preUnpack ? "",
-  postUnpack ? "",
-  patches ? [ ],
-  patchPhase ? "",
-  prePatch ? "",
-  postPatch ? "",
-  configureFlags ? [ ],
-  configurePhase ? "",
-  preConfigure ? "",
-  postConfigure ? "",
-  buildPhase ? "",
-  preBuild ? "",
-  postBuild ? "",
-  installPhase ? "",
-  preInstall ? "",
-  postInstall ? "",
-  checkPhase ? "",
-  preCheck ? "",
-  postCheck ? "",
-  fixupPhase ? "",
-  preFixup ? "",
-  postFixup ? "",
-  meta ? { },
-}:
-
-assert
-  wxSupport
-  -> (
-    if stdenv.hostPlatform.isDarwin then
-      wxGTK != null
-    else
-      libGL != null && libGLU != null && wxGTK != null && xorg != null
-  );
-
-assert odbcSupport -> unixODBC != null;
-assert javacSupport -> openjdk11 != null;
-
 let
   inherit (lib)
     optional
     optionals
-    optionalAttrs
     optionalString
     ;
-  wxPackages2 = if stdenv.hostPlatform.isDarwin then [ wxGTK ] else wxPackages;
+
+  wxPackages2 =
+    if stdenv.hostPlatform.isDarwin then
+      [ wxGTK32 ]
+    else
+      [
+        libGL
+        libGLU
+        wxGTK32
+        xorg.libX11
+        wrapGAppsHook3
+      ];
 
   major = builtins.head (builtins.splitVersion version);
+
+  enableSystemd =
+    if (systemdSupport == null) then
+      lib.meta.availableOn stdenv.hostPlatform systemd
+    else
+      systemdSupport;
+
+  runtimePath = lib.makeBinPath [
+    gawk
+    gnused
+  ];
 in
-stdenv.mkDerivation (
-  {
-    # name is used instead of pname to
-    # - not have to pass pnames as argument
-    # - have a separate pname for erlang (main module)
-    name =
-      "${baseName}"
-      + optionalString javacSupport "_javac"
-      + optionalString odbcSupport "_odbc"
-      + "-${version}";
+stdenv.mkDerivation {
+  pname = "erlang" + optionalString javacSupport "_javac" + optionalString odbcSupport "_odbc";
+  inherit version;
 
-    inherit src version;
+  src = fetchFromGitHub {
+    owner = "erlang";
+    repo = "otp";
+    tag = "OTP-${version}";
+    inherit hash;
+  };
 
+  env = {
+    # only build man pages and shell/IDE docs
+    DOC_TARGETS = "man chunks";
     LANG = "C.UTF-8";
+  };
 
-    nativeBuildInputs = [
-      makeWrapper
-      perl
-      gnum4
-      libxslt
-      libxml2
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+    gnum4
+    libxslt
+    libxml2
+  ];
 
-    env = {
-      # only build man pages and shell/IDE docs
-      DOC_TARGETS = "man chunks";
+  buildInputs = [
+    ncurses
+    openssl
+    zlib
+  ]
+  ++ optionals wxSupport wxPackages2
+  ++ optionals odbcSupport [ unixODBC ]
+  ++ optionals javacSupport [ openjdk11 ]
+  ++ optionals enableSystemd [ systemd ];
+
+  # disksup requires a shell
+  postPatch = ''
+    substituteInPlace lib/os_mon/src/disksup.erl --replace-fail '"sh ' '"${runtimeShell} '
+  '';
+
+  debugInfo = enableDebugInfo;
+
+  # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
+  enableParallelBuilding = parallelBuild;
+
+  configureFlags = [
+    "--with-ssl=${lib.getOutput "out" openssl}"
+    "--with-ssl-incl=${lib.getDev openssl}"
+  ]
+  ++ optional enableThreads "--enable-threads"
+  ++ optional enableSmpSupport "--enable-smp-support"
+  ++ optional enableKernelPoll "--enable-kernel-poll"
+  ++ optional enableHipe "--enable-hipe"
+  ++ optional javacSupport "--with-javac"
+  ++ optional odbcSupport "--with-odbc=${unixODBC}"
+  ++ optional wxSupport "--enable-wx"
+  ++ optional enableSystemd "--enable-systemd"
+  ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
+  # make[3]: *** [yecc.beam] Segmentation fault: 11
+  ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit";
+
+  installTargets = [
+    "install"
+    "install-docs"
+  ];
+
+  postInstall = ''
+    ln -sv $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
+
+    wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${runtimePath}"
+    wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${runtimePath}"
+  '';
+
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "OTP-(${major}.*)"
+        "--override-filename"
+        "pkgs/development/interpreters/erlang/${major}.nix"
+      ];
     };
+  };
 
-    buildInputs =
-      [
-        ncurses
-        opensslPackage
-        zlib
-      ]
-      ++ optionals wxSupport wxPackages2
-      ++ optionals odbcSupport odbcPackages
-      ++ optionals javacSupport javacPackages
-      ++ optional systemdSupport systemd;
+  meta = {
+    homepage = "https://www.erlang.org/";
+    downloadPage = "https://www.erlang.org/download.html";
+    description = "Programming language used for massively scalable soft real-time systems";
 
-    debugInfo = enableDebugInfo;
-
-    # On some machines, parallel build reliably crashes on `GEN    asn1ct_eval_ext.erl` step
-    enableParallelBuilding = parallelBuild;
-
-    postPatch =
-      ''
-        patchShebangs make
-
-        ${postPatch}
-      ''
-      + optionalString (lib.versionOlder "25" version) ''
-        substituteInPlace lib/os_mon/src/disksup.erl \
-          --replace-fail '"sh ' '"${runtimeShell} '
-      '';
-
-    configureFlags =
-      [ "--with-ssl=${lib.getOutput "out" opensslPackage}" ]
-      ++ [ "--with-ssl-incl=${lib.getDev opensslPackage}" ] # This flag was introduced in R24
-      ++ optional enableThreads "--enable-threads"
-      ++ optional enableSmpSupport "--enable-smp-support"
-      ++ optional enableKernelPoll "--enable-kernel-poll"
-      ++ optional enableHipe "--enable-hipe"
-      ++ optional javacSupport "--with-javac"
-      ++ optional odbcSupport "--with-odbc=${unixODBC}"
-      ++ optional wxSupport "--enable-wx"
-      ++ optional systemdSupport "--enable-systemd"
-      ++ optional stdenv.hostPlatform.isDarwin "--enable-darwin-64bit"
-      # make[3]: *** [yecc.beam] Segmentation fault: 11
-      ++ optional (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) "--disable-jit"
-      ++ configureFlags;
-
-    # install-docs will generate and install manpages and html docs
-    # (PDFs are generated only when fop is available).
-    installTargets = [
-      "install"
-      "install-docs"
-    ];
-
-    postInstall = ''
-      ln -s $out/lib/erlang/lib/erl_interface*/bin/erl_call $out/bin/erl_call
-
-      ${postInstall}
+    longDescription = ''
+      Erlang is a programming language used to build massively scalable
+      soft real-time systems with requirements on high availability.
+      Some of its uses are in telecoms, banking, e-commerce, computer
+      telephony and instant messaging. Erlang's runtime system has
+      built-in support for concurrency, distribution and fault
+      tolerance.
     '';
 
-    # Some erlang bin/ scripts run sed and awk
-    postFixup = ''
-      wrapProgram $out/lib/erlang/bin/erl --prefix PATH ":" "${gnused}/bin/"
-      wrapProgram $out/lib/erlang/bin/start_erl --prefix PATH ":" "${
-        lib.makeBinPath [
-          gnused
-          gawk
-        ]
-      }"
-    '';
-
-    passthru = {
-      updateScript = nix-update-script {
-        extraArgs = [
-          "--version-regex"
-          "OTP-(${major}.*)"
-          "--override-filename"
-          "pkgs/development/interpreters/erlang/${major}.nix"
-        ];
-      };
-    };
-
-    meta =
-      with lib;
-      (
-        {
-          homepage = "https://www.erlang.org/";
-          downloadPage = "https://www.erlang.org/download.html";
-          description = "Programming language used for massively scalable soft real-time systems";
-
-          longDescription = ''
-            Erlang is a programming language used to build massively scalable
-            soft real-time systems with requirements on high availability.
-            Some of its uses are in telecoms, banking, e-commerce, computer
-            telephony and instant messaging. Erlang's runtime system has
-            built-in support for concurrency, distribution and fault
-            tolerance.
-          '';
-
-          platforms = platforms.unix;
-          teams = [ teams.beam ];
-          license = licenses.asl20;
-        }
-        // meta
-      );
-  }
-  // optionalAttrs (preUnpack != "") { inherit preUnpack; }
-  // optionalAttrs (postUnpack != "") { inherit postUnpack; }
-  // optionalAttrs (patches != [ ]) { inherit patches; }
-  // optionalAttrs (prePatch != "") { inherit prePatch; }
-  // optionalAttrs (patchPhase != "") { inherit patchPhase; }
-  // optionalAttrs (configurePhase != "") { inherit configurePhase; }
-  // optionalAttrs (preConfigure != "") { inherit preConfigure; }
-  // optionalAttrs (postConfigure != "") { inherit postConfigure; }
-  // optionalAttrs (buildPhase != "") { inherit buildPhase; }
-  // optionalAttrs (preBuild != "") { inherit preBuild; }
-  // optionalAttrs (postBuild != "") { inherit postBuild; }
-  // optionalAttrs (checkPhase != "") { inherit checkPhase; }
-  // optionalAttrs (preCheck != "") { inherit preCheck; }
-  // optionalAttrs (postCheck != "") { inherit postCheck; }
-  // optionalAttrs (installPhase != "") { inherit installPhase; }
-  // optionalAttrs (preInstall != "") { inherit preInstall; }
-  // optionalAttrs (fixupPhase != "") { inherit fixupPhase; }
-  // optionalAttrs (preFixup != "") { inherit preFixup; }
-  // optionalAttrs (postFixup != "") { inherit postFixup; }
-)
+    platforms = lib.platforms.unix;
+    teams = [ lib.teams.beam ];
+    license = lib.licenses.asl20;
+  };
+}

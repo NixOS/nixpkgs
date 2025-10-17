@@ -52,15 +52,14 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      glib
-      json_c
-      libvirt
-    ]
-    ++ lib.optionals xenSupport [ xen ]
-    ++ lib.optionals (!legacyKVM) [ libkvmi ]
-    ++ lib.optionals withVMIFS [ fuse ];
+  buildInputs = [
+    glib
+    json_c
+    libvirt
+  ]
+  ++ lib.optionals xenSupport [ xen ]
+  ++ lib.optionals (!legacyKVM) [ libkvmi ]
+  ++ lib.optionals withVMIFS [ fuse ];
 
   configureFlags =
     lib.optionals (!xenSupport) [ "--disable-xen" ]

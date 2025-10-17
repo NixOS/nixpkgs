@@ -14,12 +14,12 @@
   protoc-gen-validate,
 }:
 let
-  version = "0.24.4";
+  version = "0.25.1";
   src = fetchFromGitHub {
     owner = "usememos";
     repo = "memos";
     rev = "v${version}";
-    hash = "sha256-Vimc9Z6X1+UBm2UnNnlsYqXEnOV3JcEPm9SD3obKkLc=";
+    hash = "sha256-5CeeOpdXs+6Vus4er8JVhJM0a7BKtGsF4SPdOoX5xQk=";
   };
 
   memos-protobuf-gen = stdenvNoCC.mkDerivation {
@@ -52,7 +52,7 @@ let
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "sha256-cJK9wT5uj1MYjYZkzgMSL9nShCO2xPJOYZT+ebndwlY=";
+    outputHash = "sha256-BOBnNcBp/vjTaS7N1z5kRWZoKokJXEMNs5rS32ZBtKU=";
   };
 
   memos-web = stdenvNoCC.mkDerivation (finalAttrs: {
@@ -61,7 +61,8 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname version src;
       sourceRoot = "${finalAttrs.src.name}/web";
-      hash = "sha256-AyQYY1vtBB6DTcieC7nw5aOOVuwESJSDs8qU6PGyaTw=";
+      fetcherVersion = 1;
+      hash = "sha256-qY3jPbdEy+lWoBV/xKNTGQ58xvcoBoG0vPwN5f9+wj4=";
     };
     pnpmRoot = "web";
     nativeBuildInputs = [
@@ -92,7 +93,7 @@ buildGoModule {
     memos-protobuf-gen
     ;
 
-  vendorHash = "sha256-EzVgQpWJJA7EUKdnnnCIvecaOXg856f/WQyfV/WuWFU=";
+  vendorHash = "sha256-+v2OElo2ZC0OEhNsNe23J0PR0y1opm/HckW+vUmJ8e4=";
 
   preBuild = ''
     rm -rf server/router/frontend/dist
@@ -112,6 +113,7 @@ buildGoModule {
   meta = {
     homepage = "https://usememos.com";
     description = "Lightweight, self-hosted memo hub";
+    changelog = "https://github.com/usememos/memos/releases/tag/${src.rev}";
     maintainers = with lib.maintainers; [
       indexyz
       kuflierl

@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "asdf-standard";
-  version = "1.3.0";
+  version = "1.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "asdf_standard";
     inherit version;
-    hash = "sha256-WViWHzmd6tIACnhyTaN/Wu6wSZp4C72a5Pw+y+Pq7WQ=";
+    hash = "sha256-DF8SHQ24fLd4DWGgh/OSxRBM4ggBbPsqEwyc6pEs/dw=";
   };
 
   build-system = [ setuptools-scm ];

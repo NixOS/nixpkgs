@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
     qtx11extras
     libdbusmenu
     quazip
-  ] ++ lib.optional withPulseaudio libpulseaudio;
+  ]
+  ++ lib.optional withPulseaudio libpulseaudio;
 
   nativeBuildInputs = [
     wrapQtAppsHook

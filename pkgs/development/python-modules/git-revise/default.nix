@@ -24,14 +24,13 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.8";
 
-  nativeCheckInputs =
-    [
-      git
-      pytestCheckHook
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      gnupg
-    ];
+  nativeCheckInputs = [
+    git
+    pytestCheckHook
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    gnupg
+  ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # `gpg: agent_genkey failed: No agent running`

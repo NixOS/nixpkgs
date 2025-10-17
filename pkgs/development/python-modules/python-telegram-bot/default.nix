@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "22.1";
+  version = "22.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "python-telegram-bot";
     repo = "python-telegram-bot";
     tag = "v${version}";
-    hash = "sha256-zysqE1WZCHdoJUr9+yE7L5xY5pInNUKC4qw4v3zPSRg=";
+    hash = "sha256-++vDura+7AkqM7gV12O2CRRQ1H7G5G22VHGo4OdyffU=";
   };
 
   build-system = [
@@ -65,7 +65,8 @@ buildPythonPackage rec {
     pytest-timeout
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   pythonImportsCheck = [ "telegram" ];
 

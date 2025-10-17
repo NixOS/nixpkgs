@@ -166,7 +166,7 @@ The following is a non-exhaustive list of such differences:
 - Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
 
 If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
-The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#opt--keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#conf-keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
 :::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
@@ -327,18 +327,54 @@ Dependency propagation takes cross compilation into account, meaning that depend
 
 To determine the exact rules for dependency propagation, we start by assigning to each dependency a couple of ternary numbers (`-1` for `build`, `0` for `host`, and `1` for `target`) representing its [dependency type](#possible-dependency-types), which captures how its host and target platforms are each "offset" from the depending derivation’s host and target platforms. The following table summarize the different combinations that can be obtained:
 
-| `host → target`     | attribute name      | offset   |
-| ------------------- | ------------------- | -------- |
-| `build --> build`   | `depsBuildBuild`    | `-1, -1` |
-| `build --> host`    | `nativeBuildInputs` | `-1, 0`  |
-| `build --> target`  | `depsBuildTarget`   | `-1, 1`  |
-| `host --> host`     | `depsHostHost`      | `0, 0`   |
-| `host --> target`   | `buildInputs`       | `0, 1`   |
-| `target --> target` | `depsTargetTarget`  | `1, 1`   |
+| `host → target`     | attribute name      | offset   | typical purpose                               |
+| ------------------- | ------------------- | -------- | --------------------------------------------- |
+| `build --> build`   | `depsBuildBuild`    | `-1, -1` | compilers for build helpers                   |
+| `build --> host`    | `nativeBuildInputs` | `-1, 0`  | build tools, compilers, setup hooks           |
+| `build --> target`  | `depsBuildTarget`   | `-1, 1`  | compilers to build stdlibs to run on target   |
+| `host --> host`     | `depsHostHost`      | `0, 0`   | compilers to build C code at runtime (rare)   |
+| `host --> target`   | `buildInputs`       | `0, 1`   | libraries                                     |
+| `target --> target` | `depsTargetTarget`  | `1, 1`   | stdlibs to run on target                      |
 
-Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results is sort of a transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
+Algorithmically, we traverse propagated inputs, accumulating every propagated dependency’s propagated dependencies and adjusting them to account for the “shift in perspective” described by the current dependency’s platform offsets. This results in a sort of transitive closure of the dependency relation, with the offsets being approximately summed when two dependency links are combined. We also prune transitive dependencies whose combined offsets go out-of-bounds, which can be viewed as a filter over that transitive closure removing dependencies that are blatantly absurd.
 
-We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+We can define the process precisely with [Natural Deduction](https://en.wikipedia.org/wiki/Natural_deduction) using the inference rules below. This probably seems a bit obtuse, but so is the bash code that actually implements it! [^footnote-stdenv-find-inputs-location] They’re confusing in very different ways so… hopefully if something doesn’t make sense in one presentation, it will in the other!
+
+**Definitions:**
+
+`dep(h_offset, t_offset, X, Y)`
+:    Package X has a direct dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+
+     For example, `nativeBuildInputs = [ Y ]` means `dep(-1, 0, X, Y)`.
+
+`propagated-dep(h_offset, t_offset, X, Y)`
+:    Package X has a propagated dependency on Y in a position with host offset `h_offset` and target offset `t_offset`.
+
+     For example, `depsBuildTargetPropagated = [ Y ]` means `propagated-dep(-1, 1, X, Y)`.
+
+`mapOffset(h, t, i) = offs`
+:    In a package X with a dependency on Y in a position with host offset `h` and target offset `t`, Y's transitive dependency Z in a position with offset `i` is mapped to offset `offs` in X.
+
+
+::: {.example}
+# Truth table of `mapOffset(h, t, i)`
+
+`x` means that the dependency was discarded because `h + i ∉ {-1, 0, 1}`.
+
+<!-- This is written as an ascii art table because the CSS was introducing so much space it was unreadable and doesn't support double lines -->
+
+```
+  h |   t  || i=-1 |  i=0 |  i=1
+----|------||------|------|-----
+ -1 |  -1  ||   x  |  -1  |  -1
+ -1 |   0  ||   x  |  -1  |   0
+ -1 |   1  ||   x  |  -1  |   1
+  0 |   0  ||  -1  |   0  |   0
+  0 |   1  ||  -1  |   0  |   1
+  1 |   1  ||   0  |   1  |   x
+```
+
+:::
 
 ```
 let mapOffset(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -372,7 +408,7 @@ propagated-dep(h, t, A, B)
 dep(h, t, A, B)
 ```
 
-Some explanation of this monstrosity is in order. In the common case, the target offset of a dependency is the successor to the host offset: `t = h + 1`. That means that:
+Some explanation of this monstrosity is in order. In the common case of `nativeBuildInputs` or `buildInputs`, the target offset of a dependency is one greater than the host offset: `t = h + 1`. That means that:
 
 ```
 let f(h, t, i) = i + (if i <= 0 then h else t - 1)
@@ -383,7 +419,11 @@ let f(h, h + 1, i) = i + h
 
 This is where “sum-like” comes in from above: We can just sum all of the host offsets to get the host offset of the transitive dependency. The target offset is the transitive dependency is the host offset + 1, just as it was with the dependencies composed to make this transitive one; it can be ignored as it doesn’t add any new information.
 
-Because of the bounds checks, the uncommon cases are `h = t` and `h + 2 = t`. In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package. In the other case, `h + 1` is skipped over between the host and target offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependencies’ offset is that one.
+Because of the bounds checks, the uncommon cases are `h = t` (`depsBuildBuild`, etc) and `h + 2 = t` (`depsBuildTarget`).
+
+In the former case, the motivation for `mapOffset` is that since its host and target platforms are the same, no transitive dependency of it should be able to “discover” an offset greater than its reduced target offsets. `mapOffset` effectively “squashes” all its transitive dependencies’ offsets so that none will ever be greater than the target offset of the original `h = t` package.
+
+In the other case, `h + 1` (0) is skipped over between the host (-1) and target (1) offsets. Instead of squashing the offsets, we need to “rip” them apart so no transitive dependency’s offset is 0.
 
 Overall, the unifying theme here is that propagation shouldn’t be introducing transitive dependencies involving platforms the depending package is unaware of. \[One can imagine the depending package asking for dependencies with the platforms it knows about; other platforms it doesn’t know how to ask for. The platform description in that scenario is a kind of unforgeable capability.\] The offset bounds checking and definition of `mapOffset` together ensure that this is the case. Discovering a new offset is discovering a new platform, and since those platforms weren’t in the derivation “spec” of the needing package, they cannot be relevant. From a capability perspective, we can imagine that the host and target platforms of a package are the capabilities a package requires, and the depending package must provide the capability to the dependency.
 
@@ -397,7 +437,7 @@ Since these packages are able to be run at build-time, they are always added to 
 
 ##### `nativeBuildInputs` {#var-stdenv-nativeBuildInputs}
 
-A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost` but `nativeBuildInputs` is used for historical continuity.
+A list of dependencies whose host platform is the new derivation’s build platform, and target platform is the new derivation’s host platform. These are programs and libraries used at build-time that, if they are a compiler or similar tool, produce code to run at run-time—i.e. tools used to build the new derivation. If the dependency doesn’t care about the target platform (i.e. isn’t a compiler or similar tool), put it here, rather than in `depsBuildBuild` or `depsBuildTarget`. This could be called `depsBuildHost`, but `nativeBuildInputs` is used for historical continuity.
 
 Since these packages are able to be run at build-time, they are added to the `PATH`, as described above. But since these packages are only guaranteed to be able to run then, they shouldn’t persist as run-time dependencies. This isn’t currently enforced, but could be in the future.
 
@@ -501,11 +541,7 @@ let
     # An example of an attribute containing a function
     passthru.appendPackages =
       packages':
-      finalAttrs.finalPackage.overrideAttrs (
-        newSelf: super: {
-          packages = super.packages ++ packages';
-        }
-      );
+      finalAttrs.finalPackage.overrideAttrs (newSelf: super: { packages = super.packages ++ packages'; });
 
     # For illustration purposes; referenced as
     # `(pkg.overrideAttrs(x)).finalAttrs` etc in the text below.
@@ -698,7 +734,7 @@ The key to use when specifying the installation [`prefix`](#var-stdenv-prefix). 
 
 ##### `dontAddStaticConfigureFlags` {#var-stdenv-dontAddStaticConfigureFlags}
 
-By default, when building statically, stdenv will try to add build system appropriate configure flags to try to enable static builds.
+By default, when building statically, `stdenv` will try to add build system appropriate configure flags to try to enable static builds.
 
 If this is undesirable, set this variable to true.
 
@@ -747,9 +783,7 @@ The file name of the Makefile.
 A list of strings passed as additional flags to `make`. These flags are also used by the default install and check phase. For setting make flags specific to the build phase, use `buildFlags` (see below).
 
 ```nix
-{
-  makeFlags = [ "PREFIX=$(out)" ];
-}
+{ makeFlags = [ "PREFIX=$(out)" ]; }
 ```
 
 ::: {.note}
@@ -799,9 +833,7 @@ It is highly recommended, for packages' sources that are not distributed with an
 Controls whether the check phase is executed. By default it is skipped, but if `doCheck` is set to true, the check phase is usually executed. Thus you should set
 
 ```nix
-{
-  doCheck = true;
-}
+{ doCheck = true; }
 ```
 
 in the derivation to enable checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -854,9 +886,7 @@ See the [build phase](#var-stdenv-makeFlags) for details.
 The make targets that perform the installation. Defaults to `install`. Example:
 
 ```nix
-{
-  installTargets = "install-bin install-doc";
-}
+{ installTargets = "install-bin install-doc"; }
 ```
 
 ##### `installFlags` / `installFlagsArray` {#var-stdenv-installFlags}
@@ -987,8 +1017,8 @@ If set to `true`, the standard environment will enable debug information in C/C+
 To make GDB find debug information for the `socat` package and its dependencies, you can use the following `shell.nix`:
 
 ```nix
-let
-  pkgs = import ./. {
+{
+  pkgs ? import <nixpkgs> {
     config = { };
     overlays = [
       (final: prev: {
@@ -996,21 +1026,15 @@ let
         readline = prev.readline.overrideAttrs { separateDebugInfo = true; };
       })
     ];
-  };
-
-  myDebugInfoDirs = pkgs.symlinkJoin {
-    name = "myDebugInfoDirs";
-    paths = with pkgs; [
-      glibc.debug
-      ncurses.debug
-      openssl.debug
-      readline.debug
-    ];
-  };
-in
+  },
+}:
 pkgs.mkShell {
-
-  NIX_DEBUG_INFO_DIRS = "${pkgs.lib.getLib myDebugInfoDirs}/lib/debug";
+  NIX_DEBUG_INFO_DIRS = pkgs.lib.makeSearchPathOutput "debug" "lib/debug" [
+    pkgs.glibc
+    pkgs.ncurses
+    pkgs.openssl
+    pkgs.readline
+  ];
 
   packages = [
     pkgs.gdb
@@ -1018,16 +1042,16 @@ pkgs.mkShell {
   ];
 
   shellHook = ''
-    ${pkgs.lib.getBin pkgs.gdb}/bin/gdb ${pkgs.lib.getBin pkgs.socat}/bin/socat
+    gdb socat
   '';
 }
 ```
 
 This setup works as follows:
 - Add [`overlays`](#chap-overlays) to the package set, since debug symbols are disabled for `ncurses` and `readline` by default.
-- Create a derivation to combine all required debug symbols under one path with [`symlinkJoin`](#trivial-builder-symlinkJoin).
-- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use it for looking up debug symbols.
-- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell). Here we use [`lib.getBin`](#function-library-lib.attrsets.getBin) to ensure that the correct derivation output is selected rather than the default one.
+- Set the environment variable `NIX_DEBUG_INFO_DIRS` in the shell. Nixpkgs patches `gdb` to use this variable for looking up debug symbols.
+  [`lib.makeSearchPathOutput`](#function-library-lib.strings.makeSearchPathOutput) constructs a colon-separated search path, pointing to the directories containing the debug symbols of the listed packages.
+- Run `gdb` on the `socat` binary on shell startup in the [`shellHook`](#sec-pkgs-mkShell).
 
 :::
 
@@ -1045,9 +1069,7 @@ It is often better to add tests that are not part of the source distribution to 
 Controls whether the installCheck phase is executed. By default it is skipped, but if `doInstallCheck` is set to true, the installCheck phase is usually executed. Thus you should set
 
 ```nix
-{
-  doInstallCheck = true;
-}
+{ doInstallCheck = true; }
 ```
 
 in the derivation to enable install checks. The exception is cross compilation. Cross compiled builds never run tests, no matter how `doInstallCheck` is set, as the newly-built program won’t run on the platform used to build it.
@@ -1415,7 +1437,7 @@ This setup hook checks for, reports, and (by default) fails builds when "broken"
 This hook can be disabled by setting `dontCheckForBrokenSymlinks`.
 
 ::: {.note}
-The hook only considers symlinks with targets inside the Nix store.
+The hook only considers symlinks with targets inside the Nix store or $TMPDIR directory (typically /nix/store and /build in the builder environment, the later being where build is executed).
 :::
 
 ::: {.note}
@@ -1501,7 +1523,7 @@ Note that support for some hardening flags varies by compiler, CPU architecture,
 
 ### Hardening flags enabled by default {#sec-hardening-flags-enabled-by-default}
 
-The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to package is incompatible.
+The following flags are enabled by default and might require disabling with `hardeningDisable` if the program to be packaged is incompatible.
 
 #### `format` {#format}
 
@@ -1659,6 +1681,12 @@ This should be turned off or fixed for build errors such as:
 ```
 sorry, unimplemented: __builtin_clear_padding not supported for variable length aggregates
 ```
+
+#### `glibcxxassertions` {#glibcxxassertions}
+
+Adds the `-D_GLIBCXX_ASSERTIONS` compiler flag. This flag only has an effect on libstdc++ targets, and when defined, enables extra error checking in the form of precondition assertions, such as bounds checking in c++ strings and null pointer checks when dereferencing c++ smart pointers.
+
+These checks may have an impact on performance in some cases.
 
 #### `pacret` {#pacret}
 

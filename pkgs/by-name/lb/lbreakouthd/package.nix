@@ -11,12 +11,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lbreakouthd";
-  version = "1.1.11";
+  version = "1.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/lgames/lbreakouthd-${finalAttrs.version}.tar.gz";
-    hash = "sha256-QFqNGv2+XXe1Dt8HAoqXEHWXFNU/IQ2c9FYEqehrWdI=";
+    hash = "sha256-ZEy/b2ZWAZvDNbAu/FnpsPo8WsvSGADbdaSXU/gpdBk=";
   };
+
+  # On macOS with a case-insensitive filesystem, "sdl.h" shadows <SDL.h>
+  postPatch = lib.optionalString stdenv.buildPlatform.isDarwin ''
+    mv src/sdl.h src/lbhd_sdl.h
+    for file in src/*.cpp src/*.h; do
+      substituteInPlace "$file" --replace-quiet 'sdl.h' 'lbhd_sdl.h'
+    done
+  '';
 
   buildInputs = [
     SDL2
@@ -38,8 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Widescreen Breakout clone";
     license = lib.licenses.gpl2Plus;
     mainProgram = "lbreakouthd";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL2.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

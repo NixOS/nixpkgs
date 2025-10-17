@@ -10,7 +10,7 @@
 }@args:
 
 let
-  version = "6.1.134-rt51"; # updated by ./update-rt.sh
+  version = "6.1.146-rt53"; # updated by ./update-rt.sh
   branch = lib.versions.majorMinor version;
   kversion = builtins.elemAt (lib.splitString "-" version) 0;
 in
@@ -29,7 +29,7 @@ buildLinux (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v6.x/linux-${kversion}.tar.xz";
-      sha256 = "08xx0w5gz7w5hqsnpckmizi1zpg38iwfchj20163ivnxf3fhriv0";
+      sha256 = "117gyi8zym09z2qarnv02i7v23v8596nqvllid07aydlcpihl9pv";
     };
 
     kernelPatches =
@@ -38,7 +38,7 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "18nznajrbjx9y76lki6aa10jkh33v60fnmyrbc0ds9x9xsnfahzz";
+            sha256 = "1kz416nc8hd2pi87l9k496r2lig07dbapyh701lq81rilbzx9nmc";
           };
         };
       in
@@ -60,6 +60,8 @@ buildLinux (
     extraMeta = extraMeta // {
       inherit branch;
     };
+
+    isLTS = true;
   }
   // argsOverride
 )

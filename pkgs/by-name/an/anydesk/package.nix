@@ -34,53 +34,52 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "anydesk";
-  version = "7.0.0";
+  version = "7.1.0";
 
   src = fetchurl {
     urls = [
       "https://download.anydesk.com/linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
       "https://download.anydesk.com/linux/generic-linux/anydesk-${finalAttrs.version}-amd64.tar.gz"
     ];
-    hash = "sha256-AEj4/S4k6mnCb/CagEDhpCtExB8pIqv7V2b/br4nC/8=";
+    hash = "sha256-CplmZZrlnMjmnpOvzFMiSGMnnSNXnXiUtleXi0X52lo=";
   };
 
-  buildInputs =
-    [
-      atk
-      cairo
-      gdk-pixbuf
-      glib
-      gtk3
-      dbus
-      harfbuzz
-      libz
-      stdenv.cc.cc
-      pango
-      libGLU
-      libGL
-      minizip
-      freetype
-      fontconfig
-      polkit
-      polkit_gnome
-      pulseaudio
-    ]
-    ++ (with xorg; [
-      libxcb
-      libxkbfile
-      libX11
-      libXdamage
-      libXext
-      libXfixes
-      libXi
-      libXmu
-      libXrandr
-      libXtst
-      libXt
-      libICE
-      libSM
-      libXrender
-    ]);
+  buildInputs = [
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk3
+    dbus
+    harfbuzz
+    libz
+    stdenv.cc.cc
+    pango
+    libGLU
+    libGL
+    minizip
+    freetype
+    fontconfig
+    polkit
+    polkit_gnome
+    pulseaudio
+  ]
+  ++ (with xorg; [
+    libxcb
+    libxkbfile
+    libX11
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXmu
+    libXrandr
+    libXtst
+    libXt
+    libICE
+    libSM
+    libXrender
+  ]);
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -99,13 +98,18 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace systemd/anydesk.service --replace-fail "/usr/bin/anydesk" "$out/bin/anydesk"
+  '';
+
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor}
+    mkdir -p $out/bin $out/share/{applications,doc/anydesk,icons/hicolor} $out/lib/systemd/system
     install -m755 anydesk $out/bin/anydesk
     cp copyright README $out/share/doc/anydesk
     cp -r icons/hicolor/* $out/share/icons/hicolor/
+    cp systemd/anydesk.service $out/lib/systemd/system/anydesk.service
 
     runHook postInstall
   '';
@@ -144,8 +148,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [
-      shyim
-    ];
+    maintainers = [ ];
   };
 })

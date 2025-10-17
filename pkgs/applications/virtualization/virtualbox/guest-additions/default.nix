@@ -12,12 +12,25 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.1.10";
+  virtualboxVersion = "7.2.2";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "7d60010a4c9102613554b46f61d17b825c30ee59d8be071e52d8aac664ca9869";
+  virtualboxSha256 = "sha256-sOY7+4VTJ67PESLNozOQwzc05f/tcvEj9e33hqjOE5M=";
+
+  platform =
+    if stdenv.hostPlatform.isAarch64 then
+      "arm64"
+    else if stdenv.hostPlatform.is32bit then
+      "x86"
+    else
+      "amd64";
 
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix {
-    inherit virtualboxVersion virtualboxSubVersion virtualboxSha256;
+    inherit
+      virtualboxVersion
+      virtualboxSubVersion
+      virtualboxSha256
+      platform
+      ;
   };
 
   # Specifies how to patch binaries to make sure that libraries loaded using
@@ -54,9 +67,7 @@ stdenv.mkDerivation {
   pname = "VirtualBox-GuestAdditions";
   version = "${virtualboxVersion}${virtualboxSubVersion}-${kernel.version}";
 
-  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${
-    if stdenv.hostPlatform.is32bit then "x86" else "amd64"
-  }.tar.bz2";
+  src = "${virtualBoxNixGuestAdditionsBuilder}/VBoxGuestAdditions-${platform}.tar.bz2";
   sourceRoot = ".";
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -70,7 +81,8 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
-  ] ++ kernel.moduleBuildDependencies;
+  ]
+  ++ kernel.moduleBuildDependencies;
 
   buildPhase = ''
     runHook preBuild
@@ -158,6 +170,7 @@ stdenv.mkDerivation {
     platforms = [
       "i686-linux"
       "x86_64-linux"
+      "aarch64-linux"
     ];
     broken = stdenv.hostPlatform.is32bit && (kernel.kernelAtLeast "5.10");
   };

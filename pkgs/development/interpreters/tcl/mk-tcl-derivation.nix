@@ -41,7 +41,7 @@ let
 
   self = (
     stdenv.mkDerivation (
-      (builtins.removeAttrs attrs [
+      (removeAttrs attrs [
         "addTclConfigureFlags"
         "checkPhase"
         "checkInputs"
@@ -74,7 +74,8 @@ let
 
         meta = {
           platforms = tcl.meta.platforms;
-        } // meta;
+        }
+        // meta;
 
       }
       // optionalAttrs (attrs ? checkPhase) {

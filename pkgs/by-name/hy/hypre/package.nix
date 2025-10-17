@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description = "Parallel solvers for sparse linear systems featuring multigrid methods.";
+    description = "Parallel solvers for sparse linear systems featuring multigrid methods";
     homepage = "https://computing.llnl.gov/projects/hypre-scalable-linear-solvers-multigrid-methods";
     platforms = platforms.unix;
     license = licenses.mit;

@@ -46,20 +46,19 @@ let
       python3.pkgs.pyside6
     ];
 
-    buildInputs =
-      [
-        graphviz
-        python3
-        qt5compat
-        qtbase
-        qtsvg
-        qttools
-        qtwebengine
-        rizin
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        qtwayland
-      ];
+    buildInputs = [
+      graphviz
+      python3
+      qt5compat
+      qtbase
+      qtsvg
+      qttools
+      qtwebengine
+      rizin
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ];
 
     cmakeFlags = [
       "-DCUTTER_USE_BUNDLED_RIZIN=OFF"

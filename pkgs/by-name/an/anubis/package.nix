@@ -2,52 +2,44 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  fetchNpmDeps,
   nixosTests,
   stdenv,
-  buildNpmPackage,
-
+  npmHooks,
+  nodejs,
   esbuild,
   brotli,
   zstd,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "anubis";
-  version = "1.20.0";
+  version = "1.22.0";
 
   src = fetchFromGitHub {
     owner = "TecharoHQ";
     repo = "anubis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pdfe2D9KAg/vesTgOi+b5ZVkUkuWhmZC/xYXiiYzlPs=";
+    hash = "sha256-LOYBl9r00AJljGvlacd506cLeMr8Ndh817/ZIw46Uu0=";
   };
 
-  vendorHash = "sha256-cOl+eVnj6aMKIJCjCM0aacp4/Jg5BhZqFwum+u9tOKE=";
+  vendorHash = "sha256-/iTAbwYSHTz9SrJ0vrAXsA+3yS0jUreJDF52gju9CgU=";
+
+  npmDeps = fetchNpmDeps {
+    name = "anubis-npm-deps";
+    inherit (finalAttrs) src;
+    hash = "sha256-s+OxVf6Iysobfuo0nAh5qF157opD2sR5D+7awAx6GTs=";
+  };
 
   nativeBuildInputs = [
     esbuild
     brotli
     zstd
+
+    nodejs
+    npmHooks.npmConfigHook
   ];
-
-  xess = buildNpmPackage {
-    pname = "anubis-xess";
-    inherit (finalAttrs) version src;
-
-    npmDepsHash = "sha256-kBnexaBAMgA7QdKevW3mmlSn+QEbkTW//hYVTRFLQeQ=";
-
-    buildPhase = ''
-      runHook preBuild
-      npx postcss ./xess/xess.css -o xess.min.css
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-      install -Dm644 xess.min.css $out/xess.min.css
-      runHook postInstall
-    '';
-  };
 
   subPackages = [ "cmd/anubis" ];
 
@@ -55,22 +47,38 @@ buildGoModule (finalAttrs: {
     "-s"
     "-w"
     "-X=github.com/TecharoHQ/anubis.Version=v${finalAttrs.version}"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "-extldflags=-static" ];
+
+  prePatch = ''
+    # we must forcefully disable the hook when creating the go vendor archive
+    if [[ $name =~ go-modules ]]; then
+      npmConfigHook() { true; }
+    fi
+  '';
 
   postPatch = ''
-    patchShebangs ./web/build.sh
+    patchShebangs ./web/build.sh ./lib/challenge/preact/build.sh
   '';
 
   preBuild = ''
-    go generate ./... && ./web/build.sh && cp -r ${finalAttrs.xess}/xess.min.css ./xess
+    # do not run when creating go vendor archive
+    if [[ ! $name =~ go-modules ]]; then
+      # https://github.com/TecharoHQ/anubis/blob/main/xess/build.sh
+      npx postcss ./xess/xess.css -o xess/xess.min.css
+      go generate ./...
+      ./web/build.sh
+    fi
   '';
 
   preCheck = ''
     export DONT_USE_NETWORK=1
   '';
 
-  passthru.tests = { inherit (nixosTests) anubis; };
-  passthru.updateScript = ./update.sh;
+  passthru = {
+    tests = { inherit (nixosTests) anubis; };
+    updateScript = nix-update-script { extraArgs = [ "--version-regex=^v(\\d+\\.\\d+\\.\\d+)$" ]; };
+  };
 
   meta = {
     description = "Weighs the soul of incoming HTTP requests using proof-of-work to stop AI crawlers";

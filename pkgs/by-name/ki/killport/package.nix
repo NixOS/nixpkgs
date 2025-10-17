@@ -13,7 +13,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-7bENyg/KR4oI//jvG6bw+3UX3j9ITAXCMTpc+65VBZ8=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-+PhaRVpsM/6GOnGkGDROoOGasrZsagK1LqBZTo9IbSI=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -30,7 +29,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Command-line tool to easily kill processes running on a specified port";
     homepage = "https://github.com/jkfran/killport";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "killport";
   };
 })

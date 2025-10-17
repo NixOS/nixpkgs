@@ -6,17 +6,26 @@
   pypblib,
   pytestCheckHook,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-sat";
-  version = "0.1.8.dev17";
+  version = "0.1.8.dev20";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pysathq";
     repo = "pysat";
-    rev = "a04763de6dafb8d3a0d7f1b231fc0d30be1de4c0"; # upstream does not tag releases
-    hash = "sha256-FG6oAAI8XKXumj6Ys2QjjYcRp1TpwkUZzyfpkdq5V6E=";
+    rev = "d94f51e5eff2feef35abbc25480659eafa615cc0"; # upstream does not tag releases
+    hash = "sha256-fKZcdEVuqpv8jWnK8Cr1UJ7szJqXivK6x3YPYHH5ccI=";
   };
+
+  # Build SAT solver backends in parallel and fix hard-coded g++ reference for
+  # darwin, where stdenv uses clang
+  postPatch = ''
+    substituteInPlace solvers/prepare.py \
+      --replace-fail "&& make &&" "&& make -j$NIX_BUILD_CORES &&"
+    substituteInPlace solvers/patches/glucose421.patch \
+      --replace-fail "+CXX      := g++" "+CXX      := c++"
+  '';
 
   propagatedBuildInputs = [
     six
@@ -37,6 +46,5 @@ buildPythonPackage rec {
       maintainers.chrjabs
     ];
     platforms = lib.platforms.all;
-    badPlatforms = lib.platforms.darwin ++ [ "i686-linux" ];
   };
 }

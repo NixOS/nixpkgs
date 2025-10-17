@@ -1,23 +1,26 @@
 {
+  stdenv,
   lib,
   fetchFromGitHub,
+  installShellFiles,
   python3Packages,
   versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "mbake";
-  version = "1.2.4";
+  version = "1.4.1.pre";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EbodShojaei";
     repo = "bake";
     tag = "v${version}";
-    hash = "sha256-RzM3HC3lYq93mngpqNCohcPMISWQ4+Lwa1V88S0O0To=";
+    hash = "sha256-HbBibwrd73GA0Z3xiYJAu1te7BADqsSkk0d99bMrwPw=";
   };
 
   build-system = [
+    installShellFiles
     python3Packages.hatchling
   ];
 
@@ -26,13 +29,20 @@ python3Packages.buildPythonApplication rec {
     typer
   ];
 
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd mbake \
+      --bash <($out/bin/mbake completions bash) \
+      --fish <($out/bin/mbake completions fish) \
+      --zsh <($out/bin/mbake completions zsh)
+  '';
+
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     versionCheckHook
   ];
   versionCheckProgramArg = "--version";
 
-  pythonImportsCheck = [ "bake" ];
+  pythonImportsCheck = [ "mbake" ];
 
   meta = {
     description = "Makefile formatter and linter";

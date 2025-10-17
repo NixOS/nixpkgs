@@ -44,7 +44,8 @@ buildPythonPackage rec {
     backoff
     deepmerge
     yarl
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   nativeCheckInputs = [
     aresponses

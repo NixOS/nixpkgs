@@ -1,12 +1,13 @@
 {
-  "url": "https://github.com/abstractmachineslab/tree-sitter-erlang",
-  "rev": "3a9c769444f08bbccce03845270efac0c641c5e7",
-  "date": "2022-10-20T12:35:01+02:00",
-  "path": "/nix/store/lcpjcmkb2js7mmvpd9w9c4gql0yqvdaj-tree-sitter-erlang",
-  "sha256": "10hv3brjvrvg81qxi956mrc16riknhaqmxb6vpl46k0zsm6cgj36",
-  "hash": "sha256-ZsjHTNUfTEPo3Wb1ihW0M2YTWK6mpNhxQG/nLfMaG4I=",
+  "url": "https://github.com/WhatsApp/tree-sitter-erlang",
+  "rev": "5dba13dcd531c19bf99829e2e0bb31f2e08e16fe",
+  "date": "2023-06-16T04:39:42-07:00",
+  "path": "/nix/store/m6f3qpkrcvj9ccmybq55ip3x33f3wkh5-tree-sitter-erlang",
+  "sha256": "123n9yb3g8fh27104n5bsmqpykv9wiqqj6hwn5cxx4rp9ls06zql",
+  "hash": "sha256-FH8DNE03k95ZsRwaiXHkaU9/cdWrWALCEdChN5ZPdog=",
   "fetchLFS": false,
   "fetchSubmodules": false,
   "deepClone": false,
+  "fetchTags": false,
   "leaveDotGit": false
 }

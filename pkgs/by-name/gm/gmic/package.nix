@@ -31,7 +31,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
-  version = "3.5.5";
+  version = "3.6.2";
 
   outputs = [
     "out"
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GreycLab";
     repo = "gmic";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-OPA0diWAtB8MCaw2DOyh89DVi7lQmyCsQ2gqfK7dGW8=";
+    hash = "sha256-KiX7yHwuy2AWLqqmiHz9YhbvRBEusE9TuXKtaA9YsME=";
   };
 
   # TODO: build this from source
@@ -63,23 +63,22 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cimg
-      fftw
-      graphicsmagick
-      libX11
-      libXext
-      libjpeg
-      libpng
-      libtiff
-      opencv
-      openexr
-      zlib
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    cimg
+    fftw
+    graphicsmagick
+    libX11
+    libXext
+    libjpeg
+    libpng
+    libtiff
+    opencv
+    openexr
+    zlib
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIB_STATIC" false)
@@ -90,19 +89,18 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
-  postPatch =
-    ''
-      cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace CMakeLists.txt \
-        --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
-    ''
-    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-      substituteInPlace CMakeLists.txt --replace-fail \
-        'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
-        '${lib.getExe buildPackages.gmic}'
-    '';
+  postPatch = ''
+    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace CMakeLists.txt \
+      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+  ''
+  + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'LD_LIBRARY_PATH=''${GMIC_BINARIES_PATH} ''${GMIC_BINARIES_PATH}/gmic' \
+      '${lib.getExe buildPackages.gmic}'
+  '';
 
   passthru = {
     tests = {

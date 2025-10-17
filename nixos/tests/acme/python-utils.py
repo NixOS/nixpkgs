@@ -3,6 +3,36 @@ import time
 
 TOTAL_RETRIES = 20
 
+# BackoffTracker provides a robust system for handling test retries
+class BackoffTracker:
+    delay = 1
+    increment = 1
+
+    def handle_fail(self, retries, message) -> int:
+        assert retries < TOTAL_RETRIES, message
+
+        print(f"Retrying in {self.delay}s, {retries + 1}/{TOTAL_RETRIES}")
+        time.sleep(self.delay)
+
+        # Only increment after the first try
+        if retries == 0:
+            self.delay += self.increment
+            self.increment *= 2
+
+        return retries + 1
+
+    def protect(self, func):
+        def wrapper(*args, retries: int = 0, **kwargs):
+            try:
+                return func(*args, **kwargs)
+            except Exception as err:
+                retries = self.handle_fail(retries, err.args)
+                return wrapper(*args, retries=retries, **kwargs)
+
+        return wrapper
+
+
+backoff = BackoffTracker()
 
 def run(node, cmd, fail=False):
     if fail:
@@ -39,6 +69,7 @@ def switch_to(node, name, fail=False) -> None:
 # and matches the issuer we expect it to be.
 # It's a good validation to ensure the cert.pem and fullchain.pem
 # are not still selfsigned after verification
+@backoff.protect
 def check_issuer(node, cert_name, issuer) -> None:
     for fname in ("cert.pem", "fullchain.pem"):
         actual_issuer = node.succeed(
@@ -102,9 +133,10 @@ def check_permissions(node, cert_name, group):
         f"test $({stat} /var/lib/acme/{cert_name}/*.pem"
         f" | tee /dev/stderr | grep -v '640 acme {group}' | wc -l) -eq 0"
     )
+    node.execute(f"ls -lahR /var/lib/acme/.lego/{cert_name}/* > /dev/stderr")
     node.succeed(
         f"test $({stat} /var/lib/acme/.lego/{cert_name}/*/{cert_name}*"
-        f" | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
+        f" | tee /dev/stderr | grep -v '640 acme {group}' | wc -l) -eq 0"
     )
     node.succeed(
         f"test $({stat} /var/lib/acme/{cert_name}"
@@ -114,37 +146,6 @@ def check_permissions(node, cert_name, group):
         f"test $(find /var/lib/acme/.lego/accounts -type f -exec {stat} {{}} \\;"
         f" | tee /dev/stderr | grep -v '600 acme {group}' | wc -l) -eq 0"
     )
-
-# BackoffTracker provides a robust system for handling test retries
-class BackoffTracker:
-    delay = 1
-    increment = 1
-
-    def handle_fail(self, retries, message) -> int:
-        assert retries < TOTAL_RETRIES, message
-
-        print(f"Retrying in {self.delay}s, {retries + 1}/{TOTAL_RETRIES}")
-        time.sleep(self.delay)
-
-        # Only increment after the first try
-        if retries == 0:
-            self.delay += self.increment
-            self.increment *= 2
-
-        return retries + 1
-
-    def protect(self, func):
-        def wrapper(*args, retries: int = 0, **kwargs):
-            try:
-                return func(*args, **kwargs)
-            except Exception as err:
-                retries = self.handle_fail(retries, err.args)
-                return wrapper(*args, retries=retries, **kwargs)
-
-        return wrapper
-
-
-backoff = BackoffTracker()
 
 
 @backoff.protect

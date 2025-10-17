@@ -39,20 +39,22 @@ buildPythonPackage rec {
     maturinBuildHook
   ];
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ (with rustPlatform; [
-      bindgenHook
-      cargoSetupHook
-      maturinBuildHook
-    ]);
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ (with rustPlatform; [
+    bindgenHook
+    cargoSetupHook
+    maturinBuildHook
+  ]);
 
-  buildInputs =
-    [ nettle ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    nettle
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   dependencies = [ httpx ];
 

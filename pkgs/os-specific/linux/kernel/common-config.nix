@@ -37,7 +37,7 @@ let
   whenPlatformHasEBPFJit = lib.mkIf (
     stdenv.hostPlatform.isAarch32
     || stdenv.hostPlatform.isAarch64
-    || stdenv.hostPlatform.isx86_64
+    || stdenv.hostPlatform.isx86
     || (stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit)
     || (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit)
   );
@@ -111,99 +111,99 @@ let
 
       # Enable crashkernel support
       PROC_VMCORE = yes;
+      HIGHMEM4G = lib.mkIf (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.is32bit) yes;
 
       # Track memory leaks and performance issues related to allocations.
       MEM_ALLOC_PROFILING = whenAtLeast "6.10" yes;
       MEM_ALLOC_PROFILING_ENABLED_BY_DEFAULT = whenAtLeast "6.10" yes;
     };
 
-    power-management =
-      {
-        CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = yes;
-        CPU_FREQ_GOV_SCHEDUTIL = yes;
-        PM_DEBUG = yes;
-        PM_ADVANCED_DEBUG = yes;
-        PM_WAKELOCKS = yes;
-        POWERCAP = yes;
-        # ACPI Firmware Performance Data Table Support
-        ACPI_FPDT = whenAtLeast "5.12" (option yes);
-        # ACPI Heterogeneous Memory Attribute Table Support
-        ACPI_HMAT = option yes;
-        # ACPI Platform Error Interface
-        ACPI_APEI = (option yes);
-        # APEI Generic Hardware Error Source
-        ACPI_APEI_GHES = (option yes);
+    power-management = {
+      CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = yes;
+      CPU_FREQ_GOV_SCHEDUTIL = yes;
+      PM_DEBUG = yes;
+      PM_ADVANCED_DEBUG = yes;
+      PM_WAKELOCKS = yes;
+      POWERCAP = yes;
+      # ACPI Firmware Performance Data Table Support
+      ACPI_FPDT = whenAtLeast "5.12" (option yes);
+      # ACPI Heterogeneous Memory Attribute Table Support
+      ACPI_HMAT = option yes;
+      # ACPI Platform Error Interface
+      ACPI_APEI = (option yes);
+      # APEI Generic Hardware Error Source
+      ACPI_APEI_GHES = (option yes);
 
-        # Without this, on some hardware the kernel fails at some
-        # point after the EFI stub has executed but before a console
-        # is set up. Regardless, it's good to have the extra debug
-        # anyway.
-        ACPI_DEBUG = yes;
+      # Without this, on some hardware the kernel fails at some
+      # point after the EFI stub has executed but before a console
+      # is set up. Regardless, it's good to have the extra debug
+      # anyway.
+      ACPI_DEBUG = yes;
 
-        # Enable lazy RCUs for power savings:
-        # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
-        # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
-        # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
-        # so we can't force-enable this
-        RCU_LAZY = whenAtLeast "6.2" (option yes);
+      # Enable lazy RCUs for power savings:
+      # https://lore.kernel.org/rcu/20221019225138.GA2499943@paulmck-ThinkPad-P17-Gen-1/
+      # RCU_LAZY depends on RCU_NOCB_CPU depends on NO_HZ_FULL
+      # depends on HAVE_VIRT_CPU_ACCOUNTING_GEN depends on 64BIT,
+      # so we can't force-enable this
+      RCU_LAZY = whenAtLeast "6.2" (option yes);
 
-        # Auto suspend Bluetooth devices at idle
-        BT_HCIBTUSB_AUTOSUSPEND = yes;
+      # Auto suspend Bluetooth devices at idle
+      BT_HCIBTUSB_AUTOSUSPEND = yes;
 
-        # Expose cpufreq stats in sysfs
-        CPU_FREQ_STAT = yes;
+      # Expose cpufreq stats in sysfs
+      CPU_FREQ_STAT = yes;
 
-        # Enable CPU energy model for scheduling
-        ENERGY_MODEL = whenAtLeast "5.0" yes;
+      # Enable CPU energy model for scheduling
+      ENERGY_MODEL = whenAtLeast "5.0" yes;
 
-        # Enable thermal interface netlink API
-        THERMAL_NETLINK = whenAtLeast "5.9" yes;
+      # Enable thermal interface netlink API
+      THERMAL_NETLINK = whenAtLeast "5.9" yes;
 
-        # Prefer power-efficient workqueue implementation to per-CPU workqueues,
-        # which is slightly slower, but improves battery life.
-        # This is opt-in per workqueue, and can be disabled globally with a kernel command line option.
-        WQ_POWER_EFFICIENT_DEFAULT = yes;
+      # Prefer power-efficient workqueue implementation to per-CPU workqueues,
+      # which is slightly slower, but improves battery life.
+      # This is opt-in per workqueue, and can be disabled globally with a kernel command line option.
+      WQ_POWER_EFFICIENT_DEFAULT = yes;
 
-        # Default SATA link power management to "medium with device initiated PM"
-        # for some extra power savings.
-        SATA_MOBILE_LPM_POLICY = whenAtLeast "5.18" (freeform "3");
+      # Default SATA link power management to "medium with device initiated PM"
+      # for some extra power savings.
+      SATA_MOBILE_LPM_POLICY = whenAtLeast "5.18" (freeform "3");
 
-        # GPIO power management
-        POWER_RESET_GPIO = option yes;
-        POWER_RESET_GPIO_RESTART = option yes;
+      # GPIO power management
+      POWER_RESET_GPIO = option yes;
+      POWER_RESET_GPIO_RESTART = option yes;
 
-        # Enable Pulse-Width-Modulation support, commonly used for fan and backlight.
-        PWM = yes;
-      }
-      // lib.optionalAttrs (stdenv.hostPlatform.isx86) {
-        INTEL_IDLE = yes;
-        INTEL_RAPL = module;
-        X86_INTEL_LPSS = yes;
-        X86_INTEL_PSTATE = yes;
-        X86_AMD_PSTATE = whenAtLeast "5.17" yes;
-        # Intel DPTF (Dynamic Platform and Thermal Framework) Support
-        ACPI_DPTF = whenAtLeast "5.10" yes;
+      # Enable Pulse-Width-Modulation support, commonly used for fan and backlight.
+      PWM = yes;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.isx86) {
+      INTEL_IDLE = yes;
+      INTEL_RAPL = module;
+      X86_INTEL_LPSS = yes;
+      X86_INTEL_PSTATE = yes;
+      X86_AMD_PSTATE = whenAtLeast "5.17" yes;
+      # Intel DPTF (Dynamic Platform and Thermal Framework) Support
+      ACPI_DPTF = whenAtLeast "5.10" yes;
 
-        # Required to bring up some Bay Trail devices properly
-        I2C = yes;
-        I2C_DESIGNWARE_CORE = yes;
-        I2C_DESIGNWARE_PLATFORM = yes;
-        PMIC_OPREGION = whenAtLeast "5.10" yes;
-        INTEL_SOC_PMIC = whenAtLeast "5.10" yes;
-        BYTCRC_PMIC_OPREGION = whenAtLeast "5.10" yes;
-        CHTCRC_PMIC_OPREGION = whenAtLeast "5.10" yes;
-        XPOWER_PMIC_OPREGION = whenAtLeast "5.10" yes;
-        BXT_WC_PMIC_OPREGION = whenAtLeast "5.10" yes;
-        INTEL_SOC_PMIC_CHTWC = whenAtLeast "5.10" yes;
-        CHT_WC_PMIC_OPREGION = whenAtLeast "5.10" yes;
-        INTEL_SOC_PMIC_CHTDC_TI = whenAtLeast "5.10" yes;
-        CHT_DC_TI_PMIC_OPREGION = whenAtLeast "5.10" yes;
-        MFD_TPS68470 = whenBetween "5.10" "5.13" yes;
-        TPS68470_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      # Required to bring up some Bay Trail devices properly
+      I2C = yes;
+      I2C_DESIGNWARE_CORE = yes;
+      I2C_DESIGNWARE_PLATFORM = yes;
+      PMIC_OPREGION = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC = whenAtLeast "5.10" yes;
+      BYTCRC_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      CHTCRC_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      XPOWER_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      BXT_WC_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC_CHTWC = whenAtLeast "5.10" yes;
+      CHT_WC_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      INTEL_SOC_PMIC_CHTDC_TI = whenAtLeast "5.10" yes;
+      CHT_DC_TI_PMIC_OPREGION = whenAtLeast "5.10" yes;
+      MFD_TPS68470 = whenBetween "5.10" "5.13" yes;
+      TPS68470_PMIC_OPREGION = whenAtLeast "5.10" yes;
 
-        # Enable Intel thermal hardware feedback
-        INTEL_HFI_THERMAL = whenAtLeast "5.18" yes;
-      };
+      # Enable Intel thermal hardware feedback
+      INTEL_HFI_THERMAL = whenAtLeast "5.18" yes;
+    };
 
     external-firmware = {
       # Support drivers that need external firmware.
@@ -222,27 +222,27 @@ let
       CC_OPTIMIZE_FOR_SIZE = no;
     };
 
-    memory =
-      {
-        DAMON = whenAtLeast "5.15" yes;
-        DAMON_VADDR = whenAtLeast "5.15" yes;
-        DAMON_PADDR = whenAtLeast "5.16" yes;
-        DAMON_SYSFS = whenAtLeast "5.18" yes;
-        DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
-        DAMON_RECLAIM = whenAtLeast "5.16" yes;
-        DAMON_LRU_SORT = whenAtLeast "6.0" yes;
-        # Support recovering from memory failures on systems with ECC and MCA recovery.
-        MEMORY_FAILURE = yes;
+    memory = {
+      DAMON = whenAtLeast "5.15" yes;
+      DAMON_VADDR = whenAtLeast "5.15" yes;
+      DAMON_PADDR = whenAtLeast "5.16" yes;
+      DAMON_SYSFS = whenAtLeast "5.18" yes;
+      DAMON_DBGFS = whenBetween "5.15" "6.9" yes;
+      DAMON_RECLAIM = whenAtLeast "5.16" yes;
+      DAMON_LRU_SORT = whenAtLeast "6.0" yes;
+      DAMON_STAT = whenAtLeast "6.17" yes;
+      # Support recovering from memory failures on systems with ECC and MCA recovery.
+      MEMORY_FAILURE = yes;
 
-        # Collect ECC errors and retire pages that fail too often
-        RAS_CEC = lib.mkIf stdenv.hostPlatform.isx86 yes;
-      }
-      // lib.optionalAttrs (stdenv.hostPlatform.is32bit) {
-        # Enable access to the full memory range (aka PAE) on 32-bit architectures
-        # This check isn't super accurate but it's close enough
-        HIGHMEM = option yes;
-        BOUNCE = option yes;
-      };
+      # Collect ECC errors and retire pages that fail too often
+      RAS_CEC = lib.mkIf stdenv.hostPlatform.isx86 yes;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.is32bit) {
+      # Enable access to the full memory range (aka PAE) on 32-bit architectures
+      # This check isn't super accurate but it's close enough
+      HIGHMEM = option yes;
+      BOUNCE = option yes;
+    };
 
     memtest = {
       MEMTEST = yes;
@@ -277,139 +277,139 @@ let
       NUMA_BALANCING = option yes;
     };
 
-    networking =
-      {
-        NET = yes;
-        IP_ADVANCED_ROUTER = yes;
-        IP_PNP = no;
-        IP_ROUTE_MULTIPATH = yes;
-        IP_VS_PROTO_TCP = yes;
-        IP_VS_PROTO_UDP = yes;
-        IP_VS_PROTO_ESP = yes;
-        IP_VS_PROTO_AH = yes;
-        IP_VS_IPV6 = yes;
-        IP_DCCP_CCID3 = whenOlder "6.16" no; # experimental
-        CLS_U32_PERF = yes;
-        CLS_U32_MARK = yes;
-        BPF_JIT = whenPlatformHasEBPFJit yes;
-        BPF_JIT_ALWAYS_ON = whenPlatformHasEBPFJit no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
-        HAVE_EBPF_JIT = whenPlatformHasEBPFJit yes;
-        BPF_STREAM_PARSER = yes;
-        XDP_SOCKETS = yes;
-        XDP_SOCKETS_DIAG = yes;
-        WAN = yes;
-        TCP_CONG_ADVANCED = yes;
-        TCP_CONG_CUBIC = yes; # This is the default congestion control algorithm since 2.6.19
-        # Required by systemd per-cgroup firewalling
-        CGROUP_BPF = option yes;
-        CGROUP_NET_PRIO = yes; # Required by systemd
-        IP_ROUTE_VERBOSE = yes;
-        IP_MROUTE = yes;
-        IP_MROUTE_MULTIPLE_TABLES = yes;
-        IP_MULTICAST = yes;
-        IP_MULTIPLE_TABLES = yes;
-        IPV6 = yes;
-        IPV6_ROUTER_PREF = yes;
-        IPV6_ROUTE_INFO = yes;
-        IPV6_OPTIMISTIC_DAD = yes;
-        IPV6_MULTIPLE_TABLES = yes;
-        IPV6_SUBTREES = yes;
-        IPV6_MROUTE = yes;
-        IPV6_MROUTE_MULTIPLE_TABLES = yes;
-        IPV6_PIMSM_V2 = yes;
-        IPV6_FOU_TUNNEL = module;
-        IPV6_SEG6_LWTUNNEL = yes;
-        IPV6_SEG6_HMAC = yes;
-        IPV6_SEG6_BPF = yes;
-        NET_CLS_BPF = module;
-        NET_ACT_BPF = module;
-        NET_SCHED = yes;
-        L2TP_V3 = yes;
-        L2TP_IP = module;
-        L2TP_ETH = module;
-        BRIDGE_VLAN_FILTERING = yes;
-        BONDING = module;
-        NET_L3_MASTER_DEV = option yes;
-        NET_FOU_IP_TUNNELS = option yes;
-        IP_NF_TARGET_REDIRECT = module;
-        NETKIT = whenAtLeast "6.7" yes;
+    networking = {
+      NET = yes;
+      IP_ADVANCED_ROUTER = yes;
+      IP_PNP = no;
+      IP_ROUTE_MULTIPATH = yes;
+      IP_VS_PROTO_TCP = yes;
+      IP_VS_PROTO_UDP = yes;
+      IP_VS_PROTO_ESP = yes;
+      IP_VS_PROTO_AH = yes;
+      IP_VS_IPV6 = yes;
+      IP_DCCP_CCID3 = whenOlder "6.16" no; # experimental
+      CLS_U32_PERF = yes;
+      CLS_U32_MARK = yes;
+      BPF_JIT = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON = whenPlatformHasEBPFJit no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
+      HAVE_EBPF_JIT = whenPlatformHasEBPFJit yes;
+      BPF_STREAM_PARSER = yes;
+      XDP_SOCKETS = yes;
+      XDP_SOCKETS_DIAG = yes;
+      WAN = yes;
+      TCP_CONG_ADVANCED = yes;
+      TCP_CONG_CUBIC = yes; # This is the default congestion control algorithm since 2.6.19
+      # Required by systemd per-cgroup firewalling
+      CGROUP_BPF = option yes;
+      CGROUP_NET_PRIO = yes; # Required by systemd
+      IP_ROUTE_VERBOSE = yes;
+      IP_MROUTE = yes;
+      IP_MROUTE_MULTIPLE_TABLES = yes;
+      IP_MULTICAST = yes;
+      IP_MULTIPLE_TABLES = yes;
+      IPV6 = yes;
+      IPV6_ROUTER_PREF = yes;
+      IPV6_ROUTE_INFO = yes;
+      IPV6_OPTIMISTIC_DAD = yes;
+      IPV6_MULTIPLE_TABLES = yes;
+      IPV6_SUBTREES = yes;
+      IPV6_MROUTE = yes;
+      IPV6_MROUTE_MULTIPLE_TABLES = yes;
+      IPV6_PIMSM_V2 = yes;
+      IPV6_FOU_TUNNEL = module;
+      IPV6_SEG6_LWTUNNEL = yes;
+      IPV6_SEG6_HMAC = yes;
+      IPV6_SEG6_BPF = yes;
+      NET_CLS_BPF = module;
+      NET_ACT_BPF = module;
+      NET_SCHED = yes;
+      NET_SCH_BPF = whenAtLeast "6.16" (whenPlatformHasEBPFJit yes);
+      L2TP_V3 = yes;
+      L2TP_IP = module;
+      L2TP_ETH = module;
+      BRIDGE_VLAN_FILTERING = yes;
+      BONDING = module;
+      NET_L3_MASTER_DEV = option yes;
+      NET_FOU_IP_TUNNELS = option yes;
+      IP_NF_TARGET_REDIRECT = whenOlder "6.17" module;
+      NETKIT = whenAtLeast "6.7" yes;
 
-        PPP_MULTILINK = yes; # PPP multilink support
-        PPP_FILTER = yes;
+      PPP_MULTILINK = yes; # PPP multilink support
+      PPP_FILTER = yes;
 
-        # needed for iwd WPS support (wpa_supplicant replacement)
-        KEY_DH_OPERATIONS = yes;
+      # needed for iwd WPS support (wpa_supplicant replacement)
+      KEY_DH_OPERATIONS = yes;
 
-        # needed for nftables
-        # Networking Options
-        NETFILTER = yes;
-        NETFILTER_ADVANCED = yes;
-        # Core Netfilter Configuration
-        NF_CONNTRACK_ZONES = yes;
-        NF_CONNTRACK_EVENTS = yes;
-        NF_CONNTRACK_TIMEOUT = yes;
-        NF_CONNTRACK_TIMESTAMP = yes;
-        NETFILTER_NETLINK_GLUE_CT = yes;
-        NF_TABLES_INET = yes;
-        NF_TABLES_NETDEV = yes;
-        NFT_REJECT_NETDEV = whenAtLeast "5.11" module;
+      # needed for nftables
+      # Networking Options
+      NETFILTER = yes;
+      NETFILTER_ADVANCED = yes;
+      # Core Netfilter Configuration
+      NF_CONNTRACK_ZONES = yes;
+      NF_CONNTRACK_EVENTS = yes;
+      NF_CONNTRACK_TIMEOUT = yes;
+      NF_CONNTRACK_TIMESTAMP = yes;
+      NETFILTER_NETLINK_GLUE_CT = yes;
+      NF_TABLES_INET = yes;
+      NF_TABLES_NETDEV = yes;
+      NFT_REJECT_NETDEV = whenAtLeast "5.11" module;
 
-        # IP: Netfilter Configuration
-        NF_TABLES_IPV4 = yes;
-        NF_TABLES_ARP = yes;
-        # IPv6: Netfilter Configuration
-        NF_TABLES_IPV6 = yes;
-        # Bridge Netfilter Configuration
-        NF_TABLES_BRIDGE = module;
-        # Expose some debug info
-        NF_CONNTRACK_PROCFS = yes;
-        NF_FLOW_TABLE_PROCFS = whenAtLeast "6.0" yes;
+      # IP: Netfilter Configuration
+      NF_TABLES_IPV4 = yes;
+      NF_TABLES_ARP = yes;
+      # IPv6: Netfilter Configuration
+      NF_TABLES_IPV6 = yes;
+      # Bridge Netfilter Configuration
+      NF_TABLES_BRIDGE = module;
+      # Expose some debug info
+      NF_CONNTRACK_PROCFS = yes;
+      NF_FLOW_TABLE_PROCFS = whenAtLeast "6.0" yes;
 
-        # needed for `dropwatch`
-        # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
-        NET_DROP_MONITOR = yes;
+      # needed for `dropwatch`
+      # Builtin-only since https://github.com/torvalds/linux/commit/f4b6bcc7002f0e3a3428bac33cf1945abff95450
+      NET_DROP_MONITOR = yes;
 
-        # needed for ss
-        # Use a lower priority to allow these options to be overridden in hardened/config.nix
-        INET_DIAG = lib.mkDefault module;
-        INET_TCP_DIAG = lib.mkDefault module;
-        INET_UDP_DIAG = lib.mkDefault module;
-        INET_RAW_DIAG = lib.mkDefault module;
-        INET_DIAG_DESTROY = lib.mkDefault yes;
+      # needed for ss
+      # Use a lower priority to allow these options to be overridden in hardened/config.nix
+      INET_DIAG = lib.mkDefault module;
+      INET_TCP_DIAG = lib.mkDefault module;
+      INET_UDP_DIAG = lib.mkDefault module;
+      INET_RAW_DIAG = lib.mkDefault module;
+      INET_DIAG_DESTROY = lib.mkDefault yes;
 
-        # IPsec over TCP
-        INET_ESPINTCP = whenAtLeast "5.8" yes;
-        INET6_ESPINTCP = whenAtLeast "5.8" yes;
+      # IPsec over TCP
+      INET_ESPINTCP = whenAtLeast "5.8" yes;
+      INET6_ESPINTCP = whenAtLeast "5.8" yes;
 
-        # enable multipath-tcp
-        MPTCP = whenAtLeast "5.6" yes;
-        MPTCP_IPV6 = whenAtLeast "5.6" yes;
-        INET_MPTCP_DIAG = whenAtLeast "5.9" (lib.mkDefault module);
+      # enable multipath-tcp
+      MPTCP = whenAtLeast "5.6" yes;
+      MPTCP_IPV6 = whenAtLeast "5.6" yes;
+      INET_MPTCP_DIAG = whenAtLeast "5.9" (lib.mkDefault module);
 
-        # Kernel TLS
-        TLS = module;
-        TLS_DEVICE = yes;
+      # Kernel TLS
+      TLS = module;
+      TLS_DEVICE = yes;
 
-        # infiniband
-        INFINIBAND = module;
-        INFINIBAND_IPOIB = module;
-        INFINIBAND_IPOIB_CM = yes;
+      # infiniband
+      INFINIBAND = module;
+      INFINIBAND_IPOIB = module;
+      INFINIBAND_IPOIB_CM = yes;
 
-        # Enable debugfs for wireless drivers
-        CFG80211_DEBUGFS = yes;
-        MAC80211_DEBUGFS = yes;
+      # Enable debugfs for wireless drivers
+      CFG80211_DEBUGFS = yes;
+      MAC80211_DEBUGFS = yes;
 
-        # HAM radio
-        HAMRADIO = yes;
-        AX25 = module;
-      }
-      // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
-        # Not enabled by default, hides modules behind it
-        NET_VENDOR_MEDIATEK = yes;
-        # Enable SoC interface for MT7915 module, required for MT798X.
-        MT7986_WMAC = whenBetween "5.18" "6.6" yes;
-        MT798X_WMAC = whenAtLeast "6.6" yes;
-      };
+      # HAM radio
+      HAMRADIO = yes;
+      AX25 = module;
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
+      # Not enabled by default, hides modules behind it
+      NET_VENDOR_MEDIATEK = yes;
+      # Enable SoC interface for MT7915 module, required for MT798X.
+      MT7986_WMAC = whenBetween "5.18" "6.6" yes;
+      MT798X_WMAC = whenAtLeast "6.6" yes;
+    };
 
     wireless = {
       CFG80211_WEXT = option yes; # Without it, ipw2200 drivers don't build
@@ -435,6 +435,13 @@ let
       ATH10K_DFS_CERTIFIED = option yes;
       B43_PHY_HT = option yes;
       BCMA_HOST_PCI = option yes;
+
+      # Enable "untested" hardware support for RTL8xxxU.
+      # There's a bunch of those still floating around,
+      # and given how old the hardware is, we're unlikely
+      # to kill any, so let's enable all known device IDs.
+      RTL8XXXU_UNTESTED = option yes;
+
       RTW88 = module;
       RTW88_8822BE = lib.mkMerge [
         (whenOlder "5.8" yes)
@@ -521,7 +528,9 @@ let
         DRM_AMD_DC_DCN = lib.mkIf (with stdenv.hostPlatform; isx86 || isPower64) (
           whenBetween "5.11" "6.4" yes
         );
-        DRM_AMD_DC_FP = whenAtLeast "6.4" yes;
+        # Not available when using clang
+        # See: https://github.com/torvalds/linux/blob/172a9d94339cea832d89630b89d314e41d622bd8/drivers/gpu/drm/amd/display/Kconfig#L14
+        DRM_AMD_DC_FP = lib.mkIf (!stdenv.cc.isClang) (whenAtLeast "6.4" yes);
         DRM_AMD_DC_HDCP = whenBetween "5.5" "6.4" yes;
         DRM_AMD_DC_SI = whenAtLeast "5.10" yes;
 
@@ -541,7 +550,7 @@ let
         DRM_AMD_ISP = whenAtLeast "6.11" yes;
 
         # Enable new firmware (and by extension NVK) for compatible hardware on Nouveau
-        DRM_NOUVEAU_GSP_DEFAULT = whenAtLeast "6.8" yes;
+        DRM_NOUVEAU_GSP_DEFAULT = whenBetween "6.8" "6.18" yes;
 
         # Enable Nouveau shared virtual memory (used by OpenCL)
         DEVICE_PRIVATE = whenHasDevicePrivate yes;
@@ -559,6 +568,11 @@ let
         # Intel GVT-g graphics virtualization supports 64-bit only
         DRM_I915_GVT = yes;
         DRM_I915_GVT_KVMGT = module;
+        # Enable Hyper-V guest stuff
+        HYPERV = lib.mkMerge [
+          (whenOlder "6.18" module)
+          (whenAtLeast "6.18" yes)
+        ];
         # Enable Hyper-V Synthetic DRM Driver
         DRM_HYPERV = whenAtLeast "5.14" module;
         # And disable the legacy framebuffer driver when we have the new one
@@ -584,28 +598,27 @@ let
       DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" yes;
     };
 
-    sound =
-      {
-        SND_DYNAMIC_MINORS = yes;
-        SND_AC97_POWER_SAVE = yes; # AC97 Power-Saving Mode
-        # 10s for the idle timeout, Fedora does 1, Arch does 10.
-        # The kernel says we should do 10.
-        # Read: https://docs.kernel.org/sound/designs/powersave.html
-        SND_AC97_POWER_SAVE_DEFAULT = freeform "10";
-        SND_HDA_POWER_SAVE_DEFAULT = freeform "10";
-        SND_HDA_INPUT_BEEP = yes; # Support digital beep via input layer
-        SND_HDA_RECONFIG = yes; # Support reconfiguration of jack functions
-        # Support configuring jack functions via fw mechanism at boot
-        SND_HDA_PATCH_LOADER = yes;
-        SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
-        SND_HDA_CODEC_CS8409 = whenAtLeast "6.6" module; # Cirrus Logic HDA Bridge CS8409
-        SND_OSSEMUL = yes;
-        SND_USB_CAIAQ_INPUT = yes;
-        SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
-        # Enable Sound Open Firmware support
-      }
-      // lib.optionalAttrs
-        (stdenv.hostPlatform.system == "x86_64-linux" && lib.versionAtLeast version "5.5")
+    sound = {
+      SND_DYNAMIC_MINORS = yes;
+      SND_AC97_POWER_SAVE = yes; # AC97 Power-Saving Mode
+      # 10s for the idle timeout, Fedora does 1, Arch does 10.
+      # The kernel says we should do 10.
+      # Read: https://docs.kernel.org/sound/designs/powersave.html
+      SND_AC97_POWER_SAVE_DEFAULT = freeform "10";
+      SND_HDA_POWER_SAVE_DEFAULT = freeform "10";
+      SND_HDA_INPUT_BEEP = yes; # Support digital beep via input layer
+      SND_HDA_RECONFIG = yes; # Support reconfiguration of jack functions
+      # Support configuring jack functions via fw mechanism at boot
+      SND_HDA_PATCH_LOADER = yes;
+      SND_HDA_CODEC_CA0132_DSP = whenOlder "5.7" yes; # Enable DSP firmware loading on Creative Soundblaster Z/Zx/ZxR/Recon
+      SND_HDA_CODEC_CS8409 = whenAtLeast "6.6" module; # Cirrus Logic HDA Bridge CS8409
+      SND_OSSEMUL = yes;
+      SND_USB_CAIAQ_INPUT = yes;
+      SND_USB_AUDIO_MIDI_V2 = whenAtLeast "6.5" yes;
+      # Enable Sound Open Firmware support
+    }
+    //
+      lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux" && lib.versionAtLeast version "5.5")
         {
           SND_SOC_INTEL_SOUNDWIRE_SOF_MACH = whenAtLeast "5.10" module;
           SND_SOC_INTEL_USER_FRIENDLY_LONG_NAMES = whenAtLeast "5.10" yes; # dep of SOF_MACH
@@ -650,6 +663,8 @@ let
       # default to dual role mode
       USB_DWC2_DUAL_ROLE = yes;
       USB_DWC3_DUAL_ROLE = yes;
+
+      USB_XHCI_SIDEBAND = whenAtLeast "6.16" yes; # needed for audio offload
     };
 
     usb-serial = {
@@ -673,8 +688,8 @@ let
       EXT2_FS_POSIX_ACL = yes;
       EXT2_FS_SECURITY = yes;
 
-      EXT3_FS_POSIX_ACL = yes;
-      EXT3_FS_SECURITY = yes;
+      EXT3_FS_POSIX_ACL = option yes;
+      EXT3_FS_SECURITY = option yes;
 
       EXT4_FS_POSIX_ACL = yes;
       EXT4_FS_SECURITY = yes;
@@ -699,8 +714,8 @@ let
 
       BTRFS_FS_POSIX_ACL = yes;
 
-      BCACHEFS_QUOTA = whenAtLeast "6.7" (option yes);
-      BCACHEFS_POSIX_ACL = whenAtLeast "6.7" (option yes);
+      BCACHEFS_QUOTA = whenBetween "6.7" "6.18" (option yes);
+      BCACHEFS_POSIX_ACL = whenBetween "6.7" "6.18" (option yes);
 
       UBIFS_FS_ADVANCED_COMPR = option yes;
 
@@ -759,109 +774,108 @@ let
       UNICODE = yes; # Casefolding support for filesystems
     };
 
-    security =
-      {
-        # Report BUG() conditions and kill the offending process.
-        BUG = yes;
-        BUG_ON_DATA_CORRUPTION = yes;
+    security = {
+      # Report BUG() conditions and kill the offending process.
+      BUG = yes;
+      BUG_ON_DATA_CORRUPTION = yes;
 
-        FORTIFY_SOURCE = option yes;
+      FORTIFY_SOURCE = option yes;
 
-        # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
-        DEBUG_LIST = yes;
+      # https://googleprojectzero.blogspot.com/2019/11/bad-binder-android-in-wild-exploit.html
+      DEBUG_LIST = yes;
 
-        HARDENED_USERCOPY = yes;
-        RANDOMIZE_BASE = option yes;
-        STRICT_KERNEL_RWX = yes;
-        STRICT_MODULE_RWX = yes;
-        STRICT_DEVMEM = lib.mkDefault yes; # Filter access to /dev/mem
-        IO_STRICT_DEVMEM = lib.mkDefault yes;
+      HARDENED_USERCOPY = yes;
+      RANDOMIZE_BASE = option yes;
+      STRICT_KERNEL_RWX = yes;
+      STRICT_MODULE_RWX = yes;
+      STRICT_DEVMEM = lib.mkDefault yes; # Filter access to /dev/mem
+      IO_STRICT_DEVMEM = lib.mkDefault yes;
 
-        # Prevent processes from ptracing non-children processes
-        SECURITY_YAMA = option yes;
-        # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
-        # This does not have any effect if a program does not support it
-        SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
+      # Prevent processes from ptracing non-children processes
+      SECURITY_YAMA = option yes;
+      # The goal of Landlock is to enable to restrict ambient rights (e.g. global filesystem access) for a set of processes.
+      # This does not have any effect if a program does not support it
+      SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
 
-        DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
+      DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
 
-        USER_NS = yes; # Support for user namespaces
+      USER_NS = yes; # Support for user namespaces
 
-        SECURITY_APPARMOR = yes;
-        DEFAULT_SECURITY_APPARMOR = yes;
+      SECURITY_APPARMOR = yes;
+      DEFAULT_SECURITY_APPARMOR = yes;
 
-        SECURITY_DMESG_RESTRICT = yes;
+      SECURITY_DMESG_RESTRICT = yes;
 
-        RANDOM_TRUST_CPU = whenOlder "6.2" yes; # allow RDRAND to seed the RNG
-        RANDOM_TRUST_BOOTLOADER = whenOlder "6.2" yes; # allow the bootloader to seed the RNG
+      RANDOM_TRUST_CPU = whenOlder "6.2" yes; # allow RDRAND to seed the RNG
+      RANDOM_TRUST_BOOTLOADER = whenOlder "6.2" yes; # allow the bootloader to seed the RNG
 
-        MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
-        # Depends on MODULE_SIG and only really helps when you sign your modules
-        # and enforce signatures which we don't do by default.
-        SECURITY_LOCKDOWN_LSM = no;
+      MODULE_SIG = no; # r13y, generates a random key during build and bakes it in
+      # Depends on MODULE_SIG and only really helps when you sign your modules
+      # and enforce signatures which we don't do by default.
+      SECURITY_LOCKDOWN_LSM = no;
 
-        # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
-        PERSISTENT_KEYRINGS = yes;
-        # enable temporary caching of the last request_key() result
-        KEYS_REQUEST_CACHE = yes;
-        # randomized slab caches
-        RANDOM_KMALLOC_CACHES = whenAtLeast "6.6" yes;
+      # provides a register of persistent per-UID keyrings, useful for encrypting storage pools in stratis
+      PERSISTENT_KEYRINGS = yes;
+      # enable temporary caching of the last request_key() result
+      KEYS_REQUEST_CACHE = yes;
+      # randomized slab caches
+      RANDOM_KMALLOC_CACHES = whenAtLeast "6.6" yes;
 
-        # NIST SP800-90A DRBG modes - enabled by most distributions
-        #   and required by some out-of-tree modules (ShuffleCake)
-        #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
-        CRYPTO_DRBG_HASH = yes;
-        CRYPTO_DRBG_CTR = yes;
+      # NIST SP800-90A DRBG modes - enabled by most distributions
+      #   and required by some out-of-tree modules (ShuffleCake)
+      #   This does not include the NSA-backdoored Dual-EC mode from the same NIST publication.
+      CRYPTO_DRBG_HASH = yes;
+      CRYPTO_DRBG_CTR = yes;
 
-        # Enable KFENCE
-        # See: https://docs.kernel.org/dev-tools/kfence.html
-        KFENCE = whenAtLeast "5.12" yes;
+      # Enable KFENCE
+      # See: https://docs.kernel.org/dev-tools/kfence.html
+      KFENCE = whenAtLeast "5.12" yes;
 
-        # Enable support for page poisoning. Still needs to be enabled on the command line to actually work.
-        PAGE_POISONING = yes;
-        # Randomize page allocator when page_alloc.shuffle=1
-        SHUFFLE_PAGE_ALLOCATOR = yes;
+      # Enable support for page poisoning. Still needs to be enabled on the command line to actually work.
+      PAGE_POISONING = yes;
+      # Randomize page allocator when page_alloc.shuffle=1
+      SHUFFLE_PAGE_ALLOCATOR = yes;
 
-        INIT_ON_ALLOC_DEFAULT_ON = yes;
+      INIT_ON_ALLOC_DEFAULT_ON = yes;
 
-        # Enable stack smashing protections in schedule()
-        # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
-        SCHED_STACK_END_CHECK = yes;
+      # Enable stack smashing protections in schedule()
+      # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?h=v4.8&id=0d9e26329b0c9263d4d9e0422d80a0e73268c52f
+      SCHED_STACK_END_CHECK = yes;
 
-        # Enable separate slab buckets for user controlled allocations
-        # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=67f2df3b82d091ed095d0e47e1f3a9d3e18e4e41
-        SLAB_BUCKETS = whenAtLeast "6.11" yes;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
-        # Enable Intel SGX
-        X86_SGX = whenAtLeast "5.11" yes;
-        # Allow KVM guests to load SGX enclaves
-        X86_SGX_KVM = whenAtLeast "5.13" yes;
+      # Enable separate slab buckets for user controlled allocations
+      # See: https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=67f2df3b82d091ed095d0e47e1f3a9d3e18e4e41
+      SLAB_BUCKETS = whenAtLeast "6.11" yes;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isx86_64 {
+      # Enable Intel SGX
+      X86_SGX = whenAtLeast "5.11" yes;
+      # Allow KVM guests to load SGX enclaves
+      X86_SGX_KVM = whenAtLeast "5.13" yes;
 
-        # AMD Cryptographic Coprocessor (CCP)
-        CRYPTO_DEV_CCP = yes;
-        # AMD SME
-        AMD_MEM_ENCRYPT = yes;
-        # AMD SEV and AMD SEV-SE
-        KVM_AMD_SEV = yes;
-        # AMD SEV-SNP
-        SEV_GUEST = whenAtLeast "5.19" module;
-        # Shadow stacks
-        X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
+      # AMD Cryptographic Coprocessor (CCP)
+      CRYPTO_DEV_CCP = yes;
+      # AMD SME
+      AMD_MEM_ENCRYPT = yes;
+      # AMD SEV and AMD SEV-SE
+      KVM_AMD_SEV = yes;
+      # AMD SEV-SNP
+      SEV_GUEST = whenAtLeast "5.19" module;
+      # Shadow stacks
+      X86_USER_SHADOW_STACK = whenAtLeast "6.6" yes;
 
-        # Enable support for Intel Trust Domain Extensions (TDX)
-        INTEL_TDX_GUEST = whenAtLeast "5.19" yes;
-        TDX_GUEST_DRIVER = whenAtLeast "6.2" module;
+      # Enable support for Intel Trust Domain Extensions (TDX)
+      INTEL_TDX_GUEST = whenAtLeast "5.19" yes;
+      TDX_GUEST_DRIVER = whenAtLeast "6.2" module;
 
-        # Mitigate straight line speculation at the cost of some file size
-        SLS = whenBetween "5.17" "6.9" yes;
-        MITIGATION_SLS = whenAtLeast "6.9" yes;
+      # Mitigate straight line speculation at the cost of some file size
+      SLS = whenBetween "5.17" "6.9" yes;
+      MITIGATION_SLS = whenAtLeast "6.9" yes;
 
-        DEFAULT_MMAP_MIN_ADDR = freeform "65536";
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
-        DEFAULT_MMAP_MIN_ADDR = freeform "32768";
-      };
+      DEFAULT_MMAP_MIN_ADDR = freeform "65536";
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isAarch64 {
+      DEFAULT_MMAP_MIN_ADDR = freeform "32768";
+    };
 
     microcode = {
       MICROCODE = lib.mkIf stdenv.hostPlatform.isx86 yes;
@@ -896,6 +910,7 @@ let
       # Enable staging drivers.  These are somewhat experimental, but
       # they generally don't hurt.
       STAGING = yes;
+      STAGING_MEDIA = yes;
     };
 
     proc-events = {
@@ -1010,7 +1025,7 @@ let
       ZRAM_DEF_COMP_ZSTD = whenAtLeast "5.11" yes;
       ZSWAP = option yes;
       ZSWAP_COMPRESSOR_DEFAULT_ZSTD = whenAtLeast "5.7" (lib.mkOptionDefault yes);
-      ZPOOL = yes;
+      ZPOOL = whenOlder "6.18" yes;
       ZSMALLOC = option yes;
     };
 
@@ -1027,25 +1042,24 @@ let
     };
 
     # Disable various self-test modules that have no use in a production system
-    tests =
-      {
-        # This menu disables all/most of them on >= 4.16
-        RUNTIME_TESTING_MENU = option no;
-      }
-      // {
-        CRC32_SELFTEST = option no;
-        CRYPTO_TEST = option no;
-        EFI_TEST = option no;
-        GLOB_SELFTEST = option no;
-        LOCK_TORTURE_TEST = option no;
-        MTD_TESTS = option no;
-        NOTIFIER_ERROR_INJECTION = option no;
-        RCU_PERF_TEST = whenOlder "5.9" no;
-        RCU_SCALE_TEST = whenAtLeast "5.10" no;
-        TEST_ASYNC_DRIVER_PROBE = option no;
-        WW_MUTEX_SELFTEST = option no;
-        XZ_DEC_TEST = option no;
-      };
+    tests = {
+      # This menu disables all/most of them on >= 4.16
+      RUNTIME_TESTING_MENU = option no;
+    }
+    // {
+      CRC32_SELFTEST = option no;
+      CRYPTO_TEST = option no;
+      EFI_TEST = option no;
+      GLOB_SELFTEST = option no;
+      LOCK_TORTURE_TEST = option no;
+      MTD_TESTS = option no;
+      NOTIFIER_ERROR_INJECTION = option no;
+      RCU_PERF_TEST = whenOlder "5.9" no;
+      RCU_SCALE_TEST = whenAtLeast "5.10" no;
+      TEST_ASYNC_DRIVER_PROBE = option no;
+      WW_MUTEX_SELFTEST = option no;
+      XZ_DEC_TEST = option no;
+    };
 
     criu = {
       # Unconditionally enabled, because it is required for CRIU and
@@ -1076,6 +1090,8 @@ let
         HID_BATTERY_STRENGTH = yes;
         # enabled by default in x86_64 but not arm64, so we do that here
         HIDRAW = yes;
+        # 6.18-rc1 fails to link otherwise, at least on aarch64
+        HID_HAPTIC = whenAtLeast "6.18" yes;
 
         # Enable loading HID fixups as eBPF from userspace
         HID_BPF = whenAtLeast "6.3" (whenPlatformHasEBPFJit yes);
@@ -1086,7 +1102,9 @@ let
         HOLTEK_FF = yes;
         INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
+        LOGITECH_FF = yes;
         LOGIG940_FF = yes;
+        LOGIWHEELS_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
         NVIDIA_SHIELD_FF = whenAtLeast "6.5" yes;
         PLAYSTATION_FF = whenAtLeast "5.12" yes;
@@ -1298,8 +1316,13 @@ let
         HOTPLUG_PCI_PCIE = yes; # PCI-Expresscard hotplug support
 
         # Enable AMD's ROCm GPU compute stack
-        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit (yes);
-        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit (yes);
+        HSA_AMD = lib.mkIf stdenv.hostPlatform.is64bit yes;
+        # required for P2P DMABUF
+        DMABUF_MOVE_NOTIFY = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+        # required for P2P transfers between accelerators
+        HSA_AMD_P2P = lib.mkIf stdenv.hostPlatform.is64bit (whenAtLeast "6.6" yes);
+
+        ZONE_DEVICE = lib.mkIf stdenv.hostPlatform.is64bit yes;
         HMM_MIRROR = yes;
         DRM_AMDGPU_USERPTR = yes;
 
@@ -1465,6 +1488,9 @@ let
         # Enable AMD Wi-Fi RF band mitigations
         # See https://cateee.net/lkddb/web-lkddb/AMD_WBRF.html
         AMD_WBRF = whenAtLeast "6.8" yes;
+
+        # Enable AMD heterogeneous core hardware feedback interface
+        AMD_HFI = whenAtLeast "6.17" yes;
 
         # Enable Intel Turbo Boost Max 3.0
         INTEL_TURBO_MAX_3 = yes;

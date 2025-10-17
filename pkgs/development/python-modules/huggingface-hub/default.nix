@@ -36,18 +36,21 @@
   graphviz,
   # tensorflow-testing
   keras,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "huggingface-hub";
-  version = "0.33.1";
+  version = "0.35.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "huggingface_hub";
     tag = "v${version}";
-    hash = "sha256-rrOmmYHH8Rz6OhJPbRfdwC/AATdYrPTTuPvCPe0G3Do=";
+    hash = "sha256-KOq3qxt3AyWQIOG0+HUbNr15u85tyTEstoUkYBFkpC4=";
   };
 
   build-system = [ setuptools ];
@@ -76,7 +79,8 @@ buildPythonPackage rec {
     torch = [
       torch
       safetensors
-    ] ++ safetensors.optional-dependencies.torch;
+    ]
+    ++ safetensors.optional-dependencies.torch;
     hf_transfer = [
       hf-transfer
     ];
@@ -99,17 +103,22 @@ buildPythonPackage rec {
     ];
   };
 
-  # Tests require network access.
-  doCheck = false;
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   pythonImportsCheck = [ "huggingface_hub" ];
 
   meta = {
     description = "Download and publish models and other files on the huggingface.co hub";
-    mainProgram = "huggingface-cli";
+    mainProgram = "hf";
     homepage = "https://github.com/huggingface/huggingface_hub";
     changelog = "https://github.com/huggingface/huggingface_hub/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ GaetanLepage ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      osbm
+    ];
   };
 }

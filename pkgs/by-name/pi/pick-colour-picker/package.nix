@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   python3Packages,
   glib,
   gtk3,
@@ -10,8 +11,8 @@
 
 python3Packages.buildPythonPackage {
   pname = "pick-colour-picker";
-  version = "unstable-2022-05-08";
-  format = "setuptools";
+  version = "1.5.0-unstable-2022-05-08";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "stuartlangridge";
@@ -31,6 +32,8 @@ python3Packages.buildPythonPackage {
     wrapGAppsHook3
   ];
 
+  build-system = with python3Packages; [ setuptools ];
+
   pythonPath = with python3Packages; [
     pygobject3
     pycairo
@@ -40,6 +43,12 @@ python3Packages.buildPythonPackage {
     glib
     gtk3
   ];
+
+  pythonImportsCheck = [ "pick" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = with lib; {
     homepage = "https://kryogenix.org/code/pick/";

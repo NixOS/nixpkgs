@@ -153,7 +153,8 @@ in
           NAME = "aesm_service";
           AESM_PATH = storeAesmFolder;
           LD_LIBRARY_PATH = makeLibraryPath [ cfg.quoteProviderLibrary ];
-        } // cfg.environment;
+        }
+        // cfg.environment;
 
         # Make sure any of the SGX application enclave devices is available
         unitConfig.AssertPathExists = [

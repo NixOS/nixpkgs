@@ -24,187 +24,196 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
+    settingsToSections
     ;
 
-  upstreamSystemUnits =
-    [
-      # Targets.
-      "basic.target"
-      "sysinit.target"
-      "sockets.target"
-      "exit.target"
-      "graphical.target"
-      "multi-user.target"
-      "network.target"
-      "network-pre.target"
-      "network-online.target"
-      "nss-lookup.target"
-      "nss-user-lookup.target"
-      "time-sync.target"
-      "first-boot-complete.target"
-    ]
-    ++ optionals cfg.package.withCryptsetup [
-      "cryptsetup.target"
-      "cryptsetup-pre.target"
-      "remote-cryptsetup.target"
-    ]
-    ++ [
-      "sigpwr.target"
-      "timers.target"
-      "paths.target"
-      "rpcbind.target"
+  upstreamSystemUnits = [
+    # Targets.
+    "basic.target"
+    "sysinit.target"
+    "sockets.target"
+    "exit.target"
+    "graphical.target"
+    "multi-user.target"
+    "network.target"
+    "network-pre.target"
+    "network-online.target"
+    "nss-lookup.target"
+    "nss-user-lookup.target"
+    "time-sync.target"
+    "first-boot-complete.target"
+  ]
+  ++ optionals cfg.package.withCryptsetup [
+    "cryptsetup.target"
+    "cryptsetup-pre.target"
+    "remote-cryptsetup.target"
+  ]
+  ++ [
+    "sigpwr.target"
+    "timers.target"
+    "paths.target"
+    "rpcbind.target"
 
-      # Rescue mode.
-      "rescue.target"
-      "rescue.service"
+    # Rescue mode.
+    "rescue.target"
+    "rescue.service"
 
-      # systemd-debug-generator
-      "debug-shell.service"
+    # systemd-debug-generator
+    "debug-shell.service"
 
-      # Udev.
-      "systemd-udevd-control.socket"
-      "systemd-udevd-kernel.socket"
-      "systemd-udevd.service"
-      "systemd-udev-settle.service"
-    ]
-    ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
-    ++ [
-      # hwdb.bin is managed by NixOS
-      # "systemd-hwdb-update.service"
+    # Udev.
+    "systemd-udevd-control.socket"
+    "systemd-udevd-kernel.socket"
+    "systemd-udevd.service"
+    "systemd-udev-settle.service"
+  ]
+  ++ (optional (!config.boot.isContainer) "systemd-udev-trigger.service")
+  ++ [
+    # hwdb.bin is managed by NixOS
+    # "systemd-hwdb-update.service"
 
-      # Hardware (started by udev when a relevant device is plugged in).
-      "sound.target"
-      "bluetooth.target"
-      "printer.target"
-      "smartcard.target"
+    # Hardware (started by udev when a relevant device is plugged in).
+    "sound.target"
+    "bluetooth.target"
+    "printer.target"
+    "smartcard.target"
 
-      # Kernel module loading.
-      "systemd-modules-load.service"
-      "kmod-static-nodes.service"
-      "modprobe@.service"
+    # Kernel module loading.
+    "systemd-modules-load.service"
+    "kmod-static-nodes.service"
+    "modprobe@.service"
 
-      # Filesystems.
-      "systemd-fsck@.service"
-      "systemd-fsck-root.service"
-      "systemd-growfs@.service"
-      "systemd-growfs-root.service"
-      "systemd-remount-fs.service"
-      "systemd-pstore.service"
-      "local-fs.target"
-      "local-fs-pre.target"
-      "remote-fs.target"
-      "remote-fs-pre.target"
-      "swap.target"
-      "dev-hugepages.mount"
-      "dev-mqueue.mount"
-      "sys-fs-fuse-connections.mount"
-    ]
-    ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount")
-    ++ [
-      "sys-kernel-debug.mount"
-      "sys-kernel-tracing.mount"
+    # Filesystems.
+    "systemd-fsck@.service"
+    "systemd-fsck-root.service"
+    "systemd-growfs@.service"
+    "systemd-growfs-root.service"
+    "systemd-remount-fs.service"
+    "systemd-pstore.service"
+    "local-fs.target"
+    "local-fs-pre.target"
+    "remote-fs.target"
+    "remote-fs-pre.target"
+    "swap.target"
+    "dev-hugepages.mount"
+    "dev-mqueue.mount"
+    "sys-fs-fuse-connections.mount"
+  ]
+  ++ (optional (!config.boot.isContainer) "sys-kernel-config.mount")
+  ++ [
+    "sys-kernel-debug.mount"
+    "sys-kernel-tracing.mount"
 
-      # Maintaining state across reboots.
-      "systemd-random-seed.service"
-    ]
-    ++ (optional cfg.package.withBootloader "systemd-boot-random-seed.service")
-    ++ [
-      "systemd-backlight@.service"
-      "systemd-rfkill.service"
-      "systemd-rfkill.socket"
+    # Maintaining state across reboots.
+    "systemd-random-seed.service"
+  ]
+  ++ optionals cfg.package.withBootloader [
+    "systemd-boot-random-seed.service"
+    "systemd-bless-boot.service"
+  ]
+  ++ [
+    "systemd-backlight@.service"
+    "systemd-rfkill.service"
+    "systemd-rfkill.socket"
 
-      # Hibernate / suspend.
-      "hibernate.target"
-      "suspend.target"
-      "suspend-then-hibernate.target"
-      "sleep.target"
-      "hybrid-sleep.target"
-      "systemd-hibernate.service"
-    ]
-    ++ (lib.optional cfg.package.withEfi "systemd-hibernate-clear.service")
-    ++ [
-      "systemd-hybrid-sleep.service"
-      "systemd-suspend.service"
-      "systemd-suspend-then-hibernate.service"
+    "boot-complete.target"
 
-      # Reboot stuff.
-      "reboot.target"
-      "systemd-reboot.service"
-      "poweroff.target"
-      "systemd-poweroff.service"
-      "halt.target"
-      "systemd-halt.service"
-      "shutdown.target"
-      "umount.target"
-      "final.target"
-      "kexec.target"
-      "systemd-kexec.service"
-    ]
-    ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service"
-    ++ [
+    # Hibernate / suspend.
+    "hibernate.target"
+    "suspend.target"
+    "suspend-then-hibernate.target"
+    "sleep.target"
+    "hybrid-sleep.target"
+    "systemd-hibernate.service"
+  ]
+  ++ (lib.optional cfg.package.withEfi "systemd-hibernate-clear.service")
+  ++ [
+    "systemd-hybrid-sleep.service"
+    "systemd-suspend.service"
+    "systemd-suspend-then-hibernate.service"
 
-      # Password entry.
-      "systemd-ask-password-console.path"
-      "systemd-ask-password-console.service"
-      "systemd-ask-password-wall.path"
-      "systemd-ask-password-wall.service"
+    # Reboot stuff.
+    "reboot.target"
+    "systemd-reboot.service"
+    "poweroff.target"
+    "systemd-poweroff.service"
+    "halt.target"
+    "systemd-halt.service"
+    "shutdown.target"
+    "umount.target"
+    "final.target"
+    "kexec.target"
+    "systemd-kexec.service"
+  ]
+  ++ lib.optional cfg.package.withUtmp "systemd-update-utmp.service"
+  ++ [
 
-      # Varlink APIs
-    ]
-    ++ lib.optionals cfg.package.withBootloader [
-      "systemd-bootctl@.service"
-      "systemd-bootctl.socket"
-    ]
-    ++ [
-      "systemd-creds@.service"
-      "systemd-creds.socket"
-    ]
-    ++ lib.optional cfg.package.withTpm2Units [
-      "systemd-pcrlock@.service"
-      "systemd-pcrlock.socket"
-    ]
-    ++ [
+    # Password entry.
+    "systemd-ask-password-console.path"
+    "systemd-ask-password-console.service"
+    "systemd-ask-password-wall.path"
+    "systemd-ask-password-wall.service"
 
-      # Slices / containers.
-      "slices.target"
-    ]
-    ++ optionals cfg.package.withImportd [
-      "systemd-importd.service"
-    ]
-    ++ optionals cfg.package.withMachined [
-      "machine.slice"
-      "machines.target"
-      "systemd-machined.service"
-    ]
-    ++ [
-      "systemd-nspawn@.service"
+    # Varlink APIs
+  ]
+  ++ lib.optionals cfg.package.withBootloader [
+    "systemd-bootctl@.service"
+    "systemd-bootctl.socket"
+  ]
+  ++ [
+    "systemd-creds@.service"
+    "systemd-creds.socket"
+  ]
+  ++ lib.optional cfg.package.withTpm2Units [
+    "systemd-pcrlock@.service"
+    "systemd-pcrlock.socket"
+  ]
+  ++ [
 
-      # Misc.
-      "systemd-sysctl.service"
-      "systemd-machine-id-commit.service"
-    ]
-    ++ optionals cfg.package.withTimedated [
-      "dbus-org.freedesktop.timedate1.service"
-      "systemd-timedated.service"
-    ]
-    ++ optionals cfg.package.withLocaled [
-      "dbus-org.freedesktop.locale1.service"
-      "systemd-localed.service"
-    ]
-    ++ optionals cfg.package.withHostnamed [
-      "dbus-org.freedesktop.hostname1.service"
-      "systemd-hostnamed.service"
-      "systemd-hostnamed.socket"
-    ]
-    ++ optionals cfg.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-      "systemd-portabled.service"
-    ]
-    ++ [
-      "systemd-exit.service"
-      "systemd-update-done.service"
-    ]
-    ++ cfg.additionalUpstreamSystemUnits;
+    # Slices / containers.
+    "slices.target"
+  ]
+  ++ optionals cfg.package.withImportd [
+    "systemd-importd.service"
+  ]
+  ++ optionals cfg.package.withMachined [
+    "machine.slice"
+    "machines.target"
+    "systemd-machined.service"
+  ]
+  ++ [
+    "systemd-nspawn@.service"
+
+    # Misc.
+    "systemd-sysctl.service"
+    "systemd-machine-id-commit.service"
+  ]
+  ++ optionals cfg.package.withTimedated [
+    "dbus-org.freedesktop.timedate1.service"
+    "systemd-timedated.service"
+  ]
+  ++ optionals cfg.package.withLocaled [
+    "dbus-org.freedesktop.locale1.service"
+    "systemd-localed.service"
+  ]
+  ++ optionals cfg.package.withHostnamed [
+    "dbus-org.freedesktop.hostname1.service"
+    "systemd-hostnamed.service"
+    "systemd-hostnamed.socket"
+  ]
+  ++ optionals cfg.package.withPortabled [
+    "dbus-org.freedesktop.portable1.service"
+    "systemd-portabled.service"
+  ]
+  ++ [
+    "systemd-exit.service"
+    "systemd-update-done.service"
+
+    # Capsule support
+    "capsule@.service"
+    "capsule.slice"
+  ]
+  ++ cfg.additionalUpstreamSystemUnits;
 
   upstreamSystemWants = [
     "sysinit.target.wants"
@@ -406,20 +415,25 @@ in
       '';
     };
 
-    enableCgroupAccounting = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable cgroup accounting; see {manpage}`cgroups(7)`.
+    settings.Manager = mkOption {
+      default = { };
+      defaultText = lib.literalExpression ''
+        {
+          DefaultIOAccounting = true;
+          DefaultIPAccounting = true;
+        }
       '';
-    };
-
-    extraConfig = mkOption {
-      default = "";
-      type = types.lines;
-      example = "DefaultLimitCORE=infinity";
+      type = lib.types.submodule {
+        freeformType = types.attrsOf unitOption;
+      };
+      example = {
+        WatchdogDevice = "/dev/watchdog";
+        RuntimeWatchdogSec = "30s";
+        RebootWatchdogSec = "10min";
+        KExecWatchdogSec = "5min";
+      };
       description = ''
-        Extra config options for systemd. See {manpage}`systemd-system.conf(5)` man page
+        Options for the global systemd service manager. See {manpage}`systemd-system.conf(5)` man page
         for available options.
       '';
     };
@@ -456,59 +470,6 @@ in
         {option}`systemd.additionalUpstreamSystemUnits`. The main purpose of this is to
         prevent a upstream systemd unit from being added to the initrd with any modifications made to it
         by other NixOS modules.
-      '';
-    };
-
-    watchdog.device = mkOption {
-      type = types.nullOr types.path;
-      default = null;
-      example = "/dev/watchdog";
-      description = ''
-        The path to a hardware watchdog device which will be managed by systemd.
-        If not specified, systemd will default to `/dev/watchdog`.
-      '';
-    };
-
-    watchdog.runtimeTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "30s";
-      description = ''
-        The amount of time which can elapse before a watchdog hardware device
-        will automatically reboot the system.
-
-        Valid time units include "ms", "s", "min", "h", "d", and "w";
-        see {manpage}`systemd.time(7)`.
-      '';
-    };
-
-    watchdog.rebootTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "10m";
-      description = ''
-        The amount of time which can elapse after a reboot has been triggered
-        before a watchdog hardware device will automatically reboot the system.
-        If left `null`, systemd will use its default of 10 minutes;
-        see {manpage}`systemd-system.conf(5)`.
-
-        Valid time units include "ms", "s", "min", "h", "d", and "w";
-        see also {manpage}`systemd.time(7)`.
-      '';
-    };
-
-    watchdog.kexecTime = mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "10m";
-      description = ''
-        The amount of time which can elapse when `kexec` is being executed before
-        a watchdog hardware device will automatically reboot the system. This
-        option should only be enabled if `reloadTime` is also enabled;
-        see {manpage}`kexec(8)`.
-
-        Valid time units include "ms", "s", "min", "h", "d", and "w";
-        see also {manpage}`systemd.time(7)`.
       '';
     };
   };
@@ -598,6 +559,11 @@ in
           (mkAfter [ "[success=merge] systemd" ]) # need merge so that NSS won't stop at file-based groups
         ]
       );
+      shadow = (
+        mkMerge [
+          (mkAfter [ "systemd" ])
+        ]
+      );
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -629,7 +595,7 @@ in
         enabledUnits = filterAttrs (n: v: !elem n cfg.suppressedSystemUnits) cfg.units;
 
       in
-      ({
+      {
         "systemd/system".source = generateUnits {
           type = "system";
           units = enabledUnits;
@@ -637,35 +603,7 @@ in
           upstreamWants = upstreamSystemWants;
         };
 
-        "systemd/system.conf".text = ''
-          [Manager]
-          ManagerEnvironment=${
-            lib.concatStringsSep " " (
-              lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
-            )
-          }
-          ${optionalString cfg.enableCgroupAccounting ''
-            DefaultCPUAccounting=yes
-            DefaultIOAccounting=yes
-            DefaultBlockIOAccounting=yes
-            DefaultIPAccounting=yes
-          ''}
-          DefaultLimitCORE=infinity
-          ${optionalString (cfg.watchdog.device != null) ''
-            WatchdogDevice=${cfg.watchdog.device}
-          ''}
-          ${optionalString (cfg.watchdog.runtimeTime != null) ''
-            RuntimeWatchdogSec=${cfg.watchdog.runtimeTime}
-          ''}
-          ${optionalString (cfg.watchdog.rebootTime != null) ''
-            RebootWatchdogSec=${cfg.watchdog.rebootTime}
-          ''}
-          ${optionalString (cfg.watchdog.kexecTime != null) ''
-            KExecWatchdogSec=${cfg.watchdog.kexecTime}
-          ''}
-
-          ${cfg.extraConfig}
-        '';
+        "systemd/system.conf".text = settingsToSections cfg.settings;
 
         "systemd/sleep.conf".text = ''
           [Sleep]
@@ -690,7 +628,7 @@ in
         "systemd/user-preset/00-nixos.preset".text = ''
           ignore *
         '';
-      });
+      };
 
     services.dbus.enable = true;
 
@@ -749,6 +687,13 @@ in
       SYSTEMD_UNIT_PATH = lib.mkIf (
         config.boot.extraSystemdUnitPaths != [ ]
       ) "${builtins.concatStringsSep ":" config.boot.extraSystemdUnitPaths}:";
+    };
+    systemd.settings.Manager = {
+      ManagerEnvironment = lib.concatStringsSep " " (
+        lib.mapAttrsToList (n: v: "${n}=${lib.escapeShellArg v}") cfg.managerEnvironment
+      );
+      DefaultIOAccounting = lib.mkDefault true;
+      DefaultIPAccounting = lib.mkDefault true;
     };
 
     system.requiredKernelConfig = map config.lib.kernelConfig.isEnabled [
@@ -832,6 +777,19 @@ in
         minsize = "1M";
       };
     };
+
+    # run0 is supposed to authenticate the user via polkit and then run a command. Without this next
+    # part, run0 would fail to run the command even if authentication is successful and the user has
+    # permission to run the command. This next part is only enabled if polkit is enabled because the
+    # error that we’re trying to avoid can’t possibly happen if polkit isn’t enabled. When polkit isn’t
+    # enabled, run0 will fail before it even tries to run the command.
+    security.pam.services = mkIf config.security.polkit.enable {
+      systemd-run0 = {
+        # Upstream config: https://github.com/systemd/systemd/blob/main/src/run/systemd-run0.in
+        setLoginUid = true;
+        pamMount = false;
+      };
+    };
   };
 
   # FIXME: Remove these eventually.
@@ -846,5 +804,26 @@ in
       To forcibly reenable cgroup v1 support, you can set boot.kernelParams = [ "systemd.unified_cgroup_hierarchy=0" "SYSTEMD_CGROUP_ENABLE_LEGACY_FORCE=1" ].
       NixOS does not officially support this configuration and might cause your system to be unbootable in future versions. You are on your own.
     '')
+    (mkRemovedOptionModule [ "systemd" "extraConfig" ] "Use systemd.settings.Manager instead.")
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "device" ]
+      [ "systemd" "settings" "Manager" "WatchdogDevice" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "runtimeTime" ]
+      [ "systemd" "settings" "Manager" "RuntimeWatchdogSec" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "rebootTime" ]
+      [ "systemd" "settings" "Manager" "RebootWatchdogSec" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "systemd" "watchdog" "kexecTime" ]
+      [ "systemd" "settings" "Manager" "KExecWatchdogSec" ]
+    )
+    (mkRemovedOptionModule [
+      "systemd"
+      "enableCgroupAccounting"
+    ] "To disable cgroup accounting, disable systemd.settings.Manager.*Accounting directly.")
   ];
 }

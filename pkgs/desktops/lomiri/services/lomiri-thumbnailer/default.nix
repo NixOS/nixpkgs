@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-thumbnailer";
-  version = "3.0.4";
+  version = "3.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-thumbnailer";
     tag = finalAttrs.version;
-    hash = "sha256-pf/bzpooCcoIGb5JtSnowePcobcfVSzHyBaEkb51IOg=";
+    hash = "sha256-TfBGcHg9y9G2Rxs/OpZ8CcQrhK05gijZjVxOYSTkJJ8=";
   };
 
   outputs = [
@@ -49,21 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Fix compat with taglib 2.x
-    # Remove when version > 3.0.4
-    (fetchpatch {
-      name = "0001-lomiri-thumbnailer-Fix-taglib-2.x-compat.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/commit/b7f1055e36cd6e33314bb9f6648f93e977a33267.patch";
-      hash = "sha256-9RHtxqsgdMkgIyswaeL5yS6+o/YvzT+HgRD8KL/RfNM=";
-    })
-
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-thumbnailer/-/merge_requests/23 merged & in release
-    ./1001-doc-liblomiri-thumbnailer-qt-Honour-CMAKE_INSTALL_DO.patch
-    ./1002-Re-enable-documentation.patch
-    ./1003-doc-liblomiri-thumbnailer-qt-examples-Drop-qt5_use_m.patch
-    ./1004-Re-enable-coverge-reporting.patch
-    ./1005-Make-GTest-available-to-example-test.patch
-
     # In aarch64 lomiri-gallery-app VM tests, default 10s timeout for thumbnail extractor is often too tight
     # Raise to 20s to work around this (too much more will run into D-Bus' call timeout)
     ./2001-Raise-default-extraction-timeout.patch
@@ -111,31 +96,30 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      boost
-      cmake-extras
-      gdk-pixbuf
-      libapparmor
-      libexif
-      librsvg
-      lomiri-api
-      persistent-cache-cpp
-      qtbase
-      qtdeclarative
-      shared-mime-info
-      taglib
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      # Something seems borked with bad's h264 decoder, add libav as a workaround
-      # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
-      gst-libav
-      # maybe add ugly to cover all kinds of formats?
-    ]);
+  buildInputs = [
+    boost
+    cmake-extras
+    gdk-pixbuf
+    libapparmor
+    libexif
+    librsvg
+    lomiri-api
+    persistent-cache-cpp
+    qtbase
+    qtdeclarative
+    shared-mime-info
+    taglib
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    # Something seems borked with bad's h264 decoder, add libav as a workaround
+    # https://github.com/NixOS/nixpkgs/issues/399599#issuecomment-2816268226
+    gst-libav
+    # maybe add ugly to cover all kinds of formats?
+  ]);
 
   nativeCheckInputs = [
     shared-mime-info

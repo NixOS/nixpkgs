@@ -37,7 +37,7 @@
           (mkVelocityService "velocity-with-native" (pkgs.velocity.override { withVelocityNative = true; }))
         ];
 
-      environment.systemPackages = [ pkgs.mcstatus ];
+      environment.systemPackages = [ (pkgs.python3.withPackages (p: [ p.mcstatus ])) ];
     };
 
   testScript = ''
@@ -50,7 +50,7 @@
       server.wait_until_succeeds(f"journalctl -b -u {name} | grep -q -E '{connections_startup_query}'")
       server.wait_until_succeeds(f"journalctl -b -u {name} | grep -q 'Done ([0-9]*.[0-9]*s)!'");
 
-      _, status_result = server.execute("mcstatus localhost:25565 status")
+      _, status_result = server.execute("python -m mcstatus localhost:25565 status")
       assert "A Velocity Server" in status_result
 
       server.execute(f"echo stop > /run/{name}.stdin")

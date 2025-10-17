@@ -31,6 +31,7 @@ let
 
   # compatible if libc is compatible
   libcModules = [
+    "log_syslog"
     "regex_posix"
     "sslrehashsignal"
   ];
@@ -50,12 +51,11 @@ let
       # GPLv2 compatible dependencies
       "argon2"
       "ldap"
+      "log_json"
       "mysql"
       "pgsql"
-      "regex_pcre"
       "regex_pcre2"
       "regex_re2"
-      "regex_tre"
       "sqlite3"
       "ssl_gnutls"
     ]
@@ -70,19 +70,19 @@ in
   nixosTests,
   perl,
   pkg-config,
+  http-parser,
+  utf8cpp,
   libargon2,
   openldap,
   libpq,
   libmysqlclient,
-  pcre,
   pcre2,
-  tre,
   re2,
   sqlite,
   gnutls,
   libmaxminddb,
   openssl,
-  mbedtls,
+  yyjson,
   # For a full list of module names, see https://docs.inspircd.org/packaging/
   extraModules ? compatibleModules lib stdenv,
 }:
@@ -104,12 +104,12 @@ let
       )
     ];
     ldap = [ openldap ];
+    log_json = [ yyjson ];
+    log_syslog = [ ];
     mysql = [ libmysqlclient ];
     pgsql = [ libpq ];
-    regex_pcre = [ pcre ];
     regex_pcre2 = [ pcre2 ];
     regex_re2 = [ re2 ];
-    regex_tre = [ tre ];
     sqlite3 = [ sqlite ];
     ssl_gnutls = [ gnutls ];
     # depends on stdenv.cc.libc
@@ -119,14 +119,11 @@ let
     regex_stdlib = [ ];
     # GPLv2 incompatible
     geo_maxmind = [ libmaxminddb ];
-    ssl_mbedtls = [ mbedtls ];
     ssl_openssl = [ openssl ];
   };
 
   # buildInputs necessary for the enabled extraModules
-  extraInputs = lib.concatMap (
-    m: extras."${m}" or (builtins.throw "Unknown extra module ${m}")
-  ) extraModules;
+  extraInputs = lib.concatMap (m: extras."${m}" or (throw "Unknown extra module ${m}")) extraModules;
 
   # if true, we can't provide a binary version of this
   # package without violating the GPL 2
@@ -151,13 +148,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "inspircd";
-  version = "3.18.0";
+  version = "4.8.0";
 
   src = fetchFromGitHub {
     owner = "inspircd";
     repo = "inspircd";
     rev = "v${version}";
-    sha256 = "sha256-Aulhg2CbtcpsxkH5kXkp4EoZF5/F9pOXJc1S08S5P08=";
+    sha256 = "sha256-fMfsNbkp9M8KiuhwOEFmPjowZ4JLP4IpX6LRO9aLHzY=";
   };
 
   outputs = [
@@ -168,15 +165,25 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
-  nativeBuildInputs =
-    [
-      perl
-      pkg-config
-    ]
-    ++ lib.optionals (lib.elem "pgsql" extraModules) [
-      libpq.pg_config
-    ];
-  buildInputs = extraInputs;
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ]
+  ++ lib.optionals (lib.elem "pgsql" extraModules) [
+    libpq.pg_config
+  ];
+
+  # Disable use of the vendored versions of these libraries
+  env = {
+    SYSTEM_HTTP_PARSER = "1";
+    SYSTEM_UTFCPP = "1";
+  };
+
+  buildInputs = [
+    http-parser
+    utf8cpp
+  ]
+  ++ extraInputs;
 
   configurePhase = ''
     runHook preConfigure
@@ -193,8 +200,7 @@ stdenv.mkDerivation rec {
     ./configure \
       --disable-auto-extras \
       --distribution-label nixpkgs${version} \
-      --uid 0 \
-      --gid 0 \
+      --disable-ownership \
       --binary-dir  ${placeholder "bin"}/bin \
       --config-dir  /etc/inspircd \
       --data-dir    ${placeholder "lib"}/lib/inspircd \
@@ -219,29 +225,29 @@ stdenv.mkDerivation rec {
     nixos-test = nixosTests.inspircd;
   };
 
-  meta =
-    {
-      description = "Modular C++ IRC server";
-      license =
-        [ lib.licenses.gpl2Only ]
-        ++ lib.concatMap getLicenses extraInputs
-        ++ lib.optionals (anyMembers extraModules libcModules) (getLicenses stdenv.cc.libc)
-        # FIXME(sternenseemann): get license of used lib(std)c++ somehow
-        ++ lib.optional (anyMembers extraModules libcxxModules) "Unknown"
-        # Hack: Definitely prevent a hydra from building this package on
-        # a GPL 2 incompatibility even if it is not in a top-level attribute,
-        # but pulled in indirectly somehow.
-        ++ lib.optional gpl2Conflict lib.licenses.unfree;
-      maintainers = [ lib.maintainers.sternenseemann ];
-      # windows is theoretically possible, but requires extra work
-      # which I am not willing to do and can't test.
-      # https://github.com/inspircd/inspircd/blob/master/win/README.txt
-      platforms = lib.platforms.unix;
-      homepage = "https://www.inspircd.org/";
-    }
-    // lib.optionalAttrs gpl2Conflict {
-      # make sure we never distribute a GPLv2-violating module
-      # in binary form. They can be built locally of course.
-      hydraPlatforms = [ ];
-    };
+  meta = {
+    description = "Modular C++ IRC server";
+    license = [
+      lib.licenses.gpl2Only
+    ]
+    ++ lib.concatMap getLicenses extraInputs
+    ++ lib.optionals (anyMembers extraModules libcModules) (getLicenses stdenv.cc.libc)
+    # FIXME(sternenseemann): get license of used lib(std)c++ somehow
+    ++ lib.optional (anyMembers extraModules libcxxModules) "Unknown"
+    # Hack: Definitely prevent a hydra from building this package on
+    # a GPL 2 incompatibility even if it is not in a top-level attribute,
+    # but pulled in indirectly somehow.
+    ++ lib.optional gpl2Conflict lib.licenses.unfree;
+    maintainers = [ lib.maintainers.sternenseemann ];
+    # windows is theoretically possible, but requires extra work
+    # which I am not willing to do and can't test.
+    # https://github.com/inspircd/inspircd/blob/master/win/README.txt
+    platforms = lib.platforms.unix;
+    homepage = "https://www.inspircd.org/";
+  }
+  // lib.optionalAttrs gpl2Conflict {
+    # make sure we never distribute a GPLv2-violating module
+    # in binary form. They can be built locally of course.
+    hydraPlatforms = [ ];
+  };
 }

@@ -8,6 +8,7 @@
   babel,
   buildPythonPackage,
   certifi,
+  cryptography,
   fetchFromGitHub,
   gitUpdater,
   hatchling,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.20.0.post0";
+  version = "3.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     tag = "v${version}";
-    hash = "sha256-OQH5wes2RGSbT9GPKcZVVxpsFbtOnXd6aAeYfQST1Xs=";
+    hash = "sha256-4LZ4+bt9n0q8WMaMEaAAIFnEuDUSd+Aq+YW49Xbcp5c=";
   };
 
   build-system = [ hatchling ];
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     redis = [ redis ];
     proxy = [ aiohttp-socks ];
     i18n = [ babel ];
+    signature = [ cryptography ];
   };
 
   nativeCheckInputs = [
@@ -74,7 +76,8 @@ buildPythonPackage rec {
     pytest-lazy-fixture
     pytestCheckHook
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiogram" ];
 

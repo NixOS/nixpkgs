@@ -27,11 +27,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "go";
-  version = "1.24.4";
+  version = "1.24.9";
 
   src = fetchurl {
     url = "https://go.dev/dl/go${finalAttrs.version}.src.tar.gz";
-    hash = "sha256-WoaoOjH5+oFJC4xUIKw4T9PZWj5x+6Zlx7P5XR3+8rQ=";
+    hash = "sha256-xy+BulT+AO/n8+dJnUAJeSRogbE7d16am7hVQcEb5pU=";
   };
 
   strictDeps = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildTarget = lib.optional isCross targetCC;
 
-  depsTargetTarget = lib.optional stdenv.targetPlatform.isWindows targetPackages.threads.package;
+  depsTargetTarget = lib.optional stdenv.targetPlatform.isMinGW targetPackages.threads.package;
 
   postPatch = ''
     patchShebangs .
@@ -80,7 +80,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   # Wasi does not support CGO
-  CGO_ENABLED = if stdenv.targetPlatform.isWasi then 0 else 1;
+  # ppc64/linux CGO is incomplete/borked, and will likely not receive any further improvements
+  # https://github.com/golang/go/issues/8912
+  # https://github.com/golang/go/issues/13192
+  CGO_ENABLED =
+    if
+      (
+        stdenv.targetPlatform.isWasi
+        || (stdenv.targetPlatform.isPower64 && stdenv.targetPlatform.isBigEndian)
+      )
+    then
+      0
+    else
+      1;
 
   GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
@@ -103,35 +115,34 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  preInstall =
-    ''
-      # Contains the wrong perl shebang when cross compiling,
-      # since it is not used for anything we can deleted as well.
-      rm src/regexp/syntax/make_perl_groups.pl
-    ''
-    + (
-      if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
-        ''
-          mv bin/*_*/* bin
-          rmdir bin/*_*
-          ${lib.optionalString
-            (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
-            ''
-              rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
-            ''
-          }
-        ''
-      else
-        lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-          rm -rf bin/*_*
-          ${lib.optionalString
-            (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
-            ''
-              rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
-            ''
-          }
-        ''
-    );
+  preInstall = ''
+    # Contains the wrong perl shebang when cross compiling,
+    # since it is not used for anything we can deleted as well.
+    rm src/regexp/syntax/make_perl_groups.pl
+  ''
+  + (
+    if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
+      ''
+        mv bin/*_*/* bin
+        rmdir bin/*_*
+        ${lib.optionalString
+          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          ''
+            rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+          ''
+        }
+      ''
+    else
+      lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
+        rm -rf bin/*_*
+        ${lib.optionalString
+          (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+          ''
+            rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+          ''
+        }
+      ''
+  );
 
   installPhase = ''
     runHook preInstall
@@ -163,6 +174,13 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.bsd3;
     teams = [ teams.golang ];
     platforms = platforms.darwin ++ platforms.linux ++ platforms.wasi ++ platforms.freebsd;
+    badPlatforms = [
+      # Support for big-endian POWER < 8 was dropped in 1.9, but POWER8 users have less of a reason to run in big-endian mode than pre-POWER8 ones
+      # So non-LE ppc64 is effectively unsupported, and Go SIGILLs on affordable ppc64 hardware
+      # https://github.com/golang/go/issues/19074 - Dropped support for big-endian POWER < 8, with community pushback
+      # https://github.com/golang/go/issues/73349 - upstream will not accept submissions to fix this
+      "powerpc64-linux"
+    ];
     mainProgram = "go";
   };
 })

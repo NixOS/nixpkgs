@@ -24,7 +24,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "dtrx";
   version = "8.5.3";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "dtrx-py";
@@ -50,15 +50,17 @@ python3Packages.buildPythonApplication rec {
           xz
           lzip
         ]
-        ++ lib.optional (unzipSupport) unzip
-        ++ lib.optional (unrarSupport) unrar
+        ++ lib.optional unzipSupport unzip
+        ++ lib.optional unrarSupport unrar
       );
     in
     [
       ''--prefix PATH : "${archivers}"''
     ];
 
-  nativeBuildInputs = [ python3Packages.invoke ];
+  build-system = with python3Packages; [
+    setuptools
+  ];
 
   passthru.updateScript = gitUpdater { };
 

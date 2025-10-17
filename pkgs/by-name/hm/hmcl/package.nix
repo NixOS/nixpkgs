@@ -26,22 +26,23 @@
   vulkan-loader,
   libpulseaudio,
   gobject-introspection,
+  callPackage,
 }:
 
-let
-  version = "3.6.12";
-  icon = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/raw/release-${version}/HMCLauncher/HMCL/HMCL.ico";
-    hash = "sha256-+EYL33VAzKHOMp9iXoJaSGZfv+ymDDYIx6i/1o47Dmc=";
-  };
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  inherit version;
+  version = "3.6.18";
 
   src = fetchurl {
-    url = "https://github.com/huanghongxun/HMCL/releases/download/release-${version}/HMCL-${version}.jar";
-    hash = "sha256-ofrG7CVZIODJoHE6owR9P7viBlChamYF5PEpFeeOH4E=";
+    # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
+    # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
+    url = "https://github.com/HMCL-dev/HMCL/releases/download/release-${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
+    hash = "sha256-x8UcHdBYXdnTabJh2hxsknYipYNBJW2vKxJKHhryMLQ=";
+  };
+
+  icon = fetchurl {
+    url = "https://github.com/HMCL-dev/HMCL/raw/release-${finalAttrs.version}/HMCL/src/main/resources/assets/img/icon@8x.png";
+    hash = "sha256-1OVq4ujA2ZHboB7zEk7004kYgl9YcoM4qLq154MZMGo=";
   };
 
   dontUnpack = true;
@@ -71,8 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/hmcl}
     cp $src $out/lib/hmcl/hmcl.jar
-    magick ${icon} hmcl.png
-    install -Dm644 hmcl-1.png $out/share/icons/hicolor/32x32/apps/hmcl.png
+
+    for n in 16 32 48 64 96 128 256
+    do
+      size=$n"x"$n
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      magick ${finalAttrs.icon} -resize $size $out/share/icons/hicolor/$size/apps/hmcl.png
+    done
 
     runHook postInstall
   '';
@@ -113,13 +119,19 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postFixup
     '';
 
-  meta = with lib; {
+  passthru.updateScript = lib.getExe (callPackage ./update.nix { });
+
+  meta = {
     homepage = "https://hmcl.huangyuhui.net";
     description = "Minecraft Launcher which is multi-functional, cross-platform and popular";
+    changelog = "https://docs.hmcl.net/changelog/stable.html";
     mainProgram = "hmcl";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ daru-san ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
+      daru-san
+      moraxyc
+    ];
     inherit (hmclJdk.meta) platforms;
   };
 })

@@ -5,23 +5,23 @@
   installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "duf";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "duf";
-    rev = "v${version}";
-    sha256 = "sha256-bVuqX88KY+ky+fd1FU9GWP78jQc4fRDk9yRSeIesHyI=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d/co7EaDk0m/oYxWFATxQYCdH3Z9r8eTtOOo+M+HD4o=";
   };
 
-  vendorHash = "sha256-oihi7E67VQmym9U1gdD802AYxWRrSowhzBiKg0CBDPc=";
+  vendorHash = "sha256-Br2jagMynnzH77GNA7NeWbM5qSHbhfW5Bo7X2b6OX28=";
 
   ldflags = [
     "-s"
     "-w"
-    "-X=main.Version=${version}"
+    "-X=main.Version=${finalAttrs.version}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -30,15 +30,15 @@ buildGoModule rec {
     installManPage duf.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/muesli/duf/";
     description = "Disk Usage/Free Utility";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       penguwin
       sigmasquadron
     ];
     mainProgram = "duf";
   };
-}
+})

@@ -86,6 +86,25 @@ let
 
       jzon = super.com_dot_inuoe_dot_jzon;
 
+      _40ants-routes = super._40ants-routes.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "40ants-routes/handler" ];
+      });
+
+      reblocks-ui2 = super.reblocks-ui2.overrideLispAttrs (o: {
+        systems = o.systems ++ [
+          "reblocks-ui2/themes/color"
+          "reblocks-ui2/themes/tailwind"
+          "reblocks-ui2/utils/padding"
+          "reblocks-ui2/utils/align"
+          "reblocks-ui2/card"
+          "reblocks-ui2/card/view"
+        ];
+      });
+
+      april = super.april.overrideLispAttrs (o: {
+        systems = o.systems ++ [ "cape" ];
+      });
+
       cl-notify = build-asdf-system {
         pname = "cl-notify";
         version = "20080904-138ca7038";
@@ -266,12 +285,10 @@ let
             #+sb-core-compression t
             :toplevel #'clfswm:main)
         '';
-        installPhase =
-          o.installPhase
-          + ''
-            mkdir -p $out/bin
-            mv $out/clfswm $out/bin
-          '';
+        installPhase = o.installPhase + ''
+          mkdir -p $out/bin
+          mv $out/clfswm $out/bin
+        '';
       });
 
       magicl = build-with-compile-into-pwd {
@@ -514,7 +531,7 @@ let
           "fset/test"
         ];
         meta = {
-          description = "functional collections library";
+          description = "Functional collections library";
           homepage = "https://gitlab.common-lisp.net/fset/fset/-/wikis/home";
           license = pkgs.lib.licenses.llgpl21;
         };
@@ -534,7 +551,7 @@ let
         lispLibs = oa.lispLibs ++ [ self.fiasco ];
         nativeLibs = [ pkgs.mpfr ];
         meta = {
-          description = "statically typed functional programming language that supercharges Common Lisp";
+          description = "Statically typed functional programming language that supercharges Common Lisp";
           homepage = "https://coalton-lang.github.io";
           license = pkgs.lib.licenses.mit;
         };

@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
     pkg-config
     perl
-  ] ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
+  ]
+  ++ lib.optionals withCyrusSaslXoauth2 [ makeWrapper ];
   buildInputs = [
     perl538Packages.TimeDate
     openssl
@@ -71,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = [ ];
     mainProgram = "mbsync";
   };
 })

@@ -129,12 +129,10 @@ let
           ac-rtags = ignoreCompilationError (fix-rtags super.ac-rtags); # elisp error
 
           age = super.age.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace age.el \
-                  --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace age.el \
+                --replace-fail 'age-program (executable-find "age")' 'age-program "${lib.getExe pkgs.age}"'
+            '';
           });
 
           airline-themes = super.airline-themes.override {
@@ -405,21 +403,17 @@ let
           forge = buildWithGit super.forge;
 
           gnuplot = super.gnuplot.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace gnuplot.el \
-                  --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace gnuplot.el \
+                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+            '';
           });
 
           gnuplot-mode = super.gnuplot-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace gnuplot-mode.el \
-                  --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace gnuplot-mode.el \
+                --replace-fail 'gnuplot-program "gnuplot"' 'gnuplot-program "${lib.getExe pkgs.gnuplot}"'
+            '';
           });
 
           magit = buildWithGit super.magit;
@@ -492,23 +486,19 @@ let
           orgit-forge = buildWithGit super.orgit-forge;
 
           ormolu = super.ormolu.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace ormolu.el \
-                  --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace ormolu.el \
+                --replace-fail 'ormolu-process-path "ormolu"' 'ormolu-process-path "${lib.getExe pkgs.ormolu}"'
+            '';
           });
 
           ox-rss = buildWithGit super.ox-rss;
 
           python-isort = super.python-isort.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace python-isort.el \
-                  --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace python-isort.el \
+                --replace '-isort-command "isort"' '-isort-command "${lib.getExe pkgs.isort}"'
+            '';
           });
 
           # upstream issue: missing file header
@@ -524,12 +514,10 @@ let
           notmuch = dontConfigure super.notmuch;
 
           pikchr-mode = super.pikchr-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace pikchr-mode.el \
-                  --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace pikchr-mode.el \
+                --replace '"pikchr")' '"${lib.getExe pkgs.pikchr}")'
+            '';
           });
 
           rtags = ignoreCompilationError (dontConfigure (externalSrc super.rtags pkgs.rtags)); # elisp error
@@ -538,16 +526,12 @@ let
 
           rime = super.rime.overrideAttrs (old: {
             buildInputs = (old.buildInputs or [ ]) ++ [ pkgs.librime ];
-            preBuild =
-              (old.preBuild or "")
-              + ''
-                make lib CC=$CC MODULE_FILE_SUFFIX=${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}
-              '';
-            postInstall =
-              (old.postInstall or "")
-              + ''
-                install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* librime-emacs.*
-              '';
+            preBuild = (old.preBuild or "") + ''
+              make lib CC=$CC MODULE_FILE_SUFFIX=${pkgs.stdenv.hostPlatform.extensions.sharedLibrary}
+            '';
+            postInstall = (old.postInstall or "") + ''
+              install -m444 -t $out/share/emacs/site-lisp/elpa/rime-* librime-emacs.*
+            '';
           });
 
           # https://github.com/projectional-haskell/structured-haskell-mode/issues/165
@@ -595,21 +579,17 @@ let
           });
 
           tokei = super.tokei.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace tokei.el \
-                  --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace tokei.el \
+                --replace 'tokei-program "tokei"' 'tokei-program "${lib.getExe pkgs.tokei}"'
+            '';
           });
 
           treemacs = super.treemacs.overrideAttrs (attrs: {
-            postPatch =
-              (attrs.postPatch or "")
-              + ''
-                substituteInPlace src/elisp/treemacs-customization.el \
-                  --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
-              '';
+            postPatch = (attrs.postPatch or "") + ''
+              substituteInPlace src/elisp/treemacs-customization.el \
+                --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
+            '';
           });
 
           treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
@@ -618,21 +598,17 @@ let
           });
 
           typst-mode = super.typst-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace typst-mode.el \
-                  --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace typst-mode.el \
+                --replace 'typst-executable-location  "typst"' 'typst-executable-location "${lib.getExe pkgs.typst}"'
+            '';
           });
 
           units-mode = super.units-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace units-mode.el \
-                  --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace units-mode.el \
+                --replace-fail 'units-binary-path "units"' 'units-binary-path "${lib.getExe pkgs.units}"'
+            '';
           });
 
           vdiff-magit = super.vdiff-magit.overrideAttrs (attrs: {
@@ -640,12 +616,10 @@ let
           });
 
           zig-mode = super.zig-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace zig-mode.el \
-                  --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace zig-mode.el \
+                --replace-fail 'zig-zig-bin "zig"' 'zig-zig-bin "${lib.getExe pkgs.zig}"'
+            '';
           });
 
           zmq = super.zmq.overrideAttrs (old: {
@@ -735,12 +709,10 @@ let
           php-auto-yasnippets = mkHome super.php-auto-yasnippets;
 
           racer = super.racer.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace racer.el \
-                  --replace /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace racer.el \
+                --replace /usr/local/src/rust/src ${pkgs.rustPlatform.rustcSrc}
+            '';
           });
 
           spaceline = super.spaceline.override {
@@ -789,32 +761,26 @@ let
           });
 
           wordnut = super.wordnut.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace wordnut.el \
-                  --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace wordnut.el \
+                --replace 'wordnut-cmd "wn"' 'wordnut-cmd "${lib.getExe pkgs.wordnet}"'
+            '';
           });
 
           mozc = super.mozc.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace src/unix/emacs/mozc.el \
-                  --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace src/unix/emacs/mozc.el \
+                --replace '"mozc_emacs_helper"' '"${pkgs.ibus-engines.mozc}/lib/mozc/mozc_emacs_helper"'
+            '';
           });
 
           # Build a helper executable that interacts with the macOS Dictionary.app
           osx-dictionary =
             if pkgs.stdenv.hostPlatform.isDarwin then
               super.osx-dictionary.overrideAttrs (old: {
-                postBuild =
-                  (old.postBuild or "")
-                  + ''
-                    $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
-                  '';
+                postBuild = (old.postBuild or "") + ''
+                  $CXX -O3 -framework CoreServices -framework Foundation osx-dictionary.m -o osx-dictionary-cli
+                '';
                 postInstall =
                   (old.postInstall or "")
                   + "\n"
@@ -828,8 +794,11 @@ let
             else
               super.osx-dictionary;
 
+          # keep-sorted start block=yes newline_separated=yes
           # https://github.com/skeeto/at-el/issues/9
           "@" = ignoreCompilationErrorIfOlder super."@" "20240923.1318";
+
+          "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
 
           abgaben = addPackageRequires (mkHome super.abgaben) [ self.mu4e ];
 
@@ -838,18 +807,14 @@ let
 
           ac-php-core = super.ac-php-core.overrideAttrs (old: {
             # empty file causing native-compiler-error-empty-byte
-            preBuild =
-              ''
-                rm --verbose ac-php-comm-tags-data.el
-              ''
-              + old.preBuild or "";
+            preBuild = ''
+              rm --verbose ac-php-comm-tags-data.el
+            ''
+            + old.preBuild or "";
           });
 
           # Optimizer error: too much on the stack
           ack-menu = ignoreCompilationError super.ack-menu;
-
-          # https://github.com/skeeto/emacs-aio/issues/31
-          aio = ignoreCompilationError super.aio;
 
           # https://github.com/gongo/airplay-el/issues/2
           airplay = addPackageRequires super.airplay [ self.request-deferred ];
@@ -882,13 +847,13 @@ let
 
           auctex-latexmk = mkHome super.auctex-latexmk;
 
-          auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
-
           # missing optional dependencies
           auto-complete-auctex = addPackageRequires (mkHome super.auto-complete-auctex) [ self.auctex ];
 
           # depends on distel which is not on any ELPA https://github.com/massemanet/distel/issues/21
           auto-complete-distel = ignoreCompilationError super.auto-complete-distel;
+
+          auto-indent-mode = ignoreCompilationError super.auto-indent-mode; # elisp error
 
           auto-virtualenv = super.auto-virtualenv.overrideAttrs (
             finalAttrs: previousAttrs: {
@@ -1147,13 +1112,13 @@ let
           # missing optional dependencies
           ekg = addPackageRequires super.ekg [ self.denote ];
 
+          el-secretario-mu4e = addPackageRequires super.el-secretario-mu4e [ self.mu4e ];
+
           elfeed = super.elfeed.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace elfeed-curl.el \
-                  --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace elfeed-curl.el \
+                --replace-fail 'elfeed-curl-program-name "curl"' 'elfeed-curl-program-name "${lib.getExe pkgs.curl}"'
+            '';
           });
 
           elisp-sandbox = ignoreCompilationError super.elisp-sandbox; # elisp error
@@ -1170,16 +1135,15 @@ let
             ];
           });
 
-          el-secretario-mu4e = addPackageRequires super.el-secretario-mu4e [ self.mu4e ];
-
           embark-vc = buildWithGit super.embark-vc;
 
           # https://github.com/nubank/emidje/issues/23
           emidje = addPackageRequires super.emidje [ self.pkg-info ];
 
+          emms-player-mpv-jp-radios = ignoreCompilationError super.emms-player-mpv-jp-radios;
+
           # depends on later-do which is not on any ELPA
           emms-player-simple-mpv = ignoreCompilationError super.emms-player-simple-mpv;
-          emms-player-mpv-jp-radios = ignoreCompilationError super.emms-player-mpv-jp-radios;
 
           # missing optional dependencies
           # https://github.com/isamert/empv.el/pull/96
@@ -1273,17 +1237,26 @@ let
 
           gh-notify = buildWithGit super.gh-notify;
 
-          "git-gutter-fringe+" = ignoreCompilationError super."git-gutter-fringe+"; # elisp error
+          # https://gitlab.com/emacs-stuff/git-commit-insert-issue/-/issues/24
+          git-commit-insert-issue = addPackageRequires super.git-commit-insert-issue [ self.glab ];
 
           # https://github.com/nlamirault/emacs-gitlab/issues/68
           gitlab = addPackageRequires super.gitlab [ self.f ];
 
+          # https://github.com/TxGVNN/gitlab-pipeline/issues/8
+          gitlab-pipeline = addPackageRequires super.gitlab-pipeline [ self.glab ];
+
           # TODO report to upstream
           global-tags = addPackageRequires super.global-tags [ self.s ];
+
+          gnosis = mkHome super.gnosis;
 
           go = ignoreCompilationError super.go; # elisp error
 
           graphene = ignoreCompilationError super.graphene; # elisp error
+
+          # https://github.com/ppareit/graphviz-dot-mode/issues/85
+          graphviz-dot-mode = addPackageRequires super.graphviz-dot-mode [ self.flycheck ];
 
           greader = ignoreCompilationError super.greader; # elisp error
 
@@ -1310,6 +1283,9 @@ let
 
           helm-ext = ignoreCompilationError super.helm-ext; # elisp error
 
+          # TODO report to upstream
+          helm-flycheck = fixRequireHelmCore super.helm-flycheck;
+
           # https://github.com/iory/emacs-helm-ghs/issues/1
           helm-ghs = addPackageRequires super.helm-ghs [ self.helm-ghq ];
 
@@ -1318,9 +1294,6 @@ let
             self.helm
             self.magit
           ];
-
-          # TODO report to upstream
-          helm-flycheck = fixRequireHelmCore super.helm-flycheck;
 
           # https://github.com/yasuyk/helm-git-grep/issues/54
           helm-git-grep = addPackageRequires super.helm-git-grep [ self.helm ];
@@ -1393,14 +1366,12 @@ let
           jekyll-modes = addPackageRequires super.jekyll-modes [ self.poly-markdown ];
 
           jq-mode = super.jq-mode.overrideAttrs (attrs: {
-            postPatch =
-              attrs.postPatch or ""
-              + ''
-                substituteInPlace jq-mode.el \
-                  --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${lib.getExe pkgs.jq}"'
-                substituteInPlace ob-jq.el \
-                  --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${lib.getExe pkgs.jq}"'
-              '';
+            postPatch = attrs.postPatch or "" + ''
+              substituteInPlace jq-mode.el \
+                --replace-fail 'jq-interactive-command "jq"' 'jq-interactive-command "${lib.getExe pkgs.jq}"'
+              substituteInPlace ob-jq.el \
+                --replace-fail 'org-babel-jq-command "jq"' 'org-babel-jq-command "${lib.getExe pkgs.jq}"'
+            '';
           });
 
           jss = ignoreCompilationError super.jss; # elisp error
@@ -1451,6 +1422,9 @@ let
             self.auto-complete
             self.flycheck
           ];
+
+          # https://gitlab.com/arvidnl/magit-gitlab/-/issues/8
+          magit-gitlab = addPackageRequires super.magit-gitlab [ self.glab ];
 
           # missing optional dependencies
           magnatune = addPackageRequires super.magnatune [ self.helm ];
@@ -1547,28 +1521,14 @@ let
 
           org-gtd = ignoreCompilationError super.org-gtd; # elisp error
 
+          # TODO report to upstream
+          org-kindle = addPackageRequires super.org-kindle [ self.dash ];
+
           # needs newer org than the Emacs 29.4 builtin one
           org-link-beautify = addPackageRequires super.org-link-beautify [
             self.org
             self.qrencode
           ];
-
-          # TODO report to upstream
-          org-kindle = addPackageRequires super.org-kindle [ self.dash ];
-
-          org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
-
-          # https://github.com/ichernyshovvv/org-timeblock/issues/65
-          org-timeblock = markBroken super.org-timeblock;
-
-          org-trello = ignoreCompilationError super.org-trello; # elisp error
-
-          # Requires xwidgets compiled into emacs, so mark this package
-          # as broken if emacs hasn't been compiled with the flag.
-          org-xlatex = if self.emacs.withXwidgets then super.org-xlatex else markBroken super.org-xlatex;
-
-          # Optimizer error: too much on the stack
-          orgnav = ignoreCompilationError super.orgnav;
 
           org-noter = super.org-noter.overrideAttrs (
             finalAttrs: previousAttrs: {
@@ -1589,15 +1549,6 @@ let
 
           org-noter-pdftools = mkHome super.org-noter-pdftools;
 
-          # elisp error and missing optional dependencies
-          org-ref = ignoreCompilationError super.org-ref;
-
-          # missing optional dependencies
-          org-roam-bibtex = addPackageRequires super.org-roam-bibtex [
-            self.helm-bibtex
-            self.ivy-bibtex
-          ];
-
           org-pdftools = mkHome super.org-pdftools;
 
           org-projectile = super.org-projectile.overrideAttrs (
@@ -1617,6 +1568,29 @@ let
           # https://github.com/colonelpanic8/org-project-capture/issues/66
           org-projectile-helm = addPackageRequires super.org-projectile-helm [ self.helm-org ];
 
+          # elisp error and missing optional dependencies
+          org-ref = ignoreCompilationError super.org-ref;
+
+          # missing optional dependencies
+          org-roam-bibtex = addPackageRequires super.org-roam-bibtex [
+            self.helm-bibtex
+            self.ivy-bibtex
+          ];
+
+          org-special-block-extras = ignoreCompilationError super.org-special-block-extras; # elisp error
+
+          # https://github.com/ichernyshovvv/org-timeblock/issues/65
+          org-timeblock = markBroken super.org-timeblock;
+
+          org-trello = ignoreCompilationError super.org-trello; # elisp error
+
+          # Requires xwidgets compiled into emacs, so mark this package
+          # as broken if emacs hasn't been compiled with the flag.
+          org-xlatex = if self.emacs.withXwidgets then super.org-xlatex else markBroken super.org-xlatex;
+
+          # Optimizer error: too much on the stack
+          orgnav = ignoreCompilationError super.orgnav;
+
           origami-predef = ignoreCompilationError super.origami-predef; # elisp error
 
           # https://github.com/DarwinAwardWinner/mac-pseudo-daemon/issues/9
@@ -1628,6 +1602,16 @@ let
           outlook = addPackageRequires super.outlook [ self.mu4e ];
 
           pastery = ignoreCompilationError super.pastery; # elisp error
+
+          pdf-meta-edit = super.pdf-meta-edit.overrideAttrs (attrs: {
+            postPatch =
+              attrs.postPatch or ""
+              + "\n"
+              + ''
+                substituteInPlace pdf-meta-edit.el \
+                    --replace-fail '(executable-find "pdftk")' '"${lib.getExe pkgs.pdftk}"'
+              '';
+          });
 
           pgdevenv = ignoreCompilationError super.pgdevenv; # elisp error
 
@@ -1644,6 +1628,8 @@ let
           portage-navi = ignoreCompilationError super.portage-navi; # elisp error
 
           preview-dvisvgm = mkHome super.preview-dvisvgm;
+
+          procress = mkHome super.procress;
 
           # https://github.com/micdahl/projectile-trailblazer/issues/4
           projectile-trailblazer = addPackageRequires super.projectile-trailblazer [ self.projectile-rails ];
@@ -1777,9 +1763,6 @@ let
           # optional dependency spamfilter is not on any ELPA
           wanderlust = ignoreCompilationError (addPackageRequires super.wanderlust [ self.shimbun ]);
 
-          # https://github.com/nicklanasa/xcode-mode/issues/28
-          xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];
-
           weechat = ignoreCompilationError super.weechat; # elisp error
 
           weechat-alert = ignoreCompilationError super.weechat-alert; # elisp error
@@ -1788,16 +1771,19 @@ let
 
           workgroups2 = ignoreCompilationError super.workgroups2; # elisp error
 
+          # https://github.com/nicklanasa/xcode-mode/issues/28
+          xcode-mode = addPackageRequires super.xcode-mode [ self.hydra ];
+
           xenops = mkHome super.xenops;
 
           # missing optional dependencies
           xmlunicode = addPackageRequires super.xmlunicode [ self.helm ];
 
-          # https://github.com/canatella/xwwp/issues/18
-          xwwp-follow-link-ivy = addPackageRequires super.xwwp-follow-link-ivy [ self.ivy ];
-
           # https://github.com/canatella/xwwp/issues/19
           xwwp-follow-link-helm = addPackageRequires super.xwwp-follow-link-helm [ self.helm ];
+
+          # https://github.com/canatella/xwwp/issues/18
+          xwwp-follow-link-ivy = addPackageRequires super.xwwp-follow-link-ivy [ self.ivy ];
 
           yara-mode = ignoreCompilationError super.yara-mode; # elisp error
 
@@ -1818,6 +1804,8 @@ let
 
           # missing optional dependencies
           zotxt = addPackageRequires super.zotxt [ self.org-noter ];
+
+          # keep-sorted end
         };
 
     in

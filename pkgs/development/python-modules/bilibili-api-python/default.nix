@@ -20,17 +20,17 @@
   setuptools-scm,
   tqdm,
   yarl,
-  nix-update-script,
 }:
+
 buildPythonPackage rec {
   pname = "bilibili-api-python";
-  version = "17.2.1";
+  version = "17.4.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "bilibili_api_python";
     inherit version;
-    hash = "sha256-ln+HNgcw3KPpOF9Ei8Ta4vrb+tGKsE4/vSim/ioKpgI=";
+    hash = "sha256-OWMQwYIP2TGkahDGEVIzviUOjbMVombupgjA9iXN8e8=";
   };
 
   # The upstream uses requirements.txt, which overly strict version constraints.
@@ -68,8 +68,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   pythonImportsCheck = [ "bilibili_api" ];
-
-  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/Nemo2011/bilibili-api/releases/tag/${version}";

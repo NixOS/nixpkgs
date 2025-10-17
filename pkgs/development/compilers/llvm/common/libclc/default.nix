@@ -30,17 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "libclc";
   inherit version;
 
-  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } (
-    ''
-      mkdir -p "$out"
-    ''
-    + lib.optionalString (lib.versionAtLeast release_version "14") ''
-      cp -r ${monorepoSrc}/cmake "$out"
-    ''
-    + ''
-      cp -r ${monorepoSrc}/libclc "$out"
-    ''
-  );
+  src = runCommand "libclc-src-${version}" { inherit (monorepoSrc) passthru; } ''
+    mkdir -p "$out"
+    cp -r ${monorepoSrc}/cmake "$out"
+    cp -r ${monorepoSrc}/libclc "$out"
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/libclc";
 
@@ -49,15 +43,16 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches =
-    [ ./libclc-gnu-install-dirs.patch ]
-    # LLVM 19 changes how host tools are looked up.
-    # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
-    # so CMake can actually find the tools in nativeBuildInputs.
-    # https://github.com/llvm/llvm-project/pull/105969
-    ++ lib.optional (lib.versionAtLeast release_version "19") (
-      getVersionFile "libclc/use-default-paths.patch"
-    );
+  patches = [
+    (getVersionFile "libclc/gnu-install-dirs.patch")
+  ]
+  # LLVM 19 changes how host tools are looked up.
+  # Need to remove NO_DEFAULT_PATH and the PATHS arguments for find_program
+  # so CMake can actually find the tools in nativeBuildInputs.
+  # https://github.com/llvm/llvm-project/pull/105969
+  ++ lib.optional (lib.versionAtLeast release_version "19") (
+    getVersionFile "libclc/use-default-paths.patch"
+  );
 
   # cmake expects all required binaries to be in the same place, so it will not be able to find clang without the patch
   postPatch =
@@ -89,17 +84,16 @@ stdenv.mkDerivation (finalAttrs: {
         ''
     );
 
-  nativeBuildInputs =
-    [
-      cmake
-      ninja
-      python3
-    ]
-    ++ lib.optional (lib.versionAtLeast release_version "19") [
-      clang-only
-      buildLlvmTools.llvm
-      spirv-llvm-translator
-    ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+  ]
+  ++ lib.optionals (lib.versionAtLeast release_version "19") [
+    clang-only
+    buildLlvmTools.llvm
+    spirv-llvm-translator
+  ];
   buildInputs = [ llvm ];
   strictDeps = true;
 

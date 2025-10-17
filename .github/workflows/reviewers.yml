@@ -4,9 +4,6 @@
 name: Reviewers
 
 on:
-  pull_request:
-    paths:
-      - .github/workflows/reviewers.yml
   pull_request_target:
     types: [ready_for_review]
   workflow_call:
@@ -27,24 +24,31 @@ defaults:
 jobs:
   request:
     runs-on: ubuntu-24.04-arm
+    timeout-minutes: 20
     steps:
       - name: Check out the PR at the base commit
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           path: trusted
           sparse-checkout: ci
 
       - name: Install Nix
-        uses: cachix/install-nix-action@f0fe604f8a612776892427721526b4c7cfb23aba # v31
-        with:
-          extra_nix_config: sandbox = true
+        uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
       - name: Build the requestReviews derivation
         run: nix-build trusted/ci -A requestReviews
 
-      # See ./codeowners-v2.yml, reuse the same App because we need the same permissions
-      # Can't use the token received from permissions above, because it can't get enough permissions
-      - uses: actions/create-github-app-token@df432ceedc7162793a195dd1713ff69aefc7379e # v2.0.6
+      # For requesting reviewers, this job depends on a GitHub App with the following permissions:
+      # - Permissions:
+      #   - Repository > Administration: read-only
+      #   - Organization > Members: read-only
+      #   - Repository > Pull Requests: read-write
+      # - Install App on this repository, setting these variables:
+      #   - OWNER_APP_ID (variable)
+      #   - OWNER_APP_PRIVATE_KEY (secret)
+      #
+      # Can't use the token received from permissions above, because it can't get enough permissions.
+      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
         if: github.event_name == 'pull_request_target' && vars.OWNER_APP_ID
         id: app-token
         with:
@@ -54,6 +58,28 @@ jobs:
           permission-members: read
           permission-pull-requests: write
 
+      - name: Log current API rate limits (app-token)
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
+      - name: Requesting code owner reviews
+        if: steps.app-token.outputs.token
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+          # Don't do anything on draft PRs
+          DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
+        run: result/bin/request-code-owner-reviews.sh "$REPOSITORY" "$NUMBER" ci/OWNERS
+
+      - name: Log current API rate limits (app-token)
+        if: ${{ steps.app-token.outputs.token }}
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+        run: gh api /rate_limit | jq
+
       - name: Log current API rate limits (github.token)
         env:
           GH_TOKEN: ${{ github.token }}
@@ -62,14 +88,14 @@ jobs:
       # In the regular case, this workflow is called via workflow_call from the eval workflow directly.
       # In the more special case, when a PR is undrafted an eval run will have started already.
       - name: Wait for comparison to be done
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         id: eval
         with:
           script: |
             const run_id = (await github.rest.actions.listWorkflowRuns({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'pr.yml',
+              workflow_id: context.eventName === 'pull_request' ? 'test.yml' : 'pr.yml',
               event: context.eventName,
               head_sha: context.payload.pull_request.head.sha
             })).data.workflow_runs[0].id
@@ -97,7 +123,7 @@ jobs:
         run: gh api /rate_limit | jq
 
       - name: Download the comparison results
-        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
           run-id: ${{ steps.eval.outputs.run-id }}
           github-token: ${{ github.token }}

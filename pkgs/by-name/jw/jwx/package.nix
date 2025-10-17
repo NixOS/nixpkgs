@@ -6,21 +6,21 @@
 
 buildGoModule (finalAttrs: {
   pname = "jwx";
-  version = "3.0.7";
+  version = "3.0.11";
 
   src = fetchFromGitHub {
     owner = "lestrrat-go";
     repo = "jwx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vR7QsRAVdYmi7wYGsjuQiB1mABq5jx7mIRFiduJRReA=";
+    hash = "sha256-TGB6dMybvMH/mXlNwnj63kOrj56mbEFTQSVfphnQJfY=";
   };
 
-  vendorHash = "sha256-fpjkaGkJUi4jrdFvrClx42FF9HwzNW5js3I5HNZChOU=";
+  vendorHash = "sha256-7lMvSwLi588UBI31YDi/VqyAqwUjWUwjOZbxE3fZQWU=";
 
   sourceRoot = "${finalAttrs.src.name}/cmd/jwx";
 
   meta = {
-    description = " Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";
+    description = "Implementation of various JWx (Javascript Object Signing and Encryption/JOSE) technologies";
     mainProgram = "jwx";
     homepage = "https://github.com/lestrrat-go/jwx";
     changelog = "https://github.com/lestrrat-go/jwx/blob/v${finalAttrs.version}/Changes";

@@ -50,24 +50,23 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      dbus
-      glib
-      gtk4
-      libadwaita
-      libxml2
-      openssl
-      sqlite
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    dbus
+    glib
+    gtk4
+    libadwaita
+    libxml2
+    openssl
+    sqlite
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PYTHONPATH : ${

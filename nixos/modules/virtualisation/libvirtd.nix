@@ -17,52 +17,18 @@ let
     ${cfg.extraConfig}
   '';
   qemuConfigFile = pkgs.writeText "qemu.conf" ''
-    ${optionalString cfg.qemu.ovmf.enable ''
-      nvram = [
-        "/run/libvirt/nix-ovmf/AAVMF_CODE.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.fd",
-        "/run/libvirt/nix-ovmf/AAVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/AAVMF_VARS.ms.fd",
-        "/run/libvirt/nix-ovmf/OVMF_CODE.fd:/run/libvirt/nix-ovmf/OVMF_VARS.fd",
-        "/run/libvirt/nix-ovmf/OVMF_CODE.ms.fd:/run/libvirt/nix-ovmf/OVMF_VARS.ms.fd"
-      ]
-    ''}
     ${optionalString (!cfg.qemu.runAsRoot) ''
       user = "qemu-libvirtd"
       group = "qemu-libvirtd"
     ''}
     ${cfg.qemu.verbatimConfig}
   '';
+  networkConfigFile = pkgs.writeText "network.conf" ''
+    firewall_backend = "${cfg.firewallBackend}"
+  '';
+
   dirName = "libvirt";
   subDirs = list: [ dirName ] ++ map (e: "${dirName}/${e}") list;
-
-  ovmfModule = types.submodule {
-    options = {
-      enable = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Allows libvirtd to take advantage of OVMF when creating new
-          QEMU VMs with UEFI boot.
-        '';
-      };
-
-      # mkRemovedOptionModule does not work in submodules, do it manually
-      package = mkOption {
-        type = types.nullOr types.package;
-        default = null;
-        internal = true;
-      };
-
-      packages = mkOption {
-        type = types.listOf types.package;
-        default = [ pkgs.OVMF.fd ];
-        defaultText = literalExpression "[ pkgs.OVMF.fd ]";
-        example = literalExpression "[ pkgs.OVMFFull.fd pkgs.pkgsCross.aarch64-multiplatform.OVMF.fd ]";
-        description = ''
-          List of OVMF packages to use. Each listed package must contain files names FV/OVMF_CODE.fd and FV/OVMF_VARS.fd or FV/AAVMF_CODE.fd and FV/AAVMF_VARS.fd
-        '';
-      };
-    };
-  };
 
   swtpmModule = types.submodule {
     options = {
@@ -112,11 +78,28 @@ let
       };
 
       ovmf = mkOption {
-        type = ovmfModule;
+        type = types.submodule {
+          options = {
+            enable = mkOption {
+              type = types.nullOr types.bool;
+              default = null;
+              internal = true;
+            };
+            package = mkOption {
+              type = types.nullOr types.package;
+              default = null;
+              internal = true;
+            };
+            packages = mkOption {
+              type = types.nullOr (types.listOf types.package);
+              default = null;
+              internal = true;
+            };
+          };
+        };
         default = { };
-        description = ''
-          QEMU's OVMF options.
-        '';
+        internal = true;
+        description = "This submodule is deprecated and has been removed";
       };
 
       swtpm = mkOption {
@@ -146,7 +129,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/daemon.d/
           and called for daemon start/shutdown/SIGHUP events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -156,7 +139,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/qemu.d/
           and called for qemu domains begin/end/migrate events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -166,7 +149,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/lxc.d/
           and called for lxc domains begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -176,7 +159,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/libxl.d/
           and called for libxl-handled xen domains begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
 
@@ -186,7 +169,7 @@ let
         description = ''
           Hooks that will be placed under /var/lib/libvirt/hooks/network.d/
           and called for networks begin/end events.
-          Please see https://libvirt.org/hooks.html for documentation.
+          Please see <https://libvirt.org/hooks.html> for documentation.
         '';
       };
     };
@@ -201,7 +184,7 @@ let
           This option enables the older libvirt NSS module. This method uses
           DHCP server records, therefore is dependent on the hostname provided
           by the guest.
-          Please see https://libvirt.org/nss.html for more information.
+          Please see <https://libvirt.org/nss.html> for more information.
         '';
       };
 
@@ -211,11 +194,26 @@ let
         description = ''
           This option enables the newer libvirt_guest NSS module. This module
           uses the libvirt guest name instead of the hostname of the guest.
-          Please see https://libvirt.org/nss.html for more information.
+          Please see <https://libvirt.org/nss.html> for more information.
         '';
       };
     };
   };
+
+  qemuOvmfMetadata = pkgs.stdenv.mkDerivation {
+    name = "qemu-ovmf-metadata";
+    version = cfg.qemu.package.version;
+    nativeBuildInputs = [ cfg.qemu.package ];
+    dontBuild = true;
+    dontUnpack = true;
+    installPhase = ''
+      mkdir -p $out
+      cp ${cfg.qemu.package}/share/qemu/firmware/*.json $out
+      substituteInPlace $out/*.json \
+        --replace-fail "${cfg.qemu.package}/share/qemu/" "/run/${dirName}/nix-ovmf/"
+    '';
+  };
+
 in
 {
 
@@ -238,15 +236,14 @@ in
       [ "virtualisation" "libvirtd" "qemu" "verbatimConfig" ]
     )
     (mkRenamedOptionModule
-      [ "virtualisation" "libvirtd" "qemuOvmf" ]
-      [ "virtualisation" "libvirtd" "qemu" "ovmf" "enable" ]
-    )
-    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
-      "If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead."
-    )
-    (mkRenamedOptionModule
       [ "virtualisation" "libvirtd" "qemuSwtpm" ]
       [ "virtualisation" "libvirtd" "qemu" "swtpm" "enable" ]
+    )
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "qemuOvmf" ]
+      "The 'virtualisation.libvirtd.qemuOvmf' option has been removed. All OVMF images distributed with QEMU are now available by default."
+    )
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "qemuOvmfPackage" ]
+      "The 'virtualisation.libvirtd.qemuOvmfPackage' option has been removed. All OVMF images distributed with QEMU are now available by default."
     )
   ];
 
@@ -385,6 +382,18 @@ in
         Whether to configure OpenSSH to use the [SSH Proxy](https://libvirt.org/ssh-proxy.html).
       '';
     };
+
+    firewallBackend = mkOption {
+      type = types.enum [
+        "iptables"
+        "nftables"
+      ];
+      default = if config.networking.nftables.enable then "nftables" else "iptables";
+      defaultText = lib.literalExpression "if config.networking.nftables.enable then \"nftables\" else \"iptables\"";
+      description = ''
+        The backend used to setup virtual network firewall rules.
+      '';
+    };
   };
 
   ###### implementation
@@ -393,15 +402,13 @@ in
 
     assertions = [
       {
-        assertion = config.virtualisation.libvirtd.qemu.ovmf.package == null;
-        message = ''
-          The option virtualisation.libvirtd.qemu.ovmf.package is superseded by virtualisation.libvirtd.qemu.ovmf.packages.
-          If this option was set to `foo`, set the option `virtualisation.libvirtd.qemu.ovmf.packages' to `[foo.fd]` instead.
-        '';
-      }
-      {
         assertion = config.security.polkit.enable;
         message = "The libvirtd module currently requires Polkit to be enabled ('security.polkit.enable = true').";
+      }
+
+      {
+        assertion = ((lib.filterAttrs (n: v: v != null) cfg.qemu.ovmf) == { });
+        message = "The 'virtualisation.libvirtd.qemu.ovmf' submodule has been removed. All OVMF images distributed with QEMU are now available by default.";
       }
     ];
 
@@ -462,6 +469,9 @@ in
         # Copy generated qemu config to libvirt directory
         cp -f ${qemuConfigFile} /var/lib/${dirName}/qemu.conf
 
+        # Copy generated network config to libvirt directory
+        cp -f ${networkConfigFile} /var/lib/${dirName}/network.conf
+
         # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
         for emulator in ${cfg.package}/libexec/libvirt_lxc ${cfg.qemu.package}/bin/qemu-kvm ${cfg.qemu.package}/bin/qemu-system-*; do
           ln -s --force "$emulator" /run/${dirName}/nix-emulators/
@@ -469,20 +479,12 @@ in
 
         ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
-        ${optionalString cfg.qemu.ovmf.enable (
-          let
-            ovmfpackage = pkgs.buildEnv {
-              name = "qemu-ovmf";
-              paths = cfg.qemu.ovmf.packages;
-            };
-          in
-          ''
-            ln -s --force ${ovmfpackage}/FV/AAVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
-            ln -s --force ${ovmfpackage}/FV/OVMF_CODE{,.ms}.fd /run/${dirName}/nix-ovmf/
-            ln -s --force ${ovmfpackage}/FV/AAVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
-            ln -s --force ${ovmfpackage}/FV/OVMF_VARS{,.ms}.fd /run/${dirName}/nix-ovmf/
-          ''
-        )}
+        # Symlink to OVMF firmware code and variable template images distributed with QEMU
+        cp -sfv $(
+          ${pkgs.jq}/bin/jq -rs \
+            '[.[] | .mapping.executable.filename, .mapping."nvram-template".filename] | unique | .[]' \
+          ${cfg.qemu.package}/share/qemu/firmware/* \
+        ) /run/${dirName}/nix-ovmf
 
         # Symlink hooks to /var/lib/libvirt
         ${concatStringsSep "\n" (
@@ -526,13 +528,12 @@ in
         ++ cfg.extraOptions
       );
 
-      path =
-        [
-          cfg.qemu.package
-          pkgs.netcat
-        ] # libvirtd requires qemu-img to manage disk images
-        ++ optional vswitch.enable vswitch.package
-        ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
+      path = [
+        cfg.qemu.package
+        pkgs.netcat
+      ] # libvirtd requires qemu-img to manage disk images
+      ++ optional vswitch.enable vswitch.package
+      ++ optional cfg.qemu.swtpm.enable cfg.qemu.swtpm.package;
 
       serviceConfig = {
         Type = "notify";
@@ -602,7 +603,7 @@ in
       in
       [
         "L+ /var/lib/qemu/vhost-user - - - - ${vhostUserCollection}/share/qemu/vhost-user"
-        "L+ /var/lib/qemu/firmware - - - - ${cfg.qemu.package}/share/qemu/firmware"
+        "L+ /var/lib/qemu/firmware - - - - ${qemuOvmfMetadata}"
       ];
 
     security.polkit = {

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wolf-plugins";
     repo = "wolf-shaper";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-4oi1wnex6eNRHUWXZHnvrmqp4veFuPJqD0YuOhDepg4=";
     fetchSubmodules = true;
   };

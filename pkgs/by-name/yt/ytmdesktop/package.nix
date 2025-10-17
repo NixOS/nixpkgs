@@ -13,6 +13,8 @@
 
   electron,
   commandLineArgs ? "",
+
+  nix-update-script,
 }:
 
 let
@@ -20,7 +22,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ytmdesktop";
-  version = "2.0.8";
+  version = "2.0.10";
 
   src = fetchFromGitHub {
     owner = "ytmdesktop";
@@ -34,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
       find -name .git -print0 | xargs -0 rm -rf
     '';
 
-    hash = "sha256-QiV7U7LoJWvBqjVm7oVfHIiyw10cLSAk4lCQGO8hXtY=";
+    hash = "sha256-CA3Vb7Wp4WrsWSVtIwDxnEt1pWYb73WnhyoMVKoqvOE=";
   };
 
   patches = [
@@ -55,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   yarnOfflineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-piHpm7eeOoDmpgc1SmeJ3wLZHZiUZZGu+Pl30qQYqps=";
+    hash = "sha256-1jlnVY4KWm+w3emMkCkdwUtkqRB9ZymPPGuvgfQolrA=";
   };
 
   nativeBuildInputs = [
@@ -92,34 +94,33 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
+  installPhase = ''
+    runHook preInstall
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
 
-      mkdir -p "$out"/share/ytmdesktop
-      cp -r out/*/{locales,resources{,.pak}} "$out"/share/ytmdesktop
+    mkdir -p "$out"/share/ytmdesktop
+    cp -r out/*/{locales,resources{,.pak}} "$out"/share/ytmdesktop
 
-      install -Dm644 src/assets/icons/ytmd.png "$out"/share/pixmaps/ytmdesktop.png
+    install -Dm644 src/assets/icons/ytmd.png "$out"/share/pixmaps/ytmdesktop.png
 
-      makeWrapper ${lib.getExe electron} "$out"/bin/ytmdesktop \
-        --add-flags "$out"/share/ytmdesktop/resources/app.asar \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r out/*/"YouTube Music Desktop App".app "$out"/Applications
+    makeWrapper ${lib.getExe electron} "$out"/bin/ytmdesktop \
+      --add-flags "$out"/share/ytmdesktop/resources/app.asar \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r out/*/"YouTube Music Desktop App".app "$out"/Applications
 
-      wrapProgram "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
+    wrapProgram "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app \
+      --add-flags ${lib.escapeShellArg commandLineArgs}
 
-      makeWrapper "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app "$out"/bin/ytmdesktop
-    ''
-    + ''
-      runHook postInstall
-    '';
+    makeWrapper "$out"/Applications/"YouTube Music Desktop App".app/Contents/MacOS/youtube-music-desktop-app "$out"/bin/ytmdesktop
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -137,6 +138,8 @@ stdenv.mkDerivation (finalAttrs: {
       startupWMClass = "YouTube Music Desktop App";
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/ytmdesktop/ytmdesktop/tag/v${finalAttrs.version}";

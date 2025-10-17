@@ -13,7 +13,7 @@ let
   mbuild = python3Packages.buildPythonPackage rec {
     pname = "mbuild";
     version = "2024.11.04";
-    format = "setuptools";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "intelxed";
@@ -21,6 +21,8 @@ let
       tag = "v${version}";
       hash = "sha256-iQVykBG3tEPxI1HmqBkvO1q+K8vi64qBfVC63/rcTOk=";
     };
+
+    build-system = with python3Packages; [ setuptools ];
 
     meta = {
       description = "Python-based build system used for building XED";
@@ -32,13 +34,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "xed";
-  version = "2025.03.02";
+  version = "2025.06.08";
 
   src = fetchFromGitHub {
     owner = "intelxed";
     repo = "xed";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-shQYgbUC06+x+3TNdOJA6y6Wea/8lqexkgBWk3AOOMA=";
+    hash = "sha256-FXVWCq7ykuSsVx8iB7WkFD7DDq6o/4bgsS0YJQWE+XM=";
   };
 
   postPatch = ''
@@ -48,7 +50,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     mbuild
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ llvmPackages.bintools ];
 
   buildPhase = ''
     runHook preBuild

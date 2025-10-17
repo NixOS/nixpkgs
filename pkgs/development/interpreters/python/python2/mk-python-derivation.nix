@@ -171,12 +171,12 @@ let
       checkDrv = drv: if (isPythonModule drv) && (isMismatchedPython drv) then throwMismatch drv else drv;
 
     in
-    inputs: builtins.map (checkDrv) inputs;
+    inputs: map checkDrv inputs;
 
   # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
   self = toPythonModule (
     stdenv.mkDerivation (
-      (builtins.removeAttrs attrs [
+      (removeAttrs attrs [
         "disabled"
         "checkPhase"
         "checkInputs"
@@ -193,47 +193,46 @@ let
 
         name = namePrefix + name_;
 
-        nativeBuildInputs =
-          [
-            python
-            wrapPython
-            ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, ...)?
-            pythonRemoveTestsDirHook
-          ]
-          ++ lib.optionals catchConflicts [
-            pythonCatchConflictsHook
-          ]
-          ++ lib.optionals removeBinBytecode [
-            pythonRemoveBinBytecodeHook
-          ]
-          ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
-            unzip
-          ]
-          ++ lib.optionals (format == "setuptools") [
-            setuptoolsBuildHook
-          ]
-          ++ lib.optionals (format == "pyproject") [
-            (pipBuildHook)
-          ]
-          ++ lib.optionals (format == "wheel") [
-            wheelUnpackHook
-          ]
-          ++ lib.optionals (format == "egg") [
-            eggUnpackHook
-            eggBuildHook
-            eggInstallHook
-          ]
-          ++ lib.optionals (format != "other") [
-            (pipInstallHook)
-          ]
-          ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
-            # This is a test, however, it should be ran independent of the checkPhase and checkInputs
-            pythonImportsCheckHook
-          ]
-          ++ lib.optionals withDistOutput [
-            pythonOutputDistHook
-          ]
-          ++ nativeBuildInputs;
+        nativeBuildInputs = [
+          python
+          wrapPython
+          ensureNewerSourcesForZipFilesHook # move to wheel installer (pip) or builder (setuptools, ...)?
+          pythonRemoveTestsDirHook
+        ]
+        ++ lib.optionals catchConflicts [
+          pythonCatchConflictsHook
+        ]
+        ++ lib.optionals removeBinBytecode [
+          pythonRemoveBinBytecodeHook
+        ]
+        ++ lib.optionals (lib.hasSuffix "zip" (attrs.src.name or "")) [
+          unzip
+        ]
+        ++ lib.optionals (format == "setuptools") [
+          setuptoolsBuildHook
+        ]
+        ++ lib.optionals (format == "pyproject") [
+          pipBuildHook
+        ]
+        ++ lib.optionals (format == "wheel") [
+          wheelUnpackHook
+        ]
+        ++ lib.optionals (format == "egg") [
+          eggUnpackHook
+          eggBuildHook
+          eggInstallHook
+        ]
+        ++ lib.optionals (format != "other") [
+          pipInstallHook
+        ]
+        ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [
+          # This is a test, however, it should be ran independent of the checkPhase and checkInputs
+          pythonImportsCheckHook
+        ]
+        ++ lib.optionals withDistOutput [
+          pythonOutputDistHook
+        ]
+        ++ nativeBuildInputs;
 
         buildInputs = validatePythonMatches "buildInputs" (buildInputs ++ pythonPath);
 
@@ -274,7 +273,8 @@ let
           # default to python's platforms
           platforms = python.meta.platforms;
           isBuildPythonPackage = python.meta.platforms;
-        } // meta;
+        }
+        // meta;
       }
       // lib.optionalAttrs (attrs ? checkPhase) {
         # If given use the specified checkPhase, otherwise use the setup hook.

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, package, ... }:
 
 let
   kafkaNamedCollectionConfig = ''
@@ -28,7 +28,10 @@ let
 in
 {
   name = "clickhouse-kafka";
-  meta.maintainers = with pkgs.lib.maintainers; [ jpds ];
+  meta.maintainers = with pkgs.lib.maintainers; [
+    jpds
+    thevar1able
+  ];
 
   nodes = {
     clickhouse = {
@@ -38,7 +41,10 @@ in
         };
       };
 
-      services.clickhouse.enable = true;
+      services.clickhouse = {
+        enable = true;
+        inherit package;
+      };
       virtualisation.memorySize = 4096;
     };
 
@@ -93,6 +99,8 @@ in
       };
 
       systemd.services.apache-kafka.serviceConfig.StateDirectory = "apache-kafka";
+
+      virtualisation.memorySize = 1024 * 2;
     };
   };
 

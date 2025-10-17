@@ -6,23 +6,29 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "savepagenow";
-  version = "1.1.1";
-  format = "setuptools";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pastpages";
     repo = "savepagenow";
-    rev = "v${version}";
-    sha256 = "1lz6rc47cds9rb35jdf8n13gr61wdkh5jqzx4skikm1yrqkwjyhm";
+    tag = version;
+    sha256 = "sha256-omQ28GqgBKC8W51c0qb6Tg06obXskyfF+2dg/13ah1M=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  SETUPTOOLS_SCM_PRETEND_VERSION = version;
+
+  build-system = with python3Packages; [ setuptools-scm ];
+
+  dependencies = with python3Packages; [
     click
     requests
   ];
 
   # requires network access
   doCheck = false;
+
+  pythonImportsCheck = [ "savepagenow" ];
 
   meta = with lib; {
     description = "Simple Python wrapper for archive.org's \"Save Page Now\" capturing service";

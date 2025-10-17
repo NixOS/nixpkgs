@@ -1,6 +1,75 @@
 {
+  "module-security-tpm2": [
+    "index.html#module-security-tpm2"
+  ],
+  "module-security-tpm2-introduction": [
+    "index.html#module-security-tpm2-introduction"
+  ],
+  "module-security-tpm2-introduction-hli": [
+    "index.html#module-security-tpm2-introduction-hli"
+  ],
+  "module-security-tpm2-introduction-resourcemanagers": [
+    "index.html#module-security-tpm2-introduction-resourcemanagers"
+  ],
+  "module-security-tpm2-introduction-softwarearchitecture": [
+    "index.html#module-security-tpm2-introduction-softwarearchitecture"
+  ],
+  "module-security-tpm2-introduction-softwarearchitecture-tcti": [
+    "index.html#module-security-tpm2-introduction-softwarearchitecture-tcti"
+  ],
+  "module-security-tpm2-nixosmodule": [
+    "index.html#module-security-tpm2-nixosmodule"
+  ],
+  "module-security-tpm2-nixosmodule-fapiconfiguration": [
+    "index.html#module-security-tpm2-nixosmodule-fapiconfiguration"
+  ],
+  "module-boot-plymouth-tpm2-totp": [
+    "index.html#module-boot-plymouth-tpm2-totp"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-check": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-check"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-configure": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-configure"
+  ],
+  "module-boot-plymouth-tpm2-totp-quick-start-enable": [
+    "index.html#module-boot-plymouth-tpm2-totp-quick-start-enable"
+  ],
+  "sec-override-nixos-test": [
+    "index.html#sec-override-nixos-test"
+  ],
+  "test-opt-rawTestDerivationArg": [
+    "index.html#test-opt-rawTestDerivationArg"
+  ],
+  "ex-nixos-test-extendNixOS": [
+    "index.html#ex-nixos-test-extendNixOS"
+  ],
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
+  ],
+  "modular-service-composition": [
+    "index.html#modular-service-composition"
+  ],
+  "modular-service-migration": [
+    "index.html#modular-service-migration"
+  ],
+  "modular-service-options-portable": [
+    "index.html#modular-service-options-portable"
+  ],
+  "modular-service-options-systemd": [
+    "index.html#modular-service-options-systemd"
+  ],
+  "modular-service-portability": [
+    "index.html#modular-service-portability"
+  ],
+  "modular-service-review": [
+    "index.html#modular-service-review"
+  ],
+  "modular-services": [
+    "index.html#modular-services"
   ],
   "module-services-anubis": [
     "index.html#module-services-anubis"
@@ -257,8 +326,14 @@
   "sec-image-repart": [
     "index.html#sec-image-repart"
   ],
+  "sec-image-repart-store-paths": [
+    "index.html#sec-image-repart-store-paths"
+  ],
   "sec-image-repart-store-partition": [
     "index.html#sec-image-repart-store-partition"
+  ],
+  "sec-image-repart-store-subvolume": [
+    "index.html#sec-image-repart-store-subvolume"
   ],
   "sec-image-repart-appliance": [
     "index.html#sec-image-repart-appliance"
@@ -307,6 +382,9 @@
   ],
   "sec-userborn": [
     "index.html#sec-userborn"
+  ],
+  "sec-restrict-usage-time": [
+    "index.html#sec-restrict-usage-time"
   ],
   "ch-file-systems": [
     "index.html#ch-file-systems"
@@ -578,6 +656,18 @@
   "module-services-suwayomi-server-extra-config": [
     "index.html#module-services-suwayomi-server-extra-config"
   ],
+  "module-services-immich": [
+    "index.html#module-services-immich"
+  ],
+  "module-services-immich-vectorchord-migration": [
+    "index.html#module-services-immich-vectorchord-migration"
+  ],
+  "module-services-paisa": [
+    "index.html#module-services-paisa"
+  ],
+  "module-services-paisa-usage": [
+    "index.html#module-services-paisa-usage"
+  ],
   "module-services-plausible": [
     "index.html#module-services-plausible"
   ],
@@ -616,6 +706,9 @@
   ],
   "module-services-nextcloud-httpd": [
     "index.html#module-services-nextcloud-httpd"
+  ],
+  "module-services-nextcloud-occ": [
+    "index.html#module-services-nextcloud-occ"
   ],
   "installing-apps-php-extensions-nextcloud": [
     "index.html#installing-apps-php-extensions-nextcloud"
@@ -839,6 +932,12 @@
   "modules-services-akkoma-distributed-deployment": [
     "index.html#modules-services-akkoma-distributed-deployment"
   ],
+  "module-services-atalkd": [
+    "index.html#module-services-atalkd"
+  ],
+  "module-services-atalkd-basic-usage": [
+    "index.html#module-services-atalkd-basic-usage"
+  ],
   "module-services-systemd-lock-handler": [
     "index.html#module-services-systemd-lock-handler"
   ],
@@ -870,9 +969,7 @@
     "index.html#module-services-meilisearch-quickstart-search"
   ],
   "module-services-meilisearch-defaults": [
-    "index.html#module-services-meilisearch-defaults"
-  ],
-  "module-services-meilisearch-missing": [
+    "index.html#module-services-meilisearch-defaults",
     "index.html#module-services-meilisearch-missing"
   ],
   "module-services-networking-yggdrasil": [
@@ -1166,6 +1263,15 @@
   "module-services-mautrix-signal-migrate-configuration": [
     "index.html#module-services-mautrix-signal-migrate-configuration"
   ],
+  "module-services-mautrix-whatsapp": [
+    "index.html#module-services-mautrix-whatsapp"
+  ],
+  "module-services-mautrix-whatsapp-configuration": [
+    "index.html#module-services-mautrix-whatsapp-configuration"
+  ],
+  "module-services-mautrix-whatsapp-migrate-configuration": [
+    "index.html#module-services-mautrix-whatsapp-migrate-configuration"
+  ],
   "module-services-maubot": [
     "index.html#module-services-maubot"
   ],
@@ -1320,6 +1426,9 @@
   "module-services-postgres-authentication-user-mapping": [
     "index.html#module-services-postgres-authentication-user-mapping"
   ],
+  "module-services-postgres-pg_config": [
+    "index.html#module-services-postgres-pg_config"
+  ],
   "module-services-postgres-upgrading": [
     "index.html#module-services-postgres-upgrading"
   ],
@@ -1415,6 +1524,9 @@
   ],
   "module-security-acme-fix-jws": [
     "index.html#module-security-acme-fix-jws"
+  ],
+  "module-security-acme-reload-dependencies": [
+    "index.html#module-security-acme-reload-dependencies"
   ],
   "module-programs-zsh-ohmyzsh": [
     "index.html#module-programs-zsh-ohmyzsh"
@@ -1881,6 +1993,9 @@
   "test-opt-sshBackdoor.vsockOffset": [
     "index.html#test-opt-sshBackdoor.vsockOffset"
   ],
+  "test-opt-enableDebugHook": [
+    "index.html#test-opt-enableDebugHook"
+  ],
   "test-opt-defaults": [
     "index.html#test-opt-defaults"
   ],
@@ -1988,6 +2103,9 @@
   ],
   "sec-nixos-test-testing-hardware-features": [
     "index.html#sec-nixos-test-testing-hardware-features"
+  ],
+  "sec-test-sandbox-breakpoint": [
+    "index.html#sec-test-sandbox-breakpoint"
   ],
   "chap-developing-the-test-driver": [
     "index.html#chap-developing-the-test-driver"

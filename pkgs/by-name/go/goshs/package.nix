@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "goshs";
-  version = "1.0.6";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "patrickhener";
     repo = "goshs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-5/KWAytz0SQYgIerf1xyTfJxzX5ynA2BhKfbYmu/vU8=";
+    hash = "sha256-MgWYbM48VbbmiY5mlDWnyU20/SPziHfZQXwNRZ435Mg=";
   };
 
-  vendorHash = "sha256-LzuY3l6QQnMtAoVM2i206BuoTkVLVHg1DTWZhjIepY8=";
+  vendorHash = "sha256-eu4ytWargmwSfCVfXPykCX0VD7XO7m/T8Her10XpM3s=";
 
   ldflags = [
     "-s"
@@ -25,7 +25,16 @@ buildGoModule (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
+
   doInstallCheck = true;
+
+  preCheck = ''
+    # Possible race condition
+    rm integration/integration_test.go
+    # This is handled by nixpkgs
+    rm update/update_test.go
+  '';
+
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # utils_test.go:62: route ip+net: no such network interface
     # does not work in sandbox even with __darwinAllowLocalNetworking

@@ -38,20 +38,17 @@ mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libmt32emu
-      portaudio
-      qtbase
-      qtmultimedia
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      libpulseaudio
-    ]
-    ++ lib.optional withJack libjack2;
-
-  dontFixCmake = true;
+  buildInputs = [
+    libmt32emu
+    portaudio
+    qtbase
+    qtmultimedia
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    libpulseaudio
+  ]
+  ++ lib.optional withJack libjack2;
 
   cmakeFlags = [
     "-Dmt32emu-qt_USE_PULSEAUDIO_DYNAMIC_LOADING=OFF"

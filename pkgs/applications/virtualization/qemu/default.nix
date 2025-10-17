@@ -90,10 +90,12 @@
   tpmSupport ? !minimal,
   uringSupport ? stdenv.hostPlatform.isLinux && !userOnly,
   liburing,
-  canokeySupport ? !minimal,
+  canokeySupport ? false,
   canokey-qemu,
   capstoneSupport ? !minimal,
   capstone,
+  valgrindSupport ? false,
+  valgrind-light,
   pluginsSupport ? !stdenv.hostPlatform.isStatic,
   enableDocs ? !minimal || toolsOnly,
   enableTools ? !minimal || toolsOnly,
@@ -144,112 +146,116 @@ stdenv.mkDerivation (finalAttrs: {
     + lib.optionalString nixosTestRunner "-for-vm-tests"
     + lib.optionalString toolsOnly "-utils"
     + lib.optionalString userOnly "-user";
-  version = "10.0.0";
+  version = "10.1.0";
 
   src = fetchurl {
     url = "https://download.qemu.org/qemu-${finalAttrs.version}.tar.xz";
-    hash = "sha256-IsB1YB/c+MeyZxqDnr3O8dTylz62c1JU/S4b0PMLOJY=";
+    hash = "sha256-4FFzSbUMpz6+wvqFsGBQ1cRjymXHOIM72PwfFfGAvlE=";
   };
 
-  depsBuildBuild =
-    [ buildPackages.stdenv.cc ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin darwinSDK
-    ++ lib.optionals hexagonSupport [ pkg-config ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin darwinSDK
+  ++ lib.optionals hexagonSupport [ pkg-config ];
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      removeReferencesTo
-      pkg-config
-      flex
-      bison
-      meson
-      ninja
-      perl
+  nativeBuildInputs = [
+    makeWrapper
+    removeReferencesTo
+    pkg-config
+    flex
+    bison
+    meson
+    ninja
+    perl
 
-      # Don't change this to python3 and python3.pkgs.*, breaks cross-compilation
-      python3Packages.python
-    ]
-    ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
-    ++ lib.optionals enableDocs [
-      python3Packages.sphinx
-      python3Packages.sphinx-rtd-theme
-    ]
-    ++ lib.optionals hexagonSupport [ glib ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      sigtool
-    ]
-    ++ lib.optionals (!userOnly) [ dtc ];
+    # For python changes other than simple package additions, ping @dramforever for review.
+    # Don't change `python3Packages` to `python3.pkgs.*`, breaks cross-compilation.
+    python3Packages.distlib
+    # Hooks from the python package are needed to add `$pythonPath` so
+    # `python/scripts/mkvenv.py` can detect `meson` otherwise the vendored meson without patches will be used.
+    python3Packages.python
+  ]
+  ++ lib.optionals gtkSupport [ wrapGAppsHook3 ]
+  ++ lib.optionals enableDocs [
+    python3Packages.sphinx
+    python3Packages.sphinx-rtd-theme
+  ]
+  ++ lib.optionals hexagonSupport [ glib ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    sigtool
+  ]
+  ++ lib.optionals (!userOnly) [ dtc ];
 
   # gnutls is required for crypto support (luks) in qemu-img
-  buildInputs =
-    [
-      glib
-      gnutls
-      zlib
-    ]
-    ++ lib.optionals (!minimal) [
-      dtc
-      pixman
-      vde2
-      lzo
-      snappy
-      libtasn1
-      libslirp
-      libcbor
-    ]
-    ++ lib.optionals (!userOnly) [ curl ]
-    ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinSDK
-    ++ lib.optionals seccompSupport [ libseccomp ]
-    ++ lib.optionals numaSupport [ numactl ]
-    ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals pulseSupport [ libpulseaudio ]
-    ++ lib.optionals pipewireSupport [ pipewire ]
-    ++ lib.optionals sdlSupport [
-      SDL2
-      SDL2_image
-    ]
-    ++ lib.optionals jackSupport [ libjack2 ]
-    ++ lib.optionals gtkSupport [
-      gtk3
-      gettext
-      vte
-    ]
-    ++ lib.optionals vncSupport [
-      libjpeg
-      libpng
-    ]
-    ++ lib.optionals smartcardSupport [ libcacard ]
-    ++ lib.optionals spiceSupport [
-      spice-protocol
-      spice
-    ]
-    ++ lib.optionals usbredirSupport [ usbredir ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && !userOnly) [
-      libcap_ng
-      libcap
-      attr
-      libaio
-    ]
-    ++ lib.optionals xenSupport [ xen ]
-    ++ lib.optionals cephSupport [ ceph ]
-    ++ lib.optionals glusterfsSupport [
-      glusterfs
-      libuuid
-    ]
-    ++ lib.optionals openGLSupport [
-      libgbm
-      libepoxy
-      libdrm
-    ]
-    ++ lib.optionals rutabagaSupport [ rutabaga_gfx ]
-    ++ lib.optionals virglSupport [ virglrenderer ]
-    ++ lib.optionals libiscsiSupport [ libiscsi ]
-    ++ lib.optionals smbdSupport [ samba ]
-    ++ lib.optionals uringSupport [ liburing ]
-    ++ lib.optionals canokeySupport [ canokey-qemu ]
-    ++ lib.optionals capstoneSupport [ capstone ];
+  buildInputs = [
+    glib
+    gnutls
+    zlib
+  ]
+  ++ lib.optionals (!minimal) [
+    dtc
+    pixman
+    vde2
+    lzo
+    snappy
+    libtasn1
+    libslirp
+    libcbor
+  ]
+  ++ lib.optionals (!userOnly) [ curl ]
+  ++ lib.optionals ncursesSupport [ ncurses ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin darwinSDK
+  ++ lib.optionals seccompSupport [ libseccomp ]
+  ++ lib.optionals numaSupport [ numactl ]
+  ++ lib.optionals alsaSupport [ alsa-lib ]
+  ++ lib.optionals pulseSupport [ libpulseaudio ]
+  ++ lib.optionals pipewireSupport [ pipewire ]
+  ++ lib.optionals sdlSupport [
+    SDL2
+    SDL2_image
+  ]
+  ++ lib.optionals jackSupport [ libjack2 ]
+  ++ lib.optionals gtkSupport [
+    gtk3
+    gettext
+    vte
+  ]
+  ++ lib.optionals vncSupport [
+    libjpeg
+    libpng
+  ]
+  ++ lib.optionals smartcardSupport [ libcacard ]
+  ++ lib.optionals spiceSupport [
+    spice-protocol
+    spice
+  ]
+  ++ lib.optionals usbredirSupport [ usbredir ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && !userOnly) [
+    libcap_ng
+    libcap
+    attr
+    libaio
+  ]
+  ++ lib.optionals xenSupport [ xen ]
+  ++ lib.optionals cephSupport [ ceph ]
+  ++ lib.optionals glusterfsSupport [
+    glusterfs
+    libuuid
+  ]
+  ++ lib.optionals openGLSupport [
+    libgbm
+    libepoxy
+    libdrm
+  ]
+  ++ lib.optionals rutabagaSupport [ rutabaga_gfx ]
+  ++ lib.optionals virglSupport [ virglrenderer ]
+  ++ lib.optionals libiscsiSupport [ libiscsi ]
+  ++ lib.optionals smbdSupport [ samba ]
+  ++ lib.optionals uringSupport [ liburing ]
+  ++ lib.optionals canokeySupport [ canokey-qemu ]
+  ++ lib.optionals capstoneSupport [ capstone ]
+  ++ lib.optionals valgrindSupport [ valgrind-light ];
 
   dontUseMesonConfigure = true; # meson's configurePhase isn't compatible with qemu build
   dontAddStaticConfigureFlags = true;
@@ -274,7 +280,8 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "sha256-oC+bRjEHixv1QEFO9XAm4HHOwoiT+NkhknKGPydnZ5E=";
       revert = true;
     })
-  ] ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
+  ]
+  ++ lib.optional nixosTestRunner ./force-uid0-on-9p.patch;
 
   postPatch = ''
     # Otherwise tries to ensure /var/run exists.
@@ -290,51 +297,52 @@ stdenv.mkDerivation (finalAttrs: {
     # avoid conflicts with libc++ include for <version>
     mv VERSION QEMU_VERSION
     substituteInPlace configure \
-      --replace '$source_path/VERSION' '$source_path/QEMU_VERSION'
+      --replace-fail '$source_path/VERSION' '$source_path/QEMU_VERSION'
     substituteInPlace meson.build \
-      --replace "'VERSION'" "'QEMU_VERSION'"
+      --replace-fail "'VERSION'" "'QEMU_VERSION'"
+    substituteInPlace docs/conf.py \
+      --replace-fail "'../VERSION'" "'../QEMU_VERSION'"
     substituteInPlace python/qemu/machine/machine.py \
       --replace-fail /var/tmp "$TMPDIR"
   '';
 
-  configureFlags =
-    [
-      "--disable-strip" # We'll strip ourselves after separating debug info.
-      "--enable-gnutls" # auto detection only works when building with --enable-system
-      (lib.enableFeature enableDocs "docs")
-      (lib.enableFeature enableTools "tools")
-      "--localstatedir=/var"
-      "--sysconfdir=/etc"
-      "--cross-prefix=${stdenv.cc.targetPrefix}"
-      (lib.enableFeature guestAgentSupport "guest-agent")
-    ]
-    ++ lib.optional numaSupport "--enable-numa"
-    ++ lib.optional seccompSupport "--enable-seccomp"
-    ++ lib.optional smartcardSupport "--enable-smartcard"
-    ++ lib.optional spiceSupport "--enable-spice"
-    ++ lib.optional usbredirSupport "--enable-usb-redir"
-    ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "--enable-cocoa"
-      "--enable-hvf"
-    ]
-    ++ lib.optional (stdenv.hostPlatform.isLinux && !userOnly) "--enable-linux-aio"
-    ++ lib.optional gtkSupport "--enable-gtk"
-    ++ lib.optional xenSupport "--enable-xen"
-    ++ lib.optional cephSupport "--enable-rbd"
-    ++ lib.optional glusterfsSupport "--enable-glusterfs"
-    ++ lib.optional openGLSupport "--enable-opengl"
-    ++ lib.optional virglSupport "--enable-virglrenderer"
-    ++ lib.optional tpmSupport "--enable-tpm"
-    ++ lib.optional libiscsiSupport "--enable-libiscsi"
-    ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
-    ++ lib.optional uringSupport "--enable-linux-io-uring"
-    ++ lib.optional canokeySupport "--enable-canokey"
-    ++ lib.optional capstoneSupport "--enable-capstone"
-    ++ lib.optional (!pluginsSupport) "--disable-plugins"
-    ++ lib.optional (!enableBlobs) "--disable-install-blobs"
-    ++ lib.optional userOnly "--disable-system"
-    ++ lib.optional stdenv.hostPlatform.isStatic "--static";
+  configureFlags = [
+    "--disable-strip" # We'll strip ourselves after separating debug info.
+    "--enable-gnutls" # auto detection only works when building with --enable-system
+    (lib.enableFeature enableDocs "docs")
+    (lib.enableFeature enableTools "tools")
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+    "--cross-prefix=${stdenv.cc.targetPrefix}"
+    (lib.enableFeature guestAgentSupport "guest-agent")
+  ]
+  ++ lib.optional numaSupport "--enable-numa"
+  ++ lib.optional seccompSupport "--enable-seccomp"
+  ++ lib.optional smartcardSupport "--enable-smartcard"
+  ++ lib.optional spiceSupport "--enable-spice"
+  ++ lib.optional usbredirSupport "--enable-usb-redir"
+  ++ lib.optional (hostCpuTargets != null) "--target-list=${lib.concatStringsSep "," hostCpuTargets}"
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "--enable-cocoa"
+    "--enable-hvf"
+  ]
+  ++ lib.optional (stdenv.hostPlatform.isLinux && !userOnly) "--enable-linux-aio"
+  ++ lib.optional gtkSupport "--enable-gtk"
+  ++ lib.optional xenSupport "--enable-xen"
+  ++ lib.optional cephSupport "--enable-rbd"
+  ++ lib.optional glusterfsSupport "--enable-glusterfs"
+  ++ lib.optional openGLSupport "--enable-opengl"
+  ++ lib.optional virglSupport "--enable-virglrenderer"
+  ++ lib.optional tpmSupport "--enable-tpm"
+  ++ lib.optional libiscsiSupport "--enable-libiscsi"
+  ++ lib.optional smbdSupport "--smbd=${samba}/bin/smbd"
+  ++ lib.optional uringSupport "--enable-linux-io-uring"
+  ++ lib.optional canokeySupport "--enable-canokey"
+  ++ lib.optional capstoneSupport "--enable-capstone"
+  ++ lib.optional (!pluginsSupport) "--disable-plugins"
+  ++ lib.optional (!enableBlobs) "--disable-install-blobs"
+  ++ lib.optional userOnly "--disable-system"
+  ++ lib.optional stdenv.hostPlatform.isStatic "--static";
 
   dontWrapGApps = true;
 
@@ -344,72 +352,70 @@ stdenv.mkDerivation (finalAttrs: {
   # * https://github.com/qemu/qemu/blob/v6.1.0/scripts/entitlement.sh#L25
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  postFixup =
-    ''
-      # the .desktop is both invalid and pointless
-      rm -f $out/share/applications/qemu.desktop
-    ''
-    + lib.optionalString guestAgentSupport ''
-      # move qemu-ga (guest agent) to separate output
-      mkdir -p $ga/bin
-      mv $out/bin/qemu-ga $ga/bin/
-      ln -s $ga/bin/qemu-ga $out/bin
-      remove-references-to -t $out $ga/bin/qemu-ga
-    ''
-    + lib.optionalString gtkSupport ''
-      # wrap GTK Binaries
-      for f in $out/bin/qemu-system-*; do
-        wrapGApp $f
-      done
-    ''
-    + lib.optionalString stdenv.hostPlatform.isStatic ''
-      # HACK: Otherwise the result will have the entire buildInputs closure
-      # injected by the pkgsStatic stdenv
-      # <https://github.com/NixOS/nixpkgs/issues/83667>
-      rm -f $out/nix-support/propagated-build-inputs
-    '';
+  postFixup = ''
+    # the .desktop is both invalid and pointless
+    rm -f $out/share/applications/qemu.desktop
+  ''
+  + lib.optionalString guestAgentSupport ''
+    # move qemu-ga (guest agent) to separate output
+    mkdir -p $ga/bin
+    mv $out/bin/qemu-ga $ga/bin/
+    ln -s $ga/bin/qemu-ga $out/bin
+    remove-references-to -t $out $ga/bin/qemu-ga
+  ''
+  + lib.optionalString gtkSupport ''
+    # wrap GTK Binaries
+    for f in $out/bin/qemu-system-*; do
+      wrapGApp $f
+    done
+  ''
+  + lib.optionalString stdenv.hostPlatform.isStatic ''
+    # HACK: Otherwise the result will have the entire buildInputs closure
+    # injected by the pkgsStatic stdenv
+    # <https://github.com/NixOS/nixpkgs/issues/83667>
+    rm -f $out/nix-support/propagated-build-inputs
+  '';
   preBuild = "cd build";
 
   # tests can still timeout on slower systems
   doCheck = false;
   nativeCheckInputs = [ socat ];
-  preCheck =
-    ''
-      # time limits are a little meagre for a build machine that's
-      # potentially under load.
-      substituteInPlace ../tests/unit/meson.build \
-        --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
-      substituteInPlace ../tests/qtest/meson.build \
-        --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
-      substituteInPlace ../tests/fp/meson.build \
-        --replace 'timeout: 90)' 'timeout: 300)'
+  preCheck = ''
+    # time limits are a little meagre for a build machine that's
+    # potentially under load.
+    substituteInPlace ../tests/unit/meson.build \
+      --replace 'timeout: slow_tests' 'timeout: 50 * slow_tests'
+    substituteInPlace ../tests/qtest/meson.build \
+      --replace 'timeout: slow_qtests' 'timeout: 50 * slow_qtests'
+    substituteInPlace ../tests/fp/meson.build \
+      --replace 'timeout: 90)' 'timeout: 300)'
 
-      # point tests towards correct binaries
-      substituteInPlace ../tests/unit/test-qga.c \
-        --replace '/bin/bash' "$(type -P bash)" \
-        --replace '/bin/echo' "$(type -P echo)"
-      substituteInPlace ../tests/unit/test-io-channel-command.c \
-        --replace '/bin/socat' "$(type -P socat)"
+    # point tests towards correct binaries
+    substituteInPlace ../tests/unit/test-qga.c \
+      --replace '/bin/bash' "$(type -P bash)" \
+      --replace '/bin/echo' "$(type -P echo)"
+    substituteInPlace ../tests/unit/test-io-channel-command.c \
+      --replace '/bin/socat' "$(type -P socat)"
 
-      # combined with a long package name, some temp socket paths
-      # can end up exceeding max socket name len
-      substituteInPlace ../tests/qtest/bios-tables-test.c \
-        --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
+    # combined with a long package name, some temp socket paths
+    # can end up exceeding max socket name len
+    substituteInPlace ../tests/qtest/bios-tables-test.c \
+      --replace 'qemu-test_acpi_%s_tcg_%s' '%s_%s'
 
-      # get-fsinfo attempts to access block devices, disallowed by sandbox
-      sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
-        ../tests/unit/test-qga.c
+    # get-fsinfo attempts to access block devices, disallowed by sandbox
+    sed -i -e '/\/qga\/get-fsinfo/d' -e '/\/qga\/blacklist/d' \
+      ../tests/unit/test-qga.c
 
-      # xattrs are not allowed in the sandbox
-      substituteInPlace ../tests/qtest/virtio-9p-test.c \
-        --replace-fail mapped-xattr mapped-file
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # skip test that stalls on darwin, perhaps due to subtle differences
-      # in fifo behaviour
-      substituteInPlace ../tests/unit/meson.build \
-        --replace "'test-io-channel-command'" "#'test-io-channel-command'"
-    '';
+    # xattrs are not allowed in the sandbox
+    substituteInPlace ../tests/qtest/virtio-9p-test.c \
+      --replace-fail mapped-xattr mapped-file
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # skip test that stalls on darwin, perhaps due to subtle differences
+    # in fifo behaviour
+    substituteInPlace ../tests/unit/meson.build \
+      --replace "'test-io-channel-command'" "#'test-io-channel-command'"
+  '';
 
   # Add a ‘qemu-kvm’ wrapper for compatibility/convenience.
   postInstall = lib.optionalString (!minimal && !xenSupport) ''

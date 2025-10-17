@@ -30,7 +30,7 @@ buildGoModule rec {
     changelog = "https://github.com/goreleaser/chglog/releases/tag/v${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     mainProgram = "chglog";
   };
 }

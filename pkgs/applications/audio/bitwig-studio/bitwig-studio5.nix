@@ -32,12 +32,12 @@
 
 stdenv.mkDerivation rec {
   pname = "bitwig-studio-unwrapped";
-  version = "5.3.8";
+  version = "5.3.13";
 
   src = fetchurl {
     name = "bitwig-studio-${version}.deb";
     url = "https://www.bitwig.com/dl/Bitwig%20Studio/${version}/installer_linux/";
-    hash = "sha256-ccDgNsKskEsaL3G5ISZUMckvFosMALFzEzOM9D4/Xgo=";
+    hash = "sha256-tx+Dz9fTm4DIobwLa055ZOCMG+tU7vQl11NFnEKMAno=";
   };
 
   nativeBuildInputs = [
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
 
       runHook postInstall
   '';

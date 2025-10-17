@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
@@ -9,6 +10,7 @@
 
   # dependencies
   addict,
+  distutils,
   matplotlib,
   numpy,
   opencv4,
@@ -73,6 +75,7 @@ buildPythonPackage rec {
 
   dependencies = [
     addict
+    distutils
     matplotlib
     numpy
     opencv4
@@ -105,16 +108,28 @@ buildPythonPackage rec {
       export MKL_NUM_THREADS=1
     '';
 
-  pytestFlagsArray = [
+  disabledTestPaths = [
     # Require unpackaged aim
-    "--deselect tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
+    "tests/test_visualizer/test_vis_backend.py::TestAimVisBackend"
 
     # Cannot find SSL certificate
     # _pygit2.GitError: OpenSSL error: failed to load certificates: error:00000000:lib(0)::reason(0)
-    "--deselect tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
+    "tests/test_visualizer/test_vis_backend.py::TestDVCLiveVisBackend"
 
     # AttributeError: type object 'MagicMock' has no attribute ...
-    "--deselect tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
+    "tests/test_fileio/test_backends/test_petrel_backend.py::TestPetrelBackend"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # RuntimeError: attempt to insert nil object from objects[1]
+    "tests/test_visualizer/test_visualizer.py::TestVisualizer::test_draw_featmap"
+    "tests/test_visualizer/test_visualizer.py::TestVisualizer::test_show"
+
+    # AssertionError: torch.bfloat16 != torch.float32
+    "tests/test_runner/test_amp.py::TestAmp::test_autocast"
+
+    # ValueError: User specified autocast device_type must be cuda or cpu, but got mps
+    "tests/test_runner/test_runner.py::TestRunner::test_test"
+    "tests/test_runner/test_runner.py::TestRunner::test_val"
   ];
 
   disabledTests = [
@@ -131,7 +146,15 @@ buildPythonPackage rec {
 
     # AssertionError: os is not <module 'os' (frozen)>
     "test_lazy_module"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fails when max-jobs is set to use fewer processes than cores
+    # for example `AssertionError: assert 14 == 4`
+    "test_setup_multi_processes"
   ];
+
+  # torch.distributed.DistNetworkError: The server socket has failed to bind.
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "Library for training deep learning models based on PyTorch";

@@ -19,14 +19,20 @@ stdenv.mkDerivation rec {
     sha256 = "12l4rvaypv87vigdrmjz48d4d6sq4gfxf5asvnc4adyabxb73i4x";
   };
 
+  # cmake 4 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [ libjack2 ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libpulseaudio
-      alsa-lib
-    ];
+  buildInputs = [
+    libjack2
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libpulseaudio
+    alsa-lib
+  ];
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     "-DBUILD_TESTS=OFF"

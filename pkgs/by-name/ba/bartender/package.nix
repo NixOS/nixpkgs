@@ -12,14 +12,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bartender";
-  version = "5.2.7";
+  version = "5.3.7";
 
   src = fetchurl {
     name = "Bartender ${lib.versions.major finalAttrs.version}.dmg";
     url = "https://www.macbartender.com/B2/updates/${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/Bartender%20${lib.versions.major finalAttrs.version}.dmg";
-    hash = "sha256-TY6ioG80W8q6LC0FCMRQMJh4DiEKiM6htVf+irvmpnI=";
+    hash = "sha256-8hOe8MTDGyxEZTv0QndjkD3BEJ6kOHcbeU0uhat/N1s=";
   };
 
   dontPatch = true;

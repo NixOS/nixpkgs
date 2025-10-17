@@ -15,9 +15,9 @@
 
 buildGoModule rec {
   pname = "minikube";
-  version = "1.36.0";
+  version = "1.37.0";
 
-  vendorHash = "sha256-ro4QwvTf1O6/iffxEKi6pAenX8E3fPu4omqbLcigsTk=";
+  vendorHash = "sha256-xPTJMxKnEwZKKCc6QZxeL+03qM0oldOIKY4sPjSw3Ak=";
 
   doCheck = false;
 
@@ -25,25 +25,24 @@ buildGoModule rec {
     owner = "kubernetes";
     repo = "minikube";
     rev = "v${version}";
-    sha256 = "sha256-We5EyEWvrQ/k27920kE1XMijQWSYvLle7N3KUOsTfbc=";
+    sha256 = "sha256-qyeGBL952YIloB/69W+QWosXxwIrazE0OMdVO6LshPk=";
   };
-  postPatch =
-    ''
-      substituteInPlace Makefile \
-        --replace-fail "export GOTOOLCHAIN := go\$(GO_VERSION)" "export GOTOOLCHAIN := local"
-    ''
-    + (lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
-      substituteInPlace \
-        pkg/minikube/registry/drvs/qemu2/qemu2.go \
-        --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
-        --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
-    '')
-    + (lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
-      substituteInPlace \
-        pkg/minikube/registry/drvs/qemu2/qemu2.go \
-        --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
-        --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
-    '');
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail "export GOTOOLCHAIN := go\$(GO_VERSION)" "export GOTOOLCHAIN := local"
+  ''
+  + (lib.optionalString (withQemu && stdenv.hostPlatform.isDarwin) ''
+    substituteInPlace \
+      pkg/minikube/registry/drvs/qemu2/qemu2.go \
+      --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
+      --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
+  '')
+  + (lib.optionalString (withQemu && stdenv.hostPlatform.isLinux) ''
+    substituteInPlace \
+      pkg/minikube/registry/drvs/qemu2/qemu2.go \
+      --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
+      --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+  '');
 
   nativeBuildInputs = [
     installShellFiles

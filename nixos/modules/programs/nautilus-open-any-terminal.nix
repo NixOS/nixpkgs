@@ -17,7 +17,7 @@ in
       default = null;
       description = ''
         The terminal emulator to add to context-entry of nautilus. Supported terminal
-        emulators are listed in https://github.com/Stunkymonkey/nautilus-open-any-terminal#supported-terminal-emulators.
+        emulators are listed in <https://github.com/Stunkymonkey/nautilus-open-any-terminal#supported-terminal-emulators>.
       '';
     };
   };

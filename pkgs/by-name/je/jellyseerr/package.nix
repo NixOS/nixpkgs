@@ -9,6 +9,7 @@
   python3Packages,
   sqlite,
   nix-update-script,
+  nixosTests,
 }:
 
 let
@@ -17,18 +18,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jellyseerr";
-  version = "2.7.0";
+  version = "2.7.3";
 
   src = fetchFromGitHub {
     owner = "Fallenbagel";
     repo = "jellyseerr";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-JzJYRwrwDk8LQZAfWwym+SFTn8YhALghpZb2Dd+3nP4=";
+    hash = "sha256-a3lhQ33Zb+vSu1sQjuqO3bITiQEIOVyFTecmJAhJROU=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Ym16jPHMHKmojMQOuMamDsW/u+oP1UhbCP5dooTUzFQ=";
+    fetcherVersion = 1;
+    hash = "sha256-3df72m/ARgfelBLE6Bhi8+ThHytowVOBL2Ndk7auDgg=";
   };
 
   buildInputs = [ sqlite ];
@@ -52,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preBuild
 
     pnpm build
-    pnpm prune --prod --ignore-scripts
+    CI=true pnpm prune --prod --ignore-scripts
     rm -rf .next/cache
 
     # Clean up broken symlinks left behind by `pnpm prune`
@@ -77,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
       --set NODE_ENV production
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    inherit (nixosTests) jellyseerr;
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fork of overseerr for jellyfin support";

@@ -75,7 +75,7 @@ buildPythonPackage rec {
     "test_yahoo"
     "test_wikipedia"
   ];
-  pytestFlagsArray = [ "--durations=10" ];
+  pytestFlags = [ "--durations=10" ];
 
   meta = with lib; {
     description = "Software for developing quantum computing programs";
@@ -83,6 +83,6 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/QISKit/qiskit-optimization/releases";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

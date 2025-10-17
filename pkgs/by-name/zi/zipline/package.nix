@@ -32,18 +32,24 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zipline";
-  version = "4.1.2";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "diced";
     repo = "zipline";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-xxe64tGxZ2Udr+p21CKTZCHJ19ZOsdgPLlil+v+j5j4=";
+    hash = "sha256-tQRfgLU0Dvf3vhELsttprfzscvHUgI1u7k9RA4S4vqo=";
+    leaveDotGit = true;
+    postFetch = ''
+      git -C $out rev-parse --short HEAD > $out/.git_head
+      rm -rf $out/.git
+    '';
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-O8RLaKff4Dj/JDeUOyf7GtcFcOu/aOuclyaZmVqVi5s=";
+    fetcherVersion = 2;
+    hash = "sha256-zbr57RVBKGpnL5u0evbQAKGyMftHXj6cuntYBHiUxiM=";
   };
 
   buildInputs = [
@@ -79,14 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
+    CI=true pnpm prune --prod
+    find node_modules -xtype l -delete
+
     mkdir -p $out/{bin,share/zipline}
 
-    cp -r build generated node_modules prisma .next mimes.json code.json package.json $out/share/zipline
+    cp -r build node_modules prisma mimes.json code.json package.json $out/share/zipline
 
     mkBin() {
       makeWrapper ${lib.getExe nodejs_24} "$out/bin/$1" \
         --chdir "$out/share/zipline" \
         --set NODE_ENV production \
+        --set ZIPLINE_GIT_SHA "$(<$src/.git_head)" \
         --prefix PATH : ${lib.makeBinPath [ openssl ]} \
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ openssl ]} \
         ${
@@ -116,10 +126,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
-    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     homepage = "https://zipline.diced.sh/";
+    downloadPage = "https://github.com/diced/zipline";
+    changelog = "https://github.com/diced/zipline/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "zipline";
+    platforms = lib.platforms.linux;
   };
 })

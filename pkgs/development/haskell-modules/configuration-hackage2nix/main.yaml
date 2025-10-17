@@ -25,43 +25,43 @@
 # not work.
 # keep-sorted start skip_lines=1 case=no numeric=yes
 default-package-overrides:
-  - chs-cabal < 0.1.1.2 # Incompatible with Cabal < 3.12
-  # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
-  - diagrams-input < 0.1.4
-  - extensions < 0.1.0.2 # Incompatible with Cabal < 3.12, the newest extensions version is only needed on ghc 9.10
-  # 2021-11-09: ghc-bignum is bundled starting with 9.0.1; only 1.0 builds with GHCs prior to 9.2.1
-  - ghc-bignum == 1.0
-  # 2024-08-17: Stackage doesn't contain hnix-store-core >= 0.8 yet, so we need to restrict hnix-store-remote
+  - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
+  - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
+  # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
+  - hiedb < 0.7
+  # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
+  # https://github.com/haskell-nix/hnix/pull/1112
+  - hnix-store-core < 0.7
   - hnix-store-remote < 0.7
-  # 2025-01-17: need to match stackage version of hosc
-  - hsc3 < 0.21
-  # 2024-12-31: last version that's compatible with GHC < 9.9
-  - htree < 0.2.0.0
+  # 2025-08-03: need to match stackage version of hosc
+  - hsc3 >= 0.21 && < 0.22
+  # liquidhaskell-boot 0.9.10.1.2 requires this specific version of liquid-fixpoint
+  - liquid-fixpoint == 0.9.6.3.2
+  # liquidhaskell(-boot) support one GHC at a time, so we choose the one matching the current GHC (9.10)
+  - liquidhaskell == 0.9.10.*
+  - liquidhaskell-boot == 0.9.10.*
 # keep-sorted end
 
 # keep-sorted start skip_lines=1 case=no numeric=yes
 extra-packages:
-  - aeson < 2                           # required by pantry-0.5.2
   - algebraic-graphs < 0.7              # 2023-08-14: Needed for building weeder < 2.6.0
-  - ansi-terminal < 1.1                 # 2025-02-27: required for ghcjs
-  - ansi-terminal-types == 0.11.5       # 2025-02-27: required for ghcjs
-  - ansi-wl-pprint >= 0.6 && < 0.7      # 2024-03-23: required for ghcjs
-  - apply-refact == 0.9.*               # 2022-12-12: needed for GHC < 9.2
+  - ansi-wl-pprint >= 0.6 && < 0.7      # 2025-07-07: used by gren <= 0.5.4
   - attoparsec == 0.13.*                # 2022-02-23: Needed to compile elm for now
-  - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
   - Cabal == 3.10.*
-  - Cabal == 3.12.*                     # version required for cabal-install and other packages
+  - Cabal == 3.12.*
+  - Cabal == 3.14.*
+  - Cabal == 3.16.*                     # version required for cabal-install and other packages
+  - cabal-add == 0.1                    # 2025-09-09: Only needed for hls 2.11 can be removed once we are past it.
   - Cabal-syntax == 3.6.*               # Dummy package that ensures packages depending on Cabal-syntax can work for Cabal < 3.8
   - Cabal-syntax == 3.8.*               # version required for ormolu and fourmolu on ghc 9.0
   - Cabal-syntax == 3.10.*
-  - Cabal-syntax == 3.12.*              # version required for cabal-install and other packages
-  - commonmark-pandoc < 0.2.3           # 2025-04-06: Needed for pandoc 3.6
-  - extensions == 0.1.0.2               # 2024-10-20: for GHC 9.10/Cabal 3.12
+  - Cabal-syntax == 3.12.*
+  - Cabal-syntax == 3.14.*
+  - Cabal-syntax == 3.16.*              # version required for cabal-install and other packages
+  - extensions == 0.1.0.1               # 2025-09-21: needed for Cabal 3.10 (fourmolo/ormolu with ghc 9.8)
   - fourmolu == 0.14.0.0                # 2023-11-13: for ghc-lib-parser 9.6 compat
-  - fourmolu == 0.16.0.0                # 2025-01-27: for ghc 9.10 compat
-  - fsnotify < 0.4                      # 2024-04-22: required by spago-0.21
+  - fourmolu == 0.15.0.0                # 2025-09-21: for ghc-lib-parser 9.8 compat
   - fuzzyset == 0.2.4                   # 2023-12-20: Needed for building postgrest > 10
-  - ghc-api-compat == 8.10.7            # 2022-02-17: preserve for GHC 8.10.7
   - ghc-exactprint == 0.6.*             # 2022-12-12: needed for GHC < 9.2
   - ghc-exactprint == 1.5.*             # 2023-03-30: needed for GHC == 9.2
   - ghc-exactprint == 1.6.*             # 2023-03-30: needed for GHC == 9.4
@@ -73,40 +73,33 @@ extra-packages:
   - ghc-lib == 9.10.*                   # 2024-12-30: preserve for GHC 9.10/ghc-tags 1.9
   - ghc-lib-parser == 9.2.*             # 2022-02-17: preserve for GHC 8.10, 9.0
   - ghc-lib-parser == 9.6.*             # 2024-05-19: preserve for GHC 9.2, 9.4
-  - ghc-lib-parser == 9.10.*            # 2024-12-26: preserve for GHC 9.10
+  - ghc-lib-parser == 9.8.*            # 2024-12-26: preserve for GHC 9.6, 9.8
   - ghc-lib-parser-ex == 9.2.*          # 2022-07-13: preserve for GHC 8.10, 9.0
   - ghc-lib-parser-ex == 9.6.*          # 2024-05-19: preserve for GHC 9.2, 9.4
-  - ghc-lib-parser-ex == 9.10.*         # 2024-12-26: preserve for 9.10 HLS
-  - ghc-source-gen < 0.4.6.0            # 2024-12-31: support GHC < 9.0
+  - ghc-lib-parser-ex == 9.8.*         # 2024-12-26: preserve for GHC 9.6, 9.8
   - ghc-tags == 1.5.*                   # 2023-02-18: preserve for ghc-lib == 9.2.*
   - ghc-tags == 1.7.*                   # 2023-02-18: preserve for ghc-lib == 9.6.*
   - ghc-tags == 1.8.*                   # 2023-02-18: preserve for ghc-lib == 9.8.*
-  - happy == 1.19.12                    # for ghcjs
+  - ghc-typelits-natnormalise < 0.8     # 2025-09-15: Stackage is stuck at 0.7.10
   - happy == 1.20.*                     # for ghc-lib-parser == 9.6.*
+  - hashable < 1.5                      # 2025-07-30: hashable >= 1.5 requires GHC >= 9.6
   - hasql < 1.7                         # 2025-01-19: Needed for building postgrest
   - hasql-dynamic-statements < 0.3.1.6  # 2025-01-19: Needed for building postgrest
   - hasql-implicits < 0.2               # 2025-01-19: Needed for building postgrest
   - hasql-notifications < 0.2.3         # 2025-01-19: Needed for building postgrest
   - hasql-pool < 1.1                    # 2025-01-19: Needed for building postgrest
   - hasql-transaction < 1.1.1           # 2025-01-19: Needed for building postgrest
-  - hlint == 3.4.1                      # 2022-09-21: preserve for ghc 8.10
   - hlint == 3.6.*                      # 2025-04-14: needed for hls with ghc-lib-parser 9.6
-  - hnix-store-core < 0.7               # 2023-12-11: required by hnix-store-remote 0.6
-  - hpack == 0.38.0                     # 2025-04-23: preserve for stack == 3.5.1
-  - hspec < 2.8                         # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - hspec-core < 2.8                    # 2022-04-07: Needed for tasty-hspec 1.1.6
-  - hspec-discover < 2.8                # 2022-04-07: Needed for tasty-hspec 1.1.6
+  - hlint == 3.8.*                      # 2025-09-21: needed for hls with ghc-lib-parser 9.8
+  - hpack == 0.38.1                     # 2025-09-18: to match exact version upstream stack-3.7.1 uses
   - hspec-megaparsec == 2.2.0           # 2023-11-18: Latest version compatible with ghc 9.0
-  - hspec-meta < 2.8                    # 2022-12-07: Needed for elmPackages.elm / hspec-discover
   - language-javascript == 0.7.0.0      # required by purescript
-  - lsp < 2.5                           # 2024-07-08: need for koka
-  - lsp == 2.1.*                        # 2024-02-28: need for dhall-lsp-server
-  - lsp-types == 2.1.*                  # 2024-02-28: need for dhall-lsp-server and koka
   - network-run == 0.4.0                # 2024-10-20: for GHC 9.10/network == 3.1.*
-  - optparse-applicative < 0.16         # needed for niv-0.2.19
   - ormolu == 0.5.2.0                   # 2023-08-08: preserve for ghc 9.0
   - ormolu == 0.7.2.0                   # 2023-11-13: for ghc-lib-parser 9.6 compat
-  - ormolu == 0.7.7.0                   # 2025-01-27: for ghc 9.10 compat
+  - ormolu == 0.7.4.0                   # 2023-09-21: for ghc-lib-parser 9.8 compat
+  - os-string == 1.*                    # 2025-07-30: dummy package we need for pre os-string GHCs
+  - path == 0.9.5                       # 2025-09-21: Pin for hls on ghc 9.4
   - postgresql-binary < 0.14            # 2025-01-19: Needed for building postgrest
   - primitive-unlifted == 0.1.3.1       # 2024-03-16: preserve for ghc 9.2
   - retrie < 1.2.0.0                    # 2022-12-30: preserve for ghc < 9.2
@@ -115,11 +108,13 @@ extra-packages:
   - simple-get-opt < 0.5                # 2025-05-01: for crux-0.7.2
   - stylish-haskell == 0.14.4.0         # 2022-09-19: preserve for ghc 9.0
   - stylish-haskell == 0.14.5.0         # 2025-04-14: needed for hls with ghc-lib 9.6
+  - stylish-haskell == 0.14.6.0         # 2025-09-21: needed for hls with ghc-lib 9.8
+  - stylish-haskell == 0.15.0.1         # 2025-04-14: needed for hls with ghc-lib 9.10
   - tar == 0.6.0.0                      # 2025-02-08: last version to not require os-string (which can't be built with GHC < 9.2)
-  - text == 2.0.2                       # 2023-09-14: Needed for elm (which is currently on ghc-8.10)
+  - tar == 0.6.3.0                      # 2025-08-17: last version to not require file-io and directory-ospath-streaming (for GHC < 9.6)
+  - text-builder < 1                    # 2025-08-27: Needed for building postgrest
+  - text-builder-dev < 0.4              # 2025-08-27: Needed for building postgrest
   - text-metrics < 0.3.3                # 2025-02-08: >= 0.3.3 uses GHC2021
-  - versions < 6                        # 2024-04-22: required by spago-0.21
-  - weeder == 2.2.*                     # 2022-02-21: preserve for GHC 8.10.7
   - weeder == 2.3.*                     # 2022-05-31: preserve for GHC 9.0.2
   - weeder == 2.4.*                     # 2023-02-02: preserve for GHC 9.2.*
 # keep-sorted end
@@ -157,7 +152,6 @@ package-maintainers:
     - jsaddle-dom
     - jsaddle-hello
     - jsaddle-warp
-    - jsaddle-webkit2gtk
     - jsaddle-wkwebview
     - json-sop
     - large-generics
@@ -191,11 +185,19 @@ package-maintainers:
     - BNFC-meta
     - alex-meta
     - happy-meta
+    - liquid-fixpoint
+    - liquidhaskell
+    - liquidhaskell-boot
+    - smtlib-backends
+    - smtlib-backends-process
+    - smtlib-backends-tests
     - vector-hashtables
   arturcygan:
     - hevm
   athas:
     - futhark
+  auscyber:
+    - kmonad
   bdesham:
     - pinboard-notes-backup
   berberman:
@@ -332,7 +334,6 @@ package-maintainers:
     - optics
     - pandoc
     - pandoc-cli
-    - pandoc-crossref
     - postgresql-simple
     - purebred-email
     - reflex-dom
@@ -353,6 +354,9 @@ package-maintainers:
     - tz
     - weeder
     - witch
+  mikatammi:
+    - botan-bindings
+    - botan-low
   mpscholten:
     - ihp-hsx
     - push-notify-apn
@@ -374,8 +378,11 @@ package-maintainers:
     - pdftotext
     - warp-systemd
     - amazonka
+    - libssh2
+    - sitemap
   ncfavier:
     - Agda
+    - agda2hs
     - irc-client
     - lambdabot
     - shake
@@ -434,8 +441,6 @@ package-maintainers:
     - hercules-ci-cnix-store
     - inline-c
     - inline-c-cpp
-  roosemberth:
-    - git-annex
   rvl:
     - taffybar
     - arbtt
@@ -515,6 +520,7 @@ package-maintainers:
     - regex-rure
     - jacinda
     - citeproc
+    - mighttpd2
     # owothia
     - irc-client
     - chatter
@@ -725,10 +731,8 @@ unsupported-platforms:
   iwlib:                                        [ platforms.darwin ]
   Jazzkell:                                     [ platforms.darwin ] # depends on Euterpea
   jsaddle-webkit2gtk:                           [ platforms.darwin ]
-  kmonad:                                       [ platforms.darwin ]
   Kulitta:                                      [ platforms.darwin ] # depends on Euterpea
   LambdaHack:                                   [ platforms.darwin ]
-  large-hashable:                               [ aarch64-linux ] # https://github.com/factisresearch/large-hashable/issues/17
   libmodbus:                                    [ platforms.darwin ]
   libsystemd-journal:                           [ platforms.darwin ]
   libtelnet:                                    [ platforms.darwin ]
@@ -927,11 +931,17 @@ dont-distribute-packages:
   - yices-easy
   - yices-painless
 
+  # These packages don’t build because they use deprecated libsoup 2.4 versions.
+  - jsaddle-webkit2gtk
+  - gi-javascriptcore4
+  - gi-soup2
+  - gi-webkit2
+  - webkit2gtk3-javascriptcore
+
   # These packages don’t build because they use deprecated webkit versions.
   - diagrams-hsqml
   - dialog
   - ghcjs-dom-webkit
-  - gi-webkit
   - hsqml
   - hsqml-datamodel
   - hsqml-datamodel-vinyl
@@ -941,7 +951,6 @@ dont-distribute-packages:
   - hsqml-demo-samples
   - hsqml-morris
   - hstorchat
-  - jsaddle-webkitgtk
   - jsc
   - lambdacat
   - manatee-all
@@ -950,8 +959,6 @@ dont-distribute-packages:
   - markup-preview
   - spike
   - web-browser-in-haskell
-  - webkit
-  - webkitgtk3-javascriptcore
   - websnap
 
   # mesos was removed from nixpkgs

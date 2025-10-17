@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       beerware
       publicDomain
     ];
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

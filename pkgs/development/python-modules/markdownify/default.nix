@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "markdownify";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "matthewwithanm";
     repo = "python-markdownify";
     tag = version;
-    hash = "sha256-eU0F3nc96q2U/3PGM/gnrRCmetIqutDugz6q+PIb8CU=";
+    hash = "sha256-/u9rjbHeBhiqzpudsv2bFSaFbme1zmCv8/jEflEDNkQ=";
   };
 
   build-system = [

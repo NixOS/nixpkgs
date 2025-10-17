@@ -45,14 +45,13 @@ stdenv.mkDerivation (finalAttrs: {
   #
   # sdcc's tracking issue:
   # <https://sourceforge.net/p/sdcc/bugs/3848/>
-  outputs =
-    [
-      "out"
-      "doc"
-    ]
-    ++ lib.optionals (!stdenv.isDarwin) [
-      "man"
-    ];
+  outputs = [
+    "out"
+    "doc"
+  ]
+  ++ lib.optionals (!stdenv.isDarwin) [
+    "man"
+  ];
 
   enableParallelBuilding = true;
 
@@ -62,15 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     flex
   ];
 
-  buildInputs =
-    [
-      boost
-      texinfo
-      zlib
-    ]
-    ++ lib.optionals withGputils [
-      gputils
-    ];
+  buildInputs = [
+    boost
+    texinfo
+    zlib
+  ]
+  ++ lib.optionals withGputils [
+    gputils
+  ];
 
   # sdcc 4.5.0 massively rewrote sim/ucsim/Makefile.in, and lost the `.PHONY`
   # rule in the process. As a result, on macOS (which uses a case-insensitive

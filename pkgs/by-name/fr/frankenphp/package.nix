@@ -31,13 +31,13 @@ let
 in
 buildGoModule rec {
   pname = "frankenphp";
-  version = "1.7.0";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "dunglas";
     repo = "frankenphp";
     tag = "v${version}";
-    hash = "sha256-FukxXuZwF7P5tUao0nTT7bELGIYivtoOBQQkHA7ZE3s=";
+    hash = "sha256-zkB/kN6noCkUyUsXAbaWeRq1fpNErTcZPzDRoRp+LtM=";
   };
 
   sourceRoot = "${src.name}/caddy";
@@ -45,20 +45,22 @@ buildGoModule rec {
   # frankenphp requires C code that would be removed with `go mod tidy`
   # https://github.com/golang/go/issues/26366
   proxyVendor = true;
-  vendorHash = "sha256-likIETO/eq1kATNbbYHxXxvIPH7q5tp3WHjz+zvNOws=";
+  vendorHash = "sha256-scL015vSSfhuK06UZFRxK0Sk9dG6W3AOuFSPTogTCfI=";
 
   buildInputs = [
     phpUnwrapped
     brotli
     watcher
-  ] ++ phpUnwrapped.buildInputs;
-  nativeBuildInputs =
-    [ makeBinaryWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkg-config
-      cctools
-      darwin.autoSignDarwinBinariesHook
-    ];
+  ]
+  ++ phpUnwrapped.buildInputs;
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkg-config
+    cctools
+    darwin.autoSignDarwinBinariesHook
+  ];
 
   subPackages = [ "frankenphp" ];
 
@@ -77,20 +79,20 @@ buildGoModule rec {
     "-w"
     "-X 'github.com/caddyserver/caddy/v2.CustomVersion=FrankenPHP ${version} PHP ${phpUnwrapped.version} Caddy'"
     # pie mode is only available with pkgsMusl, it also automatically add -buildmode=pie to $GOFLAGS
-  ] ++ (lib.optional pieBuild [ "-static-pie" ]);
+  ]
+  ++ (lib.optional pieBuild [ "-static-pie" ]);
 
-  preBuild =
-    ''
-      export CGO_CFLAGS="$(${phpConfig} --includes)"
-      export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
-        $(${phpConfig} --ldflags) \
-        $(${phpConfig} --libs)"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # replace hard-code homebrew path
-      substituteInPlace ../frankenphp.go \
-        --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
-    '';
+  preBuild = ''
+    export CGO_CFLAGS="$(${phpConfig} --includes)"
+    export CGO_LDFLAGS="-DFRANKENPHP_VERSION=${version} \
+      $(${phpConfig} --ldflags) \
+      $(${phpConfig} --libs)"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # replace hard-code homebrew path
+    substituteInPlace ../frankenphp.go \
+      --replace "-L/opt/homebrew/opt/libiconv/lib" "-L${libiconv}/lib"
+  '';
 
   preFixup = ''
     mkdir -p $out/lib
@@ -131,7 +133,6 @@ buildGoModule rec {
     mainProgram = "frankenphp";
     maintainers = with lib.maintainers; [
       gaelreyrol
-      shyim
     ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };

@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
+  pythonAtLeast,
   pythonOlder,
   replaceVars,
 
@@ -43,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "5.1.11";
+  version = "5.1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -52,33 +53,32 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-yHoK7NGa91QEVFLeHqJo126qNg1pTE7W6LEtbCLy4sw=";
+    hash = "sha256-y6wBMQ2BA6UUOJDWGhidCFwthtXZU2r0oGOUUSwKvQE=";
   };
 
-  patches =
-    [
-      (replaceVars ./django_5_set_zoneinfo_dir.patch {
-        zoneinfo = tzdata + "/share/zoneinfo";
-      })
-      # prevent tests from messing with our pythonpath
-      ./django_5_tests_pythonpath.patch
-      # disable test that expects timezone issues
-      ./django_5_disable_failing_tests.patch
+  patches = [
+    (replaceVars ./django_5_set_zoneinfo_dir.patch {
+      zoneinfo = tzdata + "/share/zoneinfo";
+    })
+    # prevent tests from messing with our pythonpath
+    ./django_5_tests_pythonpath.patch
+    # disable test that expects timezone issues
+    ./django_5_disable_failing_tests.patch
 
-      # fix filename length limit tests on bcachefs
-      # FIXME: remove in 5.2
-      (fetchpatch {
-        url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
-        hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
-      })
-    ]
-    ++ lib.optionals withGdal [
-      (replaceVars ./django_5_set_geos_gdal_lib.patch {
-        geos = geos;
-        gdal = gdal;
-        extension = stdenv.hostPlatform.extensions.sharedLibrary;
-      })
-    ];
+    # fix filename length limit tests on bcachefs
+    # FIXME: remove in 5.2
+    (fetchpatch {
+      url = "https://github.com/django/django/commit/12f4f95405c7857cbf2f4bf4d0261154aac31676.patch";
+      hash = "sha256-+K20/V8sh036Ox9U7CSPgfxue7f28Sdhr3MsB7erVOk=";
+    })
+  ]
+  ++ lib.optionals withGdal [
+    (replaceVars ./django_5_set_geos_gdal_lib.patch {
+      geos = geos;
+      gdal = gdal;
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
+    })
+  ];
 
   postPatch = ''
     substituteInPlace tests/utils_tests/test_autoreload.py \
@@ -113,7 +113,8 @@ buildPythonPackage rec {
     selenium
     tblib
     tzdata
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     # make sure the installed library gets imported

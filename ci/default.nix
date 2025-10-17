@@ -5,6 +5,7 @@ in
   system ? builtins.currentSystem,
 
   nixpkgs ? null,
+  nixPath ? "nixVersions.latest",
 }:
 let
   nixpkgs' =
@@ -18,10 +19,9 @@ let
 
   pkgs = import nixpkgs' {
     inherit system;
-    config = {
-      permittedInsecurePackages = [ "nix-2.3.18" ];
-    };
-    overlays = [ ];
+    # Nixpkgs generally — and CI specifically — do not use aliases,
+    # because we want to ensure they are not load-bearing.
+    allowAliases = false;
   };
 
   fmt =
@@ -47,12 +47,30 @@ let
 
         programs.actionlint.enable = true;
 
+        programs.biome = {
+          enable = true;
+          settings.formatter = {
+            useEditorconfig = true;
+          };
+          settings.javascript.formatter = {
+            quoteStyle = "single";
+            semicolons = "asNeeded";
+          };
+          settings.json.formatter.enabled = false;
+        };
+        settings.formatter.biome.excludes = [
+          "*.min.js"
+          "pkgs/*"
+        ];
+
         programs.keep-sorted.enable = true;
 
-        # This uses nixfmt-rfc-style underneath,
-        # the default formatter for Nix code.
+        # This uses nixfmt underneath, the default formatter for Nix code.
         # See https://github.com/NixOS/nixfmt
-        programs.nixfmt.enable = true;
+        programs.nixfmt = {
+          enable = true;
+          package = pkgs.nixfmt;
+        };
 
         programs.yamlfmt = {
           enable = true;
@@ -69,11 +87,54 @@ let
           "pkgs/development/haskell-modules/configuration-hackage2nix/transitive-broken.yaml"
         ];
 
+        programs.nixf-diagnose.enable = true;
+        settings.formatter.nixf-diagnose = {
+          # Ensure nixfmt cleans up after nixf-diagnose.
+          priority = -1;
+          options = [
+            "--auto-fix"
+            # Rule names can currently be looked up here:
+            # https://github.com/nix-community/nixd/blob/main/libnixf/src/Basic/diagnostic.py
+            # TODO: Remove the following and fix things.
+            "--ignore=sema-unused-def-lambda-noarg-formal"
+            "--ignore=sema-unused-def-lambda-witharg-arg"
+            "--ignore=sema-unused-def-lambda-witharg-formal"
+            "--ignore=sema-unused-def-let"
+            # Keep this rule, because we have `lib.or`.
+            "--ignore=or-identifier"
+          ];
+          excludes = [
+            # Auto-generated; violates sema-extra-with
+            # Can only sensibly be removed when --auto-fix supports multiple fixes at once:
+            # https://github.com/inclyc/nixf-diagnose/issues/13
+            "pkgs/servers/home-assistant/component-packages.nix"
+            # https://github.com/nix-community/nixd/issues/708
+            "nixos/maintainers/scripts/azure-new/examples/basic/system.nix"
+          ];
+        };
+
         settings.formatter.editorconfig-checker = {
           command = "${pkgs.lib.getExe pkgs.editorconfig-checker}";
           options = [ "-disable-indent-size" ];
           includes = [ "*" ];
           priority = 1;
+        };
+
+        # TODO: Upstream this into treefmt-nix eventually:
+        #   https://github.com/numtide/treefmt-nix/issues/387
+        settings.formatter.markdown-code-runner = {
+          command = pkgs.lib.getExe pkgs.markdown-code-runner;
+          options =
+            let
+              config = pkgs.writers.writeTOML "markdown-code-runner-config" {
+                presets.nixfmt = {
+                  language = "nix";
+                  command = [ (pkgs.lib.getExe pkgs.nixfmt) ];
+                };
+              };
+            in
+            [ "--config=${config}" ];
+          includes = [ "*.md" ];
         };
       };
       fs = pkgs.lib.fileset;
@@ -89,7 +150,7 @@ let
     };
 
 in
-{
+rec {
   inherit pkgs fmt;
   requestReviews = pkgs.callPackage ./request-reviews { };
   codeownersValidator = pkgs.callPackage ./codeowners-validator { };
@@ -98,19 +159,33 @@ in
   # (nixVersions.stable and Lix) here somehow at some point to ensure we don't
   # have eval divergence.
   eval = pkgs.callPackage ./eval {
-    nix = pkgs.nixVersions.latest;
+    nix = pkgs.lib.getAttrFromPath (pkgs.lib.splitString "." nixPath) pkgs;
   };
 
   # CI jobs
   lib-tests = import ../lib/tests/release.nix { inherit pkgs; };
   manual-nixos = (import ../nixos/release.nix { }).manual.${system} or null;
-  manual-nixpkgs = (import ../doc { });
-  manual-nixpkgs-tests = (import ../doc { }).tests;
-  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix { };
+  manual-nixpkgs = (import ../doc { inherit pkgs; });
+  manual-nixpkgs-tests = (import ../doc { inherit pkgs; }).tests;
+  nixpkgs-vet = pkgs.callPackage ./nixpkgs-vet.nix {
+    nix = pkgs.nixVersions.latest;
+  };
   parse = pkgs.lib.recurseIntoAttrs {
     latest = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.latest; };
     lix = pkgs.callPackage ./parse.nix { nix = pkgs.lix; };
-    minimum = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.minimum; };
+    nix_2_28 = pkgs.callPackage ./parse.nix { nix = pkgs.nixVersions.nix_2_28; };
   };
   shell = import ../shell.nix { inherit nixpkgs system; };
+  tarball = import ../pkgs/top-level/make-tarball.nix {
+    # Mirrored from top-level release.nix:
+    nixpkgs = {
+      outPath = pkgs.lib.cleanSource ../.;
+      revCount = 1234;
+      shortRev = "abcdef";
+      revision = "0000000000000000000000000000000000000000";
+    };
+    officialRelease = false;
+    inherit pkgs lib-tests;
+    nix = pkgs.nixVersions.latest;
+  };
 }

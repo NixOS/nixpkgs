@@ -36,7 +36,7 @@ buildHomeAssistantComponent {
     paho-mqtt
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Fixes `AttributeError: 'async_generator' object has no attribute 'data'`
     #  See https://github.com/MatthewFlamm/pytest-homeassistant-custom-component/issues/158
     "--asyncio-mode=auto"

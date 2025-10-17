@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   setuptools,
@@ -28,16 +27,14 @@
 
 buildPythonPackage rec {
   pname = "optimum";
-  version = "1.26.1";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "optimum";
     tag = "v${version}";
-    hash = "sha256-GfUlvz7b0DlqBPibndRzUkszGnbYXg6E8u144ZFAZxA=";
+    hash = "sha256-aeGWjzktpxY6Xym1licGCZf+Vzia9BdUnXE80Ja28jg=";
   };
 
   build-system = [ setuptools ];
@@ -50,7 +47,8 @@ buildPythonPackage rec {
     packaging
     torch
     transformers
-  ] ++ transformers.optional-dependencies.sentencepiece;
+  ]
+  ++ transformers.optional-dependencies.sentencepiece;
 
   optional-dependencies = {
     onnxruntime = [
@@ -112,7 +110,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "optimum" ];
 
   meta = {
-    description = "Accelerate training and inference of 🤗 Transformers and 🤗 Diffusers with easy to use hardware optimization tools";
+    description = "Accelerate training and inference of Transformers and Diffusers with easy to use hardware optimization tools";
     mainProgram = "optimum-cli";
     homepage = "https://github.com/huggingface/optimum";
     changelog = "https://github.com/huggingface/optimum/releases/tag/${src.tag}";

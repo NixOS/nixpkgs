@@ -6,14 +6,14 @@
 }:
 buildGoModule {
   pname = "mozhi";
-  version = "0-unstable-2025-04-14";
+  version = "0-unstable-2025-09-19";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "aryak";
     repo = "mozhi";
-    rev = "c2c14988c09e6c5fae5a8ac59c07a650f0997a5a";
-    hash = "sha256-xJw9BkdKlN1VToKyDlkW8UUZB94gzD9nclNciDmVIkk=";
+    rev = "67f216b3fa9edb3b3ec995a4a6fb6777ea934177";
+    hash = "sha256-fQkOyfuBbRLvCzwv7kT1AEJUAWQshWOZDTYfp7plkag=";
   };
 
   vendorHash = "sha256-ptwP+ZuuzxRpIuNDoXnAML1KYEh9zTBcOs9YTI8z63A=";

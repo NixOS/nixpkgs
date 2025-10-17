@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildGoModule,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "cirrus-cli";
-  version = "0.145.1";
+  version = "0.155.0";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
     repo = "cirrus-cli";
     rev = "v${version}";
-    hash = "sha256-RyT0pR/hcqkvavI4HkWjCG5AS4H5hBbjOChHrUoq2GI=";
+    hash = "sha256-HMEd1G7CTK4P3fQ34wMOgd4GJ/7YALEL0UaqljB/44Y=";
   };
 
-  vendorHash = "sha256-CvypJVRLdMr38Qn8E67IZ33cSq5fYhM3i5HyifXGYNE=";
+  vendorHash = "sha256-ag1HzNrSqGTJGXxhdspxHsJRBu7tuB5nDFiEWh1VOsU=";
 
   ldflags = [
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"
@@ -24,7 +25,7 @@ buildGoModule rec {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd cirrus \
       --bash <($out/bin/cirrus completion bash) \
       --zsh <($out/bin/cirrus completion zsh) \

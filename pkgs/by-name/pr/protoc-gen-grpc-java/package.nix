@@ -33,21 +33,21 @@ let
           throw "Unsupported CPU \"${platform.parsed.cpu.name}\"";
     in
     "${os}-${arch}";
+  data = import ./data.nix;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "protoc-gen-grpc-java";
-  version = "1.73.0";
+  inherit (data) version;
   src = fetchurl {
     url = "https://repo1.maven.org/maven2/io/grpc/protoc-gen-grpc-java/${finalAttrs.version}/protoc-gen-grpc-java-${finalAttrs.version}-${hostArch}.exe";
-    hash = (import ./hashes.nix).${hostArch} or (throw "Unsuported host arch ${hostArch}");
+    hash = data.hashes.${hostArch} or (throw "Unsuported host arch ${hostArch}");
   };
   dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [
+  nativeBuildInputs = (lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]) ++ [
     makeWrapper
-    autoPatchelfHook
   ];
   buildInputs = [ stdenv.cc.cc ];
 

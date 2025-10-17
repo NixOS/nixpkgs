@@ -236,13 +236,14 @@ let
     +
       /*
         Now we update the other settings defined in cleanedConfig which are not
-        "folders" or "devices".
+        "folders", "devices", or "guiPasswordFile".
       */
       (lib.pipe cleanedConfig [
         builtins.attrNames
         (lib.subtractLists [
           "folders"
           "devices"
+          "guiPasswordFile"
         ])
         (map (subOption: ''
           curl -X PUT -d ${
@@ -251,6 +252,12 @@ let
         ''))
         (lib.concatStringsSep "\n")
       ])
+    +
+      # Now we hash the contents of guiPasswordFile and use the result to update the gui password
+      (lib.optionalString (cfg.guiPasswordFile != null) ''
+        ${pkgs.mkpasswd}/bin/mkpasswd -m bcrypt --stdin <"${cfg.guiPasswordFile}" | tr -d "\n" > "$RUNTIME_DIRECTORY/password_bcrypt"
+        curl -X PATCH --variable "pw_bcrypt@$RUNTIME_DIRECTORY/password_bcrypt" --expand-json '{ "password": "{{pw_bcrypt}}" }' ${curlAddressArgs "/rest/config/gui"}
+      '')
     + ''
       # restart Syncthing if required
       if curl ${curlAddressArgs "/rest/config/restart-required"} |
@@ -282,6 +289,14 @@ in
         description = ''
           Path to the `key.pem` file, which will be copied into Syncthing's
           [configDir](#opt-services.syncthing.configDir).
+        '';
+      };
+
+      guiPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to file containing the plaintext password for Syncthing's GUI.
         '';
       };
 
@@ -336,7 +351,7 @@ in
                     };
 
                     localAnnouncePort = mkOption {
-                      type = types.nullOr types.int;
+                      type = types.nullOr types.port;
                       default = null;
                       description = ''
                         The port on which to listen and send IPv4 broadcast announcements to.
@@ -791,30 +806,30 @@ in
     };
   };
 
-  imports =
-    [
-      (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
-        This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
-        It can be enabled on a per-folder basis through the web interface.
-      '')
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "extraOptions" ]
-        [ "services" "syncthing" "settings" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "folders" ]
-        [ "services" "syncthing" "settings" "folders" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "devices" ]
-        [ "services" "syncthing" "settings" "devices" ]
-      )
-      (mkRenamedOptionModule
-        [ "services" "syncthing" "options" ]
-        [ "services" "syncthing" "settings" "options" ]
-      )
-    ]
-    ++ map
+  imports = [
+    (mkRemovedOptionModule [ "services" "syncthing" "useInotify" ] ''
+      This option was removed because Syncthing now has the inotify functionality included under the name "fswatcher".
+      It can be enabled on a per-folder basis through the web interface.
+    '')
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "extraOptions" ]
+      [ "services" "syncthing" "settings" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "folders" ]
+      [ "services" "syncthing" "settings" "folders" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "devices" ]
+      [ "services" "syncthing" "settings" "devices" ]
+    )
+    (mkRenamedOptionModule
+      [ "services" "syncthing" "options" ]
+      [ "services" "syncthing" "settings" "options" ]
+    )
+  ]
+  ++
+    map
       (o: mkRenamedOptionModule [ "services" "syncthing" "declarative" o ] [ "services" "syncthing" o ])
       [
         "cert"
@@ -837,6 +852,12 @@ in
           from the configuration, creating path conflicts.
         '';
       }
+      {
+        assertion = (lib.hasAttrByPath [ "gui" "password" ] cfg.settings) -> cfg.guiPasswordFile == null;
+        message = ''
+          Please use only one of services.syncthing.settings.gui.password or services.syncthing.guiPasswordFile.
+        '';
+      }
     ];
 
     networking.firewall = mkIf cfg.openDefaultPorts {
@@ -847,7 +868,8 @@ in
       ];
     };
 
-    systemd.packages = [ pkgs.syncthing ];
+    environment.systemPackages = [ cfg.package ];
+    systemd.packages = [ cfg.package ];
 
     users.users = mkIf (cfg.systemService && cfg.user == defaultUser) {
       ${defaultUser} = {
@@ -873,7 +895,8 @@ in
           STNORESTART = "yes";
           STNOUPGRADE = "yes";
           inherit (cfg) all_proxy;
-        } // config.networking.proxy.envVars;
+        }
+        // config.networking.proxy.envVars;
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
           Restart = "on-failure";
@@ -892,14 +915,19 @@ in
                   install -Dm600 -o ${cfg.user} -g ${cfg.group} ${toString cfg.key} ${cfg.configDir}/key.pem
                 ''}
               ''}";
-          ExecStart = ''
-            ${cfg.package}/bin/syncthing \
-              -no-browser \
-              -gui-address=${if isUnixGui then "unix://" else ""}${cfg.guiAddress} \
-              -config=${cfg.configDir} \
-              -data=${cfg.databaseDir} \
-              ${escapeShellArgs cfg.extraFlags}
-          '';
+          ExecStart =
+            let
+              args = lib.escapeShellArgs (
+                (lib.cli.toGNUCommandLine { } {
+                  "no-browser" = true;
+                  "gui-address" = (if isUnixGui then "unix://" else "") + cfg.guiAddress;
+                  "config" = cfg.configDir;
+                  "data" = cfg.databaseDir;
+                })
+                ++ cfg.extraFlags
+              );
+            in
+            "${lib.getExe cfg.package} ${args}";
           MemoryDenyWriteExecute = true;
           NoNewPrivileges = true;
           PrivateDevices = true;

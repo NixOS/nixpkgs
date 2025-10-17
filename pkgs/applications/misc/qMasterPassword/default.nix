@@ -23,22 +23,21 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "bkueng";
-    repo = pname;
+    repo = "qMasterPassword";
     rev = "v${version}";
     hash = "sha256-kNVdE42JFzl6HO84b793gseMhcDyiGzQCmhh6zh2epc=";
   };
 
-  buildInputs =
-    [
-      qtbase
-      qtwayland
-      openssl
-      libscrypt
-    ]
-    ++ lib.optionals x11Support [
-      libX11
-      libXtst
-    ];
+  buildInputs = [
+    qtbase
+    qtwayland
+    openssl
+    libscrypt
+  ]
+  ++ lib.optionals x11Support [
+    libX11
+    libXtst
+  ];
   nativeBuildInputs = [
     cmake
     qttools

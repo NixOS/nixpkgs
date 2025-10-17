@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.antlr.org/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ lib.maintainers.workflow ];
   };
 }

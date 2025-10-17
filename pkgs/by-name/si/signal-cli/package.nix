@@ -12,12 +12,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "signal-cli";
-  version = "0.13.16";
+  version = "0.13.20";
 
   # Building from source would be preferred, but is much more involved.
   src = fetchurl {
     url = "https://github.com/AsamK/signal-cli/releases/download/v${finalAttrs.version}/signal-cli-${finalAttrs.version}.tar.gz";
-    hash = "sha256-L2c2UyJCNITDEvtAfPjRzjskoA3v06oI8LNw9CW4mT8=";
+    hash = "sha256-MFgR2c+XhzgxO6jv7e30rTf7bRVa5gxnzVOLnemXYY8=";
   };
 
   buildInputs = lib.optionals stdenvNoCC.hostPlatform.isLinux [
@@ -27,32 +27,31 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   ];
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase =
-    ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r lib $out/
-      install -Dm755 bin/signal-cli -t $out/bin
-    ''
-    + (
-      if stdenvNoCC.hostPlatform.isLinux then
-        ''
-          makeWrapper ${openjdk21_headless}/bin/java $out/bin/signal-cli \
-            --set JAVA_HOME "${openjdk21_headless}" \
-            --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
-            --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
-            --add-flags "org.asamk.signal.Main"
-        ''
-      else
-        ''
-          wrapProgram $out/bin/signal-cli \
-            --prefix PATH : ${lib.makeBinPath [ openjdk21_headless ]} \
-            --set JAVA_HOME ${openjdk21_headless}
-        ''
-    )
-    + ''
-      runHook postInstall
-    '';
+  installPhase = ''
+    runHook preInstall
+    mkdir -p $out
+    cp -r lib $out/
+    install -Dm755 bin/signal-cli -t $out/bin
+  ''
+  + (
+    if stdenvNoCC.hostPlatform.isLinux then
+      ''
+        makeWrapper ${openjdk21_headless}/bin/java $out/bin/signal-cli \
+          --set JAVA_HOME "${openjdk21_headless}" \
+          --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
+          --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
+          --add-flags "org.asamk.signal.Main"
+      ''
+    else
+      ''
+        wrapProgram $out/bin/signal-cli \
+          --prefix PATH : ${lib.makeBinPath [ openjdk21_headless ]} \
+          --set JAVA_HOME ${openjdk21_headless}
+      ''
+  )
+  + ''
+    runHook postInstall
+  '';
 
   # Execution in the macOS (10.13) sandbox fails with
   # dyld: Library not loaded: /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa

@@ -6,18 +6,18 @@
   nix-update-script,
 }:
 
-buildGoModule {
+buildGoModule (finalAttrs: {
   pname = "alertmanager-ntfy";
-  version = "0-unstable-2025-06-27";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "alexbakker";
     repo = "alertmanager-ntfy";
-    rev = "dc4ef93f7db7f046a775ef3e4a2a462b2afcec6c";
-    hash = "sha256-J+T3Mt+40vhL3DVBKKH86l45AKSlkT7h+TrfhsWwMac=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-aVK8HCRXRprNoBhILLN7F/Fb3RePPzBW4vBMnQr9zRU=";
   };
 
-  vendorHash = "sha256-e1JAoDNm2+xB/bZcEGr5l4+va8GIg1R8pdj3d+/Y+UY=";
+  vendorHash = "sha256-CpVGLM6ZtfYODhP6gzWGcnpEuDvKRiMWzoPNm2qtML4=";
 
   doInstallCheck = true;
   installCheckPhase = ''
@@ -30,7 +30,7 @@ buildGoModule {
 
   passthru = {
     tests = { inherit (nixosTests.prometheus) alertmanager-ntfy; };
-    updateScript = nix-update-script { extraArgs = [ "--version=branch=master" ]; };
+    updateScript = nix-update-script { };
   };
 
   meta = {
@@ -40,4 +40,4 @@ buildGoModule {
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "alertmanager-ntfy";
   };
-}
+})

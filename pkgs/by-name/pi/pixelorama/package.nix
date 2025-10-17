@@ -20,13 +20,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixelorama";
-  version = "1.1.1";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "Orama-Interactive";
     repo = "Pixelorama";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HXCfZ/ePqEMnaEN+fxGVoaFWsO1isTAyYoRpLY6opRg=";
+    hash = "sha256-5ODSGZM39FO+6tTLoosnrf5ngh+fSHpNsphTgjlux48=";
   };
 
   strictDeps = true;
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://orama-interactive.itch.io/pixelorama";
-    description = "Free & open-source 2D sprite editor, made with the Godot Engine!";
+    description = "Free & open-source 2D sprite editor, made with the Godot Engine";
     changelog = "https://github.com/Orama-Interactive/Pixelorama/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     platforms = [

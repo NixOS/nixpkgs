@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "redis";
-  version = "8.0.2";
+  version = "8.2.2";
 
   src = fetchFromGitHub {
     owner = "redis";
     repo = "redis";
     tag = finalAttrs.version;
-    hash = "sha256-BZJEBp3M7Gw/6/fZjfaMfU777dFmMzAS4bDI06ErkSc=";
+    hash = "sha256-0TMUSNCrDEtOkojcmFFhmLQ0ghyLAn+OS4xl4Sbr76c=";
   };
 
   patches = lib.optional useSystemJemalloc (fetchpatch2 {
@@ -46,21 +46,23 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [ lua ]
-    ++ lib.optional useSystemJemalloc jemalloc
-    ++ lib.optional withSystemd systemd
-    ++ lib.optional tlsSupport openssl;
+  buildInputs = [
+    lua
+  ]
+  ++ lib.optional useSystemJemalloc jemalloc
+  ++ lib.optional withSystemd systemd
+  ++ lib.optional tlsSupport openssl;
 
   # More cross-compiling fixes.
-  makeFlags =
-    [ "PREFIX=${placeholder "out"}" ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "AR=${stdenv.cc.targetPrefix}ar"
-      "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    ]
-    ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
-    ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "AR=${stdenv.cc.targetPrefix}ar"
+    "RANLIB=${stdenv.cc.targetPrefix}ranlib"
+  ]
+  ++ lib.optionals withSystemd [ "USE_SYSTEMD=yes" ]
+  ++ lib.optionals tlsSupport [ "BUILD_TLS=yes" ];
 
   enableParallelBuilding = true;
 
@@ -74,7 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     which
     tcl
     ps
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isStatic [ getconf ];
   checkPhase = ''
     runHook preCheck
 
@@ -86,17 +89,26 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/support/server.tcl \
       --replace-fail 'exec /usr/bin/env' 'exec env'
 
-    sed -i -e '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
+    sed -i \
+      -e '/^proc wait_load_handlers_disconnected/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       -e  '/^proc wait_for_ofs_sync/{n ; s/wait_for_condition 50 100/wait_for_condition 50 500/; }' \
       tests/support/util.tcl
+
+    CLIENTS="$NIX_BUILD_CORES"
+    if (( $CLIENTS > 4)); then
+      CLIENTS=4
+    fi
 
     ./runtest \
       --no-latency \
       --timeout 2000 \
-      --clients $NIX_BUILD_CORES \
+      --clients "$CLIENTS" \
       --tags -leaks \
       --skipunit integration/aof-multi-part \
-      --skipunit integration/failover # flaky and slow
+      --skipunit integration/failover \
+      --skipunit integration/replication-rdbchannel \
+      --skiptest "Check MEMORY USAGE for embedded key strings with jemalloc"
+      # ^ breaks due to unexpected and varying address space sizes that jemalloc gets built with
 
     runHook postCheck
   '';

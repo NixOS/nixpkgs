@@ -2,8 +2,8 @@
 
 fixupHooks=()
 
-if [ -e @out@/nix-support/setup-hooks.sh ]; then
-    source @out@/nix-support/setup-hooks.sh
+if [[ -n "@signingUtils@" ]]; then
+    source "@signingUtils@"
 fi
 
 excludes=""
@@ -25,9 +25,8 @@ for i in "$@"; do
         cat "$i" | @perl@/bin/perl -pe "s|\Q@storeDir@\E/$excludes[a-z0-9]{32}-|@storeDir@/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" > "$i.tmp"
         if test -x "$i"; then chmod +x "$i.tmp"; fi
         mv "$i.tmp" "$i"
-
-        for hook in "${fixupHooks[@]}"; do
-            eval "$hook" "$i"
-        done
+        if [[ -n "@signingUtils@" ]]; then
+            signIfRequired "$i"
+        fi
     fi
 done

@@ -369,6 +369,9 @@ in
     systemd.user.services.pipewire.environment.LV2_PATH = mkIf (
       !cfg.systemWide
     ) "${lv2Plugins}/lib/lv2";
+    systemd.user.services.filter-chain.environment.LV2_PATH = mkIf (
+      !cfg.systemWide
+    ) "${lv2Plugins}/lib/lv2";
 
     # Mask pw-pulse if it's not wanted
     systemd.services.pipewire-pulse.enable = cfg.pulse.enable && cfg.systemWide;
@@ -444,7 +447,8 @@ in
         extraGroups = [
           "audio"
           "video"
-        ] ++ optional config.security.rtkit.enable "rtkit";
+        ]
+        ++ optional config.security.rtkit.enable "rtkit";
         description = "PipeWire system service user";
         isSystemUser = true;
         home = "/var/lib/pipewire";

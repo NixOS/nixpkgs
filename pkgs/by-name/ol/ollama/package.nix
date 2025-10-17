@@ -18,6 +18,7 @@
   cudaPackages,
   cudaArches ? cudaPackages.flags.realArches or [ ],
   autoAddDriverRunpath,
+  apple-sdk_15,
 
   # passthru
   nixosTests,
@@ -88,21 +89,20 @@ let
 
   cudaPath = lib.removeSuffix "-${cudaMajorVersion}" cudaToolkit;
 
-  wrapperOptions =
-    [
-      # ollama embeds llama-cpp binaries which actually run the ai models
-      # these llama-cpp binaries are unaffected by the ollama binary's DT_RUNPATH
-      # LD_LIBRARY_PATH is temporarily required to use the gpu
-      # until these llama-cpp binaries can have their runpath patched
-      "--suffix LD_LIBRARY_PATH : '${addDriverRunpath.driverLink}/lib'"
-    ]
-    ++ lib.optionals enableRocm [
-      "--suffix LD_LIBRARY_PATH : '${rocmPath}/lib'"
-      "--set-default HIP_PATH '${rocmPath}'"
-    ]
-    ++ lib.optionals enableCuda [
-      "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib cudaLibs)}'"
-    ];
+  wrapperOptions = [
+    # ollama embeds llama-cpp binaries which actually run the ai models
+    # these llama-cpp binaries are unaffected by the ollama binary's DT_RUNPATH
+    # LD_LIBRARY_PATH is temporarily required to use the gpu
+    # until these llama-cpp binaries can have their runpath patched
+    "--suffix LD_LIBRARY_PATH : '${addDriverRunpath.driverLink}/lib'"
+  ]
+  ++ lib.optionals enableRocm [
+    "--suffix LD_LIBRARY_PATH : '${rocmPath}/lib'"
+    "--set-default HIP_PATH '${rocmPath}'"
+  ]
+  ++ lib.optionals enableCuda [
+    "--suffix LD_LIBRARY_PATH : '${lib.makeLibraryPath (map lib.getLib cudaLibs)}'"
+  ];
   wrapperArgs = builtins.concatStringsSep " " wrapperOptions;
 
   goBuild =
@@ -117,17 +117,16 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.9.3";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bAxvlFeCxrxE8PuLbsjAwJYDeZfKb8BDuGBgX8uMgr8=";
-    fetchSubmodules = true;
+    hash = "sha256-ooDGwTklGJ/wzDlAY3uJiqpZUxT1cCsqVNJKU8BAPbQ=";
   };
 
-  vendorHash = "sha256-oHTo8EQGfrKOwg6SRPrL23qSH+p+clBxxiXsuO1auLk=";
+  vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
 
   env =
     lib.optionalAttrs enableRocm {
@@ -139,24 +138,24 @@ goBuild (finalAttrs: {
     }
     // lib.optionalAttrs enableCuda { CUDA_PATH = cudaPath; };
 
-  nativeBuildInputs =
-    [
-      cmake
-      gitMinimal
-    ]
-    ++ lib.optionals enableRocm [
-      rocmPackages.llvm.bintools
-      rocmLibs
-    ]
-    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
-    ++ lib.optionals (enableRocm || enableCuda) [
-      makeWrapper
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    cmake
+    gitMinimal
+  ]
+  ++ lib.optionals enableRocm [
+    rocmPackages.llvm.bintools
+    rocmLibs
+  ]
+  ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals (enableRocm || enableCuda) [
+    makeWrapper
+    autoAddDriverRunpath
+  ];
 
   buildInputs =
     lib.optionals enableRocm (rocmLibs ++ [ libdrm ])
-    ++ lib.optionals enableCuda cudaLibs;
+    ++ lib.optionals enableCuda cudaLibs
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 
   # replace inaccurate version number with actual release version
   postPatch = ''
@@ -180,7 +179,7 @@ goBuild (finalAttrs: {
         in
         if matched == null then str else builtins.head matched;
 
-      cudaArchitectures = builtins.concatStringsSep ";" (builtins.map removeSMPrefix cudaArches);
+      cudaArchitectures = builtins.concatStringsSep ";" (map removeSMPrefix cudaArches);
       rocmTargets = builtins.concatStringsSep ";" rocmGpuTargets;
 
       cmakeFlagsCudaArchitectures = lib.optionalString enableCuda "-DCMAKE_CUDA_ARCHITECTURES='${cudaArchitectures}'";
@@ -229,22 +228,31 @@ goBuild (finalAttrs: {
     (allow iokit-open (iokit-user-client-class "AGXDeviceUserClient"))
   '';
 
+  checkFlags =
+    let
+      # Skip tests that require network access
+      skippedTests = [
+        "TestPushHandler/unauthorized_push" # Writes to $HOME, se https://github.com/ollama/ollama/pull/12307#pullrequestreview-3249128660
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
+
   passthru = {
-    tests =
-      {
-        inherit ollama;
-        version = testers.testVersion {
-          inherit (finalAttrs) version;
-          package = ollama;
-        };
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        inherit ollama-rocm ollama-cuda;
-        service = nixosTests.ollama;
-        service-cuda = nixosTests.ollama-cuda;
-        service-rocm = nixosTests.ollama-rocm;
+    tests = {
+      inherit ollama;
+      version = testers.testVersion {
+        inherit (finalAttrs) version;
+        package = ollama;
       };
-  } // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit ollama-rocm ollama-cuda;
+      service = nixosTests.ollama;
+      service-cuda = nixosTests.ollama-cuda;
+      service-rocm = nixosTests.ollama-rocm;
+    };
+  }
+  // lib.optionalAttrs (!enableRocm && !enableCuda) { updateScript = nix-update-script { }; };
 
   meta = {
     description =
@@ -259,7 +267,6 @@ goBuild (finalAttrs: {
     maintainers = with maintainers; [
       abysssol
       dit7ya
-      elohmeier
       prusnak
     ];
   };

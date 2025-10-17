@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "kubernetes";
-  version = "32.0.1";
+  version = "33.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "kubernetes-client";
     repo = "python";
     tag = "v${version}";
-    hash = "sha256-pQuo2oLWMmq4dHTqJYL+Z1xg3ZoYp9ZzLDT7jWIsglo=";
+    hash = "sha256-+jL0XS7Y8qOqzZ5DcG/hZFUpj7krJAaA4fgPNSEgIAE=";
   };
 
   build-system = [
@@ -60,7 +60,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mock
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # AssertionError: <class 'urllib3.poolmanager.ProxyManager'> != <class 'urllib3.poolmanager.Poolmanager'>

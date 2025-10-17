@@ -98,77 +98,76 @@ let
 
         enableOCR = true;
 
-        testScript =
-          ''
-            machine.wait_for_x()
+        testScript = ''
+          machine.wait_for_x()
 
-            machine.succeed("mkdir /root/${builtins.dirOf file}")
-            machine.succeed("cp -vr /etc/${imageDataDir}/${file} /root/${builtins.dirOf file}")
+          machine.succeed("mkdir /root/${builtins.dirOf file}")
+          machine.succeed("cp -vr /etc/${imageDataDir}/${file} /root/${builtins.dirOf file}")
 
-            # Start thumbnailer, wait for idle shutdown
-            machine.systemctl("start dbus-com.lomiri.Thumbnailer", "root")
-            machine.wait_until_succeeds(
-                "env XDG_RUNTIME_DIR=/run/user/0 "
-                + "systemctl --user is-active dbus-com.lomiri.Thumbnailer"
-            )
-            machine.wait_for_console_text("thumbnail cache:")
+          # Start thumbnailer, wait for idle shutdown
+          machine.systemctl("start dbus-com.lomiri.Thumbnailer", "root")
+          machine.wait_until_succeeds(
+              "env XDG_RUNTIME_DIR=/run/user/0 "
+              + "systemctl --user is-active dbus-com.lomiri.Thumbnailer"
+          )
+          machine.wait_for_console_text("thumbnail cache:")
 
-            # Request thumbnail processing, get initial thumbnail image into cache
-            # This can randomly take abit longer, just run it until it succeeds
-            # Touch file to invalidate failure cache
-            machine.wait_until_succeeds(
-                "touch '/root/${file}' && "
-                + "env XDG_RUNTIME_DIR=/run/user/0 "
-                + "gdbus call -e "
-                + "-d com.lomiri.Thumbnailer -o /com/lomiri/Thumbnailer "
-                + "-m com.lomiri.Thumbnailer.GetThumbnail "
-                + "'/root/${file}' "
-                # Same size as source, to reduce processing - we're very close to hitting 20s on slow hardware here
-                + "'@(ii) (500,500)'"
-            )
+          # Request thumbnail processing, get initial thumbnail image into cache
+          # This can randomly take abit longer, just run it until it succeeds
+          # Touch file to invalidate failure cache
+          machine.wait_until_succeeds(
+              "touch '/root/${file}' && "
+              + "env XDG_RUNTIME_DIR=/run/user/0 "
+              + "gdbus call -e "
+              + "-d com.lomiri.Thumbnailer -o /com/lomiri/Thumbnailer "
+              + "-m com.lomiri.Thumbnailer.GetThumbnail "
+              + "'/root/${file}' "
+              # Same size as source, to reduce processing - we're very close to hitting 20s on slow hardware here
+              + "'@(ii) (500,500)'"
+          )
 
-            machine.wait_for_console_text("Idle timeout reached")
-            machine.wait_until_fails(
-                "env XDG_RUNTIME_DIR=/run/user/0 "
-                + "systemctl --user is-active dbus-com.lomiri.Thumbnailer"
-            )
+          machine.wait_for_console_text("Idle timeout reached")
+          machine.wait_until_fails(
+              "env XDG_RUNTIME_DIR=/run/user/0 "
+              + "systemctl --user is-active dbus-com.lomiri.Thumbnailer"
+          )
 
-            with subtest("lomiri gallery finds files"):
-                machine.succeed("lomiri-gallery-app >&2 &")
-                machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
-                machine.sleep(10)
-                machine.send_key("alt-f10")
-                machine.sleep(5)
-                machine.wait_for_text(r"(Albums|Events|Photos|${imageLabel})")
+          with subtest("lomiri gallery finds files"):
+              machine.succeed("lomiri-gallery-app >&2 &")
+              machine.wait_for_console_text("qq= AlbumsOverview") # logged when album page actually gets loaded
+              machine.sleep(10)
+              machine.send_key("alt-f10")
+              machine.sleep(5)
+              machine.wait_for_text(r"(Albums|Events|Photos|${imageLabel})")
 
-                machine.succeed("xdotool mousemove 30 40 click 1") # burger menu for categories
-                machine.sleep(2)
-                machine.succeed("xdotool mousemove 30 180 click 1") # photos
-                machine.sleep(2)
-                machine.screenshot("lomiri-gallery_photos")
+              machine.succeed("xdotool mousemove 30 40 click 1") # burger menu for categories
+              machine.sleep(2)
+              machine.succeed("xdotool mousemove 30 180 click 1") # photos
+              machine.sleep(2)
+              machine.screenshot("lomiri-gallery_photos")
 
-            machine.succeed("xdotool mousemove 80 140 click 1") # select first one
-            machine.sleep(2)
-            machine.succeed("xdotool mousemove 80 140 click 1") # enable top-bar
-            machine.sleep(2)
+          machine.succeed("xdotool mousemove 80 140 click 1") # select first one
+          machine.sleep(2)
+          machine.succeed("xdotool mousemove 80 140 click 1") # enable top-bar
+          machine.sleep(2)
 
-          ''
-          + (
-            if (customTest != null) then
-              customTest
-            else
-              ''
-                with subtest("lomiri gallery handles ${format}"):
-                    machine.succeed("xdotool mousemove ${
-                      if buttonIsOffset then "900" else "940"
-                    } 50 click 1") # open media information
-                    machine.sleep(2)
-                    machine.screenshot("lomiri-gallery_${format}_info")
-                    machine.send_key("esc")
-                    machine.sleep(2)
-                    machine.wait_for_text("${imageLabel}") # make sure media shows fine
-              ''
-          );
+        ''
+        + (
+          if (customTest != null) then
+            customTest
+          else
+            ''
+              with subtest("lomiri gallery handles ${format}"):
+                  machine.succeed("xdotool mousemove ${
+                    if buttonIsOffset then "900" else "940"
+                  } 50 click 1") # open media information
+                  machine.sleep(2)
+                  machine.screenshot("lomiri-gallery_${format}_info")
+                  machine.send_key("esc")
+                  machine.sleep(2)
+                  machine.wait_for_text("${imageLabel}") # make sure media shows fine
+            ''
+        );
 
       }
     );

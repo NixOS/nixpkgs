@@ -38,29 +38,36 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { } (
-        ''
-          mkdir -p "$out"
-        ''
-        + lib.optionalString (lib.versionAtLeast release_version "14") ''
-          cp -r ${monorepoSrc}/cmake "$out"
-          cp -r ${monorepoSrc}/third-party "$out"
-        ''
-        + ''
-          cp -r ${monorepoSrc}/llvm "$out"
-          cp -r ${monorepoSrc}/clang "$out"
-          cp -r ${monorepoSrc}/clang-tools-extra "$out"
-          cp -r ${monorepoSrc}/mlir "$out"
-        ''
-      )
+      runCommand "${pname}-src-${version}" { } ''
+        mkdir -p "$out"
+        cp -r ${monorepoSrc}/cmake "$out"
+        cp -r ${monorepoSrc}/third-party "$out"
+        cp -r ${monorepoSrc}/llvm "$out"
+        cp -r ${monorepoSrc}/clang "$out"
+        cp -r ${monorepoSrc}/clang-tools-extra "$out"
+        cp -r ${monorepoSrc}/mlir "$out"
+      ''
     else
       src;
+
+  # List of tablegen targets.
+  targets = [
+    "clang-tblgen"
+    "llvm-tblgen"
+    "clang-tidy-confusable-chars-gen"
+    "mlir-tblgen"
+  ]
+  ++ lib.optionals (lib.versionOlder release_version "20") [
+    "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
+  ];
 
   self = stdenv.mkDerivation (finalAttrs: {
     inherit pname version patches;
 
     src = src';
     sourceRoot = "${finalAttrs.src.name}/llvm";
+
+    __structuredAttrs = true;
 
     postPatch = ''
       (
@@ -86,40 +93,23 @@ let
     cmakeFlags = [
       # Projects with tablegen-like tools.
       "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" (
-          [
-            "llvm"
-            "clang"
-            "clang-tools-extra"
-          ]
-          ++ lib.optionals (lib.versionAtLeast release_version "16") [
-            "mlir"
-          ]
-        )
+        lib.concatStringsSep ";" [
+          "llvm"
+          "clang"
+          "clang-tools-extra"
+          "mlir"
+        ]
       }"
-    ] ++ devExtraCmakeFlags;
+    ]
+    ++ devExtraCmakeFlags;
 
-    # List of tablegen targets.
-    ninjaFlags =
-      [
-        "clang-tblgen"
-        "llvm-tblgen"
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
-        "clang-tidy-confusable-chars-gen"
-      ]
-      ++ lib.optionals (lib.versionAtLeast release_version "16") [
-        "mlir-tblgen"
-      ]
-      ++
-        lib.optionals ((lib.versionAtLeast release_version "15") && (lib.versionOlder release_version "20"))
-          [
-            "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
-          ];
+    ninjaFlags = targets;
+
+    inherit targets;
 
     installPhase = ''
-      mkdir -p $out
-      cp -ar bin $out/bin
+      mkdir -p $out/bin
+      cp "''${targets[@]/#/bin/}" $out/bin
     '';
   });
 in

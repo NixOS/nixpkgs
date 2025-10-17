@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/iksteen/aws-request-signer/releases/tag/${version}";
-    description = "Python library to sign AWS requests using AWS Signature V4.";
+    description = "Python library to sign AWS requests using AWS Signature V4";
     homepage = "https://github.com/iksteen/aws-request-signer";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ pyrox0 ];

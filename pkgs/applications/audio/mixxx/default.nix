@@ -56,14 +56,20 @@
 
 stdenv.mkDerivation rec {
   pname = "mixxx";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = version;
-    hash = "sha256-dKk3n3KDindnLbON52SW5h4cz96WVi0OPjwA27HqQCI=";
+    hash = "sha256-WmYoblIVygLnjNaFnRoEHmfnQcaBtIVOBZicEwD4NMw=";
   };
+
+  # Should be removed when bumping to 2.6.x
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-warn "LIBDJINTEROP_VERSION 0.24.3" "LIBDJINTEROP_VERSION 0.26.1"
+  '';
 
   nativeBuildInputs = [
     cmake

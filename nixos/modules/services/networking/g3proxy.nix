@@ -54,7 +54,7 @@ in
           let
             g3proxy-yaml = settingsFormat.generate "g3proxy.yaml" cfg.settings;
           in
-          "${lib.getExe cfg.package} --config-file ${g3proxy-yaml}";
+          "${lib.getExe cfg.package} --config-file ${g3proxy-yaml} --systemd --control-dir %t/g3proxy";
 
         WorkingDirectory = "/var/lib/g3proxy";
         StateDirectory = "g3proxy";

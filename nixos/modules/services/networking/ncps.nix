@@ -27,6 +27,9 @@ let
         cfg.openTelemetry.grpcURL != null
       ) "--otel-grpc-url='${cfg.openTelemetry.grpcURL}'")
     ))
+    ++ (lib.optionals cfg.prometheus.enable [
+      "--prometheus-enabled"
+    ])
   );
 
   serveFlags = lib.concatStringsSep " " (
@@ -34,6 +37,7 @@ let
       "--cache-hostname='${cfg.cache.hostName}'"
       "--cache-data-path='${cfg.cache.dataPath}'"
       "--cache-database-url='${cfg.cache.databaseURL}'"
+      "--cache-temp-path='${cfg.cache.tempPath}'"
       "--server-addr='${cfg.server.addr}'"
     ]
     ++ (lib.optional cfg.cache.allowDeleteVerb "--cache-allow-delete-verb")
@@ -46,6 +50,7 @@ let
     ++ (lib.optional (cfg.cache.secretKeyPath != null) "--cache-secret-key-path='%d/secretKey'")
     ++ (lib.forEach cfg.upstream.caches (url: "--upstream-cache='${url}'"))
     ++ (lib.forEach cfg.upstream.publicKeys (pk: "--upstream-public-key='${pk}'"))
+    ++ (lib.optional (cfg.netrcFile != null) "--netrc-file='${cfg.netrcFile}'")
   );
 
   isSqlite = lib.strings.hasPrefix "sqlite:" cfg.cache.databaseURL;
@@ -75,6 +80,8 @@ in
           '';
         };
       };
+
+      prometheus.enable = lib.mkEnableOption "Enable Prometheus metrics endpoint at /metrics";
 
       logLevel = lib.mkOption {
         type = lib.types.enum logLevels;
@@ -165,6 +172,14 @@ in
             empty to automatically generate a private/public key.
           '';
         };
+
+        tempPath = lib.mkOption {
+          type = lib.types.str;
+          default = "/tmp";
+          description = ''
+            The path to the temporary directory that is used by the cache to download NAR files
+          '';
+        };
       };
 
       server = {
@@ -197,6 +212,16 @@ in
           '';
         };
       };
+
+      netrcFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        example = "/etc/nix/netrc";
+        description = ''
+          The path to netrc file for upstream authentication.
+          When unspecified ncps will look for ``$HOME/.netrc`.
+        '';
+      };
     };
   };
 
@@ -214,7 +239,7 @@ in
     };
     users.groups.ncps = { };
 
-    systemd.services.ncps-create-datadirs = {
+    systemd.services.ncps-create-directories = {
       description = "Created required directories by ncps";
       serviceConfig = {
         Type = "oneshot";
@@ -231,6 +256,12 @@ in
           if ! test -d ${dbDir}; then
             mkdir -p ${dbDir}
             chown ncps:ncps ${dbDir}
+          fi
+        '')
+        + (lib.optionalString (cfg.cache.tempPath != "/tmp") ''
+          if ! test -d ${cfg.cache.tempPath}; then
+            mkdir -p ${cfg.cache.tempPath}
+            chown ncps:ncps ${cfg.cache.tempPath}
           fi
         '');
       wantedBy = [ "ncps.service" ];
@@ -273,6 +304,9 @@ in
         (lib.mkIf (isSqlite && !lib.strings.hasPrefix "/var/lib/ncps" dbDir) {
           ReadWritePaths = [ dbDir ];
         })
+        (lib.mkIf (cfg.cache.tempPath != "/tmp") {
+          ReadWritePaths = [ cfg.cache.tempPath ];
+        })
 
         # Hardening
         {
@@ -313,10 +347,13 @@ in
       ];
 
       unitConfig.RequiresMountsFor = lib.concatStringsSep " " (
-        [ "${cfg.cache.dataPath}" ] ++ lib.optional (isSqlite) dbDir
+        [ "${cfg.cache.dataPath}" ] ++ lib.optional isSqlite dbDir
       );
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ kalbasit ];
+  meta.maintainers = with lib.maintainers; [
+    kalbasit
+    aciceri
+  ];
 }

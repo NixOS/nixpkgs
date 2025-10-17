@@ -2,7 +2,7 @@
 
 ## Steam in Nix {#sec-steam-nix}
 
-Steam is distributed as a `.deb` file, for now only as an i686 package (the amd64 package only has documentation). When unpacked, it has a script called `steam` that in Ubuntu (their target distro) would go to `/usr/bin`. When run for the first time, this script copies some files to the user's home, which include another script that is the ultimate responsible for launching the steam binary, which is also in `$HOME`.
+Steam is distributed as a `.deb` file, for now only as an i686 package (the amd64 package only has documentation). When unpacked, it has a script called `steam` that in Ubuntu (their target distro) would go to `/usr/bin`. When run for the first time, this script copies some files to the user's home, which include another script that is ultimately responsible for launching the steam binary, which is also in `$HOME`.
 
 Nix problems and constraints:
 
@@ -11,7 +11,7 @@ Nix problems and constraints:
 - The `steam.sh` script in `$HOME` cannot be patched, as it is checked and rewritten by steam.
 - The steam binary cannot be patched, it's also checked.
 
-The current approach to deploy Steam in NixOS is composing a FHS-compatible chroot environment, as documented [here](https://sandervanderburg.blogspot.com/2013/09/composing-fhs-compatible-chroot.html). This allows us to have binaries in the expected paths without disrupting the system, and to avoid patching them to work in a non FHS environment.
+The current approach to deploy Steam in NixOS is composing a FHS-compatible chroot environment, as documented [here](https://sandervanderburg.blogspot.com/2013/09/composing-fhs-compatible-chroot.html). This allows us to have binaries in the expected paths without disrupting the system and to avoid patching them to work in a non-FHS environment.
 
 ## How to play {#sec-steam-play}
 

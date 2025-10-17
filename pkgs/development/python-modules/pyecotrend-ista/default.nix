@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "pyecotrend-ista";
-  version = "3.3.3";
+  version = "3.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "Ludy87";
     repo = "pyecotrend-ista";
     tag = version;
-    hash = "sha256-x9teLjIJPLYi/mE6vy4KBUl7NI4aAwWPYSEwYZQ+4I4=";
+    hash = "sha256-GPbRlvdXLxCNuhuELg2OQT5NB8qX+bcbZSRdQimqGtQ=";
   };
 
   postPatch = ''

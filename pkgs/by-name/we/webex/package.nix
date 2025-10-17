@@ -50,18 +50,18 @@
   xcbutilrenderutil,
   xcbutilwm,
   p7zip,
-  tbb,
+  onetbb,
   wayland,
   libXScrnSaver,
 }:
 
 stdenv.mkDerivation rec {
   pname = "webex";
-  version = "45.2.0.31846";
+  version = "45.6.2.32823";
 
   src = fetchurl {
-    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250225153039/Webex_ubuntu.7z";
-    sha256 = "88b6031d3ea885b750a9e44e3f7b98634e3ecdfb5ca1672ea840ea16a97386ab";
+    url = "https://binaries.webex.com/WebexDesktop-Ubuntu-Gold/20250725151734/Webex_ubuntu.7z";
+    sha256 = "72e9693d7c1c09ebf2c93c5e29e2b52a012eaf3ac108d7759d66be500c528b3b";
   };
 
   nativeBuildInputs = [
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    tbb
+    onetbb
     wayland
   ];
 

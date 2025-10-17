@@ -15,12 +15,12 @@
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "37.3.0";
+  version = "37.5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-d7eeeiIo1XF1Ezrwu83SbcYj34HbOQ7lL1EE1GwBDy8=";
+    hash = "sha256-gxXY/01vT1iL1C/+Y6vVmYhseFBz4mpEcH4Q7rpXE9w=";
   };
 
   build-system = [ setuptools ];
@@ -40,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   # avoid tests which import random2, an abandoned library
-  pytestFlagsArray = [ "--ignore=tests/providers/test_ssn.py" ];
+  disabledTestPaths = [ "tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {

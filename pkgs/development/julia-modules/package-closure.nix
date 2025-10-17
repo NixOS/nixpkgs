@@ -43,11 +43,20 @@ let
             println(io, "- name: " * spec.name)
             println(io, "  uuid: " * string(spec.uuid))
             println(io, "  version: " * string(spec.version))
+            println(io, "  tree_hash: " * string(spec.tree_hash))
             if endswith(spec.name, "_jll") && haskey(deps_map, spec.uuid)
                 println(io, "  depends_on: ")
                 for (dep_name, dep_uuid) in pairs(deps_map[spec.uuid])
                     println(io, "    \"$(dep_name)\": \"$(dep_uuid)\"")
                 end
+            end
+            println(io, "  deps: ")
+            for (dep_name, dep_uuid) in pairs(deps_map[spec.uuid])
+                println(io, "  - name: \"$(dep_name)\"")
+                println(io, "    uuid: \"$(dep_uuid)\"")
+            end
+            if spec.name in input
+                println(io, "  is_input: true")
             end
         end
     end

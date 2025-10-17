@@ -17,16 +17,16 @@ buildGoModule (finalAttrs: {
     webkitgtk_4_1
   ];
   pname = "paretosecurity";
-  version = "0.2.36";
+  version = "0.3.11";
 
   src = fetchFromGitHub {
     owner = "ParetoSecurity";
     repo = "agent";
     rev = finalAttrs.version;
-    hash = "sha256-PAH5aswkN8MxK+sZNucXgw50Fc2CkhBLM7+wwxkgAvs=";
+    hash = "sha256-BYSbLeWW0DSVNAgBvWKRLgwDg47QjTbvloGfyCDYIOU=";
   };
 
-  vendorHash = "sha256-RAKYaNi+MXUfNnEJmZF5g9jFBDOPIVBOZWtqZp2FwWY=";
+  vendorHash = "sha256-hH+4rYvFuDsCa90C1uNM2WaQSYK9n0PpVv6P+o54RoU=";
   proxyVendor = true;
 
   # Skip building the Windows installer
@@ -78,13 +78,15 @@ buildGoModule (finalAttrs: {
   };
 
   meta = {
-    description = "Pareto Security agent makes sure your laptop is correctly configured for security.";
+    description = "A simple trayicon app that makes sure your laptop is correctly configured for security";
     longDescription = ''
-      The Pareto Security agent is a free and open source app to help you make
-      sure that your laptop is configured for security.
+      [Pareto Desktop](https://paretosecurity.com/linux) is a free and open
+      source trayicon app to help you configure your laptop for security. It
+      nudges you to take care of 20% of security-related tasks that bring 80% of
+      protection.
 
-      By default, it's a CLI command that prints out a report on basic security
-      settings such as if you have disk encryption and firewall enabled.
+      In it's simplest form, it's a CLI command that prints out a report on basic
+      security settings such as if you have disk encryption and firewall enabled.
 
       If you use the `services.paretosecurity` NixOS module, you also get a
       root helper that allows you to run the checker in userspace. Some checks
@@ -96,9 +98,11 @@ buildGoModule (finalAttrs: {
       once per hour. If you want to use just the CLI mode, set
       `services.paretosecurity.trayIcon` to `false`.
 
-      Finally, you can run `paretosecurity link` to configure the agent
-      to send the status of checks to https://dash.paretosecurity.com to make
-      compliance people happy. No sending happens until your device is linked.
+      Finally, if you set `users.users.alice.paretosecurity.inviteId = "..."`
+      to the `inviteId` you get on [Pareto Cloud](https://cloud.paretosecurity.com/),
+      then Pareto Desktop acts as a read-only and push-only agent that sends the
+      status of checks to https://cloud.paretosecurity.com which makes
+      compliance people happy and your privacy intact.
     '';
     homepage = "https://github.com/ParetoSecurity/agent";
     license = lib.licenses.gpl3Only;

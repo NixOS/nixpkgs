@@ -27,7 +27,7 @@ rec {
   phraseDirective =
     solution: env: name: val:
     if builtins.isInt val then
-      builtins.toString val
+      toString val
     else if builtins.isString val then
       name
     else if true == val then
@@ -39,7 +39,11 @@ rec {
     else if builtins.isList val then
       "${name}:${semicolons (map lib.escapeShellArg val)}"
     else
-      nope [ solution env name ] "unexpected type: ${builtins.typeOf val}";
+      nope [
+        solution
+        env
+        name
+      ] "unexpected type: ${builtins.typeOf val}";
 
   # Build fake/fix/keep directives from Nix types
   phraseDirectives =
@@ -68,7 +72,10 @@ rec {
     else if builtins.isAttrs val then
       spaces (phraseDirectives solution env val)
     else
-      nope [ solution env ] "unexpected type: ${builtins.typeOf val}";
+      nope [
+        solution
+        env
+      ] "unexpected type: ${builtins.typeOf val}";
 
   # Shell-format each env value
   shellEnv =
@@ -182,22 +189,21 @@ rec {
     writeTextFile {
       inherit name text;
       executable = true;
-      checkPhase =
-        ''
-          ${
-            (phraseContextForPWD (
-              phraseInvocation name (
-                partialSolution
-                // {
-                  scripts = [ "${placeholder "out"}" ];
-                }
-              )
-            ))
-          }
-        ''
-        + lib.optionalString (partialSolution.interpreter != "none") ''
-          ${partialSolution.interpreter} -n $out
-        '';
+      checkPhase = ''
+        ${
+          (phraseContextForPWD (
+            phraseInvocation name (
+              partialSolution
+              // {
+                scripts = [ "${placeholder "out"}" ];
+              }
+            )
+          ))
+        }
+      ''
+      + lib.optionalString (partialSolution.interpreter != "none") ''
+        ${partialSolution.interpreter} -n $out
+      '';
     };
   writeScriptBin =
     name: partialSolution: text:
@@ -205,20 +211,19 @@ rec {
       inherit name text;
       executable = true;
       destination = "/bin/${name}";
-      checkPhase =
-        ''
-          ${phraseContextForOut (
-            phraseInvocation name (
-              partialSolution
-              // {
-                scripts = [ "bin/${name}" ];
-              }
-            )
-          )}
-        ''
-        + lib.optionalString (partialSolution.interpreter != "none") ''
-          ${partialSolution.interpreter} -n $out/bin/${name}
-        '';
+      checkPhase = ''
+        ${phraseContextForOut (
+          phraseInvocation name (
+            partialSolution
+            // {
+              scripts = [ "bin/${name}" ];
+            }
+          )
+        )}
+      ''
+      + lib.optionalString (partialSolution.interpreter != "none") ''
+        ${partialSolution.interpreter} -n $out/bin/${name}
+      '';
     };
   mkDerivation =
     {

@@ -48,6 +48,11 @@ let
     pythonOnBuildForTarget = throw "${pname} does not support cross compilation";
     pythonOnHostForHost = throw "${pname} does not support cross compilation";
     pythonOnTargetForTarget = throw "${pname} does not support cross compilation";
+
+    pythonABITags = [
+      "none"
+      "pypy${lib.concatStrings (lib.take 2 (lib.splitString "." pythonVersion))}_pp${sourceVersion.major}${sourceVersion.minor}"
+    ];
   };
   pname = "${passthru.executable}_prebuilt";
   version = with sourceVersion; "${major}.${minor}.${patch}";
@@ -71,24 +76,23 @@ stdenv.mkDerivation {
     inherit hash;
   };
 
-  buildInputs =
-    [
-      bzip2
-      expat
-      gdbm
-      ncurses6
-      sqlite
-      zlib
-      stdenv.cc.cc.libgcc or null
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      tcl-8_5
-      tk-8_5
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      tcl-8_6
-      tk-8_6
-    ];
+  buildInputs = [
+    bzip2
+    expat
+    gdbm
+    ncurses6
+    sqlite
+    zlib
+    stdenv.cc.cc.libgcc or null
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    tcl-8_5
+    tk-8_5
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    tcl-8_6
+    tk-8_6
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
@@ -142,18 +146,17 @@ stdenv.mkDerivation {
   # Check whether importing of (extension) modules functions
   installCheckPhase =
     let
-      modules =
-        [
-          "ssl"
-          "sys"
-          "curses"
-        ]
-        ++ lib.optionals (!isPy3k) [
-          "Tkinter"
-        ]
-        ++ lib.optionals isPy3k [
-          "tkinter"
-        ];
+      modules = [
+        "ssl"
+        "sys"
+        "curses"
+      ]
+      ++ lib.optionals (!isPy3k) [
+        "Tkinter"
+      ]
+      ++ lib.optionals isPy3k [
+        "tkinter"
+      ];
       imports = lib.concatMapStringsSep "; " (x: "import ${x}") modules;
     in
     ''

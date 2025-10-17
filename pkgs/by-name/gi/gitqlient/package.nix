@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "francescmm";
     repo = "gitqlient";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-gfWky5KTSj+5FC++QIVTJbrDOYi/dirTzs6LvTnO74A=";
   };

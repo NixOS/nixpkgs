@@ -4,23 +4,38 @@
   rustPlatform,
   protobuf,
   versionCheckHook,
+  cmake,
+  pkg-config,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.7.7";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-x89sFBQ6bAIHvaRTCxqKKgFKo7PpquVze0R6VicwrJw=";
+    hash = "sha256-asD7veAYdIF5biCbSXYvAyW/qBra3tvON9TQYCw6nB8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-jfc0Rmt9eEN3ds5Rakj+IcJcUa28CbhiSu4AfqHurf0=";
+  cargoHash = "sha256-9zCQKxkjiskkBGxfnq2ANpqWobs+UJ5qCsbME2Z7GY4=";
+
+  cargoPatches = [ ./Cargo.patch ];
 
   patches = [
     ./unbounded-shifts.patch
+  ];
+
+  postPatch = ''
+    substituteInPlace clash-lib/Cargo.toml \
+      --replace-fail ', git = "https://github.com/smoltcp-rs/smoltcp.git", rev = "ac32e64"' ""
+  '';
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
   ];
 
   nativeInstallCheckInputs = [
@@ -31,13 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "--cfg tokio_unstable";
+    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
-  buildFeatures = [
-    "shadowsocks"
-    "tuic"
-    "onion"
-  ];
+  buildFeatures = [ "plus" ];
 
   doCheck = false; # test failed
 
@@ -48,6 +61,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Custom protocol, rule based network proxy software";

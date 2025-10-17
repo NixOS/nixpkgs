@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iputils";
-  version = "20240905";
+  version = "20250605";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    hash = "sha256-2CjzIOe1hrW3He9DN+w+Wi2zaaMBkVEdA7dezTpkx8I=";
+    hash = "sha256-AJgNPIE90kALu4ihANELr9Dh28LhJ4camLksOIRV8Xo=";
   };
 
   outputs = [
@@ -34,15 +34,14 @@ stdenv.mkDerivation rec {
   # /build/source/build/ping/ping: socket: Operation not permitted
   doCheck = false;
 
-  mesonFlags =
-    [
-      "-DNO_SETCAP_OR_SUID=true"
-      "-Dsystemdunitdir=etc/systemd/system"
-      "-DINSTALL_SYSTEMD_UNITS=true"
-      "-DSKIP_TESTS=${lib.boolToString (!doCheck)}"
-    ]
-    # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
-    ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
+  mesonFlags = [
+    "-DNO_SETCAP_OR_SUID=true"
+    "-Dsystemdunitdir=etc/systemd/system"
+    "-DINSTALL_SYSTEMD_UNITS=true"
+    "-DSKIP_TESTS=${lib.boolToString (!doCheck)}"
+  ]
+  # Disable idn usage w/musl (https://github.com/iputils/iputils/pull/111):
+  ++ lib.optional stdenv.hostPlatform.isMusl "-DUSE_IDN=false";
 
   nativeBuildInputs = [
     meson
@@ -96,6 +95,6 @@ stdenv.mkDerivation rec {
       bsd3
     ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

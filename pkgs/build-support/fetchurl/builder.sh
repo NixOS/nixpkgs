@@ -35,6 +35,7 @@ if [ -n "$downloadToTemp" ]; then downloadedFile="$TMPDIR/file"; fi
 
 tryDownload() {
     local url="$1"
+    local target="$2"
     echo
     echo "trying $url"
     local curlexit=18;
@@ -44,7 +45,7 @@ tryDownload() {
     # if we get error code 18, resume partial download
     while [ $curlexit -eq 18 ]; do
        # keep this inside an if statement, since on failure it doesn't abort the script
-       if "${curl[@]}" -C - --fail "$url" --output "$downloadedFile"; then
+       if "${curl[@]}" -C - --fail "$url" --output "$target"; then
           success=1
           break
        else
@@ -81,7 +82,9 @@ tryHashedMirrors() {
         if "${curl[@]}" --retry 0 --connect-timeout "${NIX_CONNECT_TIMEOUT:-15}" \
             --fail --silent --show-error --head "$url" \
             --write-out "%{http_code}" --output /dev/null > code 2> log; then
-            tryDownload "$url"
+            # Directly download to $out, because postFetch doesn't need to run,
+            # since hashed mirrors provide pre-built derivation outputs.
+            tryDownload "$url" "$out"
 
             # We skip postFetch here, because hashed-mirrors are
             # already content addressed. So if $outputHash is in the
@@ -156,7 +159,7 @@ for url in $urls; do
                ;;
        esac
     fi
-    tryDownload "$url"
+    tryDownload "$url" "$downloadedFile"
     if test -n "$success"; then finish; fi
 done
 

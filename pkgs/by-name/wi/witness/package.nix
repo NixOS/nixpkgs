@@ -1,25 +1,26 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
+
+  buildPackages,
   installShellFiles,
 
-  # testing
-  testers,
-  witness,
+  versionCheckHook,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "witness";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "in-toto";
     repo = "witness";
-    rev = "v${version}";
-    sha256 = "sha256-0Q+6nG5N3Xp5asmRMPZccLxw6dWiZVX6fuIUf1rT+mI=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-MKiPIZFeCWOT4zTbG7SjwdNUHFuqsL4pGu4VvVwyn3s=";
   };
-  vendorHash = "sha256-oH/aWt8Hl/BIN+IYLcuVYWDpQZaYABAOGxXyLssjQg0=";
+  vendorHash = "sha256-V3SuhBbhXyA0SFOGfBrV/qH+cROr2obHOBcivkgRO6U=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,7 +30,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/in-toto/witness/cmd.Version=v${version}"
+    "-X github.com/in-toto/witness/cmd.Version=${finalAttrs.src.tag}"
   ];
 
   # Feed in all tests for testing
@@ -37,20 +38,30 @@ buildGoModule rec {
   # want but also limits the tests
   preCheck = ''
     unset subPackages
+    # tests expect no version set
+    unset ldflags
   '';
 
-  postInstall = ''
-    installShellCompletion --cmd witness \
-      --bash <($out/bin/witness completion bash) \
-      --fish <($out/bin/witness completion fish) \
-      --zsh <($out/bin/witness completion zsh)
-  '';
+  postInstall =
+    let
+      exe =
+        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+          "$out/bin/witness"
+        else
+          lib.getExe buildPackages.witness;
+    in
+    ''
+      installShellCompletion --cmd witness \
+        --bash <(${exe} completion bash) \
+        --fish <(${exe} completion fish) \
+        --zsh <(${exe} completion zsh)
+    '';
 
-  passthru.tests.version = testers.testVersion {
-    package = witness;
-    command = "witness version";
-    version = "v${version}";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "version";
 
   meta = {
     description = "Pluggable framework for software supply chain security. Witness prevents tampering of build materials and verifies the integrity of the build process from source to target";
@@ -65,11 +76,11 @@ buildGoModule rec {
     '';
     mainProgram = "witness";
     homepage = "https://github.com/testifysec/witness";
-    changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
+    changelog = "https://github.com/testifysec/witness/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       fkautz
       jk
     ];
   };
-}
+})

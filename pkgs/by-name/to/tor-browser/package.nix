@@ -111,7 +111,7 @@ lib.warnIf (useHardenedMalloc != null)
         ++ lib.optionals mediaSupport [ ffmpeg ]
       );
 
-      version = "14.5.4";
+      version = "14.5.8";
 
       sources = {
         x86_64-linux = fetchurl {
@@ -121,7 +121,7 @@ lib.warnIf (useHardenedMalloc != null)
             "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
             "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-x86_64-${version}.tar.xz"
           ];
-          hash = "sha256-27Wq9VwFB85swQZIRQMKZgeUeb/SgQ04aaWmZtlpY9s=";
+          hash = "sha256-hf3pkl+J9Hs28XSyNoXCZM0B9A7g4/n6F7WFkD/hl/o=";
         };
 
         i686-linux = fetchurl {
@@ -131,7 +131,7 @@ lib.warnIf (useHardenedMalloc != null)
             "https://tor.eff.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
             "https://tor.calyxinstitute.org/dist/torbrowser/${version}/tor-browser-linux-i686-${version}.tar.xz"
           ];
-          hash = "sha256-OgexrnQWGYSf9g3Le/LyBcpGo3xFqpCMq1NUHF5fi9M=";
+          hash = "sha256-iSHeHCyBg66pbGw8glmViTFMvys3EArOkXVpqJBXEfc=";
         };
       };
 
@@ -364,10 +364,11 @@ lib.warnIf (useHardenedMalloc != null)
         changelog = "https://gitweb.torproject.org/builders/tor-browser-build.git/plain/projects/tor-browser/Bundle-Data/Docs/ChangeLog.txt?h=maint-${version}";
         platforms = lib.attrNames sources;
         maintainers = with lib.maintainers; [
+          c4patino
           felschr
-          panicgh
-          joachifm
           hax404
+          joachifm
+          panicgh
         ];
         # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
         # the compound is "libre" in a strict sense (some components place certain

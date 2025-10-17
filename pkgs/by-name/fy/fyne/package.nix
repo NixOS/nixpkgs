@@ -15,16 +15,18 @@
 
 buildGoModule rec {
   pname = "fyne";
-  version = "1.26.1";
+  # This is the current latest version
+  # version "1.26.1" was a typo of "1.6.2" - maybe, don't "upgrade" to it
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "fyne-io";
     repo = "tools";
     rev = "v${version}";
-    hash = "sha256-eBwbXyhI1s4se7krzTemoSehgSXN7mht70q8mk+yGoM=";
+    hash = "sha256-N5v1oytSwRHE631KQDHTulUAqs/Jlr8YJqE8wy+Ygdk=";
   };
 
-  vendorHash = "sha256-7B0PCKMfLULmqzIlNFeXhOUThnWSe9+gRhpswbiwLP4=";
+  vendorHash = "sha256-LU3UkWHsf0Qt6w5tNIz11ubI+OIWkbtqqSlcoYJVFZU=";
 
   nativeBuildInputs = [ pkg-config ];
 

@@ -2,41 +2,50 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  cmake,
+  nix-update-script,
   rust-jemalloc-sys,
+  versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "oxlint";
-  version = "1.3.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "oxc-project";
     repo = "oxc";
-    tag = "oxlint_v${version}";
-    hash = "sha256-+K8hc6uU/p/hT3bkaGPZpVcK9itSGJM9Mdhfw3DSZJw=";
+    tag = "oxlint_v${finalAttrs.version}";
+    hash = "sha256-HH98Q4mvCrylnRmvmfqKksF3ECT3rkoT93bSTqV4xOY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-D0YEodCzBpf7g3VnKyydEDtjzGUu+XsGc2BpXU4CR6Q=";
+  cargoHash = "sha256-lAEAOB6JkIkwckhwXU2/fRMkGOkEZnNtiyx/Xm+0JKc=";
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
     rust-jemalloc-sys
   ];
 
-  env.OXC_VERSION = version;
+  env.OXC_VERSION = finalAttrs.version;
 
   cargoBuildFlags = [
     "--bin=oxlint"
     "--bin=oxc_language_server"
   ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Collection of JavaScript tools written in Rust";
     homepage = "https://github.com/oxc-project/oxc";
-    changelog = "https://github.com/oxc-project/oxc/releases/tag/${src.tag}";
+    changelog = "https://github.com/oxc-project/oxc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "oxlint";
   };
-}
+})

@@ -58,18 +58,24 @@ Keys of the redirects mapping must correspond to some identifier in the source.
 This can happen when an identifier was added, renamed, or removed.
 
     Added new content?
-        $ redirects add-content ❬identifier❭ ❬path❭
+        $ redirects add-content <identifier> <path>
+    often:
+        $ redirects add-content <identifier> index.html
 
     Moved existing content to a different output path?
-        $ redirects move-content ❬identifier❭ ❬path❭
+        $ redirects move-content <identifier> <path>
 
     Renamed existing identifiers?
-        $ redirects rename-identifier ❬old-identifier❭ ❬new-identifier❭
+        $ redirects rename-identifier <old-identifier> <new-identifier>
 
     Removed content? Redirect to alternatives or relevant release notes.
-        $ redirects remove-and-redirect ❬identifier❭ ❬target-identifier❭
+        $ redirects remove-and-redirect <identifier> <target-identifier>
 
-    NOTE: Run `nix-shell doc` or `nix-shell nixos/doc/manual` to make this command available.
+    NOTE: Run the right nix-shell to make this command available.
+        Nixpkgs:
+        $ nix-shell doc
+        NixOS:
+        $ nix-shell nixos/doc/manual
 """)
         error_messages.append("NOTE: If your build passes locally and you see this message in CI, you probably need a rebase.")
         return "\n".join(error_messages)
@@ -94,7 +100,7 @@ class Redirects:
           - The first element of an identifier's redirects list must denote its current location.
         """
         xref_targets = {}
-        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-")
+        ignored_identifier_patterns = ("opt-", "auto-generated-", "function-library-", "service-opt-", "systemd-service-opt")
         for id, target in initial_xref_targets.items():
             # filter out automatically generated identifiers from module options and library documentation
             if id.startswith(ignored_identifier_patterns):

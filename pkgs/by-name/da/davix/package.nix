@@ -34,16 +34,15 @@ stdenv.mkDerivation rec {
     pkg-config
     python3
   ];
-  buildInputs =
-    [
-      boost
-      curl
-      libxml2
-      openssl
-      rapidjson
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
-    ++ lib.optional (enableThirdPartyCopy) gsoap;
+  buildInputs = [
+    boost
+    curl
+    libxml2
+    openssl
+    rapidjson
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libuuid
+  ++ lib.optional enableThirdPartyCopy gsoap;
 
   # using the url below since the github release page states
   # "please ignore the GitHub-generated tarballs, as they are incomplete"

@@ -3,20 +3,23 @@
   buildGoModule,
   fetchFromGitHub,
   nixosTests,
+
+  # Test dependencies
+  redisTestHook,
 }:
 
 buildGoModule rec {
   pname = "redis_exporter";
-  version = "1.74.0";
+  version = "1.78.0";
 
   src = fetchFromGitHub {
     owner = "oliver006";
     repo = "redis_exporter";
     rev = "v${version}";
-    sha256 = "sha256-TPMbRyz476ylo6OEYYtLQCNL01dLShnJu0ncVgzL5kY=";
+    sha256 = "sha256-Nj2SvnKk04kTVm4O1v809WslW/egKVsZO0b9zTKIoWQ=";
   };
 
-  vendorHash = "sha256-q/RMdGFwZuFnjE0txb7ShhHlxLpLNF5S6KmmAKKYnaE=";
+  vendorHash = "sha256-7/7O61tOEUsRVkFVkmOiHqgxmFDmwaw8s97aOQr89Mg=";
 
   ldflags = [
     "-X main.BuildVersion=${version}"
@@ -24,8 +27,31 @@ buildGoModule rec {
     "-X main.BuildDate=unknown"
   ];
 
-  # needs a redis server
-  doCheck = false;
+  nativeCheckInputs = [
+    redisTestHook
+  ];
+
+  preCheck = ''
+    export TEST_REDIS_URI="redis://localhost:6379"
+  '';
+
+  __darwinAllowLocalNetworking = true;
+
+  checkFlags =
+    let
+      skippedTests = [
+        "TestLatencySpike" # timing-sensitive
+
+        # The following tests require ad-hoc generated TLS certificates in the source dir.
+        # This is not possible in the read-only Nix store.
+        "TestCreateClientTLSConfig"
+        "TestValkeyTLSScheme"
+        "TestCreateServerTLSConfig"
+        "TestGetServerCertificateFunc"
+        "TestGetConfigForClientFunc"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru.tests = { inherit (nixosTests.prometheus-exporters) redis; };
 

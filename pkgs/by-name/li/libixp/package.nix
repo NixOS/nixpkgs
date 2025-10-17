@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation {
   pname = "libixp";
-  version = "unstable-2022-04-04";
+  version = "0-unstable-2022-04-04";
 
   src = fetchFromGitHub {
     owner = "0intro";

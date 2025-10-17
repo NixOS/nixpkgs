@@ -6,19 +6,28 @@
   libkrb5,
   zlib,
   openssl,
+  stdenv,
   callPackage,
 }:
 
+let
+  plugins = [
+    "ArchiSteamFarm.OfficialPlugins.ItemsMatcher"
+    "ArchiSteamFarm.OfficialPlugins.MobileAuthenticator"
+    "ArchiSteamFarm.OfficialPlugins.Monitoring"
+    "ArchiSteamFarm.OfficialPlugins.SteamTokenDumper"
+  ];
+in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.1.6.7";
+  version = "6.2.2.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-XdnKcWzw/d7yLG2efgw/gQ8UkPjExigffbomTD3YUgE=";
+    hash = "sha256-FV9dYp3E8MHra5pyrh8dqZ/85TDwNbdiLV/XdAWiJsg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
@@ -26,7 +35,12 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  projectFile = "ArchiSteamFarm.sln";
+  projectFile = [
+    "ArchiSteamFarm"
+  ]
+  ++ plugins;
+  testProjectFile = "ArchiSteamFarm.Tests";
+
   executable = "ArchiSteamFarm";
 
   enableParallelBuilding = false;
@@ -48,7 +62,8 @@ buildDotnetModule rec {
     openssl
   ];
 
-  doCheck = true;
+  # times out when trying to connect to something even with relaxed sandbox
+  doCheck = stdenv.hostPlatform.isLinux;
 
   preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
@@ -65,13 +80,13 @@ buildDotnetModule rec {
       echo "Publishing plugin $1"
       dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
         --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        --no-restore --no-build --runtime $dotnetRuntimeIds \
         $dotnetFlags $dotnetInstallFlags
     }
 
-    buildPlugin ArchiSteamFarm.OfficialPlugins.ItemsMatcher
-    buildPlugin ArchiSteamFarm.OfficialPlugins.MobileAuthenticator
-    buildPlugin ArchiSteamFarm.OfficialPlugins.Monitoring
-    buildPlugin ArchiSteamFarm.OfficialPlugins.SteamTokenDumper
+  ''
+  + lib.concatMapStrings (p: "buildPlugin ${p}\n") plugins
+  + ''
 
     chmod +x $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll
     wrapDotnetProgram $out/lib/ArchiSteamFarm/ArchiSteamFarm.dll $out/bin/ArchiSteamFarm

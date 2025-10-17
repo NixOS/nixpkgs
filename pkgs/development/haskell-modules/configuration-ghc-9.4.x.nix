@@ -2,22 +2,10 @@
 
 let
   inherit (pkgs) fetchpatch lib;
-  checkAgainAfter =
-    pkg: ver: msg: act:
-    if builtins.compareVersions pkg.version ver <= 0 then
-      act
-    else
-      builtins.throw "Check if '${msg}' was resolved in ${pkg.pname} ${pkg.version} and update or remove this";
 in
 
 with haskellLib;
-self: super:
-let
-  jailbreakForCurrentVersion = p: v: checkAgainAfter p v "bad bounds" (doJailbreak p);
-in
-{
-  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
-
+self: super: {
   # Disable GHC core libraries.
   array = null;
   base = null;
@@ -66,11 +54,22 @@ in
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
 
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
+
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   # only broken for >= 9.6
   calligraphy = doDistribute (unmarkBroken super.calligraphy);
 
   # Jailbreaks & Version Updates
 
+  # hashable >= 1.5 needs base >= 4.18
+  hashable = self.hashable_1_4_7_0;
   hashable-time = doJailbreak super.hashable-time;
   libmpd = doJailbreak super.libmpd;
 
@@ -92,7 +91,8 @@ in
     # 2021-10-10: 9.2.1 is not yet supported (also no issue)
     testFlags = [
       "--skip=/Hpack/renderCabalFile/is inverse to readCabalFile/"
-    ] ++ drv.testFlags or [ ];
+    ]
+    ++ drv.testFlags or [ ];
   }) (doJailbreak super.hpack);
 
   # 2022-08-01: Tests are broken on ghc 9.2.4: https://github.com/wz1000/HieDb/issues/46
@@ -116,8 +116,12 @@ in
     }
   );
 
+  # Last version to not depend on file-io and directory-ospath-streaming,
+  # which both need unix >= 2.8.
+  tar = self.tar_0_6_3_0;
+
   # A given major version of ghc-exactprint only supports one version of GHC.
-  ghc-exactprint = super.ghc-exactprint_1_6_1_3;
+  ghc-exactprint = dontCheck super.ghc-exactprint_1_6_1_3;
 
   # Too strict upper bound on template-haskell
   # https://github.com/mokus0/th-extras/issues/18
@@ -126,28 +130,44 @@ in
   # https://github.com/kowainik/relude/issues/436
   relude = dontCheck super.relude;
 
+  haddock-library = doJailbreak super.haddock-library;
+  apply-refact = addBuildDepend self.data-default-class super.apply-refact;
+  path = self.path_0_9_5;
   inherit
     (
       let
         hls_overlay = lself: lsuper: {
           Cabal-syntax = lself.Cabal-syntax_3_10_3_0;
           Cabal = lself.Cabal_3_10_3_0;
+          extensions = dontCheck (doJailbreak (lself.extensions_0_1_0_1));
         };
       in
       lib.mapAttrs (_: pkg: doDistribute (pkg.overrideScope hls_overlay)) {
-        haskell-language-server = allowInconsistentDependencies super.haskell-language-server;
-        fourmolu = doJailbreak self.fourmolu_0_14_0_0; # ansi-terminal, Diff
+        haskell-language-server = allowInconsistentDependencies (
+          addBuildDepends [ self.retrie self.floskell ] super.haskell-language-server
+        );
+        fourmolu = doJailbreak (dontCheck self.fourmolu_0_14_0_0); # ansi-terminal, Diff
         ormolu = doJailbreak self.ormolu_0_7_2_0; # ansi-terminal
         hlint = self.hlint_3_6_1;
         stylish-haskell = self.stylish-haskell_0_14_5_0;
+        retrie = doJailbreak (unmarkBroken super.retrie);
+        floskell = doJailbreak super.floskell;
       }
     )
+    retrie
+    floskell
     haskell-language-server
     fourmolu
     ormolu
     hlint
     stylish-haskell
     ;
+
+  # directory-ospath-streaming requires the ospath API in core packages
+  # filepath, directory and unix.
+  stan = super.stan.override {
+    directory-ospath-streaming = null;
+  };
 
   # Packages which need compat library for GHC < 9.6
   inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)

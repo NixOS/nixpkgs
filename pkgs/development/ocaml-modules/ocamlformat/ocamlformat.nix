@@ -32,12 +32,13 @@ lib.throwIf
 
     nativeBuildInputs = if lib.versionAtLeast version "0.25.1" then [ ] else [ menhir ];
 
-    buildInputs =
-      [ re ]
-      ++ library_deps
-      ++ lib.optionals (lib.versionAtLeast version "0.25.1") [
-        (ocamlformat-lib.override { inherit version; })
-      ];
+    buildInputs = [
+      re
+    ]
+    ++ library_deps
+    ++ lib.optionals (lib.versionAtLeast version "0.25.1") [
+      (ocamlformat-lib.override { inherit version; })
+    ];
 
     meta = {
       homepage = "https://github.com/ocaml-ppx/ocamlformat";

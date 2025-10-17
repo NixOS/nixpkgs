@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.7.1";
+  version = "9.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -38,7 +38,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-QXuXHFc48KTlIwO0aJsQRmrupZIJYElfbwM9itzTYhc=";
+    hash = "sha256-mdH7bFfUzjSOOIhRK4GpizohFB82s8v9N2yEX2X/dms=";
   };
 
   patches = [
@@ -85,6 +85,6 @@ buildPythonPackage rec {
     description = "Read and write PDFs with Python, powered by qpdf";
     license = licenses.mpl20;
     maintainers = with maintainers; [ dotlambda ];
-    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.rst";
+    changelog = "https://github.com/pikepdf/pikepdf/blob/${src.tag}/docs/releasenotes/version${lib.versions.major version}.md";
   };
 }

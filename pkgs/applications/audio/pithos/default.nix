@@ -22,8 +22,8 @@ pythonPackages.buildPythonApplication rec {
   version = "1.6.2";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "pithos";
+    repo = "pithos";
     tag = version;
     hash = "sha256-3j6IoMi30BQ8WHK4BxbsW+/3XZx7rBFd47EBENa2GiQ=";
   };
@@ -44,27 +44,27 @@ pythonPackages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      gtk3
-      libnotify
-      libsecret
-      glib
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gst-plugins-bad
-    ]);
+  buildInputs = [
+    gtk3
+    libnotify
+    libsecret
+    glib
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+  ]);
 
-  propagatedBuildInputs =
-    [ adwaita-icon-theme ]
-    ++ (with pythonPackages; [
-      pygobject3
-      pylast
-    ]);
+  propagatedBuildInputs = [
+    adwaita-icon-theme
+  ]
+  ++ (with pythonPackages; [
+    pygobject3
+    pylast
+  ]);
 
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;

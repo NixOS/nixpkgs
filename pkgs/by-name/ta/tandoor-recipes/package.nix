@@ -28,6 +28,10 @@ python.pkgs.buildPythonPackage {
     fi
 
     substituteInPlace pytest.ini --subst-var NIX_BUILD_CORES
+
+    # The script name test tries to use django allauth for admin login
+    substituteInPlace cookbook/admin.py \
+      --replace-fail "admin.site.login = secure_admin_login(admin.site.login)" ""
   '';
 
   propagatedBuildInputs = with python.pkgs; [
@@ -37,7 +41,10 @@ python.pkgs.buildPythonPackage {
     django-cleanup
     django-crispy-forms
     django-tables2
+    django-vite
     djangorestframework
+    drf-spectacular
+    drf-spectacular-sidecar
     drf-writable-nested
     django-oauth-toolkit
     bleach
@@ -81,13 +88,16 @@ python.pkgs.buildPythonPackage {
     python3-openid
     python3-saml
     standard-imghdr
+
+    # Tests
+    fido2
+    litellm
   ];
 
   configurePhase = ''
     runHook preConfigure
 
-    ln -sf ${frontend}/ cookbook/static/vue
-    cp ${frontend}/webpack-stats.json vue/
+    ln -sf ${frontend}/ cookbook/static/vue3
 
     runHook postConfigure
   '';
@@ -106,7 +116,6 @@ python.pkgs.buildPythonPackage {
     touch cookbook/static/themes/bootstrap.min.css.map
     touch cookbook/static/css/bootstrap-vue.min.css.map
 
-    ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic_js_reverse
     ${python.pythonOnBuildForHost.interpreter} manage.py collectstatic
 
     runHook postBuild
@@ -121,8 +130,7 @@ python.pkgs.buildPythonPackage {
     makeWrapper $out/lib/tandoor-recipes/manage.py $out/bin/tandoor-recipes \
       --prefix PYTHONPATH : "$PYTHONPATH"
 
-    # usually copied during frontend build (see vue.config.js)
-    cp vue/src/sw.js $out/lib/tandoor-recipes/cookbook/templates/
+    cp staticfiles/vue3/service-worker.js $out/lib/tandoor-recipes/cookbook/templates/
 
     runHook postInstall
   '';

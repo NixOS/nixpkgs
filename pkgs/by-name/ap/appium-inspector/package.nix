@@ -11,7 +11,7 @@
 
 let
   electron = electron_36;
-  version = "2025.3.1";
+  version = "2025.8.2";
 in
 
 buildNpmPackage {
@@ -22,16 +22,18 @@ buildNpmPackage {
     owner = "appium";
     repo = "appium-inspector";
     tag = "v${version}";
-    hash = "sha256-Qpk3IXoegPKLKdSSzY05cT2//45TIhyVLxESd2OeWPE=";
+    hash = "sha256-v3UN58dJ+rSdFx+99xRMI88gnJ/hgL48Lr7AMjNgXMY=";
   };
 
-  npmDepsHash = "sha256-vUqX8yUZCflfkDYssQelFfJLNhDeU3K4UJPPgvvEeaI=";
+  npmDepsHash = "sha256-rlmAZyznoLSudAf7k1mgf13CO+9mlDB3HhubPga+30Q=";
   npmFlags = [ "--ignore-scripts" ];
 
   nativeBuildInputs = [
     makeWrapper
     copyDesktopItems
   ];
+
+  makeCacheWritable = true;
 
   buildPhase = ''
     runHook preBuild
@@ -57,7 +59,7 @@ buildNpmPackage {
       --set NODE_ENV production
 
     install -m 444 -D 'app/common/renderer/assets/images/icon.png' \
-      $out/share/icons/hicolor/512x512/apps/appium-inspector.png
+      $out/share/icons/hicolor/256x256/apps/appium-inspector.png
 
     runHook postInstall
   '';

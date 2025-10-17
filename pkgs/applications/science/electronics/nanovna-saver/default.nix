@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "NanoVNA-Saver";
-    repo = pname;
+    repo = "nanovna-saver";
     tag = "v${version}";
     sha256 = "sha256-Asx4drb9W2NobdgOlbgdm1aAzB69hnIWvOM915F7sgA=";
   };
@@ -66,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://github.com/NanoVNA-Saver/nanovna-saver";
-    description = "A tool for reading, displaying and saving data from the NanoVNA";
+    description = "Tool for reading, displaying and saving data from the NanoVNA";
     mainProgram = "NanoVNASaver";
     longDescription = ''
       A multiplatform tool to save Touchstone files from the NanoVNA, sweep

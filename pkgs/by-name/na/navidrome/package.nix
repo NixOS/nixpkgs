@@ -18,16 +18,16 @@
 
 buildGo124Module rec {
   pname = "navidrome";
-  version = "0.56.1";
+  version = "0.58.0";
 
   src = fetchFromGitHub {
     owner = "navidrome";
     repo = "navidrome";
     rev = "v${version}";
-    hash = "sha256-Vq8qfBqxF/PVRtYYTsFydnJ7z/IuoNUWRWTLy/RM6xg=";
+    hash = "sha256-MwFACp2RKXz6zTzjknC5nKzaTEG1NWtvYggRZRiX5t0=";
   };
 
-  vendorHash = "sha256-E7Q3wxUd5JAwERBKD2NZaVyj1kszOxvxeDY0s/fEDfY=";
+  vendorHash = "sha256-CrZqVhvDYemnaCuveOXySqHZhW+nrgzdxaiJRuZfSaI=";
 
   npmRoot = "ui";
 
@@ -84,7 +84,7 @@ buildGo124Module rec {
   };
 
   meta = {
-    description = "Navidrome Music Server and Streamer compatible with Subsonic/Airsonic";
+    description = "Music Server and Streamer compatible with Subsonic/Airsonic";
     mainProgram = "navidrome";
     homepage = "https://www.navidrome.org/";
     license = lib.licenses.gpl3Only;

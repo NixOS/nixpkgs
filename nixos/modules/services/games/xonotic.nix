@@ -195,6 +195,8 @@ in
 
         Restart = "on-failure";
         RestartSec = 10;
+      };
+      unitConfig = {
         StartLimitBurst = 5;
       };
     };

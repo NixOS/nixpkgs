@@ -100,7 +100,7 @@ let
 
   modulesConf =
     let
-      lst = builtins.map (mod: mod.path) enabledModules;
+      lst = map (mod: mod.path) enabledModules;
       str = lib.strings.concatStringsSep "\n" lst;
     in
     builtins.toFile "modules.conf" str;
@@ -154,7 +154,8 @@ stdenv.mkDerivation rec {
     libtiff
     libuuid
     libxcrypt
-  ] ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
+  ]
+  ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules);
 
   enableParallelBuilding = true;
 

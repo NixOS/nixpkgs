@@ -13,7 +13,6 @@
   installDocumentation ? true,
   hoogleWithPackages,
   postBuild ? "",
-  ghcLibdir ? null, # only used by ghcjs, when resolving plugins
 }:
 
 # This argument is a function which selects a list of Haskell packages from any
@@ -45,15 +44,14 @@ selectPackages:
 #   fi
 
 let
-  inherit (haskellPackages) llvmPackages ghc;
+  inherit (haskellPackages) ghc;
 
   hoogleWithPackages' = if withHoogle then hoogleWithPackages selectPackages else null;
 
   packages = selectPackages haskellPackages ++ [ hoogleWithPackages' ];
 
-  isGhcjs = ghc.isGhcjs or false;
   isHaLVM = ghc.isHaLVM or false;
-  ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand' = "ghc";
   ghcCommand = "${ghc.targetPrefix}${ghcCommand'}";
   ghcCommandCaps = lib.toUpper ghcCommand';
   libDir =
@@ -65,19 +63,21 @@ let
   docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths = lib.concatLists (
-    builtins.map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
+    map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
       lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages)
     )
   );
   hasLibraries = lib.any (x: x.isHaskellLibrary) paths;
-  # CLang is needed on Darwin for -fllvm to work:
+  # Clang is needed on Darwin for -fllvm to work.
+  # GHC >= 9.10 needs an LLVM specific assembler which we use clang for.
   # https://downloads.haskell.org/~ghc/latest/docs/html/users_guide/codegens.html#llvm-code-generator-fllvm
   llvm = lib.makeBinPath (
-    [ llvmPackages.llvm ] ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang
+    [ ghc.llvmPackages.llvm ]
+    ++ lib.optionals (lib.versionAtLeast ghc.version "9.10" || stdenv.targetPlatform.isDarwin) [
+      ghc.llvmPackages.clang
+    ]
   );
 in
-
-assert ghcLibdir != null -> (ghc.isGhcjs or false);
 
 if paths == [ ] && !useLLVM then
   ghc
@@ -89,114 +89,100 @@ else
     name = ghc.name + "-with-packages";
     paths = paths ++ [ ghc ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" ghc) ];
     nativeBuildInputs = [ makeWrapper ];
-    postBuild =
-      ''
-        # wrap compiler executables with correct env variables
+    postBuild = ''
+      # wrap compiler executables with correct env variables
 
-        for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
-          if [[ -x "${ghc}/bin/$prg" ]]; then
-            rm -f $out/bin/$prg
-            makeWrapper ${ghc}/bin/$prg $out/bin/$prg                           \
-              --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'                   \
-              --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
-              --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
-              --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
-              --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
-              ${
-                lib.optionalString (ghc.isGhcjs or false) ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
-              } \
-              ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
-          fi
-        done
+      for prg in ${ghcCommand} ${ghcCommand}i ${ghcCommand}-${ghc.version} ${ghcCommand}i-${ghc.version}; do
+        if [[ -x "${ghc}/bin/$prg" ]]; then
+          rm -f $out/bin/$prg
+          makeWrapper ${ghc}/bin/$prg $out/bin/$prg                           \
+            --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'                   \
+            --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
+            --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
+            --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
+            --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
+            ${lib.optionalString useLLVM ''--prefix "PATH" ":" "${llvm}"''}
+        fi
+      done
 
-        for prg in runghc runhaskell; do
-          if [[ -x "${ghc}/bin/$prg" ]]; then
-            rm -f $out/bin/$prg
-            makeWrapper ${ghc}/bin/$prg $out/bin/$prg                           \
-              --add-flags "-f $out/bin/${ghcCommand}"                           \
-              --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
-              --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
-              --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
-              --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
-          fi
-        done
-
-        for prg in ${ghcCommand}-pkg ${ghcCommand}-pkg-${ghc.version}; do
-          if [[ -x "${ghc}/bin/$prg" ]]; then
-            rm -f $out/bin/$prg
-            makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "--global-package-db=${packageCfgDir}"
-          fi
-        done
-
-        # haddock was referring to the base ghc, https://github.com/NixOS/nixpkgs/issues/36976
-        if [[ -x "${ghc}/bin/haddock" ]]; then
-          rm -f $out/bin/haddock
-          makeWrapper ${ghc}/bin/haddock $out/bin/haddock    \
-            --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'  \
+      for prg in runghc runhaskell; do
+        if [[ -x "${ghc}/bin/$prg" ]]; then
+          rm -f $out/bin/$prg
+          makeWrapper ${ghc}/bin/$prg $out/bin/$prg                           \
+            --add-flags "-f $out/bin/${ghcCommand}"                           \
+            --set "NIX_${ghcCommandCaps}"        "$out/bin/${ghcCommand}"     \
+            --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
+            --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
             --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
         fi
+      done
 
-      ''
-      + (lib.optionalString (stdenv.targetPlatform.isDarwin && !isGhcjs && !stdenv.targetPlatform.isiOS)
-        ''
-          # Work around a linker limit in macOS Sierra (see generic-builder.nix):
-          local packageConfDir="${packageCfgDir}";
-          local dynamicLinksDir="$out/lib/links";
-          mkdir -p $dynamicLinksDir
-          # Clean up the old links that may have been (transitively) included by
-          # symlinkJoin:
-          rm -f $dynamicLinksDir/*
+      for prg in ${ghcCommand}-pkg ${ghcCommand}-pkg-${ghc.version}; do
+        if [[ -x "${ghc}/bin/$prg" ]]; then
+          rm -f $out/bin/$prg
+          makeWrapper ${ghc}/bin/$prg $out/bin/$prg --add-flags "--global-package-db=${packageCfgDir}"
+        fi
+      done
 
-          dynamicLibraryDirs=()
+      # haddock was referring to the base ghc, https://github.com/NixOS/nixpkgs/issues/36976
+      if [[ -x "${ghc}/bin/haddock" ]]; then
+        rm -f $out/bin/haddock
+        makeWrapper ${ghc}/bin/haddock $out/bin/haddock    \
+          --add-flags '"-B$NIX_${ghcCommandCaps}_LIBDIR"'  \
+          --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"
+      fi
 
-          for pkg in $($out/bin/ghc-pkg list --simple-output); do
-            dynamicLibraryDirs+=($($out/bin/ghc-pkg --simple-output field "$pkg" dynamic-library-dirs))
-          done
+    ''
+    + (lib.optionalString (stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isiOS) ''
+      # Work around a linker limit in macOS Sierra (see generic-builder.nix):
+      local packageConfDir="${packageCfgDir}";
+      local dynamicLinksDir="$out/lib/links";
+      mkdir -p $dynamicLinksDir
+      # Clean up the old links that may have been (transitively) included by
+      # symlinkJoin:
+      rm -f $dynamicLinksDir/*
 
-          for dynamicLibraryDir in $(echo "''${dynamicLibraryDirs[@]}" | tr ' ' '\n' | sort -u); do
-            echo "Linking $dynamicLibraryDir/*.dylib from $dynamicLinksDir"
-            find "$dynamicLibraryDir" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
-          done
+      dynamicLibraryDirs=()
 
-          for f in $packageConfDir/*.conf; do
-            # Initially, $f is a symlink to a read-only file in one of the inputs
-            # (as a result of this symlinkJoin derivation).
-            # Replace it with a copy whose dynamic-library-dirs points to
-            # $dynamicLinksDir
-            cp $f $f-tmp
-            rm $f
-            sed "N;s,dynamic-library-dirs:\s*.*\n,dynamic-library-dirs: $dynamicLinksDir\n," $f-tmp > $f
-            rm $f-tmp
-          done
-        ''
-      )
-      + ''
-        ${lib.optionalString hasLibraries ''
-          # GHC 8.10 changes.
-          # Instead of replacing package.cache[.lock] with the new file,
-          # ghc-pkg is now trying to open the file.  These file are symlink
-          # to another nix derivation, so they are not writable.  Removing
-          # them allow the correct behavior of ghc-pkg recache
-          # See: https://github.com/NixOS/nixpkgs/issues/79441
-          rm ${packageCfgDir}/package.cache.lock
-          rm ${packageCfgDir}/package.cache
+      for pkg in $($out/bin/ghc-pkg list --simple-output); do
+        dynamicLibraryDirs+=($($out/bin/ghc-pkg --simple-output field "$pkg" dynamic-library-dirs))
+      done
 
-          $out/bin/${ghcCommand}-pkg recache
-        ''}
-        ${
-          # ghcjs will read the ghc_libdir file when resolving plugins.
-          lib.optionalString (isGhcjs && ghcLibdir != null) ''
-            mkdir -p "${libDir}"
-            rm -f "${libDir}/ghc_libdir"
-            printf '%s' '${ghcLibdir}' > "${libDir}/ghc_libdir"
-          ''
-        }
-        $out/bin/${ghcCommand}-pkg check
-      ''
-      + postBuild;
+      for dynamicLibraryDir in $(echo "''${dynamicLibraryDirs[@]}" | tr ' ' '\n' | sort -u); do
+        echo "Linking $dynamicLibraryDir/*.dylib from $dynamicLinksDir"
+        find "$dynamicLibraryDir" -name '*.dylib' -exec ln -s {} "$dynamicLinksDir" \;
+      done
+
+      for f in $packageConfDir/*.conf; do
+        # Initially, $f is a symlink to a read-only file in one of the inputs
+        # (as a result of this symlinkJoin derivation).
+        # Replace it with a copy whose dynamic-library-dirs points to
+        # $dynamicLinksDir
+        cp $f $f-tmp
+        rm $f
+        sed "N;s,dynamic-library-dirs:\s*.*\n,dynamic-library-dirs: $dynamicLinksDir\n," $f-tmp > $f
+        rm $f-tmp
+      done
+    '')
+    + ''
+      ${lib.optionalString hasLibraries ''
+        # GHC 8.10 changes.
+        # Instead of replacing package.cache[.lock] with the new file,
+        # ghc-pkg is now trying to open the file.  These file are symlink
+        # to another nix derivation, so they are not writable.  Removing
+        # them allow the correct behavior of ghc-pkg recache
+        # See: https://github.com/NixOS/nixpkgs/issues/79441
+        rm ${packageCfgDir}/package.cache.lock
+        rm ${packageCfgDir}/package.cache
+
+        $out/bin/${ghcCommand}-pkg recache
+      ''}
+      $out/bin/${ghcCommand}-pkg check
+    ''
+    + postBuild;
     preferLocalBuild = true;
     passthru = {
-      inherit (ghc) version meta;
+      inherit (ghc) version targetPrefix;
 
       hoogle = hoogleWithPackages';
 
@@ -216,5 +202,10 @@ else
 
           Also note that withLLVM has been renamed to useLLVM for consistency with
           the GHC Nix expressions.'';
+    };
+    pos = __curPos;
+    meta = ghc.meta // {
+      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
+      broken = useLLVM;
     };
   }

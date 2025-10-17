@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Sd-bus library, extracted from systemd";
     mainProgram = "basuctl";
     license = lib.licenses.lgpl21Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

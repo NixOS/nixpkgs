@@ -22,6 +22,7 @@
   qtmultimedia,
   discord-rpc,
   yajl,
+  withDiscordRpc ? false,
 }:
 
 let
@@ -98,8 +99,8 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     yajl
-    discord-rpc
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
@@ -109,58 +110,61 @@ stdenv.mkDerivation rec {
   WITH_FONTS = "NO";
   WITH_UPDATER = "NO";
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir -pv $out/lib
-      cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
-      mkdir -pv $out/share/mudlet
-      cp -r ../src/mudlet-lua/lua $out/share/mudlet/
+    mkdir -pv $out/lib
+    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
+    mkdir -pv $out/share/mudlet
+    cp -r ../src/mudlet-lua/lua $out/share/mudlet/
 
-      mkdir -pv $out/share/pixmaps
-      cp -r ../mudlet.png $out/share/pixmaps/
+    mkdir -pv $out/share/pixmaps
+    cp -r ../mudlet.png $out/share/pixmaps/
 
-      cp -r ../translations $out/share/
+    cp -r ../translations $out/share/
 
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      cp -r src/mudlet.app/ $out/Applications/mudlet.app
-      mv $out/Applications/mudlet.app/Contents/MacOS/mudlet $out/Applications/mudlet.app/Contents/MacOS/mudlet-unwrapped
-      makeQtWrapper $out/Applications/Mudlet.app/Contents/MacOS/mudlet-unwrapped $out/Applications/Mudlet.app/Contents/MacOS/mudlet \
-        --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-        --prefix LUA_PATH : "$NIX_LUA_PATH" \
-        --prefix DYLD_LIBRARY_PATH : "${
-          lib.makeLibraryPath [
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    cp -r src/mudlet.app/ $out/Applications/mudlet.app
+    mv $out/Applications/mudlet.app/Contents/MacOS/mudlet $out/Applications/mudlet.app/Contents/MacOS/mudlet-unwrapped
+    makeQtWrapper $out/Applications/Mudlet.app/Contents/MacOS/mudlet-unwrapped $out/Applications/Mudlet.app/Contents/MacOS/mudlet \
+      --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
+      --prefix LUA_PATH : "$NIX_LUA_PATH" \
+      --prefix DYLD_LIBRARY_PATH : "${
+        lib.makeLibraryPath (
+          [
             libsForQt5.qtkeychain
-            discord-rpc
           ]
-        }:$out/lib" \
-        --chdir "$out";
+          ++ lib.optional withDiscordRpc discord-rpc
+        )
+      }:$out/lib" \
+      --chdir "$out";
 
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-      mkdir -pv $out/bin
-      cp src/mudlet $out/bin/mudlet-unwrapped
-      makeQtWrapper $out/bin/mudlet-unwrapped $out/bin/mudlet \
-        --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
-        --prefix LUA_PATH : "$NIX_LUA_PATH" \
-        --prefix LD_LIBRARY_PATH : "${
-          lib.makeLibraryPath [
+  ''
+  + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    mkdir -pv $out/bin
+    cp src/mudlet $out/bin/mudlet-unwrapped
+    makeQtWrapper $out/bin/mudlet-unwrapped $out/bin/mudlet \
+      --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
+      --prefix LUA_PATH : "$NIX_LUA_PATH" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath (
+          [
             libsForQt5.qtkeychain
-            discord-rpc
           ]
-        }" \
-        --chdir "$out";
+          ++ lib.optional withDiscordRpc discord-rpc
+        )
+      }" \
+      --chdir "$out";
 
-      mkdir -pv $out/share/applications
-      cp ../mudlet.desktop $out/share/applications/
+    mkdir -pv $out/share/applications
+    cp ../mudlet.desktop $out/share/applications/
 
-    ''
-    + ''
-      runHook postInstall
-    '';
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   meta = with lib; {
     description = "Crossplatform mud client";

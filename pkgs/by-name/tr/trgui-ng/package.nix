@@ -60,35 +60,33 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-TflzT1BNAciMcxcejrlmIOIjXc1tpm/zX0kjk+dpGiM=";
 
-  postPatch =
-    ''
-      cp ${dbip-country-lite}/share/dbip/dbip-country-lite.mmdb src-tauri/dbip.mmdb
+  postPatch = ''
+    cp ${dbip-country-lite}/share/dbip/dbip-country-lite.mmdb src-tauri/dbip.mmdb
 
-      # Copy pre-built frontend and remove `beforeBuildCommand` to build it
-      cp -r ${finalAttrs.passthru.frontend} dist/
-      substituteInPlace src-tauri/tauri.conf.json \
-        --replace-fail '"npm run webpack-prod"' '""'
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    '';
+    # Copy pre-built frontend and remove `beforeBuildCommand` to build it
+    cp -r ${finalAttrs.passthru.frontend} dist/
+    substituteInPlace src-tauri/tauri.conf.json \
+      --replace-fail '"npm run webpack-prod"' '""'
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+      --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+  '';
 
   nativeBuildInputs = [
     cargo-tauri.hook
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      glib
-      libayatana-appindicator
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    glib
+    libayatana-appindicator
+    webkitgtk_4_1
+  ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = "src-tauri";

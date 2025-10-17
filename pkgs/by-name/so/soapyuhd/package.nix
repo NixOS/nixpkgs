@@ -9,15 +9,16 @@
   soapysdr,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "soapyuhd";
-  version = "0.4.1";
+  version = "0.4.1-unstable-2025-10-05";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapyUHD";
-    rev = "soapy-uhd-${version}";
-    sha256 = "14rk9ap9ayks2ma6mygca08yfds9bgfmip8cvwl87l06hwhnlwhj";
+    # version that supports cmake 4
+    rev = "cf78b9ca3bddfc9263d2acb7e8afcb0036938163";
+    hash = "sha256-/hJ78dUL477gX3c2kV8kUknIk01PUf+ie1Gl7Ujq1Ac=";
   };
 
   nativeBuildInputs = [

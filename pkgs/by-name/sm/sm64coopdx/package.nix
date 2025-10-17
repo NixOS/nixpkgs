@@ -37,14 +37,16 @@ in
 # note: there is a generic builder in pkgs/games/sm64ex/generic.nix that is meant to help build sm64ex and its forks; however sm64coopdx has departed significantly enough in its build that it doesn't make sense to use that other than the baseRom derivation
 stdenv.mkDerivation (finalAttrs: {
   pname = "sm64coopdx";
-  version = "1.3.0";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "coop-deluxe";
     repo = "sm64coopdx";
-    rev = "v1.3"; # it seems coopdx has taken on some stylistic versioning...
-    hash = "sha256-ssbvNnBBxahzJRIX5Vhze+Nfh3ADoy+NrUIF2RZHye8=";
+    rev = "v1.3.2";
+    hash = "sha256-FHH3+pGowkT8asDmU9qxPNDKy4VPKlkA0X7e4gnX9KY=";
   };
+
+  patches = [ ./no-update-check.patch ];
 
   nativeBuildInputs = [ makeWrapper ];
 

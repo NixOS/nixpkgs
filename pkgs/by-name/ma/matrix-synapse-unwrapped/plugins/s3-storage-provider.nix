@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "matrix-synapse-s3-storage-provider";
-  version = "1.5.0";
+  version = "1.6.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "matrix-org";
     repo = "synapse-s3-storage-provider";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Nv8NkzOcUDX17N7Lyx/NT1vXztiRNaTYIAWNPHxgxJ4=";
+    hash = "sha256-aeacw6Fpv4zFhZI4LdsJiV2pcOAMv3aV5CicnwYRxw8=";
   };
 
   postPatch = ''
@@ -34,16 +34,15 @@ buildPythonPackage rec {
     matrix-synapse-unwrapped
   ];
 
-  propagatedBuildInputs =
-    [
-      boto3
-      humanize
-      tqdm
-      twisted
-      psycopg2
-    ]
-    # For the s3_media_upload script
-    ++ matrix-synapse-unwrapped.propagatedBuildInputs;
+  propagatedBuildInputs = [
+    boto3
+    humanize
+    tqdm
+    twisted
+    psycopg2
+  ]
+  # For the s3_media_upload script
+  ++ matrix-synapse-unwrapped.propagatedBuildInputs;
 
   # Tests need network access
   doCheck = false;
@@ -58,6 +57,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/matrix-org/synapse-s3-storage-provider";
     changelog = "https://github.com/matrix-org/synapse-s3-storage-provider/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

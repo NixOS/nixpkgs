@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "django-storages";
-  version = "1.14.5";
+  version = "1.14.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
     owner = "jschneier";
     repo = "django-storages";
     tag = version;
-    hash = "sha256-KWYDcHDLIoS42RqtD66tC/gKoeOBuYyT6jVOJ+cPYYU=";
+    hash = "sha256-br7JGPf5EAAl0Qg7b+XaksxNPCTJsSS8HLgvA0wZmeI=";
   };
 
   patches = [
@@ -62,7 +62,8 @@ buildPythonPackage rec {
     moto
     pytestCheckHook
     rsa
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   checkInputs = [ pynacl ];
 

@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "cairosvg/test_api.py" ];
+  enabledTestPaths = [ "cairosvg/test_api.py" ];
 
   pythonImportsCheck = [ "cairosvg" ];
 

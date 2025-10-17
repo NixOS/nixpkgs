@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.3.1";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${version}";
-    hash = "sha256-xnlFt6K7SOpeT4yXxLnep5NvNaP6REteUhBpcT7ipN0=";
+    hash = "sha256-jnmfCYFtlfnFRMrNHfoiXgL8bael7IKmhuZCj+AOuz8=";
   };
 
   build-system = [ poetry-core ];
@@ -55,7 +55,8 @@ buildPythonPackage rec {
     pytestCheckHook
     syrupy
     typeguard
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "renault_api" ];
 

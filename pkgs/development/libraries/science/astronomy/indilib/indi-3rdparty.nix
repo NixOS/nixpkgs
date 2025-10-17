@@ -47,7 +47,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-zd88QHYhqxAQlzozXZMKXCFWKYqvGsPHhNxmkdexOOE=";
+    hash = "sha256-+WBQdu1iWleHf6xC4SK69y505wqZ36IUM4xnh1fnc6s=";
   };
 
   buildIndi3rdParty =
@@ -71,25 +71,25 @@ let
 
         sourceRoot = "${src.name}/${pname}";
 
-        cmakeFlags =
-          [
-            "-DCMAKE_INSTALL_LIBDIR=lib"
-            "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DRULES_INSTALL_DIR=lib/udev/rules.d"
-            "-DINDI_DATA_DIR=share/indi/"
-          ]
-          ++ lib.optional doCheck [
-            "-DINDI_BUILD_UNITTESTS=ON"
-            "-DINDI_BUILD_INTEGTESTS=ON"
-          ]
-          ++ cmakeFlags;
+        cmakeFlags = [
+          "-DCMAKE_INSTALL_LIBDIR=lib"
+          "-DUDEVRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DRULES_INSTALL_DIR=lib/udev/rules.d"
+          "-DINDI_DATA_DIR=share/indi/"
+        ]
+        ++ lib.optional doCheck [
+          "-DINDI_BUILD_UNITTESTS=ON"
+          "-DINDI_BUILD_INTEGTESTS=ON"
+        ]
+        ++ cmakeFlags;
 
         nativeBuildInputs = [
           cmake
           ninja
           pkg-config
           udevCheckHook
-        ] ++ nativeBuildInputs;
+        ]
+        ++ nativeBuildInputs;
 
         checkInputs = [ gtest ];
 
@@ -116,7 +116,6 @@ let
             changelog = "https://github.com/indilib/indi-3rdparty/releases/tag/v${version}";
             license = licenses.lgpl2Plus;
             maintainers = with maintainers; [
-              hjones2199
               sheepforce
               returntoreality
             ];
@@ -552,6 +551,14 @@ in
   indi-astarbox = buildIndi3rdParty {
     pname = "indi-astarbox";
     buildInputs = [ indilib ];
+    # TODO patch already upstream, remove with version > 2.1.5.1
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/indilib/indi-3rdparty/commit/c347000ec227a5ef98911aab34c7b08a91509cba.patch";
+        hash = "sha256-M3b4ySoGJRpfNmBaagjDaeEPKqwaVgRUWaQY626SGBI=";
+        stripLen = 1;
+      })
+    ];
   };
 
   indi-astroasis = buildIndi3rdParty {
@@ -688,6 +695,7 @@ in
   indi-fli = buildIndi3rdParty {
     pname = "indi-fli";
     buildInputs = [
+      libusb1
       cfitsio
       indilib
       zlib
@@ -705,6 +713,15 @@ in
       glib
       zlib
     ];
+    # TODO patch already upstream, remove with version > 2.1.5.1
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/indilib/indi-3rdparty/commit/c33c08b50093698e2aa73d73783d96f85df488a9.patch";
+        hash = "sha256-EQ2G9gTexf9FESCAR28f2cwzvH4TOAA8bvyJCxFv/E8=";
+        stripLen = 1;
+      })
+    ];
+
   };
 
   indi-gphoto = buildIndi3rdParty {
@@ -972,14 +989,6 @@ in
   indi-shelyak = buildIndi3rdParty {
     pname = "indi-shelyak";
     buildInputs = [ indilib ];
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/indilib/indi-3rdparty/commit/db8106a9a03e0cfb700e02841d46f8b97b5513e0.patch";
-        hash = "sha256-JJatmu/dxFEni6CdR6QUn7+EiPe18EwE7OmrCT8Nk2c=";
-        stripLen = 1;
-      })
-    ];
   };
 
   indi-starbook = buildIndi3rdParty {

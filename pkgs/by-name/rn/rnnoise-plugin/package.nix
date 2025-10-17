@@ -38,17 +38,16 @@ stdenv.mkDerivation rec {
     ./disable-ubsan.patch
   ];
 
-  buildInputs =
-    [
-      freetype
-      gtk3-x11
-      pcre
-      xorg.libX11
-      xorg.libXrandr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      webkitgtk_4_1
-    ];
+  buildInputs = [
+    freetype
+    gtk3-x11
+    pcre
+    xorg.libX11
+    xorg.libXrandr
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    webkitgtk_4_1
+  ];
 
   # Move each plugin into a dedicated output, leaving a symlink in $out for backwards compatibility
   postInstall = ''

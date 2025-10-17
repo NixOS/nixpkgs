@@ -58,45 +58,43 @@ stdenv.mkDerivation rec {
     zlib
     opensm
   ];
-  buildInputs =
-    [
-      numactl
-      libxml2
-      perl
-      openssh
-      hwloc
-    ]
-    ++ lib.optionals (network == "infiniband") [
-      rdma-core
-      opensm
-    ]
-    ++ lib.optionals (network == "omnipath") [
-      libpsm2
-      libfabric
-    ]
-    ++ lib.optional useSlurm slurm;
+  buildInputs = [
+    numactl
+    libxml2
+    perl
+    openssh
+    hwloc
+  ]
+  ++ lib.optionals (network == "infiniband") [
+    rdma-core
+    opensm
+  ]
+  ++ lib.optionals (network == "omnipath") [
+    libpsm2
+    libfabric
+  ]
+  ++ lib.optional useSlurm slurm;
 
-  configureFlags =
-    [
-      "--with-pm=hydra"
-      "--enable-fortran=all"
-      "--enable-cxx"
-      "--enable-threads=multiple"
-      "--enable-hybrid"
-      "--enable-shared"
-      "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
-    ]
-    ++ lib.optional useSlurm "--with-pm=slurm"
-    ++ lib.optional (network == "ethernet") "--with-device=ch3:sock"
-    ++ lib.optionals (network == "infiniband") [
-      "--with-device=ch3:mrail"
-      "--with-rdma=gen2"
-      "--disable-ibv-dlopen"
-    ]
-    ++ lib.optionals (network == "omnipath") [
-      "--with-device=ch3:psm"
-      "--with-psm2=${libpsm2}"
-    ];
+  configureFlags = [
+    "--with-pm=hydra"
+    "--enable-fortran=all"
+    "--enable-cxx"
+    "--enable-threads=multiple"
+    "--enable-hybrid"
+    "--enable-shared"
+    "FFLAGS=-fallow-argument-mismatch" # fix build with gfortran 10
+  ]
+  ++ lib.optional useSlurm "--with-pm=slurm"
+  ++ lib.optional (network == "ethernet") "--with-device=ch3:sock"
+  ++ lib.optionals (network == "infiniband") [
+    "--with-device=ch3:mrail"
+    "--with-rdma=gen2"
+    "--disable-ibv-dlopen"
+  ]
+  ++ lib.optionals (network == "omnipath") [
+    "--with-device=ch3:psm"
+    "--with-psm2=${libpsm2}"
+  ];
 
   doCheck = true;
 

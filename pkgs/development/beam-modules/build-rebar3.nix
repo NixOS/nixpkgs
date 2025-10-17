@@ -21,13 +21,15 @@
   buildPhase ? null,
   configurePhase ? null,
   meta ? { },
-  enableDebugInfo ? false,
+  erlangCompilerOptions ? [ ],
+  # Deterministic Erlang builds remove full system paths from debug information
+  # among other things to keep builds more reproducible. See their docs for more:
+  # https://www.erlang.org/doc/man/compile
+  erlangDeterministicBuilds ? true,
   ...
 }@attrs:
 
 let
-  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
-
   rebar3 = rebar3WithPlugins {
     plugins = buildPlugins;
   };
@@ -67,6 +69,12 @@ let
 
         inherit src;
 
+        ERL_COMPILER_OPTIONS =
+          let
+            options = erlangCompilerOptions ++ lib.optionals erlangDeterministicBuilds [ "deterministic" ];
+          in
+          "[${lib.concatStringsSep "," options}]";
+
         # stripping does not have any effect on beam files
         # it is however needed for dependencies with NIFs
         # false is the default but we keep this for readability
@@ -76,15 +84,14 @@ let
           addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
         '';
 
-        postPatch =
-          ''
-            rm -f rebar rebar3
-          ''
-          + postPatch;
+        postPatch = ''
+          rm -f rebar rebar3
+        ''
+        + postPatch;
 
         buildPhase = ''
           runHook preBuild
-          HOME=. rebar3 bare compile -path ""
+          HOME=. rebar3 bare compile --paths "."
           runHook postBuild
         '';
 
@@ -101,7 +108,8 @@ let
 
         meta = {
           inherit (erlang.meta) platforms;
-        } // meta;
+        }
+        // meta;
 
         passthru = {
           packageName = name;

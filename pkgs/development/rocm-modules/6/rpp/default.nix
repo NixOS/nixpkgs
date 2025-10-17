@@ -29,25 +29,24 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rpp";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-METwagek17/DdZGaOTQqvyU6xGt7OBMLHk4YM4KmgtA=";
+    hash = "sha256-rccVjSrOVIe4ZDtloCoCCI3u9UIcUqdirHIzS7ffAas=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      rocm-cmake
-      clr
-    ]
-    ++ lib.optionals buildDocs [
-      rocm-docs-core
-      python3Packages.python
-    ];
+  nativeBuildInputs = [
+    cmake
+    rocm-cmake
+    clr
+  ]
+  ++ lib.optionals buildDocs [
+    rocm-docs-core
+    python3Packages.python
+  ];
 
   buildInputs = [
     half
@@ -55,27 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     boost
   ];
 
-  CFLAGS = "-I${openmp.dev}/include";
-  CXXFLAGS = "-I${openmp.dev}/include";
-  cmakeFlags =
-    [
-      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
-      "-DROCM_PATH=${clr}"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals (!useOpenCL && !useCPU) [
-      "-DBACKEND=HIP"
-    ]
-    ++ lib.optionals (useOpenCL && !useCPU) [
-      "-DBACKEND=OCL"
-    ]
-    ++ lib.optionals useCPU [
-      "-DBACKEND=CPU"
-    ];
+  cmakeFlags = [
+    "-DROCM_PATH=${clr}"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals (!useOpenCL && !useCPU) [
+    "-DBACKEND=HIP"
+  ]
+  ++ lib.optionals (useOpenCL && !useCPU) [
+    "-DBACKEND=OCL"
+  ]
+  ++ lib.optionals useCPU [
+    "-DBACKEND=CPU"
+  ];
 
   postPatch = lib.optionalString (!useOpenCL && !useCPU) ''
     # Bad path

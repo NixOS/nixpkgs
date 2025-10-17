@@ -8,17 +8,18 @@
   glew,
   gtk3,
   xorg,
+  nix-update-script,
 }:
 
 buildDotnetModule rec {
   pname = "libation";
-  version = "12.3.1";
+  version = "12.5.4";
 
   src = fetchFromGitHub {
     owner = "rmcrackan";
     repo = "Libation";
     tag = "v${version}";
-    hash = "sha256-jir1r78HbAhlOiCj6pSw0+o4V9ceCkJQWnKtt6VzLDY=";
+    hash = "sha256-W2wCtXcvft450A2cdLPbOFjHrQahSbTEbfyoSXUtH/E=";
   };
 
   sourceRoot = "${src.name}/Source";
@@ -64,19 +65,12 @@ buildDotnetModule rec {
   dontDotnetFixup = true;
 
   preFixup = ''
-    # remove binaries for other platform, like upstream does
-    pushd $out/lib/libation
-    rm -f *.x86.dll *.x64.dll
-    ${lib.optionalString (stdenv.system != "x86_64-linux") "rm -f *.x64.so"}
-    ${lib.optionalString (stdenv.system != "aarch64-linux") "rm -f *.arm64.so"}
-    ${lib.optionalString (stdenv.system != "x86_64-darwin") "rm -f *.x64.dylib"}
-    ${lib.optionalString (stdenv.system != "aarch64-darwin") "rm -f *.arm64.dylib"}
-    popd
-
     wrapDotnetProgram $out/lib/libation/Libation $out/bin/libation
     wrapDotnetProgram $out/lib/libation/LibationCli $out/bin/libationcli
     wrapDotnetProgram $out/lib/libation/Hangover $out/bin/hangover
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/rmcrackan/Libation/releases/tag/v${version}";

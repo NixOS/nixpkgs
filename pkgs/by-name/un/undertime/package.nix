@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     changelog = "https://gitlab.com/anarcat/undertime/-/raw/${version}/debian/changelog";
-    description = "pick a meeting time across timezones from the commandline";
+    description = "Pick a meeting time across timezones from the commandline";
     homepage = "https://gitlab.com/anarcat/undertime";
     longDescription = ''
       Undertime draws a simple 24 hour table of matching times across

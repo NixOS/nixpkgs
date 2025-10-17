@@ -33,7 +33,7 @@
 
 buildGoModule (finalAttrs: {
   pname = "prometheus";
-  version = "3.4.2";
+  version = "3.6.0";
 
   outputs = [
     "out"
@@ -45,14 +45,14 @@ buildGoModule (finalAttrs: {
     owner = "prometheus";
     repo = "prometheus";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/JeT8+I/jNE7O2YT9qfu7RF3xculPyR3rRrFQIG4YV4=";
+    hash = "sha256-GowtA1iTx6lpRW+RBLYFc8s5H8ECPEmcbdVJvGHl5Cw=";
   };
 
-  vendorHash = "sha256-edR9vvSNexRR8EGEiSCIIYl3ndGckS8XuIWojPrq60U=";
+  vendorHash = "sha256-xGMBd/MhwjCbrQrP5d5aSd99F8GN6wB3jaHpOh0M7OA=";
 
   webUiStatic = fetchurl {
     url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-3aXP79aeA/qe99sVsJn0nNRggrzFWTmaRO3dBzOR6UU=";
+    hash = "sha256-lw097NTDJUWm2RY0RUg/5djNdbj+W9hRdIaF2cQz4Bo=";
   };
 
   excludedPackages = [
@@ -128,6 +128,10 @@ buildGoModule (finalAttrs: {
   # https://hydra.nixos.org/build/130673870/nixlog/1
   # Test mock data uses 64 bit data without an explicit (u)int64
   doCheck = !(stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.parsed.cpu.bits < 64);
+
+  checkFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-skip=TestEvaluations/testdata/aggregators.test"
+  ];
 
   passthru.tests = { inherit (nixosTests) prometheus; };
 

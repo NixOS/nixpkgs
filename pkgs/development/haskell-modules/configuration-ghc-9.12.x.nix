@@ -5,27 +5,17 @@ self: super:
 let
   inherit (pkgs) lib;
 
-  versionAtMost = a: b: lib.versionAtLeast b a;
-
-  warnVersion =
-    predicate: ver: pkg:
-    let
-      pname = pkg.pname;
-    in
-    lib.warnIf (predicate ver
-      super.${pname}.version
-    ) "override for haskell.packages.ghc912.${pname} may no longer be needed" pkg;
-
-  warnAfterVersion = warnVersion lib.versionOlder;
-  warnFromVersion = warnVersion versionAtMost;
+  warnAfterVersion =
+    ver: pkg:
+    lib.warnIf (lib.versionOlder ver
+      super.${pkg.pname}.version
+    ) "override for haskell.packages.ghc912.${pkg.pname} may no longer be needed" pkg;
 
 in
 
 with haskellLib;
 
 {
-  llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
-
   # Disable GHC core libraries
   array = null;
   base = null;
@@ -81,44 +71,21 @@ with haskellLib;
   # Hand pick versions that are compatible with ghc 9.12 and base 4.21
   #
 
-  extra = doDistribute self.extra_1_8;
-  htree = doDistribute self.htree_0_2_0_0;
-  tagged = doDistribute self.tagged_0_8_9;
-  time-compat = doDistribute self.time-compat_1_9_8;
   extensions = doDistribute self.extensions_0_1_0_3;
-  doctest = doDistribute self.doctest_0_24_0;
-  ghc-syntax-highlighter = doDistribute self.ghc-syntax-highlighter_0_0_13_0;
-  ghc-lib = doDistribute self.ghc-lib_9_12_2_20250421;
   ghc-exactprint = doDistribute self.ghc-exactprint_1_12_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_12_2_20250421;
-  ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_12_0_0;
-  hlint = doDistribute self.hlint_3_10;
-  fourmolu = doDistribute self.fourmolu_0_18_0_0;
-  ormolu = doDistribute self.ormolu_0_8_0_0;
-  apply-refact = doDistribute self.apply-refact_0_15_0_0;
 
   #
   # Jailbreaks
   #
 
-  lucid = doJailbreak super.lucid; # base <4.21
-  extensions_0_1_0_3 = doJailbreak super.extensions_0_1_0_3; # hedgehog >=1.0 && <1.5, hspec-hedgehog >=0.0.1 && <0.2
-  hie-compat = doJailbreak super.hie-compat; # base <4.21
-  hiedb = doJailbreak super.hiedb; # base >=4.12 && <4.21, ghc >=8.6 && <9.11
-  ed25519 = doJailbreak super.ed25519; # https://github.com/thoughtpolice/hs-ed25519/issues/39
-  ghc-trace-events = doJailbreak super.ghc-trace-events; # base <4.21
-  time-compat_1_9_8 = doJailbreak super.time-compat_1_9_8; # too strict lower bound on QuickCheck
+  large-generics = doJailbreak super.large-generics; # base <4.20
   cpphs = overrideCabal (drv: {
     # jail break manually the conditional dependencies
     postPatch = ''
       sed -i 's/time >=1.5 \&\& <1.13/time >=1.5 \&\& <=1.14/g' cpphs.cabal
     '';
   }) super.cpphs;
-  vector = doJailbreak super.vector; # doctest >=0.15 && <0.24
-  binary-instances = doJailbreak super.binary-instances; # base >=4.6.0.1 && <4.21, tagged >=0.8.8 && <0.8.9
   cabal-install-parsers = doJailbreak super.cabal-install-parsers; # base, Cabal-syntax, etc.
-  http-api-data = doJailbreak super.http-api-data; # base < 4.21
-  servant = doJailbreak super.servant; # base < 4.21
   ghc-exactprint_1_12_0_0 = addBuildDepends [
     # somehow buildDepends was missing
     self.Diff
@@ -128,7 +95,11 @@ with haskellLib;
     self.syb
     self.HUnit
   ] super.ghc-exactprint_1_12_0_0;
-  co-log-core = doJailbreak super.co-log-core; # doctest >=0.16.0 && <0.24
+  timezone-series = doJailbreak super.timezone-series; # time <1.14
+  timezone-olson = doJailbreak super.timezone-olson; # time <1.14
+  cabal-plan = doJailbreak super.cabal-plan; # base <4.21
+  dbus = doJailbreak super.dbus; # template-haskell <2.23
+  xmobar = doJailbreak super.xmobar; # base <4.21
 
   #
   # Test suite issues
@@ -138,25 +109,14 @@ with haskellLib;
 
   relude = dontCheck super.relude;
 
-  doctest_0_24_0 = overrideCabal (drv: {
-    testFlags = drv.testFlags or [ ] ++ [
-      # These tests require cabal-install (would cause infinite recursion)
-      "--skip=/Cabal.Options"
-      "--skip=/Cabal.Paths/paths"
-      "--skip=/Cabal.ReplOptions" # >= 0.23
-    ];
-  }) super.doctest_0_24_0;
-
   # https://gitlab.haskell.org/ghc/ghc/-/issues/25930
   generic-lens = dontCheck super.generic-lens;
 
   # Cabal 3.14 regression (incorrect datadir in tests): https://github.com/haskell/cabal/issues/10717
   alex = overrideCabal (drv: {
-    preCheck =
-      drv.preCheck or ""
-      + ''
-        export alex_datadir="$(pwd)/data"
-      '';
+    preCheck = drv.preCheck or "" + ''
+      export alex_datadir="$(pwd)/data"
+    '';
   }) super.alex;
 
   # https://github.com/sjakobi/newtype-generics/pull/28/files
@@ -168,39 +128,4 @@ with haskellLib;
   interpolate =
     assert super.ghc.version == "9.12.2";
     dontCheck super.interpolate;
-
-  #
-  # Multiple issues
-  #
-
-  fourmolu_0_18_0_0 = dontCheck (
-    super.fourmolu_0_18_0_0.override {
-      # Diff >=1 && <2
-      Diff = super.Diff_1_0_2;
-    }
-  );
-
-  doctest-parallel = overrideCabal (drv: {
-    patches = drv.patches or [ ] ++ [
-      (pkgs.fetchpatch {
-        name = "doctest-0.23.0-ghc-9.12.patch";
-        url = "https://github.com/martijnbastiaan/doctest-parallel/commit/d3df7aa5d223f3daeb676c8a7efe093ee743d54f.patch";
-        sha256 = "sha256-92CtqBCulfOTjLAeC205cIrqL/2CBP1YFLijTVcTD2M=";
-        includes = [ "src/Test/DocTest/Helpers.hs" ];
-      })
-    ];
-  }) (dontCheck (doJailbreak super.doctest-parallel)); # Cabal >=2.4 && <3.13
-
-  haskell-language-server = disableCabalFlag "retrie" (
-    disableCabalFlag "stylishhaskel" (
-      super.haskell-language-server.override {
-        stylish-haskell = null;
-        floskell = null;
-        retrie = null;
-      }
-    )
-  );
-
-  # Allow Cabal 3.14
-  hpack = doDistribute self.hpack_0_38_0;
 }

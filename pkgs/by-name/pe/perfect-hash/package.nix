@@ -6,7 +6,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "perfect-hash";
   version = "0.4.1";
-  format = "setuptools";
+  pyproject = true;
 
   # Archive on pypi does not contain examples, which are very helpful to
   # understand how to use this program, so we use git source.
@@ -16,6 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     rev = version;
     sha256 = "0gkc3n613hl0q4jknrh2nm1n96j97p36q9jjgarb9d8yii9q7792";
   };
+
+  build-system = with python3.pkgs; [ setuptools ];
 
   postInstall = ''
     mkdir -p $out/share/doc/perfect-hash

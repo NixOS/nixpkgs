@@ -18,13 +18,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nero-umu";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "SeongGino";
     repo = "Nero-umu";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7Wmha/WsSmbEgD2Dw2izSRzw8ldIrWcRIdUMp2okHWY=";
+    hash = "sha256-Cx2hN5LV7/EOXnn9RfIsj9OmnlM1oMZB7a535/hwTas=";
   };
 
   #Replace quazip git submodule with pre-packaged quazip

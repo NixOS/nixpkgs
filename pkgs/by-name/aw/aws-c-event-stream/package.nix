@@ -15,13 +15,13 @@
 stdenv.mkDerivation rec {
   pname = "aws-c-event-stream";
   # nixpkgs-update: no auto update
-  version = "0.5.0";
+  version = "0.5.7";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-event-stream";
     rev = "v${version}";
-    hash = "sha256-lg1qS/u5Fi8nt/tv2ekd8dgQ7rlrF3DrRxqidAoEywY=";
+    hash = "sha256-JvjUrIj1bh5WZEzkauLSLIolxrT8CKIMjO7p1c35XZI=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     aws-c-io
     aws-checksums
     s2n-tls
-  ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS:BOOL=ON"

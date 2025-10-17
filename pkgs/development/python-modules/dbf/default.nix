@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "dbf";
-  version = "0.99.10";
+  version = "0.99.11";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UAK7eleaUwLT22Nzjv4+nSUy6lSm9jAXbTUmQW/+AKI=";
+    hash = "sha256-IWnAUlLA776JfzRvBoMybsJYVL6rHQxkMN9ukDpXsxU=";
   };
 
   # Workaround for https://github.com/ethanfurman/dbf/issues/48

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq git pnpm_10 sd
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq git nodejs pnpm sd
 # shellcheck shell=bash
 set -euo pipefail
 nixpkgs="$(pwd)"
@@ -23,7 +23,7 @@ generate_patch() {
     pnpm patch-commit node_modules/.pnpm_patches/next*
 
     git add -A .
-    git diff -p --staged > ../prerender_cache_path.patch
+    git diff -p --staged --no-ext-diff > ../prerender_cache_path.patch
 
     popd
     rm -rf src

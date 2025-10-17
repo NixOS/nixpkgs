@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blisp";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "pine64";
     repo = "blisp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cN35VLbdQFA3KTZ8PxgpbsLGXqfFhw5eh3nEBRZqAm4=";
+    hash = "sha256-qjZ5BNQR57J78Y6MT9I388OCLOiYTevPJ2btgmtkpJw=";
   };
 
   nativeBuildInputs = [

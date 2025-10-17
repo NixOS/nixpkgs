@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   mkKdeDerivation,
   qtsvg,
   qttools,
@@ -17,15 +16,6 @@
 let
   unwrapped = mkKdeDerivation {
     pname = "kirigami";
-
-    # Backport patch recommended by upstream
-    # FIXME: remove in next update
-    patches = [
-      (fetchpatch {
-        url = "https://invent.kde.org/frameworks/kirigami/-/commit/21788be688de90d4f12edb9f45967a481801bd5e.patch";
-        hash = "sha256-BNp1Sc0qSXBJkyKSYW6sq0s2yN959iwnSxaZtOTmaNc=";
-      })
-    ];
 
     extraNativeBuildInputs = [
       qtsvg

@@ -7,17 +7,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dix";
-  version = "1.1.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
-    owner = "bloxx12";
+    owner = "faukah";
     repo = "dix";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CCHWxQjronLhyt5MB2bb2vgmOgvjYaIr2HNbmUmT+gw=";
+    hash = "sha256-X+yFRLorfq9jvyMCvVCYUCh1pVN207XqTDr2FM1C+QE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-/3uL++0IEI2Yw3xrkS0UQmDZX3p0tQCqMyuUCcol1A0=";
+  cargoHash = "sha256-Y9cTncgTfv+mr5izioLF3wb6ZRBWe0eKAZ2iqcsf/Tk=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -25,11 +24,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://github.com/bloxx12/dix";
+    homepage = "https://github.com/faukah/dix";
     description = "Blazingly fast tool to diff Nix related things";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      bloxx12
+      faukah
       NotAShelf
     ];
     mainProgram = "dix";

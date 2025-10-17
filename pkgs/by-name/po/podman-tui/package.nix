@@ -4,17 +4,18 @@
   fetchFromGitHub,
   buildGoModule,
   testers,
+  nix-update-script,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "podman-tui";
-  version = "1.6.1";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-U+oQUdqOhF6p52bEvMBqoxn4Z5WexsYe97XFOEMSFpk=";
+    hash = "sha256-vE2GG7lDGORTuziNSoKJWNKGhskcGuEh6U2KHrGu0JQ=";
   };
 
   vendorHash = null;
@@ -24,7 +25,8 @@ buildGoModule (finalAttrs: {
   tags = [
     "containers_image_openpgp"
     "remote"
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
 
   ldflags = [
     "-s"
@@ -47,11 +49,13 @@ buildGoModule (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://github.com/containers/podman-tui";
     description = "Podman Terminal UI";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [ iedame ];
     mainProgram = "podman-tui";
   };
 })

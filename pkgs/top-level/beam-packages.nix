@@ -2,7 +2,6 @@
   lib,
   beam,
   callPackage,
-  wxGTK32,
   stdenv,
   wxSupport ? true,
   systemd,
@@ -17,7 +16,7 @@ in
 {
   beamLib = callPackage ../development/beam-modules/lib.nix { };
 
-  latestVersion = "erlang_27";
+  latestVersion = "erlang_28";
 
   # Each
   interpreters = {
@@ -29,20 +28,14 @@ in
     # Three versions are supported according to https://github.com/erlang/otp/security
 
     erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
       inherit wxSupport systemdSupport;
     };
 
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
       inherit wxSupport systemdSupport;
     };
 
     erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
       inherit wxSupport systemdSupport;
     };
 
@@ -56,10 +49,8 @@ in
       elixir_1_17
       elixir_1_16
       elixir_1_15
-      elixir_1_14
       elixir-ls
       lfe
-      lfe_2_1
       ;
   };
 
@@ -74,6 +65,4 @@ in
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
   };
-
-  __attrsFailEvaluation = true;
 }

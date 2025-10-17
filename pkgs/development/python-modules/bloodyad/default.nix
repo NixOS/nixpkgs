@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.20";
+  version = "2.1.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "CravateRouge";
     repo = "bloodyAD";
     tag = "v${version}";
-    hash = "sha256-mPomYeGuTbj5cKR+/null7EIjuSVsNbKqnPIqAOkZQY=";
+    hash = "sha256-9yzKYSEmaPMv6AWhgr4UPPEx8s75Pg/hwqJnV29WocM=";
   };
 
   pythonRelaxDeps = [ "cryptography" ];

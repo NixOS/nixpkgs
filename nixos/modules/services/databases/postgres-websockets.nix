@@ -174,7 +174,8 @@ in
         CacheDirectoryMode = "0700";
         LoadCredential = [
           "jwt_secret:${cfg.jwtSecretFile}"
-        ] ++ lib.optional (cfg.pgpassFile != null) "pgpass:${cfg.pgpassFile}";
+        ]
+        ++ lib.optional (cfg.pgpassFile != null) "pgpass:${cfg.pgpassFile}";
         Restart = "always";
         User = "postgres-websockets";
 

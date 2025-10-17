@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "fuse-7z-ng";
-  version = "unstable-2014-06-08";
+  version = "0-unstable-2014-06-08";
 
   src = fetchFromGitHub {
     owner = "kedazo";

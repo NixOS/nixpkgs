@@ -51,27 +51,25 @@ stdenv.mkDerivation (finalAttrs: {
     ./CVE-2023-47997.patch
   ];
 
-  postPatch =
-    ''
-      # To support cross compilation, use the correct `pkg-config`.
-      substituteInPlace Makefile.fip \
-        --replace "pkg-config" "$PKG_CONFIG"
-      substituteInPlace Makefile.gnu \
-        --replace "pkg-config" "$PKG_CONFIG"
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-      # Upstream Makefile hardcodes i386 and x86_64 architectures only
-      substituteInPlace Makefile.osx --replace "x86_64" "arm64"
-    '';
+  postPatch = ''
+    # To support cross compilation, use the correct `pkg-config`.
+    substituteInPlace Makefile.fip \
+      --replace "pkg-config" "$PKG_CONFIG"
+    substituteInPlace Makefile.gnu \
+      --replace "pkg-config" "$PKG_CONFIG"
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+    # Upstream Makefile hardcodes i386 and x86_64 architectures only
+    substituteInPlace Makefile.osx --replace "x86_64" "arm64"
+  '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools
-      fixDarwinDylibNames
-    ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     libtiff
@@ -94,14 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
   INCDIR = "${placeholder "out"}/include";
   INSTALLDIR = "${placeholder "out"}/lib";
 
-  preInstall =
-    ''
-      mkdir -p $INCDIR $INSTALLDIR
-    ''
-    # Workaround for Makefiles.osx not using ?=
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
-    '';
+  preInstall = ''
+    mkdir -p $INCDIR $INSTALLDIR
+  ''
+  # Workaround for Makefiles.osx not using ?=
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeFlagsArray+=( "INCDIR=$INCDIR" "INSTALLDIR=$INSTALLDIR" )
+  '';
 
   postInstall =
     lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -116,7 +113,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Open Source library for accessing popular graphics image file formats";
     homepage = "http://freeimage.sourceforge.net/";
-    license = "GPL";
+    license = with lib.licenses; [
+      freeimage
+      gpl2Only
+      gpl3Only
+    ];
     knownVulnerabilities = [
       "CVE-2024-31570"
       "CVE-2024-28584"
@@ -163,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CVE-2019-12214"
       "CVE-2019-12212"
     ];
-    maintainers = with lib.maintainers; [ l-as ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 })

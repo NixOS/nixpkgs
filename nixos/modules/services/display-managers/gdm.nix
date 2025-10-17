@@ -190,7 +190,6 @@ in
     users.groups.gdm.gid = config.ids.gids.gdm;
 
     # GDM needs different xserverArgs, presumable because using wayland by default.
-    services.xserver.tty = null;
     services.xserver.display = null;
     services.xserver.verbose = null;
 
@@ -198,23 +197,22 @@ in
       # Enable desktop session data
       enable = true;
 
-      environment =
-        {
-          GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") xdmcfg.xserverArgs);
-          XDG_DATA_DIRS = lib.makeSearchPath "share" [
-            gdm # for gnome-login.session
-            config.services.displayManager.sessionData.desktops
-            pkgs.gnome-control-center # for accessibility icon
-            pkgs.adwaita-icon-theme
-            pkgs.hicolor-icon-theme # empty icon theme as a base
-          ];
-        }
-        // lib.optionalAttrs (xSessionWrapper != null) {
-          # Make GDM use this wrapper before running the session, which runs the
-          # configured setupCommands. This relies on a patched GDM which supports
-          # this environment variable.
-          GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
-        };
+      environment = {
+        GDM_X_SERVER_EXTRA_ARGS = toString (lib.filter (arg: arg != "-terminate") xdmcfg.xserverArgs);
+        XDG_DATA_DIRS = lib.makeSearchPath "share" [
+          gdm # for gnome-login.session
+          config.services.displayManager.sessionData.desktops
+          pkgs.gnome-control-center # for accessibility icon
+          pkgs.adwaita-icon-theme
+          pkgs.hicolor-icon-theme # empty icon theme as a base
+        ];
+      }
+      // lib.optionalAttrs (xSessionWrapper != null) {
+        # Make GDM use this wrapper before running the session, which runs the
+        # configured setupCommands. This relies on a patched GDM which supports
+        # this environment variable.
+        GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
+      };
       execCmd = "exec ${gdm}/bin/gdm";
       preStart = lib.optionalString (defaultSessionName != null) ''
         # Set default session in session chooser to a specified values – basically ignore session history.
@@ -222,18 +220,17 @@ in
       '';
     };
 
-    systemd.tmpfiles.rules =
-      [
-        "d /run/gdm/.config 0711 gdm gdm"
-      ]
-      ++ lib.optionals config.services.pulseaudio.enable [
-        "d /run/gdm/.config/pulse 0711 gdm gdm"
-        "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
-      ]
-      ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
-        # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
-        "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
-      ];
+    systemd.tmpfiles.rules = [
+      "d /run/gdm/.config 0711 gdm gdm"
+    ]
+    ++ lib.optionals config.services.pulseaudio.enable [
+      "d /run/gdm/.config/pulse 0711 gdm gdm"
+      "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
+    ]
+    ++ lib.optionals config.services.gnome.gnome-initial-setup.enable [
+      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
+    ];
 
     # Otherwise GDM will not be able to start correctly and display Wayland sessions
     systemd.packages = [
@@ -262,12 +259,10 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
       "plymouth-start.service"
     ];
     systemd.services.display-manager.conflicts = [
-      "getty@tty${gdm.initialVT}.service"
       "plymouth-quit.service"
     ];
     systemd.services.display-manager.onFailure = [
@@ -401,7 +396,7 @@ in
         auth       requisite                   pam_nologin.so
         auth       requisite                   pam_faillock.so      preauth
         auth       required                    ${pkgs.fprintd}/lib/security/pam_fprintd.so
-        auth       required                    pam_env.so
+        auth       required                    pam_env.so conffile=/etc/pam/environment readenv=0
         ${lib.optionalString (pamLogin.enable && pamLogin.enableGnomeKeyring) ''
           auth       [success=ok default=1]      ${gdm}/lib/security/pam_gdm.so
           auth       optional                    ${pkgs.gnome-keyring}/lib/security/pam_gnome_keyring.so

@@ -4,7 +4,7 @@
   fetchFromGitHub,
   setuptools,
   pkg-config,
-  cython_3_1,
+  cython,
   ffmpeg,
 }:
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    cython_3_1
+    cython
   ];
 
   nativeBuildInputs = [ pkg-config ];
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "Python bindings for ffmpeg libraries";
     homepage = "https://github.com/basswood-io/BasswoodAV";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

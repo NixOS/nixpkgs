@@ -47,12 +47,10 @@ stdenv.mkDerivation (finalAttrs: {
     udev
     libevdev
     libgudev
-    (python3.withPackages (
-      pp: with pp; [
-        pp.libevdev
-        pp.pyudev
-      ]
-    ))
+    (python3.withPackages (pp: [
+      pp.libevdev
+      pp.pyudev
+    ]))
   ];
 
   mesonFlags = [
@@ -85,5 +83,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Libraries, configuration, and diagnostic tools for Wacom tablets running under Linux";
     teams = [ lib.teams.freedesktop ];
     license = lib.licenses.hpnd;
+    badPlatforms = [
+      # Mandatory shared library.
+      lib.systems.inspect.platformPatterns.isStatic
+    ];
   };
 })

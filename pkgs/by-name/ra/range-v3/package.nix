@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   # errors (with GCC 9.2):
   cmakeFlags = [
     "-DRANGES_ENABLE_WERROR=OFF"
-  ] ++ lib.optional stdenv.hostPlatform.isAarch64 "-DRANGE_V3_TESTS=OFF";
+  ]
+  ++ lib.optional stdenv.hostPlatform.isAarch64 "-DRANGE_V3_TESTS=OFF";
 
   doCheck = !stdenv.hostPlatform.isAarch64;
   checkTarget = "test";
@@ -37,6 +38,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/ericniebler/range-v3/releases/tag/${version}";
     license = lib.licenses.boost;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

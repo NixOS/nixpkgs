@@ -2,13 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  orjson,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.11";
+  version = "0.1.18";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     owner = "SukramJ";
     repo = "pydevccu";
     tag = version;
-    hash = "sha256-Ar9KNOkiy60HTGKz8br701v8xF470dz1jv8sp/CZbpw=";
+    hash = "sha256-+IUPj27+eU2e215LkF+Qqv5vtRqASPP7dEBTvfT/KEo=";
   };
 
   postPatch = ''
@@ -25,7 +26,11 @@ buildPythonPackage rec {
       --replace-fail "setuptools==75.6.0" setuptools
   '';
 
+  pythonRelaxDeps = [ "orjson" ];
+
   build-system = [ setuptools ];
+
+  dependencies = [ orjson ];
 
   # Module has no tests
   doCheck = false;

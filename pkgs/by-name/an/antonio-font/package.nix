@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation {
 
   meta = {
     homepage = "https://github.com/vernnobile/antonioFont";
-    description = "condensed, sans serif font for larger display, headline & banner use, based on Anton";
+    description = "Condensed, sans serif font for larger display, headline & banner use, based on Anton";
     longDescription = ''
       Antonio is a ‘refined’ version of the Anton Font. Anton is a single
       weight web font, designed specifically for larger display, headline and

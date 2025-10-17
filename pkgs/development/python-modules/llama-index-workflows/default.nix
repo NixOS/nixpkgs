@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "llama-index-workflows";
-  version = "1.0.1";
+  version = "1.3.0";
   pyproject = true;
 
   src = fetchPypi {
     pname = "llama_index_workflows";
     inherit version;
-    hash = "sha256-B6aM9YBA1GmvjQX1YhdBiuZARVfwJUv/IqdIGYeBjj8=";
+    hash = "sha256-nBaI4jfvrThPFkha9xxvlFai622Fv2H/SeVxfxD/KG0=";
   };
 
   pythonRelaxDeps = [ "pydantic" ];
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "workflows" ];
 
   meta = {
-    description = "An event-driven, async-first, step-based way to control the execution flow of AI applications like Agents";
+    description = "Event-driven, async-first, step-based way to control the execution flow of AI applications like Agents";
     homepage = "https://pypi.org/project/llama-index-workflows/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];

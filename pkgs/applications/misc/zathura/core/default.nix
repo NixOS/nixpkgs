@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.11";
+  version = "0.5.12";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
+    hash = "sha256-6Ehw+/lrdmuCJKPzps58z6Nu+jtpGcyKL792XqTf5HY=";
   };
 
   outputs = [
@@ -73,21 +73,20 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      gtk3
-      girara
-      libintl
-      sqlite
-      glib
-      file
-      librsvg
-      check
-      json-glib
-      texlive.bin.core
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  buildInputs = [
+    gtk3
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
+    check
+    json-glib
+    texlive.bin.core
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {

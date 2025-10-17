@@ -1,23 +1,28 @@
 {
   lib,
-  fetchFromGitHub,
+  stdenv,
   buildGoModule,
+  fetchFromGitHub,
+  libredirect,
+  iana-etc,
   testers,
   seaweedfs,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "seaweedfs";
-  version = "3.92";
+  version = "3.97";
 
   src = fetchFromGitHub {
     owner = "seaweedfs";
     repo = "seaweedfs";
-    rev = version;
-    hash = "sha256-In4LVN5Um7ettxDFuT2MFuU9kx50PXBpd5t5qp/2lzk=";
+    tag = finalAttrs.version;
+    hash = "sha256-h8pyjC/hbKfvt4hEKuq0v5osLMWNU+6mYqFGqsZFqXs=";
   };
 
-  vendorHash = "sha256-gTfoC5yHOSRSTsVXKrPx3Jxwh3IUmwjr9ynR02zYduA=";
+  vendorHash = "sha256-KRO0aDGOVx1neXcGsYYqcpD0tAqtR3GSBDhFz5TbQBs=";
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
 
   subPackages = [ "weed" ];
 
@@ -42,25 +47,31 @@ buildGoModule rec {
   preCheck = ''
     # Test all targets.
     unset subPackages
-
-    # Remove unmaintained tests ahd those that require additional services.
-    rm -rf unmaintained test/s3
+    # Remove unmaintained tests and those that require additional services.
+    rm -rf unmaintained test/s3 test/fuse_integration
+    # TestECEncodingVolumeLocationTimingBug, TestECEncodingMasterTimingRaceCondition: weed binary not found
+    export PATH=$PATH:$NIX_BUILD_TOP/go/bin
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols:/etc/services=${iana-etc}/etc/services
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests.version = testers.testVersion {
     package = seaweedfs;
     command = "weed version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple and highly scalable distributed file system";
     homepage = "https://github.com/chrislusf/seaweedfs";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       azahi
       cmacrae
       wozeparrot
     ];
     mainProgram = "weed";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
-}
+})

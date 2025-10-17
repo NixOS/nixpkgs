@@ -5,7 +5,6 @@
   erlang,
   icu,
   openssl,
-  spidermonkey_91,
   python3,
   nixosTests,
 }:
@@ -19,17 +18,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-api5CpqYC77yw1tJlqjnGi8a5SJ1RshfBMQ2EBvfeL8=";
   };
 
-  postPatch =
-    ''
-      substituteInPlace src/couch/rebar.config.script --replace '/usr/include/mozjs-91' "${spidermonkey_91.dev}/include/mozjs-91"
-      substituteInPlace configure --replace '/usr/include/''${SM_HEADERS}' "${spidermonkey_91.dev}/include/mozjs-91"
-      patchShebangs bin/rebar
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
-      # (There are warnings, but no hard errors, and it produces an empty dylib.)
-      substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
-    '';
+  postPatch = ''
+    patchShebangs bin/rebar
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # LTO with Clang produces LLVM bitcode, which causes linking to fail quietly.
+    # (There are warnings, but no hard errors, and it produces an empty dylib.)
+    substituteInPlace src/jiffy/rebar.config.script --replace '"-flto"' '""'
+  '';
 
   nativeBuildInputs = [
     erlang
@@ -38,14 +34,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     icu
     openssl
-    spidermonkey_91
     (python3.withPackages (ps: with ps; [ requests ]))
   ];
 
   dontAddPrefix = "True";
 
   configureFlags = [
-    "--spidermonkey-version=91"
+    "--js-engine=quickjs"
+    "--disable-spidermonkey"
   ];
 
   buildFlags = [
@@ -69,5 +65,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ lostnet ];
+    broken = stdenv.isDarwin && stdenv.isAarch64;
   };
 }

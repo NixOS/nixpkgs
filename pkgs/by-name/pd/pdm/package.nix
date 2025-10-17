@@ -15,12 +15,14 @@ let
       resolvelib = super.resolvelib.overridePythonAttrs (old: rec {
         version = "1.1.0";
         src = old.src.override {
-          rev = version;
+          tag = version;
           hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
         };
       });
+      # pdm requires ...... -> ghostscript-with-X which is AGPL only
+      matplotlib = super.matplotlib.override { enableTk = false; };
       # pdm requires ...... -> jbig2dec which is AGPL only
-      moto = super.moto.overridePythonAttrs (old: rec {
+      moto = super.moto.overridePythonAttrs (old: {
         doCheck = false;
       });
     };
@@ -28,7 +30,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.24.2";
+  version = "2.26.0";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -37,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-z2p7guCQrKpDSYRHaGcHuwoTDsprrvJo9SH3sGBILSQ=";
+    hash = "sha256-Ici9XFUgtlk5yBYckZGE64KFUvA0UdX+9wo7CfaRrLI=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
@@ -101,7 +103,7 @@ python.pkgs.buildPythonApplication rec {
     pytest-httpserver
   ];
 
-  pytestFlagsArray = [ "-m 'not network'" ];
+  disabledTestMarks = [ "network" ];
 
   preCheck = ''
     export HOME=$TMPDIR
@@ -126,6 +128,9 @@ python.pkgs.buildPythonApplication rec {
     "test_use_python_write_file_multiple_versions"
     "test_repository_get_token_from_oidc"
     "test_repository_get_token_misconfigured_github"
+
+    # https://github.com/pdm-project/pdm/issues/3590
+    "test_install_from_lock_with_higher_version"
   ];
 
   __darwinAllowLocalNetworking = true;

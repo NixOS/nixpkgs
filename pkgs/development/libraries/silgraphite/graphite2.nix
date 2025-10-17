@@ -30,13 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     cmake
   ];
-  buildInputs =
-    [ freetype ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
-      llvmPackages.compiler-rt.override {
-        doFakeLibgcc = true;
-      }
-    );
+  buildInputs = [
+    freetype
+  ]
+  ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+    llvmPackages.compiler-rt.override {
+      doFakeLibgcc = true;
+    }
+  );
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [ ./macosx.patch ];
   postPatch = ''
@@ -52,6 +53,22 @@ stdenv.mkDerivation (finalAttrs: {
     # headers are located in the dev output:
     substituteInPlace CMakeLists.txt \
       --replace-fail ' ''${CMAKE_INSTALL_PREFIX}/include' " ${placeholder "dev"}/include"
+
+    # Fix the build with CMake 4.
+    #
+    # See: <https://github.com/silnrsi/graphite/issues/98>
+    badCmakeFiles=(
+      CMakeLists.txt
+      src/CMakeLists.txt
+      tests/{bittwiddling,json,sparsetest,utftest}/CMakeLists.txt
+      gr2fonttest/CMakeLists.txt
+    )
+    for file in "''${badCmakeFiles[@]}"; do
+      substituteInPlace "$file" \
+        --replace-fail \
+          'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0 FATAL_ERROR)' \
+          'CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)'
+    done
   '';
 
   cmakeFlags = lib.optionals static [

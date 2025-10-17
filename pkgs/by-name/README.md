@@ -37,8 +37,7 @@ The `package.nix` may look like this:
 # The return value must be a derivation
 stdenv.mkDerivation {
   # ...
-  buildInputs =
-    lib.optional enableBar libbar;
+  buildInputs = lib.optional enableBar libbar;
 }
 ```
 
@@ -63,18 +62,12 @@ The above expression is called using these arguments by default:
 ```
 
 But the package might need `pkgs.libbar_2` instead.
-While the function could be changed to take `libbar_2` directly as an argument,
-this would change the `.override` interface, breaking code like `.override { libbar = ...; }`.
-So instead it is preferable to use the same generic parameter name `libbar`
-and override its value in [`pkgs/top-level/all-packages.nix`](../top-level/all-packages.nix):
+While the `libbar` argument could explicitly be overridden in `all-packages.nix` with `libbar_2`, this would hide important information about this package from its interface.
+The fact that the package requires a certain version of `libbar` to work should not be hidden in a separate place.
+It is preferable to use `libbar_2` as a argument name instead.
 
-```nix
-{
-  libfoo = callPackage ../by-name/so/some-package/package.nix {
-    libbar = libbar_2;
-  };
-}
-```
+This approach also has the benefit that, if the expectation of the package changes to require a different version of `libbar`, a downstream user with an override of this argument will receive an error.
+This is comparable to a merge conflict in git: It's much better to be forced to explicitly address the conflict instead of silently keeping the override - which might lead to a different problem that is likely much harder to debug.
 
 ## Manual migration guidelines
 
@@ -99,23 +92,21 @@ Definitions like the following however, _can_ be transitioned:
 
 ```nix
 # all-packages.nix
-fooWithBaz = foo.override {
-  bar = baz;
-};
-# turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
 {
-  foo,
-  baz,
-}:
-
-foo.override {
-  bar = baz;
+  fooWithBaz = foo.override { bar = baz; };
 }
+```
+
+```nix
+# turned into pkgs/by-name/fo/fooWithBaz/package.nix with:
+{ foo, baz }:
+
+foo.override { bar = baz; }
 ```
 
 ## Limitations
 
-There's some limitations as to which packages can be defined using this structure:
+There are some limitations as to which packages can be defined using this structure:
 
 - Only packages defined using `pkgs.callPackage`.
   This excludes packages defined using `pkgs.python3Packages.callPackage ...`.
@@ -182,10 +173,7 @@ because it establishes a clear connection between related attributes.
 This is not required, but the above solution also allows refactoring the definitions into a separate file:
 
 ```nix
-{
-  inherit (import ../tools/foo pkgs)
-    foo_1 foo_2;
-}
+{ inherit (import ../tools/foo pkgs) foo_1 foo_2; }
 ```
 
 ```nix
@@ -200,19 +188,19 @@ Alternatively using [`callPackages`](https://nixos.org/manual/nixpkgs/unstable/#
 if `callPackage` isn't used underneath and you want the same `.override` arguments for all attributes:
 
 ```nix
-{
-  inherit (callPackages ../tools/foo { })
-    foo_1 foo_2;
-}
+{ inherit (callPackages ../tools/foo { }) foo_1 foo_2; }
 ```
 
 ```nix
 # pkgs/tools/foo/default.nix
+{ stdenv }:
 {
-  stdenv
-}: {
-  foo_1 = stdenv.mkDerivation { /* ... */ };
-  foo_2 = stdenv.mkDerivation { /* ... */ };
+  foo_1 = stdenv.mkDerivation {
+    # ...
+  };
+  foo_2 = stdenv.mkDerivation {
+    # ...
+  };
 }
 ```
 

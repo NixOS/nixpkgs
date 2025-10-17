@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "aiortm";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "MartinHjelmare";
     repo = "aiortm";
     tag = "v${version}";
-    hash = "sha256-YclrU24eyk88eOc/nlgeWJ/Fo9SveCzRqQCKYAA9Y9s=";
+    hash = "sha256-KghKxaa1MhNH13NdUpDiT5h8ZEj5aWLUVhvQKvLC+oM=";
   };
 
   pythonRelaxDeps = [ "typer" ];
@@ -49,14 +49,15 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-cov-stub
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiortm" ];
 
   meta = with lib; {
     description = "Library for the Remember the Milk API";
     homepage = "https://github.com/MartinHjelmare/aiortm";
-    changelog = "https://github.com/MartinHjelmare/aiortm/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/MartinHjelmare/aiortm/blob/${src.tag}/CHANGELOG.md";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aiortm";

@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nwg-hello";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-hello";
     tag = "v${version}";
-    hash = "sha256-yevcHctVnUWuPsdB+KN+Uuxg+iGdzP7WOOTMUvVmuEY=";
+    hash = "sha256-h/2e2pQw4ID17kT36AMzFe/FX6pYxxOxqkmHVHS5R1E=";
   };
 
   nativeBuildInputs = [

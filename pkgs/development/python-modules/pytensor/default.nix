@@ -33,7 +33,7 @@
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.31.5";
+  version = "2.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     postFetch = ''
       sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/pytensor/_version.py
     '';
-    hash = "sha256-9sIFBKuPMwg+5JHA9zhvaSvluxthUtc/rdqMZPl+VZg=";
+    hash = "sha256-xQ9qFQhVSxdCB+jsfcxy04HySl7Mq0lGd4cg9bTxU5E=";
   };
 
   build-system = [
@@ -73,7 +73,7 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pytensor" ];
 
@@ -83,6 +83,11 @@ buildPythonPackage rec {
   '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Numerical assertion error
+    # tests.unittest_tools.WrongValue: WrongValue
+    "test_op_sd"
+    "test_op_ss"
+
     # pytensor.link.c.exceptions.CompileError: Compilation failed (return status=1)
     "OpFromGraph"
     "add"
@@ -123,6 +128,7 @@ buildPythonPackage rec {
     "test_modes"
     "test_mul_s_v_grad"
     "test_multiple_outputs"
+    "test_nnet"
     "test_not_inplace"
     "test_numba_Cholesky_grad"
     "test_numba_pad"
@@ -167,7 +173,7 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin

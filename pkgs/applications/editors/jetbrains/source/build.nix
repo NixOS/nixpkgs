@@ -102,7 +102,12 @@ let
     inherit src;
     sourceRoot = "${src.name}/native/LinuxGlobalMenu";
     patches = [ ../patches/libdbm-headers.patch ];
-    postPatch = "cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a";
+    postPatch = ''
+      # Fix the build with CMake 4.
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'cmake_minimum_required(VERSION 2.6.0)' 'cmake_minimum_required(VERSION 3.10)'
+      cp ${libdbusmenu-jb}/lib/libdbusmenu-glib.a libdbusmenu-glib.a
+    '';
     passthru.patched-libdbusmenu = libdbusmenu-jb;
     installPhase = ''
       runHook preInstall
@@ -119,7 +124,7 @@ let
     version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/restarter";
-    useFetchCargoVendor = true;
+
     cargoHash = restarterHash;
 
     # Allow static linking
@@ -162,11 +167,11 @@ let
     patches = [ ../patches/kotlinc-path.patch ];
     postPatch = "sed -i 's|KOTLIN_PATH_HERE|${kotlin'}|' src/main/java/org/jetbrains/jpsBootstrap/KotlinCompiler.kt";
     buildPhase = ''
-      runHook preInstall
+      runHook preBuild
 
       ant -Duser.home=${jpsRepo} -Dbuild.dir=/build/out -f jps-bootstrap-classpath.xml
 
-      runHook postInstall
+      runHook postBuild
     '';
     installPhase = ''
       runHook preInstall
@@ -185,7 +190,7 @@ let
   mkRepoEntry = entry: {
     name = ".m2/repository/" + entry.path;
     path = fetchurl {
-      urls = builtins.map (url: "${url}/${entry.url}") repositories;
+      urls = map (url: "${url}/${entry.url}") repositories;
       sha256 = entry.hash;
     };
   };

@@ -99,6 +99,7 @@ import ./make-test-python.nix (
               objectClass: posixAccount
               userPassword: ${testPassword}
               homeDirectory: /home/${testUser}
+              loginShell: /run/current-system/sw/bin/bash
               uidNumber: 1234
               gidNumber: 1234
               cn: ""

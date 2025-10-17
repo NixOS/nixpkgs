@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
     license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ l-as ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

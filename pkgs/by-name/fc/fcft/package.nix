@@ -33,14 +33,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fcft";
-  version = "3.3.1";
+  version = "3.3.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "dnkl";
     repo = "fcft";
     rev = version;
-    hash = "sha256:08fr6zcqk4qp1k3r0di6v60qfyd3q5k9jnxzlsx2p1lh0nils0xa";
+    hash = "sha256-a+lELkEjMtqeBYGj6yl+OoQ+I6neyJt6a1T83B2KWOk=";
   };
 
   depsBuildBuild = [ pkg-config ];
@@ -50,26 +50,22 @@ stdenv.mkDerivation rec {
     ninja
     scdoc
   ];
-  buildInputs =
-    [
-      freetype
-      fontconfig
-      nanosvg
-      pixman
-      tllist
-    ]
-    ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
-    ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
+  buildInputs = [
+    freetype
+    fontconfig
+    nanosvg
+    pixman
+    tllist
+  ]
+  ++ lib.optionals (withShapingTypes != [ ]) [ harfbuzz ]
+  ++ lib.optionals (builtins.elem "run" withShapingTypes) [ utf8proc ];
   nativeCheckInputs = [ check ];
 
   mesonBuildType = "release";
-  mesonFlags =
-    [
-      (lib.mesonEnable "system-nanosvg" true)
-    ]
-    ++ builtins.map (
-      t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)
-    ) availableShapingTypes;
+  mesonFlags = [
+    (lib.mesonEnable "system-nanosvg" true)
+  ]
+  ++ map (t: lib.mesonEnable "${t}-shaping" (lib.elem t withShapingTypes)) availableShapingTypes;
 
   doCheck = true;
 

@@ -20,6 +20,84 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "cuda": [
+    "index.html#cuda"
+  ],
+  "cuda-configuring-nixpkgs-for-cuda": [
+    "index.html#cuda-configuring-nixpkgs-for-cuda"
+  ],
+  "cuda-contributing": [
+    "index.html#cuda-contributing"
+  ],
+  "cuda-docker-podman": [
+    "index.html#cuda-docker-podman"
+  ],
+  "cuda-extending-cuda-package-sets": [
+    "index.html#cuda-extending-cuda-package-sets"
+  ],
+  "cuda-modifying-cuda-package-sets": [
+    "index.html#cuda-modifying-cuda-package-sets",
+    "index.html#cuda-configuring-cuda-package-sets"
+  ],
+  "cuda-nixpkgs-cuda-variants": [
+    "index.html#cuda-nixpkgs-cuda-variants"
+  ],
+  "cuda-package-set-maintenance": [
+    "index.html#cuda-package-set-maintenance",
+    "index.html#adding-a-new-cuda-release"
+  ],
+  "cuda-passthru-testers": [
+    "index.html#cuda-passthru-testers"
+  ],
+  "cuda-passthru-tests": [
+    "index.html#cuda-passthru-tests"
+  ],
+  "cuda-specifying-what-devices-to-expose-to-the-container": [
+    "index.html#cuda-specifying-what-devices-to-expose-to-the-container",
+    "index.html#specifying-what-devices-to-expose-to-the-container"
+  ],
+  "cuda-updating-redistributables": [
+    "index.html#cuda-updating-redistributables",
+    "index.html#updating-cuda-redistributables"
+  ],
+  "cuda-updating-cutensor": [
+    "index.html#cuda-updating-cutensor",
+    "index.html#updating-cutensor"
+  ],
+  "cuda-updating-supported-compilers-and-gpus": [
+    "index.html#cuda-updating-supported-compilers-and-gpus",
+    "index.html#updating-supported-compilers-and-gpus"
+  ],
+  "cuda-updating-the-cuda-package-set": [
+    "index.html#cuda-updating-the-cuda-package-set",
+    "index.html#updating-the-cuda-package-set"
+  ],
+  "cuda-updating-the-cuda-toolkit": [
+    "index.html#cuda-updating-the-cuda-toolkit",
+    "index.html#updating-the-cuda-toolkit"
+  ],
+  "cuda-user-guide": [
+    "index.html#cuda-user-guide"
+  ],
+  "cuda-using-cudapackages": [
+    "index.html#cuda-using-cudapackages"
+  ],
+  "cuda-using-cudapackages-pkgs": [
+    "index.html#cuda-using-cudapackages-pkgs"
+  ],
+  "cuda-using-docker-compose": [
+    "index.html#cuda-using-docker-compose",
+    "index.html#using-docker-compose"
+  ],
+  "cuda-using-pkgscuda": [
+    "index.html#cuda-using-pkgscuda"
+  ],
+  "cuda-using-pkgsforcudaarch": [
+    "index.html#cuda-using-pkgsforcudaarch"
+  ],
+  "cuda-writing-tests": [
+    "index.html#cuda-writing-tests"
+  ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
@@ -51,6 +129,15 @@
   ],
   "minor-ghc-deprecation": [
     "index.html#minor-ghc-deprecation"
+  ],
+  "modules": [
+    "index.html#modules"
+  ],
+  "modules-generic": [
+    "index.html#modules-generic"
+  ],
+  "modules-generic-meta-maintainers": [
+    "index.html#modules-generic-meta-maintainers"
   ],
   "neovim": [
     "index.html#neovim"
@@ -129,6 +216,12 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-darwin-libcxx-deployment-targets": [
+    "index.html#sec-darwin-libcxx-deployment-targets"
+  ],
+  "sec-darwin-libcxx-versions": [
+    "index.html#sec-darwin-libcxx-versions"
+  ],
   "sec-functions-library-treefmt": [
     "index.html#sec-functions-library-treefmt"
   ],
@@ -137,6 +230,12 @@
   ],
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
+  ],
+  "sec-meta-identifiers": [
+    "index.html#sec-meta-identifiers"
+  ],
+  "sec-meta-identifiers-cpe": [
+    "index.html#sec-meta-identifiers-cpe"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -166,7 +265,16 @@
     "release-notes.html#sec-nixpkgs-release-25.11-highlights"
   ],
   "sec-nixpkgs-release-25.11-incompatibilities": [
-    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities"
+    "release-notes.html#sec-nixpkgs-release-25.11-incompatibilities",
+    "index.html#enocache-errors-from-buildbowercomponents",
+    "index.html#ex-bowerGulpFile",
+    "index.html#ex-bowerJson",
+    "index.html#ex-buildBowerComponents",
+    "index.html#ex-buildBowerComponentsDefaultNix",
+    "index.html#sec-bower",
+    "index.html#ssec-bower2nix-troubleshooting",
+    "index.html#ssec-bower2nix-usage",
+    "index.html#ssec-build-bower-components"
   ],
   "sec-nixpkgs-release-25.11-lib": [
     "release-notes.html#sec-nixpkgs-release-25.11-lib"
@@ -409,6 +517,9 @@
   "module-system-lib-evalModules-return-value-_configurationClass": [
     "index.html#module-system-lib-evalModules-return-value-_configurationClass"
   ],
+  "module-system-lib-evalModules-return-value-graph": [
+    "index.html#module-system-lib-evalModules-return-value-graph"
+  ],
   "part-stdenv": [
     "index.html#part-stdenv"
   ],
@@ -484,6 +595,9 @@
   "strictflexarrays3": [
     "index.html#strictflexarrays3"
   ],
+  "glibcxxassertions": [
+    "index.html#glibcxxassertions"
+  ],
   "tester-shfmt": [
     "index.html#tester-shfmt"
   ],
@@ -531,6 +645,18 @@
   ],
   "typst-package-scope-and-usage": [
     "index.html#typst-package-scope-and-usage"
+  ],
+  "var-go-buildTestBinaries": [
+    "index.html#var-go-buildTestBinaries"
+  ],
+  "var-meta-identifiers-cpe": [
+    "index.html#var-meta-identifiers-cpe"
+  ],
+  "var-meta-identifiers-cpeParts": [
+    "index.html#var-meta-identifiers-cpeParts"
+  ],
+  "var-meta-identifiers-possibleCPEs": [
+    "index.html#var-meta-identifiers-possibleCPEs"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -1575,6 +1701,12 @@
   ],
   "fetchfromsourcehut": [
     "index.html#fetchfromsourcehut"
+  ],
+  "fetchfromradicle": [
+    "index.html#fetchfromradicle"
+  ],
+  "fetchradiclepatch": [
+    "index.html#fetchradiclepatch"
   ],
   "requirefile": [
     "index.html#requirefile"
@@ -2684,33 +2816,6 @@
   "elixir---phoenix-project": [
     "index.html#elixir---phoenix-project"
   ],
-  "sec-bower": [
-    "index.html#sec-bower"
-  ],
-  "ssec-bower2nix-usage": [
-    "index.html#ssec-bower2nix-usage"
-  ],
-  "ex-bowerJson": [
-    "index.html#ex-bowerJson"
-  ],
-  "ssec-build-bower-components": [
-    "index.html#ssec-build-bower-components"
-  ],
-  "ex-buildBowerComponents": [
-    "index.html#ex-buildBowerComponents"
-  ],
-  "ex-bowerGulpFile": [
-    "index.html#ex-bowerGulpFile"
-  ],
-  "ex-buildBowerComponentsDefaultNix": [
-    "index.html#ex-buildBowerComponentsDefaultNix"
-  ],
-  "ssec-bower2nix-troubleshooting": [
-    "index.html#ssec-bower2nix-troubleshooting"
-  ],
-  "enocache-errors-from-buildbowercomponents": [
-    "index.html#enocache-errors-from-buildbowercomponents"
-  ],
   "sec-chicken": [
     "index.html#sec-chicken"
   ],
@@ -2752,36 +2857,6 @@
   ],
   "building-a-crystal-package": [
     "index.html#building-a-crystal-package"
-  ],
-  "cuda": [
-    "index.html#cuda"
-  ],
-  "adding-a-new-cuda-release": [
-    "index.html#adding-a-new-cuda-release"
-  ],
-  "updating-cuda-redistributables": [
-    "index.html#updating-cuda-redistributables"
-  ],
-  "updating-cutensor": [
-    "index.html#updating-cutensor"
-  ],
-  "updating-supported-compilers-and-gpus": [
-    "index.html#updating-supported-compilers-and-gpus"
-  ],
-  "updating-the-cuda-toolkit": [
-    "index.html#updating-the-cuda-toolkit"
-  ],
-  "updating-the-cuda-package-set": [
-    "index.html#updating-the-cuda-package-set"
-  ],
-  "cuda-docker-podman": [
-    "index.html#cuda-docker-podman"
-  ],
-  "specifying-what-devices-to-expose-to-the-container": [
-    "index.html#specifying-what-devices-to-expose-to-the-container"
-  ],
-  "using-docker-compose": [
-    "index.html#using-docker-compose"
   ],
   "cuelang": [
     "index.html#cuelang"
@@ -3027,7 +3102,7 @@
   "ex-buildGoModule": [
     "index.html#ex-buildGoModule"
   ],
-  "ssec-go-toolchain-versions" : [
+  "ssec-go-toolchain-versions": [
     "index.html#ssec-go-toolchain-versions"
   ],
   "buildGoModule-goModules-override": [
@@ -3326,6 +3401,12 @@
   ],
   "javascript-pnpm-extraCommands": [
     "index.html#javascript-pnpm-extraCommands"
+  ],
+  "javascript-pnpm-fetcherVersion": [
+    "index.html#javascript-pnpm-fetcherVersion"
+  ],
+  "javascript-pnpm-fetcherVersion-versionHistory": [
+    "index.html#javascript-pnpm-fetcherVersion-versionHistory"
   ],
   "javascript-yarn": [
     "index.html#javascript-yarn"
@@ -4213,6 +4294,15 @@
   "sec-linux-kernel": [
     "index.html#sec-linux-kernel"
   ],
+  "sec-linux-kernel-maintainer-information": [
+    "index.html#sec-linux-kernel-maintainer-information"
+  ],
+  "sec-linux-updates": [
+    "index.html#sec-linux-updates"
+  ],
+  "sec-linux-add-new-kernel-version": [
+    "index.html#sec-linux-add-new-kernel-version"
+  ],
   "ex-overriding-kernel-derivation": [
     "index.html#ex-overriding-kernel-derivation"
   ],
@@ -4515,6 +4605,9 @@
   ],
   "sec-interop.cylonedx-fod": [
     "index.html#sec-interop.cylonedx-fod"
+  ],
+  "sec-uv": [
+    "index.html#sec-uv"
   ],
   "module-system-module-argument-_prefix": [
     "index.html#module-system-module-argument-_prefix"

@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
-    repo = pname;
+    repo = "kup";
     owner = "system";
-    rev = "${pname}-${version}";
+    rev = "kup-${version}";
     sha256 = "1s180y6vzkxxcjpfdvrm90251rkaf3swzkjwdlpm6m4vnggq0hvs";
   };
 

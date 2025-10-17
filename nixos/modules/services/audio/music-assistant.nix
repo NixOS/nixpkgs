@@ -79,6 +79,18 @@ in
         PYTHONPATH = finalPackage.pythonPath;
       };
 
+      path =
+        with pkgs;
+        [
+          lsof
+        ]
+        ++ lib.optionals (lib.elem "spotify" cfg.providers) [
+          librespot-ma
+        ]
+        ++ lib.optionals (lib.elem "snapcast" cfg.providers) [
+          snapcast
+        ];
+
       serviceConfig = {
         ExecStart = utils.escapeSystemdExecArgs (
           [

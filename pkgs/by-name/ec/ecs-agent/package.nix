@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "amazon-ecs-agent";
-  version = "1.95.0";
+  version = "1.99.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "aws";
     repo = "amazon-ecs-agent";
-    hash = "sha256-HJrio/Hr2ms33g9NM1sytLaig6D1ixYp1W16AE7OlGo=";
+    hash = "sha256-aGmXu+ho5H6vPTBWR5OvqDcmFQN87BOl99HGIek24CE=";
   };
 
   vendorHash = null;
@@ -32,7 +32,7 @@ buildGoModule rec {
     changelog = "https://github.com/aws/amazon-ecs-agent/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "agent";
   };
 }

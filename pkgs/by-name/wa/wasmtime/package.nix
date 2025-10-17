@@ -3,26 +3,30 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  buildPackages,
   cmake,
+  installShellFiles,
   versionCheckHook,
   nix-update-script,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "33.0.0";
+  version = "37.0.2";
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/i//5kPN1/zQnfDZWuJldKdFWk/DKAf5b5P4F58rgPI=";
+    hash = "sha256-OQyGcxWMOxxzBHyOg2LUVsFuBEow6NIJCfrnsYWZtzk=";
     fetchSubmodules = true;
   };
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4ziMGmBbQ4anXvF6wwK1ezYXHY7JBvMRmPDreNME0H8=";
+
+  cargoHash = "sha256-PXvhwnfGvGF4D6U+2dKp3wg6cbk/i+0bWRAMSkyd6i8=";
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
@@ -33,9 +37,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
   outputs = [
     "out"
     "dev"
+    "lib"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
   doCheck =
     with stdenv.buildPlatform;
@@ -50,28 +58,34 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall =
     let
-      inherit (stdenv.targetPlatform.rust) cargoShortTarget;
+      inherit (stdenv.hostPlatform.rust) cargoShortTarget;
     in
     ''
-      # move libs from out to dev
-      install -d -m 0755 $dev/lib
-      install -m 0644 ''${!outputLib}/lib/* $dev/lib
-      rm -r ''${!outputLib}/lib
+      moveToOutput lib $lib
+      ${lib.optionalString (!enableShared) "rm -f $lib/lib/*.so{,.*}"}
+      ${lib.optionalString (!enableStatic) "rm -f $lib/lib/*.a"}
 
       # copy the build.rs generated c-api headers
-      install -d -m0755 $dev/include/wasmtime
       # https://github.com/rust-lang/cargo/issues/9661
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/*.h \
-        $dev/include
-      install -m0644 \
-        target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include/wasmtime/*.h \
-        $dev/include/wasmtime
+      mkdir $dev
+      cp -r target/${cargoShortTarget}/release/build/wasmtime-c-api-impl-*/out/include $dev/include
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -id \
-        $dev/lib/libwasmtime.dylib \
-        $dev/lib/libwasmtime.dylib
+        $lib/lib/libwasmtime.dylib \
+        $lib/lib/libwasmtime.dylib
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd wasmtime \
+        --bash <("$out/bin/wasmtime" completion bash) \
+        --zsh <("$out/bin/wasmtime" completion zsh) \
+        --fish <("$out/bin/wasmtime" completion fish)
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd wasmtime \
+        --bash "${buildPackages.wasmtime}"/share/bash-completion/completions/*.bash \
+        --zsh "${buildPackages.wasmtime}"/share/zsh/site-functions/* \
+        --fish "${buildPackages.wasmtime}"/share/fish/*/*
     '';
 
   nativeInstallCheckInputs = [
@@ -87,11 +101,15 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = "https://wasmtime.dev/";
-    license = lib.licenses.asl20;
+    license = [
+      lib.licenses.asl20
+      lib.licenses.llvm-exception
+    ];
     mainProgram = "wasmtime";
     maintainers = with lib.maintainers; [
       ereslibre
       matthewbauer
+      nekowinston
     ];
     platforms = lib.platforms.unix;
     changelog = "https://github.com/bytecodealliance/wasmtime/blob/v${finalAttrs.version}/RELEASES.md";

@@ -9,64 +9,48 @@
   jrl-cmakemodules,
   assimp,
   octomap,
+  pkg-config,
   qhull,
-  pythonSupport ? false,
-  python3Packages,
   zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "coal";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "coal-library";
     repo = "coal";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-2X1chL4tYQXo50W/C5z+IVA1DGPcPdA378lh+7Bs2OE=";
+    hash = "sha256-7Ww1vAzKaCccBpBQU1hzI7Jk+oXw73zhnH594Xn9gbw=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      doxygen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.numpy
-      python3Packages.pythonImportsCheckHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ];
 
-  propagatedBuildInputs =
-    [
-      assimp
-      jrl-cmakemodules
-      octomap
-      qhull
-      zlib
-    ]
-    ++ lib.optionals (!pythonSupport) [
-      boost
-      eigen
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.boost
-      python3Packages.eigenpy
-    ];
+  propagatedBuildInputs = [
+    assimp
+    jrl-cmakemodules
+    octomap
+    qhull
+    zlib
+    boost
+    eigen
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)
     (lib.cmakeBool "COAL_HAS_QHULL" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
-    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
+    (lib.cmakeBool "BUILD_PYTHON_INTERFACE" false)
   ];
 
   doCheck = true;
-  pythonImportsCheck = [
-    "coal"
-    "hppfcl"
-  ];
 
   outputs = [
     "dev"

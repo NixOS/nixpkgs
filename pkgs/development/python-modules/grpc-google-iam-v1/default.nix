@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "grpc-google-iam-v1";
-  version = "0.14.2";
+  version = "3.31.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googleapis";
     repo = "google-cloud-python";
-    tag = "grpc-google-iam-v1-v${version}";
-    hash = "sha256-5PzidE1CWN+pt7+gcAtbuXyL/pq6cnn0MCRkBfmeUSw=";
+    tag = "google-cloud-build-v${version}";
+    hash = "sha256-qQ+8X6I8lt4OTgbvODsbdab2dYUk0wxWsbaVT2T651U=";
   };
 
   sourceRoot = "${src.name}/packages/grpc-google-iam-v1";
@@ -36,9 +36,8 @@ buildPythonPackage rec {
     "google.iam.v1"
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = with lib; {

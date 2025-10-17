@@ -7,14 +7,14 @@
   versionCheckHook,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "proxmox-auto-install-assistant";
-  version = "8.4.6";
+  version = "9.0.7";
 
   src = fetchgit {
     url = "git://git.proxmox.com/git/pve-installer.git";
-    rev = "fcd13b1503bec573da9db4bfad42b2478e97d9ce";
-    hash = "sha256-fPl6qxWTaqumtnAFUfEBTChTIe+94fWCZv8s7Sq9zSk=";
+    rev = "cfcaceacb797bfdbff8c7e8fed76e56642390b20";
+    hash = "sha256-tXwNuT25GzQhdDtYiiQKPu6EPZQffUOZhBqkLZK/+DY=";
   };
 
   postPatch = ''

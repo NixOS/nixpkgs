@@ -24,8 +24,12 @@ mkYarnPackage rec {
   };
 
   configurePhase = ''
+    runHook preConfigure
+
     cp -r $node_modules node_modules
     chmod +w node_modules
+
+    runHook postConfigure
   '';
 
   buildPhase = ''

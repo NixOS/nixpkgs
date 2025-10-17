@@ -76,7 +76,7 @@ let
       # PCSC-Lite daemon (services.pcscd) also must be enabled for firefox to access smartcards
       smartcardSupport = cfg.smartcardSupport or false;
 
-      allNativeMessagingHosts = builtins.map lib.getBin nativeMessagingHosts;
+      allNativeMessagingHosts = map lib.getBin nativeMessagingHosts;
 
       libs =
         lib.optionals stdenv.hostPlatform.isLinux (
@@ -130,7 +130,7 @@ let
 
       usesNixExtensions = nixExtensions != null;
 
-      nameArray = builtins.map (a: a.name) (lib.optionals usesNixExtensions nixExtensions);
+      nameArray = map (a: a.name) (lib.optionals usesNixExtensions nixExtensions);
 
       # Check that every extension has a unique .name attribute
       # and an extid attribute
@@ -140,7 +140,7 @@ let
         else if browser.requireSigning || !browser.allowAddonSideload then
           throw "Nix addons are only supported with signature enforcement disabled and addon sideloading enabled (eg. LibreWolf)"
         else
-          builtins.map (
+          map (
             a:
             if !(builtins.hasAttr "extid" a) then
               throw "nixExtensions has an invalid entry. Missing extid attribute. Please use fetchFirefoxAddon"
@@ -149,38 +149,36 @@ let
           ) (lib.optionals usesNixExtensions nixExtensions);
 
       enterprisePolicies = {
-        policies =
-          {
-            DisableAppUpdate = true;
+        policies = {
+          DisableAppUpdate = true;
+        }
+        // lib.optionalAttrs usesNixExtensions {
+          ExtensionSettings = {
+            "*" = {
+              blocked_install_message = "You can't have manual extension mixed with nix extensions";
+              installation_mode = "blocked";
+            };
           }
-          // lib.optionalAttrs usesNixExtensions {
-            ExtensionSettings =
-              {
-                "*" = {
-                  blocked_install_message = "You can't have manual extension mixed with nix extensions";
-                  installation_mode = "blocked";
-                };
-              }
-              // lib.foldr (
-                e: ret:
-                ret
-                // {
-                  "${e.extid}" = {
-                    installation_mode = "allowed";
-                  };
-                }
-              ) { } extensions;
+          // lib.foldr (
+            e: ret:
+            ret
+            // {
+              "${e.extid}" = {
+                installation_mode = "allowed";
+              };
+            }
+          ) { } extensions;
 
-            Extensions = {
-              Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
-            };
-          }
-          // lib.optionalAttrs smartcardSupport {
-            SecurityDevices = {
-              "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
-            };
-          }
-          // extraPolicies;
+          Extensions = {
+            Install = lib.foldr (e: ret: ret ++ [ "${e.outPath}/${e.extid}.xpi" ]) [ ] extensions;
+          };
+        }
+        // lib.optionalAttrs smartcardSupport {
+          SecurityDevices = {
+            "OpenSC PKCS#11 Module" = "opensc-pkcs11.so";
+          };
+        }
+        // extraPolicies;
       };
 
       mozillaCfg = ''
@@ -291,71 +289,70 @@ let
       ];
       buildInputs = lib.optionals (!isDarwin) [ browser.gtk3 ];
 
-      makeWrapperArgs =
-        [
-          "--prefix"
-          "LD_LIBRARY_PATH"
-          ":"
-          "${finalAttrs.libs}"
+      makeWrapperArgs = [
+        "--prefix"
+        "LD_LIBRARY_PATH"
+        ":"
+        "${finalAttrs.libs}"
 
-          "--suffix"
-          "PATH"
-          ":"
-          "${placeholder "out"}/bin"
+        "--suffix"
+        "PATH"
+        ":"
+        "${placeholder "out"}/bin"
 
-          "--set"
-          "MOZ_APP_LAUNCHER"
-          launcherName
+        "--set"
+        "MOZ_APP_LAUNCHER"
+        launcherName
 
-          "--set"
-          "MOZ_LEGACY_PROFILES"
-          "1"
+        "--set"
+        "MOZ_LEGACY_PROFILES"
+        "1"
 
-          "--set"
-          "MOZ_ALLOW_DOWNGRADE"
-          "1"
-        ]
-        ++ lib.optionals (!isDarwin) [
-          "--suffix"
-          "GTK_PATH"
-          ":"
-          "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+        "--set"
+        "MOZ_ALLOW_DOWNGRADE"
+        "1"
+      ]
+      ++ lib.optionals (!isDarwin) [
+        "--suffix"
+        "GTK_PATH"
+        ":"
+        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
 
-          "--suffix"
-          "XDG_DATA_DIRS"
-          ":"
-          "${adwaita-icon-theme}/share"
+        "--suffix"
+        "XDG_DATA_DIRS"
+        ":"
+        "${adwaita-icon-theme}/share"
 
-          "--set-default"
-          "MOZ_ENABLE_WAYLAND"
-          "1"
+        "--set-default"
+        "MOZ_ENABLE_WAYLAND"
+        "1"
 
-        ]
-        ++ lib.optionals (!xdg-utils.meta.broken && !isDarwin) [
-          # make xdg-open overridable at runtime
-          "--suffix"
-          "PATH"
-          ":"
-          "${lib.makeBinPath [ xdg-utils ]}"
+      ]
+      ++ lib.optionals (!xdg-utils.meta.broken && !isDarwin) [
+        # make xdg-open overridable at runtime
+        "--suffix"
+        "PATH"
+        ":"
+        "${lib.makeBinPath [ xdg-utils ]}"
 
-        ]
-        ++ lib.optionals hasMozSystemDirPatch [
-          "--set"
-          "MOZ_SYSTEM_DIR"
-          "${placeholder "out"}/lib/mozilla"
+      ]
+      ++ lib.optionals hasMozSystemDirPatch [
+        "--set"
+        "MOZ_SYSTEM_DIR"
+        "${placeholder "out"}/lib/mozilla"
 
-        ]
-        ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
+      ]
+      ++ lib.optionals (!hasMozSystemDirPatch && allNativeMessagingHosts != [ ]) [
+        "--run"
+        ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
+
+      ]
+      ++ lib.optionals (!hasMozSystemDirPatch) (
+        lib.concatMap (ext: [
           "--run"
-          ''mkdir -p ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts''
-
-        ]
-        ++ lib.optionals (!hasMozSystemDirPatch) (
-          lib.concatMap (ext: [
-            "--run"
-            ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
-          ]) allNativeMessagingHosts
-        );
+          ''ln -sfLt ''${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*''
+        ]) allNativeMessagingHosts
+      );
 
       buildCommand =
         let
@@ -519,7 +516,7 @@ let
           rm -f "$POL_PATH"
           cat ${policiesJson} >> "$POL_PATH"
 
-          extraPoliciesFiles=(${builtins.toString extraPoliciesFiles})
+          extraPoliciesFiles=(${toString extraPoliciesFiles})
           for extraPoliciesFile in "''${extraPoliciesFiles[@]}"; do
             jq -s '.[0] * .[1]' $extraPoliciesFile "$POL_PATH" > .tmp.json
             mv .tmp.json "$POL_PATH"
@@ -536,7 +533,7 @@ let
           ${mozillaCfg}
           EOF
 
-          extraPrefsFiles=(${builtins.toString extraPrefsFiles})
+          extraPrefsFiles=(${toString extraPrefsFiles})
           for extraPrefsFile in "''${extraPrefsFiles[@]}"; do
             cat "$extraPrefsFile" >> "$libDir/mozilla.cfg"
           done

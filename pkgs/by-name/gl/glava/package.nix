@@ -52,7 +52,8 @@ stdenv.mkDerivation rec {
     libXrender
     libpulseaudio
     libXcomposite
-  ] ++ optional enableGlfw glfw;
+  ]
+  ++ optional enableGlfw glfw;
 
   nativeBuildInputs = [
     python3

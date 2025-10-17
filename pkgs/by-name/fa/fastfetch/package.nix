@@ -59,13 +59,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
-  version = "2.46.0";
+  version = "2.53.0";
 
   src = fetchFromGitHub {
     owner = "fastfetch-cli";
     repo = "fastfetch";
     tag = finalAttrs.version;
-    hash = "sha256-gRDG3lbUcApUushUPCpTkzc6FOB/CHrsVZwdRn6IEL8=";
+    hash = "sha256-Cq6Nq7UpeW7MFi6VjsWmU2M3FjzDiAyhwnl4yTQFRnA=";
   };
 
   outputs = [
@@ -190,73 +190,71 @@ stdenv.mkDerivation (finalAttrs: {
     in
     commonDeps ++ imageDeps ++ sqliteDeps ++ linuxCoreDeps ++ linuxFeatureDeps ++ macosDeps;
 
-  cmakeFlags =
-    [
-      (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
-      (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
-      (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
+  cmakeFlags = [
+    (lib.cmakeOptionType "filepath" "CMAKE_INSTALL_SYSCONFDIR" "${placeholder "out"}/etc")
+    (lib.cmakeBool "ENABLE_DIRECTX_HEADERS" false)
+    (lib.cmakeBool "ENABLE_SYSTEM_YYJSON" true)
 
-      # Feature flags
-      (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
+    # Feature flags
+    (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
 
-      (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
-      (lib.cmakeBool "ENABLE_IMAGEMAGICK7" imageSupport)
-      (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
+    (lib.cmakeBool "ENABLE_IMAGEMAGICK6" false)
+    (lib.cmakeBool "ENABLE_IMAGEMAGICK7" imageSupport)
+    (lib.cmakeBool "ENABLE_CHAFA" imageSupport)
 
-      (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
+    (lib.cmakeBool "ENABLE_SQLITE3" sqliteSupport)
 
-      (lib.cmakeBool "ENABLE_LIBZFS" zfsSupport)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      (lib.cmakeBool "ENABLE_PULSE" audioSupport)
+    (lib.cmakeBool "ENABLE_LIBZFS" zfsSupport)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.cmakeBool "ENABLE_PULSE" audioSupport)
 
-      (lib.cmakeBool "ENABLE_DDCUTIL" brightnessSupport)
+    (lib.cmakeBool "ENABLE_DDCUTIL" brightnessSupport)
 
-      (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
+    (lib.cmakeBool "ENABLE_DBUS" dbusSupport)
 
-      (lib.cmakeBool "ENABLE_ELF" terminalSupport)
+    (lib.cmakeBool "ENABLE_ELF" terminalSupport)
 
-      (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
-      (lib.cmakeBool "ENABLE_DCONF" gnomeSupport)
+    (lib.cmakeBool "ENABLE_GIO" gnomeSupport)
+    (lib.cmakeBool "ENABLE_DCONF" gnomeSupport)
 
-      (lib.cmakeBool "ENABLE_ZLIB" imageSupport)
+    (lib.cmakeBool "ENABLE_ZLIB" imageSupport)
 
-      (lib.cmakeBool "ENABLE_OPENCL" openclSupport)
+    (lib.cmakeBool "ENABLE_OPENCL" openclSupport)
 
-      (lib.cmakeBool "ENABLE_EGL" openglSupport)
-      (lib.cmakeBool "ENABLE_GLX" openglSupport)
+    (lib.cmakeBool "ENABLE_EGL" openglSupport)
+    (lib.cmakeBool "ENABLE_GLX" openglSupport)
 
-      (lib.cmakeBool "ENABLE_RPM" rpmSupport)
+    (lib.cmakeBool "ENABLE_RPM" rpmSupport)
 
-      (lib.cmakeBool "ENABLE_DRM" (!x11Support && !waylandSupport))
-      (lib.cmakeBool "ENABLE_DRM_AMDGPU" (!x11Support && !waylandSupport))
+    (lib.cmakeBool "ENABLE_DRM" (!x11Support && !waylandSupport))
+    (lib.cmakeBool "ENABLE_DRM_AMDGPU" (!x11Support && !waylandSupport))
 
-      (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
+    (lib.cmakeBool "ENABLE_VULKAN" vulkanSupport)
 
-      (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
+    (lib.cmakeBool "ENABLE_WAYLAND" waylandSupport)
 
-      (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
-      (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+    (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
+    (lib.cmakeBool "ENABLE_XRANDR" x11Support)
 
-      (lib.cmakeBool "ENABLE_XFCONF" xfceSupport)
+    (lib.cmakeBool "ENABLE_XFCONF" xfceSupport)
 
-      (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
-      (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
-    ];
+    (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
+    (lib.cmakeOptionType "filepath" "CUSTOM_AMDGPU_IDS_PATH" "${libdrm}/share/libdrm/amdgpu.ids")
+  ];
 
   postPatch = ''
     substituteInPlace completions/fastfetch.{bash,fish,zsh} --replace-fail python3 '${python3.interpreter}'
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/fastfetch \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    ''
-    + lib.optionalString flashfetchSupport ''
-      wrapProgram $out/bin/flashfetch \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/fastfetch \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+  ''
+  + lib.optionalString flashfetchSupport ''
+    wrapProgram $out/bin/flashfetch \
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+  '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
@@ -272,6 +270,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       luftmensch-luftmensch
       khaneliman
+      defelo
     ];
     platforms = lib.platforms.all;
     mainProgram = "fastfetch";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "lxqt";
-    repo = pname;
+    repo = "libdbusmenu-lxqt";
     rev = version;
     hash = "sha256-PqX8ShSu3CYN9XIRp6IjVmr/eKH+oLNhXvwiudUH660=";
   };

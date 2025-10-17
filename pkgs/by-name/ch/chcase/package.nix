@@ -33,6 +33,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small library to convert case of a given string";
     license = lib.licenses.lgpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 })

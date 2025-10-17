@@ -14,12 +14,11 @@
   python3Packages,
 
   boost,
-  fmt_11,
+  fmt,
   gtest,
   icu,
   spdlog,
-  tbb_2021,
-  yaml-cpp,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,7 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocs [ "doc" ];
+  ]
+  ++ lib.optionals withDocs [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "loot";
@@ -52,27 +52,25 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      python3Packages.sphinx
-      python3Packages.sphinx-rtd-theme
-      python3Packages.breathe
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    python3Packages.sphinx
+    python3Packages.sphinx-rtd-theme
+    python3Packages.breathe
+  ];
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     gtest
     icu
-    (spdlog.override { fmt = fmt_11; })
-    tbb_2021
+    spdlog
+    onetbb
 
-    finalAttrs.passthru.yaml-cpp # has merge-key support
     finalAttrs.passthru.libloadorder
     finalAttrs.passthru.esplugin
     finalAttrs.passthru.loot-condition-interpreter
@@ -83,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBLOADORDER_LIBRARIES" "loadorder_ffi")
     (lib.cmakeFeature "LCI_LIBRARIES" "loot_condition_interpreter_ffi")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TESTING-PLUGINS" "../testing-plugins")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${finalAttrs.passthru.yaml-cpp-src}")
     (lib.cmakeBool "LIBLOOT_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "LIBLOOT_INSTALL_DOCS" withDocs)
   ];
@@ -116,6 +115,13 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-3Aa98EwqpuGA3YlsRF8luWzXVEFO/rs6JXisXdLyIK4=";
     };
 
+    yaml-cpp-src = fetchFromGitHub {
+      owner = "loot";
+      repo = "yaml-cpp";
+      tag = "0.8.0+merge-key-support.2";
+      hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
+    };
+
     buildRustFFIPackage =
       args:
       rustPlatform.buildRustPackage (
@@ -146,7 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-/8WOEt9dxKFTTZbhf5nt81jo/yHuALPxh/IwAOehi9w=";
       };
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-re/cKqf/CAD7feNIEuou4ZP8BNkArd5CvREx1610jig=";
 
       lang = "c++";
@@ -164,7 +169,6 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-ygjSyixg+9HFFNV/G+w+TxGFTrjlWxlDt8phpCE8xyQ=";
       };
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-6sY2M7kjSYB3+6+zoMxPwdl+g7ARLHm9RdSODHQR8bE=";
 
       lang = "c++";
@@ -182,21 +186,10 @@ stdenv.mkDerivation (finalAttrs: {
         hash = "sha256-MvadQ4cWpzNgF/lUW5Jb758DvfRPGZ7s1W4MbO7nbIw=";
       };
 
-      useFetchCargoVendor = true;
       cargoHash = "sha256-m/vRnAJyMQOosxnjSUgHIY1RCkdB5+HFVqqzYVEpgOI=";
 
       lang = "c";
       header = "loot_condition_interpreter.h";
-    };
-
-    yaml-cpp = yaml-cpp.overrideAttrs rec {
-      version = "0.8.0+merge-key-support.2";
-      src = fetchFromGitHub {
-        owner = "loot";
-        repo = "yaml-cpp";
-        tag = version;
-        hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
-      };
     };
   };
 

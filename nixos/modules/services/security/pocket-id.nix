@@ -122,25 +122,26 @@ in
     warnings =
       optional (cfg.settings ? MAXMIND_LICENSE_KEY)
         "config.services.pocket-id.settings.MAXMIND_LICENSE_KEY will be stored as plaintext in the Nix store. Use config.services.pocket-id.environmentFile instead."
-      ++ concatMap
-        (
-          # Added 2025-05-27
-          setting:
-          optional (cfg.settings ? "${setting}") ''
-            config.services.pocket-id.settings.${setting} is deprecated.
-            See https://pocket-id.org/docs/setup/migrate-to-v1/ for migration instructions.
-          ''
-        )
-        [
-          "PUBLIC_APP_URL"
-          "PUBLIC_UI_CONFIG_DISABLED"
-          "CADDY_DISABLED"
-          "CADDY_PORT"
-          "BACKEND_PORT"
-          "POSTGRES_CONNECTION_STRING"
-          "SQLITE_DB_PATH"
-          "INTERNAL_BACKEND_URL"
-        ];
+      ++
+        concatMap
+          (
+            # Added 2025-05-27
+            setting:
+            optional (cfg.settings ? "${setting}") ''
+              config.services.pocket-id.settings.${setting} is deprecated.
+              See https://pocket-id.org/docs/setup/migrate-to-v1/ for migration instructions.
+            ''
+          )
+          [
+            "PUBLIC_APP_URL"
+            "PUBLIC_UI_CONFIG_DISABLED"
+            "CADDY_DISABLED"
+            "CADDY_PORT"
+            "BACKEND_PORT"
+            "POSTGRES_CONNECTION_STRING"
+            "SQLITE_DB_PATH"
+            "INTERNAL_BACKEND_URL"
+          ];
 
     systemd.tmpfiles.rules = [
       "d ${cfg.dataDir} 0755 ${cfg.user} ${cfg.group}"
@@ -195,6 +196,7 @@ in
           ReadWritePaths = [ cfg.dataDir ];
           RemoveIPC = true;
           RestrictAddressFamilies = [
+            "AF_UNIX"
             "AF_INET"
             "AF_INET6"
           ];

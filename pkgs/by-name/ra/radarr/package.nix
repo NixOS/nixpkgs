@@ -21,7 +21,7 @@
   applyPatches,
 }:
 let
-  version = "5.26.2.10099";
+  version = "5.28.0.10274";
   # The dotnet8 compatibility patches also change `yarn.lock`, so we must pass
   # the already patched lockfile to `fetchYarnDeps`.
   src = applyPatches {
@@ -29,7 +29,7 @@ let
       owner = "Radarr";
       repo = "Radarr";
       tag = "v${version}";
-      hash = "sha256-7tU9oxE1F/dcR5bwb/qHyux3WA6lEwdozLloDgOMVbU=";
+      hash = "sha256-iETtSByI9VjZdVjFHdfDcfSHUGz5Es8K8/HiB99KUqc=";
     };
     postPatch = ''
       mv src/NuGet.config NuGet.Config
@@ -41,12 +41,12 @@ let
       # However, the patches cleanly apply to v5 as well.
       (fetchpatch {
         name = "dotnet8-compatibility";
-        url = "https://github.com/Radarr/Radarr/commit/490891c63de589604bdc3373cfc85068c3826648.patch";
-        hash = "sha256-SCP7MPUkEZLSrls8ouekSXpXdgAJTwNFPirHjaMkQ6s=";
+        url = "https://github.com/Radarr/Radarr/commit/2235823af313ea1f39fd1189b69a75fc5d380c41.patch";
+        hash = "sha256-3YgQV4xc2i5DNWp2KxVz6M5S8n//a/Js7pckGZ06fWc=";
       })
       (fetchpatch {
         name = "dotnet8-darwin-compatibility";
-        url = "https://github.com/Radarr/Radarr/commit/f38a129289c49a242d8901dc2f041f9dc8bfc303.patch";
+        url = "https://github.com/Radarr/Radarr/commit/2a886fb26a70b4d48a4ad08d7ee23e5e4d81f522.patch";
         hash = "sha256-SAMUHqlSj8FPq20wY8NWbRytVZXTPtMXMfM3CoM8kSA=";
       })
     ];
@@ -132,43 +132,41 @@ buildDotnetModule {
   ];
 
   # Skip manual, integration, automation and platform-dependent tests.
-  testFilters =
-    [
-      "TestCategory!=ManualTest"
-      "TestCategory!=IntegrationTest"
-      "TestCategory!=AutomationTest"
+  testFilters = [
+    "TestCategory!=ManualTest"
+    "TestCategory!=IntegrationTest"
+    "TestCategory!=AutomationTest"
 
-      # makes real HTTP requests
-      "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
-    ]
-    ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-      # fails on macOS
-      "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
-    ];
+    # makes real HTTP requests
+    "FullyQualifiedName!~NzbDrone.Core.Test.UpdateTests.UpdatePackageProviderFixture"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # fails on macOS
+    "FullyQualifiedName!~NzbDrone.Core.Test.Http.HttpProxySettingsProviderFixture"
+  ];
 
-  disabledTests =
-    [
-      # setgid tests
-      "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
-      "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
+  disabledTests = [
+    # setgid tests
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_preserve_setgid_on_set_folder_permissions"
+    "NzbDrone.Mono.Test.DiskProviderTests.DiskProviderFixture.should_clear_setgid_on_set_folder_permissions"
 
-      # we do not set application data directory during tests (i.e. XDG data directory)
-      "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
-      "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
+    # we do not set application data directory during tests (i.e. XDG data directory)
+    "NzbDrone.Mono.Test.DiskProviderTests.FreeSpaceFixture.should_return_free_disk_space"
+    "NzbDrone.Common.Test.ServiceFactoryFixture.event_handlers_should_be_unique"
 
-      # attempts to read /etc/*release and fails since it does not exist
-      "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
+    # attempts to read /etc/*release and fails since it does not exist
+    "NzbDrone.Mono.Test.EnvironmentInfo.ReleaseFileVersionAdapterFixture.should_get_version_info"
 
-      # fails to start test dummy because it cannot locate .NET runtime for some reason
-      "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
-      "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
-      "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
-    ]
-    ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
-      # flaky on darwin
-      "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_add_collection_movie_if_valid_mediainfo"
-      "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_format_audio_channels_to_one_decimal_when_adding_collection_movie"
-    ];
+    # fails to start test dummy because it cannot locate .NET runtime for some reason
+    "NzbDrone.Common.Test.ProcessProviderFixture.should_be_able_to_start_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.exists_should_find_running_process"
+    "NzbDrone.Common.Test.ProcessProviderFixture.kill_all_should_kill_all_process_with_name"
+  ]
+  ++ lib.optionals stdenvNoCC.buildPlatform.isDarwin [
+    # flaky on darwin
+    "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_add_collection_movie_if_valid_mediainfo"
+    "NzbDrone.Core.Test.NotificationTests.TraktServiceFixture.should_format_audio_channels_to_one_decimal_when_adding_collection_movie"
+  ];
 
   passthru = {
     tests = {

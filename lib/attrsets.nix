@@ -4,13 +4,9 @@
 { lib }:
 
 let
-  inherit (builtins) head length;
-  inherit (lib.trivial)
-    oldestSupportedReleaseIsAtLeast
-    mergeAttrs
-    warn
-    warnIf
-    ;
+  inherit (builtins) head length typeOf;
+  inherit (lib.asserts) assertMsg;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -43,7 +39,7 @@ rec {
     ;
 
   /**
-    Return an attribute from nested attribute sets.
+    Returns an attribute from nested attribute sets.
 
     Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
@@ -110,7 +106,7 @@ rec {
     attrByPath' 0 set;
 
   /**
-    Return if an attribute from nested attribute set exists.
+    Returns if an attribute from nested attribute set exists.
 
     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
 
@@ -176,7 +172,7 @@ rec {
     hasAttrByPath' 0 e;
 
   /**
-    Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
+    Returns the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
 
     Can be used after [`mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) to apply a condition,
     although this will evaluate the predicate function on sibling attributes as well.
@@ -503,13 +499,13 @@ rec {
     updates: value: go 0 true value updates;
 
   /**
-    Return the specified attributes from a set.
+    Returns the specified attributes from a set.
 
     # Inputs
 
     `nameList`
 
-    : The list of attributes to fetch from `set`. Each attribute name must exist on the attrbitue set
+    : The list of attributes to fetch from `set`. Each attribute name must exist on the attribute set
 
     `set`
 
@@ -535,7 +531,7 @@ rec {
   attrVals = nameList: set: map (x: set.${x}) nameList;
 
   /**
-    Return the values of all attributes in the given set, sorted by
+    Returns the values of all attributes in the given set, sorted by
     attribute name.
 
     # Type
@@ -632,6 +628,16 @@ rec {
     `pred`
 
     : Predicate taking an attribute name and an attribute value, which returns `true` to include the attribute, or `false` to exclude the attribute.
+
+      <!-- TIP -->
+      If possible, decide on `name` first and on `value` only if necessary.
+      This avoids evaluating the value if the name is already enough, making it possible, potentially, to have the argument reference the return value.
+      (Depending on context, that could still be considered a self reference by users; a common pattern in Nix.)
+
+      <!-- TIP -->
+      `filterAttrs` is occasionally the cause of infinite recursion in configuration systems that allow self-references.
+      To support the widest range of user-provided logic, perform the `filterAttrs` call as late as possible.
+      Typically that's right before using it in a derivation, as opposed to an implicit conversion whose result is accessible to the user's expressions.
 
     `set`
 
@@ -1163,7 +1169,7 @@ rec {
     ```nix
     mapAttrsRecursiveCond
       (as: !(as ? "type" && as.type == "derivation"))
-      (x: x.name)
+      (path: x: x.name)
       attrs
     ```
     :::
@@ -1182,6 +1188,125 @@ rec {
           name: value:
           if isAttrs value && cond value then recurse (path ++ [ name ]) value else f (path ++ [ name ]) value
         );
+    in
+    recurse [ ] set;
+
+  /**
+    Apply a function to each leaf (non‐attribute‐set attribute) of a tree of
+    nested attribute sets, returning the results of the function as a list,
+    ordered lexicographically by their attribute paths.
+
+    Like `mapAttrsRecursive`, but concatenates the mapping function results
+    into a list.
+
+    # Inputs
+
+    `f`
+
+    : Mapping function which, given an attribute’s path and value, returns a
+      new value.
+
+      This value will be an element of the list returned by
+      `mapAttrsToListRecursive`.
+
+      The first argument to the mapping function is a list of attribute names
+      forming the path to the leaf attribute. The second argument is the leaf
+      attribute value, which will never be an attribute set.
+
+    `set`
+
+    : Attribute set to map over.
+
+    # Type
+
+    ```
+    mapAttrsToListRecursive :: ([String] -> a -> b) -> AttrSet -> [b]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.mapAttrsToListRecursive` usage example
+
+    ```nix
+    mapAttrsToListRecursive (path: value: "${concatStringsSep "." path}=${value}")
+      { n = { a = "A"; m = { b = "B"; c = "C"; }; }; d = "D"; }
+    => [ "n.a=A" "n.m.b=B" "n.m.c=C" "d=D" ]
+    ```
+    :::
+  */
+  mapAttrsToListRecursive = mapAttrsToListRecursiveCond (_: _: true);
+
+  /**
+    Determine the nodes of a tree of nested attribute sets by applying a
+    predicate, then apply a function to the leaves, returning the results
+    as a list, ordered lexicographically by their attribute paths.
+
+    Like `mapAttrsToListRecursive`, but takes an additional predicate to
+    decide whether to recurse into an attribute set.
+
+    Unlike `mapAttrsRecursiveCond` this predicate receives the attribute path
+    as its first argument, in addition to the attribute set.
+
+    # Inputs
+
+    `pred`
+
+    : Predicate to decide whether to recurse into an attribute set.
+
+      If the predicate returns true, `mapAttrsToListRecursiveCond` recurses into
+      the attribute set. If the predicate returns false, it does not recurse
+      but instead applies the mapping function, treating the attribute set as
+      a leaf.
+
+      The first argument to the predicate is a list of attribute names forming
+      the path to the attribute set. The second argument is the attribute set.
+
+    `f`
+
+    : Mapping function which, given an attribute’s path and value, returns a
+      new value.
+
+      This value will be an element of the list returned by
+      `mapAttrsToListRecursiveCond`.
+
+      The first argument to the mapping function is a list of attribute names
+      forming the path to the leaf attribute. The second argument is the leaf
+      attribute value, which may be an attribute set if the predicate returned
+      false.
+
+    `set`
+
+    : Attribute set to map over.
+
+    # Type
+    ```
+    mapAttrsToListRecursiveCond :: ([String] -> AttrSet -> Bool) -> ([String] -> a -> b) -> AttrSet -> [b]
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.mapAttrsToListRecursiveCond` usage example
+
+    ```nix
+    mapAttrsToListRecursiveCond
+      (path: as: !(lib.isDerivation as))
+      (path: value: "--set=${lib.concatStringsSep "." path}=${toString value}")
+      {
+        rust.optimize = 2;
+        target = {
+          riscv64-unknown-linux-gnu.linker = pkgs.lld;
+        };
+      }
+    => [ "--set=rust.optimize=2" "--set=target.riscv64-unknown-linux-gnu.linker=/nix/store/sjw4h1k…" ]
+    ```
+    :::
+  */
+  mapAttrsToListRecursiveCond =
+    pred: f: set:
+    let
+      mapRecursive =
+        path: value: if isAttrs value && pred path value then recurse path value else [ (f path value) ];
+      recurse = path: set: concatMap (name: mapRecursive (path ++ [ name ]) set.${name}) (attrNames set);
     in
     recurse [ ] set;
 
@@ -1216,7 +1341,44 @@ rec {
 
     :::
   */
-  genAttrs = names: f: listToAttrs (map (n: nameValuePair n (f n)) names);
+  genAttrs = names: f: genAttrs' names (n: nameValuePair n (f n));
+
+  /**
+    Like `genAttrs`, but allows the name of each attribute to be specified in addition to the value.
+    The applied function should return both the new name and value as a `nameValuePair`.
+    ::: {.warning}
+    In case of attribute name collision the first entry determines the value,
+    all subsequent conflicting entries for the same name are silently ignored.
+    :::
+
+    # Inputs
+
+    `xs`
+
+    : A list of strings `s` used as generator.
+
+    `f`
+
+    : A function, given a string `s` from the list `xs`, returns a new `nameValuePair`.
+
+    # Type
+
+    ```
+    genAttrs' :: [ Any ] -> (Any -> { name :: String; value :: Any; }) -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.genAttrs'` usage example
+
+    ```nix
+    genAttrs' [ "foo" "bar" ] (s: nameValuePair ("x_" + s) ("y_" + s))
+    => { x_foo = "y_foo"; x_bar = "y_bar"; }
+    ```
+
+    :::
+  */
+  genAttrs' = xs: f: listToAttrs (map f xs);
 
   /**
     Check whether the argument is a derivation. Any set with
@@ -1982,7 +2144,7 @@ rec {
     chooseDevOutputs :: [Derivation] -> [Derivation]
     ```
   */
-  chooseDevOutputs = builtins.map getDev;
+  chooseDevOutputs = map getDev;
 
   /**
     Make various Nix tools consider the contents of the resulting
@@ -2038,10 +2200,8 @@ rec {
   dontRecurseIntoAttrs = attrs: attrs // { recurseForDerivations = false; };
 
   /**
-    `unionOfDisjoint x y` is equal to `x // y // z` where the
-    attrnames in `z` are the intersection of the attrnames in `x` and
-    `y`, and all values `assert` with an error message.  This
-     operator is commutative, unlike (//).
+    `unionOfDisjoint x y` is equal to `x // y`, but accessing attributes present
+    in both `x` and `y` will throw an error.  This operator is commutative, unlike `//`.
 
     # Inputs
 
@@ -2065,20 +2225,8 @@ rec {
       intersection = builtins.intersectAttrs x y;
       collisions = lib.concatStringsSep " " (builtins.attrNames intersection);
       mask = builtins.mapAttrs (
-        name: value: builtins.throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
+        name: value: throw "unionOfDisjoint: collision on ${name}; complete list: ${collisions}"
       ) intersection;
     in
     (x // y) // mask;
-
-  # DEPRECATED
-  zipWithNames = warn "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
-
-  # DEPRECATED
-  zip = warn "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
-
-  # DEPRECATED
-  cartesianProductOfSets =
-    warnIf (oldestSupportedReleaseIsAtLeast 2405)
-      "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct."
-      cartesianProduct;
 }

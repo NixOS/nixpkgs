@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 let
-  version = "3.7.0";
-  srcHash = "sha256-5EmvmfkAUMkmImS37jAPOoEADYeAzQgV6zhpRbP9FVk=";
+  version = "3.10.0";
+  srcHash = "sha256-Z9EGm14q9DySZ0lgw/wwam3NjvicltWBkVJ3cwi/eds=";
   # The tarball contains vendored dependencies
   vendorHash = null;
 in
@@ -44,8 +44,8 @@ in
     license = licenses.asl20;
     maintainers = with maintainers; [
       ambroisie
+      marcusramberg
       techknowlogick
-      adamcstephens
     ];
   };
 }

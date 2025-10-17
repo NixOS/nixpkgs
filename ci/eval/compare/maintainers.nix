@@ -1,10 +1,10 @@
 {
   lib,
 }:
-# Almost directly vendored from https://github.com/NixOS/ofborg/blob/5a4e743f192fb151915fcbe8789922fa401ecf48/ofborg/src/maintainers.nix
 {
   changedattrs,
   changedpathsjson,
+  removedattrs,
   byName ? false,
 }:
 let
@@ -21,48 +21,32 @@ let
 
   anyMatchingFiles = files: builtins.any anyMatchingFile files;
 
-  enrichedAttrs = builtins.map (name: {
-    path = lib.splitString "." name;
-    name = name;
-  }) changedattrs;
-
-  validPackageAttributes = builtins.filter (
-    pkg:
-    if (lib.attrsets.hasAttrByPath pkg.path pkgs) then
-      (
-        let
-          value = lib.attrsets.attrByPath pkg.path null pkgs;
-        in
-        if (builtins.tryEval value).success then
-          if value != null then true else builtins.trace "${pkg.name} exists but is null" false
-        else
-          builtins.trace "Failed to access ${pkg.name} even though it exists" false
-      )
-    else
-      builtins.trace "Failed to locate ${pkg.name}." false
-  ) enrichedAttrs;
-
-  attrsWithPackages = builtins.map (
-    pkg: pkg // { package = lib.attrsets.attrByPath pkg.path null pkgs; }
-  ) validPackageAttributes;
-
-  attrsWithMaintainers = builtins.map (
-    pkg:
-    let
-      meta = pkg.package.meta or { };
-    in
-    pkg
-    // {
-      # TODO: Refactor this so we can ping entire teams instead of the individual members.
-      # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
-      maintainers = meta.maintainers or [ ];
-    }
-  ) attrsWithPackages;
+  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
+    (map (
+      name:
+      let
+        # Some packages might be reported as changed on a different platform, but
+        # not even have an attribute on the platform the maintainers are requested on.
+        # Fallback to `null` for these to filter them out below.
+        package = lib.attrByPath (lib.splitString "." name) null pkgs;
+      in
+      {
+        inherit name package;
+        # TODO: Refactor this so we can ping entire teams instead of the individual members.
+        # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
+        maintainers = package.meta.maintainers or [ ];
+      }
+    ))
+    # No need to match up packages without maintainers with their files.
+    # This also filters out attributes where `packge = null`, which is the
+    # case for libintl, for example.
+    (builtins.filter (pkg: pkg.maintainers != [ ]))
+  ];
 
   relevantFilenames =
     drv:
     (lib.lists.unique (
-      builtins.map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
+      map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
         builtins.filter (x: x != null) [
           ((drv.meta or { }).maintainersPosition or null)
           ((drv.meta or { }).teamsPosition or null)
@@ -89,7 +73,7 @@ let
       )
     ));
 
-  attrsWithFilenames = builtins.map (
+  attrsWithFilenames = map (
     pkg: pkg // { filenames = relevantFilenames pkg.package; }
   ) attrsWithMaintainers;
 
@@ -97,7 +81,7 @@ let
 
   listToPing = lib.concatMap (
     pkg:
-    builtins.map (maintainer: {
+    map (maintainer: {
       id = maintainer.githubId;
       inherit (maintainer) github;
       packageName = pkg.name;
@@ -108,7 +92,7 @@ let
   byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
 
   packagesPerMaintainer = lib.attrsets.mapAttrs (
-    maintainer: packages: builtins.map (pkg: pkg.packageName) packages
+    maintainer: packages: map (pkg: pkg.packageName) packages
   ) byMaintainer;
 in
 packagesPerMaintainer

@@ -89,35 +89,42 @@ buildPythonApplication rec {
     "hotdoc.extensions.gst.gst_extension"
   ];
 
-  pytestFlagsArray = [
-    # Executing hotdoc exits with code 1
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_basic"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
-    "--deselect tests/test_hotdoc.py::TestHotdoc::test_private_folder"
+  pytestFlags = [
     # Run the tests by package instead of current dir
     "--pyargs"
     "hotdoc"
   ];
 
-  disabledTests =
-    [
-      # Test does not correctly handle path normalization for test comparison
-      "test_cli_overrides"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
-      "test_index"
-    ];
+  disabledTestPaths = [
+    # Executing hotdoc exits with code 1
+    "tests/test_hotdoc.py::TestHotdoc::test_basic"
+    "tests/test_hotdoc.py::TestHotdoc::test_explicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_implicit_conf_file"
+    "tests/test_hotdoc.py::TestHotdoc::test_private_folder"
+  ];
 
-  # Hardcode libclang paths
-  postPatch = ''
-    substituteInPlace hotdoc/extensions/c/c_extension.py \
-      --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
-  '';
+  disabledTests = [
+    # Test does not correctly handle path normalization for test comparison
+    "test_cli_overrides"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Test does not correctly handle absolute /home paths on Darwin (even fake ones)
+    "test_index"
+  ];
+
+  postPatch =
+    # Hardcode libclang paths
+    ''
+      substituteInPlace hotdoc/extensions/c/c_extension.py \
+        --replace "shutil.which('llvm-config')" 'True' \
+        --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
+        --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
+        --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
+    ''
+    # <https://github.com/MathieuDuponchelle/cmark/pull/2>
+    + ''
+      patch -p1 -d cmark -i ${./fix-cmake-4.patch}
+    '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
   preCheck = ''

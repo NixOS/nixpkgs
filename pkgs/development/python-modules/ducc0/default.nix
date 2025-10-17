@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "ducc0";
-  version = "0.38.0";
+  version = "0.39.0";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "mtr";
     repo = "ducc";
     tag = "ducc0_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-Be7lw9i1uEOY3w/Efnn7sZ4Xg5DenQuih6uReCmOI1I=";
+    hash = "sha256-VF4m0/kna1HEccK5ljFuNwXSYoak9TeFMyhBmUgupf0=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     scipy
     pytest-xdist
   ];
-  pytestFlagsArray = [ "python/test" ];
+  enabledTestPaths = [ "python/test" ];
   pythonImportsCheck = [ "ducc0" ];
 
   postInstall = ''

@@ -96,7 +96,6 @@ finalAttrs: prevAttrs: {
     '';
 
   passthru = prevAttrs.passthru or { } // {
-    useCudatoolkitRunfile = strings.versionOlder cudaMajorMinorVersion "11.3.999";
     # The CUDNN used with TensorRT.
     # If null, the default cudnn derivation will be used.
     # If a version is specified, the cudnn derivation with that version will be used,
@@ -118,7 +117,6 @@ finalAttrs: prevAttrs: {
       prevAttrs.meta.badPlatforms or [ ]
       ++ lib.optionals (targetArch == "unsupported") [ hostPlatform.system ];
     homepage = "https://developer.nvidia.com/tensorrt";
-    maintainers = prevAttrs.meta.maintainers or [ ] ++ [ maintainers.aidalgol ];
     teams = prevAttrs.meta.teams or [ ];
 
     # Building TensorRT on Hydra is impossible because of the non-redistributable

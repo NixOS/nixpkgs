@@ -30,7 +30,8 @@ let
       lib.switch
         [ coq.coq-version mathcomp.version ]
         [
-          (case (range "8.20" "9.0") (isGe "2.3.0") "2.1.0")
+          (case (range "8.20" "9.1") (isGe "2.3.0") "2.1.1")
+          (case (range "8.20" "9.1") (isGe "2.3.0") "2.1.0")
           (case (range "8.16" "8.20") (isGe "2.1.0") "2.0.3")
           (case (range "8.16" "8.20") (isGe "2.0.0") "2.0.1")
           (case (range "8.16" "8.17") (isGe "2.0.0") "2.0.0")
@@ -43,6 +44,7 @@ let
         ]
         null;
 
+    release."2.1.1".sha256 = "sha256-nAQAX35W9br7dgrT9FqGyHYSzwgMiMsuD1d7SztQDwY=";
     release."2.1.0".sha256 = "sha256-UoDxy2BKraDyRsO42GXRo26O74OF51biZQGkIMWLf8Y=";
     release."2.0.3".sha256 = "sha256-5lDq7IWlEW0EkNzYPu+dA6KOvRgy53W/alikpDr/Kd0=";
     release."2.0.1".sha256 = "sha256-d/IQ4IdS2tpyPewcGobj2S6m2HU+iXQmlvR+ITNIcjI=";

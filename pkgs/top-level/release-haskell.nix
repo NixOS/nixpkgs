@@ -63,22 +63,12 @@ let
 
   # list of all compilers to test specific packages on
   released = with compilerNames; [
-    ghc8107
-    ghc902
-    ghc928
-    ghc947
     ghc948
-    ghc963
-    ghc964
-    ghc965
-    ghc966
     ghc967
-    ghc981
-    ghc982
-    ghc983
     ghc984
     ghc9101
     ghc9102
+    ghc9103
     # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
@@ -238,24 +228,7 @@ let
   jobs = recursiveUpdateMany [
     (mapTestOn {
       haskellPackages = packagePlatforms pkgs.haskellPackages;
-      haskell.compiler =
-        packagePlatforms pkgs.haskell.compiler
-        // (lib.genAttrs
-          [
-            "ghcjs"
-            "ghcjs810"
-          ]
-          (ghcjsName: {
-            # We can't build ghcjs itself, since it exceeds 3GB (Hydra's output limit) due
-            # to the size of its bundled libs. We can however save users a bit of compile
-            # time by building the bootstrap ghcjs on Hydra. For this reason, we overwrite
-            # the ghcjs attributes in haskell.compiler with a reference to the bootstrap
-            # ghcjs attribute in their bootstrap package set (exposed via passthru) which
-            # would otherwise be ignored by Hydra.
-            bootGhcjs = (packagePlatforms pkgs.haskell.compiler.${ghcjsName}.passthru).bootGhcjs;
-          })
-        );
-
+      haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       tests.haskell = packagePlatforms pkgs.tests.haskell;
 
       nixosTests = {
@@ -341,13 +314,11 @@ let
         nix-delegate
         nix-deploy
         nix-diff
-        nix-linter
         nix-output-monitor
         nix-script
         nix-tree
-        nixfmt
         nixfmt-classic
-        nixfmt-rfc-style
+        nixfmt
         nota
         nvfetcher
         oama
@@ -363,7 +334,7 @@ let
         shellcheck-minimal
         sourceAndTags
         spacecookie
-        spago
+        spago-legacy
         specup
         splot
         stack
@@ -379,13 +350,11 @@ let
         uusi
         uqm
         uuagc
-        # vaultenv: broken by connection on 2024-03-16
-        wstunnel
+        vaultenv
         xmobar
         xmonadctl
         xmonad-with-packages
         yi
-        zsh-git-prompt
         ;
 
       # Members of the elmPackages set that are Haskell derivations
@@ -393,8 +362,6 @@ let
         inherit (pkgsPlatforms.elmPackages)
           elm
           elm-format
-          elm-instrument
-          elmi-to-json
           ;
       };
 
@@ -413,14 +380,7 @@ let
             "aarch64-darwin"
           ]
           {
-            haskell.compiler = lib.recursiveUpdate (packagePlatforms pkgs.pkgsMusl.haskell.compiler) {
-              # remove musl ghc865Binary since it is known to be broken and
-              # causes an evaluation error on darwin.
-              ghc865Binary = { };
-
-              ghcjs = { };
-              ghcjs810 = { };
-            };
+            haskell.compiler = packagePlatforms pkgs.pkgsMusl.haskell.compiler;
 
             # Get some cache going for MUSL-enabled GHC.
             haskellPackages = {
@@ -471,8 +431,8 @@ let
                 ;
             };
 
-            haskell.packages.native-bignum.ghc984 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc984)
+            haskell.packages.native-bignum.ghc9103 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
                 hello
                 random
                 QuickCheck
@@ -482,6 +442,26 @@ let
           };
 
       pkgsCross = {
+        aarch64-android-prebuilt.pkgsStatic =
+          removePlatforms
+            [
+              # Android NDK package doesn't support building on
+              "aarch64-darwin"
+              "aarch64-linux"
+
+              "x86_64-darwin"
+            ]
+            {
+              haskell.packages.ghc912 = {
+                inherit
+                  (packagePlatforms pkgs.pkgsCross.aarch64-android-prebuilt.pkgsStatic.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  ;
+              };
+            };
+
         ghcjs =
           removePlatforms
             [
@@ -491,14 +471,6 @@ let
             {
               haskellPackages = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-
-              haskell.packages.ghc98 = {
-                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
                   ghc
                   hello
                   microlens
@@ -524,14 +496,18 @@ let
               };
             };
 
+        ucrt64.haskell.packages.ghc912 = {
+          inherit (packagePlatforms pkgs.pkgsCross.ucrt64.haskell.packages.ghc912)
+            ghc
+            # hello # executables don't build yet
+            microlens
+            ;
+        };
+
         riscv64 = {
           # Cross compilation of GHC
           haskell.compiler = {
             inherit (packagePlatforms pkgs.pkgsCross.riscv64.haskell.compiler)
-              # Our oldest GHC which still uses its own expression. 8.10.7 can
-              # theoretically be used to chain bootstrap all GHCs on riscv64
-              # which doesn't have official bindists.
-              ghc8107
               # Latest GHC we are able to cross-compile.
               ghc948
               ;
@@ -542,8 +518,6 @@ let
           # Cross compilation of GHC
           haskell.compiler = {
             inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.compiler)
-              # Uses a separate expression and LLVM backend for aarch64.
-              ghc8107
               # Latest GHC we are able to cross-compile. Uses NCG backend.
               ghc948
               ;
@@ -563,10 +537,6 @@ let
         # from the package sets. Due to (transitively) requiring recent versions
         # of core packages, it is not always reasonable to get cabal-install to
         # work with older compilers.
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc928
-        compilerNames.ghc947
         compilerNames.ghc948
       ] released;
       Cabal_3_10_3_0 = lib.subtractLists [
@@ -576,22 +546,22 @@ let
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
+      Cabal_3_16_0_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
-      haskell-language-server = lib.subtractLists [
-        # Support ceased as of 2.3.0.0
-        compilerNames.ghc8107
-        # Support ceased as of 2.5.0.0
-        compilerNames.ghc902
-        # Support ceased as of 2.10.0.0
-        compilerNames.ghc928
-      ] released;
-      hoogle = released;
-      hlint = lib.subtractLists [
-        compilerNames.ghc902
+      git-annex = [
+        # for 9.10, test that using filepath (instead of filepath-bytestring) works.
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
+      ];
+      haskell-language-server = released;
+      hoogle = released;
+      hlint = lib.subtractLists [
+        compilerNames.ghc9101
+        compilerNames.ghc9102
+        compilerNames.ghc9103
         compilerNames.ghc9122
       ] released;
       hpack = released;
@@ -600,13 +570,6 @@ let
       language-nix = released;
       nix-paths = released;
       titlecase = released;
-      ghc-api-compat = [
-        compilerNames.ghc8107
-        compilerNames.ghc902
-      ];
-      ghc-bignum = [
-        compilerNames.ghc8107
-      ];
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
@@ -621,11 +584,12 @@ let
       semaphore-compat = [
         # Compiler < 9.8 don't have the semaphore-compat core package, but
         # requires unix >= 2.8.1.0 which implies GHC >= 9.6 for us.
-        compilerNames.ghc966
+        compilerNames.ghc967
       ];
       weeder = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
         compilerNames.ghc9122
       ] released;
     })
@@ -676,7 +640,7 @@ let
           teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations (
-          builtins.map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
+          map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
         );
       };
 
@@ -689,14 +653,7 @@ let
           ];
         };
         constituents = accumulateDerivations [
-          jobs.pkgsMusl.haskell.compiler.ghc8107Binary
-          jobs.pkgsMusl.haskell.compiler.ghc8107
-          jobs.pkgsMusl.haskell.compiler.ghc902
-          jobs.pkgsMusl.haskell.compiler.ghc928
           jobs.pkgsMusl.haskell.compiler.ghcHEAD
-          jobs.pkgsMusl.haskell.compiler.integer-simple.ghc8107
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc902
-          jobs.pkgsMusl.haskell.compiler.native-bignum.ghc928
           jobs.pkgsMusl.haskell.compiler.native-bignum.ghcHEAD
         ];
       };
@@ -713,7 +670,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc984
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9103
         ];
       };
     }

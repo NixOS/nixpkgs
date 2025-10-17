@@ -18,18 +18,17 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  postPatch =
-    ''
-      patchShebangs .
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace Configure.pl \
-        --replace '`/usr/bin/arch`' '"${stdenv.hostPlatform.darwinArch}"' \
-        --replace '/usr/bin/arch' "$(type -P true)" \
-        --replace '/usr/' '/nope/'
-      substituteInPlace 3rdparty/dyncall/configure \
-        --replace '`sw_vers -productVersion`' '"11.0"'
-    '';
+  postPatch = ''
+    patchShebangs .
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace Configure.pl \
+      --replace '`/usr/bin/arch`' '"${stdenv.hostPlatform.darwinArch}"' \
+      --replace '/usr/bin/arch' "$(type -P true)" \
+      --replace '/usr/' '/nope/'
+    substituteInPlace 3rdparty/dyncall/configure \
+      --replace '`sw_vers -productVersion`' '"11.0"'
+  '';
 
   buildInputs = [ perl ];
   doCheck = false; # MoarVM does not come with its own test suite

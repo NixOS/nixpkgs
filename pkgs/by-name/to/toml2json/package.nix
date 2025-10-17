@@ -6,15 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "toml2json";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-9q2HtNzsRO0/5gcmxUfWuQlWsfvw/A21WEXZlifCUjY=";
+    hash = "sha256-KzMDJ3WBjr8PNP8+6X8c6/g99375B+MARYIKooqA5jY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-IglwVFTKOQFln/LE76+QM4P0J9dDM83jSAF6jGGNLEg=";
+  cargoHash = "sha256-6HMaKak3YI8kH9Wp1/e4dt276B4QyfyZMve1wl5mucQ=";
 
   meta = with lib; {
     description = "Very small CLI for converting TOML to JSON";

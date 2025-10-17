@@ -20,25 +20,26 @@
   jq,
   ripgrep,
   common-updater-scripts,
+  headless ? false,
 }:
 
 let
-  version = "2025.4.943";
+  version = "2025.8.779";
   sources = {
     x86_64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_amd64.deb";
-      hash = "sha256-QWLeAq1bhIBw1UzGp62cR7KaOcGOmHgBZJHR3NgB3JY=";
+      hash = "sha256-488sXR0CqZAkeXSMawYVXHszK9NXsTCQc5RAd87Hj9k=";
     };
     aarch64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_arm64.deb";
-      hash = "sha256-PDS64b4F3VzUlKNSUBynBRemDkRgbx53xZ7pOL00N0A=";
+      hash = "sha256-rLDGY8kmYU/B0wks20oE1sQ7luaX6teTNfWZ6atJzhU=";
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
-  pname = "cloudflare-warp";
+  pname = "cloudflare-warp" + lib.optionalString headless "-headless";
 
   src =
     sources.${stdenv.hostPlatform.system}
@@ -49,20 +50,24 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
     versionCheckHook
     makeWrapper
+  ]
+  ++ lib.optionals (!headless) [
     copyDesktopItems
     desktop-file-utils
   ];
 
   buildInputs = [
     dbus
-    gtk3
     libpcap
     openssl
     nss
     (lib.getLib stdenv.cc.cc)
+  ]
+  ++ lib.optionals (!headless) [
+    gtk3
   ];
 
-  desktopItems = [
+  desktopItems = lib.optionals (!headless) [
     (makeDesktopItem {
       name = "com.cloudflare.WarpCli";
       desktopName = "Cloudflare Zero Trust Team Enrollment";
@@ -92,26 +97,39 @@ stdenv.mkDerivation rec {
     patchelf --replace-needed libpcap.so.0.8 ${libpcap}/lib/libpcap.so $out/bin/warp-dex
     mv lib/systemd/system $out/lib/systemd/
     substituteInPlace $out/lib/systemd/system/warp-svc.service \
-      --replace "ExecStart=" "ExecStart=$out"
-    substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
-      --replace "ExecStart=" "ExecStart=$out"
+      --replace-fail "ExecStart=" "ExecStart=$out"
+    ${lib.optionalString (!headless) ''
+      substituteInPlace $out/lib/systemd/user/warp-taskbar.service \
+        --replace-fail "ExecStart=" "ExecStart=$out" \
+        --replace-fail "BindsTo=" "PartOf="
 
-    cat >>$out/lib/systemd/user/warp-taskbar.service <<EOF
+      cat >>$out/lib/systemd/user/warp-taskbar.service <<EOF
 
-    [Service]
-    BindReadOnlyPaths=$out:/usr:
-    EOF
+      [Service]
+      BindReadOnlyPaths=$out:/usr:
+      EOF
+    ''}
+    ${lib.optionalString headless ''
+      # For headless version, remove GUI components
+      rm $out/bin/warp-taskbar
+      rm -r $out/lib/systemd/user
+      rm -r $out/etc
+      rm -r $out/share/applications
+      rm -r $out/share/icons
+      rm -r $out/share/warp
+    ''}
 
     runHook postInstall
   '';
 
   postInstall = ''
     wrapProgram $out/bin/warp-svc --prefix PATH : ${lib.makeBinPath [ nftables ]}
-    wrapProgram $out/bin/warp-cli --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
+    ${lib.optionalString (!headless) ''
+      wrapProgram $out/bin/warp-cli --prefix PATH : ${lib.makeBinPath [ desktop-file-utils ]}
+    ''}
   '';
 
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
   passthru = {
@@ -137,21 +155,23 @@ stdenv.mkDerivation rec {
             rg '([^/]+)\.0\.yaml\b' --only-matching --replace '$1'
         )"
 
-        for platform in ${lib.escapeShellArgs meta.platforms}; do
-          update-source-version "${pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
+        for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+          update-source-version "${finalAttrs.pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
         done
       '';
     });
   };
 
-  meta = with lib; {
-    description = "Replaces the connection between your device and the Internet with a modern, optimized, protocol";
+  meta = {
+    changelog = "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/warp-releases/linux/ga/${finalAttrs.version}.0.yaml";
+    description =
+      "Replaces the connection between your device and the Internet with a modern, optimized, protocol"
+      + lib.optionalString headless " (headless version)";
     homepage = "https://pkg.cloudflareclient.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     mainProgram = "warp-cli";
-    maintainers = with maintainers; [
-      devpikachu
+    maintainers = with lib.maintainers; [
       marcusramberg
     ];
     platforms = [
@@ -159,4 +179,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

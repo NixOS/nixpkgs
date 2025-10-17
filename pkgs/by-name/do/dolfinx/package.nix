@@ -47,7 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     dolfinxPackages.kahip
     dolfinxPackages.scotch
-  ] ++ lib.optional withParmetis dolfinxPackages.parmetis;
+  ]
+  ++ lib.optional withParmetis dolfinxPackages.parmetis;
 
   propagatedBuildInputs = [
     spdlog

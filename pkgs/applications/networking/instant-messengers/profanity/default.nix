@@ -39,13 +39,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "profanity";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "profanity-im";
     repo = "profanity";
     rev = finalAttrs.version;
-    hash = "sha256-3TmnbTnL8SPSd3seThavOOJVELi8kWLSlZlAub24KZ4=";
+    hash = "sha256-h+R+hasc45NZOneuqZ+z+yjfpsPm317OXq0LYe3t+cQ=";
   };
 
   patches = [
@@ -61,50 +61,48 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cmocka
-      curl
-      expat
-      expect
-      glib
-      libstrophe
-      libmicrohttpd
-      libotr
-      libuuid
-      ncurses
-      openssl
-      readline
-      sqlite
-    ]
-    ++ lib.optionals autoAwaySupport [
-      libXScrnSaver
-      libX11
-    ]
-    ++ lib.optionals notifySupport [
-      libnotify
-      gdk-pixbuf
-    ]
-    ++ lib.optionals omemoSupport [
-      libsignal-protocol-c
-      libgcrypt
-      qrencode
-    ]
-    ++ lib.optionals pgpSupport [ gpgme ]
-    ++ lib.optionals pythonPluginSupport [ python3 ]
-    ++ lib.optionals traySupport [ gtk3 ];
+  buildInputs = [
+    cmocka
+    curl
+    expat
+    expect
+    glib
+    libstrophe
+    libmicrohttpd
+    libotr
+    libuuid
+    ncurses
+    openssl
+    readline
+    sqlite
+  ]
+  ++ lib.optionals autoAwaySupport [
+    libXScrnSaver
+    libX11
+  ]
+  ++ lib.optionals notifySupport [
+    libnotify
+    gdk-pixbuf
+  ]
+  ++ lib.optionals omemoSupport [
+    libsignal-protocol-c
+    libgcrypt
+    qrencode
+  ]
+  ++ lib.optionals pgpSupport [ gpgme ]
+  ++ lib.optionals pythonPluginSupport [ python3 ]
+  ++ lib.optionals traySupport [ gtk3 ];
 
   # Enable feature flags, so that build fail if libs are missing
-  configureFlags =
-    [
-      "--enable-c-plugins"
-      "--enable-otr"
-    ]
-    ++ lib.optionals notifySupport [ "--enable-notifications" ]
-    ++ lib.optionals traySupport [ "--enable-icons-and-clipboard" ]
-    ++ lib.optionals pgpSupport [ "--enable-pgp" ]
-    ++ lib.optionals pythonPluginSupport [ "--enable-python-plugins" ]
-    ++ lib.optionals omemoSupport [ "--enable-omemo" ];
+  configureFlags = [
+    "--enable-c-plugins"
+    "--enable-otr"
+  ]
+  ++ lib.optionals notifySupport [ "--enable-notifications" ]
+  ++ lib.optionals traySupport [ "--enable-icons-and-clipboard" ]
+  ++ lib.optionals pgpSupport [ "--enable-pgp" ]
+  ++ lib.optionals pythonPluginSupport [ "--enable-python-plugins" ]
+  ++ lib.optionals omemoSupport [ "--enable-omemo" ];
 
   doCheck = true;
 

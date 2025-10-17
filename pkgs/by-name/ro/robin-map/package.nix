@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "robin-map";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "Tessil";
     repo = "robin-map";
     tag = "v${version}";
-    hash = "sha256-dspOWp/8oNR0p5XRnqO7WtPcCx54/y8m1cDho4UBYyc=";
+    hash = "sha256-Hkgxiq2i0TuqMK/bI5OMOn3LkmSE40NimDjK1FBZpsA=";
   };
 
   nativeBuildInputs = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Tessil/robin-map";
     changelog = "https://github.com/Tessil/robin-map/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

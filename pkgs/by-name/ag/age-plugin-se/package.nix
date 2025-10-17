@@ -1,13 +1,14 @@
 {
   lib,
   fetchFromGitHub,
+  llvmPackages,
   swiftPackages,
   swift,
   swiftpm,
   nix-update-script,
 }:
 let
-  inherit (swiftPackages) stdenv;
+  inherit (llvmPackages) stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "age-plugin-se";

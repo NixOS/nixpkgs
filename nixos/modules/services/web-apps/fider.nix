@@ -87,7 +87,8 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [
         "network.target"
-      ] ++ lib.optionals (cfg.database.url == "local") [ "postgresql.target" ];
+      ]
+      ++ lib.optionals (cfg.database.url == "local") [ "postgresql.target" ];
       requires = lib.optionals (cfg.database.url == "local") [ "postgresql.target" ];
       environment =
         let
@@ -116,7 +117,6 @@ in
 
   meta = {
     maintainers = with lib.maintainers; [
-      drupol
       niklaskorz
     ];
     # doc = ./fider.md;

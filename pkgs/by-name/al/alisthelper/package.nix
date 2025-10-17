@@ -71,7 +71,7 @@ flutter327.buildFlutterApplication {
     homepage = "https://github.com/Xmarmalade/alisthelper";
     mainProgram = "alisthelper";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

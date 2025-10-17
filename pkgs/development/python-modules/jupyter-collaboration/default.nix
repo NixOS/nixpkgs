@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-collaboration";
-  version = "4.0.2";
+  version = "4.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterlab";
     repo = "jupyter-collaboration";
     tag = "v${version}";
-    hash = "sha256-BCvTtrlP45YC9G/m/e8Nvbls7AugIaQzO2Gect1EmGE=";
+    hash = "sha256-PnfUWtOXdXYG5qfzAW5kATSQr2sWKDBNiINA8/G4ZX4=";
   };
 
   sourceRoot = "${src.name}/projects/jupyter-collaboration";
@@ -55,19 +55,21 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # pytest.PytestCacheWarning: could not create cache path /build/source/.pytest_cache/v/cache/nodeids: [Errno 13] Permission denied: '/build/source/pytest-cache-files-plraagdr'
-    "-p"
-    "no:cacheprovider"
-    "$src/tests"
+    "-pno:cacheprovider"
   ];
+
+  preCheck = ''
+    appendToVar enabledTestPaths "$src/tests"
+  '';
 
   __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "JupyterLab Extension enabling Real-Time Collaboration";
     homepage = "https://github.com/jupyterlab/jupyter_collaboration";
-    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jupyterlab/jupyter_collaboration/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.bsd3;
     teams = [ lib.teams.jupyter ];
   };

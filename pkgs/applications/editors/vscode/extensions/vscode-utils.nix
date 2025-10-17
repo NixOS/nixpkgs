@@ -41,14 +41,13 @@ let
       {
         pname = "vscode-extension-${pname}";
 
-        passthru =
-          {
-            updateScript = vscode-extension-update-script { };
-          }
-          // passthru
-          // {
-            inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
-          };
+        passthru = {
+          updateScript = vscode-extension-update-script { };
+        }
+        // passthru
+        // {
+          inherit vscodeExtPublisher vscodeExtName vscodeExtUniqueId;
+        };
 
         inherit
           configurePhase
@@ -128,7 +127,7 @@ let
 
   extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace =
-    mktplcExtRefList: builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
+    mktplcExtRefList: map extensionFromVscodeMarketplace mktplcExtRefList;
 
   vscodeWithConfiguration = import ./vscodeWithConfiguration.nix {
     inherit lib extensionsFromVscodeMarketplace writeShellScriptBin;

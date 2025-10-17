@@ -47,6 +47,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     teams = with lib.teams; [ ngi ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

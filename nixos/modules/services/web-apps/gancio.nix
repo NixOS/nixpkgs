@@ -44,7 +44,7 @@ in
       default = "gancio";
     };
 
-    settings = mkOption rec {
+    settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {
@@ -211,7 +211,8 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-        ] ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.target";
+        ]
+        ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.target";
 
         environment = {
           NODE_ENV = "production";

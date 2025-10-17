@@ -193,6 +193,9 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
 
+# fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
+34a5b1eb23129f8fb62c677e3760903f6d43228f
+
 # fetchurl: nixfmt-rfc-style
 ce21e97a1f20dee15da85c084f9d1148d84f853b
 
@@ -261,6 +264,9 @@ a4f7e161b380b35b2f7bc432659a95fd71254ad8
 # haskellPackages.hercules-ci-agent (cabal2nix -> nixfmt-rfc-style)
 9314da7ee8d2aedfb15193b8c489da51efe52bb5
 
+# haskell-updates: nixfmt-rfc-style
+9e296dcf846294e0aa94af7d3235e82eee7fe055
+
 # nix-builder-vm: nixfmt-rfc-style
 a034fb50f79816c6738fb48b48503b09ea3b0132
 
@@ -275,3 +281,22 @@ d7f1102f04c58b2edfc74c9a1d577e3aebfca775
 60e35e4ded6e91524364a74b3b4ec233ed9321f2
 99f2e655d9db009ee0b4ede3edced5f6c882c7f4
 b4532efe93882ae2e3fc579929a42a5a56544146
+
+# emacs: keep elpa/nongnu/melpa package overrides sorted
+9f2faf683ed48704aa17f693208a13aa64e22181
+
+# nixfmt 1.0.0
+62fe01651911043bd3db0add920af3d2935d9869 # !autorebase nix-shell --run treefmt
+5a0711127cd8b916c3d3128f473388c8c79df0da # !autorebase nix-shell --run treefmt
+
+# systemd: nixfmt
+b1c5cd3e794cdf89daa5e4f0086274a416a1cded
+
+#nixos/nextcloud: remove with lib usage
+b6088b0d8e13e8d18464d78935f0130052784658
+f7611cad5154a9096faa26d156a4079577bfae17
+
+# nixf-diagnose
+90e7159c559021ac4f4cc1222000f08a91feff69 # !autorebase nix-shell --run treefmt
+c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
+91a8fee3aaf79348aa2dc1552a29fc1b786c5133 # !autorebase nix-shell --run treefmt

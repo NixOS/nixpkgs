@@ -45,7 +45,9 @@ let
   # match .python-version
   customPython = python311.withPackages (
     ps: with ps; [
+      markupsafe
       packaging
+      pygments
     ]
   );
   runtimePaths = lib.makeLibraryPath (
@@ -63,13 +65,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "servo";
-  version = "0-unstable-2025-06-26";
+  version = "0-unstable-2025-07-30";
 
   src = fetchFromGitHub {
     owner = "servo";
     repo = "servo";
-    rev = "cbb0407ae641c049dd6796275b4ba8572c06b798";
-    hash = "sha256-d0Z+dvnNm3NxvGe/W/zJsAsyeMvxF9HoA+wSclWeLgk=";
+    rev = "0e180578632facc10f0e8fb29df9084369adc600";
+    hash = "sha256-4EQ15jOZNYjGmhIOJivHT8R6BeT6moGj+AI9DBq58v4=";
     # Breaks reproducibility depending on whether the picked commit
     # has other ref-names or not, which may change over time, i.e. with
     # "ref-names: HEAD -> main" as long this commit is the branch HEAD
@@ -79,8 +81,7 @@ rustPlatform.buildRustPackage {
     '';
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-j6cQalYbeHunI1t4VRQkbqGNylwWg0NBoItwloYTfAE=";
+  cargoHash = "sha256-fqIlN+6SEY0LVrUk47U12TuVoRte0oCGJhO7DHovzBM=";
 
   # set `HOME` to a temp dir for write access
   # Fix invalid option errors during linking (https://github.com/mozilla/nixpkgs-mozilla/commit/c72ff151a3e25f14182569679ed4cd22ef352328)
@@ -112,29 +113,28 @@ rustPlatform.buildRustPackage {
 
   env.UV_PYTHON = customPython.interpreter;
 
-  buildInputs =
-    [
-      fontconfig
-      freetype
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-      harfbuzz
-      libunwind
-      libGL
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland
-      xorg.libX11
-      xorg.libxcb
-      udev
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_14
-    ];
+  buildInputs = [
+    fontconfig
+    freetype
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    harfbuzz
+    libunwind
+    libGL
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland
+    xorg.libX11
+    xorg.libxcb
+    udev
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_14
+  ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
   buildFeatures = lib.optionals stdenv.hostPlatform.isAarch64 [
@@ -159,6 +159,7 @@ rustPlatform.buildRustPackage {
   };
 
   meta = {
+    broken = true; # cargo fetcher leaves invalid Cargo.toml around, which breaks mozjs-sys build
     description = "Embeddable, independent, memory-safe, modular, parallel web rendering engine";
     homepage = "https://servo.org";
     license = lib.licenses.mpl20;

@@ -20,7 +20,7 @@ let
       base = if stdenv.hostPlatform.is32bit then "linux32" else "linux64";
     in
     prefix + base;
-  inifile = "linux/v0.${builtins.toString dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}${platformSlug}.ini";
+  inifile = "linux/v0.${toString dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}${platformSlug}.ini";
   unsupportedVersion = lib.versionOlder dwarf-therapist.maxDfVersion dwarf-fortress.dfVersion;
 
   # Used to run dfhack to produce a Therapist ini file for the current memory map.
@@ -56,13 +56,14 @@ stdenv.mkDerivation {
 
   paths = [ dwarf-therapist ];
 
-  nativeBuildInputs =
-    [ wrapQtAppsHook ]
-    ++ lib.optionals unsupportedVersion [
-      expect
-      xvfb-run
-      dfHackWrapper
-    ];
+  nativeBuildInputs = [
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals unsupportedVersion [
+    expect
+    xvfb-run
+    dfHackWrapper
+  ];
 
   passthru = { inherit dwarf-fortress dwarf-therapist; };
 
@@ -73,9 +74,10 @@ stdenv.mkDerivation {
         local orig_md5="$2"
         local patched_md5="$3"
         echo "It doesn't support DF $dfVersion out of the box, so we're doing it the hard way."
-        export NIXPKGS_DF_HOME="$(mktemp -dt dfhack.XXXXXX)"
+        export HOME="$(mktemp -dt dfhack.XXXXXX)"
+        export XDG_DATA_HOME="$HOME/.local/share"
         expect ${dfHackExpectScript}
-        local ini="$NIXPKGS_DF_HOME/therapist.ini"
+        local ini="$XDG_DATA_HOME/df_linux/therapist.ini"
         if [ -f "$ini" ]; then
           if grep -q "$patched_md5" "$ini"; then
             cp -v "$ini" "$output"

@@ -48,15 +48,14 @@ stdenv.mkDerivation rec {
     gfortran
     python3
   ];
-  buildInputs =
-    [
-      blas
-      boost
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      ocl-icd
-      opencl-headers
-    ];
+  buildInputs = [
+    blas
+    boost
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    ocl-icd
+    opencl-headers
+  ];
 
   strictDeps = true;
 
@@ -67,7 +66,7 @@ stdenv.mkDerivation rec {
       This package contains a library of BLAS functions on top of OpenCL.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ artuuge ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 

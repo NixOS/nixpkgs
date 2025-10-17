@@ -39,14 +39,13 @@ stdenv.mkDerivation {
 
   patches = [ ./bsl430.patch ];
 
-  preBuild =
-    ''
-      rm ThirdParty/src/pugixml.cpp
-      rm ThirdParty/include/pugi{config,xml}.hpp
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      makeFlagsArray+=(OUTNAME="-install_name ")
-    '';
+  preBuild = ''
+    rm ThirdParty/src/pugixml.cpp
+    rm ThirdParty/include/pugi{config,xml}.hpp
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    makeFlagsArray+=(OUTNAME="-install_name ")
+  '';
 
   installPhase = ''
     install -Dm0755 -t $out/lib $libName
@@ -58,7 +57,8 @@ stdenv.mkDerivation {
     boost
     hidapi
     pugixml
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libusb1;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libusb1;
 
   meta = with lib; {
     description = "TI MSP430 FET debug driver";

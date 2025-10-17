@@ -94,7 +94,8 @@ python3.pkgs.buildPythonApplication rec {
     udev
     xorg.libXtst
     xorg.libxkbfile
-  ] ++ lib.optional atspiSupport at-spi2-core;
+  ]
+  ++ lib.optional atspiSupport at-spi2-core;
 
   pythonPath = with python3.pkgs; [
     dbus-python
@@ -191,7 +192,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     homepage = "https://launchpad.net/onboard";
     description = "Onscreen keyboard useful for tablet PC users and for mobility impaired users";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl3;
   };
 }

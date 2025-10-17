@@ -10,7 +10,7 @@
   zlib,
   setuptools,
   cudaSupport ? config.cudaSupport or false,
-  cudaPackages_11 ? { },
+  cudaPackages,
   addDriverRunpath,
   # runtime dependencies
   httpx,
@@ -88,7 +88,7 @@ buildPythonPackage {
           (lib.getLib stdenv.cc.cc)
         ]
         ++ lib.optionals cudaSupport (
-          with cudaPackages_11;
+          with cudaPackages;
           [
             cudatoolkit.lib
             cudatoolkit.out
@@ -115,12 +115,14 @@ buildPythonPackage {
     homepage = "https://github.com/PaddlePaddle/Paddle";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ happysalada ];
-    platforms =
-      [ "x86_64-linux" ]
-      ++ lib.optionals (!cudaSupport) [
-        "aarch64-linux"
-        "x86_64-darwin"
-        "aarch64-darwin"
-      ];
+    platforms = [
+      "x86_64-linux"
+    ]
+    ++ lib.optionals (!cudaSupport) [
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

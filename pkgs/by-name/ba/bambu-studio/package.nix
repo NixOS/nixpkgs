@@ -7,9 +7,9 @@
   ninja,
   pkg-config,
   wrapGAppsHook3,
-  boost186,
+  boost183,
   cereal,
-  cgal,
+  cgal_5,
   curl,
   dbus,
   eigen,
@@ -34,8 +34,8 @@
   opencv,
   pcre,
   systemd,
-  tbb_2021,
-  webkitgtk_4_0,
+  onetbb,
+  webkitgtk_4_1,
   wxGTK31,
   xorg,
   withSystemd ? stdenv.hostPlatform.isLinux,
@@ -54,15 +54,15 @@ let
         ];
       });
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "01.10.02.76";
+  version = "02.02.02.56";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
-    rev = "v${version}";
-    hash = "sha256-LvAi3I5lnnumhOUagyej28uVy0Lgd3e19HNQXOUWSvQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-vg+sEIztFBfzROl2surRd4l/afZ+tGMtG65m3kDIPAY=";
   };
 
   nativeBuildInputs = [
@@ -72,44 +72,43 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      binutils
-      boost186
-      cereal
-      cgal
-      curl
-      dbus
-      eigen
-      expat
-      ffmpeg
-      gcc-unwrapped
-      glew
-      glfw
-      glib
-      glib-networking
-      gmp
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-good
-      gtk3
-      hicolor-icon-theme
-      ilmbase
-      libpng
-      mpfr
-      nlopt
-      opencascade-occt_7_6
-      openvdb
-      pcre
-      tbb_2021
-      webkitgtk_4_0
-      wxGTK'
-      xorg.libX11
-      opencv.cxxdev
-    ]
-    ++ lib.optionals withSystemd [ systemd ]
-    ++ checkInputs;
+  buildInputs = [
+    binutils
+    boost183
+    cereal
+    cgal_5
+    curl
+    dbus
+    eigen
+    expat
+    ffmpeg
+    gcc-unwrapped
+    glew
+    glfw
+    glib
+    glib-networking
+    gmp
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+    gtk3
+    hicolor-icon-theme
+    ilmbase
+    libpng
+    mpfr
+    nlopt
+    opencascade-occt_7_6
+    openvdb
+    pcre
+    onetbb
+    webkitgtk_4_1
+    wxGTK'
+    xorg.libX11
+    opencv
+  ]
+  ++ lib.optionals withSystemd [ systemd ]
+  ++ finalAttrs.checkInputs;
 
   patches = [
     # Fix for webkitgtk linking
@@ -118,12 +117,6 @@ stdenv.mkDerivation rec {
     ./patches/dont-link-opencv-world-bambu.patch
     # Don't link osmesa
     ./patches/no-osmesa.patch
-    # Fix the build with newer Boost versions. All but one commit is
-    # from <https://github.com/bambulab/BambuStudio/pull/3968>.
-    ./0001-Replace-deprecated-boost-filesystem-string_file.hpp-.patch
-    ./0002-Replace-deprecated-Boost-methods-options.patch
-    ./0003-Fix-additional-Boost-upgrade-issues.patch
-    ./0004-Remove-deprecated-Boost-filesystem-header.patch
   ];
 
   doCheck = true;
@@ -143,11 +136,11 @@ stdenv.mkDerivation rec {
     # It seems to be a known issue for Eigen:
     # http://eigen.tuxfamily.org/bz/show_bug.cgi?id=1221
     "-Wno-ignored-attributes"
-    "-I${opencv.out}/include/opencv4"
+    "-I${opencv}/include/opencv4"
   ];
 
   # prusa-slicer uses dlopen on `libudev.so` at runtime
-  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev";
+  NIX_LDFLAGS = lib.optionalString withSystemd "-ludev" + " -L${opencv}/lib -lopencv_imgcodecs";
 
   # TODO: macOS
   prePatch = ''
@@ -192,7 +185,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "PC Software for BambuLab's 3D printers";
     homepage = "https://github.com/bambulab/BambuStudio";
-    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${version}";
+    changelog = "https://github.com/bambulab/BambuStudio/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [
       zhaofengli
@@ -201,4 +194,4 @@ stdenv.mkDerivation rec {
     mainProgram = "bambu-studio";
     platforms = lib.platforms.linux;
   };
-}
+})

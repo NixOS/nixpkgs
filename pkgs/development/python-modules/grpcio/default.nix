@@ -8,6 +8,7 @@
   openssl,
   pkg-config,
   protobuf,
+  typing-extensions,
   pythonOlder,
   setuptools,
   zlib,
@@ -18,14 +19,14 @@
 # nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio";
-  version = "1.72.0";
+  version = "1.75.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Ba7pvpWKWA4WnhqomHOHvNi+btf8XCo6BItqK5EUc80=";
+    hash = "sha256-uYnosJSJR4wtGf7MdEopiTD0DYsnw2OK+/6E0i82zk4=";
   };
 
   outputs = [
@@ -46,18 +47,20 @@ buildPythonPackage rec {
     zlib
   ];
 
-  dependencies = [ protobuf ];
+  dependencies = [
+    protobuf
+    typing-extensions
+  ];
 
-  preBuild =
-    ''
-      export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
-      if [ -z "$enableParallelBuilding" ]; then
-        GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
-      fi
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      unset AR
-    '';
+  preBuild = ''
+    export GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS="$NIX_BUILD_CORES"
+    if [ -z "$enableParallelBuilding" ]; then
+      GRPC_PYTHON_BUILD_EXT_COMPILER_JOBS=1
+    fi
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    unset AR
+  '';
 
   GRPC_BUILD_WITH_BORING_SSL_ASM = "";
   GRPC_PYTHON_BUILD_SYSTEM_OPENSSL = 1;

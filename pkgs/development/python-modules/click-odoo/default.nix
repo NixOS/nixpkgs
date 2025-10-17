@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "click-odoo";
-  version = "1.7.0";
+  version = "1.8.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "acsone";
     repo = "click-odoo";
     tag = version;
-    hash = "sha256-lNhhaUTFbvUTkMpTZZmTSVjhh/I43l9AeWvx8YzB8OA=";
+    hash = "sha256-dUTAu02iSA0YvF/nQYOyb5gzbT8zMedXXwU7yONBrl4=";
   };
 
   build-system = [ setuptools-scm ];

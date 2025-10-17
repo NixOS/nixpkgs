@@ -52,14 +52,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mkvtoolnix";
-  version = "93.0";
+  version = "95.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "mbunkus";
     repo = "mkvtoolnix";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-xCO5wKZO2fcO6+KhPO5+OpOvAFuqOuQ2A3V+LzFYLNY=";
+    hash = "sha256-FwOVqBHzgDveT8dGRfb2ONIAhCGEKU4UqpM3g7m0klA=";
   };
 
   passthru = {
@@ -76,32 +76,32 @@ stdenv.mkDerivation (finalAttrs: {
     libxslt
     pkg-config
     rake
-  ] ++ optionals withGUI [ qt6.wrapQtAppsHook ];
+  ]
+  ++ optionals withGUI [ qt6.wrapQtAppsHook ];
 
   # qtbase and qtmultimedia are needed without the GUI
-  buildInputs =
-    [
-      boost
-      expat
-      file
-      flac
-      fmt
-      gmp
-      libdvdread
-      libebml
-      libmatroska
-      libogg
-      libvorbis
-      nlohmann_json
-      pugixml
-      qt6.qtbase
-      qt6.qtmultimedia
-      utf8cpp
-      xdg-utils
-      zlib
-    ]
-    ++ optionals withGUI [ cmark ]
-    ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+  buildInputs = [
+    boost
+    expat
+    file
+    flac
+    fmt
+    gmp
+    libdvdread
+    libebml
+    libmatroska
+    libogg
+    libvorbis
+    nlohmann_json
+    pugixml
+    qt6.qtbase
+    qt6.qtmultimedia
+    utf8cpp
+    xdg-utils
+    zlib
+  ]
+  ++ optionals withGUI [ cmark ]
+  ++ optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
 
   # autoupdate is not needed but it silences a ton of pointless warnings
   postPatch = ''

@@ -5,37 +5,34 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "simdjson";
-  version = "3.13.0";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "simdjson";
     repo = "simdjson";
-    rev = "v${version}";
-    sha256 = "sha256-Vzw1FpFjg3Tun1Sfk7H4h4tY7lfnjE1Wk+W82K7dcW0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8pmFtMpML7tTXbH1E3aIpSTQkNF8TFcIPOm2nwnKxkA=";
   };
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags =
-    [
-      "-DSIMDJSON_DEVELOPER_MODE=OFF"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isStatic [
-      "-DBUILD_SHARED_LIBS=OFF"
-    ]
-    ++ lib.optionals (with stdenv.hostPlatform; isPower && isBigEndian) [
-      # Assume required CPU features are available, since otherwise we
-      # just get a failed build.
-      "-DCMAKE_CXX_FLAGS=-mpower8-vector"
-    ];
+  cmakeFlags = [
+    (lib.cmakeBool "SIMDJSON_DEVELOPER_MODE" false)
+    (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
+  ]
+  ++ lib.optionals (with stdenv.hostPlatform; isPower && isBigEndian) [
+    # Assume required CPU features are available, since otherwise we
+    # just get a failed build.
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-mpower8-vector")
+  ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://simdjson.org/";
     description = "Parsing gigabytes of JSON per second";
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ chessai ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ chessai ];
   };
-}
+})

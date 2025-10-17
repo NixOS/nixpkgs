@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     tag = finalAttrs.version;
-    hash = "sha256-R5W1MmT+H9i8NXrzOv2xaVu8TKPCRCAAswwM/tflkQ0=";
+    hash = "sha256-uLqPbbCBahUwj9ZG3Q7x+bXCl0yI6L7jBpg09DTrrpk=";
   };
 
   outputs = [
@@ -126,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ayatana indiator exporting the network settings menu through D-Bus";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-indicator-network";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];

@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libcomps";
-  version = "0.1.21";
+  version = "0.1.23";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "rpm-software-management";
     repo = "libcomps";
     rev = version;
-    hash = "sha256-2ZxU1g5HDWnSxTabnmfyQwz1ZCXK+7kJXLofeFBiwn0=";
+    hash = "sha256-6nX6Oa2ACVALOtXDxjowIGKaziZkGZbtkgZzDfuP4PE=";
   };
 
   patches = [

@@ -19,7 +19,6 @@ rustPlatform.buildRustPackage {
     hash = "sha256-DiqC7z1AQbXsSXc77AGRilWi3HfEg0YoHrXu54O3Clo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ygFXKniCCOyXndPOTKoRbd4W1OR2CSA2jr7yxpwkw28=";
 
   checkFlags = [
@@ -35,6 +34,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/zbelial/lspce";
     description = "LSP Client for Emacs implemented as a module using Rust";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,27 +4,36 @@
   lib,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "promptfoo";
-  version = "0.79.0";
+  version = "0.118.11";
 
   src = fetchFromGitHub {
     owner = "promptfoo";
     repo = "promptfoo";
-    rev = "${version}";
-    hash = "sha256-sMBgjxPzG3SJ7RS4oTtOq7hJ1MYaKW3/6FF8Pn5l89c=";
+    tag = finalAttrs.version;
+    hash = "sha256-py85AvOnge5KAOwsCUVCgwVhbNMn6kqNpQ5w6KA60LM=";
   };
 
-  npmDepsHash = "sha256-tnzeEFEc/BMN/VsoNHWJIWDOvupHfddqI6020Q4M0RM=";
+  npmDepsHash = "sha256-J/wVq10sgLFZiPuiXie3oi2I9uCycyRP/19AQdGLmF4=";
 
-  dontNpmBuild = true;
+  # don't fetch playwright binary
+  env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+
+  # cleanup dangling symlinks for workspaces
+  preFixup = ''
+    rm -rf $out/lib/node_modules/promptfoo/node_modules/app $out/lib/node_modules/promptfoo/node_modules/promptfoo-docs
+  '';
 
   meta = {
     description = "Test your prompts, models, RAGs. Evaluate and compare LLM outputs, catch regressions, and improve prompt quality";
     mainProgram = "promptfoo";
     homepage = "https://www.promptfoo.dev/";
-    changelog = "https://github.com/promptfoo/promptfoo/releases/tag/${version}";
+    changelog = "https://github.com/promptfoo/promptfoo/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.nathanielbrough ];
+    maintainers = with lib.maintainers; [
+      nathanielbrough
+      jk
+    ];
   };
-}
+})

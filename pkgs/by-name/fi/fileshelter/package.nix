@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fileshelter";
-  version = "6.2.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "epoupon";
     repo = "fileshelter";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-21ANNJB7rbGAdlS7ELyGAEIjvK8biFlH27yVHrLKpwY=";
+    hash = "sha256-M6Asq3FWK7JpiLwxtNfuzeltO7iWxLOZIYg5lwJCByM=";
   };
 
   postPatch = ''
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://github.com/epoupon/fileshelter";
-    description = "FileShelter is a 'one-click' file sharing web application";
+    description = "One-click file sharing web application";
     mainProgram = "fileshelter";
     maintainers = [ ];
     license = lib.licenses.gpl3;

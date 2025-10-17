@@ -94,17 +94,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   installFlags = [ "COPYDIR=$(out)/share/ioquake3" ];
 
-  postInstall =
-    ''
-      install -Dm644 misc/quake3.svg $out/share/icons/hicolor/scalable/apps/ioquake3.svg
+  postInstall = ''
+    install -Dm644 misc/quake3.svg $out/share/icons/hicolor/scalable/apps/ioquake3.svg
 
-      makeWrapper $out/share/ioquake3/ioquake3.* $out/bin/ioquake3
-      makeWrapper $out/share/ioquake3/ioq3ded.* $out/bin/ioq3ded
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Applications
-      mv build/release-darwin-${stdenv.hostPlatform.darwinArch}/ioquake3.app $out/Applications/
-    '';
+    makeWrapper $out/share/ioquake3/ioquake3.* $out/bin/ioquake3
+    makeWrapper $out/share/ioquake3/ioq3ded.* $out/bin/ioq3ded
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv build/release-darwin-${stdenv.hostPlatform.darwinArch}/ioquake3.app $out/Applications/
+  '';
 
   desktopItems = [
     (makeDesktopItem {
@@ -128,8 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     mainProgram = "ioquake3";
     maintainers = with lib.maintainers; [
-      abbradar
-      drupol
       rvolosatovs
     ];
     platforms = lib.platforms.unix;

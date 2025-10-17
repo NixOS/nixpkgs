@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   openssl,
   windows,
@@ -20,15 +21,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isMinGW [
-      windows.mingw_w64_pthreads
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
+    windows.pthreads
+  ];
 
-  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+  patches = [
+    # Fix the build with CMake 4.
+    (fetchpatch {
+      name = "srt-fix-cmake-4.patch";
+      url = "https://github.com/Haivision/srt/commit/0def1b1a1094fc57752f241250e9a1aed71bbffd.patch";
+      hash = "sha256-dnBGNut+I9trkQzr81Wo36O2Pt7d2gsjA1buJBegPMM=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMinGW [
     ./no-msvc-compat-headers.patch
   ];
 

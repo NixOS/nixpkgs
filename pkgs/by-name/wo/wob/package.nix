@@ -41,7 +41,8 @@ stdenv.mkDerivation rec {
     inih
     wayland
     wayland-protocols
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp;
 
   mesonFlags = lib.optional stdenv.hostPlatform.isLinux "-Dseccomp=enabled";
 
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
     changelog = "https://github.com/francma/wob/releases/tag/${version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     mainProgram = "wob";
   };

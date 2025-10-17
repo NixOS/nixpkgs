@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "vnotex";
     repo = "vnote";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-40k0wSqRdwlUqrbb9mDK0dqsSEqCfbNLt+cUKeky+do=";
   };
@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "vnote";
     changelog = "https://github.com/vnotex/vnote/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

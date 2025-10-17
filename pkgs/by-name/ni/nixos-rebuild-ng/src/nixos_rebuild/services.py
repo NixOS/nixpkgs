@@ -4,7 +4,6 @@ import logging
 import os
 import sys
 from pathlib import Path
-from subprocess import CalledProcessError
 from typing import Final
 
 from . import nix, tmpdir
@@ -14,6 +13,7 @@ from .process import Remote, cleanup_ssh
 from .utils import Args, tabulate
 
 NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
+NIXOS_REBUILD_REEXEC_ENV: Final = "_NIXOS_REBUILD_REEXEC"
 
 logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -25,27 +25,26 @@ def reexec(
     build_flags: Args,
     flake_build_flags: Args,
 ) -> None:
+    if os.environ.get(NIXOS_REBUILD_REEXEC_ENV):
+        return
+
     drv = None
-    try:
-        # Parsing the args here but ignore ask_sudo_password since it is not
-        # needed and we would end up asking sudo password twice
-        if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
-            drv = nix.build_flake(
-                NIXOS_REBUILD_ATTR,
-                flake,
-                flake_build_flags | {"no_link": True},
-            )
-        else:
-            build_attr = BuildAttr.from_arg(args.attr, args.file)
-            drv = nix.build(
-                NIXOS_REBUILD_ATTR,
-                build_attr,
-                build_flags | {"no_out_link": True},
-            )
-    except CalledProcessError:
-        logger.warning(
-            "could not build a newer version of nixos-rebuild, using current version",
-            exc_info=logger.isEnabledFor(logging.DEBUG),
+    # Parsing the args here but ignore ask_sudo_password since it is not
+    # needed and we would end up asking sudo password twice
+    if flake := Flake.from_arg(
+        args.flake, Remote.from_arg(args.target_host, ask_sudo_password=None)
+    ):
+        drv = nix.build_flake(
+            NIXOS_REBUILD_ATTR,
+            flake,
+            flake_build_flags | {"no_link": True},
+        )
+    else:
+        build_attr = BuildAttr.from_arg(args.attr, args.file)
+        drv = nix.build(
+            NIXOS_REBUILD_ATTR,
+            build_attr,
+            build_flags | {"no_out_link": True},
         )
 
     if drv:
@@ -62,7 +61,7 @@ def reexec(
             cleanup_ssh()
             tmpdir.TMPDIR.cleanup()
             try:
-                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+                os.execve(new, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
             except Exception:
                 # Possible errors that we can have here:
                 # - Missing the binary
@@ -74,7 +73,7 @@ def reexec(
                 )
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
-                os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+                os.execve(current, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
 
 
 def _validate_image_variant(image_variant: str, variants: ImageVariants) -> None:
@@ -118,13 +117,34 @@ def _get_system_attr(
     return attr
 
 
+def _rollback_system(
+    action: Action,
+    args: argparse.Namespace,
+    target_host: Remote | None,
+    profile: Profile,
+) -> Path:
+    match action:
+        case Action.SWITCH | Action.BOOT:
+            path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
+        case Action.TEST | Action.BUILD:
+            maybe_path_to_config = nix.rollback_temporary_profile(
+                profile,
+                target_host,
+                sudo=args.sudo,
+            )
+            if maybe_path_to_config:
+                path_to_config = maybe_path_to_config
+            else:
+                raise NixOSRebuildError("could not find previous generation")
+
+    return path_to_config
+
+
 def _build_system(
     attr: str,
     action: Action,
-    args: argparse.Namespace,
     build_host: Remote | None,
     target_host: Remote | None,
-    profile: Profile,
     flake: Flake | None,
     build_attr: BuildAttr,
     build_flags: Args,
@@ -134,24 +154,11 @@ def _build_system(
     flake_common_flags: Args,
 ) -> Path:
     dry_run = action == Action.DRY_BUILD
-    no_link = action in (Action.SWITCH, Action.BOOT)
+    # actions that we will not add a /result symlink in CWD
+    no_link = action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE)
 
-    match (action, args.rollback, build_host, flake):
-        case (Action.SWITCH | Action.BOOT, True, _, _):
-            path_to_config = nix.rollback(profile, target_host, sudo=args.sudo)
-        case (Action.TEST | Action.BUILD, True, _, _):
-            maybe_path_to_config = nix.rollback_temporary_profile(
-                profile,
-                target_host,
-                sudo=args.sudo,
-            )
-            if maybe_path_to_config:  # kinda silly but this makes mypy happy
-                path_to_config = maybe_path_to_config
-            else:
-                raise NixOSRebuildError("could not find previous generation")
-        case (_, True, _, _):
-            raise NixOSRebuildError(f"--rollback is incompatible with '{action}'")
-        case (_, False, Remote(_), Flake(_)):
+    match (build_host, flake):
+        case (Remote(_), Flake(_)):
             path_to_config = nix.build_remote_flake(
                 attr,
                 flake,
@@ -161,14 +168,14 @@ def _build_system(
                 | {"no_link": no_link, "dry_run": dry_run},
                 copy_flags=copy_flags,
             )
-        case (_, False, None, Flake(_)):
+        case (None, Flake(_)):
             path_to_config = nix.build_flake(
                 attr,
                 flake,
                 flake_build_flags=flake_build_flags
                 | {"no_link": no_link, "dry_run": dry_run},
             )
-        case (_, False, Remote(_), None):
+        case (Remote(_), None):
             path_to_config = nix.build_remote(
                 attr,
                 build_attr,
@@ -177,20 +184,16 @@ def _build_system(
                 instantiate_flags=build_flags,
                 copy_flags=copy_flags,
             )
-        case (_, False, None, None):
+        case (None, None):
             path_to_config = nix.build(
                 attr,
                 build_attr,
                 build_flags=build_flags | {"no_out_link": no_link, "dry_run": dry_run},
             )
-        case never:
-            # should never happen, but mypy is not smart enough to
-            # handle this with assert_never
-            # https://github.com/python/mypy/issues/16650
-            # https://github.com/python/mypy/issues/16722
-            raise AssertionError(f"expected code to be unreachable, but got: {never}")
 
-    if not args.rollback:
+    # In dry_run mode there is nothing to copy
+    # https://github.com/NixOS/nixpkgs/issues/444156
+    if not dry_run:
         nix.copy_closure(
             path_to_config,
             to_host=target_host,
@@ -290,23 +293,31 @@ def build_and_activate_system(
         common_flags=common_flags,
         flake_common_flags=flake_common_flags,
     )
-    path_to_config = _build_system(
-        attr,
-        action=action,
-        args=args,
-        build_host=build_host,
-        target_host=target_host,
-        profile=profile,
-        flake=flake,
-        build_attr=build_attr,
-        build_flags=build_flags,
-        common_flags=common_flags,
-        copy_flags=copy_flags,
-        flake_build_flags=flake_build_flags,
-        flake_common_flags=flake_common_flags,
-    )
+
+    if args.rollback:
+        path_to_config = _rollback_system(
+            action=action,
+            args=args,
+            target_host=target_host,
+            profile=profile,
+        )
+    else:
+        path_to_config = _build_system(
+            attr=attr,
+            action=action,
+            build_host=build_host,
+            target_host=target_host,
+            flake=flake,
+            build_attr=build_attr,
+            build_flags=build_flags,
+            common_flags=common_flags,
+            copy_flags=copy_flags,
+            flake_build_flags=flake_build_flags,
+            flake_common_flags=flake_common_flags,
+        )
+
     _activate_system(
-        path_to_config,
+        path_to_config=path_to_config,
         action=action,
         args=args,
         target_host=target_host,

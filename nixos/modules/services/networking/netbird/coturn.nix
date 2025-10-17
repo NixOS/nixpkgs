@@ -104,24 +104,23 @@ in
         }
       ];
 
-      services.coturn =
-        {
-          enable = true;
+      services.coturn = {
+        enable = true;
 
-          realm = cfg.domain;
-          lt-cred-mech = true;
-          no-cli = true;
+        realm = cfg.domain;
+        lt-cred-mech = true;
+        no-cli = true;
 
-          extraConfig = ''
-            fingerprint
-            user=${cfg.user}:${if cfg.password != null then cfg.password else "@password@"}
-            no-software-attribute
-          '';
-        }
-        // (optionalAttrs cfg.useAcmeCertificates {
-          cert = "@cert@";
-          pkey = "@pkey@";
-        });
+        extraConfig = ''
+          fingerprint
+          user=${cfg.user}:${if cfg.password != null then cfg.password else "@password@"}
+          no-software-attribute
+        '';
+      }
+      // (optionalAttrs cfg.useAcmeCertificates {
+        cert = "@cert@";
+        pkey = "@pkey@";
+      });
 
       systemd.services.coturn =
         let

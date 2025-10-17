@@ -27,7 +27,10 @@ buildPythonPackage {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    "lxml"
+    "numpy"
+  ];
 
   dependencies = [
     cssselect
@@ -52,16 +55,15 @@ buildPythonPackage {
     gtk3
   ];
 
-  disabledTests =
-    [
-      "test_extract_multiple"
-      "test_lookup_and"
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      "test_image_extract"
-      "test_path_number_nodes"
-      "test_plotter" # Hangs
-    ];
+  disabledTests = [
+    "test_extract_multiple"
+    "test_lookup_and"
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [
+    "test_image_extract"
+    "test_path_number_nodes"
+    "test_plotter" # Hangs
+  ];
 
   disabledTestPaths = [
     # Fatal Python error: Segmentation fault

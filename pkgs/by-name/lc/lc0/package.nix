@@ -46,15 +46,14 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  mesonFlags =
-    [
-      "-Dplain_cuda=false"
-      "-Daccelerate=false"
-      "-Dmetal=disabled"
-      "-Dembed=false"
-    ]
-    # in version 31 this option will be required
-    ++ lib.optionals (lib.versionAtLeast version "0.31") [ "-Dnative_cuda=false" ];
+  mesonFlags = [
+    "-Dplain_cuda=false"
+    "-Daccelerate=false"
+    "-Dmetal=disabled"
+    "-Dembed=false"
+  ]
+  # in version 31 this option will be required
+  ++ lib.optionals (lib.versionAtLeast version "0.31") [ "-Dnative_cuda=false" ];
 
   enableParallelBuilding = true;
 

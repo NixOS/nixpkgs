@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   fetchFromGitea,
   buildGoModule,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd zs \
       --bash <($out/bin/zs completion bash) \
       --fish <($out/bin/zs completion fish) \

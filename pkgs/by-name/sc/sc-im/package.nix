@@ -35,17 +35,16 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs =
-    [
-      gnuplot
-      libxml2
-      libzip
-      ncurses
-    ]
-    ++ lib.optionals xlsSupport [
-      libxls
-      libxlsxwriter
-    ];
+  buildInputs = [
+    gnuplot
+    libxml2
+    libzip
+    ncurses
+  ]
+  ++ lib.optionals xlsSupport [
+    libxls
+    libxlsxwriter
+  ];
 
   makeFlags = [ "prefix=${placeholder "out"}" ];
 

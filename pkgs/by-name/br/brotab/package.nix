@@ -8,12 +8,12 @@
 python3Packages.buildPythonApplication rec {
   pname = "brotab";
   version = "1.4.2";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "balta2ar";
-    repo = pname;
-    rev = version;
+    repo = "brotab";
+    tag = version;
     hash = "sha256-HKKjiW++FwjdorqquSCIdi1InE6KbMbFKZFYHBxzg8Q=";
   };
 
@@ -26,7 +26,11 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+  ];
+
+  dependencies = with python3Packages; [
     flask
     psutil
     requests
@@ -35,9 +39,9 @@ python3Packages.buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace "Flask==2.0.2" "Flask>=2.0.2" \
-      --replace "psutil==5.8.0" "psutil>=5.8.0" \
-      --replace "requests==2.24.0" "requests>=2.24.0"
+      --replace-fail "Flask==2.0.2" "Flask>=2.0.2" \
+      --replace-fail "psutil==5.8.0" "psutil>=5.8.0" \
+      --replace-fail "requests==2.24.0" "requests>=2.24.0"
   '';
 
   __darwinAllowLocalNetworking = true;

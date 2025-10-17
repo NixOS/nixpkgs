@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "wallabag is a self hostable application for saving web pages";
+    description = "Self-hostable application for saving web pages";
     longDescription = ''
       wallabag is a self-hostable PHP application allowing you to not
       miss any content anymore. Click, save and read it when you can.
@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     homepage = "https://wallabag.org";
     changelog = "https://github.com/wallabag/wallabag/releases/tag/${version}";
-    maintainers = with lib.maintainers; [ schneefux ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

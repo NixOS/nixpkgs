@@ -76,32 +76,31 @@ lib.makeOverridable (
           runHook postInstall
         '';
 
-        passthru =
-          {
-            inherit scriptName;
-          }
-          // lib.optionalAttrs (runtime-dependencies != [ ]) {
-            extraWrapperArgs = [
-              "--prefix"
-              "PATH"
-              ":"
-              (lib.makeBinPath runtime-dependencies)
-            ] ++ args.passthru.extraWrapperArgs or [ ];
-          };
-        meta =
-          {
-            platforms = lib.platforms.all;
-          }
-          // (
-            let
-              pos =
-                if (args.meta or { }) ? description then
-                  builtins.unsafeGetAttrPos "description" args.meta
-                else
-                  builtins.unsafeGetAttrPos "pname" args;
-            in
-            lib.optionalAttrs (pos != null) { position = "${pos.file}:${toString pos.line}"; }
-          );
+        passthru = {
+          inherit scriptName;
+        }
+        // lib.optionalAttrs (runtime-dependencies != [ ]) {
+          extraWrapperArgs = [
+            "--prefix"
+            "PATH"
+            ":"
+            (lib.makeBinPath runtime-dependencies)
+          ]
+          ++ args.passthru.extraWrapperArgs or [ ];
+        };
+        meta = {
+          platforms = lib.platforms.all;
+        }
+        // (
+          let
+            pos =
+              if (args.meta or { }) ? description then
+                builtins.unsafeGetAttrPos "description" args.meta
+              else
+                builtins.unsafeGetAttrPos "pname" args;
+          in
+          lib.optionalAttrs (pos != null) { position = "${pos.file}:${toString pos.line}"; }
+        );
       }
     )
   )

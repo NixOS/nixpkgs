@@ -14,21 +14,23 @@
   util-linux,
   xdg-utils,
   zsh,
+  fish,
   unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fzf-git-sh";
-  version = "0-unstable-2025-05-08";
+  version = "0-unstable-2025-10-12";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = "fzf-git.sh";
-    rev = "3ec3e97d1cc75ec97c0ab923ed5aa567aee01a5e";
-    hash = "sha256-hkxbFYCogrIhnAGs3lcqY8Zv51/TAfM6zB9G78UuYSA=";
+    rev = "279050e2eba5b9f4c5b057ca7dbc7e02e67315a1";
+    hash = "sha256-l7xVch0YYFSGuz9CFAr9lWqsbFeq+jcjyzN7XovRKFc=";
   };
 
   dontBuild = true;
+  doInstallCheck = true;
 
   postPatch = ''
     sed -i \
@@ -50,17 +52,30 @@ stdenv.mkDerivation rec {
       -e "s,__fzf_git=.*BASH_SOURCE.*,__fzf_git=$out/share/${pname}/fzf-git.sh," \
       -e "/__fzf_git=.*readlink.*/d" \
       fzf-git.sh
+
+    sed -i \
+      -e "s,\bbash\b,${bash}/bin/bash," \
+      -e "s,\''$fzf_git_sh_path\b,$out/share/${pname}," \
+      fzf-git.fish
   '';
 
   installPhase = ''
     install -D fzf-git.sh $out/share/${pname}/fzf-git.sh
+    install -D fzf-git.fish $out/share/${pname}/fzf-git.fish
+  '';
+
+  # Smoke test
+  installCheckPhase = ''
+    export HOME=$(mktemp -d)
+    ${bash}/bin/bash -c "source $out/share/${pname}/fzf-git.sh"
+    ${fish}/bin/fish -c "source $out/share/${pname}/fzf-git.fish"
   '';
 
   passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     homepage = "https://github.com/junegunn/fzf-git.sh";
-    description = "Bash and zsh key bindings for Git objects, powered by fzf";
+    description = "Bash, zsh and fish key bindings for Git objects, powered by fzf";
     license = licenses.mit;
     maintainers = with maintainers; [ deejayem ];
     platforms = platforms.all;

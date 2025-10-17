@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "ffmpy";
-  version = "0.6.0";
+  version = "0.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8.1";
@@ -21,25 +21,27 @@ buildPythonPackage rec {
     owner = "Ch00k";
     repo = "ffmpy";
     tag = version;
-    hash = "sha256-U20mBg+428kkka6NY9qc7X8jH8A5bKa++g2+PTn/MYg=";
+    hash = "sha256-XFC7f8wdIsySIn4qXqo61GmRcaF0QciLYN5lwhzlIuA=";
   };
 
-  postPatch = ''
-    # default to store ffmpeg
-    substituteInPlace ffmpy/ffmpy.py \
-      --replace-fail \
-        'executable: str = "ffmpeg",' \
-        'executable: str = "${ffmpeg-headless}/bin/ffmpeg",'
-
-    #  The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
-    for fname in tests/*.py; do
-      echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
-    done
-  '';
+  postPatch =
+    # Default to store ffmpeg.
+    ''
+      substituteInPlace ffmpy/ffmpy.py \
+        --replace-fail \
+          'executable: str = "ffmpeg",' \
+          'executable: str = "${lib.getExe ffmpeg-headless}",'
+    ''
+    # The tests test a mock that does not behave like ffmpeg. If we default to the nix-store ffmpeg they fail.
+    + ''
+      for fname in tests/*.py; do
+        echo >>"$fname" 'FFmpeg.__init__.__defaults__ = ("ffmpeg", *FFmpeg.__init__.__defaults__[1:])'
+      done
+    '';
 
   pythonImportsCheck = [ "ffmpy" ];
 
-  nativeBuildInputs = [ uv-build ];
+  build-system = [ uv-build ];
 
   nativeCheckInputs = [
     pytestCheckHook

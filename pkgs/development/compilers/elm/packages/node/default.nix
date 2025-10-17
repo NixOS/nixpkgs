@@ -12,25 +12,6 @@ let
     inherit pkgs nodejs;
     inherit (pkgs.stdenv.hostPlatform) system;
   };
-  ESBUILD_BINARY_PATH = lib.getExe (
-    pkgs.esbuild.override {
-      buildGoModule =
-        args:
-        pkgs.buildGoModule (
-          args
-          // rec {
-            version = "0.20.2";
-            src = pkgs.fetchFromGitHub {
-              owner = "evanw";
-              repo = "esbuild";
-              rev = "v${version}";
-              hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-            };
-            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-          }
-        );
-    }
-  );
 in
 with self;
 with elmLib;
@@ -43,65 +24,17 @@ with elmLib;
     elm-git-install
     ;
 
-  elm-verify-examples =
-    let
-      patched = patchBinwrap [ elmi-to-json ] nodePkgs.elm-verify-examples // {
-        meta =
-          with lib;
-          nodePkgs.elm-verify-examples.meta
-          // {
-            description = "Verify examples in your docs";
-            homepage = "https://github.com/stoeffel/elm-verify-examples";
-            license = licenses.bsd3;
-            maintainers = [ maintainers.turbomack ];
-          };
+  elm-verify-examples = nodePkgs.elm-verify-examples // {
+    meta =
+      with lib;
+      nodePkgs.elm-verify-examples.meta
+      // {
+        description = "Verify examples in your docs";
+        homepage = "https://github.com/stoeffel/elm-verify-examples";
+        license = licenses.bsd3;
+        maintainers = [ maintainers.turbomack ];
       };
-    in
-    patched.override (old: {
-      inherit ESBUILD_BINARY_PATH;
-      preRebuild =
-        (old.preRebuild or "")
-        + ''
-          # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
-          # in case of just this package
-          # TODO: investigate, same as for elm-coverage below
-          sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-        '';
-    });
-
-  elm-coverage =
-    let
-      patched = patchNpmElm (patchBinwrap [ elmi-to-json ] nodePkgs.elm-coverage);
-    in
-    patched.override (old: {
-      # Symlink Elm instrument binary
-      preRebuild =
-        (old.preRebuild or "")
-        + ''
-          # Noop custom installation script
-          sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
-
-          # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
-          # in case of just this package
-          # TODO: investigate
-          sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
-        '';
-      postInstall =
-        (old.postInstall or "")
-        + ''
-          mkdir -p unpacked_bin
-          ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
-        '';
-      meta =
-        with lib;
-        nodePkgs.elm-coverage.meta
-        // {
-          description = "Work in progress - Code coverage tooling for Elm";
-          homepage = "https://github.com/zwilias/elm-coverage";
-          license = licenses.bsd3;
-          maintainers = [ maintainers.turbomack ];
-        };
-    });
+  };
 
   create-elm-app = patchNpmElm nodePkgs.create-elm-app // {
     meta =
@@ -120,7 +53,7 @@ with elmLib;
       with lib;
       nodePkgs."@dillonkearns/elm-graphql".meta
       // {
-        description = " Autogenerate type-safe GraphQL queries in Elm";
+        description = "Autogenerate type-safe GraphQL queries in Elm";
         license = licenses.bsd3;
         maintainers = [ maintainers.pedrohlc ];
       };

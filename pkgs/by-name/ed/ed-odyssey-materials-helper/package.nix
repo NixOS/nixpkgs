@@ -2,32 +2,36 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gradle,
-  jdk23,
-  makeWrapper,
+  gradle_9,
+  jdk25,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
   libglvnd,
   glib,
+  alsa-lib,
+  ffmpeg,
+  lsb-release,
   copyDesktopItems,
   makeDesktopItem,
   writeScript,
 }:
+let
+  gradle = gradle_9;
+in
 stdenv.mkDerivation rec {
   pname = "ed-odyssey-materials-helper";
-  version = "2.178";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "jixxed";
     repo = "ed-odyssey-materials-helper";
     tag = version;
-    hash = "sha256-a/nrRw5FjUZBJE0CmSevGAw4LBI/A3jPAEJfg7GY5+U=";
+    hash = "sha256-TcRj+TZ4shY1UAE7TseRXZZJZtL8aaD79pBL9LeoMJA=";
   };
 
   nativeBuildInputs = [
     gradle
-    makeWrapper
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -49,6 +53,11 @@ stdenv.mkDerivation rec {
     # remove "new version available" popup
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' ""
+
+    for f in build.gradle */build.gradle; do
+      substituteInPlace $f \
+        --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
+    done
   '';
 
   mitmCache = gradle.fetchDeps {
@@ -56,9 +65,21 @@ stdenv.mkDerivation rec {
     data = ./deps.json;
   };
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk23}" ];
+  gradleFlags = [
+    "-Dorg.gradle.java.home=${jdk25}"
+    "--stacktrace"
+  ];
 
   gradleBuildTask = "application:jpackage";
+
+  env = {
+    EDDN_SOFTWARE_NAME = "EDO Materials Helper";
+  };
+
+  preBuild = ''
+    # required to make EDDN_SOFTWARE_NAME work and for the program to know its own version
+    gradle $gradleFlags application:generateSecrets
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -75,17 +96,19 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true;
 
   postFixup = ''
-    # The logs would go into the current directory, so the wrapper will cd to the config dir first
-    makeShellWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
-      --run 'mkdir -p ~/.config/odyssey-materials-helper/ && cd ~/.config/odyssey-materials-helper/' \
+    makeWrapper $out/share/ed-odyssey-materials-helper/bin/Elite\ Dangerous\ Odyssey\ Materials\ Helper $out/bin/ed-odyssey-materials-helper \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           libXxf86vm
           glib
           libXtst
           libglvnd
+          alsa-lib
+          ffmpeg
         ]
-      } "''${gappsWrapperArgs[@]}"
+      } \
+      --prefix PATH : ${lib.makeBinPath [ lsb-release ]} \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   desktopItems = [

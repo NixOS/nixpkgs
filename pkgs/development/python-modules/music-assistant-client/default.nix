@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "music-assistant-client";
-  version = "1.2.0";
+  version = "1.2.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "client";
     tag = version;
-    hash = "sha256-i3VIRK3RUgbF5KX3U7i4WwjbLaRvg88zUH5Ly8BKEB0=";
+    hash = "sha256-0NgV/xa8jF+j+oIZllgT7UI4MRsP3vTDarluLgtSZwI=";
   };
 
   postPatch = ''
@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/music-assistant/client";
     changelog = "https://github.com/music-assistant/client/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

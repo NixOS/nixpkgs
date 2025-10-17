@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     python3Packages.python
     xfce.xfce4-panel
     xfce.xfconf
-  ] ++ pythonPath;
+  ]
+  ++ pythonPath;
 
   postPatch = ''
     # We execute the wrapped xfce4-panel-plug directly.

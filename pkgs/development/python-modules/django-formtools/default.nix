@@ -39,8 +39,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-formtools";
     changelog = "https://github.com/jazzband/django-formtools/blob/master/docs/changelog.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      schmittlauch
+    maintainers = [
     ];
   };
 }

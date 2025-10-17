@@ -65,7 +65,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     responses
     pytestCheckHook
-  ] ++ optional-dependencies.all;
+  ]
+  ++ optional-dependencies.all;
 
   disabledTests = [
     # tests require network access

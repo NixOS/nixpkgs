@@ -25,7 +25,7 @@
 # nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "grpc";
-  version = "1.72.0"; # N.B: if you change this, please update:
+  version = "1.75.0"; # N.B: if you change this, please update:
   # pythonPackages.grpcio
   # pythonPackages.grpcio-channelz
   # pythonPackages.grpcio-health-checking
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grpc";
     repo = "grpc";
-    rev = "v${version}";
-    hash = "sha256-3ZFQ59zoxNlS5tdm5Bt8EyKyp+9HEpYvLlWarErIR6g=";
+    tag = "v${version}";
+    hash = "sha256-2SeL/O6FaAnrPXMHAPKCSzx3hlcKLuC5y+ljJ1gewkE=";
     fetchSubmodules = true;
   };
 
@@ -49,13 +49,17 @@ stdenv.mkDerivation rec {
       url = "https://github.com/lopsided98/grpc/commit/a9b917666234f5665c347123d699055d8c2537b2.patch";
       hash = "sha256-Lm0GQsz/UjBbXXEE14lT0dcRzVmCKycrlrdBJj+KLu8=";
     })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # fix build of 1.63.0 and newer on darwin: https://github.com/grpc/grpc/issues/36654
-  ] ++ (lib.optional stdenv.hostPlatform.isDarwin ./dynamic-lookup-darwin.patch);
+    ./dynamic-lookup-darwin.patch
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
+  ]
+  ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) grpc;
   propagatedBuildInputs = [
     c-ares
     re2
@@ -65,37 +69,37 @@ stdenv.mkDerivation rec {
   buildInputs = [
     openssl
     protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ libnsl ];
 
-  cmakeFlags =
-    [
-      "-DgRPC_ZLIB_PROVIDER=package"
-      "-DgRPC_CARES_PROVIDER=package"
-      "-DgRPC_RE2_PROVIDER=package"
-      "-DgRPC_SSL_PROVIDER=package"
-      "-DgRPC_PROTOBUF_PROVIDER=package"
-      "-DgRPC_ABSL_PROVIDER=package"
-      "-DBUILD_SHARED_LIBS=ON"
+  cmakeFlags = [
+    "-DgRPC_ZLIB_PROVIDER=package"
+    "-DgRPC_CARES_PROVIDER=package"
+    "-DgRPC_RE2_PROVIDER=package"
+    "-DgRPC_SSL_PROVIDER=package"
+    "-DgRPC_PROTOBUF_PROVIDER=package"
+    "-DgRPC_ABSL_PROVIDER=package"
+    "-DBUILD_SHARED_LIBS=ON"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
+    "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
+  ]
+  # The build scaffold defaults to c++14 on darwin, even when the compiler uses
+  # a more recent c++ version by default [1]. However, downgrades are
+  # problematic, because the compatibility types in abseil will have different
+  # interface definitions than the ones used for building abseil itself.
+  # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
+  ++ (
+    let
+      defaultCxxIsOlderThan17 =
+        (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
+        || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
+    in
+    lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17) [
+      "-DCMAKE_CXX_STANDARD=17"
     ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "-D_gRPC_PROTOBUF_PROTOC_EXECUTABLE=${buildPackages.protobuf}/bin/protoc"
-      "-D_gRPC_CPP_PLUGIN=${buildPackages.grpc}/bin/grpc_cpp_plugin"
-    ]
-    # The build scaffold defaults to c++14 on darwin, even when the compiler uses
-    # a more recent c++ version by default [1]. However, downgrades are
-    # problematic, because the compatibility types in abseil will have different
-    # interface definitions than the ones used for building abseil itself.
-    # [1] https://github.com/grpc/grpc/blob/v1.57.0/CMakeLists.txt#L239-L243
-    ++ (
-      let
-        defaultCxxIsOlderThan17 =
-          (stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.cc.version "16.0")
-          || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0");
-      in
-      lib.optionals (stdenv.hostPlatform.isDarwin && defaultCxxIsOlderThan17) [
-        "-DCMAKE_CXX_STANDARD=17"
-      ]
-    );
+  );
 
   # CMake creates a build directory by default, this conflicts with the
   # basel BUILD file on case-insensitive filesystems.

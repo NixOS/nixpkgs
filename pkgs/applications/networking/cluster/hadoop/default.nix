@@ -6,6 +6,7 @@
   autoPatchelfHook,
   jdk8_headless,
   jdk11_headless,
+  jdk21_headless,
   bash,
   coreutils,
   which,
@@ -39,11 +40,15 @@ let
       tests,
     }:
     stdenv.mkDerivation (finalAttrs: {
-      inherit pname jdk;
+      inherit pname;
+      jdk = platformAttrs.${stdenv.system}.jdk or jdk;
       version = platformAttrs.${stdenv.system}.version or (throw "Unsupported system: ${stdenv.system}");
       src = fetchurl {
         url =
           "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
+          +
+            lib.optionalString (lib.hasAttr "variant" platformAttrs.${stdenv.system})
+              "-${platformAttrs.${stdenv.system}.variant}"
           + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64"
           + ".tar.gz";
         inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"))
@@ -65,7 +70,8 @@ let
 
       nativeBuildInputs = [
         makeWrapper
-      ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
       buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
         (lib.getLib stdenv.cc.cc)
         openssl
@@ -75,67 +81,66 @@ let
         libtirpc
       ];
 
-      installPhase =
-        ''
-          mkdir $out
-          mv * $out/
-        ''
-        + lib.optionalString stdenv.hostPlatform.isLinux ''
-          for n in $(find ${finalAttrs.containerExecutor}/bin -type f); do
-            ln -sf "$n" $out/bin
-          done
+      installPhase = ''
+        mkdir $out
+        mv * $out/
+      ''
+      + lib.optionalString stdenv.hostPlatform.isLinux ''
+        for n in $(find ${finalAttrs.containerExecutor}/bin -type f); do
+          ln -sf "$n" $out/bin
+        done
 
-          # these libraries are loaded at runtime by the JVM
-          ln -s ${lib.getLib cyrus_sasl}/lib/libsasl2.so $out/lib/native/libsasl2.so.2
-          ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/native/
-          ln -s ${lib.getLib zlib}/lib/libz.so.1 $out/lib/native/
-          ln -s ${lib.getLib zstd}/lib/libzstd.so.1 $out/lib/native/
-          ln -s ${lib.getLib bzip2}/lib/libbz2.so.1 $out/lib/native/
-          ln -s ${lib.getLib snappy}/lib/libsnappy.so.1 $out/lib/native/
+        # these libraries are loaded at runtime by the JVM
+        ln -s ${lib.getLib cyrus_sasl}/lib/libsasl2.so $out/lib/native/libsasl2.so.2
+        ln -s ${lib.getLib openssl}/lib/libcrypto.so $out/lib/native/
+        ln -s ${lib.getLib zlib}/lib/libz.so.1 $out/lib/native/
+        ln -s ${lib.getLib zstd}/lib/libzstd.so.1 $out/lib/native/
+        ln -s ${lib.getLib bzip2}/lib/libbz2.so.1 $out/lib/native/
+        ln -s ${lib.getLib snappy}/lib/libsnappy.so.1 $out/lib/native/
 
-          # libjvm.so is in different paths for java 8 and 11
-          # libnativetask.so in hadooop 3 and libhdfs.so in hadoop 2 depend on it
-          find $out/lib/native/ -name 'libnativetask.so*' -o -name 'libhdfs.so*' | \
-            xargs -n1 patchelf --add-rpath $(dirname $(find ${finalAttrs.jdk.home} -name libjvm.so | head -n1))
+        # libjvm.so is in different paths for java 8 and 11
+        # libnativetask.so in hadooop 3 and libhdfs.so in hadoop 2 depend on it
+        find $out/lib/native/ -name 'libnativetask.so*' -o -name 'libhdfs.so*' | \
+          xargs -n1 patchelf --add-rpath $(dirname $(find ${finalAttrs.jdk.home} -name libjvm.so | head -n1))
 
-          # NixOS/nixpkgs#193370
-          # This workaround is needed to use protobuf 3.19
-          # hadoop 3.3+ depends on protobuf 3.18, 3.2 depends on 3.8
-          find $out/lib/native -name 'libhdfspp.so*' | \
-            xargs -r -n1 patchelf --replace-needed libprotobuf.so.${
-              if (lib.versionAtLeast finalAttrs.version "3.4.1") then
-                "32"
-              else if (lib.versionAtLeast finalAttrs.version "3.3") then
-                "18"
-              else
-                "8"
-            } libprotobuf.so
+        # NixOS/nixpkgs#193370
+        # This workaround is needed to use protobuf 3.19
+        # hadoop 3.3+ depends on protobuf 3.18, 3.2 depends on 3.8
+        find $out/lib/native -name 'libhdfspp.so*' | \
+          xargs -r -n1 patchelf --replace-needed libprotobuf.so.${
+            if (lib.versionAtLeast finalAttrs.version "3.4.1") then
+              "32"
+            else if (lib.versionAtLeast finalAttrs.version "3.3") then
+              "18"
+            else
+              "8"
+          } libprotobuf.so
 
-          patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
-            $out/lib/native/{libhdfs{pp,}.so*,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
+        patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
+          $out/lib/native/{libhdfs{pp,}.so*,examples/{pipes-sort,wordcount-nopipe,wordcount-part,wordcount-simple}}
 
-        ''
-        + ''
-          for n in $(find $out/bin -type f ! -name "*.*"); do
-            wrapProgram "$n"\
-              --set-default JAVA_HOME ${finalAttrs.jdk.home}\
-              --set-default HADOOP_HOME $out/\
-              --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
-              --set-default HADOOP_CONF_DIR $out/etc/hadoop/\
-              --prefix PATH : "${
-                lib.makeBinPath [
-                  bash
-                  coreutils
-                  which
-                ]
-              }"\
-              --prefix JAVA_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-          done
-        ''
-        + (lib.optionalString sparkSupport ''
-          # Add the spark shuffle service jar to YARN
-          cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/share/hadoop/yarn/
-        '');
+      ''
+      + ''
+        for n in $(find $out/bin -type f ! -name "*.*"); do
+          wrapProgram "$n"\
+            --set-default JAVA_HOME ${finalAttrs.jdk.home}\
+            --set-default HADOOP_HOME $out/\
+            --run "test -d /etc/hadoop-conf && export HADOOP_CONF_DIR=\''${HADOOP_CONF_DIR-'/etc/hadoop-conf/'}"\
+            --set-default HADOOP_CONF_DIR $out/etc/hadoop/\
+            --prefix PATH : "${
+              lib.makeBinPath [
+                bash
+                coreutils
+                which
+              ]
+            }"\
+            --prefix JAVA_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+        done
+      ''
+      + (lib.optionalString sparkSupport ''
+        # Add the spark shuffle service jar to YARN
+        cp ${spark.src}/yarn/spark-${spark.version}-yarn-shuffle.jar $out/share/hadoop/yarn/
+      '');
 
       passthru = { inherit tests; };
 
@@ -170,23 +175,25 @@ in
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
-        version = "3.4.1";
-        hash = "sha256-mtVIeDOZbf5VFOdW9DkQKckFKf0i6NAC/T3QwUwEukY=";
-        srcHash = "sha256-lE9uSohy6GWXprFEYbEin2ITqTms2h6EWXe4nEd3U4Y=";
+        version = "3.4.2";
+        hash = "sha256-YySoP+EeUXiQQ2/G2AvIKVBu0lLL4kZXUrkSIJAN+4M=";
+        srcHash = "sha256-AkZjpHk57S3pYiZambxgRHR7PD51HSI4H1HHW9ICah4=";
+        variant = "lean";
       };
       x86_64-darwin = x86_64-linux;
-      aarch64-linux = x86_64-linux // {
+      aarch64-linux = {
         version = "3.4.0";
         hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
         srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
+        jdk = jdk11_headless;
       };
       aarch64-darwin = aarch64-linux;
     };
-    jdk = jdk11_headless;
+    jdk = jdk21_headless;
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop;
   };
-  hadoop_3_3 = common rec {
+  hadoop_3_3 = common {
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
@@ -204,7 +211,7 @@ in
     # TODO: Package and add Intel Storage Acceleration Library
     tests = nixosTests.hadoop_3_3;
   };
-  hadoop2 = common rec {
+  hadoop2 = common {
     pname = "hadoop";
     platformAttrs.x86_64-linux = {
       version = "2.10.2";

@@ -16,17 +16,17 @@
 
 maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
-  version = "3.24.0.76217";
+  version = "3.25.0.76263";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
     rev = version;
-    hash = "sha256-iXMh4HYktzT+9muVe1bRA4DX+DosAm7vmHEGTd71cyk=";
+    hash = "sha256-bnR6h2NRdGwmx04ydQIlE2VMe/C23YRqNxdbbb19yzE=";
   };
 
   mvnJdk = jdk17;
-  mvnHash = "sha256-6Ovqu+Lw4Cm0Atj9YI+0OStENAVfNAjJqfD+XxIChlc=";
+  mvnHash = "sha256-cRDrd2QysN3KCndfdnTn8/hXuJ1xd28GcE8vrd6ILuM=";
 
   # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [
@@ -63,7 +63,7 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript =
     let
-      pkgFile = builtins.toString ./package.nix;
+      pkgFile = toString ./package.nix;
     in
     lib.getExe (writeShellApplication {
       name = "update-${pname}";

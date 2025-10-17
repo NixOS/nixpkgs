@@ -14,7 +14,8 @@ let
   # Get packages to generate the cache for. We always include gdk-pixbuf.
   loaderPackages = [
     gdk-pixbuf
-  ] ++ extraLoaders;
+  ]
+  ++ extraLoaders;
 in
 
 # Generate the cache file by running gdk-pixbuf-query-loaders for each

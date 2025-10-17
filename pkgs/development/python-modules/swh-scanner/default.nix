@@ -84,6 +84,6 @@ buildPythonPackage rec {
     description = "Implementation of the Data model of the Software Heritage project, used to archive source code artifacts";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-model";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

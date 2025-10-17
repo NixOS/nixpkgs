@@ -28,6 +28,13 @@ stdenv.mkDerivation {
     hash = "sha256-JkmyfA6Q5jLq3NdXvgbG6aT0jZQd5R58D4P/dkCKB7k=";
   };
 
+  patches = [
+    # Fixes test-float-h failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    # Multiple upstream commits squashed with adjustments, see header
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+  ];
+
   # Some gnulib tests fail
   # - on Musl: https://github.com/NixOS/nixpkgs/pull/228714
   # - on x86_64-darwin: https://github.com/NixOS/nixpkgs/pull/228714#issuecomment-1576826330
@@ -52,7 +59,8 @@ stdenv.mkDerivation {
   buildInputs = [
     pcre2
     libiconv
-  ] ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isWindows) runtimeShellPackage;
 
   # cygwin: FAIL: multibyte-white-space
   # freebsd: FAIL mb-non-UTF8-performance
@@ -83,6 +91,10 @@ stdenv.mkDerivation {
     echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
     chmod +x $out/bin/egrep $out/bin/fgrep
   '';
+
+  env = lib.optionalAttrs stdenv.hostPlatform.isMinGW {
+    NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
+  };
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/grep/";

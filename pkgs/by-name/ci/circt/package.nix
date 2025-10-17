@@ -19,12 +19,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "circt";
-  version = "1.122.0";
+  version = "1.131.0";
   src = fetchFromGitHub {
     owner = "llvm";
     repo = "circt";
     rev = "firtool-${version}";
-    hash = "sha256-8q/oh/LjeOsfQSQBfnyhQjGIYtRLgyEENsyfgxyTnv0=";
+    hash = "sha256-im+w6vYsLdJ/i88mG/anFjPYgE1HfvJIemLEse0pzco=";
     fetchSubmodules = true;
   };
 
@@ -75,6 +75,7 @@ stdenv.mkDerivation rec {
           "CIRCT :: circt-as-dis/.*\\.mlir"
           "CIRCT :: circt-reduce/.*\\.mlir"
           "CIRCT :: circt-test/basic.mlir"
+          "CIRCT :: firld/.*\\.mlir"
         ]
         ++ [
           # Temporarily disable for bump: https://github.com/llvm/circt/issues/8000

@@ -15,7 +15,7 @@
   ffmpeg,
   cmake,
   pkg-config,
-  buildGo123Module,
+  buildGoModule,
   makeWrapper,
   ncurses,
   which,
@@ -112,20 +112,18 @@ let
           hash = "sha256-b9B5I3EbBFrkWc6RLXMWcCRKayyWjlGuQrogUcrISrc=";
           fetchSubmodules = true;
         };
-        postPatch =
-          prev.postPatch
-          + ''
-            cd examples
-            cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
-            cp llava/clip* llava/llava.* grpc-server
-            printf "\nadd_subdirectory(grpc-server)" >> CMakeLists.txt
+        postPatch = ''
+          cd examples
+          cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
+          cp llava/clip* llava/llava.* grpc-server
+          printf "\nadd_subdirectory(grpc-server)" >> CMakeLists.txt
 
-            cp ${src}/backend/backend.proto grpc-server
-            sed -i grpc-server/CMakeLists.txt \
-              -e '/get_filename_component/ s;[.\/]*backend/;;' \
-              -e '$a\install(TARGETS ''${TARGET} RUNTIME)'
-            cd ..
-          '';
+          cp ${src}/backend/backend.proto grpc-server
+          sed -i grpc-server/CMakeLists.txt \
+            -e '/get_filename_component/ s;[.\/]*backend/;;' \
+            -e '$a\install(TARGETS ''${TARGET} RUNTIME)'
+          cd ..
+        '';
         cmakeFlags = prev.cmakeFlags ++ [
           (lib.cmakeBool "BUILD_SHARED_LIBS" false)
           (lib.cmakeBool "GGML_AVX" enable_avx)
@@ -189,7 +187,7 @@ let
     passthru.espeak-ng = espeak-ng';
   };
 
-  piper-tts' = (piper-tts.override { inherit piper-phonemize; }).overrideAttrs (self: {
+  piper-tts' = piper-tts.overrideAttrs (self: {
     name = "piper-tts'";
     inherit (go-piper) src;
     sourceRoot = "${go-piper.src.name}/piper";
@@ -251,7 +249,8 @@ let
     nativeBuildInputs = [
       cmake
       pkg-config
-    ] ++ lib.optionals with_cublas [ cuda_nvcc ];
+    ]
+    ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     buildInputs =
       [ ]
@@ -357,50 +356,47 @@ let
       ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
 
-  self = buildGo123Module.override { stdenv = effectiveStdenv; } {
+  self = buildGoModule.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
     vendorHash = "sha256-1OY/y1AeL0K+vOU4Jk/cj7rToVLC9EkkNhgifB+icDM=";
 
     env.NIX_CFLAGS_COMPILE = " -isystem ${opencv}/include/opencv4";
 
-    postPatch =
-      ''
-        # TODO: add silero-vad
-        sed -i Makefile \
-          -e '/mod download/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
-          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/silero-vad/ d' \
+    postPatch = ''
+      # TODO: add silero-vad
+      sed -i Makefile \
+        -e '/mod download/ d' \
+        -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
+        -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
+        -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/silero-vad/ d' \
 
-        sed -i backend/go/image/stablediffusion-ggml/Makefile \
-          -e '/^libsd/ s,$, $(COMBINED_LIB),'
+      sed -i backend/go/image/stablediffusion-ggml/Makefile \
+        -e '/^libsd/ s,$, $(COMBINED_LIB),'
 
-      ''
-      + lib.optionalString with_cublas ''
-        sed -i Makefile \
-          -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
-      '';
+    ''
+    + lib.optionalString with_cublas ''
+      sed -i Makefile \
+        -e '/^CGO_LDFLAGS_WHISPER?=/ s;$;-L${libcufft}/lib -L${cuda_cudart}/lib;'
+    '';
 
-    postConfigure =
-      prepare-sources
-      + ''
-        shopt -s extglob
-        mkdir -p backend-assets/grpc
-        cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-fallback
-        cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
+    postConfigure = prepare-sources + ''
+      shopt -s extglob
+      mkdir -p backend-assets/grpc
+      cp ${llama-cpp-grpc}/bin/grpc-server backend-assets/grpc/llama-cpp-fallback
+      cp ${llama-cpp-rpc}/bin/grpc-server backend-assets/grpc/llama-cpp-grpc
 
-        mkdir -p backend/cpp/llama/llama.cpp
+      mkdir -p backend/cpp/llama/llama.cpp
 
-        mkdir -p backend-assets/util
-        cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
+      mkdir -p backend-assets/util
+      cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
 
-        cp -r --no-preserve=mode,ownership ${stable-diffusion}/build backend/go/image/stablediffusion-ggml/build
+      cp -r --no-preserve=mode,ownership ${stable-diffusion}/build backend/go/image/stablediffusion-ggml/build
 
-        # avoid rebuild of prebuilt make targets
-        touch backend-assets/grpc/* backend-assets/util/*
-        find sources -name "lib*.a" -exec touch {} +
-      '';
+      # avoid rebuild of prebuilt make targets
+      touch backend-assets/grpc/* backend-assets/util/*
+      find sources -name "lib*.a" -exec touch {} +
+    '';
 
     buildInputs =
       [ ]
@@ -417,26 +413,23 @@ let
       ++ lib.optionals with_openblas [ openblas.dev ]
       ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs =
-      [
-        protobuf
-        protoc-gen-go
-        protoc-gen-go-grpc
-        makeWrapper
-        ncurses # tput
-        which
-      ]
-      ++ lib.optional enable_upx upx
-      ++ lib.optionals with_cublas [ cuda_nvcc ];
+    nativeBuildInputs = [
+      protobuf
+      protoc-gen-go
+      protoc-gen-go-grpc
+      makeWrapper
+      ncurses # tput
+      which
+    ]
+    ++ lib.optional enable_upx upx
+    ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
-    modBuildPhase =
-      prepare-sources
-      + ''
-        make protogen-go
-        go mod tidy -v
-      '';
+    modBuildPhase = prepare-sources + ''
+      make protogen-go
+      go mod tidy -v
+    '';
 
     proxyVendor = true;
 
@@ -444,13 +437,12 @@ let
     # containing spaces
     env.GO_TAGS = builtins.concatStringsSep " " GO_TAGS;
 
-    makeFlags =
-      [
-        "VERSION=v${version}"
-        "BUILD_TYPE=${BUILD_TYPE}"
-      ]
-      ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
-      ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
+    makeFlags = [
+      "VERSION=v${version}"
+      "BUILD_TYPE=${BUILD_TYPE}"
+    ]
+    ++ lib.optional with_cublas "CUDA_LIBPATH=${cuda_cudart}/lib"
+    ++ lib.optional with_tts "PIPER_CGO_CXXFLAGS=-DSPDLOG_FMT_EXTERNAL=1";
 
     buildPhase = ''
       runHook preBuild
@@ -546,6 +538,9 @@ let
         ck3d
       ];
       platforms = platforms.linux;
+      # Doesn't build with >buildGo123Module.
+      # 'cp: cannot stat 'bin/rpc-server': No such file or directory'
+      broken = true;
     };
   };
 in

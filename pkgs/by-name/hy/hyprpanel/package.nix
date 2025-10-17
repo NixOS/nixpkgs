@@ -37,7 +37,7 @@
 }:
 ags.bundle {
   pname = "hyprpanel";
-  version = "0-unstable-2025-06-22";
+  version = "0-unstable-2025-09-11";
 
   __structuredAttrs = true;
   strictDeps = true;
@@ -45,8 +45,8 @@ ags.bundle {
   src = fetchFromGitHub {
     owner = "Jas-SinghFSU";
     repo = "HyprPanel";
-    rev = "2c0c66a8ddcdff69b2ff694fefbcd8df4387a9e7";
-    hash = "sha256-wn6XV23Sz/nsDPI+1FGjtyMfAWJWcXRpNcryS47DJdY=";
+    rev = "0a961ce8a959c521f41546af7f355e04adee5503";
+    hash = "sha256-pz69vejsrB+7N+jyKxZcckTjJtzw9BCAIRzHNbFUIp0=";
   };
 
   # keep in sync with https://github.com/Jas-SinghFSU/HyprPanel/blob/master/flake.nix#L42
@@ -93,7 +93,8 @@ ags.bundle {
       ]
       ++ lib.optional enableCuda gpustat
     ))
-  ] ++ (lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [ gpu-screen-recorder ]);
+  ]
+  ++ (lib.optionals (stdenv.hostPlatform.system == "x86_64-linux") [ gpu-screen-recorder ]);
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 

@@ -3,6 +3,7 @@
 let
   inherit (builtins)
     intersectAttrs
+    unsafeGetAttrPos
     ;
   inherit (lib)
     functionArgs
@@ -166,7 +167,16 @@ rec {
         overrideWith = newArgs: origArgs // (if isFunction newArgs then newArgs origArgs else newArgs);
 
         # Re-call the function but with different arguments
-        overrideArgs = mirrorArgs (newArgs: makeOverridable f (overrideWith newArgs));
+        overrideArgs = mirrorArgs (
+          /**
+            Change the arguments with which a certain function is called.
+
+            In some cases, you may find a list of possible attributes to pass in this function's `__functionArgs` attribute, but it will not be complete for an original function like `args@{foo, ...}: ...`, which accepts arbitrary attributes.
+
+            This function was provided by `lib.makeOverridable`.
+          */
+          newArgs: makeOverridable f (overrideWith newArgs)
+        );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
       in
@@ -176,6 +186,16 @@ rec {
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
+            /**
+              Override the attributes that were passed to `mkDerivation` in order to generate this derivation.
+
+              This function is provided by `lib.makeOverridable`, and indirectly by `callPackage` among others, in order to make the combination of `override` and `overrideAttrs` work.
+              Specifically, it re-adds the `override` attribute to the result of `overrideAttrs`.
+
+              The real implementation of `overrideAttrs` is provided by `stdenv.mkDerivation`.
+            */
+            # NOTE: part of the above documentation had to be duplicated in `mkDerivation`'s `overrideAttrs`.
+            #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
             fdrv: overrideResult (x: x.overrideAttrs fdrv);
         }
       else if isFunction result then
@@ -284,19 +304,10 @@ rec {
       errorForArg =
         arg:
         let
-          loc = builtins.unsafeGetAttrPos arg fargs;
-          # loc' can be removed once lib/minver.nix is >2.3.4, since that includes
-          # https://github.com/NixOS/nix/pull/3468 which makes loc be non-null
-          loc' =
-            if loc != null then
-              loc.file + ":" + toString loc.line
-            else if !isFunction fn then
-              toString fn + optionalString (pathIsDirectory fn) "/default.nix"
-            else
-              "<unknown location>";
+          loc = unsafeGetAttrPos arg fargs;
         in
         "Function called without required argument \"${arg}\" at "
-        + "${loc'}${prettySuggestions (getSuggestions arg)}";
+        + "${loc.file}:${toString loc.line}${prettySuggestions (getSuggestions arg)}";
 
       # Only show the error for the first missing argument
       error = errorForArg (head (attrNames missingArgs));
@@ -385,7 +396,7 @@ rec {
       outputs = drv.outputs or [ "out" ];
 
       commonAttrs =
-        drv // (listToAttrs outputsList) // ({ all = map (x: x.value) outputsList; }) // passthru;
+        drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
       outputToAttrListElement = outputName: {
         name = outputName;
@@ -446,16 +457,15 @@ rec {
     let
       outputs = drv.outputs or [ "out" ];
 
-      commonAttrs =
-        {
-          inherit (drv) name system meta;
-          inherit outputs;
-        }
-        // optionalAttrs (drv._hydraAggregate or false) {
-          _hydraAggregate = true;
-          constituents = map hydraJob (flatten drv.constituents);
-        }
-        // (listToAttrs outputsList);
+      commonAttrs = {
+        inherit (drv) name system meta;
+        inherit outputs;
+      }
+      // optionalAttrs (drv._hydraAggregate or false) {
+        _hydraAggregate = true;
+        constituents = map hydraJob (flatten drv.constituents);
+      }
+      // (listToAttrs outputsList);
 
       makeOutput =
         outputName:

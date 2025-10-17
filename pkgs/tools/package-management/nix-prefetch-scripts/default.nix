@@ -5,14 +5,18 @@
   buildEnv,
   bash,
   breezy,
+  cacert,
   coreutils,
   cvs,
+  darcs,
   findutils,
   gawk,
-  git,
+  gitMinimal,
   git-lfs,
   gnused,
+  jq,
   mercurial,
+  pijul,
   subversion,
 }:
 
@@ -61,10 +65,15 @@ rec {
     breezy
   ];
   nix-prefetch-cvs = mkPrefetchScript "cvs" ../../../build-support/fetchcvs/nix-prefetch-cvs [ cvs ];
+  nix-prefetch-darcs = mkPrefetchScript "darcs" ../../../build-support/fetchdarcs/nix-prefetch-darcs [
+    darcs
+    cacert
+    jq
+  ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
-    git
+    gitMinimal
     git-lfs
   ];
   nix-prefetch-hg = mkPrefetchScript "hg" ../../../build-support/fetchhg/nix-prefetch-hg [
@@ -73,6 +82,11 @@ rec {
   nix-prefetch-svn = mkPrefetchScript "svn" ../../../build-support/fetchsvn/nix-prefetch-svn [
     subversion
   ];
+  nix-prefetch-pijul = mkPrefetchScript "pijul" ../../../build-support/fetchpijul/nix-prefetch-pijul [
+    pijul
+    cacert
+    jq
+  ];
 
   nix-prefetch-scripts = buildEnv {
     name = "nix-prefetch-scripts";
@@ -80,9 +94,11 @@ rec {
     paths = [
       nix-prefetch-bzr
       nix-prefetch-cvs
+      nix-prefetch-darcs
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn
+      nix-prefetch-pijul
     ];
 
     meta = with lib; {

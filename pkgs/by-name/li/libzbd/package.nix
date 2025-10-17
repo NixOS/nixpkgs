@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     autoconf-archive # this can be removed with the next release
     autoreconfHook
     libtool
-  ] ++ lib.optionals guiSupport [ pkg-config ];
+  ]
+  ++ lib.optionals guiSupport [ pkg-config ];
 
   buildInputs = lib.optionals guiSupport [ gtk3 ];
 

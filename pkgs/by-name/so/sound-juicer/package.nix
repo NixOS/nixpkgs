@@ -14,7 +14,7 @@
   gnome,
   adwaita-icon-theme,
   gst_all_1,
-  libmusicbrainz5,
+  libmusicbrainz,
   libdiscid,
   isocodes,
   gsettings-desktop-schemas,
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     adwaita-icon-theme
     gsettings-desktop-schemas
-    libmusicbrainz5
+    libmusicbrainz
     libdiscid
     isocodes
     gst_all_1.gstreamer

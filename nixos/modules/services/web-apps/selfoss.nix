@@ -100,7 +100,7 @@ in
         };
 
         port = mkOption {
-          type = types.nullOr types.int;
+          type = types.nullOr types.port;
           default = null;
           description = ''
             The database's port. If not set, the default ports will be

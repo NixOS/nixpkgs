@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.com/desktop-frameworks/wayqt";
     description = "Qt-based library to handle Wayland and Wlroots protocols to be used with any Qt project";
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };

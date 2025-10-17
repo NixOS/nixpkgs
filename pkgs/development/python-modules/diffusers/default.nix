@@ -45,14 +45,14 @@
 
 buildPythonPackage rec {
   pname = "diffusers";
-  version = "0.34.0";
+  version = "0.35.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "diffusers";
     tag = "v${version}";
-    hash = "sha256-e7969HsHS1wUG9LKREc7FPe2eBeUVPSW2I+BisBPt3M=";
+    hash = "sha256-VZXf1YCIFtzuBWaeYG3A+AyqnMEAKEI2nStjuPJ8ZTk=";
   };
 
   build-system = [ setuptools ];
@@ -103,7 +103,8 @@ buildPythonPackage rec {
     sentencepiece
     torchsde
     transformers
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck =
     let
@@ -133,30 +134,29 @@ buildPythonPackage rec {
       cat ${conftestSkipNetworkErrors} >> tests/conftest.py
     '';
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
-  disabledTests =
-    [
-      # depends on current working directory
-      "test_deprecate_stacklevel"
-      # fails due to precision of floating point numbers
-      "test_full_loop_no_noise"
-      "test_model_cpu_offload_forward_pass"
-      # tries to run ruff which we have intentionally removed from nativeCheckInputs
-      "test_is_copy_consistent"
+  disabledTests = [
+    # depends on current working directory
+    "test_deprecate_stacklevel"
+    # fails due to precision of floating point numbers
+    "test_full_loop_no_noise"
+    "test_model_cpu_offload_forward_pass"
+    # tries to run ruff which we have intentionally removed from nativeCheckInputs
+    "test_is_copy_consistent"
 
-      # Require unpackaged torchao:
-      # importlib.metadata.PackageNotFoundError: No package metadata was found for torchao
-      "test_load_attn_procs_raise_warning"
-      "test_save_attn_procs_raise_warning"
-      "test_save_load_lora_adapter_0"
-      "test_save_load_lora_adapter_1"
-      "test_wrong_adapter_name_raises_error"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # RuntimeError: Dynamo is not supported on Python 3.12+
-      "test_from_save_pretrained_dynamo"
-    ];
+    # Require unpackaged torchao:
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for torchao
+    "test_load_attn_procs_raise_warning"
+    "test_save_attn_procs_raise_warning"
+    "test_save_load_lora_adapter_0"
+    "test_save_load_lora_adapter_1"
+    "test_wrong_adapter_name_raises_error"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # RuntimeError: Dynamo is not supported on Python 3.12+
+    "test_from_save_pretrained_dynamo"
+  ];
 
   passthru.tests.pytest = diffusers.overridePythonAttrs { doCheck = true; };
 

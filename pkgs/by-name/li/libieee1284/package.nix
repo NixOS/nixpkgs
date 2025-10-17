@@ -39,16 +39,15 @@ stdenv.mkDerivation rec {
     docbook_xsl
   ];
 
-  configureFlags =
-    [
-      "--without-python"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
-      # musl always provides <sys/io.h>, even though the functionality
-      # is x86-specific.
-      # https://www.openwall.com/lists/musl/2024/10/25/2
-      "ac_cv_header_sys_io_h=no"
-    ];
+  configureFlags = [
+    "--without-python"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
+    # musl always provides <sys/io.h>, even though the functionality
+    # is x86-specific.
+    # https://www.openwall.com/lists/musl/2024/10/25/2
+    "ac_cv_header_sys_io_h=no"
+  ];
 
   prePatch = ''
     ./bootstrap

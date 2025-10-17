@@ -15,36 +15,36 @@
 }:
 
 let
-  version = "0.11.0";
+  version = "0.12.0";
   hashes = {
     "aarch64-darwin" = {
       platform = "darwin-arm64";
       hash = {
-        "8.1" = "sha256-/yaUulwiT+y7WZHPTdOWUgMsOnSwGrzMeVuT5W0XFsY=";
-        "8.2" = "sha256-AFisp5/LsCoVjHQ8VA9d4vUDPutYi26PzsPVton0Gjw=";
-        "8.3" = "dAJKUU5NED6QHFNrgRTLshkdT6ZtlRlcZh10rGQTON0=";
-        "8.4" = "sha256-cx2IcRRfD6PyQzZJaWgS4d5Mf70w0uJAwl9hTkr6cDo=";
-        "8.5" = "8ZfP++7jKcHdm89P+LOQj+ZsXbp2E3b3yuTQx6bOkmE=";
+        "8.1" = "sha256-AH8FzXjIPojCxTQqDChuZPUTDnVPeOeS5a0wNXjlyEk=";
+        "8.2" = "sha256-SdivilTHbr28fHaYxK7o1QIT+sWZGHQDjWC2EgtkBbM=";
+        "8.3" = "RUnmwI5q4jXHkiRuR/PwqnztEX/7y59DA/L7BelreVk=";
+        "8.4" = "sha256-y76rICDyrA/ogRxK+4C3JvJ4ch1fNLBrY01zMmcldnw=";
+        "8.5" = "W7BwODGEcRc6E7jpX1nojak7jDV5X+0tjgk32F82wvQ=";
       };
     };
     "aarch64-linux" = {
       platform = "debian-aarch64+libssl3";
       hash = {
-        "8.1" = "sha256-VYIWr0PyEzP3HHpnLI1X8NC48Oz9VWi1D70y7xT0WMw=";
-        "8.2" = "sha256-wF4BiiSRro0R6OUpintAas6WSFuyWiUSVc4yHjBkFRo=";
-        "8.3" = "sha256-LvIaYShHy4S7McpRX4EoWXpfNSkg2TV587IGbLaeMfg=";
-        "8.4" = "56Yzuu4JWwnKPabxU0stuLjz3N4AHeRuHeLc8OsdfxU=";
-        "8.5" = "lcSpj+VgT0soIzN0NX3S9JDO/gHSugKfRL5C3oLvg2w=";
+        "8.1" = "sha256-Zg1DdzJKfovGwA+cTR5hDQ1Or8oPRrtsyBu3Zt+/6yg=";
+        "8.2" = "sha256-tV7aoi9aiUrpOufmN4pQKi0Q0Ad6wrajq9SnaeZGlKg=";
+        "8.3" = "sha256-zJN+RSzFXjOB3Uajk1Adrphbz7NAbWMcuB88RRK7SlY=";
+        "8.4" = "qvXUg3GqqN3UUtDPQz1H2BiG/b8SomGLyIPR1NIkFUA=";
+        "8.5" = "GZZa4a+MfoQPlpIA6zOEnD4UdErh/9fLhMp20rOmGIE=";
       };
     };
     "x86_64-linux" = {
       platform = "debian-x86-64+libssl3";
       hash = {
-        "8.1" = "sha256-0gdkrhG/YSl6tjhrQnpIxC6YQj+NJqte6UNDdPv5YvE=";
-        "8.2" = "sha256-8vQ3Le3ssgb0jTxY2vUmriAHSFJXFlZxcYHcTHFkXDc=";
-        "8.3" = "sha256-VqtIugl5LZgc/VB7lmXewV3SxagD9l2C966W24sz3Qo=";
-        "8.4" = "3LjLX+zSjsCmnSWq2xD6wfnHf1dCY/Dl5CXJ3A8DY6Y=";
-        "8.5" = "TaJQcmxs7baH1pMnSvAoZqPaTiSujFQu1VBTB6h3fA0=";
+        "8.1" = "sha256-NTCRrTuiPDbKBauY+9nQm4oJn9TwHQvNfynSKk/bZ7w=";
+        "8.2" = "sha256-9GwMHf0GIErr0vZieCH5D5tvJiekpOdBo/u1P30L9lc=";
+        "8.3" = "sha256-180n5Naz6dQRCQCj7r0CJhRqfmEHjM7jgkmWRAvyFaY=";
+        "8.4" = "nGgvhtuita+rTtns+33xDDEaIXcd3aYiCAClizWtE1E=";
+        "8.5" = "wvxZ7jUrqXImzH1LEUmvxpxKL4NE0tAtu9M25P82d0w=";
       };
     };
   };
@@ -81,47 +81,43 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
   ];
   internalDeps = [ php.extensions.session ];
-  installPhase =
-    ''
-      runHook preInstall
-      install -Dm755 relay.so -t $out/lib/php/extensions
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        let
-          args =
-            lib.strings.concatMapStrings
-              (
-                v:
-                " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${builtins.baseNameOf v.name}"
-              )
-              (
-                with lib.attrsets;
-                [
-                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
-                  (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
-                  (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
-                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
-                  (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
-                  (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
-                  (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
-                ]
-              );
-        in
-        # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
-        ''
-          install_name_tool${args} $out/lib/php/extensions/relay.so
-        ''
-      else
-        ""
-    )
-    + ''
-      # Random UUID that's required by the extension. Can be anything, but must be different from default.
-      sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
-      chmod -w $out/lib/php/extensions/relay.so
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 relay.so -t $out/lib/php/extensions
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
+      let
+        args =
+          lib.strings.concatMapStrings
+            (v: " -change ${v.name}" + " ${lib.strings.makeLibraryPath [ v.value ]}/${baseNameOf v.name}")
+            (
+              with lib.attrsets;
+              [
+                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis.1.1.0.dylib" hiredis)
+                (nameValuePair "/opt/homebrew/opt/hiredis/lib/libhiredis_ssl.dylib.1.1.0" hiredis)
+                (nameValuePair "/opt/homebrew/opt/concurrencykit/lib/libck.0.dylib" libck)
+                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libssl.3.dylib" openssl)
+                (nameValuePair "/opt/homebrew/opt/openssl@3/lib/libcrypto.3.dylib" openssl)
+                (nameValuePair "/opt/homebrew/opt/zstd/lib/libzstd.1.dylib" zstd)
+                (nameValuePair "/opt/homebrew/opt/lz4/lib/liblz4.1.dylib" lz4)
+              ]
+            );
+      in
+      # fixDarwinDylibNames can't be used here because we need to completely remap .dylibs, not just add absolute paths
+      ''
+        install_name_tool${args} $out/lib/php/extensions/relay.so
+      ''
+    else
+      ""
+  )
+  + ''
+    # Random UUID that's required by the extension. Can be anything, but must be different from default.
+    sed -i "s/00000000-0000-0000-0000-000000000000/aced680f-30e9-40cc-a868-390ead14ba0c/" $out/lib/php/extensions/relay.so
+    chmod -w $out/lib/php/extensions/relay.so
 
-      runHook postInstall
-    '';
+    runHook postInstall
+  '';
 
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''

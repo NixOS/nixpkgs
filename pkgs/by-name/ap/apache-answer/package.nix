@@ -2,7 +2,7 @@
   buildGoModule,
   lib,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm,
   nodejs,
   fetchpatch,
   stdenv,
@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "apache-answer";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "apache";
-    repo = "incubator-answer";
+    repo = "answer";
     tag = "v${version}";
-    hash = "sha256-nS3ZDwY221axzo1HAz369f5jWZ/mpCn4r3OPPqjiohI=";
+    hash = "sha256-QrLYkGiEDBB4uUzG2yrlEUYXpQxovKFBmGZjLbZiGKk=";
   };
 
   webui = stdenv.mkDerivation {
@@ -25,14 +25,15 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/ui";
 
-    pnpmDeps = pnpm_9.fetchDeps {
+    pnpmDeps = pnpm.fetchDeps {
       inherit src version pname;
       sourceRoot = "${src.name}/ui";
-      hash = "sha256-/se6IWeHdazqS7PzOpgtT4IxCJ1WptqBzZ/BdmGb4BA=";
+      fetcherVersion = 1;
+      hash = "sha256-6IeLOwsEqchCwe0GGj/4v9Q4/Hm16K+ve2X+8QHztQM=";
     };
 
     nativeBuildInputs = [
-      pnpm_9.configHook
+      pnpm.configHook
       nodejs
     ];
 
@@ -54,26 +55,28 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-nvXr1YAqVCyhCgPtABTOtzDH+FCQhN9kSEhxKw7ipsE=";
+  vendorHash = "sha256-mWSKoEYj23fy6ix3mK1/5HeGugp1UAUO+iwInXkzgU4=";
+
+  doCheck = false; # TODO checks are currently broken upstream
+
+  ldflags = [
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+  ];
 
   preBuild = ''
     cp -r ${webui}/* ui/build/
   '';
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/apache/incubator-answer/commit/57b0d0e84dd0e0bf3c8a05a38a7f55eddc5f0dda.patch";
-      hash = "sha256-TfF+PtrcMYYgNjgU4lGpnshdII8xECTT2L7M26uebn0=";
-    })
-  ];
-
   meta = {
     homepage = "https://answer.apache.org/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      bot-wxt1221
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "answer";
-    changelog = "https://github.com/apache/incubator-answer/releases/tag/v${version}";
+    changelog = "https://github.com/apache/answer/releases/tag/v${version}";
     description = "Q&A platform software for teams at any scales";
   };
 }

@@ -1,0 +1,88 @@
+name: Merge Group
+
+on:
+  merge_group:
+  workflow_call:
+    inputs:
+      mergedSha:
+        required: true
+        type: string
+      targetSha:
+        required: true
+        type: string
+    secrets:
+      CACHIX_AUTH_TOKEN:
+        required: true
+
+permissions: {}
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: |
+            ci/supportedSystems.json
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
+
+  lint:
+    name: Lint
+    uses: ./.github/workflows/lint.yml
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
+      targetSha: ${{ inputs.targetSha || github.event.merge_group.base_sha }}
+
+  eval:
+    name: Eval
+    needs: [prepare]
+    uses: ./.github/workflows/eval.yml
+    # The eval workflow requests these permissions so we must explicitly allow them,
+    # even though they are unused when working with the merge queue.
+    permissions:
+      # compare
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
+      systems: ${{ needs.prepare.outputs.systems }}
+
+  # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
+  # It "needs" all the jobs that should block the Merge Queue.
+  unlock:
+    if: github.event_name != 'pull_request' && always()
+    # Modify this list to add or remove jobs from required status checks.
+    needs:
+      - lint
+      - eval
+    runs-on: ubuntu-24.04-arm
+    permissions:
+      statuses: write
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        env:
+          RESULTS: ${{ toJSON(needs.*.result) }}
+        with:
+          script: |
+            const { serverUrl, repo, runId, payload } = context
+            const target_url =
+              `${serverUrl}/${repo.owner}/${repo.repo}/actions/runs/${runId}`
+            await github.rest.repos.createCommitStatus({
+              ...repo,
+              sha: payload.merge_group.head_sha,
+              // WARNING:
+              // Do NOT change the name of this, otherwise the rule will not catch it anymore.
+              // This would prevent all PRs from merging.
+              context: 'no PR failures',
+              state: JSON.parse(process.env.RESULTS).every(result => result == 'success') ? 'success' : 'error',
+              target_url,
+            })

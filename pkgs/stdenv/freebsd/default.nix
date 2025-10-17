@@ -59,7 +59,7 @@ let
       attrs
       // {
         inherit system;
-        name = attrs.name or (builtins.baseNameOf (builtins.elemAt attrs.paths 0));
+        name = attrs.name or (baseNameOf (builtins.elemAt attrs.paths 0));
         src = bootstrapArchive;
         builder = "${bootstrapArchive}/bin/bash";
         # this script will prefer to link files instead of copying them.
@@ -404,7 +404,7 @@ let
       fetchurlBoot = import ../../build-support/fetchurl {
         inherit lib stdenvNoCC;
         inherit (prevStage) curl;
-        inherit (config) rewriteURL;
+        inherit (config) hashedMirrors rewriteURL;
       };
       stdenv = import ../generic {
         inherit
@@ -455,15 +455,14 @@ let
           };
         };
         overrides = overrides prevStage;
-        preHook =
-          ''
-            export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-            export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
-            export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
-          ''
-          + lib.optionalString (prevStage.freebsd ? libiconvModules) ''
-            export PATH_I18NMODULE=${prevStage.freebsd.libiconvModules}/lib/i18n
-          '';
+        preHook = ''
+          export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
+          export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+          export PATH_LOCALE=${prevStage.freebsd.localesReal or prevStage.freebsd.locales}/share/locale
+        ''
+        + lib.optionalString (prevStage.freebsd ? libiconvModules) ''
+          export PATH_I18NMODULE=${prevStage.freebsd.libiconvModules}/lib/i18n
+        '';
       };
     in
     {
@@ -498,12 +497,12 @@ in
           bzip2
           xz
           ;
-        binutils-unwrapped = builtins.removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
+        binutils-unwrapped = removeAttrs bootstrapTools.binutils-unwrapped [ "src" ];
         fetchurl = import ../../build-support/fetchurl {
           inherit lib;
           inherit (self) stdenvNoCC;
           inherit (prevStage) curl;
-          inherit (config) rewriteURL;
+          inherit (config) hashedMirrors rewriteURL;
         };
         gettext = super.gettext.overrideAttrs {
           NIX_CFLAGS_COMPILE = "-DHAVE_ICONV=1"; # we clearly have iconv. what do you want?

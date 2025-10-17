@@ -112,6 +112,6 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     # https://gitlab.freedesktop.org/glvnd/libglvnd/-/issues/212
     badPlatforms = [ lib.systems.inspect.platformPatterns.isStatic ];
-    maintainers = with lib.maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

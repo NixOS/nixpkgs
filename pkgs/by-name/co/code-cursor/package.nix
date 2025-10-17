@@ -16,20 +16,20 @@ let
 
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/979ba33804ac150108481c14e0b5cb970bda3266/linux/x64/Cursor-1.1.3-x86_64.AppImage";
-      hash = "sha256-mOwWNbKKykMaLFxfjaoGGrxfyhLX++fqJ0TXQtKVD8c=";
+      url = "https://downloads.cursor.com/production/fe5d1728063e86edeeda5bebd2c8e14bf4d0f96a/linux/x64/Cursor-1.7.38-x86_64.AppImage";
+      hash = "sha256-52QJVbXO3CYeL4vVZ249xabS7AoYFDOxKCQ6m3vB+vE=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/production/979ba33804ac150108481c14e0b5cb970bda3266/linux/arm64/Cursor-1.1.3-aarch64.AppImage";
-      hash = "sha256-1uWfTOrBcCX6QWTwB9C45RsjLqu2C89DQkqKFTHsKxg=";
+      url = "https://downloads.cursor.com/production/fe5d1728063e86edeeda5bebd2c8e14bf4d0f96a/linux/arm64/Cursor-1.7.38-aarch64.AppImage";
+      hash = "sha256-4yUjLAiC7wZYYmAnVNUbRuvLBrpAfC/Kb9y/nONtwkM=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/979ba33804ac150108481c14e0b5cb970bda3266/darwin/x64/Cursor-darwin-x64.dmg";
-      hash = "sha256-q5/bmv+QDAkuMOUcaCspJrkaxrz9dBRJKf1eFhk9M04=";
+      url = "https://downloads.cursor.com/production/fe5d1728063e86edeeda5bebd2c8e14bf4d0f96a/darwin/x64/Cursor-darwin-x64.dmg";
+      hash = "sha256-x56I8XaOvFK7GDlfyAHD18DdUwZrKf7hlXAROplqKU0=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/production/979ba33804ac150108481c14e0b5cb970bda3266/darwin/arm64/Cursor-darwin-arm64.dmg";
-      hash = "sha256-vgcPwbRXFRtxIAUqbozFD9b21/XUAAojMv9/UnEYvb8=";
+      url = "https://downloads.cursor.com/production/fe5d1728063e86edeeda5bebd2c8e14bf4d0f96a/darwin/arm64/Cursor-darwin-arm64.dmg";
+      hash = "sha256-14H1jvVmSsywkFm6M3BFLAwUzorehrbVvo9OJo6cEdk=";
     };
   };
 
@@ -39,12 +39,12 @@ in
   inherit useVSCodeRipgrep;
   commandLineArgs = finalCommandLineArgs;
 
-  version = "1.1.3";
+  version = "1.7.38";
   pname = "cursor";
 
   # You can find the current VSCode version in the About dialog:
   # workbench.action.showAboutDialog (Help: About)
-  vscodeVersion = "1.96.2";
+  vscodeVersion = "1.99.3";
 
   executableName = "cursor";
   longName = "Cursor";
@@ -89,21 +89,14 @@ in
     platforms = [
       "aarch64-linux"
       "x86_64-linux"
-    ] ++ lib.platforms.darwin;
+    ]
+    ++ lib.platforms.darwin;
     mainProgram = "cursor";
   };
 }).overrideAttrs
   (oldAttrs: {
     nativeBuildInputs =
-      (oldAttrs.nativeBuildInputs or [ ])
-      ++ lib.optionals hostPlatform.isDarwin [ undmg ];
-
-    preInstall =
-      (oldAttrs.preInstall or "")
-      + lib.optionalString hostPlatform.isLinux ''
-        mkdir -p bin
-        ln -s ../cursor bin/cursor
-      '';
+      (oldAttrs.nativeBuildInputs or [ ]) ++ lib.optionals hostPlatform.isDarwin [ undmg ];
 
     passthru = (oldAttrs.passthru or { }) // {
       inherit sources;

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "fastavro";
-  version = "1.11.1";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "fastavro";
     repo = "fastavro";
     tag = version;
-    hash = "sha256-I8Te1Ae20UrE5qI2nwktU0Ubip7Jx4/NWteSKsSz7tg=";
+    hash = "sha256-r/dNXBmsNnvYbvXdZC5++1B9884dQV76pLga6u3XtO8=";
   };
 
   preBuild = ''
@@ -56,7 +56,8 @@ buildPythonPackage rec {
     pytestCheckHook
     python-dateutil
     zlib-ng
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Fails with "AttributeError: module 'fastavro._read_py' has no attribute
   # 'CYTHON_MODULE'." Doesn't appear to be serious. See https://github.com/fastavro/fastavro/issues/112#issuecomment-387638676.
@@ -71,7 +72,7 @@ buildPythonPackage rec {
     description = "Fast read/write of AVRO files";
     mainProgram = "fastavro";
     homepage = "https://github.com/fastavro/fastavro";
-    changelog = "https://github.com/fastavro/fastavro/blob/${version}/ChangeLog";
+    changelog = "https://github.com/fastavro/fastavro/blob/${src.tag}/ChangeLog";
     license = licenses.mit;
     maintainers = with maintainers; [ samuela ];
   };

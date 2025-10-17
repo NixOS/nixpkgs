@@ -42,26 +42,25 @@ mkDerivation rec {
     desktop-file-utils
     imagemagick
   ];
-  buildInputs =
-    [
-      libsodium
-      libopus
-      libGL
-      alsa-lib
-    ]
-    ++ [
-      qtbase
-      qtsvg
-      qtmultimedia
-      qtwebsockets
-      qtimageformats
-    ]
-    ++ (with xorg; [
-      libX11
-      libXScrnSaver
-      libXcursor
-      xkeyboardconfig
-    ]);
+  buildInputs = [
+    libsodium
+    libopus
+    libGL
+    alsa-lib
+  ]
+  ++ [
+    qtbase
+    qtsvg
+    qtmultimedia
+    qtwebsockets
+    qtimageformats
+  ]
+  ++ (with xorg; [
+    libX11
+    libXScrnSaver
+    libXcursor
+    xkeyboardconfig
+  ]);
 
   fontsConf = makeFontsConf {
     fontDirectories = [ twemoji-color-font ];

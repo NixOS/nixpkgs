@@ -4,7 +4,7 @@
   fetchpatch,
   fetchurl,
   unzip,
-  gdc,
+  ldc,
   libGL,
   libGLU,
   SDL,
@@ -17,7 +17,7 @@ let
     patchname: hash:
     fetchpatch {
       name = "${patchname}.patch";
-      url = "https://sources.debian.org/data/main/t/torus-trooper/0.22.dfsg1-12/debian/patches/${patchname}.patch";
+      url = "https://sources.debian.org/data/main/t/torus-trooper/0.22.dfsg1-14/debian/patches/${patchname}.patch";
       sha256 = hash;
     };
 
@@ -48,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     (debianPatch "libbulletml0v5-segfault" "0pad2daz60hswkhkdpssxaqc9p9ca0sw1nraqzr453x0zdwwq0hn")
     (debianPatch "std.math.fabs" "18xnnqlj20bxv2h9fa8dn4rmxwi3k6y3g50kwvh8i8p3b4hgag3r")
     (debianPatch "gdc-8" "10z702y75c48hjcnvv8m7f3ka52cj3r3jqafdbby85nb0p2lbssx")
+    (debianPatch "gcc12" "sha256-8zNwhteRW3xWFsdoTOLIPPZn2cqCE1mS7UDYP1DzSQQ=")
   ];
 
   postPatch = ''
@@ -55,11 +56,16 @@ stdenv.mkDerivation (finalAttrs: {
       substituteInPlace $f \
         --replace "/usr/" "$out/"
     done
+    # GDC → DMD/LDC flag compatibility
+    substituteInPlace Makefile \
+      --replace-fail "-o " -of= \
+      --replace-fail -Wno-deprecated "" \
+      --replace-fail -l -L-l
   '';
 
   nativeBuildInputs = [
     unzip
-    gdc
+    ldc
   ];
 
   buildInputs = [
@@ -69,6 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_mixer
     bulletml
   ];
+
+  makeFlags = [ "GDC=ldc2" ];
 
   installPhase = ''
     install -Dm755 torus-trooper $out/bin/torus-trooper

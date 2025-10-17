@@ -1,20 +1,21 @@
 {
   lib,
-  aiohttp,
   aiohttp-socks,
+  aiohttp,
   beautifulsoup4,
   buildPythonPackage,
   dateparser,
   dnspython,
   fetchFromGitHub,
+  orjson,
   playwright-stealth,
   playwright,
   poetry-core,
   puremagic,
   pydub,
-  pythonOlder,
   pytz,
   requests,
+  rfc3161-client,
   setuptools,
   speechrecognition,
   tzdata,
@@ -23,22 +24,21 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.29.1";
+  version = "1.34.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     tag = "v${version}";
-    hash = "sha256-n2lVP+oThZ2hRVOadudaaNFU2KI14rrkG7ipJ0vrj20=";
+    hash = "sha256-3O46iBYoPYPvCLRlQhGesD+VJR1y4LnwPk3zIZ/OetA=";
   };
 
   pythonRelaxDeps = [
     "aiohttp"
     "aiohttp-socks"
     "beautifulsoup4"
+    "orjson"
     "playwright"
     "setuptools"
     "tzdata"
@@ -52,11 +52,13 @@ buildPythonPackage rec {
     beautifulsoup4
     dateparser
     dnspython
+    orjson
     playwright
     playwright-stealth
     puremagic
     pytz
     requests
+    rfc3161-client
     setuptools
     tzdata
     w3lib

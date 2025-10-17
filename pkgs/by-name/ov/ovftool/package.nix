@@ -113,33 +113,31 @@ stdenv.mkDerivation (final: {
         and would like to use this package.
       '';
 
-  buildInputs =
-    [
-      c-ares
-      expat
-      icu60
-      libiconv
-      libxcrypt-legacy
-      ovftool-xercesc
-      zlib
-      curl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      glibc
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libxml2
-    ];
+  buildInputs = [
+    c-ares
+    expat
+    icu60
+    libiconv
+    libxcrypt-legacy
+    ovftool-xercesc
+    zlib
+    curl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    glibc
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libxml2
+  ];
 
-  nativeBuildInputs =
-    [
-      unzip
-      makeWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      autoPatchelfHook
-    ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    autoPatchelfHook
+  ];
 
   postUnpack = ''
     # The linux package wraps ovftool.bin with ovftool. Wrapping
@@ -150,84 +148,83 @@ stdenv.mkDerivation (final: {
     fi
   '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      # Based on https://aur.archlinux.org/packages/vmware-ovftool/
-      # with the addition of a libexec directory and a Nix-style binary wrapper.
+    # Based on https://aur.archlinux.org/packages/vmware-ovftool/
+    # with the addition of a libexec directory and a Nix-style binary wrapper.
 
-      # Almost all libs in the package appear to be VMware proprietary except for
-      # libgoogleurl and libcurl.
-      #
-      # FIXME: Replace libgoogleurl? Possibly from Chromium?
-      # FIXME: Tell VMware to use a modern version of OpenSSL on macOS. As of ovftool
-      # v4.6.3 ovftool uses openssl-1.0.2zj which in seems to be the extended
-      # support LTS release: https://www.openssl.org/support/contracts.html
+    # Almost all libs in the package appear to be VMware proprietary except for
+    # libgoogleurl and libcurl.
+    #
+    # FIXME: Replace libgoogleurl? Possibly from Chromium?
+    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS. As of ovftool
+    # v4.6.3 ovftool uses openssl-1.0.2zj which in seems to be the extended
+    # support LTS release: https://www.openssl.org/support/contracts.html
 
-      # Install all libs that are not patched in preFixup.
-      # Darwin dylibs are under `lib` in the zip.
-      install -m 755 -d "$out/lib"
-      install -m 644 -t "$out/lib" \
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      libgoogleurl.so.59 \
-      libssoclient.so \
-      libvim-types.so \
-      libvmacore.so \
-      libvmomi.so
-    ''
-    # macOS still relies on OpenSSL 1.0.2 as of v4.6.3, but Linux is in the clear
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      lib/libcrypto.1.0.2.dylib \
-      lib/libgoogleurl.59.0.30.45.2.dylib \
-      lib/libssl.1.0.2.dylib \
-      lib/libssoclient.dylib \
-      lib/libvim-types.dylib \
-      lib/libvmacore.dylib \
-      lib/libvmomi.dylib
-    ''
-    + ''
-      # Install libexec binaries
-      # ovftool expects to be run relative to certain directories, namely `env`.
-      # Place the binary and those dirs in libexec.
-      install -m 755 -d "$out/libexec"
-      install -m 755 -t "$out/libexec" ovftool
-      [ -f ovftool.bin ] && install -m 755 -t "$out/libexec" ovftool.bin
-      install -m 644 -t "$out/libexec" icudt44l.dat
+    # Install all libs that are not patched in preFixup.
+    # Darwin dylibs are under `lib` in the zip.
+    install -m 755 -d "$out/lib"
+    install -m 644 -t "$out/lib" \
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    libgoogleurl.so.59 \
+    libssoclient.so \
+    libvim-types.so \
+    libvmacore.so \
+    libvmomi.so
+  ''
+  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3, but Linux is in the clear
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    lib/libcrypto.1.0.2.dylib \
+    lib/libgoogleurl.59.0.30.45.2.dylib \
+    lib/libssl.1.0.2.dylib \
+    lib/libssoclient.dylib \
+    lib/libvim-types.dylib \
+    lib/libvmacore.dylib \
+    lib/libvmomi.dylib
+  ''
+  + ''
+    # Install libexec binaries
+    # ovftool expects to be run relative to certain directories, namely `env`.
+    # Place the binary and those dirs in libexec.
+    install -m 755 -d "$out/libexec"
+    install -m 755 -t "$out/libexec" ovftool
+    [ -f ovftool.bin ] && install -m 755 -t "$out/libexec" ovftool.bin
+    install -m 644 -t "$out/libexec" icudt44l.dat
 
-      # Install other libexec resources that need to be relative to the `ovftool`
-      # binary.
-      for subdir in "certs" "env" "env/en" "schemas/DMTF" "schemas/vmware"; do
-        install -m 755 -d "$out/libexec/$subdir"
-        install -m 644 -t "$out/libexec/$subdir" "$subdir"/*.*
-      done
+    # Install other libexec resources that need to be relative to the `ovftool`
+    # binary.
+    for subdir in "certs" "env" "env/en" "schemas/DMTF" "schemas/vmware"; do
+      install -m 755 -d "$out/libexec/$subdir"
+      install -m 644 -t "$out/libexec/$subdir" "$subdir"/*.*
+    done
 
-      # Install EULA/OSS files
-      install -m 755 -d "$out/share/licenses"
-      install -m 644 -t "$out/share/licenses" \
-        "vmware.eula" \
-        "vmware-eula.rtf" \
-        "README.txt" \
-        "open_source_licenses.txt"
+    # Install EULA/OSS files
+    install -m 755 -d "$out/share/licenses"
+    install -m 644 -t "$out/share/licenses" \
+      "vmware.eula" \
+      "vmware-eula.rtf" \
+      "README.txt" \
+      "open_source_licenses.txt"
 
-      # Install Docs
-      install -m 755 -d "$out/share/doc"
-      install -m 644 -t "$out/share/doc" "README.txt"
+    # Install Docs
+    install -m 755 -d "$out/share/doc"
+    install -m 644 -t "$out/share/doc" "README.txt"
 
-      # Install final executable
-      install -m 755 -d "$out/bin"
-      makeWrapper "$out/libexec/ovftool" "$out/bin/ovftool" \
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      --prefix LD_LIBRARY_PATH : "$out/lib"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      --prefix DYLD_LIBRARY_PATH : "$out/lib"
-    ''
-    + ''
-      runHook postInstall
-    '';
+    # Install final executable
+    install -m 755 -d "$out/bin"
+    makeWrapper "$out/libexec/ovftool" "$out/bin/ovftool" \
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    --prefix LD_LIBRARY_PATH : "$out/lib"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    --prefix DYLD_LIBRARY_PATH : "$out/lib"
+  ''
+  + ''
+    runHook postInstall
+  '';
 
   preFixup =
     lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -243,7 +240,6 @@ stdenv.mkDerivation (final: {
       done
 
       # Patches for ovftool binary
-      change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
       change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
       change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
       change_args+=(-change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib)

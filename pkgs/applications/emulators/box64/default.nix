@@ -42,27 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "NOGIT" true)
+  cmakeFlags = [
+    (lib.cmakeBool "NOGIT" true)
 
-      # Arch mega-option
-      (lib.cmakeBool "ARM64" stdenv.hostPlatform.isAarch64)
-      (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
-      (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
-      (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
-      (lib.cmakeBool "LD80BITS" true)
-      (lib.cmakeBool "NOALIGN" true)
-    ]
-    ++ [
-      # Arch dynarec
-      (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
-      (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
-      (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
-    ];
+    # Arch mega-option
+    (lib.cmakeBool "ARM64" stdenv.hostPlatform.isAarch64)
+    (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
+    (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+    (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
+    (lib.cmakeBool "LD80BITS" true)
+    (lib.cmakeBool "NOALIGN" true)
+  ]
+  ++ [
+    # Arch dynarec
+    (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
+    (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
+    (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
+  ];
 
   installPhase = ''
     runHook preInstall

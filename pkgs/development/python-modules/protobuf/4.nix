@@ -82,7 +82,8 @@ buildPythonPackage {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
+  ]
+  ++ lib.optionals (lib.versionAtLeast protobuf.version "22") [ numpy ];
 
   disabledTests =
     lib.optionals isPyPy [
@@ -129,7 +130,7 @@ buildPythonPackage {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = "https://developers.google.com/protocol-buffers/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = lib.versionAtLeast protobuf.version "26";
   };
 }

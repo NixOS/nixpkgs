@@ -110,7 +110,9 @@ in
             1
           else
             coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
+        latestPlatformVersionInt = lib.max minPlatformVersionInt (
+          coerceInt (lib.versions.major repo.latest.platforms)
+        );
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
@@ -189,7 +191,7 @@ let
               archive:
               (fetchurl {
                 inherit (archive) url sha1;
-                preferLocalBuild = true;
+                inherit meta;
                 passthru = {
                   info = packageInfo;
                 };
@@ -255,16 +257,14 @@ let
   mkLicenseTexts =
     licenseNames:
     lib.lists.flatten (
-      builtins.map (
-        licenseName:
-        builtins.map (licenseText: "--- ${licenseName} ---\n${licenseText}") (mkLicenses licenseName)
+      map (
+        licenseName: map (licenseText: "--- ${licenseName} ---\n${licenseText}") (mkLicenses licenseName)
       ) licenseNames
     );
 
   # Converts a license name to a list of license hashes.
   mkLicenseHashes =
-    licenseName:
-    builtins.map (licenseText: builtins.hashString "sha1" licenseText) (mkLicenses licenseName);
+    licenseName: map (licenseText: builtins.hashString "sha1" licenseText) (mkLicenses licenseName);
 
   # The list of all license names we're accepting. Put android-sdk-license there
   # by default.
@@ -631,32 +631,32 @@ lib.recurseIntoAttrs rec {
   # This derivation deploys the tools package and symlinks all the desired
   # plugins that we want to use. If the license isn't accepted, prints all the licenses
   # requested and throws.
-  androidsdk =
-    if !licenseAccepted then
-      throw ''
-        ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
+  androidsdk = callPackage ./cmdline-tools.nix {
+    inherit
+      deployAndroidPackage
+      os
+      arch
+      meta
+      ;
 
-        You must accept the following licenses:
-        ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
+    package = cmdline-tools-package;
 
-        a)
-          by setting nixpkgs config option 'android_sdk.accept_license = true;'.
-        b)
-          by an environment variable for a single invocation of the nix tools.
-            $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
-      ''
-    else
-      callPackage ./cmdline-tools.nix {
-        inherit
-          deployAndroidPackage
-          os
-          arch
-          meta
-          ;
+    postInstall =
+      if !licenseAccepted then
+        throw ''
+          ${builtins.concatStringsSep "\n\n" (mkLicenseTexts licenseNames)}
 
-        package = cmdline-tools-package;
+          You must accept the following licenses:
+          ${lib.concatMapStringsSep "\n" (str: "  - ${str}") licenseNames}
 
-        postInstall = ''
+          a)
+            by setting nixpkgs config option 'android_sdk.accept_license = true;'.
+          b)
+            by an environment variable for a single invocation of the nix tools.
+              $ export NIXPKGS_ACCEPT_ANDROID_SDK_LICENSE=1
+        ''
+      else
+        ''
           # Symlink all requested plugins
           ${linkPlugin {
             name = "platform-tools";
@@ -769,5 +769,5 @@ lib.recurseIntoAttrs rec {
             ''
           ) licenseNames}
         '';
-      };
+  };
 }

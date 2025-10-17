@@ -30,6 +30,11 @@ buildPythonPackage rec {
     hash = "sha256-rRiRaXONLMNirKsK+QZWMSvaGeSLrHN9BpM8dhxoaxY=";
   };
 
+  patches = [
+    # https://gitlab.com/coroner/cryptolyzer/-/merge_requests/4
+    ./fix-dirs-exclude.patch
+  ];
+
   pythonRemoveDeps = [ "bs4" ];
 
   build-system = [
@@ -54,13 +59,23 @@ buildPythonPackage rec {
   # Tests require networking
   doCheck = false;
 
+  postInstall = ''
+    find $out -name "__pycache__" -type d | xargs rm -rv
+
+    # Prevent creating more binary byte code later (e.g. during
+    # pythonImportsCheck)
+    export PYTHONDONTWRITEBYTECODE=1
+  '';
+
   pythonImportsCheck = [ "cryptolyzer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cryptographic protocol analyzer";
     homepage = "https://gitlab.com/coroner/cryptolyzer";
     changelog = "https://gitlab.com/coroner/cryptolyzer/-/blob/v${version}/CHANGELOG.md";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ kranzes ];
+    license = lib.licenses.mpl20;
+    mainProgram = "cryptolyze";
+    maintainers = with lib.maintainers; [ kranzes ];
+    teams = with lib.teams; [ ngi ];
   };
 }

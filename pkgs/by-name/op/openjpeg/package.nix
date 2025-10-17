@@ -78,25 +78,25 @@ stdenv.mkDerivation rec {
     "-DBUILD_VIEWER=OFF"
     "-DBUILD_JAVA=OFF"
     (lib.cmakeBool "BUILD_TESTING" doCheck)
-  ] ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
+  ]
+  ++ lib.optional doCheck "-DOPJ_DATA_ROOT=${test-data}";
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libpng
-      libtiff
-      zlib
-      lcms2
-    ]
-    ++ lib.optionals jpipServerSupport [
-      curl
-      fcgi
-    ]
-    ++ lib.optional (jpipLibSupport) jdk;
+  buildInputs = [
+    libpng
+    libtiff
+    zlib
+    lcms2
+  ]
+  ++ lib.optionals jpipServerSupport [
+    curl
+    fcgi
+  ]
+  ++ lib.optional jpipLibSupport jdk;
 
   # tests did fail on powerpc64
   doCheck = !stdenv.hostPlatform.isPower64 && stdenv.buildPlatform.canExecute stdenv.hostPlatform;

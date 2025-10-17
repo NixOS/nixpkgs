@@ -49,31 +49,31 @@ stdenv.mkDerivation rec {
     qttools
   ];
 
-  buildInputs =
-    [
-      curl
-      qtbase
-      avahi
-      libX11
-      libXext
-      libXtst
-      libXinerama
-      libXrandr
-      libXdmcp
-      libICE
-      libSM
-    ]
-    ++ lib.optionals withLibei [
-      libei
-      libportal
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      pkgsStatic.openssl
-    ];
+  buildInputs = [
+    curl
+    qtbase
+    avahi
+    libX11
+    libXext
+    libXtst
+    libXinerama
+    libXrandr
+    libXdmcp
+    libICE
+    libSM
+  ]
+  ++ lib.optionals withLibei [
+    libei
+    libportal
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pkgsStatic.openssl
+  ];
 
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
-  ] ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
+  ]
+  ++ lib.optional withLibei "-DINPUTLEAP_BUILD_LIBEI=ON";
 
   dontWrapGApps = true;
   preFixup = ''
@@ -96,7 +96,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/input-leap/input-leap";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kovirobi
       phryneas
       twey
       shymega

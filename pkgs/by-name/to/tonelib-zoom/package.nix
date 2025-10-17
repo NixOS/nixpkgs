@@ -36,7 +36,8 @@ stdenv.mkDerivation rec {
     freetype
     libglvnd
     webkitgtk_4_0
-  ] ++ runtimeDependencies;
+  ]
+  ++ runtimeDependencies;
 
   runtimeDependencies = map lib.getLib [
     curl
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Zoom";
   };

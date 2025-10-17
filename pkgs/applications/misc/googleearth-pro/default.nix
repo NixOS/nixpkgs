@@ -20,7 +20,7 @@
   fontconfig,
   dpkg,
   libproxy,
-  libxml2,
+  libxml2_13,
   gst_all_1,
   dbus,
   makeWrapper,
@@ -70,7 +70,7 @@ mkDerivation rec {
     libXrender
     libproxy
     libxcb
-    libxml2
+    libxml2_13
     sqlite
     zlib
     alsa-lib
@@ -81,9 +81,13 @@ mkDerivation rec {
   dontBuild = true;
 
   unpackPhase = ''
+    runHook preUnpack
+
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     mkdir deb
     dpkg --fsys-tarfile $src | tar --extract -C deb
+
+    runHook postUnpack
   '';
 
   installPhase = ''

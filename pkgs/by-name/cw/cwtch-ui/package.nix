@@ -12,19 +12,14 @@ let
 in
 flutter329.buildFlutterApplication rec {
   pname = "cwtch-ui";
-  version = "1.15.5";
+  version = "1.16.0";
   # This Gitea instance has archive downloads disabled, so: fetchgit
   src = fetchgit {
     url = "https://git.openprivacy.ca/cwtch.im/cwtch-ui";
     rev = "v${version}";
-    hash = "sha256-u0IFLZp53Fg8soKjSXr6IjNxFI9aTU5xUYgf1SN6rTQ=";
+    hash = "sha256-887BiDqu35kocQmren9/rRhLdMNEXPmzsQFAixUvTxo=";
   };
 
-  # NOTE: The included pubspec.json does not exactly match the upstream
-  # pubspec.lock. With Flutter 3.24, a newer version of material_color_utilities
-  # is required than the upstream locked version. From a checkout of cwtch-ui
-  # 1.15.4, I ran `flutter pub upgrade material_color_utilities` on 2024-12-15.
-  # This upgraded material_color_utilities and its dependencies.
   pubspecLock = lib.importJSON ./pubspec.json;
   gitHashes = {
     flutter_gherkin = "sha256-Y8tR84kkczQPBwh7cGhPFAAqrMZKRfGp/02huPaaQZg=";

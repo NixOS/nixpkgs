@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchzip,
   fetchFromGitHub,
   fetchpatch,
   buildPackages,
@@ -47,6 +48,7 @@
   asymptote,
   biber-ms,
   tlpdb,
+  luajit,
 }@args:
 
 # Useful resource covering build options:
@@ -131,7 +133,8 @@ let
     "luahbtex"
     "upmendex"
     "xetex"
-  ] ++ lib.optional withLuaJIT "luajittex";
+  ]
+  ++ lib.optional withLuaJIT "luajittex";
   binPackages = lib.getAttrs (corePackages ++ coreBigPackages) tlpdb;
 
   common = {
@@ -143,56 +146,54 @@ let
       hash = "sha256-//2xo9FDwXekOYoiKaQNaojxgJjl9tz9V2SMnyQXSQ8=";
     };
 
-    prePatch =
-      ''
-        for i in texk/kpathsea/mktex*; do
-          sed -i '/^mydir=/d' "$i"
-        done
+    prePatch = ''
+      for i in texk/kpathsea/mktex*; do
+        sed -i '/^mydir=/d' "$i"
+      done
 
-        # ST_NLINK_TRICK causes kpathsea to treat folders with no real subfolders
-        # as leaves, even if they contain symlinks to other folders; must be
-        # disabled to work correctly with the nix store", see section 5.3.6
-        # “Subdirectory expansion” of the kpathsea manual
-        # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
-        # details
-        sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
-      ''
-      +
-        # when cross compiling, we must use himktables from PATH
-        # (i.e. from buildPackages.texlive.bin.core.dev)
-        lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-          sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
-        '';
+      # ST_NLINK_TRICK causes kpathsea to treat folders with no real subfolders
+      # as leaves, even if they contain symlinks to other folders; must be
+      # disabled to work correctly with the nix store", see section 5.3.6
+      # “Subdirectory expansion” of the kpathsea manual
+      # http://mirrors.ctan.org/systems/doc/kpathsea/kpathsea.pdf for more
+      # details
+      sed -i '/^#define ST_NLINK_TRICK/d' texk/kpathsea/config.h
+    ''
+    +
+      # when cross compiling, we must use himktables from PATH
+      # (i.e. from buildPackages.texlive.bin.core.dev)
+      lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+        sed -i 's|\./himktables|himktables|' texk/web2c/Makefile.in
+      '';
 
-    configureFlags =
-      [
-        "--with-banner-add=/nixos.org"
-        "--disable-missing"
-        # terminate if a requested program or feature must be
-        # disabled, e.g., due to missing libraries
-        "--disable-native-texlive-build" # do not build for the TeX Live binary distribution
-        "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
-        "--enable-tex-synctex"
-        "--disable-texlive" # do not build the texlive (TeX Live scripts) package
-        "--disable-linked-scripts" # do not install the linked scripts
-        "-C" # use configure cache to speed up
-      ]
-      ++ withSystemLibs [
-        # see "from TL tree" vs. "Using installed"  in configure output
-        "zziplib"
-        "mpfr"
-        "gmp"
-        "pixman"
-        "potrace"
-        "gd"
-        "freetype2"
-        "libpng"
-        "libpaper"
-        "zlib"
-      ]
-      ++ lib.optional (
-        stdenv.hostPlatform != stdenv.buildPlatform
-      ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
+    configureFlags = [
+      "--with-banner-add=/nixos.org"
+      "--disable-missing"
+      # terminate if a requested program or feature must be
+      # disabled, e.g., due to missing libraries
+      "--disable-native-texlive-build" # do not build for the TeX Live binary distribution
+      "--enable-shared" # "--enable-cxx-runtime-hack" # static runtime
+      "--enable-tex-synctex"
+      "--disable-texlive" # do not build the texlive (TeX Live scripts) package
+      "--disable-linked-scripts" # do not install the linked scripts
+      "-C" # use configure cache to speed up
+    ]
+    ++ withSystemLibs [
+      # see "from TL tree" vs. "Using installed"  in configure output
+      "zziplib"
+      "mpfr"
+      "gmp"
+      "pixman"
+      "potrace"
+      "gd"
+      "freetype2"
+      "libpng"
+      "libpaper"
+      "zlib"
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform != stdenv.buildPlatform
+    ) "BUILDCC=${buildPackages.stdenv.cc.targetPrefix}cc";
 
     # move binaries to corresponding split outputs, based on content of texlive.tlpdb
     binToOutput = lib.listToAttrs (
@@ -228,8 +229,7 @@ let
   };
 
   # RISC-V: https://github.com/LuaJIT/LuaJIT/issues/628
-  withLuaJIT =
-    !(stdenv.hostPlatform.isPower && stdenv.hostPlatform.is64bit) && !stdenv.hostPlatform.isRiscV;
+  withLuaJIT = lib.meta.availableOn stdenv.hostPlatform luajit;
 in
 rec {
   # un-indented
@@ -249,24 +249,24 @@ rec {
       "dev"
       "man"
       "info"
-    ] ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
+    ]
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
-    nativeBuildInputs =
+    nativeBuildInputs = [
+      pkg-config
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+      with texlive.bin.core;
       [
-        pkg-config
+        # configure: error: tangle was not found but is required when cross-compiling.
+        # dev (himktables) is used when building hitex to generate the additional source file hitables.c
+        web # tangle
+        cweb # ctangle
+        omegaware # otangle
+        tie # tie see "Building TeX Live" 6.4.2 Cross problems
+        dev # himktables
       ]
-      ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
-        with texlive.bin.core;
-        [
-          # configure: error: tangle was not found but is required when cross-compiling.
-          # dev (himktables) is used when building hitex to generate the additional source file hitables.c
-          web # tangle
-          cweb # ctangle
-          omegaware # otangle
-          tie # tie see "Building TeX Live" 6.4.2 Cross problems
-          dev # himktables
-        ]
-      );
+    );
 
     buildInputs = [
       # teckit
@@ -422,24 +422,23 @@ rec {
       deleting the unused packages speeds up configure by a considerable margin
       and ensures we do not rebuild existing libraries by mistake
     */
-    preConfigure =
-      ''
-        rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
-          libs/{mpfr,pixman,xpdf,zlib,zziplib} \
-          texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
-          texk/{dvipdfm-x,dvipng,dvipos,dvipsk,dvisvgm,gregorio,gsftopk,kpathsea} \
-          texk/{lcdf-typetools,makeindexk,makejvf,mendexk,musixtnt,ps2pk,psutils,ptexenc} \
-          texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,xdvik} \
-          utils/{asymptote,autosp,axodraw2,devnag,lacheck,m-tx,pmx,ps2eps,t1utils,texdoctk} \
-          utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
-        mkdir WorkDir
-        cd WorkDir
-      ''
-      # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
-      # by tricking configure into thinking that the relevant test result is already in the config cache
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        export kpse_cv_have_ApplicationServices=no
-      '';
+    preConfigure = ''
+      rm -r libs/{cairo,freetype2,gd,gmp,graphite2,harfbuzz,icu,libpaper,libpng} \
+        libs/{mpfr,pixman,xpdf,zlib,zziplib} \
+        texk/{afm2pl,bibtex-x,chktex,cjkutils,detex,dtl,dvi2tty,dvidvi,dviljk,dviout-util} \
+        texk/{dvipdfm-x,dvipng,dvipos,dvipsk,dvisvgm,gregorio,gsftopk,kpathsea} \
+        texk/{lcdf-typetools,makeindexk,makejvf,mendexk,musixtnt,ps2pk,psutils,ptexenc} \
+        texk/{seetexk,tex4htk,texlive,ttf2pk2,ttfdump,xdvik} \
+        utils/{asymptote,autosp,axodraw2,devnag,lacheck,m-tx,pmx,ps2eps,t1utils,texdoctk} \
+        utils/{tpic2pdftex,vlna,xindy,xml2pmx,xpdfopen}
+      mkdir WorkDir
+      cd WorkDir
+    ''
+    # force XeTeX to use fontconfig instead of Core Text, so that fonts can be made available via FONTCONFIG_FILE,
+    # by tricking configure into thinking that the relevant test result is already in the config cache
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export kpse_cv_have_ApplicationServices=no
+    '';
 
     configureFlags =
       common.configureFlags
@@ -488,28 +487,27 @@ rec {
 
     doCheck = false; # fails
 
-    outputs =
-      [
-        "out"
-        "dev"
-        "man"
-        "info"
-      ]
-      ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
-      # some outputs of metapost, omegaware are for ptex/uptex
-      ++ [
-        "ptex"
-        "uptex"
-      ]
-      # unavoidable duplicates from core
-      ++ [
-        "ctie"
-        "cweb"
-        "omegaware"
-        "texlive_scripts_extra"
-        "tie"
-        "web"
-      ];
+    outputs = [
+      "out"
+      "dev"
+      "man"
+      "info"
+    ]
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
+    # some outputs of metapost, omegaware are for ptex/uptex
+    ++ [
+      "ptex"
+      "uptex"
+    ]
+    # unavoidable duplicates from core
+    ++ [
+      "ctie"
+      "cweb"
+      "omegaware"
+      "texlive_scripts_extra"
+      "tie"
+      "web"
+    ];
     postInstall = common.moveBins;
   };
 
@@ -533,35 +531,42 @@ rec {
     enableParallelBuilding = true;
   };
 
-  # the LuaMetaTeX engine (distributed since TeX Live 2023) must be built separately
-  # the sources used by TL are stored in the source TL repo
-  # for details see https://wiki.contextgarden.net/Building_LuaMetaTeX_for_TeX_Live
-  context = stdenv.mkDerivation rec {
-    pname = "luametatex";
-    version = "2.11.07";
+  # The LuaMetaTeX engine (distributed since TeX Live 2023) must be built separately.
+  # For details on how TeX Live packages ConTeXt, see
+  # https://github.com/gucci-on-fleek/context-packaging
+  context =
+    let
+      # The latest release of the context-packaging repo before the CTAN version in tlpdb.nix
+      # https://github.com/gucci-on-fleek/context-packaging
+      context_packaging_release = "2025-06-12-14-21-B";
+    in
+    stdenv.mkDerivation {
+      pname = "luametatex";
+      version = "2.11.07";
 
-    src = fetchurl {
-      name = "luametatex-${version}.tar.xz";
-      url = "https://tug.org/svn/texlive/trunk/Master/source/luametatex-${version}.tar.xz?pathrev=75382&view=co";
-      hash = "sha256-ou04WcKnyEJTkUV4HhlGwDTscdEJTflGv0cpN69qkWE=";
-    };
+      src = fetchzip {
+        name = "luametatex.src.zip";
+        url = "https://github.com/gucci-on-fleek/context-packaging/releases/download/${context_packaging_release}/luametatex.src.zip";
+        hash = "sha256-9TLTIUSqA3g8QP9EF+tQ4VfLLLQwMrbeXPPy58uFWDo=";
+        stripRoot = false;
+      };
 
-    enableParallelBuilding = true;
-    nativeBuildInputs = [
-      cmake
-      ninja
-    ];
-
-    meta = with lib; {
-      description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
-      homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
-      license = licenses.gpl2Plus;
-      maintainers = with lib.maintainers; [
-        apfelkuchen6
-        xworld21
+      enableParallelBuilding = true;
+      nativeBuildInputs = [
+        cmake
+        ninja
       ];
+
+      meta = with lib; {
+        description = "LUAMETATEX engine is a follow up on LUATEX and is again part of CONTEXT development";
+        homepage = "https://www.pragma-ade.nl/luametatex-1.htm";
+        license = licenses.gpl2Plus;
+        maintainers = with lib.maintainers; [
+          apfelkuchen6
+          xworld21
+        ];
+      };
     };
-  };
 
   dvisvgm = stdenv.mkDerivation rec {
     pname = "dvisvgm";
@@ -730,22 +735,21 @@ rec {
     inherit (common) src;
 
     nativeBuildInputs = [ pkg-config ];
-    buildInputs =
-      [
-        core # kpathsea
-        freetype
-        ghostscript
-      ]
-      ++ (with xorg; [
-        libX11
-        libXaw
-        libXi
-        libXpm
-        libXmu
-        libXaw
-        libXext
-        libXfixes
-      ]);
+    buildInputs = [
+      core # kpathsea
+      freetype
+      ghostscript
+    ]
+    ++ (with xorg; [
+      libX11
+      libXaw
+      libXi
+      libXpm
+      libXmu
+      libXaw
+      libXext
+      libXfixes
+    ]);
 
     preConfigure = "cd texk/xdvik";
 

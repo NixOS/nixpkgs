@@ -250,7 +250,7 @@ lib.makeOverridable
         "codegenUnits"
         "links"
       ];
-      extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
+      extraDerivationAttrs = removeAttrs crate processedAttrs;
       nativeBuildInputs_ = nativeBuildInputs;
       buildInputs_ = buildInputs;
       extraRustcOpts_ = extraRustcOpts;
@@ -297,16 +297,15 @@ lib.makeOverridable
         name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
         version = crate.version;
         depsBuildBuild = [ pkgsBuildBuild.stdenv.cc ];
-        nativeBuildInputs =
-          [
-            rust
-            cargo
-            jq
-          ]
-          ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
-          ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
-          ++ (crate.nativeBuildInputs or [ ])
-          ++ nativeBuildInputs_;
+        nativeBuildInputs = [
+          rust
+          cargo
+          jq
+        ]
+        ++ lib.optionals stdenv.hasCC [ stdenv.cc ]
+        ++ lib.optionals stdenv.buildPlatform.isDarwin [ libiconv ]
+        ++ (crate.nativeBuildInputs or [ ])
+        ++ nativeBuildInputs_;
         buildInputs =
           lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
           ++ (crate.buildInputs or [ ])

@@ -326,19 +326,18 @@ in
       environment = {
         MISSKEY_CONFIG_YML = "/run/misskey/default.yml";
       };
-      preStart =
-        ''
-          install -m 700 ${settingsFormat.generate "misskey-config.yml" cfg.settings} /run/misskey/default.yml
-        ''
-        + (lib.optionalString (cfg.database.passwordFile != null) ''
-          ${pkgs.replace-secret}/bin/replace-secret '@DATABASE_PASSWORD@' "${cfg.database.passwordFile}" /run/misskey/default.yml
-        '')
-        + (lib.optionalString (cfg.redis.passwordFile != null) ''
-          ${pkgs.replace-secret}/bin/replace-secret '@REDIS_PASSWORD@' "${cfg.redis.passwordFile}" /run/misskey/default.yml
-        '')
-        + (lib.optionalString (cfg.meilisearch.keyFile != null) ''
-          ${pkgs.replace-secret}/bin/replace-secret '@MEILISEARCH_KEY@' "${cfg.meilisearch.keyFile}" /run/misskey/default.yml
-        '');
+      preStart = ''
+        install -m 700 ${settingsFormat.generate "misskey-config.yml" cfg.settings} /run/misskey/default.yml
+      ''
+      + (lib.optionalString (cfg.database.passwordFile != null) ''
+        ${pkgs.replace-secret}/bin/replace-secret '@DATABASE_PASSWORD@' "${cfg.database.passwordFile}" /run/misskey/default.yml
+      '')
+      + (lib.optionalString (cfg.redis.passwordFile != null) ''
+        ${pkgs.replace-secret}/bin/replace-secret '@REDIS_PASSWORD@' "${cfg.redis.passwordFile}" /run/misskey/default.yml
+      '')
+      + (lib.optionalString (cfg.meilisearch.keyFile != null) ''
+        ${pkgs.replace-secret}/bin/replace-secret '@MEILISEARCH_KEY@' "${cfg.meilisearch.keyFile}" /run/misskey/default.yml
+      '');
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/misskey migrateandstart";
         RuntimeDirectory = "misskey";

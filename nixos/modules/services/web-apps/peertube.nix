@@ -20,6 +20,9 @@ let
     NPM_CONFIG_CACHE = "/var/cache/peertube/.npm";
     NPM_CONFIG_PREFIX = cfg.package;
     HOME = cfg.package;
+    XDG_CACHE_HOME = "/var/cache/peertube";
+    # Used for auto video transcription
+    HF_HOME = "/var/cache/peertube/huggingface";
   };
 
   systemCallsList = [
@@ -36,7 +39,6 @@ let
 
   cfgService = {
     # Proc filesystem
-    ProcSubset = "pid";
     ProtectProc = "invisible";
     # Access write directories
     UMask = "0027";
@@ -68,10 +70,11 @@ let
 
   envFile = pkgs.writeText "peertube.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   peertubeEnv = pkgs.writeShellScriptBin "peertube-env" ''
@@ -163,7 +166,39 @@ in
     };
 
     settings = lib.mkOption {
-      type = settingsFormat.type;
+      type = lib.types.submodule (
+        { config, ... }:
+        {
+          freeformType = settingsFormat.type;
+          options = {
+            video_transcription = {
+              enabled = lib.mkOption {
+                type = lib.types.bool;
+                default = false;
+                description = "Enable automatic transcription of videos.";
+              };
+              engine_path = lib.mkOption {
+                type = with lib.types; either path str;
+                default =
+                  if config.video_transcription.enabled then
+                    lib.getExe pkgs.whisper-ctranslate2
+                  else
+                    # This will be in the error message when someone enables
+                    # transcription manually in the web UI and tries to run a
+                    # transcription job.
+                    "Set `services.peertube.settings.video_transcription.enabled = true`.";
+                defaultText = lib.literalExpression ''
+                  if config.services.peertube.settings.video_transcription.enabled then
+                    lib.getExe pkgs.whisper-ctranslate2
+                  else
+                    "Set `services.peertube.settings.video_transcription.enabled = true`."
+                '';
+                description = "Custom engine path for local transcription.";
+              };
+            };
+          };
+        }
+      );
       example = lib.literalExpression ''
         {
           listen = {
@@ -304,12 +339,7 @@ in
       };
     };
 
-    package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.peertube;
-      defaultText = lib.literalExpression "pkgs.peertube";
-      description = "PeerTube package to use.";
-    };
+    package = lib.mkPackageOption pkgs "peertube" { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -410,6 +440,7 @@ in
           plugins = lib.mkDefault "/var/lib/peertube/storage/plugins/";
           client_overrides = lib.mkDefault "/var/lib/peertube/storage/client-overrides/";
           well_known = lib.mkDefault "/var/lib/peertube/storage/well_known/";
+          uploads = lib.mkDefault "/var/lib/peertube/storage/uploads/";
         };
         import = {
           videos = {
@@ -419,6 +450,9 @@ in
               };
             };
           };
+        };
+        video_transcription = {
+          engine = lib.mkDefault "whisper-ctranslate2";
         };
       }
       (lib.mkIf cfg.redis.enableUnixSocket {
@@ -466,18 +500,20 @@ in
         MemoryDenyWriteExecute = true;
         # System Call Filtering
         SystemCallFilter = "~" + lib.concatStringsSep " " (systemCallsList ++ [ "@resources" ]);
-      } // cfgService;
+      }
+      // cfgService;
     };
 
     systemd.services.peertube = {
       description = "PeerTube daemon";
-      after =
-        [ "network.target" ]
-        ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
-        ++ lib.optionals cfg.database.createLocally [
-          "postgresql.target"
-          "peertube-init-db.service"
-        ];
+      after = [
+        "network.target"
+      ]
+      ++ lib.optional cfg.redis.createLocally "redis-peertube.service"
+      ++ lib.optionals cfg.database.createLocally [
+        "postgresql.target"
+        "peertube-init-db.service"
+      ];
       requires =
         lib.optional cfg.redis.createLocally "redis-peertube.service"
         ++ lib.optionals cfg.database.createLocally [
@@ -553,10 +589,12 @@ in
         # System Call Filtering
         SystemCallFilter = [
           ("~" + lib.concatStringsSep " " systemCallsList)
+          "fchown"
           "pipe"
           "pipe2"
         ];
-      } // cfgService;
+      }
+      // cfgService;
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {
@@ -577,85 +615,78 @@ in
           tryFiles = "/dev/null @api";
           priority = 1120;
 
-          extraConfig =
-            ''
-              client_max_body_size 0;
-              proxy_request_buffering off;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/users/[^/]+/imports/import-resumable$" = {
           tryFiles = "/dev/null @api";
           priority = 1130;
 
-          extraConfig =
-            ''
-              client_max_body_size 0;
-              proxy_request_buffering off;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/videos/(upload|([^/]+/studio/edit))$" = {
           tryFiles = "/dev/null @api";
-          root = cfg.settings.storage.tmp;
           priority = 1140;
 
-          extraConfig =
-            ''
-              limit_except POST HEAD { deny all; }
+          extraConfig = ''
+            limit_except POST HEAD { deny all; }
 
-              client_max_body_size 12G;
-              add_header X-File-Maximum-Size 8G always;
-            ''
-            + nginxCommonHeaders;
+            client_max_body_size 12G;
+            add_header X-File-Maximum-Size 8G always;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/runners/jobs/[^/]+/(update|success)$" = {
           tryFiles = "/dev/null @api";
-          root = cfg.settings.storage.tmp;
           priority = 1150;
 
-          extraConfig =
-            ''
-              client_max_body_size 12G;
-              add_header X-File-Maximum-Size 8G always;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 0;
+            proxy_request_buffering off;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."~ ^/api/v1/(videos|video-playlists|video-channels|users/me)" = {
           tryFiles = "/dev/null @api";
           priority = 1160;
 
-          extraConfig =
-            ''
-              client_max_body_size 6M;
-              add_header X-File-Maximum-Size 4M always;
-            ''
-            + nginxCommonHeaders;
+          extraConfig = ''
+            client_max_body_size 12M;
+            add_header X-File-Maximum-Size 8M always;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."@api" = {
           proxyPass = "http://peertube";
           priority = 1170;
 
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_connect_timeout 10m;
+            proxy_connect_timeout 10m;
 
-              proxy_send_timeout 10m;
-              proxy_read_timeout 10m;
+            proxy_send_timeout 10m;
+            proxy_read_timeout 10m;
 
-              client_max_body_size 100k;
-              send_timeout 10m;
-            ''
-            + nginxCommonHeaders;
+            client_max_body_size 100k;
+            send_timeout 10m;
+          ''
+          + nginxCommonHeaders;
         };
 
         # Websocket
@@ -682,104 +713,94 @@ in
           proxyPass = "http://peertube";
           priority = 1240;
 
-          extraConfig =
-            ''
-              proxy_http_version 1.1;
-              proxy_set_header Upgrade $http_upgrade;
-              proxy_set_header Connection 'upgrade';
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection 'upgrade';
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-            ''
-            + nginxCommonHeaders;
+          ''
+          + nginxCommonHeaders;
         };
 
         # Bypass PeerTube for performance reasons.
-        locations."~ ^/client/(assets/images/(icons/icon-36x36\\.png|icons/icon-48x48\\.png|icons/icon-72x72\\.png|icons/icon-96x96\\.png|icons/icon-144x144\\.png|icons/icon-192x192\\.png|icons/icon-512x512\\.png|logo\\.svg|favicon\\.png|default-playlist\\.jpg|default-avatar-account\\.png|default-avatar-account-48x48\\.png|default-avatar-video-channel\\.png|default-avatar-video-channel-48x48\\.png))$" =
+        locations."~ ^/client/(.*\\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
+          alias = "${cfg.package}/client/dist/$1";
+          priority = 1320;
+          extraConfig = ''
+            add_header Cache-Control 'public, max-age=604800, immutable';
+          ''
+          + nginxCommonHeaders;
+        };
+
+        locations."~ ^/client/(assets/images/(default-playlist\\.jpg|default-avatar-account\\.png|default-avatar-account-48x48\\.png|default-avatar-video-channel\\.png|default-avatar-video-channel-48x48\\.png))$" =
           {
             tryFiles = "/client-overrides/$1 /client/$1 $1";
-            priority = 1310;
+            priority = 1320;
 
             extraConfig = nginxCommonHeaders;
           };
 
-        locations."~ ^/client/(.*\\.(js|css|png|svg|woff2|otf|ttf|woff|eot))$" = {
-          alias = "${cfg.package}/client/dist/$1";
-          priority = 1320;
-          extraConfig =
-            ''
-              add_header Cache-Control 'public, max-age=604800, immutable';
-            ''
-            + nginxCommonHeaders;
-        };
-
         locations."^~ /download/" = {
           proxyPass = "http://peertube";
           priority = 1410;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/streaming-playlists/hls/private/" = {
           proxyPass = "http://peertube";
           priority = 1420;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/web-videos/private/" = {
           proxyPass = "http://peertube";
           priority = 1430;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/webseed/private/" = {
           proxyPass = "http://peertube";
           priority = 1440;
-          extraConfig =
-            ''
-              proxy_set_header Host $host;
-              proxy_set_header X-Real-IP $remote_addr;
-              proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          extraConfig = ''
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
 
-              proxy_limit_rate 5M;
-            ''
-            + nginxCommonHeaders;
+            proxy_limit_rate 5M;
+          ''
+          + nginxCommonHeaders;
         };
 
         locations."^~ /static/redundancy/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.redundancy;
+          alias = cfg.settings.storage.redundancy;
           priority = 1450;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -800,21 +821,15 @@ in
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/redundancy/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/streaming-playlists/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.streaming_playlists;
+          alias = cfg.settings.storage.streaming_playlists;
           priority = 1460;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -835,21 +850,15 @@ in
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/streaming-playlists/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/web-videos/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.web_videos;
+          alias = cfg.settings.storage.web_videos;
           priority = 1470;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -870,21 +879,15 @@ in
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/web-videos/(.*)$ /$1 break;
           '';
         };
 
         locations."^~ /static/webseed/" = {
           tryFiles = "$uri @api";
-          root = cfg.settings.storage.web_videos;
+          alias = cfg.settings.storage.web_videos;
           priority = 1480;
           extraConfig = ''
-            set $peertube_limit_rate 800k;
-
-            if ($request_uri ~ -fragmented.mp4$) {
-              set $peertube_limit_rate 5M;
-            }
+            set $peertube_limit_rate 5M;
 
             if ($request_method = 'OPTIONS') {
               ${nginxCommonHeaders}
@@ -905,8 +908,6 @@ in
 
             limit_rate $peertube_limit_rate;
             limit_rate_after 5M;
-
-            rewrite ^/static/webseed/(.*)$ /web-videos/$1 break;
           '';
         };
       };
@@ -932,7 +933,7 @@ in
 
     services.postfix = lib.mkIf cfg.smtp.createLocally {
       enable = true;
-      hostname = lib.mkDefault "${cfg.localDomain}";
+      settings.main.myhostname = lib.mkDefault "${cfg.localDomain}";
     };
 
     users.users = lib.mkMerge [

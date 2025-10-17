@@ -8,7 +8,6 @@
   rocsparse,
   clr,
   gfortran,
-  git,
   gtest,
   openmp,
   buildTests ? false,
@@ -20,24 +19,23 @@
 # This can also use cuSPARSE as a backend instead of rocSPARSE
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsparse";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipSPARSE";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-3a7fKpYyiqG3aGOg7YrTHmKoH4rgTVLD16DvrZ3YY1g=";
+    hash = "sha256-fbh9fKlzxuIBTeCV/bEQbUS3lO6O3KoGF7/tTqRaCpE=";
   };
 
   nativeBuildInputs = [
@@ -47,32 +45,29 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs =
-    [
-      rocsparse
-      git
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildSamples) [
-      openmp
-    ];
+  buildInputs = [
+    rocsparse
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    gtest
+  ]
+  ++ lib.optionals (buildTests || buildSamples) [
+    openmp
+  ];
 
-  cmakeFlags =
-    [
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-      (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
-      (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
-      (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildSamples)
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ];
+  cmakeFlags = [
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    (lib.cmakeBool "BUILD_CLIENTS_TESTS" buildTests)
+    (lib.cmakeBool "BUILD_CLIENTS_BENCHMARKS" buildBenchmarks)
+    (lib.cmakeBool "BUILD_CLIENTS_SAMPLES" buildSamples)
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ];
 
   # We have to manually generate the matrices
   # CMAKE_MATRICES_DIR seems to be reset in clients/tests/CMakeLists.txt

@@ -28,18 +28,25 @@ self: super:
 
   # Used by maintainers/scripts/regenerate-hackage-packages.sh, and generated
   # from the latest master instead of the current version on Hackage.
-  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable.nix { };
+  cabal2nix-unstable = self.callPackage ./cabal2nix-unstable/cabal2nix.nix {
+    distribution-nixpkgs = self.distribution-nixpkgs-unstable;
+    hackage-db = self.hackage-db-unstable;
+    language-nix = self.language-nix-unstable;
+  };
+  distribution-nixpkgs-unstable = self.callPackage ./cabal2nix-unstable/distribution-nixpkgs.nix {
+    language-nix = self.language-nix-unstable;
+  };
+  hackage-db-unstable = self.callPackage ./cabal2nix-unstable/hackage-db.nix { };
+  language-nix-unstable = self.callPackage ./cabal2nix-unstable/language-nix.nix { };
 
   ghc-settings-edit = self.callPackage ../tools/haskell/ghc-settings-edit { };
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
-  # spago is not released to Hackage.
+  # spago-legacy is not released to Hackage.
   # https://github.com/spacchetti/spago/issues/512
-  spago = self.callPackage ../tools/purescript/spago/spago.nix { };
-
-  nix-linter = self.callPackage ../../development/tools/analysis/nix-linter { };
+  spago-legacy = self.callPackage ../../by-name/sp/spago-legacy/spago-legacy.nix { };
 
   # Unofficial fork until PRs are merged https://github.com/pcapriotti/optparse-applicative/pulls/roberth
   # cabal2nix --maintainer roberth https://github.com/hercules-ci/optparse-applicative.git > pkgs/development/misc/haskell/hercules-ci-optparse-applicative.nix

@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     #!nix-shell -i bash -p curl jq common-updater-scripts nix nix-prefetch findutils moreutils
 
     prefetch-sri() {
-        nix-prefetch-url "$1" | xargs nix hash to-sri --type sha256
+        nix-prefetch-url "$1" | xargs nix --extra-experimental-features nix-command hash to-sri --type sha256
     }
 
     res="$(curl ''${GITHUB_TOKEN:+-u ":$GITHUB_TOKEN"} \

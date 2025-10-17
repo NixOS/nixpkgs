@@ -74,42 +74,18 @@ in
       # This means that systemd-timesyncd needs to have NSS modules path in LD_LIBRARY_PATH. When systemd-resolved is disabled we still need to set
       # NSS module path so that systemd-timesyncd keeps using other NSS modules that are configured in the system.
       environment.LD_LIBRARY_PATH = config.system.nssModules.path;
-
-      preStart = (
-        # Ensure that we have some stored time to prevent
-        # systemd-timesyncd to resort back to the fallback time.  If
-        # the file doesn't exist we assume that our current system
-        # clock is good enough to provide an initial value.
-        ''
-          if ! [ -f /var/lib/systemd/timesync/clock ]; then
-            test -d /var/lib/systemd/timesync || mkdir -p /var/lib/systemd/timesync
-            touch /var/lib/systemd/timesync/clock
-          fi
-        ''
-        +
-          # workaround an issue of systemd-timesyncd not starting due to upstream systemd reverting their dynamic users changes
-          #  - https://github.com/NixOS/nixpkgs/pull/61321#issuecomment-492423742
-          #  - https://github.com/systemd/systemd/issues/12131
-          (lib.optionalString (versionOlder config.system.stateVersion "19.09") ''
-            if [ -L /var/lib/systemd/timesync ]; then
-              rm /var/lib/systemd/timesync
-              mv /var/lib/private/systemd/timesync /var/lib/systemd/timesync
-            fi
-          '')
-      );
     };
 
-    environment.etc."systemd/timesyncd.conf".text =
-      ''
-        [Time]
-      ''
-      + optionalString (cfg.servers != null) ''
-        NTP=${concatStringsSep " " cfg.servers}
-      ''
-      + optionalString (cfg.fallbackServers != null) ''
-        FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
-      ''
-      + cfg.extraConfig;
+    environment.etc."systemd/timesyncd.conf".text = ''
+      [Time]
+    ''
+    + optionalString (cfg.servers != null) ''
+      NTP=${concatStringsSep " " cfg.servers}
+    ''
+    + optionalString (cfg.fallbackServers != null) ''
+      FallbackNTP=${concatStringsSep " " cfg.fallbackServers}
+    ''
+    + cfg.extraConfig;
 
     users.users.systemd-timesync = {
       uid = config.ids.uids.systemd-timesync;

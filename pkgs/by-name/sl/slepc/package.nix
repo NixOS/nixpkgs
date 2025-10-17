@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  python3,
   python3Packages,
   arpack-mpi,
   petsc,
@@ -16,40 +15,31 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.2";
+  version = "3.24.0";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-nRY8ARc31Q2Qi8Tf7921vBf5nPpI4evSjmpTYUTUigQ=";
+    hash = "sha256-nvzX0p/H3EYR8+7jD+I4FdvU+WstxR/U4Upcn7yZULk=";
   };
 
   postPatch = ''
     # Fix slepc4py install prefix
     substituteInPlace config/packages/slepc4py.py \
       --replace-fail "slepc.prefixdir,'lib'" \
-      "slepc.prefixdir,'${python3.sitePackages}'"
+      "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
   '';
 
-  # Usually this project is being built as part of a `petsc` build or as part of
-  # other projects, e.g when `petsc` is `./configure`d with
-  # `--download-slepc=1`. This instructs the slepc to be built as a standalone
-  # project.
-  preConfigure = ''
-    export SLEPC_DIR=$PWD
-  '';
-
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.setuptools
-      python3Packages.cython
-    ];
+  nativeBuildInputs = [
+    python3Packages.python
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.setuptools
+    python3Packages.cython
+  ];
 
   configureFlags =
     lib.optionals withArpack [
@@ -59,13 +49,12 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-slepc4py=1"
     ];
 
-  buildInputs =
-    [
-      mpi
-    ]
-    ++ lib.optionals withArpack [
-      arpack-mpi
-    ];
+  buildInputs = [
+    mpi
+  ]
+  ++ lib.optionals withArpack [
+    arpack-mpi
+  ];
 
   propagatedBuildInputs = [
     petsc
@@ -77,14 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs =
-    [
-      mpiCheckPhaseHook
-    ]
-    ++ lib.optionals pythonSupport [
-      python3Packages.pythonImportsCheckHook
-      python3Packages.unittestCheckHook
-    ];
+  nativeInstallCheckInputs = [
+    mpiCheckPhaseHook
+  ]
+  ++ lib.optionals pythonSupport [
+    python3Packages.pythonImportsCheckHook
+    python3Packages.unittestCheckHook
+  ];
 
   doInstallCheck = true;
 
@@ -103,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Scalable Library for Eigenvalue Problem Computations";
     homepage = "https://slepc.upv.es";
-    changelog = "https://gitlab.com/slepc/slepc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/slepc/slepc/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       bsd2
     ];

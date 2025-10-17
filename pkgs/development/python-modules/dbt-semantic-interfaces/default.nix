@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "dbt-semantic-interfaces";
-  version = "0.8.4";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "dbt-labs";
     repo = "dbt-semantic-interfaces";
     tag = "v${version}";
-    hash = "sha256-H9PGU6pG/NhA7NyKaaw6B2RNlJLzKT7ilDHFTL7KGUY=";
+    hash = "sha256-I/bMpqTaAHs0XnYOYjFRgXv3qB06LItkaSxtRjk55js=";
   };
 
   pythonRelaxDeps = [ "importlib-metadata" ];

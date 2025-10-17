@@ -59,15 +59,15 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.3.0";
+  version = "2.3.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.gz";
-    hash = "sha256-WB+H+enp2yy6IUFADhYOndZE7iSHiNb5BjbuuP2SYKY=";
+    hash = "sha256-4EhqEewwzey1PxhNSW0caiB4bIHlXkFkAnATAFb47kg=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -83,15 +83,14 @@ buildPythonPackage rec {
       --replace-fail 'py.full_path()' "'python'"
   '';
 
-  build-system =
-    [
-      cython
-      gfortran
-      meson-python
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
+  build-system = [
+    cython
+    gfortran
+    meson-python
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcrun ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ mesonEmulatorHook ];
 
   # we default openblas to build with 64 threads
   # if a machine has more than 64 threads, it will segfault
@@ -131,41 +130,39 @@ buildPythonPackage rec {
   '';
 
   # https://github.com/numpy/numpy/blob/a277f6210739c11028f281b8495faf7da298dbef/numpy/_pytesttester.py#L180
-  pytestFlagsArray = [
-    "-m"
-    "not\\ slow" # fast test suite
+  disabledTestMarks = [
+    "slow" # fast test suite
   ];
 
-  disabledTests =
-    [
-      # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
-      "test_api_importable"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.13") [
-      # https://github.com/numpy/numpy/issues/26713
-      "test_iter_refcount"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-      # https://github.com/numpy/numpy/issues/24548
-      "test_impossible_feature_enable" # AssertionError: Failed to generate error
-      "test_features" # AssertionError: Failure Detection
-      "test_new_policy" # AssertionError: assert False
-      "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
-      "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage object at 0xd1197430>]
-      "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
-      "test_real" # AssertionError: selectedrealkind(16): expected 10 but got -1
-      "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
-      "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
-      "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
-      "test_loss_of_precision"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
-      # remove if https://github.com/numpy/numpy/issues/27460 is resolved
-      "test_validate_transcendentals"
-    ];
+  disabledTests = [
+    # Tries to import numpy.distutils.msvccompiler, removed in setuptools 74.0
+    "test_api_importable"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/numpy/numpy/issues/26713
+    "test_iter_refcount"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+    # https://github.com/numpy/numpy/issues/24548
+    "test_impossible_feature_enable" # AssertionError: Failed to generate error
+    "test_features" # AssertionError: Failure Detection
+    "test_new_policy" # AssertionError: assert False
+    "test_identityless_reduction_huge_array" # ValueError: Maximum allowed dimension exceeded
+    "test_unary_spurious_fpexception" # AssertionError: Got warnings: [<warnings.WarningMessage object at 0xd1197430>]
+    "test_int" # AssertionError: selectedintkind(19): expected 16 but got -1
+    "test_real" # AssertionError: selectedrealkind(16): expected 10 but got -1
+    "test_quad_precision" # AssertionError: selectedrealkind(32): expected 16 but got -1
+    "test_big_arrays" # ValueError: array is too big; `arr.size * arr.dtype.itemsize` is larger tha...
+    "test_multinomial_pvals_float32" # Failed: DID NOT RAISE <class 'ValueError'>
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # AssertionError: (np.int64(0), np.longdouble('9.9999999999999994515e-21'), np.longdouble('3.9696755572509052902e+20'), 'arctanh')
+    "test_loss_of_precision"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform ? gcc.arch) [
+    # remove if https://github.com/numpy/numpy/issues/27460 is resolved
+    "test_validate_transcendentals"
+  ];
 
   passthru = {
     # just for backwards compatibility

@@ -3,7 +3,7 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
-  nodejs,
+  nodejs_20,
   pnpm_8,
   wails,
   wrapGAppsHook3,
@@ -12,6 +12,10 @@
   copyDesktopItems,
 }:
 
+let
+  # NodeJS 22.18.0 broke our build, not sure why
+  wails' = wails.override { nodejs = nodejs_20; };
+in
 buildGoModule rec {
   pname = "satisfactorymodmanager";
   version = "3.0.3";
@@ -38,9 +42,8 @@ buildGoModule rec {
   '';
 
   nativeBuildInputs = [
-    nodejs
     pnpm_8.configHook
-    wails
+    wails'
     wrapGAppsHook3
     copyDesktopItems
   ];
@@ -55,6 +58,7 @@ buildGoModule rec {
     pnpmDeps = pnpm_8.fetchDeps {
       inherit pname version src;
       sourceRoot = "${src.name}/frontend";
+      fetcherVersion = 1;
       hash = "sha256-OP+3zsNlvqLFwvm2cnBd2bj2Kc3EghQZE3hpotoqqrQ=";
     };
 
@@ -64,7 +68,7 @@ buildGoModule rec {
   # running this caches some additional dependencies for the FOD
   overrideModAttrs = {
     preBuild = ''
-      wails build
+      wails build -tags webkit2_41 # 4.0 EOL
     '';
   };
 
@@ -74,7 +78,7 @@ buildGoModule rec {
 
   buildPhase = ''
     runHook preBuild
-    wails build
+    wails build -tags webkit2_41 # 4.0 EOL
     runHook postBuild
   '';
 

@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-data-download"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "--disable-sse2" ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "--disable-sse2" ];
 
   env = {
     NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";

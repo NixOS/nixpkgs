@@ -43,31 +43,31 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     pkg-config
     qt6Packages.wrapQtAppsHook
     wrapGAppsHook3
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin desktopToDarwinBundle;
 
-  buildInputs =
-    [
-      gnuradioMinimal.unwrapped.logLib
-      mpir
-      fftwFloat
-      libjack2
-      gnuradioMinimal.unwrapped.boost
-      qt6Packages.qtbase
-      qt6Packages.qtsvg
-      gnuradioMinimal.pkgs.osmosdr
-      rtl-sdr
-      hackrf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      qt6Packages.qtwayland
-    ]
-    ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
-      thrift
-      gnuradioMinimal.unwrapped.python.pkgs.thrift
-    ]
-    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
-    ++ lib.optionals portaudioSupport [ portaudio ];
+  buildInputs = [
+    gnuradioMinimal.unwrapped.logLib
+    mpir
+    fftwFloat
+    libjack2
+    gnuradioMinimal.unwrapped.boost
+    qt6Packages.qtbase
+    qt6Packages.qtsvg
+    gnuradioMinimal.pkgs.osmosdr
+    rtl-sdr
+    hackrf
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    qt6Packages.qtwayland
+  ]
+  ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
+    thrift
+    gnuradioMinimal.unwrapped.python.pkgs.thrift
+  ]
+  ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  ++ lib.optionals portaudioSupport [ portaudio ];
 
   cmakeFlags =
     let

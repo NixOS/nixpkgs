@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   gflags,
   staticOnly ? stdenv.hostPlatform.isStatic,
@@ -14,15 +15,27 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "crc32c";
-    rev = version;
+    tag = version;
     sha256 = "0c383p7vkfq9rblww6mqxz8sygycyl27rr0j3bzb8l8ga71710ii";
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch {
+      name = "crc32c-fix-cmake-4.patch";
+      url = "https://github.com/google/crc32c/commit/2bbb3be42e20a0e6c0f7b39dc07dc863d9ffbc07.patch";
+      excludes = [ "third_party/*" ];
+      hash = "sha256-XYH0Mwvmf8RkXscVo6pAejTbRmVl9tY+lpp1sqbNXa0=";
+    })
+  ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc";
+  env.NIX_CFLAGS_COMPILE =
+    lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc"
+    # TODO: probably fixed for version > 1.1.2
+    + lib.optionalString stdenv.cc.isClang " -Wno-error=character-conversion";
 
   cmakeFlags = [
     "-DCRC32C_INSTALL=1"

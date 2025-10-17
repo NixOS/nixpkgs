@@ -17,18 +17,18 @@
 }:
 buildGoModule rec {
   pname = "pulumi";
-  version = "3.162.0";
+  version = "3.192.0";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi";
     tag = "v${version}";
-    hash = "sha256-avtqURmj3PL82j89kLmVsBWqJJHnOFqR1huoUESt4L4=";
+    hash = "sha256-rcDXC+xlUa67afuXvmEv8UNsYWBvQQ0P4httdtdcrh4=";
     # Some tests rely on checkout directory name
     name = "pulumi";
   };
 
-  vendorHash = "sha256-fJFpwhbRkxSI2iQfNJ9qdL9oYM1SVVMJ30VIymoZBmg=";
+  vendorHash = "sha256-BaFw8EnPd2GPA/p9wm8XpVy/iE8gqbteRnMQC8Z4NHQ=";
 
   sourceRoot = "${src.name}/pkg";
 
@@ -68,6 +68,10 @@ buildGoModule rec {
         # Seems to require TTY.
         "TestProgressEvents"
 
+        # Flaky; upstream “fixed” it by increasing timeout.
+        # https://github.com/pulumi/pulumi/pull/20116
+        "TestAnalyzerCancellation"
+
         # Tries to clone repo: https://github.com/pulumi/test-repo.git
         "TestValidateRelativeDirectory"
         "TestRepoLookup"
@@ -81,6 +85,13 @@ buildGoModule rec {
         "TestPulumiNewWithOrgTemplates"
         "TestPulumiNewWithoutPulumiAccessToken"
         "TestPulumiNewWithoutTemplateSupport"
+        "TestGeneratingProjectWithAIPromptSucceeds"
+        "TestPulumiNewWithRegistryTemplates"
+        "TestRunNewYesNoTemplate"
+        "TestRunNewYesWithTemplate"
+
+        # Connects to https://api.pulumi.com/…
+        "TestGetLatestPluginIncludedVersion"
 
         # Connects to https://pulumi-testing.vault.azure.net/…
         "TestAzureCloudManager"
@@ -151,18 +162,17 @@ buildGoModule rec {
         version = "v${version}";
         command = "PULUMI_SKIP_UPDATE_CHECK=1 pulumi version";
       };
+
       # Test building packages that reuse our version and src.
       inherit (pulumiPackages) pulumi-go pulumi-nodejs pulumi-python;
-      # Pulumi currently requires protobuf4, but Nixpkgs defaults to a newer
-      # version. Test that we can actually build the package with protobuf4.
-      # https://github.com/pulumi/pulumi/issues/16828
-      # https://github.com/NixOS/nixpkgs/issues/351751#issuecomment-2462163436
-      pythonPackage =
+      pythonPackage = python3Packages.pulumi;
+      pythonPackageProtobuf5 =
         (python3Packages.overrideScope (
           final: _: {
-            protobuf = final.protobuf4;
+            protobuf = final.protobuf5;
           }
         )).pulumi;
+
       pulumiTestHookShellcheck = testers.shellcheck {
         name = "pulumi-test-hook-shellcheck";
         src = ./extra/pulumi-test-hook.sh;
@@ -172,7 +182,7 @@ buildGoModule rec {
 
   meta = {
     homepage = "https://www.pulumi.com";
-    description = "Pulumi is a cloud development platform that makes creating cloud programs easy and productive";
+    description = "Cloud development platform that makes creating cloud programs easy and productive";
     sourceProvenance = [ lib.sourceTypes.fromSource ];
     license = lib.licenses.asl20;
     mainProgram = "pulumi";

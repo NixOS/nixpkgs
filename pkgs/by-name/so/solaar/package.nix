@@ -9,6 +9,7 @@
   libappindicator,
   librsvg,
   udevCheckHook,
+  acl,
 }:
 
 # Although we copy in the udev rules here, you probably just want to use
@@ -62,6 +63,11 @@ python3Packages.buildPythonApplication rec {
     pytest-cov-stub
   ];
 
+  preConfigure = ''
+    substituteInPlace lib/solaar/listener.py \
+      --replace-fail /usr/bin/getfacl "${lib.getExe' acl "getfacl"}"
+  '';
+
   # the -cli symlink is just to maintain compabilility with older versions where
   # there was a difference between the GUI and CLI versions.
   postInstall = ''
@@ -95,6 +101,7 @@ python3Packages.buildPythonApplication rec {
     '';
     homepage = "https://pwr-solaar.github.io/Solaar/";
     license = licenses.gpl2Only;
+    mainProgram = "solaar";
     maintainers = with maintainers; [
       spinus
       ysndr

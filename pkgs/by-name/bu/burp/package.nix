@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "grke";
     repo = "burp";
-    rev = version;
+    tag = version;
     hash = "sha256-y6kRd1jD6t+Q6d5t7W9MDuk+m2Iq1THQkP50PJwI7Nc=";
   };
 
@@ -51,14 +51,15 @@ stdenv.mkDerivation rec {
     openssl_legacy
     zlib
     uthash
-  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) acl;
 
   configureFlags = [ "--localstatedir=/var" ];
 
   installFlags = [ "localstatedir=/tmp" ];
 
   meta = with lib; {
-    description = "BURP - BackUp and Restore Program";
+    description = "BackUp and Restore Program";
     homepage = "https://burp.grke.org";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ arjan-s ];

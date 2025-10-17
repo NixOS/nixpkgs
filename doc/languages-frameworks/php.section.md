@@ -9,7 +9,7 @@ wide variety of extensions and libraries available.
 
 The different versions of PHP that nixpkgs provides are located under
 attributes named based on major and minor version number; e.g.,
-`php81` is PHP 8.1.
+`php84` is PHP 8.4.
 
 Only versions of PHP that are supported by upstream for the entirety
 of a given NixOS release will be included in that release of
@@ -22,8 +22,8 @@ NixOS - not necessarily the latest major release from upstream.
 
 All available PHP attributes are wrappers around their respective
 binary PHP package and provide commonly used extensions this way. The
-real PHP 8.1 package, i.e. the unwrapped one, is available as
-`php81.unwrapped`; see the next section for more details.
+real PHP 8.4 package, i.e. the unwrapped one, is available as
+`php84.unwrapped`; see the next section for more details.
 
 Interactive tools built on PHP are put in `php.packages`; composer is
 for example available at `php.packages.composer`.
@@ -201,7 +201,7 @@ Composer is not a package manager in the same sense as `Yum` or `Apt` are. Yes,
 it deals with "packages" or libraries, but it manages them on a per-project
 basis, installing them in a directory (e.g. `vendor`) inside your project. By
 default, it does not install anything globally. This idea is not new and
-Composer is strongly inspired by node's `npm` and ruby's `bundler`.
+Composer is strongly inspired by Node's `npm` and Ruby's `bundler`.
 
 Currently, there is no other PHP tool that offers the same functionality as
 Composer. Consequently, incorporating a helper in Nix to facilitate building
@@ -267,13 +267,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   # PHP version containing the `ast` extension enabled
   php = php.buildEnv {
-    extensions = (
-      { enabled, all }:
-      enabled
-      ++ (with all; [
-        ast
-      ])
-    );
+    extensions = ({ enabled, all }: enabled ++ (with all; [ ast ]));
   };
 
   # The composer vendor hash

@@ -12,14 +12,17 @@ let
     mkdir $out
 
     ${
-      if config.boot.initrd.systemd.enable then
+      if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
         ''
-          cp ${config.system.build.bootStage2} $out/prepare-root
-          substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
           # This must not be a symlink or the abs_path of the grub builder for the tests
           # will resolve the symlink and we end up with a path that doesn't point to a
           # system closure.
           cp "$systemd/lib/systemd/systemd" $out/init
+
+          ${lib.optionalString (!config.system.nixos-init.enable) ''
+            cp ${config.system.build.bootStage2} $out/prepare-root
+            substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
+          ''}
         ''
       else
         ''
@@ -100,11 +103,9 @@ let
 
   systemWithBuildDeps = system.overrideAttrs (o: {
     systemBuildClosure = pkgs.closureInfo { rootPaths = [ system.drvPath ]; };
-    buildCommand =
-      o.buildCommand
-      + ''
-        ln -sn $systemBuildClosure $out/build-closure
-      '';
+    buildCommand = o.buildCommand + ''
+      ln -sn $systemBuildClosure $out/build-closure
+    '';
   });
 
 in
@@ -285,8 +286,8 @@ in
       };
 
       cutoffPackages = mkOption {
-        default = [ config.system.build.initialRamdisk ];
-        defaultText = literalExpression "[ config.system.build.initialRamdisk ]";
+        default = lib.optionals config.boot.initrd.enable [ config.system.build.initialRamdisk ];
+        defaultText = literalExpression "lib.optionals config.boot.initrd.enable [ config.system.build.initialRamdisk ]";
         type = types.listOf types.package;
         description = ''
           Packages to which no replacements should be applied.
@@ -360,44 +361,45 @@ in
         )
       );
 
-    system.systemBuilderArgs =
-      {
+    system.systemBuilderArgs = {
 
-        # Legacy environment variables. These were used by the activation script,
-        # but some other script might still depend on them, although unlikely.
-        installBootLoader = config.system.build.installBootLoader;
-        localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
-        distroId = config.system.nixos.distroId;
-        perl = pkgs.perl.withPackages (
-          p: with p; [
-            ConfigIniFiles
-            FileSlurp
-          ]
-        );
-        # End if legacy environment variables
+      # Legacy environment variables. These were used by the activation script,
+      # but some other script might still depend on them, although unlikely.
+      installBootLoader = config.system.build.installBootLoader;
+      localeArchive = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+      distroId = config.system.nixos.distroId;
+      perl = pkgs.perl.withPackages (
+        p: with p; [
+          ConfigIniFiles
+          FileSlurp
+        ]
+      );
+      # End if legacy environment variables
 
-        preSwitchCheck = config.system.preSwitchChecksScript;
+      preSwitchCheck = lib.mkIf (
+        config.system.preSwitchChecks != { }
+      ) config.system.preSwitchChecksScript;
 
-        # Not actually used in the builder. `passedChecks` is just here to create
-        # the build dependencies. Checks are similar to build dependencies in the
-        # sense that if they fail, the system build fails. However, checks do not
-        # produce any output of value, so they are not used by the system builder.
-        # In fact, using them runs the risk of accidentally adding unneeded paths
-        # to the system closure, which defeats the purpose of the `system.checks`
-        # option, as opposed to `system.extraDependencies`.
-        passedChecks = concatStringsSep " " config.system.checks;
-      }
-      // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != [ ]) {
-        closureInfo = pkgs.closureInfo {
-          rootPaths = [
-            # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
-            (config.system.build.toplevel.overrideAttrs (_: {
-              extraDependencies = [ ];
-              closureInfo = null;
-            }))
-          ];
-        };
+      # Not actually used in the builder. `passedChecks` is just here to create
+      # the build dependencies. Checks are similar to build dependencies in the
+      # sense that if they fail, the system build fails. However, checks do not
+      # produce any output of value, so they are not used by the system builder.
+      # In fact, using them runs the risk of accidentally adding unneeded paths
+      # to the system closure, which defeats the purpose of the `system.checks`
+      # option, as opposed to `system.extraDependencies`.
+      passedChecks = concatStringsSep " " config.system.checks;
+    }
+    // lib.optionalAttrs (config.system.forbiddenDependenciesRegexes != [ ]) {
+      closureInfo = pkgs.closureInfo {
+        rootPaths = [
+          # override to avoid  infinite recursion (and to allow using extraDependencies to add forbidden dependencies)
+          (config.system.build.toplevel.overrideAttrs (_: {
+            extraDependencies = [ ];
+            closureInfo = null;
+          }))
+        ];
       };
+    };
 
     system.build.toplevel =
       if config.system.includeBuildDependencies then systemWithBuildDeps else system;

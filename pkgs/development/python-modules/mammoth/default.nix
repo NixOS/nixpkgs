@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "mammoth";
-  version = "1.8.0";
+  version = "1.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "python-mammoth";
     tag = version;
-    hash = "sha256-mIvzEyKpy1j7tZti+QTXgsbqqZAhYs7N+p5sQFsLhBg=";
+    hash = "sha256-x1wSudTD/C1uHnudaCCrhi9fyQInCej+Kd7CyBI2sus=";
   };
 
   postPatch = ''
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwilliamson/python-mammoth";
     changelog = "https://github.com/mwilliamson/python-mammoth/blob/${src.tag}/NEWS";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

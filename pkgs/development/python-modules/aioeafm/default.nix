@@ -37,6 +37,8 @@ buildPythonPackage rec {
 
   dependencies = [ aiohttp ];
 
+  doCheck = false; # Failed: async def functions are not natively supported.
+
   nativeCheckInputs = [
     pytest-aiohttp
     pytestCheckHook

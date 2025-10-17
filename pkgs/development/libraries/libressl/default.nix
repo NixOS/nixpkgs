@@ -16,9 +16,10 @@ let
       version,
       hash,
       patches ? [ ],
+      postPatch ? "",
       knownVulnerabilities ? [ ],
     }:
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "libressl";
       inherit version;
 
@@ -40,7 +41,8 @@ let
         "-DCMAKE_INSTALL_LIBDIR=lib"
 
         "-DTLS_DEFAULT_CA_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt"
-      ] ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
+      ]
+      ++ lib.optional buildShared "-DBUILD_SHARED_LIBS=ON";
 
       # The autoconf build is broken as of 2.9.1, resulting in the following error:
       # libressl-2.9.1/tls/.libs/libtls.a', needed by 'handshake_table'.
@@ -57,7 +59,8 @@ let
 
       postPatch = ''
         patchShebangs tests/
-      '';
+      ''
+      + postPatch;
 
       doCheck = !(stdenv.hostPlatform.isPower64 || stdenv.hostPlatform.isRiscV);
       preCheck = ''
@@ -147,5 +150,21 @@ in
         hash = "sha256-dEdtmHHiR7twAqgebXv1Owle/KYCak71NhDCp0PdseU=";
       })
     ];
+  };
+
+  libressl_4_1 = generic {
+    version = "4.1.0";
+    hash = "sha256-D3HBa9NL2qzNy5al2UpJIb+2EuxuDrp6gNiFTu/Yu2E=";
+    # Fixes build on loongarch64
+    # https://github.com/libressl/portable/pull/1184
+    postPatch = ''
+      mkdir -p include/arch/loongarch64
+      cp ${
+        fetchurl {
+          url = "https://github.com/libressl/portable/raw/refs/tags/v4.1.0/include/arch/loongarch64/opensslconf.h";
+          hash = "sha256-68dw5syUy1z6GadCMR4TR9+0UQX6Lw/CbPWvjHGAhgo=";
+        }
+      } include/arch/loongarch64/opensslconf.h
+    '';
   };
 }

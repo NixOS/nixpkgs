@@ -60,6 +60,11 @@ mkDerivation rec {
     sha256 = "ig3+TdYv277D9GVnkRSX6nc6D6qruUOw/IQdQCK6FoA=";
   };
 
+  # configure.ac:23: error: AC_CONFIG_MACRO_DIR can only be used once
+  postPatch = ''
+    sed -i "23d" src/hidapi/configure.ac
+  '';
+
   nativeBuildInputs = [
     autoreconfHook
     curl

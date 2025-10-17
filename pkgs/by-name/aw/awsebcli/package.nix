@@ -25,14 +25,14 @@ in
 
 python.pkgs.buildPythonApplication rec {
   pname = "awsebcli";
-  version = "3.24.1";
+  version = "3.25.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-elastic-beanstalk-cli";
     tag = version;
-    hash = "sha256-t6dqiC9zY3Apcc4F/x5c/QhsNKGBZxIY20a50wCEER8=";
+    hash = "sha256-objIzpYMyuFjEc85H9dXhQez3MZfNu3lWSWm6+E2iJs=";
   };
 
   pythonRelaxDeps = [
@@ -70,7 +70,7 @@ python.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/unit"
   ];
 

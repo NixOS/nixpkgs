@@ -55,6 +55,7 @@ sets are
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
 * `pkgs.python314Packages`
+* `pkgs.python315Packages`
 * `pkgs.pypy27Packages`
 * `pkgs.pypy310Packages`
 
@@ -126,9 +127,7 @@ buildPythonPackage rec {
     pluggy
   ];
 
-  nativeCheckInputs = [
-    hypothesis
-  ];
+  nativeCheckInputs = [ hypothesis ];
 
   meta = {
     changelog = "https://github.com/pytest-dev/pytest/releases/tag/${version}";
@@ -271,16 +270,8 @@ be used through out all of the Python package set:
   python3MyBlas = pkgs.python3.override {
     packageOverrides = self: super: {
       # We need toPythonModule for the package set to evaluate this
-      blas = super.toPythonModule (
-        super.pkgs.blas.override {
-          blasProvider = super.pkgs.mkl;
-        }
-      );
-      lapack = super.toPythonModule (
-        super.pkgs.lapack.override {
-          lapackProvider = super.pkgs.mkl;
-        }
-      );
+      blas = super.toPythonModule (super.pkgs.blas.override { blasProvider = super.pkgs.mkl; });
+      lapack = super.toPythonModule (super.pkgs.lapack.override { lapackProvider = super.pkgs.mkl; });
     };
   };
 }
@@ -323,9 +314,7 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-Pe229rT0aHwA98s+nTHQMEFKZPo/yw6sot8MivFDvAw=";
   };
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     tornado
@@ -357,9 +346,7 @@ the attribute in `python-packages.nix`, and the `toPythonApplication` shall be
 applied to the reference:
 
 ```nix
-{
-  python3Packages,
-}:
+{ python3Packages }:
 
 python3Packages.toPythonApplication python3Packages.youtube-dl
 ```
@@ -395,9 +382,7 @@ mkPythonMetaPackage {
   pname = "psycopg2-binary";
   inherit (psycopg2) optional-dependencies version;
   dependencies = [ psycopg2 ];
-  meta = {
-    inherit (psycopg2.meta) description homepage;
-  };
+  meta = { inherit (psycopg2.meta) description homepage; };
 }
 ```
 
@@ -443,9 +428,7 @@ let
   pythonEnv = myPython.withPackages (ps: [ ps.my-editable ]);
 
 in
-pkgs.mkShell {
-  packages = [ pythonEnv ];
-}
+pkgs.mkShell { packages = [ pythonEnv ]; }
 ```
 
 #### `python.buildEnv` function {#python.buildenv-function}
@@ -583,8 +566,8 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
 Several versions of the Python interpreter are available on Nix, as well as a
 high amount of packages. The attribute `python3` refers to the default
 interpreter, which is currently CPython 3.13. The attribute `python` refers to
-CPython 2.7 for backwards-compatibility. It is also possible to refer to
-specific versions, e.g. `python313` refers to CPython 3.13, and `pypy` refers to
+CPython 2.7 for backwards compatibility. It is also possible to refer to
+specific versions, e.g., `python313` refers to CPython 3.13, and `pypy` refers to
 the default PyPy interpreter.
 
 Python is used a lot, and in different ways. This affects also how it is
@@ -743,7 +726,7 @@ The dot product of [1 2] and [3 4] is: 11
 
 If the dependencies are not available on the host where `foo.py` is executed, it
 will build or download them from a Nix binary cache prior to starting up, prior
-that it is executed on a machine with a multi-user nix installation.
+that it is executed on a machine with a multi-user Nix installation.
 
 This provides a way to ship a self bootstrapping Python script, akin to a
 statically linked binary, where it can be run on any machine (provided nix is
@@ -751,7 +734,7 @@ installed) without having to assume that `numpy` is installed globally on the
 system.
 
 By default it is pulling the import checkout of Nixpkgs itself from our nix
-channel, which is nice as it cache aligns with our other package builds, but we
+channel, which is nice as it cache-aligns with our other package builds, but we
 can make it fully reproducible by pinning the `nixpkgs` import:
 
 ```python
@@ -834,7 +817,7 @@ mkShell {
 
 This will create a unified environment that has not just our Python interpreter
 and its Python dependencies, but also tools like `black` or `mypy` and libraries
-like `libffi` the `openssl` in scope. This is generic and can span any number of
+like `libffi` and `openssl` in scope. This is generic and can span any number of
 tools or languages across the Nixpkgs ecosystem.
 
 ##### Installing environments globally on the system {#installing-environments-globally-on-the-system}
@@ -942,9 +925,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   # has no tests
   doCheck = false;
@@ -1001,9 +982,7 @@ with import <nixpkgs> { };
         hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
       };
 
-      build-system = [
-        python313.pkgs.setuptools
-      ];
+      build-system = [ python313.pkgs.setuptools ];
 
       # has no tests
       doCheck = false;
@@ -1040,7 +1019,7 @@ that we introduced with the `let` expression.
 #### Handling dependencies {#handling-dependencies}
 
 Our example, `toolz`, does not have any dependencies on other Python packages or system libraries.
-[`buildPythonPackage`](#buildpythonpackage-function) uses the the following arguments in the following circumstances:
+[`buildPythonPackage`](#buildpythonpackage-function) uses the following arguments in the following circumstances:
 
 - `dependencies` - For Python runtime dependencies.
 - `build-system` - For Python build-time requirements.
@@ -1080,9 +1059,7 @@ buildPythonPackage rec {
     hash = "sha256-FLLvdm1MllKrgTGC6Gb0k0deZeVYvtCCLji/B7uhong=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     multipledispatch
@@ -1090,9 +1067,7 @@ buildPythonPackage rec {
     python-dateutil
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   meta = {
     changelog = "https://github.com/blaze/datashape/releases/tag/${version}";
@@ -1133,9 +1108,7 @@ buildPythonPackage rec {
     hash = "sha256-s9NiusRxFydHzaNRMjjxFcvWxfi45jGb9ql6eJJyQJk=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     libxml2
@@ -1197,9 +1170,7 @@ buildPythonPackage rec {
     hash = "sha256-9ru2r6kwhUCaskiFoaPNuJCfCVoUL01J40byvRt4kHQ=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   buildInputs = [
     fftw
@@ -1307,11 +1278,7 @@ To use `pytestCheckHook`, add it to `nativeCheckInputs`.
 Adding `pytest` is not required, since it is included with `pytestCheckHook`.
 
 ```nix
-{
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
-}
+{ nativeCheckInputs = [ pytestCheckHook ]; }
 ```
 
 `pytestCheckHook` recognizes the following attributes:
@@ -1340,9 +1307,7 @@ The following example demonstrates usage of various `pytestCheckHook` attributes
 
 ```nix
 {
-  nativeCheckInputs = [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   # Allow running the following test paths and test objects.
   enabledTestPaths = [
@@ -1402,9 +1367,7 @@ by disabling tests that match both `"Foo"` **and** `"bar"`:
 {
   __structuredAttrs = true;
 
-  disabledTests = [
-    "Foo and bar"
-  ];
+  disabledTests = [ "Foo and bar" ];
 }
 ```
 
@@ -1414,20 +1377,19 @@ This is especially helpful to select tests or specify flags conditionally:
 
 ```nix
 {
-  disabledTests =
-    [
-      # touches network
-      "download"
-      "update"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.8") [
-      # broken due to python3.8 async changes
-      "async"
-    ]
-    ++ lib.optionals stdenv.buildPlatform.isDarwin [
-      # can fail when building with other packages
-      "socket"
-    ];
+  disabledTests = [
+    # touches network
+    "download"
+    "update"
+  ]
+  ++ lib.optionals (pythonAtLeast "3.8") [
+    # broken due to python3.8 async changes
+    "async"
+  ]
+  ++ lib.optionals stdenv.buildPlatform.isDarwin [
+    # can fail when building with other packages
+    "socket"
+  ];
 }
 ```
 
@@ -1492,9 +1454,7 @@ we can do:
     "pkg1"
     "pkg3"
   ];
-  pythonRemoveDeps = [
-    "pkg2"
-  ];
+  pythonRemoveDeps = [ "pkg2" ];
 }
 ```
 
@@ -1509,9 +1469,7 @@ Another option is to pass `true`, that will relax/remove all dependencies, for
 example:
 
 ```nix
-{
-  pythonRelaxDeps = true;
-}
+{ pythonRelaxDeps = true; }
 ```
 
 which would result in the following `requirements.txt` file:
@@ -1547,9 +1505,7 @@ automatically add `pythonRelaxDepsHook` if either `pythonRelaxDeps` or
 
 ```nix
 {
-  nativeCheckInputs = [
-    unittestCheckHook
-  ];
+  nativeCheckInputs = [ unittestCheckHook ];
 
   unittestFlags = [
     "-s"
@@ -1575,9 +1531,7 @@ render them using the default `html` style.
     "doc"
   ];
 
-  nativeBuildInputs = [
-    sphinxHook
-  ];
+  nativeBuildInputs = [ sphinxHook ];
 }
 ```
 
@@ -1652,9 +1606,7 @@ buildPythonPackage rec {
     hash = "sha256-CP3V73yWSArRHBLUct4hrNMjWZlvaaUlkpm1QP66RWA=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   meta = {
     changelog = "https://github.com/pytoolz/toolz/releases/tag/${version}";
@@ -1717,14 +1669,10 @@ with import <nixpkgs> { };
           });
         };
       in
-      pkgs.python310.override {
-        inherit packageOverrides;
-      };
+      pkgs.python310.override { inherit packageOverrides; };
 
   in
-  python.withPackages (ps: [
-    ps.pandas
-  ])
+  python.withPackages (ps: [ ps.pandas ])
 ).env
 ```
 
@@ -1743,16 +1691,9 @@ with import <nixpkgs> { };
 
 (
   let
-    packageOverrides = self: super: {
-      scipy = super.scipy_0_17;
-    };
+    packageOverrides = self: super: { scipy = super.scipy_0_17; };
   in
-  (pkgs.python310.override {
-    inherit packageOverrides;
-  }).withPackages
-    (ps: [
-      ps.blaze
-    ])
+  (pkgs.python310.override { inherit packageOverrides; }).withPackages (ps: [ ps.blaze ])
 ).env
 ```
 
@@ -2000,11 +1941,7 @@ this snippet:
 
 ```nix
 {
-  myPythonPackages = python3Packages.override {
-    overrides = self: super: {
-      twisted = <...>;
-    };
-  };
+  myPythonPackages = python3Packages.override { overrides = self: super: { twisted = <...>; }; };
 }
 ```
 
@@ -2098,7 +2035,8 @@ and letting the package requiring the extra add the list to its dependencies
 {
   dependencies = [
     # ...
-  ] ++ dask.optional-dependencies.complete;
+  ]
+  ++ dask.optional-dependencies.complete;
 }
 ```
 
@@ -2186,12 +2124,8 @@ The following rules are desired to be respected:
   It does not need to be set explicitly unless the package requires a specific platform.
 * The file is formatted with `nixfmt-rfc-style`.
 * Commit names of Python libraries must reflect that they are Python
-  libraries (e.g. `python313Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
-* The current default version of python should be included
-  in commit messages to enable automatic builds by ofborg.
-  For example `python313Packages.numpy: 1.11 -> 1.12` should be used rather
-  than `python3Packages.numpy: 1.11 -> 1.12`.
-  Note that `pythonPackages` is an alias for `python27Packages`.
+  libraries (e.g. `python3Packages.numpy: 1.11 -> 1.12` rather than `numpy: 1.11 -> 1.12`).
+  See also [`pkgs/README.md`](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md#commit-conventions).
 * Attribute names in `python-packages.nix` as well as `pname`s should match the
   library's name on PyPI, but be normalized according to [PEP
   0503](https://www.python.org/dev/peps/pep-0503/#normalized-names). This means

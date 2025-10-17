@@ -4,11 +4,11 @@
   fetchurl,
   fetchFromGitHub,
   coreutils,
-  nettools,
+  net-tools,
   java,
   scala_3,
   polyml,
-  veriT,
+  verit,
   vampire,
   eprover-ho,
   rlwrap,
@@ -81,10 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     polyml
-    veriT
+    verit
     vampire'
     eprover-ho
-    nettools
+    net-tools
   ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ procps ];
@@ -99,83 +99,82 @@ stdenv.mkDerivation (finalAttrs: {
     sourceRoot=${finalAttrs.dirname}
   '';
 
-  postPatch =
-    ''
-      patchShebangs lib/Tools/ bin/
+  postPatch = ''
+    patchShebangs lib/Tools/ bin/
 
-      cat >contrib/verit-*/etc/settings <<EOF
-        ISABELLE_VERIT=${veriT}/bin/veriT
-      EOF
+    cat >contrib/verit-*/etc/settings <<EOF
+      ISABELLE_VERIT=${verit}/bin/veriT
+    EOF
 
-      cat >contrib/e-*/etc/settings <<EOF
-        E_HOME=${eprover-ho}/bin
-        E_VERSION=${eprover-ho.version}
-      EOF
+    cat >contrib/e-*/etc/settings <<EOF
+      E_HOME=${eprover-ho}/bin
+      E_VERSION=${eprover-ho.version}
+    EOF
 
-      cat >contrib/vampire-*/etc/settings <<EOF
-        VAMPIRE_HOME=${vampire'}/bin
-        VAMPIRE_VERSION=${vampire'.version}
-        VAMPIRE_EXTRA_OPTIONS="--mode casc"
-      EOF
+    cat >contrib/vampire-*/etc/settings <<EOF
+      VAMPIRE_HOME=${vampire'}/bin
+      VAMPIRE_VERSION=${vampire'.version}
+      VAMPIRE_EXTRA_OPTIONS="--mode casc"
+    EOF
 
-      cat >contrib/polyml-*/etc/settings <<EOF
-        ML_SYSTEM_64=true
-        ML_SYSTEM=${polyml.name}
-        ML_PLATFORM=${stdenv.system}
-        ML_HOME=${polyml}/bin
-        ML_OPTIONS="--minheap 1000"
-        POLYML_HOME="\$COMPONENT"
-        ML_SOURCES="\$POLYML_HOME/src"
-      EOF
+    cat >contrib/polyml-*/etc/settings <<EOF
+      ML_SYSTEM_64=true
+      ML_SYSTEM=${polyml.name}
+      ML_PLATFORM=${stdenv.system}
+      ML_HOME=${polyml}/bin
+      ML_OPTIONS="--minheap 1000"
+      POLYML_HOME="\$COMPONENT"
+      ML_SOURCES="\$POLYML_HOME/src"
+    EOF
 
-      cat >contrib/jdk*/etc/settings <<EOF
-        ISABELLE_JAVA_PLATFORM=${stdenv.system}
-        ISABELLE_JDK_HOME=${java}
-      EOF
+    cat >contrib/jdk*/etc/settings <<EOF
+      ISABELLE_JAVA_PLATFORM=${stdenv.system}
+      ISABELLE_JDK_HOME=${java}
+    EOF
 
-      echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
+    echo ISABELLE_LINE_EDITOR=${rlwrap}/bin/rlwrap >>etc/settings
 
-      for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
-        rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
-      done
-      rm -rf contrib/*/src
+    for comp in contrib/jdk* contrib/polyml-* contrib/verit-* contrib/vampire-* contrib/e-*; do
+      rm -rf $comp/${if stdenv.hostPlatform.isx86 then "x86" else "arm"}*
+    done
+    rm -rf contrib/*/src
 
-      substituteInPlace lib/Tools/env \
-        --replace-fail /usr/bin/env ${coreutils}/bin/env
+    substituteInPlace lib/Tools/env \
+      --replace-fail /usr/bin/env ${coreutils}/bin/env
 
-      substituteInPlace src/Tools/Setup/src/Environment.java \
-        --replace-fail 'cmd.add("/usr/bin/env");' "" \
-        --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
+    substituteInPlace src/Tools/Setup/src/Environment.java \
+      --replace-fail 'cmd.add("/usr/bin/env");' "" \
+      --replace-fail 'cmd.add("bash");' "cmd.add(\"$SHELL\");"
 
-      substituteInPlace src/Pure/General/sha1.ML \
-        --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
+    substituteInPlace src/Pure/General/sha1.ML \
+      --replace-fail '"$ML_HOME/" ^ (if ML_System.platform_is_windows then "sha1.dll" else "libsha1.so")' '"${sha1}/lib/libsha1.so"'
 
-      rm -r heaps
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
-      substituteInPlace lib/scripts/isabelle-platform \
-        --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      arch=${
-        if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
-      }
-      for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
-        patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
-      done
-      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
-      for d in contrib/kodkodi-*/jni/$arch; do
-        patchelf --set-rpath "${
-          lib.concatStringsSep ":" [
-            "${java}/lib/openjdk/lib/server"
-            "${lib.getLib stdenv.cc.cc}/lib"
-          ]
-        }" $d/*.so
-      done
-    ''
-    + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
-      patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
-    '';
+    rm -r heaps
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-darwin") ''
+    substituteInPlace lib/scripts/isabelle-platform \
+      --replace-fail 'ISABELLE_APPLE_PLATFORM64=arm64-darwin' ""
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    arch=${
+      if stdenv.hostPlatform.system == "aarch64-linux" then "arm64-linux" else stdenv.hostPlatform.system
+    }
+    for f in contrib/*/$arch/{z3,nunchaku,spass,zipperposition}; do
+      patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) "$f"${lib.optionalString stdenv.hostPlatform.isAarch64 " || true"}
+    done
+    patchelf --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) contrib/bash_process-*/$arch/bash_process
+    for d in contrib/kodkodi-*/jni/$arch; do
+      patchelf --set-rpath "${
+        lib.concatStringsSep ":" [
+          "${java}/lib/openjdk/lib/server"
+          "${lib.getLib stdenv.cc.cc}/lib"
+        ]
+      }" $d/*.so
+    done
+  ''
+  + lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") ''
+    patchelf --set-rpath "${lib.getLib stdenv.cc.cc}/lib" contrib/z3-*/$arch/z3
+  '';
 
   buildPhase = ''
     export HOME=$TMP # The build fails if home is not set
@@ -259,24 +258,23 @@ stdenv.mkDerivation (finalAttrs: {
     in
     symlinkJoin {
       name = "isabelle-with-components-${isabelle.version}";
-      paths = [ isabelle ] ++ (builtins.map (c: c.override { inherit isabelle; }) components);
+      paths = [ isabelle ] ++ (map (c: c.override { inherit isabelle; }) components);
 
-      postBuild =
-        ''
-          rm $out/bin/*
+      postBuild = ''
+        rm $out/bin/*
 
-          cd ${base}
-          rm bin/*
-          cp ${isabelle}/${isabelle.dirname}/bin/* bin/
-          rm etc/components
-          cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
+        cd ${base}
+        rm bin/*
+        cp ${isabelle}/${isabelle.dirname}/bin/* bin/
+        rm etc/components
+        cat ${isabelle}/${isabelle.dirname}/etc/components > etc/components
 
-          export HOME=$TMP
-          bin/isabelle install $out/bin
-          patchShebangs $out/bin
-        ''
-        + lib.concatMapStringsSep "\n" (c: ''
-          echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
-        '') components;
+        export HOME=$TMP
+        bin/isabelle install $out/bin
+        patchShebangs $out/bin
+      ''
+      + lib.concatMapStringsSep "\n" (c: ''
+        echo contrib/${c.pname}-${c.version} >> ${base}/etc/components
+      '') components;
     };
 })

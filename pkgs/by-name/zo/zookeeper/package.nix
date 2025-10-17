@@ -13,12 +13,12 @@ let
   # https://zookeeper.apache.org/doc/r3.9.2/zookeeperAdmin.html#sc_requiredSoftware
   jre = jdk11_headless;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zookeeper";
   version = "3.9.3";
 
   src = fetchurl {
-    url = "mirror://apache/zookeeper/${pname}-${version}/apache-${pname}-${version}-bin.tar.gz";
+    url = "mirror://apache/zookeeper/zookeeper-${finalAttrs.version}/apache-zookeeper-${finalAttrs.version}-bin.tar.gz";
     hash = "sha512-1E2HDBaRZi778ai68YWckBuCDcX/Fjs26BvrJ7b7880xtfHwdWl+2q9tPnpMsMyS+STc/2SylO8T1TVYm9rxQw==";
   };
 
@@ -53,14 +53,13 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://zookeeper.apache.org";
     description = "Apache Zookeeper";
-    changelog = "https://zookeeper.apache.org/doc/r${version}/releasenotes.html";
+    changelog = "https://zookeeper.apache.org/doc/r${finalAttrs.version}/releasenotes.html";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       nathan-gs
-      pradeepchhetri
       ztzg
     ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
-}
+})

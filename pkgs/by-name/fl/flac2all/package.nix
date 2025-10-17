@@ -11,12 +11,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "flac2all";
-  version = "5.1";
-  format = "setuptools";
+  version = "5.4";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "OBjlr7cbSx2WOIfZUNwHy5Hpb2Fmh3vmZdc70JiWsiI=";
+    sha256 = "sha256-UGrkCQcpNzWH2hIRd1oTDryUeDumgHKuuxsbC87xaUI=";
   };
 
   # Not sure why this is needed, but setup.py expects this to be set
@@ -24,7 +24,11 @@ python3Packages.buildPythonApplication rec {
     echo ${version} > ./flac2all_pkg/version
   '';
 
-  propagatedBuildInputs = [
+  build-system = [
+    python3Packages.setuptools
+  ];
+
+  dependencies = [
     python3Packages.pyzmq
   ];
 

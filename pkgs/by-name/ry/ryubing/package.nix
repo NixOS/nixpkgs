@@ -26,24 +26,30 @@
   udev,
   SDL2,
   SDL2_mixer,
+  gtk3,
+  wrapGAppsHook3,
 }:
 
 buildDotnetModule rec {
   pname = "ryubing";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     domain = "git.ryujinx.app";
     owner = "Ryubing";
     repo = "Ryujinx";
     tag = version;
-    hash = "sha256-6BCDFd0nU96OgI5lqf4fbyNkG4PS5P4raHVbvBAhB5A=";
+    hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin [
-    cctools
-    darwin.sigtool
-  ];
+  nativeBuildInputs =
+    lib.optional stdenv.hostPlatform.isLinux [
+      wrapGAppsHook3
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      cctools
+      darwin.sigtool
+    ];
 
   enableParallelBuilding = false;
 
@@ -52,35 +58,35 @@ buildDotnetModule rec {
 
   nugetDeps = ./deps.json;
 
-  runtimeDeps =
-    [
-      libX11
-      libgdiplus
-      SDL2_mixer
-      openal
-      libsoundio
-      sndio
-      vulkan-loader
-      ffmpeg
+  runtimeDeps = [
+    libX11
+    libgdiplus
+    SDL2_mixer
+    openal
+    libsoundio
+    sndio
+    vulkan-loader
+    ffmpeg
 
-      # Avalonia UI
-      glew
-      libICE
-      libSM
-      libXcursor
-      libXext
-      libXi
-      libXrandr
+    # Avalonia UI
+    glew
+    libICE
+    libSM
+    libXcursor
+    libXext
+    libXi
+    libXrandr
+    gtk3
 
-      # Headless executable
-      libGL
-      SDL2
-    ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
-      udev
-      pulseaudio
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
+    # Headless executable
+    libGL
+    SDL2
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) [
+    udev
+    pulseaudio
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin [ moltenvk ];
 
   projectFile = "Ryujinx.sln";
   testProjectFile = "src/Ryujinx.Tests/Ryujinx.Tests.csproj";

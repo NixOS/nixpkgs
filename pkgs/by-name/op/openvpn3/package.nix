@@ -28,17 +28,22 @@
 
 stdenv.mkDerivation rec {
   pname = "openvpn3";
-  version = "24.1";
+  version = "25";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     tag = "v${version}";
-    hash = "sha256-E6SBVPHmejXB18RuNCNq62yWOJslZfIjVbNUdRIk5Sw=";
+    hash = "sha256-Fme8OT49h2nZw5ypyeKdHlqv2Hk92LW2KVisd0jC66s=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Should be fixed in v26: https://codeberg.org/OpenVPN/openvpn3-linux/issues/70
+    ./v25-latest-linux-fix.patch
+  ];
 
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
@@ -87,7 +92,8 @@ stdenv.mkDerivation rec {
     protobuf
     tinyxml-2
     gdbuspp
-  ] ++ lib.optionals enableSystemdResolved [ systemd.dev ];
+  ]
+  ++ lib.optionals enableSystemdResolved [ systemd.dev ];
 
   mesonFlags = [
     (lib.mesonOption "selinux" "disabled")

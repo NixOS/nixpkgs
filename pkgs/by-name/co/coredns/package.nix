@@ -6,21 +6,21 @@
   installShellFiles,
   nixosTests,
   externalPlugins ? [ ],
-  vendorHash ? "sha256-mp+0/DQTNsgAZTnLqcQq1HVLAfKr5vUGYSZlIvM7KpE=",
+  vendorHash ? "sha256-Es3xy8NVDo7Xgu32jJa4lhYWGa5hJnRyDKFYQqB3aBY=",
 }:
 
 let
-  attrsToSources = attrs: builtins.map ({ repo, version, ... }: "${repo}@${version}") attrs;
+  attrsToSources = attrs: map ({ repo, version, ... }: "${repo}@${version}") attrs;
 in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "coredns";
-  version = "1.11.3";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "coredns";
     repo = "coredns";
-    rev = "v${version}";
-    sha256 = "sha256-8LZMS1rAqEZ8k1IWSRkQ2O650oqHLP0P31T8oUeE4fw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-P4GhWrEACR1ZhNhGAoXWvNXYlpwnm2dz6Ggqv72zYog=";
   };
 
   inherit vendorHash;
@@ -75,7 +75,7 @@ buildGoModule rec {
       ) externalPlugins)
     }
     diff -u plugin.cfg.orig plugin.cfg || true
-    for src in ${builtins.toString (attrsToSources externalPlugins)}; do go get $src; done
+    for src in ${toString (attrsToSources externalPlugins)}; do go get $src; done
     GOOS= GOARCH= go generate
     go mod vendor
   '';
@@ -92,28 +92,30 @@ buildGoModule rec {
     GOOS= GOARCH= go generate
   '';
 
-  postPatch =
-    ''
-      substituteInPlace test/file_cname_proxy_test.go \
-        --replace "TestZoneExternalCNAMELookupWithProxy" \
-                  "SkipZoneExternalCNAMELookupWithProxy"
+  postPatch = ''
+    substituteInPlace test/file_cname_proxy_test.go \
+      --replace-fail \
+        "TestZoneExternalCNAMELookupWithProxy" \
+        "SkipZoneExternalCNAMELookupWithProxy"
 
-      substituteInPlace test/readme_test.go \
-        --replace "TestReadme" "SkipReadme"
+    substituteInPlace test/readme_test.go \
+      --replace-fail "TestReadme" "SkipReadme"
 
-      # this test fails if any external plugins were imported.
-      # it's a lint rather than a test of functionality, so it's safe to disable.
-      substituteInPlace test/presubmit_test.go \
-        --replace "TestImportOrdering" "SkipImportOrdering"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # loopback interface is lo0 on macos
-      sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
+    # this test fails if any external plugins were imported.
+    # it's a lint rather than a test of functionality, so it's safe to disable.
+    substituteInPlace test/presubmit_test.go \
+      --replace-fail "TestImportOrdering" "SkipImportOrdering"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # loopback interface is lo0 on macos
+    sed -E -i 's/\blo\b/lo0/' plugin/bind/setup_test.go
 
-      # test is apparently outdated but only exhibits this on darwin
-      substituteInPlace test/corefile_test.go \
-        --replace "TestCorefile1" "SkipCorefile1"
-    '';
+    # test is apparently outdated but only exhibits this on darwin
+    substituteInPlace test/corefile_test.go \
+      --replace-fail "TestCorefile1" "SkipCorefile1"
+  '';
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     installManPage man/*
@@ -124,15 +126,16 @@ buildGoModule rec {
     kubernetes-multi-node = nixosTests.kubernetes.dns-multi-node;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://coredns.io";
     description = "DNS server that runs middleware";
     mainProgram = "coredns";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
-      rushmorem
-      rtreffer
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       deltaevo
+      djds
+      rtreffer
+      rushmorem
     ];
   };
-}
+})

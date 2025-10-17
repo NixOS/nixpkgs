@@ -5,8 +5,9 @@
 }@args:
 
 let
-  # For 24 JDK FX is newer than regular JDK?
-  zuluVersion = if enableJavaFX then "24.28.85" else "24.28.83";
+  # For 24 JDK FX can be different version than regular JDK
+  zuluVersion = if enableJavaFX then "24.32.13" else "24.32.13";
+  jdkVersion = "24.0.2";
 in
 callPackage ./common.nix (
   {
@@ -14,45 +15,41 @@ callPackage ./common.nix (
     # Note that the latest build may differ by platform
     dists = {
       x86_64-linux = {
-        inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-y8jiE5yECh96pHYZFM0Q/JTiVcm5a0PONYJDLYydCT0="
+            "sha256-6ZCa348yFLoZ70iDjNkN17dl1IWe53HxKMGpMhFuEOE="
           else
-            "sha256-Kf6gF8A8ZFIhujEgjlENeuSPVzW6QWnVZcRst35/ZvI=";
+            "sha256-seZl5oZmHJlAFsOR6mFAvX9CEY+WatKIeYbi7W8RO/U=";
       };
 
       aarch64-linux = {
-        inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-H6YD8uhk9rTpd+3/S1+7QVzpCi6jykWKyu7RPxMx/sI="
+            "sha256-pVspe5R5INmEIJNiihDanOwleBklUp7Svj1NwzOe+ws="
           else
-            "sha256-6J7szd/ax9xCMNA9efw9Bhgv/VwQFXz5glWIoj+UYIc=";
+            "sha256-hV19g22QKWngOvNGh4dCaTOzLke6VjdsPCGQiVlyij0=";
       };
 
       x86_64-darwin = {
-        inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-lMdbPkUdXyNcye8uMxGIhZTErrTI0P0SnqMS+8+Rjqg="
+            "sha256-JXsx8GvjPEQO9ZN3p+CraSWeqc0KDIRBado+jz7l2ww="
           else
-            "sha256-e7KJtJ9+mFFSdKCj68thfTXguWH5zXaSSb9phzXf/lQ=";
+            "sha256-UHY+Oy6g98bVk5BTfd/Mx3OT5He9SnWUR0L+LZso3Lo=";
       };
 
       aarch64-darwin = {
-        inherit zuluVersion;
-        jdkVersion = "24.0.0";
+        inherit zuluVersion jdkVersion;
         hash =
           if enableJavaFX then
-            "sha256-oR2x0vphBGgh3KkEkLAcmtIMNONny9/b32z9jLR98X0="
+            "sha256-Z825S6qxHMm3kwHQnu15dihguDOrxlM1lca3wU8lCqk="
           else
-            "sha256-7yXLOJCK0RZ8V1vsexOGxGR9NAwi/pCl95BlO8E8nGU=";
+            "sha256-jDHoPG4NpNXVK35yNHe5JBkmaKNAixmmMEE0P9jcfnU=";
       };
     };
   }
-  // builtins.removeAttrs args [ "callPackage" ]
+  // removeAttrs args [ "callPackage" ]
 )

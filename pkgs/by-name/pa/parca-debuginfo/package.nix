@@ -27,7 +27,10 @@ buildGoModule rec {
     changelog = "https://github.com/parca-dev/parca-debuginfo/releases/tag/v${version}";
     homepage = "https://github.com/parca-dev/parca-debuginfo";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      brancz
+      metalmatze
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "parca-debuginfo";
   };

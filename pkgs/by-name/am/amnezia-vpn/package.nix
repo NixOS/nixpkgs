@@ -16,12 +16,29 @@
   wireguard-tools,
   libssh,
   zlib,
+  openssl,
   tun2socks,
   xray,
   nix-update-script,
   bash,
 }:
 let
+  awg-vendored = amneziawg-go.overrideAttrs (
+    finalAttrs: prevAttrs: {
+      name = "amneziawg-go";
+      version = "0.2.13";
+
+      src = fetchFromGitHub {
+        owner = "amnezia-vpn";
+        repo = "amneziawg-go";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-vXSPUGBMP37kXJ4Zn5TDLAzG8N+yO/IIj9nSKrZ+sFA=";
+      };
+
+      vendorHash = "sha256-9OtIb3UQXpAA0OzPhDIdb9lXZQHHiYCcmjHAU+vCtpk=";
+    }
+  );
+
   amnezia-tun2socks = tun2socks.overrideAttrs (
     finalAttrs: prevAttrs: {
       pname = "amnezia-tun2socks";
@@ -41,16 +58,16 @@ let
   amnezia-xray = xray.overrideAttrs (
     finalAttrs: prevAttrs: {
       pname = "amnezia-xray";
-      version = "1.8.13";
+      version = "1.8.15";
 
       src = fetchFromGitHub {
         owner = "amnezia-vpn";
         repo = "amnezia-xray-core";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-7XYdogoUEv3kTPTOQwRCohsPtfSDf+aRdI28IkTjvPk=";
+        hash = "sha256-3ZGkfGxYl9/yE7Q2CsJkFJ6xSGybBdq3DztQ0f4VsnY=";
       };
 
-      vendorHash = "sha256-zArdGj5yeRxU0X4jNgT5YBI9SJUyrANDaqNPAPH3d5M=";
+      vendorHash = "sha256-AimQsuBRhgpTY5rW8WRejCkx4s9Q9n+OuTf4XCrgpnE=";
     }
   );
 
@@ -64,56 +81,50 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amnezia-vpn";
-  version = "4.8.6.0";
+  version = "4.8.10.0";
 
   src = fetchFromGitHub {
     owner = "amnezia-vpn";
     repo = "amnezia-client";
     tag = finalAttrs.version;
-    hash = "sha256-WQbay3dtGNPPpcK1O7bfs/HKO4ytfmQo60firU/9o28=";
+    hash = "sha256-w1uBhp47XRinZpSuKeFaASOIOyjRDkDA81uqW4pK3F4=";
     fetchSubmodules = true;
   };
 
-  # Temporary patch header file to fix build with QT 6.9
-  patches = [
-    (fetchpatch {
-      name = "add-missing-include.patch";
-      url = "https://github.com/amnezia-vpn/amnezia-client/commit/c44ce0d77cc3acdf1de48a12459a1a821d404a1c.patch";
-      hash = "sha256-Q6UMD8PlKAcI6zNolT5+cULECnxNrYrD7cifvNg1ZrY=";
-    })
-  ];
-
-  postPatch =
-    ''
-      substituteInPlace client/platforms/linux/daemon/wireguardutilslinux.cpp \
-        --replace-fail 'm_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);' 'm_tunnel.start("${amneziawg-go}/bin/amneziawg-go", wgArgs);'
-      substituteInPlace client/utilities.cpp \
-        --replace-fail 'return Utils::executable("../../client/bin/openvpn", true);' 'return Utils::executable("${openvpn}/bin/openvpn", false);' \
-        --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${amnezia-tun2socks}/bin/amnezia-tun2socks", false);' \
-        --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);'
-      substituteInPlace client/protocols/xrayprotocol.cpp \
-        --replace-fail 'return Utils::executable(QString("xray"), true);' 'return Utils::executable(QString("${amnezia-xray}/bin/xray"), false);'
-      substituteInPlace client/protocols/openvpnovercloakprotocol.cpp \
-        --replace-fail 'return Utils::executable(QString("/ck-client"), true);' 'return Utils::executable(QString("${cloak-pt}/bin/ck-client"), false);'
-      substituteInPlace client/protocols/shadowsocksvpnprotocol.cpp \
-        --replace-fail 'return Utils::executable(QString("/ss-local"), true);' 'return Utils::executable(QString("${shadowsocks-rust}/bin/sslocal"), false);'
-      substituteInPlace client/configurators/openvpn_configurator.cpp \
-        --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/libexec\");"
-      substituteInPlace client/ui/qautostart.cpp \
-        --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
-      substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
-        --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
-      substituteInPlace deploy/data/linux/AmneziaVPN.service \
-        --replace-fail "ExecStart=/opt/AmneziaVPN/service/AmneziaVPN-service.sh" "ExecStart=$out/bin/AmneziaVPN-service" \
-        --replace-fail "Environment=LD_LIBRARY_PATH=/opt/AmneziaVPN/client/lib" ""
-    ''
-    + (lib.optionalString (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) ''
-      substituteInPlace client/cmake/3rdparty.cmake \
-        --replace-fail 'set(LIBSSH_LIB_PATH "''${LIBSSH_ROOT_DIR}/linux/x86_64/libssh.a")' 'set(LIBSSH_LIB_PATH "${libssh}/lib/libssh.so")' \
-        --replace-fail 'set(ZLIB_LIB_PATH "''${LIBSSH_ROOT_DIR}/linux/x86_64/libz.a")' 'set(ZLIB_LIB_PATH "${zlib}/lib/libz.so")' \
-        --replace-fail 'set(OPENSSL_LIB_SSL_PATH "''${OPENSSL_ROOT_DIR}/linux/x86_64/libssl.a")' 'set(OPENSSL_LIB_SSL_PATH "''${OPENSSL_ROOT_DIR}/linux/arm64/libssl.a")' \
-        --replace-fail 'set(OPENSSL_LIB_CRYPTO_PATH "''${OPENSSL_ROOT_DIR}/linux/x86_64/libcrypto.a")' 'set(OPENSSL_LIB_CRYPTO_PATH "''${OPENSSL_ROOT_DIR}/linux/arm64/libcrypto.a")'
-    '');
+  postPatch = ''
+    substituteInPlace client/platforms/linux/daemon/wireguardutilslinux.cpp \
+      --replace-fail 'm_tunnel.start(appPath.filePath("../../client/bin/wireguard-go"), wgArgs);' 'm_tunnel.start("${awg-vendored}/bin/amneziawg-go", wgArgs);'
+    substituteInPlace client/utilities.cpp \
+      --replace-fail 'return Utils::executable("../../client/bin/openvpn", true);' 'return Utils::executable("${openvpn}/bin/openvpn", false);' \
+      --replace-fail 'return Utils::executable("../../client/bin/tun2socks", true);' 'return Utils::executable("${amnezia-tun2socks}/bin/amnezia-tun2socks", false);' \
+      --replace-fail 'return Utils::usrExecutable("wg-quick");' 'return Utils::executable("${wireguard-tools}/bin/wg-quick", false);'
+    substituteInPlace client/protocols/xrayprotocol.cpp \
+      --replace-fail 'return Utils::executable(QString("xray"), true);' 'return Utils::executable(QString("${amnezia-xray}/bin/xray"), false);'
+    substituteInPlace client/protocols/openvpnovercloakprotocol.cpp \
+      --replace-fail 'return Utils::executable(QString("/ck-client"), true);' 'return Utils::executable(QString("${cloak-pt}/bin/ck-client"), false);'
+    substituteInPlace client/protocols/shadowsocksvpnprotocol.cpp \
+      --replace-fail 'return Utils::executable(QString("/ss-local"), true);' 'return Utils::executable(QString("${shadowsocks-rust}/bin/sslocal"), false);'
+    substituteInPlace client/configurators/openvpn_configurator.cpp \
+      --replace-fail ".arg(qApp->applicationDirPath());" ".arg(\"$out/libexec\");"
+    substituteInPlace client/ui/qautostart.cpp \
+      --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "AmneziaVPN"
+    substituteInPlace deploy/installer/config/AmneziaVPN.desktop.in \
+      --replace-fail "/usr/share/pixmaps/AmneziaVPN.png" "$out/share/pixmaps/AmneziaVPN.png"
+    substituteInPlace deploy/data/linux/AmneziaVPN.service \
+      --replace-fail "ExecStart=/opt/AmneziaVPN/service/AmneziaVPN-service.sh" "ExecStart=$out/bin/AmneziaVPN-service" \
+      --replace-fail "Environment=LD_LIBRARY_PATH=/opt/AmneziaVPN/client/lib" ""
+    substituteInPlace client/cmake/3rdparty.cmake \
+      --replace-fail 'set(LIBSSH_LIB_PATH "''${LIBSSH_ROOT_DIR}/linux/x86_64/libssh.a")' 'set(LIBSSH_LIB_PATH "${libssh}/lib/libssh.so")' \
+      --replace-fail 'set(ZLIB_LIB_PATH "''${LIBSSH_ROOT_DIR}/linux/x86_64/libz.a")' 'set(ZLIB_LIB_PATH "${zlib}/lib/libz.so")' \
+      --replace-fail 'set(OPENSSL_INCLUDE_DIR "''${OPENSSL_ROOT_DIR}/linux/include")' 'set(OPENSSL_INCLUDE_DIR "${openssl.dev}/include")' \
+      --replace-fail 'set(OPENSSL_LIB_SSL_PATH "''${OPENSSL_ROOT_DIR}/linux/x86_64/libssl.a")' 'set(OPENSSL_LIB_SSL_PATH "${openssl.out}/lib/libssl.so")' \
+      --replace-fail 'set(OPENSSL_LIB_CRYPTO_PATH "''${OPENSSL_ROOT_DIR}/linux/x86_64/libcrypto.a")' 'set(OPENSSL_LIB_CRYPTO_PATH "${openssl.out}/lib/libcrypto.so")' \
+      --replace-fail 'set(OPENSSL_USE_STATIC_LIBS TRUE)' 'set(OPENSSL_USE_STATIC_LIBS FALSE)'
+    substituteInPlace service/server/CMakeLists.txt \
+      --replace-fail 'set(OPENSSL_INCLUDE_DIR "''${OPENSSL_ROOT_DIR}/linux/include")' 'set(OPENSSL_INCLUDE_DIR "${openssl.dev}/include")' \
+      --replace-fail 'set(OPENSSL_LIB_CRYPTO_PATH "''${OPENSSL_ROOT_DIR}/linux/x86_64/libcrypto.a")' 'set(OPENSSL_LIB_CRYPTO_PATH "${openssl.out}/lib/libcrypto.so")' \
+      --replace-fail 'set(OPENSSL_USE_STATIC_LIBS TRUE)' 'set(OPENSSL_USE_STATIC_LIBS FALSE)'
+  '';
 
   strictDeps = true;
 
@@ -151,13 +162,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    inherit amnezia-tun2socks amnezia-xray;
+    inherit amnezia-tun2socks amnezia-xray awg-vendored;
     updateScript = nix-update-script {
       extraArgs = [
         "--subpackage"
         "amnezia-tun2socks"
         "--subpackage"
         "amnezia-xray"
+        "--subpackage"
+        "awg-vendored"
       ];
     };
   };
@@ -169,6 +182,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3;
     mainProgram = "AmneziaVPN";
     maintainers = with maintainers; [ sund3RRR ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 })

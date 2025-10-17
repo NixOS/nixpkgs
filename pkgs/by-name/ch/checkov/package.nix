@@ -17,6 +17,18 @@ let
           tag = "v${version}";
           hash = "sha256-nklizCiu7Nmynjd5WU5oX/v2TWy9xFVF4GkmCwFKZLI=";
         };
+
+        # The `serializable` package eventually got renamed `py_serializable`, therefore we need
+        # to patch the imports;
+        # _c.f._ https://github.com/madpah/serializable/pull/155 .
+        postPatch = ''
+          find . -name '*.py' | xargs -I{} sed -i \
+            -e 's/serializable\./py_serializable\./g' \
+            -e 's/@serializable/@py_serializable/g' \
+            -e 's/from serializable/from py_serializable/g' \
+            -e 's/import serializable/import py_serializable/g' \
+            {}
+        '';
       });
     };
   };
@@ -25,14 +37,14 @@ with py.pkgs;
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.447";
+  version = "3.2.483";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
     tag = version;
-    hash = "sha256-CSLp3ykBvTcx8xDpW5HKGtQsVQZGflXkNT3ktXb6dJU=";
+    hash = "sha256-KkJ0XfPS0vJNcI03pusYLx/nqXFeY4b6+KoT7aCokQI=";
   };
 
   pythonRelaxDeps = [
@@ -41,8 +53,8 @@ python3.pkgs.buildPythonApplication rec {
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cachetools"
     "cloudsplaining"
-    "cyclonedx-python-lib"
     "dpath"
     "igraph"
     "importlib-metadata"
@@ -187,6 +199,7 @@ python3.pkgs.buildPythonApplication rec {
       Prevent cloud misconfigurations during build-time for Terraform, Cloudformation,
       Kubernetes, Serverless framework and other infrastructure-as-code-languages.
     '';
+    mainProgram = "checkov";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       anhdle14

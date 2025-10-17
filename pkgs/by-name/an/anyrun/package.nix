@@ -3,31 +3,29 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
-  wrapGAppsHook3,
-  atk,
+  wrapGAppsHook4,
   cairo,
   gdk-pixbuf,
   glib,
-  gtk3,
+  gtk4,
   pango,
   wayland,
-  gtk-layer-shell,
+  gtk4-layer-shell,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "anyrun";
-  version = "0-unstable-2025-05-27";
+  version = "25.9.3";
 
   src = fetchFromGitHub {
-    owner = "kirottu";
+    owner = "anyrun-org";
     repo = "anyrun";
-    rev = "25367153f225a59c5ce5746583e39a71ff052f09";
-    hash = "sha256-pg0w4uOZI32dLASD6UbBezeQg5PwOa0GLv7rTwn3VxY=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-IlnFA/a9Clgbt+FuavIKWtauhtH4Fo/rGJIjJDDeYRs=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ouAeoSCmkvWgxAUA/VYITm9/XvxmN+TdyZgEGgBGdKI=";
+  cargoHash = "sha256-gP324zqfoNSYKIuTJFTWRr2fKBreVZFfZNR+jUasp/8=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -35,16 +33,15 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     pkg-config
-    wrapGAppsHook3
+    wrapGAppsHook4
   ];
 
   buildInputs = [
-    atk
     cairo
     gdk-pixbuf
     glib
-    gtk3
-    gtk-layer-shell
+    gtk4
+    gtk4-layer-shell
     pango
     wayland
   ];
@@ -59,11 +56,11 @@ rustPlatform.buildRustPackage {
     install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Wayland-native, highly customizable runner";
-    homepage = "https://github.com/kirottu/anyrun";
+    homepage = "https://github.com/anyrun-org/anyrun";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       khaneliman
@@ -72,4 +69,4 @@ rustPlatform.buildRustPackage {
     mainProgram = "anyrun";
     platforms = lib.platforms.linux;
   };
-}
+})

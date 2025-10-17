@@ -45,84 +45,83 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
+  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.42.1";
+  version = "0.43.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-dW6WgIi+3GJE4OlwxrnY8SUMCQ37eG19UGNfAU4Ts1o=";
+    hash = "sha256-Wd61Q1sG55oDxPuHJpmvSWuptwJIuzgn2sB/dzNRc1c=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-gTzonKFXo1jhTU+bX3+4/5wvvLGDHE/ppUg1ImkVpAs=";
+      vendorHash = "sha256-bjtzvEQmpsrwD0BArw9N6/HqMB3T5xeqxpx89FV7p2A=";
     }).goModules;
 
-  buildInputs =
-    [
-      harfbuzz
-      ncurses
-      simde
-      lcms2
-      librsync
-      matplotlib
-      openssl.dev
-      xxHash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libpng
-      python3
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      fontconfig
-      libunistring
-      libcanberra
-      libX11
-      libXrandr
-      libXinerama
-      libXcursor
-      libxkbcommon
-      libXi
-      libXext
-      wayland-protocols
-      wayland
-      dbus
-      libGL
-      cairo
-    ];
+  buildInputs = [
+    harfbuzz
+    ncurses
+    simde
+    lcms2
+    librsync
+    matplotlib
+    openssl.dev
+    xxHash
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libpng
+    python3
+    zlib
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    fontconfig
+    libunistring
+    libcanberra
+    libX11
+    libXrandr
+    libXinerama
+    libXcursor
+    libxkbcommon
+    libXi
+    libXext
+    wayland-protocols
+    wayland
+    dbus
+    libGL
+    cairo
+  ];
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      ncurses
-      pkg-config
-      sphinx
-      furo
-      sphinx-copybutton
-      sphinxext-opengraph
-      sphinx-inline-tabs
-      go_1_24
-      fontconfig
-      makeBinaryWrapper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      imagemagick
-      libicns # For the png2icns tool.
-      autoSignDarwinBinariesHook
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    ncurses
+    pkg-config
+    sphinx
+    furo
+    sphinx-copybutton
+    sphinxext-opengraph
+    sphinx-inline-tabs
+    go_1_24
+    fontconfig
+    makeBinaryWrapper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    imagemagick
+    libicns # For the png2icns tool.
+    autoSignDarwinBinariesHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    wayland-scanner
+  ];
 
   depsBuildBuild = [ pkg-config ];
 
@@ -143,7 +142,6 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
-
   ];
 
   hardeningDisable = [
@@ -200,19 +198,18 @@ buildPythonApplication rec {
       runHook postBuild
     '';
 
-  nativeCheckInputs =
-    [
-      pillow
+  nativeCheckInputs = [
+    pillow
 
-      # Shells needed for shell integration tests
-      bashInteractive
-      zsh
-      fish
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      # integration tests need sudo
-      sudo
-    ];
+    # Shells needed for shell integration tests
+    bashInteractive
+    zsh
+    fish
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    # integration tests need sudo
+    sudo
+  ];
 
   # skip failing tests due to darwin sandbox
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -321,7 +318,6 @@ buildPythonApplication rec {
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
     maintainers = with maintainers; [
-      tex
       rvolosatovs
       Luflosi
       kashw2

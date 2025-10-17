@@ -477,7 +477,8 @@ rec {
       "armv9.1-a" = [
         "armv9-a"
         "armv8.6-a"
-      ] ++ inferiors."armv8.6-a";
+      ]
+      ++ inferiors."armv8.6-a";
       "armv9.2-a" = lib.unique (
         [
           "armv9.1-a"
@@ -503,12 +504,14 @@ rec {
         "armv8.2-a"
         "cortex-a53"
         "cortex-a72"
-      ] ++ inferiors."armv8.2-a";
+      ]
+      ++ inferiors."armv8.2-a";
       cortex-a76 = [
         "armv8.2-a"
         "cortex-a53"
         "cortex-a72"
-      ] ++ inferiors."armv8.2-a";
+      ]
+      ++ inferiors."armv8.2-a";
 
       # Ampere
       ampere1 = withInferiors [

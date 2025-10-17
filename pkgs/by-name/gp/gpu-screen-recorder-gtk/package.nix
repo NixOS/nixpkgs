@@ -24,12 +24,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gpu-screen-recorder-gtk";
-  version = "5.7.3";
+  version = "5.7.8";
 
   src = fetchgit {
     url = "https://repo.dec05eba.com/${pname}";
     tag = version;
-    hash = "sha256-FZIS/74qIqz3qZTOixqwqe2liIt5kKBPiVRVOFzgAs4=";
+    hash = "sha256-Vzi7IfiMsBFJZaZwC1CWZkVFCfDAfU0lmO7orRLjqgU=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
-    description = "GTK frontend for gpu-screen-recorder.";
+    description = "GTK frontend for gpu-screen-recorder";
     homepage = "https://git.dec05eba.com/gpu-screen-recorder-gtk/about/";
     license = lib.licenses.gpl3Only;
     mainProgram = "gpu-screen-recorder-gtk";

@@ -7,17 +7,18 @@
   setuptools-scm,
   filelock,
   requests,
+  platformdirs,
   unicode-character-database,
 }:
 
 buildPythonPackage rec {
   pname = "youseedee";
-  version = "0.6.0";
+  version = "0.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9w6yr28zq0LgOvMp5fCFaHGOwK4wbbDo/g1jH4Uky0E=";
+    hash = "sha256-b5gxBIr/mowzlG4/N0C22S1XTq0NAGTq1/+iMUfxD18=";
   };
 
   patches = [
@@ -36,6 +37,7 @@ buildPythonPackage rec {
   dependencies = [
     filelock
     requests
+    platformdirs
   ];
 
   # Package has no unit tests, but we can check an example as per README.rst:

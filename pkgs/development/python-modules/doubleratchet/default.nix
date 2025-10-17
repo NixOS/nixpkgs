@@ -8,18 +8,19 @@
   typing-extensions,
   pytestCheckHook,
   pytest-asyncio,
+  pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "doubleratchet";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Syndace";
     repo = "python-doubleratchet";
     tag = "v${version}";
-    hash = "sha256-yoph3u7LjGjSPi1hFlXzWmSNkCXvY/ocTt2MKa+F1fs=";
+    hash = "sha256-TgkRityDMSzyF6ihM63lAGCSrCHCHrsbCyGYUaObvDU=";
   };
 
   strictDeps = true;
@@ -37,6 +38,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
+    pytest-cov-stub
   ];
 
   pythonImportsCheck = [ "doubleratchet" ];

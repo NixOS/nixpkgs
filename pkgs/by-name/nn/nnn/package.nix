@@ -52,24 +52,24 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
   ];
-  buildInputs =
-    [
-      readline
-      ncurses
-    ]
-    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
-    ++ lib.optional withPcre pcre;
+  buildInputs = [
+    readline
+    ncurses
+  ]
+  ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
+  ++ lib.optional withPcre pcre;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 
-  makeFlags =
-    [ "PREFIX=$(out)" ]
-    ++ lib.optionals withIcons [ "O_ICONS=1" ]
-    ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
-    ++ lib.optionals withEmojis [ "O_EMOJI=1" ]
-    ++ lib.optionals withPcre [ "O_PCRE=1" ]
-    ++ extraMakeFlags;
+  makeFlags = [
+    "PREFIX=$(out)"
+  ]
+  ++ lib.optionals withIcons [ "O_ICONS=1" ]
+  ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
+  ++ lib.optionals withEmojis [ "O_EMOJI=1" ]
+  ++ lib.optionals withPcre [ "O_PCRE=1" ]
+  ++ extraMakeFlags;
 
   binPath = lib.makeBinPath [
     file

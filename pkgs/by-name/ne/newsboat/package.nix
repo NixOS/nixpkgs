@@ -19,17 +19,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "newsboat";
-  version = "2.39";
+  version = "2.41";
 
   src = fetchFromGitHub {
     owner = "newsboat";
     repo = "newsboat";
-    rev = "r${finalAttrs.version}";
-    hash = "sha256-ypAn9Z27S20f82wqsZIELO1DHN0deqcTHYA77ddtb8g=";
+    tag = "r${finalAttrs.version}";
+    hash = "sha256-LhEhbK66OYwAD/pel81N7Hgh/xEvnFR8GlZzgqZIe5M=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-LDv5Rrv5ZKs7cspPTWt49omvLWY01y1TDGrfl7Jea3g=";
+  cargoHash = "sha256-CyhyzNw2LXwIVf/SX2rQRvEex5LmjZfZKgCe88jthz0=";
 
   # TODO: Check if that's still needed
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -38,30 +37,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace "ncurses5.4" "ncurses"
   '';
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      asciidoctor
-      gettext
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      makeWrapper
-      ncurses
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    gettext
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    makeWrapper
+    ncurses
+  ];
 
-  buildInputs =
-    [
-      stfl
-      sqlite
-      curl
-      libxml2
-      json_c
-      ncurses
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-      gettext
-    ];
+  buildInputs = [
+    stfl
+    sqlite
+    curl
+    libxml2
+    json_c
+    ncurses
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+    gettext
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=deprecated-declarations" ];
 
@@ -82,15 +79,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     make -j $NIX_BUILD_CORES test
   '';
 
-  postInstall =
-    ''
-      make -j $NIX_BUILD_CORES prefix="$out" install
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      for prog in $out/bin/*; do
-        wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
-      done
-    '';
+  postInstall = ''
+    make -j $NIX_BUILD_CORES prefix="$out" install
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    for prog in $out/bin/*; do
+      wrapProgram "$prog" --prefix DYLD_LIBRARY_PATH : "${stfl}/lib"
+    done
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
@@ -105,7 +101,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     homepage = "https://newsboat.org/";
-    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/newsboat/newsboat/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     description = "Fork of Newsbeuter, an RSS/Atom feed reader for the text console";
     maintainers = with lib.maintainers; [
       dotlambda

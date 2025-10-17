@@ -18,6 +18,7 @@
   pkg-config,
   bash-completion,
   help2man,
+  nix-update-script,
   sendmailPath ? "/run/wrappers/bin/sendmail",
 }:
 
@@ -29,14 +30,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "debian-devscripts";
-  version = "2.25.15";
+  version = "2.25.19";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "debian";
     repo = "devscripts";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s2QSfJyHsFr1eiia/yFj3jsS5k38xNewEe/g5PFpqag=";
+    hash = "sha256-xRWWdM2l1F1Z7U+ThxWvH5wL2ZY+sR8+Jx6h/7mo9dQ=";
   };
 
   patches = [
@@ -51,44 +52,47 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace scripts/debrebuild.pl \
       --replace-fail "/usr/bin/perl" "${perlPackages.perl}/bin/perl"
     patchShebangs scripts
+  ''
+  +
     # Remove man7 target to avoid missing *.7 file error
-    substituteInPlace doc/Makefile \
-      --replace-fail " install_man7" ""
-  '';
+    ''
+      substituteInPlace doc/Makefile \
+        --replace-fail " install_man7" ""
+    '';
 
   nativeBuildInputs = [
     makeWrapper
     pkg-config
   ];
 
-  buildInputs =
-    [
-      xz
-      dpkg
-      libxslt
-      python
-      setuptools
-      curl
-      gnupg
-      diffutils
-      bash-completion
-      help2man
-    ]
-    ++ (with perlPackages; [
-      perl
-      CryptSSLeay
-      LWP
-      TimeDate
-      DBFile
-      FileDesktopEntry
-      ParseDebControl
-      LWPProtocolHttps
-      Moo
-      FileHomeDir
-      IPCRun
-      FileDirList
-      FileTouch
-    ]);
+  buildInputs = [
+    xz
+    dpkg
+    libxslt
+    python
+    setuptools
+    curl
+    gnupg
+    diffutils
+    bash-completion
+    help2man
+  ]
+  ++ (with perlPackages; [
+    perl
+    CryptSSLeay
+    LWP
+    TimeDate
+    DBFile
+    FileDesktopEntry
+    ParseDebControl
+    LWPProtocolHttps
+    Moo
+    FileHomeDir
+    IPCRun
+    FileDirList
+    FileTouch
+    IOString
+  ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -96,11 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$tgtpy"
     export PYTHONPATH="$PYTHONPATH''${PYTHONPATH:+:}$tgtpy"
     find lib po4a scripts -type f -exec sed -r \
-      -e "s@/usr/bin/gpg(2|)@${gnupg}/bin/gpg@g" \
+      -e "s@/usr/bin/gpg(2|)@${lib.getExe' gnupg "gpg"}@g" \
       -e "s@/usr/(s|)bin/sendmail@${sendmailPath}@g" \
-      -e "s@/usr/bin/diff@${diffutils}/bin/diff@g" \
-      -e "s@/usr/bin/gpgv(2|)@${gnupg}/bin/gpgv@g" \
-      -e "s@(command -v|/usr/bin/)curl@${curl.bin}/bin/curl@g" \
+      -e "s@/usr/bin/diff@${lib.getExe' diffutils "diff"}@g" \
+      -e "s@/usr/bin/gpgv(2|)@${lib.getExe' gnupg "gpgv"}@g" \
+      -e "s@(command -v|/usr/bin/)curl@${lib.getExe curl}@g" \
       -e "s@sensible-editor@${sensible-editor}@g" \
       -e "s@(^|\W)/bin/bash@\1${stdenv.shell}@g" \
       -i {} +
@@ -131,6 +135,13 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s debchange $out/bin/dch
     ln -s pts-subscribe $out/bin/pts-unsubscribe
   '';
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^v([0-9.]+)$"
+    ];
+  };
 
   meta = {
     description = "Debian package maintenance scripts";

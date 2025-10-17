@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -9,16 +10,16 @@
 
 buildGoModule rec {
   pname = "karmor";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchFromGitHub {
     owner = "kubearmor";
     repo = "kubearmor-client";
     rev = "v${version}";
-    hash = "sha256-g60T9npfU1uwQvs95ntRrwwfxXeC67C0iF867ki3WAI=";
+    hash = "sha256-BlMWbd+c/dW3nrG9mQn4lfyXvauJ4GCcJypp+SMfAuY=";
   };
 
-  vendorHash = "sha256-4F/q6vYOGtLef+rrJXKhLwjM71NMNI4es4dKe1pohZU=";
+  vendorHash = "sha256-SZAJsstFUtZi+/sSkgmvFSjd4115YKsPuPEksWxE9D0=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -34,6 +35,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/{kubearmor-client,karmor}
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd karmor \
       --bash <($out/bin/karmor completion bash) \
       --fish <($out/bin/karmor completion fish) \

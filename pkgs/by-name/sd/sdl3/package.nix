@@ -50,7 +50,6 @@
     config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   libudevSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   sndioSupport ? false,
-  testSupport ? true,
   traySupport ? true,
   waylandSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   x11Support ? !stdenv.hostPlatform.isAndroid && !stdenv.hostPlatform.isWindows,
@@ -63,29 +62,26 @@ assert lib.assertMsg (ibusSupport -> dbusSupport) "SDL3 requires dbus support to
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdl3";
-  version = "3.2.16";
+  version = "3.2.22";
 
-  outputs =
-    [
-      "lib"
-      "dev"
-      "out"
-    ]
-    ++ lib.optionals testSupport [
-      "installedTests"
-    ];
+  outputs = [
+    "lib"
+    "dev"
+    "out"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "libsdl-org";
     repo = "SDL";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-xFWE/i4l3sU1KritwbqvN67kJ3/WUfNP3iScMfQUbwA=";
+    hash = "sha256-4jGfw2hNZTGuae2DMLz8xJBtfNu5abIN5GlNIKDOUpw=";
   };
 
   postPatch =
     # Tests timeout on Darwin
     # `testtray` loads assets from a relative path, which we are patching to be absolute
-    lib.optionalString testSupport ''
+    lib.optionalString (finalAttrs.finalPackage.doCheck) ''
       substituteInPlace test/CMakeLists.txt \
         --replace-fail 'set(noninteractive_timeout 10)' 'set(noninteractive_timeout 30)'
 
@@ -105,26 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     ninja
     validatePkgConfig
-  ] ++ lib.optional waylandSupport wayland-scanner;
+  ]
+  ++ lib.optional waylandSupport wayland-scanner;
 
   buildInputs =
-    finalAttrs.dlopenBuildInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
-      (darwinMinVersionHook "11.0")
-
-      apple-sdk_11
-    ]
-    ++ lib.optionals ibusSupport [
-      # sdl3 only uses some constants of the ibus headers
-      # it never actually loads the library
-      # thus, it also does not have to care about gtk integration,
-      # so using ibusMinimal avoids an unnecessarily large closure here.
-      ibusMinimal
-    ]
-    ++ lib.optional waylandSupport zenity;
-
-  dlopenBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       libusb1
     ]
@@ -150,6 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals x11Support [
       xorg.libX11
+      xorg.libxcb
       xorg.libXScrnSaver
       xorg.libXcursor
       xorg.libXext
@@ -162,7 +143,20 @@ stdenv.mkDerivation (finalAttrs: {
       vulkan-loader
     ]
     ++ lib.optional (openglSupport && !stdenv.hostPlatform.isDarwin) libGL
-    ++ lib.optional x11Support xorg.libX11;
+    ++ lib.optional x11Support xorg.libX11
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # error: 'MTLPixelFormatASTC_4x4_LDR' is unavailable: not available on macOS
+      (darwinMinVersionHook "11.0")
+
+      apple-sdk_11
+    ]
+    ++ lib.optionals ibusSupport [
+      # sdl3 only uses some constants of the ibus headers
+      # it never actually loads the library
+      # thus, it also does not have to care about gtk integration,
+      # so using ibusMinimal avoids an unnecessarily large closure here.
+      ibusMinimal
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "SDL_ALSA" alsaSupport)
@@ -175,33 +169,22 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "SDL_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "SDL_SNDIO" sndioSupport)
-    (lib.cmakeBool "SDL_TEST_LIBRARY" testSupport)
+    (lib.cmakeBool "SDL_TEST_LIBRARY" true)
     (lib.cmakeBool "SDL_TRAY_DUMMY" (!traySupport))
     (lib.cmakeBool "SDL_WAYLAND" waylandSupport)
     (lib.cmakeBool "SDL_WAYLAND_LIBDECOR" libdecorSupport)
     (lib.cmakeBool "SDL_X11" x11Support)
 
-    (lib.cmakeBool "SDL_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeBool "SDL_INSTALL_TESTS" testSupport)
+    (lib.cmakeBool "SDL_TESTS" true)
+    (lib.cmakeBool "SDL_INSTALL_TESTS" true)
+    (lib.cmakeBool "SDL_DEPS_SHARED" false)
   ];
 
-  doCheck = testSupport && stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doCheck = true;
 
-  # See comment below. We actually *do* need these RPATH entries
-  dontPatchELF = true;
-
-  env = {
-    # Many dependencies are not directly linked to, but dlopen()'d at runtime. Adding them to the RPATH
-    # helps them be found
-    NIX_LDFLAGS = lib.optionalString (
-      stdenv.hostPlatform.hasSharedLibraries && stdenv.hostPlatform.extensions.sharedLibrary == ".so"
-    ) "-rpath ${lib.makeLibraryPath (finalAttrs.dlopenBuildInputs)}";
-  };
-
-  postInstall = lib.optionalString testSupport ''
+  postInstall = ''
     moveToOutput "share/installed-tests" "$installedTests"
     moveToOutput "libexec/installed-tests" "$installedTests"
-    install -Dm 444 -t $installedTests/share/assets test/*.bmp
   '';
 
   passthru = {

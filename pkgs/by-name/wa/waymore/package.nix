@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waymore";
-  version = "4.7";
-  format = "setuptools";
+  version = "6.2";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "waymore";
     tag = "v${version}";
-    hash = "sha256-oaswuXQPdAl2XExwEWnSN15roqNj9OVUr1Y1vsX461o=";
+    hash = "sha256-5fpG+ulSt/pTUQ3upzyitjkAc3x3jJi/JFblW6M/FUs=";
   };
 
   preBuild = ''
@@ -26,6 +26,11 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
+  pythonRemoveDeps = [
+    # python already provides urllib.parse
+    "urlparse3"
+  ];
+
   dependencies = with python3Packages; [
     requests
     termcolor
@@ -34,6 +39,8 @@ python3Packages.buildPythonApplication rec {
     uritools
     tldextract
   ];
+
+  pythonImportsCheck = [ "waymore.waymore" ];
 
   passthru.tests.version = testers.testVersion {
     package = waymore;

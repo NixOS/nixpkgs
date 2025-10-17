@@ -26,7 +26,7 @@ let
   src = fetchFromGitHub {
     owner = "M0rf30";
     repo = "cie-middleware-linux";
-    rev = version;
+    tag = version;
     hash = "sha256-2UMKxanF35oBNBtIqfU46QUYJwXiTU1xCrCMqzqetgI=";
   };
 
@@ -120,7 +120,7 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin"
     makeWrapper "${jre}/bin/java" "$out/bin/cieid" \
       --add-flags "-Djna.library.path='$out/lib:${libraries}'" \
-      --add-flags '-Dawt.useSystemAAFontSettings=on' \
+      --add-flags "-Dawt.useSystemAAFontSettings=gasp" \
       --add-flags "-cp $out/share/cieid/cieid.jar" \
       --add-flags "app.m0rf30.cieid.MainApplication"
 

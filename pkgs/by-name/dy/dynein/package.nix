@@ -21,7 +21,6 @@ rustPlatform.buildRustPackage rec {
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-PA7Hvn+vYBD80thkIamwOhw4lJWAmU/TQBnwJro4r7c=";
 
   nativeBuildInputs = [ pkg-config ];
@@ -47,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/awslabs/dynein";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pimeys ];
+    maintainers = [ ];
   };
 }

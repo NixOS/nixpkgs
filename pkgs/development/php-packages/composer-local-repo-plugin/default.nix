@@ -27,7 +27,7 @@ php.buildComposerWithPlugin {
     homepage = "https://github.com/nix-community/composer-local-repo-plugin";
     license = lib.licenses.mit;
     mainProgram = "composer";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

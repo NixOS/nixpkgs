@@ -2,8 +2,6 @@
   lib,
   stdenv,
   buildPackages,
-  runCommand,
-  nettools,
   bc,
   bison,
   flex,
@@ -23,8 +21,8 @@
   kmod,
   ubootTools,
   fetchpatch,
-  rustc,
-  rust-bindgen,
+  rustc-unwrapped,
+  rust-bindgen-unwrapped,
   rustPlatform,
 }:
 
@@ -34,16 +32,18 @@ let
 
   readConfig =
     configfile:
-    import
-      (runCommand "config.nix" { } ''
-        echo "{" > "$out"
-        while IFS='=' read key val; do
-          [ "x''${key#CONFIG_}" != "x$key" ] || continue
-          no_firstquote="''${val#\"}";
-          echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-        done < "${configfile}"
-        echo "}" >> $out
-      '').outPath;
+    let
+      matchLine =
+        line:
+        let
+          match = lib.match "(CONFIG_[^=]+)=([ym])" line;
+        in
+        lib.optional (match != null) {
+          name = lib.elemAt match 0;
+          value = lib.elemAt match 1;
+        };
+    in
+    lib.listToAttrs (lib.concatMap matchLine (lib.splitString "\n" (builtins.readFile configfile)));
 in
 lib.makeOverridable (
   {
@@ -66,7 +66,9 @@ lib.makeOverridable (
     configfile,
     # Manually specified nixexpr representing the config
     # If unspecified, this will be autodetected from the .config
-    config ? lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+    config ? lib.optionalAttrs (builtins.isPath configfile || allowImportFromDerivation) (
+      readConfig configfile
+    ),
     # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
     # automatically extended with extra per-version and per-config values.
     randstructSeed ? "",
@@ -161,28 +163,30 @@ lib.makeOverridable (
         buildDTBs = kernelConf.DTB or false;
 
         # Dependencies that are required to build kernel modules
-        moduleBuildDependencies =
-          [
-            pahole
-            perl
-            elfutils
-            # module makefiles often run uname commands to find out the kernel version
-            (buildPackages.deterministic-uname.override { inherit modDirVersion; })
-          ]
-          ++ optional (lib.versionAtLeast version "5.13") zstd
-          ++ optionals withRust [
-            rustc
-            rust-bindgen
-          ];
+        moduleBuildDependencies = [
+          pahole
+          perl
+          elfutils
+          # module makefiles often run uname commands to find out the kernel version
+          (buildPackages.deterministic-uname.override { inherit modDirVersion; })
+        ]
+        ++ optional (lib.versionAtLeast version "5.13") zstd
+        ++ optionals withRust [
+          rustc-unwrapped
+          rust-bindgen-unwrapped
+        ];
 
       in
       (optionalAttrs isModular {
         outputs = [
           "out"
           "dev"
+          "modules"
         ];
       })
       // {
+        __structuredAttrs = true;
+
         passthru = rec {
           inherit
             version
@@ -208,43 +212,44 @@ lib.makeOverridable (
         inherit src;
 
         depsBuildBuild = [ buildPackages.stdenv.cc ];
-        nativeBuildInputs =
-          [
-            bison
-            flex
-            perl
-            bc
-            nettools
-            openssl
-            rsync
-            gmp
-            libmpc
-            mpfr
-            elfutils
-            zstd
-            python3Minimal
-            kmod
-            hexdump
-          ]
-          ++ optional needsUbootTools ubootTools
-          ++ optionals (lib.versionAtLeast version "5.2") [
-            cpio
-            pahole
-            zlib
-          ]
-          ++ optionals withRust [
-            rustc
-            rust-bindgen
-          ];
+        nativeBuildInputs = [
+          bison
+          flex
+          perl
+          bc
+          openssl
+          rsync
+          gmp
+          libmpc
+          mpfr
+          elfutils
+          zstd
+          python3Minimal
+          kmod
+          hexdump
+        ]
+        ++ optional needsUbootTools ubootTools
+        ++ optionals (lib.versionAtLeast version "5.2") [
+          cpio
+          pahole
+          zlib
+        ]
+        ++ optionals withRust [
+          rustc-unwrapped
+          rust-bindgen-unwrapped
+        ];
 
-        RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
+        env = {
+          RUST_LIB_SRC = lib.optionalString withRust rustPlatform.rustLibSrc;
 
-        # avoid leaking Rust source file names into the final binary, which adds
-        # a false dependency on rust-lib-src on targets with uncompressed kernels
-        KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+          # avoid leaking Rust source file names into the final binary, which adds
+          # a false dependency on rust-lib-src on targets with uncompressed kernels
+          KRUSTFLAGS = lib.optionalString withRust "--remap-path-prefix ${rustPlatform.rustLibSrc}=/";
+        };
 
         patches =
-          map (p: p.patch) kernelPatches
+          # kernelPatches can contain config changes and no actual patch
+          lib.filter (p: p != null) (map (p: p.patch) kernelPatches)
           # Required for deterministic builds along with some postPatch magic.
           ++ optional (lib.versionOlder version "5.19") ./randstruct-provide-seed.patch
           ++ optional (lib.versionAtLeast version "5.19") ./randstruct-provide-seed-5.19.patch
@@ -310,43 +315,42 @@ lib.makeOverridable (
 
           # reads the existing .config file and prompts the user for options in
           # the current kernel source that are not found in the file.
-          make $makeFlags "''${makeFlagsArray[@]}" oldconfig
+          make "''${makeFlags[@]}" oldconfig
           runHook postConfigure
 
-          make $makeFlags "''${makeFlagsArray[@]}" prepare
+          make "''${makeFlags[@]}" prepare
           actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
           if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
             echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
             exit 1
           fi
 
-          buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
+          buildFlags+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
 
           cd $buildRoot
         '';
 
-        buildFlags =
-          [
-            "KBUILD_BUILD_VERSION=1-NixOS"
-            kernelConf.target
-            "vmlinux" # for "perf" and things like that
-          ]
-          ++ optional isModular "modules"
-          ++ optionals buildDTBs [
-            "dtbs"
-            "DTC_FLAGS=-@"
-          ]
-          ++ extraMakeFlags;
+        buildFlags = [
+          "KBUILD_BUILD_VERSION=1-NixOS"
+          kernelConf.target
+          "vmlinux" # for "perf" and things like that
+          "scripts_gdb"
+        ]
+        ++ optional isModular "modules"
+        ++ optionals buildDTBs [
+          "dtbs"
+          "DTC_FLAGS=-@"
+        ]
+        ++ extraMakeFlags;
 
-        installFlags =
-          [
-            "INSTALL_PATH=$(out)"
-          ]
-          ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
-          ++ optionals buildDTBs [
-            "dtbs_install"
-            "INSTALL_DTBS_PATH=$(out)/dtbs"
-          ];
+        installFlags = [
+          "INSTALL_PATH=${placeholder "out"}"
+        ]
+        ++ (optional isModular "INSTALL_MOD_PATH=${placeholder "modules"}")
+        ++ optionals buildDTBs [
+          "dtbs_install"
+          "INSTALL_DTBS_PATH=${placeholder "out"}/dtbs"
+        ];
 
         preInstall =
           let
@@ -402,7 +406,7 @@ lib.makeOverridable (
             '';
           in
           ''
-            installFlagsArray+=("-j$NIX_BUILD_CORES")
+            installFlags+=("-j$NIX_BUILD_CORES")
             export HOME=${installkernel}
           '';
 
@@ -438,13 +442,15 @@ lib.makeOverridable (
         postInstall = optionalString isModular ''
           mkdir -p $dev
           cp vmlinux $dev/
+
+          mkdir -p $dev/lib/modules/${modDirVersion}/build/scripts
+          cp -rL ../scripts/gdb/ $dev/lib/modules/${modDirVersion}/build/scripts
+
           if [ -z "''${dontStrip-}" ]; then
-            installFlagsArray+=("INSTALL_MOD_STRIP=1")
+            installFlags+=("INSTALL_MOD_STRIP=1")
           fi
-          make modules_install $makeFlags "''${makeFlagsArray[@]}" \
-            $installFlags "''${installFlagsArray[@]}"
-          unlink $out/lib/modules/${modDirVersion}/build
-          rm -f $out/lib/modules/${modDirVersion}/source
+          make modules_install "''${makeFlags[@]}" "''${installFlags[@]}"
+          unlink $modules/lib/modules/${modDirVersion}/build
 
           mkdir -p $dev/lib/modules/${modDirVersion}/{build,source}
 
@@ -456,7 +462,7 @@ lib.makeOverridable (
           cd $dev/lib/modules/${modDirVersion}/source
 
           cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
-          make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
+          make modules_prepare "''${makeFlags[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
           # For reproducibility, removes accidental leftovers from a `cc1` call
           # from a `try-run` call from the Makefile
@@ -465,6 +471,7 @@ lib.makeOverridable (
           # Keep some extra files on some arches (powerpc, aarch64)
           for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
             if [ -f "$buildRoot/$f" ]; then
+              mkdir -p "$(dirname $dev/lib/modules/${modDirVersion}/build/$f)"
               cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
             fi
           done
@@ -476,12 +483,12 @@ lib.makeOverridable (
           # headers on 3.10 though.
 
           chmod u+w -R ..
-          arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
+          buildArchDir="$dev/lib/modules/${modDirVersion}/build/arch"
 
           # Remove unused arches
           for d in $(cd arch/; ls); do
-            if [ "$d" = "$arch" ]; then continue; fi
-            if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
+            if [ -d "$buildArchDir/$d" ]; then continue; fi
+            if [ -d "$buildArchDir/arm64" ] && [ "$d" = arm ]; then continue; fi
             rm -rf arch/$d
           done
 
@@ -495,7 +502,7 @@ lib.makeOverridable (
           find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
           # Keep root and arch-specific Makefiles
-          chmod u-w Makefile arch/"$arch"/Makefile*
+          chmod u-w Makefile arch/*/Makefile*
 
           # Keep whole scripts dir
           chmod u-w -R scripts
@@ -533,24 +540,25 @@ lib.makeOverridable (
             ]
             ++ lib.optional (lib.versionOlder version "5.19") "loongarch64-linux";
           timeout = 14400; # 4 hours
-        } // extraMeta;
+          identifiers.cpeParts = {
+            part = "o";
+            vendor = "linux";
+            product = "linux_kernel";
+            inherit version;
+            update = "*";
+          };
+        }
+        // extraMeta;
       };
 
-    # Absolute paths for compilers avoid any PATH-clobbering issues.
-    commonMakeFlags =
-      [
-        "ARCH=${stdenv.hostPlatform.linuxArch}"
-        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      ]
-      ++ lib.optionals (stdenv.isx86_64 && stdenv.cc.bintools.isLLVM) [
-        # The wrapper for ld.lld breaks linking the kernel. We use the
-        # unwrapped linker as workaround. See:
-        #
-        # https://github.com/NixOS/nixpkgs/issues/321667
-        "LD=${stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ld"
-      ]
-      ++ (stdenv.hostPlatform.linux-kernel.makeFlags or [ ])
-      ++ extraMakeFlags;
+    commonMakeFlags = import ./common-flags.nix {
+      inherit
+        lib
+        stdenv
+        buildPackages
+        extraMakeFlags
+        ;
+    };
   in
 
   stdenv.mkDerivation (
@@ -572,7 +580,22 @@ lib.makeOverridable (
 
         makeFlags = [
           "O=$(buildRoot)"
-        ] ++ commonMakeFlags;
+
+          # We have a `modules` variable in the environment for our
+          # split output, but the kernel Makefiles also define their
+          # own `modules` variable. Their definition wins, but Make
+          # remembers that the variable was originally from the
+          # environment and exports it to all the build recipes. This
+          # breaks the build with an “Argument list too long” error due
+          # to passing the huge list of every module object file in the
+          # environment of every process invoked by every build recipe.
+          #
+          # We use `--eval` here to undefine the inherited environment
+          # variable before any Makefiles are read, ensuring that the
+          # kernel’s definition creates a new, unexported variable.
+          "--eval=undefine modules"
+        ]
+        ++ commonMakeFlags;
 
         passthru = { inherit commonMakeFlags; };
 

@@ -109,15 +109,15 @@ stdenv.mkDerivation {
       cp -a * $out/share/1password
 
       # Desktop file
-      install -Dt $out/share/applications resources/${pname}.desktop
-      substituteInPlace $out/share/applications/${pname}.desktop \
-        --replace 'Exec=/opt/1Password/${pname}' 'Exec=${pname}'
+      install -Dt $out/share/applications resources/1password.desktop
+      substituteInPlace $out/share/applications/1password.desktop \
+        --replace-fail 'Exec=/opt/1Password/1password' 'Exec=1password'
 
     ''
     + (lib.optionalString (polkitPolicyOwners != [ ]) ''
       # Polkit file
         mkdir -p $out/share/polkit-1/actions
-        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace "\''${POLICY_OWNERS}" "${policyOwners}"
+        substitute com.1password.1Password.policy.tpl $out/share/polkit-1/actions/com.1password.1Password.policy --replace-fail "\''${POLICY_OWNERS}" "${policyOwners}"
     '')
     + ''
 
@@ -146,12 +146,8 @@ stdenv.mkDerivation {
     makeShellWrapper $out/share/1password/1password $out/bin/1password \
       "''${gappsWrapperArgs[@]}" \
       --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]}
-      # Currently half broken on wayland (e.g. no copy functionality)
-      # See: https://github.com/NixOS/nixpkgs/pull/232718#issuecomment-1582123406
-      # Remove this comment when upstream fixes:
-      # https://1password.community/discussion/comment/624011/#Comment_624011
-      #--add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ udev ]} \
+      --add-flags "\''${NIXOS_OZONE_WL:+--ozone-platform-hint=auto}"
   '';
 
   passthru.updateScript = ./update.sh;

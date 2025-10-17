@@ -19,8 +19,8 @@
     #
     # Ensure you also check ../mattermostLatest/package.nix.
     regex = "^v(10\\.5\\.[0-9]+)$";
-    version = "10.5.8";
-    srcHash = "sha256-yzC+QyGs8bynEOyZejMElh/gRKakUhw21eiqiah0K5s=";
+    version = "10.5.11";
+    srcHash = "sha256-2XX6SNWlu+2Kh0rJodp0Ipzu8/gdjygCxeD2BVYDcTc=";
     vendorHash = "sha256-uryErnXPVd/gmiAk0F2DVaqz368H6j97nBn0eNW7DFk=";
     npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
     lockfileOverlay = ''
@@ -192,15 +192,14 @@ buildMattermost rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--version-regex"
+        versionInfo.regex
+      ]
+      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+        "--override-filename"
+        versionInfo.autoUpdate
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
 
@@ -250,7 +249,7 @@ buildMattermost rec {
   };
 
   meta = {
-    description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
+    description = "Open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with lib.licenses; [
       agpl3Only

@@ -3,23 +3,32 @@
   buildGoModule,
   fetchFromGitLab,
   installShellFiles,
+  makeBinaryWrapper,
   stdenv,
   nix-update-script,
   writableTmpDirAsHomeHook,
+  versionCheckHook,
+  gitMinimal,
 }:
 
 buildGoModule (finalAttrs: {
   pname = "glab";
-  version = "1.61.0";
+  version = "1.73.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-pouFnmHCfRFDy+MMbRI82o73jO8hRewHeXgGnJ4hnww=";
+    hash = "sha256-2beWB7QD2oeGZIjDWxKyqZLGzNJKWlRuqA1h7GRu1G4=";
+    leaveDotGit = true;
+    postFetch = ''
+      cd "$out"
+      git rev-parse --short HEAD > $out/COMMIT
+      find "$out" -name .git -print0 | xargs -0 rm -rf
+    '';
   };
 
-  vendorHash = "sha256-COp4RebkU36OChbZFeLALUppXqHLRbrm3D64Hb5RmI4=";
+  vendorHash = "sha256-pQK3cRNxvGm+NH4zBlw8jm+fPgSg65FIe7zxZ99jl5Q=";
 
   ldflags = [
     "-s"
@@ -27,11 +36,16 @@ buildGoModule (finalAttrs: {
     "-X main.version=${finalAttrs.version}"
   ];
 
-  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+  preBuild = ''
+    ldflags+=" -X main.commit=$(cat COMMIT)"
+  '';
+
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
   subPackages = [ "cmd/glab" ];
-
-  nativeBuildInputs = [ installShellFiles ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     make manpage
@@ -40,7 +54,26 @@ buildGoModule (finalAttrs: {
       --bash <($out/bin/glab completion -s bash) \
       --fish <($out/bin/glab completion -s fish) \
       --zsh <($out/bin/glab completion -s zsh)
+
+    wrapProgram $out/bin/glab \
+      --set-default GLAB_CHECK_UPDATE 0 \
+      --set-default GLAB_SEND_TELEMETRY 0
   '';
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  preCheck = ''
+    git init
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    gitMinimal
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckProgramArg = "version";
+  versionCheckKeepEnvironment = [ "HOME" ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -52,6 +85,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       freezeboy
       luftmensch-luftmensch
+      anthonyroussel
     ];
     mainProgram = "glab";
   };

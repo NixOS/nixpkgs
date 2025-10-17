@@ -52,10 +52,11 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  makeFlags =
-    [ "PREFIX=$(out)" ]
-    ++ lib.optional withLibui "USE_LIBUI=yes"
-    ++ lib.optional withUdisks "USE_UDISKS2=yes";
+  makeFlags = [
+    "PREFIX=$(out)"
+  ]
+  ++ lib.optional withLibui "USE_LIBUI=yes"
+  ++ lib.optional withUdisks "USE_UDISKS2=yes";
 
   meta = with lib; {
     description = "Very minimal GUI app that can write compressed disk images to USB drives";

@@ -14,7 +14,7 @@
 
   # tests
   cython,
-  git,
+  gitMinimal,
   pytestCheckHook,
   pytest-mock,
 }:
@@ -42,17 +42,19 @@ buildPythonPackage rec {
     meson
     ninja
     pyproject-metadata
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   dependencies = [
     meson
     ninja
     pyproject-metadata
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
     cython
-    git
+    gitMinimal
     pytestCheckHook
     pytest-mock
   ];

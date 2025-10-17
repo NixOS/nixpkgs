@@ -7,7 +7,6 @@
   pkg-config,
   ninja,
   gtest,
-
   curl,
   freetype,
   giflib,
@@ -34,11 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "LibreSprite";
     repo = "LibreSprite";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-jXjrA859hR46Cp5qi6Z1C+hLWCUR7yGlASOGlTveeW8=";
   };
-
+  patches = [
+    # From https://github.com/LibreSprite/LibreSprite/pull/565
+    ./cmake4.diff
+  ];
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -46,31 +48,31 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  buildInputs =
-    [
-      curl
-      freetype
-      giflib
-      libjpeg
-      libpng
-      libwebp
-      libarchive
-      libX11
-      pixman
-      tinyxml-2
-      zlib
-      SDL2
-      SDL2_image
-      lua
-      # no v8 due to missing libplatform and libbase
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      xorg.libXi
-    ];
+  buildInputs = [
+    curl
+    freetype
+    giflib
+    libjpeg
+    libpng
+    libwebp
+    libarchive
+    libX11
+    pixman
+    tinyxml-2
+    zlib
+    SDL2
+    SDL2_image
+    lua
+    # no v8 due to missing libplatform and libbase
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    xorg.libXi
+  ];
 
   cmakeFlags = [
     "-DWITH_DESKTOP_INTEGRATION=ON"
     "-DWITH_WEBP_SUPPORT=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isDarwin "format";

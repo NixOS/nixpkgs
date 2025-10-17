@@ -43,29 +43,28 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      geocode-glib_2
-      gexiv2
-      granite
-      gtk3
-      libexif
-      libgee
-      libgphoto2
-      libgudev
-      libhandy
-      libportal-gtk3
-      libraw
-      libwebp
-      sqlite
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    geocode-glib_2
+    gexiv2
+    granite
+    gtk3
+    libexif
+    libgee
+    libgphoto2
+    libgudev
+    libhandy
+    libportal-gtk3
+    libraw
+    libwebp
+    sqlite
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   passthru = {
     updateScript = nix-update-script { };

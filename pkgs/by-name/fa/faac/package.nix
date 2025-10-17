@@ -1,27 +1,24 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   autoreconfHook,
   mp4v2Support ? true,
   mp4v2,
-  drmSupport ? false, # Digital Radio Mondiale
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "faac";
-  version = "1.30";
+  version = "1.31.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/faac/${pname}-${
-      builtins.replaceStrings [ "." ] [ "_" ] version
-    }.tar.gz";
-    sha256 = "1lmj0dib3mjp84jhxc5ddvydkzzhb0gfrdh3ikcidjlcb378ghxd";
+  src = fetchFromGitHub {
+    owner = "knik0";
+    repo = "faac";
+    tag = "faac-${finalAttrs.version}";
+    hash = "sha256-mSdFnmOOpCJ9lvX1vLyAZdK7m+0cUSdLTScGs+Sh1Rc=";
   };
 
-  configureFlags =
-    lib.optional mp4v2Support "--with-external-mp4v2"
-    ++ lib.optional drmSupport "--enable-drm";
+  configureFlags = lib.optional mp4v2Support "--with-external-mp4v2";
 
   hardeningDisable = [ "format" ];
 
@@ -38,4 +35,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ codyopel ];
     platforms = platforms.all;
   };
-}
+})

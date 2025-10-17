@@ -11,6 +11,7 @@
   ninja,
   pkg-config,
   rustc,
+  rustPlatform,
   wrapGAppsHook4,
   glib,
   gst_all_1,
@@ -36,6 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
     glycin-loaders.passthru.glycinPathsPatch
   ];
 
+  cargoVendorDir = "vendor";
+
   nativeBuildInputs = [
     cargo
     desktop-file-utils
@@ -45,6 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     rustc
+    rustPlatform.cargoSetupHook
     wrapGAppsHook4
   ];
 
@@ -69,6 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
       '.files."src/sandbox.rs" = $hash' \
       vendor/glycin/.cargo-checksum.json \
       | sponge vendor/glycin/.cargo-checksum.json
+
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()" \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
   '';
 
   preFixup = ''
@@ -79,6 +87,9 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
     )
   '';
+
+  # For https://gitlab.gnome.org/GNOME/snapshot/-/blob/34236a6dded23b66fdc4e4ed613e5b09eec3872c/src/meson.build#L57
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   passthru.updateScript = gnome.updateScript {
     packageName = "snapshot";

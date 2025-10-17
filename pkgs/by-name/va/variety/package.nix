@@ -23,7 +23,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "variety";
   version = "0.8.13";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "varietywalls";
@@ -44,7 +44,10 @@ python3Packages.buildPythonApplication rec {
     hicolor-icon-theme
     libnotify
     librsvg
-  ] ++ lib.optional appindicatorSupport libayatana-appindicator;
+  ]
+  ++ lib.optional appindicatorSupport libayatana-appindicator;
+
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies =
     with python3Packages;
@@ -84,6 +87,8 @@ python3Packages.buildPythonApplication rec {
       --replace-fail "/bin/bash" "${lib.getExe bash}" \
       --replace-fail "{VARIETY_PATH}" "variety"
   '';
+
+  pythonImportsCheck = [ "variety" ];
 
   meta = {
     homepage = "https://github.com/varietywalls/variety";

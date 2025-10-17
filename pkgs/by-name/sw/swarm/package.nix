@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "swarm";
-  version = "unstable-2019-03-11";
+  version = "0-unstable-2019-03-11";
 
   src = fetchFromGitHub {
     owner = "nimble-code";
@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage = "http://spinroot.com/";
     license = licenses.free;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

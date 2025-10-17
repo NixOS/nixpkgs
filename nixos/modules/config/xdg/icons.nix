@@ -34,22 +34,21 @@
       "/share/pixmaps"
     ];
 
-    environment.systemPackages =
-      [
-        # Empty icon theme that contains index.theme file describing directories
-        # where toolkits should look for icons installed by apps.
-        pkgs.hicolor-icon-theme
-      ]
-      ++ lib.optionals (config.xdg.icons.fallbackCursorThemes != [ ]) [
-        (pkgs.writeTextFile {
-          name = "fallback-cursor-theme";
-          text = ''
-            [Icon Theme]
-            Inherits=${lib.concatStringsSep "," config.xdg.icons.fallbackCursorThemes}
-          '';
-          destination = "/share/icons/default/index.theme";
-        })
-      ];
+    environment.systemPackages = [
+      # Empty icon theme that contains index.theme file describing directories
+      # where toolkits should look for icons installed by apps.
+      pkgs.hicolor-icon-theme
+    ]
+    ++ lib.optionals (config.xdg.icons.fallbackCursorThemes != [ ]) [
+      (pkgs.writeTextFile {
+        name = "fallback-cursor-theme";
+        text = ''
+          [Icon Theme]
+          Inherits=${lib.concatStringsSep "," config.xdg.icons.fallbackCursorThemes}
+        '';
+        destination = "/share/icons/default/index.theme";
+      })
+    ];
 
     # libXcursor looks for cursors in XCURSOR_PATH
     # it mostly follows the spec for icons

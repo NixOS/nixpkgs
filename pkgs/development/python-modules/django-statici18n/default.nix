@@ -47,8 +47,7 @@ buildPythonPackage rec {
     description = "Helper for generating Javascript catalog to static files";
     homepage = "https://github.com/zyegfryed/django-statici18n";
     license = licenses.bsd3;
-    maintainers = with maintainers; [
-      schmittlauch
+    maintainers = [
     ];
   };
 }

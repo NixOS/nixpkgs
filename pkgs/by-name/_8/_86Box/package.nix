@@ -28,6 +28,7 @@
   libvorbis,
   libopus,
   libmpg123,
+  libgcrypt,
 
   enableDynarec ? with stdenv.hostPlatform; isx86 || isAarch,
   enableNewDynarec ? enableDynarec && stdenv.hostPlatform.isAarch,
@@ -39,13 +40,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "86Box";
-  version = "4.2.1";
+  version = "5.1";
 
   src = fetchFromGitHub {
     owner = "86Box";
     repo = "86Box";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ue5Coy2MpP7Iwl81KJPQPC7eD53/Db5a0PGIR+DdPYI=";
+    hash = "sha256-EkKqDkVK0QpGC/1F5DDHzlD05/JVnMZ6rSLuT2OPoHo=";
   };
 
   patches = [ ./darwin.patch ];
@@ -54,42 +55,43 @@ stdenv.mkDerivation (finalAttrs: {
     substituteAllInPlace src/qt/qt_platform.cpp
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      makeWrapper
-      qt5.wrapQtAppsHook
-    ]
-    ++ lib.optionals enableWayland [
-      extra-cmake-modules
-      wayland-scanner
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+    qt5.wrapQtAppsHook
+  ]
+  ++ lib.optionals enableWayland [
+    extra-cmake-modules
+    wayland-scanner
+  ];
 
-  buildInputs =
-    [
-      freetype
-      fluidsynth
-      SDL2
-      glib
-      openal
-      rtmidi
-      pcre2
-      jack2
-      libpcap
-      libslirp
-      qt5.qtbase
-      qt5.qttools
-      libsndfile
-      flac.dev
-      libogg.dev
-      libvorbis.dev
-      libopus.dev
-      libmpg123.dev
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-    ++ lib.optional enableWayland wayland
-    ++ lib.optional enableVncRenderer libvncserver;
+  buildInputs = [
+    freetype
+    fluidsynth
+    SDL2
+    glib
+    openal
+    rtmidi
+    pcre2
+    jack2
+    libpcap
+    libslirp
+    qt5.qtbase
+    qt5.qttools
+    libsndfile
+    flac.dev
+    libogg.dev
+    libvorbis.dev
+    libopus.dev
+    libmpg123.dev
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+  ++ lib.optional enableWayland wayland
+  ++ lib.optionals enableVncRenderer [
+    libvncserver
+    libgcrypt
+  ];
 
   cmakeFlags =
     lib.optional stdenv.hostPlatform.isDarwin "-DCMAKE_MACOSX_BUNDLE=OFF"
@@ -117,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       owner = "86Box";
       repo = "roms";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-p3djn950mTUIchFCEg56JbJtIsUuxmqRdYFRl50kI5Y=";
+      hash = "sha256-ek/TbQJfrYXmpAmYeL8uSehsKxh1oDil7ebW4oFr7Cs=";
     };
     updateScript = ./update.sh;
   };

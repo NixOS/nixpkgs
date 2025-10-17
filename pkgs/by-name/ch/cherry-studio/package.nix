@@ -5,7 +5,7 @@
   yarn-berry_4,
   nodejs,
   python3,
-  electron,
+  electron_37,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
@@ -14,17 +14,18 @@
 }:
 
 let
+  electron = electron_37;
   yarn-berry = yarn-berry_4;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.4.3";
+  version = "1.5.11";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XDz5JJF9ntVYPzItRsdnTiiIPSHmtfCdZrhD0KpJNyI=";
+    hash = "sha256-XJFqoluI3ZwmqxhKpJANqOxkYP3Va7pXXyWOHSLopwc=";
   };
 
   postPatch = ''
@@ -41,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-OFinYvzLEXahaLY5YZM4eamiMUSPJZ1nUCzo8hQdnFw=";
+    hash = "sha256-k23HzIN8QAkV/IREM5fHHeaMjO+cIthpLNrLKn4g7tY=";
   };
 
   nativeBuildInputs = [
@@ -113,7 +114,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/CherryHQ/cherry-studio/releases/tag/v${finalAttrs.version}";
     mainProgram = "cherry-studio";
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = with lib.licenses; [ agpl3Only ];
   };
 })

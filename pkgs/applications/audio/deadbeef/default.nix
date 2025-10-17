@@ -3,17 +3,12 @@
   config,
   clangStdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   libtool,
   intltool,
   pkg-config,
   jansson,
   swift-corelibs-libdispatch,
-  # deadbeef can use either gtk2 or gtk3
-  gtk2Support ? false,
-  gtk2,
-  gtk3Support ? true,
   gtk3,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
@@ -65,8 +60,6 @@
   curl,
 }:
 
-assert gtk2Support || gtk3Support;
-
 let
   inherit (lib) optionals;
 
@@ -84,104 +77,83 @@ clangStdenv.mkDerivation {
     hash = "sha256-qa0ULmE15lV2vkyXPNW9kSISQZEANrjwJwykTiifk5Q=";
   };
 
-  buildInputs =
-    [
-      jansson
-      swift-corelibs-libdispatch
-    ]
-    ++ optionals gtk2Support [
-      gtk2
-    ]
-    ++ optionals gtk3Support [
-      gtk3
-      gsettings-desktop-schemas
-    ]
-    ++ optionals vorbisSupport [
-      libvorbis
-    ]
-    ++ optionals mp123Support [
-      libmad
-    ]
-    ++ optionals flacSupport [
-      flac
-    ]
-    ++ optionals wavSupport [
-      libsndfile
-    ]
-    ++ optionals cdaSupport [
-      libcdio
-      libcddb
-    ]
-    ++ optionals aacSupport [
-      faad2
-    ]
-    ++ optionals opusSupport [
-      opusfile
-    ]
-    ++ optionals zipSupport [
-      libzip
-    ]
-    ++ optionals ffmpegSupport [
-      ffmpeg
-    ]
-    ++ optionals apeSupport [
-      yasm
-    ]
-    ++ optionals artworkSupport [
-      imlib2
-    ]
-    ++ optionals hotkeysSupport [
-      libX11
-    ]
-    ++ optionals osdSupport [
-      dbus
-    ]
-    ++ optionals alsaSupport [
-      alsa-lib
-    ]
-    ++ optionals pulseSupport [
-      libpulseaudio
-    ]
-    ++ optionals pipewireSupport [
-      pipewire
-    ]
-    ++ optionals resamplerSupport [
-      libsamplerate
-    ]
-    ++ optionals overloadSupport [
-      zlib
-    ]
-    ++ optionals wavpackSupport [
-      wavpack
-    ]
-    ++ optionals remoteSupport [
-      curl
-    ];
+  buildInputs = [
+    jansson
+    swift-corelibs-libdispatch
+    gtk3
+    gsettings-desktop-schemas
+  ]
+  ++ optionals vorbisSupport [
+    libvorbis
+  ]
+  ++ optionals mp123Support [
+    libmad
+  ]
+  ++ optionals flacSupport [
+    flac
+  ]
+  ++ optionals wavSupport [
+    libsndfile
+  ]
+  ++ optionals cdaSupport [
+    libcdio
+    libcddb
+  ]
+  ++ optionals aacSupport [
+    faad2
+  ]
+  ++ optionals opusSupport [
+    opusfile
+  ]
+  ++ optionals zipSupport [
+    libzip
+  ]
+  ++ optionals ffmpegSupport [
+    ffmpeg
+  ]
+  ++ optionals apeSupport [
+    yasm
+  ]
+  ++ optionals artworkSupport [
+    imlib2
+  ]
+  ++ optionals hotkeysSupport [
+    libX11
+  ]
+  ++ optionals osdSupport [
+    dbus
+  ]
+  ++ optionals alsaSupport [
+    alsa-lib
+  ]
+  ++ optionals pulseSupport [
+    libpulseaudio
+  ]
+  ++ optionals pipewireSupport [
+    pipewire
+  ]
+  ++ optionals resamplerSupport [
+    libsamplerate
+  ]
+  ++ optionals overloadSupport [
+    zlib
+  ]
+  ++ optionals wavpackSupport [
+    wavpack
+  ]
+  ++ optionals remoteSupport [
+    curl
+  ];
 
-  nativeBuildInputs =
-    [
-      autoconf
-      automake
-      intltool
-      libtool
-      pkg-config
-    ]
-    ++ optionals gtk3Support [
-      wrapGAppsHook3
-    ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+    libtool
+    pkg-config
+    wrapGAppsHook3
+  ];
 
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  postPatch = ''
-    # Fix the build on c++17 compiler:
-    #   https://github.com/DeaDBeeF-Player/deadbeef/issues/3012
-    # TODO: remove after 1.9.5 release.
-    substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
-  '';
 
   meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";
@@ -193,6 +165,6 @@ clangStdenv.mkDerivation {
       "x86_64-linux"
       "i686-linux"
     ];
-    maintainers = [ maintainers.abbradar ];
+    maintainers = [ ];
   };
 }

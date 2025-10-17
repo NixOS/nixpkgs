@@ -4,21 +4,23 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
+  versionCheckHook,
   nixosTests,
+  openssh,
   rclone,
   python3,
 }:
 
 buildGoModule rec {
   pname = "restic";
-  version = "0.18.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    hash = "sha256-odyKcpNAhk1dlVBhjrtmgKjWTOCMtooYOJ5p0J9OUFY=";
+    hash = "sha256-lLinqZUOsZCPPybvVDB1f8o9Hl5qKYi0eHwJAaydsD8=";
   };
 
   patches = [
@@ -26,16 +28,20 @@ buildGoModule rec {
     ./0001-Skip-testing-restore-with-permission-failure.patch
   ];
 
-  vendorHash = "sha256-cxOwVf1qZXJbDZC/7cGnKPNpwJnAk3OunKVZpwtI8pI=";
+  vendorHash = "sha256-4GVhG1sjFiuKyDUAgmSmFww5bDKIoCjejkkoSqkvU4E=";
 
   subPackages = [ "cmd/restic" ];
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   nativeCheckInputs = [ python3 ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     restic = nixosTests.restic;
@@ -45,27 +51,32 @@ buildGoModule rec {
     rm cmd/restic/cmd_mount_integration_test.go
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
-    ''
-    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
-      $out/bin/restic generate \
-        --bash-completion restic.bash \
-        --fish-completion restic.fish \
-        --zsh-completion restic.zsh \
-        --man .
-      installShellCompletion restic.{bash,fish,zsh}
-      installManPage *.1
-    '';
+  postInstall = ''
+    wrapProgram $out/bin/restic \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          openssh
+          rclone
+        ]
+      }"
+  ''
+  + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+    $out/bin/restic generate \
+      --bash-completion restic.bash \
+      --fish-completion restic.fish \
+      --zsh-completion restic.zsh \
+      --man .
+    installShellCompletion restic.{bash,fish,zsh}
+    installManPage *.1
+  '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://restic.net";
     changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
     description = "Backup program that is fast, efficient and secure";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       mbrgm
       dotlambda
       ryan4yin

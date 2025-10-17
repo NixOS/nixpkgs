@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "ibm-watson";
-  version = "9.0.0";
+  version = "11.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "watson-developer-cloud";
     repo = "python-sdk";
     tag = "v${version}";
-    hash = "sha256-JZriBvdeDAZ+NOnWCsjI2m5JlLe/oLlbtFkdFeuL8TI=";
+    hash = "sha256-FSzuPRiJ6OXkdy4XyvGs2kTKPF2Kl55e53keztmEdfY=";
   };
 
   build-system = [ setuptools ];

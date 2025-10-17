@@ -38,7 +38,8 @@ buildPythonPackage rec {
     pyqtgraph
     pyqtwebengine
     typing-extensions
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ appnope ];
 
   pythonImportsCheck = [ "orangewidget" ];
 
@@ -65,6 +66,6 @@ buildPythonPackage rec {
     description = "Implementation of the base OWBaseWidget class and utilities for use in Orange Canvas workflows";
     homepage = "https://github.com/biolab/orange-widget-base";
     license = [ lib.licenses.gpl3Plus ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
   };
 }

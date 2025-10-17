@@ -25,17 +25,16 @@ stdenv.mkDerivation rec {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      libzip
-      poppler
-      qt6.qt5compat
-      qt6.qtsvg
-      qt6.qtwebengine
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux [
-      qt6.qtwayland
-    ];
+  buildInputs = [
+    libzip
+    poppler
+    qt6.qt5compat
+    qt6.qtsvg
+    qt6.qtwebengine
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux [
+    qt6.qtwayland
+  ];
 
   # We use a separate build-dir as otherwise ld seems to get confused between
   # directory and executable name on buildPhase.

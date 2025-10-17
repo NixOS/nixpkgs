@@ -3,9 +3,9 @@
   stdenv,
 
   writableTmpDirAsHomeHook,
-  buildEnv,
   cargo,
   fetchFromGitHub,
+  fetchurl,
   installShellFiles,
   lame,
   mpv-unwrapped,
@@ -16,9 +16,11 @@
   jq,
   protobuf,
   python3,
+  python3Packages,
   qt6,
   rsync,
   rustPlatform,
+  uv,
   writeShellScriptBin,
   yarn,
   yarn-berry_4,
@@ -32,12 +34,16 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.02.5";
-  rev = "29192d156ae60d6ce35e80ccf815a8331c9db724";
+  version = "25.07.5";
+  rev = "7172b2d26684c7ef9d10e249bd43dc5bf73ae00c";
 
-  srcHash = "sha256-lx3tK57gcQpwmiqUzO6iU7sE31LPFp6s80prYaB2jHE=";
-  cargoHash = "sha256-BPCfeUiZ23FdZaF+zDUrRZchauNZWQ3gSO+Uo9WRPes=";
-  yarnHash = "sha256-3G+9N3xOzog3XDCKDQJCY/6CB3i6oXixRgxEyv7OG3U=";
+  srcHash = "sha256-nWxRr55Hm40V3Ijw+WetBKNoreLpcvRscgbOZa0REcY=";
+  cargoHash = "sha256-H/xwPPL6VupSZGLPEThhoeMcg12FvAX3fmNM6zYfqRQ=";
+  yarnHash = "sha256-adHnV345oDm20R8zGdEiEW+8/mTQAz4oxraybRfmwew=";
+  pythonDeps = map (meta: {
+    url = meta.url;
+    path = toString (fetchurl meta);
+  }) (lib.importJSON ./uv-deps.json);
 
   src = fetchFromGitHub {
     owner = "ankitects";
@@ -66,25 +72,46 @@ let
     exec ${yarn}/bin/yarn "$@"
   '';
 
-  anki-build-python = python3.withPackages (ps: with ps; [ mypy-protobuf ]);
+  uvWheels = stdenv.mkDerivation {
+    name = "uv-wheels";
+    phases = [ "installPhase" ];
 
-  pyEnv = buildEnv {
-    name = "anki-pyenv-${version}";
-    paths = with python3.pkgs; [
-      pip
-      anki-build-python
-    ];
-    pathsToLink = [ "/bin" ];
+    # otherwise, it's too long of a string
+    passAsFile = [ "installCommand" ];
+    installCommand = ''
+      #!${stdenv.shell}
+      mkdir -p $out
+      # note: uv.lock doesn't contain build deps?? https://github.com/astral-sh/uv/issues/5190
+      # link them in manually
+      ln -vsf ${python3Packages.setuptools.dist}/*.whl $out
+      ln -vsf ${python3Packages.editables.dist}/*.whl $out
+      # we also force nixpkgs pyqt6 stuff because that needs to match the
+      # nixpkgs qt6 version, otherwise we get linker errors
+      ln -vsf ${python3Packages.pyqt6.dist}/*.whl $out
+      ln -vsf ${python3Packages.pyqt6-webengine.dist}/*.whl $out
+      ln -vsf ${python3Packages.pyqt6-sip.dist}/*.whl $out
+    ''
+    + (lib.strings.concatStringsSep "\n" (
+      map (dep: ''
+        if ! [[ "${baseNameOf dep.url}" =~ (PyQt|pyqt) ]]; then
+          ln -vsf ${dep.path} "$out/${baseNameOf dep.url}"
+        fi
+      '') pythonDeps
+    ));
+
+    installPhase = ''bash $installCommandPath'';
   };
 in
-python3.pkgs.buildPythonApplication rec {
-  format = "setuptools";
+
+python3Packages.buildPythonApplication rec {
+  format = "other";
   inherit pname version;
 
   outputs = [
     "out"
     "doc"
     "man"
+    "lib"
   ];
 
   inherit src;
@@ -93,6 +120,7 @@ python3.pkgs.buildPythonApplication rec {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
+    ./patches/fix-compilation-under-rust-1.89.patch
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
   ];
@@ -107,6 +135,7 @@ python3.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
+    uv
     cargo
     installShellFiles
     jq
@@ -117,67 +146,16 @@ python3.pkgs.buildPythonApplication rec {
     rustPlatform.cargoSetupHook
     writableTmpDirAsHomeHook
     yarn-berry_4.yarnBerryConfigHook
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin swift;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin swift;
 
   buildInputs = [
     qt6.qtbase
     qt6.qtsvg
-  ] ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux qt6.qtwayland;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    # This rather long list came from running:
-    #    grep --no-filename -oE "^[^ =]*" python/{requirements.base.txt,requirements.bundle.txt,requirements.qt6_lin.txt} | \
-    #      sort | uniq | grep -v "^#$"
-    # in their repo at the git tag for this version
-    # There's probably a more elegant way, but the above extracted all the
-    # names, without version numbers, of their python dependencies. The hope is
-    # that nixpkgs versions are "close enough"
-    # I then removed the ones the check phase failed on (pythonCatchConflictsPhase)
-    attrs
-    beautifulsoup4
-    blinker
-    build
-    certifi
-    charset-normalizer
-    click
-    colorama
-    decorator
-    flask
-    flask-cors
-    google-api-python-client
-    idna
-    importlib-metadata
-    itsdangerous
-    jinja2
-    jsonschema
-    markdown
-    markupsafe
-    orjson
-    packaging
-    pip
-    pip-system-certs
-    pip-tools
-    protobuf
-    pyproject-hooks
-    pyqt6
-    pyqt6-sip
-    pyqt6-webengine
-    pyrsistent
-    pysocks
-    requests
-    send2trash
-    setuptools
-    soupsieve
-    tomli
-    urllib3
-    waitress
-    werkzeug
-    wheel
-    wrapt
-    zipp
-  ];
-
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     pytest
     mock
     astroid
@@ -205,6 +183,12 @@ python3.pkgs.buildPythonApplication rec {
     NODE_BINARY = lib.getExe nodejs;
     PROTOC_BINARY = lib.getExe protobuf;
     PYTHON_BINARY = lib.getExe python3;
+    UV_BINARY = lib.getExe uv;
+    UV_NO_MANAGED_PYTHON = "1";
+    UV_SYSTEM_PYTHON = true;
+    UV_PYTHON_DOWNLOADS = "never";
+    UV_OFFLINE = "1";
+    UV_FIND_LINKS = "${uvWheels}";
   };
 
   buildPhase = ''
@@ -214,17 +198,40 @@ python3.pkgs.buildPythonApplication rec {
     mkdir -p out/pylib/anki .git
 
     echo ${builtins.substring 0 8 rev} > out/buildhash
+    echo ${python3.version} > .python-version
 
-    ln -vsf ${pyEnv} ./out/pyenv
+    # Setup the python environment.
+    # We have 'UV_FIND_LINKS' set, so packages generally should just get picked
+    # up, so install everything anki wants.
+    # Note, for pyqt stuff, our versions may not match (see the comment above
+    # uvWheels), so we don't install those.
+    mkdir -p ./out/pyenv
+    uv export > requirements.txt
+    uv pip install --prefix ./out/pyenv -r requirements.txt
+    uv export --project qt --extra qt --extra audio \
+      --no-emit-package "pyqt6" \
+      --no-emit-package "pyqt6-qt6" \
+      --no-emit-package "pyqt6-webengine" \
+      --no-emit-package "pyqt6-webengine-qt6" \
+      --no-emit-package "pyqt6-sip" \
+      > requirements.txt
+    uv pip install --prefix ./out/pyenv -r requirements.txt
+    uv export --project pylib > requirements.txt
+    uv pip install --prefix ./out/pyenv -r requirements.txt
+
+    # anki's build tooling expects python in there too
+    ln -sf $PYTHON_BINARY ./out/pyenv/bin/python
 
     mv node_modules out
 
-    # Run everything else
+    # And finally build
     patchShebangs ./ninja
 
+    export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
     # Necessary for yarn to not complain about 'corepack'
     jq 'del(.packageManager)' package.json > package.json.tmp && mv package.json.tmp package.json
-    YARN_BINARY="${lib.getExe noInstallYarn}" PIP_USER=1 ./ninja build wheels
+    YARN_BINARY="${lib.getExe noInstallYarn}" PIP_USER=1 \
+      ./ninja build wheels
   '';
 
   # mimic https://github.com/ankitects/anki/blob/76d8807315fcc2675e7fa44d9ddf3d4608efc487/build/ninja_gen/src/python.rs#L232-L250
@@ -245,6 +252,7 @@ python3.pkgs.buildPythonApplication rec {
     in
     ''
       runHook preCheck
+      export PYTHONPATH=$PYTHONPATH:$PWD/out/pyenv/${python3.sitePackages}
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib \
         pytest -p no:cacheprovider pylib/tests -k ${disabledTestsString}
       HOME=$TMP ANKI_TEST_MODE=1 PYTHONPATH=$PYTHONPATH:$PWD/out/pylib:$PWD/pylib:$PWD/out/qt \
@@ -252,23 +260,31 @@ python3.pkgs.buildPythonApplication rec {
       runHook postCheck
     '';
 
-  preInstall = ''
-    mkdir dist
-    mv out/wheels/* dist
-  '';
+  installPhase = ''
+    runHook preInstall
 
-  postInstall = ''
-    install -D -t $out/share/applications qt/bundle/lin/anki.desktop
+    mkdir -p $lib $out
+    uv pip install out/wheels/*.whl --prefix $lib
+    # remove non-anki bins from dependencies
+    find $lib/bin -type f ! -name "anki*" -delete
+    # and put bin into $out so people can access it. Leave $lib separate to avoid collisions, see
+    # https://github.com/NixOS/nixpkgs/issues/438598
+    mv $lib/bin $out/bin
+
+    install -D -t $out/share/applications qt/launcher/lin/anki.desktop
     install -D -t $doc/share/doc/anki README* LICENSE*
-    install -D -t $out/share/mime/packages qt/bundle/lin/anki.xml
-    install -D -t $out/share/pixmaps qt/bundle/lin/anki.{png,xpm}
-    installManPage qt/bundle/lin/anki.1
+    install -D -t $out/share/mime/packages qt/launcher/lin/anki.xml
+    install -D -t $out/share/pixmaps qt/launcher/lin/anki.{png,xpm}
+    installManPage qt/launcher/lin/anki.1
+
+    runHook postInstall
   '';
 
   preFixup = ''
     makeWrapperArgs+=(
       "''${qtWrapperArgs[@]}"
       --prefix PATH ':' "${lame}/bin:${mpv-unwrapped}/bin"
+      --prefix PYTHONPATH ':' "$lib/${python3.sitePackages}"
     )
   '';
 
@@ -302,5 +318,10 @@ python3.pkgs.buildPythonApplication rec {
     ];
     # Reported to crash at launch on darwin (as of 2.1.65)
     broken = stdenv.hostPlatform.isDarwin;
+    badPlatforms = [
+      # pyqt6-webengine is broken on darwin
+      # https://github.com/NixOS/nixpkgs/issues/375059
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

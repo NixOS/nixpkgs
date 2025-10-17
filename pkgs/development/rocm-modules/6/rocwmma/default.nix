@@ -19,27 +19,26 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "6.3.3";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocWMMA";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-kih3hn6QhcMmyj9n8f8eO+RIgKQgWKIuzg8fb0eoRPE=";
+    hash = "sha256-fjyxMrzt74rE7Gf4v4WawYltuw1fvahwZUpauMIE3qc=";
   };
 
   patches = lib.optionals (buildTests || buildBenchmarks) [
@@ -52,39 +51,34 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
-  buildInputs =
-    [
-      openmp
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      rocm-smi
-      gtest
-      rocblas
-    ];
+  buildInputs = [
+    openmp
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    rocm-smi
+    gtest
+    rocblas
+  ];
 
-  cmakeFlags =
-    [
-      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
-      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
-      "-DROCWMMA_BUILD_TESTS=${if buildTests || buildBenchmarks then "ON" else "OFF"}"
-      "-DROCWMMA_BUILD_SAMPLES=${if buildSamples then "ON" else "OFF"}"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals (gpuTargets != [ ]) [
-      "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
-    ]
-    ++ lib.optionals buildExtendedTests [
-      "-DROCWMMA_BUILD_EXTENDED_TESTS=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DROCWMMA_BUILD_BENCHMARK_TESTS=ON"
-      "-DROCWMMA_BENCHMARK_WITH_ROCBLAS=ON"
-    ];
+  cmakeFlags = [
+    "-DROCWMMA_BUILD_TESTS=${if buildTests || buildBenchmarks then "ON" else "OFF"}"
+    "-DROCWMMA_BUILD_SAMPLES=${if buildSamples then "ON" else "OFF"}"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+  ]
+  ++ lib.optionals (gpuTargets != [ ]) [
+    "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
+  ]
+  ++ lib.optionals buildExtendedTests [
+    "-DROCWMMA_BUILD_EXTENDED_TESTS=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DROCWMMA_BUILD_BENCHMARK_TESTS=ON"
+    "-DROCWMMA_BENCHMARK_WITH_ROCBLAS=ON"
+  ];
 
   postInstall =
     lib.optionalString (buildTests || buildBenchmarks) ''

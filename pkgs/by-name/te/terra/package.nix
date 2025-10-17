@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages_16,
+  llvmPackages_18,
   ncurses,
   cmake,
   libxml2,
@@ -14,17 +14,17 @@
 }:
 
 let
-  luajitRev = "50936d784474747b4569d988767f1b5bab8bb6d0";
+  luajitRev = "83954100dba9fc0cf5eeaf122f007df35ec9a604";
   luajitBase = "LuaJIT-${luajitRev}";
   luajitArchive = "${luajitBase}.tar.gz";
   luajitSrc = fetchFromGitHub {
     owner = "LuaJIT";
     repo = "LuaJIT";
     rev = luajitRev;
-    sha256 = "1g87pl014b5v6z2nnhiwn3wf405skawszfr5wdzyfbx00j3kgxd0";
+    hash = "sha256-L9T6lc32dDLAp9hPI5mKOzT0c4juW9JHA3FJCpm7HNQ=";
   };
 
-  llvmPackages = llvmPackages_16;
+  llvmPackages = llvmPackages_18;
   llvmMerged = symlinkJoin {
     name = "llvmClangMerged";
     paths = with llvmPackages; [
@@ -37,38 +37,35 @@ let
     ];
   };
 
-  cuda = cudaPackages.cudatoolkit_11;
+  cuda = cudaPackages.cudatoolkit;
 
   clangVersion = llvmPackages.clang-unwrapped.version;
 
 in
 stdenv.mkDerivation rec {
   pname = "terra";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "terralang";
     repo = "terra";
     rev = "release-${version}";
-    sha256 = "0v9vpxcp9ybwnfljskqn41vjq7c0srdfv7qs890a6480pnk4kavd";
+    hash = "sha256-CukNCvTHZUhjdHyvDUSH0YCVNkThUFPaeyLepyEKodA=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [
-      llvmMerged
-      ncurses
-      libffi
-      libxml2
-    ]
-    ++ lib.optionals enableCUDA [ cuda ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
+  buildInputs = [
+    llvmMerged
+    ncurses
+    libffi
+    libxml2
+  ]
+  ++ lib.optionals enableCUDA [ cuda ]
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libpfm;
 
   cmakeFlags =
     let
-      resourceDir =
-        "${llvmMerged}/lib/clang/"
-        + (if lib.versionOlder clangVersion "16" then clangVersion else lib.versions.major clangVersion);
+      resourceDir = "${llvmMerged}/lib/clang/${lib.versions.major clangVersion}";
     in
     [
       "-DHAS_TERRA_VERSION=0"

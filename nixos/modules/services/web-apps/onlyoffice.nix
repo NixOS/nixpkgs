@@ -145,7 +145,7 @@ in
               '';
             "~* ^(\\/cache\\/files.*)(\\/.*)".extraConfig = ''
               alias /var/lib/onlyoffice/documentserver/App_Data$1;
-              add_header Content-Disposition "attachment; filename*=UTF-8''$arg_filename";
+              more_set_headers "Content-Disposition: attachment; filename*=UTF-8''$arg_filename";
 
               set $secure_link_secret verysecretstring;
               secure_link $arg_md5,$arg_expires;

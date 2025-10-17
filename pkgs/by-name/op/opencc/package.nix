@@ -20,14 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JBTegQs9ALp4LdKKYMNp9GYEgqR9O8IkX6LqatvaTic=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      python3
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      opencc # opencc_dict
-    ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    opencc # opencc_dict
+  ];
 
   buildInputs = [
     rapidjson

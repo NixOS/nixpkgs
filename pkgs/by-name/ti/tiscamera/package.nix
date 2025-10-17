@@ -52,49 +52,47 @@ stdenv.mkDerivation rec {
       --replace "typically /usr/share/theimagingsource/tiscamera/uvc-extension/" ""
   '';
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      wrapGAppsHook3
-      gobject-introspection
-    ]
-    ++ lib.optionals withDoc [
-      sphinx
-      graphviz
-    ]
-    ++ lib.optionals withAravis [
-      meson
-    ]
-    ++ lib.optionals withGui [
-      qt5.wrapQtAppsHook
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapGAppsHook3
+    gobject-introspection
+  ]
+  ++ lib.optionals withDoc [
+    sphinx
+    graphviz
+  ]
+  ++ lib.optionals withAravis [
+    meson
+  ]
+  ++ lib.optionals withGui [
+    qt5.wrapQtAppsHook
+  ];
 
-  buildInputs =
-    [
-      elfutils
-      libselinux
-      libsepol
-      libunwind
-      libusb1
-      libuuid
-      libzip
-      orc
-      pcre
-      zstd
-      glib
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-good
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-ugly
-    ]
-    ++ lib.optionals withAravis [
-      aravis
-    ]
-    ++ lib.optionals withGui [
-      qt5.qtbase
-    ];
+  buildInputs = [
+    elfutils
+    libselinux
+    libsepol
+    libunwind
+    libusb1
+    libuuid
+    libzip
+    orc
+    pcre
+    zstd
+    glib
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+  ]
+  ++ lib.optionals withAravis [
+    aravis
+  ]
+  ++ lib.optionals withGui [
+    qt5.qtbase
+  ];
 
   hardeningDisable = [ "format" ];
 

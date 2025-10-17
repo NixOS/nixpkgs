@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation {
   pname = "ipfetch";
-  version = "unstable-2024-02-02";
+  version = "0-unstable-2024-02-02";
 
   src = fetchFromGitHub {
     owner = "trakBan";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   postPatch = ''
     patchShebangs --host ipfetch
     # Not only does `/usr` have to be replaced but also `/flags` needs to be added because with Nix the script is broken without this. The `/flags` is somehow not needed if you install via the install script in the source repository.
-    substituteInPlace ./ipfetch --replace /usr/share/ipfetch $out/usr/share/ipfetch/flags
+    substituteInPlace ./ipfetch --replace-fail /usr/share/ipfetch $out/usr/share/ipfetch/flags
   '';
   installPhase = ''
     mkdir -p $out/bin

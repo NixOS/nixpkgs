@@ -44,6 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/frankie567/pwdlib/releases/tag/v${version}";
     homepage = "https://github.com/frankie567/pwdlib";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

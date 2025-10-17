@@ -27,22 +27,22 @@ stdenv.mkDerivation {
     makeFlagsArray+=(CC="$CC")
   '';
 
-  makeFlags =
-    [
-      "prefix=$(out)"
-      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    ]
-    ++ lib.optional gnutlsSupport "CRYPTO=GNUTLS"
-    ++ lib.optional opensslSupport "CRYPTO=OPENSSL"
-    ++ lib.optional stdenv.hostPlatform.isDarwin "SYS=darwin";
+  makeFlags = [
+    "prefix=$(out)"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optional gnutlsSupport "CRYPTO=GNUTLS"
+  ++ lib.optional opensslSupport "CRYPTO=OPENSSL"
+  ++ lib.optional stdenv.hostPlatform.isDarwin "SYS=darwin";
 
-  propagatedBuildInputs =
-    [ zlib ]
-    ++ lib.optionals gnutlsSupport [
-      gnutls
-      nettle
-    ]
-    ++ lib.optional opensslSupport openssl;
+  propagatedBuildInputs = [
+    zlib
+  ]
+  ++ lib.optionals gnutlsSupport [
+    gnutls
+    nettle
+  ]
+  ++ lib.optional opensslSupport openssl;
 
   outputs = [
     "out"

@@ -31,6 +31,12 @@ buildPythonPackage rec {
     hash = "sha256-9f8SNlt4qiTlXgx2ica9Y8rmnYzQ5VarvFRfoZ9bSsY=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0rc1,<2.3; python_version >= '3.9'" "numpy>=2.0.0" \
+      --replace-fail "Cython>=3.0.10,<3.1.0" "Cython>=3.1.0,<4.0.0"
+  '';
+
   build-system = [
     cython
     numpy

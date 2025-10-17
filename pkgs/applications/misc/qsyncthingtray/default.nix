@@ -28,7 +28,8 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     qtwebengine
-  ] ++ lib.optional preferQWebView qtwebkit;
+  ]
+  ++ lib.optional preferQWebView qtwebkit;
 
   nativeBuildInputs = [ cmake ];
 
@@ -43,7 +44,8 @@ mkDerivation rec {
       url = "https://patch-diff.githubusercontent.com/raw/sieren/QSyncthingTray/pull/225.patch";
       sha256 = "0w665xdlsbjxs977pdpzaclxpswf7xys1q3rxriz181lhk2y66yy";
     })
-  ] ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
+  ]
+  ++ lib.optional (!preferQWebView && !preferNative) ./qsyncthingtray-0.5.8-qt-5.6.3.patch;
 
   postPatch = ''
     ${lib.optionalString stdenv.hostPlatform.isLinux ''

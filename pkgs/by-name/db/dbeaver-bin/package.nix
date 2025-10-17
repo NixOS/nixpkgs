@@ -7,6 +7,7 @@
   openjdk21,
   gnused,
   autoPatchelfHook,
+  autoSignDarwinBinariesHook,
   wrapGAppsHook3,
   gtk3,
   glib,
@@ -17,7 +18,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "25.1.1";
+  version = "25.2.2";
 
   src =
     let
@@ -30,10 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-PFY1eZFG8mvbG6D7pDJBBbsySeNmw6/DlxSyNvCJcSI=";
-        aarch64-linux = "sha256-Fny8+XA7N3rmXqP2UfTPYFIwHHSZTLbABjm+ESMoFJ4=";
-        x86_64-darwin = "sha256-/U8lcvJotAB+K0pQWpy6RIRqbfJzqVefS67qF9arzw0=";
-        aarch64-darwin = "sha256-lfz+B2ZHaBoyDKduDn45ocSTMAsS/bBXrByBeIZb0Ew=";
+        x86_64-linux = "sha256-e0xIFoDmhX1+VetCEJoDZqu6+wrFwTwgIzU8hQ/mXnI=";
+        aarch64-linux = "sha256-80HW2GGBAuCYo+fxz+XZG3sZm0/QW5krHLS4jSGgGvU=";
+        x86_64-darwin = "sha256-w1b22Uce2PmX3f6UMrrkVxSxT/E5rFhiSgb3PjYaYvY=";
+        aarch64-darwin = "sha256-oQ10VB4puNBxFcFRdOtFFF+FcN9I7CUbWMc56V1Z90E=";
       };
     in
     fetchurl {
@@ -43,14 +44,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
-  nativeBuildInputs =
-    [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
-      gnused
-      wrapGAppsHook3
-      autoPatchelfHook
-    ]
-    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
+  nativeBuildInputs = [
+    makeWrapper
+  ]
+  ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
+    gnused
+    wrapGAppsHook3
+    autoPatchelfHook
+  ]
+  ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
+    undmg
+    autoSignDarwinBinariesHook
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -58,6 +63,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   prePatch = ''
     substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
       --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  ''
+  # remove the bundled JRE configuration on Darwin
+  # dont use substituteInPlace here because it would match "-vmargs"
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    sed -i -e '/^-vm$/ { N; d; }' Contents/Eclipse/dbeaver.ini
   '';
 
   preInstall = ''
@@ -66,6 +76,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     pushd ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}plugins/com.sun.jna_*/com/sun/jna/
     rm -r !(ptr|internal|linux-x86-64|linux-aarch64|darwin-x86-64|darwin-aarch64)/
     popd
+  ''
+  # remove the bundled JRE on Darwin
+  + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+    rm -r Contents/Eclipse/jre/
   '';
 
   installPhase =
@@ -108,9 +122,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         mkdir -p $out/{Applications/dbeaver.app,bin}
         cp -R . $out/Applications/dbeaver.app
-        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS,bin}/dbeaver \
+        wrapProgram $out/Applications/dbeaver.app/Contents/MacOS/dbeaver \
           --prefix PATH : "${openjdk21}/bin" \
           --set JAVA_HOME "${openjdk21.home}"
+        makeWrapper $out/{Applications/dbeaver.app/Contents/MacOS/dbeaver,bin/dbeaver}
 
         runHook postInstall
       '';

@@ -40,7 +40,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "habanero" ];
 
   # almost the entirety of the test suite makes network calls
-  pytestFlagsArray = [ "test/test-filters.py" ];
+  enabledTestPaths = [ "test/test-filters.py" ];
 
   meta = {
     description = "Python interface to Library Genesis";

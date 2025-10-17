@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "pgscv";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "CHERTS";
     repo = "pgscv";
     tag = "v${version}";
-    hash = "sha256-jUTHaZvJ6O3dVhBGO+ZFT9A7KmKieR2viGhZXwOv5S8=";
+    hash = "sha256-5n2HANuWQT1eQfz+cP0AlKLVe/aNJmGrTJ9l7l40T0k=";
   };
 
-  vendorHash = "sha256-v4Xi2R+q2jGD3Fy6xvKNRaf+P725acr+tvdDxod2KiI=";
+  vendorHash = "sha256-epQCbmfa2qlgEp0ta3FqjUlkEkq1duE0a20CSTLrS28=";
 
   ldflags = [
     "-X=main.appName=pgscv"
@@ -32,7 +32,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    description = "PgSCV is a PostgreSQL ecosystem metrics collector";
+    description = "PostgreSQL ecosystem metrics collector";
     homepage = "https://github.com/CHERTS/pgscv/";
     changelog = "https://github.com/CHERTS/pgscv/releases/${version}";
     license = lib.licenses.bsd3;

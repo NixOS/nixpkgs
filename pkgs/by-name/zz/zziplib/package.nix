@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "zziplib";
-  version = "0.13.79";
+  version = "0.13.80";
 
   src = fetchFromGitHub {
     owner = "gdraheim";
     repo = "zziplib";
-    rev = "v${version}";
-    hash = "sha256-PUG6MAglYJXJzQMWM7KfLFbHG3bva7FyaP+HdCsRnZQ=";
+    tag = "v${version}";
+    hash = "sha256-vvPcQBRk1iIPNk5qI7N0Nv9JWndVfFH6oGxyr9ZIt0g=";
   };
 
   nativeBuildInputs = [
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     xmlto
     zip
   ];
+
   buildInputs = [
     zlib
   ];
@@ -50,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "https://github.com/gdraheim/zziplib";
-    changelog = "https://github.com/gdraheim/zziplib/blob/${version}/ChangeLog";
+    changelog = "https://github.com/gdraheim/zziplib/blob/v${version}/ChangeLog";
     description = "Library to extract data from files archived in a zip file";
     longDescription = ''
       The zziplib library is intentionally lightweight, it offers the ability to
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
       lgpl2Plus
       mpl11
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 }

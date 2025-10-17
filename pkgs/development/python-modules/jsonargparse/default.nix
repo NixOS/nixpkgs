@@ -10,7 +10,6 @@
   omegaconf,
   pytest-subtests,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
   reconplogger,
   requests,
@@ -24,16 +23,14 @@
 
 buildPythonPackage rec {
   pname = "jsonargparse";
-  version = "4.40.0";
+  version = "4.42.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "omni-us";
     repo = "jsonargparse";
     tag = "v${version}";
-    hash = "sha256-2FEFAFEi+IRvFbFwto0YKJ/1JdSjb4kbTm1n9t/Ix4Y=";
+    hash = "sha256-M6CEUDf6JcjZWRBoHfVyFmX9ZV8xsB7illoBk0YzZs0=";
   };
 
   build-system = [ setuptools ];
@@ -82,7 +79,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module to implement minimal boilerplate CLIs derived from various sources";
     homepage = "https://github.com/omni-us/jsonargparse";
-    changelog = "https://github.com/omni-us/jsonargparse/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/omni-us/jsonargparse/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

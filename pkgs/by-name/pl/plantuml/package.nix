@@ -11,11 +11,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "plantuml";
-  version = "1.2025.3";
+  version = "1.2025.8";
 
   src = fetchurl {
     url = "https://github.com/plantuml/plantuml/releases/download/v${finalAttrs.version}/plantuml-pdf-${finalAttrs.version}.jar";
-    hash = "sha256-o8bBO9Crcrf2XLuLbakSiUp4WcIanJJTRwlDr4ydL0I=";
+    hash = "sha256-KYOy8hJ62IBrLx78S2JLAMR2wuL18Ww+afVgPeKgWgQ=";
   };
 
   nativeBuildInputs = [

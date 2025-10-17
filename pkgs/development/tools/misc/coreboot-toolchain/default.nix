@@ -15,8 +15,8 @@ let
         flex,
         getopt,
         git,
-        gnat,
-        gcc,
+        gnat14,
+        gcc14,
         lib,
         perl,
         stdenvNoCC,
@@ -50,7 +50,7 @@ let
         buildInputs = [
           flex
           zlib
-          (if withAda then gnat else gcc)
+          (if withAda then gnat14 else gcc14)
         ];
 
         enableParallelBuilding = true;
@@ -76,7 +76,7 @@ let
 
         meta = with lib; {
           homepage = "https://www.coreboot.org";
-          description = "coreboot toolchain for ${arch} targets";
+          description = "Coreboot toolchain for ${arch} targets";
           license = with licenses; [
             bsd2
             bsd3

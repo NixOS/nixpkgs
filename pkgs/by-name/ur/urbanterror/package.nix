@@ -115,9 +115,7 @@ stdenv.mkDerivation {
       realism". This results in a very unique, enjoyable and addictive game.
     '';
     mainProgram = "urbanterror";
-    maintainers = with lib.maintainers; [
-      drupol
-    ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

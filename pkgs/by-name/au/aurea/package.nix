@@ -64,6 +64,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "aurea";
     platforms = lib.platforms.linux;
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

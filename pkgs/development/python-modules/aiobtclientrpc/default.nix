@@ -27,13 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-2nBrIMlYUI4PwirkiSJSkw5zw2Kc/KoVRyIIYYx4iYs=";
   };
 
-  pythonRelaxDeps = [
-    "async-timeout"
-  ];
+  pythonRelaxDeps = [ "async-timeout" ];
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
   dependencies = [
     async-timeout
@@ -41,7 +37,8 @@ buildPythonPackage rec {
     httpx-socks
     python-socks
     rencode
-  ] ++ python-socks.optional-dependencies.asyncio;
+  ]
+  ++ python-socks.optional-dependencies.asyncio;
 
   nativeCheckInputs = [
     proxy-py
@@ -62,6 +59,8 @@ buildPythonPackage rec {
     "test_timeout[rtorrent_http]"
     "test_event_subscriptions_survive_reconnecting[rtorrent_http]"
     "test_waiting_for_event[rtorrent_http]"
+    # Tests are outdated
+    "test_DelugeRPCRequest_equality"
   ];
 
   pythonImportsCheck = [ "aiobtclientrpc" ];

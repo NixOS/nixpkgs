@@ -1,9 +1,9 @@
 {
   mkKdeDerivation,
-  libmusicbrainz5,
+  libmusicbrainz,
 }:
 mkKdeDerivation {
   pname = "libkcddb";
 
-  extraBuildInputs = [ libmusicbrainz5 ];
+  extraBuildInputs = [ libmusicbrainz ];
 }

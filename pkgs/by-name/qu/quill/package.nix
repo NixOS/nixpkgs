@@ -44,21 +44,19 @@ rustPlatform.buildRustPackage rec {
     export OPENSSL_LIB_DIR=${lib.getLib openssl}/lib
   '';
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-rpsbQYA6RBYSo2g+YhYG02CYlboRQvIwMqPAybayCOs=";
 
   nativeBuildInputs = [
     pkg-config
     protobuf
   ];
-  buildInputs =
-    [
-      openssl
-      udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libiconv
-    ];
+  buildInputs = [
+    openssl
+    udev
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   meta = {
     homepage = "https://github.com/dfinity/quill";

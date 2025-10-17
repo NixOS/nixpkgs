@@ -22,8 +22,8 @@ appimageTools.wrapAppImage {
   extraInstallCommands = ''
     mkdir -p $out/share/applications
     cp ${appimageContents}/wechat.desktop $out/share/applications/
-    mkdir -p $out/share/pixmaps
-    cp ${appimageContents}/wechat.png $out/share/pixmaps/
+    mkdir -p $out/share/icons/hicolor/256x256/apps
+    cp ${appimageContents}/wechat.png $out/share/icons/hicolor/256x256/apps/
 
     substituteInPlace $out/share/applications/wechat.desktop --replace-fail AppRun wechat
   '';

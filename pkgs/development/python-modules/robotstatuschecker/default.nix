@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "robotstatuschecker";
-  version = "3.0.1";
+  version = "4.1.1";
   pyproject = true;
 
   # no tests included in PyPI tarball
@@ -17,18 +17,12 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "statuschecker";
     tag = "v${version}";
-    hash = "sha256-yW6353gDwo/IzoWOB8oelaS6IUbvTtwwDT05yD7w6UA=";
+    hash = "sha256-YyiGd3XSIe+4PEL2l9LYDGH3lt1iRAAJflcBGYXaBzY=";
   };
 
-  postPatch = ''
-    # https://github.com/robotframework/statuschecker/issues/46
-    substituteInPlace test/tests.robot \
-      --replace-fail BuiltIn.Log Log
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ robotframework ];
+  dependencies = [ robotframework ];
 
   checkPhase = ''
     runHook preCheck

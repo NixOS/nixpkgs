@@ -45,7 +45,8 @@ buildPythonPackage rec {
     numpy
     tabulate
     wrapt
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   optional-dependencies = {
     tensorflow = [ tensorflow ];

@@ -155,20 +155,19 @@ in
           # Needed for the default wallpaper:
           pathsToLink = lib.optional (cfg.package != null) "/share/backgrounds/sway";
 
-          etc =
-            {
-              "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
-                # Import the most important environment variables into the D-Bus and systemd
-                # user environments (e.g. required for screen sharing and Pinentry prompts):
-                exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
-                # enable systemd-integration
-                exec "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
-                exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
-              '';
-            }
-            // lib.optionalAttrs (cfg.package != null) {
-              "sway/config".source = lib.mkOptionDefault "${cfg.package}/etc/sway/config";
-            };
+          etc = {
+            "sway/config.d/nixos.conf".source = pkgs.writeText "nixos.conf" ''
+              # Import the most important environment variables into the D-Bus and systemd
+              # user environments (e.g. required for screen sharing and Pinentry prompts):
+              exec dbus-update-activation-environment --systemd DISPLAY WAYLAND_DISPLAY SWAYSOCK XDG_CURRENT_DESKTOP
+              # enable systemd-integration
+              exec "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+              exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
+            '';
+          }
+          // lib.optionalAttrs (cfg.package != null) {
+            "sway/config".source = lib.mkOptionDefault "${cfg.package}/etc/sway/config";
+          };
         };
 
         systemd.user.targets.sway-session = {
@@ -205,7 +204,5 @@ in
     ]
   );
 
-  meta.maintainers = with lib.maintainers; [
-    primeos
-  ];
+  meta.maintainers = [ ];
 }

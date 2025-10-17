@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   pname = "netpbm";
-  version = "11.10.5";
+  version = "11.12.0";
 
   outputs = [
     "bin"
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "5085";
-    sha256 = "sha256-04ObCW+xMvGOkhTwYAhVoBG1QIe0/DKfEYbSpDkEGCU=";
+    rev = "5121";
+    sha256 = "sha256-u5/chGsu+imk6GtptDz/EIyCe3CmoWiQ6CAcLASqpqU=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
     libxml2
     libtiff
     jbigkit
-  ] ++ lib.optional enableX11 libX11;
+  ]
+  ++ lib.optional enableX11 libX11;
 
   strictDeps = true;
 
@@ -64,43 +65,42 @@ stdenv.mkDerivation rec {
       --replace '/sharedlink' '/lib'
   '';
 
-  configurePhase =
-    ''
-      runHook preConfigure
+  configurePhase = ''
+    runHook preConfigure
 
-      cp config.mk.in config.mk
+    cp config.mk.in config.mk
 
-      # Disable building static library
-      echo "STATICLIB_TOO = N" >> config.mk
+    # Disable building static library
+    echo "STATICLIB_TOO = N" >> config.mk
 
-      # Enable cross-compilation
-      echo 'AR = ${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar' >> config.mk
-      echo 'CC = ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc' >> config.mk
-      echo 'CC_FOR_BUILD = ${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc' >> config.mk
-      echo 'LD_FOR_BUILD = $(CC_FOR_BUILD)' >> config.mk
-      echo 'PKG_CONFIG = ${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' >> config.mk
-      echo 'RANLIB = ${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib' >> config.mk
+    # Enable cross-compilation
+    echo 'AR = ${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ar' >> config.mk
+    echo 'CC = ${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc' >> config.mk
+    echo 'CC_FOR_BUILD = ${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc' >> config.mk
+    echo 'LD_FOR_BUILD = $(CC_FOR_BUILD)' >> config.mk
+    echo 'PKG_CONFIG = ${buildPackages.pkg-config}/bin/${buildPackages.pkg-config.targetPrefix}pkg-config' >> config.mk
+    echo 'RANLIB = ${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib' >> config.mk
 
-      # Use libraries from Nixpkgs
-      echo "TIFFLIB = libtiff.so" >> config.mk
-      echo "TIFFLIB_NEEDS_JPEG = N" >> config.mk
-      echo "TIFFLIB_NEEDS_Z = N" >> config.mk
-      echo "JPEGLIB = libjpeg.so" >> config.mk
-      echo "JBIGLIB = libjbig.a" >> config.mk
-      # Insecure
-      echo "JASPERLIB = NONE" >> config.mk
+    # Use libraries from Nixpkgs
+    echo "TIFFLIB = libtiff.so" >> config.mk
+    echo "TIFFLIB_NEEDS_JPEG = N" >> config.mk
+    echo "TIFFLIB_NEEDS_Z = N" >> config.mk
+    echo "JPEGLIB = libjpeg.so" >> config.mk
+    echo "JBIGLIB = libjbig.a" >> config.mk
+    # Insecure
+    echo "JASPERLIB = NONE" >> config.mk
 
-      # Fix path to rgb.txt
-      echo "RGB_DB_PATH = $out/share/netpbm/misc/rgb.txt" >> config.mk
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
-      echo "NETPBMLIBTYPE = dylib" >> config.mk
-      echo "NETPBMLIBSUFFIX = dylib" >> config.mk
-    ''
-    + ''
-      runHook postConfigure
-    '';
+    # Fix path to rgb.txt
+    echo "RGB_DB_PATH = $out/share/netpbm/misc/rgb.txt" >> config.mk
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
+    echo "NETPBMLIBTYPE = dylib" >> config.mk
+    echo "NETPBMLIBSUFFIX = dylib" >> config.mk
+  ''
+  + ''
+    runHook postConfigure
+  '';
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";

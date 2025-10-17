@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gash";
-  version = "0.3.0";
+  version = "0.3.1";
 
   src = fetchurl {
-    url = "mirror://savannah/gash/gash-${finalAttrs.version}.tar.gz";
-    hash = "sha256-VGrsaRBo1nfFjd/BVpXbn4CGFuGfpzMi1Ppno8iXwqk=";
+    url = "mirror://gnu/guix/mirror/gash-${finalAttrs.version}.tar.gz";
+    hash = "sha256-RwPWo+Kg3ztZCC1Ku7vJXlr2Fp/OZGCTjC7O6eaPPBk=";
   };
 
   strictDeps = true;

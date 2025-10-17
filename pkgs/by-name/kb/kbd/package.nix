@@ -1,48 +1,51 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchgit,
   nixosTests,
   autoreconfHook,
   pkg-config,
   flex,
+  perl,
+  bison,
+  autoPatchelfHook,
   check,
   pam,
+  bash,
+  bashNonInteractive,
   coreutils,
-  gzip,
+  zlib,
   bzip2,
   xz,
   zstd,
   gitUpdater,
+  pkgsCross,
+  withVlock ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kbd";
-  version = "2.7.1";
+  version = "2.9.0";
 
-  src = fetchurl {
-    url = "mirror://kernel/linux/utils/kbd/${pname}-${version}.tar.xz";
-    sha256 = "sha256-8WfYmdkrVszxL29JNVFz+ThwqV8V2K7r9f3NKKYhrKg=";
+  __structuredAttrs = true;
+
+  src = fetchgit {
+    url = "https://git.kernel.org/pub/scm/linux/kernel/git/legion/kbd.git";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-uUECxFdm/UhoHKLHLFe6/ygCQ+4mrQOZExKl+ReaTNw=";
   };
 
   # vlock is moved into its own output, since it depends on pam. This
   # reduces closure size for most use cases.
   outputs = [
     "out"
-    "vlock"
     "dev"
+    "scripts"
+    "man"
+  ]
+  ++ lib.optionals withVlock [
+    "vlock"
   ];
-
-  configureFlags =
-    [
-      "--enable-optional-progs"
-      "--enable-libkeymap"
-      "--disable-nls"
-    ]
-    ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
-      "ac_cv_func_malloc_0_nonnull=yes"
-      "ac_cv_func_realloc_0_nonnull=yes"
-    ];
 
   patches = [
     ./search-paths.patch
@@ -60,56 +63,87 @@ stdenv.mkDerivation rec {
     mv fgGIod/trf{,-fgGIod}.map
     mv colemak/{en-latin9,colemak}.map
     popd
-
-    # Fix paths to decompressors. Trailing space to avoid replacing `xz` in `".xz"`.
-    substituteInPlace src/libkbdfile/kbdfile.c \
-      --replace-fail 'gzip '  '${gzip}/bin/gzip ' \
-      --replace-fail 'bzip2 ' '${bzip2.bin}/bin/bzip2 ' \
-      --replace-fail 'xz '    '${xz.bin}/bin/xz ' \
-      --replace-fail 'zstd '  '${zstd.bin}/bin/zstd '
-
-    sed -i '
-      1i prefix:=$(vlock)
-      1i bindir := $(vlock)/bin' \
-      src/vlock/Makefile.in \
-      src/vlock/Makefile.am
   '';
 
-  postInstall = ''
-    for i in $out/bin/unicode_{start,stop}; do
-      substituteInPlace "$i" \
-        --replace /usr/bin/tty ${coreutils}/bin/tty
-    done
+  preConfigure = ''
+    # Perl and Bash only used during build time
+    patchShebangs --build contrib/
   '';
 
-  buildInputs = [
-    check
-    pam
+  configureFlags = [
+    "--enable-optional-progs"
+    "--enable-libkeymap"
+    "--disable-nls"
+    (lib.enableFeature withVlock "vlock")
+  ]
+  ++ lib.optionals (!lib.systems.equals stdenv.buildPlatform stdenv.hostPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
   ];
-  NIX_LDFLAGS = lib.optional stdenv.hostPlatform.isStatic "-laudit";
+
+  strictDeps = true;
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     flex
+    perl
+    bison
+    autoPatchelfHook # for patching dlopen()
   ];
 
-  passthru.tests = {
-    inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
-  };
+  nativeCheckInputs = [
+    check
+  ];
+
+  buildInputs = [
+    zlib
+    bzip2
+    xz
+    zstd
+    bash
+  ]
+  ++ lib.optionals withVlock [ pam ];
+
+  postInstall = ''
+    substituteInPlace $out/bin/unicode_{start,stop} \
+      --replace-fail /usr/bin/tty ${coreutils}/bin/tty
+
+    moveToOutput bin/unicode_start $scripts
+    moveToOutput bin/unicode_stop $scripts
+  ''
+  + lib.optionalString withVlock ''
+    moveToOutput bin/vlock $vlock
+    moveToOutput etc/pam.d/vlock $vlock
+  '';
+
+  outputChecks.out.disallowedRequisites = [
+    bash
+    bashNonInteractive
+  ];
+
   passthru = {
-    gzip = gzip;
     updateScript = gitUpdater {
       # No nicer place to find latest release.
       url = "https://github.com/legionus/kbd.git";
       rev-prefix = "v";
     };
+    tests = {
+      cross =
+        let
+          systemString = if stdenv.buildPlatform.isAarch64 then "gnu64" else "aarch64-multiplatform";
+        in
+        pkgsCross.${systemString}.kbd;
+      inherit (nixosTests) keymap kbd-setfont-decompress kbd-update-search-paths-patch;
+    };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kbd-project.org/";
     description = "Linux keyboard tools and keyboard maps";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ davidak ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ davidak ];
   };
-}
+})

@@ -7,7 +7,7 @@
   yarn,
   nodejs,
   jq,
-  electron_36,
+  electron_38,
   element-web,
   sqlcipher,
   callPackage,
@@ -22,7 +22,7 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  electron = electron_36;
+  electron = electron_38;
   keytar = callPackage ./keytar {
     inherit electron;
   };
@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation (
   finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
+  removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";
@@ -57,7 +57,8 @@ stdenv.mkDerivation (
       jq
       yarn
       typescript
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ desktopToDarwinBundle ];
 
     inherit seshat;
 
@@ -74,6 +75,11 @@ stdenv.mkDerivation (
       substituteInPlace package.json --replace-fail "tsx " "node node_modules/tsx/dist/cli.mjs "
 
       runHook postConfigure
+    '';
+
+    # Workaround for darwin sandbox build failure: "Error: listen EPERM: operation not permitted ..tsx..."
+    preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
+      export TMPDIR="$(mktemp -d)"
     '';
 
     buildPhase = ''
@@ -99,18 +105,15 @@ stdenv.mkDerivation (
       mkdir -p "$out/share/element"
       ln -s '${element-web}' "$out/share/element/webapp"
       cp -r '.' "$out/share/element/electron"
-      cp -r './res/img' "$out/share/element"
       chmod -R "a+w" "$out/share/element/electron/node_modules"
       rm -rf "$out/share/element/electron/node_modules"
       cp -r './node_modules' "$out/share/element/electron"
       cp $out/share/element/electron/lib/i18n/strings/en_EN.json $out/share/element/electron/lib/i18n/strings/en-us.json
       ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
-      # icons
-      for icon in $out/share/element/electron/build/icons/*.png; do
-        mkdir -p "$out/share/icons/hicolor/$(basename $icon .png)/apps"
-        ln -s "$icon" "$out/share/icons/hicolor/$(basename $icon .png)/apps/element.png"
-      done
+      # icon
+      mkdir -p "$out/share/icons/hicolor/512x512/apps"
+      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
 
       # desktop item
       mkdir -p "$out/share"

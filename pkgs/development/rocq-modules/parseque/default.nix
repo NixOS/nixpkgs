@@ -1,7 +1,6 @@
 {
   lib,
   mkRocqDerivation,
-  which,
   stdlib,
   rocq-core,
   version ? null,
@@ -20,7 +19,7 @@ mkRocqDerivation {
       [ rocq-core.rocq-version ]
       [
         {
-          cases = [ (range "9.0" "9.0") ];
+          cases = [ (range "9.0" "9.1") ];
           out = "0.3.0";
         }
       ]

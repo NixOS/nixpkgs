@@ -12,21 +12,21 @@
   wrapGAppsHook3,
   makeDesktopItem,
   copyDesktopItems,
-  llvmPackages_19,
+  llvmPackages_20,
   autoPatchelfHook,
   unstableGitUpdater,
   fetchFromGitHub,
 }:
-llvmPackages_19.stdenv.mkDerivation {
+llvmPackages_20.stdenv.mkDerivation {
   pname = "xenia-canary";
-  version = "0-unstable-2025-06-21";
+  version = "0-unstable-2025-10-06";
 
   src = fetchFromGitHub {
     owner = "xenia-canary";
     repo = "xenia-canary";
     fetchSubmodules = true;
-    rev = "fd1abfe6aa66b2348d9f93f8e5065def06b1a11d";
-    hash = "sha256-cxwawoCLE0E/HaELfI3FG4yhk4GRtjB9pCs9gkeM+uc=";
+    rev = "703531d541fb9391afed4fbb951db198c9193c28";
+    hash = "sha256-xLZBEnSxDhGWGscvE4Ht4wSAnSxY+0wBLAA2MVVobHg=";
   };
 
   dontConfigure = true;
@@ -42,6 +42,11 @@ llvmPackages_19.stdenv.mkDerivation {
     libuuid
   ];
 
+  postPatch = ''
+    substituteInPlace premake5.lua \
+      --replace-fail "cdialect(\"C17\")" ""
+  ''; # Prevent build failure
+
   NIX_CFLAGS_COMPILE = [
     "-Wno-error=unused-result"
   ];
@@ -54,8 +59,8 @@ llvmPackages_19.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    python3 xenia-build setup
-    python3 xenia-build build --config=release -j $NIX_BUILD_CORES
+    python3 xenia-build.py setup
+    python3 xenia-build.py build --config=release
     runHook postBuild
   '';
 
@@ -89,7 +94,7 @@ llvmPackages_19.stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
 
   meta = {
     description = "Xbox 360 Emulator Research Project";

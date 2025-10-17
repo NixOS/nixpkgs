@@ -38,6 +38,9 @@ let
   # on the PATH to both be usable.
   targetPrefix = lib.optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 
+  # gas is disabled for some targets via noconfigdirs in configure.
+  targetHasGas = !stdenv.targetPlatform.isDarwin;
+
   # gas isn't multi-target, even with --enable-targets=all, so we do
   # separate builds of just gas for each target.
   #
@@ -45,7 +48,9 @@ let
   # additional targets here as required.
   allGasTargets =
     allGasTargets'
-    ++ lib.optional (!lib.elem targetPlatform.config allGasTargets') targetPlatform.config;
+    ++ lib.optional (
+      targetHasGas && !lib.elem targetPlatform.config allGasTargets'
+    ) targetPlatform.config;
   allGasTargets' = [
     "aarch64-unknown-linux-gnu"
     "alpha-unknown-linux-gnu"
@@ -115,38 +120,36 @@ stdenv.mkDerivation (finalAttrs: {
     ./windres-locate-gcc.patch
   ];
 
-  outputs =
-    [
-      "out"
-      "info"
-      "man"
-      "dev"
-    ]
-    # Ideally we would like to always install 'lib' into a separate
-    # target. Unfortunately cross-compiled binutils installs libraries
-    # across both `$lib/lib/` and `$out/$target/lib` with a reference
-    # from $out to $lib. Probably a binutils bug: all libraries should go
-    # to $lib as binutils does not build target libraries. Let's make our
-    # life slightly simpler by installing everything into $out for
-    # cross-binutils.
-    ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
+  outputs = [
+    "out"
+    "info"
+    "man"
+    "dev"
+  ]
+  # Ideally we would like to always install 'lib' into a separate
+  # target. Unfortunately cross-compiled binutils installs libraries
+  # across both `$lib/lib/` and `$out/$target/lib` with a reference
+  # from $out to $lib. Probably a binutils bug: all libraries should go
+  # to $lib as binutils does not build target libraries. Let's make our
+  # life slightly simpler by installing everything into $out for
+  # cross-binutils.
+  ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # texinfo was removed here in https://github.com/NixOS/nixpkgs/pull/210132
   # to reduce rebuilds during stdenv bootstrap.  Please don't add it back without
   # checking the impact there first.
-  nativeBuildInputs =
-    [
-      bison
-      perl
-    ]
-    ++ lib.optionals buildPlatform.isDarwin [
-      autoconf269
-      automake
-      gettext
-      libtool
-    ];
+  nativeBuildInputs = [
+    bison
+    perl
+  ]
+  ++ lib.optionals buildPlatform.isDarwin [
+    autoconf269
+    automake
+    gettext
+    libtool
+  ];
 
   buildInputs = [
     zlib
@@ -207,69 +210,68 @@ stdenv.mkDerivation (finalAttrs: {
     "target"
   ];
 
-  configureFlags =
-    [
-      "--enable-64-bit-bfd"
-      "--with-system-zlib"
+  configureFlags = [
+    "--enable-64-bit-bfd"
+    "--with-system-zlib"
 
-      "--enable-deterministic-archives"
-      "--disable-werror"
-      "--enable-fix-loongson2f-nop"
+    "--enable-deterministic-archives"
+    "--disable-werror"
+    "--enable-fix-loongson2f-nop"
 
-      # Turn on --enable-new-dtags by default to make the linker set
-      # RUNPATH instead of RPATH on binaries.  This is important because
-      # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
-      "--enable-new-dtags"
+    # Turn on --enable-new-dtags by default to make the linker set
+    # RUNPATH instead of RPATH on binaries.  This is important because
+    # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
+    "--enable-new-dtags"
 
-      # force target prefix. Some versions of binutils will make it empty if
-      # `--host` and `--target` are too close, even if Nixpkgs thinks the
-      # platforms are different (e.g. because not all the info makes the
-      # `config`). Other versions of binutils will always prefix if `--target` is
-      # passed, even if `--host` and `--target` are the same. The easiest thing
-      # for us to do is not leave it to chance, and force the program prefix to be
-      # what we want it to be.
-      "--program-prefix=${targetPrefix}"
+    # force target prefix. Some versions of binutils will make it empty if
+    # `--host` and `--target` are too close, even if Nixpkgs thinks the
+    # platforms are different (e.g. because not all the info makes the
+    # `config`). Other versions of binutils will always prefix if `--target` is
+    # passed, even if `--host` and `--target` are the same. The easiest thing
+    # for us to do is not leave it to chance, and force the program prefix to be
+    # what we want it to be.
+    "--program-prefix=${targetPrefix}"
 
-      # Unconditionally disable:
-      # - musl target needs porting: https://sourceware.org/PR29477
-      "--disable-gprofng"
+    # Unconditionally disable:
+    # - musl target needs porting: https://sourceware.org/PR29477
+    "--disable-gprofng"
 
-      # By default binutils searches $libdir for libraries. This brings in
-      # libbfd and libopcodes into a default visibility. Drop default lib
-      # path to force users to declare their use of these libraries.
-      "--with-lib-path=:"
-    ]
-    ++ lib.optionals withAllTargets [
-      "--enable-targets=all"
-      # gas will be built separately for each target.
-      "--disable-gas"
-    ]
-    ++ lib.optionals enableGold [
-      "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
-      "--enable-plugins"
-    ]
-    ++ (
-      if enableShared then
-        [
-          "--enable-shared"
-          "--disable-static"
-        ]
-      else
-        [
-          "--disable-shared"
-          "--enable-static"
-        ]
-    )
-    ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    # By default binutils searches $libdir for libraries. This brings in
+    # libbfd and libopcodes into a default visibility. Drop default lib
+    # path to force users to declare their use of these libraries.
+    "--with-lib-path=:"
+  ]
+  ++ lib.optionals withAllTargets [
+    "--enable-targets=all"
+    # gas will be built separately for each target.
+    "--disable-gas"
+  ]
+  ++ lib.optionals enableGold [
+    "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
+    "--enable-plugins"
+  ]
+  ++ (
+    if enableShared then
       [
-        # lld17+ passes `--no-undefined-version` by default and makes this a hard
-        # error; libctf.ver version script references symbols that aren't present.
-        #
-        # This is fixed upstream and can be removed with the future release of 2.43.
-        # For now we allow this with `--undefined-version`:
-        "LDFLAGS=-Wl,--undefined-version"
+        "--enable-shared"
+        "--disable-static"
       ]
-    );
+    else
+      [
+        "--disable-shared"
+        "--enable-static"
+      ]
+  )
+  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+    [
+      # lld17+ passes `--no-undefined-version` by default and makes this a hard
+      # error; libctf.ver version script references symbols that aren't present.
+      #
+      # This is fixed upstream and can be removed with the future release of 2.43.
+      # For now we allow this with `--undefined-version`:
+      "LDFLAGS=-Wl,--undefined-version"
+    ]
+  );
 
   postConfigure = lib.optionalString withAllTargets ''
     for target in ${lib.escapeShellArgs allGasTargets}; do
@@ -328,6 +330,8 @@ stdenv.mkDerivation (finalAttrs: {
           $makeFlags "''${makeFlagsArray[@]}" $installFlags "''${installFlagsArray[@]}" \
           install-exec-bindir
       done
+    ''
+    + lib.optionalString (withAllTargets && targetHasGas) ''
       ln -s $out/bin/${stdenv.targetPlatform.config}-as $out/bin/as
     '';
 

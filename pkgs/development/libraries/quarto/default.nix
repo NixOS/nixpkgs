@@ -23,7 +23,8 @@ let
   rWithPackages = rWrapper.override {
     packages = [
       rPackages.rmarkdown
-    ] ++ extraRPackages;
+    ]
+    ++ extraRPackages;
   };
 
   pythonWithPackages = python3.withPackages (
@@ -38,11 +39,11 @@ let
 in
 stdenv.mkDerivation (final: {
   pname = "quarto";
-  version = "1.7.32";
+  version = "1.7.34";
 
   src = fetchurl {
     url = "https://github.com/quarto-dev/quarto-cli/releases/download/v${final.version}/quarto-${final.version}-linux-amd64.tar.gz";
-    hash = "sha256-JiUF49JkWcZOZu/v1LkkDrdV6iDdb+h21qpkx6exPSc=";
+    hash = "sha256-3WsDCkS5Y9AflLlpa6y6ca/DF4621RqcwQUzK3fqa5o=";
   };
 
   patches = [
@@ -64,9 +65,12 @@ stdenv.mkDerivation (final: {
       --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
       --set-default QUARTO_TYPST ${lib.getExe typst} \
       ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
+      ${
+        lib.optionalString (python3 != null) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"
+      } \
       ${lib.optionalString (
-        python3 != null
-      ) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
+        rWrapper != null
+      ) "--set-default RETICULATE_PYTHON ${pythonWithPackages.interpreter}"}
   '';
 
   installPhase = ''
@@ -95,7 +99,7 @@ stdenv.mkDerivation (final: {
         '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source scientific and technical publishing system built on Pandoc";
     mainProgram = "quarto";
     longDescription = ''
@@ -103,14 +107,14 @@ stdenv.mkDerivation (final: {
       Quarto documents are authored using markdown, an easy to write plain text format.
     '';
     homepage = "https://quarto.org/";
-    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${version}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/quarto-dev/quarto-cli/releases/tag/v${final.version}";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       minijackson
       mrtarantoga
     ];
-    platforms = platforms.all;
-    sourceProvenance = with sourceTypes; [
+    platforms = lib.platforms.all;
+    sourceProvenance = with lib.sourceTypes; [
       binaryNativeCode
       binaryBytecode
     ];

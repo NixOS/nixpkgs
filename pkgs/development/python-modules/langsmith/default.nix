@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   httpx,
@@ -21,6 +21,7 @@
   fastapi,
   freezegun,
   instructor,
+  opentelemetry-sdk,
   pytest-asyncio,
   pytest-vcr,
   pytestCheckHook,
@@ -30,21 +31,21 @@
 
 buildPythonPackage rec {
   pname = "langsmith";
-  version = "0.3.45";
+  version = "0.4.34";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langsmith-sdk";
     tag = "v${version}";
-    hash = "sha256-uR3Uukt8LwoBKBcgyX2srK0C6O04IEECe/cFhBQFO2s=";
+    hash = "sha256-vuet4/Y5MW2Ob4zISl9vf3PD/OlmA/4/v7awVuvhk8E=";
   };
 
   sourceRoot = "${src.name}/python";
 
   pythonRelaxDeps = [ "orjson" ];
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     httpx
@@ -61,11 +62,13 @@ buildPythonPackage rec {
     fastapi
     freezegun
     instructor
+    opentelemetry-sdk
     pytest-asyncio
     pytest-vcr
     pytestCheckHook
     uvicorn
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ attr ];
 
   disabledTests = [
     # These tests require network access

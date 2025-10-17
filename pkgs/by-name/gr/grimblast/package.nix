@@ -12,19 +12,20 @@
   libnotify,
   slurp,
   wl-clipboard,
+  unixtools,
   bash,
   nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "grimblast";
-  version = "0.1-unstable-2025-06-14";
+  version = "0.1-unstable-2025-10-04";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "contrib";
-    rev = "9d4963e7394485ba4735779519c59275901de6ab";
-    hash = "sha256-nlmU6lpm8zGe6EnexauHr9Y/4AknE4j+ATcyjIsO1jw=";
+    rev = "32e1a75b65553daefb419f0906ce19e04815aa3a";
+    hash = "sha256-PzgQJydp+RlKvwDi807pXPlURdIAVqLppZDga3DwPqg=";
   };
 
   strictDeps = true;
@@ -54,6 +55,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           libnotify
           slurp
           wl-clipboard
+          unixtools.getopt
         ]
       }"
   '';

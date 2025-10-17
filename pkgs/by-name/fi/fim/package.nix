@@ -62,20 +62,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      flex
-      readline
-      libexif
-      bash
-    ]
-    ++ lib.optional x11Support SDL
-    ++ lib.optional svgSupport inkscape
-    ++ lib.optional asciiArtSupport aalib
-    ++ lib.optional gifSupport giflib
-    ++ lib.optional tiffSupport libtiff
-    ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional pngSupport libpng;
+  buildInputs = [
+    flex
+    readline
+    libexif
+    bash
+  ]
+  ++ lib.optional x11Support SDL
+  ++ lib.optional svgSupport inkscape
+  ++ lib.optional asciiArtSupport aalib
+  ++ lib.optional gifSupport giflib
+  ++ lib.optional tiffSupport libtiff
+  ++ lib.optional jpegSupport libjpeg
+  ++ lib.optional pngSupport libpng;
 
   configureFlags = [
     # mmap works on all relevant platforms
@@ -98,6 +97,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nongnu.org/fbi-improved/";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
   };
 }

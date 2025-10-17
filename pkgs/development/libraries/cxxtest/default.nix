@@ -12,7 +12,7 @@ buildPythonApplication rec {
 
   src = fetchFromGitHub {
     owner = "CxxTest";
-    repo = pname;
+    repo = "cxxtest";
     rev = version;
     sha256 = "19w92kipfhp5wvs47l0qpibn3x49sbmvkk91yxw6nwk6fafcdl17";
   };

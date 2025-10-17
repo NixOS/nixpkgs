@@ -86,10 +86,18 @@ let
       colmap = linux;
       ctranslate2 = linux;
       ffmpeg-full = linux;
+      firefox = linux;
+      firefox-unwrapped = linux;
+      firefox-beta = linux;
+      firefox-beta-unwrapped = linux;
+      firefox-devedition = linux;
+      firefox-devedition-unwrapped = linux;
       gimp = linux;
       gimp3 = linux;
       gpu-screen-recorder = linux;
       gst_all_1.gst-plugins-bad = linux;
+      jellyfin-ffmpeg = linux;
+      kdePackages.kdenlive = linux;
       lightgbm = linux;
       llama-cpp = linux;
       meshlab = linux;
@@ -97,6 +105,7 @@ let
       monado = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581
       noisetorch = linux;
       obs-studio-plugins.obs-backgroundremoval = linux;
+      octave = linux; # because depend on SuiteSparse which need rebuild when cuda enabled
       ollama = linux;
       onnxruntime = linux;
       openmvg = linux;
@@ -109,6 +118,8 @@ let
       saga = linux;
       suitesparse = linux;
       sunshine = linux;
+      thunderbird = linux;
+      thunderbird-unwrapped = linux;
       truecrack-cuda = linux;
       tts = linux;
       ueberzugpp = linux; # Failed in https://github.com/NixOS/nixpkgs/pull/233581

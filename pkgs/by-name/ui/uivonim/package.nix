@@ -37,7 +37,7 @@ buildNpmPackage rec {
   meta = with lib; {
     homepage = "https://github.com/smolck/uivonim";
     description = "Cross-platform GUI for neovim based on electron";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     license = licenses.agpl3Only;
     mainProgram = "uivonim";

@@ -19,20 +19,20 @@
 
 let
   parts = fetchurl {
-    url = "https://web.archive.org/web/20241230062818/https://library.ldraw.org/library/updates/complete.zip";
-    hash = "sha256-0RIJYEU+MpE4MSfxk2HK5hQd8IsiPn2xEGUFmItzlk8=";
+    url = "https://web.archive.org/web/20250709230715/https://library.ldraw.org/library/updates/complete.zip";
+    hash = "sha256-Uy7YYE7LdcmgEGbt6DlljS3QCQxjcviLApFuu1p9GZ8=";
   };
 
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "leocad";
-  version = "23.03";
+  version = "25.09";
 
   src = fetchFromGitHub {
     owner = "leozide";
     repo = "leocad";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-IY9mr2gSMZL9pxiVTKH/f7rjsOvBDNgwVKpXA57oMGo=";
+    hash = "sha256-Utiy9JBKaPddb2yNv1Ta61KIB1vCsayZlxagn3or5UE=";
   };
 
   nativeBuildInputs = [

@@ -85,6 +85,7 @@ let
           # ValueError: An instance of Chroma already exists for ephemeral with different settings
           "chromadb/test/test_chroma.py"
           "chromadb/test/test_client.py"
+          "chromadb/test/ef/test_multimodal_ef.py"
         ];
       });
     };
@@ -92,20 +93,24 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "vectorcode";
-  version = "0.6.12";
+  version = "0.7.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Davidyz";
     repo = "VectorCode";
     tag = version;
-    hash = "sha256-7RI5F7r4yX3wqAuakdBvZOvDRWn8IHntU0fyTPIXjT4=";
+    hash = "sha256-YRvJVdNZLmNongYEy06QPsmJkPvmg7cucjLJY05yD54=";
   };
 
   build-system = with python.pkgs; [
     pdm-backend
   ];
 
+  pythonRelaxDeps = [
+    "posthog"
+    "wheel"
+  ];
   dependencies =
     with python.pkgs;
     [
@@ -157,40 +162,43 @@ python.pkgs.buildPythonApplication rec {
     installShellCompletion vectorcode.{bash,zsh}
   '';
 
-  postFixup = ''
-    wrapProgram $out/bin/vectorcode \
-      --prefix PYTHONPATH : "$PYTHONPATH" \
-      --set PATH ${
-        lib.makeBinPath [
-          python
-        ]
-      };
-  '';
-
-  # Test collection breaks on aarch64-linux, because the transitive onnxruntime
-  # tries to read /sys/devices/system/cpu, which does not exist in the sandbox.
-  #
-  # We inherit the issue from chromadb, so inherit its `doCheck` attribute.
-  inherit (python.pkgs.chromadb) doCheck;
+  makeWrapperArgs = [
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
+  ];
 
   pythonImportsCheck = [ "vectorcode" ];
 
-  nativeCheckInputs =
-    [
-      versionCheckHook
-    ]
-    ++ (with python.pkgs; [
-      mcp
-      pygls
-      pytestCheckHook
-    ]);
+  nativeCheckInputs = [
+    versionCheckHook
+  ]
+  ++ (with python.pkgs; [
+    mcp
+    pygls
+    pytest-asyncio
+    pytestCheckHook
+  ]);
   versionCheckProgramArg = "version";
 
   disabledTests = [
     # Require internet access
+    "test_chunked_add"
+    "test_chunked_add_empty_file"
+    "test_chunked_add_truncated"
+    "test_chunked_add_update_existing"
+    "test_chunked_add_with_existing"
     "test_get_embedding_function"
     "test_get_embedding_function_fallback"
+    "test_get_query_reranker_initialisation_error"
+    "test_get_query_result_chunks_with_query_exclude"
+    "test_get_query_result_files_include_chunk"
+    "test_get_query_result_files_multiple_queries"
+    "test_get_query_result_files_query_error"
+    "test_get_query_result_files_with_query_exclude"
     "test_get_reranker"
+    "test_query_tool_success"
     "test_supported_rerankers_initialization"
   ];
 
@@ -207,5 +215,16 @@ python.pkgs.buildPythonApplication rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "vectorcode";
+    badPlatforms = [
+      # Error in cpuinfo: failed to parse the list of possible processors in /sys/devices/system/cpu/possible
+      # Error in cpuinfo: failed to parse the list of present processors in /sys/devices/system/cpu/present
+      # Error in cpuinfo: failed to parse both lists of possible and present processors
+      # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+      #   what():  /build/source/include/onnxruntime/core/common/logging/logging.h:371 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
+      #
+      # Since 0.7.4, disabling `pythonImportsCheck` and `pytestCheckPhase` is not enough anymore.
+      # The error above happens at the end of `pypaInstallPhase`.
+      "aarch64-linux"
+    ];
   };
 }

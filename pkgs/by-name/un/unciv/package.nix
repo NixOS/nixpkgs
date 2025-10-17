@@ -9,9 +9,10 @@
   libGL,
   libpulseaudio,
   libXxf86vm,
+  nix-update-script,
 }:
 let
-  version = "4.16.5";
+  version = "4.18.4";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -34,7 +35,6 @@ let
       libXxf86vm
     ]
   );
-
 in
 stdenv.mkDerivation rec {
   pname = "unciv";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-CMyZlQ5zXHxUExH7aMIJ4nreEPz8Y0eeJ5nnt267SqU=";
+    hash = "sha256-xF9Y6pil7UZzrN0k/2qZ/FKSj7WudRwF3u167Sz3RyA=";
   };
 
   dontUnpack = true;
@@ -67,11 +67,13 @@ stdenv.mkDerivation rec {
 
   desktopItems = [ desktopItem ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
-    maintainers = with maintainers; [ tex ];
+    maintainers = [ ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mpl20;
     platforms = platforms.all;

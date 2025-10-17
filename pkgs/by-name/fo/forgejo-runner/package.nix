@@ -13,31 +13,70 @@ let
   disabledTests = [
     "Test_runCreateRunnerFile"
     "Test_ping"
+
+    # The following tests were introduced in 9.x with the inclusion of act
+    # the pkgs/by-name/ac/act/package.nix just sets doCheck = false;
+
+    # Requires running docker install
+    "TestDocker"
+    "TestJobExecutor"
+    "TestRunner"
+    "Test_validateCmd"
+
+    # Docker network request for image
+    "TestImageExistsLocally"
+
+    # Reaches out to different websites
+    "TestFindGitRemoteURL"
+    "TestGitFindRef"
+    "TestGitCloneExecutor"
+    "TestCloneIfRequired"
+    "TestActionCache"
+    "TestRunContext_GetGitHubContext"
+
+    # These tests rely on outbound IP address
+    "TestHandler"
+    "TestHandler_gcCache"
   ];
 in
 buildGoModule rec {
   pname = "forgejo-runner";
-  version = "6.4.0";
+  version = "11.1.2";
 
   src = fetchFromGitea {
     domain = "code.forgejo.org";
     owner = "forgejo";
     repo = "runner";
     rev = "v${version}";
-    hash = "sha256-fEsT82h33XIBXyvcIYNsieQiV45jLnxLpFP5ji9pNlg=";
+    hash = "sha256-/rkBrG8hRn52M1ybjbWtSDFYsJ4fHzw9qAoc5325g9A=";
   };
 
-  vendorHash = "sha256-KV8KYOjy3WO+yfVWEFwKZVAesmx4tFk/k/sTLDKk9lo=";
+  vendorHash = "sha256-eVOmUozNLHRiNwIhbf7ebVNdRiMAtLMdYI7pnALvl8U=";
+
+  # See upstream Makefile
+  # https://code.forgejo.org/forgejo/runner/src/branch/main/Makefile
+  tags = [
+    "netgo"
+    "osusergo"
+  ];
 
   ldflags = [
     "-s"
     "-w"
-    "-X gitea.com/gitea/act_runner/internal/pkg/ver.version=${src.rev}"
+    "-X code.forgejo.org/forgejo/runner/v11/internal/pkg/ver.version=${src.rev}"
   ];
 
   checkFlags = [
     "-skip ${lib.concatStringsSep "|" disabledTests}"
   ];
+
+  postInstall = ''
+    # fix up go-specific executable naming derived from package name, upstream
+    # also calls it `forgejo-runner`
+    mv $out/bin/runner $out/bin/forgejo-runner
+    # provide old binary name for compatibility
+    ln -s $out/bin/forgejo-runner $out/bin/act_runner
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
@@ -54,13 +93,14 @@ buildGoModule rec {
   meta = with lib; {
     description = "Runner for Forgejo based on act";
     homepage = "https://code.forgejo.org/forgejo/runner";
-    changelog = "https://code.forgejo.org/forgejo/runner/src/tag/${src.rev}/RELEASE-NOTES.md";
-    license = licenses.mit;
+    changelog = "https://code.forgejo.org/forgejo/runner/releases/tag/${src.rev}";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       adamcstephens
       emilylange
       christoph-heiss
+      tebriel
     ];
-    mainProgram = "act_runner";
+    mainProgram = "forgejo-runner";
   };
 }

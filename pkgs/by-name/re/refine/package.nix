@@ -21,7 +21,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "refine";
-  version = "0.5.9";
+  version = "0.6.0";
   pyproject = false; # uses meson
 
   src = fetchFromGitLab {
@@ -29,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     owner = "TheEvilSkeleton";
     repo = "Refine";
     tag = version;
-    hash = "sha256-jX2U6YZCvB8IxUHoByO4egqV40C/L/O8z7AIEYYHBRY=";
+    hash = "sha256-EomhAJORgVBwBb6CUAKAW82SoRwN9CBCyI0nLuO9ii0=";
   };
 
   nativeBuildInputs = [
@@ -50,14 +50,13 @@ python3Packages.buildPythonApplication rec {
     libadwaita
   ];
 
-  dependencies =
-    [
-      libportal
-      libportal-gtk4
-    ]
-    ++ (with python3Packages; [
-      pygobject3
-    ]);
+  dependencies = [
+    libportal
+    libportal-gtk4
+  ]
+  ++ (with python3Packages; [
+    pygobject3
+  ]);
 
   strictDeps = true;
 

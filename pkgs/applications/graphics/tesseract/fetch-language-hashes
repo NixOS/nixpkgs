@@ -30,6 +30,6 @@ fi
 
 for lang in $langCodes; do
     url=https://github.com/tesseract-ocr/tessdata/raw/$tessdataRev/$lang.traineddata
-    hash=$(nix hash to-sri --type sha256 $(nix-prefetch-url $url 2>/dev/null))
+    hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url $url 2>/dev/null))
     echo "$lang = \"$hash\";"
 done

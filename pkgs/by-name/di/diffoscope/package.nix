@@ -106,12 +106,12 @@ in
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python.pkgs.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "300";
-  format = "setuptools";
+  version = "304";
+  pyproject = true;
 
   src = fetchurl {
     url = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    hash = "sha256-ByfAS1ygWex8FLGeaV1HouSb6ElDZjAhXV5xjpsltFE=";
+    hash = "sha256-lJdZRIyoVq1PsmiicsSxJ0Mgsy5IcAUar6l8QvJoxOw=";
   };
 
   outputs = [
@@ -134,6 +134,8 @@ python.pkgs.buildPythonApplication rec {
     help2man
     installShellFiles
   ];
+
+  build-system = with python.pkgs; [ setuptools ];
 
   # Most of the non-Python dependencies here are optional command-line tools for various file-format parsers.
   # To help figuring out what's missing from the list, run: ./pkgs/tools/misc/diffoscope/list-missing-tools.sh
@@ -260,7 +262,7 @@ python.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python.pkgs; [ pytestCheckHook ] ++ pythonPath;
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Always show more information when tests fail
     "-vv"
   ];
@@ -270,30 +272,31 @@ python.pkgs.buildPythonApplication rec {
     installManPage doc/diffoscope.1
   '';
 
-  disabledTests =
-    [
-      "test_sbin_added_to_path"
-      "test_diff_meta"
-      "test_diff_meta2"
+  disabledTests = [
+    "test_sbin_added_to_path"
+    "test_diff_meta"
+    "test_diff_meta2"
 
-      # Fails because it fails to determine llvm version
-      "test_item3_deflate_llvm_bitcode"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Disable flaky tests on Darwin
-      "test_non_unicode_filename"
-      "test_listing"
-      "test_symlink_root"
+    # Fails because it fails to determine llvm version
+    "test_item3_deflate_llvm_bitcode"
 
-      # Appears to be a sandbox related issue
-      "test_trim_stderr_in_command"
-      # Seems to be a bug caused by having different versions of rdata than
-      # expected. Will file upstream.
-      "test_item_rdb"
-      # Caused by getting an otool command instead of llvm-objdump. Could be Nix
-      # setup, could be upstream bug. Will file upstream.
-      "test_libmix_differences"
-    ];
+    # Flaky test on Linux and Darwin
+    "test_non_unicode_filename"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Disable flaky tests on Darwin
+    "test_listing"
+    "test_symlink_root"
+
+    # Appears to be a sandbox related issue
+    "test_trim_stderr_in_command"
+    # Seems to be a bug caused by having different versions of rdata than
+    # expected. Will file upstream.
+    "test_item_rdb"
+    # Caused by getting an otool command instead of llvm-objdump. Could be Nix
+    # setup, could be upstream bug. Will file upstream.
+    "test_libmix_differences"
+  ];
 
   disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/comparators/test_git.py"
@@ -301,6 +304,8 @@ python.pkgs.buildPythonApplication rec {
     "tests/comparators/test_uimage.py"
     "tests/comparators/test_device.py"
     "tests/comparators/test_macho.py"
+    # OSError: AF_UNIX path too long
+    "tests/comparators/test_sockets.py"
   ];
 
   passthru = {

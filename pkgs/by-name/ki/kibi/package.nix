@@ -9,7 +9,6 @@ rustPlatform.buildRustPackage rec {
   pname = "kibi";
   version = "0.2.2";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-7SOkREsGiolT5LxLAbjZe3aAYBT/AlhlOXDlDmoei9w=";
 
   src = fetchFromGitHub {

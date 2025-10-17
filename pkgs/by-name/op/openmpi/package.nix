@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   removeReferencesTo,
   gfortran,
   perl,
@@ -41,23 +40,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openmpi";
-  version = "5.0.6";
+  version = "5.0.8";
 
   src = fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${lib.versions.majorMinor finalAttrs.version}/downloads/openmpi-${finalAttrs.version}.tar.bz2";
-    sha256 = "sha256-vUGD/LxDR3wlR5m0Kd8abldsBC50otL4s31Tey/5gVc=";
+    sha256 = "sha256-UxMeGlfnJw9kVwf4sLZbpWBI9bWsP2j6q+0+sNcQ5Ek=";
   };
-
-  patches = [
-    # This patch can be removed with the next openmpi update (>5.0.6)
-    # See https://github.com/open-mpi/ompi/issues/12784 and https://github.com/open-mpi/ompi/pull/13003
-    # Fixes issue where the shared memory backing file cannot be created because directory trees are never created
-    (fetchpatch {
-      name = "fix-singletons-session-dir";
-      url = "https://github.com/open-mpi/ompi/commit/4d4f7212decd0d0ca719688b15dc9b3ee7553a52.patch";
-      hash = "sha256-Mb8qXtAUhAQ90v0SdL24BoTASsKRq2Gu8nYqoeSc9DI=";
-    })
-  ];
 
   postPatch = ''
     patchShebangs ./
@@ -82,7 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
   env = {
     USER = "nixbld";
     HOSTNAME = "localhost";
-    SOURCE_DATE_EPOCH = "0";
   };
 
   outputs = [
@@ -91,37 +78,37 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  buildInputs =
-    [
-      zlib
-      libevent
-      hwloc
-      prrte
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libnl
-      numactl
-      pmix
-      ucx
-      ucc
-    ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
-    # needed for internal pmix
-    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
-    ++ lib.optionals fabricSupport [
-      libpsm2
-      libfabric
-    ];
+  buildInputs = [
+    zlib
+    libevent
+    hwloc
+    prrte
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libnl
+    numactl
+    pmix
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
+    ucx
+    ucc
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_cudart ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isFreeBSD) [ rdma-core ]
+  # needed for internal pmix
+  ++ lib.optionals (!stdenv.hostPlatform.isLinux) [ python3 ]
+  ++ lib.optionals fabricSupport [
+    libpsm2
+    libfabric
+  ];
 
-  nativeBuildInputs =
-    [
-      perl
-      removeReferencesTo
-      makeWrapper
-    ]
-    ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
-    ++ lib.optionals fortranSupport [ gfortran ];
+  nativeBuildInputs = [
+    perl
+    removeReferencesTo
+    makeWrapper
+  ]
+  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ]
+  ++ lib.optionals fortranSupport [ gfortran ];
 
   configureFlags = [
     (lib.enableFeature cudaSupport "mca-dso")
@@ -137,12 +124,14 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/openucx/ucx
     # https://www.open-mpi.org/faq/?category=buildcuda
     (lib.withFeatureAs cudaSupport "cuda" (lib.getDev cudaPackages.cuda_cudart))
+    (lib.withFeatureAs cudaSupport "cuda-libdir" "${cudaPackages.cuda_cudart.stubs}/lib")
     (lib.enableFeature cudaSupport "dlopen")
     (lib.withFeatureAs fabricSupport "psm2" (lib.getDev libpsm2))
     (lib.withFeatureAs fabricSupport "ofi" (lib.getDev libfabric))
     # The flag --without-ofi-libdir is not supported from some reason, so we
     # don't use lib.withFeatureAs
-  ] ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
+  ]
+  ++ lib.optionals fabricSupport [ "--with-ofi-libdir=${lib.getLib libfabric}/lib" ];
 
   enableParallelBuilding = true;
 
@@ -151,60 +140,58 @@ stdenv.mkDerivation (finalAttrs: {
       # The file names we need to iterate are a combination of ${p}${s}, and there
       # are 7x3 such options. We use lib.mapCartesianProduct to iterate them all.
       fileNamesToIterate = {
-        p =
-          [
-            "mpi"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [
-            "shmem"
-            "osh"
-          ];
-        s =
-          [
-            "c++"
-            "cxx"
-            "cc"
-          ]
-          ++ lib.optionals fortranSupport [
-            "f77"
-            "f90"
-            "fort"
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isLinux [ "CC" ];
+        p = [
+          "mpi"
+        ]
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [
+          "shmem"
+          "osh"
+        ];
+        s = [
+          "c++"
+          "cxx"
+          "cc"
+        ]
+        ++ lib.optionals fortranSupport [
+          "f77"
+          "f90"
+          "fort"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isLinux [ "CC" ];
       };
-      wrapperDataSubstitutions =
-        {
-          # The attr key is the filename prefix. The list's 1st value is the
-          # compiler=_ line that should be replaced by a compiler=#2 string, where
-          # #2 is the 2nd value in the list.
-          "cc" = [
-            # "$CC" is expanded by the executing shell in the substituteInPlace
-            # commands to the name of the compiler ("clang" for Darwin and
-            # "gcc" for Linux)
-            "$CC"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
-          ];
-          "c++" = [
-            # Same as with $CC
-            "$CXX"
-            "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
-          ];
-        }
-        // lib.optionalAttrs fortranSupport {
-          "fort" = [
-            "gfortran"
-            "${targetPackages.gfortran or gfortran}/bin/${
-              targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
-            }gfortran"
-          ];
-        };
+      wrapperDataSubstitutions = {
+        # The attr key is the filename prefix. The list's 1st value is the
+        # compiler=_ line that should be replaced by a compiler=#2 string, where
+        # #2 is the 2nd value in the list.
+        "cc" = [
+          # "$CC" is expanded by the executing shell in the substituteInPlace
+          # commands to the name of the compiler ("clang" for Darwin and
+          # "gcc" for Linux)
+          "$CC"
+          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CC"
+        ];
+        "c++" = [
+          # Same as with $CC
+          "$CXX"
+          "${targetPackages.stdenv.cc}/bin/${targetPackages.stdenv.cc.targetPrefix}$CXX"
+        ];
+      }
+      // lib.optionalAttrs fortranSupport {
+        "fort" = [
+          "gfortran"
+          "${targetPackages.gfortran or gfortran}/bin/${
+            targetPackages.gfortran.targetPrefix or gfortran.targetPrefix
+          }gfortran"
+        ];
+      };
       # The -wrapper-data.txt files that are not symlinks, need to be iterated as
       # well, here they start withw ${part1}${part2}, and we use
       # lib.mapCartesianProduct as well.
       wrapperDataFileNames = {
         part1 = [
           "mpi"
-        ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "shmem" ];
+        ]
+        ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform ucx) [ "shmem" ];
         part2 = builtins.attrNames wrapperDataSubstitutions;
       };
     in
@@ -240,14 +227,14 @@ stdenv.mkDerivation (finalAttrs: {
         ))
         (lib.concatStringsSep "\n")
       ]}
-      # A symlink to $\{lib.getDev pmix}/bin/pmixcc upstreeam puts here as well
-      # from some reason.
-      moveToOutput "bin/pcc" "''${!outputDev}"
 
       # Handle informative binaries about the compilation
-      for i in {prte,ompi,oshmem}_info; do
-        moveToOutput "bin/$i" "''${!outputDev}"
-      done
+      ${lib.pipe wrapperDataFileNames.part1 [
+        (map (name: ''
+          moveToOutput "bin/o${name}_info" "''${!outputDev}"
+        ''))
+        (lib.concatStringsSep "\n")
+      ]}
     '';
 
   postFixup = ''
@@ -285,5 +272,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
+    # checking size of Fortran CHARACTER... configure: error: Can not determine size of CHARACTER when cross-compiling
+    broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   };
 })

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -22,7 +23,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd gmailctl \
       --bash <($out/bin/gmailctl completion bash) \
       --fish <($out/bin/gmailctl completion fish) \

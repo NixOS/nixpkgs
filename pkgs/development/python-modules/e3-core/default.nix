@@ -14,6 +14,7 @@
   requests-cache,
   requests-toolbelt,
   requests,
+  resolvelib,
   setuptools,
   stevedore,
   tqdm,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "e3-core";
-  version = "22.6.0";
+  version = "22.10.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,31 +31,31 @@ buildPythonPackage rec {
     owner = "AdaCore";
     repo = "e3-core";
     tag = "v${version}";
-    hash = "sha256-6rClGDo8KhBbOg/Rw0nVISVtOAACf5cwSafNInlBGCw=";
+    hash = "sha256-LHWtgIvbS1PaF85aOpdhR0rWQGRUtbY0Qg1SZxQOsSc=";
   };
 
   build-system = [ setuptools ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
-  dependencies =
-    [
-      colorama
-      packaging
-      python-dateutil
-      pyyaml
-      requests
-      requests-cache
-      requests-toolbelt
-      stevedore
-      tqdm
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux [
-      # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
-      # These are required only on Linux. Darwin has its own set of requirements
-      psutil
-      distro
-    ];
+  dependencies = [
+    colorama
+    packaging
+    python-dateutil
+    pyyaml
+    requests
+    requests-cache
+    requests-toolbelt
+    resolvelib
+    stevedore
+    tqdm
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux [
+    # See https://github.com/AdaCore/e3-core/blob/v22.6.0/pyproject.toml#L37-L42
+    # These are required only on Linux. Darwin has its own set of requirements
+    psutil
+    distro
+  ];
 
   pythonImportsCheck = [ "e3" ];
 
@@ -62,7 +63,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    changelog = "https://github.com/AdaCore/e3-core/releases/tag/v${version}";
+    changelog = "https://github.com/AdaCore/e3-core/releases/tag/${src.tag}";
     homepage = "https://github.com/AdaCore/e3-core/";
     description = "Core framework for developing portable automated build systems";
     license = licenses.gpl3Only;

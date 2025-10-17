@@ -44,6 +44,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
   ];
 
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";

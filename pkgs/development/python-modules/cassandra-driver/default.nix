@@ -6,6 +6,7 @@
   cython,
   eventlet,
   fetchFromGitHub,
+  fetchpatch,
   geomet,
   gevent,
   gremlinpython,
@@ -21,7 +22,6 @@
   twisted,
   setuptools,
   distutils,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +35,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-RX9GLk2admzRasmP7LCwIfsJIt8TC/9rWhIcoTqS0qc=";
   };
+
+  patches = [
+    # https://github.com/datastax/python-driver/pull/1242
+    (fetchpatch {
+      name = "Maintain-compatibility-with-CPython-3.13.patch";
+      url = "https://github.com/datastax/python-driver/commit/b144a84a1f97002c4545b335efaac719519cd9fa.patch";
+      hash = "sha256-60ki6i1SiGxK+J4x/8voS7Hh2x249ykpjU9EMYKD8kc=";
+    })
+  ];
 
   pythonRelaxDeps = [ "geomet" ];
 
@@ -56,10 +65,15 @@ buildPythonPackage rec {
     pytz
     pyyaml
     sure
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # This is used to determine the version of cython that can be used
   CASS_DRIVER_ALLOWED_CYTHON_VERSION = cython.version;
+
+  preBuild = ''
+    export CASS_DRIVER_BUILD_CONCURRENCY=$NIX_BUILD_CORES
+  '';
 
   # Make /etc/protocols accessible to allow socket.getprotobyname('tcp') in sandbox,
   # also /etc/resolv.conf is referenced by some tests
@@ -87,7 +101,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   disabledTestPaths = [
     # requires puresasl
@@ -115,8 +129,6 @@ buildPythonPackage rec {
   };
 
   meta = {
-    # cassandra/io/libevwrapper.c:668:10: error: implicit declaration of function ‘PyEval_ThreadsInitialized’ []
-    broken = pythonAtLeast "3.13";
     description = "Python client driver for Apache Cassandra";
     homepage = "http://datastax.github.io/python-driver";
     changelog = "https://github.com/datastax/python-driver/blob/${version}/CHANGELOG.rst";

@@ -17,7 +17,6 @@ in
 rustPlatform.buildRustPackage {
   inherit pname version src;
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Txyj2o4Ew8VPKV/UCNiLhosgm5kuSl+na2l4H3yl/Yc=";
 
   # No tests
@@ -28,7 +27,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/Lyr-7D1h/swayest_workstyle";
     license = lib.licenses.mit;
     mainProgram = "sworkstyle";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

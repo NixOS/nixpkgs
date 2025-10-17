@@ -22,8 +22,6 @@ buildPythonPackage rec {
   version = "0.14.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-znp";
@@ -41,14 +39,14 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
-    async-timeout
     coloredlogs
     jsonschema
     voluptuous
     zigpy
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
-
-  doCheck = false; # tests are not compatible with zigpy 0.65.3
 
   nativeCheckInputs = [
     pytest-asyncio
@@ -59,17 +57,12 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--reruns=3" ];
+  pytestFlags = [ "--reruns=3" ];
 
   disabledTests = [
-    # failing since zigpy 0.60.0
-    "test_join_device"
-    "test_nonstandard_profile"
-    "test_permit_join"
-    "test_request_recovery_route_rediscovery_zdo"
-    "test_watchdog"
-    "test_zigpy_request"
-    "test_zigpy_request_failure"
+    # broken by https://github.com/zigpy/zigpy/pull/1635
+    "test_concurrency_auto_config"
+    "test_request_concurrency"
   ];
 
   pythonImportsCheck = [ "zigpy_znp" ];

@@ -8,7 +8,7 @@
 python312.pkgs.buildPythonApplication rec {
   pname = "patray";
   version = "0.1.2";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     inherit version pname;
@@ -20,6 +20,8 @@ python312.pkgs.buildPythonApplication rec {
     sed -i 's/production.txt/production.in/' setup.py
     sed -i '/pyside2/d' requirements/production.in
   '';
+
+  build-system = with python312.pkgs; [ setuptools ];
 
   dependencies = with python312.pkgs; [
     pulsectl
@@ -39,7 +41,7 @@ python312.pkgs.buildPythonApplication rec {
     description = "Yet another tray pulseaudio frontend";
     homepage = "https://github.com/pohmelie/patray";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "patray";
   };
 }

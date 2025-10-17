@@ -10,6 +10,7 @@
   aiohttp,
 
   # tests
+  pytest-asyncio,
   pytestCheckHook,
 }:
 
@@ -33,7 +34,10 @@ buildPythonPackage {
 
   propagatedBuildInputs = [ aiohttp ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [
     "uasiren"

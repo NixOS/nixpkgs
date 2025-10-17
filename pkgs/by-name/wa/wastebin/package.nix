@@ -10,17 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wastebin";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "matze";
     repo = "wastebin";
     rev = version;
-    hash = "sha256-emhPa4VuXOjTZ6AU/4S8acjjz68byBg4x4MW0M5hvD4=";
+    hash = "sha256-L19Yz+vGNTdwJ3cYoGnx4m8/J6SMSg1Gbaqph8tQtfE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Ub6BQhrLkIoOM9XFVIfm6mI4pP1Rloo3DnZXB8C4CjE=";
+  cargoHash = "sha256-BZlYb7ZRfCKUgO3R+l/ZpLctXHA2N6L3nYTVov2GolI=";
 
   nativeBuildInputs = [
     pkg-config
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = with lib; {
-    description = "Wastebin is a pastebin";
+    description = "Pastebin service";
     homepage = "https://github.com/matze/wastebin";
     changelog = "https://github.com/matze/wastebin/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;

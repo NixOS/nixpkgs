@@ -49,7 +49,8 @@ stdenv.mkDerivation rec {
     gtk3
     dconf
     mate-desktop
-  ] ++ lib.optional pulseaudioSupport libpulseaudio;
+  ]
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = lib.optional pulseaudioSupport "--enable-pulse";
 

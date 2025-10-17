@@ -37,9 +37,9 @@ buildPythonPackage rec {
 
   meta = {
     changelog = "https://github.com/CourtBouillon/tinyhtml5/releases/tag/${src.tag}";
-    description = "A tiny HTML5 parser";
+    description = "Tiny HTML5 parser";
     homepage = "https://github.com/CourtBouillon/tinyhtml5";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

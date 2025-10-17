@@ -6,7 +6,7 @@
 
 stdenvNoCC.mkDerivation {
   pname = "zsh-fzf-history-search";
-  version = "unstable-2024-05-15";
+  version = "0-unstable-2024-05-15";
 
   src = fetchFromGitHub {
     owner = "joshskidmore";

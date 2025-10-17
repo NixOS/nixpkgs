@@ -28,11 +28,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "tdb";
-  version = "1.4.13";
+  version = "1.4.14";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${pname}-${version}.tar.gz";
-    hash = "sha256-XuJ252RNcT4Z5LatwAtECvtYUf8h5lgh/67YnhWl4Wc=";
+    hash = "sha256-FE9AfULteg7BRwpA7xetQRM/6RC86GXdn+CE1JyQdSY=";
   };
 
   nativeBuildInputs = [
@@ -52,32 +52,30 @@ stdenv.mkDerivation rec {
 
   # otherwise the configure script fails with
   # PYTHONHASHSEED=1 missing! Don't use waf directly, use ./configure and make!
-  preConfigure =
-    ''
-      export PKGCONFIG="$PKG_CONFIG"
-      export PYTHONHASHSEED=1
-    ''
-    + lib.optionalString needsAnswers ''
-      cp ${answers} answers
-      chmod +w answers
-    '';
+  preConfigure = ''
+    export PKGCONFIG="$PKG_CONFIG"
+    export PYTHONHASHSEED=1
+  ''
+  + lib.optionalString needsAnswers ''
+    cp ${answers} answers
+    chmod +w answers
+  '';
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags =
-    [
-      "--bundled-libraries=NONE"
-      "--builtin-libraries=replace"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-compile"
-      (
-        if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
-          "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-        else
-          "--cross-answers=answers"
-      )
-    ];
+  wafConfigureFlags = [
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    (
+      if (stdenv.hostPlatform.emulatorAvailable buildPackages) then
+        "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+      else
+        "--cross-answers=answers"
+    )
+  ];
 
   postFixup =
     if stdenv.hostPlatform.isDarwin then

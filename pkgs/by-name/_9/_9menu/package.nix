@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     description = "Simple X11 menu program for running commands";
     mainProgram = "9menu";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = libX11.meta.platforms;
   };
 }

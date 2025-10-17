@@ -17,15 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "1xyg3amgg27zf7188kss7y248s0xhh1vv8rrk0j9bcsd5nasxsmf";
   };
 
-  preConfigure =
-    ''
-      # Configure script is not in the root of the source directory
-      cd build/generic
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Undocumented darwin hack
-      substituteInPlace configure --replace "-no-cpp-precomp" ""
-    '';
+  preConfigure = ''
+    # Configure script is not in the root of the source directory
+    cd build/generic
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    # Undocumented darwin hack
+    substituteInPlace configure --replace "-no-cpp-precomp" ""
+  '';
 
   configureFlags =
     [ ]

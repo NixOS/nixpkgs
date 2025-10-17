@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "DiffX file format and utilities";
     homepage = "https://github.com/beanbaginc/diffx";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emaryn ];
+    maintainers = [ ];
   };
 }

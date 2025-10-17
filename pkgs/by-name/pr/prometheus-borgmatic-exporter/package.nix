@@ -21,18 +21,19 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ poetry-core ];
 
-  propagatedBuildInputs =
-    [ borgmatic ]
-    ++ (with python3Packages; [
-      arrow
-      click
-      flask
-      loguru
-      pretty-errors
-      prometheus-client
-      timy
-      waitress
-    ]);
+  propagatedBuildInputs = [
+    borgmatic
+  ]
+  ++ (with python3Packages; [
+    arrow
+    click
+    flask
+    loguru
+    pretty-errors
+    prometheus-client
+    timy
+    waitress
+  ]);
 
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook

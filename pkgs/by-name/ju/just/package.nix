@@ -16,28 +16,28 @@
   # run the compiled `generate-book` utility to prepare the files for mdbook
   withDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
-
-rustPlatform.buildRustPackage rec {
+let
+  version = "1.43.0";
+in
+rustPlatform.buildRustPackage {
+  inherit version;
   pname = "just";
-  version = "1.40.0";
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals installManPages [
-      "man"
-    ]
-    ++ lib.optionals withDocumentation [ "doc" ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals installManPages [
+    "man"
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   src = fetchFromGitHub {
     owner = "casey";
     repo = "just";
     tag = version;
-    hash = "sha256-pmuwZoBIgUsKWFTXo8HYHVxrDWPMO8cumD/UHajFS6A=";
+    hash = "sha256-148bubjJYbmqugOd8crWXLqxigWfd3VVnsL0/WB2FYM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mQQGxtSgNuRbz/83eWru+dmtWiLSKdVH+3z88BNugQE=";
+  cargoHash = "sha256-3DIpEPStOh/PcjoJ5dWpfSgRNMTCmN+wO2VzeNtikFU=";
 
   nativeBuildInputs =
     lib.optionals (installShellCompletions || installManPages) [ installShellFiles ]
@@ -72,7 +72,8 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--package=just"
-  ] ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
+  ]
+  ++ (lib.optionals withDocumentation [ "--package=generate-book" ]);
 
   checkFlags = [
     "--skip=backticks::trailing_newlines_are_stripped" # Wants to use python3 as alternate shell

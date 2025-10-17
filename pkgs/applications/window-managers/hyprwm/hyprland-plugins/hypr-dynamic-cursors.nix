@@ -2,19 +2,18 @@
   lib,
   mkHyprlandPlugin,
   fetchFromGitHub,
-  hyprland,
   nix-update-script,
 }:
 
-mkHyprlandPlugin hyprland {
+mkHyprlandPlugin {
   pluginName = "hypr-dynamic-cursors";
-  version = "0-unstable-2025-05-23";
+  version = "0-unstable-2025-10-12";
 
   src = fetchFromGitHub {
     owner = "VirtCode";
     repo = "hypr-dynamic-cursors";
-    rev = "761acf0e602e0f6549e5e6c0289a0402e6073489";
-    hash = "sha256-7L2MRMB2ONEh7wlgQzraEoA+0o88EOV87KNqZg7vpHA=";
+    rev = "d0e9f7320711fc83967cf6b172e8ed40c565631b";
+    hash = "sha256-Zr9eBntl3vfoIjmgSF9MgDAW+YGbYa1auttah7qqqTc=";
   };
 
   dontUseCmakeConfigure = true;

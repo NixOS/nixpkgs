@@ -40,7 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
-  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  ]
+  ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     pkg-config
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
       gretl is a cross-platform software package for econometric analysis,
       written in the C programming language.
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

@@ -28,10 +28,10 @@ let
   addPackages =
     self:
     let
-      callPackage = self.newScope ({
+      callPackage = self.newScope {
         inherit (self) qtModule;
         inherit srcs python3 stdenv;
-      });
+      };
 
       # Per <https://doc.qt.io/qt-6/macos.html#supported-versions>.
       # This should reflect the highest “Build Environment” and the
@@ -183,13 +183,12 @@ let
         makeSetupHook {
           name = "wrap-qt6-apps-hook";
           propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated =
-            [
-              (onlyPluginsAndQml qtbase)
-            ]
-            ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
-              (onlyPluginsAndQml qtwayland)
-            ];
+          depsTargetTargetPropagated = [
+            (onlyPluginsAndQml qtbase)
+          ]
+          ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+            (onlyPluginsAndQml qtwayland)
+          ];
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
 

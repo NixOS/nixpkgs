@@ -165,22 +165,20 @@ let
         CPUSchedulingPolicy = "idle";
         IOSchedulingClass = "idle";
         ProtectSystem = "strict";
-        ReadWritePaths =
-          [
-            "${userHome}/.config/borg"
-            "${userHome}/.cache/borg"
-          ]
-          ++ cfg.readWritePaths
-          # Borg needs write access to repo if it is not remote
-          ++ lib.optional (isLocalPath cfg.repo) cfg.repo;
+        ReadWritePaths = [
+          "${userHome}/.config/borg"
+          "${userHome}/.cache/borg"
+        ]
+        ++ cfg.readWritePaths
+        # Borg needs write access to repo if it is not remote
+        ++ lib.optional (isLocalPath cfg.repo) cfg.repo;
         PrivateTmp = cfg.privateTmp;
       };
-      environment =
-        {
-          BORG_REPO = cfg.repo;
-        }
-        // (mkPassEnv cfg)
-        // cfg.environment;
+      environment = {
+        BORG_REPO = cfg.repo;
+      }
+      // (mkPassEnv cfg)
+      // cfg.environment;
     };
 
   mkBackupTimers =
@@ -208,23 +206,26 @@ let
       {
         nativeBuildInputs = [ pkgs.makeWrapper ];
       }
-      (
-        with lib;
-        ''
-          makeWrapper "${original}" "$out/bin/${name}" \
-            ${lib.concatStringsSep " \\\n " (
-              lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
-            )}
-        ''
-      );
 
+      ''
+        makeWrapper "${original}" "$out/bin/${name}" \
+          ${lib.concatStringsSep " \\\n " (
+            lib.mapAttrsToList (name: value: ''--set ${name} "${value}"'') set
+          )}
+      '';
+
+  # Returns a singleton list, due to usage of lib.optional
   mkBorgWrapper =
     name: cfg:
-    mkWrapperDrv {
+    lib.optional (cfg.wrapper != "" && cfg.wrapper != null) (mkWrapperDrv {
       original = lib.getExe config.services.borgbackup.package;
-      name = "borg-job-${name}";
-      set = { BORG_REPO = cfg.repo; } // (mkPassEnv cfg) // cfg.environment;
-    };
+      name = cfg.wrapper;
+      set = {
+        BORG_REPO = cfg.repo;
+      }
+      // (mkPassEnv cfg)
+      // cfg.environment;
+    });
 
   # Paths listed in ReadWritePaths must exist before service is started
   mkTmpfiles =
@@ -484,6 +485,16 @@ in
                 for the specified {option}`paths`.
               '';
               default = "root";
+            };
+
+            wrapper = lib.mkOption {
+              type = with lib.types; nullOr str;
+              description = ''
+                Name of the wrapper that is installed into {env}`PATH`.
+                Set to `null` or `""` to disable it altogether.
+              '';
+              default = "borg-job-${name}";
+              defaultText = "borg-job-<name>";
             };
 
             encryption.mode = lib.mkOption {
@@ -895,7 +906,8 @@ in
 
       environment.systemPackages = [
         config.services.borgbackup.package
-      ] ++ (lib.mapAttrsToList mkBorgWrapper jobs);
+      ]
+      ++ (lib.flatten (lib.mapAttrsToList mkBorgWrapper jobs));
     }
   );
 }

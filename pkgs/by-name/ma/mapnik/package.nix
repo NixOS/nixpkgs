@@ -12,6 +12,7 @@
   gdal,
   harfbuzz,
   icu,
+  libavif,
   libjpeg,
   libpng,
   libtiff,
@@ -25,17 +26,18 @@
   libpq,
   protozero,
   sparsehash,
+  openssl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mapnik";
-  version = "4.1.0";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "mapnik";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EhRMG0xPOGwcRAMQD2B4z7nVlXQf4HFFfL3oUaUfXBY=";
+    hash = "sha256-jbtVJHTAeKGpb6PtcK9Tt4qA6dsECwLSQG9JGsHJjvY=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     gdal
     (harfbuzz.override { withIcu = true; })
     icu
+    libavif
     libjpeg
     libpng
     libtiff
@@ -85,6 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpq
     protozero
     sparsehash
+    openssl
   ];
 
   cmakeFlags = [

@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "beets-filetote";
-  version = "1.0.2";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gtronset";
     repo = "beets-filetote";
     tag = "v${version}";
-    hash = "sha256-4goblrcSbjl8+xf1wwyoC2462kSy6biLUhTAVIJ8Pjc=";
+    hash = "sha256-5o0Hif0dNavYRH1pa1ZPTnOvk9VPXCU/Lqpg2rKzU/I=";
   };
 
   postPatch = ''
@@ -59,7 +59,11 @@ python3Packages.buildPythonApplication rec {
     dev = optional-dependencies.lint ++ optional-dependencies.test ++ [ python3Packages.tox ];
   };
 
-  pytestFlagsArray = [ "-r fEs" ];
+  pytestFlags = [
+    # This is the same as:
+    #   -r fEs
+    "-rfEs"
+  ];
 
   disabledTestPaths = [
     "tests/test_cli_operation.py"
@@ -70,7 +74,8 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
     writableTmpDirAsHomeHook
-  ] ++ optional-dependencies.test;
+  ]
+  ++ optional-dependencies.test;
 
   meta = with lib; {
     description = "Beets plugin to move non-music files during the import process";
@@ -79,5 +84,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ dansbandit ];
     license = licenses.mit;
     inherit (beets.meta) platforms;
+    # https://github.com/gtronset/beets-filetote/issues/211
+    broken = true;
   };
 }

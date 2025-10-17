@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "rosa";
-  version = "1.2.53";
+  version = "1.2.57";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "rosa";
     rev = "v${version}";
-    hash = "sha256-t8hJscLk0tRi7CC6maE478CEbOkJtVkbXA0Ag1DxFB4=";
+    hash = "sha256-oRW5CUQzepQialxi7lHoskNm6ZXLiPWGatKo61GEVLQ=";
   };
   vendorHash = null;
 
@@ -37,12 +37,13 @@ buildGoModule rec {
       skippedTests = [
         "TestCluster"
         "TestRhRegionCommand"
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd rosa \
       --bash <($out/bin/rosa completion bash) \
       --fish <($out/bin/rosa completion fish) \

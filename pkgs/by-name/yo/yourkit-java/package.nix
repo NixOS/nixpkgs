@@ -5,12 +5,14 @@
   copyDesktopItems,
   imagemagick,
   makeDesktopItem,
-  jre,
+  jdk21,
 }:
 let
+  jre = jdk21;
+
   vPath = v: lib.elemAt (lib.splitString "-" v) 0;
 
-  version = "2025.3-b147";
+  version = "2025.3-b154";
 
   arches = {
     aarch64-linux = "arm64";
@@ -20,8 +22,8 @@ let
   arch = arches.${stdenvNoCC.targetPlatform.system} or (throw "Unsupported system");
 
   hashes = {
-    arm64 = "sha256-uyoticzh7jeBp0B+tKI6q6N+aoJUS3yfhUxTgCtVwR4=";
-    x64 = "sha256-kiINiOHlvunNRS+Wpr+2tE4vkgZXMiED8itTuP03wzk=";
+    arm64 = "sha256-X9YQy12rfTWOVKX2ufmS4GxLGp/I6jhZAZyRBfLuOuk=";
+    x64 = "sha256-BuEfpMEgkOcbUra6eT/sTiVhXpheMaCe55M/CuG0kHE=";
   };
 
   desktopItem = makeDesktopItem {

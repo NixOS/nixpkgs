@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromSourcehut,
   fetchpatch,
   ncurses,
   boehmgc,
@@ -38,23 +38,29 @@ let
     '';
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "w3m";
-  version = "0.5.3+git20230121";
+  version = "0.5.5";
 
-  src = fetchFromGitHub {
-    owner = "tats";
+  src = fetchFromSourcehut {
+    owner = "~rkta";
     repo = "w3m";
-    rev = "v${version}";
-    hash = "sha256-upb5lWqhC1jRegzTncIz5e21v4Pw912FyVn217HucFs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rz9tNkMg5xUqMpMdK2AQlKjCJlCjgLQOkj4A/eyPm0M=";
   };
 
-  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
+  env = {
+    NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lsocket -lnsl";
 
-  # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
-  # the correct paths.
-  PERL = "${perl}/bin/perl";
-  MAN = "${man}/bin/man";
+    # we must set these so that the generated files (e.g. w3mhelp.cgi) contain
+    # the correct paths.
+    PERL = "${perl}/bin/perl";
+    MAN = "${man}/bin/man";
+
+    # for w3mimgdisplay
+    # see: https://bbs.archlinux.org/viewtopic.php?id=196093
+    LIBS = lib.optionalString x11Support "-lX11";
+  };
 
   makeFlags = [ "AR=${stdenv.cc.bintools.targetPrefix}ar" ];
 
@@ -80,16 +86,15 @@ stdenv.mkDerivation rec {
     gettext
     updateAutotoolsGnuConfigScriptsHook
   ];
-  buildInputs =
-    [
-      ncurses
-      boehmgc
-      zlib
-    ]
-    ++ lib.optional sslSupport openssl
-    ++ lib.optional mouseSupport gpm-ncurses
-    ++ lib.optional graphicsSupport imlib2
-    ++ lib.optional x11Support libX11;
+  buildInputs = [
+    ncurses
+    boehmgc
+    zlib
+  ]
+  ++ lib.optional sslSupport openssl
+  ++ lib.optional mouseSupport gpm-ncurses
+  ++ lib.optional graphicsSupport imlib2
+  ++ lib.optional x11Support libX11;
 
   postInstall = lib.optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin
@@ -97,16 +102,18 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags =
-    [
-      "--with-ssl=${openssl.dev}"
-      "--with-gc=${boehmgc.dev}"
-    ]
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-      "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
-    ]
-    ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
-    ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
+  configureFlags = [
+    "--with-ssl=${openssl.dev}"
+    "--with-gc=${boehmgc.dev}"
+    # The code won't compile in c23 mode.
+    # https://gcc.gnu.org/gcc-15/porting_to.html#c23-fn-decls-without-parameters
+    "CFLAGS=-std=gnu17"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+  ]
+  ++ lib.optional graphicsSupport "--enable-image=${lib.optionalString x11Support "x11,"}fb"
+  ++ lib.optional (graphicsSupport && !x11Support) "--without-x";
 
   preConfigure = ''
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
@@ -115,23 +122,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = false;
 
-  # for w3mimgdisplay
-  # see: https://bbs.archlinux.org/viewtopic.php?id=196093
-  LIBS = lib.optionalString x11Support "-lX11";
-
   passthru.tests.version = testers.testVersion {
-    inherit version;
+    inherit (finalAttrs) version;
     package = w3m;
     command = "w3m -version";
   };
 
   meta = {
-    homepage = "https://w3m.sourceforge.net/";
-    changelog = "https://github.com/tats/w3m/blob/v${version}/ChangeLog";
+    homepage = "https://git.sr.ht/~rkta/w3m";
+    changelog = "https://git.sr.ht/~rkta/w3m/tree/v${finalAttrs.version}/item/NEWS";
     description = "Text-mode web browser";
-    maintainers = with lib.maintainers; [ anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      anthonyroussel
+      toastal
+    ];
     platforms = lib.platforms.unix;
     license = lib.licenses.mit;
     mainProgram = "w3m";
   };
-}
+})

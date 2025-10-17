@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   cmake,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1j6kp9axhgna47cfnmk1m7vnqn01hwh7pf1fp76aid60yhjwgdvi";
   };
 
+  buildInputs = [ python3 ];
   nativeBuildInputs = [ cmake ];
 
   # error: no viable conversion from ...
@@ -22,6 +24,9 @@ stdenv.mkDerivation rec {
   patches = [
     # error: ISO C++17 does not allow 'register' storage class specifier
     ./remove-register.patch
+
+    # fix cmake compatibility. vendored from https://github.com/The-OpenROAD-Project/lemon-graph/pull/2
+    ./cmake_version.patch
   ];
 
   meta = with lib; {

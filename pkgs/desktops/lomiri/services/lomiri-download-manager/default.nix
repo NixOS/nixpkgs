@@ -41,7 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
-  ] ++ lib.optionals withDocumentation [ "doc" ];
+  ]
+  ++ lib.optionals withDocumentation [ "doc" ];
 
   patches = [
     # Remove when version > 0.2.1
@@ -65,18 +66,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-      validatePkgConfig
-      wrapQtAppsHook
-    ]
-    ++ lib.optionals withDocumentation [
-      doxygen
-      graphviz
-      qttools # qdoc
-    ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    validatePkgConfig
+    wrapQtAppsHook
+  ]
+  ++ lib.optionals withDocumentation [
+    doxygen
+    graphviz
+    qttools # qdoc
+  ];
 
   buildInputs = [
     boost
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Performs uploads and downloads from a centralized location";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-download-manager";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-download-manager/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.lgpl3Only;
     teams = [ lib.teams.lomiri ];

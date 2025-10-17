@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "src/zope/deprecation/tests.py" ];
+  enabledTestPaths = [ "src/zope/deprecation/tests.py" ];
 
   pythonImportsCheck = [ "zope.deprecation" ];
 
@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Zope Deprecation Infrastructure";
     changelog = "https://github.com/zopefoundation/zope.deprecation/blob/${version}/CHANGES.rst";
     license = lib.licenses.zpl21;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

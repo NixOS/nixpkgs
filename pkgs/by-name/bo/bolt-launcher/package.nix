@@ -15,6 +15,8 @@
   jdk17,
   pango,
   cairo,
+  pkg-config,
+  libnotify,
   buildFHSEnv,
   makeDesktopItem,
   copyDesktopItems,
@@ -38,14 +40,14 @@ in
 let
   bolt = stdenv.mkDerivation (finalAttrs: {
     pname = "bolt-launcher";
-    version = "0.17.0";
+    version = "0.20.0";
 
     src = fetchFromGitHub {
       owner = "AdamCake";
       repo = "bolt";
       tag = finalAttrs.version;
       fetchSubmodules = true;
-      hash = "sha256-RlWJcxSCKTbj6MNeQwweu20rPBQGzumEk42MtTAhGRU=";
+      hash = "sha256-Gh1xaYAysZshEGzljnEYJuK8Mv4cwSWH1W4rEu2F/0s=";
     };
 
     nativeBuildInputs = [
@@ -54,6 +56,7 @@ let
       luajit
       makeWrapper
       copyDesktopItems
+      pkg-config
     ];
 
     buildInputs = [
@@ -66,15 +69,12 @@ let
       jdk17
     ];
 
-    cmakeFlags =
-      [
-        "-D CMAKE_BUILD_TYPE=Release"
-        "-D BOLT_LUAJIT_INCLUDE_DIR=${luajit}/include"
-        "-G Ninja"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
-        (lib.cmakeFeature "PROJECT_ARCH" "arm64")
-      ];
+    cmakeFlags = [
+      "-G Ninja"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isAarch64) [
+      (lib.cmakeFeature "PROJECT_ARCH" "arm64")
+    ];
 
     preConfigure = ''
       mkdir -p cef
@@ -115,6 +115,7 @@ buildFHSEnv {
       xorg.libSM
       xorg.libXxf86vm
       xorg.libX11
+      xorg.libXi
       xorg.libXext
       glib
       pango
@@ -126,6 +127,7 @@ buildFHSEnv {
       SDL2
       sdl3
       libGL
+      libnotify
     ])
     ++ lib.optionals enableRS3 (
       with pkgs;
@@ -156,6 +158,7 @@ buildFHSEnv {
     maintainers = with lib.maintainers; [
       nezia
       jaspersurmont
+      iedame
     ];
     platforms = lib.platforms.linux;
     mainProgram = "${bolt.name}";

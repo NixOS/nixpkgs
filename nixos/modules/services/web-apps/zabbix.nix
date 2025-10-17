@@ -267,45 +267,46 @@ in
           $DB['DOUBLE_IEEE754'] = 'true';
         '';
 
-    systemd.tmpfiles.rules =
-      [ "d '${stateDir}' 0750 ${user} ${group} - -" ]
-      ++ optionals (cfg.frontend == "httpd") [
-        "d '${stateDir}/session' 0750 ${user} ${config.services.httpd.group} - -"
-      ]
-      ++ optionals (cfg.frontend == "nginx") [
-        "d '${stateDir}/session' 0750 ${user} ${config.services.nginx.group} - -"
-      ];
+    systemd.tmpfiles.rules = [
+      "d '${stateDir}' 0750 ${user} ${group} - -"
+    ]
+    ++ optionals (cfg.frontend == "httpd") [
+      "d '${stateDir}/session' 0750 ${user} ${config.services.httpd.group} - -"
+    ]
+    ++ optionals (cfg.frontend == "nginx") [
+      "d '${stateDir}/session' 0750 ${user} ${config.services.nginx.group} - -"
+    ];
 
     services.phpfpm.pools.zabbix = {
       inherit user;
       group = config.services.${cfg.frontend}.group;
-      phpOptions =
-        ''
-          # https://www.zabbix.com/documentation/current/manual/installation/install
-          memory_limit = 128M
-          post_max_size = 16M
-          upload_max_filesize = 2M
-          max_execution_time = 300
-          max_input_time = 300
-          session.auto_start = 0
-          mbstring.func_overload = 0
-          always_populate_raw_post_data = -1
-          # https://bbs.archlinux.org/viewtopic.php?pid=1745214#p1745214
-          session.save_path = ${stateDir}/session
-        ''
-        + optionalString (config.time.timeZone != null) ''
-          date.timezone = "${config.time.timeZone}"
-        ''
-        + optionalString (cfg.database.type == "oracle") ''
-          extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
-        '';
+      phpOptions = ''
+        # https://www.zabbix.com/documentation/current/manual/installation/install
+        memory_limit = 128M
+        post_max_size = 16M
+        upload_max_filesize = 2M
+        max_execution_time = 300
+        max_input_time = 300
+        session.auto_start = 0
+        mbstring.func_overload = 0
+        always_populate_raw_post_data = -1
+        # https://bbs.archlinux.org/viewtopic.php?pid=1745214#p1745214
+        session.save_path = ${stateDir}/session
+      ''
+      + optionalString (config.time.timeZone != null) ''
+        date.timezone = "${config.time.timeZone}"
+      ''
+      + optionalString (cfg.database.type == "oracle") ''
+        extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
+      '';
       phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
       settings = {
         "listen.owner" =
           if cfg.frontend == "httpd" then config.services.httpd.user else config.services.nginx.user;
         "listen.group" =
           if cfg.frontend == "httpd" then config.services.httpd.group else config.services.nginx.group;
-      } // cfg.poolConfig;
+      }
+      // cfg.poolConfig;
     };
 
     services.httpd = mkIf (cfg.frontend == "httpd") {

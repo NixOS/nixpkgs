@@ -31,11 +31,13 @@
     # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
     # broken for the armv7l builder
     && !stdenv.hostPlatform.isAarch,
-  enablePolly ? lib.versionAtLeast release_version "14",
+  enablePolly ? true,
   enableTerminfo ? true,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
   fetchpatch,
+  # for tests
+  libllvm,
 }:
 
 let
@@ -83,7 +85,7 @@ stdenv.mkDerivation (
     pname = "llvm";
     inherit version;
 
-    # Used when creating a version-suffixed symlink of libLLVM.dylib
+    # TODO: Remove on `staging`.
     shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
     src =
@@ -92,8 +94,6 @@ stdenv.mkDerivation (
           ''
             mkdir -p "$out"
             cp -r ${monorepoSrc}/llvm "$out"
-          ''
-          + lib.optionalString (lib.versionAtLeast release_version "14") ''
             cp -r ${monorepoSrc}/cmake "$out"
             cp -r ${monorepoSrc}/third-party "$out"
           ''
@@ -123,29 +123,11 @@ stdenv.mkDerivation (
     ];
 
     patches =
-      lib.optional (lib.versionOlder release_version "14")
-        # When cross-compiling we configure llvm-config-native with an approximation
-        # of the flags used for the normal LLVM build. To avoid the need for building
-        # a native libLLVM.so (which would fail) we force llvm-config to be linked
-        # statically against the necessary LLVM components always.
-        ./llvm-config-link-static.patch
-      ++ lib.optionals (lib.versions.major release_version == "12") [
-        # Fix llvm being miscompiled by some gccs. See https://github.com/llvm/llvm-project/issues/49955
-        (getVersionFile "llvm/fix-llvm-issue-49955.patch")
-
-        # On older CPUs (e.g. Hydra/wendy) we'd be getting an error in this test.
-        (fetchpatch {
-          name = "uops-CMOV16rm-noreg.diff";
-          url = "https://github.com/llvm/llvm-project/commit/9e9f991ac033.diff";
-          sha256 = "sha256:12s8vr6ibri8b48h2z38f3afhwam10arfiqfy4yg37bmc054p5hi";
-          stripLen = 1;
-        })
-      ]
       # Support custom installation dirs
       # Originally based off https://reviews.llvm.org/D99484
       # Latest state: https://github.com/llvm/llvm-project/pull/125376
-      ++ [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
-      ++ lib.optionals (lib.versionAtLeast release_version "15") [
+      [ (getVersionFile "llvm/gnu-install-dirs.patch") ]
+      ++ [
         # Running the tests involves invoking binaries (like `opt`) that depend on
         # the LLVM dylibs and reference them by absolute install path (i.e. their
         # nix store path).
@@ -188,17 +170,7 @@ stdenv.mkDerivation (
         (getVersionFile "llvm/lit-shell-script-runner-set-dyld-library-path.patch")
       ]
       ++
-        lib.optional (lib.versions.major release_version == "13")
-          # Fix random compiler crashes: https://bugs.llvm.org/show_bug.cgi?id=50611
-          (
-            fetchpatch {
-              url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/4764a4f8c920912a2bfd8b0eea57273acfe0d8a8/trunk/no-strict-aliasing-DwarfCompileUnit.patch";
-              sha256 = "18l6mrvm2vmwm77ckcnbjvh6ybvn72rhrb799d4qzwac4x2ifl7g";
-              stripLen = 1;
-            }
-          )
-      ++
-        lib.optional (lib.versionAtLeast release_version "12" && lib.versionOlder release_version "19")
+        lib.optional (lib.versionOlder release_version "19")
           # Add missing include headers to build against gcc-15:
           #   https://github.com/llvm/llvm-project/pull/101761
           (
@@ -206,58 +178,6 @@ stdenv.mkDerivation (
               url = "https://github.com/llvm/llvm-project/commit/7e44305041d96b064c197216b931ae3917a34ac1.patch";
               hash = "sha256-1htuzsaPHbYgravGc1vrR8sqpQ/NSQ8PUZeAU8ucCFk=";
               stripLen = 1;
-            }
-          )
-      ++ lib.optionals (lib.versionOlder release_version "16") [
-        # Fix musl build.
-        (fetchpatch {
-          url = "https://github.com/llvm/llvm-project/commit/5cd554303ead0f8891eee3cd6d25cb07f5a7bf67.patch";
-          relative = "llvm";
-          hash = "sha256-XPbvNJ45SzjMGlNUgt/IgEvM2dHQpDOe6woUJY+nUYA=";
-        })
-        # Fix for Python 3.13
-        (getVersionFile "llvm/no-pipes.patch")
-      ]
-      ++ lib.optionals (lib.versionOlder release_version "14") [
-        # Backport gcc-13 fixes with missing includes.
-        (fetchpatch {
-          name = "signals-gcc-13.patch";
-          url = "https://github.com/llvm/llvm-project/commit/ff1681ddb303223973653f7f5f3f3435b48a1983.patch";
-          hash = "sha256-CXwYxQezTq5vdmc8Yn88BUAEly6YZ5VEIA6X3y5NNOs=";
-          stripLen = 1;
-        })
-        (fetchpatch {
-          name = "base64-gcc-13.patch";
-          url = "https://github.com/llvm/llvm-project/commit/5e9be93566f39ee6cecd579401e453eccfbe81e5.patch";
-          hash = "sha256-PAwrVrvffPd7tphpwCkYiz+67szPRzRB2TXBvKfzQ7U=";
-          stripLen = 1;
-        })
-      ]
-      ++
-        lib.optionals
-          (
-            (lib.versionAtLeast (lib.versions.major release_version) "14")
-            && (lib.versionOlder (lib.versions.major release_version) "17")
-          )
-          [
-            # fix RuntimeDyld usage on aarch64-linux (e.g. python312Packages.numba tests)
-            # See also: https://github.com/numba/numba/issues/9109
-            (fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/2e1b838a889f9793d4bcd5dbfe10db9796b77143.patch";
-              relative = "llvm";
-              hash = "sha256-Ot45P/iwaR4hkcM3xtLwfryQNgHI6pv6ADjv98tgdZA=";
-            })
-          ]
-      ++
-        lib.optional (lib.versions.major release_version == "17")
-          # Fixes a crash with -fzero-call-used-regs=used-gpr
-          # See also https://github.com/llvm/llvm-project/issues/75168
-          (
-            fetchpatch {
-              name = "fix-fzero-call-used-regs.patch";
-              url = "https://github.com/llvm/llvm-project/commit/f800c1f3b207e7bcdc8b4c7192928d9a078242a0.patch";
-              stripLen = 1;
-              hash = "sha256-e8YKrMy2rGcSJGC6er2V66cOnAnI+u1/yImkvsRsmg8=";
             }
           )
       ++ lib.optionals (lib.versions.major release_version == "18") [
@@ -277,56 +197,62 @@ stdenv.mkDerivation (
           hash = "sha256-fqw5gTSEOGs3kAguR4tINFG7Xja1RAje+q67HJt2nGg=";
         })
       ]
-      ++
-        lib.optionals (lib.versionAtLeast release_version "17" && lib.versionOlder release_version "19")
-          [
-            # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
-            (fetchpatch {
-              url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
-              hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
-              stripLen = 1;
-            })
-          ]
+      ++ lib.optionals (lib.versionOlder release_version "19") [
+        # Fixes test-suite on glibc 2.40 (https://github.com/llvm/llvm-project/pull/100804)
+        (fetchpatch {
+          url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
+          hash = "sha256-mvBlG2RxpZPFnPI7jvCMz+Fc8JuM15Ye3th1FVZMizE=";
+          stripLen = 1;
+        })
+      ]
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
+        # Just like the `llvm-lit-cfg` patch, but for `polly`.
+        (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
       ]
       ++
-        lib.optional (lib.versionAtLeast release_version "15")
-          # Just like the `llvm-lit-cfg` patch, but for `polly`.
-          (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch");
+        lib.optional (lib.versions.major release_version == "20")
+          # Test failure on riscv64, fixed in llvm 21
+          # https://github.com/llvm/llvm-project/issues/150818
+          (
+            fetchpatch {
+              url = "https://github.com/llvm/llvm-project/commit/bd49bbaaafc98433a2cb4e95ce25b7a201baf5a5.patch";
+              hash = "sha256-3hkbYPUVRAtWpo5qBmc2jLZLivURMx8T0GQomvNZesc=";
+              stripLen = 1;
+            }
+          );
 
-    nativeBuildInputs =
-      [
-        cmake
-        # while this is not an autotools build, it still includes a config.guess
-        # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
-        updateAutotoolsGnuConfigScriptsHook
-        python
-      ]
-      ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
-      ++ optionals enableManpages [
-        # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
-        # splicing does *not* work with the latter. (TODO: fix)
-        python3Packages.sphinx
-      ]
-      ++ optionals (lib.versionOlder version "18" && enableManpages) [
-        python3Packages.recommonmark
-      ]
-      ++ optionals (lib.versionAtLeast version "18" && enableManpages) [
-        python3Packages.myst-parser
-      ];
+    nativeBuildInputs = [
+      cmake
+      # while this is not an autotools build, it still includes a config.guess
+      # this is needed until scripts are updated to not use /usr/bin/uname on FreeBSD native
+      updateAutotoolsGnuConfigScriptsHook
+      python
+      ninja
+    ]
+    ++ optionals enableManpages [
+      # Note: we intentionally use `python3Packages` instead of `python3.pkgs`;
+      # splicing does *not* work with the latter. (TODO: fix)
+      python3Packages.sphinx
+      python3Packages.myst-parser
+    ];
 
     buildInputs = [
       libxml2
       libffi
-    ] ++ optional enablePFM libpfm; # exegesis
+    ]
+    ++ optional enablePFM libpfm; # exegesis
 
-    propagatedBuildInputs =
-      (lib.optional (
-        lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform
-      ) ncurses)
-      ++ [ zlib ];
+    propagatedBuildInputs = [
+      ncurses
+      zlib
+    ];
+
+    nativeCheckInputs = [
+      which
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin sysctl;
 
     postPatch =
       optionalString stdenv.hostPlatform.isDarwin (
@@ -337,119 +263,90 @@ stdenv.mkDerivation (
         +
           # As of LLVM 15, marked as XFAIL on arm64 macOS but lit doesn't seem to pick
           # this up: https://github.com/llvm/llvm-project/blob/c344d97a125b18f8fed0a64aace73c49a870e079/llvm/test/MC/ELF/cfi-version.ll#L7
-          (optionalString (lib.versionAtLeast release_version "15") (
-            ''
-              rm test/MC/ELF/cfi-version.ll
+          ''
+            rm test/MC/ELF/cfi-version.ll
 
-            ''
-            +
-              # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
-              # and thus fails under the sandbox:
-              (
-                if lib.versionAtLeast release_version "16" then
-                  ''
-                    substituteInPlace unittests/TargetParser/Host.cpp \
-                      --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
-                  ''
-                else
-                  ''
-                    substituteInPlace unittests/Support/Host.cpp \
-                      --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
-                  ''
-              )
-            +
-              # This test tries to call the intrinsics `@llvm.roundeven.f32` and
-              # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
-              # and `roundeven` on macOS and FreeBSD.
-              #
-              # However these functions are glibc specific so the test fails:
-              #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
-              #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
-              #
-              # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
-              # pass there?
-              optionalString (lib.versionAtLeast release_version "16") ''
-                substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-                  --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-                  --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
-              ''
-            +
-              # fails when run in sandbox
-              optionalString (!stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "18") ''
-                substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                  --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-              ''
-          ))
+          ''
+        +
+          # This test tries to call `sw_vers` by absolute path (`/usr/bin/sw_vers`)
+          # and thus fails under the sandbox:
+          ''
+            substituteInPlace unittests/TargetParser/Host.cpp \
+              --replace-fail '/usr/bin/sw_vers' "${(toString darwin.DarwinTools) + "/bin/sw_vers"}"
+          ''
+        +
+          # This test tries to call the intrinsics `@llvm.roundeven.f32` and
+          # `@llvm.roundeven.f64` which seem to (incorrectly?) lower to `roundevenf`
+          # and `roundeven` on macOS and FreeBSD.
+          #
+          # However these functions are glibc specific so the test fails:
+          #   - https://www.gnu.org/software/gnulib/manual/html_node/roundevenf.html
+          #   - https://www.gnu.org/software/gnulib/manual/html_node/roundeven.html
+          #
+          # TODO(@rrbutani): this seems to run fine on `aarch64-darwin`, why does it
+          # pass there?
+          ''
+            substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
+              --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
+              --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
+          ''
+        +
+          # fails when run in sandbox
+          optionalString (!stdenv.hostPlatform.isx86) ''
+            substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+              --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
+          ''
       )
       +
         # dup of above patch with different conditions
-        optionalString
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
+          # fails when run in sandbox
           (
-            stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "15"
-          )
-          (
-            optionalString (lib.versionOlder release_version "16") ''
-              substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
-                --replace-fail "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
-                --replace-fail "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
-
+            ''
+              substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
+                --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
             ''
             +
-              # fails when run in sandbox
-              (
-                (optionalString (lib.versionAtLeast release_version "18") ''
-                  substituteInPlace unittests/Support/VirtualFileSystemTest.cpp \
-                    --replace-fail "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
-                '')
-                +
-                  # This test fails on darwin x86_64 because `sw_vers` reports a different
-                  # macOS version than what LLVM finds by reading
-                  # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
-                  # the sandbox on macOS).
-                  #
-                  # The `sw_vers` provided by nixpkgs reports the macOS version associated
-                  # with the `CoreFoundation` framework with which it was built. Because
-                  # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
-                  # `sw_vers` reports is not guaranteed to match the macOS version of the host
-                  # that's building this derivation.
-                  #
-                  # Astute readers will note that we only _patch_ this test on aarch64-darwin
-                  # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
-                  # So why does this test pass on aarch64?
-                  #
-                  # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
-                  # CoreFoundation framework instead of the nixpkgs provided one.
-                  #
-                  # Not entirely sure what the right fix is here. I'm assuming aarch64
-                  # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
-                  # (still digging into how this ends up happening, will follow up) but that
-                  # aside I think the more pertinent question is: should we be patching LLVM's
-                  # macOS version detection logic to use `sw_vers` instead of reading host
-                  # paths? This *is* a way in which details about builder machines can creep
-                  # into the artifacts that are produced, affecting reproducibility, but it's
-                  # not clear to me when/where/for what this even gets used in LLVM.
-                  #
-                  # TODO(@rrbutani): fix/follow-up
-                  (
-                    if lib.versionAtLeast release_version "16" then
-                      ''
-                        substituteInPlace unittests/TargetParser/Host.cpp \
-                          --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-                      ''
-                    else
-                      ''
-                        substituteInPlace unittests/Support/Host.cpp \
-                          --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
-                      ''
-                  )
-                +
-                  # This test fails with a `dysmutil` crash; have not yet dug into what's
-                  # going on here (TODO(@rrbutani)).
-                  lib.optionalString (lib.versionOlder release_version "19") ''
-                    rm test/tools/dsymutil/ARM/obfuscated.test
-                  ''
-              )
+              # This test fails on darwin x86_64 because `sw_vers` reports a different
+              # macOS version than what LLVM finds by reading
+              # `/System/Library/CoreServices/SystemVersion.plist` (which is passed into
+              # the sandbox on macOS).
+              #
+              # The `sw_vers` provided by nixpkgs reports the macOS version associated
+              # with the `CoreFoundation` framework with which it was built. Because
+              # nixpkgs pins the SDK for `aarch64-darwin` and `x86_64-darwin` what
+              # `sw_vers` reports is not guaranteed to match the macOS version of the host
+              # that's building this derivation.
+              #
+              # Astute readers will note that we only _patch_ this test on aarch64-darwin
+              # (to use the nixpkgs provided `sw_vers`) instead of disabling it outright.
+              # So why does this test pass on aarch64?
+              #
+              # Well, it seems that `sw_vers` on aarch64 actually links against the _host_
+              # CoreFoundation framework instead of the nixpkgs provided one.
+              #
+              # Not entirely sure what the right fix is here. I'm assuming aarch64
+              # `sw_vers` doesn't intentionally link against the host `CoreFoundation`
+              # (still digging into how this ends up happening, will follow up) but that
+              # aside I think the more pertinent question is: should we be patching LLVM's
+              # macOS version detection logic to use `sw_vers` instead of reading host
+              # paths? This *is* a way in which details about builder machines can creep
+              # into the artifacts that are produced, affecting reproducibility, but it's
+              # not clear to me when/where/for what this even gets used in LLVM.
+              #
+              # TODO(@rrbutani): fix/follow-up
+              ''
+                substituteInPlace unittests/TargetParser/Host.cpp \
+                  --replace-fail "getMacOSHostVersion" "DISABLED_getMacOSHostVersion"
+              ''
+            +
+              # This test fails with a `dysmutil` crash; have not yet dug into what's
+              # going on here (TODO(@rrbutani)).
+              lib.optionalString (lib.versionOlder release_version "19") ''
+                rm test/tools/dsymutil/ARM/obfuscated.test
+              ''
           )
+
       +
         # FileSystem permissions tests fail with various special bits
         ''
@@ -459,32 +356,14 @@ stdenv.mkDerivation (
           substituteInPlace unittests/IR/CMakeLists.txt \
             --replace-fail "PassBuilderCallbacksTest.cpp" ""
           rm unittests/IR/PassBuilderCallbacksTest.cpp
+          rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
         ''
-      + lib.optionalString (lib.versionAtLeast release_version "13") ''
-        rm test/tools/llvm-objcopy/ELF/mirror-permissions-unix.test
-      ''
-      + lib.optionalString (lib.versionOlder release_version "13") ''
-        # TODO: Fix failing tests:
-        rm test/DebugInfo/X86/vla-multi.ll
-      ''
       +
         # Fails in the presence of anti-virus software or other intrusion-detection software that
         # modifies the atime when run. See #284056.
-        lib.optionalString (lib.versionAtLeast release_version "16") (
-          ''
-            rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
-          ''
-          + lib.optionalString (lib.versionOlder release_version "17") ''
-
-          ''
-        )
-      +
-        # timing-based tests are trouble
-        lib.optionalString
-          (lib.versionAtLeast release_version "15" && lib.versionOlder release_version "17")
-          ''
-            rm utils/lit/tests/googletest-timeout.py
-          ''
+        ''
+          rm test/tools/llvm-objcopy/ELF/strip-preserve-atime.test
+        ''
       +
         # valgrind unhappy with musl or glibc, but fails w/musl only
         optionalString stdenv.hostPlatform.isMusl ''
@@ -519,46 +398,17 @@ stdenv.mkDerivation (
           # Fails in sandbox
           substituteInPlace unittests/Support/LockFileManagerTest.cpp --replace-fail "Basic" "DISABLED_Basic"
         ''
+      +
+        # https://github.com/llvm/llvm-project/issues/149616
+        optionalString stdenv.hostPlatform.isLoongArch64 ''
+          substituteInPlace unittests/tools/llvm-exegesis/X86/SnippetRepetitorTest.cpp \
+            --replace-fail \
+              "TEST_F(X86SnippetRepetitorTest, Loop)" \
+              "TEST_F(X86SnippetRepetitorTest, DISABLED_Loop)"
+        ''
       + ''
         patchShebangs test/BugPoint/compile-custom.ll.py
-      ''
-      +
-        # Tweak tests to ignore namespace part of type to support
-        # gcc-12: https://gcc.gnu.org/PR103598.
-        # The change below mangles strings like:
-        #    CHECK-NEXT: Starting llvm::Function pass manager run.
-        # to:
-        #    CHECK-NEXT: Starting {{.*}}Function pass manager run.
-        (lib.optionalString (lib.versionOlder release_version "13") (
-          ''
-            for f in \
-              test/Other/new-pass-manager.ll \
-              test/Other/new-pm-O0-defaults.ll \
-              test/Other/new-pm-defaults.ll \
-              test/Other/new-pm-lto-defaults.ll \
-              test/Other/new-pm-thinlto-defaults.ll \
-              test/Other/pass-pipeline-parsing.ll \
-              test/Transforms/Inline/cgscc-incremental-invalidate.ll \
-              test/Transforms/Inline/clear-analyses.ll \
-              test/Transforms/LoopUnroll/unroll-loop-invalidation.ll \
-              test/Transforms/SCCP/ipsccp-preserve-analysis.ll \
-              test/Transforms/SCCP/preserve-analysis.ll \
-              test/Transforms/SROA/dead-inst.ll \
-              test/tools/gold/X86/new-pm.ll \
-              ; do
-              echo "PATCH: $f"
-              substituteInPlace $f \
-                --replace-quiet 'Starting llvm::' 'Starting {{.*}}' \
-                --replace-quiet 'Finished llvm::' 'Finished {{.*}}'
-            done
-          ''
-          +
-            # gcc-13 fix
-            ''
-              sed -i '/#include <string>/i#include <cstdint>' \
-                include/llvm/DebugInfo/Symbolize/DIPrinter.h
-            ''
-        ));
+      '';
 
     # Workaround for configure flags that need to have spaces
     preConfigure = ''
@@ -566,6 +416,40 @@ stdenv.mkDerivation (
         -DLLVM_LIT_ARGS="--verbose -j''${NIX_BUILD_CORES}"
       )
     '';
+
+    # Defensive check: some paths (that we make symlinks to) depend on the release
+    # version, for example:
+    #  - https://github.com/llvm/llvm-project/blob/406bde9a15136254f2b10d9ef3a42033b3cb1b16/clang/lib/Headers/CMakeLists.txt#L185
+    #
+    # So we want to sure that the version in the source matches the release
+    # version we were given.
+    #
+    # We do this check here, in the LLVM build, because it happens early.
+    postConfigure =
+      let
+        v = lib.versions;
+        major = v.major release_version;
+        minor = v.minor release_version;
+        patch = v.patch release_version;
+      in
+      ''
+        # $1: part, $2: expected
+        check_version() {
+          part="''${1^^}"
+          part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
+
+          if [[ "$part" != "$2" ]]; then
+            echo >&2 \
+              "mismatch in the $1 version! we have version ${release_version}" \
+              "and expected the $1 version to be '$2'; the source has '$part' instead"
+            exit 3
+          fi
+        }
+
+        check_version major ${major}
+        check_version minor ${minor}
+        check_version patch ${patch}
+      '';
 
     # E.g. Mesa uses the build-id as a cache key (see #93946):
     LDFLAGS = optionalString (
@@ -583,22 +467,12 @@ stdenv.mkDerivation (
         #
         # Some flags don't need to be repassed because LLVM already does so (like
         # CMAKE_BUILD_TYPE), others are irrelevant to the result.
-        flagsForLlvmConfig =
-          (
-            if lib.versionOlder release_version "15" then
-              [
-                (lib.cmakeFeature "LLVM_INSTALL_CMAKE_DIR" "${placeholder "dev"}/lib/cmake/llvm/")
-              ]
-            else
-              [
-                (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
-              ]
-          )
-          ++ [
-            (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
-            (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
-            (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-          ];
+        flagsForLlvmConfig = [
+          (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
+          (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
+          (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
+          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+        ];
       in
       flagsForLlvmConfig
       ++ [
@@ -682,46 +556,32 @@ stdenv.mkDerivation (
           ]
       ++ devExtraCmakeFlags;
 
-    postInstall =
-      ''
-        mkdir -p $python/share
-        mv $out/share/opt-viewer $python/share/opt-viewer
-        moveToOutput "bin/llvm-config*" "$dev"
-        substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
-          --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
-      ''
-      + (
-        if lib.versionOlder release_version "15" then
-          ''
-            substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-              --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}'"$lib"'")'
-          ''
-        else
-          ''
-            substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
-              --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
-          ''
-      )
-      + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
-        ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${
-          if lib.versionOlder release_version "18" then "$shortVersion" else release_version
-        }.dylib
-      ''
-      + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
-        if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
-          ''
-            ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
-          ''
-        else
-          ''
-            cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
-          ''
-      );
+    postInstall = ''
+      mkdir -p $python/share
+      mv $out/share/opt-viewer $python/share/opt-viewer
+      moveToOutput "bin/llvm-config*" "$dev"
+      substituteInPlace "$dev/lib/cmake/llvm/LLVMExports-${lib.toLower finalAttrs.finalPackage.cmakeBuildType}.cmake" \
+        --replace-fail "$out/bin/llvm-config" "$dev/bin/llvm-config"
+      substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
+        --replace-fail 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
+    ''
+    + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ''
+    + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (
+      if stdenv.buildPlatform.canExecute stdenv.hostPlatform then
+        ''
+          ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
+        ''
+      else
+        ''
+          cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
+        ''
+    );
 
     doCheck =
       !isDarwinBootstrap
       && !stdenv.hostPlatform.isAarch32
-      && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
       && (
         !stdenv.hostPlatform.isx86_32 # TODO: why
       )
@@ -731,8 +591,15 @@ stdenv.mkDerivation (
 
     checkTarget = "check-all";
 
-    # For the update script:
-    passthru.monorepoSrc = monorepoSrc;
+    passthru = {
+      # For the update script:
+      inherit monorepoSrc;
+      tests.withoutOptionalFeatures = libllvm.override {
+        enablePFM = false;
+        enablePolly = false;
+        enableTerminfo = false;
+      };
+    };
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {
@@ -754,97 +621,23 @@ stdenv.mkDerivation (
       '';
     };
   }
-  // lib.optionalAttrs enableManpages (
-    {
-      pname = "llvm-manpages";
+  // lib.optionalAttrs enableManpages {
+    pname = "llvm-manpages";
 
-      propagatedBuildInputs = [ ];
+    propagatedBuildInputs = [ ];
 
-      postPatch = null;
-      postInstall = null;
+    ninjaFlags = [ "docs-llvm-man" ];
+    installTargets = [ "install-docs-llvm-man" ];
 
-      outputs = [ "out" ];
+    doCheck = false;
 
-      doCheck = false;
+    postPatch = null;
+    postInstall = null;
 
-      meta = llvm_meta // {
-        description = "man pages for LLVM ${version}";
-      };
-    }
-    // (
-      if lib.versionOlder release_version "15" then
-        {
-          buildPhase = ''
-            make docs-llvm-man
-          '';
+    outputs = [ "out" ];
 
-          installPhase = ''
-            make -C docs install
-          '';
-        }
-      else
-        {
-          ninjaFlags = [ "docs-llvm-man" ];
-          installTargets = [ "install-docs-llvm-man" ];
-
-          postPatch = null;
-          postInstall = null;
-        }
-    )
-  )
-  // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
-    nativeCheckInputs = [
-      which
-    ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
-  }
-  // lib.optionalAttrs (lib.versionOlder release_version "15") {
-    # hacky fix: created binaries need to be run before installation
-    preBuild = ''
-      mkdir -p $out/
-      ln -sv $PWD/lib $out
-    '';
-
-    postBuild = ''
-      rm -fR $out
-    '';
-
-    preCheck = ''
-      export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
-    '';
-  }
-  // lib.optionalAttrs (lib.versionAtLeast release_version "15") {
-    # Defensive check: some paths (that we make symlinks to) depend on the release
-    # version, for example:
-    #  - https://github.com/llvm/llvm-project/blob/406bde9a15136254f2b10d9ef3a42033b3cb1b16/clang/lib/Headers/CMakeLists.txt#L185
-    #
-    # So we want to sure that the version in the source matches the release
-    # version we were given.
-    #
-    # We do this check here, in the LLVM build, because it happens early.
-    postConfigure =
-      let
-        v = lib.versions;
-        major = v.major release_version;
-        minor = v.minor release_version;
-        patch = v.patch release_version;
-      in
-      ''
-        # $1: part, $2: expected
-        check_version() {
-          part="''${1^^}"
-          part="$(cat include/llvm/Config/llvm-config.h  | grep "#define LLVM_VERSION_''${part} " | cut -d' ' -f3)"
-
-          if [[ "$part" != "$2" ]]; then
-            echo >&2 \
-              "mismatch in the $1 version! we have version ${release_version}" \
-              "and expected the $1 version to be '$2'; the source has '$part' instead"
-            exit 3
-          fi
-        }
-
-        check_version major ${major}
-        check_version minor ${minor}
-        check_version patch ${patch}
-      '';
+    meta = llvm_meta // {
+      description = "man pages for LLVM ${version}";
+    };
   }
 )

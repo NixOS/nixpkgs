@@ -44,36 +44,35 @@
 
   # Note: the hardening flags are part of the bintools-wrapper, rather than
   # the cc-wrapper, because a few of them are handled by the linker.
-  defaultHardeningFlags ?
-    [
-      "bindnow"
-      "format"
-      "fortify"
-      "fortify3"
-      "pic"
-      "relro"
-      "stackclashprotection"
-      "stackprotector"
-      "strictoverflow"
-      "zerocallusedregs"
+  defaultHardeningFlags ? [
+    "bindnow"
+    "format"
+    "fortify"
+    "fortify3"
+    "pic"
+    "relro"
+    "stackclashprotection"
+    "stackprotector"
+    "strictoverflow"
+    "zerocallusedregs"
+  ]
+  ++ lib.optional (
+    with stdenvNoCC;
+    lib.any (x: x) [
+      # OpenBSD static linking requires PIE
+      (with targetPlatform; isOpenBSD && isStatic)
+      (lib.all (x: x) [
+        # Musl-based platforms will keep "pie", other platforms will not.
+        # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
+        # in the nixpkgs manual to inform users about the defaults.
+        (targetPlatform.libc == "musl")
+        # Except when:
+        #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
+        #    - static armv7l, where compilation fails.
+        (!(targetPlatform.isAarch && targetPlatform.isStatic))
+      ])
     ]
-    ++ lib.optional (
-      with stdenvNoCC;
-      lib.any (x: x) [
-        # OpenBSD static linking requires PIE
-        (with targetPlatform; isOpenBSD && isStatic)
-        (lib.all (x: x) [
-          # Musl-based platforms will keep "pie", other platforms will not.
-          # If you change this, make sure to update section `{#sec-hardening-in-nixpkgs}`
-          # in the nixpkgs manual to inform users about the defaults.
-          (targetPlatform.libc == "musl")
-          # Except when:
-          #    - static aarch64, where compilation works, but produces segfaulting dynamically linked binaries.
-          #    - static armv7l, where compilation fails.
-          (!(targetPlatform.isAarch && targetPlatform.isStatic))
-        ])
-      ]
-    ) "pie",
+  ) "pie",
 }:
 
 assert propagateDoc -> bintools ? man;
@@ -222,72 +221,71 @@ stdenvNoCC.mkDerivation {
     src=$PWD
   '';
 
-  installPhase =
-    ''
-      mkdir -p $out/bin $out/nix-support
+  installPhase = ''
+    mkdir -p $out/bin $out/nix-support
 
-      wrap() {
-        local dst="$1"
-        local wrapper="$2"
-        export prog="$3"
-        export use_response_file_by_default=${if isCCTools then "1" else "0"}
-        substituteAll "$wrapper" "$out/bin/$dst"
-        chmod +x "$out/bin/$dst"
-      }
-    ''
+    wrap() {
+      local dst="$1"
+      local wrapper="$2"
+      export prog="$3"
+      export use_response_file_by_default=${if isCCTools then "1" else "0"}
+      substituteAll "$wrapper" "$out/bin/$dst"
+      chmod +x "$out/bin/$dst"
+    }
+  ''
 
-    + (
-      if nativeTools then
-        ''
-          echo ${nativePrefix} > $out/nix-support/orig-bintools
+  + (
+    if nativeTools then
+      ''
+        echo ${nativePrefix} > $out/nix-support/orig-bintools
 
-          ldPath="${nativePrefix}/bin"
-        ''
-      else
-        ''
-          echo $bintools_bin > $out/nix-support/orig-bintools
+        ldPath="${nativePrefix}/bin"
+      ''
+    else
+      ''
+        echo $bintools_bin > $out/nix-support/orig-bintools
 
-          ldPath="${bintools_bin}/bin"
-        ''
+        ldPath="${bintools_bin}/bin"
+      ''
 
-        # Solaris needs an additional ld wrapper.
-        + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
-          ldPath="${nativePrefix}/bin"
-          exec="$ldPath/${targetPrefix}ld"
-          wrap ld-solaris ${./ld-solaris-wrapper.sh}
-        ''
-    )
+      # Solaris needs an additional ld wrapper.
+      + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
+        ldPath="${nativePrefix}/bin"
+        exec="$ldPath/${targetPrefix}ld"
+        wrap ld-solaris ${./ld-solaris-wrapper.sh}
+      ''
+  )
 
-    # If we are asked to wrap `gas` and this bintools has it,
-    # then symlink it (`as` will be symlinked next).
-    # This is mainly for the wrapped gnat-bootstrap on x86-64 Darwin,
-    # as it must have both the GNU assembler from cctools (installed as `gas`)
-    # and the Clang integrated assembler (installed as `as`).
-    # See pkgs/os-specific/darwin/binutils/default.nix for details.
-    + optionalString wrapGas ''
-      if [ -e $ldPath/${targetPrefix}gas ]; then
-        ln -s $ldPath/${targetPrefix}gas $out/bin/${targetPrefix}gas
+  # If we are asked to wrap `gas` and this bintools has it,
+  # then symlink it (`as` will be symlinked next).
+  # This is mainly for the wrapped gnat-bootstrap on x86-64 Darwin,
+  # as it must have both the GNU assembler from cctools (installed as `gas`)
+  # and the Clang integrated assembler (installed as `as`).
+  # See pkgs/os-specific/darwin/binutils/default.nix for details.
+  + optionalString wrapGas ''
+    if [ -e $ldPath/${targetPrefix}gas ]; then
+      ln -s $ldPath/${targetPrefix}gas $out/bin/${targetPrefix}gas
+    fi
+  ''
+
+  # Create symlinks for rest of the binaries.
+  + ''
+    for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line \
+        ranlib readelf elfedit dlltool dllwrap windmc windres; do
+      if [ -e $ldPath/${targetPrefix}''${binary} ]; then
+        ln -s $ldPath/${targetPrefix}''${binary} $out/bin/${targetPrefix}''${binary}
       fi
-    ''
+    done
 
-    # Create symlinks for rest of the binaries.
-    + ''
-      for binary in objdump objcopy size strings as ar nm gprof dwp c++filt addr2line \
-          ranlib readelf elfedit dlltool dllwrap windmc windres; do
-        if [ -e $ldPath/${targetPrefix}''${binary} ]; then
-          ln -s $ldPath/${targetPrefix}''${binary} $out/bin/${targetPrefix}''${binary}
-        fi
-      done
+    if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
+      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
+    fi
 
-      if [ -e ''${ld:-$ldPath/${targetPrefix}ld} ]; then
-        wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
-      fi
-
-      for variant in $ldPath/${targetPrefix}ld.*; do
-        basename=$(basename "$variant")
-        wrap $basename ${./ld-wrapper.sh} $variant
-      done
-    '';
+    for variant in $ldPath/${targetPrefix}ld.*; do
+      basename=$(basename "$variant")
+      wrap $basename ${./ld-wrapper.sh} $variant
+    done
+  '';
 
   strictDeps = true;
   depsTargetTargetPropagated = extraPackages;
@@ -347,6 +345,9 @@ stdenvNoCC.mkDerivation {
               ''
           }
         fi
+      ''
+      + optionalString (libc.w32api or null != null) ''
+        echo '-L${lib.getLib libc.w32api}${libc.libdir or "/lib/w32api"}' >> $out/nix-support/libc-ldflags
       ''
     )
 
@@ -458,44 +459,43 @@ stdenvNoCC.mkDerivation {
     ##
     + extraBuildCommands;
 
-  env =
-    {
-      # for substitution in utils.bash
-      # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
-      expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-      # TODO(@sternenseemann): rename env var via stdenv rebuild
-      shell = (getBin runtimeShell + runtimeShell.shellPath or "");
-      gnugrep_bin = optionalString (!nativeTools) gnugrep;
-      rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
-      mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
-      wrapperName = "BINTOOLS_WRAPPER";
-      inherit
-        dynamicLinker
-        targetPrefix
-        suffixSalt
-        coreutils_bin
-        ;
-      inherit
-        bintools_bin
-        libc_bin
-        libc_dev
-        libc_lib
-        ;
-      default_hardening_flags_str = builtins.toString defaultHardeningFlags;
-    }
-    // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
-      # These will become empty strings when not targeting Darwin.
-      inherit (targetPlatform)
-        darwinPlatform
-        darwinSdkVersion
-        darwinMinVersion
-        darwinMinVersionVariable
-        ;
-    }
-    // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
-      # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
-      fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
-    };
+  env = {
+    # for substitution in utils.bash
+    # TODO(@sternenseemann): invent something cleaner than passing in "" in case of absence
+    expandResponseParams = "${expand-response-params}/bin/expand-response-params";
+    # TODO(@sternenseemann): rename env var via stdenv rebuild
+    shell = (getBin runtimeShell + runtimeShell.shellPath or "");
+    gnugrep_bin = optionalString (!nativeTools) gnugrep;
+    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
+    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
+    wrapperName = "BINTOOLS_WRAPPER";
+    inherit
+      dynamicLinker
+      targetPrefix
+      suffixSalt
+      coreutils_bin
+      ;
+    inherit
+      bintools_bin
+      libc_bin
+      libc_dev
+      libc_lib
+      ;
+    default_hardening_flags_str = toString defaultHardeningFlags;
+  }
+  // lib.mapAttrs (_: lib.optionalString targetPlatform.isDarwin) {
+    # These will become empty strings when not targeting Darwin.
+    inherit (targetPlatform)
+      darwinPlatform
+      darwinSdkVersion
+      darwinMinVersion
+      darwinMinVersionVariable
+      ;
+  }
+  // lib.optionalAttrs (stdenvNoCC.targetPlatform.isDarwin && apple-sdk != null) {
+    # Wrapped compilers should do something useful even when no SDK is provided at `DEVELOPER_DIR`.
+    fallback_sdk = apple-sdk.__spliced.buildTarget or apple-sdk;
+  };
 
   meta =
     let

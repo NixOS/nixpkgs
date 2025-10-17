@@ -10,16 +10,12 @@ lib.extendMkDerivation {
   constructDrv = stdenv.mkDerivation;
   excludeDrvArgNames = [
     "overrideModAttrs"
-    # Compatibility layer to the directly-specified CGO_ENABLED.
-    # TODO(@ShamrockLee): Remove after Nixpkgs 25.05 branch-off
-    "CGO_ENABLED"
   ];
   extendDrvArgs =
     finalAttrs:
     {
       nativeBuildInputs ? [ ], # Native build inputs used for the derivation.
       passthru ? { },
-      patches ? [ ],
 
       # A function to override the `goModules` derivation.
       overrideModAttrs ? (finalAttrs: previousAttrs: { }),
@@ -63,6 +59,12 @@ lib.extendMkDerivation {
       ldflags ? [ ],
       # Go build flags.
       GOFLAGS ? [ ],
+
+      # Instead of building binary targets with 'go install', build test binaries with 'go test'.
+      # The binaries found in $out/bin can be executed as go tests outside of the sandbox.
+      # This is mostly useful outside of nixpkgs, for example to build integration/e2e tests
+      # that won't run within the sandbox.
+      buildTestBinaries ? false,
 
       ...
     }@args:
@@ -202,7 +204,15 @@ lib.extendMkDerivation {
             outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
             # in case an overlay clears passthru by accident, don't fail evaluation
           }).overrideAttrs
-            (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
+            (
+              let
+                pos = builtins.unsafeGetAttrPos "passthru" finalAttrs;
+                posString =
+                  if pos == null then "unknown" else "${pos.file}:${toString pos.line}:${toString pos.column}";
+              in
+              finalAttrs.passthru.overrideModAttrs
+                or (lib.warn "buildGoModule: ${finalAttrs.name or finalAttrs.pname}: passthru.overrideModAttrs missing after overrideAttrs. Last overridden at ${posString}." overrideModAttrs)
+            );
 
       nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
@@ -212,19 +222,7 @@ lib.extendMkDerivation {
         GO111MODULE = "on";
         GOTOOLCHAIN = "local";
 
-        CGO_ENABLED =
-          args.env.CGO_ENABLED or (
-            if args ? CGO_ENABLED then
-              # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
-              # TODO(@ShamrockLee): Remove and convert to
-              # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
-              # after the Nixpkgs 25.05 branch-off.
-              lib.warn
-                "${finalAttrs.finalPackage.meta.position}: buildGoModule: specify CGO_ENABLED with env.CGO_ENABLED instead."
-                args.CGO_ENABLED
-            else
-              go.CGO_ENABLED
-          );
+        CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED;
       };
 
       GOFLAGS =
@@ -236,7 +234,7 @@ lib.extendMkDerivation {
         ++
           lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
             "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-            (lib.optional (!allowGoReference) "-trimpath");
+            (lib.optional (!finalAttrs.allowGoReference) "-trimpath");
 
       inherit enableParallelBuilding;
 
@@ -338,8 +336,18 @@ lib.extendMkDerivation {
                   export NIX_BUILD_CORES=1
               fi
               for pkg in $(getGoDirs ""); do
-                echo "Building subPackage $pkg"
-                buildGoDir install "$pkg"
+                ${
+                  if buildTestBinaries then
+                    ''
+                      echo "Building test binary for $pkg"
+                      buildGoDir "test -c -o $GOPATH/bin/" "$pkg"
+                    ''
+                  else
+                    ''
+                      echo "Building subPackage $pkg"
+                      buildGoDir install "$pkg"
+                    ''
+                }
               done
             ''
           + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
@@ -359,7 +367,7 @@ lib.extendMkDerivation {
           ''
         );
 
-      doCheck = args.doCheck or true;
+      doCheck = args.doCheck or (!buildTestBinaries);
       checkPhase =
         args.checkPhase or ''
           runHook preCheck
@@ -386,7 +394,8 @@ lib.extendMkDerivation {
 
       strictDeps = true;
 
-      disallowedReferences = lib.optional (!allowGoReference) go;
+      inherit allowGoReference;
+      disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
 
       passthru = {
         inherit go;
@@ -394,11 +403,13 @@ lib.extendMkDerivation {
         # `passthru.overrideModAttrs` will be overridden
         # when users want to override `goModules`.
         overrideModAttrs = lib.toExtension overrideModAttrs;
-      } // passthru;
+      }
+      // passthru;
 
       meta = {
         # Add default meta information.
         platforms = go.meta.platforms or lib.platforms.all;
-      } // meta;
+      }
+      // meta;
     };
 }

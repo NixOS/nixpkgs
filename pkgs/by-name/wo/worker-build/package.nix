@@ -6,23 +6,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "worker-build";
-  version = "0.6.0";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-rs";
     tag = "v${version}";
-    hash = "sha256-wsH16hkiaTthE2FwQ8Ma2qQhkunq2rxkZXPEYR7P0Io=";
+    hash = "sha256-Ia921UNb++9Y1NoEd7nNdJaEEqRxQLAzZ8yYaxPrWYc=";
+    fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-ZuO020orJBJWm3Q+39MnkQ96rsv9juicUeMtBBVWxcg=";
+  cargoHash = "sha256-sIxsGeORhWpL3lWzXas7fK4QVuB03UT7rAN8uEzOdr0=";
 
   buildAndTestSubdir = "worker-build";
-
-  # missing some module upstream to run the tests
-  doCheck = false;
 
   meta = {
     description = "Tool to be used as a custom build command for a Cloudflare Workers `workers-rs` project";

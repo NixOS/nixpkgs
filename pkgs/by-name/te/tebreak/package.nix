@@ -12,7 +12,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "tebreak";
   version = "1.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamewing";
@@ -21,8 +21,9 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "13mgh775d8hkl340923lfwwm4r5ps70girn8d6wgfxzwzxylz8iz";
   };
 
-  nativeBuildInputs = [ python3.pkgs.cython ];
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     pysam
     scipy
     bx-python
@@ -47,12 +48,19 @@ python3.pkgs.buildPythonApplication rec {
     ${python3.interpreter} checktest.py
   '';
 
-  meta = with lib; {
+  pythonImportsCheck = [ "tebreak" ];
+
+  meta = {
     description = "Find and characterise transposable element insertions";
     mainProgram = "tebreak";
     homepage = "https://github.com/adamewing/tebreak";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jbedo ];
-    platforms = platforms.x86_64;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jbedo ];
+    platforms = lib.platforms.x86_64;
+    # Several tests are failing:
+    # - AttributeError: module 'skbio.alignment' has no attribute 'local_pairwise_align_ssw'.
+    #   Did you mean: 'local_pairwise_align'?
+    # - AssertionError: 6 != 0
+    broken = true;
   };
 }

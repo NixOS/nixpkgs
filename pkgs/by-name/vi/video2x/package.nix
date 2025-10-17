@@ -55,18 +55,17 @@ stdenv.mkDerivation (finalAttrs: {
     glslang
   ];
 
-  buildInputs =
-    [
-      boost
-      ffmpeg
-      ncnn
-      spdlog
-      vulkan-headers
-      vulkan-loader
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ];
+  buildInputs = [
+    boost
+    ffmpeg
+    ncnn
+    spdlog
+    vulkan-headers
+    vulkan-loader
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     # Don't build the libvideo2x shared library, we only need the CLI tool

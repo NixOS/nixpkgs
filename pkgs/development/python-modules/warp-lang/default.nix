@@ -35,15 +35,15 @@
 assert libmathdxSupport -> cudaSupport;
 let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
-  stdenv = builtins.throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
+  stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.7.2.post1";
+  version = "1.9.0";
 
   libmathdx = effectiveStdenv.mkDerivation (finalAttrs: {
     # NOTE: The version used should match the version Warp requires:
-    # https://github.com/NVIDIA/warp/blob/4ad209076ce09668b18dedc74dce0d5cf8b9e409/deps/libmathdx-deps.packman.xml
+    # https://github.com/NVIDIA/warp/blob/${version}/deps/libmathdx-deps.packman.xml
     pname = "libmathdx";
-    version = "0.1.2";
+    version = "0.2.3";
 
     outputs = [
       "out"
@@ -52,36 +52,46 @@ let
 
     src =
       let
-        baseURL = "https://developer.download.nvidia.com/compute/cublasdx/redist/cublasdx";
+        baseURL = "https://developer.nvidia.com/downloads/compute/cublasdx/redist/cublasdx";
+        cudaMajorVersion = cudaPackages.cudaMajorVersion; # only 12, 13 supported
+        cudaVersion = "${cudaMajorVersion}.0"; # URL example: ${baseURL}/cuda12/${name}-${version}-cuda12.0.zip
         name = lib.concatStringsSep "-" [
           finalAttrs.pname
           "Linux"
           effectiveStdenv.hostPlatform.parsed.cpu.name
           finalAttrs.version
+          "cuda${cudaVersion}"
         ];
+
+        # nix-hash --type sha256 --to-sri $(nix-prefetch-url "https://...")
         hashes = {
-          aarch64-linux = "sha256-7HEXfzxPF62q/7pdZidj4eO09u588yxcpSu/bWot/9A=";
-          x86_64-linux = "sha256-MImBFv+ooRSUqdL/YEe/bJIcVBnHMCk7SLS5eSeh0cQ=";
+          "12" = {
+            aarch64-linux = "sha256-d/aBC+zU2ciaw3isv33iuviXYaLGLdVDdzynGk9SFck=";
+            x86_64-linux = "sha256-CHIH0s4SnA67COtHBkwVCajW/3f0VxNBmuDLXy4LFIg=";
+          };
+          "13" = {
+            aarch64-linux = "sha256-TetJbMts8tpmj5PV4+jpnUHMcooDrXUEKL3aGWqilKI=";
+            x86_64-linux = "sha256-wLJLbRpQWa6QEm8ibm1gxt3mXvkWvu0vEzpnqTIvE1M=";
+          };
         };
       in
       lib.mapNullable (
         hash:
         fetchurl {
           inherit hash name;
-          url = "${baseURL}/${name}.tar.gz";
+          url = "${baseURL}/cuda${cudaMajorVersion}/${name}.tar.gz";
         }
-      ) (hashes.${effectiveStdenv.hostPlatform.system} or null);
+      ) (hashes.${cudaMajorVersion}.${effectiveStdenv.hostPlatform.system} or null);
 
     dontUnpack = true;
     dontConfigure = true;
     dontBuild = true;
 
-    # NOTE: The leading component is stripped because the 0.1.2 release is within the `libmathdx` directory.
     installPhase = ''
       runHook preInstall
 
       mkdir -p "$out"
-      tar -xzf "$src" --strip-components=1 -C "$out"
+      tar -xzf "$src" -C "$out"
 
       mkdir -p "$static"
       moveToOutput "lib/libmathdx_static.a" "$static"
@@ -90,7 +100,7 @@ let
     '';
 
     meta = {
-      description = "library used to integrate cuBLASDx and cuFFTDx into Warp";
+      description = "Library used to integrate cuBLASDx and cuFFTDx into Warp";
       homepage = "https://developer.nvidia.com/cublasdx-downloads";
       sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
       license = with lib.licenses; [
@@ -138,7 +148,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-cT0CrD71nNZnQMimGrmnSQl6RQx4MiUv2xBFPWNI/0s=";
+    hash = "sha256-OEg2mUsEdRKhgx0fIraqme4moKNh1RSdN7/yCT1V5+g=";
   };
 
   patches =
@@ -161,16 +171,21 @@ buildPythonPackage {
 
   postPatch =
     # Patch build_dll.py to use our gencode flags rather than NVIDIA's very broad defaults.
-    # NOTE: After 1.7.2, patching will need to be updated like this:
-    # https://github.com/ConnorBaker/cuda-packages/blob/2fc8ba8c37acee427a94cdd1def55c2ec701ad82/pkgs/development/python-modules/warp/default.nix#L56-L65
     lib.optionalString cudaSupport ''
       nixLog "patching $PWD/warp/build_dll.py to use our gencode flags"
       substituteInPlace "$PWD/warp/build_dll.py" \
-        --replace-fail \
-          'nvcc_opts = gencode_opts + [' \
-          'nvcc_opts = [ ${
-            lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
-          }, '
+          --replace-fail \
+            '*gencode_opts,' \
+            '${
+              lib.concatMapStringsSep ", " (gencodeString: ''"${gencodeString}"'') cudaPackages.flags.gencode
+            },' \
+          --replace-fail \
+            '*clang_arch_flags,' \
+            '${
+              lib.concatMapStringsSep ", " (
+                realArch: ''"--cuda-gpu-arch=${realArch}"''
+              ) cudaPackages.flags.realArches
+            },'
     ''
     # Patch build_dll.py to use dynamic libraries rather than static ones.
     # NOTE: We do not patch the `nvptxcompiler_static` path because it is not available as a dynamic library.
@@ -193,22 +208,13 @@ buildPythonPackage {
           '-lmathdx_static' \
           '-lmathdx'
     ''
-    + ''
-      nixLog "patching $PWD/warp/build_dll.py to use our C++ compiler"
-      substituteInPlace "$PWD/warp/build_dll.py" \
-        --replace-fail "g++" "c++"
-    ''
-    # Broken tests on aarch64. Since unittest doesn't support disabling a
-    # single test, and pytest isn't compatible, we patch the test file directly
-    # instead.
-    #
-    # See: https://github.com/NVIDIA/warp/issues/552
-    + lib.optionalString effectiveStdenv.hostPlatform.isAarch64 ''
-      nixLog "patching $PWD/warp/tests/test_fem.py to disable broken tests on aarch64"
-      substituteInPlace "$PWD/warp/tests/test_fem.py" \
+    # AssertionError: 0.4082476496696472 != 0.40824246406555176 within 5 places
+    + lib.optionalString effectiveStdenv.hostPlatform.isDarwin ''
+      nixLog "patching $PWD/warp/tests/test_fem.py to disable broken tests on darwin"
+      substituteInPlace "$PWD/warp/tests/test_codegen.py" \
         --replace-fail \
-          'add_function_test(TestFem, "test_integrate_gradient", test_integrate_gradient, devices=devices)' \
-          ""
+          'places=5' \
+          'places=4'
     ''
     # These tests fail on CPU and CUDA.
     + ''
@@ -261,7 +267,10 @@ buildPythonPackage {
   preBuild =
     let
       buildOptions =
-        lib.optionals (!standaloneSupport) [
+        lib.optionals effectiveStdenv.cc.isClang [
+          "--clang_build_toolchain"
+        ]
+        ++ lib.optionals (!standaloneSupport) [
           "--no_standalone"
         ]
         ++ lib.optionals cudaSupport [
@@ -339,12 +348,6 @@ buildPythonPackage {
                 writableTmpDirAsHomeHook
               ];
               requiredSystemFeatures = lib.optionals cudaSupport [ "cuda" ];
-              # Many unit tests fail with segfaults on aarch64-linux, especially in the sim
-              # and grad modules. However, other functionality generally works, so we don't
-              # mark the package as broken.
-              #
-              # See: https://www.github.com/NVIDIA/warp/issues/{356,372,552}
-              meta.broken = effectiveStdenv.hostPlatform.isAarch64 && effectiveStdenv.hostPlatform.isLinux;
             }
             ''
               nixLog "running ${name}"

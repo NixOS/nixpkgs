@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,7 +8,7 @@
 
 let
   pname = "lefthook";
-  version = "1.11.14";
+  version = "1.13.4";
 in
 buildGoModule {
   inherit pname version;
@@ -16,10 +17,10 @@ buildGoModule {
     owner = "evilmartians";
     repo = "lefthook";
     rev = "v${version}";
-    hash = "sha256-QD1fDHzR9ZRS8FZBvGJk9rxecqnTE69WWZqaN3eXOhU=";
+    hash = "sha256-/ZZ+eFHKQoqOzUNpTZ1Ef2A0EQbgT+CWau/q9hhuTHU=";
   };
 
-  vendorHash = "sha256-vatbvmtdh/23ul6S/cgbyWEtsUgKXZ5BR+aUuQ0MxMg=";
+  vendorHash = "sha256-HQ6xpHYAOkT48UvOIf0g49jp5dt/4zuwmy8r/9KAZUk=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -30,7 +31,7 @@ buildGoModule {
 
   doCheck = false;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd lefthook \
       --bash <($out/bin/lefthook completion bash) \
       --fish <($out/bin/lefthook completion fish) \
@@ -43,6 +44,6 @@ buildGoModule {
     changelog = "https://github.com/evilmartians/lefthook/raw/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     mainProgram = "lefthook";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -32,7 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     ncurses
     libvorbis
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin SDL;
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin SDL;
 
   env.NIX_CFLAGS_COMPILE = toString (
     [

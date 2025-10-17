@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X github.com/snyk/driftctl/build.enableUsageReporting=false"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd driftctl \
       --bash <($out/bin/driftctl completion bash) \
       --fish <($out/bin/driftctl completion fish) \

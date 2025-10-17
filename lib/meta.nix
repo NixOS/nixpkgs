@@ -15,7 +15,12 @@ let
     assertMsg
     ;
   inherit (lib.attrsets) mapAttrs' filterAttrs;
-  inherit (builtins) isString match typeOf;
+  inherit (builtins)
+    isString
+    match
+    typeOf
+    elemAt
+    ;
 
 in
 rec {
@@ -44,7 +49,14 @@ rec {
 
     :::
   */
-  addMetaAttrs = newAttrs: drv: drv // { meta = (drv.meta or { }) // newAttrs; };
+  addMetaAttrs =
+    newAttrs: drv:
+    if drv ? overrideAttrs then
+      drv.overrideAttrs (old: {
+        meta = (old.meta or { }) // newAttrs;
+      })
+    else
+      drv // { meta = (drv.meta or { }) // newAttrs; };
 
   /**
     Disable Hydra builds of given derivation.
@@ -387,7 +399,7 @@ rec {
     => true
     lib.getLicenseFromSpdxIdOr "MY LICENSE" null
     => null
-    lib.getLicenseFromSpdxIdOr "MY LICENSE" (builtins.throw "No SPDX ID matches MY LICENSE")
+    lib.getLicenseFromSpdxIdOr "MY LICENSE" (throw "No SPDX ID matches MY LICENSE")
     => error: No SPDX ID matches MY LICENSE
     ```
     :::
@@ -484,4 +496,186 @@ rec {
     assert assertMsg (match ".*/.*" y == null)
       "lib.meta.getExe': The second argument \"${y}\" is a nested path with a \"/\" character, but it should just be the name of the executable instead.";
     "${getBin x}/bin/${y}";
+
+  /**
+    Generate [CPE parts](#var-meta-identifiers-cpeParts) from inputs. Copies `vendor` and `version` to the output, and sets `update` to `*`.
+
+    # Inputs
+
+    `vendor`
+
+    : package's vendor
+
+    `version`
+
+    : package's version
+
+    # Type
+
+    ```
+    cpeFullVersionWithVendor :: string -> string -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.cpeFullVersionWithVendor` usage example
+
+    ```nix
+    lib.meta.cpeFullVersionWithVendor "gnu" "1.2.3"
+    => {
+      vendor = "gnu";
+      version = "1.2.3";
+      update = "*";
+    }
+    ```
+
+    :::
+    :::{.example}
+    ## `lib.meta.cpeFullVersionWithVendor` usage in derivations
+
+    ```nix
+    mkDerivation rec {
+      version = "1.2.3";
+      # ...
+      meta = {
+        # ...
+        identifiers.cpeParts = lib.meta.cpeFullVersionWithVendor "gnu" version;
+      };
+    }
+    ```
+    :::
+  */
+  cpeFullVersionWithVendor = vendor: version: {
+    inherit vendor version;
+    update = "*";
+  };
+
+  /**
+    Alternate version of [`lib.meta.cpePatchVersionInUpdateWithVendor`](#function-library-lib.meta.cpePatchVersionInUpdateWithVendor).
+    If `cpePatchVersionInUpdateWithVendor` succeeds, returns an attribute set with `success` set to `true` and `value` set to the result.
+    Otherwise, `success` is set to `false` and `error` is set to the string representation of the error.
+
+    # Inputs
+
+    `vendor`
+
+    : package's vendor
+
+    `version`
+
+    : package's version
+
+    # Type
+
+    ```
+    tryCPEPatchVersionInUpdateWithVendor :: string -> string -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.tryCPEPatchVersionInUpdateWithVendor` usage example
+
+    ```nix
+    lib.meta.tryCPEPatchVersionInUpdateWithVendor "gnu" "1.2.3"
+    => {
+      success = true;
+      value = {
+        vendor = "gnu";
+        version = "1.2";
+        update = "3";
+      };
+    }
+    ```
+
+    :::
+    :::{.example}
+    ## `lib.meta.cpePatchVersionInUpdateWithVendor` error example
+
+    ```nix
+    lib.meta.tryCPEPatchVersionInUpdateWithVendor "gnu" "5.3p0"
+    => {
+      success = false;
+      error = "version 5.3p0 doesn't match regex `([0-9]+\\.[0-9]+)\\.([0-9]+)`";
+    }
+    ```
+
+    :::
+  */
+  tryCPEPatchVersionInUpdateWithVendor =
+    vendor: version:
+    let
+      regex = "([0-9]+\\.[0-9]+)\\.([0-9]+)";
+      # we have to call toString here in case version is an attrset with __toString attribute
+      versionMatch = builtins.match regex (toString version);
+    in
+    if versionMatch == null then
+      {
+        success = false;
+        error = "version ${version} doesn't match regex `${regex}`";
+      }
+    else
+      {
+        success = true;
+        value = {
+          inherit vendor;
+          version = elemAt versionMatch 0;
+          update = elemAt versionMatch 1;
+        };
+      };
+
+  /**
+    Generate [CPE parts](#var-meta-identifiers-cpeParts) from inputs. Copies `vendor` to the result. When `version` matches `X.Y.Z` where all parts are numerical, sets `version` and `update` fields to `X.Y` and `Z`. Throws an error if the version doesn't match the expected template.
+
+    # Inputs
+
+    `vendor`
+
+    : package's vendor
+
+    `version`
+
+    : package's version
+
+    # Type
+
+    ```
+    cpePatchVersionInUpdateWithVendor :: string -> string -> AttrSet
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.meta.cpePatchVersionInUpdateWithVendor` usage example
+
+    ```nix
+    lib.meta.cpePatchVersionInUpdateWithVendor "gnu" "1.2.3"
+    => {
+      vendor = "gnu";
+      version = "1.2";
+      update = "3";
+    }
+    ```
+
+    :::
+    :::{.example}
+    ## `lib.meta.cpePatchVersionInUpdateWithVendor` usage in derivations
+
+    ```nix
+    mkDerivation rec {
+      version = "1.2.3";
+      # ...
+      meta = {
+        # ...
+        identifiers.cpeParts = lib.meta.cpePatchVersionInUpdateWithVendor "gnu" version;
+      };
+    }
+    ```
+
+    :::
+  */
+  cpePatchVersionInUpdateWithVendor =
+    vendor: version:
+    let
+      result = tryCPEPatchVersionInUpdateWithVendor vendor version;
+    in
+    if result.success then result.value else throw result.error;
 }

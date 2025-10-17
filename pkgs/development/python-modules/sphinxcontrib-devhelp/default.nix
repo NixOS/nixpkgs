@@ -28,7 +28,7 @@ buildPythonPackage rec {
   pythonNamespaces = [ "sphinxcontrib" ];
 
   meta = with lib; {
-    description = "sphinxcontrib-devhelp is a sphinx extension which outputs Devhelp document";
+    description = "Sphinx extension which outputs Devhelp document";
     homepage = "https://github.com/sphinx-doc/sphinxcontrib-devhelp";
     license = licenses.bsd2;
     teams = [ teams.sphinx ];

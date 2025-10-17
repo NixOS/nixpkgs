@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "array-record";
-  version = "0.7.2";
+  version = "0.8.1";
   format = "wheel";
 
   disabled = pythonOlder "3.10" || pythonAtLeast "3.14";
@@ -26,13 +26,12 @@ buildPythonPackage rec {
       dist = pyShortVersion;
       python = pyShortVersion;
       abi = pyShortVersion;
-      platform = "manylinux_2_17_x86_64.manylinux2014_x86_64";
+      platform = "manylinux2014_x86_64.manylinux_2_17_x86_64";
       hash =
         {
-          cp310 = "sha256-UmMEehSqMqgLy1TcYoKUX/tG4Tf8UM2xgnuUrXOiHGo=";
-          cp311 = "sha256-cUN9Ws8A1xIN/n+/oGfv3mGUfmlsojLS69iWRpA2meM=";
-          cp312 = "sha256-S+cV0NhXXlOzSTr2ED1oUuk6U1gQA0ZXoGPaWxGp/ZQ=";
-          cp313 = "sha256-C7UvwXV0/NXA5dhr7NbUCW/KeUWg5w5F18aN2oAUXAQ=";
+          cp311 = "sha256-CQ2ChYqTHjdU4QYvXGLCCudk8+XyTnnqkFQ5OAQ4Oo0=";
+          cp312 = "sha256-AF+29PToM7LeHE5RxiCtajCok7RtwWgDnZuzG3FGYHA=";
+          cp313 = "sha256-N7uALh/cmO22CoWVUsfn1JThQc85C/tzUKz9Y0Z9rq4=";
         }
         .${pyShortVersion} or (throw "${pname} is missing hash for ${pyShortVersion}");
     };
@@ -40,7 +39,8 @@ buildPythonPackage rec {
   dependencies = [
     absl-py
     etils
-  ] ++ etils.optional-dependencies.epath;
+  ]
+  ++ etils.optional-dependencies.epath;
 
   pythonImportsCheck = [ "array_record" ];
 

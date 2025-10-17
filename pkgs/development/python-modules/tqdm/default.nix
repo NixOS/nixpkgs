@@ -41,11 +41,9 @@ buildPythonPackage rec {
     pandas
   ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::FutureWarning"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-Wignore::FutureWarning"
+    "-Wignore::DeprecationWarning"
   ];
 
   # Remove performance testing.

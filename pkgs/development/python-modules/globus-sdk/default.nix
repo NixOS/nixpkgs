@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "globus-sdk";
-  version = "3.57.0";
+  version = "3.63.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "globus";
     repo = "globus-sdk-python";
     tag = version;
-    hash = "sha256-pwAr8Z8Qoc+LjRtF2NRu4lAN/7ha7jogw1RnDhuobZs=";
+    hash = "sha256-ucVDjOV1NmHguwXSWbomNz9gjrxpeGmoZqF/Je6BL/4=";
   };
 
   build-system = [ setuptools ];
@@ -37,7 +37,8 @@ buildPythonPackage rec {
     cryptography
     requests
     pyjwt
-  ] ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

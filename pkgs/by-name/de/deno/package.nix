@@ -29,38 +29,39 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.3.7";
+  version = "2.5.3";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-xrGEEtYOjQmKniDsPnWJSbiTRG0uBFqRbUbrvgrMyHg=";
+    hash = "sha256-UqD9Va33XVX73bjwUdb6woZ3kP/Xz6iBVqV1ceRbXq0=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1RhVg5fjzA9zKzpkjOyV1KITlTtW41VVqc2Cbe4pfdY=";
+  cargoHash = "sha256-OrKg3bOA5AyLQA+LIsHwWpk9DHodhcCVzdKW/S9+mNY=";
 
   patches = [
-    ./tests-replace-hardcoded-paths.patch
-    ./tests-darwin-differences.patch
-    ./tests-no-chown.patch
+    # Patch out the remote upgrade (deno update) check.
+    # Not a blocker in the build sandbox, since implementation and tests are
+    # considerately written for no external networking, but removing brings
+    # in-line with common nixpkgs practice.
+    ./patches/0000-remove-deno-upgrade-check.patch
+    # Patch out the upgrade sub-command since that wouldn't correctly upgrade
+    # deno from nixpkgs.
+    ./patches/0001-remove-deno-upgrade.patch
+    ./patches/0002-tests-replace-hardcoded-paths.patch
+    ./patches/0003-tests-linux-no-chown.patch
+    ./patches/0004-tests-darwin-fixes.patch
+    # some new TS tests don't identify `deno` location from parent actively
+    # running `deno` instance
+    # https://github.com/denoland/deno/pull/30914
+    ./patches/0005-tests-fix-deno-path.patch
   ];
-  postPatch =
-    ''
-      # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-      tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
-    ''
-    +
-      lib.optionalString
-        (stdenv.hostPlatform.isLinux || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64))
-        ''
-          # LTO crashes with the latest Rust + LLVM combination.
-          # https://github.com/rust-lang/rust/issues/141737
-          # TODO: remove this once LLVM is upgraded to 20.1.7
-          tomlq -ti '.profile.release.lto = false' Cargo.toml
-        '';
+  postPatch = ''
+    # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
+    tomlq -ti '.workspace.dependencies.libffi = { "version": .workspace.dependencies.libffi, "features": ["system"] }' Cargo.toml
+  '';
 
   buildInputs = [
     libffi
@@ -78,7 +79,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # required by deno_kv crate
     protobuf
     installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ lld ];
 
   configureFlags = lib.optionals stdenv.cc.isClang [
     # This never worked with clang, but became a hard error recently: https://github.com/llvm/llvm-project/commit/3d5b610c864c8f5980eaa16c22b71ff1cf462fae
@@ -140,48 +142,51 @@ rustPlatform.buildRustPackage (finalAttrs: {
     #   - https://github.com/denoland/deno/blob/2212d7d814914e43f43dfd945ee24197f50fa6fa/tests/Cargo.toml#L25
     #   - https://github.com/denoland/file_test_runner/blob/9c78319a4e4c6180dde0e9e6c2751017176e65c9/src/collection/mod.rs#L49
   ];
-  checkFlags =
-    [
-      # Internet access
-      "--skip=check::ts_no_recheck_on_redirect"
-      "--skip=js_unit_tests::quic_test"
-      "--skip=js_unit_tests::net_test"
-      "--skip=node_unit_tests::http_test"
-      "--skip=node_unit_tests::http2_test"
-      "--skip=node_unit_tests::net_test"
-      "--skip=node_unit_tests::tls_test"
-      "--skip=npm::lock_file_lock_write"
+  checkFlags = [
+    # Internet access
+    "--skip=check::ts_no_recheck_on_redirect"
+    "--skip=js_unit_tests::quic_test"
+    "--skip=js_unit_tests::net_test"
+    "--skip=node_unit_tests::http_test"
+    "--skip=node_unit_tests::http2_test"
+    "--skip=node_unit_tests::net_test"
+    "--skip=node_unit_tests::tls_test"
+    "--skip=npm::lock_file_lock_write"
 
-      # GPU access
-      "--skip=js_unit_tests::webgpu_test"
-      "--skip=js_unit_tests::jupyter_test"
+    # GPU access
+    "--skip=js_unit_tests::webgpu_test"
+    "--skip=js_unit_tests::jupyter_test"
 
-      # Use of /usr/bin
-      "--skip=specs::permission::proc_self_fd"
+    # Use of /usr/bin
+    "--skip=specs::permission::proc_self_fd"
 
-      # Flaky
-      "--skip=init::init_subcommand_serve"
-      "--skip=serve::deno_serve_parallel"
-      "--skip=js_unit_tests::stat_test" # timing-sensitive
-      "--skip=repl::pty_complete_imports"
-      "--skip=repl::pty_complete_expression"
+    # Flaky
+    "--skip=init::init_subcommand_serve"
+    "--skip=serve::deno_serve_parallel"
+    "--skip=js_unit_tests::stat_test" # timing-sensitive
+    "--skip=repl::pty_complete_imports"
+    "--skip=repl::pty_complete_expression"
 
-      # Test hangs, needs investigation
-      "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
+    # Test hangs, needs investigation
+    "--skip=repl::pty_complete_imports_no_panic_empty_specifier"
 
-      # Use of VSOCK, might not be available on all platforms
-      "--skip=js_unit_tests::serve_test"
-      "--skip=js_unit_tests::fetch_test"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # Expects specific shared libraries from macOS to be linked
-      "--skip=shared_library_tests::macos_shared_libraries"
+    # Use of VSOCK, might not be available on all platforms
+    "--skip=js_unit_tests::serve_test"
+    "--skip=js_unit_tests::fetch_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Expects specific shared libraries from macOS to be linked
+    "--skip=shared_library_tests::macos_shared_libraries"
 
-      # Darwin sandbox issues
-      "--skip=watcher"
-      "--skip=node_unit_tests::_fs_watch_test"
-      "--skip=js_unit_tests::fs_events_test"
-    ];
+    # Darwin sandbox issues
+    "--skip=watcher"
+    "--skip=node_unit_tests::_fs_watch_test"
+    "--skip=js_unit_tests::fs_events_test"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
+    "--skip=tests::test_userspace_resolver"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -205,13 +210,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     # Remove non-essential binaries like denort and test_server
     find $out/bin/* -not -name "deno" -delete
-
-    ${lib.optionalString canExecute ''
-      installShellCompletion --cmd deno \
-        --bash <($out/bin/deno completions bash) \
-        --fish <($out/bin/deno completions fish) \
-        --zsh <($out/bin/deno completions zsh)
-    ''}
+  ''
+  + lib.optionalString canExecute ''
+    installShellCompletion --cmd deno \
+      --bash <($out/bin/deno completions bash) \
+      --fish <($out/bin/deno completions fish) \
+      --zsh <($out/bin/deno completions zsh)
   '';
 
   doInstallCheck = canExecute;

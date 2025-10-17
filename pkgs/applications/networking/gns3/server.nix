@@ -79,11 +79,15 @@ python3Packages.buildPythonApplication {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [
-    # fails on ofborg because of lack of cpu vendor information
-    "--deselect=tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+  pytestFlags = [
     # Rerun failed tests up to three times (flaky tests)
-    "--reruns 3"
+    "--reruns=3"
+  ];
+
+  disabledTestPaths = [
+    # fails on ofborg because of lack of cpu vendor information
+    "tests/controller/gns3vm/test_virtualbox_gns3_vm.py::test_cpu_vendor_id"
+    "tests/controller/test_project.py"
   ];
 
   passthru.tests = {

@@ -24,7 +24,7 @@
   hnswlib,
   pgvector,
   sqlalchemy,
-  sqlite-vec,
+  sqlite-vec-c,
   # api
   aiohttp,
   fastapi,
@@ -93,7 +93,7 @@
   pytestCheckHook,
 }:
 let
-  version = "8.6.0";
+  version = "9.0.1";
   agent = [
     mcpadapt
     smolagents
@@ -103,7 +103,7 @@ let
     hnswlib
     pgvector
     sqlalchemy
-    sqlite-vec
+    sqlite-vec-c
   ];
   api = [
     aiohttp
@@ -224,6 +224,7 @@ let
       graph
       model
       pipeline-audio
+      pipeline-data
       pipeline-image
       pipeline-llm
       pipeline-text
@@ -240,7 +241,7 @@ let
     owner = "neuml";
     repo = "txtai";
     tag = "v${version}";
-    hash = "sha256-xFGVX0Ustime6ttysY3dcOCWc+jB75xqpSDBuRetIJc=";
+    hash = "sha256-ciQDKpqTdgYe4oIgd2uxY7491SMr9Snha9XyTpxgXyY=";
   };
 in
 buildPythonPackage {
@@ -276,37 +277,21 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "txtai" ];
 
-  nativeCheckInputs =
-    [
-      httpx
-      msgpack
-      pytestCheckHook
-      python-multipart
-      timm
-      sqlalchemy
-    ]
-    ++ optional-dependencies.agent
-    ++ optional-dependencies.ann
-    ++ optional-dependencies.api
-    ++ optional-dependencies.similarity;
+  nativeCheckInputs = [
+    httpx
+    msgpack
+    pytestCheckHook
+    python-multipart
+    timm
+    sqlalchemy
+  ]
+  ++ optional-dependencies.agent
+  ++ optional-dependencies.ann
+  ++ optional-dependencies.api
+  ++ optional-dependencies.similarity;
 
-  # The deselected paths depend on the huggingface hub and should be run as a passthru test
-  # disabledTestPaths won't work as the problem is with the classes containing the tests
-  # (in other words, it fails on __init__)
   pytestFlagsArray = [
-    "test/python/test*.py"
-    "--deselect=test/python/testagent.py"
-    "--deselect=test/python/testcloud.py"
-    "--deselect=test/python/testconsole.py"
-    "--deselect=test/python/testembeddings.py"
-    "--deselect=test/python/testgraph.py"
-    "--deselect=test/python/testapi/testapiembeddings.py"
-    "--deselect=test/python/testapi/testapipipelines.py"
-    "--deselect=test/python/testapi/testapiworkflow.py"
-    "--deselect=test/python/testdatabase/testclient.py"
-    "--deselect=test/python/testdatabase/testduckdb.py"
-    "--deselect=test/python/testdatabase/testencoder.py"
-    "--deselect=test/python/testworkflow.py"
+    "test/python/*"
   ];
 
   disabledTests = [
@@ -314,6 +299,12 @@ buildPythonPackage {
     "testInvalidTar"
     "testInvalidZip"
     # Downloads from Huggingface
+    "TestAgent"
+    "TestCloud"
+    "TestConsole"
+    "TestEmbeddings"
+    "TestGraph"
+    "TestWorkflow"
     "testPipeline"
     "testVectors"
     # Not finding sqlite-vec despite being supplied

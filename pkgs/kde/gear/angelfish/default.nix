@@ -16,7 +16,7 @@ mkKdeDerivation rec {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version;
     src = sources.${pname};
-    hash = "sha256-FgzmWw8FZb+DNSf2n6H14Rq07+x1LzG9hX4hFetuqDw=";
+    hash = "sha256-aGpmkuw7Y0PRFp0+0ozv5/A80O2T9lMN9SJfKfExx/o=";
   };
 
   extraNativeBuildInputs = [

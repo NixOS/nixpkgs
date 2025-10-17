@@ -8,17 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "monocle";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "bgpkit";
     repo = "monocle";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vpGCYU/vW4cQFuAWxa+ZkuKLB4NSs5tPW2iWVE8iPAk=";
+    hash = "sha256-7p7asmCHKFAHElYuRKs6BPG7Al3J36sJEss+hDEVQRI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1wouA1REbPHm/v4ZB76gfgDPweNV3nztf6XxKdu42GQ=";
+  cargoHash = "sha256-nGeAHIn076WkVnab7lUn4K1/TQ01Bgk/huxm12pzzkQ=";
 
   # require internet access
   checkFlags = [
@@ -28,6 +27,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=datasets::rpki::validator::tests::test_list_asn"
     "--skip=datasets::rpki::validator::tests::test_list_prefix"
     "--skip=datasets::rpki::validator::tests::test_validation"
+    "--skip=filters::search::tests::test_build_broker_with_filters"
+    "--skip=filters::search::tests::test_pagination_logic"
   ];
 
   doInstallCheck = true;

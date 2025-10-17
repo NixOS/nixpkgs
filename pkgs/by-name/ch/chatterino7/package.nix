@@ -3,24 +3,27 @@
   chatterino2,
   fetchFromGitHub,
   gitUpdater,
-  boost186,
 }:
 
 (chatterino2.buildChatterino {
   enableAvifSupport = true;
-  boost = boost186;
 }).overrideAttrs
   (
     finalAttrs: _: {
       pname = "chatterino7";
-      version = "7.5.3";
+      version = "7.5.4";
 
       src = fetchFromGitHub {
         owner = "SevenTV";
         repo = "chatterino7";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-KrAr3DcQDjb+LP+vIf0qLSSgII0m5rNwhncLNHlLaC8=";
+        hash = "sha256-zA198AIFIRx4qE5MZwrGOFFrpnVrZMVQx1SX0RJpDo4=";
         fetchSubmodules = true;
+        leaveDotGit = true;
+        postFetch = ''
+          git -C $out rev-parse --short HEAD > $out/GIT_HASH
+          find "$out" -name .git -print0 | xargs -0 rm -rf
+        '';
       };
 
       passthru.updateScript = gitUpdater {

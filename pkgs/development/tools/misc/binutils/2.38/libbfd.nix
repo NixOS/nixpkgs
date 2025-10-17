@@ -49,7 +49,8 @@ stdenv.mkDerivation {
   buildInputs = [
     libiberty
     zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libintl ];
 
   configurePlatforms = [
     "build"
@@ -60,7 +61,8 @@ stdenv.mkDerivation {
     "--enable-64-bit-bfd"
     "--enable-install-libbfd"
     "--with-system-zlib"
-  ] ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
+  ]
+  ++ lib.optional (!stdenv.hostPlatform.isStatic) "--enable-shared";
 
   enableParallelBuilding = true;
 

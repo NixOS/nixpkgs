@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "llm-mistral";
-  version = "0.14";
+  version = "0.15";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-mistral";
     tag = version;
-    hash = "sha256-NuiqRA/SCjGq0hJsnHJ/vgdncIKu3oE9WqWGht7QRMc=";
+    hash = "sha256-4ajvsq0sm3/vdiHUuNxHsHKdX58VNNpHIwhWI0ws+08=";
   };
 
   build-system = [
@@ -49,7 +49,7 @@ buildPythonPackage rec {
   meta = {
     description = "LLM plugin providing access to Mistral models using the Mistral API";
     homepage = "https://github.com/simonw/llm-mistral";
-    changelog = "https://github.com/simonw/llm-mistral/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-mistral/releases/tag/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ philiptaron ];
   };

@@ -9,21 +9,21 @@
 
 buildPythonPackage rec {
   pname = "phonenumbers";
-  version = "9.0.5";
+  version = "9.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cP3haKkt2cc/V4cjWVFRgdbN5ruOfsVmDpTEykVpLFA=";
+    hash = "sha256-wtFaap0FNLFKd2T1EkatqZVj4mP2W4CwJR0adgrEobo=";
   };
 
   build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "tests/*.py" ];
+  enabledTestPaths = [ "tests/*.py" ];
 
   pythonImportsCheck = [ "phonenumbers" ];
 

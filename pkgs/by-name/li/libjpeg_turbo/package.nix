@@ -32,13 +32,13 @@ assert !(enableJpeg7 && enableJpeg8); # pick only one or none, not both
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libjpeg-turbo";
-  version = "3.1.0";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "libjpeg-turbo";
     repo = "libjpeg-turbo";
     tag = finalAttrs.version;
-    hash = "sha256-ImDTMObirpw/SouCftlALJoWCbXsRc6bf4IFjYfWpUY=";
+    hash = "sha256-tmeWLJxieV42f9ljSpKJoLER4QOYQLsLFC7jW54YZAk=";
   };
 
   patches =
@@ -55,34 +55,32 @@ stdenv.mkDerivation (finalAttrs: {
     "doc"
   ];
 
-  nativeBuildInputs =
-    [
-      cmake
-      nasm
-    ]
-    ++ lib.optionals enableJava [
-      openjdk
-    ];
+  nativeBuildInputs = [
+    cmake
+    nasm
+  ]
+  ++ lib.optionals enableJava [
+    openjdk
+  ];
 
-  cmakeFlags =
-    [
-      "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
-      "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
-    ]
-    ++ lib.optionals enableJava [
-      "-DWITH_JAVA=1"
-    ]
-    ++ lib.optionals enableJpeg7 [
-      "-DWITH_JPEG7=1"
-    ]
-    ++ lib.optionals enableJpeg8 [
-      "-DWITH_JPEG8=1"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isRiscV [
-      # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
-      # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
-      "-DFLOATTEST=fp-contract"
-    ];
+  cmakeFlags = [
+    "-DENABLE_STATIC=${if enableStatic then "1" else "0"}"
+    "-DENABLE_SHARED=${if enableShared then "1" else "0"}"
+  ]
+  ++ lib.optionals enableJava [
+    "-DWITH_JAVA=1"
+  ]
+  ++ lib.optionals enableJpeg7 [
+    "-DWITH_JPEG7=1"
+  ]
+  ++ lib.optionals enableJpeg8 [
+    "-DWITH_JPEG8=1"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isRiscV [
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/issues/428
+    # https://github.com/libjpeg-turbo/libjpeg-turbo/commit/88bf1d16786c74f76f2e4f6ec2873d092f577c75
+    "-DFLOATTEST=fp-contract"
+  ];
 
   doInstallCheck = true;
   installCheckTarget = "test";
@@ -113,6 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://libjpeg-turbo.org/";
     description = "Faster (using SIMD) libjpeg implementation";
     license = lib.licenses.ijg; # and some parts under other BSD-style licenses
+    changelog = "https://github.com/libjpeg-turbo/libjpeg-turbo/releases/tag/${finalAttrs.version}";
     pkgConfigModules = [
       "libjpeg"
       "libturbojpeg"

@@ -9,7 +9,7 @@
 python3.pkgs.buildPythonApplication rec {
   pname = "bumpver";
   version = "2021.1110";
-  format = "setuptools";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
@@ -18,12 +18,16 @@ python3.pkgs.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace setup.py \
-      --replace "if any(arg.startswith(\"bdist\") for arg in sys.argv):" ""\
-      --replace "import lib3to6" ""\
-      --replace "package_dir = lib3to6.fix(package_dir)" ""
+      --replace-fail "if any(arg.startswith(\"bdist\") for arg in sys.argv):" ""\
+      --replace-fail "import lib3to6" ""\
+      --replace-fail "package_dir = lib3to6.fix(package_dir)" ""
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pathlib2
     click
     toml

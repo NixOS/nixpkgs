@@ -15,7 +15,7 @@
   mpfr,
   pcl,
   libsForQt5,
-  tbb,
+  onetbb,
   xercesc,
   wrapGAppsHook3,
 }:
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
     libsForQt5.qtsvg
     libsForQt5.qttools
-    tbb
+    onetbb
     xercesc
   ];
 

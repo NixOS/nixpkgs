@@ -11,18 +11,19 @@
   symengine,
   fenics-ufl,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
-  pname = "firdrake-fiat";
-  version = "2025.4.0";
+  pname = "firedrake-fiat";
+  version = "2025.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "firedrakeproject";
     repo = "fiat";
     tag = version;
-    hash = "sha256-i+hDpeg4SYRF7OK6uh1p1gVscyuJ4FjmyUUiLR7P7/A=";
+    hash = "sha256-SIi/4JW9L4kyFxEmbG9pqe0QtY80UMOh7LSFLmrHhZY=";
   };
 
   postPatch =
@@ -58,9 +59,21 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--skip-download"
   ];
+
+  passthru = {
+    # python updater script sets the wrong tag
+    skipBulkUpdate = true;
+
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "([0-9.]+)"
+      ];
+    };
+  };
 
   meta = {
     description = "FInite element Automatic Tabulator";

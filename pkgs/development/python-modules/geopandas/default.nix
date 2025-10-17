@@ -1,11 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 
   packaging,
@@ -29,26 +26,15 @@
 
 buildPythonPackage rec {
   pname = "geopandas";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "geopandas";
     repo = "geopandas";
     tag = "v${version}";
-    hash = "sha256-SZizjwkx8dsnaobDYpeQm9jeXZ4PlzYyjIScnQrH63Q=";
+    hash = "sha256-7ZsO4jresikA17M8cyHskdcVnTscGHxTCLJv5p1SvfI=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Remove geom_almost_equals, because it broke with shapely 2.1.0 and is not being updated
-      url = "https://github.com/geopandas/geopandas/commit/0e1f871a02e9612206dcadd6817284131026f61c.patch";
-      excludes = [ "CHANGELOG.md" ];
-      hash = "sha256-n9AmmbjjNwV66lxDQV2hfkVVfxRgMfEGfHZT6bql684=";
-    })
-  ];
 
   build-system = [ setuptools ];
 
@@ -83,9 +69,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
-  ] ++ optional-dependencies.all;
-
-  doCheck = !stdenv.hostPlatform.isDarwin;
+  ]
+  ++ optional-dependencies.all;
 
   preCheck = ''
     export HOME=$(mktemp -d);
@@ -96,14 +81,14 @@ buildPythonPackage rec {
     "test_read_file_url"
   ];
 
-  pytestFlagsArray = [ "geopandas" ];
+  enabledTestPaths = [ "geopandas" ];
 
   pythonImportsCheck = [ "geopandas" ];
 
   meta = with lib; {
     description = "Python geospatial data analysis framework";
     homepage = "https://geopandas.org";
-    changelog = "https://github.com/geopandas/geopandas/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/geopandas/geopandas/blob/${src.tag}/CHANGELOG.md";
     license = licenses.bsd3;
     teams = [ teams.geospatial ];
   };

@@ -68,7 +68,7 @@ let
       # Ensure a consistent umask.
       umask 0022
 
-      ${textClosureMap id (withDrySnippets) (attrNames withDrySnippets)}
+      ${textClosureMap id withDrySnippets (attrNames withDrySnippets)}
 
     ''
     + optionalString (!onlyDry) ''
@@ -90,7 +90,6 @@ let
       getent
       stdenv.cc.libc # nscd in update-users-groups.pl
       shadow
-      nettools # needed for hostname
       util-linux # needed for mount and mountpoint
     ];
 
@@ -98,32 +97,31 @@ let
     withDry:
     with types;
     let
-      scriptOptions =
-        {
-          deps = mkOption {
-            type = types.listOf types.str;
-            default = [ ];
-            description = "List of dependencies. The script will run after these.";
-          };
-          text = mkOption {
-            type = types.lines;
-            description = "The content of the script.";
-          };
-        }
-        // optionalAttrs withDry {
-          supportsDryActivation = mkOption {
-            type = types.bool;
-            default = false;
-            description = ''
-              Whether this activation script supports being dry-activated.
-              These activation scripts will also be executed on dry-activate
-              activations with the environment variable
-              `NIXOS_ACTION` being set to `dry-activate`.
-              it's important that these activation scripts  don't
-              modify anything about the system when the variable is set.
-            '';
-          };
+      scriptOptions = {
+        deps = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = "List of dependencies. The script will run after these.";
         };
+        text = mkOption {
+          type = types.lines;
+          description = "The content of the script.";
+        };
+      }
+      // optionalAttrs withDry {
+        supportsDryActivation = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether this activation script supports being dry-activated.
+            These activation scripts will also be executed on dry-activate
+            activations with the environment variable
+            `NIXOS_ACTION` being set to `dry-activate`.
+            it's important that these activation scripts  don't
+            modify anything about the system when the variable is set.
+          '';
+        };
+      };
     in
     either str (submodule {
       options = scriptOptions;
@@ -222,7 +220,7 @@ in
               set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
               withHeadlines = addAttributeName set';
             in
-            textClosureMap id (withHeadlines) (attrNames withHeadlines)
+            textClosureMap id withHeadlines (attrNames withHeadlines)
           }
 
           exit $_status
@@ -276,16 +274,15 @@ in
     system.activationScripts.stdio = ""; # obsolete
     system.activationScripts.var = ""; # obsolete
 
-    systemd.tmpfiles.rules =
-      [
-        "D /var/empty 0555 root root -"
-        "h /var/empty - - - - +i"
-      ]
-      ++ lib.optionals config.nix.enable [
-        # Prevent the current configuration from being garbage-collected.
-        "d /nix/var/nix/gcroots -"
-        "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
-      ];
+    systemd.tmpfiles.rules = [
+      "D /var/empty 0555 root root -"
+      "h /var/empty - - - - +i"
+    ]
+    ++ lib.optionals config.nix.enable [
+      # Prevent the current configuration from being garbage-collected.
+      "d /nix/var/nix/gcroots -"
+      "L+ /nix/var/nix/gcroots/current-system - - - - /run/current-system"
+    ];
 
     system.activationScripts.usrbinenv =
       if config.environment.usrbinenv != null then
@@ -320,7 +317,7 @@ in
       source ${config.system.build.earlyMountScript}
     '';
 
-    systemd.user = {
+    systemd.user = lib.mkIf config.system.activatable {
       services.nixos-activation = {
         description = "Run user-specific NixOS activation";
         script = config.system.userActivationScripts.script;

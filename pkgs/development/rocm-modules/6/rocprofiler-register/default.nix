@@ -18,15 +18,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler-register";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocprofiler-register";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-UZsCiGnudsbL1v5lKBx7Vz3/HRnGn4f86Pd+qu3ryh0=";
+    hash = "sha256-HaN4XMHuCRDfKOpfuZ2SkOEQfAZKouh6luqbtATUYm0=";
     fetchSubmodules = true;
   };
+
+  # vendored glog is too old and breaks on CMake 4, gets bumped in ROCm 7.0
+  postPatch = ''
+    substituteInPlace external/glog/cmake/GetCacheVariables.cmake \
+      --replace-fail "(VERSION 3.3)" "(VERSION 3.5)"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -34,6 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     clr
   ];
 
+  # TODO(@LunNova): use system fmt&glog once upstream fixes flag to not vendor
   buildInputs = [
     numactl
     libpciaccess
