@@ -187,7 +187,7 @@ in
 
       systemd.services.gns3-server =
         let
-          commandArgs = lib.cli.toGNUCommandLineShell { } {
+          commandArgs = lib.cli.toCommandLineShellGNU { } {
             config = "/etc/gns3/gns3_server.conf";
             pid = "/run/gns3/server.pid";
             log = cfg.log.file;
