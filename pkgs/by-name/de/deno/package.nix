@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.5.3";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-UqD9Va33XVX73bjwUdb6woZ3kP/Xz6iBVqV1ceRbXq0=";
+    hash = "sha256-EmXJQ4SSaWvo/vSmNKH8RSEsED08ae4w2f8Pr0MDeLg=";
   };
 
-  cargoHash = "sha256-OrKg3bOA5AyLQA+LIsHwWpk9DHodhcCVzdKW/S9+mNY=";
+  cargoHash = "sha256-71QOJDuUjUmJIW2Z04blGlcmnIyX1ktp9DbPaE77nyY=";
 
   patches = [
     # Patch out the remote upgrade (deno update) check.
@@ -53,10 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
-    # some new TS tests don't identify `deno` location from parent actively
-    # running `deno` instance
-    # https://github.com/denoland/deno/pull/30914
-    ./patches/0005-tests-fix-deno-path.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
