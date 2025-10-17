@@ -2883,6 +2883,8 @@ self: super: with self; {
 
   colout = callPackage ../development/python-modules/colout { };
 
+  columnize = callPackage ../development/python-modules/columnize { };
+
   comet-ml = callPackage ../development/python-modules/comet-ml { };
 
   cometblue-lite = callPackage ../development/python-modules/cometblue-lite { };
