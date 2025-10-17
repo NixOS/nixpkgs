@@ -29,6 +29,10 @@ buildRedist {
     libcutensor
   ];
 
+  extraAutoPatchelfLibs = [
+    "${lib.getOutput "stubs" cuda_nvml_dev}/lib/stubs"
+  ];
+
   meta = {
     description = "Set of high-performance libraries and tools for accelerating quantum computing simulations at both the circuit and device level by orders of magnitude";
     longDescription = ''
