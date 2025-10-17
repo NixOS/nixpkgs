@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
     # Backport e49b934 "Fix underspecified `getenv()` prototype." for non-glibc systems with C23
     # This can be dropped in the next release, when the local getopt implementation in libgroff is removed
     ./fix-underspecified-getenv-prototype.patch
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isCygwin ./fix-cygwin-build.patch;
 
   outputs = [
     "out"
