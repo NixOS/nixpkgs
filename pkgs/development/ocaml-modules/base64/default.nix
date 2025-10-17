@@ -11,14 +11,13 @@
 
 buildDunePackage rec {
   pname = "base64";
-  version = "3.5.1";
+  version = "3.5.2";
 
-  minimalOCamlVersion = "4.03";
-  duneVersion = "3";
+  minimalOCamlVersion = "4.07";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-base64/releases/download/v${version}/base64-${version}.tbz";
-    hash = "sha256-2P7apZvRL+rnrMCLWSjdR4qsUj9MqNJARw0lAGUcZe0=";
+    hash = "sha256-s/XOMBqnLHAy75C+IzLXL/OWKSLADuKuxryt4Yei9Zs=";
   };
 
   nativeBuildInputs = [ findlib ];
