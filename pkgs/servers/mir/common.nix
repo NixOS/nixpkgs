@@ -149,6 +149,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (lib.strings.versionAtLeast version "2.22.0") [
     mesa.llvmpipeHook
+  ]
+  ++ lib.optionals (lib.strings.versionAtLeast version "2.23.0") [
+    xwayland
   ];
 
   checkInputs = [
