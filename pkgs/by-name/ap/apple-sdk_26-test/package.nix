@@ -4,6 +4,7 @@
   meson,
   ninja,
   apple-sdk_26,
+  darwinMinVersionHook
 }:
 
 stdenv.mkDerivation {
@@ -18,6 +19,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     apple-sdk_26
+    (darwinMinVersionHook "26.0")
   ];
 
   meta.mainProgram = "apple-sdk_26-test";
