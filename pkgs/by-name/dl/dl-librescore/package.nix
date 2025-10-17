@@ -21,7 +21,6 @@ buildNpmPackage rec {
   npmDepsHash = "sha256-5Uc83VdqMwQaTSmzwpBh7x4IKoVPd9MYDXkDvR1fz6Q=";
 
   # see https://github.com/LibreScore/dl-librescore/pull/32
-  # TODO can be removed with next update
   postPatch = ''
     substituteInPlace package-lock.json \
       --replace-fail 50c7a1508cd9358757c30794e14ba777e6faa8aa b4cb32eb1734a2f73ba2d92743647b1a91c0e2a8
