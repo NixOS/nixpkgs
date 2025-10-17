@@ -2885,6 +2885,7 @@ mapAliases {
   zkg = throw "'zkg' has been replaced by 'zeek'"; # Added 2023-10-20
   zsh-git-prompt = throw "zsh-git-prompt was removed as it is unmaintained upstream"; # Added 2025-08-28
   zsh-history = throw "'zsh-history' has been removed as it was unmaintained"; # Added 2025-04-17
+  zotero_7 = throw "'zotero_7' has been renamed to/replaced by 'zotero'"; # Added 2025-05-15
   zq = zed.overrideAttrs (old: {
     meta = old.meta // {
       mainProgram = "zq";
