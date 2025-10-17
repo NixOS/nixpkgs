@@ -5,23 +5,29 @@
   cmake,
   pkg-config,
   libubox,
+  ucode,
+  json_c,
 }:
 
 stdenv.mkDerivation {
   pname = "uclient";
-  version = "unstable-2023-04-13";
+  version = "unstable-2025-10-03";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/uclient.git";
-    rev = "007d945467499f43656b141171d31f5643b83a6c";
-    hash = "sha256-A47dyVc2MtOL6aImZ0b3SMWH2vzjfAXzRAOF4nfH6S0=";
+    rev = "dc909ca71bc884c0e5362e1d7cc7808696cb2add";
+    hash = "sha256-jrhLBB3Mb7FvxMtKxG7e7D/hcyygTjx868POGtF+Dcc=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
-  buidInputs = [ libubox ];
+  buildInputs = [
+    libubox
+    ucode
+    json_c
+  ];
 
   preConfigure = ''
     sed -e 's|ubox_include_dir libubox/ustream-ssl.h|ubox_include_dir libubox/ustream-ssl.h HINTS ${libubox}/include|g' \
