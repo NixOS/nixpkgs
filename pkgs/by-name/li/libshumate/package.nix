@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   gi-docgen,
   meson,
   ninja,
@@ -36,6 +37,16 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/libshumate/${lib.versions.majorMinor finalAttrs.version}/libshumate-${finalAttrs.version}.tar.xz";
     hash = "sha256-OYQ2jgJZhis4ENHdyG0trdbTcqKzI3bM9K/3wuSMbTA=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # Required for cross-compiled libshumate to get $dev/share/vala/vapi/shumate-1.0.{deps,vapi}
+      # https://gitlab.gnome.org/GNOME/libshumate/-/merge_requests/263
+      url = "https://gitlab.gnome.org/GNOME/libshumate/-/commit/0d29ec4d47d5590b69844629e2383b6220807278.patch";
+      name = "meson: use `find_program` instead of `dependency` for vapigen";
+      hash = "sha256-okNoHa2bY112vwI13yuMuwHvQZLifUjKoIJeKtyl2qU=";
+    })
+  ];
 
   depsBuildBuild = [
     # required to find native gi-docgen when cross compiling
@@ -88,6 +99,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
     moveToOutput share/doc/libshumate-1.0 "$devdoc"
   '';
+
+  strictDeps = true;
 
   passthru = {
     updateScript = gnome.updateScript {
