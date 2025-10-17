@@ -5,6 +5,7 @@
 
   # build-system
   setuptools,
+  trubar,
 
   # dependencies
   anyqt,
@@ -15,10 +16,12 @@
   filelock,
   lockfile,
   numpy,
+  packaging,
   pip,
-  trubar,
   qasync,
+  requests,
   requests-cache,
+  truststore,
   typing-extensions,
 
   # tests
@@ -42,22 +45,26 @@ buildPythonPackage rec {
     hash = "sha256-cEy9ADU/jZoKmGXVlqwG+qWKZ22STjALgCb1IxAwpO0=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    trubar
+  ];
 
   dependencies = [
     anyqt
-    cachecontrol
     commonmark
     dictdiffer
     docutils
     filelock
     lockfile
     numpy
+    packaging
     pip
     qasync
+    requests
     requests-cache
+    truststore
     typing-extensions
-    trubar
   ];
 
   pythonImportsCheck = [ "orangecanvas" ];

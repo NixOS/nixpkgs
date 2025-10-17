@@ -5,33 +5,46 @@
   changedattrs,
   changedpathsjson,
   removedattrs,
-  byName ? false,
 }:
 let
-  pkgs = import ../../.. {
-    system = "x86_64-linux";
-    config = { };
-    overlays = [ ];
-  };
+  pkgs = import ../../.. { system = "x86_64-linux"; };
 
-  changedpaths = builtins.fromJSON (builtins.readFile changedpathsjson);
+  changedpaths = lib.importJSON changedpathsjson;
 
-  anyMatchingFile =
-    filename: builtins.any (changed: lib.strings.hasSuffix changed filename) changedpaths;
+  # Extract attributes that changed from by-name paths.
+  # This allows pinging reviewers for pure refactors.
+  touchedattrs = lib.pipe changedpaths [
+    (lib.filter (changed: lib.hasPrefix "pkgs/by-name/" changed))
+    (map (lib.splitString "/"))
+    (map (path: lib.elemAt path 3))
+    lib.unique
+  ];
 
-  anyMatchingFiles = files: builtins.any anyMatchingFile files;
+  anyMatchingFile = filename: lib.any (lib.hasPrefix filename) changedpaths;
 
-  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs) [
+  anyMatchingFiles = files: lib.any anyMatchingFile files;
+
+  sharded = name: "${lib.substring 0 2 name}/${name}";
+
+  attrsWithMaintainers = lib.pipe (changedattrs ++ removedattrs ++ touchedattrs) [
+    # An attribute can appear in changed/removed *and* touched
+    lib.unique
     (map (
       name:
       let
+        path = lib.splitString "." name;
         # Some packages might be reported as changed on a different platform, but
         # not even have an attribute on the platform the maintainers are requested on.
         # Fallback to `null` for these to filter them out below.
-        package = lib.attrByPath (lib.splitString "." name) null pkgs;
+        package = lib.attrByPath path null pkgs;
       in
       {
         inherit name package;
+        # Adds all files in by-name to each package, no matter whether they are discoverable
+        # via meta attributes below. For example, this allows pinging maintainers for
+        # updates to .json files.
+        # TODO: Support by-name package sets.
+        filenames = lib.optional (lib.length path == 1) "pkgs/by-name/${sharded (lib.head path)}/";
         # TODO: Refactor this so we can ping entire teams instead of the individual members.
         # Note that this will require keeping track of GH team IDs in "maintainers/teams.nix".
         maintainers = package.meta.maintainers or [ ];
@@ -40,24 +53,19 @@ let
     # No need to match up packages without maintainers with their files.
     # This also filters out attributes where `packge = null`, which is the
     # case for libintl, for example.
-    (builtins.filter (pkg: pkg.maintainers != [ ]))
+    (lib.filter (pkg: pkg.maintainers != [ ]))
   ];
 
   relevantFilenames =
     drv:
-    (lib.lists.unique (
-      map (pos: lib.strings.removePrefix (toString ../..) pos.file) (
-        builtins.filter (x: x != null) [
-          ((drv.meta or { }).maintainersPosition or null)
-          ((drv.meta or { }).teamsPosition or null)
-          (builtins.unsafeGetAttrPos "src" drv)
-          # broken because name is always set by stdenv:
-          #    # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
-          #    # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          #    name = assert validity.handled; name + lib.optionalString
-          #(builtins.unsafeGetAttrPos "name" drv)
-          (builtins.unsafeGetAttrPos "pname" drv)
-          (builtins.unsafeGetAttrPos "version" drv)
+    (lib.unique (
+      map (pos: lib.removePrefix "${toString ../../..}/" pos.file) (
+        lib.filter (x: x != null) [
+          (drv.meta.maintainersPosition or null)
+          (drv.meta.teamsPosition or null)
+          (lib.unsafeGetAttrPos "src" drv)
+          (lib.unsafeGetAttrPos "pname" drv)
+          (lib.unsafeGetAttrPos "version" drv)
 
           # Use ".meta.position" for cases when most of the package is
           # defined in a "common" section and the only place where
@@ -74,10 +82,10 @@ let
     ));
 
   attrsWithFilenames = map (
-    pkg: pkg // { filenames = relevantFilenames pkg.package; }
+    pkg: pkg // { filenames = pkg.filenames ++ relevantFilenames pkg.package; }
   ) attrsWithMaintainers;
 
-  attrsWithModifiedFiles = builtins.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
+  attrsWithModifiedFiles = lib.filter (pkg: anyMatchingFiles pkg.filenames) attrsWithFilenames;
 
   listToPing = lib.concatMap (
     pkg:
@@ -89,9 +97,9 @@ let
     }) pkg.maintainers
   ) attrsWithModifiedFiles;
 
-  byMaintainer = lib.groupBy (ping: toString ping.${if byName then "github" else "id"}) listToPing;
+  byMaintainer = lib.groupBy (ping: toString ping.id) listToPing;
 
-  packagesPerMaintainer = lib.attrsets.mapAttrs (
+  packagesPerMaintainer = lib.mapAttrs (
     maintainer: packages: map (pkg: pkg.packageName) packages
   ) byMaintainer;
 in
