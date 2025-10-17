@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gpgme";
-  version = "1.24.3";
+  version = "2.0.1";
 
   outputs = [
     "out"
@@ -33,12 +33,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnupg/gpgme/gpgme-${version}.tar.bz2";
-    hash = "sha256-v8F/W9GxeMhkn92RiVbSdwgPM98Aai3ECs3s3OaMUN0=";
+    hash = "sha256-ghqwaVyELqtRdSqBmAySsEEMfq3QQQP3kdXSpSZ4SWY=";
   };
 
   patches = [
-    # Fix a test after disallowing compressed signatures in gpg (PR #180336)
-    ./test_t-verify_double-plaintext.patch
     # Don't use deprecated LFS64 APIs (removed in musl 1.2.4)
     # https://dev.gnupg.org/D600
     ./LFS64.patch
