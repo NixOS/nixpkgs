@@ -105,11 +105,12 @@ buildGoModule rec {
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
 
+  # expose and use the GO_TEST_PACKAGES var from the Makefile
+  # instead of manually copying over the entire list:
+  # https://codeberg.org/forgejo/forgejo/src/tag/v11.0.6/Makefile#L128
+  # https://codeberg.org/forgejo/forgejo/src/tag/v13.0.0/Makefile#L290
   preCheck = ''
-    # expose and use the GO_TEST_PACKAGES var from the Makefile
-    # instead of manually copying over the entire list:
-    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
-    echo -e 'show-backend-tests:\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    echo -e 'show-backend-tests:${lib.optionalString (lib.versionAtLeast version "13") " | compute-go-test-packages"}\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
     getGoDirs() {
       make show-backend-tests
     }
