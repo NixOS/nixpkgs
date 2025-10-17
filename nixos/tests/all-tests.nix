@@ -954,6 +954,7 @@ in
   mtp = runTest ./mtp.nix;
   multipass = runTest ./multipass.nix;
   mumble = runTest ./mumble.nix;
+  munge = runTest ./munge.nix;
   munin = runTest ./munin.nix;
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
