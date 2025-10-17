@@ -12,7 +12,7 @@
 }:
 buildPythonPackage rec {
   pname = "kestra";
-  version = "0.23.0";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
