@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
-  version = "0.2.3";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_access_context_manager";
     inherit version;
-    hash = "sha256-wt6A+6EZDkZ50zYmOE0Z4EpWujtNRh7VIeiSCa9jogk=";
+    hash = "sha256-86o1ySJbeq74Xs2s7cwVd3ib6NRYt6QbatI7UEeG5fk=";
   };
 
   build-system = [ setuptools ];
