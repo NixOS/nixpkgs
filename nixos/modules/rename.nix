@@ -401,9 +401,15 @@ in
       services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
       and removed from nixpkgs.
     '')
+    (mkRemovedOptionModule [ "services" "filesender" ] ''
+      services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
+    '')
     (mkRemovedOptionModule [ "services" "postfixadmin" ] ''
       services.postfixadmin has been removed since it was unmaintained in nixpkgs and the version
       available only supported PHP 8.1 which is EOL.
+    '')
+    (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
+      services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
     # Do NOT add any option renames here, see top of the file
   ];
