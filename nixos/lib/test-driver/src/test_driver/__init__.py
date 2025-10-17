@@ -6,7 +6,7 @@ from pathlib import Path
 import ptpython.ipython
 
 from test_driver.debug import Debug, DebugAbstract, DebugNop
-from test_driver.driver import Driver
+from test_driver.driver import Driver, NixStartScript
 from test_driver.logger import (
     CompositeLogger,
     JunitXMLLogger,
@@ -138,8 +138,9 @@ def main() -> None:
     if args.debug_hook_attach is not None:
         debugger = Debug(logger, args.debug_hook_attach)
 
+    scripts = [NixStartScript(s) for s in args.start_scripts]
     with Driver(
-        args.start_scripts,
+        scripts,
         args.vlans,
         args.testscript.read_text(),
         output_directory,

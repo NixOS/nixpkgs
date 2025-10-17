@@ -72,7 +72,7 @@ class Driver:
 
     def __init__(
         self,
-        start_scripts: list[str],
+        start_scripts: list[NixStartScript],
         vlans: list[int],
         tests: str,
         out_dir: Path,
@@ -94,10 +94,6 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
 
-        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
-            for s in scripts:
-                yield NixStartScript(s)
-
         self.polling_conditions = []
 
         self.machines = [
@@ -110,7 +106,7 @@ class Driver:
                 out_dir=self.out_dir,
                 logger=self.logger,
             )
-            for cmd in cmd(start_scripts)
+            for cmd in start_scripts
         ]
 
     def __enter__(self) -> "Driver":
