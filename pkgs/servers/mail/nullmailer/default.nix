@@ -4,6 +4,7 @@
   lib,
   tls ? true,
   gnutls ? null,
+  nixosTests,
 }:
 
 assert tls -> gnutls != null;
@@ -44,6 +45,8 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  passthru.tests.nixos = nixosTests.nullmailer;
 
   meta = {
     homepage = "http://untroubled.org/nullmailer/";
