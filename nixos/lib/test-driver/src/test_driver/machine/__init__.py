@@ -15,6 +15,7 @@ import threading
 import time
 from collections.abc import Callable, Generator
 from contextlib import _GeneratorContextManager, contextmanager, nullcontext
+from functools import cached_property
 from pathlib import Path
 from queue import Queue
 from typing import Any
@@ -204,7 +205,7 @@ class NixStartScript(StartCommand):
     def __init__(self, script: str):
         self._cmd = script
 
-    @property
+    @cached_property
     def machine_name(self) -> str:
         match = re.search("run-(.+)-vm$", self._cmd)
         name = "machine"
