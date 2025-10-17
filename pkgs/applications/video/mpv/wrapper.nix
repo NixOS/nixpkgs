@@ -3,7 +3,7 @@
   stdenv,
   buildEnv,
   lib,
-  makeWrapper,
+  makeBinaryWrapper,
   mpvScripts,
   symlinkJoin,
   writeTextDir,
@@ -102,7 +102,7 @@ let
       # TODO: don't link all mpv outputs and convert package to mpv-unwrapped?
       paths = [ mpv.all ];
 
-      nativeBuildInputs = [ makeWrapper ];
+      nativeBuildInputs = [ makeBinaryWrapper ];
 
       passthru.unwrapped = mpv;
 

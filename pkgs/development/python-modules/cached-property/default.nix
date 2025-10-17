@@ -42,6 +42,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/pydanny/cached-property/releases/tag/${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -162,7 +162,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   dontWrapQtApps = true;
   postFixup = ''
-    wrapProgram $out/opt/PixInsight/bin/PixInsight ${builtins.toString finalAttrs.qtWrapperArgs}
+    wrapProgram $out/opt/PixInsight/bin/PixInsight ${toString finalAttrs.qtWrapperArgs}
   '';
 
   meta = with lib; {

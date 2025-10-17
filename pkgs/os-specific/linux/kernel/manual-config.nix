@@ -32,24 +32,18 @@ let
 
   readConfig =
     configfile:
-    lib.listToAttrs (
-      map
-        (
-          line:
-          let
-            match = lib.match "(.*)=\"?(.*)\"?" line;
-          in
-          {
-            name = lib.elemAt match 0;
-            value = lib.elemAt match 1;
-          }
-        )
-        (
-          lib.filter (line: !(lib.hasPrefix "#" line || line == "")) (
-            lib.splitString "\n" (builtins.readFile configfile)
-          )
-        )
-    );
+    let
+      matchLine =
+        line:
+        let
+          match = lib.match "(CONFIG_[^=]+)=([ym])" line;
+        in
+        lib.optional (match != null) {
+          name = lib.elemAt match 0;
+          value = lib.elemAt match 1;
+        };
+    in
+    lib.listToAttrs (lib.concatMap matchLine (lib.splitString "\n" (builtins.readFile configfile)));
 in
 lib.makeOverridable (
   {
@@ -489,12 +483,12 @@ lib.makeOverridable (
           # headers on 3.10 though.
 
           chmod u+w -R ..
-          arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
+          buildArchDir="$dev/lib/modules/${modDirVersion}/build/arch"
 
           # Remove unused arches
           for d in $(cd arch/; ls); do
-            if [ "$d" = "$arch" ]; then continue; fi
-            if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
+            if [ -d "$buildArchDir/$d" ]; then continue; fi
+            if [ -d "$buildArchDir/arm64" ] && [ "$d" = arm ]; then continue; fi
             rm -rf arch/$d
           done
 
@@ -508,7 +502,7 @@ lib.makeOverridable (
           find .  -type f -name '*.lds' -print0 | xargs -0 -r chmod u-w
 
           # Keep root and arch-specific Makefiles
-          chmod u-w Makefile arch/"$arch"/Makefile*
+          chmod u-w Makefile arch/*/Makefile*
 
           # Keep whole scripts dir
           chmod u-w -R scripts

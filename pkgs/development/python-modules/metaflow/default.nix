@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "metaflow";
-  version = "2.18.4";
+  version = "2.18.11";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "metaflow";
     tag = version;
-    hash = "sha256-ijgdilia8WVwAZ0BDxvrN751ReJu6iaIW9KbIrXdwUE=";
+    hash = "sha256-MR/QMweDwfvZiG0WqaP1xELnnpiz3zRBvedOtrQnGZM=";
   };
 
   build-system = [

@@ -61,7 +61,7 @@ in
     };
 
     log-level = lib.mkOption {
-      type = lib.types.int;
+      type = lib.types.ints.between 0 4;
       description = ''
         Specify the log level (0:none, 1:error, 2:warning, 3:notice, 4:debug).
       '';

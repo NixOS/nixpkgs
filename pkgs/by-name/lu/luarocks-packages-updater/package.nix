@@ -25,7 +25,7 @@ let
     luajit
   ];
 
-  attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
+  attrs = fromTOML (builtins.readFile ./pyproject.toml);
   pname = attrs.project.name;
   inherit (attrs.project) version;
 in

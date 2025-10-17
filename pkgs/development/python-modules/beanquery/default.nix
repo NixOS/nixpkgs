@@ -4,6 +4,7 @@
   click,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   python-dateutil,
   pytestCheckHook,
   setuptools,
@@ -20,6 +21,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-O7+WCF7s50G14oNTvJAOTvgSoNR9fWcn/m1jv7RHmK8=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "beancount-workaround.patch";
+      url = "https://github.com/beancount/beanquery/commit/aa0776285a25baeedf151e9f582bef0314f76004.patch?full_index=1";
+      hash = "sha256-hWL1CDsBSbMqufEQrtEncmyUr5L5VJI+i4xQtnAvQd8=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

@@ -17,15 +17,18 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cjs";
-  version = "128.0";
+  version = "128.0-unstable-2025-09-15";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
-    rev = version;
-    hash = "sha256-B9N/oNRvsnr3MLkpcH/aBST6xOJSFdvSUFuD6EldE38=";
+    # Backport fixes to support GLib 2.86.0 typelibs
+    # nixpkgs-update: no auto update
+    # https://github.com/linuxmint/cjs/issues/130
+    rev = "1f39576bafe6bc05bce960e590dc743dd7990e39";
+    hash = "sha256-drKLaTZLIZfPIhcVcCAB48PdM2b0GNLe5xrHGBysVmM=";
   };
 
   outputs = [

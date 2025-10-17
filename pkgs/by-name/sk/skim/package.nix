@@ -51,6 +51,11 @@ rustPlatform.buildRustPackage rec {
 
     installBin sk-share
     installManPage $(find man -type f)
+    installShellCompletion \
+      --cmd sk \
+      --bash shell/completion.bash \
+      --fish shell/completion.fish \
+      --zsh shell/completion.zsh
   '';
 
   # Doc tests are broken on aarch64

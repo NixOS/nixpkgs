@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jaxwilko";
-    repo = pname;
+    repo = "gtk-theme-framework";
     rev = "v${version}";
     sha256 = "1z5s5rsgiypanf2z0avaisbflnvwrc8aiy5qskrsvbbaja63jy3s";
   };

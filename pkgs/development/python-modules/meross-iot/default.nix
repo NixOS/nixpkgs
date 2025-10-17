@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "meross-iot";
-  version = "0.4.9.1";
+  version = "0.4.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "albertogeniola";
     repo = "MerossIot";
     tag = version;
-    hash = "sha256-c9nUFCjbuqJaGk5Rqo+Nmr+IYQrWsVqb36mLmYTc47s=";
+    hash = "sha256-VxwOigIyLTeP1P9uyiavsu14zTjuLCZuka+2cLqJDUw=";
   };
 
   build-system = [ setuptools ];

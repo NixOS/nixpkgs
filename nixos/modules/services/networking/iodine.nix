@@ -56,7 +56,7 @@ in
           }
         '';
         type = lib.types.attrsOf (
-          lib.types.submodule ({
+          lib.types.submodule {
             options = {
               server = lib.mkOption {
                 type = lib.types.str;
@@ -85,7 +85,7 @@ in
                 description = "Path to a file containing the password.";
               };
             };
-          })
+          }
         );
       };
 

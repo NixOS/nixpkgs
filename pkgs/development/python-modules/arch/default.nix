@@ -27,7 +27,9 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.cfg \
-      --replace 'PytestRemovedIn8Warning' 'PytestRemovedIn9Warning'
+      --replace-fail 'PytestRemovedIn8Warning' 'PytestRemovedIn9Warning'
+    substituteInPlace pyproject.toml \
+      --replace-fail '"setuptools_scm[toml]>=8.0.3,<9",' '"setuptools_scm[toml]",'
   '';
 
   build-system = [

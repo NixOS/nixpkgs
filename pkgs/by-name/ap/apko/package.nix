@@ -11,13 +11,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "apko";
-  version = "0.30.9";
+  version = "0.30.15";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = "apko";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-oJ/Tg/9ou1VFL2jILLDJF4kKbNPqCPHwriW6D63MD5M=";
+    hash = "sha256-eFcj/Yo0qvIgZKiKkm4DNhslOLokFmLoj7QrjeK/iT8=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-  vendorHash = "sha256-rdHpv4al6Hc9q1atE9xLDOiJTV97G0L3wgUHbNhzdms=";
+  vendorHash = "sha256-mZg8OXPMeBAJYQWB0vrZC5fo0+xuU8ho/IE2j624RV8=";
 
   nativeBuildInputs = [ installShellFiles ];
 

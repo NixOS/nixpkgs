@@ -44,23 +44,8 @@ in
           Name of the nginx virtualhost to use and setup. If null, do not setup any virtualhost.
         '';
       };
-      phpPackage = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.php;
-        defaultText = "pkgs.php";
-        description = ''
-          php package to use for php fpm daemon.
-        '';
-      };
-      package = lib.mkOption {
-        type = lib.types.package;
-        default = pkgs.baikal;
-        defaultText = "pkgs.baikal";
-        description = ''
-          Baikal package to use.
-        '';
-      };
-
+      phpPackage = lib.mkPackageOption pkgs "php" { };
+      package = lib.mkPackageOption pkgs "baikal" { };
     };
   };
   config = lib.mkIf cfg.enable {

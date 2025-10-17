@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.28";
+  version = "0.6.34";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-677M1IxWhdJ3AO8DPlW4eUYnOo/mCNu+11IPdaey9ks=";
+    hash = "sha256-crjBVR0ZXUYck4pyLNb1IO9IoQ6MFBnCKEBsi0/JXCI=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-vsgdf7+h16VBF+bTxzdNeHNzsYV65KWNZ6Ga3N7fB5A=";
+    npmDepsHash = "sha256-ofw/leDcfrc+Bp93s9BkB3WFs8qQgiWUag7gvdPJdlo=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -107,17 +107,14 @@ python3Packages.buildPythonApplication rec {
       black
       boto3
       chromadb
-      colbert-ai
       cryptography
       ddgs
       docx2txt
       einops
-      elasticsearch
       extract-msg
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
       google-api-python-client
@@ -129,12 +126,14 @@ python3Packages.buildPythonApplication rec {
       googleapis-common-protos
       httpx
       iso-639
+      itsdangerous
       langchain
       langchain-community
       langdetect
       ldap3
       loguru
       markdown
+      mcp
       nltk
       onnxruntime
       openai
@@ -152,22 +151,18 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
-      oracledb
       pandas
       passlib
       peewee
       peewee-migrate
       pgvector
       pillow
-      pinecone-client
-      playwright
       psutil
       pyarrow
       pycrdt
       pydub
       pyjwt
       pymdown-extensions
-      pymilvus
       pymysql
       pypandoc
       pypdf
@@ -178,7 +173,6 @@ python3Packages.buildPythonApplication rec {
       python-socketio
       pytube
       pyxlsb
-      qdrant-client
       rank-bm25
       rapidocr-onnxruntime
       redis
@@ -188,7 +182,7 @@ python3Packages.buildPythonApplication rec {
       sentencepiece
       soundfile
       starlette-compress
-      tencentcloud-sdk-python
+      starsessions
       tiktoken
       transformers
       unstructured
@@ -197,7 +191,8 @@ python3Packages.buildPythonApplication rec {
       xlrd
       youtube-transcript-api
     ]
-    ++ pyjwt.optional-dependencies.crypto;
+    ++ pyjwt.optional-dependencies.crypto
+    ++ starsessions.optional-dependencies.redis;
 
   optional-dependencies = with python3Packages; rec {
     postgres = [
@@ -206,9 +201,18 @@ python3Packages.buildPythonApplication rec {
     ];
 
     all = [
-      moto
+      colbert-ai
+      elasticsearch
+      firecrawl-py
       gcp-storage-emulator
+      moto
+      oracledb
+      pinecone-client
+      playwright
+      pymilvus
       pymongo
+      qdrant-client
+      tencentcloud-sdk-python
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

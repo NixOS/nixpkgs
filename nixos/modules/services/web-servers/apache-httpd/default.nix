@@ -229,7 +229,7 @@ let
                     RewriteEngine on
                     RewriteCond %{REQUEST_URI} !^/.well-known/acme-challenge [NC]
                     RewriteCond %{HTTPS} off
-                    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI}
+                    RewriteRule (.*) https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
                 </IfModule>
               ''
             else
@@ -704,14 +704,14 @@ in
       };
 
       maxClients = mkOption {
-        type = types.int;
+        type = types.ints.positive;
         default = 150;
         example = 8;
         description = "Maximum number of httpd processes (prefork)";
       };
 
       maxRequestsPerChild = mkOption {
-        type = types.int;
+        type = types.ints.unsigned;
         default = 0;
         example = 500;
         description = ''

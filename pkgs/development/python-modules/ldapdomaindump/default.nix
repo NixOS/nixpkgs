@@ -4,6 +4,7 @@
   fetchFromGitHub,
   dnspython,
   ldap3,
+  pycryptodome,
   setuptools,
 }:
 
@@ -24,6 +25,7 @@ buildPythonPackage rec {
   dependencies = [
     dnspython
     ldap3
+    pycryptodome
   ];
 
   # Tests require LDAP server

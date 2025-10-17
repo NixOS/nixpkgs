@@ -39,7 +39,7 @@ let
       pname = "thunderbird";
       inherit version updateScript applicationName;
       application = "comm/mail";
-      binaryName = pname;
+      binaryName = "thunderbird";
       src = fetchurl {
         url = "mirror://mozilla/thunderbird/releases/${version}/source/thunderbird-${version}.source.tar.xz";
         inherit sha512;
@@ -101,8 +101,8 @@ rec {
   thunderbird = thunderbird-latest;
 
   thunderbird-latest = common {
-    version = "142.0";
-    sha512 = "9a871846fc395c69688310dbf4a4569b75d3b2952a34ba1f7dc9ef5a60a34bd740087b4abb2a1a4d522dfa9d6640f2f4fcc9972a2b72160d1ed3e0df71c2901c";
+    version = "143.0.1";
+    sha512 = "5f4fd5e4f5bc9fee9852d51b8e675f7c9c605660332c24aa0c90e5437301b468153c1788720bc80a53cfc1c3bf95a4bdb622a0533b8f11fb9853b290485c47c6";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-latest";
@@ -115,8 +115,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.2.1esr";
-    sha512 = "fccef5b8d60cd1aace585f253f52587cb3ff9384bcca2e150d4b52c8106dcd19e4d911f0ac634c0adef2da5034169c81667a5634ee14a5f5fd7cf194f6b86576";
+    version = "140.3.0esr";
+    sha512 = "82a9c4aa250b01e0e4d53890b0337972e46504636831c1b6307b841c4c5aeec86482b2da3c1666c46e870a75f6cb54db9f759664688b382ad66efa647145d900";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";
@@ -124,21 +124,9 @@ rec {
       versionSuffix = "esr";
     };
   };
-
-  thunderbird-128 = common {
-    applicationName = "Thunderbird ESR";
-
-    version = "128.14.0esr";
-    sha512 = "3ce2debe024ad8dafc319f86beff22feb9edecfabfad82513269e037a51210dfd84810fe35adcf76479273b8b2ceb8d4ecd2d0c6a3c5f6600b6b3df192bb798b";
-
-    updateScript = callPackage ./update.nix {
-      attrPath = "thunderbirdPackages.thunderbird-128";
-      versionPrefix = "128";
-      versionSuffix = "esr";
-    };
-  };
 }
 // lib.optionalAttrs config.allowAliases {
   thunderbird-102 = throw "Thunderbird 102 support ended in September 2023";
   thunderbird-115 = throw "Thunderbird 115 support ended in October 2024";
+  thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
 }

@@ -72,7 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
       tags.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ neonfuz ];
     platforms = lib.platforms.all;
     mainProgram = "dwm";
   };

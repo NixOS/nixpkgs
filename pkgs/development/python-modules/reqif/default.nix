@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/strictdoc-project/reqif";
     changelog = "https://github.com/strictdoc-project/reqif/releases/tag/${src.tag}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ yuu ];
+    maintainers = [ ];
   };
 }

@@ -62,8 +62,14 @@ buildPythonPackage rec {
   ];
 
   postPatch =
-    # Avoid downloading dependencies remove any downloads
+    # Allow CMake 4
+    # Upstream issue: https://github.com/triton-lang/triton/issues/8245
     ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "cmake>=3.20,<4.0" "cmake>=3.20"
+    ''
+    # Avoid downloading dependencies remove any downloads
+    + ''
       substituteInPlace setup.py \
         --replace-fail "[get_json_package_info()]" "[]" \
         --replace-fail "[get_llvm_package_info()]" "[]" \
@@ -317,7 +323,6 @@ buildPythonPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       SomeoneSerge
-      Madouura
       derdennisop
     ];
   };

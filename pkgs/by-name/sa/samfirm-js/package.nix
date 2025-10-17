@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage {
   pname = "samfirm-js";
   version = "0.3.0-unstable-2023-12-27";
 

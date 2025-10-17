@@ -39,7 +39,7 @@
   libvdpau,
   libxkbcommon,
   lua,
-  makeWrapper,
+  makeBinaryWrapper,
   libgbm,
   meson,
   mujs,
@@ -159,7 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     buildPackages.darwin.sigtool
     swift
-    makeWrapper
+    makeBinaryWrapper
   ]
   ++ lib.optionals waylandSupport [ wayland-scanner ];
 

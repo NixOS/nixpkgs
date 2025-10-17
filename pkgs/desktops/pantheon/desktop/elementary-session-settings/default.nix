@@ -19,7 +19,7 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-session-settings";
   # Allow disabling x11 session
   # nixpkgs-update: no auto update
@@ -58,8 +58,9 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dmimeapps-list=false"
-    "-Dfallback-session=GNOME"
     "-Ddetect-program-prefixes=true"
+    # https://github.com/elementary/session-settings/issues/91
+    "-Dx11=false"
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation rec {
     cp -av ${./pantheon-mimeapps.list} $out/share/applications/pantheon-mimeapps.list
 
     # absolute path patched sessions
-    substituteInPlace $out/share/{xsessions/pantheon.desktop,wayland-sessions/pantheon-wayland.desktop} \
+    substituteInPlace $out/share/wayland-sessions/pantheon-wayland.desktop \
       --replace-fail "Exec=gnome-session" "Exec=${gnome-session}/bin/gnome-session" \
       --replace-fail "TryExec=io.elementary.wingpanel" "TryExec=${wingpanel}/bin/io.elementary.wingpanel"
   '';
@@ -79,7 +80,6 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
 
     providedSessions = [
-      "pantheon"
       "pantheon-wayland"
     ];
   };

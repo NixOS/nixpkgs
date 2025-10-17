@@ -9,11 +9,11 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "amp-cli";
-  version = "0.0.1757347273-geb1b63";
+  version = "0.0.1760546826-g6984fa";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@sourcegraph/amp/-/amp-${finalAttrs.version}.tgz";
-    hash = "sha256-8bB7sBdKUZMpHFjRQdEg++Ea3Uv4ykIc88ITAfIzzdM=";
+    hash = "sha256-aEUBTpQMQ2fgSfioRNXvdkKy4eLTw5XqkeSrt5T5498=";
   };
 
   postPatch = ''
@@ -45,7 +45,7 @@ buildNpmPackage (finalAttrs: {
     chmod +x bin/amp-wrapper.js
   '';
 
-  npmDepsHash = "sha256-CUoT9JzvYvaPBqQrKo5XESISVzi9jRvPcbBVPHETIF4=";
+  npmDepsHash = "sha256-/s1wZhdwvVGOJoasgBs5eCWcvSuIriWi+bfz/Np8h+Y=";
 
   propagatedBuildInputs = [
     ripgrep
@@ -82,6 +82,7 @@ buildNpmPackage (finalAttrs: {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
       keegancsmith
+      burmudar
     ];
     mainProgram = "amp";
   };

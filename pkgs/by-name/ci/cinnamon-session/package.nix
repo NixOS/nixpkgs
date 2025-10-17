@@ -33,13 +33,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "cinnamon-session";
-  version = "6.4.1";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-session";
-    rev = version;
-    hash = "sha256-xmKreYrdN22bz5JRkpocf+dfK7BY1Ic4F+mTax0lM3Y=";
+    tag = version;
+    hash = "sha256-zv1X1MLZBg+Bayd4hjsmrdXkFTRkH4kz7PJe6mFTBqc=";
   };
 
   buildInputs = [

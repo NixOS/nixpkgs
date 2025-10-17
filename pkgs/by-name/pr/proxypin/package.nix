@@ -46,6 +46,6 @@ flutter332.buildFlutterApplication rec {
     mainProgram = "ProxyPin";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

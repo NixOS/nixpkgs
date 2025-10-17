@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git
+#! nix-shell -I nixpkgs=../../../.. -i python3 -p bundix bundler nix-update nix python3 python3Packages.requests python3Packages.click python3Packages.click-log python3Packages.packaging prefetch-yarn-deps git go
 
 import click
 import click_log
@@ -22,7 +22,7 @@ click_log.basic_config(logger)
 
 
 class GitLabRepo:
-    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?")
+    version_regex = re.compile(r"^v\d+\.\d+\.\d+(\-rc\d+)?(\-ee)?(\-gitlab)?$")
 
     def __init__(self, owner: str = "gitlab-org", repo: str = "gitlab"):
         self.owner = owner
@@ -44,7 +44,7 @@ class GitLabRepo:
         # sort, but ignore v, -ee and -gitlab for sorting comparisons
         versions.sort(
             key=lambda x: Version(
-                x.replace("v", "").replace("-ee", "").replace("-gitlab", "").replace("-ahmed-master-test", "")
+                x.replace("v", "").replace("-ee", "").replace("-gitlab", "")
             ),
             reverse=True,
         )
@@ -336,6 +336,29 @@ def update_gitlab_elasticsearch_indexer():
     data = _get_data_json()
     gitlab_elasticsearch_indexer_version = data['passthru']['GITLAB_ELASTICSEARCH_INDEXER_VERSION']
     _call_nix_update('gitlab-elasticsearch-indexer', gitlab_elasticsearch_indexer_version)
+    # Update the dependency gitlab-code-parser
+    src_workdir = subprocess.check_output(
+        [
+            "nix-build",
+            "-A",
+            "gitlab-elasticsearch-indexer.src",
+        ],
+        cwd=NIXPKGS_PATH,
+    ).decode("utf-8").strip()
+    codeparser_module = json.loads(
+        subprocess.check_output(
+            [
+                "go",
+                "list",
+                "-m",
+                "-json",
+                "gitlab.com/gitlab-org/rust/gitlab-code-parser/bindings/go"
+            ],
+            cwd=src_workdir
+        ).decode("utf-8").strip()
+    )
+    codeparser_version = codeparser_module["Version"].replace("v", "")
+    _call_nix_update('gitlab-elasticsearch-indexer.codeParserBindings', codeparser_version)
 
 
 @cli.command("update-all")

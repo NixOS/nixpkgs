@@ -4,11 +4,6 @@
     "minor": 1
   },
   "modules": {
-    "IL": {
-      "attrPath": [
-        "libdevil"
-      ]
-    },
     "ImageMagick": {
       "attrPath": [
         "imagemagick"
@@ -749,11 +744,6 @@
     "python": {
       "attrPath": [
         "python3"
-      ]
-    },
-    "ruby-3.1": {
-      "attrPath": [
-        "ruby_3_1"
       ]
     },
     "sdl2": {

@@ -45,7 +45,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tlocke/pg8000";
     changelog = "https://github.com/tlocke/pg8000#release-notes";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

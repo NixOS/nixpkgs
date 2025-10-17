@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     wrapProgram $out/bin/pulumi --set LD_LIBRARY_PATH "${lib.getLib stdenv.cc.cc}/lib"
   ''
-  + ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pulumi \
       --bash <($out/bin/pulumi completion bash) \
       --fish <($out/bin/pulumi completion fish) \

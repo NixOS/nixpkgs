@@ -21,13 +21,13 @@ in
 
 rustPlatform.buildRustPackage {
   pname = "attic";
-  version = "0-unstable-2025-08-28";
+  version = "0-unstable-2025-09-24";
 
   src = fetchFromGitHub {
     owner = "zhaofengli";
     repo = "attic";
-    rev = "2524dd1c007bc7a0a9e9c863a1b02de8d54b319b";
-    hash = "sha256-S4SJDmVTtbcXaJkYrMFkcA5SDrpfRHlBbzwp6IRRPAw=";
+    rev = "12cbeca141f46e1ade76728bce8adc447f2166c6";
+    hash = "sha256-0nZlCCDC5PfndsQJXXtcyrtrfW49I3KadGMDlutzaGU=";
   };
 
   nativeBuildInputs = [
@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage {
   buildInputs = lib.optional needNixInclude nix ++ [ boost ];
 
   cargoBuildFlags = lib.concatMapStrings (c: "-p ${c} ") crates;
-  cargoHash = "sha256-NdzwYnD0yMEI2RZwwXl/evYx9zdBVMOUee+V7uq1cf0=";
+  cargoHash = "sha256-h041o0s+bciXnvSuk4j+/uCY/sRRQWDVf+WEb9GEYeY=";
 
   env = {
     ATTIC_DISTRIBUTOR = "nixpkgs";

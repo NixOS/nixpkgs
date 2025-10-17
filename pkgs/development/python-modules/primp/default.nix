@@ -55,6 +55,21 @@ let
       );
 
     vendorHash = "sha256-06MkjXl0DKFzIH/H+uT9kXsQdPq7qdZh2dlLW/YhJuk=";
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $bin/bin $dev $out/lib
+
+      install -Dm755 tool/bssl -t $bin/bin
+      install -Dm644 ssl/libssl.a -t $out/lib
+      install -Dm644 crypto/libcrypto.a -t $out/lib
+      install -Dm644 decrepit/libdecrepit.a -t $out/lib
+
+      cp -r ../include $dev
+
+      runHook postInstall
+    '';
   });
   # boring-sys expects the static libraries in build/ instead of lib/
   boringssl-wrapper = runCommand "boringssl-wrapper" { } ''
@@ -112,6 +127,6 @@ buildPythonPackage rec {
     description = "Python Requests IMPersonate, the fastest Python HTTP client that can impersonate web browsers";
     homepage = "https://github.com/deedy5/primp";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

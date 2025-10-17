@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "tblite";
-    repo = pname;
+    repo = "tblite";
     rev = "v${version}";
     hash = "sha256-hePy/slEeM2o1gtrAbq/nkEUILa6oQjkD2ddDstQ2Zc=";
   };

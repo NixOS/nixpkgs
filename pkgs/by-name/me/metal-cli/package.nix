@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -8,16 +9,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "metal-cli";
-  version = "0.25.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "equinix";
     repo = "metal-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-+hpsGFZHuVhh+fKVcap0vhoUmRs3xPgUwW8SD56m6uI=";
+    hash = "sha256-o2CXcwGowmQ4/BBXZXbR0uJ0AOARj2KbKhhtlRr7qpM=";
   };
 
-  vendorHash = "sha256-X+GfM73LAWk2pT4ZOPT2pg8YaKyT+SNjQ14LgB+C7Wo=";
+  vendorHash = "sha256-oAghUkEhOkpCfRkDF+/Tfo45ihbXJabRkk7J3ghP36I=";
 
   ldflags = [
     "-s"
@@ -29,7 +30,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd metal \
       --bash <($out/bin/metal completion bash) \
       --fish <($out/bin/metal completion fish) \

@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/pycampers/ampy";
     license = lib.licenses.mit;
     description = "Utility to interact with a MicroPython board over a serial connection";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ampy";
   };
 }

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
       This package contains a library of BLAS functions on top of OpenCL.
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ artuuge ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 

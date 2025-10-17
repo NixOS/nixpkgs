@@ -37,19 +37,19 @@
   withNotmuch ? true,
 }:
 
-assert lib.warnIf (
-  enableMixmaster
-) "Support for mixmaster has been removed from neomutt since the 20241002 release" true;
+assert lib.warnIf enableMixmaster
+  "Support for mixmaster has been removed from neomutt since the 20241002 release"
+  true;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "neomutt";
-  version = "20250510";
+  version = "20250905";
 
   src = fetchFromGitHub {
     owner = "neomutt";
     repo = "neomutt";
     tag = finalAttrs.version;
-    hash = "sha256-62J7qyHC3hSgEgTA2zB+BQtZb+5BUXjQEOB3vGZGSNw=";
+    hash = "sha256-RLyszU2u5jV/o6LrmZFkLx/Wu94Yq3JlXNgpe4agOZI=";
   };
 
   buildInputs = [

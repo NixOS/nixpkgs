@@ -31,27 +31,16 @@ lib.makeExtensible (
 
     beets-stable = callPackage ./common.nix rec {
       inherit python3Packages extraPatches;
-      version = "2.3.1";
+      version = "2.5.1";
       src = fetchFromGitHub {
         owner = "beetbox";
         repo = "beets";
         tag = "v${version}";
-        hash = "sha256-INxL2XDn8kwRYYcZATv/NdLmAtfQvxVDWKB1OYo8dxY=";
+        hash = "sha256-H3jcEHyK13+RHVlV4zp+8M3LZ0Jc2FdmAbLpekGozLA=";
       };
     };
 
     beets-minimal = self.beets.override { disableAllPlugins = true; };
-
-    beets-unstable = callPackage ./common.nix {
-      inherit python3Packages;
-      version = "2.3.1";
-      src = fetchFromGitHub {
-        owner = "beetbox";
-        repo = "beets";
-        rev = "d487d675b9115672c484eab8a6729b1f0fd24b68";
-        hash = "sha256-INxL2XDn8kwRYYcZATv/NdLmAtfQvxVDWKB1OYo8dxY=";
-      };
-    };
 
     alternatives = callPackage ./plugins/alternatives.nix { beets = self.beets-minimal; };
     audible = callPackage ./plugins/audible.nix { beets = self.beets-minimal; };
@@ -59,6 +48,8 @@ lib.makeExtensible (
     filetote = callPackage ./plugins/filetote.nix { beets = self.beets-minimal; };
   }
   // lib.optionalAttrs config.allowAliases {
+    beets-unstable = lib.warn "beets-unstable was aliased to beets, since upstream releases are frequent nowadays" self.beets;
+
     extrafiles = throw "extrafiles is unmaintained since 2020 and broken since beets 2.0.0";
   }
 )

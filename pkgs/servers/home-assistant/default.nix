@@ -126,19 +126,6 @@ let
         };
       });
 
-      mcp = super.mcp.overridePythonAttrs (oldAttrs: rec {
-        version = "1.5.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          tag = "v${version}";
-          hash = "sha256-Z2NN6k4mD6NixDON1MUOELpBZW9JvMvFErcCbFPdg2o=";
-        };
-        pytestFlagsArray = [
-          "-W"
-          "ignore::pydantic.warnings.PydanticDeprecatedSince211"
-        ];
-      });
-
       notifications-android-tv = super.notifications-android-tv.overridePythonAttrs (oldAttrs: rec {
         version = "0.1.5";
         format = "setuptools";
@@ -272,21 +259,6 @@ let
         doCheck = false;
       });
 
-      python-roborock =
-        (super.python-roborock.override {
-          pytest-asyncio = self.pytest-asyncio_0;
-        }).overridePythonAttrs
-          rec {
-            version = "2.18.2";
-
-            src = fetchFromGitHub {
-              owner = "Python-roborock";
-              repo = "python-roborock";
-              tag = "v${version}";
-              hash = "sha256-7xcw1jNCDapHjH1YVB5NW7jxMyb8Raf8HuTnWf2vdFo=";
-            };
-          };
-
       python-telegram-bot = super.python-telegram-bot.overridePythonAttrs (oldAttrs: rec {
         version = "21.5";
 
@@ -318,7 +290,7 @@ let
         };
       });
 
-      wolf-comm = super.wolf-comm.overridePythonAttrs (rec {
+      wolf-comm = super.wolf-comm.overridePythonAttrs rec {
         version = "0.0.23";
         src = fetchFromGitHub {
           owner = "janrothkegel";
@@ -326,7 +298,7 @@ let
           tag = version;
           hash = "sha256-LpehooW3vmohiyMwOQTFNLiNCsaLKelWQxQk8bl+y1k=";
         };
-      });
+      };
 
       # internal python packages only consumed by home-assistant itself
       hass-web-proxy-lib = self.callPackage ./python-modules/hass-web-proxy-lib { };
@@ -358,7 +330,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2025.9.3";
+  hassVersion = "2025.10.2";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -379,13 +351,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     tag = version;
-    hash = "sha256-iGOpLZMrEu0z+VdQMn1OeI1rw4x3WawQemyOdt7j124=";
+    hash = "sha256-Y9StuiDaICKgqRrYc8d0i/Ey6R78J/5tvk/0qGVeZPQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-iw5RNM6VoiGfCmGgqfqMQot9ArPlKk/tXJUJZNs7Kzg=";
+    hash = "sha256-tIUImUHGh8nrf0IuSOjSuV718B0SIS/oL6yLnyu8gOE=";
   };
 
   build-system = with python.pkgs; [
@@ -518,7 +490,6 @@ python.pkgs.buildPythonApplication rec {
       # some components are needed even if tests in tests/components are disabled
       "default_config"
       "hue"
-      "qwikswitch"
     ];
 
   pytestFlags = [

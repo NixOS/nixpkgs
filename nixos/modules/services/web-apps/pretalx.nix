@@ -439,16 +439,23 @@ in
             "mysql.service"
           ];
           wantedBy = [ "multi-user.target" ];
-          preStart = ''
-            versionFile="${cfg.settings.filesystem.data}/.version"
-            version=$(cat "$versionFile" 2>/dev/null || echo 0)
+          preStart =
+            let
+              versionString = lib.concatStringsSep "\n" (
+                [ "pretalx-${cfg.package.version}" ]
+                ++ map (plugin: "${plugin.pname}-${plugin.version}") cfg.plugins
+              );
+            in
+            ''
+              versionFile="${cfg.settings.filesystem.data}/.version"
+              version="$(cat "$versionFile" 2>/dev/null || echo 0)"
 
-            if [[ $version != ${cfg.package.version} ]]; then
-              ${lib.getExe' pythonEnv "pretalx-manage"} migrate
+              if [[ "$version" != "${versionString}" ]]; then
+                ${lib.getExe' pythonEnv "pretalx-manage"} migrate
 
-              echo "${cfg.package.version}" > "$versionFile"
-            fi
-          '';
+                echo "${versionString}" > "$versionFile"
+              fi
+            '';
           serviceConfig = {
             ExecStart = "${lib.getExe' pythonEnv "gunicorn"} --bind unix:/run/pretalx/pretalx.sock ${cfg.gunicorn.extraArgs} pretalx.wsgi";
             RuntimeDirectory = "pretalx";

@@ -11,8 +11,6 @@ on:
       OWNER_APP_PRIVATE_KEY:
         # The Test workflow should not actually request reviews from owners.
         required: false
-      OWNER_RO_APP_PRIVATE_KEY:
-        required: true
 
 concurrency:
   group: pr-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
@@ -59,13 +57,11 @@ jobs:
       pull-requests: write
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-      OWNER_RO_APP_PRIVATE_KEY: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
     with:
       baseBranch: ${{ needs.prepare.outputs.baseBranch }}
       headBranch: ${{ needs.prepare.outputs.headBranch }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
       targetSha: ${{ needs.prepare.outputs.targetSha }}
-      ownersCanFail: ${{ !contains(fromJSON(needs.prepare.outputs.touched), 'owners') }}
 
   lint:
     name: Lint

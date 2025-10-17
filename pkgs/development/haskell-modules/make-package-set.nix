@@ -107,29 +107,35 @@ let
       # is that nix has no way to "passthrough" args while preserving the reflection
       # info that callPackage uses to determine the arguments).
       drv = if lib.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (lib.functionArgs drv) scope;
+      drvFunctionArgs = lib.functionArgs drv;
+      auto = builtins.intersectAttrs drvFunctionArgs scope;
 
       # Converts a returned function to a functor attribute set if necessary
       ensureAttrs = v: if builtins.isFunction v then { __functor = _: v; } else v;
 
       # this wraps the `drv` function to add `scope` and `overrideScope` to the result.
-      drvScope =
-        allArgs:
-        ensureAttrs (drv allArgs)
-        // {
-          inherit scope;
-          overrideScope =
-            f:
-            let
-              newScope = mkScope (fix' (extends f scope.__unfix__));
-            in
-            # note that we have to be careful here: `allArgs` includes the auto-arguments that
-            # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
-            # then we wouldn't look up any packages in the scope in the next interation, because it
-            # appears as if all arguments were already manually passed, so the scope change would do
-            # nothing.
-            callPackageWithScope newScope drv manualArgs;
-        };
+      # it's a functor, so that we can pass through `functionArgs`
+      drvScope = {
+        __functor =
+          _: allArgs:
+          ensureAttrs (drv allArgs)
+          // {
+            inherit scope;
+            overrideScope =
+              f:
+              let
+                newScope = mkScope (fix' (extends f scope.__unfix__));
+              in
+              # note that we have to be careful here: `allArgs` includes the auto-arguments that
+              # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
+              # then we wouldn't look up any packages in the scope in the next interation, because it
+              # appears as if all arguments were already manually passed, so the scope change would do
+              # nothing.
+              callPackageWithScope newScope drv manualArgs;
+          };
+        # `drvScope` accepts the same arguments as `drv`
+        __functionArgs = drvFunctionArgs;
+      };
     in
     lib.makeOverridable drvScope (auto // manualArgs);
 
@@ -262,6 +268,7 @@ package-set { inherit pkgs lib callPackage; } self
       pkg,
       ver,
       sha256,
+      candidate ? false,
       rev ? {
         revision = null;
         sha256 = null;
@@ -271,7 +278,11 @@ package-set { inherit pkgs lib callPackage; } self
     let
       pkgver = "${pkg}-${ver}";
       firstRevision = self.callCabal2nix pkg (pkgs.fetchzip {
-        url = "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
+        url =
+          if candidate then
+            "mirror://hackage/${pkgver}/candidate/${pkgver}.tar.gz"
+          else
+            "mirror://hackage/${pkgver}/${pkgver}.tar.gz";
         inherit sha256;
       }) args;
     in
@@ -340,7 +351,7 @@ package-set { inherit pkgs lib callPackage; } self
   developPackage =
     {
       root,
-      name ? lib.optionalString (builtins.typeOf root == "path") (builtins.baseNameOf root),
+      name ? lib.optionalString (builtins.typeOf root == "path") (baseNameOf root),
       source-overrides ? { },
       overrides ? self: super: { },
       modifier ? drv: drv,
@@ -623,7 +634,7 @@ package-set { inherit pkgs lib callPackage; } self
       # pkgWithCombinedDepsDevDrv :: Derivation
       pkgWithCombinedDepsDevDrv = pkgWithCombinedDeps.envFunc { inherit withHoogle; };
 
-      mkDerivationArgs = builtins.removeAttrs args [
+      mkDerivationArgs = removeAttrs args [
         "genericBuilderArgsModifier"
         "packages"
         "withHoogle"

@@ -218,6 +218,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "http://www.r-project.org/";
     description = "Free software environment for statistical computing and graphics";
+    mainProgram = "R";
     license = licenses.gpl2Plus;
 
     longDescription = ''

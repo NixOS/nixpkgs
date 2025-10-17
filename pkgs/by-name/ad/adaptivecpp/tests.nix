@@ -9,7 +9,7 @@
   # Not setting an explicit target makes it default to the generic target.
   targets ? null,
   enablePstlTests ? false,
-  tbb,
+  onetbb,
   cmake,
   boost,
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    tbb
+    onetbb
   ];
   buildInputs = [ boost ];
 

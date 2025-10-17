@@ -45,26 +45,27 @@
   makeBinaryWrapper,
   autoSignDarwinBinariesHook,
   cairo,
+  fetchpatch,
 }:
 
 with python3Packages;
 buildPythonApplication rec {
   pname = "kitty";
-  version = "0.42.2";
+  version = "0.43.1";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty";
     tag = "v${version}";
-    hash = "sha256-YDfKYzj5LRx1XaKUpBKo97CMW4jPhVQq0aXx/Qfcdzo=";
+    hash = "sha256-Wd61Q1sG55oDxPuHJpmvSWuptwJIuzgn2sB/dzNRc1c=";
   };
 
   goModules =
     (buildGo124Module {
       pname = "kitty-go-modules";
       inherit src version;
-      vendorHash = "sha256-q5LMyogAqgUFfln7LVkhuXzYSMuYmOif5sj15KkOjB4=";
+      vendorHash = "sha256-bjtzvEQmpsrwD0BArw9N6/HqMB3T5xeqxpx89FV7p2A=";
     }).goModules;
 
   buildInputs = [
@@ -141,7 +142,6 @@ buildPythonApplication rec {
     # Skip `test_ssh_bootstrap_with_different_launchers` when launcher is `zsh` since it causes:
     # OSError: master_fd is in error condition
     ./disable-test_ssh_bootstrap_with_different_launchers.patch
-
   ];
 
   hardeningDisable = [
@@ -318,7 +318,6 @@ buildPythonApplication rec {
     platforms = platforms.darwin ++ platforms.linux;
     mainProgram = "kitty";
     maintainers = with maintainers; [
-      tex
       rvolosatovs
       Luflosi
       kashw2

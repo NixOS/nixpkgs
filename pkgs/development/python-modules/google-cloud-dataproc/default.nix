@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dataproc";
-  version = "5.21.0";
+  version = "5.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_dataproc";
     inherit version;
-    hash = "sha256-LSoMxquZrJVB9z0uIRqFH6TQp18btRsjwk3vyGzWxPo=";
+    hash = "sha256-zkGy0LLTnTqvLckUCRMtNP4n+KpdKtat3fQqz78rW/A=";
   };
 
   build-system = [ setuptools ];

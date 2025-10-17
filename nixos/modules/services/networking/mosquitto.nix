@@ -518,6 +518,7 @@ let
     pid_file = 1;
     queue_qos0_messages = 1;
     retain_available = 1;
+    retain_expiry_interval = 1;
     set_tcp_nodelay = 1;
     sys_interval = 1;
     upgrade_outgoing_qos = 1;

@@ -21,6 +21,8 @@ buildPythonPackage rec {
     hash = "sha256-eyMMtLgJuBIuPCyenYrHaRQIrb2tzPaIzM2UCAPPqDg=";
   };
 
+  pythonRelaxDeps = [ "awsiotsdk" ];
+
   build-system = [ poetry-core ];
 
   dependencies = [

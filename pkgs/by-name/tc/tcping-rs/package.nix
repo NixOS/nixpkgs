@@ -6,16 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tcping-rs";
-  version = "1.2.18";
+  version = "1.2.19";
 
   src = fetchFromGitHub {
     owner = "lvillis";
     repo = "tcping-rs";
     tag = version;
-    hash = "sha256-G9LZ9XlIl/JYji/GgznQnIbnV83qi9kZqCkaZJ0kENI=";
+    hash = "sha256-I7rcIemdPGFPBeOoIRft0tq49ikDs49UH5sEobL6fOA=";
   };
 
-  cargoHash = "sha256-INbXvNfn3vmXzZgaDUwl1wgbQ2wVQcCP0ZV2dpZedQY=";
+  cargoHash = "sha256-k+Hm6dHy6igk1deeVrWrAOdhlz0h/jen6pVNaGvB7Ak=";
 
   checkFlags = [
     # This test requires external network access

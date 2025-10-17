@@ -31,13 +31,14 @@
 }:
 let
   zig = zig_0_14;
+
   zig_hook = zig.hook.overrideAttrs {
     zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
   };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.2.0";
+  version = "1.2.2";
 
   outputs = [
     "out"
@@ -51,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Z6lndpkEqBwgsjIeZhmVIQ5D7YdQSH/fG6NCY+YWEAo=";
+    hash = "sha256-BTIH8G1GKrcoMasvlA3fje8f1vZvr4uuAUHfvZq6LVY=";
   };
 
   deps = callPackage ./deps.nix {
@@ -158,6 +159,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit (nixosTests) allTerminfo;
       nixos = nixosTests.terminal-emulators.ghostty;
     };
+    updateScript = ./update.nu;
   };
 
   meta = {

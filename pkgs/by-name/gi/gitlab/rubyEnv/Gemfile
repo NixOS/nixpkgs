@@ -26,9 +26,9 @@ gem 'bundler-checksum', '~> 0.1.0', path: 'gems/bundler-checksum', require: fals
 # See https://docs.gitlab.com/ee/development/gemfile.html#upgrade-rails for guidelines when upgrading Rails
 
 if next?
-  gem 'rails', '~> 7.2.2.1', feature_category: :shared
+  gem 'rails', '~> 7.2.2.2', feature_category: :shared
 else
-  gem 'rails', '~> 7.1.5.1', feature_category: :shared
+  gem 'rails', '~> 7.1.5.2', feature_category: :shared
 end
 
 gem 'activerecord-gitlab', path: 'gems/activerecord-gitlab', feature_category: :shared
@@ -81,7 +81,7 @@ gem 'logger', '~> 1.7.0', feature_category: :shared
 gem 'marginalia', '~> 1.11.1', feature_category: :database
 
 # Authorization
-gem 'declarative_policy', '~> 1.1.0', feature_category: :shared
+gem 'declarative_policy', '~> 2.0.1', feature_category: :shared
 
 # For source code paths mapping
 gem 'coverband', '6.1.5', require: false, feature_category: :shared
@@ -152,7 +152,7 @@ gem 'gpgme', '~> 2.0.24', feature_category: :source_code_management
 # LDAP Auth
 # GitLab fork with several improvements to original library. For full list of changes
 # see https://github.com/intridea/omniauth-ldap/compare/master...gitlabhq:master
-gem 'gitlab_omniauth-ldap', '~> 2.2.0', require: 'omniauth-ldap', feature_category: :system_access
+gem 'gitlab_omniauth-ldap', '~> 2.3.0', require: 'omniauth-ldap', feature_category: :system_access
 gem 'net-ldap', '~> 0.17.1', feature_category: :system_access
 
 # API
@@ -171,12 +171,13 @@ gem 'apollo_upload_server', '~> 2.1.6', feature_category: :api
 # Cells
 gem 'gitlab-topology-service-client', '~> 0.1',
   path: 'vendor/gems/gitlab-topology-service-client',
+  require: 'gitlab/cells/topology_service',
   feature_category: :cell
 
 # Duo Workflow
-gem 'gitlab-duo-workflow-service-client', '~> 0.2',
+gem 'gitlab-duo-workflow-service-client', '~> 0.3',
   path: 'vendor/gems/gitlab-duo-workflow-service-client',
-  feature_category: :duo_workflow
+  feature_category: :agent_foundations
 
 # Generate Fake data
 gem 'ffaker', '~> 2.24', feature_category: :shared
@@ -192,6 +193,7 @@ gem 'hamlit', '~> 3.0.0', feature_category: :shared
 # Files attachments
 gem 'carrierwave', '~> 1.3', feature_category: :shared
 gem 'mini_magick', '~> 4.12', feature_category: :shared
+gem 'marcel', '~> 1.0.4', feature_category: :shared
 
 # PDF generation
 gem 'prawn', feature_category: :vulnerability_management
@@ -199,10 +201,8 @@ gem 'prawn-svg', feature_category: :vulnerability_management
 
 # for backups
 gem 'fog-aws', '~> 3.26', feature_category: :shared
-# Locked until fog-google resolves https://github.com/fog/fog-google/issues/421.
-# Also see config/initializers/fog_core_patch.rb.
-gem 'fog-core', '= 2.1.0', feature_category: :shared
-gem 'fog-google', '~> 1.24.1', require: 'fog/google', feature_category: :shared
+gem 'fog-core', '~> 2.5', feature_category: :shared
+gem 'fog-google', '~> 1.25', require: 'fog/google', feature_category: :shared
 gem 'fog-local', '~> 0.8', feature_category: :shared
 # NOTE:
 # the fog-aliyun gem since v0.4 pulls in aliyun-sdk transitively, which monkey-patches
@@ -211,25 +211,25 @@ gem 'fog-local', '~> 0.8', feature_category: :shared
 # We may want to update this dependency if this is ever addressed upstream, e.g. via
 # https://github.com/aliyun/aliyun-oss-ruby-sdk/pull/93
 gem 'fog-aliyun', '~> 0.4', feature_category: :shared
-gem 'gitlab-fog-azure-rm', '~> 2.2.0', require: 'fog/azurerm', feature_category: :shared
+gem 'gitlab-fog-azure-rm', '~> 2.4.0', require: 'fog/azurerm', feature_category: :shared
 
 # for Google storage
 
 # Need this specific version of google-apis-storage_v1 so that fog-google will utilize the updated list_objects with
 # match_glob support in google-apis-core 0.11.1. Because of this we also have to bump google-cloud-storage to 1.45.0.
 gem 'google-apis-storage_v1', '~> 0.29', feature_category: :shared
-gem 'google-cloud-storage', '~> 1.45.0', feature_category: :shared
+gem 'google-cloud-storage', '~> 1.57.0', feature_category: :shared
 # We need >= 0.11.1 because that's when match_glob support is added to list_objects
 gem 'google-apis-core', '~> 0.18.0', '>= 0.18.0', feature_category: :shared
-gem 'google-apis-compute_v1', '~> 0.127.0', feature_category: :shared
+gem 'google-apis-compute_v1', '~> 0.129.0', feature_category: :shared
 gem 'google-apis-container_v1', '~> 0.100.0', feature_category: :shared
-gem 'google-apis-container_v1beta1', '~> 0.43.0', feature_category: :shared
+gem 'google-apis-container_v1beta1', '~> 0.90.0', feature_category: :shared
 gem 'google-apis-cloudbilling_v1', '~> 0.22.0', feature_category: :shared
 gem 'google-apis-cloudresourcemanager_v1', '~> 0.31.0', feature_category: :shared
 gem 'google-apis-iam_v1', '~> 0.73.0', feature_category: :shared
 gem 'google-apis-serviceusage_v1', '~> 0.28.0', feature_category: :shared
 gem 'google-apis-sqladmin_v1beta4', '~> 0.41.0', feature_category: :shared
-gem 'google-apis-androidpublisher_v3', '~> 0.84.0', feature_category: :shared
+gem 'google-apis-androidpublisher_v3', '~> 0.86.0', feature_category: :shared
 
 gem 'googleauth', '~> 1.14', feature_category: :shared
 gem 'google-cloud-artifact_registry-v1', '~> 0.11.0', feature_category: :shared
@@ -380,9 +380,9 @@ gem 'rack-proxy', '~> 0.7.7', feature_category: :shared
 gem 'cssbundling-rails', '1.4.3', feature_category: :shared
 gem 'terser', '1.0.2', feature_category: :shared
 
-gem 'click_house-client', '0.3.5', feature_category: :database
+gem 'click_house-client', '0.5.1', feature_category: :database
 gem 'addressable', '~> 2.8', feature_category: :shared
-gem 'gon', '~> 6.4.0', feature_category: :shared
+gem 'gon', '~> 6.5.0', feature_category: :shared
 gem 'request_store', '~> 1.7.0', feature_category: :shared
 gem 'base32', '~> 0.3.0', feature_category: :shared
 gem 'gitlab-license', '~> 2.6', feature_category: :shared
@@ -403,7 +403,7 @@ gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation', feature_c
 gem 'gitlab-http', path: 'gems/gitlab-http', feature_category: :shared
 
 gem 'premailer-rails', '~> 1.12.0', feature_category: :notifications
-gem 'gitlab-labkit', '~> 0.39.0', feature_category: :shared
+gem 'gitlab-labkit', '~> 0.40.0', feature_category: :shared
 gem 'thrift', '~> 0.22.0', feature_category: :shared
 
 # I18n
@@ -430,11 +430,15 @@ gem 'prometheus-client-mmap', '~> 1.2.9', require: 'prometheus/client', feature_
 
 # Event-driven reactor for Ruby
 # Required manually in config/initializers/require_async_gem
-gem 'async', '~> 2.24.0', require: false, feature_category: :shared
+gem 'async', '~> 2.28.0', require: false, feature_category: :shared
 gem 'io-event', '~> 1.12', require: false, feature_category: :shared
 
 # Security report schemas used to validate CI job artifacts of security jobs
 gem 'gitlab-security_report_schemas', '0.1.3.min15.0.0.max15.2.3', feature_category: :vulnerability_management
+
+# Frontend bundling
+gem 'vite_rails', '~> 3.0.17', feature_category: :shared
+gem 'vite_ruby', '~> 3.9.0', feature_category: :shared
 
 # OpenTelemetry
 group :opentelemetry do
@@ -470,7 +474,8 @@ gem 'warning', '~> 1.5.0', feature_category: :shared
 
 group :development do
   gem 'lefthook', '~> 1.12.0', require: false, feature_category: :tooling
-  gem 'rubocop', feature_category: :tooling
+  gem 'rubocop', feature_category: :tooling, require: false
+  gem 'debug', '~> 1.11.0', feature_category: :shared
 
   gem 'solargraph', '~> 0.54.0', require: false, feature_category: :shared
   gem 'solargraph-rspec', '~> 0.5.1', require: false, feature_category: :shared
@@ -526,9 +531,6 @@ group :development, :test do
   gem 'benchmark-ips', '~> 2.14.0', require: false, feature_category: :shared
   gem 'benchmark-memory', '~> 0.1', require: false, feature_category: :shared
 
-  # Profiling data from CI/CD pipelines
-  gem 'influxdb-client', '~> 3.1', require: false, feature_category: :tooling
-
   gem 'knapsack', '~> 4.0.0', feature_category: :tooling
   gem 'gitlab-crystalball', '~> 1.1.0', require: false, feature_category: :tooling
   gem 'test_file_finder', '~> 0.3.1', feature_category: :tooling
@@ -542,11 +544,6 @@ group :development, :test do
   gem 'sigdump', '~> 0.2.4', require: 'sigdump/setup', feature_category: :shared
 
   gem 'pact', '~> 1.64', feature_category: :shared
-
-  # For now we only use vite in development / test, and not for production builds
-  # See: https://gitlab.com/gitlab-org/frontend/rfcs/-/issues/106
-  gem 'vite_rails', '~> 3.0.17', feature_category: :shared
-  gem 'vite_ruby', '~> 3.9.0', feature_category: :shared
 
   gem 'gitlab-housekeeper', path: 'gems/gitlab-housekeeper', feature_category: :tooling
 
@@ -607,7 +604,7 @@ group :test do
   # Moved in `test` because https://gitlab.com/gitlab-org/gitlab/-/issues/217527
   gem 'derailed_benchmarks', require: false, feature_category: :shared
 
-  gem 'gitlab_quality-test_tooling', '~> 2.18.0', require: false, feature_category: :tooling
+  gem 'gitlab_quality-test_tooling', '~> 2.20.0', require: false, feature_category: :tooling
 end
 
 gem 'octokit', '~> 9.0', feature_category: :importers
@@ -643,10 +640,10 @@ gem 'ssh_data', '~> 1.3', feature_category: :shared
 gem 'spamcheck', '~> 1.3.0', feature_category: :insider_threat
 
 # Gitaly GRPC protocol definitions
-gem 'gitaly', '~> 18.2.0', feature_category: :gitaly
+gem 'gitaly', '~> 18.4.0.pre.rc1', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
-gem 'gitlab-kas-grpc', '~> 18.2.0', feature_category: :deployment_management
+gem 'gitlab-kas-grpc', '~> 18.3.0', feature_category: :deployment_management
 
 gem 'grpc', '~> 1.74.0', feature_category: :shared
 
@@ -684,7 +681,7 @@ gem 'lru_redux', feature_category: :shared
 # fix STARTTLS handling until https://github.com/mikel/mail/pull/1536 is
 # released.
 gem 'mail', '= 2.8.1', feature_category: :shared
-gem 'mail-smtp_pool', '~> 0.1.0', path: 'vendor/gems/mail-smtp_pool', require: false, feature_category: :shared
+gem 'mail-smtp_pool', '~> 0.1.0', path: 'gems/mail-smtp_pool', require: false, feature_category: :shared
 
 gem 'microsoft_graph_mailer', '~> 0.1.0', path: 'vendor/gems/microsoft_graph_mailer', feature_category: :shared
 
@@ -700,7 +697,7 @@ gem 'json', '~> 2.13.0', feature_category: :shared
 gem 'json_schemer', '~> 2.3.0', feature_category: :shared
 gem 'oj', '~> 3.16.0', '>=3.16.10', feature_category: :shared
 gem 'oj-introspect', '~> 0.8', feature_category: :shared
-gem 'multi_json', '~> 1.14.1', feature_category: :shared
+gem 'multi_json', '~> 1.17.0', feature_category: :shared
 gem 'yajl-ruby', '~> 1.4.3', require: 'yajl', feature_category: :shared
 
 gem 'webauthn', '~> 3.0', feature_category: :shared
@@ -725,7 +722,7 @@ gem 'cvss-suite', '~> 3.3.0', require: 'cvss_suite', feature_category: :software
 gem 'arr-pm', '~> 0.0.12', feature_category: :package_registry
 
 # Remote Development
-gem 'devfile', '~> 0.4.4', feature_category: :workspaces
+gem 'devfile', '~> 0.4.8', feature_category: :workspaces
 gem 'hashdiff', '~> 1.2.0', feature_category: :workspaces
 
 # Apple plist parsing
@@ -733,7 +730,11 @@ gem 'CFPropertyList', '~> 3.0.0', feature_category: :mobile_devops
 gem 'app_store_connect', feature_category: :mobile_devops
 
 # For phone verification
-gem 'telesignenterprise', '~> 2.2', feature_category: :insider_threat
+gem 'telesignenterprise', '~> 2.6', feature_category: :insider_threat
+
+# NOTE: In Ruby 3.4 base64 was moved out of the stdlib
+# This gem was added while upgrading `telesignenterprise` to 2.6.0 to ensure compatibility with Ruby 3.4
+gem "base64", "~> 0.2.0", feature_category: :shared
 
 # BufferedIO patch
 gem 'net-protocol', '~> 0.2.2', feature_category: :shared

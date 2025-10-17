@@ -203,7 +203,7 @@ rec {
         glew110
         openssl
         libidn
-        tbb
+        onetbb
         wayland
         libgbm
         libxkbcommon

@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -29,7 +30,7 @@ buildGoModule (finalAttrs: {
     installShellFiles
     writableTmpDirAsHomeHook
   ];
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd nvs \
       --bash <($out/bin/nvs completion bash) \
       --fish <($out/bin/nvs completion fish) \

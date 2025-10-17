@@ -77,7 +77,7 @@ rec {
       #
       # Neither your store nor your substituters seems to have:
       #
-      #  ${builtins.placeholder "out"}
+      #  ${placeholder "out"}
       #
       # You can create this path from an already-bootstrapped nixpkgs
       # using the following command:

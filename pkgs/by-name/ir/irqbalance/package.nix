@@ -9,6 +9,7 @@
   libcap_ng,
   enableSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   systemdMinimal,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,6 +49,8 @@ stdenv.mkDerivation rec {
       --replace-fail ' $IRQBALANCE_ARGS' ""
   '';
 
+  passthru.tests.nixos = nixosTests.irqbalance;
+
   meta = {
     homepage = "https://github.com/Irqbalance/irqbalance";
     changelog = lib.strings.optionalString (
@@ -57,5 +60,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ moni ];
+    mainProgram = "irqbalance";
   };
 }

@@ -24,12 +24,11 @@
   scipy,
   pillow,
   mapbox-earcut,
-  embreex,
 }:
 
 buildPythonPackage rec {
   pname = "trimesh";
-  version = "4.8.1";
+  version = "4.8.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -38,7 +37,7 @@ buildPythonPackage rec {
     owner = "mikedh";
     repo = "trimesh";
     tag = version;
-    hash = "sha256-nU79v0n6Dx5YV4nWBtLYXU1oickdcS43Me5fd5QNb88=";
+    hash = "sha256-ywLbXOE3qO3+hrqy/+cVGZA4V202eHaMUnn3Wz1iNLI=";
   };
 
   build-system = [ setuptools ];
@@ -63,9 +62,7 @@ buildPythonPackage rec {
       pillow
       # vhacdx # not packaged
       mapbox-earcut
-    ]
-    ++ lib.optionals embreex.meta.available [
-      embreex
+      # embreex # not packaged
     ];
   };
 

@@ -10,6 +10,10 @@ let
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
+  # convert a Nix attribute path to jq object identifier-index:
+  # https://jqlang.org/manual/#object-identifier-index
+  attrPathToIndex = attrPath: "." + lib.concatStringsSep "." attrPath;
+
   commonServiceConfig = {
     Type = "simple";
     Restart = "on-failure";
@@ -145,6 +149,27 @@ in
           };
         }
       );
+    };
+
+    secretSettings = mkOption {
+      default = { };
+      description = ''
+        Secrets to to be added to the JSON file generated from {option}`settings`, read from files.
+      '';
+      example = lib.literalExpression ''
+        {
+          notifications.smtp.transport.password = "/path/to/secret";
+          oauth.clientSecret = "/path/to/other/secret";
+        }
+      '';
+      type =
+        let
+          inherit (types) attrsOf either path;
+          recursiveType = either (attrsOf recursiveType) path // {
+            description = "nested " + (attrsOf path).description;
+          };
+        in
+        recursiveType;
     };
 
     machine-learning = {
@@ -353,13 +378,14 @@ in
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
       }
       // lib.optionalAttrs (cfg.settings != null) {
-        IMMICH_CONFIG_FILE = "${format.generate "immich.json" cfg.settings}";
+        IMMICH_CONFIG_FILE = "/run/immich/config.json";
       };
 
     services.immich.machine-learning.environment = {
       MACHINE_LEARNING_WORKERS = "1";
       MACHINE_LEARNING_WORKER_TIMEOUT = "120";
       MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+      XDG_CACHE_HOME = "/var/cache/immich";
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";
     };
@@ -381,7 +407,24 @@ in
         postgresqlPackage
       ];
 
+      preStart = mkIf (cfg.settings != null) (
+        ''
+          cat '${format.generate "immich-config.json" cfg.settings}' > /run/immich/config.json
+        ''
+        + lib.concatStrings (
+          lib.mapAttrsToListRecursive (attrPath: _: ''
+            tmp="$(mktemp)"
+            ${lib.getExe pkgs.jq} --rawfile secret "$CREDENTIALS_DIRECTORY/${attrPathToIndex attrPath}" \
+              '${attrPathToIndex attrPath} = $secret' /run/immich/config.json > "$tmp"
+            mv "$tmp" /run/immich/config.json
+          '') cfg.secretSettings
+        )
+      );
+
       serviceConfig = commonServiceConfig // {
+        LoadCredential = lib.mapAttrsToListRecursive (
+          attrPath: file: "${attrPathToIndex attrPath}:${file}"
+        ) cfg.secretSettings;
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         Slice = "system-immich.slice";

@@ -2,25 +2,69 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchNpmDeps,
   nix-update-script,
+  jq,
+  git,
+  ripgrep,
 }:
 
 buildNpmPackage (finalAttrs: {
   pname = "qwen-code";
-  version = "0.0.6";
+  version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "QwenLM";
     repo = "qwen-code";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-s4+1hqdlJh5jOy6uZz608n5DzuBR+v/s+7D85oFwQIY=";
+    hash = "sha256-Rld6k0MPfOOncK240zOJbcvheV4UKU2yF7luBrTrnFs=";
   };
 
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    hash = "sha256-cGO66hQxgpoxphtt/BPPDIBuAG8yQseCdzUdAO2mkr4=";
-  };
+  patches = [
+    # similar to upstream gemini-cli some node deps are missing resolved and integrity fields
+    # upstream the problem is solved in master and in v0.4+, eventually the fix should arrive to qwen
+    ./add-missing-resolved-integrity-fields.patch
+  ];
+
+  npmDepsHash = "sha256-43s13HncNKv4uOKVwNvqIF+Ih3rJBWrpVJnE3hCKD2w=";
+
+  nativeBuildInputs = [
+    jq
+  ];
+
+  buildInputs = [
+    git
+    ripgrep
+  ];
+
+  postPatch = ''
+    # Remove @lvce-editor/ripgrep dependency (no network on buildPhase
+    substituteInPlace package.json --replace-fail '"@lvce-editor/ripgrep": "^1.6.0",' ""
+    substituteInPlace packages/core/package.json --replace-fail '"@lvce-editor/ripgrep": "^1.6.0",' ""
+    substituteInPlace packages/core/src/tools/ripGrep.ts \
+      --replace-fail "const { rgPath } = await import('@lvce-editor/ripgrep');" "const rgPath = 'rg';"
+
+    # patches below remove node-pty dependency which causes build fail on Darwin
+    # should be conditional on platform but since package-lock.json is patched it changes its hash
+    # though seems like this dependency is not really required by the package
+    ${jq}/bin/jq '
+      del(.packages."node_modules/node-pty") |
+      del(.packages."node_modules/@lydell/node-pty") |
+      del(.packages."node_modules/@lydell/node-pty-darwin-arm64") |
+      del(.packages."node_modules/@lydell/node-pty-darwin-x64") |
+      del(.packages."node_modules/@lydell/node-pty-linux-arm64") |
+      del(.packages."node_modules/@lydell/node-pty-linux-x64") |
+      del(.packages."node_modules/@lydell/node-pty-win32-arm64") |
+      del(.packages."node_modules/@lydell/node-pty-win32-x64") |
+      walk(
+        if type == "object" and has("dependencies") then
+          .dependencies |= with_entries(select(.key | contains("node-pty") | not))
+        elif type == "object" and has("optionalDependencies") then
+          .optionalDependencies |= with_entries(select(.key | contains("node-pty") | not))
+        else .
+        end
+      )
+    ' package-lock.json > package-lock.json.tmp && mv package-lock.json.tmp package-lock.json
+  '';
 
   buildPhase = ''
     runHook preBuild
@@ -34,10 +78,11 @@ buildNpmPackage (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin
-    cp -r bundle/* $out/
-    patchShebangs $out
-    ln -s $out/gemini.js $out/bin/qwen
+    mkdir -p $out/bin $out/share/qwen-code
+    cp -r bundle/* $out/share/qwen-code/
+    cp node_modules/tiktoken/tiktoken_bg.wasm $out/share/qwen-code/
+    patchShebangs $out/share/qwen-code
+    ln -s $out/share/qwen-code/gemini.js $out/bin/qwen
 
     runHook postInstall
   '';

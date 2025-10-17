@@ -113,15 +113,17 @@ let
       });
 
       docker-tini = tini.overrideAttrs {
-        pname = "docker-init";
+        pname = "docker-tini";
         inherit version;
 
         src = fetchFromGitHub {
           owner = "krallin";
           repo = "tini";
-          tag = tiniRev;
+          rev = tiniRev;
           hash = tiniHash;
         };
+
+        patches = [ ];
 
         # Do not remove static from make files as we want a static binary
         postPatch = "";
@@ -387,7 +389,7 @@ in
   # https://github.com/moby/moby/tree/${version}/hack/dockerfile/install/*
   docker_25 =
     let
-      version = "25.0.12";
+      version = "25.0.13";
     in
     callPackage dockerGen {
       inherit version;
@@ -396,31 +398,31 @@ in
       cliRev = "43987fca488a535d810c429f75743d8c7b63bf4f";
       cliHash = "sha256-OwufdfuUPbPtgqfPeiKrQVkOOacU2g4ommHb770gV40=";
       mobyRev = "v${version}";
-      mobyHash = "sha256-EBOdbFP6UBK1uhXi1IzcPxYihHikuzzwMvv2NHsksYk=";
+      mobyHash = "sha256-X+1QG/toJt+VNLktR5vun8sG3PRoTVBAcekFXxocJdU=";
       runcRev = "v1.2.5";
       runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
       containerdRev = "v1.7.27";
       containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
-      tiniRev = "v0.19.0";
-      tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
+      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };
 
   docker_28 =
     let
-      version = "28.3.3";
+      version = "28.5.1";
     in
     callPackage dockerGen {
-      version = "28.3.3";
+      inherit version;
       cliRev = "v${version}";
-      cliHash = "sha256-+nYpd9VGzzMPcBUfGM7V9MkrslYHDSUlE0vhTqDGc1s=";
+      cliHash = "sha256-iT5FLzX8Pg07V0Uo+07gy3ChP/WgLTPs/vtxnFVmCG8=";
       mobyRev = "v${version}";
-      mobyHash = "sha256-3SWjoF4sXVuYxnENq5n6ZzPJx6BQXnyP8VXTQaaUSFA=";
-      runcRev = "v1.2.6";
-      runcHash = "sha256-XMN+YKdQOQeOLLwvdrC6Si2iAIyyHD5RgZbrOHrQE/g=";
-      containerdRev = "v1.7.27";
-      containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
-      tiniRev = "v0.19.0";
-      tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+      mobyHash = "sha256-IlkEK4UeQjZsojbahzLy/rP3WqJUWXG9nthmBSEj10M=";
+      runcRev = "v1.3.0";
+      runcHash = "sha256-oXoDio3l23Z6UyAhb9oDMo1O4TLBbFyLh9sRWXnfLVY=";
+      containerdRev = "v1.7.28";
+      containerdHash = "sha256-vz7RFJkFkMk2gp7bIMx1kbkDFUMS9s0iH0VoyD9A21s=";
+      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
+      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };
 
 }

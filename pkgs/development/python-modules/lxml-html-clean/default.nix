@@ -9,31 +9,15 @@
 
 buildPythonPackage rec {
   pname = "lxml-html-clean";
-  version = "0.4.2";
+  version = "0.4.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fedora-python";
     repo = "lxml_html_clean";
     tag = version;
-    hash = "sha256-KGUFRbcaeDcX2jyoyyZMZsVTbN+h8uy+ugcritkZe38=";
+    hash = "sha256-pMZgECts7QqddI76EHnEDhQ0IoR/yioQXTqcg1npCOA=";
   };
-
-  # Disable failing snapshot tests (AssertionError)
-  # https://github.com/fedora-python/lxml_html_clean/issues/24
-  # As this derivation must use unittestCheckHook, we cannot use disabledTests
-  postPatch = ''
-    substituteInPlace tests/test_clean.py \
-      --replace-fail \
-        "test_host_whitelist_valid" \
-        "DISABLED_test_host_whitelist_valid" \
-      --replace-fail \
-        "test_host_whitelist_invalid" \
-        "DISABLED_test_host_whitelist_invalid" \
-      --replace-fail \
-        "test_host_whitelist_sneaky_userinfo" \
-        "DISABLED_test_host_whitelist_sneaky_userinfo"
-  '';
 
   build-system = [ setuptools ];
 

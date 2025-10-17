@@ -1,37 +1,51 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   fontconfig,
+  makeFontsConf,
   versionCheckHook,
   nix-update-script,
 }:
 
+let
+  fontsConf = makeFontsConf {
+    fontDirectories = [ ];
+  };
+in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dovi-tool";
-  version = "2.2.0";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "quietvoid";
     repo = "dovi_tool";
     tag = finalAttrs.version;
-    hash = "sha256-z783L6gBr9o44moKYZGwymWEMp5ZW7yOhZcpvbznXK4=";
+    hash = "sha256-4C9d8Rt1meV6Pcdnf2SaiWGA97sRj2WmvKsf1rC01Bs=";
   };
 
-  cargoHash = "sha256-pwB6QBLeHALbYZHzTBm/ODLPHhxM3B5n+B/0iXYNuVc=";
+  cargoHash = "sha256-Dg6IDcYm3qTSyE5kVgZ8Yka8538KDFyBN+weUyAfQT8=";
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pkg-config
   ];
 
-  buildInputs = [
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [
     fontconfig
   ];
 
-  checkFlags = [
-    # fails because nix-store is read only
-    "--skip=rpu::plot::plot_p7"
+  preCheck = lib.optionals (!stdenv.hostPlatform.isDarwin) ''
+    # Fontconfig error: Cannot load default config file: No such file: (null)
+    export FONTCONFIG_FILE="${fontsConf}"
+    # Fontconfig error: No writable cache directories
+    export XDG_CACHE_HOME="$(mktemp -d)"
+  '';
+
+  # Needed for rpu::plot::plot_p7 to pass in the sandbox.
+  __impureHostDeps = lib.optionals stdenv.hostPlatform.isDarwin [
+    "/System/Library/Fonts/Supplemental/Arial.ttf"
   ];
 
   nativeInstallCheckInputs = [

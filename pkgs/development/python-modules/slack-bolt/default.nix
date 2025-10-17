@@ -34,26 +34,22 @@
 
   # tests
   docker,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "slack-bolt";
-  version = "1.23.0";
+  version = "1.26.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "bolt-python";
     tag = "v${version}";
-    hash = "sha256-Aq7vLkrTeBVsY+xVwQhFmSqq8ik0yHEmPANtKyJZKTw=";
+    hash = "sha256-5VbljuIYuPNPVZ6OwK9GV0ZyCNtMH7aPogOoBaaVb5A=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail '"pytest-runner==6.0.1",' ""
-  '';
 
   build-system = [ setuptools ];
 
@@ -89,14 +85,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     docker
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   __darwinAllowLocalNetworking = true;
 

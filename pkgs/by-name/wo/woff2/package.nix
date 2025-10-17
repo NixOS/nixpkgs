@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Need to explicitly link to brotlicommon
-  patches = lib.optional static ./brotli-static.patch;
+  patches = lib.optional static ./brotli-static.patch ++ [ ./gcc15.patch ];
 
   nativeBuildInputs = [
     cmake
@@ -44,6 +44,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # without this binaries only get built if shared libs are disable
     sed 's@^if (NOT BUILD_SHARED_LIBS)$@if (TRUE)@g' -i CMakeLists.txt
+
+    # Fix the build with CMake 4.
+    #
+    # See: <https://github.com/google/woff2/issues/183>
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 2.8.6)' \
+        'cmake_minimum_required(VERSION 3.10)'
   '';
 
   meta = with lib; {

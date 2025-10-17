@@ -107,7 +107,7 @@ in
         package = mkPackageOption pkgs "chromium" { };
 
         maxQueueSize = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 0;
           description = "Maximum queue size for chromium-based conversions. Setting to 0 disables the limit.";
         };
@@ -143,7 +143,7 @@ in
           description = "Deny accepting URLs from these domains in the `downloadFrom` API field. Accepts a regular expression.";
         };
         maxRetries = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 4;
           description = "The maximum amount of times to retry downloading a file specified with `downloadFrom`.";
         };
@@ -158,13 +158,13 @@ in
         package = mkPackageOption pkgs "libreoffice" { };
 
         restartAfter = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 10;
           description = "Restart LibreOffice after this many conversions. Setting to 0 disables this feature.";
         };
 
         maxQueueSize = mkOption {
-          type = types.int;
+          type = types.ints.unsigned;
           default = 0;
           description = "Maximum queue size for LibreOffice-based conversions. Setting to 0 disables the limit.";
         };

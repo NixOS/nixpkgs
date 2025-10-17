@@ -7,8 +7,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     publisher = "ethersync";
     name = "ethersync";
-    version = "0.4.0";
-    hash = "sha256-/09be/1KZVIDUr+YieeD7xc8PXdchRo3Kt1GqD3Pt6M=";
+    version = "0.6.0";
+    hash = "sha256-KuidePUxQ+FhnIGTUf6i+WxBQfbQVlq68xbuOeEouIE=";
   };
 
   meta = {

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-settings-components";
-  version = "1.1.2";
+  version = "1.1.3";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-settings-components";
     rev = finalAttrs.version;
-    hash = "sha256-H7G3dzzitdyahB/MwgtfRBpo+qMOhmQSzN4EGYculks=";
+    hash = "sha256-WKLdTiTVfgX9IAVPsRGx7GWBbYMI9iICXevzrfuHPGc=";
   };
 
   postPatch = ''

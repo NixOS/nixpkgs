@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.1.6";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-MVdd67ssP64aEV6rjNA3fxypqKn0lJe/UN2waCEkLJM=";
+    hash = "sha256-XvNvVWEmJpsY2AxTYLT0/4IiJ2QTI4mWwDleMmZ2LgA=";
   };
 
-  cargoHash = "sha256-XW8na9kXgn7gKaN7OYlEGTv8cgtzKXggj1uXlvQh4N4=";
+  cargoHash = "sha256-PDYCO1ggKwtMR9tnokY7JqVM03FWsO4c2L4GV+7TKu4=";
 
   preBuild = ''
     version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # some python tests use uv, which in turn needs python
   UV_PYTHON = "${python312}/bin/python";
 
-  checkFlags = builtins.map (t: "--skip ${t}") [
+  checkFlags = map (t: "--skip ${t}") [
     # these tests require internet access
     "check_added_large_files_hook"
     "check_json_hook"
@@ -61,6 +61,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
+    "docker::workspace_docker"
     "docker_image::docker_image"
     "pygrep::basic_case_sensitive"
     "pygrep::case_insensitive"
@@ -95,6 +96,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "subdirectory"
     "check_yaml_hook"
     "check_yaml_multiple_document"
+    "builtin_hooks_workspace_mode"
+    "fix_byte_order_marker_hook"
+    "fix_byte_order_marker"
     # does not properly use TMP
     "hook_impl"
   ];
@@ -102,6 +106,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/j178/prek";
     description = "Better `pre-commit`, re-engineered in Rust ";
+    mainProgram = "prek";
     changelog = "https://github.com/j178/prek/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.mit ];
     maintainers = [ lib.maintainers.knl ];

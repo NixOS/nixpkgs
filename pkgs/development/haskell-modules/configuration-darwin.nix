@@ -354,22 +354,24 @@ self: super:
     # after verifying they are indeed erroneous (e.g. cabal2nix) or just disable
     # the check, sticking with the status quo. Ideally there'll be zero cases of
     # the latter in the future!
-    inherit
-      (lib.mapAttrs (
-        _:
-        overrideCabal (old: {
-          postInstall = ''
-            remove-references-to -t ${self.hpack} "$out/bin/cabal2nix"
-            # Note: The `data` output is needed at runtime.
-            remove-references-to -t ${self.distribution-nixpkgs.out} "$out/bin/hackage2nix"
+    cabal2nix = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs.out} "''${!outputBin}/bin/hackage2nix"
 
-            ${old.postInstall or ""}
-          '';
-        })
-      ) super)
-      cabal2nix
-      cabal2nix-unstable
-      ;
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix;
+    cabal2nix-unstable = overrideCabal (old: {
+      postInstall = ''
+        remove-references-to -t ${self.hpack} "''${!outputBin}/bin/cabal2nix"
+        # Note: The `data` output is needed at runtime.
+        remove-references-to -t ${self.distribution-nixpkgs-unstable.out} "''${!outputBin}/bin/hackage2nix"
+
+        ${old.postInstall or ""}
+      '';
+    }) super.cabal2nix-unstable;
 
     # https://github.com/fpco/unliftio/issues/87
     unliftio = dontCheck super.unliftio;

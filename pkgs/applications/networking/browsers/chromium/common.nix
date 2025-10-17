@@ -164,7 +164,8 @@ let
     # //third_party/libavif:libavif_enc(//build/toolchain/linux/unbundle:default)
     #   needs //third_party/libwebp:libwebp_sharpyuv(//build/toolchain/linux/unbundle:default)
     # "libwebp"
-    "libxslt"
+    "libxml"
+    "libxslt" # depends on libxml, always remove or re-add as a pair
     # "opus"
   ];
 
@@ -255,7 +256,7 @@ let
           ''
         else
           ''
-            mkdir -p ${builtins.dirOf path}
+            mkdir -p ${dirOf path}
             cp -r ${dep}/. ${path}
           ''
       )
@@ -438,12 +439,6 @@ let
       # Optional patch to use SOURCE_DATE_EPOCH in compute_build_timestamp.py (should be upstreamed):
       ./patches/no-build-timestamps.patch
     ]
-    ++ lib.optionals (!chromiumVersionAtLeast "136") [
-      # Fix build with Pipewire 1.4
-      # Submitted upstream: https://webrtc-review.googlesource.com/c/src/+/380500
-      # Got merged, started shipping with M136+.
-      ./patches/webrtc-pipewire-1.4.patch
-    ]
     ++ lib.optionals (packageName == "chromium") [
       # This patch is limited to chromium and ungoogled-chromium because electron-source sets
       # enable_widevine to false.
@@ -483,33 +478,15 @@ let
       # allowing us to use our rustc and our clang.
       ./patches/chromium-129-rust.patch
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "140") [
+    ++ lib.optionals (versionRange "140" "141") [
       # Rebased variant of the patch above due to
       # https://chromium-review.googlesource.com/c/chromium/src/+/6665907
       ./patches/chromium-140-rust.patch
     ]
-    ++ lib.optionals (!ungoogled && !chromiumVersionAtLeast "136") [
-      # Note: We since use LLVM v19.1+ on unstable *and* release-24.11 for all version and as such
-      # no longer need this patch. We opt to arbitrarily limit it to versions prior to M136 just
-      # because that's when this revert stopped applying cleanly and defer fully dropping it for
-      # the next cleanup to bundle rebuilding all of chromium and electron.
-      #
-      # Our rustc.llvmPackages is too old for std::hardware_destructive_interference_size
-      # and std::hardware_constructive_interference_size.
-      # So let's revert the change for now and hope that our rustc.llvmPackages and
-      # nixpkgs-stable catch up sooner than later.
-      # https://groups.google.com/a/chromium.org/g/cxx/c/cwktrFxxUY4
-      # https://chromium-review.googlesource.com/c/chromium/src/+/5767325
-      # Note: We exclude the changes made to the partition_allocator (PA), as the revert
-      # would otherwise not apply because upstream reverted those changes to PA already
-      # in https://chromium-review.googlesource.com/c/chromium/src/+/5841144
-      # Note: ungoogled-chromium already reverts this as part of its patchset.
-      (githubPatch {
-        commit = "fc838e8cc887adbe95110045d146b9d5885bf2a9";
-        hash = "sha256-NNKzIp6NYdeZaqBLWDW/qNxiDB1VFRz7msjMXuMOrZ8=";
-        excludes = [ "base/allocator/partition_allocator/src/partition_alloc/*" ];
-        revert = true;
-      })
+    ++ lib.optionals (chromiumVersionAtLeast "141") [
+      # Rebased variant of the patch above due to
+      # https://chromium-review.googlesource.com/c/chromium/src/+/6897026
+      ./patches/chromium-141-rust.patch
     ]
     ++ lib.optionals stdenv.hostPlatform.isAarch64 [
       # Reverts decommit pooled pages which causes random crashes of tabs on systems
@@ -527,7 +504,7 @@ let
         hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
       })
     ]
-    ++ lib.optionals (chromiumVersionAtLeast "136") [
+    ++ [
       # Modify the nodejs version check added in https://chromium-review.googlesource.com/c/chromium/src/+/6334038
       # to look for the minimal version, not the exact version (major.minor.patch). The linked CL makes a case for
       # preventing compilations of chromium with versions below their intended version, not about running the very
@@ -551,6 +528,17 @@ let
       # Rebased variant of the patch above for
       # electron 35 (M134) and 36 (M136)
       ./patches/chromium-134-rust-1.86-mismatched_lifetime_syntaxes.patch
+    ]
+    ++ lib.optionals (chromiumVersionAtLeast "141") [
+      (fetchpatch {
+        # Fix "invalid application of 'sizeof' to an incomplete type 'blink::CSSStyleSheet'"
+        # by reverting https://chromium-review.googlesource.com/c/chromium/src/+/6892157
+        name = "chromium-141-Revert-Remove-unnecessary-include-in-tree_scope.h.patch";
+        url = "https://chromium.googlesource.com/chromium/src/+/0fc0e71aa1ca0419fae6d14255025543980d2cba^!?format=TEXT";
+        decode = "base64 -d";
+        revert = true;
+        hash = "sha256-pnEus2NHpNWZ6ZSXLgdTn+it7oy1MPZPbD8SOAKLWbw=";
+      })
     ];
 
     postPatch =
@@ -561,8 +549,6 @@ let
         chmod u+w build/config/gclient_args.gni
         echo 'checkout_mutter = false' >> build/config/gclient_args.gni
         echo 'checkout_glic_e2e_tests = false' >> build/config/gclient_args.gni
-      ''
-      + lib.optionalString (!isElectron && chromiumVersionAtLeast "140") ''
         echo 'checkout_clusterfuzz_data = false' >> build/config/gclient_args.gni
       ''
       + lib.optionalString (!isElectron) ''
@@ -659,7 +645,7 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString (ungoogled) ''
+      + lib.optionalString ungoogled ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
@@ -766,23 +752,24 @@ let
         # Disable PGO because the profile data requires a newer compiler version (LLVM 14 isn't sufficient):
         chrome_pgo_phase = 0;
         clang_base_path = "${llvmCcAndBintools}";
-
-        use_qt5 = false;
-        use_qt6 = false;
       }
-      // lib.optionalAttrs (chromiumVersionAtLeast "136") {
-        # LLVM < v21 does not support --warning-suppression-mappings yet:
-        clang_warning_suppression_file = "";
+      // lib.optionalAttrs (chromiumVersionAtLeast "141") {
+        # TODO: remove opt-out of https://chromium.googlesource.com/chromium/src/+/main/docs/modules.md
+        use_clang_modules = false;
       }
       // {
+        use_qt5 = false;
+        use_qt6 = false;
+
+        # LLVM < v21 does not support --warning-suppression-mappings yet:
+        clang_warning_suppression_file = "";
+
         # To fix the build as we don't provide libffi_pic.a
         # (ld.lld: error: unable to find library -l:libffi_pic.a):
         use_system_libffi = true;
         # Use nixpkgs Rust compiler instead of the one shipped by Chromium.
         rust_sysroot_absolute = "${buildPackages.rustc}";
         rust_bindgen_root = "${buildPackages.rust-bindgen}";
-      }
-      // {
         enable_rust = true;
         # While we technically don't need the cache-invalidation rustc_version provides, rustc_version
         # is still used in some scripts (e.g. build/rust/std/find_std_rlibs.py).
@@ -811,15 +798,7 @@ let
       // (extraAttrs.gnFlags or { })
     );
 
-    # TODO: Migrate this to env.RUSTC_BOOTSTRAP next mass-rebuild.
-    # Chromium expects nightly/bleeding edge rustc features to be available.
-    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
-    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
-    # enable those features in our stable builds.
-    preConfigure = ''
-      export RUSTC_BOOTSTRAP=1
-    ''
-    + lib.optionalString (!isElectron) ''
+    preConfigure = lib.optionalString (!isElectron) ''
       (
         cd third_party/node
         grep patch update_npm_deps | sh
@@ -840,12 +819,15 @@ let
       runHook postConfigure
     '';
 
+    # Chromium expects nightly/bleeding edge rustc features to be available.
+    # Our rustc in nixpkgs follows stable, but since bootstrapping rustc requires
+    # nightly features too, we can (ab-)use RUSTC_BOOTSTRAP here as well to
+    # enable those features in our stable builds.
+    env.RUSTC_BOOTSTRAP = 1;
     # Mute some warnings that are enabled by default. This is useful because
     # our Clang is always older than Chromium's and the build logs have a size
     # of approx. 25 MB without this option (and this saves e.g. 66 %).
-    env.NIX_CFLAGS_COMPILE =
-      "-Wno-unknown-warning-option"
-      + lib.optionalString (chromiumVersionAtLeast "135") " -Wno-unused-command-line-argument -Wno-shadow";
+    env.NIX_CFLAGS_COMPILE = "-Wno-unknown-warning-option -Wno-unused-command-line-argument -Wno-shadow";
     env.BUILD_CC = "$CC_FOR_BUILD";
     env.BUILD_CXX = "$CXX_FOR_BUILD";
     env.BUILD_AR = "$AR_FOR_BUILD";

@@ -145,7 +145,7 @@ python3.pkgs.buildPythonApplication {
         # avoid persistant warning on starup
         --set QT_STYLE_OVERRIDE Fusion
         ${lib.optionalString pipewireSupport ''--prefix LD_LIBRARY_PATH : ${libPath}''}
-        ${lib.optionalString (enableVulkan) ''
+        ${lib.optionalString enableVulkan ''
           --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ vulkan-loader ]}
           --set-default QSG_RHI_BACKEND vulkan
         ''}

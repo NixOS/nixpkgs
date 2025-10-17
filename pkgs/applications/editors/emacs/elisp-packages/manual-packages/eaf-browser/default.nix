@@ -5,7 +5,7 @@
   fetchFromGitHub,
   # Dependencies
   aria2,
-  # Java Script dependency
+  # JavaScript dependency
   nodejs,
   fetchNpmDeps,
   npmHooks,
@@ -36,6 +36,12 @@ melpaBuild (finalAttrs: {
     npmHooks.npmConfigHook
   ];
 
+  postPatch = ''
+    substituteInPlace buffer.py \
+      --replace-fail "aria2_args = [\"aria2c\"]" \
+                     "aria2_args = [\"${lib.getExe aria2}\"]"
+  '';
+
   files = ''
     ("*.el"
      "*.py"
@@ -55,9 +61,6 @@ melpaBuild (finalAttrs: {
       ps: with ps; [
         pysocks
       ];
-    eafOtherDeps = [
-      aria2
-    ];
   };
 
   meta = {

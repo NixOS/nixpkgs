@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "duf";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "muesli";
     repo = "duf";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cIHFWFSsfS5UG2QKkFEEB34Q1l0pjuICxQlGfgWnLeY=";
+    hash = "sha256-d/co7EaDk0m/oYxWFATxQYCdH3Z9r8eTtOOo+M+HD4o=";
   };
 
   vendorHash = "sha256-Br2jagMynnzH77GNA7NeWbM5qSHbhfW5Bo7X2b6OX28=";

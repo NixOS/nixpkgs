@@ -42,6 +42,36 @@ rec {
     ;
 
   /**
+    Concatenates a list of strings with a separator between each element.
+
+    # Inputs
+
+    `sep`
+    : Separator to add between elements
+
+    `list`
+    : List of strings that will be joined
+
+    # Type
+
+    ```
+    join :: string -> [ string ] -> string
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.strings.join` usage example
+
+    ```nix
+    join ", " ["foo" "bar"]
+    => "foo, bar"
+    ```
+
+    :::
+  */
+  join = builtins.concatStringsSep;
+
+  /**
     Concatenate a list of strings.
 
     # Type
@@ -1135,7 +1165,7 @@ rec {
         "."
         "~"
       ];
-      toEscape = builtins.removeAttrs asciiTable unreserved;
+      toEscape = removeAttrs asciiTable unreserved;
     in
     replaceStrings (builtins.attrNames toEscape) (
       lib.mapAttrsToList (_: c: "%${fixedWidthString 2 "0" (lib.toHexString c)}") toEscape
@@ -1776,7 +1806,7 @@ rec {
     if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
 
   /**
-    Return a string without the specified prefix, if the prefix matches.
+    Returns a string without the specified prefix, if the prefix matches.
 
     # Inputs
 
@@ -1827,7 +1857,7 @@ rec {
       );
 
   /**
-    Return a string without the specified suffix, if the suffix matches.
+    Returns a string without the specified suffix, if the suffix matches.
 
     # Inputs
 
@@ -1878,7 +1908,7 @@ rec {
       );
 
   /**
-    Return true if string `v1` denotes a version older than `v2`.
+    Returns true if string `v1` denotes a version older than `v2`.
 
     # Inputs
 
@@ -1910,7 +1940,7 @@ rec {
   versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
   /**
-    Return true if string v1 denotes a version equal to or newer than v2.
+    Returns true if string v1 denotes a version equal to or newer than v2.
 
     # Inputs
 

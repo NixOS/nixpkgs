@@ -6,12 +6,12 @@
   cabal-install,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "cubical-mini";
   version = "0.5-unstable-2025-06-13";
 
   src = fetchFromGitHub {
-    repo = pname;
+    repo = "cubical-mini";
     owner = "cmcmA20";
     rev = "1776874d13d0b811e6eeb70d0e5a52b4d2a978d2";
     hash = "sha256-UxWOS+uzP9aAaMdSueA2CAuzWkImGAoKxroarcgpk+w=";

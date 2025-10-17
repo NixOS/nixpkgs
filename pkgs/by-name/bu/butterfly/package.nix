@@ -1,6 +1,6 @@
 {
   lib,
-  flutter332,
+  flutter335,
   fetchFromGitHub,
   runCommand,
   yq-go,
@@ -9,16 +9,16 @@
 }:
 
 let
-  version = "2.3.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "LinwoodDev";
     repo = "Butterfly";
     tag = "v${version}";
-    hash = "sha256-qmgM6h2HxvRwUv4UwkIBR3uYz2NiaWEgJWWjrpumQug=";
+    hash = "sha256-kxX9gHNKDlRir9TGSob6iz8cRJOqHdoYlvIi4MQAroc=";
   };
 in
-flutter332.buildFlutterApplication {
+flutter335.buildFlutterApplication {
   pname = "butterfly";
   inherit version src;
 
@@ -64,7 +64,7 @@ flutter332.buildFlutterApplication {
       cc-by-sa-40
       asl20
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

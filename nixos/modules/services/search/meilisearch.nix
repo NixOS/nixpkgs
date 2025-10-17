@@ -182,21 +182,7 @@ in
       no_analytics = lib.mkDefault true;
     };
 
-    warnings = lib.optional (lib.versionOlder cfg.package.version "1.12") ''
-      Meilisearch 1.11 will be removed in NixOS 25.11. As it was the last
-      version not to support dumpless upgrades, you will have to manually
-      migrate your data before that. Instructions can be found at
-      https://www.meilisearch.com/docs/learn/update_and_migration/updating#using-a-dump
-      and afterwards, you can set `services.meilisearch.package = pkgs.meilisearch;`
-      to use the latest version.
-    '';
-
-    services.meilisearch.package = lib.mkDefault (
-      if lib.versionAtLeast config.system.stateVersion "25.05" then
-        pkgs.meilisearch
-      else
-        pkgs.meilisearch_1_11
-    );
+    services.meilisearch.package = lib.mkDefault pkgs.meilisearch;
 
     # used to restore dumps
     environment.systemPackages = [ cfg.package ];
@@ -223,6 +209,9 @@ in
       );
 
       serviceConfig = {
+        Type = "simple";
+        DynamicUser = true;
+        Restart = "always";
         LoadCredential = lib.mkMerge (
           [
             (lib.mkIf (cfg.masterKeyFile != null) [ "master_key:${cfg.masterKeyFile}" ])
@@ -232,11 +221,15 @@ in
           ) secrets-with-path
         );
         ExecStart = "${lib.getExe cfg.package} --config-file-path \${RUNTIME_DIRECTORY}/config.toml";
-        DynamicUser = true;
         StateDirectory = "meilisearch";
         WorkingDirectory = "%S/meilisearch";
         RuntimeDirectory = "meilisearch";
         RuntimeDirectoryMode = "0700";
+        ReadWritePaths = [
+          cfg.settings.db_path
+          cfg.settings.dump_dir
+          cfg.settings.snapshot_dir
+        ];
 
         ProtectSystem = "strict";
         ProtectHome = true;
@@ -255,8 +248,11 @@ in
         RestrictSUIDSGID = true;
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
+        RemoveIPC = true;
 
-        ProcSubset = "pid";
+        # Meilisearch needs to determine cgroup memory limits to set its own memory limits.
+        # This means this can't be set to "pid"
+        ProcSubset = "all";
         ProtectProc = "invisible";
 
         NoNewPrivileges = true;

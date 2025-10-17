@@ -26,29 +26,29 @@ in
 {
   imports = [
     #  Module A
-    ({
+    {
       options.attrsOfModule = attrsOfModule;
       options.mergedAttrsOfModule = attrsOfModule;
       options.listOfModule = listOfModule;
       options.mergedListOfModule = listOfModule;
-    })
+    }
     # Module B
-    ({
+    {
       options.mergedAttrsOfModule = attrsOfModule;
       options.mergedListOfModule = listOfModule;
-    })
+    }
     # Values
     # It is important that the value is defined in a separate module
     # Without valueMeta the actual value and sub-options wouldn't be accessible via:
     # options.attrsOfModule.type.getSubOptions
-    ({
+    {
       attrsOfModule = {
         foo.bar = 42;
       };
       mergedAttrsOfModule = {
         foo.bar = 42;
       };
-    })
+    }
     (
       { options, ... }:
       {

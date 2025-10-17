@@ -34,7 +34,7 @@
   opencv,
   pcre,
   systemd,
-  tbb_2022,
+  onetbb,
   webkitgtk_4_1,
   wxGTK31,
   xorg,
@@ -56,13 +56,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "bambu-studio";
-  version = "02.02.01.60";
+  version = "02.02.02.56";
 
   src = fetchFromGitHub {
     owner = "bambulab";
     repo = "BambuStudio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Ttv0LwJ0GnDhmxofP7c3CJMawad8AhAToZFOvoK3Zow=";
+    hash = "sha256-vg+sEIztFBfzROl2surRd4l/afZ+tGMtG65m3kDIPAY=";
   };
 
   nativeBuildInputs = [
@@ -101,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     opencascade-occt_7_6
     openvdb
     pcre
-    tbb_2022
+    onetbb
     webkitgtk_4_1
     wxGTK'
     xorg.libX11

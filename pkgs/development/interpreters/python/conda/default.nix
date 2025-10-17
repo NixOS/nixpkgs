@@ -4,7 +4,7 @@
   # List of libraries that are needed for conda binary packages.
   # When installing a conda binary package, just extend
   # the `buildInputs` with `condaAutopatchLibs`.
-  condaPatchelfLibs = builtins.map (p: p.lib or p) (
+  condaPatchelfLibs = map (p: p.lib or p) (
     [
       pkgs.alsa-lib
       pkgs.cups

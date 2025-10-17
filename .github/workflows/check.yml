@@ -12,16 +12,11 @@ on:
       mergedSha:
         required: true
         type: string
-      ownersCanFail:
-        required: true
-        type: boolean
       targetSha:
         required: true
         type: string
     secrets:
       CACHIX_AUTH_TOKEN:
-        required: true
-      OWNER_RO_APP_PRIVATE_KEY:
         required: true
 
 permissions: {}
@@ -72,19 +67,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: gh api /rate_limit | jq
 
-  # For checking code owners, this job depends on a GitHub App with the following permissions:
-  # - Permissions:
-  #   - Repository > Administration: read-only
-  #   - Organization > Members: read-only
-  # - Install App on this repository, setting these variables:
-  #   - OWNER_RO_APP_ID (variable)
-  #   - OWNER_RO_APP_PRIVATE_KEY (secret)
-  #
-  # This should not use the same app as the job to request reviewers, because this job requires
-  # handling untrusted PR input.
   owners:
     runs-on: ubuntu-24.04-arm
-    continue-on-error: ${{ inputs.ownersCanFail }}
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
@@ -94,9 +78,8 @@ jobs:
         uses: ./.github/actions/checkout
         with:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
-          target-as-trusted-at: ${{ inputs.targetSha }}
 
-      - uses: cachix/install-nix-action@7be5dee1421f63d07e71ce6e0a9f8a4b07c2a487 # v31
+      - uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -107,36 +90,15 @@ jobs:
           pushFilter: -source$
 
       - name: Build codeowners validator
-        run: nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A codeownersValidator
-
-      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
-        if: github.event_name == 'pull_request_target' && vars.OWNER_RO_APP_ID
-        id: app-token
-        with:
-          app-id: ${{ vars.OWNER_RO_APP_ID }}
-          private-key: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
-          permission-administration: read
-          permission-members: read
-
-      - name: Log current API rate limits
-        if: steps.app-token.outputs.token
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh api /rate_limit | jq
+        run: nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A codeownersValidator
 
       - name: Validate codeowners
-        if: steps.app-token.outputs.token
         env:
           OWNERS_FILE: nixpkgs/untrusted/ci/OWNERS
-          GITHUB_ACCESS_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY_PATH: nixpkgs/untrusted
-          OWNER_CHECKER_REPOSITORY: ${{ github.repository }}
+          # Omits "owners", which checks whether GitHub handles exist, but fails with nested team
+          # structures.
+          CHECKS: "duppatterns,files,syntax"
           # Set this to "notowned,avoid-shadowing" to check that all files are owned by somebody
           EXPERIMENTAL_CHECKS: "avoid-shadowing"
         run: result/bin/codeowners-validator
-
-      - name: Log current API rate limits
-        if: steps.app-token.outputs.token
-        env:
-          GH_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: gh api /rate_limit | jq

@@ -12,9 +12,11 @@ let
   xEnv = config.systemd.services.display-manager.environment;
 
   sddm = cfg.package.override (old: {
-    withWayland = cfg.wayland.enable;
-    withLayerShellQt = cfg.wayland.compositor == "kwin";
-    extraPackages = old.extraPackages or [ ] ++ cfg.extraPackages;
+    extraPackages =
+      old.extraPackages or [ ]
+      ++ lib.optionals cfg.wayland.enable [ pkgs.qt6.qtwayland ]
+      ++ lib.optionals (cfg.wayland.compositor == "kwin") [ pkgs.kdePackages.layer-shell-qt ]
+      ++ cfg.extraPackages;
   });
 
   iniFmt = pkgs.formats.ini { };
@@ -228,7 +230,7 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs [ "libsForQt5" "sddm" ] { };
+      package = mkPackageOption pkgs [ "kdePackages" "sddm" ] { };
 
       enableHidpi = mkOption {
         type = types.bool;
@@ -255,6 +257,7 @@ in
       theme = mkOption {
         type = types.str;
         default = "";
+        example = lib.literalExpression "\"\${pkgs.where-is-my-sddm-theme.override { variants = [ \"qt5\" ]; }}/share/sddm/themes/where_is_my_sddm_theme_qt5\"";
         description = ''
           Greeter theme to use.
         '';

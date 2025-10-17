@@ -36,6 +36,8 @@
   devExtraCmakeFlags ? [ ],
   getVersionFile,
   fetchpatch,
+  # for tests
+  libllvm,
 }:
 
 let
@@ -206,8 +208,6 @@ stdenv.mkDerivation (
       ++ lib.optionals enablePolly [
         # Just like the `gnu-install-dirs` patch, but for `polly`.
         (getVersionFile "llvm/gnu-install-dirs-polly.patch")
-      ]
-      ++ [
         # Just like the `llvm-lit-cfg` patch, but for `polly`.
         (getVersionFile "llvm/polly-lit-cfg-add-libs-to-dylib-path.patch")
       ]
@@ -272,7 +272,7 @@ stdenv.mkDerivation (
           # and thus fails under the sandbox:
           ''
             substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
+              --replace-fail '/usr/bin/sw_vers' "${(toString darwin.DarwinTools) + "/bin/sw_vers"}"
           ''
         +
           # This test tries to call the intrinsics `@llvm.roundeven.f32` and
@@ -299,7 +299,7 @@ stdenv.mkDerivation (
       )
       +
         # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
           # fails when run in sandbox
           (
             ''
@@ -346,7 +346,7 @@ stdenv.mkDerivation (
                 rm test/tools/dsymutil/ARM/obfuscated.test
               ''
           )
-        )
+
       +
         # FileSystem permissions tests fail with various special bits
         ''
@@ -591,8 +591,15 @@ stdenv.mkDerivation (
 
     checkTarget = "check-all";
 
-    # For the update script:
-    passthru.monorepoSrc = monorepoSrc;
+    passthru = {
+      # For the update script:
+      inherit monorepoSrc;
+      tests.withoutOptionalFeatures = libllvm.override {
+        enablePFM = false;
+        enablePolly = false;
+        enableTerminfo = false;
+      };
+    };
 
     requiredSystemFeatures = [ "big-parallel" ];
     meta = llvm_meta // {

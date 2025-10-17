@@ -4,23 +4,33 @@
   fetchFromGitHub,
   pythonOlder,
 
+  # build-system
+  hatchling,
+  hatch-vcs,
+
+  # dependencies
   babelfish,
   beautifulsoup4,
   chardet,
   click,
   click-option-group,
+  defusedxml,
   dogpile-cache,
   enzyme,
   guessit,
+  knowit,
   srt,
   pysubs2,
   rarfile,
   requests,
   platformdirs,
-  setuptools,
   stevedore,
   tomli,
+  tomlkit,
 
+  # nativeCheckInputs
+  colorama,
+  pypandoc,
   pytestCheckHook,
   pytest-cov-stub,
   pytest-xdist,
@@ -31,7 +41,7 @@
 
 buildPythonPackage rec {
   pname = "subliminal";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,10 +50,13 @@ buildPythonPackage rec {
     owner = "Diaoul";
     repo = "subliminal";
     tag = version;
-    hash = "sha256-eAXzD6diep28wCZjWLOZpOX1bnakEldhs2LX5CPu5OI=";
+    hash = "sha256-QRxaLJAtI7Xe+3Llp3fJP12KblDJ8+MGNsmKT4t2O0k=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    hatchling
+    hatch-vcs
+  ];
 
   propagatedBuildInputs = [
     babelfish
@@ -51,9 +64,11 @@ buildPythonPackage rec {
     chardet
     click
     click-option-group
+    defusedxml
     dogpile-cache
     enzyme
     guessit
+    knowit
     srt
     pysubs2
     rarfile
@@ -61,9 +76,12 @@ buildPythonPackage rec {
     platformdirs
     stevedore
     tomli
+    tomlkit
   ];
 
   nativeCheckInputs = [
+    colorama
+    pypandoc
     pytestCheckHook
     pytest-cov-stub
     pytest-xdist
@@ -76,6 +94,10 @@ buildPythonPackage rec {
 
   disabledTests = [
     # Tests require network access
+    "integration"
+    "test_cli_cache"
+    "test_cli_download"
+    "test_is_supported_archive"
     "test_refine"
     "test_scan"
     "test_hash"

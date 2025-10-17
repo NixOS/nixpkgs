@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  llvmPackages,
   libsForQt5,
   libGLU,
   lib3ds,
@@ -17,7 +18,7 @@
   boost,
   mpfr,
   xercesc,
-  tbb,
+  onetbb,
   embree,
   libigl,
   corto,
@@ -29,14 +30,15 @@ let
   tinygltf-src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
-    rev = "v2.6.3";
+    tag = "v2.6.3";
     hash = "sha256-IyezvHzgLRyc3z8HdNsQMqDEhP+Ytw0stFNak3C8lTo=";
   };
+
   # requires submodules to build
   lib3mf-src = fetchFromGitHub {
     owner = "3MFConsortium";
     repo = "lib3mf";
-    rev = "v2.3.2";
+    tag = "v2.3.2";
     fetchSubmodules = true;
     hash = "sha256-pKjnN9H6/A2zPvzpFed65J+mnNwG/dkSE2/pW7IlN58=";
   };
@@ -50,10 +52,18 @@ stdenv.mkDerivation {
     repo = "meshlab";
     # note that this is in branch devel
     rev = "72142583980b6dbfc5b85c6cca226a72f48497a9";
-    sha256 = "1q7qga4d82pvpcbsp9pi2i7nzdbflhp6q0d3y31kpch9r3r9pzks";
+    hash = "sha256-ev6b8sgJsjvD8KMBbC6kbrVvTxTxpqsXu/sK1Ih6+OA=";
     # needed for an updated version of vcg in their submodule
     fetchSubmodules = true;
   };
+
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace src/meshlab/CMakeLists.txt \
+      --replace-fail "set_additional_settings_info_plist(" "# set_additional_settings_info_plist(" \
+      --replace-fail "	TARGET meshlab" "#	TARGET meshlab" \
+      --replace-fail "	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)" \
+                     "#	FILE \''${MESHLAB_BUILD_DISTRIB_DIR}/meshlab.app/Contents/Info.plist)"
+  '';
 
   buildInputs = [
     libGLU
@@ -72,12 +82,15 @@ stdenv.mkDerivation {
     boost
     mpfr
     xercesc
-    tbb
+    onetbb
     embree
     libigl
     corto
     openctm
     structuresynth
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
   ];
 
   nativeBuildInputs = [
@@ -106,14 +119,32 @@ stdenv.mkDerivation {
       --replace-warn "MESHLAB_LIB_INSTALL_DIR" "CMAKE_INSTALL_LIBDIR"
   '';
 
-  postFixup = ''
-    patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
-    patchelf --add-needed $out/lib/meshlab/lib3mf.so $out/lib/meshlab/plugins/libio_3mf.so
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin,lib}
+    mv $out/meshlab.app $out/Applications/
+    ln $out/Applications/meshlab.app/Contents/Frameworks/* $out/lib/
+    makeWrapper $out/{Applications/meshlab.app/Contents/MacOS,bin}/meshlab
   '';
+
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --add-needed $out/lib/meshlab/libmeshlab-common.so $out/bin/.meshlab-wrapped
+      patchelf --add-needed $out/lib/meshlab/lib3mf.so $out/lib/meshlab/plugins/libio_3mf.so
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      wrapQtApp "$out/Applications/meshlab.app/Contents/MacOS/meshlab"
+      install_name_tool -change libopenctm.dylib "${lib.getOutput "out" openctm}/lib/libopenctm.dylib" \
+        "$out/Applications/meshlab.app/Contents/PlugIns/libio_ctm.so"
+    '';
+
+  # The hook will wrap all the plugin binaries, make they are not a
+  # valid plugin. So we have to wrap the main app manually.
+  # See: https://github.com/NixOS/nixpkgs/pull/396295#issuecomment-3137779781
+  dontWrapQtApps = stdenv.hostPlatform.isDarwin;
 
   # display a black screen on wayland, so force XWayland for now.
   # Might be fixed when upstream will be ready for Qt6.
-  qtWrapperArgs = [
+  qtWrapperArgs = lib.optionals stdenv.hostPlatform.isLinux [
     "--set QT_QPA_PLATFORM xcb"
   ];
 
@@ -123,6 +154,6 @@ stdenv.mkDerivation {
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ pca006132 ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 }

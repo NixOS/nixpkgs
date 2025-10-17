@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch,
-  fetchpatch2,
   fetchurl,
   cmake,
   ninja,
@@ -18,33 +17,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chromaprint";
-  version = "1.5.1";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "acoustid";
     repo = "chromaprint";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bFplHaqXYvGbl8E8b/HUNFO4X+B/HPZjGTmuVFPjS3g=";
+    hash = "sha256-G3HIMgbjaAXsC+8nt7mkj58xA62qwA8FC+PfTGblhNg=";
   };
 
   patches = [
-    # Use FFmpeg 5.x
-    # https://github.com/acoustid/chromaprint/pull/120
+    # fix generated pkg-config files
     (fetchpatch {
-      url = "https://github.com/acoustid/chromaprint/commit/8ccad6937177b1b92e40ab8f4447ea27bac009a7.patch";
-      hash = "sha256-yO2iWmU9s2p0uJfwIdmk3jZ5HXBIQZ/NyOqG+Y5EHdg=";
-      excludes = [ "package/build.sh" ];
-    })
-    # ffmpeg5 fix for issue #122
-    # https://github.com/acoustid/chromaprint/pull/125
-    (fetchpatch {
-      url = "https://github.com/acoustid/chromaprint/commit/aa67c95b9e486884a6d3ee8b0c91207d8c2b0551.patch";
-      hash = "sha256-dLY8FBzBqJehAofE924ayZK0HA/aKiuFhEFxL7dg6rY=";
-    })
-    # Fix for FFmpeg 7
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/chromaprint/-/raw/74ae4c7faea2114f2d70a57755f714e348476d28/ffmpeg-7.patch";
-      hash = "sha256-io+dzhDNlz+2hWhNfsyePKLQjiUvSzbv10lHVKumTEk=";
+      url = "https://github.com/acoustid/chromaprint/commit/782ef6bb5f6498e35f8e275f76998fbd5ffa36d6.patch";
+      hash = "sha256-drUfAMzTrqqB5UbzOnfPq6XD3HI+3sxyJJSTCa0BmD8=";
     })
   ];
 
@@ -67,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "BUILD_EXAMPLES" withExamples)
     (lib.cmakeBool "BUILD_TOOLS" withTools)
+  ]
+  ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+    # special-cased to avoid a mass-rebuild: remove from `lib.optionals` as part of next update
+    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
   ];
 
   passthru = {

@@ -667,7 +667,7 @@ in
           description = "Upstream outproxy bind address.";
         };
         outproxyPort = mkOption {
-          type = types.int;
+          type = types.port;
           default = 4444;
           description = "Upstream outproxy bind port.";
         };
@@ -686,7 +686,7 @@ in
             {
               options = {
                 destinationPort = mkOption {
-                  type = with types; nullOr int;
+                  type = with types; nullOr port;
                   default = null;
                   description = "Connect to particular port at destination.";
                 };
@@ -711,7 +711,7 @@ in
             {
               options = {
                 inPort = mkOption {
-                  type = types.int;
+                  type = types.port;
                   default = 0;
                   description = "Service port. Default to the tunnel's listen port.";
                 };

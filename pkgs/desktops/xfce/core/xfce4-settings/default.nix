@@ -13,6 +13,7 @@
   libxfce4ui,
   libxfce4util,
   libxklavier,
+  withXrandr ? true,
   upower,
   # Disabled by default on upstream and actually causes issues:
   # https://gitlab.xfce.org/xfce/xfce4-settings/-/issues/222
@@ -57,6 +58,7 @@ mkXfceDerivation {
   configureFlags = [
     "--enable-pluggable-dialogs"
     "--enable-sound-settings"
+    (lib.enableFeature withXrandr "xrandr")
   ]
   ++ lib.optionals withUpower [ "--enable-upower-glib" ]
   ++ lib.optionals withColord [ "--enable-colord" ];

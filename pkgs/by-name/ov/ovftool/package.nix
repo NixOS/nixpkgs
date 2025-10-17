@@ -240,7 +240,6 @@ stdenv.mkDerivation (final: {
       done
 
       # Patches for ovftool binary
-      change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
       change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
       change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
       change_args+=(-change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib)

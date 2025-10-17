@@ -33,7 +33,11 @@ stdenv.mkDerivation (finalAttrs: {
     lz4
   ];
 
-  cmakeFlags = [ (lib.cmakeBool "INSTALL_GDALCPP" true) ];
+  cmakeFlags = [
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    (lib.cmakeBool "INSTALL_GDALCPP" true)
+  ];
 
   doCheck = true;
 

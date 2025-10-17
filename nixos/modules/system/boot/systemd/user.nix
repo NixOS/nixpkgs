@@ -30,6 +30,7 @@ let
     "background.slice"
     "basic.target"
     "bluetooth.target"
+    "capsule@.target"
     "default.target"
     "exit.target"
     "graphical-session-pre.target"

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       unmodified "guest" operating systems to run.
     '';
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "gxemul";
   };

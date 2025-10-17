@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "systembridgemodels";
-  version = "4.2.5";
+  version = "5.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,8 +19,13 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-models";
     tag = version;
-    hash = "sha256-k7QENmfw27qxacB6j1F8ywYfZyQC27PvnkWWQayk310=";
+    hash = "sha256-Yh16la+3zk+igdMyHov4rf2M1yAT3JYYe/0IYu/SmVY=";
   };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail ".dev0" ""
+  '';
 
   build-system = [ setuptools ];
 

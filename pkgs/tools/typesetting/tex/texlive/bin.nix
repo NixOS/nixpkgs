@@ -250,7 +250,7 @@ rec {
       "man"
       "info"
     ]
-    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) corePackages);
 
     nativeBuildInputs = [
       pkg-config
@@ -493,7 +493,7 @@ rec {
       "man"
       "info"
     ]
-    ++ (builtins.map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
+    ++ (map (builtins.replaceStrings [ "-" ] [ "_" ]) coreBigPackages)
     # some outputs of metapost, omegaware are for ptex/uptex
     ++ [
       "ptex"
@@ -540,7 +540,7 @@ rec {
       # https://github.com/gucci-on-fleek/context-packaging
       context_packaging_release = "2025-06-12-14-21-B";
     in
-    stdenv.mkDerivation rec {
+    stdenv.mkDerivation {
       pname = "luametatex";
       version = "2.11.07";
 

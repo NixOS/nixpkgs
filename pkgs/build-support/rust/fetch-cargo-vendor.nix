@@ -22,9 +22,12 @@ let
   } (builtins.readFile ./replace-workspace-values.py);
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
-    libraries = with python3Packages; [
-      requests
-    ];
+    libraries =
+      with python3Packages;
+      [
+        requests
+      ]
+      ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
     flakeIgnore = [
       "E501"
     ];
@@ -86,7 +89,7 @@ let
       outputHashAlgo = if hash == "" then "sha256" else null;
       outputHashMode = "recursive";
     }
-    // builtins.removeAttrs args removedArgs
+    // removeAttrs args removedArgs
   );
 in
 

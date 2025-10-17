@@ -172,11 +172,11 @@ in
     };
 
     environmentFile = lib.mkOption {
-      type = with lib.types; nullOr path;
-      default = null;
+      type = with lib.types; coercedTo path lib.singleton (listOf path);
+      default = [ ];
       example = "/var/lib/vaultwarden.env";
       description = ''
-        Additional environment file as defined in {manpage}`systemd.exec(5)`.
+        Additional environment file or files as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
         should be passed to the service without adding them to the world-readable Nix store.
@@ -197,12 +197,7 @@ in
 
     package = lib.mkPackageOption pkgs "vaultwarden" { };
 
-    webVaultPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.vaultwarden.webvault;
-      defaultText = lib.literalExpression "pkgs.vaultwarden.webvault";
-      description = "Web vault package to use.";
-    };
+    webVaultPackage = lib.mkPackageOption pkgs [ "vaultwarden" "webvault" ] { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -230,7 +225,7 @@ in
       serviceConfig = {
         User = user;
         Group = group;
-        EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
         ExecStart = lib.getExe vaultwarden;
         LimitNOFILE = "1048576";
         CapabilityBoundingSet = [ "" ];

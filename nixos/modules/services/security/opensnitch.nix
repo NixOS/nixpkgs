@@ -108,13 +108,7 @@ in
             };
 
             LogLevel = lib.mkOption {
-              type = lib.types.enum [
-                0
-                1
-                2
-                3
-                4
-              ];
+              type = lib.types.ints.between 0 4;
               description = ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
@@ -164,6 +158,15 @@ in
               description = ''
                 Configure eBPF modules path. Used when
                 `settings.ProcMonitorMethod` is set to `ebpf`.
+              '';
+            };
+
+            Audit.AudispSocketPath = lib.mkOption {
+              type = lib.types.path;
+              default = "/run/audit/audispd_events";
+              description = ''
+                Configure audit socket path. Used when
+                `settings.ProcMonitorMethod` is set to `audit`.
               '';
             };
 

@@ -1,7 +1,7 @@
 #! /usr/bin/env nix-shell
 #! nix-shell -i bash --pure --keep GITHUB_TOKEN -p nix git curl cacert nix-prefetch-git gzip
 
-base_url_suffix="https://pro-store-packages.uniontech.com/appstore/dists/eagle/appstore/binary-"
+base_url_suffix="https://pro-store-packages.uniontech.com/appstore/dists/eagle-pro/appstore/binary-"
 base_url_appendix="/Packages.gz"
 target_package="com.tencent.wechat"
 packages_file="Packages.gz"
@@ -13,7 +13,7 @@ hash=()
 for i in amd64 arm64 loongarch64
 do
     current_url=$base_url_suffix$i$base_url_appendix
-    curl -A "Mozilla/5.0 (X11; Linux x86_64; rv:125.0) Gecko/20100101 Firefox/125.0" -v -L -O $current_url
+    curl -A "debian APT-HTTP/1.3 (1.6.11)" -v -L -O $current_url
     current_version=$(zgrep -A 20 "Package: $target_package" "$packages_file" | awk -v pkg="$target_package" '
     BEGIN { found = 0 }
     {
@@ -39,8 +39,8 @@ do
         }
     }
     ')
+    hash+=("$(nix --extra-experimental-features nix-command hash convert --hash-algo sha256 --to sri $sha256sum)")
     url+=("https://pro-store-packages.uniontech.com/appstore/pool/appstore/c/com.tencent.wechat/com.tencent.wechat_"$version"_"$i".deb")
-    hash+=("$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $sha256sum)")
 done
 
 cat >sources.nix <<EOF
@@ -48,12 +48,18 @@ cat >sources.nix <<EOF
 # Last updated: $(date +%F)
 {
   version = "${version[0]}";
-  amd64_url = "${url[0]}";
-  arm64_url = "${url[1]}";
-  loongarch64_url = "${url[2]}";
-  amd64_hash = "${hash[0]}";
-  arm64_hash = "${hash[1]}";
-  loongarch64_hash = "${hash[2]}";
+  amd64 = {
+    url = "${url[0]}";
+    hash = "${hash[0]}";
+  };
+  arm64 = {
+    url = "${url[1]}";
+    hash = "${hash[1]}";
+  };
+  loongarch64 = {
+    url = "${url[2]}";
+    hash = "${hash[2]}";
+  };
 }
 EOF
 

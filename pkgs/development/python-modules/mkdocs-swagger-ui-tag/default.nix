@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-swagger-ui-tag";
-  version = "0.7.1";
+  version = "0.7.2";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "Blueswen";
     repo = "mkdocs-swagger-ui-tag";
     tag = "v${version}";
-    hash = "sha256-zn+ASunOiAg/kxsvaHUYKuWc5UZ406RO/LSQ+qkAEn0=";
+    hash = "sha256-5bQJMmPrweIAR42bjfWHUqnSy4IFoTpFoBaV+Gj/OGI=";
   };
 
   propagatedBuildInputs = [

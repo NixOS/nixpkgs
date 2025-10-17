@@ -118,7 +118,7 @@ python3.pkgs.buildPythonApplication rec {
       ''
     ]
     # Remove problematic tests
-    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+    ++ (map (f: ''rm -vr "${f}";'') (
       [
         # requires git, creating cyclic dependency
         ''test cases/common/66 vcstag''

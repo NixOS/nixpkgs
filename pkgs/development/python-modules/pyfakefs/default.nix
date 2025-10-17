@@ -51,6 +51,6 @@ buildPythonPackage rec {
     homepage = "https://pyfakefs.org/";
     changelog = "https://github.com/jmcgeheeiv/pyfakefs/blob/v${version}/CHANGES.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

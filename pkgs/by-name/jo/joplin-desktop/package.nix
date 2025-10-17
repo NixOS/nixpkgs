@@ -13,16 +13,17 @@
   cairo,
   pixman,
   libsecret,
-  electron_35,
+  electron_36,
   xcbuild,
   buildPackages,
   callPackage,
   runCommand,
   libGL,
+  clang_20,
 }:
 
 let
-  electron = electron_35;
+  electron = electron_36;
   yarn-berry = yarn-berry_4;
 
   releaseData = lib.importJSON ./release-data.json;
@@ -99,6 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     xcbuild
     buildPackages.cctools
+    clang_20 # clang_21 breaks keytar, sqlite
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
@@ -237,6 +239,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       fugi
     ];
-    inherit (electron.meta) platforms;
+    platforms = electron.meta.platforms ++ lib.platforms.darwin;
   };
 })

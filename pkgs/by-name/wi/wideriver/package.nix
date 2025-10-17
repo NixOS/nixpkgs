@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wideriver";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "alex-courtis";
     repo = "wideriver";
     tag = finalAttrs.version;
-    hash = "sha256-1D06onZiR8H4OuwNTr7NBnD1H7zagFHYlAXFo5CfibI=";
+    hash = "sha256-HdmgTRIR5+mK3almk7kUZdSdJl9tHCDztlEqZ6MLVNI=";
   };
 
   nativeBuildInputs = [

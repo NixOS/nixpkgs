@@ -14,12 +14,15 @@ let
     ${
       if config.boot.initrd.enable && config.boot.initrd.systemd.enable then
         ''
-          cp ${config.system.build.bootStage2} $out/prepare-root
-          substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
           # This must not be a symlink or the abs_path of the grub builder for the tests
           # will resolve the symlink and we end up with a path that doesn't point to a
           # system closure.
           cp "$systemd/lib/systemd/systemd" $out/init
+
+          ${lib.optionalString (!config.system.nixos-init.enable) ''
+            cp ${config.system.build.bootStage2} $out/prepare-root
+            substituteInPlace $out/prepare-root --subst-var-by systemConfig $out
+          ''}
         ''
       else
         ''
@@ -283,8 +286,8 @@ in
       };
 
       cutoffPackages = mkOption {
-        default = [ config.system.build.initialRamdisk ];
-        defaultText = literalExpression "[ config.system.build.initialRamdisk ]";
+        default = lib.optionals config.boot.initrd.enable [ config.system.build.initialRamdisk ];
+        defaultText = literalExpression "lib.optionals config.boot.initrd.enable [ config.system.build.initialRamdisk ]";
         type = types.listOf types.package;
         description = ''
           Packages to which no replacements should be applied.
@@ -373,7 +376,9 @@ in
       );
       # End if legacy environment variables
 
-      preSwitchCheck = config.system.preSwitchChecksScript;
+      preSwitchCheck = lib.mkIf (
+        config.system.preSwitchChecks != { }
+      ) config.system.preSwitchChecksScript;
 
       # Not actually used in the builder. `passedChecks` is just here to create
       # the build dependencies. Checks are similar to build dependencies in the

@@ -7,7 +7,7 @@
   boost,
   eigen,
   opencv,
-  tbb,
+  onetbb,
 
   avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    tbb
+    onetbb
   ];
 
   buildInputs = [

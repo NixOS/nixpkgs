@@ -6,21 +6,30 @@
   fetchFromGitHub,
   requests,
   setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "sharkiq";
-  version = "1.4.0";
+  version = "1.4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "JeffResc";
     repo = "sharkiq";
     tag = "v${version}";
-    hash = "sha256-XPqrEE/GwIn4sqbhETRPhBBPkH8Je+LKoDV+qDb3Ry8=";
+    hash = "sha256-VhWqYYGZRsEPW4g9kQznr50ujGhLcTs+TS3atxsqCng=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools-scm>=9.2.0" "setuptools-scm"
+  '';
+
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     aiohttp

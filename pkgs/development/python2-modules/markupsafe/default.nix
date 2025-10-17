@@ -18,7 +18,7 @@ buildPythonPackage rec {
     description = "Implements a XML/HTML/XHTML Markup safe string";
     homepage = "http://dev.pocoo.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 
 }

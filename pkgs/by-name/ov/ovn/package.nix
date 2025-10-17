@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   autoreconfHook,
   libbpf,
   libcap_ng,
@@ -13,6 +14,8 @@
   python3,
   unbound,
   xdp-tools,
+  openvswitch,
+  makeWrapper,
 }:
 let
   withOpensslConfigureFlag = "--with-openssl=${lib.getLib openssl.dev}";
@@ -29,19 +32,35 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  outputs = [
+    "out"
+    "lib"
+    "man"
+    "dev"
+    "tools"
+  ];
+
   patches = [
     # Fix test failure with musl libc.
-    # https://patchwork.ozlabs.org/project/ovn/patch/20250912035054.50593-1-ihar.hrachyshka@gmail.com/
-    ./0001-tests-Expect-musl-error-string-for-EIO-errno.patch
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/d0b187905c45ce039163d18cc82869918946a41c.patch";
+      hash = "sha256-mTpNpH1ZSSMLtpZmy6jKjGDu84jL0ECr+HVh1PQzaVA=";
+    })
     # Fix sandbox test failure.
-    # https://patchwork.ozlabs.org/project/ovn/patch/20250912035054.50593-2-ihar.hrachyshka@gmail.com/
-    ./0002-tests-Use-localhost-when-setting-wrong-ovn-remote.patch
+    (fetchpatch {
+      url = "https://github.com/ovn-org/ovn/commit/b396babaa54ea0c8d943bbfef751dbdbf288c7af.patch";
+      hash = "sha256-RjWxT3EYKjGhtvCq3bAhKN9PrPTkSR72xPkQQ4SPWWU=";
+    })
+    # Fix build failure due to make install race condition.
+    # Posted at: https://patchwork.ozlabs.org/project/ovn/patch/20251012225908.37855-1-ihar.hrachyshka@gmail.com/
+    ./0001-build-Fix-race-condition-when-installing-ovn-detrace.patch
   ];
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
     python3
+    makeWrapper
   ];
 
   buildInputs = [
@@ -83,23 +102,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postInstall = ''
-    mkdir -vp $out/share/openvswitch/scripts
-    mkdir -vp $out/etc/ovn
-    cp ovs/ovsdb/ovsdb-client $out/bin
-    cp ovs/ovsdb/ovsdb-server $out/bin
-    cp ovs/ovsdb/ovsdb-tool $out/bin
-    cp ovs/vswitchd/ovs-vswitchd $out/bin
-    cp ovs/utilities/ovs-appctl $out/bin
-    cp ovs/utilities/ovs-vsctl $out/bin
-    cp ovs/utilities/ovs-ctl $out/share/openvswitch/scripts
-    cp ovs/utilities/ovs-lib $out/share/openvswitch/scripts
-    cp ovs/utilities/ovs-kmod-ctl $out/share/openvswitch/scripts
-    cp ovs/vswitchd/vswitch.ovsschema $out/share/openvswitch
-    sed -i "s#/usr/local/etc#/var/lib#g" $out/share/openvswitch/scripts/ovs-lib
-    sed -i "s#/usr/local/bin#$out/bin#g" $out/share/openvswitch/scripts/ovs-lib
-    sed -i "s#/usr/local/sbin#$out/bin#g" $out/share/openvswitch/scripts/ovs-lib
-    sed -i "s#/usr/local/share#$out/share#g" $out/share/openvswitch/scripts/ovs-lib
+    moveToOutput 'share/ovn/bugtool-plugins' "$tools"
+    moveToOutput 'share/ovn/scripts/ovn-bugtool-*' "$tools"
+
+    moveToOutput 'bin/ovn-detrace' "$tools"
+    moveToOutput 'bin/ovn_detrace*' "$tools"
+    moveToOutput 'bin/ovn-trace' "$tools"
+    moveToOutput 'bin/ovn-debug' "$tools"
+    moveToOutput 'bin/ovn-docker*' "$tools"
+
     sed -i '/chown -R $INSTALL_USER:$INSTALL_GROUP $ovn_etcdir/d' $out/share/ovn/scripts/ovn-ctl
+
+    mkdir -vp $out/share/openvswitch/scripts
+    ln -s ${openvswitch}/share/openvswitch/scripts/ovs-lib $out/share/openvswitch/scripts/ovs-lib
+
+    wrapProgram $out/share/ovn/scripts/ovn-ctl \
+      --prefix PATH : ${lib.makeBinPath [ openvswitch ]}
   '';
 
   env = {
@@ -126,7 +144,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.ovn.org";
     changelog = "https://github.com/ovn-org/ovn/blob/refs/tags/${finalAttrs.src.tag}/NEWS";
-    license = lib.licenses.asl20;
+    license = with lib.licenses; [
+      asl20
+      lgpl21Plus # bugtool plugins
+      sissl11 # lib/sflow from ovs submodule
+    ];
     maintainers = with lib.maintainers; [
       adamcstephens
       booxter

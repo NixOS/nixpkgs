@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/goocanvas/2.0/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/goocanvas/2.0/goocanvas-${version}.tar.xz";
     sha256 = "141fm7mbqib0011zmkv3g8vxcjwa7hypmq71ahdyhnj2sjvy4a67";
   };
 
@@ -60,8 +60,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      attrPath = "${pname}${lib.versions.major version}";
-      packageName = pname;
+      attrPath = "goocanvas${lib.versions.major version}";
+      packageName = "goocanvas";
       versionPolicy = "odd-unstable";
       freeze = true;
     };

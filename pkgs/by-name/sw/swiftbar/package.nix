@@ -5,15 +5,15 @@
   makeWrapper,
 }:
 let
-  build = "520";
+  build = "536";
 in
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "swiftbar";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchzip {
-    url = "https://github.com/swiftbar/SwiftBar/releases/download/v${version}/SwiftBar.v${version}.b${build}.zip";
-    hash = "sha256-eippK01Q+J9jdwvnGcnr7nw3KwyQQqh051lHN3Xmy+c=";
+    url = "https://github.com/swiftbar/SwiftBar/releases/download/v${finalAttrs.version}/SwiftBar.v${finalAttrs.version}.b${build}.zip";
+    hash = "sha256-K46XQvhLs8rnQ0psveL2dZ/+bTZnaeWVLtrUm29RQYU=";
     stripRoot = false;
   };
 
@@ -37,11 +37,11 @@ stdenvNoCC.mkDerivation rec {
   meta = {
     description = "Powerful macOS menu bar customization tool";
     homepage = "https://swiftbar.app";
-    changelog = "https://github.com/swiftbar/SwiftBar/releases/tag/v${version}";
+    changelog = "https://github.com/swiftbar/SwiftBar/releases/tag/v${finalAttrs.version}";
     mainProgram = "SwiftBar";
     license = lib.licenses.mit;
     platforms = lib.platforms.darwin;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ matteopacini ];
   };
-}
+})

@@ -8,7 +8,7 @@
   lib,
   python3,
   stdenv,
-  tbb,
+  onetbb,
   xcodebuild,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcodebuild ];
 
   buildInputs = [
-    tbb
+    onetbb
   ]
 
   ++ lib.optionals cudaSupport [
@@ -49,8 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "OIDN_DEVICE_CUDA" cudaSupport)
-    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${tbb.dev}/include")
-    (lib.cmakeFeature "TBB_ROOT" "${tbb}")
+    (lib.cmakeFeature "TBB_INCLUDE_DIR" "${onetbb.dev}/include")
+    (lib.cmakeFeature "TBB_ROOT" "${onetbb}")
   ];
 
   meta = {

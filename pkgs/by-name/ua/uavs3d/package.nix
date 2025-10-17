@@ -32,6 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.1)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   passthru = {
     updateScript = unstableGitUpdater { };
     tests.pkg-config = testers.hasPkgConfigModules { package = finalAttrs.finalPackage; };

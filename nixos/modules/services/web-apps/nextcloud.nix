@@ -283,7 +283,7 @@ let
         'apps_paths' => [
           ${lib.concatStrings (lib.mapAttrsToList mkAppStoreConfig appStores)}
         ],
-        ${lib.optionalString (showAppStoreSetting) "'appstoreenabled' => ${renderedAppStoreSetting},"}
+        ${lib.optionalString showAppStoreSetting "'appstoreenabled' => ${renderedAppStoreSetting},"}
         ${lib.optionalString cfg.caching.apcu "'memcache.local' => '\\OC\\Memcache\\APCu',"}
         ${lib.optionalString (c.dbname != null) "'dbname' => '${c.dbname}',"}
         ${lib.optionalString (c.dbhost != null) "'dbhost' => '${c.dbhost}',"}
@@ -319,6 +319,9 @@ in
     '')
     (lib.mkRemovedOptionModule [ "services" "nextcloud" "config" "dbport" ] ''
       Add port to services.nextcloud.config.dbhost instead.
+    '')
+    (lib.mkRemovedOptionModule [ "services" "nextcloud" "nginx" "recommendedHttpHeaders" ] ''
+      This option has been removed to always follow upstream's security recommendation.
     '')
     (lib.mkRenamedOptionModule
       [ "services" "nextcloud" "logLevel" ]
@@ -437,12 +440,12 @@ in
       type = lib.types.package;
       description = "Which package to use for the Nextcloud instance.";
       relatedPackages = [
-        "nextcloud30"
         "nextcloud31"
+        "nextcloud32"
       ];
     };
     phpPackage = lib.mkPackageOption pkgs "php" {
-      default = [ "php83" ];
+      default = [ "php84" ];
       example = "php82";
     };
 
@@ -549,7 +552,7 @@ in
         Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
         configuration directives. The above are recommended for a server with 4GiB of RAM.
 
-        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/latest/admin_manual/installation/server_tuning.html#tune-php-fpm)
         and consider customizing the values.
       '';
     };
@@ -980,11 +983,6 @@ in
     };
 
     nginx = {
-      recommendedHttpHeaders = lib.mkOption {
-        type = lib.types.bool;
-        default = true;
-        description = "Enable additional recommended HTTP response headers";
-      };
       hstsMaxAge = lib.mkOption {
         type = lib.types.ints.positive;
         default = 15552000;
@@ -1031,7 +1029,7 @@ in
       {
         warnings =
           let
-            latest = 31;
+            latest = 32;
             upgradeWarning = major: nixos: ''
               A legacy Nextcloud install (from before NixOS ${nixos}) may be installed.
 
@@ -1062,7 +1060,8 @@ in
           ++ (lib.optional (lib.versionOlder overridePackage.version "28") (upgradeWarning 27 "24.05"))
           ++ (lib.optional (lib.versionOlder overridePackage.version "29") (upgradeWarning 28 "24.11"))
           ++ (lib.optional (lib.versionOlder overridePackage.version "30") (upgradeWarning 29 "24.11"))
-          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"));
+          ++ (lib.optional (lib.versionOlder overridePackage.version "31") (upgradeWarning 30 "25.05"))
+          ++ (lib.optional (lib.versionOlder overridePackage.version "32") (upgradeWarning 31 "25.11"));
 
         services.nextcloud.package = lib.mkDefault (
           if pkgs ? nextcloud then
@@ -1071,14 +1070,12 @@ in
               nextcloud defined in an overlay, please set `services.nextcloud.package` to
               `pkgs.nextcloud`.
             ''
-          else if lib.versionOlder stateVersion "24.05" then
-            pkgs.nextcloud27
-          else if lib.versionOlder stateVersion "24.11" then
-            pkgs.nextcloud29
           else if lib.versionOlder stateVersion "25.05" then
             pkgs.nextcloud30
-          else
+          else if lib.versionOlder stateVersion "25.11" then
             pkgs.nextcloud31
+          else
+            pkgs.nextcloud32
         );
 
         services.nextcloud.phpOptions = lib.mkMerge [
@@ -1535,19 +1532,23 @@ in
           };
           extraConfig = ''
             index index.php index.html /index.php$request_uri;
-            ${lib.optionalString (cfg.nginx.recommendedHttpHeaders) ''
-              add_header X-Content-Type-Options nosniff;
-              add_header X-Robots-Tag "noindex, nofollow";
-              add_header X-Permitted-Cross-Domain-Policies none;
-              add_header X-Frame-Options sameorigin;
-              add_header Referrer-Policy no-referrer;
-            ''}
+            add_header X-Content-Type-Options nosniff;
+            add_header X-Robots-Tag "noindex, nofollow";
+            add_header X-Permitted-Cross-Domain-Policies none;
+            add_header X-Frame-Options sameorigin;
+            add_header Referrer-Policy no-referrer;
             ${lib.optionalString (cfg.https) ''
               add_header Strict-Transport-Security "max-age=${toString cfg.nginx.hstsMaxAge}; includeSubDomains" always;
             ''}
             client_max_body_size ${cfg.maxUploadSize};
             fastcgi_buffers 64 4K;
             fastcgi_hide_header X-Powered-By;
+            # mirror upstream htaccess file https://github.com/nextcloud/server/blob/v32.0.0/.htaccess#L40-L41
+            fastcgi_hide_header Referrer-Policy;
+            fastcgi_hide_header X-Content-Type-Options;
+            fastcgi_hide_header X-Frame-Options;
+            fastcgi_hide_header X-Permitted-Cross-Domain-Policies;
+            fastcgi_hide_header X-Robots-Tag;
             gzip on;
             gzip_vary on;
             gzip_comp_level 4;

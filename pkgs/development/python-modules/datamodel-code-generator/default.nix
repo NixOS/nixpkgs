@@ -1,4 +1,5 @@
 {
+  lib,
   argcomplete,
   black,
   buildPythonPackage,
@@ -6,33 +7,34 @@
   freezegun,
   genson,
   graphql-core,
+  hatch-vcs,
+  hatchling,
   httpx,
   inflect,
   isort,
   jinja2,
-  lib,
   openapi-spec-validator,
   packaging,
-  poetry-core,
-  poetry-dynamic-versioning,
   prance,
+  ruff,
+  pydantic,
+  pytest-benchmark,
   pytest-mock,
   pytestCheckHook,
-  pydantic,
   pyyaml,
   toml,
 }:
 
 buildPythonPackage rec {
   pname = "datamodel-code-generator";
-  version = "0.32.0";
+  version = "0.35.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "koxudaxi";
     repo = "datamodel-code-generator";
     tag = version;
-    hash = "sha256-sFMNs8wHRTxK1TU4IWfbKf/qUCb11bh2Td1/FngFavo=";
+    hash = "sha256-whhyTkX3R76idVNmY/6O9aVDU7DSvDtLq7JK0NJXn0U=";
   };
 
   pythonRelaxDeps = [
@@ -41,32 +43,40 @@ buildPythonPackage rec {
   ];
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     argcomplete
     black
     genson
-    graphql-core
-    httpx
     inflect
     isort
     jinja2
-    openapi-spec-validator
     packaging
     pydantic
     pyyaml
     toml
   ];
 
+  optional-dependencies = {
+    graphql = [ graphql-core ];
+    http = [ httpx ];
+    ruff = [ ruff ];
+    validation = [
+      openapi-spec-validator
+      prance
+    ];
+  };
+
   nativeCheckInputs = [
     freezegun
-    prance
+    pytest-benchmark
     pytest-mock
     pytestCheckHook
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "datamodel_code_generator" ];
 
@@ -78,6 +88,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pydantic model and dataclasses.dataclass generator for easy conversion of JSON, OpenAPI, JSON Schema, and YAML data sources";
     homepage = "https://github.com/koxudaxi/datamodel-code-generator";
+    changelog = "https://github.com/koxudaxi/datamodel-code-generator/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tochiaha ];
     mainProgram = "datamodel-code-generator";

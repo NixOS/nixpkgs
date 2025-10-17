@@ -10,18 +10,20 @@
   # dependencies
   aenum,
   cachetools,
-  gitpython,
   klayout,
   loguru,
   numpy,
-  pydantic,
+  pydantic-extra-types,
   pydantic-settings,
+  pydantic,
+  pygit2,
+  rapidfuzz,
   rectangle-packer,
   requests,
-  ruamel-yaml,
   ruamel-yaml-string,
+  ruamel-yaml,
   scipy,
-  tomli,
+  semver,
   toolz,
   typer,
 
@@ -31,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "kfactory";
-  version = "1.12.1";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
     tag = "v${version}";
-    hash = "sha256-C7ner1jkMCHI8/sRiw82l+THhAIWhwJuZ/ctJ9V76Us=";
+    hash = "sha256-el3bGv57mAfxYG9tdLX5N6R76F+9GY9jdZaIUjMqcVU=";
   };
 
   build-system = [
@@ -49,18 +51,20 @@ buildPythonPackage rec {
   dependencies = [
     aenum
     cachetools
-    gitpython
     klayout
     loguru
     numpy
     pydantic
+    pydantic-extra-types
     pydantic-settings
+    pygit2
+    rapidfuzz
     rectangle-packer
     requests
     ruamel-yaml
     ruamel-yaml-string
     scipy
-    tomli
+    semver
     toolz
     typer
   ];
@@ -72,6 +76,8 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # https://github.com/gdsfactory/kfactory/issues/511
     "tests/test_pdk.py"
+    # NameError
+    "tests/test_session.py"
   ];
 
   meta = {

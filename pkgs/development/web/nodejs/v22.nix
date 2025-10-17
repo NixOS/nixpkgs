@@ -15,14 +15,7 @@ let
     python = python3;
   };
 
-  gypPatches =
-    if stdenv.buildPlatform.isDarwin then
-      callPackage ./gyp-patches.nix { }
-      ++ [
-        ./gyp-patches-set-fallback-value-for-CLT.patch
-      ]
-    else
-      [ ];
+  gypPatches = if stdenv.buildPlatform.isDarwin then callPackage ./gyp-patches.nix { } else [ ];
 in
 buildNodejs {
   inherit enableNpm;

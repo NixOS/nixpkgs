@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "postfix-tlspol";
-  version = "1.8.18";
+  version = "1.8.19";
 
   src = fetchFromGitHub {
     owner = "Zuplu";
     repo = "postfix-tlspol";
     tag = "v${version}";
-    hash = "sha256-ijFKFvdmA1ZHOc3r89yalVSO/tMy9Rzeu1VTgdZLlxI=";
+    hash = "sha256-DSkWE76GSQKkrXAlnMvjTPAa4I4J07mZL9eea06Dzb8=";
   };
 
   vendorHash = null;
@@ -37,5 +37,6 @@ buildGoModule rec {
       valodim
     ];
     mainProgram = "postfix-tlspol";
+    platforms = lib.platforms.linux;
   };
 }

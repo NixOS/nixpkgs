@@ -28,6 +28,7 @@
   MPISupport ? false,
   mpi,
   buildDocs ? false,
+  targetPackages,
 
   # tests.cudaAvailable:
   callPackage,
@@ -187,49 +188,52 @@ let
         # TODO: Retest after ROCm 6.4 or torch 2.8
         "gfx1010"
         "gfx1012"
-
-        # Strix Halo seems to be broken as well, see
-        # https://github.com/NixOS/nixpkgs/pull/440359.
-        "gfx1151"
-      ] (rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets)
+      ] rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets
     else
       throw "No GPU targets specified"
   );
 
+  # Use vendored CK as header only dep if rocmPackages' CK doesn't properly support targets
+  vendorComposableKernel = rocmSupport && !rocmPackages.composable_kernel.anyMfmaTarget;
+
   rocmtoolkit_joined = symlinkJoin {
     name = "rocm-merged";
 
-    paths = with rocmPackages; [
-      rocm-core
-      clr
-      rccl
-      miopen
-      aotriton
-      composable_kernel
-      rocrand
-      rocblas
-      rocsparse
-      hipsparse
-      rocthrust
-      rocprim
-      hipcub
-      roctracer
-      rocfft
-      rocsolver
-      hipfft
-      hiprand
-      hipsolver
-      hipblas-common
-      hipblas
-      hipblaslt
-      rocminfo
-      rocm-comgr
-      rocm-device-libs
-      rocm-runtime
-      rocm-smi
-      clr.icd
-      hipify
-    ];
+    paths =
+      with rocmPackages;
+      [
+        rocm-core
+        clr
+        rccl
+        miopen
+        aotriton
+        rocrand
+        rocblas
+        rocsparse
+        hipsparse
+        rocthrust
+        rocprim
+        hipcub
+        roctracer
+        rocfft
+        rocsolver
+        hipfft
+        hiprand
+        hipsolver
+        hipblas-common
+        hipblas
+        hipblaslt
+        rocminfo
+        rocm-comgr
+        rocm-device-libs
+        rocm-runtime
+        rocm-smi
+        clr.icd
+        hipify
+      ]
+      ++ lib.optionals (!vendorComposableKernel) [
+        composable_kernel
+      ];
 
     # Fix `setuptools` not being found
     postBuild = ''
@@ -365,6 +369,12 @@ buildPythonPackage rec {
     substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
       --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
   ''
+  # Ensures torch compile can find and use compilers from nix.
+  + ''
+    substituteInPlace torch/_inductor/config.py \
+      --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
+      '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
+  ''
   + lib.optionalString rocmSupport ''
     # https://github.com/facebookincubator/gloo/pull/297
     substituteInPlace third_party/gloo/cmake/Hipify.cmake \
@@ -373,8 +383,9 @@ buildPythonPackage rec {
     # Doesn't pick up the environment variable?
     substituteInPlace third_party/kineto/libkineto/CMakeLists.txt \
       --replace-fail "\''$ENV{ROCM_SOURCE_DIR}" "${rocmtoolkit_joined}"
-
-    # Use composable kernel as dependency, rather than built-in third-party
+  ''
+  # When possible, composable kernel as dependency, rather than built-in third-party
+  + lib.optionalString (rocmSupport && !vendorComposableKernel) ''
     substituteInPlace aten/src/ATen/CMakeLists.txt \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/include)" "" \
       --replace-fail "list(APPEND ATen_HIP_INCLUDE \''${CMAKE_CURRENT_SOURCE_DIR}/../../../third_party/composable_kernel/library/include)" ""
@@ -412,7 +423,7 @@ buildPythonPackage rec {
       export ROCM_PATH=${rocmtoolkit_joined}
       export ROCM_SOURCE_DIR=${rocmtoolkit_joined}
       export PYTORCH_ROCM_ARCH="${gpuTargetString}"
-      export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include -I${rocmtoolkit_joined}/include/rocblas"
+      export CMAKE_CXX_FLAGS="-I${rocmtoolkit_joined}/include"
       python tools/amd_build/build_amd.py
     '';
 

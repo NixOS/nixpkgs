@@ -33,13 +33,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-indicator-network";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lomiri-indicator-network";
     tag = finalAttrs.version;
-    hash = "sha256-R5W1MmT+H9i8NXrzOv2xaVu8TKPCRCAAswwM/tflkQ0=";
+    hash = "sha256-uLqPbbCBahUwj9ZG3Q7x+bXCl0yI6L7jBpg09DTrrpk=";
   };
 
   outputs = [
@@ -49,14 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # GTest needs C++17
-    # std::multimap in C++17 is not happy with this not being const
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/merge_requests/134 merged & in release
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'CMAKE_CXX_STANDARD 14' 'CMAKE_CXX_STANDARD 17'
-    substituteInPlace src/indicator/nmofono/wwan/wwan-link.h \
-      --replace-fail 'bool operator()(int lhs, int rhs)' 'bool operator()(int lhs, int rhs) const'
-
     # Override original prefixes
     substituteInPlace data/CMakeLists.txt \
       --replace-fail 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir)' 'pkg_get_variable(DBUS_SESSION_BUS_SERVICES_DIR dbus-1 session_bus_services_dir DEFINE_VARIABLES datadir=''${CMAKE_INSTALL_FULL_SYSCONFDIR})' \
@@ -134,7 +126,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Ayatana indiator exporting the network settings menu through D-Bus";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-indicator-network";
     changelog = "https://gitlab.com/ubports/development/core/lomiri-indicator-network/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = lib.licenses.gpl3Only;
     teams = [ lib.teams.lomiri ];

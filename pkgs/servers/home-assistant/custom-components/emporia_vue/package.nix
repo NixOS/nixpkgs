@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "magico13";
   domain = "emporia_vue";
-  version = "0.11.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "magico13";
     repo = "ha-emporia-vue";
     rev = "v${version}";
-    hash = "sha256-XyGF7tVPPIMjzYXKpiF2lqQiCpPkJ/cOjZZCB2XMDYU=";
+    hash = "sha256-p8rBO+Z64n87NE7BXNSsTT5IA7ba5RzCZjqX05LqD0A=";
   };
 
   dependencies = [

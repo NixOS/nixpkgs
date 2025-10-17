@@ -290,14 +290,7 @@ in
         '';
       };
 
-      package = mkOption {
-        type = types.package;
-        default = pkgs.syncplay-nogui;
-        defaultText = literalExpression "pkgs.syncplay-nogui";
-        description = ''
-          Package to use for syncplay.
-        '';
-      };
+      package = mkPackageOption pkgs "syncplay-nogui" { };
     };
   };
 

@@ -17,38 +17,32 @@ let
   python = python3.withPackages (
     ps: with ps; [
       bottle
+      waitress
+      selenium
       func-timeout
       prometheus-client
-      selenium
-      waitress
-      xvfbwrapper
-
-      # For `undetected_chromedriver`
-      looseversion
       requests
+      certifi
       websockets
+      packaging
+      xvfbwrapper
     ]
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "flaresolverr";
-  version = "3.3.25";
+  version = "3.4.2";
 
   src = fetchFromGitHub {
     owner = "FlareSolverr";
     repo = "FlareSolverr";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-AGRqJOIIePaJH0j0eyMFJ6Kddul3yXF6uw6dPMnskmY=";
+    hash = "sha256-ZQMrt4KJpTRdug3dqtDsX5sQveAdiGSsq9V+71iUKR8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   postPatch = ''
-    substituteInPlace src/undetected_chromedriver/patcher.py \
-      --replace-fail \
-        "from distutils.version import LooseVersion" \
-        "from looseversion import LooseVersion"
-
     substituteInPlace src/utils.py \
       --replace-fail \
         'CHROME_EXE_PATH = None' \
@@ -77,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/FlareSolverr/FlareSolverr/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "flaresolverr";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (undetected-chromedriver.meta) platforms;
   };
 })

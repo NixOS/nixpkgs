@@ -22,23 +22,18 @@ in
   options = {
     boot.initrd.clevis.enable = lib.mkEnableOption "Clevis in initrd";
 
-    boot.initrd.clevis.package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.clevis;
-      defaultText = "pkgs.clevis";
-      description = "Clevis package";
-    };
+    boot.initrd.clevis.package = lib.mkPackageOption pkgs "clevis" { };
 
     boot.initrd.clevis.devices = lib.mkOption {
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
       default = { };
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options.secretFile = lib.mkOption {
             description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
             type = lib.types.path;
           };
-        })
+        }
       );
     };
 

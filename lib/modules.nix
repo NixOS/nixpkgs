@@ -1131,7 +1131,7 @@ let
     defsFinal' =
       let
         # Process mkMerge and mkIf properties.
-        defs' = concatMap (
+        defsNormalized = concatMap (
           m:
           map (
             value:
@@ -1146,19 +1146,19 @@ let
         ) defs;
 
         # Process mkOverride properties.
-        defs'' = filterOverrides' defs';
+        defsFiltered = filterOverrides' defsNormalized;
 
         # Sort mkOrder properties.
-        defs''' =
+        defsSorted =
           # Avoid sorting if we don't have to.
-          if any (def: def.value._type or "" == "order") defs''.values then
-            sortProperties defs''.values
+          if any (def: def.value._type or "" == "order") defsFiltered.values then
+            sortProperties defsFiltered.values
           else
-            defs''.values;
+            defsFiltered.values;
       in
       {
-        values = defs''';
-        inherit (defs'') highestPrio;
+        values = defsSorted;
+        inherit (defsFiltered) highestPrio;
       };
     defsFinal = defsFinal'.values;
 
@@ -1452,7 +1452,7 @@ let
   };
 
   /**
-    Return a definition with file location information.
+    Returns a definition with file location information.
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
@@ -1541,7 +1541,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if the
+    Returns a module that causes a warning to be shown if the
     specified option is defined. For example,
 
       mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "<replacement instructions>"
@@ -1589,7 +1589,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if the
+    Returns a module that causes a warning to be shown if the
     specified "from" option is defined; the defined value is however
     forwarded to the "to" option. This can be used to rename options
     while providing backward compatibility. For example,
@@ -1645,7 +1645,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if any of the "from"
+    Returns a module that causes a warning to be shown if any of the "from"
     option is defined; the defined values can be used in the "mergeFn" to set
     the "to" value.
     This function can be used to merge multiple options into one that has a
@@ -1724,7 +1724,7 @@ let
 
   /**
     Single "from" version of mkMergedOptionModule.
-    Return a module that causes a warning to be shown if the "from" option is
+    Returns a module that causes a warning to be shown if the "from" option is
     defined; the defined value can be used in the "mergeFn" to set the "to"
     value.
     This function can be used to change an option into another that has a
@@ -1822,7 +1822,7 @@ let
   mkDerivedConfig = opt: f: mkOverride (opt.highestPrio or defaultOverridePriority) (f opt.value);
 
   /**
-    Return a module that help declares an option that has been renamed.
+    Returns a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
   */
   doRename =

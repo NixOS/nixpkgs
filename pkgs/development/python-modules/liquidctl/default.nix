@@ -83,7 +83,6 @@ buildPythonPackage rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arturcygan
-      evils
     ];
     mainProgram = "liquidctl";
   };

@@ -73,6 +73,8 @@
   gitMinimal,
   # Preview-nvim dependencies
   md-tui,
+  # sidekick-nvim dependencies
+  copilot-language-server,
   # sved dependencies
   glib,
   gobject-introspection,
@@ -398,6 +400,25 @@ assertNoAdditions {
   claude-code-nvim = super.claude-code-nvim.overrideAttrs {
     dependencies = with self; [
       plenary-nvim
+    ];
+  };
+
+  claude-fzf-nvim = super.claude-fzf-nvim.overrideAttrs {
+    dependencies = with self; [
+      claudecode-nvim
+      fzf-lua
+    ];
+    # Failed to build help tags!
+    # E670: Mix of help file encodings within a language: doc/claude-fzf-zh.txt
+    # E154: Duplicate tag "claude-fzf-keymaps" in file doc/claude-fzf-en.txt
+    preInstall = ''
+      rm -r doc
+    '';
+  };
+
+  claude-fzf-history-nvim = super.claude-fzf-history-nvim.overrideAttrs {
+    dependencies = with self; [
+      fzf-lua
     ];
   };
 
@@ -798,7 +819,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
+      "conjure-spec.client.common-lisp.swank_spec"
       "conjure-spec.client.fennel.nfnl_spec"
+      "conjure-spec.client.guile.socket_spec"
+      "conjure-spec.client.scheme.stdio_spec"
       # No parser for fennel
       "conjure.client.fennel.def-str-util"
     ];
@@ -874,7 +898,15 @@ assertNoAdditions {
     '';
   };
 
-  cpsm = super.cpsm.overrideAttrs {
+  cpsm = super.cpsm.overrideAttrs (old: {
+    # CMake 4 dropped support of versions lower than 3.5, and versions
+    # lower than 3.10 are deprecated.
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          "cmake_minimum_required(VERSION 2.8.12)" \
+          "cmake_minimum_required(VERSION 3.10)"
+    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       python3
@@ -883,11 +915,15 @@ assertNoAdditions {
       ncurses
     ];
     buildPhase = ''
+      runHook preBuild
+
       patchShebangs .
       export PY3=ON
       ./install.sh
+
+      runHook postBuild
     '';
-  };
+  });
 
   crates-nvim = super.crates-nvim.overrideAttrs {
     checkInputs = [
@@ -1255,6 +1291,8 @@ assertNoAdditions {
       "fyler.views.explorer.init"
       "fyler.views.explorer.actions"
       "fyler.views.explorer.ui"
+      "fyler.explorer.ui"
+      "fyler.explorer"
     ];
   };
 
@@ -1566,6 +1604,8 @@ assertNoAdditions {
     nvimSkipModules = [
       # attempt to index global 'LazyVim' (a nil value)
       "lazyvim.config.keymaps"
+      "lazyvim.plugins.extras.ai.copilot-native"
+      "lazyvim.plugins.extras.ai.sidekick"
       "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
@@ -1633,6 +1673,7 @@ assertNoAdditions {
     checkInputs = with self; [
       snacks-nvim
       telescope-nvim
+      mini-nvim
     ];
     dependencies = with self; [
       nui-nvim
@@ -1657,6 +1698,7 @@ assertNoAdditions {
       "leetcode.picker.question.init"
       "leetcode.picker.question.snacks"
       "leetcode.picker.question.telescope"
+      "leetcode.picker.question.mini"
       "leetcode.picker.tabs.fzf"
       "leetcode.runner.init"
       "leetcode-plugins.cn.api"
@@ -2332,6 +2374,7 @@ assertNoAdditions {
       nvim-lspconfig
       telescope-nvim
       nvim-treesitter
+      nvchad-ui
     ];
     nvimSkipModules = [
       # Requires global config setup
@@ -2770,6 +2813,10 @@ assertNoAdditions {
     ];
   };
 
+  oil-git-nvim = super.oil-git-nvim.overrideAttrs {
+    dependencies = [ self.oil-nvim ];
+  };
+
   oil-git-status-nvim = super.oil-git-status-nvim.overrideAttrs {
     dependencies = [ self.oil-nvim ];
   };
@@ -3093,6 +3140,16 @@ assertNoAdditions {
     runtimeDeps = [
       fd
       sad
+    ];
+  };
+
+  sidekick-nvim = super.sidekick-nvim.overrideAttrs {
+    runtimeDeps = [
+      copilot-language-server
+    ];
+
+    nvimSkipModules = [
+      "sidekick.docs"
     ];
   };
 
@@ -3643,6 +3700,14 @@ assertNoAdditions {
     };
   });
 
+  vimtex = super.vimtex.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      fzf-lua
+      snacks-nvim
+    ];
+  };
+
   vimproc-vim = super.vimproc-vim.overrideAttrs {
     buildInputs = [ which ];
 
@@ -3877,11 +3942,8 @@ assertNoAdditions {
   };
 
   vim-isort = super.vim-isort.overrideAttrs {
-    # Code updated to find relative path at runtime
-    # https://github.com/fisadev/vim-isort/pull/41
-    dontCheckForBrokenSymlinks = true;
     postPatch = ''
-      substituteInPlace ftplugin/python_vimisort.vim \
+      substituteInPlace autoload/vimisort.vim \
         --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   };

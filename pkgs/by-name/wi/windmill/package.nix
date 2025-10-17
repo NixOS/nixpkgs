@@ -46,13 +46,13 @@
 
 let
   pname = "windmill";
-  version = "1.542.1";
+  version = "1.549.1";
 
   src = fetchFromGitHub {
     owner = "windmill-labs";
     repo = "windmill";
     rev = "v${version}";
-    hash = "sha256-SVE1P7NQ6mz26bS3oURAc1ImvbCJRkT8mMTuCmHeZLU=";
+    hash = "sha256-+4cYZCD8iqrrckYWTDCM++SogptXXahfCKN6O8E8HuE=";
   };
 in
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -65,7 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     RUSTY_V8_ARCHIVE = librusty_v8;
   };
 
-  cargoHash = "sha256-0OETpBXO/c2YJPta1LLAa/Jf7PusH+GAwgfAmRGh9m0=";
+  cargoHash = "sha256-m7/72IRbzllAfAlbjKsjGrTaiXzpj2TufLKrTpKLbUU=";
 
   buildFeatures = [
     "agent_worker_server"
@@ -194,7 +194,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-8t5ww8zuP1ZWASKpj6F0bFGWnUDROf7iLBTLsof5jtM=";
+    npmDepsHash = "sha256-2CBqPDEqKGDIGo7ARK3sxTkFNsTxIa6V1QCtSKDkj4I=";
 
     # without these you get a
     # FATAL ERROR: Ineffective mark-compacts near heap limit Allocation failed - JavaScript heap out of memory
@@ -239,8 +239,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "web-ui"
       ];
     })
-    (./update-librusty.sh)
-    (./update-ui_builder.sh)
+    ./update-librusty.sh
+    ./update-ui_builder.sh
   ];
 
   meta = {

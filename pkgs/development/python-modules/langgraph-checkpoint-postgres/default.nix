@@ -63,7 +63,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-asyncio
     pytestCheckHook
-    (postgresql.withPackages (p: with p; [ pgvector ]))
+    (postgresql.withPackages (p: [ pgvector ]))
     postgresqlTestHook
   ];
 

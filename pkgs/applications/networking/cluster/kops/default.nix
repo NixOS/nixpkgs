@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -13,7 +14,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "version"
         "sha256"
         "rev"
@@ -45,7 +46,7 @@ let
 
       doCheck = false;
 
-      postInstall = ''
+      postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
         installShellCompletion --cmd kops \
           --bash <($GOPATH/bin/kops completion bash) \
           --fish <($GOPATH/bin/kops completion fish) \
@@ -71,27 +72,21 @@ in
 rec {
   mkKops = generic;
 
-  kops_1_27 = mkKops rec {
-    version = "1.27.1";
-    sha256 = "sha256-WV+0380yj8GHckY4PDM3WspbZ/YuYZOAQEMd2ygEOjo=";
+  kops_1_31 = mkKops rec {
+    version = "1.31.0";
+    sha256 = "sha256-q9megrNXXKJ/YqP/fjPHh8Oji4dPK5M3HLHa+ufwRAM=";
     rev = "v${version}";
   };
 
-  kops_1_28 = mkKops rec {
-    version = "1.28.7";
-    sha256 = "sha256-rTf7+w/o8MGSBKV9wCzZOEI0v31exZhOJpRABeF/KyI=";
+  kops_1_32 = mkKops rec {
+    version = "1.32.1";
+    sha256 = "sha256-nQKeTDajtUffPBhPrPuaJ+1XWgLDUltwDQDZHkylys4=";
     rev = "v${version}";
   };
 
-  kops_1_29 = mkKops rec {
-    version = "1.29.2";
-    sha256 = "sha256-SRj0x9N+yfTG/UL/hu1ds46Zt6d5SUYU0PA9lPHO6jQ=";
-    rev = "v${version}";
-  };
-
-  kops_1_30 = mkKops rec {
-    version = "1.30.4";
-    sha256 = "sha256-f+VdgQj6tHWrn+LG6qkArjcADYfpKjuOp+bU0BTYsWY=";
+  kops_1_33 = mkKops rec {
+    version = "1.33.0";
+    sha256 = "sha256-VnnKWcU83yqsKW54Q1tr99/Ln8ppMyB7GLl70rUFGDY=";
     rev = "v${version}";
   };
 }

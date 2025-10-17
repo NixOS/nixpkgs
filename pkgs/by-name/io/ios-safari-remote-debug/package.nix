@@ -35,6 +35,6 @@ buildGoModule rec {
     homepage = "https://git.gay/besties/ios-safari-remote-debug";
     license = lib.licenses.agpl3Plus;
     mainProgram = "ios-safari-remote-debug";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

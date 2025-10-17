@@ -7,13 +7,13 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "autobase";
-  version = "7.19.1";
+  version = "7.19.2";
 
   src = fetchFromGitHub {
     owner = "holepunchto";
     repo = "autobase";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-bkb8Q6eI1ck6FD/JuWRnepJy14KsaYM+wB6nkc25fdI=";
+    hash = "sha256-IsqpVx7GFcbIouIAoLHiHLivE6RCzehW1TTmYC6SDgw=";
   };
 
   npmDepsHash = "sha256-H9Xy1VD7WQvi0+86v6CMcmc0L3mB6KuSCtgQSF4AlkY=";
@@ -27,13 +27,17 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--generate-lockfile"
+    ];
+  };
 
   meta = {
     description = "Concise multiwriter for data structures with Hypercore";
     homepage = "https://github.com/holepunchto/autobase";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     teams = with lib.teams; [ ngi ];
   };
 })

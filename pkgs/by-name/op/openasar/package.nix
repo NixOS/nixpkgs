@@ -6,17 +6,21 @@
   nodejs,
   asar,
   unzip,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openasar";
-  version = "0-unstable-2025-07-15";
+  version = "0-unstable-2025-09-17";
 
   src = fetchFromGitHub {
     owner = "GooseMod";
     repo = "OpenAsar";
-    rev = "92abbb0e3efc39e553fd24e9125c42cdba1318ec";
-    hash = "sha256-9PTseQdQ6YbeuBbcBnPr+OXP5wNYDJgv8s9sn8hGSgk=";
+    rev = "bf8a71e2fcf1c77761092b7b899839164e3a596c";
+    hash = "sha256-gKaqLIlEJUUTbXBQ0E97bHS6Z1HFdmEt8jsvkQH4hI8=";
   };
 
   postPatch = ''
@@ -48,9 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater {
-    # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
-    hardcodeZeroVersion = true;
+  passthru = {
+    updateScript = unstableGitUpdater {
+      # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
+      hardcodeZeroVersion = true;
+    };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withOpenASAR
+    );
   };
 
   meta = with lib; {

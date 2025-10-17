@@ -3,17 +3,12 @@
   config,
   clangStdenv,
   fetchFromGitHub,
-  autoconf,
-  automake,
+  autoreconfHook,
   libtool,
   intltool,
   pkg-config,
   jansson,
   swift-corelibs-libdispatch,
-  # deadbeef can use either gtk2 or gtk3
-  gtk2Support ? false,
-  gtk2,
-  gtk3Support ? true,
   gtk3,
   gsettings-desktop-schemas,
   wrapGAppsHook3,
@@ -65,8 +60,6 @@
   curl,
 }:
 
-assert gtk2Support || gtk3Support;
-
 let
   inherit (lib) optionals;
 
@@ -87,11 +80,6 @@ clangStdenv.mkDerivation {
   buildInputs = [
     jansson
     swift-corelibs-libdispatch
-  ]
-  ++ optionals gtk2Support [
-    gtk2
-  ]
-  ++ optionals gtk3Support [
     gtk3
     gsettings-desktop-schemas
   ]
@@ -158,28 +146,14 @@ clangStdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
+    autoreconfHook
     intltool
     libtool
     pkg-config
-  ]
-  ++ optionals gtk3Support [
     wrapGAppsHook3
   ];
 
   enableParallelBuilding = true;
-
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  postPatch = ''
-    # Fix the build on c++17 compiler:
-    #   https://github.com/DeaDBeeF-Player/deadbeef/issues/3012
-    # TODO: remove after 1.9.5 release.
-    substituteInPlace plugins/adplug/Makefile.am --replace 'adplug_la_CXXFLAGS = ' 'adplug_la_CXXFLAGS = -std=c++11 '
-  '';
 
   meta = with lib; {
     description = "Ultimate Music Player for GNU/Linux";

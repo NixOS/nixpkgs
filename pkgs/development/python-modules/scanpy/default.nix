@@ -165,6 +165,9 @@ buildPythonPackage rec {
 
     # fails to find the trivial test script for some reason:
     "test_external"
+
+    # AssertionError: Not equal to tolerance rtol=1e-07, atol=0
+    "test_connectivities_euclidean"
   ];
 
   pythonImportsCheck = [

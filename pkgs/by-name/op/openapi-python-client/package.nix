@@ -11,7 +11,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "openapi-python-client";
-  version = "0.26.0";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
     owner = "openapi-generators";
     repo = "openapi-python-client";
     tag = "v${version}";
-    hash = "sha256-kDULsu9mGxMu23kczVadwXLchYJiATJ2j6qU/8AKOSo=";
+    hash = "sha256-RSz8UCOJBcF4zRYURRqzJahfkX49hBq7/yiTWE3es3M=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ python3Packages.buildPythonApplication rec {
   # just a simple wrapper to locate the binary. We'll remove the upper bound
   pythonRelaxDeps = [ "ruff" ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     # see: https://github.com/fastapi/typer/blob/5889cf82f4ed925f92e6b0750bf1b1ed9ee672f3/typer/completion.py#L54
     # otherwise shellingham throws exception on darwin
     export _TYPER_COMPLETE_TEST_DISABLE_SHELL_DETECTION=1

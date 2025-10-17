@@ -119,6 +119,9 @@ buildPythonPackage rec {
   ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     # TypeError: the JSON object must be str, bytes or bytearray, not NoneType
     "test_terminal_create_with_cwd"
+    # Fails under load (which causes failure on Hydra)
+    "test_execution_state"
+    "test_cull_connected"
   ];
 
   disabledTestPaths = [

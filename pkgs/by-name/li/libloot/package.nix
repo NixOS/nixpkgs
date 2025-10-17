@@ -14,12 +14,11 @@
   python3Packages,
 
   boost,
-  fmt_11,
+  fmt,
   gtest,
   icu,
   spdlog,
-  tbb_2022,
-  yaml-cpp,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -66,13 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     gtest
     icu
-    (spdlog.override { fmt = fmt_11; })
-    tbb_2022
+    spdlog
+    onetbb
 
-    finalAttrs.passthru.yaml-cpp # has merge-key support
     finalAttrs.passthru.libloadorder
     finalAttrs.passthru.esplugin
     finalAttrs.passthru.loot-condition-interpreter
@@ -83,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LIBLOADORDER_LIBRARIES" "loadorder_ffi")
     (lib.cmakeFeature "LCI_LIBRARIES" "loot_condition_interpreter_ffi")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TESTING-PLUGINS" "../testing-plugins")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${finalAttrs.passthru.yaml-cpp-src}")
     (lib.cmakeBool "LIBLOOT_BUILD_TESTS" finalAttrs.finalPackage.doCheck)
     (lib.cmakeBool "LIBLOOT_INSTALL_DOCS" withDocs)
   ];
@@ -114,6 +113,13 @@ stdenv.mkDerivation (finalAttrs: {
       repo = "testing-plugins";
       tag = "1.6.2";
       hash = "sha256-3Aa98EwqpuGA3YlsRF8luWzXVEFO/rs6JXisXdLyIK4=";
+    };
+
+    yaml-cpp-src = fetchFromGitHub {
+      owner = "loot";
+      repo = "yaml-cpp";
+      tag = "0.8.0+merge-key-support.2";
+      hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
     };
 
     buildRustFFIPackage =
@@ -184,16 +190,6 @@ stdenv.mkDerivation (finalAttrs: {
 
       lang = "c";
       header = "loot_condition_interpreter.h";
-    };
-
-    yaml-cpp = yaml-cpp.overrideAttrs rec {
-      version = "0.8.0+merge-key-support.2";
-      src = fetchFromGitHub {
-        owner = "loot";
-        repo = "yaml-cpp";
-        tag = version;
-        hash = "sha256-whYorebrLiDeO75LC2SMUX/8OD528BR0+DEgnJxxpoQ=";
-      };
     };
   };
 

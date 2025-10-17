@@ -33,10 +33,28 @@ in
     enable = lib.mkEnableOption "Photoprism web server";
 
     passwordFile = lib.mkOption {
-      type = lib.types.nullOr lib.types.path;
+      type = lib.types.nullOr (
+        lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        }
+      );
       default = null;
       description = ''
         Admin password file.
+      '';
+    };
+
+    databasePasswordFile = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.pathWith {
+          inStore = false;
+          absolute = true;
+        }
+      );
+      default = null;
+      description = ''
+        Database password file.
       '';
     };
 
@@ -114,9 +132,12 @@ in
           cfg.storagePath
         ];
 
-        LoadCredential = lib.optionalString (
-          cfg.passwordFile != null
-        ) "PHOTOPRISM_ADMIN_PASSWORD:${cfg.passwordFile}";
+        LoadCredential = [
+          (lib.optionalString (cfg.passwordFile != null) "PHOTOPRISM_ADMIN_PASSWORD_FILE=${cfg.passwordFile}")
+          (lib.optionalString (
+            cfg.databasePasswordFile != null
+          ) "PHOTOPRISM_DATABASE_PASSWORD=${cfg.databasePasswordFile}")
+        ];
 
         LockPersonality = true;
         PrivateDevices = true;
@@ -146,19 +167,23 @@ in
       wantedBy = [ "multi-user.target" ];
       environment = env;
 
-      # reminder: easier password configuration will come in https://github.com/photoprism/photoprism/pull/2302
       preStart = ''
         ln -sf ${manage} photoprism-manage
-
         ${lib.optionalString (cfg.passwordFile != null) ''
-          export PHOTOPRISM_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD")
+          export PHOTOPRISM_ADMIN_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD_FILE
+        ''}
+        ${lib.optionalString (cfg.databasePasswordFile != null) ''
+          export PHOTOPRISM_DATABASE_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_DATABASE_PASSWORD")
         ''}
         exec ${cfg.package}/bin/photoprism migrations run -f
       '';
 
       script = ''
         ${lib.optionalString (cfg.passwordFile != null) ''
-          export PHOTOPRISM_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD")
+          export PHOTOPRISM_ADMIN_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/PHOTOPRISM_ADMIN_PASSWORD_FILE
+        ''}
+        ${lib.optionalString (cfg.databasePasswordFile != null) ''
+          export PHOTOPRISM_DATABASE_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PHOTOPRISM_DATABASE_PASSWORD")
         ''}
         exec ${cfg.package}/bin/photoprism start
       '';

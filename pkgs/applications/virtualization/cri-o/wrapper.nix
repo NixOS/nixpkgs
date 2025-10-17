@@ -33,7 +33,7 @@ runCommand cri-o-unwrapped.name
 
     preferLocalBuild = true;
 
-    meta = builtins.removeAttrs cri-o-unwrapped.meta [ "outputsToInstall" ];
+    meta = removeAttrs cri-o-unwrapped.meta [ "outputsToInstall" ];
 
     outputs = [
       "out"

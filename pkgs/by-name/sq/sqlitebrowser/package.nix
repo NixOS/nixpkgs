@@ -28,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail '"Unknown"' '"${finalAttrs.src.rev}"'
+  ''
+  # Fix build with CMake 4
+  # Will be part of the Qt6 port
+  # Note: The vendored version of qhexedit is incompatible with our qhexedit2: https://github.com/sqlitebrowser/sqlitebrowser/issues/1808
+  + ''
+    substituteInPlace libs/qhexedit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12.2)' 'cmake_minimum_required(VERSION 3.16)'
   '';
 
   buildInputs = [

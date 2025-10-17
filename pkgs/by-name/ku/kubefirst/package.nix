@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "kubefirst";
-  version = "2.9.0";
+  version = "2.10.2";
 
   src = fetchFromGitHub {
     owner = "konstructio";
     repo = "kubefirst";
     tag = "v${version}";
-    hash = "sha256-oPuvkFT3MUv5LY1qhfjFEfgxvZRGziLUyEZhHKVdGrQ=";
+    hash = "sha256-AjVShJEsZczDc0iD4RWF0Q+xlhN/bkl4ESh+ESoxejM=";
   };
 
   vendorHash = "sha256-1u34cuPUY/5fYd073UhRUu/5/1nhPadTI06+3o+uE7w=";

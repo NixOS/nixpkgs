@@ -13,17 +13,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "omnom";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
     repo = "omnom";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wFUKoM8xiuAfmBCQJ4BgX7gQ1FmU2yHSs/RkQI0WxI4=";
+    hash = "sha256-auujlRG3RKJYYTi/iptx0Y3Yzqmt6i9AlfjVcqn5YPc=";
     fetchSubmodules = true;
   };
 
-  vendorHash = "sha256-Ie486oAsgsOM5hDURD+1bfnGIUqkeW2bOaIDiwWWq+0=";
+  vendorHash = "sha256-0usbfvGz+9chLGyHHUUStUh7x91ZGfr/+gAXXVA5iNc=";
 
   passthru.updateScript = nix-update-script { };
 

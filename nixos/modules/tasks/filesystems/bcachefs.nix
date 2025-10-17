@@ -7,6 +7,7 @@
 }:
 
 let
+  cfg = config.boot.bcachefs;
   cfgScrub = config.services.bcachefs.autoScrub;
 
   bootFs = lib.filterAttrs (
@@ -146,7 +147,7 @@ let
         unitConfig.DefaultDependencies = false;
         serviceConfig = {
           Type = "oneshot";
-          ExecCondition = "${pkgs.bcachefs-tools}/bin/bcachefs unlock -c \"${device}\"";
+          ExecCondition = "${cfg.package}/bin/bcachefs unlock -c \"${device}\"";
           Restart = "on-failure";
           RestartMode = "direct";
           # Ideally, this service would lock the key on stop.
@@ -155,7 +156,7 @@ let
         };
         script =
           let
-            unlock = ''${pkgs.bcachefs-tools}/bin/bcachefs unlock "${device}"'';
+            unlock = ''${cfg.package}/bin/bcachefs unlock "${device}"'';
             unlockInteractively = ''${config.boot.initrd.systemd.package}/bin/systemd-ask-password --timeout=0 "enter passphrase for ${name}" | exec ${unlock}'';
           in
           if useClevis fs then
@@ -174,28 +175,25 @@ let
             '';
       };
     };
-
-  assertions = [
-    {
-      assertion =
-        let
-          kernel = config.boot.kernelPackages.kernel;
-        in
-        (
-          kernel.kernelAtLeast "6.7"
-          || (lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
-            lib.kernel.module
-            lib.kernel.yes
-            (lib.kernel.option lib.kernel.yes)
-          ])
-        );
-
-      message = "Linux 6.7-rc1 at minimum or a custom linux kernel with bcachefs support is required";
-    }
-  ];
 in
 
 {
+  options.boot.bcachefs = {
+    package = lib.mkPackageOption pkgs "bcachefs-tools" {
+      extraDescription = ''
+        This package should also provide a passthru 'kernelModule'
+        attribute to build the out-of-tree kernel module.
+      '';
+    };
+
+    modulePackage = lib.mkOption {
+      type = lib.types.package;
+      # See NOTE in linux-kernels.nix
+      default = config.boot.kernelPackages.callPackage cfg.package.kernelModule { };
+      internal = true;
+    };
+  };
+
   options.services.bcachefs.autoScrub = {
     enable = lib.mkEnableOption "regular bcachefs scrub";
 
@@ -225,13 +223,46 @@ in
   config = lib.mkIf (config.boot.supportedFilesystems.bcachefs or false) (
     lib.mkMerge [
       {
-        inherit assertions;
+        assertions = [
+          {
+            assertion =
+              let
+                kernel = config.boot.kernelPackages.kernel;
+              in
+              (
+                kernel.kernelAtLeast "6.7"
+                || (lib.elem (kernel.structuredExtraConfig.BCACHEFS_FS or null) [
+                  lib.kernel.module
+                  lib.kernel.yes
+                  (lib.kernel.option lib.kernel.yes)
+                ])
+              );
+
+            message = "Linux 6.7-rc1 at minimum or a custom linux kernel with bcachefs support is required";
+          }
+        ];
+
+        warnings = lib.mkIf cfg.modulePackage.meta.broken [
+          ''
+            Using unmaintained in-tree bcachefs kernel module. This
+            will be removed in 26.05. Please use a kernel supported
+            by the out-of-tree module package.
+          ''
+        ];
+
+        # Bcachefs upstream recommends using the latest kernel
+        boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
+
         # needed for systemd-remount-fs
-        system.fsPackages = [ pkgs.bcachefs-tools ];
-        services.udev.packages = [ pkgs.bcachefs-tools ];
+        system.fsPackages = [ cfg.package ];
+        services.udev.packages = [ cfg.package ];
+
+        boot.extraModulePackages = lib.optionals (!cfg.modulePackage.meta.broken) [
+          cfg.modulePackage
+        ];
 
         systemd = {
-          packages = [ pkgs.bcachefs-tools ];
+          packages = [ cfg.package ];
           services = lib.mapAttrs' (mkUnits "") (
             lib.filterAttrs (n: fs: (fs.fsType == "bcachefs") && (!utils.fsNeededForBoot fs)) config.fileSystems
           );
@@ -239,7 +270,6 @@ in
       }
 
       (lib.mkIf ((config.boot.initrd.supportedFilesystems.bcachefs or false) || (bootFs != { })) {
-        inherit assertions;
         boot.initrd.availableKernelModules = [
           "bcachefs"
           "sha256"
@@ -253,12 +283,12 @@ in
         ];
         boot.initrd.systemd.extraBin = {
           # do we need this? boot/systemd.nix:566 & boot/systemd/initrd.nix:357
-          "bcachefs" = "${pkgs.bcachefs-tools}/bin/bcachefs";
-          "mount.bcachefs" = "${pkgs.bcachefs-tools}/bin/mount.bcachefs";
+          "bcachefs" = "${cfg.package}/bin/bcachefs";
+          "mount.bcachefs" = "${cfg.package}/bin/mount.bcachefs";
         };
         boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
-          copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/bcachefs
-          copy_bin_and_libs ${pkgs.bcachefs-tools}/bin/mount.bcachefs
+          copy_bin_and_libs ${cfg.package}/bin/bcachefs
+          copy_bin_and_libs ${cfg.package}/bin/mount.bcachefs
         '';
         boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
           $out/bin/bcachefs version
@@ -348,7 +378,7 @@ in
                   "sleep.target"
                 ];
 
-                script = "${lib.getExe pkgs.bcachefs-tools} data scrub ${fs}";
+                script = "${lib.getExe cfg.package} data scrub ${fs}";
 
                 serviceConfig = {
                   Type = "oneshot";

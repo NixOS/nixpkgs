@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ readline ];
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    # Fix the build with CMake 4.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   meta = with lib; {
     description = "REPL for taskwarrior";
     homepage = "http://tasktools.org";

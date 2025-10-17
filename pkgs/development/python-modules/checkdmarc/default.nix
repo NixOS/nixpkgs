@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "checkdmarc";
-  version = "5.10.5";
+  version = "5.10.12";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "domainaware";
     repo = "checkdmarc";
     tag = version;
-    hash = "sha256-wXHfeWQ8ClTTWJQ4b9SGn8is5e103lgIyRvC+ACTmcE=";
+    hash = "sha256-XbBdBef3+kt26XP5GDH5rgHYGh8xIjHUUVOcdeVICLs=";
   };
 
   pythonRelaxDeps = [ "xmltodict" ];

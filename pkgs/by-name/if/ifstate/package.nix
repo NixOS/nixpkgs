@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  yq,
   python3Packages,
   fetchFromGitea,
   iproute2,
@@ -12,18 +14,50 @@
 }:
 
 let
+  version = "2.0.2";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "liske";
+    repo = "ifstate";
+    tag = version;
+    hash = "sha256-ghl2EVSum8KOh9wpFkrLGeIii2cj0a2+yOa48/JwFRk=";
+  };
+  docs = stdenv.mkDerivation {
+    pname = "ifstate-docs";
+
+    inherit version src;
+
+    nativeBuildInputs = [ yq ];
+
+    buildInputs =
+      with python3Packages;
+      (
+        [
+          mkdocs-material
+          mkdocs-glightbox
+          mkdocs-minify-plugin
+        ]
+        ++ mkdocs-material.optional-dependencies.imaging
+      );
+
+    postPatch = ''
+      # git-revision-date requires a git repository
+      # privacy and social plugin require internet
+      yq -yi 'del(.plugins[] | select((type == "object" and (has("git-revision-date-localized") or has("social"))) or (type == "string" and . == "privacy")))' mkdocs.yaml
+    '';
+
+    buildPhase = ''
+      runHook preBuild
+      mkdir -p $out
+      mkdocs build -d $out
+      runHook postBuild
+    '';
+  };
   self = python3Packages.buildPythonApplication rec {
     pname = "ifstate";
-    version = "2.0.0";
-    pyproject = true;
+    inherit version src;
 
-    src = fetchFromGitea {
-      domain = "codeberg.org";
-      owner = "liske";
-      repo = "ifstate";
-      tag = version;
-      hash = "sha256-YxLyiTVLN4nxc2ppqGGnYCGudbdPLSLV8EwDURtpO0U=";
-    };
+    pyproject = true;
 
     postPatch = ''
       substituteInPlace libifstate/routing/__init__.py \
@@ -71,6 +105,7 @@ let
       };
       # needed for access in schema validaten in module
       jsonschema = "${self}/${python3Packages.python.sitePackages}/libifstate/schema/2/ifstate.conf.schema.json";
+      inherit docs;
     };
 
     meta = {

@@ -3,7 +3,7 @@
   stdenv,
   cmake,
   git,
-  apple-sdk_11,
+  apple-sdk_13,
   ninja,
   fetchFromGitHub,
   SDL2,
@@ -14,7 +14,7 @@
   nix-update-script,
 
   metalSupport ? stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64,
-  coreMLSupport ? stdenv.hostPlatform.isDarwin && false, # FIXME currently broken
+  coreMLSupport ? stdenv.hostPlatform.isDarwin && true,
 
   config,
   cudaSupport ? config.cudaSupport,
@@ -47,7 +47,7 @@ let
     optionals
     ;
 
-  darwinBuildInputs = [ apple-sdk_11 ];
+  darwinBuildInputs = [ apple-sdk_13 ];
 
   cudaBuildInputs = with cudaPackages; [
     cuda_cccl # <nv/target>
@@ -73,13 +73,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "whisper-cpp";
-  version = "1.7.6";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "whisper.cpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dppBhiCS4C3ELw/Ckx5W0KOMUvOHUiisdZvkS7gkxj4=";
+    hash = "sha256-lE25O/C55INo4xufCSzrPFX2kyodXiKwf80kknIy1Os=";
   };
 
   # The upstream download script tries to download the models to the
@@ -92,6 +92,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     for target in examples/{bench,command,cli,quantize,server,stream,talk-llama}/CMakeLists.txt; do
       if ! grep -q -F 'install('; then
         echo 'install(TARGETS ''${TARGET} RUNTIME)' >> $target
+        ${lib.optionalString stdenv.isDarwin "echo 'install(TARGETS whisper.coreml LIBRARY)' >> src/CMakeLists.txt"}
       fi
     done
   '';
@@ -183,7 +184,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "whisper-cli";
     platforms = lib.platforms.all;
-    broken = coreMLSupport;
     badPlatforms = optionals cudaSupport lib.platforms.darwin;
     maintainers = with lib.maintainers; [
       dit7ya

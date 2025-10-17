@@ -1,0 +1,25 @@
+diff --git a/make/PreInit.gmk b/make/PreInit.gmk
+index 3df44308dd..490d7c24e9 100644
+--- a/make/PreInit.gmk
++++ b/make/PreInit.gmk
+@@ -60,13 +60,19 @@
+ # Extract non-global targets that require a spec file.
+ CALLED_SPEC_TARGETS := $(filter-out $(ALL_GLOBAL_TARGETS), $(CALLED_TARGETS))
+ 
++# GNU make-4.4 (and later) include not just single-letter form of the
++# options MAKEFILES but also long for and even some of the arguments.
++# Skip long form and use only short form:
++#     MAKEFLAGS=' --debug=basic -- LOG=trace ...'
++MAKEFLAGS_SINGLE_LETTER := $(firstword -$(MAKEFLAGS))
++
+ # If we have only global targets, or if we are called with -qp (assuming an
+ # external part, e.g. bash completion, is trying to understand our targets),
+ # we will skip SPEC location and the sanity checks.
+ ifeq ($(CALLED_SPEC_TARGETS), )
+   SKIP_SPEC := true
+ endif
+-ifeq ($(findstring p, $(MAKEFLAGS))$(findstring q, $(MAKEFLAGS)), pq)
++ifeq ($(findstring p, $(MAKEFLAGS_SINGLE_LETTER))$(findstring q, $(MAKEFLAGS_SINGLE_LETTER)), pq)
+   SKIP_SPEC := true
+ endif
+ 

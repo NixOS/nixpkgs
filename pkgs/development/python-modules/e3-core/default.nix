@@ -14,6 +14,7 @@
   requests-cache,
   requests-toolbelt,
   requests,
+  resolvelib,
   setuptools,
   stevedore,
   tqdm,
@@ -45,6 +46,7 @@ buildPythonPackage rec {
     requests
     requests-cache
     requests-toolbelt
+    resolvelib
     stevedore
     tqdm
   ]

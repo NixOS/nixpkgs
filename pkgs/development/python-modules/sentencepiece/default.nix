@@ -16,5 +16,5 @@ buildPythonPackage rec {
   sourceRoot = "${src.name}/python";
 
   # sentencepiece installs 'bin' output.
-  meta = builtins.removeAttrs sentencepiece.meta [ "outputsToInstall" ];
+  meta = removeAttrs sentencepiece.meta [ "outputsToInstall" ];
 }

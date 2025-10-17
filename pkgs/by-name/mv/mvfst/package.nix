@@ -13,6 +13,8 @@
 
   fizz,
 
+  ctestCheckHook,
+
   gtest,
 
   nix-update-script,
@@ -20,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mvfst";
-  version = "2025.04.21.00";
+  version = "2025.09.15.00";
 
   outputs = [
     "bin"
@@ -32,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "facebook";
     repo = "mvfst";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/84smnZ2L1zDmkO1w9VQzVhXKt/S5azQr7Xpr8/dOA4=";
+    hash = "sha256-ZgzqkR72xtO5VVd2cyMM3vSsUWdW6HEvu9T1sM+cPi8=";
   };
 
   patches = [
@@ -52,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   propagatedBuildInputs = [
     fizz
+  ];
+
+  nativeCheckInputs = [
+    ctestCheckHook
   ];
 
   checkInputs = [
@@ -84,41 +90,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  dontUseNinjaCheck = true;
+
   postPatch = ''
     # Make sure the libraries the `tperf` binary uses are installed.
     printf 'install(TARGETS mvfst_test_utils)\n' >> quic/common/test/CMakeLists.txt
     printf 'install(TARGETS mvfst_dsr_backend)\n' >> quic/dsr/CMakeLists.txt
   '';
 
-  checkPhase = ''
-    runHook preCheck
-
-    ctest -j $NIX_BUILD_CORES --output-on-failure ${
-      lib.optionalString stdenv.hostPlatform.isLinux (
-        lib.escapeShellArgs [
-          "--exclude-regex"
-          (lib.concatMapStringsSep "|" (test: "^${lib.escapeRegex test}$") [
-            "*/QuicClientTransportIntegrationTest.NetworkTest/*"
-            "*/QuicClientTransportIntegrationTest.FlowControlLimitedTest/*"
-            "*/QuicClientTransportIntegrationTest.NetworkTestConnected/*"
-            "*/QuicClientTransportIntegrationTest.SetTransportSettingsAfterStart/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttSuccess/*"
-            "*/QuicClientTransportIntegrationTest.ZeroRttRetryPacketTest/*"
-            "*/QuicClientTransportIntegrationTest.NewTokenReceived/*"
-            "*/QuicClientTransportIntegrationTest.UseNewTokenThenReceiveRetryToken/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttRejection/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttNotAttempted/*"
-            "*/QuicClientTransportIntegrationTest.TestZeroRttInvalidAppParams/*"
-            "*/QuicClientTransportIntegrationTest.ChangeEventBase/*"
-            "*/QuicClientTransportIntegrationTest.ResetClient/*"
-            "*/QuicClientTransportIntegrationTest.TestStatelessResetToken/*"
-          ])
-        ]
-      )
-    }
-
-    runHook postCheck
-  '';
+  disabledTests = [
+    "*/QuicClientTransportIntegrationTest.NetworkTest/*"
+    "*/QuicClientTransportIntegrationTest.FlowControlLimitedTest/*"
+    "*/QuicClientTransportIntegrationTest.NetworkTestConnected/*"
+    "*/QuicClientTransportIntegrationTest.SetTransportSettingsAfterStart/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttSuccess/*"
+    "*/QuicClientTransportIntegrationTest.ZeroRttRetryPacketTest/*"
+    "*/QuicClientTransportIntegrationTest.NewTokenReceived/*"
+    "*/QuicClientTransportIntegrationTest.UseNewTokenThenReceiveRetryToken/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttRejection/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttNotAttempted/*"
+    "*/QuicClientTransportIntegrationTest.TestZeroRttInvalidAppParams/*"
+    "*/QuicClientTransportIntegrationTest.ChangeEventBase/*"
+    "*/QuicClientTransportIntegrationTest.ResetClient/*"
+    "*/QuicClientTransportIntegrationTest.TestStatelessResetToken/*"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

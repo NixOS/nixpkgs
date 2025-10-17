@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "renault-api";
-  version = "0.4.0";
+  version = "0.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "hacf-fr";
     repo = "renault-api";
     tag = "v${version}";
-    hash = "sha256-ynHtQN5bE8+Z7ey/UdOJ9Z1cA+cVbSc8QyvTgLYvwY4=";
+    hash = "sha256-jnmfCYFtlfnFRMrNHfoiXgL8bael7IKmhuZCj+AOuz8=";
   };
 
   build-system = [ poetry-core ];

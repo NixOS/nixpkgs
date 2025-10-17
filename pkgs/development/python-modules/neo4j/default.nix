@@ -8,38 +8,29 @@
   pythonOlder,
   pytz,
   setuptools,
-  tomlkit,
 }:
 
 buildPythonPackage rec {
   pname = "neo4j";
-  version = "5.28.2";
+  version = "6.0.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "neo4j";
     repo = "neo4j-python-driver";
     tag = version;
-    hash = "sha256-dQvQO+Re+ki9w+itzE6/WdiiLdMlU4yePt01vAPe4+M=";
+    hash = "sha256-0Idfa7hFrLSD26PpA/lJcVtYpAPcX+AF3wab092Sbzw=";
   };
 
   postPatch = ''
-    # The dynamic versioning adds a postfix (.dev0) to the version
     substituteInPlace pyproject.toml \
       --replace-fail "setuptools ==" "setuptools >=" \
-      --replace-fail "tomlkit ==" "tomlkit >=" \
-      --replace-fail 'dynamic = ["version", "readme"]' 'dynamic = ["readme"]' \
-      --replace-fail '#readme = "README.rst"' 'version = "${version}"'
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    pytz
-    tomlkit
-  ];
+  dependencies = [ pytz ];
 
   optional-dependencies = {
     numpy = [ numpy ];

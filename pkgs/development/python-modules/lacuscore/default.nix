@@ -6,6 +6,7 @@
   dnspython,
   eval-type-backport,
   fetchFromGitHub,
+  orjson,
   playwrightcapture,
   poetry-core,
   pydantic,
@@ -17,19 +18,19 @@
 
 buildPythonPackage rec {
   pname = "lacuscore";
-  version = "1.16.6";
+  version = "1.19.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "LacusCore";
     tag = "v${version}";
-    hash = "sha256-LcqGJU+wMKTF1E4asysQPcfURqmgc4WQompPpHEgjb8=";
+    hash = "sha256-5cMgeZlbgK+YixHiwnolqxLUVNbfVdabtVZWZIGzjdk=";
   };
 
   pythonRelaxDeps = [
+    "dnspython"
+    "orjson"
     "pydantic"
     "redis"
     "requests"
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   dependencies = [
     defang
     dnspython
+    orjson
     playwrightcapture
     pydantic
     redis

@@ -7,7 +7,6 @@
   kconfig,
   kcoreaddons,
   kwindowsystem,
-  libdbusmenu,
   phonon,
   qttools,
   qtx11extras,
@@ -25,7 +24,6 @@ mkDerivation {
     kconfig
     kcoreaddons
     kwindowsystem
-    libdbusmenu
     phonon
     qtx11extras
   ]

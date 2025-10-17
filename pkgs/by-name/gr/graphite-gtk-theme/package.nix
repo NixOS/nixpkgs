@@ -96,10 +96,10 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook preInstall
 
       name= ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --dest $out/share/themes
 
       ${lib.optionalString wallpapers "sh -x wallpaper/install-wallpapers.sh"}
@@ -112,7 +112,7 @@ lib.checkListOfEnum "${pname}: theme variants"
 
         ./install.sh --justcopy --dest $out/share/grub/themes \
           ${lib.optionalString (builtins.elem "nord" tweaks) "--theme nord"} \
-          ${lib.optionalString (grubScreens != [ ]) "--screen " + builtins.toString grubScreens}
+          ${lib.optionalString (grubScreens != [ ]) "--screen " + toString grubScreens}
         )
       ''}
 

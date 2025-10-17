@@ -8,26 +8,20 @@
   setuptools,
 
   # dependencies
-  diskcache,
   guidance-stitch,
+  jinja2,
   llguidance,
   numpy,
-  ordered-set,
-  platformdirs,
   psutil,
   pydantic,
-  referencing,
   requests,
-  tiktoken,
 
   # optional-dependencies
   openai,
-  jsonschema,
-  fastapi,
-  uvicorn,
 
   # tests
   huggingface-hub,
+  jsonschema,
   pytestCheckHook,
   tokenizers,
   torch,
@@ -36,14 +30,14 @@
 
 buildPythonPackage rec {
   pname = "guidance";
-  version = "0.2.5";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
     tag = version;
-    hash = "sha256-dTMJOBGirEumbpTanCVZQJATfLxqxmpUCqE7pah97Zw=";
+    hash = "sha256-ZKHCnLGZdpr/R+vu7crijnKUFc+LMMxIdN9f6hYL7dk=";
   };
 
   build-system = [
@@ -56,37 +50,31 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    diskcache
     guidance-stitch
+    jinja2
     llguidance
     numpy
-    ordered-set
-    platformdirs
     psutil
     pydantic
-    referencing
     requests
-    tiktoken
   ];
 
   optional-dependencies = {
-    azureai = [ openai ];
-    openai = [ openai ];
-    schemas = [ jsonschema ];
-    server = [
-      fastapi
-      uvicorn
+    azureai = [
+      # azure-ai-inference
+      openai
     ];
+    openai = [ openai ];
   };
 
   nativeCheckInputs = [
     huggingface-hub
+    jsonschema
     pytestCheckHook
     tokenizers
     torch
     writableTmpDirAsHomeHook
-  ]
-  ++ optional-dependencies.schemas;
+  ];
 
   enabledTestPaths = [ "tests/unit" ];
 

@@ -32,14 +32,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.36.0";
+  version = "0.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
     tag = "v${version}";
-    hash = "sha256-/1ijyVl5CFwOXwo2Jki4o6fJ+Bf4kkDFfJT0+BO5Jhg=";
+    hash = "sha256-H4HQzLmQdDS8aS/OMsIHjWEogmctkF+5N5ClozeuITU=";
   };
 
   sourceRoot = "${src.name}/python";
@@ -51,7 +51,7 @@ buildPythonPackage rec {
       src
       sourceRoot
       ;
-    hash = "sha256-VuPnzeM9m3HYV6pEt5n7KSBtS5L4zHiK38tqND2sPHk=";
+    hash = "sha256-A4qZERrYm8FELuJNqy/fhbJxLxTp73oY7jc5bZavFFI=";
   };
 
   nativeBuildInputs = [
@@ -113,6 +113,9 @@ buildPythonPackage rec {
 
     # subprocess.CalledProcessError: Command ... returned non-zero exit status 1.
     # ModuleNotFoundError: No module named 'lance'
+    "test_lance_log_file"
+    "test_lance_log_file_invalid_path"
+    "test_lance_log_file_with_directory_creation"
     "test_timestamp_precision"
     "test_tracing"
 

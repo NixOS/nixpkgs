@@ -86,7 +86,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
   # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
   # referring to an array!
-  env.LDFLAGS = builtins.toString (
+  env.LDFLAGS = toString (
     optionals enableCuda [
       # Fake libnvidia-ml.so (the real one is deployed impurely)
       "-L${getLib cuda_nvml_dev}/lib/stubs"

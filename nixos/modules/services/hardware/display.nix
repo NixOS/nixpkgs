@@ -132,7 +132,7 @@ in
 
     hardware.display.outputs = lib.mkOption {
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options = {
             edid = lib.mkOption {
               type = with lib.types; nullOr str;
@@ -161,7 +161,7 @@ in
               '';
             };
           };
-        })
+        }
       );
       description = ''
         Hardware/kernel-level configuration of specific outputs.

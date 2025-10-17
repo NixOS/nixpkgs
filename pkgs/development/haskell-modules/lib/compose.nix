@@ -662,9 +662,9 @@ rec {
       # closePropagationFast.
       propagatedPlainBuildInputs =
         drvs:
-        builtins.map (i: i.val) (
+        map (i: i.val) (
           builtins.genericClosure {
-            startSet = builtins.map (drv: {
+            startSet = map (drv: {
               key = drv.outPath;
               val = drv;
             }) drvs;

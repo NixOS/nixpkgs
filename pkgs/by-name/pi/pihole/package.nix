@@ -1,5 +1,6 @@
 {
   lib,
+  nixosTests,
   fetchFromGitHub,
   makeBinaryWrapper,
   installShellFiles,
@@ -71,7 +72,7 @@
 
   solutions.default =
     let
-      out = builtins.placeholder "out";
+      out = placeholder "out";
       scriptsDir = "${out}/share/pihole/advanced/Scripts";
     in
     {
@@ -237,6 +238,8 @@
     platforms = lib.platforms.linux;
     mainProgram = "pihole";
   };
+
+  passthru.tests = nixosTests.pihole-ftl;
 
   passthru = {
     inherit stateDir;

@@ -3,6 +3,7 @@
   stdenv,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   libelf,
   libpcap,
   nix-update-script,
@@ -18,6 +19,15 @@ stdenv.mkDerivation rec {
     tag = "v${version}";
     hash = "sha256-+h+WsZ/QrDd+dNrR6CJb2uMG+vbUvK8GTxFJZOxknL0=";
   };
+
+  patches = [
+    # https://github.com/GNS3/dynamips/issues/305
+    (fetchpatch {
+      name = "cmake4-compat.patch";
+      url = "https://github.com/GNS3/dynamips/commit/fdbbb7d3887eaa5b024bbcbcc14215f420a7e989.patch";
+      hash = "sha256-CbiPGrIqn9KGnZEPUw7LiH8dkqzjfu4UxW1f7Fzbwro=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

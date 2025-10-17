@@ -225,7 +225,7 @@
       "testers.hasPkgConfigModule has been deprecated in favor of testers.hasPkgConfigModules. It accepts a list of strings via the moduleNames argument instead of a single moduleName."
       (
         testers.hasPkgConfigModules (
-          builtins.removeAttrs args [ "moduleName" ]
+          removeAttrs args [ "moduleName" ]
           // {
             moduleNames = [ moduleName ];
           }

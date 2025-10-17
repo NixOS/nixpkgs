@@ -13,16 +13,16 @@
 let
   ocamlPackages = ocaml-ng.ocamlPackages_5_2;
 in
-ocamlPackages.buildDunePackage rec {
+ocamlPackages.buildDunePackage {
   pname = "owi";
-  version = "0.2-unstable-2025-08-22";
+  version = "0.2-unstable-2025-10-09";
 
   src = fetchFromGitHub {
     owner = "ocamlpro";
     repo = "owi";
-    rev = "daad8163dec12abc8fe7f3384adc37e51f0994e9";
+    rev = "8500bc99a5a88515a019b1dc0d736152ab7d1767";
     fetchSubmodules = true;
-    hash = "sha256-C28YoUbovSEk9/RW0iYWNVB7/ETlDnY+vPTfQZPOerE=";
+    hash = "sha256-vskIVgtgUpjuJFzweDg6w2/ml31/6HQWMEjE08KibmM=";
   };
 
   nativeBuildInputs = with ocamlPackages; [

@@ -7,7 +7,7 @@
   gst_all_1,
   cmake,
   libglvnd,
-  tbb,
+  onetbb,
   ninja,
   pkg-config,
 }:
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtwayland
     qt6.wrapQtAppsHook
-    tbb
+    onetbb
   ];
 
   patches = [

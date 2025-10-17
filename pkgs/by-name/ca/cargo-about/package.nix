@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-about";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "EmbarkStudios";
     repo = "cargo-about";
-    rev = version;
-    sha256 = "sha256-EHqivIsS3wWvm3kJylynyobAsN2OlogXwLv9WdvzvJg=";
+    tag = version;
+    sha256 = "sha256-cNKZpDlfqEXeOE5lmu79AcKOawkPpk4PQCsBzNtIEbs=";
   };
 
-  cargoHash = "sha256-J3kSBu81jQ/u6uLOT3pKFl4tfE6qOABWhpEea1O0BZI=";
+  cargoHash = "sha256-NnocSs6UkuF/mCM3lIdFk+r51Iz2bHuYzMT/gEbT/nk=";
 
   nativeBuildInputs = [ pkg-config ];
 

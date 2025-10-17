@@ -86,7 +86,7 @@ let
         # Building with JIT in pkgsStatic fails like this:
         #   fatal error: 'stdio.h' file not found
         && !stdenv.hostPlatform.isStatic,
-      llvmPackages,
+      llvmPackages_20,
       nukeReferences,
       overrideCC,
 
@@ -161,6 +161,13 @@ let
       zstdEnabled = atLeast "15";
 
       dlSuffix = if olderThan "16" then ".so" else stdenv.hostPlatform.extensions.sharedLibrary;
+
+      # Pin LLVM 20 until upstream has resolved:
+      # https://www.postgresql.org/message-id/flat/d25e6e4a-d1b4-84d3-2f8a-6c45b975f53d%40applied-asynchrony.com
+      # TODO: Remove with next minor releases
+      llvmPackages = lib.warnIf (
+        version == "17.7"
+      ) "PostgreSQL: Is the pin for LLVM 20 still needed?" llvmPackages_20;
 
       stdenv' =
         if !stdenv.cc.isClang then

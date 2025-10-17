@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Free computer algebra and analysis system consisting of a high level language with a compiler and a series of mathematical libraries";
     homepage = "https://www.mathemagix.org/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

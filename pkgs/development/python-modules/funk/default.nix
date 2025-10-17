@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mwilliamson/funk";
     changelog = "https://github.com/mwilliamson/funk/blob/${src.tag}/NEWS";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

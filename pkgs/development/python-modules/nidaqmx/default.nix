@@ -2,22 +2,21 @@
   lib,
   stdenv,
   buildPythonPackage,
-  fetchFromGitHub,
-  poetry-core,
-  pythonOlder,
-  numpy,
-  deprecation,
-  hightime,
-  tzlocal,
-  python-decouple,
   click,
+  deprecation,
   distro,
-  requests,
-  sphinx,
-  sphinx-rtd-theme,
+  fetchFromGitHub,
   grpcio,
+  hightime,
+  numpy,
+  poetry-core,
   protobuf,
+  python-decouple,
+  requests,
+  sphinx-rtd-theme,
+  sphinx,
   toml,
+  tzlocal,
 }:
 
 buildPythonPackage rec {
@@ -32,32 +31,22 @@ buildPythonPackage rec {
     hash = "sha256-uxf+1nmJ+YFS3zGu+0YP4zOdBlSCHPYC8euqZIGwb00=";
   };
 
-  disabled = pythonOlder "3.8";
-
   build-system = [ poetry-core ];
 
-  prePatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'poetry.masonry.api' 'poetry.core.masonry.api'
-
-    substituteInPlace pyproject.toml \
-      --replace-fail '["poetry>=1.2"]' '["poetry-core>=1.0.0"]'
-  '';
-
   dependencies = [
-    numpy
+    click
     deprecation
     hightime
-    tzlocal
+    numpy
     python-decouple
-    click
     requests
+    tzlocal
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     distro
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docs = [
       sphinx
       sphinx-rtd-theme

@@ -51,8 +51,8 @@
   },
   {
     "pname": "Expecto",
-    "version": "10.2.1",
-    "hash": "sha256-DgwHFsPMySlnMag4kPTviTwrNOD7uPnnJLi9DCZif5s="
+    "version": "10.2.3",
+    "hash": "sha256-klv7QbGwd0ClMSe+wJ38URVmIawV2ksyrjzQbGhVUPg="
   },
   {
     "pname": "Expecto.Diff",
@@ -470,6 +470,11 @@
     "hash": "sha256-rf8Sh0fQq44Sneuvs64unkkIHg8kOjDGWE35j9iLx5I="
   },
   {
+    "pname": "Microsoft.TestPlatform.TranslationLayer",
+    "version": "17.13.0",
+    "hash": "sha256-F9s0dPTsmtHN+Khn4F0ybvjdJptH0M3sRE3oJDO1TBs="
+  },
+  {
     "pname": "Microsoft.VisualStudio.SolutionPersistence",
     "version": "1.0.28",
     "hash": "sha256-7BmeidGDb19wfvpaYA91luCFE1CStb8iLlnyJhVCJ6w="
@@ -503,6 +508,16 @@
     "pname": "Nerdbank.Streams",
     "version": "2.11.79",
     "hash": "sha256-1bzibVcSH8LJMR8Nb6Q0q/7fieTgxRnVY4C1RvRbrrI="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.0",
+    "hash": "sha256-Pp7fRylai8JrE1O+9TGfIEJrAOmnWTJRLWE+qJBahK0="
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "hash": "sha256-Prh2RPebz/s8AzHb2sPHg3Jl8s31inv9k+Qxd293ybo="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -658,6 +673,11 @@
     "pname": "Serilog",
     "version": "4.1.0",
     "hash": "sha256-r89nJ5JE5uZlsRrfB8QJQ1byVVfCWQbySKQ/m9PYj0k="
+  },
+  {
+    "pname": "Serilog.Extensions.Logging",
+    "version": "8.0.0",
+    "hash": "sha256-GoWxCpkdahMvYd7ZrhwBxxTyjHGcs9ENNHJCp0la6iA="
   },
   {
     "pname": "Serilog.Sinks.Async",

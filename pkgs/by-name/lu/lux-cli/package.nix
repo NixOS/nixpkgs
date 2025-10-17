@@ -18,18 +18,18 @@
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "lux-cli";
 
-  version = "0.17.0";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
-    owner = "nvim-neorocks";
+    owner = "lumen-oss";
     repo = "lux";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jVKCjAYeWjy2jDOHEb6vu4ZNTXrSETgUt6NIE++trPE=";
+    hash = "sha256-Lqw6U14fhkz4ZgSH0OBICvuj2ZJWo7p0dwhpn7szu2A=";
   };
 
   buildAndTestSubdir = "lux-cli";
 
-  cargoHash = "sha256-Kv8wYxPGainwayru9pWBplg2PNcC86ZTAmDp9M4G1bQ=";
+  cargoHash = "sha256-Dx6nmB8kmCKNzXVTROI+NIxvvCboACSOLUU1BCLnTUw=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
@@ -84,8 +84,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
       compatible with luarocks.org and the Rockspec specification,
       with first-class support for Nix and Neovim.
     '';
-    homepage = "https://nvim-neorocks.github.io/";
-    changelog = "https://github.com/nvim-neorocks/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    homepage = "https://lux.lumen-labs.org/";
+    changelog = "https://github.com/lumen-oss/lux/blob/${finalAttrs.src.tag}/CHANGELOG.md";
     license = lib.licenses.lgpl3Plus;
     maintainers = with lib.maintainers; [
       mrcjkb

@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       ];
       skipFlag = test: "--skip " + test;
     in
-    builtins.concatStringsSep " " (builtins.map skipFlag skipList);
+    builtins.concatStringsSep " " (map skipFlag skipList);
 
   meta = {
     description = "Rust tool to collect and aggregate code coverage data for multiple source files";

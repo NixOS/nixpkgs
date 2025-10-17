@@ -131,5 +131,5 @@ stdenv.mkDerivation rec {
     cp -r $(pwd)/install/${usr_prefix}/man $out
   '';
 
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

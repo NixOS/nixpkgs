@@ -8,13 +8,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "httpstat";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "pyproject";
   src = fetchFromGitHub {
     owner = "reorx";
     repo = "httpstat";
     rev = version;
-    sha256 = "sha256-zUdis41sQpJ1E3LdNwaCVj6gexi/Rk21IBUgoFISiDM=";
+    sha256 = "sha256-dOHFLw8suvpuZkcKEzq5HktMYBGE7+vtTD609TkAFfw=";
   };
 
   build-system = with python3Packages; [ setuptools ];

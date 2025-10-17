@@ -8,27 +8,19 @@
   xcbutil,
   xcbutilkeysyms,
   xcbutilwm,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sxhkd";
-  version = "0.6.2";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "sxhkd";
     rev = finalAttrs.version;
-    hash = "sha256-OelMqenk0tiWMLraekS/ggGf6IsXP7Sz7bv75NvnNvI=";
+    hash = "sha256-kbjbTzYL2dz/RpG+SgBYy+XS3W9PBEWkg6ocqAFG3VQ=";
   };
-
-  patches = [
-    (fetchpatch {
-      # Fixes an issue with overlapping chords when using multiple keyboard layouts.
-      name = "sxhkd-mod5.patch";
-      url = "https://github.com/baskerville/sxhkd/pull/307/commits/35e64f1d7b54c97ccc02e84e278012dae9bc3941.patch";
-      hash = "sha256-bvXWEEITbHC/h0nXQx99SXjvkI/KO36XXNSa1O8KSY0=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -50,6 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   makeFlags = [ "PREFIX=$(out)" ];
+
+  passthru.tests = {
+    inherit (nixosTests) startx;
+  };
 
   meta = {
     description = "Simple X hotkey daemon";

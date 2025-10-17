@@ -55,6 +55,7 @@ buildPythonPackage rec {
     "kaitaistruct"
     "passlib"
     "pyopenssl"
+    "pyperclip"
     "tornado"
     "typing-extensions"
     "urwid"

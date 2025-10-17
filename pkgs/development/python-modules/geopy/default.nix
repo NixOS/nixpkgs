@@ -49,6 +49,6 @@ buildPythonPackage rec {
     description = "Python Geocoding Toolbox";
     changelog = "https://github.com/geopy/geopy/releases/tag/${version}";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
   };
 }

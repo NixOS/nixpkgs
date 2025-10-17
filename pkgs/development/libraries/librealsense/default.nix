@@ -39,7 +39,7 @@ stdenv'.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "IntelRealSense";
-    repo = pname;
+    repo = "librealsense";
     rev = "v${version}";
     sha256 = "sha256-Stx337mGcpMCg9DlZmvX4LPQmCSzLRFcUQPxaD/Y0Ds=";
   };

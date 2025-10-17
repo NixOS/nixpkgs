@@ -95,7 +95,7 @@ let
 
 in
 tweak (
-  (builtins.removeAttrs nixpkgsJobs blacklist)
+  (removeAttrs nixpkgsJobs blacklist)
   // {
     nixosTests.simple = nixosJobs.tests.simple;
   }

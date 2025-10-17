@@ -113,9 +113,9 @@ You can install them like any other package:
 ```nix
 {
   environment.systemPackages = [
-    gnomeExtensions.dash-to-dock
-    gnomeExtensions.gsconnect
-    gnomeExtensions.mpris-indicator-button
+    pkgs.gnomeExtensions.dash-to-dock
+    pkgs.gnomeExtensions.gsconnect
+    pkgs.gnomeExtensions.mpris-indicator-button
   ];
 }
 ```

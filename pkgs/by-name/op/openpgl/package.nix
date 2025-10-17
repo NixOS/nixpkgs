@@ -4,7 +4,7 @@
   fetchFromGitHub,
   ninja,
   stdenv,
-  tbb,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    tbb
+    onetbb
   ];
 
   cmakeFlags = [
     "-DOPENPGL_BUILD_STATIC=OFF"
-    "-DTBB_ROOT=${tbb.out}"
+    "-DTBB_ROOT=${onetbb.out}"
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (

@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_37,
+  electron_38,
   python3,
   makeWrapper,
   callPackage,
@@ -23,7 +23,7 @@
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_37;
+  electron = electron_38;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.70.0";
+  version = "7.73.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-y9i9YQPsLt3SLqROyEZsyIkVy/os3hy+1UMUSFMZJTY=";
+    hash = "sha256-5cwGV0WPOS7O/xnQZ38t/hiQppqFFtVQmGuniGsD6H8=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -134,15 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-uVVUHvYhBCplKPyuS2+PKCxox8uWU2E/2EXLCG1ot54="
+        "sha256-9YvNs925xBUYEpF429rHfMXIGPapVYd8j1jZa/yBuhA="
       else
-        "sha256-tbfk/tIgqpjDtDiULbTVUOJf5i9eLX9xY7vUPrrjmu0=";
+        "sha256-lcr8EeL+wd6VihKcBgfXNRny8VskX8g7I7WTAkLuBss=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1757542492;
+    SOURCE_DATE_EPOCH = 1759413120;
   };
 
   preBuild = ''
@@ -218,10 +218,12 @@ stdenv.mkDerivation (finalAttrs: {
       install -Dm644 $icon $out/share/icons/hicolor/`basename ''${icon%.png}`/apps/signal-desktop.png
     done
 
+    # TODO: Remove --ozone-platform=wayland after next electron update,
+    # see https://github.com/electron/electron/pull/48309
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

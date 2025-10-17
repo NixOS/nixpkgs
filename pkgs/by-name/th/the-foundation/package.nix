@@ -13,14 +13,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "the-foundation";
-  version = "1.10.0";
+  version = "1.10.1";
 
   src = fetchFromGitea {
     domain = "git.skyjake.fi";
     owner = "skyjake";
     repo = "the_Foundation";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+z5vw6TIs+5RyS3CLSLIdflJqnDu8NL+yFHpSxwG2fM=";
+    hash = "sha256-EGltSimFdgojbXt97TbH7+a3iwuuI/jj14u9fkw4NnA=";
   };
 
   nativeBuildInputs = [
@@ -39,6 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeFeature "UNISTRING_DIR" "${libunistring}")
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=attribute-warning";
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/the_Foundation.pc \

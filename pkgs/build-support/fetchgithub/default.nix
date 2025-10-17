@@ -18,7 +18,8 @@ lib.makeOverridable (
     private ? false,
     forceFetchGit ? false,
     fetchLFS ? false,
-    sparseCheckout ? [ ],
+    rootDir ? "",
+    sparseCheckout ? lib.optional (rootDir != "") rootDir,
     githubBase ? "github.com",
     varPrefix ? null,
     meta ? { },
@@ -46,11 +47,28 @@ lib.makeOverridable (
       meta
       // {
         homepage = meta.homepage or baseUrl;
+        identifiers = {
+          purlParts =
+            if githubBase == "github.com" then
+              {
+                type = "github";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/github-definition.md
+                spec = "${owner}/${repo}@${(lib.revOrTag rev tag)}";
+              }
+            else
+              {
+                type = "generic";
+                # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+                spec = "${repo}?vcs_url=https://${githubBase}/${owner}/${repo}@${(lib.revOrTag rev tag)}";
+              };
+        }
+        // meta.identifiers or { };
       }
       // lib.optionalAttrs (position != null) {
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
+
     passthruAttrs = removeAttrs args [
       "owner"
       "repo"
@@ -69,6 +87,7 @@ lib.makeOverridable (
       || deepClone
       || forceFetchGit
       || fetchLFS
+      || (rootDir != "")
       || (sparseCheckout != [ ]);
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
@@ -153,12 +172,12 @@ lib.makeOverridable (
       // passthruAttrs
       // {
         inherit name;
+        meta = newMeta;
       };
   in
 
   fetcher fetcherArgs
   // {
-    meta = newMeta;
     inherit owner repo tag;
     rev = revWithTag;
   }

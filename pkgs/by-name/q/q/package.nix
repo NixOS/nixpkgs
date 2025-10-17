@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "q";
-  version = "0.19.8";
+  version = "0.19.9";
 
   src = fetchFromGitHub {
     owner = "natesales";
     repo = "q";
     tag = "v${version}";
-    hash = "sha256-kR++GyCdv/5/7E+BeZdTQTjokh2vU5sXjz0f/Ld18g0=";
+    hash = "sha256-QYSy2RaEWNkitehsmcfGYTCvpHtu1aVRuwBVNMjOHZ0=";
   };
 
-  vendorHash = "sha256-7OknLdkJB3ujX/DL+DVdWFK5RcoEw5R9h/KY4OfKeCw=";
+  vendorHash = "sha256-g5ZrzkPqkvoz0Q0ERXYlNk7lDf+6V27yKa+5NLVZHCI=";
 
   ldflags = [
     "-s"

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   scdoc,
   util-linux,
@@ -19,6 +20,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-MtanR+cxz6FsbNBngqLE+ITKPZFHmWGsD1mBDk0OVng=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/ReimuNotMoe/ydotool/commit/58fde33d9a8b393fd59348f71e80c56177b62706.patch?full_index=1";
+      hash = "sha256-Ga9DPCzpJwtYVHWwKKl3kzn2BPEZBZ7uzbEY/eFXGs4=";
+      includes = [ "CMakeLists.txt" ];
+    })
+  ];
 
   postPatch = ''
     substituteInPlace Daemon/ydotoold.c \

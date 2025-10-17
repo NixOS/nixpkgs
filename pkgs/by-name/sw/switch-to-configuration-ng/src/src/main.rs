@@ -197,17 +197,17 @@ fn required_env(var: &str) -> anyhow::Result<String> {
     std::env::var(var).with_context(|| format!("missing required environment variable ${var}"))
 }
 
-#[derive(Debug)]
-struct UnitState {
+struct UnitState<'a, 'b> {
     state: String,
     substate: String,
+    proxy: Proxy<'a, &'b LocalConnection>,
 }
 
 // Asks the currently running systemd instance via dbus which units are active. Returns a hash
 // where the key is the name of each unit and the value a hash of load, state, substate.
-fn get_active_units(
-    systemd_manager: &Proxy<'_, &LocalConnection>,
-) -> Result<HashMap<String, UnitState>> {
+fn get_active_units<'a, 'b>(
+    systemd_manager: &Proxy<'a, &'b LocalConnection>,
+) -> Result<HashMap<String, UnitState<'a, 'b>>> {
     let units = systemd_manager
         .list_units_by_patterns(Vec::new(), Vec::new())
         .context("Failed to list systemd units")?;
@@ -219,29 +219,36 @@ fn get_active_units(
                 id,
                 _description,
                 _load_state,
-                active_state,
-                sub_state,
+                state,
+                substate,
                 following,
-                _unit_path,
+                unit_path,
                 _job_id,
                 _job_type,
                 _job_path,
             )| {
-                if following.is_empty() && active_state != "inactive" {
-                    Some((id, active_state, sub_state))
+                let proxy = systemd_manager.connection.with_proxy(
+                    "org.freedesktop.systemd1",
+                    unit_path,
+                    Duration::from_millis(5000),
+                );
+
+                if following.is_empty() && state != "inactive" {
+                    Some((
+                        id,
+                        UnitState {
+                            state,
+                            substate,
+                            proxy,
+                        },
+                    ))
                 } else {
                     None
                 }
             },
         )
-        .fold(HashMap::new(), |mut acc, (id, active_state, sub_state)| {
-            acc.insert(
-                id,
-                UnitState {
-                    state: active_state,
-                    substate: sub_state,
-                },
-            );
+        .fold(HashMap::new(), |mut acc, (id, unit_state)| {
+            acc.insert(id, unit_state);
 
             acc
         }))
@@ -811,9 +818,12 @@ fn parse_fstab(fstab: impl BufRead) -> (HashMap<String, Filesystem>, HashMap<Str
 
 // Converts a path to the name of a systemd mount unit that would be responsible for mounting this
 // path.
-fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
+fn path_to_unit_name(bin_path: &Path, path: &str, is_automount: bool) -> String {
     let Ok(output) = std::process::Command::new(bin_path.join("systemd-escape"))
-        .arg("--suffix=mount")
+        .arg(format!(
+            "--suffix={}",
+            if is_automount { "automount" } else { "mount" }
+        ))
         .arg("-p")
         .arg(path)
         .output()
@@ -823,7 +833,7 @@ fn path_to_unit_name(bin_path: &Path, path: &str) -> String {
     };
 
     let Ok(unit) = String::from_utf8(output.stdout) else {
-        eprintln!("Unable to convert systemd-espape output to valid UTF-8");
+        eprintln!("Unable to convert systemd-escape output to valid UTF-8");
         die();
     };
 
@@ -894,20 +904,19 @@ impl std::fmt::Display for Job {
     }
 }
 
-fn new_dbus_proxies(
-    conn: &LocalConnection,
-) -> (Proxy<'_, &LocalConnection>, Proxy<'_, &LocalConnection>) {
-    (
-        conn.with_proxy(
-            "org.freedesktop.systemd1",
-            "/org/freedesktop/systemd1",
-            Duration::from_millis(10000),
-        ),
-        conn.with_proxy(
-            "org.freedesktop.login1",
-            "/org/freedesktop/login1",
-            Duration::from_millis(10000),
-        ),
+fn systemd1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.systemd1",
+        "/org/freedesktop/systemd1",
+        Duration::from_millis(10000),
+    )
+}
+
+fn login1_proxy(conn: &LocalConnection) -> Proxy<'_, &LocalConnection> {
+    conn.with_proxy(
+        "org.freedesktop.login1",
+        "/org/freedesktop/login1",
+        Duration::from_millis(10000),
     )
 }
 
@@ -946,7 +955,7 @@ fn do_user_switch(parent_exe: String) -> anyhow::Result<()> {
     }
 
     let dbus_conn = LocalConnection::new_session().context("Failed to open dbus connection")?;
-    let (systemd, _) = new_dbus_proxies(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
 
     let nixos_activation_done = Rc::new(RefCell::new(false));
     let _nixos_activation_done = nixos_activation_done.clone();
@@ -1140,7 +1149,8 @@ won't take effect until you reboot the system.
     let mut units_to_reload = map_from_list_file(RELOAD_LIST_FILE);
 
     let dbus_conn = LocalConnection::new_system().context("Failed to open dbus connection")?;
-    let (systemd, logind) = new_dbus_proxies(&dbus_conn);
+    let systemd = systemd1_proxy(&dbus_conn);
+    let logind = login1_proxy(&dbus_conn);
 
     let submitted_jobs = Rc::new(RefCell::new(HashMap::new()));
     let finished_jobs = Rc::new(RefCell::new(HashMap::new()));
@@ -1189,6 +1199,17 @@ won't take effect until you reboot the system.
         .context("Invalid regex for matching systemd unit names")?;
 
     for (unit, unit_state) in &current_active_units {
+        // Don't touch units not explicitly written by NixOS (e.g. units created by generators in
+        // /run/systemd/generator*)
+        if !unit_state
+            .proxy
+            .get("org.freedesktop.systemd1.Unit", "FragmentPath")
+            .map(|fragment_path: String| fragment_path.starts_with("/etc/systemd/system"))
+            .unwrap_or_default()
+        {
+            continue;
+        }
+
         let current_unit_file = Path::new("/etc/systemd/system").join(unit);
         let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
 
@@ -1319,8 +1340,10 @@ won't take effect until you reboot the system.
         .unwrap_or_default();
 
     for (mountpoint, current_filesystem) in current_filesystems {
+        let is_automount = current_filesystem.options.contains("x-systemd.automount");
+
         // Use current version of systemctl binary before daemon is reexeced.
-        let unit = path_to_unit_name(&current_system_bin, &mountpoint);
+        let unit = path_to_unit_name(&current_system_bin, &mountpoint, is_automount);
         if let Some(new_filesystem) = new_filesystems.get(&mountpoint) {
             if current_filesystem.fs_type != new_filesystem.fs_type
                 || current_filesystem.device != new_filesystem.device

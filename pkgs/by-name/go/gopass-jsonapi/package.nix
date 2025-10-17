@@ -13,7 +13,7 @@
 
 let
 
-  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.16/internal/jsonapi/manifest/manifest_path_linux.go
+  # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.18/internal/jsonapi/manifest/manifest_path_linux.go
   manifestPaths = {
     firefox = "$out/lib/mozilla/native-messaging-hosts/com.justwatch.gopass.json";
     chrome = "$out/etc/opt/chrome/native-messaging-hosts/com.justwatch.gopass.json";
@@ -27,16 +27,16 @@ let
 in
 buildGoModule rec {
   pname = "gopass-jsonapi";
-  version = "1.15.16";
+  version = "1.15.18";
 
   src = fetchFromGitHub {
     owner = "gopasspw";
     repo = "gopass-jsonapi";
     rev = "v${version}";
-    hash = "sha256-Nl69SSqs18zG7eYhBafXFGBVNQglSeffg7Z0Y8zuLmc=";
+    hash = "sha256-TN6GC+T2S3xdUGtQFbsSnFtdb+DsERLjLMCPCb8Q+2c=";
   };
 
-  vendorHash = "sha256-zncWJSA6cUthwcFZQXtJmwJZujaXt0Rubcga8D0+ZQc=";
+  vendorHash = "sha256-PJOGnx0zSxK95bWbweF/VoSfyXkkmru8XYToSh48YOw=";
 
   subPackages = [ "." ];
 
@@ -72,7 +72,7 @@ buildGoModule rec {
       # `gopass-jsonapi configure` will ask for them. (`--libpath` and `--global`
       # are overriden by `--manifest-path`. `--libpath` is only used to
       # compute Firefox's global manifest path. See
-      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.16/setup_others.go#L33-L46)
+      # https://github.com/gopasspw/gopass-jsonapi/blob/v1.15.18/setup_others.go#L33-L46)
       #
       # `gopass-jsonapi configure` ask for confirmation before writing any files,
       # `echo y` gives it.

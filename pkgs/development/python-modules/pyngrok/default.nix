@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyngrok";
-  version = "7.3.0";
+  version = "7.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8iQOSbneybJ+ugDxREzTzOesRdG8xJOpt27mPC2piCw=";
+    hash = "sha256-H3hv7Y0Va5m//XEwlqfsjIEYH5Scj1ySD2gg6S1rmHY=";
   };
 
   build-system = [

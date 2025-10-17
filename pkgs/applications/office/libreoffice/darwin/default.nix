@@ -57,8 +57,8 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript =
     let
-      defaultNixFile = builtins.toString ./default.nix;
-      updateNix = builtins.toString ./update.nix;
+      defaultNixFile = toString ./default.nix;
+      updateNix = toString ./update.nix;
       aarch64Url = dist."aarch64-darwin".url;
       x86_64Url = dist."x86_64-darwin".url;
     in

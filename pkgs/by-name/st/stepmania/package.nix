@@ -42,6 +42,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     sed '1i#include <ctime>' -i src/arch/ArchHooks/ArchHooks.h # gcc12
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   nativeBuildInputs = [

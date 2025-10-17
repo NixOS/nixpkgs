@@ -26,7 +26,7 @@ let
     owner = "coq-community";
     repo = "vscoq";
   };
-  fetch = metaFetch ({
+  fetch = metaFetch {
     release."2.0.3+coq8.18".sha256 = "sha256-VXhHCP6Ni5/OcsgoI1EbJfYCpXzwkuR8kbbKrl6dfjU=";
     release."2.0.3+coq8.18".rev = "v2.0.3+coq8.18";
     release."2.1.2".rev = "v2.1.2";
@@ -42,7 +42,7 @@ let
     release."2.2.6".rev = "v2.2.6";
     release."2.2.6".sha256 = "sha256-J8nRTAwN6GBEYgqlXa2kkkrHPatXsSObQg9QUQoZhgE=";
     inherit location;
-  });
+  };
   fetched = fetch (if version != null then version else defaultVersion);
 in
 ocamlPackages.buildDunePackage {

@@ -345,13 +345,6 @@ rec {
     );
 
   /**
-    Deprecated alias of mkPackageOption, to be removed in 25.05.
-
-    Previously used to create options with markdown documentation, which is no longer required.
-  */
-  mkPackageOptionMD = lib.warn "mkPackageOptionMD is deprecated and will be removed in 25.05; please use mkPackageOption." mkPackageOption;
-
-  /**
     This option accepts arbitrary definitions, but it does not produce an option value.
 
     This is useful for sharing a module across different module sets
@@ -503,7 +496,7 @@ rec {
     loc: defs:
     if defs == [ ] then
       abort "This case should never happen."
-    # Return early if we only have one element
+    # Returns early if we only have one element
     # This also makes it work for functions, because the foldl' below would try
     # to compare the first element with itself, which is false for functions
     else if length defs == 1 then

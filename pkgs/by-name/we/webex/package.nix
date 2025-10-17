@@ -50,7 +50,7 @@
   xcbutilrenderutil,
   xcbutilwm,
   p7zip,
-  tbb,
+  onetbb,
   wayland,
   libXScrnSaver,
 }:
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
     xcbutilkeysyms
     xcbutilrenderutil
     xcbutilwm
-    tbb
+    onetbb
     wayland
   ];
 

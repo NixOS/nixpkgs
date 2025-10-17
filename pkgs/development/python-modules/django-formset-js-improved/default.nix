@@ -2,6 +2,8 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+  setuptools,
   django,
   django-jquery-js,
 }:
@@ -9,7 +11,7 @@
 buildPythonPackage rec {
   pname = "django-formset-js-improved";
   version = "0.5.0.3";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
@@ -18,9 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-bOM24ldXk9WeV0jl6LIJB3BJ5hVWLA1PJTBBnJBoprU=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/pretix/django-formset-js/commit/7d8a33190d58ff9d75270264342eba82672d054e.patch";
+      hash = "sha256-eBRP0eqMnH7UM9cToR+diejO6dMDDVt2bbUHLDcaWjk=";
+    })
+  ];
+
+  build-system = [ setuptools ];
+
   buildInputs = [ django ];
 
-  propagatedBuildInputs = [ django-jquery-js ];
+  dependencies = [ django-jquery-js ];
 
   pythonImportsCheck = [ "djangoformsetjs" ];
 

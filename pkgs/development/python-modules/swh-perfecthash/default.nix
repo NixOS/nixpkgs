@@ -57,6 +57,6 @@ buildPythonPackage rec {
     description = "Perfect hash table for software heritage object storage";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-perfecthash";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

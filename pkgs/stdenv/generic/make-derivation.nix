@@ -60,7 +60,7 @@ let
     :::{.note}
     This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
 
-    Most arguments are also passed through to the underlying call of [`builtins.derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    Most arguments are also passed through to the underlying call of [`derivation`](https://nixos.org/manual/nix/stable/language/derivations).
     :::
   */
   mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
@@ -115,8 +115,8 @@ let
                 ${
                   args.name or "${pname}-${version}"
                 } was overridden with `version` but not `src` at ${pos.file or "<unknown file>"}:${
-                  builtins.toString pos.line or "<unknown line>"
-                }:${builtins.toString pos.column or "<unknown column>"}.
+                  toString pos.line or "<unknown line>"
+                }:${toString pos.column or "<unknown column>"}.
 
                 This is most likely not what you want. In order to properly change the version of a package, override
                 both the `version` and `src` attributes:
@@ -130,7 +130,7 @@ let
                 })
 
                 (To silence this warning, set `__intentionallyOverridingVersion = true` in your `overrideAttrs` call.)
-              '' (prev // (builtins.removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
+              '' (prev // (removeAttrs thisOverlay [ "__intentionallyOverridingVersion" ]))
             );
         in
         makeDerivationExtensible (extends' (lib.toExtension f0) rattrs);
@@ -176,6 +176,7 @@ let
     "disallowedRequisites"
     "allowedReferences"
     "allowedRequisites"
+    "allowedImpureDLLs"
   ];
 
   inherit (stdenv)
@@ -198,6 +199,7 @@ let
     isLinux
     isDarwin
     isWindows
+    isCygwin
     isOpenBSD
     isStatic
     isMusl
@@ -358,6 +360,8 @@ let
       sandboxProfile ? "",
       propagatedSandboxProfile ? "",
 
+      allowedImpureDLLs ? [ ],
+
       hardeningEnable ? [ ],
       hardeningDisable ? [ ],
 
@@ -479,6 +483,7 @@ let
           nativeBuildInputs
           ++ optional separateDebugInfo' ../../build-support/setup-hooks/separate-debug-info.sh
           ++ optional isWindows ../../build-support/setup-hooks/win-dll-link.sh
+          ++ optional isCygwin ../../build-support/setup-hooks/cygwin-dll-link.sh
           ++ optionals doCheck nativeCheckInputs
           ++ optionals doInstallCheck nativeInstallCheckInputs;
 
@@ -701,6 +706,19 @@ let
               __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
             }
           )
+          // optionalAttrs (isWindows || isCygwin) (
+            let
+              dlls =
+                allowedImpureDLLs
+                ++ lib.optionals isCygwin [
+                  "KERNEL32.dll"
+                  "cygwin1.dll"
+                ];
+            in
+            {
+              allowedImpureDLLs = if dlls != [ ] then dlls else null;
+            }
+          )
           // (
             if !__structuredAttrs then
               makeOutputChecks attrs
@@ -799,12 +817,12 @@ let
       env' = env // lib.optionalAttrs (mainProgram != null) { NIX_MAIN_PROGRAM = mainProgram; };
 
       derivationArg = makeDerivationArgument (
-        removeAttrs attrs ([
+        removeAttrs attrs [
           "meta"
           "passthru"
           "pos"
           "env"
-        ])
+        ]
         // lib.optionalAttrs __structuredAttrs { env = checkedEnv; }
         // {
           cmakeFlags = makeCMakeFlags attrs;
@@ -848,7 +866,7 @@ let
       # for a fixed-output derivation, the corresponding inputDerivation should
       # *not* be fixed-output. To achieve this we simply delete the attributes that
       # would make it fixed-output.
-      deleteFixedOutputRelatedAttrs = lib.flip builtins.removeAttrs [
+      deleteFixedOutputRelatedAttrs = lib.flip removeAttrs [
         "outputHashAlgo"
         "outputHash"
         "outputHashMode"

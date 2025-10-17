@@ -1,0 +1,41 @@
+From fe6e6412ac0fb155843585647c045a1fba2ee3f2 Mon Sep 17 00:00:00 2001
+From: Alyssa Ross <hi@alyssa.is>
+Date: Sat, 20 Sep 2025 14:11:13 +0200
+Subject: [PATCH] Add missing <cstdint> includes
+
+These files use types from <cstdint> without including it.  Without
+the includes, the build fails for musl.
+---
+Link: https://github.com/mariadb-corporation/mariadb-connector-odbc/pull/65
+
+ driver/interface/Exception.h | 1 +
+ driver/template/CArray.h     | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/driver/interface/Exception.h b/driver/interface/Exception.h
+index 1b2eb847..82f06273 100644
+--- a/driver/interface/Exception.h
++++ b/driver/interface/Exception.h
+@@ -21,6 +21,7 @@
+ #ifndef _EXCEPTION_H_
+ #define _EXCEPTION_H_
+ 
++#include <cstdint>
+ #include <stdexcept>
+ #include "class/SQLString.h"
+ 
+diff --git a/driver/template/CArray.h b/driver/template/CArray.h
+index 2c4be514..bd0e9912 100644
+--- a/driver/template/CArray.h
++++ b/driver/template/CArray.h
+@@ -24,6 +24,7 @@
+ #include <initializer_list>
+ #include <vector>
+ #include <stdexcept>
++#include <cstdint>
+ #include <cstring>
+ #include <string>
+ 
+-- 
+2.51.0
+

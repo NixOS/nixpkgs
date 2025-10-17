@@ -76,7 +76,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/strictdoc-project/strictdoc";
     changelog = "https://github.com/strictdoc-project/strictdoc/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ yuu ];
+    maintainers = [ ];
     mainProgram = "strictdoc";
   };
 }

@@ -26,7 +26,7 @@ in
 
 buildPythonPackage rec {
   pname = "llvmlite";
-  version = "0.45.0rc1";
+  version = "0.45.0";
   pyproject = true;
 
   disabled = isPyPy || pythonAtLeast "3.14";
@@ -35,7 +35,7 @@ buildPythonPackage rec {
     owner = "numba";
     repo = "llvmlite";
     tag = "v${version}";
-    hash = "sha256-wMTNtUuslCjopyfF6FAtfJAR0zuWjL8N8G16UKiplN0=";
+    hash = "sha256-xONYpDGsx6lhbAjAqwFx5Vo3PxeFsblhZxkxTSjMWOE=";
   };
 
   build-system = [ setuptools ];

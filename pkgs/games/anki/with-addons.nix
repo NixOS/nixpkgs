@@ -99,7 +99,7 @@ symlinkJoin {
       --set ANKI_ADDONS "${anki-utils.buildAnkiAddonsDir (ankiAddons ++ defaultAddons)}"
   '';
 
-  meta = builtins.removeAttrs anki.meta [
+  meta = removeAttrs anki.meta [
     "name"
     "outputsToInstall"
     "position"

@@ -104,7 +104,7 @@ let
       # and pings all maintainers.
       #
       # For further context, see https://github.com/NixOS/nixpkgs/pull/143113#issuecomment-953319957
-      basicArgs = builtins.removeAttrs args (
+      basicArgs = removeAttrs args (
         lib.filter (
           x:
           !(builtins.elem x [

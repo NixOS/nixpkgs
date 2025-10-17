@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roxterm";
-  version = "3.17.1";
+  version = "3.17.2";
 
   src = fetchFromGitHub {
     owner = "realh";
     repo = "roxterm";
     rev = finalAttrs.version;
-    hash = "sha256-daUfjiRk/Ie7eoAZnQlXCO//V1XZ0WOX7/kA32qqAzA=";
+    hash = "sha256-QMWxNgMbodkyUDG2o7nrnVZiWFpIYTdphU9yDEhzKNM=";
   };
 
   nativeBuildInputs = [
@@ -96,7 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl3Plus
     ];
     mainProgram = "roxterm";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -6,22 +6,23 @@
   pkg-config,
   openssl,
   rust-jemalloc-sys,
-  nix-update-script,
   rust-jemalloc-sys-unprefixed,
+  versionCheckHook,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "qdrant";
-  version = "1.14.0";
+  version = "1.15.5";
 
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    tag = "v${version}";
-    hash = "sha256-o9Nv4UsFgVngKWpe5sUR8tovtpB81tJBSm6We6DN20c=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-/bwSkXfk/7wyWhAE87SY99EOcHmzBwXzX5PNBdKOJUQ=";
   };
 
-  cargoHash = "sha256-xt7uu+YZGazbKwXEKXeIwcGg8G4djQx7nKpQYFv/L3Y=";
+  cargoHash = "sha256-U5CPqwsYW6QCGg2mFKzX50imnrvfGNSuFtYkwAB1OE4=";
 
   nativeBuildInputs = [
     protobuf
@@ -38,6 +39,17 @@ rustPlatform.buildRustPackage rec {
   # Needed to get openssl-sys to use pkg-config.
   env.OPENSSL_NO_VENDOR = 1;
 
+  # Fix cargo-auditable issue with bench_rocksdb = ["dep:rocksdb"]
+  auditable = false;
+
+  __darwinAllowLocalNetworking = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -50,4 +62,4 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ dit7ya ];
   };
-}
+})

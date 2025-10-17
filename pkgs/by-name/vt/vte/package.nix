@@ -31,6 +31,7 @@
   fast-float,
   nixosTests,
   blackbox-terminal,
+  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -85,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals systemdSupport [
     systemd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (darwinMinVersionHook "13.3")
   ];
 
   # Required by vte-2.91.pc.

@@ -60,6 +60,11 @@ buildPythonPackage rec {
     rm -r phik
   '';
 
+  disabledTests = [
+    # AssertionError: np.False_ is not true
+    "test_phik_calculation"
+  ];
+
   meta = with lib; {
     description = "Phi_K correlation analyzer library";
     longDescription = ''

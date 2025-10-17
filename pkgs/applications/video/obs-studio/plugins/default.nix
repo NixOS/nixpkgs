@@ -60,8 +60,6 @@
 
   obs-mute-filter = callPackage ./obs-mute-filter.nix { };
 
-  obs-ndi = qt6Packages.callPackage ./obs-ndi { };
-
   obs-noise = callPackage ./obs-noise.nix { };
 
   obs-pipewire-audio-capture = callPackage ./obs-pipewire-audio-capture.nix { };
@@ -95,8 +93,6 @@
   obs-transition-table = qt6Packages.callPackage ./obs-transition-table.nix { };
 
   obs-tuna = qt6Packages.callPackage ./obs-tuna { };
-
-  obs-urlsource = qt6Packages.callPackage ./obs-urlsource.nix { };
 
   obs-vaapi = callPackage ./obs-vaapi { };
 

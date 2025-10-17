@@ -44,8 +44,6 @@
   cgns,
   adios2,
   libLAS,
-  libgeotiff,
-  laszip_2,
   gdal,
   pdal,
   alembic,
@@ -69,7 +67,7 @@
   opencascade-occt,
 
   # threading
-  tbb,
+  onetbb,
   llvmPackages,
 
   # rendering
@@ -82,11 +80,10 @@
   libXcursor,
   gl2ps,
   libGL,
-  qt5,
   qt6,
 
   # custom options
-  qtVersion ? null,
+  withQt6 ? false,
   # To avoid conflicts between the propagated vtkPackages.hdf5
   # and the input hdf5 used by most downstream packages,
   # we set mpiSupport to false by default.
@@ -97,18 +94,8 @@
   testers,
 }:
 let
-  qtPackages =
-    if (isNull qtVersion) then
-      null
-    else if (qtVersion == "6") then
-      qt6
-    else if (qtVersion == "5") then
-      qt5
-    else
-      throw ''qtVersion must be "5", "6" or null'';
   vtkPackages = lib.makeScope newScope (self: {
     inherit
-      tbb
       mpi
       mpiSupport
       python3Packages
@@ -119,7 +106,6 @@ let
       inherit mpi mpiSupport;
       cppSupport = !mpiSupport;
     };
-    openvdb = self.callPackage openvdb.override { };
     netcdf = self.callPackage netcdf.override { };
     catalyst = self.callPackage catalyst.override { };
     adios2 = self.callPackage adios2.override { };
@@ -151,8 +137,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     libLAS
-    libgeotiff
-    laszip_2
     gdal
     pdal
     alembic
@@ -167,14 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
     openturns
     libarchive
     libGL
-    vtkPackages.openvdb
+    openvdb
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libXfixes
     libXrender
     libXcursor
   ]
-  ++ lib.optional (!(isNull qtPackages)) qtPackages.qttools
+  ++ lib.optional withQt6 qt6.qttools
   ++ lib.optional mpiSupport mpi
   ++ lib.optional pythonSupport tk;
 
@@ -205,13 +189,13 @@ stdenv.mkDerivation (finalAttrs: {
     libtheora
     cli11
     openslide
+    onetbb
     vtkPackages.hdf5
     vtkPackages.cgns
     vtkPackages.adios2
     vtkPackages.netcdf
     vtkPackages.catalyst
     vtkPackages.viskores
-    vtkPackages.tbb
   ]
   ++ lib.optionals stdenv.cc.isClang [
     llvmPackages.openmp
@@ -235,18 +219,13 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  # wrapper script calls qmlplugindump, crashes due to lack of minimal platform plugin
-  # Could not find the Qt platform plugin "minimal" in ""
-  preConfigure = lib.optionalString (qtVersion == "5") ''
-    export QT_PLUGIN_PATH=${lib.getBin qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}
-  '';
-
-  env = {
-    CMAKE_PREFIX_PATH = "${lib.getDev openvdb}/lib/cmake/OpenVDB";
-    NIX_LDFLAGS = "-L${lib.getLib libmysqlclient}/lib/mariadb";
-  };
-
   cmakeFlags = [
+    # During installPhase, keep rpath that came from target_link_libraries() of imported targets.
+    # Typically libgeotiff,liblaszip propagated from liblas and libmariadb found by pkg-config.
+    (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
+    # Required for locating the findOpenVDB.cmake module
+    # TODO: Add a setup hook in openvdb to append CMAKE_MODULE_PATH to cmakeFlagsArray
+    (lib.cmakeFeature "CMAKE_MODULE_PATH" "${lib.getDev openvdb}/lib/cmake/OpenVDB")
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
@@ -276,8 +255,8 @@ stdenv.mkDerivation (finalAttrs: {
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingOpenVR" false) # openvr
     (vtkBool "VTK_MODULE_ENABLE_VTK_RenderingAnari" false) # anari
 
-    # qtSupport
-    (vtkBool "VTK_GROUP_ENABLE_Qt" (!(isNull qtPackages)))
+    # withQt6
+    (vtkBool "VTK_GROUP_ENABLE_Qt" withQt6)
     (lib.cmakeFeature "VTK_QT_VERSION" "Auto") # will search for Qt6 first
 
     # pythonSupport
@@ -300,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove thirdparty find module that have been provided in nixpkgs.
     ''
       rm -rf $out/lib/cmake/vtk/patches
-      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig}.cmake
+      rm $out/lib/cmake/vtk/Find{EXPAT,Freetype,utf8cpp,LibXml2,FontConfig,TBB}.cmake
     ''
     # libvtkglad.so will find and load libGL.so at runtime.
     + lib.optionalString stdenv.hostPlatform.isLinux ''
@@ -325,9 +304,9 @@ stdenv.mkDerivation (finalAttrs: {
 
         package = finalAttrs.finalPackage;
 
-        nativeBuildInputs = lib.optionals (!(isNull qtPackages)) [
-          qtPackages.qttools
-          qtPackages.wrapQtAppsHook
+        nativeBuildInputs = lib.optionals withQt6 [
+          qt6.qttools
+          qt6.wrapQtAppsHook
         ];
       };
     };

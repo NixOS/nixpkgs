@@ -280,22 +280,22 @@ let
     # skip `null` value
     else
       [
-        (
-          "  ${key}${
-              if value == true then
-                ""
-              # just output key if value is `true`
-              else if isInt value then
-                "  ${builtins.toString value}"
-              else if path.check value then
-                "  \"${value}\""
-              # enclose path in ".."
-              else if singleLineStr.check value then
-                "  ${value}"
-              else
-                throw "assertion failed: cannot convert type" # should never happen
-            }"
-        )
+
+        "  ${key}${
+            if value == true then
+              ""
+            # just output key if value is `true`
+            else if isInt value then
+              "  ${builtins.toString value}"
+            else if path.check value then
+              "  \"${value}\""
+            # enclose path in ".."
+            else if singleLineStr.check value then
+              "  ${value}"
+            else
+              throw "assertion failed: cannot convert type" # should never happen
+          }"
+
       ];
 
   makeDsmSysStanza =

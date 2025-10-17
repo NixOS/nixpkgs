@@ -127,7 +127,7 @@ in
       description = "Soothing pastel theme for Tmux";
       license = licenses.mit;
       platforms = platforms.unix;
-      maintainers = with maintainers; [ ];
+      maintainers = [ ];
     };
   };
 
@@ -421,7 +421,7 @@ in
     };
   };
 
-  kanagawa = mkTmuxPlugin rec {
+  kanagawa = mkTmuxPlugin {
     pluginName = "kanagawa";
     version = "0-unstable-2025-02-10";
     src = fetchFromGitHub {
@@ -478,7 +478,7 @@ in
     };
   };
 
-  mode-indicator = mkTmuxPlugin rec {
+  mode-indicator = mkTmuxPlugin {
     pluginName = "mode-indicator";
     version = "unstable-2021-10-01";
     src = fetchFromGitHub {
@@ -606,7 +606,7 @@ in
       wrapProgram $target/scripts/main.sh \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             findutils
             fzf
             gnugrep
@@ -614,7 +614,7 @@ in
             ncurses
             pkgs.pass
             tmux
-          ])
+          ]
         }
     '';
 
@@ -770,13 +770,13 @@ in
       wrapProgram $target/bin/t \
         --prefix PATH : ${
           with pkgs;
-          lib.makeBinPath ([
+          lib.makeBinPath [
             fzf
             zoxide
             coreutils
             gnugrep
             gnused
-          ])
+          ]
         }
     '';
   };
@@ -1017,11 +1017,11 @@ in
     postInstall = ''
       wrapProgram $out/share/tmux-plugins/t-smart-tmux-session-manager/bin/t \
           --prefix PATH : ${
-            with pkgs;
-            lib.makeBinPath ([
+
+            lib.makeBinPath [
               pkgs.fzf
               pkgs.zoxide
-            ])
+            ]
           }
 
       find $target -type f -print0 | xargs -0 sed -i -e 's|fzf |${pkgs.fzf}/bin/fzf |g'
@@ -1065,12 +1065,12 @@ in
   vim-tmux-navigator = mkTmuxPlugin {
     pluginName = "vim-tmux-navigator";
     rtpFilePath = "vim-tmux-navigator.tmux";
-    version = "unstable-2025-04-25";
+    version = "unstable-2025-07-15";
     src = fetchFromGitHub {
       owner = "christoomey";
       repo = "vim-tmux-navigator";
-      rev = "33afa80db65113561dc53fa732b7f5e53d5ecfd0";
-      hash = "sha256-h3c5ki8N4kiNzbgjxHwLh625un6GqbLZv/4dPVW3vCI=";
+      rev = "c45243dc1f32ac6bcf6068e5300f3b2b237e576a";
+      hash = "sha256-IEPnr/GdsAnHzdTjFnXCuMyoNLm3/Jz4cBAM0AJBrj8=";
     };
   };
 
@@ -1131,12 +1131,12 @@ in
   tmux-toggle-popup = mkTmuxPlugin rec {
     pluginName = "tmux-toggle-popup";
     rtpFilePath = "toggle-popup.tmux";
-    version = "0.4.3";
+    version = "0.4.4";
     src = fetchFromGitHub {
       owner = "loichyan";
       repo = "tmux-toggle-popup";
       tag = "v${version}";
-      hash = "sha256-uQihpmQTJbjx5euXSGOFlekFgCTYXGu7SQYqyZjKLM8=";
+      hash = "sha256-tiiM5ETSrceyAyqhYRXjG1qCbjzZ0NJL5GWWbWX7Cbo=";
     };
     meta = with lib; {
       homepage = "https://github.com/loichyan/tmux-toggle-popup";

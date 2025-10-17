@@ -7,7 +7,7 @@
   nlopt,
   ipopt,
   boost,
-  tbb,
+  onetbb,
   # tests pass but take 30+ minutes
   runTests ? false,
 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     eigen
     nlopt
     boost
-    tbb
+    onetbb
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) ipopt;
 

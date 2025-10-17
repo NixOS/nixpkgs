@@ -17,7 +17,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "upsies";
-  version = "2025.04.21";
+  version = "2025.10.09";
   pyproject = true;
 
   src = fetchFromGitea {
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "plotski";
     repo = "upsies";
     tag = "v${version}";
-    hash = "sha256-gjv0HOFV1VdfhVejGbV2+bMxP9BPfB3/3p6nOAYMS34=";
+    hash = "sha256-mFGeN1ic0jTuamKG1QK30rz5OklwEN5Gykk93IOvUco=";
   };
 
   patches = [
@@ -37,9 +37,7 @@ python3Packages.buildPythonApplication rec {
     })
   ];
 
-  build-system = with python3Packages; [
-    setuptools
-  ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies = with python3Packages; [
     aiobtclientapi
@@ -65,9 +63,10 @@ python3Packages.buildPythonApplication rec {
     with python3Packages;
     [
       pytest-asyncio
+      pytest-cov-stub
+      pytest-httpserver
       pytest-mock
       pytest-timeout
-      pytest-httpserver
       pytestCheckHook
       trustme
     ]
@@ -94,7 +93,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Toolkit for collecting, generating, normalizing and sharing video metadata";
     homepage = "https://upsies.readthedocs.io/";
-    license = with licenses; [ gpl3Plus ];
+    license = licenses.gpl3Plus;
     mainProgram = "upsies";
     maintainers = with maintainers; [ ambroisie ];
   };

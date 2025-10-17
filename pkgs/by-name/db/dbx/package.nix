@@ -157,6 +157,6 @@ python.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/databrickslabs/dbx";
     changelog = "https://github.com/databrickslabs/dbx/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.databricks-dbx;
-    maintainers = with lib.maintainers; [ GuillaumeDesforges ];
+    maintainers = [ ];
   };
 }

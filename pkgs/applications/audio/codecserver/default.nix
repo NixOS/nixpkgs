@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "jketterl";
-    repo = pname;
+    repo = "codecserver";
     rev = version;
     sha256 = "sha256-JzaVBFl3JsFNDm4gy1qOKA9uAjUjNeMiI39l5gfH0aE=";
   };
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/codecserver.pc \
-      --replace '=''${prefix}//' '=/' \
-      --replace '=''${exec_prefix}//' '=/'
+      --replace-fail '=''${prefix}//' '=/' \
+      --replace-fail '=''${exec_prefix}//' '=/'
   '';
 
   meta = with lib; {

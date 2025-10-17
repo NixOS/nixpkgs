@@ -310,7 +310,8 @@ in
                         substitute ${cfg.ui.package}/share/applications/netbird.desktop \
                             "$out/share/applications/${mkBin "netbird"}.desktop" \
                           --replace-fail 'Name=Netbird' "Name=NetBird @ ${client.service.name}" \
-                          --replace-fail '${lib.getExe cfg.ui.package}' "$out/bin/${mkBin "netbird-ui"}"
+                          --replace-fail '${lib.getExe cfg.ui.package}' "$out/bin/${mkBin "netbird-ui"}" \
+                          --replace-fail 'Icon=netbird' "Icon=${cfg.ui.package}/share/pixmaps/netbird.png"
                       '')
                     ];
                   };
@@ -542,14 +543,7 @@ in
           after = [ "network.target" ];
           wantedBy = [ "multi-user.target" ];
 
-          path =
-            optionals (!config.services.resolved.enable) [ pkgs.openresolv ]
-            # useful for `netbird debug` system info gathering
-            ++ optionals config.networking.nftables.enable [ pkgs.nftables ]
-            ++ optionals (!config.networking.nftables.enable) [
-              pkgs.iptables
-              pkgs.ipset
-            ];
+          path = optionals (!config.services.resolved.enable) [ pkgs.openresolv ];
 
           serviceConfig = {
             ExecStart = "${getExe client.wrapper} service run";
@@ -570,6 +564,38 @@ in
           };
 
           stopIfChanged = false;
+        }
+      );
+    }
+    # netbird debug bundle related configurations
+    {
+      systemd.services = toClientAttrs (
+        client:
+        nameValuePair client.service.name {
+          /*
+            lets NetBird daemon know which systemd service to gather logs for
+            see https://github.com/netbirdio/netbird/blob/2c87fa623654c5eef76bc0226062290201eef13a/client/internal/debug/debug_linux.go#L50-L51
+          */
+          environment.SYSTEMD_UNIT = client.service.name;
+
+          path =
+            optionals config.networking.nftables.enable [ pkgs.nftables ]
+            ++ optionals (!config.networking.nftables.enable) [
+              pkgs.iptables
+              pkgs.ipset
+            ];
+        }
+      );
+      users.users = toHardenedClientAttrs (
+        client:
+        nameValuePair client.user.name {
+          extraGroups = [
+            /*
+              allows debug bundles to gather systemd logs for `netbird*.service`
+              this is not ideal for hardening as it grants access to the whole journal, not just own logs
+            */
+            "systemd-journal"
+          ];
         }
       );
     }

@@ -11,8 +11,8 @@
   },
   {
     "pname": "AudibleApi",
-    "version": "9.4.4.1",
-    "hash": "sha256-eH1gOfnZDNdIInwnH6Nct/uTl1UuP7VIQd2LHjnad0k="
+    "version": "9.4.5.1",
+    "hash": "sha256-EE2GpXsVakLqN5JiK8LvPG/lNTbQk6r/MW6MFZwEA+E="
   },
   {
     "pname": "Avalonia",
@@ -116,8 +116,8 @@
   },
   {
     "pname": "Dinah.Core",
-    "version": "9.0.2.1",
-    "hash": "sha256-pm5wFnKjzh5f4c9wIqQcaWf4E26EHXfHBLK1N0oUybE="
+    "version": "9.0.3.1",
+    "hash": "sha256-RQQ27ECECPCTHnmdPZ6YjvGpCY9xRg39VOASMtJKJL0="
   },
   {
     "pname": "Dinah.EntityFrameworkCore",
@@ -176,8 +176,8 @@
   },
   {
     "pname": "HtmlAgilityPack",
-    "version": "1.12.0",
-    "hash": "sha256-Ps3IfNHKCosY4yg1QAj4aldMHni8u1JnlMre0fLcjHo="
+    "version": "1.12.2",
+    "hash": "sha256-SbzDudru9uTMuMjSTxnKyoT0KbAkd8SVNH9VOfCiR50="
   },
   {
     "pname": "Humanizer.Core",
@@ -686,8 +686,8 @@
   },
   {
     "pname": "System.Collections.Immutable",
-    "version": "9.0.2",
-    "hash": "sha256-brMJqQ4PyRDOJCNq+HTFdFEphlyPD1x9YZGeHUbmtTo="
+    "version": "9.0.8",
+    "hash": "sha256-/5757YLLlbkDL29+ZSoTiJ4TpFy6HQSKwdMPlT7KYQw="
   },
   {
     "pname": "System.Collections.NonGeneric",
@@ -746,8 +746,8 @@
   },
   {
     "pname": "System.Diagnostics.EventLog",
-    "version": "9.0.2",
-    "hash": "sha256-IoiQbH8To9UqzYgJzYpFbuiRV3KGU85y4ccPTyttP/w="
+    "version": "9.0.8",
+    "hash": "sha256-u10dcgug0Pwp83YNagVto8Pu3ieuByflYLNwAdX9Fm0="
   },
   {
     "pname": "System.Globalization",
@@ -846,8 +846,8 @@
   },
   {
     "pname": "System.ServiceProcess.ServiceController",
-    "version": "9.0.2",
-    "hash": "sha256-7H8oHNlgRX1BK5sP0bZvMhKVGznOjeTgnqiPkgXW+0g="
+    "version": "9.0.8",
+    "hash": "sha256-Cb/kCaHXKtuGva1lsog1NDzEWVkHL5UUhBBGlA36N9Q="
   },
   {
     "pname": "System.Text.Encoding.CodePages",

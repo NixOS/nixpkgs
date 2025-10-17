@@ -70,6 +70,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jazzband/django-debug-toolbar";
     changelog = "https://django-debug-toolbar.readthedocs.io/en/latest/changes.html";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ yuu ];
+    maintainers = [ ];
   };
 }

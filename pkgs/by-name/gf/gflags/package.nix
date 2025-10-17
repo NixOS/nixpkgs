@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
@@ -16,6 +17,15 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "147i3md3nxkjlrccqg4mq1kyzc7yrhvqv5902iibc7znkvzdvlp0";
   };
+
+  patches = [
+    # Fix the build with CMake 4.
+    (fetchpatch {
+      name = "gflags-fix-cmake-4.patch";
+      url = "https://github.com/gflags/gflags/commit/70c01a642f08734b7bddc9687884844ca117e080.patch";
+      hash = "sha256-TYdroBbF27Wvvm/rOahBEvhezuKCcxbtgh/ZhpA5ESo=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

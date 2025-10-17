@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 
@@ -27,20 +28,11 @@ in
         type = types.bool;
         default = false;
         description = ''
-          This enables Parallels Tools for Linux guests, along with provided
-          video, mouse and other hardware drivers.
+          This enables Parallels Tools for Linux guests.
         '';
       };
 
-      package = mkOption {
-        type = types.nullOr types.package;
-        default = config.boot.kernelPackages.prl-tools;
-        defaultText = "config.boot.kernelPackages.prl-tools";
-        example = literalExpression "config.boot.kernelPackages.prl-tools";
-        description = ''
-          Defines which package to use for prl-tools. Override to change the version.
-        '';
-      };
+      package = lib.mkPackageOption pkgs "prl-tools" { };
     };
 
   };
@@ -52,10 +44,6 @@ in
     environment.systemPackages = [ prl-tools ];
 
     boot.extraModulePackages = [ prl-tools ];
-
-    boot.kernelModules = [
-      "prl_tg"
-    ];
 
     services.timesyncd.enable = false;
 

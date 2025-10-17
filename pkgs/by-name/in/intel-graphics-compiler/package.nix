@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   ninja,
   git,
@@ -16,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-graphics-compiler";
-  version = "2.16.0";
+  version = "2.18.5";
 
   # See the repository for expected versions:
   # <https://github.com/intel/intel-graphics-compiler/blob/v2.16.0/documentation/build_ubuntu.md#revision-table>
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
       owner = "intel";
       repo = "intel-graphics-compiler";
       tag = "v${version}";
-      hash = "sha256-vtVktc77OT7OANVXnLvEQx+NEQBPrTE5FFynXhpsK7o=";
+      hash = "sha256-AvEeK3rySEu89br4JgeZlXVQ6IXEzStVZYvehzdWq7g=";
     })
     (fetchFromGitHub {
       name = "llvm-project";
@@ -56,6 +57,13 @@ stdenv.mkDerivation rec {
       tag = "v15.0.15";
       hash = "sha256-kFVDS+qwoG1AXrZ8LytoiLVbZkTGR9sO+Wrq3VGgWNQ=";
     })
+  ];
+
+  patches = [
+    # Raise minimum CMake version to 3.5
+    # https://github.com/intel/intel-graphics-compiler/commit/4f0123a7d67fb716b647f0ba5c1ab550abf2f97d
+    # https://github.com/intel/intel-graphics-compiler/pull/364
+    ./bump-cmake.patch
   ];
 
   sourceRoot = ".";

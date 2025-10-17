@@ -3,7 +3,7 @@
   lib,
   melpaBuild,
   fetchFromGitHub,
-  # Java Script dependency
+  # JavaScript dependency
   nodejs,
   fetchNpmDeps,
   npmHooks,
@@ -49,7 +49,6 @@ melpaBuild (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
     eafPythonDeps = ps: [ ];
-    eafOtherDeps = [ ];
   };
 
   meta = {

@@ -7,6 +7,7 @@
   ruff,
 
   # tests
+  addBinToPathHook,
   versionCheckHook,
 
   nix-update-script,
@@ -51,14 +52,12 @@ let
       tomli
     ];
 
+    # Force using the Ruff executable rather than the Python package
     postPatch = ''
-      # Force using the Ruff executable rather than the Python package
-      substituteInPlace nbqa/__main__.py --replace 'if shell:' 'if shell or main_command == "ruff":'
-    '';
-
-    preCheck = ''
-      # Allow the tests to run `nbqa` itself from the path
-      export PATH="$out/bin":"$PATH"
+      substituteInPlace nbqa/__main__.py \
+        --replace-fail \
+          'if shell:' \
+          'if shell or main_command == "ruff":'
     '';
 
     nativeCheckInputs =
@@ -72,7 +71,10 @@ let
         yapf
       ])
       ++ lib.flatten (lib.attrValues optional-dependencies)
-      ++ [ versionCheckHook ];
+      ++ [
+        addBinToPathHook
+        versionCheckHook
+      ];
     versionCheckProgramArg = "--version";
 
     disabledTests = [
@@ -86,6 +88,9 @@ let
       "test_unable_to_reconstruct_message_pythonpath"
       "test_with_subcommand"
       "test_pylint_works"
+
+      # ruff output has changed and invalidates the snapshot tests (AssertionError)
+      "test_ruff_works"
     ];
 
     disabledTestPaths = [

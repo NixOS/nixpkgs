@@ -15,13 +15,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apriltags";
-  version = "3.4.4";
+  version = "3.4.5";
 
   src = fetchFromGitHub {
     owner = "AprilRobotics";
     repo = "AprilTags";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-fHVwRE7qAJZ5Q1SFUfS5du91CUcb3+3n12M/NThDEV4=";
+    hash = "sha256-pBUjRKfP884+bNgV5B4b8TiuhyZ9p/jIluxs+idv/28=";
   };
 
   nativeBuildInputs = [

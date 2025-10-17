@@ -10,7 +10,6 @@ mkChromiumDerivation (base: rec {
   name = "chromium-browser";
   packageName = "chromium";
   buildTargets = [
-    "run_mksnapshot_default"
     "chrome_sandbox"
     "chrome"
   ];

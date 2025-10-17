@@ -3,26 +3,19 @@
   stdenvNoCC,
   fetchurl,
   nodejs,
-  gitUpdater,
+  writableTmpDirAsHomeHook,
+  nix-update-script,
 }:
-let
-  owner = "google-gemini";
-  repo = "gemini-cli";
-  asset = "gemini.js";
-in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "gemini-cli-bin";
-  version = "0.4.0";
+  version = "0.9.0";
 
   src = fetchurl {
-    url = "https://github.com/${owner}/${repo}/releases/download/v${finalAttrs.version}/${asset}";
-    hash = "sha256-5uPzphiVsqczo3XOVrT0c0Y9hkFRUsyaORPRgJSqpck=";
+    url = "https://github.com/google-gemini/gemini-cli/releases/download/v${finalAttrs.version}/gemini.js";
+    hash = "sha256-nUuO+03WqWjW8GGQNyVBdDSVEKNBDDsDta7MP6YzcX8=";
   };
 
-  phases = [
-    "installPhase"
-    "fixupPhase"
-  ];
+  dontUnpack = true;
 
   strictDeps = true;
 
@@ -36,11 +29,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = [
-    ./update-asset.sh
-    "${owner}/${repo}"
-    "${asset}"
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    writableTmpDirAsHomeHook
   ];
+  # versionCheckHook cannot be used because the reported version might be incorrect (e.g., 0.6.1 returns 0.6.0).
+  installCheckPhase = ''
+    runHook preInstallCheck
+
+    "$out/bin/gemini" -v
+
+    runHook postInstallCheck
+  '';
+
+  passthru.updateScript = nix-update-script {
+    # Ignore `preview` and `nightly` tags
+    extraArgs = [ "--version-regex=^v([0-9.]+)$" ];
+  };
 
   meta = {
     description = "AI agent that brings the power of Gemini directly into your terminal";

@@ -123,6 +123,9 @@ builtins.intersectAttrs super {
     + drv.preCheck or "";
   }) super.agda2lagda;
 
+  # Executable is of interest without the closure of the library
+  fix-whitespace = enableSeparateBinOutput super.fix-whitespace;
+
   # scrypt requires SSE2
   password = super.password.override (
     lib.optionalAttrs (!(lib.meta.availableOn pkgs.stdenv.hostPlatform self.scrypt)) {
@@ -155,7 +158,13 @@ builtins.intersectAttrs super {
   # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
   streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
 
-  threadscope = enableSeparateBinOutput super.threadscope;
+  # Requires wrapGAppsHook otherwise we get: https://github.com/haskell/ThreadScope/issues/143
+  # We cannot use enableSeparateBinOutput here since it doesn't work with wrapGAppsHook
+  threadscope = (
+    overrideCabal (drv: {
+      executableToolDepends = (drv.executableToolDepends or [ ]) ++ [ pkgs.wrapGAppsHook3 ];
+    }) super.threadscope
+  );
 
   # Binary may be used separately for e.g. editor integrations
   cabal-cargs = enableSeparateBinOutput super.cabal-cargs;
@@ -263,7 +272,22 @@ builtins.intersectAttrs super {
   ormolu = self.generateOptparseApplicativeCompletions [ "ormolu" ] (
     enableSeparateBinOutput super.ormolu
   );
-  hnix = self.generateOptparseApplicativeCompletions [ "hnix" ] super.hnix;
+
+  hnix = lib.pipe super.hnix [
+    (self.generateOptparseApplicativeCompletions [ "hnix" ])
+    # For nix-instantiate(1)
+    (addTestToolDepends [ pkgs.nix ])
+    (overrideCabal (drv: {
+      testFlags = drv.testFlags or [ ] ++ [
+        "-p"
+        # Need to connect to the Nix daemon (?)
+        "!(/eval-okay-context-introspection/ || /eval-okay-context/ || /eval-okay-eq-derivations/ || /eval-okay-path/)"
+      ];
+    }))
+  ];
+
+  # Provides a library and an executable (pretty-derivation)
+  nix-derivation = enableSeparateBinOutput super.nix-derivation;
 
   # Generate shell completion.
   cabal2nix = self.generateOptparseApplicativeCompletions [ "cabal2nix" ] super.cabal2nix;
@@ -327,6 +351,76 @@ builtins.intersectAttrs super {
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
+
+  # These require postgres and pass the connection string manually via the CLI in tests.
+  consumers = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=consumers
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "consumers-test"
+        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) super.consumers
+  );
+  hpqtypes-extras = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=hpqtypes-extras
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "hpqtypes-extras-tests"
+        "--test-option=--connection-string=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) super.hpqtypes-extras
+  );
+  hpqtypes = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal (drv: {
+      preCheck = ''
+        export postgresqlTestUserOptions="LOGIN SUPERUSER"
+        export PGDATABASE=hpqtypes
+      '';
+      testToolDepends = drv.testToolDepends or [ ] ++ [
+        pkgs.postgresql
+        pkgs.postgresqlTestHook
+      ];
+      testTargets = [
+        "hpqtypes-tests"
+        "--test-option=\"host=$PGHOST user=$PGUSER dbname=$PGDATABASE\""
+      ];
+    }) (super.hpqtypes.override { libpq = pkgs.libpq; })
+  );
+  hpqtypes-effectful = dontCheckIf pkgs.postgresqlTestHook.meta.broken (
+    overrideCabal
+      (drv: {
+        preCheck = ''
+          export postgresqlTestUserOptions="LOGIN SUPERUSER"
+          export PGDATABASE=hpqtypes-effectful
+        '';
+        testToolDepends = drv.testToolDepends or [ ] ++ [
+          pkgs.postgresql
+          pkgs.postgresqlTestHook
+        ];
+      })
+      (
+        super.hpqtypes-effectful.overrideAttrs (drv: {
+          postgresqlTestSetupPost = ''
+            export DATABASE_URL="host=$PGHOST user=$PGUSER dbname=$PGDATABASE"
+          '';
+        })
+      )
+  );
 
   shelly = overrideCabal (drv: {
     # /usr/bin/env is unavailable in the sandbox
@@ -422,6 +516,14 @@ builtins.intersectAttrs super {
   hasql-notifications = dontCheck super.hasql-notifications;
   hasql-pool = dontCheck super.hasql-pool;
   hasql-transaction = dontCheck super.hasql-transaction;
+
+  # Test dependency tree-sitter-while is not uploaded to Hackage,
+  # so cabal2nix automatically marks it as broken
+  hs-tree-sitter-capi = lib.pipe super.hs-tree-sitter-capi [
+    dontCheck
+    doDistribute
+    unmarkBroken
+  ];
 
   # Avoid compiling twice by providing executable as a separate output (with small closure size),
   postgres-websockets = lib.pipe super.postgres-websockets [
@@ -752,6 +854,15 @@ builtins.intersectAttrs super {
   # Break infinite recursion cycle with criterion and network-uri.
   js-flot = dontCheck super.js-flot;
 
+  # Test suite unsets PATH, but wants to be able to run `whoami`
+  # https://github.com/stackbuilders/dotenv-hs/commit/6125dc2d260c5042f5416c1431882d1c2c91d3c8#issuecomment-3163926427
+  dotenv = overrideCabal (drv: {
+    postPatch = drv.postPatch or "" + ''
+      substituteInPlace spec/fixtures/.dotenv spec/Configuration/DotenvSpec.hs \
+        --replace-fail "whoami" "$(type -p whoami)"
+    '';
+  }) super.dotenv;
+
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
   splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
@@ -774,11 +885,30 @@ builtins.intersectAttrs super {
   # loc and loc-test depend on each other for testing. Break that infinite cycle:
   loc-test = super.loc-test.override { loc = dontCheck self.loc; };
 
-  # The test suites try to run the "fixpoint" and "liquid" executables built just
-  # before and fail because the library search paths aren't configured properly.
-  # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
-  liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
-  liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
+  smtlib-backends-process = overrideCabal (drv: {
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [ pkgs.z3 ];
+  }) super.smtlib-backends-process;
+
+  # overrideCabal because the tests need to execute the built executable "fixpoint"
+  liquid-fixpoint = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/fixpoint:$PATH
+    ''
+    + (drv.preCheck or "");
+    testSystemDepends = (drv.testSystemDepends or [ ]) ++ [
+      pkgs.cvc5
+      pkgs.z3
+    ];
+  }) super.liquid-fixpoint;
+
+  # overrideCabal because the tests need to execute the built executable "liquid"
+  liquidhaskell = overrideCabal (drv: {
+    preCheck = ''
+      export PATH=$PWD/dist/build/liquid:$PATH
+    ''
+    + (drv.preCheck or "");
+    libraryToolDepends = (drv.libraryToolDepends or [ ]) ++ [ pkgs.z3 ];
+  }) super.liquidhaskell;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
@@ -1021,7 +1151,7 @@ builtins.intersectAttrs super {
     addBuildTool self.buildHaskellPackages.gtk2hs-buildtools super.pango
   );
 
-  spago =
+  spago-legacy =
     let
       docsSearchApp_0_0_10 = pkgs.fetchurl {
         url = "https://github.com/purescript/purescript-docs-search/releases/download/v0.0.10/docs-search-app.js";
@@ -1043,49 +1173,43 @@ builtins.intersectAttrs super {
         sha256 = "1hjdprm990vyxz86fgq14ajn0lkams7i00h8k2i2g1a0hjdwppq6";
       };
     in
-    lib.pipe
-      (super.spago.override {
-        # base <4.19, text <2.1
-        versions = doJailbreak self.versions_5_0_5;
-        fsnotify = self.fsnotify_0_3_0_1;
-      })
-      [
-        (overrideCabal (drv: {
-          postUnpack = (drv.postUnpack or "") + ''
-            # Spago includes the following two files directly into the binary
-            # with Template Haskell.  They are fetched at build-time from the
-            # `purescript-docs-search` repo above.  If they cannot be fetched at
-            # build-time, they are pulled in from the `templates/` directory in
-            # the spago source.
-            #
-            # However, they are not actually available in the spago source, so they
-            # need to fetched with nix and put in the correct place.
-            # https://github.com/spacchetti/spago/issues/510
-            cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
-            cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
-            cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
-            cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
+    lib.pipe super.spago-legacy [
+      (overrideCabal (drv: {
+        postUnpack = (drv.postUnpack or "") + ''
+          # Spago includes the following two files directly into the binary
+          # with Template Haskell.  They are fetched at build-time from the
+          # `purescript-docs-search` repo above.  If they cannot be fetched at
+          # build-time, they are pulled in from the `templates/` directory in
+          # the spago source.
+          #
+          # However, they are not actually available in the spago source, so they
+          # need to fetched with nix and put in the correct place.
+          # https://github.com/spacchetti/spago/issues/510
+          cp ${docsSearchApp_0_0_10} "$sourceRoot/templates/docs-search-app-0.0.10.js"
+          cp ${docsSearchApp_0_0_11} "$sourceRoot/templates/docs-search-app-0.0.11.js"
+          cp ${purescriptDocsSearch_0_0_10} "$sourceRoot/templates/purescript-docs-search-0.0.10"
+          cp ${purescriptDocsSearch_0_0_11} "$sourceRoot/templates/purescript-docs-search-0.0.11"
 
-            # For some weird reason, on Darwin, the open(2) call to embed these files
-            # requires write permissions. The easiest resolution is just to permit that
-            # (doesn't cause any harm on other systems).
-            chmod u+w \
-              "$sourceRoot/templates/docs-search-app-0.0.10.js" \
-              "$sourceRoot/templates/purescript-docs-search-0.0.10" \
-              "$sourceRoot/templates/docs-search-app-0.0.11.js" \
-              "$sourceRoot/templates/purescript-docs-search-0.0.11"
-          '';
-        }))
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w \
+            "$sourceRoot/templates/docs-search-app-0.0.10.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.10" \
+            "$sourceRoot/templates/docs-search-app-0.0.11.js" \
+            "$sourceRoot/templates/purescript-docs-search-0.0.11"
+        '';
+      }))
 
-        # Tests require network access.
-        dontCheck
+      # Tests require network access.
+      dontCheck
 
-        # Overly strict upper bound on text
-        doJailbreak
+      # Overly strict upper bound on text (<1.3)
+      doJailbreak
 
-        # Generate shell completion for spago
-        (self.generateOptparseApplicativeCompletions [ "spago" ])
-      ];
+      # Generate shell completion for spago
+      (self.generateOptparseApplicativeCompletions [ "spago" ])
+    ];
 
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
@@ -1267,22 +1391,7 @@ builtins.intersectAttrs super {
   # not used to link against by anyone, we can make it’s closure smaller and
   # add its runtime dependencies in `haskellPackages` (as opposed to cabal2nix).
   cabal2nix-unstable = overrideCabal (drv: {
-    buildTools = (drv.buildTools or [ ]) ++ [
-      pkgs.buildPackages.makeWrapper
-    ];
-    postInstall = ''
-      ${drv.postInstall or ""}
-
-      wrapProgram $out/bin/cabal2nix \
-        --prefix PATH ":" "${
-          pkgs.lib.makeBinPath [
-            pkgs.nix
-            pkgs.nix-prefetch-scripts
-          ]
-        }"
-    '';
-
-    passthru = {
+    passthru = drv.passthru or { } // {
       updateScript = ../../../maintainers/scripts/haskell/update-cabal2nix-unstable.sh;
 
       # This is used by regenerate-hackage-packages.nix to supply the configuration
@@ -1308,7 +1417,7 @@ builtins.intersectAttrs super {
               >> "$out"
           '';
     };
-  }) (justStaticExecutables super.cabal2nix-unstable);
+  }) (enableSeparateBinOutput super.cabal2nix-unstable);
 
   # test suite needs local redis daemon
   nri-redis = dontCheck super.nri-redis;
@@ -1714,8 +1823,8 @@ builtins.intersectAttrs super {
     gi-javascriptcore4
     gi-javascriptcore6
     gi-webkit2webextension
-    gi-gtk_4_0_12
-    gi-gdk_4_0_10
+    gi-gtk
+    gi-gdk
     gi-gdk4
     gi-gdkx114
     gi-gtk4
@@ -1741,6 +1850,31 @@ builtins.intersectAttrs super {
   ];
 
   jsaddle-warp = addTestToolDepends [ pkgs.nodejs ] super.jsaddle-warp;
+
+  # Hackage tarball doesn't have the executable bits from git repo
+  wai-app-file-cgi = overrideCabal (drv: {
+    preCheck = ''
+      ${drv.preCheck or ""}
+      chmod +x test/cgi-bin/*
+      patchShebangs test/cgi-bin
+    '';
+  }) super.wai-app-file-cgi;
+
+  # All flags are off by default
+  mighttpd2 = lib.pipe super.mighttpd2 [
+    # Library shouldn't increase closure size of resulting daemon and utility executables
+    enableSeparateBinOutput
+    # Enable all possible features
+    (enableCabalFlag "dhall")
+    (addBuildDepends [ self.dhall ])
+    (enableCabalFlag "tls")
+    (addBuildDepends [
+      self.warp-tls
+      self.tls
+    ])
+    # Can't build quic with Stackage LTS at the moment (random >= 1.3, tls >= 2.1.10)
+    (disableCabalFlag "quic")
+  ];
 
   # Makes the mpi-hs package respect the choice of mpi implementation in Nixpkgs.
   # Also adds required test dependencies for checks to pass
@@ -1801,53 +1935,47 @@ builtins.intersectAttrs super {
   kmonad = lib.pipe super.kmonad [
     enableSeparateBinOutput
     (overrideCabal (drv: {
-      passthru = lib.recursiveUpdate drv.passthru or { } { tests.nixos = pkgs.nixosTests.kmonad; };
+      passthru = lib.recursiveUpdate drv.passthru or { } {
+        darwinDriver = pkgs.karabiner-dk.override {
+          driver-version = "5.0.0";
+        };
+        tests.nixos = pkgs.nixosTests.kmonad;
+      };
     }))
   ];
 
   xmobar = enableSeparateBinOutput super.xmobar;
 
-  # These test cases access the network
-  hpack_0_38_1 = doDistribute (
-    overrideCabal (drv: {
-      testFlags = drv.testFlags or [ ] ++ [
-        "--skip"
-        "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
-        "--skip"
-        "/Hpack.Defaults/ensureFile/downloads file if missing/"
-        "--skip"
-        "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
-      ];
-    }) super.hpack_0_38_1
-  );
+  # Combination of library and executable
+  extensions = enableSeparateBinOutput super.extensions;
 
-  # 2024-08-09: Disable some cabal-doctest tests pending further investigation.
+  # These test cases access the network
   inherit
     (lib.mapAttrs (
-      _: doctest:
-      lib.pipe doctest [
-        (overrideCabal (drv: {
-          patches = drv.patches or [ ] ++ [
-            (pkgs.fetchpatch {
-              name = "doctest-0.23.0-ghc-9.12.patch";
-              url = "https://github.com/sol/doctest/commit/77373c5d84cd5e59ea86ec30b9ada874f50fad9e.patch";
-              sha256 = "07dx99lna17fni1ccbklijx1ckkf2p4kk9wvkwib0ihmra70zpn2";
-              includes = [ "test/**" ];
-            })
-          ];
-          testFlags = drv.testFlags or [ ] ++ [
-            # These tests require cabal-install (would cause infinite recursion)
-            "--skip=/Cabal.Options"
-            "--skip=/Cabal.Paths/paths"
-            "--skip=/Cabal.ReplOptions" # >= 0.23
-          ];
-        }))
-        doDistribute
-      ]
-    ) { inherit (super) doctest doctest_0_23_0; })
-    doctest
-    doctest_0_23_0
+      _:
+      overrideCabal (drv: {
+        testFlags = drv.testFlags or [ ] ++ [
+          "--skip"
+          "/Hpack.Defaults/ensureFile/with 404/does not create any files/"
+          "--skip"
+          "/Hpack.Defaults/ensureFile/downloads file if missing/"
+          "--skip"
+          "/EndToEnd/hpack/defaults/fails if defaults don't exist/"
+        ];
+      })
+    ) super)
+    hpack
+    hpack_0_38_1
     ;
+
+  doctest = overrideCabal (drv: {
+    testFlags = drv.testFlags or [ ] ++ [
+      # These tests require cabal-install (would cause infinite recursion)
+      "--skip=/Cabal.Options"
+      "--skip=/Cabal.Paths/paths"
+      "--skip=/Cabal.ReplOptions" # >= 0.23
+    ];
+  }) super.doctest;
 
   # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
   # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
@@ -1866,11 +1994,11 @@ builtins.intersectAttrs super {
         ])
       )
       (
-        super.libtorch-ffi.override ({
+        super.libtorch-ffi.override {
           c10 = pkgs.libtorch-bin;
           torch = pkgs.libtorch-bin;
           torch_cpu = pkgs.libtorch-bin;
-        })
+        }
       );
 
   # Upper bounds of text and bytestring too strict: https://github.com/zsedem/haskell-cpython/pull/24

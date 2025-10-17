@@ -80,7 +80,7 @@ in
     '';
     allowedPatterns =
       with lib.types;
-      lib.mkOption rec {
+      lib.mkOption {
         type = attrsOf Pattern;
         description = "The hook config, describing which paths to mount for which system features";
         default = { };

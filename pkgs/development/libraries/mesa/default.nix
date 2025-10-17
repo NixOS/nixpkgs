@@ -29,7 +29,6 @@
   runCommand,
   rust-bindgen,
   rust-cbindgen,
-  rustPlatform,
   rustc,
   spirv-llvm-translator,
   stdenv,
@@ -121,8 +120,8 @@ let
   toCommand = dep: "ln -s ${dep} $out/${dep.pname}-${dep.version}.tar.gz";
 
   packageCacheCommand = lib.pipe rustDeps [
-    (builtins.map fetchDep)
-    (builtins.map toCommand)
+    (map fetchDep)
+    (map toCommand)
     (lib.concatStringsSep "\n")
   ];
 
@@ -145,6 +144,8 @@ stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/37027
+    ./gallivm-llvm-21.patch
   ];
 
   postPatch = ''
@@ -314,7 +315,6 @@ stdenv.mkDerivation {
     rustc
     rust-bindgen
     rust-cbindgen
-    rustPlatform.bindgenHook
     wayland-scanner
   ]
   ++ lib.optionals needNativeCLC [

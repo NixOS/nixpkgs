@@ -100,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       improving aestetics, and efficient use of system resources.
     '';
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "afterstep";
     platforms = lib.platforms.linux;
   };

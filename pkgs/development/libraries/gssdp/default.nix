@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/gssdp-${version}.tar.xz";
     sha256 = "VySWVDV9PVGxQDFRaaJMBnHeeqUsb3XIxcmr1Ao1JSk=";
   };
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "gssdp";
       freeze = true;
     };
 

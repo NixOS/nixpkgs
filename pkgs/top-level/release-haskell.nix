@@ -64,11 +64,11 @@ let
   # list of all compilers to test specific packages on
   released = with compilerNames; [
     ghc948
-    ghc963
     ghc967
     ghc984
     ghc9101
     ghc9102
+    ghc9103
     # exclude ghc9121 due to severe miscompilation bug
     ghc9122
   ];
@@ -334,7 +334,7 @@ let
         shellcheck-minimal
         sourceAndTags
         spacecookie
-        spago
+        spago-legacy
         specup
         splot
         stack
@@ -350,8 +350,7 @@ let
         uusi
         uqm
         uuagc
-        # vaultenv: broken by connection on 2024-03-16
-        wstunnel
+        vaultenv
         xmobar
         xmonadctl
         xmonad-with-packages
@@ -432,8 +431,8 @@ let
                 ;
             };
 
-            haskell.packages.native-bignum.ghc984 = {
-              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc984)
+            haskell.packages.native-bignum.ghc9103 = {
+              inherit (packagePlatforms pkgs.pkgsStatic.haskell.packages.native-bignum.ghc9103)
                 hello
                 random
                 QuickCheck
@@ -472,14 +471,6 @@ let
             {
               haskellPackages = {
                 inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskellPackages)
-                  ghc
-                  hello
-                  microlens
-                  ;
-              };
-
-              haskell.packages.ghc98 = {
-                inherit (packagePlatforms pkgs.pkgsCross.ghcjs.haskell.packages.ghc98)
                   ghc
                   hello
                   microlens
@@ -555,6 +546,7 @@ let
       ] released;
       Cabal_3_12_1_0 = released;
       Cabal_3_14_2_0 = released;
+      Cabal_3_16_0_0 = released;
       cabal2nix = released;
       cabal2nix-unstable = released;
       funcmp = released;
@@ -562,12 +554,14 @@ let
         # for 9.10, test that using filepath (instead of filepath-bytestring) works.
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
       ];
       haskell-language-server = released;
       hoogle = released;
       hlint = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
         compilerNames.ghc9122
       ] released;
       hpack = released;
@@ -595,6 +589,7 @@ let
       weeder = lib.subtractLists [
         compilerNames.ghc9101
         compilerNames.ghc9102
+        compilerNames.ghc9103
         compilerNames.ghc9122
       ] released;
     })
@@ -645,7 +640,7 @@ let
           teams = [ lib.teams.haskell ];
         };
         constituents = accumulateDerivations (
-          builtins.map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
+          map (name: jobs.haskellPackages."${name}") (maintainedPkgNames pkgs.haskellPackages)
         );
       };
 
@@ -675,7 +670,7 @@ let
         constituents = accumulateDerivations [
           jobs.pkgsStatic.haskell.packages.native-bignum.ghc948 # non-hadrian
           jobs.pkgsStatic.haskellPackages
-          jobs.pkgsStatic.haskell.packages.native-bignum.ghc984
+          jobs.pkgsStatic.haskell.packages.native-bignum.ghc9103
         ];
       };
     }

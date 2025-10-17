@@ -218,7 +218,7 @@ in
           Type = "simple";
           Restart = "on-failure";
 
-          AmbientCapablities = [ ];
+          AmbientCapabilities = [ ];
           CapabilityBoundingSet = [ ];
           LockPersonality = true;
           MemoryDenyWriteExecute = true;

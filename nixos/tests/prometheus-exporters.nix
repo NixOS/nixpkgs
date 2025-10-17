@@ -1291,7 +1291,7 @@ let
         wait_for_file("/var/lib/postfix/queue/public/showq")
         wait_for_open_port(9154)
         wait_until_succeeds(
-            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"/var/lib/postfix/queue/public/showq\"} 1'"
+            "curl -sSf http://localhost:9154/metrics | grep 'postfix_up{path=\"unix:///var/lib/postfix/queue/public/showq\"} 1'"
         )
         succeed(
             "curl -sSf http://localhost:9154/metrics | grep 'postfix_smtpd_connects_total 0'"
@@ -1612,6 +1612,21 @@ let
                 'smokeping_response_ttl{host="127.0.0.1",ip="127.0.0.1",source="",tos="0"}'
             )
         )
+      '';
+    };
+
+    storagebox = {
+      exporterConfig = {
+        enable = true;
+        tokenFile = "/tmp/faketoken";
+      };
+      exporterTest = ''
+        succeed(
+          'echo faketoken > /tmp/faketoken'
+        )
+        wait_for_unit("prometheus-storagebox-exporter.service")
+        wait_for_open_port(9509)
+        succeed("curl -sSf localhost:9509/metrics | grep 'process_open_fds'")
       '';
     };
 

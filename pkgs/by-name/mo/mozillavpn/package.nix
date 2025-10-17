@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.30.0";
+  version = "2.31.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-dwVgwEs1prEXOYuYlO1m5lJD5AKolW0Stj2HOZC+Y+o=";
+    hash = "sha256-+Aexwj/iNIhriiUrMhtj2c9S3e5jGN7OvREXUzi/03s=";
   };
   patches = [ ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-dap2t7nINWaTTahiPUFVkgAlkDuVt0w0mz13ycqwLcI=";
+    hash = "sha256-bJTOTHlCYSrlhy6GewpK8qhBGRH49xNkFqOXZug5lNA=";
   };
 
   buildInputs = [
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"

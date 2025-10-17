@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "telethon";
-  version = "1.40.0";
+  version = "1.41.1";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "LonamiWebs";
     repo = "Telethon";
     tag = "v${version}";
-    hash = "sha256-y8nMh2dAy5ixATYGjH04FtfpvhO2HU5HRTXBr7Z+Dds=";
+    hash = "sha256-V38enxg1ZW1zd87xRLr0GHv+t1NK7fwDFxXDqPvCf2U=";
   };
 
   patches = [

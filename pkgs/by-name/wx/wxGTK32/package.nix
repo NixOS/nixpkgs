@@ -152,7 +152,6 @@ stdenv.mkDerivation rec {
       wxWindowsException31
     ];
     maintainers = with maintainers; [
-      tfmoraes
       fliegendewurst
     ];
     platforms = platforms.unix;

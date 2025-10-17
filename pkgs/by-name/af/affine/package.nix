@@ -4,7 +4,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_35,
+  electron_37,
   nodejs_22,
   yarn-berry_4,
   cacert,
@@ -28,7 +28,7 @@ let
   hostPlatform = stdenvNoCC.hostPlatform;
   nodePlatform = hostPlatform.node.platform;
   nodeArch = hostPlatform.node.arch;
-  electron = electron_35;
+  electron = electron_37;
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
@@ -135,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   configurePhase = ''
-    runHook preConfigurePhase
+    runHook preConfigure
 
     # cargo config
     mkdir -p .cargo
@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cd $HOME/.electron-prebuilt-zip-tmp && zip --recurse-paths - .) > $ELECTRON_FORGE_ELECTRON_ZIP_DIR/electron-v$ELECTRON_VERSION_IN_LOCKFILE-${nodePlatform}-${nodeArch}.zip
     export ELECTRON_SKIP_BINARY_DOWNLOAD=1
 
-    runHook postConfigurePhase
+    runHook postConfigure
   '';
 
   buildPhase = ''

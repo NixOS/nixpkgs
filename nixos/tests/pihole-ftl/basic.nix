@@ -5,7 +5,7 @@
   ...
 }:
 
-rec {
+{
   name = "pihole-ftl-basic";
   meta.maintainers = with lib.maintainers; [ averyvigolo ];
 

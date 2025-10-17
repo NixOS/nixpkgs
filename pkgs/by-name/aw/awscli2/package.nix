@@ -23,6 +23,13 @@ let
             "test_check_link_response_only" # fails on hydra https://hydra.nixos.org/build/242624087/nixlog/1
           ];
         });
+        prompt-toolkit = prev.prompt-toolkit.overridePythonAttrs (prev: rec {
+          version = "3.0.51";
+          src = prev.src.override {
+            inherit version;
+            hash = "sha256-kxoWLjsn/JDIbxtIux+yxSjCdhR15XycBt4TMRx7VO0=";
+          };
+        });
         python-dateutil = prev.python-dateutil.overridePythonAttrs (prev: rec {
           version = "2.8.2";
           format = "setuptools";
@@ -66,14 +73,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "awscli2";
-  version = "2.28.1"; # N.B: if you change this, check if overrides are still up-to-date
+  version = "2.31.11"; # N.B: if you change this, check if overrides are still up-to-date
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-cli";
     tag = version;
-    hash = "sha256-TpyjYnLTBPU83g6/h+BrX4hd4dUbZUvDyJ6m/3v38+A=";
+    hash = "sha256-JyTL3q8MMKSKbNiJvBL3u7vpUNFt9rp2Ueh8mL9FRkM=";
   };
 
   postPatch = ''

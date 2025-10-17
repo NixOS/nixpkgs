@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "viceroy";
-  version = "0.14.2";
+  version = "0.14.4";
 
   src = fetchFromGitHub {
     owner = "fastly";
     repo = "viceroy";
     rev = "v${version}";
-    hash = "sha256-tfIUmyQjoWflAjA4aOIJ7xhUgVG5Njf54W36h8a1vQ8=";
+    hash = "sha256-rK+Us4QvvWpHtMvq5s3koPyy7xKhVQsxUMQnpyfMtDU=";
   };
 
-  cargoHash = "sha256-0xrT1Eum0ttApkN09U4MEo/vM6y6t6+e7iVcuih2b5U=";
+  cargoHash = "sha256-SacepQEMpDxqd7vl/sjkxyTb3R7z+Q1IQOrfZyV8nRU=";
 
   cargoTestFlags = [
     "--package viceroy-lib"

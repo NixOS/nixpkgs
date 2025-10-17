@@ -52,6 +52,12 @@ stdenv.mkDerivation rec {
 
     # required for darwin and linux-musl
     ./pthread-include.patch
+
+    # cmake 4 support
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-cpp/clucene/files/clucene-2.3.3.4-cmake4.patch?id=e06df280c75b0f0803954338466e5278d777f984";
+      hash = "sha256-e0u6J91bnuy24hIrSl+Ap5Xwds/nzzGiWpzskwaGx9o=";
+    })
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     ./fix-darwin.patch

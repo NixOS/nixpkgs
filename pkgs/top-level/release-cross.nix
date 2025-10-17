@@ -112,6 +112,10 @@ let
     windows.pthreads = nativePlatforms;
   };
 
+  cygwinCommon = {
+    hello = nativePlatforms;
+  };
+
   wasiCommon = {
     gmp = nativePlatforms;
     boehmgc = nativePlatforms;
@@ -205,6 +209,8 @@ in
 
   # Test some cross builds on 64 bit mingw-w64
   crossMingwW64 = mapTestOnCross systems.examples.mingwW64 windowsCommon;
+
+  x86_64-cygwin = mapTestOnCross systems.examples.x86_64-cygwin cygwinCommon;
 
   # Linux on mipsel
   fuloongminipc = mapTestOnCross systems.examples.fuloongminipc linuxCommon;

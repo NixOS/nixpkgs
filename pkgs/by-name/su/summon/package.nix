@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "summon";
-  version = "0.10.5";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "cyberark";
     repo = "summon";
     rev = "v${version}";
-    hash = "sha256-m4aLGEUXBakfp+KwUZBmNzFEHuG58ZuWQFF5TmUM7pM=";
+    hash = "sha256-Z98NgC9abNOHscwtV14gbI8SL8ODMbthMZMjhKz7KEk=";
   };
 
   vendorHash = "sha256-QOCPATTs2vvww+ekt6HFg2IUA/NFmE8+2WkMby2f/OE=";

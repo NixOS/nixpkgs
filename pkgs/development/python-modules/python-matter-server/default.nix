@@ -12,7 +12,6 @@
   # dependencies
   aiohttp,
   aiorun,
-  async-timeout,
   atomicwrites,
   coloredlogs,
   orjson,
@@ -57,7 +56,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "8.1.0";
+  version = "8.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -66,7 +65,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     tag = version;
-    hash = "sha256-g6C0QbnDA6+DMD0a5oWMSGWY4ZXUDJAXSmD05DmHPqI=";
+    hash = "sha256-vTJGe6OGFM+q9+iovsQMPwkrHNg2l4pw9BFEtSA/vmA=";
   };
 
   patches = [
@@ -89,7 +88,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     aiorun
-    async-timeout
     atomicwrites
     coloredlogs
     orjson

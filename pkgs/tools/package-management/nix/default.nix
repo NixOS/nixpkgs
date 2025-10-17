@@ -166,37 +166,51 @@ lib.makeExtensible (
       nix_2_30 = addTests "nix_2_30" self.nixComponents_2_30.nix-everything;
 
       nixComponents_2_31 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.31.1";
+        version = "2.31.2";
         inherit (self.nix_2_30.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_31";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
           tag = version;
-          hash = "sha256-p7GXuu9OyQ1etTYl5egWIk2Ck7CdpXj80CqkhfE4H0c=";
+          hash = "sha256-NLGXPLjENLeKVOg3OZgHXZ+1x6sPIKq9FHH8pxbCrDI=";
         };
       };
 
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
+      nixComponents_2_32 = nixDependencies.callPackage ./modular/packages.nix rec {
+        version = "2.32.0";
+        inherit (self.nix_2_31.meta) maintainers teams;
+        otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
+        src = fetchFromGitHub {
+          owner = "NixOS";
+          repo = "nix";
+          tag = version;
+          hash = "sha256-OOd7dFe0tX0CVPygR7U6cqs5fiJAvFO1el1QmjDG1GM=";
+        };
+      };
+
+      nix_2_32 = addTests "nix_2_32" self.nixComponents_2_32.nix-everything;
+
       nixComponents_git = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.31pre20250712_${lib.substring 0 8 src.rev}";
+        version = "2.32pre20250919_${lib.substring 0 8 src.rev}";
         inherit maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_git";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
-          rev = "b124512388378cd38c4e353ddb387905d296e877";
-          hash = "sha256-asBUtSonedNfMO0/Z6HUi8RK/y/7I1qBDHv2UryichA=";
+          rev = "07b96c1d14ab8695e5071fb73e19049fce8f3b6b";
+          hash = "sha256-9tR08zFwQ9JNohdfeb40wcLfRnicXpKrHF+FHFva/WA=";
         };
       };
 
       git = addTests "git" self.nixComponents_git.nix-everything;
 
-      latest = self.nix_2_31;
+      latest = self.nix_2_32;
 
       # Read ./README.md before bumping a major release
-      stable = addFallbackPathsCheck self.nix_2_28;
+      stable = addFallbackPathsCheck self.nix_2_31;
     }
     // lib.optionalAttrs config.allowAliases (
       lib.listToAttrs (

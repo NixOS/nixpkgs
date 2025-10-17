@@ -28,24 +28,27 @@
   sdl3,
   sndio,
   stb,
+  toml11,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
+  xbyak,
   xorg,
   xxHash,
   zlib-ng,
+  zydis,
   nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
     tag = "v.${finalAttrs.version}";
-    hash = "sha256-0wvxvKw2XHhnXiM5DiiiY+nWPoze0fvNCJeTsKzoCn0=";
+    hash = "sha256-ZHgwFWSoEaWILTafet5iQvaLwLtXy3HuCxjkQMt4PBA=";
     fetchSubmodules = true;
   };
 
@@ -79,11 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     sdl3
     sndio
     stb
+    toml11
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
+    xbyak
     xxHash
     zlib-ng
+    zydis
   ];
 
   nativeBuildInputs = [

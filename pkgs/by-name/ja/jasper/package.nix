@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "jasper";
-  version = "4.2.6";
+  version = "4.2.8";
 
   src = fetchFromGitHub {
     owner = "jasper-software";
     repo = "jasper";
     rev = "version-${finalAttrs.version}";
-    hash = "sha256-tq27ANDDRdP224E12UeQnvE6BFZRk7KczH4Dq+yt0nY=";
+    hash = "sha256-p/xqDsYivhG/21808hdMKFMWl4DfQ0huAHiftVjOdJM=";
   };
 
   outputs = [
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

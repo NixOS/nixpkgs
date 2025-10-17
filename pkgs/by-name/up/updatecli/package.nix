@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   go,
   buildGoModule,
   fetchFromGitHub,
@@ -11,16 +12,16 @@
 
 buildGoModule rec {
   pname = "updatecli";
-  version = "0.105.0";
+  version = "0.108.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${version}";
-    hash = "sha256-VE5sU3R9dVi97fyc+bafZUz/9v6iPfw3MRsjCm8ifuo=";
+    hash = "sha256-JFv40wtfjNMQrjmku7iVwJ0MquaHPyiRaN9Ti5tCUwI=";
   };
 
-  vendorHash = "sha256-HdeFXQGisz0q/ZZv1UMo9ig9zBzH6Uyap8c1vl4zl5w=";
+  vendorHash = "sha256-9tA55vTI+UARfR1hxmdb9iuByPeKfFLLwAbwoCG0dsc=";
 
   # tests require network access
   doCheck = false;
@@ -45,7 +46,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd updatecli \
       --bash <($out/bin/updatecli completion bash) \
       --fish <($out/bin/updatecli completion fish) \

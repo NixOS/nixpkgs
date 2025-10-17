@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
     mainProgram = "fxload";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ realsnick ];
+    maintainers = with maintainers; [ logger ];
   };
 }

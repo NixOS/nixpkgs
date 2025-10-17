@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-guardian";
-  version = "3.1.3";
+  version = "3.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-guardian";
     repo = "django-guardian";
     tag = version;
-    hash = "sha256-cQw4bFcblq80ss64rQpg1VyS7rKiheEBJvmRRPyAn9Y=";
+    hash = "sha256-imisHa5DOIQrQCEPWC/0EqPjDq12tR3xr0Dl1VifJoI=";
   };
 
   build-system = [ setuptools ];

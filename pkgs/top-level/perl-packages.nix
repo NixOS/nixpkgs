@@ -1175,6 +1175,31 @@ with self;
     };
   };
 
+  AppFatPackerSimple = buildPerlModule {
+    pname = "App-FatPacker-Simple";
+    version = "0.20";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/App-FatPacker-Simple-0.20.tar.gz";
+      sha256 = "sha256-nkSy/gno2PxT5aA3UWCRK0Dnn9fIdcCOtQvoGUZocSo=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      pkgs.gnumake
+      ClonePP
+      PPI
+      TestLeakTrace
+      DistributionMetadata
+    ];
+    propagatedBuildInputs = [
+      AppFatPacker
+    ];
+    meta = {
+      description = "A simpler way to fatpack perl programs";
+      homepage = "https://metacpan.org/pod/App::FatPacker::Simple";
+      mainProgram = "Simple.pm";
+    };
+  };
+
   Appcpanminus = buildPerlPackage {
     pname = "App-cpanminus";
     version = "1.7047";
@@ -2062,21 +2087,14 @@ with self;
 
   AuthenSASL = buildPerlPackage {
     pname = "Authen-SASL";
-    version = "2.1700";
+    version = "2.1900";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1700.tar.gz";
-      hash = "sha256-uG1aV2uNOHruJPOfR6VK/RS7ZrCQA9tQZQAfHeA6js4=";
+      url = "mirror://cpan/authors/id/E/EH/EHUELS/Authen-SASL-2.1900.tar.gz";
+      hash = "sha256-vjUzpokbLmdxULR5waDUvxHIu+6+0+e466NAU+k5I7A=";
     };
-    patches = [
-      (fetchurl {
-        name = "CVE-2025-40918.patch";
-        url = "https://security.metacpan.org/patches/A/Authen-SASL/2.1800/CVE-2025-40918-r1.patch";
-        hash = "sha256-2Mk6RoD7tI8V6YFV8gs08LLs0QeMJqwGz/eZ6zXBBpw=";
-      })
-    ];
     propagatedBuildInputs = [
-      DigestHMAC
       CryptURandom
+      DigestHMAC
     ];
     meta = {
       description = "SASL Authentication framework";
@@ -2927,10 +2945,10 @@ with self;
 
   CacheFastMmap = buildPerlPackage {
     pname = "Cache-FastMmap";
-    version = "1.57";
+    version = "1.60";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.57.tar.gz";
-      hash = "sha256-4Es6KNmJ7bj7lur6zcK4f57MuE8EfrLifLJqp9CMx7g=";
+      url = "mirror://cpan/authors/id/R/RO/ROBM/Cache-FastMmap-1.60.tar.gz";
+      hash = "sha256-my07Cu8JXSxZs1akSClQ0MOiLoTm5puXu5bcwe3GQv8=";
     };
     buildInputs = [ TestDeep ];
     meta = {
@@ -10327,10 +10345,10 @@ with self;
 
   DBIxSearchBuilder = buildPerlPackage {
     pname = "DBIx-SearchBuilder";
-    version = "1.77";
+    version = "1.82";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.77.tar.gz";
-      hash = "sha256-O/il1cjF/cYK0vY/Y/c90fZJP/TYJYcoOj4iM36P4HA=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/DBIx-SearchBuilder-1.82.tar.gz";
+      hash = "sha256-3IDX5PRVdt4/2Ui2slD+3FAM/QCrzTC2qLLXeJV2uPE=";
     };
     buildInputs = [ DBDSQLite ];
     propagatedBuildInputs = [
@@ -10956,6 +10974,29 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  DistributionMetadata = buildPerlModule {
+    pname = "Distribution-Metadata";
+    version = "0.10";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/S/SK/SKAJI/Distribution-Metadata-0.10.tar.gz";
+      sha256 = "sha256-uynMfh26OQphJnYfB9BwQ27fqinrjpBwMCOwXzET6nE=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      pkgs.gnumake
+    ];
+    propagatedBuildInputs = [
+      PerlStrip
+      CPANDistnameInfo
+      JSON
+    ];
+    meta = {
+      description = "Distribution::Metadata - gather distribution metadata in local";
+      homepage = "https://metacpan.org/pod/Distribution::Metadata";
+      mainProgram = "Metadata.pm";
     };
   };
 
@@ -16201,8 +16242,8 @@ with self;
     pname = "HTML-RewriteAttributes";
     version = "0.05";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TS/TSIBLEY/HTML-RewriteAttributes-0.05.tar.gz";
-      hash = "sha256-GAjsfN9A0nCFdf5hVaiPEDsX/sd5c6WDHC8kwlDnpYw=";
+      url = "mirror://cpan/authors/id/B/BP/BPS/HTML-RewriteAttributes-0.06.tar.gz";
+      hash = "sha256-vGQgAmEUL5pffgeG3FqySmMwvBm9Hj6btLbXwxYhtyI=";
     };
     propagatedBuildInputs = [ HTMLParser ];
     meta = {
@@ -19713,14 +19754,32 @@ with self;
 
   MCE = buildPerlPackage {
     pname = "MCE";
-    version = "1.889";
+    version = "1.901";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.889.tar.gz";
-      hash = "sha256-22FT5HTQRvwlMFC/U8VAAthM1Mp30hwrnfVv7rgJu+0=";
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-1.901.tar.gz";
+      hash = "sha256-3RRrHpmFPjPBzbtowgJK7nQGeseDlNUbgdH6so9Q0TU=";
     };
     meta = {
       description = "Many-Core Engine for Perl providing parallel processing capabilities";
       homepage = "https://github.com/marioroy/mce-perl";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+    };
+  };
+
+  MCEShared = buildPerlPackage {
+    pname = "MCE-Shared";
+    version = "1.893";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MA/MARIOROY/MCE-Shared-1.893.tar.gz";
+      hash = "sha256-+kxIet+w2zyPK2qidNM9j4J/ojTGMbs689lPpKPJRi8=";
+    };
+    propagatedBuildInputs = [ MCE ];
+    meta = {
+      description = "MCE extension for sharing data supporting threads and processes";
+      homepage = "https://github.com/marioroy/mce-shared";
       license = with lib.licenses; [
         artistic1
         gpl1Plus
@@ -29086,6 +29145,26 @@ with self;
     };
   };
 
+  PerlStrip = buildPerlPackage {
+    pname = "Perl-Strip";
+    version = "1.2";
+    src = pkgs.fetchurl {
+      url = "mirror://cpan/authors/id/M/ML/MLEHMANN/Perl-Strip-1.2.tar.gz";
+      sha256 = "sha256-PI7buDcjZwzD/RIEFVUW+a18N2nzPnnan4xlxQItixo=";
+    };
+    buildInputs = [
+      ModuleBuildTiny
+      PPI
+    ];
+    propagatedBuildInputs = [
+      commonsense
+    ];
+    meta = {
+      description = "Perl::Strip - reduce file size by stripping whitespace, comments, pod etc";
+      mainProgram = "perlstrip";
+    };
+  };
+
   PodAbstract = buildPerlPackage {
     pname = "Pod-Abstract";
     version = "0.20";
@@ -33227,6 +33306,10 @@ with self;
       export AUTOMATED_TESTING=1
       ./scripts/yath test -j $NIX_BUILD_CORES
     '';
+
+    # The t/integration/preload.t test is broken on riscv64
+    # https://github.com/Test-More/Test2-Harness/issues/290
+    doCheck = !stdenv.hostPlatform.isRiscV;
 
     propagatedBuildInputs = [
       DataUUID
@@ -38990,10 +39073,10 @@ with self;
 
   XSParseKeyword = buildPerlModule {
     pname = "XS-Parse-Keyword";
-    version = "0.46";
+    version = "0.48";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.46.tar.gz";
-      hash = "sha256-ZaJyapEAeUma1LuDxBeAWdpDMGrpLIc0yPoXwC8ioB0=";
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/XS-Parse-Keyword-0.48.tar.gz";
+      hash = "sha256-hXoHC6Rlq1uJ1NjTbZI1jt1m5ee0qRWEYR2FElrJqcc=";
     };
     buildInputs = [
       ExtUtilsCChecker
