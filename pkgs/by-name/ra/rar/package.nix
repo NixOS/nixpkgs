@@ -28,11 +28,6 @@ let
       hash = "sha256-1ExnVDre49wWwB/BKP/L9xdYOMx8qkeZfmObJ7xm4dY=";
     };
   };
-  manSrc = fetchurl {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/rar.1?h=rar&id=8e39a12e88d8a3b168c496c44c18d443c876dd10";
-    name = "rar.1";
-    hash = "sha256-93cSr9oAsi+xHUtMsUvICyHJe66vAImS2tLie7nt8Uw=";
-  };
 in
 stdenv.mkDerivation {
   pname = "rar";
@@ -60,10 +55,6 @@ stdenv.mkDerivation {
     install -Dm644 rarfiles.lst -t "$out/etc"
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    installManPage ${manSrc}
   '';
 
   passthru.updateScript = ./update.sh;
