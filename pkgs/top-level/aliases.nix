@@ -916,6 +916,7 @@ mapAliases {
   ffmpeg_5-full = throw "ffmpeg_5-full has been removed, please use another version"; # Added 2024-07-12
   FIL-plugins = fil-plugins; # Added 2024-06-12
   fileschanged = throw "'fileschanged' has been removed as it is unmaintained upstream"; # Added 2024-04-19
+  filesender = throw "'filesender' has been removed because of its simplesamlphp dependency"; # Added 2025-10-17
   filet = throw "'filet' has been removed as the upstream repo has been deleted"; # Added 2025-02-07
   finger_bsd = bsd-finger; # Added 2022-03-14
   fingerd_bsd = bsd-fingerd; # Added 2022-03-14
