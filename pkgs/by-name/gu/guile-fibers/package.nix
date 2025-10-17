@@ -1,23 +1,23 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
+  fetchFromGitea,
   autoreconfHook,
   guile,
   libevent,
   pkg-config,
   texinfo,
 }:
-
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "guile-fibers";
-  version = "1.3.1";
+  version = "1.4.1";
 
-  src = fetchFromGitHub {
-    owner = "wingo";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "fibers";
     repo = "fibers";
-    rev = "v${version}";
-    hash = "sha256-jJKA5JEHsmqQ/IKb1aNmOtoVaGKNjcgTKyo5VCiJbXM=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-y+61jBQHDznWsq3EYnyCkqBo9lM/EPOraUxLd0fu1pc=";
   };
 
   strictDeps = true;
@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/wingo/fibers";
+    homepage = "https://codeberg.org/fibers/fibers";
     description = "Concurrent ML-like concurrency for Guile";
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = guile.meta.platforms;
   };
-}
+})
