@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "oci";
-  version = "2.160.3";
+  version = "2.161.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-python-sdk";
     tag = "v${version}";
-    hash = "sha256-Nz3/aGumNTMItE/HL5tAdh0QbZngeO02CfJKq4GZ+qY=";
+    hash = "sha256-i+LQNBrD8aJEpQSPePv+9JebOAJN2RnDKK8vNdhO9Wk=";
   };
 
   pythonRelaxDeps = [
