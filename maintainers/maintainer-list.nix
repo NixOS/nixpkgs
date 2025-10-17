@@ -9315,6 +9315,12 @@
     name = "Greaka";
     keys = [ { fingerprint = "6275 FB5C C9AC 9D85 FF9E  44C5 EE92 A5CD C367 118C"; } ];
   };
+  greatnatedev = {
+    email = "Nate@pelmel.net";
+    github = "GreatNateDev";
+    githubId = 99703235;
+    name = "Nate";
+  };
   greg = {
     email = "greg.hellings@gmail.com";
     github = "greg-hellings";
