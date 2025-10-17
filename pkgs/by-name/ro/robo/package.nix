@@ -16,7 +16,7 @@ php82.buildComposerProject2 (finalAttrs: {
     hash = "sha256-bAT4jHvqWeYcACeyGtBwVBA2Rz+AvkZcUGLDwSf+fLg=";
   };
 
-  vendorHash = "sha256-vketnTu5VEgt3HBbtnTppWl3+sSSIsCB2MpvL27bxv4=";
+  vendorHash = "sha256-Rg8WTZUnWA4bemNmE7hxFwfnlMtYyPkeltAQEWJ2VDU=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
