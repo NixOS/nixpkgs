@@ -58,7 +58,10 @@ stdenv.mkDerivation {
     homepage = "https://gitlab.com/idevecore/pomodoro";
     license = lib.licenses.gpl3Plus;
     mainProgram = "pomodoro";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      iedame
+    ];
     platforms = lib.platforms.unix;
   };
 }
