@@ -96,8 +96,8 @@ let
     only one of {option}`hashedPassword`, {option}`password`, or
     {option}`hashedPasswordFile` will be set.
 
-    In a system where [](#opt-systemd.sysusers.enable) is `true`, typically
-    only one of {option}`initialPassword`, {option}`initialHashedPassword`,
+    In a system where [](#opt-systemd.sysusers.enable) or [](#opt-services.userborn.enable) is `true`,
+    typically only one of {option}`initialPassword`, {option}`initialHashedPassword`,
     or {option}`hashedPasswordFile` will be set.
 
     If the option {option}`users.mutableUsers` is true, the password defined
@@ -874,7 +874,7 @@ in
       };
 
       system.activationScripts.users =
-        if !config.systemd.sysusers.enable then
+        if !config.systemd.sysusers.enable && !config.services.userborn.enable then
           {
             supportsDryActivation = true;
             text = ''
@@ -925,7 +925,7 @@ in
       # This does not work when the users and groups are created by
       # systemd-sysusers because the users are created too late then.
       system.activationScripts.hashes =
-        if !config.systemd.sysusers.enable then
+        if !config.systemd.sysusers.enable && !config.services.userborn.enable then
           {
             deps = [ "users" ];
             text = ''
