@@ -18,6 +18,8 @@ let
         rev = "v${self.idris2-version}";
         hash = "sha256-VwveX3fZfrxEsytpbOc5Tm6rySpLFhTt5132J6rmrmM=";
       };
+      # Prelude libraries
+      mkPrelude = callPackage ./mkPrelude.nix { }; # Build helper
 
       libidris2_support = callPackage ./libidris2_support.nix { };
       idris2-unwrapped = callPackage ./unwrapped.nix { };
