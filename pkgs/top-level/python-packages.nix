@@ -9278,6 +9278,8 @@ self: super: with self; {
 
   messagebird = callPackage ../development/python-modules/messagebird { };
 
+  meta-memcache = callPackage ../development/python-modules/meta-memcache { };
+
   meta-memcache-socket = callPackage ../development/python-modules/meta-memcache-socket { };
 
   metaflow = callPackage ../development/python-modules/metaflow { };
