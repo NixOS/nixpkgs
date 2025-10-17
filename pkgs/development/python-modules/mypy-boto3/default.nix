@@ -785,8 +785,8 @@ in
       "sha256-FgQalWvHO0Zzisw9CLKIKeNchDh5DMHjos2OIyXto40=";
 
   mypy-boto3-lexv2-runtime =
-    buildMypyBoto3Package "lexv2-runtime" "1.40.15"
-      "sha256-75J3DLBsf70P6ur8XyB6iGExyzosrHbb82o7RjE5/3M=";
+    buildMypyBoto3Package "lexv2-runtime" "1.40.54"
+      "sha256-beE9BjjI8wZFwDy0Xzv0/BmRjunfJlJ0qASf4yfpxpE=";
 
   mypy-boto3-license-manager =
     buildMypyBoto3Package "license-manager" "1.40.0"
