@@ -1034,7 +1034,6 @@ runBuildTests {
           };
         }
       ];
-      path = ./testfile;
     };
     expected = ''
       <?xml version="1.0" encoding="UTF-8"?>
@@ -1074,8 +1073,6 @@ runBuildTests {
       ''\t''\t''\t</dict>
       ''\t''\t</dict>
       ''\t</array>
-      ''\t<key>path</key>
-      ''\t<string>${toString ./testfile}</string>
       ''\t<key>str</key>
       ''\t<string>foo</string>
       ''\t<key>true</key>
