@@ -366,8 +366,8 @@ in
       "sha256-QRwEUkDj7S0/VuQrcwuPWqKnzXEN6NYUSakhT+9T2wk=";
 
   mypy-boto3-customer-profiles =
-    buildMypyBoto3Package "customer-profiles" "1.40.42"
-      "sha256-9zxTdvAc7+MgUM1KZJndXBCc0qL6jp50u7I93zZXrJY=";
+    buildMypyBoto3Package "customer-profiles" "1.40.54"
+      "sha256-mbbRVnRyCe97wfrWg5glIWmxx9czOCmJC4OrUVYRnYI=";
 
   mypy-boto3-databrew =
     buildMypyBoto3Package "databrew" "1.40.20"
