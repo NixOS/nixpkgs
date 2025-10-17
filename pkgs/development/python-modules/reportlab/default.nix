@@ -4,6 +4,7 @@
   charset-normalizer,
   fetchPypi,
   freetype,
+  charset-normalizer,
   pillow,
   setuptools,
   python,
@@ -46,6 +47,7 @@ buildPythonPackage rec {
   dependencies = [
     charset-normalizer
     pillow
+    charset-normalizer
   ];
 
   checkPhase = ''
