@@ -57,6 +57,7 @@ let
       mathcomp-finmap = callPackage ../development/rocq-modules/mathcomp-finmap { };
       mathcomp-reals = self.mathcomp-analysis.reals;
       mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
+      micromega-plugin = callPackage ../development/rocq-modules/micromega-plugin { };
       parseque = callPackage ../development/rocq-modules/parseque { };
       relation-algebra = callPackage ../development/rocq-modules/relation-algebra { };
       rocq-elpi = callPackage ../development/rocq-modules/rocq-elpi { };
