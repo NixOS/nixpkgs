@@ -14,11 +14,12 @@
   redis,
   redisTestHook,
   sortedcontainers,
+  valkey,
 }:
 
 buildPythonPackage rec {
   pname = "fakeredis";
-  version = "2.30.3";
+  version = "2.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     owner = "dsoftwareinc";
     repo = "fakeredis-py";
     tag = "v${version}";
-    hash = "sha256-SQVLuO5cA+XO7hEBph7XGlnomTcysB3ye9jZ8sy9GAI=";
+    hash = "sha256-esouWM32qe4iO5AcRC0HuUF+lwEDHnyXoknwqsZhr+o=";
   };
 
   build-system = [ hatchling ];
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   dependencies = [
     redis
     sortedcontainers
+    valkey
   ];
 
   optional-dependencies = {
@@ -60,6 +62,14 @@ buildPythonPackage rec {
   disabledTests = [
     "test_init_args" # AttributeError: module 'fakeredis' has no attribute 'FakeValkey'
     "test_async_init_kwargs" # AttributeError: module 'fakeredis' has no attribute 'FakeAsyncValkey'"
+
+    # KeyError: 'tot-mem'
+    "test_acl_log_auth_exist"
+    "test_acl_log_invalid_channel"
+    "test_acl_log_invalid_key"
+    "test_client_id"
+    "test_client_info"
+    "test_client_list"
   ];
 
   preCheck = ''
