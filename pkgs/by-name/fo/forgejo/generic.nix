@@ -26,6 +26,7 @@
   stdenv,
   fetchFromGitea,
   buildNpmPackage,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -77,6 +78,7 @@ buildGoModule rec {
   nativeCheckInputs = [
     git
     openssh
+    writableTmpDirAsHomeHook
   ];
 
   patches = [
@@ -104,9 +106,6 @@ buildGoModule rec {
   '';
 
   preCheck = ''
-    # $HOME is required for ~/.ssh/authorized_keys and such
-    export HOME="$TMPDIR/home"
-
     # expose and use the GO_TEST_PACKAGES var from the Makefile
     # instead of manually copying over the entire list:
     # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
