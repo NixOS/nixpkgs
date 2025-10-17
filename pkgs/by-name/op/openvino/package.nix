@@ -102,6 +102,10 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
+    substituteInPlace src/plugins/intel_cpu/thirdparty/ComputeLibrary/SConstruct \
+      --replace-fail 'toolchain_prefix + "ar"' '"${stdenv.cc.cc}/bin/gcc-ar"' \
+      --replace-fail 'toolchain_prefix + "ranlib"' '"${stdenv.cc.cc}/bin/gcc-ranlib"'
+
     mkdir -p temp/tbbbind_${tbbbind_version}
     pushd temp/tbbbind_${tbbbind_version}
     bsdtar -xf ${tbbbind}
@@ -129,7 +133,7 @@ stdenv.mkDerivation rec {
     (cmakeBool "ENABLE_SAMPLES" false)
 
     # features
-    (cmakeBool "ENABLE_INTEL_CPU" stdenv.hostPlatform.isx86_64)
+    (cmakeBool "ENABLE_INTEL_CPU" true)
     (cmakeBool "ENABLE_INTEL_GPU" true)
     (cmakeBool "ENABLE_INTEL_NPU" stdenv.hostPlatform.isx86_64)
     (cmakeBool "ENABLE_JS" false)
