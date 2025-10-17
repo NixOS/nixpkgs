@@ -37,6 +37,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     writableTmpDirAsHomeHook
   ];
 
+  cargoBuildFlags = [ "--locked" ];
+  RUSTFLAGS = [
+    "-C debuginfo=0"
+  ];
+
   meta = {
     description = "Modern text editor inspired by Vim";
     homepage = "https://amp.rs";
