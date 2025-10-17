@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Accuracy-focused XNA4 reimplementation for open platforms";
     homepage = "https://fna-xna.github.io/";
-    license = lib.licenses.mspl;
+    license = lib.licenses.zlib;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ mrtnvgr ];
   };
