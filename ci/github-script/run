@@ -65,19 +65,19 @@ program
   })
 
 program
-  .command('labels')
-  .description('Manage labels on pull requests.')
+  .command('bot')
+  .description('Run automation on pull requests and issues.')
   .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
   .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
   .argument('[pr]', 'Number of the Pull Request to label')
   .option('--no-dry', 'Make actual modifications')
   .action(async (owner, repo, pr, options) => {
-    const labels = (await import('./labels.js')).default
+    const bot = (await import('./bot.js')).default
     const tmp = mkdtempSync(join(tmpdir(), 'github-script-'))
     try {
       process.env.GITHUB_WORKSPACE = tmp
       process.chdir(tmp)
-      await run(labels, owner, repo, pr, options)
+      await run(bot, owner, repo, pr, options)
     } finally {
       rmSync(tmp, { recursive: true })
     }
