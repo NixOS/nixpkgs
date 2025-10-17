@@ -1,0 +1,32 @@
+diff --git a/package.json b/package.json
+index 951900f76..f319d9027 100644
+--- a/package.json
++++ b/package.json
+@@ -359,7 +359,8 @@
+     "typescript": "5.3.3",
+     "graphql-redis-subscriptions/ioredis": "^5.6.0",
+     "prosemirror-view": "1.40.0",
+-    "prosemirror-transform": "1.10.4"
++    "prosemirror-transform": "1.10.4",
++    "treeverse": "3.0.0"
+   },
+   "version": "0.2.1",
+   "nx": {},
+diff --git a/yarn.lock b/yarn.lock
+index e29e26601..b868e92b9 100644
+--- a/yarn.lock
++++ b/yarn.lock
+@@ -56181,10 +56181,10 @@ __metadata:
+   languageName: node
+   linkType: hard
+
+-"treeverse@npm:^1.0.4":
+-  version: 1.0.4
+-  resolution: "treeverse@npm:1.0.4"
+-  checksum: 10c0/e7390992eae8c318c02dd55ae65288e54d1b6f0ae4625de32dd0b5e9b94e1fab01500f88683048f7366ea0ecab02b7aeae25dc6507fe9e67e0473c5874bac569
++"treeverse@npm:3.0.0":
++  version: 3.0.0
++  resolution: "treeverse@npm:3.0.0"
++  checksum: 10c0/286479b9c05a8fb0538ee7d67a5502cea7704f258057c784c9c1118a2f598788b2c0f7a8d89e74648af88af0225b31766acecd78e6060736f09b21dd3fa255db
+   languageName: node
+   linkType: hard
