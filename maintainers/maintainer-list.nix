@@ -147,6 +147,12 @@
     githubId = 105598867;
     matrix = "@0xmrtt:envs.net";
   };
+  _0xrsydn = {
+    email = "contact@rasyidanaf.com";
+    name = "Rasyidan A F";
+    github = "0xrsydn";
+    githubId = 78522797;
+  };
   _1000101 = {
     email = "b1000101@pm.me";
     github = "1000101";
