@@ -11,21 +11,20 @@
   buildPackages,
   versionCheckHook,
   withClipboard ? true,
-  withTrash ? !stdenv.hostPlatform.isDarwin,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "broot";
-  version = "1.49.1";
+  version = "1.50.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "broot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zDy494qIoo4r+oCnrMvYSetmqsWCWfS5PAVlp8sU8Zk=";
+    hash = "sha256-izNuTXteNtoliDqfssEICUx3ynTBGoT6a7Ux2n+2cRo=";
   };
 
-  cargoHash = "sha256-zHvfZAsEoCtdxtFP7yqrC9t49UIMji2qTm+I1bhu63A=";
+  cargoHash = "sha256-ZwooHnQ2ZQigfMOYhEzMEJA2GrfHe4U8COtiblnFcOA=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -40,7 +39,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     zlib
   ];
 
-  buildFeatures = lib.optionals withTrash [ "trash" ] ++ lib.optionals withClipboard [ "clipboard" ];
+  buildFeatures = lib.optionals withClipboard [ "clipboard" ];
 
   env.RUSTONIG_SYSTEM_LIBONIG = true;
 
