@@ -26,11 +26,10 @@
 
   # package customization
   # Note: enable* flags should not require full rebuilds (i.e. only affect the wrapper)
-  upstream-info ?
-    (lib.importJSON ./info.json).${if !ungoogled then "chromium" else "ungoogled-chromium"},
+  upstream-info ? (lib.importJSON ./info.json).${variant},
   proprietaryCodecs ? true,
   enableWideVine ? false,
-  ungoogled ? false, # Whether to build chromium or ungoogled-chromium
+  variant ? "chromium", # chromium, ungoogled, helium
   cupsSupport ? true,
   pulseSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   commandLineArgs ? "",
@@ -77,13 +76,13 @@ let
         proprietaryCodecs
         cupsSupport
         pulseSupport
-        ungoogled
+        variant
         ;
       gnChromium = buildPackages.gn.override upstream-info.deps.gn;
     };
 
     browser = callPackage ./browser.nix {
-      inherit chromiumVersionAtLeast enableWideVine ungoogled;
+      inherit chromiumVersionAtLeast enableWideVine variant;
     };
 
     # ungoogled-chromium is, contrary to its name, not a build of
@@ -91,7 +90,10 @@ let
     # Therefore, it needs to come from buildPackages, because it
     # contains python scripts which get /nix/store/.../bin/python3
     # patched into their shebangs.
-    ungoogled-chromium = pkgsBuildBuild.callPackage ./ungoogled.nix { };
+    ungoogled-chromium = pkgsBuildBuild.callPackage ./variants/ungoogled { };
+
+    # so is helium.
+    helium = pkgsBuildBuild.callPackage ./variants/helium { };
   };
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
@@ -115,7 +117,7 @@ let
 
 in
 stdenv.mkDerivation {
-  pname = lib.optionalString ungoogled "ungoogled-" + "chromium";
+  inherit ((import ./variants/meta.nix lib).${variant}) pname;
   inherit (chromium.browser) version;
 
   nativeBuildInputs = [
