@@ -19,7 +19,7 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "pyproject";
 
-  propagatedBuildInputs = [
+  buildInputs = [
     beancount
     beangulp
   ];
