@@ -26,14 +26,6 @@ stdenv.mkDerivation rec {
   buildInputs = if useSDL3 then [ sdl3 ] else [ SDL2 ];
   nativeBuildInputs = [ cmake ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 libFNA3D.so $out/lib/libFNA3D.so
-    ln -s libFNA3D.so $out/lib/libFNA3D.so.0
-    ln -s libFNA3D.so $out/lib/libFNA3D.so.0.${version}
-    runHook postInstall
-  '';
-
   meta = {
     description = "Accuracy-focused XNA4 reimplementation for open platforms";
     homepage = "https://fna-xna.github.io/";
