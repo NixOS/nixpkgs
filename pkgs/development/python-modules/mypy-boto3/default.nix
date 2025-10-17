@@ -66,8 +66,8 @@ in
       "sha256-LHVI54tJakPFTh0l+YZMJQV9X6+smUNJBee0u8WO5ro=";
 
   mypy-boto3-amplify =
-    buildMypyBoto3Package "amplify" "1.40.0"
-      "sha256-B9APRl3tgbLaWHsXOdcaYDvkpEdQRO5P1PIbQecR7lo=";
+    buildMypyBoto3Package "amplify" "1.40.54"
+      "sha256-8nNBUlGXVoracAltiBNWohK7yG8z6Q0KGupyOS9/Tpc=";
 
   mypy-boto3-amplifybackend =
     buildMypyBoto3Package "amplifybackend" "1.40.19"
