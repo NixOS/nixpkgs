@@ -35,9 +35,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     installShellFiles
     pkg-config
-  ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-      swift
-      swiftpm
+  ]
+  ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+    swift
+    swiftpm
   ]);
 
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
