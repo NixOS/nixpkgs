@@ -71,7 +71,6 @@ let
         makeWrapper ${lib.getExe Agda} $out/bin/${Agda.meta.mainProgram} \
           ${lib.optionalString (ghc != null) ''--add-flags "--with-compiler=${ghc}/bin/ghc"''} \
           --add-flags "--library-file=${libraryFile}"
-        ln -s ${lib.getExe' Agda "agda-mode"} $out/bin/agda-mode
       '';
 
   withPackages = arg: if isAttrs arg then withPackages' arg else withPackages' { pkgs = arg; };
