@@ -92,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       (callPackage ../../../../nixos/modules/security/pwquality/pwquality-conf-format.nix { }).tests;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/libpwquality/libpwquality";
     description = "Password quality checking and random password generation library";
     longDescription = ''
@@ -106,12 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
       function and PAM module that can be used instead of pam_cracklib. The
       module supports all the options of pam_cracklib.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       # or
       gpl2Plus
     ];
-    maintainers = with maintainers; [ jk ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      jk
+    ];
+    platforms = lib.platforms.unix;
   };
 })
