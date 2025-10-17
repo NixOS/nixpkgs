@@ -3,6 +3,9 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  makeWrapper,
+  arduino-cli,
+  clang-tools,
 }:
 
 buildGoModule rec {
@@ -15,6 +18,8 @@ buildGoModule rec {
     tag = version;
     hash = "sha256-twTbJ5SFbL4AIX+ffB0LdOYXUxh4SzmZguJSRdEo1lQ=";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   subPackages = [ "." ];
 
@@ -31,6 +36,15 @@ buildGoModule rec {
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     "-extldflags '-static'"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/arduino-language-server --prefix PATH : ${
+      lib.makeBinPath [
+        arduino-cli
+        clang-tools
+      ]
+    }
+  '';
 
   meta = {
     description = "Arduino Language Server based on Clangd to Arduino code autocompletion";
