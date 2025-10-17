@@ -208,7 +208,13 @@ in
     systemd.services.lldap = {
       description = "Lightweight LDAP server (lldap)";
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ];
+      after = [
+        "network-online.target"
+
+        # prevent races with database creation
+        "mysql.service"
+        "postgresql.target"
+      ];
       wantedBy = [ "multi-user.target" ];
       # lldap defaults to a hardcoded `jwt_secret` value if none is provided, which is bad, because
       # an attacker could create a valid admin jwt access token fairly trivially.
