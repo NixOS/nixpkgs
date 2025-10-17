@@ -14851,6 +14851,18 @@ with pkgs;
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
+  jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
+    # TODO: remove once `udev` is `systemdMinimal` everywhere.
+    udev = systemdMinimal;
+    jack = libjack2;
+  };
+
+  gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
+
+  zrythm = callPackage ../applications/audio/zrythm {
+    inherit (plasma5Packages) breeze-icons;
+  };
+
   swift-corelibs-libdispatch = swiftPackages.Dispatch;
 
   aitrack = libsForQt5.callPackage ../applications/misc/aitrack { };
