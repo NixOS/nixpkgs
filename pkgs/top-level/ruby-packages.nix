@@ -2001,6 +2001,17 @@
     };
     version = "2.4.3";
   };
+  levenshtein-ffi = {
+    dependencies = [ "ffi" ];
+    groups = [ "default" ];
+    platforms = [ ];
+    source = {
+      remotes = [ "https://rubygems.org" ];
+      sha256 = "0l56819iq5jqyzqr0p7bhikfnj12gny6z8afkmgxnnk7jfjd5ah9";
+      type = "gem";
+    };
+    version = "1.1.0";
+  };
   libxml-ruby = {
     groups = [ "default" ];
     platforms = [ ];
