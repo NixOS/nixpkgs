@@ -988,6 +988,11 @@ let
 
       # Enable device detection on virtio-mmio hypervisors
       VIRTIO_MMIO_CMDLINE_DEVICES = yes;
+
+      # Enable CDEV and NOIOMMU support for VFIO, which is useful for
+      # passthrough.
+      VFIO_DEVICE_CDEV = yes;
+      VFIO_NOIOMMU = yes;
     };
 
     media = {
