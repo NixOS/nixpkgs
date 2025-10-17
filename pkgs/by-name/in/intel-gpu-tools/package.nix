@@ -43,14 +43,14 @@
 
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
-  version = "2.1";
+  version = "2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "drm";
     repo = "igt-gpu-tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-O//tL7AuYmrpTlZ61YzpSKOxbtM6u6zlcANzXWTTbhw=";
+    hash = "sha256-Lt/mqx13nHyD5QiDl8oWGiYIiK006uQvbbzHH44LB/0=";
   };
 
   nativeBuildInputs = [
