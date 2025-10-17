@@ -3,6 +3,7 @@
   stdenv,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
   python3,
   cctools,
 }:
@@ -18,14 +19,16 @@ buildNpmPackage rec {
     hash = "sha256-DwDlGTFdqAAsEWrhnieuaeYQ0N8COB/7b49xPJackJQ=";
   };
 
-  npmDepsHash = "sha256-5Uc83VdqMwQaTSmzwpBh7x4IKoVPd9MYDXkDvR1fz6Q=";
+  npmDepsHash = "sha256-JLB/+arhAzRj49m4kDCasDXEhVIBygSZ9kHI2npJf3s=";
 
-  # see https://github.com/LibreScore/dl-librescore/pull/32
-  # TODO can be removed with next update
-  postPatch = ''
-    substituteInPlace package-lock.json \
-      --replace 50c7a1508cd9358757c30794e14ba777e6faa8aa b4cb32eb1734a2f73ba2d92743647b1a91c0e2a8
-  '';
+  patches = [
+    # https://github.com/LibreScore/dl-librescore/pull/144
+    (fetchpatch {
+      name = "update-pdfkit.patch";
+      url = "https://github.com/LibreScore/dl-librescore/commit/3694697d2d3f3f59ca32ee962999b3dd22c81de7.patch";
+      hash = "sha256-ikEJNwKMDWpWBQnS3ur76vZqF+zRI6D5d0AyLDdreJY=";
+    })
+  ];
 
   makeCacheWritable = true;
 
