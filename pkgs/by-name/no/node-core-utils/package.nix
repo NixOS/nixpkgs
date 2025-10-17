@@ -2,7 +2,6 @@
   lib,
   buildNpmPackage,
   fetchFromGitHub,
-  fetchurl,
   nix-update-script,
   versionCheckHook,
 }:

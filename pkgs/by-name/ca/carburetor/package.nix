@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitLab,
-  fetchpatch2,
   python3Packages,
   appstream,
   desktop-file-utils,
