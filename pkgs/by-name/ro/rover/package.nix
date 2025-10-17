@@ -4,20 +4,21 @@
   pkg-config,
   rustPlatform,
   openssl,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rover";
-  version = "0.24.0";
+  version = "0.36.2";
 
   src = fetchFromGitHub {
     owner = "apollographql";
     repo = "rover";
-    rev = "v${version}";
-    sha256 = "sha256-uyeePAHBDCzXzwIWrKcc9LHClwSI7DMBYod/o4LfK+Y=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-26XhJQqvmPTJGDkhcUumLhna0SL23jrJBO919zXc3no=";
   };
 
-  cargoHash = "sha256-uR5XvkHUmZzCHZITKgScmzqjLOIvbPyrih/0B1OpsAc=";
+  cargoHash = "sha256-tPXLAyAcuTa4h9+D/xlFEsmzQJrjGqg6ftp0BdDOBbY=";
 
   buildInputs = [
     openssl
@@ -31,14 +32,14 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
+  __darwinAllowLocalNetworking = true;
+
   # This test checks whether the plugins specified in the plugins json file are
   # valid by making a network call to the repo that houses their binaries; but, the
   # build env can't make network calls (impurity)
   cargoTestFlags = [
     "-- --skip=latest_plugins_are_valid_versions"
   ];
-
-  passthru.updateScript = ./update.sh;
 
   # Some tests try to write configuration data to a location in the user's home
   # directory. Since this would be /homeless-shelter during the build, point at
@@ -47,14 +48,16 @@ rustPlatform.buildRustPackage rec {
     export APOLLO_CONFIG_HOME="$PWD"
   '';
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "CLI for interacting with ApolloGraphQL's developer tooling, including managing self-hosted and GraphOS graphs";
     mainProgram = "rover";
     homepage = "https://www.apollographql.com/docs/rover";
-    license = licenses.mit;
-    maintainers = [
-      maintainers.ivanbrennan
-      maintainers.aaronarinder
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ivanbrennan
+      aaronarinder
     ];
   };
-}
+})
