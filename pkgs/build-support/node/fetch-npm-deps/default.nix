@@ -195,17 +195,6 @@
       ...
     }@args:
     let
-      hash_ =
-        if hash != "" then
-          {
-            outputHash = hash;
-          }
-        else
-          {
-            outputHash = "";
-            outputHashAlgo = "sha256";
-          };
-
       forceGitDeps_ = lib.optionalAttrs forceGitDeps { FORCE_GIT_DEPS = true; };
       forceEmptyCache_ = lib.optionalAttrs forceEmptyCache { FORCE_EMPTY_CACHE = true; };
     in
@@ -214,7 +203,10 @@
       // {
         inherit name;
 
-        nativeBuildInputs = nativeBuildInputs ++ [ prefetch-npm-deps ];
+        nativeBuildInputs = nativeBuildInputs ++ [
+          prefetch-npm-deps
+          cacert
+        ];
 
         buildPhase = ''
           runHook preBuild
@@ -243,22 +235,10 @@
         # `{ "registry.example.com": "example-registry-bearer-token", ... }`
         impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [ "NIX_NPM_TOKENS" ];
 
-        SSL_CERT_FILE =
-          if
-            (
-              hash_.outputHash == ""
-              || hash_.outputHash == lib.fakeSha256
-              || hash_.outputHash == lib.fakeSha512
-              || hash_.outputHash == lib.fakeHash
-            )
-          then
-            "${cacert}/etc/ssl/certs/ca-bundle.crt"
-          else
-            "/no-cert-file.crt";
-
+        outputHash = hash;
+        ${lib.optionalDrvAttr (hash == "") "outputHashAlgo"} = "sha256";
         outputHashMode = "recursive";
       }
-      // hash_
       // forceGitDeps_
       // forceEmptyCache_
     );
