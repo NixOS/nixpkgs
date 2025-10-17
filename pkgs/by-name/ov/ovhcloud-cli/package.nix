@@ -8,13 +8,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "ovhcloud-cli";
-  version = "0.6.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "ovhcloud-cli";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZW/o9YpENWmiBYRy+gPQyLM00QM6f+Ym7IFSeArqZ64=";
+    hash = "sha256-pps6PuaIJxZ0ewrBXgq4TnICOW3wjHJQDDmcQUfYDNg=";
   };
 
   vendorHash = "sha256-WNONEceR/cDVloosQ/BMYjPTk9elQ1oTX89lgzENSAI=";
