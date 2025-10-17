@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "reth";
-  version = "1.7.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "paradigmxyz";
     repo = "reth";
     rev = "v${version}";
-    hash = "sha256-Th2ibG4fVQPPxRSS4ChOQ176xUq3eU1/zNQbQlJUFNw=";
+    hash = "sha256-Z84zCt/v6e++Et6a2hBcHfrzQvtzBEn+Zx1bBRJfiqM=";
   };
 
-  cargoHash = "sha256-2zdilVIHCW0N2yZNfLNoVpTASjXU1ABcZzQLzpAGEsY=";
+  cargoHash = "sha256-KxUiiOTlMNlPw4pHjEcqXsMF3RCA0KVO66WKpz1YoT0=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook

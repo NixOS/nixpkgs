@@ -60,6 +60,6 @@ buildGoModule rec {
       * Asserting operators react (or not) the way they should
     '';
     mainProgram = "chainsaw";
-    maintainers = with lib.maintainers; [ Sanskarzz ];
+    maintainers = [ ];
   };
 }

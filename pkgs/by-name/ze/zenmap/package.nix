@@ -8,7 +8,7 @@
   xterm,
 }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "zenmap";
   version = nmap.version;
   pyproject = true;

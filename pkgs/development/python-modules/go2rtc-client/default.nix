@@ -62,6 +62,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/home-assistant-libs/python-go2rtc-client";
     changelog = "https://github.com/home-assistant-libs/python-go2rtc-client/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

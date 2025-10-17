@@ -503,7 +503,7 @@ let
       pkg-config
       gmp.dev
       mpfr.dev
-      flint3
+      flint
     ];
     fingerPro = [ pkgs.gsl ];
     Formula = [ pkgs.gmp ];
@@ -522,7 +522,7 @@ let
         xorg.libXdmcp
       ];
     GeneralizedWendland = [ pkgs.gsl ];
-    ggiraph = with pkgs; [ pkgs.libpng.dev ];
+    ggiraph = [ pkgs.libpng.dev ];
     git2r = with pkgs; [
       zlib.dev
       openssl.dev

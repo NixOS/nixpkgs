@@ -165,7 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
     "gcc_cv_target_thread_file=single"
     # $CC cannot link binaries, let alone run then
     "cross_compiling=true"
-    "--with-toolexeclibdir=${builtins.placeholder "dev"}/lib"
+    "--with-toolexeclibdir=${placeholder "dev"}/lib"
   ];
 
   # Set the variable back the way it was, see corresponding code in

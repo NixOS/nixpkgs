@@ -73,6 +73,8 @@
   gitMinimal,
   # Preview-nvim dependencies
   md-tui,
+  # sidekick-nvim dependencies
+  copilot-language-server,
   # sved dependencies
   glib,
   gobject-introspection,
@@ -817,7 +819,10 @@ assertNoAdditions {
     dependencies = [ self.plenary-nvim ];
     nvimSkipModules = [
       # Test mismatch of directory because of nix generated path
+      "conjure-spec.client.common-lisp.swank_spec"
       "conjure-spec.client.fennel.nfnl_spec"
+      "conjure-spec.client.guile.socket_spec"
+      "conjure-spec.client.scheme.stdio_spec"
       # No parser for fennel
       "conjure.client.fennel.def-str-util"
     ];
@@ -893,7 +898,15 @@ assertNoAdditions {
     '';
   };
 
-  cpsm = super.cpsm.overrideAttrs {
+  cpsm = super.cpsm.overrideAttrs (old: {
+    # CMake 4 dropped support of versions lower than 3.5, and versions
+    # lower than 3.10 are deprecated.
+    postPatch = (old.postPatch or "") + ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          "cmake_minimum_required(VERSION 2.8.12)" \
+          "cmake_minimum_required(VERSION 3.10)"
+    '';
     nativeBuildInputs = [ cmake ];
     buildInputs = [
       python3
@@ -902,11 +915,15 @@ assertNoAdditions {
       ncurses
     ];
     buildPhase = ''
+      runHook preBuild
+
       patchShebangs .
       export PY3=ON
       ./install.sh
+
+      runHook postBuild
     '';
-  };
+  });
 
   crates-nvim = super.crates-nvim.overrideAttrs {
     checkInputs = [
@@ -1274,6 +1291,8 @@ assertNoAdditions {
       "fyler.views.explorer.init"
       "fyler.views.explorer.actions"
       "fyler.views.explorer.ui"
+      "fyler.explorer.ui"
+      "fyler.explorer"
     ];
   };
 
@@ -1585,8 +1604,9 @@ assertNoAdditions {
     nvimSkipModules = [
       # attempt to index global 'LazyVim' (a nil value)
       "lazyvim.config.keymaps"
-      "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.ai.copilot-native"
+      "lazyvim.plugins.extras.ai.sidekick"
+      "lazyvim.plugins.extras.ai.tabnine"
       "lazyvim.plugins.extras.coding.blink"
       "lazyvim.plugins.extras.coding.luasnip"
       "lazyvim.plugins.extras.coding.neogen"
@@ -3123,6 +3143,16 @@ assertNoAdditions {
     ];
   };
 
+  sidekick-nvim = super.sidekick-nvim.overrideAttrs {
+    runtimeDeps = [
+      copilot-language-server
+    ];
+
+    nvimSkipModules = [
+      "sidekick.docs"
+    ];
+  };
+
   skim-vim = super.skim-vim.overrideAttrs {
     dependencies = [ self.skim ];
   };
@@ -3669,6 +3699,14 @@ assertNoAdditions {
       maintainers = with lib.maintainers; [ hugolgst ];
     };
   });
+
+  vimtex = super.vimtex.overrideAttrs {
+    checkInputs = with self; [
+      # Optional integrations
+      fzf-lua
+      snacks-nvim
+    ];
+  };
 
   vimproc-vim = super.vimproc-vim.overrideAttrs {
     buildInputs = [ which ];

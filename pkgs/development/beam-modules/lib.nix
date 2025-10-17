@@ -34,25 +34,21 @@ rec {
   callErlang =
     drv: args:
     let
-      builder = callPackage ../../development/interpreters/erlang/generic-builder.nix args;
+      genericBuilder =
+        versionArgs: import ../../development/interpreters/erlang/generic-builder.nix (versionArgs // args);
     in
-    callPackage drv {
-      mkDerivation = pkgs.makeOverridable builder;
-    };
+    pkgs.callPackage (import drv genericBuilder) { };
 
   /*
     Uses generic-builder to evaluate provided drv containing Elixir version
     specific data.
 
-    drv: package containing version-specific args;
-    builder: generic builder for all Erlang versions;
+    drv: file containing version-specific args;
+    genericBuilder: generic builder for all Erlang versions;
     args: arguments merged into version-specific args, used mostly to customize
-          dependencies;
+          high level options;
 
     Arguments passed to the generic-builder are overridable.
-
-    Please note that "mkDerivation" defined here is the one called from 1.4.nix
-    and similar files.
   */
   callElixir =
     drv: args:

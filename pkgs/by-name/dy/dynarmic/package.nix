@@ -110,10 +110,6 @@ stdenv.mkDerivation (finalAttrs: {
     oaknut
   ];
 
-  # This changes `ir/opt` to `ir/var/empty` in `CMakeLists.txt`
-  # making the build fail, as that path does not exist
-  dontFixCmake = true;
-
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "DYNARMIC_TESTS" finalAttrs.finalPackage.doCheck)

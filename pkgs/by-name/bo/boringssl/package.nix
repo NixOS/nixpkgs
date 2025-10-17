@@ -65,7 +65,7 @@ buildGoModule (finalAttrs: {
     mkdir -p $bin/bin $dev $out/lib
 
     install -Dm755 bssl -t $bin/bin
-    install -Dm644 {libboringssl_gtest,libcrypto,libdecrepit,libpki,libssl,libtest_support_lib}.a -t $out/lib
+    install -Dm644 {libcrypto,libdecrepit,libpki,libssl}.a -t $out/lib
 
     cp -r ../include $dev
 

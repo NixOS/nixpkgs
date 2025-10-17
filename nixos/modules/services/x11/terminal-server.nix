@@ -7,8 +7,6 @@
 
 { lib, pkgs, ... }:
 
-with lib;
-
 {
 
   config = {

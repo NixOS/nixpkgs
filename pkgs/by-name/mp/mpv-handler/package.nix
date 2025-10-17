@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "mpv-handler";
-  version = "0.3.16";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "akiirui";
     repo = "mpv-handler";
     tag = "v${version}";
-    hash = "sha256-RpfHUVZmhtneeu8PIfxinYG3/groJPA9QveDSvzU6Zo=";
+    hash = "sha256-uWV9pjZp5s8H1UDS/T0JK//eJNnsaaby88l/tDqlQHY=";
   };
 
-  cargoHash = "sha256-FrE1PSRc7GTNUum05jNgKnzpDUc3FiS5CEM18It0lYY=";
+  cargoHash = "sha256-Cps+cPOv8uV8x0MiBdSqsdJ/8n259K6Y5aVl2aWJ/tE=";
 
   passthru.updateScript = nix-update-script { };
 

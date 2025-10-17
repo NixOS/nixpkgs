@@ -59,7 +59,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/srl-labs/containerlab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "containerlab";
   };
 })

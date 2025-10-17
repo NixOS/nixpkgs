@@ -104,7 +104,7 @@ let
     in
     locatedModules ++ legacyModules;
 
-  noUserModules = evalModulesMinimal ({
+  noUserModules = evalModulesMinimal {
     inherit prefix specialArgs;
     modules =
       baseModules
@@ -113,7 +113,7 @@ let
         pkgsModule
         modulesModule
       ];
-  });
+  };
 
   # Extra arguments that are useful for constructing a similar configuration.
   modulesModule = {

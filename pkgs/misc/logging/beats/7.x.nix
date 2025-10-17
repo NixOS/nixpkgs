@@ -13,7 +13,7 @@ let
   beat =
     package: extraArgs:
     buildGoModule (
-      lib.attrsets.recursiveUpdate (rec {
+      lib.attrsets.recursiveUpdate rec {
         pname = package;
         version = elk7Version;
 
@@ -38,7 +38,7 @@ let
           ];
           platforms = platforms.linux;
         };
-      }) extraArgs
+      } extraArgs
     );
 in
 rec {

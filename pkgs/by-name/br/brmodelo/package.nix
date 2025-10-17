@@ -127,6 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/chcandido/brModelo";
     license = licenses.gpl3;
     mainProgram = "brmodelo";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 })

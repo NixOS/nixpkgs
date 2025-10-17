@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
       lib.licenses.mit # or
       lib.licenses.asl20
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "millet-ls";
   };
 }

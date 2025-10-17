@@ -46,7 +46,7 @@ let
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   linux = stdenv.mkDerivation {

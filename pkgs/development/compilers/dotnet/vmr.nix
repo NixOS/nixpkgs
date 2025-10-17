@@ -1,14 +1,14 @@
 {
-  clangStdenv,
+  llvmPackages_20,
   lib,
   fetchurl,
+  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
   git,
   cmake,
   pkg-config,
-  llvm,
   zlib,
   icu,
   lttng-ust_2_12,
@@ -37,7 +37,9 @@
 }:
 
 let
-  stdenv = if clangStdenv.hostPlatform.isDarwin then swiftPackages.stdenv else clangStdenv;
+  llvmPackages = llvmPackages_20;
+
+  stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
     isLinux
@@ -101,7 +103,7 @@ stdenv.mkDerivation rec {
     # this gets copied into the tree, but we still need the sandbox profile
     bootstrapSdk
     # the propagated build inputs in llvm.dev break swift compilation
-    llvm.out
+    llvmPackages.llvm.out
     zlib
     _icu
     openssl
@@ -146,6 +148,12 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals (lib.versionAtLeast version "10") [
       ./bundler-fix-file-size-estimation-when-bundling-symli.patch
+      (fetchpatch {
+        url = "https://github.com/dotnet/runtime/commit/118eacc4f40f1ef48b47c0b7ff40ac0b3ae8c28a.patch";
+        hash = "sha256-5sRGEpULAgjDjU1LKm7Pcx3Qfbr891CB9apOpYdzPyA=";
+        stripLen = 1;
+        extraPrefix = "src/runtime/";
+      })
     ];
 
   postPatch = ''

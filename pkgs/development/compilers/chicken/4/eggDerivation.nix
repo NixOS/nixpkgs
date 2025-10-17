@@ -53,7 +53,7 @@ stdenv.mkDerivation (
     }
     // args.meta or { };
   }
-  // (builtins.removeAttrs args [
+  // (removeAttrs args [
     "name"
     "buildInputs"
     "meta"

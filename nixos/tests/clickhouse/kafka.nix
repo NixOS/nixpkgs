@@ -99,6 +99,8 @@ in
       };
 
       systemd.services.apache-kafka.serviceConfig.StateDirectory = "apache-kafka";
+
+      virtualisation.memorySize = 1024 * 2;
     };
   };
 

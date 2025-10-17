@@ -117,13 +117,13 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.12.2";
+  version = "0.12.3";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-D3b3ddW6s9NqV8mJZboQ/z8IkId8h7a4eTh/MkjPNqg=";
+    hash = "sha256-ooDGwTklGJ/wzDlAY3uJiqpZUxT1cCsqVNJKU8BAPbQ=";
   };
 
   vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
@@ -179,7 +179,7 @@ goBuild (finalAttrs: {
         in
         if matched == null then str else builtins.head matched;
 
-      cudaArchitectures = builtins.concatStringsSep ";" (builtins.map removeSMPrefix cudaArches);
+      cudaArchitectures = builtins.concatStringsSep ";" (map removeSMPrefix cudaArches);
       rocmTargets = builtins.concatStringsSep ";" rocmGpuTargets;
 
       cmakeFlagsCudaArchitectures = lib.optionalString enableCuda "-DCMAKE_CUDA_ARCHITECTURES='${cudaArchitectures}'";

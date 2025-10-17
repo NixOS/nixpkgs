@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Pure Python, cross platform, single function module with no dependencies for playing sounds";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

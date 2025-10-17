@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  requireFile,
   autoPatchelfHook,
   undmg,
   fetchurl,
@@ -18,6 +17,8 @@
   openal,
   libmpg123,
   libxmp,
+  libiconv,
+  darwin,
 }:
 
 let
@@ -84,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     libmpg123
     libxmp
     stdenv.cc.cc
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
   ];
 
   nativeBuildInputs =
@@ -94,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
       undmg
+      darwin.autoSignDarwinBinariesHook
     ];
 
   installPhase =
@@ -116,6 +121,15 @@ stdenv.mkDerivation (finalAttrs: {
       cp -r "UnrealTournament.app" $out/Applications/
       makeWrapper $out/Applications/UnrealTournament.app/Contents/MacOS/UnrealTournament \
         $out/bin/${finalAttrs.meta.mainProgram}
+      # If the darwin build sandbox is enabled, system libiconv is not available
+      # https://github.com/OldUnreal/UnrealTournamentPatches/issues/1902
+      # Even though ut1999 is able to unpack the map files at runtime, upstream advised to still do it at install time
+      # which is why the UCC binary is fixed to access a copy of iconv from the nix store
+      install_name_tool -change /usr/lib/libiconv.2.dylib \
+        ${libiconv}/lib/libiconv.2.dylib \
+        $out/Applications/UnrealTournament.app/Contents/MacOS/UCC
+      # Needs manual re-signing, as UCC is used during the build, and the auto signer is part of the fixup phase
+      signDarwinBinariesInAllOutputs
     ''
     + ''
       chmod -R 755 $out
@@ -198,7 +212,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Unreal Tournament GOTY (1999) with the OldUnreal patch";
     license = licenses.unfree;
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ eliandoran ];
+    maintainers = with maintainers; [
+      eliandoran
+      dwt
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "ut1999";
   };

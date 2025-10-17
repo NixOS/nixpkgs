@@ -59,6 +59,7 @@
   libdatachannel,
   libvpl,
   qrcodegencpp,
+  simde,
   nix-update-script,
   extra-cmake-modules,
 }:
@@ -82,21 +83,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.1.2";
+  version = "32.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-QZoIyjliVruDPZj8hzTABaDn+nCTVs5qQCdBLtSOKvI=";
+    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
   patches = [
-    # Lets obs-browser build against CEF 90.1.0+
-    ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
   ];
 
@@ -155,6 +154,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional browserSupport cef
   ++ optional withFdk fdk_aac;
+
+  propagatedBuildInputs = [ simde ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''

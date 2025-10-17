@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "enaml";
-  version = "0.18.0";
+  version = "0.19.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "nucleic";
     repo = "enaml";
     tag = version;
-    hash = "sha256-XwBvPABg4DomI5JNuqaRTINsPgjn8h67rO/ZkSRQ39o=";
+    hash = "sha256-gsNJSK9QcavsiRx2n/S2bbf9ZVsqJXxBiUyBWVIZzj8=";
   };
 
   nativeBuildInputs = [

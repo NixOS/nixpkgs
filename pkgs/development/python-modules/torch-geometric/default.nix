@@ -191,6 +191,17 @@ buildPythonPackage rec {
     # This test uses `torch.jit` which might not be working on darwin:
     # RuntimeError: required keyword attribute 'value' has the wrong type
     "test_traceable_my_conv_with_self_loops"
+
+    # RuntimeError: no response from torch_shm_manager
+    "test_data_loader"
+    "test_data_share_memory"
+    "test_dataloader"
+    "test_edge_index_dataloader"
+    "test_heterogeneous_dataloader"
+    "test_index_dataloader"
+    "test_multiprocessing"
+    "test_share_memory"
+    "test_storage_tensor_methods"
   ]
   ++ lib.optionals (pythonAtLeast "3.13") [
     # RuntimeError: Dynamo is not supported on Python 3.13+

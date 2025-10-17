@@ -22,7 +22,7 @@ replaceVarsWith {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
     mainProgram = "lsb_release";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

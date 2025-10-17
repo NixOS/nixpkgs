@@ -55,7 +55,7 @@ mkDerivation rec {
   # TODO: The tests are failing because it can't locate QT plugins. Is there a better way to do this?
   + (builtins.concatStringsSep "\n" (
     lib.lists.flatten (
-      builtins.map (pkg: [
+      map (pkg: [
         (lib.optionalString (pkg ? qtPluginPrefix) ''
           export QT_PLUGIN_PATH="${pkg}/${pkg.qtPluginPrefix}"''${QT_PLUGIN_PATH:+':'}$QT_PLUGIN_PATH
         '')

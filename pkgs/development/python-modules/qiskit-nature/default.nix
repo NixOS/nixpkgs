@@ -76,6 +76,6 @@ buildPythonPackage rec {
       binaryNativeCode # drivers/gaussiand/gauopen/*.so
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

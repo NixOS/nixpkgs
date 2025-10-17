@@ -34,6 +34,6 @@ buildPythonPackage rec {
     description = "dbt public protos";
     homepage = "https://github.com/dbt-labs/proto-python-public";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

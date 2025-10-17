@@ -58,6 +58,6 @@ buildPythonPackage rec {
     description = "Flat dark theme for PySide and PyQt";
     homepage = "https://pyqtdarktheme.readthedocs.io/en/stable";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

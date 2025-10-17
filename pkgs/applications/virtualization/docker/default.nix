@@ -113,15 +113,17 @@ let
       });
 
       docker-tini = tini.overrideAttrs {
-        pname = "docker-init";
+        pname = "docker-tini";
         inherit version;
 
         src = fetchFromGitHub {
           owner = "krallin";
           repo = "tini";
-          tag = tiniRev;
+          rev = tiniRev;
           hash = tiniHash;
         };
+
+        patches = [ ];
 
         # Do not remove static from make files as we want a static binary
         postPatch = "";
@@ -401,8 +403,8 @@ in
       runcHash = "sha256-J/QmOZxYnMPpzm87HhPTkYdt+fN+yeSUu2sv6aUeTY4=";
       containerdRev = "v1.7.27";
       containerdHash = "sha256-H94EHnfW2Z59KcHcbfJn+BipyZiNUvHe50G5EXbrIps=";
-      tiniRev = "v0.19.0";
-      tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
+      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };
 
   docker_28 =
@@ -419,8 +421,8 @@ in
       runcHash = "sha256-oXoDio3l23Z6UyAhb9oDMo1O4TLBbFyLh9sRWXnfLVY=";
       containerdRev = "v1.7.28";
       containerdHash = "sha256-vz7RFJkFkMk2gp7bIMx1kbkDFUMS9s0iH0VoyD9A21s=";
-      tiniRev = "v0.19.0";
-      tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
+      tiniRev = "369448a167e8b3da4ca5bca0b3307500c3371828";
+      tiniHash = "sha256-jCBNfoJAjmcTJBx08kHs+FmbaU82CbQcf0IVjd56Nuw=";
     };
 
 }

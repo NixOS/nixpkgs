@@ -7,12 +7,12 @@
 let
   cfg = config.services.cgminer;
 
-  convType = with builtins; v: if lib.isBool v then lib.boolToString v else toString v;
+  convType = v: if lib.isBool v then lib.boolToString v else toString v;
   mergedHwConfig = lib.mapAttrsToList (
     n: v: ''"${n}": "${(lib.concatStringsSep "," (map convType v))}"''
   ) (lib.foldAttrs (n: a: [ n ] ++ a) [ ] cfg.hardware);
   mergedConfig =
-    with builtins;
+
     lib.mapAttrsToList (
       n: v: ''"${n}":  ${if lib.isBool v then convType v else ''"${convType v}"''}''
     ) cfg.config;

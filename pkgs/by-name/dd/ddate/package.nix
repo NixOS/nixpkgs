@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
 }:
 
@@ -15,6 +16,15 @@ stdenv.mkDerivation rec {
     tag = "v${version}";
     sha256 = "1qchxnxvghbma6gp1g78wnjxsri0b72ha9axyk31cplssl7yn73f";
   };
+
+  patches = [
+    # cmake-4 compatibility
+    (fetchpatch {
+      name = "cmake-4.patch";
+      url = "https://github.com/bo0ts/ddate/commit/0fbae46cb004c0acc48982b8e3533556d7b2edcc.patch?full_index=1";
+      hash = "sha256-EbOmZYhFN8t8E/GW9ctcvhYfQauGZnX+5ZQmrEl6F18=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

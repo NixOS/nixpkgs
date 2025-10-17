@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation (
   finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
+  removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";
@@ -112,8 +112,8 @@ stdenv.mkDerivation (
       ln -s $out/share/element/electron/lib/i18n/strings/en{-us,}.json
 
       # icon
-      mkdir -p "$out/share/icons/hicolor/icon/apps"
-      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/icon/apps/element.png"
+      mkdir -p "$out/share/icons/hicolor/512x512/apps"
+      ln -s "$out/share/element/electron/build/icon.png" "$out/share/icons/hicolor/512x512/apps/element.png"
 
       # desktop item
       mkdir -p "$out/share"

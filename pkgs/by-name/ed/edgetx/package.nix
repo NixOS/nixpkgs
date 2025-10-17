@@ -114,15 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   dontUseCmakeConfigure = true;
-  # We invoke cmakeConfigurePhase multiple times, but only need this once.
-  dontFixCmake = true;
   inherit targetsToBuild;
   __structuredAttrs = true; # To pass targetsToBuild as an array.
 
   configurePhase = ''
     runHook preConfigure
     prependToVar cmakeFlags "-GNinja"
-    fixCmakeFiles .
     runHook postConfigure
   '';
 

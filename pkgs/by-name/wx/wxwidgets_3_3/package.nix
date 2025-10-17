@@ -132,7 +132,6 @@ stdenv.mkDerivation (finalAttrs: {
       wxWindowsException31
     ];
     maintainers = with lib.maintainers; [
-      tfmoraes
       fliegendewurst
       wegank
     ];

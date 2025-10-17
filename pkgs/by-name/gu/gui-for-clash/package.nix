@@ -16,20 +16,20 @@
 
 let
   pname = "gui-for-clash";
-  version = "1.9.10";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "GUI-for-Cores";
     repo = "GUI.for.Clash";
     tag = "v${version}";
-    hash = "sha256-odASuy0zaXf6vvd5CRVtuuVIX1EgEO7GsMgXWUR+fxk=";
+    hash = "sha256-kk6ZjG58gMIPd8f3Ib+1z7bie9X5kJvBq/CwioksbcU=";
   };
 
   metaCommon = {
     homepage = "https://github.com/GUI-for-Cores/GUI.for.Clash";
     hydraPlatforms = [ ]; # https://gui-for-cores.github.io/guide/#note
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +50,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-AuBUneWOR9oCuj811iCB3l5dlpeKhxt6KrF7KDs27a0=";
+      hash = "sha256-MvGLIB68itkCGsBIgAI6ak5xa5rFAJfoAwNuISPRw30=";
     };
 
     buildPhase = ''
@@ -86,7 +86,7 @@ buildGoModule {
       --subst-var out
   '';
 
-  vendorHash = "sha256-UArCB5U2bF5HXFDU1oCfm+SaURe6e9gyCx+UjtWI/ug=";
+  vendorHash = "sha256-6T9cFVzfRJnwnWjc61oSihifgnP81n3K+jlLHXGmA4I=";
 
   nativeBuildInputs = [
     autoPatchelfHook

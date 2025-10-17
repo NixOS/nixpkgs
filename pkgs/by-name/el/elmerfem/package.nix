@@ -12,11 +12,11 @@
   libGLU,
   opencascade-occt,
   qt6Packages,
-  tbb,
+  onetbb,
   vtkWithQt6,
   llvmPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elmerfem";
   version = "9.0-unstable-2025-05-25";
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     opencascade-occt
-    tbb
+    onetbb
     vtkWithQt6
   ]
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;

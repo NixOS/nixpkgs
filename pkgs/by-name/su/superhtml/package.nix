@@ -3,33 +3,36 @@
   callPackage,
   fetchFromGitHub,
   stdenv,
-  zig_0_13,
+  zig_0_15,
 }:
-stdenv.mkDerivation rec {
+let
+  zig = zig_0_15;
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "superhtml";
-  version = "0.5.3";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "kristoff-it";
     repo = "superhtml";
-    tag = "v${version}";
-    hash = "sha256-rO7HS07nSqwOq6345q/SOL2imoD0cKV16QJcVVr6mHw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jwyhTD3QP017W6sjWhujeSo0C/kPRKyaJqSiSWIsqdc=";
   };
 
   nativeBuildInputs = [
-    zig_0_13.hook
+    zig.hook
   ];
 
   postPatch = ''
     ln -s ${callPackage ./deps.nix { }} $ZIG_GLOBAL_CACHE_DIR/p
   '';
 
-  meta = with lib; {
+  meta = {
     description = "HTML Language Server and Templating Language Library";
     homepage = "https://github.com/kristoff-it/superhtml";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "superhtml";
-    maintainers = with maintainers; [ petertriho ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ petertriho ];
+    platforms = lib.platforms.unix;
   };
-}
+})

@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication {
 
   build-system = [
     python3Packages.poetry-core
+    python3Packages.poetry-dynamic-versioning
   ];
 
   dependencies =
@@ -152,6 +153,7 @@ python3Packages.buildPythonApplication {
       rarfile
       responses
       requests-mock
+      pillow
     ]
     ++ [
       writableTmpDirAsHomeHook
@@ -171,7 +173,21 @@ python3Packages.buildPythonApplication {
       # if not self._poll(timeout):
       #   raise Empty
       #   _queue.Empty
-      "test/plugins/test_player.py"
+      "test/plugins/test_bpd.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # fail on Hydra with `RuntimeError: image cannot be obtained without artresizer backend`
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_percent_margin"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_px_margin"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_minwidth"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced_and_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_not_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_and_scaled"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_but_not_scaled"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_resize"
     ];
   disabledTests = disabledTests ++ [
     # https://github.com/beetbox/beets/issues/5880

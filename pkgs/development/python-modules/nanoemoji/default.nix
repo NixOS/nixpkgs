@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "nanoemoji";
-  version = "0.15.8";
+  version = "0.15.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "nanoemoji";
     tag = "v${version}";
-    hash = "sha256-QufiPTVb4bjWgb76DOOt0u4WGiZkbYC7oKkwxv3S8us=";
+    hash = "sha256-T/d7gbw8n2I6amp3qAK/uo3Uf1qZ9teVOCIgkiMSkmE=";
   };
 
   patches = [

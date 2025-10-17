@@ -33,7 +33,7 @@ let
 
           # Needed by nixos-rebuild due to the lack of network
           # access. Determined by trial and error.
-          system.extraDependencies = with pkgs; ([
+          system.extraDependencies = with pkgs; [
             # Needed for a nixos-rebuild.
             busybox
             cloud-utils
@@ -53,7 +53,7 @@ let
             apacheHttpd.doc
             apacheHttpd.man
             valgrind.doc
-          ]);
+          ];
 
           nixpkgs.pkgs = pkgs;
         }

@@ -6,6 +6,7 @@
   stdenv,
   binaryName,
   desktopName,
+  self,
   lib,
   undmg,
   makeWrapper,
@@ -116,5 +117,20 @@ stdenv.mkDerivation {
         lib.optionalString (!stdenv.buildPlatform.isDarwin) "pkgsCross.aarch64-darwin."
       }${pname} "$version" --file=./pkgs/applications/networking/instant-messengers/discord/default.nix --version-key=${branch}
     '';
+
+    tests = {
+      withVencord = self.override {
+        withVencord = true;
+      };
+      withEquicord = self.override {
+        withEquicord = true;
+      };
+      withMoonlight = self.override {
+        withMoonlight = true;
+      };
+      withOpenASAR = self.override {
+        withOpenASAR = true;
+      };
+    };
   };
 }

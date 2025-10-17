@@ -55,6 +55,6 @@ rustPlatform.buildRustPackage rec {
       bsd2
     ];
     mainProgram = "pngquant";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

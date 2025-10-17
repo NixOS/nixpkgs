@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "NIX_RTLD_NAME" (builtins.baseNameOf stdenv.cc.bintools.dynamicLinker))
+    (lib.cmakeFeature "NIX_RTLD_NAME" (baseNameOf stdenv.cc.bintools.dynamicLinker))
     (lib.cmakeFeature "NIX_STORE_DIR" storeDir)
   ];
 

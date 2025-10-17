@@ -24,18 +24,19 @@
   sqlite,
   pytestCheckHook,
   sparsehash,
+  pybind11,
 }:
 
 buildPythonPackage rec {
   pname = "python-mapnik";
-  version = "3.0.16-unstable-2024-02-22";
+  version = "4.1.3.unstable-2025-09-25";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "mapnik";
     repo = "python-mapnik";
-    rev = "5ab32f0209909cc98c26e1d86ce0c8ef29a9bf3d";
-    hash = "sha256-OqijA1WcyBcyWO8gntqp+xNIaV1Jqa0n1eMDip2OCvY=";
+    rev = "4b51d57911dc6a1a9f35c62c681fbdeb56fc69d4";
+    hash = "sha256-oXxfLvmptW1v19vaUj11nGEcTHOrneBIea2+GB6uK48=";
     # Only needed for test data
     fetchSubmodules = true;
   };
@@ -46,9 +47,6 @@ buildPythonPackage rec {
     (replaceVars ./find-libmapnik.patch {
       libmapnik = "${mapnik}/lib";
     })
-    # Use `std::optional` rather than `boost::optional`
-    # https://github.com/mapnik/python-mapnik/commit/e9f88a95a03dc081826a69da67bbec3e4cccd5eb
-    ./python-mapnik_std_optional.patch
   ];
 
   stdenv = python.stdenv;
@@ -58,6 +56,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     mapnik # for mapnik_config
     pkg-config
+    pybind11
   ];
 
   dependencies = [
@@ -131,5 +130,6 @@ buildPythonPackage rec {
     homepage = "https://mapnik.org";
     license = lib.licenses.lgpl21Plus;
     teams = [ lib.teams.geospatial ];
+    broken = true;
   };
 }

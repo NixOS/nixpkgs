@@ -130,5 +130,5 @@ in
     time.timeZone = lib.mkDefault "UTC";
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 }

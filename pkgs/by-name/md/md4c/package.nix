@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/mity/md4c/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "md2html";
     platforms = lib.platforms.all;
   };

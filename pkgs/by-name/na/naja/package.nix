@@ -11,7 +11,7 @@
   pkg-config,
   python3,
   sphinx,
-  tbb_2022,
+  onetbb,
   buildPackages,
   nix-update-script,
 }:
@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     capnproto # cmake modules
     flex # include dir
-    tbb_2022
+    onetbb
     python3
   ];
 

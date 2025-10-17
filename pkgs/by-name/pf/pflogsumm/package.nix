@@ -34,7 +34,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = {
     homepage = "http://jimsun.linxnet.com/postfix_contrib.html";
-    maintainers = with lib.maintainers; [ schneefux ];
+    maintainers = [ ];
     description = "Postfix activity overview";
     mainProgram = "pflogsumm";
     license = lib.licenses.gpl2Plus;

@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "C++ header-only HTTP/HTTPS server and client library";
     changelog = "https://github.com/yhirose/cpp-httplib/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

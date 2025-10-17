@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

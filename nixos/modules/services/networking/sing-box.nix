@@ -75,6 +75,7 @@ in
         StateDirectoryMode = "0700";
         RuntimeDirectory = "sing-box";
         RuntimeDirectoryMode = "0700";
+        WorkingDirectory = "/var/lib/sing-box";
         ExecStartPre =
           let
             script = pkgs.writeShellScript "sing-box-pre-start" ''
@@ -95,6 +96,7 @@ in
       users.sing-box = {
         isSystemUser = true;
         group = "sing-box";
+        home = "/var/lib/sing-box";
       };
       groups.sing-box = { };
     };

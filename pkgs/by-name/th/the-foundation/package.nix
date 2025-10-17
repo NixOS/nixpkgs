@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "UNISTRING_DIR" "${libunistring}")
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=attribute-warning";
+
   postFixup = ''
     substituteInPlace "$out"/lib/pkgconfig/the_Foundation.pc \
       --replace '="''${prefix}//' '="/'

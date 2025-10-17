@@ -70,7 +70,7 @@ let
       ))
     ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "dcgm";
   version = "4.3.1"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 

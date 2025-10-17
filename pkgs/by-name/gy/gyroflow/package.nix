@@ -119,7 +119,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   desktopItems = [
-    (makeDesktopItem ({
+    (makeDesktopItem {
       name = "gyroflow";
       desktopName = "Gyroflow";
       genericName = "Video stabilization using gyroscope data";
@@ -137,7 +137,7 @@ rustPlatform.buildRustPackage rec {
       startupNotify = true;
       startupWMClass = "gyroflow";
       prefersNonDefaultGPU = true;
-    }))
+    })
   ];
 
   meta = {

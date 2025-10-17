@@ -19,13 +19,13 @@
 }:
 mkDerivation rec {
   pname = "changelog-d";
-  version = "1.0.1";
+  version = "1.0.2";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "fgaz";
     repo = "changelog-d";
     rev = "v${version}";
-    hash = "sha256-4TbZD4pXP/5q+t3rTcdCsY5APWIcxhCMM+WsNO/6ke4=";
+    hash = "sha256-nPvuAkcFfK/NKXNBv8D2ePnB88WnjvmAIbzQHVvEXtk=";
   };
   isLibrary = false;
   isExecutable = true;

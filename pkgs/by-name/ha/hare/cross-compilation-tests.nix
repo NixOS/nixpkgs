@@ -7,9 +7,7 @@
 }:
 let
   archs = lib.concatStringsSep " " (
-    builtins.map (lib.removeSuffix "-linux") (
-      builtins.filter (lib.hasSuffix "-linux") hare.meta.platforms
-    )
+    map (lib.removeSuffix "-linux") (builtins.filter (lib.hasSuffix "-linux") hare.meta.platforms)
   );
   mainDotHare = writeText "main.ha" ''
     export fn main() void = void;

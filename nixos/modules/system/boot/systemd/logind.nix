@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  pkgs,
   utils,
   ...
 }:
@@ -62,10 +61,8 @@
       "user-runtime-dir@.service"
     ];
 
-    environment.etc."systemd/logind.conf".text = ''
-      [Login]
-      ${utils.systemdUtils.lib.attrsToSection config.services.logind.settings.Login}
-    '';
+    environment.etc."systemd/logind.conf".text =
+      utils.systemdUtils.lib.settingsToSections config.services.logind.settings;
 
     # Restarting systemd-logind breaks X11
     # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101

@@ -129,7 +129,7 @@ in
   config = lib.mkIf cfg.enable {
     # backward compatibility: if password is set but not passwordFile, make one.
     services.roundcube.database.passwordFile = lib.mkIf (!localDB && cfg.database.password != "") (
-      lib.mkDefault ("${pkgs.writeText "roundcube-password" cfg.database.password}")
+      lib.mkDefault "${pkgs.writeText "roundcube-password" cfg.database.password}"
     );
     warnings =
       lib.optional (!localDB && cfg.database.password != "")

@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "2.80.0";
+  version = "2.81.0";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-3XrP3NuXYWT09Yfo3XJ6Z2SE5jkE+tvS9QrXiRy3ov8=";
+    hash = "sha256-uhmVIDTkMRFS1MZitjDjylrYWd/q9aGAZNiTjzmqwPw=";
   };
 
   vendorHash = "sha256-rVNKTr3b4zShPfkiEBx7LqVQY2eMrXo/s8iC5tyQZNo=";

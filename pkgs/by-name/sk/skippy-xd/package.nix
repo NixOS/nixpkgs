@@ -13,16 +13,20 @@
   giflib,
   pkg-config,
 }:
-stdenv.mkDerivation {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "skippy-xd";
-  version = "0.8.0";
+  version = "2025.10.05";
+
   src = fetchFromGitHub {
     owner = "felixfung";
     repo = "skippy-xd";
-    rev = "30da57cb59ccf77f766718f7d533ddbe533ba241";
-    hash = "sha256-YBUDbI1SHsBI/fA3f3W1sPu3wXSodMbTGvAMqOz7RCM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WrB633mhZwoP+54mjSE+3gSU/VsdBZVITfD0dkYaoa8=";
   };
+
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     xorgproto
     libX11
@@ -34,15 +38,18 @@ stdenv.mkDerivation {
     libjpeg
     giflib
   ];
+
   makeFlags = [ "PREFIX=$(out)" ];
+
   preInstall = ''
     sed -e "s@/etc/xdg@$out&@" -i Makefile
   '';
-  meta = with lib; {
+
+  meta = {
     description = "Expose-style compositing-based standalone window switcher";
     homepage = "https://github.com/felixfung/skippy-xd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -37,6 +37,6 @@ buildPythonPackage rec {
       blocks.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

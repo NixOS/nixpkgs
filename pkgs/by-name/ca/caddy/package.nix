@@ -8,6 +8,7 @@
   testers,
   installShellFiles,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 let
   version = "2.10.2";
@@ -31,8 +32,6 @@ buildGo125Module {
 
   vendorHash = "sha256-wjcmWKVmLBAybILUi8tKEDnFbhtybf042ODH7jEq6r8=";
 
-  subPackages = [ "cmd/caddy" ];
-
   ldflags = [
     "-s"
     "-w"
@@ -47,6 +46,10 @@ buildGo125Module {
   ];
 
   nativeBuildInputs = [ installShellFiles ];
+
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
+  __darwinAllowLocalNetworking = true;
 
   postInstall = ''
     install -Dm644 ${dist}/init/caddy.service ${dist}/init/caddy-api.service -t $out/lib/systemd/system

@@ -97,7 +97,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/louipc/turses";
     changelog = "https://github.com/louipc/turses/blob/v${version}/HISTORY.rst";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "turses";
     platforms = lib.platforms.unix;
   };

@@ -214,12 +214,12 @@ in
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstable = makeZfsTest rec {
+  unstable = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
   };
 
-  unstableWithSystemdStage1 = makeZfsTest rec {
+  unstableWithSystemdStage1 = makeZfsTest {
     zfsPackage = pkgs.zfs_unstable;
     kernelPackages = pkgs.linuxPackages;
     enableSystemdStage1 = true;

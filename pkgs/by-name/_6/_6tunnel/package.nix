@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wojtekka";
     repo = "6tunnel";
-    rev = version;
+    tag = version;
     sha256 = "sha256-ftTAFjHlXRrXH6co8bX0RY092lAmv15svZn4BKGVuq0=";
   };
 

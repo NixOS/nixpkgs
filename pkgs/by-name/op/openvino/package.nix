@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fetchurl,
   cudaSupport ? opencv.cudaSupport or false,
 
@@ -28,7 +29,7 @@
   protobuf,
   pugixml,
   snappy,
-  tbb_2022,
+  onetbb,
   cudaPackages,
 }:
 
@@ -70,6 +71,14 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     hash = "sha256-EtXHMOIk4hGcLiaoC0ZWYF6XZCD2qNtt1HeJoJIuuTA=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "cmake4-compat.patch";
+      url = "https://github.com/openvinotoolkit/openvino/commit/677716c2471cadf1bf1268eca6343498a886a229.patch?full_index=1";
+      hash = "sha256-iaifJBdl7+tQZq1d8SiczUaXz+AdfMrLtwzfTmSG+XA=";
+    })
+  ];
 
   outputs = [
     "out"
@@ -156,7 +165,7 @@ stdenv.mkDerivation rec {
     opencv
     pugixml
     snappy
-    tbb_2022
+    onetbb
   ]
   ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
@@ -191,6 +200,5 @@ stdenv.mkDerivation rec {
     license = with licenses; [ asl20 ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # Cannot find macos sdk
-    maintainers = with maintainers; [ tfmoraes ];
   };
 }

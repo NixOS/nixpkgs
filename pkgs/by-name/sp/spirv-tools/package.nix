@@ -7,15 +7,18 @@
   spirv-headers,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "spirv-tools";
-  version = "1.4.321.0";
+  version = "1.4.321.0-unstable-2025-06-25";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Tools";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-yAdd/mXY8EJnE0vCu0n/aVxMH9059T/7cAdB9nP1vQQ=";
+    # The SPIRV-Headers release for Vulkan SDK 1.4.321.0 is missing
+    # a PR required for LLVM 21 support in SPIRV-LLVM-Translator;
+    # return to the `vulkan-sdk-*` tags on the next stable release.
+    rev = "28a883ba4c67f58a9540fb0651c647bb02883622";
+    hash = "sha256-yRzpEBGyTr9oovsh3TUnJsR/luHNAPkotcJFWh7R1Fc=";
   };
 
   # The cmake options are sufficient for turning on static building, but not

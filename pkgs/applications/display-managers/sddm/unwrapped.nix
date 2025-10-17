@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   qttools,
@@ -39,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./greeter-path.patch
     ./sddm-ignore-config-mtime.patch
     ./sddm-default-session.patch
+
+    (fetchpatch {
+      name = "sddm-fix-cmake-4.patch";
+      url = "https://github.com/sddm/sddm/commit/228778c2b4b7e26db1e1d69fe484ed75c5791c3a.patch";
+      hash = "sha256-Okt9LeZBhTDhP7NKBexWAZhkK6N6j9dFkAEgpidSnzE=";
+    })
   ];
 
   postPatch = ''

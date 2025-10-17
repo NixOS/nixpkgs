@@ -193,9 +193,7 @@ let
       # starting with 3.5 its nice to speed things up for free
       ++ lib.optional stdenv.hostPlatform.isx86_64 "enable-ec_nistp_64_gcc_128"
       # useful to set e.g. 256 bit security level with setting this to 5
-      ++ lib.optional (
-        securityLevel != null
-      ) "-DOPENSSL_TLS_SECURITY_LEVEL=${builtins.toString securityLevel}"
+      ++ lib.optional (securityLevel != null) "-DOPENSSL_TLS_SECURITY_LEVEL=${toString securityLevel}"
       ++ lib.optional enableMD2 "enable-md2"
       ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
@@ -295,6 +293,8 @@ let
           cat ${conf} > $etc/etc/ssl/openssl.cnf
         '';
 
+      allowedImpureDLLs = [ "CRYPT32.dll" ];
+
       postFixup =
         lib.optionalString (!stdenv.hostPlatform.isWindows) ''
           # Check to make sure the main output and the static runtime dependencies
@@ -387,8 +387,8 @@ in
   };
 
   openssl_3_5 = common {
-    version = "3.5.1";
-    hash = "sha256-UpBDsVz/pfNgd6TQr4Pz3jmYBxgdYHRB1zQZbYibZB8=";
+    version = "3.5.2";
+    hash = "sha256-xTpH5eRByTDDkoz3v2+wDl0Sm2MOCqhzsIJYZW5zRew=";
 
     patches = [
       ./3.0/nix-ssl-cert-file.patch

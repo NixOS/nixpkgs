@@ -36,6 +36,14 @@ melpaBuild (finalAttrs: {
     npmHooks.npmConfigHook
   ];
 
+  postPatch = ''
+    substituteInPlace buffer.py \
+      --replace-fail "shutil.which(\"fd\")" \
+                     "shutil.which(\"${lib.getExe fd}\")" \
+      --replace-fail "return \"fd\"" \
+                     "return \"${lib.getExe fd}\""
+  '';
+
   postBuild = ''
     npm run build
   '';
@@ -62,9 +70,6 @@ melpaBuild (finalAttrs: {
         pygments
         exif
       ];
-    eafOtherDeps = [
-      fd
-    ];
   };
 
   meta = {

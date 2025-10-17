@@ -40,8 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DOQS_BUILD_ONLY_LIB=ON"
   ];
 
-  dontFixCmake = true; # fix CMake file will give an error
-
   outputs = [
     "out"
     "dev"

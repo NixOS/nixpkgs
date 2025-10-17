@@ -31,6 +31,12 @@ mkDerivation rec {
     qtx11extras
   ];
 
+  cmakeFlags = [
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   # Wayland support is broken.
   # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315
   qtWrapperArgs = [ "--set QT_QPA_PLATFORM xcb" ];

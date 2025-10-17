@@ -29,6 +29,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/3-manifolds/tkinter_gl/releases/tag/${src.tag}";
     homepage = "https://github.com/3-manifolds/tkinter_gl";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
   };
 }

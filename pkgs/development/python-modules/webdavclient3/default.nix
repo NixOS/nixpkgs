@@ -49,7 +49,7 @@ buildPythonPackage rec {
     description = "Easy to use WebDAV Client for Python 3.x";
     homepage = "https://github.com/ezhov-evgeny/webdav-client-python-3";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "wdc";
   };
 }

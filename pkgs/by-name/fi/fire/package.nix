@@ -78,14 +78,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "fire";
-  version = "1.0.2-unstable-2025-08-16";
+  version = "1.5.0b-unstable-2025-09-20";
 
   src = fetchFromGitHub {
     owner = "jerryuhoo";
     repo = "Fire";
-    rev = "e74e9351a18921c5b7419646eee377e38524c47a";
+    rev = "34a424a4fc50984213b6e98e3aaae3dcb8e960c4";
     fetchSubmodules = true;
-    hash = "sha256-2hx5nba7o+ot+KtypSZJb3pKJk8mUIdI1sNqnT2va0Q=";
+    hash = "sha256-ZTsZ/J5aeyjg4pxhjjIkgoTB5sSg2jpeKAp/uc4V+aQ=";
   };
 
   postPatch =
@@ -101,6 +101,9 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail 'set(FORMATS' 'set(FORMATS ${formatsListing}) #' \
         --replace-fail 'BUNDLE_ID "''${BUNDLE_ID}"' 'BUNDLE_ID "''${BUNDLE_ID}" LV2URI "https://www.bluewingsmusic.com/Fire/"' \
         --replace-fail 'COPY_PLUGIN_AFTER_BUILD TRUE' 'COPY_PLUGIN_AFTER_BUILD FALSE'
+
+      # Regression tests require big sound files stored in LFS, skip them
+      rm -v tests/RegressionTests.cpp
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       # Remove hardcoded LTO flags: needs extra setup on Linux

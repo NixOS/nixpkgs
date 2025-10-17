@@ -15,7 +15,7 @@
   sharutils,
   file,
   getconf,
-  flint3,
+  flint,
   ntl,
   mpfr,
   cddlib,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-gfanlib"
     "--with-ntl=${ntl}"
-    "--with-flint=${flint3}"
+    "--with-flint=${flint}"
   ]
   ++ lib.optionals enableDocs [
     "--enable-doc-build"
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     # necessary
     gmp
-    flint3
+    flint
     # by upstream recommended but optional
     ncurses
     readline

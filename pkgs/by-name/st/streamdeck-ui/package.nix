@@ -103,7 +103,7 @@ python3Packages.buildPythonApplication rec {
         categories = [ "Utility" ];
       };
     in
-    builtins.map makeDesktopItem [
+    map makeDesktopItem [
       common
       (
         common

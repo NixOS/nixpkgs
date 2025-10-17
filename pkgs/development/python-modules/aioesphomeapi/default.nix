@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
 
   # build-system
   cython,
@@ -11,11 +10,11 @@
   # dependencies
   aiohappyeyeballs,
   async-interrupt,
-  async-timeout,
   chacha20poly1305-reuseable,
   cryptography,
   noiseprotocol,
   protobuf,
+  tzlocal,
   zeroconf,
 
   # tests
@@ -26,16 +25,14 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "39.0.1";
+  version = "41.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-vBRKngr8Yn9TBAS0bXBetwXJbLPDabOL6nW0oH5Q/U0=";
+    hash = "sha256-hrGAByVxnGqFk23fTvGRDJipjHglMS35WeJFM7Gk5S4=";
   };
 
   build-system = [
@@ -52,9 +49,9 @@ buildPythonPackage rec {
     cryptography
     noiseprotocol
     protobuf
+    tzlocal
     zeroconf
-  ]
-  ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
   nativeCheckInputs = [
     mock

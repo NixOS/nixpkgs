@@ -76,6 +76,13 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  disabledTestPaths = [
+    # tests fail starting on 2025-10-01
+    # related: https://github.com/aws-cloudformation/cfn-lint/issues/4125
+    "test/integration/test_quickstart_templates.py"
+    "test/integration/test_quickstart_templates_non_strict.py"
+  ];
+
   disabledTests = [
     # Requires git directory
     "test_update_docs"

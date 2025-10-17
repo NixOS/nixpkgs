@@ -27,7 +27,7 @@ perlPackages.buildPerlPackage rec {
 
   propagatedBuildOutputs = [ ]; # otherwise out propagates bin -> cycle
 
-  buildInputs = with perlPackages; [ ]; # plugins will need some
+  buildInputs = [ ]; # plugins will need some
 
   preConfigure = ''
     touch Makefile.PL

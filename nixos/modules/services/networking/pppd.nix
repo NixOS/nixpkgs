@@ -96,7 +96,8 @@ in
               ];
             in
             {
-              ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} nodetach nolog";
+              Type = "notify";
+              ExecStart = "${getBin cfg.package}/sbin/pppd call ${peerCfg.name} up_sdnotify nolog";
               Restart = "always";
               RestartSec = 5;
 

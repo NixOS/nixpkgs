@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
       pointers into the original command line argument C-strings.
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
     badPlatforms = [ "aarch64-darwin" ];
   };

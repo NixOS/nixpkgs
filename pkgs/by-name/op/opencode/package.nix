@@ -22,12 +22,12 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opencode";
-  version = "0.12.1";
+  version = "0.15.2";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "opencode";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ZpxHLZIc9bBzPJyvDHMjuaTEzZsHwafoBihKxe8Pr3U=";
+    hash = "sha256-oH0WVQpq+OOMooV21p2gR/WLDtrf9wdKvOZ5fLtzqPk=";
   };
 
   tui = buildGoModule {
@@ -36,7 +36,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     modRoot = "packages/tui";
 
-    vendorHash = "sha256-H+TybeyyHTbhvTye0PCDcsWkcN8M34EJ2ddxyXEJkZI=";
+    vendorHash = "sha256-g3+2q7yRaM6BgIs5oIXz/u7B84ZMMjnxXpvFpqDePU4=";
 
     subPackages = [ "cmd/opencode" ];
 
@@ -75,18 +75,24 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     buildPhase = ''
       runHook preBuild
 
-       export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
+      export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
-       # Disable post-install scripts to avoid shebang issues
-       bun install \
-         --filter=opencode \
-         --force \
-         --ignore-scripts \
-         --no-progress
-         # Remove `--frozen-lockfile` and `--production` — they erroneously report the lockfile needs updating even though `bun install` does not change it.
-         # Related to  https://github.com/oven-sh/bun/issues/19088
-         # --frozen-lockfile \
-         # --production
+      # NOTE: Disabling post-install scripts with `--ignore-scripts` to avoid
+      # shebang issues
+      # NOTE: `--linker=hoisted` temporarily disables Bun's isolated installs,
+      # which became the default in Bun 1.3.0.
+      # See: https://bun.com/blog/bun-v1.3#isolated-installs-are-now-the-default-for-workspaces
+      # This workaround is required because the 'yargs' dependency is currently
+      # missing when building opencode. Remove this flag once upstream is
+      # compatible with Bun 1.3.0.
+      bun install \
+        --filter=opencode \
+        --force \
+        --frozen-lockfile \
+        --ignore-scripts \
+        --linker=hoisted \
+        --no-progress \
+        --production
 
       runHook postBuild
     '';
@@ -105,10 +111,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     outputHash =
       {
-        x86_64-linux = "sha256-YOTuzwo0ZjqVswW3bUu3pFJcmfl0X0Se8Z5jKg8/rQs=";
-        aarch64-linux = "sha256-pLtE1Cyv4jHYGFQlVHMeKZbQqC2SkxTu2KRHN4E1NPw=";
-        x86_64-darwin = "sha256-3JxXe889dL7TBuHPRYDsviUuwnp38XWAwFN3Te6JtDg=";
-        aarch64-darwin = "sha256-RHg55NvI52EGTWUCCJVrilXqr3qc+vqQoT/uIUjDVvg=";
+        x86_64-linux = "sha256-kXsLJ/Ck9epH9md6goCj3IYpWog/pOkfxJDYAxI14Fg=";
+        aarch64-linux = "sha256-DHzDyk7BWYgBNhYDlK3dLZglUN7bMiB3acdoU7djbxU=";
+        x86_64-darwin = "sha256-OTEK9SV9IxBHrJlf+F4lI7gF0Gtvik3c7d1mp+4a3Zk=";
+        aarch64-darwin = "sha256-qlLfus/cyrI0HtwVLTjPTdL7OeIYjmH9yoNKa6YNBkg=";
       }
       .${stdenv.hostPlatform.system};
     outputHashAlgo = "sha256";

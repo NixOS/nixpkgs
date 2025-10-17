@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.17.0";
+  version = "2.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "fredrike";
     repo = "pydaikin";
     tag = "v${version}";
-    hash = "sha256-sX+YJ5uYQqVr9QPkx22IlgpI3nCHiN3XzrkUyY7ECDM=";
+    hash = "sha256-GSZJ7Upq43S8AC2U+8qRaPlcht/GndA2jm1mSVfEiaY=";
   };
 
   __darwinAllowLocalNetworking = true;

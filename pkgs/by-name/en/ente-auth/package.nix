@@ -60,6 +60,9 @@ flutter324.buildFlutterApplication rec {
     jdk17_headless # JDK version used by upstream CI
   ];
 
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
+
   # Based on https://github.com/ente-io/ente/blob/main/auth/linux/packaging/rpm/make_config.yaml
   # and https://github.com/ente-io/ente/blob/main/auth/linux/packaging/enteauth.appdata.xml
   desktopItems = [

@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vietnamese input method engine support for Fcitx";
     homepage = "https://github.com/fcitx/fcitx5-bamboo";
     license = lib.licenses.lgpl21Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     description = "Java Ldap Browser";
     homepage = "https://sourceforge.net/projects/jxplorer/";
     license = lib.licenses.asl11;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux;
     mainProgram = "jxplorer";
   };

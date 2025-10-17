@@ -1,11 +1,10 @@
 {
   _7zz,
-  avalonia,
   buildDotnetModule,
   callPackage,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchgit,
+  fetchFromGitHub,
   imagemagick,
   lib,
   xdg-utils,
@@ -23,12 +22,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.16.4";
+  version = "0.18.2";
 
-  src = fetchgit {
-    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-9Xy5SWwjVWYlbt33meVGFDF96Cx66DXOyECEF47/kSo=";
+  src = fetchFromGitHub {
+    owner = "Nexus-Mods";
+    repo = "NexusMods.App";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-+ayYRNclxbBedH6gIWTh5wI/AIvMzSq4x5fQXzxOT5c=";
     fetchSubmodules = true;
   };
 
@@ -43,11 +43,6 @@ buildDotnetModule (finalAttrs: {
   # TODO: do something about this in buildDotnetModule
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
-
-  buildInputs = [
-    # TODO: bump avalonia to 11.1.3
-    # avalonia
-  ];
 
   nativeCheckInputs = [ _7zz ];
 
@@ -106,8 +101,8 @@ buildDotnetModule (finalAttrs: {
 
     # Bitmap icons
     for i in 16 24 48 64 96 128 256 512; do
-      size=''${i}x''${i}
-      dir=$out/share/icons/hicolor/$size/apps
+      size="$i"x"$i"
+      dir="$out/share/icons/hicolor/$size/apps"
       mkdir -p $dir
       magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
@@ -196,7 +191,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0

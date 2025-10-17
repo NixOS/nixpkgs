@@ -67,6 +67,6 @@ buildPythonPackage rec {
       import the project being documented.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

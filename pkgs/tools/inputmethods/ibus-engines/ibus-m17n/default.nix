@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ibus/ibus-m17n";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

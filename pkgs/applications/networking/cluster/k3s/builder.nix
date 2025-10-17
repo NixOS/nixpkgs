@@ -68,6 +68,7 @@ lib:
   socat,
   sqlite,
   stdenv,
+  su,
   systemdMinimal,
   util-linuxMinimal,
   yq-go,
@@ -129,11 +130,11 @@ let
   # bundled into the k3s binary
   traefik = {
     chart = fetchurl chartVersions.traefik;
-    name = builtins.baseNameOf chartVersions.traefik.url;
+    name = baseNameOf chartVersions.traefik.url;
   };
   traefik-crd = {
     chart = fetchurl chartVersions.traefik-crd;
-    name = builtins.baseNameOf chartVersions.traefik-crd.url;
+    name = baseNameOf chartVersions.traefik-crd.url;
   };
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
@@ -371,6 +372,7 @@ buildGoModule (finalAttrs: {
     conntrack-tools
     runc
     bash
+    su
   ];
 
   k3sKillallDeps = [

@@ -39,6 +39,8 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
+
   pythonImportsCheck = [
     # https://opennmt.net/CTranslate2/python/overview.html
     "ctranslate2"

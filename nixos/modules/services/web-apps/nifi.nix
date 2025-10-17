@@ -19,10 +19,11 @@ let
 
   envFile = pkgs.writeText "nifi.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   nifiEnv = pkgs.writeShellScriptBin "nifi-env" ''

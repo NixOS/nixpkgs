@@ -69,6 +69,7 @@ let
     id
     ifilter0
     isStorePath
+    join
     lazyDerivation
     length
     lists
@@ -434,6 +435,15 @@ runTests {
   };
 
   # STRINGS
+
+  testJoin = {
+    expr = join "," [
+      "a"
+      "b"
+      "c"
+    ];
+    expected = "a,b,c";
+  };
 
   testConcatMapStrings = {
     expr = concatMapStrings (x: x + ";") [
@@ -4488,7 +4498,7 @@ runTests {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
       # Do NOT remove the `builtins.toString` call here!!!
-      directory = builtins.toString ./packages-from-directory/plain;
+      directory = toString ./packages-from-directory/plain;
     };
     expected = {
       a = "a";

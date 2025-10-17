@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "scarrazza";
     repo = "apfel";
-    rev = version;
+    tag = version;
     hash = "sha256-0Ix7KwEZUG/NmGJ380DVJbUA0PcoEJDlcGSc09l5Tbc=";
   };
 

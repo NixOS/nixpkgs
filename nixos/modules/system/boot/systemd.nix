@@ -24,7 +24,7 @@ let
     mountToUnit
     automountToUnit
     sliceToUnit
-    attrsToSection
+    settingsToSections
     ;
 
   upstreamSystemUnits = [
@@ -595,7 +595,7 @@ in
         enabledUnits = filterAttrs (n: v: !elem n cfg.suppressedSystemUnits) cfg.units;
 
       in
-      ({
+      {
         "systemd/system".source = generateUnits {
           type = "system";
           units = enabledUnits;
@@ -603,10 +603,7 @@ in
           upstreamWants = upstreamSystemWants;
         };
 
-        "systemd/system.conf".text = ''
-          [Manager]
-          ${attrsToSection cfg.settings.Manager}
-        '';
+        "systemd/system.conf".text = settingsToSections cfg.settings;
 
         "systemd/sleep.conf".text = ''
           [Sleep]
@@ -631,7 +628,7 @@ in
         "systemd/user-preset/00-nixos.preset".text = ''
           ignore *
         '';
-      });
+      };
 
     services.dbus.enable = true;
 

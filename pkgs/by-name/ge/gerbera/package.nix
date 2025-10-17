@@ -13,7 +13,7 @@
   spdlog,
   sqlite,
   zlib,
-  fmt_11,
+  fmt,
   # options
   enableMysql ? false,
   libmysqlclient,
@@ -161,7 +161,7 @@ stdenv.mkDerivation rec {
     spdlog
     sqlite
     zlib
-    fmt_11
+    fmt
   ]
   ++ flatten (builtins.catAttrs "packages" (builtins.filter (e: e.enable) options));
 

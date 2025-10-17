@@ -57,11 +57,10 @@ let
     }:
     let
       ver = version;
-      atLeast31 = lib.versionAtLeast ver.majMin "3.1";
-      atLeast32 = lib.versionAtLeast ver.majMin "3.2";
+      isCross = stdenv.buildPlatform != stdenv.hostPlatform;
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        atLeast32
+        !isCross
         && (
           stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
         );
@@ -188,25 +187,13 @@ let
           # make: *** [uncommon.mk:373: do-install-all] Error 1
           enableParallelInstalling = false;
 
-          patches =
-            op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-            ++ op useBaseRuby (
-              if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch else ./do-not-update-gems-baseruby.patch
-            )
-            ++ ops (ver.majMin == "3.0") [
-              # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
-              (fetchpatch {
-                url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-                hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
-              })
-            ]
-            ++ ops atLeast31 [
-              # When using a baseruby, ruby always sets "libdir" to the build
-              # directory, which nix rejects due to a reference in to /build/ in
-              # the final product. Removing this reference doesn't seem to break
-              # anything and fixes cross compilation.
-              ./dont-refer-to-build-dir.patch
-            ];
+          patches = op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch ++ [
+            # When using a baseruby, ruby always sets "libdir" to the build
+            # directory, which nix rejects due to a reference in to /build/ in
+            # the final product. Removing this reference doesn't seem to break
+            # anything and fixes cross compilation.
+            ./dont-refer-to-build-dir.patch
+          ];
 
           cargoRoot = opString yjitSupport "yjit";
 
@@ -410,17 +397,6 @@ in
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "7" "";
-    hash = "sha256-BVas1p8UHdrOA/pd2NdufqDY9SMu3wEkKVebzaqzDns=";
-  };
-
-  ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "9" "";
-    hash = "sha256-q7rZjbmusVJ3Ow01ho5QADuMRn89BhUld8Tf7Z2I7So=";
-    cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
-  };
-
   ruby_3_3 = generic {
     version = rubyVersion "3" "3" "9" "";
     hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
@@ -428,8 +404,15 @@ in
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "5" "";
-    hash = "sha256-HYjYontEL93kqgbcmehrC78LKIlj2EMxEt1frHmP1e4=";
+    version = rubyVersion "3" "4" "7" "";
+    hash = "sha256-I4FabQlWlveRkJD9w+L5RZssg9VyJLLkRs4fX3Mz7zY=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
+
+  ruby_3_5 = generic {
+    version = rubyVersion "3" "5" "0" "preview1";
+    hash = "sha256-7PCcfrkC6Rza+cxVPNAMypuEiz/A4UKXhQ+asIzdRvA=";
+    cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
 }

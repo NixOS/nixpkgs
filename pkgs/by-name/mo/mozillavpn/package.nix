@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.31.0";
+  version = "2.31.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-++j3BMTkg5TG09hmsUGDcKbkvTGrd9u0FaRebbOsI3s=";
+    hash = "sha256-+Aexwj/iNIhriiUrMhtj2c9S3e5jGN7OvREXUzi/03s=";
   };
   patches = [ ];
 
@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"

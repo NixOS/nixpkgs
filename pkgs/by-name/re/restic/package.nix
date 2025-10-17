@@ -4,8 +4,10 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
-  makeWrapper,
+  makeBinaryWrapper,
+  versionCheckHook,
   nixosTests,
+  openssh,
   rclone,
   python3,
 }:
@@ -32,10 +34,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   nativeCheckInputs = [ python3 ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "version";
 
   passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
     restic = nixosTests.restic;
@@ -46,7 +52,13 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    wrapProgram $out/bin/restic --prefix PATH : '${rclone}/bin'
+    wrapProgram $out/bin/restic \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          openssh
+          rclone
+        ]
+      }"
   ''
   + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     $out/bin/restic generate \
@@ -58,13 +70,13 @@ buildGoModule rec {
     installManPage *.1
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://restic.net";
     changelog = "https://github.com/restic/restic/blob/${src.rev}/CHANGELOG.md";
     description = "Backup program that is fast, efficient and secure";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.bsd2;
-    maintainers = with maintainers; [
+    platforms = with lib.platforms; linux ++ darwin;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [
       mbrgm
       dotlambda
       ryan4yin

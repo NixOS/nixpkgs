@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromSourcehut {
     owner = "~onemoresuza";
     repo = "aba";
-    rev = version;
+    tag = version;
     hash = "sha256-2zVQNchL4DFh2v2/kwupJTBSmXiKqlxzUMrP9TbfCMs=";
   };
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage {
 
   preBuild = ''
     justFlagsArray+=(
-      PREFIX=${builtins.placeholder "out"}
+      PREFIX=${placeholder "out"}
       MANIFEST_OPTS="--frozen --locked --profile=release"
       INSTALL_OPTS="--no-track"
     )

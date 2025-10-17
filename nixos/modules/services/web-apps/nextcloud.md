@@ -5,7 +5,7 @@ self-hostable cloud platform. The server setup can be automated using
 [services.nextcloud](#opt-services.nextcloud.enable). A
 desktop client is packaged at `pkgs.nextcloud-client`.
 
-The current default by NixOS is `nextcloud31` which is also the latest
+The current default by NixOS is `nextcloud32` which is also the latest
 major version available.
 
 ## Basic usage {#module-services-nextcloud-basic-usage}
@@ -232,58 +232,7 @@ By default, `nginx` is used as reverse-proxy for `nextcloud`.
 However, it's possible to use e.g. `httpd` by explicitly disabling
 `nginx` using [](#opt-services.nginx.enable) and fixing the
 settings `listen.owner` &amp; `listen.group` in the
-[corresponding `phpfpm` pool](#opt-services.phpfpm.pools).
-
-An exemplary configuration may look like this:
-```nix
-{
-  config,
-  lib,
-  pkgs,
-  ...
-}:
-{
-  services.nginx.enable = false;
-  services.nextcloud = {
-    enable = true;
-    hostName = "localhost";
-
-    # further, required options
-  };
-  services.phpfpm.pools.nextcloud.settings = {
-    "listen.owner" = config.services.httpd.user;
-    "listen.group" = config.services.httpd.group;
-  };
-  services.httpd = {
-    enable = true;
-    adminAddr = "webmaster@localhost";
-    extraModules = [ "proxy_fcgi" ];
-    virtualHosts."localhost" = {
-      documentRoot = config.services.nextcloud.package;
-      extraConfig = ''
-        <Directory "${config.services.nextcloud.package}">
-          <FilesMatch "\.php$">
-            <If "-f %{REQUEST_FILENAME}">
-              SetHandler "proxy:unix:${config.services.phpfpm.pools.nextcloud.socket}|fcgi://localhost/"
-            </If>
-          </FilesMatch>
-          <IfModule mod_rewrite.c>
-            RewriteEngine On
-            RewriteBase /
-            RewriteRule ^index\.php$ - [L]
-            RewriteCond %{REQUEST_FILENAME} !-f
-            RewriteCond %{REQUEST_FILENAME} !-d
-            RewriteRule . /index.php [L]
-          </IfModule>
-          DirectoryIndex index.php
-          Require all granted
-          Options +FollowSymLinks
-        </Directory>
-      '';
-    };
-  };
-}
-```
+[`phpfpm` pool `nextcloud`](#opt-services.phpfpm.pools).
 
 ## Installing Apps and PHP extensions {#installing-apps-php-extensions-nextcloud}
 

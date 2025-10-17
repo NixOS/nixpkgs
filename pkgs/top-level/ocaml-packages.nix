@@ -161,6 +161,10 @@ let
 
         ca-certs-nss = callPackage ../development/ocaml-modules/ca-certs-nss { };
 
+        cachet = callPackage ../development/ocaml-modules/cachet { };
+
+        cachet-lwt = callPackage ../development/ocaml-modules/cachet/lwt.nix { };
+
         cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
         calendar = callPackage ../development/ocaml-modules/calendar { };
@@ -414,6 +418,8 @@ let
 
         dnssec = callPackage ../development/ocaml-modules/dns/dnssec.nix { };
 
+        dockerfile = callPackage ../development/ocaml-modules/dockerfile { };
+
         dolmen = callPackage ../development/ocaml-modules/dolmen { };
 
         dolmen_loop = callPackage ../development/ocaml-modules/dolmen/loop.nix { };
@@ -660,10 +666,6 @@ let
         };
 
         frontc = callPackage ../development/ocaml-modules/frontc { };
-
-        functoria = callPackage ../development/ocaml-modules/functoria { };
-
-        functoria-runtime = callPackage ../development/ocaml-modules/functoria/runtime.nix { };
 
         functory = callPackage ../development/ocaml-modules/functory { };
 
@@ -1316,7 +1318,9 @@ let
 
         monolith = callPackage ../development/ocaml-modules/monolith { };
 
-        mopsa = callPackage ../development/ocaml-modules/mopsa { };
+        mopsa = callPackage ../development/ocaml-modules/mopsa {
+          inherit (pkgs.llvmPackages_19) clang libclang libllvm;
+        };
 
         morbig = callPackage ../development/ocaml-modules/morbig { };
 
@@ -1977,6 +1981,8 @@ let
 
         swhid_core = callPackage ../development/ocaml-modules/swhid_core { };
 
+        synchronizer = callPackage ../development/ocaml-modules/synchronizer { };
+
         syslog = callPackage ../development/ocaml-modules/syslog { };
 
         syslog-message = callPackage ../development/ocaml-modules/syslog-message { };
@@ -2001,7 +2007,7 @@ let
 
         tcpip = callPackage ../development/ocaml-modules/tcpip { };
 
-        tcslib = callPackage ../development/ocaml-modules/tcslib { };
+        tcs-lib = callPackage ../development/ocaml-modules/tcs-lib { };
 
         tdigest = callPackage ../development/ocaml-modules/tdigest { };
 
@@ -2223,8 +2229,6 @@ let
 
         hol_light = callPackage ../applications/science/logic/hol_light { };
 
-        ocamlnat = callPackage ../development/ocaml-modules/ocamlnat { };
-
         ### End ###
 
       }
@@ -2312,6 +2316,8 @@ rec {
   ocamlPackages_5_2 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.2.nix { });
 
   ocamlPackages_5_3 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.3.nix { });
+
+  ocamlPackages_5_4 = mkOcamlPackages (callPackage ../development/compilers/ocaml/5.4.nix { });
 
   ocamlPackages_latest = ocamlPackages_5_3;
 

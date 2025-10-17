@@ -76,12 +76,13 @@
   withLibsecret ? true,
   systemdSupport ? lib.meta.availableOn clangStdenv.hostPlatform systemd,
   testers,
+  fetchpatch,
 }:
 
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.50.0";
+  version = "2.50.1";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -101,13 +102,22 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-5WS4CZ+aOuMkCVObKQu9KtCE6ZttItSqxeUeRVTfi8I=";
+    hash = "sha256-M+kS7m4820uYA3FfUGhq+Fpgr0fxz3KmrMai2xuz2f4=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
     (replaceVars ./fix-bubblewrap-paths.patch {
       inherit (builtins) storeDir;
       inherit (addDriverRunpath) driverLink;
+    })
+
+    # Workaround to fix cross-compilation for RiscV
+    # error: ‘toB3Type’ was not declared in this scope
+    # See: https://bugs.webkit.org/show_bug.cgi?id=271371
+    (fetchpatch {
+      url = "https://salsa.debian.org/webkit-team/webkit/-/raw/debian/2.44.1-1/debian/patches/fix-ftbfs-riscv64.patch";
+      hash = "sha256-MgaSpXq9l6KCLQdQyel6bQFHG53l3GY277WePpYXdjA=";
+      name = "fix_ftbfs_riscv64.patch";
     })
   ];
 

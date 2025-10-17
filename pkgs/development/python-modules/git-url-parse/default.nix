@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/coala/git-url-parse";
     changelog = "https://github.com/coala/git-url-parse/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -289,7 +289,7 @@ let
     # `optionType`: The option type to parenthesize or not.
     #   The option whose description we're returning.
     #
-    # Return value
+    # Returns value
     #
     # The description of the `optionType`, with parentheses if there may be an
     # ambiguity.
@@ -1373,7 +1373,7 @@ let
             if builtins.isString v then
               ''"${v}"''
             else if builtins.isInt v then
-              builtins.toString v
+              toString v
             else if builtins.isBool v then
               boolToString v
             else

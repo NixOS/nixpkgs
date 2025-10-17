@@ -40,6 +40,6 @@ buildPythonPackage rec {
     description = "Python package which contains runtime validation for attrs data classes based on the types existing in the typing module";
     homepage = "https://github.com/bloomberg/attrs-strict";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

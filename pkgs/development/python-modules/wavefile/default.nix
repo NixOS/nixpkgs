@@ -53,7 +53,7 @@ buildPythonPackage rec {
     description = "Pythonic libsndfile wrapper to read and write audio files";
     homepage = "https://github.com/vokimon/python-wavefile";
     changelog = "https://github.com/vokimon/python-wavefile#version-history";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.gpl3Plus;
   };
 }

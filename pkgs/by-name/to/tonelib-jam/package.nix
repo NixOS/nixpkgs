@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = "https://tonelib.net/";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ToneLib-Jam";
   };

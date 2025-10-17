@@ -58,6 +58,8 @@
               - nixos/modules/services/display-managers/cosmic-greeter.nix
               - nixos/tests/cosmic.nix
               - pkgs/by-name/co/cosmic-*/**/*
+              - pkgs/by-name/li/libcosmicAppHook/*
+              - pkgs/by-name/po/pop-launcher/*
               - pkgs/by-name/xd/xdg-desktop-portal-cosmic/*
 
 "6.topic: crystal":

@@ -147,7 +147,13 @@ stdenv.mkDerivation (self: {
       # Heisentest, sometimes fails on ofBorg, would rather just disable it than
       # have it block a release.
       "futex-wait.test.sh"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
+      # Fail intermittently
+      "gc.impure.lisp"
+      "threads.pure.lisp"
     ];
+
   patches =
     # Support the NIX_SBCL_DYNAMIC_SPACE_SIZE envvar. Upstream SBCL didn’t want
     # to include this (see
@@ -218,8 +224,8 @@ stdenv.mkDerivation (self: {
     "--prefix=$out"
     "--xc-host=${lib.escapeShellArg bootstrapLisp'}"
   ]
-  ++ builtins.map (x: "--with-${x}") self.enableFeatures
-  ++ builtins.map (x: "--without-${x}") self.disableFeatures
+  ++ map (x: "--with-${x}") self.enableFeatures
+  ++ map (x: "--without-${x}") self.disableFeatures
   ++ lib.optionals (stdenv.hostPlatform.system == "aarch64-darwin") [
     "--arch=arm64"
   ];

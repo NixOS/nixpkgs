@@ -5,38 +5,43 @@
         "lts": false
     },
     "6.1": {
-        "version": "6.1.154",
-        "hash": "sha256:165im36dhnvhrfkn4x77ds6cgisn40d1cwxvxsci5lnhqf9bl6kg",
+        "version": "6.1.155",
+        "hash": "sha256:0wsw99h2jsrcx9fff59nqjx66l40vywj8qi3j6yvqpq8xsp8g4y2",
         "lts": true
     },
     "5.15": {
-        "version": "5.15.193",
-        "hash": "sha256:168ymh51hm0l6pd9g2kc33ji28gznc25rwzj7rvhnw82z79640n7",
+        "version": "5.15.194",
+        "hash": "sha256:0zi6ihvjmaf940arnc7jjvdqrjf3cvkc9mqc8n24dz85vam6z39l",
         "lts": true
     },
     "5.10": {
-        "version": "5.10.244",
-        "hash": "sha256:1h3dqaran5zrfgs0vybwq576yka8s9jirahiy3bb7hpm1763f2i1",
+        "version": "5.10.245",
+        "hash": "sha256:17wxs8i8vd5ivv99ra0sri3wmkw5c22wsaw8nf1xcvys2kmpa7hk",
         "lts": true
     },
     "5.4": {
-        "version": "5.4.299",
-        "hash": "sha256:0bdzy3bpywm24nx73ah9smwmmlmyhvlf5xcp2kk1z54dxfp9bpl8",
+        "version": "5.4.300",
+        "hash": "sha256:0nl1l689d4jq2l39v816yy7z5lzc5dvv8aqn85xlv4najc022jcr",
         "lts": true
     },
     "6.6": {
-        "version": "6.6.108",
-        "hash": "sha256:19k834gd9galmzl7gq0v25nv785ld7ryygrmgdh1cpb9m8rd6730",
+        "version": "6.6.111",
+        "hash": "sha256:1is6nrm5x54bw8zn8l5akp8ign185i19biks442yynfn63hp1i04",
         "lts": true
     },
     "6.12": {
-        "version": "6.12.49",
-        "hash": "sha256:09jm892q3b275liyzmycczg6nyjg1ramsma920jf5k6s8vhj2ii3",
+        "version": "6.12.52",
+        "hash": "sha256:1ccyd9h9i3xia1gqq0mggis5yv04c9ys44xp707wfcm0f3v0r1dl",
         "lts": true
     },
     "6.16": {
-        "version": "6.16.9",
-        "hash": "sha256:13g59jvc6kvp8dzl6ysmzrpq4nh9xvy5va5avrsn6iq5ryiwij3s",
+        "version": "6.16.12",
+        "hash": "sha256:0vm257d76hmimnac8hzg66gd1mdg330sai39lywfn4m9bjydx93w",
+        "lts": false
+    },
+    "6.17": {
+        "version": "6.17.2",
+        "hash": "sha256:0zzmcjkmxmcn45y20g8hz7dxs355rmczp9k8vjwc3xb5a03cpszx",
         "lts": false
     }
 }

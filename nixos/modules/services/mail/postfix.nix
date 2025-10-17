@@ -1250,7 +1250,7 @@ in
       [ "services" "postfix" "settings" "main" "mynetworks" ]
     )
     (lib.mkRenamedOptionModule
-      [ "services" "postfix" "networkStyle" ]
+      [ "services" "postfix" "networksStyle" ]
       [ "services" "postfix" "settings" "main" "mynetworks_style" ]
     )
     (lib.mkRenamedOptionModule

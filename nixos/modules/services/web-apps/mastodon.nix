@@ -131,10 +131,11 @@ let
 
   envFile = pkgs.writeText "mastodon.env" (
     lib.concatMapStrings (s: s + "\n") (
-      (lib.concatLists (
+      lib.concatLists (
         lib.mapAttrsToList (name: value: lib.optional (value != null) ''${name}="${toString value}"'') env
-      ))
+      )
     )
+
   );
 
   mastodonTootctl =

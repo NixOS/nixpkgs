@@ -3,30 +3,31 @@
   stdenvNoCC,
   fetchFromGitHub,
   php,
-  writeText,
   nix-update-script,
-  theme ? null,
-  plugins ? [ ],
+  installPlugins ? true,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "adminneo";
-  version = "4.17.2";
+  version = "5.1.1";
 
   src = fetchFromGitHub {
     owner = "adminneo-org";
     repo = "adminneo";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-erz/kkaywkuT4k3wg8a48p2pTEqzsr3pHDrtNDtrq2I=";
+    hash = "sha256-ckz0LvKLY6xm3thPmY/ry8G5kkt29rmDsG/D6NNeRoY=";
   };
 
   nativeBuildInputs = [
     php
   ];
 
+  # Package provides a Makefile, which is currently broken
+  # https://github.com/adminneo-org/adminneo/issues/161
+  # As soon, as this is fixed, the buildPhase can be removed
   buildPhase = ''
     runHook preBuild
 
-    php compile.php
+    ${php}/bin/php bin/compile.php
 
     runHook postBuild
   '';
@@ -35,41 +36,28 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preInstall
 
     mkdir $out
-    cp export/adminer-${finalAttrs.version}.php $out/adminer.php
-    cp ${./index.php} $out/index.php
-
-    ${lib.optionalString (theme != null) ''
-      cp designs/${theme}/adminer.css $out/adminer.css
-    ''}
-
-    # Copy base plugin
-    mkdir -p $out/plugins
-    cp plugins/plugin.php $out/plugins/plugin.php
-
-    ${lib.optionalString (plugins != [ ]) ''
-      cp plugins/*.php $out/plugins/
-      cp ${writeText "$out/plugins.json" ''
-        ${toString (builtins.toJSON plugins)}
-      ''} $out/plugins.json
-    ''}
-
+    cp compiled/adminneo-${finalAttrs.version}.php $out/adminneo.php
+    # for compatibility
+    ln -s adminneo.php $out/index.php
+  ''
+  + (lib.optionalString installPlugins ''
+    cp -r compiled/adminneo-plugins $out/
+  '')
+  + ''
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    indexPHP = ./index.php;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Database management in a single PHP file (fork of Adminer)";
-    homepage = "https://github.com/adminneo-org/adminneo";
+    homepage = "https://www.adminneo.org/";
     license = with lib.licenses; [
       asl20
       gpl2Only
     ];
     maintainers = with lib.maintainers; [
-      johnrtitor
+      Necoro
     ];
     platforms = lib.platforms.all;
   };

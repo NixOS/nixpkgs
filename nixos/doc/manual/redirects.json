@@ -1,4 +1,28 @@
 {
+  "module-security-tpm2": [
+    "index.html#module-security-tpm2"
+  ],
+  "module-security-tpm2-introduction": [
+    "index.html#module-security-tpm2-introduction"
+  ],
+  "module-security-tpm2-introduction-hli": [
+    "index.html#module-security-tpm2-introduction-hli"
+  ],
+  "module-security-tpm2-introduction-resourcemanagers": [
+    "index.html#module-security-tpm2-introduction-resourcemanagers"
+  ],
+  "module-security-tpm2-introduction-softwarearchitecture": [
+    "index.html#module-security-tpm2-introduction-softwarearchitecture"
+  ],
+  "module-security-tpm2-introduction-softwarearchitecture-tcti": [
+    "index.html#module-security-tpm2-introduction-softwarearchitecture-tcti"
+  ],
+  "module-security-tpm2-nixosmodule": [
+    "index.html#module-security-tpm2-nixosmodule"
+  ],
+  "module-security-tpm2-nixosmodule-fapiconfiguration": [
+    "index.html#module-security-tpm2-nixosmodule-fapiconfiguration"
+  ],
   "module-boot-plymouth-tpm2-totp": [
     "index.html#module-boot-plymouth-tpm2-totp"
   ],
@@ -302,8 +326,14 @@
   "sec-image-repart": [
     "index.html#sec-image-repart"
   ],
+  "sec-image-repart-store-paths": [
+    "index.html#sec-image-repart-store-paths"
+  ],
   "sec-image-repart-store-partition": [
     "index.html#sec-image-repart-store-partition"
+  ],
+  "sec-image-repart-store-subvolume": [
+    "index.html#sec-image-repart-store-subvolume"
   ],
   "sec-image-repart-appliance": [
     "index.html#sec-image-repart-appliance"

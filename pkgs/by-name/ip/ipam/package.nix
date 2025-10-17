@@ -41,7 +41,7 @@ buildGoModule rec {
     homepage = "https://ipam.lauka.net/";
     changelog = "https://codeberg.org/lauralani/ipam/releases/tag/v${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ipam";
   };
 }

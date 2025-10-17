@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "Simplified python article discovery & extraction";
     homepage = "https://pypi.org/project/newspaper3k";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

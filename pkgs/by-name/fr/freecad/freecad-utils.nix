@@ -31,7 +31,7 @@ let
     in
     lib.optionalString (val != null) "--run ${installer}";
 
-  pythonsProcessed = builtins.map (
+  pythonsProcessed = map (
     pyt:
     if builtins.isString pyt then
       pyt
@@ -57,7 +57,7 @@ let
         let
           modulesStr = wrapPathsStr "--module-path" modules;
           pythonsStr = wrapPathsStr "--python-path" (pythonsProcessed pythons);
-          makeWrapperFlagsStr = builtins.concatStringsSep " " (builtins.map (f: "'${f}'") makeWrapperFlags);
+          makeWrapperFlagsStr = builtins.concatStringsSep " " (map (f: "'${f}'") makeWrapperFlags);
 
           userCfgStr = wrapCfgStr "user" userCfg;
           systemCfgStr = wrapCfgStr "system" systemCfg;

@@ -6,7 +6,6 @@
   gnumake,
   makeWrapper,
   pkg-config,
-  autopanosiftc,
   boost,
   cairo,
   enblend-enfuse,
@@ -86,7 +85,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for p in $out/bin/*; do
       wrapProgram "$p" \
-        --suffix PATH : ${autopanosiftc}/bin \
         --suffix PATH : ${enblend-enfuse}/bin \
         --suffix PATH : ${gnumake}/bin \
         --suffix PATH : ${perlPackages.ImageExifTool}/bin

@@ -37,6 +37,7 @@
   pyls-spyder,
   pyopengl,
   python-lsp-black,
+  python-lsp-ruff,
   python-lsp-server,
   pyuca,
   pyzmq,
@@ -58,12 +59,12 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "6.1.0a2";
+  version = "6.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-KbGfG9T3XkYXntIQx325mYb0Bh8c0idb+25awFlWD9s=";
+    hash = "sha256-UgDGJJuwNzB0VfAMgGM/UIhNarQ6da18XKE9JGJXRjY=";
   };
 
   patches = [ ./dont-clear-pythonpath.patch ];
@@ -106,6 +107,7 @@ buildPythonPackage rec {
     pyopengl
     pyqtwebengine
     python-lsp-black
+    python-lsp-ruff
     python-lsp-server
     pyuca
     pyzmq
@@ -153,7 +155,7 @@ buildPythonPackage rec {
     downloadPage = "https://github.com/spyder-ide/spyder/releases";
     changelog = "https://github.com/spyder-ide/spyder/blob/v${version}/changelogs/Spyder-6.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

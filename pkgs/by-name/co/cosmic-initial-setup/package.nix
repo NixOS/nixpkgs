@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch2,
   just,
   libcosmicAppHook,
   libinput,
@@ -23,6 +24,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   };
 
   cargoHash = "sha256-orwK9gcFXK4/+sfwRubcz0PP6YAFqsENRHnlSLttLxM=";
+
+  buildFeatures = [ "nixos" ];
 
   # cargo-auditable fails during the build when compiling the `crabtime::function`
   # procedural macro. It panics because the `--out-dir` flag is not passed to
@@ -47,6 +50,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   patches = [
     ./disable-language-page.patch
     ./disable-timezone-page.patch
+    # TODO: Remove in next update
+    (fetchpatch2 {
+      name = "fix-layout-and-themes-page.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/pop-os/cosmic-initial-setup/pull/53.diff?full_index=1";
+      hash = "sha256-081qyQnPhh+FRPU/JKJVCK+l3SKjHAIV5b6/7WN6lb8=";
+    })
   ];
 
   postPatch = ''

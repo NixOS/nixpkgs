@@ -26,7 +26,7 @@ callPackage ../nginx/generic.nix args rec {
   fixPatch =
     patch:
     let
-      name = patch.name or (builtins.baseNameOf patch);
+      name = patch.name or (baseNameOf patch);
     in
     runCommand "openresty-${name}" { src = patch; } ''
       substitute $src $out \

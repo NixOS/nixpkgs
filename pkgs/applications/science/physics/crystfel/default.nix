@@ -25,7 +25,7 @@
   doxygen,
   opencl-headers,
   ncurses,
-  msgpack,
+  msgpack-c,
   fftw,
   zeromq,
   ocl-icd,
@@ -235,7 +235,7 @@ stdenv.mkDerivation rec {
     hdf5
     gsl
     ncurses
-    msgpack
+    msgpack-c
     fftw
     fdip
     zeromq

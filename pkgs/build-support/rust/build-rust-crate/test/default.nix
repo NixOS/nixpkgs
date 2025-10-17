@@ -91,7 +91,7 @@ let
   mkTest =
     crateArgs:
     let
-      crate = mkHostCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkHostCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       hasTests = crateArgs.buildTests or false;
       expectedTestOutputs = crateArgs.expectedTestOutputs or null;
       binaries = map (v: lib.escapeShellArg v.name) (crateArgs.crateBin or [ ]);
@@ -182,7 +182,7 @@ let
     assert (builtins.isList expectedFiles);
 
     let
-      crate = mkCrate (builtins.removeAttrs crateArgs [ "expectedTestOutput" ]);
+      crate = mkCrate (removeAttrs crateArgs [ "expectedTestOutput" ]);
       crateOutput = if output == null then crate else crate."${output}";
       expectedFilesFile = writeTextFile {
         name = "expected-files-${name}";
@@ -706,7 +706,7 @@ rec {
 
         rustCargoTomlInTopDir =
           let
-            withoutCargoTomlSearch = builtins.removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
+            withoutCargoTomlSearch = removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
           in
           withoutCargoTomlSearch
           // {

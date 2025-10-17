@@ -98,7 +98,6 @@ jobs:
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
-      OWNER_RO_APP_PRIVATE_KEY: ${{ secrets.OWNER_RO_APP_PRIVATE_KEY }}
 
   push:
     if: needs.prepare.outputs.push

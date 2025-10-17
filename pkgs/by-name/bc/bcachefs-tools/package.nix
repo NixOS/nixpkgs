@@ -19,7 +19,6 @@
   rustPlatform,
   makeWrapper,
   nix-update-script,
-  python3,
   testers,
   nixosTests,
   installShellFiles,
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bcachefs-tools";
-  version = "1.31.3";
+  version = "1.31.7";
 
   src = fetchFromGitHub {
     owner = "koverstreet";
     repo = "bcachefs-tools";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-sXv6YFM91T08WF5dPU7iQNqWbB/QiL2kMaXm6ZtIDqI=";
+    hash = "sha256-gKtOyaDN9hQo45Rk9hMabKRefOG+ooaCrtLBCPx0fT8=";
   };
 
   nativeBuildInputs = [
@@ -66,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     src = finalAttrs.src;
-    hash = "sha256-04YrgYfhZ5NfA2BcF2H6Np1SXRiH6CJpkgc9hzlbMAo=";
+    hash = "sha256-INnv9kRgM8RRMwBnC6Vwj9S5FfI5gMscU//aNzHF+8w=";
   };
 
   outputs = [
@@ -118,6 +117,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
+    # See NOTE in linux-kernels.nix
+    kernelModule = import ./kernel-module.nix finalAttrs.finalPackage;
+
     tests = {
       version = testers.testVersion {
         package = finalAttrs.finalPackage;
@@ -143,5 +145,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     platforms = lib.platforms.linux;
     mainProgram = "bcachefs";
+    broken = stdenv.hostPlatform.isi686; # error: stack smashing detected
   };
 })

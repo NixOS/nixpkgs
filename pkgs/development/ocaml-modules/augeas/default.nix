@@ -12,7 +12,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ocaml-augeas";
   version = "0.6";
 

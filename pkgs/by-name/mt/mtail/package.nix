@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.2.16";
+  version = "3.2.19";
 
   src = fetchFromGitHub {
     owner = "jaqx0r";
     repo = "mtail";
     rev = "v${version}";
-    hash = "sha256-yugtprUVSy9+a7YGtgIffafE8hQrKku1RMHn2tq64KU=";
+    hash = "sha256-rAN5k3XjDTSmdp2E5pa5W+nK4J8l5+sPqSFQRdjebmA=";
   };
 
   vendorHash = "sha256-SMdEowzg53uori/Ge+GE4542wswBU2kgdyAXxeKQiiU=";

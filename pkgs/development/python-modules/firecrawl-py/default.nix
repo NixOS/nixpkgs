@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://firecrawl.dev";
     changelog = "https://github.com/mendableai/firecrawl/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

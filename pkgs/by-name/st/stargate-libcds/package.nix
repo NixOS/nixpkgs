@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "C data structure library";
     homepage = "https://github.com/stargateaudio/libcds";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     license = licenses.lgpl3Only;
   };
 }

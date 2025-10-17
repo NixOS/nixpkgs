@@ -52,7 +52,7 @@ let
     See https://hexdocs.pm/elixir/${version}/compatibility-and-deprecations.html
   '';
 
-  maxShiftMajor = builtins.toString ((toInt (versions.major maximumOTPVersion)) + 1);
+  maxShiftMajor = toString ((toInt (versions.major maximumOTPVersion)) + 1);
   maxAssert =
     if (maximumOTPVersion == null) then
       true
@@ -137,9 +137,11 @@ else
     };
 
     pos = builtins.unsafeGetAttrPos "sha256" args;
-    meta = with lib; {
+
+    meta = {
       homepage = "https://elixir-lang.org/";
       description = "Functional, meta-programming aware language built on top of the Erlang VM";
+      changelog = "https://github.com/elixir-lang/elixir/releases/tag/v${version}";
 
       longDescription = ''
         Elixir is a functional, meta-programming aware language built on
@@ -149,8 +151,8 @@ else
         with hot code upgrades.
       '';
 
-      license = licenses.asl20;
-      platforms = platforms.unix;
-      teams = [ teams.beam ];
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.unix;
+      teams = [ lib.teams.beam ];
     };
   }

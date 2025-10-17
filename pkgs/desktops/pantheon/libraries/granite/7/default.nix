@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   nix-update-script,
   meson,
   ninja,
@@ -10,6 +9,7 @@
   vala,
   pkg-config,
   libgee,
+  libshumate,
   gtk4,
   glib,
   gettext,
@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "7.6.0";
+  version = "7.7.0";
 
   outputs = [
     "out"
@@ -31,17 +31,8 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = "granite";
     rev = version;
-    sha256 = "sha256-bv2rOq16xg9lCWfcLzAFN4LjBTJBxPhXvEJzutkdYzs=";
+    sha256 = "sha256-ypSkzz9BaVweR1C0OkkfwDl8tehMK1S5iExL14LuKmI=";
   };
-
-  patches = [
-    # Init: Avoid crash with Gtk >= 4.17
-    # https://github.com/elementary/granite/pull/893
-    (fetchpatch {
-      url = "https://github.com/elementary/granite/commit/60cb8c4119b579592e6c7f3b1476e4d729f58699.patch";
-      hash = "sha256-6NB/Tu3mdmiBd77SOi4twdY/HidyhMn7mNN+54iFLIc=";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext
@@ -52,6 +43,10 @@ stdenv.mkDerivation rec {
     sassc
     vala
     wrapGAppsHook4
+  ];
+
+  buildInputs = [
+    libshumate # demo
   ];
 
   propagatedBuildInputs = [

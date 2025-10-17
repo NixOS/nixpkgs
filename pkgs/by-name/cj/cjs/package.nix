@@ -17,7 +17,7 @@
   libxml2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cjs";
   version = "128.0-unstable-2025-09-15";
 

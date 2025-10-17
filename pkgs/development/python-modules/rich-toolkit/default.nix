@@ -48,6 +48,6 @@ buildPythonPackage rec {
     description = "Rich toolkit for building command-line applications";
     homepage = "https://github.com/patrick91/rich-toolkit/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

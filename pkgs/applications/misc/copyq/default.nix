@@ -17,7 +17,7 @@
   kdePackages,
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "CopyQ";
   version = "11.0.0";
 
@@ -63,4 +63,4 @@ stdenv.mkDerivation (rec {
     platforms = lib.platforms.linux;
     mainProgram = "copyq";
   };
-})
+}

@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/manix";
     license = licenses.mpl20;
     maintainers = with maintainers; [
-      iogamaster
       lecoqjacob
     ];
     mainProgram = "manix";

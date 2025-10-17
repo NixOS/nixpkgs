@@ -63,7 +63,7 @@ let
   docDir = "$out/share/doc/ghc/html";
   packageCfgDir = "${libDir}/package.conf.d";
   paths = lib.concatLists (
-    builtins.map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
+    map (pkg: [ pkg ] ++ lib.optionals installDocumentation [ (lib.getOutput "doc" pkg) ]) (
       lib.filter (x: x ? isHaskellLibrary) (lib.closePropagation packages)
     )
   );

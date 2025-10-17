@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "coregarage";
     homepage = "https://gitlab.com/cubocore/coreapps/coregarage";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

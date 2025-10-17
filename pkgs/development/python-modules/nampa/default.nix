@@ -7,7 +7,7 @@
   unstableGitUpdater,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "nampa";
   version = "1.0-unstable-2024-12-18";
   pyproject = true;

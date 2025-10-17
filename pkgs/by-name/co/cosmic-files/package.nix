@@ -40,11 +40,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "prefix"
     (placeholder "out")
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
-    "--set"
-    "applet-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"
   ];
 
   # This is needed since by setting cargoBuildFlags, it would build both the applet and the main binary

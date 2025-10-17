@@ -71,7 +71,7 @@ let
   chromium = rec {
     inherit stdenv upstream-info;
 
-    mkChromiumDerivation = callPackage ./common.nix ({
+    mkChromiumDerivation = callPackage ./common.nix {
       inherit chromiumVersionAtLeast versionRange;
       inherit
         proprietaryCodecs
@@ -80,7 +80,7 @@ let
         ungoogled
         ;
       gnChromium = buildPackages.gn.override upstream-info.deps.gn;
-    });
+    };
 
     browser = callPackage ./browser.nix {
       inherit chromiumVersionAtLeast enableWideVine ungoogled;

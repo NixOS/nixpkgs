@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "CEmu";
     homepage = "https://ce-programming.github.io/CEmu";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

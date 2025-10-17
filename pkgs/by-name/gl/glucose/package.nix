@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.labri.fr/perso/lsimon/research/glucose/";
     license = if enableUnfree then licenses.unfreeRedistributable else licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -62,7 +62,7 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-gtk-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-0pXbeeBAkk6v2DBWfUYhWWdyrQhgr/JfDbhyS33maMM=";
     };
 
@@ -87,10 +87,10 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
       runHook preInstall
 
       name= HOME="$TMPDIR" ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --dest $out/share/themes
 
       jdupes --quiet --link-soft --recurse $out/share

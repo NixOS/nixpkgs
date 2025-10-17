@@ -49,6 +49,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     badPlatforms = platforms.darwin;
-    maintainers = with maintainers; [ neonfuz ];
   };
 }

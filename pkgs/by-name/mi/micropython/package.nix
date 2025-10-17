@@ -7,6 +7,7 @@
   python3,
   libffi,
   readline,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,6 +44,33 @@ stdenv.mkDerivation rec {
       extraPrefix = "lib/mbedtls/";
       hash = "sha256-Sllp/iWWEhykMJ3HALw5KzR4ta22120Jcl51JZCkZE0=";
     })
+    ./fix-cross-compilation.patch
+    ./fix-mpy-cross-path.patch
+  ];
+
+  postPatch = ''
+    # Fix cross-compilation by replacing uname and pkg-config
+    substituteInPlace ports/unix/Makefile \
+      --subst-var-by UNAME_S "${
+        {
+          "x86_64-linux" = "Linux";
+          "i686-linux" = "Linux";
+          "aarch64-linux" = "Linux";
+          "armv7l-linux" = "Linux";
+          "armv6l-linux" = "Linux";
+          "riscv64-linux" = "Linux";
+          "powerpc64le-linux" = "Linux";
+          "x86_64-darwin" = "Darwin";
+          "aarch64-darwin" = "Darwin";
+        }
+        .${stdenv.hostPlatform.system} or stdenv.hostPlatform.parsed.kernel.name
+      }" \
+      --subst-var-by PKG_CONFIG "${stdenv.cc.targetPrefix}pkg-config"
+  '';
+
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    buildPackages.python3
   ];
 
   nativeBuildInputs = [
@@ -58,7 +86,24 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "-C"
     "ports/unix"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
+    # Workaround for false positive gcc warning in mbedtls on aarch64
+    "CFLAGS_EXTRA=-Wno-array-bounds"
   ]; # also builds mpy-cross
+
+  # Build mpy-cross for the build platform first when cross-compiling
+  preBuild = ''
+    # Build mpy-cross for the build platform
+    make -C mpy-cross \
+      CC="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc" \
+      CROSS_COMPILE=""
+  ''
+  + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+    # Set MPY_CROSS environment variable for cross-compilation
+    export MPY_CROSS="$PWD/mpy-cross/build/mpy-cross"
+  '';
 
   enableParallelBuilding = true;
 
@@ -87,7 +132,6 @@ stdenv.mkDerivation rec {
     runHook preInstall
     mkdir -p $out/bin
     install -Dm755 ports/unix/build-standard/micropython -t $out/bin
-    install -Dm755 mpy-cross/build/mpy-cross -t $out/bin
     runHook postInstall
   '';
 

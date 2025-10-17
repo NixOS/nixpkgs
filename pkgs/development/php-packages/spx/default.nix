@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.4.20";
+  version = "0.4.21";
 in
 buildPecl {
   inherit version;
@@ -16,7 +16,7 @@ buildPecl {
     owner = "NoiseByNorthwest";
     repo = "php-spx";
     rev = "v${version}";
-    hash = "sha256-2MOl9waWY3zK5NzQ19TJKK8kE7xC4K+e9AwV+wyAHZc=";
+    hash = "sha256-3rVnKUZZXLxoKCW717pCiPOVWDudQpoN8lC1jQzpwuw=";
   };
 
   configureFlags = [
@@ -29,6 +29,6 @@ buildPecl {
     description = "Simple & straight-to-the-point PHP profiling extension with its built-in web UI";
     homepage = "https://github.com/NoiseByNorthwest/php-spx";
     license = lib.licenses.php301;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [ piotrkwiecinski ];
   };
 }

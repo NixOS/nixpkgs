@@ -10,6 +10,7 @@
   loguru,
   pyotp,
   pytestCheckHook,
+  pytest-asyncio,
   pytest-httpx,
   pythonOlder,
 }:
@@ -43,6 +44,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    pytest-asyncio
     pytest-httpx
   ];
 

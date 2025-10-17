@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/d-bahr/CRCpp/releases/tag/release-${version}";
     description = "Easy to use and fast C++ CRC library";
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     license = lib.licenses.bsd3;
   };
 }

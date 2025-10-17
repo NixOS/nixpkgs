@@ -19,7 +19,7 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   pname = "polar";
   # The package has no releases so let's use the latest commit

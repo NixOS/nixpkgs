@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brlaser";
-  version = "6.2.7";
+  version = "6.2.8";
 
   src = fetchFromGitHub {
     owner = "Owl-Maintain";
     repo = "brlaser";
     tag = "v${version}";
-    hash = "sha256-a+TjLmjqBz0b7v6kW1uxh4BGzrYOQ8aMdVo4orZeMT4=";
+    hash = "sha256-fE3mKGrYPvLl66gVJJJPc3P3rBJk695SP7+3exE5exw=";
   };
 
   nativeBuildInputs = [
@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
+    # NOTE: this can be removed once version 6.2.8 is released
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DCUPS_SERVER_BIN=lib/cups"
     "-DCUPS_DATA_DIR=share/cups"
   ];

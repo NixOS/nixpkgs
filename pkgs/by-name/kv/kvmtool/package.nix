@@ -26,9 +26,9 @@ stdenv.mkDerivation {
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
     "ARCH=${stdenv.hostPlatform.linuxArch}"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isAarch64 ([
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "LIBFDT_DIR=${dtc}/lib"
-  ]);
+  ];
 
   meta = with lib; {
     description = "Lightweight tool for hosting KVM guests";

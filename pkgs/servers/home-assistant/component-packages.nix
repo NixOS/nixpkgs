@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2025.9.4";
+  version = "2025.10.2";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -984,6 +984,9 @@
       ps: with ps; [
         numpy
       ];
+    "compit" =
+      ps: with ps; [
+      ]; # missing inputs: compit-inext-api
     "concord232" =
       ps: with ps; [
         concord232
@@ -1052,6 +1055,9 @@
     "currencylayer" =
       ps: with ps; [
       ];
+    "cync" =
+      ps: with ps; [
+      ]; # missing inputs: pycync
     "dacia" =
       ps: with ps; [
       ];
@@ -1117,6 +1123,7 @@
         cached-ipaddress
         cronsim
         dbus-fast
+        file-read-backwards
         fnv-hash-fast
         go2rtc-client
         ha-ffmpeg
@@ -1320,6 +1327,9 @@
         dropmqttapi
         paho-mqtt
       ];
+    "droplet" =
+      ps: with ps; [
+      ]; # missing inputs: pydroplet
     "dsmr" =
       ps: with ps; [
         dsmr-parser
@@ -1437,6 +1447,9 @@
     "eight_sleep" =
       ps: with ps; [
       ];
+    "ekeybionyx" =
+      ps: with ps; [
+      ]; # missing inputs: ekey-bionyxpy
     "electrasmart" =
       ps: with ps; [
         pyelectra
@@ -2106,9 +2119,6 @@
         python-google-drive-api
         securetar
       ];
-    "google_gemini" =
-      ps: with ps; [
-      ];
     "google_generative_ai_conversation" =
       ps: with ps; [
         google-genai
@@ -2350,6 +2360,15 @@
     "homeassistant_alerts" =
       ps: with ps; [
         aiohasupervisor
+      ];
+    "homeassistant_connect_zbt2" =
+      ps: with ps; [
+        aiohasupervisor
+        aiousbwatcher
+        ha-silabs-firmware-client
+        psutil-home-assistant
+        pyserial
+        universal-silabs-flasher
       ];
     "homeassistant_green" =
       ps: with ps; [
@@ -2804,6 +2823,10 @@
       ps: with ps; [
         pyirishrail
       ];
+    "irm_kmi" =
+      ps: with ps; [
+        irm-kmi-api
+      ];
     "iron_os" =
       ps: with ps; [
         aioesphomeapi
@@ -3035,6 +3058,9 @@
       ps: with ps; [
         konnected
       ];
+    "konnected_esphome" =
+      ps: with ps; [
+      ];
     "kostal_plenticore" =
       ps: with ps; [
         pykoplenti
@@ -3252,6 +3278,9 @@
       ps: with ps; [
         thinqconnect
       ];
+    "libre_hardware_monitor" =
+      ps: with ps; [
+      ]; # missing inputs: librehardwaremonitor-api
     "lidarr" =
       ps: with ps; [
         aiopyarr
@@ -3859,6 +3888,9 @@
       ps: with ps; [
         mutesync
       ];
+    "mvglive" =
+      ps: with ps; [
+      ]; # missing inputs: mvg
     "my" =
       ps: with ps; [
         home-assistant-frontend
@@ -3916,6 +3948,9 @@
         nsapi
       ];
     "neff" =
+      ps: with ps; [
+      ];
+    "neo" =
       ps: with ps; [
       ];
     "ness_alarm" =
@@ -4562,6 +4597,10 @@
       ps: with ps; [
         poolsense
       ];
+    "portainer" =
+      ps: with ps; [
+        pyportainer
+      ];
     "portlandgeneral" =
       ps: with ps; [
       ];
@@ -4653,7 +4692,7 @@
       ];
     "prowl" =
       ps: with ps; [
-      ];
+      ]; # missing inputs: prowlpy
     "proximity" =
       ps: with ps; [
       ];
@@ -5056,6 +5095,12 @@
       ps: with ps; [
         boto3
       ];
+    "route_b_smart_meter" =
+      ps: with ps; [
+        aiousbwatcher
+        momonga
+        pyserial
+      ];
     "rova" =
       ps: with ps; [
         rova
@@ -5352,6 +5397,13 @@
     "sfr_box" =
       ps: with ps; [
         sfrbox-api
+      ];
+    "sftp_storage" =
+      ps: with ps; [
+        aiohasupervisor
+        asyncssh
+        cronsim
+        securetar
       ];
     "sharkiq" =
       ps: with ps; [
@@ -6382,6 +6434,12 @@
       ps: with ps; [
         pyuptimerobot
       ];
+    "usage_prediction" =
+      ps: with ps; [
+        fnv-hash-fast
+        psutil-home-assistant
+        sqlalchemy
+      ];
     "usb" =
       ps: with ps; [
         aiousbwatcher
@@ -6465,6 +6523,9 @@
       ps: with ps; [
         pyvicare
       ];
+    "victron_remote_monitoring" =
+      ps: with ps; [
+      ]; # missing inputs: victron-vrm
     "vilfo" =
       ps: with ps; [
         vilfo-api-client
@@ -6517,7 +6578,6 @@
       ];
     "volvooncall" =
       ps: with ps; [
-        volvooncall
       ];
     "vultr" =
       ps: with ps; [
@@ -7275,6 +7335,7 @@
     "home_connect"
     "homeassistant"
     "homeassistant_alerts"
+    "homeassistant_connect_zbt2"
     "homeassistant_green"
     "homeassistant_hardware"
     "homeassistant_sky_connect"
@@ -7337,6 +7398,7 @@
     "ipma"
     "ipp"
     "iqvia"
+    "irm_kmi"
     "iron_os"
     "isal"
     "iskra"
@@ -7487,6 +7549,7 @@
     "nanoleaf"
     "nasweb"
     "neato"
+    "nederlandse_spoorwegen"
     "ness_alarm"
     "nest"
     "netatmo"
@@ -7587,6 +7650,7 @@
     "point"
     "pooldose"
     "poolsense"
+    "portainer"
     "powerfox"
     "powerwall"
     "private_ble_device"
@@ -7657,6 +7721,7 @@
     "romy"
     "roomba"
     "roon"
+    "route_b_smart_meter"
     "rova"
     "rpi_power"
     "rss_feed_template"
@@ -7668,6 +7733,7 @@
     "sabnzbd"
     "samsungtv"
     "sanix"
+    "satel_integra"
     "scene"
     "schedule"
     "schlage"
@@ -7689,6 +7755,7 @@
     "senz"
     "seventeentrack"
     "sfr_box"
+    "sftp_storage"
     "sharkiq"
     "shell_command"
     "shelly"
@@ -7848,6 +7915,7 @@
     "uptime"
     "uptime_kuma"
     "uptimerobot"
+    "usage_prediction"
     "usb"
     "usgs_earthquakes_feed"
     "utility_meter"

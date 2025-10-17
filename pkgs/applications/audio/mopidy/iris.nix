@@ -7,13 +7,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-iris";
-  version = "3.69.3";
+  version = "3.70.0";
   pyproject = true;
 
   src = fetchPypi {
+    pname = "mopidy_iris";
     inherit version;
-    pname = "Mopidy-Iris";
-    hash = "sha256-PEAXnapiyxozijR053I7zQYRYLeDOV719L0QbO2r4r4=";
+    hash = "sha256-md/1blTTtjiAAb/jiLE2EfiSlIUwEga8U7OiuKa466k=";
   };
 
   build-system = [

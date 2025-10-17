@@ -11,7 +11,7 @@ let
 
   self = {
 
-    octoprint = stdenv.mkDerivation rec {
+    octoprint = stdenv.mkDerivation {
       pname = "Cura-OctoPrintPlugin";
       version = "3.5.18";
 
@@ -35,7 +35,7 @@ let
         description = "Enables printing directly to OctoPrint and monitoring the process";
         homepage = "https://github.com/fieldOfView/Cura-OctoPrintPlugin";
         license = licenses.agpl3Plus;
-        maintainers = with maintainers; [ ];
+        maintainers = [ ];
       };
     };
 
@@ -74,7 +74,7 @@ let
         description = "Cura plugin for HID mice such as 3Dconnexion spacemouse";
         homepage = "https://github.com/smartavionics/RawMouse";
         license = licenses.agpl3Plus;
-        maintainers = with maintainers; [ ];
+        maintainers = [ ];
       };
     };
 

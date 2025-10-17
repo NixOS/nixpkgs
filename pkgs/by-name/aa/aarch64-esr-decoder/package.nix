@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "aarch64-esr-decoder";
-    rev = version;
+    tag = version;
     hash = "sha256-ZpSrz7iwwzNrK+bFTMn5MPx4Zjceao9NKhjAyjuPLWY=";
   };
 
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Utility for decoding aarch64 ESR register values";
     homepage = "https://github.com/google/aarch64-esr-decoder";
-    changelog = "https://github.com/google/aarch64-esr-decoder/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/google/aarch64-esr-decoder/blob/${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jmbaur ];
     mainProgram = "aarch64-esr-decoder";

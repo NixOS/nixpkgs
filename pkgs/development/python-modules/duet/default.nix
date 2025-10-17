@@ -35,9 +35,9 @@ buildPythonPackage rec {
     "test_repeated_sleep"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple future-based async library for python";
     homepage = "https://github.com/google/duet";
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

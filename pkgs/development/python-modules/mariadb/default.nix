@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "mariadb";
-  version = "1.1.13";
+  version = "1.1.14";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-python";
     tag = "v${version}";
-    hash = "sha256-BYE+W/P2/kPtbi6tzE1FQkI/KFCO5C1KQnB67XfJqkA=";
+    hash = "sha256-BPyEBQ5M/kqTKpZX/incgTX/+E1dMZW98GuywsBeCJw=";
   };
 
   build-system = [ setuptools ];

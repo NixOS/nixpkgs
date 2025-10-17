@@ -26,7 +26,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "denemo";
   version = "2.6.43";
 

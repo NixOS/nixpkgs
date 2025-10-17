@@ -40,6 +40,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/3MFConsortium/lib3mf/pull/421/commits/6d7b5709a4a1cf9bd55ae8b4ae999c9ca014f62c.patch?full_index=1";
       hash = "sha256-rGOyXZUZglRNMu1/oVhgSpRdi0pUa/wn5SFHCS9jVOY=";
     })
+    (fetchpatch {
+      name = "lib3mf-fix-cmake-4.patch";
+      url = "https://github.com/3MFConsortium/lib3mf/commit/01325a73de25d2ad49e992b5b6294beb32298c92.patch";
+      hash = "sha256-8vv2ydnDgvSKkGjpmk5ng1BGKK0okTMOeAoGwlKcziY=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -104,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Reference implementation of the 3D Manufacturing Format file standard";
     homepage = "https://3mf.io/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 })

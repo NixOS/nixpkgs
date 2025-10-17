@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We fix this by setting the systemd package's `systemdsystemunitdir` pkg-config variable.
   #
   # https://man.openbsd.org/pkg-config.1#PKG_CONFIG_$PACKAGE_$VARIABLE
-  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${builtins.placeholder "out"}/lib/systemd/system";
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
 
   outputs = [
     "out"

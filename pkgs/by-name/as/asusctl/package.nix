@@ -18,16 +18,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.1.12";
+  version = "6.1.15";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
-    rev = version;
-    hash = "sha256-E/tDd7wQKDgC91x1rGa8Ltn4GMPk3DJDvmMQNafVLyM=";
+    tag = version;
+    hash = "sha256-ckazulETorMaYc860ELV/kABPv9+YF+EvpapNqNnXuI=";
   };
 
-  cargoHash = "sha256-lvm3xvI01RyaSS39nm3l7Zpn3x23DDBQr+0Gggl4p9U=";
+  cargoHash = "sha256-qryRfwffP+AiaFjZ6mw5GHI/xlV1EhOsdhJhJw6Zn74=";
 
   postPatch = ''
     files="
@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage rec {
       substituteInPlace $file --replace-fail /usr/share $out/share
     done
 
-    substituteInPlace data/asusd.rules --replace-fail systemctl ${lib.getExe' systemd "systemctl"}
+    substituteInPlace rog-control-center/src/main.rs \
+      --replace-fail 'std::env::var("RUST_TRANSLATIONS").is_ok()' 'true'
+
+    substituteInPlace data/asusd.rules --replace-fail /usr/bin/systemctl ${lib.getExe' systemd "systemctl"}
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}

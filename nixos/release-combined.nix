@@ -64,7 +64,7 @@ rec {
       name = "nixos-${nixos.channel.version}";
       meta = {
         description = "Release-critical builds for the NixOS channel";
-        maintainers = with pkgs.lib.maintainers; [ ];
+        maintainers = [ ];
       };
       constituents = pkgs.lib.concatLists [
         [ "nixos.channel" ]

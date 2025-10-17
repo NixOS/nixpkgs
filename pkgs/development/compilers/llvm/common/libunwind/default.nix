@@ -12,7 +12,7 @@
   python3,
   libcxx,
   enableShared ? !stdenv.hostPlatform.isStatic,
-  doFakeLibgcc ? stdenv.hostPlatform.useLLVM,
+  doFakeLibgcc ? stdenv.hostPlatform.useLLVM && !stdenv.hostPlatform.isStatic,
   devExtraCmakeFlags ? [ ],
   getVersionFile,
 }:

@@ -6,7 +6,7 @@
   clipper2,
   gtest,
   glm,
-  tbb_2022,
+  onetbb,
   python3Packages,
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     gtest
     glm
-    tbb_2022
+    onetbb
   ];
 
   propagatedBuildInputs = [ clipper2 ];
@@ -48,7 +48,6 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tbb = tbb_2022;
     tests = {
       python = python3Packages.manifold3d;
     };

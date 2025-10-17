@@ -770,7 +770,7 @@ in
             || config.services.displayManager.lemurs.enable
           );
       in
-      mkIf (default) (mkDefault true);
+      mkIf default (mkDefault true);
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 

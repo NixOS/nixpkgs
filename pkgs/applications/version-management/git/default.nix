@@ -526,7 +526,7 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
     "libexec"
     "bin"
-    "share/git/contrib/credential/libsecret"
+    "share/git/contrib/credential"
   ];
 
   passthru = {

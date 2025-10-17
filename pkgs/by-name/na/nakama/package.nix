@@ -19,6 +19,12 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
+  postPatch = ''
+    substituteInPlace main.go \
+      --replace-fail  'os.Getenv("NAKAMA_TELEMETRY") != "0"' \
+                      'os.Getenv("NAKAMA_TELEMETRY") == "1"'
+  '';
+
   ldflags = [
     "-s"
     "-w"

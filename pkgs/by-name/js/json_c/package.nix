@@ -23,6 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    (lib.cmakeBool "BUILD_APPS" false)
+  ];
+
   meta = with lib; {
     description = "JSON implementation in C";
     longDescription = ''

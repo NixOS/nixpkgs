@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "templateflow";
-  version = "25.0.3";
+  version = "25.0.4";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "templateflow";
     repo = "python-client";
     tag = version;
-    hash = "sha256-5LGAuDaJzc2asM5EPOVuOxZwpV0LQNBhMhYKHJlXHmE=";
+    hash = "sha256-7N8JJAJwnmesQIoZttcphmUW5HLEi8Rxv70MGNjOO98=";
   };
 
   build-system = [

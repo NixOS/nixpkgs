@@ -64,7 +64,7 @@ flutter335.buildFlutterApplication {
       cc-by-sa-40
       asl20
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

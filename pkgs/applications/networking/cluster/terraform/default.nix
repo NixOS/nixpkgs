@@ -21,7 +21,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "version"
         "hash"
         "vendorHash"
@@ -213,7 +213,7 @@ rec {
       mainTf = writeText "main.tf" ''
         resource "random_id" "test" {}
       '';
-      terraform = terraform_1.withPlugins (p: [ p.random ]);
+      terraform = terraform_1.withPlugins (p: [ p.hashicorp_random ]);
       test = runCommand "terraform-plugin-test" { buildInputs = [ terraform ]; } ''
         set -e
         # make it fail outside of sandbox

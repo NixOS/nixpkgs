@@ -44,6 +44,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/PierreMarchand20/asciinema_automation";
     license = lib.licenses.mit;
     mainProgram = "asciinema-automation";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

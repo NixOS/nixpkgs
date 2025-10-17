@@ -65,6 +65,9 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "USE_RAPIDJSON" true)
     # Enable exception handling for release builds.
     (lib.cmakeBool "BUILD_RELEASE_DISABLE_EXCEPTIONS" false)
+    # cmake 4 compatibility, old versions upstream need like 3 patches to get to a
+    # supported version, so just use the big hammer
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optionals withVtk [
     (lib.cmakeBool "USE_VTK" true)
@@ -73,7 +76,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      withVtk = opencascade-occt.override ({ withVtk = true; });
+      withVtk = opencascade-occt.override { withVtk = true; };
     };
   };
 

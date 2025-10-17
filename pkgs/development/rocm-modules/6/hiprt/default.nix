@@ -4,7 +4,6 @@
   fetchFromGitHub,
   cmake,
   clr,
-  gcc,
   python3,
 }:
 
@@ -20,13 +19,12 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   postPatch = ''
-    g++ contrib/easy-encryption/cl.cpp -o contrib/easy-encryption/bin/linux/ee64 #replacing prebuilt binary
+    rm -rf contrib/easy-encrypt # contains prebuilt easy-encrypt binaries, we disable encryption
     substituteInPlace contrib/Orochi/contrib/hipew/src/hipew.cpp --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib'
     substituteInPlace hiprt/hiprt_libpath.h --replace-fail '"/opt/rocm/hip/lib/' '"${clr}/lib/'
   '';
 
   nativeBuildInputs = [
-    gcc # required for replacing easy-encryption binary
     cmake
     python3
   ];
@@ -36,13 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-D CMAKE_BUILD_TYPE=Release"
-    "-D BAKE_KERNEL=OFF"
-    "-D BAKE_COMPILED_KERNEL=OFF"
-    "-D BITCODE=ON"
-    "-D PRECOMPILE=ON"
-    "-D NO_UNITTEST=ON"
-    "-D FORCE_DISABLE_CUDA=ON"
+    (lib.cmakeBool "BAKE_KERNEL" false)
+    (lib.cmakeBool "BAKE_COMPILED_KERNEL" false)
+    (lib.cmakeBool "BITCODE" true)
+    (lib.cmakeBool "PRECOMPILE" true)
+    # needs accelerator
+    (lib.cmakeBool "NO_UNITTEST" true)
+    # we have no need to support baking encrypted kernels into object files
+    (lib.cmakeBool "NO_ENCRYPT" true)
+    (lib.cmakeBool "FORCE_DISABLE_CUDA" true)
   ];
 
   postInstall = ''
@@ -58,6 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       mksafavi
     ];
+    teams = [ lib.teams.rocm ];
     platforms = lib.platforms.linux;
   };
 })
