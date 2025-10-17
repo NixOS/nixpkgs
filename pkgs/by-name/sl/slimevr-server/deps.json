@@ -26,59 +26,6 @@
    "pom": "sha256-5dGKuzEH67lOmuyc2CJdxWhWyS7tZVMFTvaKw+IBZT8="
   }
  },
- "https://oss.sonatype.org/content/repositories/snapshots": {
-  "net/java/dev/jna#jna-platform/5.1.1-20181118.214522-1/SNAPSHOT": {
-   "pom": "sha256-STVISbMwC8BymYDxq6UJhC3ZWqO+p7iA7lRW34ZcX6g="
-  },
-  "net/java/dev/jna#jna/5.1.1-20181118.214402-1/SNAPSHOT": {
-   "pom": "sha256-ABsaEoX+E319CyWjlyv5FnEy2ppq0u0rUQpNTfmFCe4="
-  },
-  "net/java/dev/jna/jna-platform/5.1.1-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "net.java.dev.jna",
-    "lastUpdated": "20181118232423"
-   }
-  },
-  "net/java/dev/jna/jna-platform/maven-metadata": {
-   "xml": {
-    "groupId": "net.java.dev.jna",
-    "lastUpdated": "20241017191337",
-    "latest": "5.1.1-SNAPSHOT",
-    "release": ""
-   }
-  },
-  "net/java/dev/jna/jna/5.1.1-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "net.java.dev.jna",
-    "lastUpdated": "20181118232424"
-   }
-  },
-  "net/java/dev/jna/jna/maven-metadata": {
-   "xml": {
-    "groupId": "net.java.dev.jna",
-    "lastUpdated": "20241028084608",
-    "latest": "5.1.1-SNAPSHOT",
-    "release": ""
-   }
-  },
-  "org/java-websocket#Java-WebSocket/1.3.10-20180805.200518-2/SNAPSHOT": {
-   "pom": "sha256-Te1UpdvGwDYnEjQPXY1m9V61JI9+4gyW5vsXY/v5B0g="
-  },
-  "org/java-websocket/Java-WebSocket/1.3.10-SNAPSHOT/maven-metadata": {
-   "xml": {
-    "groupId": "org.java-websocket",
-    "lastUpdated": "20180806172916"
-   }
-  },
-  "org/java-websocket/Java-WebSocket/maven-metadata": {
-   "xml": {
-    "groupId": "org.java-websocket",
-    "lastUpdated": "20240929162703",
-    "latest": "1.3.10-SNAPSHOT",
-    "release": ""
-   }
-  }
- },
  "https://plugins.gradle.org/m2": {
   "com/diffplug/durian#durian-collect/1.2.0": {
    "jar": "sha256-sZTAuIAhzBFsIcHcdvScLB/hda9by3TIume527+aSMw=",
@@ -775,26 +722,26 @@
    "jar": "sha256-HTFpZEVpdyBScJF1Q2kIKmZRvUl4G2AF3rlOVnU0Bvk=",
    "pom": "sha256-O5Wj083TqkuRqzJ921ob/gPYHic3lONqoUQEcdXXDl4="
   },
-  "net/java/dev/jna#jna-platform/5.17.0": {
-   "jar": "sha256-t+PUbIe60utAmw5wSRa82BIGFo41cxLf3dDiU2ec2eA=",
-   "pom": "sha256-CjC3l622giFH75jLJJ7z+/SiQ1QqqGv59C+tnmgwWkQ="
+  "net/java/dev/jna#jna-platform/5.18.1": {
+   "jar": "sha256-rRTBsexPQ9OWIxIZ36Y16/go9zjqyfiQ6hvAd5WJLZo=",
+   "pom": "sha256-OdU4qVmaRHR3CDiGXtQs+j5rPRMIbLHld7i7QxSNGmU="
   },
-  "net/java/dev/jna#jna/5.17.0": {
-   "jar": "sha256-s6lAjnxR4I7w47/MCPRD9uwPYZG6jNfBjVPSsi5b28A=",
-   "pom": "sha256-UBoP8F2EpK0Q9t4lvpT0k5i3CjG+jzoO2fTGtE++/uQ="
+  "net/java/dev/jna#jna/5.18.1": {
+   "jar": "sha256-JgxLHiKx254RDuRBxPE84RX4QfpIxB14dQmGIUs5VVc=",
+   "pom": "sha256-mLYq5v8oDXR/s1n8QuSP7RE9Rbw3Kagj3DC4MIqAZkU="
   },
   "net/java/dev/jna/jna-platform/maven-metadata": {
    "xml": {
     "groupId": "net.java.dev.jna",
-    "lastUpdated": "20250316114732",
-    "release": "5.17.0"
+    "lastUpdated": "20250930184734",
+    "release": "5.18.1"
    }
   },
   "net/java/dev/jna/jna/maven-metadata": {
    "xml": {
     "groupId": "net.java.dev.jna",
-    "lastUpdated": "20250316114729",
-    "release": "5.17.0"
+    "lastUpdated": "20250930184731",
+    "release": "5.18.1"
    }
   },
   "org/apache#apache/16": {
