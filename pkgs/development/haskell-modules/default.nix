@@ -15,6 +15,7 @@
   configurationNix ? import ./configuration-nix.nix,
   configurationArm ? import ./configuration-arm.nix,
   configurationDarwin ? import ./configuration-darwin.nix,
+  configurationCross ? import ./configuration-cross.nix,
   configurationJS ? import ./configuration-ghcjs-9.x.nix,
 }:
 
@@ -41,6 +42,9 @@ let
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (configurationDarwin { inherit pkgs haskellLib; })
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      (configurationCross { inherit pkgs haskellLib; })
     ]
     ++ lib.optionals stdenv.hostPlatform.isGhcjs [
       (configurationJS { inherit pkgs haskellLib; })

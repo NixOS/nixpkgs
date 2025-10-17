@@ -511,15 +511,25 @@ let
           };
         };
 
-        aarch64-multiplatform = {
-          # Cross compilation of GHC
-          haskell.compiler = {
-            inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.compiler)
-              # Latest GHC we are able to cross-compile. Uses NCG backend.
-              ghc948
-              ;
-          };
-        };
+        aarch64-multiplatform =
+          removePlatforms
+            [
+              # Testing cross from x86_64-linux
+              "aarch64-darwin"
+              "aarch64-linux"
+              "x86_64-darwin"
+            ]
+            {
+              haskell.packages.ghc912 = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  miso
+                  reflex-dom
+                  ;
+              };
+            };
       };
     })
     (versionedCompilerJobs {
