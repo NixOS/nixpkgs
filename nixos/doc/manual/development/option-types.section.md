@@ -251,7 +251,7 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
     options. This is equivalent to
     `types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }`.
 
-`types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`shorthandOnlyDefinesConfig`* ? false }
+`types.submoduleWith` { *`modules`*, *`specialArgs`* ? {}, *`onlyDefinesConfig`* ? false, *`shorthandOnlyDefinesConfig`* ? false }
 
 :   Like `types.submodule`, but more flexible and with better defaults.
     It has parameters
@@ -274,6 +274,12 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         because `lib` itself is used to define `_module.args`, which
         makes using `_module.args` to define it impossible.
 
+    -   *`onlyDefinesConfig`* Whether definitions of this type should
+        always default to the `config` section of a module. In contrast to
+        `shorthandOnlyDefinesConfig`, this applies to all definition values,
+        including functions and paths. When a value is a function, it is invoked
+        with the same arguments as the module itself.
+
     -   *`shorthandOnlyDefinesConfig`* Whether definitions of this type
         should default to the `config` section of a module (see
         [Example: Structure of NixOS Modules](#ex-module-syntax))
@@ -290,6 +296,8 @@ Submodules are detailed in [Submodule](#section-option-types-submodule).
         With this option enabled, defining a non-`config` section
         requires using a function:
         `the-submodule = { ... }: { options = { ... }; }`.
+        Note that this behavior does *not* apply to [path values](https://nix.dev/manual/nix/latest/language/types.html#type-path),
+        similar to how it does not apply to [function values](https://nix.dev/manual/nix/latest/language/types.html#type-function).
 
 `types.deferredModule`
 
