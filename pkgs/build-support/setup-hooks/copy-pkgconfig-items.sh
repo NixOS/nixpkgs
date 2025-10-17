@@ -28,8 +28,10 @@ copyPkgconfigItems() {
         return
     fi
 
+    concatTo pkgConfigArray pkgconfigItems
+
     pkgconfigdir="${!outputDev}/lib/pkgconfig"
-    for pkgconfigItem in $pkgconfigItems; do
+    for pkgconfigItem in ${pkgConfigArray[@]}; do
         if [[ -f "$pkgconfigItem" ]]; then
             substituteAllInPlace "$pkgconfigItem"
             echo "Copying '$pkgconfigItem' into '${pkgconfigdir}'"
