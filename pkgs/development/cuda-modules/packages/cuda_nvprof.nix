@@ -21,6 +21,10 @@ buildRedist {
     cuda_cupti
   ];
 
+  extraAutoPatchelfLibs = [
+    "${lib.getOutput "stubs" cuda_cudart}/lib/stubs"
+  ];
+
   meta = {
     description = "Collect and view profiling data from the command-line";
     longDescription = ''
