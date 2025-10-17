@@ -13,10 +13,19 @@
 
         virtualHosts."phpfpm" =
           let
-            testdir = pkgs.writeTextDir "web/index.php" "<?php phpinfo();";
+            testdir = pkgs.linkFarm "testDir" {
+              "index.php" = pkgs.writeText "index.php" "<?php phpinfo();";
+              "loadTestCredential.php" = pkgs.writeText "loadTestCredential.php" ''
+                <?php
+                  echo file_get_contents(
+                    getenv('CREDENTIALS_DIRECTORY') . '/test'
+                  );
+                ?>
+              '';
+            };
           in
           {
-            root = "${testdir}/web";
+            root = testdir;
             locations."~ \\.php$".extraConfig = ''
               fastcgi_pass unix:${config.services.phpfpm.pools.foobar.socket};
               fastcgi_index index.php;
@@ -45,6 +54,9 @@
           "pm.start_servers" = 2;
         };
       };
+      systemd.services.phpfpm-foobar.serviceConfig.LoadCredential = [
+        "test:${pkgs.writeText "testCredential" "42"}"
+      ];
     };
   testScript =
     { ... }:
@@ -60,5 +72,9 @@
       for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite", "apcu"]:
           assert ext in response, f"Missing {ext} extension"
           machine.succeed(f'test -n "$(php -m | grep -i {ext})"')
+
+      # Check so php workers are able to read our test credential
+      response = machine.succeed("curl -fvvv -s http://127.0.0.1:80/loadTestCredential.php")
+      assert response == "42", "php worker not able to read test systemd credential"
     '';
 }
