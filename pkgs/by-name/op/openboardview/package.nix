@@ -37,6 +37,8 @@ stdenv.mkDerivation rec {
       url = "https://github.com/OpenBoardView/OpenBoardView/commit/55ba0afca413189e8611b2861fe6653499028e47.patch?full_index=1";
       hash = "sha256-InzfX2aU20oyyImDdmjCS+FGm0aQOMbN//Vwty1VCpI=";
     })
+    # https://github.com/OpenBoardView/OpenBoardView/pull/339
+    ./fix-darwin-build.patch
   ];
 
   nativeBuildInputs = [
