@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "benqprojector";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rrooggiieerr";
     repo = "benqprojector.py";
     tag = version;
-    hash = "sha256-BttaLpjiybjeoJhOXfo6Qlox4bRqf9auvNg/wtm9gMQ=";
+    hash = "sha256-oG6djfmBnZyb4YpB6zqzHlcmQx+l+LF5xwCdf/NOb1Q=";
   };
 
   build-system = [
