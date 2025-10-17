@@ -5255,11 +5255,15 @@ self: super: with self; {
 
   fjaraskupan = callPackage ../development/python-modules/fjaraskupan { };
 
+  flag-embedding = callPackage ../development/python-modules/flag-embedding { };
+
   flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
   flake8-bugbear = callPackage ../development/python-modules/flake8-bugbear { };
+
+  flake8-builtins = callPackage ../development/python-modules/flake8-builtins { };
 
   flake8-class-newline = callPackage ../development/python-modules/flake8-class-newline { };
 
@@ -7273,6 +7277,8 @@ self: super: with self; {
 
   ipyxact = callPackage ../development/python-modules/ipyxact { };
 
+  ir-datasets = callPackage ../development/python-modules/ir-datasets { };
+
   irc = callPackage ../development/python-modules/irc { };
 
   ircrobots = callPackage ../development/python-modules/ircrobots { };
@@ -7995,6 +8001,8 @@ self: super: with self; {
   langchain-openai = callPackage ../development/python-modules/langchain-openai { };
 
   langchain-perplexity = callPackage ../development/python-modules/langchain-perplexity { };
+
+  langchain-qdrant = callPackage ../development/python-modules/langchain-qdrant { };
 
   langchain-tests = callPackage ../development/python-modules/langchain-tests { };
 
@@ -18718,6 +18726,8 @@ self: super: with self; {
 
   travispy = callPackage ../development/python-modules/travispy { };
 
+  trec-car-tools = callPackage ../development/python-modules/trec-car-tools { };
+
   trectools = callPackage ../development/python-modules/trectools { };
 
   tree-sitter = callPackage ../development/python-modules/tree-sitter { };
@@ -19580,6 +19590,8 @@ self: super: with self; {
 
   unix-ar = callPackage ../development/python-modules/unix-ar { };
 
+  unlzw3 = callPackage ../development/python-modules/unlzw3 { };
+
   unpaddedbase64 = callPackage ../development/python-modules/unpaddedbase64 { };
 
   unrardll = callPackage ../development/python-modules/unrardll { };
@@ -19950,6 +19962,10 @@ self: super: with self; {
   waqiasync = callPackage ../development/python-modules/waqiasync { };
 
   warble = callPackage ../development/python-modules/warble { };
+
+  warc3-wet = callPackage ../development/python-modules/warc3-wet { };
+
+  warc3-wet-clueweb = callPackage ../development/python-modules/warc3-wet-clueweb { };
 
   warcio = callPackage ../development/python-modules/warcio { };
 
@@ -20612,6 +20628,8 @@ self: super: with self; {
   zipstream-ng = callPackage ../development/python-modules/zipstream-ng { };
 
   zlib-ng = callPackage ../development/python-modules/zlib-ng { inherit (pkgs) zlib-ng; };
+
+  zlib-state = callPackage ../development/python-modules/zlib-state { };
 
   zm-py = callPackage ../development/python-modules/zm-py { };
 
