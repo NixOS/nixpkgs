@@ -148,6 +148,6 @@ generatedEclipses
 
   ### Plugins
 
-  plugins = callPackage ./plugins.nix { };
+  plugins = lib.recurseIntoAttrs (callPackage ./plugins.nix { });
 
 }

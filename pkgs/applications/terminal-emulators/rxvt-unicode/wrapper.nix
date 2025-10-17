@@ -16,7 +16,7 @@
 }:
 
 let
-  availablePlugins = rxvt-unicode-plugins;
+  availablePlugins = lib.filterAttrs (_: v: lib.isDerivation v) rxvt-unicode-plugins;
 
   # Transform the string "self" to the plugin itself.
   # It's needed for plugins like bidi who depends on the perl
