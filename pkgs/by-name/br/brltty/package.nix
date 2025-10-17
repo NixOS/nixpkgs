@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-MoDYjHU6aJY9e5cgjm9InOEDGCs+jvlEurMWg9wo4RY=";
   };
 
+  depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
     pkg-config
     python3.pkgs.cython
