@@ -121,9 +121,26 @@ stdenv.mkDerivation (finalAttrs: {
       wrapped = testers.testVersion {
         package = finalAttrs.finalPackage.withPackages (p: [ p.idris2Api ]);
       };
+
+      prelude = testers.runCommand {
+        name = "idris2-prelude-wrapped";
+        script = ''
+          local packages=$(idris2 --list-packages)
+
+          if ! [[ $packages =~ "contrib" ]]; then
+            exit 1
+          fi
+
+          touch "$out"
+        '';
+
+        nativeBuildInputs = [
+          (finalAttrs.finalPackage.withPackages (_: [ ]))
+        ];
+      };
     }
     // (callPackage ./tests.nix {
-      idris2 = finalAttrs.finalPackage;
+      idris2 = finalAttrs.finalPackage.withPackages (_: [ ]);
       idris2Packages = idris2Packages.override { idris2 = finalAttrs.finalPackage; };
     });
 
