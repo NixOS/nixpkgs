@@ -21034,6 +21034,12 @@
     githubId = 488734;
     name = "Puck Meerburg";
   };
+  puckla = {
+    email = "kassandra@pucher.space";
+    github = "PucklaJ";
+    githubId = 25499721;
+    name = "Kassandra Pucher";
+  };
   PuercoPop = {
     email = "pirata@gmail.com";
     github = "PuercoPop";
