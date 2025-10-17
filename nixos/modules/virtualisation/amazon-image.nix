@@ -85,12 +85,19 @@ in
 
     systemd.services.fetch-ec2-metadata = {
       wantedBy = [ "multi-user.target" ];
-      wants = [ "network-online.target" ];
+      requires = [ "network-online.target" ];
       after = [ "network-online.target" ];
+
       path = [ pkgs.curl ];
+
       script = builtins.readFile ./ec2-metadata-fetcher.sh;
-      serviceConfig.Type = "oneshot";
-      serviceConfig.StandardOutput = "journal+console";
+
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        StandardOutput = "journal+console";
+        Restart = "on-failure";
+      };
     };
 
     # Amazon-issued AMIs include the SSM Agent by default, so we do the same.
