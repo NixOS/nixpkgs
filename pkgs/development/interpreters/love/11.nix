@@ -1,26 +1,26 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  pkg-config,
   SDL2,
-  openal,
-  luajit,
-  lua5_1,
-  freetype,
-  physfs,
-  libmodplug,
-  mpg123,
-  libvorbis,
-  libogg,
-  libtheora,
   cmake,
+  fetchFromGitHub,
+  lib,
   libjpeg,
+  libmodplug,
+  libogg,
   libpng,
+  libtheora,
+  libvorbis,
   libwebp,
+  lua5_1,
+  luajit,
   mesa,
+  mpg123,
+  openal,
+  physfs,
+  pkg-config,
+  stdenv,
   xorg,
   zlib,
+  freetype,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,20 +41,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    zlib
-    libpng
-    libjpeg
-    libwebp
-    freetype
-    physfs
-    openal
     SDL2
-    libvorbis
-    libogg
-    libtheora
+    freetype
+    libjpeg
     libmodplug
-    mpg123
+    libogg
+    libpng
+    libtheora
+    libvorbis
+    libwebp
     lua5_1
+    mpg123
+    openal
+    physfs
+    zlib
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     mesa
