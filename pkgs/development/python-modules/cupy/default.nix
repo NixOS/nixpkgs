@@ -63,6 +63,11 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  env.LDFLAGS = toString [
+    # Fake libcuda.so (the real one is deployed impurely)
+    "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+  ];
+
   # See https://docs.cupy.dev/en/v10.2.0/reference/environment.html. Setting both
   # CUPY_NUM_BUILD_JOBS and CUPY_NUM_NVCC_THREADS to NIX_BUILD_CORES results in
   # a small amount of thrashing but it turns out there are a large number of
