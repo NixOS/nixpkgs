@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "exabgp";
-  version = "4.2.25";
+  version = "debian/sid/4.2.25-1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "Exa-Networks";
     repo = "exabgp";
     tag = version;
-    hash = "sha256-YBxRDcm4Qt44W3lBHDwdvZq2pXEujbqJDh24JbXthMg=";
+    hash = "sha256-NVQ61ew1UUSUb5LZZdcPQmzm5fDPXSM2NyagjzVb+nc=";
   };
 
   nativeBuildInputs = with python3.pkgs; [
