@@ -14,12 +14,13 @@
   portaudio,
   imath,
   qt6,
+  fmt_10,
 }:
 
 let
   # https://github.com/olive-editor/olive/issues/2284
   # we patch support for 2.3+, but 2.5 fails
-  openimageio' = openimageio.overrideAttrs (old: rec {
+  openimageio' = (openimageio.override { fmt = fmt_10; }).overrideAttrs (old: rec {
     version = "2.4.15.0";
     src = (
       old.src.override {
