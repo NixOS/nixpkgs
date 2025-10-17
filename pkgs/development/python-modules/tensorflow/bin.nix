@@ -204,6 +204,12 @@ buildPythonPackage rec {
             addDriverRunpath "$lib"
           ''}
         done
+
+        ${lib.optionalString cudaSupport ''
+          # Symlink nvcc besides TensorFlow so that routines that require JIT can work
+          # properly.
+          ln -s ${cudaPackages.cuda_nvcc} "$out/${python.sitePackages}/tensorflow/cuda"
+        ''}
       ''
     );
 
