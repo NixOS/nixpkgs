@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ares";
-  version = "145";
+  version = "146";
 
   src = fetchFromGitHub {
     owner = "ares-emulator";
     repo = "ares";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-es+K5+qlK7FcJCFEIMcOsXCZSnoXEEmtS0yhpCvaILM";
+    hash = "sha256-DCHMr4nwTpZIY4t+c8XYfTQ3wzznmr83r4OdG2F0fWI=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ARES_BUILD_LOCAL" false)
     (lib.cmakeBool "ARES_SKIP_DEPS" true)
+    (lib.cmakeBool "ARES_BUILD_OFFICIAL" true)
   ];
 
   postInstall =
