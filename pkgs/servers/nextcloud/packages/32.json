@@ -359,6 +359,16 @@
       "agpl"
     ]
   },
+  "theming_customcss": {
+    "hash": "sha256-tDU6GIGX5PFr6+iBYjUl4iGcZKUmc/3MUBt5xD561uw=",
+    "url": "https://github.com/nextcloud-releases/theming_customcss/releases/download/v1.19.0/theming_customcss.tar.gz",
+    "version": "1.19.0",
+    "description": "Adjust the Nextcloud theme with custom CSS",
+    "homepage": "",
+    "licenses": [
+      "agpl"
+    ]
+  },
   "twofactor_admin": {
     "hash": "sha256-zZvH7xfSooKBG4CKvSuf8D/6KnKEunLa+DRLAkWGoow=",
     "url": "https://github.com/nextcloud-releases/twofactor_admin/releases/download/v4.8.0/twofactor_admin.tar.gz",

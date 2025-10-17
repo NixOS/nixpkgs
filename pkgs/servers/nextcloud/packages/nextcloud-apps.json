@@ -41,6 +41,7 @@
 , "spreed": "agpl3Plus"
 , "tables": "agpl3Only"
 , "tasks": "agpl3Plus"
+, "theming_customcss": "agpl3Plus"
 , "twofactor_admin": "agpl3Plus"
 , "twofactor_nextcloud_notification": "agpl3Only"
 , "twofactor_totp": "agpl3Plus"
