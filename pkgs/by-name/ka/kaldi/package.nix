@@ -34,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
     "-DBLAS_LIBRARIES=-lblas"
     "-DLAPACK_LIBRARIES=-llapack"
     "-DFETCHCONTENT_SOURCE_DIR_OPENFST:PATH=${finalAttrs.passthru.sources.openfst}"
+    # Fix the build with CMake 4 (openfst does not contain cmake_minimum_required)
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   buildInputs = [
