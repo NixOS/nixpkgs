@@ -173,18 +173,16 @@ let
 
       strictDeps = true;
 
-      patches =
-        lib.optionals (lib.versionOlder version "4.4") [
-          (fetchpatch {
-            name = "wayland-header-fix.patch";
-            url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
-            hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
-          })
-          # Fix a crash in the mono test project build. It no longer seems to
-          # happen in 4.4, but an existing fix couldn't be identified.
-          ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
-        ]
-        ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
+      patches = lib.optionals (lib.versionOlder version "4.4") [
+        (fetchpatch {
+          name = "wayland-header-fix.patch";
+          url = "https://github.com/godotengine/godot/commit/6ce71f0fb0a091cffb6adb4af8ab3f716ad8930b.patch";
+          hash = "sha256-hgAtAtCghF5InyGLdE9M+9PjPS1BWXWGKgIAyeuqkoU=";
+        })
+        # Fix a crash in the mono test project build. It no longer seems to
+        # happen in 4.4, but an existing fix couldn't be identified.
+        ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
+      ];
 
       postPatch = ''
         # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE

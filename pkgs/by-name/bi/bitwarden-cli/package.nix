@@ -2,37 +2,39 @@
   lib,
   stdenv,
   buildNpmPackage,
-  nodejs_20,
   fetchFromGitHub,
-  cctools,
-  nix-update-script,
-  nixosTests,
+  nodejs_22,
   perl,
   xcbuild,
+  nixosTests,
+  nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "bitwarden-cli";
-  version = "2025.4.0";
+  version = "2025.9.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    tag = "cli-v${version}";
-    hash = "sha256-sWphSdxh07GS7GPlNVxK7zoXMTGLjT7qTLfH1nsIiQQ=";
+    tag = "cli-v${finalAttrs.version}";
+    hash = "sha256-vxGyDYtv0O5U4pnVrQm/BOIpDtpcDUOyFFdBDehQ2to=";
   };
+
+  patches = [
+    ./fix-lockfile.patch
+  ];
 
   postPatch = ''
     # remove code under unfree license
     rm -r bitwarden_license
   '';
 
-  nodejs = nodejs_20;
+  nodejs = nodejs_22;
 
-  npmDepsHash = "sha256-/BOzDt+wgnWedWfShPkAhaeujBBQTDlZdtiKl3wrOqE=";
+  npmDepsHash = "sha256-bn39QlZXNUa/GEZhJsjLiG3PRYdQ/Y36Tvef2fXH8yQ=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
     perl
     xcbuild.xcrun
   ];
@@ -60,9 +62,6 @@ buildNpmPackage rec {
     shopt -s globstar
     rm -r node_modules/**/prebuilds
     shopt -u globstar
-
-    # FIXME one of the esbuild versions fails to download @esbuild/linux-x64
-    rm -r node_modules/esbuild node_modules/vite/node_modules/esbuild
 
     npm rebuild --verbose
   '';
@@ -97,11 +96,14 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/bitwarden/clients/releases/tag/${src.tag}";
+    changelog = "https://github.com/bitwarden/clients/releases/tag/${finalAttrs.src.tag}";
     description = "Secure and free password manager for all of your devices";
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3Only;
     mainProgram = "bw";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+      dotlambda
+    ];
   };
-}
+})
