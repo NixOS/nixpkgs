@@ -35,13 +35,13 @@ assert builtins.all (
 
 buildDotnetModule (finalAttrs: {
   pname = "github-runner";
-  version = "2.328.0";
+  version = "2.329.0";
 
   src = fetchFromGitHub {
     owner = "actions";
     repo = "runner";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-3Q2bscLKdUBPx+5X0qxwtcy3CU6N/wE8yO1CcATSyBQ=";
+    hash = "sha256-Lf8l959y5tfvCsLwI8+tziFGm+LUJnhE2PQIz/zZneA=";
     leaveDotGit = true;
     postFetch = ''
       git -C $out rev-parse --short HEAD > $out/.git-revision
