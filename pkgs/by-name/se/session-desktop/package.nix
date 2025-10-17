@@ -9,12 +9,12 @@
 }:
 
 let
-  version = "1.15.2";
+  version = "1.16.3";
   pname = "session-desktop";
 
   src = fetchurl {
     url = "https://github.com/session-foundation/session-desktop/releases/download/v${version}/session-desktop-linux-x86_64-${version}.AppImage";
-    hash = "sha256-xQ/Fjg04XgXUioCCU0+sOLaTWZV1z05EmzZCqEU++Ok=";
+    hash = "sha256-RJjU3cixWM7UwEb6EIr6zqvsSxPbUFVrNNx6Rupedq4=";
   };
   appimage = appimageTools.wrapType2 { inherit version pname src; };
   appimage-contents = appimageTools.extractType2 { inherit version pname src; };
