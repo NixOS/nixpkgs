@@ -1067,6 +1067,8 @@ let
         };
       };
 
+      congyiwu.vscode-jupytext = callPackage ./congyiwu.vscode-jupytext { };
+
       contextmapper.context-mapper-vscode-extension =
         callPackage ./contextmapper.context-mapper-vscode-extension
           { };
@@ -2576,6 +2578,8 @@ let
 
       johnpapa.winteriscoming = callPackage ./johnpapa.winteriscoming { };
 
+      joshmu.periscope = callPackage ./joshmu.periscope { };
+
       jgclark.vscode-todo-highlight = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-todo-highlight";
@@ -3234,7 +3238,7 @@ let
           description = "Data viewing, cleaning and preparation for tabular datasets";
           downloadPage = "https://marketplace.visualstudio.com/items?itemName=ms-toolsai.datawrangler";
           homepage = "https://github.com/microsoft/vscode-data-wrangler";
-          license = lib.licenses.mit;
+          license = lib.licenses.unfree;
           maintainers = [ lib.maintainers.katanallama ];
         };
       };
