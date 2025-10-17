@@ -17,7 +17,6 @@
   opencv,
   ffmpeg,
   boost,
-  libjpeg_turbo,
   half,
   lmdb,
   rapidjson,
@@ -76,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
     opencv
     ffmpeg
     boost
-    libjpeg_turbo
     lmdb
     rapidjson
     python3Packages.pybind11
@@ -115,11 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   postPatch = ''
-    # Properly find turbojpeg
-    substituteInPlace cmake/FindTurboJpeg.cmake \
-      --replace-fail "\''${TURBO_JPEG_PATH}/include" "${libjpeg_turbo.dev}/include" \
-      --replace-fail "\''${TURBO_JPEG_PATH}/lib" "${libjpeg_turbo.out}/lib"
-
     ${lib.optionalString (!useOpenCL && !useCPU) ''
       # Properly find miopen
       substituteInPlace amd_openvx_extensions/CMakeLists.txt \

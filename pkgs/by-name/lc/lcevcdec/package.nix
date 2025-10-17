@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcevcdec";
-  version = "4.0.1";
+  version = "4.0.2";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "v-novaltd";
     repo = "LCEVCdec";
     tag = finalAttrs.version;
-    hash = "sha256-azY4xle2wwopT9qEHa4+nXPkGzscWz9tYof1qN7Nw8c=";
+    hash = "sha256-NbaU543M+xCF5OmMKwE6jK0F5USlpp/Jaw6g3qz+iN4=";
   };
 
   postPatch = ''
@@ -34,8 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "args.git_version" '"${finalAttrs.version}"' \
       --replace-fail "args.git_hash" '"${finalAttrs.src.rev}"' \
       --replace-fail "args.git_date" '"1970-01-01"'
-    substituteInPlace cmake/templates/lcevc_dec.pc.in \
-      --replace-fail "@GIT_SHORT_VERSION@" "${finalAttrs.version}"
   '';
 
   env = {
