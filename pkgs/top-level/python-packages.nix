@@ -796,6 +796,8 @@ self: super: with self; {
 
   appium-python-client = callPackage ../development/python-modules/appium-python-client { };
 
+  apple-compress = callPackage ../development/python-modules/apple-compress { };
+
   apple-weatherkit = callPackage ../development/python-modules/apple-weatherkit { };
 
   applicationinsights = callPackage ../development/python-modules/applicationinsights { };
@@ -3633,6 +3635,8 @@ self: super: with self; {
   detect-secrets = callPackage ../development/python-modules/detect-secrets { };
 
   detectron2 = callPackage ../development/python-modules/detectron2 { };
+
+  developer-disk-image = callPackage ../development/python-modules/developer-disk-image { };
 
   devgoldyutils = callPackage ../development/python-modules/devgoldyutils { };
 
@@ -7133,6 +7137,8 @@ self: super: with self; {
 
   inquirer = callPackage ../development/python-modules/inquirer { };
 
+  inquirer3 = callPackage ../development/python-modules/inquirer3 { };
+
   inquirerpy = callPackage ../development/python-modules/inquirerpy { };
 
   inscriptis = callPackage ../development/python-modules/inscriptis { };
@@ -7216,6 +7222,8 @@ self: super: with self; {
   ipfshttpclient = callPackage ../development/python-modules/ipfshttpclient { };
 
   iplotx = callPackage ../development/python-modules/iplotx { };
+
+  ipsw-parser = callPackage ../development/python-modules/ipsw-parser { };
 
   iptools = callPackage ../development/python-modules/iptools { };
 
@@ -7929,6 +7937,8 @@ self: super: with self; {
   kuzu = callPackage ../development/python-modules/kuzu { };
 
   l18n = callPackage ../development/python-modules/l18n { };
+
+  la-panic = callPackage ../development/python-modules/la-panic { };
 
   labelbox = callPackage ../development/python-modules/labelbox { };
 
@@ -8891,6 +8901,8 @@ self: super: with self; {
   lz4 = callPackage ../development/python-modules/lz4 { };
 
   lzallright = callPackage ../development/python-modules/lzallright { };
+
+  lzfse = callPackage ../development/python-modules/lzfse { };
 
   lzstring = callPackage ../development/python-modules/lzstring { };
 
@@ -10912,6 +10924,8 @@ self: super: with self; {
 
   oocsi = callPackage ../development/python-modules/oocsi { };
 
+  opack2 = callPackage ../development/python-modules/opack2 { };
+
   opaque = callPackage ../development/python-modules/opaque { };
 
   opcua-widgets = callPackage ../development/python-modules/opcua-widgets { };
@@ -11422,6 +11436,8 @@ self: super: with self; {
   param = callPackage ../development/python-modules/param { };
 
   paramax = callPackage ../development/python-modules/paramax { };
+
+  parameter-decorators = callPackage ../development/python-modules/parameter-decorators { };
 
   parameter-expansion-patched =
     callPackage ../development/python-modules/parameter-expansion-patched
@@ -12770,6 +12786,8 @@ self: super: with self; {
 
   pycparser = callPackage ../development/python-modules/pycparser { };
 
+  pycrashreport = callPackage ../development/python-modules/pycrashreport { };
+
   pycrc = callPackage ../development/python-modules/pycrc { };
 
   pycrdt = callPackage ../development/python-modules/pycrdt { };
@@ -13124,6 +13142,8 @@ self: super: with self; {
 
   pygnmi = callPackage ../development/python-modules/pygnmi { };
 
+  pygnuutils = callPackage ../development/python-modules/pygnuutils { };
+
   pygobject-stubs = callPackage ../development/python-modules/pygobject-stubs { };
 
   pygobject3 = callPackage ../development/python-modules/pygobject/3.nix {
@@ -13203,6 +13223,8 @@ self: super: with self; {
 
   pyicumessageformat = callPackage ../development/python-modules/pyicumessageformat { };
 
+  pyimg4 = callPackage ../development/python-modules/pyimg4 { };
+
   pyimgbox = callPackage ../development/python-modules/pyimgbox { };
 
   pyimpfuzzy = callPackage ../development/python-modules/pyimpfuzzy { inherit (pkgs) ssdeep; };
@@ -13278,6 +13300,8 @@ self: super: with self; {
   pykalman = callPackage ../development/python-modules/pykalman { };
 
   pykcs11 = callPackage ../development/python-modules/pykcs11 { };
+
+  pykdebugparser = callPackage ../development/python-modules/pykdebugparser { };
 
   pykdl = callPackage ../development/python-modules/pykdl { };
 
@@ -13431,6 +13455,8 @@ self: super: with self; {
 
   pylzma = callPackage ../development/python-modules/pylzma { };
 
+  pylzss = callPackage ../development/python-modules/pylzss { };
+
   pym3u8downloader = callPackage ../development/python-modules/pym3u8downloader { };
 
   pymacaroons = callPackage ../development/python-modules/pymacaroons { };
@@ -13506,6 +13532,8 @@ self: super: with self; {
   pymitsubishi = callPackage ../development/python-modules/pymitsubishi { };
 
   pymitv = callPackage ../development/python-modules/pymitv { };
+
+  pymobiledevice3 = callPackage ../development/python-modules/pymobiledevice3 { };
 
   pymochad = callPackage ../development/python-modules/pymochad { };
 
@@ -15052,6 +15080,8 @@ self: super: with self; {
 
   python-path = callPackage ../development/python-modules/python-path { };
 
+  python-pcapng = callPackage ../development/python-modules/python-pcapng { };
+
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
   python-picnic-api2 = callPackage ../development/python-modules/python-picnic-api2 { };
@@ -15305,6 +15335,8 @@ self: super: with self; {
   pytubefix = callPackage ../development/python-modules/pytubefix { };
 
   pytun = callPackage ../development/python-modules/pytun { };
+
+  pytun-pmd3 = callPackage ../development/python-modules/pytun-pmd3 { };
 
   pyturbojpeg = callPackage ../development/python-modules/pyturbojpeg { };
 
@@ -15850,6 +15882,8 @@ self: super: with self; {
   remote-pdb = callPackage ../development/python-modules/remote-pdb { };
 
   remotezip = callPackage ../development/python-modules/remotezip { };
+
+  remotezip2 = callPackage ../development/python-modules/remotezip2 { };
 
   renault-api = callPackage ../development/python-modules/renault-api { };
 
@@ -17583,6 +17617,8 @@ self: super: with self; {
   sshtunnel = callPackage ../development/python-modules/sshtunnel { };
 
   sslib = callPackage ../development/python-modules/sslib { };
+
+  sslpsk-pmd3 = callPackage ../development/python-modules/sslpsk-pmd3 { };
 
   ssort = callPackage ../development/python-modules/ssort { };
 

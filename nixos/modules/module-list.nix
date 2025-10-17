@@ -1296,6 +1296,7 @@
   ./services/networking/openconnect.nix
   ./services/networking/opengfw.nix
   ./services/networking/openvpn.nix
+  ./services/networking/opkssh/opkssh.nix
   ./services/networking/ostinato.nix
   ./services/networking/owamp.nix
   ./services/networking/pangolin.nix
@@ -1634,6 +1635,7 @@
   ./services/web-apps/lasuite-docs.nix
   ./services/web-apps/lasuite-meet.nix
   ./services/web-apps/lemmy.nix
+  ./services/web-apps/librespeed.nix
   ./services/web-apps/libretranslate.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/linkwarden.nix
