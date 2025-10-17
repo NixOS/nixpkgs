@@ -897,7 +897,7 @@ let
                     rm --verbose --force test-bpr.el
                   ''
                 else
-                  previousAttrs;
+                  previousAttrs.preBuild or "";
             }
           );
 
