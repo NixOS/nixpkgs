@@ -28,7 +28,7 @@
     lib.switch
       [ coq.coq-version mathcomp.version ]
       [
-        (case (range "8.20" "9.1") (range "2.2" "2.4") "2025.06.1")
+        (case (range "8.20" "9.1") (range "2.2" "2.5") "2025.06.1")
         (case (range "8.19" "9.1") (range "2.2" "2.4") "2025.02.1")
         (case (isEq "8.18") (isEq "2.2") "2024.07.2")
       ]

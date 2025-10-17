@@ -29,6 +29,7 @@ mkCoqDerivation {
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
+        (case (range "8.20" "9.1") (range "2.3" "2.5") "2.2.2")
         (case (range "8.20" "9.1") (range "2.3" "2.4") "2.2.0")
         (case (range "8.16" "9.0") (range "2.0" "2.3") "2.1.0")
         (case (range "8.16" "8.18") (range "2.0" "2.1") "2.0.0")
@@ -43,6 +44,7 @@ mkCoqDerivation {
       ]
       null;
   release = {
+    "2.2.2".sha256 = "sha256-G5fSdx4MhOXtQ2H8lpyK5FuIbWAZNc7vRL3hcYmGA2o=";
     "2.2.0".sha256 = "sha256-oDQEZOutrJxmN8FvzovUIhqw0mwc8Ej7thrieJrW8BY=";
     "2.1.0".sha256 = "sha256-gh0cnhdVDyo+D5zdtxLc10kGKQLQ3ITzHnMC45mCtpY=";
     "2.0.0".sha256 = "sha256-0Wr1ZUYVuZH74vawO4EZlZ+K3kq+s1xEz/BfzyKj+wk=";

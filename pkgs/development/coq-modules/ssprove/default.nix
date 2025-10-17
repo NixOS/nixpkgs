@@ -31,7 +31,7 @@
     lib.switch
       [ coq.coq-version mathcomp-boot.version ]
       [
-        (case (range "8.18" "9.0") (range "2.3.0" "2.4.0") "0.2.4")
+        (case (range "8.18" "9.0") (range "2.3.0" "2.5.0") "0.2.4")
         (case (range "8.18" "8.20") (range "2.3.0" "2.3.0") "0.2.3")
         (case (range "8.18" "8.20") (range "2.1.0" "2.2.0") "0.2.2")
         # This is the original dependency:
