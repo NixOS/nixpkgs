@@ -72,9 +72,9 @@ let
   buildType = "release";
   # Use maintainers/scripts/update.nix to update the version and all related hashes or
   # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.2";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "sha256-sOY7+4VTJ67PESLNozOQwzc05f/tcvEj9e33hqjOE5M=";
 
   kvmPatchVboxVersion = "7.2.0";
   kvmPatchVersion = "20250903";
@@ -216,10 +216,6 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-glLdr.cpp \
       --replace-fail \"libGL.so.1\" \"${libGL.out}/lib/libGL.so.1\"
 
-    # this works in conjunction with fix-graphics-driver-loading.patch
-    substituteInPlace src/VBox/Devices/Graphics/DevVGA-SVGA3d-dx-dx11.cpp \
-      --replace-fail \"VBoxDxVk\" \"$out/libexec/virtualbox/VBoxDxVk.so\"
-
     export USER=nix
     set +x
   '';
@@ -260,6 +256,11 @@ stdenv.mkDerivation (finalAttrs: {
       ./qt-dependency-paths.patch
       # https://github.com/NixOS/nixpkgs/issues/123851
       ./fix-audio-driver-loading.patch
+      # curl 8.16 upgrade breakage
+      (fetchpatch {
+        url = "https://salsa.debian.org/pkg-virtualbox-team/virtualbox/-/raw/dbf9a6ef75380ebd2705df0198c6ac8073d0b4cb/debian/patches/new-curl.patch";
+        hash = "sha256-WWnCWdXlJo9jTr8yXA0NxcDQBScryuu/53wyX0rhszk=";
+      })
     ];
 
   postPatch = ''

@@ -34,7 +34,7 @@
 }:
 let
   pnpm = pnpm_10;
-  version = "2.0.1";
+  version = "2.1.0";
 
   esbuild' = buildPackages.esbuild.override {
     buildGoModule =
@@ -108,14 +108,14 @@ let
     owner = "immich-app";
     repo = "immich";
     tag = "v${version}";
-    hash = "sha256-lpFUjjS7Q2F/Uhog1NdJ8vaVIGjmZM9ZWxW5d0zoQsc=";
+    hash = "sha256-xbOzTJKutuR5/oRBUyXjZ4FWAmDnWO+nS7dQcNNRHlE=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     pname = "immich";
     inherit version src;
     fetcherVersion = 2;
-    hash = "sha256-+CwwTqjI+xOGCAb66lZplNMBwR2xJZBs6E0OyGHbSAE=";
+    hash = "sha256-JqI7te2M88CVfvqEOIggGn64Ue0rkrMlC6HvSRW1CU0=";
   };
 
   web = stdenv.mkDerivation {
@@ -146,6 +146,12 @@ let
       runHook postInstall
     '';
   };
+
+  # Without this thumbnail generation for raw photos fails with
+  #     Error: Input file has corrupt header: tiff2vips: samples_per_pixel not a whole number of bytes
+  vips' = vips.overrideAttrs (prev: {
+    mesonFlags = prev.mesonFlags ++ [ "-Dtiff=disabled" ];
+  });
 in
 stdenv.mkDerivation {
   pname = "immich";
@@ -182,7 +188,7 @@ stdenv.mkDerivation {
     pango
     pixman
     # Required for sharp
-    vips
+    vips'
   ];
 
   env.SHARP_FORCE_GLOBAL_LIBVIPS = 1;

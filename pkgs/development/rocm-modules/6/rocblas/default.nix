@@ -4,7 +4,6 @@
   fetchFromGitHub,
   fetchpatch,
   rocmUpdateScript,
-  writableTmpDirAsHomeHook,
   cmake,
   rocm-cmake,
   clr,
@@ -16,7 +15,7 @@
   gtest,
   gfortran,
   openmp,
-  git,
+  gitMinimal,
   amd-blis,
   zstd,
   roctracer,
@@ -53,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     # no ninja, it buffers console output and nix times out long periods of no output
     rocm-cmake
     clr
-    git
+    gitMinimal
     pkg-config
   ]
   ++ lib.optionals buildTensile [

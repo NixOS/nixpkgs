@@ -524,7 +524,6 @@ in
           '';
           extraConfig = ''
             add_header X-Frame-Options "SAMEORIGIN";
-            add_header X-XSS-Protection "1; mode=block";
             add_header X-Content-Type-Options "nosniff";
             index index.html index.htm index.php;
             error_page 404 /index.php;

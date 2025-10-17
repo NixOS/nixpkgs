@@ -28,6 +28,7 @@
   MPISupport ? false,
   mpi,
   buildDocs ? false,
+  targetPackages,
 
   # tests.cudaAvailable:
   callPackage,
@@ -367,6 +368,12 @@ buildPythonPackage rec {
   + ''
     substituteInPlace torch/csrc/profiler/unwind/unwind.cpp \
       --replace-fail 'addr2line_binary_ = "addr2line"' 'addr2line_binary_ = "${lib.getExe' binutils "addr2line"}"'
+  ''
+  # Ensures torch compile can find and use compilers from nix.
+  + ''
+    substituteInPlace torch/_inductor/config.py \
+      --replace-fail '"clang++" if sys.platform == "darwin" else "g++"' \
+      '"${lib.getExe' targetPackages.stdenv.cc "${targetPackages.stdenv.cc.targetPrefix}c++"}"'
   ''
   + lib.optionalString rocmSupport ''
     # https://github.com/facebookincubator/gloo/pull/297

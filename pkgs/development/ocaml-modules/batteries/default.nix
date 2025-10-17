@@ -11,17 +11,17 @@
   doCheck ? lib.versionAtLeast ocaml.version "4.08",
 }:
 
-buildDunePackage rec {
+buildDunePackage (finalAttrs: {
   pname = "batteries";
-  version = "3.9.0";
+  version = "3.10.0";
 
   minimalOCamlVersion = "4.05";
 
   src = fetchFromGitHub {
     owner = "ocaml-batteries-team";
     repo = "batteries-included";
-    rev = "v${version}";
-    hash = "sha256-+PGfExdvp3WyX1s8dLTBYp1SoUOBkzrxyqMUuaW6Bto=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-cD0O4kEDE58yCYnUuS83O1CJNHJuCGVhvKJSKQeQGkc=";
   };
 
   nativeCheckInputs = [ qtest ];
@@ -50,4 +50,4 @@ buildDunePackage rec {
       lib.maintainers.maggesi
     ];
   };
-}
+})

@@ -28,24 +28,24 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-material";
-  version = "9.6.20";
+  version = "9.6.21";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "squidfunk";
     repo = "mkdocs-material";
     tag = version;
-    hash = "sha256-4VvMy3eAkITASX8qRu8Qdgj2n92dz0vfZJo4q8EFLuU=";
+    hash = "sha256-zd1KJQOH3uHrePJbBgLuq++GSoM1KYW9VwpYnCrZZQY=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-requirements-txt
     hatch-nodejs-version
     hatchling
     trove-classifiers
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     babel
     backrefs
     colorama

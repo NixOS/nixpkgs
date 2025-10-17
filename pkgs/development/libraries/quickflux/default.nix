@@ -29,6 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace CMakeLists.txt \
       --replace-fail 'quickflux STATIC' 'quickflux' \
       --replace-fail 'DESTINATION include' 'DESTINATION ''${CMAKE_INSTALL_INCLUDEDIR}'
+
+    # Fix CMake 4 compat
+    # https://github.com/benlau/quickflux/pull/37
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0.0)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   strictDeps = true;

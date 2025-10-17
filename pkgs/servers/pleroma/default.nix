@@ -12,7 +12,6 @@
   pkg-config,
   glib,
   fetchpatch,
-  ...
 }:
 
 beamPackages.mixRelease rec {

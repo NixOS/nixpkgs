@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     libxkbfile
   ];
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   meta = with lib; {
     description = "Switch your X keyboard layouts from the command line";
     homepage = "https://github.com/ierton/xkb-switch";

@@ -47,6 +47,11 @@ python3.pkgs.buildPythonApplication rec {
 
   enabledTestPaths = [ "tests/tests*" ];
 
+  disabledTests = [
+    # Issue with later neo4j versions
+    "test_create_db"
+  ];
+
   meta = with lib; {
     description = "Tool for pentesting Microsoft Active Directory";
     homepage = "https://github.com/helviojunior/knowsmore";

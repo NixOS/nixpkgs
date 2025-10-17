@@ -9,10 +9,10 @@
 }:
 let
   pname = "beeper";
-  version = "4.1.186";
+  version = "4.1.253";
   src = fetchurl {
     url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}.AppImage";
-    hash = "sha256-/SEBOQF5XzOLVyaCn0+a0iPvVz/JE38hEt9iNJgDRaU=";
+    hash = "sha256-/vjJmDP183M8B/g0IIcWytB5NUoteWMZlef0j8nZdOQ=";
   };
   appimageContents = appimageTools.extract {
     inherit pname version src;

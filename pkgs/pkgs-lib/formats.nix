@@ -425,10 +425,22 @@ optionalAttrs allowAliases aliases
     let
       mkValueString = mkValueStringDefault { };
       mkKeyValue = k: v: if v == null then "# ${k} is unset" else "${k} = ${mkValueString v}";
+
+      rawFormat = ini {
+        listsAsDuplicateKeys = true;
+        inherit mkKeyValue;
+      };
     in
-    ini {
-      listsAsDuplicateKeys = true;
-      inherit mkKeyValue;
+    rawFormat
+    // {
+      generate =
+        name: value:
+        lib.warn
+          "Direct use of `pkgs.formats.systemd` has been deprecated, please use `pkgs.formats.systemd { }` instead."
+          rawFormat.generate
+          name
+          value;
+      __functor = self: { }: rawFormat;
     };
 
   keyValue =
@@ -1125,4 +1137,29 @@ optionalAttrs allowAliases aliases
     else
       throw "pkgs.formats.xml: Unknown format: ${format}";
 
+  plist =
+    {
+      escape ? true,
+    }:
+    {
+      type =
+        let
+          valueType =
+            nullOr (oneOf [
+              bool
+              int
+              float
+              str
+              path
+              (attrsOf valueType)
+              (listOf valueType)
+            ])
+            // {
+              description = "Property list (plist) value";
+            };
+        in
+        valueType;
+
+      generate = name: value: pkgs.writeText name (lib.generators.toPlist { inherit escape; } value);
+    };
 }

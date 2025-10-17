@@ -87,6 +87,9 @@ buildPythonPackage rec {
     # causing a later test to fail with a spurious KeyboardInterrupt
     "test_connection_interrupt"
     "test_query_interruption"
+
+    # flaky due to a race condition in checking whether a thread is alive
+    "test_query_progress"
   ];
 
   # remove duckdb dir to prevent import confusion by pytest

@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "lenovo-legion-app";
-  version = "0.0.20-unstable-2025-04-01";
+  version = "0.0.21-unstable-2025-07-11";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "johnfanv2";
     repo = "LenovoLegionLinux";
-    rev = "19fef88dbbb077d99052e06f3cd9a3675e7bf3aa";
-    hash = "sha256-0lQ6LyfjZ1/dc6QjB4a1aBcfxY5lIJJEonwuy9a4V4I=";
+    rev = "f559df04cc0705b2b181dfd0404110a4d1d6e2a9";
+    hash = "sha256-WXGDlykH6aBUVotmDcGZ8Y/zC8iBAv57u3hXRnfTaSo=";
   };
 
   sourceRoot = "${src.name}/python/legion_linux";
@@ -25,6 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pyqt6
     argcomplete
+    pillow
     pyyaml
     darkdetect
     xorg.libxcb

@@ -5,23 +5,20 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requests,
   responses,
 }:
 
 buildPythonPackage rec {
   pname = "securityreporter";
-  version = "1.2.0";
+  version = "1.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "dongit-org";
     repo = "python-reporter";
     tag = "v${version}";
-    hash = "sha256-fpsvjbPE6iaOmLxykGSkCjkhFTmb8xhXa8pDrWN66KM=";
+    hash = "sha256-YvUDgsKM0JUajp8JAR2vj30QsNtcGvADGCZ791ZZD/8=";
   };
 
   postPatch = ''

@@ -49,7 +49,7 @@ lib.checkListOfEnum "colloid-icon-theme: scheme variants"
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-icon-theme";
-      rev = version;
+      tag = version;
       hash = "sha256-x2SSaIkKm1415avO7R6TPkpghM30HmMdjMFUUyPWZsk=";
     };
 

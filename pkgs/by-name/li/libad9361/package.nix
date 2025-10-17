@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-9e66qSrKpczatZY9lPAzi/6f7lHChnl2+Pih53oa28Y=";
   };
 
+  patches = [
+    # Update CMake minimum required version for CMake 4 compatibility
+    # https://github.com/analogdevicesinc/libad9361-iio/pull/134
+    ./cmake-3.10.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libiio ];

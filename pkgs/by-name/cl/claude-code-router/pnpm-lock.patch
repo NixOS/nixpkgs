@@ -1,0 +1,90 @@
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -356,6 +356,12 @@
+     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==}
+     engines: {node: '>= 8'}
+ 
++  '@types/mute-stream@0.0.4':
++    resolution: {integrity: sha512-CPM9nzrCPPJHQNA9keH9CVkVI+WR5kMa+7XEs5jcGQ0VoAGnLv242w8lIVgwAEfmE4oufJRaTc9PNLQl0ioAow==}
++
++  '@types/node@22.18.9':
++    resolution: {integrity: sha512-5yBtK0k/q8PjkMXbTfeIEP/XVYnz1R9qZJ3yUicdEW7ppdDJfe+MqXEhpqDL3mtn4Wvs1u0KLEG0RXzCgNpsSg==}
++
+   '@types/node@24.7.0':
+     resolution: {integrity: sha512-IbKooQVqUBrlzWTi79E8Fw78l8k1RNtlDDNWsFZs7XonuQSJ8oNYfEeclhprUldXISRMLzBpILuKgPlIxm+/Yw==}
+ 
+@@ -904,6 +910,9 @@
+     resolution: {integrity: sha512-b3rppTKm9T+PsVCBEOUR46GWI7fdOs00VKZ1+9c1EWDaDMvjQc6tUwuFyIprgGgTcWoVHSKrU8H31ZHA2e0RHA==}
+     engines: {node: '>=10'}
+ 
++  safer-buffer@2.1.2:
++    resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
++
+   secure-json-parse@4.1.0:
+     resolution: {integrity: sha512-l4KnYfEyqYJxDwlNVyRfO2E4NTHfMKAWdUuA8J0yve2Dz/E/PdBepY03RvyJpssIpRFwJoCD55wA+mEDs6ByWA==}
+ 
+@@ -1026,11 +1035,18 @@
+   tr46@0.0.3:
+     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==}
+ 
++  type-fest@0.21.3:
++    resolution: {integrity: sha512-t0rzBq87m3fVcduHDUFhKmyyX+9eo6WQjZvf51Ea/M0Q7+T374Jp1aUiyUl0GKxp8M/OETVHSDvmkyPgvX+X2w==}
++    engines: {node: '>=10'}
++
+   typescript@5.9.3:
+     resolution: {integrity: sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw==}
+     engines: {node: '>=14.17'}
+     hasBin: true
+ 
++  undici-types@6.21.0:
++    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
++
+   undici-types@7.14.0:
+     resolution: {integrity: sha512-QQiYxHuyZ9gQUIrmPo3IA+hUl4KYk8uSA7cHrcKd/l3p1OTpZcM0Tbp9x7FAtXdAYhlasd60ncPpgu6ihG6TOA==}
+ 
+@@ -1253,7 +1269,7 @@
+       '@inquirer/figures': 1.0.13
+       '@inquirer/type': 2.0.0
+       '@types/mute-stream': 0.0.4
+-      '@types/node': 22.18.8
++      '@types/node': 22.18.9
+       '@types/wrap-ansi': 3.0.0
+       ansi-escapes: 4.3.2
+       cli-width: 4.1.0
+@@ -1386,6 +1402,14 @@
+       '@nodelib/fs.scandir': 2.1.5
+       fastq: 1.19.1
+ 
++  '@types/mute-stream@0.0.4':
++    dependencies:
++      '@types/node': 24.7.0
++
++  '@types/node@22.18.9':
++    dependencies:
++      undici-types: 6.21.0
++
+   '@types/node@24.7.0':
+     dependencies:
+       undici-types: 7.14.0
+@@ -1956,6 +1980,8 @@
+ 
+   safe-stable-stringify@2.5.0: {}
+ 
++  safer-buffer@2.1.2: {}
++
+   secure-json-parse@4.1.0: {}
+ 
+   semver@5.7.2: {}
+@@ -2054,8 +2080,12 @@
+ 
+   tr46@0.0.3: {}
+ 
++  type-fest@0.21.3: {}
++
+   typescript@5.9.3: {}
+ 
++  undici-types@6.21.0: {}
++
+   undici-types@7.14.0: {}
+ 
+   undici@7.16.0: {}

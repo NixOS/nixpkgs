@@ -27,7 +27,11 @@ buildNpmPackage (finalAttrs: {
     cp ${./package-lock.json} ./package-lock.json
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--generate-lockfile"
+    ];
+  };
 
   meta = {
     description = "Concise multiwriter for data structures with Hypercore";

@@ -1,11 +1,13 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   pkg-config,
   libsecret,
-  python3,
-  testers,
+  nodejs,
+  clang_20,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -28,18 +30,19 @@ buildNpmPackage (finalAttrs: {
 
   nativeBuildInputs = [
     pkg-config
-    python3
-  ];
+    nodejs.python
+  ]
+  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 
   buildInputs = [ libsecret ];
 
   makeCacheWritable = true;
-  npmFlags = [ "--legacy-peer-deps" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = finalAttrs.finalPackage;
-    };
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
@@ -51,7 +54,9 @@ buildNpmPackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/microsoft/vscode-vsce";
     description = "Visual Studio Code Extension Manager";
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+    ];
     license = lib.licenses.mit;
     mainProgram = "vsce";
   };

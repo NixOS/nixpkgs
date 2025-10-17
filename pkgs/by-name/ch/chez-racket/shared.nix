@@ -55,7 +55,7 @@ stdenv.mkDerivation (
       description = "Fork of Chez Scheme for Racket";
       homepage = "https://github.com/racket/ChezScheme";
       license = lib.licenses.asl20;
-      maintainers = with lib.maintainers; [ l-as ];
+      maintainers = [ ];
       platforms = lib.platforms.unix;
     };
   }

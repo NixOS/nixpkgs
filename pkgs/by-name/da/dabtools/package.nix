@@ -30,6 +30,13 @@ stdenv.mkDerivation {
     libusb1
   ];
 
+  #  CMake 4 is no longer retro compatible with versions < 3.5
+  postPatch = ''
+    substituteInPlace CMakeLists.txt src/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   meta = with lib; {
     description = "Commandline tools for DAB and DAB+ digital radio broadcasts";
     homepage = "https://github.com/Opendigitalradio/dabtools";

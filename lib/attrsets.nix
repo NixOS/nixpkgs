@@ -6,12 +6,7 @@
 let
   inherit (builtins) head length typeOf;
   inherit (lib.asserts) assertMsg;
-  inherit (lib.trivial)
-    oldestSupportedReleaseIsAtLeast
-    mergeAttrs
-    warn
-    warnIf
-    ;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs;
   inherit (lib.strings)
     concatStringsSep
     concatMapStringsSep
@@ -44,7 +39,7 @@ rec {
     ;
 
   /**
-    Return an attribute from nested attribute sets.
+    Returns an attribute from nested attribute sets.
 
     Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
@@ -111,7 +106,7 @@ rec {
     attrByPath' 0 set;
 
   /**
-    Return if an attribute from nested attribute set exists.
+    Returns if an attribute from nested attribute set exists.
 
     Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
 
@@ -177,7 +172,7 @@ rec {
     hasAttrByPath' 0 e;
 
   /**
-    Return the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
+    Returns the longest prefix of an attribute path that refers to an existing attribute in a nesting of attribute sets.
 
     Can be used after [`mapAttrsRecursiveCond`](#function-library-lib.attrsets.mapAttrsRecursiveCond) to apply a condition,
     although this will evaluate the predicate function on sibling attributes as well.
@@ -504,7 +499,7 @@ rec {
     updates: value: go 0 true value updates;
 
   /**
-    Return the specified attributes from a set.
+    Returns the specified attributes from a set.
 
     # Inputs
 
@@ -536,7 +531,7 @@ rec {
   attrVals = nameList: set: map (x: set.${x}) nameList;
 
   /**
-    Return the values of all attributes in the given set, sorted by
+    Returns the values of all attributes in the given set, sorted by
     attribute name.
 
     # Type
@@ -2234,16 +2229,4 @@ rec {
       ) intersection;
     in
     (x // y) // mask;
-
-  # DEPRECATED
-  zipWithNames = warn "lib.zipWithNames is a deprecated alias of lib.zipAttrsWithNames." zipAttrsWithNames;
-
-  # DEPRECATED
-  zip = warn "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
-
-  # DEPRECATED
-  cartesianProductOfSets =
-    warnIf (oldestSupportedReleaseIsAtLeast 2405)
-      "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct."
-      cartesianProduct;
 }

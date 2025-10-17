@@ -24,11 +24,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required (VERSION 2.8.11)' 'cmake_minimum_required (VERSION 4.1)'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   postFixup = ''
     substituteInPlace $out/lib/cmake/bpp-core/bpp-core-targets.cmake  \
-      --replace 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
+      --replace-fail 'set(_IMPORT_PREFIX' '#set(_IMPORT_PREFIX'
   '';
   # prevents cmake from exporting incorrect INTERFACE_INCLUDE_DIRECTORIES
   # of form /nix/store/.../nix/store/.../include,

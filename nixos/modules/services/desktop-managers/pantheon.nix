@@ -322,6 +322,7 @@ in
             elementary-files
             elementary-mail
             elementary-maps
+            elementary-monitor
             elementary-music
             elementary-photos
             elementary-screenshot

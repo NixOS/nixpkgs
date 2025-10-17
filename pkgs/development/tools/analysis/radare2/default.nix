@@ -52,13 +52,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "radare2";
-  version = "6.0.2";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     tag = finalAttrs.version;
-    hash = "sha256-uCMf+pNqyjRLeNJlE8Kk6PQCIRBjidO/XGHeNV/F1lA=";
+    hash = "sha256-B0xCQPD27NcCDvRJK1/yyjtrlEJoSTD7e2cu5JIo95w=";
   };
 
   mesonFlags = [

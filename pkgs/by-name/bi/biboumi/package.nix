@@ -79,6 +79,12 @@ stdenv.mkDerivation {
     "man"
   ];
 
+  cmakeFlags = [
+    # Fix breakage with CMake 4
+    "-DCMAKE_SKIP_RPATH=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
     cp ${catch}/single_include/catch.hpp tests/

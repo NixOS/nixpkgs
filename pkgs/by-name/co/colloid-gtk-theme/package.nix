@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  gnome-themes-extra,
   gtk-engine-murrine,
   jdupes,
   sassc,
@@ -55,24 +54,20 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
   tweaks
 
   stdenvNoCC.mkDerivation
-  rec {
+  (finalAttrs: {
     inherit pname;
     version = "2025-07-31";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
       repo = "colloid-gtk-theme";
-      rev = version;
+      tag = finalAttrs.version;
       hash = "sha256-0pXbeeBAkk6v2DBWfUYhWWdyrQhgr/JfDbhyS33maMM=";
     };
 
     nativeBuildInputs = [
       jdupes
       sassc
-    ];
-
-    buildInputs = [
-      gnome-themes-extra
     ];
 
     propagatedUserEnvPkgs = [
@@ -98,11 +93,11 @@ lib.checkListOfEnum "colloid-gtk-theme: theme variants"
       runHook postInstall
     '';
 
-    meta = with lib; {
+    meta = {
       description = "Modern and clean Gtk theme";
       homepage = "https://github.com/vinceliuice/Colloid-gtk-theme";
-      license = licenses.gpl3Only;
-      platforms = platforms.unix;
-      maintainers = [ maintainers.romildo ];
+      license = lib.licenses.gpl3Only;
+      platforms = lib.platforms.unix;
+      maintainers = [ lib.maintainers.romildo ];
     };
-  }
+  })

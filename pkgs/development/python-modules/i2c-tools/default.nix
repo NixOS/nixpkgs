@@ -19,6 +19,6 @@ buildPythonPackage {
     description = "Wrapper for i2c-tools' smbus stuff";
     # from py-smbus/smbusmodule.c
     license = [ licenses.gpl2Only ];
-    maintainers = [ maintainers.evils ];
+    maintainers = [ ];
   };
 }

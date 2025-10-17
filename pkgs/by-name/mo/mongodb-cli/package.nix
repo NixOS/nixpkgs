@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "mongodb-cli";
-  version = "2.0.5";
+  version = "2.0.6";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongodb-cli";
     tag = "mongocli/v${version}";
-    hash = "sha256-PL4GS+HpxAiaGgnW5jnOWCmxEWAwkAiquFXShFBeqYY=";
+    hash = "sha256-ltNYphGNUyg12Xjg3kmmMVdSYyzMUjdVeXjDi6O4T08=";
   };
 
-  vendorHash = "sha256-khEkagnUqgfUBoOmeCxbkC2N/ER0oMkyg57AW3oB3i8=";
+  vendorHash = "sha256-X5qIte7TFn9b54cg0NF4yrFuAjqTdLXPx0qPGK54jnY=";
 
   subPackages = [ "cmd/mongocli" ];
 

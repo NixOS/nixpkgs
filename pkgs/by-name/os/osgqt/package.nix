@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "osgQt";
-  version = "3.5.7";
+  version = "3.5.7-unstable-2025-10-08";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "osgQt";
-    rev = finalAttrs.version;
-    hash = "sha256-iUeIqRDlcAHdKXWAi4WhEaOCxa7ZivQw0K5E7ccEKnM=";
+    rev = "effd111b747d786d4937de93973188a48eee3412";
+    hash = "sha256-+rjy2a266p755Mbfk6jRApiERpOL8axHklK0cYokX40=";
   };
 
   buildInputs = [ libsForQt5.qtbase ];
@@ -31,13 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DDESIRED_QT_VERSION=5"
     "-DOpenGL_GL_PREFERENCE=GLVND"
   ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "FIND_PACKAGE(Qt5Widgets REQUIRED)" \
-      "FIND_PACKAGE(Qt5Widgets REQUIRED)
-       FIND_PACKAGE(Qt5OpenGL REQUIRED)"
-  '';
 
   meta = {
     description = "Qt bindings for OpenSceneGraph";

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "glv2";
     repo = "bruteforce-salted-openssl";
-    rev = version;
+    tag = version;
     hash = "sha256-hXB4CUQ5pihKmahyK359cgQACrs6YH1gHmZJAuTXgQM=";
   };
 

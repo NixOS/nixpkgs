@@ -30,7 +30,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.25.9";
+  version = "2.26.0";
   pyproject = true;
 
   disabled = python.pkgs.pythonOlder "3.8";
@@ -39,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "pdm-project";
     repo = "pdm";
     tag = version;
-    hash = "sha256-Oq3xOxP6huK9sppum9SFoKUsEZNmXdTuuhhy1UqAk/Q=";
+    hash = "sha256-Ici9XFUgtlk5yBYckZGE64KFUvA0UdX+9wo7CfaRrLI=";
   };
 
   pythonRelaxDeps = [ "hishel" ];

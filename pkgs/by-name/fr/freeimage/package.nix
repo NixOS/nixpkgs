@@ -164,7 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
       "CVE-2019-12214"
       "CVE-2019-12212"
     ];
-    maintainers = with lib.maintainers; [ l-as ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 })

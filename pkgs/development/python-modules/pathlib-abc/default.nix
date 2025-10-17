@@ -1,23 +1,21 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pythonOlder,
+  fetchFromGitHub,
   hatchling,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "pathlib-abc";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
-  src = fetchPypi {
-    pname = "pathlib_abc";
-    inherit version;
-    hash = "sha256-vsmplUco6iEJL4oRaLWc1vOAoMNQPkZuDCrJx8JiNWQ=";
+  src = fetchFromGitHub {
+    owner = "barneygale";
+    repo = "pathlib-abc";
+    tag = version;
+    hash = "sha256-Amr5yrdmS0jx1dnakstgE7JFs4QzNK150aG51GUrc2Y=";
   };
 
   build-system = [ hatchling ];
@@ -26,11 +24,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Python base classes for rich path objects";
     homepage = "https://github.com/barneygale/pathlib-abc";
-    changelog = "https://github.com/barneygale/pathlib-abc/blob/${version}/CHANGES.rst";
-    license = licenses.psfl;
+    changelog = "https://github.com/barneygale/pathlib-abc/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.psfl;
     maintainers = [ ];
   };
 }

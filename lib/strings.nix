@@ -1806,7 +1806,7 @@ rec {
     if len == 0 then [ (addContextFrom str "") ] else map (addContextFrom str) (go 0 "" [ ]);
 
   /**
-    Return a string without the specified prefix, if the prefix matches.
+    Returns a string without the specified prefix, if the prefix matches.
 
     # Inputs
 
@@ -1857,7 +1857,7 @@ rec {
       );
 
   /**
-    Return a string without the specified suffix, if the suffix matches.
+    Returns a string without the specified suffix, if the suffix matches.
 
     # Inputs
 
@@ -1908,7 +1908,7 @@ rec {
       );
 
   /**
-    Return true if string `v1` denotes a version older than `v2`.
+    Returns true if string `v1` denotes a version older than `v2`.
 
     # Inputs
 
@@ -1940,7 +1940,7 @@ rec {
   versionOlder = v1: v2: compareVersions v2 v1 == 1;
 
   /**
-    Return true if string v1 denotes a version equal to or newer than v2.
+    Returns true if string v1 denotes a version equal to or newer than v2.
 
     # Inputs
 

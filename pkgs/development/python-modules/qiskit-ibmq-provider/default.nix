@@ -104,6 +104,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Qiskit/qiskit-ibmq-provider";
     changelog = "https://qiskit.org/documentation/release_notes.html";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

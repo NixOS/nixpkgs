@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     installShellFiles
   ];
 
+  cmakeFlags = [
+    # Fix build with cmake>=4
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
+
   doCheck = true;
   preCheck = ''
     patchShebangs --build test

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
@@ -46,7 +47,14 @@ buildPythonPackage rec {
   disabledTests = [
     # AssertionError
     "test_streams"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Assertion error when test_socketstats hits a permission error
+    "test_resource_watcher_max_mem"
+    "test_resource_watcher_max_mem_abs"
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   meta = {
     description = "A Process & Socket Manager built with zmq";

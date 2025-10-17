@@ -290,11 +290,6 @@
     "hash": "sha256-/LclaFA/8uKIWg0Diw2kD/k0o5y2tKFA/HzzrAFQ+b4="
   },
   {
-    "pname": "Microsoft.Build.Tasks.Git",
-    "version": "1.1.1",
-    "hash": "sha256-PHxHmsCty8Si5dCUQSizeHkJrHa9+j2nRsg6Sz+5Za0="
-  },
-  {
     "pname": "Microsoft.Build.Traversal",
     "version": "4.1.0",
     "hash": "sha256-N7N8s8Jb488mvuvN9+fl5leMJ1FZyPNKAS54/YC272Y="
@@ -786,16 +781,6 @@
     "hash": "sha256-zisaNDp0uHprZmhTokn/Gsr0bBzkiC3gcEls0jGJ0ho="
   },
   {
-    "pname": "Microsoft.SourceLink.Common",
-    "version": "1.1.1",
-    "hash": "sha256-b4FaNFneDVDbvJVX1iNyhhLTrnxUfnmyypeJr47GbXY="
-  },
-  {
-    "pname": "Microsoft.SourceLink.GitHub",
-    "version": "1.1.1",
-    "hash": "sha256-3hc9ym5ReONp00ruCKio/Ka1gYXo/jDlUHtfK1wZPiU="
-  },
-  {
     "pname": "Microsoft.TestPlatform.ObjectModel",
     "version": "17.10.0",
     "hash": "sha256-3YjVGK2zEObksBGYg8b/CqoJgLQ1jUv4GCWNjDhLRh4="
@@ -902,8 +887,8 @@
   },
   {
     "pname": "Microsoft.WindowsDesktop.App.Ref",
-    "version": "8.0.20",
-    "hash": "sha256-EDrxjwHRVTirMADYU+po/ANd6LaoehL/9RSiuZEsIB0="
+    "version": "8.0.21",
+    "hash": "sha256-RufsU8Mr81jK6fIbULBgkv0BRVmobXL38L8rBwBjJyg="
   },
   {
     "pname": "Mono.Cecil",

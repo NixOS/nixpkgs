@@ -9,13 +9,13 @@
 }:
 let
   pname = "open-webui";
-  version = "0.6.32";
+  version = "0.6.34";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
     tag = "v${version}";
-    hash = "sha256-+P/IjELE1G2Fm8OwS5l7k78f78s/o1/Dy945aw+lfQw=";
+    hash = "sha256-crjBVR0ZXUYck4pyLNb1IO9IoQ6MFBnCKEBsi0/JXCI=";
   };
 
   frontend = buildNpmPackage rec {
@@ -32,7 +32,7 @@ let
       url = "https://github.com/pyodide/pyodide/releases/download/${pyodideVersion}/pyodide-${pyodideVersion}.tar.bz2";
     };
 
-    npmDepsHash = "sha256-BcSDzLg2voHyUz4cnXQ0KRNSbLCsCwJ1itEJSbfAQhU=";
+    npmDepsHash = "sha256-ofw/leDcfrc+Bp93s9BkB3WFs8qQgiWUag7gvdPJdlo=";
 
     # See https://github.com/open-webui/open-webui/issues/15880
     npmFlags = [
@@ -115,7 +115,6 @@ python3Packages.buildPythonApplication rec {
       fake-useragent
       fastapi
       faster-whisper
-      firecrawl-py
       fpdf2
       ftfy
       google-api-python-client
@@ -152,7 +151,6 @@ python3Packages.buildPythonApplication rec {
       opentelemetry-instrumentation-logging
       opentelemetry-instrumentation-httpx
       opentelemetry-instrumentation-aiohttp-client
-      oracledb
       pandas
       passlib
       peewee
@@ -185,7 +183,6 @@ python3Packages.buildPythonApplication rec {
       soundfile
       starlette-compress
       starsessions
-      tencentcloud-sdk-python
       tiktoken
       transformers
       unstructured
@@ -206,14 +203,16 @@ python3Packages.buildPythonApplication rec {
     all = [
       colbert-ai
       elasticsearch
-      moto
+      firecrawl-py
       gcp-storage-emulator
-      playwright
+      moto
       oracledb
       pinecone-client
+      playwright
       pymilvus
       pymongo
       qdrant-client
+      tencentcloud-sdk-python
     ]
     ++ moto.optional-dependencies.s3
     ++ postgres;

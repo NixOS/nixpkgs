@@ -4,22 +4,19 @@
   fetchFromGitHub,
   flit-core,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
 }:
 
 buildPythonPackage rec {
   pname = "svg-py";
-  version = "1.8.0";
+  version = "1.9.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "orsinium-labs";
     repo = "svg.py";
     tag = version;
-    hash = "sha256-wHbAsmFkJ3VGBuaKElB+qT8OaKleJ2DgGKr0LvojWws=";
+    hash = "sha256-ILnPviXUHJrdeT6VTUYAZog3zY0tVA+13ddf8yVRYqE=";
   };
 
   build-system = [ flit-core ];

@@ -2,6 +2,7 @@
   llvmPackages_20,
   lib,
   fetchurl,
+  fetchpatch,
   dotnetCorePackages,
   jq,
   curl,
@@ -38,8 +39,7 @@
 let
   llvmPackages = llvmPackages_20;
 
-  stdenv =
-    if llvmPackages.stdenv.hostPlatform.isDarwin then swiftPackages.stdenv else llvmPackages.stdenv;
+  stdenv = llvmPackages.stdenv;
 
   inherit (stdenv)
     isLinux
@@ -145,9 +145,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (lib.versionOlder version "9") [
       ./fix-aspnetcore-portable-build.patch
       ./vmr-compiler-opt-v8.patch
-    ]
-    ++ lib.optionals (lib.versionAtLeast version "10") [
-      ./bundler-fix-file-size-estimation-when-bundling-symli.patch
     ];
 
   postPatch = ''

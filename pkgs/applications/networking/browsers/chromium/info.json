@@ -1,10 +1,10 @@
 {
   "chromium": {
-    "version": "141.0.7390.54",
+    "version": "141.0.7390.107",
     "chromedriver": {
-      "version": "141.0.7390.55",
-      "hash_darwin": "sha256-wo68N1aftGGyZR4rYI+96lXKJqPAYro3g4s/OL/CUco=",
-      "hash_darwin_aarch64": "sha256-5uUklsYRFhpLIAKoPl5EU5dQJcxwXVpJp0lyQ4SkspY="
+      "version": "141.0.7390.108",
+      "hash_darwin": "sha256-TvfBtM4vEYmBiUiZmdALHouufc95l9lcptGUafhT/a4=",
+      "hash_darwin_aarch64": "sha256-xe9/tivLgzkUHRo/39ytgGl32Q/Gml8Vg7Jptf1jtGw="
     },
     "deps": {
       "depot_tools": {
@@ -21,8 +21,8 @@
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "b95610d5c4a562d9cd834bc0a098d3316e2f533f",
-        "hash": "sha256-jraDPodJBdyFFHS30BcQTZOEUD+h9SFHQrO0GoMhtk8=",
+        "rev": "1c008349f76ff3a317bf28316fc5008c0120deb4",
+        "hash": "sha256-NRqWOkGrg/Y4wZi4WQDJ6CvsDpeseVgTc/iAnuPRy/U=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -252,8 +252,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "65f160d43dc97a2e8eb5e1c2814179a519313884",
-        "hash": "sha256-VLMJ/WWCIzk92mmuBdx+P6Gi0ouiXuMGkiR0KVK5GWI="
+        "rev": "9c2c4cc7cf6c82ad460e1f3b49f34bb702d5fe11",
+        "hash": "sha256-qj1vR0FW2jiR2v18Nv8RqYgy/UEw2rgGUsQ68EhdHos="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -772,8 +772,8 @@
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "bc7452c444245f7999be5711b1802e900f25540b",
-        "hash": "sha256-Bqsd8b14ORREk/J3Tfs7OJXny0FdwUHO/sfCSEMEUSE="
+        "rev": "d2eaa5570fc9959f8dbde32912a16366b8ee75f4",
+        "hash": "sha256-vWz+CAlgvavAmoCgy+D5FDGSyYoe15vfKI2fw33K8cc="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",
@@ -808,7 +808,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "141.0.7390.54",
+    "version": "141.0.7390.107",
     "deps": {
       "depot_tools": {
         "rev": "3f41e54ae17d53d4a39feecad64c3d3e6871b219",
@@ -820,16 +820,16 @@
         "hash": "sha256-WERLGrReUATmn3RhxtmyZcJBxdIY/WZqBDranCLDYEg="
       },
       "ungoogled-patches": {
-        "rev": "141.0.7390.54-1",
-        "hash": "sha256-Lu74ipJFj194vDPHmIXQ9FyPvexTNdbKJ/SlLZpW4B8="
+        "rev": "141.0.7390.107-1",
+        "hash": "sha256-IQoIcOlFhbSBpmZ6bpoX43XMPrKWRVExETjBBT4TCs0="
       },
       "npmHash": "sha256-i1eQ4YlrWSgY522OlFtGDDPmxE2zd1hDM03AzR8RafE="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "b95610d5c4a562d9cd834bc0a098d3316e2f533f",
-        "hash": "sha256-jraDPodJBdyFFHS30BcQTZOEUD+h9SFHQrO0GoMhtk8=",
+        "rev": "1c008349f76ff3a317bf28316fc5008c0120deb4",
+        "hash": "sha256-NRqWOkGrg/Y4wZi4WQDJ6CvsDpeseVgTc/iAnuPRy/U=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1059,8 +1059,8 @@
       },
       "src/third_party/devtools-frontend/src": {
         "url": "https://chromium.googlesource.com/devtools/devtools-frontend",
-        "rev": "65f160d43dc97a2e8eb5e1c2814179a519313884",
-        "hash": "sha256-VLMJ/WWCIzk92mmuBdx+P6Gi0ouiXuMGkiR0KVK5GWI="
+        "rev": "9c2c4cc7cf6c82ad460e1f3b49f34bb702d5fe11",
+        "hash": "sha256-qj1vR0FW2jiR2v18Nv8RqYgy/UEw2rgGUsQ68EhdHos="
       },
       "src/third_party/dom_distiller_js/dist": {
         "url": "https://chromium.googlesource.com/chromium/dom-distiller/dist.git",
@@ -1579,8 +1579,8 @@
       },
       "src/third_party/webrtc": {
         "url": "https://webrtc.googlesource.com/src.git",
-        "rev": "bc7452c444245f7999be5711b1802e900f25540b",
-        "hash": "sha256-Bqsd8b14ORREk/J3Tfs7OJXny0FdwUHO/sfCSEMEUSE="
+        "rev": "d2eaa5570fc9959f8dbde32912a16366b8ee75f4",
+        "hash": "sha256-vWz+CAlgvavAmoCgy+D5FDGSyYoe15vfKI2fw33K8cc="
       },
       "src/third_party/wuffs/src": {
         "url": "https://skia.googlesource.com/external/github.com/google/wuffs-mirror-release-c.git",

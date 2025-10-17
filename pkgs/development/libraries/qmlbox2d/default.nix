@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "qml-box2d";
-  version = "0-unstable-2024-04-15";
+  version = "0-unstable-2025-09-30";
 
   src = fetchFromGitHub {
     owner = "qml-box2d";
     repo = "qml-box2d";
-    rev = "3a85439726d1ac4d082308feba45f23859ba71e0";
-    hash = "sha256-lTgzPJWSwNfPRj5Lc63C69o4ILuyhVRLvltTo5E7yq0=";
+    rev = "e3674e0fe030c406a1d915e47eab760624fffa55";
+    hash = "sha256-kxDSPO2ifffJng9rKgEwdKRoP6alnYWwItbvE1t4Hbo=";
   };
 
   dontWrapQtApps = true;

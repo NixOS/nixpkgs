@@ -6,8 +6,7 @@
   pkg-config,
   libosmocore,
   libosmo-netif,
-  ortp,
-  bctoolbox,
+  linphonePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libosmocore
     libosmo-netif
-    ortp
-    bctoolbox
+    linphonePackages.ortp
+    linphonePackages.bctoolbox
   ];
 
   enableParallelBuilding = true;

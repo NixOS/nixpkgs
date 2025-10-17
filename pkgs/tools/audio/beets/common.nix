@@ -88,6 +88,7 @@ python3Packages.buildPythonApplication {
 
   build-system = [
     python3Packages.poetry-core
+    python3Packages.poetry-dynamic-versioning
   ];
 
   dependencies =
@@ -102,6 +103,10 @@ python3Packages.buildPythonApplication {
       platformdirs
       pyyaml
       unidecode
+      # Can be built without it, but is useful on btrfs systems, and doesn't
+      # add too much to the closure. See:
+      # https://github.com/NixOS/nixpkgs/issues/437308
+      reflink
       typing-extensions
       lap
     ]
@@ -111,6 +116,8 @@ python3Packages.buildPythonApplication {
     gobject-introspection
     sphinxHook
     python3Packages.pydata-sphinx-theme
+    python3Packages.sphinx-design
+    python3Packages.sphinx-copybutton
   ]
   ++ extraNativeBuildInputs;
 
@@ -131,6 +138,12 @@ python3Packages.buildPythonApplication {
     "html"
     "man"
   ];
+  # Causes an installManPage error. Not clear why this directory gets generated
+  # with the manpages. The same directory is observed correctly in
+  # $doc/share/doc/beets-${version}/html
+  preInstallSphinx = ''
+    rm -r .sphinx/man/man/_sphinx_design_static
+  '';
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -193,6 +206,9 @@ python3Packages.buildPythonApplication {
     "test_reject_different_art"
     # touches network
     "test_merge_duplicate_album"
+    # The existence of the dependency reflink (see comment above), causes this
+    # test to be run, and it fails in the sandbox.
+    "test_successful_reflink"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.

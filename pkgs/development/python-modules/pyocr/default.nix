@@ -12,7 +12,7 @@
   setuptools,
   setuptools-scm,
   withTesseractSupport ? true,
-  withCuneiformSupport ? stdenv.hostPlatform.isLinux,
+  withCuneiformSupport ? false,
 }:
 
 buildPythonPackage rec {
@@ -39,7 +39,7 @@ buildPythonPackage rec {
         tesseractLibraryLocation = "${tesseract}/lib/libtesseract${stdenv.hostPlatform.extensions.sharedLibrary}";
       }
     ))
-    ++ (lib.optional stdenv.hostPlatform.isLinux (
+    ++ (lib.optional withCuneiformSupport (
       replaceVars ./paths-cuneiform.patch {
         inherit cuneiform;
       }

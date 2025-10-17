@@ -97,7 +97,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/biolab/orange-canvas-core";
     changelog = "https://github.com/biolab/orange-canvas-core/releases/tag/${src.tag}";
     license = [ lib.licenses.gpl3 ];
-    maintainers = [ lib.maintainers.lucasew ];
+    maintainers = [ ];
     # Segmentation fault during tests
     broken = stdenv.hostPlatform.isDarwin;
   };

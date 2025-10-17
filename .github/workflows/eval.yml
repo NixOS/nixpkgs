@@ -47,7 +47,7 @@ jobs:
             ci/pinned.json
 
       - name: Install Nix
-        uses: cachix/install-nix-action@9280e7aca88deada44c930f1e2c78e21c3ae3edd # v31
+        uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
       - name: Load supported versions
         id: versions
@@ -92,7 +92,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@9280e7aca88deada44c930f1e2c78e21c3ae3edd # v31
+        uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
       - uses: cachix/cachix-action@0fc020193b5a1fa3ac4575aa3a7d3aa6a35435ad # v16
         with:
@@ -115,31 +115,11 @@ jobs:
           # If it uses too much memory, slightly decrease chunkSize.
           # Note: Keep the same further down in sync!
 
-      # Running the attrpath generation step separately from the outpath step afterwards.
-      # The idea is that, *if* Eval on the target branch has not finished, yet, we will
-      # generate the attrpaths in the meantime - and the separate command command afterwards
-      # will check cachix again for whether Eval has finished. If no Eval result from the
-      # target branch can be found the second time, we proceed to run it in here. Attrpaths
-      # generation takes roughly 30 seconds, so for every normal use-case this should be more
-      # than enough of a head start for Eval on the target branch to finish.
-      # This edge-case, that Eval on the target branch is delayed is unlikely to happen anyway:
-      # For a commit to become the target commit of a PR, it must *already* be on the branch.
-      # Normally, CI should always start running on that push event *before* it starts running
-      # on the PR.
-      - name: Evaluate the ${{ matrix.system }} attribute paths at the target commit
-        if: inputs.targetSha
-        env:
-          MATRIX_SYSTEM: ${{ matrix.system }}
-        run: |
-          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.attrpathsSuperset \
-            --argstr evalSystem "$MATRIX_SYSTEM" \
-            --argstr nixPath "nixVersions.latest"
-
       - name: Evaluate the ${{ matrix.system }} output paths at the target commit
         if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
-        # This should be very quick, because it pulls the eval results from Cachix.
+        # This is very quick, because it pulls the eval results from Cachix.
         run: |
           nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
@@ -190,7 +170,7 @@ jobs:
           merge-multiple: true
 
       - name: Install Nix
-        uses: cachix/install-nix-action@9280e7aca88deada44c930f1e2c78e21c3ae3edd # v31
+        uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
       - name: Combine all output paths and eval stats
         run: |
@@ -304,10 +284,6 @@ jobs:
                           diff.removed,
                           diff.changed,
                           diff.rebuilds
-                        ).filter(attr =>
-                          // Exceptions related to dev shells, which changed at some time between 2.18 and 2.24.
-                          !attr.startsWith('tests.devShellTools.nixos.') &&
-                          !attr.startsWith('tests.devShellTools.unstructuredDerivationInputEnv.')
                         )
                         if (attrs.length > 0) {
                           core.setFailed(
@@ -350,7 +326,7 @@ jobs:
           merged-as-untrusted-at: ${{ inputs.mergedSha }}
 
       - name: Install Nix
-        uses: cachix/install-nix-action@9280e7aca88deada44c930f1e2c78e21c3ae3edd # v31
+        uses: cachix/install-nix-action@7ab6e7fd29da88e74b1e314a4ae9ac6b5cda3801 # v31
 
       - name: Run misc eval tasks in parallel
         run: |

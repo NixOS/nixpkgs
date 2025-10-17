@@ -232,10 +232,12 @@ in
         AmbientCapabilities = "";
         CapabilityBoundingSet = "";
         LockPersonality = true;
+        MountAPIVFS = true;
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
         PrivateTmp = true;
+        PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = "strict";
         ProtectHome = true;
@@ -243,7 +245,7 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        ProtectProc = "noaccess";
+        ProtectProc = "invisible";
         ProtectSystem = "full";
         RestrictAddressFamilies = [
           "AF_UNIX"
