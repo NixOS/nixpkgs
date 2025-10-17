@@ -766,6 +766,19 @@ let
           substSubModules = m: nonEmptyListOf (elemType.substSubModules m);
         };
 
+      arrayOf =
+        elemType: size:
+        let
+          list = addCheck (types.listOf elemType) (l: length l == size);
+        in
+        list
+        // {
+          description = "fixed-length list of ${toString size} ${
+            optionDescriptionPhrase (class: class == "noun" || class == "composite") elemType
+          }";
+          substSubModules = m: arrayOf (elemType.substSubModules m) size;
+        };
+
       attrsOf = elemType: attrsWith { inherit elemType; };
 
       # A version of attrsOf that's lazy in its values at the expense of
