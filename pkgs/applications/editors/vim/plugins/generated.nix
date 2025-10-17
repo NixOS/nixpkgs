@@ -5074,14 +5074,14 @@ final: prev: {
 
   fennel-vim = buildVimPlugin {
     pname = "fennel.vim";
-    version = "2020-11-15";
+    version = "2025-04-01";
     src = fetchFromGitHub {
-      owner = "bakpakin";
+      owner = "micampe";
       repo = "fennel.vim";
-      rev = "30b9beabad2c4f09b9b284caf5cd5666b6b4dc89";
-      sha256 = "1fvcn4q87d594nzxlj1597bmrixzlfqnl7k8f547skvvywx09kii";
+      rev = "0a5c89e7f31d2721a36f7043ee98e24e22e6325e";
+      sha256 = "12hcvc2c2dgxqs6x333fdc7f1fn4jz9vm6vm2g8iwlfhm70bcaab";
     };
-    meta.homepage = "https://github.com/bakpakin/fennel.vim/";
+    meta.homepage = "https://github.com/micampe/fennel.vim/";
     meta.hydraPlatforms = [ ];
   };
 
