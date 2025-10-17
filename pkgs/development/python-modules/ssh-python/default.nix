@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "ssh-python";
-  version = "1.1.1";
+  version = "1.2.0.post1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "ParallelSSH";
     repo = "ssh-python";
     tag = version;
-    hash = "sha256-kidz4uHT5C8TUROLGQUHihemYtwOoWZQNw7ElbwYKLM=";
+    hash = "sha256-ix6UzyC/mFDVOvfJujwppijmsTrwNtuDAkmikrKKc2o=";
   };
 
   build-system = [ setuptools ];
