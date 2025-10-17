@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
   nixosTests,
 }:
 
@@ -15,17 +16,17 @@ let
 in
 buildGoModule rec {
   pname = "go-ethereum";
-  version = "1.16.3";
+  version = "1.16.4";
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "go-ethereum";
     rev = "v${version}";
-    hash = "sha256-9g+RlOnV3DMLkak+RbSm8RgFB14Yuap8CT1w6kuZRv0=";
+    hash = "sha256-OlNbqKJUrpyFpsrkPu6mejLRYAPNkn6kI7HMvw9yjb8=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-GEPSkuEdrYvPGXEGhAT3U765rjY6w6kwOVYOMCgOaCo=";
+  vendorHash = "sha256-m3rKGE3DDUEv1IJc/eAcVVGzXmaw7AjGIJ9iNzQFZtU=";
 
   doCheck = false;
 
@@ -57,6 +58,8 @@ buildGoModule rec {
   tags = [ "urfave_cli_no_docs" ];
 
   passthru.tests = { inherit (nixosTests) geth; };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://geth.ethereum.org/";
