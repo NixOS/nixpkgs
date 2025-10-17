@@ -718,6 +718,7 @@ in
   homepage-dashboard = runTest ./homepage-dashboard.nix;
   homer = handleTest ./homer { };
   honk = runTest ./honk.nix;
+  hoogle = runTest ./hoogle.nix;
   hostname = handleTest ./hostname.nix { };
   hound = runTest ./hound.nix;
   hub = runTest ./git/hub.nix;
