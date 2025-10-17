@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "magic-vlsi";
-  version = "8.3.555";
+  version = "8.3.561";
 
   src = fetchFromGitHub {
     owner = "RTimothyEdwards";
     repo = "magic";
     tag = "${version}";
-    sha256 = "sha256-O/W2gWdL4z7JSAv+ZvTkQ6ApKLhrg4UwGde68qSwq3c=";
+    sha256 = "sha256-LyRmUFleOxT/UCCTP+K5Cm+3NB+wTuDjS9Ot3tV5jV4=";
     leaveDotGit = true;
   };
 
