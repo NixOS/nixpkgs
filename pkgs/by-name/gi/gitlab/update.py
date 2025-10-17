@@ -62,10 +62,10 @@ class GitLabRepo:
             .strip()
         )
 
-    def get_yarn_hash(self, rev: str):
+    def get_yarn_hash(self, rev: str, yarn_lock_path="yarn.lock"):
         with tempfile.TemporaryDirectory() as tmp_dir:
             with open(tmp_dir + "/yarn.lock", "w") as f:
-                f.write(self.get_file("yarn.lock", rev))
+                f.write(self.get_file(yarn_lock_path, rev))
             return (
                 subprocess.check_output(["prefetch-yarn-deps", tmp_dir + "/yarn.lock"])
                 .decode("utf-8")
@@ -112,6 +112,7 @@ class GitLabRepo:
             version=self.rev2version(rev),
             repo_hash=self.get_git_hash(rev),
             yarn_hash=self.get_yarn_hash(rev),
+            frontend_islands_yarn_hash=self.get_yarn_hash(rev, "/ee/frontend_islands/apps/duo_next/yarn.lock"),
             owner=self.owner,
             repo=self.repo,
             rev=rev,

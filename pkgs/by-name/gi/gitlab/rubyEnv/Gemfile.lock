@@ -49,7 +49,7 @@ PATH
       google-cloud-storage_transfer (~> 1.2.0)
       google-protobuf (~> 3.25, >= 3.25.3)
       googleauth (~> 1.14)
-      grpc (~> 1.74.0)
+      grpc (~> 1.75)
       json (~> 2.7)
       jwt (~> 2.5)
       logger (~> 1.5)
@@ -63,11 +63,18 @@ PATH
       thor (~> 1.3)
 
 PATH
+  remote: gems/gitlab-grape-openapi
+  specs:
+    gitlab-grape-openapi (0.1.0)
+      grape (~> 2.0.0)
+      grape-entity (~> 1.0.1)
+
+PATH
   remote: gems/gitlab-housekeeper
   specs:
     gitlab-housekeeper (0.1.0)
       activesupport
-      awesome_print
+      amazing_print
       httparty
       rubocop
 
@@ -149,7 +156,7 @@ PATH
 PATH
   remote: vendor/gems/gitlab-duo-workflow-service-client
   specs:
-    gitlab-duo-workflow-service-client (0.3)
+    gitlab-duo-workflow-service-client (0.5)
       grpc
 
 PATH
@@ -203,7 +210,7 @@ GEM
       nkf
       rexml
     RedCloth (4.3.4)
-    acme-client (2.0.25)
+    acme-client (2.0.26)
       base64 (~> 0.2)
       faraday (>= 1.0, < 3.0.0)
       faraday-retry (>= 1.0, < 3.0.0)
@@ -294,6 +301,7 @@ GEM
     amatch (0.4.1)
       mize
       tins (~> 1.0)
+    amazing_print (1.8.1)
     android_key_attestation (0.3.0)
     apollo_upload_server (2.1.6)
       actionpack (>= 6.1.6)
@@ -311,7 +319,7 @@ GEM
     asciidoctor-plantuml (0.0.16)
       asciidoctor (>= 2.0.17, < 3.0.0)
     ast (2.4.2)
-    async (2.28.0)
+    async (2.32.0)
       console (~> 1.29)
       fiber-annotation
       io-event (~> 1.11)
@@ -364,7 +372,7 @@ GEM
     base64 (0.2.0)
     batch-loader (2.0.5)
     bcrypt (3.1.20)
-    benchmark (0.4.0)
+    benchmark (0.4.1)
     benchmark-ips (2.14.0)
     benchmark-malloc (0.2.0)
     benchmark-memory (0.2.0)
@@ -375,14 +383,14 @@ GEM
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
       rouge (>= 1.0.0)
-    bigdecimal (3.1.7)
+    bigdecimal (3.2.3)
     bindata (2.4.11)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     browser (5.3.1)
-    builder (3.2.4)
+    builder (3.3.0)
     bullet (8.0.8)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
@@ -424,7 +432,7 @@ GEM
       cork
       nap
       open4 (~> 1.3)
-    click_house-client (0.5.1)
+    click_house-client (0.8.0)
       activerecord (>= 7.0, < 9.0)
       activesupport (>= 7.0, < 9.0)
       addressable (~> 2.8)
@@ -433,7 +441,7 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     colored2 (3.1.2)
-    commonmarker (0.23.11)
+    commonmarker (0.23.12)
     concurrent-ruby (1.3.5)
     connection_pool (2.5.4)
     console (1.29.2)
@@ -477,9 +485,9 @@ GEM
     danger-gitlab (8.0.0)
       danger
       gitlab (~> 4.2, >= 4.2.0)
-    database_cleaner-active_record (2.2.1)
+    database_cleaner-active_record (2.2.2)
       activerecord (>= 5.a)
-      database_cleaner-core (~> 2.0.0)
+      database_cleaner-core (~> 2.0)
     database_cleaner-core (2.0.1)
     date (3.4.1)
     deb_version (1.0.2)
@@ -545,15 +553,18 @@ GEM
     dotenv (2.7.6)
     drb (2.2.3)
     dry-cli (1.0.0)
-    dry-core (1.0.1)
+    dry-core (1.1.0)
       concurrent-ruby (~> 1.0)
+      logger
       zeitwerk (~> 2.6)
-    dry-inflector (1.0.0)
-    dry-logic (1.5.0)
+    dry-inflector (1.2.0)
+    dry-logic (1.6.0)
+      bigdecimal
       concurrent-ruby (~> 1.0)
-      dry-core (~> 1.0, < 2)
+      dry-core (~> 1.1)
       zeitwerk (~> 2.6)
-    dry-types (1.7.1)
+    dry-types (1.8.3)
+      bigdecimal (~> 3.0)
       concurrent-ruby (~> 1.0)
       dry-core (~> 1.0)
       dry-inflector (~> 1.0)
@@ -630,7 +641,7 @@ GEM
     fast_gettext (4.1.0)
       prime
       racc
-    ffaker (2.24.0)
+    ffaker (2.25.0)
     ffi (1.17.2)
     ffi-compiler (1.0.1)
       ffi (>= 1.0.0)
@@ -719,14 +730,14 @@ GEM
     git (1.19.1)
       addressable (~> 2.8)
       rchardet (~> 1.8)
-    gitaly (18.4.0.pre.rc1)
+    gitaly (18.4.1)
       grpc (~> 1.0)
     gitlab (4.19.0)
       httparty (~> 0.20)
       terminal-table (>= 1.5.1)
     gitlab-chronic (0.10.6)
       numerizer (~> 0.2)
-    gitlab-cloud-connector (1.32.0)
+    gitlab-cloud-connector (1.33.0)
       activesupport (~> 7.0)
       jwt (~> 2.9)
     gitlab-crystalball (1.1.1)
@@ -736,7 +747,7 @@ GEM
       danger (>= 9.3.0)
       danger-gitlab (>= 8.0.0)
       rake (~> 13.0)
-    gitlab-experiment (0.9.1)
+    gitlab-experiment (1.0.0)
       activesupport (>= 3.0)
       request_store (>= 1.0)
     gitlab-fog-azure-rm (2.4.0)
@@ -748,11 +759,11 @@ GEM
       mime-types
       net-http-persistent (~> 4.0)
       nokogiri (~> 1, >= 1.10.8)
-    gitlab-glfm-markdown (0.0.33)
+    gitlab-glfm-markdown (0.0.36)
       rb_sys (~> 0.9.109)
-    gitlab-kas-grpc (18.3.2)
+    gitlab-kas-grpc (18.5.0.pre.rc4)
       grpc (~> 1.0)
-    gitlab-labkit (0.40.0)
+    gitlab-labkit (0.42.0)
       actionpack (>= 5.0.0, < 8.1.0)
       activesupport (>= 5.0.0, < 8.1.0)
       google-protobuf (~> 3)
@@ -777,7 +788,7 @@ GEM
       activesupport (>= 5.2.0)
       rake (~> 13.0)
       snowplow-tracker (~> 0.8.0)
-    gitlab-secret_detection (0.33.3)
+    gitlab-secret_detection (0.35.1)
       grpc (>= 1.63.0, < 2)
       grpc_reflection (~> 0.1)
       parallel (~> 1)
@@ -805,7 +816,7 @@ GEM
       omniauth (>= 1.3, < 3)
       pyu-ruby-sasl (>= 0.0.3.3, < 0.1)
       rubyntlm (~> 0.5)
-    gitlab_quality-test_tooling (2.20.0)
+    gitlab_quality-test_tooling (2.20.3)
       activesupport (>= 7.0, < 7.3)
       amatch (~> 0.4.1)
       fog-google (~> 1.24, >= 1.24.1)
@@ -831,13 +842,13 @@ GEM
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-cloudbilling_v1 (0.22.0)
       google-apis-core (>= 0.9.1, < 2.a)
-    google-apis-cloudresourcemanager_v1 (0.31.0)
-      google-apis-core (>= 0.9.1, < 2.a)
+    google-apis-cloudresourcemanager_v1 (0.44.0)
+      google-apis-core (>= 0.15.0, < 2.a)
     google-apis-compute_v1 (0.129.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-container_v1 (0.100.0)
       google-apis-core (>= 0.15.0, < 2.a)
-    google-apis-container_v1beta1 (0.90.0)
+    google-apis-container_v1beta1 (0.91.0)
       google-apis-core (>= 0.15.0, < 2.a)
     google-apis-core (0.18.0)
       addressable (~> 2.5, >= 2.5.1)
@@ -964,7 +975,7 @@ GEM
       logger (~> 1.6)
       ostruct (~> 0.6)
       sass-embedded (~> 1.58)
-    grpc (1.74.1)
+    grpc (1.75.0)
       google-protobuf (>= 3.25, < 5.0)
       googleapis-common-protos-types (~> 1.0)
     grpc-google-iam-v1 (1.5.0)
@@ -992,7 +1003,7 @@ GEM
     haml (5.2.2)
       temple (>= 0.8.0)
       tilt
-    haml_lint (0.64.0)
+    haml_lint (0.66.0)
       haml (>= 5.0)
       parallel (~> 1.10)
       rainbow
@@ -1003,7 +1014,7 @@ GEM
       thor
       tilt
     hana (1.3.7)
-    hashdiff (1.2.0)
+    hashdiff (1.2.1)
     hashie (5.0.0)
     health_check (3.1.0)
       railties (>= 5.0)
@@ -1030,7 +1041,7 @@ GEM
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
     httpclient (2.8.3)
-    i18n (1.14.4)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     i18n_data (0.13.1)
     icalendar (2.10.3)
@@ -1112,10 +1123,10 @@ GEM
       jsonpath (~> 1.0)
       recursive-open-struct (~> 1.1, >= 1.1.1)
       rest-client (~> 2.0)
-    language_server-protocol (3.17.0.3)
+    language_server-protocol (3.17.0.5)
     launchy (2.5.2)
       addressable (~> 2.8)
-    lefthook (1.12.3)
+    lefthook (1.13.0)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
     letter_opener_web (3.0.0)
@@ -1188,7 +1199,7 @@ GEM
     mini_histogram (0.3.1)
     mini_magick (4.13.2)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     minitest (5.11.3)
     mixlib-cli (2.1.8)
     mixlib-config (3.0.27)
@@ -1203,7 +1214,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.2.3)
     murmurhash3 (0.1.7)
-    mustermann (3.0.0)
+    mustermann (3.0.4)
       ruby2_keywords (~> 0.0.1)
     mustermann-grape (1.0.2)
       mustermann (>= 1.0.0)
@@ -1232,7 +1243,7 @@ GEM
     nio4r (2.7.0)
     nkf (0.2.0)
     no_proxy_fix (0.1.2)
-    nokogiri (1.18.9)
+    nokogiri (1.18.10)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     notiffany (0.1.3)
@@ -1270,8 +1281,9 @@ GEM
       ostruct (>= 0.2)
     oj-introspect (0.8.0)
       oj (>= 3.16.10)
-    omniauth (2.1.3)
+    omniauth (2.1.4)
       hashie (>= 3.4.6)
+      logger
       rack (>= 2.2.3)
       rack-protection
     omniauth-alicloud (3.0.0)
@@ -1323,7 +1335,7 @@ GEM
     opensearch-ruby (3.4.0)
       faraday (>= 1.0, < 3)
       multi_json (>= 1.0)
-    openssl (3.3.0)
+    openssl (3.3.1)
     openssl-signature_algorithm (1.3.0)
       openssl (> 2.0)
     opentelemetry-api (1.2.5)
@@ -1496,7 +1508,7 @@ GEM
     prime (0.1.3)
       forwardable
       singleton
-    prism (1.2.0)
+    prism (1.4.0)
     proc_to_ast (0.1.0)
       coderay
       parser
@@ -1527,7 +1539,7 @@ GEM
     pyu-ruby-sasl (0.0.3.3)
     raabro (1.4.0)
     racc (1.8.1)
-    rack (2.2.17)
+    rack (2.2.18)
     rack-accept (0.4.5)
       rack (>= 0.4)
     rack-attack (6.7.0)
@@ -1597,7 +1609,7 @@ GEM
       ffi (~> 1.0)
     rb_sys (0.9.110)
       rake-compiler-dock (= 1.9.1)
-    rbs (3.6.1)
+    rbs (3.9.5)
       logger
     rbtrace (0.5.2)
       ffi (>= 1.0.6)
@@ -1606,8 +1618,8 @@ GEM
     rchardet (1.8.0)
     rdoc (6.13.0)
       psych (>= 4.0.0)
-    re2 (2.19.0)
-      mini_portile2 (~> 2.8.7)
+    re2 (2.20.0)
+      mini_portile2 (~> 2.8.9)
     recaptcha (5.12.3)
       json
     recursive-open-struct (1.1.3)
@@ -1618,7 +1630,7 @@ GEM
       actionpack (>= 5)
       redis-rack (>= 2.1.0, < 4)
       redis-store (>= 1.1.0, < 2)
-    redis-client (0.25.3)
+    redis-client (0.26.1)
       connection_pool
     redis-cluster-client (0.13.5)
       redis-client (~> 0.24)
@@ -1653,10 +1665,10 @@ GEM
     retriable (3.1.2)
     reverse_markdown (3.0.0)
       nokogiri
-    rexml (3.4.2)
+    rexml (3.4.4)
     rinku (2.0.0)
     rotp (6.3.0)
-    rouge (4.6.0)
+    rouge (4.6.1)
     rqrcode (2.2.0)
       chunky_png (~> 1.0)
       rqrcode_core (~> 1.0)
@@ -1737,15 +1749,14 @@ GEM
     rubocop-rspec_rails (2.30.0)
       rubocop (~> 1.61)
       rubocop-rspec (~> 3, >= 3.0.1)
-    ruby-lsp (0.23.20)
+    ruby-lsp (0.26.1)
       language_server-protocol (~> 3.17.0)
       prism (>= 1.2, < 2.0)
-      rbs (>= 3, < 4)
-      sorbet-runtime (>= 0.5.10782)
-    ruby-lsp-rails (0.3.31)
-      ruby-lsp (>= 0.23.0, < 0.24.0)
-    ruby-lsp-rspec (0.1.24)
-      ruby-lsp (~> 0.23.19)
+      rbs (>= 3, < 5)
+    ruby-lsp-rails (0.4.8)
+      ruby-lsp (>= 0.26.0, < 0.27.0)
+    ruby-lsp-rspec (0.1.27)
+      ruby-lsp (~> 0.26.0)
     ruby-magic (0.6.0)
       mini_portile2 (~> 2.8)
     ruby-progressbar (1.11.0)
@@ -1853,9 +1864,8 @@ GEM
       tilt (~> 2.0)
       yard (~> 0.9, >= 0.9.24)
       yard-solargraph (~> 0.1)
-    solargraph-rspec (0.5.2)
-      solargraph (~> 0.52, >= 0.52.0)
-    sorbet-runtime (0.5.11647)
+    solargraph-rspec (0.5.4)
+      solargraph (>= 0.52.0)
     spamcheck (1.3.3)
       grpc (~> 1.63)
     spring (4.3.0)
@@ -1870,7 +1880,8 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    ssh_data (1.3.0)
+    ssh_data (2.0.0)
+      base64 (~> 0.1)
     ssrf_filter (1.0.8)
     stackprof (0.2.27)
     state_machines (0.5.0)
@@ -2060,7 +2071,7 @@ GEM
     yard (0.9.37)
     yard-solargraph (0.1.0)
       yard (~> 0.9)
-    zeitwerk (2.6.7)
+    zeitwerk (2.7.3)
 
 PLATFORMS
   ruby
@@ -2072,6 +2083,7 @@ DEPENDENCIES
   activerecord-gitlab!
   addressable (~> 2.8)
   akismet (~> 3.0)
+  amazing_print
   apollo_upload_server (~> 2.1.6)
   app_store_connect
   arr-pm (~> 0.0.12)
@@ -2079,10 +2091,9 @@ DEPENDENCIES
   asciidoctor-include-ext (~> 0.4.0)
   asciidoctor-kroki (~> 0.10.0)
   asciidoctor-plantuml (~> 0.0.16)
-  async (~> 2.28.0)
+  async (~> 2.32.0)
   atlassian-jwt (~> 0.2.1)
   attr_encrypted (~> 4.2)
-  awesome_print
   aws-sdk-cloudformation (~> 1)
   aws-sdk-core (~> 3.226.0)
   aws-sdk-s3 (~> 1.193.0)
@@ -2104,7 +2115,7 @@ DEPENDENCIES
   carrierwave (~> 1.3)
   charlock_holmes (~> 0.7.9)
   circuitbox (= 2.0.0)
-  click_house-client (= 0.5.1)
+  click_house-client (= 0.8.0)
   commonmarker (~> 0.23.10)
   concurrent-ruby (~> 1.1)
   connection_pool (~> 2.5.3)
@@ -2168,14 +2179,15 @@ DEPENDENCIES
   gitlab-cloud-connector (~> 1.26)
   gitlab-crystalball (~> 1.1.0)
   gitlab-dangerfiles (~> 4.10.0)
-  gitlab-duo-workflow-service-client (~> 0.3)!
-  gitlab-experiment (~> 0.9.1)
+  gitlab-duo-workflow-service-client (~> 0.4)!
+  gitlab-experiment (~> 1.0.0)
   gitlab-fog-azure-rm (~> 2.4.0)
-  gitlab-glfm-markdown (~> 0.0.33)
+  gitlab-glfm-markdown (~> 0.0.36)
+  gitlab-grape-openapi!
   gitlab-housekeeper!
   gitlab-http!
-  gitlab-kas-grpc (~> 18.3.0)
-  gitlab-labkit (~> 0.40.0)
+  gitlab-kas-grpc (~> 18.5.0.pre.rc4)
+  gitlab-labkit (~> 0.42.0)
   gitlab-license (~> 2.6)
   gitlab-mail_room (~> 0.0.24)
   gitlab-markup (~> 2.0.0)
@@ -2197,10 +2209,10 @@ DEPENDENCIES
   gon (~> 6.5.0)
   google-apis-androidpublisher_v3 (~> 0.86.0)
   google-apis-cloudbilling_v1 (~> 0.22.0)
-  google-apis-cloudresourcemanager_v1 (~> 0.31.0)
+  google-apis-cloudresourcemanager_v1 (~> 0.44.0)
   google-apis-compute_v1 (~> 0.129.0)
   google-apis-container_v1 (~> 0.100.0)
-  google-apis-container_v1beta1 (~> 0.90.0)
+  google-apis-container_v1beta1 (~> 0.91.0)
   google-apis-core (~> 0.18.0, >= 0.18.0)
   google-apis-iam_v1 (~> 0.73.0)
   google-apis-serviceusage_v1 (~> 0.28.0)
@@ -2222,7 +2234,7 @@ DEPENDENCIES
   graphlyte (~> 1.0.0)
   graphql (= 2.5.11)
   graphql-docs (~> 5.2.0)
-  grpc (~> 1.74.0)
+  grpc (~> 1.75.0)
   gssapi (~> 1.3.1)
   guard-rspec
   haml_lint (~> 0.58)
@@ -2249,7 +2261,7 @@ DEPENDENCIES
   knapsack (~> 4.0.0)
   kramdown (~> 2.5.0)
   kubeclient (~> 4.12.0)
-  lefthook (~> 1.12.0)
+  lefthook (~> 1.13.0)
   letter_opener_web (~> 3.0.0)
   license_finder (~> 7.0)
   licensee (~> 9.16)
@@ -2361,7 +2373,7 @@ DEPENDENCIES
   responders (~> 3.0)
   retriable (~> 3.1.2)
   rexml (~> 3.4.0)
-  rouge (~> 4.6.0)
+  rouge (~> 4.6.1)
   rqrcode (~> 2.2)
   rspec-benchmark (~> 0.6.0)
   rspec-parameterized (~> 1.0, >= 1.0.2)
@@ -2370,9 +2382,9 @@ DEPENDENCIES
   rspec_junit_formatter
   rspec_profiling (~> 0.0.9)
   rubocop
-  ruby-lsp (~> 0.23.0)
-  ruby-lsp-rails (~> 0.3.6)
-  ruby-lsp-rspec (~> 0.1.10)
+  ruby-lsp (~> 0.26.0)
+  ruby-lsp-rails (~> 0.4.8)
+  ruby-lsp-rspec (~> 0.1.27)
   ruby-magic (~> 0.6)
   ruby-progressbar (~> 1.10)
   ruby-saml (~> 1.18)
@@ -2404,7 +2416,7 @@ DEPENDENCIES
   sprite-factory (~> 1.7)
   sprockets (~> 3.7.0)
   sprockets-rails (~> 3.5.1)
-  ssh_data (~> 1.3)
+  ssh_data (~> 2.0)
   stackprof (~> 0.2.26)
   state_machines-activerecord (~> 0.8.0)
   state_machines-rspec (~> 0.6)
