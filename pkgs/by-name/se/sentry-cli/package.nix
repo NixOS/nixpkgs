@@ -8,7 +8,7 @@
   stdenv,
   swift,
   swiftpm,
-  writeShellScriptBin,
+  replaceVars,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sentry-cli";
@@ -26,7 +26,9 @@ rustPlatform.buildRustPackage rec {
   OPENSSL_NO_VENDOR = 1;
 
   patches = [
-    ./fix-swift-lib-path.patch
+    (replaceVars ./fix-swift-lib-path.patch {
+      swiftLib = lib.getLib swift;
+    })
   ];
 
   buildInputs = [ openssl ];
@@ -36,9 +38,6 @@ rustPlatform.buildRustPackage rec {
   ] ++ (lib.optionals stdenv.hostPlatform.isDarwin [
       swift
       swiftpm
-      (writeShellScriptBin "xcode-select" ''
-        echo $DEVELOPER_DIR
-      '')
   ]);
 
   # By default including `swiftpm` in `nativeBuildInputs` will take over `buildPhase`
