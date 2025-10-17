@@ -13382,8 +13382,6 @@ with pkgs;
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
 
-  flightgear = libsForQt5.callPackage ../games/flightgear { };
-
   freeciv = callPackage ../by-name/fr/freeciv/package.nix {
     sdl2Client = false;
     gtkClient = true;

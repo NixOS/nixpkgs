@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  wrapQtAppsHook,
   callPackage,
   libglut,
   freealut,
@@ -28,9 +27,7 @@
   udev,
   fltk13,
   apr,
-  qtbase,
-  qtquickcontrols2,
-  qtdeclarative,
+  qt5,
   glew,
   curl,
 }:
@@ -71,7 +68,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     libglut
@@ -98,21 +95,21 @@ stdenv.mkDerivation rec {
     udev
     fltk13
     apr
-    qtbase
-    qtquickcontrols2
+    qt5.qtbase
+    qt5.qtquickcontrols2
     glew
-    qtdeclarative
+    qt5.qtdeclarative
     curl
   ];
 
   qtWrapperArgs = [ "--set FG_ROOT ${data}/share/FlightGear" ];
 
-  meta = with lib; {
+  meta = {
     description = "Flight simulator";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     hydraPlatforms = [ ]; # disabled from hydra because it's so big
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "fgfs";
   };
 }
