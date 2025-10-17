@@ -62,7 +62,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Client side encrypted pastebin";
-    homepage = "https://0bin.net/";
+    homepage = "https://github.com/Tygs/0bin";
     license = licenses.wtfpl;
     platforms = platforms.all;
     maintainers = with maintainers; [ julm ];
