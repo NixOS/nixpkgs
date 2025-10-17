@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/hedning/nix-bash-completions/pull/28/commits/ef2055aa28754fa9e009bbfebc1491972e4f4e67.patch";
       hash = "sha256-TRkHrk7bX7DX0COzzYR+1pgTqLy7J55BcejNjRwthII=";
     })
+    # Fix completion with Nix 2.4+ on non-NixOS: https://github.com/hedning/nix-bash-completions/pull/26
+    # Rebased locally due to conflict with the above patch (https://github.com/hedning/nix-bash-completions/pull/28).
+    ./0001-Fix-completion-with-Nix-2.4-on-non-NixOS.patch
   ];
 
   postPatch = ''
