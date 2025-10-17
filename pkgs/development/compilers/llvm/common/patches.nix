@@ -116,4 +116,16 @@
       path = ../21;
     }
   ];
+  "mlir/mlir-add-include-cstdint.patch" = [
+    {
+      after = "18";
+      before = "19";
+      path = ../18;
+    }
+    {
+      after = "19";
+      before = "20";
+      path = ../19;
+    }
+  ];
 }
