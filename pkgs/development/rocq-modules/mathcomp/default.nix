@@ -21,6 +21,7 @@
   single ? false,
   rocq-core,
   hierarchy-builder,
+  micromega-plugin,
   version ? null,
 }@args:
 
@@ -139,8 +140,22 @@ let
           extraInstallFlags = [ "-f Makefile.coq" ];
         }
       );
-      # patched-derivation1 = derivation.overrideAttrs ...
+      patched-derivation1 = derivation.overrideAttrs (
+        o:
+        lib.optionalAttrs
+          (
+            lib.elem package [
+              "algebra"
+              "single"
+            ]
+            && o.version != null
+            && (o.version == "dev" || lib.versions.isGe "2.6.0" o.version)
+          )
+          {
+            propagatedBuildInputs = o.propagatedBuildInputs ++ [ micromega-plugin ];
+          }
+      );
     in
-    derivation;
+    patched-derivation1;
 in
 mathcomp_ (if single then "single" else "all")

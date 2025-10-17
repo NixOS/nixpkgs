@@ -38,9 +38,11 @@
   release."2024.07.2".sha256 = "sha256-aF8SYY5jRxQ6iEr7t6mRN3BEmIDhJ53PGhuZiJGB+i8=";
 
   propagatedBuildInputs = [
-    mathcomp-algebra-tactics
     mathcomp-word
-  ];
+  ]
+  ++ lib.optional (
+    mathcomp.version != "dev" && lib.versions.isLe "2.5" mathcomp.version
+  ) mathcomp-algebra-tactics;
 
   makeFlags = [
     "-C"
