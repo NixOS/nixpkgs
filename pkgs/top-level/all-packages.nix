@@ -9590,7 +9590,7 @@ with pkgs;
     mariadb_114
     mariadb_118
     ;
-  mariadb = mariadb_1011;
+  mariadb = mariadb_114;
   mariadb-embedded = mariadb.override { withEmbedded = true; };
 
   mongodb = hiPrio mongodb-7_0;
