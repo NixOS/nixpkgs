@@ -28662,6 +28662,12 @@
     githubId = 7040031;
     name = "Yannik Sander";
   };
+  yuannan = {
+    email = "brandon@emergence.ltd";
+    github = "yuannan";
+    githubId = 8006928;
+    name = "Yuannan (Brandon) Lin";
+  };
   yuka = {
     email = "yuka@yuka.dev";
     matrix = "@yuka:yuka.dev";
