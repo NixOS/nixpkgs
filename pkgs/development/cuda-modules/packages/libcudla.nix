@@ -19,7 +19,7 @@ buildRedist {
     "libnvcudla.so"
   ];
 
-  passthru.platformAssertions = [
+  platformAssertions = [
     {
       message = "Only Xavier (7.2) and Orin (8.7) Jetson devices are supported";
       assertion =
