@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-chroma";
-  version = "0.2.6";
+  version = "1.0.0a1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-chroma==${version}";
-    hash = "sha256-HxoxxOgiDC/rf4hCA6uQBPmK11/fqddc5d4nMpIFxEw=";
+    hash = "sha256-VudoBxELs9DCGRREwTs0q/m7HGzC1nokPSa8GSE0H+c=";
   };
 
   sourceRoot = "${src.name}/libs/partners/chroma";
