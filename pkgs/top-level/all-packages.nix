@@ -11722,7 +11722,7 @@ with pkgs;
 
   lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
 
-  lenovo-legion = libsForQt5.callPackage ../os-specific/linux/lenovo-legion/app.nix { };
+  lenovo-legion = qt6Packages.callPackage ../os-specific/linux/lenovo-legion/app.nix { };
 
   libkiwix = callPackage ../applications/misc/kiwix/lib.nix { };
 
