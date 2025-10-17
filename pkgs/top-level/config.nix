@@ -148,7 +148,7 @@ let
 
         For example, an override like `"registry.npmjs.org" = "my-mirror.local/registry.npmjs.org"` will replace a URL like `https://registry.npmjs.org/foo.tar.gz` with `https://my-mirror.local/registry.npmjs.org/foo.tar.gz`.
 
-        To set the string directly, see [`npmRegistryOverridesString`)](#opt-npmRegistryOverridesString).
+        To set the string directly, see [`npmRegistryOverridesString`](#opt-npmRegistryOverridesString).
       '';
       default = { };
       example = {
@@ -157,7 +157,13 @@ let
     };
 
     npmRegistryOverridesString = mkOption {
-      type = types.nullOr types.str;
+      type = types.addCheck types.str (
+        s:
+        let
+          j = builtins.fromJSON s;
+        in
+        lib.isAttrs j && lib.all builtins.isString (builtins.attrValues j)
+      );
       description = ''
         A string containing a string with a JSON representation of NPM registry overrides for `fetchNpmDeps`.
 
