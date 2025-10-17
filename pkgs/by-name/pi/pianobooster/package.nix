@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DOpenGL_GL_PREFERENCE=GLVND"
     "-DUSE_JACK=ON"
   ];
