@@ -22,6 +22,7 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "websockets"
+    "typer"
   ];
 
   build-system = with python3Packages; [
@@ -89,6 +90,7 @@ python3Packages.buildPythonApplication rec {
       websockets
       whenever
       uv
+      semver
     ]
     ++ sqlalchemy.optional-dependencies.asyncio
     ++ httpx.optional-dependencies.http2
@@ -196,7 +198,7 @@ python3Packages.buildPythonApplication rec {
     description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [ happysalada mrmebelman ];
     mainProgram = "prefect";
   };
 }
