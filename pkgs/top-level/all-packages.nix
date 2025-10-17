@@ -13260,8 +13260,6 @@ with pkgs;
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
-  pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
-
   qgo = libsForQt5.callPackage ../games/qgo { };
 
   anki = callPackage ../games/anki {
