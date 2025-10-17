@@ -1,8 +1,8 @@
-name: Review dismissed
+name: Reviewed
 
 on:
   pull_request_review:
-    types: [dismissed]
+    types: [submitted, dismissed]
 
 permissions: {}
 

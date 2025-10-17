@@ -3,10 +3,11 @@ module.exports = async ({ github, context, core, dry }) => {
   const { DefaultArtifactClient } = require('@actions/artifact')
   const { readFile, writeFile } = require('node:fs/promises')
   const withRateLimit = require('./withRateLimit.js')
+  const { handleMerge } = require('./merge.js')
 
   const artifactClient = new DefaultArtifactClient()
 
-  async function handlePullRequest({ item, stats }) {
+  async function handlePullRequest({ item, stats, events }) {
     const log = (k, v) => core.info(`PR #${item.number} - ${k}: ${v}`)
 
     const pull_number = item.number
@@ -134,12 +135,12 @@ module.exports = async ({ github, context, core, dry }) => {
         expectedHash: artifact.digest,
       })
 
-      const maintainers = new Set(
-        Object.keys(
-          JSON.parse(
-            await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
-          ),
-        ).map((m) => Number.parseInt(m, 10)),
+      const maintainers = JSON.parse(
+        await readFile(`${pull_number}/maintainers.json`, 'utf-8'),
+      )
+
+      const maintainerIds = new Set(
+        Object.keys(maintainers).map((m) => Number.parseInt(m, 10)),
       )
 
       const evalLabels = JSON.parse(
@@ -148,7 +149,18 @@ module.exports = async ({ github, context, core, dry }) => {
 
       Object.assign(prLabels, evalLabels, {
         '12.approved-by: package-maintainer':
-          maintainers.intersection(approvals).size > 0,
+          maintainerIds.intersection(approvals).size > 0,
+      })
+
+      await handleMerge({
+        github,
+        context,
+        core,
+        log,
+        dry,
+        pull_request,
+        events,
+        maintainers,
       })
     }
 
@@ -210,9 +222,21 @@ module.exports = async ({ github, context, core, dry }) => {
 
       const itemLabels = {}
 
+      const events = await github.paginate(
+        github.rest.issues.listEventsForTimeline,
+        {
+          ...context.repo,
+          issue_number,
+          per_page: 100,
+        },
+      )
+
       if (item.pull_request || context.payload.pull_request) {
         stats.prs++
-        Object.assign(itemLabels, await handlePullRequest({ item, stats }))
+        Object.assign(
+          itemLabels,
+          await handlePullRequest({ item, stats, events }),
+        )
       } else {
         stats.issues++
         if (item.labels.some(({ name }) => name === '4.workflow: auto-close')) {
@@ -224,13 +248,7 @@ module.exports = async ({ github, context, core, dry }) => {
       }
 
       const latest_event_at = new Date(
-        (
-          await github.paginate(github.rest.issues.listEventsForTimeline, {
-            ...context.repo,
-            issue_number,
-            per_page: 100,
-          })
-        )
+        events
           .filter(({ event }) =>
             [
               // These events are hand-picked from:
@@ -317,7 +335,7 @@ module.exports = async ({ github, context, core, dry }) => {
       const lastRun = (
         await github.rest.actions.listWorkflowRuns({
           ...context.repo,
-          workflow_id: 'labels.yml',
+          workflow_id: 'bot.yml',
           event: 'schedule',
           status: 'success',
           exclude_pull_requests: true,
