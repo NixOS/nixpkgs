@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     description = "Third person ninja rabbit fighting game";
     mainProgram = "lugaru";
     homepage = "https://osslugaru.gitlab.io";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
   };
