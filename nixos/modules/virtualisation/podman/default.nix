@@ -315,6 +315,15 @@ in
 
       users.groups.podman = { };
 
+      # User 'containers' is required by podman when running in rootful mode with --userns=auto
+      users.users.containers = {
+        isSystemUser = true;
+        autoSubUidGidRange = true;
+        description = "User required by podman to get subuids from.";
+        group = "containers";
+      };
+      users.groups.containers = { };
+
       assertions = [
         {
           assertion = cfg.dockerCompat -> !config.virtualisation.docker.enable;
