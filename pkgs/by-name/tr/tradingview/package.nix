@@ -24,12 +24,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tradingview";
-  version = "2.12.0";
-  revision = "66";
+  version = "2.13.0";
+  revision = "67";
 
   src = fetchurl {
     url = "https://api.snapcraft.io/api/v1/snaps/download/nJdITJ6ZJxdvfu8Ch7n5kH5P99ClzBYV_${finalAttrs.revision}.snap";
-    hash = "sha512-ydk0/mJh4M02oIEfU3PKTwEO+nMpeJGuxQAly8WqJLx5GOQAb/J7VRB8IQpHHqWGeRfbwhantdZryQF8ngFJ/g==";
+    hash = "sha512-fLJy86ICaAw0S/Vm4rYKeW0Xx2ebgMNo5+g3l5wZYBEn152palaFH8zzqzF0ctHUI9TfD36VwxFaP5tpS7GyZQ==";
   };
 
   nativeBuildInputs = [
