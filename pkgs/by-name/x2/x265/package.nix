@@ -120,6 +120,13 @@ stdenv.mkDerivation rec {
     (mkFlag vtuneSupport "ENABLE_VTUNE")
     (mkFlag werrorSupport "WARNINGS_AS_ERRORS")
   ]
+  ++ lib.optionals stdenv.hostPlatform.isPower [
+    # baseline for everything but ppc64le doesn't have AltiVec
+    # ppc64le: https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
+    (lib.cmakeBool "ENABLE_ALTIVEC" false)
+    # baseline for everything but ppc64le is pre-POWER8
+    (lib.cmakeBool "CPU_POWER8" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+  ]
   # Clang does not support the endfunc directive so use GCC.
   ++ lib.optional (
     stdenv.cc.isClang && !stdenv.targetPlatform.isDarwin && !stdenv.targetPlatform.isFreeBSD
@@ -136,9 +143,6 @@ stdenv.mkDerivation rec {
     "-DENABLE_CLI=OFF"
     "-DENABLE_SHARED=OFF"
     "-DEXPORT_C_API=OFF"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isPower [
-    "-DENABLE_ALTIVEC=OFF" # https://bitbucket.org/multicoreware/x265_git/issues/320/fail-to-build-on-power8-le
   ]
   ++ lib.optionals isCross [
     (mkFlag stdenv.hostPlatform.isAarch32 "CROSS_COMPILE_ARM")
