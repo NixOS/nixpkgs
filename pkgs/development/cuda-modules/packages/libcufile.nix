@@ -25,6 +25,10 @@ buildRedist {
     rdma-core
   ];
 
+  extraAutoPatchelfLibs = [
+    "${lib.getOutput "stubs" cuda_cudart}/lib/stubs"
+  ];
+
   meta = {
     description = "Library to leverage GDS technology";
     homepage = "https://docs.nvidia.com/gpudirect-storage/api-reference-guide";
