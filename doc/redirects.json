@@ -1,4 +1,7 @@
 {
+  "buildjulemodule-parameters": [
+    "index.html#buildjulemodule-parameters"
+  ],
   "chap-build-helpers-finalAttrs": [
     "index.html#chap-build-helpers-finalAttrs"
   ],
@@ -100,6 +103,9 @@
   ],
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
+  ],
+  "ex-buildJuleModule": [
+    "index.html#ex-buildJuleModule"
   ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
@@ -230,6 +236,9 @@
   ],
   "sec-language-cosmic": [
     "index.html#sec-language-cosmic"
+  ],
+  "sec-language-jule": [
+    "index.html#sec-language-jule"
   ],
   "sec-meta-identifiers": [
     "index.html#sec-meta-identifiers"
@@ -565,6 +574,12 @@
   "ssec-cosmic-settings-fallback": [
     "index.html#ssec-cosmic-settings-fallback"
   ],
+  "ssec-language-jule": [
+    "index.html#ssec-language-jule"
+  ],
+  "ssec-skip-jule-tests": [
+    "index.html#ssec-skip-jule-tests"
+  ],
   "ssec-stdenv-dependencies": [
     "index.html#ssec-stdenv-dependencies"
   ],
@@ -648,6 +663,18 @@
   ],
   "var-go-buildTestBinaries": [
     "index.html#var-go-buildTestBinaries"
+  ],
+  "var-jule-buildArgs": [
+    "index.html#var-jule-buildArgs"
+  ],
+  "var-jule-checkArgs": [
+    "index.html#var-jule-checkArgs"
+  ],
+  "var-jule-srcDir": [
+    "index.html#var-jule-srcDir"
+  ],
+  "var-jule-testDir": [
+    "index.html#var-jule-testDir"
   ],
   "var-meta-identifiers-cpe": [
     "index.html#var-meta-identifiers-cpe"
