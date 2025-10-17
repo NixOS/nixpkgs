@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gitflow";
-  version = "1.12.3";
+  version = "v2.2.1";
 
   src = fetchFromGitHub {
-    owner = "petervanderdoes";
-    repo = "gitflow";
+    owner = "CJ-Systems";
+    repo = "gitflow-cjs";
     rev = version;
-    sha256 = "sha256-kHirHG/bfsU6tKyQ0khNSTyChhzHfzib+HyA3LOtBI8=";
+    sha256 = "sha256-uc4WVbvr6BpHnuznLPgVJQL7eaidp0IoOcuj+QqgAkQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/petervanderdoes/gitflow";
+    homepage = "https://github.com/CJ-Systems/gitflow-cjs";
     description = "Extend git with the Gitflow branching model";
     mainProgram = "git-flow";
     longDescription = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       particularly suited to be utilised to follow Vincent Driessen's
       branching model.
     '';
-    license = licenses.bsd2;
+    license = licenses.lgpl21Only;
     platforms = platforms.all;
     maintainers = with maintainers; [ offline ];
   };
