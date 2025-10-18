@@ -21888,6 +21888,12 @@
     githubId = 44014925;
     name = "Rexx Larsson";
   };
+  rfeltis = {
+    email = "rfeltis@gmail.com";
+    github = "rfeltis";
+    githubId = 2825162;
+    name = "Ralph Feltis";
+  };
   rgnns = {
     email = "jglievano@gmail.com";
     github = "rgnns";
