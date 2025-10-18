@@ -299,6 +299,7 @@
   ./programs/qgroundcontrol.nix
   ./programs/qt5ct.nix
   ./programs/quark-goldleaf.nix
+  ./programs/readline.nix
   ./programs/regreet.nix
   ./programs/rog-control-center.nix
   ./programs/rush.nix
