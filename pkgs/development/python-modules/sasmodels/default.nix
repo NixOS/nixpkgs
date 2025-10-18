@@ -2,8 +2,16 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  setuptools,
-  pytestCheckHook,
+
+  # build-system
+  columnize,
+  hatch-requirements-txt,
+  hatch-sphinx,
+  hatch-vcs,
+  hatchling,
+  siphash24,
+  sphinx,
+
   numpy,
   scipy,
   bumps,
@@ -12,27 +20,46 @@
   opencl-headers,
   pycuda,
   pyopencl,
-  pythonOlder,
+
+  # optional-dependencies
+
+  # tests
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "1.0.10";
+  version = "1.0.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
     tag = "v${version}";
-    hash = "sha256-cTXFlTCm521+xhcggFvDqVZrTJuDiVZ8PazBwA3mKJU=";
+    hash = "sha256-AtFkcW7h2hMnQAeAk0fGsARXwpuaSb7ERBhdnAH4pCY=";
   };
 
-  build-system = [ setuptools ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail '"tccbox",' ""
+  '';
+
+  build-system = [
+    columnize
+    hatch-requirements-txt
+    hatch-sphinx
+    hatch-vcs
+    hatchling
+    siphash24
+    sphinx
+  ];
 
   buildInputs = [ opencl-headers ];
 
+  pythonRemoveDeps = [
+    "tccbox" # unpackaged
+  ];
   dependencies = [
     numpy
     scipy
@@ -43,25 +70,26 @@ buildPythonPackage rec {
       docutils
       bumps
       matplotlib
-      # columnize
+      columnize
     ];
     server = [ bumps ];
     opencl = [ pyopencl ];
     cuda = [ pycuda ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    writableTmpDirAsHomeHook
+  ]
+  ++ optional-dependencies.full;
 
   pythonImportsCheck = [ "sasmodels" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library of small angle scattering models";
     homepage = "https://github.com/SasView/sasmodels";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ rprospero ];
+    changelog = "https://github.com/SasView/sasmodels/blob/${src.tag}/CHANGES.rst";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ rprospero ];
   };
 }

@@ -282,7 +282,7 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-uYK/e9McEyrDTACMk5S0cGCjai9rf6HMR9dpPL7ISYc=";
+    hash = "sha256-47TPvvPQvVbh6Gm2yvi+xhWZ8tSma91rp9hp/SBrEY8=";
   };
 
   patches = [

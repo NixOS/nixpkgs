@@ -998,8 +998,6 @@ self: super: with self; {
 
   astropy = callPackage ../development/python-modules/astropy { };
 
-  astropy-extension-helpers = callPackage ../development/python-modules/astropy-extension-helpers { };
-
   astropy-healpix = callPackage ../development/python-modules/astropy-healpix { };
 
   astropy-helpers = callPackage ../development/python-modules/astropy-helpers { };
@@ -2882,6 +2880,8 @@ self: super: with self; {
   colour = callPackage ../development/python-modules/colour { };
 
   colout = callPackage ../development/python-modules/colout { };
+
+  columnize = callPackage ../development/python-modules/columnize { };
 
   comet-ml = callPackage ../development/python-modules/comet-ml { };
 
@@ -6555,6 +6555,8 @@ self: super: with self; {
   hatch-regex-commit = callPackage ../development/python-modules/hatch-regex-commit { };
 
   hatch-requirements-txt = callPackage ../development/python-modules/hatch-requirements-txt { };
+
+  hatch-sphinx = callPackage ../development/python-modules/hatch-sphinx { };
 
   hatch-vcs = callPackage ../development/python-modules/hatch-vcs { };
 
@@ -17928,6 +17930,8 @@ self: super: with self; {
   swagger-spec-validator = callPackage ../development/python-modules/swagger-spec-validator { };
 
   swagger-ui-bundle = callPackage ../development/python-modules/swagger-ui-bundle { };
+
+  swagger-ui-py = callPackage ../development/python-modules/swagger-ui-py { };
 
   swcgeom = callPackage ../development/python-modules/swcgeom { };
 

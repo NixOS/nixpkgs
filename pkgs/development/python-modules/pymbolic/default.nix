@@ -7,8 +7,9 @@
   hatchling,
 
   # dependencies
-  immutabledict,
+  constantdict,
   pytools,
+  typing-extensions,
 
   # optional-dependencies
   matchpy,
@@ -20,21 +21,22 @@
 
 buildPythonPackage rec {
   pname = "pymbolic";
-  version = "2024.2.2";
+  version = "2025.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inducer";
     repo = "pymbolic";
     tag = "v${version}";
-    hash = "sha256-07RWdEPhO+n9/FOvIWe4nm9fGekut9X6Tz4HlIkBSpo=";
+    hash = "sha256-cn2EdhMn5qjK854AF5AY4Hv4M5Ib6gPRJk+kQvsFWRk=";
   };
 
   build-system = [ hatchling ];
 
   dependencies = [
-    immutabledict
+    constantdict
     pytools
+    typing-extensions
   ];
 
   optional-dependencies = {
@@ -51,6 +53,6 @@ buildPythonPackage rec {
     homepage = "https://documen.tician.de/pymbolic/";
     changelog = "https://github.com/inducer/pymbolic/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ qbisi ];
   };
 }

@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pgmodeler";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "pgmodeler";
     repo = "pgmodeler";
     rev = "v${version}";
-    sha256 = "sha256-DIyqUewP8q9O6O/v82a2DNgyrBffWkBmyhBm3pA1qVY=";
+    sha256 = "sha256-gDhH6b+8zFIsosdecUUkwAQMP1HME4EbJZsFyTzvGcE=";
   };
 
   nativeBuildInputs = [
