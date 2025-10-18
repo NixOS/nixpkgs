@@ -62,6 +62,11 @@ let
           }
         ) cfg.specialisation
       )}
+      ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
+        menuentry 'Memtest86+' --class debug {
+          linux /boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
+        }
+      ''}
     '';
 
   targetArch = if config.boot.loader.grub.forcei686 then "ia32" else pkgs.stdenv.hostPlatform.efiArch;
