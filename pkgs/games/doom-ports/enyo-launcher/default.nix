@@ -1,25 +1,26 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitLab,
   cmake,
-  qtbase,
+  qt6,
 }:
-
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "enyo-launcher";
-  version = "2.0.6";
+  version = "2.0.7";
 
   src = fetchFromGitLab {
     owner = "sdcofer70";
     repo = "enyo-launcher";
     rev = version;
-    hash = "sha256-k6Stc1tQOcdS//j+bFUNfnOUlwuhIPKxf9DHU+ng164=";
+    hash = "sha256-Ig1b+JylRlxhl5k5ys9SOGMYw3eUxXyoVXt3YNeWNqI=";
   };
 
-  nativeBuildInputs = [ cmake ];
-
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [
+    cmake
+    qt6.wrapQtAppsHook
+  ];
+  buildInputs = [ qt6.qtbase ];
 
   meta = {
     homepage = "https://gitlab.com/sdcofer70/enyo-launcher";
