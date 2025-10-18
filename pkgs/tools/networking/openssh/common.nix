@@ -55,6 +55,23 @@ stdenv.mkDerivation (finalAttrs: {
 
     # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
     ./dont_create_privsep_path.patch
+
+    # CVE-2025-61984:
+    # https://github.com/advisories/GHSA-hh67-847q-q3h9
+    (fetchpatch {
+      name = "CVE-2025-61984.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/35d5917652106aede47621bb3f64044604164043.patch";
+      hunks = [ "2-" ];
+      hash = "sha256-HVnMrXCjUUerE7vENS5ZB+kJieVID9lLEkm12YHWi6A=";
+    })
+    # CVE-2025-61985:
+    # https://github.com/advisories/GHSA-8gmf-r74v-362p
+    (fetchpatch {
+      name = "CVE-2025-61985.patch";
+      url = "https://github.com/openssh/openssh-portable/commit/43b3bff47bb029f2299bacb6a36057981b39fdb0.patch";
+      hunks = [ "2-" ];
+      hash = "sha256-BCvaYGw6suLkQwzT9zJTYChLgX2TexzcNnBYzztFRYw=";
+    })
   ]
   ++ extraPatches;
 
