@@ -95,6 +95,5 @@ stdenv.mkDerivation {
       ocamlLgplLinkingException
     ];
     inherit (ocaml.meta) platforms;
-    maintainers = with maintainers; [ maggesi ];
   };
 }
