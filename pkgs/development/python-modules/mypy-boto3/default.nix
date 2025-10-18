@@ -1361,8 +1361,8 @@ in
       "sha256-cdyFlcNg9F5RPYJ8xuLm1G1plHQDhRe2YQZqUv+wk8U=";
 
   mypy-boto3-tnb =
-    buildMypyBoto3Package "tnb" "1.40.0"
-      "sha256-SfZ4sYKJic9iQfWxUQEdV233Y5NbITHWjC3Vt+hFpHA=";
+    buildMypyBoto3Package "tnb" "1.40.55"
+      "sha256-Jzl2BKfgW5EK0GbjUP+BFqNOeEiFvlMMlgzaJxgaFzs=";
 
   mypy-boto3-transcribe =
     buildMypyBoto3Package "transcribe" "1.40.52"
