@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   google-api-core,
-  pythonOlder,
   protobuf,
   setuptools,
 }:
@@ -12,8 +11,6 @@ buildPythonPackage rec {
   pname = "google-cloud-access-context-manager";
   version = "0.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_access_context_manager";
