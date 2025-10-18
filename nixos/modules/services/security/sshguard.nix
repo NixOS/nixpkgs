@@ -110,6 +110,10 @@ in
         LOGREADER="${lib.getExe' pkgs.coreutils "cat"} /run/sshguard-logger/sshguard-logger"
       '';
 
+    systemd.slices."system-sshguard" = {
+      description = "SSHGuard Intrusion Prevention Slice";
+    };
+
     systemd.services.sshguard-logger = {
       description = "SSHGuard Intrusion Prevention Log Provider";
       wantedBy = [ "sshguard.service" ];
@@ -119,6 +123,7 @@ in
       environment.LANG = "C";
 
       serviceConfig = {
+        Slice = "system-sshguard";
         Type = "simple";
 
         Sockets = "sshguard-logger.socket";
@@ -159,7 +164,7 @@ in
     };
 
     systemd.services.sshguard = {
-      description = "SSHGuard brute-force attacks protection system";
+      description = "SSHGuard Intrusion Prevention System";
 
       wantedBy = [ "multi-user.target" ];
       after = [
@@ -194,6 +199,7 @@ in
       ];
 
       serviceConfig = {
+        Slice = "system-sshguard";
         Type = "simple";
 
         # The sshguard ipsets must exist before we invoke
