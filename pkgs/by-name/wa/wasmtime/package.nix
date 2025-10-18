@@ -3,6 +3,7 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
+  fetchpatch,
   buildPackages,
   cmake,
   installShellFiles,
@@ -10,23 +11,50 @@
   nix-update-script,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  majorVersion ? "37",
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wasmtime";
-  version = "37.0.2";
+  version =
+    {
+      "29" = "29.0.1";
+      "37" = "37.0.2";
+    }
+    .${majorVersion};
 
   src = fetchFromGitHub {
     owner = "bytecodealliance";
     repo = "wasmtime";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OQyGcxWMOxxzBHyOg2LUVsFuBEow6NIJCfrnsYWZtzk=";
+    hash =
+      {
+        "29" = "sha256-BYTPBerWCDGqcN3TpMLhtL92f413IjCgGDQqQUu5D7Y=";
+        "37" = "sha256-OQyGcxWMOxxzBHyOg2LUVsFuBEow6NIJCfrnsYWZtzk=";
+      }
+      .${majorVersion};
     fetchSubmodules = true;
   };
+
+  cargoPatches = lib.optionals (lib.versionOlder finalAttrs.version "30") [
+    (fetchpatch {
+      url = "https://github.com/bytecodealliance/wasmtime/commit/73ff15fb7f758c5f88952b1a0dc36a47f2665c4e.patch";
+      hash = "sha256-S8mroaw8nSTH1sExHajeYZRF0SeEUz2w+xpOxTqRMas=";
+    })
+  ];
+
+  cargoHash =
+    {
+      "29" = "sha256-oRkZHAovgS5i8ScXpvkLYkC3x0qxwAfmBd5EPjwgyEI=";
+      "37" = "sha256-PXvhwnfGvGF4D6U+2dKp3wg6cbk/i+0bWRAMSkyd6i8=";
+    }
+    .${majorVersion};
+
+  # release predates the lint, causes a build failure
+  RUSTFLAGS = lib.optionalString (lib.versionOlder finalAttrs.version "30") "-Amismatched_lifetime_syntaxes";
 
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
 
-  cargoHash = "sha256-PXvhwnfGvGF4D6U+2dKp3wg6cbk/i+0bWRAMSkyd6i8=";
   cargoBuildFlags = [
     "--package"
     "wasmtime-cli"
