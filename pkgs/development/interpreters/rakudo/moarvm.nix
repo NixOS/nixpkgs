@@ -5,6 +5,7 @@
   perl,
   pkg-config,
   stdenv,
+  versionCheckHook,
   zstd,
 }:
 
@@ -50,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--pkgconfig=${lib.getExe pkg-config}"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "VM with adaptive optimization and JIT compilation, built for Rakudo";
