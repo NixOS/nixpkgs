@@ -30,6 +30,24 @@ This section has been moved to [pkgs/README.md](https://github.com/NixOS/nixpkgs
 
 This section has been moved to [pkgs/README.md](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md).
 
+## Using fake user data for download {#sec-fake-data}
+
+Some software require user data like name and address to download it. When it does not matter which data we put in, we can use this fake data.
+
+```
+First Name: NixOS
+Last Name: Linux
+Email: someone@nixos.org
+Phone: +31 71 452 5670
+Country: Netherlands
+State/Province: Province of Utrecht
+Postcode: 3584CX
+City: Utrecht
+Address: Heidelberglaan 200
+```
+
+This fake data is inspired by the origin of the NixOS project which was started in 2003 as a research project at Utrecht University.
+
 ## Patches {#sec-patches}
 
 This section has been moved to [pkgs/README.md](https://github.com/NixOS/nixpkgs/blob/master/pkgs/README.md).
