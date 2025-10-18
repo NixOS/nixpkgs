@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "open-music-kontrollers.ch";
     owner = "~hp";
     repo = "lv2lint";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-NkzbKteLZ+P+Py+CMOYYipvu6psDslWnM1MAV1XB0TM=";
   };
 
@@ -44,12 +44,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "x11-tests" true)
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Check whether a given LV2 plugin is up to the specification";
     homepage = "https://git.open-music-kontrollers.ch/~hp/lv2lint";
-    license = licenses.artistic2;
-    maintainers = [ maintainers.magnetophon ];
-    platforms = platforms.linux;
+    license = lib.licenses.artistic2;
+    maintainers = with lib.maintainers; [ magnetophon ];
+    platforms = lib.platforms.linux;
     mainProgram = "lv2lint";
   };
 })

@@ -11793,8 +11793,6 @@ with pkgs;
     steamSupport = false;
   };
 
-  lv2lint = callPackage ../applications/audio/lv2lint/default.nix { };
-
   lxi-tools = callPackage ../tools/networking/lxi-tools { };
   lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
 
