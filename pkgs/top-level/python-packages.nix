@@ -15658,8 +15658,6 @@ self: super: with self; {
 
   ramlfications = callPackage ../development/python-modules/ramlfications { };
 
-  random-user-agent = callPackage ../development/python-modules/random-user-agent { };
-
   random2 = callPackage ../development/python-modules/random2 { };
 
   randomfiletree = callPackage ../development/python-modules/randomfiletree { };
