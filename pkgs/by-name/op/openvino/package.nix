@@ -31,6 +31,9 @@
   snappy,
   onetbb,
   cudaPackages,
+
+  # tests
+  frigate,
 }:
 
 let
@@ -185,6 +188,10 @@ stdenv.mkDerivation rec {
       addDriverRunpath "$lib"
     done
   '';
+
+  passthru.tests = {
+    inherit (frigate) ssdlite_mobilenet_v2_coco-openvino;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/openvinotoolkit/openvino/releases/tag/${src.tag}";
