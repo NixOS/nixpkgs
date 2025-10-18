@@ -109,7 +109,7 @@ in
       };
     })
     (lib.mkIf (cfg.enable && cfg.prompt.enable) {
-      environment.interactiveShellInit = ''
+      programs.bash.interactiveShellInit = ''
         source ${cfg.package}/share/bash-completion/completions/git-prompt.sh
       '';
     })
