@@ -26,13 +26,13 @@ buildGoModule (finalAttrs: {
 
   # Use only versions specified in anytype-ts middleware.version file:
   #  https://github.com/anyproto/anytype-ts/blob/v<anytype-ts-version>/middleware.version
-  version = "0.44.3";
+  version = "0.44.5";
 
   src = fetchFromGitHub {
     owner = "anyproto";
     repo = "anytype-heart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-seGjGokKZz4oP+jgWF+IVKMLJLQM+aU5CqS7moKpoUs=";
+    hash = "sha256-wSZcDcGPKbtUWf7hYXiQrS8a4sgnbItW7bu4hxQ2yFM=";
   };
 
   vendorHash = "sha256-T7CPD6mbxkN1x53oe9jsS2XMqluqWv8VPPd1pnXZvlc=";
