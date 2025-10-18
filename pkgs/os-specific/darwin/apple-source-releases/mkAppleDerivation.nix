@@ -17,22 +17,22 @@ in
 lib.extendMkDerivation {
   constructDrv = bootstrapStdenv.mkDerivation;
   extendDrvArgs =
-    self: super:
-    assert super ? releaseName;
+    finalAttrs: args:
+    assert args ? releaseName;
     let
-      inherit (super) releaseName;
+      inherit (args) releaseName;
       info = versions.${releaseName};
       files = lib.filesystem.listFilesRecursive (lib.path.append ./. releaseName);
       mesonFiles = lib.filter (hasBasenamePrefix "meson") files;
     in
     # You have to have at least `meson.build.in` when using xcodeHash to trigger the Meson
     # build support in `mkAppleDerivation`.
-    assert super ? xcodeHash -> lib.length mesonFiles > 0;
+    assert args ? xcodeHash -> lib.length mesonFiles > 0;
     {
-      pname = super.pname or releaseName;
+      pname = args.pname or releaseName;
       inherit (info) version;
 
-      src = super.src or fetchFromGitHub {
+      src = args.src or fetchFromGitHub {
         owner = "apple-oss-distributions";
         repo = releaseName;
         rev = info.rev or "${releaseName}-${info.version}";
@@ -48,11 +48,11 @@ lib.extendMkDerivation {
         teams = [ lib.teams.darwin ];
         platforms = lib.platforms.darwin;
       }
-      // super.meta or { };
+      // args.meta or { };
     }
-    // lib.optionalAttrs (super ? xcodeHash) {
+    // lib.optionalAttrs (args ? xcodeHash) {
       postUnpack =
-        super.postUnpack or ""
+        args.postUnpack or ""
         + lib.concatMapStrings (
           file:
           if baseNameOf file == "meson.build.in" then
@@ -61,9 +61,9 @@ lib.extendMkDerivation {
             "cp ${lib.escapeShellArg "${file}"} \"$sourceRoot/\"${lib.escapeShellArg (baseNameOf file)}\n"
         ) mesonFiles;
 
-      xcodeProject = super.xcodeProject or "${releaseName}.xcodeproj";
+      xcodeProject = args.xcodeProject or "${releaseName}.xcodeproj";
 
-      nativeBuildInputs = super.nativeBuildInputs or [ ] ++ [
+      nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [
         meson
         ninja
         xcodeProjectCheckHook
