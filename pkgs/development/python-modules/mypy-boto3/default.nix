@@ -522,8 +522,8 @@ in
       "sha256-mu4434uXtTV2eq8rymiN7uqLDoncFwmdi0slIucwSjQ=";
 
   mypy-boto3-evidently =
-    buildMypyBoto3Package "evidently" "1.40.19"
-      "sha256-v4FSQ3YR4s9hgu7SBhHWebkgSmDFDN5qf1/XKo2zlvs=";
+    buildMypyBoto3Package "evidently" "1.40.55"
+      "sha256-r71o2OkpgGBxh5gy23+OFHqCU0QI6Z/rQSBjDagMfB0=";
 
   mypy-boto3-finspace =
     buildMypyBoto3Package "finspace" "1.40.18"
