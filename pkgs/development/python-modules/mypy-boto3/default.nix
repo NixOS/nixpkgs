@@ -1129,8 +1129,8 @@ in
       "sha256-qPJ/kxKiVat3aj6aVLDgIYpoGlpsrF7kjfxJ9UWbV0o=";
 
   mypy-boto3-rolesanywhere =
-    buildMypyBoto3Package "rolesanywhere" "1.40.0"
-      "sha256-9AfMYmfGgFYxbGF1UYLBEtCkmYtlPNtD0q2MHmbJUWw=";
+    buildMypyBoto3Package "rolesanywhere" "1.40.55"
+      "sha256-CoF3Aw759lxUzg9iRCfKofDkbq/idAIy4Eu4L7yrRL0=";
 
   mypy-boto3-route53 =
     buildMypyBoto3Package "route53" "1.40.23"
