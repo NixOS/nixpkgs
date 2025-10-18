@@ -10,7 +10,6 @@ let
   tlsCmd =
     if (cfg.tlsSettings != null) then
       ''
-        mkdir -p /var/lib/glusterd
         touch /var/lib/glusterd/secure-access
       ''
     else
@@ -173,22 +172,12 @@ in
       requires = lib.optional cfg.useRpcbind "rpcbind.service";
       after = [ "network.target" ] ++ lib.optional cfg.useRpcbind "rpcbind.service";
 
-      preStart = ''
-        install -m 0755 -d /var/log/glusterfs
-      ''
       # The copying of hooks is due to upstream bug https://bugzilla.redhat.com/show_bug.cgi?id=1452761
       # Excludes one hook due to missing SELinux binaries.
-      + ''
-        mkdir -p /var/lib/glusterd/hooks/
+      preStart = ''
         ${rsync}/bin/rsync -a --exclude="S10selinux-label-brick.sh" ${glusterfs}/var/lib/glusterd/hooks/ /var/lib/glusterd/hooks/
 
         ${tlsCmd}
-      ''
-      # `glusterfind` needs dirs that upstream installs at `make install` phase
-      # https://github.com/gluster/glusterfs/blob/v3.10.2/tools/glusterfind/Makefile.am#L16-L17
-      + ''
-        mkdir -p /var/lib/glusterd/glusterfind/.keys
-        mkdir -p /var/lib/glusterd/hooks/1/delete/post/
       '';
 
       serviceConfig = {
@@ -196,6 +185,17 @@ in
         ExecStart = "${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
         KillMode = cfg.killMode;
         TimeoutStopSec = cfg.stopKillTimeout;
+        LogDirectory = [ "glusterfs" ];
+        LogDirectoryMode = "0755";
+        StateDirectory = [
+          "glusterd"
+          "glusterd/glusterd/hooks"
+
+          # `glusterfind` needs dirs that upstream installs at `make install` phase
+          # https://github.com/gluster/glusterfs/blob/v3.10.2/tools/glusterfind/Makefile.am#L16-L17
+          "glusterd/glusterfind/.keys"
+          "glusterd/glusterd/hooks/1/delete/post"
+        ];
       };
     };
 
@@ -208,10 +208,6 @@ in
 
       after = [ "network.target" ];
 
-      preStart = ''
-        install -m 0755 -d /var/log/glusterfs
-      '';
-
       # glustereventsd uses the `gluster` executable
       path = [ glusterfs ];
 
@@ -221,6 +217,8 @@ in
         ExecStart = "${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
         ExecReload = "/bin/kill -SIGUSR2 $MAINPID";
         KillMode = "control-group";
+        LogDirectory = [ "glusterfs" ];
+        LogDirectoryMode = "0755";
       };
     };
   };
