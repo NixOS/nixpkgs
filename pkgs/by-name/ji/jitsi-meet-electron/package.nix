@@ -16,13 +16,13 @@
 
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
-  version = "2025.2.0";
+  version = "2025.10.0";
 
   src = fetchFromGitHub {
     owner = "jitsi";
     repo = "jitsi-meet-electron";
     rev = "v${version}";
-    hash = "sha256-Pk62BpfXblRph3ktxy8eF9umRmPRZbZGjRWduy+3z+s=";
+    hash = "sha256-GKsTM/dDwt8JnV0TKe3kc9bcnPatJjX60/Ou/4aG4VA=";
   };
 
   nativeBuildInputs = [
@@ -41,7 +41,7 @@ buildNpmPackage rec {
     zlib
   ];
 
-  npmDepsHash = "sha256-TckV91RJo06OKb8nIvxBCxu28qyHtA/ACDshOlaCQxA=";
+  npmDepsHash = "sha256-kcq3N49F7KYQx3L7Ip5JlmRjxLW6nYPul6WCdLp4ozI=";
 
   makeCacheWritable = true;
 
