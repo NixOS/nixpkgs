@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.com/interception/linux/tools";
     changelog = "https://gitlab.com/interception/linux/tools/-/tags/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [ lib.maintainers.vyp ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }
