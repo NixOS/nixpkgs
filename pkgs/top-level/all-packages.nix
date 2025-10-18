@@ -2332,9 +2332,6 @@ with pkgs;
     usePoppler = true;
   };
 
-  beetsPackages = lib.recurseIntoAttrs (callPackage ../tools/audio/beets { });
-  inherit (beetsPackages) beets;
-
   binlore = callPackage ../development/tools/analysis/binlore { };
 
   birdfont = callPackage ../tools/misc/birdfont { };
