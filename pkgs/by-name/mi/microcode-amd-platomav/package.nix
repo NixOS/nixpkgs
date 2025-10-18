@@ -78,6 +78,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/platomav/CPUMicrocodes";
     license = lib.licenses.unfreeRedistributableFirmware;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ d-brasher ];
+    maintainers = with lib.maintainers; [
+      d-brasher
+      johnrtitor
+    ];
   };
 })
