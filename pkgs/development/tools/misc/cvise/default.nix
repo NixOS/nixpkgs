@@ -13,6 +13,8 @@
   pebble,
   psutil,
   pytestCheckHook,
+  testers,
+  cvise,
 }:
 
 buildPythonApplication rec {
@@ -77,6 +79,16 @@ buildPythonApplication rec {
     # Needs gcc, fails when run noninteractively (without tty).
     "test_simple_reduction"
   ];
+
+  passthru = {
+    tests = {
+      # basic syntax check
+      help-output = testers.testVersion {
+        package = cvise;
+        command = "cvise --version";
+      };
+    };
+  };
 
   meta = with lib; {
     homepage = "https://github.com/marxin/cvise";
