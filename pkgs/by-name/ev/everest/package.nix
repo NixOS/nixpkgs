@@ -6,7 +6,6 @@
   dotnetCorePackages,
   autoPatchelfHook,
   mono,
-  git,
   icu,
 }:
 
@@ -23,14 +22,12 @@ buildDotnetModule {
     repo = "Everest";
     rev = "e47f67fc8c4b0b60b0a75112c5c90704ed371040";
     fetchSubmodules = true;
-    leaveDotGit = true; # MonoMod.SourceGen.Internal needs .git
-    hash = "sha256-uxb9LwCDGJIc+JN2EqNqHdLLwULnG7Bd/Az3H1zKf3E=";
+    # TODO: use leaveDotGit = true and modify external/MonoMod in postFetch to please SourceLink
+    # Microsoft.SourceLink.Common.targets(53,5): warning : Source control information is not available - the generated source link is empty.
+    hash = "sha256-scizz5U9DQaeJsh0dg7Lllycd/D3Ezu8QNYPPZFGJhY=";
   };
 
-  nativeBuildInputs = [
-    git
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
     icu # For autoPatchelf
@@ -39,7 +36,7 @@ buildDotnetModule {
 
   postPatch = ''
     # MonoMod.ILHelpers.Patcher complains at build phase: You must install .NET to run this application.
-    sed -i 's|<Exec Command="&quot;|<Exec Command="DOTNET_ROOT=${dotnetCorePackages.runtime_8_0}/share/dotnet \&quot;|' external/MonoMod/tools/Common.IL.targets
+    sed -i 's|<Exec Command="&quot;|<Exec Command="DOTNET_ROOT=${dotnetCorePackages.runtime_9_0}/share/dotnet \&quot;|' external/MonoMod/tools/Common.IL.targets
 
     # Moving files after publishing somehow doesn't work. Will do this manually in postInstall.
     sed -i 's|<Move.*/>||' Celeste.Mod.mm/Celeste.Mod.mm.csproj
@@ -48,14 +45,6 @@ buildDotnetModule {
   '';
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
-
-  preConfigure = ''
-    # Microsoft.SourceLink.GitHub complains: Unable to determine repository url, the source code won't be available via source link.
-    cd external/MonoMod
-    git -c safe.directory='*' remote add origin https://github.com/MonoMod/MonoMod.git
-    cd ../..
-  '';
-
   nugetDeps = ./deps.json;
 
   # Needed for ILAsm projects: https://github.com/NixOS/nixpkgs/issues/370754#issuecomment-2571475814
@@ -93,8 +82,10 @@ buildDotnetModule {
   dontPatchShebangs = true;
   dontAutoPatchelf = true;
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
-    description = "Celeste mod loader";
+    description = "Celeste mod loader (don't install; use celestegame instead)";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ ulysseszhan ];
     homepage = "https://everestapi.github.io";
