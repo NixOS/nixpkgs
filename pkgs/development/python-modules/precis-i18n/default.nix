@@ -2,15 +2,13 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "precis-i18n";
   version = "1.1.2";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "byllyfish";
@@ -19,12 +17,14 @@ buildPythonPackage rec {
     hash = "sha256-ZMj9KqiPVrpmq4/FweLMDxWQVQEtykimNhMTS9Mh5QY=";
   };
 
+  build-system = [ setuptools ];
+
   pythonImportsCheck = [ "precis_i18n" ];
 
   meta = with lib; {
     description = "Internationalized usernames and passwords";
     homepage = "https://github.com/byllyfish/precis_i18n";
-    changelog = "https://github.com/byllyfish/precis_i18n/blob/v${version}/CHANGELOG.rst";
+    changelog = "https://github.com/byllyfish/precis_i18n/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
     maintainers = [ ];
   };
