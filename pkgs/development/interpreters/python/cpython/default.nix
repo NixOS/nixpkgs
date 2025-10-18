@@ -516,8 +516,8 @@ stdenv.mkDerivation (finalAttrs: {
     "ac_cv_have_size_t_format=yes"
     "ac_cv_computed_gotos=yes"
     # Both fail when building for windows, normally configure checks this by itself but on other platforms this is set to yes always.
-    "ac_cv_file__dev_ptmx=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
-    "ac_cv_file__dev_ptc=${if stdenv.hostPlatform.isWindows then "no" else "yes"}"
+    "ac_cv_file__dev_ptmx=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
+    "ac_cv_file__dev_ptc=${lib.boolToYesNo (!stdenv.hostPlatform.isWindows)}"
   ]
   ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform && pythonAtLeast "3.11") [
     "--with-build-python=${pythonOnBuildForHostInterpreter}"
