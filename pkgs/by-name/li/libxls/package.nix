@@ -6,14 +6,14 @@
   autoconf-archive,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libxls";
   version = "1.6.3";
 
   src = fetchFromGitHub {
     owner = "libxls";
     repo = "libxls";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-KbITHQ9s2RUeo8zR53R9s4WUM6z8zzddz1k47So0Mlw=";
   };
 
@@ -41,12 +41,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Extract Cell Data From Excel xls files";
+    changelog = "https://github.com/libxls/libxls/releases/tag/v${finalAttrs.version}";
     homepage = "https://github.com/libxls/libxls";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
     mainProgram = "xls2csv";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
