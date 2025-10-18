@@ -14,14 +14,12 @@
 
   # build-tools
   bootPkgs,
-  autoconf,
-  automake,
+  autoreconfHook,
   coreutils,
   fetchpatch,
   fetchurl,
   perl,
   python3,
-  m4,
   sphinx,
   xattr,
   autoSignDarwinBinariesHook,
@@ -388,7 +386,9 @@ stdenv.mkDerivation (
       # elimination on aarch64-darwin. (see
       # https://github.com/NixOS/nixpkgs/issues/140774 for details). krank:ignore-line
       ./Cabal-at-least-3.6-paths-fix-cycle-aarch64-darwin.patch
-    ];
+    ]
+
+    ++ (import ./common-llvm-patches.nix { inherit lib version fetchpatch; });
 
     postPatch = "patchShebangs .";
 
@@ -444,7 +444,6 @@ stdenv.mkDerivation (
       export AR_STAGE0="$AR_FOR_BUILD"
 
       echo -n "${buildMK}" > mk/build.mk
-      sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
     # Haddock and sphinx need a working locale
     + lib.optionalString (enableDocs || enableHaddockProgram) (
@@ -479,8 +478,7 @@ stdenv.mkDerivation (
       grep linux-musl llvm-targets | sed 's/^/  /'
 
       echo "And now patching to preserve '-musleabi' as done with '-gnueabi'"
-      # (aclocal.m4 is actual source, but patch configure as well since we don't re-gen)
-      for x in configure aclocal.m4; do
+      for x in aclocal.m4; do
         substituteInPlace $x \
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
@@ -547,10 +545,8 @@ stdenv.mkDerivation (
     dontAddExtraLibs = true;
 
     nativeBuildInputs = [
+      autoreconfHook
       perl
-      autoconf
-      automake
-      m4
       python3
       bootPkgs.alex
       bootPkgs.happy
@@ -677,8 +673,6 @@ stdenv.mkDerivation (
       timeout = 24 * 3600;
       platforms = lib.platforms.all;
       inherit (bootPkgs.ghc.meta) license;
-      # To be fixed by <https://github.com/NixOS/nixpkgs/pull/440774>.
-      broken = useLLVM;
     };
 
   }

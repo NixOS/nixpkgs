@@ -46,6 +46,16 @@ let
   # Use this rather than `rec { ... }` below for sake of overlays.
   inherit (pkgs.haskell) compiler packages;
 
+  # The GHC LLVM backend rarely sees significant changes relating to
+  # LLVM version support, as it uses the textual IR format and invokes
+  # the LLVM binary tools rather than linking to the C++ libraries.
+  #
+  # Consider backporting upstream GHC changes to support new LLVM
+  # versions in `common-llvm-patches.nix` to allow the version to be
+  # shared across our supported versions of GHC. If the required
+  # changes are too invasive, it’s fine to decouple individual versions
+  # from this default or disable their LLVM support if it’s not load‐
+  # bearing (e.g. GHC 9.4.8 is important for cross‐compiling GHC).
   buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_20;
   llvmPackages = pkgs.llvmPackages_20;
 
