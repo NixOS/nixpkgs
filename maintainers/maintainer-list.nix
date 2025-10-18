@@ -7880,6 +7880,12 @@
     githubId = 21313906;
     name = "EsAu";
   };
+  esch = {
+    name = "Austin Eschweiler";
+    github = "Eschguy";
+    githubId = 8880292;
+    email = "austin.eschweiler@gmail.com";
+  };
   esclear = {
     github = "esclear";
     githubId = 7432848;
