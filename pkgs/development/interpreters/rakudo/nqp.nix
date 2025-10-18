@@ -4,6 +4,7 @@
   moarvm,
   perl,
   stdenv,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/$share_dir
     ln -fs ${moarvm}/$share_dir/{Nodes,Ops}.nqp $out/$share_dir
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Lightweight Raku-like environment for virtual machines";
