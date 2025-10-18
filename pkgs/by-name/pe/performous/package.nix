@@ -55,12 +55,21 @@ stdenv.mkDerivation rec {
       url = "https://github.com/performous/performous/commit/eb9b97f46b7d064c32ed0f086d89a70427ce1d14.patch";
       hash = "sha256-98pcO/sFQJ+G67ErwlO/aAITNDPuRgPziQiF1cAlc0g=";
     })
+    # Fix build with CMake 4
+    (fetchpatch {
+      url = "https://github.com/performous/compact_enc_det/commit/28f46c18c60b851773b0ff61f3ce416fb09adcf3.patch?full_index=1";
+      stripLen = 1;
+      extraPrefix = "ced-src/";
+      hash = "sha256-23VD/4X4BOtcX5k+koSlRMowlbo2jAXbp3XKTXP7VrM=";
+    })
   ];
 
-  postPatch = ''
+  prePatch = ''
     mkdir ced-src
     cp -R ${cedSrc}/* ced-src
+  '';
 
+  postPatch = ''
     substituteInPlace data/CMakeLists.txt \
       --replace "/usr" "$out"
   '';
