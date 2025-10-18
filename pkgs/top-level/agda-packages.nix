@@ -27,7 +27,7 @@ let
 
       lib = lib.extend (final: prev: import ../build-support/agda/lib.nix { lib = prev; });
 
-      "${Agda.meta.mainProgram}" = withPackages [ ];
+      agda = withPackages [ ];
 
       standard-library = callPackage ../development/libraries/agda/standard-library { };
 
