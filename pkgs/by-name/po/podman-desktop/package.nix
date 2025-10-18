@@ -24,7 +24,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.22.0";
+  version = "1.22.1";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -57,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gq4RMODR7AESMAGpg6ga5LS5SrpWD6pPe6dZ+Rx7a/g=";
+    hash = "sha256-+YM1fiY2bH5nY1L/xWjMbWe5lH1LfyKW47OzCROB3nE=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-tWWqnxPO27RcYeix5B+R3CyyyHYQL9PMPRhlse8FyVk=";
+    hash = "sha256-2Cja6CQxjOlxjhsjGQ5C9a/C/2RfzKdvtRCKO7VztwQ=";
   };
 
   patches = [
