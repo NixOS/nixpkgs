@@ -8,11 +8,7 @@ let
   cfg = config.services.sshguard;
 in
 {
-
-  ###### interface
-
   options = {
-
     services.sshguard = {
       enable = lib.mkOption {
         default = false;
@@ -99,10 +95,7 @@ in
     };
   };
 
-  ###### implementation
-
   config = lib.mkIf cfg.enable {
-
     environment.etc."sshguard.conf".text =
       let
         backend = if config.networking.nftables.enable then "sshg-fw-nft-sets" else "sshg-fw-ipset";
