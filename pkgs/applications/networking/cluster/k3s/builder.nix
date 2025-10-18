@@ -478,5 +478,7 @@ buildGoModule (finalAttrs: {
   }
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = baseMeta;
+  meta = baseMeta // {
+    mainProgram = "k3s";
+  };
 })

@@ -180,14 +180,14 @@ lib.makeExtensible (
       nix_2_31 = addTests "nix_2_31" self.nixComponents_2_31.nix-everything;
 
       nixComponents_2_32 = nixDependencies.callPackage ./modular/packages.nix rec {
-        version = "2.32.0";
+        version = "2.32.1";
         inherit (self.nix_2_31.meta) maintainers teams;
         otherSplices = generateSplicesForNixComponents "nixComponents_2_32";
         src = fetchFromGitHub {
           owner = "NixOS";
           repo = "nix";
           tag = version;
-          hash = "sha256-OOd7dFe0tX0CVPygR7U6cqs5fiJAvFO1el1QmjDG1GM=";
+          hash = "sha256-pApD0gpaklYkgZ9oZCtuAcAcYeUxR9FUOAlOtflZr+Q=";
         };
       };
 
