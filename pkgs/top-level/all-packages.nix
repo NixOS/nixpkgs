@@ -2243,7 +2243,7 @@ with pkgs;
     rainloop-standard
     ;
 
-  razergenie = libsForQt5.callPackage ../applications/misc/razergenie { };
+  razergenie = callPackage ../applications/misc/razergenie { };
 
   roundcube = callPackage ../servers/roundcube { };
 
