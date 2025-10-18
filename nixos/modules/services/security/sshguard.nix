@@ -83,7 +83,9 @@ in
         ];
         type = lib.types.listOf lib.types.str;
         description = ''
-          Systemd services sshguard should receive logs of.
+          Systemd services or syslog identifiers sshguard should receive logs of.
+
+          See also <https://github.com/SSHGuard/sshguard/blob/master/src/common/attack.h> for a list of known services.
         '';
       };
 
@@ -131,17 +133,17 @@ in
         StandardError = "journal";
         SyslogIdentifier = "sshguard-logger";
 
-        ExecStart = let
-          args = lib.concatStringsSep " " (
-            [
-              "-afb"
-              "-p info"
-              "-o cat"
-              "-n1"
-            ]
-            ++ (map (name: "-t ${lib.escapeShellArg name}") cfg.services)
-          );
-        in
+        ExecStart =
+          let
+            args = lib.cli.toGNUCommandLineShell { } {
+              all = true;
+              follow = true;
+              priority = "info";
+              output = "cat";
+              lines = 1;
+              unit = cfg.services;
+            };
+          in
           if cfg.enableInspectableLogStream then
             pkgs.writeShellScript "sshguard-logger-start" "${config.systemd.package}/bin/journalctl ${args} |& ${lib.getExe' pkgs.coreutils "tee"} >(cat 1>&2)"
           else
