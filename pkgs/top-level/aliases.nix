@@ -554,6 +554,7 @@ mapAliases {
   bloom = throw "'bloom' has been removed because it was unmaintained upstream."; # Added 2024-11-02
   bloomeetunes = throw "bloomeetunes is unmaintained and has been removed"; # Added 2025-08-26
   bmap-tools = bmaptool; # Added 2024-08-05
+  boolector = throw "boolector has been removed as it was archived in 2024 and no longer builds. Use Bitwuzla instead"; # Added 2025-10-13
   boost175 = throw "Boost 1.75 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
   boost184 = throw "Boost 1.84 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
   boost185 = throw "Boost 1.85 has been removed as it is obsolete and no longer used by anything in Nixpkgs"; # Added 2024-11-24
