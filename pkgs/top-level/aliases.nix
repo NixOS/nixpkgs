@@ -2741,6 +2741,8 @@ mapAliases {
   wakatime = wakatime-cli; # 2024-05-30
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
   wal_e = throw "wal_e was removed as it is unmaintained upstream and depends on the removed boto package; upstream recommends using wal-g or pgbackrest"; # Added 2024-09-22
+  warsow = throw "'warsow' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
+  warsow-engine = throw "'warsow-engine' has been removed as it is unmaintained and is broken"; # Added 2025-10-09
   wapp = tclPackages.wapp; # Added 2024-10-02
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_104;
