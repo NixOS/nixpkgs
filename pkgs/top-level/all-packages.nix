@@ -1882,6 +1882,8 @@ with pkgs;
 
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
+  intel-oneapi = callPackage ../development/libraries/intel-oneapi { };
+
   sway-unwrapped = callPackage ../by-name/sw/sway-unwrapped/package.nix {
     wlroots = wlroots_0_19;
   };
@@ -14225,8 +14227,6 @@ with pkgs;
   celestia = callPackage ../applications/science/astronomy/celestia {
     inherit (gnome2) gtkglext;
   };
-
-  convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
   faissWithCuda = faiss.override {
     cudaSupport = true;
