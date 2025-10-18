@@ -12403,8 +12403,6 @@ with pkgs;
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
-  spotify-qt = qt6Packages.callPackage ../applications/audio/spotify-qt { };
-
   stag = callPackage ../applications/misc/stag {
     curses = ncurses;
   };
