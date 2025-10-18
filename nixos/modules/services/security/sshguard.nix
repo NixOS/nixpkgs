@@ -86,6 +86,14 @@ in
           Systemd services sshguard should receive logs of.
         '';
       };
+
+      enableInspectableLogStream = lib.mkEnableOption "" // {
+        description = ''
+          Whether to let `sshguard-logger.service` print the logs sent to `sshguard.service` to its journal.
+
+          This is useful for debugging some services where sshguard might be parsing the logs wrongly.
+        '';
+      };
     };
   };
 
@@ -95,27 +103,73 @@ in
 
     environment.etc."sshguard.conf".text =
       let
-        args = lib.concatStringsSep " " (
-          [
-            "-afb"
-            "-p info"
-            "-o cat"
-            "-n1"
-          ]
-          ++ (map (name: "-t ${lib.escapeShellArg name}") cfg.services)
-        );
         backend = if config.networking.nftables.enable then "sshg-fw-nft-sets" else "sshg-fw-ipset";
       in
       ''
         BACKEND="${pkgs.sshguard}/libexec/${backend}"
-        LOGREADER="LANG=C ${config.systemd.package}/bin/journalctl ${args}"
+        LOGREADER="${lib.getExe' pkgs.coreutils "cat"} /run/sshguard-logger/sshguard-logger"
       '';
+
+    systemd.services.sshguard-logger = {
+      description = "SSHGuard Intrusion Prevention Log Provider";
+      wantedBy = [ "sshguard.service" ];
+      requires = [ "sshguard-logger.socket" ];
+      after = [ "sshguard-logger.socket" ];
+
+      environment.LANG = "C";
+
+      serviceConfig = {
+        Type = "simple";
+
+        Sockets = "sshguard-logger.socket";
+        StandardOutput = "fd:sshguard-logger.socket";
+        StandardError = "journal";
+        SyslogIdentifier = "sshguard-logger";
+
+        ExecStart = let
+          args = lib.concatStringsSep " " (
+            [
+              "-afb"
+              "-p info"
+              "-o cat"
+              "-n1"
+            ]
+            ++ (map (name: "-t ${lib.escapeShellArg name}") cfg.services)
+          );
+        in
+          if cfg.enableInspectableLogStream then
+            pkgs.writeShellScript "sshguard-logger-start" "${config.systemd.package}/bin/journalctl ${args} |& ${lib.getExe' pkgs.coreutils "tee"} >(cat 1>&2)"
+          else
+            "${config.systemd.package}/bin/journalctl ${args}";
+
+        DynamicUser = true;
+        SupplementaryGroups = [
+          # allow to read the systemd journal for opentelemetry-collector
+          "systemd-journal"
+        ];
+      };
+    };
+
+    systemd.sockets.sshguard-logger = {
+      description = "SSHGuard Intrusion Prevention Log Provider";
+      socketConfig = {
+        ListenFIFO = "/run/sshguard-logger/sshguard-logger";
+        SocketMode = "0600";
+      };
+    };
 
     systemd.services.sshguard = {
       description = "SSHGuard brute-force attacks protection system";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      after = [
+        "network.target"
+        "sshguard-logger.socket"
+      ];
+      requires = [
+        "sshguard-logger.socket"
+        "sshguard-logger.service"
+      ];
       partOf = lib.optional config.networking.firewall.enable "firewall.service";
 
       restartTriggers = [ config.environment.etc."sshguard.conf".source ];
@@ -126,14 +180,12 @@ in
           [
             nftables
             iproute2
-            systemd
           ]
         else
           [
             iptables
             ipset
             iproute2
-            systemd
           ];
 
       documentation = [
