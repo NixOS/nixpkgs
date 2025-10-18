@@ -153,6 +153,7 @@ buildNpmPackage {
     maintainers = with lib.maintainers; [
       onny
       jlbribeiro
+      rfeltis
     ];
   };
 }
