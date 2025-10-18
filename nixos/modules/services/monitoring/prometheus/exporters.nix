@@ -127,6 +127,7 @@ let
         "storagebox"
         "surfboard"
         "systemd"
+        "tailscale"
         "tibber"
         "unbound"
         "unpoller"

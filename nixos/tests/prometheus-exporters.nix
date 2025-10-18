@@ -1760,6 +1760,51 @@ let
       '';
     };
 
+    tailscale = {
+      exporterConfig = {
+        package = pkgs.prometheus-tailscale-exporter.overrideAttrs {
+          patches = [
+            # This patch prevents the exporter from exiting immediately upon
+            # startup when no credentials are provided, which is useful for
+            # testing the NixOS module.
+            (pkgs.writeText "allow-running-without-credentials" ''
+              diff --git a/cmd/tailscale-exporter/root.go b/cmd/tailscale-exporter/root.go
+              index 2ff11cb..2fb576f 100644
+              --- a/cmd/tailscale-exporter/root.go
+              +++ b/cmd/tailscale-exporter/root.go
+              @@ -137,14 +137,6 @@ func runExporter(cmd *cobra.Command, args []string) error {
+              ''\t// Create HTTP client that automatically handles token refresh
+              ''\thttpClient := oauthConfig.Client(context.Background())
+
+              -''\t// Test OAuth token generation
+              -''\ttoken, err := oauthConfig.Token(context.Background())
+              -''\tif err != nil {
+              -''\t''\treturn fmt.Errorf("failed to obtain OAuth token: %w", err)
+              -''\t}
+              -''\tlogger.Info("OAuth token obtained", "token_type", token.TokenType)
+              -''\tlogger.Info("Successfully obtained OAuth token", "expires", token.Expiry)
+              -
+              ''\t// Default labels for all metrics
+              ''\tdefaultLabels := prometheus.Labels{"tailnet": tailnet}
+              ''\treg := prometheus.WrapRegistererWith(
+            '')
+          ];
+        };
+        enable = true;
+        environmentFile = pkgs.writeText "tailscale-exporter-env" ''
+          TAILSCALE_OAUTH_CLIENT_ID=12345678
+          TAILSCALE_OAUTH_CLIENT_SECRET=12345678
+          TAILSCALE_TAILNET=example.com
+        '';
+      };
+
+      exporterTest = ''
+        wait_for_unit("prometheus-tailscale-exporter.service")
+        wait_for_open_port(9250)
+        succeed("curl -sSf localhost:9250/metrics | grep 'tailscale_up{tailnet=\"example.com\"} 1'")
+      '';
+    };
+
     unpoller = {
       nodeName = "unpoller";
       exporterConfig.enable = true;
