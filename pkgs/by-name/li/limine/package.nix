@@ -22,6 +22,13 @@ let
     || (if targets == [ ] then stdenv.hostPlatform.isx86_64 else (builtins.elem "x86_64" targets))
     || enableAll;
 
+  missingZerocallusedregs =
+    (
+      if targets == [ ] then stdenv.hostPlatform.isLoongArch64 else (builtins.elem "loongarch64" targets)
+    )
+    || (if targets == [ ] then stdenv.hostPlatform.isRiscV64 else (builtins.elem "riscv64" targets))
+    || enableAll;
+
   biosSupport' = biosSupport && hasX86;
   pxeSupport' = pxeSupport && hasX86;
 
@@ -51,6 +58,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   enableParallelBuilding = true;
+
+  hardeningDisable = lib.optionals missingZerocallusedregs [
+    "zerocallusedregs"
+  ];
 
   nativeBuildInputs = [
     llvmPackages.libllvm
