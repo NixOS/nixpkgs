@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.11.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
+    hash = "sha256-wXj/bygm+Pa6b0sM+UYHPSpH/mlfozvPGu5pO6DutvA=";
   };
 
   build-system = [
@@ -24,15 +24,22 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "authlib"
+    "click"
     "fitdecode"
     "flask"
     "flask-limiter"
     "flask-migrate"
-    "nh3"
+    "humanize"
+    "jsonschema"
     "lxml"
+    "mistune"
+    "nh3"
+    "numpy"
+    "pandas"
     "pyopenssl"
     "pytz"
     "sqlalchemy"
+    "xmltodict"
   ];
 
   dependencies =
@@ -43,18 +50,25 @@ python3Packages.buildPythonApplication rec {
       click
       dramatiq
       dramatiq-abort
+      feedgenerator
       fitdecode
       flask
+      flask-babel
       flask-bcrypt
       flask-dramatiq
       flask-limiter
       flask-migrate
       flask-sqlalchemy
+      geoalchemy2
+      geopandas
       gpxpy
       gunicorn
       humanize
       jsonschema
       nh3
+      mistune
+      numpy
+      pandas
       psycopg2-binary
       pyjwt
       pyopenssl
@@ -74,7 +88,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     freezegun
     postgresqlTestHook
-    postgresql
+    (postgresql.withPackages (ps: with ps; [ postgis ]))
     time-machine
   ];
 
@@ -83,6 +97,7 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postgresqlTestSetupPost = ''
+    echo "CREATE EXTENSION postgis; CREATE EXTENSION postgis_topology;" | PGUSER=postgres psql test_db
     export DATABASE_TEST_URL=postgresql://$PGUSER/$PGDATABASE?host=$PGHOST
   '';
 
