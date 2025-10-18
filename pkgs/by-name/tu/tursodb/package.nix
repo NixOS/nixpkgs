@@ -6,12 +6,12 @@
   nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
-  pname = "limbo";
+  pname = "tursodb";
   version = "0.0.14";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
-    repo = "limbo";
+    repo = "turso";
     tag = "v${version}";
     hash = "sha256-t3bIW+HuuZzj3NOw2lnTZw9qxj7lGWtR8RbZF0rVbQ4=";
   };
@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "-p"
-    "limbo"
+    "turso_cli"
   ];
   cargoTestFlags = cargoBuildFlags;
 
@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "Interactive SQL shell for Limbo";
-    homepage = "https://github.com/tursodatabase/limbo";
-    changelog = "https://github.com/tursodatabase/limbo/blob/v${version}/CHANGELOG.md";
+    description = "Interactive SQL shell for Turso";
+    homepage = "https://github.com/tursodatabase/turso";
+    changelog = "https://github.com/tursodatabase/turso/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
-    mainProgram = "limbo";
+    mainProgram = "tursodb";
   };
 }
