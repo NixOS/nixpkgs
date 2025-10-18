@@ -99,20 +99,6 @@ in
     }) systemUsers;
 
     systemd = {
-
-      # Create home directories, do not create /var/empty even if that's a user's
-      # home.
-      tmpfiles.settings.home-directories = lib.mapAttrs' (
-        username: opts:
-        lib.nameValuePair opts.home {
-          d = {
-            mode = opts.homeMode;
-            user = username;
-            group = opts.group;
-          };
-        }
-      ) (lib.filterAttrs (_username: opts: opts.home != "/var/empty") systemUsers);
-
       # Create uid/gid marker files for those without an explicit id
       tmpfiles.settings.nixos-uid = lib.mapAttrs' (
         username: opts:
