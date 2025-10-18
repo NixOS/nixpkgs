@@ -220,7 +220,10 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
-  env = lib.optionalAttrs effectiveStdenv.cc.isClang {
+  env = {
+    NIX_LDFLAGS = "-z,noexecstack";
+  }
+  // lib.optionalAttrs effectiveStdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 

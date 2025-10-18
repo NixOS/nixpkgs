@@ -38,6 +38,10 @@ buildPythonPackage {
     chmod +w dist
   '';
 
+  env = {
+    NIX_LDFLAGS = "-z,noexecstack";
+  };
+
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   # This project requires fairly large dependencies such as sympy which we really don't always need.
