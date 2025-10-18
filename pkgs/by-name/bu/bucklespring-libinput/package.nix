@@ -15,17 +15,14 @@
   libX11,
 }:
 
-let
-  inherit (lib) optionals;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bucklespring";
   version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "zevv";
     repo = "bucklespring";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "0prhqibivxzmz90k79zpwx3c97h8wa61rk5ihi9a5651mnc46mna";
   };
 
@@ -38,13 +35,13 @@ stdenv.mkDerivation rec {
     openal
     alure
   ]
-  ++ optionals legacy [
+  ++ lib.optionals legacy [
     libXtst
     libX11
   ]
-  ++ optionals (!legacy) [ libinput ];
+  ++ lib.optionals (!legacy) [ libinput ];
 
-  makeFlags = optionals (!legacy) [ "libinput=1" ];
+  makeFlags = lib.optionals (!legacy) [ "libinput=1" ];
 
   installPhase = ''
     runHook preInstall
@@ -58,7 +55,7 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Nostalgia bucklespring keyboard sound";
     mainProgram = "buckle";
     longDescription = ''
@@ -67,8 +64,8 @@ stdenv.mkDerivation rec {
       <code>users.users.alice.extraGroups = [ "input" ];</code>
     '';
     homepage = "https://github.com/zevv/bucklespring";
-    license = licenses.gpl2Only;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})
