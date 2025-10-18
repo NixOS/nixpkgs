@@ -50,14 +50,20 @@ in
 
       # Nvidia support
       (lib.mkIf cfg.nvidiaSupport {
-        systemd.services.coolercontrold.path =
+        systemd.services.coolercontrold =
           let
             nvidiaPkg = config.hardware.nvidia.package;
           in
-          [
-            nvidiaPkg # nvidia-smi
-            nvidiaPkg.settings # nvidia-settings
-          ];
+          {
+            path = [
+              nvidiaPkg.bin # nvidia-smi
+              nvidiaPkg.settings # nvidia-settings
+            ];
+
+            environment = {
+              LD_LIBRARY_PATH = "${nvidiaPkg}/lib"; # nvml
+            };
+          };
       })
     ]
   );
