@@ -78,6 +78,7 @@ idris2.section.md
 ios.section.md
 java.section.md
 javascript.section.md
+jule.section.md
 julia.section.md
 lisp.section.md
 lua.section.md

@@ -8973,6 +8973,10 @@ with pkgs;
 
   javaPackages = recurseIntoAttrs (callPackage ./java-packages.nix { });
 
+  ### DEVELOPMENT / JULE
+
+  buildJuleModule = callPackage ../build-support/jule/module.nix { };
+
   ### DEVELOPMENT / LISP MODULES
 
   asdf = callPackage ../development/lisp-modules/asdf {
