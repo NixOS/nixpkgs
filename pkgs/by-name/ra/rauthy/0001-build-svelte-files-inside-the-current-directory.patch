@@ -1,0 +1,28 @@
+From 512e1247bc45b15311f404a1589f79ac183111e2 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
+Date: Mon, 1 Sep 2025 23:42:03 +0200
+Subject: [PATCH] build svelte files inside the current directory
+
+Fix for "Error: EACCES: permission denied, mkdir '../static/v1/_app/immutable/assets'"
+---
+ frontend/svelte.config.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/frontend/svelte.config.js b/frontend/svelte.config.js
+index 397fe4d4..3a08f7a2 100644
+--- a/frontend/svelte.config.js
++++ b/frontend/svelte.config.js
+@@ -12,8 +12,8 @@ const config = {
+         },
+         adapter: adapter({
+             fallback: null,
+-            pages: '../templates/html',
+-            assets: '../static/v1',
++            pages: 'dist/templates/html',
++            assets: 'dist/static/v1',
+             precompress: true,
+             strict: true,
+         }),
+-- 
+2.51.0
+

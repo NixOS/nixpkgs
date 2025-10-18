@@ -1480,6 +1480,7 @@
   ./services/security/pass-secret-service.nix
   ./services/security/physlock.nix
   ./services/security/pocket-id.nix
+  ./services/security/rauthy.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
   ./services/security/sshguard.nix
