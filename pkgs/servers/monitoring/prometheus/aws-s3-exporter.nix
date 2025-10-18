@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Exports Prometheus metrics about S3 buckets and objects";
     mainProgram = "s3_exporter";
     homepage = "https://github.com/ribbybibby/s3_exporter";
-    license = licenses.asl20;
-    maintainers = [ maintainers.mmahut ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.mmahut ];
   };
 }
