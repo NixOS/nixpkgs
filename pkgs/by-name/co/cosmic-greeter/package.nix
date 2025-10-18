@@ -6,7 +6,6 @@
   libcosmicAppHook,
   cmake,
   just,
-  cosmic-randr,
   libinput,
   linux-pam,
   udev,
@@ -19,20 +18,22 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-greeter";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.0-beta.2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-rMZ+UbHarnvPaVAI5XeBfLduWEZHthguRSKLv3d/Eo0=";
+    hash = "sha256-Q4JrqyZbqdRk9nYk+u61CCHIucUOP4VjNALJRGaCfn4=";
   };
 
   cargoHash = "sha256-qioWGfg+cMaRNX6H6IWdcAU2py7oq9eNaxzKWw0H4R4=";
 
-  env.VERGEN_GIT_COMMIT_DATE = "2025-09-16";
-  env.VERGEN_GIT_SHA = finalAttrs.src.tag;
+  env = {
+    VERGEN_GIT_COMMIT_DATE = "2025-10-14";
+    VERGEN_GIT_SHA = finalAttrs.src.tag;
+  };
 
   cargoBuildFlags = [ "--all" ];
 
@@ -44,7 +45,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    cosmic-randr
     libinput
     linux-pam
     udev
@@ -70,7 +70,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   preFixup = ''
     libcosmicAppWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ cosmic-randr ]}
       --set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml
       --set-default X11_BASE_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/extra.xml
     )
