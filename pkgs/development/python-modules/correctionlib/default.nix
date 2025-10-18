@@ -62,6 +62,11 @@ buildPythonPackage rec {
     rich
   ];
 
+  env = {
+    # error: identifier '_' preceded by whitespace in a literal operator declaration is deprecated
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-literal-operator";
+  };
+
   nativeCheckInputs = [
     # One test requires running the produced `correctionlib` binary
     addBinToPathHook
