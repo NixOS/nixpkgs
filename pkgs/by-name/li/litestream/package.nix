@@ -1,6 +1,7 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  iana-etc,
   lib,
   nixosTests,
 }:
@@ -24,6 +25,10 @@ buildGoModule rec {
   vendorHash = "sha256-fVF07uFlntGxNAVJUfwMAYw6Ju5R7ATABdMT++VmqF4=";
 
   passthru.tests = { inherit (nixosTests) litestream; };
+
+  # The transitive dependency modernc.org/libc attempts reading /etc/protocols
+  # in a unit test. If the read fails, then the test fails.
+  nativeBuildInputs = [ iana-etc ];
 
   meta = with lib; {
     description = "Streaming replication for SQLite";
