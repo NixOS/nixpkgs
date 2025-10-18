@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  nixosTests,
   cmake,
   pkg-config,
   ninja,
@@ -27,6 +28,7 @@
   rustc-demangle,
   elfutils,
   perf,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -103,6 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
   postFixup = ''
     substituteInPlace ''${!outputDev}/lib/cmake/QtCreator/QtCreatorConfig.cmake --replace "$out/" ""
   '';
+
+  passthru = {
+    tests = nixosTests.qtcreator;
+    withPackages = callPackage ./with-plugins.nix { };
+  };
 
   meta = {
     description = "Cross-platform IDE tailored to the needs of Qt developers";
