@@ -22,6 +22,7 @@ from typing import Any
 
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
+from test_driver.vsock import VHostVsock
 
 from .ocr import perform_ocr_on_screenshot, perform_ocr_variants_on_screenshot
 from .qmp import QMPSession
@@ -124,6 +125,7 @@ class StartCommand:
         monitor_socket_path: Path,
         qmp_socket_path: Path,
         shell_socket_path: Path,
+        vhost_vsock: VHostVsock,
         allow_reboot: bool = False,
     ) -> str:
         display_opts = ""
@@ -147,6 +149,8 @@ class StartCommand:
         )
         if not allow_reboot:
             qemu_opts += " -no-reboot"
+
+        qemu_opts += vhost_vsock.qemu_args
 
         return (
             f"{self._cmd}"
@@ -176,6 +180,7 @@ class StartCommand:
     def run(
         self,
         state_dir: Path,
+        vhost_vsock: VHostVsock,
         shared_dir: Path,
         monitor_socket_path: Path,
         qmp_socket_path: Path,
@@ -184,7 +189,11 @@ class StartCommand:
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(
-                monitor_socket_path, qmp_socket_path, shell_socket_path, allow_reboot
+                monitor_socket_path,
+                qmp_socket_path,
+                shell_socket_path,
+                vhost_vsock,
+                allow_reboot,
             ),
             stdin=subprocess.PIPE,
             stdout=subprocess.PIPE,
@@ -226,6 +235,7 @@ class Machine:
     monitor_path: Path
     qmp_path: Path
     shell_path: Path
+    vhost_vsock: VHostVsock
 
     start_command: StartCommand
     keep_vm_state: bool
@@ -252,6 +262,7 @@ class Machine:
     def __init__(
         self,
         out_dir: Path,
+        vhost_vsock: VHostVsock,
         tmp_dir: Path,
         start_command: StartCommand,
         logger: AbstractLogger,
@@ -267,6 +278,7 @@ class Machine:
         self.callbacks = callbacks if callbacks is not None else []
         self.logger = logger
         self.full_console_log = []
+        self.vhost_vsock = vhost_vsock
 
         # set up directories
         self.shared_dir = self.tmp_dir / "shared-xchg"
@@ -1085,6 +1097,7 @@ class Machine:
         shell_socket = create_socket(clear(self.shell_path))
         self.process = self.start_command.run(
             self.state_dir,
+            self.vhost_vsock,
             self.shared_dir,
             self.monitor_path,
             self.qmp_path,

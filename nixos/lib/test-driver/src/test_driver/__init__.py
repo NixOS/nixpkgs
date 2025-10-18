@@ -13,6 +13,7 @@ from test_driver.logger import (
     TerminalLogger,
     XMLLogger,
 )
+from test_driver.vsock import vhost_device_vsock
 
 
 class EnvDefault(argparse.Action):
@@ -115,9 +116,9 @@ def main() -> None:
         type=Path,
     )
     arg_parser.add_argument(
-        "--dump-vsocks",
+        "--enable-ssh-backdoor",
         help="indicates that the interactive SSH backdoor is active and dumps information about it on start",
-        type=int,
+        action="store_true",
     )
 
     args = arg_parser.parse_args()
@@ -139,18 +140,25 @@ def main() -> None:
         debugger = Debug(logger, args.debug_hook_attach)
 
     scripts = [NixStartScript(s) for s in args.start_scripts]
-    with Driver(
-        scripts,
-        args.vlans,
-        args.testscript.read_text(),
-        output_directory,
-        logger,
-        args.keep_vm_state,
-        args.global_timeout,
-        debug=debugger,
-    ) as driver:
-        if offset := args.dump_vsocks:
-            driver.dump_machine_ssh(offset)
+    with (
+        vhost_device_vsock(
+            args.enable_ssh_backdoor, (sc.machine_name for sc in scripts)
+        ) as vsock_pairs,
+        Driver(
+            scripts,
+            vsock_pairs,
+            args.vlans,
+            args.testscript.read_text(),
+            output_directory,
+            logger,
+            args.keep_vm_state,
+            args.global_timeout,
+            debug=debugger,
+            enable_ssh_backdoor=args.enable_ssh_backdoor,
+        ) as driver,
+    ):
+        if args.enable_ssh_backdoor:
+            driver.dump_machine_ssh()
         if args.interactive:
             history_dir = os.getcwd()
             history_path = os.path.join(history_dir, ".nixos-test-history")
@@ -171,7 +179,7 @@ def generate_driver_symbols() -> None:
     in user's test scripts. That list is then used by pyflakes to lint those
     scripts.
     """
-    d = Driver([], [], "", Path(), CompositeLogger([]))
+    d = Driver([], {}, [], "", Path(), CompositeLogger([]))
     test_symbols = d.test_symbols()
     with open("driver-symbols", "w") as fp:
         fp.write(",".join(test_symbols.keys()))
