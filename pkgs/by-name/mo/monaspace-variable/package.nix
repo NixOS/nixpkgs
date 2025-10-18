@@ -4,19 +4,19 @@
   fetchzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "monaspace";
+  pname = "monaspace-variable";
   version = "1.301";
 
   src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-static-v${finalAttrs.version}.zip";
+    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-variable-v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-H6J4InGyXabZuslywuzNYqw14zymzF90JKxa7CikOIM=";
+    hash = "sha256-VjRZ/IWScYuAilPgVecmT6ZpLVGOKDT61H5EvolbG+w=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 Static\ Fonts/**/*.otf -t $out/share/fonts/opentype
+    install -Dm644 Variable\ Fonts/**/*.ttf -t $out/share/fonts/truetype
 
     runHook postInstall
   '';

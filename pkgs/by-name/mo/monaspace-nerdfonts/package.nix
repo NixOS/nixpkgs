@@ -4,19 +4,19 @@
   fetchzip,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "monaspace";
+  pname = "monaspace-nerdfonts";
   version = "1.301";
 
   src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-static-v${finalAttrs.version}.zip";
+    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-nerdfonts-v${finalAttrs.version}.zip";
     stripRoot = false;
-    hash = "sha256-H6J4InGyXabZuslywuzNYqw14zymzF90JKxa7CikOIM=";
+    hash = "sha256-okhtInxOcIjS3A2w2q6f4EloMF7I8nBuD5aSreQr9bI=";
   };
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 Static\ Fonts/**/*.otf -t $out/share/fonts/opentype
+    install -Dm644 NerdFonts/**/*.otf -t $out/share/fonts/opentype
 
     runHook postInstall
   '';
