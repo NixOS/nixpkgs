@@ -1,5 +1,6 @@
 {
   alsa-lib,
+  copyDesktopItems,
   dbus,
   fetchFromGitHub,
   fontconfig,
@@ -10,6 +11,7 @@
   libXext,
   libXrandr,
   libxkbcommon,
+  makeDesktopItem,
   makeWrapper,
   nix-update-script,
   openvr,
@@ -55,6 +57,7 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
     pkg-config
     rustPlatform.bindgenHook
+    copyDesktopItems
   ];
 
   buildInputs = [
@@ -81,12 +84,29 @@ rustPlatform.buildRustPackage rec {
 
     # TODO: src/res/keyboard.yaml references 'whisper_stt'
   '';
+  postInstall = ''
+    install -Dm644 wlx-overlay-s.svg $out/share/icons/hicolor/scalable/apps/wlx-overlay-s.svg
+  '';
 
   passthru = {
     tests.testVersion = testers.testVersion { package = wlx-overlay-s; };
 
     updateScript = nix-update-script { };
   };
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "wlx-overlay-s";
+      desktopName = "WlxOverlay-S";
+      exec = "wlx-overlay-s";
+      icon = "wlx-overlay-s";
+      terminal = true;
+      categories = [
+        "Utility"
+        "X-WiVRn-VR"
+      ];
+    })
+  ];
 
   meta = {
     description = "Wayland/X11 desktop overlay for SteamVR and OpenXR, Vulkan edition";
