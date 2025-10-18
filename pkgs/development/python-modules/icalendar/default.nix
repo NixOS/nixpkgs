@@ -9,12 +9,19 @@
   tzdata,
   hypothesis,
   pytestCheckHook,
+  sphinxHook,
+  sphinx-copybutton,
+  pydata-sphinx-theme,
 }:
 
 buildPythonPackage rec {
   version = "6.3.1";
   pname = "icalendar";
   pyproject = true;
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "collective";
@@ -42,6 +49,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     hypothesis
     pytestCheckHook
+    sphinxHook
+    sphinx-copybutton
+    pydata-sphinx-theme
   ];
 
   disabledTests = [
