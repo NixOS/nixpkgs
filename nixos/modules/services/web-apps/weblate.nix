@@ -374,7 +374,7 @@ in
               --bind='unix:///run/weblate.socket' \
               weblate.wsgi
           '';
-        ExecReload = "kill -s HUP $MAINPID";
+        ExecReload = "${lib.getExe' pkgs.coreutils "kill"} -s HUP $MAINPID";
         KillMode = "mixed";
         PrivateTmp = true;
         WorkingDirectory = dataDir;
