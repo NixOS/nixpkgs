@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swagger-codegen";
-  version = "3.0.74";
+  version = "3.0.75";
 
   src = fetchurl {
     url = "mirror://maven/io/swagger/codegen/v3/swagger-codegen-cli/${finalAttrs.version}/swagger-codegen-cli-${finalAttrs.version}.jar";
-    hash = "sha256-ZrvSlwrNwcMXOUdaiBnqyDpRkFx7b34JOrRiaUWfAnw=";
+    hash = "sha256-Na6aWKq1SU/zWfxRf4ZH73lJy/dwbzz7coXP61zFv+E=";
   };
 
   dontUnpack = true;
