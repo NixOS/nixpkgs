@@ -20,6 +20,46 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     ).data
 
+    // When the same change has already been merged to the target branch, a PR will still be
+    // open and display the same changes - but will not actually have any effect. This causes
+    // strange CI behavior, because the diff of the merge-commit is empty, no rebuilds will
+    // be detected, no maintainers pinged.
+    // We can just check the temporary merge commit, and if it's empty the PR can safely be
+    // closed - there are no further changes.
+    if (pull_request.merge_commit_sha) {
+      const commit = (
+        await github.rest.repos.getCommit({
+          ...context.repo,
+          ref: pull_request.merge_commit_sha,
+        })
+      ).data
+
+      if (commit.files.length === 0) {
+        const body = [
+          `The diff for the temporary merge commit ${pull_request.merge_commit_sha} is empty.`,
+          'The changes in this PR have almost certainly already been merged to the target branch.',
+        ].join('\n')
+
+        core.info(`PR #${item.number}: closed`)
+
+        if (!dry) {
+          await github.rest.issues.createComment({
+            ...context.repo,
+            issue_number: pull_number,
+            body,
+          })
+
+          await github.rest.pulls.update({
+            ...context.repo,
+            pull_number,
+            state: 'closed',
+          })
+        }
+
+        return {}
+      }
+    }
+
     const reviews = await github.paginate(github.rest.pulls.listReviews, {
       ...context.repo,
       pull_number,
