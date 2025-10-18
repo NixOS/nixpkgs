@@ -3,35 +3,31 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  qmake,
-  qttools,
-  wrapQtAppsHook,
   alsa-lib,
   flac,
   libjack2,
   libogg,
   libvorbis,
-  qtsvg,
-  qtwayland,
   rtmidi,
+  kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "2.4.1";
   pname = "polyphone";
 
   src = fetchFromGitHub {
     owner = "davy7125";
     repo = "polyphone";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-43EswCgNJv11Ov+4vmj2vS/yJ2atyzkRmk/SoCKYD/0=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    qmake
-    qttools
-    wrapQtAppsHook
+    kdePackages.qmake
+    kdePackages.qttools
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -40,8 +36,8 @@ stdenv.mkDerivation rec {
     libjack2
     libogg
     libvorbis
-    qtsvg
-    qtwayland
+    kdePackages.qtsvg
+    kdePackages.qtwayland
     rtmidi
   ];
 
@@ -52,23 +48,23 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     # Work around https://github.com/NixOS/nixpkgs/issues/214765
     substituteInPlace Makefile \
-      --replace-fail "$(dirname $QMAKE)/lrelease" "${lib.getBin qttools}/bin/lrelease"
+      --replace-fail "$(dirname $QMAKE)/lrelease" "${lib.getBin kdePackages.qttools}/bin/lrelease"
   '';
 
   qmakeFlags = [
     "DEFINES+=USE_LOCAL_STK"
   ];
 
-  meta = with lib; {
+  meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Soundfont editor for creating musical instruments";
     mainProgram = "polyphone";
     homepage = "https://www.polyphone-soundfonts.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
       maxdamantus
       orivej
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

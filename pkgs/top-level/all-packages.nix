@@ -12010,8 +12010,6 @@ with pkgs;
     i3Support = true;
   };
 
-  polyphone = qt6.callPackage ../applications/audio/polyphone { };
-
   scx = recurseIntoAttrs (callPackage ../os-specific/linux/scx { });
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
