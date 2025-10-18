@@ -214,7 +214,7 @@ in
           SCRUTINY_WEB_SRC_FRONTEND_PATH = "${cfg.package}/share/scrutiny";
         };
         preStart = ''
-          ${genJqSecretsReplacementSnippet cfg.settings "/run/scrutiny/config.yaml"}
+          ${(genJqSecretsReplacementSnippet { } cfg.settings "/run/scrutiny/config.yaml").script}
         '';
         postStart = ''
           for i in $(seq 300); do
@@ -258,7 +258,9 @@ in
             COLLECTOR_API_ENDPOINT = cfg.collector.settings.api.endpoint;
           };
           preStart = ''
-            ${genJqSecretsReplacementSnippet cfg.collector.settings "/run/scrutiny-collector/config.yaml"}
+            ${(genJqSecretsReplacementSnippet { } cfg.collector.settings "/run/scrutiny-collector/config.yaml")
+              .script
+            }
           '';
           serviceConfig = {
             Type = "oneshot";

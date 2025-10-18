@@ -95,7 +95,7 @@ in
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         umask 0077
-        ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/artalk/new"}
+        ${(utils.genJqSecretsReplacementSnippet { } cfg.settings "/run/artalk/new").script}
       ''
       + (
         if cfg.allowModify then

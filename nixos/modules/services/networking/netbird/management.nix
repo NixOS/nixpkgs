@@ -381,7 +381,8 @@ in
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ managementFile ];
 
-      preStart = genJqSecretsReplacementSnippet managementConfig "${stateDir}/management.json";
+      preStart =
+        (genJqSecretsReplacementSnippet { } managementConfig "${stateDir}/management.json").script;
 
       serviceConfig = {
         ExecStart = escapeSystemdExecArgs (
