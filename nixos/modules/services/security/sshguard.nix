@@ -165,7 +165,10 @@ in
           ${pkgs.ipset}/bin/ipset -quiet destroy sshguard6
         '';
 
-      unitConfig.Documentation = "man:sshguard(8)";
+      documentation = [
+        "man:sshguard(8)"
+        "man:sshguard-setup(8)"
+      ];
 
       serviceConfig = {
         Type = "simple";
