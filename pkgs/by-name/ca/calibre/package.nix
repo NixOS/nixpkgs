@@ -233,6 +233,7 @@ stdenv.mkDerivation (finalAttrs: {
       $ETN 'test_recipe_browser_webengine'
 
       ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_plugins'"} # loading onnxruntime on aarch64 tries to access /sys
       ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
     )
 
