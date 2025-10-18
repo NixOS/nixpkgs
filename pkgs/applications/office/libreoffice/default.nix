@@ -315,19 +315,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./readd-explicit-zlib-link.patch
 
   ]
-  ++ lib.optionals (lib.versionOlder version "25.8") [
+  ++ lib.optionals (variant == "collabora") [
     # Backport patch to fix build with Poppler 25.05
     (fetchpatch2 {
       url = "https://github.com/LibreOffice/core/commit/0ee2636304ac049f21415c67e92040f7d6c14d35.patch";
       includes = [ "sdext/*" ];
       hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
-    })
-  ]
-  ++ lib.optionals (lib.versionOlder version "24.8") [
-    (fetchpatch2 {
-      name = "icu74-compat.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/main/libreoffice-7.5.8.2-icu-74-compatibility.patch?ref_type=heads.patch";
-      hash = "sha256-OGBPIVQj8JTYlkKywt4QpH7ULAzKmet5jTLztGpIS0Y=";
     })
   ]
   ++ lib.optionals (variant == "collabora") [
@@ -594,6 +587,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     # cannot find headers, no idea why
     "--without-system-boost"
+
+    "--with-system-rhino"
+    "--with-rhino-jar=${rhino}/share/java/js.jar"
+
+    "--without-system-java-websocket"
   ]
   ++ optionals kdeIntegration [
     "--enable-kf6"
@@ -603,21 +601,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-system-beanshell"
     "--with-ant-home=${ant.home}"
     "--with-beanshell-jar=${bsh}"
-  ]
-  ++ (
-    if variant == "fresh" || variant == "collabora" then
-      [
-        "--with-system-rhino"
-        "--with-rhino-jar=${rhino}/share/java/js.jar"
-
-        "--without-system-java-websocket"
-      ]
-    else
-      [
-        # our Rhino is too new for older versions
-        "--without-system-rhino"
-      ]
-  );
+  ];
 
   env = {
     # FIXME: this is a hack, because the right cflags are not being picked up
