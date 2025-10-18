@@ -1,0 +1,39 @@
+diff -r -u a/triggers/desktop-database.trigger b/triggers/desktop-database.trigger
+--- a/triggers/desktop-database.trigger	2025-05-11 11:19:30.000000000 +0900
++++ b/triggers/desktop-database.trigger	2025-10-18 11:47:22.412091631 +0900
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+ 
+-if command -v update-desktop-database >/dev/null && test -d "$1/exports/share/applications"; then
+-    exec update-desktop-database -q "$1/exports/share/applications"
++if test -d "$1/exports/share/applications"; then
++    exec @updateDesktopDatabase@ -q "$1/exports/share/applications"
+ fi
+diff -r -u a/triggers/gtk-icon-cache.trigger b/triggers/gtk-icon-cache.trigger
+--- a/triggers/gtk-icon-cache.trigger	2025-05-11 11:19:30.000000000 +0900
++++ b/triggers/gtk-icon-cache.trigger	2025-10-18 11:48:35.308576967 +0900
+@@ -1,10 +1,10 @@
+ #!/bin/sh
+ 
+-if command -v gtk-update-icon-cache >/dev/null && test -d "$1/exports/share/icons/hicolor"; then
+-    cp /usr/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
++if test -d "$1/exports/share/icons/hicolor"; then
++    @coreutils@/bin/cp @hicolorIconTheme@/share/icons/hicolor/index.theme "$1/exports/share/icons/hicolor/"
+     for dir in "$1"/exports/share/icons/*; do
+         if test -f "$dir/index.theme"; then
+-            if ! gtk-update-icon-cache --quiet "$dir"; then
++            if ! @gtkUpdateIconCache@ --quiet "$dir"; then
+                 echo "Failed to run gtk-update-icon-cache for $dir"
+                 exit 1
+             fi
+diff -r -u a/triggers/mime-database.trigger b/triggers/mime-database.trigger
+--- a/triggers/mime-database.trigger	2025-05-11 11:19:30.000000000 +0900
++++ b/triggers/mime-database.trigger	2025-10-18 11:48:44.749016603 +0900
+@@ -1,5 +1,5 @@
+ #!/bin/sh
+ 
+-if command -v update-mime-database >/dev/null && test -d "$1/exports/share/mime/packages"; then
+-    exec update-mime-database "$1/exports/share/mime"
++if test -d "$1/exports/share/mime/packages"; then
++    exec @updateMimeDatabase@ "$1/exports/share/mime"
+ fi

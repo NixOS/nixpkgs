@@ -118,6 +118,16 @@ stdenv.mkDerivation (finalAttrs: {
     # The icon validator needs to access the gdk-pixbuf loaders in the Nix store
     # and cannot bind FHS paths since those are not available on NixOS.
     finalAttrs.passthru.icon-validator-patch
+
+    # Hardcode paths used by Flatpak triggers
+    # https://github.com/NixOS/nixpkgs/issues/404619
+    (replaceVars ./fix-trigger-paths.patch {
+      inherit coreutils;
+      updateDesktopDatabase = lib.getExe' desktop-file-utils "update-desktop-database";
+      hicolorIconTheme = hicolor-icon-theme;
+      gtkUpdateIconCache = lib.getExe' gtk3 "gtk-update-icon-cache";
+      updateMimeDatabase = lib.getExe' shared-mime-info "update-mime-database";
+    })
   ]
   ++ lib.optionals finalAttrs.doCheck [
     # Hardcode paths used by tests and change test runtime generation to use files from Nix store.
