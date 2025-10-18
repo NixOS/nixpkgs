@@ -1,0 +1,13 @@
+diff --git a/glycin/src/sandbox.rs b/glycin/src/sandbox.rs
+index 12a9dafcdf..8f2e9d8d2d 100644
+--- a/glycin/src/sandbox.rs
++++ b/glycin/src/sandbox.rs
+@@ -164,7 +164,7 @@
+     "unlinkat",
+ ];
+
+-const INHERITED_ENVIRONMENT_VARIABLES: &[&str] = &["RUST_BACKTRACE", "RUST_LOG", "XDG_RUNTIME_DIR"];
++const INHERITED_ENVIRONMENT_VARIABLES: &[&str] = &["RUST_BACKTRACE", "RUST_LOG", "XDG_RUNTIME_DIR", "PATH"];
+
+ pub struct Sandbox {
+     sandbox_mechanism: SandboxMechanism,
