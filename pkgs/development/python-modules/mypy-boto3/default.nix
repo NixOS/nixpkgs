@@ -430,8 +430,8 @@ in
       "sha256-dtw54zAzP4HddWx0kZr7SzxmWiKCiiP6g4+aDRRid2k=";
 
   mypy-boto3-ds =
-    buildMypyBoto3Package "ds" "1.40.42"
-      "sha256-gKzshS6Q6O/lTAsrkuXOvKkGz+ECRlmSeb5NxNCBim8=";
+    buildMypyBoto3Package "ds" "1.40.55"
+      "sha256-obbn0FjZQDwFucsnH3N1+zfe1aWFE5PWHUWiLAeupqA=";
 
   mypy-boto3-dynamodb =
     buildMypyBoto3Package "dynamodb" "1.40.44"
