@@ -38,6 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper "${jdk21}/bin/java" "$out/bin/jenkins-cli" \
       --add-flags "-jar $out/share/jenkins-cli.jar"
+
+    makeWrapper "${openjdk}/bin/java" "$out/bin/jenkins-server" \
+      --add-flags "-jar $out/webapps/jenkins.war"
   '';
 
   passthru = {
