@@ -32,26 +32,27 @@
   libgcc,
   krb5,
   wrapGAppsHook3,
+  _experimental-update-script-combinators,
 }:
 let
-  version = "5";
+  version = "10";
   src = fetchFromGitLab {
     domain = "gitlab.futo.org";
     owner = "videostreaming";
     repo = "Grayjay.Desktop";
     tag = version;
-    hash = "sha256-xrbYghNymny6MQrvFn++GaI+kUoOphPQMWcqH47U1Yg=";
+    hash = "sha256-ap0NnjyBjvyFjHPu9vACQMoOXqwz90/8QqSfPFqfh5U=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
   frontend = buildNpmPackage {
-    name = "grayjay-frontend";
+    pname = "grayjay-frontend";
     inherit version src;
 
     sourceRoot = "source/Grayjay.Desktop.Web";
 
     npmBuildScript = "build";
-    npmDepsHash = "sha256-pTEbMSAJwTY6ZRriPWfBFnRHSYufSsD0d+hWGz35xFM=";
+    npmDepsHash = "sha256-3RMUV6o6422PEuqYg7B+y6JjlaiHDhnwsgsaKEbu5BM=";
 
     installPhase = ''
       runHook preInstall
@@ -60,7 +61,7 @@ let
     '';
   };
 in
-buildDotnetModule {
+buildDotnetModule (finalAttrs: {
   pname = "grayjay";
 
   inherit version src frontend;
@@ -113,6 +114,16 @@ buildDotnetModule {
 
   nugetDeps = ./deps.json;
 
+  dotnet-sdk = dotnetCorePackages.sdk_9_0 // {
+    inherit
+      (dotnetCorePackages.combinePackages [
+        dotnetCorePackages.sdk_9_0
+        dotnetCorePackages.sdk_8_0
+      ])
+      packages
+      targetPackages
+      ;
+  };
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
 
   executables = [ "Grayjay" ];
@@ -164,14 +175,17 @@ buildDotnetModule {
     libsecret
   ];
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "frontend"
-      "--url"
-      "https://github.com/futo-org/Grayjay.Desktop"
-    ];
-  };
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+        "--url"
+        "https://github.com/futo-org/Grayjay.Desktop"
+      ];
+    })
+    (finalAttrs.passthru.fetch-deps)
+  ];
 
   meta = {
     description = "Cross-platform application to stream and download content from various sources";
@@ -188,4 +202,4 @@ buildDotnetModule {
     platforms = [ "x86_64-linux" ];
     mainProgram = "Grayjay";
   };
-}
+})
