@@ -7,10 +7,10 @@
 
 let
   pname = "wootility";
-  version = "5.1.1";
+  version = "5.1.2";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
-    sha256 = "sha256-NDTRsrOZljvFOkvBN40CmH4GD6szT3c9qoFdFGpZ5Oc=";
+    sha256 = "sha256-JcVyuilhy1qjXyIeniXZ0s4qxXr/4wLXrXgTTxjCkBk=";
   };
 in
 
