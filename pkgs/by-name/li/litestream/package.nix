@@ -1,18 +1,19 @@
 {
   buildGoModule,
   fetchFromGitHub,
+  iana-etc,
   lib,
   nixosTests,
 }:
 buildGoModule rec {
   pname = "litestream";
-  version = "0.3.13";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "benbjohnson";
     repo = "litestream";
     rev = "v${version}";
-    sha256 = "sha256-p858gK+ICKDQ+/LUiBaxF/kfrZzQAXnYMZDFU8kNCJ4=";
+    sha256 = "sha256-u0l95Hkhbga6WLKhxlv+Ce/ImCUkvuOj/zdo9KAMjeE=";
   };
 
   ldflags = [
@@ -21,11 +22,13 @@ buildGoModule rec {
     "-X main.Version=${version}"
   ];
 
-  vendorHash = "sha256-sYIY3Z3VrCqbjEbQtEY7q6Jljg8jMoa2qWEB/IkDjzM=";
-
-  patches = [ ./fix-cve-2024-41254.patch ];
+  vendorHash = "sha256-fVF07uFlntGxNAVJUfwMAYw6Ju5R7ATABdMT++VmqF4=";
 
   passthru.tests = { inherit (nixosTests) litestream; };
+
+  # The transitive dependency modernc.org/libc attempts reading /etc/protocols
+  # in a unit test. If the read fails, then the test fails.
+  nativeBuildInputs = [ iana-etc ];
 
   meta = with lib; {
     description = "Streaming replication for SQLite";
