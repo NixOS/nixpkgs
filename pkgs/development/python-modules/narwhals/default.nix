@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_convert_time_zone_to_connection_tz_pyspark"
     "test_replace_time_zone_to_connection_tz_pyspark"
     "test_lazy"
+    # Incompatible with ibis 11
+    "test_unique_3069"
   ];
 
   pytestFlags = [

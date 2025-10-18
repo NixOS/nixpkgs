@@ -64,7 +64,7 @@
 
 let
   pname = "ray";
-  version = "2.50.0";
+  version = "2.50.1";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -84,22 +84,22 @@ buildPythonPackage rec {
       # Results are in ./ray-hashes.nix
       hashes = {
         x86_64-linux = {
-          cp310 = "sha256-yDG/+6D28N+iW2XFuAACLHI0y+wbmKjt4X+XzIJfcA0=";
-          cp311 = "sha256-A7Zfzo7eJuKlI2XyCWfAmzo16dfSuFZkXcxoBDWkfkM=";
-          cp312 = "sha256-IUoAZIlBnHhnFcsqgbPFLIjgjqMpX0i6l6tpuIjY+Bg=";
-          cp313 = "sha256-g40spgZcElW2xw8dIEHKC2qzq6uQgzA7ZdezE4wCLeI=";
+          cp310 = "sha256-3qnMYOkt0IlokVZ1bm2ZyZ/j5JE0GA9xVDay41K134Y=";
+          cp311 = "sha256-hfR2u05mfarWUxjymjWxPW+qjgUwB5xmfVSMAMLZJeg=";
+          cp312 = "sha256-dciE4x1NwMOE1KS2jpYRF1tqy6hiI1K8q7cxkMufjD8=";
+          cp313 = "sha256-elJVS9VfKmGIr1b/5ce9l35A65e3tigtgnqNOnPweJo=";
         };
         aarch64-linux = {
-          cp310 = "sha256-AGKn+lY/QkZlsc3sD+6ccHCNqAfsxZFsSZJaIUOIl9A=";
-          cp311 = "sha256-sTkjnzAUDpgve8X7HMJpSKCnbJgOujce/d4/sEXQp+Q=";
-          cp312 = "sha256-z94CocsRRIF1ir/kC0uMMa/hmRUIhzciUUZiVnVpEcs=";
-          cp313 = "sha256-E1xwySvTwwUEQckFV26HG4edykhmSSGMRSQaPsRXI5k=";
+          cp310 = "sha256-sGGBb4rtS8oLgRdNv/5xfGn7e8og79j3VWDTpvjMsoA=";
+          cp311 = "sha256-duHqpifhm3Bvoh5InLppLHFD19NYQzc7pxlB3vB6tYs=";
+          cp312 = "sha256-qEJP06Sh7zFKhfgMNh8i6b2UnHpj4jjPQXLcGVWxLHw=";
+          cp313 = "sha256-QMtWy4Kid51bJna3vNkR0PCnjSI0oVq7T5gkFbZRz8o=";
         };
         aarch64-darwin = {
-          cp310 = "sha256-sWTWr0IMejioMj+P83iLjFfO9GebNIg1ShI3GqwBh04=";
-          cp311 = "sha256-YZsua4gNWvEm3x382qJzFO3UPSxtYxXgHR4xGDmr/+Q=";
-          cp312 = "sha256-5oOYG1H/U0wJpIs6W2X8YYht49qKroc4I5WR2rK2fOU=";
-          cp313 = "sha256-w9qWaV4/Y70O7K1tMOx89tAwmoc44xrCcJV4ErzBzYs=";
+          cp310 = "sha256-DuYbabBqy3dU9s0IcWCEzklfu9ljrrcs+00UUl0OCWk=";
+          cp311 = "sha256-uzP9gWhP6tSqtwa9iLCqJ7lGhJBr+1EeWcxXVohaP28=";
+          cp312 = "sha256-cj5WyBk/it3j7BiBerQ3rRzJ1Oct8SY+hWl74oLPxSY=";
+          cp313 = "sha256-JUolfcK6Q0mkeErx8gTE2BaZCOp3mi5dTehzEatfUl8=";
         };
       };
     in
