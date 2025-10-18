@@ -770,7 +770,7 @@ rec {
       ''
       + (
         let
-          env = cfg.globalEnvironment // def.environment;
+          env = def.environment;
         in
         concatMapStrings (
           n:
