@@ -54,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   cmakeFlags = [
+    (lib.cmakeBool "WITH_DEVIL" false)
     (lib.cmakeBool "WITH_FREEIMAGE" false)
   ];
 
