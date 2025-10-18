@@ -1595,9 +1595,8 @@ with pkgs;
 
   blocksat-cli = with python3Packages; toPythonApplication blocksat-cli;
 
+  bucklespring-x11 = callPackage ../by-name/bu/bucklespring-libinput/package.nix { legacy = true; };
   bucklespring = bucklespring-x11;
-  bucklespring-libinput = callPackage ../applications/audio/bucklespring { };
-  bucklespring-x11 = callPackage ../applications/audio/bucklespring { legacy = true; };
 
   buildbotPackages = recurseIntoAttrs (
     callPackage ../development/tools/continuous-integration/buildbot { }
@@ -2927,9 +2926,7 @@ with pkgs;
     godot-export-templates-bin
     ;
 
-  goattracker = callPackage ../applications/audio/goattracker { };
-
-  goattracker-stereo = callPackage ../applications/audio/goattracker {
+  goattracker-stereo = callPackage ../by-name/go/goattracker/package.nix {
     isStereo = true;
   };
 
@@ -10782,8 +10779,6 @@ with pkgs;
   apngasm = callPackage ../applications/graphics/apngasm { };
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix { };
 
-  ardour = callPackage ../applications/audio/ardour { };
-
   arelle = with python3Packages; toPythonApplication arelle;
 
   astroid = callPackage ../applications/networking/mailreaders/astroid {
@@ -10825,7 +10820,6 @@ with pkgs;
     callPackage ../applications/science/electronics/bitscope/packages.nix { }
   );
 
-  bitwig-studio3 = callPackage ../applications/audio/bitwig-studio/bitwig-studio3.nix { };
   bitwig-studio4 = callPackage ../applications/audio/bitwig-studio/bitwig-studio4.nix {
     libjpeg = libjpeg8;
   };
@@ -10905,8 +10899,6 @@ with pkgs;
   confclerk = libsForQt5.callPackage ../applications/misc/confclerk { };
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
-
-  csound = callPackage ../applications/audio/csound { };
 
   csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt { };
 
@@ -11408,11 +11400,7 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  libmt32emu = callPackage ../applications/audio/munt/libmt32emu.nix { };
-
   mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
-
-  mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
 
   noson = libsForQt5.callPackage ../applications/audio/noson { };
 
@@ -11794,8 +11782,6 @@ with pkgs;
     steamSupport = false;
   };
 
-  lv2lint = callPackage ../applications/audio/lv2lint/default.nix { };
-
   lxi-tools = callPackage ../tools/networking/lxi-tools { };
   lxi-tools-gui = callPackage ../tools/networking/lxi-tools { withGui = true; };
 
@@ -11975,8 +11961,6 @@ with pkgs;
     }).mumble;
 
   mumble_overlay = (callPackages ../applications/networking/mumble { }).overlay;
-
-  musescore = qt6.callPackage ../applications/audio/musescore { };
 
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
