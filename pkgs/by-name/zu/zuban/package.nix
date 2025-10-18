@@ -1,30 +1,34 @@
 {
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
   nix-update-script,
+  python3,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "zuban";
 
-  version = "0.0.23";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "zubanls";
     repo = "zuban";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-EPF1HW/oqUKHLTorkO3C+X+ziq6i1lCxGY5y1ioKg6A=";
+    hash = "sha256-nm6HSyoK1DC+x6ojAt9snBM7fiwrC2AW4/rsEEtp/CU=";
+    fetchSubmodules = true;
   };
 
   buildAndTestSubdir = "crates/zuban";
 
-  cargoHash = "sha256-TAFdS4NmXchmhqVRcsckz6GhZG35IE2fukDlZiRF8Ms=";
+  cargoHash = "sha256-Etjo2/2HKe0fOZKVrAaIZCWiuCp3TOmPGnbxBMfYCHA=";
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  postInstall = ''
+    mkdir -p $out/${python3.sitePackages}/zuban
+    cp -r typeshed $out/${python3.sitePackages}/zuban/typeshed
+  '';
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
