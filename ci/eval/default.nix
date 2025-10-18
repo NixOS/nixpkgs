@@ -95,6 +95,10 @@ let
         system=$3
         outputDir=$4
 
+        # Default is 5, higher values effectively disable the warning.
+        # This randomly breaks Eval.
+        export GC_LARGE_ALLOC_WARN_INTERVAL=1000
+
         export NIX_SHOW_STATS=1
         export NIX_SHOW_STATS_PATH="$outputDir/stats/$myChunk"
         echo "Chunk $myChunk on $system start"
