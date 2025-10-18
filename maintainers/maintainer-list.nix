@@ -22162,6 +22162,12 @@
     githubId = 641278;
     name = "Robert T. McGibbon";
   };
+  rmgaray = {
+    email = "ramiro.sgaray@gmail.com";
+    github = "rmgaray";
+    githubId = 29001707;
+    name = "Ramiro Sergio Garay";
+  };
   rmgpinto = {
     email = "hessian_loom_0u@icloud.com";
     github = "rmgpinto";
