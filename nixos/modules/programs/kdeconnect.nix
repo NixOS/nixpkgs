@@ -25,7 +25,7 @@
       cfg = config.programs.kdeconnect;
     in
     lib.mkIf cfg.enable {
-      environment.systemPackages = lib.optional (cfg.package != null) [
+      environment.systemPackages = lib.optionals (cfg.package != null) [
         cfg.package
       ];
       networking.firewall = rec {
