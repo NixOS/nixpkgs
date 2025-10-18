@@ -20,7 +20,7 @@ let
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv "$HOME/.cache/ksycoca"*
+    rm -fv "''${XDG_CACHE_HOME:-$HOME/.cache}/ksycoca"*
   '';
 in
 {
