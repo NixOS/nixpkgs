@@ -16,7 +16,6 @@
       implementation if you use Gnome
     '';
     package = lib.mkPackageOption pkgs [ "kdePackages" "kdeconnect-kde" ] {
-      nullable = true;
       example = "gnomeExtensions.gsconnect";
     };
   };
@@ -25,7 +24,7 @@
       cfg = config.programs.kdeconnect;
     in
     lib.mkIf cfg.enable {
-      environment.systemPackages = lib.optional (cfg.package != null) [
+      environment.systemPackages = [
         cfg.package
       ];
       networking.firewall = rec {
