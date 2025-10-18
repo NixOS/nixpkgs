@@ -151,7 +151,7 @@ in
         LogsDirectory = "pufferpanel";
         LogsDirectoryMode = "0700";
 
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
 
         # Command "pufferpanel shutdown --pid $MAINPID" sends SIGTERM (code 15)
         # to the main process and waits for termination. This is essentially

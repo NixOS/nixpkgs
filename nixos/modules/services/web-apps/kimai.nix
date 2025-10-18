@@ -340,7 +340,7 @@ in
               Type = "oneshot";
               User = user;
               Group = webserver.group;
-              EnvironmentFile = [ cfg.environmentFile ];
+              EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
             };
           })
         ) eachSite)
@@ -349,7 +349,7 @@ in
           hostName: cfg:
           (nameValuePair "phpfpm-kimai-${hostName}" {
             serviceConfig = {
-              EnvironmentFile = [ cfg.environmentFile ];
+              EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
             };
           })
         ) eachSite)
