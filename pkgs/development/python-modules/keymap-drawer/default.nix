@@ -2,9 +2,11 @@
   lib,
 
   buildPythonPackage,
+  callPackages,
   fetchFromGitHub,
   pythonOlder,
 
+  keymap-drawer,
   nix-update-script,
   pcpp,
   platformdirs,
@@ -59,6 +61,12 @@ buildPythonPackage {
   versionCheckProgram = "${placeholder "out"}/bin/keymap";
   versionCheckProgramArg = "--version";
 
+  passthru.tests = callPackages ./tests {
+    # Explicitly pass the correctly scoped package.
+    # The top-level package will still resolve to itself, because the way
+    # `toPythonApplication` interacts with scopes is weird.
+    inherit keymap-drawer;
+  };
   passthru.updateScript = nix-update-script { };
 
   meta = {
