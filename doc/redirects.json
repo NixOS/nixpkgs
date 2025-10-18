@@ -20,6 +20,12 @@
   "cmake-ctest-variables": [
     "index.html#cmake-ctest-variables"
   ],
+  "coq-withPackages": [
+    "index.html#coq-withPackages"
+  ],
+  "coq-withPackages-usage": [
+    "index.html#coq-withPackages-usage"
+  ],
   "cuda": [
     "index.html#cuda"
   ],
