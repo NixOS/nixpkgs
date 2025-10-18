@@ -6,25 +6,6 @@
 }:
 let
   cfg = config.services.sshguard;
-
-  configFile =
-    let
-      args = lib.concatStringsSep " " (
-        [
-          "-afb"
-          "-p info"
-          "-o cat"
-          "-n1"
-        ]
-        ++ (map (name: "-t ${lib.escapeShellArg name}") cfg.services)
-      );
-      backend = if config.networking.nftables.enable then "sshg-fw-nft-sets" else "sshg-fw-ipset";
-    in
-    pkgs.writeText "sshguard.conf" ''
-      BACKEND="${pkgs.sshguard}/libexec/${backend}"
-      LOGREADER="LANG=C ${config.systemd.package}/bin/journalctl ${args}"
-    '';
-
 in
 {
 
@@ -112,7 +93,23 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    environment.etc."sshguard.conf".source = configFile;
+    environment.etc."sshguard.conf".text =
+      let
+        args = lib.concatStringsSep " " (
+          [
+            "-afb"
+            "-p info"
+            "-o cat"
+            "-n1"
+          ]
+          ++ (map (name: "-t ${lib.escapeShellArg name}") cfg.services)
+        );
+        backend = if config.networking.nftables.enable then "sshg-fw-nft-sets" else "sshg-fw-ipset";
+      in
+      ''
+        BACKEND="${pkgs.sshguard}/libexec/${backend}"
+        LOGREADER="LANG=C ${config.systemd.package}/bin/journalctl ${args}"
+      '';
 
     systemd.services.sshguard = {
       description = "SSHGuard brute-force attacks protection system";
@@ -121,7 +118,7 @@ in
       after = [ "network.target" ];
       partOf = lib.optional config.networking.firewall.enable "firewall.service";
 
-      restartTriggers = [ configFile ];
+      restartTriggers = [ config.environment.etc."sshguard.conf".source ];
 
       path =
         with pkgs;
