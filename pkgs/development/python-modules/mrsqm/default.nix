@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mrsqm";
-  version = "4";
+  version = "0.0.7";
   pyproject = true;
 
   build-system = [
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mlgig";
     repo = "mrsqm";
-    tag = "r${version}";
-    hash = "sha256-59f18zItV3K6tXcg1v1q2Z8HYrQB8T0ntaaqjxeAEbM=";
+    tag = "v.${version}";
+    hash = "sha256-5K6vCU0HExnmYNThZNDCbEtII9bUGauxDtKkJXe/85Q=";
   };
 
   buildInputs = [ fftw ];

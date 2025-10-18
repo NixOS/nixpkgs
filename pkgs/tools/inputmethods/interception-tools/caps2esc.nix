@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Transforming the most useless key ever into the most useful one";
     mainProgram = "caps2esc";
     license = licenses.mit;
-    maintainers = [ maintainers.vyp ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

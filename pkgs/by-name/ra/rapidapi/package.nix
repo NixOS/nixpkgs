@@ -16,11 +16,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rapidapi";
-  version = "4.2.8-4002008002";
+  version = "4.4.3-4004003001";
 
   src = fetchurl {
     url = "https://cdn-builds.paw.cloud/paw/RapidAPI-${finalAttrs.version}.zip";
-    hash = "sha256-ApBOYMOjpQJvUe+JsEAnyK7xpIZNt6qkX/2KUIT6S8g=";
+    hash = "sha256-eckLVX/NnyYa2Ad1+D6RUxR6nGrRcG5HFkudhFWhII0=";
   };
 
   dontPatch = true;

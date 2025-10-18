@@ -1882,6 +1882,8 @@ with pkgs;
 
   coreboot-configurator = libsForQt5.callPackage ../tools/misc/coreboot-configurator { };
 
+  intel-oneapi = callPackage ../development/libraries/intel-oneapi { };
+
   sway-unwrapped = callPackage ../by-name/sw/sway-unwrapped/package.nix {
     wlroots = wlroots_0_19;
   };
@@ -8807,19 +8809,13 @@ with pkgs;
     graphviz = graphviz-nox;
   };
 
-  webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
+  webkitgtk_6_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
-    libsoup = libsoup_2_4;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
   };
 
-  webkitgtk_4_1 = webkitgtk_4_0.override {
-    libsoup = libsoup_3;
-  };
-
-  webkitgtk_6_0 = webkitgtk_4_0.override {
-    libsoup = libsoup_3;
-    gtk3 = gtk4;
+  webkitgtk_4_1 = webkitgtk_6_0.override {
+    gtk4 = gtk3;
   };
 
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
@@ -11635,6 +11631,7 @@ with pkgs;
     k3s_1_31
     k3s_1_32
     k3s_1_33
+    k3s_1_34
     ;
   k3s = k3s_1_33;
 
@@ -13397,8 +13394,6 @@ with pkgs;
 
   freeciv_gtk = freeciv;
 
-  garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
-
   gl-gsync-demo = callPackage ../games/gl-gsync-demo {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
@@ -13635,9 +13630,7 @@ with pkgs;
 
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
 
-  warsow-engine = callPackage ../games/warsow/engine.nix { };
-
-  warsow = callPackage ../games/warsow { };
+  wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 
   inherit (callPackage ../games/xonotic { })
     xonotic-data
@@ -14223,8 +14216,6 @@ with pkgs;
   celestia = callPackage ../applications/science/astronomy/celestia {
     inherit (gnome2) gtkglext;
   };
-
-  convertall = qt5.callPackage ../applications/science/misc/convertall { };
 
   faissWithCuda = faiss.override {
     cudaSupport = true;

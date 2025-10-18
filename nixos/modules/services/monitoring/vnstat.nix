@@ -10,11 +10,12 @@ in
 {
   options.services.vnstat = {
     enable = lib.mkEnableOption "update of network usage statistics via vnstatd";
+    package = lib.mkPackageOption pkgs "vnstat" { };
   };
 
   config = lib.mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.vnstat ];
+    environment.systemPackages = [ cfg.package ];
 
     users = {
       groups.vnstatd = { };
@@ -37,7 +38,7 @@ in
         "man:vnstat.conf(5)"
       ];
       serviceConfig = {
-        ExecStart = "${pkgs.vnstat}/bin/vnstatd -n";
+        ExecStart = "${cfg.package}/bin/vnstatd -n";
         ExecReload = "${pkgs.procps}/bin/kill -HUP $MAINPID";
 
         # Hardening (from upstream example service)
