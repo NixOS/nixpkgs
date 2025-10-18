@@ -3089,21 +3089,84 @@ runTests {
     ];
   };
 
-  testToGNUCommandLineShell = {
-    expr = cli.toGNUCommandLineShell { } {
-      data = builtins.toJSON { id = 0; };
-      X = "PUT";
-      retry = 3;
-      retry-delay = null;
-      url = [
-        "https://example.com/foo"
-        "https://example.com/bar"
+  testToCommandLine = {
+    expr =
+      let
+        optionFormat = optionName: {
+          option = "-${optionName}";
+          sep = "=";
+          explicitBool = true;
+        };
+      in
+      cli.toCommandLine optionFormat {
+        v = true;
+        verbose = [
+          true
+          true
+          false
+          null
+        ];
+        i = ".bak";
+        testsuite = [
+          "unit"
+          "integration"
+        ];
+        e = [
+          "s/a/b/"
+          "s/b/c/"
+        ];
+        n = false;
+        data = builtins.toJSON { id = 0; };
+      };
+
+    expected = [
+      "-data={\"id\":0}"
+      "-e=s/a/b/"
+      "-e=s/b/c/"
+      "-i=.bak"
+      "-n=false"
+      "-testsuite=unit"
+      "-testsuite=integration"
+      "-v=true"
+      "-verbose=true"
+      "-verbose=true"
+      "-verbose=false"
+    ];
+  };
+
+  testToCommandLineGNU = {
+    expr = cli.toCommandLineGNU { } {
+      v = true;
+      verbose = [
+        true
+        true
+        false
+        null
       ];
-      silent = false;
-      verbose = true;
+      i = ".bak";
+      testsuite = [
+        "unit"
+        "integration"
+      ];
+      e = [
+        "s/a/b/"
+        "s/b/c/"
+      ];
+      n = false;
+      data = builtins.toJSON { id = 0; };
     };
 
-    expected = "-X PUT --data '{\"id\":0}' --retry 3 --url https://example.com/foo --url https://example.com/bar --verbose";
+    expected = [
+      "--data={\"id\":0}"
+      "-es/a/b/"
+      "-es/b/c/"
+      "-i.bak"
+      "--testsuite=unit"
+      "--testsuite=integration"
+      "-v"
+      "--verbose"
+      "--verbose"
+    ];
   };
 
   testSanitizeDerivationNameLeadingDots = testSanitizeDerivationName {

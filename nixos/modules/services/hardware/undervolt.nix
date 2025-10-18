@@ -16,7 +16,7 @@ let
         limit != null && window != null
       ) "Both power limit and window must be set";
       "${toString limit} ${toString window}";
-  cliArgs = lib.cli.toGNUCommandLine { } {
+  cliArgs = lib.cli.toCommandLineGNU { } {
     inherit (cfg)
       verbose
       temp

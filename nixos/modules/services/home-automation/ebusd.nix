@@ -170,7 +170,7 @@ in
         serviceConfig = {
           ExecStart =
             let
-              args = lib.cli.toGNUCommandLineShell { optionValueSeparator = "="; } (
+              args = lib.cli.toCommandLineShellGNU { } (
                 lib.foldr (a: b: a // b) { } [
                   {
                     inherit (cfg)
