@@ -11,6 +11,7 @@ lib.makeScope pkgs.newScope (
   in
   {
     focus-request = callPackage ./focus-request.nix { };
+    qwf-overview = callPackage ./qwf-overview.nix { };
     wayfire-plugins-extra = callPackage ./wayfire-plugins-extra.nix { };
     wayfire-shadows = callPackage ./wayfire-shadows.nix { };
     wcm = callPackage ./wcm.nix { };
