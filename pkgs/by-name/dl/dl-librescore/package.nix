@@ -9,22 +9,21 @@
 
 buildNpmPackage rec {
   pname = "dl-librescore";
-  version = "0.35.29";
+  version = "0.35.32";
 
   src = fetchFromGitHub {
     owner = "LibreScore";
     repo = "dl-librescore";
     rev = "v${version}";
-    hash = "sha256-DwDlGTFdqAAsEWrhnieuaeYQ0N8COB/7b49xPJackJQ=";
+    hash = "sha256-qFAJlcyvH0lShaZKIAJkXqrY0DRaUvr8V9Ipch1A3kw=";
   };
 
   npmDepsHash = "sha256-5Uc83VdqMwQaTSmzwpBh7x4IKoVPd9MYDXkDvR1fz6Q=";
 
   # see https://github.com/LibreScore/dl-librescore/pull/32
-  # TODO can be removed with next update
   postPatch = ''
     substituteInPlace package-lock.json \
-      --replace 50c7a1508cd9358757c30794e14ba777e6faa8aa b4cb32eb1734a2f73ba2d92743647b1a91c0e2a8
+      --replace-fail 50c7a1508cd9358757c30794e14ba777e6faa8aa b4cb32eb1734a2f73ba2d92743647b1a91c0e2a8
   '';
 
   makeCacheWritable = true;
