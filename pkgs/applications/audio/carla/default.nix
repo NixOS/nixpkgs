@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   alsa-lib,
   file,
   fluidsynth,
@@ -13,11 +12,9 @@
   pkg-config,
   python3Packages,
   which,
-  gtk2 ? null,
   gtk3 ? null,
   qtbase ? null,
   withFrontend ? true,
-  withGtk2 ? true,
   withGtk3 ? true,
   withQt ? true,
   wrapQtAppsHook ? null,
@@ -62,7 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile
   ]
   ++ lib.optional withQt qtbase
-  ++ lib.optional withGtk2 gtk2
   ++ lib.optional withGtk3 gtk3;
 
   propagatedBuildInputs = finalAttrs.pythonPath;
@@ -77,11 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
         filename="$(basename -- "$file")"
         substituteInPlace "$file" --replace-fail '--with-appname="$0"' "--with-appname=\"$filename\""
     done
-  ''
-  + lib.optionalString withGtk2 ''
-    # Will try to dlopen() libgtk-x11-2.0 at runtime when using the bridge.
-    substituteInPlace source/bridges-ui/Makefile \
-        --replace-fail '$(CXX) $(OBJS_GTK2)' '$(CXX) $(OBJS_GTK2) -lgtk-x11-2.0'
   '';
 
   dontWrapQtApps = true;
