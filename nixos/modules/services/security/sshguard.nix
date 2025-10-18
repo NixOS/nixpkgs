@@ -217,9 +217,41 @@ in
             "${config.systemd.package}/bin/journalctl ${args}";
 
         DynamicUser = true;
+        User = "sshguard-logger";
         SupplementaryGroups = [
           # allow to read the systemd journal for opentelemetry-collector
           "systemd-journal"
+        ];
+
+        UMask = "0777";
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        MountAPIVFS = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = "strict";
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        BindPaths = [ "/run/systemd/journal/socket" ];
+        BindReadOnlyPaths = [ builtins.storeDir ];
+        RemoveIPC = true;
+        PrivateMounts = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
         ];
       };
     };
@@ -311,11 +343,53 @@ in
             "${pkgs.ipset}/bin/ipset -quiet destroy sshguard6"
           ];
         Restart = "always";
-        ProtectSystem = "strict";
-        ProtectHome = "tmpfs";
         RuntimeDirectory = "sshguard";
         StateDirectory = "sshguard";
-        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
+
+        ProtectProc = "invisible";
+        UMask = "0077";
+        CapabilityBoundingSet = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = "full";
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        MountAPIVFS = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = "strict";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        BindReadOnlyPaths = [ builtins.storeDir ];
+        BindPaths = lib.mkIf (cfg.blacklist_file != "/var/lib/sshguard/blacklist.db") [
+          "${cfg.blacklist_file}:/var/lib/sshguard/blacklist.db"
+        ];
+        ReadWritePaths = [
+          "/run/sshguard-logger/sshguard-logger"
+        ];
+        RemoveIPC = true;
+        PrivateMounts = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };
