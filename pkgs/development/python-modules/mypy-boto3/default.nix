@@ -530,8 +530,8 @@ in
       "sha256-7P/MvdQjYmNgda7EZ8GSI0mLPe3o19ETSspd8wL23Ag=";
 
   mypy-boto3-finspace-data =
-    buildMypyBoto3Package "finspace-data" "1.40.17"
-      "sha256-fePfBO2KWcMACejuSer80O2LCEuwh/pjA6wkEpUL9os=";
+    buildMypyBoto3Package "finspace-data" "1.40.55"
+      "sha256-CQzN5qc5N34JKeF0gKoIzVb5wtdc8r2uar+Q6Y2Gd3g=";
 
   mypy-boto3-firehose =
     buildMypyBoto3Package "firehose" "1.40.0"
