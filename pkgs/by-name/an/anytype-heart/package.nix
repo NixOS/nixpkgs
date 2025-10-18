@@ -79,6 +79,9 @@ buildGoModule (finalAttrs: {
   # disable tests to save time, as it's mostly built by users, not CI
   doCheck = false;
 
+  # Disable automatic updates. Update only together with 'anytype' package.
+  passthru.updateScript = null;
+
   meta = {
     description = "Shared library for Anytype clients";
     homepage = "https://anytype.io/";
