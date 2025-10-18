@@ -11,6 +11,7 @@
   git,
   pkg-config,
   openssl,
+  cmake,
   cacert,
   usage,
   mise,
@@ -21,16 +22,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2025.9.10";
+  version = "2025.10.8";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-CPi0scFKv8+K/s7wh6cdURyzKA3frSPf59kq6Y2XDV0=";
+    hash = "sha256-I5onltMr/UALRL0FampMcgZSJQPNp+hjfUV58pXbeWo=";
   };
 
-  cargoHash = "sha256-lbSGcnkiJYTI0VyUskxH+sxAUr+loI2mhyWaK/DgMN8=";
+  cargoHash = "sha256-GdnTOyXl6O8Mz37Ke4MUCYaVF+RkQo9mItwSLt7d/SY=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -60,7 +61,14 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'cmd!("direnv"' 'cmd!("${lib.getExe direnv}"'
   '';
 
-  nativeCheckInputs = [ cacert ];
+  nativeCheckInputs = [
+    cacert
+    cmake
+    rustPlatform.bindgenHook
+  ];
+
+  # disable warnings as errors for aws-lc-sys in checkPhase
+  env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
   checkFlags = [
     # last_modified will always be different in nix
@@ -80,7 +88,7 @@ rustPlatform.buildRustPackage rec {
     installManPage ./man/man1/mise.1
 
     substituteInPlace ./completions/{mise.bash,mise.fish,_mise}  \
-      --replace-fail '-v usage' '-v ${lib.getExe usage}' \
+      --replace-fail '-p usage' '-p ${lib.getExe usage}' \
       --replace-fail 'usage complete-word' '${lib.getExe usage} complete-word'
 
     installShellCompletion \
