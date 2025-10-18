@@ -21,13 +21,13 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bitwig-studio";
   version = "3.3.11";
 
   src = fetchurl {
-    url = "https://downloads.bitwig.com/stable/${version}/${pname}-${version}.deb";
-    sha256 = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
+    url = "https://downloads.bitwig.com/stable/${finalAttrs.version}/bitwig-studio-${finalAttrs.version}.deb";
+    hash = "sha256-cF8gVPjM0KUcKOW09uFccp4/lzbUmZcBkVOwr/A/8Yw=";
   };
 
   nativeBuildInputs = [
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  ldLibraryPath = lib.strings.makeLibraryPath buildInputs;
+  ldLibraryPath = lib.strings.makeLibraryPath finalAttrs.buildInputs;
 
   installPhase = ''
     runHook preInstall
@@ -86,13 +86,13 @@ stdenv.mkDerivation rec {
       patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $f
       wrapProgram $f \
         "''${gappsWrapperArgs[@]}" \
-        --prefix LD_LIBRARY_PATH : "${ldLibraryPath}" \
+        --prefix LD_LIBRARY_PATH : "${finalAttrs.ldLibraryPath}" \
         --prefix PATH : "${lib.makeBinPath [ ffmpeg ]}" \
         --suffix PATH : "${lib.makeBinPath [ xdg-utils ]}"
     done
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Digital audio workstation";
     longDescription = ''
       Bitwig Studio is a multi-platform music-creation system for
@@ -100,13 +100,13 @@ stdenv.mkDerivation rec {
       editing tools and a super-fast workflow.
     '';
     homepage = "https://www.bitwig.com/";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       bfortz
       michalrus
       mrVanDalo
     ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
-}
+})
