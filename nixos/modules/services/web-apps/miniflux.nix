@@ -18,12 +18,6 @@ let
   cfg = config.services.miniflux;
 
   boolToInt = b: if b then 1 else 0;
-
-  pgbin = "${config.services.postgresql.package}/bin";
-  preStart = pkgs.writeScript "miniflux-pre-start" ''
-    #!${pkgs.runtimeShell}
-    ${pgbin}/psql "miniflux" -c "CREATE EXTENSION IF NOT EXISTS hstore"
-  '';
 in
 
 {
@@ -139,7 +133,7 @@ in
       serviceConfig = {
         Type = "oneshot";
         User = config.services.postgresql.superUser;
-        ExecStart = preStart;
+        ExecStart = ''${config.services.postgresql.package}/bin/psql "miniflux" -c "CREATE EXTENSION IF NOT EXISTS hstore"'';
       };
     };
 
