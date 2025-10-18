@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.8.0";
+  version = "2.9.0";
   format = "wheel";
 
   src =
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
+  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
 
   buildInputs = [
     # We need to patch lib/torio/_torio_ffmpeg6
