@@ -4,6 +4,7 @@
   nqp,
   perl,
   stdenv,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,6 +25,9 @@ stdenv.mkDerivation (finalAttrs: {
     "--backends=moar"
     "--with-nqp=${lib.getExe nqp}"
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "Raku implementation on top of Moar virtual machine";
