@@ -157,7 +157,7 @@ in
 
           The options are
           - `gnome`: Use GNOME theme with [qgnomeplatform](https://github.com/FedoraQt/QGnomePlatform)
-          - `gtk2`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
+          - `gtk3`: Use GTK theme with [qtstyleplugins](https://github.com/qt/qtstyleplugins)
           - `kde`: Use Qt settings from Plasma 5.
           - `kde6`: Use Qt settings from Plasma 6.
           - `lxqt`: Use LXQt style set using the [lxqt-config-appearance](https://github.com/lxqt/lxqt-config)
