@@ -2,10 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   wrapGAppsHook3,
-  wrapQtAppsHook,
   pkg-config,
   ninja,
   alsa-lib,
@@ -19,18 +17,11 @@
   libvorbis,
   portaudio,
   portmidi,
-  qtbase,
-  qtdeclarative,
   flac,
   libopusenc,
   libopus,
   tinyxml-2,
-  qt5compat,
-  qtwayland,
-  qtsvg,
-  qtscxml,
-  qtnetworkauth,
-  qttools,
+  kdePackages,
   nixosTests,
 }:
 
@@ -41,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "musescore";
     repo = "MuseScore";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-3VpptHR9dt8lJeFhFygnPiP0XRf4R29SASC8AicLU5E=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-3VpptHR9dt8lJeFhFygnPiP0XRf4R29SASC8AicLU5E=";
   };
 
   cmakeFlags = [
@@ -87,9 +78,9 @@ stdenv.mkDerivation (finalAttrs: {
   dontWrapGApps = true;
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
     cmake
-    qttools
+    kdePackages.qttools
     pkg-config
     ninja
   ]
@@ -113,16 +104,16 @@ stdenv.mkDerivation (finalAttrs: {
     libopusenc
     libopus
     tinyxml-2
-    qtbase
-    qtdeclarative
-    qt5compat
-    qtsvg
-    qtscxml
-    qtnetworkauth
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
+    kdePackages.qt5compat
+    kdePackages.qtsvg
+    kdePackages.qtscxml
+    kdePackages.qtnetworkauth
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
-    qtwayland
+    kdePackages.qtwayland
   ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -160,16 +151,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = nixosTests.musescore;
 
-  meta = with lib; {
+  meta = {
     description = "Music notation and composition software";
     homepage = "https://musescore.org/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       vandenoever
       doronbehar
       orivej
     ];
     mainProgram = "mscore";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 })

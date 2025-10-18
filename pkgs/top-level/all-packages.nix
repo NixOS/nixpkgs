@@ -11967,8 +11967,6 @@ with pkgs;
 
   mumble_overlay = (callPackages ../applications/networking/mumble { }).overlay;
 
-  musescore = qt6.callPackage ../applications/audio/musescore { };
-
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
