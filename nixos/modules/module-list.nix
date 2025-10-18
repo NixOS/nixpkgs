@@ -225,6 +225,7 @@
   ./programs/gdk-pixbuf.nix
   ./programs/geary.nix
   ./programs/ghidra.nix
+  ./programs/ghostty.nix
   ./programs/git-worktree-switcher.nix
   ./programs/git.nix
   ./programs/gnome-disks.nix
