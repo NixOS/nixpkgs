@@ -1603,10 +1603,6 @@ with haskellLib;
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  hledger_1_50_2 = super.hledger_1_50_2.override {
-    hledger-lib = self.hledger-lib_1_50_2;
-  };
-
   # it wants to build a statically linked binary by default
   hledger-flow = overrideCabal (drv: {
     postPatch = (drv.postPatch or "") + ''
