@@ -17,6 +17,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-KbITHQ9s2RUeo8zR53R9s4WUM6z8zzddz1k47So0Mlw=";
   };
 
+  # workaround required to build against gettext >= 0.25
+  # https://savannah.gnu.org/support/index.php?111272
+  preAutoreconf = ''
+    autopoint --force
+  '';
+
+  # workaround required to build against gettext >= 0.25
+  # https://savannah.gnu.org/support/index.php?111273
+  autoreconfFlags = [
+    "--include=m4"
+    "--install"
+    "--force"
+    "--verbose"
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     autoconf-archive
