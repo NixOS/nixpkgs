@@ -399,6 +399,8 @@ let
         makeScopeWithSplicing
         makeScopeWithSplicing'
         extendMkDerivation
+        getFinalPassthruMissingMessage
+        getFinalPassthruWith
         ;
       inherit (self.derivations) lazyDerivation optionalDrvAttr warnOnInstantiate;
       inherit (self.generators) mkLuaInline;
