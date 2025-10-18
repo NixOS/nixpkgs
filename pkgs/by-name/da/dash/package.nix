@@ -7,6 +7,10 @@
   libedit,
   runCommand,
   dash,
+
+  # Reverse dependency smoke tests
+  tests,
+  patchRcPathPosix,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,6 +47,19 @@ stdenv.mkDerivation (finalAttrs: {
         [ -s $out/success ]
         grep -q "Hello World" $out/success
       '';
+
+      /**
+        Reverse dependency smoke tests. Build success of `dash.tests` informs
+        whether an update makes it into staging.
+      */
+      reverseDependencies = lib.recurseIntoAttrs {
+        writers = lib.recurseIntoAttrs {
+          simple = tests.writers.simple.dash;
+          bin = tests.writers.bin.dash;
+        };
+        # Not sure if effective smoke test, but cheap
+        patch-rc-path-posix = patchRcPathPosix.tests.test-posix;
+      };
     };
   };
 
