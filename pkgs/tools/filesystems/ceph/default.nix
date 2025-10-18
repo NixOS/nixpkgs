@@ -386,6 +386,12 @@ rec {
       # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
       # * <https://github.com/ceph/ceph/pull/60999>
       ./boost-1.86-PyModule.patch
+
+      (fetchpatch2 {
+        name = "ceph-cmake-4.patch";
+        url = "https://gitlab.alpinelinux.org/ashpool/aports/-/raw/d22b70eafe33c3daabe4eea6913c5be87d9463ad/community/ceph19/cpp_redis.patch";
+        hash = "sha256-wxPIsYt25CjXhJ6kmr/MXwFD58Sl4y4W+r9jAMND+uw=";
+      })
     ];
 
     nativeBuildInputs = [
