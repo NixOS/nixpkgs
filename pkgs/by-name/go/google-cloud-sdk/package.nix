@@ -161,6 +161,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     # Avoid trying to write logs to homeless-shelter
     export HOME=$(mktemp -d)
+    # Prevent Python from writing bytecode to ensure build determinism
+    export PYTHONDONTWRITEBYTECODE=1
     $out/bin/gcloud version --format json | jq '."Google Cloud SDK"' | grep "${version}"
     $out/bin/gsutil version | grep -w "$(cat platform/gsutil/VERSION)"
   '';
