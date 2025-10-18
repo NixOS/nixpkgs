@@ -5,14 +5,14 @@
   versionCheckHook,
   nix-update-script,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "tursodb";
   version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "turso";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/28jbPZYEy2/xioLd1ARvvVwTdUJmLz4gPTT1oU9RRU=";
   };
 
@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     "-p"
     "turso_cli"
   ];
-  cargoTestFlags = cargoBuildFlags;
+  cargoTestFlags = finalAttrs.cargoBuildFlags;
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -33,9 +33,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Interactive SQL shell for Turso";
     homepage = "https://github.com/tursodatabase/turso";
-    changelog = "https://github.com/tursodatabase/turso/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/tursodatabase/turso/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nartsiss ];
     mainProgram = "tursodb";
   };
-}
+})
