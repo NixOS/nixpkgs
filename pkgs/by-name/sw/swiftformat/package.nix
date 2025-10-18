@@ -10,13 +10,13 @@
 
 swift.stdenv.mkDerivation (finalAttrs: {
   pname = "swiftformat";
-  version = "0.58.4";
+  version = "0.58.5";
 
   src = fetchFromGitHub {
     owner = "nicklockwood";
     repo = "SwiftFormat";
     tag = finalAttrs.version;
-    hash = "sha256-GFnFTRPf4sZhLXe+VnDOndS/GhhTkZZmTTj/gR05IcI=";
+    hash = "sha256-QTfdMJpdm4m2YSZefPclGcAZFjyFgJeeWIYLf3apuFo=";
   };
 
   strictDeps = true;
