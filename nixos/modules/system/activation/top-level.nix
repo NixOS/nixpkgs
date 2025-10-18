@@ -80,7 +80,7 @@ let
   );
 
   # Handle assertions and warnings
-  baseSystemAssertWarn = lib.asserts.checkAssertWarn config.assertions config.warnings baseSystem;
+  baseSystemAssertWarn = config.assertAndWarn baseSystem;
 
   # Replace runtime dependencies
   system =
