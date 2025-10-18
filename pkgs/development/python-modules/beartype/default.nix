@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "beartype";
-  version = "0.21.0";
+  version = "0.22.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "beartype";
     repo = "beartype";
     tag = "v${version}";
-    hash = "sha256-oD7LS+c+mZ8W4YnAaAYxQkbUlmO8E2TPxy0PBI7Jr7A=";
+    hash = "sha256-tSRUYL7QpqImRKRluN2xbGlxw46IGI41b0UUqWoqhyk=";
   };
 
   build-system = [ hatchling ];
