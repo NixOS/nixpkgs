@@ -29,6 +29,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Bootstrapper for SCION network configuration";
     homepage = "https://github.com/netsec-ethz/bootstrapper";
     license = licenses.asl20;

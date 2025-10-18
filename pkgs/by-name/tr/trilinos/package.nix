@@ -105,6 +105,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
+    broken = true;
     description = "Engineering and scientific problems algorithms";
     mainProgram = "nvcc_wrapper";
     longDescription = ''
