@@ -76,7 +76,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Microcode update image for AMD CPUs from platomav's github";
     homepage = "https://github.com/platomav/CPUMicrocodes";
-    license = lib.licenses.unfreeRedistributableFirmware;
+    license = lib.licenses.unfree;
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       d-brasher
