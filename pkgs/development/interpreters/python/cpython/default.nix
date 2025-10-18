@@ -153,7 +153,10 @@ let
   passthru =
     let
       # When we override the interpreter we also need to override the spliced versions of the interpreter
-      inputs' = lib.filterAttrs (n: v: n != "passthruFun" && !lib.isDerivation v) inputs;
+      # openssl is excluded manually to break an infinite recursion.
+      inputs' = lib.filterAttrs (
+        n: v: n != "openssl" && n != "passthruFun" && !lib.isDerivation v
+      ) inputs;
       # Memoization of the splices to avoid re-evaluating this function for all combinations of splices e.g.
       # python3.pythonOnBuildForHost.pythonOnBuildForTarget == python3.pythonOnBuildForTarget by consuming
       # __splices as an arg and using the cache if populated.
