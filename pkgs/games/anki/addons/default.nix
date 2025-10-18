@@ -4,6 +4,8 @@
 {
   adjust-sound-volume = callPackage ./adjust-sound-volume { };
 
+  anki-button-colours = callPackage ./anki-button-colours { };
+
   anki-connect = callPackage ./anki-connect { };
 
   anki-quizlet-importer-extended = callPackage ./anki-quizlet-importer-extended { };
