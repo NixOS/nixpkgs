@@ -7,11 +7,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "rectangle-pro";
-  version = "3.0.37";
+  version = "3.62";
 
   src = fetchurl {
     url = "https://rectangleapp.com/pro/downloads/Rectangle%20Pro%20${finalAttrs.version}.dmg";
-    hash = "sha256-1/guAVppL6AwC9luqPZZscz38U4irN1vyGesN8q2leM=";
+    hash = "sha256-0pJ2vhBaxNRYu40IjlzY4P6LS/TyvxalodcdKV0eqA4=";
   };
 
   sourceRoot = ".";
