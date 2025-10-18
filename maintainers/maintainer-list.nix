@@ -29170,5 +29170,11 @@
     githubId = 59917878;
     name = "Mathias Zhang";
   };
+  reylak = {
+    name = "El Reylak";
+    github = "Reylak-dev";
+    githubId = 178049808;
+  };
+
   # keep-sorted end
 }
