@@ -4,7 +4,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   rustPlatform,
-  electron_37,
+  electron,
   nodejs_22,
   yarn-berry_4,
   cacert,
@@ -28,7 +28,6 @@ let
   hostPlatform = stdenvNoCC.hostPlatform;
   nodePlatform = hostPlatform.node.platform;
   nodeArch = hostPlatform.node.arch;
-  electron = electron_37;
   nodejs = nodejs_22;
   yarn-berry = yarn-berry_4.override { inherit nodejs; };
   productName = if buildType != "stable" then "AFFiNE-${buildType}" else "AFFiNE";
