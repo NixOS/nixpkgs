@@ -147,7 +147,7 @@ in
         WorkingDirectory = "${cfg.package}/${cfg.package.passthru.nodeAppDir}";
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
 
         ExecStart = ''
           ${cfg.package}/bin/matrix-appservice-discord \

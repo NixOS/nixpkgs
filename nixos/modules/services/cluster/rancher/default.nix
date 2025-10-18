@@ -922,7 +922,7 @@ let
               LimitCORE = "infinity";
               TasksMax = "infinity";
               TimeoutStartSec = 0;
-              EnvironmentFile = cfg.environmentFile;
+              EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
               ExecStart = lib.concatStringsSep " \\\n " (
                 [ "${cfg.package}/bin/${name} ${cfg.role}" ]
                 ++ (lib.optional (cfg.serverAddr != "") "--server ${cfg.serverAddr}")

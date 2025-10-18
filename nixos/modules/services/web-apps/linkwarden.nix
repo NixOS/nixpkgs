@@ -21,7 +21,7 @@ let
     Restart = "on-failure";
     RestartSec = 3;
 
-    EnvironmentFile = cfg.environmentFile;
+    EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
     StateDirectory = "linkwarden";
     CacheDirectory = "linkwarden";
     User = cfg.user;
