@@ -15,6 +15,8 @@
   gtk4,
   gobject-introspection,
   gnome,
+  replaceVars,
+  bubblewrap,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -72,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "capi_docs" withIntrospection)
   ];
 
+  postPatch = ''
+    patch -p2 < ${finalAttrs.passthru.glycinPathsPatch}
+  '';
+
   passthru = {
     updateScript =
       let
@@ -100,6 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
         updateSource
         updateLockfile
       ];
+
+    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
+      bwrap = "${bubblewrap}/bin/bwrap";
+    };
   };
 
   meta = {
@@ -111,6 +121,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     maintainers = with lib.maintainers; [ normalcea ];
+    teams = [ lib.teams.gnome ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "glycin-1"
