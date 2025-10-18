@@ -1952,8 +1952,6 @@ with pkgs;
     enableSSH = true;
   };
 
-  easyaudiosync = qt6Packages.callPackage ../applications/audio/easyaudiosync { };
-
   easycrypt = callPackage ../applications/science/logic/easycrypt {
     why3 = pkgs.why3.override {
       ideSupport = false;

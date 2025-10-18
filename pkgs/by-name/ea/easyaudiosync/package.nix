@@ -4,24 +4,22 @@
   fetchFromGitHub,
   pkg-config,
   cmake,
-  qtbase,
-  qttools,
   spdlog,
   ffmpeg,
   taglib,
-  wrapQtAppsHook,
+  kdePackages,
   makeDesktopItem,
   copyDesktopItems,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "easyaudiosync";
   version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "complexlogic";
     repo = "EasyAudioSync";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-UCOL4DzynKjNDvS0HZ4/K+Wn5lOqHZ0bNop0zqJl5kc=";
   };
 
@@ -34,13 +32,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ]
   ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
-    qtbase
-    qttools
+    kdePackages.qtbase
+    kdePackages.qttools
     ffmpeg
     spdlog
     taglib
@@ -82,7 +80,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Audio library syncing and conversion utility";
     longDescription = ''
       Easy Audio Sync is an audio library syncing and conversion utility.
@@ -94,8 +92,8 @@ stdenv.mkDerivation rec {
       GUI-based instead of CLI-based.
     '';
     homepage = "https://github.com/complexlogic/EasyAudioSync";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [ matteopacini ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [ matteopacini ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})
