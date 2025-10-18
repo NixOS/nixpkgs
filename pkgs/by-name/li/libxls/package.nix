@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
+
   meta = with lib; {
     description = "Extract Cell Data From Excel xls files";
     homepage = "https://github.com/libxls/libxls";
