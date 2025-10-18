@@ -29,10 +29,18 @@ rustPlatform.buildRustPackage (finalAttrs: {
     hash = "sha256-1WKmSgDZ3c6+fFKH9+kgrxFYthKQqE1455bFHlVCGhU=";
   };
 
-  cargoHash = "sha256-i6AvyX4RObB9aa+TYvsOW8i9WTcYx8ddP/Jmyr8PWMY=";
+  # Fix RiscV cross-compilation by updating ldap3 dependency
+  # See https://github.com/stalwartlabs/stalwart/pull/2270
+  cargoPatches = [ ./fix-riscv-cross-compile.patch ];
+
+  cargoHash = "sha256-0LK6Y2ESige6J/2bkV4NQMT4kcJhNUzuw7TuLDCnbJU=";
+
+  depsBuildBuild = [
+    pkg-config
+    zstd
+  ];
 
   nativeBuildInputs = [
-    pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];

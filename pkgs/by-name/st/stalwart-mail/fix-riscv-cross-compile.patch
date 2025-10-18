@@ -1,0 +1,532 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index d268672f..f3db067a 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -228,22 +228,6 @@ dependencies = [
+  "term",
+ ]
+ 
+-[[package]]
+-name = "asn1-rs"
+-version = "0.5.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7f6fd5ddaf0351dff5b8da21b2fb4ff8e08ddd02857f0bf69c47639106c0fff0"
+-dependencies = [
+- "asn1-rs-derive 0.4.0",
+- "asn1-rs-impl 0.1.0",
+- "displaydoc",
+- "nom",
+- "num-traits",
+- "rusticata-macros",
+- "thiserror 1.0.69",
+- "time",
+-]
+-
+ [[package]]
+ name = "asn1-rs"
+ version = "0.6.2"
+@@ -251,7 +235,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "5493c3bedbacf7fd7382c6346bbd66687d12bbaad3a89a2d2c303ee6cf20b048"
+ dependencies = [
+  "asn1-rs-derive 0.5.1",
+- "asn1-rs-impl 0.2.0",
++ "asn1-rs-impl",
+  "displaydoc",
+  "nom",
+  "num-traits",
+@@ -267,7 +251,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "56624a96882bb8c26d61312ae18cb45868e5a9992ea73c58e45c3101e56a1e60"
+ dependencies = [
+  "asn1-rs-derive 0.6.0",
+- "asn1-rs-impl 0.2.0",
++ "asn1-rs-impl",
+  "displaydoc",
+  "nom",
+  "num-traits",
+@@ -276,18 +260,6 @@ dependencies = [
+  "time",
+ ]
+ 
+-[[package]]
+-name = "asn1-rs-derive"
+-version = "0.4.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "726535892e8eae7e70657b4c8ea93d26b8553afb1ce617caee529ef96d7dee6c"
+-dependencies = [
+- "proc-macro2",
+- "quote",
+- "syn 1.0.109",
+- "synstructure 0.12.6",
+-]
+-
+ [[package]]
+ name = "asn1-rs-derive"
+ version = "0.5.1"
+@@ -297,7 +269,7 @@ dependencies = [
+  "proc-macro2",
+  "quote",
+  "syn 2.0.106",
+- "synstructure 0.13.2",
++ "synstructure",
+ ]
+ 
+ [[package]]
+@@ -309,18 +281,7 @@ dependencies = [
+  "proc-macro2",
+  "quote",
+  "syn 2.0.106",
+- "synstructure 0.13.2",
+-]
+-
+-[[package]]
+-name = "asn1-rs-impl"
+-version = "0.1.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2777730b2039ac0f95f093556e61b6d26cebed5393ca6f152717777cec3a42ed"
+-dependencies = [
+- "proc-macro2",
+- "quote",
+- "syn 1.0.109",
++ "synstructure",
+ ]
+ 
+ [[package]]
+@@ -386,7 +347,7 @@ dependencies = [
+  "portable-atomic",
+  "rand 0.8.5",
+  "regex",
+- "ring 0.17.14",
++ "ring",
+  "rustls-native-certs 0.7.3",
+  "rustls-pemfile 2.2.0",
+  "rustls-webpki 0.102.8",
+@@ -723,7 +684,7 @@ dependencies = [
+  "num-bigint",
+  "num-traits",
+  "once_cell",
+- "ring 0.17.14",
++ "ring",
+  "serde",
+  "serde_json",
+ ]
+@@ -1268,7 +1229,7 @@ dependencies = [
+  "rcgen 0.12.1",
+  "regex",
+  "reqwest 0.12.23",
+- "ring 0.17.14",
++ "ring",
+  "rkyv",
+  "rsa",
+  "rustls 0.23.32",
+@@ -1881,20 +1842,6 @@ dependencies = [
+  "zeroize",
+ ]
+ 
+-[[package]]
+-name = "der-parser"
+-version = "8.2.0"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dbd676fbbab537128ef0278adb5576cf363cff6aa22a7b24effe97347cfab61e"
+-dependencies = [
+- "asn1-rs 0.5.2",
+- "displaydoc",
+- "nom",
+- "num-bigint",
+- "num-traits",
+- "rusticata-macros",
+-]
+-
+ [[package]]
+ name = "der-parser"
+ version = "9.0.0"
+@@ -3018,7 +2965,7 @@ dependencies = [
+  "ipnet",
+  "once_cell",
+  "rand 0.8.5",
+- "ring 0.17.14",
++ "ring",
+  "rustls 0.21.12",
+  "rustls-pemfile 1.0.4",
+  "thiserror 1.0.69",
+@@ -3048,7 +2995,7 @@ dependencies = [
+  "ipnet",
+  "once_cell",
+  "rand 0.9.2",
+- "ring 0.17.14",
++ "ring",
+  "rustls 0.23.32",
+  "rustls-pki-types",
+  "thiserror 2.0.17",
+@@ -4105,9 +4052,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "lber"
+-version = "0.4.2"
++version = "0.5.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "2df7f9fd9f64cf8f59e1a4a0753fe7d575a5b38d3d7ac5758dcee9357d83ef0a"
++checksum = "cbcf559624bfd9fe8d488329a8959766335a43a9b8b2cdd6a2c379fca02909a5"
+ dependencies = [
+  "bytes",
+  "nom",
+@@ -4115,29 +4062,27 @@ dependencies = [
+ 
+ [[package]]
+ name = "ldap3"
+-version = "0.11.5"
++version = "0.12.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "166199a8207874a275144c8a94ff6eed5fcbf5c52303e4d9b4d53a0c7ac76554"
++checksum = "01fe89f5e7cfb7e4701e3a38ff9f00358e026a9aee940355d88ee9d81e5c7503"
+ dependencies = [
+  "async-trait",
+  "bytes",
+  "futures",
+  "futures-util",
+- "lazy_static",
+  "lber",
+  "log",
+  "nom",
+  "percent-encoding",
+- "ring 0.16.20",
+- "rustls 0.21.12",
+- "rustls-native-certs 0.6.3",
+- "thiserror 1.0.69",
++ "rustls 0.23.32",
++ "rustls-native-certs 0.8.1",
++ "thiserror 2.0.17",
+  "tokio",
+- "tokio-rustls 0.24.1",
++ "tokio-rustls 0.26.4",
+  "tokio-stream",
+  "tokio-util",
+  "url",
+- "x509-parser 0.15.1",
++ "x509-parser 0.18.0",
+ ]
+ 
+ [[package]]
+@@ -4372,7 +4317,7 @@ dependencies = [
+  "quick-xml 0.38.3",
+  "quick_cache",
+  "rand 0.8.5",
+- "ring 0.17.14",
++ "ring",
+  "rkyv",
+  "rsa",
+  "rustls-pemfile 2.2.0",
+@@ -4960,15 +4905,6 @@ dependencies = [
+  "subtle",
+ ]
+ 
+-[[package]]
+-name = "oid-registry"
+-version = "0.6.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9bedf36ffb6ba96c2eb7144ef6270557b52e54b20c0a8e1eb2ff99a6c6959bff"
+-dependencies = [
+- "asn1-rs 0.5.2",
+-]
+-
+ [[package]]
+ name = "oid-registry"
+ version = "0.7.1"
+@@ -5911,7 +5847,7 @@ dependencies = [
+  "getrandom 0.3.3",
+  "lru-slab",
+  "rand 0.9.2",
+- "ring 0.17.14",
++ "ring",
+  "rustc-hash 2.1.1",
+  "rustls 0.23.32",
+  "rustls-pki-types",
+@@ -6171,7 +6107,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "48406db8ac1f3cbc7dcdb56ec355343817958a356ff430259bb07baf7607e1e1"
+ dependencies = [
+  "pem",
+- "ring 0.17.14",
++ "ring",
+  "time",
+  "yasna",
+ ]
+@@ -6183,7 +6119,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "75e669e5202259b5314d1ea5397316ad400819437857b90861765f24c4cf80a2"
+ dependencies = [
+  "pem",
+- "ring 0.17.14",
++ "ring",
+  "rustls-pki-types",
+  "time",
+  "yasna",
+@@ -6451,21 +6387,6 @@ dependencies = [
+  "subtle",
+ ]
+ 
+-[[package]]
+-name = "ring"
+-version = "0.16.20"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3053cf52e236a3ed746dfc745aa9cacf1b791d846bdaf412f60a8d7d6e17c8fc"
+-dependencies = [
+- "cc",
+- "libc",
+- "once_cell",
+- "spin 0.5.2",
+- "untrusted 0.7.1",
+- "web-sys",
+- "winapi",
+-]
+-
+ [[package]]
+ name = "ring"
+ version = "0.17.14"
+@@ -6476,7 +6397,7 @@ dependencies = [
+  "cfg-if",
+  "getrandom 0.2.16",
+  "libc",
+- "untrusted 0.9.0",
++ "untrusted",
+  "windows-sys 0.52.0",
+ ]
+ 
+@@ -6750,7 +6671,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "3f56a14d1f48b391359b22f731fd4bd7e43c97f3c50eee276f3aa09c94784d3e"
+ dependencies = [
+  "log",
+- "ring 0.17.14",
++ "ring",
+  "rustls-webpki 0.101.7",
+  "sct",
+ ]
+@@ -6763,7 +6684,7 @@ checksum = "cd3c25631629d034ce7cd9940adc9d45762d46de2b0f57193c4443b92c6d4d40"
+ dependencies = [
+  "log",
+  "once_cell",
+- "ring 0.17.14",
++ "ring",
+  "rustls-pki-types",
+  "rustls-webpki 0.103.6",
+  "subtle",
+@@ -6868,8 +6789,8 @@ version = "0.101.7"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "8b6275d1ee7a1cd780b64aca7726599a1dbc893b1e64144529e55c3c2f745765"
+ dependencies = [
+- "ring 0.17.14",
+- "untrusted 0.9.0",
++ "ring",
++ "untrusted",
+ ]
+ 
+ [[package]]
+@@ -6878,9 +6799,9 @@ version = "0.102.8"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "64ca1bc8749bd4cf37b5ce386cc146580777b4e8572c7b97baf22c83f444bee9"
+ dependencies = [
+- "ring 0.17.14",
++ "ring",
+  "rustls-pki-types",
+- "untrusted 0.9.0",
++ "untrusted",
+ ]
+ 
+ [[package]]
+@@ -6889,9 +6810,9 @@ version = "0.103.6"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "8572f3c2cb9934231157b45499fc41e1f58c589fdfb81a844ba873265e80f8eb"
+ dependencies = [
+- "ring 0.17.14",
++ "ring",
+  "rustls-pki-types",
+- "untrusted 0.9.0",
++ "untrusted",
+ ]
+ 
+ [[package]]
+@@ -7030,8 +6951,8 @@ version = "0.7.1"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "da046153aa2352493d6cb7da4b6e5c0c057d8a1d0a9aa8560baffdd945acd414"
+ dependencies = [
+- "ring 0.17.14",
+- "untrusted 0.9.0",
++ "ring",
++ "untrusted",
+ ]
+ 
+ [[package]]
+@@ -7718,12 +7639,6 @@ dependencies = [
+  "utils",
+ ]
+ 
+-[[package]]
+-name = "spin"
+-version = "0.5.2"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6e63cff320ae2c57904679ba7cb63280a3dc4613885beafb148ee7bf9aa9042d"
+-
+ [[package]]
+ name = "spin"
+ version = "0.9.8"
+@@ -7847,7 +7762,7 @@ dependencies = [
+  "redis",
+  "regex",
+  "reqwest 0.12.23",
+- "ring 0.17.14",
++ "ring",
+  "rkyv",
+  "roaring",
+  "rocksdb",
+@@ -7945,18 +7860,6 @@ dependencies = [
+  "futures-core",
+ ]
+ 
+-[[package]]
+-name = "synstructure"
+-version = "0.12.6"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "f36bdaa60a83aca3921b5259d5400cbf5e90fc51931376a9bd4a0eb79aa7210f"
+-dependencies = [
+- "proc-macro2",
+- "quote",
+- "syn 1.0.109",
+- "unicode-xid",
+-]
+-
+ [[package]]
+ name = "synstructure"
+ version = "0.13.2"
+@@ -8066,7 +7969,7 @@ dependencies = [
+  "quick-xml 0.38.3",
+  "rayon",
+  "reqwest 0.12.23",
+- "ring 0.17.14",
++ "ring",
+  "rkyv",
+  "rustls 0.23.32",
+  "rustls-pemfile 2.2.0",
+@@ -8355,7 +8258,7 @@ dependencies = [
+  "http 1.3.1",
+  "httparse",
+  "rand 0.8.5",
+- "ring 0.17.14",
++ "ring",
+  "rustls-pki-types",
+  "tokio",
+  "tokio-rustls 0.26.4",
+@@ -8790,12 +8693,6 @@ version = "0.2.11"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "673aac59facbab8a9007c7f6108d11f63b603f7cabff99fabf650fea5c32b861"
+ 
+-[[package]]
+-name = "untrusted"
+-version = "0.7.1"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "a156c684c91ea7d62626509bce3cb4e1d9ed5c4d978f7b4352658f96a4c26b4a"
+-
+ [[package]]
+ name = "untrusted"
+ version = "0.9.0"
+@@ -8879,7 +8776,7 @@ dependencies = [
+  "rcgen 0.13.2",
+  "regex",
+  "reqwest 0.12.23",
+- "ring 0.17.14",
++ "ring",
+  "rkyv",
+  "rustls 0.23.32",
+  "rustls-pemfile 2.2.0",
+@@ -9638,16 +9535,16 @@ dependencies = [
+ 
+ [[package]]
+ name = "x509-parser"
+-version = "0.15.1"
++version = "0.16.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "7069fba5b66b9193bd2c5d3d4ff12b839118f6bcbef5328efafafb5395cf63da"
++checksum = "fcbc162f30700d6f3f82a24bf7cc62ffe7caea42c0b2cba8bf7f3ae50cf51f69"
+ dependencies = [
+- "asn1-rs 0.5.2",
++ "asn1-rs 0.6.2",
+  "data-encoding",
+- "der-parser 8.2.0",
++ "der-parser 9.0.0",
+  "lazy_static",
+  "nom",
+- "oid-registry 0.6.1",
++ "oid-registry 0.7.1",
+  "rusticata-macros",
+  "thiserror 1.0.69",
+  "time",
+@@ -9655,26 +9552,26 @@ dependencies = [
+ 
+ [[package]]
+ name = "x509-parser"
+-version = "0.16.0"
++version = "0.17.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "fcbc162f30700d6f3f82a24bf7cc62ffe7caea42c0b2cba8bf7f3ae50cf51f69"
++checksum = "4569f339c0c402346d4a75a9e39cf8dad310e287eef1ff56d4c68e5067f53460"
+ dependencies = [
+- "asn1-rs 0.6.2",
++ "asn1-rs 0.7.1",
+  "data-encoding",
+- "der-parser 9.0.0",
++ "der-parser 10.0.0",
+  "lazy_static",
+  "nom",
+- "oid-registry 0.7.1",
++ "oid-registry 0.8.1",
+  "rusticata-macros",
+- "thiserror 1.0.69",
++ "thiserror 2.0.17",
+  "time",
+ ]
+ 
+ [[package]]
+ name = "x509-parser"
+-version = "0.17.0"
++version = "0.18.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "4569f339c0c402346d4a75a9e39cf8dad310e287eef1ff56d4c68e5067f53460"
++checksum = "eb3e137310115a65136898d2079f003ce33331a6c4b0d51f1531d1be082b6425"
+ dependencies = [
+  "asn1-rs 0.7.1",
+  "data-encoding",
+@@ -9729,7 +9626,7 @@ dependencies = [
+  "proc-macro2",
+  "quote",
+  "syn 2.0.106",
+- "synstructure 0.13.2",
++ "synstructure",
+ ]
+ 
+ [[package]]
+@@ -10222,7 +10119,7 @@ dependencies = [
+  "proc-macro2",
+  "quote",
+  "syn 2.0.106",
+- "synstructure 0.13.2",
++ "synstructure",
+ ]
+ 
+ [[package]]
+diff --git a/crates/directory/Cargo.toml b/crates/directory/Cargo.toml
+index ebb84f3f..67b23dff 100644
+--- a/crates/directory/Cargo.toml
++++ b/crates/directory/Cargo.toml
+@@ -12,14 +12,14 @@ trc = { path = "../trc" }
+ nlp = { path = "../nlp" }
+ types = { path = "../types" }
+ smtp-proto = { version = "0.2" }
+-mail-parser = { version = "0.11", features = ["full_encoding", "rkyv"] } 
++mail-parser = { version = "0.11", features = ["full_encoding", "rkyv"] }
+ mail-send = { version = "0.5", default-features = false, features = ["cram-md5", "ring", "tls12"] }
+ mail-builder = { version = "0.4" }
+ tokio = { version = "1.47", features = ["net"] }
+ tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "tls12"] }
+ rustls = { version = "0.23.5", default-features = false, features = ["std", "ring", "tls12"] }
+ rustls-pki-types = { version = "1" }
+-ldap3 = { version = "0.11.1", default-features = false, features = ["tls-rustls"] }
++ldap3 = { version = "0.12.1", default-features = false, features = ["tls-rustls-ring"] }
+ deadpool = { version = "0.10", features = ["managed", "rt_tokio_1"] }
+ async-trait = "0.1.68"
+ ahash = { version = "0.8" }
