@@ -1,0 +1,31 @@
+--- a/ui/build.rs	2024-04-26 16:11:59.502431471 +0200
++++ b/ui/build.rs	2024-04-26 16:12:44.539532395 +0200
+@@ -5,28 +5,7 @@
+ fn main() {
+     println!("cargo:rerun-if-changed=./src");
+
+-    // Save details from build environment so they can be included in the binary
+-    vergen(Config::default()).unwrap();
+
+-    if let Some(git_tag) = Command::new("git")
+-        .args(["describe", "--exact-match", "--tags", "HEAD"])
+-        .output()
+-        .ok()
+-        .and_then(|output| String::from_utf8(output.stdout).ok())
+-    {
+-        if !git_tag.is_empty() {
+-            println!("cargo:rustc-env=GIT_VERSION={}", git_tag);
+-        }
+-    }
+-
+-    if let Some(short_commit) = Command::new("git")
+-        .args(["rev-parse", "--short", "HEAD"])
+-        .output()
+-        .ok()
+-        .and_then(|output| String::from_utf8(output.stdout).ok())
+-    {
+-        println!("cargo:rustc-env=GIT_COMMIT_HASH={}", short_commit);
+-    }
+
+     // Load icon data
+     let out_dir = std::env::var_os("OUT_DIR").unwrap();
