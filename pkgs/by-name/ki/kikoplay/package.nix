@@ -3,95 +3,113 @@
   stdenv,
   lib,
   callPackage,
-  libsForQt5,
   makeWrapper,
-  qt5,
+  cmake,
+  qt6,
+  pkg-config,
   mpv,
   lua5_3_compat,
+  onnxruntime,
 }:
 let
-  qhttpengine = callPackage ./qhttpengine.nix { };
+  ela-widget-tools = callPackage ./ela-widget-tools.nix { };
+  qtwebapp = callPackage ./qtwebapp.nix { };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kikoplay";
-  version = "1.0.3";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "KikoPlayProject";
     repo = "KikoPlay";
-    rev = "${version}";
-    hash = "sha256-y+sT0aHDvKFNaJIxnGxDXZXUiCzuXVF7FPc8t//RMW4=";
+    tag = finalAttrs.version;
+    hash = "sha256-Rj+U7hs6PGq3BwLUoCRxbTl3lOVd8S5F5Lwb0tG67oM=";
   };
 
   nativeBuildInputs = [
-    libsForQt5.qmake
+    cmake
     makeWrapper
-    qt5.qtwebsockets
-    qt5.wrapQtAppsHook
+    pkg-config
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
+    ela-widget-tools
+    lua5_3_compat
     mpv
-    qhttpengine
-    qt5.qtbase
-    qt5.qtwebsockets
+    onnxruntime
+    qt6.qmake
+    qt6.qtbase
+    qt6.qtdeclarative
+    qt6.qtpositioning
+    qt6.qtwayland
+    qt6.qtwebengine
+    qt6.qtwebsockets
+    qtwebapp
   ];
 
-  strictDeps = true;
-
-  patches = [ ./change-install-path.patch ];
+  patches = [
+    ./change-install-path.patch
+    ./fix-mpv-dup-initialization.patch
+  ];
 
   postPatch = ''
     substituteInPlace KikoPlay.pro \
       --replace-fail "OUTPATH" "$out" \
-      --replace-fail "liblua53.a" "${lua5_3_compat}/lib/liblua.so.5.3"
+      --replace-fail "liblua53.a" "liblua.so.5.3" \
+      --replace-fail "DEFINES += KSERVICE" ""
 
-    substituteInPlace kikoplay.desktop \
-      --replace-fail "/usr/share/pixmaps/kikoplay.png" "$out/share/pixmaps/kikoplay.png"
-
-    for F in Extension/App/appmanager.cpp Extension/Script/scriptmanager.cpp LANServer/router.cpp; do
+    for F in Extension/App/appmanager.cpp Extension/Script/scriptmanager.cpp LANServer/router.cpp Play/Subtitle/subtitlerecognizer.cpp; do
       substituteInPlace "$F" --replace-fail "/usr/share/kikoplay/" "$out/share/kikoplay/"
     done
+
+    rm -rf lib/
   '';
 
+  dontUseCmakeConfigure = true;
   qmakeFlags = [ "KikoPlay.pro" ];
   hardeningDisable = [ "format" ];
 
-  # We will append QT wrapper args to our own wrapper
-  dontWrapQtApps = true;
+  qtWrapperArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${lua5_3_compat}/lib:/run/opengl-driver/lib"
+  ];
 
   postFixup = ''
     mkdir -p $out/share/kikoplay/extension/script
     cp -r ${
-      (fetchFromGitHub {
+      fetchFromGitHub {
         owner = "KikoPlayProject";
         repo = "KikoPlayScript";
-        rev = "0efa0aa479922ea7881966e3876263ccc3de1cf7";
-        hash = "sha256-saRI+/wk90Ldry85dh3PStKVQZjDECtPN58tJftkVJA=";
-      })
+        rev = "31dc29fd2fd538eab529f1165697e94bac131737";
+        hash = "sha256-3iwm4zMd1yEQ2bFWZqjIGj2IoGUtXl1LEPFlEJjLIew=";
+      }
     }/{bgm_calendar,danmu,library,resource} $out/share/kikoplay/extension/script/
     mkdir -p $out/share/kikoplay/extension/app
     cp -r ${
-      (fetchFromGitHub {
+      fetchFromGitHub {
         owner = "KikoPlayProject";
         repo = "KikoPlayApp";
-        rev = "1e9c0a2e0a0b34ce4f8b97c712afacd85708f848";
-        hash = "sha256-ditVnsOHirCw/ve96c0evBYWG+1YQpsQXht7vgto8/o=";
-      })
+        rev = "e14235dff81408d3047148276de646d93947c875";
+        hash = "sha256-cfQcpGYimP9o3R1iao2wxd61kUTE3kpNNq6syM0Ep90=";
+      }
     }/app/* $out/share/kikoplay/extension/app/
-
-    wrapProgram $out/bin/KikoPlay \
-      "''${qtWrapperArgs[@]}" \
-      --set QT_QPA_PLATFORM xcb \
-      --set XDG_SESSION_TYPE x11
   '';
 
+  passthru = {
+    inherit ela-widget-tools qtwebapp;
+  };
+
   meta = {
+    changelog = "https://github.com/KikoPlayProject/KikoPlay/releases/tag/${finalAttrs.version}";
     mainProgram = "KikoPlay";
     maintainers = with lib.maintainers; [ xddxdd ];
     description = "More than a Full-Featured Danmu Player";
     homepage = "https://kikoplay.fun";
     license = lib.licenses.gpl3Only;
     # See https://github.com/NixOS/nixpkgs/pull/354929
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = stdenv.isDarwin;
   };
-}
+})
