@@ -8,6 +8,8 @@ let
   cfg = config.services.sshguard;
 in
 {
+  meta.maintainers = with lib.maintainers; [ h7x4 ];
+
   options = {
     services.sshguard = {
       enable = lib.mkOption {
