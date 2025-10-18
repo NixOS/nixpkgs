@@ -4928,12 +4928,6 @@
     githubId = 640797;
     name = "Roger Qiu";
   };
-  cmfwyp = {
-    email = "cmfwyp@riseup.net";
-    github = "cmfwyp";
-    githubId = 20808761;
-    name = "cmfwyp";
-  };
   cmm = {
     email = "repo@cmm.kakpryg.net";
     github = "cmm";
