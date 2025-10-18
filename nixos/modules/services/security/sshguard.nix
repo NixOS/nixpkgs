@@ -72,12 +72,82 @@ in
       };
 
       services = lib.mkOption {
-        default = [ "sshd" ];
-        example = [
-          "sshd"
-          "exim"
+        default = [
+          (
+            if config.services.openssh.startWhenNeeded then
+              {
+                name = "sshd-session";
+                type = "syslog-id";
+              }
+            else
+              {
+                name = "sshd.service";
+                type = "service-name";
+              }
+          )
         ];
-        type = lib.types.listOf lib.types.str;
+        defaultText = lib.literalExpression ''
+          [
+            (
+              if config.services.openssh.startWhenNeeded then
+                {
+                  name = "sshd-session";
+                  type = "syslog-id";
+                }
+              else
+                {
+                  name = "sshd.service";
+                  type = "service-name";
+                }
+            )
+          ]
+        '';
+        example = lib.literalExpression ''
+          [
+            (
+              if config.services.openssh.startWhenNeeded then
+                {
+                  name = "sshd-session";
+                  type = "syslog-id";
+                }
+              else
+                {
+                  name = "sshd.service";
+                  type = "service-name";
+                }
+            )
+            {
+              name = "exim.service";
+              type = "service-name";
+            }
+          ]
+        '';
+        type =
+          let
+            logTarget = lib.types.submodule {
+              options = {
+                name = lib.mkOption {
+                  description = "Syslog identifier or service unit pattern to include as a log target";
+                  type = lib.types.str;
+                  example = "sshd@*.service";
+                };
+                type = lib.mkOption {
+                  description = "Whether the log target is a syslog id or a servic unit pattern";
+                  type = lib.types.enum [
+                    "service-name"
+                    "syslog-id"
+                  ];
+                };
+              };
+            };
+
+            coerce = name: {
+              type = "service";
+              inherit name;
+            };
+          in
+          with lib.types;
+          listOf (coercedTo str coerce logTarget);
         description = ''
           Systemd services or syslog identifiers sshguard should receive logs of.
 
@@ -128,13 +198,15 @@ in
 
         ExecStart =
           let
+            logTargets = lib.partition ({ type, ... }: type == "service-name") cfg.services;
             args = lib.cli.toGNUCommandLineShell { } {
               all = true;
               follow = true;
               priority = "info";
               output = "cat";
               lines = 1;
-              unit = cfg.services;
+              unit = map (x: x.name) logTargets.right;
+              identifier = map (x: x.name) logTargets.wrong;
             };
           in
           if cfg.enableInspectableLogStream then
