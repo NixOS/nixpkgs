@@ -713,6 +713,7 @@ let
                 }
               ) possibleCPEPartsFuns;
 
+          evaluateSrc = !isMarkedBroken attrs && !hasUnsupportedPlatform attrs;
           purlParts = attrs.meta.identifiers.purlParts or { };
           purlPartsFormatted =
             if purlParts ? type && purlParts ? spec then "pkg:${purlParts.type}/${purlParts.spec}" else null;
@@ -722,6 +723,8 @@ let
             # 1) locally set through API
             if purlPartsFormatted != null then
               purlPartsFormatted
+            else if !evaluateSrc then
+              null
             else
               # 2) locally overwritten through meta.identifiers.purl
               (attrs.src.meta.identifiers.purl or null);
@@ -733,6 +736,8 @@ let
               # 2) locally set through API
               if purlPartsFormatted != null then
                 [ purlPartsFormatted ]
+              else if !evaluateSrc then
+                [ ]
               else
                 # 3) src.meta.PURL
                 (attrs.src.meta.identifiers.purls or (
