@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texpresso";
-  version = "0-unstable-2025-01-29";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "let-def";
