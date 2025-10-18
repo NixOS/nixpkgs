@@ -73,6 +73,7 @@ in
         BindPaths = [
           cfg.settings.playlists-path
           cfg.settings.podcast-path
+          cfg.settings.cache-path
         ];
         BindReadOnlyPaths = [
           # gonic can access scrobbling services
