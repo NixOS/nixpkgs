@@ -12,7 +12,7 @@
 buildPythonPackage rec {
   pname = "ssh-python";
   version = "1.2.0.post1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ParallelSSH";
@@ -22,9 +22,9 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-  nativeBuildInputs = [
-    cython
-  ];
+
+  nativeBuildInputs = [ cython ];
+
   buildInputs = [
     openssl
     zlib
