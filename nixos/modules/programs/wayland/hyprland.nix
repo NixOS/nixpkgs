@@ -67,7 +67,7 @@ in
     };
 
     systemd.setPath.enable = lib.mkEnableOption null // {
-      default = lib.versionOlder cfg.package.version "0.41.2";
+      default = lib.versionOlder "0.41.2" cfg.package.version;
       defaultText = lib.literalExpression ''lib.versionOlder cfg.package.version "0.41.2"'';
       example = false;
       description = ''
