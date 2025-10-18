@@ -4526,6 +4526,7 @@ with pkgs;
     crystal_1_15
     crystal_1_16
     crystal_1_17
+    crystal_1_18
     crystal
     ;
 
