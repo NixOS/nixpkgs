@@ -1,7 +1,7 @@
 import ./make-test-python.nix (
   { pkgs, transmission, ... }:
   {
-    name = "transmission";
+    name = "transmission-${transmission.version}";
     meta = with pkgs.lib.maintainers; {
       maintainers = [ coconnor ];
     };

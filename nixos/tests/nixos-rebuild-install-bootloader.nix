@@ -6,7 +6,7 @@ import ./make-test-python.nix (
     ...
   }:
   {
-    name = "nixos-rebuild-install-bootloader";
+    name = "nixos-rebuild-install-bootloader" + pkgs.lib.optionalString withNg "-ng";
 
     nodes = {
       machine =
