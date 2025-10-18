@@ -65,9 +65,6 @@ let
       ./qtdeclarative-default-disable-qmlcache.patch
       # add version specific QML import path
       ./qtdeclarative-qml-paths.patch
-    ]
-    # FIXME: Make unconditional on next staging cycle
-    ++ lib.optionals (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isDarwin) [
       # Fix an undefined behavior, and fix random-seeming build error with Clang. See:
       # - https://codereview.qt-project.org/c/qt/qtdeclarative/+/354847
       # - https://github.com/llvm/llvm-project/issues/74070

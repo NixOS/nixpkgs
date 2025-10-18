@@ -42,6 +42,8 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
+    # https://github.com/click-contrib/click-repl/issues/128
+    broken = lib.versionAtLeast click.version "8.2.0";
     homepage = "https://github.com/click-contrib/click-repl";
     description = "Subcommand REPL for click apps";
     license = licenses.mit;

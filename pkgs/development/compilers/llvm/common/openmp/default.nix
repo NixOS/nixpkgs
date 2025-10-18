@@ -46,9 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  # TODO: Remove on `staging`.
-  patchFlags = null;
-
   patches =
     lib.optional (lib.versionOlder release_version "19") (getVersionFile "openmp/fix-find-tool.patch")
     ++ [

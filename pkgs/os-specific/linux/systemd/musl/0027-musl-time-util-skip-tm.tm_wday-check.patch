@@ -1,0 +1,47 @@
+From 524396a3058a08955683038dae86cf5aaaf10847 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 8 Sep 2025 15:08:49 +0900
+Subject: [PATCH 27/30] musl: time-util: skip tm.tm_wday check
+
+musl does not set tm_wday when it is explicitly requested.
+The check is not necessary at all, it is just for safety.
+Let's skip it when built with musl.
+---
+ src/basic/time-util.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
+
+diff --git a/src/basic/time-util.c b/src/basic/time-util.c
+index 38591b0604..c890141a99 100644
+--- a/src/basic/time-util.c
++++ b/src/basic/time-util.c
+@@ -668,10 +668,14 @@ static int parse_timestamp_impl(
+         _cleanup_free_ char *t_alloc = NULL;
+         usec_t usec, plus = 0, minus = 0;
+         bool with_tz = false;
+-        int r, weekday = -1;
+         unsigned fractional = 0;
+         const char *k;
+         struct tm tm, copy;
++        int r;
++#ifndef __GLIBC__
++        _unused_
++#endif
++        int weekday = -1;
+ 
+         /* Allowed syntaxes:
+          *
+@@ -921,8 +925,11 @@ from_tm:
+         assert(plus == 0);
+         assert(minus == 0);
+ 
++#ifdef __GLIBC__
++        /* musl does not set tm_wday field and set 0 unless it is explicitly requested by %w or so. */
+         if (weekday >= 0 && tm.tm_wday != weekday)
+                 return -EINVAL;
++#endif
+ 
+         if (gmtoff < 0) {
+                 plus = -gmtoff * USEC_PER_SEC;
+-- 
+2.51.0
+

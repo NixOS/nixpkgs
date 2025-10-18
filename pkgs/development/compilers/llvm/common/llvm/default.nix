@@ -85,9 +85,6 @@ stdenv.mkDerivation (
     pname = "llvm";
     inherit version;
 
-    # TODO: Remove on `staging`.
-    shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
-
     src =
       if monorepoSrc != null then
         runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (

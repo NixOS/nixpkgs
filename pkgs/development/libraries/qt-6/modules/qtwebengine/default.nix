@@ -37,7 +37,6 @@
   libopus,
   jsoncpp,
   protobuf,
-  libvpx,
   srtp,
   snappy,
   nss,
@@ -59,13 +58,12 @@
   lcms2,
   libkrb5,
   libgbm,
+  libva,
   enableProprietaryCodecs ? true,
   # darwin
   bootstrap_cmds,
   cctools,
   xcbuild,
-
-  fetchpatch,
 }:
 
 qtModule {
@@ -112,15 +110,6 @@ qtModule {
 
     # Reproducibility QTBUG-136068
     ./gn-object-sorted.patch
-
-    # Revert "Create EGLImage with eglCreateDRMImageMESA() for exporting dma_buf"
-    # Mesa 25.2 dropped eglCreateDRMImageMESA, so this no longer works.
-    # There are better ways to do this, but this is the easy fix for now.
-    (fetchpatch {
-      url = "https://invent.kde.org/qt/qt/qtwebengine/-/commit/ddcd30454aa6338d898c9d20c8feb48f36632e16.diff";
-      revert = true;
-      hash = "sha256-ht7C3GIEaPtmMGLzQKOtMqE9sLKdqqYCgi/W6b430YU=";
-    })
   ];
 
   postPatch = ''
@@ -210,7 +199,6 @@ qtModule {
 
     # Video formats
     srtp
-    libvpx
 
     # Audio formats
     libopus
@@ -269,6 +257,7 @@ qtModule {
 
     libkrb5
     libgbm
+    libva
   ];
 
   buildInputs = [

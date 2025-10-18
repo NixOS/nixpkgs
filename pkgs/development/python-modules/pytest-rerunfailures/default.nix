@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-rerunfailures";
-  version = "15.1";
+  version = "16.0.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "pytest-dev";
     repo = "pytest-rerunfailures";
     tag = version;
-    hash = "sha256-ab3n61zCf9ok2PWvKTwmaeoeGuMxl0sYE25djk/NDLk=";
+    hash = "sha256-4/BgvfVcs7MdULlhafZypNzzag4ITALStHI1tIoAPL4=";
   };
 
   build-system = [ setuptools ];
@@ -34,6 +34,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Pytest plugin to re-run tests to eliminate flaky failures";
     homepage = "https://github.com/pytest-dev/pytest-rerunfailures";
+    changelog = "https://github.com/pytest-dev/pytest-rerunfailures/blob/${src.tag}/CHANGES.rst";
     license = licenses.mpl20;
     maintainers = with maintainers; [ das-g ];
   };

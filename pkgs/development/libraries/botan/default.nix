@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchurl,
   pkgsStatic,
   python3,
@@ -172,5 +173,13 @@ in
   botan2 = common {
     version = "2.19.5";
     hash = "sha256-3+6g4KbybWckxK8B2pp7iEh62y2Bunxy/K9S21IsmtQ=";
+    patches = [
+      # Fix build with gcc15
+      (fetchpatch {
+        name = "botan2-add-include-cstdint-gcc15.patch";
+        url = "https://src.fedoraproject.org/rpms/botan2/raw/c3fb7a3800df117e7ef8a7617ac8eacb31a4464a/f/f765f0b312f2998498f629d93369babfb2c975b4.patch";
+        hash = "sha256-8Yhxd5TCgxUMtRiv3iq5sQaVjDF+b9slppm38/6l6lw=";
+      })
+    ];
   };
 }
