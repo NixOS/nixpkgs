@@ -116,6 +116,7 @@ stubs
   ### D ###
 
   discrete-scroll = pkgs.discrete-scroll; # added 2024-11-27
+  ditto = throw "'darwin.ditto' has been removed, because it was impure and unused"; # added 2025-10-18
 
   ### I ###
 
@@ -150,5 +151,6 @@ stubs
 
   stdenvNoCF = throw "darwin.stdenvNoCF has been removed; use `stdenv` or `stdenvNoCC`"; # converted to throw 2025-07-29
   stubs = throw "'darwin.stubs.*' have been removed as they were unused"; # added 2025-04-20
+  sudo = throw "'darwin.sudo' has been removed, because it was impure and unused"; # added 2025-10-18
   swift-corelibs-foundation = throw "'darwin.swift-corelibs-foundation' has been removed, as it was broken and is no longer used"; # added 2025-04-20
 }
