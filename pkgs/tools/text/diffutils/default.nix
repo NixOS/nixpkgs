@@ -58,6 +58,11 @@ stdenv.mkDerivation rec {
       ''
         sed -i -E 's:test-time::g' gnulib-tests/Makefile.in
       ''
+    else if (stdenv.buildPlatform.isGnu && stdenv.hostPlatform.isMusl) then
+      ''
+        sed -i -E 's:test-getopt-gnu::g' gnulib-tests/Makefile.in
+        sed -i -E 's:test-getopt-posix::g' gnulib-tests/Makefile.in
+      ''
     else
       null;
 
