@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation {
   pname = "cups-zj-58";
-  version = "2019-04-28";
+  version = "0-unstable-2019-04-28";
 
   src = fetchFromGitHub {
     owner = "klirichek";
     repo = "zj-58";
     rev = "64743565df4379098b68a197d074c86617a8fc0a";
-    sha256 = "sha256-4l9NRfp0hiPDC6dtFsq7jLf0Gn9tktGy6oZ4GHxSfbw=";
+    hash = "sha256-4l9NRfp0hiPDC6dtFsq7jLf0Gn9tktGy6oZ4GHxSfbw=";
   };
 
   nativeBuildInputs = [
