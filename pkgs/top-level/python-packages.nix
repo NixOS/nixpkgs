@@ -5133,8 +5133,6 @@ self: super: with self; {
 
   favicon = callPackage ../development/python-modules/favicon { };
 
-  fb-re2 = callPackage ../development/python-modules/fb-re2 { };
-
   fe25519 = callPackage ../development/python-modules/fe25519 { };
 
   feather-format = callPackage ../development/python-modules/feather-format { };
