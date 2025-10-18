@@ -55,8 +55,6 @@ jobs:
     with:
       mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
       systems: ${{ needs.prepare.outputs.systems }}
-      # This must match the version in Eval's target step.
-      defaultVersion: lixPackageSets.latest.lix
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block the Merge Queue.
