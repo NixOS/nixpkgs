@@ -8,17 +8,14 @@
   pkg-config,
 }:
 
-let
-  char2underscore = char: str: lib.replaceStrings [ char ] [ "_" ] str;
-in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-smf2wav";
   version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
-    rev = "${char2underscore "-" pname}_${char2underscore "." version}";
+    rev = "mt32emu_smf2wav_${lib.replaceString "." "_" finalAttrs.version}";
     sha256 = "sha256-XGds9lDfSiY0D8RhYG4TGyjYEVvVYuAfNSv9+VxiJEs=";
   };
 
@@ -41,12 +38,12 @@ stdenv.mkDerivation rec {
     "-Dmunt_WITH_MT32EMU_SMF2WAV=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://munt.sourceforge.net/";
     description = "Produces a WAVE file from a Standard MIDI file (SMF)";
     mainProgram = "mt32emu-smf2wav";
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
-}
+})

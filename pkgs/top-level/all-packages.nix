@@ -11409,8 +11409,6 @@ with pkgs;
 
   mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
 
-  mt32emu-smf2wav = callPackage ../applications/audio/munt/mt32emu-smf2wav.nix { };
-
   noson = libsForQt5.callPackage ../applications/audio/noson { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
