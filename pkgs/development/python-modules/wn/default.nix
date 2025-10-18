@@ -1,14 +1,15 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  pytestCheckHook,
-  pytest-benchmark,
+  fetchFromGitHub,
   pythonOlder,
   hatchling,
   httpx,
   tomli,
   starlette,
+
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -18,9 +19,11 @@ buildPythonPackage rec {
 
   disabled = pythonOlder "3.9";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-wOaFLlFCNUo7RWWiMXRuztyVJTXpJtPvZJi9d6UmkcY=";
+  src = fetchFromGitHub {
+    owner = "goodmami";
+    repo = "wn";
+    tag = "v${version}";
+    hash = "sha256-xUraVRQmr4Oq1T/RiWgch8YJtAZR9ebOzaGBJ1NPKtw=";
   };
 
   build-system = [ hatchling ];
@@ -35,24 +38,24 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    writableTmpDirAsHomeHook
     pytestCheckHook
-    pytest-benchmark
   ]
   ++ optional-dependencies.web;
 
-  pytestFlags = [ "--benchmark-disable" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  # probably not worth spending time on plus require additional dependencies
+  disabledTestPaths = [ "bench/" ];
 
   pythonImportsCheck = [ "wn" ];
 
   meta = with lib; {
     description = "Modern, interlingual wordnet interface for Python";
     homepage = "https://github.com/goodmami/wn";
-    changelog = "https://github.com/goodmami/wn/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/goodmami/wn/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [
+      zendo
+      jk
+    ];
   };
 }
