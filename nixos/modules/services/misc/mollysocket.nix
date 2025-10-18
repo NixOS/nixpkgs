@@ -98,7 +98,7 @@ in
       wants = [ "network-online.target" ];
       environment.RUST_LOG = cfg.logLevel;
       serviceConfig = {
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         ExecStart = "${getExe package} server";
         KillSignal = "SIGINT";
         Restart = "on-failure";

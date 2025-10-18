@@ -234,7 +234,7 @@ in
       serviceConfig = {
         User = "mautrix-whatsapp";
         Group = "mautrix-whatsapp";
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         StateDirectory = baseNameOf dataDir;
         WorkingDirectory = dataDir;
         ExecStart = ''
