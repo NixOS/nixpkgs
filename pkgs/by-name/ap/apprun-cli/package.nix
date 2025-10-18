@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "apprun-cli";
-  version = "0.3.2";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "fujiwara";
     repo = "apprun-cli";
     tag = "v${version}";
-    hash = "sha256-k8ZFDWIuUjYqDIm7JdiqjeF2qaPX0SaOgqk4oud09Lc=";
+    hash = "sha256-tBQgBu/5GDphkpb/c+NoUCAvcrlbjR8nABp8a+3Lr1U=";
   };
 
-  vendorHash = "sha256-WQRDkxL52RQmZn2aeE13pU4YGk8UjuZtS1lTNb53/hQ=";
+  vendorHash = "sha256-V+yVp59fA3g4NRtsuUTAetmrO0bIyfFMAJRsD6G+QgE=";
 
   ldflags = [
     "-s"
