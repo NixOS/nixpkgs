@@ -11836,8 +11836,6 @@ with pkgs;
 
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
-  miniaudicle = qt6Packages.callPackage ../applications/audio/miniaudicle { };
-
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
   mixxx = qt6Packages.callPackage ../applications/audio/mixxx { };

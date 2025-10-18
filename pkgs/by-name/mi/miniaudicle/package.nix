@@ -2,9 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  qmake,
-  wrapQtAppsHook,
-  qt6Packages,
   bison,
   flex,
   which,
@@ -12,6 +9,7 @@
   libsndfile,
   libpulseaudio,
   libjack2,
+  kdePackages,
   audioBackend ? "pulse", # "pulse", "alsa", or "jack"
 }:
 
@@ -22,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ccrma";
     repo = "miniAudicle";
-    rev = "chuck-${finalAttrs.version}";
+    tag = "chuck-${finalAttrs.version}";
     hash = "sha256-LYr9Fc4Siqk0BFKHVXfIV2XskJYAN+/0P+nb6FJLsLE=";
     fetchSubmodules = true;
   };
@@ -39,28 +37,28 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     which
-    qmake
-    wrapQtAppsHook
+    kdePackages.qmake
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
     libsndfile
-    qt6Packages.qscintilla
+    kdePackages.qscintilla
   ]
   ++ lib.optional (audioBackend == "pulse") libpulseaudio
   ++ lib.optional (audioBackend == "jack") libjack2;
 
   buildFlags = [ "linux-${audioBackend}" ];
 
-  meta = with lib; {
+  meta = {
     description = "Light-weight integrated development environment for the ChucK digital audio programming language";
     mainProgram = "miniAudicle";
     homepage = "https://audicle.cs.princeton.edu/mini/";
     downloadPage = "https://audicle.cs.princeton.edu/mini/linux/";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # not attempted
   };
 })
