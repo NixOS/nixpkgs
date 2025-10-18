@@ -5,7 +5,6 @@
   cryptography,
   fetchPypi,
   isodate,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
@@ -14,8 +13,6 @@ buildPythonPackage rec {
   pname = "azure-storage-file-share";
   version = "12.23.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "azure_storage_file_share";
