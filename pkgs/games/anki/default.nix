@@ -24,6 +24,7 @@
   writeShellScriptBin,
   yarn,
   yarn-berry_4,
+  runCommand,
 
   swift,
 
@@ -72,10 +73,7 @@ let
     exec ${yarn}/bin/yarn "$@"
   '';
 
-  uvWheels = stdenv.mkDerivation {
-    name = "uv-wheels";
-    phases = [ "installPhase" ];
-
+  uvWheels = runCommand "uv-wheels" {
     # otherwise, it's too long of a string
     passAsFile = [ "installCommand" ];
     installCommand = ''
@@ -98,9 +96,7 @@ let
         fi
       '') pythonDeps
     ));
-
-    installPhase = ''bash $installCommandPath'';
-  };
+  } "bash $installCommandPath";
 in
 
 python3Packages.buildPythonApplication rec {

@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pimsync";
-  version = "0.4.4";
+  version = "0.5.4";
 
   src = fetchFromSourcehut {
     owner = "~whynothugo";
     repo = "pimsync";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-M29kqvvNfs4zF1epurXGEas1phPdrEAFDnYKqyCzzfE=";
+    hash = "sha256-LHdm6CeaGrlTNzN4h9XzYCG5aRG2lk3ZqqZLd37q7is=";
   };
 
-  cargoHash = "sha256-HQObvolih9nOn0epu7tWkLa0ibkNarXy2pNNzllQtMg=";
+  cargoHash = "sha256-6n7kjmLWzG5rttYak65gmu5KM/W4bN4FS1MaEnCELV8=";
 
   PIMSYNC_VERSION = finalAttrs.version;
 
@@ -50,6 +50,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "Synchronise calendars and contacts";
     homepage = "https://git.sr.ht/~whynothugo/pimsync";
+    changelog = "https://pimsync.whynothugo.nl/changelog.html#v${
+      lib.replaceString "." "-" finalAttrs.version
+    }";
     license = lib.licenses.eupl12;
     platforms = lib.platforms.unix;
     maintainers = [ lib.maintainers.qxrein ];
