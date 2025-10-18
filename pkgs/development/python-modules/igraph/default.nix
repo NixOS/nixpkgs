@@ -15,19 +15,19 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.9";
+  version = "0.11.9-unstable-2025-10-17";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "igraph";
     repo = "python-igraph";
-    tag = version;
+    rev = "7bd368c64dcae62b4bd485396494015cfd03fe08";
     postFetch = ''
       # export-subst prevents reproducability
       rm $out/.git_archival.json
     '';
-    hash = "sha256-rmIICiIyEr5JCmkDAzcdisVaaKDraTQEquPHjK4d7oU=";
+    hash = "sha256-QLcpSrQ6kC3sxk1793KaxEXz7tt7xSiAmrwMZV6GgVQ=";
   };
 
   postPatch = ''
