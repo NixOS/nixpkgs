@@ -1,7 +1,7 @@
 {
+  lib,
   config,
   stdenv,
-  lib,
   fetchFromGitHub,
   fetchpatch,
   abseil-cpp_202407,
@@ -29,20 +29,23 @@
 }@inputs:
 
 let
-  version = "1.22.2";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-X8Pdtc0eR0iU+Xi2A1HrNo1xqCnoaxNjj4QFm/E3kSE=";
+    hash = "sha256-GIvKPjuQDZgr8avnJjTU0DisPROlZMWui5gAt4wthbo=";
   };
 
   stdenv = throw "Use effectiveStdenv instead";
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else inputs.stdenv;
 
   cudaArchitecturesString = cudaPackages.flags.cmakeCudaArchitecturesString;
+
+  # TODO: update the following dependencies according to:
+  # https://github.com/microsoft/onnxruntime/blob/v<VERSION>/cmake/deps.txt
 
   mp11 = fetchFromGitHub {
     owner = "boostorg";
@@ -61,15 +64,15 @@ let
   onnx = fetchFromGitHub {
     owner = "onnx";
     repo = "onnx";
-    tag = "v1.17.0";
-    hash = "sha256-9oORW0YlQ6SphqfbjcYb0dTlHc+1gzy9quH/Lj6By8Q=";
+    tag = "v1.18.0";
+    hash = "sha256-UhtF+CWuyv5/Pq/5agLL4Y95YNP63W2BraprhRqJOag=";
   };
 
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v3.5.1";
-    hash = "sha256-sTGYN+bjtEqQ7Ootr/wvx3P9f8MCDSSj3qyCWjfdLEA=";
+    tag = "v3.9.2";
+    hash = "sha256-teziPNA9csYvhkG5t2ht8W8x5+1YGGbHm8VKx4JoxgI=";
   };
 
   dlpack = fetchFromGitHub {
@@ -85,15 +88,7 @@ effectiveStdenv.mkDerivation rec {
   pname = "onnxruntime";
   inherit src version;
 
-  patches = [
-    # https://github.com/microsoft/onnxruntime/pull/24583
-    (fetchpatch {
-      name = "fix-compilation-with-gcc-15.patch";
-      url = "https://github.com/microsoft/onnxruntime/commit/f7619dc93f592ddfc10f12f7145f9781299163a0.patch";
-      hash = "sha256-jxfMB+/Zokcu5DSfZP7QV1E8mTrsLe/sMr+ZCX/Y3m0=";
-    })
-  ]
-  ++ lib.optionals cudaSupport [
+  patches = lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0
     ./nvcc-gsl.patch
@@ -220,9 +215,14 @@ effectiveStdenv.mkDerivation rec {
     (lib.cmakeFeature "onnxruntime_NVCC_THREADS" "1")
   ];
 
-  env = lib.optionalAttrs effectiveStdenv.cc.isClang {
-    NIX_CFLAGS_COMPILE = "-Wno-error";
-  };
+  env =
+    lib.optionalAttrs effectiveStdenv.cc.isClang {
+      NIX_CFLAGS_COMPILE = "-Wno-error";
+    }
+    // lib.optionalAttrs effectiveStdenv.cc.isGNU {
+      # error: loop variable 'provider' creates a copy from type 'const gsl::not_null<const onnxruntime::IExecutionProvider*>' [-Werror=range-loop-construct]
+      NIX_CFLAGS_COMPILE = "-Wno-error=range-loop-construct";
+    };
 
   doCheck =
     !(
@@ -246,14 +246,15 @@ effectiveStdenv.mkDerivation rec {
     substituteInPlace cmake/libonnxruntime.pc.cmake.in \
       --replace-fail '$'{prefix}/@CMAKE_INSTALL_ @CMAKE_INSTALL_
     echo "find_package(cudnn_frontend REQUIRED)" > cmake/external/cudnn_frontend.cmake
-
-    # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
+  ''
+  # https://github.com/microsoft/onnxruntime/blob/c4f3742bb456a33ee9c826ce4e6939f8b84ce5b0/onnxruntime/core/platform/env.h#L249
+  + ''
     substituteInPlace onnxruntime/core/platform/env.h --replace-fail \
       "GetRuntimePath() const { return PathString(); }" \
       "GetRuntimePath() const { return PathString(\"$out/lib/\"); }"
   ''
+  # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
   + lib.optionalString (effectiveStdenv.hostPlatform.system == "aarch64-linux") ''
-    # https://github.com/NixOS/nixpkgs/pull/226734#issuecomment-1663028691
     rm -v onnxruntime/test/optimizer/nhwc_transformer_test.cc
   '';
 
@@ -261,8 +262,8 @@ effectiveStdenv.mkDerivation rec {
     ${python3Packages.python.interpreter} ../setup.py bdist_wheel
   '';
 
+  # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
   postInstall = ''
-    # perform parts of `tools/ci_build/github/linux/copy_strip_binary.sh`
     install -m644 -Dt $out/include \
       ../include/onnxruntime/core/framework/provider_options.h \
       ../include/onnxruntime/core/providers/cpu/cpu_provider_factory.h \
