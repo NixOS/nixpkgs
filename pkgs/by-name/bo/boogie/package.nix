@@ -15,7 +15,7 @@ buildDotnetModule rec {
     owner = "boogie-org";
     repo = "boogie";
     tag = "v${version}";
-    hash = "sha256-OuNzxzcoWrDCmUfQNXEif5wIY+L5jql14231m7nNBe4=";
+    hash = "sha256-tmcio1GCyfMhjnbBE/pUqYso5HCu4SLHOYx/t0/PZTQ=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
