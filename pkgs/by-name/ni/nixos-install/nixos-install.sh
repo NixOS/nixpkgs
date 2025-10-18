@@ -19,7 +19,8 @@ system=
 verbosity=()
 attr=
 buildFile=
-buildingAttribute=1
+# keys: module, by-attrset, flake, system
+declare -A requestedBuildMethods
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -38,10 +39,12 @@ while [ "$#" -gt 0 ]; do
             ;;
         --system|--closure)
             system="$1"; shift 1
+            requestedBuildMethods["system"]=1
             ;;
         --flake)
           flake="$1"
           flakeFlags=(--extra-experimental-features 'nix-command flakes')
+          requestedBuildMethods["flake"]=1
           shift 1
           ;;
         --file|-f)
@@ -49,8 +52,15 @@ while [ "$#" -gt 0 ]; do
                 log "$0: '$i' requires an argument"
                 exit 1
             fi
-            buildFile="$1"
-            buildingAttribute=
+            if [ -f "$1" ]; then
+                buildFile="$1"
+            elif [ -f "$1/default.nix" ]; then
+                log "$0: warning: in future release, system.nix will be used when directory is given instead of default.nix"
+                buildFile="${1%/}/default.nix"
+            else
+                buildFile="${1%/}/system.nix"
+            fi
+            requestedBuildMethods["by-attrset"]=1
             shift 1
             ;;
         --attr|-A)
@@ -59,7 +69,7 @@ while [ "$#" -gt 0 ]; do
                 exit 1
             fi
             attr="$1"
-            buildingAttribute=
+            requestedBuildMethods["by-attrset"]=1
             shift 1
             ;;
         --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
@@ -106,6 +116,20 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+# Finds a specific file in a directory or its parents
+findInParents() {
+    local dir=$1
+    local filename=$2
+    while [[ ! -f "$dir/$filename" ]] && [[ "$dir" != / ]]; do
+        dir=$(dirname "$dir")
+    done
+    if [[ -f "$dir/$filename" ]]; then
+        echo "$dir/$filename"
+    else
+        return 1
+    fi
+}
+
 if ! test -e "$mountPoint"; then
     echo "mount point $mountPoint doesn't exist"
     exit 1
@@ -122,30 +146,63 @@ while [[ "$checkPath" != "/" ]]; do
     checkPath="$(dirname "$checkPath")"
 done
 
-# Verify that user is not trying to use attribute building and flake
-# at the same time
-if [[ -z $buildingAttribute && -n $flake ]]; then
-    echo "$0: '--flake' cannot be used with '--file' or '--attr'"
+# If user requested multiple build methods, abort
+if [[ ${#requestedBuildMethods[@]} -gt 1 ]]; then
+    echo "error: multiple build methods requested: ${!requestedBuildMethods[@]}"
     exit 1
 fi
 
 # Get the path of the NixOS configuration file.
-if [[ -z $flake && -n $buildingAttribute ]]; then
-    if [[ -z $NIXOS_CONFIG ]]; then
-        NIXOS_CONFIG=$mountPoint/etc/nixos/configuration.nix
+findByAttrset() {
+    # - From default.nix up from the current directory
+    # - Hardcoded to /etc/nixos/default.nix
+    # - From system.nix up from the current directory
+    # - Hardcoded to $mountPoint/etc/nixos/system.nix
+    if resolvedBuildFile="$(findInParents "$PWD" default.nix)"; then
+        log "$0: warning: in future release, system.nix will be used instead of default.nix"
+        buildFile=$resolvedBuildFile
+        return 0
+    elif [[ -f "/etc/nixos/default.nix" ]]; then
+        log "$0: warning: in future release, /etc/nixos/system.nix will be used instead of /etc/nixos/default.nix"
+        buildFile="/etc/nixos/default.nix"
+        return 0
+    elif resolvedBuildFile="$(findInParents "$PWD" system.nix)"; then
+        buildFile=$resolvedBuildFile
+        return 0
+    elif [[ -f "/etc/nixos/system.nix" ]]; then
+        buildFile="/etc/nixos/system.nix"
+        return 0
     fi
+    return 1
+}
 
-    if [[ ${NIXOS_CONFIG:0:1} != / ]]; then
-        echo "$0: \$NIXOS_CONFIG is not an absolute path"
+findModule() {
+    # - From NIXOS_CONFIG environment variable
+    # - hardcoded to $mountPoint/etc/nixos/configuration.nix
+    if [[ -n $NIXOS_CONFIG ]]; then
+        return 0
+    elif [[ -f "$mountPoint/etc/nixos/configuration.nix" ]]; then
+        NIXOS_CONFIG="$mountPoint/etc/nixos/configuration.nix"
+        return 0
+    fi
+    return 1
+}
+
+# If user didn't request a specific build method, try to find one
+if [[ ${#requestedBuildMethods[@]} -eq 0 ]]; then
+    # Flakes cannot be resolved without knowing hostname
+    if findByAttrset; then
+        requestedBuildMethods["by-attrset"]=1
+    elif findModule; then
+        requestedBuildMethods["module"]=1
+    else
+        echo "error: no build method found"
         exit 1
     fi
-elif [[ -z $buildingAttribute ]]; then
-    if [[ -z $buildFile ]]; then
-        buildFile="$mountPoint/etc/nixos/default.nix"
-    elif [[ -d $buildFile ]]; then
-        buildFile="$buildFile/default.nix"
-    fi
-elif [[ -n $flake ]]; then
+fi
+
+# Find configuration files if not already found
+if [[ -n "${requestedBuildMethods["flake"]}" ]]; then
     if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
        flake="${BASH_REMATCH[1]}"
        flakeAttr="${BASH_REMATCH[2]}"
@@ -156,19 +213,28 @@ elif [[ -n $flake ]]; then
         exit 1
     fi
     flakeAttr="nixosConfigurations.\"$flakeAttr\""
+elif [[ -n "${requestedBuildMethods["by-attrset"]}" && -z $buildFile ]]; then
+    findByAttrset
+elif [[ -n "${requestedBuildMethods["module"]}" && -z $NIXOS_CONFIG ]]; then
+    findModule
+
+    if [[ ${NIXOS_CONFIG:0:1} != / ]]; then
+        echo "$0: \$NIXOS_CONFIG is not an absolute path"
+        exit 1
+    fi
 fi
 
 # Resolve the flake.
-if [[ -n $flake ]]; then
+if [[ -n "${requestedBuildMethods["flake"]}" ]]; then
     flake=$(nix "${flakeFlags[@]}" flake metadata --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
-if [[ ! -e $NIXOS_CONFIG && -z $system && -z $flake && -n $buildingAttribute ]]; then
+if [[ ! -e $NIXOS_CONFIG && -n "${requestedBuildMethods["module"]}" ]]; then
     echo "configuration file $NIXOS_CONFIG doesn't exist"
     exit 1
 fi
 
-if [[ ! -z $buildingAttribute && -e $buildFile && -z $system ]]; then
+if [[ ! -e $buildFile && -n "${requestedBuildMethods["by-attrset"]}" ]]; then
     echo "configuration file $buildFile doesn't exist"
     exit 1
 fi
@@ -202,12 +268,12 @@ fi
 # Build the system configuration in the target filesystem.
 if [[ -z $system ]]; then
     outLink="$tmpdir/system"
-    if [[ -z $flake && -n $buildingAttribute ]]; then
+    if [[ -n "${requestedBuildMethods["module"]}" ]]; then
         echo "building the configuration in $NIXOS_CONFIG..."
         nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
             --extra-substituters "$sub" \
             '<nixpkgs/nixos>' -A system -I "nixos-config=$NIXOS_CONFIG" "${verbosity[@]}"
-    elif [[ -z $buildingAttribute ]]; then
+    elif [[ -n "${requestedBuildMethods["by-attrset"]}" ]]; then
         if [[ -n $attr ]]; then
             echo "building the configuration in $buildFile and attribute $attr..."
         else
@@ -216,7 +282,7 @@ if [[ -z $system ]]; then
         nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
             --extra-substituters "$sub" \
             "$buildFile" -A "${attr:+$attr.}config.system.build.toplevel" "${verbosity[@]}"
-    else
+    else # [[ -n "${requestedBuildMethods["flake"]}" ]]
         echo "building the flake in $flake..."
         nix "${flakeFlags[@]}" build "$flake#$flakeAttr.config.system.build.toplevel" \
             --store "$mountPoint" --extra-substituters "$sub" "${verbosity[@]}" \
