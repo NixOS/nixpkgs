@@ -79,6 +79,10 @@ in
     };
   };
 
+  imports = [
+    ../../modules/misc/assertions.nix
+  ];
+
   config = {
     rawTestDerivation = hostPkgs.stdenv.mkDerivation config.rawTestDerivationArg;
     rawTestDerivationArg =
@@ -125,11 +129,13 @@ in
 
         meta = config.meta;
       };
-    test = lib.lazyDerivation {
-      # lazyDerivation improves performance when only passthru items and/or meta are used.
-      derivation = config.rawTestDerivation;
-      inherit (config) passthru meta;
-    };
+    test = lib.asserts.checkAssertWarn config.assertions config.warnings (
+      lib.lazyDerivation {
+        # lazyDerivation improves performance when only passthru items and/or meta are used.
+        derivation = config.rawTestDerivation;
+        inherit (config) passthru meta;
+      }
+    );
 
     # useful for inspection (debugging / exploration)
     passthru.config = config;

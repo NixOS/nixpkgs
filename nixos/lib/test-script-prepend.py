@@ -55,3 +55,4 @@ serial_stdout_on: Callable[[], None]
 polling_condition: PollingConditionProtocol
 debug: DebugAbstract
 t: TestCase
+dump_machine_ssh: Callable[[], None]

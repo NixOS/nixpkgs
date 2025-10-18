@@ -19,6 +19,7 @@ from test_driver.logger import AbstractLogger
 from test_driver.machine import Machine, NixStartScript, retry
 from test_driver.polling_condition import PollingCondition
 from test_driver.vlan import VLan
+from test_driver.vsock import VHostVsock, VHostVsockNop
 
 SENTINEL = object()
 
@@ -69,10 +70,13 @@ class Driver:
     race_timer: threading.Timer
     logger: AbstractLogger
     debug: DebugAbstract
+    vsock_pairs: dict[str, VHostVsock]
+    enable_ssh_backdoor: bool
 
     def __init__(
         self,
-        start_scripts: list[str],
+        start_scripts: list[NixStartScript],
+        vsock_pairs: dict[str, VHostVsock],
         vlans: list[int],
         tests: str,
         out_dir: Path,
@@ -80,6 +84,7 @@ class Driver:
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
         debug: DebugAbstract = DebugNop(),
+        enable_ssh_backdoor: bool = False,
     ):
         self.tests = tests
         self.out_dir = out_dir
@@ -94,23 +99,22 @@ class Driver:
             vlans = list(set(vlans))
             self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
 
-        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
-            for s in scripts:
-                yield NixStartScript(s)
-
         self.polling_conditions = []
+        self.vsock_pairs = vsock_pairs
+        self.enable_ssh_backdoor = enable_ssh_backdoor
 
         self.machines = [
             Machine(
                 start_command=cmd,
                 keep_vm_state=keep_vm_state,
+                vhost_vsock=vsock_pairs[cmd.machine_name],
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
                 logger=self.logger,
             )
-            for cmd in cmd(start_scripts)
+            for cmd in start_scripts
         ]
 
     def __enter__(self) -> "Driver":
@@ -164,6 +168,7 @@ class Driver:
             Machine=Machine,  # for typing
             t=AssertionTester(),
             debug=self.debug,
+            dump_machine_ssh=self.dump_machine_ssh,
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}
         # If there's exactly one machine, make it available under the name
@@ -183,18 +188,21 @@ class Driver:
         )
         return {**general_symbols, **machine_symbols, **vlan_symbols}
 
-    def dump_machine_ssh(self, offset: int) -> None:
-        print("SSH backdoor enabled, the machines can be accessed like this:")
-        print(
-            f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
-        )
-        names = [machine.name for machine in self.machines]
-        longest_name = len(max(names, key=len))
-        for num, name in enumerate(names, start=offset + 1):
-            spaces = " " * (longest_name - len(name) + 2)
+    def dump_machine_ssh(self) -> None:
+        if self.machines:
+            print("SSH backdoor enabled, the machines can be accessed like this:")
             print(
-                f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock/{num}{Style.RESET_ALL}"
+                f"{Style.BRIGHT}Note:{Style.RESET_ALL} this requires {Style.BRIGHT}systemd-ssh-proxy(1){Style.RESET_ALL} to be enabled (default on NixOS 25.05 and newer)."
             )
+            names = [machine.name for machine in self.machines]
+            longest_name = len(max(names, key=len))
+            for name in names:
+                spaces = " " * (longest_name - len(name) + 2)
+                print(
+                    f"    {name}:{spaces}{Style.BRIGHT}ssh -o User=root vsock-mux/{self.vsock_pairs[name].host}{Style.RESET_ALL}"
+                )
+        else:
+            print("SSH backdoor enabled, but no machines defined")
 
     def test_script(self) -> None:
         """Run the test script"""
@@ -281,10 +289,14 @@ class Driver:
         name: str | None = None,
         keep_vm_state: bool = False,
     ) -> Machine:
-        tmp_dir = get_tmp_dir()
-
         cmd = NixStartScript(start_command)
         name = name or cmd.machine_name
+        if self.enable_ssh_backdoor:
+            self.logger.warning(
+                f"create_machine({name}): not enabling SSH backdoor, this is not supported for VMs created with create_machine!"
+            )
+
+        tmp_dir = get_tmp_dir()
 
         return Machine(
             tmp_dir=tmp_dir,
@@ -292,6 +304,7 @@ class Driver:
             start_command=cmd,
             name=name,
             keep_vm_state=keep_vm_state,
+            vhost_vsock=VHostVsockNop(cmd.machine_name),
             logger=self.logger,
         )
 
