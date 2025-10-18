@@ -10910,8 +10910,6 @@ with pkgs;
 
   copyq = qt6Packages.callPackage ../applications/misc/copyq { };
 
-  csound = callPackage ../applications/audio/csound { };
-
   csound-qt = libsForQt5.callPackage ../applications/audio/csound/csound-qt { };
 
   codeblocksFull = codeblocks.override { contribPlugins = true; };
