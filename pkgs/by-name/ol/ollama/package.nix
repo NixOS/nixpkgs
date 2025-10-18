@@ -3,8 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   buildEnv,
-  linkFarm,
-  makeWrapper,
+  makeBinaryWrapper,
   stdenv,
   addDriverRunpath,
   nix-update-script,
@@ -20,9 +19,11 @@
   autoAddDriverRunpath,
   apple-sdk_15,
 
+  versionCheckHook,
+  writableTmpDirAsHomeHook,
+
   # passthru
   nixosTests,
-  testers,
   ollama,
   ollama-rocm,
   ollama-cuda,
@@ -117,13 +118,13 @@ in
 goBuild (finalAttrs: {
   pname = "ollama";
   # don't forget to invalidate all hashes each update
-  version = "0.12.3";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "ollama";
     repo = "ollama";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ooDGwTklGJ/wzDlAY3uJiqpZUxT1cCsqVNJKU8BAPbQ=";
+    hash = "sha256-X5xxM53DfN8EW29hfJiAeADKLvKdmdNYE2NBa05T82k=";
   };
 
   vendorHash = "sha256-SlaDsu001TUW+t9WRp7LqxUSQSGDF1Lqu9M1bgILoX4=";
@@ -148,7 +149,7 @@ goBuild (finalAttrs: {
   ]
   ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ]
   ++ lib.optionals (enableRocm || enableCuda) [
-    makeWrapper
+    makeBinaryWrapper
     autoAddDriverRunpath
   ];
 
@@ -214,8 +215,6 @@ goBuild (finalAttrs: {
     '';
 
   ldflags = [
-    "-s"
-    "-w"
     "-X=github.com/ollama/ollama/version.Version=${finalAttrs.version}"
     "-X=github.com/ollama/ollama/server.mode=release"
   ];
@@ -237,13 +236,17 @@ goBuild (finalAttrs: {
     in
     [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+    writableTmpDirAsHomeHook
+  ];
+  versionCheckKeepEnvironment = "HOME";
+  versionCheckProgramArg = "--version";
+
   passthru = {
     tests = {
       inherit ollama;
-      version = testers.testVersion {
-        inherit (finalAttrs) version;
-        package = ollama;
-      };
     }
     // lib.optionalAttrs stdenv.hostPlatform.isLinux {
       inherit ollama-rocm ollama-cuda;
