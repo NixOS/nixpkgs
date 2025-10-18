@@ -6,17 +6,22 @@
 }:
 buildGoModule rec {
   pname = "bitrise";
-  version = "2.33.2";
+  version = "2.34.3";
 
   src = fetchFromGitHub {
     owner = "bitrise-io";
     repo = "bitrise";
     rev = "v${version}";
-    hash = "sha256-ckiozGSk8a0bzTzj8PuN55rrL2r95BylYRUHZdQF+Kc=";
+    hash = "sha256-Px4u3Jc3HbTN9NRGFYwTVL0/g+PsFw+JxEyOuTSTQbc=";
   };
 
   # many tests rely on writable $HOME/.bitrise and require network access
   doCheck = false;
+
+  # resolves error: main module (github.com/bitrise-io/bitrise/v2) does not contain package github.com/bitrise-io/bitrise/v2/integrationtests/config
+  excludedPackages = [
+    "./integrationtests"
+  ];
 
   vendorHash = null;
   ldflags = [

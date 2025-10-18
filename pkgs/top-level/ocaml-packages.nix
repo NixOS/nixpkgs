@@ -610,6 +610,8 @@ let
 
         farfadet = callPackage ../development/ocaml-modules/farfadet { };
 
+        farith = callPackage ../development/ocaml-modules/farith { };
+
         fdkaac = callPackage ../development/ocaml-modules/fdkaac { };
 
         ff = callPackage ../development/ocaml-modules/ff { };
@@ -1578,15 +1580,21 @@ let
 
         omd = callPackage ../development/ocaml-modules/omd { };
 
+        opam-0install-cudf = callPackage ../development/ocaml-modules/opam-0install-cudf { };
+
         opam-core = callPackage ../development/ocaml-modules/opam-core {
           inherit (pkgs) opam;
         };
+
+        opam-client = callPackage ../development/ocaml-modules/opam-client { };
 
         opam-file-format = callPackage ../development/ocaml-modules/opam-file-format { };
 
         opam-format = callPackage ../development/ocaml-modules/opam-format { };
 
         opam-repository = callPackage ../development/ocaml-modules/opam-repository { };
+
+        opam-solver = callPackage ../development/ocaml-modules/opam-solver { };
 
         opam-state = callPackage ../development/ocaml-modules/opam-state { };
 
@@ -1611,6 +1619,8 @@ let
         otoml = callPackage ../development/ocaml-modules/otoml { };
 
         otr = callPackage ../development/ocaml-modules/otr { };
+
+        oui = callPackage ../development/ocaml-modules/oui { };
 
         ounit = callPackage ../development/ocaml-modules/ounit { };
 
@@ -2091,6 +2101,8 @@ let
 
         ### U ###
 
+        ubase = callPackage ../development/ocaml-modules/ubase { };
+
         uchar = callPackage ../development/ocaml-modules/uchar { };
 
         uecc = callPackage ../development/ocaml-modules/uecc { };
@@ -2214,6 +2226,10 @@ let
         zmq = callPackage ../development/ocaml-modules/zmq { };
 
         zmq-lwt = callPackage ../development/ocaml-modules/zmq/lwt.nix { };
+
+        ### _ ###
+
+        _0install-solver = callPackage ../development/ocaml-modules/0install-solver { };
 
         ### Exceptional packages kept out of order ###
 

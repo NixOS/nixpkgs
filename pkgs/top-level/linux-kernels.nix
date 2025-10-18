@@ -1,6 +1,7 @@
 {
   pkgs,
   linuxKernel,
+  kernelPackagesExtensions,
   config,
   buildPackages,
   callPackage,
@@ -327,7 +328,7 @@ in
 
   packagesFor =
     kernel_:
-    lib.makeExtensible (
+    (lib.makeExtensible (
       self:
       with self;
       let
@@ -721,7 +722,8 @@ in
         phc-intel = throw "phc-intel drivers are no longer supported by any kernel >=4.17"; # added 2025-07-18
         prl-tools = throw "Parallel Tools no longer provide any kernel module, please use pkgs.prl-tools instead."; # added 2025-10-04
       }
-    );
+    )).extend
+      (lib.fixedPoints.composeManyExtensions kernelPackagesExtensions);
 
   hardenedPackagesFor = kernel: overrides: packagesFor (hardenedKernelFor kernel overrides);
 

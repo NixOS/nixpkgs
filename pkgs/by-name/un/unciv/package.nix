@@ -12,7 +12,7 @@
   nix-update-script,
 }:
 let
-  version = "4.18.4";
+  version = "4.18.6";
 
   desktopItem = makeDesktopItem {
     name = "unciv";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/yairm210/Unciv/releases/download/${version}/Unciv.jar";
-    hash = "sha256-xF9Y6pil7UZzrN0k/2qZ/FKSj7WudRwF3u167Sz3RyA=";
+    hash = "sha256-UKm5lJ378AZ016To5eC6EpFFNfbINCeHZdUyv+MN0X4=";
   };
 
   dontUnpack = true;
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Open-source Android/Desktop remake of Civ V";
     mainProgram = "unciv";
     homepage = "https://github.com/yairm210/Unciv";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ iedame ];
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.mpl20;
     platforms = platforms.all;

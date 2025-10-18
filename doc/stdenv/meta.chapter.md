@@ -319,3 +319,22 @@ A readonly attribute that concatenates all CPE parts in one string.
 #### `meta.identifiers.possibleCPEs` {#var-meta-identifiers-possibleCPEs}
 
 A readonly attribute containing the list of guesses for what CPE for this package can look like. It includes all variants of version handling mentioned above. Each item is an attrset with attributes `cpeParts` and `cpe` for each guess.
+
+### Package URL {#sec-meta-identifiers-purl}
+
+[Package-URL](https://github.com/package-url/purl-spec) (PURL) is a specification to reliably identify and locate software packages. Through identification of software packages, additional (non-major) use cases are e.g. software license cross-verification via third party databases or initial vulnerability response management. Package URL's default to the mkDerivation.src, as the original consumed software package is the single point of truth.
+
+#### `meta.identifiers.purlParts` {#var-meta-identifiers-purlParts}
+
+This attribute contains an attribute set of all parts of the PURL for this package.
+
+* `type` mandatory [type](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/docs/standard/summary.md) which needs to be provided
+* `spec` specify the PURL in accordance with the [purl-spec](https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/purl-specification.md)
+
+#### `meta.identifiers.purl` {#var-meta-identifiers-purl}
+
+An extendable attribute which is built based on purlParts. It is the main identifier, consumers should consider using the PURL's list interface to be prepared for edge cases.
+
+#### `meta.identifiers.purls` {#var-meta-identifiers-purls}
+
+An extendable attribute list which defaults to a single element equal to the main PURL. It provides an interface for additional identifiers of mkDerivation.src and / or vendored dependencies inside mkDerivation.src, which maintainers can conciously decide to use on top. Identifiers different to the default src identifier are not recommended by default as they might cause maintenance overhead or may diverge (e.g. differences between source distribution pkg:github and binary distribution like pkg:pypi).

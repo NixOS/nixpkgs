@@ -917,6 +917,7 @@ mapAliases {
   ffmpeg_5-full = throw "ffmpeg_5-full has been removed, please use another version"; # Added 2024-07-12
   FIL-plugins = fil-plugins; # Added 2024-06-12
   fileschanged = throw "'fileschanged' has been removed as it is unmaintained upstream"; # Added 2024-04-19
+  filesender = throw "'filesender' has been removed because of its simplesamlphp dependency"; # Added 2025-10-17
   filet = throw "'filet' has been removed as the upstream repo has been deleted"; # Added 2025-02-07
   finger_bsd = bsd-finger; # Added 2022-03-14
   fingerd_bsd = bsd-fingerd; # Added 2022-03-14
@@ -2290,6 +2291,7 @@ mapAliases {
   rapidjson-unstable = lib.warnOnInstantiate "'rapidjson-unstable' has been renamed to 'rapidjson'" rapidjson; # Added 2024-07-28
   rargs = throw "'rargs' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   rebazel = throw "'rebazel' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
+  redict = throw "'redict' has been removed due to lack of nixpkgs maintenance and a slow upstream development pace. Consider using 'valkey'."; # Added 2025-10-16
   redoc-cli = throw "'redoc-cli' been removed because it has been marked as broken since at least November 2024. Consider using 'redocly' instead."; # Added 2025-10-01
   redocly-cli = redocly; # Added 2024-04-14
   redpanda = redpanda-client; # Added 2023-10-14
@@ -2398,6 +2400,7 @@ mapAliases {
   signal-desktop-source = lib.warnOnInstantiate "'signal-desktop-source' is now exposed at 'signal-desktop'." signal-desktop; # Added 2025-04-16
   silc_server = throw "'silc_server' has been removed because it is unmaintained"; # Added 2025-05-12
   silc_client = throw "'silc_client' has been removed because it is unmaintained"; # Added 2025-05-12
+  simplesamlphp = throw "'simplesamlphp' was removed because it was unmaintained in nixpkgs"; # Added 2025-10-17
   siproxd = throw "'siproxd' has been removed as it was unmaintained and incompatible with newer libosip versions"; # Added 2025-05-18
   sisco.lv2 = throw "'sisco.lv2' has been removed as it was unmaintained and broken"; # Added 2025-08-26
   sipwitch = throw "'sipwitch' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
