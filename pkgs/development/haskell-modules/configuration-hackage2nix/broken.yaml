@@ -73,7 +73,6 @@ broken-packages:
   - adp-multi # failure in job https://hydra.nixos.org/build/233256331 at 2023-09-02
   - adtrees # failure in job https://hydra.nixos.org/build/233192320 at 2023-09-02
   - AERN-Basics # failure in job https://hydra.nixos.org/build/233246999 at 2023-09-02
-  - aes-gcm # failure in job https://hydra.nixos.org/build/309811668 at 2025-10-15
   - aeson-applicative # failure in job https://hydra.nixos.org/build/233213824 at 2023-09-02
   - aeson-bson # failure in job https://hydra.nixos.org/build/233201964 at 2023-09-02
   - aeson-commit # failure in job https://hydra.nixos.org/build/233198515 at 2023-09-02
