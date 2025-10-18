@@ -26,6 +26,12 @@ stdenv.mkDerivation {
     hash = "sha256-IhCQh60wBzaRsj72Y8NUHrv9lvss0fmgHjzrO/subOI=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 3.1.0)" \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 4.0)"
+  '';
+
   buildInputs = [
     SDL2
     SDL2_net
