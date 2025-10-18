@@ -237,6 +237,9 @@
             };
       */
       nixosModules = {
+        assertions = ./nixos/modules/misc/assertions.nix;
+        lib = ./nixos/modules/misc/lib.nix;
+        meta = ./nixos/modules/misc/meta.nix;
         notDetected = ./nixos/modules/installer/scan/not-detected.nix;
 
         /**
