@@ -19,8 +19,6 @@ mkAppleDerivation (finalAttrs: {
     ./patches/0001-Support-setting-an-upper-bound-on-versions.patch
   ];
 
-  noCC = true;
-
   nativeBuildInputs = [ unifdef ];
 
   buildPhase = ''

@@ -8,8 +8,6 @@ in
   fetchFromGitHub,
   meson,
   ninja,
-  stdenv,
-  stdenvNoCC,
   xcodeProjectCheckHook,
 }:
 
@@ -21,15 +19,8 @@ lib.makeOverridable (
   let
     attrs' = if lib.isFunction attrs then attrs else _: attrs;
     attrsFixed = lib.fix attrs';
-    stdenv' =
-      if attrsFixed.noCC or false then
-        stdenvNoCC
-      else if attrsFixed.noBootstrap or false then
-        stdenv
-      else
-        bootstrapStdenv;
   in
-  stdenv'.mkDerivation (
+  bootstrapStdenv.mkDerivation (
     lib.extends (
       self: super:
       assert super ? releaseName;
