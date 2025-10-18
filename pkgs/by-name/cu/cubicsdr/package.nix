@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # Fix for liquid-dsp v1.50
     (fetchpatch {
       url = "https://github.com/cjcliffe/CubicSDR/commit/0e3a785bd2af56d18ff06b56579197b3e89b34ab.patch";
-      sha256 = "sha256-mPfNZcV3FnEtGVX4sCMSs+Qc3VeSBIRkpCyx24TKkcU=";
+      hash = "sha256-mPfNZcV3FnEtGVX4sCMSs+Qc3VeSBIRkpCyx24TKkcU=";
     })
   ];
 

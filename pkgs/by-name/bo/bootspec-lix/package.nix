@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     (fetchpatch {
       name = "aarch64-support.patch";
       url = "https://github.com/DeterminateSystems/bootspec/commit/1d0e925f360f0199f13422fb7541225fd162fd4f.patch";
-      sha256 = "sha256-wU/jWnOqVBrU2swANdXbQfzRpNd/JIS4cxSyCvixZM0=";
+      hash = "sha256-wU/jWnOqVBrU2swANdXbQfzRpNd/JIS4cxSyCvixZM0=";
     })
   ];
 

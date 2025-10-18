@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     # make install rule
     (fetchpatch {
       url = "https://gitlab.com/kalilinux/packages/redfang/-/merge_requests/1.diff";
-      sha256 = "sha256-oxIrUAucxsBL4+u9zNNe2XXoAd088AEAHcRB/AN7B1M=";
+      hash = "sha256-oxIrUAucxsBL4+u9zNNe2XXoAd088AEAHcRB/AN7B1M=";
     })
     # error: implicit declaration of function 'pthread_create' []
     ./include-pthread.patch

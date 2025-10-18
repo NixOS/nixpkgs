@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "remove-empty-static-lib.patch";
       url = "https://github.com/MusicPlayerDaemon/mpdscribble/commit/0dbcea25c81f3fdc608f71ef71a9784679fee17f.patch";
-      sha256 = "sha256-3wLfQvbwx+OFrCl5vMV7Zps4e4iEYFhqPiVCo5hDqgw=";
+      hash = "sha256-3wLfQvbwx+OFrCl5vMV7Zps4e4iEYFhqPiVCo5hDqgw=";
     })
   ];
 

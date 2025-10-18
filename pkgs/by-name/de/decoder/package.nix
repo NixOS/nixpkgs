@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     (fetchpatch {
       name = "fno-common.patch";
       url = "https://github.com/PeterPawn/decoder/commit/843ac477c31108023d8008581bf91c5a3acc1859.patch";
-      sha256 = "sha256-rRylz8cxgNyPSqL/THdgEBpzcVx1K+xbjUn4PwP9Jn4=";
+      hash = "sha256-rRylz8cxgNyPSqL/THdgEBpzcVx1K+xbjUn4PwP9Jn4=";
     })
   ];
 

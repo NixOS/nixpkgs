@@ -83,7 +83,7 @@ in
   hevm = appendPatch (pkgs.fetchpatch {
     url = "https://github.com/hellwolf/hevm/commit/338674d1fe22d46ea1e8582b24c224d76d47d0f3.patch";
     name = "release-0.54.2-ghc-9.8.4-patch";
-    sha256 = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
+    hash = "sha256-Mo65FfP1nh7QTY+oLia22hj4eV2v9hpXlYsrFKljA3E=";
   }) super.hevm;
   HaskellNet-SSL = doJailbreak super.HaskellNet-SSL; # bytestring >=0.9 && <0.12
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1

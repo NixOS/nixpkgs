@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "define-obsolete-function-alias.patch";
       url = "https://github.com/Andersbakken/rtags/commit/63f18acb21e664fd92fbc19465f0b5df085b5e93.patch";
-      sha256 = "sha256-dmEPtnk8Pylmf5479ovHKItRZ+tJuOWuYOQbWB/si/Y=";
+      hash = "sha256-dmEPtnk8Pylmf5479ovHKItRZ+tJuOWuYOQbWB/si/Y=";
     })
   ];
 

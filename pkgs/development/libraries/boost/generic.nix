@@ -173,14 +173,14 @@ stdenv.mkDerivation {
     ++ lib.optional (version == "1.77.0") (fetchpatch {
       url = "https://github.com/boostorg/math/commit/7d482f6ebc356e6ec455ccb5f51a23971bf6ce5b.patch";
       relative = "include";
-      sha256 = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
+      hash = "sha256-KlmIbixcds6GyKYt1fx5BxDIrU7msrgDdYo9Va/KJR4=";
     })
     # Fixes ABI detection
     ++ lib.optional (version == "1.83.0") (fetchpatch {
       url = "https://github.com/boostorg/context/commit/6fa6d5c50d120e69b2d8a1c0d2256ee933e94b3b.patch";
       stripLen = 1;
       extraPrefix = "libs/context/";
-      sha256 = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
+      hash = "sha256-bCfLL7bD1Rn4Ie/P3X+nIcgTkbXdCX6FW7B9lHsmVW8=";
     })
     # This fixes another issue regarding ill-formed constant expressions, which is a default error
     # in clang 16 and will be a hard error in clang 17.

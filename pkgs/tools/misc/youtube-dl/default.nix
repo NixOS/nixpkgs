@@ -55,13 +55,13 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "avoid-crashing-if-nsig-decode-fails.patch";
       url = "https://github.com/ytdl-org/youtube-dl/commit/41f0043983c831b7c0c3614340d2f66ec153087b.diff";
-      sha256 = "sha256-a72gWhBXCLjuBBD36PpZ5F/AHBdiBv4W8Wf9g4P/aBY=";
+      hash = "sha256-a72gWhBXCLjuBBD36PpZ5F/AHBdiBv4W8Wf9g4P/aBY=";
     })
     # YouTube changed the n-parameter format in April 2022, so decoder updates are required.
     (fetchpatch {
       name = "fix-n-descrambling.patch";
       url = "https://github.com/ytdl-org/youtube-dl/commit/a0068bd6bec16008bda7a39caecccbf84881c603.diff";
-      sha256 = "sha256-tSuEns4jputa2nOOo6JsFXpK3hvJ/+z1/ymcLsd3A6w=";
+      hash = "sha256-tSuEns4jputa2nOOo6JsFXpK3hvJ/+z1/ymcLsd3A6w=";
     })
   ];
 

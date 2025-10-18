@@ -276,7 +276,7 @@ rec {
       (fetchpatch {
         # fix tools/llvm-exegesis/X86/latency/ failing with glibc 2.4+
         name = "exegesis-latency-glibc-fix.patch";
-        sha256 = "sha256-CjKxQlYwHXTM0mVnv8k/ssg5OXuKpJxRvBZGXjrFZAg=";
+        hash = "sha256-CjKxQlYwHXTM0mVnv8k/ssg5OXuKpJxRvBZGXjrFZAg=";
         url = "https://github.com/llvm/llvm-project/commit/1e8df9e85a1ff213e5868bd822877695f27504ad.patch";
         relative = "llvm";
       })
@@ -369,7 +369,7 @@ rec {
             ./perf-shorten-gcclib-include-paths.patch
             (fetchpatch {
               # [ClangOffloadBundler]: Add GetBundleIDsInFile to OffloadBundler
-              sha256 = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
+              hash = "sha256-G/mzUdFfrJ2bLJgo4+mBcR6Ox7xGhWu5X+XxT4kH2c8=";
               url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
               relative = "clang";
             })

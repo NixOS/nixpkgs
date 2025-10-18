@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     # TODO: remove on the next release
     (fetchpatch {
       url = "https://github.com/dosfstools/dosfstools/commit/77ffb87e8272760b3bb2dec8f722103b0effb801.patch";
-      sha256 = "sha256-xHxIs3faHK/sK3vAVoG8JcTe4zAV+ZtkozWIIFBvPWI=";
+      hash = "sha256-xHxIs3faHK/sK3vAVoG8JcTe4zAV+ZtkozWIIFBvPWI=";
     })
     (fetchpatch {
       url = "https://github.com/dosfstools/dosfstools/commit/2d3125c4a74895eae1f66b93287031d340324524.patch";
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # TODO: remove on the next release
     (fetchpatch {
       url = "https://github.com/dosfstools/dosfstools/commit/8da7bc93315cb0c32ad868f17808468b81fa76ec.patch";
-      sha256 = "sha256-Quegj5uYZgACgjSZef6cjrWQ64SToGQxbxyqCdl8C7o=";
+      hash = "sha256-Quegj5uYZgACgjSZef6cjrWQ64SToGQxbxyqCdl8C7o=";
     })
     ./gettext-0.25.patch
   ];

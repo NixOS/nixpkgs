@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     #   https://github.com/thorkill/eresi/pull/167
     (fetchpatch {
       url = "https://github.com/thorkill/eresi/commit/f85397c4dce633764fab29b0642f59fc4764658a.patch";
-      sha256 = "sha256-mKmJHjyWwCNh/pueB94Ndhj/3uZLBZNn/m9gXenP5ns=";
+      hash = "sha256-mKmJHjyWwCNh/pueB94Ndhj/3uZLBZNn/m9gXenP5ns=";
     })
   ];
 

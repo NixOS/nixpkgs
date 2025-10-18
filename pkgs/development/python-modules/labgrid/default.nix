@@ -43,15 +43,15 @@ buildPythonPackage rec {
   patches = [
     (fetchpatch {
       url = "https://github.com/Emantor/labgrid/commit/4a66b43882811d50600e37aa39b24ec40398d184.patch";
-      sha256 = "sha256-eJMB1qFWiDzQXEB4dYOHYMQqCPHXEWCwWjNNY0yTC2s=";
+      hash = "sha256-eJMB1qFWiDzQXEB4dYOHYMQqCPHXEWCwWjNNY0yTC2s=";
     })
     (fetchpatch {
       url = "https://github.com/Emantor/labgrid/commit/d9933b3ec444c35d98fd41685481ecae8ff28bf4.patch";
-      sha256 = "sha256-Zx5j+CD6Q89dLmTl5QSKI9M1IcZ97OCjEWtEbG+CKWE=";
+      hash = "sha256-Zx5j+CD6Q89dLmTl5QSKI9M1IcZ97OCjEWtEbG+CKWE=";
     })
     (fetchpatch {
       url = "https://github.com/Emantor/labgrid/commit/f0b672afe1e8976c257f0adff9bf6e7ee9760d6f.patch";
-      sha256 = "sha256-M7rg+W9SjWDdViWyWe3ERzbUowxzf09c4w1yG3jQGak=";
+      hash = "sha256-M7rg+W9SjWDdViWyWe3ERzbUowxzf09c4w1yG3jQGak=";
     })
   ];
 

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
           ./fuse2-Do-not-set-FUSERMOUNT_DIR.patch
           (fetchpatch {
             url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/fuse/files/fuse-2.9.9-closefrom-glibc-2-34.patch?id=8a970396fca7aca2d5a761b8e7a8242f1eef14c9";
-            sha256 = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
+            hash = "sha256-ELYBW/wxRcSMssv7ejCObrpsJHtOPJcGq33B9yHQII4=";
           })
           ./fuse2-gettext-0.25.patch
         ]

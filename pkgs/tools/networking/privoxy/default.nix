@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://www.privoxy.org/gitweb/?p=privoxy.git;a=commitdiff_plain;h=19d7684ca10f6c1279568aa19e9a9da2276851f1";
-      sha256 = "sha256-bCb0RUVrWeGfqZYFHXDEEx+76xiNyVqehtLvk9C1j+4=";
+      hash = "sha256-bCb0RUVrWeGfqZYFHXDEEx+76xiNyVqehtLvk9C1j+4=";
     })
   ];
 

@@ -225,7 +225,7 @@ let
               # Support for Coq 8.16.0
               (fetchpatch {
                 url = "https://github.com/AbsInt/CompCert/commit/34be08a23d18d56f2dde24fd24b6dbe3bcb01ec3.patch";
-                sha256 = "sha256-a5YnftGVadVypEqrOYRRxI7YtGOEWyKnO4GqakFhvzI=";
+                hash = "sha256-a5YnftGVadVypEqrOYRRxI7YtGOEWyKnO4GqakFhvzI=";
               })
               # Support for Coq 8.16.1
               (fetchpatch {

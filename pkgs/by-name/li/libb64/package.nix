@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) (fetchpatch {
     name = "0001-example-Do-not-run-the-tests.patch";
     url = "https://cgit.openembedded.org/meta-openembedded/plain/meta-oe/recipes-support/libb64/libb64/0001-example-Do-not-run-the-tests.patch?id=484e0de1e4ee107f21ae2a5c5f976ed987978baf";
-    sha256 = "sha256-KTsiIWJe66BKlu/A43FWfW0XAu4E7lWX/RY4NITRrm4=";
+    hash = "sha256-KTsiIWJe66BKlu/A43FWfW0XAu4E7lWX/RY4NITRrm4=";
   });
 
   enableParallelBuilding = true;

@@ -32,7 +32,7 @@ in
             patches = [
               (super.fetchpatch {
                 url = "https://dwm.suckless.org/patches/steam/dwm-steam-6.2.diff";
-                sha256 = "sha256-f3lffBjz7+0Khyn9c9orzReoLTqBb/9gVGshYARGdVc=";
+                hash = "sha256-f3lffBjz7+0Khyn9c9orzReoLTqBb/9gVGshYARGdVc=";
               })
             ];
           })

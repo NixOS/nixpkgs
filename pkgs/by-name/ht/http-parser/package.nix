@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     # https://github.com/nodejs/http-parser/pull/510
     (fetchpatch {
       url = "https://github.com/nodejs/http-parser/commit/4f15b7d510dc7c6361a26a7c6d2f7c3a17f8d878.patch";
-      sha256 = "sha256-rZZMJeow3V1fTnjadRaRa+xTq3pdhZn/eJ4xjxEDoU4=";
+      hash = "sha256-rZZMJeow3V1fTnjadRaRa+xTq3pdhZn/eJ4xjxEDoU4=";
     })
   ];
 

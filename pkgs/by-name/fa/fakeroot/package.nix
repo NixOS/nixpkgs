@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       (fetchpatch {
         name = "fakeroot-no64.patch";
         url = "https://git.alpinelinux.org/aports/plain/main/fakeroot/fakeroot-no64.patch?id=f68c541324ad07cc5b7f5228501b5f2ce4b36158";
-        sha256 = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
+        hash = "sha256-NCDaB4nK71gvz8iQxlfaQTazsG0SBUQ/RAnN+FqwKkY=";
       })
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [

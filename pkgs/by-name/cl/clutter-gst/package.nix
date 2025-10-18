@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     # https://github.com/archlinux/svntogit-packages/tree/packages/clutter-gst/trunk
     (fetchpatch {
       url = "https://github.com/archlinux/svntogit-packages/raw/c4dd0bbda35aa603ee790676f6e15541f71b6d36/trunk/0001-video-sink-Remove-RGBx-BGRx-support.patch";
-      sha256 = "sha256-k1fCiM/u7q81UrDYgbqhN/C+q9DVQ+qOyq6vmA3hbSQ=";
+      hash = "sha256-k1fCiM/u7q81UrDYgbqhN/C+q9DVQ+qOyq6vmA3hbSQ=";
     })
   ];
 

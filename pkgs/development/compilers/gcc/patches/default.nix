@@ -196,7 +196,7 @@ optionals noSysDirs (
       (fetchpatch {
         name = "gcc-15-darwin-aarch64-support.patch";
         url = "https://raw.githubusercontent.com/Homebrew/formula-patches/a25079204c1cb3d78ba9dd7dd22b8aecce7ce264/gcc/gcc-15.1.0.diff";
-        sha256 = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
+        hash = "sha256-MJxSGv6LEP1sIM8cDqbmfUV7byV0bYgADeIBY/Teyu8=";
       })
     ];
     "14" = [

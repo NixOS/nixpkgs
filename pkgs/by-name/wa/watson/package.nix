@@ -23,7 +23,7 @@ python3.pkgs.buildPythonApplication rec {
     (fetchpatch {
       name = "fix-completion.patch";
       url = "https://github.com/jazzband/Watson/commit/43ad061a981eb401c161266f497e34df891a5038.patch";
-      sha256 = "sha256-v8/asP1wooHKjyy9XXB4Rtf6x+qmGDHpRoHEne/ZCxc=";
+      hash = "sha256-v8/asP1wooHKjyy9XXB4Rtf6x+qmGDHpRoHEne/ZCxc=";
     })
   ];
 

@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     # Work around https://bugs.kde.org/show_bug.cgi?id=445196 until a new release.
     (fetchpatch {
       url = "https://invent.kde.org/libraries/phonon-gstreamer/-/commit/bbbb160f30a394655cff9398d17961142388b0f2.patch";
-      sha256 = "sha256-tNBqVt67LNb9SQogS9ol8/xYIZvVSoVUgXQahMfkFh8=";
+      hash = "sha256-tNBqVt67LNb9SQogS9ol8/xYIZvVSoVUgXQahMfkFh8=";
     })
   ];
 

@@ -148,17 +148,17 @@ stdenv.mkDerivation (finalAttrs: {
     ./cmake-find-x11-libgl.patch
     (fetchpatch {
       # [PATCH] improve rocclr isa compatibility check
-      sha256 = "sha256-oj1loBEuqzuMihOKoN0wR92Wo25AshN5MpBuTq/9TMw=";
+      hash = "sha256-oj1loBEuqzuMihOKoN0wR92Wo25AshN5MpBuTq/9TMw=";
       url = "https://github.com/GZGavinZhao/clr/commit/f675b9b46d9f7bb8e003f4f47f616fa86a0b7a5e.patch";
     })
     (fetchpatch {
       # [PATCH] improve hipamd isa compatibility check
-      sha256 = "sha256-E3ERoVjUVWCiYHuE1GaVY5jMrAVx3B1cAVHM4/HPuaQ=";
+      hash = "sha256-E3ERoVjUVWCiYHuE1GaVY5jMrAVx3B1cAVHM4/HPuaQ=";
       url = "https://github.com/GZGavinZhao/clr/commit/aec0fc56ee2d10a2bc269c418fa847da2ee9969a.patch";
     })
     (fetchpatch {
       # [PATCH] SWDEV-507104 - Removes alignment requirement for Semaphore class to resolve runtime misaligned memory issues
-      sha256 = "sha256-nStJ22B/CM0fzQTvYjbHDbQt0GlE8DXxVK+UDU9BAx4=";
+      hash = "sha256-nStJ22B/CM0fzQTvYjbHDbQt0GlE8DXxVK+UDU9BAx4=";
       url = "https://github.com/ROCm/clr/commit/21d764518363d74187deaef2e66c1a127bc5aa64.patch";
     })
     (fetchpatch {

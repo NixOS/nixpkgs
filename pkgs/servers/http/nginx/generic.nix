@@ -241,7 +241,7 @@ stdenv.mkDerivation {
         })
         (fetchpatch {
           url = "https://raw.githubusercontent.com/openwrt/packages/c057dfb09c7027287c7862afab965a4cd95293a3/net/nginx/patches/104-endianness_fix.patch";
-          sha256 = "sha256-M7V3ZJfKImur2OoqXcoL+CbgFj/huWnfZ4xMCmvkqfc=";
+          hash = "sha256-M7V3ZJfKImur2OoqXcoL+CbgFj/huWnfZ4xMCmvkqfc=";
         })
       ]
       ++ mapModules "patches"

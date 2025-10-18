@@ -22,22 +22,22 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix makefile for Unix
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/makefile.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9";
-      sha256 = "sha256-mLFclu8IlDN/gxNTI7Kei6ARketlAhJRu8ForFUzFU0=";
+      hash = "sha256-mLFclu8IlDN/gxNTI7Kei6ARketlAhJRu8ForFUzFU0=";
     })
     # Fix lseek usage in file_media.c
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/file_media.c.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9";
-      sha256 = "sha256-CCq5fApwx6w1GKDrgP+0nUdQy/5z5ON7/fdp4M63nko=";
+      hash = "sha256-CCq5fApwx6w1GKDrgP+0nUdQy/5z5ON7/fdp4M63nko=";
     })
     # Fix open_partition_map call in cvt_pt.c
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/cvt_pt.c.patch?h=pdisk&id=39dc371712d2f7dbd38f6e8ddc6ba661faa1a7a9";
-      sha256 = "sha256-jScPfzt9/fQHkf2MfHLvYsh/Rw2NZZXkzZiiVo8F5Mc=";
+      hash = "sha256-jScPfzt9/fQHkf2MfHLvYsh/Rw2NZZXkzZiiVo8F5Mc=";
     })
     # Replace removed sys_nerr and sys_errlist with strerror
     (fetchpatch {
       url = "https://aur.archlinux.org/cgit/aur.git/plain/linux_strerror.patch?h=pdisk&id=d0c930ea8bcac008bbd0ade1811133a625caea54";
-      sha256 = "sha256-HGJIS+vTn6456KtaETutIgTPPBm2C9OHf1anG8yaJPo=";
+      hash = "sha256-HGJIS+vTn6456KtaETutIgTPPBm2C9OHf1anG8yaJPo=";
     })
 
     # Fix missing includes on Linux

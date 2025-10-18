@@ -55,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     (fetchpatch {
       # rocr: Extend HIP ISA compatibility check
-      sha256 = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
+      hash = "sha256-8r2Lb5lBfFaZC3knCxfXGcnkzNv6JxOKyJn2rD5gus4=";
       url = "https://github.com/GZGavinZhao/ROCR-Runtime/commit/7c63e7185d8fcf08537a278908946145f6231121.patch";
     })
     # Patches for UB at runtime https://github.com/ROCm/ROCR-Runtime/issues/272

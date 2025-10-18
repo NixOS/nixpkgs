@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Fix case-sensitive filesystems issue when save/load games
     (fetchpatch2 {
       url = "https://github.com/alexbatalov/fallout1-ce/commit/fbd25f00e9ccfb5391e394272d536206bb86678b.patch?full_index=1";
-      sha256 = "sha256-MylI1DZwaANuScyRJ7fXch3aym8n6BDRhccAXAyvU70=";
+      hash = "sha256-MylI1DZwaANuScyRJ7fXch3aym8n6BDRhccAXAyvU70=";
     })
   ];
 

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     # PR: https://github.com/grzegorzmazur/yacas/pull/343
     (fetchpatch {
       url = "https://github.com/grzegorzmazur/yacas/commit/8bc22d517ecfdde3ac94800dc8506f5405564d48.patch";
-      sha256 = "sha256-aPO5T8iYNkGtF8j12YxNJyUPJJPKrXje1DmfCPt317A=";
+      hash = "sha256-aPO5T8iYNkGtF8j12YxNJyUPJJPKrXje1DmfCPt317A=";
     })
   ];
   preCheck = ''

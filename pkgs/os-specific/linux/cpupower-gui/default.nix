@@ -46,7 +46,7 @@ buildPythonApplication rec {
     # Fixes https://github.com/vagnum08/cpupower-gui/issues/86
     (fetchpatch {
       url = "https://github.com/vagnum08/cpupower-gui/commit/22ea668aa4ecf848149ea4c150aa840a25dc6ff8.patch";
-      sha256 = "sha256-Mri7Af1Y79lt2pvZl4DQSvrqSLIJLIjzyXwMPFEbGVI=";
+      hash = "sha256-Mri7Af1Y79lt2pvZl4DQSvrqSLIJLIjzyXwMPFEbGVI=";
     })
   ];
 

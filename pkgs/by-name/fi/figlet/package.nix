@@ -24,12 +24,12 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://git.alpinelinux.org/aports/plain/main/figlet/musl-fix-cplusplus-decls.patch?h=3.4-stable&id=71776c73a6f04b6f671430f702bcd40b29d48399";
       name = "musl-fix-cplusplus-decls.patch";
-      sha256 = "sha256-8tg/3rBnjFG2Q4W807+Z0NpTO7VZrontn6qm6fL7QJw=";
+      hash = "sha256-8tg/3rBnjFG2Q4W807+Z0NpTO7VZrontn6qm6fL7QJw=";
     })
     (fetchpatch {
       url = "https://github.com/cmatsuoka/figlet/commit/9a50c1795bc32e5a698b855131ee87c8d7762c9e.patch";
       name = "unistd-on-darwin.patch";
-      sha256 = "sha256-hyfY87N+yuAwjsBIjpgvcdJ1IbzlR4A2yUJQSzShCRI=";
+      hash = "sha256-hyfY87N+yuAwjsBIjpgvcdJ1IbzlR4A2yUJQSzShCRI=";
     })
   ];
 

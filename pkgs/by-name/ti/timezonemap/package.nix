@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     # https://bugs.launchpad.net/ubuntu/+source/libtimezonemap/+bug/2012116
     (fetchpatch {
       url = "https://git.launchpad.net/ubuntu/+source/libtimezonemap/plain/debian/patches/timezone-map-Never-try-to-access-to-free-d-or-null-values.patch?id=88f72f724e63df061204f6818c9a1e7d8c003e29";
-      sha256 = "sha256-M5eR0uaqpJOeW2Ya1Al+3ZciXukzHpnjJTMVvdO0dPE=";
+      hash = "sha256-M5eR0uaqpJOeW2Ya1Al+3ZciXukzHpnjJTMVvdO0dPE=";
     })
 
     # Port to libsoup3

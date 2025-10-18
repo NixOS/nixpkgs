@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "CVE-2022-47021.patch";
       url = "https://github.com/xiph/opusfile/commit/0a4cd796df5b030cb866f3f4a5e41a4b92caddf5.patch";
-      sha256 = "sha256-XThI/ys5caB+OncFVfxm5IsvQPy1MbLQKwIlYjPvTJQ=";
+      hash = "sha256-XThI/ys5caB+OncFVfxm5IsvQPy1MbLQKwIlYjPvTJQ=";
     })
   ]
   # fixes problem with openssl 1.1 dependency

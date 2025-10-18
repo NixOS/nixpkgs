@@ -60,7 +60,7 @@ buildPythonPackage rec {
     ./tensile-create-library-dont-copy-twice.diff
     (fetchpatch {
       # [PATCH] Extend Tensile HIP ISA compatibility
-      sha256 = "sha256-d+fVf/vz+sxGqJ96vuxe0jRMgbC5K6j5FQ5SJ1e3Sl8=";
+      hash = "sha256-d+fVf/vz+sxGqJ96vuxe0jRMgbC5K6j5FQ5SJ1e3Sl8=";
       url = "https://github.com/GZGavinZhao/Tensile/commit/855cb15839849addb0816a6dde45772034a3e41f.patch";
     })
   ];
