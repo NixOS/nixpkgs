@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-iQA19FrXvVLzg+LaY1BcNmG8amMfKPVFwYbZ7dr+H9Q=";
   };
 
-  vendorHash = "sha256-sFRy9Hy9CVNjjYqbPbKH0XhoUdu4HlkiuHDDovTGono=";
+  vendorHash = "sha256-iXkj0Pa4ln8GX/ARCpnijaWdFM4VYZuj42RP0GS2LW8=";
 
   nativeBuildInputs = [ makeBinaryWrapper ];
 
