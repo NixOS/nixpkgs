@@ -78,7 +78,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
       f4814n
-      Mogria
     ];
     platforms = lib.platforms.linux;
   };

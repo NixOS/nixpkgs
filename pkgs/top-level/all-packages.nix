@@ -8811,19 +8811,13 @@ with pkgs;
     graphviz = graphviz-nox;
   };
 
-  webkitgtk_4_0 = callPackage ../development/libraries/webkitgtk {
+  webkitgtk_6_0 = callPackage ../development/libraries/webkitgtk {
     harfbuzz = harfbuzzFull;
-    libsoup = libsoup_2_4;
     inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
   };
 
-  webkitgtk_4_1 = webkitgtk_4_0.override {
-    libsoup = libsoup_3;
-  };
-
-  webkitgtk_6_0 = webkitgtk_4_0.override {
-    libsoup = libsoup_3;
-    gtk3 = gtk4;
+  webkitgtk_4_1 = webkitgtk_6_0.override {
+    gtk4 = gtk3;
   };
 
   wlr-protocols = callPackage ../development/libraries/wlroots/protocols.nix { };
@@ -13402,8 +13396,6 @@ with pkgs;
 
   freeciv_gtk = freeciv;
 
-  garden-of-coloured-lights = callPackage ../games/garden-of-coloured-lights { allegro = allegro4; };
-
   gl-gsync-demo = callPackage ../games/gl-gsync-demo {
     libXNVCtrl = linuxPackages.nvidia_x11.settings.libXNVCtrl;
   };
@@ -13639,10 +13631,6 @@ with pkgs;
   vdrift-bin = vdrift.bin;
 
   vessel = pkgsi686Linux.callPackage ../games/vessel { };
-
-  warsow-engine = callPackage ../games/warsow/engine.nix { };
-
-  warsow = callPackage ../games/warsow { };
 
   wesnoth-devel = callPackage ../by-name/we/wesnoth/package.nix { enableDevel = true; };
 

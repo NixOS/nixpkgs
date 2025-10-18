@@ -17,7 +17,6 @@
   libopus,
   curl,
   gtk3,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     libopus
     curl
     gtk3
-    webkitgtk_4_0
+    # webkitgtk_4_0
   ];
 
   runtimeDependencies = [
@@ -76,12 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "High-quality network audio streaming";
     homepage = "https://sonobus.net/";
     license = with licenses; [ gpl3Plus ];
     maintainers = with maintainers; [ PowerUser64 ];
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "sonobus";
   };
 })
