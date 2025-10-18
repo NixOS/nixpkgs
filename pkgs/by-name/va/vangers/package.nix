@@ -4,6 +4,7 @@
   callPackage,
   stdenv,
   cmake,
+  installShellFiles,
   SDL2,
   SDL2_net,
   libogg,
@@ -32,6 +33,8 @@ stdenv.mkDerivation {
       "CMAKE_MINIMUM_REQUIRED(VERSION 4.0)"
   '';
 
+  strictDeps = true;
+
   buildInputs = [
     SDL2
     SDL2_net
@@ -41,13 +44,20 @@ stdenv.mkDerivation {
     clunk
     zlib
   ];
-  nativeBuildInputs = [ cmake ];
+
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+  ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -T -m755 server/vangers_server $out/bin/vangers_server
-    install -T -m755 src/vangers $out/bin/vangers
-    install -T -m755 surmap/surmap $out/bin/surmap
+    runHook preInstall
+
+    installBin server/vangers_server
+    installBin src/vangers
+    installBin surmap/surmap
+
+    runHook postInstall
   '';
 
   meta = {
