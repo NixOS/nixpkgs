@@ -20,6 +20,7 @@ runCommand "nix-parse-${nix.name}"
   ''
     export NIX_STORE_DIR=$TMPDIR/store
     export NIX_STATE_DIR=$TMPDIR/state
+    nix-store --init
 
     cd "${nixpkgs}"
 
