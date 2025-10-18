@@ -217,9 +217,41 @@ in
             "${config.systemd.package}/bin/journalctl ${args}";
 
         DynamicUser = true;
+        User = "sshguard-logger";
         SupplementaryGroups = [
           # allow to read the systemd journal for opentelemetry-collector
           "systemd-journal"
+        ];
+
+        UMask = "0777";
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = true;
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        MountAPIVFS = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = "strict";
+        RestrictAddressFamilies = [ "AF_UNIX" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        BindPaths = [ "/run/systemd/journal/socket" ];
+        BindReadOnlyPaths = [ builtins.storeDir ];
+        RemoveIPC = true;
+        PrivateMounts = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
         ];
       };
     };
@@ -279,12 +311,12 @@ in
         # firewall rules before sshguard starts.
         ExecStartPre =
           lib.optionals config.networking.firewall.enable [
-            "${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet"
-            "${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP"
+            "-${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:net family inet"
+            "-${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP"
           ]
           ++ lib.optionals (config.networking.firewall.enable && config.networking.enableIPv6) [
-            "${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6"
-            "${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP"
+            "-${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:net family inet6"
+            "-${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP"
           ];
         ExecStart =
           let
@@ -303,19 +335,61 @@ in
           "${pkgs.sshguard}/bin/sshguard ${args}";
         ExecStopPost =
           lib.optionals config.networking.firewall.enable [
-            "${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP"
-            "${pkgs.ipset}/bin/ipset -quiet destroy sshguard4"
+            "-${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP"
+            "-${pkgs.ipset}/bin/ipset -quiet destroy sshguard4"
           ]
           ++ lib.optionals (config.networking.firewall.enable && config.networking.enableIPv6) [
-            "${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP"
-            "${pkgs.ipset}/bin/ipset -quiet destroy sshguard6"
+            "-${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP"
+            "-${pkgs.ipset}/bin/ipset -quiet destroy sshguard6"
           ];
         Restart = "always";
-        ProtectSystem = "strict";
-        ProtectHome = "tmpfs";
         RuntimeDirectory = "sshguard";
         StateDirectory = "sshguard";
-        CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
+
+        ProtectProc = "invisible";
+        UMask = "0077";
+        CapabilityBoundingSet = [
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        PrivateUsers = "full";
+        ProtectHostname = true;
+        ProtectClock = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        MountAPIVFS = true;
+        ProtectKernelLogs = true;
+        ProtectControlGroups = "strict";
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+          "AF_NETLINK"
+        ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        BindReadOnlyPaths = [ builtins.storeDir ];
+        BindPaths = lib.mkIf (cfg.blacklist_file != "/var/lib/sshguard/blacklist.db") [
+          "${cfg.blacklist_file}:/var/lib/sshguard/blacklist.db"
+        ];
+        ReadWritePaths = [
+          "/run/sshguard-logger/sshguard-logger"
+        ];
+        RemoveIPC = true;
+        PrivateMounts = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };
