@@ -415,7 +415,7 @@ in
           lib.mapAttrsToListRecursive (attrPath: _: ''
             tmp="$(mktemp)"
             ${lib.getExe pkgs.jq} --rawfile secret "$CREDENTIALS_DIRECTORY/${attrPathToIndex attrPath}" \
-              '${attrPathToIndex attrPath} = $secret' /run/immich/config.json > "$tmp"
+              '${attrPathToIndex attrPath} = ($secret | rtrimstr("\n"))' /run/immich/config.json > "$tmp"
             mv "$tmp" /run/immich/config.json
           '') cfg.secretSettings
         )
