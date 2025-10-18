@@ -325,6 +325,9 @@
   "sec-nixpkgs-release-25.05-notable-changes": [
     "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
   ],
+  "sec-nrfutil": [
+    "index.html#sec-nrfutil"
+  ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
   ],
