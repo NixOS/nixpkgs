@@ -495,7 +495,7 @@ in
 
           ReadWritePaths = [ dataDir ];
           StateDirectory = "mautrix-discord";
-          EnvironmentFile = cfg.environmentFile;
+          EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         };
 
         restartTriggers = [ settingsFileUnformatted ];
@@ -524,7 +524,7 @@ in
             ${lib.getExe cfg.package} \
               --config='${settingsFile}'
           '';
-          EnvironmentFile = cfg.environmentFile;
+          EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
 
           ProtectSystem = "strict";
           ProtectHome = true;

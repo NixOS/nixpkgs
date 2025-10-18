@@ -210,7 +210,7 @@ in
         ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
         Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
-        EnvironmentFile = cfg.environmentFile;
+        EnvironmentFile = lib.optionals (cfg.environmentFile != null) [ cfg.environmentFile ];
         StateDirectory = "glance";
         RuntimeDirectory = "glance";
         RuntimeDirectoryMode = "0755";
