@@ -21,7 +21,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "microcodeAmd-platomav";
+  pname = "microcode-amd-platomav";
   version = "0-unstable-2025-10-04";
 
   src = fetchFromGitHub {
