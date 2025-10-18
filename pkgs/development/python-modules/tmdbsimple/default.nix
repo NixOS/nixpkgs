@@ -8,7 +8,7 @@
 
 buildPythonPackage {
   pname = "tmdbsimple";
-  version = "2.9.2-unstable-2025-01-07";
+  version = "2.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
