@@ -5,22 +5,20 @@
   meson,
   ninja,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  qt6,
   cmake,
 }:
 
 let
   libopenrazer = stdenv.mkDerivation (finalAttrs: {
     pname = "libopenrazer";
-    version = "0.3.0";
+    version = "0.4.0";
 
     src = fetchFromGitHub {
       owner = "z3ntu";
       repo = "libopenrazer";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-bU8Zsm/hM4HbPcoD191zwxU3x7f0i51evtVeD4jqw0U=";
+      hash = "sha256-2RH4mevJS5HaEkb5lDNwoMaMNACXJGUVA5RWSYSsakI=";
     };
 
     nativeBuildInputs = [
@@ -30,8 +28,8 @@ let
     ];
 
     buildInputs = [
-      qtbase
-      qttools
+      qt6.qtbase
+      qt6.qttools
     ];
 
     dontWrapQtApps = true;
@@ -46,13 +44,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "razergenie";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "z3ntu";
     repo = "RazerGenie";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-kw7/Qf6L63PBuyq3TfgU2iGAKX0qLGiq6JgLnN+3tu4=";
+    hash = "sha256-TxW6IUHmEaNdJPeEGwo57a3EGH6MMyitVTmzStVmZjc=";
   };
 
   postUnpack = ''ln -s ${libopenrazer} libopenrazer'';
@@ -62,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
     meson
     ninja
     cmake
-    wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qttools
+    qt6.qtbase
+    qt6.qttools
     libopenrazer
   ];
 
@@ -75,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/z3ntu/RazerGenie";
     description = "Qt application for configuring your Razer devices under GNU/Linux";
     mainProgram = "razergenie";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       f4814n
       Mogria
