@@ -6,6 +6,7 @@
   git,
   installShellFiles,
   openssl,
+  net-tools,
 }:
 
 buildGoModule (finalAttrs: {
@@ -38,6 +39,7 @@ buildGoModule (finalAttrs: {
   nativeCheckInputs = [
     git
     openssl
+    net-tools
   ];
 
   subPackages = [ "cmd/grype" ];
