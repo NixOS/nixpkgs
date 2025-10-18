@@ -35,12 +35,12 @@ python3Packages.buildPythonApplication rec {
     cp -r dashboard README.md $out/share/${pname}/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Prometheus exporter for Bitcoin Core nodes";
     mainProgram = "bitcoind-monitor.py";
     homepage = "https://github.com/jvstein/bitcoin-prometheus-exporter";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ mmilata ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ mmilata ];
+    platforms = lib.platforms.all;
   };
 }
