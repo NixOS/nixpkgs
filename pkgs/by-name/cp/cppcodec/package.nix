@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,6 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-k4EACtDOSkTXezTeFtVdM1EVJjvGga/IQSrvDzhyaXw=";
   };
+
+  patches = [
+    # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    # Luckily, this has been fixed on master.
+    (fetchpatch {
+      name = "modernize-cmake.patch";
+      url = "https://github.com/tplgy/cppcodec/commit/8019b8b580f8573c33c50372baec7039dfe5a8ce.patch";
+      hash = "sha256-0MCx3nTsey4Qonx+lyexbcxut0qIHOJZbkJ9u23Zuv8=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 
