@@ -8,23 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rbspy";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
-    tag = "v${version}";
-    hash = "sha256-yVcVuMCyvk9RbkbKomqjkLY+p5tUzW2zcAKZ8XfsjM0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-6pQoCPwrIKaEUYgaHNgFLz+bY4p+ImlhZ2l2vehA4Ic=";
   };
 
-  cargoHash = "sha256-WiIHFwB6BE9VYuC2dCHNnrEFjVsesp0c5i4bH01cXis=";
-
-  # error: linker `aarch64-linux-gnu-gcc` not found
-  postPatch = ''
-    rm .cargo/config
-  '';
+  cargoHash = "sha256-6Q1ebXEknP3qEiU5qMXhHykRwahMZEVXGJGE4EToohA=";
 
   doCheck = true;
 
@@ -32,11 +27,11 @@ rustPlatform.buildRustPackage rec {
   # from nixpkgs during tests.
   preCheck = ''
     substituteInPlace src/core/process.rs \
-      --replace /usr/bin/which '${which}/bin/which'
+      --replace-fail "/usr/bin/which" "${lib.getExe which}"
     substituteInPlace src/sampler/mod.rs \
-      --replace /usr/bin/which '${which}/bin/which'
+      --replace-fail "/usr/bin/which" "${lib.getExe which}"
     substituteInPlace src/core/ruby_spy.rs \
-      --replace /usr/bin/ruby '${ruby}/bin/ruby'
+      --replace-fail "/usr/bin/ruby" "${lib.getExe ruby}"
   '';
 
   checkFlags = [
@@ -60,9 +55,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://rbspy.github.io/";
     description = "Sampling CPU Profiler for Ruby";
     mainProgram = "rbspy";
-    changelog = "https://github.com/rbspy/rbspy/releases/tag/v${version}";
+    changelog = "https://github.com/rbspy/rbspy/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ viraptor ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
-}
+})
