@@ -165,6 +165,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       dandellion
       evanjs
+      KunyaKud
     ];
   };
 }
