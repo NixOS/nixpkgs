@@ -149,5 +149,8 @@ in
     environment.sessionVariables = lib.mkIf cfg.ignoreUserConfig {
       SKIP_FCITX_USER_PATH = "1";
     };
+
+    # required by svg themes
+    programs.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
   };
 }
