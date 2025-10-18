@@ -14231,8 +14231,6 @@ with pkgs;
     inherit (gnome2) gtkglext;
   };
 
-  convertall = qt5.callPackage ../applications/science/misc/convertall { };
-
   faissWithCuda = faiss.override {
     cudaSupport = true;
   };
