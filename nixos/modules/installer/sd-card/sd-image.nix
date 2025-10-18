@@ -17,9 +17,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   rootfsImage = pkgs.callPackage ../../../lib/make-ext4-fs.nix (
     {
@@ -28,17 +25,17 @@ let
       populateImageCommands = config.sdImage.populateRootCommands;
       volumeLabel = config.sdImage.rootVolumeLabel;
     }
-    // optionalAttrs (config.sdImage.rootPartitionUUID != null) {
+    // lib.optionalAttrs (config.sdImage.rootPartitionUUID != null) {
       uuid = config.sdImage.rootPartitionUUID;
     }
   );
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ]
+    (lib.mkRemovedOptionModule [ "sdImage" "bootPartitionID" ]
       "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID."
     )
-    (mkRemovedOptionModule [ "sdImage" "bootSize" ]
+    (lib.mkRemovedOptionModule [ "sdImage" "bootSize" ]
       "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required."
     )
     (lib.mkRenamedOptionModuleWith {
@@ -68,16 +65,16 @@ in
   ];
 
   options.sdImage = {
-    storePaths = mkOption {
-      type = with types; listOf package;
-      example = literalExpression "[ pkgs.stdenv ]";
+    storePaths = lib.mkOption {
+      type = lib.types.listOf lib.types.package;
+      example = lib.literalExpression "[ pkgs.stdenv ]";
       description = ''
         Derivations to be included in the Nix store in the generated SD image.
       '';
     };
 
-    firmwarePartitionOffset = mkOption {
-      type = types.int;
+    firmwarePartitionOffset = lib.mkOption {
+      type = lib.types.int;
       default = 8;
       description = ''
         Gap in front of the /boot/firmware partition, in MiB (1024×1024 bytes).
@@ -91,8 +88,8 @@ in
       '';
     };
 
-    firmwarePartitionID = mkOption {
-      type = types.str;
+    firmwarePartitionID = lib.mkOption {
+      type = lib.types.str;
       default = "0x2178694e";
       description = ''
         Volume ID for the /boot/firmware partition on the SD card. This value
@@ -100,16 +97,16 @@ in
       '';
     };
 
-    firmwarePartitionName = mkOption {
-      type = types.str;
+    firmwarePartitionName = lib.mkOption {
+      type = lib.types.str;
       default = "FIRMWARE";
       description = ''
         Name of the filesystem which holds the boot firmware.
       '';
     };
 
-    rootPartitionUUID = mkOption {
-      type = types.nullOr types.str;
+    rootPartitionUUID = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "14e19a7b-0ae0-484d-9d54-43bd6fdc20c7";
       description = ''
@@ -117,8 +114,8 @@ in
       '';
     };
 
-    rootVolumeLabel = mkOption {
-      type = types.str;
+    rootVolumeLabel = lib.mkOption {
+      type = lib.types.str;
       default = "NIXOS_SD";
       example = "NIXOS_PENDRIVE";
       description = ''
@@ -128,8 +125,8 @@ in
       '';
     };
 
-    firmwareSize = mkOption {
-      type = types.int;
+    firmwareSize = lib.mkOption {
+      type = lib.types.int;
       # As of 2019-08-18 the Raspberry pi firmware + u-boot takes ~18MiB
       default = 30;
       description = ''
@@ -137,8 +134,8 @@ in
       '';
     };
 
-    populateFirmwareCommands = mkOption {
-      example = literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
+    populateFirmwareCommands = lib.mkOption {
+      example = lib.literalExpression "'' cp \${pkgs.myBootLoader}/u-boot.bin firmware/ ''";
       description = ''
         Shell commands to populate the ./firmware directory.
         All files in that directory are copied to the
@@ -146,8 +143,8 @@ in
       '';
     };
 
-    populateRootCommands = mkOption {
-      example = literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
+    populateRootCommands = lib.mkOption {
+      example = lib.literalExpression "''\${config.boot.loader.generic-extlinux-compatible.populateCmd} -c \${config.system.build.toplevel} -d ./files/boot''";
       description = ''
         Shell commands to populate the ./files directory.
         All files in that directory are copied to the
@@ -156,8 +153,8 @@ in
       '';
     };
 
-    postBuildCommands = mkOption {
-      example = literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
+    postBuildCommands = lib.mkOption {
+      example = lib.literalExpression "'' dd if=\${pkgs.myBootLoader}/SPL of=$img bs=1024 seek=1 conv=notrunc ''";
       default = "";
       description = ''
         Shell commands to run after the image is built.
@@ -165,8 +162,8 @@ in
       '';
     };
 
-    compressImage = mkOption {
-      type = types.bool;
+    compressImage = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether the SD image should be compressed using
@@ -174,16 +171,16 @@ in
       '';
     };
 
-    expandOnBoot = mkOption {
-      type = types.bool;
+    expandOnBoot = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = ''
         Whether to configure the sd image to expand it's partition on boot.
       '';
     };
 
-    nixPathRegistrationFile = mkOption {
-      type = types.str;
+    nixPathRegistrationFile = lib.mkOption {
+      type = lib.types.str;
       default = "/nix-path-registration";
       description = ''
         Location of the file containing the input for nix-store --load-db once the machine has booted.
