@@ -1,0 +1,13 @@
+--- source/tools/explorer/CMakeLists.txt.orig	2025-09-20 21:14:54.983800412 -0700
++++ source/tools/explorer/CMakeLists.txt	2025-09-20 21:17:36.216543630 -0700
+@@ -8,9 +8,7 @@
+ ExternalProject_Add(
+   model-explorer
+   PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/model-explorer
+-  GIT_REPOSITORY https://github.com/tenstorrent/model-explorer.git
+-  GIT_TAG ${MODEL_EXPLORER_VERSION}
+-  GIT_PROGRESS OFF
++  SOURCE_DIR ${MODEL_EXPLORER_SOURCE_DIR}
+   CONFIGURE_COMMAND ""
+   BUILD_COMMAND ""
+   INSTALL_COMMAND ""

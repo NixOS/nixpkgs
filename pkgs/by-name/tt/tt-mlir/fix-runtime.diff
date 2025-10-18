@@ -1,0 +1,65 @@
+diff --git a/runtime/include/tt/runtime/perf.h b/runtime/include/tt/runtime/perf.h
+index 998b9499..d408cd0d 100644
+--- a/runtime/include/tt/runtime/perf.h
++++ b/runtime/include/tt/runtime/perf.h
+@@ -6,6 +6,7 @@
+ #define TT_RUNTIME_PERF_H
+
+ #include <ostream>
++#include <cstdint>
+
+ namespace tt::runtime::perf {
+
+diff --git a/tools/ttrt/CMakeLists.txt b/tools/ttrt/CMakeLists.txt
+index 9b14e863..013eaf48 100644
+--- a/tools/ttrt/CMakeLists.txt
++++ b/tools/ttrt/CMakeLists.txt
+@@ -10,7 +10,6 @@ endforeach (filename)
+
+ add_custom_command(
+   COMMAND rm -rf build
+-  COMMAND python -m pip install -r "${CMAKE_CURRENT_BINARY_DIR}/requirements.txt"
+   COMMAND TTMLIR_ENABLE_RUNTIME=${TTMLIR_ENABLE_RUNTIME}
+           TT_RUNTIME_ENABLE_TTNN=${TT_RUNTIME_ENABLE_TTNN}
+           TT_RUNTIME_ENABLE_TTMETAL=${TT_RUNTIME_ENABLE_TTMETAL}
+@@ -23,8 +22,7 @@ add_custom_command(
+           TTMLIR_VERSION_PATCH=${TTMLIR_VERSION_PATCH}
+           CMAKE_SYSTEM_PROCESSOR=${CMAKE_SYSTEM_PROCESSOR}
+           SOURCE_ROOT=${TTMLIR_SOURCE_DIR}
+-          python -m pip wheel . --wheel-dir build
+-  COMMAND python -m pip install build/*.whl --force-reinstall
++          python3 -m build --skip-dependency-check --outdir build
+   COMMAND touch ${CMAKE_CURRENT_BINARY_DIR}/build/.installed
+   WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}"
+   DEPENDS ${TTRT_SOURCES} ${TTRT_FILES} TTMLIRRuntime TTRuntimeTTNNTypes TTRuntimeTTNNUtils _ttmlir_runtime
+diff --git a/tools/explorer/CMakeLists.txt b/tools/explorer/CMakeLists.txt
+index e650cb13..1f022857 100644
+--- a/tools/explorer/CMakeLists.txt
++++ b/tools/explorer/CMakeLists.txt
+@@ -36,12 +36,8 @@ endforeach()
+
+ add_custom_target(explorer
+   COMMENT "Building tt-explorer... ${TTMLIR_BIN_DIR}"
+-  COMMAND pip install ${PIP_EDITABLE_FLAG} ${CMAKE_CURRENT_SOURCE_DIR}/tt_adapter
+-  COMMAND pip uninstall -y ai-edge-model-explorer
+-  COMMAND ${CMAKE_COMMAND} -E remove_directory ${CMAKE_CURRENT_SOURCE_DIR}/model-explorer/src/model-explorer/src/server/package/build
+-  COMMAND pip install --upgrade ${CMAKE_CURRENT_SOURCE_DIR}/model-explorer/src/model-explorer/src/server/package
+-  COMMAND python -m pip wheel ${CMAKE_CURRENT_SOURCE_DIR}/tt_adapter --wheel-dir ${TTMLIR_BUILD_BIN_DIR}/wheels
+-  COMMAND python -m pip wheel ${CMAKE_CURRENT_SOURCE_DIR}/model-explorer/src/model-explorer/src/server/package --wheel-dir ${TTMLIR_BUILD_BIN_DIR}/wheels
++  COMMAND python -m build ${CMAKE_CURRENT_SOURCE_DIR}/tt_adapter --outdir ${TTMLIR_BUILD_BIN_DIR}/wheels
++  COMMAND python -m build ${CMAKE_CURRENT_SOURCE_DIR}/model-explorer/src/model-explorer/src/server/package --outdir ${TTMLIR_BUILD_BIN_DIR}/wheels
+
+   DEPENDS TTMLIRPythonModules model-explorer ttrt ttmlir-opt ttmlir-translate
+ )
+diff --git a/tools/explorer/model-explorer/src/model-explorer/src/server/package/pyproject.toml b/tools/explorer/model-explorer/src/model-explorer/src/server/package/pyproject.toml
+index 16960bb..cf63f06 100644
+--- a/tools/explorer/model-explorer/src/model-explorer/src/server/package/pyproject.toml
++++ b/tools/explorer/model-explorer/src/model-explorer/src/server/package/pyproject.toml
+@@ -12,7 +12,6 @@ classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+-   "License :: OSI Approved :: Apache Software License",
+ ]
+ dependencies = [
+   "flask",
