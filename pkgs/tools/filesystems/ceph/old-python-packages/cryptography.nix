@@ -109,10 +109,12 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # save compute time by not running benchmarks
     "tests/bench"
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # aarch64-darwin forbids W+X memory, but this tests depends on it:
     # * https://cffi.readthedocs.io/en/latest/using.html#callbacks
+    # furthermore, this test fails with OpenSSL 3.6.0, probably due to:
+    # * https://github.com/openssl/openssl/issues/28757
+    # * https://github.com/openssl/openssl/issues/28770
+    # * https://github.com/openssl/openssl/issues/28888
     "tests/hazmat/backends/test_openssl_memleak.py"
   ];
 
