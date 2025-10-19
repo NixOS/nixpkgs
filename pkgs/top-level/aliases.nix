@@ -2862,6 +2862,8 @@ mapAliases {
   z3_4_8 = throw "'z3_4_8' has been removed in favour of the latest version. Use 'z3'."; # Added 2025-05-18
   zabbix50 = throw "'zabbix50' has been removed, it would have reached its End of Life a few days after the release of NixOS 25.05. Consider upgrading to 'zabbix60' or 'zabbix70'."; # Added 2025-04-22
   zabbix64 = throw "'zabbix64' has been removed because it reached its End of Life. Consider upgrading to 'zabbix70'."; # Added 2025-04-22
+  zandronum-alpha = throw "'zandronum-alpha' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
+  zandronum-alpha-server = throw "'zandronum-alpha-server' has been removed as it was broken and the stable version has caught up"; # Added 2025-10-19
   zbackup = throw "'zbackup' has been removed due to being unmaintained upstream"; # Added 2025-08-22
   zeal-qt5 = lib.warnOnInstantiate "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = lib.warnOnInstantiate "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
