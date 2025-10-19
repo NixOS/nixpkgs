@@ -723,7 +723,7 @@ let
             # 1) locally set through API
             if purlPartsFormatted != null then
               purlPartsFormatted
-            else if !evaluateSrc then
+            else if !evaluateSrc || !(builtins.tryEval attrs.src or null).success then
               null
             else
               # 2) locally overwritten through meta.identifiers.purl
@@ -736,7 +736,11 @@ let
               # 2) locally set through API
               if purlPartsFormatted != null then
                 [ purlPartsFormatted ]
-              else if !evaluateSrc then
+              else if
+                !evaluateSrc
+                || !(builtins.tryEval attrs.src or [ ]).success
+                || !(builtins.tryEval attrs.srcs or [ ]).success
+              then
                 [ ]
               else
                 # 3) src.meta.PURL
