@@ -67,6 +67,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Universal array library";
     homepage = "https://github.com/Quansight-Labs/uarray";
+    changelog = "https://github.com/Quansight-Labs/uarray/releases/tag/${src.tag}";
     license = licenses.bsd0;
     maintainers = [ lib.maintainers.pbsds ];
   };
