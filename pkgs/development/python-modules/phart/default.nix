@@ -29,7 +29,6 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
-
     # pythonRelaxDeps = true; didn't work
     substituteInPlace pyproject.toml \
       --replace-fail 'hatchling==1.26.3' 'hatchling'
@@ -37,7 +36,6 @@ buildPythonPackage rec {
     # This line makes the cli tool not work, removing it fixes it
     substituteInPlace src/phart/cli.py \
       --replace-fail "renderer.options.use_ascii = args.ascii" ""
-
   '';
 
   dependencies = [
