@@ -22,7 +22,7 @@
   procps,
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   pname = "ponyc";
   version = "0.59.0";
 
@@ -164,7 +164,6 @@ stdenv.mkDerivation (rec {
     license = licenses.bsd2;
     maintainers = with maintainers; [
       kamilchm
-      patternspandemic
       redvers
       numinit
     ];
@@ -175,4 +174,4 @@ stdenv.mkDerivation (rec {
       "aarch64-darwin"
     ];
   };
-})
+}

@@ -15,7 +15,7 @@
   mpfr,
   pcl,
   libsForQt5,
-  tbb,
+  onetbb,
   xercesc,
   wrapGAppsHook3,
 }:
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     libsForQt5.qtbase
     libsForQt5.qtsvg
     libsForQt5.qttools
-    tbb
+    onetbb
     xercesc
   ];
 

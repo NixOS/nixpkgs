@@ -82,6 +82,6 @@ flutter329.buildFlutterApplication rec {
     mainProgram = "GPTBox";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -9,7 +9,7 @@
   libpthreadstubs,
   withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
   libpciaccess,
-  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
   valgrind-light,
   gitUpdater,
 }:
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

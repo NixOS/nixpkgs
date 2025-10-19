@@ -16,7 +16,6 @@ lib.extendMkDerivation {
     {
       nativeBuildInputs ? [ ], # Native build inputs used for the derivation.
       passthru ? { },
-      patches ? [ ],
 
       # A function to override the `goModules` derivation.
       overrideModAttrs ? (finalAttrs: previousAttrs: { }),
@@ -235,7 +234,7 @@ lib.extendMkDerivation {
         ++
           lib.warnIf (builtins.elem "-trimpath" GOFLAGS)
             "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
-            (lib.optional (!allowGoReference) "-trimpath");
+            (lib.optional (!finalAttrs.allowGoReference) "-trimpath");
 
       inherit enableParallelBuilding;
 
@@ -395,7 +394,8 @@ lib.extendMkDerivation {
 
       strictDeps = true;
 
-      disallowedReferences = lib.optional (!allowGoReference) go;
+      inherit allowGoReference;
+      disallowedReferences = lib.optional (!finalAttrs.allowGoReference) go;
 
       passthru = {
         inherit go;

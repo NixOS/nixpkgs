@@ -7,17 +7,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lune";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "filiptibell";
     repo = "lune";
     tag = "v${version}";
-    hash = "sha256-td+rzfM4MtvuwnxDZbJOJAFMPzc/KzTWsHSiqJg2+a4=";
+    hash = "sha256-pWOGaVugfnwaA4alFP85ha+/iaN8x6KOVnx38vfFk78=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-vgnt76GyKYJhrnMqJNKj5YMXubDzSgsab07nd5Y8+qY=";
+  cargoHash = "sha256-cq7Sgq9f2XpVTgEOMfR/G7sTqcWLwuJBgG9U+h4IMWQ=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''

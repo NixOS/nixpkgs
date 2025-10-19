@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-sweep";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "holmgr";
     repo = "cargo-sweep";
     rev = "v${version}";
-    sha256 = "sha256-L9tWTgW8PIjxeby+wa71NPp3kWMYH5D7PNtpk8Bmeyc=";
+    sha256 = "sha256-/a7quBIX3gr9vVwQfDHdfkt4Xt7UYpjMNiyqivhOvBQ=";
   };
 
-  cargoHash = "sha256-FCpCGp2WUTKTjvUewcOqLoNPlZDnOa4TsamSQNU1xxU=";
+  cargoHash = "sha256-6J512mezcMn82z7qN+ppy66v4tzqMFyqDXU6H9+xyaQ=";
 
   checkFlags = [
     # Requires a rustup toolchain to be installed.

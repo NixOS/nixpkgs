@@ -56,13 +56,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.23.1";
+  version = "1.24.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-65bv/AYQ3Dxwuwv49dU2UuA2imZFbUWnQEJESJvqC6w=";
+    hash = "sha256-M5gn18HTgcpqsOZGtxPoQbQd5tPW3T4r0YeMK5Mwgls=";
   };
 
   outputs = [

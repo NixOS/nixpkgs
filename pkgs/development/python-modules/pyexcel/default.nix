@@ -1,27 +1,27 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
-  isPy3k,
   chardet,
+  fetchPypi,
   lml,
   pyexcel-io,
+  setuptools,
   texttable,
 }:
 
 buildPythonPackage rec {
   pname = "pyexcel";
   version = "0.7.3";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-V7PD+1XdCaYsu/Kunx54qhG2J8K/xgcv8tlYfAIrBtQ=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     chardet
     lml
     pyexcel-io
@@ -37,6 +37,7 @@ buildPythonPackage rec {
   meta = {
     description = "Single API for reading, manipulating and writing data in csv, ods, xls, xlsx and xlsm files";
     homepage = "http://docs.pyexcel.org/";
+    changelog = "https://github.com/pyexcel/pyexcel/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     maintainers = [ ];
   };

@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "django-upgrade";
-  version = "1.28.0";
+  version = "1.29.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-upgrade";
     tag = version;
-    hash = "sha256-GX8qIpkXD/XTxj5fp46xG+ZVEDnkuOeBJm4tS9uXC6Q=";
+    hash = "sha256-ALAwOm+j0Gpx3ZiO8nyTDrJNqR9WaFSxLxAgTarNQeM=";
   };
 
   build-system = [ python3Packages.setuptools ];

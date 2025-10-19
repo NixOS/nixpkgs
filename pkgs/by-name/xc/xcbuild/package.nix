@@ -81,6 +81,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/Suppress-unknown-key-warnings.patch
     # Don't pipe stdout / stderr of processes launched by xcrun
     ./patches/fix-interactive-apps.patch
+    # Fallback to $HOME and correctly handle missing home directories
+    ./patches/fix-no-home-directory-crash.patch
   ];
 
   prePatch = ''
@@ -92,6 +94,12 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace Libraries/pbxbuild/Sources/Tool/TouchResolver.cpp \
       --replace-fail "/usr/bin/touch" "touch"
+    substituteInPlace Libraries/pbxbuild/Sources/Tool/MakeDirectoryResolver.cpp \
+      --replace-fail "/bin/mkdir" "mkdir"
+    substituteInPlace Libraries/pbxbuild/Sources/Tool/SymlinkResolver.cpp \
+      --replace-fail "/bin/ln" "ln"
+    substituteInPlace Libraries/pbxbuild/Sources/Tool/ScriptResolver.cpp \
+      --replace-fail "/bin/sh" "sh"
   ''
   + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # Fix build on gcc-13 due to missing includes
@@ -114,6 +122,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";
+
+  # CMake 4 dropped support of versions lower than 3.5, and versions
+  # lower than 3.10 are deprecated.
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
 
   nativeBuildInputs = [
     cmake

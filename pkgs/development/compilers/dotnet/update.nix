@@ -115,14 +115,18 @@ writeScript "update-dotnet-vmr.sh" ''
       tarballHash=$(nix-hash --to-sri --type sha256 "''${prefetch[0]}")
       tarball=''${prefetch[1]}
 
-      curl -fssL "$sigUrl" -o release.sig
+      # recent dotnet 10 releases don't have a signature for the github tarball
+      if [[ ! $sigUrl = */dotnet-source-* ]]; then
+        curl -fssL "$sigUrl" -o release.sig
 
-      (
-          export GNUPGHOME=$PWD/.gnupg
-          trap 'gpgconf --kill all' EXIT
-          gpg --batch --import ${releaseKey}
-          gpg --batch --verify release.sig "$tarball"
-      )
+        (
+            export GNUPGHOME=$PWD/.gnupg
+            mkdir -m 700 -p $GNUPGHOME
+            trap 'gpgconf --kill all' EXIT
+            gpg --no-autostart --batch --import ${releaseKey}
+            gpg --no-autostart --batch --verify release.sig "$tarball"
+        )
+      fi
 
       tar --strip-components=1 --no-wildcards-match-slash --wildcards -xzf "$tarball" \*/eng/Versions.props \*/global.json \*/prep\*.sh
       artifactsVersion=$(xq -r '.Project.PropertyGroup |

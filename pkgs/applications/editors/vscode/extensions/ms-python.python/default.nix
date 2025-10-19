@@ -37,7 +37,7 @@ let
       or (throw "unsupported platform ${stdenv.hostPlatform.system}");
 
 in
-vscode-utils.buildVscodeMarketplaceExtension rec {
+vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = base // {
     name = "python";
     publisher = "ms-python";

@@ -1438,16 +1438,28 @@ with self;
     meta.broken = lib.versionAtLeast ppxlib.version "0.36";
   };
 
-  ppx_js_style = janePackage {
-    pname = "ppx_js_style";
-    hash = "sha256-7jRzxe4bLyZ2vnHeqWiLlCUvOlNUAk0dwCfBFhrykUU=";
-    meta.description = "Code style checker for Jane Street Packages";
-    propagatedBuildInputs = [
-      octavius
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_js_style = janePackage (
+    {
+      pname = "ppx_js_style";
+      meta.description = "Code style checker for Jane Street Packages";
+      propagatedBuildInputs = [
+        octavius
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-YGGG468WVZbT5JfCB32FfTV7kdRz14ProDQxkdZuE44=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-7jRzxe4bLyZ2vnHeqWiLlCUvOlNUAk0dwCfBFhrykUU=";
+        }
+    )
+  );
 
   ppx_let = janePackage (
     {

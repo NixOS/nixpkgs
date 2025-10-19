@@ -1,25 +1,30 @@
 {
   lib,
   buildPythonPackage,
-  pythonAtLeast,
   fetchFromGitHub,
 
   setuptools,
   setuptools-scm,
 
+  bottle,
   certifi,
   filelock,
   isodate,
+  jsonschema,
   lxml,
   numpy,
   openpyxl,
+  pillow,
   pyparsing,
   python-dateutil,
   regex,
+  truststore,
+  typing-extensions,
 
   gui ? true,
   tkinter,
 
+  aniso8601,
   pycryptodome,
   pg8000,
   pymysql,
@@ -45,16 +50,14 @@
 
 buildPythonPackage rec {
   pname = "arelle${lib.optionalString (!gui) "-headless"}";
-  version = "2.30.25";
+  version = "2.37.61";
   pyproject = true;
-
-  disabled = pythonAtLeast "3.13"; # Note: when updating, check if this is still needed
 
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
     tag = version;
-    hash = "sha256-xzTrFie97HDIqPZ4nzCh+0p/w0bTK12cS0FSsuIi7tY=";
+    hash = "sha256-xz3sDAgE1Qpml8V+2y+q/tTda6uGZuMnNSEGdIjLlzI=";
   };
 
   outputs = [
@@ -64,7 +67,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml --replace-fail \
-        'requires = ["setuptools~=73.0", "wheel~=0.44", "setuptools_scm[toml]~=8.1"]' \
+        'requires = ["setuptools>=80.9,<81", "wheel>=0.45,<1", "setuptools_scm[toml]>=9.2,<10"]' \
         'requires = ["setuptools", "wheel", "setuptools_scm[toml]"]'
   '';
 
@@ -74,15 +77,20 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
+    bottle
     certifi
     filelock
     isodate
+    jsonschema
     lxml
     numpy
     openpyxl
+    pillow
     pyparsing
     python-dateutil
     regex
+    truststore
+    typing-extensions
   ]
   ++ lib.optionals gui [ tkinter ];
 
@@ -105,6 +113,7 @@ buildPythonPackage rec {
       cherrypy
       tornado
     ];
+    xule = [ aniso8601 ];
   };
 
   nativeBuildInputs = [

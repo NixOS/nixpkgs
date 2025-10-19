@@ -31,13 +31,13 @@ let
 in
 stdenv.mkDerivation {
   pname = "${ipuVersion}-camera-hal";
-  version = "unstable-2024-09-29";
+  version = "unstable-2025-06-27";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "ipu6-camera-hal";
-    rev = "f98f72b156563fe8373e4f8d017a9f609676bb33";
-    hash = "sha256-zVcgKW7/GHYd1oMvsaI77cPyj3G68dL+OXBJDz5+Td4=";
+    rev = "c933525a6efe8229a7129b7b0b66798f19d2bef7";
+    hash = "sha256-ZWwszteRmUBn0wGgN5rmzw/onfzBoPGadcmpk+93kAM=";
   };
 
   nativeBuildInputs = [
@@ -46,14 +46,14 @@ stdenv.mkDerivation {
   ];
 
   cmakeFlags = [
-    "-DIPU_VER=${ipuVersion}"
-    "-DTARGET_SUFFIX=-${ipuVersion}"
-    # missing libiacss
-    "-DUSE_PG_LITE_PIPE=ON"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
-    "-DCMAKE_INSTALL_SUB_PATH=${ipuTarget}"
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+    "-DBUILD_CAMHAL_ADAPTOR=ON"
+    "-DBUILD_CAMHAL_PLUGIN=ON"
+    "-DIPU_VERSIONS=${ipuVersion}"
+    "-DUSE_PG_LITE_PIPE=ON"
   ];
 
   NIX_CFLAGS_COMPILE = [

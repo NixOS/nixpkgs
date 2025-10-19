@@ -35,6 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/gmenuharness/-/commit/70e9ed85792a6ac1950faaf26391ce91e69486ab.patch";
       hash = "sha256-jeue0qrl2JZCt/Yfj4jT210wsF/E+MlbtNT/yFTcw5I=";
     })
+    (fetchpatch {
+      name = "0002-gmenuharness-CMakeLists.txt-Bump-cmake_minimum_required-to-version-3.10.patch";
+      url = "https://gitlab.com/ubports/development/core/gmenuharness/-/commit/42d04e0d484b3715e7b9935e3ef3e2fa6c33b409.patch";
+      hash = "sha256-Gyk8TxIfEWsqL9CGymmnVA/Xj4/+J1PRNmWikNEcRJ8=";
+    })
   ];
 
   postPatch = ''

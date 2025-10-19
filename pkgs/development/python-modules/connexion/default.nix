@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   poetry-core,
@@ -35,16 +34,14 @@
 
 buildPythonPackage rec {
   pname = "connexion";
-  version = "3.2.0";
+  version = "3.3.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "spec-first";
     repo = "connexion";
     tag = version;
-    hash = "sha256-ruwpA2yd7FRME1FvYrZh0EOnhmQ26YVouXzpVD9ph6g=";
+    hash = "sha256-mUnot9kdUgpxMXjKnkRzK9Dp2c7ibJzv4qX61ZPuJHM=";
   };
 
   build-system = [ poetry-core ];
@@ -84,8 +81,6 @@ buildPythonPackage rec {
   disabledTests = [
     "test_build_example"
     "test_mock_resolver_no_example"
-    "test_sort_apis_by_basepath"
-    "test_sort_routes"
     # Tests require network access
     "test_remote_api"
   ]

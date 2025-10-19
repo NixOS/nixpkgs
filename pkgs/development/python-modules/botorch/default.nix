@@ -3,15 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   gpytorch,
   linear-operator,
   multipledispatch,
   pyre-extensions,
   pyro-ppl,
-  setuptools,
-  setuptools-scm,
-  torch,
   scipy,
+  torch,
+
+  # optional-dependencies
+  pymoo,
+
+  # tests
   pytestCheckHook,
   pythonAtLeast,
 }:
@@ -42,6 +51,12 @@ buildPythonPackage rec {
     scipy
     torch
   ];
+
+  optional-dependencies = {
+    pymoo = [
+      pymoo
+    ];
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

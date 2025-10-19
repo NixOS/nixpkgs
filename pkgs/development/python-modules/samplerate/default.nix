@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "samplerate";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tuxu";
     repo = "python-samplerate";
     tag = "v${version}";
-    hash = "sha256-/9NFJcn8R0DFjVhFAIYOtzZM90hjVIfsVXFlS0nHNhA=";
+    hash = "sha256-aSlnPwFNZRffDsLqhYD1Pd5JOwvv9GcWyseZmeyrvt0=";
   };
 
   postPatch = ''
@@ -66,7 +66,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python bindings for libsamplerate based on CFFI and NumPy";
     homepage = "https://github.com/tuxu/python-samplerate";
-    changelog = "https://github.com/tuxu/python-samplerate/releases/tag/${version}";
+    changelog = "https://github.com/tuxu/python-samplerate/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

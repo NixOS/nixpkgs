@@ -232,12 +232,9 @@ let
         getInclude
         getMan
         chooseDevOutputs
-        zipWithNames
-        zip
         recurseIntoAttrs
         dontRecurseIntoAttrs
         cartesianProduct
-        cartesianProductOfSets
         mapCartesianProduct
         updateManyAttrsByPath
         listToAttrs
@@ -505,7 +502,6 @@ let
         unknownModule
         mkOption
         mkPackageOption
-        mkPackageOptionMD
         literalMD
         ;
       inherit (self.types)
@@ -553,7 +549,6 @@ let
         modifySumArgs
         innerClosePropagation
         closePropagation
-        mapAttrsFlatten
         nvs
         setAttr
         setAttrMerge

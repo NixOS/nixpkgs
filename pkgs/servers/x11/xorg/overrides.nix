@@ -170,8 +170,6 @@ self: super:
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
   });
 
-  listres = addMainProgram super.listres { };
-
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
     preConfigure =
@@ -323,9 +321,6 @@ self: super:
   });
 
   oclock = addMainProgram super.oclock { };
-  smproxy = addMainProgram super.smproxy { };
-
-  viewres = addMainProgram super.viewres { };
 
   x11perf = super.x11perf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [
@@ -338,16 +333,6 @@ self: super:
   });
 
   xcalc = addMainProgram super.xcalc { };
-
-  xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    meta = attrs.meta // {
-      maintainers = [ lib.maintainers.lovek323 ];
-    };
-  });
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
@@ -851,33 +836,8 @@ self: super:
     ];
   });
 
-  twm = super.twm.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      bison
-      flex
-    ];
-    meta = attrs.meta // {
-      mainProgram = "twm";
-    };
-  });
-
-  xauth = super.xauth.overrideAttrs (attrs: {
-    doCheck = false; # fails
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xauth";
-    };
-  });
-
-  xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
   xcompmgr = addMainProgram super.xcompmgr { };
-  xconsole = addMainProgram super.xconsole { };
 
   xinit =
     (super.xinit.override {
@@ -963,15 +923,11 @@ self: super:
   });
 
   xfd = addMainProgram super.xfd { };
-  xfontsel = addMainProgram super.xfontsel { };
   xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
   xload = addMainProgram super.xload { };
-  xmag = addMainProgram super.xmag { };
-  xmessage = addMainProgram super.xmessage { };
-  xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
 
@@ -982,10 +938,6 @@ self: super:
     };
   });
 
-  xset = addMainProgram super.xset { };
-  xsetroot = addMainProgram super.xsetroot { };
-  xsm = addMainProgram super.xsm { };
-  xstdcmap = addMainProgram super.xstdcmap { };
   xwd = addMainProgram super.xwd { };
 
   # convert Type1 vector fonts to OpenType fonts

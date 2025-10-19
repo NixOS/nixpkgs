@@ -229,7 +229,7 @@ in
         path = lib.getExe' pkgs.audit "audisp-af_unix";
         args = [
           "0640"
-          "/var/run/audispd_events"
+          "/run/audit/audispd_events"
           "string"
         ];
         format = "binary";
@@ -256,41 +256,23 @@ in
       };
     };
 
-    systemd.services.auditd = {
-      description = "Security Audit Logging Service";
-      documentation = [ "man:auditd(8)" ];
-      wantedBy = [ "sysinit.target" ];
-      after = [
-        "local-fs.target"
-        "systemd-tmpfiles-setup.service"
-      ];
-      before = [
-        "sysinit.target"
-        "shutdown.target"
-      ];
-      conflicts = [ "shutdown.target" ];
+    systemd.packages = [ pkgs.audit.out ];
 
-      unitConfig = {
-        DefaultDependencies = false;
-        RefuseManualStop = true;
-        ConditionVirtualization = "!container";
-        ConditionKernelCommandLine = [
-          "!audit=0"
-          "!audit=off"
-        ];
-      };
+    systemd.services.auditd = {
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        # https://github.com/linux-audit/audit-userspace/pull/501
+        # set up audit directories using systemd service instead of tmpfiles
         LogsDirectory = "audit";
-        ExecStart = "${pkgs.audit}/bin/auditd -l -n -s nochange";
-        Restart = "on-failure";
-        # Do not restart for intentional exits. See EXIT CODES section in auditd(8).
-        RestartPreventExitStatus = "2 4 6";
-
-        # Upstream hardening settings
-        MemoryDenyWriteExecute = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
+        LogsDirectoryMode = "0700";
+        RuntimeDirectory = "audit";
+        RuntimeDirectoryMode = "0755";
+        ExecStart = [
+          # the upstream unit does not allow symlinks, so clear and rewrite the ExecStart
+          ""
+          "${lib.getExe' pkgs.audit "auditd"} -l -s nochange"
+        ];
       };
     };
   };

@@ -396,7 +396,7 @@ rec {
       outputs = drv.outputs or [ "out" ];
 
       commonAttrs =
-        drv // (listToAttrs outputsList) // ({ all = map (x: x.value) outputsList; }) // passthru;
+        drv // (listToAttrs outputsList) // { all = map (x: x.value) outputsList; } // passthru;
 
       outputToAttrListElement = outputName: {
         name = outputName;

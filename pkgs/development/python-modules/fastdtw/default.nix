@@ -56,6 +56,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/slaypni/fastdtw";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

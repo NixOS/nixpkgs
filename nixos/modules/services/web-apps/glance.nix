@@ -208,6 +208,7 @@ in
             ${secretReplacements}
           '';
         ExecStart = "${getExe cfg.package} --config ${mergedSettingsFile}";
+        Restart = "on-failure";
         WorkingDirectory = "/var/lib/glance";
         EnvironmentFile = cfg.environmentFile;
         StateDirectory = "glance";

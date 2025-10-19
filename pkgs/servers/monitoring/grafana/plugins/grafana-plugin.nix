@@ -64,7 +64,7 @@ stdenvNoCC.mkDerivation (
     }
     // meta;
   }
-  // (builtins.removeAttrs args [
+  // (removeAttrs args [
     "zipHash"
     "pname"
     "versionPrefix"

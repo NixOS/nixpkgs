@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ] ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
 
+  # CMake 4 is no longer retro compatible with versions < 3.5
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.2)" \
+      "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   postInstall =
     let
       canonicalExtension =

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     openal
     alure
   ]
-  ++ optionals (legacy) [
+  ++ optionals legacy [
     libXtst
     libX11
   ]
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/zevv/bucklespring";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = [ maintainers.evils ];
+    maintainers = [ ];
   };
 }

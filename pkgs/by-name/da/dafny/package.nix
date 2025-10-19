@@ -38,35 +38,31 @@ let
 in
 buildDotnetModule rec {
   pname = "Dafny";
-  version = "4.10.0";
+  version = "4.11.0";
 
   src = fetchFromGitHub {
     owner = "dafny-lang";
     repo = "dafny";
     tag = "v${version}";
-    hash = "sha256-aPOjt4bwalhJUTJm4+pGqN88LwDP5zrVtakF26b3K4s=";
+    hash = "sha256-oM8dKDZ5FCmKq24taQ6Sr2eTeNAMSq8MY0U1AFvS6D4=";
   };
 
-  postPatch =
-    let
-      runtimeJarVersion = "4.10.0";
-    in
-    ''
-      cp ${writeScript "fake-gradlew-for-dafny" ''
-        mkdir -p build/libs/
-        javac $(find -name "*.java" | grep "^./src/main") -d classes
-        jar cf build/libs/DafnyRuntime-${runtimeJarVersion}.jar -C classes dafny
-      ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
+  postPatch = ''
+    cp ${writeScript "fake-gradlew-for-dafny" ''
+      mkdir -p build/libs/
+      javac $(find -name "*.java" | grep "^./src/main") -d classes
+      jar cf build/libs/DafnyRuntime-${version}.jar -C classes dafny
+    ''} Source/DafnyRuntime/DafnyRuntimeJava/gradlew
 
-      # Needed to fix
-      # "error NETSDK1129: The 'Publish' target is not supported without
-      # specifying a target framework. The current project targets multiple
-      # frameworks, you must specify the framework for the published
-      # application."
-      substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
-        --replace-fail TargetFrameworks TargetFramework \
-        --replace-fail "netstandard2.0;net452" net8.0
-    '';
+    # Needed to fix
+    # "error NETSDK1129: The 'Publish' target is not supported without
+    # specifying a target framework. The current project targets multiple
+    # frameworks, you must specify the framework for the published
+    # application."
+    substituteInPlace Source/DafnyRuntime/DafnyRuntime.csproj \
+      --replace-fail TargetFrameworks TargetFramework \
+      --replace-fail "netstandard2.0;net452" net8.0
+  '';
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   nativeBuildInputs = [ jdk11 ];
@@ -82,8 +78,15 @@ buildDotnetModule rec {
 
   executables = [ "Dafny" ];
 
-  # Help Dafny find z3
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ z3 ]}" ];
+  # Help Dafny find z3 and dotnet SDK (needed for dafny run)
+  makeWrapperArgs = [
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        z3
+        dotnet-sdk
+      ]
+    }"
+  ];
 
   postFixup = ''
     ln -s "$out/bin/Dafny" "$out/bin/dafny" || true

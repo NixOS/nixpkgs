@@ -10,14 +10,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "wapiti";
-  version = "3.2.5";
+  version = "3.2.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "wapiti-scanner";
     repo = "wapiti";
     tag = version;
-    hash = "sha256-Sof7ZaCeIJ6Hsut0uK9yPcunXArexpzIbSbksZpHqVU=";
+    hash = "sha256-dcPFHy7W6wJ+KpD8e9VfO+AgedwaA2+xeJImxRxq4oE=";
   };
 
   pythonRelaxDeps = true;
@@ -66,6 +66,7 @@ python3Packages.buildPythonApplication rec {
       versionCheckHook
       writableTmpDirAsHomeHook
     ];
+
   versionCheckProgramArg = "--version";
 
   disabledTests = [
@@ -94,6 +95,7 @@ python3Packages.buildPythonApplication rec {
     "test_meta_detection"
     "test_multi_detection"
     "test_no_crash"
+    "test_ns_takeover"
     "test_options"
     "test_out_of_band"
     "test_partial_tag_name_escape"

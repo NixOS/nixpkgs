@@ -10,7 +10,6 @@
   nixosTests,
   nixfmt,
   mobilizon-frontend,
-  ...
 }:
 
 let

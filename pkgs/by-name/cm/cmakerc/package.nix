@@ -15,6 +15,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-++16WAs2K9BKk8384yaSI/YD1CdtdyXVBIjGhqi4JIk=";
   };
 
+  # Fix the cmake_minimum_required version constraint in CMakeRC.cmake.
+  patches = [
+    ./0001-Fix-minimum-required-CMake-version-to-be-compatible-.patch
+  ];
+
   installPhase = ''
     runHook preInstall
 

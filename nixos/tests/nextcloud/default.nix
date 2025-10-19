@@ -140,5 +140,6 @@ in
 listToAttrs (
   concatMap genTests [
     31
+    32
   ]
 )

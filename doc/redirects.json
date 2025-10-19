@@ -216,6 +216,12 @@
   "sec-building-packages-with-llvm-using-clang-stdenv": [
     "index.html#sec-building-packages-with-llvm-using-clang-stdenv"
   ],
+  "sec-darwin-libcxx-deployment-targets": [
+    "index.html#sec-darwin-libcxx-deployment-targets"
+  ],
+  "sec-darwin-libcxx-versions": [
+    "index.html#sec-darwin-libcxx-versions"
+  ],
   "sec-functions-library-treefmt": [
     "index.html#sec-functions-library-treefmt"
   ],
@@ -230,6 +236,9 @@
   ],
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
+  ],
+  "sec-meta-identifiers-purl": [
+    "index.html#sec-meta-identifiers-purl"
   ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
@@ -315,6 +324,9 @@
   ],
   "sec-nixpkgs-release-25.05-notable-changes": [
     "release-notes.html#sec-nixpkgs-release-25.05-notable-changes"
+  ],
+  "sec-nrfutil": [
+    "index.html#sec-nrfutil"
   ],
   "sec-overlays-install": [
     "index.html#sec-overlays-install"
@@ -651,6 +663,15 @@
   ],
   "var-meta-identifiers-possibleCPEs": [
     "index.html#var-meta-identifiers-possibleCPEs"
+  ],
+  "var-meta-identifiers-purl": [
+    "index.html#var-meta-identifiers-purl"
+  ],
+  "var-meta-identifiers-purlParts": [
+    "index.html#var-meta-identifiers-purlParts"
+  ],
+  "var-meta-identifiers-purls": [
+    "index.html#var-meta-identifiers-purls"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -4287,6 +4308,15 @@
   ],
   "sec-linux-kernel": [
     "index.html#sec-linux-kernel"
+  ],
+  "sec-linux-kernel-maintainer-information": [
+    "index.html#sec-linux-kernel-maintainer-information"
+  ],
+  "sec-linux-updates": [
+    "index.html#sec-linux-updates"
+  ],
+  "sec-linux-add-new-kernel-version": [
+    "index.html#sec-linux-add-new-kernel-version"
   ],
   "ex-overriding-kernel-derivation": [
     "index.html#ex-overriding-kernel-derivation"

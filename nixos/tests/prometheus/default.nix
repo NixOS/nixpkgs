@@ -8,4 +8,5 @@
   prometheus-pair = runTest ./prometheus-pair.nix;
   pushgateway = runTest ./pushgateway.nix;
   remote-write = runTest ./remote-write.nix;
+  ui = runTest ./ui.nix;
 }

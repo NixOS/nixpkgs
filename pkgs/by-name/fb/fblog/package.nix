@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fblog";
-  version = "4.15.0";
+  version = "4.16.0";
 
   src = fetchFromGitHub {
     owner = "brocode";
     repo = "fblog";
     rev = "v${version}";
-    hash = "sha256-IPT/1k8bs2NBbq5KthvcJY7eBwbnFop8cO0OiLgRZg4=";
+    hash = "sha256-SWwk7qNe2R1aBYGBFqltUZjeOvr4jG1P7/CPIAfHCc8=";
   };
 
-  cargoHash = "sha256-puZN1ao+Grw9nWQvNfqAwmY9Lb6+z13EPv/cZlueYxc=";
+  cargoHash = "sha256-du9FXuUNqQm1AMqcCFqeso5OPrPCxzTVl5e7kR0rpwc=";
 
   meta = with lib; {
     description = "Small command-line JSON log viewer";

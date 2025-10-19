@@ -114,7 +114,7 @@ let
             version = dottedVersion;
           };
         }
-        // lib.optionalAttrs (editor) (
+        // lib.optionalAttrs editor (
           let
             project-src =
               runCommand "${pkg.name}-project-src"
@@ -337,7 +337,7 @@ let
         outputs = [
           "out"
         ]
-        ++ lib.optional (editor) "man";
+        ++ lib.optional editor "man";
         separateDebugInfo = true;
 
         # Set the build name which is part of the version. In official downloads, this
@@ -426,8 +426,7 @@ let
           # Fix a crash in the mono test project build. It no longer seems to
           # happen in 4.4, but an existing fix couldn't be identified.
           ./CSharpLanguage-fix-crash-in-reload_assemblies-after-.patch
-        ]
-        ++ lib.optional (lib.versionAtLeast version "4.5") ./fix-freetype-link-error.patch;
+        ];
 
         postPatch = ''
           # this stops scons from hiding e.g. NIX_CFLAGS_COMPILE

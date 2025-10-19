@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchzip,
-  jdk24,
+  jdk25,
   unzip,
   copyDesktopItems,
   makeDesktopItem,
@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
-    ./build/script/package-weasis.sh --no-installer --jdk ${jdk24}
+    ./build/script/package-weasis.sh --no-installer --jdk ${jdk25}
 
     runHook postBuild
   '';
@@ -70,12 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
   ''
   + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share/{applications,pixmaps}
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis/* $out/
+    mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis/* $out/
     mv $out/lib/*.png $out/share/pixmaps/
   ''
   + lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/Applications
-    mv weasis-${platform}-jdk${lib.versions.major jdk24.version}-${finalAttrs.version}/Weasis.app $out/Applications/
+    mv weasis-${platform}-jdk${lib.versions.major jdk25.version}-${finalAttrs.version}/Weasis.app $out/Applications/
   ''
   + ''
     runHook postInstall

@@ -34,6 +34,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mgedmin/imgdiff";
     changelog = "https://github.com/mgedmin/imgdiff/blob/${src.rev}/CHANGES.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }

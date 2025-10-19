@@ -15,13 +15,13 @@ assert petsc.mpiSupport;
 assert pythonSupport -> petsc.pythonSupport;
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
-  version = "3.23.3";
+  version = "3.24.0";
 
   src = fetchFromGitLab {
     owner = "slepc";
     repo = "slepc";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-j0sUJet4eViFxOR0XOAxNSprnL+kN4OW1npGihT0Q4Y=";
+    hash = "sha256-nvzX0p/H3EYR8+7jD+I4FdvU+WstxR/U4Upcn7yZULk=";
   };
 
   postPatch = ''
@@ -31,14 +31,6 @@ stdenv.mkDerivation (finalAttrs: {
       "slepc.prefixdir,'${python3Packages.python.sitePackages}'"
 
     patchShebangs lib/slepc/bin
-  '';
-
-  # Usually this project is being built as part of a `petsc` build or as part of
-  # other projects, e.g when `petsc` is `./configure`d with
-  # `--download-slepc=1`. This instructs the slepc to be built as a standalone
-  # project.
-  preConfigure = ''
-    export SLEPC_DIR=$PWD
   '';
 
   nativeBuildInputs = [
@@ -99,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Scalable Library for Eigenvalue Problem Computations";
     homepage = "https://slepc.upv.es";
-    changelog = "https://gitlab.com/slepc/slepc/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    changelog = "https://gitlab.com/slepc/slepc/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [
       bsd2
     ];

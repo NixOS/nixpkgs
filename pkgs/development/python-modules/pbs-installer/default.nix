@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "pbs-installer";
-  version = "2025.09.18";
+  version = "2025.10.10";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "frostming";
     repo = "pbs-installer";
     tag = version;
-    hash = "sha256-bkqQa7wqNBkeDVTG4HIj8im4wljrPTG3IS2c20m+rzg=";
+    hash = "sha256-YqZPCzmmvcsP4tnYZS+nFZ9p+lnLtz/ivGhp2+4X3vU=";
   };
 
   build-system = [ pdm-backend ];

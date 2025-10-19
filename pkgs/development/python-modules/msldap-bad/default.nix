@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/CravateRouge/msldap-bAD";
     changelog = "https://github.com/CravateRouge/asyauth-bAD/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

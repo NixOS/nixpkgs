@@ -4,9 +4,7 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
-  clang,
-  libxml2,
-  rocm-merged-llvm,
+  llvm,
   zlib,
   zstd,
   perl,
@@ -14,30 +12,36 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipify";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIPIFY";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-o/1LNsNtAyQcSug1gf7ujGNRRbvC33kwldrJKZi2LA0=";
+    hash = "sha256-uj25WmGCpwouS1yzW9Oil5Vyrbyj5yRITvWF9WaGozM=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
+    perl
+    llvm.rocm-toolchain
   ];
 
   buildInputs = [
-    libxml2
-    rocm-merged-llvm
+    llvm.llvm
+    llvm.clang-unwrapped
+    perl
     zlib
     zstd
-    perl
   ];
+
+  env.CXXFLAGS = "-I${lib.getInclude llvm.llvm}/include -I${lib.getInclude llvm.clang-unwrapped}/include";
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${clang}/bin/clang"
+      --replace-fail "\''${LLVM_TOOLS_BINARY_DIR}/clang" "${llvm.rocm-toolchain}/bin/clang"
     chmod +x bin/*
   '';
 

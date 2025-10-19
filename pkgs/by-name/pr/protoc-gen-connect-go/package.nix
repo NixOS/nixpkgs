@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "protoc-gen-connect-go";
-  version = "1.18.1";
+  version = "1.19.0";
 
   src = fetchFromGitHub {
     owner = "connectrpc";
     repo = "connect-go";
     tag = "v${version}";
-    hash = "sha256-w3zn2O5gc3cbLsHStF53t1kitXvCxCyNcR5mfcr92Sg=";
+    hash = "sha256-pxG2f54m01tC9YhpN9zQ8M5KiP4gyt019klqnBPHHrw=";
   };
 
-  vendorHash = "sha256-j5T1Ho3K0kPZOo5LA6Md06W/gF6DmEElGt9BvceBtTo=";
+  vendorHash = "sha256-oAcAE9t4mz0HrkqO8lh5Ex2nakKj5FKy2lKTP8X/9Gg=";
 
   subPackages = [
     "cmd/protoc-gen-connect-go"

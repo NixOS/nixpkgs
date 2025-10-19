@@ -6,7 +6,6 @@
   installShellFiles,
   pkg-config,
   glib,
-  pcre,
   pcre2,
   util-linux,
   libsysprof-capture,
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    pcre
     pcre2
     util-linux
     libmysqlclient

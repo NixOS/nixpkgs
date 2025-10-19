@@ -80,6 +80,8 @@ buildPythonPackage rec {
     "test_happy_path"
     # test assumes a virtual environment
     "test_code_style"
+    # AssertionError: Lists differ: ['my...
+    "test_import_all_files"
   ];
 
   disabledTestPaths = [

@@ -9,16 +9,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rofi-nerdy";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchFromGitHub {
     owner = "Rolv-Apneseth";
     repo = "rofi-nerdy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-RiQ8bP7Q1ItZfCO94R95aTenqVOD45ohfUdmtDn0r9k=";
+    hash = "sha256-FxMRUE4OKF0e1gNVFuEIGCbV83tUVj4ZNZFCjFqNb64=";
   };
 
-  cargoHash = "sha256-NvS38uTqlBTUmRg2z0Faa5bTlRC/DTXQU3MCcSmPerA=";
+  cargoHash = "sha256-z7pfVLlOZFKxoqk87cHFd//DOArCvTpPK83UmJwmdtw=";
 
   nativeBuildInputs = [ pkg-config ];
 

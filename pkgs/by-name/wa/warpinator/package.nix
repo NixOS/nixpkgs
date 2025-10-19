@@ -19,7 +19,9 @@
 
 let
   pythonEnv = python3.withPackages (
-    pp: with pp; [
+    pp:
+    with pp;
+    [
       grpcio-tools
       protobuf
       pygobject3
@@ -35,6 +37,7 @@ let
       ifaddr
       qrcode
     ]
+    ++ qrcode.optional-dependencies.pil
   );
 in
 stdenv.mkDerivation rec {

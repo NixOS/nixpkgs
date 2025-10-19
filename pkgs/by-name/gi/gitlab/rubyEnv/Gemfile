@@ -211,7 +211,7 @@ gem 'fog-local', '~> 0.8', feature_category: :shared
 # We may want to update this dependency if this is ever addressed upstream, e.g. via
 # https://github.com/aliyun/aliyun-oss-ruby-sdk/pull/93
 gem 'fog-aliyun', '~> 0.4', feature_category: :shared
-gem 'gitlab-fog-azure-rm', '~> 2.3.0', require: 'fog/azurerm', feature_category: :shared
+gem 'gitlab-fog-azure-rm', '~> 2.4.0', require: 'fog/azurerm', feature_category: :shared
 
 # for Google storage
 

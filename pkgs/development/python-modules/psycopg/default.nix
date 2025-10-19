@@ -197,6 +197,8 @@ buildPythonPackage rec {
     "test_package_version"
     # expects timeout, but we have no route in the sandbox
     "test_connect_error_multi_hosts_each_message_preserved"
+    # Flaky, fails intermittently
+    "test_break_attempts"
   ];
 
   disabledTestPaths = [

@@ -261,8 +261,8 @@
   },
   {
     "pname": "DuckDB.NativeBinaries",
-    "version": "1.3.2",
-    "hash": "sha256-wHFmXCpJI44wr1mgybl+4QKhX+CwME9+Smzhi5G9G4w="
+    "version": "1.4.0",
+    "hash": "sha256-27G7ptdNsjebMOrcegl0tgR2pvfvLS4RxQmw21k5Zuc="
   },
   {
     "pname": "DynamicData",
@@ -1926,23 +1926,23 @@
   },
   {
     "pname": "NexusMods.HyperDuck",
-    "version": "0.24.0",
-    "hash": "sha256-DQP/Jq+19282NbTrwiCEOFwtbagbVhc8tmtruBLV470="
+    "version": "0.28.0",
+    "hash": "sha256-vJW/9DbnSIzxH6CR1CzMru0w/BA7HwxuJ0TiKt6NgcQ="
   },
   {
     "pname": "NexusMods.MnemonicDB",
-    "version": "0.24.0",
-    "hash": "sha256-QIuX3I/tAc37hmmvhrOQZcv5U40Sa6HeR00wTlmgFF0="
+    "version": "0.28.0",
+    "hash": "sha256-AzSzn2mdp4sx1ntOfm03kWlfo/mxxURcEMmChxSyEAI="
   },
   {
     "pname": "NexusMods.MnemonicDB.Abstractions",
-    "version": "0.24.0",
-    "hash": "sha256-SaVCEfgG1d+4wAtBdq9i5atbZsyBe6OEXt367eMOj1A="
+    "version": "0.28.0",
+    "hash": "sha256-c6hEojlKk8B//lpEyxrYBy/QlpixzDE4LJq+sk4XZDY="
   },
   {
     "pname": "NexusMods.MnemonicDB.SourceGenerator",
-    "version": "0.24.0",
-    "hash": "sha256-vEALZe2bs1fm2r7TyOG2UJNbeudadc3BtdE5ezppINg="
+    "version": "0.28.0",
+    "hash": "sha256-o888EyOAzDypNzhZTtW8BZp0Ew/fOUsho6IeBbGlmNM="
   },
   {
     "pname": "NexusMods.Paths",

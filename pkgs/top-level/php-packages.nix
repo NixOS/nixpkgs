@@ -1,5 +1,6 @@
 {
   stdenv,
+  fetchpatch,
   config,
   callPackages,
   lib,
@@ -115,7 +116,7 @@ lib.makeScope pkgs.newScope (
         ...
       }@args:
       stdenv.mkDerivation (
-        (builtins.removeAttrs args [ "name" ])
+        (removeAttrs args [ "name" ])
         // {
           pname = "php-${name}";
           extensionName = extName;
@@ -407,6 +408,7 @@ lib.makeScope pkgs.newScope (
       }
       // lib.optionalAttrs config.allowAliases {
         php-spx = throw "php-spx is deprecated, use spx instead";
+        openssl-legacy = throw "openssl-legacy has been removed";
       }
       // (
         # Core extensions
@@ -444,6 +446,14 @@ lib.makeScope pkgs.newScope (
               buildInputs = [ libxml2 ];
               configureFlags = [
                 "--enable-dom"
+              ];
+              patches = lib.optionals (lib.versionAtLeast php.version "8.4") [
+                # Fix build of ext-dom.
+                # https://github.com/php/php-src/pull/20023 (will be part of 8.4.14)
+                (fetchpatch {
+                  url = "https://github.com/php/php-src/commit/4fe040290da2822c70d3b60d30a2c1256264735d.patch";
+                  hash = "sha256-hCs59X5gCApXMjU9dKEtgdTJBHYq3BcKr9tlQjRCTIA=";
+                })
               ];
             }
             {
@@ -596,16 +606,6 @@ lib.makeScope pkgs.newScope (
             {
               name = "openssl";
               buildInputs = [ openssl ];
-              configureFlags = [ "--with-openssl" ];
-              doCheck = false;
-            }
-            # This provides a legacy OpenSSL PHP extension
-            # For situations where OpenSSL 3 do not support a set of features
-            # without a specific openssl.cnf file
-            {
-              name = "openssl-legacy";
-              extName = "openssl";
-              buildInputs = [ openssl_1_1 ];
               configureFlags = [ "--with-openssl" ];
               doCheck = false;
             }
@@ -845,7 +845,7 @@ lib.makeScope pkgs.newScope (
           # [ { name = <name>; value = <extension drv>; } ... ]
           #
           # which we later use listToAttrs to make all attrs available by name.
-          namedExtensions = builtins.map (drv: {
+          namedExtensions = map (drv: {
             name = drv.name;
             value = mkExtension drv;
           }) extensionData;

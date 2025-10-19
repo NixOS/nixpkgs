@@ -30,7 +30,7 @@
   flaky,
   hypothesis,
   py-evm,
-  pytest-asyncio_0_21,
+  pytest-asyncio,
   pytest-mock,
   pytest-xdist,
   pytestCheckHook,
@@ -85,7 +85,7 @@ buildPythonPackage rec {
     flaky
     hypothesis
     py-evm
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytest-mock
     pytest-xdist
     pytestCheckHook

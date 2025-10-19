@@ -36,6 +36,13 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # See https://github.com/NixOS/nixpkgs/issues/445447
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6)" \
+      "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

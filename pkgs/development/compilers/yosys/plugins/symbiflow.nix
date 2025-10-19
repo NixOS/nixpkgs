@@ -46,7 +46,7 @@ let
 in
 lib.genAttrs plugins (
   plugin:
-  stdenv.mkDerivation (rec {
+  stdenv.mkDerivation rec {
     pname = "yosys-symbiflow-${plugin}-plugin";
     inherit src version plugin;
     enableParallelBuilding = true;
@@ -109,5 +109,5 @@ lib.genAttrs plugins (
         thoughtpolice
       ];
     };
-  })
+  }
 )

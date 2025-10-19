@@ -61,12 +61,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "tests";
 
-  checkFlags = lib.optionals stdenv.hostPlatform.isMusl [
-    # equality tests are broken on musl due to different priority values
-    # https://gitlab.com/apparmor/apparmor/-/issues/513
-    "-o equality"
-  ];
-
   postCheck = "popd";
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;

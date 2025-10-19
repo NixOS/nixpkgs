@@ -27,13 +27,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libqalculate";
-  version = "5.7.0";
+  version = "5.8.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S2WO/bHZ+L4EZgcgdDVB3jJZjqqk/GoksmhKJ7qTw+Q=";
+    hash = "sha256-8rw+SPRGWTdlJkrqSk7FXKMgOWSfErlC8FXqQM49o8A=";
   };
 
   outputs = [

@@ -45,7 +45,10 @@ stdenv.mkDerivation rec {
   # Required for build with gcc-14
   env.NIX_CFLAGS_COMPILE = "-std=c++14";
 
-  cmakeFlags = [ "-DENABLE_OPENMP=ON" ];
+  cmakeFlags = [
+    "-DENABLE_OPENMP=ON"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
+  ];
 
   hardeningDisable = [ "format" ];
 

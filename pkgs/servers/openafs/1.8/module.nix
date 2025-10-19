@@ -80,33 +80,34 @@ stdenv.mkDerivation {
     })
     # linux: change lookup_one_len to lookup_noperm
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16435/revisions/d3c424dcaba6ed8415a7617f0ae3622fe84e988a/patch";
-      decode = "base64 -d";
-      hash = "sha256-AqLhS6A68E5M+3CyNnIgv7CB5jGC/hQ4PIqPv0zggq4=";
+      url = "https://github.com/openafs/openafs/commit/a580c6388ae08b8af0fa03d866f7db5e9c87a209.patch";
+      hash = "sha256-9z0+GYTkv8sbXJpJ4wV9uBWT3Ebz9AKwDKAJa3Cd1zw=";
     })
     # linux: refactor afs_linux_writepage
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16436/revisions/1f488463969b436a882c656020d1f3b92c6df440/patch";
-      decode = "base64 -d";
-      hash = "sha256-Wx8Xx97Kox76sSFOdpqxjMzXFrA2IFqKptpYEsfRTac=";
-    })
-    # linux: convert aops->writepage to writepages
-    (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16437/revisions/fd33425820589ed52dc712df63ea8d4b5944de87/patch";
-      decode = "base64 -d";
-      hash = "sha256-B011gge+vzGeUxkGOkKoK/jZn16pvGGc8DpAzzbjV+8=";
+      url = "https://github.com/openafs/openafs/commit/691e90fa1c58d9afb2e26fe6b9022329364ac048.patch";
+      hash = "sha256-r+dbeJsf7DQ6E0szm5PjpYKz4Ity2tcSxgub0aG9UsU=";
     })
     # Linux: Use __readahead_folio
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16438/revisions/8a2cbf0ba08097de4b8ab0c57fe2fddf83739b9b/patch";
-      decode = "base64 -d";
-      hash = "sha256-MDb7vOekq/lwBgELMq+VfuvAXiHQmd0vp04ToqIm3lI=";
+      url = "https://github.com/openafs/openafs/commit/c226a7073270f6f8669581dd31ce787905cc0ded.patch";
+      hash = "sha256-OXA0iF7uITUZr5fymXF62XiZhaz3WHZqcvkg2hVTuTI=";
     })
     # Linux: Rename page->index to page->__folio_index
     (fetchpatch {
-      url = "https://gerrit.openafs.org/changes/16439/revisions/9a5596a25618f153be7ae7eb17f29f3b7752d863/patch";
+      url = "https://github.com/openafs/openafs/commit/3e57d358defc12eb573331b2ca9940abedf93f4f.patch";
+      hash = "sha256-J8d6u+7H1HW3xi1nQCEfLJihyLIaJVMvbxFAT++jdX8=";
+    })
+    # linux: convert aops->writepage to writepages
+    (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/a31b416054f7e5de2188ecfb1e59fe7223921197.patch";
+      hash = "sha256-RSXganheuV8GW0/KuwQyIwac4cBMgiNWc5u5oCfr5Wc=";
+    })
+    # Linux: Use struct kiocb * for aops write_begin/end
+    (fetchpatch {
+      url = "https://gerrit.openafs.org/changes/16558/revisions/78c5beffaca71b226667ce558baf7be225093870/patch";
       decode = "base64 -d";
-      hash = "sha256-OYlMcmnIkoC841E0ONNWtSCUKokyxOmd0d+AWcXwbAI=";
+      hash = "sha256-Y6xPjNM0J1DpJ62stnEaB+mJsa9kq89TGMxZkIk9334=";
     })
   ];
 

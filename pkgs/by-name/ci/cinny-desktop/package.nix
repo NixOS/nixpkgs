@@ -10,7 +10,7 @@
   pkg-config,
   openssl,
   glib-networking,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   jq,
   moreutils,
 }:
@@ -79,7 +79,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     glib-networking
     openssl
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   meta = {
@@ -92,5 +92,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cinny";
+    # Waiting for update to Tauri v2, webkitgtk_4_0 is deprecated
+    # See https://github.com/cinnyapp/cinny-desktop/issues/398 and https://github.com/NixOS/nixpkgs/pull/450065
+    broken = stdenv.hostPlatform.isLinux;
   };
 })

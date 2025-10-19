@@ -1,75 +1,79 @@
 {
-  copyDesktopItems,
-  flutter332,
+  lib,
+  flutter335,
   fetchFromGitHub,
   imagemagick,
-  lib,
+  alsa-lib,
   libass,
-  makeDesktopItem,
   mpv-unwrapped,
+  runCommand,
+  yq-go,
+  _experimental-update-script-combinators,
+  nix-update-script,
 }:
 
-flutter332.buildFlutterApplication rec {
+let
   pname = "interstellar";
-  version = "0.9.3";
+
+  version = "0.10.1";
 
   src = fetchFromGitHub {
     owner = "interstellar-app";
     repo = "interstellar";
     tag = "v${version}";
-    hash = "sha256-osZp2hk9ZoMxto5Sla4vWSWjTFB+syOwlFGTRHJjcVU=";
+    hash = "sha256-nlzTYLJSFKMdPIZ1WX4ZrT8ZBw3gd3Y2o1mmc1DH9Rs=";
   };
+in
+flutter335.buildFlutterApplication {
+  inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
+  nativeBuildInputs = [ imagemagick ];
+
   buildInputs = [
-    imagemagick
+    alsa-lib
     libass
     mpv-unwrapped
   ];
 
-  nativeBuildInputs = [
-    copyDesktopItems
-  ];
-
-  # temp turn off language locale gen
-  postPatch = ''
-    substituteInPlace pubspec.yaml --replace-fail "generate: true" "generate: false"
-  '';
-
-  # 1 - turn language locale gen back on
-  # 2 - set the app version (upstream does this in a github runner)
-  # 3 - run build_runner to make model .part files and language locale gen
+  # run build_runner to make model .part files and language locale gen
   preBuild = ''
-    substituteInPlace pubspec.yaml \
-      --replace-fail "generate: false" "generate: true" \
-      --replace-fail "version: 0.0.0" "version: ${version}"
-    packageRun build_runner build -d
+    packageRun build_runner build --delete-conflicting-outputs
   '';
-
-  extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : $out/app/interstellar/lib
-  '';
-
-  desktopItems = [
-    (makeDesktopItem {
-      name = "one.jwr.interstellar";
-      desktopName = "Interstellar";
-      exec = "interstellar";
-      icon = "Interstellar";
-      categories = [
-        "Network"
-        "News"
-      ];
-    })
-  ];
 
   postInstall = ''
     for size in 16 22 24 32 36 48 64 72 96 128 192 256 512 1024; do
         mkdir -p $out/share/icons/hicolor/"$size"x"$size"/apps
-        magick $src/assets/icons/logo.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/Interstellar.png
+        magick $src/assets/icons/logo.png -resize "$size"x"$size" $out/share/icons/hicolor/"$size"x"$size"/apps/interstellar.png
     done
+    install -D --mode=0644 linux/appimage/interstellar.desktop --target-directory $out/share/applications
   '';
+
+  extraWrapProgramArgs = ''
+    --prefix LD_LIBRARY_PATH : $out/app/${pname}/lib
+  '';
+
+  passthru = {
+    pubspecSource =
+      runCommand "pubspec.lock.json"
+        {
+          inherit src;
+          nativeBuildInputs = [ yq-go ];
+        }
+        ''
+          yq eval --output-format=json --prettyPrint $src/pubspec.lock > "$out"
+        '';
+    updateScript = _experimental-update-script-combinators.sequence [
+      (nix-update-script { })
+      (
+        (_experimental-update-script-combinators.copyAttrOutputToFile "interstellar.pubspecSource" ./pubspec.lock.json)
+        // {
+          supportedFeatures = [ ];
+        }
+      )
+    ];
+  };
 
   meta = {
     description = "App for Mbin/Lemmy/PieFed, connecting you to the fediverse";

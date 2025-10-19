@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-desktop";
-    rev = version;
+    tag = version;
     hash = "sha256-kNxVdPtCQtz4TSyCc6uKHmAGWm2nlWnLwC3Cm0E42Jc=";
   };
 

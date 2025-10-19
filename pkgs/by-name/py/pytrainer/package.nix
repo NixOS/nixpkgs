@@ -12,7 +12,7 @@
   perl,
   sqlite,
   tzdata,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
   xvfb-run,
 }:
@@ -60,7 +60,7 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [
     sqlite
     gtk3
-    webkitgtk_4_0
+    webkitgtk_4_1
     glib-networking
     adwaita-icon-theme
     gdk-pixbuf
@@ -89,6 +89,10 @@ python.pkgs.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace pytrainer/platform.py \
         --replace-fail 'sys.prefix' "\"$out\""
+
+    # https://github.com/pytrainer/pytrainer/pull/281
+    substituteInPlace pytrainer/extensions/mapviewer.py \
+        --replace-fail "gi.require_version('WebKit2', '4.0')" "gi.require_version('WebKit2', '4.1')"
   '';
 
   checkPhase = ''
@@ -102,6 +106,8 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
+    # https://github.com/pytrainer/pytrainer/issues/280
+    broken = true;
     homepage = "https://github.com/pytrainer/pytrainer";
     description = "Application for logging and graphing sporting excursions";
     mainProgram = "pytrainer";

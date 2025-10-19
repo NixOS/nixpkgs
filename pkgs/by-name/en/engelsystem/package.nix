@@ -23,7 +23,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   inherit php;
 
-  vendorHash = "sha256-0Mv48mB/pTQtYd2do6wTdhD/c2zwbU1gTYsdU7rELPY=";
+  vendorHash = "sha256-ODJgsvECw+q3sAA6pWNw4X2Png7f4G2Jty9AQSj/SgE=";
   composoerNoDev = true;
   composerStrictValidation = false;
 
@@ -67,7 +67,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://engelsystem.de";
     license = lib.licenses.gpl2Only;
     mainProgram = "migrate";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

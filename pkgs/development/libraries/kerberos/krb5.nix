@@ -51,10 +51,15 @@ stdenv.mkDerivation rec {
   # While "out" acts as the bin output, most packages only care about the lib output.
   # We set prefix such that all the pkg-config configuration stays inside the dev and lib outputs.
   # stdenv will take care of overriding bindir, sbindir, etc. such that "out" contains the binaries.
-  prefix = builtins.placeholder "lib";
+  prefix = placeholder "lib";
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isStatic {
-    NIX_CFLAGS_COMPILE = "-fcommon";
+  env = {
+    # The release 1.21.3 is not compatible with c23, which changed the meaning of
+    #
+    #     void foo();
+    #
+    # declaration.
+    NIX_CFLAGS_COMPILE = "-std=gnu17" + lib.optionalString stdenv.hostPlatform.isStatic " -fcommon";
   };
 
   configureFlags = [

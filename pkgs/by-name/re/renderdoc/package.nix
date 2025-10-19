@@ -14,7 +14,6 @@
   nix-update-script,
   pcre,
   pkg-config,
-  # python3Packages.shiboken2 is currently broken
   python312Packages,
   qt5,
   stdenv,
@@ -154,6 +153,8 @@ stdenv.mkDerivation (finalAttrs: {
       pbsds
       ShyAssassin
     ];
-    platforms = lib.intersectLists lib.platforms.linux (lib.platforms.x86_64 ++ lib.platforms.i686);
+    platforms = lib.intersectLists lib.platforms.linux (
+      lib.platforms.x86_64 ++ lib.platforms.i686 ++ lib.platforms.aarch64
+    );
   };
 })

@@ -15,7 +15,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprim";
-  version = "6.3.3";
+  version = "6.4.3";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocPRIM";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-0aHxpBuYIYhI2UER45YhHHL5YcxA+XeXoihcUs2AmCo=";
+    hash = "sha256-lH4MlBEkVJocq1VliGBtb7VvWfS6p/uIKWR239fSjRY=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
+    "-DHIP_CXX_COMPILER=amdclang++"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     "-DCMAKE_INSTALL_BINDIR=bin"

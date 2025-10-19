@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   pkg-config,
   zlib,
@@ -23,15 +22,17 @@
 
 stdenv.mkDerivation rec {
   pname = "maim";
-  version = "5.8.0";
+  version = "5.8.1";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "maim";
     rev = "v${version}";
-    sha256 = "sha256-/tZqSJnKe8GiffSz9VIFKuxMktRld+hA4ZWP4TZQrlg=";
+    hash = "sha256-bbjV3+41cxAlKCEd1/nvnZ19GhctWOr5Lu4X+Vg3EAk=";
   };
 
+  # TODO: drop -DCMAKE_POLICY_VERSION_MINIMUM once maim adds CMake 4 support
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.10" ];
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -53,15 +54,6 @@ stdenv.mkDerivation rec {
     icu
   ];
 
-  patches = [
-    # Use C++17 as required by icu
-    (fetchpatch {
-      name = "maim-c++-17.patch";
-      url = "https://github.com/naelstrof/maim/commit/e7fe09b6734baeb59081b8805be542c92178cf0f.patch";
-      sha256 = "0z9zvrr8msfli88jmhxm5knysi385s48j2w7zpacc7qhf4c5zh8c";
-    })
-  ];
-
   doCheck = false;
 
   meta = {
@@ -76,6 +68,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/naelstrof/maim/releases/tag/v${version}";
     platforms = lib.platforms.all;
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

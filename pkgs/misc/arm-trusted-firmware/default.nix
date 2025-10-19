@@ -114,7 +114,7 @@ let
           }
           // extraMeta;
       }
-      // builtins.removeAttrs args [ "extraMeta" ]
+      // removeAttrs args [ "extraMeta" ]
     )
   );
 

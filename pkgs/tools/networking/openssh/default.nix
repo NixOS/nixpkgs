@@ -50,17 +50,17 @@ in
 
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
-    version = "10.0p2";
+    version = "10.2p1";
     extraDesc = " with high performance networking patches";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
+      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
     };
 
     extraPatches =
       let
-        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/dde9561b3ff73639aeebe8ec33ad52ecca0bf58d/security/openssh-portable/files/extra-patch-hpn";
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/7d4f03d56d19a19a15399a03b3ceca8a0f5924b4/security/openssh-portable/files/extra-patch-hpn";
       in
       [
         ./ssh-keysign-8.5.patch
@@ -71,7 +71,7 @@ in
           inherit url;
           stripLen = 1;
           excludes = [ "channels.c" ];
-          hash = "sha256-0HQAacNdvqX+7CTDhkbgAyb0WbqnnH6iAYQBFh8XenA=";
+          hash = "sha256-BGR0Jn1JoD/0q9/TKjygg9C3UWeVf0R2DrH0esMzmpY=";
         })
 
         (fetchpatch {
@@ -93,12 +93,12 @@ in
 
   openssh_gssapi = common rec {
     pname = "openssh-with-gssapi";
-    version = "10.0p2";
+    version = "10.2p1";
     extraDesc = " with GSSAPI support";
 
     src = fetchurl {
       url = urlFor version;
-      hash = "sha256-AhoucJoO30JQsSVr1anlAEEakN3avqgw7VnO+Q652Fw=";
+      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
     };
 
     extraPatches = [
@@ -106,8 +106,8 @@ in
 
       (fetchpatch {
         name = "openssh-gssapi.patch";
-        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.0p1-1/debian/patches/gssapi.patch";
-        hash = "sha256-7Q27tvtCY3b9evC3lbqEz4u7v5DcerjWZfhh8azIAQo=";
+        url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%2510.1p1-1/debian/patches/gssapi.patch";
+        hash = "sha256-/wJ3AA+RscHjFRSeL0LENviKlCglpOi7HNuCxidpQV8=";
       })
     ];
 

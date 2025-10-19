@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corekeyboard";
     homepage = "https://gitlab.com/cubocore/coreapps/corekeyboard";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

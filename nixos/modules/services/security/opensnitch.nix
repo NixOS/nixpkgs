@@ -161,6 +161,15 @@ in
               '';
             };
 
+            Audit.AudispSocketPath = lib.mkOption {
+              type = lib.types.path;
+              default = "/run/audit/audispd_events";
+              description = ''
+                Configure audit socket path. Used when
+                `settings.ProcMonitorMethod` is set to `audit`.
+              '';
+            };
+
             Rules.Path = lib.mkOption {
               type = lib.types.path;
               default = "/var/lib/opensnitch/rules";

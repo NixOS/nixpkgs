@@ -9,18 +9,18 @@ buildGoModule (finalAttrs: {
   # "chatgpt-cli" is taken by another package with the same upsteam name.
   # To keep "pname" and "package attribute name" identical, the owners name (kardolus) gets prefixed as identifier.
   pname = "kardolus-chatgpt-cli";
-  version = "1.8.10";
+  version = "1.8.11";
 
   src = fetchFromGitHub {
     owner = "kardolus";
     repo = "chatgpt-cli";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XZ9f+PAY0i7DfzZCxtZFw1jit7o/tjqAEc8uJpqiOAc=";
+    hash = "sha256-PcZB/XDvCPkbfJmp0c43QCCv0Z5Ih6ZyHYrCdMciDTU=";
   };
 
   vendorHash = null;
   # The tests of kardolus/chatgpt-cli require an OpenAI API Key to be present in the environment,
-  # (e.g. https://github.com/kardolus/chatgpt-cli/blob/v1.8.10/test/contract/contract_test.go#L35)
+  # (e.g. https://github.com/kardolus/chatgpt-cli/blob/v1.8.11/test/contract/contract_test.go#L35)
   # which will not be the case in the pipeline.
   # Therefore, tests must be skipped.
   doCheck = false;

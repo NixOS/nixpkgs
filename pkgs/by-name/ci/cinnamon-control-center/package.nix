@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon-control-center";
-    rev = version;
+    tag = version;
     hash = "sha256-nw70sbiz3+dp40WP957hOVo/mQOg2MJknZNN5Kw/Q/0=";
   };
 

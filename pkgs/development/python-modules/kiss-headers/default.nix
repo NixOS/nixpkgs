@@ -29,9 +29,12 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
+  preCheck = ''
+    rm -rf src # cause pycache conflict
+  '';
+
   disabledTestPaths = [
     # Tests require internet access
-    "kiss_headers/__init__.py"
     "tests/test_serializer.py"
     "tests/test_with_http_request.py"
   ];

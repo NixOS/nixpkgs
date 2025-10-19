@@ -20,6 +20,12 @@ stdenv.mkDerivation {
     # Make a recently added pure virtual function just virtual,
     # to keep compatibility.
     sed -i 's/virtual void endImage() = 0;/virtual void endImage() {}/' src/nvtt/nvtt.h
+
+    # Fix build with CMake 4
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.0)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+    substituteInPlace extern/libsquish-1.15/CMakeLists.txt --replace-fail \
+      "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
   ''
   + lib.optionalString stdenv.hostPlatform.isAarch64 ''
     # remove x86_64-only libraries

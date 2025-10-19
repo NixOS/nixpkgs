@@ -32,14 +32,14 @@
 
 buildDotnetModule rec {
   pname = "ryubing";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitLab {
     domain = "git.ryujinx.app";
     owner = "Ryubing";
     repo = "Ryujinx";
     tag = version;
-    hash = "sha256-6BCDFd0nU96OgI5lqf4fbyNkG4PS5P4raHVbvBAhB5A=";
+    hash = "sha256-LhQaXxmj5HIgfmrsDN8GhhVXlXHpDO2Q8JtNLaCq0mk=";
   };
 
   nativeBuildInputs =

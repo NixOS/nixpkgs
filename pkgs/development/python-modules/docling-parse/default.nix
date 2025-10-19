@@ -33,6 +33,13 @@ buildPythonPackage rec {
     hash = "sha256-8eHYMvfjPuGgrgrlqEh061ug+yer+1nQLbeDR1dQu68=";
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        '"cmake>=3.27.0,<4.0.0"' \
+        '"cmake>=3.27.0"'
+  '';
+
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
@@ -94,6 +101,6 @@ buildPythonPackage rec {
     description = "Simple package to extract text with coordinates from programmatic PDFs";
     homepage = "https://github.com/DS4SD/docling-parse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

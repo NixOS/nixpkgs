@@ -8,6 +8,7 @@
   funcy,
   gitMinimal,
   pydantic,
+  pydantic-settings,
   pytest-cov-stub,
   pytest-mock,
   pytest-test-utils,
@@ -25,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "gto";
-  version = "1.8.0";
+  version = "1.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +35,7 @@ buildPythonPackage rec {
     owner = "iterative";
     repo = "gto";
     tag = version;
-    hash = "sha256-XgVV/WPs9QcxjVVsdvloo2+QWNViAJE404Nue7ZcBak=";
+    hash = "sha256-LXYpOnk9W/ellG70qZLihmvk4kvVcwZfE5buPNU2qzQ=";
   };
 
   build-system = [
@@ -46,6 +47,7 @@ buildPythonPackage rec {
     entrypoints
     funcy
     pydantic
+    pydantic-settings
     rich
     ruamel-yaml
     scmrepo

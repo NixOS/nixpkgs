@@ -76,15 +76,23 @@ let
       ];
 
       buildPhase = ''
+        runHook preBuild
+
         HOME=`pwd` ./app/build.sh
+
+        runHook postBuild
       '';
 
       installPhase = ''
+        runHook preInstall
+
         mkdir -p $out
         cp -R app/{pkg,static} $out/
         cp app/index_local.html $out/index.html
         cp -R ${staticAssets finalAttrs.src}/* $out/static
         rm $out/static/libraries.txt $out/static/fonts/fonts.txt
+
+        runHook postInstall
       '';
 
       doCheck = false;
@@ -93,6 +101,7 @@ let
 
 in
 rustPlatform.buildRustPackage (
+  finalAttrs:
   commonDerivationAttrs
   // {
     cargoBuildFlags = [
@@ -107,7 +116,7 @@ rustPlatform.buildRustPackage (
     nativeBuildInputs = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/lldap \
-        --set LLDAP_ASSETS_PATH ${frontend}
+        --set LLDAP_ASSETS_PATH ${finalAttrs.finalPackage.frontend}
     '';
 
     passthru = {
@@ -130,4 +139,5 @@ rustPlatform.buildRustPackage (
       mainProgram = "lldap";
     };
   }
+
 )

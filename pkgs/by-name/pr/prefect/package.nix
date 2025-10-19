@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.4.5";
+  version = "3.4.24";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jS/r5LskvgWLIiMSVMM6jgxVbuolI+w+g5Xq/xPYXOU=";
+    hash = "sha256-jBDHgGNZRl1nr5qpj/5r5+D7o1skFFPcd6yTe60uMlE=";
   };
 
   pythonRelaxDeps = [
@@ -80,6 +80,7 @@ python3Packages.buildPythonApplication rec {
       rfc3339-validator
       rich
       ruamel-yaml
+      semver
       sniffio
       toml
       typing-extensions

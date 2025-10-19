@@ -2939,10 +2939,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "03xwn2477zhc4654c7s1ks72w9lbns79n2qhfca7m17349vivpw8";
+      sha256 = "02rnrd403hp5hwgvrapl3mvqp6gzr422v81wwq8dlzm38bjqd2v7";
       type = "gem";
     };
-    version = "2.3.0";
+    version = "2.4.0";
   };
   gitlab-glfm-markdown = {
     dependencies = [ "rb_sys" ];

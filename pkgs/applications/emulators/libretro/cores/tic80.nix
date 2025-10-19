@@ -21,16 +21,30 @@ mkLibretroCore {
     cmake
     pkg-config
   ];
+
   makefile = "Makefile";
-  cmakeFlags = [
-    "-DBUILD_LIBRETRO=ON"
-    "-DBUILD_DEMO_CARTS=OFF"
-    "-DBUILD_PRO=OFF"
-    "-DBUILD_PLAYER=OFF"
-    "-DBUILD_SDL=OFF"
-    "-DBUILD_SOKOL=OFF"
+
+  cmakeFlags = with lib.strings; [
+    (cmakeBool "BUILD_LIBRETRO" true)
+    (cmakeBool "BUILD_DEMO_CARTS" false)
+    (cmakeBool "BUILD_PRO" false)
+    (cmakeBool "BUILD_PLAYER" false)
+    (cmakeBool "BUILD_SDL" false)
+    (cmakeBool "BUILD_SOKOL" false)
+    # Workaround the following error:
+    # > CMake Error at 3rdparty/libzip/libzip/CMakeLists.txt:1 (cmake_minimum_required):
+    # > Compatibility with CMake < 3.5 has been removed from CMake.
+    #
+    # > Update the VERSION argument <min> value.  Or, use the <min>...<max> syntax
+    # > to tell CMake that the project requires at least <min> but has been updated
+    # > to work with policies introduced by <max> or earlier.
+    #
+    # > Or, add -DCMAKE_POLICY_VERSION_MINIMUM=3.5 to try configuring anyway.
+    (cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
+
   preConfigure = "cd core";
+
   postBuild = "cd lib";
 
   meta = {

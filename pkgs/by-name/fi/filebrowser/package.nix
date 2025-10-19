@@ -7,9 +7,8 @@
   nix-update-script,
   nixosTests,
 }:
-
 let
-  version = "2.42.5";
+  version = "2.44.0";
 
   pnpm = pnpm_9;
 
@@ -17,7 +16,7 @@ let
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-6AZwWdYQlaQ30Q5ohi9ovlUJZZ+u7Wqc5mfRW/3t7Zs=";
+    hash = "sha256-j7V1POuF6cFpnq6UgBseHe6GxypOoj2rYrN6k2nIF8w=";
   };
 
   frontend = buildNpmPackage rec {
@@ -37,7 +36,7 @@ let
         sourceRoot
         ;
       fetcherVersion = 2;
-      hash = "sha256-uGEw6Wt6hXEcYQzXYzfgo3fcCX7Hj39bLHsT1rsGy74=";
+      hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
     };
 
     installPhase = ''
@@ -49,7 +48,6 @@ let
       runHook postInstall
     '';
   };
-
 in
 buildGoModule {
   pname = "filebrowser";

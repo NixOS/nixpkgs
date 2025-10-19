@@ -74,11 +74,9 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
     print {*STDERR} "$team_config->{shortName}:";
     # GitHub Teams
     my @github_members;
-    if (defined $team_config->{githubTeams}) {
-        foreach (@{$team_config->{githubTeams}}) {
-            print {*STDERR} " \@NixOS/${_}";
-            push @github_members, @{github_team_members($_, $github_user, $github_token)};
-        }
+    if (defined $team_config->{github}) {
+        print {*STDERR} " \@NixOS/$team_config->{github}";
+        push @github_members, @{github_team_members($team_config->{github}, $github_user, $github_token)};
     }
     my %github_members = map { $_ => 1 } @github_members;
     # Members

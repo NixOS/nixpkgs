@@ -45,7 +45,7 @@
 }@args:
 
 let
-  sandboxPathsTests = builtins.map (path: "[[ ! -e '${path}' ]]") sandboxPaths;
+  sandboxPathsTests = map (path: "[[ ! -e '${path}' ]]") sandboxPaths;
   sandboxPathsTest = lib.concatStringsSep " || " sandboxPathsTests;
   sandboxPathsList = lib.concatStringsSep " " sandboxPaths;
 
@@ -71,7 +71,7 @@ let
         passthru.runScript = runScript;
       }
       (
-        builtins.removeAttrs args [
+        removeAttrs args [
           "lib"
           "stdenv"
           "writeShellScript"

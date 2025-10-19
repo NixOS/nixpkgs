@@ -19,7 +19,7 @@
   meson,
   ninja,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "elementary-session-settings";
   # Allow disabling x11 session
   # nixpkgs-update: no auto update

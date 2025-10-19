@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
 
     substitute usr/share/applications/com.bitwig.BitwigStudio.desktop \
       $out/share/applications/com.bitwig.BitwigStudio.desktop \
-      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
+      --replace-fail "Exec=bitwig-studio" "Exec=$out/bin/bitwig-studio"
 
       runHook postInstall
   '';

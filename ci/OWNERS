@@ -190,6 +190,9 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /pkgs/top-level/release-cuda.nix              @NixOS/cuda-maintainers
 /pkgs/development/cuda-modules                @NixOS/cuda-maintainers
 
+# ROCm
+/pkgs/development/rocm-modules                @NixOS/rocm
+
 # Haskell
 /doc/languages-frameworks/haskell.section.md  @sternenseemann @maralorn @wolfgangwalther
 /maintainers/scripts/haskell                  @sternenseemann @maralorn @wolfgangwalther
@@ -333,6 +336,13 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/development/dhall-modules      @Gabriella439 @Profpatsch
 /pkgs/development/interpreters/dhall @Gabriella439 @Profpatsch
 
+# Agda
+/pkgs/build-support/agda                  @NixOS/agda
+/pkgs/top-level/agda-packages.nix         @NixOS/agda
+/pkgs/development/libraries/agda          @NixOS/agda
+/doc/languages-frameworks/agda.section.md @NixOS/agda
+/nixos/tests/agda.nix                     @NixOS/agda
+
 # Idris
 /pkgs/development/idris-modules @Infinisil
 /pkgs/development/compilers/idris2 @mattpolzin
@@ -377,9 +387,9 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/php-packages.nix         @jtojnar @aanderse @globin @ma27 @talyz
 
 # Docker tools
-/pkgs/build-support/docker                   @roberth
-/nixos/tests/docker-tools*                   @roberth
-/doc/build-helpers/images/dockertools.section.md  @roberth
+/pkgs/build-support/docker                       @roberth @jhol
+/nixos/tests/docker-tools*                       @roberth @jhol
+/doc/build-helpers/images/dockertools.section.md @roberth @jhol
 
 # Blockchains
 /pkgs/applications/blockchains  @mmahut @RaghavSood

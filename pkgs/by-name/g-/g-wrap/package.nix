@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.nongnu.org/g-wrap/";
     license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

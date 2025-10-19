@@ -12,18 +12,18 @@
   pango,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "browsers";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "Browsers-software";
     repo = "browsers";
-    tag = version;
-    hash = "sha256-s03BEscaYdSitLtlqbX/tgGSLRHuXc9Ht+3RMCUIdY8=";
+    tag = finalAttrs.version;
+    hash = "sha256-1RWGAEiSJWDoScKuUB5LL1tQyTw5NRnld7Fi93vP0BA=";
   };
 
-  cargoHash = "sha256-tz4ju0NwgG5yb1VndYqyf+g631izPl904KYDUvawO28=";
+  cargoHash = "sha256-M1KAZPjNu4j5b5Ml2J9OHpD+/jeF8WRP6EzfmLnb0hY=";
 
   nativeBuildInputs = [
     pkg-config
@@ -46,7 +46,7 @@ rustPlatform.buildRustPackage rec {
     mv $out/share/applications/software.Browsers.template.desktop $out/share/applications/software.Browsers.desktop
     substituteInPlace \
         $out/share/applications/software.Browsers.desktop \
-        --replace-fail 'Exec=€ExecCommand€' 'Exec=${pname} %u'
+        --replace-fail 'Exec=€ExecCommand€' 'Exec=${finalAttrs.pname} %u'
     cp -r resources $out
     for size in 16 32 128 256 512; do
       install -m 444 \
@@ -58,9 +58,9 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Open the right browser at the right time";
     homepage = "https://browsers.software";
-    changelog = "https://github.com/Browsers-software/browsers/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Browsers-software/browsers/blob/${finalAttrs.version}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ ravenz46 ];
     mainProgram = "browsers";
   };
-}
+})

@@ -20,7 +20,7 @@ let
   mkMassRebuild =
     args:
     mkOption (
-      builtins.removeAttrs args [ "feature" ]
+      removeAttrs args [ "feature" ]
       // {
         type = args.type or (types.uniq types.bool);
         default = args.default or false;
@@ -285,6 +285,19 @@ let
       default = false;
       description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
+
+    hashedMirrors = mkOption {
+      type = types.listOf types.str;
+      default = [ "https://tarballs.nixos.org" ];
+      description = ''
+        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](#sec-pkgs-fetchers-fetchurl).
+        In case `pkgs.fetchurl` can't download from the given URLs,
+        it will try the hashed mirrors based on the expected output hash.
+
+        See [`copy-tarballs.pl`](https://github.com/NixOS/nixpkgs/blob/a2d829eaa7a455eaa3013c45f6431e705702dd46/maintainers/scripts/copy-tarballs.pl)
+        for more details on how hashed mirrors are constructed.
       '';
     };
 

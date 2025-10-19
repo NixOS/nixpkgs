@@ -95,6 +95,9 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     "--skip=handler::http::router::tests::test_get_proxy_routes"
     "--skip=tests::e2e_test"
+    # test_export_operator unit test panics when run on the 0.14.7 release
+    # see this issue for more details : https://github.com/NixOS/nixpkgs/issues/447106
+    "--skip=tests::test_export_operator"
     "--skip=service::organization::tests::test_organization"
   ];
 

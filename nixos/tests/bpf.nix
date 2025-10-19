@@ -21,7 +21,12 @@
     # simple BEGIN probe (user probe on bpftrace itself)
     print(machine.succeed("bpftrace -e 'BEGIN { print(\"ok\\n\"); exit(); }'"))
     # tracepoint
-    print(machine.succeed("bpftrace -e 'tracepoint:syscalls:sys_enter_* { print(probe); exit() }'"))
+    # workaround: this needs more than the default of 1k FD to attach ~350 probes, bump fd limit
+    # see https://github.com/bpftrace/bpftrace/issues/2110
+    print(machine.succeed("""
+        ulimit -n 2048
+        bpftrace -e 'tracepoint:syscalls:sys_enter_* { print(probe); exit() }'
+    """))
     # kprobe
     print(machine.succeed("bpftrace -e 'kprobe:schedule { print(probe); exit() }'"))
     # BTF

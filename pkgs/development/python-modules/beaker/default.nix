@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pycrypto
     cryptography
   ]
-  ++ lib.optionals (isPy27) [
+  ++ lib.optionals isPy27 [
     funcsigs
     pycryptopp
   ];
@@ -66,7 +66,7 @@ buildPythonPackage rec {
     description = "Session and Caching library with WSGI Middleware";
     homepage = "https://github.com/bbangert/beaker";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     knownVulnerabilities = [ "CVE-2013-7489" ];
   };
 }

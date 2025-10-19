@@ -9,15 +9,15 @@
   fuse,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dislocker";
   version = "0.7.3";
 
   src = fetchFromGitHub {
-    owner = "aorimn";
+    owner = "Aorimn";
     repo = "dislocker";
-    rev = "v${version}";
-    sha256 = "1ak68s1v5dwh8y2dy5zjybmrh0pnqralmyqzis67y21m87g47h2k";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-U8BD3kE1CH+Mjh/7SlXG9gKY6/LyF9+ER5C3soNGZqo=";
   };
 
   patches = [
@@ -28,8 +28,16 @@ stdenv.mkDerivation rec {
     #
     # https://github.com/Aorimn/dislocker/pull/246
     (fetchpatch {
-      url = "https://github.com/Aorimn/dislocker/commit/7744f87c75fcfeeb414d0957771042b10fb64e62.diff";
-      sha256 = "0bpyccbbfjsidsrd2q9qylb95nvi8g3glb3jss7xmhywj86bhzr5";
+      name = "feat-support-the-latest-FUSE-on-macOS.patch";
+      url = "https://github.com/Aorimn/dislocker/commit/7744f87c75fcfeeb414d0957771042b10fb64e62.patch";
+      hash = "sha256-JX+4DJLcw9qP1nIs+sZDcduSFvU4YdGyblFLtxZj/i4=";
+    })
+    # fix compatibility with CMake (https://cmake.org/cmake/help/v4.0/command/cmake_minimum_required.html)
+    # https://github.com/Aorimn/dislocker/pull/346
+    (fetchpatch {
+      name = "cmake-raise-minimum-required-version-to-3.5.patch";
+      url = "https://github.com/Aorimn/dislocker/commit/337d05dc7447436539f2fb481eef0e528a000b66.patch";
+      hash = "sha256-6LTRjaZfyGS2BCdpcJy/qo0r8soXJSZqWjZRbaKvcQk=";
     })
   ];
 
@@ -37,16 +45,18 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ];
+
   buildInputs = [
     fuse
     mbedtls_2
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Read BitLocker encrypted partitions in Linux";
-    homepage = "https://github.com/aorimn/dislocker";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ elitak ];
-    platforms = platforms.unix;
+    homepage = "https://github.com/Aorimn/dislocker";
+    changelog = "https://github.com/Aorimn/dislocker/raw/${finalAttrs.src.rev}/CHANGELOG.md";
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ elitak ];
+    platforms = lib.platforms.unix;
   };
-}
+})

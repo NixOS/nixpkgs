@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Digitally sign PDF files from your commandline";
     homepage = "https://github.com/open-pdf-sign/open-pdf-sign";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     mainProgram = "open-pdf-sign";

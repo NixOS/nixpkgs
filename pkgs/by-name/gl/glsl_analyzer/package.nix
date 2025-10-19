@@ -9,13 +9,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "glsl_analyzer";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "nolanderc";
     repo = "glsl_analyzer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-UDAbSRGaismUHQy4s+gygDzrrHu1G5PObRBWnua6bDA=";
+    hash = "sha256-sNvhqnuWEG9Www6dBlxNVHd9b5uXgmDEwApgfkh1gzE=";
   };
 
   nativeBuildInputs = [

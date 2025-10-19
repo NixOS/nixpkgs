@@ -26,7 +26,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -37,16 +36,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.1.9";
+  version = "5.1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-UbCSGpvS8Jvpe8iV1rVplSoGykHSup9pVTd3odbPq6Y=";
+    hash = "sha256-krZrPzH8/pOGvQTcofT2TzyytDXs9FTpqh9JK0QN44E=";
   };
 
   build-system = [

@@ -6,6 +6,7 @@
   stdenv,
   lib,
   fetchurl,
+  fetchpatch,
   nixosTests,
   zlib,
   libxcrypt,
@@ -42,11 +43,11 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
-  version = "3.2.5";
+  version = "3.2.6";
 
   src = fetchurl {
     url = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/haproxy-${finalAttrs.version}.tar.gz";
-    hash = "sha256-dzFqPhtsOSRbwR71j01trdBjwBTBuuyPDYF5jFGeBys=";
+    hash = "sha256-rWMLawtz4dEYrM5Fj+wb8efQ5ClTDyZo7FgvT4u3jmU=";
   };
 
   buildInputs = [

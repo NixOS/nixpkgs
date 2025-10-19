@@ -120,7 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Photo gallery application for Ubuntu Touch devices";
     homepage = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app";
     changelog = "https://gitlab.com/ubports/development/apps/lomiri-gallery-app/-/blob/${
-      if (!builtins.isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
+      if (!isNull finalAttrs.src.tag) then finalAttrs.src.tag else finalAttrs.src.rev
     }/ChangeLog";
     license = with lib.licenses; [
       gpl3Only

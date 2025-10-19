@@ -7,6 +7,7 @@
   cmake,
   clang,
   clr,
+  aqlprofile,
   rocm-core,
   rocm-runtime,
   rocm-device-libs,
@@ -15,11 +16,10 @@
   numactl,
   libpciaccess,
   libxml2,
+  llvm,
   elfutils,
   mpi,
-  systemd,
   gtest,
-  git,
   python3Packages,
   gpuTargets ? clr.gpuTargets,
 }:
@@ -44,27 +44,20 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-x6DVt1logBE8aNnuwukQhsv/vRqkJALcfAF+6yEQuIk=";
+    hash = "sha256-CgW8foM4W3K19kUK/l8IsH2Q9DHi/z88viXTxhNqlHQ=";
     fetchSubmodules = true;
   };
-
-  patches = [
-    # These just simply won't build
-    ./0000-dont-install-tests-hsaco.patch
-    ./optional-aql-in-cmake.patch
-  ];
 
   nativeBuildInputs = [
     cmake
     clang
     clr
-    git
     python3Packages.lxml
     python3Packages.cppheaderparser
     python3Packages.pyyaml
@@ -73,19 +66,19 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm.clang-unwrapped
+    llvm.llvm
     numactl
     libpciaccess
     libxml2
     elfutils
     mpi
-    systemd
     gtest
+    aqlprofile
   ];
 
   propagatedBuildInputs = [ rocmtoolkit-merged ];
 
-  # HACK: allow building without aqlprofile, probably explodes at runtime if use profiling
-  env.LDFLAGS = "-z nodefs -Wl,-undefined,dynamic_lookup,--unresolved-symbols=ignore-all";
   #HACK: rocprofiler's cmake doesn't add these deps properly
   env.CXXFLAGS = "-I${libpciaccess}/include -I${numactl.dev}/include -I${rocmtoolkit-merged}/include -I${elfutils.dev}/include -w";
 
@@ -95,9 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
-    "-DBUILD_TEST=OFF"
-    "-DROCPROFILER_BUILD_TESTS=0"
-    "-DROCPROFILER_BUILD_SAMPLES=0"
     "-DCMAKE_INSTALL_BINDIR=bin"
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
@@ -123,6 +113,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Why do these have the executable bit set?
     chmod -x $out/libexec/rocprofiler/counters/*.xml
+    # rocprof shell script wants to find it in the same bin dir, easiest to symlink in
+    ln -s ${clr}/bin/rocm_agent_enumerator $out/bin/rocm_agent_enumerator
+  '';
+
+  postFixup = ''
+    patchelf $out/lib/*.so \
+      --add-rpath ${aqlprofile}/lib \
+      --add-needed libhsa-amd-aqlprofile64.so
   '';
 
   passthru.updateScript = rocmUpdateScript {

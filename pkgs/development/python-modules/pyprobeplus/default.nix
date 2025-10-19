@@ -1,5 +1,6 @@
 {
   bleak,
+  bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   lib,
@@ -8,20 +9,21 @@
 
 buildPythonPackage rec {
   pname = "pyprobeplus";
-  version = "1.0.1";
+  version = "1.1.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pyprobeplus";
     tag = version;
-    hash = "sha256-ixrkwnvqjHwqnKG3Xo4qJP/FcP7fuAOPKpar13e8U1w=";
+    hash = "sha256-pD8o+Wb9X1yTMPh1eY1PwOc5KR2W5KoxDDQ/otHz6zI=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
     bleak
+    bleak-retry-connector
   ];
 
   pythonImportsCheck = [ "pyprobeplus" ];

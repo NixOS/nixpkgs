@@ -58,6 +58,7 @@ $pcMap{"xcb-ewmh"} = "xcbutilwm";
 $pcMap{"xcb-icccm"} = "xcbutilwm";
 $pcMap{"xcb-image"} = "xcbutilimage";
 $pcMap{"xcb-keysyms"} = "xcbutilkeysyms";
+$pcMap{"xcb-cursor"} = "xcbutilcursor";
 $pcMap{"xcb-proto"} = "xcbproto";
 $pcMap{"xcb-renderutil"} = "xcbutilrenderutil";
 $pcMap{"xcb-util"} = "xcbutil";
@@ -344,6 +345,7 @@ print OUT <<EOF;
   libxau,
   libxaw,
   libxcb,
+  libxcb-cursor,
   libxcb-errors,
   libxcb-image,
   libxcb-keysyms,
@@ -365,21 +367,29 @@ print OUT <<EOF;
   libxxf86dga,
   libxxf86misc,
   libxxf86vm,
+  listres,
   lndir,
   luit,
   makedepend,
   mkfontscale,
   pixman,
   sessreg,
+  smproxy,
+  tab-window-manager,
   transset,
   util-macros,
+  viewres,
+  xauth,
+  xbacklight,
   xbitmaps,
   xcb-proto,
   xcmsdb,
+  xconsole,
   xcursorgen,
   xcursor-themes,
   xdriinfo,
   xev,
+  xfontsel,
   xfsinfo,
   xgamma,
   xgc,
@@ -390,7 +400,10 @@ print OUT <<EOF;
   xlsatoms,
   xlsclients,
   xlsfonts,
+  xmag,
+  xmessage,
   xmodmap,
+  xmore,
   xorg-cf-files,
   xorg-docs,
   xorgproto,
@@ -398,6 +411,10 @@ print OUT <<EOF;
   xprop,
   xrandr,
   xrefresh,
+  xset,
+  xsetroot,
+  xsm,
+  xstdcmap,
   xtrans,
   xvinfo,
   xwininfo,
@@ -416,18 +433,25 @@ self: with self; {
     libpciaccess
     libxcb
     libxcvt
+    listres
     lndir
     luit
     makedepend
     mkfontscale
     pixman
     sessreg
+    smproxy
     transset
+    viewres
+    xauth
+    xbacklight
     xbitmaps
     xcmsdb
+    xconsole
     xcursorgen
     xdriinfo
     xev
+    xfontsel
     xfsinfo
     xgamma
     xgc
@@ -437,11 +461,18 @@ self: with self; {
     xlsatoms
     xlsclients
     xlsfonts
+    xmag
+    xmessage
     xmodmap
+    xmore
     xorgproto
     xprop
     xrandr
     xrefresh
+    xset
+    xsetroot
+    xsm
+    xstdcmap
     xtrans
     xvinfo
     xwininfo
@@ -480,8 +511,10 @@ self: with self; {
   libXxf86dga = libxxf86dga;
   libXxf86misc = libxxf86misc;
   libXxf86vm = libxxf86vm;
+  twm = tab-window-manager;
   utilmacros = util-macros;
   xcbproto = xcb-proto;
+  xcbutilcursor = libxcb-cursor;
   xcbutilerrors = libxcb-errors;
   xcbutilimage = libxcb-image;
   xcbutilkeysyms = libxcb-keysyms;

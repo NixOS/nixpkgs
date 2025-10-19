@@ -37,6 +37,16 @@ melpaBuild (finalAttrs: {
     npmHooks.npmConfigHook
   ];
 
+  postPatch = ''
+    substituteInPlace eaf-git.el \
+      --replace-fail "(defcustom eaf-git-delta-executable \"delta\"" \
+                     "(defcustom eaf-git-delta-executable \"${lib.getExe delta}\""
+
+    substituteInPlace buffer.py \
+      --replace-fail "command = \"rg '{}' {}" \
+                     "command = \"${lib.getExe ripgrep} '{}' {}"
+  '';
+
   postBuild = ''
     npm run build
   '';
@@ -65,10 +75,6 @@ melpaBuild (finalAttrs: {
         pygments
         unidiff
       ];
-    eafOtherDeps = [
-      delta
-      ripgrep
-    ];
   };
 
   meta = {

@@ -38,9 +38,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysilero_vad" ];
 
+  # aarch64-linux onnxruntime tries to get cpu information from /sys, which isn't available
+  # inside the nix build sandbox.
+  doCheck = stdenv.buildPlatform.system != "aarch64-linux";
+  dontUsePythonImportsCheck = stdenv.buildPlatform.system == "aarch64-linux";
+
   meta = with lib; {
-    # what():  /build/source/include/onnxruntime/core/common/logging/logging.h:294 static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger() Attempt to use DefaultLogger but none has been registered.
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
     description = "Pre-packaged voice activity detector using silero-vad";
     homepage = "https://github.com/rhasspy/pysilero-vad";
     changelog = "https://github.com/rhasspy/pysilero-vad/blob/${src.tag}/CHANGELOG.md";

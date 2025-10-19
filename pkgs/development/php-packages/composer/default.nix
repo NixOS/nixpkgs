@@ -14,6 +14,13 @@
   versionCheckHook,
 }:
 
+/*
+    XXX IMPORTANT
+
+    Make sure to check if the `vendorHash` of `buildComposerProject2` changes when updating!
+    See https://github.com/NixOS/nixpkgs/issues/451395
+*/
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "composer";
   version = "2.8.12";

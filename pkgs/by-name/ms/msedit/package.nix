@@ -22,6 +22,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # Requires nightly features
   env.RUSTC_BOOTSTRAP = 1;
 
+  # Without -headerpad, the following error occurs on x86_64-darwin
+  # error: install_name_tool: changing install names or rpaths can't be redone for: ... because larger updated load commands do not fit (the program must be relinked, and you may need to use -headerpad or -headerpad_max_install_names)
+  NIX_LDFLAGS = lib.optionals (with stdenv.hostPlatform; isDarwin && isx86_64) [
+    "-headerpad_max_install_names"
+  ];
+
   buildInputs = [
     icu
   ];

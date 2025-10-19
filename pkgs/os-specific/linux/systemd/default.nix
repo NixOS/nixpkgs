@@ -205,7 +205,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "257.8";
+  version = "257.9";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -213,7 +213,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-XQ+IyRar74qQij96CKClHXW0kkPnGeKUgA8ULiWh5YY=";
+    hash = "sha256-3Ig5TXhK99iOu41k4c5CgC4R3HhBftSAb9UbXvFY6lo=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -891,11 +891,7 @@ stdenv.mkDerivation (finalAttrs: {
   disallowedReferences =
     lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
       # 'or p' is for manually specified buildPackages as they dont have __spliced
-      (
-        builtins.filter (p: p != null) (
-          builtins.map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs
-        )
-      );
+      (builtins.filter (p: p != null) (map (p: p.__spliced.buildHost or p) finalAttrs.nativeBuildInputs));
 
   disallowedRequisites = lib.optionals (!withUkify) [
     bash
@@ -1011,7 +1007,6 @@ stdenv.mkDerivation (finalAttrs: {
             systemd-sysusers-mutable
             systemd-sysusers-immutable
             systemd-sysusers-password-option-override-ordering
-            systemd-timesyncd
             systemd-timesyncd-nscd-dnssec
             systemd-user-linger
             systemd-user-tmpfiles-rules

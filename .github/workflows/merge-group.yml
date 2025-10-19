@@ -17,6 +17,21 @@ on:
 permissions: {}
 
 jobs:
+  prepare:
+    runs-on: ubuntu-24.04-arm
+    outputs:
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          sparse-checkout: |
+            ci/supportedSystems.json
+
+      - name: Load supported systems
+        id: systems
+        run: |
+          echo "systems=$(jq -c <ci/supportedSystems.json)" >> "$GITHUB_OUTPUT"
+
   lint:
     name: Lint
     uses: ./.github/workflows/lint.yml
@@ -26,6 +41,21 @@ jobs:
       mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
       targetSha: ${{ inputs.targetSha || github.event.merge_group.base_sha }}
 
+  eval:
+    name: Eval
+    needs: [prepare]
+    uses: ./.github/workflows/eval.yml
+    # The eval workflow requests these permissions so we must explicitly allow them,
+    # even though they are unused when working with the merge queue.
+    permissions:
+      # compare
+      statuses: write
+    secrets:
+      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
+    with:
+      mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
+      systems: ${{ needs.prepare.outputs.systems }}
+
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block the Merge Queue.
   unlock:
@@ -33,6 +63,7 @@ jobs:
     # Modify this list to add or remove jobs from required status checks.
     needs:
       - lint
+      - eval
     runs-on: ubuntu-24.04-arm
     permissions:
       statuses: write

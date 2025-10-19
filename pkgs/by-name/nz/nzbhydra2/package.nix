@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "nzbhydra2";
-  version = "7.19.1";
+  version = "7.19.2";
 
   src = fetchzip {
     url = "https://github.com/theotherp/nzbhydra2/releases/download/v${version}/nzbhydra2-${version}-generic.zip";
-    hash = "sha256-eR+mYtVWRg+2HWAFmyCpb9hNdsS+U3QMBpO1r4LvQVM=";
+    hash = "sha256-QFE8Zr7HGfMioiXWUKp5UvofK5IBb+gLpm1ytAEl3HM=";
     stripRoot = false;
   };
 

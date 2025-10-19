@@ -100,7 +100,7 @@ melpaBuild (
       '';
       license = lib.licenses.gpl3Plus;
       mainProgram = "cask";
-      maintainers = with lib.maintainers; [ ];
+      maintainers = [ ];
     };
   }
 )

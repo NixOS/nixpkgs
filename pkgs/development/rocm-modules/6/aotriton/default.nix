@@ -23,17 +23,21 @@ let
     "gfx90a"
     "gfx942"
     "gfx950"
+    # some gfx1100 kernels fail with error: branch size exceeds simm16
+    # but build proceeds and those ops will fallback so it's ok
     "gfx1100"
     "gfx1151"
     "gfx1150"
     "gfx1201"
     "gfx1200"
   ] gpuTargets;
-  supportedTargets' = lib.concatStringsSep ";" supportedTargets;
   anySupportedTargets = supportedTargets != [ ];
+  # Pick a single arbitrary target to speed up shim build when we can't support our target
+  supportedTargets' =
+    if anySupportedTargets then lib.concatStringsSep ";" supportedTargets else "gfx1200";
 in
 stdenv.mkDerivation (finalAttrs: {
-  pname = "aotriton";
+  pname = "aotriton${lib.optionalString (!anySupportedTargets) "-shim"}";
   version = "0.10b";
 
   src = fetchFromGitHub {
@@ -132,13 +136,16 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "AOTRITON_NOIMAGE_MODE" (!anySupportedTargets))
     # Use preinstalled triton from our python's site-packages
     (lib.cmakeBool "AOTRITON_INHERIT_SYSTEM_SITE_TRITON" true)
+    # FP32 kernels are optional, turn them off to speed up builds and save space
+    # Perf sensitive code should be using BF16 or F16
+    (lib.cmakeBool "AOTRITON_ENABLE_FP32_INPUTS" false)
+    # Avoid kernels being skipped if build host is overloaded
+    (lib.cmakeFeature "AOTRITON_GPU_BUILD_TIMEOUT" "0")
     # Manually define CMAKE_INSTALL_<DIR>
     # See: https://github.com/NixOS/nixpkgs/pull/197838
     (lib.cmakeFeature "CMAKE_INSTALL_BINDIR" "bin")
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
-  ]
-  ++ lib.optionals anySupportedTargets [
     # Note: build will warn "AMDGPU_TARGETS was not set, and system GPU detection was unsuccsesful."
     # but this can safely be ignored, aotriton uses a different approach to pass targets
     (lib.cmakeFeature "AOTRITON_TARGET_ARCH" supportedTargets')

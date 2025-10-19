@@ -4,7 +4,8 @@
   fetchpatch,
   buildOasisPackage,
   ounit,
-  tcslib,
+  tcs-lib,
+  extlib,
   ocaml-sat-solvers,
 }:
 
@@ -29,9 +30,15 @@ buildOasisPackage rec {
     ];
   };
 
+  # Compatibility with tcs-lib ≥ 0.6
+  postPatch = ''
+    substituteInPlace _oasis --replace-fail TCSLib tcs-lib
+  '';
+
   buildInputs = [ ounit ];
   propagatedBuildInputs = [
-    tcslib
+    extlib
+    tcs-lib
     ocaml-sat-solvers
   ];
 

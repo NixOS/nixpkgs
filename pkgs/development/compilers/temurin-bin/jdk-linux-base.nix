@@ -139,7 +139,7 @@ let
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
+      platforms = map (arch: arch + "-linux") providedCpuTypes; # some inherit jre.meta.platforms
       maintainers = with maintainers; [ taku0 ];
       teams = [ teams.java ];
       inherit knownVulnerabilities;

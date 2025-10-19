@@ -83,7 +83,7 @@ flutter329.buildFlutterApplication rec {
     homepage = "https://github.com/jiangtian616/JHenTai";
     mainProgram = "jhentai";
     license = with lib.licenses; [ asl20 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

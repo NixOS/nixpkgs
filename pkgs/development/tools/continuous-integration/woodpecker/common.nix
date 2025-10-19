@@ -44,6 +44,7 @@ in
     license = licenses.asl20;
     maintainers = with maintainers; [
       ambroisie
+      marcusramberg
       techknowlogick
     ];
   };

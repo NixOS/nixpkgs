@@ -20,8 +20,8 @@
   pkgsTargetTarget,
   makeRustPlatform,
   wrapRustcWith,
-  llvmPackages_20,
-  llvm_20,
+  llvmPackages,
+  llvm,
   wrapCCWith,
   overrideCC,
   fetchpatch,
@@ -29,7 +29,7 @@
 let
   llvmSharedFor =
     pkgSet:
-    pkgSet.llvmPackages_20.libllvm.override (
+    pkgSet.llvmPackages.libllvm.override (
       {
         enableSharedLibraries = true;
       }
@@ -37,7 +37,7 @@ let
         # Force LLVM to compile using clang + LLVM libs when targeting pkgsLLVM
         stdenv = pkgSet.stdenv.override {
           allowedRequisites = null;
-          cc = pkgSet.pkgsBuildHost.llvmPackages_20.clangUseLLVM;
+          cc = pkgSet.pkgsBuildHost.llvmPackages.clangUseLLVM;
         };
       }
     );
@@ -51,11 +51,10 @@ import ./default.nix
     llvmSharedForHost = llvmSharedFor pkgsBuildHost;
     llvmSharedForTarget = llvmSharedFor pkgsBuildTarget;
 
+    inherit llvmPackages;
+
     # For use at runtime
     llvmShared = llvmSharedFor pkgsHostTarget;
-
-    # Expose llvmPackages used for rustc from rustc via passthru for LTO in Firefox
-    llvmPackages = llvmPackages_20;
 
     # Note: the version MUST be the same version that we are building. Upstream
     # ensures that each released compiler can compile itself:
@@ -86,9 +85,9 @@ import ./default.nix
   }
 
   (
-    builtins.removeAttrs args [
-      "llvmPackages_20"
-      "llvm_20"
+    removeAttrs args [
+      "llvmPackages"
+      "llvm"
       "wrapCCWith"
       "overrideCC"
       "pkgsHostTarget"

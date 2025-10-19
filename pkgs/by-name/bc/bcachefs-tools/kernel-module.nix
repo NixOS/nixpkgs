@@ -38,11 +38,12 @@ stdenv.mkDerivation {
 
     inherit (bcachefs-tools.meta)
       homepage
+      downloadPage
       license
       maintainers
       platforms
       ;
 
-    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "6.18");
+    broken = !(lib.versionAtLeast kernel.version "6.16" && lib.versionOlder kernel.version "6.19");
   };
 }

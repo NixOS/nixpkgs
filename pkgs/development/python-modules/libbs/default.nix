@@ -30,14 +30,14 @@ let
 in
 buildPythonPackage rec {
   pname = "libbs";
-  version = "2.16.4";
+  version = "2.16.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "binsync";
     repo = "libbs";
     tag = "v${version}";
-    hash = "sha256-if27Tg5S0Esrw9xHi6nr+kDIw4OTz7yZ2256/4Kbkeo=";
+    hash = "sha256-JE/eDs9vOiislIrsgBUx36XFenxgcoLtHA/veOMj2IY=";
   };
 
   build-system = [ setuptools ];

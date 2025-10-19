@@ -23,15 +23,16 @@
   iptables,
   nixosTests,
   gitUpdater,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.4";
+  version = "1.1.5";
   pname = "nftables";
 
   src = fetchurl {
     url = "https://netfilter.org/projects/nftables/files/${pname}-${version}.tar.xz";
-    hash = "sha256-NETwASrwRyOZ7q6Jp1i5xtxfMR9sZ6SJiPoWAPxLrIY=";
+    hash = "sha256-Ha8Q8yLhT9kKAXU4qvLANNfMHrHMQY3tR0RdcU6haNQ=";
   };
 
   patches = [
@@ -52,7 +53,8 @@ stdenv.mkDerivation rec {
     docbook_xsl
     findXMLCatalogs
     libxslt
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isStatic ncurses;
 
   buildInputs = [
     libmnl
@@ -63,6 +65,8 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withCli libedit
   ++ lib.optional withXtables iptables;
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isStatic "-lncursesw";
 
   configureFlags = [
     "--with-json"

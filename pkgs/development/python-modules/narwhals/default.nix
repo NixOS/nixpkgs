@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "2.4.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-ReF/6UNxxeQd4RspzmauEUJGaI1kY3hMPNYSDg8ZP2w=";
+    hash = "sha256-peD5CLp5YCLPrOmXnoezT+gAJLf7zSb0xdhV+PhC/XI=";
   };
 
   build-system = [ hatchling ];
@@ -73,6 +73,8 @@ buildPythonPackage rec {
     "test_convert_time_zone_to_connection_tz_pyspark"
     "test_replace_time_zone_to_connection_tz_pyspark"
     "test_lazy"
+    # Incompatible with ibis 11
+    "test_unique_3069"
   ];
 
   pytestFlags = [

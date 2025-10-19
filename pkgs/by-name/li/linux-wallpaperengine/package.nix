@@ -16,6 +16,7 @@
   glew,
   glfw,
   glm,
+  gmp,
   kissfftFloat,
   libXau,
   libXdmcp,
@@ -33,11 +34,12 @@
   wayland-protocols,
   wayland-scanner,
   zlib,
+  nix-update-script,
 }:
 
 let
   cef = cef-binary.overrideAttrs (oldAttrs: {
-    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/be0fc25e72203310f268221a132c5d765874b02c/CMakeLists.txt#L47
+    version = "135.0.17"; # follow upstream. https://github.com/Almamu/linux-wallpaperengine/blob/b39f12757908eda9f4c1039613b914606568bb84/CMakeLists.txt#L47
     __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
     gitRevision = "cbc1c5b";
     chromiumVersion = "135.0.7049.52";
@@ -52,14 +54,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "linux-wallpaperengine";
-  version = "0-unstable-2025-05-17";
+  version = "0-unstable-2025-09-19";
 
   src = fetchFromGitHub {
     owner = "Almamu";
     repo = "linux-wallpaperengine";
-    rev = "be0fc25e72203310f268221a132c5d765874b02c";
+    rev = "b39f12757908eda9f4c1039613b914606568bb84";
     fetchSubmodules = true;
-    hash = "sha256-Wkxt6c5aSMJnQPx/n8MeNKLQ8YmdFilzhJ1wQooKprI=";
+    hash = "sha256-Lm4BixK+PBCN/I+ecoYfoD96zS9UysEDOfponFy3SDU=";
   };
 
   nativeBuildInputs = [
@@ -79,6 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     glew
     glfw
     glm
+    gmp
     kissfftFloat
     libXau
     libXdmcp
@@ -117,12 +120,14 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
     description = "Wallpaper Engine backgrounds for Linux";
     homepage = "https://github.com/Almamu/linux-wallpaperengine";
-    license = with lib.licenses; [ gpl3Plus ];
+    license = lib.licenses.gpl3Plus;
     mainProgram = "linux-wallpaperengine";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"

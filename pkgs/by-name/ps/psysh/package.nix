@@ -58,6 +58,7 @@ php.buildComposerProject2 (finalAttrs: {
     mainProgram = "psysh";
     license = lib.licenses.mit;
     homepage = "https://psysh.org/";
-    teams = [ lib.teams.php ];
+    # `composerVendor` doesn't build
+    broken = true;
   };
 })

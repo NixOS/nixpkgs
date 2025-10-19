@@ -21,7 +21,7 @@ let
 in
 
 if lib.versionOlder ocaml.version minimalOCamlVersion then
-  builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
+  throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
 else
 
   stdenv.mkDerivation {

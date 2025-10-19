@@ -48,6 +48,7 @@ jobs:
             })).map(file => file.filename)
 
             if (files.some(file => [
+              '.github/workflows/eval.yml',
               '.github/workflows/lint.yml',
               '.github/workflows/merge-group.yml',
               '.github/workflows/test.yml',
@@ -64,12 +65,6 @@ jobs:
               '.github/workflows/reviewers.yml',
               '.github/workflows/test.yml',
             ].includes(file))) core.setOutput('pr', true)
-
-            if (files.some(file => [
-              '.github/workflows/eval.yml',
-              '.github/workflows/push.yml',
-              '.github/workflows/test.yml',
-            ].includes(file))) core.setOutput('push', true)
 
   merge-group:
     if: needs.prepare.outputs.merge-group
@@ -98,16 +93,3 @@ jobs:
     secrets:
       CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
       NIXPKGS_CI_APP_PRIVATE_KEY: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
-
-  push:
-    if: needs.prepare.outputs.push
-    name: Push
-    needs: [prepare]
-    uses: ./.github/workflows/push.yml
-    # Those are not actually used on the push or pull_request events, but will throw an error if not set.
-    permissions:
-      statuses: write
-    secrets:
-      CACHIX_AUTH_TOKEN: ${{ secrets.CACHIX_AUTH_TOKEN }}
-    with:
-      mergedSha: ${{ needs.prepare.outputs.mergedSha }}

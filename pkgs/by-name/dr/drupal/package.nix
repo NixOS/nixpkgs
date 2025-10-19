@@ -8,17 +8,17 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "drupal";
-  version = "11.2.4";
+  version = "11.2.5";
 
   src = fetchFromGitLab {
     domain = "git.drupalcode.org";
     owner = "project";
     repo = "drupal";
     tag = finalAttrs.version;
-    hash = "sha256-5uzq7zQHWJGi+YU9diRNSlSHIguypTXgOmtgAbF5TBU=";
+    hash = "sha256-y6oKz9ldj1jP6VYIzw0iqVQM5bMOY5UOj7Yf2rUk2fc=";
   };
 
-  vendorHash = "sha256-7jZRZ2qlQ7V5Y+aHScR31rahfoYF0p2yiiFiFHgDqa0=";
+  vendorHash = "sha256-sBzh772IRZ1e84s6iBsTHPK2qdtMP91UqHYpLIofqwM=";
   composerNoPlugins = false;
 
   passthru = {

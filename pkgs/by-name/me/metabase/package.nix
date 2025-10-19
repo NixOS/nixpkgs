@@ -36,7 +36,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.agpl3Only;
     platforms = platforms.all;
     maintainers = with maintainers; [
-      schneefux
       thoughtpolice
       mmahut
     ];

@@ -69,6 +69,6 @@ buildPythonPackage rec {
     homepage = "https://trypyramid.com/";
     changelog = "https://github.com/Pylons/pyramid/blob/${version}/CHANGES.rst";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

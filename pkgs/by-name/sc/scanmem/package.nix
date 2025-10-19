@@ -11,15 +11,15 @@
   readline,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scanmem";
   version = "0.17";
 
   src = fetchFromGitHub {
     owner = "scanmem";
     repo = "scanmem";
-    rev = "v${version}";
-    sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-SZ94BNMHcynq0uglP/j/QxTEELmrqJjN+NgjmQHU6J4=";
   };
 
   patches = [
@@ -55,11 +55,11 @@ stdenv.mkDerivation rec {
     runHook postFixup
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scanmem/scanmem";
     description = "Memory scanner for finding and poking addresses in executing processes";
-    maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ iedame ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
   };
-}
+})
