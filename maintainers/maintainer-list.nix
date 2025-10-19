@@ -14068,6 +14068,12 @@
     githubId = 629430;
     keys = [ { fingerprint = "2843 750C B1AB E256 94BE  40E2 D843 D30B 42CA 0E2D"; } ];
   };
+  KunyaKud = {
+    name = "KunyaKud";
+    email = "KunyaKud@proton.me";
+    github = "KunyaKud";
+    githubId = 238898928;
+  };
   kupac = {
     github = "Kupac";
     githubId = 8224569;
