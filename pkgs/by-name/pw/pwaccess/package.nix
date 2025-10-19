@@ -14,6 +14,7 @@
   selinuxSupport ? lib.meta.availableOn stdenv.hostPlatform libselinux,
   docbook-xsl-ns,
   libxslt,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "selinux" selinuxSupport)
     (lib.mesonBool "b_lto" false)
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) login-nosuid;
+  };
 
   meta = {
     description = "The pwaccess package contains a library and a systemd service, which allows tools to read `/etc/shadow` entries without the need of having setuid/setgid bits set";
