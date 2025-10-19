@@ -4,12 +4,9 @@
   fetchFromGitLab,
   cmake,
   pkg-config,
-  wrapQtAppsHook,
-  qtbase,
-  qtsvg,
-  qtwayland,
   alsa-lib,
   pipewire,
+  kdePackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,27 +17,27 @@ stdenv.mkDerivation (finalAttrs: {
     domain = "gitlab.freedesktop.org";
     owner = "rncbc";
     repo = "qpwgraph";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     sha256 = "sha256-zhp6Mkb8iQF8tGXkYu+lgbMUNN/fk/gWBhzeDS4myJ0=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
-    qtsvg
-    qtwayland
+    kdePackages.qtbase
+    kdePackages.qtsvg
+    kdePackages.qtwayland
     alsa-lib
     pipewire
   ];
 
   cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt graph manager for PipeWire, similar to QjackCtl";
     longDescription = ''
       qpwgraph is a graph manager dedicated for PipeWire,
@@ -48,9 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
       the same of QjackCtl.
     '';
     homepage = "https://gitlab.freedesktop.org/rncbc/qpwgraph";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       kanashimia
       exi
       Scrumplex

@@ -12255,8 +12255,6 @@ with pkgs;
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
-  qpwgraph = qt6Packages.callPackage ../applications/audio/qpwgraph { };
-
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
