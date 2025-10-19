@@ -12,10 +12,33 @@ STDOUT->autoflush(1);
 $SIG{__WARN__} = sub { warn "pkgs.buildEnv warning: ", @_ };
 $SIG{__DIE__}  = sub { die "pkgs.buildEnv error: ", @_ };
 
-my $out = $ENV{"out"};
-my $extraPrefix = $ENV{"extraPrefix"};
+my $out;
+my $extraPrefix;
+my @pathsToLink;
+my $ignoreCollisions;
+my $checkCollisionContents;
+my $ignoreSingleFileOutputs;
+my @chosenOutputsRefs;
+my $extraPathsFrom;
+my $manifest;
 
-my @pathsToLink = @{decode_json $ENV{"pathsToLinkJSON"}};
+if ($ENV{"NIX_ATTRS_JSON_FILE"} // "") {
+    open FILE, $ENV{"NIX_ATTRS_JSON_FILE"} or die "cannot open extra paths file $ENV{NIX_ATTRS_JSON_FILE} $!";
+    my $attrsFromJSONRef = decode_json <FILE>;
+    close FILE;
+
+    $out = $attrsFromJSONRef->{"outputs"}->{"out"};
+    $extraPrefix = $attrsFromJSONRef->{"extraPrefix"};
+    @pathsToLink = @{$attrsFromJSONRef->{"pathsToLink"}};
+    $ignoreCollisions = $attrsFromJSONRef->{"ignoreCollisions"};
+    $checkCollisionContents = $attrsFromJSONRef->{"checkCollisionContents"};
+    $ignoreSingleFileOutputs = $attrsFromJSONRef->{"ignoreSingleFileOutputs"};
+    @chosenOutputsRefs = @{$attrsFromJSONRef->{"chosenOutputs"}};
+    $extraPathsFrom = $attrsFromJSONRef->{"extraPathsFrom"};
+    $manifest = $attrsFromJSONRef->{"manifest"};
+} else {
+    die "expect environment variable NIX_ATTRS_JSON_FILE";
+}
 
 sub isInPathsToLink($path) {
     $path = "/" if $path eq "";
@@ -210,26 +233,15 @@ sub addPkg($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority, $igno
     }
 }
 
-# Read packages list.
-my $pkgs;
-
-if (exists $ENV{"pkgsPath"}) {
-    open FILE, $ENV{"pkgsPath"};
-    $pkgs = <FILE>;
-    close FILE;
-} else {
-    $pkgs = $ENV{"pkgs"}
-}
-
 # Symlink to the packages that have been installed explicitly by the
 # user.
-for my $pkg (@{decode_json $pkgs}) {
+for my $pkg (@chosenOutputsRefs) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
-               $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"checkCollisionContents"} eq "1",
+               $ignoreCollisions,
+               $checkCollisionContents,
                $pkg->{priority},
-               $ENV{"ignoreSingleFileOutputs"} eq "1")
+               $ignoreSingleFileOutputs)
            if -e $path;
     }
 }
@@ -244,21 +256,20 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++, $ENV{"ignoreSingleFileOutputs"} eq "1");
+        addPkg($pkgDir, 2, $checkCollisionContents, $priorityCounter++, $ignoreSingleFileOutputs);
     }
 }
 
-my $extraPathsFilePath = $ENV{"extraPathsFrom"};
-if ($extraPathsFilePath) {
-    open FILE, $extraPathsFilePath or die "cannot open extra paths file $extraPathsFilePath: $!";
+if ($extraPathsFrom) {
+    open FILE, $extraPathsFrom or die "cannot open extra paths file $extraPathsFrom: $!";
 
     while(my $line = <FILE>) {
         chomp $line;
         addPkg($line,
-               $ENV{"ignoreCollisions"} eq "1",
-               $ENV{"checkCollisionContents"} eq "1",
+               $ignoreCollisions,
+               $checkCollisionContents,
                1000,
-               $ENV{"ignoreSingleFileOutputs"} eq "1")
+               $ignoreSingleFileOutputs)
             if -d $line;
     }
 
@@ -286,7 +297,6 @@ foreach my $relName (sort keys %symlinks) {
 print STDERR "created $nrLinks symlinks in user environment\n";
 
 
-my $manifest = $ENV{"manifest"};
 if ($manifest) {
     symlink($manifest, "$out/manifest") or die "cannot create manifest";
 }
