@@ -1,4 +1,5 @@
 {
+  argp-standalone,
   cmake,
   fetchgit,
   gd,
@@ -15,12 +16,12 @@
 
 stdenv.mkDerivation {
   pname = "ptouch-print";
-  version = "1.5-unstable-2024-02-11";
+  version = "1.7";
 
   src = fetchgit {
     url = "https://git.familie-radermacher.ch/linux/ptouch-print.git";
-    rev = "8aaeecd84b619587dc3885dd4fea4b7310c82fd4";
-    hash = "sha256-IIq3SmMfsgwSYbgG1w/wrBnFtb6xdFK2lkK27Qqk6mw=";
+    rev = "v1.7";
+    hash = "sha256-OdWdDjgA0Jltho9IB9btZW3UsU+EDm21iltQ1McgiqU=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +37,13 @@ stdenv.mkDerivation {
     libpng
     zlib
     libusb1
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isGnu) [
+    argp-standalone
+  ];
+
+  patches = [
+    ./argp.patch
   ];
 
   installPhase = ''
