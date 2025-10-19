@@ -49,6 +49,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/tamland/python-tidal";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [
+      drafolin
       drawbu
       ryand56
     ];
