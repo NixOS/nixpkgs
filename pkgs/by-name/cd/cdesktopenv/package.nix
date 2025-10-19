@@ -4,7 +4,6 @@
   fetchurl,
   libX11,
   bison,
-  ksh,
   perl,
   libXinerama,
   libXt,
@@ -82,7 +81,6 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     tcl
     libXaw
-    ksh
     libxcrypt
     libXpm
   ];

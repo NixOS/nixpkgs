@@ -7,7 +7,6 @@
       runCommandLocal,
       bash,
       hello,
-      ksh,
       patchRcPathBash,
       shellcheck,
       zsh,
@@ -16,7 +15,6 @@
       {
         nativeBuildInputs = [
           bash
-          ksh
           patchRcPathBash
           shellcheck
           zsh
@@ -34,7 +32,6 @@
 
         echo "Running shellcheck against ${./test-sourcing-bash}"
         shellcheck -s bash --exclude SC1090 ${./test-sourcing-bash}
-        shellcheck -s ksh --exclude SC1090 ${./test-sourcing-bash}
 
 
         # Test patching a blank file
@@ -47,13 +44,9 @@
 
         echo "Running shellcheck against blank_patched.bash"
         shellcheck -s bash blank_patched.bash
-        shellcheck -s ksh blank_patched.bash
 
         echo "Testing in Bash if blank.bash and blank_patched.bash modifies PATH the same way"
         bash ${./test-sourcing-bash} ./blank.bash ./blank_patched.bash
-
-        echo "Testing in Ksh if blank.bash and blank_patched.bash modifies PATH the same way"
-        ksh ${./test-sourcing-bash} "$PWD/blank.bash" "$PWD/blank_patched.bash"
 
         echo "Testing in Zsh if blank.bash and blank_patched.bash modifies PATH the same way"
         zsh ${./test-sourcing-bash} ./blank.bash ./blank_patched.bash
@@ -73,9 +66,6 @@
         echo "Testing in Bash if silent_hello_patched.bash get sourced without error"
         bash -eu -o pipefail -c ". ./silent_hello_patched.bash"
 
-        echo "Testing in Ksh if silent_hello_patched.bash get sourced without error"
-        ksh -eu -o pipefail -c ". ./silent_hello_patched.bash"
-
         echo "Testing in Zsh if silent_hello_patched.bash get sourced without error"
         zsh -eu -o pipefail -c ". ./silent_hello_patched.bash"
 
@@ -84,8 +74,6 @@
 
         echo "Running shellcheck against sample_source.bash"
         shellcheck -s bash ${./sample_source.bash}
-        shellcheck -s ksh ${./sample_source.bash}
-
 
         # Test patching the sample source
 
@@ -101,9 +89,6 @@
         echo "Testing in Bash if sample_source.bash and sample_source_patched.bash modifies PATH the same way"
         bash ${./test-sourcing-bash} ${./sample_source.bash} ./sample_source_patched.bash
 
-        echo "Testing in Ksh if sample_source.bash and sample_source_patched.bash modifies PATH the same way"
-        ksh ${./test-sourcing-bash} ${./sample_source.bash} "$PWD/sample_source_patched.bash"
-
         echo "Testing in Zsh if sample_source.bash and sample_source_patched.bash modifies PATH the same way"
         zsh ${./test-sourcing-bash} ${./sample_source.bash} ./sample_source_patched.bash
 
@@ -115,13 +100,9 @@
 
         echo "Running shellcheck against sample_source_patched.bash"
         shellcheck -s bash sample_source_patched.bash
-        shellcheck -s ksh sample_source_patched.bash
 
         echo "Testing in Bash if sample_source.bash and sample_source_patched.bash modifies PATH the same way"
         bash ${./test-sourcing-bash} ${./sample_source.bash} ./sample_source_patched.bash
-
-        echo "Testing in Ksh if sample_source.bash and sample_source_patched.bash modifies PATH the same way"
-        ksh ${./test-sourcing-bash} ${./sample_source.bash} "$PWD/sample_source_patched.bash"
 
         echo "Testing in Zsh if sample_source.bash and sample_source_patched.bash modifies PATH the same way"
         zsh ${./test-sourcing-bash} ${./sample_source.bash} ./sample_source_patched.bash
@@ -299,7 +280,6 @@
       dash,
       gnused,
       hello,
-      ksh,
       patchRcPathPosix,
       shellcheck,
     }:
@@ -308,7 +288,6 @@
         nativeBuildInputs = [
           bash
           dash
-          ksh
           patchRcPathPosix
           shellcheck
         ];
@@ -346,10 +325,6 @@
         echo "Testing in Dash if blank.sh and blank_patched.sh modifies PATH the same way"
         dash ${./test-sourcing-posix} ./blank.sh ./blank_patched.sh
 
-        echo "Testing in Ksh if ./blank.sh and ./blank_patched.sh modifies PATH the same way"
-        ksh ${./test-sourcing-posix} "$PWD/blank.sh" "$PWD/blank_patched.sh"
-
-
         # Test patching silent_hello file
 
         echo "hello > /dev/null" > silent_hello.sh
@@ -367,10 +342,6 @@
 
         echo "Testing in Dash if silent_hello_patched.sh get sourced without error"
         dash -eu -c ". ./silent_hello_patched.sh"
-
-        echo "Testing in Ksh if silent_hello_patched.sh get sourced without error"
-        ksh -eu -c ". $PWD/silent_hello_patched.sh"
-
 
         # Generate the sample source "$PWD/delta:$PWD/foxtrot" "$PWD/delta:$PWD/foxtrot"
 
@@ -402,10 +373,6 @@
         echo "Testing in Dash if sample_source.sh and sample_source_patched.sh modifies PATH the same way"
         dash ${./test-sourcing-posix} "./sample_source.sh" "./sample_source_patched.sh"
 
-        echo "Testing in Ksh if sample_source.sh and sample_source_patched.sh modifies PATH the same way"
-        ksh ${./test-sourcing-posix} "$PWD/sample_source.sh" "$PWD/sample_source_patched.sh"
-
-
         # Test double-patching the sample source
 
         echo "Patching again sample_source_patched.sh"
@@ -420,10 +387,6 @@
 
         echo "Testing in Dash if sample_source.sh and sample_source_patched.sh modifies PATH the same way"
         dash ${./test-sourcing-posix} "./sample_source.sh" "./sample_source_patched.sh"
-
-        echo "Testing in Ksh if sample_source.sh and sample_source_patched.sh modifies PATH the same way"
-        ksh ${./test-sourcing-posix} "$PWD/sample_source.sh" "$PWD/sample_source_patched.sh"
-
 
         # Create a dummy output
         touch "$out"
