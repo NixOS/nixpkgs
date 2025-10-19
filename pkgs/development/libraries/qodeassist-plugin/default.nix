@@ -72,6 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Palm1r/QodeAssist";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.zatm8 ];
-    platforms = lib.platforms.linux;
+    platforms = qtcreator.meta.platforms;
   };
 })
