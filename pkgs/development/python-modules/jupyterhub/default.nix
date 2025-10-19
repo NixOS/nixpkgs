@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "jupyterhub";
-  version = "5.4.0";
+  version = "5.4.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "jupyterhub";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OCrEmNwWhOMJE/uTDUyEZzJlWqyzNp6CnvDsOg5hZkU=";
+    tag = version;
+    hash = "sha256-8hClknn0GfXbfXEzoYnb6qCXby7MU6BUDVoAG80UgNA=";
   };
 
   npmDeps = fetchNpmDeps {
