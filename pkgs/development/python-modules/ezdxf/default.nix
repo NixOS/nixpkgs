@@ -22,7 +22,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.4.2";
+  version = "1.4.3";
   pname = "ezdxf";
 
   pyproject = true;
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "mozman";
     repo = "ezdxf";
     tag = "v${version}";
-    hash = "sha256-XNy7/N6tQIf7rVx8q85fzI3mFMIcwaOi7wBz4hNRWjY=";
+    hash = "sha256-v/xW/Tg3OgzwvSNy3cfkxzf6R33ZvW4VE8k7MB+rM+w=";
   };
 
   nativeBuildInputs = lib.optionals withGui [ qt6.wrapQtAppsHook ];
@@ -41,7 +41,8 @@ buildPythonPackage rec {
     typing-extensions
     numpy
     fonttools
-  ] ++ lib.optionals withGui ([ qt6.qtbase ] ++ optional-dependencies.draw);
+  ]
+  ++ lib.optionals withGui ([ qt6.qtbase ] ++ optional-dependencies.draw);
 
   optional-dependencies = {
     draw = [
