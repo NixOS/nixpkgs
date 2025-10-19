@@ -202,7 +202,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "258";
+  version = "258.1";
 
   # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
   # This has proven to be less error-prone than the previous systemd fork.
@@ -210,7 +210,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "systemd";
     repo = "systemd";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-xtGZaVNsBNxkidgfVBu8xtvj0SxpY6OyJCUE+gq59qE=";
+    hash = "sha256-LA+6/d9W3CxK0G2sXsPHM4BVLf8IzsWW6IxJFby6/JU=";
   };
 
   # On major changes, or when otherwise required, you *must* :
@@ -224,14 +224,12 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # https://github.com/systemd/systemd/pull/39094
     (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/0f44a6c64aebc64a0611a605831206afee9cb730.patch";
-      hash = "sha256-DO6q17mE2U8iLezMYt4PX5Ror20N1gCrUbXeQmrW1is=";
+      url = "https://github.com/systemd/systemd/commit/8b4ee3d68d2e70d9a396b74d155eab3b11763311.patch";
+      hash = "sha256-JJDaSHQjd1QZ18CQHq40viB0AF/0MiescmZUcc/6LDg=";
     })
-
-    # https://github.com/systemd/systemd/pull/39069
     (fetchpatch {
-      url = "https://github.com/systemd/systemd/commit/b5fdfedf729712b9824a5cb457a07d5699d2946c.patch";
-      hash = "sha256-0SvAn9Dl4z80PRIvDbIVIjKp5DsT/IUoHa5IiH1HHFY=";
+      url = "https://github.com/systemd/systemd/commit/13b0e7fc6d2623800ba04b104f3b628388c9f5e6.patch";
+      hash = "sha256-X+tY3NjfRJpF6wvd++xEps0DIFTbX/6Zw9oO4Y9FmNI=";
     })
 
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
