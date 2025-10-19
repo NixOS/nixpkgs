@@ -1,0 +1,41 @@
+From e34d0c1f444bdb80f385d80e9054cde657c2ac1e Mon Sep 17 00:00:00 2001
+From: Emil Hemdal <ehemdal@volvocars.com>
+Date: Mon, 3 Feb 2025 10:57:05 +0100
+Subject: [PATCH 2/2] Fix deprecated code
+
+---
+ openconnect_sso/browser/webengine_process.py | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/openconnect_sso/browser/webengine_process.py b/openconnect_sso/browser/webengine_process.py
+index cb49acc..002849c 100644
+--- a/openconnect_sso/browser/webengine_process.py
++++ b/openconnect_sso/browser/webengine_process.py
+@@ -1,4 +1,5 @@
+ import asyncio
++import importlib.resources
+ import json
+ import multiprocessing
+ import signal
+@@ -6,7 +7,6 @@ import sys
+ from urllib.parse import urlparse
+ 
+ import attr
+-import pkg_resources
+ import structlog
+ 
+ from PyQt6.QtCore import QUrl, QTimer, pyqtSlot, Qt
+@@ -158,7 +158,9 @@ class WebBrowser(QWebEngineView):
+             return self._popupWindow.view()
+ 
+     def authenticate_at(self, url, credentials):
+-        script_source = pkg_resources.resource_string(__name__, "user.js").decode()
++        script_source = importlib.resources.read_text(
++            "openconnect_sso.browser", "user.js"
++        )
+         script = QWebEngineScript()
+         script.setInjectionPoint(QWebEngineScript.InjectionPoint.DocumentCreation)
+         script.setWorldId(QWebEngineScript.ScriptWorldId.ApplicationWorld)
+-- 
+2.50.1
+
