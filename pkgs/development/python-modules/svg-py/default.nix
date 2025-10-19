@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "svg-py";
-  version = "1.9.1";
+  version = "1.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "orsinium-labs";
     repo = "svg.py";
     tag = version;
-    hash = "sha256-ILnPviXUHJrdeT6VTUYAZog3zY0tVA+13ddf8yVRYqE=";
+    hash = "sha256-m/ZiEMwoopQiiHeOT27pM9sx4BCVWSK0VV792YGjDlE=";
   };
 
   build-system = [ flit-core ];

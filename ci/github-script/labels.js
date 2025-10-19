@@ -26,7 +26,10 @@ module.exports = async ({ github, context, core, dry }) => {
     // be detected, no maintainers pinged.
     // We can just check the temporary merge commit, and if it's empty the PR can safely be
     // closed - there are no further changes.
-    if (pull_request.merge_commit_sha) {
+    // We only do this for PRs, which are non-empty to start with. This avoids closing PRs
+    // which have been created with an empty commit for notification purposes, for example
+    // the yearly election notification for voters.
+    if (pull_request.merge_commit_sha && pull_request.changed_files > 0) {
       const commit = (
         await github.rest.repos.getCommit({
           ...context.repo,
