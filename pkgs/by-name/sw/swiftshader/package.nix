@@ -24,6 +24,17 @@ stdenv.mkDerivation {
     '';
   };
 
+  postPatch = ''
+    substituteInPlace third_party/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace third_party/googletest/googlemock/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace third_party/googletest/googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace third_party/marl/CMakeLists.txt \
+      --replace-fail  "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   nativeBuildInputs = [
     cmake
     python3
@@ -49,13 +60,13 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance CPU-based implementation of the Vulkan 1.3 graphics API";
     homepage = "https://opensource.google/projects/swiftshader";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     # Should be possible to support Darwin by changing the install phase with
     # 's/Linux/Darwin/' and 's/so/dylib/' or something similar.
-    platforms = with platforms; linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }
