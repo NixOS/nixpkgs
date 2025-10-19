@@ -12253,8 +12253,6 @@ with pkgs;
 
   qsudo = libsForQt5.callPackage ../applications/misc/qsudo { };
 
-  qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
-
   qtbitcointrader = libsForQt5.callPackage ../applications/misc/qtbitcointrader { };
 
   qtemu = libsForQt5.callPackage ../applications/virtualization/qtemu { };

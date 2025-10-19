@@ -7,42 +7,39 @@
   libjack2,
   cmake,
   pkg-config,
-  qtbase,
-  qttools,
-  qtx11extras,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qsynth";
   version = "1.0.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qsynth/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/qsynth/qsynth-${finalAttrs.version}.tar.gz";
     hash = "sha256-z4l+Ku3oEQV3NunkogyxzaSKhFJuYhIxlExJsACcumY=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     alsa-lib
     fluidsynth
     libjack2
-    qtbase
-    qttools
-    qtx11extras
+    libsForQt5.qtbase
+    libsForQt5.qttools
+    libsForQt5.qtx11extras
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Fluidsynth GUI";
     mainProgram = "qsynth";
     homepage = "https://sourceforge.net/projects/qsynth";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
