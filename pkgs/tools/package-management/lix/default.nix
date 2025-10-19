@@ -29,6 +29,9 @@
   confDir ? "/etc",
 }:
 let
+  # Remove updateScript from a package to prevent redundant updates.
+  removeUpdateScript = pkg: lib.removeAttrs pkg [ "updateScript" ];
+
   makeLixScope =
     {
       attrName,
@@ -57,10 +60,12 @@ let
           boehmgc =
             # TODO: Why is this called `boehmgc-nix_2_3`?
             let
-              boehmgc-nix_2_3 = boehmgc.override {
-                enableLargeConfig = true;
-                initialMarkStackSize = 1048576;
-              };
+              boehmgc-nix_2_3 = removeUpdateScript (
+                boehmgc.override {
+                  enableLargeConfig = true;
+                  initialMarkStackSize = 1048576;
+                }
+              );
             in
             # Since Lix 2.91 does not use boost coroutines, it does not need boehmgc patches either.
             if lib.versionOlder lix-args.version "2.91" then
@@ -73,7 +78,7 @@ let
             else
               boehmgc-nix_2_3;
 
-          aws-sdk-cpp =
+          aws-sdk-cpp = removeUpdateScript (
             (aws-sdk-cpp.override {
               apis = [
                 "s3"
@@ -84,12 +89,15 @@ let
               {
                 # only a stripped down version is build which takes a lot less resources to build
                 requiredSystemFeatures = [ ];
-              };
+              }
+          );
 
-          editline = editline.override {
-            inherit ncurses;
-            enableTermcap = true;
-          };
+          editline = removeUpdateScript (
+            editline.override {
+              inherit ncurses;
+              enableTermcap = true;
+            }
+          );
 
           # NOTE: The `common-*.nix` helpers contain a top-level function which
           # takes the Lix source to build and version information. We use the
@@ -102,40 +110,52 @@ let
             stdenv = lixStdenv;
           };
 
-          nixpkgs-review = nixpkgs-review.override {
-            nix = self.lix;
-          };
+          nixpkgs-review = removeUpdateScript (
+            nixpkgs-review.override {
+              nix = self.lix;
+            }
+          );
 
-          nix-direnv = nix-direnv.override {
-            nix = self.lix;
-          };
+          nix-direnv = removeUpdateScript (
+            nix-direnv.override {
+              nix = self.lix;
+            }
+          );
 
           nix-eval-jobs = self.callPackage (callPackage ./common-nix-eval-jobs.nix nix-eval-jobs-args) {
             stdenv = lixStdenv;
           };
 
-          nix-fast-build = nix-fast-build.override {
-            inherit (self) nix-eval-jobs;
-          };
+          nix-fast-build = removeUpdateScript (
+            nix-fast-build.override {
+              inherit (self) nix-eval-jobs;
+            }
+          );
 
-          nix-serve-ng = lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
-            (haskell.lib.compose.enableCabalFlag "lix")
-            (haskell.lib.compose.overrideCabal (drv: {
-              # https://github.com/aristanetworks/nix-serve-ng/issues/46
-              # Resetting (previous) broken flag since it may be related to C++ Nix
-              broken = lib.versionAtLeast self.lix.version "2.93";
-            }))
-          ];
+          nix-serve-ng = removeUpdateScript (
+            lib.pipe (nix-serve-ng.override { nix = self.lix; }) [
+              (haskell.lib.compose.enableCabalFlag "lix")
+              (haskell.lib.compose.overrideCabal (drv: {
+                # https://github.com/aristanetworks/nix-serve-ng/issues/46
+                # Resetting (previous) broken flag since it may be related to C++ Nix
+                broken = lib.versionAtLeast self.lix.version "2.93";
+              }))
+            ]
+          );
 
-          colmena = colmena.override {
-            nix = self.lix;
-            inherit (self) nix-eval-jobs;
-          };
+          colmena = removeUpdateScript (
+            colmena.override {
+              nix = self.lix;
+              inherit (self) nix-eval-jobs;
+            }
+          );
 
-          nix-update = nix-update.override {
-            nix = self.lix;
-            inherit (self) nixpkgs-review;
-          };
+          nix-update = removeUpdateScript (
+            nix-update.override {
+              nix = self.lix;
+              inherit (self) nixpkgs-review;
+            }
+          );
         };
     };
 
