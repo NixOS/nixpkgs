@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     "-DUSE_SYSTEM_CPR=ON"
     "-DCMAKE_BUILD_TYPE=Release"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   # Wrapper script because the things are hardcoded so we just
