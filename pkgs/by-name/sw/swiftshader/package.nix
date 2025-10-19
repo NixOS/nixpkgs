@@ -9,12 +9,12 @@
 
 stdenv.mkDerivation {
   pname = "swiftshader";
-  version = "2023-09-11";
+  version = "2025-10-15";
 
   src = fetchgit {
     url = "https://swiftshader.googlesource.com/SwiftShader";
-    rev = "4e40d502c440cc59b25fa3a5fee0eadbab7442aa";
-    hash = "sha256-YtbTaOkFhVMKdu3jiRHQsPmoEu3KDzIQXLZ5HFBSmWI=";
+    rev = "3d536c0fc62b1cdea0f78c3c38d79be559855b88";
+    hash = "sha256-RLc9ZJeq/97mi4/5vRnPPOPBHK2lc9/6Y7p1YVwxWkc=";
     # Remove 1GB of test files to get under Hydra output limit
     postFetch = ''
       rm -r $out/third_party/llvm-project/llvm/test
