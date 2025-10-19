@@ -95,6 +95,11 @@ let
       })
     ];
 
+    postPatch = ''
+      substituteInPlace Modules/ThirdParty/KWSys/src/KWSys/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+    '';
+
     # fix the CMake config files for ITK which contains double slashes
     postInstall = (oldArgs.postInstall or "") + ''
       sed -i 's|''${ITK_INSTALL_PREFIX}//nix/store|/nix/store|g' $out/lib/cmake/ITK-${itkMajorMinorVersion}/ITKConfig.cmake
