@@ -23,6 +23,8 @@ buildGoModule rec {
     "cmd/loopd"
   ];
 
+  env.CGO_ENABLED = 0;
+
   nativeBuildInputs = [ installShellFiles ];
 
   ldflags = [
