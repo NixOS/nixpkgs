@@ -2,19 +2,19 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  qt5,
+  qt6,
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cutecom";
-  version = "0.51.0+patch";
+  version = "0.60.0-RC1";
 
   src = fetchFromGitLab {
     owner = "cutecom";
     repo = "cutecom";
-    rev = "70d0c497acf8f298374052b2956bcf142ed5f6ca";
-    sha256 = "X8jeESt+x5PxK3rTNC1h1Tpvue2WH09QRnG2g1eMoEE=";
+    tag = "v${finalAttrs.version}";
+    sha256 = "sha256-Co0bUW7klSPf1VfBt7oT2DlQmf6CLELS0oapIyjpx8w=";
   };
 
   postPatch = ''
@@ -22,10 +22,11 @@ stdenv.mkDerivation {
       --replace "/Applications" "$out/Applications"
   '';
 
-  buildInputs = [ qt5.qtserialport ];
+  buildInputs = [ qt6.qtserialport ];
+
   nativeBuildInputs = [
     cmake
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
 
   postInstall =
@@ -42,12 +43,12 @@ stdenv.mkDerivation {
         cp cutecom.1 "$out/share/man/man1"
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphical serial terminal";
     homepage = "https://gitlab.com/cutecom/cutecom/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ bennofs ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ bennofs ];
+    platforms = lib.platforms.unix;
     mainProgram = "cutecom";
   };
-}
+})
