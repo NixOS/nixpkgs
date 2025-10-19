@@ -25,6 +25,13 @@ stdenv.mkDerivation {
     hash = "sha256-YafO5UjeADO/658Xm973JtqldRYkGQ4v8m1oNJoZrbM=";
   };
 
+  # Fix for CMake > 4 in which the old policy for CMP0026 was removed.
+  # Note this breaks the tests, but they are not enabled anyway.
+  # Upstream issue: https://github.com/BIC-MNI/minc-tools/issues/123
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail "SET CMP0026 OLD" "SET CMP0026 NEW"
+  '';
+
   nativeBuildInputs = [
     cmake
     flex
