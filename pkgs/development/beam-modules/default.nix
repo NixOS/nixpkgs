@@ -8,8 +8,6 @@ let
   pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
 
-  lib' = pkgs.callPackage ./lib.nix { };
-
   # FIXME: add support for overrideScope
   callPackageWithScope =
     scope: drv: args:
