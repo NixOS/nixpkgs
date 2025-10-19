@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchhg,
+  fetchFromGitLab,
   cmake,
   pkg-config,
   makeWrapper,
@@ -9,6 +9,7 @@
   soundfont-fluid,
   SDL_compat,
   libGL,
+  libopus,
   glew,
   bzip2,
   zlib,
@@ -29,25 +30,21 @@ let
   clientLibPath = lib.makeLibraryPath [ fluidsynth ];
 
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zandronum${suffix}";
-  version = "3.1.0";
+  version = "3.2.1";
 
-  src = fetchhg {
-    # expired ssl certificate
-    url = "http://hg.osdn.net/view/zandronum/zandronum-stable";
-    rev = "4178904d7698";
-    hash = "sha256-5t36CoRPPjDKQE0DVSv2Qqpqko6JAXBI53tuAYiylHQ=";
+  src = fetchFromGitLab {
+    domain = "foss.heptapod.net";
+    owner = "zandronum";
+    repo = "zandronum-stable";
+    tag = "ZA_${finalAttrs.version}";
+    hash = "sha256-A5sfZMiCypBxAUOsoB8yuinZf7b9D7+HH9rpVs3esgA=";
   };
 
   # zandronum tries to download sqlite now when running cmake, don't let it
-  # it also needs the current mercurial revision info embedded in gitinfo.h
-  # otherwise, the client will fail to connect to servers because the
-  # protocol version doesn't match.
   patches = [
     ./zan_configure_impurity.patch
-    ./dont_update_gitinfo.patch
-    ./add_gitinfo.patch
   ];
 
   # I have no idea why would SDL and libjpeg be needed for the server part!
@@ -66,6 +63,7 @@ stdenv.mkDerivation {
     glew
     fmod
     fluidsynth
+    libopus
     gtk2
   ];
 
@@ -117,12 +115,12 @@ stdenv.mkDerivation {
     inherit fmod sqlite;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://zandronum.com/";
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
     mainProgram = "zandronum-server";
-    maintainers = with maintainers; [ lassulus ];
-    license = licenses.sleepycat;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lassulus ];
+    license = lib.licenses.sleepycat;
+    platforms = lib.platforms.linux;
   };
-}
+})
