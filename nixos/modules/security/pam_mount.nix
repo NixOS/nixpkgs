@@ -173,7 +173,9 @@ in
             if cfg.logoutTerm then "yes" else "no"
           }" kill="${if cfg.logoutKill then "yes" else "no"}" />
           <!-- set PATH variable for pam_mount module -->
-          <path>${lib.makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)}</path>
+          <path>${lib.optionalString config.security.enableWrappers (config.security.wrapperDir + ":")}${
+            lib.makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)
+          }</path>
           <!-- create mount point if not present -->
           <mkmountpoint enable="${if cfg.createMountPoints then "1" else "0"}" remove="${
             if cfg.removeCreatedMountPoints then "true" else "false"
