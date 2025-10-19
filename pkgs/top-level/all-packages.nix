@@ -6034,8 +6034,6 @@ with pkgs;
   rubyPackages_3_4 = recurseIntoAttrs ruby_3_4.gems;
   rubyPackages_3_5 = recurseIntoAttrs ruby_3_5.gems;
 
-  samplebrain = libsForQt5.callPackage ../applications/audio/samplebrain { };
-
   inherit (callPackages ../applications/networking/cluster/spark { })
     spark_3_5
     spark_3_4

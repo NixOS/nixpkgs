@@ -8,19 +8,17 @@
   libsndfile,
   makeDesktopItem,
   portaudio,
-  qmake,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samplebrain";
   version = "0.18.5";
 
   src = fetchFromGitLab {
     owner = "then-try-this";
     repo = "samplebrain";
-    rev = "v${version}_release";
+    tag = "v${finalAttrs.version}_release";
     hash = "sha256-/pMHmwly5Dar7w/ZawvR3cWQHw385GQv/Wsl1E2w5p4=";
   };
 
@@ -32,7 +30,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     qmake
     wrapQtAppsHook
   ];
@@ -42,16 +40,16 @@ stdenv.mkDerivation rec {
     liblo
     libsndfile
     portaudio
-    qtbase
+    libsForQt5.qtbase
   ];
 
   desktopItem = makeDesktopItem {
     type = "Application";
-    desktopName = pname;
-    name = pname;
+    desktopName = "samplebrain";
+    name = "samplebrain";
     comment = "A sample masher designed by Aphex Twin";
-    exec = pname;
-    icon = pname;
+    exec = "samplebrain";
+    icon = "samplebrain";
     categories = [ "Audio" ];
   };
 
@@ -65,9 +63,9 @@ stdenv.mkDerivation rec {
     description = "Custom sample mashing app";
     mainProgram = "samplebrain";
     homepage = "https://thentrythis.org/projects/samplebrain";
-    changelog = "https://gitlab.com/then-try-this/samplebrain/-/releases/v${version}_release";
+    changelog = "https://gitlab.com/then-try-this/samplebrain/-/releases/v${finalAttrs.version}_release";
     maintainers = with lib.maintainers; [ mitchmindtree ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
   };
-}
+})
