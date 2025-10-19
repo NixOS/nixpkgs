@@ -56,7 +56,6 @@ let
         ./0001-Removed-lookup-against-basic_string-uint8_t.patch
         ./0001-Implemented-char_traits-for-SEXP-octet_t.patch
       ];
-
       extraPassthru = {
         icu73 = icu73';
         icu77 = icu77';
@@ -109,8 +108,8 @@ rec {
   thunderbird-140 = common {
     applicationName = "Thunderbird ESR";
 
-    version = "140.3.0esr";
-    sha512 = "82a9c4aa250b01e0e4d53890b0337972e46504636831c1b6307b841c4c5aeec86482b2da3c1666c46e870a75f6cb54db9f759664688b382ad66efa647145d900";
+    version = "140.4.0esr";
+    sha512 = "23a7c99f51a346f9df6e0da257040a78da0b9afd70966a0fd5c0f5a4dcd4806520f8d510a382cf5d76a099aa889219a5eec185b774a6a9b65c4ccdcb75662554";
 
     updateScript = callPackage ./update.nix {
       attrPath = "thunderbirdPackages.thunderbird-140";
