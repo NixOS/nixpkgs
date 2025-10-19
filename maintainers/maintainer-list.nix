@@ -4526,6 +4526,12 @@
     githubId = 8228888;
     name = "Charlie Hanley";
   };
+  channinghe = {
+    email = "channinghey@gmail.com";
+    github = "ChanningHe";
+    githubId = 52875777;
+    name = "Channing He";
+  };
   chaoflow = {
     email = "flo@chaoflow.net";
     github = "chaoflow";
