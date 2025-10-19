@@ -34,5 +34,12 @@ regular@{
       # only a stripped down version is built which takes a lot less resources to build
       requiredSystemFeatures = [ ];
     };
+
+    libgit2 = pkgs.libgit2.overrideAttrs (old: {
+      # Drop the SSH buffer overflow patch to avoid rebuilding Nix
+      patches = lib.filter (p: !lib.hasSuffix "fix-ssh-custom-heap-buffer-overflow.patch" (toString p)) (
+        old.patches or [ ]
+      );
+    });
   };
 }
