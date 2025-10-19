@@ -12634,8 +12634,6 @@ with pkgs;
     inherit (linuxPackages) x86_energy_perf_policy;
   };
 
-  tony = libsForQt5.callPackage ../applications/audio/tony { };
-
   trustedqsl = tqsl; # Alias added 2019-02-10
 
   libtransmission_3 = transmission_3.override {
