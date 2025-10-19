@@ -908,13 +908,19 @@ in
           ''
             mkdir -vp ${lingerDir}
             cd ${lingerDir}
-            for user in $(ls); do
-              if ! id "$user" >/dev/null; then
-                echo "Removing linger for missing user $user"
-                rm --force -- "$user"
+            for user in *; do
+              # empty glob will run once
+              if [ -e "$user" ]; then
+                if ! id "$user" >/dev/null; then
+                  echo "Removing linger for missing user $user"
+                  rm --force -- "$user"
+                fi
               fi
             done
+            # using find here is overkill, suppress shellcheck warning re iterating over ls output
+            # shellcheck disable=2012
             ls | sort | comm -3 -1 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl disable-linger
+            # shellcheck disable=2012
             ls | sort | comm -3 -2 ${lingeringUsersFile} - | xargs -r ${pkgs.systemd}/bin/loginctl  enable-linger
           '';
 

@@ -18,6 +18,7 @@
           uid = 10001;
         };
       };
+      systemd.enableStrictShellChecks = true;
     };
 
   testScript =
