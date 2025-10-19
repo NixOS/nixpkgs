@@ -2778,8 +2778,6 @@ with pkgs;
 
   gemstash = callPackage ../development/tools/gemstash { };
 
-  lpd8editor = libsForQt5.callPackage ../applications/audio/lpd8editor { };
-
   lp_solve = callPackage ../applications/science/math/lp_solve {
     inherit (darwin) autoSignDarwinBinariesHook;
   };
