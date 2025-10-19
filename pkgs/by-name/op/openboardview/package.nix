@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   fetchpatch,
-  gitUpdater,
   cmake,
   pkg-config,
   python3,
@@ -67,9 +66,7 @@ stdenv.mkDerivation rec {
         --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gtk3 ]}
     '';
 
-  passthru.updateScript = gitUpdater {
-    ignoredVersions = ''.*\.90\..*'';
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = with lib; {
     description = "Linux SDL/ImGui edition software for viewing .brd files";
