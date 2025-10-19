@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   fpc,
   zip,
   makeWrapper,
@@ -60,6 +61,13 @@ stdenv.mkDerivation rec {
     rev = "9574f5791b7993067f03d2df03d625908bc3762f";
     sha256 = "0kyxzikd4ngx3nshjw0411x61zqq1b7l01lxw41rlcy4nad3r0vi";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/opensoldat/opensoldat/commit/6d619849af70ad8b35dad6d51e656ac45165d4c3.patch?full_index=1";
+      hash = "sha256-0WKWLuhoN4vo6gysvARzZooofQ+UIRKh7fG7/PoCB+E=";
+    })
+  ];
 
   nativeBuildInputs = [
     fpc
