@@ -6,21 +6,18 @@
   fetchFromGitHub,
   python3,
   python-qt,
-  qmake,
-  qtwebengine,
-  qtxmlpatterns,
   rtmidi,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "csound-qt";
   version = "1.1.3";
 
   src = fetchFromGitHub {
     owner = "CsoundQt";
     repo = "CsoundQt";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ZdQwWRAr6AKLmZ/L0lSxIlvWRLoZIKinn7BAQiR+luk=";
   };
 
@@ -28,7 +25,7 @@ stdenv.mkDerivation rec {
     ./rtmidipath.patch
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with libsForQt5; [
     qmake
     qtwebengine
     qtxmlpatterns
@@ -59,11 +56,11 @@ stdenv.mkDerivation rec {
     "PYTHON_VERSION=3.${python3.sourceVersion.minor}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "CsoundQt is a frontend for Csound with editor, integrated help, widgets and other features";
     homepage = "https://csoundqt.github.io/";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ hlolli ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ hlolli ];
   };
-}
+})
