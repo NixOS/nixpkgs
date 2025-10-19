@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "libpwquality";
     repo = "libpwquality";
-    tag = "${finalAttrs.pname}-${finalAttrs.version}";
+    tag = "libpwquality-${finalAttrs.version}";
     sha256 = "sha256-YjvHzd4iEBvg+qHOVJ7/y9HqyeT+QDalNE/jdNM9BNs=";
   };
 
