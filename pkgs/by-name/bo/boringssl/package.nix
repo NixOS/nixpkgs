@@ -47,6 +47,9 @@ buildGoModule (finalAttrs: {
       # Needed with GCC 12 but breaks on darwin (with clang)
       "-Wno-error=stringop-overflow"
     ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=character-conversion"
+    ]
   );
 
   buildPhase = ''
