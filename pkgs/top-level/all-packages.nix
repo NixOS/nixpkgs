@@ -3143,8 +3143,7 @@ with pkgs;
 
   jackett = callPackage ../servers/jackett { };
 
-  jamesdsp = qt6Packages.callPackage ../applications/audio/jamesdsp { };
-  jamesdsp-pulse = qt6Packages.callPackage ../applications/audio/jamesdsp {
+  jamesdsp-pulse = callPackage ../by-name/ja/jamesdsp/package.nix {
     usePipewire = false;
     usePulseaudio = true;
   };
