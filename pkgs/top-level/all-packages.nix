@@ -3718,8 +3718,6 @@ with pkgs;
 
   packagekit = callPackage ../tools/package-management/packagekit { };
 
-  padthv1 = libsForQt5.callPackage ../applications/audio/padthv1 { };
-
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
