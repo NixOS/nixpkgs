@@ -79,7 +79,14 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optional (!onigurumaSupport) "--with-oniguruma=no"
   # jq is linked to libjq:
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}"
+  ++ lib.optionals stdenv.hostPlatform.isCygwin [
+    # these are both in -lm, but not in the headers, which confuses AC
+    "ac_cv_lib_m_scalb=no"
+    "ac_cv_lib_m_significand=no"
+  ];
+
+  makeFlags = lib.optional stdenv.hostPlatform.isCygwin "libjq_la_LDFLAGS=-no-undefined";
 
   # jq binary includes the whole `configureFlags` in:
   # https://github.com/jqlang/jq/commit/583e4a27188a2db097dd043dd203b9c106bba100
@@ -93,7 +100,9 @@ stdenv.mkDerivation (finalAttrs: {
       "$bin/bin/jq"
   '';
 
-  doInstallCheck = true;
+  doInstallCheck =
+    # shtest aborts: https://github.com/jqlang/jq/issues/3129
+    !stdenv.hostPlatform.isCygwin;
   installCheckTarget = "check";
 
   preInstallCheck = ''
