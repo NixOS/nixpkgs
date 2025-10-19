@@ -1,4 +1,5 @@
 {
+  lib,
   cava,
   fetchFromGitHub,
   nix-update-script,
@@ -34,5 +35,6 @@ cava.overrideAttrs (old: rec {
   meta = old.meta // {
     homepage = "https://github.com/LukashonakV/cava";
     description = "Fork of CAVA to build it as a shared library";
+    maintainers = old.meta.maintainers ++ [ lib.maintainers.perchun ];
   };
 })
