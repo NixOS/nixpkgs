@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   pname = "opensmt";
-  version = "2.7.0";
+  version = "2.9.2";
 
   src = fetchFromGitHub {
     owner = "usi-verification-and-security";
     repo = "opensmt";
     rev = "v${version}";
-    sha256 = "sha256-zhNNnwc41B4sNq50kPub29EYhqV+FoDKRD/CLHnVyZw=";
+    sha256 = "sha256-xKpYABMn2bsXRg2PMjiMhsx6+FbAsxitLRnmqa1kmu0=";
   };
 
   nativeBuildInputs = [
@@ -31,17 +31,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libedit
     gmpxx
+    gtest
   ]
   ++ lib.optional enableReadline readline;
 
   preConfigure = ''
     substituteInPlace test/CMakeLists.txt \
-      --replace 'FetchContent_Populate' '#FetchContent_Populate'
+      --replace-fail 'FetchContent_MakeAvailable' '#FetchContent_MakeAvailable'
   '';
-  cmakeFlags = [
-    "-Dgoogletest_SOURCE_DIR=${gtest.src}"
-    "-Dgoogletest_BINARY_DIR=./gtest-build"
-  ];
 
   meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
