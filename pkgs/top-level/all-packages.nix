@@ -3211,8 +3211,6 @@ with pkgs;
     inherit (darwin) sigtool;
   };
 
-  kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
-
   kwalletcli = libsForQt5.callPackage ../tools/security/kwalletcli { };
 
   ksmoothdock = libsForQt5.callPackage ../applications/misc/ksmoothdock { };
