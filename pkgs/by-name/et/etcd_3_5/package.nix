@@ -2,7 +2,6 @@
   applyPatches,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   k3s,
   lib,
   nixosTests,
@@ -10,11 +9,11 @@
 }:
 
 let
-  version = "3.5.22";
-  etcdSrcHash = "sha256-tS1IFMxfb8Vk9HJTAK+BGPZiVE3ls4Q2DQSerALOQCc=";
-  etcdServerVendorHash = "sha256-ul3R0c6RoCqLvlD2dfso1KwfHjsHfzQiUVJZJmz28ks=";
-  etcdUtlVendorHash = "sha256-S2pje2fTDaZwf6jnyE2YXWcs/fgqF51nxCVfEwg0Gsw=";
-  etcdCtlVendorHash = "sha256-lZ6o0oWUsc3WiCa87ynm7UAG6VxTf81a301QMSPOvW0=";
+  version = "3.5.24";
+  etcdSrcHash = "sha256-8qzgMiA/ATSFR5XTzWQhK1SmykHkT/FqBNG0RO93H9w=";
+  etcdServerVendorHash = "sha256-yCazbIcCOuabYDu7Tl0UTx47UiF/Rhg5O6r2kb+w4SY=";
+  etcdUtlVendorHash = "sha256-v8JQmyvHhvz7l8i8kwXVX9sAylElVSUnxKD5oUwQDUw=";
+  etcdCtlVendorHash = "sha256-UNdomi/3Q92CEsUYkt49vFF1Dp1QIFGK7wF/08U3dio=";
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -23,13 +22,6 @@ let
       tag = "v${version}";
       hash = etcdSrcHash;
     };
-
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/etcd-io/etcd/commit/31650ab0c8df43af05fc4c13b48ffee59271eec7.patch";
-        hash = "sha256-Q94HOLFx2fnb61wMQsAUT4sIBXfxXqW9YEayukQXX18=";
-      })
-    ];
   };
   env = {
     CGO_ENABLED = 0;
