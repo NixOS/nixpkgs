@@ -118,6 +118,7 @@ buildPythonPackage rec {
     "test_class_alias_having_doccomment"
     "test_class_alias_for_imported_object_having_doccomment"
     "test_decorators"
+    "test_xml_warnings"
     # racy with too many threads
     # https://github.com/NixOS/nixpkgs/issues/353176
     "test_document_toc_only"
