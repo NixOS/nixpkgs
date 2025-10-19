@@ -274,7 +274,8 @@
     "index.html#sec-bower",
     "index.html#ssec-bower2nix-troubleshooting",
     "index.html#ssec-bower2nix-usage",
-    "index.html#ssec-build-bower-components"
+    "index.html#ssec-build-bower-components",
+    "index.html#aws-c-common"
   ],
   "sec-nixpkgs-release-25.11-lib": [
     "release-notes.html#sec-nixpkgs-release-25.11-lib"
@@ -2338,9 +2339,6 @@
   ],
   "setup-hook-autopatchelfhook": [
     "index.html#setup-hook-autopatchelfhook"
-  ],
-  "aws-c-common": [
-    "index.html#aws-c-common"
   ],
   "bmake-hook": [
     "index.html#bmake-hook"
