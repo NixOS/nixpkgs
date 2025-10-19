@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -58,6 +59,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  # Lack of network sandboxing leads to conflicting listeners when testing
+  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # benchmarking requires pytest-codespeed
