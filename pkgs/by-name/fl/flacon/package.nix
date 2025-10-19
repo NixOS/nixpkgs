@@ -17,30 +17,28 @@
   monkeysAudio,
   sox,
   gtk3,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "flacon";
   version = "12.0.0";
 
   src = fetchFromGitHub {
     owner = "flacon";
     repo = "flacon";
-    rev = "v${version}";
-    sha256 = "sha256-r9SdQg6JTMoGxO2xUtkkBe5F5cajnsndZEq20BjJGuU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-r9SdQg6JTMoGxO2xUtkkBe5F5cajnsndZEq20BjJGuU=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
     libuchardet
     taglib
   ];
@@ -64,12 +62,12 @@ stdenv.mkDerivation rec {
       --prefix PATH : "$bin_path";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Extracts audio tracks from an audio CD image to separate tracks";
     mainProgram = "flacon";
     homepage = "https://flacon.github.io/";
-    license = licenses.lgpl21;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ snglth ];
+    license = lib.licenses.lgpl21;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ snglth ];
   };
-}
+})

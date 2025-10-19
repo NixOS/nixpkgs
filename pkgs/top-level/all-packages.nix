@@ -11055,8 +11055,6 @@ with pkgs;
 
   firewalld-gui = firewalld.override { withGui = true; };
 
-  flacon = libsForQt5.callPackage ../applications/audio/flacon { };
-
   fldigi = callPackage ../applications/radio/fldigi {
     hamlib = hamlib_4;
   };
