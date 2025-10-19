@@ -11,26 +11,27 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "comodoro";
-  version = "0.0.10";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner = "soywod";
     repo = "comodoro";
     rev = "v${version}";
-    hash = "sha256-Y9SuxqI8wvoF0+X6CLNDlSFCwlSU8R73NYF/LjACP18=";
+    hash = "sha256-FnNNJ6WHR8KCsW+1hPIYddxQlUvpPc+SRbaxAcdVEUk=";
   };
 
-  cargoHash = "sha256-HzutYDphJdhNJ/jwyA5KVYr6fIutf73rYzKxrzVki9k=";
+  cargoHash = "sha256-2Drty/dj9HCG86rPt4RgexU83vKMnGFETbOT11Puy/0=";
 
   nativeBuildInputs = lib.optional (installManPages || installShellCompletions) installShellFiles;
 
-  buildNoDefaultFeatures = true;
+  # Enable upstream default features to include hooks.
+  buildNoDefaultFeatures = false;
   buildFeatures = lib.optional withTcp "tcp";
 
   postInstall =
     lib.optionalString installManPages ''
       mkdir -p $out/man
-      $out/bin/comodoro man $out/man
+      $out/bin/comodoro manual $out/man
       installManPage $out/man/*
     ''
     + lib.optionalString installShellCompletions ''
@@ -47,5 +48,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ soywod ];
     mainProgram = "comodoro";
+    platforms = lib.platforms.linux;
   };
 }
