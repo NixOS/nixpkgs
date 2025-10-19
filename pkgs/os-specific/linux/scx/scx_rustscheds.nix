@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage {
   };
 
   hardeningDisable = [
-    "stackprotector"
     "zerocallusedregs"
   ];
 
