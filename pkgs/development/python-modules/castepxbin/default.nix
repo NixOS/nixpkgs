@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
   flit-core,
   numpy,
@@ -11,23 +10,17 @@
 
 buildPythonPackage rec {
   pname = "castepxbin";
-  version = "0.3.0";
+  version = "0.3.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "zhubonan";
     repo = "castepxbin";
     tag = "v${version}";
-    hash = "sha256-6kumVnm4PLRxuKO6Uz0iHzfYuu21hFC7EPRsc3S1kxE=";
+    hash = "sha256-M+OoKr9ODIp47gt64hf47A1PblyZpBzulKI7nEm8hdo=";
   };
 
   build-system = [ flit-core ];
-
-  pythonRelaxDeps = [
-    "numpy"
-  ];
 
   dependencies = [
     numpy
