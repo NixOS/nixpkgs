@@ -2122,3 +2122,12 @@ builtins.intersectAttrs super {
 
   botan-bindings = super.botan-bindings.override { botan = pkgs.botan3; };
 }
+
+// lib.optionalAttrs pkgs.config.allowAliases {
+  "2captcha" = self._2captcha;
+  "3d-graphics-example" = self._3d-graphics-examples;
+  "3dmodels" = self._3dmodels;
+  "4Blocks" = self._4Blocks;
+  "assert" = self._assert;
+  "if" = self._if;
+}
