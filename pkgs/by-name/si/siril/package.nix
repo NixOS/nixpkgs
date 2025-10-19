@@ -11,7 +11,7 @@
   gtk3,
   libconfig,
   gnuplot,
-  opencv,
+  opencv4,
   json-glib,
   fftwFloat,
   cfitsio,
@@ -30,17 +30,25 @@
   curl,
   versionCheckHook,
   nix-update-script,
+  gtksourceview4,
+  lcms2,
+  gettext,
+  desktop-file-utils,
+  appstream-glib,
+  yyjson,
+  libjxl,
+  libxisf,
+  libgit2,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "siril";
-  version = "1.2.6";
+  version = "1.4.0-beta4";
 
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
     tag = finalAttrs.version;
-    hash = "sha256-pSJp4Oj8x4pKuwPSaSyGbyGfpnanoWBxAdXtzGTP7uA=";
+    hash = "sha256-oWw8LmcFXQkbpZz1Vvo1MSCRjAa3WexHrKGsJWpZnIA=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +59,9 @@ stdenv.mkDerivation (finalAttrs: {
     git
     criterion
     wrapGAppsHook3
+    gettext
+    desktop-file-utils
+    appstream-glib
   ];
 
   buildInputs = [
@@ -59,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gsl
     exiv2
     gnuplot
-    opencv
+    opencv4
     fftwFloat
     librtprocess
     wcslib
@@ -73,6 +84,12 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     json-glib
     curl
+    gtksourceview4
+    lcms2
+    yyjson
+    libjxl
+    libxisf
+    libgit2
   ];
 
   # Necessary because project uses default build dir for flatpaks/snaps
@@ -81,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Meson fails to find libcurl unless the option is specifically enabled
   configureScript = ''
-    ${meson}/bin/meson setup -Denable-libcurl=yes --buildtype release nixbld .
+    ${meson}/bin/meson setup -Dlibcurl=true --buildtype release nixbld .
   '';
 
   postConfigure = ''
