@@ -1,6 +1,5 @@
-# This test runs simple etcd cluster
+{ pkgs, etcd, ... }:
 
-{ lib, pkgs, ... }:
 let
   runWithOpenSSL =
     file: cmd:
@@ -77,6 +76,7 @@ let
     services = {
       etcd = {
         enable = true;
+        package = etcd;
         keyFile = etcd_key;
         certFile = etcd_cert;
         trustedCaFile = ca_pem;
@@ -99,10 +99,9 @@ let
     networking.firewall.allowedTCPPorts = [ 2380 ];
   };
 in
-{
-  name = "etcd-cluster";
 
-  meta.maintainers = with lib.maintainers; [ offline ];
+{
+  name = "etcd-multi-node";
 
   nodes = {
     node1 =
@@ -170,4 +169,5 @@ in
         node1.succeed("etcdctl put /foo/bar 'Hello degraded world'")
         node1.succeed("etcdctl get /foo/bar | grep 'Hello degraded world'")
   '';
+
 }

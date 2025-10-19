@@ -132,11 +132,7 @@ symlinkJoin {
     deps = {
       inherit etcdserver etcdutl etcdctl;
     };
-    # Fix-Me: Tests for etcd 3.6 needs work.
-    # tests = {
-    #   inherit (nixosTests) etcd etcd-cluster;
-    #   k3s = k3s.passthru.tests.etcd;
-    # };
+    tests = nixosTests.etcd."3_6";
     updateScript = ./update.sh;
   };
 
