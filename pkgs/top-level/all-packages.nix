@@ -12467,8 +12467,6 @@ with pkgs;
 
   socialscan = with python3.pkgs; toPythonApplication socialscan;
 
-  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
-
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
 
   squeezelite-pulse = callPackage ../by-name/sq/squeezelite/package.nix {

@@ -23,17 +23,17 @@
   serd,
   sord,
   capnproto,
-  wrapQtAppsHook,
   pkg-config,
   libjack2,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sonic-lineup";
   version = "1.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/2765/${pname}-${version}.tar.gz";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/2765/sonic-lineup-${finalAttrs.version}.tar.gz";
     sha256 = "0k45k9fawcm4s5yy05x00pgww7j8m7k2cxcc7g0fn9vqy7vcbq9h";
   };
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     capnproto # capnp
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   strictDeps = true;
@@ -86,12 +86,12 @@ stdenv.mkDerivation rec {
     sed -i 's/sub_test_svcore_/#sub_test_svcore_/' sonic-lineup.pro
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Comparative visualisation of related audio recordings";
     mainProgram = "sonic-lineup";
     homepage = "https://www.sonicvisualiser.org/sonic-lineup/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.vandenoever ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ vandenoever ];
+    platforms = lib.platforms.linux;
   };
-}
+})
