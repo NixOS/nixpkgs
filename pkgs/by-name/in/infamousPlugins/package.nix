@@ -42,6 +42,17 @@ stdenv.mkDerivation rec {
     zita-resampler
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 4.0)'
+    find src -name "CMakeLists.txt" -type f | while read -r file; do
+      substituteInPlace "$file" --replace-fail \
+        'cmake_minimum_required(VERSION 2.8)' \
+        'cmake_minimum_required(VERSION 4.0)'
+    done
+  '';
+
   meta = with lib; {
     homepage = "https://ssj71.github.io/infamousPlugins";
     description = "Collection of open-source LV2 plugins";
