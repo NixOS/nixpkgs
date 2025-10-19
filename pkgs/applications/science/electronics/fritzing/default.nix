@@ -100,11 +100,14 @@ stdenv.mkDerivation {
   '';
 
   env = {
-    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-      "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
-      "-I${svgpp}/include"
-      "-I${clipper}/include/polyclipping"
-    ];
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+      [
+        "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
+        "-I${svgpp}/include"
+        "-I${clipper}/include/polyclipping"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-F${qt5compat}/lib" ]
+    );
     NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
   };
 
