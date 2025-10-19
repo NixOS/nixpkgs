@@ -20,8 +20,8 @@ mkDerivation {
   pname = "distribution-nixpkgs";
   version = "1.7.1.1-unstable-2025-11-20";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/be62a6c198c6fd082cd5660170fa23a709d92c8e.tar.gz";
-    sha256 = "15bfhl0ypnnpgglxc7smppqi3w8w04zi97gh65kk1p6drlg29f47";
+    url = "https://github.com/NixOS/cabal2nix/archive/459859839cfe4fb352a29c1a72a1c4f0f537a1b8.tar.gz";
+    sha256 = "1443hlbz29y2dn22kf91zx7g284zp3l2vgw6jg4wgx66v2sxrqii";
   };
   postUnpack = "sourceRoot+=/distribution-nixpkgs; echo source root reset to $sourceRoot";
   enableSeparateDataOutput = true;
