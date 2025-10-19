@@ -10764,8 +10764,6 @@ with pkgs;
     pdfstudioviewer
     ;
 
-  airwave = libsForQt5.callPackage ../applications/audio/airwave { };
-
   androidStudioPackages = recurseIntoAttrs (callPackage ../applications/editors/android-studio { });
   android-studio = androidStudioPackages.stable;
   android-studio-full = android-studio.full;

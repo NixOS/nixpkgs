@@ -1,14 +1,10 @@
 {
   lib,
-  stdenv,
   multiStdenv,
   fetchFromGitHub,
-  requireFile,
-  unzip,
   wine,
   cmake,
   makeWrapper,
-  wrapQtAppsHook,
   file,
   libX11,
   qt5,
@@ -46,7 +42,7 @@ multiStdenv.mkDerivation {
   nativeBuildInputs = [
     cmake
     makeWrapper
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
