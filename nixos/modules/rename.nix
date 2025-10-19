@@ -411,6 +411,12 @@ in
     (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
     '')
+    (mkRemovedOptionModule [ "security" "rngd" ] ''
+      rngd is not necessary for any device that the kernel recognises
+      as an hardware RNG, as it will automatically run the krngd task
+      to periodically collect random data from the device and mix it
+      into the kernel's RNG.
+    '')
     # Do NOT add any option renames here, see top of the file
   ];
 }
