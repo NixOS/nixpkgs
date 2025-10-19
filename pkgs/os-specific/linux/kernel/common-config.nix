@@ -1090,7 +1090,11 @@ let
         HID_BATTERY_STRENGTH = yes;
         # enabled by default in x86_64 but not arm64, so we do that here
         HIDRAW = yes;
-        # 6.18-rc1 fails to link otherwise, at least on aarch64
+
+        # https://lore.kernel.org/all/20251013-hid-haptic-kconfig-fix-v1-1-b1ad90732625@google.com/
+        # Hopefully this is fixed properly before 6.18 is released
+        # For now, we have to use HID_HAPTIC=y, which requires HID=y
+        HID = whenAtLeast "6.18" yes;
         HID_HAPTIC = whenAtLeast "6.18" yes;
 
         # Enable loading HID fixups as eBPF from userspace
