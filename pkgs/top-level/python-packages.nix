@@ -13697,6 +13697,8 @@ self: super: with self; {
 
   pyomo = callPackage ../development/python-modules/pyomo { };
 
+  pyopen-wakeword = callPackage ../development/python-modules/pyopen-wakeword/default.nix { };
+
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
   pyopengl = callPackage ../development/python-modules/pyopengl {
