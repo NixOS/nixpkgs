@@ -13179,8 +13179,6 @@ with pkgs;
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
 
-  drumkv1 = libsForQt5.callPackage ../applications/audio/drumkv1 { };
-
   phonemizer = with python3Packages; toPythonApplication phonemizer;
 
   ### GAMES

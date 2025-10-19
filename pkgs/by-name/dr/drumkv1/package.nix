@@ -13,12 +13,12 @@
   xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "drumkv1";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/drumkv1/drumkv1-${version}.tar.gz";
+    url = "mirror://sourceforge/drumkv1/drumkv1-${finalAttrs.version}.tar.gz";
     hash = "sha256-Z9F9lbLSAJRlVh7tnSMNTlK7FiZhhlVfeHPlbbVuWXk=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Old-school drum-kit sampler synthesizer with stereo fx";
     mainProgram = "drumkv1_jack";
     homepage = "http://drumkv1.sourceforge.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.theredstonedev ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ theredstonedev ];
   };
-}
+})
