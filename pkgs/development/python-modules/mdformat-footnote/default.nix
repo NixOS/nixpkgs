@@ -5,18 +5,21 @@
   flit-core,
   mdformat,
   mdit-py-plugins,
+  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mdformat-footnote";
-  version = "0.1.2";
+  version = "0.1.1";
   pyproject = true;
+
+  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "executablebooks";
     repo = "mdformat-footnote";
     tag = "v${version}";
-    hash = "sha256-JVxztVcp60LynacPw8tBrmSfe6Ool8zyK+aYwaKhyiA=";
+    hash = "sha256-DUCBWcmB5i6/HkqxjlU3aTRO7i0n2sj+e/doKB8ffeo=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -31,7 +34,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Footnote format addition for mdformat";
     homepage = "https://github.com/executablebooks/mdformat-footnote";
-    changelog = "https://github.com/executablebooks/mdformat-footnote/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ aldoborrero ];
   };
