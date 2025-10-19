@@ -8,14 +8,14 @@
 
 stdenv.mkDerivation rec {
   pname = "orocos-kdl";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "orocos";
     repo = "orocos_kinematics_dynamics";
-    tag = "v${version}";
-    sha256 = "15ky7vw461005axx96d0f4zxdnb9dxl3h082igyd68sbdb8r1419";
+    tag = "${version}";
     # Needed to build Python bindings
+    hash = "sha256-4pPU+6uMMYLGq2V46wmg6lHFVhwFXrEg7PfnWGAI2is=";
     fetchSubmodules = true;
   };
 
