@@ -16,8 +16,6 @@
   libsndfile,
   pkg-config,
   libpulseaudio,
-  qtbase,
-  qtsvg,
   redland,
   rubberband,
   serd,
@@ -29,19 +27,19 @@
   libfishsound,
   libid3tag,
   opusfile,
-  wrapQtAppsHook,
   meson,
   ninja,
   cmake,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sonic-visualiser";
   version = "4.5.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/2841/${pname}-${version}.tar.gz";
-    sha256 = "1sgg4m3035a03ldipgysz7zqfa9pqaqa4j024gyvvcwh4ml8iasr";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/2841/sonic-visualiser-${finalAttrs.version}.tar.gz";
+    hash = "sha256-WauIaCWQs739IwJIorDCNymH//navxsbHUCVAUYl7+k=";
   };
 
   nativeBuildInputs = [
@@ -49,12 +47,12 @@ stdenv.mkDerivation rec {
     ninja
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
     libsndfile
-    qtbase
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtsvg
     fftw
     fftwFloat
     bzip2
@@ -82,11 +80,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "View and analyse contents of music audio files";
     homepage = "https://www.sonicvisualiser.org/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ marcweber ];
+    platforms = lib.platforms.linux;
   };
-}
+})
