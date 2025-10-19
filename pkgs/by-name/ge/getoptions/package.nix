@@ -4,7 +4,6 @@
   fetchFromGitHub,
   shellspec,
   busybox-sandbox-shell,
-  ksh,
   mksh,
   yash,
   zsh,
@@ -27,7 +26,6 @@ stdenvNoCC.mkDerivation rec {
 
   nativeCheckInputs = [
     shellspec
-    ksh
     mksh
     yash
     zsh

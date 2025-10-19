@@ -1318,6 +1318,7 @@ mapAliases {
   krun = throw "'krun' has been renamed to/replaced by 'muvm'"; # Added 2025-05-01
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
+  ksh = throw "'ksh' has been removed, as upstream was archived"; # Added 2025-10-19
   kubei = kubeclarity; # Added 2023-05-20
   kubo-migrator-all-fs-repo-migrations = kubo-fs-repo-migrations; # Added 2024-09-24
 
