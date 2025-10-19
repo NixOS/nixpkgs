@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -35,6 +36,8 @@ buildGoModule rec {
   postInstall = ''
     install -Dm755 bin/* bin/functional/cmd/* -t $out/bin
   '';
+
+  passthru.tests = nixosTests.etcd."3_4";
 
   meta = {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
