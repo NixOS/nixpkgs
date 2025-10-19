@@ -14,14 +14,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "hatch";
-  version = "1.14.2";
+  version = "1.15.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "hatch";
     tag = "hatch-v${version}";
-    hash = "sha256-LrfPDgpb9AQsaiYVb2MNdOfoIBbStZMKmESCbVhfn+s=";
+    hash = "sha256-mdavpv05jnS1RZPboyJI6rRApGSr87h7x3GW3HotB94=";
   };
 
   patches = [ (replaceVars ./paths.patch { uv = lib.getExe python3Packages.uv; }) ];
