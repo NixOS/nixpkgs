@@ -2,7 +2,6 @@
   applyPatches,
   buildGoModule,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
   k3s,
   lib,
@@ -12,11 +11,11 @@
 }:
 
 let
-  version = "3.6.4";
-  etcdSrcHash = "sha256-otz+06cOD2MVnMZWKId1GN+MeZfnDbdudiYfVCKdzuo=";
-  etcdCtlVendorHash = "sha256-kTH+s/SY+xwo6kt6iPJ7XDhin0jPk0FBr0eOe/717bE=";
-  etcdUtlVendorHash = "sha256-P0yx9YMMD9vT7N6LOlo26EAOi+Dj33p3ZjAYEoaL19A=";
-  etcdServerVendorHash = "sha256-kgbCT1JxI98W89veCItB7ZfW4d9D3/Ip3tOuFKEX9v4=";
+  version = "3.6.5";
+  etcdSrcHash = "sha256-d0Ujg9ynnnSW0PYYYrNEmPtLnYW2HcCl+zcVo8ACiS0=";
+  etcdCtlVendorHash = "sha256-5r3Q+AfWp23tzbYQoD1hXEzRttJrUUKQSpcEV3GIlOE=";
+  etcdUtlVendorHash = "sha256-funO7EEJs28w4sk4sHVA/KR1TiHumVKNs0Gn/xFl4ig=";
+  etcdServerVendorHash = "sha256-OtWpX5A+kyQej2bueTqmNf62oKmXGQzjexzXlK/XJms=";
 
   src = applyPatches {
     src = fetchFromGitHub {
@@ -25,12 +24,6 @@ let
       tag = "v${version}";
       hash = etcdSrcHash;
     };
-    patches = [
-      (fetchpatch {
-        url = "https://github.com/etcd-io/etcd/commit/31650ab0c8df43af05fc4c13b48ffee59271eec7.patch";
-        hash = "sha256-Q94HOLFx2fnb61wMQsAUT4sIBXfxXqW9YEayukQXX18=";
-      })
-    ];
   };
 
   env = {
