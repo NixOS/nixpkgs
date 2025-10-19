@@ -2,9 +2,8 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  qtserialport,
+  qt5,
   cmake,
-  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation {
@@ -23,10 +22,10 @@ stdenv.mkDerivation {
       --replace "/Applications" "$out/Applications"
   '';
 
-  buildInputs = [ qtserialport ];
+  buildInputs = [ qt5.qtserialport ];
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
 
   postInstall =
