@@ -8768,8 +8768,6 @@ with pkgs;
 
   vc = callPackage ../development/libraries/vc { };
 
-  vc_0_7 = callPackage ../development/libraries/vc/0.7.nix { };
-
   vencord-web-extension = callPackage ../by-name/ve/vencord/package.nix { buildWebExtension = true; };
 
   vid-stab = callPackage ../development/libraries/vid-stab {
