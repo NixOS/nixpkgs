@@ -1217,18 +1217,30 @@ with self;
     ];
   };
 
-  ppx_derive_at_runtime = janePackage {
-    pname = "ppx_derive_at_runtime";
-    hash = "sha256-Y/z4BKFRt3z1lUGdc7SznIv/ys//dZHoPSnsouj1GtI=";
-    meta.description = "Define a new ppx deriver by naming a runtime module";
-    propagatedBuildInputs = [
-      base
-      expect_test_helpers_core
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_derive_at_runtime = janePackage (
+    {
+      pname = "ppx_derive_at_runtime";
+      meta.description = "Define a new ppx deriver by naming a runtime module";
+      propagatedBuildInputs = [
+        base
+        expect_test_helpers_core
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-bbUV2t8MhqDCHDJp7fqJTnRrfZdYO8DLnygqQF0+ouY=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-Y/z4BKFRt3z1lUGdc7SznIv/ys//dZHoPSnsouj1GtI=";
+        }
+    )
+  );
 
   ppx_diff = janePackage (
     {
