@@ -114,7 +114,7 @@ stdenv.mkDerivation {
   doInstallCheck = true;
 
   preInstallCheck = ''
-    export JULIA_TEST_USE_MULTIPLE_WORKERS=true
+    export JULIA_TEST_USE_MULTIPLE_WORKERS=${if stdenv.hostPlatform.isDarwin then "false" else "true"}
     # Some tests require read/write access to $HOME.
     # And $HOME cannot be equal to $TMPDIR as it causes test failures
     export HOME=$(mktemp -d)
