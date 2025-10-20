@@ -16,23 +16,23 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "mdformat-footnote";
     tag = "v${version}";
-    hash = "sha256-JVxztVcp60LynacPw8tBrmSfe6Ool8zyK+aYwaKhyiA=";
+    hash = "sha256-QiekcxKfJGWog8rfSL6VIDHdo7rpw8ftl/dDJpVpdUg=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     mdformat
     mdit-py-plugins
   ];
 
   pythonImportsCheck = [ "mdformat_footnote" ];
 
-  meta = with lib; {
+  meta = {
     description = "Footnote format addition for mdformat";
     homepage = "https://github.com/executablebooks/mdformat-footnote";
     changelog = "https://github.com/executablebooks/mdformat-footnote/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aldoborrero ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aldoborrero ];
   };
 }

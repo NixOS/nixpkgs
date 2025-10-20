@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  runCommand,
   cmake,
   pkg-config,
   qttools,
@@ -50,6 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = "mkdir -p $out; cp -R lib $out/";
 
+  passthru.tests = {
+    test-version = runCommand "${finalAttrs.pname}-test" { } ''
+      QT_QPA_PLATFORM="offscreen" ${
+        lib.getExe (qtcreator.withPackages [ finalAttrs.finalPackage ])
+      } --version > $out
+      cat $out | grep 'qodeassist ${finalAttrs.version}'
+    '';
+  };
+
   meta = {
     description = "AI-powered coding assistant plugin for Qt Creator";
     longDescription = ''
@@ -62,6 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Palm1r/QodeAssist";
     license = lib.licenses.gpl3Only;
     maintainers = [ lib.maintainers.zatm8 ];
-    platforms = lib.platforms.linux;
+    platforms = qtcreator.meta.platforms;
   };
 })
