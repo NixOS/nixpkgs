@@ -796,13 +796,13 @@
     "vendorHash": "sha256-pnOwYupql5EWoA0l72RENXeAQELaFHlDorJLQKJUz+c="
   },
   "kislerdm_neon": {
-    "hash": "sha256-D1KWC2D4OLMUSWKzQmiZaDrATCv4SEUWwk6SK/o1U5M=",
+    "hash": "sha256-7/O+Brfvogpk9z5hX7hi4S7/YQAU3NPd9U6x0oHfQGU=",
     "homepage": "https://registry.terraform.io/providers/kislerdm/neon",
     "owner": "kislerdm",
     "repo": "terraform-provider-neon",
-    "rev": "v0.9.0",
+    "rev": "v0.10.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-8WY2iEOFOwx7zDMps5cctxzv1stRseS/OUaHkMDuBYs="
+    "vendorHash": "sha256-q3tvE5WZb7UXe/srfXqQZVnsqG06PITzDwKYS7sRgzo="
   },
   "kreuzwerker_docker": {
     "hash": "sha256-THMGfpRrPFReRdYusdrJGnUKEUtxy4Pu+HdcceK2FNc=",
