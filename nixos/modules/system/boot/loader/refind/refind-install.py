@@ -275,11 +275,11 @@ def install_bootloader() -> None:
     copy_file(efi_path, dest_path)
 
     if not config('efiRemovable') and not config('canTouchEfiVariables'):
-        print('warning: boot.loader.efi.canTouchEfiVariables is set to false while boot.loader.limine.efiInstallAsRemovable.\n  This may render the system unbootable.')
+        print('warning: boot.loader.efi.canTouchEfiVariables is set to false while boot.loader.refind.efiInstallAsRemovable.\n  This may render the system unbootable.')
 
     if config('canTouchEfiVariables'):
         if config('efiRemovable'):
-            print('note: boot.loader.limine.efiInstallAsRemovable is true, no need to add EFI entry.')
+            print('note: boot.loader.refind.efiInstallAsRemovable is true, no need to add EFI entry.')
         else:
             efibootmgr = os.path.join(str(config('efiBootMgrPath')), 'bin', 'efibootmgr')
             efi_partition = find_mounted_device(str(config('efiMountPoint')))
@@ -292,7 +292,7 @@ def install_bootloader() -> None:
             if matches := re.findall(r'Boot([0-9a-fA-F]{4})\*? rEFInd', efibootmgr_output):
                 refind_boot_entry = matches[0]
 
-            # If there's already a Limine entry, replace it
+            # If there's already a rEFInd entry, replace it
             if refind_boot_entry:
                 boot_order = re.findall(r'BootOrder: ((?:[0-9a-fA-F]{4},?)*)', efibootmgr_output)[0]
 
