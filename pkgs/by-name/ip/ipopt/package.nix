@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Software package for large-scale nonlinear optimization";
     homepage = "https://projects.coin-or.org/Ipopt";
-    license = lib.licenses.epl10;
+    license = lib.licenses.epl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       nim65s
