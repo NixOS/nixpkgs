@@ -123,6 +123,7 @@ let
       #pragma once
       #include_next <net/route.h>
       $(sed -n \
+        -e '/^#define RTM_/p' \
         -e '/^struct rt_msghdr_ext\s*{/,/^};/p' \
         -e '/^struct rt_reach_info\s*{/,/^};/p' \
         -e '/^struct rtstat_64\s*{/,/^};/p' \
@@ -294,9 +295,11 @@ let
         -e '/^#define SIOCGIFAGENTDATA\s/p' \
         -e '/^#define SIOCGIFAGENTIDS\s/p' \
         -e '/^#define SIOCGIFCLAT46ADDR\s/p' \
+        -e '/^#define SIOCGIFCONSTRAINED\s/p' \
         -e '/^#define SIOCGIFDELEGATE\s/p' \
         -e '/^#define SIOCGIFDESC\s/p' \
         -e '/^#define SIOCGIFEFLAGS\s/p' \
+        -e '/^#define SIOCGIFGENERATIONID\s/p' \
         -e '/^#define SIOCGIFGETRTREFCNT\s/p' \
         -e '/^#define SIOCGIFINTERFACESTATE\s/p' \
         -e '/^#define SIOCGIFLINKPARAMS\s/p' \
@@ -321,6 +324,7 @@ let
         -e '/^#define SIOCSIF2KCL\s/p' \
         -e '/^#define SIOCSIFCONSTRAINED\s/p' \
         -e '/^#define SIOCSIFDESC\s/p' \
+        -e '/^#define SIOCSIFDISABLEINPUT\s/p' \
         -e '/^#define SIOCSIFDISABLEOUTPUT\s/p' \
         -e '/^#define SIOCSIFEXPENSIVE\s/p' \
         -e '/^#define SIOCSIFINTERFACESTATE\s/p' \
@@ -331,7 +335,6 @@ let
         -e '/^#define SIOCSIFMPKLOG\s/p' \
         -e '/^#define SIOCSIFNOACKPRIO\s/p' \
         -e '/^#define SIOCSIFNOTRAFFICSHAPING\s/p' \
-        -e '/^#define SIOCSIFDISABLEINPUT\s/p' \
         -e '/^#define SIOCSIFPROBECONNECTIVITY\s/p' \
         -e '/^#define SIOCSIFSUBFAMILY\s/p' \
         -e '/^#define SIOCSIFTHROTTLE\s/p' \
@@ -343,6 +346,7 @@ let
       #undef ifreq
       #include_next <sys/sockio.h>
       EOF
+      ln -s "$out/include/sys/sockio.h" "$out/include/sys/sockio_private.h"
 
       cat <<EOF > "$out/include/sys/sys_domain.h"
       #pragma once
@@ -385,7 +389,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-HkcIvKB4ektuk+3J/Sque8Pr5dMeNFZRlENuiu3KdsA=";
+  xcodeHash = "sha256-1RJ/s9vnfCGY2Vc2XH8dg8rB+0lwK2IBC7zIx4PuXWQ=";
 
   patches = [
     # Some private headers depend on corecrypto, which we can’t use.
