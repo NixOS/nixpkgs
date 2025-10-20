@@ -3,18 +3,19 @@
   stdenv,
   fetchFromGitHub,
   qt6,
+  nix-update-script,
   kdePackages,
   x11Support ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qview";
   version = "7.1";
 
   src = fetchFromGitHub {
     owner = "jurplel";
     repo = "qView";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-EcXhwJcgBLdXa/FQ5LuENlzwnLw4Gt2BGlBO1p5U8tI=";
   };
 
@@ -37,12 +38,15 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optionals (!x11Support) [ "CONFIG+=NO_X11" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Practical and minimal image viewer";
     mainProgram = "qview";
+    changelog = "https://github.com/jurplel/qView/releases/tag/${finalAttrs.version}";
     homepage = "https://interversehq.com/qview/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ acowley ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ acowley ];
+    platforms = lib.platforms.all;
   };
-}
+})
