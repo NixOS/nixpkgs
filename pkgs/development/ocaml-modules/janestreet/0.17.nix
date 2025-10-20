@@ -1567,13 +1567,25 @@ with self;
     ];
   };
 
-  ppx_pattern_bind = janePackage {
-    pname = "ppx_pattern_bind";
-    hash = "sha256-IVDvFU9ERB2YFJOgP/glYcO4KhEH5VdQ7wCCfreboqA=";
-    meta.description = "PPX for writing fast incremental bind nodes in a pattern match";
-    propagatedBuildInputs = [ ppx_let ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_pattern_bind = janePackage (
+    {
+      pname = "ppx_pattern_bind";
+      meta.description = "PPX for writing fast incremental bind nodes in a pattern match";
+      propagatedBuildInputs = [ ppx_let ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-O3FtpXrFoyMI3iPL3BUwquREy+8TygOlyaTUGBUPk4Q=$";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-IVDvFU9ERB2YFJOgP/glYcO4KhEH5VdQ7wCCfreboqA=";
+        }
+    )
+  );
 
   ppx_pipebang = janePackage {
     pname = "ppx_pipebang";
