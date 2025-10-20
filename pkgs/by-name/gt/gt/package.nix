@@ -8,7 +8,9 @@
   libconfig,
   asciidoc,
   libusbgx,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "gt";
   version = "0-unstable-2025-06-26";
@@ -17,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-usb-gadgets";
     repo = "gt";
     rev = "8ebbf3eb6fb77a53d6ace0eebf4f5debb779b576";
-    sha256 = "sha256-f/1nYnpAJ22ilWeyGtGcz9ZynL8a4UQoiKW+K/97iRI=";
+    hash = "sha256-f/1nYnpAJ22ilWeyGtGcz9ZynL8a4UQoiKW+K/97iRI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";
@@ -32,6 +34,8 @@ stdenv.mkDerivation (finalAttrs: {
       'cmake_minimum_required(VERSION ${cmake.version})'
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -44,8 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     libusbgx
   ];
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
-    description = "Linux command line tool for setting up USB gadgets using configfs";
+    description = "CLI tool for setting up USB gadgets using configfs";
     mainProgram = "gt";
     license = with lib.licenses; [ asl20 ];
     maintainers = [ ];
