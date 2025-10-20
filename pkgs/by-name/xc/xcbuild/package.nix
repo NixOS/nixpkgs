@@ -16,7 +16,7 @@
   xcodeVer ? null,
   sdkVer ? null,
   productBuildVer ? null,
-}:
+}@args:
 
 # TODO(@reckenrode) enable this warning after uses in nixpkgs have been fixed
 #let
@@ -42,6 +42,9 @@
 #'' true;
 
 let
+  # xcbuild is included in the SDK. Avoid an infinite recursion by using a bootstrap stdenv.
+  stdenv = if args.stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else args.stdenv;
+
   googletest = fetchFromGitHub {
     owner = "google";
     repo = "googletest";
