@@ -94,14 +94,17 @@ buildPythonPackage rec {
   dependencies = [
     aiohappyeyeballs
     aiosignal
-    async-timeout
     attrs
     frozenlist
     multidict
     propcache
     yarl
   ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ]
   ++ optional-dependencies.speedups;
+
 
   optional-dependencies.speedups = [
     aiodns
