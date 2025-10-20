@@ -1074,13 +1074,6 @@ with pkgs;
     wine = wineWowPackages.stable;
   };
 
-  x2t = callPackage ../by-name/x2/x2t/package.nix {
-    openssl = openssl.override {
-      enableMD2 = true;
-      static = true;
-    };
-  };
-
   yabridge = callPackage ../tools/audio/yabridge {
     wine = wineWowPackages.yabridge;
   };
@@ -1557,10 +1550,6 @@ with pkgs;
   kerf = kerf_1; # kerf2 is WIP
   kerf_1 = callPackage ../development/interpreters/kerf {
     stdenv = clangStdenv;
-  };
-
-  plausible = callPackage ../by-name/pl/plausible/package.nix {
-    beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
   };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
@@ -4526,12 +4515,6 @@ with pkgs;
   inherit (haxePackages) hxcpp;
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
-
-  gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
-    vlc = vlc.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ x264 ];
-    });
-  };
 
   gwe = callPackage ../tools/misc/gwe {
     nvidia_x11 = linuxPackages.nvidia_x11;
@@ -8946,10 +8929,6 @@ with pkgs;
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
 
-  rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix {
-    beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
-  };
-
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = cctools;
@@ -10287,12 +10266,6 @@ with pkgs;
       inherit buildPythonApplication;
     };
 
-  freedv = callPackage ../by-name/fr/freedv/package.nix {
-    codec2 = codec2.override {
-      freedvSupport = true;
-    };
-  };
-
   inherit
     ({
       freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
@@ -11614,10 +11587,7 @@ with pkgs;
   # more usecases when wrapping neovim. The interface is being actively worked on
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
-  wrapNeovim = neovim-unwrapped: makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
-  neovim-unwrapped = callPackage ../by-name/ne/neovim-unwrapped/package.nix {
-    lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
-  };
+  wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
     lua = lua5_1;
@@ -13121,18 +13091,6 @@ with pkgs;
   dysnomia = callPackage ../tools/package-management/disnix/dysnomia (
     config.disnix or {
       inherit (python3Packages) supervisor;
-    }
-  );
-
-  mysql-workbench = callPackage ../by-name/my/mysql-workbench/package.nix (
-    let
-      mysql = mysql80;
-    in
-    {
-      gdal = gdal.override {
-        libmysqlclient = mysql;
-      };
-      mysql = mysql;
     }
   );
 
