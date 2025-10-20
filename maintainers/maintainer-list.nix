@@ -15543,12 +15543,6 @@
     githubId = 1140462;
     name = "magenbluten";
   };
-  maggesi = {
-    email = "marco.maggesi@gmail.com";
-    github = "maggesi";
-    githubId = 1809783;
-    name = "Marco Maggesi";
-  };
   magicquark = {
     name = "magicquark";
     github = "magicquark";
@@ -18988,6 +18982,12 @@
     github = "nwjsmith";
     githubId = 1348;
     name = "Nate Smith";
+  };
+  nxm = {
+    email = "szturomski@jakub.app";
+    name = "Jakub Szturomski";
+    github = "nxm";
+    githubId = 22380073;
   };
   nyabinary = {
     name = "Niko Cantero";

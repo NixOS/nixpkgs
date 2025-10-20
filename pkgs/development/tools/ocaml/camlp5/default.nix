@@ -93,10 +93,7 @@ stdenv.mkDerivation (
       homepage = "https://camlp5.github.io/";
       license = licenses.bsd3;
       platforms = ocaml.meta.platforms or [ ];
-      maintainers = with maintainers; [
-        maggesi
-        vbgl
-      ];
+      maintainers = with maintainers; [ vbgl ];
       broken = lib.versionOlder ocaml.version "4.02";
     };
   }

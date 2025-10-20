@@ -86,7 +86,6 @@ stdenv.mkDerivation {
     homepage = "http://lablgtk.forge.ocamlcore.org/";
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [
-      maggesi
       roconnor
       vbgl
     ];

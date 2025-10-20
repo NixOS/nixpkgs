@@ -38,8 +38,5 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     broken = lib.versionAtLeast ocaml.version "4.06";
     inherit (ocaml.meta) platforms;
-    maintainers = [
-      lib.maintainers.maggesi
-    ];
   };
 }
