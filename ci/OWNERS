@@ -343,7 +343,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /pkgs/top-level/agda-packages.nix         @NixOS/agda
 /pkgs/development/libraries/agda          @NixOS/agda
 /doc/languages-frameworks/agda.section.md @NixOS/agda
-/nixos/tests/agda.nix                     @NixOS/agda
+/nixos/tests/agda                         @NixOS/agda
 
 # Idris
 /pkgs/development/idris-modules @Infinisil
