@@ -12,6 +12,7 @@
   python3,
 
   nixosTests,
+  callPackage,
 }:
 
 # python binding generates a shared library which are unavailable with musl build
@@ -87,6 +88,8 @@ stdenv.mkDerivation rec {
 
   passthru.tests = {
     pam = nixosTests.pam-pwquality;
+    format =
+      (callPackage ../../../../nixos/modules/security/pwquality/pwquality-conf-format.nix { }).tests;
   };
 
   meta = with lib; {

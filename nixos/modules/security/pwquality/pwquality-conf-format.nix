@@ -2,9 +2,10 @@
 
 let
   inherit (lib) types;
+  inherit (pkgs) testers;
 in
 
-{
+rec {
   type = types.submodule {
     freeformType =
       with types;
@@ -313,4 +314,68 @@ in
   # internal pam config expectations in `moduleSettingsType` at the top of
   # `nixos/modules/security/pam.nix`
   pamApply = d: lib.mapAttrs (_: v: if lib.isList v then toString v else v) (baseFilter d);
+
+  # tests adopted into libpwquality.passthru.tests.format
+  tests = {
+    generate-basic = testers.testEqualContents {
+      assertion = "basic settings match";
+      # attr -> list -> string
+      # attrs don't maintain order and are sorted alphabetically
+      expected = pkgs.writeText "expected" ''
+        badwords = foobar hunter42 password
+        enforce_for_root
+        minclass = 4
+        minlen = 10
+      '';
+      # matches settings in nixos test, keep in sync
+      actual = generate "actual" {
+        # numbers
+        minlen = 10;
+        minclass = 4;
+
+        # list of str
+        badwords = [
+          "foobar"
+          "hunter42"
+          "password"
+        ];
+
+        # bool
+        enforce_for_root = true;
+      };
+    };
+
+    generate-falsy = testers.testEqualContents {
+      assertion = "false should not appear";
+      expected = pkgs.writeText "expected" ''
+        difok = 0
+        local_users_only
+        ocredit = -1
+      '';
+      actual = generate "actual" {
+        # include
+        local_users_only = true;
+        # drop
+        enforce_for_root = false;
+        dictpath = null;
+        # potentially difficult numbers
+        ocredit = -1;
+        difok = 0;
+      };
+    };
+
+    pamApply-list-becomes-string = testers.testEqualContents {
+      assertion = "known list is converted to a space separated string for pam";
+      expected = pkgs.writeText "expected" "foobar hunter42 password";
+      actual =
+        pkgs.writeText "actual"
+          (pamApply {
+            badwords = [
+              "foobar"
+              "hunter42"
+              "password"
+            ];
+          }).badwords;
+    };
+  };
 }
