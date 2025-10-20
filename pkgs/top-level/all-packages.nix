@@ -11878,10 +11878,6 @@ with pkgs;
     lua = lua5;
   };
 
-  monotoneViz = callPackage ../applications/version-management/monotone-viz {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;
-  };
-
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
   mopidyPackages =
