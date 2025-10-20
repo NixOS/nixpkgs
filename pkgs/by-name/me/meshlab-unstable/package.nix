@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages,
+  llvmPackages_18,
   libsForQt5,
   libGLU,
   lib3ds,
@@ -90,7 +90,7 @@ stdenv.mkDerivation {
     structuresynth
   ]
   ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
+    llvmPackages_18.openmp
   ];
 
   nativeBuildInputs = [

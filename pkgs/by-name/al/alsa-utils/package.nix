@@ -13,7 +13,7 @@
   pciutils,
   procps,
   which,
-  fftw,
+  fftwFloat,
   pipewire,
   withPipewireLib ? true,
   symlinkJoin,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     alsa-lib
     ncurses
     libsamplerate
-    fftw
+    fftwFloat
   ];
 
   configureFlags = [

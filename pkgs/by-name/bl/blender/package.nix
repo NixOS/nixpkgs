@@ -67,7 +67,7 @@
   pkg-config,
   potrace,
   pugixml,
-  python3Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
+  python311Packages, # must use instead of python3.pkgs, see https://github.com/NixOS/nixpkgs/issues/211340
   rocmPackages, # comes with a significantly larger closure size
   runCommand,
   shaderc,
@@ -94,6 +94,7 @@ let
     (!stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) || stdenv.hostPlatform.isDarwin;
   vulkanSupport = !stdenv.hostPlatform.isDarwin;
 
+  python3Packages = python311Packages;
   python3 = python3Packages.python;
   pyPkgsOpenusd = python3Packages.openusd.override (old: {
     opensubdiv = old.opensubdiv.override { inherit cudaSupport; };

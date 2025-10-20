@@ -3,7 +3,7 @@
   fetchFromGitHub,
   stdenv,
   nodejs,
-  pnpm,
+  pnpm_9,
   buildGoModule,
   mage,
   writeShellScriptBin,
@@ -28,7 +28,7 @@ let
     ];
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
-    pnpmDeps = pnpm.fetchDeps {
+    pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs)
         pname
         version
@@ -42,7 +42,7 @@ let
 
     nativeBuildInputs = [
       nodejs
-      pnpm.configHook
+      pnpm_9.configHook
     ];
 
     doCheck = true;

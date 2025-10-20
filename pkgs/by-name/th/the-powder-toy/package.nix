@@ -8,7 +8,7 @@
   lib,
   libpng,
   libX11,
-  lua,
+  lua5_2,
   luajit,
   meson,
   ninja,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     jsoncpp
     libpng
     libX11
-    lua
+    lua5_2
     luajit
     SDL2
     zlib

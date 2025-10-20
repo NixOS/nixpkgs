@@ -5,7 +5,7 @@
   fetchFromGitHub,
   coreutils,
   net-tools,
-  java,
+  openjdk21,
   scala_3,
   polyml,
   verit,
@@ -52,6 +52,8 @@ let
       cp libsha1.so $out/lib/
     '';
   };
+
+  java = openjdk21;
 
 in
 stdenv.mkDerivation (finalAttrs: {

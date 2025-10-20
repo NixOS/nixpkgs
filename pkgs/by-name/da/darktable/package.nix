@@ -53,7 +53,7 @@
   libtiff,
   libwebp,
   libxml2,
-  lua,
+  lua5_4,
   util-linux,
   openexr,
   openjpeg,
@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libxml2
-    lua
+    lua5_4
     openexr
     openjpeg
     osm-gps-map

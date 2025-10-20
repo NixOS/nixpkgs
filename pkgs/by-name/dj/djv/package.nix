@@ -18,7 +18,7 @@
   libpng,
   opencolorio_1,
   freetype,
-  openexr,
+  openexr_2,
 }:
 
 let
@@ -152,7 +152,7 @@ stdenv.mkDerivation {
     freetype
     opencolorio_1
     djv-deps
-    openexr
+    openexr_2
   ];
 
   postPatch = ''

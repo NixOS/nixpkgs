@@ -1,11 +1,11 @@
 {
-  stdenv,
+  clangStdenv,
   lib,
   fetchFromGitHub,
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+clangStdenv.mkDerivation rec {
   pname = "armips";
   version = "0.11.0";
 

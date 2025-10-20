@@ -12,8 +12,11 @@
   rustPlatform,
   luarocks,
 
+  # lua
+  luajit,
+  withLuaPackage ? luajit,
+
   # buildInputs
-  lua,
   harfbuzz,
   icu,
   fontconfig,
@@ -26,6 +29,10 @@
   runCommand,
   poppler-utils,
 }:
+
+let
+  lua = withLuaPackage;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sile";

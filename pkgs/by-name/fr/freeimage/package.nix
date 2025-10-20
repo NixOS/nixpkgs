@@ -8,7 +8,7 @@
   zlib,
   libwebp,
   libraw,
-  openexr,
+  openexr_2,
   openjpeg,
   libjpeg,
   jxrlib,
@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libwebp
     libraw
-    openexr
+    openexr_2
     openjpeg
     libjpeg
     libjpeg.dev_private

@@ -2,7 +2,7 @@
   lib,
   nixosTests,
   fetchFromGitHub,
-  beamPackages,
+  beam27Packages,
   gitMinimal,
   pnpm_9,
   nodejs,
@@ -12,7 +12,7 @@
   mixReleaseName ? "domain", # "domain" "web" or "api"
 }:
 
-beamPackages.mixRelease rec {
+beam27Packages.mixRelease rec {
   pname = "firezone-server-${mixReleaseName}";
   version = "0-unstable-2025-08-31";
 
@@ -67,7 +67,7 @@ beamPackages.mixRelease rec {
 
   inherit mixReleaseName;
 
-  mixFodDeps = beamPackages.fetchMixDeps {
+  mixFodDeps = beam27Packages.fetchMixDeps {
     pname = "mix-deps-${pname}-${version}";
     inherit src version;
     hash = "sha256-h3l7HK9dxNmkHWfJyCOCXmCvFOK+mZtmszhRv0zxqoo=";

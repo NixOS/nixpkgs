@@ -1,9 +1,12 @@
 {
   lib,
   fetchFromGitHub,
-  perl,
-  perlPackages,
+  perl538Packages,
 }:
+
+let
+  perlPackages = perl538Packages;
+in
 
 perlPackages.buildPerlPackage {
   pname = "cope";

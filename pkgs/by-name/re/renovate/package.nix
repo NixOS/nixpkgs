@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeWrapper,
-  nodejs,
+  nodejs_22,
   pnpm_10,
   python3,
   testers,
@@ -12,6 +12,10 @@
   nix-update-script,
   yq-go,
 }:
+
+let
+  nodejs = nodejs_22;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";

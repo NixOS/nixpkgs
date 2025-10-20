@@ -22,7 +22,7 @@
   lcms2,
   libraw,
   libiptcdata,
-  fftw,
+  fftwSinglePrec,
   expat,
   pcre2,
   libsigcxx,
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     lcms2
     libraw
     libiptcdata
-    fftw
+    fftwSinglePrec
     expat
     pcre2
     libsigcxx
