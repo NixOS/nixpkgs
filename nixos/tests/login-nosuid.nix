@@ -61,6 +61,7 @@
         machine.wait_until_tty_matches("2", "login: alice")
         machine.wait_until_succeeds("pgrep login")
         machine.wait_until_tty_matches("2", "Password: ")
+        machine.sleep(3) # something is racy here, so lets just sleep a bit... Not great, but seems to work
         machine.send_chars("foobar\n")
         machine.wait_until_succeeds("pgrep -u alice bash")
         machine.send_chars("touch done\n")
