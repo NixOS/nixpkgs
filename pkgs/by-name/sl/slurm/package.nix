@@ -34,8 +34,12 @@
   # enable internal X11 support via libssh2
   enableX11 ? true,
   enableNVML ? config.cudaSupport,
-  nvml,
+  cudaPackages,
 }:
+
+let
+  nvml = cudaPackages.cuda_nvml_dev;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";

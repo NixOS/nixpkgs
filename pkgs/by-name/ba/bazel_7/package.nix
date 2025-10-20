@@ -32,7 +32,7 @@
   # Apple dependencies
   cctools,
   libtool,
-  sigtool,
+  darwin,
   # Allow to independently override the jdks used to build and run respectively
   buildJdk,
   runJdk,
@@ -414,7 +414,7 @@ stdenv.mkDerivation rec {
         # don't use system installed Xcode to run clang, use Nix clang instead
         sed -i -E \
           -e "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
-          -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${sigtool}/bin/codesign;" \
+          -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${darwin.sigtool}/bin/codesign;" \
           scripts/bootstrap/compile.sh \
           tools/osx/BUILD
 

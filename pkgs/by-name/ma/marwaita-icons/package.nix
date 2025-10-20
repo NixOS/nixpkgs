@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchFromGitHub,
   gtk3,
-  breeze-icons,
+  kdePackages,
   hicolor-icon-theme,
   pantheon,
 }:
@@ -24,7 +24,7 @@ stdenvNoCC.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    breeze-icons
+    kdePackages.breeze-icons
     hicolor-icon-theme
     pantheon.elementary-icon-theme
   ];
