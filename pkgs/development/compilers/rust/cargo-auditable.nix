@@ -10,18 +10,18 @@
 let
   args = rec {
     pname = "cargo-auditable";
-    version = "0.7.0";
+    version = "0.7.1";
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
       repo = "cargo-auditable";
       tag = "v${version}";
-      hash = "sha256-hFdG3LEPhk1UqlmWwFaHs9d2xyl6edb4WfOYgcE9/8I=";
+      hash = "sha256-t5il9CVhYZtmKrWxBoDpKZaGTPjpBO6Cotw0vuAthvc=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit pname version src;
-      hash = "sha256-2dAlo+5rwzU2DxsbjBfri/lF6NFIvNeY7gx8we/5aQs=";
+      hash = "sha256-2ZbRANFMExILSUrrft2fRWjScy0kMreyQMtHWA7iRds=";
     };
 
     checkFlags = [
