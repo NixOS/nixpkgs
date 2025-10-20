@@ -6,19 +6,21 @@
   click,
   primp,
   lxml,
+  httpx,
+  h2,
   versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "ddgs";
-  version = "9.5.5";
+  version = "9.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "deedy5";
     repo = "ddgs";
     tag = "v${version}";
-    hash = "sha256-Pwl6fCEBj+eUXYEf4wCTw1fpKZh3j4IVC6SW0Vqcmf4=";
+    hash = "sha256-NaOwklHea3TUDa2M23X549IiX5zP87N9qWKkr5PObLY=";
   };
 
   build-system = [ setuptools ];
@@ -27,7 +29,12 @@ buildPythonPackage rec {
     click
     primp
     lxml
-  ];
+    httpx
+    h2
+  ]
+  ++ httpx.optional-dependencies.http2
+  ++ httpx.optional-dependencies.socks
+  ++ httpx.optional-dependencies.brotli;
 
   nativeCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "version";
