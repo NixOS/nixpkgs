@@ -3,6 +3,7 @@
 {
   lib,
   stdenvNoCC,
+  pkgsBuildBuild,
   fetchurl,
   fetchzip,
   fetchFromGitHub,
@@ -1323,7 +1324,7 @@ rec {
     dictFileName = "ko_KR";
     readmeFile = "README.md";
 
-    nativeBuildInputs = [ (python3.withPackages (ps: [ ps.pyyaml ])) ];
+    nativeBuildInputs = [ (pkgsBuildBuild.python3.withPackages (ps: [ ps.pyyaml ])) ];
 
     preInstall = ''
       mv ko.aff ko_KR.aff
