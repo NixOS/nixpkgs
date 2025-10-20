@@ -1134,13 +1134,6 @@ with lib.maintainers;
     shortName = "Red Code Labs";
   };
 
-  release = {
-    members = [ ];
-    github = "nixos-release-managers";
-    scope = "Manage the current nixpkgs/NixOS release.";
-    shortName = "Release";
-  };
-
   rocm = {
     members = [
       Flakebi
@@ -1151,13 +1144,6 @@ with lib.maintainers;
     github = "rocm";
     scope = "Maintain ROCm and related packages.";
     shortName = "ROCm";
-  };
-
-  ruby = {
-    members = [ ];
-    scope = "Maintain the Ruby interpreter and related packages.";
-    shortName = "Ruby";
-    enableFeatureFreezePing = true;
   };
 
   rust = {
