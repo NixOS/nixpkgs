@@ -24,7 +24,7 @@
       croniter
       oras
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   aksarc = mkAzExtension rec {
@@ -37,7 +37,7 @@
       kubernetes
       paramiko
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   alias = mkAzExtension rec {
@@ -49,7 +49,7 @@
     propagatedBuildInputs = with python3Packages; [
       jinja2
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   aosm = mkAzExtension rec {
@@ -64,7 +64,7 @@
       oras
       ruamel-yaml
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   application-insights = mkAzExtension rec {
@@ -87,7 +87,7 @@
       jsonschema
       kubernetes
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   arcdata = mkAzExtension rec {
@@ -107,7 +107,7 @@
       pydash
       regex
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   attestation = mkAzExtension rec {
@@ -119,7 +119,7 @@
     propagatedBuildInputs = with python3Packages; [
       pyjwt
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   azure-devops = mkAzExtension rec {
@@ -168,7 +168,7 @@
     propagatedBuildInputs = with python3Packages; [
       azure-mgmt-compute
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   confcom = mkAzExtension rec {
@@ -207,7 +207,7 @@
       pycryptodome
       pyyaml
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   containerapp = mkAzExtension rec {
@@ -246,7 +246,7 @@
     propagatedBuildInputs = with python3Packages; [
       prompt-toolkit
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   k8s-configuration = mkAzExtension rec {
@@ -259,7 +259,7 @@
       pycryptodome
       pyyaml
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   rdbms-connect = mkAzExtension rec {
@@ -288,7 +288,7 @@
     propagatedBuildInputs = with python3Packages; [
       websocket-client
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 
   ssh = mkAzExtension rec {
@@ -336,7 +336,7 @@
     propagatedBuildInputs = with python3Packages; [
       websockets
     ];
-    meta.maintainers = with lib.maintainers; [ ];
+    meta.maintainers = with lib.maintainers; [ techknowlogick ];
   };
 }
 // lib.optionalAttrs config.allowAliases {
