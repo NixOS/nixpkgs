@@ -108,6 +108,10 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError - json-repair behaves differently since 0.52.0
+    "test_safe_repair_json_unrepairable"
+    "test_valid_action_parsing_with_curly_braces"
+
     # Tests parser
     "test_valid_action_parsing_with_special_characters"
 
