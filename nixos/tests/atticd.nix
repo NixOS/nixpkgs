@@ -29,6 +29,35 @@ in
       ];
     };
 
+    localWithPostgres = {
+      services.atticd = {
+        enable = true;
+        settings = {
+          database = {
+            url = "postgres:///atticd?host=/run/postgresql";
+          };
+        };
+
+        inherit environmentFile;
+      };
+
+      services.postgresql = {
+        enable = true;
+
+        ensureDatabases = [ "atticd" ];
+        ensureUsers = [
+          {
+            name = "atticd";
+            ensureDBOwnership = true;
+          }
+        ];
+      };
+
+      environment.systemPackages = [
+        pkgs.attic-client
+      ];
+    };
+
     s3 = {
       services.atticd = {
         enable = true;
@@ -65,16 +94,23 @@ in
     ''
       start_all()
 
-      with subtest("local storage push"):
-          local.wait_for_unit("atticd.service")
-          token = local.succeed("atticd-atticadm make-token --sub stop --validity 1y --create-cache '*' --pull '*' --push '*' --delete '*' --configure-cache '*' --configure-cache-retention '*'").strip()
+      def check_push(node) -> None:
+          node.wait_for_unit("atticd.service")
+          token = node.succeed("atticd-atticadm make-token --sub stop --validity 1y --create-cache '*' --pull '*' --push '*' --delete '*' --configure-cache '*' --configure-cache-retention '*'").strip()
 
-          local.succeed(f"attic login local http://localhost:8080 {token}")
-          local.succeed("attic cache create test-cache")
-          local.succeed("attic push test-cache ${environmentFile}")
+          node.succeed(f"attic login local http://localhost:8080 {token}")
+          node.succeed("attic cache create test-cache")
+          node.succeed("attic push test-cache ${environmentFile}")
+
+      with subtest("local storage push"):
+          check_push(local)
+
+      with subtest("local storage with postgres db push"):
+          localWithPostgres.wait_for_unit("postgresql.target")
+
+          check_push(localWithPostgres)
 
       with subtest("s3 storage push"):
-          s3.wait_for_unit("atticd.service")
           s3.wait_for_unit("minio.service")
           s3.wait_for_open_port(9000)
           s3.succeed(
@@ -83,10 +119,7 @@ in
               + "${accessKey} ${secretKey} --api s3v4",
               "mc mb minio/attic",
           )
-          token = s3.succeed("atticd-atticadm make-token --sub stop --validity 1y --create-cache '*' --pull '*' --push '*' --delete '*' --configure-cache '*' --configure-cache-retention '*'").strip()
 
-          s3.succeed(f"attic login s3 http://localhost:8080 {token}")
-          s3.succeed("attic cache create test-cache")
-          s3.succeed("attic push test-cache ${environmentFile}")
+          check_push(s3)
     '';
 }
