@@ -20,7 +20,7 @@
   python3Packages,
 
   cairo,
-  mysql,
+  mysql80,
   libiodbc,
   proj,
 
@@ -41,6 +41,8 @@
 }:
 
 let
+  gdal' = gdal.override { libmysqlclient = mysql80; };
+
   # for some reason the package doesn't build with swig 4.3.0
   swig_4_2 = swig.overrideAttrs (prevAttrs: {
     version = "4.2.1";
@@ -106,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     antlr4_13.runtime.cpp
     boost
-    gdal
+    gdal'
     gtkmm3
     libiodbc
     libmysqlconnectorcpp
@@ -145,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   cmakeFlags = [
-    (lib.cmakeFeature "MySQL_CONFIG_PATH" (lib.getExe' mysql "mysql_config"))
+    (lib.cmakeFeature "MySQL_CONFIG_PATH" (lib.getExe' mysql80 "mysql_config"))
     (lib.cmakeFeature "IODBC_CONFIG_PATH" (lib.getExe' libiodbc "iodbc-config"))
     (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr4_13.jarLocation}")
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.

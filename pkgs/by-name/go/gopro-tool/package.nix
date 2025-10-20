@@ -5,8 +5,15 @@
   makeWrapper,
   ffmpeg,
   vlc,
+  x264,
   jq,
 }:
+
+let
+  vlc' = vlc.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ x264 ];
+  });
+in
 
 stdenv.mkDerivation {
   pname = "gopro-tool";
@@ -30,7 +37,7 @@ stdenv.mkDerivation {
       --prefix PATH : ${
         lib.makeBinPath [
           ffmpeg
-          vlc
+          vlc'
           jq
         ]
       }
