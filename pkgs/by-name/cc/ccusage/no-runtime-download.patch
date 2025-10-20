@@ -1,0 +1,246 @@
+Stop pnpm 10.21+ from auto-downloading its own bun and node binaries
+via engines.runtime.
+
+With `"onFail": "download"`, pnpm injects them as managed runtime:
+dependencies and the resulting platform-specific binaries break inside
+the Nix build sandbox. Removing the onFail field makes pnpm skip the
+injection. The matching runtime: entries are also dropped from
+pnpm-lock.yaml so --frozen-lockfile stays consistent.
+
+This makes pnpmDeps platform-independent so a single hash suffices
+across systems.
+
+--- a/package.json
++++ b/package.json
+@@ -13,12 +13,10 @@
+ 			{
+ 				"name": "node",
+-				"version": "^24.13.0",
+-				"onFail": "download"
++				"version": "^24.13.0"
+ 			},
+ 			{
+ 				"name": "bun",
+-				"version": "^1.3.9",
+-				"onFail": "download"
++				"version": "^1.3.9"
+ 			}
+ 		]
+ 	},
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -182,13 +182,6 @@
+ importers:
+
+   .:
+-    dependencies:
+-      bun:
+-        specifier: runtime:^1.3.9
+-        version: runtime:1.3.9
+-      node:
+-        specifier: runtime:^24.13.0
+-        version: runtime:24.13.1
+     devDependencies:
+       '@gunshi/docs':
+         specifier: catalog:llm-docs
+@@ -2591,85 +2584,6 @@
+
+   bun-types@1.3.5:
+     resolution: {integrity: sha512-inmAYe2PFLs0SUbFOWSVD24sg1jFlMPxOjOSSCYqUgn4Hsc3rDc7dFvfVYjFPNHtov6kgUeulV4SxbuIV/stPw==}
+-
+-  bun@runtime:1.3.9:
+-    resolution:
+-      type: variations
+-      variants:
+-        - resolution:
+-            archive: zip
+-            bin: bun
+-            integrity: sha256-zeak7fGc9kkJFY+lpGShICb9fw15pKlQwQzwrwQmbYU=
+-            prefix: bun-darwin-aarch64
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-darwin-aarch64.zip
+-          targets:
+-            - cpu: arm64
+-              os: darwin
+-        - resolution:
+-            archive: zip
+-            bin: bun
+-            integrity: sha256-WI9KSHQLmgw2agD4eIEKs6teZzTSm3w8vdlIS3SgB94=
+-            prefix: bun-darwin-x64
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-darwin-x64.zip
+-          targets:
+-            - cpu: x64
+-              os: darwin
+-        - resolution:
+-            archive: zip
+-            bin: bun
+-            integrity: sha256-QS6bJzLRSMsSenU9Y4mbAzPE9PG9jd55MW7Pt+8XAnA=
+-            prefix: bun-linux-aarch64-musl
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-linux-aarch64-musl.zip
+-          targets:
+-            - cpu: arm64
+-              os: linux
+-              libc: musl
+-        - resolution:
+-            archive: zip
+-            bin: bun
+-            integrity: sha256-osKGK8wf0cCzqNzcjH77XirNhx6yDtLxdheITt6ByEQ=
+-            prefix: bun-linux-aarch64
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-linux-aarch64.zip
+-          targets:
+-            - cpu: arm64
+-              os: linux
+-        - resolution:
+-            archive: zip
+-            bin: bun
+-            integrity: sha256-BLcYQxiTdiPTF95rJegr73v1zOCyQVAcXQSZUTIBxy0=
+-            prefix: bun-linux-x64-musl
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-linux-x64-musl.zip
+-          targets:
+-            - cpu: x64
+-              os: linux
+-              libc: musl
+-        - resolution:
+-            archive: zip
+-            bin: bun
+-            integrity: sha256-RoDoDkTjKqcYVgzq6F0i7Pvy77jzZBeC415Lfv1loao=
+-            prefix: bun-linux-x64
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-linux-x64.zip
+-          targets:
+-            - cpu: x64
+-              os: linux
+-        - resolution:
+-            archive: zip
+-            bin: bun.exe
+-            integrity: sha256-9MHPNUn2r5htxlNcQLR4X/Gn54BeWWN+xFD8Ea2wyHQ=
+-            prefix: bun-windows-x64
+-            type: binary
+-            url: https://github.com/oven-sh/bun/releases/download/bun-v1.3.9/bun-windows-x64.zip
+-          targets:
+-            - cpu: x64
+-              os: win32
+-    version: 1.3.9
+-    hasBin: true
+
+   bundle-name@4.1.0:
+     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
+@@ -4219,96 +4133,6 @@
+
+   node-releases@2.0.21:
+     resolution: {integrity: sha512-5b0pgg78U3hwXkCM8Z9b2FJdPZlr9Psr9V2gQPESdGHqbntyFJKFW4r5TeWGFzafGY3hzs1JC62VEQMbl1JFkw==}
+-
+-  node@runtime:24.13.1:
+-    resolution:
+-      type: variations
+-      variants:
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-iuBmSe6dptnq29KhoLCRw7k8eMkbam7ImQmZOrW64q4=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-aix-ppc64.tar.gz
+-          targets:
+-            - cpu: ppc64
+-              os: aix
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-jAOdWfL+xhleQoGtWw0CualAiXtN97hJxvtIvmeHu6Y=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-darwin-arm64.tar.gz
+-          targets:
+-            - cpu: arm64
+-              os: darwin
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-Un8FeNmBLn36IlEhvaCxVGpqDktfVWKV/IKZwnLeX78=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-darwin-x64.tar.gz
+-          targets:
+-            - cpu: x64
+-              os: darwin
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-SHNFnXybKP6qHw+t6bucgctwJnCZH/gKUdgFMlxeNFY=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-linux-arm64.tar.gz
+-          targets:
+-            - cpu: arm64
+-              os: linux
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-2oagoEtiLKvAyd6DYW6pN8HYoFqOr/iJVb3Bx+Ds7R0=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-linux-ppc64le.tar.gz
+-          targets:
+-            - cpu: ppc64le
+-              os: linux
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-1F5eM3qNN7VX11v6pPhU8yWIwqz5df98OeT9k64h1jA=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-linux-s390x.tar.gz
+-          targets:
+-            - cpu: s390x
+-              os: linux
+-        - resolution:
+-            archive: tarball
+-            bin: bin/node
+-            integrity: sha256-etKPsXKpqwWT+GwaOeXCaNDY/D1ssBZ/RVtWVaem4v0=
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-linux-x64.tar.gz
+-          targets:
+-            - cpu: x64
+-              os: linux
+-        - resolution:
+-            archive: zip
+-            bin: node.exe
+-            integrity: sha256-DNKe62TzxknbLEyGh3nKJ39aTEnibGnlko0B/grgbag=
+-            prefix: node-v24.13.1-win-arm64
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-win-arm64.zip
+-          targets:
+-            - cpu: arm64
+-              os: win32
+-        - resolution:
+-            archive: zip
+-            bin: node.exe
+-            integrity: sha256-+6V3xLuH3wTVTdh7vapaInLx+Zoqy/kVLhqRuLXwsnk=
+-            prefix: node-v24.13.1-win-x64
+-            type: binary
+-            url: https://nodejs.org/download/release/v24.13.1/node-v24.13.1-win-x64.zip
+-          targets:
+-            - cpu: x64
+-              os: win32
+-    version: 24.13.1
+-    hasBin: true
+
+   nopt@5.0.0:
+     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}
+@@ -7147,8 +6971,6 @@
+   bun-types@1.3.5:
+     dependencies:
+       '@types/node': 24.5.1
+-
+-  bun@runtime:1.3.9: {}
+
+   bundle-name@4.1.0:
+     dependencies:
+@@ -9068,8 +8890,6 @@
+     optional: true
+
+   node-releases@2.0.21: {}
+-
+-  node@runtime:24.13.1: {}
+
+   nopt@5.0.0:
+     dependencies:
