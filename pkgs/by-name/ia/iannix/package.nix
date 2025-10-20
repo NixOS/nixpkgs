@@ -1,15 +1,13 @@
 {
-  mkDerivation,
   lib,
+  stdenv,
   fetchFromGitHub,
   alsa-lib,
   pkg-config,
-  qtbase,
-  qtscript,
-  qmake,
+  libsForQt5,
 }:
 
-mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "iannix";
   version = "unstable-2020-12-09";
 
@@ -22,24 +20,26 @@ mkDerivation {
 
   nativeBuildInputs = [
     pkg-config
-    qmake
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
+
   buildInputs = [
     alsa-lib
-    qtbase
-    qtscript
+    libsForQt5.qtbase
+    libsForQt5.qtscript
   ];
 
   qmakeFlags = [ "PREFIX=/" ];
 
   installFlags = [ "INSTALL_ROOT=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Graphical open-source sequencer";
     mainProgram = "iannix";
     homepage = "https://www.iannix.org/";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ freezeboy ];
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ freezeboy ];
   };
-}
+})
