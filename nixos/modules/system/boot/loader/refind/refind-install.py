@@ -197,7 +197,7 @@ def copy_file(from_path: str, to_path: str):
 def install_bootloader() -> None:
     global refind_dir
 
-    refind_dir = os.path.join(str(config('efiMountPoint')), 'efi', 'refind')
+    refind_dir = os.path.join(str(config('efiMountPoint')), 'efi', 'boot' if config('efiRemovable') else 'refind')
 
     if not os.path.exists(refind_dir):
         os.makedirs(refind_dir)
@@ -270,7 +270,7 @@ def install_bootloader() -> None:
         raise Exception(f'Unsupported CPU family: {cpu_family}')
 
     efi_path = os.path.join(config('refindPath'), 'share', 'refind', efi_file)
-    dest_path = os.path.join(config('efiMountPoint'), 'efi', 'boot' if config('efiRemovable') else 'refind', boot_file)
+    dest_path = os.path.join(refind_dir, boot_file)
 
     copy_file(efi_path, dest_path)
 
