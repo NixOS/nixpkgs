@@ -30,6 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./link-xcrypt.patch # pwupdd requires crypt.h, so explicitly link it
+    ./musl.patch
   ];
 
   nativeBuildInputs = [

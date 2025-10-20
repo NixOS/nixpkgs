@@ -1,0 +1,172 @@
+diff --git a/src/pam_unix_ng-passwd.c b/src/pam_unix_ng-passwd.c
+index 271e4c9..f822c61 100644
+--- a/src/pam_unix_ng-passwd.c
++++ b/src/pam_unix_ng-passwd.c
+@@ -15,6 +15,167 @@
+ 
+ #define MAX_PASSWD_TRIES 3
+ 
++#ifndef __GLIBC__
++#include <errno.h>
++#include <grp.h>
++#include <limits.h>
++#include <pthread.h>
++#include <pwd.h>
++#include <shadow.h>
++#include <stdint.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++
++static
++long xatol(char **s)
++{
++	long x;
++	if (**s == ':' || **s == '\n') return -1;
++	for (x=0; **s-'0'<10U; ++*s) x=10*x+(**s-'0');
++	return x;
++}
++
++static
++unsigned atou(char **s)
++{
++	unsigned x;
++	for (x=0; **s-'0'<10U; ++*s) x=10*x+(**s-'0');
++	return x;
++}
++
++static
++int __parsespent(char *s, struct spwd *sp)
++{
++	sp->sp_namp = s;
++	if (!(s = strchr(s, ':'))) return -1;
++	*s = 0;
++
++	sp->sp_pwdp = ++s;
++	if (!(s = strchr(s, ':'))) return -1;
++	*s = 0;
++
++	s++; sp->sp_lstchg = xatol(&s);
++	if (*s != ':') return -1;
++
++	s++; sp->sp_min = xatol(&s);
++	if (*s != ':') return -1;
++
++	s++; sp->sp_max = xatol(&s);
++	if (*s != ':') return -1;
++
++	s++; sp->sp_warn = xatol(&s);
++	if (*s != ':') return -1;
++
++	s++; sp->sp_inact = xatol(&s);
++	if (*s != ':') return -1;
++
++	s++; sp->sp_expire = xatol(&s);
++	if (*s != ':') return -1;
++
++	s++; sp->sp_flag = xatol(&s);
++	if (*s != '\n') return -1;
++	return 0;
++}
++
++static
++int __getpwent_a(FILE *f, struct passwd *pw, char **line, size_t *size, struct passwd **res)
++{
++	ssize_t l;
++	char *s;
++	int rv = 0;
++	int cs;
++	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
++	for (;;) {
++		if ((l=getline(line, size, f)) < 0) {
++			rv = ferror(f) ? errno : 0;
++			free(*line);
++			*line = 0;
++			pw = 0;
++			break;
++		}
++		line[0][l-1] = 0;
++
++		s = line[0];
++		pw->pw_name = s++;
++		if (!(s = strchr(s, ':'))) continue;
++
++		*s++ = 0; pw->pw_passwd = s;
++		if (!(s = strchr(s, ':'))) continue;
++
++		*s++ = 0; pw->pw_uid = atou(&s);
++		if (*s != ':') continue;
++
++		*s++ = 0; pw->pw_gid = atou(&s);
++		if (*s != ':') continue;
++
++		*s++ = 0; pw->pw_gecos = s;
++		if (!(s = strchr(s, ':'))) continue;
++
++		*s++ = 0; pw->pw_dir = s;
++		if (!(s = strchr(s, ':'))) continue;
++
++		*s++ = 0; pw->pw_shell = s;
++		break;
++	}
++	pthread_setcancelstate(cs, 0);
++	*res = pw;
++	if (rv) errno = rv;
++	return rv;
++}
++
++static
++int fgetspent_r(
++    FILE *f,
++    struct spwd *sp,
++    char *line,
++    size_t size,
++    struct spwd **spret)
++{
++	int res = 0;
++	int cs;
++	*spret = 0;
++	if (size > INT_MAX)
++		size = INT_MAX; //2GB ought to be enough for anyone
++	pthread_setcancelstate(PTHREAD_CANCEL_DISABLE, &cs);
++	if (!fgets(line, size, f))
++		goto out;
++	res = ERANGE;
++	if (line[strlen(line) - 1] != '\n')
++		goto out;
++	res = EILSEQ;
++	if ( __parsespent(line, sp) < 0)
++		goto out;
++	*spret = sp;
++	res = 0;
++out:
++	pthread_setcancelstate(cs, 0);
++	return res;
++}
++
++static
++int fgetpwent_r(
++    FILE *f,
++    struct passwd *pass,
++    char *line,
++    size_t size,
++    struct passwd **passret)
++{
++    if (f == NULL || pass == NULL || line == NULL || passret == NULL)
++        return EINVAL;
++    if (!fgets(line, size, f))
++        return feof(f) ? ENOENT : EIO;
++
++    int ret = __getpwent_a(f, pass, &line, &size, passret);
++
++    if (ret != 0)
++        *passret = NULL;
++
++    return ret;
++}
++
++#endif
++
+ static int
+ get_local_user_record(pam_handle_t *pamh, const char *user,
+ 		      struct passwd **ret_pw, struct spwd **ret_sp)
