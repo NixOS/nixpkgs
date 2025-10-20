@@ -1,64 +1,73 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchgit,
 }:
 
 let
-  mkDictFromChromium =
-    {
-      shortName,
-      dictFileName,
-      shortDescription,
-    }:
-    stdenv.mkDerivation {
-      pname = "hunspell-dict-${shortName}-chromium";
-      version = "115.0.5790.170";
+  mkDictFromChromium = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      src = fetchgit {
-        url = "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries";
-        rev = "41cdffd71c9948f63c7ad36e1fb0ff519aa7a37e";
-        hash = "sha256-67mvpJRFFa9eMfyqFMURlbxOaTJBICnk+gl0b0mEHl8=";
-      };
+    excludeDrvArgNames = [
+      "shortName"
+      "dictFileName"
+      "shortDescription"
+    ];
 
-      dontBuild = true;
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        dictFileName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-chromium";
+        version = "115.0.5790.170";
 
-      installPhase = ''
-        cp ${dictFileName} $out
-      '';
+        src = fetchgit {
+          url = "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries";
+          rev = "41cdffd71c9948f63c7ad36e1fb0ff519aa7a37e";
+          hash = "sha256-67mvpJRFFa9eMfyqFMURlbxOaTJBICnk+gl0b0mEHl8=";
+        };
 
-      passthru = {
-        # As chromium needs the exact filename in ~/.config/chromium/Dictionaries,
-        # this value needs to be known to tools using the package if they want to
-        # link the file correctly.
-        inherit dictFileName;
+        dontBuild = true;
 
-        updateScript = ./update-chromium-dictionaries.py;
-      };
-
-      meta = {
-        homepage = "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries/";
-        description = "Chromium compatible hunspell dictionary for ${shortDescription}";
-        longDescription = ''
-          Humspell directories in Chromium's custom bdic format
-
-          See https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries/
+        installPhase = ''
+          cp ${dictFileName} $out
         '';
-        license = with lib.licenses; [
-          gpl2
-          lgpl21
-          mpl11
-          lgpl3
-        ];
-        maintainers = with lib.maintainers; [ networkexception ];
-        platforms = lib.platforms.all;
+
+        passthru = {
+          # As chromium needs the exact filename in ~/.config/chromium/Dictionaries,
+          # this value needs to be known to tools using the package if they want to
+          # link the file correctly.
+          inherit dictFileName;
+
+          updateScript = ./update-chromium-dictionaries.py;
+        };
+
+        meta = {
+          homepage = "https://chromium.googlesource.com/chromium/deps/hunspell_dictionaries/";
+          description = "Chromium compatible hunspell dictionary for ${shortDescription}";
+          longDescription = ''
+            Hunspell directories in Chromium's custom bdic format
+
+            See https://www.chromium.org/developers/how-tos/editing-the-spell-checking-dictionaries/
+          '';
+          license = with lib.licenses; [
+            gpl2
+            lgpl21
+            mpl11
+            lgpl3
+          ];
+          maintainers = with lib.maintainers; [ networkexception ];
+          platforms = lib.platforms.all;
+        };
       };
-    };
+  };
 in
 rec {
-
-  inherit mkDictFromChromium;
-
   # ENGLISH
 
   en_US = en-us;
