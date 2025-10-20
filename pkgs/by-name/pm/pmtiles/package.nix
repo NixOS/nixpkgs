@@ -14,7 +14,14 @@ buildGoModule rec {
     hash = "sha256-JGsbgBB2T+4SWKQmiSmuMqQ8gw0qhM5c5eFDF/+sndA=";
   };
 
-  vendorHash = "sha256-XRx9Qe7tTQAPJJdj9yEU0YAFjvl+4jW/XQy2MYFApds=";
+  vendorHash = "sha256-6zsX7rU+D+RUHwXfFZzLQftQ6nSYJhvKIDdsO2vow4A=";
+
+  overrideModAttrs = old: {
+    # https://gitlab.com/cznic/libc/-/merge_requests/10
+    postBuild = ''
+      patch -p0 < ${./darwin-sandbox-fix.patch}
+    '';
+  };
 
   ldflags = [
     "-s"
