@@ -4479,8 +4479,6 @@ self: super: with self; {
 
   duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
 
-  duckduckgo-search = callPackage ../development/python-modules/duckduckgo-search { };
-
   duct-py = callPackage ../development/python-modules/duct-py { };
 
   duden = callPackage ../development/python-modules/duden { };
