@@ -1,0 +1,34 @@
+diff --git a/config.h.in b/config.h.in
+index 623b5f9..26376fe 100644
+--- a/config.h.in
++++ b/config.h.in
+@@ -198,7 +198,6 @@
+ 
+ #if defined( __CYGWIN__ )
+ #define SUPPORT_NETBIOS_SHARE 1
+-#define SUPPORT_WIN9X_CONSOLE_MBCS 1
+ #endif
+ 
+ #if defined(__CYGWIN__) && defined(__x86_64__)
+diff --git a/terms.c b/terms.c
+index c77b87a..56b9306 100644
+--- a/terms.c
++++ b/terms.c
+@@ -2112,17 +2112,6 @@ term_title(const char *s)
+  * TERM=cygwin special handle announced deprecation and
+  * no one complains
+  */
+-#ifdef __CYGWIN__
+-	if (isLocalConsole && title_str == CYGWIN_TITLE) {
+-	    Str buff;
+-	    buff = Sprintf(title_str, s);
+-	    if (buff->length > 1024) {
+-		Strtruncate(buff, 1024);
+-	    }
+-	    SetConsoleTitle(buff->ptr);
+-	}
+-	else if (isLocalConsole || !isWinConsole)
+-#endif
+         fprintf(ttyf, title_str, s);
+     }
+ }
