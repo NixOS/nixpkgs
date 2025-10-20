@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Bridge from Glyphs source files (.glyphs) to UFOs and Designspace files via defcon and designspaceLib";
     homepage = "https://github.com/googlefonts/glyphsLib";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
   };
 }
