@@ -22,7 +22,7 @@
   dbus,
   apple-sdk_15,
   nix-update-script,
-}:
+}@args:
 
 let
   ebur128Src = fetchFromGitHub {
@@ -43,6 +43,7 @@ let
     rev = "2354cd2a4b3af60c7feb1c0d6b3d6dd7417c2ac9";
     hash = "sha256-yEr/OCXV83qXi89QHXMrUtQ2UwNOsijQMN35Or2JP+Y=";
   };
+  codec2 = args.codec2.override { freedvSupport = true; };
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "freedv";

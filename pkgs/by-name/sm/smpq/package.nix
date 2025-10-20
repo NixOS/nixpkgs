@@ -1,10 +1,23 @@
 {
   lib,
   cmake,
+  fetchFromGitHub,
   fetchurl,
   stdenv,
   stormlib,
 }:
+
+let
+  stormlib_9_22 = stormlib.overrideAttrs (old: {
+    version = "9.22";
+    src = fetchFromGitHub {
+      owner = "ladislav-zezula";
+      repo = "StormLib";
+      rev = "v9.22";
+      hash = "sha256-jFUfxLzuRHAvFE+q19i6HfGcL6GX4vKL1g7l7LOhjeU=";
+    };
+  });
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "smpq";
@@ -21,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ stormlib ];
+  buildInputs = [ stormlib_9_22 ];
 
   strictDeps = true;
 

@@ -5,7 +5,8 @@
   cmake,
   gettext,
   libuv,
-  lua,
+  lua5_1,
+  luajit,
   pkg-config,
   unibilium,
   utf8proc,
@@ -25,6 +26,11 @@
   fish ? null,
   python3 ? null,
 }:
+
+let
+  lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
+in
+
 stdenv.mkDerivation (
   finalAttrs:
   let

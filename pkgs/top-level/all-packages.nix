@@ -282,10 +282,6 @@ with pkgs;
 
   cve = with python3Packages; toPythonApplication cvelib;
 
-  basalt-monado = callPackage ../by-name/ba/basalt-monado/package.nix {
-    opencv = opencv.override { enableGtk3 = true; };
-  };
-
   bloodhound-py = with python3Packages; toPythonApplication bloodhound-py;
 
   # Zip file format only allows times after year 1980, which makes e.g. Python
@@ -968,17 +964,6 @@ with pkgs;
 
   opnplug = adlplug.override { type = "OPN"; };
 
-  akkoma = callPackage ../by-name/ak/akkoma/package.nix {
-    beamPackages = beam_minimal.packages.erlang_26.extend (
-      self: super: {
-        elixir = self.elixir_1_16;
-        rebar3 = self.rebar3WithPlugins {
-          plugins = with self; [ pc ];
-        };
-      }
-    );
-  };
-
   acme-client = callPackage ../tools/networking/acme-client {
     stdenv = gccStdenv;
   };
@@ -1093,13 +1078,6 @@ with pkgs;
   winbox = winbox3;
   winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
-  };
-
-  x2t = callPackage ../by-name/x2/x2t/package.nix {
-    openssl = openssl.override {
-      enableMD2 = true;
-      static = true;
-    };
   };
 
   yabridge = callPackage ../tools/audio/yabridge {
@@ -1643,10 +1621,6 @@ with pkgs;
   kerf = kerf_1; # kerf2 is WIP
   kerf_1 = callPackage ../development/interpreters/kerf {
     stdenv = clangStdenv;
-  };
-
-  plausible = callPackage ../by-name/pl/plausible/package.nix {
-    beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
   };
 
   reattach-to-user-namespace = callPackage ../os-specific/darwin/reattach-to-user-namespace { };
@@ -3838,18 +3812,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_12;
   };
 
-  smpq = callPackage ../by-name/sm/smpq/package.nix {
-    stormlib = stormlib.overrideAttrs (old: {
-      version = "9.22";
-      src = fetchFromGitHub {
-        owner = "ladislav-zezula";
-        repo = "StormLib";
-        rev = "v9.22";
-        hash = "sha256-jFUfxLzuRHAvFE+q19i6HfGcL6GX4vKL1g7l7LOhjeU=";
-      };
-    });
-  };
-
   snapcast = callPackage ../applications/audio/snapcast {
     pulseaudioSupport = config.pulseaudio or stdenv.hostPlatform.isLinux;
   };
@@ -4265,10 +4227,6 @@ with pkgs;
   binaryen = callPackage ../development/compilers/binaryen {
     nodejs = nodejs-slim;
     inherit (python3Packages) filecheck;
-  };
-
-  bluespec = callPackage ../by-name/bl/bluespec/package.nix {
-    gmp-static = gmp.override { withStatic = true; };
   };
 
   codon = callPackage ../development/compilers/codon {
@@ -4857,12 +4815,6 @@ with pkgs;
   inherit (haxePackages) hxcpp;
 
   dotnetPackages = recurseIntoAttrs (callPackage ./dotnet-packages.nix { });
-
-  gopro-tool = callPackage ../by-name/go/gopro-tool/package.nix {
-    vlc = vlc.overrideAttrs (old: {
-      buildInputs = old.buildInputs ++ [ x264 ];
-    });
-  };
 
   gwe = callPackage ../tools/misc/gwe {
     nvidia_x11 = linuxPackages.nvidia_x11;
@@ -7298,7 +7250,6 @@ with pkgs;
       # these things are only used for tests, they don't get into the closure
       shared-mime-info = shared-mime-info.override { glib = glib-untested; };
       desktop-file-utils = desktop-file-utils.override { glib = glib-untested; };
-      dbus = dbus.override { enableSystemd = false; };
     }
   );
 
@@ -9562,10 +9513,6 @@ with pkgs;
 
   qremotecontrol-server = libsForQt5.callPackage ../servers/misc/qremotecontrol-server { };
 
-  rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix {
-    beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_17; });
-  };
-
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     stdenv = clangStdenv;
     libtool = cctools;
@@ -10650,10 +10597,6 @@ with pkgs;
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );
 
-  darktable = callPackage ../by-name/da/darktable/package.nix {
-    pugixml = pugixml.override { shared = true; };
-  };
-
   datadog-agent = callPackage ../tools/networking/dd-agent/datadog-agent.nix {
     pythonPackages = datadog-integrations-core { };
   };
@@ -10959,12 +10902,6 @@ with pkgs;
     callPackage ../applications/editors/formiko {
       inherit buildPythonApplication;
     };
-
-  freedv = callPackage ../by-name/fr/freedv/package.nix {
-    codec2 = codec2.override {
-      freedvSupport = true;
-    };
-  };
 
   inherit
     ({
@@ -12454,9 +12391,6 @@ with pkgs;
   # so expect breakage. use wrapNeovim instead if you want a stable alternative
   wrapNeovimUnstable = callPackage ../applications/editors/neovim/wrapper.nix { };
   wrapNeovim = neovim-unwrapped: lib.makeOverridable (neovimUtils.legacyWrapper neovim-unwrapped);
-  neovim-unwrapped = callPackage ../by-name/ne/neovim-unwrapped/package.nix {
-    lua = if lib.meta.availableOn stdenv.hostPlatform luajit then luajit else lua5_1;
-  };
 
   neovimUtils = callPackage ../applications/editors/neovim/utils.nix {
     lua = lua5_1;
@@ -13699,19 +13633,6 @@ with pkgs;
 
   inherit (ocamlPackages) hol_light;
 
-  isabelle = callPackage ../by-name/is/isabelle/package.nix {
-    polyml = polyml.overrideAttrs {
-      pname = "polyml-for-isabelle";
-      version = "2025";
-      __intentionallyOverridingVersion = true; # avoid a warning, no src override
-      configureFlags = [
-        "--enable-intinf-as-int"
-        "--with-gmp"
-        "--disable-shared"
-      ];
-      buildFlags = [ "compiler" ];
-    };
-  };
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
   lean3 = lean;
@@ -14173,18 +14094,6 @@ with pkgs;
   );
 
   lice = python3Packages.callPackage ../tools/misc/lice { };
-
-  mysql-workbench = callPackage ../by-name/my/mysql-workbench/package.nix (
-    let
-      mysql = mysql80;
-    in
-    {
-      gdal = gdal.override {
-        libmysqlclient = mysql;
-      };
-      mysql = mysql;
-    }
-  );
 
   resp-app = libsForQt5.callPackage ../applications/misc/resp-app { };
 

@@ -1,6 +1,7 @@
 {
   lib,
-  beamPackages,
+  beam27Packages,
+  elixir_1_18,
   buildNpmPackage,
   rustPlatform,
   fetchFromGitHub,
@@ -110,6 +111,8 @@ let
           ln -s "$lib" $out/mjml/priv/native/$base.so
         done
       '';
+
+  beamPackages = beam27Packages.extend (self: super: { elixir = elixir_1_18; });
 
 in
 beamPackages.mixRelease rec {

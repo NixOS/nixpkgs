@@ -77,7 +77,11 @@
 
   versionCheckHook,
   gitUpdater,
-}:
+}@args:
+
+let
+  pugixml = args.pugixml.override { shared = true; };
+in
 
 stdenv.mkDerivation rec {
   version = "5.2.1";

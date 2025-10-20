@@ -40,11 +40,13 @@
     stdenv.hostPlatform.emulatorAvailable buildPackages
     && lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.isLittleEndian == stdenv.buildPlatform.isLittleEndian,
-}:
+}@args:
 
 assert stdenv.hostPlatform.isLinux -> util-linuxMinimal != null;
 
 let
+  dbus = args.dbus.override { enableSystemd = false; };
+
   gobject-introspection' = buildPackages.gobject-introspection.override {
     propagateFullGlib = false;
     # Avoid introducing cairo, which enables gobjectSupport by default.

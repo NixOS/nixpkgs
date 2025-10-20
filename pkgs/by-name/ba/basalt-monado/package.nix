@@ -24,7 +24,12 @@
   xorg,
   cudaPackages,
   enableCuda ? config.cudaSupport,
-}:
+}@args:
+
+let
+  opencv = args.opencv.override { enableGtk3 = true; };
+in
+
 stdenv.mkDerivation {
   pname = "basalt-monado";
   version = "0-unstable-2025-09-25";
