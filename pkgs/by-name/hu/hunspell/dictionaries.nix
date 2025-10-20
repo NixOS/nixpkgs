@@ -293,53 +293,74 @@ let
       };
     };
 
-  mkDictFromJ3e =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    stdenv.mkDerivation rec {
-      pname = "hunspell-dict-${shortName}-j3e";
-      version = "20161207";
+  mkDictFromJ3e = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      src = fetchurl {
-        url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
-        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
-      };
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
 
-      nativeBuildInputs = [
-        ispell
-        perl
-        hunspell
-      ];
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-j3e";
+        version = "20161207";
 
-      dontBuild = true;
+        src = fetchurl {
+          url = "https://j3e.de/ispell/igerman98/dict/igerman98-${finalAttrs.version}.tar.bz2";
+          hash = "sha256-FylvA8X+pi127MUw6+gPatxDAnj1jUctwYQtcWEpYKg=";
+        };
 
-      installPhase = ''
-        patchShebangs bin
-        make hunspell/${dictFileName}.aff hunspell/${dictFileName}.dic
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 hunspell/${dictFileName}.dic "$out/share/hunspell/"
-        install -m644 hunspell/${dictFileName}.aff "$out/share/hunspell/"
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-      '';
+        postPatch = ''
+          patchShebangs --build bin
+        '';
 
-      meta = {
-        homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
-        description = shortDescription;
-        license = with lib.licenses; [
-          gpl2
-          gpl3
+        strictDeps = true;
+        nativeBuildInputs = [
+          ispell
+          perl
+          hunspell
         ];
-        maintainers = with lib.maintainers; [ timor ];
-        platforms = lib.platforms.all;
+
+        buildFlags = [
+          "hunspell/${finalAttrs.dictFileName}.aff"
+          "hunspell/${finalAttrs.dictFileName}.dic"
+        ];
+
+        installPhase = ''
+          runHook preInstall
+
+          # hunspell dicts
+          install -dm755 "$out/share/hunspell"
+          install -m644 hunspell/${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
+          install -m644 hunspell/${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
+
+          # myspell dicts symlinks
+          install -dm755 "$out/share/myspell/dicts"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
+
+          runHook postInstall
+        '';
+
+        meta = {
+          homepage = "https://www.j3e.de/ispell/igerman98/index_en.html";
+          description = shortDescription;
+          license = with lib.licenses; [
+            gpl2
+            gpl3
+          ];
+          maintainers = with lib.maintainers; [ timor ];
+          platforms = lib.platforms.all;
+        };
       };
-    };
+  };
 
   mkDictFromLibreOffice =
     {
