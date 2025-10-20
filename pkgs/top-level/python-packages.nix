@@ -16128,6 +16128,10 @@ self: super: with self; {
 
   requests-hawk = callPackage ../development/python-modules/requests-hawk { };
 
+  requests-http-message-signatures =
+    callPackage ../development/python-modules/requests-http-message-signatures
+      { };
+
   requests-http-signature = callPackage ../development/python-modules/requests-http-signature { };
 
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
