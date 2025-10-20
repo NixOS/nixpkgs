@@ -19619,6 +19619,10 @@ self: super: with self; {
 
   types-xxhash = callPackage ../development/python-modules/types-xxhash { };
 
+  typesense = callPackage ../development/python-modules/typesense {
+    inherit (pkgs) typesense curl;
+  };
+
   typesentry = callPackage ../development/python-modules/typesentry { };
 
   typeshed-client = callPackage ../development/python-modules/typeshed-client { };
