@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchurl,
+  fetchgit,
   cmake,
   pkg-config,
   alsa-lib,
@@ -15,24 +15,26 @@
   libsndfile,
   libvorbis,
   portaudio,
+  qt6,
   wavpack,
-  libsForQt5,
 }:
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation {
   pname = "traverso";
-  version = "0.49.6";
+  version = "0-unstable-2024-09-28";
 
-  src = fetchurl {
-    url = "https://traverso-daw.org/traverso-${finalAttrs.version}.tar.gz";
-    sha256 = "12f7x8kw4fw1j0xkwjrp54cy4cv1ql0zwz2ba5arclk4pf6bhl7q";
+  src = fetchgit {
+    url = "https://git.savannah.nongnu.org/git/traverso.git";
+    rev = "f34717623a8d19dd7c04d9604ef4468734140abc";
+    hash = "sha256-eobQFJohndwQjXRXBAehkTWS9jR/1bQOjrOF1XJN5L4=";
   };
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
     pkg-config
-    libsForQt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ];
-
   buildInputs = [
     alsa-lib
     fftw
@@ -45,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsndfile.dev
     libvorbis
     portaudio
-    libsForQt5.qtbase
+    qt6.qtbase
     wavpack
   ];
 
@@ -56,17 +58,16 @@ stdenv.mkDerivation (finalAttrs: {
     "-DWANT_LV2=0"
   ];
 
-  hardeningDisable = [ "format" ];
-
   meta = {
     description = "Cross-platform multitrack audio recording and audio editing suite";
     mainProgram = "traverso";
-    homepage = "https://traverso-daw.org/";
+    homepage = "https://savannah.nongnu.org/projects/traverso";
     license = with lib.licenses; [
       gpl2Plus
       lgpl21Plus
     ];
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
     maintainers = with lib.maintainers; [ coconnor ];
   };
-})
+}
