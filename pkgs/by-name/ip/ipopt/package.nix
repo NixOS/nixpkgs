@@ -25,6 +25,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gfortran
