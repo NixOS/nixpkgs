@@ -1759,17 +1759,29 @@ with self;
     )
   );
 
-  ppx_typed_fields = janePackage {
-    pname = "ppx_typed_fields";
-    hash = "sha256-aTPEBBc1zniZkEmzubGkU064bwGnefBOjVDqTdPm2w8=";
-    meta.description = "GADT-based field accessors and utilities";
-    propagatedBuildInputs = [
-      core
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_typed_fields = janePackage (
+    {
+      pname = "ppx_typed_fields";
+      meta.description = "GADT-based field accessors and utilities";
+      propagatedBuildInputs = [
+        core
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-M+UhZst98gRg6pVg828UZn8AEFK2a/KAzGkuUkWoBaI=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-aTPEBBc1zniZkEmzubGkU064bwGnefBOjVDqTdPm2w8=";
+        }
+    )
+  );
 
   ppx_typerep_conv = janePackage (
     {
