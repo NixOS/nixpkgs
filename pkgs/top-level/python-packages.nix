@@ -12166,8 +12166,6 @@ self: super: with self; {
 
   primer3 = callPackage ../development/python-modules/primer3 { };
 
-  primp = callPackage ../development/python-modules/primp { };
-
   print-color = callPackage ../development/python-modules/print-color { };
 
   priority = callPackage ../development/python-modules/priority { };
