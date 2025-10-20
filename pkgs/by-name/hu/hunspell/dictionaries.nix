@@ -821,6 +821,33 @@ rec {
     };
   };
 
+  # UZBEK
+  uz_UZ = uz-uz;
+  uz-uz = mkDict rec {
+    pname = "hunspell-dict-uz-uz";
+    version = "0.1.0";
+
+    src = fetchFromGitHub {
+      owner = "uzbek-net";
+      repo = "uz-hunspell";
+      tag = version;
+      hash = "sha256-EUYhnUWUy45AYGH+HoxaFFCBVnotsIm4GlpMBgnHxdo=";
+    };
+
+    shortName = "uz-uz";
+    dictFileName = "uz_UZ";
+    readmeFile = "README.md";
+
+    meta = {
+      description = "Hunspell dictionary for Uzbek";
+      homepage = "https://github.com/uzbek-net/uz-hunspell";
+      license = with lib.licenses; [
+        gpl3Plus
+      ];
+      teams = [ lib.teams.uzinfocom ];
+    };
+  };
+
   # RUSSIAN
 
   ru_RU = ru-ru;
