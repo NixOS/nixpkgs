@@ -523,6 +523,7 @@ rec {
     shortDescription = "English (United States)";
     srcFileName = "en_US";
     dictFileName = "en_US";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2018.04.16.zip";
       sha256 = "18hbncvqnckzqarrmnzk58plymjqyi93k4qj98fac5mr71jbmzaf";
@@ -535,6 +536,7 @@ rec {
     shortDescription = "English (United States) Large";
     srcFileName = "en_US-large";
     dictFileName = "en_US";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2018.04.16.zip";
       sha256 = "1xm9jgqbivp5cb78ykjxg47vzq1yqj82l7r4q5cjpivrv99s49qc";
@@ -547,6 +549,7 @@ rec {
     shortDescription = "English (Canada)";
     srcFileName = "en_CA";
     dictFileName = "en_CA";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2018.04.16.zip";
       sha256 = "06yf3s7y1215jmikbs18cn4j8a13csp4763w3jfgah8zlim6vc47";
@@ -559,6 +562,7 @@ rec {
     shortDescription = "English (Canada) Large";
     srcFileName = "en_CA-large";
     dictFileName = "en_CA";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2018.04.16.zip";
       sha256 = "1200xxyvv6ni8nk52v3059c367817vnrkm0cdh38rhiigb5flfha";
@@ -571,6 +575,7 @@ rec {
     shortDescription = "English (Australia)";
     srcFileName = "en_AU";
     dictFileName = "en_AU";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip";
       sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
@@ -583,6 +588,7 @@ rec {
     shortDescription = "English (Australia) Large";
     srcFileName = "en_AU-large";
     dictFileName = "en_AU";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2018.04.16.zip";
       sha256 = "14l1w4dpk0k1js2wwq5ilfil89ni8cigph95n1rh6xi4lzxj7h6g";
@@ -595,6 +601,7 @@ rec {
     shortDescription = "English (United Kingdom, 'ise' ending)";
     srcFileName = "en_GB-ise";
     dictFileName = "en_GB";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2018.04.16.zip";
       sha256 = "0ylg1zvfvsawamymcc9ivrqcb9qhlpgpnizm076xc56jz554xc2l";
@@ -607,6 +614,7 @@ rec {
     shortDescription = "English (United Kingdom, 'ize' ending)";
     srcFileName = "en_GB-ize";
     dictFileName = "en_GB";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2018.04.16.zip";
       sha256 = "1rmwy6sxmd400cwjf58az6g14sq28p18f5mlq8ybg8y33q9m42ps";
@@ -619,6 +627,7 @@ rec {
     shortDescription = "English (United Kingdom) Large";
     srcFileName = "en_GB-large";
     dictFileName = "en_GB";
+
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2018.04.16.zip";
       sha256 = "1y4d7x5vvi1qh1s3i09m0vvqrpdzzqhsdngr8nsh7hc5bnlm37mi";
@@ -945,16 +954,17 @@ rec {
   uk-ua = mkDict (finalAttrs: {
     pname = "hunspell-dict-uk-ua";
     version = "6.5.3";
+
     _version = "1727974630";
+    dictFileName = "uk_UA";
+    readmeFile = "README_uk_UA.txt";
 
     src = fetchurl {
       url = "https://extensions.libreoffice.org/assets/downloads/521/${finalAttrs._version}/dict-uk_UA-${finalAttrs.version}.oxt";
       hash = "sha256-c957WHJqaf/M2QrE2H3aIDAWGoQDnDl0na7sd+kUXNI=";
     };
 
-    dictFileName = "uk_UA";
-    readmeFile = "README_uk_UA.txt";
-    nativeBuildInputs = [ unzip ];
+    depsBuildBuild = [ unzip ];
     unpackCmd = ''
       unzip $curSrc ${finalAttrs.dictFileName}/{${finalAttrs.dictFileName}.dic,${finalAttrs.dictFileName}.aff,${finalAttrs.readmeFile}}
     '';
@@ -974,16 +984,16 @@ rec {
     pname = "hunspell-dict-uz-uz";
     version = "0.1.0";
 
+    shortName = "uz-uz";
+    dictFileName = "uz_UZ";
+    readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "uzbek-net";
       repo = "uz-hunspell";
       tag = finalAttrs.version;
       hash = "sha256-EUYhnUWUy45AYGH+HoxaFFCBVnotsIm4GlpMBgnHxdo=";
     };
-
-    shortName = "uz-uz";
-    dictFileName = "uz_UZ";
-    readmeFile = "README.md";
 
     meta = {
       description = "Hunspell dictionary for Uzbek";
@@ -1041,16 +1051,17 @@ rec {
     pname = "hunspell-dict-da-dk";
     version = "2.5.189";
 
+    shortName = "da-dk";
+    shortDescription = "Danish (Danmark)";
+    dictFileName = "da_DK";
+    readmeFile = "README_da_DK.txt";
+
     src = fetchurl {
       url = "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-${finalAttrs.version}.oxt";
       hash = "sha256-6CTyExN2NssCBXDbQkRhuzxbwjh4MC+eBouI5yzgLEQ=";
     };
 
-    shortName = "da-dk";
-    shortDescription = "Danish (Danmark)";
-    dictFileName = "da_DK";
-    readmeFile = "README_da_DK.txt";
-    nativeBuildInputs = [ unzip ];
+    depsBuildBuild = [ unzip ];
     unpackCmd = ''
       unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
     '';
@@ -1074,6 +1085,9 @@ rec {
     pname = "hunspell-dict-nl-nl";
     version = "2.20.19";
 
+    dictFileName = "nl_NL";
+    readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
@@ -1085,9 +1099,6 @@ rec {
       mv nl.aff nl_NL.aff
       mv nl.dic nl_NL.dic
     '';
-
-    dictFileName = "nl_NL";
-    readmeFile = "README.md";
 
     meta = {
       description = "Hunspell dictionary for Dutch (Netherlands) from OpenTaal";
@@ -1117,14 +1128,17 @@ rec {
   th-th = mkDict {
     pname = "hunspell-dict-th-th";
     version = "experimental-2024-04-15";
+
     dictFileName = "th_TH";
     readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
       rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
       sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
     };
+
     meta = {
       description = "Hunspell dictionary for Central Thai (Thailand)";
       homepage = "https://github.com/SyafiqHadzir/Hunspell-TH";
@@ -1140,9 +1154,11 @@ rec {
   id_id = mkDictFromLibreOffice {
     shortName = "id-id";
     dictFileName = "id_ID";
-    sourceRoot = "id";
-    shortDescription = "Bahasa Indonesia (Indonesia)";
     readmeFile = "README-dict.md";
+    shortDescription = "Bahasa Indonesia (Indonesia)";
+
+    sourceRoot = "id";
+
     license = with lib.licenses; [
       lgpl21Only
       lgpl3Only
@@ -1157,6 +1173,7 @@ rec {
     dictFileName = "hr_HR";
     shortDescription = "Croatian (Croatia)";
     readmeFile = "README_hr_HR.txt";
+
     license = with lib.licenses; [
       gpl2Only
       lgpl21Only
@@ -1170,9 +1187,11 @@ rec {
   nb-no = mkDictFromLibreOffice {
     shortName = "nb-no";
     dictFileName = "nb_NO";
-    sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Bokmål (Norway)";
+
+    sourceRoot = "no";
+
     license = with lib.licenses; [ gpl2Only ];
   };
 
@@ -1180,9 +1199,11 @@ rec {
   nn-no = mkDictFromLibreOffice {
     shortName = "nn-no";
     dictFileName = "nn_NO";
-    sourceRoot = "no";
     readmeFile = "README_hyph_NO.txt";
     shortDescription = "Norwegian Nynorsk (Norway)";
+
+    sourceRoot = "no";
+
     license = with lib.licenses; [ gpl2Only ];
   };
 
@@ -1191,6 +1212,7 @@ rec {
   tok = mkDict (finalAttrs: {
     pname = "hunspell-dict-tok";
     version = "20220829";
+
     dictFileName = "tok";
     readmeFile = "README.en.adoc";
 
@@ -1223,6 +1245,7 @@ rec {
     dictFileName = "pl_PL";
     shortDescription = "Polish (Poland)";
     readmeFile = "README_en.txt";
+
     # the README doesn't specify versions of licenses :/
     license = with lib.licenses; [
       gpl2Plus
@@ -1241,6 +1264,7 @@ rec {
     dictFileName = "pt_BR";
     shortDescription = "Portuguese (Brazil)";
     readmeFile = "README_pt_BR.txt";
+
     license = with lib.licenses; [ lgpl3 ];
   };
 
@@ -1250,6 +1274,7 @@ rec {
     dictFileName = "pt_PT";
     shortDescription = "Portuguese (Portugal)";
     readmeFile = "README_pt_PT.txt";
+
     license = with lib.licenses; [
       gpl2
       lgpl21
@@ -1263,24 +1288,34 @@ rec {
   fa-ir = mkDict {
     pname = "hunspell-dict-fa-ir";
     version = "experimental-2022-09-04";
+
     dictFileName = "fa-IR";
     readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "b00f";
       repo = "lilak";
       rev = "1a80a8e5c9377ac424d29ef20be894e250bc9765";
       hash = "sha256-xonnrclzgFEHdQ9g8ijm0bo9r5a5Y0va52NoJR5d8mo=";
     };
+
     nativeBuildInputs = [ python3 ];
+
     buildPhase = ''
       runHook preBuild
+
       mkdir build
+
       (cd src && python3 lilak.py)
+
       mv build/* ./
+
       # remove timestamp from file
       sed -i 's/^\(## *File Version[^,]*\),.*/\1/' fa-IR.aff
+
       runHook postBuild
     '';
+
     meta = {
       description = "Hunspell dictionary for Persian (Iran)";
       homepage = "https://github.com/b00f/lilak";
@@ -1295,18 +1330,18 @@ rec {
   ro-ro = mkDict (finalAttrs: {
     pname = "hunspell-dict-ro-ro";
     version = "3.3.10";
-    shortName = "ro-ro";
+
     dictFileName = "ro_RO";
-    fileName = "${finalAttrs.dictFileName}.${finalAttrs.version}.zip";
+
     shortDescription = "Romanian (Romania)";
     readmeFile = "README";
 
     src = fetchurl {
-      url = "mirror://sourceforge/rospell/${finalAttrs.fileName}";
+      url = "mirror://sourceforge/rospell/${finalAttrs.dictFileName}.${finalAttrs.version}.zip";
       hash = "sha256-fxKNZOoGyeZxHDCxGMCv7vsBTY8zyS2szfRVq6LQRRk=";
     };
 
-    nativeBuildInputs = [ unzip ];
+    depsBuildBuild = [ unzip ];
     unpackCmd = ''
       unzip $curSrc ${finalAttrs.dictFileName}.aff ${finalAttrs.dictFileName}.dic ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
     '';
@@ -1325,15 +1360,15 @@ rec {
     pname = "hunspell-dict-tr-tr";
     version = "1.1.1";
 
+    dictFileName = "tr_TR";
+    readmeFile = "README.md";
+
     src = fetchFromGitHub {
       owner = "tdd-ai";
       repo = "hunspell-tr";
       rev = "7302eca5f3652fe7ae3d3ec06c44697c97342b4e";
       hash = "sha256-r/I5T/1e7gcp2XZ4UvnpFmWMTsNqLZSCbkqPcgC13PE=";
     };
-
-    dictFileName = "tr_TR";
-    readmeFile = "README.md";
 
     meta = {
       description = "Hunspell dictionary for Turkish (Turkey) from tdd-ai";
@@ -1352,6 +1387,7 @@ rec {
     dictFileName = "el_GR";
     shortDescription = "Greek (Greece)";
     readmeFile = "README_el_GR.txt";
+
     license = with lib.licenses; [
       mpl11
       gpl2
