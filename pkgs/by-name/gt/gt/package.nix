@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gt";
-  version = "0-unstable-2022-05-08";
+  version = "0-unstable-2025-06-26";
 
   src = fetchFromGitHub {
     owner = "linux-usb-gadgets";
     repo = "gt";
-    rev = "7f9c45d98425a27444e49606ce3cf375e6164e8e";
-    sha256 = "sha256-km4U+t4Id2AZx6GpH24p2WNmvV5RVjJ14sy8tWLCQsk=";
+    rev = "8ebbf3eb6fb77a53d6ace0eebf4f5debb779b576";
+    sha256 = "sha256-f/1nYnpAJ22ilWeyGtGcz9ZynL8a4UQoiKW+K/97iRI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";
