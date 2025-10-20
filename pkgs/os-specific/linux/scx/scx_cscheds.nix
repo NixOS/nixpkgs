@@ -6,13 +6,13 @@
   elfutils,
   zlib,
   zstd,
-  scx-common,
+  scx,
   libseccomp,
 }:
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "scx_cscheds";
-  inherit (scx-common) version src;
+  inherit (scx.rustscheds) version src;
 
   postPatch = ''
     substituteInPlace ./scheds/c/Makefile \
@@ -42,7 +42,11 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
-  meta = scx-common.meta // {
+  passthru = {
+    inherit (scx.rustscheds.passthru) tests;
+  };
+
+  meta = scx.rustscheds.meta // {
     description = "Sched-ext C userspace schedulers";
     longDescription = ''
       This includes C based schedulers such as scx_central, scx_flatcg,

@@ -6,15 +6,24 @@
   elfutils,
   zlib,
   zstd,
-  scx-common,
+  fetchFromGitHub,
   protobuf,
   libseccomp,
+  nix-update-script,
+  nixosTests,
 }:
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "scx_rustscheds";
-  inherit (scx-common) version src;
+  version = "1.0.17";
 
-  inherit (scx-common.versionInfo.scx) cargoHash;
+  src = fetchFromGitHub {
+    owner = "sched-ext";
+    repo = "scx";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-UhFHT8cSrdjhSqjj4qFzn5UvfPOLPwrBh1ytL2gFhzU=";
+  };
+
+  cargoHash = "sha256-yQM2zx1IzGjegwLK4epsluWl8m5RSP3jB00Lpd8+TLE=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,7 +61,10 @@ rustPlatform.buildRustPackage {
     "--skip=proc_data::tests::test_thread_operations"
   ];
 
-  meta = scx-common.meta // {
+  passthru.tests.basic = nixosTests.scx;
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Sched-ext Rust userspace schedulers";
     longDescription = ''
       This includes Rust based schedulers such as
@@ -63,5 +75,15 @@ rustPlatform.buildRustPackage {
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
+
+    homepage = "https://github.com/sched-ext/scx";
+    changelog = "https://github.com/sched-ext/scx/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    badPlatforms = [ "aarch64-linux" ];
+    maintainers = with lib.maintainers; [
+      johnrtitor
+      Gliczy
+    ];
   };
-}
+})
