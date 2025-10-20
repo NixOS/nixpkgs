@@ -24,13 +24,13 @@
 
 gcc15Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprtoolkit";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprtoolkit";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AQCTRH8VsrHzOHL0ueXt/6OQtSSfZbT3XUBI4sq8rx4=";
+    hash = "sha256-SjZAlFpZ/ZpYXj59toamF4qx5rC8RP0U/yEsPVniyI8=";
   };
 
   nativeBuildInputs = [
