@@ -299,40 +299,48 @@ let
       };
   };
 
-  mkDictFromLinguistico =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-      src,
-    }:
-    mkDict (finalAttrs: {
-      inherit src dictFileName;
-      pname = "hunspell-dict-${shortName}-linguistico";
-      version = "2.4";
+  mkDictFromLinguistico = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-      readmeFile = finalAttrs.dictFileName + "_README.txt";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
 
-      unpackCmd = ''
-        unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
-      '';
-      sourceRoot = ".";
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-linguistico";
+        version = "2.4";
 
-      prePatch = ''
-        # Fix dic file empty lines (FS#22275)
-        sed '/^\/$/d' -i ${finalAttrs.dictFileName}.dic
-      '';
+        readmeFile = finalAttrs.dictFileName + "_README.txt";
 
-      depsBuildBuild = [ unzip ];
+        unpackCmd = ''
+          unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
+        '';
+        sourceRoot = ".";
 
-      meta = {
-        description = "Hunspell dictionary for ${shortDescription}";
-        homepage = "https://sourceforge.net/projects/linguistico/";
-        license = lib.licenses.gpl3;
-        maintainers = with lib.maintainers; [ renzo ];
-        platforms = lib.platforms.all;
+        prePatch = ''
+          # Fix dic file empty lines (FS#22275)
+          sed '/^\/$/d' -i ${finalAttrs.dictFileName}.dic
+        '';
+
+        depsBuildBuild = [ unzip ];
+
+        meta = {
+          description = "Hunspell dictionary for ${shortDescription}";
+          homepage = "https://sourceforge.net/projects/linguistico/";
+          license = lib.licenses.gpl3;
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-    });
+  };
 
   mkDictFromXuxen = lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
