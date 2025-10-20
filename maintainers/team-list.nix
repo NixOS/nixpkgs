@@ -418,15 +418,6 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
-  # Dummy group for the "everyone else" section
-  feature-freeze-everyone-else = {
-    members = [ ];
-    github = "nixpkgs-committers";
-    scope = "Dummy team for the #everyone else' section during feture freezes, not to be used as package maintainers!";
-    shortName = "Everyone else";
-    enableFeatureFreezePing = true;
-  };
-
   flutter = {
     members = [
       mkg20001
