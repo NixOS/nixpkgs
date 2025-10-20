@@ -26,32 +26,37 @@ let
           hash = "sha256-J7Sb4nv9wOl1JnR6Ky4XS9HZHABKtNKPB3uYfC/UGO4=";
         };
       });
+
+      textual-textarea = super.textual-textarea.overridePythonAttrs (old: {
+        pythonRelaxDeps = old.pythonRelaxDeps ++ [ "textual" ];
+      });
     };
   };
   pythonPackages = python.pkgs;
 in
 pythonPackages.buildPythonApplication rec {
   pname = "harlequin";
-  version = "2.1.2";
+  version = "2.2.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "harlequin";
     tag = "v${version}";
-    hash = "sha256-uHzhAI8ppp6aoveMPcLCQX2slhbor5Qy+IoTui+RP7M=";
+    hash = "sha256-uBHzoawvhEeRjcvm+R3nft37cEv+1sqx9crYUbC7pRo=";
   };
 
   pythonRelaxDeps = [
     "numpy"
     "pyarrow"
+    "questionary"
+    "rich-click"
     "textual"
     "tree-sitter"
     "tree-sitter-sql"
-    "rich-click"
   ];
 
-  build-system = with pythonPackages; [ poetry-core ];
+  build-system = with pythonPackages; [ hatchling ];
 
   nativeBuildInputs = [ glibcLocales ];
 
