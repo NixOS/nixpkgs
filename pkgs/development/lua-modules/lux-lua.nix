@@ -12,13 +12,14 @@
   perl,
   pkg-config,
   rustPlatform,
+  toLuaModule
 }:
 let
   luaMajorMinor = lib.take 2 (lib.splitVersion lua.version);
   luaVersionDir = if isLuaJIT then "jit" else lib.concatStringsSep "." luaMajorMinor;
   luaFeature = if isLuaJIT then "luajit" else "lua${lib.concatStringsSep "" luaMajorMinor}";
 in
-rustPlatform.buildRustPackage rec {
+toLuaModule (rustPlatform.buildRustPackage rec {
   pname = "lux-lua";
 
   version = lux-cli.version;
@@ -89,4 +90,4 @@ rustPlatform.buildRustPackage rec {
     ];
     platforms = lib.platforms.all;
   };
-}
+})
