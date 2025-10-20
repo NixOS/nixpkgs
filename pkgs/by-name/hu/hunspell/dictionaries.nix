@@ -136,7 +136,7 @@ let
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
       unpackCmd = ''
-        unzip $src dictionaries/${finalAttrs.dictFileName}.dic dictionaries/${finalAttrs.dictFileName}.aff $readmeFile
+        unzip $curSrc dictionaries/${finalAttrs.dictFileName}.dic dictionaries/${finalAttrs.dictFileName}.aff $readmeFile
       '';
       installPhase = ''
         # hunspell dicts
@@ -181,7 +181,7 @@ let
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
       unpackCmd = ''
-        unzip $src ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
+        unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
       '';
       postInstall = lib.optionalString isDefault ''
         for ext in aff dic; do
@@ -215,7 +215,7 @@ let
       nativeBuildInputs = [ unzip ];
       sourceRoot = ".";
       unpackCmd = ''
-        unzip $src ${finalAttrs.srcFileName}.dic ${finalAttrs.srcFileName}.aff ${finalAttrs.srcReadmeFile}
+        unzip $curSrc ${finalAttrs.srcFileName}.dic ${finalAttrs.srcFileName}.aff ${finalAttrs.srcReadmeFile}
       '';
       postUnpack = ''
         mv ${finalAttrs.srcFileName}.dic ${finalAttrs.dictFileName}.dic || true
@@ -250,7 +250,7 @@ let
         sed '/^\/$/d' -i ${finalAttrs.dictFileName}.dic
       '';
       unpackCmd = ''
-        unzip $src ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
+        unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
       '';
     });
 
@@ -852,7 +852,7 @@ rec {
     readmeFile = "README_uk_UA.txt";
     nativeBuildInputs = [ unzip ];
     unpackCmd = ''
-      unzip $src ${finalAttrs.dictFileName}/{${finalAttrs.dictFileName}.dic,${finalAttrs.dictFileName}.aff,${finalAttrs.readmeFile}}
+      unzip $curSrc ${finalAttrs.dictFileName}/{${finalAttrs.dictFileName}.dic,${finalAttrs.dictFileName}.aff,${finalAttrs.readmeFile}}
     '';
 
     meta = {
@@ -948,7 +948,7 @@ rec {
     readmeFile = "README_da_DK.txt";
     nativeBuildInputs = [ unzip ];
     unpackCmd = ''
-      unzip $src ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
+      unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
     '';
 
     meta = {
@@ -1204,7 +1204,7 @@ rec {
 
     nativeBuildInputs = [ unzip ];
     unpackCmd = ''
-      unzip $src ${finalAttrs.dictFileName}.aff ${finalAttrs.dictFileName}.dic ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
+      unzip $curSrc ${finalAttrs.dictFileName}.aff ${finalAttrs.dictFileName}.dic ${finalAttrs.readmeFile} -d ${finalAttrs.dictFileName}
     '';
 
     meta = {
