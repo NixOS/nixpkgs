@@ -2100,21 +2100,33 @@ with self;
     ];
   };
 
-  streamable = janePackage {
-    pname = "streamable";
-    hash = "sha256-FtrAX4nsacCO5HTVxwLgwwT8R2sASJ05qu4gT2ZVSDg=";
-    meta.description = "Collection of types suitable for incremental serialization";
-    propagatedBuildInputs = [
-      async_kernel
-      async_rpc_kernel
-      base
-      core
-      core_kernel
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  streamable = janePackage (
+    {
+      pname = "streamable";
+      meta.description = "Collection of types suitable for incremental serialization";
+      propagatedBuildInputs = [
+        async_kernel
+        async_rpc_kernel
+        base
+        core
+        core_kernel
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-3d7tByQCOfA44wSBKbHXDvyomenWVaEDMHujlK++n8Y=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-FtrAX4nsacCO5HTVxwLgwwT8R2sASJ05qu4gT2ZVSDg=";
+        }
+    )
+  );
 
   textutils = janePackage {
     pname = "textutils";
