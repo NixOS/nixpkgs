@@ -465,39 +465,52 @@ let
       };
   };
 
-  mkDictFromLibreOffice =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-      license,
-      readmeFile ? "README_${dictFileName}.txt",
-      sourceRoot ? dictFileName,
-    }:
-    mkDict (finalAttrs: {
-      inherit dictFileName readmeFile;
-      pname = "hunspell-dict-${shortName}-libreoffice";
-      version = "6.3.0.4";
+  mkDictFromLibreOffice = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-      src = fetchFromGitHub {
-        owner = "LibreOffice";
-        repo = "dictionaries";
-        rev = "libreoffice-${finalAttrs.version}";
-        hash = "sha256-w/iD26CfTLCMnYPxN1awkN911WOG6qMTRZwdmx9Y5JM=";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "license"
+      "sourceRoot"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        dictFileName,
+        license,
+        readmeFile ? "README_${finalAttrs.dictFileName}.txt",
+        sourceRoot ? dictFileName,
+        ...
+      }@args:
+      {
+        inherit readmeFile;
+        pname = "hunspell-dict-${shortName}-libreoffice";
+        version = "6.3.0.4";
+
+        src = fetchFromGitHub {
+          owner = "LibreOffice";
+          repo = "dictionaries";
+          rev = "libreoffice-${finalAttrs.version}";
+          hash = "sha256-w/iD26CfTLCMnYPxN1awkN911WOG6qMTRZwdmx9Y5JM=";
+        };
+
+        buildPhase = ''
+          cp -a ${sourceRoot}/* .
+        '';
+
+        meta = {
+          inherit license;
+          homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
+          description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+          maintainers = with lib.maintainers; [ vlaci ];
+          platforms = lib.platforms.all;
+        };
       };
-
-      buildPhase = ''
-        cp -a ${sourceRoot}/* .
-      '';
-
-      meta = {
-        homepage = "https://wiki.documentfoundation.org/Development/Dictionaries";
-        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
-        license = license;
-        maintainers = with lib.maintainers; [ vlaci ];
-        platforms = lib.platforms.all;
-      };
-    });
+  };
 
 in
 rec {
