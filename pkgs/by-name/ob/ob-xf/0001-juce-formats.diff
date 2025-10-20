@@ -1,0 +1,17 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -89,14 +89,6 @@ add_compile_definitions(JUCE_USE_CURL=0)
+
+ list(APPEND OBXF_JUCE_FORMATS VST3 Standalone)
+
+-if(APPLE)
+-    list(APPEND OBXF_JUCE_FORMATS AU)
+-endif()
+-
+-if(UNIX AND NOT APPLE)
+-    list(APPEND OBXF_JUCE_FORMATS LV2)
+-endif()
+-
+ juce_add_plugin(OB-Xf
+     COMPANY_NAME "Surge Synth Team"
+     BUNDLE_ID "org.surge-synth-team.OB-Xf"
