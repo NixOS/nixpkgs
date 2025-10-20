@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  callPackage,
-  vscode-generic,
+  buildVscode,
   fetchurl,
   jq,
   buildFHSEnv,
@@ -19,7 +18,7 @@ let
     information.sources."${hostPlatform.system}"
       or (throw "antigravity: unsupported system ${hostPlatform.system}");
 in
-(callPackage vscode-generic {
+(buildVscode {
   inherit commandLineArgs useVSCodeRipgrep;
   inherit (information) version vscodeVersion;
   pname = "antigravity";

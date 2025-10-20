@@ -27,14 +27,14 @@
   libkrb5,
   openssl,
   webkitgtk_4_1,
-
-  # Populate passthru.tests
-  tests,
+  ripgrep,
 
   # needed to fix "Save as Root"
   asar,
   bash,
+}:
 
+{
   # Attributes inherit from specific versions
   version,
   vscodeVersion ? version,
@@ -47,6 +47,7 @@
   shortName,
   pname,
   libraryName ? "vscode",
+  buildFHSEnv ? null,
   iconName ? "vs${executableName}",
   updateScript,
   dontFixup ? false,
@@ -54,9 +55,11 @@
   vscodeServer ? null,
   sourceExecutableName ? executableName,
   useVSCodeRipgrep ? false,
-  ripgrep,
   hasVsceSign ? false,
   patchVSCodePath ? true,
+
+  # Populate passthru.tests
+  tests,
 }:
 
 stdenv.mkDerivation (
