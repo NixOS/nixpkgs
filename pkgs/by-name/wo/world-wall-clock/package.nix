@@ -24,6 +24,10 @@ python3.pkgs.buildPythonApplication rec {
     xdg-base-dirs
   ];
 
+  pythonRelaxDeps = [
+    "urwid"
+  ];
+
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
   enabledTestPaths = [ "tests/*" ];
