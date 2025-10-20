@@ -117,8 +117,8 @@ in
             repository = sftpRepository;
             initialize = true;
             timerConfig = null; # has no effect here, just checking that it doesn't break the service
-            extraOptions = [
-              "sftp.command='ssh alice@sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -s sftp'"
+            extraOpts = [
+              "--option=sftp.command='ssh alice@sftp -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -s sftp'"
             ];
           };
           remote-from-file-backup = {
