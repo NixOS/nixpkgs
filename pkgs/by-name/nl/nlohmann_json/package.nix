@@ -24,7 +24,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cECvDOLxgX7Q9R3IE86Hj9JJUxraDQvhoyPDF03B2CY=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMusl [
+  patches = [
+    # https://github.com/nlohmann/json/pull/4771
+    # Fixes build failure in python3Packages.docling-parse, et. al.
+    (fetchpatch {
+      url = "https://github.com/nlohmann/json/commit/96c1b52f1cc4742a00ee02b34e043f61bbffa6ae.patch";
+      hash = "sha256-Reum5a3W6V+OIyyFcStoY4NJB3ZzdAyA/TDt1i07fg4=";
+    })
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
     # Musl does not support LC_NUMERIC, causing a test failure.
     # Turn the error into a warning to make the test succeed.
     # https://github.com/nlohmann/json/pull/4770
@@ -33,6 +41,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-gOZfRyDRI6USdUIY+sH7cygPrSIKGIo8AWcjqc/GQNI=";
     })
   ];
+
+  # TODO Remove when 3.12.1 is released
+  postPatch = ''
+    rm tests/src/unit-class_parser.cpp
+  '';
 
   nativeBuildInputs = [ cmake ];
 
