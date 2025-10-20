@@ -6,12 +6,9 @@
   blas,
   lapack,
   gfortran,
-  enableAMPL ? true,
-  libamplsolver,
-  enableMUMPS ? true,
   mumps,
-  enableSPRAL ? true,
   spral,
+  libamplsolver,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -28,29 +25,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
-  configureFlags =
-    lib.optionals enableAMPL [
-      "--with-asl-lflags=-lamplsolver"
-    ]
-    ++ lib.optionals enableMUMPS [
-      "--with-mumps-cflags=-I${lib.getDev mumps}/include/mumps_seq"
-      "--with-mumps-lflags=-ldmumps"
-    ]
-    ++ lib.optionals enableSPRAL [
-      "--with-spral-lflags=-lspral"
-    ];
-
   nativeBuildInputs = [
     pkg-config
     gfortran
   ];
+
   buildInputs = [
     blas
     lapack
-  ]
-  ++ lib.optionals enableAMPL [ libamplsolver ]
-  ++ lib.optionals enableMUMPS [ mumps ]
-  ++ lib.optionals enableSPRAL [ spral ];
+    mumps
+    spral
+    libamplsolver
+  ];
+
+  configureFlags = [
+    "--with-mumps-cflags=-I${lib.getDev mumps}/include/mumps_seq"
+    "--with-mumps-lflags=-ldmumps"
+    "--with-spral-lflags=-lspral"
+    "--with-asl-lflags=-lamplsolver"
+  ];
 
   enableParallelBuilding = true;
 
