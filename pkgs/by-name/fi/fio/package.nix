@@ -10,7 +10,7 @@
   zlib,
   withGnuplot ? false,
   gnuplot,
-  withLibnbd ? true,
+  withLibnbd ? stdenv.hostPlatform.isLinux,
   libnbd,
 }:
 
