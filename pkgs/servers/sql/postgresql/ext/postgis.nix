@@ -35,7 +35,7 @@ let
 in
 postgresqlBuildExtension (finalAttrs: {
   pname = "postgis";
-  version = "3.6.0";
+  version = "3.5.4";
 
   outputs = [
     "out"
@@ -46,7 +46,7 @@ postgresqlBuildExtension (finalAttrs: {
     owner = "postgis";
     repo = "postgis";
     tag = finalAttrs.version;
-    hash = "sha256-L8k3yk1Dn4Dk7UyHse+8RJsjYsYMebdsiZp6fS7cC0Y=";
+    hash = "sha256-U+nTS7MQEqbyz18cwwBHsvpb+yjiDCV/ADhL1QWIUc0=";
   };
 
   buildInputs = [
