@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  poetry-core,
+  hatchling,
 
   # dependencies
   pyperclip,
@@ -19,26 +19,24 @@
 
 buildPythonPackage rec {
   pname = "textual-textarea";
-  version = "0.15.0";
+  version = "0.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
     tag = "v${version}";
-    hash = "sha256-aaeXgD6RMQ3tlK5H/2lk3ueTyA3yYjHrYL51w/1tvSI=";
+    hash = "sha256-AIt3UqfZbJBgAACxJHElhvAsJWk9I6zjdeRjBtI/FiA=";
   };
-
-  patches = [
-    # https://github.com/tconbeer/textual-textarea/issues/296
-    ./textual-2.0.0.diff
-  ];
 
   pythonRelaxDeps = [
     "textual"
+    "tree-sitter-sql"
   ];
 
-  build-system = [ poetry-core ];
+  build-system = [
+    hatchling
+  ];
 
   dependencies = [
     pyperclip
@@ -54,12 +52,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "textual_textarea" ];
-
-  disabledTests = [
-    # AssertionError: assert Selection(sta...), end=(0, 6)) == Selection(sta...), end=(1, 0))
-    # https://github.com/tconbeer/textual-textarea/issues/296
-    "test_keys"
-  ];
 
   meta = {
     description = "Text area (multi-line input) with syntax highlighting for Textual";
