@@ -34,8 +34,9 @@
   libtool,
   darwin,
   # Allow to independently override the jdks used to build and run respectively
-  buildJdk,
-  runJdk,
+  jdk21_headless,
+  buildJdk ? jdk21_headless,
+  runJdk ? jdk21_headless,
   # Toggle for hacks for running bazel under buildBazelPackage:
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
