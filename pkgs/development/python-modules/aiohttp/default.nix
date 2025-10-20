@@ -21,11 +21,11 @@
   aiosignal,
   async-timeout,
   attrs,
+  backports-zstd,
   frozenlist,
   multidict,
   propcache,
   yarl,
-  zstandard,
 
   # optional dependencies
   aiodns,
@@ -51,14 +51,14 @@
 
 buildPythonPackage rec {
   pname = "aiohttp";
-  version = "3.13.0";
+  version = "3.13.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aio-libs";
     repo = "aiohttp";
     tag = "v${version}";
-    hash = "sha256-X4igOjBeAGDfUGwZAsjUWOWt3EFt53QSuUcdJ/5vBVU=";
+    hash = "sha256-gjFNGHfbajktxApj1RfUdMB4FuD8cFc6ueHZsRbV/uU=";
   };
 
   patches = lib.optionals (!lib.meta.availableOn stdenv.hostPlatform isa-l) [
@@ -105,13 +105,10 @@ buildPythonPackage rec {
   ]
   ++ optional-dependencies.speedups;
 
-
   optional-dependencies.speedups = [
     aiodns
+    backports-zstd
     (if isPyPy then brotlicffi else brotli)
-  ]
-  ++ lib.optionals (pythonOlder "3.14") [
-    zstandard
   ];
 
   nativeCheckInputs = [
