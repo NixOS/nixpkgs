@@ -2,6 +2,8 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  makeWrapper,
+  which,
 }:
 let
   version = "1.2.14";
@@ -21,6 +23,7 @@ python3Packages.buildPythonApplication {
   nativeBuildInputs = with python3Packages; [
     pypaInstallHook
     setuptoolsBuildHook
+    makeWrapper
   ];
 
   dependencies = with python3Packages; [
@@ -34,6 +37,11 @@ python3Packages.buildPythonApplication {
     packaging
     pyyaml
   ];
+
+  postFixup = ''
+    wrapProgram "$out/bin/mktxp" \
+      --prefix PATH : ${lib.makeBinPath [ which ]}
+  '';
 
   meta = {
     homepage = "https://github.com/akpw/mktxp";
