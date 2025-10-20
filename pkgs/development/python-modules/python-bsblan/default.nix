@@ -14,7 +14,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -23,18 +22,12 @@ buildPythonPackage rec {
   version = "2.2.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.12";
-
   src = fetchFromGitHub {
     owner = "liudger";
     repo = "python-bsblan";
     tag = "v${version}";
     hash = "sha256-kPkKgjze3ohaIaDax3h66JWw5tY+3S0N+lPqXSFFcRY=";
   };
-
-  postPatch = ''
-    sed -i "/ruff/d" pyproject.toml
-  '';
 
   env.PACKAGE_VERSION = version;
 
@@ -44,7 +37,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    async-timeout
     backoff
     mashumaro
     orjson
