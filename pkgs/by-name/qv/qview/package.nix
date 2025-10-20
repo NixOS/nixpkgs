@@ -2,7 +2,8 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  libsForQt5,
+  qt6,
+  kdePackages,
   x11Support ? true,
 }:
 
@@ -17,20 +18,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-EcXhwJcgBLdXa/FQ5LuENlzwnLw4Gt2BGlBO1p5U8tI=";
   };
 
-  qmakeFlags = lib.optionals (!x11Support) [ "CONFIG+=NO_X11" ];
-
   nativeBuildInputs = [
-    libsForQt5.qmake
-    libsForQt5.wrapQtAppsHook
+    qt6.qmake
+    qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    libsForQt5.qtbase
-    libsForQt5.qttools
-    libsForQt5.qtimageformats
-    libsForQt5.qtsvg
+    qt6.qtbase
+    qt6.qttools
+    qt6.qtimageformats
+    qt6.qtsvg
+    kdePackages.kimageformats
+  ];
+
+  qmakeFlags = [
+    # See https://github.com/NixOS/nixpkgs/issues/214765
+    "QT_TOOL.lrelease.binary=${lib.getDev qt6.qttools}/bin/lrelease"
   ]
-  ++ lib.optionals x11Support [ libsForQt5.qtx11extras ];
+  ++ lib.optionals (!x11Support) [ "CONFIG+=NO_X11" ];
 
   meta = with lib; {
     description = "Practical and minimal image viewer";
