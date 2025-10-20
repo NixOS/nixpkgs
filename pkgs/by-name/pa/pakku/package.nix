@@ -6,7 +6,6 @@
   makeWrapper,
   fetchFromGitHub,
   versionCheckHook,
-  nix-update-script,
   installShellFiles,
   stripJavaArchivesHook,
 }:
@@ -64,12 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "mitmCache"
-    ];
-  };
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Multiplatform modpack manager for Minecraft: Java Edition";
