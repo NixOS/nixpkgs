@@ -323,11 +323,7 @@ in
     homepage = "https://github.com/electron/electron";
     platforms = lib.platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [
-      yayayayaka
-      teutat3s
-      tomasajt
-    ];
+    teams = [ teams.electron ];
     mainProgram = "electron";
     hydraPlatforms =
       lib.optionals (!(hasInfix "alpha" info.version) && !(hasInfix "beta" info.version))

@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "har-to-k6";
-  version = "0.14.10";
+  version = "0.14.11";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "har-to-k6";
     tag = "v${version}";
-    hash = "sha256-eBy5rBZt9v8XFOSGQPhJWAGy2XuhyuG013A6ex2AxE4=";
+    hash = "sha256-ACt9MNxcEyfg7lkeFBK/KnssbI4jkER0Ua/llQWLpxU=";
   };
 
   dontNpmBuild = true;

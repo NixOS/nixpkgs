@@ -5072,8 +5072,8 @@ let
         mktplcRef = {
           name = "vscode-java-pack";
           publisher = "vscjava";
-          version = "0.30.2";
-          hash = "sha256-uC3hf2OjncMqTRc9KTfrVvTwZOoPT0QXX7HCBTdblnQ=";
+          version = "0.30.3";
+          hash = "sha256-O6Elqkaf2oTpPxWIctrgD1NrDhkeOaCNKuRI4VFhmZ8=";
         };
         meta = {
           description = "Popular extensions for Java development that provides Java IntelliSense, debugging, testing, Maven/Gradle support, project management and more";
