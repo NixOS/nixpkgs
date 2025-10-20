@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "saunafs";
-  version = "5.2.0";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "leil-io";
     repo = "saunafs";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-FS3USnNs6hmR8kExMxvgjCikLCuiZBdyxIdArshwqM0=";
+    hash = "sha256-pT12m50q6unqx9IzRHRs8WE7ygVJW8bi0IKUHu8bGCs=";
   };
 
   patches = [
