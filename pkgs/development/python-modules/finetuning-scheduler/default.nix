@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "speediedan";
     repo = "finetuning-scheduler";
     tag = "v${version}";
-    hash = "sha256-xKaOVbsflqQI9e1Ezcgea2hZpLh6CY+vx2Jy7QPswHM=";
+    hash = "sha256-AfkrWuqpFS71Zrh5NsamzxMitKCsqPF50F9zTDdDhRg=";
   };
 
   build-system = [ setuptools ];
