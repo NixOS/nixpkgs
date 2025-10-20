@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.7.49.5";
+  version = "1.7.50";
 in
 stdenvNoCC.mkDerivation {
   pname = "grav";
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchzip {
     url = "https://github.com/getgrav/grav/releases/download/${version}/grav-admin-v${version}.zip";
-    hash = "sha256-zhjsYWma0qze8zdzX01EauzMONeEC6TRkhdQJUoJEUQ=";
+    hash = "sha256-Gwjzm52aB+5q2/e65sT0eF0Si+j+wqW+7VM8h9BnMNM=";
   };
 
   patches = [
