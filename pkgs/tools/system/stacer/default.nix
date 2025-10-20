@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "0qndzzkbq6abapvwq202kva8j619jdn9977sbqmmfs9zkjz4mbsd";
   };
 
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=4.0"
+  ];
+
   postPatch = ''
     substituteInPlace stacer/Managers/app_manager.cpp \
       --replace 'qApp->applicationDirPath() + "/translations"' \
