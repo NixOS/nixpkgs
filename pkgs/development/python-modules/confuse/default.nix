@@ -2,10 +2,16 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
-  pyyaml,
-  pytestCheckHook,
   pythonOlder,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  pyyaml,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -22,11 +28,17 @@ buildPythonPackage rec {
     hash = "sha256-TVx0cBXv/fIuli/xrFXBAmwJ1rQr5xJL1Q67FaDr4ow=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [
+    flit-core
+  ];
 
-  propagatedBuildInputs = [ pyyaml ];
+  dependencies = [
+    pyyaml
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "confuse" ];
 
