@@ -64,7 +64,6 @@ stdenvNoCC.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [
       rawkode
-      AdsonCicilioti
     ];
   };
 }
