@@ -46,6 +46,9 @@ buildPythonPackage rec {
     description = "Python configuration library for Python that uses YAML";
     homepage = "https://github.com/beetbox/confuse";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [
+      lovesegfault
+      doronbehar
+    ];
   };
 }
