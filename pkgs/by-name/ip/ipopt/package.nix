@@ -10,12 +10,12 @@
   libamplsolver,
   enableMUMPS ? true,
   mumps,
-  mpi,
   enableSPRAL ? true,
   spral,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
+assert !mumps.mpiSupport;
 
 stdenv.mkDerivation rec {
   pname = "ipopt";
@@ -30,15 +30,13 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     lib.optionals enableAMPL [
-      "--with-asl-cflags=-I${libamplsolver}/include"
       "--with-asl-lflags=-lamplsolver"
     ]
     ++ lib.optionals enableMUMPS [
-      "--with-mumps-cflags=-I${mumps}/include"
+      "--with-mumps-cflags=-I${lib.getDev mumps}/include/mumps_seq"
       "--with-mumps-lflags=-ldmumps"
     ]
     ++ lib.optionals enableSPRAL [
-      "--with-spral-cflags=-I${spral}/include"
       "--with-spral-lflags=-lspral"
     ];
 
@@ -51,10 +49,7 @@ stdenv.mkDerivation rec {
     lapack
   ]
   ++ lib.optionals enableAMPL [ libamplsolver ]
-  ++ lib.optionals enableMUMPS [
-    mumps
-    mpi
-  ]
+  ++ lib.optionals enableMUMPS [ mumps ]
   ++ lib.optionals enableSPRAL [ spral ];
 
   enableParallelBuilding = true;
