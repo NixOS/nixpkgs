@@ -1437,18 +1437,30 @@ with self;
     ];
   };
 
-  ppx_jsonaf_conv = janePackage {
-    pname = "ppx_jsonaf_conv";
-    hash = "sha256-v7CYOJ1g4LkqIv5De5tQjjkBWXqKHbvqfSr0X5jBUuM=";
-    meta.description = "[@@deriving] plugin to generate Jsonaf conversion functions";
-    propagatedBuildInputs = [
-      base
-      jsonaf
-      ppx_jane
-      ppxlib
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_jsonaf_conv = janePackage (
+    {
+      pname = "ppx_jsonaf_conv";
+      meta.description = "[@@deriving] plugin to generate Jsonaf conversion functions";
+      propagatedBuildInputs = [
+        base
+        jsonaf
+        ppx_jane
+        ppxlib
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-BnkYY+Td9zV++PuPs/gm5U58rCZjew1OJQ2k8KE+dfA=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-v7CYOJ1g4LkqIv5De5tQjjkBWXqKHbvqfSr0X5jBUuM=";
+        }
+    )
+  );
 
   ppx_js_style = janePackage (
     {
