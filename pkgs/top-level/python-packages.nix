@@ -11995,6 +11995,8 @@ self: super: with self; {
 
   plumlightpad = callPackage ../development/python-modules/plumlightpad { };
 
+  pluralizer = callPackage ../development/python-modules/pluralizer { };
+
   pluthon = callPackage ../development/python-modules/pluthon { };
 
   plux = callPackage ../development/python-modules/plux { };
