@@ -237,9 +237,6 @@
   "sec-meta-identifiers-cpe": [
     "index.html#sec-meta-identifiers-cpe"
   ],
-  "sec-meta-identifiers-purl": [
-    "index.html#sec-meta-identifiers-purl"
-  ],
   "sec-modify-via-packageOverrides": [
     "index.html#sec-modify-via-packageOverrides"
   ],
@@ -663,15 +660,6 @@
   ],
   "var-meta-identifiers-possibleCPEs": [
     "index.html#var-meta-identifiers-possibleCPEs"
-  ],
-  "var-meta-identifiers-purl": [
-    "index.html#var-meta-identifiers-purl"
-  ],
-  "var-meta-identifiers-purlParts": [
-    "index.html#var-meta-identifiers-purlParts"
-  ],
-  "var-meta-identifiers-purls": [
-    "index.html#var-meta-identifiers-purls"
   ],
   "var-meta-teams": [
     "index.html#var-meta-teams"
@@ -2380,6 +2368,9 @@
   ],
   "cmake-build-dir": [
     "index.html#cmake-build-dir"
+  ],
+  "cmake-build-type": [
+    "index.html#cmake-build-type"
   ],
   "dont-use-cmake-configure": [
     "index.html#dont-use-cmake-configure"

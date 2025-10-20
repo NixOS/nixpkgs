@@ -8,12 +8,12 @@
 
 stdenv.mkDerivation {
   pname = "odhcp6c";
-  version = "0-unstable-2025-10-03";
+  version = "0-unstable-2025-10-17";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/odhcp6c.git";
-    rev = "96d9e0b6e81330c61c954c6bc73a2302276fcda1";
-    hash = "sha256-EhkzSKf1t4MrGCN5oC1h0QJiY9w8VhMsa/jor4lEvD4=";
+    rev = "d7afeea2b9650c64fcf915cbb3369577247b96ed";
+    hash = "sha256-6L/yY8u5JBw1oywj2pg+0rW2397KBNAejrg5VKpYxLw=";
   };
 
   nativeBuildInputs = [ cmake ];
