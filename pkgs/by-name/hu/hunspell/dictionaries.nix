@@ -58,62 +58,72 @@ let
       };
   };
 
-  mkDictFromRla =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    mkDict (finalAttrs: {
-      inherit dictFileName;
-      pname = "hunspell-dict-${shortName}-rla";
-      version = "2.5";
+  mkDictFromRla = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-      readmeFile = "README.txt";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
 
-      src = fetchFromGitHub {
-        owner = "sbosio";
-        repo = "rla-es";
-        rev = "v${finalAttrs.version}";
-        hash = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
-      };
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-rla";
+        version = "2.5";
 
-      postPatch = ''
-        substituteInPlace ortograf/herramientas/make_dict.sh \
-           --replace /bin/bash ${bash}/bin/bash \
-           --replace /dev/stderr stderr.log
+        readmeFile = "README.txt";
 
-        substituteInPlace ortograf/herramientas/remover_comentarios.sh \
-           --replace /bin/bash ${bash}/bin/bash \
-      '';
+        src = fetchFromGitHub {
+          owner = "sbosio";
+          repo = "rla-es";
+          rev = "v${finalAttrs.version}";
+          hash = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
+        };
 
-      nativeBuildInputs = [
-        bash
-        coreutils
-        which
-        zip
-        unzip
-      ];
+        postPatch = ''
+          patchShebangs --build ortograf/herramientas
 
-      buildPhase = ''
-        cd ortograf/herramientas
-        bash -x ./make_dict.sh -l ${finalAttrs.dictFileName} -2
-        unzip ${finalAttrs.dictFileName}.zip \
-          ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
-      '';
+          substituteInPlace ortograf/herramientas/make_dict.sh \
+             --replace /dev/stderr stderr.log
+        '';
 
-      meta = {
-        description = "Hunspell dictionary for ${shortDescription} from rla";
-        homepage = "https://github.com/sbosio/rla-es";
-        license = with lib.licenses; [
-          gpl3
-          lgpl3
-          mpl11
+        depsBuildBuild = [
+          which
+          zip
+          unzip
         ];
-        maintainers = with lib.maintainers; [ renzo ];
-        platforms = lib.platforms.all;
+
+        buildPhase = ''
+          runHook preBuild
+
+          cd ortograf/herramientas
+          ./make_dict.sh -l ${finalAttrs.dictFileName} -2
+
+          unzip ${finalAttrs.dictFileName}.zip \
+            ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
+
+          runHook postBuild
+        '';
+
+        meta = {
+          description = "Hunspell dictionary for ${shortDescription} from rla";
+          homepage = "https://github.com/sbosio/rla-es";
+          license = with lib.licenses; [
+            gpl3
+            lgpl3
+            mpl11
+          ];
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-    });
+  };
 
   mkDictFromDSSO =
     {
