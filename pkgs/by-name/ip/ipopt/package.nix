@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-85fUBMwQtG+RWQYk9YzdZYK3CYcDKgWroo4blhVWBzE=";
   };
 
-  CXXDEFS = [
-    "-DHAVE_RAND"
-    "-DHAVE_CSTRING"
-    "-DHAVE_CSTDIO"
-  ];
-
   configureFlags =
     lib.optionals enableAMPL [
       "--with-asl-cflags=-I${libamplsolver}/include"
