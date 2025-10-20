@@ -196,49 +196,60 @@ let
       };
   };
 
-  mkDictFromDicollecte =
-    {
-      shortName,
-      shortDescription,
-      longDescription,
-      dictFileName,
-      isDefault ? false,
-    }:
-    mkDict (finalAttrs: {
-      inherit dictFileName;
-      pname = "hunspell-dict-${shortName}-dicollecte";
-      version = "5.3";
+  mkDictFromDicollecte = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-      readmeFile = "README_dict_fr.txt";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "longDescription"
+      "isDefault"
+    ];
 
-      src = fetchurl {
-        url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${finalAttrs.version}.zip";
-        hash = "sha256-YEZkwHUUC4iQQKQVdeIRVp607s4uwM9nDOufKgkCRzE=";
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        longDescription,
+        isDefault ? false,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-dicollecte";
+        version = "5.3";
+
+        readmeFile = "README_dict_fr.txt";
+
+        src = fetchurl {
+          url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${finalAttrs.version}.zip";
+          hash = "sha256-YEZkwHUUC4iQQKQVdeIRVp607s4uwM9nDOufKgkCRzE=";
+        };
+
+        unpackCmd = ''
+          unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff "$readmeFile"
+        '';
+        sourceRoot = ".";
+
+        depsBuildBuild = [ unzip ];
+
+        postInstall = lib.optionalString isDefault ''
+          for ext in aff dic; do
+            ln -sv $out/share/hunspell/${finalAttrs.dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
+            ln -sv $out/share/myspell/dicts/${finalAttrs.dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
+          done
+        '';
+
+        meta = {
+          inherit longDescription;
+          description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
+          homepage = "https://www.dicollecte.org/home.php?prj=fr";
+          license = lib.licenses.mpl20;
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-
-      unpackCmd = ''
-        unzip $curSrc ${finalAttrs.dictFileName}.dic ${finalAttrs.dictFileName}.aff ${finalAttrs.readmeFile}
-      '';
-      sourceRoot = ".";
-
-      depsBuildBuild = [ unzip ];
-
-      postInstall = lib.optionalString isDefault ''
-        for ext in aff dic; do
-          ln -sv $out/share/hunspell/${finalAttrs.dictFileName}.$ext $out/share/hunspell/fr_FR.$ext
-          ln -sv $out/share/myspell/dicts/${finalAttrs.dictFileName}.$ext $out/share/myspell/dicts/fr_FR.$ext
-        done
-      '';
-
-      meta = {
-        inherit longDescription;
-        description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = "https://www.dicollecte.org/home.php?prj=fr";
-        license = lib.licenses.mpl20;
-        maintainers = with lib.maintainers; [ renzo ];
-        platforms = lib.platforms.all;
-      };
-    });
+  };
 
   mkDictFromWordlist =
     {
