@@ -1273,13 +1273,13 @@
     "vendorHash": "sha256-rWiafaFE1RolO9JUN1WoW4EWJjR7kpfeVEOTLf21j50="
   },
   "tailscale_tailscale": {
-    "hash": "sha256-3sStrkhEZqtR+G5kTFSx++Yxa26h00Y2fa8DI6/8ftY=",
+    "hash": "sha256-hkqlstHLHBERVenwyVUew+b26liFQpRh99vIMI0TCBY=",
     "homepage": "https://registry.terraform.io/providers/tailscale/tailscale",
     "owner": "tailscale",
     "repo": "terraform-provider-tailscale",
-    "rev": "v0.22.0",
+    "rev": "v0.23.0",
     "spdx": "MIT",
-    "vendorHash": "sha256-Di4Mc67GrGue0fN47APjJKiWSCw5MRuYF4tS9hP6HLw="
+    "vendorHash": "sha256-9VyRFLpwF/+5iidLdzilztAdv/YaujUKoRwIyLgiV6o="
   },
   "telmate_proxmox": {
     "hash": "sha256-1aKKlOIk1mH4yx66eD635d1IaUWXIiBGHEt4A2F2mGM=",
