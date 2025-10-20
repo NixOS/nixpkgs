@@ -58,8 +58,13 @@ let
     '';
   });
 in
-buildGoModule {
-  inherit pname src version;
+buildGoModule (finalAttrs: {
+  inherit
+    pname
+    src
+    version
+    frontend
+    ;
 
   postPatch = ''
     sed -i -e \
@@ -77,7 +82,7 @@ buildGoModule {
 
   preBuild = ''
     mkdir -p ./webui/dist
-    cp -r ${frontend}/* ./webui/dist
+    cp -r ${finalAttrs.frontend}/* ./webui/dist
 
     go generate -skip="npm" ./...
   '';
@@ -127,4 +132,4 @@ buildGoModule {
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };
-}
+})
