@@ -19025,6 +19025,8 @@ self: super: with self; {
     }
   );
 
+  troi = callPackage ../development/python-modules/troi { };
+
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
