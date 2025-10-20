@@ -126,66 +126,75 @@ let
       };
   };
 
-  mkDictFromDSSO =
-    {
-      shortName,
-      shortDescription,
-      dictFileName,
-    }:
-    mkDict (finalAttrs: {
-      inherit dictFileName;
-      pname = "hunspell-dict-${shortName}-dsso";
-      version = "2.40";
+  mkDictFromDSSO = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-      # Should really use a string function or something
-      _version = "2-40";
-      _name = "ooo_swedish_dict_${finalAttrs._version}";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+    ];
 
-      readmeFile = "LICENSE_en_US.txt";
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-dsso";
+        version = "2.40";
 
-      src = fetchurl {
-        url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${finalAttrs.version}/@@download/file/${finalAttrs._name}.oxt";
-        hash = "sha256-uYKIHMdfXErxGZU1vUc17kdr3Ejt9j4/BftPcVZUp7w=";
-      };
+        # Should really use a string function or something
+        _version = "2-40";
+        _name = "ooo_swedish_dict_${finalAttrs._version}";
 
-      unpackCmd = ''
-        unzip $curSrc dictionaries/${finalAttrs.dictFileName}.dic dictionaries/${finalAttrs.dictFileName}.aff $readmeFile
-      '';
-      sourceRoot = ".";
+        readmeFile = "LICENSE_en_US.txt";
 
-      depsBuildBuild = [ unzip ];
+        src = fetchurl {
+          url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${finalAttrs.version}/@@download/file/${finalAttrs._name}.oxt";
+          hash = "sha256-uYKIHMdfXErxGZU1vUc17kdr3Ejt9j4/BftPcVZUp7w=";
+        };
 
-      installPhase = ''
-        runHook preInstall
-
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 dictionaries/${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
-        install -m644 dictionaries/${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
-
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
-
-        # docs
-        install -dm755 "$out/share/doc"
-        install -m644 ${finalAttrs.readmeFile} $out/share/doc/${finalAttrs.pname}.txt
-
-        runHook postInstall
-      '';
-
-      meta = {
-        longDescription = ''
-          Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
-          Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
-          LibreOffice då dsso.se inte längre verkar vara med oss.
+        unpackCmd = ''
+          unzip $curSrc dictionaries/${finalAttrs.dictFileName}.dic dictionaries/${finalAttrs.dictFileName}.aff $readmeFile
         '';
-        description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
-        license = lib.licenses.lgpl3;
-        platforms = lib.platforms.all;
+        sourceRoot = ".";
+
+        depsBuildBuild = [ unzip ];
+
+        installPhase = ''
+          runHook preInstall
+
+          # hunspell dicts
+          install -dm755 "$out/share/hunspell"
+          install -m644 dictionaries/${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
+          install -m644 dictionaries/${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
+
+          # myspell dicts symlinks
+          install -dm755 "$out/share/myspell/dicts"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
+
+          # docs
+          install -dm755 "$out/share/doc"
+          install -m644 ${finalAttrs.readmeFile} $out/share/doc/${finalAttrs.pname}.txt
+
+          runHook postInstall
+        '';
+
+        meta = {
+          longDescription = ''
+            Svensk ordlista baserad på DSSO (den stora svenska ordlistan) och Göran
+            Anderssons (goran@init.se) arbete med denna. Ordlistan hämtas från
+            LibreOffice då dsso.se inte längre verkar vara med oss.
+          '';
+          description = "Hunspell dictionary for ${shortDescription} from LibreOffice";
+          license = lib.licenses.lgpl3;
+          platforms = lib.platforms.all;
+        };
       };
-    });
+  };
 
   mkDictFromDicollecte =
     {
