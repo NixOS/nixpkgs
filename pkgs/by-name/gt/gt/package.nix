@@ -3,12 +3,13 @@
   lib,
   fetchFromGitHub,
   cmake,
-  bash-completion,
   pkg-config,
   libconfig,
   asciidoc,
   libusbgx,
+  nix-update-script,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "gt";
   version = "0-unstable-2025-06-26";
@@ -17,7 +18,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "linux-usb-gadgets";
     repo = "gt";
     rev = "8ebbf3eb6fb77a53d6ace0eebf4f5debb779b576";
-    sha256 = "sha256-f/1nYnpAJ22ilWeyGtGcz9ZynL8a4UQoiKW+K/97iRI=";
+    hash = "sha256-f/1nYnpAJ22ilWeyGtGcz9ZynL8a4UQoiKW+K/97iRI=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/source";
@@ -27,9 +28,11 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
-  preConfigure = ''
-    cmakeFlagsArray+=("-DBASH_COMPLETION_COMPLETIONSDIR=$out/share/bash-completions/completions")
-  '';
+  cmakeFlags = [
+    (lib.cmakeFeature "BASH_COMPLETION_COMPLETIONSDIR" "${placeholder "out"}/share/bash-completion/completions")
+  ];
+
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
@@ -38,14 +41,15 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    bash-completion
     libconfig
     libusbgx
   ];
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+
   meta = {
-    description = "Linux command line tool for setting up USB gadgets using configfs";
     homepage = "https://github.com/linux-usb-gadgets/gt";
+    description = "CLI tool for setting up USB gadgets using configfs";
     mainProgram = "gt";
     license = lib.licenses.asl20;
     maintainers = [ ];
