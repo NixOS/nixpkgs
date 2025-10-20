@@ -2,7 +2,6 @@
 
 {
   lib,
-  stdenv,
   stdenvNoCC,
   fetchurl,
   fetchzip,
@@ -255,43 +254,59 @@ let
       '';
     });
 
-  mkDictFromXuxen =
-    {
-      shortName,
-      srcs,
-      shortDescription,
-      longDescription,
-      dictFileName,
-    }:
-    stdenv.mkDerivation {
-      pname = "hunspell-dict-${shortName}-xuxen";
-      version = "5-2015.11.10";
+  mkDictFromXuxen = lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
 
-      inherit srcs;
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "longDescription"
+    ];
 
-      sourceRoot = ".";
-      # Copy files stripping until first dash (path and hash)
-      unpackCmd = "cp $curSrc \${curSrc##*-}";
-      installPhase = ''
-        # hunspell dicts
-        install -dm755 "$out/share/hunspell"
-        install -m644 ${dictFileName}.dic "$out/share/hunspell/"
-        install -m644 ${dictFileName}.aff "$out/share/hunspell/"
-        # myspell dicts symlinks
-        install -dm755 "$out/share/myspell/dicts"
-        ln -sv "$out/share/hunspell/${dictFileName}.dic" "$out/share/myspell/dicts/"
-        ln -sv "$out/share/hunspell/${dictFileName}.aff" "$out/share/myspell/dicts/"
-      '';
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        longDescription,
+        ...
+      }@args:
+      {
+        pname = "hunspell-dict-${shortName}-xuxen";
+        version = "5-2015.11.10";
 
-      meta = {
-        homepage = "https://xuxen.eus/";
-        description = shortDescription;
-        longDescription = longDescription;
-        license = lib.licenses.gpl2;
-        maintainers = with lib.maintainers; [ zalakain ];
-        platforms = lib.platforms.all;
+        strictDeps = true;
+        sourceRoot = ".";
+
+        # Copy files stripping until first dash (path and hash)
+        unpackCmd = "cp $curSrc \${curSrc##*-}";
+
+        installPhase = ''
+          runHook preInstall
+
+          # hunspell dicts
+          install -dm755 "$out/share/hunspell"
+          install -m644 ${finalAttrs.dictFileName}.dic "$out/share/hunspell/"
+          install -m644 ${finalAttrs.dictFileName}.aff "$out/share/hunspell/"
+
+          # myspell dicts symlinks
+          install -dm755 "$out/share/myspell/dicts"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.dic" "$out/share/myspell/dicts/"
+          ln -sv "$out/share/hunspell/${finalAttrs.dictFileName}.aff" "$out/share/myspell/dicts/"
+
+          runHook postInstall
+        '';
+
+        meta = {
+          homepage = "https://xuxen.eus/";
+          description = shortDescription;
+          longDescription = longDescription;
+          license = lib.licenses.gpl2;
+          maintainers = with lib.maintainers; [ zalakain ];
+          platforms = lib.platforms.all;
+        };
       };
-    };
+  };
 
   mkDictFromJ3e = lib.extendMkDerivation {
     constructDrv = stdenvNoCC.mkDerivation;
