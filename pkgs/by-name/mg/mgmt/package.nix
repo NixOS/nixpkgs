@@ -10,16 +10,19 @@
   pkg-config,
   ragel,
 }:
-buildGoModule rec {
+
+buildGoModule (finalAttrs: {
   pname = "mgmt";
   version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "purpleidea";
     repo = "mgmt";
-    tag = version;
+    tag = finalAttrs.version;
     hash = "sha256-Qi9KkWzFOqmUp5CSHxzQabQ8bVnBbxxKS/W6aLBTv6k=";
   };
+
+  vendorHash = "sha256-XZTDqN5nQqze41Y/jOhT3mFHXeR2oPjXpz7CJuPOi8k=";
 
   buildInputs = [
     augeas
@@ -38,18 +41,16 @@ buildGoModule rec {
     "-s"
     "-w"
     "-X main.program=mgmt"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   subPackages = [ "." ];
 
-  vendorHash = "sha256-XZTDqN5nQqze41Y/jOhT3mFHXeR2oPjXpz7CJuPOi8k=";
-
-  meta = with lib; {
+  meta = {
     description = "Next generation distributed, event-driven, parallel config management";
     homepage = "https://mgmtconfig.com";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ urandom ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ urandom ];
     mainProgram = "mgmt";
   };
-}
+})
