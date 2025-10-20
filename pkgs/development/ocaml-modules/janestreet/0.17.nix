@@ -1606,26 +1606,38 @@ with self;
     doCheck = false; # test rules broken
   };
 
-  ppx_quick_test = janePackage {
-    pname = "ppx_quick_test";
-    hash = "sha256-Kxb0IJcosC4eYlUjEfZE9FhY8o1/gDHHLWD5Cby5hXY=";
-    meta.description = "Spiritual equivalent of let%expect_test, but for property based tests";
-    propagatedBuildInputs = [
-      async
-      async_kernel
-      base
-      base_quickcheck
-      core
-      core_kernel
-      expect_test_helpers_core
-      ppx_expect
-      ppx_here
-      ppx_jane
-      ppx_sexp_conv
-      ppx_sexp_message
-    ];
-    meta.broken = lib.versionAtLeast ppxlib.version "0.36";
-  };
+  ppx_quick_test = janePackage (
+    {
+      pname = "ppx_quick_test";
+      meta.description = "Spiritual equivalent of let%expect_test, but for property based tests";
+      propagatedBuildInputs = [
+        async
+        async_kernel
+        base
+        base_quickcheck
+        core
+        core_kernel
+        expect_test_helpers_core
+        ppx_expect
+        ppx_here
+        ppx_jane
+        ppx_sexp_conv
+        ppx_sexp_message
+      ];
+    }
+    // (
+      if lib.versionAtLeast ppxlib.version "0.36" then
+        {
+          version = "0.17.1";
+          hash = "sha256-nSgi0MAmOWhk53x6U5Wmv/5zTxBiErWQqoT6ATBOv3w=";
+        }
+      else
+        {
+          version = "0.17.0";
+          hash = "sha256-Kxb0IJcosC4eYlUjEfZE9FhY8o1/gDHHLWD5Cby5hXY=";
+        }
+    )
+  );
 
   ppx_sexp_conv = janePackage (
     {
