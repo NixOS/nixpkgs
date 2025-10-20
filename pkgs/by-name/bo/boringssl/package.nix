@@ -90,7 +90,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://boringssl.googlesource.com";
     maintainers = [ lib.maintainers.thoughtpolice ];
     license = with lib.licenses; [
-      openssl
+      asl20
       isc
       mit
       bsd3
