@@ -3,13 +3,6 @@
 # - pkgs/applications/editors/kakoune/plugins/update.py
 # - pkgs/development/lua-modules/updater/updater.py
 
-# format:
-# $ nix run nixpkgs#ruff maintainers/scripts/pluginupdate.py
-# type-check:
-# $ nix run nixpkgs#python3.pkgs.mypy maintainers/scripts/pluginupdate.py
-# linted:
-# $ nix run nixpkgs#python3.pkgs.flake8 -- --ignore E501,E265 maintainers/scripts/pluginupdate.py
-
 import argparse
 import csv
 import functools
