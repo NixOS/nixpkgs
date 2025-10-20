@@ -3684,10 +3684,6 @@ with pkgs;
     beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
   };
 
-  plfit = callPackage ../by-name/pl/plfit/package.nix {
-    python = null;
-  };
-
   inherit (callPackage ../development/tools/pnpm { })
     pnpm_8
     pnpm_9
