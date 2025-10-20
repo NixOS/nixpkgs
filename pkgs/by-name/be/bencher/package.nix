@@ -18,6 +18,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "bencher";
   version = "0.5.8";
 
+  # When updating, also make sure to update npmDeps.hash in bencher-console!
   src = fetchFromGitHub {
     owner = "bencherdev";
     repo = "bencher";
