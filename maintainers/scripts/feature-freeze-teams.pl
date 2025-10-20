@@ -75,3 +75,5 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
 
     print {*STDOUT} "\n";
 }
+
+print {*STDOUT} "Everyone else: \@NixOS/nixpkgs-committers\n";
