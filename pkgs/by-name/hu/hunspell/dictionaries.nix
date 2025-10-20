@@ -251,43 +251,53 @@ let
       };
   };
 
-  mkDictFromWordlist =
-    {
-      shortName,
-      shortDescription,
-      srcFileName,
-      dictFileName,
-      src,
-    }:
-    mkDict (finalAttrs: {
-      inherit src srcFileName dictFileName;
-      pname = "hunspell-dict-${shortName}-wordlist";
-      version = "2018.04.16";
+  mkDictFromWordlist = lib.extendMkDerivation {
+    constructDrv = mkDict;
 
-      srcReadmeFile = "README_" + finalAttrs.srcFileName + ".txt";
-      readmeFile = "README_" + finalAttrs.dictFileName + ".txt";
+    excludeDrvArgNames = [
+      "shortName"
+      "shortDescription"
+      "srcFileName"
+    ];
 
-      unpackCmd = ''
-        unzip $curSrc ${finalAttrs.srcFileName}.dic ${finalAttrs.srcFileName}.aff ${finalAttrs.srcReadmeFile}
-      '';
-      sourceRoot = ".";
+    extendDrvArgs =
+      finalAttrs:
+      {
+        shortName,
+        shortDescription,
+        srcFileName,
+        ...
+      }@args:
+      {
+        inherit srcFileName;
+        pname = "hunspell-dict-${shortName}-wordlist";
+        version = "2018.04.16";
 
-      postUnpack = ''
-        mv ${finalAttrs.srcFileName}.dic ${finalAttrs.dictFileName}.dic || true
-        mv ${finalAttrs.srcFileName}.aff ${finalAttrs.dictFileName}.aff || true
-        mv ${finalAttrs.srcReadmeFile} ${finalAttrs.readmeFile}         || true
-      '';
+        srcReadmeFile = "README_" + srcFileName + ".txt";
+        readmeFile = "README_" + finalAttrs.dictFileName + ".txt";
 
-      depsBuildBuild = [ unzip ];
+        unpackCmd = ''
+          unzip $curSrc ${srcFileName}.dic ${srcFileName}.aff "$srcReadmeFile"
+        '';
+        sourceRoot = ".";
 
-      meta = {
-        description = "Hunspell dictionary for ${shortDescription} from Wordlist";
-        homepage = "http://wordlist.aspell.net/";
-        license = lib.licenses.bsd3;
-        maintainers = with lib.maintainers; [ renzo ];
-        platforms = lib.platforms.all;
+        postUnpack = ''
+          mv ${srcFileName}.dic ${finalAttrs.dictFileName}.dic || true
+          mv ${srcFileName}.aff ${finalAttrs.dictFileName}.aff || true
+          mv "$srcReadmeFile" "${finalAttrs.readmeFile}" || true
+        '';
+
+        depsBuildBuild = [ unzip ];
+
+        meta = {
+          description = "Hunspell dictionary for ${shortDescription} from Wordlist";
+          homepage = "http://wordlist.aspell.net/";
+          license = lib.licenses.bsd3;
+          maintainers = with lib.maintainers; [ renzo ];
+          platforms = lib.platforms.all;
+        };
       };
-    });
+  };
 
   mkDictFromLinguistico =
     {
