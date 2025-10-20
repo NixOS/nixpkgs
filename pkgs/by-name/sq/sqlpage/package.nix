@@ -4,30 +4,35 @@
   fetchFromGitHub,
   pkg-config,
   sqlite,
+  unixODBC,
   zstd,
   fetchurl,
 }:
 
 let
   apexcharts = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/apexcharts@4.5.0/dist/apexcharts.min.js";
-    hash = "sha256-D19uY7rZtzJPVsZWYpvTOoY2hXmgfg+Mlaf+ALYHTgg=";
+    url = "https://cdn.jsdelivr.net/npm/apexcharts@5.3.0/dist/apexcharts.min.js";
+    hash = "sha256-OtfH8igG4/XVMWV1155dCl8kGhruowISVUm7ZZF0VwU=";
   };
   tablerCss = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css";
-    hash = "sha256-aO+4ZoyNPZHCexbbprDYU9LCxshqszQA0SINFYfos3M=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css";
+    hash = "sha256-fvdQvRBUamldCxJ2etgEi9jz7F3n2u+xBn+dDao9HJo=";
+  };
+  tomSelectCss = fetchurl {
+    url = "https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.css";
+    hash = "sha256-vW5UjM/Ka9/jIY8I5s5KcudaTRWh/cCGE1ZUsrJvlI0=";
   };
   tablerVendorsCss = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler-vendors.min.css";
-    hash = "sha256-MyRhKcnB54KIswGkkyYXzEjx3YPVTKG7zVBf4wE20QY=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler-vendors.min.css";
+    hash = "sha256-/VPz9GtiH1Es1KGLY706UIayEEgG93B6aIBa3WzwKYc=";
   };
   tablerJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js";
-    hash = "sha256-QoGNzPGpYrbyDynQUZxmnFFT8MEk/nkUCLyp71avhqw=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js";
+    hash = "sha256-tgx2Fg6XYkV027jPEKvmrummSTtgCW/fwV3R3SvZnrk=";
   };
   tablerIcons = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.30.0/dist/tabler-sprite.svg";
-    hash = "sha256-CD5BvpwW4Db6C7bxjaWUrA3kz17BDJKVU4bTwOPP1kE=";
+    url = "https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.34.0/dist/tabler-sprite.svg";
+    hash = "sha256-pCPkhrx0GnPg5/EthJ7pLdMxb7wbYMJ0R7WchDcffpg=";
   };
   tomselect = fetchurl {
     url = "https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js";
@@ -35,55 +40,59 @@ let
   };
 in
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "sqlpage";
-  version = "0.34.0";
+  version = "0.38.0";
 
   src = fetchFromGitHub {
     owner = "lovasoa";
     repo = "SQLpage";
-    tag = "v${version}";
-    hash = "sha256-cqMXdAXc46DbbONz1A6uf2Oo2Cu4sig6ntuLqYlihR4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-sIbEyW1/EuZuspU9pBOe6y9Ktwvz9ZNEsQ4CU/yU278=";
   };
 
   postPatch = ''
     substituteInPlace sqlpage/apexcharts.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@4.5.0/dist/apexcharts.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/apexcharts@5.3.0/dist/apexcharts.min.js */' \
       "$(cat ${apexcharts})"
     substituteInPlace sqlpage/sqlpage.css \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler.min.css */' \
-      "$(cat ${tablerCss})"
-    substituteInPlace sqlpage/sqlpage.css \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/css/tabler-vendors.min.css */' \
-      "$(cat ${tablerVendorsCss})"
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler.min.css */' \
+      "$(cat ${tablerCss})" \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/css/tabler-vendors.min.css */' \
+      "$(cat ${tablerVendorsCss})" \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.4.3/dist/css/tom-select.bootstrap5.css */' \
+      "$(cat ${tomSelectCss})"
     substituteInPlace sqlpage/sqlpage.js \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0/dist/js/tabler.min.js */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/core@1.4.0/dist/js/tabler.min.js */' \
       "$(cat ${tablerJs})"
     substituteInPlace sqlpage/tabler-icons.svg \
-      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.30.0/dist/tabler-sprite.svg */' \
+      --replace-fail '/* !include https://cdn.jsdelivr.net/npm/@tabler/icons-sprite@3.34.0/dist/tabler-sprite.svg */' \
       "$(cat ${tablerIcons})"
     substituteInPlace sqlpage/tomselect.js \
       --replace-fail '/* !include https://cdn.jsdelivr.net/npm/tom-select@2.4.1/dist/js/tom-select.popular.min.js */' \
       "$(cat ${tomselect})"
   '';
 
-  cargoHash = "sha256-NUbCSYUTXN8glw94Lr/+Jj54PukRXFlzTxq0d7znjwA=";
+  cargoHash = "sha256-uWdEzuEKxN50OM40i/BedgfoWf3oijks8tM5bs7qUao=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     sqlite
+    unixODBC
     zstd
   ];
 
   env.ZSTD_SYS_USE_PKG_CONFIG = true;
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "SQL-only webapp builder, empowering data analysts to build websites and applications quickly";
     homepage = "https://github.com/lovasoa/SQLpage";
-    changelog = "https://github.com/lovasoa/SQLpage/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/lovasoa/SQLpage/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "sqlpage";
   };
-}
+})

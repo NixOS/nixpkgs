@@ -18,6 +18,7 @@ commit=$(echo "$latest" | jq -r .commit)
 version=$(echo "$latest" | jq -r .version)
 url=$(echo "$latest" | jq -r .mainDownload)
 
-update-source-version celestegame.passthru.everest $version --rev=$commit
-"$(nix-build --attr celestegame.passthru.everest.fetch-deps --no-out-link)"
-update-source-version celestegame.passthru.everest-bin $version "" $url
+update-source-version everest $version --rev=$commit
+echo > "$(dirname "$(nix-instantiate --eval --strict -A everest.meta.position | sed -re 's/^"(.*):[0-9]+"$/\1/')")/deps.json"
+"$(nix-build --attr everest.fetch-deps --no-out-link)"
+update-source-version everest-bin $version "" $url

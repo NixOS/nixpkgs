@@ -11718,6 +11718,8 @@ self: super: with self; {
 
   pgvector = callPackage ../development/python-modules/pgvector { };
 
+  phart = callPackage ../development/python-modules/phart { };
+
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
@@ -13694,6 +13696,8 @@ self: super: with self; {
   pyombi = callPackage ../development/python-modules/pyombi { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
+
+  pyopen-wakeword = callPackage ../development/python-modules/pyopen-wakeword/default.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
@@ -15705,8 +15709,6 @@ self: super: with self; {
   raincloudy = callPackage ../development/python-modules/raincloudy { };
 
   ramlfications = callPackage ../development/python-modules/ramlfications { };
-
-  random-user-agent = callPackage ../development/python-modules/random-user-agent { };
 
   random2 = callPackage ../development/python-modules/random2 { };
 
@@ -19493,6 +19495,8 @@ self: super: with self; {
   ufoprocessor = callPackage ../development/python-modules/ufoprocessor { };
 
   uharfbuzz = callPackage ../development/python-modules/uharfbuzz { };
+
+  uhashring = callPackage ../development/python-modules/uhashring { };
 
   uhi = callPackage ../development/python-modules/uhi { };
 
