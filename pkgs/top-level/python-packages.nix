@@ -3536,6 +3536,8 @@ self: super: with self; {
 
   decorator = callPackage ../development/python-modules/decorator { };
 
+  dedupe-levenshtein-search = callPackage ../development/python-modules/dedupe-levenshtein-search { };
+
   deebot-client = callPackage ../development/python-modules/deebot-client { };
 
   deemix = callPackage ../development/python-modules/deemix { };
