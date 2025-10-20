@@ -25,9 +25,11 @@
   corto,
   openctm,
   structuresynth,
-}:
+}@args:
 
 let
+  stdenv = if args.stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else args.stdenv;
+
   tinygltf-src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
