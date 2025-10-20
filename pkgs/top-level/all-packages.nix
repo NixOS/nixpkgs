@@ -979,13 +979,6 @@ with pkgs;
     );
   };
 
-  aegisub = callPackage ../by-name/ae/aegisub/package.nix (
-    {
-      luajit = luajit.override { enable52Compat = true; };
-    }
-    // (config.aegisub or { })
-  );
-
   acme-client = callPackage ../tools/networking/acme-client {
     stdenv = gccStdenv;
   };
