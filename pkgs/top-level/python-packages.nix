@@ -6660,6 +6660,8 @@ self: super: with self; {
 
   highdicom = callPackage ../development/python-modules/highdicom { };
 
+  highered = callPackage ../development/python-modules/highered { };
+
   highspy = callPackage ../development/python-modules/highspy { };
 
   hightime = callPackage ../development/python-modules/hightime { };
