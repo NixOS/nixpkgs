@@ -16852,6 +16852,8 @@ self: super: with self; {
 
   simplebayes = callPackage ../development/python-modules/simplebayes { };
 
+  simplecosine = callPackage ../development/python-modules/simplecosine { };
+
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   simplefin4py = callPackage ../development/python-modules/simplefin4py { };
