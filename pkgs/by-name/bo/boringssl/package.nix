@@ -6,6 +6,7 @@
   ninja,
   perl,
   buildGoModule,
+  gitUpdater,
 }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
@@ -80,6 +81,8 @@ buildGoModule (finalAttrs: {
     "bin"
     "dev"
   ];
+
+  passthru.updateScript = gitUpdater { };
 
   meta = {
     description = "Free TLS/SSL implementation";
