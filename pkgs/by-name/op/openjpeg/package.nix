@@ -34,35 +34,20 @@ let
   test-data = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg-data";
-    rev = "a428429db695fccfc6d698bd13b6937dffd9d005";
-    hash = "sha256-udUi7sPNQJ5uCIAM8SqMGee6vRj1QbF9pLjdpNTQE5k=";
+    rev = "39524bd3a601d90ed8e0177559400d23945f96a9";
+    hash = "sha256-ckZHCZV5UJicVUoi/mZDwvCJneXC3X+NA8Byp6GLE0w=";
   };
 in
 stdenv.mkDerivation rec {
   pname = "openjpeg";
-  version = "2.5.2";
+  version = "2.5.4";
 
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
     rev = "v${version}";
-    hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
+    hash = "sha256-HSXGdpHUbwlYy5a+zKpcLo2d+b507Qf5nsaMghVBlZ8=";
   };
-
-  patches = [
-    (fetchpatch {
-      # https://github.com/uclouvain/openjpeg/issues/1564
-      name = "CVE-2024-56826_ISSUE1564.patch";
-      url = "https://github.com/uclouvain/openjpeg/commit/e492644fbded4c820ca55b5e50e598d346e850e8.patch";
-      hash = "sha256-v+odu4/MXRA+RKOlPO+m/Xk66BMH6mOcEN4ScHn3VAo=";
-    })
-    (fetchpatch {
-      # https://github.com/uclouvain/openjpeg/issues/1563
-      name = "CVE-2024-56826_ISSUE1563.patch";
-      url = "https://github.com/uclouvain/openjpeg/commit/98592ee6d6904f1b48e8207238779b89a63befa2.patch";
-      hash = "sha256-1ScnEZAPuvclyRME5kbeo7dBMG31Njs5CaYC4sGyx08=";
-    })
-  ];
 
   outputs = [
     "out"
