@@ -52,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
     homepage = "https://boringssl.googlesource.com";
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      theoparis
+      niklaskorz
+    ];
     license = with lib.licenses; [
       asl20
       isc
