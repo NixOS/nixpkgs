@@ -8888,15 +8888,6 @@ let
         sha512 = "LElXdjswlqjWrPpJFg1Fx4wpkOCxj1TDHlSV4PlaRxHGWko024xICaa97ZkMfs6DRKlCguiAI+rbXv5GWwXIkg==";
       };
     };
-    "async-0.1.22" = {
-      name = "async";
-      packageName = "async";
-      version = "0.1.22";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/async/-/async-0.1.22.tgz";
-        sha512 = "2tEzliJmf5fHNafNwQLJXUasGzQCVctvsNkXmnlELHwypU0p08/rHohYvkqKIjyXpx+0rkrYv6QbhJ+UF4QkBg==";
-      };
-    };
     "async-0.2.10" = {
       name = "async";
       packageName = "async";
@@ -11894,15 +11885,6 @@ let
         sha512 = "MxS8Ad995KpdAC0Jopo/ovGIroV/m0KHwzKfXxKag6FHOkGsH8/lv5yjgablcRxCJJC0oJeUMuO/gmaq+Wq46g==";
       };
     };
-    "commander-0.6.1" = {
-      name = "commander";
-      packageName = "commander";
-      version = "0.6.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-0.6.1.tgz";
-        sha512 = "0fLycpl1UMTGX257hRsu/arL/cUbcvQM4zMKwvLvzXtfdezIV4yotPS2dYtknF+NmEfWSoCEF6+hj9XLm/6hEw==";
-      };
-    };
     "commander-10.0.1" = {
       name = "commander";
       packageName = "commander";
@@ -12243,15 +12225,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/configstore/-/configstore-7.0.0.tgz";
         sha512 = "yk7/5PN5im4qwz0WFZW3PXnzHgPu9mX29Y8uZ3aefe2lBPC1FYttWZRcaW9fKkT0pBCJyuQ2HfbmPVaODi9jcQ==";
-      };
-    };
-    "connect-1.9.2" = {
-      name = "connect";
-      packageName = "connect";
-      version = "1.9.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/connect/-/connect-1.9.2.tgz";
-        sha512 = "6Z9RPjQOHjaI47gK385djHVv7SEkRm1Y9AAvBhiI7gSXpO5sFktTkAD+dkbcaiEo2xaNlS1KIJU3XRxqbPLx6w==";
       };
     };
     "connect-3.6.6" = {
@@ -16359,15 +16332,6 @@ let
         sha512 = "8QxYTVXUkuy7fIIoitQkPwGonB8F3Zj8eEO8Sqg9Zv/bkI7RJAzowee4gr81Hak/dUTpA2Z7VfQgoijjPNlUZA==";
       };
     };
-    "express-2.5.11" = {
-      name = "express";
-      packageName = "express";
-      version = "2.5.11";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/express/-/express-2.5.11.tgz";
-        sha512 = "gc3jJ0P3Bh1Zjkxe0ICSNmjhDvYWKiXfQIdDWuRPr8S4IZAZexzJHjrzNz56LsRKHTL0OiXQq602GfwZjZ8xPQ==";
-      };
-    };
     "express-4.21.2" = {
       name = "express";
       packageName = "express";
@@ -17518,15 +17482,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/formdata-polyfill/-/formdata-polyfill-4.0.10.tgz";
         sha512 = "buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==";
-      };
-    };
-    "formidable-1.0.17" = {
-      name = "formidable";
-      packageName = "formidable";
-      version = "1.0.17";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/formidable/-/formidable-1.0.17.tgz";
-        sha512 = "95MFT5qipMvUiesmuvGP1BI4hh5XWCzyTapiNJ/k8JBQda7rPy7UCWYItz2uZEdTgGNy1eInjzlL9Wx1O9fedg==";
       };
     };
     "formidable-1.2.6" = {
@@ -22038,15 +21993,6 @@ let
         sha512 = "OGlZQpz2yfahA/Rd1Y8Cd9SIEsqvXkLVoSw/cgwhnhFMDbsQFeZYoJJ7bIZBS9BcamUW96asq/npPWugM+RQBw==";
       };
     };
-    "jade-0.27.0" = {
-      name = "jade";
-      packageName = "jade";
-      version = "0.27.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/jade/-/jade-0.27.0.tgz";
-        sha512 = "VPrAZm2V9+0tqISXjca7ipt2LPMpLwnFZFM+1VG7q2LmiUQp1imCa++FgSqWxIs4W5gUTp/xlrUlx5xyFHYE6w==";
-      };
-    };
     "jake-10.9.2" = {
       name = "jake";
       packageName = "jake";
@@ -26062,15 +26008,6 @@ let
         sha512 = "/wk9d4Z6/9ZvoEH/6BI4TrTCgmkpZPuSRN/6fI9aUHOfXdNTuj/VhLS7d+NqG26bi6L9YmGXutVYvWC8zQ0qtA==";
       };
     };
-    "mime-1.2.4" = {
-      name = "mime";
-      packageName = "mime";
-      version = "1.2.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/mime/-/mime-1.2.4.tgz";
-        sha512 = "u4y8WFj7SnfbHxyzCMSV2nL/GKbfZ+lidPf1V4/XUKCJ49N6ttQWp/xnqpbMQEx3naBSt93i2qtPLFj/mjPDaA==";
-      };
-    };
     "mime-1.6.0" = {
       name = "mime";
       packageName = "mime";
@@ -27485,15 +27422,6 @@ let
         sha512 = "TkCET/3rr9mUuRp+CpO7qfgT++aAxfDRaalQhwPFzI9BY/2rCDn6OfpZOVggi1AXfTPpfkTrg5f5WQx5G1uLxA==";
       };
     };
-    "node.extend-1.0.0" = {
-      name = "node.extend";
-      packageName = "node.extend";
-      version = "1.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/node.extend/-/node.extend-1.0.0.tgz";
-        sha512 = "Jqb2SFiBSqeOUlxHbjpinUo3ZXBkVmCqha8t1REgyo4rYx/cXh+pttzlL2vXIjG63VdklCrwrnqwIXsVBRMrSA==";
-      };
-    };
     "nomnom-1.8.1" = {
       name = "nomnom";
       packageName = "nomnom";
@@ -28347,15 +28275,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/oo-ascii-tree/-/oo-ascii-tree-1.109.0.tgz";
         sha512 = "0YZJaT5UFMnaj8ol0U3gG9pVbS27mG9rq/G+ED44GiFsi/Jb3mOtOXScFJXd7tdkOnXHS7oUCp1m7DUQ1BC6sA==";
-      };
-    };
-    "open-0.0.2" = {
-      name = "open";
-      packageName = "open";
-      version = "0.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/open/-/open-0.0.2.tgz";
-        sha512 = "gnt725gcNKTaMSul17WNEz4I3rvgVotCq30TkU9thlEZaRJ7ivOV0vEoRupkGU/NJ2+qxqAmVbSK94rwuOWXnw==";
       };
     };
     "open-0.0.5" = {
@@ -29924,15 +29843,6 @@ let
         sha512 = "nDywThFk1i4BQK4twPQ6TA4RT8bDY96yeuCVBWL3ePARCiEKDRSrNGbFIgUJpLp+XeIR65v8ra7WuJOFUBtkMA==";
       };
     };
-    "pkginfo-0.2.3" = {
-      name = "pkginfo";
-      packageName = "pkginfo";
-      version = "0.2.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/pkginfo/-/pkginfo-0.2.3.tgz";
-        sha512 = "7W7wTrE/NsY8xv/DTGjwNIyNah81EQH0MWcTzrHL6pOpMocOGZc0Mbdz9aXxSrp+U0mSmkU8jrNCDCfUs3sOBg==";
-      };
-    };
     "pkginfo-0.3.1" = {
       name = "pkginfo";
       packageName = "pkginfo";
@@ -30813,15 +30723,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/pvutils/-/pvutils-1.1.3.tgz";
         sha512 = "pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==";
-      };
-    };
-    "qs-0.4.2" = {
-      name = "qs";
-      packageName = "qs";
-      version = "0.4.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/qs/-/qs-0.4.2.tgz";
-        sha512 = "VAtfWeUtlBOnGiWFok2vOIMmwumiLmpqXDcXQcAEIQmLYgDbjrkHrcFBfth+YVDeRsz7jX44dhJr7IBJR0t/FQ==";
       };
     };
     "qs-3.1.0" = {
@@ -32478,15 +32379,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/request/-/request-2.88.2.tgz";
         sha512 = "MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==";
-      };
-    };
-    "request-2.9.203" = {
-      name = "request";
-      packageName = "request";
-      version = "2.9.203";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/request/-/request-2.9.203.tgz";
-        sha512 = "OWtna9w7yRI/gcfu3VaURgIwE1FHgbz5+fHGQ9GJTHcJ4+uvHnDjXd+N7mVDOv5+1fp1CRPzUSY2wcM345Z2Fw==";
       };
     };
     "request-compose-2.1.7" = {
@@ -39930,15 +39822,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/winreg/-/winreg-1.2.4.tgz";
         sha512 = "IHpzORub7kYlb8A43Iig3reOvlcBJGX9gZ0WycHhghHtA65X0LYnMRuJs+aH1abVnMJztQkvQNlltnbPi5aGIA==";
-      };
-    };
-    "winston-0.6.2" = {
-      name = "winston";
-      packageName = "winston";
-      version = "0.6.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/winston/-/winston-0.6.2.tgz";
-        sha512 = "BzHNq8X415XGFkGPT+ACKTj95ghSAbR4eThAtKg4OC4PYVn5FLIdTETYUv76f4QxUcG1ps6yqnbO1K/81hGIzQ==";
       };
     };
     "winston-0.8.0" = {
@@ -55369,43 +55252,6 @@ in
       description = "Beautiful and accessible math in all browsers. MathJax is an open-source JavaScript display engine for LaTeX, MathML, and AsciiMath notation that works in all browsers. This package includes the packaged components (install mathjax-full to get the source ";
       homepage = "https://github.com/mathjax/MathJax#readme";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  meat = nodeEnv.buildNodePackage {
-    name = "meat";
-    packageName = "meat";
-    version = "0.3.4";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/meat/-/meat-0.3.4.tgz";
-      sha512 = "qaXHW5HwzV9+J4PgnqQ52i9C6V1fhiwQ4skSn+UCQdyPB4H1XYF+0UKIq1kFHINMFhDZ8Lz0WsQjOV09fiImpQ==";
-    };
-    dependencies = [
-      sources."async-0.1.22"
-      sources."colors-0.6.2"
-      sources."commander-0.6.1"
-      sources."connect-1.9.2"
-      sources."cycle-1.0.3"
-      sources."express-2.5.11"
-      sources."eyes-0.1.8"
-      sources."formidable-1.0.17"
-      sources."jade-0.27.0"
-      sources."mime-1.2.4"
-      sources."mkdirp-0.3.0"
-      sources."node.extend-1.0.0"
-      sources."open-0.0.2"
-      sources."pkginfo-0.2.3"
-      sources."qs-0.4.2"
-      sources."request-2.9.203"
-      sources."stack-trace-0.0.10"
-      sources."winston-0.6.2"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Meeting room kiosk app for displaying meeting room schedules and booking rooms in your organization. Built against Google Apps, but other sources can be defined";
-      homepage = "https://bitbucket.org/aahmed/meat";
     };
     production = true;
     bypassCache = true;
