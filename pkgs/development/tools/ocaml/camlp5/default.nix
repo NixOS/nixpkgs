@@ -98,7 +98,6 @@ else
         license = licenses.bsd3;
         platforms = ocaml.meta.platforms or [ ];
         maintainers = with maintainers; [
-          maggesi
           vbgl
         ];
       };
