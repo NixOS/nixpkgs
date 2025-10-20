@@ -83,7 +83,7 @@ let
         src = fetchFromGitHub {
           owner = "sbosio";
           repo = "rla-es";
-          rev = "v${finalAttrs.version}";
+          tag = "v${finalAttrs.version}";
           hash = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
         };
 
@@ -494,7 +494,7 @@ let
         src = fetchFromGitHub {
           owner = "LibreOffice";
           repo = "dictionaries";
-          rev = "libreoffice-${finalAttrs.version}";
+          tag = "libreoffice-${finalAttrs.version}";
           hash = "sha256-w/iD26CfTLCMnYPxN1awkN911WOG6qMTRZwdmx9Y5JM=";
         };
 
@@ -1077,7 +1077,7 @@ rec {
     src = fetchFromGitHub {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-/rYufNGkXWH7UQDa8ZI55JtP9LM+0j7Pad8zm2tFqko=";
     };
 
@@ -1368,7 +1368,7 @@ rec {
     src = fetchFromGitHub {
       owner = "spellcheck-ko";
       repo = "hunspell-dict-ko";
-      rev = finalAttrs.version;
+      tag = finalAttrs.version;
       hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
     };
 
