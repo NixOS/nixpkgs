@@ -6925,7 +6925,7 @@ with pkgs;
     withTeensyduino = true;
   };
 
-  tytools = libsForQt5.callPackage ../development/embedded/tytools { };
+  tytools = callPackage ../development/embedded/tytools { };
 
   texinfoPackages = callPackages ../development/tools/misc/texinfo/packages.nix { };
   inherit (texinfoPackages)
@@ -7254,7 +7254,12 @@ with pkgs;
   fltk = fltk13;
   fltk-minimal = fltk13-minimal;
 
-  inherit (callPackages ../development/libraries/fmt { }) fmt_9 fmt_10 fmt_11;
+  inherit (callPackages ../development/libraries/fmt { })
+    fmt_9
+    fmt_10
+    fmt_11
+    fmt_12
+    ;
 
   fmt = fmt_11;
 
@@ -8227,7 +8232,6 @@ with pkgs;
   };
 
   nss_latest = callPackage ../development/libraries/nss/latest.nix { };
-  nss_3_115 = callPackage ../development/libraries/nss/3_115.nix { };
   nss_esr = callPackage ../development/libraries/nss/esr.nix { };
   nss = nss_esr;
   nssTools = nss.tools;

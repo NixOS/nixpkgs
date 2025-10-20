@@ -20,11 +20,6 @@ let
     pname = "fff-nvim-lib";
     inherit version src;
 
-    postPatch = ''
-      substituteInPlace $cargoDepsCopy/neo_frizbee*/src/lib.rs \
-        --replace-fail "#![feature(avx512_target_feature)]" ""
-    '';
-
     cargoHash = "sha256-ZZt4BlMgRik4LH92F5cgS84WI1Jeuw68jP+y1+QXfDE=";
 
     nativeBuildInputs = [

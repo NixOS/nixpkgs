@@ -11718,6 +11718,8 @@ self: super: with self; {
 
   pgvector = callPackage ../development/python-modules/pgvector { };
 
+  phart = callPackage ../development/python-modules/phart { };
+
   phe = callPackage ../development/python-modules/phe { };
 
   phik = callPackage ../development/python-modules/phik { };
@@ -13694,6 +13696,8 @@ self: super: with self; {
   pyombi = callPackage ../development/python-modules/pyombi { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
+
+  pyopen-wakeword = callPackage ../development/python-modules/pyopen-wakeword/default.nix { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
