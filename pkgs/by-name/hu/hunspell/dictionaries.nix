@@ -62,7 +62,7 @@ let
         owner = "sbosio";
         repo = "rla-es";
         rev = "v${version}";
-        sha256 = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
+        hash = "sha256-oGnxOGHzDogzUMZESydIxRTbq9Dmd03flwHx16AK1yk=";
       };
       meta = with lib; {
         description = "Hunspell dictionary for ${shortDescription} from rla";
@@ -114,7 +114,7 @@ let
       readmeFile = "LICENSE_en_US.txt";
       src = fetchurl {
         url = "https://extensions.libreoffice.org/extensions/swedish-spelling-dictionary-den-stora-svenska-ordlistan/${version}/@@download/file/${_name}.oxt";
-        sha256 = "b982881cc75f5c4af1199535bd4735ee476bdc48edf63e3f05fb4f715654a7bc";
+        hash = "sha256-uYKIHMdfXErxGZU1vUc17kdr3Ejt9j4/BftPcVZUp7w=";
       };
       meta = with lib; {
         longDescription = ''
@@ -161,7 +161,7 @@ let
       readmeFile = "README_dict_fr.txt";
       src = fetchurl {
         url = "http://www.dicollecte.org/download/fr/hunspell-french-dictionaries-v${version}.zip";
-        sha256 = "0ca7084jm7zb1ikwzh1frvpb97jn27i7a5d48288h2qlfp068ik0";
+        hash = "sha256-YEZkwHUUC4iQQKQVdeIRVp607s4uwM9nDOufKgkCRzE=";
       };
       meta = with lib; {
         inherit longDescription;
@@ -297,7 +297,7 @@ let
 
       src = fetchurl {
         url = "https://j3e.de/ispell/igerman98/dict/igerman98-${version}.tar.bz2";
-        sha256 = "1a3055hp2bc4q4nlg3gmg0147p3a1zlfnc65xiv2v9pyql1nya8p";
+        hash = "sha256-FylvA8X+pi127MUw6+gPatxDAnj1jUctwYQtcWEpYKg=";
       };
 
       nativeBuildInputs = [
@@ -350,7 +350,7 @@ let
         owner = "LibreOffice";
         repo = "dictionaries";
         rev = "libreoffice-${version}";
-        sha256 = "14z4b0grn7cw8l9s7sl6cgapbpwhn1b3gwc3kn6b0k4zl3dq7y63";
+        hash = "sha256-w/iD26CfTLCMnYPxN1awkN911WOG6qMTRZwdmx9Y5JM=";
       };
       buildPhase = ''
         cp -a ${sourceRoot}/* .
@@ -377,7 +377,7 @@ rec {
     dictFileName = "en_US";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-2018.04.16.zip";
-      sha256 = "18hbncvqnckzqarrmnzk58plymjqyi93k4qj98fac5mr71jbmzaf";
+      hash = "sha256-Tv26ZDi5FqYcShKTOVL0WFZPLyrz25qzwn8yizezC6I=";
     };
   };
 
@@ -389,7 +389,7 @@ rec {
     dictFileName = "en_US";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_US-large-2018.04.16.zip";
-      sha256 = "1xm9jgqbivp5cb78ykjxg47vzq1yqj82l7r4q5cjpivrv99s49qc";
+      hash = "sha256-DCeiU9p5xytZwSQfKpDEPuC/D3ldTo/OYuXuuPCTqfY=";
     };
   };
 
@@ -401,7 +401,7 @@ rec {
     dictFileName = "en_CA";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-2018.04.16.zip";
-      sha256 = "06yf3s7y1215jmikbs18cn4j8a13csp4763w3jfgah8zlim6vc47";
+      hash = "sha256-h7BtaqQfQfWcHHyYQ65mIygkiWUo6DVjlSWI4I8ezhs=";
     };
   };
 
@@ -413,7 +413,7 @@ rec {
     dictFileName = "en_CA";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_CA-large-2018.04.16.zip";
-      sha256 = "1200xxyvv6ni8nk52v3059c367817vnrkm0cdh38rhiigb5flfha";
+      hash = "sha256-CjrqynoxwowGbAzUme0+AR0zWCpgbFGmRdGavX3vAIg=";
     };
   };
 
@@ -425,7 +425,7 @@ rec {
     dictFileName = "en_AU";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-2018.04.16.zip";
-      sha256 = "1kp06npl1kd05mm9r52cg2iwc13x02zwqgpibdw15b6x43agg6f5";
+      hash = "sha256-xZn31CDdrBJ4W/E+zL8AfQTGo3hMlJxqLaDNQK814M4=";
     };
   };
 
@@ -437,7 +437,7 @@ rec {
     dictFileName = "en_AU";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_AU-large-2018.04.16.zip";
-      sha256 = "14l1w4dpk0k1js2wwq5ilfil89ni8cigph95n1rh6xi4lzxj7h6g";
+      hash = "sha256-z8Aj+6ckdgNzsCXB+yJD0SZEo6OxYM6FlmGCeRvhgZI=";
     };
   };
 
@@ -449,7 +449,7 @@ rec {
     dictFileName = "en_GB";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ise-2018.04.16.zip";
-      sha256 = "0ylg1zvfvsawamymcc9ivrqcb9qhlpgpnizm076xc56jz554xc2l";
+      hash = "sha256-VLBOSvnSFNbNAfVHe9+lEKfFcN4xMVZ9VVzp7fYPj3o=";
     };
   };
 
@@ -461,7 +461,7 @@ rec {
     dictFileName = "en_GB";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-ize-2018.04.16.zip";
-      sha256 = "1rmwy6sxmd400cwjf58az6g14sq28p18f5mlq8ybg8y33q9m42ps";
+      hash = "sha256-+gpSEx7Do7c8wrQWh8JFAmsSnvkKFSc5A4C02rXxvOY=";
     };
   };
 
@@ -473,7 +473,7 @@ rec {
     dictFileName = "en_GB";
     src = fetchurl {
       url = "mirror://sourceforge/wordlist/speller/2018.04.16/hunspell-en_GB-large-2018.04.16.zip";
-      sha256 = "1y4d7x5vvi1qh1s3i09m0vvqrpdzzqhsdngr8nsh7hc5bnlm37mi";
+      hash = "sha256-sZ5RqV2FwQO1RfnZpiH+v92M9wY1gTh0gDjEvUs/jfg=";
     };
   };
 
@@ -680,7 +680,7 @@ rec {
     shortDescription = "Hunspell dictionary for 'Italian (Italy)' from Linguistico";
     src = fetchurl {
       url = "mirror://sourceforge/linguistico/italiano_2_4_2007_09_01.zip";
-      sha256 = "0m9frz75fx456bczknay5i446gdcp1smm48lc0qfwzhz0j3zcdrd";
+      hash = "sha256-LTf2hwQffu4wYBSRWnW4rD1DSCxe2fnZMoV0V87PLlU=";
     };
   };
 
@@ -708,11 +708,11 @@ rec {
     srcs = [
       (fetchurl {
         url = "http://xuxen.eus/static/hunspell/eu_ES.aff";
-        sha256 = "12w2j6phzas2rdzc7f20jnk93sm59m2zzfdgxv6p8nvcvbrkmc02";
+        hash = "sha256-ArA689psW3TN7q+5/0VNpeqRppVAuMN+y0KrD6+Rgos=";
       })
       (fetchurl {
         url = "http://xuxen.eus/static/hunspell/eu_ES.dic";
-        sha256 = "0lw193jr7ldvln5x5z9p21rz1by46h0say9whfcw2kxs9vprd5b3";
+        hash = "sha256-Y5WW7066T8GZgzx5pQE0xK/wcxA3/dKLpbvRk+VIgVM=";
       })
     ];
   };
@@ -757,7 +757,7 @@ rec {
 
     src = fetchzip {
       url = "http://www.meso.ee/~jjpp/speller/ispell-et_${version}.tar.gz";
-      sha256 = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
+      hash = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
     };
 
     dictFileName = "et_EE";
@@ -896,7 +896,7 @@ rec {
 
     src = fetchurl {
       url = "https://stavekontrolden.dk/dictionaries/da_DK/da_DK-${version}.oxt";
-      sha256 = "sha256:0i1cw0nfg24b0sg2yc3q7315ng5vc5245nvh0l1cndkn2c9z4978";
+      hash = "sha256-6CTyExN2NssCBXDbQkRhuzxbwjh4MC+eBouI5yzgLEQ=";
     };
 
     shortName = "da-dk";
@@ -931,7 +931,7 @@ rec {
       owner = "OpenTaal";
       repo = "opentaal-hunspell";
       rev = version;
-      sha256 = "0jma8mmrncyzd77kxliyngs4z6z4769g3nh0a7xn2pd4s5y2xdpy";
+      hash = "sha256-/rYufNGkXWH7UQDa8ZI55JtP9LM+0j7Pad8zm2tFqko=";
     };
 
     preInstall = ''
@@ -976,7 +976,7 @@ rec {
       owner = "SyafiqHadzir";
       repo = "Hunspell-TH";
       rev = "419eb32115b936da9c949e35b35c29b8187f6c93";
-      sha256 = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
+      hash = "sha256-aXjof5dcEoCmep3PtvVkBhcgcd2NtqUpUEu37wsi1Uk=";
     };
     meta = with lib; {
       description = "Hunspell dictionary for Central Thai (Thailand)";
@@ -1049,7 +1049,7 @@ rec {
 
     src = fetchzip {
       url = "https://github.com/somasis/hunspell-tok/releases/download/${version}/hunspell-tok-${version}.tar.gz";
-      sha256 = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
+      hash = "sha256-RiAODKXPUeIcf8IFcU6Tacehq5S8GYuPTuxEiN2CXD0=";
     };
 
     dontBuild = true;
