@@ -52,11 +52,11 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
         next;
     }
     #  Team name
-    print {*STDERR} "$team_config->{shortName}:";
+    print {*STDOUT} "$team_config->{shortName}:";
     # GitHub Teams
     my @github_members;
     if (defined $team_config->{github}) {
-        print {*STDERR} " \@NixOS/$team_config->{github}";
+        print {*STDOUT} " \@NixOS/$team_config->{github}";
         push @github_members, @{github_team_members($team_config->{github})};
     }
     my %github_members = map { $_ => 1 } @github_members;
@@ -69,9 +69,9 @@ while (my ($team_nix_key, $team_config) = each %{$data}) {
             if (defined $github_members{$github_handle}) {
                 next;
             }
-            print {*STDERR} " \@$github_handle";
+            print {*STDOUT} " \@$github_handle";
         }
     }
 
-    print {*STDERR} "\n";
+    print {*STDOUT} "\n";
 }
