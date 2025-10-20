@@ -3,9 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qttools,
-  wrapQtAppsHook,
-  qtcharts,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,12 +31,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtcharts
+    libsForQt5.qtcharts
   ];
 
   preConfigure = ''
