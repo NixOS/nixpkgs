@@ -60,8 +60,8 @@
     "version": "40"
   },
   "libiconv": {
-    "hash": "sha256-eaUp0z7HqX0AW2C90gDVFeiJnmGRxPDuzyb1Jlm1pNc=",
-    "version": "109"
+    "hash": "sha256-50DC6LePtvdAh9FLa/esiwCUmYDxKofN6hCiv9+dmgQ=",
+    "version": "109.100.2"
   },
   "libpcap": {
     "hash": "sha256-RViIXv5zP2Bcive5qrcfb9vNWwhSe6fGCaToSgDYNxU=",
