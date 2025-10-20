@@ -64,8 +64,8 @@
     "version": "109.100.2"
   },
   "libpcap": {
-    "hash": "sha256-RViIXv5zP2Bcive5qrcfb9vNWwhSe6fGCaToSgDYNxU=",
-    "version": "137"
+    "hash": "sha256-DqINoombdui5N6lNHcZ07c7LrVum4f8fFK89ymdCd0c=",
+    "version": "140"
   },
   "libresolv": {
     "hash": "sha256-ndGcicbHizPazTCB0P3aioDOv7IJPmTOgLnioFHH2+o=",
