@@ -9,7 +9,7 @@ let
 in
 
 {
-  options.hardware.dslogic.enable = lib.mkEnableOption "udev rules and software for Dream DreamSourceLab DSLogic devices";
+  options.hardware.dslogic.enable = lib.mkEnableOption "udev rules and software for DreamSourceLab DSLogic devices";
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ pkgs.dsview ];
