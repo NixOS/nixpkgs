@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  clang_20,
   fetchFromGitHub,
   buildNpmPackage,
   nix-update-script,
@@ -38,6 +39,7 @@ buildNpmPackage rec {
   nativeBuildInputs = [
     pkg-config
   ]
+  ++ lib.optional stdenv.isDarwin clang_20 # clang_21 breaks gyp builds
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     makeWrapper
     copyDesktopItems
