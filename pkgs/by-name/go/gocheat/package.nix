@@ -6,13 +6,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "gocheat";
-  version = "0.1.1";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "Achno";
     repo = "gocheat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9Xw1GVfqk0Se8pLx3vzqR+f9GgX4LDo/H3iq1fzoTRs=";
+    hash = "sha256-lG/WcFKD2xeQ0v/zJWB3XP9Hd5GgRyGiCkcC08a6oPg=";
   };
 
   vendorHash = "sha256-CByVf4+WWUlFGJcqt7aq5bHXiLMjdHTKvv6PQYEbLqc=";
