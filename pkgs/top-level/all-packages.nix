@@ -14294,8 +14294,6 @@ with pkgs;
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
-  muse = libsForQt5.callPackage ../applications/audio/muse { };
-
   nixDependencies = recurseIntoAttrs (
     callPackage ../tools/package-management/nix/dependencies-scope.nix { }
   );

@@ -5,8 +5,6 @@
   cmake,
   extra-cmake-modules,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
   alsa-lib,
   dssi,
   fluidsynth,
@@ -25,6 +23,7 @@
   rubberband,
   sord,
   serd,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,8 +43,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     extra-cmake-modules
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
