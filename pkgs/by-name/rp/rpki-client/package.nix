@@ -56,7 +56,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    description = "rpki-client is a FREE, easy-to-use implementation of the Resource Public Key Infrastructure (RPKI) for Relying Parties (RP) to facilitate validation of BGP announcements";
+    description = "Implementation of the Resource Public Key Infrastructure (RPKI) for Relying Parties (RP) to facilitate validation of BGP announcements";
     license = lib.licenses.isc;
     homepage = "https://rpki-client.org";
     maintainers = with lib.maintainers; [ seike ];
