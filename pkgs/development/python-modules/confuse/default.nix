@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "confuse";
-  version = "1.7.0";
+  version = "2.0.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "beetbox";
     repo = "confuse";
     rev = "v${version}";
-    hash = "sha256-zdH5DNXnuAfYTuaG9EIKiXL2EbLSfzYjPSkC3G06bU8=";
+    hash = "sha256-TVx0cBXv/fIuli/xrFXBAmwJ1rQr5xJL1Q67FaDr4ow=";
   };
 
   nativeBuildInputs = [ flit-core ];
