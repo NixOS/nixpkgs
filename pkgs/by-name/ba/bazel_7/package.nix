@@ -10,9 +10,6 @@
   makeBinaryWrapper,
   autoPatchelfHook,
   buildFHSEnv,
-  # this package (through the fixpoint glass)
-  # TODO probably still need for tests at some point
-  bazel_self,
   # native build inputs
   runtimeShell,
   zip,
