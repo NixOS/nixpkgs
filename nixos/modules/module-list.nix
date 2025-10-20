@@ -65,6 +65,7 @@
   ./hardware/cpu/x86-msr.nix
   ./hardware/decklink.nix
   ./hardware/device-tree.nix
+  ./hardware/dslogic.nix
   ./hardware/digitalbitbox.nix
   ./hardware/facter
   ./hardware/flipperzero.nix
