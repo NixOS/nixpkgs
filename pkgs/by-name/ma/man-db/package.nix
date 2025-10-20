@@ -91,7 +91,12 @@ stdenv.mkDerivation rec {
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
   '';
 
-  postInstall = ''
+  ${if stdenv.hostPlatform.isCygwin then "postInstall" else null} = ''
+    mv "$out"/lib/bin/* "$out"/bin/
+    rmdir "$out"/lib/bin
+  '';
+
+  ${if stdenv.hostPlatform.isCygwin then "postFixup" else "postInstall"} = ''
     # apropos/whatis uses program name to decide whether to act like apropos or whatis
     # (multi-call binary). `apropos` is actually just a symlink to whatis. So we need to
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
