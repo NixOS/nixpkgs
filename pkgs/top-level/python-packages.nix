@@ -3540,6 +3540,8 @@ self: super: with self; {
 
   dedupe-pyhacrf = callPackage ../development/python-modules/dedupe-pyhacrf { };
 
+  dedupe-pylbfgs = callPackage ../development/python-modules/dedupe-pylbfgs { };
+
   deebot-client = callPackage ../development/python-modules/deebot-client { };
 
   deemix = callPackage ../development/python-modules/deemix { };
