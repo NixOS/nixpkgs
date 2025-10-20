@@ -44,6 +44,9 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     sphinxHook
     sphinx-better-theme
+  ];
+
+  build-system = [
     setuptools
   ];
 
