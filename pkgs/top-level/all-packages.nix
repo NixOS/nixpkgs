@@ -3747,8 +3747,6 @@ with pkgs;
 
   patch = gnupatch;
 
-  patchance = python3Packages.callPackage ../applications/audio/patchance { };
-
   pcscliteWithPolkit = pcsclite.override {
     pname = "pcsclite-with-polkit";
     polkitSupport = true;

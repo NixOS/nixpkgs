@@ -1,27 +1,26 @@
 {
   lib,
   fetchurl,
-  buildPythonApplication,
+  python3Packages,
   libjack2,
-  pyqt5,
   qt5,
   which,
   bash,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "patchance";
   version = "1.1.0";
 
   src = fetchurl {
     url = "https://github.com/Houston4444/Patchance/releases/download/v${version}/Patchance-${version}-source.tar.gz";
-    sha256 = "sha256-wlkEKkPH2C/y7TQicIVycWbtLUdX2hICcUWi7nFN51w=";
+    hash = "sha256-wlkEKkPH2C/y7TQicIVycWbtLUdX2hICcUWi7nFN51w=";
   };
 
   format = "other";
 
   nativeBuildInputs = [
-    pyqt5 # pyuic5 and pyrcc5 to build resources.
+    python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
     qt5.qttools # lrelease to build translations.
     which # which to find lrelease.
     qt5.wrapQtAppsHook
@@ -30,7 +29,7 @@ buildPythonApplication rec {
     libjack2
     bash
   ];
-  propagatedBuildInputs = [ pyqt5 ];
+  propagatedBuildInputs = [ python3Packages.pyqt5 ];
 
   dontWrapQtApps = true; # The program is a python script.
 
@@ -54,12 +53,12 @@ buildPythonApplication rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Houston4444/Patchance";
     description = "JACK Patchbay GUI";
     mainProgram = "patchance";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }
