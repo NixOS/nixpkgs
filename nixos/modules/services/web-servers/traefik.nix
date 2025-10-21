@@ -555,8 +555,11 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [
-    jackr
-    therealgramdalf
-  ];
+  meta = {
+    maintainers = with lib.maintainers; [
+      jackr
+      therealgramdalf
+    ];
+    doc = ./traefik.md;
+  };
 }
