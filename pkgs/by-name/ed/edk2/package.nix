@@ -33,14 +33,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edk2";
-  version = "202508";
+  version = "202508.01";
 
   srcWithVendoring = fetchFromGitHub {
     owner = "tianocore";
     repo = "edk2";
     tag = "edk2-stable${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-YZcjPGPkUQ9CeJS9JxdHBmpdHsAj7T0ifSZWZKyNPMk=";
+    hash = "sha256-BgNNKA+YFeaZDm1mLzBN3VA7RAwNT9MXV3JX5ZLrFOo=";
   };
 
   src = applyPatches {
@@ -133,7 +133,7 @@ stdenv.mkDerivation (finalAttrs: {
       #!nix-shell -i bash -p common-updater-scripts coreutils gnused
       set -eu -o pipefail
       version="$(list-git-tags --url="${finalAttrs.srcWithVendoring.url}" |
-                 sed -E --quiet 's/^edk2-stable([0-9]{6})$/\1/p' |
+                 sed -E --quiet 's/^edk2-stable([0-9\\.]+)$/\1/p' |
                  sort --reverse --numeric-sort |
                  head -n 1)"
       if [[ "x$UPDATE_NIX_OLD_VERSION" != "x$version" ]]; then
