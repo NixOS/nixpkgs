@@ -104,6 +104,15 @@ buildPythonPackage rec {
     "test_warp"
     "test_warpedvrt"
     "test_rio_warp"
+
+    # AssertionError CLI exists with non-zero error code
+    # This is a regression introduced by https://github.com/NixOS/nixpkgs/pull/448189
+    "test_sample_stdin"
+    "test_transform"
+    "test_transform_point"
+    "test_transform_point_dst_file"
+    "test_transform_point_multi"
+    "test_transform_point_src_file"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_reproject_error_propagation" ];
 
