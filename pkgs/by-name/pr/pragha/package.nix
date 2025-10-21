@@ -1,14 +1,13 @@
 {
   lib,
+  stdenv,
   intltool,
-  mkDerivation,
   installShellFiles,
   pkg-config,
   fetchFromGitHub,
   dbus-glib,
   desktop-file-utils,
   hicolor-icon-theme,
-  qtbase,
   sqlite,
   taglib,
   zlib,
@@ -17,6 +16,7 @@
   libcddb,
   libcdio,
   gst_all_1,
+  libsForQt5,
   withGstPlugins ? true,
   glyr,
   withGlyr ? true,
@@ -45,15 +45,15 @@
 assert withGlyr -> withLastfm;
 assert withLastfm -> withCD;
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pragha";
   version = "1.3.99.1";
 
   src = fetchFromGitHub {
     owner = "pragha-music-player";
     repo = "pragha";
-    rev = "v${version}";
-    sha256 = "sha256-C4zh2NHqP4bwKMi5s+3AfEtKqxRlzL66H8OyNonGzxE=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-C4zh2NHqP4bwKMi5s+3AfEtKqxRlzL66H8OyNonGzxE=";
   };
 
   nativeBuildInputs = [
@@ -62,6 +62,7 @@ mkDerivation rec {
     xfce.xfce4-dev-tools
     desktop-file-utils
     installShellFiles
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs =
@@ -73,7 +74,7 @@ mkDerivation rec {
       gtk3
       hicolor-icon-theme
       libpeas
-      qtbase
+      libsForQt5.qtbase
       sqlite
       taglib
       zlib
@@ -108,17 +109,17 @@ mkDerivation rec {
   postInstall = ''
     qtWrapperArgs+=(--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0")
 
-    install -m 444 data/${pname}.desktop $out/share/applications
+    install -m 444 data/pragha.desktop $out/share/applications
     install -d $out/share/pixmaps
-    installManPage data/${pname}.1
+    installManPage data/pragha.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight GTK+ music manager - fork of Consonance Music Manager";
     mainProgram = "pragha";
     homepage = "https://pragha-music-player.github.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ mbaeten ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ mbaeten ];
+    platforms = lib.platforms.unix;
   };
-}
+})
