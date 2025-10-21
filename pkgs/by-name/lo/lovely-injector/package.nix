@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   rustPlatform,
   lib,
   versionCheckHook,
@@ -8,16 +9,28 @@
 }:
 let
   version = "0.7.1";
+
+  # retour-rs PR #67 (unmerged) fixes compilation with rustc 1.89.0
+  retourPatch = fetchpatch {
+    url = "https://patch-diff.githubusercontent.com/raw/Hpmason/retour-rs/pull/67.patch";
+    hash = "sha256-zajJdc1ml5UKPi6yOUwW1rPxiTx3VhVig3dh/xSBrc8=";
+  };
 in
 rustPlatform.buildRustPackage {
   pname = "lovely-injector";
   inherit version;
+
   src = fetchFromGitHub {
     owner = "ethangreen-dev";
     repo = "lovely-injector";
     tag = "v${version}";
     hash = "sha256-j03/DOnLFfFYTwGGh+7BalS779jyg+p0UqtcTTyHgv4=";
   };
+
+  # Apply retour patch to the vendored crate
+  postPatch = ''
+    patch -p1 -d "/build/lovely-injector-${version}-vendor/retour-0.4.0-alpha.2" < ${retourPatch}
+  '';
 
   cargoHash = "sha256-hHq26kSKcqEldxUb6bn1laTpKGFplP9/2uogsal8T5A=";
   # no tests
