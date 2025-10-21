@@ -10,8 +10,9 @@
   click,
 
   # tests
-  pytestCheckHook,
   hypothesis,
+  pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -35,9 +36,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytestCheckHook
     hypothesis
+    pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # AssertionError CLI exists with non-zero error code
