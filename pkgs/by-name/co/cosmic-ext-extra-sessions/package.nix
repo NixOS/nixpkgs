@@ -4,6 +4,7 @@
   fetchFromGitHub,
   symlinkJoin,
   cosmic-ext-alternative-startup,
+  cosmic-ext-sway-daemon,
   cosmic-session,
   dbus,
   nix-update-script,
@@ -46,7 +47,8 @@ let
               --replace-fail "/etc/sway/config-cosmic" "${placeholder "out"}/etc/sway/config-cosmic"
 
           substituteInPlace ${name}/config-cosmic \
-            --replace-fail '/usr/bin/cosmic-ext-alternative-startup' '${lib.getExe cosmic-ext-alternative-startup}'
+            --replace-fail "/usr/bin/cosmic-ext-alternative-startup" "${lib.getExe cosmic-ext-alternative-startup}" \
+            --replace-fail "/usr/bin/cosmic-ext-sway-daemon" "${lib.getExe cosmic-ext-sway-daemon}"
         ''}
       '';
 
