@@ -7,13 +7,13 @@
 }:
 buildGoModule rec {
   pname = "beszel";
-  version = "0.13.2";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     tag = "v${version}";
-    hash = "sha256-5akfgX3533NkeszP/by9ZfwTmMPdG5/JKFjswP1FRp8=";
+    hash = "sha256-IQ39OtYG2VDyHIPFRR0VNK56czGlJly66Bwb/NYIBxY=";
   };
 
   webui = buildNpmPackage {
@@ -47,7 +47,7 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/internal/site";
 
-    npmDepsHash = "sha256-7+3K8MhA+FXWRXQR5edUYbL/XcxPmUqWQPxl5k8u1xs=";
+    npmDepsHash = "sha256-Wtq/pesnovOyAnFta/wI+j8rml8XWORvOLz/Q82sy8g=";
   };
 
   vendorHash = "sha256-IfwgL4Ms5Uho1l0yGCyumbr1N/SN+j5HaFl4hACkTsQ=";
