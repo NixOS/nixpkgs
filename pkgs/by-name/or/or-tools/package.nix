@@ -1,4 +1,8 @@
 {
+  stdenv,
+  lib,
+  callPackage,
+
   abseil-cpp_202407,
   bzip2,
   cbc,
@@ -11,12 +15,10 @@
   gbenchmark,
   glpk,
   highs,
-  lib,
   pkg-config,
   protobuf_29,
   python3,
   re2,
-  stdenv,
   swig,
   unzip,
   zlib,
@@ -33,7 +35,9 @@ let
   abseil-cpp = abseil-cpp_202407;
   protobuf = protobuf_29.override { inherit abseil-cpp; };
   python-protobuf = python3.pkgs.protobuf5.override { inherit protobuf; };
-  pybind11-protobuf = python3.pkgs.pybind11-protobuf.override { protobuf_29 = protobuf; };
+  pybind11-protobuf = callPackage ./pybind11-protobuf.nix {
+    inherit (python3.pkgs) buildPythonPackage pybind11;
+  };
 
   # local revert of 58daf511687f191829238fc7f571e08dc9dedf56,
   # working around https://github.com/google/or-tools/issues/4911

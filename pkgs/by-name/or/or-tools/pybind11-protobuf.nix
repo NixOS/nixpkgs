@@ -4,7 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  abseil-cpp_202407, # downgrade, same reason as toplevel protobuf_29
+  abseil-cpp_202407,
   protobuf_29,
   pybind11,
   zlib,
