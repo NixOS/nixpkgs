@@ -10,14 +10,14 @@
 }:
 buildGoModule rec {
   pname = "openshift";
-  version = "4.16.0";
-  gitCommit = "fa84651";
+  version = "4.19.0-202505210330";
+  gitCommit = "8f1c8b5";
 
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "oc";
-    rev = "fa846511dbeb7e08cf77265056397283c6c896f9";
-    hash = "sha256-mGItCpZQqQOKoNm2amwpHrEIcZdVNirQFa7DGvmnR9s=";
+    tag = "openshift-clients-${version}";
+    hash = "sha256-EIsK73zSozqBOFZalURNcamk5FRDusUEhXtup60c2zQ=";
   };
 
   vendorHash = null;
