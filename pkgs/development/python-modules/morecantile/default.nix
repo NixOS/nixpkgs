@@ -3,23 +3,26 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
 
+  # build-system
+  flit,
+
+  # dependencies
   attrs,
   click,
-  flit,
-  mercantile,
   pydantic,
   pyproj,
+
+  # tests
+  mercantile,
   rasterio,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "morecantile";
   version = "6.2.0";
   pyproject = true;
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "developmentseed";
@@ -28,9 +31,9 @@ buildPythonPackage rec {
     hash = "sha256-ohTSgkjgaANS/Pli4fao+THA4ltts6svj5CdJEgorz0=";
   };
 
-  nativeBuildInputs = [ flit ];
+  build-system = [ flit ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     click
     pydantic
@@ -52,7 +55,9 @@ buildPythonPackage rec {
 
   meta = {
     description = "Construct and use map tile grids in different projection";
-    homepage = "https://developmentseed.org/morecantile/";
+    homepage = "https://developmentseed.org/morecantile";
+    downloadPage = "https://github.com/developmentseed/morecantile";
+    changelog = "https://github.com/developmentseed/morecantile/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     teams = [ lib.teams.geospatial ];
     mainProgram = "morecantile";
