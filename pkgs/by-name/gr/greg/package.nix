@@ -1,34 +1,33 @@
 {
   lib,
   fetchFromGitHub,
-  pythonPackages,
+  python3Packages,
 }:
 
-with pythonPackages;
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "greg";
   version = "0.4.8";
   format = "setuptools";
 
-  disabled = !isPy3k;
+  disabled = !python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "manolomartinez";
     repo = "greg";
     tag = "v${version}";
-    sha256 = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
+    hash = "sha256-o4+tXVJTgT52JyJOC+Glr2cvZjbTaZL8TIsmz+A4vE4=";
   };
 
   propagatedBuildInputs = [
-    setuptools
-    feedparser
+    python3Packages.setuptools
+    python3Packages.feedparser
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/manolomartinez/greg";
     description = "Command-line podcast aggregator";
     mainProgram = "greg";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ edwtjo ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ edwtjo ];
   };
 }
