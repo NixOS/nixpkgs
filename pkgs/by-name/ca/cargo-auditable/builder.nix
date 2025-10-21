@@ -28,6 +28,8 @@ lib.extendMkDerivation {
         inherit hash;
       };
 
+      runCargoAudit = false;
+
       nativeBuildInputs = [
         installShellFiles
       ];
