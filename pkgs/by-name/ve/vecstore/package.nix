@@ -14,8 +14,8 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "PhilipJohnBasile";
     repo = "vecstore";
-    rev = "v1.0.0";
-    hash = "sha256-96bce955be4d16ccd29e6dbd8bbfe87c1da869b4c76607176ad7ca9c54895448";
+    rev = "v${version}";
+    hash = "sha256-REPLACE_WITH_ACTUAL_HASH";
   };
 
   cargoHash = "sha256-REPLACE_WITH_ACTUAL_CARGO_HASH";
@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "High-performance embeddable vector database (100/100 feature matrix vs competitors) - HNSW, hybrid search, multi-language, production-ready";
     homepage = "https://github.com/PhilipJohnBasile/vecstore";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ philipjohnbasile ];
     mainProgram = "vecstore-server";
     platforms = platforms.unix;
   };
