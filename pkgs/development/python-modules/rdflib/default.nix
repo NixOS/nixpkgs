@@ -66,6 +66,8 @@ buildPythonPackage rec {
     # requires network access
     "rdflib/__init__.py::rdflib"
     "test/jsonld/test_onedotone.py::test_suite"
+    # https://github.com/RDFLib/rdflib/issues/3274
+    "test/test_sparql/test_translate_algebra.py::test_roundtrip"
   ];
 
   disabledTests = [
