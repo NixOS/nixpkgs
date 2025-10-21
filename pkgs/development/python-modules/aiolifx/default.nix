@@ -24,6 +24,8 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [ "click" ];
+
   dependencies = [
     async-timeout
     bitstring
