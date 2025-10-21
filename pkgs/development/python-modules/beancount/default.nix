@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   bison,
   buildPythonPackage,
   click,
@@ -50,6 +51,12 @@ buildPythonPackage rec {
     # avoid local paths, relative imports wont resolve correctly
     mv beancount tests
   '';
+
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Cannot run the gpg-agent. If needed, implement as passthru tests.
+    "tests/utils/encryption_test.py::TestEncryptedFiles::test_read_encrypted_file"
+    "tests/utils/encryption_test.py::TestLoadIncludesEncrypted::test_include_encrypted"
+  ];
 
   pythonImportsCheck = [ "beancount" ];
 
