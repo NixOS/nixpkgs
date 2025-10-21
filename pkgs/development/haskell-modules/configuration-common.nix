@@ -4034,16 +4034,17 @@ with haskellLib;
   }
 )
 
-# cachix: manually maintained
+# Cachix packages
+# Manually maintained
 // (
   let
-    version = "1.7.9";
+    version = "1.9.1";
 
     src = pkgs.fetchFromGitHub {
       owner = "cachix";
       repo = "cachix";
       tag = "v${version}";
-      hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
+      hash = "sha256-IwnNtbNVrlZIHh7h4Wz6VP0Furxg9Hh0ycighvL5cZc=";
     };
   in
   {
@@ -4057,12 +4058,9 @@ with haskellLib;
         inherit version;
         src = src + "/cachix";
       })
-      # Fix ambiguous 'show' reference: https://github.com/cachix/cachix/pull/704
-      (overrideCabal (_: {
-        postPatch = ''
-          sed -i 's/<> show i/<> Protolude.show i/' src/Cachix/Client/NixVersion.hs
-        '';
-      }))
+      (addBuildDepends [
+        self.pqueue
+      ])
       (
         drv:
         drv.override {
