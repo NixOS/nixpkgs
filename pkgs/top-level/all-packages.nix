@@ -2052,6 +2052,10 @@ with pkgs;
     stdenv = gcc15Stdenv;
   };
 
+  hyprfreeze = callPackage ../by-name/hy/hyprfreeze/package.nix {
+    stdenv = gcc15Stdenv;
+  };
+
   hyprgraphics = callPackage ../by-name/hy/hyprgraphics/package.nix {
     stdenv = gcc15Stdenv;
   };
