@@ -1,21 +1,20 @@
 # shellcheck shell=bash
 
-addLinkDLLPaths() {
-  addToSearchPath "LINK_DLL_FOLDERS" "$1/lib"
-  addToSearchPath "LINK_DLL_FOLDERS" "$1/bin"
+_moveDLLsToLib() {
+  if [[ "${dontMoveDLLsToLib-}" ]]; then return; fi
+  # shellcheck disable=SC2154
+  moveToOutput "bin/*.dll" "${!outputLib}"
 }
 
-# shellcheck disable=SC2154
-addEnvHooks "$targetOffset" addLinkDLLPaths
+preFixupHooks+=(_moveDLLsToLib)
 
 addOutputDLLPaths() {
   for output in $(getAllOutputNames); do
-    addToSearchPath "LINK_DLL_FOLDERS" "${!output}/lib"
-    addToSearchPath "LINK_DLL_FOLDERS" "${!output}/bin"
+    addToSearchPath "HOST_PATH" "${!output}/bin"
   done
 }
 
-postInstallHooks+=(addOutputDLLPaths)
+preFixupHooks+=(addOutputDLLPaths)
 
 _dllDeps() {
   [ -z "${OBJDUMP:-}" ] && echo "_dllDeps: '\$OBJDUMP' variable is empty, skipping." 1>&2 && return
@@ -36,13 +35,13 @@ _linkDeps() {
       CYGWIN+=\ winsymlinks:nativestrict ln -sr /bin/cygwin1.dll "$dir"
       continue
     fi
-    # Locate the DLL - it should be an *executable* file on $LINK_DLL_FOLDERS.
+    # Locate the DLL - it should be an *executable* file on $HOST_PATH.
     local dllPath
-    if ! dllPath="$(PATH="$(dirname "$target"):$LINK_DLL_FOLDERS" type -P "$dll")"; then
+    if ! dllPath="$(PATH="$(dirname "$target"):$HOST_PATH" type -P "$dll")"; then
       if [[ -z "$check" || -n "${allowedImpureDLLsMap[$dll]}" ]]; then
         continue
       fi
-      echo unable to find "$dll" in "$LINK_DLL_FOLDERS" >&2
+      echo unable to find "$dll" in "$HOST_PATH" >&2
       exit 1
     fi
     echo '    linking to:' "$dllPath"
