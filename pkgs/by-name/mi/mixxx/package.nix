@@ -36,11 +36,6 @@
   portaudio,
   portmidi,
   protobuf,
-  qt5compat,
-  qtbase,
-  qtdeclarative,
-  qtkeychain,
-  qtsvg,
   rubberband,
   serd,
   sord,
@@ -51,7 +46,7 @@
   upower,
   vamp-plugin-sdk,
   wavpack,
-  wrapQtAppsHook,
+  kdePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,7 +69,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -110,11 +105,11 @@ stdenv.mkDerivation rec {
     portaudio
     portmidi
     protobuf
-    qt5compat
-    qtbase
-    qtdeclarative
-    qtkeychain
-    qtsvg
+    kdePackages.qt5compat
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
+    kdePackages.qtkeychain
+    kdePackages.qtsvg
     rubberband
     serd
     sord
