@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
       --set-default HOMEPAGE_CONFIG_DIR /var/lib/homepage-dashboard \
       --set-default NIXPKGS_HOMEPAGE_CACHE_DIR /var/cache/homepage-dashboard \
       --add-flags "$out/share/homepage/server.js" \
-      --set PATH "${lib.makeBinPath [ unixtools.ping ]}"
+      --prefix PATH : "${lib.makeBinPath [ unixtools.ping ]}"
 
     ${if enableLocalIcons then installLocalIcons else ""}
 
