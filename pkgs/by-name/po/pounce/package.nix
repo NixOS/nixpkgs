@@ -7,12 +7,12 @@
   libxcrypt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "pounce";
   version = "3.1";
 
   src = fetchzip {
-    url = "https://git.causal.agency/pounce/snapshot/pounce-${version}.tar.gz";
+    url = "https://git.causal.agency/pounce/snapshot/pounce-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-6PGiaU5sOwqO4V2PKJgIi3kI2jXsBOldEH51D7Sx9tg=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ edef ];
   };
-}
+})
