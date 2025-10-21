@@ -4,7 +4,7 @@
   fetchurl,
   autoPatchelfHook,
   wrapGAppsHook,
-  desktop-file-utils,
+  makeDesktopItem,
   makeWrapper,
   alsa-lib,
   at-spi2-atk,
@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     wrapGAppsHook
-    desktop-file-utils
     makeWrapper
   ];
 
@@ -90,73 +89,61 @@ stdenv.mkDerivation rec {
     pango
   ];
 
-  # No build phase needed - we're using pre-built binaries
   dontBuild = true;
   dontConfigure = true;
+
+  desktopItem = makeDesktopItem {
+    name = "ipfs-desktop";
+    exec = "ipfs-desktop";
+    icon = "ipfs-desktop";
+    comment = "An unobtrusive and user-friendly desktop application for IPFS";
+    desktopName = "IPFS Desktop";
+    genericName = "IPFS Desktop";
+    categories = [ "Network" "P2P" "FileTransfer" ];
+    keywords = [ "ipfs" "p2p" "distributed" "web" "dweb" ];
+    startupWMClass = "IPFS Desktop";
+    mimeTypes = [ "application/x-ipfs" ];
+  };
 
   installPhase = ''
     runHook preInstall
     
     # Create directories
-    mkdir -p $out/{bin,share/applications,share/pixmaps}
+    mkdir -p $out/{bin,lib/ipfs-desktop,share/pixmaps}
     
-    # Copy the pre-built application to a subdirectory
-    mkdir -p $out/lib/ipfs-desktop
+    # Copy the pre-built application
     cp -r * $out/lib/ipfs-desktop/
     
-    # Create a wrapper script for the main executable
+    # Create wrapper script
     makeWrapper $out/lib/ipfs-desktop/ipfs-desktop $out/bin/ipfs-desktop \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --set ELECTRON_IS_DEV 0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1
     
-    # Create desktop file
-    cat > $out/share/applications/ipfs-desktop.desktop << EOF
-    [Desktop Entry]
-    Name=IPFS Desktop
-    Comment=An unobtrusive and user-friendly desktop application for IPFS
-    Exec=ipfs-desktop
-    Icon=ipfs-desktop
-    Terminal=false
-    Type=Application
-    Categories=Network;P2P;FileTransfer;
-    Keywords=ipfs;p2p;distributed;web;dweb;
-    StartupWMClass=IPFS Desktop
-    MimeType=application/x-ipfs;
-    EOF
+    # Install desktop file
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications/
     
     # Copy icon if available
     if [ -f "resources/app.asar.unpacked/assets/icon.png" ]; then
       cp resources/app.asar.unpacked/assets/icon.png $out/share/pixmaps/ipfs-desktop.png
     elif [ -f "assets/icon.png" ]; then
       cp assets/icon.png $out/share/pixmaps/ipfs-desktop.png
-    else
-      echo "Warning: No icon found for IPFS Desktop"
     fi
     
     runHook postInstall
   '';
 
-  # Fix library paths
   preFixup = ''
     gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs})
   '';
 
   meta = with lib; {
-    description = "An unobtrusive and user-friendly desktop application for IPFS on Windows, Mac and Linux";
-    longDescription = ''
-      IPFS Desktop is a desktop application for IPFS that allows you to
-      run an IPFS node on your machine, giving you access to the distributed
-      web and all the benefits of IPFS. It provides an unobtrusive and
-      user-friendly interface for managing your IPFS node, file sharing,
-      pinning, and distributed web browsing.
-    '';
+    description = "Desktop application for IPFS";
     homepage = "https://github.com/ipfs/ipfs-desktop";
-    changelog = "https://github.com/ipfs/ipfs-desktop/blob/main/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hi ];
     platforms = platforms.linux;
     mainProgram = "ipfs-desktop";
-    broken = false;
   };
 }
