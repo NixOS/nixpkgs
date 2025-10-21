@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  libressl,
+  libretls,
+  openssl,
   fetchzip,
   pkg-config,
   libxcrypt,
@@ -17,7 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [
-    libressl
+    libretls
+    openssl
     libxcrypt
   ];
 
