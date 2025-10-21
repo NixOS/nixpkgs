@@ -11,17 +11,16 @@
   libsndfile,
   pkg-config,
   python3Packages,
+  libsForQt5,
   which,
   gtk3 ? null,
-  qtbase ? null,
   withFrontend ? true,
   withGtk3 ? true,
   withQt ? true,
-  wrapQtAppsHook ? null,
 }:
 
-assert withQt -> qtbase != null;
-assert withQt -> wrapQtAppsHook != null;
+assert withQt -> libsForQt5.qtbase != null;
+assert withQt -> libsForQt5.wrapQtAppsHook != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "carla";
@@ -30,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "falkTX";
     repo = "carla";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-21QaFCIjGjRTcJtf2nwC5RcVJF8JgcFPIbS8apvf9tw=";
   };
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.wrapPython
     pkg-config
     which
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   pythonPath =
@@ -58,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio
     libsndfile
   ]
-  ++ lib.optional withQt qtbase
+  ++ lib.optional withQt libsForQt5.qtbase
   ++ lib.optional withGtk3 gtk3;
 
   propagatedBuildInputs = finalAttrs.pythonPath;
@@ -99,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://kx.studio/Applications:Carla";
     description = "Audio plugin host";
     longDescription = ''
@@ -108,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
       It uses JACK as the default and preferred audio driver but also
       supports native drivers like ALSA, DirectSound or CoreAudio.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.minijackson ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ minijackson ];
+    platforms = lib.platforms.linux;
   };
 })
