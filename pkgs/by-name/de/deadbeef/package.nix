@@ -62,18 +62,16 @@
 
 let
   inherit (lib) optionals;
-
-  version = "1.10.0";
 in
-clangStdenv.mkDerivation {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "deadbeef";
-  inherit version;
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     fetchSubmodules = true;
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-qa0ULmE15lV2vkyXPNW9kSISQZEANrjwJwykTiifk5Q=";
   };
 
@@ -155,16 +153,16 @@ clangStdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ultimate Music Player for GNU/Linux";
     mainProgram = "deadbeef";
     homepage = "http://deadbeef.sourceforge.net/";
     downloadPage = "https://github.com/DeaDBeeF-Player/deadbeef";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     platforms = [
       "x86_64-linux"
       "i686-linux"
     ];
     maintainers = [ ];
   };
-}
+})
