@@ -1,2 +1,2 @@
-{ pkgs }:
-(pkgs.callPackage ./integration-tests { }) // (pkgs.callPackage ./fetchDenoDeps-e2e-tests { })
+{ callPackage }:
+(callPackage ./fetchDenoDeps-integration-tests { }) // (callPackage ./fetchDenoDeps-e2e-tests { })

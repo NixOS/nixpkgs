@@ -10,7 +10,7 @@ let
   denoJson = builtins.fromJSON (builtins.readFile ./deno.json);
 in
 {
-  test-fetch-deno-deps-scripts = stdenvNoCC.mkDerivation {
+  fetchDenoDeps-integration-tests = stdenvNoCC.mkDerivation {
     pname = denoJson.name;
     inherit (denoJson) version;
     DENO_DIR = "./.deno";
