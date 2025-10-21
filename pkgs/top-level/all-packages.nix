@@ -11578,7 +11578,6 @@ with pkgs;
     subproject = "reader";
   };
 
-  jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   js8call = qt5.callPackage ../applications/radio/js8call { };

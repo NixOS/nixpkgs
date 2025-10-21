@@ -1,25 +1,25 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
   pkg-config,
   scons,
-  qtbase,
   lash,
   libjack2,
   jack ? libjack2,
   alsa-lib,
+  libsForQt5,
   fetchpatch,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "jackmix";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "kampfschlaefer";
     repo = "jackmix";
-    rev = version;
+    tag = finalAttrs.version;
     sha256 = "0p59411vk38lccn24r7nih10jpgg9i46yc26zpc3x13amxwwpd4h";
   };
 
@@ -35,9 +35,10 @@ mkDerivation rec {
   nativeBuildInputs = [
     scons
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     lash
     jack
     alsa-lib
@@ -55,4 +56,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ kampfschlaefer ];
     platforms = platforms.linux;
   };
-}
+})
