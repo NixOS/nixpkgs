@@ -12634,8 +12634,6 @@ with pkgs;
   transmission_4-qt6 = transmission_4.override { enableQt6 = true; };
   transmission_4-qt = transmission_4-qt5;
 
-  traverso = libsForQt5.callPackage ../applications/audio/traverso { };
-
   tinywl = callPackage ../applications/window-managers/tinywl {
     wlroots = wlroots_0_19;
   };
