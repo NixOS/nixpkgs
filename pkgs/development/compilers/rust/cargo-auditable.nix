@@ -29,6 +29,8 @@ let
       "--skip=test_wasm"
     ];
 
+    runCargoAudit = false;
+
     meta = with lib; {
       description = "Tool to make production Rust binaries auditable";
       mainProgram = "cargo-auditable";
