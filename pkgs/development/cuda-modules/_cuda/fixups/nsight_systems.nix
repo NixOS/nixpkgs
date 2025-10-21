@@ -87,14 +87,14 @@ in
   buildInputs =
     prevAttrs.buildInputs or [ ]
     ++ [
-      (qt6.qtdeclarative or qt6.full)
-      (qt6.qtsvg or qt6.full)
-      (qt6.qtimageformats or qt6.full)
-      (qt6.qtpositioning or qt6.full)
-      (qt6.qtscxml or qt6.full)
-      (qt6.qttools or qt6.full)
-      (qt6.qtwebengine or qt6.full)
-      (qt6.qtwayland or qt6.full)
+      qt6.qtdeclarative
+      qt6.qtsvg
+      qt6.qtimageformats
+      qt6.qtpositioning
+      qt6.qtscxml
+      qt6.qttools
+      qt6.qtwebengine
+      qt6.qtwayland
       boost178
       cuda_cudart.stubs
       e2fsprogs
