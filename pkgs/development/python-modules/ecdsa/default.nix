@@ -24,5 +24,12 @@ buildPythonPackage rec {
     description = "ECDSA cryptographic signature library";
     homepage = "https://github.com/warner/python-ecdsa";
     license = licenses.mit;
+    knownVulnerabilities = [
+      # "I don't want people to use this library in production environments.
+      # It's a teaching tool, it's a testing tool, it's absolutely not an
+      # production grade implementation."
+      # https://github.com/tlsfuzzer/python-ecdsa/issues/330
+      "CVE-2024-23342"
+    ];
   };
 }
