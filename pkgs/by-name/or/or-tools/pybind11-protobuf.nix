@@ -4,22 +4,22 @@
   buildPythonPackage,
   fetchFromGitHub,
   cmake,
-  abseil-cpp_202407,
-  protobuf_29,
+  abseil-cpp_202505,
+  protobuf,
   pybind11,
   zlib,
 }:
 
 buildPythonPackage {
   pname = "pybind11-protobuf";
-  version = "0-unstable-2025-02-10";
+  version = "0-unstable-2025-10-29";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "pybind";
     repo = "pybind11_protobuf";
-    rev = "f02a2b7653bc50eb5119d125842a3870db95d251";
-    hash = "sha256-jlZcxQKYYYvTOGhk+0Sgtek4oKy6R1wDGiBOf2t+KiU=";
+    rev = "4825dca68c8de73f5655fc50ce79c49c4d814652";
+    hash = "sha256-SeIUyWLeThfBX3SljLdG7CbENdbuJG+X0+h/gn/ATWE=";
   };
 
   patches = [
@@ -28,11 +28,16 @@ buildPythonPackage {
     ./add-install-target-for-cmake-builds.patch
   ];
 
+  postPatch = ''
+    substituteInPlace cmake/dependencies/CMakeLists.txt \
+      --replace-fail 'find_package(protobuf 5.29.2 REQUIRED)' 'find_package(protobuf REQUIRED)'
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    abseil-cpp_202407
-    protobuf_29
+    abseil-cpp_202505
+    protobuf
     pybind11
     zlib
   ];
