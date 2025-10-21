@@ -15,7 +15,7 @@
 
 let
   pname = "trilium-desktop";
-  version = "0.99.1";
+  version = "0.99.2";
 
   triliumSource = os: arch: hash: {
     url = "https://github.com/TriliumNext/Trilium/releases/download/v${version}/TriliumNotes-v${version}-${os}-${arch}.zip";
@@ -26,10 +26,10 @@ let
   darwinSource = triliumSource "macos";
 
   # exposed like this for update.sh
-  x86_64-linux.hash = "sha256-cn1Y6wMYoVCuNNdAxesNKcZiRo2uKGV8nL6yK1KtNP8=";
-  aarch64-linux.hash = "sha256-KhSSrdITpbGiIAEkdNfRAoIlhC2uUV6+8ZUaEYW7dyA=";
-  x86_64-darwin.hash = "sha256-jKAZnCtNEEnvJ6p6lziOG7+uAyMuEel4dAKRXvMHo8c=";
-  aarch64-darwin.hash = "sha256-1p0rUoZPunP3fRgn/EO3obdGp6l5BbsfZyKMlsgrl80=";
+  x86_64-linux.hash = "sha256-O5jlEwN97rZpB12FxNJu+kt9Or9+M0zTUCrrOC8Vr/E=";
+  aarch64-linux.hash = "sha256-vTt/4mmhQKK0yTGNAYnkZbhhxyj7km7tU4/iK2ApXqk=";
+  x86_64-darwin.hash = "sha256-TJA+s+Qy5rmi8sPNf6mKL3ZUvltYbQhDeWvXZVV5uPs=";
+  aarch64-darwin.hash = "sha256-5ibkfmSIEAm0prN0mHw2fxcBsshH9Tl+sbPA5XoZFQk=";
 
   sources = {
     x86_64-linux = linuxSource "x64" x86_64-linux.hash;
