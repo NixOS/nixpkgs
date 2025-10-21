@@ -4,7 +4,7 @@
   bitstring,
   buildPythonPackage,
   click,
-  fetchPypi,
+  fetchFromGitHub,
   ifaddr,
   inquirerpy,
   setuptools,
@@ -15,9 +15,11 @@ buildPythonPackage rec {
   version = "1.2.1";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-h82KPrHcWUUrQFyMy3fY6BmQFA5a4DFJdhJ6zRnKMsc=";
+  src = fetchFromGitHub {
+    owner = "aiolifx";
+    repo = "aiolifx";
+    tag = version;
+    hash = "sha256-9FTsY/VFfzLlDEjF8ueBQxr30YasdQwei1/KfHiXwMo=";
   };
 
   build-system = [ setuptools ];
