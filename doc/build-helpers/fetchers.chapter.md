@@ -1001,3 +1001,75 @@ fetchtorrent {
 
 - `config`: When using `transmission` as the `backend`, a json configuration can
   be supplied to transmission. Refer to the [upstream documentation](https://github.com/transmission/transmission/blob/main/docs/Editing-Configuration-Files.md) for information on how to configure.
+
+## `fetchTraefikPlugin` {#sec-pkgs-fetchers-fetchtraefikplugin}
+
+This specialised fetcher can build local [Traefik](https://traefik.io) plugins in a format expected by the `experimental.localPlugins` option in a Traefik static configuration file.
+
+::::{.example #ex-fetchers-fetchtraefikplugin}
+# Building a Traefik plugin hosted on `plugins.traefik.io`
+
+The following recipe shows how to use `fetchTraefikPlugin` to fetch the `geoblock` Traefik plugin at version `0.3.3`:
+
+```nix
+{ fetchTraefikPlugin }:
+fetchTraefikPlugin {
+  plugin = "geoblock";
+  owner = "PascalMinder";
+  version = "0.3.3";
+  hash = "sha256-gLhihjsBJEKGzpIwWzu/zmvLJbqnqXsF8ZiJWWKwDIA=";
+}
+```
+
+After building the recipe, the derivation output will set up the appropriate paths expected by Traefik:
+
+```shell
+$ nix-build
+(output removed for clarity)
+/nix/store/m68kmlay1vdjzqjq7144r6ra885fd8l8-geoblock-0.3.3
+
+$ tree /nix/store/m68kmlay1vdjzqjq7144r6ra885fd8l8-geoblock-0.3.3
+/nix/store/m68kmlay1vdjzqjq7144r6ra885fd8l8-geoblock-0.3.3
+└── src
+    └── github.com
+        └── PascalMinder
+            └── geoblock
+                ├── docker
+                │   ├── dev-geoblock
+                │   │   └── docker-compose.yml
+                │   └── traefik-config
+                │       ├── dynamic-configuration.yml
+                │       └── traefik.yml
+                ├── lrucache
+                │   ├── lru.go
+                │   ├── lru_interface.go
+                │   └── lru_test.go
+                ├── LICENSE
+                ├── Makefile
+                ├── geoblock.go
+                ├── geoblock_test.go
+                ├── go.mod
+                └── readme.md
+```
+
+::::
+
+### Parameters {#sec-pkgs-fetchers-fetchtraefikplugin-parameters}
+
+- `plugin`: The plugin name, usually lowercase.
+
+- `owner`: The author of the plugin.
+
+- `version`: The version of the plugin, without the `v` prefix.
+
+- `hash`: The resulting hash of the derivation.
+
+#### Optional parameters {#sec-pkgs-fetchers-fetchtraefikplugin-parameters-optional}
+
+- `provider`: The forge hosting the plugin. This defaults to `github.com`, as most Traefik plugins are hosted on GitHub, but the fetcher will always fetch plugins from `plugins.traefik.io`, regardless of upstream provider.
+
+- `pname`: Defaults to the value of `plugin`.
+
+- `name`: Defaults to `${pname}-${version}`.
+
+- `meta`: Defaults to `{ }`, but can be configured similarly to any other package.

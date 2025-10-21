@@ -102,6 +102,9 @@
   "ex-build-helpers-extendMkDerivation": [
     "index.html#ex-build-helpers-extendMkDerivation"
   ],
+  "ex-fetchers-fetchtraefikplugin": [
+    "index.html#ex-fetchers-fetchtraefikplugin"
+  ],
   "ex-pkgs-replace-vars": [
     "index.html#ex-pkgs-replace-vars",
     "index.html#ex-pkgs-substituteAll",
@@ -548,6 +551,15 @@
   ],
   "sec-debug": [
     "index.html#sec-debug"
+  ],
+  "sec-pkgs-fetchers-fetchtraefikplugin": [
+    "index.html#sec-pkgs-fetchers-fetchtraefikplugin"
+  ],
+  "sec-pkgs-fetchers-fetchtraefikplugin-parameters": [
+    "index.html#sec-pkgs-fetchers-fetchtraefikplugin-parameters"
+  ],
+  "sec-pkgs-fetchers-fetchtraefikplugin-parameters-optional": [
+    "index.html#sec-pkgs-fetchers-fetchtraefikplugin-parameters-optional"
   ],
   "sec-prefer-remote-fetch": [
     "index.html#sec-prefer-remote-fetch"
