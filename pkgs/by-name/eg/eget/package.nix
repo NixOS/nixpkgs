@@ -34,6 +34,7 @@ buildGoModule rec {
   ];
 
   postInstall = ''
+    rm $out/bin/{test,tools}
     pandoc man/eget.md -s -t man -o eget.1
     installManPage eget.1
   '';
