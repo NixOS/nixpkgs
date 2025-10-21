@@ -1,13 +1,12 @@
 {
+  stdenv,
   lib,
-  mkDerivation,
   fetchFromGitHub,
   pkg-config,
-  qmake,
-  qtbase,
   libjack2,
+  libsForQt5,
 }:
-mkDerivation {
+stdenv.mkDerivation {
   pname = "jack_autoconnect";
 
   # It does not have any versions (yet?)
@@ -17,16 +16,18 @@ mkDerivation {
     owner = "kripton";
     repo = "jack_autoconnect";
     rev = "fe0c8f69149e30979e067646f80b9d326341c02b";
-    sha256 = "sha256-imvNc498Q2W9RKmiOoNepSoJzIv2tGvFG6hx+seiifw=";
+    hash = "sha256-imvNc498Q2W9RKmiOoNepSoJzIv2tGvFG6hx+seiifw=";
   };
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libjack2
   ];
+
   nativeBuildInputs = [
     pkg-config
-    qmake
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   installPhase = ''
@@ -34,12 +35,12 @@ mkDerivation {
     cp -- jack_autoconnect "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kripton/jack_autoconnect";
     description = "Tiny application that reacts on port registrations by clients and connects them";
     mainProgram = "jack_autoconnect";
-    maintainers = with maintainers; [ unclechu ];
-    license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ unclechu ];
+    license = lib.licenses.gpl2Only;
+    platforms = lib.platforms.linux;
   };
 }
