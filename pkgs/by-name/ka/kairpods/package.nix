@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-y/WO0y3IPdhXOnsa+//HLXWEk7gs+MH0K62QUcnveiw=";
 
-  sourceRoot = "${src.name}/service";
+  sourceRoot = "${finalAttrs.src.name}/service";
 
   nativeBuildInputs = [
     pkg-config
