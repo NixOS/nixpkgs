@@ -1,0 +1,12 @@
+diff --git a/meson.build b/meson.build
+index a5fcbeb..9374900 100644
+--- a/meson.build
++++ b/meson.build
+@@ -130,7 +130,7 @@ executable('pwupdd',
+            pwupdd_c,
+            include_directories : inc,
+ 	   link_with : [libcommon],
+-	   dependencies : [libpam, libsystemd, libeconf, libselinux],
++	   dependencies : [libpam, libsystemd, libeconf, libselinux, libcrypt],
+            install_dir : libexecdir,
+            install : true)

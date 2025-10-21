@@ -397,6 +397,7 @@
   ./security/pam_mount.nix
   ./security/please.nix
   ./security/polkit.nix
+  ./security/pwaccess.nix
   ./security/rngd.nix
   ./security/rtkit.nix
   ./security/soteria.nix

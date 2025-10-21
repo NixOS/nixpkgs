@@ -19,6 +19,8 @@
   libbsd,
   withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
   tcb,
+  pwaccess,
+  withPwaccess ? false,
 }:
 let
   glibc' =
@@ -65,14 +67,16 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional (pam != null && (lib.meta.availableOn stdenv.hostPlatform pam)) pam
   ++ lib.optional withLibbsd libbsd
-  ++ lib.optional withTcb tcb;
+  ++ lib.optional withTcb tcb
+  ++ lib.optional withPwaccess pwaccess;
 
   patches = [
     ./keep-path.patch
     # Obtain XML resources from XML catalog (patch adapted from gtk-doc)
     ./respect-xml-catalog-files-var.patch
     ./fix-install-with-tcb.patch
-  ];
+  ]
+  ++ lib.optional withPwaccess "${pwaccess.src}/patches/shadow-pwaccess.patch";
 
   postPatch = ''
     # The nix daemon often forbids even creating set[ug]id files
