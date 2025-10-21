@@ -99,6 +99,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       fkautz
       jk
+      mjm
     ];
   };
 })
