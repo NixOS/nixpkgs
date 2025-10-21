@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
-  version = "1.13.4";
+  version = "1.13.5";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-8Aq41CrYuQUpb6tn4TuHHxpCSDkzFRZkIQD4KtiBJ80=";
+    hash = "sha256-iZGK57fBOTbmSCYEp3or+7t0VExdA5/eAcP6G99jmYc=";
   };
 
   nativeBuildInputs = [
