@@ -55,6 +55,8 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "bsblan" ];
 
   meta = with lib; {
