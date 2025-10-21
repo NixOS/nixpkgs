@@ -10,12 +10,15 @@
   pam,
   enablePython ? false,
   python3,
+
+  nixosTests,
+  callPackage,
 }:
 
 # python binding generates a shared library which are unavailable with musl build
 assert enablePython -> !stdenv.hostPlatform.isStatic;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpwquality";
   version = "1.4.5";
 
@@ -30,7 +33,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "libpwquality";
     repo = "libpwquality";
-    rev = "${pname}-${version}";
+    tag = "libpwquality-${finalAttrs.version}";
     sha256 = "sha256-YjvHzd4iEBvg+qHOVJ7/y9HqyeT+QDalNE/jdNM9BNs=";
   };
 
@@ -83,7 +86,13 @@ stdenv.mkDerivation rec {
       # leave for now to avoid rebuilds on !enablePython before 24.11 fully lands
       [ "--disable-python-bindings" ];
 
-  meta = with lib; {
+  passthru.tests = {
+    pam = nixosTests.pam-pwquality;
+    format =
+      (callPackage ../../../../nixos/modules/security/pwquality/pwquality-conf-format.nix { }).tests;
+  };
+
+  meta = {
     homepage = "https://github.com/libpwquality/libpwquality";
     description = "Password quality checking and random password generation library";
     longDescription = ''
@@ -97,12 +106,14 @@ stdenv.mkDerivation rec {
       function and PAM module that can be used instead of pam_cracklib. The
       module supports all the options of pam_cracklib.
     '';
-    license = with licenses; [
+    license = with lib.licenses; [
       bsd3
       # or
       gpl2Plus
     ];
-    maintainers = with maintainers; [ jk ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      jk
+    ];
+    platforms = lib.platforms.unix;
   };
-}
+})
