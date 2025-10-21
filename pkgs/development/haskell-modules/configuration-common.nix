@@ -565,42 +565,6 @@ self: super:
   # https://github.com/illia-shkroba/pfile/issues/2
   pfile = doJailbreak super.pfile;
 
-  # Manually maintained
-  cachix-api = overrideCabal (drv: {
-    version = "1.7.9";
-    src = pkgs.fetchFromGitHub {
-      owner = "cachix";
-      repo = "cachix";
-      tag = "v1.7.9";
-      hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/cachix-api";
-  }) super.cachix-api;
-  cachix = (
-    overrideCabal
-      (drv: {
-        version = "1.7.9";
-        src = pkgs.fetchFromGitHub {
-          owner = "cachix";
-          repo = "cachix";
-          tag = "v1.7.9";
-          hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
-        };
-        postUnpack = "sourceRoot=$sourceRoot/cachix";
-      })
-      (
-        lib.pipe
-          (super.cachix.override {
-            nix = self.hercules-ci-cnix-store.nixPackage;
-          })
-          [
-            (addBuildTool self.hercules-ci-cnix-store.nixPackage)
-            (addBuildTool pkgs.buildPackages.pkg-config)
-            (addBuildDepend self.hnix-store-nar)
-          ]
-      )
-  );
-
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
@@ -3368,5 +3332,44 @@ self: super:
     amazonka =
       assert super.amazonka.version == "2.0";
       setAmazonkaSourceRoot "lib/amazonka" (doJailbreak super.amazonka);
+  }
+)
+
+# cachix: manually maintained
+// (
+  let
+    version = "1.7.9";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "cachix";
+      repo = "cachix";
+      tag = "v${version}";
+      hash = "sha256-R0W7uAg+BLoHjMRMQ8+oiSbTq8nkGz5RDpQ+ZfxxP3A=";
+    };
+  in
+  {
+    cachix-api = overrideSrc {
+      inherit version;
+      src = src + "/cachix-api";
+    } super.cachix-api;
+
+    cachix = lib.pipe super.cachix [
+      (overrideSrc {
+        inherit version;
+        src = src + "/cachix";
+      })
+      # Fix ambiguous 'show' reference: https://github.com/cachix/cachix/pull/704
+      (overrideCabal (_: {
+        postPatch = ''
+          sed -i 's/<> show i/<> Protolude.show i/' src/Cachix/Client/NixVersion.hs
+        '';
+      }))
+      (
+        drv:
+        drv.override {
+          nix = self.hercules-ci-cnix-store.nixPackage;
+        }
+      )
+    ];
   }
 )
