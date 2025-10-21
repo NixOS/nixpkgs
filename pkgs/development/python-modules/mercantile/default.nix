@@ -40,6 +40,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError CLI exists with non-zero error code
+    # This is a regression introduced by https://github.com/NixOS/nixpkgs/pull/448189
     "test_cli_bounding_tile"
     "test_cli_bounding_tile2"
     "test_cli_bounding_tile_bbox"
