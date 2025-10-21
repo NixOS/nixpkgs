@@ -2,7 +2,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   lib,
-  pythonOlder,
   poetry-core,
   grpclib,
   python-dateutil,
@@ -10,9 +9,10 @@
   jinja2,
   isort,
   python,
+  cachelib,
   pydantic,
-  pytest7CheckHook,
-  pytest-asyncio_0_21,
+  pytestCheckHook,
+  pytest-asyncio,
   pytest-mock,
   typing-extensions,
   tomlkit,
@@ -21,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "betterproto";
-  version = "2.0.0b6";
+  version = "2.0.0b7";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "danielgtaylor";
     repo = "python-betterproto";
     tag = "v.${version}";
-    hash = "sha256-ZuVq4WERXsRFUPNNTNp/eisWX1MyI7UtwqEI8X93wYI=";
+    hash = "sha256-T7QSPH8MFa1hxJOhXc3ZMM62/FxHWjCJJ59IpeM41rI=";
   };
 
   postPatch = ''
@@ -53,11 +51,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    cachelib
     grpcio-tools
     pydantic
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytest-mock
-    pytest7CheckHook
+    pytestCheckHook
     tomlkit
   ]
   ++ lib.flatten (builtins.attrValues optional-dependencies);
@@ -73,13 +72,11 @@ buildPythonPackage rec {
     ${python.interpreter} -m tests.generate
   '';
 
-  disabledTestPaths = [
-    # https://github.com/danielgtaylor/python-betterproto/issues/530
-    "tests/inputs/oneof/test_oneof.py"
-  ];
-
   disabledTests = [
-    "test_pydantic_no_value"
+    # incompatible with pytest 8:
+    #     TypeError: exceptions must be derived from Warning, not <class 'NoneType'>
+    "test_message_with_deprecated_field_not_set"
+    "test_service_with_deprecated_method"
     # Test is flaky
     "test_binary_compatibility"
   ];

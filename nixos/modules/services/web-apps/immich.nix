@@ -322,15 +322,17 @@ in
           "vector"
           "vchord"
         ];
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
-
-          ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ${lib.optionalString cfg.database.enableVectors "ALTER SCHEMA vectors OWNER TO ${cfg.database.user};"}
-          GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
-
-          ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
-        '';
+        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" (
+          ''
+            ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+            ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
+            ALTER SCHEMA public OWNER TO ${cfg.database.user};
+          ''
+          + lib.optionalString cfg.database.enableVectors ''
+            ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
+            GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
+          ''
+        );
       in
       [
         ''

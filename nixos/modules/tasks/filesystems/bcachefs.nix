@@ -242,14 +242,6 @@ in
           }
         ];
 
-        warnings = lib.mkIf cfg.modulePackage.meta.broken [
-          ''
-            Using unmaintained in-tree bcachefs kernel module. This
-            will be removed in 26.05. Please use a kernel supported
-            by the out-of-tree module package.
-          ''
-        ];
-
         # Bcachefs upstream recommends using the latest kernel
         boot.kernelPackages = lib.mkDefault pkgs.linuxPackages_latest;
 
@@ -257,9 +249,7 @@ in
         system.fsPackages = [ cfg.package ];
         services.udev.packages = [ cfg.package ];
 
-        boot.extraModulePackages = lib.optionals (!cfg.modulePackage.meta.broken) [
-          cfg.modulePackage
-        ];
+        boot.extraModulePackages = [ cfg.modulePackage ];
 
         systemd = {
           packages = [ cfg.package ];

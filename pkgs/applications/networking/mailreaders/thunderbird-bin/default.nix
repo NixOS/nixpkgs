@@ -45,7 +45,9 @@ let
     x86_64-darwin = "mac";
   };
 
-  arch = mozillaPlatforms.${stdenv.hostPlatform.system};
+  throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
+
+  arch = mozillaPlatforms.${stdenv.hostPlatform.system} or throwSystem;
 
   isPrefixOf = prefix: string: builtins.substring 0 (builtins.stringLength prefix) string == prefix;
 
