@@ -12218,8 +12218,6 @@ with pkgs;
 
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
-  qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
-
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
   qsyncthingtray = libsForQt5.callPackage ../applications/misc/qsyncthingtray { };
