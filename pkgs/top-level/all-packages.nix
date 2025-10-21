@@ -12084,10 +12084,6 @@ with pkgs;
     sed = gnused;
   };
 
-  petrifoo = callPackage ../applications/audio/petrifoo {
-    inherit (gnome2) libgnomecanvas;
-  };
-
   pdfpc = callPackage ../applications/misc/pdfpc {
     inherit (gst_all_1)
       gstreamer

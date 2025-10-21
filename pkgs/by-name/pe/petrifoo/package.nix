@@ -7,7 +7,7 @@
   cmake,
   gtk2,
   libjack2,
-  libgnomecanvas,
+  gnome2,
   libpthreadstubs,
   libsamplerate,
   libsndfile,
@@ -17,12 +17,12 @@
   openssl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "petri-foo";
   version = "0.1.87";
 
   src = fetchurl {
-    url = "mirror://sourceforge/petri-foo/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/petri-foo/petri-foo-${finalAttrs.version}.tar.bz2";
     sha256 = "0b25iicgn8c42487fdw32ycfrll1pm2zjgy5djvgw6mfcaa4gizh";
   };
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     gtk2
     libjack2
-    libgnomecanvas
+    gnome2.libgnomecanvas
     libpthreadstubs
     libsamplerate
     libsndfile
@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "MIDI controllable audio sampler";
     longDescription = "a fork of Specimen";
     homepage = "https://petri-foo.sourceforge.net";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
     mainProgram = "petri-foo";
   };
-}
+})
