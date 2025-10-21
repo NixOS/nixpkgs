@@ -14284,6 +14284,12 @@
     github = "langsjo";
     githubId = 104687438;
   };
+  larsianer = {
+    name = "larsianer";
+    email = "lars@feilberg.de";
+    github = "larsianer";
+    githubId = 55206664;
+  };
   larsr = {
     email = "Lars.Rasmusson@gmail.com";
     github = "larsr";
