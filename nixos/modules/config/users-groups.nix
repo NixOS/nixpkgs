@@ -637,8 +637,6 @@ let
           group
           description
           home
-          homeMode
-          createHome
           isSystemUser
           password
           hashedPasswordFile
@@ -893,6 +891,18 @@ in
           }
         else
           ""; # keep around for backwards compatibility
+
+      systemd.tmpfiles.settings."10-nixos-homedirs" =
+        lib.mapAttrs'
+          (_: user: {
+            name = user.home;
+            value.d = {
+              inherit (user) group;
+              mode = user.homeMode;
+              user = user.name;
+            };
+          })
+          (lib.filterAttrs (_: user: user.createHome && user.enable && user.home != "/var/empty") cfg.users);
 
       systemd.services.linger-users = lib.mkIf ((length lingeringUsers) > 0) {
         wantedBy = [ "multi-user.target" ];
