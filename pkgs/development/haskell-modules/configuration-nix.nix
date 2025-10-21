@@ -580,7 +580,7 @@ builtins.intersectAttrs super {
   gi-gtk-declarative = dontCheck super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = dontCheck super.gi-gtk-declarative-app-simple;
   hsqml = dontCheck (
-    addExtraLibraries [ pkgs.libGLU pkgs.libGL ] (super.hsqml.override { qt5 = pkgs.qt5Full; })
+    addExtraLibraries [ pkgs.libGLU pkgs.libGL ] (super.hsqml.override { qt5 = pkgs.qt5.qtbase; })
   );
   monomer = dontCheck super.monomer;
 
