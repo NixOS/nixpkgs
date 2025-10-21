@@ -11377,8 +11377,6 @@ with pkgs;
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
 
-  mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
-
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
 
   pinboard = with python3Packages; toPythonApplication pinboard;

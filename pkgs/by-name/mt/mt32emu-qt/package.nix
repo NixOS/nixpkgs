@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   fetchFromGitHub,
   alsa-lib,
   cmake,
@@ -9,24 +8,20 @@
   libmt32emu,
   pkg-config,
   portaudio,
-  qtbase,
-  qtmultimedia,
   withJack ? stdenv.hostPlatform.isUnix,
   libjack2,
+  libsForQt5,
 }:
 
-let
-  char2underscore = char: str: lib.replaceStrings [ char ] [ "_" ] str;
-in
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "mt32emu-qt";
   version = "1.11.1";
 
   src = fetchFromGitHub {
     owner = "munt";
     repo = "munt";
-    rev = "${char2underscore "-" pname}_${char2underscore "." version}";
-    sha256 = "sha256-PqYPYnKPlnU3PByxksBscl4GqDRllQdmD6RWpy/Ura0=";
+    tag = "mt32emu_qt_${lib.replaceString "." "_" finalAttrs.version}";
+    hash = "sha256-PqYPYnKPlnU3PByxksBscl4GqDRllQdmD6RWpy/Ura0=";
   };
 
   postPatch = ''
@@ -36,13 +31,14 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     libmt32emu
     portaudio
-    qtbase
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -58,11 +54,11 @@ mkDerivation rec {
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
-    mv $out/bin/${pname}.app $out/Applications/
-    ln -s $out/{Applications/${pname}.app/Contents/MacOS,bin}/${pname}
+    mv $out/bin/mt32emu-qt.app $out/Applications/
+    ln -s $out/{Applications/mt32emu-qt.app/Contents/MacOS,bin}/mt32emu-qt
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://munt.sourceforge.net/";
     description = "Synthesizer application built on Qt and libmt32emu";
     mainProgram = "mt32emu-qt";
@@ -71,8 +67,8 @@ mkDerivation rec {
       synthesis and conversion of pre-recorded SMF files to WAVE making use of
       the mt32emu library and the Qt framework.
     '';
-    license = with licenses; [ gpl3Plus ];
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = with lib.licenses; [ gpl3Plus ];
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
-}
+})
