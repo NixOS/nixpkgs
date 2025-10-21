@@ -6,9 +6,20 @@
   ...
 }:
 
-with lib;
-
 let
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    optional
+    mkIf
+    mkBefore
+    mkAfter
+    literalExpression
+    types
+    literalMD
+    getBin
+    escapeShellArg
+    ;
 
   plymouth = pkgs.plymouth.override {
     systemd = config.boot.initrd.systemd.package;
@@ -109,7 +120,7 @@ in
       };
 
       themePackages = mkOption {
-        default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
+        default = optional (cfg.theme == "breeze") nixosBreezePlymouth;
         defaultText = literalMD ''
           A NixOS branded variant of the breeze theme when
           `config.${opt.theme} == "breeze"`, otherwise
@@ -202,7 +213,7 @@ in
     boot.initrd.systemd = {
       extraBin.plymouth = "${plymouth}/bin/plymouth"; # for the recovery shell
       storePaths = [
-        "${lib.getBin config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent"
+        "${getBin config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent"
         "${plymouth}/bin/plymouthd"
         "${plymouth}/sbin/plymouthd"
       ];
@@ -306,7 +317,7 @@ in
       '')
     ];
 
-    boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) (
       ''
         copy_bin_and_libs ${plymouth}/bin/plymouth
         copy_bin_and_libs ${plymouth}/bin/plymouthd
