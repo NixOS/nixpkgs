@@ -42,6 +42,12 @@ qtModule {
       url = "https://invent.kde.org/qt/qt/qtdeclarative/-/commit/2b7f93da38d41ffaeb5322a7dca40ec26fc091a1.diff";
       hash = "sha256-AOXey18lJlswpZ8tpTTZeFb0VE9k1louXy8TPPGNiA4=";
     })
+    # Fix another common crash
+    # https://bugreports.qt.io/browse/QTBUG-139626
+    (fetchpatch {
+      url = "https://invent.kde.org/qt/qt/qtdeclarative/-/commit/0de0b0ffdb44d73c605e20f00934dfb44bdf7ad9.diff";
+      hash = "sha256-DCoaSxH1MgywGXmmK21LLzCBi2KAmJIv5YKpFS6nw7M=";
+    })
   ];
 
   cmakeFlags = [
