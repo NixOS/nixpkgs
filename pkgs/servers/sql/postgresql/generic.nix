@@ -6,6 +6,7 @@ let
       stdenv,
       fetchFromGitHub,
       fetchurl,
+      fetchpatch2,
       lib,
       replaceVars,
       writeShellScriptBin,
@@ -424,6 +425,12 @@ let
       ]
       ++ lib.optionals (stdenv'.hostPlatform.isDarwin && olderThan "16") [
         ./patches/export-dynamic-darwin-15-.patch
+      ]
+      ++ lib.optionals (atLeast "17") [
+        (fetchpatch2 {
+          url = "https://github.com/postgres/postgres/commit/a48d1ef58652229521ba4b5070e19f857608b22e.patch";
+          hash = "sha256-3FKQS1Vpu+p6z6c1GWs6GlrLl2Bgm9paEU/z81LrEus=";
+        })
       ];
 
       installTargets = [ "install-world" ];

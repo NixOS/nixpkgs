@@ -25,8 +25,17 @@ python.pkgs.toPythonModule (
 
     nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
 
-    # upstream pins every dependency
-    pythonRelaxDeps = true;
+    pythonRelaxDeps = [
+      "certifi"
+      "flask"
+      "flask-babel"
+      "httpx-socks"
+      "lxml"
+      "setproctitle"
+      "typer-slim"
+      "typing-extensions"
+      "whitenoise"
+    ];
 
     preBuild =
       let

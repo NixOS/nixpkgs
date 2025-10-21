@@ -144,7 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
   ]
   ++ lib.optional (!stdenv.hostPlatform.isDarwin) hostname
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) softhsm;
+  # TODO: softhsm is currently breaking the tests; see #453782
+  ++ lib.optional (false && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) softhsm;
 
   preCheck = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
     ''
@@ -193,11 +194,15 @@ stdenv.mkDerivation (finalAttrs: {
       # set up NIX_REDIRECTS for direct invocations
       set -a; source ~/.ssh/environment.base; set +a
     ''
-    + lib.optionalString (!stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) ''
-      # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
-      substituteInPlace regress/test-exec.sh \
-        --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
-    ''
+    # See softhsm in nativeCheckInputs above.
+    +
+      lib.optionalString
+        (!finalAttrs.doCheck && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl)
+        ''
+          # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
+          substituteInPlace regress/test-exec.sh \
+            --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+        ''
   );
   # integration tests hard to get working on darwin with its shaky
   # sandbox

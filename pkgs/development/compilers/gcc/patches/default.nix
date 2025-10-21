@@ -222,7 +222,7 @@ optionals noSysDirs (
   .${majorVersion} or [ ]
 )
 
-++ optional targetPlatform.isCygwin (fetchpatch {
+++ optional (targetPlatform.isWindows || targetPlatform.isCygwin) (fetchpatch {
   name = "libstdc-fix-compilation-in-freestanding-win32.patch";
   url = "https://inbox.sourceware.org/gcc-patches/20250922182808.2599390-2-corngood@gmail.com/raw";
   hash = "sha256-+EYW9lG8CviVX7RyNHp+iX+8BRHUjt5b07k940khbbY=";
