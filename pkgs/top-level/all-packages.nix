@@ -12218,8 +12218,6 @@ with pkgs;
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
-  qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
-
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
 
   qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
