@@ -12348,8 +12348,6 @@ with pkgs;
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
 
-  seq66 = qt5.callPackage ../applications/audio/seq66 { };
-
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
   stag = callPackage ../applications/misc/stag {
