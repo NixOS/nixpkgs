@@ -2555,6 +2555,8 @@ self: super: with self; {
 
   chex = callPackage ../development/python-modules/chex { };
 
+  chipwhisperer = callPackage ../development/python-modules/chipwhisperer { };
+
   chirpstack-api = callPackage ../development/python-modules/chirpstack-api { };
 
   chispa = callPackage ../development/python-modules/chispa { };
