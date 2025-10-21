@@ -441,7 +441,7 @@ stdenv.mkDerivation (
     setupHook = ./setup-hook-cross.sh;
   }
   // lib.optionalAttrs (stdenv.hostPlatform.isCygwin) {
-    # in cygwin we need PATH and LINK_DLL_FOLDERS set up for these dependencies
+    # in cygwin we need PATH and HOST_PATH set up for these dependencies
     buildInputs = [ zlib ];
     nativeBuildInputs = lib.optional (!crossCompiling && enableCrypt) libxcrypt;
   }
