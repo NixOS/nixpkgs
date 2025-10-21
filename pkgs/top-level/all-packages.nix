@@ -1970,6 +1970,8 @@ with pkgs;
     conf = config.element-web.conf or { };
   };
 
+  espansoPlugins = recurseIntoAttrs (callPackage ../by-name/es/espanso/plugins { });
+
   espanso-wayland = espanso.override {
     x11Support = false;
     waylandSupport = !stdenv.hostPlatform.isDarwin;
