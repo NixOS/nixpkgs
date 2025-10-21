@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "dockerfmt";
-  version = "0.3.7";
+  version = "0.3.9";
 
   src = fetchFromGitHub {
     owner = "reteps";
     repo = "dockerfmt";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-cNxPe0LOZyUxyw43fmTQeoxvXcT9K+not/3SvChBSx4=";
+    hash = "sha256-eTsYL2UAVW2M1aQGc5X1gT5cXpXKgshLmN+U5Qro/Qw=";
   };
 
   vendorHash = "sha256-fLGgvAxSAiVSrsnF7r7EpPKCOOD9jzUsXxVQNWjYq80=";
