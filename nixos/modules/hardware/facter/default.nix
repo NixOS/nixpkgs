@@ -7,6 +7,7 @@
   imports = [
     ./disk.nix
     ./keyboard.nix
+    ./networking
     ./system.nix
   ];
 
