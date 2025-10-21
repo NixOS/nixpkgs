@@ -33,13 +33,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kew";
-  version = "3.5.3";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "ravachol";
     repo = "kew";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-7bO9IvSTJJKiNYQzcTSI2Ugjhw1ibbyE5/fe6EDYqvI=";
+    hash = "sha256-PhNBAy+XS1wpU91GNoRc4jume9razD03xmmUER0p8I0=";
   };
 
   postPatch = ''
