@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkRemovedOptionModule
     ;
 in
@@ -18,7 +18,7 @@ in
 
     # This alias module can't be where _module.check is defined because it would
     # be added to submodules as well there
-    (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
+    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
