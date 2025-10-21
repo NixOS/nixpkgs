@@ -3193,6 +3193,11 @@ with pkgs;
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
 
+  keila = callPackage ../by-name/ke/keila/package.nix {
+    elixir = elixir_1_15;
+    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_15; });
+  };
+
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
   kio-fuse = libsForQt5.callPackage ../tools/filesystems/kio-fuse { };
