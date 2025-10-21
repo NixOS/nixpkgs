@@ -1,23 +1,23 @@
 {
   lib,
-  buildGoModule,
+  buildGo124Module,
   fetchFromGitHub,
   nixosTests,
 }:
 
-buildGoModule rec {
+buildGo124Module rec {
   pname = "etcd";
-  version = "3.4.37";
+  version = "3.4.38";
 
   src = fetchFromGitHub {
     owner = "etcd-io";
     repo = "etcd";
     rev = "v${version}";
-    hash = "sha256-PZ+8hlxSwayR1yvjHmStMDur9e1uc2s+YB8qdz+42mA=";
+    hash = "sha256-+fRmz52ZqQTL8JJmSsufoVJP/FGHez9LliEwGsoCE7s=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-VeB0A+freNwgETQMIokiOPWovGq1FANUexnzxVg2aRA=";
+  vendorHash = "sha256-CqeSRyWDw1nCKlAI46iJXT5XjI3elxufx87QIlHwp1w=";
 
   preBuild = ''
     go mod tidy
