@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     with python3Packages;
     [
       rdflib
-      pyliblo3
+      python-osc
     ]
     ++ lib.optional withFrontend pyqt5;
 
