@@ -1,8 +1,8 @@
 {
-  async-timeout,
   buildPythonPackage,
   coloredlogs,
   fetchFromGitHub,
+  fetchpatch,
   jsonschema,
   lib,
   pytest-asyncio_0,
@@ -25,10 +25,21 @@ buildPythonPackage rec {
     hash = "sha256-T2R291GeFIsnDRI1tAydTlLamA3LF5tKxKFhPtcEUus=";
   };
 
+  patches = [
+    # https://github.com/kardia-as/zigpy-zboss/pull/66
+    (fetchpatch {
+      name = "replace-async-timeout-with-asyncio-timeout.patch";
+      url = "https://github.com/kardia-as/zigpy-zboss/commit/91688873ddbcd0c2196f0da69a857b2e2bec75a6.patch";
+      excludes = [ "setup.cfg" ];
+      hash = "sha256-aC0+FbbtuHDW3ApJDnTG3TUeNWhzecEYVuiSOik03uU=";
+    })
+  ];
+
+  pythonRemoveDeps = [ "async_timeout" ];
+
   build-system = [ setuptools ];
 
   dependencies = [
-    async-timeout
     coloredlogs
     jsonschema
     voluptuous

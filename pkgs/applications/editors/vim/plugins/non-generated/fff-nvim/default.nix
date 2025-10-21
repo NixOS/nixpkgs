@@ -9,12 +9,12 @@
   nix-update-script,
 }:
 let
-  version = "0-unstable-2025-10-18";
+  version = "e8850c3-unstable-2025-10-20";
   src = fetchFromGitHub {
     owner = "dmtrKovalenko";
     repo = "fff.nvim";
-    rev = "ee8bd6e839ff3e70660e794d79d4ce26a33a8e1e";
-    hash = "sha256-Wj6YLTUqLzOngiSDkM3ci85WwdQgjoonwHbvXyvN9cE=";
+    rev = "e8850c3c62a13e92f71233350962e842fcabf01b";
+    hash = "sha256-qyzM45FaXqLipnBW2zTao2SvY21qiFsdsX+Mn2Tu3xI=";
   };
   fff-nvim-lib = rustPlatform.buildRustPackage {
     pname = "fff-nvim-lib";

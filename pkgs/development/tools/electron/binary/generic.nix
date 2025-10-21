@@ -44,11 +44,7 @@ let
     homepage = "https://github.com/electron/electron";
     license = licenses.mit;
     mainProgram = "electron";
-    maintainers = with maintainers; [
-      yayayayaka
-      teutat3s
-      tomasajt
-    ];
+    teams = [ teams.electron ];
     platforms = [
       "x86_64-darwin"
       "x86_64-linux"

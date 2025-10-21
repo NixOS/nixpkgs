@@ -78,7 +78,6 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       thoughtpolice
-      maggesi
       vbgl
     ];
   };
