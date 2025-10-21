@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  stdenv,
   cmake,
   fetchFromGitLab,
   nix-update-script,
@@ -9,11 +9,10 @@
   ninja,
   pcre,
   pkg-config,
-  qtbase,
-  qttools,
   taglib,
   zlib,
   python3,
+  libsForQt5,
 }:
 
 let
@@ -23,14 +22,14 @@ let
     ]
   );
 in
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "sayonara";
   version = "1.10.0-stable1";
 
   src = fetchFromGitLab {
     owner = "luciocarreras";
     repo = "sayonara-player";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-ZcuWe1dsLJS4/nLXSSKB7wzPU9COFyE4vPSwZIo0bgI=";
   };
 
@@ -44,13 +43,14 @@ mkDerivation rec {
     cmake
     ninja
     pkg-config
-    qttools
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     libpulseaudio
     pcre
-    qtbase
+    libsForQt5.qtbase
     taglib
     zlib
     py
@@ -80,11 +80,11 @@ mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Sayonara music player";
     homepage = "https://sayonara-player.com/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ deepfire ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ deepfire ];
+    platforms = lib.platforms.unix;
   };
-}
+})
