@@ -8,6 +8,7 @@
   which,
   bash,
   qt5,
+  legacy-cgi,
 }:
 
 buildPythonApplication rec {
@@ -42,6 +43,7 @@ buildPythonApplication rec {
   dependencies = [
     pyliblo3
     pyqt5
+    legacy-cgi # Remove when upstream has new release with the fix
   ];
 
   dontWrapQtApps = true; # The program is a python script.
