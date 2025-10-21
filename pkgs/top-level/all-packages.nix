@@ -10934,8 +10934,6 @@ with pkgs;
 
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
 
-  dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
-
   djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
 
   djview4 = djview;

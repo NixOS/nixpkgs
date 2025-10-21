@@ -1,12 +1,10 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
   fftw,
   libsndfile,
-  qtbase,
-  qtmultimedia,
-  qmake,
+  libsForQt5,
 }:
 
 let
@@ -36,13 +34,13 @@ let
   };
 
 in
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "dfasma";
   version = "1.4.5";
 
   src = fetchFromGitHub {
     sha256 = "09fcyjm0hg3y51fnjax88m93im39nbynxj79ffdknsazmqw9ac0h";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     repo = "dfasma";
     owner = "gillesdegottex";
   };
@@ -50,11 +48,14 @@ mkDerivation rec {
   buildInputs = [
     fftw
     libsndfile
-    qtbase
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
   ];
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
+  ];
 
   postPatch = ''
     cp -Rv "${reaperFork.src}"/* external/REAPER
@@ -62,7 +63,7 @@ mkDerivation rec {
     substituteInPlace dfasma.pro --replace "CONFIG += file_sdif" "";
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Analyse and compare audio files in time and frequency";
     mainProgram = "dfasma";
     longDescription = ''
@@ -75,9 +76,9 @@ mkDerivation rec {
     '';
     homepage = "https://gillesdegottex.gitlab.io/dfasma-website/";
     license = [
-      licenses.gpl3Plus
+      lib.licenses.gpl3Plus
       reaperFork.meta.license
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
