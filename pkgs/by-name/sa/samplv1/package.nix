@@ -8,27 +8,24 @@
   liblo,
   libsndfile,
   lv2,
-  qtbase,
-  qttools,
   rubberband,
-  wrapQtAppsHook,
   cmake,
-  qtsvg,
+  kdePackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "samplv1";
   version = "1.3.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/samplv1/samplv1-${version}.tar.gz";
+    url = "mirror://sourceforge/samplv1/samplv1-${finalAttrs.version}.tar.gz";
     hash = "sha256-YCxt9RAP02uAigddA6HjBt2ryM6MyOtI3L2eLg0AhFg=";
   };
 
   nativeBuildInputs = [
-    qttools
+    kdePackages.qttools
     pkg-config
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
     cmake
   ];
 
@@ -38,9 +35,9 @@ stdenv.mkDerivation rec {
     liblo
     libsndfile
     lv2
-    qtbase
+    kdePackages.qtbase
     rubberband
-    qtsvg
+    kdePackages.qtsvg
   ];
 
   meta = {
@@ -51,4 +48,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

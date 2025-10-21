@@ -13104,8 +13104,6 @@ with pkgs;
     stdenv = llvmPackages.stdenv;
   };
 
-  samplv1 = qt6.callPackage ../applications/audio/samplv1 { };
-
   beancount = with python3.pkgs; toPythonApplication beancount;
 
   beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
