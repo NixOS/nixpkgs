@@ -5,8 +5,6 @@
   cmake,
   extra-cmake-modules,
   pkg-config,
-  qttools,
-  wrapQtAppsHook,
   alsa-lib,
   dssi,
   fluidsynth,
@@ -20,11 +18,11 @@
   lilv,
   lrdf,
   lv2,
-  qtsvg,
   rtaudio,
   rubberband,
   sord,
   serd,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "muse-sequencer";
     repo = "muse";
-    rev = finalAttrs.version;
+    tag = finalAttrs.version;
     hash = "sha256-LxibuqopMHuKEfTWXSEXc1g3wTm2F3NQRiV71FHvaY0=";
   };
 
@@ -44,8 +42,8 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     extra-cmake-modules
     pkg-config
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -62,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     lilv
     lrdf
     lv2
-    qtsvg
+    libsForQt5.qtsvg
     rtaudio
     rubberband
     sord
