@@ -7,13 +7,13 @@
 
 buildDunePackage rec {
   pname = "ninja_utils";
-  version = "0.9.0";
+  version = "1.0.0";
 
   minimalOCamlVersion = "4.12";
 
   src = fetchzip {
     url = "https://github.com/CatalaLang/ninja_utils/archive/refs/tags/${version}.tar.gz";
-    hash = "sha256-VSj1IXfczoI3lSAtOqQPIqsxX+HgyxKzlssKd7By/Lo=";
+    hash = "sha256-2OYsZVk7/KYHXHTqAAEyVEHzcUCC+vBRU1s1XdfnWaE=";
   };
 
   propagatedBuildInputs = [ re ];
