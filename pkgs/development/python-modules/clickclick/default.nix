@@ -34,8 +34,11 @@ buildPythonPackage rec {
     six
   ];
 
-  # test_cli asserts on exact quoting style of output
-  disabledTests = [ "test_cli" ];
+  # asserts on exact quoting style of output
+  disabledTests = [
+    "test_cli"
+    "test_choice_default"
+  ];
 
   meta = with lib; {
     description = "Click command line utilities";
