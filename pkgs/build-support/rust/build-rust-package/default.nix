@@ -3,6 +3,7 @@
   importCargoLock,
   fetchCargoVendor,
   stdenv,
+  cargoAuditHook,
   cargoBuildHook,
   cargoCheckHook,
   cargoInstallHook,
@@ -10,6 +11,8 @@
   cargoSetupHook,
   cargo,
   cargo-auditable,
+  cargo-audit,
+  rust-advisory-db,
   buildPackages,
   rustc,
   windows,
@@ -23,6 +26,7 @@ lib.extendMkDerivation {
     "cargoUpdateHook"
     "cargoLock"
     "useFetchCargoVendor"
+    "runCargoAudit"
   ];
 
   extendDrvArgs =
@@ -60,6 +64,7 @@ lib.extendMkDerivation {
       checkFeatures ? buildFeatures,
       useNextest ? false,
       auditable ? !cargo-auditable.meta.broken,
+      runCargoAudit ? auditable,
 
       depsExtraArgs ? { },
 
@@ -129,6 +134,9 @@ lib.extendMkDerivation {
           (buildPackages.cargo-auditable-cargo-wrapper.override {
             inherit cargo cargo-auditable;
           })
+        ]
+        ++ lib.optionals (runCargoAudit && auditable) [
+          cargoAuditHook
         ]
         ++ [
           cargoBuildHook
