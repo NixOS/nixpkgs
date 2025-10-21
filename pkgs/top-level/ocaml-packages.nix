@@ -424,6 +424,8 @@ let
 
         dolmen_lsp = callPackage ../development/ocaml-modules/dolmen/lsp.nix { };
 
+        dolmen_model = callPackage ../development/ocaml-modules/dolmen/model.nix { };
+
         dolmen_type = callPackage ../development/ocaml-modules/dolmen/type.nix { };
 
         dolog = callPackage ../development/ocaml-modules/dolog { };
