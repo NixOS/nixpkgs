@@ -22,7 +22,7 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   meta = {
-    description = "The MOE Li font, a clerical-script-style Chinese character typeface";
+    description = "MOE Li font, a clerical-script-style Chinese character typeface";
     longDescription = ''
       A clerical-script-style Chinese character typeface published by the Ministry of Education of the Republic of China (Taiwan).
       Clerical script is also referred to as 隸書, 隶书, or lìshū in Chinese; lệ thư or chữ lệ in Vietnamese; 예서, 隸書, or yeseo in Korean; 隷書体, れいしょたい, or reishotai in Japanese.
