@@ -8,7 +8,7 @@
   nixosTests,
 }:
 let
-  version = "2.44.0";
+  version = "2.44.1";
 
   pnpm = pnpm_9;
 
@@ -16,7 +16,7 @@ let
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-j7V1POuF6cFpnq6UgBseHe6GxypOoj2rYrN6k2nIF8w=";
+    hash = "sha256-ln7Dst+sN99c3snPU7DrIGpwKBz/e4Lz+uOknmm6sxg=";
   };
 
   frontend = buildNpmPackage rec {
