@@ -17,6 +17,7 @@
   mercantile,
   rasterio,
   pytestCheckHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +45,9 @@ buildPythonPackage rec {
     mercantile
     pytestCheckHook
     rasterio
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   disabledTests = [
     # AssertionError CLI exists with non-zero error code
