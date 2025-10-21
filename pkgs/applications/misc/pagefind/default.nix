@@ -12,7 +12,7 @@
   python3,
   rustc,
   versionCheckHook,
-  wasm-bindgen-cli_0_2_92,
+  wasm-bindgen-cli_0_2_104,
   wasm-pack,
 }:
 
@@ -72,8 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env.cargoDeps_web = rustPlatform.fetchCargoVendor {
     name = "cargo-deps-web-${finalAttrs.version}";
     inherit (finalAttrs) src;
+    patches = [ ./web-cargo-lock.patch ];
     sourceRoot = "${finalAttrs.src.name}/pagefind_web";
-    hash = "sha256-DaipINtwePA03YdbSzh6EjH4Q13P3CB9lwcmTOR54dM=";
+    hash = "sha256-TdbNvDF4WQ2xgkKGVmmZ8R2Wga21OUaGmey/2HVWVcQ=";
   };
   env.npmDeps_web_js = fetchNpmDeps {
     name = "pagefind-npm-deps-web-js-${finalAttrs.version}";
@@ -165,7 +166,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     nodejs
     rustc
     rustc.llvmPackages.lld
-    wasm-bindgen-cli_0_2_92
+    wasm-bindgen-cli_0_2_104
     wasm-pack
   ]
   ++ lib.optionals stdenv.buildPlatform.isDarwin [

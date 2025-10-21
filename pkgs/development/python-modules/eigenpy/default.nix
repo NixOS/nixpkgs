@@ -1,14 +1,16 @@
 {
   lib,
+
   buildPythonPackage,
   fetchFromGitHub,
-
+  writableTmpDirAsHomeHook,
   fontconfig,
 
   # nativeBuildInputs
   cmake,
   doxygen,
   graphviz,
+  pkg-config,
   scipy,
 
   # buildInputs
@@ -18,7 +20,6 @@
   eigen,
   jrl-cmakemodules,
   numpy,
-
 }:
 
 buildPythonPackage rec {
@@ -47,9 +48,6 @@ buildPythonPackage rec {
 
   strictDeps = true;
 
-  # Fontconfig error: No writable cache directories
-  preBuild = "export XDG_CACHE_HOME=$(mktemp -d)";
-
   # Fontconfig error: Cannot load default config file: No such file: (null)
   env.FONTCONFIG_FILE = "${fontconfig.out}/etc/fonts/fonts.conf";
 
@@ -57,7 +55,9 @@ buildPythonPackage rec {
     cmake
     doxygen
     graphviz
+    pkg-config
     scipy
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [ boost ];
@@ -68,7 +68,9 @@ buildPythonPackage rec {
     numpy
   ];
 
-  preInstallCheck = "make test";
+  preInstallCheck = ''
+    make test
+  '';
 
   pythonImportsCheck = [ "eigenpy" ];
 

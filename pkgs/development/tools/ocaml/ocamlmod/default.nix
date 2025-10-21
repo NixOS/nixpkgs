@@ -25,9 +25,6 @@ buildDunePackage (finalAttrs: {
   meta = {
     homepage = "https://github.com/gildor478/ocamlmod";
     description = "Generate OCaml modules from source files";
-    maintainers = with lib.maintainers; [
-      maggesi
-    ];
     mainProgram = "ocamlmod";
   };
 })

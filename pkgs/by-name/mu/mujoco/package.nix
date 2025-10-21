@@ -18,14 +18,14 @@ let
     abseil-cpp = fetchFromGitHub {
       owner = "abseil";
       repo = "abseil-cpp";
-      rev = "987c57f325f7fa8472fa84e1f885f7534d391b0d";
-      hash = "sha256-6Ro7miql9+wcArsOKTjlyDSyD91rmmPsIfO5auk9kiI=";
+      rev = "d38452e1ee03523a208362186fd42248ff2609f6";
+      hash = "sha256-SCQDORhmJmTb0CYm15zjEa7dkwc+lpW2s1d4DsMRovI=";
     };
     benchmark = fetchFromGitHub {
       owner = "google";
       repo = "benchmark";
-      rev = "049f6e79cc3e8636cec21bbd94ed185b4a5f2653";
-      hash = "sha256-VmSKKCsBvmvXSnFbw6GJRgiGjlne8rw22+RCLBV/kD4=";
+      rev = "5f7d66929fb66869d96dfcbacf0d8a586b33766d";
+      hash = "sha256-G9jMWq8BxKvRGP4D2/tcogdLwmek4XGYESqepnZIlCw=";
     };
     ccd = fetchFromGitHub {
       owner = "danfis";
@@ -36,8 +36,8 @@ let
     eigen3 = fetchFromGitLab {
       owner = "libeigen";
       repo = "eigen";
-      rev = "4be7e6b4e0a82853e853c0c7c4ef72f395e1f497";
-      hash = "sha256-SOTQ9j8YCsEuxNULsulQ0bmtxOZJKF7zc4GZOQlrmdo=";
+      rev = "4033cfcc1dd45b3cdf7285afd93556f2cfbe9425";
+      hash = "sha256-E1jfbHldIQOwonHvMn0feQiLI9zq3zB8Q9a0ufw1HuY=";
     };
     googletest = fetchFromGitHub {
       owner = "google";
@@ -86,7 +86,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mujoco";
-  version = "3.3.6";
+  version = "3.3.7";
 
   # Bumping version? Make sure to look though the MuJoCo's commit
   # history for bumped dependency pins!
@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "google-deepmind";
     repo = "mujoco";
     tag = finalAttrs.version;
-    hash = "sha256-6lZ36XFMsjzck/ouSSiX47+dxbEzXgrMhw1Mi3PEnq4=";
+    hash = "sha256-qetgQDgXtaDAuAo/PakZJEsevnvZFJB5EYXPMWeaEqo=";
   };
 
   patches = [ ./mujoco-system-deps-dont-fetch.patch ];
@@ -127,7 +127,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${pin.qhull} build/_deps/qhull-src
     ln -s ${pin.tinyobjloader} build/_deps/tinyobjloader-src
     ln -s ${pin.tinyxml2} build/_deps/tinyxml2-src
-    ln -s ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
+  ''
+  # Mujoco's cmake apply a patch on the trianglemeshdistance source code. Requires write permission.
+  + ''
+    cp -r ${pin.trianglemeshdistance} build/_deps/trianglemeshdistance-src
     ln -s ${pin.marchingcubecpp} build/_deps/marchingcubecpp-src
   '';
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell --pure -i bash --packages nodejs nix-update git
+#!nix-shell --pure --keep NIX_PATH -i bash --packages nodejs nix-update git
 
 set -euo pipefail
 

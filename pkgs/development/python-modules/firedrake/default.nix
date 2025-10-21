@@ -36,6 +36,7 @@
   sympy,
   islpy,
   matplotlib,
+  immutabledict,
 
   # tests
   pytest,
@@ -129,6 +130,8 @@ buildPythonPackage rec {
     sympy
     # required by script spydump
     matplotlib
+    # required by pyop2
+    immutabledict
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     islpy

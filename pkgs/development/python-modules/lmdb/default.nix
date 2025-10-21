@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "lmdb";
-  version = "1.7.3";
+  version = "1.7.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-1KJ7evT+OPNAnZ+/v0e2F7PZTe6YoAvIwqgzbM0/mxU=";
+    hash = "sha256-8GBHUXYssJcFnVQSRExAV7lfOGx+2Vg2PPY/RT5RCNo=";
   };
 
   build-system = [ setuptools ];

@@ -3,6 +3,7 @@
   stdenv,
   fetchurl,
   fetchpatch,
+  gettext,
   libX11,
   libXext,
   xorgproto,
@@ -20,6 +21,8 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://sourceforge/lincity/lincity-${finalAttrs.version}.tar.gz";
     hash = "sha256-e0y9Ef/Uy+15oKrbJfKxw04lqCARgvuyWc4vRQ/lAV0=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ gettext ];
 
   buildInputs = [
     libICE
@@ -66,6 +69,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -e 's@\[MPS_INFO_CHARS\]@[MPS_INFO_CHARS+8]@' -i mps.c -i mps.h
+
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i '/\#include \"malloc.h\"/d' readpng.c
+    ''}
   '';
 
   meta = {
@@ -74,7 +81,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     homepage = "https://sourceforge.net/projects/lincity";
     maintainers = with lib.maintainers; [ iedame ];
-    # ../lcintl.h:14:10: fatal error: 'libintl.h' file not found
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })

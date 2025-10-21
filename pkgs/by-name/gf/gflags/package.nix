@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gflags.github.io/gflags/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.linquize ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

@@ -146,6 +146,7 @@ mapAliases {
   inherit (pkgs) javascript-typescript-langserver; # added 2023-08-19
   inherit (pkgs) kaput-cli; # added 2024-12-03
   karma = pkgs.karma-runner; # added 2023-07-29
+  keyoxide = pkgs.keyoxide-cli; # Added 2025-10-20
   leetcode-cli = self.vsc-leetcode-cli; # added 2023-08-31
   inherit (pkgs) lerna; # added 2025-02-12
   less = pkgs.lessc; # added 2024-06-15
@@ -158,6 +159,7 @@ mapAliases {
   inherit (pkgs) markdownlint-cli2; # added 2023-08-22
   inherit (pkgs) mathjax-node-cli; # added 2023-11-02
   mdctl-cli = self."@medable/mdctl-cli"; # added 2023-08-21
+  meat = throw "meat was removed because it was abandoned upstream."; # Added 2025-10-20
   inherit (pkgs) mermaid-cli; # added 2023-10-01
   meshcommander = throw "meshcommander was removed because it was abandoned upstream"; # added 2024-12-02
   musescore-downloader = pkgs.dl-librescore; # added 2023-08-19

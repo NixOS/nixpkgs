@@ -824,12 +824,6 @@
   "module-services-glance-quickstart": [
     "index.html#module-services-glance-quickstart"
   ],
-  "module-services-filesender": [
-    "index.html#module-services-filesender"
-  ],
-  "module-services-filesender-quickstart": [
-    "index.html#module-services-filesender-quickstart"
-  ],
   "module-services-discourse": [
     "index.html#module-services-discourse"
   ],

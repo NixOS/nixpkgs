@@ -1265,6 +1265,12 @@
     "project_path": "unmaintained/jovie",
     "repo_path": "unmaintained/jovie"
   },
+  "jp-archives": {
+    "description": "Patches for KDE and Qt created by the members of Japan KDE Users Group (JKUG)",
+    "name": "jp-archives",
+    "project_path": "unmaintained/jp-archives",
+    "repo_path": "unmaintained/jp-archives"
+  },
   "jsmoke": {
     "description": "Smoke bindings for QtScript.",
     "name": "jsmoke",
@@ -2477,6 +2483,12 @@
     "project_path": "applications/keditbookmarks",
     "repo_path": "utilities/keditbookmarks"
   },
+  "keepsecret": {
+    "description": "Password manager",
+    "name": "keepsecret",
+    "project_path": "utilities/keepsecret",
+    "repo_path": "utilities/keepsecret"
+  },
   "kemoticons": {
     "description": "KEmoticons",
     "name": "kemoticons",
@@ -2864,8 +2876,8 @@
   "kiss": {
     "description": "KDE Initial System Setup",
     "name": "kiss",
-    "project_path": "system/kiss",
-    "repo_path": "system/kiss"
+    "project_path": "plasma/kiss",
+    "repo_path": "plasma/kiss"
   },
   "kitemmodels": {
     "description": "KItemModels",
@@ -6874,6 +6886,12 @@
     "name": "sysadmin-sentry-bugzilla-bridge",
     "project_path": "sysadmin/sentry-bugzilla-bridge",
     "repo_path": "sysadmin/sentry-bugzilla-bridge"
+  },
+  "sysadmin-token-service": {
+    "description": "Service for issuing short lived access tokens for those presenting valid credentials",
+    "name": "sysadmin-token-service",
+    "project_path": "sysadmin/token-service",
+    "repo_path": "sysadmin/token-service"
   },
   "sysadmin-webstats": {
     "description": "Scripts and templates used to manage web statistics on KDE servers",

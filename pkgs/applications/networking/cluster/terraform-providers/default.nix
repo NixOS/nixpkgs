@@ -82,7 +82,9 @@ let
       passthru = attrs // {
         inherit provider-source-address;
         updateScript = writeShellScript "update" ''
-          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "${owner}_${lib.removePrefix "terraform-provider-" repo}"
+          ./pkgs/applications/networking/cluster/terraform-providers/update-provider "${
+            lib.replaceStrings [ "registry.terraform.io/" "/" ] [ "" "_" ] provider-source-address
+          }"
         '';
       };
     }

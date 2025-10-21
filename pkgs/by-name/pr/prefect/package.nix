@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "prefect";
-  version = "3.4.23";
+  version = "3.4.24";
   pyproject = true;
 
   # Trying to install from source is challenging
@@ -17,11 +17,12 @@ python3Packages.buildPythonApplication rec {
   # Source will be missing sdist, uv.lock, ui artefacts ...
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XGgAc3vVd+3gcPo4UvYII1xxXnKol9Qf07kxf2f96MM=";
+    hash = "sha256-jBDHgGNZRl1nr5qpj/5r5+D7o1skFFPcd6yTe60uMlE=";
   };
 
   pythonRelaxDeps = [
     "websockets"
+    "typer"
   ];
 
   build-system = with python3Packages; [
@@ -68,6 +69,7 @@ python3Packages.buildPythonApplication rec {
       packaging
       pathspec
       pendulum
+      pluggy
       prometheus-client
       pydantic
       pydantic-core
@@ -89,6 +91,7 @@ python3Packages.buildPythonApplication rec {
       websockets
       whenever
       uv
+      semver
     ]
     ++ sqlalchemy.optional-dependencies.asyncio
     ++ httpx.optional-dependencies.http2
@@ -196,7 +199,10 @@ python3Packages.buildPythonApplication rec {
     description = "Workflow orchestration framework for building resilient data pipelines in Python";
     homepage = "https://github.com/PrefectHQ/prefect";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ happysalada ];
+    maintainers = with lib.maintainers; [
+      happysalada
+      mrmebelman
+    ];
     mainProgram = "prefect";
   };
 }

@@ -51,13 +51,13 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "linkwarden";
-  version = "2.13.0";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "linkwarden";
     repo = "linkwarden";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zoJ5y2J+lkmfAFdI/7FvFAC6D308IPxaLzpGtj42IrU=";
+    hash = "sha256-ARy7UNG1Rnq3E8UaM1zgmbtr9uLvsfIHLdvVeTKjM+I=";
   };
 
   patches = [
@@ -71,21 +71,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
        pkgs/by-name/ne/nextjs-ollama-llm-ui/0002-use-local-google-fonts.patch
     */
     ./01-localfont.patch
-
-    /*
-      https://github.com/linkwarden/linkwarden/pull/1290
-
-      Fixes an issue where linkwarden cannot save a plain HTTP (no TLS) website.
-    */
-    (fetchpatch {
-      url = "https://github.com/linkwarden/linkwarden/commit/327826d760e5b1870c58a25f85501a7c9a468818.patch";
-      hash = "sha256-kq1GIEW0chnPmzvg4eDSS/5WtRyWlrHlk41h4pSCMzg=";
-    })
   ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-Z1EwecQGWHr6RZCDHAy7BA6BEoixj1dbKH3XE8sfeKQ=";
+    hash = "sha256-FpJJwei7T8emcFtkIOOWyf92w3zp5n1b1MnSRA5dnyI=";
   };
 
   nativeBuildInputs = [

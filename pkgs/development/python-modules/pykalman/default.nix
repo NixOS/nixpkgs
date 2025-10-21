@@ -29,6 +29,8 @@ buildPythonPackage rec {
     scikit-base
   ];
 
+  pythonRelaxDeps = [ "scikit-base" ];
+
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "pykalman" ];
 

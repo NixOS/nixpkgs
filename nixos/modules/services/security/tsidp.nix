@@ -23,6 +23,8 @@ let
     nullOr
     ;
 
+  stateDir = "/var/lib/tsidp";
+
   cfg = config.services.tsidp;
 in
 {
@@ -154,7 +156,7 @@ in
         ];
 
         environment = {
-          HOME = "/var/lib/tsidp";
+          HOME = stateDir;
           TAILSCALE_USE_WIP_CODE = "1"; # Needed while tsidp is in development (< v1.0.0).
         };
 
@@ -163,6 +165,7 @@ in
           ExecStart =
             let
               args = lib.cli.toGNUCommandLineShell { mkOptionName = k: "-${k}"; } {
+                dir = stateDir;
                 hostname = cfg.settings.hostName;
                 port = cfg.settings.port;
                 local-port = cfg.settings.localPort;
@@ -179,8 +182,8 @@ in
           RestartSec = "15";
 
           DynamicUser = true;
-          StateDirectory = "tsidp";
-          WorkingDirectory = "/var/lib/tsidp";
+          StateDirectory = baseNameOf stateDir;
+          WorkingDirectory = stateDir;
           ReadWritePaths = mkIf (cfg.settings.useLocalTailscaled) [
             "/var/run/tailscale" # needed due to `ProtectSystem = "strict";`
             "/var/lib/tailscale"

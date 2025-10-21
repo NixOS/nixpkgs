@@ -21,5 +21,7 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://sabre.io/baikal/";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ wrvsrx ];
+    # vendorHash non-reproducible
+    broken = true;
   };
 })

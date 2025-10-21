@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayclip";
-  version = "0.4.2";
+  version = "0.5";
 
   outputs = [
     "out"
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "~noocsharp";
     repo = "wayclip";
     rev = finalAttrs.version;
-    hash = "sha256-/xii/FF8JPv6KbMMxzww9AYqYJrpKYowsxQ5Bz7m+/M=";
+    hash = "sha256-Uej5ggtlPeDid1yKSfZt5FlCen1GLea6EWa4lL+BPRM=";
   };
 
   strictDeps = true;

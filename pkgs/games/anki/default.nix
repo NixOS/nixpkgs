@@ -24,6 +24,7 @@
   writeShellScriptBin,
   yarn,
   yarn-berry_4,
+  runCommand,
 
   swift,
 
@@ -34,12 +35,12 @@ let
   yarn-berry = yarn-berry_4;
 
   pname = "anki";
-  version = "25.07.5";
-  rev = "7172b2d26684c7ef9d10e249bd43dc5bf73ae00c";
+  version = "25.09.2";
+  rev = "3890e12c9e48c028c3f12aa58cb64bd9f8895e30";
 
-  srcHash = "sha256-nWxRr55Hm40V3Ijw+WetBKNoreLpcvRscgbOZa0REcY=";
-  cargoHash = "sha256-H/xwPPL6VupSZGLPEThhoeMcg12FvAX3fmNM6zYfqRQ=";
-  yarnHash = "sha256-adHnV345oDm20R8zGdEiEW+8/mTQAz4oxraybRfmwew=";
+  srcHash = "sha256-0hLTQR7f7s58DUgAZbDeREMee6VrqAKHyhS1Hs/Em1A=";
+  cargoHash = "sha256-qcB+r9VzBz6ACZaXPL26MOxxtb/h2OIuxyc54vUgfPM=";
+  yarnHash = "sha256-EmKeHORr/+qsDzAwtearMi7qodcCgjeAQcy+79HL7Vg=";
   pythonDeps = map (meta: {
     url = meta.url;
     path = toString (fetchurl meta);
@@ -72,10 +73,7 @@ let
     exec ${yarn}/bin/yarn "$@"
   '';
 
-  uvWheels = stdenv.mkDerivation {
-    name = "uv-wheels";
-    phases = [ "installPhase" ];
-
+  uvWheels = runCommand "uv-wheels" {
     # otherwise, it's too long of a string
     passAsFile = [ "installCommand" ];
     installCommand = ''
@@ -98,9 +96,7 @@ let
         fi
       '') pythonDeps
     ));
-
-    installPhase = ''bash $installCommandPath'';
-  };
+  } "bash $installCommandPath";
 in
 
 python3Packages.buildPythonApplication rec {
@@ -120,7 +116,6 @@ python3Packages.buildPythonApplication rec {
     ./patches/disable-auto-update.patch
     ./patches/remove-the-gl-library-workaround.patch
     ./patches/skip-formatting-python-code.patch
-    ./patches/fix-compilation-under-rust-1.89.patch
     # Used in with-addons.nix
     ./patches/allow-setting-addons-folder.patch
   ];

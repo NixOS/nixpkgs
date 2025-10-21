@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    # NOTE: this can be removed once version 6.2.8 is released
-    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DCUPS_SERVER_BIN=lib/cups"
     "-DCUPS_DATA_DIR=share/cups"
   ];

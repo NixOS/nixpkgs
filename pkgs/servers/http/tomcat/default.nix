@@ -60,13 +60,13 @@ let
 in
 {
   tomcat9 = common {
-    version = "9.0.110";
-    hash = "sha256-lDk+uSjtAdWACK9pJWYNen03JmHeXO+NY8ZqGqoolhg=";
+    version = "9.0.111";
+    hash = "sha256-6pZLufCeo6mqD1JZJOjCfvryd6cI9p6B99Ct9YWlw3M=";
   };
 
   tomcat10 = common {
-    version = "10.1.47";
-    hash = "sha256-pqPfam1tuW5J4gxZc6WyNKEYW88cGn7zo2yuTDaM+FI=";
+    version = "10.1.48";
+    hash = "sha256-bAAMIBNs8q7QRhQpl4GEFqFgwOUWwfuiRUS00J26lRM=";
   };
 
   tomcat11 = common {

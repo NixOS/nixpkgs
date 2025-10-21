@@ -172,6 +172,11 @@ lib.mapAttrs mkLicense (
       fullName = "Baekmuk License";
     };
 
+    bitstreamCharter = {
+      spdxId = "Bitstream-Charter";
+      fullName = "Bitstream Charter Font License";
+    };
+
     bitstreamVera = {
       spdxId = "Bitstream-Vera";
       fullName = "Bitstream Vera Font License";
@@ -788,6 +793,12 @@ lib.mapAttrs mkLicense (
     inria-zelus = {
       fullName = "INRIA Non-Commercial License Agreement for the Zélus compiler";
       url = "https://github.com/INRIA/zelus/raw/829f2b97cba93b0543a9ca0272269e6b8fdad356/LICENSE";
+      free = false;
+    };
+
+    intel-eula = {
+      fullName = "Intel End User License Agreement for Developer Tools";
+      url = "https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/WordDocuments/intelamtsdklicense.htm";
       free = false;
     };
 

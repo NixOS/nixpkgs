@@ -42,11 +42,14 @@ buildGoModule (finalAttrs: {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  checkFlags = [
-    # https://github.com/dundee/gdu/issues/371
-    "-skip=TestStoredAnalyzer"
-    "-skip=TestAnalyzePathWithIgnoring"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestStoredAnalyzer" # https://github.com/dundee/gdu/issues/371
+        "TestAnalyzePathWithIgnoring"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   doInstallCheck = true;
 

@@ -1121,6 +1121,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
             with prevStage;
             [
               apple-sdk
+              apple-sdk.cups-headers
               bashNonInteractive
               bzip2.bin
               bzip2.out

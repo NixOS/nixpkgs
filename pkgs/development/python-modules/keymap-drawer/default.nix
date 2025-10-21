@@ -2,10 +2,11 @@
   lib,
 
   buildPythonPackage,
+  callPackages,
   fetchFromGitHub,
-  fetchPypi,
   pythonOlder,
 
+  keymap-drawer,
   nix-update-script,
   pcpp,
   platformdirs,
@@ -47,16 +48,7 @@ buildPythonPackage {
     pydantic-settings
     pyparsing
     pyyaml
-    # keymap-drawer currently requires tree-sitter 0.24.0
-    # See https://github.com/caksoylar/keymap-drawer/issues/183
-    (tree-sitter.overrideAttrs rec {
-      version = "0.24.0";
-      src = fetchPypi {
-        inherit version;
-        inherit (tree-sitter) pname;
-        hash = "sha256-q9la9lyi9Pfso1Y0M5HtZp52Tzd0i1NSlG8A9/x45zQ=";
-      };
-    })
+    tree-sitter
     tree-sitter-grammars.tree-sitter-devicetree
   ];
 
@@ -69,6 +61,12 @@ buildPythonPackage {
   versionCheckProgram = "${placeholder "out"}/bin/keymap";
   versionCheckProgramArg = "--version";
 
+  passthru.tests = callPackages ./tests {
+    # Explicitly pass the correctly scoped package.
+    # The top-level package will still resolve to itself, because the way
+    # `toPythonApplication` interacts with scopes is weird.
+    inherit keymap-drawer;
+  };
   passthru.updateScript = nix-update-script { };
 
   meta = {
@@ -80,5 +78,10 @@ buildPythonPackage {
       MattSturgeon
     ];
     mainProgram = "keymap";
+    # keymap-drawer currently requires tree-sitter 0.24.0
+    # See https://github.com/caksoylar/keymap-drawer/issues/183
+    # top-level package `keymap-drawer` is not broken due to this
+    # incompatibility, thanks to a Python override
+    broken = lib.versionAtLeast tree-sitter.version "0.25.0";
   };
 }

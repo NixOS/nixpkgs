@@ -2,7 +2,7 @@
   bcunit,
   bc-decaf,
   mkLinphoneDerivation,
-  openssl,
+  bc-mbedtls,
   lib,
 
   # tests
@@ -14,15 +14,14 @@ mkLinphoneDerivation (finalAttrs: {
   propagatedBuildInputs = [
     bcunit
     bc-decaf
-    openssl
+    bc-mbedtls
   ];
 
   cmakeFlags = [
     "-DENABLE_STRICT=NO"
 
-    # mbedtils does not build
-    "-DENABLE_MBEDTLS=NO"
-    "-DENABLE_OPENSSL=YES"
+    "-DENABLE_MBEDTLS=YES"
+    "-DENABLE_OPENSSL=NO"
   ];
 
   strictDeps = true;

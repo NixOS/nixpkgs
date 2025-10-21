@@ -44,7 +44,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Multiplayer X11 space combat game";
     homepage = "http://xpilot.sf.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ raskin ];
+    maintainers = with lib.maintainers; [
+      raskin
+      iedame
+    ];
     platforms = lib.platforms.linux;
   };
 })

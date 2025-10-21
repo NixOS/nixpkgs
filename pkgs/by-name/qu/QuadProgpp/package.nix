@@ -20,6 +20,13 @@ stdenv.mkDerivation {
     cmake
   ];
 
+  postPatch = ''
+    # Inline https://github.com/liuq/QuadProgpp/pull/32
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.0)' \
+      'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   meta = with lib; {
     description = "C++ library for Quadratic Programming";
     longDescription = ''

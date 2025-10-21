@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "blint";
-  version = "3.0.0";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "blint";
     tag = "v${version}";
-    hash = "sha256-9Hc6tv0oVtgaH3qOVDJvxkXteHkkqzLdA7iHLNRqCdk=";
+    hash = "sha256-ell0/opQso7/qD6d6i18vU55TfTgdcZwVFXD+yZg9/g=";
   };
 
   build-system = [

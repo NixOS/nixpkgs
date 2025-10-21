@@ -276,6 +276,8 @@ in
         Extra config to append to avahi-daemon.conf.
       '';
     };
+
+    debug = lib.mkEnableOption "debug logging";
   };
 
   config = lib.mkIf cfg.enable {
@@ -356,7 +358,7 @@ in
         NotifyAccess = "main";
         BusName = "org.freedesktop.Avahi";
         Type = "dbus";
-        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf}";
+        ExecStart = "${cfg.package}/sbin/avahi-daemon --syslog -f ${avahiDaemonConf} ${lib.optionalString cfg.debug "--debug"}";
         ConfigurationDirectory = "avahi/services";
 
         # Hardening

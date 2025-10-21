@@ -33,21 +33,21 @@
 
 let
   pname = "legends-of-equestria";
-  version = "2025.04.001";
+  version = "2025.05.001";
   description = "Free-to-play MMORPG";
 
   srcOptions = {
     x86_64-linux = {
-      url = "https://mega.nz/file/w7BQTCAD#zW1atRLzSd1-V8GV7s7yj_HVZwB4v8zuX3aWIjA0ztc";
-      outputHash = "YYPxS/qNl/DvNmiGZorRGoONbtAI3nJslqCRzctwoz8=";
+      url = "https://mega.nz/file/cjhDAZ5S#dsCHHfZ3rhmGBynu4FxooK5kf2w7oHYwgzf4E7vzerM";
+      outputHash = "WbJL/+T/BNrk4GllCM4C4K2OymHmjzf5BuFR4V1N5Ds=";
     };
     x86_64-darwin = {
-      url = "https://mega.nz/file/IqgBEJTD#aUd6LgigncoQ8o3owSkadYRp7GkfIOWl4B1Hwzti1qk";
-      outputHash = "XdcHM6zCDNFU5VJo3/QISuhtYnBKm1f6IEDfy6Fjnp8=";
+      url = "https://mega.nz/file/dqQyjaSC#Aazc0tyu3v5WZcGet8ouHWlBB4to6Eu1SADYa3iSmAw";
+      outputHash = "V8qGABS1uNnj/0CVLsFNXLjzBAjq/UXAT11gczVP298=";
     };
     aarch64-darwin = {
-      url = "https://mega.nz/file/QyZnkYYB#EtAZrVdHgqX10ag09M9nhJVEboG0J_5f_nVKxCHskYg";
-      outputHash = "GA0Zin+vlgYfBFC1ZbkkgX1eSn/NVBYuxuv8fayXMLU=";
+      url = "https://mega.nz/file/I6QCSZqL#by23SjXBl0EMtgxex9Fhv5FO4qkhFX4uWSr3l5N4f-M";
+      outputHash = "ISmtCw35kA4p6nWcDWIk4UucVT7fIGS9XC73rzwSigo=";
     };
   };
 

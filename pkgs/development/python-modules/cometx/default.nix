@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "cometx";
-  version = "2.6.1";
+  version = "3.0.1";
 
   pyproject = true;
   build-system = [ setuptools ];
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "comet-ml";
     repo = "cometx";
     tag = version;
-    hash = "sha256-Iax75Gz/gxGavau0wOJyICZYlBOJ3yVc4NXZB/HV4X0=";
+    hash = "sha256-Dudg1GLeo9WhtZnW+PEi10pxA+EDUBs2u3oIBMN8w30=";
   };
 
   dependencies = [

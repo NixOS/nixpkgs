@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   bash,
   cmake,
   cfitsio,
@@ -17,22 +18,36 @@
   fftw,
   gtest,
   udevCheckHook,
+  versionCheckHook,
   indi-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.5.1";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mbY3iDLRcQ+pis26u6pHzB43ureaKH7KYPkV0CwHU/E=";
+    hash = "sha256-0+ZC9NoanBDojYz/ufZUpUQB++vnMcUYtG1UmmVGbTg=";
   };
+
+  # fixes version number. This commit is directly after the tagged commit in master
+  # should be removed with the next release
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/indilib/indi/commit/91e3e35250126887a856e90b6a0a30697fb01545.patch?full_index=1";
+      hash = "sha256-ho1S+A6gTQ9ELy/QE14S6daXyMN+vASFbXa2vMWdqR8=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
     udevCheckHook
   ];
 
@@ -86,6 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
+    mainProgram = "indiserver";
     maintainers = with maintainers; [
       sheepforce
       returntoreality

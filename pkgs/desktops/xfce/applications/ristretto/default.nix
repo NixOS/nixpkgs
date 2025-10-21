@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     export GDK_PIXBUF_MODULE_FILE="${
       gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
         extraLoaders = [
-          libheif.out
+          libheif.lib
           libjxl
           librsvg
           webp-pixbuf-loader

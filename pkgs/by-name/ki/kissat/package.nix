@@ -25,13 +25,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-IlMHtsEYafpbCNZfbeJo1JS5S5qcZQt1aDWjv+xxoqM=";
+    sha256 = "sha256-hgB1U2Pmh1hEyNA3ej3fXxxf0YjCRgtOuSddRl6s0eo=";
   };
 
   outputs = [
