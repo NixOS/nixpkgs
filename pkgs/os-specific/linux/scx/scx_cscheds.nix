@@ -10,7 +10,7 @@
   libseccomp,
 }:
 
-llvmPackages.stdenv.mkDerivation (finalAttrs: {
+llvmPackages.stdenv.mkDerivation {
   pname = "scx_cscheds";
   inherit (scx.rustscheds) version src;
 
@@ -57,5 +57,6 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
+    homepage = "https://github.com/sched-ext/scx/tree/main/scheds/c";
   };
-})
+}

@@ -20,5 +20,6 @@ scx.cscheds.overrideAttrs (oldAttrs: {
       It is recommended to use the latest kernel for the best compatibility.
       :::
     '';
+    homepage = "https://github.com/sched-ext/scx";
   };
 })

@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       :::
     '';
 
-    homepage = "https://github.com/sched-ext/scx";
+    homepage = "https://github.com/sched-ext/scx/tree/main/scheds/rust";
     changelog = "https://github.com/sched-ext/scx/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
