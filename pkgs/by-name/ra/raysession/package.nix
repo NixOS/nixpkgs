@@ -1,22 +1,20 @@
 {
   lib,
   fetchurl,
-  buildPythonApplication,
+  python3Packages,
   libjack2,
-  pyliblo3,
-  pyqt5,
   which,
   bash,
   qt5,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "raysession";
   version = "0.14.4";
 
   src = fetchurl {
     url = "https://github.com/Houston4444/RaySession/releases/download/v${version}/RaySession-${version}-source.tar.gz";
-    sha256 = "sha256-cr9kqZdqY6Wq+RkzwYxNrb/PLFREKUgWeVNILVUkc7A=";
+    hash = "sha256-cr9kqZdqY6Wq+RkzwYxNrb/PLFREKUgWeVNILVUkc7A=";
   };
 
   postPatch = ''
@@ -30,7 +28,7 @@ buildPythonApplication rec {
   format = "other";
 
   nativeBuildInputs = [
-    pyqt5 # pyuic5 and pyrcc5 to build resources.
+    python3Packages.pyqt5 # pyuic5 and pyrcc5 to build resources.
     qt5.qttools # lrelease to build translations.
     which # which to find lrelease.
     qt5.wrapQtAppsHook
@@ -40,8 +38,8 @@ buildPythonApplication rec {
     bash
   ];
   dependencies = [
-    pyliblo3
-    pyqt5
+    python3Packages.pyliblo3
+    python3Packages.pyqt5
   ];
 
   dontWrapQtApps = true; # The program is a python script.
@@ -62,11 +60,11 @@ buildPythonApplication rec {
     done
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Houston4444/RaySession";
     description = "Session manager for Linux musical programs";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }

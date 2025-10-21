@@ -3847,8 +3847,6 @@ with pkgs;
 
   pywal = with python3Packages; toPythonApplication pywal;
 
-  raysession = python3Packages.callPackage ../applications/audio/raysession { };
-
   remarshal = with python3Packages; toPythonApplication remarshal;
 
   riseup-vpn = qt6Packages.callPackage ../tools/networking/bitmask-vpn {
