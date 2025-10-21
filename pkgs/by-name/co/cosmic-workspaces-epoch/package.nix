@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-workspaces-epoch";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.0-beta.2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-workspaces-epoch";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-gcS8Q9SR7Dj1FH2Dtdd6jUMX8u5kHJBMvlgqJGw+rjA=";
+    hash = "sha256-WHMOA7fNPIAwaQmzqyo+XlBYl+13cz0LrRpT0GUa8Vs=";
   };
 
   cargoHash = "sha256-BE6s2dmbgXlFXrtd8b9k2LltLnegLzWbIUlaEQvv+5o=";
