@@ -39,9 +39,16 @@ lib.fix (self: {
       inherit (rust.envVars) setEnv;
 
     };
+
+    # Modify bootstrap config if any are added here
     propagatedBuildInputs = [
       self.cargoAuditHook
     ];
+
+    passthru.bootstrap = self.cargoBuildHook.overrideAttrs {
+      propagatedBuildInputs = [ ];
+    };
+
     passthru.tests = {
       test = tests.rust-hooks.cargoBuildHook;
     }
