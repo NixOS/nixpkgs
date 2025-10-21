@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     (cmakeFeature "CMAKE_BUILD_TYPE" "\"Release\"")
   ];
 
+  dontWrapGApps = true;
+
+  preFixup = ''
+    qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
+
   meta = {
     description = "Simple RSS/Atom feed reader with online synchronization";
     mainProgram = "rssguard";
