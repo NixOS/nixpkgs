@@ -108,6 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     udevCheckHook
     versionCheckHook
   ];
+  versionCheckProgram = "${placeholder "out"}/bin/bcachefs";
   versionCheckProgramArg = "version";
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
