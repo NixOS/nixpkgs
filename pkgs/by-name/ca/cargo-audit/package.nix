@@ -6,8 +6,14 @@
   openssl,
   zlib,
 }:
-
-rustPlatform.buildRustPackage (finalAttrs: {
+let
+  rustBootstrapPlatform = rustPlatform.overrideScope (
+    _: prev: {
+      cargoBuildHook = prev.cargoBuildHook.bootstrap;
+    }
+  );
+in
+rustBootstrapPlatform.buildRustPackage (finalAttrs: {
   pname = "cargo-audit";
   version = "0.22.1";
 
