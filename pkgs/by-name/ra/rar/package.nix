@@ -4,34 +4,26 @@
   fetchurl,
   autoPatchelfHook,
   installShellFiles,
+  perl,
 }:
 
 let
-  version = "7.01";
+  version = "7.12";
   downloadVersion = lib.replaceStrings [ "." ] [ "" ] version;
   # Use `./update.sh` to generate the entries below
   srcs = {
-    i686-linux = {
-      url = "https://www.rarlab.com/rar/rarlinux-x32-${downloadVersion}.tar.gz";
-      hash = "sha256-1CSbxM7arGpn4Yj5fHEFKcDURFPrC2+XptLoaDH8LDs=";
-    };
     x86_64-linux = {
       url = "https://www.rarlab.com/rar/rarlinux-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-34iWajylsSmIOuAT6kV7c2537qWFHc+gT+JT/trWrw8=";
+      hash = "sha256-Yw2andExNnJzZnvuB5rRA/Rp8bfNvJtCpPKDzCmTurI=";
     };
     aarch64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-arm-${downloadVersion}.tar.gz";
-      hash = "sha256-BjEJFzKyRpN4XL6KYW7ykQcSxqF4tYr2dCFf50JHH38=";
+      hash = "sha256-lQeOD1n/0F6+ZlpVfp1NHAcxVqJ3fZFn9sQg7kSKg8U=";
     };
     x86_64-darwin = {
       url = "https://www.rarlab.com/rar/rarmacos-x64-${downloadVersion}.tar.gz";
-      hash = "sha256-1ExnVDre49wWwB/BKP/L9xdYOMx8qkeZfmObJ7xm4dY=";
+      hash = "sha256-Wzp5Izpc4usNldBEb3OZCeNyByTTJegoxbDD8HNnCPo=";
     };
-  };
-  manSrc = fetchurl {
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/rar.1?h=rar&id=8e39a12e88d8a3b168c496c44c18d443c876dd10";
-    name = "rar.1";
-    hash = "sha256-93cSr9oAsi+xHUtMsUvICyHJe66vAImS2tLie7nt8Uw=";
   };
 in
 stdenv.mkDerivation {
@@ -48,8 +40,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     installShellFiles
+    perl
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+
+  postPatch = ''
+    perl -0777 -i -pe 's/ ([\w .-]+\n) ~+\n/=head1 \U$1/g' rar.txt
+    perl -0777 -i -pe 's/ (Copyrights)/=head1 \U$1/g;' rar.txt
+    mv rar.txt rar.1.pod
+    pod2man -c "RAR User's Manual" -n "RAR" -r "rar ${version}" -s 1 rar.1.pod > rar.1
+  '';
 
   installPhase = ''
     runHook preInstall
@@ -58,12 +58,9 @@ stdenv.mkDerivation {
     install -Dm755 default.sfx -t "$out/lib"
     install -Dm644 {acknow.txt,license.txt} -t "$out/share/doc/rar"
     install -Dm644 rarfiles.lst -t "$out/etc"
+    installManPage rar.1
 
     runHook postInstall
-  '';
-
-  postInstall = ''
-    installManPage ${manSrc}
   '';
 
   passthru.updateScript = ./update.sh;
