@@ -113,6 +113,7 @@ buildPythonPackage rec {
     "test_backward_compatibility"
     "test_dataset_initialization"
     "test_factory"
+    "test_from_pretrained_nonexistent_path"
     "test_policy_defaults"
     "test_save_and_load_pretrained"
 
