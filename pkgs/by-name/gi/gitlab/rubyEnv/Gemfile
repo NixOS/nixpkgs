@@ -161,6 +161,7 @@ gem 'grape-entity', '~> 1.0.1', feature_category: :api
 gem 'grape-swagger', '~> 2.1.2', group: [:development, :test], feature_category: :api
 gem 'grape-swagger-entity', '~> 0.5.5', group: [:development, :test], feature_category: :api
 gem 'grape-path-helpers', '~> 2.0.1', feature_category: :api
+gem 'gitlab-grape-openapi', path: 'gems/gitlab-grape-openapi', feature_category: :api
 gem 'rack-cors', '~> 2.0.1', require: 'rack/cors', feature_category: :shared
 
 # GraphQL API
@@ -175,7 +176,7 @@ gem 'gitlab-topology-service-client', '~> 0.1',
   feature_category: :cell
 
 # Duo Workflow
-gem 'gitlab-duo-workflow-service-client', '~> 0.3',
+gem 'gitlab-duo-workflow-service-client', '~> 0.4',
   path: 'vendor/gems/gitlab-duo-workflow-service-client',
   feature_category: :agent_foundations
 
@@ -223,9 +224,9 @@ gem 'google-cloud-storage', '~> 1.57.0', feature_category: :shared
 gem 'google-apis-core', '~> 0.18.0', '>= 0.18.0', feature_category: :shared
 gem 'google-apis-compute_v1', '~> 0.129.0', feature_category: :shared
 gem 'google-apis-container_v1', '~> 0.100.0', feature_category: :shared
-gem 'google-apis-container_v1beta1', '~> 0.90.0', feature_category: :shared
+gem 'google-apis-container_v1beta1', '~> 0.91.0', feature_category: :shared
 gem 'google-apis-cloudbilling_v1', '~> 0.22.0', feature_category: :shared
-gem 'google-apis-cloudresourcemanager_v1', '~> 0.31.0', feature_category: :shared
+gem 'google-apis-cloudresourcemanager_v1', '~> 0.44.0', feature_category: :shared
 gem 'google-apis-iam_v1', '~> 0.73.0', feature_category: :shared
 gem 'google-apis-serviceusage_v1', '~> 0.28.0', feature_category: :shared
 gem 'google-apis-sqladmin_v1beta4', '~> 0.41.0', feature_category: :shared
@@ -267,10 +268,10 @@ gem 'asciidoctor', '~> 2.0.18', feature_category: :markdown
 gem 'asciidoctor-include-ext', '~> 0.4.0', require: false, feature_category: :markdown
 gem 'asciidoctor-plantuml', '~> 0.0.16', feature_category: :markdown
 gem 'asciidoctor-kroki', '~> 0.10.0', require: false, feature_category: :markdown
-gem 'rouge', '~> 4.6.0', feature_category: :shared
+gem 'rouge', '~> 4.6.1', feature_category: :shared
 gem 'truncato', '~> 0.7.13', feature_category: :team_planning
 gem 'nokogiri', '~> 1.18', feature_category: :shared
-gem 'gitlab-glfm-markdown', '~> 0.0.33', feature_category: :markdown
+gem 'gitlab-glfm-markdown', '~> 0.0.36', feature_category: :markdown
 gem 'tanuki_emoji', '~> 0.13', feature_category: :markdown
 gem 'unicode-emoji', '~> 4.0', feature_category: :markdown
 
@@ -380,7 +381,7 @@ gem 'rack-proxy', '~> 0.7.7', feature_category: :shared
 gem 'cssbundling-rails', '1.4.3', feature_category: :shared
 gem 'terser', '1.0.2', feature_category: :shared
 
-gem 'click_house-client', '0.5.1', feature_category: :database
+gem 'click_house-client', '0.8.0', feature_category: :database
 gem 'addressable', '~> 2.8', feature_category: :shared
 gem 'gon', '~> 6.5.0', feature_category: :shared
 gem 'request_store', '~> 1.7.0', feature_category: :shared
@@ -403,7 +404,7 @@ gem 'gitlab-schema-validation', path: 'gems/gitlab-schema-validation', feature_c
 gem 'gitlab-http', path: 'gems/gitlab-http', feature_category: :shared
 
 gem 'premailer-rails', '~> 1.12.0', feature_category: :notifications
-gem 'gitlab-labkit', '~> 0.40.0', feature_category: :shared
+gem 'gitlab-labkit', '~> 0.42.0', feature_category: :shared
 gem 'thrift', '~> 0.22.0', feature_category: :shared
 
 # I18n
@@ -430,7 +431,7 @@ gem 'prometheus-client-mmap', '~> 1.2.9', require: 'prometheus/client', feature_
 
 # Event-driven reactor for Ruby
 # Required manually in config/initializers/require_async_gem
-gem 'async', '~> 2.28.0', require: false, feature_category: :shared
+gem 'async', '~> 2.32.0', require: false, feature_category: :shared
 gem 'io-event', '~> 1.12', require: false, feature_category: :shared
 
 # Security report schemas used to validate CI job artifacts of security jobs
@@ -473,7 +474,7 @@ end
 gem 'warning', '~> 1.5.0', feature_category: :shared
 
 group :development do
-  gem 'lefthook', '~> 1.12.0', require: false, feature_category: :tooling
+  gem 'lefthook', '~> 1.13.0', require: false, feature_category: :tooling
   gem 'rubocop', feature_category: :tooling, require: false
   gem 'debug', '~> 1.11.0', feature_category: :shared
 
@@ -490,11 +491,11 @@ group :development do
 
   gem 'listen', '~> 3.7', feature_category: :shared
 
-  gem 'ruby-lsp', "~> 0.23.0", require: false, feature_category: :tooling
+  gem 'ruby-lsp', "~> 0.26.0", require: false, feature_category: :tooling
 
-  gem 'ruby-lsp-rails', "~> 0.3.6", feature_category: :tooling
+  gem 'ruby-lsp-rails', "~> 0.4.8", feature_category: :tooling
 
-  gem 'ruby-lsp-rspec', "~> 0.1.10", require: false, feature_category: :tooling
+  gem 'ruby-lsp-rspec', "~> 0.1.27", require: false, feature_category: :tooling
 
   gem 'gdk-toogle', '~> 0.9', '>= 0.9.5', require: 'toogle', feature_category: :tooling
 
@@ -512,7 +513,7 @@ group :development, :test do
   gem 'pry-rails', '~> 0.3.9', feature_category: :shared
   gem 'pry-shell', '~> 0.6.4', feature_category: :shared
 
-  gem 'awesome_print', require: false, feature_category: :shared
+  gem 'amazing_print', require: false, feature_category: :shared
 
   gem 'database_cleaner-active_record', '~> 2.2.0', feature_category: :database
   gem 'rspec-rails', '~> 7.1.0', feature_category: :shared
@@ -634,7 +635,7 @@ gem 'sys-filesystem', '~> 1.4.3', feature_category: :shared
 gem 'net-ntp', feature_category: :shared
 
 # SSH keys support
-gem 'ssh_data', '~> 1.3', feature_category: :shared
+gem 'ssh_data', '~> 2.0', feature_category: :shared
 
 # Spamcheck GRPC protocol definitions
 gem 'spamcheck', '~> 1.3.0', feature_category: :insider_threat
@@ -643,9 +644,9 @@ gem 'spamcheck', '~> 1.3.0', feature_category: :insider_threat
 gem 'gitaly', '~> 18.4.0.pre.rc1', feature_category: :gitaly
 
 # KAS GRPC protocol definitions
-gem 'gitlab-kas-grpc', '~> 18.3.0', feature_category: :deployment_management
+gem 'gitlab-kas-grpc', '~> 18.5.0-rc4', feature_category: :deployment_management
 
-gem 'grpc', '~> 1.74.0', feature_category: :shared
+gem 'grpc', '~> 1.75.0', feature_category: :shared
 
 gem 'google-protobuf', '~> 3.25', '>= 3.25.3', feature_category: :shared
 
@@ -656,7 +657,7 @@ gem 'flipper', '~> 0.28.0', feature_category: :shared
 gem 'flipper-active_record', '~> 0.28.0', feature_category: :shared
 gem 'flipper-active_support_cache_store', '~> 0.28.0', feature_category: :shared
 gem 'unleash', '~> 3.2.2', feature_category: :shared
-gem 'gitlab-experiment', '~> 0.9.1', feature_category: :shared
+gem 'gitlab-experiment', '~> 1.0.0', feature_category: :shared
 
 # Structured logging
 gem 'lograge', '~> 0.5', feature_category: :shared

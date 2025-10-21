@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   extra-cmake-modules,
+  kcmutils,
   kcoreaddons,
   kdeclarative,
   kdecoration,
@@ -23,12 +24,16 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
+  # kdecoration headers include C++20 spaceship operator
+  env.NIX_CFLAGS_COMPILE = "-std=c++20";
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules
   ];
 
   buildInputs = [
+    kcmutils
     kcoreaddons
     kdeclarative
     kdecoration
