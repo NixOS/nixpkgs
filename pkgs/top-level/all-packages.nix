@@ -3078,8 +3078,6 @@ with pkgs;
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
 
-  iannix = libsForQt5.callPackage ../applications/audio/iannix { };
-
   iaito = libsForQt5.callPackage ../tools/security/iaito { };
 
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
