@@ -32,7 +32,6 @@ in
       source = lib.getExe (
         pkgs.espanso-wayland.override { securityWrapperPath = config.security.wrapperDir; }
       );
-
     };
     systemd.user.services.espanso = {
       description = "Espanso daemon";
