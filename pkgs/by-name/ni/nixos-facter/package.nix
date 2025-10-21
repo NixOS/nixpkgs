@@ -17,8 +17,8 @@ let
     src = fetchFromGitHub {
       owner = "numtide";
       repo = "hwinfo";
-      rev = "c2259845d10694c099fb306a8cfc5a403e71c708";
-      hash = "sha256-RGIoJkYiNMRHwUclzdRMELxCgBU9Pfvaghvt3op0zM0=";
+      rev = "bfeab0b4e38b200c7a62a44d4d01601a86fe1091";
+      hash = "sha256-GL3fNCSaU45fNihEksgtPtbuLkc+tVGXtPH05wbrHwI=";
     };
   };
 in
