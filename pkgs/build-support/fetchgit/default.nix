@@ -190,7 +190,18 @@ lib.makeOverridable (
             "FETCHGIT_HTTP_PROXIES"
           ];
 
-        inherit preferLocalBuild meta allowedRequisites;
+        inherit preferLocalBuild allowedRequisites;
+
+        meta = meta // {
+          identifiers = {
+            purlParts = {
+              type = "generic";
+              # https://github.com/package-url/purl-spec/blob/18fd3e395dda53c00bc8b11fe481666dc7b3807a/types-doc/generic-definition.md
+              spec = "${name}?vcs_url=${url}@${(lib.revOrTag rev tag)}";
+            };
+          }
+          // meta.identifiers or { };
+        };
 
         passthru = {
           gitRepoUrl = url;
