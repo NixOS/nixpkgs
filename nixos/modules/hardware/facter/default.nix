@@ -7,6 +7,7 @@
   imports = [
     ./bluetooth.nix
     ./camera
+    ./debug.nix
     ./disk.nix
     ./fingerprint
     ./firmware.nix
