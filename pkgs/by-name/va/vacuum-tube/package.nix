@@ -1,4 +1,5 @@
 {
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   lib,
@@ -68,5 +69,7 @@ buildNpmPackage rec {
     mainProgram = "VacuumTube";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ theCapypara ];
+    # https://github.com/NixOS/nixpkgs/pull/453698#issuecomment-3422020307
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
