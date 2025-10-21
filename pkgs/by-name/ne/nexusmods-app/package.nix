@@ -66,14 +66,6 @@ buildDotnetModule (finalAttrs: {
   ];
 
   postPatch = ''
-    # for some reason these tests fail (intermittently?) with a zero timestamp
-    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
-
-    # Fix expected version number in text fixture
-    # https://github.com/Nexus-Mods/NexusMods.App/issues/4030
-    substituteInPlace tests/NexusMods.Backend.Tests/EventTrackerTests.Test_PrepareRequest.verified.txt \
-      --replace-fail 0.0.1 ${finalAttrs.version}
-
     # Specify a fixed date to improve build reproducibility
     echo "1970-01-01T00:00:00Z" >buildDate.txt
     substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
@@ -86,6 +78,16 @@ buildDotnetModule (finalAttrs: {
     # Use a vendored version of the nexus API's games.json data
     substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+
+    ${lib.optionalString finalAttrs.doCheck ''
+      # For some reason these tests fail (intermittently?) with a zero timestamp
+      touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+
+      # Fix expected version number in text fixture
+      # https://github.com/Nexus-Mods/NexusMods.App/issues/4030
+      substituteInPlace tests/NexusMods.Backend.Tests/EventTrackerTests.Test_PrepareRequest.verified.txt \
+        --replace-fail 0.0.1 ${finalAttrs.version}
+    ''}
   '';
 
   makeWrapperArgs = [
