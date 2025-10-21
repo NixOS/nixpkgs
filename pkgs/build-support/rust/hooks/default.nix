@@ -1,7 +1,9 @@
 {
+  config,
   cargo-nextest,
   clang,
   diffutils,
+  rust-advisory-db,
   lib,
   makeSetupHook,
   rust,
@@ -17,6 +19,19 @@
   pkgsCross,
 }:
 {
+  cargoAuditHook = makeSetupHook {
+    name = "cargo-audit-hook.sh";
+    substitutions = {
+      inherit (stdenv.targetPlatform.rust.platform) arch os;
+      auditDatabase = rust-advisory-db;
+      failOnAuditFail = builtins.toString config.failRustAudit;
+    };
+    propagatedBuildInputs = [
+      pkgsHostTarget.cargo-audit
+      pkgsHostTarget.jq
+    ];
+  } ./cargo-audit-hook.sh;
+
   cargoBuildHook = makeSetupHook {
     name = "cargo-build-hook.sh";
     substitutions = {
