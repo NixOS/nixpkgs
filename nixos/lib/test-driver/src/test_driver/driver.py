@@ -62,11 +62,14 @@ class Driver:
     and runs the tests"""
 
     tests: str
-    vlans: list[VLan]
-    machines: list[Machine]
+    vlans: list[VLan] = []
+    machines: list[Machine] = []
     polling_conditions: list[PollingCondition]
     global_timeout: int
     race_timer: threading.Timer
+    start_scripts: list[NixStartScript]
+    vlan_ids: list[int]
+    keep_vm_state: bool
     logger: AbstractLogger
     debug: DebugAbstract
 
@@ -84,36 +87,34 @@ class Driver:
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
-        self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
         self.debug = debug
+        self.vlan_ids = list(set(vlans))
+        self.polling_conditions = []
+        self.keep_vm_state = keep_vm_state
+        self.global_timeout = global_timeout
+        self.start_scripts = list(map(NixStartScript, start_scripts))
 
+    def __enter__(self) -> "Driver":
+        self.race_timer = threading.Timer(self.global_timeout, self.terminate_test)
         tmp_dir = get_tmp_dir()
 
         with self.logger.nested("start all VLans"):
-            vlans = list(set(vlans))
-            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in vlans]
-
-        def cmd(scripts: list[str]) -> Iterator[NixStartScript]:
-            for s in scripts:
-                yield NixStartScript(s)
-
-        self.polling_conditions = []
+            self.vlans = [VLan(nr, tmp_dir, self.logger) for nr in self.vlan_ids]
 
         self.machines = [
             Machine(
                 start_command=cmd,
-                keep_vm_state=keep_vm_state,
+                keep_vm_state=self.keep_vm_state,
                 name=cmd.machine_name,
                 tmp_dir=tmp_dir,
                 callbacks=[self.check_polling_conditions],
                 out_dir=self.out_dir,
                 logger=self.logger,
             )
-            for cmd in cmd(start_scripts)
+            for cmd in self.start_scripts
         ]
 
-    def __enter__(self) -> "Driver":
         return self
 
     def __exit__(self, *_: Any) -> None:
