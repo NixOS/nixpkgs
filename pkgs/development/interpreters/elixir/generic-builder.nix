@@ -1,32 +1,22 @@
 {
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  erlang,
-  makeWrapper,
-  nix-update-script,
-  coreutils,
-  curl,
-  bash,
-  debugInfo ? false,
-}@inputs:
-
-{
-  baseName ? "elixir",
   version,
-  erlang ? inputs.erlang,
+  hash,
   minimumOTPVersion,
   maximumOTPVersion ? null,
-  sha256 ? null,
-  rev ? "v${version}",
-  src ? fetchFromGitHub {
-    inherit rev sha256;
-    owner = "elixir-lang";
-    repo = "elixir";
-  },
-  escriptPath ? "lib/elixir/generate_app.escript",
-}@args:
+}:
+{
+  bash,
+  config,
+  coreutils,
+  curl,
+  debugInfo ? false,
+  erlang,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  nix-update-script,
+  stdenv,
+}:
 
 let
   inherit (lib)
@@ -79,9 +69,16 @@ if !config.allowAliases && !bothAssert then
 else
   assert assertMsg bothAssert compatibilityMsg;
   stdenv.mkDerivation {
-    pname = "${baseName}";
+    pname = "elixir";
 
-    inherit src version debugInfo;
+    src = fetchFromGitHub {
+      owner = "elixir-lang";
+      repo = "elixir";
+      rev = "v${version}";
+      inherit hash;
+    };
+
+    inherit version debugInfo;
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ erlang ];
@@ -95,7 +92,7 @@ else
     };
 
     preBuild = ''
-      patchShebangs ${escriptPath} || true
+      patchShebangs lib/elixir/scripts/generate_app.escript || true
     '';
 
     # copy stdlib source files for LSP access
@@ -135,8 +132,6 @@ else
         "pkgs/development/interpreters/elixir/${lib.versions.major version}.${lib.versions.minor version}.nix"
       ];
     };
-
-    pos = builtins.unsafeGetAttrPos "sha256" args;
 
     meta = {
       homepage = "https://elixir-lang.org/";
