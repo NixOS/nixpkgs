@@ -63,17 +63,19 @@ buildPythonPackage rec {
   ]
   ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTestPaths = [
-    # Slow: > 1.5 seconds/test run standalone on a fast machine
-    # (Apple M3 Max with highest performance settings and 36GB RAM)
-    # and/or hang under load
-    # https://github.com/vutran1710/PyrateLimiter/issues/245
-    # https://github.com/vutran1710/PyrateLimiter/issues/247
-    "tests/test_bucket_all.py"
-    "tests/test_bucket_factory.py"
-    "tests/test_limiter.py"
-    "tests/test_multiprocessing.py"
+  # https://github.com/vutran1710/PyrateLimiter/issues/245
+  # https://github.com/vutran1710/PyrateLimiter/issues/247
+  disabledTests = [
+    "test_limiter_01"
+    "test_limiter_async_factory_get"
+    "test_factory_leak"
+    "test_bucket_flush" # Part of "tests/test_bucket_all.py"
   ];
+
+  # Slow: > 1.5 seconds/test run standalone on a fast machine
+  # (Apple M3 Max with highest performance settings and 36GB RAM)
+  # and/or hang under load
+  disabledTestPaths = [ "tests/test_bucket_all.py" ];
 
   pythonImportsCheck = [ "pyrate_limiter" ];
 
