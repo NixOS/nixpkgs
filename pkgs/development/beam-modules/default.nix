@@ -8,8 +8,6 @@ let
   pkgs = __splicedPackages;
   inherit (lib) makeExtensible;
 
-  lib' = pkgs.callPackage ./lib.nix { };
-
   # FIXME: add support for overrideScope
   callPackageWithScope =
     scope: drv: args:
@@ -51,27 +49,27 @@ let
       # BEAM-based languages.
       elixir = elixir_1_18;
 
-      elixir_1_19 = lib'.callElixir ../interpreters/elixir/1.19.nix {
+      elixir_1_19 = callPackage ../interpreters/elixir/1.19.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_18 = lib'.callElixir ../interpreters/elixir/1.18.nix {
+      elixir_1_18 = callPackage ../interpreters/elixir/1.18.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_17 = lib'.callElixir ../interpreters/elixir/1.17.nix {
+      elixir_1_17 = callPackage ../interpreters/elixir/1.17.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_16 = lib'.callElixir ../interpreters/elixir/1.16.nix {
+      elixir_1_16 = callPackage ../interpreters/elixir/1.16.nix {
         inherit erlang;
         debugInfo = true;
       };
 
-      elixir_1_15 = lib'.callElixir ../interpreters/elixir/1.15.nix {
+      elixir_1_15 = callPackage ../interpreters/elixir/1.15.nix {
         inherit erlang;
         debugInfo = true;
       };
