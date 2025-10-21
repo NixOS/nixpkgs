@@ -74,6 +74,7 @@ stdenv.mkDerivation (
 
     nativeBuildInputs = [
       cmake
+      ninja
       python3
       which
       swig
@@ -84,10 +85,6 @@ stdenv.mkDerivation (
     ++ lib.optionals enableManpages [
       python3.pkgs.sphinx
       python3.pkgs.myst-parser
-    ]
-    # TODO: Clean up on `staging`.
-    ++ [
-      ninja
     ];
 
     buildInputs = [
@@ -112,16 +109,13 @@ stdenv.mkDerivation (
       (lib.cmakeBool "LLVM_ENABLE_RTTI" false)
       (lib.cmakeFeature "Clang_DIR" "${lib.getDev libclang}/lib/cmake")
       (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${lit}/bin/lit")
+      (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       (lib.cmakeBool "LLDB_USE_SYSTEM_DEBUGSERVER" true)
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       (lib.cmakeFeature "LLDB_CODESIGN_IDENTITY" "") # codesigning makes nondeterministic
-    ]
-    # TODO: Clean up on `staging`.
-    ++ [
-      (lib.cmakeFeature "CLANG_RESOURCE_DIR" "../../../../${lib.getLib libclang}")
     ]
     ++ lib.optionals enableManpages [
       (lib.cmakeBool "LLVM_ENABLE_SPHINX" true)
@@ -183,9 +177,6 @@ stdenv.mkDerivation (
   }
   // lib.optionalAttrs enableManpages {
     pname = "lldb-manpages";
-
-    # TODO: Remove on `staging`.
-    buildPhase = "";
 
     ninjaFlags = [ "docs-lldb-man" ];
 

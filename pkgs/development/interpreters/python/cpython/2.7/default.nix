@@ -323,7 +323,8 @@ stdenv.mkDerivation (
 
     env.NIX_CFLAGS_COMPILE =
       lib.optionalString (stdenv.targetPlatform.system == "x86_64-darwin") "-msse2"
-      + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000";
+      + lib.optionalString stdenv.hostPlatform.isMusl " -DTHREAD_STACK_SIZE=0x100000"
+      + " -std=gnu17";
     DETERMINISTIC_BUILD = 1;
 
     setupHook = python-setup-hook sitePackages;

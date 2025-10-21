@@ -9,7 +9,7 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cosmic-icons";
-  version = "1.0.0-beta.1.1";
+  version = "1.0.0-beta.2";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {

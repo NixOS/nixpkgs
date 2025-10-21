@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
 
   # build-system
   setuptools,
@@ -30,6 +31,15 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-ULEf9DJiz/S2wKlb/vjGto8VCI0QDcm0pkU5rlOwtiE=";
   };
+
+  patches = [
+    # https://github.com/flasgger/flasgger/pull/633
+    (fetchpatch {
+      name = "fix-tests-with-click-8.2.patch";
+      url = "https://github.com/flasgger/flasgger/commit/08591b60e988c0002fcf1b1e9f98b78e041d2732.patch";
+      hash = "sha256-DHaaY9W+cta3M2VA8S+ZQWacmgSpeyP03SKTiIlfBRM=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

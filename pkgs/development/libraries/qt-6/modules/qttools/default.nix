@@ -6,7 +6,7 @@
   qtbase,
   qtdeclarative,
   cups,
-  llvmPackages_20,
+  llvmPackages,
   # clang-based c++ parser for qdoc and lupdate
   withClang ? false,
 }:
@@ -30,10 +30,9 @@ qtModule {
     "-DNIX_OUTPUT_OUT=\"${placeholder "out"}\""
   ];
 
-  # FIXME: update to LLVM 21 with Qt 6.10
   buildInputs = lib.optionals withClang [
-    llvmPackages_20.libclang
-    llvmPackages_20.llvm
+    llvmPackages.libclang
+    llvmPackages.llvm
   ];
 
   propagatedBuildInputs = [

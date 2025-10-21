@@ -58,6 +58,38 @@ let
     submodule
     ;
 
+  /*
+    Creates a structured value type suitable for serialization formats.
+
+    Parameters:
+    - typeName: String describing the format (e.g. "JSON", "YAML", "XML")
+    - nullable: Whether the structured value type allows `null` values.
+
+    Returns a type suitable for structured data formats that supports:
+    - Basic types: boolean, integer, float, string, path
+    - Complex types: attribute sets and lists
+  */
+  mkStructuredType =
+    {
+      typeName,
+      nullable ? true,
+    }:
+    let
+      baseType = oneOf [
+        bool
+        int
+        float
+        str
+        path
+        (attrsOf valueType)
+        (listOf valueType)
+      ];
+      valueType = (if nullable then nullOr baseType else baseType) // {
+        description = "${typeName} value";
+      };
+    in
+    valueType;
+
   # Attributes added accidentally in https://github.com/NixOS/nixpkgs/pull/335232 (2024-08-18)
   # Deprecated in https://github.com/NixOS/nixpkgs/pull/415666 (2025-06)
   allowAliases = pkgs.config.allowAliases or false;
@@ -130,23 +162,7 @@ optionalAttrs allowAliases aliases
     { }:
     {
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "JSON value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "JSON"; };
 
       generate =
         name: value:
@@ -160,7 +176,7 @@ optionalAttrs allowAliases aliases
               preferLocalBuild = true;
             }
             ''
-              jq . "$valuePath"> $out
+              jq . "$valuePath" > $out
             ''
         ) { };
 
@@ -187,23 +203,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.1 value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "YAML 1.1"; };
 
     };
 
@@ -226,23 +226,7 @@ optionalAttrs allowAliases aliases
             ''
         ) { };
 
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "YAML 1.2 value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "YAML 1.2"; };
 
     };
 
@@ -503,23 +487,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ]
-            // {
-              description = "TOML value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "TOML"; };
 
       generate =
         name: value:
@@ -552,23 +520,7 @@ optionalAttrs allowAliases aliases
     { }:
     json { }
     // {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              int
-              float
-              str
-              path
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "CDN value";
-            };
-        in
-        valueType;
+      type = mkStructuredType { typeName = "CDN"; };
 
       generate =
         name: value:
@@ -983,23 +935,9 @@ optionalAttrs allowAliases aliases
   pythonVars =
     { }:
     {
-      type =
-        let
-          valueType =
-            nullOr (oneOf [
-              bool
-              float
-              int
-              path
-              str
-              (attrsOf valueType)
-              (listOf valueType)
-            ])
-            // {
-              description = "Python value";
-            };
-        in
-        attrsOf valueType;
+      type = attrsOf (mkStructuredType {
+        typeName = "Python";
+      });
 
       lib = {
         mkRaw = value: {
@@ -1079,23 +1017,7 @@ optionalAttrs allowAliases aliases
     }:
     if format == "badgerfish" then
       {
-        type =
-          let
-            valueType =
-              nullOr (oneOf [
-                bool
-                int
-                float
-                str
-                path
-                (attrsOf valueType)
-                (listOf valueType)
-              ])
-              // {
-                description = "XML value";
-              };
-          in
-          valueType;
+        type = mkStructuredType { typeName = "XML"; };
 
         generate =
           name: value:

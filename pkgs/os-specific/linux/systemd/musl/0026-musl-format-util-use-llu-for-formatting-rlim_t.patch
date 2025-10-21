@@ -1,0 +1,57 @@
+From 65cd003563fe1b8f1f1b3e1c1198b3d63f993820 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 9 Jun 2025 12:00:01 +0900
+Subject: [PATCH 26/30] musl: format-util: use %llu for formatting rlim_t
+
+glibc uses uint32_t or uint64_t for rlim_t, while musl uses unsigned long long.
+---
+ meson.build             |  7 +++++++
+ src/basic/format-util.h | 14 ++++++++------
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/meson.build b/meson.build
+index 5f235d5113..66579b9182 100644
+--- a/meson.build
++++ b/meson.build
+@@ -572,6 +572,13 @@ conf.set('SIZEOF_RLIM_T', cc.sizeof('rlim_t', prefix : '#include <sys/resource.h
+ conf.set('SIZEOF_TIME_T', cc.sizeof('time_t', prefix : '#include <sys/time.h>'))
+ conf.set('SIZEOF_TIMEX_MEMBER', cc.sizeof('typeof(((struct timex *)0)->freq)', prefix : '#include <sys/timex.h>'))
+ 
++if get_option('libc') == 'musl'
++        if conf.get('SIZEOF_RLIM_T') != 8
++                error('Unexpected size of rlim_t: @0@'.format(conf.get('SIZEOF_RLIM_T')))
++        endif
++        conf.set_quoted('RLIM_FMT', '%llu')
++endif
++
+ long_max = cc.compute_int(
+         'LONG_MAX',
+         prefix : '#include <limits.h>',
+diff --git a/src/basic/format-util.h b/src/basic/format-util.h
+index e42f788ce6..d40ca5818a 100644
+--- a/src/basic/format-util.h
++++ b/src/basic/format-util.h
+@@ -39,12 +39,14 @@ assert_cc(sizeof(gid_t) == sizeof(uint32_t));
+ #  error Unknown timex member size
+ #endif
+ 
+-#if SIZEOF_RLIM_T == 8
+-#  define RLIM_FMT "%" PRIu64
+-#elif SIZEOF_RLIM_T == 4
+-#  define RLIM_FMT "%" PRIu32
+-#else
+-#  error Unknown rlim_t size
++#ifndef RLIM_FMT
++#  if SIZEOF_RLIM_T == 8
++#    define RLIM_FMT "%" PRIu64
++#  elif SIZEOF_RLIM_T == 4
++#    define RLIM_FMT "%" PRIu32
++#  else
++#    error Unknown rlim_t size
++#  endif
+ #endif
+ 
+ #if SIZEOF_DEV_T == 8
+-- 
+2.51.0
+
