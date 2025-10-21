@@ -5169,6 +5169,9 @@ with pkgs;
   openj9_25 = openj9;
   openj9_25_headless = openj9_headless;
 
+  openj9_21 = openj9.override { majorVersion = 21; };
+  openj9_21_headless = openj9_21.override { headless = true; };
+
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   inherit (callPackage ../development/compilers/julia { })

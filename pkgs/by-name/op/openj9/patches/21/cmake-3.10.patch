@@ -1,0 +1,88 @@
+--- a/openj9/CMakeLists.txt
++++ b/openj9/CMakeLists.txt
+@@ -20,7 +20,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ ################################################################################
+ 
+-cmake_minimum_required(VERSION 3.4 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ project(openj9)
+ 
+--- a/omr/CMakeLists.txt
++++ b/omr/CMakeLists.txt
+@@ -23,7 +23,7 @@
+ # TODO: OMR_RTTI flag
+ # TODO: Version things
+ 
+-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ message(STATUS "Starting with CMake version ${CMAKE_VERSION}")
+ 
+--- a/omr/cmake/modules/ddr/DDRSetStub.cmake.in
++++ b/omr/cmake/modules/ddr/DDRSetStub.cmake.in
+@@ -19,7 +19,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ #############################################################################
+ 
+-cmake_minimum_required(VERSION 3.3 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ set(OMR_EXE_LAUNCHER "@OMR_EXE_LAUNCHER@")
+ set(OMR_MODULES_DIR "@OMR_MODULES_DIR@")
+--- a/omr/fvtest/compilertriltest/CMakeLists.txt
++++ b/omr/fvtest/compilertriltest/CMakeLists.txt
+@@ -19,7 +19,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ ###############################################################################
+ 
+-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ project(comptest LANGUAGES C CXX)
+ 
+--- a/omr/fvtest/compilerunittest/CMakeLists.txt
++++ b/omr/fvtest/compilerunittest/CMakeLists.txt
+@@ -19,7 +19,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ ###############################################################################
+ 
+-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ project(compunittest LANGUAGES C CXX)
+ 
+--- a/omr/fvtest/tril/examples/incordec/CMakeLists.txt
++++ b/omr/fvtest/tril/examples/incordec/CMakeLists.txt
+@@ -19,7 +19,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ ###############################################################################
+ 
+-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ project(tril_incordec LANGUAGES C CXX)
+ 
+--- a/omr/fvtest/tril/examples/mandelbrot/CMakeLists.txt
++++ b/omr/fvtest/tril/examples/mandelbrot/CMakeLists.txt
+@@ -19,7 +19,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ ###############################################################################
+ 
+-cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ 
+ project(tril_mandelbrot LANGUAGES C CXX)
+ 
+--- a/omr/fvtest/tril/test/CMakeLists.txt
++++ b/omr/fvtest/tril/test/CMakeLists.txt
+@@ -19,7 +19,7 @@
+ # SPDX-License-Identifier: EPL-2.0 OR Apache-2.0 OR GPL-2.0-only WITH Classpath-exception-2.0 OR GPL-2.0-only WITH OpenJDK-assembly-exception-1.0
+ ###############################################################################
+ 
+-# cmake_minimum_required(VERSION 3.2 FATAL_ERROR)
++# cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ #
+ # project(triltest LANGUAGES CXX)
+ 

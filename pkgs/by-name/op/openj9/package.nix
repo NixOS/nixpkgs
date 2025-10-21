@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   jdk25,
+  jdk21,
   autoconf,
   cmake,
   m4,
@@ -52,6 +53,8 @@ let
     # Explicit, to make nixpkgs-vet happy
     if majorVersion == 25 then
       ./sources/25.json
+    else if majorVersion == 21 then
+      ./sources/21.json
     else
       throw "Unsupported Major version: ${toString majorVersion}";
   sourceData = lib.importJSON sourceFile;
@@ -59,9 +62,11 @@ let
   inherit (sourceData) version;
   bootstrapJdk =
     {
+      "21" = jdk21;
       "25" = jdk25;
     }
     .${toString majorVersion};
+  atLeast21 = majorVersion >= 21;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -75,22 +80,38 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r --no-preserve=mode ${sources.omr} $sourceRoot/omr
   '';
 
-  patches = lib.optionals (majorVersion == 25) [
-    ./patches/25/make-4.4.1.patch
-    ./patches/25/openj9-version.diff
-    # Fix build with libdwarf 2
-    (fetchpatch {
-      url = "https://github.com/eclipse-openj9/openj9-omr/commit/3619866c6c4c1b0183389fdbf18eca41e2be8f23.patch";
-      hash = "sha256-4dsurJFBfkb6bd/M933sAUFpCRM29McodkOLufzwscs=";
-      stripLen = 1;
-      extraPrefix = "omr/";
-    })
-    # From "https://code.opensuse.org/package/java-25-openj9/raw/0e2817a7edf1b5134a93e082526135e45d40b7cc/f/reproducible-version.patch";
-    ./patches/25/reproducible-version.patch
-    # Makes java*.properties files reproducible
-    ./patches/25/reproducible-nls.diff
-    ./patches/25/read-truststore-from-env-jdk25.patch
-  ];
+  patches =
+    lib.optionals (majorVersion == 21) [
+      ./patches/21/cmake-3.10.patch
+      ./patches/21/read-truststore-from-env-jdk10.patch
+      ./patches/21/currency-date-range-jdk10.patch
+      (fetchpatch {
+        name = "gnumake-4.4.1";
+        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
+      })
+    ]
+    ++ lib.optionals (majorVersion == 25) [
+      ./patches/25/make-4.4.1.patch
+      ./patches/25/read-truststore-from-env-jdk25.patch
+    ]
+    ++ lib.optionals atLeast21 [
+      # Fix build with libdwarf 2
+      (fetchpatch {
+        url = "https://github.com/eclipse-openj9/openj9-omr/commit/3619866c6c4c1b0183389fdbf18eca41e2be8f23.patch";
+        hash = "sha256-4dsurJFBfkb6bd/M933sAUFpCRM29McodkOLufzwscs=";
+        stripLen = 1;
+        extraPrefix = "omr/";
+      })
+      ./patches/21/openj9-version.diff
+      # From "https://code.opensuse.org/package/java-25-openj9/raw/0e2817a7edf1b5134a93e082526135e45d40b7cc/f/reproducible-version.patch";
+      ./patches/21/reproducible-version.patch
+      # Makes java*.properties files reproducible
+      ./patches/21/reproducible-nls.diff
+      ./patches/21/swing-use-gtk-jdk13.patch
+      ./patches/21/ignore-LegalNoticeFilePlugin-jdk18.patch
+      ./patches/21/increase-javadoc-heap-jdk13.patch
+    ];
 
   strictDeps = true;
   separateDebugInfo = true;
