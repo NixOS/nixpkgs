@@ -1,42 +1,43 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
-  pythonOlder,
-  stdenv,
-  testers,
 
+  # build-system
+  cython,
+  gdal,
+  numpy,
+  setuptools,
+
+  # dependencies
   affine,
   attrs,
-  boto3,
   certifi,
   click,
   click-plugins,
   cligj,
-  cython,
-  fsspec,
-  gdal,
-  hypothesis,
+  snuggs,
+
+  # optional-dependencies
   ipython,
   matplotlib,
-  numpy,
-  packaging,
-  pytest-randomly,
-  setuptools,
-  shapely,
-  snuggs,
-  wheel,
+  boto3,
 
-  rasterio, # required to run version test
+  # tests
+  fsspec,
+  hypothesis,
+  packaging,
+  pytestCheckHook,
+  pytest-randomly,
+  shapely,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rasterio";
   version = "1.4.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.8";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rasterio";
@@ -50,15 +51,14 @@ buildPythonPackage rec {
       --replace-fail "cython~=3.0.2" cython
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     cython
     gdal
     numpy
     setuptools
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     affine
     attrs
     certifi
@@ -83,7 +83,9 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-randomly
     shapely
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   preCheck = ''
     rm -r rasterio # prevent importing local rasterio
@@ -107,18 +109,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rasterio" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = rasterio;
-    version = version;
-    command = "${rasterio}/bin/rio --version";
-  };
-
-  meta = with lib; {
+  meta = {
     description = "Python package to read and write geospatial raster data";
     mainProgram = "rio";
     homepage = "https://rasterio.readthedocs.io/";
     changelog = "https://github.com/rasterio/rasterio/blob/${version}/CHANGES.txt";
-    license = licenses.bsd3;
-    teams = [ teams.geospatial ];
+    license = lib.licenses.bsd3;
+    teams = [ lib.teams.geospatial ];
   };
 }
