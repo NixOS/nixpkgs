@@ -686,7 +686,7 @@ in
           path = [ manage ];
           script = ''
             paperless-manage document_exporter ${cfg.exporter.directory} ${
-              lib.cli.toGNUCommandLineShell { } cfg.exporter.settings
+              lib.cli.toCommandLineShellGNU { } cfg.exporter.settings
             }
           '';
         };

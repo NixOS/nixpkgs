@@ -40,7 +40,9 @@
     :::
   */
   toGNUCommandLineShell =
-    options: attrs: lib.escapeShellArgs (lib.cli.toGNUCommandLine options attrs);
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511)
+      "lib.cli.toGNUCommandLineShell is deprecated, please use lib.cli.toCommandLineShell or lib.cli.toCommandLineShellGNU instead."
+      (options: attrs: lib.escapeShellArgs (lib.cli.toGNUCommandLine options attrs));
 
   /**
     Automatically convert an attribute set to a list of command-line options.
@@ -114,40 +116,44 @@
     :::
   */
   toGNUCommandLine =
-    {
-      mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}",
+    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511)
+      "lib.cli.toGNUCommandLine is deprecated, please use lib.cli.toCommandLine or lib.cli.toCommandLineShellGNU instead."
+      (
+        {
+          mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}",
 
-      mkBool ? k: v: lib.optional v (mkOptionName k),
+          mkBool ? k: v: lib.optional v (mkOptionName k),
 
-      mkList ? k: v: lib.concatMap (mkOption k) v,
+          mkList ? k: v: lib.concatMap (mkOption k) v,
 
-      mkOption ?
-        k: v:
-        if v == null then
-          [ ]
-        else if optionValueSeparator == null then
-          [
-            (mkOptionName k)
-            (lib.generators.mkValueStringDefault { } v)
-          ]
-        else
-          [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
+          mkOption ?
+            k: v:
+            if v == null then
+              [ ]
+            else if optionValueSeparator == null then
+              [
+                (mkOptionName k)
+                (lib.generators.mkValueStringDefault { } v)
+              ]
+            else
+              [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
 
-      optionValueSeparator ? null,
-    }:
-    options:
-    let
-      render =
-        k: v:
-        if builtins.isBool v then
-          mkBool k v
-        else if builtins.isList v then
-          mkList k v
-        else
-          mkOption k v;
+          optionValueSeparator ? null,
+        }:
+        options:
+        let
+          render =
+            k: v:
+            if builtins.isBool v then
+              mkBool k v
+            else if builtins.isList v then
+              mkList k v
+            else
+              mkOption k v;
 
-    in
-    builtins.concatLists (lib.mapAttrsToList render options);
+        in
+        builtins.concatLists (lib.mapAttrsToList render options)
+      );
 
   /**
     Converts the given attributes into a single shell-escaped command-line string.
