@@ -65,18 +65,17 @@ buildPythonPackage (finalAttrs: {
     redisTestHook
   ];
 
+  # Timing-sensitive, fails under load
+  # https://github.com/vutran1710/PyrateLimiter/issues/245
+  disabledTests = [ "test_limiter_01" ];
+
   disabledTestPaths = [
     # Slow: > 1.5 seconds/test run standalone on a fast machine
     # (Apple M3 Max with highest performance settings and 36GB RAM)
     # and/or hang under load
-    # https://github.com/vutran1710/PyrateLimiter/issues/245
     # https://github.com/vutran1710/PyrateLimiter/issues/247
     "tests/test_bucket_all.py"
-    "tests/test_bucket_factory.py"
-    "tests/test_limiter.py"
-    "tests/test_multiprocessing.py"
     "tests/test_postgres_concurrent.py"
-    "tests/test_multi_bucket.py"
   ];
 
   # For redisTestHook
