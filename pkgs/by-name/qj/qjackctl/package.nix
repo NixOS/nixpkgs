@@ -1,20 +1,18 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
   cmake,
   alsa-lib,
   libjack2,
   dbus,
-  qtbase,
-  qttools,
-  qtx11extras,
+  libsForQt5,
   # Enable jack session support
   jackSession ? false,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.91";
   pname = "qjackctl";
 
@@ -23,14 +21,14 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "rncbc";
     repo = "qjackctl";
-    rev = "${pname}_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-YfdRyylU/ktFvsh18FjpnG9MkV1HxHJBhRnHWQ7I+hY=";
+    tag = "qjackctl_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    hash = "sha256-YfdRyylU/ktFvsh18FjpnG9MkV1HxHJBhRnHWQ7I+hY=";
   };
 
   buildInputs = [
-    qtbase
-    qtx11extras
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qtx11extras
+    libsForQt5.qttools
     alsa-lib
     libjack2
     dbus
@@ -39,6 +37,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [
@@ -46,12 +45,12 @@ mkDerivation rec {
     "-DCONFIG_JACK_SESSION=${toString jackSession}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Qt application to control the JACK sound server daemon";
     mainProgram = "qjackctl";
     homepage = "https://github.com/rncbc/qjackctl";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})
