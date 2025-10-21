@@ -11,9 +11,18 @@ let
 in
 {
   options.services.llama-swap = {
-    enable = lib.mkEnableOption "enable the llama-swap service";
+    enable = lib.mkEnableOption "the llama-swap service";
 
     package = lib.mkPackageOption pkgs "llama-swap" { };
+
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
+      default = "localhost";
+      example = "0.0.0.0";
+      description = ''
+        Address that llama-swap listens on.
+      '';
+    };
 
     port = lib.mkOption {
       default = 8080;
@@ -31,6 +40,30 @@ in
         Whether to open the firewall for llama-swap.
         This adds {option}`port` to [](#opt-networking.firewall.allowedTCPPorts).
       '';
+    };
+
+    tls = {
+      enable = lib.mkEnableOption "TLS encryption";
+
+      certFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/path/to/cert.pem";
+        description = ''
+          Path to the TLS certificate file. This certificate will be offered to,
+          and may be verified by, clients.
+        '';
+      };
+
+      keyFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
+        default = null;
+        example = "/path/to/key.pem";
+        description = ''
+          Path to the TLS private key file. This key will be used to decrypt,
+          data received from clients.
+        '';
+      };
     };
 
     settings = lib.mkOption {
@@ -64,6 +97,17 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    assertions = [
+      {
+        assertion = cfg.tls.enable -> cfg.tls.certFile != null;
+        message = "Please provide a certificate to use for TLS encryption.";
+      }
+      {
+        assertion = cfg.tls.enable -> cfg.tls.keyFile != null;
+        message = "Please provide a private key to use for TLS encryption.";
+      }
+    ];
+
     systemd.services.llama-swap = {
       description = "Model swapping for LLaMA C++ Server (or any local OpenAPI compatible server)";
       after = [ "network.target" ];
@@ -71,7 +115,18 @@ in
 
       serviceConfig = {
         Type = "exec";
-        ExecStart = "${lib.getExe cfg.package} --listen :${toString cfg.port} --config ${configFile}";
+        ExecStart = "${lib.getExe cfg.package} ${
+          lib.escapeShellArgs (
+            [
+              "--listen=${cfg.listenAddress}:${toString cfg.port}"
+              "--config=${configFile}"
+            ]
+            ++ lib.optionals cfg.tls.enable [
+              "--tls-cert-file=${cfg.tls.certFile}"
+              "--tls-key-file=${cfg.tls.keyFile}"
+            ]
+          )
+        }";
         Restart = "on-failure";
         RestartSec = 3;
 
