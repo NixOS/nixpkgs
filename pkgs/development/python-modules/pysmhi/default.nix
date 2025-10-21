@@ -39,6 +39,8 @@ buildPythonPackage rec {
     syrupy
   ];
 
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     changelog = "https://github.com/gjohansson-ST/pysmhi/releases/tag/${src.tag}";
     description = "Retrieve open data from SMHI api";
