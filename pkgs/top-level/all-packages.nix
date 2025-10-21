@@ -11603,7 +11603,7 @@ with pkgs;
     k3s_1_33
     k3s_1_34
     ;
-  k3s = k3s_1_33;
+  k3s = k3s_1_34;
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
 
@@ -13313,8 +13313,6 @@ with pkgs;
   };
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
-
-  flightgear = libsForQt5.callPackage ../games/flightgear { };
 
   freeciv = callPackage ../by-name/fr/freeciv/package.nix {
     sdl2Client = false;
