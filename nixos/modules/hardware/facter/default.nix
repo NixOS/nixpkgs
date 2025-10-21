@@ -7,6 +7,7 @@
   imports = [
     ./disk.nix
     ./firmware.nix
+    ./graphics
     ./keyboard.nix
     ./networking
     ./system.nix
