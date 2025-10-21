@@ -1,37 +1,37 @@
 {
   stdenv,
-  mkDerivation,
   lib,
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
   SDL2,
-  qtdeclarative,
   libpulseaudio,
   glm,
   which,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "projectm";
   version = "3.1.12";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectM";
-    rev = "v${version}";
-    sha256 = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
   };
 
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
     which
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     SDL2
-    qtdeclarative
+    libsForQt5.qtdeclarative
     libpulseaudio
     glm
   ];
@@ -65,4 +65,4 @@ mkDerivation rec {
       Read an audio input and produces mesmerizing visuals, detecting tempo, and rendering advanced equations into a limitless array of user-contributed visualizations.
     '';
   };
-}
+})

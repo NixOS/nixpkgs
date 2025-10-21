@@ -3833,8 +3833,6 @@ with pkgs;
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
 
-  projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
-
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
 
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
