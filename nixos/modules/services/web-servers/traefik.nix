@@ -202,8 +202,12 @@ in
     users.groups.traefik = { };
   };
 
-  meta.maintainers = with lib.maintainers; [
-    jackr
-    sigmasquadron
-  ];
+  meta = {
+    maintainers = with lib.maintainers; [
+      jackr
+      sigmasquadron
+      therealgramdalf
+    ];
+    doc = ./traefik.md;
+  };
 }

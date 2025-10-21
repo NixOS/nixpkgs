@@ -76,6 +76,27 @@
   "module-services-tandoor-recipes-migrating-media-option-disallow-access": [
     "index.html#module-services-tandoor-recipes-migrating-media-option-disallow-access"
   ],
+  "module-services-traefik": [
+    "index.html#module-services-traefik"
+  ],
+  "module-services-traefik-environment": [
+    "index.html#module-services-traefik-environment"
+  ],
+  "module-services-traefik-plugins": [
+    "index.html#module-services-traefik-plugins"
+  ],
+  "module-services-traefik-plugins-custom": [
+    "index.html#module-services-traefik-plugins-custom"
+  ],
+  "module-services-traefik-usage": [
+    "index.html#module-services-traefik-usage"
+  ],
+  "module-services-traefik-usage-dynamic": [
+    "index.html#module-services-traefik-usage-dynamic"
+  ],
+  "module-services-traefik-usage-static": [
+    "index.html#module-services-traefik-usage-static"
+  ],
   "sec-override-nixos-test": [
     "index.html#sec-override-nixos-test"
   ],
