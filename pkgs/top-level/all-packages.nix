@@ -3062,8 +3062,6 @@ with pkgs;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
-  hqplayer-desktop = qt6Packages.callPackage ../applications/audio/hqplayer-desktop { };
-
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
   httpie = with python3Packages; toPythonApplication httpie;

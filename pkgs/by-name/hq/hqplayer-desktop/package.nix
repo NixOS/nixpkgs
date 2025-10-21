@@ -12,13 +12,8 @@
   libusb-compat-0_1,
   llvmPackages,
   mpfr,
-  qtcharts,
-  qtdeclarative,
-  qtwayland,
-  qtwebengine,
-  qtwebview,
   wavpack,
-  wrapQtAppsHook,
+  kdePackages,
 }:
 
 let
@@ -44,7 +39,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
-    wrapQtAppsHook
+    kdePackages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -56,11 +51,11 @@ stdenv.mkDerivation {
     libusb-compat-0_1
     llvmPackages.openmp
     mpfr
-    qtcharts
-    qtdeclarative
-    qtwayland
-    qtwebengine
-    qtwebview
+    kdePackages.qtcharts
+    kdePackages.qtdeclarative
+    kdePackages.qtwayland
+    kdePackages.qtwebengine
+    kdePackages.qtwebview
     wavpack
   ];
 
@@ -111,12 +106,12 @@ stdenv.mkDerivation {
     patchelf --replace-needed libomp.so.5 libomp.so $out/bin/.hqplayer5*-wrapped
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.signalyst.com";
     description = "High-end upsampling multichannel software HD-audio player";
-    license = licenses.unfree;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = builtins.attrNames srcs;
-    maintainers = with maintainers; [ lovesegfault ];
+    maintainers = with lib.maintainers; [ lovesegfault ];
   };
 }
