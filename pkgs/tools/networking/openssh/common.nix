@@ -195,11 +195,14 @@ stdenv.mkDerivation (finalAttrs: {
       set -a; source ~/.ssh/environment.base; set +a
     ''
     # See softhsm in nativeCheckInputs above.
-    + lib.optionalString (!finalAttrs.doCheck && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl) ''
-      # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
-      substituteInPlace regress/test-exec.sh \
-        --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
-    ''
+    +
+      lib.optionalString
+        (!finalAttrs.doCheck && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl)
+        ''
+          # The extra tests check PKCS#11 interactions, which softhsm emulates with software only
+          substituteInPlace regress/test-exec.sh \
+            --replace /usr/local/lib/softhsm/libsofthsm2.so ${lib.getLib softhsm}/lib/softhsm/libsofthsm2.so
+        ''
   );
   # integration tests hard to get working on darwin with its shaky
   # sandbox
