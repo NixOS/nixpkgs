@@ -4487,8 +4487,6 @@ self: super: with self; {
 
   duckdb-engine = callPackage ../development/python-modules/duckdb-engine { };
 
-  duckduckgo-search = callPackage ../development/python-modules/duckduckgo-search { };
-
   duct-py = callPackage ../development/python-modules/duct-py { };
 
   duden = callPackage ../development/python-modules/duden { };
@@ -12150,6 +12148,8 @@ self: super: with self; {
 
   precisely = callPackage ../development/python-modules/precisely { };
 
+  prefect = toPythonModule pkgs.prefect;
+
   prefixed = callPackage ../development/python-modules/prefixed { };
 
   preggy = callPackage ../development/python-modules/preggy { };
@@ -12173,8 +12173,6 @@ self: super: with self; {
   primepy = callPackage ../development/python-modules/primepy { };
 
   primer3 = callPackage ../development/python-modules/primer3 { };
-
-  primp = callPackage ../development/python-modules/primp { };
 
   print-color = callPackage ../development/python-modules/print-color { };
 
