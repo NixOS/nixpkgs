@@ -1,43 +1,38 @@
 {
+  stdenv,
   cmake,
   fetchFromGitLab,
   lib,
   libnotify,
-  mkDerivation,
   pkg-config,
-  qtbase,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qtquickcontrols2,
-  qttools,
-  qtwebengine,
-  stdenv,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "MellowPlayer";
   version = "3.6.8";
 
   src = fetchFromGitLab {
     owner = "ColinDuquesnoy";
     repo = "MellowPlayer";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-rsF2xQet7U8d4oGU/HgghvE3vvmkxjlGXPBlLD9mWTk=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     libnotify
-    qtbase
-    qtdeclarative
-    qtgraphicaleffects
-    qtquickcontrols2
-    qttools
-    qtwebengine
+    libsForQt5.qtbase
+    libsForQt5.qtdeclarative
+    libsForQt5.qtgraphicaleffects
+    libsForQt5.qtquickcontrols2
+    libsForQt5.qttools
+    libsForQt5.qtwebengine
   ];
 
   doCheck = true;
@@ -63,18 +58,18 @@ mkDerivation rec {
         (lib.optionalString (pkg ? qtQmlPrefix) ''
           export QML2_IMPORT_PATH="${pkg}/${pkg.qtQmlPrefix}"''${QML2_IMPORT_PATH:+':'}$QML2_IMPORT_PATH
         '')
-      ]) buildInputs
+      ]) finalAttrs.buildInputs
     )
   ));
 
-  meta = with lib; {
-    inherit (qtbase.meta) platforms;
+  meta = {
+    inherit (libsForQt5.qtbase.meta) platforms;
     broken = stdenv.hostPlatform.isDarwin; # test build fails, but the project is not maintained anymore
 
     description = "Cloud music integration for your desktop";
     mainProgram = "MellowPlayer";
     homepage = "https://gitlab.com/ColinDuquesnoy/MellowPlayer";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
-}
+})

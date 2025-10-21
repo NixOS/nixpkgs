@@ -2383,8 +2383,6 @@ with pkgs;
     protobuf = protobuf_21;
   };
 
-  mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
-
   circus = with python310Packages; toPythonApplication circus;
 
   inherit (callPackage ../applications/networking/remote/citrix-workspace { })
