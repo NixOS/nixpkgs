@@ -10012,8 +10012,6 @@ with pkgs;
   libkrun-sev = libkrun.override { variant = "sev"; };
   libkrun-tdx = libkrun.override { variant = "tdx"; };
 
-  linthesia = callPackage ../games/linthesia/default.nix { };
-
   projecteur = libsForQt5.callPackage ../os-specific/linux/projecteur { };
 
   lklWithFirewall = lkl.override { firewallSupport = true; };

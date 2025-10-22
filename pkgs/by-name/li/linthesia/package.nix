@@ -18,7 +18,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "linthesia";
   version = "unstable-2023-05-23";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "linthesia";
     repo = "linthesia";
     rev = "1f2701241f8865c2f5c14a97b81ae64884cf0396";
-    sha256 = "sha256-3uPcpDUGtAGW9q/u8Cn+0bNqikII1Y/a0PKARW/5nao=";
+    hash = "sha256-3uPcpDUGtAGW9q/u8Cn+0bNqikII1Y/a0PKARW/5nao=";
   };
 
   postPatch = ''
@@ -52,12 +52,12 @@ stdenv.mkDerivation rec {
     gtk3.out # icon cache
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Game of playing music using a MIDI keyboard following a MIDI file";
     mainProgram = "linthesia";
-    inherit (src.meta) homepage;
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    inherit (finalAttrs.src.meta) homepage;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})
