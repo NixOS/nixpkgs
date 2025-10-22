@@ -13208,8 +13208,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
-
   asc = callPackage ../games/asc {
     lua = lua5_1;
     physfs = physfs_2;
