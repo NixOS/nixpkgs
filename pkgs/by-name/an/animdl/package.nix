@@ -61,6 +61,6 @@ python3Packages.buildPythonApplication {
     license = lib.licenses.gpl3Only;
     mainProgram = "animdl";
     maintainers = with lib.maintainers; [ passivelemon ];
-    platforms = [ "x86_64-linux" ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }
