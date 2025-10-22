@@ -2,6 +2,9 @@
   lib,
   fetchPypi,
   buildPythonPackage,
+
+  # build-system
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -13,6 +16,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-s5RaNBNuGTgGzeZXuicdiKYHYedRN8E9E4qNFCqNEqw=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   # has no tests
   doCheck = false;
