@@ -116,6 +116,7 @@ with lib.maintainers;
       happysalada
       minijackson
       yurrriq
+      savtrip
     ];
     github = "beam";
     scope = "Maintain BEAM-related packages and modules.";
