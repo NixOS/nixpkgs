@@ -986,6 +986,8 @@ self: super: with self; {
 
   asterisk-mbox = callPackage ../development/python-modules/asterisk-mbox { };
 
+  asterix_decoder = callPackage ../development/python-modules/asterix_decoder { };
+
   asteroid-filterbanks = callPackage ../development/python-modules/asteroid-filterbanks { };
 
   asteval = callPackage ../development/python-modules/asteval { };
