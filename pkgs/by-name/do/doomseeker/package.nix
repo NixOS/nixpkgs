@@ -3,14 +3,11 @@
   stdenv,
   cmake,
   fetchFromBitbucket,
-  wrapQtAppsHook,
   pkg-config,
-  qtbase,
-  qttools,
-  qtmultimedia,
   zlib,
   bzip2,
   xxd,
+  qt5,
 }:
 
 stdenv.mkDerivation {
@@ -31,15 +28,15 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
     cmake
-    qttools
+    qt5.qttools
     pkg-config
     xxd
   ];
   buildInputs = [
-    qtbase
-    qtmultimedia
+    qt5.qtbase
+    qt5.qtmultimedia
     zlib
     bzip2
   ];
@@ -52,12 +49,12 @@ stdenv.mkDerivation {
     ln -s $out/lib/doomseeker/doomseeker $out/bin/
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://doomseeker.drdteam.org/";
     description = "Multiplayer server browser for many Doom source ports";
     mainProgram = "doomseeker";
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

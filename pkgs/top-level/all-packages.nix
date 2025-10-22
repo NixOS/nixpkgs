@@ -13044,8 +13044,6 @@ with pkgs;
 
   ### GAMES/DOOM-PORTS
 
-  doomseeker = qt5.callPackage ../games/doom-ports/doomseeker { };
-
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
   zandronum = callPackage ../games/doom-ports/zandronum { };
