@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  fetchpatch2,
 
   # build-system
   rustPlatform,
@@ -41,6 +42,12 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
   };
+
+  patches = [
+    # fix architecture checks in build.rs to fix build for riscv
+    # can be removed after this is merged: https://github.com/ijl/orjson/pull/609
+    ./cross-arch-compat.patch
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
