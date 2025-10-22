@@ -28,7 +28,7 @@
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
 in
-buildPythonApplication rec {
+buildPythonApplication {
   pname = "nixos-rebuild-ng";
   version = lib.trivial.release;
 
@@ -142,21 +142,7 @@ buildPythonApplication rec {
 
         # NOTE: this is a passthru test rather than a build-time test because we
         # want to keep the build closures small
-        linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
-          export MYPY_CACHE_DIR="$(mktemp -d)"
-          export RUFF_CACHE_DIR="$(mktemp -d)"
-
-          pushd ${src}
-          echo -e "\x1b[32m## run mypy\x1b[0m"
-          mypy .
-          echo -e "\x1b[32m## run ruff\x1b[0m"
-          ruff check .
-          echo -e "\x1b[32m## run ruff format\x1b[0m"
-          ruff format --check .
-          popd
-
-          touch $out
-        '';
+        linters = pkgs.callPackage ./tests/linters.nix { };
       };
     };
 
