@@ -11271,8 +11271,6 @@ with pkgs;
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
-  linvstmanager = qt5.callPackage ../applications/audio/linvstmanager { };
-
   deadd-notification-center = haskell.lib.compose.justStaticExecutables (
     haskellPackages.callPackage ../applications/misc/deadd-notification-center { }
   );
