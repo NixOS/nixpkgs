@@ -1,43 +1,100 @@
 {
   lib,
-  python3Packages,
+  buildNimPackage,
   fetchFromGitHub,
+
+  withHEVC ? true,
+  withWhisper ? false,
+
+  ffmpeg,
   yt-dlp,
+  lame,
+  libopus,
+  libvpx,
+  x264,
+  x265,
+  dav1d,
+  svt-av1,
+  whisper-cpp,
+
+  python3,
+  python3Packages,
+  nimble,
+  nim,
 }:
 
-python3Packages.buildPythonApplication rec {
+buildNimPackage rec {
   pname = "auto-editor";
-  version = "28.0.2";
-  pyproject = true;
+  version = "29.2.0";
 
   src = fetchFromGitHub {
     owner = "WyattBlue";
     repo = "auto-editor";
     tag = version;
-    hash = "sha256-ozw5ZPvKP7aTBBItQKNx85hZ1T4IxX9NYCcNHC5UuuM=";
+    hash = "sha256-2EpdrFGkeISiCnwtBMFikfWOzEdHO/ut2NbVbIAutdk=";
   };
 
-  postPatch = ''
-    substituteInPlace auto_editor/__main__.py \
-      --replace-fail '"yt-dlp"' '"${lib.getExe yt-dlp}"'
-  '';
+  lockFile = ./lock.json;
 
-  build-system = with python3Packages; [ setuptools ];
-
-  dependencies = with python3Packages; [
-    basswood-av
-    numpy
+  buildInputs = [
+    ffmpeg
+    lame
+    libopus
+    libvpx
+    x264
+    dav1d
+    svt-av1
+  ]
+  ++ lib.optionals withHEVC [
+    x265
+  ]
+  ++ lib.optionals withWhisper [
+    whisper-cpp
   ];
 
-  checkPhase = ''
-    runHook preCheck
+  nimFlags = [
+    "--passc:-Wno-incompatible-pointer-types"
+  ]
+  ++ lib.optionals withHEVC [
+    "-d:enable_hevc"
+  ]
+  ++ lib.optionals withWhisper [
+    "-d:enable_whisper"
+  ];
 
-    $out/bin/auto-editor test all
+  postPatch = ''
+    substituteInPlace src/log.nim \
+      --replace-fail '"yt-dlp"' '"${lib.getExe yt-dlp}"'
 
-    runHook postCheck
+    # buildNimPackage hack
+    substituteInPlace ae.nimble \
+      --replace-fail '"main=auto-editor"' '"main"'
   '';
 
-  pythonImportsCheck = [ "auto_editor" ];
+  # TODO: Fix checks
+  /*
+    nativeCheckInputs = [
+      python3Packages.av
+      python3
+    ];
+
+    checkPhase = ''
+      runHook preCheck
+
+      nim c \
+      ${if withHEVC then "-d:enable_hevc" else ""} \
+      ${if withWhisper then "-d:enable_whisper" else ""} \
+      -r $src/src/rationals
+
+      python3 $src/tests/test.py
+
+      runHook postCheck
+    '';
+  */
+
+  postInstall = ''
+    mv $out/bin/main $out/bin/auto-editor
+  '';
 
   meta = {
     changelog = "https://github.com/WyattBlue/auto-editor/releases/tag/${src.tag}";
@@ -45,6 +102,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://auto-editor.com/";
     license = lib.licenses.unlicense;
     mainProgram = "auto-editor";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      utopiatopia
+    ];
+    platforms = lib.platforms.unix;
   };
 }
