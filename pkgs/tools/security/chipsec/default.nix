@@ -11,27 +11,19 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "chipsec";
-  version = "1.10.6";
-  format = "setuptools";
+  version = "1.13.16";
+
+  pyproject = true;
+  build-system = [ python3.pkgs.setuptools ];
 
   disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "chipsec";
     repo = "chipsec";
-    rev = version;
-    hash = "sha256-+pbFG1SmSO/cnt1e+kel7ereC0I1OCJKKsS0KaJDWdc=";
+    tag = version;
+    hash = "sha256-/fx6Mvjsz1EKKtX18GaJwn3QC9nUldPljX0m1Olcl9o=";
   };
-
-  patches = lib.optionals withDriver [
-    ./ko-path.diff
-    ./compile-ko.diff
-  ];
-
-  postPatch = ''
-    substituteInPlace tests/software/util.py \
-      --replace-fail "assertRegexpMatches" "assertRegex"
-  '';
 
   KSRC = lib.optionalString withDriver "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
 
@@ -43,34 +35,26 @@ python3.pkgs.buildPythonApplication rec {
   ]
   ++ lib.optionals withDriver kernel.moduleBuildDependencies;
 
+  propagatedBuildInputs = with python3.pkgs; [
+    brotli
+  ];
+
+  # Marker file preventing driver from being built
+  preBuild = lib.optionals (!withDriver) ''
+    touch README.NO_KERNEL_DRIVER
+  '';
+
   nativeCheckInputs = with python3.pkgs; [
     distro
     pytestCheckHook
   ];
 
-  preBuild = lib.optionalString withDriver ''
-    export CHIPSEC_BUILD_LIB=$(mktemp -d)
-    mkdir -p $CHIPSEC_BUILD_LIB/chipsec/helper/linux
-    appendToVar setupPyBuildFlags "--build-lib=$CHIPSEC_BUILD_LIB"
-  '';
-
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=dangling-pointer"
-  ];
-
-  preInstall = lib.optionalString withDriver ''
-    mkdir -p $out/${python3.pkgs.python.sitePackages}/drivers/linux
-    mv $CHIPSEC_BUILD_LIB/chipsec/helper/linux/chipsec.ko \
-      $out/${python3.pkgs.python.sitePackages}/drivers/linux/chipsec.ko
-  '';
-
-  setupPyBuildFlags = lib.optionals (!withDriver) [
-    "--skip-driver"
-  ];
-
   pythonImportsCheck = [
     "chipsec"
+  ];
+
+  patches = [
+    ./log-path.diff
   ];
 
   meta = with lib; {
