@@ -14,6 +14,9 @@ buildPythonPackage rec {
     hash = "sha256-eMrQOtymBQIavTh6Oy61FchRuG6UaCoe8jVKLHT8wZY=";
   };
 
+  # has no tests
+  doCheck = false;
+
   pythonImportsCheck = [ "pymorphy2_dicts_ru" ];
 
   meta = {
