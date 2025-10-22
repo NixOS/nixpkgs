@@ -3,11 +3,11 @@
   stdenv,
   fetchurl,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ladspa.h";
   version = "1.15";
   src = fetchurl {
-    url = "https://www.ladspa.org/download/ladspa_sdk_${version}.tgz";
+    url = "https://www.ladspa.org/download/ladspa_sdk_${finalAttrs.version}.tgz";
     sha256 = "1vgx54cgsnc3ncl9qbgjbmq12c444xjafjkgr348h36j16draaa2";
   };
 
@@ -27,4 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = [ lib.maintainers.magnetophon ];
     platforms = lib.platforms.all;
   };
-}
+})

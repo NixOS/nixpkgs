@@ -11647,13 +11647,9 @@ with pkgs;
 
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
-  ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
-
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
     fftw = fftwSinglePrec;
   };
-
-  ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
