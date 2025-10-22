@@ -7,7 +7,6 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   umodbus,
 }:
@@ -15,9 +14,7 @@
 buildPythonPackage rec {
   pname = "async-modbus";
   version = "0.2.3";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tiagocoutinho";
@@ -39,9 +36,9 @@ buildPythonPackage rec {
       --replace '"--durations=2", "--verbose"' ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     connio
     umodbus
   ];
@@ -57,7 +54,8 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for Modbus communication";
     homepage = "https://github.com/tiagocoutinho/async_modbus";
-    license = with licenses; [ gpl3Plus ];
+    changelog = "https://github.com/tiagocoutinho/async_modbus/releases/tag/${src.tag}";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ fab ];
   };
 }
