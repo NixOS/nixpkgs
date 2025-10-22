@@ -8,16 +8,16 @@
 
 buildGoModule (finalAttrs: {
   pname = "containerlab";
-  version = "0.70.2";
+  version = "0.71.0";
 
   src = fetchFromGitHub {
     owner = "srl-labs";
     repo = "containerlab";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-QBv0SZ7XxVc0yWbOxPKdfzk9AKYlMJyeZwpAx1jbamk=";
+    hash = "sha256-wfkkRQ0F8G57pEuyLP1qjoZGkDNW/Ix4Nh3ZKoWK+w8=";
   };
 
-  vendorHash = "sha256-XttJ/GXhNKVHLR33A/o3N3OYHsyKWHBhD5QOz0AlfFk=";
+  vendorHash = "sha256-s5WBCYOdNooygEL0AbhIqZLeWd4gnpAvWjJu38QTKYU=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -37,9 +37,10 @@ buildGoModule (finalAttrs: {
     export USER="runner"
   '';
 
-  # TestVerifyLinks wants to use docker.sock which is not available in the Nix build env
-  # KernelModulesLoaded wants to use /proc/modules which is not available in Nix build env
   checkFlags = [
+    # Not available in sandbox:
+    # - docker.sock needed for TestVerifyLinks
+    # - /proc/modules needed for KernelModulesLoaded
     "-skip=^TestVerifyLinks$|^TestIsKernelModuleLoaded$"
   ];
 
@@ -60,7 +61,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/srl-labs/containerlab/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ _0x4A6F ];
     mainProgram = "containerlab";
   };
 })

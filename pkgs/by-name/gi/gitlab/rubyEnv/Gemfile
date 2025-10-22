@@ -331,7 +331,8 @@ gem 'js_regex', '~> 3.8', feature_category: :shared
 gem 'device_detector', feature_category: :shared
 
 # Redis
-gem 'redis', '~> 5.4.0', feature_category: :redis
+# Do NOT upgrade until Rails is upgraded with a version that contains https://github.com/rails/rails/pull/55359.
+gem 'redis', '= 5.4.0', feature_category: :redis
 gem 'redis-client', '~> 0.25', feature_category: :redis
 gem 'redis-cluster-client', '~> 0.13', feature_category: :redis
 gem 'redis-clustering', '~> 5.4.0', feature_category: :redis

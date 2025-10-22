@@ -164,7 +164,7 @@ in
           Type = "simple";
           ExecStart =
             let
-              args = lib.cli.toGNUCommandLineShell { mkOptionName = k: "-${k}"; } {
+              args = lib.cli.toCommandLineShellGNU { } {
                 dir = stateDir;
                 hostname = cfg.settings.hostName;
                 port = cfg.settings.port;

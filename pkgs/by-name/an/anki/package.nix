@@ -14,7 +14,7 @@
   nixosTests,
   nodejs,
   jq,
-  protobuf,
+  protobuf_31,
   python3,
   python3Packages,
   qt6,
@@ -176,7 +176,7 @@ python3Packages.buildPythonApplication rec {
     # https://github.com/ankitects/anki/blob/24.11/docs/linux.md#packaging-considerations
     OFFLINE_BUILD = "1";
     NODE_BINARY = lib.getExe nodejs;
-    PROTOC_BINARY = lib.getExe protobuf;
+    PROTOC_BINARY = lib.getExe protobuf_31;
     PYTHON_BINARY = lib.getExe python3;
     UV_BINARY = lib.getExe uv;
     UV_NO_MANAGED_PYTHON = "1";

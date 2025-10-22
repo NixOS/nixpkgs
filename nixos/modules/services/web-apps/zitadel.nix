@@ -207,7 +207,7 @@ in
         configFile = settingsFormat.generate "config.yaml" cfg.settings;
         stepsFile = settingsFormat.generate "steps.yaml" cfg.steps;
 
-        args = lib.cli.toGNUCommandLineShell { } {
+        args = lib.cli.toCommandLineShellGNU { } {
           config = cfg.extraSettingsPaths ++ [ configFile ];
           steps = cfg.extraStepsPaths ++ [ stepsFile ];
           masterkeyFile = cfg.masterKeyFile;
