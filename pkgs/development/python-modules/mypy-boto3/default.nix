@@ -901,8 +901,8 @@ in
       "sha256-f/tGLKRnpzMDLAzQH1W7sUjGljb04Ws5Tidh8lL0pWE=";
 
   mypy-boto3-meteringmarketplace =
-    buildMypyBoto3Package "meteringmarketplace" "1.40.0"
-      "sha256-wbPakhKKDtNY6y84jzqJQlP7IiG5QAKQTRsYP/tndV8=";
+    buildMypyBoto3Package "meteringmarketplace" "1.40.56"
+      "sha256-idAuSb9+u1KVh13BBNSgXYkqKHZHcSfQ3rVxiDBLdVU=";
 
   mypy-boto3-mgh =
     buildMypyBoto3Package "mgh" "1.40.18"
