@@ -586,6 +586,51 @@ in
   */
   mod = base: int: base - (int * (builtins.div base int));
 
+  /**
+    C-style remainder
+
+    # Inputs
+
+    `dividend`
+
+    : The number to be divided
+
+    `divisor`
+
+    : The number by which to divide
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.rem` usage example
+
+    ```nix
+    rem 11 10
+    # => 1
+    rem 1 10
+    # => 1
+    rem (-1) 10
+    # => -1
+    rem 10 (-3)
+    # => 1
+    rem 5.5 2
+    # => 1.5
+    rem (-3.7) 2.5
+    # => -1.2
+    ```
+
+    :::
+  */
+  rem =
+    dividend: divisor:
+    let
+      quotient =
+        if dividend >= 0 then
+          builtins.floor (dividend / divisor)
+        else
+          -builtins.floor (-dividend / divisor);
+    in
+    dividend - quotient * divisor;
+
   ## Comparisons
 
   /**
