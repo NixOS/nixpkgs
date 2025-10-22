@@ -99,38 +99,48 @@ stdenv.mkDerivation rec {
     comment = "An unobtrusive and user-friendly desktop application for IPFS";
     desktopName = "IPFS Desktop";
     genericName = "IPFS Desktop";
-    categories = [ "Network" "P2P" "FileTransfer" ];
-    keywords = [ "ipfs" "p2p" "distributed" "web" "dweb" ];
+    categories = [
+      "Network"
+      "P2P"
+      "FileTransfer"
+    ];
+    keywords = [
+      "ipfs"
+      "p2p"
+      "distributed"
+      "web"
+      "dweb"
+    ];
     startupWMClass = "IPFS Desktop";
     mimeTypes = [ "application/x-ipfs" ];
   };
 
   installPhase = ''
     runHook preInstall
-    
+
     # Create directories
     mkdir -p $out/{bin,lib/ipfs-desktop,share/pixmaps}
-    
+
     # Copy the pre-built application
     cp -r * $out/lib/ipfs-desktop/
-    
+
     # Create wrapper script
     makeWrapper $out/lib/ipfs-desktop/ipfs-desktop $out/bin/ipfs-desktop \
       --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath buildInputs} \
       --set ELECTRON_IS_DEV 0 \
       --set ELECTRON_FORCE_IS_PACKAGED 1
-    
+
     # Install desktop file
     mkdir -p $out/share/applications
     cp ${desktopItem}/share/applications/* $out/share/applications/
-    
+
     # Copy icon if available
     if [ -f "resources/app.asar.unpacked/assets/icon.png" ]; then
       cp resources/app.asar.unpacked/assets/icon.png $out/share/pixmaps/ipfs-desktop.png
     elif [ -f "assets/icon.png" ]; then
       cp assets/icon.png $out/share/pixmaps/ipfs-desktop.png
     fi
-    
+
     runHook postInstall
   '';
 
@@ -142,7 +152,7 @@ stdenv.mkDerivation rec {
     description = "Desktop application for IPFS";
     homepage = "https://github.com/ipfs/ipfs-desktop";
     license = licenses.mit;
-    maintainers = with maintainers; [ hi ];
+    maintainers = with maintainers; [ ltpie123 ];
     platforms = platforms.linux;
     mainProgram = "ipfs-desktop";
   };
