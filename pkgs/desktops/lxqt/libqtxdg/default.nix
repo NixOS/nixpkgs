@@ -12,23 +12,23 @@
   version ? "4.2.0",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libqtxdg";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "libqtxdg";
-    rev = version;
+    tag = finalAttrs.version;
     hash =
       {
         "3.12.0" = "sha256-y+3noaHubZnwUUs8vbMVvZPk+6Fhv37QXUb//reedCU=";
         "4.2.0" = "sha256-TSyVYlWsmB/6gxJo+CjROBQaWsmYZAwkM8BwiWP+XBI=";
       }
-      ."${version}";
+      ."${finalAttrs.version}";
   };
 
-  patches = lib.optionals (version == "4.2.0") [
+  patches = lib.optionals (finalAttrs.version == "4.2.0") [
     # fix build against Qt >= 6.10 (https://github.com/lxqt/libqtxdg/pull/313)
     # TODO: drop when upgrading beyond version 4.2.0
     (fetchpatch {
@@ -59,11 +59,11 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/libqtxdg";
     description = "Qt implementation of freedesktop.org xdg specs";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})
