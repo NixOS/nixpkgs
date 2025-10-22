@@ -9,6 +9,7 @@
   zstd,
   szipSupport ? false,
   szip,
+  pnetcdf,
   libxml2,
   m4,
   curl, # for DAP
@@ -55,7 +56,10 @@ stdenv.mkDerivation rec {
     zstd
   ]
   ++ lib.optional szipSupport szip
-  ++ lib.optional mpiSupport mpi;
+  ++ lib.optionals mpiSupport [
+    mpi
+    pnetcdf
+  ];
 
   strictDeps = true;
 
@@ -76,6 +80,7 @@ stdenv.mkDerivation rec {
     "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
   ++ (lib.optionals mpiSupport [
+    "--enable-pnetcdf"
     "--enable-parallel-tests"
     "CC=${lib.getDev mpi}/bin/mpicc"
   ]);
