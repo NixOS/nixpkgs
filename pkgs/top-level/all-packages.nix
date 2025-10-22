@@ -13433,8 +13433,6 @@ with pkgs;
 
   path-of-building = qt6Packages.callPackage ../games/path-of-building { };
 
-  pentobi = libsForQt5.callPackage ../games/pentobi { };
-
   pokerth = libsForQt5.callPackage ../games/pokerth {
     protobuf = protobuf_21;
   };
