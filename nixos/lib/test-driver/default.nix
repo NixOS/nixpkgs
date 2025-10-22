@@ -14,6 +14,7 @@
   remote-pdb,
 
   netpbm,
+  vhost-device-vsock,
   nixosTests,
   qemu_pkg ? qemu_test,
   qemu_test,
@@ -56,6 +57,7 @@ buildPythonApplication {
     socat
     util-linux
     vde2
+    vhost-device-vsock
   ]
   ++ lib.optionals enableNspawn [
     systemd
