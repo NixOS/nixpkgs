@@ -13,19 +13,14 @@ let
 in
 buildNpmPackage' (finalAttrs: {
   pname = "claude-code-router";
-  version = "1.0.59";
+  version = "1.0.64";
 
   src = fetchFromGitHub {
     owner = "musistudio";
     repo = "claude-code-router";
-    rev = "4617d66492cf37539d9567044f6ffec7844af2ee";
-    hash = "sha256-LC1JIOLaNLYNIIDofgFj+is4mwLjRjD3aAOt/nHRUmo=";
+    rev = "1a4462a92362e8c41d4539dc1a79fb85fccf9559";
+    hash = "sha256-q818e8PcKjdBqYk6WfGLKQ8pybXWVxmNV8KX7GjEQq0=";
   };
-
-  patches = [
-    # pnpm install --fix-lockfile --lockfile-only
-    ./pnpm-lock.patch
-  ];
 
   postPatch = ''
     substituteInPlace src/cli.ts \
@@ -34,9 +29,9 @@ buildNpmPackage' (finalAttrs: {
 
   npmDeps = null;
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname src patches;
+    inherit (finalAttrs) pname src;
     fetcherVersion = 2;
-    hash = "sha256-aPAY7JhzzYQero8f0/w3jtf5IwpDnoZCXGQKzRbj9aU=";
+    hash = "sha256-BLPGTbDvvI40kuXfE/p3+s9hkE0reXr7OJA6UGXN4ys=";
   };
 
   nativeBuildInputs = [
