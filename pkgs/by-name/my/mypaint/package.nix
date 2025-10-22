@@ -76,6 +76,25 @@ buildPythonApplication rec {
       url = "https://github.com/mypaint/mypaint/commit/5496b1cd1113fcd46230d87760b7e6b51cc747bc.patch";
       hash = "sha256-h+sE1LW04xDU2rofH5KqXsY1M0jacfBNBC+Zb0i6y1w=";
     })
+    # Format source so the later patches apply
+    (fetchpatch {
+      url = "https://github.com/mypaint/mypaint/commit/69d1d553034a31c0a466050a4acb323787dd04e6.patch";
+      hash = "sha256-nziaPgfZRzPUvQEyQUM4FQbasHLFFT88H8qucbYI0pA=";
+      includes = [
+        "lib/strokemap.py"
+        "lib/stroke.py"
+      ];
+    })
+    # Fix numpy deprecation
+    (fetchpatch {
+      url = "https://github.com/mypaint/mypaint/commit/2a92b6baf452aba2cff3cc0a7782b301da3933d7.patch";
+      hash = "sha256-IkzdrA3pmeiihDOMzqIfc3uDd/wO3cI6dT+cVVhaQcI=";
+    })
+    # Fix numpy deprecation
+    (fetchpatch {
+      url = "https://github.com/mypaint/mypaint/commit/ab017e073e83a4930a0fb09608682bf4b7ab1874.patch";
+      hash = "sha256-7OFqH75/gJYRJ1vROUDIkUqoBowAolBYQ5anWtp228o=";
+    })
   ];
 
   nativeBuildInputs = [
