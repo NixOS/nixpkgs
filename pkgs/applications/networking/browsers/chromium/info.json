@@ -1628,7 +1628,7 @@
       },
       "ungoogled-patches": {
         "rev": "0.5.7",
-        "hash": "ssha256-FI4iNoS/7yzfWFiJws6fzltiLm4dvH0ztYd0P5GgYqM="
+        "hash": "sha256-FI4iNoS/7yzfWFiJws6fzltiLm4dvH0ztYd0P5GgYqM="
       },
       "npmHash": "sha256-i1eQ4YlrWSgY522OlFtGDDPmxE2zd1hDM03AzR8RafE="
     },
