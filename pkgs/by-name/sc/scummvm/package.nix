@@ -23,14 +23,14 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "scummvm";
   version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-+MM47piuXuIBmAQd0g/cAg5t02qSQ0sw/DwFrMUSIAA=";
   };
 
@@ -82,12 +82,12 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     mainProgram = "scummvm";
     homepage = "https://www.scummvm.org/";
-    license = licenses.gpl2Plus;
-    maintainers = [ maintainers.peterhoeg ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ peterhoeg ];
+    platforms = lib.platforms.unix;
   };
-}
+})
