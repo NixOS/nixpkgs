@@ -3,13 +3,6 @@
 # - pkgs/applications/editors/kakoune/plugins/update.py
 # - pkgs/development/lua-modules/updater/updater.py
 
-# format:
-# $ nix run nixpkgs#ruff maintainers/scripts/pluginupdate.py
-# type-check:
-# $ nix run nixpkgs#python3.pkgs.mypy maintainers/scripts/pluginupdate.py
-# linted:
-# $ nix run nixpkgs#python3.pkgs.flake8 -- --ignore E501,E265 maintainers/scripts/pluginupdate.py
-
 import argparse
 import csv
 import functools
@@ -104,7 +97,7 @@ class Repo:
         self._branch = branch
         # Redirect is the new Repo to use
         self.redirect: "Repo | None" = None
-        self.token = "dummy_token"
+        self.token: str | None = "dummy_token"
 
     @property
     def name(self):
@@ -141,7 +134,7 @@ class Repo:
         loaded = json.loads(data)
         return loaded
 
-    def prefetch(self, ref: str | None) -> str:
+    def prefetch(self, ref: str) -> str:
         log.info("Prefetching %s", self.uri)
         loaded = self._prefetch(ref)
         return loaded["sha256"]
@@ -202,12 +195,12 @@ class RepoGitHub(Repo):
             latest_entry = root.find(ATOM_ENTRY)
             assert latest_entry is not None, f"No commits found in repository {self}"
             commit_link = latest_entry.find(ATOM_LINK)
-            assert commit_link is not None, f"No link tag found feed entry {xml}"
+            assert commit_link is not None, f"No link tag found feed entry {xml!r}"
             url = urlparse(commit_link.get("href"))
             updated_tag = latest_entry.find(ATOM_UPDATED)
             assert (
                 updated_tag is not None and updated_tag.text is not None
-            ), f"No updated tag found feed entry {xml}"
+            ), f"No updated tag found feed entry {xml!r}"
             updated = datetime.strptime(updated_tag.text, "%Y-%m-%dT%H:%M:%SZ")
             return Path(str(url.path)).name, updated
 
@@ -372,7 +365,7 @@ class Editor:
         self.default_out = default_out or root.joinpath("generated.nix")
         self.deprecated = deprecated or root.joinpath("deprecated.json")
         self.cache_file = cache_file or f"{name}-plugin-cache.json"
-        self.nixpkgs_repo = None
+        self.nixpkgs_repo: git.Repo | None = None
 
     def add(self, args):
         """CSV spec"""
@@ -403,6 +396,7 @@ class Editor:
 
             autocommit = not args.no_commit
             if autocommit:
+                assert editor.nixpkgs_repo is not None
                 commit(
                     editor.nixpkgs_repo,
                     "{drv_name}: init at {version}".format(
@@ -788,11 +782,10 @@ def make_repo(uri: str, branch) -> Repo:
     # dumb check to see if it's of the form owner/repo (=> github) or https://...
     res = urlparse(uri)
     if res.netloc in ["github.com", ""]:
-        res = res.path.strip("/").split("/")
-        repo = RepoGitHub(res[0], res[1], branch)
+        owner, repo = res.path.strip("/").split("/")
+        return RepoGitHub(owner, repo, branch)
     else:
-        repo = Repo(uri.strip(), branch)
-    return repo
+        return Repo(uri.strip(), branch)
 
 
 def get_cache_path(cache_file_name: str) -> Path | None:
@@ -928,7 +921,7 @@ def update_plugins(editor: Editor, args):
     All input arguments are grouped in the `Editor`."""
 
     log.info("Start updating plugins")
-    if args.proc > 1 and args.github_token == None:
+    if args.proc > 1 and args.github_token is None:
         log.warning(
             "You have enabled parallel updates but haven't set a github token.\n"
             "You may be hit with `HTTP Error 429: too many requests` as a consequence."
@@ -966,6 +959,7 @@ def update_plugins(editor: Editor, args):
     if redirects:
         update()
         if autocommit:
+            assert editor.nixpkgs_repo is not None
             commit(
                 editor.nixpkgs_repo,
                 f"{editor.attr_path}: resolve github repository redirects",
