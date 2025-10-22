@@ -19,25 +19,15 @@ let
     lib.mirrorFunctionArgs f (
       origArgs:
       let
-        args = lib.fix (
-          lib.extends (_: previousAttrs: {
-            passthru = (previousAttrs.passthru or { }) // {
-              overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-            };
-          }) (_: origArgs)
-        );
-        result = f args;
-        overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
+        result = f origArgs;
+        extendArgs = newArgs: lib.extends (lib.toExtension newArgs) (lib.toFunction origArgs);
       in
-      if builtins.isAttrs result then
-        result
-      else if builtins.isFunction result then
-        {
-          overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-          __functor = self: result;
-        }
-      else
-        result
+      result
+      // {
+        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (extendArgs newArgs);
+        overrideAttrs =
+          newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
+      }
     )
     // {
       # Support overriding `f` itself, e.g. `buildPythonPackage.override { }`.
