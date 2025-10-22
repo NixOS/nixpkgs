@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://descope.com/";
     changelog = "https://github.com/descope/python-sdk/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ pid1 ];
   };
 }
