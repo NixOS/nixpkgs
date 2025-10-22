@@ -9,14 +9,14 @@
   withTTS ? false,
   speechd-minimal,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "blightmud";
   version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "blightmud";
     repo = "blightmud";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-9GUul5EoejcnCQqq1oX+seBtxttYIUhgcexaZk+7chk=";
   };
 
@@ -59,7 +59,7 @@ rustPlatform.buildRustPackage rec {
     in
     builtins.concatStringsSep " " (map skipFlag skipList);
 
-  meta = with lib; {
+  meta = {
     description = "Terminal MUD client written in Rust";
     mainProgram = "blightmud";
     longDescription = ''
@@ -72,8 +72,8 @@ rustPlatform.buildRustPackage rec {
       friendly mode.
     '';
     homepage = "https://github.com/Blightmud/Blightmud";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ cpu ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ cpu ];
+    platforms = with lib.platforms; linux ++ darwin;
   };
-}
+})

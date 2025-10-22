@@ -13263,9 +13263,7 @@ with pkgs;
     lua = lua5_1;
   };
 
-  blightmud = callPackage ../games/blightmud { };
-
-  blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
+  blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
   run-npush = callPackage ../by-name/np/npush/run.nix { };
 
