@@ -5,6 +5,7 @@
   zstd,
   fetchFromGitiles,
   fetchNpmDeps,
+  fetchzip,
   buildPackages,
   pkgsBuildBuild,
   # Channel data:
@@ -16,6 +17,7 @@
   # Native build inputs:
   ninja,
   bashInteractive,
+  p7zip,
   pkg-config,
   python3,
   perl,
@@ -92,8 +94,9 @@
   proprietaryCodecs ? true,
   pulseSupport ? false,
   libpulseaudio ? null,
-  ungoogled ? false,
+  variant ? "chromium",
   ungoogled-chromium,
+  helium,
   # Optional dependencies:
   libgcrypt ? null, # cupsSupport
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
@@ -175,7 +178,12 @@ let
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
 
-  ungoogler = ungoogled-chromium {
+  ungooglers = {
+    ungoogled = ungoogled-chromium;
+    inherit helium;
+  };
+
+  ungoogler = ungooglers.${variant} {
     inherit (upstream-info.deps.ungoogled-patches) rev hash;
   };
 
@@ -220,27 +228,37 @@ let
 
   chromiumDeps = lib.mapAttrs (
     path: args:
-    fetchFromGitiles (
-      removeAttrs args [ "recompress" ]
-      // lib.optionalAttrs args.recompress or false {
-        name = "source.tar.zstd";
-        downloadToTemp = false;
-        passthru.unpack = true;
-        nativeBuildInputs = [ zstd ];
-        postFetch = ''
-          tar \
-            --use-compress-program="zstd -T$NIX_BUILD_CORES" \
-            --sort=name \
-            --mtime="1970-01-01" \
-            --owner=root --group=root \
-            --numeric-owner --mode=go=rX,u+rw,a-s \
-            --remove-files \
-            --directory="$out" \
-            -cf "$TMPDIR/source.zstd" .
-          mv "$TMPDIR/source.zstd" "$out"
-        '';
-      }
-    )
+    if lib.hasAttr "rev" args then
+      fetchFromGitiles (
+        removeAttrs args [ "recompress" ]
+        // lib.optionalAttrs args.recompress or false {
+          name = "source.tar.zstd";
+          downloadToTemp = false;
+          passthru.unpack = true;
+          nativeBuildInputs = [ zstd ];
+          postFetch = ''
+            tar \
+              --use-compress-program="zstd -T$NIX_BUILD_CORES" \
+              --sort=name \
+              --mtime="1970-01-01" \
+              --owner=root --group=root \
+              --numeric-owner --mode=go=rX,u+rw,a-s \
+              --remove-files \
+              --directory="$out" \
+              -cf "$TMPDIR/source.zstd" .
+            mv "$TMPDIR/source.zstd" "$out"
+          '';
+        }
+      )
+    else
+      fetchzip (
+        args
+        // {
+          # Support crx unpacking
+          # unzip: warning [ublock.zip]:  593 extra bytes at beginning or within zipfile (return 1)
+          nativeBuildInputs = [ p7zip ];
+        }
+      )
   ) upstream-info.DEPS;
 
   unpackPhaseSnippet = lib.concatStrings (
@@ -267,7 +285,7 @@ let
   );
 
   base = rec {
-    pname = "${lib.optionalString ungoogled "ungoogled-"}${packageName}-unwrapped";
+    inherit ((import ./variants/meta.nix lib).${variant}) pname;
     inherit (upstream-info) version;
     inherit packageName buildType buildPath;
 
@@ -645,13 +663,15 @@ let
 
         patchShebangs .
       ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString (variant == "ungoogled" || variant == "helium") ''
         # Prune binaries (ungoogled only) *before* linking our own binaries:
         ${ungoogler}/utils/prune_binaries.py . ${ungoogler}/pruning.list || echo "some errors"
       ''
       + ''
         # Link to our own Node.js and Java (required during the build):
-        mkdir -p third_party/node/linux/node-linux-x64/bin${lib.optionalString ungoogled " third_party/jdk/current/bin/"}
+        mkdir -p third_party/node/linux/node-linux-x64/bin${
+          lib.optionalString (variant == "ungoogled" || variant == "helium") " third_party/jdk/current/bin/"
+        }
         ln -sf "${pkgsBuildHost.nodejs}/bin/node" third_party/node/linux/node-linux-x64/bin/node
         ln -s "${pkgsBuildHost.jdk17_headless}/bin/java" third_party/jdk/current/bin/
 
@@ -665,9 +685,19 @@ let
             substituteInPlace build/toolchain/linux/BUILD.gn \
               --replace 'toolprefix = "aarch64-linux-gnu-"' 'toolprefix = ""'
           ''
-      + lib.optionalString ungoogled ''
+      + lib.optionalString (variant == "ungoogled" || variant == "helium") ''
         ${ungoogler}/utils/patches.py . ${ungoogler}/patches
         ${ungoogler}/utils/domain_substitution.py apply -r ${ungoogler}/domain_regex.list -f ${ungoogler}/domain_substitution.list -c ./ungoogled-domsubcache.tar.gz .
+      ''
+      + lib.optionalString (variant == "helium") ''
+        # helium_substitution
+        ${ungoogler}/utils/name_substitution.py --sub -t .
+
+        # helium_version
+        ${ungoogler}/utils/helium_version.py --tree ${ungoogler} --chromium-tree .
+
+        # helium_resources
+        ${ungoogler}/utils/replace_resources.py ${ungoogler}/resources/helium_resources.txt ${ungoogler}/resources .
       '';
 
     llvmCcAndBintools = symlinkJoin {
@@ -794,7 +824,10 @@ let
         use_pulseaudio = true;
         link_pulseaudio = true;
       }
-      // lib.optionalAttrs ungoogled (lib.importTOML ./ungoogled-flags.toml)
+      // lib.optionalAttrs (variant == "ungoogled") (
+        lib.importTOML ./variants/ungoogled/ungoogled-flags.toml
+      )
+      // lib.optionalAttrs (variant == "helium") (lib.importTOML ./variants/helium/helium-flags.toml)
       // (extraAttrs.gnFlags or { })
     );
 
