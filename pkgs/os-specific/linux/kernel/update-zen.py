@@ -45,7 +45,11 @@ def nix_prefetch_git(url, rev):
         '--url', url,
         '--rev', rev,
         '--fetch-submodules'])
-    return json.loads(out)['sha256']
+    sha256_hash = json.loads(out)['sha256']
+    sri_hash = subprocess.check_output([
+        'nix-hash', '--type', 'sha256', '--to-sri', sha256_hash
+    ]).decode('utf-8').rstrip()
+    return sri_hash
 
 
 def nix_prefetch_url(url, unpack=False):
@@ -58,7 +62,7 @@ def nix_prefetch_url(url, unpack=False):
     return out.decode('utf-8').rstrip()
 
 
-def update_file(relpath, variant, version, suffix, sha256):
+def update_file(relpath, variant, version, suffix, hash):
     file_path = os.path.join(DIR, relpath)
     with fileinput.FileInput(file_path, inplace=True) as f:
         for line in f:
@@ -72,8 +76,8 @@ def update_file(relpath, variant, version, suffix, sha256):
                 f'      suffix = "{suffix}"; # {variant}',
                 result)
             result = re.sub(
-                fr'^      sha256 = ".+"; # {variant}',
-                f'      sha256 = "{sha256}"; # {variant}',
+                fr'^      hash = ".+"; # {variant}',
+                f'      hash = "{hash}"; # {variant}',
                 result)
             print(result, end='')
 
