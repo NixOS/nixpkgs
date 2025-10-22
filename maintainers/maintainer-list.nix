@@ -15296,6 +15296,12 @@
     githubId = 30698906;
     name = "Luna D Dragon";
   };
+  lunaticabs = {
+    name = "Anthony Liu";
+    github = "lunaticabs";
+    githubId = 77927794;
+    email = "lunaticabstraction@gmail.com";
+  };
   luNeder = {
     email = "luana@luana.dev.br";
     matrix = "@luana:catgirl.cloud";
