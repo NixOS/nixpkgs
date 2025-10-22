@@ -5,12 +5,12 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "npush";
   version = "0.7";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/npush/${pname}/${version}/${pname}-${version}.tgz";
+    url = "mirror://sourceforge/project/npush/npush/${finalAttrs.version}/npush-${finalAttrs.version}.tgz";
     hash = "sha256-8hbSsyeehzd4T3fUhDyebyI/oTHOHr3a8ArYAquivNk=";
   };
 
@@ -42,13 +42,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://npush.sourceforge.net/";
     description = "Sokoban-like game";
     mainProgram = "npush";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
-    platforms = with platforms; unix;
+    platforms = lib.platforms.unix;
   };
-}
+})
