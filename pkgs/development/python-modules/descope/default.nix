@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Descope Python SDK";
     homepage = "https://descope.com/";
-    changelog = "https://github.com/descope/python-sdk/releases/tag/v${version}";
+    changelog = "https://github.com/descope/python-sdk/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ pid1 ];
   };
