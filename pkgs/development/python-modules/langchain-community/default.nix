@@ -11,6 +11,7 @@
   dataclasses-json,
   httpx-sse,
   langchain,
+  langchain-classic,
   langchain-core,
   langsmith,
   numpy,
@@ -42,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "langchain-community";
-  version = "0.3.27";
+  version = "0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain-community";
     tag = "libs/community/v${version}";
-    hash = "sha256-rGU8AYe7993+zMAtHLkNiK+wA+UtZnGkUQsOPMtUQ8w=";
+    hash = "sha256-JyhP4lOBbPmaZxcc8ENgiX4aUM3MCKOhjuyWm1Y6EbE=";
   };
 
   sourceRoot = "${src.name}/libs/community";
@@ -75,6 +76,7 @@ buildPythonPackage rec {
     dataclasses-json
     httpx-sse
     langchain
+    langchain-classic
     langchain-core
     langsmith
     numpy
