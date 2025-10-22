@@ -24,15 +24,15 @@
   tinysparql,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "valent";
-  version = "1.0.0.alpha.46-unstable-2024-10-26";
+  version = "1.0.0.alpha.48";
 
   src = fetchFromGitHub {
     owner = "andyholmes";
     repo = "valent";
-    rev = "165a2791d4bf3e7dee69e3dd7885dbe4948265b9";
-    hash = "sha256-7klvOvwyAg+Xno6zWo8UByjaS9OkOuCceuZcAIEgdyU=";
+    rev = "v${version}";
+    hash = "sha256-CB3Jb7N8vcNTLCWXKoDh/wQkPW1CH6WRlwXg4efU3GY=";
     fetchSubmodules = true;
   };
 
