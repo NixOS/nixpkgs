@@ -82,6 +82,21 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/debian/ghostscript/-/raw/01e895fea033cc35054d1b68010de9818fa4a8fc/debian/patches/2010_add_build_timestamp_setting.patch";
       hash = "sha256-XTKkFKzMR2QpcS1YqoxzJnyuGk/l/Y2jdevsmbMtCXA=";
     })
+    (fetchpatch2 {
+      name = "CVE-2025-59798.patch";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/0cae41b23a9669e801211dd4cf97b6dadd6dbdd7.patch?full_index=1";
+      hash = "sha256-M530YPAhD1vbGuaK5Dg/CFt9Rxi7fIA/qK3Yrirr8G0=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2025-59799.patch";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/6dab38fb211f15226c242ab7a83fa53e4b0ff781.patch?full_index=1";
+      hash = "sha256-Uuw0Kw5GoZgX0AnrUUpvxEGXQ2cSOfgbtNY6e8nNAWw=";
+    })
+    (fetchpatch2 {
+      name = "CVE-2025-59800.patch";
+      url = "https://github.com/ArtifexSoftware/ghostpdl/commit/176cf0188a2294bc307b8caec876f39412e58350.patch?full_index=1";
+      hash = "sha256-DaMsTzXlRc+8HVuYsrAW8X44G9r0csW1WLro/5NIq0U=";
+    })
   ];
 
   outputs = [
