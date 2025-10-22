@@ -91,6 +91,7 @@ stdenv.mkDerivation rec {
     "-DPLUGIN_STANDARD_QRANSAC_SD=OFF" # not compatible with GPL, broken on non-x86
     "-DPLUGIN_STANDARD_QSRA=ON"
     "-DPLUGIN_STANDARD_QCLOUDLAYERS=ON"
+    (lib.strings.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.5")
   ];
 
   dontWrapGApps = true;
