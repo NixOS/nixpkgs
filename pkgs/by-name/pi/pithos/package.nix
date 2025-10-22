@@ -8,7 +8,7 @@
   appstream-glib,
   glib,
   wrapGAppsHook3,
-  pythonPackages,
+  python3Packages,
   gtk3,
   adwaita-icon-theme,
   gobject-introspection,
@@ -17,7 +17,7 @@
   gst_all_1,
 }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "pithos";
   version = "1.6.2";
 
@@ -61,17 +61,17 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = [
     adwaita-icon-theme
   ]
-  ++ (with pythonPackages; [
+  ++ (with python3Packages; [
     pygobject3
     pylast
   ]);
 
-  meta = with lib; {
+  meta = {
     broken = stdenv.hostPlatform.isDarwin;
     description = "Pandora Internet Radio player for GNOME";
     mainProgram = "pithos";
     homepage = "https://pithos.github.io/";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ obadz ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ obadz ];
   };
 }

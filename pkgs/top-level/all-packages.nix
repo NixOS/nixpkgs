@@ -12100,10 +12100,6 @@ with pkgs;
 
   inherit (pidginPackages) pidgin;
 
-  pithos = callPackage ../applications/audio/pithos {
-    pythonPackages = python3Packages;
-  };
-
   pineapple-pictures = qt6Packages.callPackage ../applications/graphics/pineapple-pictures { };
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
