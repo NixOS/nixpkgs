@@ -9066,6 +9066,8 @@ self: super: with self; {
 
   mat2 = callPackage ../development/python-modules/mat2 { };
 
+  mat4py = callPackage ../development/python-modules/mat4py { };
+
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   material-color-utilities = callPackage ../development/python-modules/material-color-utilities { };
