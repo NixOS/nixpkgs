@@ -3498,6 +3498,12 @@
     githubId = 37768199;
     name = "Christian Bergschneider";
   };
+  bloominstrong = {
+    email = "github@mail.bloominstrong.net";
+    github = "bloominstrong";
+    githubId = 114744388;
+    name = "bloominstrong";
+  };
   bloveless = {
     email = "brennon.loveless@gmail.com";
     github = "bloveless";
