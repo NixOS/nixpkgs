@@ -13343,9 +13343,7 @@ with pkgs;
     buildShareware = true;
   };
 
-  scummvm = callPackage ../games/scummvm { };
-
-  inherit (callPackage ../games/scummvm/games.nix { })
+  inherit (callPackage ../by-name/sc/scummvm/games.nix { })
     beneath-a-steel-sky
     broken-sword-25
     drascula-the-vampire-strikes-back
