@@ -785,10 +785,6 @@ in
       }
     ) vhostCertNames;
 
-    warnings = mapAttrsToList (name: hostOpts: ''
-      Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
-    '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != [ ]) cfg.virtualHosts);
-
     users.users = optionalAttrs (cfg.user == "wwwrun") {
       wwwrun = {
         group = cfg.group;

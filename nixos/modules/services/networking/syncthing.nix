@@ -749,25 +749,20 @@ in
         '';
       };
 
-      configDir =
-        let
-          cond = versionAtLeast config.system.stateVersion "19.03";
-        in
-        mkOption {
-          type = types.path;
-          description = ''
-            The path where the settings and keys will exist.
-          '';
-          default = cfg.dataDir + optionalString cond "/.config/syncthing";
-          defaultText = literalMD ''
-            * if `stateVersion >= 19.03`:
-
-                  config.${opt.dataDir} + "/.config/syncthing"
-            * otherwise:
-
-                  config.${opt.dataDir}
-          '';
-        };
+      configDir = mkOption {
+        type = types.path;
+        description = ''
+          The path where the settings and keys will exist.
+        '';
+        default =
+          cfg.dataDir
+          + optionalString (versionAtLeast config.system.stateVersion "19.03") "/.config/syncthing";
+        defaultText = literalExpression ''
+          if versionAtLeast config.system.stateVersion "19.03"
+          then "${opt.dataDir}/.config/syncthing"
+          else "${opt.dataDir}"
+        '';
+      };
 
       databaseDir = mkOption {
         type = types.path;
