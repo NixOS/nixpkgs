@@ -152,6 +152,7 @@ let
         oldestSupportedReleaseIsAtLeast
         mod
         rem
+        abs
         compare
         splitByAndCompare
         seq

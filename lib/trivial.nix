@@ -631,6 +631,32 @@ in
     in
     dividend - quotient * divisor;
 
+  /**
+    Absolute value
+
+    # Inputs
+
+    `n`
+
+    : A number
+
+    # Examples
+    :::{.example}
+    ## `lib.trivial.abs` usage example
+
+    ```nix
+    abs 1
+    # => 1
+    abs -1
+    # => 1
+    abs -12.34
+    # => 12.34
+    ```
+
+    :::
+  */
+  abs = n: if n < 0 then -n else n;
+
   ## Comparisons
 
   /**
