@@ -275,13 +275,15 @@ let
 
   stdenv' = if cudaSupport then cudaPackages.backendStdenv else stdenv;
 in
-buildPythonPackage rec {
+let
+  # From here on, `stdenv` shall be `stdenv'`.
+  stdenv = stdenv';
+in
+buildPythonPackage.override { inherit stdenv; } rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
   version = "2.8.0";
   pyproject = true;
-
-  stdenv = stdenv';
 
   outputs = [
     "out" # output standard python package
