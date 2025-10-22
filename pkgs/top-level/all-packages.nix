@@ -5065,8 +5065,8 @@ with pkgs;
     inherit (emacs.pkgs.melpaStablePackages) irony;
   };
 
-  iroh-relay = callPackage ../by-name/ir/iroh/iroh-relay.nix { };
-  iroh-dns-server = callPackage ../by-name/ir/iroh/iroh-dns-server.nix { };
+  iroh-relay = callPackage ../tools/networking/iroh/iroh-relay.nix { };
+  iroh-dns-server = callPackage ../tools/networking/iroh/iroh-dns-server.nix { };
 
   openjfx17 = openjfx;
   openjfx21 = callPackage ../by-name/op/openjfx/package.nix { featureVersion = "21"; };
