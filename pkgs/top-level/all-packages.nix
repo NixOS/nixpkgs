@@ -13127,14 +13127,13 @@ with pkgs;
 
   dfhack = dwarf-fortress-packages.dwarf-fortress-full;
 
-  dxx-rebirth = callPackage ../games/dxx-rebirth { };
 
-  inherit (callPackages ../games/dxx-rebirth/assets.nix { })
+  inherit (callPackages ../by-name/dx/dxx-rebirth/assets.nix { })
     descent1-assets
     descent2-assets
     ;
 
-  inherit (callPackages ../games/dxx-rebirth/full.nix { })
+  inherit (callPackages ../by-name/dx/dxx-rebirth/full.nix { })
     d1x-rebirth-full
     d2x-rebirth-full
     ;
