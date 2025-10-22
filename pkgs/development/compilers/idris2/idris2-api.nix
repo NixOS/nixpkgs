@@ -2,7 +2,7 @@
 let
   inherit (idris2Packages) idris2 buildIdris;
   apiPkg = buildIdris {
-    inherit (idris2) src version;
+    inherit (idris2.unwrapped) src version;
     ipkgName = "idris2api";
     idrisLibraries = [ ];
     preBuild = ''

@@ -352,6 +352,7 @@
   ./programs/wayland/uwsm.nix
   ./programs/wayland/waybar.nix
   ./programs/wayland/wayfire.nix
+  ./programs/wayland/wayvnc.nix
   ./programs/weylus.nix
   ./programs/winbox.nix
   ./programs/wireshark.nix
@@ -972,6 +973,8 @@
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
   ./services/monitoring/below.nix
+  ./services/monitoring/beszel-agent.nix
+  ./services/monitoring/beszel-hub.nix
   ./services/monitoring/bosun.nix
   ./services/monitoring/cadvisor.nix
   ./services/monitoring/certspotter.nix
