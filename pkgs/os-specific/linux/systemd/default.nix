@@ -163,6 +163,7 @@
   # on their live NixOS system, we disable it by default.
   withKernelInstall ? false,
   withLibarchive ? true,
+  withVConsole ? true,
   # tests assume too much system access for them to be feasible for us right now
   withTests ? false,
   # build only libudev and libsystemd
@@ -204,8 +205,6 @@ stdenv.mkDerivation (finalAttrs: {
   inherit pname;
   version = "258.1";
 
-  # We use systemd/systemd-stable for src, and ship NixOS-specific patches inside nixpkgs directly
-  # This has proven to be less error-prone than the previous systemd fork.
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd";
@@ -326,17 +325,13 @@ stdenv.mkDerivation (finalAttrs: {
   separateDebugInfo = true;
   __structuredAttrs = true;
 
-  hardeningDisable = [
-    # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=111523
-    "trivialautovarinit"
-  ]
-  ++ (lib.optionals withLibBPF [
+  hardeningDisable = lib.optionals withLibBPF [
     # breaks clang -target bpf; should be fixed to not use
     # a wrapped clang?
     "zerocallusedregs"
     "shadowstack"
     "pacret"
-  ]);
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -445,7 +440,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "tty-gid" "3") # tty in NixOS has gid 3
     (lib.mesonOption "pamconfdir" "${placeholder "out"}/etc/pam.d")
     (lib.mesonOption "shellprofiledir" "${placeholder "out"}/etc/profile.d")
-    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
 
     # /bin/sh is also the upstream default. Explicitly set this so that we're
     # independent of upstream changes to the default.
@@ -466,10 +460,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "pkgconfiglibdir" "${placeholder "dev"}/lib/pkgconfig")
     (lib.mesonOption "pkgconfigdatadir" "${placeholder "dev"}/share/pkgconfig")
 
-    # Keyboard
-    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
-    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
-
     # SBAT
     (lib.mesonOption "sbat-distro" "nixos")
     (lib.mesonOption "sbat-distro-summary" "NixOS")
@@ -486,8 +476,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonOption "sysvrcnd-path" "")
 
     # Login
-    (lib.mesonOption "sulogin-path" "${util-linux.login}/bin/sulogin")
-    (lib.mesonOption "nologin-path" "${util-linux.login}/bin/nologin")
+    (lib.mesonOption "sulogin-path" "${lib.getOutput "login" util-linux}/bin/sulogin")
+    (lib.mesonOption "nologin-path" "${lib.getOutput "login" util-linux}/bin/nologin")
 
     # Mount
     (lib.mesonOption "mount-path" "${lib.getOutput "mount" util-linux}/bin/mount")
@@ -571,6 +561,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "man" true)
     (lib.mesonEnable "nspawn" withNspawn)
 
+    (lib.mesonBool "vconsole" withVConsole)
     (lib.mesonBool "analyze" withAnalyze)
     (lib.mesonBool "logind" withLogind)
     (lib.mesonBool "localed" withLocaled)
@@ -597,7 +588,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "create-log-dirs" false)
     (lib.mesonBool "smack" true)
     (lib.mesonBool "b_pie" true)
-
+  ]
+  ++ lib.optionals withVConsole [
+    (lib.mesonOption "loadkeys-path" "${kbd}/bin/loadkeys")
+    (lib.mesonOption "setfont-path" "${kbd}/bin/setfont")
+  ]
+  ++ lib.optionals withKmod [
+    (lib.mesonOption "kmod-path" "${kmod}/bin/kmod")
   ]
   ++ lib.optionals (withShellCompletions == false) [
     (lib.mesonOption "bashcompletiondir" "no")
@@ -855,11 +852,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Avoid *.EFI binary stripping.
   # At least on aarch64-linux strip removes too much from PE32+ files:
   #   https://github.com/NixOS/nixpkgs/issues/169693
-  # The hack is to move EFI file out of lib/ before doStrip run and return it
-  # after doStrip run.
-  preFixup = lib.optionalString withBootloader ''
-    mv $out/lib/systemd/boot/efi $out/dont-strip-me
-  '';
+  stripExclude = [ "lib/systemd/boot/efi/*" ];
 
   # Wrap in the correct path for LUKS2 tokens.
   postFixup =
@@ -868,9 +861,6 @@ stdenv.mkDerivation (finalAttrs: {
         # This needs to be in LD_LIBRARY_PATH because rpath on a binary is not propagated to libraries using dlopen, in this case `libcryptsetup.so`
         wrapProgram $out/$f --prefix LD_LIBRARY_PATH : ${placeholder "out"}/lib/cryptsetup
       done
-    ''
-    + lib.optionalString withBootloader ''
-      mv $out/dont-strip-me $out/lib/systemd/boot/efi
     ''
     + lib.optionalString withUkify ''
       # To cross compile a derivation that builds a UKI with ukify, we need to wrap
