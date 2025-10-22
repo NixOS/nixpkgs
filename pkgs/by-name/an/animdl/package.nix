@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication {
   ];
 
   pythonRelaxDeps = [
+    "click"
     "cssselect"
     "httpx"
     "lxml"
