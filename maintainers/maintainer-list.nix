@@ -9754,6 +9754,12 @@
     githubId = 3320792;
     name = "gspia";
   };
+  gthm = {
+    email = "gunnar@magnusson.io";
+    github = "gunnihinn";
+    githubId = 6123958;
+    name = "Gunnar Þór Magnússon";
+  };
   gtrunsec = {
     email = "gtrunsec@hardenedlinux.org";
     github = "GTrunSec";
