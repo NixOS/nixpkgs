@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "ao";
-  version = "0.13.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${version}";
-    hash = "sha256-R9H4+KkKuOzsunM3A5LT8upH1TfkHrD+BZerToCHwjo=";
+    hash = "sha256-L9Eoul7Nar/+gS44+hA8JbfxCgkMH5xAMCleggAZn7c=";
   };
 
   build-system = [
