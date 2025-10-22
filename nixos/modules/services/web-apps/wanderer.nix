@@ -88,6 +88,28 @@ in
       };
 
       settings = {
+        about = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            Set a custom text for the "About" section of the home page. Full markdown is supported.
+            If the value is `null`, the [default "About" section](https://wanderer.to/run/frontend-configuration/about) is used:
+
+            ```
+            Welcome to wanderer, a self-hosted service for managing and sharing your outdoor adventures.
+
+            With wanderer you can:
+            - Upload and store your GPS tracks (GPX files)
+            - Organize routes with descriptions, waypoints, photos, and tags
+            - Search and filter through your personal trail library
+            - Optionally connect with other wanderer instances via ActivityPub to share tracks across the Fediverse
+            - And much more
+
+            wanderer is designed for explorers who value privacy, control, and open technology.
+            ```
+          '';
+        };
+
         syncSchedule = mkOption {
           type = types.str;
           default = "0 2 * * *";
@@ -241,7 +263,10 @@ in
         StateDirectory = baseNameOf stateDir;
         BindReadOnlyPaths = [
           "${cfg.package}/share/web:${stateDir}/web"
-        ];
+        ]
+        ++
+          lib.optional (cfg.settings.about != null)
+            "${pkgs.writeText "wanderer-about.md" cfg.settings.about}:${stateDir}/web/build/client/md/about.md";
         WorkingDirectory = stateDir;
 
         EnvironmentFile = cfg.secretsFile;
