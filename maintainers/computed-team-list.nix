@@ -20,6 +20,8 @@ let
     );
 
 in
+# TODO: Consider automatically exposing all GitHub teams under `lib.teams`,
+# so that no manual PRs are necessary to add such teams anymore
 lib.mapAttrs (
   name: attrs:
   if attrs ? github then
@@ -28,6 +30,12 @@ lib.mapAttrs (
         githubTeams.${attrs.github}
           or (throw "lib.teams.${name}: Corresponding GitHub team ${attrs.github} not known yet, make sure to create it and wait for the regular team sync");
     in
+    # TODO: Consider specifying `githubId` in team-list.nix and inferring `github` from it (or even dropping it)
+    # This would make renames easier because no additional place needs to keep track of them.
+    # Though in a future where all Nixpkgs GitHub teams are automatically exposed under `lib.teams`,
+    # this would also not be an issue anymore.
+    assert lib.assertMsg (!attrs ? githubId)
+      "lib.teams.${name}: Both `githubId` and `github` is set, but the former is synced from the latter";
     assert lib.assertMsg (!attrs ? shortName)
       "lib.teams.${name}: Both `shortName` and `github` is set, but the former is synced from the latter";
     assert lib.assertMsg (
@@ -38,6 +46,7 @@ lib.mapAttrs (
     ) "lib.teams.${name}: Both `members` and `github` is set, but the former is synced from the latter";
     attrs
     // {
+      githubId = githubTeam.id;
       shortName = githubTeam.name;
       scope = githubTeam.description;
       members =

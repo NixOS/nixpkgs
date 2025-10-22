@@ -17,6 +17,7 @@
     - There is limited mention capacity in a single post, so this should be reserved for critical components
       or larger ecosystems within nixpkgs.
   - `github` will ping the specified GitHub team and sync the `members`, `scope` and `shortName` fields from it
+  - `githubId` will be set automatically based on `github`
 
   If `github` is specified and you'd like to be added to the team, contact one of the `githubMaintainers` of the team:
 

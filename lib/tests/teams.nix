@@ -31,6 +31,10 @@ let
           type = types.str;
           default = "";
         };
+        githubId = lib.mkOption {
+          type = types.int;
+          default = 0;
+        };
         githubMaintainers = lib.mkOption {
           type = types.listOf (types.submodule ./maintainer-module.nix);
           default = [ ];
