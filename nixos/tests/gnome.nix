@@ -76,8 +76,7 @@
           # wait for alice to be logged in
           machine.wait_for_unit("default.target", "${user.name}")
           # check that logging in has given the user ownership of devices
-          # Change back to /dev/snd/timer after systemd-258.1
-          assert "alice" in machine.succeed("getfacl -p /dev/dri/card0")
+          assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
       with subtest("Wait for GNOME Shell"):
           # correct output should be (true, 'false')
