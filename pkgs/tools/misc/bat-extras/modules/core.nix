@@ -9,15 +9,15 @@
   nix-update-script,
   zsh,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "bat-extras";
-  version = "2024.08.24";
+  version = "2024.08.24-unstable-2025-02-22";
 
   src = fetchFromGitHub {
     owner = "eth-p";
     repo = "bat-extras";
-    tag = "v${version}";
-    hash = "sha256-xkND/w6UNC58dC8WrsifwjqU9ZI4yUUq+ZljkhhUNT8=";
+    rev = "3860f0f1481f1d0e117392030f55ef19cc018ee4";
+    hash = "sha256-9TEq/LzE1Pty1Z3WFWR/TaNNKPp2LGBr0jzGBkOEGQo=";
     fetchSubmodules = true;
   };
 
@@ -25,8 +25,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bat ];
 
   dontConfigure = true;
-
-  patches = [ ../patches/disable-theme-tests.patch ];
 
   postPatch = ''
     patchShebangs --build test.sh test/shimexec .test-framework/bin/best.sh
@@ -72,7 +70,7 @@ stdenv.mkDerivation rec {
   # The per-script derivations will go ahead and patch the files they actually install.
   dontPatchShebangs = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Bash scripts that integrate bat with various command line tools";
