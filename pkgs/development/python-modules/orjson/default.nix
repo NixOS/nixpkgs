@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
+  fetchpatch2,
 
   # build-system
   rustPlatform,
@@ -41,6 +42,17 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-oTrmDYmUHXMKxgxzBIStw7nnWXcyH9ir0ohnbX4bdjU=";
   };
+
+  patches = [
+    (
+      # fix architecture checks in build.rs to fix build for riscv
+      # can be removed after this is merged: https://github.com/ijl/orjson/pull/609
+      fetchpatch2 {
+        url = "https://github.com/DavHau/orjson/commit/8a6c16fd79e78aaaf1223090e673bdbe11451abc.patch";
+        hash = "sha256-/zWv3/5Bxn46OAcAGfR83Fo+Fom9FmyZsvDbtaQJIcA=";
+      }
+    )
+  ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
