@@ -4,6 +4,7 @@
   fetchFromGitHub,
   nix-update-script,
   buildNpmPackage,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "beszel";
@@ -62,11 +63,14 @@ buildGoModule rec {
     mv $out/bin/hub $out/bin/beszel-hub
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "webui"
-    ];
+  passthru = {
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "webui"
+      ];
+    };
+    tests.nixos = nixosTests.beszel;
   };
 
   meta = {
