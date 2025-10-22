@@ -16,7 +16,7 @@
   nixVersions,
   nixos-rebuild-ng,
   nixosTests,
-  runCommand,
+  replaceVars,
   scdoc,
 
   # Override interface, required to be passed in from `./package.nix`.
@@ -27,10 +27,11 @@
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+  version = lib.trivial.release;
 in
 buildPythonApplication {
   pname = "nixos-rebuild-ng";
-  version = lib.trivial.release;
+  inherit version;
 
   src = ./src;
 
@@ -56,15 +57,13 @@ buildPythonApplication {
     (lib.getBin nix)
   ];
 
-  postPatch = ''
-    substituteInPlace nixos_rebuild/constants.py \
-      --subst-var-by executable ${executable} \
-      --subst-var-by withReexec ${lib.boolToString withReexec} \
-      --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
-
-    substituteInPlace pyproject.toml \
-      --replace-fail nixos-rebuild ${executable}
-  '';
+  patches = [
+    (replaceVars ./0001-replacements.patch {
+      inherit executable version;
+      withReexec = if withReexec then "True" else "False";
+      withShellFiles = if withShellFiles then "True" else "False";
+    })
+  ];
 
   postInstall = lib.optionalString withShellFiles ''
     scdoc < ${./nixos-rebuild.8.scd} > ${executable}.8

@@ -1,0 +1,47 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Philip Taron <philip.taron@gmail.com>
+Date: Wed, 22 Oct 2025 17:02:15 -0700
+Subject: [PATCH] nixos-rebuild-ng: patch out actual replacements
+
+Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src`
+---
+ nixos_rebuild/constants.py | 6 +++---
+ pyproject.toml             | 6 +++---
+ 2 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/nixos_rebuild/constants.py b/nixos_rebuild/constants.py
+index c567796c590b..daa856a11430 100644
+--- a/nixos_rebuild/constants.py
++++ b/nixos_rebuild/constants.py
+@@ -2,6 +2,6 @@ from typing import Final
+ 
+ # These are replaced in a patch for the actual derivation; what's below supports running the tool
+ # out of the Nixpkgs repository directly.
+-EXECUTABLE: Final[str] = "nixos-rebuild-ng"
+-WITH_REEXEC: Final[bool] = True
+-WITH_SHELL_FILES: Final[bool] = True
++EXECUTABLE: Final[str] = "@executable@"
++WITH_REEXEC: Final[bool] = @withReexec@
++WITH_SHELL_FILES: Final[bool] = @withShellFiles@
+diff --git a/pyproject.toml b/pyproject.toml
+index 757067db9f06..68dfa825a824 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -3,11 +3,11 @@ requires = ["setuptools"]
+ build-backend = "setuptools.build_meta"
+ 
+ [project]
+-name = "nixos-rebuild"
+-version = "0.0.0"
++name = "@executable@"
++version = "@version@"
+ 
+ [project.scripts]
+-nixos-rebuild = "nixos_rebuild:main"
++@executable@ = "nixos_rebuild:main"
+ 
+ [tool.setuptools.package-data]
+ nixos_rebuild = ["*.nix.template"]
+-- 
+2.51.0
+
