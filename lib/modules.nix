@@ -1787,11 +1787,10 @@ let
     };
 
   /**
-    Transitional version of mkAliasOptionModule that uses MD docs.
-
-    This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+    Deprecated alias of mkAliasOptionModule that uses MD docs.
+    This function is no longer necessary will be removed in 26.05`.
   */
-  mkAliasOptionModuleMD = mkAliasOptionModule;
+  mkAliasOptionModuleMD = lib.warn "mkAliasOptionModuleMD is deprecated and will be removed in 26.05; please use mkAliasOptionModule." mkAliasOptionModule;
 
   /**
     mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b

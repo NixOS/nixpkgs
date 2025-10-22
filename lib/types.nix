@@ -1464,7 +1464,7 @@ let
                         One or more definitions did not pass the type-check of the 'either' type.
                         ${headError.message}
                         If `either`, `oneOf` or similar is used in freeformType, ensure that it is preceded by an 'attrsOf' such as: `freeformType = types.attrsOf (types.either t1 t2)`.
-                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.06.
+                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.05.
                       '' (mergeOneOption loc defs);
                     };
               in
