@@ -7,7 +7,7 @@ diff --git a/test/suite/batpipe.sh b/test/suite/batpipe.sh
  test:batpipe_term_width() {
  	description "Test support for BATPIPE_TERM_WIDTH"
  	snapshot STDOUT
-+	skip "bat-extras does not support `--theme` flag"
++	skip "bat-extras does not support '--theme' flag"
 
  	export BATPIPE=color
  	export BATPIPE_DEBUG_PARENT_EXECUTABLE=less
@@ -20,7 +20,7 @@ diff --git a/test/suite/batgrep.sh b/test/suite/batgrep.sh
  	description "Snapshot test for colored output."
  	snapshot stdout
  	snapshot stderr
-+	skip "bat-extras does not support `--theme` flag"
++	skip "bat-extras does not support '--theme' flag"
 
  	require_rg
 
@@ -28,7 +28,7 @@ diff --git a/test/suite/batgrep.sh b/test/suite/batgrep.sh
  	description "Should respect the BAT_STYLE variable."
  	snapshot stdout
  	snapshot stderr
-+	skip "bat-extras does not support `--theme` flag"
++	skip "bat-extras does not support '--theme' flag"
 
  	require_rg
 
@@ -36,7 +36,7 @@ diff --git a/test/suite/batgrep.sh b/test/suite/batgrep.sh
  	description "Snapshot test for output without separator"
  	snapshot stdout
  	snapshot stderr
-+	skip "bat-extras does not support `--theme` flag"
++	skip "bat-extras does not support '--theme' flag"
 
  	require_rg
 
