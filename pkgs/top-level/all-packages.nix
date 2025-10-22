@@ -13283,8 +13283,7 @@ with pkgs;
 
   blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
 
-  npush = callPackage ../games/npush { };
-  run-npush = callPackage ../games/npush/run.nix { };
+  run-npush = callPackage ../by-name/np/npush/run.nix { };
 
   openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
