@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  crystal,
+  crystal_1_17,
   fetchFromGitHub,
   librsvg,
   pkg-config,
@@ -27,6 +27,7 @@
 let
   # normally video.js is downloaded at build time
   videojs = callPackage ./videojs.nix { inherit versions; };
+  crystal = crystal_1_17;
 in
 crystal.buildCrystalPackage rec {
   pname = "invidious";
