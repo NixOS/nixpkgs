@@ -10997,8 +10997,7 @@ with pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
-  espeak-ng = callPackage ../applications/audio/espeak-ng { };
-  espeak = res.espeak-ng;
+  espeak = espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
