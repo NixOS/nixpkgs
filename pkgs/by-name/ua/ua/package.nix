@@ -35,6 +35,6 @@ buildGoModule {
     homepage = "https://github.com/sloonz/ua";
     license = licenses.isc;
     description = "Universal Aggregator";
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 }

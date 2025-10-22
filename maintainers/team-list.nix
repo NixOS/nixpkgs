@@ -1104,7 +1104,6 @@ with lib.maintainers;
       mjm
       nickcao
       SuperSandro2000
-      ttuegel
     ];
     github = "qt-kde";
     scope = "Maintain the Qt framework, KDE application suite, Plasma desktop environment and related projects.";

@@ -152,6 +152,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
     mainProgram = "clementine";
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 })

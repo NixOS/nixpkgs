@@ -30,6 +30,6 @@ mkDerivation rec {
     description = "Libraries for creating business diagrams";
     license = lib.licenses.gpl2;
     platforms = qtbase.meta.platforms;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
   };
 }

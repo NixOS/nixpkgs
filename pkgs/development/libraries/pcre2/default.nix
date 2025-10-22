@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.pcre.org/";
     description = "Perl Compatible Regular Expressions";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = platforms.all;
     pkgConfigModules = [
       "libpcre2-posix"

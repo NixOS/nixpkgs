@@ -185,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ gpl2Plus ];
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
     teams = [ lib.teams.freedesktop ];
   };
 })

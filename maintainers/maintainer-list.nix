@@ -26660,12 +26660,6 @@
     githubId = 77488956;
     name = "Timothy Tschnitzel";
   };
-  ttuegel = {
-    email = "ttuegel@mailbox.org";
-    github = "ttuegel";
-    githubId = 563054;
-    name = "Thomas Tuegel";
-  };
   tu-maurice = {
     email = "valentin.gehrke+nixpkgs@zom.bi";
     github = "tu-maurice";

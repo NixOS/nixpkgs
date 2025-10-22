@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       thoughtpolice
-      ttuegel
       numinit
     ];
     pkgConfigModules = lib.optionals useCmakeBuild [ "z3" ];

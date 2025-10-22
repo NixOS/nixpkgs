@@ -23,6 +23,6 @@ mkDerivation rec {
     description = "Plasma Wayland Protocols";
     license = lib.licenses.lgpl21Plus;
     platforms = qtbase.meta.platforms;
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = [ ];
   };
 }

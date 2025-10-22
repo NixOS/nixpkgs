@@ -61,7 +61,7 @@ mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = "https://github.com/steveire/grantlee";
-    maintainers = [ maintainers.ttuegel ];
+    maintainers = [ ];
     license = licenses.lgpl21;
     inherit (qtbase.meta) platforms;
   };

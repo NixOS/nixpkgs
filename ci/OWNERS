@@ -265,15 +265,15 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 /lib/licenses.nix @alyssais @emilazy @jopejoe1
 
 # Qt
-/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000 @ttuegel
-/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/qt-5 @K900 @NickCao @SuperSandro2000
+/pkgs/development/libraries/qt-6 @K900 @NickCao @SuperSandro2000
 
 # KDE Frameworks 5
-/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/development/libraries/kde-frameworks @K900 @NickCao @SuperSandro2000
 
 # KDE / Plasma 6
-/pkgs/kde @K900 @NickCao @SuperSandro2000 @ttuegel
-/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000 @ttuegel
+/pkgs/kde @K900 @NickCao @SuperSandro2000
+/maintainers/scripts/kde @K900 @NickCao @SuperSandro2000
 
 # PostgreSQL and related stuff
 /pkgs/by-name/po/postgresqlTestHook @NixOS/postgres

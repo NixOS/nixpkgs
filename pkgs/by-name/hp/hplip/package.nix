@@ -356,6 +356,6 @@ python3Packages.buildPythonApplication {
           gpl2Plus
         ];
     platforms = lib.attrNames hplipPlatforms;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 }
