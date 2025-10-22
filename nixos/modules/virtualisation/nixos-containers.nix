@@ -201,7 +201,10 @@ let
       --notify-ready=yes \
       --kill-signal=SIGRTMIN+3 \
       --bind-ro=/nix/store:/nix/store$NIX_BIND_OPT \
-      --bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT \
+      ${
+        optionalString (config.virtualisation.writableStore or true
+        ) "--bind-ro=/nix/var/nix/db:/nix/var/nix/db$NIX_BIND_OPT"
+      } \
       --bind-ro=/nix/var/nix/daemon-socket:/nix/var/nix/daemon-socket$NIX_BIND_OPT \
       --bind="/nix/var/nix/profiles/per-container/$INSTANCE:/nix/var/nix/profiles$NIX_BIND_OPT" \
       --bind="/nix/var/nix/gcroots/per-container/$INSTANCE:/nix/var/nix/gcroots$NIX_BIND_OPT" \
@@ -1209,6 +1212,30 @@ in
           "tap"
           "tun"
         ];
+
+        # Ensure that the filesystem of the Nix store mounted inside the VM
+        # supports idmap via systemd.
+        # See https://github.com/NixOS/nixpkgs/issues/451167
+        virtualisation.vmVariant.virtualisation =
+          let
+            privateUserNamespaces = (
+              builtins.any (
+                container:
+                !(builtins.elem container.privateUsers [
+                  0
+                  "no"
+                  "identity"
+                ])
+              ) (builtins.attrValues config.containers)
+            );
+          in
+          lib.mkIf privateUserNamespaces {
+            # systemd seems unable to apply idmap to OverlayFS
+            # See https://github.com/systemd/systemd/issues/25886
+            writableStore = false;
+            # 9p mounts do not support idmap
+            useNixStoreImage = true;
+          };
       }
     ))
   ];
