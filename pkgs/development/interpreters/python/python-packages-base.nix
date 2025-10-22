@@ -24,12 +24,12 @@ let
             passthru = (previousAttrs.passthru or { }) // {
               overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
             };
-          }) (_: origArgs)
+          }) (if builtins.isFunction origArgs then origArgs else (_: origArgs))
         );
         result = f args;
         overrideWith = newArgs: args // (if pkgs.lib.isFunction newArgs then newArgs args else newArgs);
       in
-      if builtins.isAttrs result then
+      if builtins.isAttrs result && !result ? __functor then
         result
       else if builtins.isFunction result then
         {
