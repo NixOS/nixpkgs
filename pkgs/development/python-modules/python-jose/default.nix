@@ -2,14 +2,11 @@
   lib,
   buildPythonPackage,
   cryptography,
-  ecdsa,
   fetchFromGitHub,
   fetchpatch,
-  pyasn1,
   pycrypto,
   pycryptodome,
   pytestCheckHook,
-  rsa,
   setuptools,
 }:
 
@@ -34,17 +31,18 @@ buildPythonPackage rec {
     })
   ];
 
-  pythonRelaxDeps = [
-    # https://github.com/mpdavis/python-jose/pull/376
+  pythonRemoveDeps = [
+    # These aren't needed if the cryptography backend is used:
+    # https://github.com/mpdavis/python-jose/blob/3.5.0/README.rst#cryptographic-backends
+    "ecdsa"
     "pyasn1"
+    "rsa"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
-    ecdsa
-    pyasn1
-    rsa
+    cryptography
   ];
 
   optional-dependencies = {
