@@ -10,9 +10,17 @@
   # tests
   versionCheckHook,
 
+  # nativeBuildInputs for GUI
+  gobject-introspection,
+  wrapGAppsHook3,
+
   # dependencies (required for most functionality)
   pyicu,
   lxml,
+  enableGui ? false,
+  # for GUI only
+  pygobject3,
+  gtk3,
 }:
 
 buildPythonPackage rec {
@@ -38,11 +46,22 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
+  ]
+  ++ lib.optionals enableGui [
+    gobject-introspection
+    wrapGAppsHook3
   ];
 
   dependencies = [
     pyicu
     lxml
+  ]
+  ++ lib.optionals enableGui [
+    pygobject3
+  ];
+
+  buildInputs = lib.optionals enableGui [
+    gtk3
   ];
 
   # Many issues with the tests: They require `cd tests` in `preCheck`; Some of
