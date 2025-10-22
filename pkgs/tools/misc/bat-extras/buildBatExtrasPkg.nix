@@ -8,6 +8,7 @@
   fish,
   getconf,
   makeWrapper,
+  nushell,
   zsh,
 }:
 let
@@ -49,6 +50,7 @@ stdenv.mkDerivation (
       bat
       bash
       fish
+      nushell
       zsh
     ]
     ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);

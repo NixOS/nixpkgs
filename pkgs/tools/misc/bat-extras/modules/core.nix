@@ -7,6 +7,7 @@
   fish,
   getconf,
   nix-update-script,
+  nushell,
   zsh,
 }:
 stdenv.mkDerivation {
@@ -41,6 +42,7 @@ stdenv.mkDerivation {
   nativeCheckInputs = [
     bash
     fish
+    nushell
     zsh
   ]
   ++ (lib.optionals stdenv.hostPlatform.isDarwin [ getconf ]);
