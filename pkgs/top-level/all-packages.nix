@@ -5817,10 +5817,6 @@ with pkgs;
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
 
-  luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
-    pluginupdate = ../../maintainers/scripts/pluginupdate-py;
-  };
-
   toluapp = callPackage ../development/tools/toluapp {
     lua = lua5_1; # doesn't work with any other :(
   };
