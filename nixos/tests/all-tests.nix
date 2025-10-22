@@ -266,6 +266,7 @@ in
   beanstalkd = runTest ./beanstalkd.nix;
   bees = runTest ./bees.nix;
   benchexec = runTest ./benchexec.nix;
+  beszel = runTest ./beszel.nix;
   binary-cache = runTest {
     imports = [ ./binary-cache.nix ];
     _module.args.compression = "zstd";

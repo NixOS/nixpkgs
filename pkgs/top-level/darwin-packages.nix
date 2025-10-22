@@ -39,14 +39,10 @@ makeScopeWithSplicing' {
         callPackage = self.callPackage;
         directory = ../os-specific/darwin/apple-source-releases;
       };
-
-      # Must use pkgs.callPackage to avoid infinite recursion.
-      impure-cmds = pkgs.callPackage ../os-specific/darwin/impure-cmds { };
     in
 
     lib.recurseIntoAttrs (
-      impure-cmds
-      // apple-source-packages
+      apple-source-packages
       // {
 
         inherit (self.adv_cmds) ps;

@@ -4,6 +4,7 @@
   cryptography,
   ecdsa,
   fetchFromGitHub,
+  fetchpatch,
   pyasn1,
   pycrypto,
   pycryptodome,
@@ -23,6 +24,15 @@ buildPythonPackage rec {
     tag = version;
     hash = "sha256-8DQ0RBQ4ZgEIwcosgX3dzr928cYIQoH0obIOgk0+Ozs=";
   };
+
+  patches = [
+    # https://github.com/mpdavis/python-jose/pull/393
+    (fetchpatch {
+      name = "fix-test_incorrect_public_key_hmac_signing.patch";
+      url = "https://github.com/mpdavis/python-jose/commit/7c0e4c6640bdc9cd60ac66d96d5d90f4377873db.patch";
+      hash = "sha256-bCzxZEWKYD20TLqzVv6neZlpU41otbVqaXc7C0Ky9BQ=";
+    })
+  ];
 
   pythonRelaxDeps = [
     # https://github.com/mpdavis/python-jose/pull/376
