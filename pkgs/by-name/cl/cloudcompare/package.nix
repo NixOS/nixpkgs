@@ -13,6 +13,7 @@
   gmp,
   laszip,
   mpfr,
+  nanoflann,
   pcl,
   libsForQt5,
   onetbb,
@@ -20,17 +21,35 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cloudcompare";
   version = "2.13.2";
 
   src = fetchFromGitHub {
     owner = "CloudCompare";
     repo = "CloudCompare";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-a/0lf3Mt5ZpLFRM8jAoqZer8pY1ROgPRY4dPt34Bk3E=";
     fetchSubmodules = true;
   };
+
+  postPatch = ''
+    # unvendor nanoflann to fix build with CMake v4
+    substituteInPlace libs/qCC_db/extern/CCCoreLib/CMakeLists.txt --replace-fail \
+      "add_subdirectory( extern/nanoflann EXCLUDE_FROM_ALL )" \
+      "find_package(nanoflann REQUIRED CONFIG)"
+
+    # ref. https://github.com/CloudCompare/CloudCompare/pull/2011
+    # merged upstream but not applying because of git submodules
+    substituteInPlace \
+      plugins/core/IO/qStepCADImport/CMakeLists.txt \
+      plugins/core/Standard/qColorimetricSegmenter/CMakeLists.txt \
+      plugins/core/Standard/qMasonry/qAutoSeg/CMakeLists.txt \
+      plugins/core/Standard/qMasonry/qManualSeg/CMakeLists.txt \
+      --replace-fail \
+      "cmake_minimum_required( VERSION 3.0 )" \
+      "cmake_minimum_required( VERSION 3.5 )"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,6 +67,7 @@ stdenv.mkDerivation rec {
     gmp
     laszip
     mpfr
+    nanoflann
     pcl
     libsForQt5.qtbase
     libsForQt5.qtsvg
@@ -149,12 +169,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nh2 ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nh2 ];
     mainProgram = "CloudCompare";
-    platforms = with platforms; linux; # only tested here; might work on others
+    platforms = with lib.platforms; linux; # only tested here; might work on others
   };
-}
+})
