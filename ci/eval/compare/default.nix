@@ -175,7 +175,11 @@ runCommand "compare"
       cmp-stats
     ];
     maintainers = builtins.toJSON maintainers.users;
-    passAsFile = [ "maintainers" ];
+    teams = builtins.toJSON maintainers.teams;
+    passAsFile = [
+      "maintainers"
+      "teams"
+    ];
   }
   ''
     mkdir $out
@@ -218,4 +222,5 @@ runCommand "compare"
     fi
 
     cp "$maintainersPath" "$out/maintainers.json"
+    cp "$teamsPath" "$out/teams.json"
   ''
