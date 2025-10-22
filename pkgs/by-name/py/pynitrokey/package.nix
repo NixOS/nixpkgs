@@ -1,4 +1,1 @@
-{ python3 }:
-
-with python3.pkgs;
-toPythonApplication pynitrokey
+{ python3Packages }: with python3Packages; toPythonApplication pynitrokey

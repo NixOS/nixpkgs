@@ -1,3 +1,1 @@
-{ python3Packages }:
-
-python3Packages.toPythonApplication python3Packages.icdiff
+{ python3Packages }: with python3Packages; toPythonApplication icdiff

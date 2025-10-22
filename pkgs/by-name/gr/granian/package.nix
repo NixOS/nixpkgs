@@ -1,4 +1,1 @@
-{
-  python3Packages,
-}:
-python3Packages.toPythonApplication python3Packages.granian
+{ python3Packages }: with python3Packages; toPythonApplication granian

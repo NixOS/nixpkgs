@@ -1,4 +1,1 @@
-{
-  python3Packages,
-}:
-python3Packages.toPythonApplication python3Packages.online-judge-verify-helper
+{ python3Packages }: with python3Packages; toPythonApplication online-judge-verify-helper
