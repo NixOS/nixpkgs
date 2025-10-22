@@ -7,6 +7,8 @@
 let
   inherit (lib) mkOption types literalMD;
 
+  inherit (config) sshBackdoor;
+
   # Reifies and correctly wraps the python test driver for
   # the respective qemu version and with or without ocr support
   testDriver = hostPkgs.callPackage ../test-driver {
@@ -209,5 +211,27 @@ in
 
     # make available on the test runner
     passthru.driver = config.driver;
+
+    defaults =
+      { config, ... }:
+      {
+        # This is needed for the SSH backdoor to function.
+        # Set this to `true` by default to not change essential QEMU flags
+        # depending on whether debugging is enabled.
+        #
+        # If needed, this can still be turned off.
+        virtualisation.qemu.enableSharedMemory = lib.mkDefault true;
+
+        assertions = [
+          {
+            assertion = sshBackdoor.enable -> config.virtualisation.qemu.enableSharedMemory;
+            message = ''
+              When turning on the SSH backdoor of the NixOS test-framework,
+              `virtualisation.qemu.enableSharedMemory` MUST be `true`
+              (affected: ${config.networking.hostName}).
+            '';
+          }
+        ];
+      };
   };
 }
