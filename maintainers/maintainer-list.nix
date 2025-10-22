@@ -2489,6 +2489,7 @@
     github = "auscyber";
     name = "Ivy Pierlot";
     githubId = 12080502;
+    matrix = "@ivy:faggot.sh";
   };
   austin-artificial = {
     email = "austin.platt@artificial.io";

@@ -72,7 +72,8 @@ let
           (lib.unsafeGetAttrPos "src" drv)
           (lib.unsafeGetAttrPos "pname" drv)
           (lib.unsafeGetAttrPos "version" drv)
-
+        ]
+        ++ lib.optionals (drv.meta.position or null != null) [
           # Use ".meta.position" for cases when most of the package is
           # defined in a "common" section and the only place where
           # reference to the file with a derivation the "pos"
@@ -82,7 +83,7 @@ let
           #   "pkgs/tools/package-management/nix/default.nix:155"
           # We transform it to the following:
           #   { file = "pkgs/tools/package-management/nix/default.nix"; }
-          { file = lib.head (lib.splitString ":" (drv.meta.position or "")); }
+          { file = lib.head (lib.splitString ":" drv.meta.position); }
         ]
       )
     ));
