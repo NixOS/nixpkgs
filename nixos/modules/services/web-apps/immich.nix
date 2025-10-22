@@ -332,6 +332,11 @@ in
             ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
             GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
           ''
+          # https://docs.immich.app/administration/postgres-standalone/#updating-vectorchord
+          + lib.optionalString cfg.database.enableVectorChord ''
+            REINDEX INDEX face_index;
+            REINDEX INDEX clip_index;
+          ''
         );
       in
       [
