@@ -3630,6 +3630,8 @@ self: super: with self; {
 
   derpconf = callPackage ../development/python-modules/derpconf { };
 
+  descope = callPackage ../development/python-modules/descope { };
+
   desktop-entry-lib = callPackage ../development/python-modules/desktop-entry-lib { };
 
   desktop-notifier = callPackage ../development/python-modules/desktop-notifier { };
