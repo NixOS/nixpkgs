@@ -51,6 +51,11 @@ def config(*path: str) -> Optional[Any]:
         result = result[component]
     return result
 
+
+def bool_to_yes_no(value: bool) -> str:
+    return 'yes' if value else 'no'
+
+
 def get_system_path(profile: str = 'system', gen: Optional[str] = None, spec: Optional[str] = None) -> str:
     basename = f'{profile}-{gen}-link' if gen is not None else profile
     profiles_dir = '/nix/var/nix/profiles'
@@ -377,10 +382,14 @@ def copy_file(from_path: str, to_path: str):
 
     paths[to_path] = True
 
-def option_from_config(name: str, config_path: List[str], conversion: Callable[[str], str] | None = None) -> str:
-    if config(*config_path):
-        return f'{name}: {conversion(config(*config_path)) if conversion else config(*config_path)}\n'
-    return ''
+
+def option_from_config(name: str, config_path: List[str]) -> str:
+    value = config(*config_path)
+    if value is None:
+        return ""
+    if isinstance(value, bool):
+        value = bool_to_yes_no(value)
+    return f"{name}: {config(*config_path)}\n"
 
 
 def install_bootloader() -> None:
@@ -439,8 +448,8 @@ def install_bootloader() -> None:
         profiles += [(profile, get_gens(profile))]
 
     timeout = config('timeout')
-    editor_enabled = 'yes' if config('enableEditor') else 'no'
-    hash_mismatch_panic = 'yes' if config('panicOnChecksumMismatch') else 'no'
+    editor_enabled = bool_to_yes_no(config('enableEditor'))
+    hash_mismatch_panic = bool_to_yes_no(config('panicOnChecksumMismatch'))
 
     last_gen = get_gens()[-1]
     last_gen_json = json.load(open(os.path.join(get_system_path('system', last_gen), 'boot.json'), 'r'))
