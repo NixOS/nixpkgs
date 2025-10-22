@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "1.3.0";
+  version = "1.3.1-pre2";
   withSubprojects = stdenv.mkDerivation {
     pname = "sources-with-subprojects";
     inherit version;
@@ -31,7 +31,7 @@ let
       repo = "vivictpp";
       tag = "v${version}";
       fetchSubmodules = true;
-      hash = "sha256-yzUgLZbqEzyJINWQUTC/j33XbjSXP1vpDlgiKv6Jx9Q=";
+      hash = "sha256-2DO1h1RSkgH4yeaO6LfPHZXVnQzQ7Tmy9tqd4aKqTBU=";
     };
 
     nativeBuildInputs = [
@@ -49,7 +49,7 @@ let
     '';
 
     outputHashMode = "recursive";
-    outputHash = "sha256-PtOb47QOffGje1U8Tle9AQon7ZCgMp/lITPAfM9/wr4=";
+    outputHash = "sha256-4ACnpp7cX86Bj2YXqfnAhLgPSEsh2WrA1K0y7CI5nS4=";
   };
 in
 stdenv.mkDerivation {
