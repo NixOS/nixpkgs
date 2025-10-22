@@ -1,7 +1,7 @@
 {
   lib,
   callPackage,
-  crystal_1_17,
+  crystal_1_16,
   fetchFromGitHub,
   librsvg,
   pkg-config,
