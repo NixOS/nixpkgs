@@ -28952,6 +28952,11 @@
     githubId = 1329212;
     name = "Andy Zhang";
   };
+  zhaithizaliel = {
+    name = "Zhaith Izaliel";
+    github = "Zhaith-Izaliel";
+    githubId = 39216756;
+  };
   zhaofengli = {
     email = "hello@zhaofeng.li";
     matrix = "@zhaofeng:zhaofeng.li";
