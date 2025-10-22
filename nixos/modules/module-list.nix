@@ -1265,6 +1265,7 @@
   ./services/networking/ncdns.nix
   ./services/networking/ncps.nix
   ./services/networking/ndppd.nix
+  ./services/networking/nebula-lighthouse-service.nix
   ./services/networking/nebula.nix
   ./services/networking/netbird.nix
   ./services/networking/netbird/server.nix

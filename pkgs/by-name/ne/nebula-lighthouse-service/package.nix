@@ -3,6 +3,7 @@
   fetchFromGitHub,
   python3Packages,
   nebula,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -44,6 +45,10 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [
     "nebula_lighthouse_service"
   ];
+
+  passthru.tests = {
+    nebula-lighthouse-service = nixosTests.nebula-lighthouse-service;
+  };
 
   meta = {
     description = "Public Nebula VPN Lighthouse Service, you can use it in case you don’t have a publicly accessible server to run your own Nebula Lighthouse";
