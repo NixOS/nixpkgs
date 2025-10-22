@@ -7,8 +7,7 @@
   setuptools,
 
   # dependencies
-  dawg-python,
-  docopt,
+  dawg2-python,
   pymorphy3-dicts-ru,
   pymorphy3-dicts-uk,
 
@@ -19,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "pymorphy3";
-  version = "2.0.4";
+  version = "2.0.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "no-plagiarism";
     repo = "pymorphy3";
     tag = version;
-    hash = "sha256-Ula2OQ80dcGeMlXauehXnlEkHLjjm4jZn39eFNltbEA=";
+    hash = "sha256-5s5v6+vMCeyn/73G5uUfRtTGkkqa7RNW8/r1v3Ay4us=";
   };
 
   build-system = [
@@ -34,8 +33,7 @@ buildPythonPackage rec {
   ];
 
   dependencies = [
-    dawg-python
-    docopt
+    dawg2-python
     pymorphy3-dicts-ru
     pymorphy3-dicts-uk
   ];
