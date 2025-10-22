@@ -439,6 +439,7 @@ let
         ];
         # Ensure that certificates are generated if people use `security.acme.certs`
         # without having/declaring other systemd units that depend on the cert.
+        wantedBy = [ "multi-user.target" ];
 
         path = with pkgs; [
           lego
