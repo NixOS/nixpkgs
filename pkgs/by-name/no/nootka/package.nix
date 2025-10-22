@@ -9,26 +9,21 @@
   libpulseaudio,
   libvorbis,
   soundtouch,
-  qtbase,
-  qtdeclarative,
-  qtgraphicaleffects,
-  qtquickcontrols2,
-  qttools,
-  wrapQtAppsHook,
+  qt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "nootka";
   version = "2.0.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/nootka/${pname}-${version}-source.tar.bz2";
-    sha256 = "sha256-ZHdyLZ3+TCpQ77tcNuDlN2124qLDZu9DdH5x7RI1HIs=";
+    url = "mirror://sourceforge/nootka/nootka-${finalAttrs.version}-source.tar.bz2";
+    hash = "sha256-ZHdyLZ3+TCpQ77tcNuDlN2124qLDZu9DdH5x7RI1HIs=";
   };
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    qt5.wrapQtAppsHook
   ];
   buildInputs = [
     alsa-lib
@@ -37,11 +32,11 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libvorbis
     soundtouch
-    qtbase
-    qtdeclarative
-    qtgraphicaleffects
-    qtquickcontrols2
-    qttools
+    qt5.qtbase
+    qt5.qtdeclarative
+    qt5.qtgraphicaleffects
+    qt5.qtquickcontrols2
+    qt5.qttools
   ];
 
   cmakeFlags = [
@@ -50,15 +45,15 @@ stdenv.mkDerivation rec {
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Application for practicing playing musical scores and ear training";
     mainProgram = "nootka";
     homepage = "https://nootka.sourceforge.io/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       mmlb
       orivej
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
-}
+})

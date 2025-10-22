@@ -11904,8 +11904,6 @@ with pkgs;
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
 
-  nootka = qt5.callPackage ../applications/audio/nootka { };
-
   opcua-client-gui = libsForQt5.callPackage ../misc/opcua-client-gui { };
 
   ostinato = libsForQt5.callPackage ../applications/networking/ostinato {
