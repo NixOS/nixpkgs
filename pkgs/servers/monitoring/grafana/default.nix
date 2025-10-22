@@ -64,7 +64,7 @@ buildGoModule (finalAttrs: {
   # This is still better than maintaining some list of go.mod files (or exclusions of that)
   # where to patch the go version (and where to not do that).
   postPatch = ''
-    find . -name go.mod -or -name "go.work" -type f -exec sed -i -e 's/^go .*/go ${finalAttrs.passthru.go.version}/g' {} \;
+    find . \( -name go.mod -or -name "go.work" \) -type f -exec sed -i -e 's/^go .*/go ${finalAttrs.passthru.go.version}/g' {} \;
   '';
 
   proxyVendor = true;
