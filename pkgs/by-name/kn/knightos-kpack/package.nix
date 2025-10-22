@@ -29,6 +29,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "fortify" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://knightos.org/";
     description = "Tool to create or extract KnightOS packages";
