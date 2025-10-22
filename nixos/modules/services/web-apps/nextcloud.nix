@@ -166,6 +166,7 @@ let
             --setenv OC_PASS \
             --setenv NC_PASS \
             --quiet \
+            -- \
             ${command}
         elif [[ "$USER" != nextcloud ]]; then
           if [[ -x /run/wrappers/bin/sudo ]]; then
@@ -174,6 +175,7 @@ let
               --preserve-env=OC_PASS \
               --preserve-env=NC_PASS \
               --user=nextcloud \
+              -- \
               ${command}
           else
             exec ${lib.getExe' pkgs.util-linux "runuser"} \
@@ -181,6 +183,7 @@ let
               --whitelist-environment=OC_PASS \
               --whitelist-environment=NC_PASS \
               --user=nextcloud \
+              -- \
               ${command}
           fi
         else
