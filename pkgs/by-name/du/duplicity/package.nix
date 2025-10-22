@@ -75,25 +75,22 @@ let
       glib
     ];
 
-    pythonPath =
-      with python3.pkgs;
-      [
-        b2sdk
-        boto3
-        cffi
-        cryptography
-        ecdsa
-        idna
-        pygobject3
-        fasteners
-        lockfile
-        paramiko
-        pyasn1
-        pycrypto
-        # Currently marked as broken.
-        # pydrive2
-      ]
-      ++ paramiko.optional-dependencies.invoke;
+    pythonPath = with python3.pkgs; [
+      b2sdk
+      boto3
+      cffi
+      cryptography
+      ecdsa
+      idna
+      pygobject3
+      fasteners
+      lockfile
+      paramiko
+      pyasn1
+      pycrypto
+      # Currently marked as broken.
+      # pydrive2
+    ];
 
     nativeCheckInputs = [
       gnupg # Add 'gpg' to PATH.
