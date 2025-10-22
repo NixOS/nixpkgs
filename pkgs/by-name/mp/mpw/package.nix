@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
     substituteInPlace mpw-cli-tests \
       --replace '/usr/bin/env bash' ${stdenv.shell} \
       --replace ./mpw ./build/mpw
+
+    # See https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required( VERSION 3.0.2 )' \
+      'cmake_minimum_required( VERSION 3.10 )'
   '';
 
   cmakeFlags = [
