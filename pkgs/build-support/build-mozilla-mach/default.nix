@@ -283,6 +283,11 @@ let
     else
       "cairo-gtk3${lib.optionalString waylandSupport "-wayland"}";
 
+  onnxruntime' = onnxruntime.override {
+    # Disable ROCm GPU support for onnxruntime in firefox due to security concerns
+    rocmSupport = false;
+  };
+
 in
 
 buildStdenv.mkDerivation {
@@ -503,7 +508,7 @@ buildStdenv.mkDerivation {
     (enableFeature sndioSupport "sndio")
   ]
   ++ lib.optionals (!buildStdenv.hostPlatform.isDarwin && lib.versionAtLeast version "141") [
-    "--with-onnx-runtime=${lib.getLib onnxruntime}/lib"
+    "--with-onnx-runtime=${lib.getLib onnxruntime'}/lib"
   ]
   ++ [
     (enableFeature crashreporterSupport "crashreporter")
