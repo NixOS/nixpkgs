@@ -41,6 +41,13 @@ stdenv.mkDerivation rec {
     pcre2.dev
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
+
+    sed -i '/^target_link_libraries *(microdnf/i set_target_properties(microdnf PROPERTIES ENABLE_EXPORTS ON)' dnf/CMakeLists.txt
+  '';
+
   meta = {
     description = "Lightweight implementation of dnf in C";
     homepage = "https://github.com/rpm-software-management/microdnf";
