@@ -22013,12 +22013,6 @@
     githubId = 1810487;
     name = "Rika";
   };
-  rileyinman = {
-    email = "rileyminman@gmail.com";
-    github = "rileyinman";
-    githubId = 37246692;
-    name = "Riley Inman";
-  };
   rinx = {
     email = "rintaro.okamura@gmail.com";
     github = "rinx";
