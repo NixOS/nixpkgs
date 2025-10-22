@@ -20,16 +20,16 @@
   useSDL2 ? stdenv.hostPlatform.isDarwin, # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "quakespasm";
   version = "0.96.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tar.gz";
-    sha256 = "sha256-tXjWzkpPf04mokRY8YxLzI04VK5iUuuZgu6B2V5QGA4=";
+    url = "mirror://sourceforge/quakespasm/quakespasm-${finalAttrs.version}.tar.gz";
+    hash = "sha256-tXjWzkpPf04mokRY8YxLzI04VK5iUuuZgu6B2V5QGA4=";
   };
 
-  sourceRoot = "${pname}-${version}/Quake";
+  sourceRoot = "quakespasm-${finalAttrs.version}/Quake";
 
   patches = lib.optionals stdenv.hostPlatform.isDarwin [
     # Makes Darwin Makefile use system libraries instead of ones from app bundle
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Engine for iD software's Quake";
     homepage = "https://quakespasm.sourceforge.net/";
     longDescription = ''
@@ -125,8 +125,8 @@ stdenv.mkDerivation rec {
       and smoother mouse input - though no CD support.
     '';
 
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ mikroskeem ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mikroskeem ];
     mainProgram = "quake";
   };
-}
+})
