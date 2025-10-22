@@ -5,7 +5,7 @@
   setuptools,
 }:
 buildPythonPackage {
-  pname = "anchor-kr";
+  pname = "anchor";
   version = "0.1.3";
   pyproject = true;
 
