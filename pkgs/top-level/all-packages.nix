@@ -13454,9 +13454,6 @@ with pkgs;
     quake3hires
     ;
 
-  quakespasm = callPackage ../games/quakespasm { };
-  vkquake = callPackage ../games/quakespasm/vulkan.nix { };
-
   rogue = callPackage ../games/rogue {
     ncurses = ncurses5;
   };
