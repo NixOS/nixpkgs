@@ -222,7 +222,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://pre-commit.com/";
     changelog = "https://github.com/pre-commit/pre-commit/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ borisbabic ];
+    maintainers = with lib.maintainers; [
+      borisbabic
+      savtrip
+    ];
     mainProgram = "pre-commit";
   };
 }
