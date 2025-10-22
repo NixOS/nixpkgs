@@ -3450,6 +3450,8 @@ self: super: with self; {
 
   dawg-python = callPackage ../development/python-modules/dawg-python { };
 
+  dawg2-python = callPackage ../development/python-modules/dawg2-python { };
+
   dazl = callPackage ../development/python-modules/dazl { };
 
   db-dtypes = callPackage ../development/python-modules/db-dtypes { };
