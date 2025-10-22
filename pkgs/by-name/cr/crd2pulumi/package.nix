@@ -30,6 +30,6 @@ buildGoModule rec {
     mainProgram = "crd2pulumi";
     homepage = "https://github.com/pulumi/crd2pulumi";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli ];
+    maintainers = [ ];
   };
 }
