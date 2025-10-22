@@ -92,6 +92,11 @@ buildPythonPackage rec {
     # Nixpkgs is taking the version from `chromadb_rust_bindings` which is versioned independently
     substituteInPlace pyproject.toml \
       --replace-fail "dynamic = [\"version\"]" "version = \"${version}\""
+
+    # Flip anonymized telemetry to opt in versus current opt-in out for privacy
+    substituteInPlace chromadb/config.py \
+      --replace-fail "anonymized_telemetry: bool = True" \
+                     "anonymized_telemetry: bool = False"
   '';
 
   pythonRelaxDeps = [
