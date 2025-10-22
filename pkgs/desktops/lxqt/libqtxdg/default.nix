@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   qtbase,
   qtsvg,
@@ -26,6 +27,16 @@ stdenv.mkDerivation rec {
       }
       ."${version}";
   };
+
+  patches = lib.optionals (version == "4.2.0") [
+    # fix build against Qt >= 6.10 (https://github.com/lxqt/libqtxdg/pull/313)
+    # TODO: drop when upgrading beyond version 4.2.0
+    (fetchpatch {
+      name = "cmake-fix-build-with-Qt-6.10.patch";
+      url = "https://github.com/lxqt/libqtxdg/commit/b01a024921acdfd5b0e97d5fda2933c726826e99.patch";
+      hash = "sha256-njpn6pU9BHlfYfkw/jEwh8w3Wo1F8MlRU8iQB+Tz2zU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
