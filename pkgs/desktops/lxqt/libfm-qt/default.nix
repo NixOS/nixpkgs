@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   libXdmcp,
   libexif,
@@ -34,6 +35,16 @@ stdenv.mkDerivation rec {
       }
       ."${version}";
   };
+
+  patches = lib.optionals (version == "2.2.0") [
+    # fix build against Qt >= 6.10 (https://github.com/lxqt/libfm-qt/pull/1060)
+    # TODO: drop when upgrading beyond version 2.2.0
+    (fetchpatch {
+      name = "cmake-fix-build-with-Qt-6.10.patch";
+      url = "https://github.com/lxqt/libfm-qt/commit/3bcbae5831f5ce3d2f06dc370f0c2ad0026ae82a.patch";
+      hash = "sha256-nTuPXlkP7AzC8R4OHfQx6/kxPsDjaw7tGzQGyiYqQSQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
