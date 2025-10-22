@@ -21,14 +21,14 @@
   wrapQtAppsHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "screengrab";
   version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = "screengrab";
-    rev = version;
+    tag = finalAttrs.version;
     hash = "sha256-6cGj3Ijv4DsAdJjcHKUg5et+yYc5miIHHZOTD2D9ASk=";
   };
 
@@ -65,12 +65,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = gitUpdater { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/lxqt/screengrab";
     description = "Crossplatform tool for fast making screenshots";
     mainProgram = "screengrab";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    teams = [ teams.lxqt ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.lxqt ];
   };
-}
+})
