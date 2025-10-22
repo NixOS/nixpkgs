@@ -39,14 +39,14 @@
 
 buildPythonPackage rec {
   pname = "web3";
-  version = "7.13.0";
+  version = "7.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ethereum";
     repo = "web3.py";
     tag = "v${version}";
-    hash = "sha256-cG4P/mrvQ3GlGT17o5yVGZtIM5Vgi2+iojUsYSBbhFA=";
+    hash = "sha256-jcRbyYbbqcY7WYIO8wiqLWYnS73NRDfMIpxDFT8ulSY=";
   };
 
   build-system = [ setuptools ];
