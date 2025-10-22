@@ -616,6 +616,7 @@ mapAliases {
   PyMVGLive = pymvglive; # added 2023-02-19
   pymyq = python-myq; # added 2023-10-20
   pynose = throw "pynose was removed, because it violates the license of nose, by redistributing modified LGPL code under MIT.";
+  python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
   python-ethtool = ethtool; # added 2024-07-23
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   python-picnic-api = throw "python-picnic-api was removed because Home Assistant switched to python-picnic-api2"; # added 2025-03-05

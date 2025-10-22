@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkRemovedOptionModule
     ;
 in
@@ -18,7 +18,7 @@ in
 
     # This alias module can't be where _module.check is defined because it would
     # be added to submodules as well there
-    (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
+    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
@@ -410,6 +410,12 @@ in
     '')
     (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
       services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "security" "rngd" ] ''
+      rngd is not necessary for any device that the kernel recognises
+      as an hardware RNG, as it will automatically run the krngd task
+      to periodically collect random data from the device and mix it
+      into the kernel's RNG.
     '')
     # Do NOT add any option renames here, see top of the file
   ];
