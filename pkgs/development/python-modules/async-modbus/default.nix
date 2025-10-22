@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "async-modbus";
-  version = "0.2.2";
+  version = "0.2.3";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "tiagocoutinho";
     repo = "async_modbus";
     tag = "v${version}";
-    hash = "sha256-xms2OfX5bHPXswwhLhyh6HFsm1YqDwKclUirxrgL4i0=";
+    hash = "sha256-d4TTs3TtD/9eFdzXBaY+QeAMeRWTvsWeaxONeG0AXJU=";
   };
 
   patches = [
