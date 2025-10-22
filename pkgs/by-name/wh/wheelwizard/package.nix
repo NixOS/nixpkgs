@@ -76,5 +76,6 @@ buildDotnetModule rec {
     license = licenses.gpl3;
     platforms = platforms.linux;
     mainProgram = "WheelWizard";
+    maintainers = with maintainers; [ DerHalbGrieche ];
   };
 }
