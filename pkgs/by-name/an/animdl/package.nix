@@ -37,7 +37,7 @@ python3Packages.buildPythonApplication {
   ];
 
   dependencies = with python3Packages; [
-    anchor-kr
+    anchor
     anitopy
     click
     cssselect
