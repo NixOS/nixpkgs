@@ -17,11 +17,8 @@
   tree-sitter-grammars,
   versionCheckHook,
 }:
-let
+buildPythonPackage (finalAttrs: {
   version = "0.22.1";
-in
-buildPythonPackage {
-  inherit version;
   pname = "keymap-drawer";
   pyproject = true;
   disabled = pythonOlder "3.12";
@@ -29,7 +26,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "caksoylar";
     repo = "keymap-drawer";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-X3O5yspEdey03YQ6JsYN/DE9NUiq148u1W6LQpUQ3ns=";
   };
 
@@ -64,7 +61,7 @@ buildPythonPackage {
   meta = {
     description = "Module and CLI tool to help parse and draw keyboard layouts";
     homepage = "https://github.com/caksoylar/keymap-drawer";
-    changelog = "https://github.com/caksoylar/keymap-drawer/releases/tag/v${version}";
+    changelog = "https://github.com/caksoylar/keymap-drawer/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       MattSturgeon
@@ -76,4 +73,4 @@ buildPythonPackage {
     # incompatibility, thanks to a Python override
     broken = lib.versionAtLeast tree-sitter.version "0.25.0";
   };
-}
+})
