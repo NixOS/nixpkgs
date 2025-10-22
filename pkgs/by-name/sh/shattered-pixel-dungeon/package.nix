@@ -11,7 +11,7 @@ callPackage ./generic.nix rec {
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-MUpQdH8RMzZtI6e2duSRWHK1gPJDhMRKsm5kIKDcFuk=";
   };
 
