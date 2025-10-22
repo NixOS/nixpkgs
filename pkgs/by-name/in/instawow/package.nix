@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "layday";
     repo = "instawow";
     tag = "v${version}";
-    sha256 = "sha256-NFs8+BUXJEn64TDojG/xkH1O+zZurv0PWY+YDhu2mQY=";
+    hash = "sha256-NFs8+BUXJEn64TDojG/xkH1O+zZurv0PWY+YDhu2mQY=";
   };
 
   extras = [ ]; # Disable GUI, most dependencies are not packaged.
@@ -44,11 +44,11 @@ python3.pkgs.buildPythonApplication rec {
     ]
     ++ plugins;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/layday/instawow";
     description = "World of Warcraft add-on manager CLI and GUI";
     mainProgram = "instawow";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ seirl ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ seirl ];
   };
 }
