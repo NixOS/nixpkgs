@@ -13219,9 +13219,8 @@ with pkgs;
 
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
-  iortcw = callPackage ../games/iortcw { };
   # used as base package for iortcw forks
-  iortcw_sp = callPackage ../games/iortcw/sp.nix { };
+  iortcw_sp = callPackage ../by-name/io/iortcw/sp.nix { };
 
   katagoWithCuda = katago.override {
     backend = "cuda";
