@@ -17,7 +17,7 @@ let
     literalExpression
     types
     literalMD
-    getBin
+    getExe'
     escapeShellArg
     ;
 
@@ -92,7 +92,7 @@ let
   preStartQuitFixup = {
     serviceConfig.ExecStartPre = [
       ""
-      "${cfg.package}/bin/plymouth quit --wait"
+      "${getExe' cfg.package "plymouth"} quit --wait"
     ];
   };
 
@@ -220,10 +220,10 @@ in
     systemd.services.emergency = preStartQuitFixup;
 
     boot.initrd.systemd = {
-      extraBin.plymouth = "${cfg.package}/bin/plymouth"; # for the recovery shell
+      extraBin.plymouth = getExe' cfg.package "plymouth"; # for the recovery shell
       storePaths = [
-        "${getBin config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent"
-        "${cfg.package}/bin/plymouthd"
+        (getExe' config.boot.initrd.systemd.package "systemd-tty-ask-password-agent")
+        (getExe' cfg.package "plymouthd")
         "${cfg.package}/sbin/plymouthd"
       ];
       packages = [ cfg.package ]; # systemd units
@@ -328,8 +328,8 @@ in
 
     boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) (
       ''
-        copy_bin_and_libs ${cfg.package}/bin/plymouth
-        copy_bin_and_libs ${cfg.package}/bin/plymouthd
+        copy_bin_and_libs ${getExe' cfg.package "plymouth"}
+        copy_bin_and_libs ${getExe' cfg.package "plymouthd"}
 
       ''
       + checkIfThemeExists
