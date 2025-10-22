@@ -43,14 +43,14 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Icon theme inspired by macOS and Google's Material Design";
     homepage = "https://github.com/keeferrourke/la-capitaine-icon-theme";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       mit
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ romildo ];
   };
 }
