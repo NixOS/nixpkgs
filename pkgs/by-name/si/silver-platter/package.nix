@@ -1,24 +1,17 @@
 {
-  buildPythonApplication,
+  python3Packages,
   lib,
   stdenv,
   fetchFromGitHub,
   pkg-config,
-  setuptools,
-  setuptools-rust,
   rustPlatform,
   cargo,
   rustc,
-  breezy,
-  dulwich,
-  jinja2,
   libiconv,
   openssl,
-  pyyaml,
-  ruamel-yaml,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "silver-platter";
   version = "0.5.20";
   pyproject = true;
@@ -35,7 +28,7 @@ buildPythonApplication rec {
     hash = "sha256-hZQfzaLvHSN/hGR5vn+/2TRH6GwDTTp+UcnePXY7JlM=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     setuptools
     breezy
     dulwich
@@ -44,7 +37,7 @@ buildPythonApplication rec {
     ruamel-yaml
   ];
   nativeBuildInputs = [
-    setuptools-rust
+    python3Packages.setuptools-rust
     rustPlatform.cargoSetupHook
     cargo
     rustc

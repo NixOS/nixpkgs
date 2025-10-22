@@ -1,13 +1,11 @@
 {
   stdenv,
   lib,
-  buildPythonApplication,
+  python3Packages,
   fetchPypi,
-  fusepy,
-  pyserial,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "mpy-utils";
   version = "0.1.13";
   format = "setuptools";
@@ -17,7 +15,7 @@ buildPythonApplication rec {
     hash = "sha256-die8hseaidhs9X7mfFvV8C8zn0uyw08gcHNqmjl+2Z4=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     fusepy
     pyserial
   ];
