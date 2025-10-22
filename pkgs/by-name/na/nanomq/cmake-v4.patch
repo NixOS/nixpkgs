@@ -1,0 +1,45 @@
+From 1a3e2be5e69765dd7ea4242bc708565894c4d016 Mon Sep 17 00:00:00 2001
+From: Skoh <101289702+SkohTV@users.noreply.github.com>
+Date: Wed, 22 Oct 2025 14:13:36 -0400
+Subject: [PATCH] Increase cmake_minimum_required to 3.10
+
+---
+ CMakeLists.txt            | 2 +-
+ nanomq/CMakeLists.txt     | 2 +-
+ nanomq_cli/CMakeLists.txt | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index a308b0e0b..3688a2483 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -5,7 +5,7 @@
+ # found online at https://opensource.org/licenses/MIT.
+ # not finished yet #
+ 
+-cmake_minimum_required (VERSION 2.8.12)
++cmake_minimum_required (VERSION 2.8.12...3.10)
+ SET(CMAKE_C_STANDARD 99)
+ 
+ project(nanomq-nng)
+diff --git a/nanomq/CMakeLists.txt b/nanomq/CMakeLists.txt
+index 483df8089..97a47e53b 100644
+--- a/nanomq/CMakeLists.txt
++++ b/nanomq/CMakeLists.txt
+@@ -4,7 +4,7 @@
+ # (LICENSE.txt).  A copy of the license may also be found online at
+ # https://opensource.org/licenses/MIT.
+ 
+-cmake_minimum_required(VERSION 2.8.12)
++cmake_minimum_required(VERSION 2.8.12...3.10)
+ 
+ project(nanomq)
+ SET(CMAKE_C_STANDARD 99)
+diff --git a/nanomq_cli/CMakeLists.txt b/nanomq_cli/CMakeLists.txt
+index f99377281..243e429da 100644
+--- a/nanomq_cli/CMakeLists.txt
++++ b/nanomq_cli/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.3)
++cmake_minimum_required(VERSION 3.3...3.10)
+ project(nanomq_cli)
