@@ -50,8 +50,10 @@ let
     lib.setFunctionArgs (
       args:
       if !(lib.isFunction args) && (args ? stdenv) then
-        # TODO: warn that `args ? stdenv` is deprecated (once in-tree usage is migrated)
-        f.override { stdenv = args.stdenv; } args
+        lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+          Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+            buildPythonPackage.override { stdenv = customStdenv; } { }
+        '' (f.override { stdenv = args.stdenv; } args)
       else
         f args
     ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
