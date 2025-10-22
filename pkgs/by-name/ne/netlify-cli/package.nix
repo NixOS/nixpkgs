@@ -4,10 +4,14 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
-  nodejs,
+  nodejs_20,
   pkg-config,
   vips,
 }:
+
+let
+  nodejs = nodejs_20;
+in
 
 buildNpmPackage rec {
   pname = "netlify-cli";

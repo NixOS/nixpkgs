@@ -6,7 +6,13 @@
   autoreconfHook,
   kyua,
   gitUpdater,
-}:
+  darwin,
+}@args:
+
+let
+  # atf is a dependency of libiconv. Avoid an infinite recursion with `pkgsStatic` by using a bootstrap stdenv.
+  stdenv = if args.stdenv.hostPlatform.isDarwin then darwin.bootstrapStdenv else args.stdenv;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "atf";

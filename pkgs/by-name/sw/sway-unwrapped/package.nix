@@ -20,7 +20,7 @@
   libinput,
   gdk-pixbuf,
   librsvg,
-  wlroots,
+  wlroots_0_19,
   wayland-protocols,
   libdrm,
   nixosTests,
@@ -95,7 +95,7 @@ stdenv.mkDerivation (finalAttrs: {
     librsvg
     wayland-protocols
     libdrm
-    (wlroots.override { inherit (finalAttrs) enableXWayland; })
+    (wlroots_0_19.override { inherit (finalAttrs) enableXWayland; })
   ]
   ++ lib.optionals finalAttrs.enableXWayland [
     xorg.xcbutilwm

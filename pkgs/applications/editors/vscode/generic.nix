@@ -26,14 +26,14 @@
   libglvnd,
   libkrb5,
   openssl,
-
-  # Populate passthru.tests
-  tests,
+  ripgrep,
 
   # needed to fix "Save as Root"
   asar,
   bash,
+}:
 
+{
   # Attributes inherit from specific versions
   version,
   vscodeVersion ? version,
@@ -53,9 +53,11 @@
   vscodeServer ? null,
   sourceExecutableName ? executableName,
   useVSCodeRipgrep ? false,
-  ripgrep,
   hasVsceSign ? false,
   patchVSCodePath ? true,
+
+  # Populate passthru.tests
+  tests,
 }:
 
 stdenv.mkDerivation (

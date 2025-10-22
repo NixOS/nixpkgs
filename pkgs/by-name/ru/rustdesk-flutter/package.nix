@@ -4,7 +4,7 @@
   cargo,
   copyDesktopItems,
   fetchFromGitHub,
-  flutter,
+  flutter324,
   ffmpeg,
   gst_all_1,
   fuse3,
@@ -54,6 +54,8 @@ let
     ];
     doCheck = false;
   };
+
+  flutter = flutter324;
 
   ffigen = callPackage ./ffigen {
     inherit flutter;

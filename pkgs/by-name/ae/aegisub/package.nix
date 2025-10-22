@@ -37,7 +37,11 @@
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   spellcheckSupport ? true,
   useBundledLuaJIT ? false,
-}:
+}@args:
+
+let
+  luajit = args.luajit.override { enable52Compat = true; };
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";

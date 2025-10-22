@@ -1,9 +1,14 @@
 {
   lib,
   fetchFromGitHub,
-  php,
+  php83,
   nixosTests,
 }:
+
+let
+  # https://github.com/tchapi/davis/issues/195
+  php = php83;
+in
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "davis";

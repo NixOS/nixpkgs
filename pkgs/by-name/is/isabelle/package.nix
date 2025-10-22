@@ -5,7 +5,7 @@
   fetchFromGitHub,
   coreutils,
   net-tools,
-  java,
+  openjdk21,
   scala_3,
   polyml,
   verit,
@@ -18,9 +18,21 @@
   isabelle-components,
   symlinkJoin,
   fetchhg,
-}:
+}@args:
 
 let
+  polyml = args.polyml.overrideAttrs {
+    pname = "polyml-for-isabelle";
+    version = "2025";
+    __intentionallyOverridingVersion = true; # avoid a warning, no src override
+    configureFlags = [
+      "--enable-intinf-as-int"
+      "--with-gmp"
+      "--disable-shared"
+    ];
+    buildFlags = [ "compiler" ];
+  };
+
   vampire' = vampire.overrideAttrs (_: {
     src = fetchFromGitHub {
       owner = "vprover";
@@ -52,6 +64,8 @@ let
       cp libsha1.so $out/lib/
     '';
   };
+
+  java = openjdk21;
 
 in
 stdenv.mkDerivation (finalAttrs: {

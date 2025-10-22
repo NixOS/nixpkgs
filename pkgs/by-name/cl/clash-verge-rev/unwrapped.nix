@@ -20,7 +20,7 @@
   kdePackages,
   libayatana-appindicator,
   libsForQt5,
-  libsoup,
+  libsoup_3,
   openssl,
   webkitgtk_4_1,
 }:
@@ -99,7 +99,7 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     libayatana-appindicator
-    libsoup
+    libsoup_3
     openssl
     webkitgtk_4_1
   ];

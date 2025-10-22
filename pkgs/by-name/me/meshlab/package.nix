@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  llvmPackages,
+  llvmPackages_18,
   libsForQt5,
   libGLU,
   lib3ds,
@@ -25,9 +25,11 @@
   corto,
   openctm,
   structuresynth,
-}:
+}@args:
 
 let
+  stdenv = if args.stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else args.stdenv;
+
   tinygltf-src = fetchFromGitHub {
     owner = "syoyo";
     repo = "tinygltf";
@@ -97,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     structuresynth
   ]
   ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
+    llvmPackages_18.openmp
   ];
 
   postPatch = ''

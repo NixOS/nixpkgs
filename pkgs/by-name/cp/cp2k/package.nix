@@ -12,7 +12,7 @@
   fftw,
   libint,
   libvori,
-  libxc,
+  libxc_7,
   dftd4,
   simple-dftd3,
   tblite,
@@ -165,7 +165,7 @@ stdenv.mkDerivation rec {
     gsl
     libint
     libvori
-    libxc
+    libxc_7
     libxsmm
     mpi
     spglib

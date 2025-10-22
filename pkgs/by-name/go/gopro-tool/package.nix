@@ -5,8 +5,15 @@
   makeWrapper,
   ffmpeg,
   vlc,
+  x264,
   jq,
-}:
+}@args:
+
+let
+  vlc = args.vlc.overrideAttrs (old: {
+    buildInputs = old.buildInputs ++ [ x264 ];
+  });
+in
 
 stdenv.mkDerivation {
   pname = "gopro-tool";

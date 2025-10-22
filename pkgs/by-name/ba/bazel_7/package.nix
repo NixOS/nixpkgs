@@ -10,9 +10,6 @@
   makeBinaryWrapper,
   autoPatchelfHook,
   buildFHSEnv,
-  # this package (through the fixpoint glass)
-  # TODO probably still need for tests at some point
-  bazel_self,
   # native build inputs
   runtimeShell,
   zip,
@@ -35,10 +32,11 @@
   # Apple dependencies
   cctools,
   libtool,
-  sigtool,
+  darwin,
   # Allow to independently override the jdks used to build and run respectively
-  buildJdk,
-  runJdk,
+  jdk21_headless,
+  buildJdk ? jdk21_headless,
+  runJdk ? jdk21_headless,
   # Toggle for hacks for running bazel under buildBazelPackage:
   # Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
   # Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
@@ -417,7 +415,7 @@ stdenv.mkDerivation rec {
         # don't use system installed Xcode to run clang, use Nix clang instead
         sed -i -E \
           -e "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
-          -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${sigtool}/bin/codesign;" \
+          -e "s;/usr/bin/codesign;CODESIGN_ALLOCATE=${cctools}/bin/${cctools.targetPrefix}codesign_allocate ${darwin.sigtool}/bin/codesign;" \
           scripts/bootstrap/compile.sh \
           tools/osx/BUILD
 

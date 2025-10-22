@@ -12,7 +12,6 @@
   lib,
   nodejs,
   nodePackages,
-  # needs to be static and built with MD2 support!
   openssl,
   pkg-config,
   qt5,
@@ -20,9 +19,14 @@
   stdenv,
   writeScript,
   x2t,
-}:
+}@args:
 
 let
+  openssl = args.openssl.override {
+    enableMD2 = true;
+    static = true;
+  };
+
   qmake = qt5.qmake;
   libv8 = nodejs.libv8;
   fixIcu = writeScript "fix-icu.sh" ''

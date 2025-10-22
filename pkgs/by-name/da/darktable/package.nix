@@ -53,7 +53,7 @@
   libtiff,
   libwebp,
   libxml2,
-  lua,
+  lua5_4,
   util-linux,
   openexr,
   openjpeg,
@@ -77,7 +77,11 @@
 
   versionCheckHook,
   gitUpdater,
-}:
+}@args:
+
+let
+  pugixml = args.pugixml.override { shared = true; };
+in
 
 stdenv.mkDerivation rec {
   version = "5.2.1";
@@ -138,7 +142,7 @@ stdenv.mkDerivation rec {
     libtiff
     libwebp
     libxml2
-    lua
+    lua5_4
     openexr
     openjpeg
     osm-gps-map

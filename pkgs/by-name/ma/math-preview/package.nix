@@ -3,8 +3,12 @@
   nix-update-script,
   fetchFromGitLab,
   buildNpmPackage,
-  nodejs,
+  nodejs_20,
 }:
+
+let
+  nodejs = nodejs_20;
+in
 
 buildNpmPackage rec {
   pname = "math-preview";
