@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   kwindowsystem,
   libexif,
@@ -24,6 +25,16 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-y3VqDuFagKcG8O5m5qjRGtlUZXfIXV0tclvZLChhWkg=";
   };
+
+  patches = [
+    # fix build against Qt >= 6.10 (https://github.com/lxqt/xdg-desktop-portal-lxqt/pull/50)
+    # TODO: drop when upgrading beyond version 1.2.0
+    (fetchpatch {
+      name = "cmake-fix-build-with-Qt-6.10.patch";
+      url = "https://github.com/lxqt/xdg-desktop-portal-lxqt/commit/15fae3c57a8e8149ef19a8c919f5728016390e3f.patch";
+      hash = "sha256-oReYMEr+tBDHtnFDZahBwTtzgtL/BABZO64yob9tem4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
