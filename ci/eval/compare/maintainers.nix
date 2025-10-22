@@ -7,7 +7,13 @@
   removedattrs,
 }:
 let
-  pkgs = import ../../.. { system = "x86_64-linux"; };
+  pkgs = import ../../.. {
+    system = "x86_64-linux";
+    # We should never try to ping maintainers through package aliases, this can only lead to errors.
+    # One example case is, where an attribute is a throw alias, but then re-introduced in a PR.
+    # This would trigger the throw. By disabling aliases, we can fallback gracefully below.
+    config.allowAliases = false;
+  };
 
   changedpaths = lib.importJSON changedpathsjson;
 
