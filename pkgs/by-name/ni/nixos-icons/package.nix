@@ -30,11 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Icons of the Nix logo, in Freedesktop Icon Directory Layout";
     homepage = "https://github.com/NixOS/nixos-artwork";
-    license = licenses.cc-by-40;
+    license = lib.licenses.cc-by-40;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 })

@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     readline
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://dump.sourceforge.io/";
     description = "Linux Ext2 filesystem dump/restore utilities";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

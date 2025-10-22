@@ -24,8 +24,8 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
-    # This font doesn't appear to have any official web site but this
+  meta = {
+    # This font doesn't appear to have lib.any official web site but this
     # one provides some good information and samples.
     homepage = "http://openfontlibrary.org/en/font/caladea";
     description = "Serif font metric-compatible with Microsoft Cambria";
@@ -34,9 +34,9 @@ stdenvNoCC.mkDerivation rec {
       Microsoft Cambria font. Developed by Carolina Giovagnoli and
       Andrés Torresi at Huerta Tipográfica foundry.
     '';
-    license = licenses.asl20;
-    platforms = platforms.all;
-    maintainers = [ maintainers.rycee ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.rycee ];
 
     # Reduce the priority of this package. The intent is that if you
     # also install the `vista-fonts` package, then you probably will

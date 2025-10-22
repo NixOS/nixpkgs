@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CFFlasher is the tool to program the firmware of dresden elektronik's Zigbee products";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     homepage = "https://github.com/dresden-elektronik/gcfflasher";
-    maintainers = with maintainers; [ fleaz ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ fleaz ];
+    platforms = lib.platforms.all;
     mainProgram = "GCFFlasher";
   };
 }

@@ -28,15 +28,15 @@ stdenv.mkDerivation rec {
     unzip
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Polygon and line clipping and offsetting library (C++, C#, Delphi)";
     longDescription = ''
       The Clipper library performs line & polygon clipping - intersection, union, difference & exclusive-or,
       and line & polygon offsetting. The library is based on Vatti's clipping algorithm.
     '';
     homepage = "https://sourceforge.net/projects/polyclipping";
-    license = licenses.boost;
-    maintainers = with maintainers; [ mpickering ];
-    platforms = with platforms; unix;
+    license = lib.licenses.boost;
+    maintainers = with lib.maintainers; [ mpickering ];
+    platforms = with lib.platforms; unix;
   };
 }

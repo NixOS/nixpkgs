@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
         'cmake_minimum_required(VERSION 3.10)'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Webfont compression reference code";
     homepage = "https://github.com/google/woff2";
-    license = licenses.mit;
-    maintainers = [ maintainers.hrdinka ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.hrdinka ];
+    platforms = lib.platforms.unix;
   };
 }

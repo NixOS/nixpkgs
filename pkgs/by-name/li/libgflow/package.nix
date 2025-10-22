@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     "-Denable_gtk4=false"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Flow graph widget for GTK 3";
     homepage = "https://notabug.org/grindhold/libgtkflow";
-    maintainers = with maintainers; [ grindhold ];
-    license = licenses.lgpl3Plus;
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ grindhold ];
+    license = lib.licenses.lgpl3Plus;
+    platforms = lib.platforms.unix;
   };
 }

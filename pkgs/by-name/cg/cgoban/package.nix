@@ -31,12 +31,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Client for the KGS Go Server";
     mainProgram = "cgoban";
     homepage = "https://www.gokgs.com/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.free;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.free;
     maintainers = [ ];
     platforms = temurin-jre-bin-17.meta.platforms;
   };

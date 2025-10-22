@@ -30,11 +30,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "savepagenow" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple Python wrapper for archive.org's \"Save Page Now\" capturing service";
     homepage = "https://github.com/pastpages/savepagenow";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "savepagenow";
   };
 }

@@ -93,15 +93,15 @@ stdenv.mkDerivation (finalAttrs: {
     libXfixes
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interactive whiteboard application";
     homepage = "https://openboard.ch/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       atinba
       fufexan
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "openboard";
   };
 })

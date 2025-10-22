@@ -20,12 +20,12 @@ buildGoModule rec {
   # There are not test files
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "CLI and API client library";
     mainProgram = "vultr";
     homepage = "https://jamesclonk.github.io/vultr";
     changelog = "https://github.com/JamesClonk/vultr/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zauberpony ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zauberpony ];
   };
 }

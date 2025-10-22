@@ -47,12 +47,12 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "YAML templating tool that allows configuration of complex software via reusable templates with user-provided values";
     mainProgram = "ytt";
     homepage = "https://get-ytt.io";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       brodes
       techknowlogick
       gabyx

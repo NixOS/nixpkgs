@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "RSS feed for websites missing it";
     homepage = "https://github.com/RSS-Bridge/rss-bridge";
-    license = licenses.unlicense;
-    maintainers = with maintainers; [
+    license = lib.licenses.unlicense;
+    maintainers = with lib.maintainers; [
       dawidsowa
       mynacol
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

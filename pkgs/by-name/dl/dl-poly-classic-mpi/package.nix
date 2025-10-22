@@ -40,12 +40,12 @@ stdenv.mkDerivation {
     cp -v ../execute/DLPOLY.X $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.ccp5.ac.uk/DL_POLY_C";
     description = "DL_POLY Classic is a general purpose molecular dynamics simulation package";
     mainProgram = "DLPOLY.X";
-    license = licenses.bsdOriginal;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.costrouc ];
+    license = lib.licenses.bsdOriginal;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.costrouc ];
   };
 }

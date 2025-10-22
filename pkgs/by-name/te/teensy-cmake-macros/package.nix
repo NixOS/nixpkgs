@@ -29,11 +29,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "CMake macros for building teensy projects";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     homepage = "https://github.com/newdigate/teensy-cmake-macros";
-    license = licenses.mit;
-    maintainers = [ maintainers.michaeldonovan ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.michaeldonovan ];
   };
 })

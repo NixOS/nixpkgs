@@ -40,17 +40,17 @@ rustPlatform.buildRustPackage rec {
     "--skip test_update_language_arg"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/tealdeer-rs/tealdeer";
     changelog = "https://github.com/tealdeer-rs/tealdeer/blob/v${version}/CHANGELOG.md";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       davidak
       newam
       mfrw
       ryan4yin
     ];
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];

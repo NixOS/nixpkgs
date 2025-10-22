@@ -38,12 +38,12 @@ stdenv.mkDerivation {
   */
   env.NIX_CFLAGS_COMPILE = "-Dg_thread_init= ";
 
-  meta = with lib; {
+  meta = {
     description = "E-component of Network Intrusion Detection System which emulates the IP stack of Linux 2.0.x";
     homepage = "https://libnids.sourceforge.net/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.symphorien ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.symphorien ];
     # probably also bsd and solaris
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

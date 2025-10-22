@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "lib"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.seasip.info/Unix/PSF";
     description = "Conversion tools for .PSF fonts";
     longDescription = ''
@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
       and PSF2 (any width) formats are supported; the default output
       format is PSF2.
     '';
-    platforms = platforms.unix;
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kaction ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kaction ];
   };
 }

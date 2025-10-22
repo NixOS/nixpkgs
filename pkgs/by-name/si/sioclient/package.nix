@@ -29,11 +29,11 @@ stdenv.mkDerivation {
     websocketpp
   ];
 
-  meta = with lib; {
+  meta = {
     description = "C++11 implementation of Socket.IO client";
     homepage = "https://github.com/socketio/socket.io-client-cpp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
+    platforms = lib.platforms.unix;
   };
 }

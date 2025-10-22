@@ -83,11 +83,11 @@ stdenv.mkDerivation rec {
     ocaml-mad = ocamlPackages.mad;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sourceforge.net/projects/mad/";
     description = "High-quality, fixed-point MPEG audio decoder supporting MPEG-1 and MPEG-2";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ lovek323 ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ lovek323 ];
+    platforms = lib.platforms.unix;
   };
 }

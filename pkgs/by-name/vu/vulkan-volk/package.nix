@@ -22,11 +22,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [ "-DVOLK_INSTALL=1" ];
 
-  meta = with lib; {
+  meta = {
     description = "Meta loader for Vulkan API";
     homepage = "https://github.com/zeux/volk";
-    platforms = platforms.all;
-    license = licenses.mit;
-    maintainers = with maintainers; [ k900 ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ k900 ];
   };
 })

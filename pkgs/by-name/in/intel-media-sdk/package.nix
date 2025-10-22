@@ -61,11 +61,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Intel Media SDK";
     mainProgram = "mfx-tracer-config";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       midchildan
       pjungkamp
     ];

@@ -36,12 +36,12 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tableaux-based reasoner for expressive Description Logics (DL)";
     homepage = "http://owl.cs.manchester.ac.uk/tools/fact/";
-    maintainers = [ maintainers.mgttlinger ];
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ darwin ++ windows;
+    maintainers = [ lib.maintainers.mgttlinger ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     broken = !stdenv.hostPlatform.isLinux;
     mainProgram = "FaCT++";
   };

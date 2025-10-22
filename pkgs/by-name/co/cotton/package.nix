@@ -17,12 +17,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-y162tjxPGZQiYBJxFk4QN9ZqSH8jrqa5Y961Sx2zrRs=";
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for JavaScript projects";
     mainProgram = "cotton";
     homepage = "https://github.com/danielhuang/cotton";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       dit7ya
       figsoda
     ];

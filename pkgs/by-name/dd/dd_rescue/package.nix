@@ -35,14 +35,14 @@ stdenv.mkDerivation rec {
     cp "$out/share/dd_rescue"/dd_rhelp*/dd_rhelp "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to copy data from a damaged block device";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       raskin
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     homepage = "http://www.garloff.de/kurt/linux/ddrescue/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     mainProgram = "dd_rescue";
   };
 }

@@ -46,7 +46,7 @@ buildGoModule rec {
       --zsh <($out/bin/dyff completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Diff tool for YAML files, and sometimes JSON";
     mainProgram = "dyff";
     longDescription = ''
@@ -58,8 +58,8 @@ buildGoModule rec {
       using either the Spruce or go-patch path syntax.
     '';
     homepage = "https://github.com/homeport/dyff";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       edlimerkaj
       jceb
     ];

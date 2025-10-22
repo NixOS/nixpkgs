@@ -29,12 +29,12 @@ stdenv.mkDerivation rec {
     sha256 = "089dkbh5705ppyi920rd0ksjc0143xmvnhm8qrx93rsgwc1ggi1y";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/ivan-tkatchev/makerpm/";
     description = "Clean, simple RPM packager reimplemented completely from scratch";
     mainProgram = "makerpm";
-    license = licenses.free;
-    platforms = platforms.all;
-    maintainers = [ maintainers.ivan-tkatchev ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.ivan-tkatchev ];
   };
 }

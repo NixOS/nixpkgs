@@ -19,12 +19,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-CeXcpSD/6qPzA8nrSyC3oDFBpjFYNfDPySQxSOZPlgc=";
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for generating animated GIF files from asciicast v2 files produced by asciinema terminal recorder";
     homepage = "https://github.com/asciinema/agg";
     changelog = "https://github.com/asciinema/agg/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "agg";
   };
 }

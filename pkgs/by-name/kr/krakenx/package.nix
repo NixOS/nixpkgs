@@ -22,11 +22,11 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "krakenx" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python script to control NZXT cooler Kraken X52/X62/X72";
     homepage = "https://github.com/KsenijaS/krakenx";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     cp symlinks.8 $out/share/man/man8
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Find and remedy problematic symbolic links on a system";
     homepage = "https://github.com/brandt/symlinks";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ckauhaus ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ckauhaus ];
+    platforms = lib.platforms.unix;
     mainProgram = "symlinks";
   };
 }

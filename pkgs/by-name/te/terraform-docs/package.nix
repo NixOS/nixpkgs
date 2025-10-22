@@ -46,12 +46,12 @@ buildGo124Module (finalAttrs: {
     version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Utility to generate documentation from Terraform modules in various output formats";
     mainProgram = "terraform-docs";
     homepage = "https://github.com/terraform-docs/terraform-docs/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       zimbatm
       anthonyroussel
     ];

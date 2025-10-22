@@ -65,11 +65,11 @@ stdenv.mkDerivation {
     "--with-pygi-overrides-dir=${placeholder "py"}/${python3.sitePackages}/gi/overrides"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for instrumenting and integrating with all aspects of the Unity shell";
     homepage = "https://launchpad.net/libunity";
-    license = licenses.lgpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

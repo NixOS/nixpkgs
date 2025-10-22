@@ -76,12 +76,12 @@ buildGoModule rec {
       --zsh <($out/bin/fastly --completion-script-zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool for interacting with the Fastly API";
     homepage = "https://github.com/fastly/cli";
     changelog = "https://github.com/fastly/cli/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ereslibre
     ];
     mainProgram = "fastly";

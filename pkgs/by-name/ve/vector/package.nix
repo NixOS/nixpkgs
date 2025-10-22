@@ -119,16 +119,16 @@ rustPlatform.buildRustPackage (finalAttrs: {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "High-performance observability data pipeline";
     homepage = "https://github.com/vectordotdev/vector";
     changelog = "https://github.com/vectordotdev/vector/releases/tag/v${finalAttrs.version}";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       happysalada
     ];
-    platforms = with platforms; all;
+    platforms = lib.all;
     mainProgram = "vector";
   };
 })

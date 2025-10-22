@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/pd-gui --prefix PATH : ${lib.makeBinPath [ tk ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Real-time graphical programming environment for audio, video, and graphical processing'';
     homepage = "http://puredata.info";
-    license = licenses.bsd3;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ carlthome ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ carlthome ];
     mainProgram = "pd";
     changelog = "https://msp.puredata.info/Pd_documentation/x5.htm#s1";
   };

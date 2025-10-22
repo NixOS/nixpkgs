@@ -82,11 +82,11 @@ stdenv.mkDerivation rec {
        --add-flags "--engine-vcfeval-path=${rtg-tools}/bin/rtg"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Compare genetics variants against a gold dataset";
     homepage = "https://github.com/Illumina/hap.py";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ apraga ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ apraga ];
     mainProgram = "hap.py";
   };
 }

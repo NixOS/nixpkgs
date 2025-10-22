@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject based library for handling and rendering epub documents";
-    license = licenses.lgpl21Plus;
-    platforms = platforms.linux;
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.gnome ];
   };
 }

@@ -61,13 +61,13 @@ stdenv.mkDerivation rec {
     "--suffix PATH : ${lib.makeBinPath [ seafile-shared ]}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/haiwen/seafile-client";
     changelog = "https://github.com/haiwen/seafile-client/releases/tag/${src.tag}";
     description = "Desktop client for Seafile, the Next-generation Open Source Cloud Storage";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [
       schmittlauch
     ];
     mainProgram = "seafile-applet";

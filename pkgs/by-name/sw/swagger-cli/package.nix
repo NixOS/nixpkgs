@@ -25,11 +25,11 @@ buildNpmPackage rec {
     find $out/lib/node_modules -xtype l -delete
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Swagger 2.0 and OpenAPI 3.0 command-line tool";
     homepage = "https://apitools.dev/swagger-cli/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "swagger-cli";
   };
 }

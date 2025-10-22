@@ -32,12 +32,12 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "OpenWrt debugging helper library/service";
     mainProgram = "udebugd";
     homepage = "https://git.openwrt.org/?p=project/udebug.git;a=summary";
-    license = licenses.free;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ mkg20001 ];
+    license = lib.licenses.free;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ mkg20001 ];
   };
 }

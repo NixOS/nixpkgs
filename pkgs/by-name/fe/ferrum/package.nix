@@ -26,14 +26,14 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://dotcolon.net/font/ferrum/";
     description = "Decorative font";
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       leenaars
       minijackson
     ];
-    license = licenses.cc0;
+    license = lib.licenses.cc0;
   };
 }

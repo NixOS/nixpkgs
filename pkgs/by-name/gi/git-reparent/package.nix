@@ -35,12 +35,12 @@ stdenv.mkDerivation rec {
     }"
   '';
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Git command to recommit HEAD with a new set of parents";
     maintainers = [ ];
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
     mainProgram = "git-reparent";
   };
 }

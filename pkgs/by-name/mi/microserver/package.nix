@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-IPJJ9kv7gf5l7Y2JLCLjkNFao42h/VmkTd3LF5BCMLU=";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/robertohuertasm/microserver";
     description = "Simple ad-hoc server with SPA support";
-    maintainers = with maintainers; [ flosse ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ flosse ];
+    license = lib.licenses.mit;
     mainProgram = "microserver";
   };
 }

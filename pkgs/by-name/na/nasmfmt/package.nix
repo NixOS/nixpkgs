@@ -23,11 +23,11 @@ buildGoModule {
 
   ldflags = [ "-s" ];
 
-  meta = with lib; {
+  meta = {
     description = "Formatter for NASM source files";
     mainProgram = "nasmfmt";
     homepage = "https://github.com/yamnikov-oleg/nasmfmt";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

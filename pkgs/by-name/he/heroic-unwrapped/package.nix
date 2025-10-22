@@ -119,14 +119,14 @@ stdenv.mkDerivation (finalAttrs: {
     inherit epic-integration legendary;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Native GOG, Epic, and Amazon Games Launcher for Linux, Windows and Mac";
     homepage = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher";
     changelog = "https://github.com/Heroic-Games-Launcher/HeroicGamesLauncher/releases/tag/v${finalAttrs.version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ iedame ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ iedame ];
     # Heroic may work on nix-darwin, but it needs a dedicated maintainer for the platform.
-    # It may also work on other Linux targets, but all the game stores only
+    # It may also work on other Linux targets, but lib.all the game stores only
     # support x86 Linux, so it would require extra hacking to run games via QEMU
     # user emulation.  Upstream provide Linux builds only for x86_64.
     platforms = [ "x86_64-linux" ];

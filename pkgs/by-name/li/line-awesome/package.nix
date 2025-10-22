@@ -27,14 +27,14 @@ stdenv.mkDerivation rec {
     cp *.woff2 $out/share/fonts/woff2
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Replace Font Awesome with modern line icons";
     longDescription = ''
       This package includes only the TTF, WOFF and WOFF2 fonts. For full CSS etc. see the project website.
     '';
     homepage = "https://icons8.com/line-awesome";
-    license = licenses.mit;
-    maintainers = with maintainers; [ puzzlewolf ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ puzzlewolf ];
+    platforms = lib.platforms.all;
   };
 }

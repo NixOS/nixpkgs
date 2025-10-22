@@ -24,11 +24,11 @@ rustPlatform.buildRustPackage rec {
 
   passthru.tests.version = testers.testVersion { package = serie; };
 
-  meta = with lib; {
+  meta = {
     description = "Rich git commit graph in your terminal, like magic";
     homepage = "https://github.com/lusingander/serie";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ matthiasbeyer ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ matthiasbeyer ];
     mainProgram = "serie";
   };
 }

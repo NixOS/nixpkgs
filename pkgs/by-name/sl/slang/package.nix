@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Small, embeddable multi-platform programming library";
     longDescription = ''
       S-Lang is an interpreted language that was designed from the start to be
@@ -101,9 +101,9 @@ stdenv.mkDerivation rec {
       Guide.
     '';
     homepage = "http://www.jedsoft.org/slang/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "slsh";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

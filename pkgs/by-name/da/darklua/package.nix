@@ -22,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     rm .cargo/config.toml
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool that transforms Lua code";
     mainProgram = "darklua";
     homepage = "https://darklua.com";
     changelog = "https://github.com/seaofvoices/darklua/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tomodachi94 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tomodachi94 ];
   };
 }

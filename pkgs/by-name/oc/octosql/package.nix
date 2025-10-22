@@ -27,11 +27,11 @@ buildGoModule rec {
     rm -v $out/bin/tester
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Commandline tool for joining, analyzing and transforming data from multiple databases and file formats using SQL";
     homepage = "https://github.com/cube2222/octosql";
-    license = licenses.mpl20;
-    maintainers = with maintainers; [ arikgrahl ];
+    license = lib.licenses.mpl20;
+    maintainers = with lib.maintainers; [ arikgrahl ];
     mainProgram = "octosql";
   };
 }

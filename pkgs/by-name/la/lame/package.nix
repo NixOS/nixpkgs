@@ -60,12 +60,12 @@ stdenv.mkDerivation rec {
     sed -i '/lame_init_old/d' include/libmp3lame.sym
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High quality MPEG Audio Layer III (MP3) encoder";
     homepage = "http://lame.sourceforge.net";
-    license = licenses.lgpl2;
-    maintainers = with maintainers; [ codyopel ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl2;
+    maintainers = with lib.maintainers; [ codyopel ];
+    platforms = lib.platforms.all;
     mainProgram = "lame";
   };
 }

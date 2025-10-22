@@ -32,11 +32,11 @@ buildGoModule rec {
     inherit (nixosTests) writefreely;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Build a digital writing community";
     homepage = "https://github.com/writefreely/writefreely";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ soopyc ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ soopyc ];
     mainProgram = "writefreely";
   };
 }

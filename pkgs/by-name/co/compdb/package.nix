@@ -20,11 +20,11 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to manipulate compilation databases";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/Sarcasm/compdb";
-    maintainers = [ maintainers.detegr ];
+    maintainers = [ lib.maintainers.detegr ];
     mainProgram = "compdb";
   };
 }

@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Isometric 3D RPG similar to game Diablo";
     mainProgram = "freedroidRPG";
 
@@ -100,10 +100,10 @@ stdenv.mkDerivation {
 
     homepage = "https://www.freedroid.org/";
 
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
 
     maintainers = [ ];
-    platforms = platforms.unix;
-    hydraPlatforms = platforms.linux; # sdl-config times out on darwin
+    platforms = lib.platforms.unix;
+    hydraPlatforms = lib.platforms.linux; # sdl-config times out on darwin
   };
 }

@@ -79,12 +79,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "GObject library to create cabinet files";
     mainProgram = "gcab";
     homepage = "https://gitlab.gnome.org/GNOME/gcab";
-    license = licenses.lgpl21Plus;
-    teams = [ teams.gnome ];
-    platforms = platforms.unix;
+    license = lib.licenses.lgpl21Plus;
+    teams = [ lib.teams.gnome ];
+    platforms = lib.platforms.unix;
   };
 }

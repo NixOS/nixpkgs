@@ -23,11 +23,11 @@ stdenv.mkDerivation rec {
     mv dist-light-nord $out/share/icons/graphite-light-nord
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Graphite cursor theme";
     homepage = "https://github.com/vinceliuice/Graphite-cursors";
-    license = licenses.gpl3Only;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ oluceps ];
   };
 }

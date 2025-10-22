@@ -34,7 +34,7 @@ python3Packages.buildPythonApplication rec {
     substituteInPlace setup.py --replace-fail 'six==' 'six>='
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run SQL directly on CSV or TSV files";
     longDescription = ''
       q is a command line tool that allows direct execution of SQL-like queries on CSVs/TSVs (and any other tabular text files).
@@ -42,9 +42,9 @@ python3Packages.buildPythonApplication rec {
       q treats ordinary files as database tables, and supports all SQL constructs, such as WHERE, GROUP BY, JOINs etc. It supports automatic column name and column type detection, and provides full support for multiple encodings.
     '';
     homepage = "http://harelba.github.io/q/";
-    license = licenses.gpl3;
-    maintainers = [ maintainers.taneb ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = [ lib.maintainers.taneb ];
+    platforms = lib.platforms.all;
     mainProgram = "q";
   };
 }

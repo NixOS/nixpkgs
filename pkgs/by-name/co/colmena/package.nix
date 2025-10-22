@@ -62,12 +62,12 @@ rustPlatform.buildRustPackage rec {
     tests.version = testers.testVersion { package = colmena; };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Simple, stateless NixOS deployment tool";
     homepage = "https://colmena.cli.rs/${passthru.apiVersion}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zhaofengli ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "colmena";
   };
 }

@@ -30,10 +30,10 @@ rustPlatform.buildRustPackage rec {
   # https://github.com/zerotier/zeronsd/blob/v0.5.2/tests/service/network.rs#L10
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "DNS server for ZeroTier users";
     homepage = "https://github.com/zerotier/zeronsd";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.dstengele ];
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.dstengele ];
   };
 }

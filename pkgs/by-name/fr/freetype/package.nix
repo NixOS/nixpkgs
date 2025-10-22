@@ -125,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Font rendering engine";
     mainProgram = "freetype-config";
     longDescription = ''
@@ -139,9 +139,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://gitlab.freedesktop.org/freetype/freetype/-/raw/VER-${
       builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }/docs/CHANGES";
-    license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
+    platforms = lib.platforms.all;
     pkgConfigModules = [ "freetype2" ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = with lib.maintainers; [ ttuegel ];
   };
 })

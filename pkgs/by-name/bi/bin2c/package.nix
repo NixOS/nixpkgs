@@ -22,12 +22,12 @@ stdenv.mkDerivation {
   checkTarget = "test";
   checkInputs = [ util-linux ]; # uuidgen
 
-  meta = with lib; {
+  meta = {
     description = "Embed binary & text files inside C binaries";
     mainProgram = "bin2c";
     homepage = "https://github.com/adobe/bin2c";
-    license = licenses.asl20;
-    maintainers = [ maintainers.shadowrz ];
-    platforms = platforms.all;
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.shadowrz ];
+    platforms = lib.platforms.all;
   };
 }

@@ -15,11 +15,11 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "serverspec";
 
-  meta = with lib; {
+  meta = {
     description = "RSpec tests for your servers configured by CFEngine, Puppet, Ansible, Itamae or anything else";
     homepage = "https://serverspec.org/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dylanmtaylor ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dylanmtaylor ];
     mainProgram = "serverspec-init";
   };
 }

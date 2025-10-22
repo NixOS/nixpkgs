@@ -56,7 +56,7 @@ python3.pkgs.buildPythonApplication rec {
     "cantoolz"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Black-box CAN network analysis framework";
     mainProgram = "cantoolz";
     longDescription = ''
@@ -70,7 +70,7 @@ python3.pkgs.buildPythonApplication rec {
       implemented with a new module.
     '';
     homepage = "https://github.com/CANToolz/CANToolz";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

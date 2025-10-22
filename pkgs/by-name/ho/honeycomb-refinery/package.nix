@@ -36,10 +36,10 @@ buildGoModule rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/honeycombio/refinery";
     description = "Tail-sampling proxy for OpenTelemetry";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
     mainProgram = "refinery";
   };

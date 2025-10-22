@@ -65,12 +65,12 @@ rustPlatform.buildRustPackage rec {
     installManPage manpage/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Simple CLI for MAA by Rust";
     homepage = "https://github.com/MaaAssistantArknights/maa-cli";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ Cryolitia ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ Cryolitia ];
     mainProgram = "maa";
   };
 }

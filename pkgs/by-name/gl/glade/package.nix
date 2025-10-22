@@ -78,11 +78,11 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/glade";
     description = "User interface designer for GTK applications";
-    teams = [ teams.gnome ];
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
   };
 }

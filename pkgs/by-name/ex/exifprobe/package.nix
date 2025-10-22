@@ -25,11 +25,11 @@ stdenv.mkDerivation {
     rm -r $out/usr
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for reading EXIF data from image files produced by digital cameras";
     homepage = "https://github.com/hfiguiere/exifprobe";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ siraben ];
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ siraben ];
+    platforms = lib.platforms.unix;
   };
 }

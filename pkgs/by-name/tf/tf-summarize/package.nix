@@ -31,11 +31,11 @@ buildGoModule rec {
     inherit version;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility to print the summary of the terraform plan";
     mainProgram = "tf-summarize";
     homepage = "https://github.com/dineshba/tf-summarize";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pjrm ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pjrm ];
   };
 }

@@ -41,11 +41,11 @@ stdenv.mkDerivation rec {
     sed -i 's/readme/Readme/' cmake_install.cmake
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GL Easy Extension Library";
     homepage = "https://sourceforge.net/p/glee/glee/";
-    maintainers = with maintainers; [ crertel ];
-    platforms = platforms.linux;
-    license = licenses.gpl3;
+    maintainers = with lib.maintainers; [ crertel ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3;
   };
 }

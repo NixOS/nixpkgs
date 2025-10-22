@@ -39,11 +39,11 @@ stdenv.mkDerivation rec {
     "LIBDIR=/lib"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "x86 emulation library";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     homepage = "https://github.com/wfeldt/libx86emu";
-    maintainers = with maintainers; [ bobvanderlinden ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ bobvanderlinden ];
+    platforms = lib.platforms.linux;
   };
 }

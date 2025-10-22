@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) ergo; };
 
-  meta = with lib; {
+  meta = {
     description = "Open protocol that implements modern scientific ideas in the blockchain area";
     homepage = "https://ergoplatform.org/en/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.cc0;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ mmahut ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.cc0;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ mmahut ];
     mainProgram = "ergo";
   };
 }

@@ -30,12 +30,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility to extract and repack Android backups created with adb backup";
     mainProgram = "abe";
     homepage = "https://github.com/nelenkov/android-backup-extractor";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.asl20;
-    maintainers = with maintainers; [ prusnak ];
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ prusnak ];
   };
 }

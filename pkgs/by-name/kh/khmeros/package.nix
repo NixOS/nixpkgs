@@ -22,11 +22,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Unicode fonts for the Khmer language";
     homepage = "http://www.khmeros.info/";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ serge ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

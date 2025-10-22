@@ -31,11 +31,11 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  meta = with lib; {
+  meta = {
     description = "File picker used by VDHCoApp";
     homepage = "https://github.com/paulrouget/static-filepicker";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     mainProgram = "filepicker";
-    maintainers = with maintainers; [ hannesgith ];
+    maintainers = with lib.maintainers; [ hannesgith ];
   };
 }

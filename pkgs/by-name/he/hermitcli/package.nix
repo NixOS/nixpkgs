@@ -24,12 +24,12 @@ buildGoModule rec {
     "-X main.channel=stable"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cashapp.github.io/hermit";
     description = "Manages isolated, self-bootstrapping sets of tools in software projects";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ cbrewster ];
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ cbrewster ];
+    platforms = lib.platforms.unix;
     mainProgram = "hermit";
   };
 }

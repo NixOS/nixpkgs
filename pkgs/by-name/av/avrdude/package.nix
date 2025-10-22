@@ -83,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     libelf = callPackage ./libelf.nix { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool for programming Atmel AVR microcontrollers";
     mainProgram = "avrdude";
     longDescription = ''
@@ -92,8 +92,8 @@ stdenv.mkDerivation (finalAttrs: {
       microcontrollers using the in-system programming technique (ISP).
     '';
     homepage = "https://www.nongnu.org/avrdude/";
-    license = licenses.gpl2Plus;
-    platforms = with platforms; linux ++ darwin;
-    maintainers = [ maintainers.bjornfor ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = [ lib.maintainers.bjornfor ];
   };
 })

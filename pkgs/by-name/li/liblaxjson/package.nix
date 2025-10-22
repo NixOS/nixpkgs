@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for parsing JSON config files";
     homepage = "https://github.com/andrewrk/liblaxjson";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.andrewrk ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.andrewrk ];
   };
 }

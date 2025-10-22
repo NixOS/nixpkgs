@@ -34,11 +34,11 @@ buildNpmPackage rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       thiagokokada
       winter
       ners

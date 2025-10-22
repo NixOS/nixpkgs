@@ -32,12 +32,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform helper for creating interactive dialogs";
     mainProgram = "gtdialog";
-    license = licenses.mit;
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
     homepage = "http://foicica.com/gtdialog";
     downloadPage = "http://foicica.com/gtdialog/download";
   };

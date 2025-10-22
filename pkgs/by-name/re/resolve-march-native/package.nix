@@ -22,12 +22,12 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Tool to determine what GCC flags -march=native would resolve into";
     mainProgram = "resolve-march-native";
     homepage = "https://github.com/hartwork/resolve-march-native";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovesegfault ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lovesegfault ];
+    platforms = lib.platforms.unix;
   };
 }

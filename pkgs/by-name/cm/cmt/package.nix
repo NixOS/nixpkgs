@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/ladspa
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Computer Music Toolkit";
     homepage = "https://www.ladspa.org/cmt";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ sjfloat ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ sjfloat ];
   };
 }

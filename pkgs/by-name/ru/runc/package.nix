@@ -68,13 +68,13 @@ buildGoModule (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) cri-o docker podman; };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/opencontainers/runc";
     description = "CLI tool for spawning and running containers according to the OCI specification";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
-    teams = [ teams.podman ];
-    platforms = platforms.linux;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ offline ];
+    teams = [ lib.teams.podman ];
+    platforms = lib.platforms.linux;
     mainProgram = "runc";
   };
 })

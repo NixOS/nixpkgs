@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     mkdir -p $out/bin $out/share/man/man8 $out/etc
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Multitalented APRS i-gate / digipeater";
     homepage = "http://thelifeofkenneth.com/aprx";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sarcasticadmin ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sarcasticadmin ];
     mainProgram = "aprx";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

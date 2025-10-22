@@ -101,16 +101,16 @@ stdenv.mkDerivation rec {
     SYSTEMC_LIBDIR = "${lib.getLib systemc}/lib";
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/verilator/verilator/blob/${src.tag}/Changes";
     description = "Fast and robust (System)Verilog simulator/compiler and linter";
     homepage = "https://www.veripool.org/verilator";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl3Only
       artistic2
     ];
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       amiloradovsky
     ];

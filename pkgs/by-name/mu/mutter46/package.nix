@@ -204,12 +204,12 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Window manager for GNOME";
     mainProgram = "mutter";
     homepage = "https://gitlab.gnome.org/GNOME/mutter";
-    license = licenses.gpl2Plus;
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
   };
 })

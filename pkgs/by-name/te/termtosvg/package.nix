@@ -24,10 +24,10 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "termtosvg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://nbedos.github.io/termtosvg/";
     description = "Record terminal sessions as SVG animations";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
     mainProgram = "termtosvg";
   };

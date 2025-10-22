@@ -56,12 +56,12 @@ stdenv.mkDerivation rec {
   # Undefined symbols for architecture arm64: "_OBJC_CLASS_$_NSAutoreleasePool"
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-framework Foundation";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://sylpheed.sraoss.jp/en/";
     description = "Lightweight and user-friendly e-mail client";
     mainProgram = "sylpheed";
     maintainers = [ ];
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    license = lib.licenses.gpl2;
   };
 }

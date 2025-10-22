@@ -116,12 +116,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Free, open-source, plastic guitar game";
     homepage = "https://yarg.in";
     changelog = "https://github.com/YARC-Official/YARG/releases/tag/v${finalAttrs.version}";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ kira-bruneau ];
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

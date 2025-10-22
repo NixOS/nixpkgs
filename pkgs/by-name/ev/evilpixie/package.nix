@@ -38,14 +38,14 @@ stdenv.mkDerivation (finalAttrs: {
     impy
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Pixel-oriented paint program, modelled on Deluxe Paint";
     mainProgram = "evilpixie";
     homepage = "https://github.com/bcampbell/evilpixie"; # http://evilpixie.scumways.com/ is gone
     downloadPage = "https://github.com/bcampbell/evilpixie/releases";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fgaz ];
+    platforms = lib.platforms.all;
     # Undefined symbols for architecture x86_64:
     # "_bundle_path", referenced from: App::SetupPaths() in src_app.cpp.o
     broken =

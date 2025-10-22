@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     install -m644 lwm.man $out/share/man/man1/lwm.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight Window Manager";
     longDescription = ''
       lwm is a window manager for X that tries to keep out of your face. There
@@ -51,9 +51,9 @@ stdenv.mkDerivation rec {
       disc space and its annexation of your physical memory.
     '';
     homepage = "http://www.jfc.org.uk/software/lwm.html";
-    license = licenses.gpl2;
+    license = lib.licenses.gpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "lwm";
   };
 }

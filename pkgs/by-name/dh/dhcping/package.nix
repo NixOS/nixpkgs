@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Send DHCP request to find out if a DHCP server is running";
     longDescription = ''
       dhcping sends either a DHCPREQUEST or DHCPINFORM packet to the server
@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
       port.
     '';
     homepage = "http://www.mavetju.org/unix/general.php";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
     mainProgram = "dhcping";
   };
 }

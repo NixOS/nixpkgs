@@ -31,11 +31,11 @@ stdenv.mkDerivation rec {
     validatePkgConfig
   ];
 
-  meta = with lib; {
+  meta = {
     description = "URDF (U-Robot Description Format) headers provides core data structure headers for URDF";
     homepage = "https://github.com/ros/urdfdom_headers";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ lopsided98 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ lopsided98 ];
+    platforms = lib.platforms.all;
   };
 }

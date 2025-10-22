@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Allows you to compose wallpapers ('root pixmaps') for X";
     homepage = "https://github.com/himdel/hsetroot";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ shamilton ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ shamilton ];
+    platforms = lib.platforms.unix;
   };
 }

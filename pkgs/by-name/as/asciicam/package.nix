@@ -22,11 +22,11 @@ buildGoModule {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Displays your webcam on the terminal";
     homepage = "https://github.com/muesli/asciicam";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "asciicam";
   };
 }

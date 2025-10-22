@@ -57,11 +57,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mastodon/Misskey Client for PC";
     homepage = "https://thedesk.top";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3Only;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "thedesk";

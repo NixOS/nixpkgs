@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     libconfuse
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/roehling/postsrsd";
     description = "Postfix Sender Rewriting Scheme daemon";
     mainProgram = "postsrsd";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
     maintainers = [ ];
   };
 }

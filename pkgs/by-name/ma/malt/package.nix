@@ -32,11 +32,11 @@ stdenv.mkDerivation rec {
     libunwind
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Memory tool to find where you allocate your memory";
     homepage = "https://github.com/memtt/malt";
-    license = licenses.cecill-c;
+    license = lib.licenses.cecill-c;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
     "CC:=$(CC)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://romfs.sourceforge.net/";
     description = "Tool for creating romfs file system images";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ nickcao ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ nickcao ];
+    platforms = lib.platforms.all;
     mainProgram = "genromfs";
   };
 }

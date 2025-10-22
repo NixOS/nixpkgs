@@ -20,11 +20,11 @@ buildGoModule rec {
   # disabled because I lack the skill
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Locally test Lambda functions packaged as container images";
     mainProgram = "aws-lambda-rie";
     homepage = "https://github.com/aws/aws-lambda-runtime-interface-emulator";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

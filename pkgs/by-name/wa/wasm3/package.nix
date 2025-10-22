@@ -28,14 +28,14 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/wasm3/wasm3";
     description = "Fastest WebAssembly interpreter, and the most universal runtime";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ malbarbo ];
-    license = licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ malbarbo ];
+    license = lib.licenses.mit;
     knownVulnerabilities = [
-      # wasm3 expects all wasm code to be pre-validated, any users
+      # wasm3 expects lib.all wasm code to be pre-validated, lib.any users
       # should be aware that running unvalidated wasm will potentially
       # lead to RCE until upstream have added a builtin validator
       "CVE-2022-39974"

@@ -40,10 +40,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/AgentD/squashfs-tools-ng";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ qyliss ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
+    platforms = lib.platforms.unix;
   };
 }

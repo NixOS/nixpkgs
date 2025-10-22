@@ -30,12 +30,12 @@ stdenv.mkDerivation {
     install -m 755 sha2wordlist $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Display SHA-256 as PGP words";
     homepage = "https://github.com/kirei/sha2wordlist";
-    maintainers = with maintainers; [ baloo ];
-    license = [ licenses.bsd2 ];
-    platforms = platforms.all;
+    maintainers = with lib.maintainers; [ baloo ];
+    license = [ lib.licenses.bsd2 ];
+    platforms = lib.platforms.all;
     mainProgram = "sha2wordlist";
   };
 }

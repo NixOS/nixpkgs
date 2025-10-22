@@ -159,14 +159,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Parallels Tools for Linux guests";
     homepage = "https://parallels.com";
-    license = licenses.unfree;
-    maintainers = with maintainers; [
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [
       wegank
       codgician
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

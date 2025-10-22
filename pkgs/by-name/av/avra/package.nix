@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Assembler for the Atmel AVR microcontroller family";
     mainProgram = "avra";
     homepage = "https://github.com/Ro5bert/avra";
-    license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.all;
   };
 }

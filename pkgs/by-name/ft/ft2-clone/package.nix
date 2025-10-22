@@ -33,14 +33,14 @@ stdenv.mkDerivation rec {
     ft2-clone-starts = nixosTests.ft2-clone;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Highly accurate clone of the classic Fasttracker II software for MS-DOS";
     homepage = "https://16-bits.org/ft2.php";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ fgaz ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ fgaz ];
     # From HOW-TO-COMPILE.txt:
     # > This code is NOT big-endian compatible
-    platforms = platforms.littleEndian;
+    platforms = lib.platforms.littleEndian;
     mainProgram = "ft2-clone";
   };
 }

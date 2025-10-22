@@ -20,8 +20,8 @@ stdenvNoCC.mkDerivation rec {
     cp -v ${./calibri-alias.conf} $out/etc/fonts/conf.d/30-calibri.conf
   '';
 
-  meta = with lib; {
-    # This font doesn't appear to have any official web site but this
+  meta = {
+    # This font doesn't appear to have lib.any official web site but this
     # one provides some good information and samples.
     homepage = "http://openfontlibrary.org/en/font/carlito";
     description = "Sans-serif font metric-compatible with Microsoft Calibri";
@@ -30,8 +30,8 @@ stdenvNoCC.mkDerivation rec {
       Microsoft Calibri font. The font is designed by Łukasz Dziedzic
       of the tyPoland foundry and based upon his Lato font.
     '';
-    license = licenses.ofl;
-    platforms = platforms.all;
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
     maintainers = [ ];
 
     # Reduce the priority of this package. The intent is that if you

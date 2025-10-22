@@ -39,11 +39,11 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Survive as a stray cat in an ncurses game";
     mainProgram = "kabeljau";
     homepage = "https://codeberg.org/annaaurora/kabeljau";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ annaaurora ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ annaaurora ];
   };
 }

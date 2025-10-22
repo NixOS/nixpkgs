@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace ./papirus-folders --replace "getent" "${getent}/bin/getent"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to change papirus icon theme color";
     mainProgram = "papirus-folders";
     longDescription = ''
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
       folders in Papirus icon theme and its forks (which based on version 20171007 and newer).
     '';
     homepage = "https://github.com/PapirusDevelopmentTeam/papirus-folders";
-    license = licenses.mit;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.aacebedo ];
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
+    maintainers = [ lib.maintainers.aacebedo ];
   };
 }

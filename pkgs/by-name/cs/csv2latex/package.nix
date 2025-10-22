@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
     make PREFIX=$out install
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line CSV to LaTeX file converter";
     homepage = "http://brouits.free.fr/csv2latex/";
-    license = licenses.gpl2Only;
-    maintainers = [ maintainers.catern ];
+    license = lib.licenses.gpl2Only;
+    maintainers = [ lib.maintainers.catern ];
     mainProgram = "csv2latex";
   };
 }

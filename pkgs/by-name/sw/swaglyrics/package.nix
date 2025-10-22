@@ -63,11 +63,11 @@ python3.pkgs.buildPythonApplication {
     "swaglyrics"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Lyrics fetcher for currently playing Spotify song";
     homepage = "https://github.com/SwagLyrics/SwagLyrics-For-Spotify";
-    license = licenses.mit;
-    maintainers = with maintainers; [ siraben ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ siraben ];
     mainProgram = "swaglyrics";
   };
 }

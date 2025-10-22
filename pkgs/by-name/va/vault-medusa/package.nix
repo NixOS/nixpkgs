@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-+bGuWOFmglvW/qB+6VlOPeoB9lwkikksQPuDKE/2kXw=";
 
-  meta = with lib; {
+  meta = {
     description = "Cli tool for importing and exporting Hashicorp Vault secrets";
     mainProgram = "medusa";
     homepage = "https://github.com/jonasvinther/medusa";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

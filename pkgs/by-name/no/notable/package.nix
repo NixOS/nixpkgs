@@ -44,10 +44,10 @@ appimageTools.wrapType2 rec {
       --add-flags "--disable-seccomp-filter-sandbox"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Markdown-based note-taking app that doesn't suck";
     homepage = "https://github.com/notable/notable";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = [ ];
   };

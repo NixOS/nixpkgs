@@ -46,7 +46,7 @@ stdenvNoCC.mkDerivation rec {
     $out/bin/listadmin --help 2> /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command line mailman moderator queue manipulation";
     longDescription = ''
       listadmin is a command line tool to manipulate the queues of messages
@@ -56,9 +56,9 @@ stdenvNoCC.mkDerivation rec {
       filter, or it can match specific senders, subjects, or reasons.
     '';
     homepage = "https://sourceforge.net/projects/listadmin/";
-    license = licenses.publicDomain;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ nomeata ];
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ nomeata ];
     mainProgram = "listadmin";
   };
 }

@@ -30,11 +30,11 @@ buildGoModule rec {
     wrapProgram $out/bin/ff2mpv-go --suffix PATH ":" ${lib.makeBinPath [ mpv ]}
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Native messaging host for ff2mpv written in Go";
     homepage = "https://git.clsr.net/util/ff2mpv-go/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ ambroisie ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ ambroisie ];
     mainProgram = "ff2mpv-go";
   };
 }

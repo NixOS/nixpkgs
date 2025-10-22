@@ -76,12 +76,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library that sends desktop notifications to a notification daemon";
     homepage = "https://gitlab.gnome.org/GNOME/libnotify";
-    license = licenses.lgpl21;
-    teams = [ teams.gnome ];
+    license = lib.licenses.lgpl21;
+    teams = [ lib.teams.gnome ];
     mainProgram = "notify-send";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

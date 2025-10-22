@@ -51,13 +51,13 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  meta = with lib; {
+  meta = {
     description = "VPN on steroids";
     homepage = "https://kronosnet.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21Plus
       gpl2Plus
     ];
-    maintainers = with maintainers; [ ryantm ];
+    maintainers = with lib.maintainers; [ ryantm ];
   };
 }

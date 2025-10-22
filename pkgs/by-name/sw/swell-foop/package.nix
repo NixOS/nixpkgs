@@ -58,13 +58,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/swell-foop";
     changelog = "https://gitlab.gnome.org/GNOME/swell-foop/-/tree/${finalAttrs.version}?ref_type=tags";
     description = "Puzzle game, previously known as Same GNOME";
     mainProgram = "swell-foop";
-    teams = [ teams.gnome ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 })

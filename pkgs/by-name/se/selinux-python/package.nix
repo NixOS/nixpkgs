@@ -98,14 +98,14 @@ stdenv.mkDerivation (finalAttrs: {
     { $out/bin/sepolgen-ifgen-attr-helper test /dev/null 2>&1 || true; } | grep -Fm1 'error(s) encountered' >/dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "SELinux policy core utilities written in Python";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "https://selinuxproject.org";
     maintainers = with lib.maintainers; [
       RossComputerGuy
       numinit
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

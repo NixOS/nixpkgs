@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  meta = {
     description = "GNU Guile library providing bindings to zstd";
     homepage = "https://notabug.org/guile-zstd/guile-zstd";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ foo-dogsquared ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ foo-dogsquared ];
     platforms = guile.meta.platforms;
   };
 }

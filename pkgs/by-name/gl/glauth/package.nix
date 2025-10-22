@@ -41,11 +41,11 @@ buildGoModule rec {
   # Tests fail in the sandbox.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight LDAP server for development, home use, or CI";
     homepage = "https://github.com/glauth/glauth";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bjornfor
       christoph-heiss
     ];

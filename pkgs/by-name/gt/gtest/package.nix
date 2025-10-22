@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_STANDARD=${cxx_standard}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google's framework for writing C++ tests";
     homepage = "https://github.com/google/googletest";
-    license = licenses.bsd3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ ivan-tkatchev ];
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ ivan-tkatchev ];
   };
 }

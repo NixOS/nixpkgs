@@ -43,12 +43,12 @@ stdenv.mkDerivation rec {
     "--disable-asm"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "AVS encoder and decoder";
     mainProgram = "xavs";
     homepage = "https://xavs.sourceforge.net/";
-    license = licenses.lgpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ codyopel ];
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ codyopel ];
   };
 }

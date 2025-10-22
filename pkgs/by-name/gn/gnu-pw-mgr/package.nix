@@ -15,14 +15,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gnulib ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/gnu-pw-mgr/";
     description = "Password manager designed to make it easy to reconstruct difficult passwords";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl3Plus
       lgpl3Plus
     ];
     platforms = lib.platforms.linux;
-    maintainers = with maintainers; [ qoelet ];
+    maintainers = with lib.maintainers; [ qoelet ];
   };
 }

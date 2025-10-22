@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) auth-mysql;
   };
 
-  meta = with lib; {
+  meta = {
     description = "MySQL module for the Solaris Nameservice Switch (NSS)";
     homepage = "https://github.com/saknopper/libnss-mysql";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ netali ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ netali ];
   };
 }

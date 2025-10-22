@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
     cp -R * $out/share/man
   '';
 
-  meta = with lib; {
+  meta = {
     description = "GCC C++ STD manual pages";
     homepage = "https://gcc.gnu.org/";
-    license = with licenses; [ fdl13Plus ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ fdl13Plus ];
+    platforms = lib.platforms.unix;
   };
 }

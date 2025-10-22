@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     OPENSSL_NO_VENDOR = true;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Automated decoding of encrypted text without knowing the key or ciphers used";
     homepage = "https://github.com/bee-san/ares";
     changelog = "https://github.com/bee-san/Ares/releases/tag/v${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "ares";
     broken = stdenv.hostPlatform.isDarwin;
   };

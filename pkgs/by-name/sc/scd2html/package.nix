@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Generates HTML from scdoc source files";
     homepage = "https://git.sr.ht/~bitfehler/scd2html";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "scd2html";
   };
 }

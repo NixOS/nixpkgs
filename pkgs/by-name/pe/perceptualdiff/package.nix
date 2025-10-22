@@ -20,12 +20,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ freeimage ];
 
-  meta = with lib; {
+  meta = {
     description = "Program that compares two images using a perceptually based image metric";
     homepage = "https://github.com/myint/perceptualdiff";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ uri-canva ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ uri-canva ];
+    platforms = lib.platforms.unix;
     mainProgram = "perceptualdiff";
   };
 }

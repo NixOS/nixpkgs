@@ -21,11 +21,11 @@ rustPlatform.buildRustPackage rec {
   # presence of certain AWS infrastructure
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Utility for managing credentials securely in AWS cloud";
     homepage = "https://github.com/psibi/rucredstash";
-    license = licenses.mit;
-    maintainers = with maintainers; [ psibi ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ psibi ];
     mainProgram = "rucredstash";
   };
 }

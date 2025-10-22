@@ -19,18 +19,18 @@ buildEnv {
     makeWrapper $out/games/flare $out/bin/flare --chdir "$out/share/games/flare"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Fantasy action RPG using the FLARE engine";
     mainProgram = "flare";
     homepage = "https://flarerpg.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       McSinyx
     ];
     license = [
-      licenses.gpl3
-      licenses.cc-by-sa-30
+      lib.licenses.gpl3
+      lib.licenses.cc-by-sa-30
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

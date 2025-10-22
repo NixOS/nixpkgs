@@ -59,10 +59,10 @@ python3.pkgs.buildPythonApplication rec {
       --fish  <(_NIMBO_COMPLETE=source_fish $out/bin/nimbo)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Run machine learning jobs on AWS with a single command";
     homepage = "https://github.com/nimbo-sh/nimbo";
-    license = licenses.bsl11;
-    maintainers = with maintainers; [ noreferences ];
+    license = lib.licenses.bsl11;
+    maintainers = with lib.maintainers; [ noreferences ];
   };
 }

@@ -20,7 +20,7 @@ bundlerApp {
 
   passthru.updateScript = bundlerUpdateScript "schleuder-cli";
 
-  meta = with lib; {
+  meta = {
     description = "Command line tool to create and manage schleuder-lists";
     longDescription = ''
       Schleuder-cli enables creating, configuring, and deleting lists,
@@ -29,7 +29,7 @@ bundlerApp {
     '';
     homepage = "https://schleuder.org";
     changelog = "https://0xacab.org/schleuder/schleuder-cli/-/blob/main/CHANGELOG.md";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

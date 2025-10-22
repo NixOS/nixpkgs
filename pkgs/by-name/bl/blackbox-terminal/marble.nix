@@ -36,11 +36,11 @@ stdenv.mkDerivation {
   ];
   buildInputs = [ gtk4 ];
 
-  meta = with lib; {
+  meta = {
     description = "Raggesilver's GTK library";
     homepage = "https://gitlab.gnome.org/raggesilver/marble";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chuangzhu ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ chuangzhu ];
+    platforms = lib.platforms.linux;
   };
 }

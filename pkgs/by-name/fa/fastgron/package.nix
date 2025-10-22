@@ -26,13 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
     package = finalAttrs.finalPackage;
   };
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/adamritter/fastgron/releases/tag/${finalAttrs.src.rev}";
     description = "High-performance JSON to GRON (greppable, flattened JSON) converter";
     mainProgram = "fastgron";
     homepage = "https://github.com/adamritter/fastgron";
-    license = licenses.mit;
-    maintainers = with maintainers; [ zowoq ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ zowoq ];
+    platforms = lib.platforms.all;
   };
 })

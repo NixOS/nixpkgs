@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     install -D zsh-system-clipboard.zsh $out/share/zsh/${pname}/zsh-system-clipboard.zsh
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kutsan/zsh-system-clipboard";
     description = "Plugin that adds key bindings support for ZLE (Zsh Line Editor) clipboard operations for vi emulation keymaps";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       _0qq
       satoqz
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

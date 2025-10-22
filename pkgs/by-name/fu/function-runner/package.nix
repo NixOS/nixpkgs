@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fRLBKHsb+y2uyqWejRBmJm+t5CAkL9ScQl6iVCksahU=";
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool which allows you to run Wasm Functions intended for the Shopify Functions infrastructure";
     mainProgram = "function-runner";
     homepage = "https://github.com/Shopify/function-runner";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nintron ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nintron ];
   };
 }

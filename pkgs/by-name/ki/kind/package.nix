@@ -52,14 +52,14 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes IN Docker - local clusters for testing Kubernetes";
     homepage = "https://github.com/kubernetes-sigs/kind";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       rawkode
     ];
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "kind";
   };
 }

@@ -33,12 +33,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Toolkit for processing sequences in FASTA/Q formats";
     mainProgram = "seqtk";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/lh3/seqtk";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ bwlang ];
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ bwlang ];
   };
 }

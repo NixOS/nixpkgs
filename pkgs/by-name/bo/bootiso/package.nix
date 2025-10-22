@@ -63,12 +63,12 @@ stdenvNoCC.mkDerivation rec {
       } \
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Script for securely creating a bootable USB device from one image file";
     homepage = "https://github.com/jsamr/bootiso";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ muscaln ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ muscaln ];
+    platforms = lib.platforms.all;
     mainProgram = "bootiso";
   };
 }

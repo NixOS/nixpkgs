@@ -28,17 +28,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Environment analysis tool for Kotlin Multiplatform Mobile";
     longDescription = ''
       KDoctor is a command-line tool that helps to set up the environment for
       Kotlin Multiplatform Mobile app development.
     '';
     homepage = "https://github.com/Kotlin/kdoctor";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "kdoctor";
-    maintainers = with maintainers; [ sironheart ];
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [ sironheart ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

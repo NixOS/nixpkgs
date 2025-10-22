@@ -23,12 +23,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "-Werror" "" \
       --replace-fail "bin_SCRIPTS" "#bin_SCRIPTS"
   '';
-  meta = with lib; {
+  meta = {
     description = "Extract e-mail messages from Outlook Express DBX files";
     homepage = "https://github.com/ZungBang/undbx";
-    maintainers = with maintainers; [ d3vil0p3r ];
-    platforms = platforms.unix;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ d3vil0p3r ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "undbx";
   };
 })

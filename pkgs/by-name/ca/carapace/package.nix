@@ -37,11 +37,11 @@ buildGoModule (finalAttrs: {
   passthru.updateScript = nix-update-script { };
   passthru.tests.version = testers.testVersion { package = carapace; };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-shell multi-command argument completer";
     homepage = "https://carapace.sh/";
-    maintainers = with maintainers; [ mimame ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ mimame ];
+    license = lib.licenses.mit;
     mainProgram = "carapace";
   };
 })

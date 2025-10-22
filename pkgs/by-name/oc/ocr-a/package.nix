@@ -19,10 +19,10 @@ stdenv.mkDerivation rec {
     install -D -m 0644 $src $out/share/fonts/truetype/OCRA.ttf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "ANSI OCR font from the '60s. CYBER";
     homepage = "https://sourceforge.net/projects/ocr-a-font/";
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ V ];
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ V ];
   };
 }

@@ -39,11 +39,11 @@ stdenv.mkDerivation {
     updateScript = ./update.sh;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://typesense.org";
     description = "Fast, typo-tolerant search engine for building delightful search experiences";
     mainProgram = "typesense-server";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     # There has been an attempt at building this from source, which were deemed
     # unfeasible at the time of writing this (July 2023) for the following reasons.
     # - Pre 0.25 would have been possible, but typesense has switched to bazel for 0.25+,
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
     # - The new bazel build has many issues, only some of which were fixable:
     #   - preBuild requires export LANG="C.UTF-8", since onxxruntime contains a
     #     unicode file path that is handled incorrectly and otherwise leads to a build failure
-    #   - bazel downloads extensions to the build systems at build time which have
+    #   - bazel downloads extensions to the build lib.systems at build time which have
     #     invalid shebangs that need to be fixed by patching rules_foreign_cc through
     #     bazel (so a patch in nix that adds a patch to the bazel WORKSPACE)
     #   - WORKSPACE has to be patched to use system cmake and ninja instead of downloaded toolchains
@@ -59,8 +59,8 @@ stdenv.mkDerivation {
     #     try to download stuff via cmake again, which is not possible in the sandbox.
     #     This is where I stopped trying for now.
     # XXX: retry once typesense has officially released their bazel based build.
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with maintainers; [ oddlama ];
+    maintainers = with lib.maintainers; [ oddlama ];
   };
 }

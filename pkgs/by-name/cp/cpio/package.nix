@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
     initrd = nixosTests.systemd-initrd-simple;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.gnu.org/software/cpio/";
     description = "Program to create or extract from cpio archives";
-    license = licenses.gpl3;
-    platforms = platforms.all;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
     priority = 6; # resolves collision with gnutar's "libexec/rmt"
     mainProgram = "cpio";
   };

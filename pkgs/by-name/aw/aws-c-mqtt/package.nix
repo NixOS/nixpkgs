@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
     inherit nix;
   };
 
-  meta = with lib; {
+  meta = {
     description = "C99 implementation of the MQTT 3.1.1 specification";
     homepage = "https://github.com/awslabs/aws-c-mqtt";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ r-burns ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ r-burns ];
   };
 }

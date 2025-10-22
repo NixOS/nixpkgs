@@ -65,11 +65,11 @@ stdenv.mkDerivation rec {
     gobject-introspection
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Interface library to access tags for identifying languages";
-    license = licenses.mpl20;
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
+    license = lib.licenses.mpl20;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
     # There are links to a homepage that are broken by a BitBucket change
     homepage = "https://bitbucket.org/tagoh/liblangtag/overview";
   };

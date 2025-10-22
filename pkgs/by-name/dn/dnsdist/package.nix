@@ -73,11 +73,11 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) dnsdist;
   };
 
-  meta = with lib; {
+  meta = {
     description = "DNS Loadbalancer";
     mainProgram = "dnsdist";
     homepage = "https://dnsdist.org";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jojosch ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ jojosch ];
   };
 }

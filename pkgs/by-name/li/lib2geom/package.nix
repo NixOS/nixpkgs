@@ -95,14 +95,14 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Easy to use 2D geometry library in C++";
     homepage = "https://gitlab.com/inkscape/lib2geom";
     license = [
-      licenses.lgpl21Only
-      licenses.mpl11
+      lib.licenses.lgpl21Only
+      lib.licenses.mpl11
     ];
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.unix;
   };
 })

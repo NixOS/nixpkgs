@@ -33,16 +33,16 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) iftop; };
 
-  meta = with lib; {
+  meta = {
     description = "Display bandwidth usage on a network interface";
     longDescription = ''
       iftop does for network usage what top(1) does for CPU usage. It listens
       to network traffic on a named interface and displays a table of current
       bandwidth usage by pairs of hosts.
     '';
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     homepage = "http://ex-parrot.com/pdw/iftop/";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
     mainProgram = "iftop";
   };

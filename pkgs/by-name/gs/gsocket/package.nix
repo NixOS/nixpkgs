@@ -21,11 +21,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ];
   dontDisableStatic = true;
 
-  meta = with lib; {
+  meta = {
     description = "Connect like there is no firewall, securely";
     homepage = "https://www.gsocket.io";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.msm ];
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
+    maintainers = [ lib.maintainers.msm ];
   };
 }

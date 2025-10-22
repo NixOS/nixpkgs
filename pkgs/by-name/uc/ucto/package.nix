@@ -67,13 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Rule-based tokenizer for natural language";
     mainProgram = "ucto";
     homepage = "https://languagemachines.github.io/ucto/";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ roberth ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ roberth ];
 
     longDescription = ''
       Ucto tokenizes text files: it separates words from punctuation, and splits sentences. It offers several other basic preprocessing steps such as changing case that you can all use to make your text suited for further processing such as indexing, part-of-speech tagging, or machine translation.

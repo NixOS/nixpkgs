@@ -37,12 +37,12 @@ stdenv.mkDerivation rec {
     "-Dcanfigger:b_sanitize=none"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Trashcan/ recycle bin utility for the command line";
     homepage = "https://github.com/theimpossibleastronaut/rmw";
     changelog = "https://github.com/theimpossibleastronaut/rmw/blob/${src.rev}/ChangeLog";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "rmw";
   };
 }

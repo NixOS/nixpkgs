@@ -27,11 +27,11 @@ stdenv.mkDerivation rec {
     "localstatedir=$(TMPDIR)"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.remlab.net/ndisc6/";
     description = "Small collection of useful tools for IPv6 networking";
     maintainers = [ ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
   };
 }

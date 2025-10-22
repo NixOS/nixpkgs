@@ -19,10 +19,10 @@ buildGoModule rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Contributed tools and other packages on top of the Go proto package";
     homepage = "https://github.com/emicklei/proto-contrib";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kalbasit ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kalbasit ];
   };
 }

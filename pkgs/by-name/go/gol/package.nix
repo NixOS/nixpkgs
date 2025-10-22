@@ -35,7 +35,7 @@ maven.buildMavenPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Command-line utility for creating and managing Geographic Object Libraries";
     longDescription = ''
       Use the GOL command-line utility to:
@@ -43,8 +43,8 @@ maven.buildMavenPackage rec {
       - perform GOQL queries and export the results in a variety of formats.
     '';
     homepage = "https://docs.geodesk.com/gol";
-    license = licenses.agpl3Only;
-    maintainers = [ maintainers.starsep ];
-    platforms = platforms.all;
+    license = lib.licenses.agpl3Only;
+    maintainers = [ lib.maintainers.starsep ];
+    platforms = lib.platforms.all;
   };
 }

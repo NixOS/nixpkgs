@@ -47,12 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) xautolock; };
 
-  meta = with lib; {
+  meta = {
     description = "Launch a given program when your X session has been idle for a given time";
     homepage = "http://www.ibiblio.org/pub/linux/X11/screensavers";
-    maintainers = with maintainers; [ peti ];
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ peti ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
     mainProgram = "xautolock";
   };
 })

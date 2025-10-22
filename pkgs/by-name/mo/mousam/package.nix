@@ -48,12 +48,12 @@ python3Packages.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Beautiful and lightweight weather app based on Python and GTK4";
     homepage = "https://amit9838.github.io/mousam";
-    license = with licenses; [ gpl3Plus ];
+    license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "mousam";
-    maintainers = with maintainers; [ aleksana ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ aleksana ];
+    platforms = lib.platforms.unix;
   };
 }

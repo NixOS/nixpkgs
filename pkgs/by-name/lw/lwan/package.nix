@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = lib.optional stdenv.hostPlatform.isMusl "pie";
 
-  meta = with lib; {
+  meta = {
     description = "Lightweight high-performance multi-threaded web server";
     mainProgram = "lwan";
     longDescription = "A lightweight and speedy web server with a low memory
@@ -53,8 +53,8 @@ stdenv.mkDerivation rec {
       support.
     ";
     homepage = "https://lwan.ws/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ leenaars ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ leenaars ];
   };
 }

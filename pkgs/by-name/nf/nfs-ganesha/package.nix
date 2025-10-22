@@ -114,12 +114,12 @@ stdenv.mkDerivation rec {
     install -Dm644 $src/src/scripts/ganeshactl/org.ganesha.nfsd.conf $out/etc/dbus-1/system.d/org.ganesha.nfsd.conf
   '';
 
-  meta = with lib; {
+  meta = {
     description = "NFS server that runs in user space";
     homepage = "https://github.com/nfs-ganesha/nfs-ganesha/wiki";
-    maintainers = [ maintainers.markuskowa ];
-    platforms = platforms.linux;
-    license = licenses.lgpl3Plus;
+    maintainers = [ lib.maintainers.markuskowa ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl3Plus;
     mainProgram = "ganesha.nfsd";
     outputsToInstall = [
       "out"

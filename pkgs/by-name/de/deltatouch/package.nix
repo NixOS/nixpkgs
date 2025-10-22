@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     rm $out/{manifest.json,share/push*}
   '';
 
-  meta = with lib; {
+  meta = {
     changelog = "https://codeberg.org/lk108/deltatouch/src/tag/${finalAttrs.src.rev}/CHANGELOG";
     description = "Messaging app for Ubuntu Touch, powered by Delta Chat core";
     longDescription = ''
@@ -73,9 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
       Delta Chat works over email.
     '';
     homepage = "https://codeberg.org/lk108/deltatouch";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ link2xt ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ link2xt ];
     mainProgram = "deltatouch";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

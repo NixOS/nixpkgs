@@ -143,11 +143,11 @@ stdenv.mkDerivation (finalAttrs: {
         touch $out
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Khronos Vulkan Conformance Tests";
     homepage = "https://github.com/KhronosGroup/VK-GL-CTS/blob/main/external/vulkancts/README.md";
     changelog = "https://github.com/KhronosGroup/VK-GL-CTS/releases/tag/vulkan-cts-${finalAttrs.version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ Flakebi ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ Flakebi ];
   };
 })

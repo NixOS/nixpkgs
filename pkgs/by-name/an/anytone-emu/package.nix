@@ -33,12 +33,12 @@ rustPlatform.buildRustPackage {
     udev
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tiny emulator for AnyTone radios";
     homepage = "https://github.com/hmatuschek/anytone-emu";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "anytone-emu";
   };
 }

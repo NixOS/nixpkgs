@@ -50,12 +50,12 @@ stdenv.mkDerivation {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''Open-source modernization of the 1993 classic "Master of Orion", written in Java'';
     homepage = "https://www.remnantsoftheprecursors.com/";
 
     # See LICENSE file in source repo for more details.
-    license = with licenses; [
+    license = with lib.licenses; [
       # All java files created by Ray Fowler:
       gpl3Only
 
@@ -84,14 +84,14 @@ stdenv.mkDerivation {
       # All sound files are copyright by Remi Agullo.
       #
       # Various *.txt files that contain a license notice are copyright by Jeff Colucci. This
-      # includes English text and any foreign language translations.
+      # includes English text and lib.any foreign language translations.
       #
-      # The manual.pdf file is copyright by Tom Chick. This includes any foreign language
+      # The manual.pdf file is copyright by Tom Chick. This includes lib.any foreign language
       # translations of the manual contained in this repository
       cc-by-nc-nd-40
     ];
 
-    maintainers = with maintainers; [ jtrees ];
+    maintainers = with lib.maintainers; [ jtrees ];
     platforms = [ "x86_64-linux" ];
   };
 }

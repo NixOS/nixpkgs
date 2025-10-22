@@ -76,7 +76,7 @@ stdenv.mkDerivation {
       --suffix PATH : "\$PATH:${psutils}/bin:${ghostscript}/bin:${bash}/bin:/var/lib/cups/path/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
     description = "Epson AcuLaser C1100 Driver";
     longDescription = ''
@@ -90,13 +90,13 @@ stdenv.mkDerivation {
         };
     '';
 
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = with licenses; [
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = with lib.licenses; [
       mit
       eapl
     ];
-    maintainers = [ maintainers.eperuffo ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.eperuffo ];
+    platforms = lib.platforms.linux;
   };
 
 }

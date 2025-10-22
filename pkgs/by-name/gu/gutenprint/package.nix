@@ -72,11 +72,11 @@ stdenv.mkDerivation rec {
   # Testing is very, very long.
   # doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Ghostscript and cups printer drivers";
     homepage = "https://sourceforge.net/projects/gimp-print/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
     isGutenprint = true;
   };
 }

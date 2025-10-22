@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Simple tool to make temporary file handling in shells scripts safe and simple";
     mainProgram = "mktemp";
     homepage = "https://www.mktemp.org";
-    license = licenses.isc;
-    platforms = platforms.unix;
+    license = lib.licenses.isc;
+    platforms = lib.platforms.unix;
   };
 }

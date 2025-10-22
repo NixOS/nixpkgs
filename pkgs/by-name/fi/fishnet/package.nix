@@ -79,11 +79,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
     });
   };
 
-  meta = with lib; {
+  meta = {
     description = "Distributed Stockfish analysis for lichess.org";
     homepage = "https://github.com/lichess-org/fishnet";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
       tu-maurice
       thibaultd
     ];

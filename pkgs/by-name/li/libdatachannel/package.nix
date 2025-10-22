@@ -56,11 +56,11 @@ stdenv.mkDerivation rec {
       --replace-fail "\''${_IMPORT_PREFIX}/include" "$dev/include"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "C/C++ WebRTC network library featuring Data Channels, Media Transport, and WebSockets";
     homepage = "https://libdatachannel.org/";
-    license = with licenses; [ mpl20 ];
-    maintainers = with maintainers; [ erdnaxe ];
-    platforms = platforms.linux ++ platforms.darwin;
+    license = with lib.licenses; [ mpl20 ];
+    maintainers = with lib.maintainers; [ erdnaxe ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

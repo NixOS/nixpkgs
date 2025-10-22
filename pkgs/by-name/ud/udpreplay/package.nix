@@ -17,15 +17,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-kF9a3pjQbFKf25NKyK7uSq0AAO6JK7QeChLhm9Z3wEA=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Replay UDP packets from a pcap file";
     longDescription = ''
       udpreplay is a lightweight alternative to tcpreplay for replaying UDP unicast and multicast streams from a pcap file.
     '';
     homepage = "https://github.com/rigtorp/udpreplay";
-    license = licenses.mit;
-    maintainers = [ maintainers.considerate ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.considerate ];
+    platforms = lib.platforms.linux;
     mainProgram = "udpreplay";
   };
 }

@@ -33,13 +33,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Optimized OpenType builder and inspector";
     homepage = "https://github.com/caryll/otfcc";
-    license = licenses.asl20;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel ];
-    # Build fails on all platforms with
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ ttuegel ];
+    # Build fails on lib.all lib.platforms with
     #        > configure flags: gmake
     #   > ** Warning: action 'xcode4' sets 'os' field, which is deprecated, use 'targetos' instead.
     #   > Error: invalid value 'StaticRuntime' for flags

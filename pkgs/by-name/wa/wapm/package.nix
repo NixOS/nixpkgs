@@ -29,11 +29,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Package manager for WebAssembly modules";
     mainProgram = "wapm";
     homepage = "https://docs.wasmer.io/ecosystem/wapm";
-    license = with licenses; [ mit ];
-    maintainers = [ maintainers.lucperkins ];
+    license = with lib.licenses; [ mit ];
+    maintainers = [ lib.maintainers.lucperkins ];
   };
 }

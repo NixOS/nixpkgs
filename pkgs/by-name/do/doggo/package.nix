@@ -36,7 +36,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/mr-karan/doggo";
     description = "Command-line DNS Client for Humans. Written in Golang";
     mainProgram = "doggo";
@@ -44,8 +44,8 @@ buildGoModule rec {
       doggo is a modern command-line DNS client (like dig) written in Golang.
       It outputs information in a neat concise manner and supports protocols like DoH, DoT, DoQ, and DNSCrypt as well
     '';
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       georgesalkhouri
       ma27
     ];

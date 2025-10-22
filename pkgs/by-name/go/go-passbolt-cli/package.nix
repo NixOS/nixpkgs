@@ -47,12 +47,12 @@ buildGoModule rec {
     cd $tmpDir && mkdir man && $out/bin/passbolt gendoc --type man && installManPage man/*
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI tool to interact with Passbolt, an open source password manager for teams";
     homepage = "https://github.com/passbolt/go-passbolt-cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pbek ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pbek ];
     mainProgram = "passbolt";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

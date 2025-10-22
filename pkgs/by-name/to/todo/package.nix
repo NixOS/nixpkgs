@@ -22,11 +22,11 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ];
-  meta = with lib; {
+  meta = {
     description = "Simple todo cli program written in rust";
     homepage = "https://github.com/sioodmy/todo";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ sioodmy ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ sioodmy ];
     mainProgram = "todo";
   };
 }

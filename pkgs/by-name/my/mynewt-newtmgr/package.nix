@@ -25,15 +25,15 @@ buildGoModule rec {
     command = "newtmgr version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mynewt.apache.org/";
     description = "Tool to communicate with devices running Mynewt OS";
     longDescription = ''
       Newt Manager (newtmgr) an application that enables a user to communicate
       with and manage remote devices running the Mynewt OS
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bezmuth ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bezmuth ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.hostPlatform.isDarwin;
   };

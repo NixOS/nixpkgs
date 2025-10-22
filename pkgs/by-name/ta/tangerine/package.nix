@@ -45,11 +45,11 @@ stdenv.mkDerivation {
       --replace-fail "cmake_policy(VERSION 3.2)" "cmake_policy(VERSION 3.10)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "System for creating 3D models procedurally from a set of Signed Distance Function (SDF) primitive shapes and combining operators";
     homepage = "https://github.com/Aeva/tangerine";
-    license = licenses.asl20;
-    maintainers = [ maintainers.viraptor ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.viraptor ];
     broken = stdenv.hostPlatform.isDarwin; # third_party/naive-surface-nets doesn't find std::execution
   };
 }

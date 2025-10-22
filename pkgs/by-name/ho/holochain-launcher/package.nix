@@ -51,14 +51,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  meta = with lib; {
+  meta = {
     # webkitgtk_4_0 was removed
     broken = true;
     description = "Cross-platform executable that launches a local Holochain conductor, and installs and opens apps";
     homepage = "https://github.com/holochain/launcher";
-    maintainers = [ maintainers.steveej ];
-    license = licenses.cal10;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    platforms = platforms.linux;
+    maintainers = [ lib.maintainers.steveej ];
+    license = lib.licenses.cal10;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    platforms = lib.platforms.linux;
   };
 }

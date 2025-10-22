@@ -19,11 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kubectl-cnpg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cloudnative-pg.io/";
     description = "Plugin for kubectl to manage a CloudNativePG cluster in Kubernetes";
     mainProgram = "kubectl-cnpg";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ devusb ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ devusb ];
   };
 }

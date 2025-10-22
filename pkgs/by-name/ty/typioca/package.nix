@@ -31,12 +31,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Cozy typing speed tester in terminal";
     homepage = "https://github.com/bloznelis/typioca";
     changelog = "https://github.com/bloznelis/typioca/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "typioca";
   };
 }

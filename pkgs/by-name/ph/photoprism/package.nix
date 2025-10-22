@@ -95,11 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   passthru.tests.photoprism = nixosTests.photoprism;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://photoprism.app";
     description = "Personal Photo Management powered by Go and Google TensorFlow";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ benesim ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ benesim ];
     mainProgram = "photoprism";
   };
 })

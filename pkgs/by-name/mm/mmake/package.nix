@@ -25,7 +25,7 @@ buildGoModule rec {
   # Almost all tests require non-local networking, trying to resolve githubusercontent.com.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/tj/mmake";
     description = "Small program  which wraps make to provide additional functionality";
     longDescription = ''
@@ -34,8 +34,8 @@ buildGoModule rec {
       includes,  and   eventually  more.   It  otherwise  acts   as  a
       pass-through to standard make.
     '';
-    license = licenses.mit;
-    maintainers = [ maintainers.gabesoft ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.gabesoft ];
     mainProgram = "mmake";
   };
 }

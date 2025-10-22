@@ -125,13 +125,13 @@ stdenv.mkDerivation (finalAttrs: {
     command = "p4 -V";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Perforce Helix Core command-line client and APIs";
     homepage = "https://www.perforce.com";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "p4";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       corngood
       impl
     ];

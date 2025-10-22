@@ -45,10 +45,10 @@ stdenv.mkDerivation {
     "-DSSL_SUPPORT=${if tlsSupport then "ON" else "OFF"}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "High performance peer-to-peer hub for the ADC network";
     homepage = "https://www.uhub.org/";
-    license = licenses.gpl3;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.unix;
   };
 }

@@ -19,14 +19,14 @@ stdenv.mkDerivation rec {
     install -Dm755 cp437 -t $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = ''
       Emulates an old-style "code page 437" / "IBM-PC" character
       set terminal on a modern UTF-8 terminal emulator
     '';
     homepage = "https://github.com/keaston/cp437";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ jb55 ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ jb55 ];
     mainProgram = "cp437";
   };
 }

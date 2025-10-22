@@ -29,15 +29,15 @@ buildGoModule {
   buildInputs = lib.optional withPcap libpcap;
   tags = lib.optional withPcap "pcap" ++ lib.optional withRawsocket "rawsocket";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/macronut/phantomsocks";
     description = "Cross-platform proxy client/server for Linux/Windows/macOS";
     longDescription = ''
       A cross-platform proxy tool that could be used to modify TCP packets
       to implement TCB desync to bypass detection and censoring.
     '';
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ oluceps ];
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ oluceps ];
     mainProgram = "phantomsocks";
   };
 }

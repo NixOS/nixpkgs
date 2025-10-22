@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     sed "s|/usr/share|/run/current-system/sw/share|g" -i ./schemas/* # NOTE: unless this causes a circular dependency, we could link it to cinnamon/share/cinnamon
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/linuxmint/cinnamon-desktop";
     description = "Library and data for various Cinnamon modules";
 
@@ -80,10 +80,10 @@ stdenv.mkDerivation rec {
     '';
 
     license = [
-      licenses.gpl2
-      licenses.lgpl2
+      lib.licenses.gpl2
+      lib.licenses.lgpl2
     ];
-    platforms = platforms.linux;
-    teams = [ teams.cinnamon ];
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.cinnamon ];
   };
 }

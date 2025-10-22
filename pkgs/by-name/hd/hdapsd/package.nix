@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   postInstall = builtins.readFile ./postInstall.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Hard Drive Active Protection System Daemon";
     mainProgram = "hdapsd";
     homepage = "http://hdaps.sf.net/";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

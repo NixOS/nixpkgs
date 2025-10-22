@@ -64,12 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeFeature "PROTOC_BIN" (lib.getExe buildPackages.protobuf))
     ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/libphonenumber/blob/${finalAttrs.src.rev}/release_notes.txt";
     description = "Google's i18n library for parsing and using phone numbers";
     homepage = "https://github.com/google/libphonenumber";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       illegalprime
       wegank
     ];

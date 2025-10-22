@@ -31,11 +31,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "ghost" ];
 
-  meta = with lib; {
+  meta = {
     description = "Android post-exploitation framework";
     mainProgram = "ghost";
     homepage = "https://github.com/EntySec/ghost";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

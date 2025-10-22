@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
 
   preAutoreconf = "cd sources/";
 
-  meta = with lib; {
+  meta = {
     description = "Jalali calendar is a small and portable free software library to manipulate date and time in Jalali calendar system";
     homepage = "http://nongnu.org/jcal/";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

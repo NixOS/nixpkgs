@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     "-DLILV_INCLUDE_DIR=${lilv.dev}/include/lilv-0"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.rosegardenmusic.com/";
     description = "Music composition and editing environment";
     mainProgram = "rosegarden";
@@ -92,8 +92,8 @@ stdenv.mkDerivation rec {
       ideal for composers, musicians, music students, and small studio or home
       recording environments.
     '';
-    maintainers = with maintainers; [ lebastr ];
-    license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ lebastr ];
+    license = lib.licenses.lgpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

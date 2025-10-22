@@ -17,12 +17,12 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  meta = with lib; {
+  meta = {
     description = "'sleep' with feedback";
     homepage = "https://github.com/clamiax/snore";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cafkafk ];
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cafkafk ];
+    platforms = lib.platforms.unix;
     mainProgram = "snore";
   };
 }

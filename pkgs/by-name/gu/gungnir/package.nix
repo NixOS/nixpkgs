@@ -22,11 +22,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Command-line tool that continuously monitors certificate transparency (CT) logs for newly issued SSL/TLS certificates";
     homepage = "https://github.com/g0ldencybersec/gungnir";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cherrykitten ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cherrykitten ];
     mainProgram = "gungnir";
   };
 }
