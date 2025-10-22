@@ -14,7 +14,6 @@
 
 let
   inherit (lib)
-    and
     licenses
     maintainers
     optional
@@ -27,8 +26,8 @@ let
 
   main_src = fetchFromGitHub {
     owner = "olofson";
-    repo = pname;
-    rev = "v${version}";
+    repo = "koboredux";
+    tag = "v${version}";
     sha256 = "09h9r65z8bar2z89s09j6px0gdq355kjf38rmd85xb2aqwnm6xig";
   };
 
