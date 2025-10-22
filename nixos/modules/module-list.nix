@@ -240,6 +240,7 @@
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/iio-hyprland.nix
+  ./programs/iio-niri.nix
   ./programs/immersed.nix
   ./programs/iotop.nix
   ./programs/java.nix
