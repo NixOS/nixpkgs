@@ -2,18 +2,25 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  click,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   dawg-python,
   docopt,
-  pytestCheckHook,
   pymorphy3-dicts-ru,
   pymorphy3-dicts-uk,
+
+  # tests
+  pytestCheckHook,
+  click,
 }:
 
 buildPythonPackage rec {
   pname = "pymorphy3";
   version = "2.0.4";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "no-plagiarism";
@@ -22,16 +29,27 @@ buildPythonPackage rec {
     hash = "sha256-Ula2OQ80dcGeMlXauehXnlEkHLjjm4jZn39eFNltbEA=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+  ];
+
+  dependencies = [
     dawg-python
     docopt
     pymorphy3-dicts-ru
     pymorphy3-dicts-uk
   ];
 
-  optional-dependencies.CLI = [ click ];
+  optional-dependencies = {
+    CLI = [
+      click
+    ];
+  };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.CLI;
+  nativeCheckInputs = [
+    pytestCheckHook
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "pymorphy3" ];
 
