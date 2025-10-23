@@ -1,31 +1,31 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   pkg-config,
-  qmake,
   SDL2,
   fluidsynth,
   libsndfile,
   libvorbis,
   mpg123,
-  qtbase,
+  qt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "qtads";
   version = "3.4.0";
 
   src = fetchFromGitHub {
     owner = "realnc";
     repo = "qtads";
-    rev = "v${version}";
-    sha256 = "sha256-KIqufpvl7zeUtDBXUOAZxBIbfv+s51DoSaZr3jol+bw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-KIqufpvl7zeUtDBXUOAZxBIbfv+s51DoSaZr3jol+bw=";
   };
 
   nativeBuildInputs = [
     pkg-config
-    qmake
+    qt5.qmake
+    qt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -34,15 +34,15 @@ mkDerivation rec {
     libsndfile
     libvorbis
     mpg123
-    qtbase
+    qt5.qtbase
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://realnc.github.io/qtads/";
     description = "Multimedia interpreter for TADS games";
     mainProgram = "qtads";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ orivej ];
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
-}
+})

@@ -13191,8 +13191,6 @@ with pkgs;
 
   gscrabble = python3Packages.callPackage ../games/gscrabble { };
 
-  qtads = qt5.callPackage ../games/qtads { };
-
   ibmcloud-cli = callPackage ../tools/admin/ibmcloud-cli { stdenv = stdenvNoCC; };
 
   # used as base package for iortcw forks
