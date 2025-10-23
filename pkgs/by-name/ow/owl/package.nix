@@ -27,6 +27,13 @@ stdenv.mkDerivation {
     libpcap
   ];
 
+  postPatch = ''
+    substituteInPlace googletest/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace googletest/{googlemock,googletest}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Open Apple Wireless Direct Link (AWDL) implementation written in C";
     homepage = "https://owlink.org/";
