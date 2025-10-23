@@ -47,5 +47,6 @@ buildPythonPackage {
     description = "Reference implementation of the slob (sorted list of blobs) format";
     mainProgram = "slob";
     license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }
