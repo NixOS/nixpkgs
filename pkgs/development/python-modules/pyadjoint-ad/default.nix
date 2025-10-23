@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyadjoint-ad";
-  version = "2025.04.1";
+  version = "2025.10.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dolfin-adjoint";
     repo = "pyadjoint";
     tag = version;
-    hash = "sha256-S9A0qCatnnLuOkqWsEC4tjVY1HZqqi2T5iXu+WUoN24=";
+    hash = "sha256-caW2X4q0mHnD8CEh5jjelD4xBth/R/8/P3m0tTeO/LQ=";
   };
 
   build-system = [
@@ -30,8 +30,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [
-    # The firedrake_adjoint module is deprecated and requires a cyclic dependency of firedrake
-    # "firedrake_adjoint"
     "numpy_adjoint"
     "pyadjoint"
     "pyadjoint.optimization"
