@@ -8,21 +8,22 @@
   jre,
   unzip,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "geoserver";
-  version = "2.26.2";
+  version = "2.27.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/geoserver/GeoServer/${version}/geoserver-${version}-bin.zip";
-    hash = "sha256-K4OeMGnczKXVl+nxyd9unuCdoEpyF7j364Vxe49EOxo=";
+    url = "mirror://sourceforge/geoserver/GeoServer/${finalAttrs.version}/geoserver-${finalAttrs.version}-bin.zip";
+    hash = "sha256-yzejVi+0FzTCtUirCvn3PsxLLmoIUSxS2sA1KWWo30U=";
   };
+
+  sourceRoot = ".";
 
   patches = [
     # set GEOSERVER_DATA_DIR to current working directory if not provided
     ./data-dir.patch
   ];
 
-  sourceRoot = ".";
   nativeBuildInputs = [
     unzip
     makeWrapper
@@ -70,27 +71,25 @@ stdenv.mkDerivation (finalAttrs: rec {
             buildInputs = lib.lists.unique (
               (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
             );
-            postInstall =
-              (previousAttrs.postInstall or "")
-              + ''
-                for extension in ${builtins.toString selectedExtensions} ; do
-                  cp -r $extension/* $out
-                  # Some files are the same for all/several extensions. We allow overwriting them again.
-                  chmod -R +w $out
-                done
-              '';
+            postInstall = (previousAttrs.postInstall or "") + ''
+              for extension in ${toString selectedExtensions} ; do
+                cp -r $extension/* $out
+                # Some files are the same for all/several extensions. We allow overwriting them again.
+                chmod -R +w $out
+              done
+            '';
           }
         );
       tests.geoserver = nixosTests.geoserver;
       updateScript = ./update.sh;
     };
 
-  meta = with lib; {
+  meta = {
     description = "Open source server for sharing geospatial data";
     homepage = "https://geoserver.org/";
-    sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = licenses.gpl2Plus;
-    maintainers = teams.geospatial.members;
-    platforms = platforms.all;
+    sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
+    license = lib.licenses.gpl2Plus;
+    teams = [ lib.teams.geospatial ];
+    platforms = lib.platforms.all;
   };
 })

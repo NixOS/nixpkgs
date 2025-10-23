@@ -2,11 +2,10 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  replaceVars,
 
   # build-system
   setuptools,
-  versioningit,
+  setuptools-scm,
 
   # native dependencies
   isa-l,
@@ -18,25 +17,19 @@
 
 buildPythonPackage rec {
   pname = "isal";
-  version = "1.7.1";
+  version = "1.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pycompression";
     repo = "python-isal";
-    rev = "v${version}";
-    hash = "sha256-KLnSE7QLM3q8DdoWnCEN6dOxsMr8eSH9k3FqFquZFlE=";
+    tag = "v${version}";
+    hash = "sha256-703uXty3a0N+yXfv/7nVIAnU7PaqMtNO0ScltNLJq3g=";
   };
-
-  patches = [
-    (replaceVars ./version.patch {
-      inherit version;
-    })
-  ];
 
   build-system = [
     setuptools
-    versioningit
+    setuptools-scm
   ];
 
   buildInputs = [ isa-l ];
@@ -48,7 +41,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests" ];
+  enabledTestPaths = [ "tests" ];
 
   disabledTests = [
     # calls `python -m isal` and fails on import

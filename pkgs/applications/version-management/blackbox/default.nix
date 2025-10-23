@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "stackexchange";
-    repo = pname;
+    repo = "blackbox";
     rev = "v${version}";
     hash = "sha256-g0oNV7Nj7ZMmsVQFVTDwbKtF4a/Fb3WDB+NRx9IGSWA=";
   };
@@ -57,7 +57,8 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Safely store secrets in a VCS repo";
-    maintainers = with maintainers; [ ericsagnes ];
+    homepage = "https://github.com/StackExchange/blackbox";
+    maintainers = [ ];
     license = licenses.mit;
     platforms = platforms.all;
   };

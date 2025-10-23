@@ -8,7 +8,7 @@
   gtk3,
   gtksourceview,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   pygobject3,
   pyyaml,
   setuptools,
@@ -16,14 +16,14 @@
 
 buildPythonApplication rec {
   pname = "rednotebook";
-  version = "2.37";
+  version = "2.41";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jendrikseipp";
     repo = "rednotebook";
     tag = "v${version}";
-    sha256 = "sha256-ytaj29xZflq20+6Iqmynsr34Q9DP5uOvSBkg+vIWXgU=";
+    sha256 = "sha256-sWfazIeROc3Pf4pUaUdcF00A5AV7bxzwI3R6eoSQkto=";
   };
 
   # We have not packaged tests.
@@ -39,7 +39,7 @@ buildPythonApplication rec {
     gtk3
     gtksourceview
     pango
-    webkitgtk_4_0
+    webkitgtk_4_1
     pygobject3
     pyyaml
   ];
@@ -54,7 +54,7 @@ buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://rednotebook.sourceforge.io/";
-    changelog = "https://github.com/jendrikseipp/rednotebook/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/jendrikseipp/rednotebook/blob/${src.tag}/CHANGELOG.md";
     description = "Modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ orivej ];

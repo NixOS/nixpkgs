@@ -1,26 +1,35 @@
-{ lib, fetchCrate, rustPlatform, clang, rustfmt
+{
+  lib,
+  fetchCrate,
+  rustPlatform,
+  clang,
+  rustfmt,
 }:
 let
   # bindgen hardcodes rustfmt outputs that use nightly features
   rustfmt-nightly = rustfmt.override { asNightly = true; };
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "rust-bindgen-unwrapped";
-  version = "0.71.1";
+  version = "0.72.1";
 
   src = fetchCrate {
     pname = "bindgen-cli";
     inherit version;
-    hash = "sha256-RL9P0dPYWLlEGgGWZuIvyULJfH+c/B+3sySVadJQS3w=";
+    hash = "sha256-rhdQZcnlqVSUqvFDg0Scs1+DHGcKyazeS5H9HH7u8Fk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-4EyDjHreFFFSGf7UoftCh6eI/8nfIP1ANlYWq0K8a3I=";
-
-  buildInputs = [ (lib.getLib clang.cc) ];
+  cargoHash = "sha256-YNpqVB+zdZ76Av2L+yQuBrxKvNML9+3H7ES4+7mED0E=";
 
   preConfigure = ''
     export LIBCLANG_PATH="${lib.getLib clang.cc}/lib"
   '';
+
+  # Disable the "runtime" feature, so libclang is linked.
+  buildNoDefaultFeatures = true;
+  buildFeatures = [ "logging" ];
+  checkNoDefaultFeatures = buildNoDefaultFeatures;
+  checkFeatures = buildFeatures;
 
   doCheck = true;
   nativeCheckInputs = [ clang ];

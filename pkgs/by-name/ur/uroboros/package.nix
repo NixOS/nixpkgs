@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "evilsocket";
-    repo = pname;
+    repo = "uroboros";
     inherit rev;
     hash = "sha256-JB4KMjD0ldJkKWKkArA/vfIdeX/TwxWPPOteob5gK6g=";
   };

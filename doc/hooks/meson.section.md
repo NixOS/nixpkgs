@@ -23,7 +23,7 @@ Controls the flags passed to `meson setup` during configure phase.
 Directory where Meson will put intermediate files.
 
 Setting this can be useful for debugging multiple Meson builds while in the same source directory, for example, when building for different platforms.
-Different values for each build will prevent build artefacts from interefering with each other.
+Different values for each build will prevent build artifacts from interfering with each other.
 This setting has no tangible effect when running the build in a sandboxed derivation.
 
 The default value is `build`.
@@ -31,8 +31,8 @@ The default value is `build`.
 #### `mesonWrapMode` {#meson-wrap-mode}
 
 Which value is passed as
-[`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#core-options)
-to. In Nixpkgs the default value is `nodownload`, so that no subproject will be
+[`-Dwrap_mode=`](https://mesonbuild.com/Builtin-options.html#core-options).
+In Nixpkgs, the default value is `nodownload`, so that no subproject will be
 downloaded (since network access is already disabled during deployment in
 Nixpkgs).
 
@@ -43,13 +43,13 @@ downloaded.
 
 Which value is passed as
 [`--buildtype`](https://mesonbuild.com/Builtin-options.html#core-options) to
-`meson setup` during configure phase. In Nixpkgs the default value is `plain`.
+`meson setup` during configure phase. In Nixpkgs, the default value is `plain`.
 
 #### `mesonAutoFeatures` {#meson-auto-features}
 
 Which value is passed as
 [`-Dauto_features=`](https://mesonbuild.com/Builtin-options.html#core-options)
-to `meson setup` during configure phase. In Nixpkgs the default value is
+to `meson setup` during configure phase. In Nixpkgs, the default value is
 `enabled`, meaning that every feature declared as "auto" by the meson scripts
 will be enabled.
 
@@ -67,7 +67,7 @@ A list of installation tags passed to Meson's commandline option
 [`--tags`](https://mesonbuild.com/Installing.html#installation-tags) during
 install phase.
 
-Note: `mesonInstallTags` should be a list of strings, that will be converted to
+Note: `mesonInstallTags` should be a list of strings that will be converted to
 a comma-separated string that is recognized to `--tags`.
 Example: `mesonInstallTags = [ "emulator" "assembler" ];` will be converted to
 `--tags emulator,assembler`.
@@ -91,3 +91,4 @@ Meson setup hook.
 
 - `prefixKey`
 - `enableParallelBuilding`
+- `enableParallelChecking`

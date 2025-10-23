@@ -1,10 +1,10 @@
 diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
-index 8daf159d..af5a6f38 100644
+index 74540dd3..14f8f864 100644
 --- a/music_assistant/helpers/util.py
 +++ b/music_assistant/helpers/util.py
-@@ -429,30 +429,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
-     def _get_provider_module(domain: str) -> ProviderModuleType:
-         return importlib.import_module(f".{domain}", "music_assistant.providers")
+@@ -434,30 +434,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
+             "ProviderModuleType", importlib.import_module(f".{domain}", "music_assistant.providers")
+         )
  
 -    # ensure module requirements are met
 -    for requirement in requirements:
@@ -30,7 +30,19 @@ index 8daf159d..af5a6f38 100644
 -    # this will fail if something else is wrong (as it should)
 -    return await asyncio.to_thread(_get_provider_module, domain)
 -
-+        raise RuntimeError(f"Missing dependencies for provider {domain}.")
++        raise RuntimeError(f"Configure {domain} in `services.music-assistant.providers` to install the required dependencies.")
  
- def create_tempfile():
-     """Return a (named) temporary file."""
+ async def has_tmpfs_mount() -> bool:
+     """Check if we have a tmpfs mount."""
+diff --git a/music_assistant/providers/ytmusic/__init__.py b/music_assistant/providers/ytmusic/__init__.py
+index 52a7544a..816d0425 100644
+--- a/music_assistant/providers/ytmusic/__init__.py
++++ b/music_assistant/providers/ytmusic/__init__.py
+@@ -197,7 +197,6 @@ class YoutubeMusicProvider(MusicProvider):
+     async def handle_async_init(self) -> None:
+         """Set up the YTMusic provider."""
+         logging.getLogger("yt_dlp").setLevel(self.logger.level + 10)
+-        await self._install_packages()
+         self._cookie = self.config.get_value(CONF_COOKIE)
+         self._po_token_server_url = (
+             self.config.get_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL

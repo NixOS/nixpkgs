@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pillow,
@@ -7,9 +8,10 @@
   xvfb-run,
   scrot,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyscreeze";
   version = "0.1.26";
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "asweigart";
@@ -19,12 +21,13 @@ buildPythonPackage rec {
   };
 
   pythonImportsCheck = [ "pyscreeze" ];
-  nativeCheckInputs = [
+  doCheck = stdenv.hostPlatform.isLinux;
+  nativeCheckInputs = lib.optionals stdenv.hostPlatform.isLinux [
     scrot
     xlib
     xvfb-run
   ];
-  checkPhase = ''
+  checkPhase = lib.optionalString stdenv.hostPlatform.isLinux ''
     python -m unittest tests.test_pillow_unavailable
     xvfb-run python -m unittest tests.test_pyscreeze
   '';

@@ -4,10 +4,13 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  setuptools-scm,
   beautifulsoup4,
   boto3,
+  freezegun,
+  hatchling,
   lxml,
+  openpyxl,
+  parameterized,
   pdoc,
   pytestCheckHook,
   requests-mock,
@@ -16,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "bx-py-utils";
-  version = "98";
+  version = "113";
 
   disabled = pythonOlder "3.10";
 
@@ -26,14 +29,14 @@ buildPythonPackage rec {
     owner = "boxine";
     repo = "bx_py_utils";
     tag = "v${version}";
-    hash = "sha256-VJ4510HLTqdRfeUEe2srT8+W9AaRpi+Mm6srZOOp0fc=";
+    hash = "sha256-rpDRLiqcbg/aRzdmKwGJAGrhBJTA+7tXsjPUIeeC03I=";
   };
 
   postPatch = ''
     rm bx_py_utils_tests/publish.py
   '';
 
-  build-system = [ setuptools-scm ];
+  build-system = [ hatchling ];
 
   pythonImportsCheck = [
     "bx_py_utils.anonymize"
@@ -59,7 +62,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     beautifulsoup4
     boto3
+    freezegun
     lxml
+    openpyxl
+    parameterized
     pdoc
     pytestCheckHook
     requests-mock
@@ -70,21 +76,29 @@ buildPythonPackage rec {
     # too closely affected by bs4 updates
     "test_pretty_format_html"
     "test_assert_html_snapshot_by_css_selector"
+    # test accesses the internet
+    "test_happy_path"
+    # test assumes a virtual environment
+    "test_code_style"
+    # AssertionError: Lists differ: ['my...
+    "test_import_all_files"
   ];
 
-  disabledTestPaths =
-    [ "bx_py_utils_tests/tests/test_project_setup.py" ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # processify() doesn't work under darwin
-      # https://github.com/boxine/bx_py_utils/issues/80
-      "bx_py_utils_tests/tests/test_processify.py"
-    ];
+  disabledTestPaths = [
+    # depends on cli-base-utilities, which depends on bx-py-utils
+    "bx_py_utils_tests/tests/test_project_setup.py"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # processify() doesn't work under darwin
+    # https://github.com/boxine/bx_py_utils/issues/80
+    "bx_py_utils_tests/tests/test_processify.py"
+  ];
 
   meta = {
     description = "Various Python utility functions";
-    mainProgram = "publish";
+    mainProgram = "bx_py_utils";
     homepage = "https://github.com/boxine/bx_py_utils";
-    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/v${version}";
+    changelog = "https://github.com/boxine/bx_py_utils/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ dotlambda ];
   };

@@ -9,11 +9,12 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-serialization-multipart";
-  version = "1.9.2";
+  version = "1.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,11 +22,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-text-v${version}";
-    hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
+    tag = "microsoft-kiota-serialization-multipart-v${version}";
+    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
   };
 
-  sourceRoot = "source/packages/serialization/multipart/";
+  sourceRoot = "${src.name}/packages/serialization/multipart/";
 
   build-system = [ poetry-core ];
 
@@ -39,6 +40,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "kiota_serialization_multipart" ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-serialization-multipart-v";
+  };
 
   meta = with lib; {
     description = "Multipart serialization implementation for Kiota clients in Python";

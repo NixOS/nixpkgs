@@ -1,9 +1,10 @@
-{ lib
-, buildDotnetModule
-, dotnetCorePackages
-, fetchFromGitHub
-, testers
-, discordchatexporter-cli
+{
+  lib,
+  buildDotnetModule,
+  dotnetCorePackages,
+  fetchFromGitHub,
+  testers,
+  discordchatexporter-cli,
 }:
 
 buildDotnetModule rec {
@@ -34,13 +35,13 @@ buildDotnetModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Tool to export Discord chat logs to a file";
     homepage = "https://github.com/Tyrrrz/DiscordChatExporter";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     changelog = "https://github.com/Tyrrrz/DiscordChatExporter/blob/${version}/Changelog.md";
-    maintainers = with maintainers; [ ];
-    platforms = platforms.unix;
+    maintainers = [ ];
+    platforms = lib.platforms.unix;
     mainProgram = "discordchatexporter-cli";
   };
 }

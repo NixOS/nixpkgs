@@ -24,6 +24,7 @@ let
     minor = builtins.elemAt (lib.splitVersion version) 2;
     patch = builtins.elemAt (lib.splitVersion version) 3;
   };
+  cross = stdenv.hostPlatform != stdenv.buildPlatform;
 in
 {
   src =
@@ -36,57 +37,60 @@ in
         rev = "v${version}";
         sha256 = sourceSha256;
       };
-  nativeBuildInputs =
-    [ removeReferencesTo ]
-    ++ lib.flatten (
-      lib.mapAttrsToList (
-        feat: info:
-        (lib.optionals (hasFeature feat) (
-          (lib.optionals (builtins.hasAttr "native" info) info.native)
-          ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
-        ))
-      ) featuresInfo
-    );
+  nativeBuildInputs = [
+    removeReferencesTo
+  ]
+  ++ lib.flatten (
+    lib.mapAttrsToList (
+      feat: info:
+      (lib.optionals (hasFeature feat) (
+        (lib.optionals (builtins.hasAttr "native" info) info.native)
+        ++ (lib.optionals (builtins.hasAttr "pythonNative" info) info.pythonNative)
+      ))
+    ) featuresInfo
+  );
   buildInputs = lib.flatten (
     lib.mapAttrsToList (
       feat: info:
       (lib.optionals (hasFeature feat) (
         (lib.optionals (builtins.hasAttr "runtime" info) info.runtime)
-        ++ (lib.optionals (builtins.hasAttr "pythonRuntime" info) info.pythonRuntime)
+        ++ (lib.optionals (
+          builtins.hasAttr "pythonRuntime" info && hasFeature "python-support"
+        ) info.pythonRuntime)
       ))
     ) featuresInfo
   );
-  cmakeFlags = lib.mapAttrsToList (
+  cmakeFlags = [
+    # https://pybind11.readthedocs.io/en/stable/changelog.html#version-2-13-0-june-25-2024
+    (lib.cmakeBool "CMAKE_CROSSCOMPILING" cross)
+    (lib.cmakeBool "PYBIND11_USE_CROSSCOMPILING" (cross && hasFeature "gnuradio-runtime"))
+  ]
+  ++ lib.mapAttrsToList (
     feat: info:
     (
       if feat == "basic" then
         # Abuse this unavoidable "iteration" to set this flag which we want as
         # well - it means: Don't turn on features just because their deps are
         # satisfied, let only our cmakeFlags decide.
-        "-DENABLE_DEFAULT=OFF"
-      else if hasFeature feat then
-        "-DENABLE_${info.cmakeEnableFlag}=ON"
+        (lib.cmakeBool "ENABLE_DEFAULT" false)
       else
-        "-DENABLE_${info.cmakeEnableFlag}=OFF"
+        (lib.cmakeBool "ENABLE_${info.cmakeEnableFlag}" (hasFeature feat))
     )
   ) featuresInfo;
-  disallowedReferences =
-    [
-      # TODO: Should this be conditional?
-      stdenv.cc
-      stdenv.cc.cc
-    ]
-    # If python-support is disabled, we probably don't want it referenced
-    ++ lib.optionals (!hasFeature "python-support") [ python ];
+  disallowedReferences = [
+    stdenv.cc
+    stdenv.cc.cc
+  ]
+  # If python-support is disabled, we probably don't want it referenced
+  ++ lib.optionals (!hasFeature "python-support") [ python ];
   # Gcc references from examples
-  stripDebugList =
-    [
-      "lib"
-      "bin"
-    ]
-    ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
-    ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
-    ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ];
+  stripDebugList = [
+    "lib"
+    "bin"
+  ]
+  ++ lib.optionals (hasFeature "gr-audio") [ "share/gnuradio/examples/audio" ]
+  ++ lib.optionals (hasFeature "gr-uhd") [ "share/gnuradio/examples/uhd" ]
+  ++ lib.optionals (hasFeature "gr-qtgui") [ "share/gnuradio/examples/qt-gui" ];
   postInstall =
     ""
     # Gcc references
@@ -101,24 +105,23 @@ in
   # module. It's not that bad since it's a development package for most
   # purposes. If closure size needs to be reduced, features should be disabled
   # via an override.
-  passthru =
-    {
-      inherit
-        hasFeature
-        versionAttr
-        features
-        featuresInfo
-        python
-        ;
-      gnuradioOlder = lib.versionOlder versionAttr.major;
-      gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
-    }
-    // lib.optionalAttrs (hasFeature "gr-qtgui") {
-      inherit qt;
-    }
-    // lib.optionalAttrs (hasFeature "gnuradio-companion") {
-      inherit gtk;
-    };
+  passthru = {
+    inherit
+      hasFeature
+      versionAttr
+      features
+      featuresInfo
+      python
+      ;
+    gnuradioOlder = lib.versionOlder versionAttr.major;
+    gnuradioAtLeast = lib.versionAtLeast versionAttr.major;
+  }
+  // lib.optionalAttrs (hasFeature "gr-qtgui") {
+    inherit qt;
+  }
+  // lib.optionalAttrs (hasFeature "gnuradio-companion") {
+    inherit gtk;
+  };
   # Wrapping is done with an external wrapper
   dontWrapPythonPrograms = true;
   dontWrapQtApps = true;
@@ -128,6 +131,8 @@ in
   preCheck = ''
     export HOME=$(mktemp -d)
     export QT_QPA_PLATFORM=offscreen
+  ''
+  + lib.optionalString (hasFeature "gr-qtgui") ''
     export QT_PLUGIN_PATH="${qt.qtbase.bin}/${qt.qtbase.qtPluginPrefix}"
   '';
 

@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
     "-DUDEV_RULES_GROUP=${udevGroup}"
   ];
 
+  doInstallCheck = true;
+
   meta = with lib; {
     description = "Open source wireless development platform suitable for Bluetooth experimentation";
     homepage = "https://github.com/greatscottgadgets/ubertooth";

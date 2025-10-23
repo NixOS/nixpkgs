@@ -14,16 +14,25 @@
 
 stdenv.mkDerivation rec {
   pname = "diffutils";
-  version = "3.10";
+  version = "3.12";
 
   src = fetchurl {
     url = "mirror://gnu/diffutils/diffutils-${version}.tar.xz";
-    hash = "sha256-kOXpPMck5OvhLt6A3xY0Bjx6hVaSaFkZv+YLVWyb0J4=";
+    hash = "sha256-fIt/n8hgkUH96pzs6FJJ0whiQ5H/Yd7a9Sj8szdyff0=";
   };
 
   outputs = [
     "out"
     "info"
+  ];
+
+  patches = [
+    # Fixes test-float-h failure on ppc64 with C23
+    # https://lists.gnu.org/archive/html/bug-gnulib/2025-07/msg00021.html
+    # Multiple upstream commits squashed with adjustments, see header
+    ./gnulib-float-h-tests-port-to-C23-PowerPC-GCC.patch
+
+    ./musl-llvm.patch
   ];
 
   nativeBuildInputs = [
@@ -34,14 +43,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ coreutils ];
 
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
-  # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow fails.
+  # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow and test-sigaction fail.
   postPatch =
     if
       ((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isAarch32))
     then
       ''
-        sed -i -E 's:test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
-        sed -i -E 's:test-sigsegv-catch-stackoverflow[12]::g' gnulib-tests/Makefile.in
+        sed -i -E 's:[[:space:]]test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
+        sed -i -E 's:[[:space:]]test-sigsegv-catch-stackoverflow[12]\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
+        sed -i -E 's:[[:space:]]test-sigaction\$\(EXEEXT\)::g' gnulib-tests/Makefile.in
+      ''
+    else if stdenv.hostPlatform.isFreeBSD then
+      ''
+        sed -i -E 's:test-time::g' gnulib-tests/Makefile.in
       ''
     else
       null;
@@ -50,7 +64,10 @@ stdenv.mkDerivation rec {
     # "pr" need not be on the PATH as a run-time dep, so we need to tell
     # configure where it is. Covers the cross and native case alike.
     lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr"
-    ++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "gl_cv_func_getopt_gnu=yes";
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "gl_cv_func_getopt_gnu=yes"
+      "gl_cv_func_strcasecmp_works=yes"
+    ];
 
   # Test failure on QEMU only (#300550)
   doCheck = !stdenv.buildPlatform.isRiscV64;
@@ -60,6 +77,6 @@ stdenv.mkDerivation rec {
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ das_j ];
+    maintainers = lib.teams.helsinki-systems.members;
   };
 }

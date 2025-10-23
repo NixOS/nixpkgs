@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, obs-studio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
 }:
 
 stdenv.mkDerivation rec {
   pname = "obs-3d-effect";
-  version = "0.1.3";
+  version = "0.1.4";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-3d-effect";
     rev = version;
-    sha256 = "sha256-SgxrBhuO3IaqINwjwdtn31cIcu3hXiPZyVMZJiNsO+s=";
+    sha256 = "sha256-5cPXfEcKIATFQktjIN5lmYjvakYe/k26aHKlJz5FqPE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -32,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-3d-effect";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    inherit (obs-studio.meta) platforms;
   };
 }

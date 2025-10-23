@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "bazel-buildtools";
-  version = "8.0.3";
+  version = "8.2.1";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = "buildtools";
     rev = "v${version}";
-    hash = "sha256-m1z3i1rddwXZK5VF4qwhaMCS5U3FZ5SawJz/IgdRgdU=";
+    hash = "sha256-YkxEc+hcfOH2zzdHngoJmuCqGD4FWSkFd2cVqIrpHD4=";
   };
 
   vendorHash = "sha256-sYZ7ogQY0dWOwJMvLljOjaKeYGYdLrF5AnetregdlYY=";
@@ -34,17 +34,15 @@ buildGoModule rec {
     "-X main.buildScmRevision=${src.rev}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
     homepage = "https://github.com/bazelbuild/buildtools";
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers =
-      with maintainers;
-      [
-        elasticdog
-        uri-canva
-      ]
-      ++ lib.teams.bazel.members;
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
+      elasticdog
+      uri-canva
+    ];
+    teams = [ lib.teams.bazel ];
   };
 }

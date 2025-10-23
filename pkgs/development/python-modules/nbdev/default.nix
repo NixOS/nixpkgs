@@ -1,5 +1,6 @@
 {
   lib,
+  build,
   buildPythonPackage,
   fetchPypi,
   setuptools,
@@ -15,19 +16,22 @@
 
 buildPythonPackage rec {
   pname = "nbdev";
-  version = "2.3.34";
+  version = "2.4.6";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oHZjN+Qu4I9HyR1ReATgCdheTfvphJUcvs7od1OOTvc=";
+    hash = "sha256-nr5bHyhyJDFOilNOCW3DH67Q+J2n+jDvXhqPiXchUyQ=";
   };
 
   pythonRelaxDeps = [ "ipywidgets" ];
 
-  build-system = [ setuptools ];
+  build-system = [
+    build
+    setuptools
+  ];
 
   dependencies = [
     astunparse

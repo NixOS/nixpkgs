@@ -4,7 +4,7 @@
   lib,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-cursor-themes";
   version = "1.0.2";
 
@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/linuxmint/mint-cursor-themes/";
     description = "Linux Mint cursor themes";
     license = licenses.gpl3Plus;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
     platforms = platforms.linux;
   };
 }

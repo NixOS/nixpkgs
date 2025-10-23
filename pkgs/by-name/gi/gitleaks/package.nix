@@ -6,20 +6,21 @@
   installShellFiles,
   nix-update-script,
   versionCheckHook,
+  git,
 }:
 
 buildGoModule rec {
   pname = "gitleaks";
-  version = "8.24.0";
+  version = "8.28.0";
 
   src = fetchFromGitHub {
     owner = "zricethezav";
     repo = "gitleaks";
     tag = "v${version}";
-    hash = "sha256-4LkM65njb2L8aCLBmKo18gNXX93zXCGh/e/+xdS+wek=";
+    hash = "sha256-smh3Ge278lYVEcs6r1F43daexgjgddy1HKhU5E4CBYM=";
   };
 
-  vendorHash = "sha256-J9cQUXVDqSTykoUOCaKGgyYzkcv7Uss6tNra42Sofw8=";
+  vendorHash = "sha256-dd9sHt5t0s4Vff1rOwQY1OC+0FIw0SDt/cwJN+IL5D8=";
 
   ldflags = [
     "-s"
@@ -32,8 +33,7 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  # With v8 the config tests are blocking
-  doCheck = false;
+  nativeCheckInputs = [ git ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ${pname} \
@@ -46,7 +46,7 @@ buildGoModule rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Scan git repos (or files) for secrets";
     longDescription = ''
       Gitleaks is a SAST tool for detecting hardcoded secrets like passwords,
@@ -54,8 +54,8 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/zricethezav/gitleaks";
     changelog = "https://github.com/zricethezav/gitleaks/releases/tag/v${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "gitleaks";
   };
 }

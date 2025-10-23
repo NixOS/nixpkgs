@@ -5,9 +5,9 @@
   faust2jaqt,
   faust2lv2,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mooSpace";
-  version = "unstable-2020-06-10";
+  version = "0-unstable-2020-06-10";
 
   src = fetchFromGitHub {
     owner = "modularev";

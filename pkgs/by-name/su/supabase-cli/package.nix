@@ -10,16 +10,16 @@
 
 buildGoModule rec {
   pname = "supabase-cli";
-  version = "2.17.0";
+  version = "2.50.3";
 
   src = fetchFromGitHub {
     owner = "supabase";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-NkXtpymrEBw5fMaRo1fvcoePuOw0sAROLL5NJsrHELE=";
+    hash = "sha256-ydo3f7TRhHwyrWrKxCT0wFXT5v5NSmoCMRjWf43MizM=";
   };
 
-  vendorHash = "sha256-2r1dYUOEA7uj7ZyShz6cgL8Vc6TFKfPp4863i+7x7Ik=";
+  vendorHash = "sha256-SJisDIpk/xiPffhtA2wKRfftODnchnaOL0wCrLx94k0=";
 
   ldflags = [
     "-s"
@@ -27,12 +27,13 @@ buildGoModule rec {
     "-X=github.com/supabase/cli/internal/utils.Version=${version}"
   ];
 
+  subPackages = [ "." ];
+
   doCheck = false; # tests are trying to connect to localhost
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-    rm $out/bin/{docs,listdep}
     mv $out/bin/{cli,supabase}
 
     installShellCompletion --cmd supabase \

@@ -3,12 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
 
-  # build
+  # build-system
   setuptools,
 
-  # runtime
+  # dependencies
+  jsonargparse,
   looseversion,
   packaging,
+  tomlkit,
   typing-extensions,
 
   # tests
@@ -18,14 +20,14 @@
 
 buildPythonPackage rec {
   pname = "lightning-utilities";
-  version = "0.14.0";
+  version = "0.15.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Lightning-AI";
     repo = "utilities";
     tag = "v${version}";
-    hash = "sha256-lRH1ZQQHnn18NxmLDHy/uSgzgXpLuDD5/08OIErEs7g=";
+    hash = "sha256-0unIL5jylunxTJxFTN+Q4aCFtD5zIHRNWEAWSbw+Fsk=";
   };
 
   postPatch = ''
@@ -36,8 +38,10 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    jsonargparse
     looseversion
     packaging
+    tomlkit
     typing-extensions
   ];
 
@@ -49,9 +53,13 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    "lightning_utilities.core.enums.StrEnum"
+    # DocTestFailure
     "lightning_utilities.core.imports.RequirementCache"
+
+    # NameError: name 'operator' is not defined. Did you forget to import 'operator'
     "lightning_utilities.core.imports.compare_version"
+
+    # importlib.metadata.PackageNotFoundError: No package metadata was found for pytorch-lightning==1.8.0
     "lightning_utilities.core.imports.get_dependency_min_version_spec"
 
     # weird doctests fail on imports, but providing the dependency

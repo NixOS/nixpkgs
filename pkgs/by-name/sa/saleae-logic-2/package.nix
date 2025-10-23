@@ -6,10 +6,10 @@
 }:
 let
   pname = "saleae-logic-2";
-  version = "2.4.22";
+  version = "2.4.29";
   src = fetchurl {
     url = "https://downloads2.saleae.com/logic2/Logic-${version}-linux-x64.AppImage";
-    hash = "sha256-MMuuSYOVw4O/JDsXz9OneUyJMNLUUCBpAMRqCs64khk=";
+    hash = "sha256-eCG2Al6MmWTCiYtaO6qIoNji4QreMryoZRcfKjk5d1c=";
   };
   desktopItem = makeDesktopItem {
     name = "saleae-logic-2";
@@ -70,6 +70,7 @@ appimageTools.wrapType2 {
 
   meta = with lib; {
     homepage = "https://www.saleae.com/";
+    changelog = "https://ideas.saleae.com/f/changelog/";
     description = "Software for Saleae logic analyzers";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];

@@ -13,6 +13,7 @@
   fetchFromGitHub,
   orjson,
   poetry-core,
+  pytest-asyncio_0,
   pytest-aiohttp,
   pytestCheckHook,
   pythonOlder,
@@ -21,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "aiohomekit";
-  version = "3.2.8";
+  version = "3.2.20";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     owner = "Jc2k";
     repo = "aiohomekit";
     tag = version;
-    hash = "sha256-b197P2hTk6lhLKm+4VvyvyPZDqb7NqO0aqoIf3BQBfs=";
+    hash = "sha256-iVLW7oaYJ2imVs0aMUpGbiCyE86JOaHZJr86ZGRkfLM=";
   };
 
   build-system = [ poetry-core ];
@@ -50,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-aiohttp
+    (pytest-aiohttp.override { pytest-asyncio = pytest-asyncio_0; })
     pytestCheckHook
   ];
 
@@ -68,7 +69,7 @@ buildPythonPackage rec {
       Homekit accessories.
     '';
     homepage = "https://github.com/Jc2k/aiohomekit";
-    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${version}";
+    changelog = "https://github.com/Jc2k/aiohomekit/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "aiohomekitctl";

@@ -29,6 +29,16 @@ stdenv.mkDerivation rec {
     "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON"
   ];
 
+  # Fix the build with CMake 4.
+  #
+  # See: <https://github.com/google/zopfli/pull/207>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 2.8.11)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   postInstall = ''
     install -Dm444 -t $out/share/doc/zopfli ../README*
     cp $src/src/zopfli/*.h $dev/include/

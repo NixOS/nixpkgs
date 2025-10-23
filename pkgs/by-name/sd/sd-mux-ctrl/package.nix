@@ -9,7 +9,7 @@
   popt,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "sd-mux-ctrl-unstable";
   version = "2020-02-17";
 
@@ -18,6 +18,13 @@ stdenv.mkDerivation rec {
     rev = "9dd189d973da64e033a0c5c2adb3d94b23153d94";
     hash = "sha256-b0uoxVPfSrqNt0wJoQho9jlpQQUjofgFm93P+UNFtDs=";
   };
+
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake

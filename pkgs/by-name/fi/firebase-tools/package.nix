@@ -5,35 +5,32 @@
   fetchFromGitHub,
   python3,
   xcbuild,
+  nix-update-script,
 }:
+
 buildNpmPackage rec {
   pname = "firebase-tools";
-  version = "13.32.0";
+  version = "14.20.0";
 
   src = fetchFromGitHub {
     owner = "firebase";
     repo = "firebase-tools";
     tag = "v${version}";
-    hash = "sha256-KImt8se4pf/W1XAV8PprYmJRWQqMIAH9FVCEFSV/3Ys=";
+    hash = "sha256-CX/2luy78Du6gsGG3ex0Q5amu93MqebTUF9of7D6H4M=";
   };
 
-  npmDepsHash = "sha256-/EWfXiITSV1r4zVvnHk+9U7MpcUlp7/MNUBJWRw3wRk=";
+  npmDepsHash = "sha256-laYq6NNGsJ2YGhg6i0iFCVk+qyRqYdZPSSWzVHailcc=";
 
-  postPatch = ''
-    ln -s npm-shrinkwrap.json package-lock.json
-  '';
+  nativeBuildInputs = [
+    python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+  ];
 
-  nativeBuildInputs =
-    [
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+  env.PUPPETEER_SKIP_DOWNLOAD = true;
 
-  env = {
-    PUPPETEER_SKIP_DOWNLOAD = true;
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/firebase/firebase-tools/blob/v${version}/CHANGELOG.md";

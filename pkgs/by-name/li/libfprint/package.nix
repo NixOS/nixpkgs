@@ -12,6 +12,7 @@
   gobject-introspection,
   cairo,
   libgudev,
+  udevCheckHook,
   gtk-doc,
   docbook-xsl-nons,
   docbook_xml_dtd_43,
@@ -51,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
     docbook-xsl-nons
     docbook_xml_dtd_43
     gobject-introspection
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -92,6 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library designed to make it easy to add support for consumer fingerprint readers";
     license = lib.licenses.lgpl21Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 })

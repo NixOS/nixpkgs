@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "phase-cli";
-  version = "1.18.7";
+  version = "1.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "phasehq";
     repo = "cli";
     tag = "v${version}";
-    hash = "sha256-ggxTXI3NUHiK1aJqy19rgDlbZxPfGxnqvIlh3NVi9BY=";
+    hash = "sha256-vhjDXQutRdkeeId2shPWFtoZGH6FXvQcWhH8MLe9JqI=";
   };
 
   build-system = with python3Packages; [
@@ -38,14 +38,14 @@ python3Packages.buildPythonApplication rec {
     python3Packages.pytestCheckHook
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests/*.py"
   ];
 
   pythonRelaxDeps = true;
 
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Securely manage and sync environment variables with Phase";

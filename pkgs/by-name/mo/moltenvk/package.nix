@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   gitUpdater,
   apple-sdk_15,
   cereal,
-  libcxx,
   glslang,
   spirv-cross,
   spirv-headers,
@@ -23,7 +21,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "MoltenVK";
-  version = "1.2.11";
+  version = "1.3.0";
 
   strictDeps = true;
 
@@ -49,17 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "KhronosGroup";
     repo = "MoltenVK";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-24qQnJ0RnJP2M4zSlSlQ4c4dVZtHutNiCvjrsCDw6wY=";
+    hash = "sha256-V69P1t48XP/pAPgpVsnFeCBidhHk60XGHRkHF6AEke0=";
   };
-
-  patches = [
-    # Cherry-pick patch to fix build failure due to a hardcoded SPIRV-Cross namespace.
-    # This can be dropped for MoltenVK 1.2.12.
-    (fetchpatch2 {
-      url = "https://github.com/KhronosGroup/MoltenVK/commit/856c8237ac3b32178caae3408effc35bedfdffa1.patch?full_index=1";
-      hash = "sha256-dVTop8sU19Swdb3ajbI+6S715NaxTqd7d0yQ/FDqxqY=";
-    })
-  ];
 
   postPatch = ''
     # Move `mvkGitRevDerived.h` to a stable location
@@ -102,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   env.NIX_CFLAGS_COMPILE = toString (
-    [
-      "-isystem ${lib.getDev libcxx}/include/c++/v1"
+    lib.optional (stdenv.cc.libcxx != null) "-isystem ${lib.getInclude stdenv.cc.libcxx}/include/c++/v1"
+    ++ [
       "-I${lib.getDev spirv-cross}/include/spirv_cross"
       "-I${lib.getDev spirv-headers}/include/spirv/unified1"
 

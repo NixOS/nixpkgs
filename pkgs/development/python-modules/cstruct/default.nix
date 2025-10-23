@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "cstruct";
-  version = "6.0";
+  version = "6.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "andreax79";
     repo = "python-cstruct";
     tag = "v${version}";
-    hash = "sha256-+0mov6TkvezDAlu+aFvMhk8yr694KQdVJ20ZjgoePMk=";
+    hash = "sha256-9MC6f8U++vJkglBmGMTmiamE8XqUNKTzKOz7TA148Ys=";
   };
 
   pythonImportsCheck = [ "cstruct" ];

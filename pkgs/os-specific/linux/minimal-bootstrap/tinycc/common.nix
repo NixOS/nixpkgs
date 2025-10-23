@@ -69,7 +69,7 @@ rec {
         kaem.runCommand "${pname}-${version}"
           {
             inherit pname version meta;
-            passthru.tests = rec {
+            passthru.tests = {
               get-version =
                 result:
                 kaem.runCommand "${pname}-get-version-${version}" { } ''

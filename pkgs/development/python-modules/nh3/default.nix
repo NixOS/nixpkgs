@@ -6,16 +6,15 @@
   rustPlatform,
   libiconv,
   fetchFromGitHub,
-  darwin,
 }:
 let
   pname = "nh3";
-  version = "0.2.20";
+  version = "0.2.21";
   src = fetchFromGitHub {
     owner = "messense";
-    repo = pname;
+    repo = "nh3";
     rev = "v${version}";
-    hash = "sha256-N+xMS1sb3Qq80eNaI5GUACjCHaCba2d8zZeizayy4kY=";
+    hash = "sha256-DskjcKjdz1HmKzmA568zRCjh4UK1/LBD5cSIu7Rfwok=";
   };
 in
 buildPythonPackage {
@@ -24,9 +23,8 @@ buildPythonPackage {
   disabled = pythonOlder "3.8";
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-cYdwN/PpG1ae6lBRk5usXSwBjH37BpQEp5JLLQ2NRNU=";
+    inherit pname version src;
+    hash = "sha256-1Ytca/GiHidR8JOcz+DydN6N/iguLchbP8Wnrd/0NTk=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -36,7 +34,6 @@ buildPythonPackage {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    darwin.apple_sdk.frameworks.Security
   ];
 
   pythonImportsCheck = [ "nh3" ];

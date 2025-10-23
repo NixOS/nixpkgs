@@ -3,52 +3,39 @@
   python3,
   fetchFromGitHub,
   nixosTests,
+  unstableGitUpdater,
 }:
 let
   python = python3.override {
-    packageOverrides = final: prev: {
-      httpx = prev.httpx.overridePythonAttrs (old: rec {
-        version = "0.27.2";
-        src = old.src.override {
-          tag = version;
-          hash = "sha256-N0ztVA/KMui9kKIovmOfNTwwrdvSimmNkSvvC+3gpck=";
-        };
-      });
-
-      httpx-socks = prev.httpx-socks.overridePythonAttrs (old: rec {
-        version = "0.9.2";
-        src = old.src.override {
-          tag = "v${version}";
-          hash = "sha256-PUiciSuDCO4r49st6ye5xPLCyvYMKfZY+yHAkp5j3ZI=";
-        };
-      });
-
-      starlette = prev.starlette.overridePythonAttrs (old: {
-        disabledTests = old.disabledTests or [ ] ++ [
-          # fails in assertion with spacing issue
-          "test_request_body"
-          "test_request_stream"
-          "test_wsgi_post"
-        ];
-      });
-    };
+    packageOverrides = final: prev: { };
   };
 in
 python.pkgs.toPythonModule (
   python.pkgs.buildPythonApplication rec {
     pname = "searxng";
-    version = "0-unstable-2025-02-09";
+    version = "0-unstable-2025-10-23";
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "searxng";
       repo = "searxng";
-      rev = "a1e2b254677a22f1f8968a06564661ac6203c162";
-      hash = "sha256-DrSj1wQUWq9xVuQqt0BZ79JgyRS9qJqg1cdYTIBb1A8=";
+      rev = "e363db970c77e9cab8f3611bb6b6f8a59646a035";
+      hash = "sha256-phJRQ+euSTEmsn1wS5dgO8UPwAJ8cr8ov3K3fSzWQVA=";
     };
 
-    postPatch = ''
-      sed -i 's/==/>=/' requirements.txt
-    '';
+    nativeBuildInputs = with python.pkgs; [ pythonRelaxDepsHook ];
+
+    pythonRelaxDeps = [
+      "certifi"
+      "flask"
+      "flask-babel"
+      "httpx-socks"
+      "lxml"
+      "setproctitle"
+      "typer-slim"
+      "typing-extensions"
+      "whitenoise"
+    ];
 
     preBuild =
       let
@@ -69,29 +56,33 @@ python.pkgs.toPythonModule (
         EOF
       '';
 
+    build-system = with python.pkgs; [ setuptools ];
+
     dependencies =
       with python.pkgs;
       [
         babel
         brotli
         certifi
+        cryptography
         fasttext-predict
         flask
         flask-babel
+        httpx
+        httpx-socks
         isodate
         jinja2
         lxml
+        markdown-it-py
         msgspec
         pygments
         python-dateutil
         pyyaml
-        redis
-        typer
-        uvloop
         setproctitle
-        httpx
-        httpx-socks
-        markdown-it-py
+        typer-slim
+        uvloop
+        valkey
+        whitenoise
       ]
       ++ httpx.optional-dependencies.http2
       ++ httpx-socks.optional-dependencies.asyncio;
@@ -112,6 +103,7 @@ python.pkgs.toPythonModule (
       tests = {
         searxng = nixosTests.searx;
       };
+      updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
     };
 
     meta = with lib; {

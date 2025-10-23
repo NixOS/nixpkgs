@@ -8,9 +8,8 @@
   qmake,
   bison,
   flex,
-  ...
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qtspim";
   version = "9.1.23";
 

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, jre
-, makeWrapper
-, copyDesktopItems
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  jre,
+  makeWrapper,
+  copyDesktopItems,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dayon";
-  version = "16.0.2";
+  version = "17.0.0";
 
   src = fetchFromGitHub {
     owner = "RetGal";
     repo = "dayon";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EOQVDzza1tqAzGtEV0npT2k1thTNJOhzMXXX1Tuti6Q=";
+    hash = "sha256-YGp27LYtiEHUkkHvAxm6M9ORPqOdpPcyDoRMqKGS8To=";
   };
 
   nativeBuildInputs = [

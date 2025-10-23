@@ -13,14 +13,16 @@ let
       expected,
       src,
       patches ? [ ],
-      schemaIdToVariableMapping,
+      args,
     }:
 
     let
-      patch = makeHardcodeGsettingsPatch ({
-        inherit src schemaIdToVariableMapping;
-        inherit patches;
-      });
+      patch = makeHardcodeGsettingsPatch (
+        args
+        // {
+          inherit src patches;
+        }
+      );
     in
     runCommandLocal "makeHardcodeGsettingsPatch-tests-${name}"
 
@@ -36,7 +38,7 @@ let
         cp -r --no-preserve=all "${expected}" src-expected
 
         pushd src
-        for patch in ${lib.escapeShellArgs (builtins.map (p: "${p}") patches)}; do
+        for patch in ${lib.escapeShellArgs (map (p: "${p}") patches)}; do
             patch < "$patch"
         done
         patch < "${patch}"
@@ -54,10 +56,12 @@ in
   basic = mkTest {
     name = "basic";
     src = ./fixtures/example-project;
-    schemaIdToVariableMapping = {
-      "org.gnome.evolution-data-server.addressbook" = "EDS";
-      "org.gnome.evolution.calendar" = "EVO";
-      "org.gnome.seahorse.nautilus.window" = "SEANAUT";
+    args = {
+      schemaIdToVariableMapping = {
+        "org.gnome.evolution-data-server.addressbook" = "EDS";
+        "org.gnome.evolution.calendar" = "EVO";
+        "org.gnome.seahorse.nautilus.window" = "SEANAUT";
+      };
     };
     expected = ./fixtures/example-project-patched;
   };
@@ -69,9 +73,26 @@ in
       # Avoid using wrapper function, which the generator cannot handle.
       ./fixtures/example-project-wrapped-settings-constructor-resolve.patch
     ];
-    schemaIdToVariableMapping = {
-      "org.gnome.evolution-data-server.addressbook" = "EDS";
+    args = {
+      schemaIdToVariableMapping = {
+        "org.gnome.evolution-data-server.addressbook" = "EDS";
+      };
     };
     expected = ./fixtures/example-project-wrapped-settings-constructor-patched;
   };
+
+  existsFn = mkTest {
+    name = "exists-fn";
+    src = ./fixtures/example-project;
+    args = {
+      schemaIdToVariableMapping = {
+        "org.gnome.evolution-data-server.addressbook" = "EDS";
+        "org.gnome.evolution.calendar" = "EVO";
+        "org.gnome.seahorse.nautilus.window" = "SEANAUT";
+      };
+      schemaExistsFunction = "e_ews_common_utils_gsettings_schema_exists";
+    };
+    expected = ./fixtures/example-project-patched-with-exists-fn;
+  };
+
 }

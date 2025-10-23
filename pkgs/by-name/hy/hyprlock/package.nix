@@ -1,6 +1,6 @@
 {
   lib,
-  gcc14Stdenv,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -26,15 +26,15 @@
   nix-update-script,
 }:
 
-gcc14Stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.7.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-U+8HOPgfrNkFEadoyB9GXSPPFW/Uytvb3TxyqW3JOw4=";
+    hash = "sha256-ucJ5C83hJy8XFO8Y+PL9hVcwdrQnj63BjXcO5A4qyNU=";
   };
 
   nativeBuildInputs = [
@@ -78,11 +78,10 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     description = "Hyprland's GPU-accelerated screen locking utility";
     homepage = "https://github.com/hyprwm/hyprlock";
     license = lib.licenses.bsd3;
-    maintainers =
-      lib.teams.hyprland.members
-      ++ (with lib.maintainers; [
-        iynaix
-      ]);
+    maintainers = with lib.maintainers; [
+      iynaix
+    ];
+    teams = [ lib.teams.hyprland ];
     mainProgram = "hyprlock";
     platforms = lib.platforms.linux;
   };

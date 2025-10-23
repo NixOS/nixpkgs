@@ -53,6 +53,6 @@ buildPythonPackage rec {
     description = "Changelog document parser";
     homepage = "https://git.sr.ht/~bignose/changelog-chug";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

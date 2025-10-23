@@ -9,7 +9,7 @@
   version ? null,
 }:
 
-mkCoqDerivation rec {
+mkCoqDerivation {
   pname = "gaia-hydras";
   repo = "hydra-battles";
 

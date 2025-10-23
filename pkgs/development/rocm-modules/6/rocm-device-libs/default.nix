@@ -1,11 +1,13 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  fetchpatch,
   cmake,
-  rocm-cmake,
-  libxml2,
+  ninja,
+  zlib,
+  zstd,
+  llvm,
+  python3,
 }:
 
 let
@@ -19,39 +21,54 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-device-libs";
-  version = "6.0.2";
+  # In-tree with ROCm LLVM
+  inherit (llvm.llvm) version;
+  src = llvm.llvm.monorepoSrc;
+  sourceRoot = "${finalAttrs.src.name}/amd/device-libs";
+  strictDeps = true;
+  __structuredAttrs = true;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "ROCm-Device-Libs";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-7XG7oSkJ3EPWTYGea0I50eB1/DPMD5agmjctxZYTbLQ=";
-  };
+  postPatch =
+    # Use our sysrooted toolchain instead of direct clang target
+    ''
+      substituteInPlace cmake/OCL.cmake \
+        --replace-fail '$<TARGET_FILE:clang>' "${llvm.rocm-toolchain}/bin/clang"
+    '';
 
-  patches = [ ./cmake.patch ];
+  patches = [
+    ./cmake.patch
+    (fetchpatch {
+      name = "cmake-4-compat-dont-set-cmp0053.patch";
+      url = "https://github.com/ROCm/llvm-project/commit/a18cc4c7cb51f94182b6018c7c73acde1b8ebddb.patch";
+      hash = "sha256-kp/Ld0IhjWgRbRR9R/CKdkI9ELvPkQSAMqPsAPFxzhM=";
+      relative = "amd/device-libs";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
-    rocm-cmake
+    ninja
+    python3
+    llvm.rocm-toolchain
   ];
 
-  buildInputs = [ libxml2 ];
-  cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}" ];
+  buildInputs = [
+    llvm.llvm
+    llvm.clang-unwrapped
+    zlib
+    zstd
+  ];
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
-  };
+  cmakeFlags = [
+    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+  ];
 
   meta = with lib; {
     description = "Set of AMD-specific device-side language runtime libraries";
     homepage = "https://github.com/ROCm/ROCm-Device-Libs";
     license = licenses.ncsa;
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

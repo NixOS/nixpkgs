@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tparted";
-  version = "2025-01-24";
+  version = "2025-10-10";
 
   src = fetchurl {
     url = "https://github.com/Kagamma/tparted/releases/download/${finalAttrs.version}/linux_x86-64_tparted_${finalAttrs.version}.tar.gz";
-    hash = "sha256-7V3bdsP4uqZ5zyw3j/s8fhMYFCyQ1Rz5Z1JiPFc1oFY=";
+    hash = "sha256-eLeo+6AGUghrU5szkUFNcieQPA3D/D5pjZV4ZrINiGY=";
   };
 
   nativeBuildInputs = [

@@ -1,26 +1,24 @@
 {
+  lib,
   buildPythonPackage,
   drawio-headless,
   fetchPypi,
-  isPy3k,
-  lib,
+  livereload,
   mkdocs,
   poetry-core,
-  livereload,
   tornado,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "mkdocs-drawio-exporter";
-  version = "0.10.1";
+  version = "0.10.2";
   pyproject = true;
-
-  disabled = !isPy3k;
 
   src = fetchPypi {
     pname = "mkdocs_drawio_exporter";
     inherit version;
-    hash = "sha256-7DbJE5UHXRO3kQYM2HuzxQeEhWBKFE06WFSf5GTYGZ8=";
+    hash = "sha256-LbHnV6WLIgab6CrripZnnqc5kkVyF4E+Ls00h1bXjHc=";
   };
 
   build-system = [ poetry-core ];
@@ -32,15 +30,18 @@ buildPythonPackage rec {
     tornado
   ];
 
+  nativeCheckInputs = [ unittestCheckHook ];
+
   pythonImportsCheck = [ "mkdocs_drawio_exporter" ];
 
   meta = with lib; {
-    description = "Exports your Draw.io diagrams at build time for easier embedding into your documentation";
-    homepage = "https://github.com/LukeCarrier/mkdocs-drawio-exporter/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ snpschaaf ];
+    description = "Module for exporting Draw.io diagrams";
     longDescription = ''
       Exports your Draw.io diagrams at build time for easier embedding into your documentation.
     '';
+    homepage = "https://github.com/LukeCarrier/mkdocs-drawio-exporter/";
+    changelog = "https://github.com/LukeCarrier/mkdocs-drawio-exporter/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ snpschaaf ];
   };
 }

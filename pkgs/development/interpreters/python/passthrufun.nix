@@ -23,6 +23,7 @@
   pythonOnHostForHost,
   pythonOnTargetForTarget,
   pythonAttr ? null,
+  pythonABITags ? [ "none" ],
   self, # is pythonOnHostForTarget
 }:
 let
@@ -106,10 +107,6 @@ let
           python = self;
         }
     );
-  pythonOnBuildForHost_overridden = pythonOnBuildForHost.override {
-    inherit packageOverrides;
-    self = pythonOnBuildForHost_overridden;
-  };
 in
 rec {
   isPy27 = pythonVersion == "2.7";
@@ -144,7 +141,8 @@ rec {
   pythonAtLeast = lib.versionAtLeast pythonVersion;
   pythonOlder = lib.versionOlder pythonVersion;
   inherit hasDistutilsCxxPatch;
-  pythonOnBuildForHost = pythonOnBuildForHost_overridden;
+  inherit pythonOnBuildForHost;
+  inherit pythonABITags;
 
   tests = callPackage ./tests.nix {
     python = self;

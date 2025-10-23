@@ -28,10 +28,10 @@ let
   addPackages =
     self:
     let
-      callPackage = self.newScope ({
+      callPackage = self.newScope {
         inherit (self) qtModule;
         inherit srcs python3 stdenv;
-      });
+      };
 
       # Per <https://doc.qt.io/qt-6/macos.html#supported-versions>.
       # This should reflect the highest “Build Environment” and the
@@ -67,58 +67,6 @@ let
         inherit (srcs.qtbase) src version;
       };
       env = callPackage ./qt-env.nix { };
-      full = callPackage (
-        { env, qtbase }:
-        env "qt-full-${qtbase.version}"
-          # `with self` is ok to use here because having these spliced is unnecessary
-          (
-            with self;
-            [
-              qt3d
-              qt5compat
-              qtcharts
-              qtconnectivity
-              qtdatavis3d
-              qtdeclarative
-              qtdoc
-              qtgraphs
-              qtgrpc
-              qthttpserver
-              qtimageformats
-              qtlanguageserver
-              qtlocation
-              qtlottie
-              qtmultimedia
-              qtmqtt
-              qtnetworkauth
-              qtpositioning
-              qtsensors
-              qtserialbus
-              qtserialport
-              qtshadertools
-              qtspeech
-              qtquick3d
-              qtquick3dphysics
-              qtquickeffectmaker
-              qtquicktimeline
-              qtremoteobjects
-              qtsvg
-              qtscxml
-              qttools
-              qttranslations
-              qtvirtualkeyboard
-              qtwebchannel
-              qtwebengine
-              qtwebsockets
-              qtwebview
-            ]
-            ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-              qtwayland
-              libglvnd
-            ]
-          )
-      ) { };
-
       qt3d = callPackage ./modules/qt3d.nix { };
       qt5compat = callPackage ./modules/qt5compat.nix { };
       qtcharts = callPackage ./modules/qtcharts.nix { };
@@ -159,7 +107,12 @@ let
       qtsvg = callPackage ./modules/qtsvg.nix { };
       qtscxml = callPackage ./modules/qtscxml.nix { };
       qttools = callPackage ./modules/qttools { };
-      qttranslations = callPackage ./modules/qttranslations.nix { };
+      qttranslations = callPackage ./modules/qttranslations.nix {
+        qttools = self.qttools.override {
+          qtbase = self.qtbase.override { qttranslations = null; };
+          qtdeclarative = null;
+        };
+      };
       qtvirtualkeyboard = callPackage ./modules/qtvirtualkeyboard.nix { };
       qtwayland = callPackage ./modules/qtwayland.nix { };
       qtwebchannel = callPackage ./modules/qtwebchannel.nix { };
@@ -178,13 +131,12 @@ let
         makeSetupHook {
           name = "wrap-qt6-apps-hook";
           propagatedBuildInputs = [ makeBinaryWrapper ];
-          depsTargetTargetPropagated =
-            [
-              (onlyPluginsAndQml qtbase)
-            ]
-            ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
-              (onlyPluginsAndQml qtwayland)
-            ];
+          depsTargetTargetPropagated = [
+            (onlyPluginsAndQml qtbase)
+          ]
+          ++ lib.optionals (lib.meta.availableOn stdenv.targetPlatform qtwayland) [
+            (onlyPluginsAndQml qtwayland)
+          ];
         } ./hooks/wrap-qt-apps-hook.sh
       ) { };
 
@@ -209,24 +161,14 @@ let
           };
         } ./hooks/qmake-hook.sh
       ) { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      full = throw "qt6.full has been removed. Please use individual packages instead."; # Added 2025-10-21
     };
 
   baseScope = makeScopeWithSplicing' {
     otherSplices = generateSplicesForMkScope "qt6";
     f = addPackages;
   };
-
-  bootstrapScope = baseScope.overrideScope (
-    final: prev: {
-      qtbase = prev.qtbase.override { qttranslations = null; };
-      qtdeclarative = null;
-    }
-  );
-
-  finalScope = baseScope.overrideScope (
-    final: prev: {
-      qttranslations = bootstrapScope.qttranslations;
-    }
-  );
 in
-finalScope
+baseScope

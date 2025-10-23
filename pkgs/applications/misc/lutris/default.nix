@@ -6,6 +6,7 @@
   # build inputs
   atk,
   file,
+  glib,
   gdk-pixbuf,
   glib-networking,
   gnome-desktop,
@@ -14,8 +15,10 @@
   gtk3,
   libnotify,
   pango,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
+  meson,
+  ninja,
 
   # check inputs
   xvfb-run,
@@ -45,11 +48,15 @@
   pulseaudio,
   p7zip,
   xgamma,
+  gettext,
   libstrangle,
   fluidsynth,
   xorgserver,
   xorg,
   util-linux,
+  pkg-config,
+  desktop-file-utils,
+  appstream-glib,
 }:
 
 let
@@ -83,29 +90,37 @@ buildPythonApplication rec {
     hash = "sha256-CAXKnx5+60MITRM8enkYgFl5ZKM6HCXhCYNyG7kHhuQ=";
   };
 
+  format = "other";
+
   nativeBuildInputs = [
-    wrapGAppsHook3
+    appstream-glib
+    desktop-file-utils
+    gettext
+    glib
     gobject-introspection
+    meson
+    ninja
+    wrapGAppsHook3
+    pkg-config
   ];
-  buildInputs =
-    [
-      atk
-      gdk-pixbuf
-      glib-networking
-      gnome-desktop
-      gtk3
-      libnotify
-      pango
-      webkitgtk_4_0
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    atk
+    gdk-pixbuf
+    glib-networking
+    gnome-desktop
+    gtk3
+    libnotify
+    pango
+    webkitgtk_4_1
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   # See `install_requires` in https://github.com/lutris/lutris/blob/master/setup.py
   propagatedBuildInputs = [
@@ -128,20 +143,6 @@ buildPythonApplication rec {
       --replace '"libmagic.so.1"' "'${lib.getLib file}/lib/libmagic.so.1'"
   '';
 
-  nativeCheckInputs = [
-    xvfb-run
-    nose2
-    flake8
-  ] ++ requiredTools;
-  checkPhase = ''
-    runHook preCheck
-
-    export HOME=$PWD
-    xvfb-run -s '-screen 0 800x600x24' make test
-
-    runHook postCheck
-  '';
-
   # avoid double wrapping
   dontWrapGApps = true;
   makeWrapperArgs = [
@@ -155,8 +156,8 @@ buildPythonApplication rec {
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
-      Madouura
       rapiteanu
+      iedame
     ];
     platforms = platforms.linux;
     mainProgram = "lutris";

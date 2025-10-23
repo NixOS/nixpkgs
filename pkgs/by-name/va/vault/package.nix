@@ -12,18 +12,24 @@
 
 buildGoModule rec {
   pname = "vault";
-  version = "1.18.5";
+  version = "1.20.4";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    hash = "sha256-ZpfUQJdwt7byRUs8sJRdVQABLYGqZVFPfaXwCdK2rR4=";
+    hash = "sha256-GZ+/NzOjcKTYOq4HajKGD68RNxIdXxfLo/pAewaZ8F8=";
   };
 
-  vendorHash = "sha256-B3NsCykCBWpWSvWULyf7/3TNToYSciLI/CEVgVF2TKM=";
+  vendorHash = "sha256-mhT5s1nIdX/57TDEaWwbni0E7DX0W0WwwvrSr7L66hI=";
 
   proxyVendor = true;
+
+  postPatch = ''
+    # Remove defunct github.com/hashicorp/go-cmp dependency
+    sed -i '/github\.com\/hashicorp\/go-cmp/d' go.mod
+    sed -i '/github\.com\/hashicorp\/go-cmp/d' go.sum
+  '';
 
   subPackages = [ "." ];
 
@@ -42,20 +48,19 @@ buildGoModule rec {
     "-X github.com/hashicorp/vault/sdk/version.VersionPrerelease="
   ];
 
-  postInstall =
-    ''
-      echo "complete -C $out/bin/vault vault" > vault.bash
-      installShellCompletion vault.bash
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      wrapProgram $out/bin/vault \
-        --prefix PATH ${
-          lib.makeBinPath [
-            gawk
-            glibc
-          ]
-        }
-    '';
+  postInstall = ''
+    echo "complete -C $out/bin/vault vault" > vault.bash
+    installShellCompletion vault.bash
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
+    wrapProgram $out/bin/vault \
+      --prefix PATH ${
+        lib.makeBinPath [
+          gawk
+          glibc
+        ]
+      }
+  '';
 
   passthru.tests = {
     inherit (nixosTests)
@@ -66,17 +71,16 @@ buildGoModule rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.vaultproject.io/";
     description = "Tool for managing secrets";
     changelog = "https://github.com/hashicorp/vault/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsl11;
+    license = lib.licenses.bsl11;
     mainProgram = "vault";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       rushmorem
       lnl7
       offline
-      pradeepchhetri
       Chili-Man
       techknowlogick
     ];

@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "nifty8";
-  version = "8.5.6";
+  version = "8.5.7";
   pyproject = true;
 
   src = fetchFromGitLab {
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "ift";
     repo = "nifty";
     tag = "v${version}";
-    hash = "sha256-DQPCLRVl/UE1zv7nUZtPJa/sRwmAkHgrcDsxRa/ndX4=";
+    hash = "sha256-5KPmM1UaXnS/ZEsnyFyxvDk4Nc4m6AT5FDgmCG6U6YU=";
   };
 
   # nifty8.re is the jax-backed version of nifty8 (the regular one uses numpy).

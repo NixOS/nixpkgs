@@ -46,7 +46,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     cairo
     cffi
-  ] ++ lib.optional withXcffib xcffib;
+  ]
+  ++ lib.optional withXcffib xcffib;
 
   nativeCheckInputs = [
     numpy
@@ -55,6 +56,10 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "cairocffi" ];
+
+  # Cairo tries to load system fonts by default.
+  # It's surfaced as a Cairo "out of memory" error in tests.
+  __impureHostDeps = [ "/System/Library/Fonts" ];
 
   meta = with lib; {
     changelog = "https://github.com/Kozea/cairocffi/blob/v${version}/NEWS.rst";

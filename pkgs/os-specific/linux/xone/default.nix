@@ -3,36 +3,18 @@
   lib,
   fetchFromGitHub,
   kernel,
-  fetchpatch,
+  kernelModuleMakeFlags,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "xone";
-  version = "0.3-unstable-2024-04-25";
+  version = "0.4.8";
 
   src = fetchFromGitHub {
-    owner = "medusalix";
+    owner = "dlundqvist";
     repo = "xone";
-    rev = "29ec3577e52a50f876440c81267f609575c5161e";
-    hash = "sha256-ZKIV8KtrFEyabQYzWpxz2BvOAXKV36ufTI87VpIfkFs=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-EXJBqzO4e2SJGrPvB0VYzIQf09uo5OfNdBQw5UqskYg=";
   };
-
-  patches = [
-    # Fix build on kernel 6.11
-    # https://github.com/medusalix/xone/pull/48
-    (fetchpatch {
-      name = "kernel-6.11.patch";
-      url = "https://github.com/medusalix/xone/commit/28df566c38e0ee500fd5f74643fc35f21a4ff696.patch";
-      hash = "sha256-X14oZmxqqZJoBZxPXGZ9R8BAugx/hkSOgXlGwR5QCm8=";
-    })
-    # Fix build on kernel 6.12
-    # https://github.com/medusalix/xone/pull/53
-    (fetchpatch {
-      name = "kernel-6.12.patch";
-      url = "https://github.com/medusalix/xone/commit/d88ea1e8b430d4b96134e43ca1892ac48334578e.patch";
-      hash = "sha256-zQK1tuxu2ZmKxPO0amkfcT/RFBSkU2pWD0qhGyCCHXI=";
-    })
-  ];
 
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${finalAttrs.src.name}
@@ -40,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = [
+  makeFlags = kernelModuleMakeFlags ++ [
     "-C"
     "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     "M=$(sourceRoot)"
@@ -54,10 +36,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Linux kernel driver for Xbox One and Xbox Series X|S accessories";
-    homepage = "https://github.com/medusalix/xone";
+    homepage = "https://github.com/dlundqvist/xone";
     license = licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ rhysmdnz ];
+    maintainers = with lib.maintainers; [
+      rhysmdnz
+      fazzi
+    ];
     platforms = platforms.linux;
-    broken = kernel.kernelOlder "5.11";
+    broken = kernel.kernelOlder "6";
   };
 })

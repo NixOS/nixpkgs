@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   go,
@@ -36,7 +37,7 @@ buildGoModule rec {
 
   allowGoReference = true;
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd go-licenses \
       --bash <("$out/bin/go-licenses" completion bash) \
       --fish <("$out/bin/go-licenses" completion fish) \
@@ -51,12 +52,12 @@ buildGoModule rec {
   # Tests require internet connection
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/google/go-licenses/releases/tag/v${version}";
     description = "Reports on the licenses used by a Go package and its dependencies";
     mainProgram = "go-licenses";
     homepage = "https://github.com/google/go-licenses";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ Luflosi ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ Luflosi ];
   };
 }

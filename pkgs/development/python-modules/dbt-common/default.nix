@@ -1,13 +1,13 @@
 {
   lib,
-  fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
+  fetchFromGitHub,
 
   # build-system
   hatchling,
 
   # dependencies
+  dbt-protos,
   agate,
   colorama,
   deepdiff,
@@ -27,21 +27,16 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dbt-common";
-  version = "1.14.0";
+  version = "1.28.0-unstable-2025-08-14";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-common";
-    # Unfortunately, upstream doesn't tag commits on GitHub, and the pypi source
-    # doesn't include tests. TODO: Write an update script that will detect the
-    # version from `dbt_common/__about__.py`.
-    rev = "965ad815f0dd546678d2595a3010d81f344f8b73";
-    hash = "sha256-63gWkETi52uOrO0FTPwM831UHECqcyCtb7wVHQuujnc=";
+    rev = "dd34e0a0565620863ff70c0b02421d84fcee8a02"; # They don't tag releases
+    hash = "sha256-hG6S+IIAR3Cu69oFapQUVoCdaiEQYeMQ/ekBuAXxPrI=";
   };
 
   build-system = [ hatchling ];
@@ -52,9 +47,11 @@ buildPythonPackage rec {
     # 0.6.x -> 0.7.2 doesn't seem too risky at a glance
     # https://pypi.org/project/isodate/0.7.2/
     "isodate"
+    "protobuf"
   ];
 
   dependencies = [
+    dbt-protos
     agate
     colorama
     deepdiff
@@ -67,7 +64,8 @@ buildPythonPackage rec {
     python-dateutil
     requests
     typing-extensions
-  ] ++ mashumaro.optional-dependencies.msgpack;
+  ]
+  ++ mashumaro.optional-dependencies.msgpack;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -76,10 +74,8 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
-    # Assertion errors (TODO: Notify upstream)
-    "test_create_print_json"
-    "test_events"
-    "test_extra_dict_on_event"
+    # flaky test: https://github.com/dbt-labs/dbt-common/issues/280
+    "TestFindMatching"
   ];
 
   pythonImportsCheck = [ "dbt_common" ];
@@ -87,7 +83,7 @@ buildPythonPackage rec {
   meta = {
     description = "Shared common utilities for dbt-core and adapter implementations use";
     homepage = "https://github.com/dbt-labs/dbt-common";
-    changelog = "https://github.com/dbt-labs/dbt-common/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/dbt-labs/dbt-common/blob/main/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ ];
   };

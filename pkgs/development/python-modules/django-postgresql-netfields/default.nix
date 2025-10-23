@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "django-postgresql-netfields";
-  version = "1.3.1";
+  version = "1.3.2";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "jimfunk";
-    repo = pname;
+    repo = "django-postgresql-netfields";
     rev = "v${version}";
-    hash = "sha256-76vGvxxfNZQBCCsTkkSgQZ8PpFspWxJQDj/xq9iOSTU=";
+    hash = "sha256-iZ6KmbVlp2nf3T0Pj4XD1einhoK0kmUmUXOZBmmrzZw=";
   };
 
   propagatedBuildInputs = [

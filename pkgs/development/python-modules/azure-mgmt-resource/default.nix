@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-resource";
-  version = "23.2.0";
+  version = "24.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_resource";
     inherit version;
-    hash = "sha256-dHt1DfevI6sw5T0/NiR6sMFt4eJn1maxpQd8OaQpJSk=";
+    hash = "sha256-z2uJlfzdQHrJ/x3UdAhxKUKaHZDbsax3+XwZuWI3smU=";
   };
 
   build-system = [ setuptools ];

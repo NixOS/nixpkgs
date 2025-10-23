@@ -1,42 +1,41 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   curl,
   pkg-config,
   makeBinaryWrapper,
+  installShellFiles,
   libgit2,
   oniguruma,
   openssl,
   sqlite,
   zlib,
 
-  unstableGitUpdater,
-  writeShellScript,
-  yq,
-
+  nix-update-script,
   includeLSP ? true,
   includeForge ? true,
 }:
 rustPlatform.buildRustPackage {
   pname = "steel";
-  version = "0.6.0-unstable-2025-02-27";
+  version = "0-unstable-2025-10-14";
 
   src = fetchFromGitHub {
     owner = "mattwparas";
     repo = "steel";
-    rev = "f1a605a0f3fe321f4605a80c4497eda2eac5ffce";
-    hash = "sha256-3Iqoy2J9wY3T5jOSjtEk1aT+Q3ncNmmpQ/LY/iyvKuY=";
+    rev = "c83d48f657f28017912cc3c1b604c33ab5de0a41";
+    hash = "sha256-VVrMXpJwcaUTSR6AElkc7Xu8If0/bUzKklOyo87CdLI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-PWE64CwHCQWvOGeOqdsqX6rAruWlnCwsQpcxS221M3g=";
+  cargoHash = "sha256-CrmQhOfh7SQ5GvBywmYkfU6wMlgZq2x61+T+mIeQ7z4=";
 
   nativeBuildInputs = [
     curl
     makeBinaryWrapper
     pkg-config
     rustPlatform.bindgenHook
+    installShellFiles
   ];
 
   buildInputs = [
@@ -52,21 +51,20 @@ rustPlatform.buildRustPackage {
     rm .cargo/config.toml
   '';
 
-  cargoBuildFlags =
-    [
-      "--package"
-      "steel-interpreter"
-      "--package"
-      "cargo-steel-lib"
-    ]
-    ++ lib.optionals includeLSP [
-      "--package"
-      "steel-language-server"
-    ]
-    ++ lib.optionals includeForge [
-      "--package"
-      "forge"
-    ];
+  cargoBuildFlags = [
+    "--package"
+    "steel-interpreter"
+    "--package"
+    "cargo-steel-lib"
+  ]
+  ++ lib.optionals includeLSP [
+    "--package"
+    "steel-language-server"
+  ]
+  ++ lib.optionals includeForge [
+    "--package"
+    "steel-forge"
+  ];
 
   # Tests are disabled since they always fail when building with Nix
   doCheck = false;
@@ -74,7 +72,7 @@ rustPlatform.buildRustPackage {
   postInstall = ''
     mkdir -p $out/lib/steel
 
-    substituteInPlace cogs/installer/download.scm \
+    substituteInPlace crates/forge/installer/download.scm \
       --replace-fail '"cargo-steel-lib"' '"$out/bin/cargo-steel-lib"'
 
     pushd cogs
@@ -83,6 +81,12 @@ rustPlatform.buildRustPackage {
 
     mv $out/lib/steel/bin/repl-connect $out/bin
     rm -rf $out/lib/steel/bin
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd steel \
+      --bash <($out/bin/steel completions bash) \
+      --fish <($out/bin/steel completions fish) \
+      --zsh <($out/bin/steel completions zsh)
   '';
 
   postFixup = ''
@@ -95,20 +99,8 @@ rustPlatform.buildRustPackage {
     STEEL_HOME = "${placeholder "out"}/lib/steel";
   };
 
-  passthru.updateScript = unstableGitUpdater {
-    tagConverter = writeShellScript "steel-tagConverter.sh" ''
-      export PATH="${
-        lib.makeBinPath [
-          curl
-          yq
-        ]
-      }:$PATH"
-
-      version=$(curl -s https://raw.githubusercontent.com/mattwparas/steel/refs/heads/master/Cargo.toml | tomlq -r .workspace.package.version)
-
-      read -r tag
-      test "$tag" = "0" && tag="$version"; echo "$tag"
-    '';
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
   };
 
   meta = {

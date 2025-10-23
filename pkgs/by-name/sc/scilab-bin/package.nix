@@ -44,7 +44,7 @@ let
     mainProgram = "scilab";
   };
 
-  darwin = stdenv.mkDerivation rec {
+  darwin = stdenv.mkDerivation {
     inherit
       pname
       version
@@ -68,9 +68,11 @@ let
 
       runHook postInstall
     '';
+
+    dontCheckForBrokenSymlinks = true;
   };
 
-  linux = stdenv.mkDerivation rec {
+  linux = stdenv.mkDerivation {
     inherit
       pname
       version
@@ -82,23 +84,22 @@ let
       autoPatchelfHook
     ];
 
-    buildInputs =
-      [
-        alsa-lib
-        ncurses5
-        stdenv.cc.cc
-      ]
-      ++ (with xorg; [
-        libX11
-        libXcursor
-        libXext
-        libXft
-        libXi
-        libXrandr
-        libXrender
-        libXtst
-        libXxf86vm
-      ]);
+    buildInputs = [
+      alsa-lib
+      ncurses5
+      stdenv.cc.cc
+    ]
+    ++ (with xorg; [
+      libX11
+      libXcursor
+      libXext
+      libXft
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libXxf86vm
+    ]);
 
     installPhase = ''
       runHook preInstall
@@ -116,6 +117,8 @@ let
 
       runHook postInstall
     '';
+
+    dontCheckForBrokenSymlinks = true;
   };
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux

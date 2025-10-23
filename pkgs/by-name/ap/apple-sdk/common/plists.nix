@@ -2,15 +2,28 @@
   lib,
   stdenvNoCC,
   xcodePlatform,
+  sdkVersion,
 }:
 
 let
   inherit (lib.generators) toPlist;
 
-  Info = {
-    CFBundleIdentifier = "com.apple.platform.${lib.toLower xcodePlatform}";
-    Type = "Platform";
+  Info = rec {
+    CFBundleIdentifier = "com.apple.platform.${Name}";
+    DefaultProperties = {
+      COMPRESS_PNG_FILES = "NO";
+      DEPLOYMENT_TARGET_SETTING_NAME = stdenvNoCC.hostPlatform.darwinMinVersionVariable;
+      STRIP_PNG_TEXT = "NO";
+    };
+    Description = if stdenvNoCC.hostPlatform.isMacOS then "macOS" else "iOS";
+    FamilyDisplayName = Description;
+    FamilyIdentifier = lib.toLower xcodePlatform;
+    FamilyName = Description;
+    Identifier = CFBundleIdentifier;
+    MinimumSDKVersion = stdenvNoCC.hostPlatform.darwinMinVersion;
     Name = lib.toLower xcodePlatform;
+    Type = "Platform";
+    Version = sdkVersion;
   };
 
   # These files are all based off of Xcode spec files found in
@@ -299,9 +312,17 @@ let
   };
 in
 {
-  "Info.plist" = builtins.toFile "Info.plist" (toPlist { } Info);
-  "ToolchainInfo.plist" = builtins.toFile "ToolchainInfo.plist" (toPlist { } ToolchainInfo);
-  "Architectures.xcspec" = builtins.toFile "Architectures.xcspec" (toPlist { } Architectures);
-  "PackageTypes.xcspec" = builtins.toFile "PackageTypes.xcspec" (toPlist { } PackageTypes);
-  "ProductTypes.xcspec" = builtins.toFile "ProductTypes.xcspec" (toPlist { } ProductTypes);
+  "Info.plist" = builtins.toFile "Info.plist" (toPlist { escape = true; } Info);
+  "ToolchainInfo.plist" = builtins.toFile "ToolchainInfo.plist" (
+    toPlist { escape = true; } ToolchainInfo
+  );
+  "Architectures.xcspec" = builtins.toFile "Architectures.xcspec" (
+    toPlist { escape = true; } Architectures
+  );
+  "PackageTypes.xcspec" = builtins.toFile "PackageTypes.xcspec" (
+    toPlist { escape = true; } PackageTypes
+  );
+  "ProductTypes.xcspec" = builtins.toFile "ProductTypes.xcspec" (
+    toPlist { escape = true; } ProductTypes
+  );
 }

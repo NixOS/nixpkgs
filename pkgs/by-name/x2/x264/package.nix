@@ -6,7 +6,7 @@
   enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "x264";
   version = "0-unstable-2025-01-03";
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       # `AS' is set to the binutils assembler, but we need nasm
       unset AS
     ''
-    + lib.optionalString stdenv.hostPlatform.isAarch ''
+    + lib.optionalString (stdenv.hostPlatform.isAarch || stdenv.hostPlatform.isLoongArch64) ''
       export AS=$CC
     '';
 

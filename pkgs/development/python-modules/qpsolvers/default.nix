@@ -13,6 +13,7 @@
   daqp,
   ecos,
   gurobipy,
+  jaxopt,
   osqp,
   quadprog,
   scs,
@@ -22,21 +23,21 @@
 }:
 buildPythonPackage rec {
   pname = "qpsolvers";
-  version = "4.4.0";
+  version = "4.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "qpsolvers";
     repo = "qpsolvers";
     tag = "v${version}";
-    hash = "sha256-/yIFLxy2gjEFg/J9A5pcbrVmq4A3Tz2efEAntH0Twk8=";
+    hash = "sha256-wiFDsTE+L0J+6GsDz27Xh20eXvtV6KDa2CLGQDYzIGM=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  build-system = [ flit-core ];
 
   pythonImportsCheck = [ "qpsolvers" ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
   ];
@@ -49,6 +50,7 @@ buildPythonPackage rec {
     ecos = [ ecos ];
     gurobi = [ gurobipy ];
     highs = [ highspy ];
+    jaxopt = [ jaxopt ];
     # mosek = [ cvxopt mosek ];
     osqp = [ osqp ];
     piqp = [ piqp ];
@@ -76,7 +78,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ] ++ optional-dependencies.open_source_solvers;
 
   meta = with lib; {
-    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/qpsolvers/qpsolvers/blob/${src.tag}/CHANGELOG.md";
     description = "Quadratic programming solvers in Python with a unified API";
     homepage = "https://github.com/qpsolvers/qpsolvers";
     license = licenses.lgpl3Plus;

@@ -6,6 +6,7 @@
   babel,
   click,
   setuptools,
+  setuptools-scm,
   sphinx,
   pytestCheckHook,
   mock,
@@ -13,17 +14,20 @@
 
 buildPythonPackage rec {
   pname = "sphinx-intl";
-  version = "2.3.1";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "sphinx-doc";
     repo = "sphinx-intl";
     tag = version;
-    hash = "sha256-VrWtRdI9j/y2m7kN7/m/5cdxpI0dAaiprdXKt8m6MPc=";
+    hash = "sha256-5Ro+UG9pwwp656fYyCsna6P4s9Gb86Tu3Qm2WUI7tsE=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     babel

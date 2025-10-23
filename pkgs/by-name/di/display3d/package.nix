@@ -8,23 +8,22 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "display3d";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "renpenguin";
     repo = "display3d";
     tag = "v${version}";
-    hash = "sha256-WGcocX3WYtTleh2f3F0yi3KBAMo1/dtlfVy1pQVhWgw=";
+    hash = "sha256-dFfU80/1fhBz9/0fVZigo+nZx6Lj66OsP52oMDpS+BY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-E4Ncg9OPlYGra794pPS9u9oyqep+k3Ser5ZxfV+uSRM=";
+  cargoHash = "sha256-eXpoWKYonNZQqqIFrxO4RnLLX1s1osaZxZt3gVTYd4o=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   versionCheckProgramArg = "--version";
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI for rendering and animating 3D objects";

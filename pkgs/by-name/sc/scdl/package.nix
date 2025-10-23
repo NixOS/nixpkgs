@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  ffmpeg-headless,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "scdl";
@@ -22,6 +27,15 @@ python3Packages.buildPythonApplication rec {
     soundcloud-v2
     filelock
   ];
+
+  # Ensure ffmpeg is available in $PATH:
+  makeWrapperArgs =
+    let
+      packagesToBinPath = [ ffmpeg-headless ];
+    in
+    [
+      ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"''
+    ];
 
   # No tests in repository
   doCheck = false;

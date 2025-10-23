@@ -1,9 +1,8 @@
 { lib, fetchzip }:
 let
-  version = "3.3.0";
-  srcHash = "sha256-f0XQ3cbao8IM5toSkxvul7pp1L89N9oiEo3Yx3mkGhg=";
-  # The tarball contains vendored dependencies
-  vendorHash = null;
+  version = "3.11.0";
+  srcHash = "sha256-mLyEHNMePVZI6MOSyeD9NMp9QXRXQ7h3LFSxHxpf878=";
+  vendorHash = null; # The tarball contains vendored dependencies
 in
 {
   inherit version vendorHash;
@@ -38,14 +37,14 @@ in
     "-X go.woodpecker-ci.org/woodpecker/v3/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://woodpecker-ci.org/";
     changelog = "https://github.com/woodpecker-ci/woodpecker/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       ambroisie
+      marcusramberg
       techknowlogick
-      adamcstephens
     ];
   };
 }

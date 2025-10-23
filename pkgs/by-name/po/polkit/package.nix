@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   glib,
   expat,
@@ -17,10 +18,10 @@
   libxslt,
   docbook-xsl-nons,
   dbus,
+  util-linux,
   docbook_xml_dtd_412,
   gtk-doc,
   coreutils,
-  fetchpatch,
   useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
   systemdMinimal,
   elogind,
@@ -41,7 +42,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "polkit";
-  version = "124";
+  version = "126";
 
   outputs = [
     "bin"
@@ -54,7 +55,7 @@ stdenv.mkDerivation rec {
     owner = "polkit-org";
     repo = "polkit";
     rev = version;
-    hash = "sha256-Vc9G2xK6U1cX+xW2BnKp3oS/ACbSXS/lztbFP5oJOlM=";
+    hash = "sha256-ZSqgW//q5DFIsmY17U93mJcK/CHSCHphKTHsTxp40q8=";
   };
 
   patches = [
@@ -62,13 +63,10 @@ stdenv.mkDerivation rec {
     # https://gitlab.freedesktop.org/polkit/polkit/-/merge_requests/100
     ./0001-build-Use-datarootdir-in-Meson-generated-pkg-config-.patch
 
-    ./elogind.patch
-
-    # FIXME: remove in the next release
-    # https://github.com/NixOS/nixpkgs/issues/18012
     (fetchpatch {
-      url = "https://github.com/polkit-org/polkit/commit/f93c7466039ea3403e0576928aeb620b806d0cce.patch";
-      sha256 = "sha256-cF0nNovYmyr+XixpBgQFF0A+oJeSPGZgTkgDQkQuof8=";
+      name = "elogind.patch";
+      url = "https://github.com/polkit-org/polkit/commit/55ee1b70456eca8281dda9612c485c619122f202.patch";
+      hash = "sha256-XOsDyYFBDWxs0PGAgqm3OSUycKR8fYa2ySZqBl8EX7E=";
     })
   ];
 
@@ -76,39 +74,37 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs =
-    [
-      glib
-      pkg-config
-      gettext
-      meson
-      ninja
-      perl
+  nativeBuildInputs = [
+    glib
+    pkg-config
+    gettext
+    meson
+    ninja
+    perl
 
-      # man pages
-      libxslt
-      docbook-xsl-nons
-      docbook_xml_dtd_412
-    ]
-    ++ lib.optionals withIntrospection [
-      gobject-introspection
-      gtk-doc
-    ]
-    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+    # man pages
+    libxslt
+    docbook-xsl-nons
+    docbook_xml_dtd_412
+  ]
+  ++ lib.optionals withIntrospection [
+    gobject-introspection
+    gtk-doc
+  ]
+  ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
-  buildInputs =
-    [
-      expat
-      pam
-      dbus
-      duktape
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      # On Linux, fall back to elogind when systemd support is off.
-      (if useSystemd then systemdMinimal else elogind)
-    ];
+  buildInputs = [
+    expat
+    pam
+    dbus
+    duktape
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    # On Linux, fall back to elogind when systemd support is off.
+    (if useSystemd then systemdMinimal else elogind)
+  ];
 
   propagatedBuildInputs = [
     glib # in .pc Requires
@@ -116,6 +112,7 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
+    util-linux # for mount
     (python3.pythonOnBuildForHost.withPackages (
       pp: with pp; [
         dbus-python
@@ -127,67 +124,51 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  env =
-    {
-      PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-      PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+  env = {
+    # HACK: We want to install policy files files to $out/share but polkit
+    # should read them from /run/current-system/sw/share on a NixOS system.
+    # Similarly for config files in /etc.
+    # With autotools, it was possible to override Make variables
+    # at install time but Meson does not support this
+    # so we need to convince it to install all files to a temporary
+    # location using DESTDIR and then move it to proper one in postInstall.
+    DESTDIR = "dest";
 
-      # HACK: We want to install policy files files to $out/share but polkit
-      # should read them from /run/current-system/sw/share on a NixOS system.
-      # Similarly for config files in /etc.
-      # With autotools, it was possible to override Make variables
-      # at install time but Meson does not support this
-      # so we need to convince it to install all files to a temporary
-      # location using DESTDIR and then move it to proper one in postInstall.
-      DESTDIR = "dest";
-    }
-    // lib.optionalAttrs (stdenv.cc.isGNU || stdenv.cc.isClang) {
-      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-    };
+    # Set these to the default locations, so the builds with and
+    # without systemd can have the same installation path below.
+    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "/usr/lib/sysusers.d";
+    PKG_CONFIG_SYSTEMD_TMPFILES_DIR = "/usr/lib/tmpfiles.d";
+  };
 
-  mesonFlags =
-    [
-      "--datadir=${system}/share"
-      "--sysconfdir=/etc"
-      "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
-      "-Dos_type=redhat" # only affects PAM includes
-      "-Dintrospection=${lib.boolToString withIntrospection}"
-      "-Dtests=${lib.boolToString doCheck}"
-      "-Dgtk_doc=${lib.boolToString withIntrospection}"
-      "-Dman=true"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
-    ];
+  mesonFlags = [
+    "--datadir=${system}/share"
+    "--sysconfdir=/etc"
+    "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
+    "-Dos_type=redhat" # affects PAM includes and privileged group name (wheel)
+    "-Dintrospection=${lib.boolToString withIntrospection}"
+    "-Dtests=${lib.boolToString doCheck}"
+    "-Dgtk_doc=${lib.boolToString withIntrospection}"
+    "-Dman=true"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    "-Dsession_tracking=${if useSystemd then "logind" else "elogind"}"
+  ];
 
   inherit doCheck;
 
   postPatch = ''
-    patchShebangs test/polkitbackend/polkitbackendjsauthoritytest-wrapper.py
+    patchShebangs \
+      test/wrapper.py
 
     # ‘libpolkit-agent-1.so’ should call the setuid wrapper on
     # NixOS.  Hard-coding the path is kinda ugly.  Maybe we can just
     # call through $PATH, but that might have security implications.
     substituteInPlace src/polkitagent/polkitagentsession.c \
-      --replace   'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
+      --replace-fail 'PACKAGE_PREFIX "/lib/polkit-1/'   '"${setuid}/'
     substituteInPlace test/data/etc/polkit-1/rules.d/10-testing.rules \
-      --replace   /bin/true ${coreutils}/bin/true \
-      --replace   /bin/false ${coreutils}/bin/false
-  '';
-
-  postConfigure = lib.optionalString doCheck ''
-    # Unpacked by meson
-    chmod +x subprojects/mocklibc-1.0/bin/mocklibc
-    patchShebangs subprojects/mocklibc-1.0/bin/mocklibc
-  '';
-
-  checkPhase = ''
-    runHook preCheck
-
-    # tests need access to the system bus
-    dbus-run-session --config-file=${./system_bus.conf} -- sh -c 'DBUS_SYSTEM_BUS_ADDRESS=$DBUS_SESSION_BUS_ADDRESS meson test --print-errorlogs'
-
-    runHook postCheck
+      --replace-fail /bin/true ${coreutils}/bin/true \
+      --replace-fail /bin/false ${coreutils}/bin/false
   '';
 
   postInstall = ''
@@ -197,9 +178,13 @@ stdenv.mkDerivation rec {
         mv "$DESTDIR/''${!o}" "''${!o}"
     done
     mv "$DESTDIR/etc" "$out"
+    mv "$DESTDIR/usr/lib"/{sysusers,tmpfiles}.d "$out/lib"
     mv "$DESTDIR${system}/share"/* "$out/share"
     # Ensure we did not forget to install anything.
-    rmdir --parents --ignore-fail-on-non-empty "$DESTDIR${builtins.storeDir}" "$DESTDIR${system}/share"
+    rmdir --parents --ignore-fail-on-non-empty \
+        "$DESTDIR${builtins.storeDir}" \
+        "$DESTDIR/usr/lib" \
+        "$DESTDIR${system}/share"
     ! test -e "$DESTDIR"
   '';
 
@@ -212,6 +197,6 @@ stdenv.mkDerivation rec {
       # mandatory libpolkit-gobject shared library
       lib.systems.inspect.platformPatterns.isStatic
     ];
-    maintainers = teams.freedesktop.members ++ (with maintainers; [ ]);
+    teams = [ teams.freedesktop ];
   };
 }

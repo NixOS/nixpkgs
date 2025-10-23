@@ -27,14 +27,14 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
   "ulex is not available for OCaml ${ocaml.version}"
 
   stdenv.mkDerivation
-  rec {
-    name = "ocaml${ocaml.version}-${pname}-${version}";
+  {
+    pname = "ocaml${ocaml.version}-${pname}";
     inherit (param) version;
 
     src = fetchFromGitHub {
-      owner = "whitequark";
+      owner = "ocaml-community";
       repo = pname;
-      rev = "v${version}";
+      rev = "v${param.version}";
       inherit (param) sha256;
     };
 
@@ -56,7 +56,7 @@ lib.throwIf (lib.versionAtLeast ocaml.version "5.0")
     ];
 
     meta = {
-      inherit (src.meta) homepage;
+      homepage = "https://opam.ocaml.org/packages/ulex/";
       description = "Lexer generator for Unicode and OCaml";
       license = lib.licenses.mit;
       inherit (ocaml.meta) platforms;

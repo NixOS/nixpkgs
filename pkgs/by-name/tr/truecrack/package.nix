@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     cudaPackages.cuda_cudart
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     # Workaround build failure on -fno-common toolchains like upstream
     # gcc-10. Otherwise build fails as:
     #   ld: CpuAes.o:/build/source/src/Crypto/CpuAes.h:1233: multiple definition of
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     #   Common/Crypto.c:42:13: error: implicit declaration of function 'cpu_CipherInit'; did you mean 'CipherInit'? []
     # https://gitlab.com/kalilinux/packages/truecrack/-/commit/5b0e3a96b747013bded7b33f65bb42be2dbafc86
     "-Wno-error=implicit-function-declaration"
-  ]);
+  ];
 
   enableParallelBuilding = true;
 

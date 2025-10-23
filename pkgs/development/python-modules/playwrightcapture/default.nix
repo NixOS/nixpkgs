@@ -1,19 +1,21 @@
 {
   lib,
-  aiohttp,
   aiohttp-socks,
+  aiohttp,
   beautifulsoup4,
   buildPythonPackage,
   dateparser,
+  dnspython,
   fetchFromGitHub,
+  orjson,
   playwright-stealth,
   playwright,
   poetry-core,
   puremagic,
   pydub,
-  pythonOlder,
   pytz,
   requests,
+  rfc3161-client,
   setuptools,
   speechrecognition,
   tzdata,
@@ -22,22 +24,21 @@
 
 buildPythonPackage rec {
   pname = "playwrightcapture";
-  version = "1.28.0";
+  version = "1.34.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
     tag = "v${version}";
-    hash = "sha256-WgxGS54OMv6JRsB9IRmKzQIPeoVcvpl28V5vvvEQ6WU=";
+    hash = "sha256-cywGV1hlxdZ9xU5adHKiZr2npdUpNkdF9sk9pykPFE8=";
   };
 
   pythonRelaxDeps = [
     "aiohttp"
     "aiohttp-socks"
     "beautifulsoup4"
+    "orjson"
     "playwright"
     "setuptools"
     "tzdata"
@@ -50,11 +51,14 @@ buildPythonPackage rec {
     aiohttp-socks
     beautifulsoup4
     dateparser
+    dnspython
+    orjson
     playwright
     playwright-stealth
     puremagic
     pytz
     requests
+    rfc3161-client
     setuptools
     tzdata
     w3lib
@@ -76,7 +80,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Capture a URL with Playwright";
     homepage = "https://github.com/Lookyloo/PlaywrightCapture";
-    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/v${version}";
+    changelog = "https://github.com/Lookyloo/PlaywrightCapture/releases/tag/${src.tag}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fab ];
   };

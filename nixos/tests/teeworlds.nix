@@ -1,58 +1,56 @@
-import ./make-test-python.nix (
-  { pkgs, ... }:
+{ pkgs, ... }:
 
-  let
-    client =
-      { pkgs, ... }:
+let
+  client =
+    { pkgs, ... }:
 
-      {
-        imports = [ ./common/x11.nix ];
-        environment.systemPackages = [ pkgs.teeworlds ];
-      };
-
-  in
-  {
-    name = "teeworlds";
-    meta = with pkgs.lib.maintainers; {
-      maintainers = [ hax404 ];
+    {
+      imports = [ ./common/x11.nix ];
+      environment.systemPackages = [ pkgs.teeworlds ];
     };
 
-    nodes = {
-      server = {
-        services.teeworlds = {
-          enable = true;
-          openPorts = true;
-        };
-      };
+in
+{
+  name = "teeworlds";
+  meta = with pkgs.lib.maintainers; {
+    maintainers = [ hax404 ];
+  };
 
-      client1 = client;
-      client2 = client;
+  nodes = {
+    server = {
+      services.teeworlds = {
+        enable = true;
+        openPorts = true;
+      };
     };
 
-    testScript = ''
-      start_all()
+    client1 = client;
+    client2 = client;
+  };
 
-      server.wait_for_unit("teeworlds.service")
-      server.wait_until_succeeds("ss --numeric --udp --listening | grep -q 8303")
+  testScript = ''
+    start_all()
 
-      client1.wait_for_x()
-      client2.wait_for_x()
+    server.wait_for_unit("teeworlds.service")
+    server.wait_until_succeeds("ss --numeric --udp --listening | grep -q 8303")
 
-      client1.execute("teeworlds 'player_name Alice;connect server' >&2 &")
-      server.wait_until_succeeds(
-          'journalctl -u teeworlds -e | grep --extended-regexp -q "team_join player=\'[0-9]:Alice"'
-      )
+    client1.wait_for_x()
+    client2.wait_for_x()
 
-      client2.execute("teeworlds 'player_name Bob;connect server' >&2 &")
-      server.wait_until_succeeds(
-          'journalctl -u teeworlds -e | grep --extended-regexp -q "team_join player=\'[0-9]:Bob"'
-      )
+    client1.execute("teeworlds 'player_name Alice;connect server' >&2 &")
+    server.wait_until_succeeds(
+        'journalctl -u teeworlds -e | grep --extended-regexp -q "team_join player=\'[0-9]:Alice"'
+    )
 
-      server.sleep(10)  # wait for a while to get a nice screenshot
+    client2.execute("teeworlds 'player_name Bob;connect server' >&2 &")
+    server.wait_until_succeeds(
+        'journalctl -u teeworlds -e | grep --extended-regexp -q "team_join player=\'[0-9]:Bob"'
+    )
 
-      client1.screenshot("screen_client1")
-      client2.screenshot("screen_client2")
-    '';
+    server.sleep(10)  # wait for a while to get a nice screenshot
 
-  }
-)
+    client1.screenshot("screen_client1")
+    client2.screenshot("screen_client2")
+  '';
+
+}

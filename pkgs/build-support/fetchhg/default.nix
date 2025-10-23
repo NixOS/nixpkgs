@@ -3,39 +3,46 @@
   stdenvNoCC,
   mercurial,
 }:
-{
-  name ? null,
-  url,
-  rev ? null,
-  sha256 ? null,
-  hash ? null,
-  fetchSubrepos ? false,
-  preferLocalBuild ? true,
-}:
 
-if hash != null && sha256 != null then
-  throw "Only one of sha256 or hash can be set"
-else
-  # TODO: statically check if mercurial as the https support if the url starts with https.
-  stdenvNoCC.mkDerivation {
-    name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
-    builder = ./builder.sh;
-    nativeBuildInputs = [ mercurial ];
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
 
-    impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+  extendDrvArgs =
+    finalAttrs:
+    {
+      name ? null,
+      url,
+      rev ? null,
+      sha256 ? null,
+      hash ? null,
+      fetchSubrepos ? false,
+      preferLocalBuild ? true,
+    }:
+    # TODO: statically check if mercurial has https support if the url starts with https.
+    {
+      name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
+      builder = ./builder.sh;
+      nativeBuildInputs = [ mercurial ];
 
-    subrepoClause = lib.optionalString fetchSubrepos "S";
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-    outputHashAlgo = if hash != null then null else "sha256";
-    outputHashMode = "recursive";
-    outputHash =
-      if hash != null then
-        hash
-      else if sha256 != null then
-        sha256
-      else
-        lib.fakeSha256;
+      subrepoClause = lib.optionalString fetchSubrepos "S";
 
-    inherit url rev;
-    inherit preferLocalBuild;
-  }
+      outputHashAlgo = if finalAttrs.hash != null && finalAttrs.hash != "" then null else "sha256";
+      outputHashMode = "recursive";
+      outputHash = lib.throwIf (hash != null && sha256 != null) "Only one of sha256 or hash can be set" (
+        if finalAttrs.hash != null then
+          finalAttrs.hash
+        else if sha256 != null then
+          sha256
+        else
+          ""
+      );
+
+      inherit url rev hash;
+      inherit preferLocalBuild;
+    };
+
+  # No ellipsis
+  inheritFunctionArgs = false;
+}

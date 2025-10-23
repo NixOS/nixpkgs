@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
-  darwin,
   libad9361,
   libiio,
   libusb1,
@@ -26,18 +26,24 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
     pkg-config
   ];
-  buildInputs =
-    [
-      libad9361
-      libiio
-      libusb1
-      soapysdr
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.IOKit
-      darwin.libobjc
-    ];
+  buildInputs = [
+    libad9361
+    libiio
+    libusb1
+    soapysdr
+  ];
+
+  patches = [
+    # CMake < 3.5.0 fixes. Remove as soon as https://github.com/pothosware/SoapyPlutoSDR/pull/72 is merged and we do the next version bump.
+    (fetchpatch {
+      url = "https://github.com/pothosware/SoapyPlutoSDR/commit/6ab50457c378e19fa53038cadb131313cde23916.patch";
+      hash = "sha256-ExrcziyDmytaVosQ+em177Unh6er/2+2nLjEXg6f0vU=";
+    })
+    (fetchpatch {
+      url = "https://github.com/pothosware/SoapyPlutoSDR/commit/4a01ddf1ae2fd0de86c6774ff35aa51f9b4f0b5a.patch";
+      hash = "sha256-XgyCWSAlKqCXxH5vtijYqub6656xYkWaY6+B0dkfsGA=";
+    })
+  ];
 
   cmakeFlags = [ "-DSoapySDR_DIR=${soapysdr}/share/cmake/SoapySDR/" ];
 

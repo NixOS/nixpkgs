@@ -1,26 +1,25 @@
 {
   lib,
-  cmake,
-  dbus,
+  stdenv,
+
   fetchFromGitHub,
   fetchYarnDeps,
-  openssl,
-  pkg-config,
-  freetype,
-  libsoup_2_4,
-  gtk3,
-  webkitgtk_4_0,
-  perl,
-  cyrus_sasl,
-  stdenv,
-  yarnConfigHook,
-  nodejs-slim,
-  cargo-tauri_1,
+
   cargo,
-  rustPlatform,
-  rustc,
+  cargo-tauri_1,
+  cmake,
   jq,
   moreutils,
+  nodejs-slim,
+  pkg-config,
+  rustc,
+  rustPlatform,
+  yarnConfigHook,
+
+  cyrus_sasl,
+  freetype,
+  libsoup_2_4,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,37 +59,36 @@ stdenv.mkDerivation rec {
   cargoRoot = "backend/";
   buildAndTestSubdir = cargoRoot;
 
+  strictDeps = true;
+
   dontUseCmakeConfigure = true;
 
-  preInstall = ''
-    mkdir -p "$out"
-  '';
-
   nativeBuildInputs = [
-    cmake
-    pkg-config
-    perl
-    rustPlatform.cargoSetupHook
     cargo
-    rustc
     cargo-tauri_1.hook
-    yarnConfigHook
-    nodejs-slim
-    cyrus_sasl
+    cmake
     jq
     moreutils # for sponge
+    nodejs-slim
+    pkg-config
+    rustc
+    rustPlatform.cargoSetupHook
+    yarnConfigHook
   ];
 
   buildInputs = [
-    dbus
-    openssl.out
+    cyrus_sasl
     freetype
     libsoup_2_4
-    gtk3
-    webkitgtk_4_0
+    openssl
+    # webkitgtk_4_0
   ];
 
+  env.OPENSSL_NO_VENDOR = 1;
+
   meta = with lib; {
+    # webkitgtk_4_0 was removed
+    broken = true;
     description = "Client UI to inspect Kafka topics, consume, produce and much more";
     homepage = "https://github.com/andrewinci/insulator2";
     license = licenses.gpl3Only;

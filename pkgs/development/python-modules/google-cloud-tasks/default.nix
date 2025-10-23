@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-tasks";
-  version = "2.19.1";
+  version = "2.19.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_tasks";
     inherit version;
-    hash = "sha256-wvIqfdMVNp3C/3apjR9d/ah3lwraKNgpoUnL57FGPAY=";
+    hash = "sha256-6dpTTzeT4N43+aOzSsNkdCCGXKcmwKxyFIxPchxIlNY=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +33,8 @@ buildPythonPackage rec {
     grpc-google-iam-v1
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

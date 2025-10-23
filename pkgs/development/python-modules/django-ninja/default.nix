@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "django-ninja";
-  version = "1.3.0-unstable-2024-11-13";
+  version = "1.4.3t";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,16 +22,16 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vitalik";
     repo = "django-ninja";
-    rev = "ee0f27b169fb227e8786bbf9011659f46b2795ea";
-    hash = "sha256-8qjGEo2n0O4WrKqhaBZNSDAW4fTOBg/nX7T4eOoJ+Pw=";
+    tag = "v${version}";
+    hash = "sha256-IiOj2fBuClHyIdn/r3XxKwO+DyrgahagUKrxp+YKZ4E=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ flit-core ];
+
+  dependencies = [
     django
     pydantic
   ];
-
-  nativeBuildInputs = [ flit-core ];
 
   nativeCheckInputs = [
     psycopg2
@@ -41,10 +41,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    changelog = "https://github.com/vitalik/django-ninja/releases/tag/v${version}";
+    changelog = "https://github.com/vitalik/django-ninja/releases/tag/${src.tag}";
     description = "Web framework for building APIs with Django and Python type hints";
     homepage = "https://django-ninja.dev";
     license = licenses.mit;
-    maintainers = with maintainers; [ elohmeier ];
+    maintainers = [ ];
   };
 }

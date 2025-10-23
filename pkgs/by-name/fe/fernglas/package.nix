@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-FlbOBX/+/LLmoqMJLvu59XuHYmiohIhDc1VjkZu4Wzo=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-aY5/dIplV8yWaQ2IdWxxC7T1DoKeRjsN5eT+UxsaA1E=";
 
   offlineCache = fetchYarnDeps {
@@ -72,13 +71,13 @@ rustPlatform.buildRustPackage rec {
     popd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Looking glass for your network using BGP and BMP as data source";
     homepage = "https://wobcom.github.io/fernglas/";
     changelog = "https://github.com/wobcom/fernglas/releases/tag/fernglas-${version}";
-    license = licenses.eupl12;
-    platforms = platforms.linux;
-    maintainers = teams.wdz.members;
+    license = lib.licenses.eupl12;
+    platforms = lib.platforms.linux;
+    teams = [ lib.teams.wdz ];
     mainProgram = "fernglas";
   };
 }

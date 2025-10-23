@@ -6,15 +6,17 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "modelscan";
-  version = "0.8.4";
+  version = "0.8.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "protectai";
     repo = "modelscan";
     tag = "v${version}";
-    hash = "sha256-tpxonfkdqPNLQQPjn+uIYSEzpXfeoRk4PG14cXR+tS8=";
+    hash = "sha256-8VupkPiHebVtOqMdtkBflAI1zPRdDSvHCEq3ghjASaE=";
   };
+
+  pythonRelaxDeps = [ "rich" ];
 
   build-system = with python3.pkgs; [
     poetry-core
@@ -49,7 +51,7 @@ python3.pkgs.buildPythonApplication rec {
   meta = with lib; {
     description = "Protection against Model Serialization Attacks";
     homepage = "https://github.com/protectai/modelscan";
-    changelog = "https://github.com/protectai/modelscan/releases/tag/v${version}";
+    changelog = "https://github.com/protectai/modelscan/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
     mainProgram = "modelscan";

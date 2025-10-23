@@ -11,17 +11,17 @@
   libXrandr,
   libsndfile,
   lv2,
-  php82,
+  php84,
   pkg-config,
 }:
 
 let
-  php = php82;
+  php = php84;
 in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lsp-plugins";
-  version = "1.2.20";
+  version = "1.2.23";
 
   outputs = [
     "out"
@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://github.com/lsp-plugins/lsp-plugins/releases/download/${finalAttrs.version}/lsp-plugins-src-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yohg3Ka/see8q6NCwVPl/F06AlyR22akQz43gp+1kck=";
+    hash = "sha256-GxjSnDsEPiXbaJ9khSvgQZeVONxWf4WJilurHpSf14w=";
   };
 
   # By default, GStreamer plugins are installed right alongside GStreamer itself

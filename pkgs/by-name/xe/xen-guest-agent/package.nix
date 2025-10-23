@@ -5,7 +5,7 @@
   pkg-config,
   xen,
 }:
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "xen-guest-agent";
   version = "0.4.0-unstable-2024-05-31";
 
@@ -16,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-OhzRsRwDvt0Ov+nLxQSP87G3RDYSLREMz2w9pPtSUYg=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-o4eQ1ORI7Rw097m6CsvWLeCW5Dtl75uRXi/tcv/Xq0Q=";
 
   nativeBuildInputs = [
@@ -44,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://gitlab.com/xen-project/xen-guest-agent";
     license = lib.licenses.agpl3Only;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.xen.members;
+    teams = [ lib.teams.xen ];
     mainProgram = "xen-guest-agent";
   };
 }

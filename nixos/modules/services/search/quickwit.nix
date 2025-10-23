@@ -136,57 +136,56 @@ in
       environment = {
         QW_DATA_DIR = cfg.dataDir;
       };
-      serviceConfig =
-        {
-          ExecStart = ''
-            ${cfg.package}/bin/quickwit run --config ${quickwitYml} \
-            ${lib.escapeShellArgs cfg.extraFlags}
-          '';
-          User = cfg.user;
-          Group = cfg.group;
-          Restart = "on-failure";
-          DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
-          CapabilityBoundingSet = [ "" ];
-          DevicePolicy = "closed";
-          LockPersonality = true;
-          MemoryDenyWriteExecute = true;
-          NoNewPrivileges = true;
-          PrivateDevices = true;
-          ProcSubset = "pid";
-          ProtectClock = true;
-          ProtectHome = true;
-          ProtectHostname = true;
-          ProtectControlGroups = true;
-          ProtectKernelLogs = true;
-          ProtectKernelModules = true;
-          ProtectKernelTunables = true;
-          ProtectProc = "invisible";
-          ProtectSystem = "strict";
-          ReadWritePaths = [
-            cfg.dataDir
-          ];
-          RestrictAddressFamilies = [
-            "AF_NETLINK"
-            "AF_INET"
-            "AF_INET6"
-          ];
-          RestrictNamespaces = true;
-          RestrictRealtime = true;
-          RestrictSUIDSGID = true;
-          SystemCallArchitectures = "native";
-          SystemCallFilter = [
-            # 1. allow a reasonable set of syscalls
-            "@system-service @resources"
-            # 2. and deny unreasonable ones
-            "~@privileged"
-            # 3. then allow the required subset within denied groups
-            "@chown"
-          ];
-        }
-        // (lib.optionalAttrs (usingDefaultDataDir) {
-          StateDirectory = "quickwit";
-          StateDirectoryMode = "0700";
-        });
+      serviceConfig = {
+        ExecStart = ''
+          ${cfg.package}/bin/quickwit run --config ${quickwitYml} \
+          ${lib.escapeShellArgs cfg.extraFlags}
+        '';
+        User = cfg.user;
+        Group = cfg.group;
+        Restart = "on-failure";
+        DynamicUser = usingDefaultUserAndGroup && usingDefaultDataDir;
+        CapabilityBoundingSet = [ "" ];
+        DevicePolicy = "closed";
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        ProcSubset = "pid";
+        ProtectClock = true;
+        ProtectHome = true;
+        ProtectHostname = true;
+        ProtectControlGroups = true;
+        ProtectKernelLogs = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        ProtectProc = "invisible";
+        ProtectSystem = "strict";
+        ReadWritePaths = [
+          cfg.dataDir
+        ];
+        RestrictAddressFamilies = [
+          "AF_NETLINK"
+          "AF_INET"
+          "AF_INET6"
+        ];
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          # 1. allow a reasonable set of syscalls
+          "@system-service @resources"
+          # 2. and deny unreasonable ones
+          "~@privileged"
+          # 3. then allow the required subset within denied groups
+          "@chown"
+        ];
+      }
+      // (lib.optionalAttrs usingDefaultDataDir {
+        StateDirectory = "quickwit";
+        StateDirectoryMode = "0700";
+      });
     };
 
     environment.systemPackages = [ cfg.package ];

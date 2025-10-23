@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "minio-warp";
-  version = "1.1.1";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "warp";
     rev = "v${version}";
-    hash = "sha256-zRRvY/PpLSY8cx3vqcAGfVK7FJKzFnxtghhIwrlUh+Y=";
+    hash = "sha256-bXThbMwT3T59nFCMEz8TnMMDYq26rDwKTOBamVGRsyM=";
   };
 
-  vendorHash = "sha256-Qyb8ivuZplbOIxoS2cC+2FSZbW7CnChv1jaIKkCzgN4=";
+  vendorHash = "sha256-fo4LLRqqylx4oZOkLOgFzT436+vjap9dW+IpQ0IFa8Y=";
 
   # See .goreleaser.yml
   ldflags = [
@@ -36,13 +36,14 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "S3 benchmarking tool";
     homepage = "https://github.com/minio/warp";
+    changelog = "https://github.com/minio/warp/releases/tag/v${version}";
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ christoph-heiss ];
     mainProgram = "minio-warp";

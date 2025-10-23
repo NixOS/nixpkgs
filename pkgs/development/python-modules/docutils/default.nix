@@ -1,7 +1,6 @@
 {
-  stdenv,
   lib,
-  fetchFromRepoOrCz,
+  fetchurl,
   buildPythonPackage,
   flit-core,
   pillow,
@@ -18,12 +17,9 @@ let
     version = "0.21.2";
     pyproject = true;
 
-    disabled = pythonOlder "3.7";
-
-    src = fetchFromRepoOrCz {
-      repo = "docutils";
-      rev = "docutils-${version}";
-      hash = "sha256-Q+9yW+BYUEvPYV504368JsAoKKoaTZTeKh4tVeiNv5Y=";
+    src = fetchurl {
+      url = "mirror://sourceforge/docutils/docutils-${version}.tar.gz";
+      hash = "sha256-OmsYcy7fGC2qPNEndbuzOM9WkUaPke7rEJ3v9uv6mG8=";
     };
 
     build-system = [ flit-core ];
@@ -34,13 +30,11 @@ let
 
     nativeCheckInputs = [ pillow ];
 
-    # Only Darwin needs LANG, but we could set it in general.
-    # It's done here conditionally to prevent mass-rebuilds.
-    checkPhase =
-      lib.optionalString stdenv.hostPlatform.isDarwin ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" ''
-      + ''
-        ${python.interpreter} test/alltests.py
-      '';
+    checkPhase = ''
+      runHook preCheck
+      ${python.interpreter} test/alltests.py
+      runHook postCheck
+    '';
 
     # Create symlinks lacking a ".py" suffix, many programs depend on these names
     postFixup = ''
@@ -49,16 +43,20 @@ let
       done
     '';
 
-    meta = with lib; {
+    pythonImportsCheck = [ "docutils" ];
+
+    meta = {
       description = "Python Documentation Utilities";
       homepage = "http://docutils.sourceforge.net/";
-      license = with licenses; [
+      changelog = "https://sourceforge.net/projects/docutils/files/docutils/${version}";
+      license = with lib.licenses; [
         publicDomain
         bsd2
         psfl
         gpl3Plus
       ];
-      maintainers = with maintainers; [ ];
+      maintainers = with lib.maintainers; [ jherland ];
+      mainProgram = "docutils";
     };
   };
 in

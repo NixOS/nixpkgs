@@ -5,25 +5,25 @@
   fetchFromGitHub,
   makeWrapper,
   iproute2,
-  nettools,
+  net-tools,
 }:
 
 buildGoModule rec {
   pname = "mackerel-agent";
-  version = "0.84.0";
+  version = "0.85.2";
 
   src = fetchFromGitHub {
     owner = "mackerelio";
-    repo = pname;
+    repo = "mackerel-agent";
     rev = "v${version}";
-    sha256 = "sha256-kLrZ+oTb27g2Lzb65cVyxu1Ou5wGXXMSUvod+IBnoPA=";
+    sha256 = "sha256-3A3x32JytJGXebgZeJcToHXNqRB+rbyziT5Zwgc9rEM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ nettools ];
+  nativeCheckInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ net-tools ];
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ iproute2 ];
 
-  vendorHash = "sha256-DPxkZp46AsUiThQC9OwL24uKfJrUhgo8IvvE4fLo1yg=";
+  vendorHash = "sha256-Ubk/ms/3FwH1ZqZ5uTy0MubXhrKBoeaC85Y1KKH5cIw=";
 
   subPackages = [ "." ];
 

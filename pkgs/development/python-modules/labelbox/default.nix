@@ -20,7 +20,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   requests,
   shapely,
   strenum,
@@ -29,19 +28,45 @@
   typing-extensions,
 }:
 
-buildPythonPackage rec {
-  pname = "labelbox";
-  version = "6.6.0";
+let
+  version = "7.2.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "Labelbox";
     repo = "labelbox-python";
-    tag = "v.${version}";
-    hash = "sha256-aMJJZ9ONnjFK/J4pyLTFQox/cC8ij85IYNlJTFrfV2I=";
+    tag = "v${version}";
+    hash = "sha256-2of/yiw+wBHc0BFLKFdWV4Xm1Dcs4SsT8DkpmruaLT0=";
   };
+
+  lbox-clients = buildPythonPackage {
+    inherit src version pyproject;
+
+    pname = "lbox-clients";
+
+    sourceRoot = "${src.name}/libs/lbox-clients";
+
+    build-system = [ hatchling ];
+
+    dependencies = [
+      google-api-core
+      requests
+    ];
+
+    nativeCheckInputs = [
+      pytestCheckHook
+      pytest-cov-stub
+    ];
+
+    doCheck = true;
+
+    __darwinAllowLocalNetworking = true;
+  };
+in
+buildPythonPackage rec {
+  inherit src version pyproject;
+
+  pname = "labelbox";
 
   sourceRoot = "${src.name}/libs/labelbox";
 
@@ -54,6 +79,7 @@ buildPythonPackage rec {
 
   dependencies = [
     google-api-core
+    lbox-clients
     pydantic
     python-dateutil
     requests
@@ -85,7 +111,8 @@ buildPythonPackage rec {
     pytest-rerunfailures
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.data;
+  ]
+  ++ optional-dependencies.data;
 
   disabledTestPaths = [
     # Requires network access
@@ -95,13 +122,17 @@ buildPythonPackage rec {
     "tests/unit/test_label_data_type.py"
   ];
 
+  doCheck = true;
+
+  __darwinAllowLocalNetworking = true;
+
   pythonImportsCheck = [ "labelbox" ];
 
-  meta = with lib; {
+  meta = {
     description = "Platform API for LabelBox";
     homepage = "https://github.com/Labelbox/labelbox-python";
     changelog = "https://github.com/Labelbox/labelbox-python/releases/tag/v.${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ rakesh4g ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ rakesh4g ];
   };
 }

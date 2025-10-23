@@ -67,7 +67,7 @@ python3.pkgs.buildPythonPackage rec {
     homepage = "https://github.com/robusta-dev/krr";
     changelog = "https://github.com/robusta-dev/krr/releases/tag/v${src.rev}";
     license = licenses.mit;
-    maintainers = with lib.maintainers; [ azahi ];
+    maintainers = [ ];
     mainProgram = "krr";
   };
 }

@@ -144,8 +144,8 @@ in
     systemd.services.gotosocial = {
       description = "ActivityPub social network server";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ lib.optional cfg.setupPostgresqlDB "postgresql.service";
-      requires = lib.optional cfg.setupPostgresqlDB "postgresql.service";
+      after = [ "network.target" ] ++ lib.optional cfg.setupPostgresqlDB "postgresql.target";
+      requires = lib.optional cfg.setupPostgresqlDB "postgresql.target";
       restartTriggers = [ configFile ];
 
       serviceConfig = {

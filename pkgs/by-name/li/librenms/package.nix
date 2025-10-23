@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   unixtools,
-  php82,
+  php,
   python3,
   makeWrapper,
   nixosTests,
@@ -23,20 +23,20 @@
 }:
 
 let
-  phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
+  phpPackage = php.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.2.0";
+  version = "25.9.1";
 
   src = fetchFromGitHub {
     owner = "librenms";
-    repo = pname;
+    repo = "librenms";
     tag = version;
-    sha256 = "sha256-BzMtUYIKbfyap8TNmGy5RReKraOoafC0Jrnq8L5URtM=";
+    sha256 = "sha256-EDdXPhPi5gJXIMniMloLWDuW3BmajxEKJM2Tkgxn36Q=";
   };
 
-  vendorHash = "sha256-Dkoq84E9zP7lrvZ9P5hSIeVJf1hjuhebGxEhBkYNWDM=";
+  vendorHash = "sha256-Tc4pW7UNY7Tvu0UJLifV24UW06xQSQG1W3+jkzvm0iw=";
 
   php = phpPackage;
 
@@ -77,7 +77,7 @@ phpPackage.buildComposerProject2 rec {
     patch -p1 -d $out -i ${./broken-binary-paths.diff}
 
     substituteInPlace \
-      $out/misc/config_definitions.json \
+      $out/resources/definitions/config_definitions.json \
       --replace-fail '"default": "/bin/ping",' '"default": "/run/wrappers/bin/ping",' \
       --replace-fail '"default": "fping",' '"default": "/run/wrappers/bin/fping",' \
       --replace-fail '"default": "fping6",' '"default": "/run/wrappers/bin/fping6",' \
@@ -127,7 +127,8 @@ phpPackage.buildComposerProject2 rec {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
     homepage = "https://www.librenms.org/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
+    maintainers = with maintainers; [ netali ];
+    teams = [ teams.wdz ];
     platforms = platforms.linux;
   };
 }

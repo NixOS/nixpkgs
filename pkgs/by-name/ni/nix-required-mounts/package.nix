@@ -1,7 +1,7 @@
 {
   addDriverRunpath,
   allowedPatternsPath ? callPackage ./closure.nix { inherit allowedPatterns; },
-  allowedPatterns ? rec {
+  allowedPatterns ? {
     # This config is just an example.
     # When the hook observes either of the following requiredSystemFeatures:
     nvidia-gpu.onFeatures = [
@@ -28,7 +28,7 @@
 }:
 
 let
-  attrs = builtins.fromTOML (builtins.readFile ./pyproject.toml);
+  attrs = fromTOML (builtins.readFile ./pyproject.toml);
   pname = attrs.project.name;
   inherit (attrs.project) version;
 in

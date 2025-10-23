@@ -5,13 +5,13 @@
 }:
 mkLibretroCore {
   core = "handy";
-  version = "0-unstable-2024-10-21";
+  version = "0-unstable-2025-06-16";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "libretro-handy";
-    rev = "4e9e072796e5552a9d57f6ab83b3f85f27b17fb6";
-    hash = "sha256-ThzFEqLCX2JC06n6GZgkGzX5sFY5CxFDjkeekXRmbXY=";
+    rev = "fca239207e9c111da3e85d2faf0b1b9d7524e498";
+    hash = "sha256-8RpRhGgW5JWY6TZa9CEaXF66WpbjcjprorVqu+FGYu0=";
   };
 
   makefile = "Makefile";

@@ -1,51 +1,53 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-
-  # build-system
-  hatchling,
-
-  # optional-dependencies
-  # cudf,
   dask,
-  # modin,
+  duckdb,
+  fetchFromGitHub,
+  hatchling,
+  hypothesis,
+  ibis-framework,
+  packaging,
   pandas,
   polars,
+  pyarrow-hotfix,
   pyarrow,
-
-  # tests
-  duckdb,
-  hypothesis,
+  pyspark,
   pytest-env,
   pytestCheckHook,
+  rich,
+  sqlframe,
 }:
 
 buildPythonPackage rec {
   pname = "narwhals";
-  version = "1.28.0";
+  version = "2.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "narwhals-dev";
     repo = "narwhals";
     tag = "v${version}";
-    hash = "sha256-zI167qTGXMKgjMUSGiEKjGw2tITRQL4//wMqzj3DhVU=";
+    hash = "sha256-peD5CLp5YCLPrOmXnoezT+gAJLf7zSb0xdhV+PhC/XI=";
   };
 
-  build-system = [
-    hatchling
-  ];
+  build-system = [ hatchling ];
 
   optional-dependencies = {
     # cudf = [ cudf ];
-    dask = [
-      dask
-    ] ++ dask.optional-dependencies.dataframe;
+    dask = [ dask ] ++ dask.optional-dependencies.dataframe;
     # modin = [ modin ];
     pandas = [ pandas ];
     polars = [ polars ];
     pyarrow = [ pyarrow ];
+    pyspark = [ pyspark ];
+    ibis = [
+      ibis-framework
+      rich
+      packaging
+      pyarrow-hotfix
+    ];
+    sqlframe = [ sqlframe ];
   };
 
   nativeCheckInputs = [
@@ -53,13 +55,30 @@ buildPythonPackage rec {
     hypothesis
     pytest-env
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "narwhals" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::DeprecationWarning"
+  disabledTests = [
+    # Flaky
+    "test_rolling_var_hypothesis"
+    # Missing file
+    "test_pyspark_connect_deps_2517"
+    # Timezone issue
+    "test_to_datetime"
+    "test_unary_two_elements"
+    # Test requires pyspark binary
+    "test_datetime_w_tz_pyspark"
+    "test_convert_time_zone_to_connection_tz_pyspark"
+    "test_replace_time_zone_to_connection_tz_pyspark"
+    "test_lazy"
+    # Incompatible with ibis 11
+    "test_unique_3069"
+  ];
+
+  pytestFlags = [
+    "-Wignore::DeprecationWarning"
   ];
 
   meta = {

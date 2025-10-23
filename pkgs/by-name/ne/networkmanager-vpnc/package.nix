@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchurl
-, replaceVars
-, vpnc
-, pkg-config
-, networkmanager
-, libsecret
-, gtk3
-, gtk4
-, withGnome ? true
-, gnome
-, glib
-, kmod
-, file
-, libnma
-, libnma-gtk4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  vpnc,
+  pkg-config,
+  networkmanager,
+  libsecret,
+  gtk3,
+  gtk4,
+  withGnome ? true,
+  gnome,
+  glib,
+  kmod,
+  file,
+  libnma,
+  libnma-gtk4,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     vpnc
     networkmanager
-  ] ++ lib.optionals withGnome [
+  ]
+  ++ lib.optionals withGnome [
     gtk3
     gtk4
     libsecret
@@ -68,7 +70,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "NetworkManager's VPNC plugin";
-    inherit (networkmanager.meta) maintainers platforms;
+    inherit (networkmanager.meta) maintainers teams platforms;
     license = licenses.gpl2Plus;
   };
 }

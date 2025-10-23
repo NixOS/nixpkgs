@@ -4,25 +4,15 @@
   stdenv,
   lib,
   isPyPy,
-  pycrypto,
-  ecdsa, # TODO
   mock,
   python-can,
   brotli,
-  withOptionalDeps ? true,
-  tcpdump,
   ipython,
-  withCryptography ? true,
   cryptography,
   withVoipSupport ? true,
   sox,
-  withPlottingSupport ? true,
   matplotlib,
-  withGraphicsSupport ? false,
   pyx,
-  texliveBasic,
-  graphviz,
-  imagemagick,
   withManufDb ? false,
   wireshark,
   libpcap,
@@ -46,41 +36,32 @@ buildPythonPackage rec {
 
   patches = [ ./find-library.patch ];
 
-  postPatch =
-    ''
-      printf "${version}" > scapy/VERSION
+  postPatch = ''
+    printf "${version}" > scapy/VERSION
 
-      libpcap_file="${lib.getLib libpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}"
-      if ! [ -e "$libpcap_file" ]; then
-          echo "error: $libpcap_file not found" >&2
-          exit 1
-      fi
-      substituteInPlace "scapy/libs/winpcapy.py" \
-          --replace "@libpcap_file@" "$libpcap_file"
-    ''
-    + lib.optionalString withManufDb ''
-      substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
-    '';
+    libpcap_file="${lib.getLib libpcap}/lib/libpcap${stdenv.hostPlatform.extensions.sharedLibrary}"
+    if ! [ -e "$libpcap_file" ]; then
+        echo "error: $libpcap_file not found" >&2
+        exit 1
+    fi
+    substituteInPlace "scapy/libs/winpcapy.py" \
+        --replace "@libpcap_file@" "$libpcap_file"
+  ''
+  + lib.optionalString withManufDb ''
+    substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
+  '';
 
   buildInputs = lib.optional withVoipSupport sox;
 
-  propagatedBuildInputs =
-    [
-      pycrypto
-      ecdsa
-    ]
-    ++ lib.optionals withOptionalDeps [
-      tcpdump
+  optional-dependencies = {
+    all = [
+      cryptography
       ipython
-    ]
-    ++ lib.optional withCryptography cryptography
-    ++ lib.optional withPlottingSupport matplotlib
-    ++ lib.optionals withGraphicsSupport [
+      matplotlib
       pyx
-      texliveBasic
-      graphviz
-      imagemagick
     ];
+    cli = [ ipython ];
+  };
 
   # Running the tests seems too complicated:
   doCheck = false;
@@ -125,7 +106,6 @@ buildPythonPackage rec {
     license = licenses.gpl2Only;
     platforms = platforms.unix;
     maintainers = with maintainers; [
-      primeos
       bjornfor
     ];
   };

@@ -9,7 +9,6 @@
   qrencode,
   python3,
   help2man,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,32 +31,28 @@ stdenv.mkDerivation (finalAttrs: {
     help2man
   ];
 
-  buildInputs =
-    [
-      pcsclite
-      qrencode
-      (python3.withPackages (
-        pp: with pp; [
-          pyscard
-          pycrypto
-          pbkdf2
-          pillow
-          gnureadline
-        ]
-      ))
-    ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk.frameworks.PCSC
-    ];
+  buildInputs = [
+    pcsclite
+    qrencode
+    (python3.withPackages (
+      pp: with pp; [
+        pyscard
+        pycrypto
+        pbkdf2
+        pillow
+        gnureadline
+      ]
+    ))
+  ];
 
-  configureFlags = lib.optional stdenv.isDarwin "--enable-infoplist";
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "--enable-infoplist";
 
   meta = {
     description = "Emulates a smart card and makes it accessible through PC/SC";
     homepage = "http://frankmorgner.github.io/vsmartcard/virtualsmartcard/README.html";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.all;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with lib.maintainers; [ stargate01 ];
   };
 })

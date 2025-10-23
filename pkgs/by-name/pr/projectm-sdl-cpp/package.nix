@@ -4,6 +4,8 @@
   fetchFromGitHub,
   cmake,
   libprojectm,
+  libGL,
+  libX11,
   poco,
   utf8proc,
   SDL2,
@@ -12,13 +14,13 @@
 
 stdenv.mkDerivation {
   pname = "projectm-sdl-cpp";
-  version = "0-unstable-2024-08-07";
+  version = "0-unstable-2025-10-17";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "frontend-sdl-cpp";
-    rev = "df6bfb51d7be335b4c258e2085f13d14e27f14a9";
-    hash = "sha256-WcQMwI0i7hON31FpgBSSUoqqlENj6SUwKTXfl7i6jn4=";
+    rev = "72e5632897c9d9bef452c679d3cbe8c7b4bb4157";
+    hash = "sha256-uO2+CX2DqVn6NdcZhBlKFIPuUQpz6N8LazG3ALJTSx0=";
     fetchSubmodules = true;
   };
 
@@ -43,6 +45,8 @@ stdenv.mkDerivation {
     libprojectm
     poco
     utf8proc
+    libGL
+    libX11
     SDL2
   ];
 
@@ -60,5 +64,6 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [ fgaz ];
     mainProgram = "projectMSDL";
     platforms = lib.platforms.all;
+    broken = stdenv.hostPlatform.isDarwin; # TODO build probably needs some fixing
   };
 }

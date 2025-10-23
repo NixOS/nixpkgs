@@ -1,0 +1,29 @@
+diff --git a/configure.ac b/configure.ac
+index 2a9f5d2..a3d9b79 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -45,6 +45,7 @@ m4_esyscmd([echo ]mym4_version[>VERSION])
+ 
+ AC_INIT([mym4_package],[mym4_version],[https://bugs.gnupg.org])
+ 
++AC_CONFIG_MACRO_DIRS([m4])
+ AC_CONFIG_AUX_DIR([build-aux])
+ AC_CONFIG_HEADERS([config.h])
+ AC_CONFIG_SRCDIR(pinentry/pinentry.h)
+@@ -329,13 +330,15 @@ if test "$pinentry_tty" = "yes"; then
+            [The TTY version of Pinentry is to be build])
+ fi
+ 
++AM_GNU_GETTEXT_VERSION([0.21])
++AM_GNU_GETTEXT([external])
++AM_ICONV
+ 
+ dnl
+ dnl Additional checks pinentry Curses.
+ dnl
+ if test "$pinentry_curses" = "yes" \
+         -o "$fallback_curses" = "yes" ; then
+-  AM_ICONV
+   if test "$am_cv_func_iconv" != "yes"; then
+     AC_MSG_ERROR([[
+ ***

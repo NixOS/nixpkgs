@@ -48,8 +48,9 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     versionCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-  versionCheckProgramArg = [ "--version" ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "asn1tools" ];
 

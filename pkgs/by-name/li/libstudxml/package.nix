@@ -31,7 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "A streaming XML pull parser and streaming XML serializer implementation for modern, standard C++";
+    description = "Streaming XML pull parser and streaming XML serializer implementation for modern, standard C++";
     homepage = "https://www.codesynthesis.com/projects/libstudxml/";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ tomasajt ];

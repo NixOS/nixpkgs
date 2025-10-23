@@ -8,14 +8,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "fittrackee";
-  version = "0.9.2";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SamR1";
     repo = "FitTrackee";
     tag = "v${version}";
-    hash = "sha256-O5dtices32EV/G9cefhewvr+OGnvq598YmwtwWaI3FI=";
+    hash = "sha256-A9gebHxNCpYUUIm7IjyySojIIyuTxfYCUeUufpUM1iA=";
   };
 
   build-system = [
@@ -24,9 +24,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [
     "authlib"
+    "fitdecode"
+    "flask"
     "flask-limiter"
     "flask-migrate"
     "nh3"
+    "lxml"
     "pyopenssl"
     "pytz"
     "sqlalchemy"
@@ -39,6 +42,8 @@ python3Packages.buildPythonApplication rec {
       babel
       click
       dramatiq
+      dramatiq-abort
+      fitdecode
       flask
       flask-bcrypt
       flask-dramatiq
@@ -56,8 +61,9 @@ python3Packages.buildPythonApplication rec {
       pytz
       shortuuid
       sqlalchemy
-      staticmap
+      staticmap3
       ua-parser
+      xmltodict
     ]
     ++ dramatiq.optional-dependencies.redis
     ++ flask-limiter.optional-dependencies.redis;
@@ -72,7 +78,7 @@ python3Packages.buildPythonApplication rec {
     time-machine
   ];
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "fittrackee"
   ];
 
@@ -92,6 +98,9 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/SamR1/FitTrackee";
     changelog = "https://github.com/SamR1/FitTrackee/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ traxys ];
+    maintainers = with lib.maintainers; [
+      tebriel
+      traxys
+    ];
   };
 }

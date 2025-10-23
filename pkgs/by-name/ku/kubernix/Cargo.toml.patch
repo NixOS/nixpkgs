@@ -1,0 +1,14 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 681e634..48cbc8e 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -19,7 +19,8 @@ path = "src/main.rs"
+ [dependencies]
+ anyhow = "1.0.43"
+ base64 = "0.13.0"
+-clap = { git = "https://github.com/clap-rs/clap", features = ["wrap_help"] }
++clap = { version = "= 3.0.0-beta.2", features = ["wrap_help"] }
++clap_derive = "= 3.0.0-beta.2"
+ console = "0.14.1"
+ crossbeam-channel = "0.5.1"
+ getset = "0.1.1"

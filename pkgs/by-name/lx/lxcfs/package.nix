@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lxcfs";
-  version = "6.0.3";
+  version = "6.0.5";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    rev = "v${version}";
-    hash = "sha256-+Xlx1E6ggB/Vx3yOJGgh4UfEvaVyT7uOttaxelDA7Iw=";
+    tag = "v${version}";
+    hash = "sha256-mRTM06QyWcB4XOi0w2qvyDABGuu1SPJX0gjlBktDOac=";
   };
 
   patches = [
@@ -59,6 +59,13 @@ stdenv.mkDerivation rec {
         util-linux
       ]
     }
+
+    # requires access to sleep
+    wrapProgram "$out/share/lxcfs/lxc.reboot.hook" --prefix PATH : ${
+      lib.makeBinPath [
+        coreutils
+      ]
+    }
   '';
 
   postFixup = ''
@@ -81,6 +88,6 @@ stdenv.mkDerivation rec {
     changelog = "https://linuxcontainers.org/lxcfs/news/";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
   };
 }

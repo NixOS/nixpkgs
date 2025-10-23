@@ -9,7 +9,7 @@
   libXi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "xcape";
   version = "unstable-2018-03-01";
 

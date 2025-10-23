@@ -6,7 +6,7 @@
   nix-update-script,
 }:
 let
-  version = "0.26.1";
+  version = "0.29.0";
 in
 rustPlatform.buildRustPackage {
   pname = "tinty";
@@ -16,11 +16,10 @@ rustPlatform.buildRustPackage {
     owner = "tinted-theming";
     repo = "tinty";
     tag = "v${version}";
-    hash = "sha256-+HTdmAKsm9YXyLktAfjPenbRi1RrrCusc6+ZarCI7Ac=";
+    hash = "sha256-p05fRJR0boNKGAZ7+KGPyY3XUmj20QfZteWr80cA/po=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-7erxE5sfEMsZiOh/VPfQYsowUub9nefkNaGYjNr0Pyg=";
+  cargoHash = "sha256-Mdfz412Y1kb4V6LXOHxrbP3WsnWiZ+irCO5Qi3DRQ4c=";
 
   # Pretty much all tests require internet access
   doCheck = false;

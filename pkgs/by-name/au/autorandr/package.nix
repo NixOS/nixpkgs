@@ -6,6 +6,7 @@
   xrandr,
   installShellFiles,
   desktop-file-utils,
+  udevCheckHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -23,6 +24,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     installShellFiles
     desktop-file-utils
+    udevCheckHook
   ];
   propagatedBuildInputs = with python3.pkgs; [ packaging ];
 

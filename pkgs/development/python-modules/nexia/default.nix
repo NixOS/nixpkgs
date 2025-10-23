@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "nexia";
-  version = "2.3.0";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "bdraco";
     repo = "nexia";
     tag = version;
-    hash = "sha256-TY4aJnqw3+n30YyPwvh8hwsxibmOBFcRHnQxMkiRgz4=";
+    hash = "sha256-rGBfmFgSInp1+2FNFS0OZSyj53kMOK6MxWIra7VNYcM=";
   };
 
   build-system = [ setuptools ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python module for Nexia thermostats";
     homepage = "https://github.com/bdraco/nexia";
-    changelog = "https://github.com/bdraco/nexia/releases/tag/${version}";
+    changelog = "https://github.com/bdraco/nexia/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
   };

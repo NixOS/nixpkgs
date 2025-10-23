@@ -1,5 +1,4 @@
 {
-  stdenv,
   lib,
   buildPythonPackage,
   fetchPypi,
@@ -8,19 +7,18 @@
   cffi,
   pytestCheckHook,
   pythonOlder,
-  ApplicationServices,
 }:
 
 buildPythonPackage rec {
   pname = "pymunk";
-  version = "6.11.1";
+  version = "7.1.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-GReEn2Ph9pnfIdah9dHCUK3duuJenBJPC+12UVTJTvg=";
+    hash = "sha256-8wRYlyYTJbs+iShEAt1DuQjQpYcdwgEFl+NrQwnwIps=";
   };
 
   nativeBuildInputs = [ cffi ];
@@ -29,15 +27,13 @@ buildPythonPackage rec {
 
   dependencies = [ cffi ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ ApplicationServices ];
-
   preBuild = ''
     ${python.pythonOnBuildForHost.interpreter} setup.py build_ext --inplace
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "pymunk/tests" ];
+  enabledTestPaths = [ "pymunk/tests" ];
 
   pythonImportsCheck = [ "pymunk" ];
 

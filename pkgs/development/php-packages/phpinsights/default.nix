@@ -17,12 +17,12 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-CwIfRmwJREz24Qj6J2PKQp+ix+/ZXo1oamcHc1fPUoc=";
+  vendorHash = "sha256-uy8/bkgjDXnt544S70IOwX9I8U0lMLAkbiBDYXyJBcY=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   meta = {
@@ -32,6 +32,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://phpinsights.com/";
     license = lib.licenses.mit;
     mainProgram = "phpinsights";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

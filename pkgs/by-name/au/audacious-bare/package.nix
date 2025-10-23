@@ -12,13 +12,13 @@
 
 stdenv.mkDerivation rec {
   pname = "audacious";
-  version = "4.4.2";
+  version = "4.5.1";
 
   src = fetchFromGitHub {
     owner = "audacious-media-player";
     repo = "audacious";
     rev = "${pname}-${version}";
-    hash = "sha256-Vh39uY15Pj2TbPk8gU55YykhFf5ytSUxN2gJ0VlC3tQ=";
+    hash = "sha256-1+RyGMUrotFdNCNpxzKpXGafKn9kNtzEyRVefUmJexU=";
   };
 
   nativeBuildInputs = [

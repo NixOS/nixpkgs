@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "netbox-plugin-prometheus-sd";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "FlxPeters";
     repo = "netbox-plugin-prometheus-sd";
     tag = "v${version}";
-    hash = "sha256-R/gUaRAHI0+U4TGjqo3kK/rhIamRY4F68cg5plGIQaE=";
+    hash = "sha256-L5kJnaY9gKpsWAgwkjVRQQauL2qViinqk7rHLXTVzT4=";
   };
 
   postPatch = ''

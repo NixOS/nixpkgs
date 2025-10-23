@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/vk-cli/vk";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ dan4ik605743 ];
+    maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };
 }

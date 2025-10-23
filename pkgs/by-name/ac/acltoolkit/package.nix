@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-python3.pkgs.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage {
   pname = "acltoolkit";
-  version = "unstable-2023-02-03";
+  version = "0-unstable-2023-02-03";
   format = "setuptools";
 
   src = fetchFromGitHub {
@@ -37,11 +37,11 @@ python3.pkgs.buildPythonPackage rec {
     "acltoolkit"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "ACL abuse swiss-knife";
     mainProgram = "acltoolkit";
     homepage = "https://github.com/zblurx/acltoolkit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "regress";
-  version = "0.4.5";
+  version = "2025.10.1";
 
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tCrFBjkK6obzaYkYiJ3WQ5yi3KkC86/cbXCSnRRGZu8=";
+    hash = "sha256-3MCorwzbw9bg1HJfETM10KX/u6hq48oY0rWzUsXyyO0=";
   };
 
   nativeBuildInputs = with rustPlatform; [
@@ -26,9 +26,8 @@ buildPythonPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-I6aUSGeosVYrFcHw0w6hprIL++c7ocYEorrQhe4ib+Y=";
+    inherit pname version src;
+    hash = "sha256-DOnKFVg+5cIv0T3mKzF8O9jj5+ZenQrLjTltfd+Tm9U=";
   };
 
   meta = with lib; {

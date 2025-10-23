@@ -1,17 +1,17 @@
 # This module defines a NixOS installation CD that contains GNOME.
 
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 {
   imports = [ ./installation-cd-graphical-calamares.nix ];
 
-  isoImage.edition = "gnome";
+  isoImage.edition = lib.mkDefault "gnome";
 
-  services.xserver.desktopManager.gnome = {
+  services.desktopManager.gnome = {
     # Add Firefox and other tools useful for installation to the launcher
     favoriteAppsOverride = ''
       [org.gnome.shell]
-      favorite-apps=[ 'firefox.desktop', 'nixos-manual.desktop', 'org.gnome.Console.desktop', 'org.gnome.Nautilus.desktop', 'gparted.desktop', 'io.calamares.calamares.desktop' ]
+      favorite-apps=[ 'firefox.desktop', 'nixos-manual.desktop', 'org.gnome.Console.desktop', 'org.gnome.Nautilus.desktop', 'gparted.desktop', 'calamares.desktop' ]
     '';
 
     # Override GNOME defaults to disable GNOME tour and disable suspend
@@ -35,7 +35,7 @@
     QT_QPA_PLATFORM = "$([[ $XDG_SESSION_TYPE = \"wayland\" ]] && echo \"wayland\")";
   };
 
-  services.xserver.displayManager.gdm = {
+  services.displayManager.gdm = {
     enable = true;
     # autoSuspend makes the machine automatically suspend after inactivity.
     # It's possible someone could/try to ssh'd into the machine and obviously

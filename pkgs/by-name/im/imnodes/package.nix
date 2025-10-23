@@ -11,7 +11,7 @@
   withExamples ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "imnodes";
   version = "unstable-2024-03-12";
   outputs = [
@@ -34,12 +34,13 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs =
-    [ imgui ]
-    ++ lib.optionals withExamples [
-      SDL2
-      xorg.libXext
-    ];
+  buildInputs = [
+    imgui
+  ]
+  ++ lib.optionals withExamples [
+    SDL2
+    xorg.libXext
+  ];
 
   cmakeFlags = [ (lib.cmakeBool "IMNODES_EXAMPLES" withExamples) ];
 

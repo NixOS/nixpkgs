@@ -8,13 +8,13 @@
 
 buildNpmPackage rec {
   pname = "fluidd";
-  version = "1.32.3";
+  version = "1.34.4";
 
   src = fetchFromGitHub {
     owner = "fluidd-core";
     repo = "fluidd";
     tag = "v${version}";
-    hash = "sha256-3sfjwwfanmRy45hrjG9X0lYVPsC41S2oZkbISz6YzYo=";
+    hash = "sha256-EixAax+Bd0IoGdk6Q9FoMQoWAa1U+O3SYeYEnuonHEI=";
   };
 
   patches = [
@@ -23,7 +23,7 @@ buildNpmPackage rec {
     })
   ];
 
-  npmDepsHash = "sha256-bwdlBXq1Z6ZoxwGhfMtPQy74/oxRt2aGxh+HXjREWMQ=";
+  npmDepsHash = "sha256-08tm+NuDLwilwo7SCmncIGAbEIW0tJLZi1HaoWGgAJA=";
 
   installPhase = ''
     mkdir -p $out/share/fluidd

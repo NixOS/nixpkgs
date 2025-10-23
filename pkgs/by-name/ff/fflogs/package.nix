@@ -6,10 +6,10 @@
 
 let
   pname = "fflogs";
-  version = "8.16.11";
+  version = "8.17.83";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-a+d9rLGJZCjrNH+Q7Vi2W26kh5xZJWMRGqB4Heg7qZE=";
+    hash = "sha256-orVUCf7+OzJQ561maIYEBKgSgLuKfuSXFGMLZV/HMjM=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in
@@ -32,7 +32,10 @@ appimageTools.wrapType2 {
     license = licenses.unfree; # no license listed
     mainProgram = "fflogs";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sersorrel ];
+    maintainers = with maintainers; [
+      keysmashes
+      iedame
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 }

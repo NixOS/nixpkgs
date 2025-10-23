@@ -29,17 +29,16 @@ stdenv.mkDerivation rec {
     gettext
   ];
 
-  buildInputs =
-    [
-      glib
-    ]
-    ++ lib.optionals alsaSupport [
-      alsa-lib
-      udev
-    ]
-    ++ lib.optionals pulseaudioSupport [
-      libpulseaudio
-    ];
+  buildInputs = [
+    glib
+  ]
+  ++ lib.optionals alsaSupport [
+    alsa-lib
+    udev
+  ]
+  ++ lib.optionals pulseaudioSupport [
+    libpulseaudio
+  ];
 
   configureFlags = lib.optional ossSupport "--enable-oss";
 
@@ -52,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mate-desktop/libmatemixer";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

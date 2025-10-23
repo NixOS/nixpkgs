@@ -18,16 +18,15 @@
 stdenv.mkDerivation (finalAttrs: {
   pname = "soapysdr";
   # Don't forget to change passthru.abiVersion
-  version = "0.8.1-unstable-2024-12-22";
+  version = "0.8.1-unstable-2025-10-05-03";
 
   src = fetchFromGitHub {
     owner = "pothosware";
     repo = "SoapySDR";
 
-    # Instead of applying several patches for Python 3.12 compat, just take the latest, from:
-    # use old get python lib for v2 (#437)
-    rev = "309335ec6a52eb712387ed025d705a3c0f7a1e24";
-    hash = "sha256-a9414gX4fUAPQaKKqrWgSlFHZH0BWqbgHzhVCKnIn2M=";
+    # update to include latest patch for newer cmake support
+    rev = "1667b4e6301d7ad47b340dcdcd6e9969bf57d843";
+    hash = "sha256-UCpYBUb2k1bHy1z2Mvmv+1ZX1BloSsPrTydFV3Ga3Os=";
   };
 
   nativeBuildInputs = [
@@ -35,15 +34,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     makeWrapper
   ];
-  buildInputs =
-    [
-      libusb-compat-0_1
-      ncurses
-    ]
-    ++ lib.optionals usePython [
-      python
-      swig
-    ];
+  buildInputs = [
+    libusb-compat-0_1
+    ncurses
+  ]
+  ++ lib.optionals usePython [
+    python
+    swig
+  ];
 
   propagatedBuildInputs = lib.optionals usePython [ python.pkgs.numpy ];
 

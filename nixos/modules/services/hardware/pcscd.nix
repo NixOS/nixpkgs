@@ -66,6 +66,36 @@ in
       default = [ ];
       description = "Extra command line arguments to be passed to the PCSC daemon.";
     };
+
+    ignoreReaderNames = lib.mkOption {
+      type = lib.types.listOf (lib.types.strMatching "[^:]+");
+      default = [ ];
+      description = ''
+        List of reader name patterns for the PCSC daemon to ignore.
+
+        For more precise control, readers can be ignored through udev rules
+        (cf. {option}`services.udev.extraRules`) by setting the
+        `PCSCLITE_IGNORE` property, for example:
+
+        ```
+        ACTION!="remove|unbind", SUBSYSTEM=="usb", ATTR{idVendor}=="20a0", ENV{PCSCLITE_IGNORE}="1"
+        ```
+      '';
+      example = [
+        "Nitrokey"
+        "YubiKey"
+      ];
+    };
+
+    extendReaderNames = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        String to append to every reader name. The special variable `$HOSTNAME`
+        will be expanded to the current host name.
+      '';
+      example = " $HOSTNAME";
+    };
   };
 
   config = lib.mkIf config.services.pcscd.enable {
@@ -79,7 +109,17 @@ in
     systemd.sockets.pcscd.wantedBy = [ "sockets.target" ];
 
     systemd.services.pcscd = {
-      environment.PCSCLITE_HP_DROPDIR = pluginEnv;
+      environment = {
+        PCSCLITE_HP_DROPDIR = pluginEnv;
+
+        PCSCLITE_FILTER_IGNORE_READER_NAMES = lib.mkIf (cfg.ignoreReaderNames != [ ]) (
+          lib.concatStringsSep ":" cfg.ignoreReaderNames
+        );
+
+        PCSCLITE_FILTER_EXTEND_READER_NAMES = lib.mkIf (
+          cfg.extendReaderNames != null
+        ) cfg.extendReaderNames;
+      };
 
       # If the cfgFile is empty and not specified (in which case the default
       # /etc/reader.conf is assumed), pcscd will happily start going through the

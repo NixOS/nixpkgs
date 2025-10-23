@@ -5,7 +5,7 @@
   scdoc,
   installShellFiles,
 }:
-buildGoModule rec {
+buildGoModule {
   pname = "ratt";
   version = "0-unstable-2025-03-10";
 

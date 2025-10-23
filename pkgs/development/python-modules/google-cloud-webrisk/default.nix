@@ -9,21 +9,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-webrisk";
-  version = "1.17.0";
+  version = "1.19.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_webrisk";
     inherit version;
-    hash = "sha256-Qcw5LyPhu9ZbYSz3Jnkr8byXiTZfW7BtQapT7MhkEug=";
+    hash = "sha256-TuWU+3pfwFt8E06zUDAY8+JJb+2j4l/eHP7Y0dgE0gs=";
   };
 
   build-system = [ setuptools ];
@@ -33,7 +30,8 @@ buildPythonPackage rec {
     google-auth
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

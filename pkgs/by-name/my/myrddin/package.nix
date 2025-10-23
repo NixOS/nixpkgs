@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     description = "Systems language that is both powerful and fun to use";
     homepage = "https://myrlang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
     broken =

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -11,12 +16,17 @@ let
   };
   env-vars = {
     DATA_PATH = cfg.dataDir;
-  } // lib.optionalAttrs (cfg.extensions != []) {
-    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss/";
+  }
+  // lib.optionalAttrs (cfg.extensions != [ ]) {
+    THIRDPARTY_EXTENSIONS_PATH = "${extension-env}/share/freshrss";
   };
 in
 {
-  meta.maintainers = with maintainers; [ etu stunkymonkey mattchrist ];
+  meta.maintainers = with maintainers; [
+    etu
+    stunkymonkey
+    mattchrist
+  ];
 
   options.services.freshrss = {
     enable = mkEnableOption "FreshRSS RSS aggregator and reader with php-fpm backend";
@@ -77,7 +87,11 @@ in
 
     database = {
       type = mkOption {
-        type = types.enum [ "sqlite" "pgsql" "mysql" ];
+        type = types.enum [
+          "sqlite"
+          "pgsql"
+          "mysql"
+        ];
         default = "sqlite";
         description = "Database type.";
         example = "pgsql";
@@ -131,7 +145,10 @@ in
     };
 
     webserver = mkOption {
-      type = types.enum [ "nginx" "caddy" ];
+      type = types.enum [
+        "nginx"
+        "caddy"
+      ];
       default = "nginx";
       description = ''
         Whether to use nginx or caddy for virtual host management.
@@ -168,7 +185,11 @@ in
     };
 
     authType = mkOption {
-      type = types.enum [ "form" "http_auth" "none" ];
+      type = types.enum [
+        "form"
+        "http_auth"
+        "none"
+      ];
       default = "form";
       description = "Authentication type for FreshRSS.";
     };
@@ -199,7 +220,11 @@ in
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@resources"
+          "~@privileged"
+        ];
         UMask = "0007";
         Type = "oneshot";
         User = cfg.user;
@@ -293,8 +318,8 @@ in
 
       systemd.services.freshrss-config =
         let
-          settingsFlags = concatStringsSep " \\\n    "
-            (mapAttrsToList (k: v: "${k} ${toString v}") {
+          settingsFlags = concatStringsSep " \\\n    " (
+            mapAttrsToList (k: v: "${k} ${toString v}") {
               "--default-user" = ''"${cfg.defaultUser}"'';
               "--auth-type" = ''"${cfg.authType}"'';
               "--base-url" = ''"${cfg.baseUrl}"'';
@@ -304,14 +329,19 @@ in
               # database.  Those that evaluate to null on the left hand side
               # will be omitted.
               ${if cfg.database.name != null then "--db-base" else null} = ''"${cfg.database.name}"'';
-              ${if cfg.database.passFile != null then "--db-password" else null} = ''"$(cat ${cfg.database.passFile})"'';
+              ${if cfg.database.passFile != null then "--db-password" else null} =
+                ''"$(cat ${cfg.database.passFile})"'';
               ${if cfg.database.user != null then "--db-user" else null} = ''"${cfg.database.user}"'';
-              ${if cfg.database.tableprefix != null then "--db-prefix" else null} = ''"${cfg.database.tableprefix}"'';
+              ${if cfg.database.tableprefix != null then "--db-prefix" else null} =
+                ''"${cfg.database.tableprefix}"'';
               # hostname:port e.g. "localhost:5432"
-              ${if cfg.database.host != null && cfg.database.port != null then "--db-host" else null} = ''"${cfg.database.host}:${toString cfg.database.port}"'';
+              ${if cfg.database.host != null && cfg.database.port != null then "--db-host" else null} =
+                ''"${cfg.database.host}:${toString cfg.database.port}"'';
               # socket path e.g. "/run/postgresql"
-              ${if cfg.database.host != null && cfg.database.port == null then "--db-host" else null} = ''"${cfg.database.host}"'';
-            });
+              ${if cfg.database.host != null && cfg.database.port == null then "--db-host" else null} =
+                ''"${cfg.database.host}"'';
+            }
+          );
         in
         {
           description = "Set up the state directory for FreshRSS before use";
@@ -324,7 +354,9 @@ in
 
           script =
             let
-              userScriptArgs = ''--user ${cfg.defaultUser} ${optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''}'';
+              userScriptArgs = ''--user ${cfg.defaultUser} ${
+                optionalString (cfg.authType == "form") ''--password "$(cat ${cfg.passwordFile})"''
+              }'';
               updateUserScript = optionalString (cfg.authType == "form" || cfg.authType == "none") ''
                 ./cli/update-user.php ${userScriptArgs}
               '';

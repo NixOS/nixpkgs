@@ -7,28 +7,33 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "davis";
-  version = "5.0.2";
+  version = "5.2.0";
 
   src = fetchFromGitHub {
     owner = "tchapi";
     repo = "davis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Zl+6nrgspyg6P9gqYwah81Z6Mtni6nUlCp4gTjJWn9M=";
+    hash = "sha256-Ih06CKwgR2ljw3w9YfgVUdBCjt5Nbs34fMsErRUkfcc=";
   };
 
-  vendorHash = "sha256-pCWM1kgk30Au9i8TflrmZXw/PJmo3tdW565BXwncsZU=";
+  vendorHash = "sha256-e0qSI5naqM/mUSMduiku0yQkYMGw1y9Uwa5oYlxaDzs=";
+
+  composerNoPlugins = false;
 
   postInstall = ''
     chmod -R u+w $out/share
     # Only include the files needed for runtime in the derivation
-    mv $out/share/php/${finalAttrs.pname}/{migrations,public,src,config,bin,templates,tests,translations,vendor,symfony.lock,composer.json,composer.lock} $out
+    mv $out/share/php/davis/{migrations,public,src,config,bin,templates,tests,translations,vendor,symfony.lock,composer.json,composer.lock} $out
     # Save the upstream .env file for reference, but rename it so it is not loaded
-    mv $out/share/php/${finalAttrs.pname}/.env $out/env-upstream
+    mv $out/share/php/davis/.env $out/env-upstream
     rm -rf "$out/share"
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) davis;
+  passthru = {
+    php = php;
+    tests = {
+      inherit (nixosTests) davis;
+    };
   };
 
   meta = {

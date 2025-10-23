@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, makeWrapper
-, autoPatchelfHook
-, jdk11
-, makeDesktopItem
-, copyDesktopItems
-, runtimeShell
-, unzip
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  autoPatchelfHook,
+  jdk11,
+  makeDesktopItem,
+  copyDesktopItems,
+  runtimeShell,
+  unzip,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "fiji";
-  version = "20241114-1317";
+  version = "20250408-1717";
 
   src = fetchurl {
     url = "https://downloads.imagej.net/fiji/archive/${version}/fiji-nojre.zip";
-    sha256 = "sha256-dNpscgZiiE2cuuo11YLs+mgoBRZ/MpUXDaAX3x+E/w8=";
+    sha256 = "sha256-bqVrTBKII58E7WSlQfRPE0Dxd4h/oJALFvIOdAAFZoI=";
   };
 
   dontBuild = true;
@@ -42,7 +43,11 @@ stdenv.mkDerivation rec {
       comment = "Scientific Image Analysis";
       desktopName = "Fiji Is Just ImageJ";
       genericName = "Fiji Is Just ImageJ";
-      categories = [ "Education" "Science" "ImageProcessing" ];
+      categories = [
+        "Education"
+        "Science"
+        "ImageProcessing"
+      ];
       startupNotify = true;
       startupWMClass = "fiji-Main";
     })
@@ -78,14 +83,19 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://imagej.net/software/fiji/";
-    description = "batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
+    description = "Batteries-included distribution of ImageJ2, bundling a lot of plugins which facilitate scientific image analysis";
     mainProgram = "fiji";
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [
       binaryBytecode
       binaryNativeCode
     ];
-    license = with lib.licenses; [ gpl2Plus gpl3Plus bsd2 publicDomain ];
+    license = with lib.licenses; [
+      gpl2Plus
+      gpl3Plus
+      bsd2
+      publicDomain
+    ];
     maintainers = with maintainers; [ davisrichard437 ];
   };
 }

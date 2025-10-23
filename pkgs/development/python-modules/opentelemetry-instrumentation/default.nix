@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "opentelemetry-instrumentation";
-  version = "0.50b0";
+  version = "0.55b0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "open-telemetry";
     repo = "opentelemetry-python-contrib";
     tag = "v${version}";
-    hash = "sha256-r50Xu/J4d17wybd0bzKpt6KYFG2qbIF5xAGemV6qCMA=";
+    hash = "sha256-UM9ezCh3TVwyj257O0rvTCIgfrddobWcVIgJmBUj/Vo=";
   };
 
   sourceRoot = "${src.name}/opentelemetry-instrumentation";
@@ -58,6 +58,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/open-telemetry/opentelemetry-python-contrib/tree/main/opentelemetry-instrumentation";
     changelog = "https://github.com/open-telemetry/opentelemetry-python-contrib/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = teams.deshaw.members ++ [ maintainers.natsukium ];
+    maintainers = [ maintainers.natsukium ];
+    teams = [ teams.deshaw ];
   };
 }

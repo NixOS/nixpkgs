@@ -7,15 +7,15 @@
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nct6687d";
-  version = "0-unstable-2024-11-05";
+  version = "0-unstable-2025-08-23";
 
   src = fetchFromGitHub {
     owner = "Fred78290";
     repo = "nct6687d";
-    rev = "2f1a27a29f71797922c74afda6a39ce368e80356";
-    hash = "sha256-fnSy3C6R8SHlu+xB+1ID8m4Eqfgb2+2y3DkDlp3blVo=";
+    rev = "b4c600d60ad26f01d11f75d40cb574c5e77e11b6";
+    hash = "sha256-w/4mZZbGi+tTEJW25h+E8yi4YYfv7cxaMlVR7TkQCdc=";
   };
 
   setSourceRoot = ''

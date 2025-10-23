@@ -6,17 +6,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-modules";
-  version = "0.22.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "regexident";
     repo = "cargo-modules";
     tag = "v${version}";
-    hash = "sha256-TlnuEurPCcQb3CXr1ffmDv3WQxSZ27qG9erLyHgF7nk=";
+    hash = "sha256-FghGqRV9KaRPZ7l3t/AB7f1XufOsNdiGFUk8GUwAxtY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-42nhyEAC9KKD3of0BBTYoVpFYx/+oXS7Ro1Hzxgvr+E=";
+  cargoHash = "sha256-Lt5zqhBpHlPYoPgIVmVYu35SnuguqPw5Qg0oTL5cgCs=";
 
   checkFlags = [
     "--skip=cfg_test::with_tests::smoke"
@@ -45,7 +44,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Cargo plugin for showing a tree-like overview of a crate's modules";

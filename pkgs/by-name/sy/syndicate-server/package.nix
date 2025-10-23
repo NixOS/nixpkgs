@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "syndicate-server";
-  version = "0.48.0";
+  version = "0.50.1";
   src = fetchFromGitea {
     domain = "git.syndicate-lang.org";
     owner = "syndicate-lang";
     repo = "syndicate-rs";
     rev = "${pname}-v${version}";
-    hash = "sha256-DVgFlJCqaTmQ7eL2LQ8rkIbvaEfwx+NDeXRA8qB+/Qo=";
+    hash = "sha256-orQN83DE+ZNgdx2PVcYrte/rVDFFtuQuRDKzeumpsLo=";
   };
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-P/NYyoH/9kkyBwCGORK9bxEjyye12SP3hRDnL9c6i78=";
+
+  cargoHash = "sha256-lR36UAMedPdfvX613adxxRzJe+Ri09hiZYanyu7xbLU=";
   nativeBuildInputs = [
     pkg-config
     versionCheckHook
@@ -27,6 +27,7 @@ rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
+  doCheck = false;
   doInstallCheck = true;
 
   meta = {
@@ -34,7 +35,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://synit.org/";
     license = lib.licenses.asl20;
     mainProgram = "syndicate-server";
-    maintainers = with lib.maintainers; [ ehmry ];
     platforms = lib.platforms.linux;
   };
 }

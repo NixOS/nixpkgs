@@ -10,9 +10,11 @@
   wayland-protocols,
   cairo,
   gdk-pixbuf,
+  gnome,
+  webp-pixbuf-loader,
   wayland-scanner,
   wrapGAppsNoGuiHook,
-  librsvg
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,6 +52,18 @@ stdenv.mkDerivation rec {
     "-Dman-pages=enabled"
   ];
 
+  # add support for webp
+  postInstall = ''
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
+  '';
+
   meta = with lib; {
     description = "Wallpaper tool for Wayland compositors";
     inherit (src.meta) homepage;
@@ -60,7 +74,9 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     mainProgram = "swaybg";
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [
+      ryan4yin
+    ];
     platforms = platforms.linux;
   };
 }

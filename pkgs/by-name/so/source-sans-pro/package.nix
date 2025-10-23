@@ -30,7 +30,7 @@ stdenvNoCC.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://adobe-fonts.github.io/source-sans/";
-    description = "Sans serif font family for user interface environments";
+    description = "Sans serif font family for user interface environments (version of Source Sans before being renamed)";
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ ttuegel ];

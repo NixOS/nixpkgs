@@ -35,7 +35,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Keyboard Layout Maker";
     homepage = "https://github.com/OneDeadKey/kalamine/";
     license = licenses.mit;
-    maintainers = with maintainers; [ iogamaster ];
+    maintainers = [ ];
     mainProgram = "kalamine";
   };
 }

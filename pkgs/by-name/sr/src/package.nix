@@ -7,21 +7,23 @@
   makeWrapper,
   python3,
   rcs,
+  asciidoctor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "src";
-  version = "1.33";
+  version = "1.41";
 
   src = fetchFromGitLab {
     owner = "esr";
     repo = "src";
-    rev = finalAttrs.version;
-    hash = "sha256-xyKJcM9dWsFGhe+ISR6S1f67jkYlS9heZe0TFXY8DgQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-i5i6+RmQ/70ul2r/NC6xv/8sUP3+8mkQIDgyC1NrSrI=";
   };
 
   nativeBuildInputs = [
     asciidoc
+    asciidoctor
     makeWrapper
   ];
 
@@ -46,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix PATH ":" "${rcs}/bin"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.catb.org/esr/src/";
     description = "Simple single-file revision control";
     longDescription = ''
@@ -58,9 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
       anywhere.
     '';
     changelog = "https://gitlab.com/esr/src/-/raw/${finalAttrs.version}/NEWS.adoc";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     mainProgram = "src";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     inherit (python3.meta) platforms;
   };
 })

@@ -3,20 +3,24 @@
   stdenv,
   fetchFromGitHub,
   libxcb,
+  xorg,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wmutils-opt";
-  version = "1.0";
+  version = "1.0-unstable-2024-09-09";
 
   src = fetchFromGitHub {
     owner = "wmutils";
     repo = "opt";
-    rev = "v${version}";
-    sha256 = "0gd05qsir1lnzfrbnfh08qwsryz7arwj20f886nqh41m87yqaljz";
+    rev = "77124e003246fce8027452d3ceb440893b18d374";
+    sha256 = "sha256-hRxuV4xBvgFLO1Mts4rSq3Z+hedr0ldf/JgUltywH+Y=";
   };
 
-  buildInputs = [ libxcb ];
+  buildInputs = [
+    libxcb
+    xorg.xcbutil
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

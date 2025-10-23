@@ -1,17 +1,22 @@
-{ lib, buildDunePackage, fetchurl
-, dune-configurator, cmdliner
-, lwt, withLwt ? true
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  dune-configurator,
+  cmdliner,
+  lwt,
+  withLwt ? true,
 }:
 
 buildDunePackage rec {
   pname = "hxd";
-  version = "0.3.3";
+  version = "0.3.5";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/dinosaure/hxd/releases/download/v${version}/hxd-${version}.tbz";
-    sha256 = "sha256-Tt4jUpal4qJZl3bIvOtIU8Fk735XNXCh7caKTAyQQz4=";
+    sha256 = "sha256-E1I198ErT9/Cpvdk/Qjpq360OIVuAsbmaNc7qJzndEM=";
   };
 
   propagatedBuildInputs = lib.optional withLwt lwt;

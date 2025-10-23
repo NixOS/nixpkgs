@@ -1,0 +1,13 @@
+diff --git a/Tools/CMake/Libraries.cmake b/Tools/CMake/Libraries.cmake
+index a6673d9..a079021 100644
+--- a/Tools/CMake/Libraries.cmake
++++ b/Tools/CMake/Libraries.cmake
+@@ -67,7 +67,7 @@ if((NOT LibArchive_FOUND) AND (NOT WIN32))
+   endif()
+ endif()
+ 
+-set(Boost_USE_STATIC_LIBS ON)
++add_definitions(-DBOOST_LOG_DYN_LINK)
+ find_package(
+   Boost 1.78 REQUIRED
+   COMPONENTS filesystem

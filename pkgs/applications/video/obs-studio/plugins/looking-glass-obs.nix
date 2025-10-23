@@ -4,6 +4,7 @@
   cmake,
   libbfd,
   SDL2,
+  libGL,
   obs-studio,
   looking-glass-client,
 }:
@@ -21,6 +22,7 @@ stdenv.mkDerivation {
     obs-studio
     libbfd
     SDL2
+    libGL
   ];
 
   env.NIX_CFLAGS_COMPILE = "-mavx";
@@ -35,6 +37,7 @@ stdenv.mkDerivation {
     homepage = "https://looking-glass.io/docs/stable/obs/";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ babbaj ];
+    # Hard coded x86_64 support
     platforms = [ "x86_64-linux" ];
   };
 }

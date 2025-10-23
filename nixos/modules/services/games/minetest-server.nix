@@ -50,27 +50,26 @@ let
       "${toString val}"
     ];
 
-  flags =
-    [
-      "--server"
-    ]
-    ++ (
-      if cfg.configPath != null then
-        [
-          "--config"
-          cfg.configPath
-        ]
-      else
-        [
-          "--config"
-          (builtins.toFile "minetest.conf" (toConf cfg.config))
-        ]
-    )
-    ++ (flag cfg.gameId "gameid")
-    ++ (flag cfg.world "world")
-    ++ (flag cfg.logPath "logfile")
-    ++ (flag cfg.port "port")
-    ++ cfg.extraArgs;
+  flags = [
+    "--server"
+  ]
+  ++ (
+    if cfg.configPath != null then
+      [
+        "--config"
+        cfg.configPath
+      ]
+    else
+      [
+        "--config"
+        (builtins.toFile "minetest.conf" (toConf cfg.config))
+      ]
+  )
+  ++ (flag cfg.gameId "gameid")
+  ++ (flag cfg.world "world")
+  ++ (flag cfg.logPath "logfile")
+  ++ (flag cfg.port "port")
+  ++ cfg.extraArgs;
 in
 {
   options = {
@@ -136,7 +135,7 @@ in
       };
 
       port = lib.mkOption {
-        type = lib.types.nullOr lib.types.int;
+        type = lib.types.nullOr lib.types.port;
         default = null;
         description = ''
           Port number to bind to.

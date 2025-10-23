@@ -6,7 +6,6 @@
 }:
 let
   cfg = config.services.sssd;
-  nscd = config.services.nscd;
 
   dataDir = "/var/lib/sssd";
   settingsFile = "${dataDir}/sssd.conf";
@@ -22,7 +21,6 @@ in
         description = "Contents of {file}`sssd.conf`.";
         default = ''
           [sssd]
-          config_file_version = 2
           services = nss, pam
           domains = shadowutils
 
@@ -106,17 +104,35 @@ in
           config.environment.etc."nscd.conf".source
           settingsFileUnsubstituted
         ];
-        script = ''
-          export LDB_MODULES_PATH+="''${LDB_MODULES_PATH+:}${pkgs.ldb}/modules/ldb:${pkgs.sssd}/modules/ldb"
-          mkdir -p /var/lib/sss/{pubconf,db,mc,pipes,gpo_cache,secrets} /var/lib/sss/pipes/private /var/lib/sss/pubconf/krb5.include.d
-          ${pkgs.sssd}/bin/sssd -D -c ${settingsFile}
-        '';
+        environment.LDB_MODULES_PATH = "${pkgs.ldb}/modules/ldb:${pkgs.sssd}/modules/ldb";
         serviceConfig = {
-          Type = "forking";
+          # systemd needs to start sssd directly for "NotifyAccess=main" to work
+          ExecStart = "${pkgs.sssd}/bin/sssd -i -c ${settingsFile}";
+          Type = "notify";
+          NotifyAccess = "main";
           PIDFile = "/run/sssd.pid";
+          CapabilityBoundingSet = [
+            "CAP_IPC_LOCK"
+            "CAP_CHOWN"
+            "CAP_DAC_READ_SEARCH"
+            "CAP_KILL"
+            "CAP_NET_ADMIN"
+            "CAP_SYS_NICE"
+            "CAP_FOWNER"
+            "CAP_SETGID"
+            "CAP_SETUID"
+            "CAP_SYS_ADMIN"
+            "CAP_SYS_RESOURCE"
+            "CAP_BLOCK_SUSPEND"
+          ];
+          Restart = "on-abnormal";
           StateDirectory = baseNameOf dataDir;
           # We cannot use LoadCredential here because it's not available in ExecStartPre
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;
+        };
+        unitConfig = {
+          StartLimitIntervalSec = "50s";
+          StartLimitBurst = 5;
         };
         preStart = ''
           mkdir -p "${dataDir}/conf.d"
@@ -127,6 +143,7 @@ in
             -o ${settingsFile} \
             -i ${settingsFileUnsubstituted}
           umask $old_umask
+          mkdir -p /var/lib/sss/{pubconf,db,mc,pipes,gpo_cache,secrets} /var/lib/sss/pipes/private /var/lib/sss/pubconf/krb5.include.d
         '';
       };
 
@@ -147,6 +164,14 @@ in
         serviceConfig = {
           ExecStartPre = "-${pkgs.sssd}/bin/sssd --genconf-section=kcm";
           ExecStart = "${pkgs.sssd}/libexec/sssd/sssd_kcm --uid 0 --gid 0";
+          CapabilityBoundingSet = [
+            "CAP_IPC_LOCK"
+            "CAP_CHOWN"
+            "CAP_DAC_READ_SEARCH"
+            "CAP_FOWNER"
+            "CAP_SETGID"
+            "CAP_SETUID"
+          ];
         };
         restartTriggers = [
           settingsFileUnsubstituted

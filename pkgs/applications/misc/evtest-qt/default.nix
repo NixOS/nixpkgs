@@ -8,13 +8,13 @@
   unstableGitUpdater,
 }:
 
-mkDerivation rec {
+mkDerivation {
   pname = "evtest-qt";
   version = "0.2.0-unstable-2023-09-13";
 
   src = fetchFromGitHub {
     owner = "Grumbel";
-    repo = pname;
+    repo = "evtest-qt";
     rev = "fb087f4d3d51377790f1ff30681c48031bf23145";
     hash = "sha256-gE47x1J13YZUVyB0b4VRyESIVCm3GbOXp2bX0TP97UU=";
     fetchSubmodules = true;

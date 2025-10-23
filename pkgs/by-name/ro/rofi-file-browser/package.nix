@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "marvinkreis";
     repo = "rofi-file-browser-extended";
-    rev = version;
+    tag = version;
     hash = "sha256-UEFv0skFzWhgFkmz1h8uV1ygW977zNq1Dw8VAawqUgw=";
     fetchSubmodules = true;
   };
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     ./fix_incompatible_pointer_type.patch
     ./fix_build_on_i686.patch
     ./fix_recent_glib_deprecation_warning.patch
+    ./fix_cmake_min_version.patch
   ];
 
   prePatch = ''

@@ -28,12 +28,12 @@ buildGoModule rec {
     "-X=github.com/lkarlslund/adalanche/modules/version.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Active Directory ACL Visualizer and Explorer";
     homepage = "https://github.com/lkarlslund/adalanche";
     changelog = "https://github.com/lkarlslund/Adalanche/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "adalanche";
   };
 }

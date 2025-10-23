@@ -27,12 +27,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs =
-    [
-      sqlite
-    ]
-    ++ lib.optional httpSupport curl
-    ++ lib.optional linenoiseSupport linenoise;
+  buildInputs = [
+    sqlite
+  ]
+  ++ lib.optional httpSupport curl
+  ++ lib.optional linenoiseSupport linenoise;
 
   patches = [
     ./0001-force-sqlite-to-be-found.patch
@@ -43,17 +42,16 @@ stdenv.mkDerivation rec {
         -e 's/-flto/${lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation"}/'
   '';
 
-  cmakeFlags =
-    [
-      "-DBUILD_CLI=${if cliSupport then "ON" else "OFF"}"
-      "-DDISABLE_HTTP=${if httpSupport then "OFF" else "ON"}"
-      "-DDISABLE_LINENOISE=${if linenoiseSupport then "OFF" else "ON"}"
-    ]
-    ++ lib.optionals enableLTO [
-      # TODO: LTO with LLVM
-      "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
-      "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
-    ];
+  cmakeFlags = [
+    "-DBUILD_CLI=${if cliSupport then "ON" else "OFF"}"
+    "-DDISABLE_HTTP=${if httpSupport then "OFF" else "ON"}"
+    "-DDISABLE_LINENOISE=${if linenoiseSupport then "OFF" else "ON"}"
+  ]
+  ++ lib.optionals enableLTO [
+    # TODO: LTO with LLVM
+    "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
+    "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
+  ];
 
   postBuild = ''
     cd .. # move out of cmakeBuildDir
@@ -76,23 +74,22 @@ stdenv.mkDerivation rec {
     ./dictu tests/runTests.du
   '';
 
-  installPhase =
-    ''
-      mkdir -p $out
-      cp -r src/include $out/include
-      mkdir -p $out/lib
-      cp build/src/libdictu_api* $out/lib
-    ''
-    + lib.optionalString cliSupport ''
-      install -Dm755 dictu $out/bin/dictu
-    '';
+  installPhase = ''
+    mkdir -p $out
+    cp -r src/include $out/include
+    mkdir -p $out/lib
+    cp build/src/libdictu_api* $out/lib
+  ''
+  + lib.optionalString cliSupport ''
+    install -Dm755 dictu $out/bin/dictu
+  '';
 
   meta = with lib; {
     description = "High-level dynamically typed, multi-paradigm, interpreted programming language";
     mainProgram = "dictu";
     homepage = "https://dictu-lang.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/staging-next/dictu.x86_64-darwin
   };

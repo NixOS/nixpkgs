@@ -11,7 +11,7 @@ buildGoModule rec {
 
   src = fetchgit {
     url = "https://tildegit.org/sloum/bombadillo.git";
-    rev = version;
+    tag = version;
     hash = "sha256-FjU9AyRAdGFr1bVpkmj5STkbzCXvpxOaOj7WNQJq7A0=";
   };
 
@@ -33,6 +33,5 @@ buildGoModule rec {
     mainProgram = "bombadillo";
     homepage = "https://bombadillo.colorfield.space/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ehmry ];
   };
 }

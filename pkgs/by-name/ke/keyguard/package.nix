@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   gradle,
-  jdk17,
+  jdk21,
   fontconfig,
   libXinerama,
   libXrandr,
@@ -15,17 +15,19 @@
   alsa-lib,
   makeDesktopItem,
   copyDesktopItems,
+  libglvnd,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.10.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20250216";
-    hash = "sha256-hTWHy7A59Xu2h5POo0nFNF7PrRNj1LU6WhcQKXsRGS8=";
+    tag = "r20250915";
+    hash = "sha256-WAD8cZkaZbv3tyzKYEBH25g7x7xmdIWAnvMxnNKYpME=";
   };
 
   postPatch = ''
@@ -45,14 +47,15 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
-  env.JAVA_HOME = jdk17;
+  env.JAVA_HOME = jdk21;
 
-  gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
+  gradleFlags = [ "-Dorg.gradle.java.home=${jdk21}" ];
 
   nativeBuildInputs = [
     gradle
-    jdk17
+    jdk21
     copyDesktopItems
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -65,6 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     cups
     lcms2
     alsa-lib
+    libglvnd
   ];
 
   doCheck = false;
@@ -95,7 +99,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/AChep/keyguard-app";
     mainProgram = "Keyguard";
     license = lib.licenses.unfree;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode

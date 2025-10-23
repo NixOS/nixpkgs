@@ -33,11 +33,11 @@ A very basic configuration may look like this:
 
 This will start the oCIS server and make it available at `https://localhost:9200`
 
-However to make this configuration work you will need generate a configuration.
+However, to make this configuration work, you will need to generate a configuration.
 You can do this with:
 
 ```console
-$ nix-shell -p ocis-bin
+$ nix-shell -p ocis_5-bin
 $ mkdir scratch/
 $ cd scratch/
 $ ocis init --config-path . --admin-password "changeme"
@@ -104,7 +104,7 @@ values, and
 [`services.ocis.environmentFile`][mod-envFile] for
 sensitive values.
 
-Configuration in (`services.ocis.environment`)[mod-env] overrides those from
+Configuration in [`services.ocis.environment`][mod-env] overrides those from
 [`services.ocis.environmentFile`][mod-envFile] and will have highest
 precedence
 

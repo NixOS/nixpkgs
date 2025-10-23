@@ -4,7 +4,7 @@
   fetchFromGitLab,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stepreduce";
   version = "unstable-2020-04-30";
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Reduces STEP file size by removing redundancy";
     homepage = "https://gitlab.com/sethhillbrand/stepreduce";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
     mainProgram = "stepreduce";
   };
 }

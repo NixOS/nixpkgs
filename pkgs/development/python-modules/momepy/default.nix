@@ -19,15 +19,15 @@
 
 buildPythonPackage rec {
   pname = "momepy";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "pysal";
     repo = "momepy";
     tag = "v${version}";
-    hash = "sha256-9bFPxpopmrwNKdCEF+jlPRoNiVFrngW+sMeshq2EDYU=";
+    hash = "sha256-9A1g2WSH1kIXO/BeF8ebcigshfcR8MrT2Ut5K/oxVM4=";
   };
 
   build-system = [ setuptools-scm ];
@@ -52,6 +52,6 @@ buildPythonPackage rec {
     description = "Urban Morphology Measuring Toolkit";
     homepage = "https://github.com/pysal/momepy";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.geospatial.members;
+    teams = [ lib.teams.geospatial ];
   };
 }

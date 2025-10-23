@@ -13,8 +13,6 @@
   nixosTests,
 }:
 
-with builtins;
-
 stdenv.mkDerivation rec {
   pname = "ttyd";
   version = "1.7.7";

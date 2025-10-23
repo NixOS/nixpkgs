@@ -4,13 +4,13 @@
   pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch2,
   python,
   buildPythonPackage,
   setuptools,
   numpy,
   numpy_1,
   llvmlite,
-  libcxx,
   replaceVars,
   writers,
   numba,
@@ -33,7 +33,7 @@ let
   cudatoolkit = cudaPackages.cuda_nvcc;
 in
 buildPythonPackage rec {
-  version = "0.61.0";
+  version = "0.62.0";
   pname = "numba";
   pyproject = true;
 
@@ -48,14 +48,10 @@ buildPythonPackage rec {
     #
     # - https://git-scm.com/docs/gitattributes#_export_subst and
     # - https://github.com/numba/numba/blame/5ef7c86f76a6e8cc90e9486487294e0c34024797/numba/_version.py#L25-L31
-    #
-    # Hence this hash may change if GitHub / Git will change it's behavior.
-    # Hopefully this will not happen until the next release. We are fairly sure
-    # that upstream relies on those strings to be valid, that's why we don't
-    # use `forceFetchGit = true;`.` If in the future we'll observe the hash
-    # changes too often, we can always use forceFetchGit, and inject the
-    # relevant strings ourselves, using `substituteInPlace`, in postFetch.
-    hash = "sha256-4CaTJPaQduJqD0NQOPp1qsDr/BeCjbfZhulVW/x2ZAU=";
+    postFetch = ''
+      sed -i 's/git_refnames = "[^"]*"/git_refnames = " (tag: ${src.tag})"/' $out/numba/_version.py
+    '';
+    hash = "sha256-y/mvmzMwTHc/tWg4WFqFJOThbFiIF71OHLvtztkT+hE=";
   };
 
   postPatch = ''
@@ -63,18 +59,7 @@ buildPythonPackage rec {
       --replace-fail \
         "dldir = [" \
         "dldir = [ '${addDriverRunpath.driverLink}/lib', "
-
-    substituteInPlace setup.py \
-      --replace-fail \
-        'max_numpy_run_version = "2.2"' \
-        'max_numpy_run_version = "3"'
-    substituteInPlace numba/__init__.py \
-      --replace-fail \
-        'numpy_version > (2, 1)' \
-        'numpy_version >= (3, 0)'
   '';
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   build-system = [
     setuptools
@@ -88,7 +73,9 @@ buildPythonPackage rec {
 
   buildInputs = lib.optionals cudaSupport [ cudaPackages.cuda_cudart ];
 
-  pythonRelaxDeps = [ "numpy" ];
+  pythonRelaxDeps = [
+    "numpy"
+  ];
 
   dependencies = [
     numpy
@@ -112,12 +99,16 @@ buildPythonPackage rec {
     cd $out
   '';
 
-  pytestFlagsArray = lib.optionals (!doFullCheck) [
-    # These are the most basic tests. Running all tests is too expensive, and
-    # some of them fail (also differently on different platforms), so it will
-    # be too hard to maintain such a `disabledTests` list.
-    "${python.sitePackages}/numba/tests/test_usecases.py"
-  ];
+  enabledTestPaths =
+    if doFullCheck then
+      null
+    else
+      [
+        # These are the most basic tests. Running all tests is too expensive, and
+        # some of them fail (also differently on different platforms), so it will
+        # be too hard to maintain such a `disabledTests` list.
+        "${python.sitePackages}/numba/tests/test_usecases.py"
+      ];
 
   disabledTests = lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     # captured stderr: Fatal Python error: Segmentation fault

@@ -74,17 +74,16 @@ let
         StateDirectory = [ "public-inbox" ];
         StateDirectoryMode = "0750";
         WorkingDirectory = stateDir;
-        BindReadOnlyPaths =
-          [
-            "/etc"
-            "/run/systemd"
-            "${config.i18n.glibcLocales}"
-          ]
-          ++ mapAttrsToList (name: inbox: inbox.description) cfg.inboxes
-          ++ filter (x: x != null) [
-            cfg.${proto}.cert or null
-            cfg.${proto}.key or null
-          ];
+        BindReadOnlyPaths = [
+          "/etc"
+          "/run/systemd"
+          "${config.i18n.glibcLocales}"
+        ]
+        ++ mapAttrsToList (name: inbox: inbox.description) cfg.inboxes
+        ++ filter (x: x != null) [
+          cfg.${proto}.cert or null
+          cfg.${proto}.key or null
+        ];
         # The following options are only for optimizing:
         # systemd-analyze security public-inbox-'*'
         AmbientCapabilities = "";
@@ -103,12 +102,13 @@ let
         ProtectProc = "invisible";
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies =
-          [ "AF_UNIX" ]
-          ++ optionals needNetwork [
-            "AF_INET"
-            "AF_INET6"
-          ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+        ]
+        ++ optionals needNetwork [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -215,7 +215,8 @@ in
     };
     imap = {
       enable = mkEnableOption "the public-inbox IMAP server";
-    } // publicInboxDaemonOptions "imap" 993;
+    }
+    // publicInboxDaemonOptions "imap" 993;
     http = {
       enable = mkEnableOption "the public-inbox HTTP server";
       mounts = mkOption {
@@ -253,7 +254,8 @@ in
     postfix.enable = mkEnableOption "the integration into Postfix";
     nntp = {
       enable = mkEnableOption "the public-inbox NNTP server";
-    } // publicInboxDaemonOptions "nntp" 563;
+    }
+    // publicInboxDaemonOptions "nntp" 563;
     spamAssassinRules = mkOption {
       type = with types; nullOr path;
       default = "${cfg.package.sa_config}/user/.spamassassin/user_prefs";
@@ -424,7 +426,7 @@ in
     };
     services.postfix = mkIf (cfg.postfix.enable && cfg.mda.enable) {
       # Not sure limiting to 1 is necessary, but better safe than sorry.
-      config.public-inbox_destination_recipient_limit = "1";
+      settings.main.public-inbox_destination_recipient_limit = "1";
 
       # Register the addresses as existing
       virtual = concatStringsSep "\n" (
@@ -441,7 +443,7 @@ in
       );
 
       # The public-inbox transport
-      masterConfig.public-inbox = {
+      settings.master.public-inbox = {
         type = "unix";
         privileged = true; # Required for user=
         command = "pipe";
@@ -592,7 +594,8 @@ in
               wants = [ "public-inbox-init.service" ];
               requires = [
                 "public-inbox-init.service"
-              ] ++ optional (cfg.settings.publicinboxwatch.spamcheck == "spamc") "spamassassin.service";
+              ]
+              ++ optional (cfg.settings.publicinboxwatch.spamcheck == "spamc") "spamassassin.service";
               wantedBy = [ "multi-user.target" ];
               serviceConfig = {
                 ExecStart = "${cfg.package}/bin/public-inbox-watch";
@@ -602,7 +605,7 @@ in
           ];
         }
       )
-      ({
+      {
         public-inbox-init =
           let
             PI_CONFIG = gitIni.generate "public-inbox.ini" (
@@ -615,52 +618,51 @@ in
               wantedBy = [ "multi-user.target" ];
               restartIfChanged = true;
               restartTriggers = [ PI_CONFIG ];
-              script =
-                ''
-                  set -ux
-                  install -D -p ${PI_CONFIG} ${stateDir}/.public-inbox/config
-                ''
-                + optionalString useSpamAssassin ''
-                  install -m 0700 -o spamd -d ${stateDir}/.spamassassin
-                  ${optionalString (cfg.spamAssassinRules != null) ''
-                    ln -sf ${cfg.spamAssassinRules} ${stateDir}/.spamassassin/user_prefs
-                  ''}
-                ''
-                + concatStrings (
-                  mapAttrsToList (name: inbox: ''
-                    if [ ! -e ${stateDir}/inboxes/${escapeShellArg name} ]; then
-                      # public-inbox-init creates an inbox and adds it to a config file.
-                      # It tries to atomically write the config file by creating
-                      # another file in the same directory, and renaming it.
-                      # This has the sad consequence that we can't use
-                      # /dev/null, or it would try to create a file in /dev.
-                      conf_dir="$(mktemp -d)"
+              script = ''
+                set -ux
+                install -D -p ${PI_CONFIG} ${stateDir}/.public-inbox/config
+              ''
+              + optionalString useSpamAssassin ''
+                install -m 0700 -o spamd -d ${stateDir}/.spamassassin
+                ${optionalString (cfg.spamAssassinRules != null) ''
+                  ln -sf ${cfg.spamAssassinRules} ${stateDir}/.spamassassin/user_prefs
+                ''}
+              ''
+              + concatStrings (
+                mapAttrsToList (name: inbox: ''
+                  if [ ! -e ${escapeShellArg inbox.inboxdir} ]; then
+                    # public-inbox-init creates an inbox and adds it to a config file.
+                    # It tries to atomically write the config file by creating
+                    # another file in the same directory, and renaming it.
+                    # This has the sad consequence that we can't use
+                    # /dev/null, or it would try to create a file in /dev.
+                    conf_dir="$(mktemp -d)"
 
-                      PI_CONFIG=$conf_dir/conf \
-                      ${cfg.package}/bin/public-inbox-init -V2 \
-                        ${escapeShellArgs (
-                          [
-                            name
-                            "${stateDir}/inboxes/${name}"
-                            inbox.url
-                          ]
-                          ++ inbox.address
-                        )}
+                    PI_CONFIG=$conf_dir/conf \
+                    ${cfg.package}/bin/public-inbox-init -V2 \
+                      ${escapeShellArgs (
+                        [
+                          name
+                          inbox.inboxdir
+                          inbox.url
+                        ]
+                        ++ inbox.address
+                      )}
 
-                      rm -rf $conf_dir
-                    fi
+                    rm -rf $conf_dir
+                  fi
 
-                    ln -sf ${inbox.description} \
-                      ${stateDir}/inboxes/${escapeShellArg name}/description
+                  ln -sf ${inbox.description} \
+                    ${escapeShellArg inbox.inboxdir}/description
 
-                    export GIT_DIR=${stateDir}/inboxes/${escapeShellArg name}/all.git
-                    if test -d "$GIT_DIR"; then
-                      # Config is inherited by each epoch repository,
-                      # so just needs to be set for all.git.
-                      ${pkgs.git}/bin/git config core.sharedRepository 0640
-                    fi
-                  '') cfg.inboxes
-                );
+                  export GIT_DIR=${escapeShellArg inbox.inboxdir}/all.git
+                  if test -d "$GIT_DIR"; then
+                    # Config is inherited by each epoch repository,
+                    # so just needs to be set for all.git.
+                    ${pkgs.git}/bin/git config core.sharedRepository 0640
+                  fi
+                '') cfg.inboxes
+              );
               serviceConfig = {
                 Type = "oneshot";
                 RemainAfterExit = true;
@@ -672,9 +674,9 @@ in
               };
             }
           ];
-      })
+      }
     ];
-    environment.systemPackages = with pkgs; [ cfg.package ];
+    environment.systemPackages = [ cfg.package ];
   };
   meta.maintainers = with lib.maintainers; [
     julm

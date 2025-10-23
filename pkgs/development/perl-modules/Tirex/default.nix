@@ -2,7 +2,6 @@
   lib,
   buildPerlPackage,
   fetchFromGitHub,
-  fetchpatch,
   GD,
   IPCShareLite,
   JSON,
@@ -15,22 +14,16 @@
 
 buildPerlPackage rec {
   pname = "Tirex";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "openstreetmap";
     repo = "tirex";
     tag = "v${version}";
-    hash = "sha256-p2P19tifA/AvJatTzboyhtt7W1SwKJQzqpU4oDalfhU=";
+    hash = "sha256-tFDyN3slj9ipa9JPB6f+mnzMIW926vOge4ZSbmxjtiE=";
   };
 
   patches = [
-    # Support Mapnik >= v4.0.0 (`mapnik/box2d.hpp` -> `mapnik/geometry/box2d.hpp`)
-    # https://github.com/openstreetmap/tirex/pull/54
-    (fetchpatch {
-      url = "https://github.com/openstreetmap/tirex/commit/5f131231c9c12e88793afba471b150ca8af8d587.patch";
-      hash = "sha256-bnL1ZGy8ZNSZuCRbZn59qRVLg3TL0GjFYnhRKroeVO0=";
-    })
     # Support Mapnik >= v4.0.0 (no more mapnik-config)
     ./use-pkg-config.patch
   ];
@@ -46,7 +39,8 @@ buildPerlPackage rec {
     LWP
     mapnik
     boost
-  ] ++ mapnik.buildInputs;
+  ]
+  ++ mapnik.buildInputs;
 
   installPhase = ''
     install -m 755 -d $out/usr/libexec

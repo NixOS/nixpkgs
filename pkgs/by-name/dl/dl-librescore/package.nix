@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, cctools
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  cctools,
 }:
 
 buildNpmPackage rec {
@@ -30,7 +31,8 @@ buildNpmPackage rec {
 
   nativeBuildInputs = [
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
   ];
 

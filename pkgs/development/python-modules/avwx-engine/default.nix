@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "avwx-engine";
-  version = "1.9.2";
+  version = "1.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "avwx-rest";
     repo = "avwx-engine";
     tag = version;
-    hash = "sha256-pAeeSv9qPrIvwc9KTwMFoq/H/qRtlNKQquQux7aYxKA=";
+    hash = "sha256-zhXUzePbgwmBIP7yMT/FcPYdSZC3qJtwEwkHtlfmv3Q=";
   };
 
   build-system = [ hatchling ];
@@ -61,7 +61,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytestCheckHook
     time-machine
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "avwx" ];
 

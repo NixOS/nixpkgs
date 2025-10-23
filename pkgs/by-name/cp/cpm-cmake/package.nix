@@ -2,17 +2,18 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cpm-cmake";
-  version = "0.40.6";
+  version = "0.42.0";
 
   src = fetchFromGitHub {
     owner = "cpm-cmake";
     repo = "cpm.cmake";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0uyCEHh2wje7ogWe7brlalFHi9SVTkPikkoPceugZ2I=";
+    hash = "sha256-IA13qA/b+owlrqbVAkhd4rS98/XB5RNONiJaPwjDm+A=";
   };
 
   postPatch = ''
@@ -32,6 +33,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/cpm-cmake/CPM.cmake";

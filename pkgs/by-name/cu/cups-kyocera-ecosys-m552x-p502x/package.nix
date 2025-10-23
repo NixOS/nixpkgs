@@ -6,7 +6,7 @@
   region ? "Global",
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-kyocera-ecosys-m552x-p502x";
   version = "8.1602";
 

@@ -74,6 +74,10 @@ buildPythonPackage rec {
     "test_thresh"
     # assert(np.allclose(r1, r2))
     "test_zero_edge_bug"
+    # assert (0, 2) == (1, 2)
+    "test_verbose_true"
+    # assert (0, 2) == (1, 2)
+    "test_verbose_false"
   ];
 
   meta = {

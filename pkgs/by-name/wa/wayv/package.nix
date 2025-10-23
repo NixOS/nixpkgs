@@ -5,7 +5,7 @@
   fetchpatch,
   libX11,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wayv";
   version = "0.3";
 

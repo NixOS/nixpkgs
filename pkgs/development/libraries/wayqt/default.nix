@@ -5,7 +5,6 @@
   replaceVars,
   meson,
   pkg-config,
-  qttools,
   ninja,
   qtbase,
   qtwayland,
@@ -14,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wayqt";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitLab {
     owner = "desktop-frameworks";
     repo = "wayqt";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-qlRRkqhKlcsd9lzlqfE0V0gjudELyENu4IH1NfO/+pI=";
+    hash = "sha256-FPyHm96LYCTqMZlPrZoSPMeyocDjaCnaYJETH/nazBU=";
   };
 
   patches = [
@@ -33,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     pkg-config
-    qttools
     ninja
   ];
 
@@ -41,10 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qtwayland
     wayland
-  ];
-
-  mesonFlags = [
-    "-Duse_qt_version=qt6"
   ];
 
   dontWrapQtApps = true;
@@ -57,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://gitlab.com/desktop-frameworks/wayqt";
     description = "Qt-based library to handle Wayland and Wlroots protocols to be used with any Qt project";
-    maintainers = with lib.maintainers; [ rewine ];
+    maintainers = with lib.maintainers; [ wineee ];
     platforms = lib.platforms.linux;
     license = lib.licenses.mit;
   };

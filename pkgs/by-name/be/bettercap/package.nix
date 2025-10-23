@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  buildGo122Module,
+  buildGoModule,
   fetchFromGitHub,
   pkg-config,
   libpcap,
@@ -10,31 +10,30 @@
   libusb1,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "bettercap";
-  version = "2.32.0";
+  version = "2.41.4";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "bettercap";
+    repo = "bettercap";
     rev = "v${version}";
-    sha256 = "sha256-OND8WPqU/95rKykqMAPWmDsJ+AjsjGjrncZ2/m3mpt0=";
+    sha256 = "sha256-y23gNqS5f/MP+wyRMxe40I+9RuZGyZEok17LIc9Z8O4=";
   };
 
-  vendorHash = "sha256-QKv8F9QLRi+1Bqj9KywJsTErjs7o6gFM4tJLA8y52MY=";
+  vendorHash = "sha256-1kgjMPsj8z2Cl0YWe/1zY0Zuiza0X+ZAIgsMqPhCrMw=";
 
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      libpcap
-      libusb1
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      libnfnetlink
-      libnetfilter_queue
-    ];
+  buildInputs = [
+    libpcap
+    libusb1
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    libnfnetlink
+    libnetfilter_queue
+  ];
 
   meta = with lib; {
     description = "Man in the middle tool";
@@ -45,7 +44,9 @@ buildGo122Module rec {
     '';
     homepage = "https://www.bettercap.org/";
     license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ y0no ];
     mainProgram = "bettercap";
+    # Broken on darwin for Go toolchain > 1.22, with error:
+    # 'link: golang.org/x/net/internal/socket: invalid reference to syscall.recvmsg'
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

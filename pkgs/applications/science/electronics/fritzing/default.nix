@@ -21,13 +21,13 @@
 let
   # SHA256 of the fritzing-parts HEAD on the master branch,
   # which contains the latest stable parts definitions
-  partsSha = "76235099ed556e52003de63522fdd74e61d53a36";
+  partsSha = "4f7d39b22a6c307e6cca62c7f78eae96696e8b2c";
 
   parts = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-parts";
     rev = partsSha;
-    hash = "sha256-1QVcPbRBOSYnNFsp7B2OyPXYuPaINRv9yEqGZFd662Y=";
+    hash = "sha256-mAzY5CVZJF5hAvWVlDiYRxoB+9mGDG9OI/8n9aY5aFE=";
   };
 
   # Header-only library
@@ -41,14 +41,19 @@ in
 
 stdenv.mkDerivation {
   pname = "fritzing";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "fritzing";
     repo = "fritzing-app";
-    rev = "a8c6ef7cf66f7a42b9b233d6137f1b70a9573a25";
-    hash = "sha256-a/bWAUeDPj3g8BECOlXuqyCi4JgGLLs1605m380Drt0=";
+    rev = "b9add9eaa7c426963de20c8514a69d3f15e83bdf";
+    hash = "sha256-OnIX+2eXT0JAs6VgSAIr1t+2DhpoUDgKVGPFjjZrKas=";
   };
+
+  patches = [
+    # Fix build with Qt >= 6.9
+    ./fix-stricter-types.patch
+  ];
 
   nativeBuildInputs = [
     qmake
@@ -57,21 +62,20 @@ stdenv.mkDerivation {
     wrapQtAppsHook
   ];
 
-  buildInputs =
-    [
-      qtbase
-      qtsvg
-      qtserialport
-      qt5compat
-      boost
-      libgit2
-      quazip
-      libngspice
-      clipper
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      qtwayland
-    ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtserialport
+    qt5compat
+    boost
+    libgit2
+    quazip
+    libngspice
+    clipper
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    qtwayland
+  ];
 
   postPatch = ''
     # Use packaged quazip, libgit and ngspice
@@ -95,11 +99,14 @@ stdenv.mkDerivation {
   '';
 
   env = {
-    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " [
-      "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
-      "-I${svgpp}/include"
-      "-I${clipper}/include/polyclipping"
-    ];
+    NIX_CFLAGS_COMPILE = lib.concatStringsSep " " (
+      [
+        "-I${lib.getDev quazip}/include/QuaZip-Qt${lib.versions.major qtbase.version}-${quazip.version}"
+        "-I${svgpp}/include"
+        "-I${clipper}/include/polyclipping"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-F${qt5compat}/lib" ]
+    );
     NIX_LDFLAGS = "-lquazip1-qt${lib.versions.major qtbase.version}";
   };
 
@@ -132,6 +139,7 @@ stdenv.mkDerivation {
     maintainers = with lib.maintainers; [
       robberer
       muscaln
+      iedame
     ];
     platforms = lib.platforms.unix;
     mainProgram = "Fritzing";

@@ -22,9 +22,12 @@ let
   } (builtins.readFile ./replace-workspace-values.py);
 
   fetchCargoVendorUtil = writers.writePython3Bin "fetch-cargo-vendor-util" {
-    libraries = with python3Packages; [
-      requests
-    ];
+    libraries =
+      with python3Packages;
+      [
+        requests
+      ]
+      ++ requests.optional-dependencies.socks; # to support socks proxy envs like ALL_PROXY in requests
     flakeIgnore = [
       "E501"
     ];
@@ -35,9 +38,6 @@ in
   name ? if args ? pname && args ? version then "${args.pname}-${args.version}" else "cargo-deps",
   hash ? (throw "fetchCargoVendor requires a `hash` value to be set for ${name}"),
   nativeBuildInputs ? [ ],
-  # This is mostly for breaking infinite recursion where dependencies
-  # of nix-prefetch-git use fetchCargoVendor.
-  allowGitDependencies ? true,
   ...
 }@args:
 
@@ -58,15 +58,14 @@ let
 
       impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-      nativeBuildInputs =
-        [
-          fetchCargoVendorUtil
-          cacert
-        ]
-        ++ lib.optionals allowGitDependencies [
-          nix-prefetch-git
-        ]
-        ++ nativeBuildInputs;
+      nativeBuildInputs = [
+        fetchCargoVendorUtil
+        cacert
+        # break loop of nix-prefetch-git -> git-lfs -> asciidoctor -> ruby (yjit) -> fetchCargoVendor -> nix-prefetch-git
+        # Cargo does not currently handle git-lfs: https://github.com/rust-lang/cargo/issues/9692
+        (nix-prefetch-git.override { git-lfs = null; })
+      ]
+      ++ nativeBuildInputs;
 
       buildPhase = ''
         runHook preBuild
@@ -90,7 +89,7 @@ let
       outputHashAlgo = if hash == "" then "sha256" else null;
       outputHashMode = "recursive";
     }
-    // builtins.removeAttrs args removedArgs
+    // removeAttrs args removedArgs
   );
 in
 

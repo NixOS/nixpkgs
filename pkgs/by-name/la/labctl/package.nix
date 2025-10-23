@@ -34,7 +34,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description = "collection of helper tools for network engineers, while configuring and experimenting with their own network labs";
+    description = "Collection of helper tools for network engineers, while configuring and experimenting with their own network labs";
     homepage = "https://labctl.net";
     changelog = "https://github.com/labctl/labctl/releases";
     license = licenses.asl20;

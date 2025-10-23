@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "buteo-syncfw";
-  version = "0.11.9";
+  version = "0.11.10";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "sailfishos";
     repo = "buteo-syncfw";
     tag = finalAttrs.version;
-    hash = "sha256-4dQl+ghkedYOqFaaY2XYlA59lYtkHCgZXhmyo4dHMsI=";
+    hash = "sha256-WZ70dFrQeHO0c9MM3wS8aWMd0DDhTW9Ks4hhw7pPmu8=";
   };
 
   postPatch = ''
@@ -67,27 +67,25 @@ stdenv.mkDerivation (finalAttrs: {
   # QMake doesn't handle strictDeps well
   strictDeps = false;
 
-  nativeBuildInputs =
-    [
-      doxygen
-      glib
-      pkg-config
-      wrapGAppsHook3
-    ]
-    ++ (with libsForQt5; [
-      qmake
-      wrapQtAppsHook
-    ]);
+  nativeBuildInputs = [
+    doxygen
+    glib
+    pkg-config
+    wrapGAppsHook3
+  ]
+  ++ (with libsForQt5; [
+    qmake
+    wrapQtAppsHook
+  ]);
 
-  buildInputs =
-    [
-      dbus
-    ]
-    ++ (with libsForQt5; [
-      accounts-qt
-      qtdeclarative
-      signond
-    ]);
+  buildInputs = [
+    dbus
+  ]
+  ++ (with libsForQt5; [
+    accounts-qt
+    qtdeclarative
+    signond
+  ]);
 
   dontWrapGApps = true;
 
@@ -121,7 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/sailfishos/buteo-syncfw/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Only;
     mainProgram = "msyncd";
-    maintainers = lib.teams.lomiri.members;
+    teams = [ lib.teams.lomiri ];
     platforms = lib.platforms.linux;
     pkgConfigModules = [
       "buteosyncfw5"

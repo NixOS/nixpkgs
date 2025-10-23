@@ -72,7 +72,8 @@ lib.makeOverridable (
         install
         tsort
         lorder
-      ] ++ (attrs.extraNativeBuildInputs or [ ]);
+      ]
+      ++ (attrs.extraNativeBuildInputs or [ ]);
 
       HOST_SH = stdenv'.shell;
 
@@ -102,6 +103,6 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
-    // (builtins.removeAttrs attrs [ "extraNativeBuildInputs" ])
+    // (removeAttrs attrs [ "extraNativeBuildInputs" ])
   )
 )

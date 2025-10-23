@@ -12,7 +12,6 @@
   libXcursor,
   libXi,
   stdenv,
-  darwin,
   makeWrapper,
   zenity,
 }:
@@ -34,12 +33,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-      (lib.getLib stdenv.cc.cc)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AppKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+    (lib.getLib stdenv.cc.cc)
+  ];
 
   # Wayland and X11 libs are required at runtime since winit uses dlopen
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
@@ -51,14 +48,7 @@ rustPlatform.buildRustPackage rec {
     libXi
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "codespan-0.12.0" = "sha256-3F2006BR3hyhxcUTaQiOjzTEuRECKJKjIDyXonS/lrE=";
-      "egui_skia_renderer-0.2.0" = "sha256-1l8iluTHDYZGRkKWnurRMj4iHljogPWs26pzkUtIGwY=";
-      "spade-0.10.0" = "sha256-nl9MsrV68mE7hVEBFF/WdasUXCJoUazCFg4xG+2MOEY=";
-    };
-  };
+  cargoHash = "sha256-89pkHS0YQ77PmQfT8epdu2tPRNAenYGgtoiJVuuVYiI=";
 
   # Avoid the network attempt from skia. See: https://github.com/cargo2nix/cargo2nix/issues/318
   doCheck = false;

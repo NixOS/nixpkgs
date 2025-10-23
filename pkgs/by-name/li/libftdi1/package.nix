@@ -21,7 +21,7 @@ let
   inherit (lib) optionals optionalString;
   onOff = a: if a then "ON" else "OFF";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libftdi";
   version = "1.5-unstable-2023-12-21";
 
@@ -43,31 +43,31 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      pkg-config
-    ]
-    ++ optionals docSupport [
-      doxygen
-      graphviz
-    ]
-    ++ optionals pythonSupport [ swig ];
+  doInstallCheck = true;
+
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ]
+  ++ optionals docSupport [
+    doxygen
+    graphviz
+  ]
+  ++ optionals pythonSupport [ swig ];
 
   buildInputs = [ libconfuse ] ++ optionals cppSupport [ boost ];
 
-  cmakeFlags =
-    [
-      "-DFTDIPP=${onOff cppSupport}"
-      "-DBUILD_TESTS=${onOff cppSupport}"
-      "-DLINK_PYTHON_LIBRARY=${onOff pythonSupport}"
-      "-DPYTHON_BINDINGS=${onOff pythonSupport}"
-      "-DDOCUMENTATION=${onOff docSupport}"
-    ]
-    ++ lib.optionals pythonSupport [
-      "-DPYTHON_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
-      "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
-    ];
+  cmakeFlags = [
+    "-DFTDIPP=${onOff cppSupport}"
+    "-DBUILD_TESTS=${onOff cppSupport}"
+    "-DLINK_PYTHON_LIBRARY=${onOff pythonSupport}"
+    "-DPYTHON_BINDINGS=${onOff pythonSupport}"
+    "-DDOCUMENTATION=${onOff docSupport}"
+  ]
+  ++ lib.optionals pythonSupport [
+    "-DPYTHON_EXECUTABLE=${python3.pythonOnBuildForHost.interpreter}"
+    "-DPYTHON_LIBRARY=${python3}/lib/libpython${python3.pythonVersion}${stdenv.hostPlatform.extensions.sharedLibrary}"
+  ];
 
   propagatedBuildInputs = [ libusb1 ];
 
@@ -79,14 +79,18 @@ stdenv.mkDerivation rec {
       --replace-fail 'GROUP="ftdi"' 'GROUP="ftdi", TAG+="uaccess"'
   '';
 
-  postInstall =
-    ''
-      install -Dm644 ../packages/99-libftdi.rules "$out/etc/udev/rules.d/60-libftdi.rules"
-    ''
-    + optionalString docSupport ''
-      cp -r doc/man "$out/share/"
-      cp -r doc/html "$out/share/doc/libftdi1/"
-    '';
+  postInstall = ''
+    install -Dm644 ../packages/99-libftdi.rules "$out/etc/udev/rules.d/60-libftdi.rules"
+  ''
+  + optionalString docSupport ''
+    cp -r doc/man "$out/share/"
+    cp -r doc/html "$out/share/doc/libftdi1/"
+  '';
+
+  preFixup = ''
+    substituteInPlace $out/lib/pkgconfig/libftdi1.pc --replace-fail "libdir=$out/$out/lib" "libdir=$out/lib"
+    substituteInPlace $out/lib/pkgconfig/libftdipp1.pc --replace-fail "libdir=$out/$out/lib" "libdir=$out/lib"
+  '';
 
   meta = with lib; {
     description = "Library to talk to FTDI chips using libusb";

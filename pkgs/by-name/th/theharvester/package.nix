@@ -6,26 +6,23 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "theharvester";
-  version = "4.6.0";
+  version = "4.8.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "laramies";
     repo = "theharvester";
     tag = version;
-    hash = "sha256-B2pZBrWZqbtvcO0pnM57GFhrryYilLCBTMEmsKvyU/I=";
+    hash = "sha256-Sui9PKpp+iMxCUbFcZE2OVDiBCxXLwR9iuXFIbd0P0k=";
   };
 
-  postPatch = ''
-    # Requirements are pinned
-    sed -i 's/==.*//' requirements/base.txt
-  '';
+  pythonRelaxDeps = true;
 
-  nativeBuildInputs = with python3.pkgs; [
-    poetry-core
-  ];
+  pythonRemoveDeps = [ "winloop" ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [ setuptools ];
+
+  dependencies = with python3.pkgs; [
     aiodns
     aiofiles
     aiohttp
@@ -65,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Gather E-mails, subdomains and names from different public sources";
     longDescription = ''
       theHarvester is a very simple, yet effective tool designed to be used in the early
@@ -75,8 +72,8 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/laramies/theHarvester";
     changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       c0bw3b
       fab
       treemo

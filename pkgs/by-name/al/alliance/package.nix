@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitLab,
+  fetchFromGitHub,
   xorgproto,
   motif,
   libX11,
@@ -14,19 +14,20 @@
   libtool,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "alliance";
-  version = "unstable-2022-01-13";
+  version = "unstable-2025-02-24";
 
-  src = fetchFromGitLab {
-    domain = "gitlab.lip6.fr";
-    owner = "vlsi-eda";
-    repo = "alliance";
-    rev = "ebece102e15c110fc79f1da50524c68fd9523f0c";
-    hash = "sha256-NGtE3ZmN9LrgXG4NIKrp7dFRVzrKMoudlPUtYYKrZjY=";
-  };
-
-  prePatch = "cd alliance/src";
+  src =
+    let
+      src = fetchFromGitHub {
+        owner = "lip6";
+        repo = "alliance";
+        rev = "a8502d32df0a4ad1bd29ab784c4332319669ecd2";
+        hash = "sha256-b2uaYZEzHMB3qCMRVANNnjTxr6OYb1Unswxjq5knYzM=";
+      };
+    in
+    "${src}/alliance/src";
 
   nativeBuildInputs = [
     libtool
@@ -43,16 +44,12 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  # Disable parallel build, errors:
-  #  ./pat_decl_y.y:736:5: error: expected '=', ...
-  enableParallelBuilding = false;
-
-  ALLIANCE_TOP = placeholder "out";
-
   configureFlags = [
-    "--prefix=${placeholder "out"}"
     "--enable-alc-shared"
   ];
+
+  # To avoid compiler error in LoadDataBase.c:366:27
+  env.NIX_CFLAGS_COMPILE = "-Wno-incompatible-pointer-types";
 
   postPatch = ''
     # texlive for docs seems extreme
@@ -77,7 +74,7 @@ stdenv.mkDerivation rec {
     description = "(deprecated) Complete set of free CAD tools and portable libraries for VLSI design";
     homepage = "http://coriolis.lip6.fr/";
     license = with licenses; gpl2Plus;
-    maintainers = with maintainers; [ l-as ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

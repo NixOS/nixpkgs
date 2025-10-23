@@ -12,7 +12,7 @@
   systemd,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "rtkit";
   version = "0.13";
 

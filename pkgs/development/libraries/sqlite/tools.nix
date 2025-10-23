@@ -1,32 +1,49 @@
-{ lib, stdenv, fetchurl, unzip, sqlite, tcl, Foundation }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  sqlite,
+  tcl,
+}:
 
 let
   archiveVersion = import ./archive-version.nix lib;
-  mkTool = { pname, makeTarget, description, homepage, mainProgram }: stdenv.mkDerivation rec {
-    inherit pname;
-    version = "3.48.0";
+  mkTool =
+    {
+      pname,
+      makeTarget,
+      description,
+      homepage,
+      mainProgram,
+    }:
+    stdenv.mkDerivation rec {
+      inherit pname;
+      version = "3.50.4";
 
-    # nixpkgs-update: no auto update
-    src = assert version == sqlite.version; fetchurl {
-      url = "https://sqlite.org/2025/sqlite-src-${archiveVersion version}.zip";
-      hash = "sha256-LXsDK2/f6MRCqoCfhQaHqB0GOB3uzXvjMSYB0oYS5kA=";
+      # nixpkgs-update: no auto update
+      src =
+        assert version == sqlite.version;
+        fetchurl {
+          url = "https://sqlite.org/2025/sqlite-src-${archiveVersion version}.zip";
+          hash = "sha256-t7TcBg82BTkC+2WzRLu+1ZLmSyKRomrAb+d+7Al4UOk=";
+        };
+
+      nativeBuildInputs = [ unzip ];
+      buildInputs = [ tcl ];
+
+      makeFlags = [ makeTarget ];
+
+      installPhase = "install -Dt $out/bin ${makeTarget}";
+
+      meta = with lib; {
+        inherit description homepage mainProgram;
+        downloadPage = "http://sqlite.org/download.html";
+        license = licenses.publicDomain;
+        maintainers = with maintainers; [ johnazoidberg ];
+        platforms = platforms.unix;
+      };
     };
-
-    nativeBuildInputs = [ unzip ];
-    buildInputs = [ tcl ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
-
-    makeFlags = [ makeTarget ];
-
-    installPhase = "install -Dt $out/bin ${makeTarget}";
-
-    meta = with lib; {
-      inherit description homepage mainProgram;
-      downloadPage = "http://sqlite.org/download.html";
-      license = licenses.publicDomain;
-      maintainers = with maintainers; [ johnazoidberg ];
-      platforms = platforms.unix;
-    };
-  };
 in
 {
   sqldiff = mkTool {

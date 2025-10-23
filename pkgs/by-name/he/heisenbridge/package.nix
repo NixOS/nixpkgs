@@ -1,25 +1,35 @@
 {
   lib,
   fetchFromGitHub,
+  nix-update-script,
   python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "heisenbridge";
-  version = "1.15.0";
+  version = "1.15.4";
+  format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "hifi";
-    repo = pname;
+    repo = "heisenbridge";
     tag = "v${version}";
-    sha256 = "sha256-4K6Sffu/yKHkcoNENbgpci2dbJVAH3vVkogcw/IYpnw=";
+    sha256 = "sha256-Aan3dtixy1xT9kPU/XxgbUvri9NS/WKiO/atmpPY/m8=";
   };
 
   postPatch = ''
     echo "${version}" > heisenbridge/version.txt
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  pythonRelaxDeps = [
+    "irc"
+  ];
+
+  dependencies = with python3.pkgs; [
     irc
     ruamel-yaml
     mautrix
@@ -29,6 +39,8 @@ python3.pkgs.buildPythonApplication rec {
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Bouncer-style Matrix-IRC bridge";

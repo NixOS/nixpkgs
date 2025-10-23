@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "commoncode";
-  version = "32.1.0";
+  version = "32.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,12 +26,14 @@ buildPythonPackage rec {
     owner = "nexB";
     repo = "commoncode";
     tag = "v${version}";
-    hash = "sha256-TzQmAJlgcHaarUhicIH4EbOIn+3feu43QQlLq+Z5ERA=";
+    hash = "sha256-FL9t8r53AJLR5D2XSEOq7qVHgvvHIbtPW5iVpSQCVsQ=";
   };
 
   dontConfigure = true;
 
   build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [ "beautifulsoup4" ];
 
   dependencies = [
     attrs
@@ -47,21 +49,20 @@ buildPythonPackage rec {
     pytest-xdist
   ];
 
-  disabledTests =
-    [
-      # chinese character translates different into latin
-      "test_safe_path_posix_style_chinese_char"
-      # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
-      "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
-      "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
-      "test_walk_can_walk_non_utf8_path_from_unicode_path"
-      "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # expected result is tailored towards the quirks of upstream's
-      # CI environment on darwin
-      "test_searchable_paths"
-    ];
+  disabledTests = [
+    # chinese character translates different into latin
+    "test_safe_path_posix_style_chinese_char"
+    # OSError: [Errno 84] Invalid or incomplete multibyte or wide character
+    "test_os_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path"
+    "test_walk_can_walk_non_utf8_path_from_unicode_path"
+    "test_resource_iter_can_walk_non_utf8_path_from_unicode_path_with_dirs"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # expected result is tailored towards the quirks of upstream's
+    # CI environment on darwin
+    "test_searchable_paths"
+  ];
 
   pythonImportsCheck = [ "commoncode" ];
 

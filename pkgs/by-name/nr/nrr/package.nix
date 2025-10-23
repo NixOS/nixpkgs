@@ -1,37 +1,22 @@
 {
   lib,
-  stdenv,
-  fetchFromGitHub,
   rustPlatform,
-  darwin,
-  pkg-config,
-  libiconv,
+  fetchFromGitHub,
   enableLTO ? true,
   nrxAlias ? true,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "nrr";
-  version = "0.10.0";
-  __structuredAttrs = true;
+  version = "0.10.3";
 
   src = fetchFromGitHub {
     owner = "ryanccn";
     repo = "nrr";
     rev = "v${version}";
-    hash = "sha256-aS3X7Mbb1nXPTk4LCrXM5Vg/vo4IakR7QbVGTKb3ziE=";
+    hash = "sha256-RBKFDm6MpK2lDCUvbX0EFEuOASKtHM+5QknWM0A6AKE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-6enwskIbVcUhn5T3Fan4Cs/JsfnMX7diQp+9PSa96SM=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.IOKit
-    libiconv
-  ];
-
-  nativeBuildInputs = [ pkg-config ];
+  cargoHash = "sha256-DiapeSFfsmox+Utx9uW/8/veEQcnWmoaETLNyffpv64=";
 
   env = lib.optionalAttrs enableLTO {
     CARGO_PROFILE_RELEASE_LTO = "fat";

@@ -10,6 +10,7 @@
   gnutar,
   hivex,
   makeWrapper,
+  nix-update-script,
   nixosTests,
   pkg-config,
   squashfsTools,
@@ -18,33 +19,31 @@
 }:
 
 let
-  bins =
-    [
-      coreutils
-      debootstrap
-      gnupg
-      gnutar
-      squashfsTools
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # repack-windows deps
-      cdrkit
-      hivex
-      wimlib
-    ];
+  bins = [
+    coreutils
+    debootstrap
+    gnupg
+    gnutar
+    squashfsTools
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # repack-windows deps
+    cdrkit
+    hivex
+    wimlib
+  ];
 in
 buildGoModule rec {
   pname = "distrobuilder";
-  version = "3.1";
+  version = "3.2";
 
-  vendorHash = "sha256-3oHLvOdHbOdaL2FTo+a5HmayNi/i3zoAsU/du9h1N30=";
+  vendorHash = "sha256-nlqapWxuSZlbt22F3Y9X1uXFxJHvEoUBZDl078x8ZnA=";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "distrobuilder";
-    rev = "refs/tags/distrobuilder-${version}";
-    sha256 = "sha256-cIzIoLQmg1kgI1QRAmFh/ca88PJBW2yIY92BKHKwTMk=";
-    fetchSubmodules = false;
+    tag = "distrobuilder-${version}";
+    sha256 = "sha256-aDCx2WGAKdTNf0uMzwxG0AUmbuuWBFPYzNyycKklYOY=";
   };
 
   buildInputs = bins;
@@ -55,7 +54,8 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     makeWrapper
-  ] ++ bins;
+  ]
+  ++ bins;
 
   postInstall = ''
     wrapProgram $out/bin/distrobuilder --prefix PATH ":" ${lib.makeBinPath bins}
@@ -67,13 +67,15 @@ buildGoModule rec {
     };
 
     generator = callPackage ./generator.nix { inherit src version; };
+
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "System container image builder for LXC and LXD";
     homepage = "https://github.com/lxc/distrobuilder";
     license = lib.licenses.asl20;
-    maintainers = lib.teams.lxc.members;
+    teams = [ lib.teams.lxc ];
     platforms = lib.platforms.linux;
     mainProgram = "distrobuilder";
   };

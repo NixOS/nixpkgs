@@ -24,7 +24,6 @@ buildHomeAssistantComponent rec {
   #skip phases without activity
   dontConfigure = true;
   doCheck = false;
-  dontBuild = true;
 
   meta = with lib; {
     changelog = "https://github.com/mampfes/ha_epex_spot/releases/tag/${version}";

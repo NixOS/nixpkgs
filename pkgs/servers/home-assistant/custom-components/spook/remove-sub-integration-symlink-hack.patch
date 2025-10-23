@@ -1,18 +1,18 @@
 diff --git a/custom_components/spook/__init__.py b/custom_components/spook/__init__.py
-index 213fb2c..c7dc299 100644
+index 1abc79d..68d48d1 100644
 --- a/custom_components/spook/__init__.py
 +++ b/custom_components/spook/__init__.py
-@@ -23,8 +23,6 @@ from .templating import SpookTemplateFunctionManager
+@@ -22,8 +22,6 @@ from .services import SpookServiceManager
  from .util import (
-     async_ensure_template_environments_exists,
      async_forward_setup_entry,
+     async_setup_all_entity_ids_cache_invalidation,
 -    link_sub_integrations,
 -    unlink_sub_integrations,
  )
-
+ 
  if TYPE_CHECKING:
-@@ -34,48 +32,6 @@ if TYPE_CHECKING:
-
+@@ -35,48 +33,6 @@ if TYPE_CHECKING:
+ 
  async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
      """Set up from a config entry."""
 -    # Symlink all sub integrations from Spook to the parent integrations folder
@@ -57,22 +57,22 @@ index 213fb2c..c7dc299 100644
 -            severity=ir.IssueSeverity.WARNING,
 -            translation_key="restart_required",
 -        )
-
-     # Ensure template environments exists
-     async_ensure_template_environments_exists(hass)
-@@ -120,4 +76,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-
+ 
+     # Forward async_setup_entry to ectoplasms
+     await async_forward_setup_entry(hass, entry)
+@@ -131,4 +87,3 @@ async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+ 
  async def async_remove_entry(hass: HomeAssistant, _: ConfigEntry) -> None:
      """Remove a config entry."""
 -    await hass.async_add_executor_job(unlink_sub_integrations, hass)
 diff --git a/custom_components/spook/util.py b/custom_components/spook/util.py
-index 32e9bd2..845d463 100644
+index 6aea27c..1437913 100644
 --- a/custom_components/spook/util.py
 +++ b/custom_components/spook/util.py
-@@ -104,37 +104,6 @@ async def async_forward_platform_entry_setups_to_ectoplasm(
+@@ -284,37 +284,6 @@ async def async_forward_platform_entry_setups_to_ectoplasm(
      )
-
-
+ 
+ 
 -def link_sub_integrations(hass: HomeAssistant) -> bool:
 -    """Link Spook sub integrations."""
 -    LOGGER.debug("Linking up Spook sub integrations")
@@ -105,5 +105,5 @@ index 32e9bd2..845d463 100644
 -
 -
  @callback
- def async_ensure_template_environments_exists(hass: HomeAssistant) -> None:
-     """Ensure default template environments exist.
+ def async_get_all_area_ids(hass: HomeAssistant) -> set[str]:
+     """Return all area IDs, known to Home Assistant."""

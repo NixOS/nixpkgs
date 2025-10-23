@@ -1,11 +1,11 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "marcusolsson-json-datasource";
-  version = "1.3.17";
-  zipHash = "sha256-L1G5s9fEEuvNs5AWXlT00f+dU2/2Rtjm4R3kpFc4NRg=";
+  version = "1.3.24";
+  zipHash = "sha256-gKFy7T5FQU2OUGBDokNWj0cT4EuOLLMcOFezlArtdww=";
   meta = with lib; {
-    description = "The Grafana JSON Datasource plugin empowers you to seamlessly integrate JSON data into Grafana.";
+    description = "Grafana JSON Datasource plugin empowers you to seamlessly integrate JSON data into Grafana";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

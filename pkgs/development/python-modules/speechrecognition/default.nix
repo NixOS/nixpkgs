@@ -24,7 +24,7 @@
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.14.1";
+  version = "3.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "Uberi";
     repo = "speech_recognition";
     tag = version;
-    hash = "sha256-4FrFiDRqTZnLB3hTy8hZovlakZsRFEg2ZGitJhJ6DA0=";
+    hash = "sha256-g//KKxPRe1pWVJo7GsRNIV59r0J7XJEoXvH0tGuV3Jk=";
   };
 
   postPatch = ''
@@ -77,12 +77,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pocketsphinx
     respx
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];
 

@@ -2,37 +2,25 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   bzip2,
   openssl,
   zstd,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "boa";
-  version = "0.17.3";
+  version = "0.20";
 
   src = fetchFromGitHub {
     owner = "boa-dev";
     repo = "boa";
-    rev = "v${version}";
-    hash = "sha256-ROzdOanfHNPwHXA0SzU2fpuBonbDbgDqH+ZgOjwK/tg=";
+    tag = "v${version}";
+    hash = "sha256-foCIzzFoEpcE6i0QrSbiob3YHIOeTpjwpAMtcPGL8Vg=";
     fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "fix-rust-1.71-lints.patch";
-      url = "https://github.com/boa-dev/boa/commit/93d05bda6864aa6ee67682d84bd4fc2108093ef5.patch";
-      hash = "sha256-hMp4/UBN5moGBSqf8BJV2nBwgV3cry9uC2fJmdT5hkQ=";
-    })
-  ];
-
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-1/92dyuEV+Xib0znEAgQOOmbsyjK/f2lYsXuPahLuw4=";
+  cargoHash = "sha256-PphgRSVCj724eYAC04Orpz/klYuAhphiQ3v5TRChs+w=";
 
   cargoBuildFlags = [
     "--package"
@@ -41,16 +29,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreFoundation
-      darwin.apple_sdk.frameworks.Security
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    zstd
+  ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

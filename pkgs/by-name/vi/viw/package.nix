@@ -5,9 +5,9 @@
   ncurses,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "viw";
-  version = "unstable-20171029";
+  version = "0-unstable-2017-10-29";
 
   src = fetchFromGitHub {
     owner = "lpan";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "VI Worsened, a fun and light clone of VI";
     homepage = "https://github.com/lpan/viw";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "viw";
   };
 }

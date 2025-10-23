@@ -7,18 +7,17 @@
   glib,
   libsigcxx,
   gnome,
-  darwin,
   meson,
   ninja,
 }:
 
 stdenv.mkDerivation rec {
   pname = "glibmm";
-  version = "2.66.7";
+  version = "2.66.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-/gLB5fWCWUDYK1a27DGhLAbAXBWDz+Yvk00HY+HlQrM=";
+    hash = "sha256-ZPEdO5WiTiqNQWbs/1GHMPeezCciLvQfr3x+A0D8kyk=";
   };
 
   outputs = [
@@ -33,13 +32,6 @@ stdenv.mkDerivation rec {
     gnum4
     glib # for glib-compile-schemas
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks;
-    [
-      Cocoa
-    ]
-  );
   propagatedBuildInputs = [
     glib
     libsigcxx
@@ -49,7 +41,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
+      packageName = "glibmm";
       versionPolicy = "odd-unstable";
       freeze = true;
     };

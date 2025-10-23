@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.9.2";
+  version = "2.0.0";
   format = "setuptools";
 
   # pypi source doesn't include tests
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "cocotb";
     repo = "cocotb";
     tag = "v${version}";
-    hash = "sha256-7KCo7g2I1rfm8QDHRm3ZKloHwjDIICnJCF8KhaFdvqY=";
+    hash = "sha256-BpshczKA83ZeytGDrHEg6IAbI5FxciAUnzwE10hgPC0=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -62,7 +62,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export PATH=$out/bin:$PATH
-    mv cocotb cocotb.hidden
   '';
 
   pythonImportsCheck = [ "cocotb" ];

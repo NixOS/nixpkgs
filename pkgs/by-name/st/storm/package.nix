@@ -1,22 +1,31 @@
-{ stdenv, lib, fetchurl, zip, unzip
-, jdk, python3
-, confFile ? ""
-, extraLibraryPaths ? []
-, extraJars ? []
-, testers
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zip,
+  unzip,
+  jdk,
+  python3,
+  confFile ? "",
+  extraLibraryPaths ? [ ],
+  extraJars ? [ ],
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apache-storm";
-  version = "2.8.0";
+  version = "2.8.2";
   name = "${finalAttrs.pname}-${finalAttrs.version}";
 
   src = fetchurl {
     url = "mirror://apache/storm/${finalAttrs.name}/${finalAttrs.name}.tar.gz";
-    hash = "sha256-BpRJ1wfrD0TM25plVvSP2DV7dtCJ3MFa04t3jzZcXno=";
+    hash = "sha256-gG2ZruU2Ua5EmVbXYP9DivtPCNwisjhk1SgZXCciPFs=";
   };
 
-  nativeBuildInputs = [ zip unzip ];
+  nativeBuildInputs = [
+    zip
+    unzip
+  ];
 
   installPhase = ''
     mkdir -p $out/share/${finalAttrs.name}
@@ -70,7 +79,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Distributed realtime computation system";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ edwtjo vizanto ];
+    maintainers = with maintainers; [
+      edwtjo
+      vizanto
+    ];
     platforms = with platforms; unix;
   };
 })

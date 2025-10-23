@@ -51,6 +51,6 @@ buildPythonPackage rec {
     mainProgram = "pproxy";
     homepage = "https://github.com/qwj/python-proxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

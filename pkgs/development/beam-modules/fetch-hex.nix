@@ -11,7 +11,7 @@
   meta ? { },
 }:
 
-stdenv.mkDerivation ({
+stdenv.mkDerivation {
   pname = pkg;
   inherit version;
   dontBuild = true;
@@ -47,4 +47,4 @@ stdenv.mkDerivation ({
   '';
 
   inherit meta;
-})
+}

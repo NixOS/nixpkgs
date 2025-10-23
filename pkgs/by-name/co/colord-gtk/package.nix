@@ -53,20 +53,19 @@ stdenv.mkDerivation rec {
     lcms2
   ];
 
-  propagatedBuildInputs =
-    [
-      colord
-    ]
-    ++ (
-      if withGtk4 then
-        [
-          gtk4
-        ]
-      else
-        [
-          gtk3
-        ]
-    );
+  propagatedBuildInputs = [
+    colord
+  ]
+  ++ (
+    if withGtk4 then
+      [
+        gtk4
+      ]
+    else
+      [
+        gtk3
+      ]
+  );
 
   mesonFlags = [
     "-Dgtk4=${lib.boolToString withGtk4}"
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.freedesktop.org/software/colord/intro.html";
     license = licenses.lgpl21Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.linux;
     mainProgram = "cd-convert";
   };

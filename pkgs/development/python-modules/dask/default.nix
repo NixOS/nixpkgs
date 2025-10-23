@@ -38,14 +38,14 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2025.2.0";
+  version = "2025.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = "dask";
     tag = version;
-    hash = "sha256-PpgzlaVWKW+aLbFtDztNjBMI79pmsiS3uN8su75Rako=";
+    hash = "sha256-bwM4Q95YTEp9pDz6LmBLOeYjmi8nH8Cc/srZlXfEIlg=";
   };
 
   postPatch = ''
@@ -67,28 +67,28 @@ buildPythonPackage rec {
     click
     cloudpickle
     fsspec
+    importlib-metadata
     packaging
     partd
     pyyaml
-    importlib-metadata
     toolz
   ];
 
   optional-dependencies = lib.fix (self: {
     array = [ numpy ];
-    complete =
-      [
-        pyarrow
-        lz4
-      ]
-      ++ self.array
-      ++ self.dataframe
-      ++ self.distributed
-      ++ self.diagnostics;
+    complete = [
+      pyarrow
+      lz4
+    ]
+    ++ self.array
+    ++ self.dataframe
+    ++ self.distributed
+    ++ self.diagnostics;
     dataframe = [
       pandas
       pyarrow
-    ] ++ self.array;
+    ]
+    ++ self.array;
     distributed = [ distributed ];
     diagnostics = [
       bokeh
@@ -96,27 +96,29 @@ buildPythonPackage rec {
     ];
   });
 
-  nativeCheckInputs =
-    [
-      hypothesis
-      pyarrow
-      pytest-asyncio
-      pytest-cov-stub
-      pytest-mock
-      pytest-rerunfailures
-      pytest-xdist
-      pytestCheckHook
-      versionCheckHook
-    ]
-    ++ optional-dependencies.array
-    ++ optional-dependencies.dataframe;
-  versionCheckProgramArg = [ "--version" ];
+  nativeCheckInputs = [
+    hypothesis
+    pyarrow
+    pytest-asyncio
+    pytest-cov-stub
+    pytest-mock
+    pytest-rerunfailures
+    pytest-xdist
+    pytestCheckHook
+    versionCheckHook
+  ]
+  ++ optional-dependencies.array
+  ++ optional-dependencies.dataframe;
+  versionCheckProgramArg = "--version";
 
-  pytestFlagsArray = [
+  pytestFlags = [
     # Rerun failed tests up to three times
-    "--reruns 3"
+    "--reruns=3"
+  ];
+
+  disabledTestMarks = [
     # Don't run tests that require network access
-    "-m 'not network'"
+    "network"
   ];
 
   disabledTests = [

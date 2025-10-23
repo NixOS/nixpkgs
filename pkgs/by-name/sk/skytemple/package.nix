@@ -4,21 +4,20 @@
   gobject-introspection,
   gtk3,
   gtksourceview4,
-  webkitgtk_4_0,
   wrapGAppsHook3,
   python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "skytemple";
-  version = "1.8.3";
+  version = "1.8.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple";
     tag = version;
-    hash = "sha256-RFLxDV/L6Qbz14KqIEcMX/EnirNUrHL0MW8v5Z8ByK0=";
+    hash = "sha256-jdiZLDQEfYESgpe7F5X/odkgXnvjhvfFArrpt4bpPbo=";
   };
 
   build-system = with python3Packages; [ setuptools ];
@@ -26,10 +25,11 @@ python3Packages.buildPythonApplication rec {
   buildInputs = [
     gtk3
     gtksourceview4
-    # webkitgtk is used for rendering interactive statistics graph which
-    # can be seen by opening a ROM, entering Pokemon section, selecting
-    # any Pokemon, and clicking Stats and Moves tab.
-    webkitgtk_4_0
+    # SkyTemple uses webkitgtk 4.0 which is depend on libsoup2, an
+    # unmaintained library. Since it is optional, do not use it.
+    # It is only used to add interactive monster XP curver, that
+    # can alternatively be opened in the web browser (and is also
+    # rendered in-app as non-interactive image)
   ];
 
   nativeBuildInputs = [

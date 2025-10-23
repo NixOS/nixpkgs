@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "zsh-z";
-  version = "unstable-2021-02-15";
+  version = "0-unstable-2021-02-15";
 
   src = fetchFromGitHub {
     owner = "agkozak";

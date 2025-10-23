@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "3.1.3";
+  version = "3.1.5";
 
   format = "pyproject";
   # < 3.10 requires get-annotations which isn't packaged yet
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "eigenein";
     repo = "protobuf";
     tag = version;
-    hash = "sha256-AsiJDi3SF3nlWKFvZujUsoHY8AJ21JKzEuTdR9FtFQI=";
+    hash = "sha256-Gr5fKpagSUzH34IKHb+pBta4q71AqYa/KG9XW2AxZqk=";
   };
 
   build-system = [
@@ -42,14 +42,14 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   pythonImportsCheck = [ "pure_protobuf" ];
 
   meta = with lib; {
     description = "Python implementation of Protocol Buffers with dataclass-based schemas";
     homepage = "https://github.com/eigenein/protobuf";
-    changelog = "https://github.com/eigenein/protobuf/releases/tag/${version}";
+    changelog = "https://github.com/eigenein/protobuf/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ chuangzhu ];
   };

@@ -1,0 +1,29 @@
+diff --git a/Tools/CMake/Install.cmake b/Tools/CMake/Install.cmake
+index edd96b0..1fbdb3c 100644
+--- a/Tools/CMake/Install.cmake
++++ b/Tools/CMake/Install.cmake
+@@ -229,24 +229,10 @@ if(LINUX)
+   install(DIRECTORY ${CMAKE_SOURCE_DIR}/Resources/
+           DESTINATION ${JASP_INSTALL_RESOURCEDIR})
+ 
+-  install(
+-    DIRECTORY ${MODULES_BINARY_PATH}/binary_pkgs ${MODULES_BINARY_PATH}/manifests ${MODULES_BINARY_PATH}/module_libs ${MODULES_BINARY_PATH}/Tools
+-    DESTINATION ${JASP_INSTALL_MODULEDIR}
+-    REGEX ${FILES_EXCLUDE_PATTERN} EXCLUDE
+-    REGEX ${FOLDERS_EXCLUDE_PATTERN} EXCLUDE)
+-
+   install(
+     FILES ${MODULES_BINARY_PATH}/modules-settings.json
+     DESTINATION ${JASP_INSTALL_MODULEDIR}
+   )
+-  # we do not need renv-root in an install
+-  #install(DIRECTORY ${MODULES_RENV_ROOT_PATH}/
+-  #        DESTINATION ${JASP_INSTALL_PREFIX}/lib64/renv-root)
+-
+-if(NOT FLATPAK_USED) #because flatpak already puts renv-cache in /app/lib64 anyway
+-  install(DIRECTORY ${MODULES_RENV_CACHE_PATH}/
+-          DESTINATION ${JASP_INSTALL_PREFIX}/lib64/renv-cache)
+-endif()
+ 
+   #Flatpak wrapper that sets some environment variables that JASP needs
+   install(PROGRAMS ${CMAKE_SOURCE_DIR}/Tools/flatpak/org.jaspstats.JASP

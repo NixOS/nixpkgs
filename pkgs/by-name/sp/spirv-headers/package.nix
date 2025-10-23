@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spirv-headers";
-  version = "1.4.304.0";
+  version = "1.4.328.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "SPIRV-Headers";
-    rev = "vulkan-sdk-${version}";
-    hash = "sha256-MCQ+i9ymjnxRZP/Agk7rOGdHcB4p67jT4J4athWUlcI=";
+    rev = "vulkan-sdk-${finalAttrs.version}";
+    hash = "sha256-gewCQvcVRw+qdWPWRlYUMTt/aXrZ7Lea058WyqL5c08=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,4 +24,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.ralith ];
   };
-}
+})

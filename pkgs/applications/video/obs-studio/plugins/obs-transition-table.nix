@@ -7,7 +7,7 @@
   qtbase,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "obs-transition-table";
   version = "0.2.7-unstable-2024-11-27";
 
@@ -35,9 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-transition-table";
     maintainers = with maintainers; [ flexiondotorg ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

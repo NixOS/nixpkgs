@@ -35,7 +35,7 @@
   rubberband,
   soundtouch,
   speexdsp,
-  tbb,
+  onetbb,
   wrapGAppsHook4,
   zam-plugins,
   zita-convolver,
@@ -48,13 +48,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "easyeffects";
-  version = "7.2.3";
+  version = "7.2.5";
 
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
     tag = "v${version}";
-    hash = "sha256-bTyPStOQusIho8x6RI+2Z+4wHSG9ERjo4NuvLUILIm8=";
+    hash = "sha256-w3Mb13LOSF8vgcdJrqbesLqyyilI5AoA19jFquE5lEw=";
   };
 
   nativeBuildInputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     rubberband
     soundtouch
     speexdsp'
-    tbb
+    onetbb
     zita-convolver
   ];
 

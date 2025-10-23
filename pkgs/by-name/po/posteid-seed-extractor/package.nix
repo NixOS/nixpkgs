@@ -6,7 +6,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "posteid-seed-extractor";
-  version = "unstable-2022-02-23";
+  version = "0-unstable-2022-02-23";
 
   src = fetchFromGitHub {
     owner = "simone36050";

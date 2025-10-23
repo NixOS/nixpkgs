@@ -13,7 +13,7 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ptouch-print";
   version = "1.5-unstable-2024-02-11";
 

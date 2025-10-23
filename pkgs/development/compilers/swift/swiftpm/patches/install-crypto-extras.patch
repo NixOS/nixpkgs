@@ -1,0 +1,10 @@
+Install _CryptoExtras target when building with CMake
+
+--- a/Sources/_CryptoExtras/CMakeLists.txt
++++ b/Sources/_CryptoExtras/CMakeLists.txt
+@@ -42,4 +42,5 @@ target_link_options(_CryptoExtras PRIVATE
+ set_target_properties(_CryptoExtras PROPERTIES
+   INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_Swift_MODULE_DIRECTORY})
+
++_install_target(_CryptoExtras)
+ set_property(GLOBAL APPEND PROPERTY SWIFT_CRYPTO_EXPORTS _CryptoExtras)

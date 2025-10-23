@@ -43,7 +43,7 @@ in
           Enable Docker support. Needed for Nomad's docker driver.
 
           Note that the docker group membership is effectively equivalent
-          to being root, see https://github.com/moby/moby/issues/9976.
+          to being root, see <https://github.com/moby/moby/issues/9976>.
         '';
       };
 

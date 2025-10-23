@@ -11,7 +11,7 @@
   jdupes,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "paper-icon-theme";
   version = "unstable-2020-03-12";
 

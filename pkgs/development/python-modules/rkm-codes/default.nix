@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "rkm-codes";
-  version = "0.6";
-  format = "pyproject";
+  version = "1.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "KenKundert";
     repo = "rkm_codes";
     tag = "v${version}";
-    hash = "sha256-CkLLZuWcNL8sqAupc7lHXu0DXUXrX3qwd1g/ekyHdw4=";
+    hash = "sha256-S1ng2eTR+dNg7TkkpLTtJvX105FOqCi2eiMdRaqQrVg=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -36,7 +36,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "QuantiPhy support for RKM codes";
     homepage = "https://github.com/kenkundert/rkm_codes/";
-    license = licenses.gpl3Plus;
+    license = licenses.mit;
     maintainers = with maintainers; [ jpetrucciani ];
   };
 }

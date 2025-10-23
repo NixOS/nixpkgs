@@ -1,6 +1,6 @@
 # Qt {#sec-language-qt}
 
-Writing Nix expressions for Qt libraries and applications is largely similar as for other C++ software.
+Writing Nix expressions for Qt libraries and applications is largely similar to that for other C++ software.
 This section assumes some knowledge of the latter.
 
 The major caveat with Qt applications is that Qt uses a plugin system to load additional modules at runtime.
@@ -43,7 +43,7 @@ Applications should generally be built with upstream's preferred Qt version.
 
 ## Locating additional runtime dependencies {#qt-runtime-dependencies}
 
-Add entries to `qtWrapperArgs` are to modify the wrappers created by
+Add entries to `qtWrapperArgs` to modify the wrappers created by
 `wrapQtAppsHook`:
 
 ```nix
@@ -52,7 +52,7 @@ Add entries to `qtWrapperArgs` are to modify the wrappers created by
 stdenv.mkDerivation {
   # ...
   nativeBuildInputs = [ qt6.wrapQtAppsHook ];
-  qtWrapperArgs = [ ''--prefix PATH : /path/to/bin'' ];
+  qtWrapperArgs = [ "--prefix PATH : /path/to/bin" ];
 }
 ```
 
@@ -64,14 +64,18 @@ and then create wrappers manually in `fixupPhase`, using `wrapQtApp`, which itse
 The `makeWrapper` arguments required for Qt are also exposed in the environment as `$qtWrapperArgs`.
 
 ```nix
-{ stdenv, lib, wrapQtAppsHook }:
+{
+  stdenv,
+  lib,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation {
   # ...
   nativeBuildInputs = [ wrapQtAppsHook ];
   dontWrapQtApps = true;
   preFixup = ''
-      wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
+    wrapQtApp "$out/bin/myapp" --prefix PATH : /path/to/bin
   '';
 }
 ```

@@ -18,7 +18,7 @@
   python3,
   qtbase,
   qttools,
-  tbb,
+  onetbb,
   unshield,
   wrapQtAppsHook,
   xz,
@@ -29,14 +29,14 @@
 
 stdenv.mkDerivation rec {
   pname = "vcmi";
-  version = "1.6.7";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-ImfEKVyuvl8VAsaq34DBe+fiAxf11Mr0jWVI51EsSRs=";
+    hash = "sha256-k6tkylNXEzU+zzYoFWtx+AkoHQzAwbBxPB2DVevsryw=";
   };
 
   nativeBuildInputs = [
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     minizip
     qtbase
     qttools
-    tbb
+    onetbb
     xz
     zlib
   ];

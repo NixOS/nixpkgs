@@ -27,7 +27,7 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   disabledTests = [
     # access to socket
     "test_service_port"
@@ -41,6 +41,6 @@ buildPythonPackage rec {
     description = "Waitress WSGI server";
     mainProgram = "waitress-serve";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = [ ];
   };
 }

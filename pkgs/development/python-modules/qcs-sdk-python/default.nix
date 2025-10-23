@@ -1,8 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  gitUpdater,
   opentelemetry-api,
   opentelemetry-sdk,
   pytest-asyncio,
@@ -11,26 +11,24 @@
   qcs-api-client-common,
   quil,
   rustPlatform,
-  darwin,
-  libiconv,
   syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "qcs-sdk-python";
-  version = "0.21.12";
+  version = "0.21.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "rigetti";
     repo = "qcs-sdk-rust";
     tag = "python/v${version}";
-    hash = "sha256-5tabdxMvYW0g2k48MTAm15+o/OI7yFyL19xirUBN7D4=";
+    hash = "sha256-B0wMOMbsoqkaJ61ula/9w6EBta13UKf5APyOD6NDle4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-YOBI0q7OsjFhoQUO2K4Q3CprcxHgJbTmg+klXj41p0o=";
+    hash = "sha256-cbcSwjeIU/Unm4Y48h3AWTz/f3McyXs9/BhXWDZnL9Q=";
   };
 
   buildAndTestSubdir = "crates/python";
@@ -49,12 +47,6 @@ buildPythonPackage rec {
     tracing-opentelemetry = [ opentelemetry-api ];
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-    libiconv
-  ];
-
   nativeCheckInputs = [
     opentelemetry-sdk
     pytest-asyncio
@@ -71,7 +63,13 @@ buildPythonPackage rec {
     "test_get_report"
     "test_get_version_info"
     "test_list_quantum_processors_timeout"
+    "test_quilc_tracing"
+    "test_qvm_tracing"
   ];
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "python/v";
+  };
 
   meta = {
     changelog = "https://github.com/rigetti/qcs-sdk-rust/blob/${src.tag}/crates/python/CHANGELOG.md";

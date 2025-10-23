@@ -37,6 +37,7 @@
   soapyaudio,
   soapybladerf,
   soapyhackrf,
+  soapyplutosdr,
   soapyremote,
   soapyrtlsdr,
   soapyuhd,
@@ -46,6 +47,7 @@
     soapyaudio
     soapybladerf
     soapyhackrf
+    soapyplutosdr
     soapyremote
     soapyrtlsdr
     soapyuhd
@@ -65,7 +67,7 @@ let
       (unwrapped.python.pkgs.toPythonModule unwrapped.passthru.uhd)
     ]
     # Add the extraPackages as python modules as well
-    ++ (builtins.map unwrapped.python.pkgs.toPythonModule extraPackages)
+    ++ (map unwrapped.python.pkgs.toPythonModule extraPackages)
     ++ lib.flatten (
       lib.mapAttrsToList (
         feat: info:
@@ -165,7 +167,7 @@ let
               "QT_PLUGIN_PATH"
               ":"
               "${lib.makeSearchPath unwrapped.qt.qtbase.qtPluginPrefix (
-                builtins.map lib.getBin (
+                map lib.getBin (
                   [
                     unwrapped.qt.qtbase
                   ]
@@ -178,7 +180,7 @@ let
               "QML2_IMPORT_PATH"
               ":"
               "${lib.makeSearchPath unwrapped.qt.qtbase.qtQmlPrefix (
-                builtins.map lib.getBin (
+                map lib.getBin (
                   [
                     unwrapped.qt.qtbase
                   ]
@@ -223,7 +225,7 @@ let
           lndir -silent ${unwrapped}
           ${lib.optionalString (extraPackages != [ ]) (
             builtins.concatStringsSep "\n" (
-              builtins.map (pkg: ''
+              map (pkg: ''
                 if [[ -d ${lib.getBin pkg}/bin/ ]]; then
                   lndir -silent ${pkg}/bin ./bin
                 fi

@@ -9,18 +9,19 @@
 
 let
   upstream-info =
-    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json).chromium;
+    (lib.importJSON ../../../../applications/networking/browsers/chromium/info.json)
+    .chromium.chromedriver;
 
   # See ./source.nix for Linux
   allSpecs = {
     x86_64-darwin = {
       system = "mac-x64";
-      hash = upstream-info.chromedriver.hash_darwin;
+      hash = upstream-info.hash_darwin;
     };
 
     aarch64-darwin = {
       system = "mac-arm64";
-      hash = upstream-info.chromedriver.hash_darwin_aarch64;
+      hash = upstream-info.hash_darwin_aarch64;
     };
   };
 
@@ -58,7 +59,7 @@ stdenv.mkDerivation {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = [ ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = platforms.darwin;

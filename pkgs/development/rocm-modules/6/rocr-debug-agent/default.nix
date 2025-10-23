@@ -5,26 +5,24 @@
   rocmUpdateScript,
   cmake,
   clr,
-  git,
   rocdbgapi,
   elfutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocr-debug-agent";
-  version = "6.0.2";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocr_debug_agent";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-8Q800T7mwBy8/rujVNyCQ0ZpZ9uPKKk+Sv9ibpWou/8=";
+    hash = "sha256-otoxZ2NHkPDIFhvn4/nvaQ/W4LF38Nx9MZ9IYEf1DyY=";
   };
 
   nativeBuildInputs = [
     cmake
     clr
-    git
   ];
 
   buildInputs = [
@@ -45,18 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "Library that provides some debugging functionality for ROCr";
     homepage = "https://github.com/ROCm/rocr_debug_agent";
     license = with licenses; [ ncsa ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

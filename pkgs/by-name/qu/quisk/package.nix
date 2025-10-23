@@ -1,18 +1,20 @@
-{ lib
-, python3
-, fetchPypi
-, fftw
-, alsa-lib
-, pulseaudio
+{
+  lib,
+  python3,
+  fetchPypi,
+  fftw,
+  alsa-lib,
+  pulseaudio,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "quisk";
-  version = "4.2.41";
+  version = "4.2.46";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-du6VcKn5WvLnlUrW9tKWT7MlMIZ2bpkrsO4yHC8cM6Q=";
+    hash = "sha256-Tp6ctOZLGYyRe3q5EU1dZjAZTCXTsHywFzE5jKF2Ssc=";
   };
 
   buildInputs = [
@@ -21,12 +23,18 @@ python3.pkgs.buildPythonApplication rec {
     pulseaudio
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pyusb
     wxpython
   ];
 
   doCheck = false;
+
+  pythonImportsCheck = [ "quisk" ];
 
   meta = with lib; {
     description = "SDR transceiver for radios that use the Hermes protocol";
@@ -45,7 +53,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     license = licenses.gpl2Plus;
     homepage = "https://james.ahlstrom.name/quisk/";
-    maintainers = with maintainers; [ pulsation kashw2 ];
+    maintainers = with maintainers; [
+      pulsation
+      kashw2
+    ];
     platforms = platforms.linux;
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,30 +8,31 @@
   func,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "func";
-  version = "1.10.0";
+  version = "1.16.2";
 
   src = fetchFromGitHub {
     owner = "knative";
     repo = "func";
-    rev = "knative-v${version}";
-    hash = "sha256-x/SrRkgeLvjcd9LNgMGOf5TLU1GXpjY2Z2MyxrBZckc=";
+    tag = "knative-v${finalAttrs.version}";
+    hash = "sha256-nbS7X5WPu+WBtPUKShE5aWve5m2gw2naQQzNeG7pbGM=";
   };
 
-  vendorHash = null;
+  vendorHash = "sha256-Gn+nyck/VOwf8iKPeyLvsPWOpfdN/maUcQOLFAU0oic=";
 
   subPackages = [ "cmd/func" ];
 
   ldflags = [
-    "-X main.vers=v${version}"
+    "-X knative.dev/func/pkg/app.vers=v${finalAttrs.version}"
     "-X main.date=19700101T000000Z"
-    "-X main.hash=${version}"
+    "-X knative.dev/func/pkg/app.hash=${finalAttrs.version}"
+    "-X knative.dev/func/pkg/app.kver=${finalAttrs.src.tag}"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd func \
       --bash <($out/bin/func completion bash) \
       --zsh <($out/bin/func completion zsh)
@@ -39,15 +41,15 @@ buildGoModule rec {
   passthru.tests.version = testers.testVersion {
     package = func;
     command = "func version";
-    version = "v${version}";
+    version = "v${finalAttrs.version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Knative client library and CLI for creating, building, and deploying Knative Functions";
     mainProgram = "func";
     homepage = "https://github.com/knative/func";
-    changelog = "https://github.com/knative/func/releases/tag/knative-v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ maxwell-lt ];
+    changelog = "https://github.com/knative/func/releases/tag/knative-v${finalAttrs.version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ maxwell-lt ];
   };
-}
+})

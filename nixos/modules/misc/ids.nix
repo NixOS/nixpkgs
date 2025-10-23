@@ -6,11 +6,17 @@
 # https://github.com/NixOS/rfcs/blob/master/rfcs/0052-dynamic-ids.md
 #
 # Use of static ids is deprecated within NixOS. Dynamic allocation is
-# required, barring special circumstacnes. Please check if the service
+# required, barring special circumstances. Please check if the service
 # is applicable for systemd's DynamicUser option and does not need a
-# uid/gid allocation at all.  Systemd can also change ownership of
-# service directories using the RuntimeDirectory/StateDirectory
-# options.
+# uid/gid allocation at all. If DynamicUser is problematic consider
+# making a `isSystemUser=true` user with the uid and gid unset and let
+# NixOS pick dynamic persistent ids on activation. These IDs are persisted
+# locally on the host in the event that the user is removed and added back.
+# Systemd will also change ownership of service directories using the
+# RuntimeDirectory/StateDirectory options just in case a change happens.
+# It's only for special circumstances like for example the ids being hardcoded
+# in the application or the ids having to be consistent across multiple hosts
+# that configuring static ids in this file makes sense.
 
 { lib, ... }:
 
@@ -25,7 +31,7 @@ in
       description = ''
         The user IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
     ids.gids = lib.mkOption {
@@ -33,7 +39,7 @@ in
       description = ''
         The group IDs used in NixOS.
       '';
-      type = types.attrsOf types.int;
+      type = types.attrsOf types.ints.u32;
     };
 
   };
@@ -167,7 +173,7 @@ in
       nsd = 126;
       gitolite = 127;
       znc = 128;
-      polipo = 129;
+      # polipo = 129; removed 2025-05-18
       mopidy = 130;
       #docker = 131; # unused
       gdm = 132;
@@ -240,7 +246,7 @@ in
       subsonic = 204;
       # riak = 205; # unused, remove 2022-07-22
       #shout = 206; # dynamically allocated as of 2021-09-18, module removed 2024-10-19
-      gateone = 207;
+      #gateone = 207; # removed 2025-08-21
       namecoin = 208;
       #lxd = 210; # unused
       #kibana = 211;# dynamically allocated as of 2021-09-03
@@ -273,7 +279,7 @@ in
       caddy = 239;
       taskd = 240;
       # factorio = 241; # DynamicUser = true
-      # emby = 242; # unusued, removed 2019-05-01
+      # emby = 242; # unused, removed 2019-05-01
       #graylog = 243;# dynamically allocated as of 2021-09-03
       sniproxy = 244;
       nzbget = 245;
@@ -371,7 +377,7 @@ in
       # system user or group of the same id in someone else's NixOS.
       # This could break their system and make that person upset for a whole day.
       #
-      # Sidenote: the default is defined in `shadow` module[2], and the relavent change
+      # Sidenote: the default is defined in `shadow` module[2], and the relevant change
       # was made way back in 2014[3].
       #
       # [1]: https://man7.org/linux/man-pages/man5/login.defs.5.html#:~:text=SYS_UID_MAX%20(number)%2C%20SYS_UID_MIN%20(number)
@@ -507,7 +513,7 @@ in
       nsd = 126;
       gitolite = 127;
       znc = 128;
-      polipo = 129;
+      # polipo = 129; removed 2025-05-18
       mopidy = 130;
       docker = 131;
       gdm = 132;
@@ -576,9 +582,8 @@ in
       subsonic = 204;
       # riak = 205;#unused, removed 2022-06-22
       #shout = 206; #unused
-      gateone = 207;
+      #gateone = 207; #removed 2025-08-21
       namecoin = 208;
-      #lxd = 210; # unused
       #kibana = 211;
       xtreemfs = 212;
       calibre-server = 213;
@@ -685,6 +690,7 @@ in
       rstudio-server = 324;
       localtimed = 325;
       automatic-timezoned = 326;
+      clock = 327;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
@@ -700,7 +706,7 @@ in
       # system user or group of the same id in someone else's NixOS.
       # This could break their system and make that person upset for a whole day.
       #
-      # Sidenote: the default is defined in `shadow` module[2], and the relavent change
+      # Sidenote: the default is defined in `shadow` module[2], and the relevant change
       # was made way back in 2014[3].
       #
       # [1]: https://man7.org/linux/man-pages/man5/login.defs.5.html#:~:text=SYS_UID_MAX%20(number)%2C%20SYS_UID_MIN%20(number)

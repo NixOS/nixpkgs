@@ -9,6 +9,8 @@
   gfortran,
   rocblas,
   rocsolver,
+  rocsparse,
+  suitesparse,
   gtest,
   lapack-reference,
   buildTests ? false,
@@ -19,27 +21,26 @@
 # Can also use cuSOLVER
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipsolver";
-  version = "6.0.2";
+  version = "6.4.3";
 
-  outputs =
-    [
-      "out"
-    ]
-    ++ lib.optionals buildTests [
-      "test"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "benchmark"
-    ]
-    ++ lib.optionals buildSamples [
-      "sample"
-    ];
+  outputs = [
+    "out"
+  ]
+  ++ lib.optionals buildTests [
+    "test"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "benchmark"
+  ]
+  ++ lib.optionals buildSamples [
+    "sample"
+  ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-iMfaOv4TdTkmaRHCZOuqUfjO081J6on71+s8nIwwV00=";
+    hash = "sha256-YP88fSM27Do0/tZ676Pvv2tr+lnlQa4vr3UnVNaVpLA=";
   };
 
   nativeBuildInputs = [
@@ -49,37 +50,37 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs =
-    [
-      rocblas
-      rocsolver
-    ]
-    ++ lib.optionals buildTests [
-      gtest
-    ]
-    ++ lib.optionals (buildTests || buildBenchmarks) [
-      lapack-reference
-    ];
+  buildInputs = [
+    rocblas
+    rocsolver
+    rocsparse
+    suitesparse
+  ]
+  ++ lib.optionals buildTests [
+    gtest
+  ]
+  ++ lib.optionals (buildTests || buildBenchmarks) [
+    lapack-reference
+  ];
 
-  cmakeFlags =
-    [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      # Manually define CMAKE_INSTALL_<DIR>
-      # See: https://github.com/NixOS/nixpkgs/pull/197838
-      "-DCMAKE_INSTALL_BINDIR=bin"
-      "-DCMAKE_INSTALL_LIBDIR=lib"
-      "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals buildTests [
-      "-DBUILD_CLIENTS_TESTS=ON"
-    ]
-    ++ lib.optionals buildBenchmarks [
-      "-DBUILD_CLIENTS_BENCHMARKS=ON"
-    ]
-    ++ lib.optionals buildSamples [
-      "-DBUILD_CLIENTS_SAMPLES=ON"
-    ];
+  cmakeFlags = [
+    "-DCMAKE_CXX_COMPILER=hipcc"
+    # Manually define CMAKE_INSTALL_<DIR>
+    # See: https://github.com/NixOS/nixpkgs/pull/197838
+    "-DCMAKE_INSTALL_BINDIR=bin"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DBUILD_WITH_SPARSE=OFF" # FIXME: broken - can't find suitesparse/cholmod, looks fixed in master
+  ]
+  ++ lib.optionals buildTests [
+    "-DBUILD_CLIENTS_TESTS=ON"
+  ]
+  ++ lib.optionals buildBenchmarks [
+    "-DBUILD_CLIENTS_BENCHMARKS=ON"
+  ]
+  ++ lib.optionals buildSamples [
+    "-DBUILD_CLIENTS_SAMPLES=ON"
+  ];
 
   postInstall =
     lib.optionalString buildTests ''
@@ -101,18 +102,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
     description = "ROCm SOLVER marshalling library";
     homepage = "https://github.com/ROCm/hipSOLVER";
     license = with licenses; [ mit ];
-    maintainers = teams.rocm.members;
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

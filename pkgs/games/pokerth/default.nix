@@ -7,7 +7,7 @@
   qtbase,
   SDL,
   SDL_mixer,
-  boost,
+  boost181,
   curl,
   gsasl,
   libgcrypt,
@@ -15,9 +15,13 @@
   protobuf,
   sqlite,
   wrapQtAppsHook,
-  tinyxml2,
+  tinyxml,
   target ? "client",
 }:
+
+let
+  boost = boost181;
+in
 
 mkDerivation rec {
   pname = "pokerth-${target}";
@@ -73,7 +77,7 @@ mkDerivation rec {
     protobuf
     qtbase
     sqlite
-    tinyxml2
+    tinyxml
   ];
 
   qmakeFlags = [

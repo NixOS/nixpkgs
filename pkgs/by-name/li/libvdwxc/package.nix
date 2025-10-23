@@ -8,7 +8,7 @@
   mpi,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "libvdwxc";
   # Stable version has non-working MPI detection.
   version = "unstable-24.02.2020";

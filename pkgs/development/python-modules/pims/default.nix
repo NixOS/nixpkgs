@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "soft-matter";
-    repo = pname;
+    repo = "pims";
     tag = "v${version}";
     hash = "sha256-3SBZk11w6eTZFmETMRJaYncxY38CYne1KzoF5oRgzuY=";
   };
@@ -37,9 +37,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pims" ];
 
-  pytestFlagsArray = [
-    "-W"
-    "ignore::Warning"
+  pytestFlags = [
+    "-Wignore::Warning"
   ];
 
   disabledTests = [

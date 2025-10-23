@@ -21,30 +21,29 @@
 
 buildPythonPackage rec {
   pname = "sphinx-autoapi";
-  version = "3.5.0";
+  version = "3.6.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "readthedocs";
     repo = "sphinx-autoapi";
     tag = "v${version}";
-    hash = "sha256-GLIImHO6exBJBhvIMvyv8AyX+01QheIDwOj9Lhc83a8=";
+    hash = "sha256-pDfGNpDyrU4q48ZHKqfN8OrxKICfIhac2qMJDB1iE0I=";
   };
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-      astroid
-      jinja2
-      pyyaml
-      sphinx
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [
-      stdlib-list
-    ];
+  dependencies = [
+    astroid
+    jinja2
+    pyyaml
+    sphinx
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [
+    stdlib-list
+  ];
 
   nativeCheckInputs = [
     beautifulsoup4
@@ -68,6 +67,6 @@ buildPythonPackage rec {
       import the project being documented.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ karolchmist ];
+    maintainers = [ ];
   };
 }

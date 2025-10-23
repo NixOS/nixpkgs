@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch2,
   fetchFromGitHub,
   pkg-config,
   SDL2,
@@ -14,6 +15,7 @@
   libpng,
   libtheora,
   libvorbis,
+  libX11,
   python3,
   tcl,
   zlib,
@@ -26,10 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "openMSX";
     repo = "openMSX";
-    rev = "RELEASE_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    tag = "RELEASE_${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-iY+oZ7fHZnnEGunM4kOxOGH2Biqj2PfdLhbT8J4mYrA=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix_view_operator.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/fix_view_operator.patch?h=openmsx&id=aa63ce478c7f528d60b79bcf4c9427101caa3b94";
+      hash = "sha256-3wmUJQrM5P3zfFJt+HF32AchNSqCgFTnQ508Bztg4uA=";
+    })
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -40,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     SDL2
     SDL2_image
     SDL2_ttf
+    libX11
     alsa-lib
     freetype
     glew
@@ -74,7 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
       boost
       gpl2Plus
     ];
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
     mainProgram = "openmsx";
   };

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aioaudiobookshelf";
-  version = "0.1.4";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "aioaudiobookshelf";
     tag = version;
-    hash = "sha256-rUd8TwmQDeMxXu7/UBnN426N+BMas2u6RNpTBXa3/5g=";
+    hash = "sha256-sHRyrh+FwR9Vc9LVOA069iH5Wg56Ye4e9bOxdTR6PPs=";
   };
 
   build-system = [

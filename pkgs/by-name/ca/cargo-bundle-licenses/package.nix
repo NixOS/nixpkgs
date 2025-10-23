@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bundle-licenses";
-  version = "3.1.0";
+  version = "4.2.0";
 
   src = fetchFromGitHub {
     owner = "sstadick";
     repo = "cargo-bundle-licenses";
     rev = "v${version}";
-    hash = "sha256-leSHjl/B76Z4JM1wO9IBKbdfMgHtY/pGut1hnDd8/L0=";
+    hash = "sha256-L3hmgDwzL6lLa0LCg/V5QeNK2U1u2dJMO4+t6W1UvxI=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-I5zIrMZ9GnlAUfWaaFP6yr+pv8wWtxguxSL0zho3BRs=";
+  cargoHash = "sha256-HHBFT4u0NPjhKJa3KNg8/AgkgNoFUkMWmioVaXYlD2M=";
 
   meta = with lib; {
     description = "Generate a THIRDPARTY file with all licenses in a cargo project";

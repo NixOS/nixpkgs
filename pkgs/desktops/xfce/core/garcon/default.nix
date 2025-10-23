@@ -1,4 +1,10 @@
-{ stdenv, lib, mkXfceDerivation, gtk3, libxfce4ui, libxfce4util,
+{
+  stdenv,
+  lib,
+  mkXfceDerivation,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
   withIntrospection ?
     lib.meta.availableOn stdenv.hostPlatform gobject-introspection
     && stdenv.hostPlatform.emulatorAvailable buildPackages,
@@ -17,11 +23,18 @@ mkXfceDerivation {
     gobject-introspection
   ];
 
-  buildInputs = [ gtk3 libxfce4ui libxfce4util ];
+  buildInputs = [
+    gtk3
+    libxfce4ui
+    libxfce4util
+  ];
 
   meta = with lib; {
     description = "Xfce menu support library";
-    license = with licenses; [ lgpl2Only fdl11Only ];
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    license = with licenses; [
+      lgpl2Only
+      fdl11Only
+    ];
+    teams = [ teams.xfce ];
   };
 }

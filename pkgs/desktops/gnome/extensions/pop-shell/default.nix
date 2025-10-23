@@ -8,15 +8,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnome-shell-extension-pop-shell";
-  version = "1.2.0-unstable-2025-02-20";
+  version = "1.2.0-unstable-2025-10-01";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "shell";
-    rev = "29869118d1b89e5fa2ee97d11f36f20343ecba4c";
-    hash = "sha256-I1DegY+vG/Yt6jE0cjH3lrzeLsS5Ce43p/zWE+5yYJo=";
+    rev = "3cb093b8e6a36c48dd5e84533dc874ea74cd8a9e";
+    hash = "sha256-FNNc3RY+x6y4bRU9BCUcQdzkG6iM8kKeRGkziQrTUM0=";
   };
 
   nativeBuildInputs = [

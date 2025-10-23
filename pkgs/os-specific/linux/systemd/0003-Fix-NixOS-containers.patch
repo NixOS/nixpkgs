@@ -10,10 +10,10 @@ container, so checking early whether it exists will fail.
  1 file changed, 2 insertions(+)
 
 diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
-index 500725d35f..2b735e4df4 100644
+index ab8746c442..480a9c55c6 100644
 --- a/src/nspawn/nspawn.c
 +++ b/src/nspawn/nspawn.c
-@@ -6189,6 +6189,7 @@ static int run(int argc, char *argv[]) {
+@@ -6165,6 +6165,7 @@ static int run(int argc, char *argv[]) {
                                  goto finish;
                          }
                  } else {
@@ -21,11 +21,11 @@ index 500725d35f..2b735e4df4 100644
                          _cleanup_free_ char *p = NULL;
  
                          if (arg_pivot_root_new)
-@@ -6208,6 +6209,7 @@ static int run(int argc, char *argv[]) {
+@@ -6184,6 +6185,7 @@ static int run(int argc, char *argv[]) {
                                  log_error_errno(r, "Unable to determine if %s looks like it has an OS tree (i.e. whether /usr/ exists): %m", arg_directory);
                                  goto finish;
                          }
 +#endif
                  }
  
-         } else {
+                 if (arg_userns_mode == USER_NAMESPACE_MANAGED) {

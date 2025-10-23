@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "5.2.1";
+  version = "5.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "jjjake";
     repo = "internetarchive";
     tag = "v${version}";
-    hash = "sha256-2CShbIS5hq+queeHHlE53Vf8sl4HQySp1ZU8mz67Qbc=";
+    hash = "sha256-3llzEZFMtyAUemNZ1QH+uYezGf0tioNyTXzLiml7Ric=";
   };
 
   build-system = [ setuptools ];
@@ -36,7 +36,8 @@ buildPythonPackage rec {
     jsonpatch
     schema
     urllib3
-  ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
   nativeCheckInputs = [
     responses

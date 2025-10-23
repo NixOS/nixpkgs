@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "h5netcdf";
-  version = "1.5.0";
+  version = "1.6.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "h5netcdf";
     repo = "h5netcdf";
     tag = "v${version}";
-    hash = "sha256-fhLL8/XgYQmdHckh5xhYvnlc+MTIc2wcTOZaohFFGlk=";
+    hash = "sha256-SFlea/ABP78GQgGkh7hscAlGfpKVnXN2zr99D9LCpeQ=";
   };
 
   build-system = [
@@ -33,8 +33,6 @@ buildPythonPackage rec {
     pytestCheckHook
     netcdf4
   ];
-
-  dontUseSetuptoolsCheck = true;
 
   pythonImportsCheck = [ "h5netcdf" ];
 

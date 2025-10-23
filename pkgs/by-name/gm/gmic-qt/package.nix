@@ -50,13 +50,13 @@ assert lib.assertMsg (builtins.all (d: d != null)
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic-qt${lib.optionalString (variant != "standalone") "-${variant}"}";
-  version = "3.4.2";
+  version = "3.5.0";
 
   src = fetchFromGitHub {
-    owner = "c-koi";
+    owner = "GreycLab";
     repo = "gmic-qt";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-fM6dBxBC2b1/v+rfiP//QaAcTJmMtYPn4OUNwVqKhYk=";
+    hash = "sha256-1fav1O75HBC7ySBgybn4goLFkX6HFbwRHARncfbkaoM=";
   };
 
   nativeBuildInputs = [
@@ -66,27 +66,26 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      cimg
-      curl
-      fftw
-      gmic
-      graphicsmagick
-      libjpeg
-      libpng
-      libtiff
-      openexr
-      zlib
-    ]
-    ++ (with libsForQt5; [
-      qtbase
-      qttools
-    ])
-    ++ lib.optionals stdenv.cc.isClang [
-      llvmPackages.openmp
-    ]
-    ++ variants.${variant}.extraDeps;
+  buildInputs = [
+    cimg
+    curl
+    fftw
+    gmic
+    graphicsmagick
+    libjpeg
+    libpng
+    libtiff
+    openexr
+    zlib
+  ]
+  ++ (with libsForQt5; [
+    qtbase
+    qttools
+  ])
+  ++ lib.optionals stdenv.cc.isClang [
+    llvmPackages.openmp
+  ]
+  ++ variants.${variant}.extraDeps;
 
   postPatch = ''
     patchShebangs \
@@ -100,7 +99,14 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_DYNAMIC_LINKING" true)
     (lib.cmakeBool "ENABLE_SYSTEM_GMIC" true)
-    (lib.cmakeFeature "GMIC_QT_HOST" (if variant == "standalone" then "none" else variant))
+    (lib.cmakeFeature "GMIC_QT_HOST" (
+      if variant == "standalone" then
+        "none"
+      else if variant == "gimp" && gimp.majorVersion == "3.0" then
+        "gimp3"
+      else
+        variant
+    ))
   ];
 
   postFixup = lib.optionalString (variant == "gimp") ''
@@ -128,7 +134,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (variants.${variant}) description;
     license = lib.licenses.gpl3Plus;
     mainProgram = "gmic_qt";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

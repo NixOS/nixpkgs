@@ -1,38 +1,41 @@
 {
   lib,
   stdenv,
-  fetchurl,
-  appimageTools,
+  callPackage,
 }:
 let
-  version = "5.5.225";
+  version = "5.5.243";
   pname = "gdevelop";
-
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://github.com/4ian/GDevelop/releases/download/v${version}/GDevelop-5-${version}.AppImage";
-        sha256 = "sha256-ACNmO5hYfLEaJV6wntH4PZoHcB2T/+WFe2E5Ir/5c4U=";
-      }
-    else
-      throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
-
-  appimageContents = appimageTools.extractType2 { inherit pname src; };
-
-  dontPatchELF = true;
-
-in
-appimageTools.wrapType2 rec {
-  inherit pname version src;
-
   meta = {
     description = "Graphical Game Development Studio";
     homepage = "https://gdevelop.io/";
     downloadPage = "https://github.com/4ian/GDevelop/releases";
     license = lib.licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ tombert ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [
+      tombert
+      matteopacini
+    ];
+    mainProgram = "gdevelop";
+    platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
   };
-
-}
+  passthru.updateScript = ./update.sh;
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }
+else
+  callPackage ./linux.nix {
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
+  }

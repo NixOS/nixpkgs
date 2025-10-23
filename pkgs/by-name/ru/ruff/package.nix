@@ -10,24 +10,24 @@
   versionCheckHook,
 
   # passthru
-  ruff-lsp,
   nixosTests,
   nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "ruff";
-  version = "0.9.10";
+  version = "0.14.1";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
     tag = finalAttrs.version;
-    hash = "sha256-z1Lx/1RxGEjxIodg/J5aFIvCVYImU3S5xf+Pooj5oA0=";
+    hash = "sha256-jBhlaLWoWp+sNsLBrHoT3J5dtdU1sZzuuhugw9UVw+c=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-ljO3e0/WtJhkI0B1+ze9MeQiqmqE5G6NGVAXU1HfO4Y=";
+  cargoBuildFlags = [ "--package=ruff" ];
+
+  cargoHash = "sha256-shDP5j3mGpnFV0cuFmsWfPoOzJB/wSTUEjNUO+CIadg=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     rust-jemalloc-sys
   ];
 
-  postInstall =
+  postInstall = lib.optionalString (stdenv.hostPlatform.emulatorAvailable buildPackages) (
     let
       emulator = stdenv.hostPlatform.emulator buildPackages;
     in
@@ -44,7 +44,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
         --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
         --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
-    '';
+    ''
+  );
 
   # Run cargo tests
   checkType = "debug";
@@ -54,28 +55,35 @@ rustPlatform.buildRustPackage (finalAttrs: {
   # This causes errors like "error: linker `cc` not found" on static builds
   doCheck = !stdenv.hostPlatform.isStatic;
 
-  # Failing on darwin for an unclear reason, but probably due to sandbox.
-  # According to the maintainers, those tests are from an experimental crate that isn't actually
-  # used by ruff currently and can thus be safely skipped.
-  cargoTestFlags = lib.optionals stdenv.hostPlatform.isDarwin [
+  # Exclude tests from `ty`-related crates, run everything else.
+  # Ordinarily we would run all the tests, but there is significant overlap with the `ty` package in nixpkgs,
+  # which ruff shares a monorepo with.
+  # As such, we leave running `ty` tests to the `ty` package, and concentrate on everything else.
+  cargoTestFlags = [
     "--workspace"
-    "--exclude=red_knot"
+    "--exclude=ty"
+    "--exclude=ty_ide"
+    "--exclude=ty_project"
+    "--exclude=ty_python_semantic"
+    "--exclude=ty_server"
+    "--exclude=ty_static"
+    "--exclude=ty_test"
+    "--exclude=ty_vendored"
+    "--exclude=ty_wasm"
   ];
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
-    tests =
-      {
-        inherit ruff-lsp;
-      }
-      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
-      };
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+    };
+    # Updating `ruff` needs to be done on staging due to NixOS tests. Disabling r-ryantm update bot:
+    # nixpkgs-update: no auto update
     updateScript = nix-update-script { };
   };
 
@@ -86,6 +94,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
+      bengsparks
       figsoda
       GaetanLepage
     ];

@@ -2,24 +2,24 @@
   lib,
   fetchFromGitHub,
   cmake,
-  llvmPackages_16,
+  llvmPackages_18,
   unstableGitUpdater,
 }:
 
 let
-  c2ffiBranch = "llvm-16.0.0";
-  llvmPackages = llvmPackages_16;
+  c2ffiBranch = "llvm-18.1.0";
+  llvmPackages = llvmPackages_18;
 in
 
 llvmPackages.stdenv.mkDerivation {
   pname = "c2ffi-${c2ffiBranch}";
-  version = "0-unstable-2023-11-18";
+  version = "0-unstable-2024-04-20";
 
   src = fetchFromGitHub {
     owner = "rpav";
     repo = "c2ffi";
-    rev = "097cbe61ca02dc79ea60859aa056975131a9d985";
-    hash = "sha256-pflolW5OoEkVDozy4cjCdUIVxgE/SfVKIhQyNBDhENc=";
+    rev = "0de81efb64acc82c08c5eee4a7108ddcb1b00d86";
+    hash = "sha256-q81Vxq/6h/5jgQ1Leq15klN/8L+UiavlxkARGo2SrJ0=";
   };
 
   passthru.updateScript = unstableGitUpdater {

@@ -241,11 +241,11 @@ let
       builder = if x.from >= minRepoVersionValidated then mkMigration else stubBecauseDisabled;
     in
     builder x.from x.to x.release x.hash;
-  migrations = builtins.map mkMigrationOrStub releases;
+  migrations = map mkMigrationOrStub releases;
 
   packageNotBroken = package: !package.meta.broken;
   migrationsBrokenRemoved = builtins.filter packageNotBroken migrations;
-  migrationsBrokenStubbed = builtins.map (
+  migrationsBrokenStubbed = map (
     x: if packageNotBroken x then x else (stubBecauseBroken x.pname)
   ) migrations;
 in
@@ -253,7 +253,7 @@ in
 symlinkJoin {
   name = "kubo-fs-repo-migrations-${version}";
   paths = if stubBrokenMigrations then migrationsBrokenStubbed else migrationsBrokenRemoved;
-  meta = (builtins.removeAttrs kubo-migrator-unwrapped.meta [ "mainProgram" ]) // {
+  meta = (removeAttrs kubo-migrator-unwrapped.meta [ "mainProgram" ]) // {
     description = "Several individual migrations for migrating the filesystem repository of Kubo one version at a time";
     longDescription = ''
       This package contains all the individual migrations in the bin directory.

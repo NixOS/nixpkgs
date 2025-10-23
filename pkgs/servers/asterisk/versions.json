@@ -1,18 +1,22 @@
 {
   "asterisk_18": {
-    "sha256": "5df5d1c3885428b8bf03e78d7b8c3079d4512679137ef1d47e865dc2058aa825",
-    "version": "18.26.1"
+    "sha256": "a17f511bfa092c8fa9eccd3a5ecf5f728ccdcf2b1a04d2c06e7177d96c3c9ee1",
+    "version": "18.26.4"
   },
   "asterisk_20": {
-    "sha256": "5ad25c136c7772f0ad10ae02d59f19b32c0cf64027278e3de6a6314ee24d5ff9",
-    "version": "20.11.1"
+    "sha256": "30945737855f47200b6986d917377989fd284fab50bf4d7646c63bda50bbf7b7",
+    "version": "20.16.0"
   },
   "asterisk_21": {
-    "sha256": "8df00a37b448fdaf63ffe25be0df02112211c1617efcb00b21cdb58f1baed89d",
-    "version": "21.6.1"
+    "sha256": "9187aea454a54065cfa632023730737aa89ba7efe65e450ce2f6ce787238b48f",
+    "version": "21.11.0"
   },
   "asterisk_22": {
-    "sha256": "e697740d91c33bf02d506d4da04635da48bfb0b5bb79bf8863c1a9b8f791264f",
-    "version": "22.1.1"
+    "sha256": "e5b33b9b6fd6fb2bbbe748bd34f517d9c634afbbd6c53bbbdd3214ec8a6a7749",
+    "version": "22.6.0"
+  },
+  "asterisk_23": {
+    "sha256": "30f012e5c7b4a20b149bf33c9150ae7a0f33b1a801655df65fc8a837138cac15",
+    "version": "23.0.0"
   }
 }

@@ -1,10 +1,14 @@
 # Do not edit manually, run ./update-providers.py
 
 {
-  version = "2.4.2";
+  version = "2.6.0";
   providers = {
     airplay = ps: [
     ];
+    alexa =
+      ps: with ps; [
+        alexapy
+      ];
     apple_music = ps: [
     ]; # missing pywidevine
     audible =
@@ -20,6 +24,8 @@
         pyblu
       ];
     builtin = ps: [
+    ];
+    builtin_player = ps: [
     ];
     chromecast =
       ps: with ps; [
@@ -44,6 +50,8 @@
       ps: with ps; [
         python-fullykiosk
       ];
+    gpodder = ps: [
+    ];
     hass =
       ps: with ps; [
         hass-client
@@ -52,11 +60,28 @@
     ];
     ibroadcast = ps: [
     ]; # missing ibroadcastaio
+    itunes_podcasts = ps: [
+    ];
     jellyfin =
       ps: with ps; [
         aiojellyfin
       ];
+    lastfm_scrobble =
+      ps: with ps; [
+        pylast
+      ];
+    listenbrainz_scrobble = ps: [
+    ]; # missing liblistenbrainz
+    lrclib = ps: [
+    ];
     musicbrainz = ps: [
+    ];
+    musiccast =
+      ps: with ps; [
+        aiomusiccast
+        setuptools
+      ];
+    nugs = ps: [
     ];
     opensubsonic =
       ps: with ps; [
@@ -68,10 +93,8 @@
       ps: with ps; [
         plexapi
       ];
-    podcastfeed =
-      ps: with ps; [
-        podcastparser
-      ];
+    podcastfeed = ps: [
+    ];
     qobuz = ps: [
     ];
     radiobrowser =
@@ -80,17 +103,16 @@
       ];
     siriusxm = ps: [
     ]; # missing sxm
-    slimproto =
-      ps: with ps; [
-        aioslimproto
-      ];
     snapcast =
       ps: with ps; [
         bidict
         snapcast
+        websocket-client
       ];
-    sonos = ps: [
-    ]; # missing aiosonos
+    sonos =
+      ps: with ps; [
+        aiosonos
+      ];
     sonos_s1 =
       ps: with ps; [
         defusedxml
@@ -104,6 +126,12 @@
       ];
     spotify_connect = ps: [
     ];
+    squeezelite =
+      ps: with ps; [
+        aioslimproto
+      ];
+    subsonic_scrobble = ps: [
+    ];
     template_player_provider = ps: [
     ];
     test = ps: [
@@ -112,12 +140,13 @@
     ];
     tidal =
       ps: with ps; [
-        tidalapi
+        pkce
       ];
     tunein = ps: [
     ];
     ytmusic =
       ps: with ps; [
+        bgutil-ytdlp-pot-provider
         duration-parser
         yt-dlp
         ytmusicapi

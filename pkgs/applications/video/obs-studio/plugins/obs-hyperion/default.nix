@@ -54,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/hyperion-project/hyperion-obs-plugin";
     license = licenses.mit;
     maintainers = with maintainers; [ algram ];
-    platforms = [ "x86_64-linux" ];
+    inherit (obs-studio.meta) platforms;
   };
 }

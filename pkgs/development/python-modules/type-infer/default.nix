@@ -1,8 +1,8 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
   poetry-core,
   colorlog,
   dataclasses-json,
@@ -13,37 +13,40 @@
   py3langid,
   pytestCheckHook,
   python-dateutil,
+  standard-imghdr,
+  standard-sndhdr,
   scipy,
   toml,
-  nltk-data,
-  symlinkJoin,
 }:
 let
-  testNltkData = symlinkJoin {
-    name = "nltk-test-data";
-    paths = [
-      nltk-data.punkt
-      nltk-data.punkt_tab
-      nltk-data.stopwords
-    ];
-  };
+  testNltkData = nltk.dataDir (d: [
+    d.punkt
+    d.punkt-tab
+    d.stopwords
+  ]);
 
-  version = "0.0.21";
+  version = "0.0.25";
   tag = "v${version}";
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "type-infer";
   inherit version;
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "mindsdb";
     repo = "type_infer";
     inherit tag;
-    hash = "sha256-Q5f4WihaT88R+x4jMUuRNBvWglkGdS5oi+o9jOk+tSE=";
+    hash = "sha256-WL/2WSy3e2Mg/jNS8afUEnCt10wpXho4uOPAkVdzHWA=";
   };
+
+  patches = [
+    # https://github.com/mindsdb/type_infer/pull/83
+    (fetchpatch {
+      url = "https://github.com/mindsdb/type_infer/commit/d09f88d5ddbe55125b1fff4506b03165d019d88b.patch";
+      hash = "sha256-wNBzb+RxoZC8zn5gdOrtJeXJIIH3DTt1gTZfgN/WnQQ=";
+    })
+  ];
 
   pythonRelaxDeps = [
     "psutil"
@@ -63,6 +66,8 @@ buildPythonPackage rec {
     py3langid
     python-dateutil
     scipy
+    standard-imghdr
+    standard-sndhdr
     toml
   ];
 
@@ -87,7 +92,5 @@ buildPythonPackage rec {
     homepage = "https://github.com/mindsdb/type_infer";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ mbalatsko ];
-    # ModuleNotFoundError: No module named 'imghdr', unrelated
-    broken = true;
   };
 }

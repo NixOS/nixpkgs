@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchpatch,
   cargo,
   desktop-file-utils,
   meson,
@@ -31,23 +32,36 @@ let
       tag = version;
       hash = "sha256-vhpQT67+849WV1SFthQdUeFnYe/okudTQJoL3y+wXwI=";
     };
+
+    patches = [
+      (fetchpatch {
+        url = "https://gitlab.freedesktop.org/pipewire/wireplumber/-/commit/f4f495ee212c46611303dec9cd18996830d7f721.patch";
+        hash = "sha256-dxVlXFGyNvWKZBrZniFatPPnK+38pFGig7LGAsc6Ydc=";
+      })
+    ];
   });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pwvucontrol";
-  version = "0.4.8";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "saivert";
     repo = "pwvucontrol";
     tag = finalAttrs.version;
-    hash = "sha256-E3UfZO0R6WGeUffgGQ2ceHiG4hwIuFntTdCpojaWL8E=";
+    hash = "sha256-21TBVDzjrBzNIPkAURGs2ngI8Vj6o/RL3Ael4wwE2Lk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-uaRpaiVjxc0j4oDbmmwt8SPS7O7hWzoYO62jLYzHl1c=";
+    hash = "sha256-FrPpLbfqM/DtjYu20pwr1AMUHaAuTEt60I3JlFZO4RI=";
   };
+
+  postPatch = ''
+    substituteInPlace src/meson.build --replace-fail \
+      "'src' / rust_target / meson.project_name()," \
+      "'src' / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name(),"
+  '';
 
   nativeBuildInputs = [
     cargo
@@ -71,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     pipewire
     wireplumber_0_4
   ];
+
+  # For https://github.com/saivert/pwvucontrol/blob/7bf43c746cd49fffbfb244ac4474742c6b3737a9/src/meson.build#L45-L46
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
 
   meta = {
     description = "Pipewire Volume Control";

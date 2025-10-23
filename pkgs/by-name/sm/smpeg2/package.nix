@@ -3,14 +3,13 @@
   stdenv,
   autoconf,
   automake,
-  darwin,
   fetchFromGitHub,
   makeWrapper,
   pkg-config,
   SDL2,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "smpeg2";
   version = "unstable-2022-05-26";
 
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [ SDL2 ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.libobjc;
+  buildInputs = [ SDL2 ];
 
   outputs = [
     "out"

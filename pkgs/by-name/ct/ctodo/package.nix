@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
     readline
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6)' \
+      'cmake_minimum_required(VERSION 3.5)'
+  '';
+
   meta = with lib; {
     homepage = "http://ctodo.apakoh.dk/";
     description = "Simple ncurses-based task list manager";

@@ -45,13 +45,13 @@ lib.checkListOfEnum "${pname}: theme variants"
   stdenvNoCC.mkDerivation
   rec {
     inherit pname;
-    version = "2024-04-20";
+    version = "2025-06-20";
 
     src = fetchFromGitHub {
       owner = "vinceliuice";
-      repo = pname;
+      repo = "vimix-gtk-themes";
       rev = version;
-      sha256 = "RbAdoix+UWKiLB+04YiPa0UwzO1fFLy56IG1MipmE+E=";
+      sha256 = "uRm6v+Zag4FO7nFVcHhZjVhOfdOeYBZYQym0IBR8+HU=";
     };
 
     nativeBuildInputs = [
@@ -76,10 +76,10 @@ lib.checkListOfEnum "${pname}: theme variants"
       runHook preInstall
       mkdir -p $out/share/themes
       name= HOME="$TMPDIR" ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (sizeVariants != [ ]) "--size " + builtins.toString sizeVariants} \
-        ${lib.optionalString (tweaks != [ ]) "--tweaks " + builtins.toString tweaks} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (sizeVariants != [ ]) "--size " + toString sizeVariants} \
+        ${lib.optionalString (tweaks != [ ]) "--tweaks " + toString tweaks} \
         --dest $out/share/themes
       rm $out/share/themes/*/{AUTHORS,LICENSE}
       jdupes --quiet --link-soft --recurse $out/share

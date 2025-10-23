@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
+    fetcherVersion = 1;
     hash = "sha256-PVA6sXbiuxqvi9u3sPoeVIJSSpSbFQHQQnTFO3w31WE=";
   };
 
@@ -41,7 +42,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   preInstall = ''
     # remove unnecessary files
-    pnpm --ignore-scripts prune --prod
+    CI=true pnpm --ignore-scripts prune --prod
     rm -rf node_modules/.pnpm/typescript*
     find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
     # https://github.com/pnpm/pnpm/issues/3645
@@ -51,10 +52,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,lib/${finalAttrs.pname}}
-    mv {dist,node_modules} $out/lib/${finalAttrs.pname}
-    chmod a+x $out/lib/${finalAttrs.pname}/dist/index.js
-    ln -s $out/lib/${finalAttrs.pname}/dist/index.js $out/bin/stylelint-lsp
+    mkdir -p $out/{bin,lib/stylelint-lsp}
+    mv {dist,node_modules} $out/lib/stylelint-lsp
+    chmod a+x $out/lib/stylelint-lsp/dist/index.js
+    ln -s $out/lib/stylelint-lsp/dist/index.js $out/bin/stylelint-lsp
 
     runHook postInstall
   '';
@@ -62,7 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    description = "A stylelint Language Server";
+    description = "Stylelint Language Server";
     homepage = "https://github.com/bmatcuk/stylelint-lsp";
     license = lib.licenses.mit;
     mainProgram = "stylelint-lsp";

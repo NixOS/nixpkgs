@@ -40,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "uiprotect";
-  version = "7.5.1";
+  version = "7.23.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     owner = "uilibs";
     repo = "uiprotect";
     tag = "v${version}";
-    hash = "sha256-moGS1hfCU8BCdAzvr0Np7lF32RucigM9YANZI6+sALw=";
+    hash = "sha256-UScv0RAIgkFYl3yJZDuSzXXV3iI/3maV42hN4EtfUio=";
   };
 
   build-system = [ poetry-core ];
@@ -91,7 +91,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "--benchmark-disable" ];
+  pytestFlags = [ "--benchmark-disable" ];
 
   disabledTests = [
     # https://127.0.0.1 vs https://127.0.0.1:0
@@ -109,7 +109,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python API for UniFi Protect (Unofficial)";
     homepage = "https://github.com/uilibs/uiprotect";
-    changelog = "https://github.com/uilibs/uiprotect/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/uilibs/uiprotect/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ hexa ];
   };

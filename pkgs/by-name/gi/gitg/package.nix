@@ -89,16 +89,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gitg";
     changelog = "https://gitlab.gnome.org/GNOME/gitg/-/blob/v${version}/NEWS?ref_type=tags";
     description = "GNOME GUI client to view git repositories";
     mainProgram = "gitg";
-    maintainers = with maintainers; [
-      domenkozar
+    maintainers = with lib.maintainers; [
       Luflosi
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
   };
 }

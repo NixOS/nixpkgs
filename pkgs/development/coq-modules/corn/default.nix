@@ -8,7 +8,7 @@
   version ? null,
 }:
 
-(mkCoqDerivation rec {
+(mkCoqDerivation {
   pname = "corn";
   inherit version;
   defaultVersion =
@@ -52,7 +52,7 @@
   configureScript = "./configure.sh";
   dontAddPrefix = true;
 
-  mlPlugin = true;  /* uses coq-bignums.plugin */
+  mlPlugin = true; # uses coq-bignums.plugin
 
   propagatedBuildInputs = [
     bignums

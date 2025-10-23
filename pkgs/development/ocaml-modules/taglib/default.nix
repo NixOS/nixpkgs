@@ -33,7 +33,7 @@ buildDunePackage rec {
     description = "Bindings for the taglib library which provides functions for reading tags in headers of audio files";
     license = with licenses; [
       lgpl21Plus
-      "link-exception"
+      ocamlLgplLinkingException
     ]; # GNU Library Public License 2 Linking Exception
     maintainers = with maintainers; [ dandellion ];
   };

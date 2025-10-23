@@ -6,9 +6,9 @@
   flex,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mceinject";
-  version = "unstable-2013-01-19";
+  version = "0-unstable-2013-01-19";
 
   src = fetchFromGitHub {
     owner = "andikleen";

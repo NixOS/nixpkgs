@@ -1,34 +1,37 @@
-{ lib
-, stdenv
-, fetchurl
-, libpq
-, openssl
-, libxcrypt
-, withPam ? stdenv.hostPlatform.isLinux
-, pam
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpq,
+  openssl,
+  libxcrypt,
+  withPam ? stdenv.hostPlatform.isLinux,
+  pam,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pgpool-II";
-  version = "4.6.0";
+  version = "4.6.3";
 
   src = fetchurl {
     url = "https://www.pgpool.net/mediawiki/download.php?f=pgpool-II-${version}.tar.gz";
     name = "pgpool-II-${version}.tar.gz";
-    hash = "sha256-9oplcUQtfqU7afOddJrUV3kLABgOGbAZ/ILiNbqwcyE=";
+    hash = "sha256-RmiGaLKs5n2BYaMgJWJS2YaYvH2XiMxnJyadVyApnyw=";
   };
 
   buildInputs = [
     libpq
     openssl
     libxcrypt
-  ] ++ lib.optional withPam pam;
+  ]
+  ++ lib.optional withPam pam;
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-openssl"
-  ] ++ lib.optional withPam "--with-pam";
+  ]
+  ++ lib.optional withPam "--with-pam";
 
   installFlags = [
     "sysconfdir=\${out}/etc"
@@ -45,7 +48,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
     description = "Middleware that works between PostgreSQL servers and PostgreSQL clients";
-    changelog = "https://www.pgpool.net/docs/latest/en/html/release-${builtins.replaceStrings ["."] ["-"] version}.html";
+    changelog = "https://www.pgpool.net/docs/latest/en/html/release-${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }.html";
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = [ ];

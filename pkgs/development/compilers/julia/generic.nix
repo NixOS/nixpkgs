@@ -1,22 +1,24 @@
-{ version
-, hash
-, patches
+{
+  version,
+  hash,
+  patches,
 }:
 
-{ lib
-, stdenv
-, fetchurl
-, which
-, python3
-, gfortran
-, cacert
-, cmake
-, perl
-, gnum4
-, openssl
-, libxml2
-, zlib
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  python3,
+  gfortran,
+  cacert,
+  cmake,
+  perl,
+  gnum4,
+  openssl,
+  libxml2,
+  zlib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,7 +46,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libxml2
     zlib
-  ] ++ lib.optionals (lib.versionAtLeast version "1.11") [
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "1.11") [
     cacert
   ];
 
@@ -52,7 +55,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs .
-  '' + lib.optionalString (lib.versionAtLeast version "1.11") ''
+  ''
+  + lib.optionalString (lib.versionAtLeast version "1.11") ''
     substituteInPlace deps/curl.mk \
       --replace-fail 'cd $(dir $<) && $(TAR) jxf $(notdir $<)' \
                      'cd $(dir $<) && $(TAR) jxf $(notdir $<) && sed -i "s|/usr/bin/env perl|${lib.getExe buildPackages.perl}|" curl-$(CURL_VER)/scripts/cd2nroff'
@@ -61,10 +65,12 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "prefix=$(out)"
     "USE_BINARYBUILDER=0"
-  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     # https://github.com/JuliaCI/julia-buildkite/blob/main/utilities/build_envs.sh
     "JULIA_CPU_TARGET=generic;sandybridge,-xsaveopt,clone_all;haswell,-rdrnd,base(1);x86-64-v4,-rdrnd,base(1)"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isAarch64 [
     "JULIA_CPU_TARGET=generic;cortex-a57;thunderx2t99;carmel,clone_all;apple-m1,base(3);neoverse-512tvb,base(3)"
   ];
 
@@ -91,7 +97,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  env = lib.optionalAttrs (lib.versionOlder version "1.11") {
+  env = lib.optionalAttrs (lib.versionOlder version "1.11" || stdenv.hostPlatform.isAarch64) {
     NIX_CFLAGS_COMPILE = toString [
       "-Wno-error=implicit-function-declaration"
       "-Wno-error=incompatible-pointer-types"
@@ -103,7 +109,14 @@ stdenv.mkDerivation rec {
     mainProgram = "julia";
     homepage = "https://julialang.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ nickcao joshniemela thomasjm ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      nickcao
+      joshniemela
+      thomasjm
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

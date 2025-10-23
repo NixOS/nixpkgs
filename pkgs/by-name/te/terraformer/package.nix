@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "terraformer";
-  version = "0.8.24";
+  version = "0.8.30";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
-    repo = pname;
+    repo = "terraformer";
     rev = version;
-    sha256 = "sha256-paBj2vaBicXHMEei2HPW+d4fXWf8VnVhvcanXmo/5KI=";
+    sha256 = "sha256-xbZm0FOa/W6/qXMnJHuGgJhgu2NWtKrMoP0Ttd+hhdw=";
   };
 
-  vendorHash = "sha256-Rh2ZGSfa95Yw8GGjsZjwmj0o4qKpygbPsLCbzUTOBxQ=";
+  vendorHash = "sha256-TsJ8r0be38680sCP8ot3NKhW9ZT03eHrF/1UpYQuDWo=";
 
   subPackages = [ "." ];
 
@@ -24,6 +24,6 @@ buildGoModule rec {
     mainProgram = "terraformer";
     homepage = "https://github.com/GoogleCloudPlatform/terraformer";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with maintainers; [ ryan4yin ];
   };
 }

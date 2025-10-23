@@ -21,12 +21,12 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  meta = with lib; {
+  meta = {
     description = "Help visualize profiling data from cProfile with kcachegrind and qcachegrind";
     mainProgram = "pyprof2calltree";
     homepage = "https://github.com/pwaller/pyprof2calltree";
-    changelog = "https://github.com/pwaller/pyprof2calltree/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ sfrijters ];
+    changelog = "https://github.com/pwaller/pyprof2calltree/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ sfrijters ];
   };
 }

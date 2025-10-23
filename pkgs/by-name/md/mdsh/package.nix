@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdsh";
-  version = "0.9.0";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "zimbatm";
     repo = "mdsh";
     rev = "v${version}";
-    hash = "sha256-vN8nFhbZgJIhFuFET9IOmdxT7uBKq/9X+TO9lZsDw6g=";
+    hash = "sha256-DQdm6911SNzVxUXpZ4mMumjonThhhEJnM/3GjbCjyuY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-kNe0WzW/9kcocRHR1FMKKIMnyZceqzShWQ9Cf7mAx0c=";
+  cargoHash = "sha256-JhrELBMGVtxJjyfPGcM6v8h1XJjdD+vOsYNfZ86Ras0=";
 
   meta = with lib; {
     description = "Markdown shell pre-processor";

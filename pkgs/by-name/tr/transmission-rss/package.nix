@@ -1,14 +1,12 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   openssl,
-  darwin,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   version = "0.3.1";
   pname = "transmission-rss";
 
@@ -21,19 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./update-cargo-lock-version.patch ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-ETbWV5OjRzQuq/rVyu22YRFjeQcuNA1REyzg46s3q5A=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [ openssl ];
 
   OPENSSL_NO_VENDOR = 1;
 

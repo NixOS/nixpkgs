@@ -10,7 +10,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "lightdm-mobile-greeter";
   version = "2022-10-30";
 
@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-SrAR2+An3BN/doFl/s8PcYZMUHLfVPXKZOo6ndO60nY=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-9beOnuyzr1vC511il3Yjy9OVcQ0ZP9RQ88eCzx3xLsA=";
 
   buildInputs = [

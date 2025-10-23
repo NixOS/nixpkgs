@@ -16,6 +16,7 @@
 
   # plugin deps, used indirectly by the @inputs when we `import ./builtin-plugins.nix`
   aacgain,
+  chromaprint,
   essentia-extractor,
   ffmpeg,
   flac,
@@ -82,21 +83,12 @@ python3Packages.buildPythonApplication {
   pyproject = true;
 
   patches = [
-    (fetchpatch {
-      # Already on master. TODO: remove when updating to the next release
-      # Issue: https://github.com/beetbox/beets/issues/5527
-      # PR: https://github.com/beetbox/beets/pull/5650
-      name = "fix-im-backend";
-      url = "https://github.com/beetbox/beets/commit/1f938674015ee71431fe9bd97c2214f58473efd2.patch";
-      hash = "sha256-koCYeiUhk1ifo6CptOSu3p7Nz0FFUeiuArTknM/tpVQ=";
-      excludes = [
-        "docs/changelog.rst"
-      ];
-    })
-  ] ++ extraPatches;
+  ]
+  ++ extraPatches;
 
   build-system = [
     python3Packages.poetry-core
+    python3Packages.poetry-dynamic-versioning
   ];
 
   dependencies =
@@ -111,7 +103,12 @@ python3Packages.buildPythonApplication {
       platformdirs
       pyyaml
       unidecode
+      # Can be built without it, but is useful on btrfs systems, and doesn't
+      # add too much to the closure. See:
+      # https://github.com/NixOS/nixpkgs/issues/437308
+      reflink
       typing-extensions
+      lap
     ]
     ++ (concatMap (p: p.propagatedBuildInputs) (attrValues enabledPlugins));
 
@@ -119,16 +116,18 @@ python3Packages.buildPythonApplication {
     gobject-introspection
     sphinxHook
     python3Packages.pydata-sphinx-theme
-  ] ++ extraNativeBuildInputs;
+    python3Packages.sphinx-design
+    python3Packages.sphinx-copybutton
+  ]
+  ++ extraNativeBuildInputs;
 
-  buildInputs =
-    [
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-    ]);
+  buildInputs = [
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+  ]);
 
   outputs = [
     "out"
@@ -139,6 +138,12 @@ python3Packages.buildPythonApplication {
     "html"
     "man"
   ];
+  # Causes an installManPage error. Not clear why this directory gets generated
+  # with the manpages. The same directory is observed correctly in
+  # $doc/share/doc/beets-${version}/html
+  preInstallSphinx = ''
+    rm -r .sphinx/man/man/_sphinx_design_static
+  '';
 
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
@@ -155,10 +160,12 @@ python3Packages.buildPythonApplication {
     with python3Packages;
     [
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
       mock
       rarfile
       responses
+      requests-mock
+      pillow
     ]
     ++ [
       writableTmpDirAsHomeHook
@@ -178,13 +185,30 @@ python3Packages.buildPythonApplication {
       # if not self._poll(timeout):
       #   raise Empty
       #   _queue.Empty
-      "test/plugins/test_player.py"
+      "test/plugins/test_bpd.py"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # fail on Hydra with `RuntimeError: image cannot be obtained without artresizer backend`
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_percent_margin"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_enforce_ratio_with_px_margin"
+      "test/plugins/test_art.py::AlbumArtOperationConfigurationTest::test_minwidth"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_deinterlaced_and_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_not_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_and_scaled"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_file_resized_but_not_scaled"
+      "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_resize"
     ];
   disabledTests = disabledTests ++ [
-    # beets.ui.UserError: unknown command 'autobpm'
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_import"
-    # AssertionError: assert 0 == 117
-    "test/plugins/test_autobpm.py::TestAutoBPMPlugin::test_command"
+    # https://github.com/beetbox/beets/issues/5880
+    "test_reject_different_art"
+    # touches network
+    "test_merge_duplicate_album"
+    # The existence of the dependency reflink (see comment above), causes this
+    # test to be run, and it fails in the sandbox.
+    "test_successful_reflink"
   ];
 
   # Perform extra "sanity checks", before running pytest tests.

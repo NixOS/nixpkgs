@@ -5,6 +5,7 @@
 
   # build-system
   poetry-core,
+  setuptools,
 
   # dependencies
   jsonref,
@@ -28,18 +29,19 @@
 
 buildPythonPackage rec {
   pname = "docling-core";
-  version = "2.21.1";
+  version = "2.49.0";
   pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "DS4SD";
+    owner = "docling-project";
     repo = "docling-core";
     tag = "v${version}";
-    hash = "sha256-I4aH1uASbi0GCQPFkrdrpLLVG/guT+vqXgJ2puzp9kU=";
+    hash = "sha256-c/uU5qeoCXNuMJwsG/Z2+M4N+M8j66fuiSr461on8Aw=";
   };
 
   build-system = [
     poetry-core
+    setuptools
   ];
 
   dependencies = [
@@ -59,7 +61,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "pillow"
-    "typer"
   ];
 
   pythonImportsCheck = [
@@ -82,6 +83,6 @@ buildPythonPackage rec {
     description = "Python library to define and validate data types in Docling";
     homepage = "https://github.com/DS4SD/docling-core";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

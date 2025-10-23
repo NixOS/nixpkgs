@@ -21,7 +21,7 @@ buildKodiAddon rec {
 
   src = fetchFromGitHub {
     owner = "jellyfin";
-    repo = pname;
+    repo = "jellycon";
     rev = "v${version}";
     sha256 = "sha256-dCPbPuUtiMhcECd3Aebs3ZGIM6jn6mmCd0rXS+1TQLs=";
   };
@@ -62,6 +62,6 @@ buildKodiAddon rec {
       easily switch between multiple user accounts at will.
     '';
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -10,13 +10,17 @@ let
     "nvidia"
     "panfrost"
     "panthor"
+    "v3d"
   ];
   # these GPU families are partially supported upstream, they are also tricky to build in nixpkgs
   # volunteers with specific hardware needed to build and test these package variants
-  additionalGPUFamilies = [ "ascend" ];
+  additionalGPUFamilies = [
+    "ascend"
+    "tpu"
+  ];
   defaultSupport = builtins.listToAttrs (
     # apple can only build on darwin, and it can't build everything else, and vice versa
-    builtins.map (gpu: {
+    map (gpu: {
       name = gpu;
       value =
         (gpu == "apple" && stdenv.buildPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform)
@@ -29,7 +33,7 @@ in
 }
 # additional packages with only one specific GPU family support
 // builtins.listToAttrs (
-  builtins.map (gpu: {
+  map (gpu: {
     name = gpu;
     value = (callPackage ./build-nvtop.nix { "${gpu}" = true; });
   }) defaultGPUFamilies

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "drafthorse";
-  version = "2025.1.0";
+  version = "2025.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pretix";
     repo = "python-drafthorse";
     rev = version;
-    hash = "sha256-v4yN2VHSA6pOXCSHscHIECeQchZkzH+/Hal4JwGXh74=";
+    hash = "sha256-z8w1n/rjrVpL+3MFoTaKCI7NZpchIg4H80rNlm0sFgQ=";
   };
 
   build-system = [ setuptools ];

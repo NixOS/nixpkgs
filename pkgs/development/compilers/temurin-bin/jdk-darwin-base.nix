@@ -19,7 +19,7 @@ let
   providedCpuTypes = builtins.filter (arch: builtins.elem arch validCpuTypes) (
     builtins.attrNames sourcePerArch
   );
-  result = stdenv.mkDerivation {
+  result = stdenv.mkDerivation (finalAttrs: {
     pname =
       if sourcePerArch.packageType == "jdk" then
         "${name-prefix}-bin"
@@ -40,16 +40,19 @@ let
     installPhase = ''
       cd ..
 
-      mv $sourceRoot $out
+      mkdir -p $out/Library/Java/JavaVirtualMachines
+
+      bundle=$out/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk
+      mv $sourceRoot $bundle
 
       # jni.h expects jni_md.h to be in the header search path.
-      ln -s $out/Contents/Home/include/darwin/*_md.h $out/Contents/Home/include/
+      ln -s $bundle/Contents/Home/include/darwin/*_md.h $bundle/Contents/Home/include/
 
       # Remove some broken manpages.
       # Only for 11 and earlier.
-      [ -e "$out/Contents/Home/man/ja" ] && rm -r $out/Contents/Home/man/ja
+      [ -e "$bundle/Contents/Home/man/ja" ] && rm -r $bundle/Contents/Home/man/ja
 
-      ln -s $out/Contents/Home/* $out/
+      ln -s $bundle/Contents/Home/* $out/
 
       # Propagate the setJavaClassPath setup hook from the JDK so that
       # any package that depends on the JDK has $CLASSPATH set up
@@ -65,22 +68,27 @@ let
 
     # FIXME: use multiple outputs or return actual JRE package
     passthru = {
-      jre = result;
-      home = result;
+      jre = finalAttrs.finalPackage;
+      home = finalAttrs.finalPackage;
+      bundle = "${finalAttrs.finalPackage}/Library/Java/JavaVirtualMachines/${name-prefix}-${lib.versions.major finalAttrs.version}.jdk";
     };
 
     meta = with lib; {
-      license = licenses.gpl2Classpath;
+      license = with licenses; [
+        gpl2
+        classpathException20
+      ];
       sourceProvenance = with sourceTypes; [
         binaryNativeCode
         binaryBytecode
       ];
       description = "${brand-name}, prebuilt OpenJDK binary";
-      platforms = builtins.map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
-      maintainers = with maintainers; [ taku0 ] ++ lib.teams.java.members;
+      platforms = map (arch: arch + "-darwin") providedCpuTypes; # some inherit jre.meta.platforms
+      maintainers = with maintainers; [ taku0 ];
+      teams = [ teams.java ];
       inherit knownVulnerabilities;
       mainProgram = "java";
     };
-  };
+  });
 in
 result

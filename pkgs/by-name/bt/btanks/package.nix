@@ -6,7 +6,9 @@
   fetchpatch,
   fetchurl,
   libGL,
+  libGLU,
   libvorbis,
+  libX11,
   lua,
   pkg-config,
   scons,
@@ -62,6 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
     expat
     libGL
+    libGLU
+    libX11
     libvorbis
     lua
     smpeg
@@ -79,7 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast 2d tank arcade game with multiplayer and split-screen modes";
     license = lib.licenses.gpl2Plus;
     mainProgram = "btanks";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL.meta) platforms;
   };
 })

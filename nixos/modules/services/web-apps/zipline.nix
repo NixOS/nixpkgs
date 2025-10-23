@@ -93,8 +93,8 @@ in
       wantedBy = [ "multi-user.target" ];
 
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.service";
-      requires = lib.optional cfg.database.createLocally "postgresql.service";
+      after = [ "network-online.target" ] ++ lib.optional cfg.database.createLocally "postgresql.target";
+      requires = lib.optional cfg.database.createLocally "postgresql.target";
 
       environment = lib.mapAttrs (_: value: toString value) cfg.settings;
 
@@ -107,9 +107,11 @@ in
         ExecStart = lib.getExe cfg.package;
 
         # Hardening
+        AmbientCapabilities = "";
         CapabilityBoundingSet = [ "" ];
-        DeviceAllow = [ "" ];
+        DevicePolicy = "closed";
         LockPersonality = true;
+        NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateTmp = true;
         PrivateUsers = true;
@@ -123,15 +125,19 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        RestrictAddressFamilies = [
-          "AF_INET"
-          "AF_INET6"
-          "AF_UNIX"
-        ];
+        RemoveIPC = true;
+        RestrictAddressFamilies = [ "AF_INET AF_INET6 AF_UNIX AF_NETLINK" ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+          "@chown"
+        ];
+        UMask = "0077";
       };
     };
   };

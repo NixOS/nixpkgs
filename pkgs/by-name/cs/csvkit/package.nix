@@ -1,24 +1,22 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchPypi,
 }:
 
-let
+python3Packages.buildPythonApplication rec {
   pname = "csvkit";
-  version = "2.0.1";
-  pythonEnv = python3;
-in
-pythonEnv.pkgs.buildPythonApplication {
-  inherit pname version;
+  version = "2.1.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-qpRgJm1XE/8xKkFO0+3Ybgw6MdqbLidYy+VkP+EUbdE=";
+    hash = "sha256-uR6PWkhYiMPFFbFcwlJc5L5c/NT0dm6tgxE+eHtf1TY=";
   };
 
-  propagatedBuildInputs = with pythonEnv.pkgs; [
+  build-system = with python3Packages; [ setuptools ];
+
+  dependencies = with python3Packages; [
     agate
     agate-excel
     agate-dbf
@@ -26,13 +24,9 @@ pythonEnv.pkgs.buildPythonApplication {
     setuptools # csvsql imports pkg_resources
   ];
 
-  nativeCheckInputs = with pythonEnv.pkgs; [
-    pytestCheckHook
-  ];
+  nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  pythonImportsCheck = [
-    "csvkit"
-  ];
+  pythonImportsCheck = [ "csvkit" ];
 
   disabledTests = [
     # Tries to compare CLI output - and fails!
@@ -44,6 +38,6 @@ pythonEnv.pkgs.buildPythonApplication {
     description = "Suite of command-line tools for converting to and working with CSV";
     changelog = "https://github.com/wireservice/csvkit/blob/${version}/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

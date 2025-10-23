@@ -9,9 +9,9 @@ body:
         <p align="center">
           <a href="https://nixos.org">
             <picture>
-              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png">
-              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.png">
-              <img src="https://raw.githubusercontent.com/NixOS/nixos-homepage/main/public/logo/nixos-hires.png" width="400px" alt="NixOS logo">
+              <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg">
+              <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos-white.svg">
+              <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/refs/heads/master/logo/nixos.svg" width="400px" alt="NixOS logo">
             </picture>
           </a>
         </p>
@@ -20,7 +20,9 @@ body:
 
         > [!TIP]
         > For instance, if you were filing a bug against the [`systemd-boot`](https://search.nixos.org/options?channel=unstable&show=boot.loader.systemd-boot.enable&from=0&size=1) module about it failing to install [`memtest86`](https://search.nixos.org/options?channel=unstable&show=boot.loader.systemd-boot.memtest86.enable&from=0&size=1), your title would be as follows:
-        > `nixos/systemd-boot: fails to install memtest86`
+        > ```
+        > nixos/systemd-boot: fails to install memtest86
+        > ```
 
         ---
   - type: "dropdown"
@@ -30,13 +32,11 @@ body:
       description: |
         What version of Nixpkgs are you using?
 
-        > [!IMPORTANT]
-        > If you are using an older version, please [update to the latest stable version](https://nixos.org/download) and check if the issue persists before continuing this bug report.
+        If you are using an older version, please update to the latest stable version and check if the issue persists before continuing this bug report.
       options:
         - "Please select a version."
-        - "- Unstable (25.05)"
-        - "- Stable (24.11)"
-        - "- Previous Stable (24.05)"
+        - "- Unstable (25.11)"
+        - "- Stable (25.05)"
       default: 0
     validations:
       required: true
@@ -103,8 +103,9 @@ body:
 
         Please note that the maintainer attribute name does not always match the maintainer's GitHub username. If that occurs, try looking in [`maintainers/maintainer-list.nix`](https://github.com/NixOS/nixpkgs/blob/master/maintainers/maintainer-list.nix) for the maintainer attribute name, and checking if the maintainer has a listed GitHub username.
 
-        If in doubt, check `git blame` for whoever last touched the module, or check the associated package's maintainers. Please add the mentions above the `---` characters.
-      value: |
+        If in doubt, check the associated package's maintainers. Please add the mentions above the `---` characters.
+      value: |2
+
 
         ---
 

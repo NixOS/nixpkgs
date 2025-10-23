@@ -19,7 +19,7 @@
   check,
   buildPackages,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "kmscon";
   version = "9.0.0-unstable-2025-01-09";
 
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
     mainProgram = "kmscon";
     homepage = "https://www.freedesktop.org/wiki/Software/kmscon/";
     license = licenses.mit;
-    maintainers = with maintainers; [ omasanori ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

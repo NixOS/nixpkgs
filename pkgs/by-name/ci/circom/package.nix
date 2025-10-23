@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "circom";
-  version = "2.2.1";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "iden3";
     repo = "circom";
     rev = "v${version}";
-    hash = "sha256-Vwu2DAWIqzqgo6oXcQxvhn7ssGojQkRRw9sKk7qjREk=";
+    hash = "sha256-BSInX4owuamRWnlKL1yJJOyzRIiE55TIzCk2TdX7aOQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-64mKd3M5EpqWASTPz7cqNbDyh4be7xR4fudjcx029u8=";
+  cargoHash = "sha256-dkgLp6BKuublS97iRXYzbT4ztbWBD5IDMz9rDY9XgcA=";
   doCheck = false;
 
   meta = with lib; {

@@ -53,13 +53,7 @@
   # Tk
   # Darwin has its own "MacOSX" backend, PyPy has tkagg backend and does not support tkinter
   enableTk ? (!stdenv.hostPlatform.isDarwin && !isPyPy),
-  tcl,
-  tk,
   tkinter,
-
-  # Ghostscript
-  enableGhostscript ? true,
-  ghostscript,
 
   # Qt
   enableQt ? false,
@@ -72,9 +66,6 @@
   # nbagg
   enableNbagg ? false,
   ipykernel,
-
-  # darwin
-  Cocoa,
 
   # required for headless detection
   libX11,
@@ -89,7 +80,7 @@ let
 in
 
 buildPythonPackage rec {
-  version = "3.10.0";
+  version = "3.10.5";
   pname = "matplotlib";
   pyproject = true;
 
@@ -97,7 +88,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-uIbQKlgblnBMnR/+VXCeSbTS1ScJzOvEvkLbhW5REng=";
+    hash = "sha256-NS7WzPt5mKAIgWkvOLTKCDxpHT4nW0FFQjcEw0yQkHY=";
   };
 
   env.XDG_RUNTIME_DIR = "/tmp";
@@ -108,39 +99,30 @@ buildPythonPackage rec {
   # installed under the same path which is not true in Nix.
   # With the following patch we just hard-code these paths into the install
   # script.
-  postPatch =
-    ''
-      substituteInPlace pyproject.toml \
-        --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "meson-python>=0.13.1,<0.17.0" meson-python
 
-      patchShebangs tools
-    ''
-    + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
-      # fix paths to libraries in dlopen calls (headless detection)
-      substituteInPlace src/_c_internal_utils.cpp \
-        --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
-        --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
-    '';
+    patchShebangs tools
+  ''
+  + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''
+    # fix paths to libraries in dlopen calls (headless detection)
+    substituteInPlace src/_c_internal_utils.cpp \
+      --replace-fail libX11.so.6 ${libX11}/lib/libX11.so.6 \
+      --replace-fail libwayland-client.so.0 ${wayland}/lib/libwayland-client.so.0
+  '';
 
   nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableGtk3 [ gobject-introspection ];
 
-  buildInputs =
-    [
-      ffmpeg-headless
-      freetype
-      qhull
-    ]
-    ++ lib.optionals enableGhostscript [ ghostscript ]
-    ++ lib.optionals enableGtk3 [
-      cairo
-      gtk3
-    ]
-    ++ lib.optionals enableTk [
-      libX11
-      tcl
-      tk
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [
+    ffmpeg-headless
+    freetype
+    qhull
+  ]
+  ++ lib.optionals enableGtk3 [
+    cairo
+    gtk3
+  ];
 
   # clang-11: error: argument unused during compilation: '-fno-strict-overflow' [-Werror,-Wunused-command-line-argument]
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
@@ -153,28 +135,27 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies =
-    [
-      # explicit
-      contourpy
-      cycler
-      fonttools
-      kiwisolver
-      numpy
-      packaging
-      pillow
-      pyparsing
-      python-dateutil
-    ]
-    ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
-    ++ lib.optionals enableGtk3 [
-      pycairo
-      pygobject3
-    ]
-    ++ lib.optionals enableQt [ pyqt5 ]
-    ++ lib.optionals enableWebagg [ tornado ]
-    ++ lib.optionals enableNbagg [ ipykernel ]
-    ++ lib.optionals enableTk [ tkinter ];
+  dependencies = [
+    # explicit
+    contourpy
+    cycler
+    fonttools
+    kiwisolver
+    numpy
+    packaging
+    pillow
+    pyparsing
+    python-dateutil
+  ]
+  ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
+  ++ lib.optionals enableGtk3 [
+    pycairo
+    pygobject3
+  ]
+  ++ lib.optionals enableQt [ pyqt5 ]
+  ++ lib.optionals enableWebagg [ tornado ]
+  ++ lib.optionals enableNbagg [ ipykernel ]
+  ++ lib.optionals enableTk [ tkinter ];
 
   mesonFlags = lib.mapAttrsToList lib.mesonBool {
     system-freetype = true;
@@ -192,8 +173,8 @@ buildPythonPackage rec {
       doCheck = true;
       freetype = freetype.overrideAttrs (_: {
         src = fetchurl {
-          url = "https://download.savannah.gnu.org/releases/freetype/freetype-old/freetype-2.6.1.tar.gz";
-          sha256 = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
+          url = "mirror://savannah/freetype/freetype-old/freetype-2.6.1.tar.gz";
+          hash = "sha256-Cjx9+9ptoej84pIy6OltmHq6u79x68jHVlnkEyw2cBQ=";
         };
         patches = [ ];
       });

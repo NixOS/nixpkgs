@@ -27,6 +27,19 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [
+    # Workaround for upstream not using GNUInstallDirs.
+    "-DINCLUDE_INSTALL_DIR=${placeholder "dev"}/include"
+  ];
+
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required (VERSION 3.1 FATAL_ERROR)' \
+        'cmake_minimum_required (VERSION 3.10 FATAL_ERROR)'
+  '';
+
   meta = with lib; {
     description = "Audio resampling library";
     homepage = "https://soxr.sourceforge.net";

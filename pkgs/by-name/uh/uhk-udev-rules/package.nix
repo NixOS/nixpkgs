@@ -2,11 +2,18 @@
   lib,
   stdenv,
   uhk-agent,
+  udevCheckHook,
 }:
 
 stdenv.mkDerivation {
   pname = "uhk-udev-rules";
   inherit (uhk-agent) version;
+
+  nativeBuildInputs = [
+    udevCheckHook
+  ];
+
+  doInstallCheck = true;
 
   dontUnpack = true;
   dontBuild = true;

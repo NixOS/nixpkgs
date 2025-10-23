@@ -5,7 +5,7 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pokemon-colorscripts-mac";
   version = "stable-2021-08-10";
 

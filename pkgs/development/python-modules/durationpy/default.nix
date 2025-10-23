@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  pytestFlagsArray = [ "test.py" ];
+  enabledTestPaths = [ "test.py" ];
 
   pythonImportsCheck = [ "durationpy" ];
 
@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "Module for converting between datetime.timedelta and Go's time.Duration strings";
     homepage = "https://github.com/icholy/durationpy";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

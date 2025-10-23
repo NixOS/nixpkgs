@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "dipc";
   version = "1.0.0";
 
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-RXEC8bwdnUOaDmYIb7ci/JD+vi16tBn55FRsUmwaRzk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1vjVuAawuquPqem1as6xIv/ZJCzjgC4k0uyPSlrvpeg=";
 
   meta = with lib; {

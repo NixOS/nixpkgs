@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "mayim";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
     tag = "v${version}";
-    hash = "sha256-nb0E9kMEJUihaCp8RnqGh0nSyDQo50eL1C4K5lBPlPQ=";
+    hash = "sha256-azAx/+y1wrUsacCmQ1SCSkn4svf6GzSfhEW3WJwjoks=";
   };
 
   build-system = [
@@ -39,17 +39,16 @@ buildPythonPackage rec {
     sqlite = [ aiosqlite ];
   };
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-asyncio
-      pytest-cov-stub
-    ]
-    ++ (with optional-dependencies; [
-      postgres
-      mysql
-      sqlite
-    ]);
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-asyncio
+    pytest-cov-stub
+  ]
+  ++ (with optional-dependencies; [
+    postgres
+    mysql
+    sqlite
+  ]);
 
   pythonImportsCheck = [ "mayim" ];
 

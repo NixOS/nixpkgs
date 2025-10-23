@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     cp -r node_modules $out/node_modules
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/cjdelisle/cjdns";
     description = "Tools for cjdns managment";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     mainProgram = "cjdns-tools";
   };
 }

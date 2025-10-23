@@ -7,14 +7,18 @@
 
 buildGoModule rec {
   pname = "docker-color-output";
-  version = "2.5.1";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "devemio";
     repo = "docker-color-output";
     tag = version;
-    hash = "sha256-rnCZ+6t6iOiLBynp1EPshO+/otAdtu8yy1FqFkYB07w=";
+    hash = "sha256-r11HNRXnmTC1CJR871sX7xW9ts9KAu1+azwIwXH09qg=";
   };
+
+  postInstall = ''
+    mv $out/bin/cli $out/bin/docker-color-output
+  '';
 
   vendorHash = null;
 

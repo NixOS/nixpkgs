@@ -5,17 +5,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lls";
-  version = "0.3.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "jcaesar";
     repo = "lls";
-    rev = "v${version}";
-    hash = "sha256-f2f09ptMBZfBY1jjOEc8ElAoEj4LKXXSdXLlYLf8Z3M=";
+    tag = "v${version}";
+    hash = "sha256-eFGyrGtH57a5iRWHWqt1h58QMdmPf2rPqHnuVj5u6PQ=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Hc6roJJ5xbqdCAsZIf0V2Z8KPm+t7AQ5Q9It1ynWqhw=";
+  cargoHash = "sha256-TY7s0sIeW+FgxqbbYvK3uZ2RwPLVKKhLq3DOurer+Gc=";
 
   meta = with lib; {
     description = "Tool to list listening sockets";

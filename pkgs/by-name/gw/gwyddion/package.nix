@@ -34,10 +34,10 @@
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-  version = "2.67";
+  version = "2.69";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
-    sha256 = "sha256-kK6vTeADc2lrC+9KgqxFtih62ce3rKYkkGjU0qT8jWE=";
+    sha256 = "sha256-WX62tR7ldaB/NQzAVzvHTQBaNJDZgyrRNqNp5w0w76Y=";
   };
 
   nativeBuildInputs = [
@@ -45,25 +45,24 @@ stdenv.mkDerivation rec {
     file
   ];
 
-  buildInputs =
-    [
-      gtk2
-      fftw
-    ]
-    ++ lib.optionals openglSupport [
-      gnome2.gtkglext
-      libGL
-    ]
-    ++ lib.optional openexrSupport openexr
-    ++ lib.optional libXmuSupport xorg.libXmu
-    ++ lib.optional fitsSupport cfitsio
-    ++ lib.optional libpngSupport libpng
-    ++ lib.optional libxsltSupport libxslt
-    ++ lib.optional libxml2Support libxml2
-    ++ lib.optional libwebpSupport libwebp
-    ++ lib.optional zlibSupport zlib
-    ++ lib.optional libuniqueSupport libunique
-    ++ lib.optional libzipSupport libzip;
+  buildInputs = [
+    gtk2
+    fftw
+  ]
+  ++ lib.optionals openglSupport [
+    gnome2.gtkglext
+    libGL
+  ]
+  ++ lib.optional openexrSupport openexr
+  ++ lib.optional libXmuSupport xorg.libXmu
+  ++ lib.optional fitsSupport cfitsio
+  ++ lib.optional libpngSupport libpng
+  ++ lib.optional libxsltSupport libxslt
+  ++ lib.optional libxml2Support libxml2
+  ++ lib.optional libwebpSupport libwebp
+  ++ lib.optional zlibSupport zlib
+  ++ lib.optional libuniqueSupport libunique
+  ++ lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if

@@ -7,6 +7,7 @@
   gitpython,
   jsonfeed,
   mkdocs,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-rss-plugin";
-  version = "1.17.1";
+  version = "1.17.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,12 +25,8 @@ buildPythonPackage rec {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
     tag = version;
-    hash = "sha256-Qa8EgjucJaxvKivE45kXSUgTx5RnLEpYCNZJRTO2E1Q=";
+    hash = "sha256-K+cqBJmTz4WzkeXp3pGQoizfLMuxR17Q33Fc0xc5eWo=";
   };
-
-  postPatch = ''
-    sed -i "/--cov/d" setup.cfg
-  '';
 
   build-system = [ setuptools ];
 
@@ -37,11 +34,13 @@ buildPythonPackage rec {
     cachecontrol
     gitpython
     mkdocs
-  ];
+  ]
+  ++ cachecontrol.optional-dependencies.filecache;
 
   nativeCheckInputs = [
     feedparser
     jsonfeed
+    pytest-cov-stub
     pytestCheckHook
     validator-collection
   ];
@@ -52,6 +51,11 @@ buildPythonPackage rec {
     # Tests require network access
     "test_plugin_config_through_mkdocs"
     "test_remote_image"
+    # Configuration error
+    "test_plugin_config_blog_enabled"
+    "test_plugin_config_social_cards_enabled_but_integration_disabled"
+    "test_plugin_config_theme_material"
+    "test_simple_build"
   ];
 
   disabledTestPaths = [

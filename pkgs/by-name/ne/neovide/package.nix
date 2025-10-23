@@ -24,19 +24,18 @@
   wayland,
 }:
 
-rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
+rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } (finalAttrs: {
   pname = "neovide";
-  version = "0.14.1";
+  version = "0.15.2";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
-    tag = version;
-    hash = "sha256-tXKTKE2JrDDJDpnipCv1hk7vS/0i7nrjzqMoMAy53qM=";
+    tag = finalAttrs.version;
+    hash = "sha256-NJ4BuJLABIuB7We11QGoKZ3fgjDBdZDyZuBKq6LIWA8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-RKgpgM6quN0plYYE8fien5tUtHlN0YG0VTp5BGuzzuo=";
+  cargoHash = "sha256-DD2c63JHMdzwD1OmC7c9dMB59qjvdAYZ9drQf3f8xCs=";
 
   SKIA_SOURCE_DIR =
     let
@@ -44,8 +43,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        tag = "m132-0.81.0";
-        hash = "sha256-9DQgCaCiK0zgsl0wARPEiGjyXxmNLRSYaHf3690KuCM=";
+        tag = "m140-0.87.4";
+        hash = "sha256-pHxqTrqguZcPmuZgv0ASbJ3dgn8JAyHI7+PdBX5gAZQ=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (
@@ -64,16 +63,15 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   SKIA_GN_COMMAND = "${gn}/bin/gn";
   SKIA_NINJA_COMMAND = "${ninja}/bin/ninja";
 
-  nativeBuildInputs =
-    [
-      makeWrapper
-      pkg-config
-      python3 # skia
-      removeReferencesTo
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      cctools.libtool
-    ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    python3 # skia
+    removeReferencesTo
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    cctools.libtool
+  ];
 
   nativeCheckInputs = [ neovim ];
 
@@ -89,6 +87,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         [
           libglvnd
           libxkbcommon
+          xorg.libX11
           xorg.libXcursor
           xorg.libXext
           xorg.libXrandr
@@ -121,15 +120,17 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
       install -m444 -Dt $out/share/applications assets/neovide.desktop
     '';
 
-  disallowedReferences = [ SKIA_SOURCE_DIR ];
+  disallowedReferences = [ finalAttrs.SKIA_SOURCE_DIR ];
 
   meta = {
-    description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
+    description = "Simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
     homepage = "https://neovide.dev/";
-    changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
-    license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ ck3d ];
+    changelog = "https://github.com/neovide/neovide/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      ck3d
+    ];
     platforms = lib.platforms.unix;
   };
-}
+})

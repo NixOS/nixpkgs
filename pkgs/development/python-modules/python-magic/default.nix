@@ -44,6 +44,10 @@ buildPythonPackage rec {
     export LC_ALL=en_US.UTF-8
   '';
 
+  postCheck = ''
+    unset LC_ALL
+  '';
+
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {

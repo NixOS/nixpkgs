@@ -1,0 +1,17 @@
+name: Review dismissed
+
+on:
+  pull_request_review:
+    types: [dismissed]
+
+permissions: {}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  trigger:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - run: echo This is a no-op only used as a trigger for workflow_run.

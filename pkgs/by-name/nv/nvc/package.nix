@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.15.2";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
-    rev = "r${version}";
-    hash = "sha256-GMgGnsEKItVgQLwk6gY8pU6lIGoGGWPGhkBJwmVRy+Q=";
+    tag = "r${version}";
+    hash = "sha256-mf6CMUdpIk8O+soKXpbI94h8RUf1MrbOVDwBIJyKitA=";
   };
 
   nativeBuildInputs = [
@@ -33,16 +33,15 @@ stdenv.mkDerivation rec {
     which
   ];
 
-  buildInputs =
-    [
-      libffi
-      llvm
-      zlib
-      zstd
-    ]
-    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-      elfutils
-    ];
+  buildInputs = [
+    libffi
+    llvm
+    zlib
+    zstd
+  ]
+  ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+    elfutils
+  ];
 
   preConfigure = ''
     mkdir build

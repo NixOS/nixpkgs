@@ -12,11 +12,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "opensearch";
-  version = "2.19.0";
+  version = "2.19.2";
 
   src = fetchurl {
     url = "https://artifacts.opensearch.org/releases/bundle/opensearch/${finalAttrs.version}/opensearch-${finalAttrs.version}-linux-x64.tar.gz";
-    hash = "sha256-RVuQAYLvKnGT1EPZaq6lX1NOwPkbG61tLqzbrqYB8W4=";
+    hash = "sha256-EaOx8vs3y00ln7rUiaCGoD+HhiQY4bhQAzu18VfaTYw=";
   };
 
   nativeBuildInputs = [
@@ -61,7 +61,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Open Source, Distributed, RESTful Search Engine";
     homepage = "https://github.com/opensearch-project/OpenSearch";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ shyim ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [
       binaryBytecode

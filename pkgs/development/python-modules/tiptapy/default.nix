@@ -7,7 +7,7 @@
   pytestCheckHook,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tiptapy";
   # github repository does not have version tags
   version = "0.20.0-unstable-2024-06-14";
@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/stckme/tiptapy";
     changelog = "https://github.com/stckme/tiptapy/blob/master/CHANGELOG.rst";
     license = lib.licenses.mit;
-    maintainers = lib.teams.apm.members;
+    teams = [ lib.teams.apm ];
   };
 }

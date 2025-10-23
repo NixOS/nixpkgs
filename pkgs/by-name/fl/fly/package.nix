@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "fly";
-  version = "7.12.1";
+  version = "7.14.2";
 
   src = fetchFromGitHub {
     owner = "concourse";
     repo = "concourse";
     rev = "v${version}";
-    hash = "sha256-3RsFtU2C3XxBddyW5liAwia9I7Fc8f2+TsziiJy6rHg=";
+    hash = "sha256-lm4l+9hYOFKt12KaOs/5R4zymya82Tb4q1k3leyG2UA=";
   };
 
-  vendorHash = "sha256-up77TV/A/C39LjgQ+1uQExWfMlbruLhY3H6820cRnt0=";
+  vendorHash = "sha256-2busKAFaQYE82XKCAx8BGOMjjs8WzqIxdpz+J45maoc=";
 
   subPackages = [ "fly" ];
 

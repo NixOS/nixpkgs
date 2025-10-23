@@ -9,15 +9,15 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.3.27";
+  version = "0.3.31";
   format = "setuptools";
   pname = "pyaxmlparser";
 
   src = fetchFromGitHub {
     owner = "appknox";
-    repo = pname;
+    repo = "pyaxmlparser";
     rev = "v${version}";
-    hash = "sha256-NtAsO/I1jDEv676yhAgLguQnB/kHdAqPoLt2QFWbvmw=";
+    hash = "sha256-ZV2PyWQfK9xidzGUz7XPAReaVjlB8tMUKQiXoGcFCGs=";
   };
 
   propagatedBuildInputs = [

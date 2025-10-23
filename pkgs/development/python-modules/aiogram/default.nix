@@ -8,6 +8,7 @@
   babel,
   buildPythonPackage,
   certifi,
+  cryptography,
   fetchFromGitHub,
   gitUpdater,
   hatchling,
@@ -28,7 +29,7 @@
 
 buildPythonPackage rec {
   pname = "aiogram";
-  version = "3.18.0";
+  version = "3.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -37,7 +38,7 @@ buildPythonPackage rec {
     owner = "aiogram";
     repo = "aiogram";
     tag = "v${version}";
-    hash = "sha256-3JyMkLixemKZN9XSpN/4SdpdYfR3WqGUKQ9Bfy6bB+Q=";
+    hash = "sha256-4LZ4+bt9n0q8WMaMEaAAIFnEuDUSd+Aq+YW49Xbcp5c=";
   };
 
   build-system = [ hatchling ];
@@ -64,6 +65,7 @@ buildPythonPackage rec {
     redis = [ redis ];
     proxy = [ aiohttp-socks ];
     i18n = [ babel ];
+    signature = [ cryptography ];
   };
 
   nativeCheckInputs = [
@@ -74,20 +76,15 @@ buildPythonPackage rec {
     pytest-lazy-fixture
     pytestCheckHook
     pytz
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  pytestFlagsArray = [
-    "-W"
-    "ignore::pluggy.PluggyTeardownRaisedWarning"
-    "-W"
-    "ignore::pytest.PytestDeprecationWarning"
-    "-W"
-    "ignore::DeprecationWarning"
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aiogram" ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+    ignoredVersions = "4.1";
+  };
 
   __darwinAllowLocalNetworking = true;
 

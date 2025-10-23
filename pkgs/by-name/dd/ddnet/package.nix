@@ -32,18 +32,17 @@
 
 stdenv.mkDerivation rec {
   pname = "ddnet";
-  version = "19.0";
+  version = "19.5";
 
   src = fetchFromGitHub {
     owner = "ddnet";
     repo = "ddnet";
     tag = version;
-    hash = "sha256-R9LXcYM96fibHzpXDWIOSASKIbh+GeiGyz7xVvV2v1Q=";
+    hash = "sha256-L9n6jvI9rzrBp8yzKQPZRBSbT5/ZnEm6eLW6qMA+sy0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    name = "${pname}-${version}";
-    inherit src;
+    inherit pname version src;
     hash = "sha256-VKGc4LQjt2FHbELLBKtV8rKpxjGBrzlA3m9BSdZ/6Z0=";
   };
 
@@ -60,33 +59,32 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  buildInputs =
+  buildInputs = [
+    curl
+    libnotify
+    pcre
+    python3
+    sqlite
+  ]
+  ++ lib.optionals buildClient (
     [
-      curl
-      libnotify
-      pcre
-      python3
-      sqlite
+      freetype
+      libGLU
+      libogg
+      opusfile
+      SDL2
+      wavpack
+      ffmpeg
+      x264
+      vulkan-loader
+      vulkan-headers
+      glslang
+      spirv-tools
     ]
-    ++ lib.optionals buildClient (
-      [
-        freetype
-        libGLU
-        libogg
-        opusfile
-        SDL2
-        wavpack
-        ffmpeg
-        x264
-        vulkan-loader
-        vulkan-headers
-        glslang
-        spirv-tools
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isLinux [
-        libX11
-      ]
-    );
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+    ]
+  );
 
   postPatch = ''
     substituteInPlace src/engine/shared/storage.cpp \
@@ -111,7 +109,7 @@ stdenv.mkDerivation rec {
     rm -rf $out/share/metainfo
   '';
 
-  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preFixup = lib.optionalString (stdenv.hostPlatform.isDarwin && buildClient) ''
     # Upstream links against <prefix>/lib while it installs this library in <prefix>/lib/ddnet
     install_name_tool -change "$out/lib/libsteam_api.dylib" "$out/lib/ddnet/libsteam_api.dylib" "$out/bin/DDNet"
   '';
@@ -137,6 +135,6 @@ stdenv.mkDerivation rec {
       Scrumplex
       sirseruju
     ];
-    mainProgram = "DDNet";
+    mainProgram = "DDNet${lib.optionalString (!buildClient) "-Server"}";
   };
 }

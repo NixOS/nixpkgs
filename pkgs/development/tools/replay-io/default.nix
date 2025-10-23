@@ -21,7 +21,7 @@ let
   metadata = lib.importJSON ./meta.json;
 in
 rec {
-  replay-recordreplay = stdenv.mkDerivation rec {
+  replay-recordreplay = stdenv.mkDerivation {
     pname = "replay-recordreplay";
     version = builtins.head (builtins.match ".*/linux-recordreplay-(.*).tgz" metadata.recordreplay.url);
     nativeBuildInputs = [ autoPatchelfHook ];
@@ -50,7 +50,7 @@ rec {
     };
   };
 
-  replay-io = stdenv.mkDerivation rec {
+  replay-io = stdenv.mkDerivation {
     pname = "replay-io";
     version = builtins.head (builtins.match ".*/linux-gecko-(.*).tar.bz2" metadata.replay.url);
     srcs = fetchurl metadata.replay;
@@ -96,7 +96,7 @@ rec {
     };
   };
 
-  replay-node = stdenv.mkDerivation rec {
+  replay-node = stdenv.mkDerivation {
     pname = "replay-node";
     version = builtins.head (builtins.match ".*/linux-node-(.*)" metadata.replay-node.url);
     nativeBuildInputs = [

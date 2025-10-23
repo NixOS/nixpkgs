@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   which,
+  dash,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-GfvOkYLo8fgAvGuUa59hDy+sWJSwyntwqMO8TAK/lUo=";
   };
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [
+    which
+    dash
+  ];
+
+  # Tests fail with bash, replacing with dash seems to work around it
+  # FIXME: Why?
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace-fail 'sh tests/run' 'dash tests/run'
+  '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

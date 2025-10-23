@@ -16,13 +16,13 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.07")
   stdenv.mkDerivation
   rec {
     pname = "ocaml${ocaml.version}-lem";
-    version = "2022-12-10";
+    version = "2025-03-13";
 
     src = fetchFromGitHub {
       owner = "rems-project";
       repo = "lem";
       rev = version;
-      hash = "sha256-ZQgcuIVRkJS0KtpzjbO4OPHGg6B0TadWA6XpRir30y8=";
+      hash = "sha256-ZV2OiFonMlNzqtsumMQ8jzY9/ATaZxiNHZ7JzOfGluY=";
     };
 
     nativeBuildInputs = [

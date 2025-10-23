@@ -7,20 +7,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "hatsu";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
     tag = "v${version}";
-    hash = "sha256-lIuaG7xfBQ1r3SkgSsXj1Ph9apxwP3oI42uunMh+ijU=";
+    hash = "sha256-mqs26srbEkGeQzeF4OdqI7o18Ajs+mmAXGLlVfS52sk=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-gja8bVsnumJ0R3sN1WBV6WXAWjO9v/K+uBpNO1cTgRs=";
+  cargoHash = "sha256-5c6boVdq0XXbtVHqmIGoxJGQRh8lvn2jbmALPuOSMs4=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

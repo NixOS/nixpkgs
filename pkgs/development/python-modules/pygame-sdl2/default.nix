@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  cython_0,
+  cython,
   fetchFromGitHub,
   lib,
   libjpeg,
@@ -15,18 +15,18 @@
 
 buildPythonPackage rec {
   pname = "pygame-sdl2";
-  version = "8.3.1.24090601";
+  version = "8.4.0.25071206";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "renpy";
     repo = "pygame_sdl2";
     tag = "renpy-${version}";
-    hash = "sha256-0itOmDScM+4HmWTpjkln56pv+yXDPB1KIDbE6ub2Tls=";
+    hash = "sha256-I4zk19aNfVZstkVDLkwI/TBXliGAqVmOjeQLbRFri8Y=";
   };
 
   build-system = [
-    cython_0
+    cython
     SDL2
     setuptools
   ];
@@ -42,11 +42,20 @@ buildPythonPackage rec {
 
   doCheck = true;
 
-  preBuild = ''
-    substituteInPlace setup.py --replace-fail "2.1.0" "${version}"
-    substituteInPlace src/pygame_sdl2/version.py --replace-fail "2, 1, 0" "${
+  postUnpack = ''
+    substituteInPlace source/setup.py --replace-fail "2.1.0" "${version}"
+    substituteInPlace source/src/pygame_sdl2/version.py --replace-fail "2, 1, 0" "${
       builtins.replaceStrings [ "." ] [ ", " ] version
     }"
+
+    headers=$(mktemp -d)
+    substituteInPlace source/setup.py --replace-fail \
+      "pathlib.Path(sysconfig.get_paths()['include']) / \"pygame_sdl2\"" \
+      "pathlib.Path(\"$headers\")"
+  '';
+
+  postInstall = ''
+    install -Dm644 $headers/* -t $out/include/pygame_sdl2
   '';
 
   passthru.updateScript = nix-update-script { extraArgs = [ "--version-regex=renpy-(.*)" ]; };

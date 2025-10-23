@@ -10,11 +10,12 @@
   pytestCheckHook,
   pythonOlder,
   std-uritemplate,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
   pname = "microsoft-kiota-abstractions";
-  version = "1.9.2";
+  version = "1.9.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,11 +23,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-python";
-    tag = "microsoft-kiota-serialization-text-v${version}";
-    hash = "sha256-ribVfvKmDMxGmeqj30SDcnbNGdRBfs1DmqQGXP3EHCk=";
+    tag = "microsoft-kiota-abstractions-v${version}";
+    hash = "sha256-ovmGka0YxhjPQYodHAMpcrqLMpXEqSTeky3n/rC7Ohs=";
   };
 
-  sourceRoot = "source/packages/abstractions/";
+  sourceRoot = "${src.name}/packages/abstractions/";
 
   build-system = [ poetry-core ];
 
@@ -52,10 +53,14 @@ buildPythonPackage rec {
   # detects the wrong tag on the repo
   passthru.skipBulkUpdate = true;
 
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "microsoft-kiota-abstractions-v";
+  };
+
   meta = with lib; {
     description = "Abstractions library for Kiota generated Python clients";
     homepage = "https://github.com/microsoft/kiota-python/tree/main/packages/abstractions/";
-    changelog = "https://github.com/microsoft/kiota-python/releases/tag/microsoft-kiota-abstractions-${src.tag}";
+    changelog = "https://github.com/microsoft/kiota-python/releases/tag/${src.tag}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,24 +1,23 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
+  groonga,
+  lib,
+  msgpack-c,
   pkg-config,
   postgresql,
-  msgpack-c,
-  groonga,
-  buildPostgresqlExtension,
+  postgresqlBuildExtension,
   xxHash,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "pgroonga";
-  version = "4.0.1";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "pgroonga";
     repo = "pgroonga";
-    rev = "${version}";
-    hash = "sha256-a5nNtlUiFBuuqWAjIN0gU/FaoV3VpJh+/fab8R/77dw=";
+    tag = "${finalAttrs.version}";
+    hash = "sha256-SXQH+L7FKhu+2+9QyQTNi+3nFYtkE7WXv2A5LdvjG2w=";
   };
 
   nativeBuildInputs = [ pkg-config ];
@@ -34,7 +33,7 @@ buildPostgresqlExtension rec {
     "MSGPACK_PACKAGE_NAME=msgpack-c"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL extension to use Groonga as the index";
     longDescription = ''
       PGroonga is a PostgreSQL extension to use Groonga as the index.
@@ -43,9 +42,9 @@ buildPostgresqlExtension rec {
       You can use super fast full text search feature against all languages by installing PGroonga into your PostgreSQL.
     '';
     homepage = "https://pgroonga.github.io/";
-    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${version}";
-    license = licenses.postgresql;
+    changelog = "https://github.com/pgroonga/pgroonga/releases/tag/${finalAttrs.version}";
+    license = lib.licenses.postgresql;
     platforms = postgresql.meta.platforms;
-    maintainers = with maintainers; [ DerTim1 ];
+    maintainers = with lib.maintainers; [ DerTim1 ];
   };
-}
+})

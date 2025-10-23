@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.3";
+  version = "1.3.0";
   pname = "nginx-config-formatter";
 
   src = fetchFromGitHub {
     owner = "slomkowski";
     repo = "nginx-config-formatter";
     rev = "v${version}";
-    sha256 = "sha256-nYaBdVsq7aLE9P1bQlJlQkrk/cq7C1hxM5XtCGyEzC0=";
+    sha256 = "sha256-0jXm82a4bYpbOJnz+y7+dSg1LZy1Mu28IgBxd24Y5ck=";
   };
 
   buildInputs = [ python3 ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "nginx config file formatter";
+    description = "Nginx config file formatter";
     maintainers = with maintainers; [ Baughn ];
     license = licenses.asl20;
     homepage = "https://github.com/slomkowski/nginx-config-formatter";

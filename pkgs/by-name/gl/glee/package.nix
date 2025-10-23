@@ -27,6 +27,12 @@ stdenv.mkDerivation rec {
     xorg.libX11
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.8)' \
+      'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   configureScript = ''
     cmake
   '';

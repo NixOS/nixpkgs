@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -27,7 +28,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd popeye \
       --bash <($out/bin/popeye completion bash) \
       --fish <($out/bin/popeye completion fish) \
@@ -39,12 +40,12 @@ buildGoModule rec {
     $out/bin/popeye version | grep ${version} > /dev/null
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kubernetes cluster resource sanitizer";
     mainProgram = "popeye";
     homepage = "https://github.com/derailed/popeye";
     changelog = "https://github.com/derailed/popeye/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = [ maintainers.bryanasdev000 ];
+    license = lib.licenses.asl20;
+    maintainers = [ lib.maintainers.bryanasdev000 ];
   };
 }

@@ -8,7 +8,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "mdbook-cmdrun";
   version = "0.6.0-unstable-2024-04-15";
 
@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage rec {
     util-linux # used by tests/regression/shell/input.md
   ];
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-C3Rg+WXHBA7KyUDFdhBz4mOm8CFH/f7UVA8KOLs9ClE=";
 
   meta = with lib; {

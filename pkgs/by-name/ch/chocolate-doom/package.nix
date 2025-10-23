@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chocolate-doom";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "chocolate-doom";
     repo = "chocolate-doom";
     tag = "chocolate-doom-${finalAttrs.version}";
-    hash = "sha256-yDPfqCuzRbDhOQisIDAGo2bmmMjT+0lds5xc9C2pqoU=";
+    hash = "sha256-wa4wxz70mxP41bNxWYD1EyxBGfyRoxEMPaoupvaK+XY=";
   };
 
   postPatch = ''

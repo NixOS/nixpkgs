@@ -19,9 +19,10 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  buildInputs = with python3.pkgs; [ libgcrypt ];
+  buildInputs = [ libgcrypt ];
 
   dependencies = with python3.pkgs; [
+    pycrypto
     pyserial
     pyusb
     rangeparser

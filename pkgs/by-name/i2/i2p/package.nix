@@ -14,19 +14,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "i2p";
-  version = "2.8.1";
+  version = "2.10.0";
 
   src = fetchzip {
-    urls =
-      [
-        "https://github.com/i2p/i2p.i2p/archive/i2p-${finalAttrs.version}.tar.gz"
-      ]
-      ++ (map (mirror: "${mirror}${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
-        "https://download.i2p2.de/releases/"
-        "https://files.i2p-projekt.de/"
-        "https://download.i2p2.no/releases/"
-      ]);
-    hash = "sha256-3gR1vQTs2SCjNtdj/AA69C+2tF23sGxwlVxkkPBUZWU=";
+    urls = [
+      "https://github.com/i2p/i2p.i2p/archive/i2p-${finalAttrs.version}.tar.gz"
+    ]
+    ++ (map (mirror: "${mirror}${finalAttrs.version}/i2psource_${finalAttrs.version}.tar.bz2") [
+      "https://download.i2p2.de/releases/"
+      "https://files.i2p-projekt.de/"
+      "https://download.i2p2.no/releases/"
+    ]);
+    hash = "sha256-Ogok7s5sawG27ucstG+NYiIAF66Pb3ExOYsL8mfNav8=";
   };
 
   strictDeps = true;

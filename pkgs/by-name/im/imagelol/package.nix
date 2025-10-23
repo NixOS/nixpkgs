@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "MCRedstoner2004";
     repo = "imagelol";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "0978zdrfj41jsqm78afyyd1l64iki9nwjvhd8ynii1b553nn4dmd";
     fetchSubmodules = true;
   };
@@ -37,6 +37,12 @@ stdenv.mkDerivation rec {
     mv imagelol src
     substituteInPlace CMakeLists.txt \
       --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+
+    substituteInPlace External/zlib-no-examples/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.4.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace External/libpng/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(VERSION 3.1)" "cmake_policy(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -46,11 +52,12 @@ stdenv.mkDerivation rec {
     cp ./ImageLOL $out/bin
   '';
 
-  cmakeFlags =
-    [ (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90") ]
-    ++ lib.optional (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-    ) "-DPNG_ARM_NEON=off";
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90")
+  ]
+  ++ lib.optional (
+    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
+  ) "-DPNG_ARM_NEON=off";
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";
@@ -58,6 +65,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ ];
     platforms = platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "ImageLOL";
   };
 }

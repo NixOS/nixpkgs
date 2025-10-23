@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-0YveqiylXJi4cdDCfnPtwCVOJbQrZYsxnXES+9B4Yfw=";
     fetchSubmodules = true;
   };
@@ -33,6 +33,11 @@ stdenv.mkDerivation rec {
     gnutls
     python3
     installShellFiles
+  ];
+
+  cmakeFlags = [
+    # Fix build with cmake>=4
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ];
 
   doCheck = true;

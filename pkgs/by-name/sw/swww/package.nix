@@ -6,26 +6,31 @@
   lz4,
   libxkbcommon,
   installShellFiles,
+  makeWrapper,
+  procps,
   scdoc,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swww";
-  version = "0.9.5";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "LGFae";
     repo = "swww";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ldy9HhIsWdtTdvtRLV3qDT80oX646BI4Q+YX5wJXbsc=";
+    hash = "sha256-X2ptpXRo6ps5RxDe5RS7qfTaHWqBbBNw/aSdC2tzUG8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-K1ww0bOD747EDtqYkA0Dlu7cwbjYcPwSXPSqQDbTwZo=";
+  cargoHash = "sha256-5KZWsdo37NbFFkK8XFc0XI9iwBkpV8KsOaOc0y287Io=";
 
   buildInputs = [
     lz4
     libxkbcommon
+    wayland-protocols
+    wayland-scanner
   ];
 
   doCheck = false; # Integration tests do not work in sandbox environment
@@ -33,6 +38,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     installShellFiles
+    makeWrapper
     scdoc
   ];
 
@@ -47,6 +53,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --bash completions/swww.bash \
       --fish completions/swww.fish \
       --zsh completions/_swww
+  '';
+
+  postFixup = ''
+    for program in $out/bin/*; do
+      wrapProgram $program \
+        --prefix PATH : "${lib.makeBinPath [ procps ]}"
+    done
   '';
 
   meta = {

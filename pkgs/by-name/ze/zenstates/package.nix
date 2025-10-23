@@ -27,7 +27,7 @@
   fetchFromGitHub,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "zenstates";
   version = "0.0.1";
 
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     mainProgram = "zenstates";
     homepage = "https://github.com/r4m0n/ZenStates-Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

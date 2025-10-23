@@ -49,10 +49,10 @@ in
   };
 
   config = mkMerge [
-    ({
+    {
       # minimal configuration file to make lvmconfig/lvm2-activation-generator happy
       environment.etc."lvm/lvm.conf".text = "config {}";
-    })
+    }
     (mkIf cfg.enable {
       systemd.tmpfiles.packages = [ cfg.package.out ];
       environment.systemPackages = [ cfg.package ];

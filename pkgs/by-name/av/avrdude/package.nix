@@ -31,28 +31,27 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "avrdude";
-  version = "8.0";
+  version = "8.1";
 
   src = fetchFromGitHub {
     owner = "avrdudes";
     repo = "avrdude";
     rev = "v${finalAttrs.version}";
-    sha256 = "w58HVCvKuWpGJwllupbj7ndeq4iE9LPs/IjFSUN0DOU=";
+    sha256 = "sha256-i1q0NQKVd/wiOm1Amop3hW+FWuefFOQCCivuEtEH38k=";
   };
 
-  nativeBuildInputs =
-    [
-      cmake
-      bison
-      flex
-      pkg-config
-    ]
-    ++ lib.optionals docSupport [
-      unixtools.more
-      texliveMedium
-      texinfo
-      texi2html
-    ];
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+    pkg-config
+  ]
+  ++ lib.optionals docSupport [
+    unixtools.more
+    texliveMedium
+    texinfo
+    texi2html
+  ];
 
   buildInputs = [
     (if useElfutils then elfutils else finalAttrs.finalPackage.passthru.libelf)

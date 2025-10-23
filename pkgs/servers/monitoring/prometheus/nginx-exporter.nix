@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "nginx_exporter";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
     rev = "v${version}";
-    sha256 = "sha256-yujMufcL4uJHxbEd8mwqxPmPlopVm6szkDxz+GZITio=";
+    sha256 = "sha256-BJf5gL+bkT6g28OVhGM29IwuLfFz3HPAo/DZzg5Eoqk=";
   };
 
-  vendorHash = "sha256-csBnUeuzkqgk5+62w0GZS2gX5jscPhN1z85KBVCMA0I=";
+  vendorHash = "sha256-lMLJvfB85kGAaPffRd7fz+PAFddSnVS2kzJHRKdnGH4=";
 
   ldflags =
     let
@@ -41,7 +41,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       benley
       fpletz
-      willibutz
       globin
     ];
   };

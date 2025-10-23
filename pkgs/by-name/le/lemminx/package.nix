@@ -25,13 +25,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "lemminx";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "lemminx";
-    rev = version;
-    hash = "sha256-xGC3ZGQ1dA0485/IPHsmX2NO1QOPp/nHMLBZvcC4Om8=";
+    tag = version;
+    hash = "sha256-a+9RN1265fsmYAUMuUTxA+VqJv7xPlzuc8HqoZwmR4M=";
     # Lemminx reads this git information at runtime from a git.properties
     # file on the classpath
     leaveDotGit = true;
@@ -86,7 +86,7 @@ maven.buildMavenPackage rec {
   passthru = {
     updateScript =
       let
-        pkgFile = builtins.toString ./package.nix;
+        pkgFile = toString ./package.nix;
       in
       lib.getExe (writeShellApplication {
         name = "update-${pname}";

@@ -1,59 +1,37 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.traefik;
-  jsonValue = with types;
-    let
-      valueType = nullOr (oneOf [
-        bool
-        int
-        float
-        str
-        (lazyAttrsOf valueType)
-        (listOf valueType)
-      ]) // {
-        description = "JSON value";
-        emptyValue.value = { };
-      };
-    in valueType;
-  dynamicConfigFile = if cfg.dynamicConfigFile == null then
-    pkgs.runCommand "config.toml" {
-      buildInputs = [ pkgs.remarshal ];
-      preferLocalBuild = true;
-    } ''
-      remarshal -if json -of toml \
-        < ${
-          pkgs.writeText "dynamic_config.json"
-          (builtins.toJSON cfg.dynamicConfigOptions)
-        } \
-        > $out
-    ''
-  else
-    cfg.dynamicConfigFile;
-  staticConfigFile = if cfg.staticConfigFile == null then
-    pkgs.runCommand "config.toml" {
-      buildInputs = [ pkgs.yj ];
-      preferLocalBuild = true;
-    } ''
-      yj -jt -i \
-        < ${
-          pkgs.writeText "static_config.json" (builtins.toJSON
-            (recursiveUpdate cfg.staticConfigOptions {
-              providers.file.filename = "${dynamicConfigFile}";
-            }))
-        } \
-        > $out
-    ''
-  else
-    cfg.staticConfigFile;
+
+  format = pkgs.formats.toml { };
+
+  dynamicConfigFile =
+    if cfg.dynamicConfigFile == null then
+      format.generate "config.toml" cfg.dynamicConfigOptions
+    else
+      cfg.dynamicConfigFile;
+
+  staticConfigFile =
+    if cfg.staticConfigFile == null then
+      format.generate "config.toml" (
+        recursiveUpdate cfg.staticConfigOptions {
+          providers.file.filename = "${dynamicConfigFile}";
+        }
+      )
+    else
+      cfg.staticConfigFile;
 
   finalStaticConfigFile =
-    if cfg.environmentFiles == []
-    then staticConfigFile
-    else "/run/traefik/config.toml";
-in {
+    if cfg.environmentFiles == [ ] then staticConfigFile else "/run/traefik/config.toml";
+in
+{
   options.services.traefik = {
     enable = mkEnableOption "Traefik web server";
 
@@ -71,8 +49,10 @@ in {
       description = ''
         Static configuration for Traefik.
       '';
-      type = jsonValue;
-      default = { entryPoints.http.address = ":80"; };
+      type = format.type;
+      default = {
+        entryPoints.http.address = ":80";
+      };
       example = {
         entryPoints.web.address = ":8080";
         entryPoints.http.address = ":80";
@@ -95,7 +75,7 @@ in {
       description = ''
         Dynamic configuration for Traefik.
       '';
-      type = jsonValue;
+      type = format.type;
       default = { };
       example = {
         http.routers.router1 = {
@@ -103,8 +83,7 @@ in {
           service = "service1";
         };
 
-        http.services.service1.loadBalancer.servers =
-          [{ url = "http://localhost:8080"; }];
+        http.services.service1.loadBalancer.servers = [ { url = "http://localhost:8080"; } ];
       };
     };
 
@@ -129,7 +108,7 @@ in {
     package = mkPackageOption pkgs "traefik" { };
 
     environmentFiles = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.path;
       example = [ "/run/secrets/traefik.env" ];
       description = ''
@@ -151,11 +130,12 @@ in {
       startLimitBurst = 5;
       serviceConfig = {
         EnvironmentFile = cfg.environmentFiles;
-        ExecStartPre = lib.optional (cfg.environmentFiles != [])
-          (pkgs.writeShellScript "pre-start" ''
+        ExecStartPre = lib.optional (cfg.environmentFiles != [ ]) (
+          pkgs.writeShellScript "pre-start" ''
             umask 077
             ${pkgs.envsubst}/bin/envsubst -i "${staticConfigFile}" > "${finalStaticConfigFile}"
-          '');
+          ''
+        );
         ExecStart = "${cfg.package}/bin/traefik --configfile=${finalStaticConfigFile}";
         Type = "simple";
         User = "traefik";
@@ -172,6 +152,7 @@ in {
         ProtectSystem = "full";
         ReadWritePaths = [ cfg.dataDir ];
         RuntimeDirectory = "traefik";
+        WorkingDirectory = cfg.dataDir;
       };
     };
 

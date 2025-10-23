@@ -1,30 +1,26 @@
 {
   stdenv,
   lib,
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
   libX11,
-  darwin,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "certinfo";
-  version = "1.0.24";
+  version = "1.0.38";
 
   src = fetchFromGitHub {
     owner = "pete911";
     repo = "certinfo";
     rev = "v${version}";
-    sha256 = "sha256-BI5gYWKGMU0wLvnArG41bLWj+9ipe/GARKRX0fwz4ag=";
+    sha256 = "sha256-3CAl/Kf20JMcq7aLOviwxpHkYXnOd2WXqC8o2TLEXGY=";
   };
 
   # clipboard functionality not working on Darwin
   doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64);
 
-  buildInputs =
-    [ ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libX11 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libX11 ];
 
   vendorHash = null;
 

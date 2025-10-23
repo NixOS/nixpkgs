@@ -138,43 +138,12 @@ let
 
     # SOURCE PACKAGES
 
-    MonoAddins = buildDotnetPackage rec {
-      pname = "Mono.Addins";
-      version = "1.2";
-
-      xBuildFiles = [
-        "Mono.Addins/Mono.Addins.csproj"
-        "Mono.Addins.Setup/Mono.Addins.Setup.csproj"
-        "Mono.Addins.Gui/Mono.Addins.Gui.csproj"
-        "Mono.Addins.CecilReflector/Mono.Addins.CecilReflector.csproj"
-      ];
-      outputFiles = [ "bin/*" ];
-
-      src = fetchFromGitHub {
-        owner = "mono";
-        repo = "mono-addins";
-        rev = "mono-addins-${version}";
-        sha256 = "1hnn0a2qsjcjprsxas424bzvhsdwy0yc2jj5xbp698c0m9kfk24y";
-      };
-
-      buildInputs = [ pkgs.gtk-sharp-2_0 ];
-
-      meta = {
-        description = "Generic framework for creating extensible applications";
-        homepage = "https://www.mono-project.com/Mono.Addins";
-        longDescription = ''
-          A generic framework for creating extensible applications,
-          and for creating libraries which extend those applications.
-        '';
-        license = lib.licenses.mit;
-      };
-    };
-
     NewtonsoftJson = fetchNuGet {
       pname = "Newtonsoft.Json";
       version = "11.0.2";
       sha256 = "07na27n4mlw77f3hg5jpayzxll7f4gyna6x7k9cybmxpbs6l77k7";
       outputFiles = [ "*" ];
+      postInstall = "rm $target/env-vars"; # fetchNuGet already sets preInstall
     };
 
     Paket = fetchNuGet {
@@ -182,6 +151,7 @@ let
       version = "5.179.1";
       sha256 = "11rzna03i145qj08hwrynya548fwk8xzxmg65swyaf19jd7gzg82";
       outputFiles = [ "*" ];
+      postInstall = "rm $target/env-vars"; # fetchNuGet already sets preInstall
     };
 
   };

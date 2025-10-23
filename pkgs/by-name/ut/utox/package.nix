@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uTox";
     repo = "uTox";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-DxnolxUTn+CL6TbZHKLHOUMTHhtTSWufzzOTRpKjOwc=";
     fetchSubmodules = true;
   };
@@ -60,6 +60,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_AUTOUPDATE=OFF"
     "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [ check ];

@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "jplephem";
-  version = "2.22";
+  version = "2.23";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DZrMche0gG/rqT5yl0zurVYREEvOZ4mvONTyfc96WSw=";
+    hash = "sha256-0/uUd+S/TDnRBJfU/xXlJxt6wD+hAeGCGqxSfWRuzPk=";
   };
 
   propagatedBuildInputs = [ numpy ];

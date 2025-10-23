@@ -9,7 +9,6 @@
   pcre2,
   neko,
   mbedtls_2,
-  Security,
 }:
 let
   ocamlDependencies =
@@ -59,15 +58,13 @@ let
       pname = "haxe";
       inherit version;
 
-      buildInputs =
-        [
-          zlib
-          neko
-        ]
-        ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
-        ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
-        ++ lib.optional (lib.versionAtLeast version "4.1" && stdenv.hostPlatform.isDarwin) Security
-        ++ ocamlDependencies version;
+      buildInputs = [
+        zlib
+        neko
+      ]
+      ++ (if lib.versionAtLeast version "4.3" then [ pcre2 ] else [ pcre ])
+      ++ lib.optional (lib.versionAtLeast version "4.1") mbedtls_2
+      ++ ocamlDependencies version;
 
       src = fetchFromGitHub {
         owner = "HaxeFoundation";

@@ -3,27 +3,36 @@
   fetchFromGitHub,
   makeWrapper,
   php,
+  nodejs,
 }:
 php.buildComposerProject2 (finalAttrs: {
   pname = "laravel";
-  version = "5.9.2";
+  version = "5.22.0";
 
   src = fetchFromGitHub {
     owner = "laravel";
     repo = "installer";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XE1KYOlWehj1peSNj3sKNr6CKchCxRNpIjXHq7slVME=";
+    hash = "sha256-kC6RD+rtjHXrOGhF/E9l8/eArTnDrXIw3D6lnDpsl7I=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-Kid5Vp42Pme1AO9fI9e/f24Cdzi1uV8qEULFEvQDKnE=";
+  vendorHash = "sha256-s+wBvGnDyKbzniZoKJ4wUcv0FCo7XnrD6KYvYhllBFM=";
 
+  # Adding npm (nodejs) and php composer to path
   postInstall = ''
     wrapProgram $out/bin/laravel \
-      --suffix PATH : ${lib.makeBinPath [ php.packages.composer ]}
+      --suffix PATH : ${
+        lib.makeBinPath [
+          php.packages.composer
+          nodejs
+        ]
+      }
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Laravel application installer";

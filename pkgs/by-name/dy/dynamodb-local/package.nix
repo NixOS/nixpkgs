@@ -27,11 +27,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dynamodb-local";
-  version = "2.5.4";
+  version = "2.6.0";
 
   src = fetchurl {
-    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2024-12-23.tar.gz";
-    hash = "sha256-YLFWH6YUFkLb062at1pjFclId/b0LmBVESWxHqimLJc=";
+    url = "https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_2025-03-13.tar.gz";
+    hash = "sha256-mAXZX+L17+z9f3/sMq+O+zLcg7YKGKL72BhhTtS2xuw=";
   };
 
   sourceRoot = ".";
@@ -74,7 +74,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       fi
 
       DOWNLOAD_URL="https://d1ni2b6xgvw0s0.cloudfront.net/v2.x/dynamodb_local_$NEW_VERSION_DATE.tar.gz"
-      NIX_HASH=$(nix hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
+      NIX_HASH=$(nix --extra-experimental-features nix-command hash to-sri sha256:$(nix-prefetch-url $DOWNLOAD_URL))
 
       update-source-version "dynamodb-local" "$NEW_VERSION" "$NIX_HASH" "$DOWNLOAD_URL"
     '';
@@ -86,7 +86,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     mainProgram = "dynamodb-local";
     maintainers = with maintainers; [
-      shyim
       martinjlowm
     ];
     platforms = platforms.all;

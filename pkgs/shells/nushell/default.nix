@@ -9,9 +9,6 @@
   pkg-config,
   python3,
   xorg,
-  Libsystem,
-  AppKit,
-  Security,
   nghttp2,
   libgit2,
   withDefaultFeatures ? true,
@@ -19,12 +16,15 @@
   testers,
   nushell,
   nix-update-script,
+  curlMinimal,
 }:
 
 let
-  version = "0.102.0";
+  # NOTE: when updating this to a new non-patch version, please also try to
+  # update the plugins. Plugins only work if they are compiled for the same
+  # major/minor version.
+  version = "0.108.0";
 in
-
 rustPlatform.buildRustPackage {
   pname = "nushell";
   inherit version;
@@ -33,38 +33,33 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-ISiixFQ2m++WKX66SnvF1VZpgYJjgchRWSlo/Cp/Ybs=";
+    hash = "sha256-8OMTscMObV+IOSgOoTSzJvZTz6q/l2AjrOb9y3p2tZY=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-3cmNlCTawMUpr6kSyT/YZzC717FoXkF0uTeE/D8BSFM=";
+  cargoHash = "sha256-M2wkhhaS3bVhwaa3O0CUK5hL757qFObr7EDtBFXXwxg=";
 
-  nativeBuildInputs =
-    [ pkg-config ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    pkg-config
+  ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs =
-    [
-      openssl
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      zlib
-      Libsystem
-      Security
-    ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
-      AppKit
-      nghttp2
-      libgit2
-    ];
+  buildInputs = [
+    zstd
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
+  ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+    nghttp2
+    libgit2
+  ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  doCheck = !stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
+  preCheck = ''
+    export NU_TEST_LOCALE_OVERRIDE="en_US.UTF-8"
+  '';
 
   checkPhase = ''
     runHook preCheck
@@ -77,10 +72,20 @@ rustPlatform.buildRustPackage {
         --test-threads=$NIX_BUILD_CORES \
         --skip=repl::test_config_path::test_default_config_path \
         --skip=repl::test_config_path::test_xdg_config_bad \
-        --skip=repl::test_config_path::test_xdg_config_empty
+        --skip=repl::test_config_path::test_xdg_config_empty ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+          \
+                  --skip=plugins::config::some \
+                  --skip=plugins::stress_internals::test_exit_early_local_socket \
+                  --skip=plugins::stress_internals::test_failing_local_socket_fallback \
+                  --skip=plugins::stress_internals::test_local_socket
+        ''}
     )
     runHook postCheck
   '';
+
+  checkInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [ curlMinimal ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   passthru = {
     shellPath = "/bin/nu";
@@ -98,6 +103,7 @@ rustPlatform.buildRustPackage {
       Br1ght0ne
       johntitor
       joaquintrinanes
+      ryan4yin
     ];
     mainProgram = "nu";
   };

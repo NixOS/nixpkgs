@@ -17,20 +17,20 @@
 
 buildPythonPackage rec {
   pname = "glyphslib";
-  version = "6.10.1";
+  version = "6.12.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "glyphsLib";
     tag = "v${version}";
-    hash = "sha256-JC0IPLdueptanpuzMsSFGOK/ptVk+c6EDOFwKH3tDWE=";
+    hash = "sha256-5Ae6oj3tbAvcKsSkDdIHhGi2I63sGDEByt00reTBQGQ=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fonttools
     openstep-plist
     ufolib2
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Bridge from Glyphs source files (.glyphs) to UFOs and Designspace files via defcon and designspaceLib";
     homepage = "https://github.com/googlefonts/glyphsLib";
     license = lib.licenses.asl20;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
   };
 }

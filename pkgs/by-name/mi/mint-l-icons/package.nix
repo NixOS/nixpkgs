@@ -8,16 +8,16 @@
   gtk3,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "mint-l-icons";
-  version = "1.7.4";
+  version = "1.7.8";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "mint-l-icons";
     # They don't really do tags, this is just a named commit.
-    rev = "b442277c822c92f7bb68282cb82c7d1a98e3fd37";
-    hash = "sha256-vPDEribE/CZwoAK1C9fjbWQEO/NWMWCKCUO/Xw/SxZ0=";
+    rev = "5d96655e37a85aa5e3d20bc7b38c9675a6145d13";
+    hash = "sha256-9MdGMbxJKZTchYKEc/cV4m4M4tgraF1XlSNVT5PInVY=";
   };
 
   propagatedBuildInputs = [
@@ -52,6 +52,6 @@ stdenvNoCC.mkDerivation rec {
     description = "Mint-L icon theme";
     license = licenses.gpl3Plus; # from debian/copyright
     platforms = platforms.linux;
-    maintainers = teams.cinnamon.members;
+    teams = [ teams.cinnamon ];
   };
 }

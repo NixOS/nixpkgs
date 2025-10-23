@@ -1,21 +1,21 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index ea1da5e..0a6f096 100644
+index 8e0eb68..0131d4e 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -100,7 +100,7 @@ if (BUILD_PYTHON_INTERFACE OR BUILD_MATLAB_INTERFACE)
+@@ -109,7 +109,7 @@ if (BUILD_PYTHON_INTERFACE OR BUILD_MATLAB_INTERFACE)
      include(FetchContent)
      FetchContent_Declare(
          cpu_features
--        URL https://github.com/google/cpu_features/archive/refs/tags/v0.9.0.zip
-+	DOWNLOAD_COMMAND true
+-        URL https://github.com/google/cpu_features/archive/refs/tags/v0.10.1.zip
++        URL @cpu_features_src@
      )
      set(BUILD_SHARED_LIBS_COPY ${BUILD_SHARED_LIBS})
      set(BUILD_SHARED_LIBS OFF)
 diff --git a/interfaces/c/tests/CMakeLists.txt b/interfaces/c/tests/CMakeLists.txt
-index 010f038..c8f9ec4 100644
+index 5919593..bf504c5 100644
 --- a/interfaces/c/tests/CMakeLists.txt
 +++ b/interfaces/c/tests/CMakeLists.txt
-@@ -13,18 +13,8 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+@@ -17,18 +17,8 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.30.0")
  endif()
  
  # Google Test
@@ -37,19 +37,16 @@ index 010f038..c8f9ec4 100644
  enable_testing()
  
 diff --git a/interfaces/python/CMakeLists.txt b/interfaces/python/CMakeLists.txt
-index f7415dc..885aeff 100644
+index b2e3cef..3d9cf65 100644
 --- a/interfaces/python/CMakeLists.txt
 +++ b/interfaces/python/CMakeLists.txt
-@@ -14,19 +14,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+@@ -13,16 +13,7 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+     cmake_policy(SET CMP0135 OLD)
  endif()
  
- # Find pybind11
--include(FetchContent)
--FetchContent_Declare(
--    pybind11
--    URL https://github.com/pybind/pybind11/archive/refs/tags/v2.12.0.zip
--)
--FetchContent_MakeAvailable(pybind11)
+-# Find pybind11
+-set(PYBIND11_FINDPYTHON ON)
+-find_package(pybind11 CONFIG REQUIRED)
 -
 -# detect arm64 cross compilation on macOS
 -if(DEFINED ENV{_PYTHON_HOST_PLATFORM})
@@ -62,7 +59,7 @@ index f7415dc..885aeff 100644
  # add instruction set detection on x86/amd64
  pybind11_add_module(instruction_set src/instruction_set.cpp)
 diff --git a/tests/CMakeLists.txt b/tests/CMakeLists.txt
-index d11bd37..2275a62 100644
+index fded71a..cb568a7 100644
 --- a/tests/CMakeLists.txt
 +++ b/tests/CMakeLists.txt
 @@ -14,18 +14,8 @@ if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")

@@ -11,9 +11,9 @@
   xprop,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "undistract-me";
-  version = "unstable-2020-08-09";
+  version = "0-unstable-2020-08-09";
 
   src = fetchFromGitHub {
     owner = "jml";

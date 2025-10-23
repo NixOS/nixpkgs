@@ -16,7 +16,6 @@
   libgee,
   libhandy,
   libxml2,
-  libsoup_2_4,
   elementary-calendar,
 }:
 
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "wingpanel-indicator-datetime";
     rev = version;
     sha256 = "sha256-iR80pF3KUe0WboFm2/f1ZK9/wER2LfmRBd92e8jGTHs=";
   };
@@ -52,7 +51,6 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libical
-    libsoup_2_4
     wingpanel
   ];
 
@@ -65,6 +63,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/wingpanel-indicator-datetime";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 }

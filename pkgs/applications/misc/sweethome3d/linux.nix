@@ -26,7 +26,7 @@ let
 
   # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
   extensionOf =
-    filePath: lib.concatStringsSep "." (lib.tail (lib.splitString "." (builtins.baseNameOf filePath)));
+    filePath: lib.concatStringsSep "." (lib.tail (lib.splitString "." (baseNameOf filePath)));
 
   installIcons =
     iconName: icons:

@@ -1,59 +1,53 @@
 {
   lib,
-  callPackage,
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
   llm,
+  llm-anthropic,
   anthropic,
   pytestCheckHook,
   pytest-asyncio,
   pytest-recording,
-  nix-update-script,
+  writableTmpDirAsHomeHook,
 }:
 
 buildPythonPackage rec {
   pname = "llm-anthropic";
-  version = "0.14.1";
+  version = "0.20";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "simonw";
     repo = "llm-anthropic";
     tag = version;
-    hash = "sha256-tKgcag8sBJA4QWunaFyZxkZH0mtc0SS17104YuX1Kac=";
+    hash = "sha256-tZCFbrsACJl1hC5tSbxJzBBLY8mdcCNjshZilSCAslM=";
   };
 
   build-system = [
     setuptools
+  ];
+
+  dependencies = [
+    anthropic
     llm
   ];
-  dependencies = [ anthropic ];
-
-  # Otherwise tests will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-recording
+    writableTmpDirAsHomeHook
   ];
 
   pythonImportsCheck = [ "llm_anthropic" ];
 
-  passthru.updateScript = nix-update-script { };
-
-  passthru.tests = {
-    llm-plugin = callPackage ./tests/llm-plugin.nix { };
-  };
+  passthru.tests = llm.mkPluginTest llm-anthropic;
 
   meta = {
     description = "LLM access to models by Anthropic, including the Claude series";
     homepage = "https://github.com/simonw/llm-anthropic";
-    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${version}/CHANGELOG.md";
+    changelog = "https://github.com/simonw/llm-anthropic/releases/tag/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aos ];
   };

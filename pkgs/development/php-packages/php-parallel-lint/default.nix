@@ -17,7 +17,7 @@ php.buildComposerProject2 (finalAttrs: {
   };
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-ySdLlqlGKZ6LgmAOBMkBNoCAqWrgMwE/Cj6ZEPEsCko=";
+  vendorHash = "sha256-AQAASj5vrSE1xkJ/SZHU4GwOWNobe9ES0Yo+YrLH354=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
@@ -28,6 +28,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/php-parallel-lint/PHP-Parallel-Lint";
     license = lib.licenses.bsd2;
     mainProgram = "parallel-lint";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

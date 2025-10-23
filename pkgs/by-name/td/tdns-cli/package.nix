@@ -4,7 +4,7 @@
   rustPlatform,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "tdns-cli";
   version = "unstable-2021-02-19";
 
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-BGxkqlKg81izq4eOBEZFJ/MPb3UCSOo8ZTYTjtjierk=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-KDZGTGLHLuZgFtzIp+lL0VIiQcYspvxAivp7hVE9V/A=";
 
   meta = with lib; {

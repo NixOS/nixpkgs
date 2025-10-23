@@ -33,11 +33,11 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"/share/doc/asdf/
     cp -r ./* "$out"/lib/common-lisp/asdf/
     cp -r doc/* "$out"/share/doc/asdf/
-    ln -s  "$out"/lib/common-lisp/{asdf/uiop,uiop}
   '';
 
   meta = with lib; {
     description = "Standard software-system definition library for Common Lisp";
+    homepage = "https://asdf.common-lisp.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;

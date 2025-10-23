@@ -4,7 +4,7 @@
   gcc13Stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
+  fetchpatch,
 
   # nativeBuildInputs
   cmake,
@@ -40,30 +40,31 @@ let
 in
 buildPythonPackage rec {
   pname = "llama-cpp-python";
-  version = "0.3.6";
+  version = "0.3.16";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "abetlen";
     repo = "llama-cpp-python";
     tag = "v${version}";
-    hash = "sha256-d5nMgpS7m6WEILs222ztwphoqkAezJ+qt6sVKSlpIYI=";
+    hash = "sha256-EUDtCv86J4bznsTqNsdgj1IYkAu83cf+RydFTUb2NEE=";
     fetchSubmodules = true;
   };
   # src = /home/gaetan/llama-cpp-python;
 
   patches = [
-    # fix segfault when running tests due to missing default Metal devices
-    (fetchpatch2 {
-      url = "https://github.com/ggml-org/llama.cpp/commit/acd38efee316f3a5ed2e6afcbc5814807c347053.patch?full_index=1";
+    # Fix test failure on a machine with no metal devices (e.g. nix-community darwin builder)
+    # https://github.com/ggml-org/llama.cpp/pull/15531
+    (fetchpatch {
+      url = "https://github.com/ggml-org/llama.cpp/pull/15531/commits/63a83ffefe4d478ebadff89300a0a3c5d660f56a.patch";
       stripLen = 1;
       extraPrefix = "vendor/llama.cpp/";
-      hash = "sha256-71+Lpg9z5KPlaQTX9D85KS2LXFWLQNJJ18TJyyq3/pU=";
+      hash = "sha256-9LGnzviBgYYOOww8lhiLXf7xgd/EtxRXGQMredOO4qM=";
     })
   ];
 
   dontUseCmakeConfigure = true;
-  SKBUILD_CMAKE_ARGS = lib.strings.concatStringsSep ";" (
+  cmakeFlags = [
     # Set GGML_NATIVE=off. Otherwise, cmake attempts to build with
     # -march=native* which is either a no-op (if cc-wrapper is able to ignore
     # it), or an attempt to build a non-reproducible binary.
@@ -72,13 +73,14 @@ buildPythonPackage rec {
     # -mcpu, breaking linux build as follows:
     #
     # cc1: error: unknown value ‘native+nodotprod+noi8mm+nosve’ for ‘-mcpu’
-    [ "-DGGML_NATIVE=off" ]
-    ++ lib.optionals cudaSupport [
-      "-DGGML_CUDA=on"
-      "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
-      "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
-    ]
-  );
+    "-DGGML_NATIVE=off"
+    "-DGGML_BUILD_NUMBER=1"
+  ]
+  ++ lib.optionals cudaSupport [
+    "-DGGML_CUDA=on"
+    "-DCUDAToolkit_ROOT=${lib.getDev cudaPackages.cuda_nvcc}"
+    "-DCMAKE_CUDA_COMPILER=${lib.getExe cudaPackages.cuda_nvcc}"
+  ];
 
   enableParallelBuilding = true;
 
@@ -126,7 +128,10 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "llama_cpp" ];
 
   passthru = {
-    updateScript = gitUpdater { rev-prefix = "v"; };
+    updateScript = gitUpdater {
+      rev-prefix = "v";
+      allowedVersions = "^[.0-9]+$";
+    };
     tests = lib.optionalAttrs stdenvTarget.hostPlatform.isLinux {
       withCuda = llama-cpp-python.override {
         cudaSupport = true;

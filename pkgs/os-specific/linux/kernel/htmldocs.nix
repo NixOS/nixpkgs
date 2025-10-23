@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     patchShebangs \
       Documentation/sphinx/parse-headers.pl \
       scripts/{get_abi.pl,get_feat.pl,kernel-doc,sphinx-pre-install} \
-      tools/net/ynl/ynl-gen-rst.py
+      tools/net/ynl/pyynl/ynl_gen_rst.py
   '';
 
   FONTCONFIG_FILE = makeFontsConf {

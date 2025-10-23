@@ -21,41 +21,47 @@ assert
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "box64";
-  version = "0.3.2";
+  version = "0.3.8";
 
   src = fetchFromGitHub {
     owner = "ptitSeb";
     repo = "box64";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-SHAfZatLrc6+8kRHGwUlXuUP0blQazZtdQmDv58Csv4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-PVzv1790UhWbqLmw/93+mU3Gw8lQek7NBls4LXks4wQ=";
   };
+
+  # Setting cpu doesn't seem to work (or maybe isn't enough / gets overwritten by the wrapper's arch flag?), errors about unsupported instructions for target
+  # (this is for code that gets executed conditionally if the cpu at runtime supports their features, so setting this should be fine)
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'ASMFLAGS  -pipe -mcpu=cortex-a76' 'ASMFLAGS  -pipe -march=armv8.2-a+fp16+dotprod'
+  '';
 
   nativeBuildInputs = [
     cmake
     python3
   ];
 
-  cmakeFlags =
-    [
-      (lib.cmakeBool "NOGIT" true)
+  cmakeFlags = [
+    (lib.cmakeBool "NOGIT" true)
 
-      # Arch mega-option
-      (lib.cmakeBool "ARM64" stdenv.hostPlatform.isAarch64)
-      (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
-      (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
-      (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-      # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
-      (lib.cmakeBool "LD80BITS" true)
-      (lib.cmakeBool "NOALIGN" true)
-    ]
-    ++ [
-      # Arch dynarec
-      (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
-      (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
-      (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
-    ];
+    # Arch mega-option
+    (lib.cmakeBool "ARM64" stdenv.hostPlatform.isAarch64)
+    (lib.cmakeBool "RV64" stdenv.hostPlatform.isRiscV64)
+    (lib.cmakeBool "PPC64LE" (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian))
+    (lib.cmakeBool "LARCH64" stdenv.hostPlatform.isLoongArch64)
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+    # x86_64 has no arch-specific mega-option, manually enable the options that apply to it
+    (lib.cmakeBool "LD80BITS" true)
+    (lib.cmakeBool "NOALIGN" true)
+  ]
+  ++ [
+    # Arch dynarec
+    (lib.cmakeBool "ARM_DYNAREC" (withDynarec && stdenv.hostPlatform.isAarch64))
+    (lib.cmakeBool "RV64_DYNAREC" (withDynarec && stdenv.hostPlatform.isRiscV64))
+    (lib.cmakeBool "LARCH64_DYNAREC" (withDynarec && stdenv.hostPlatform.isLoongArch64))
+  ];
 
   installPhase = ''
     runHook preInstall

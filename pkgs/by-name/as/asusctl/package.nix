@@ -14,20 +14,20 @@
   seatd,
   wayland,
   glibc,
+  udevCheckHook,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "asusctl";
-  version = "6.1.10";
+  version = "6.1.16";
 
   src = fetchFromGitLab {
     owner = "asus-linux";
     repo = "asusctl";
-    rev = version;
-    hash = "sha256-KCGoaqqXWFApD464jbNcdGhd7DDxrpNcRg/ClM0GrJc=";
+    tag = version;
+    hash = "sha256-Ndwzy/2Rg5W1cF6YFjoUtgN1156VZW4Gs1DgJTrmu/w=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-c3uoQWdf4nG2SzLpB/T7AM/wrfxqVZcTVX1eRFZTGhQ=";
+  cargoHash = "sha256-+j682yZx54DXh+45b9GzSD29/aYALI/y1YbmlfQd09Q=";
 
   postPatch = ''
     files="
@@ -43,7 +43,10 @@ rustPlatform.buildRustPackage rec {
       substituteInPlace $file --replace-fail /usr/share $out/share
     done
 
-    substituteInPlace data/asusd.rules --replace-fail systemctl ${lib.getExe' systemd "systemctl"}
+    substituteInPlace rog-control-center/src/main.rs \
+      --replace-fail 'std::env::var("RUST_TRANSLATIONS").is_ok()' 'true'
+
+    substituteInPlace data/asusd.rules --replace-fail /usr/bin/systemctl ${lib.getExe' systemd "systemctl"}
     substituteInPlace data/asusd.service \
       --replace-fail /usr/bin/asusd $out/bin/asusd \
       --replace-fail /bin/sleep ${lib.getExe' coreutils "sleep"}
@@ -61,6 +64,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook
+    udevCheckHook
   ];
 
   buildInputs = [
@@ -85,6 +89,7 @@ rustPlatform.buildRustPackage rec {
 
   # upstream has minimal tests, so don't rebuild twice
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     make prefix=$out install-data

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.94.0";
+  version = "1.99.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "aws";
     repo = "serverless-application-model";
     tag = "v${version}";
-    hash = "sha256-o6LjkNG8Ao0Qqel17iAi3fo2cTuSjJ5AWitkKpS4NWc=";
+    hash = "sha256-Y82qN2bmzE5Xqz2wSw9lWItsPbsRevLL7FlLN0FGKs0=";
   };
 
   postPatch = ''
@@ -57,9 +57,12 @@ buildPythonPackage rec {
     export AWS_DEFAULT_REGION=us-east-1
   '';
 
-  pytestFlagsArray = [
+  enabledTestPaths = [
     "tests"
-    ''-m "not slow"''
+  ];
+
+  disabledTestMarks = [
+    "slow"
   ];
 
   disabledTests = [

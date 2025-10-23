@@ -18,7 +18,7 @@ stdenvNoCC.mkDerivation {
   pname = "ibm-plex";
   inherit version;
 
-  srcs = builtins.map (
+  srcs = map (
     family:
     fetchzip {
       url = "https://github.com/IBM/plex/releases/download/%40ibm%2Fplex-${family}%40${version}/ibm-plex-${family}.zip";
@@ -37,13 +37,13 @@ stdenvNoCC.mkDerivation {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "IBM Plex Typeface";
     homepage = "https://www.ibm.com/plex/";
     changelog = "https://github.com/IBM/plex/raw/v${version}/CHANGELOG.md";
-    license = licenses.ofl;
-    platforms = platforms.all;
-    maintainers = with maintainers; [
+    license = lib.licenses.ofl;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [
       romildo
       ryanccn
     ];

@@ -26,7 +26,6 @@
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   pyyaml,
   requests,
   responses,
@@ -37,16 +36,14 @@
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "5.0.28";
+  version = "5.1.11";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "getmoto";
     repo = "moto";
     tag = version;
-    hash = "sha256-++kkPiI3AOTF+VlvPWhjhuiIjiHQPa3M0Nmh3+1PHSE=";
+    hash = "sha256-krZrPzH8/pOGvQTcofT2TzyytDXs9FTpqh9JK0QN44E=";
   };
 
   build-system = [
@@ -300,19 +297,21 @@ buildPythonPackage rec {
     pytest-order
     pytest-xdist
     pytestCheckHook
-  ] ++ optional-dependencies.server;
+  ]
+  ++ optional-dependencies.server;
 
   # Some tests depend on AWS credentials environment variables to be set.
   env.AWS_ACCESS_KEY_ID = "ak";
   env.AWS_SECRET_ACCESS_KEY = "sk";
 
-  pytestFlagsArray = [
-    "-m"
-    "'not network and not requires_docker'"
-
+  pytestFlags = [
     # Matches upstream configuration, presumably due to expensive setup/teardown.
-    "--dist"
-    "loadscope"
+    "--dist=loadscope"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "requires_docker"
   ];
 
   disabledTests = [
@@ -351,6 +350,11 @@ buildPythonPackage rec {
 
     # Parameter validation fails
     "test_conditional_write"
+
+    # Assumes too much about threading.Timer() behavior (that it honors the
+    # timeout precisely and that the thread handler will complete in just 0.1s
+    # from the requested timeout)
+    "test_start_and_fire_timer_decision"
   ];
 
   disabledTestPaths = [
@@ -372,6 +376,12 @@ buildPythonPackage rec {
 
     # Infinite recursion with pycognito
     "tests/test_cognitoidp/test_cognitoidp.py"
+
+    # botocore.exceptions.ParamValidationError: Parameter validation failed: Unknown parameter in input: "EnableWorkDocs", must be one of: [...]
+    "tests/test_workspaces/test_workspaces.py"
+
+    # Requires sagemaker client
+    "other_langs/tests_sagemaker_client/test_model_training.py"
   ];
 
   meta = {

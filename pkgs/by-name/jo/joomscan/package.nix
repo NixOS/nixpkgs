@@ -14,7 +14,7 @@ let
     ]
   );
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "joomscan";
   version = "unstable-2021-06-08";
 

@@ -84,6 +84,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jupyter/jupyter_console";
     changelog = "https://github.com/jupyter/jupyter_console/releases/tag/v${version}";
     license = lib.licenses.bsd3;
-    maintainers = lib.teams.jupyter.members;
+    teams = [ lib.teams.jupyter ];
   };
 }

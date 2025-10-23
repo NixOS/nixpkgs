@@ -1,54 +1,55 @@
-{ lib
-, copyDesktopItems
-, electron_34
-, fetchFromGitHub
-, deltachat-rpc-server
-, makeDesktopItem
-, makeWrapper
-, nodejs
-, pkg-config
-, pnpm_9
-, python3
-, rustPlatform
-, stdenv
-, darwin
-, testers
-, deltachat-desktop
-, yq
+{
+  lib,
+  copyDesktopItems,
+  electron_37,
+  fetchFromGitHub,
+  deltachat-rpc-server,
+  makeDesktopItem,
+  makeWrapper,
+  nodejs,
+  pkg-config,
+  pnpm_9,
+  python3,
+  rustPlatform,
+  stdenv,
+  testers,
+  deltachat-desktop,
+  yq,
 }:
 
 let
   deltachat-rpc-server' = deltachat-rpc-server.overrideAttrs rec {
-    version = "1.156.2";
+    version = "2.22.0";
     src = fetchFromGitHub {
-      owner = "deltachat";
-      repo = "deltachat-core-rust";
+      owner = "chatmail";
+      repo = "core";
       tag = "v${version}";
-      hash = "sha256-CpFnO8stLLTH/XOZZS3j9nVrf2FRekjkQ/R1pmw5o9A=";
+      hash = "sha256-DKqqdcG3C7/RF/wz2SqaiPUjZ/7vMFJTR5DIGTXjoTY=";
     };
     cargoDeps = rustPlatform.fetchCargoVendor {
-      pname = "deltachat-core-rust";
+      pname = "chatmail-core";
       inherit version src;
-      hash = "sha256-jrsGMNgKglk+Rq/ZGiZgSZrT4uSA5RjbTYaDtW0Ijyg=";
+      hash = "sha256-x71vytk9ytIhHlRR0lDhDcIaDNJGDdPwb6fkB1SI+NQ=";
     };
   };
-  electron = electron_34;
+  electron = electron_37;
   pnpm = pnpm_9;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "deltachat-desktop";
-  version = "1.54.2";
+  version = "2.22.0";
 
   src = fetchFromGitHub {
     owner = "deltachat";
     repo = "deltachat-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-KN8VO03/f143qMBv9Z6K75Mb3S1QQjgzt0psTnBFLyw=";
+    hash = "sha256-IEYfdA1rGg452pZVWW/XuIsNffyhAlI9qyGwcnksgAs=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-dRnmu5tEqrWn2AizLvd/ZMsiQJP4qtq/+SOSidpzLbY=";
+    fetcherVersion = 1;
+    hash = "sha256-fEzp+nrfLakmtUsPef0HG6tZGn5/q+271YwVyBkFKJw=";
   };
 
   nativeBuildInputs = [
@@ -58,16 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     pnpm.configHook
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     copyDesktopItems
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
   ];
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    SKIP_FUSES = true; # EACCES: permission denied
     VERSION_INFO_GIT_REF = finalAttrs.src.tag;
   };
 
@@ -113,6 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --inherit-argv0
 
+    install -Dt "$out/share/icons/hicolor/scalable/apps" images/tray/deltachat.svg
+
     runHook postInstall
   '';
 
@@ -123,7 +124,11 @@ stdenv.mkDerivation (finalAttrs: {
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
     comment = finalAttrs.meta.description;
-    categories = [ "Network" "InstantMessaging" "Chat" ];
+    categories = [
+      "Network"
+      "InstantMessaging"
+      "Chat"
+    ];
     startupWMClass = "DeltaChat";
     mimeTypes = [
       "x-scheme-handler/openpgp4fpr"

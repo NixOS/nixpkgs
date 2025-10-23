@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "bluetooth-auto-recovery";
-  version = "1.4.4";
+  version = "1.5.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,17 +25,19 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-auto-recovery";
     tag = "v${version}";
-    hash = "sha256-Sm3VLgWttMVXH+s1m1ab8kE6dHPit0GY4FVAld5Yg88=";
+    hash = "sha256-xnEEq3NVScMbMjZWb4lI+kpy2zr6WlXx3XcBhzN1rZ4=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
-    async-timeout
     bluetooth-adapters
     btsocket
     pyric
     usb-devices
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [
+    async-timeout
   ];
 
   nativeCheckInputs = [

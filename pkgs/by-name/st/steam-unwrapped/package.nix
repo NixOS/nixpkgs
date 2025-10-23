@@ -7,12 +7,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "steam-unwrapped";
-  version = "1.0.0.82";
+  version = "1.0.0.85";
 
   src = fetchurl {
     # use archive url so the tarball doesn't 404 on a new release
     url = "https://repo.steampowered.com/steam/archive/stable/steam_${finalAttrs.version}.tar.gz";
-    hash = "sha256-r6Lx3WJx/StkW6MLjzq0Cv02VONUJBoxy9UQAPfm/Hc=";
+    hash = "sha256-fy03Si+0E87VuBJRUUViGdkYolWHK0u3cBbLzPOLt/E=";
   };
 
   patches = [
@@ -23,8 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
+    "PREFIX=${placeholder "out"}"
   ];
 
   postInstall = ''
@@ -34,16 +33,17 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/etc/udev/rules.d/
     cp ./subprojects/steam-devices/*.rules $out/etc/udev/rules.d/
     substituteInPlace $out/etc/udev/rules.d/60-steam-input.rules \
-      --replace "/bin/sh" "${bash}/bin/bash"
+      --replace-fail "/bin/sh" "${bash}/bin/bash"
 
     # this just installs a link, "steam.desktop -> /lib/steam/steam.desktop"
     rm $out/share/applications/steam.desktop
-    sed -e 's,/usr/bin/steam,steam,g' steam.desktop > $out/share/applications/steam.desktop
+    substitute steam.desktop $out/share/applications/steam.desktop \
+      --replace-fail /usr/bin/steam steam
   '';
 
   passthru.updateScript = ./update.py;
 
-  meta = with lib; {
+  meta = {
     description = "Digital distribution platform";
     longDescription = ''
       Steam is a video game digital distribution service and storefront from Valve.
@@ -51,8 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
       To install on NixOS, please use the option `programs.steam.enable = true`.
     '';
     homepage = "https://store.steampowered.com/";
-    license = licenses.unfreeRedistributable;
-    maintainers = lib.teams.steam.members ++ [ lib.maintainers.jagajaga ];
+    license = lib.licenses.unfreeRedistributable;
+    maintainers = with lib.maintainers; [ jagajaga ];
+    teams = with lib.teams; [ steam ];
     mainProgram = "steam";
   };
 })

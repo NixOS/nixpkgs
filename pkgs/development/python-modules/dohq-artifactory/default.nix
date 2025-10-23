@@ -14,17 +14,17 @@
 
 buildPythonPackage rec {
   pname = "dohq-artifactory";
-  version = "0.10.3";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "devopshq";
     repo = "artifactory";
     tag = version;
-    hash = "sha256-AlC5WtYnMrrI8yR1io84QtblndlZLsGGiicc10tpnF8=";
+    hash = "sha256-oGv7sZWi/e9WWa5W82pJ6d8S2d2e9gaoGZ3P/97IWoI=";
   };
 
-  # https://github.com/devopshq/artifactory/issues/430
-  disabled = pythonAtLeast "3.12";
+  # https://github.com/devopshq/artifactory/issues/470
+  disabled = pythonAtLeast "3.13";
 
   pyproject = true;
 
@@ -43,7 +43,7 @@ buildPythonPackage rec {
     responses
   ];
 
-  pytestFlagsArray = [ "tests/unit" ];
+  enabledTestPaths = [ "tests/unit" ];
 
   passthru.updateScript = nix-update-script { };
 

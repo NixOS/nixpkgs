@@ -7,6 +7,8 @@
   # nativeBuildInputs
   pkg-config,
   python3,
+  autoPatchelfHook,
+  autoAddDriverRunpath,
 
   # buildInputs
   oniguruma,
@@ -32,6 +34,8 @@
 }:
 
 let
+  inherit (stdenv) hostPlatform;
+
   accelIsValid = builtins.elem acceleration [
     null
     false
@@ -45,7 +49,7 @@ let
     (acceleration == "cuda") || (config.cudaSupport && acceleration == null);
 
   minRequiredCudaCapability = "6.1"; # build fails with 6.0
-  inherit (cudaPackages.cudaFlags) cudaCapabilities;
+  inherit (cudaPackages.flags) cudaCapabilities;
   cudaCapabilityString =
     if cudaCapability == null then
       (builtins.head (
@@ -56,7 +60,7 @@ let
       ))
     else
       cudaCapability;
-  cudaCapability' = lib.toInt (cudaPackages.cudaFlags.dropDot cudaCapabilityString);
+  cudaCapability' = lib.toInt (cudaPackages.flags.dropDots cudaCapabilityString);
 
   mklSupport =
     assert accelIsValid;
@@ -65,88 +69,96 @@ let
   metalSupport =
     assert accelIsValid;
     (acceleration == "metal")
-    || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
+    || (hostPlatform.isDarwin && hostPlatform.isAarch64 && (acceleration == null));
 
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mistral-rs";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
-    tag = "v${version}";
-    hash = "sha256-dsqW0XpZN2FGZlmNKgAEYGcdY5iGvRwNUko2OuU87Gw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-mkxgssJUBtM1DYOhFfj8YKlW61/gd0cgPtMze7YZ9L8=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-Fp/5xQ1ib2TTBSayxR5EDKkk7G+5c1QdnVW+kzcE5Jo=";
+  patches = [
+    ./no-native-cpu.patch
+  ];
 
-  # Otherwise, fails with
-  # failed to get `anyhow` as a dependency of package
-  postPatch = ''
-    rm "$cargoDepsCopy"/llguidance-*/build.rs
-  '';
+  cargoHash = "sha256-YGGtS8gJJQKIgXxMWjO05ikSVdfVNs+cORbJ+Wf88y4=";
 
   nativeBuildInputs = [
     pkg-config
     python3
-  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ]
+  ++ lib.optionals cudaSupport [
+    # WARNING: autoAddDriverRunpath must run AFTER autoPatchelfHook
+    # Otherwise, autoPatchelfHook removes driverLink from RUNPATH
+    autoPatchelfHook
+    autoAddDriverRunpath
 
-  buildInputs =
-    [
-      oniguruma
-      openssl
-    ]
-    ++ lib.optionals cudaSupport [
-      cudaPackages.cuda_cudart
-      cudaPackages.cuda_nvrtc
-      cudaPackages.libcublas
-      cudaPackages.libcurand
-    ]
-    ++ lib.optionals mklSupport [ mkl ];
+    cudaPackages.cuda_nvcc
+  ];
+
+  buildInputs = [
+    oniguruma
+    openssl
+  ]
+  ++ lib.optionals cudaSupport [
+    cudaPackages.cuda_cccl
+    cudaPackages.cuda_cudart
+    cudaPackages.cuda_nvrtc
+    cudaPackages.libcublas
+    cudaPackages.libcurand
+  ]
+  ++ lib.optionals mklSupport [ mkl ];
 
   buildFeatures =
     lib.optionals cudaSupport [ "cuda" ]
     ++ lib.optionals mklSupport [ "mkl" ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "metal" ];
+    ++ lib.optionals (hostPlatform.isDarwin && metalSupport) [ "metal" ];
 
-  env =
-    {
-      SWAGGER_UI_DOWNLOAD_URL =
-        let
-          # When updating:
-          # - Look for the version of `utoipa-swagger-ui` at:
-          #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
-          # - Look at the corresponding version of `swagger-ui` at:
-          #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
-          swaggerUiVersion = "5.17.12";
+  env = {
+    SWAGGER_UI_DOWNLOAD_URL =
+      let
+        # When updating:
+        # - Look for the version of `utoipa-swagger-ui` at:
+        #   https://github.com/EricLBuehler/mistral.rs/blob/v<MISTRAL-RS-VERSION>/mistralrs-server/Cargo.toml
+        # - Look at the corresponding version of `swagger-ui` at:
+        #   https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-<UTOPIA-SWAGGER-UI-VERSION>/utoipa-swagger-ui/build.rs#L21-L22
+        swaggerUiVersion = "5.17.12";
 
-          swaggerUi = fetchurl {
-            url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
-            hash = "sha256-HK4z/JI+1yq8BTBJveYXv9bpN/sXru7bn/8g5mf2B/I=";
-          };
-        in
-        "file://${swaggerUi}";
+        swaggerUi = fetchurl {
+          url = "https://github.com/swagger-api/swagger-ui/archive/refs/tags/v${swaggerUiVersion}.zip";
+          hash = "sha256-HK4z/JI+1yq8BTBJveYXv9bpN/sXru7bn/8g5mf2B/I=";
+        };
+      in
+      "file://${swaggerUi}";
 
-      RUSTONIG_SYSTEM_LIBONIG = true;
-    }
-    // (lib.optionalAttrs cudaSupport {
-      CUDA_COMPUTE_CAP = cudaCapability';
+    RUSTONIG_SYSTEM_LIBONIG = true;
+  }
+  // (lib.optionalAttrs cudaSupport {
+    CUDA_COMPUTE_CAP = cudaCapability';
 
-      # Apparently, cudart is enough: No need to provide the entire cudaPackages.cudatoolkit derivation.
-      CUDA_TOOLKIT_ROOT_DIR = lib.getDev cudaPackages.cuda_cudart;
-    });
+    # We already list CUDA dependencies in buildInputs
+    # We only set CUDA_TOOLKIT_ROOT_DIR to satisfy some redundant checks from upstream
+    CUDA_TOOLKIT_ROOT_DIR = lib.getDev cudaPackages.cuda_cudart;
+  });
 
-  NVCC_PREPEND_FLAGS = lib.optionals cudaSupport [
-    "-I${lib.getDev cudaPackages.cuda_cudart}/include"
-    "-I${lib.getDev cudaPackages.cuda_cccl}/include"
+  appendRunpaths = lib.optionals cudaSupport [
+    (lib.makeLibraryPath [
+      cudaPackages.libcublas
+      cudaPackages.libcurand
+    ])
   ];
 
   # swagger-ui will once more be copied in the target directory during the check phase
+  # See https://github.com/juhaku/utoipa/blob/utoipa-swagger-ui-7.1.0/utoipa-swagger-ui/build.rs#L168
   # Not deleting the existing unpacked archive leads to a `PermissionDenied` error
   preCheck = ''
-    rm -rf target/${stdenv.hostPlatform.config}/release/build/
+    rm -rf target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/build/
   '';
 
   # Prevent checkFeatures from inheriting buildFeatures because
@@ -165,20 +177,18 @@ rustPlatform.buildRustPackage rec {
     versionCheckHook
   ];
   versionCheckProgram = "${placeholder "out"}/bin/mistralrs-server";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
     tests = {
       version = testers.testVersion { package = mistral-rs; };
 
-      withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
+      withMkl = lib.optionalAttrs (hostPlatform.isLinux && hostPlatform.isx86_64) (
         mistral-rs.override { acceleration = "mkl"; }
       );
-      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
-        mistral-rs.override { acceleration = "cuda"; }
-      );
-      withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
+      withCuda = lib.optionalAttrs hostPlatform.isLinux (mistral-rs.override { acceleration = "cuda"; });
+      withMetal = lib.optionalAttrs (hostPlatform.isDarwin && hostPlatform.isAarch64) (
         mistral-rs.override { acceleration = "metal"; }
       );
     };
@@ -188,7 +198,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Blazingly fast LLM inference";
     homepage = "https://github.com/EricLBuehler/mistral.rs";
-    changelog = "https://github.com/EricLBuehler/mistral.rs/releases/tag/v${version}";
+    changelog = "https://github.com/EricLBuehler/mistral.rs/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "mistralrs-server";
@@ -203,4 +213,4 @@ rustPlatform.buildRustPackage rec {
         lib.platforms.unix;
     broken = mklSupport;
   };
-}
+})

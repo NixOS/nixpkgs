@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "PowerDNS-Admin";
     repo = "PowerDNS-Admin";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-q9mt8wjSNFb452Xsg+qhNOWa03KJkYVGAeCWVSzZCyk=";
   };
 
@@ -66,6 +66,7 @@ let
     werkzeug
     zipp
     zxcvbn
+    standard-imghdr
   ];
 
   all_patches = [
@@ -83,7 +84,8 @@ let
 
     nativeBuildInputs = [
       yarnConfigHook
-    ] ++ pythonDeps;
+    ]
+    ++ pythonDeps;
     patches = all_patches ++ [
       ./0002-Remove-cssrewrite-filter.patch
     ];
@@ -129,8 +131,8 @@ stdenv.mkDerivation {
   patches = all_patches ++ [
     ./0003-Fix-flask-migrate-4.0-compatibility.patch
     ./0004-Fix-flask-session-and-powerdns-admin-compatibility.patch
-    ./0005-Use-app-context-to-create-routes.patch
-    ./0006-Register-modules-before-starting.patch
+    ./0005-Fix-app-context-and-register-modules.patch
+    ./0006-Fix-regex.patch
   ];
 
   postPatch = ''
@@ -164,12 +166,12 @@ stdenv.mkDerivation {
     tests = nixosTests.powerdns-admin;
   };
 
-  meta = with lib; {
+  meta = {
     description = "PowerDNS web interface with advanced features";
     mainProgram = "powerdns-admin";
     homepage = "https://github.com/PowerDNS-Admin/PowerDNS-Admin";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Flakebi
       zhaofengli
     ];

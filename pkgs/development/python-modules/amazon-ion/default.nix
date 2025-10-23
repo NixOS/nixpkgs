@@ -6,7 +6,7 @@
   fetchFromGitHub,
   jsonconversion,
   pytestCheckHook,
-  pythonOlder,
+  pytest_7,
   setuptools,
   six,
   tabulate,
@@ -16,8 +16,6 @@ buildPythonPackage rec {
   pname = "amazon-ion";
   version = "0.13.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "amazon-ion";
@@ -33,9 +31,9 @@ buildPythonPackage rec {
       --replace "'pytest-runner'," ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonconversion
     six
   ];
@@ -43,7 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     cbor2
     docopt
-    pytestCheckHook
+    (pytestCheckHook.override { pytest = pytest_7; })
     tabulate
   ];
 

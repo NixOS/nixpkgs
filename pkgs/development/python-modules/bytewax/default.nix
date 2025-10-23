@@ -1,9 +1,8 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
+  pythonAtLeast,
 
   # build-system
   cmake,
@@ -17,6 +16,7 @@
 
   # dependencies
   jsonpickle,
+  prometheus-client,
 
   # optional dependencies
   confluent-kafka,
@@ -24,33 +24,31 @@
   # test
   myst-docutils,
   pytestCheckHook,
+  pytest-benchmark,
 }:
 
 buildPythonPackage rec {
   pname = "bytewax";
-  version = "0.17.2";
-  format = "pyproject";
+  version = "0.21.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  # error: the configured Python interpreter version (3.13) is newer than PyO3's maximum supported version (3.12)
+  disabled = pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "bytewax";
-    repo = pname;
+    repo = "bytewax";
     tag = "v${version}";
-    hash = "sha256-BecZvBJsaTHIhJhWM9GZldSL6Irrc7fiedulTN9e76I=";
+    hash = "sha256-O5q1Jd3AMUaQwfQM249CUnkjqEkXybxtM9SOISoULZk=";
   };
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
 
-  # Remove docs tests, myst-docutils in nixpkgs is not compatible with package requirements.
-  # Package uses old version.
-  patches = [ ./remove-docs-test.patch ];
-
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-osLr4u5vQa3/2whytC9PsXKURAwMCNObykY5Us7P3kQ=";
+    hash = "sha256-TTB1//Xza47rnfvlIs9qMvwHPj/U3w2cGTmWrEokriQ=";
   };
 
   nativeBuildInputs = [
@@ -68,7 +66,10 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  propagatedBuildInputs = [ jsonpickle ];
+  dependencies = [
+    jsonpickle
+    prometheus-client
+  ];
 
   optional-dependencies = {
     kafka = [ confluent-kafka ];
@@ -78,10 +79,20 @@ buildPythonPackage rec {
     export PY_IGNORE_IMPORTMISMATCH=1
   '';
 
-  checkInputs = [
+  nativeCheckInputs = [
     myst-docutils
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+    pytest-benchmark
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlags = [
+    "--benchmark-disable"
+  ];
+
+  enabledTestPaths = [
+    "pytests"
+  ];
 
   disabledTestPaths = [
     # dependens on an old myst-docutils version
@@ -90,16 +101,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "bytewax" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Stream Processing";
     homepage = "https://github.com/bytewax/bytewax";
     changelog = "https://github.com/bytewax/bytewax/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       mslingsby
       kfollesdal
     ];
-    # mismatched type expected u8, found i8
-    broken = stdenv.hostPlatform.isAarch64;
   };
 }

@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "pyannote-metrics";
-  version = "3.2.1";
+  version = "3.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     owner = "pyannote";
     repo = "pyannote-metrics";
     tag = version;
-    hash = "sha256-V4qyaCaFsoikfFILm2sccf6m7lqJSDTdLxS1sr/LXAY=";
+    hash = "sha256-tinNdFiUISnzUDnzM8wT3+0W8Dlc9gbCiNoIMo9xNKY=";
   };
 
   postPatch = ''

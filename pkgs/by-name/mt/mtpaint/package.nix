@@ -14,7 +14,7 @@
   gifsicle,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "mtPaint";
   version = "3.50.01";
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mtpaint.sourceforge.net/";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.vklquevs ];
+    maintainers = [ ];
     mainProgram = "mtpaint";
   };
 }

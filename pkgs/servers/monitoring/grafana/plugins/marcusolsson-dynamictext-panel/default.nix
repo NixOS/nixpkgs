@@ -1,9 +1,9 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "marcusolsson-dynamictext-panel";
-  version = "5.6.0";
-  zipHash = "sha256-UDJG6KAaothSv26SHKo1HNQwVHg5slI01rmDnGgGBWs=";
+  version = "6.0.0";
+  zipHash = "sha256-OfQWEwEu+c0DvuACddBM5wjXZWxr6D3QP/N4KUQfQ+k=";
   meta = with lib; {
     description = "Dynamic, data-driven text panel for Grafana";
     license = licenses.asl20;

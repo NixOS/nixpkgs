@@ -32,32 +32,30 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-VpwHjA0LufKDnGRAS906Qh3R2pVt4uUGXxsRcca9SyM=";
   };
 
-  nativeBuildInputs =
-    [
-      installShellFiles
-      pkg-config
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      libicns
-    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    libicns
+  ];
 
-  buildInputs =
-    [
-      SDL2
-      libao
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      alsa-lib
-      gtk3
-      gtksourceview3
-      libGL
-      libGLU
-      libX11
-      libXv
-      libpulseaudio
-      openal
-      udev
-    ];
+  buildInputs = [
+    SDL2
+    libao
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    alsa-lib
+    gtk3
+    gtksourceview3
+    libGL
+    libGLU
+    libX11
+    libXv
+    libpulseaudio
+    openal
+    udev
+  ];
 
   patches = [
     # Includes cmath header
@@ -105,67 +103,66 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-  installPhase =
-    ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-    ''
-    + (
-      if stdenv.hostPlatform.isDarwin then
-        ''
-          mkdir $out
-          mv higan/out/higan.app $out/
-          mv icarus/out/icarus.app $out/
-        ''
-      else
-        ''
-          installBin higan-ui/out/higan icarus/out/icarus
-
-          install -d $out/share/applications
-          install higan-ui/resource/higan.desktop -t $out/share/applications/
-          install icarus/resource/icarus.desktop -t $out/share/applications/
-
-          install -d $out/share/pixmaps
-          install higan/higan/resource/higan.svg $out/share/pixmaps/higan-icon.svg
-          install higan/higan/resource/logo.png $out/share/pixmaps/higan-icon.png
-          install icarus/resource/icarus.svg $out/share/pixmaps/icarus-icon.svg
-          install icarus/resource/icarus.png $out/share/pixmaps/icarus-icon.png
-        ''
-    )
-    + ''
-      install -d $out/share/higan
-      cp -rd extras/ higan/System/ $out/share/higan/
-
-      install -d $out/share/icarus
-      cp -rd icarus/Database icarus/Firmware $out/share/icarus/
-    ''
-    + (
-      # A dirty workaround, suggested by @cpages:
-      # we create a first-run script to populate
-      # $HOME with all the stuff needed at runtime
-      let
-        dest =
-          if stdenv.hostPlatform.isDarwin then
-            "\\$HOME/Library/Application Support/higan"
-          else
-            "\\$HOME/higan";
-      in
+  ''
+  + (
+    if stdenv.hostPlatform.isDarwin then
       ''
-        mkdir -p $out/bin
-        cat <<EOF > $out/bin/higan-init.sh
-        #!${runtimeShell}
-
-        cp --recursive --update $out/share/higan/System/ "${dest}"/
-
-        EOF
-
-        chmod +x $out/bin/higan-init.sh
+        mkdir $out
+        mv higan/out/higan.app $out/
+        mv icarus/out/icarus.app $out/
       ''
-    )
-    + ''
+    else
+      ''
+        installBin higan-ui/out/higan icarus/out/icarus
 
-      runHook postInstall
-    '';
+        install -d $out/share/applications
+        install higan-ui/resource/higan.desktop -t $out/share/applications/
+        install icarus/resource/icarus.desktop -t $out/share/applications/
+
+        install -d $out/share/pixmaps
+        install higan/higan/resource/higan.svg $out/share/pixmaps/higan-icon.svg
+        install higan/higan/resource/logo.png $out/share/pixmaps/higan-icon.png
+        install icarus/resource/icarus.svg $out/share/pixmaps/icarus-icon.svg
+        install icarus/resource/icarus.png $out/share/pixmaps/icarus-icon.png
+      ''
+  )
+  + ''
+    install -d $out/share/higan
+    cp -rd extras/ higan/System/ $out/share/higan/
+
+    install -d $out/share/icarus
+    cp -rd icarus/Database icarus/Firmware $out/share/icarus/
+  ''
+  + (
+    # A dirty workaround, suggested by @cpages:
+    # we create a first-run script to populate
+    # $HOME with all the stuff needed at runtime
+    let
+      dest =
+        if stdenv.hostPlatform.isDarwin then
+          "\\$HOME/Library/Application Support/higan"
+        else
+          "\\$HOME/higan";
+    in
+    ''
+      mkdir -p $out/bin
+      cat <<EOF > $out/bin/higan-init.sh
+      #!${runtimeShell}
+
+      cp --recursive --update $out/share/higan/System/ "${dest}"/
+
+      EOF
+
+      chmod +x $out/bin/higan-init.sh
+    ''
+  )
+  + ''
+
+    runHook postInstall
+  '';
 
   passthru.updateScript = unstableGitUpdater { };
 
@@ -184,7 +181,7 @@ stdenv.mkDerivation (finalAttrs: {
       Challenge V2.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

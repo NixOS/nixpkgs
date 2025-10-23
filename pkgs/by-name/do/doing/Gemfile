@@ -1,2 +1,2 @@
 source 'https://rubygems.org'
-gem 'doing', '1.0.10pre'
+gem 'doing'

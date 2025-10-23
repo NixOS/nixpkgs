@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "agkozak";
     repo = "agkozak-zsh-prompt";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-FC9LIZaS6fV20qq6cJC/xQvfsM3DHXatVleH7yBgoNg=";
   };
 

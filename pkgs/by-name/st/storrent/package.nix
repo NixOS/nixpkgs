@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "storrent";
-  version = "unstable-2023-01-14";
+  version = "0-unstable-2023-01-14";
 
   src = fetchFromGitHub {
     owner = "jech";

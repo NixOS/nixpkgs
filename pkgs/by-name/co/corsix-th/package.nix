@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "corsix-th";
-  version = "0.68.0";
+  version = "0.69.1";
 
   src = fetchFromGitHub {
     owner = "CorsixTH";
     repo = "CorsixTH";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-D8ks+fiFJxwClqW1aNtGGa5UxAFvuH2f2guwPxOEQwI=";
+    hash = "sha256-Jrf3PhgnJUBGy+ZcSPjU5tQFyuTmnn5+8P6LujsoSAg=";
   };
 
   patches = [

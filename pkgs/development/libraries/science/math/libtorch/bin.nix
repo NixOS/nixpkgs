@@ -24,7 +24,6 @@ let
   device = if cudaSupport then "cuda" else "cpu";
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
-  libcxx-for-libtorch = if stdenv.hostPlatform.isDarwin then libcxx else (lib.getLib stdenv.cc.cc);
 in
 stdenv.mkDerivation {
   inherit version;
@@ -87,9 +86,6 @@ stdenv.mkDerivation {
         for rpath in $(otool -L $f | grep rpath | awk '{print $1}');do
           install_name_tool -change $rpath $out/lib/$(basename $rpath) $f
         done
-        if otool -L $f | grep /usr/lib/libc++ >& /dev/null; then
-          install_name_tool -change /usr/lib/libc++.1.dylib ${libcxx-for-libtorch.outPath}/lib/libc++.1.0.dylib $f
-        fi
       done
       for f in $out/lib/*.dylib; do
           otool -L $f

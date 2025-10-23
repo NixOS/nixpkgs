@@ -11,6 +11,6 @@ in
 
 runCommand "nixos-test-driver-docstrings" env ''
   mkdir $out
-  python3 ${./src/extract-docstrings.py} ${./src/test_driver/machine.py} \
+  python3 ${./src/extract-docstrings.py} ${./src/test_driver/machine/__init__.py} \
     > $out/machine-methods.md
 ''

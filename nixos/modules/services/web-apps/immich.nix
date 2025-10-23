@@ -10,6 +10,10 @@ let
   isPostgresUnixSocket = lib.hasPrefix "/" cfg.database.host;
   isRedisUnixSocket = lib.hasPrefix "/" cfg.redis.host;
 
+  # convert a Nix attribute path to jq object identifier-index:
+  # https://jqlang.org/manual/#object-identifier-index
+  attrPathToIndex = attrPath: "." + lib.concatStringsSep "." attrPath;
+
   commonServiceConfig = {
     Type = "simple";
     Restart = "on-failure";
@@ -46,6 +50,9 @@ let
     mkOption
     mkEnableOption
     ;
+
+  postgresqlPackage =
+    if cfg.database.enable then config.services.postgresql.package else pkgs.postgresql;
 in
 {
   options.services.immich = {
@@ -144,6 +151,27 @@ in
       );
     };
 
+    secretSettings = mkOption {
+      default = { };
+      description = ''
+        Secrets to to be added to the JSON file generated from {option}`settings`, read from files.
+      '';
+      example = lib.literalExpression ''
+        {
+          notifications.smtp.transport.password = "/path/to/secret";
+          oauth.clientSecret = "/path/to/other/secret";
+        }
+      '';
+      type =
+        let
+          inherit (types) attrsOf either path;
+          recursiveType = either (attrsOf recursiveType) path // {
+            description = "nested " + (attrsOf path).description;
+          };
+        in
+        recursiveType;
+    };
+
     machine-learning = {
       enable =
         mkEnableOption "immich's machine-learning functionality to detect faces and search for objects"
@@ -178,6 +206,17 @@ in
         mkEnableOption "the postgresql database for use with immich. See {option}`services.postgresql`"
         // {
           default = true;
+        };
+      enableVectorChord =
+        mkEnableOption "the new VectorChord extension for full-text search in Postgres"
+        // {
+          default = true;
+        };
+      enableVectors =
+        mkEnableOption "pgvecto.rs in the database. You may disable this, if you have migrated to VectorChord and deleted the `vectors` schema."
+        // {
+          default = lib.versionOlder config.system.stateVersion "25.11";
+          defaultText = lib.literalExpression "lib.versionOlder config.system.stateVersion \"25.11\"";
         };
       createDB = mkEnableOption "the automatic creation of the database for immich." // {
         default = true;
@@ -228,6 +267,17 @@ in
         assertion = !isPostgresUnixSocket -> cfg.secretsFile != null;
         message = "A secrets file containing at least the database password must be provided when unix sockets are not used.";
       }
+      {
+        # When removing this assertion, please adjust the nixosTests accordingly.
+        assertion =
+          (cfg.database.enable && cfg.database.enableVectors)
+          -> lib.versionOlder config.services.postgresql.package.version "17";
+        message = "Immich doesn't support PostgreSQL 17+ when using pgvecto.rs. Consider disabling it using services.immich.database.enableVectors if it is not needed anymore.";
+      }
+      {
+        assertion = cfg.database.enable -> (cfg.database.enableVectorChord || cfg.database.enableVectors);
+        message = "At least one of services.immich.database.enableVectorChord and services.immich.database.enableVectors has to be enabled.";
+      }
     ];
 
     services.postgresql = mkIf cfg.database.enable {
@@ -240,32 +290,53 @@ in
           ensureClauses.login = true;
         }
       ];
-      extensions = ps: with ps; [ pgvecto-rs ];
+      extensions =
+        ps:
+        lib.optionals cfg.database.enableVectors [ ps.pgvecto-rs ]
+        ++ lib.optionals cfg.database.enableVectorChord [
+          ps.pgvector
+          ps.vectorchord
+        ];
       settings = {
-        shared_preload_libraries = [ "vectors.so" ];
+        shared_preload_libraries =
+          lib.optionals cfg.database.enableVectors [
+            "vectors.so"
+          ]
+          ++ lib.optionals cfg.database.enableVectorChord [ "vchord.so" ];
         search_path = "\"$user\", public, vectors";
       };
     };
-    systemd.services.postgresql.serviceConfig.ExecStartPost =
+    systemd.services.postgresql-setup.serviceConfig.ExecStartPost =
       let
-        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" ''
-          CREATE EXTENSION IF NOT EXISTS unaccent;
-          CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-          CREATE EXTENSION IF NOT EXISTS vectors;
-          CREATE EXTENSION IF NOT EXISTS cube;
-          CREATE EXTENSION IF NOT EXISTS earthdistance;
-          CREATE EXTENSION IF NOT EXISTS pg_trgm;
-
-          ALTER SCHEMA public OWNER TO ${cfg.database.user};
-          ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
-          GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
-
-          ALTER EXTENSION vectors UPDATE;
-        '';
+        extensions = [
+          "unaccent"
+          "uuid-ossp"
+          "cube"
+          "earthdistance"
+          "pg_trgm"
+        ]
+        ++ lib.optionals cfg.database.enableVectors [
+          "vectors"
+        ]
+        ++ lib.optionals cfg.database.enableVectorChord [
+          "vector"
+          "vchord"
+        ];
+        sqlFile = pkgs.writeText "immich-pgvectors-setup.sql" (
+          ''
+            ${lib.concatMapStringsSep "\n" (ext: "CREATE EXTENSION IF NOT EXISTS \"${ext}\";") extensions}
+            ${lib.concatMapStringsSep "\n" (ext: "ALTER EXTENSION \"${ext}\" UPDATE;") extensions}
+            ALTER SCHEMA public OWNER TO ${cfg.database.user};
+          ''
+          + lib.optionalString cfg.database.enableVectors ''
+            ALTER SCHEMA vectors OWNER TO ${cfg.database.user};
+            GRANT SELECT ON TABLE pg_vector_index_stat TO ${cfg.database.user};
+          ''
+        );
       in
       [
         ''
-          ${lib.getExe' config.services.postgresql.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' postgresqlPackage "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
         ''
       ];
 
@@ -309,13 +380,14 @@ in
         IMMICH_MACHINE_LEARNING_URL = "http://localhost:3003";
       }
       // lib.optionalAttrs (cfg.settings != null) {
-        IMMICH_CONFIG_FILE = "${format.generate "immich.json" cfg.settings}";
+        IMMICH_CONFIG_FILE = "/run/immich/config.json";
       };
 
     services.immich.machine-learning.environment = {
       MACHINE_LEARNING_WORKERS = "1";
       MACHINE_LEARNING_WORKER_TIMEOUT = "120";
       MACHINE_LEARNING_CACHE_FOLDER = "/var/cache/immich";
+      XDG_CACHE_HOME = "/var/cache/immich";
       IMMICH_HOST = "localhost";
       IMMICH_PORT = "3003";
     };
@@ -327,16 +399,34 @@ in
 
     systemd.services.immich-server = {
       description = "Immich backend server (Self-hosted photo and video backup solution)";
-      after = [ "network.target" ];
+      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg) environment;
       path = [
         # gzip and pg_dumpall are used by the backup service
         pkgs.gzip
-        config.services.postgresql.package
+        postgresqlPackage
       ];
 
+      preStart = mkIf (cfg.settings != null) (
+        ''
+          cat '${format.generate "immich-config.json" cfg.settings}' > /run/immich/config.json
+        ''
+        + lib.concatStrings (
+          lib.mapAttrsToListRecursive (attrPath: _: ''
+            tmp="$(mktemp)"
+            ${lib.getExe pkgs.jq} --rawfile secret "$CREDENTIALS_DIRECTORY/${attrPathToIndex attrPath}" \
+              '${attrPathToIndex attrPath} = ($secret | rtrimstr("\n"))' /run/immich/config.json > "$tmp"
+            mv "$tmp" /run/immich/config.json
+          '') cfg.secretSettings
+        )
+      );
+
       serviceConfig = commonServiceConfig // {
+        LoadCredential = lib.mapAttrsToListRecursive (
+          attrPath: file: "${attrPathToIndex attrPath}:${file}"
+        ) cfg.secretSettings;
         ExecStart = lib.getExe cfg.package;
         EnvironmentFile = mkIf (cfg.secretsFile != null) cfg.secretsFile;
         Slice = "system-immich.slice";
@@ -354,7 +444,8 @@ in
 
     systemd.services.immich-machine-learning = mkIf cfg.machine-learning.enable {
       description = "immich machine learning";
-      after = [ "network.target" ];
+      requires = lib.mkIf cfg.database.enable [ "postgresql.target" ];
+      after = [ "network.target" ] ++ lib.optionals cfg.database.enable [ "postgresql.target" ];
       wantedBy = [ "multi-user.target" ];
       inherit (cfg.machine-learning) environment;
       serviceConfig = commonServiceConfig // {
@@ -389,7 +480,9 @@ in
       };
     };
     users.groups = mkIf (cfg.group == "immich") { immich = { }; };
-
-    meta.maintainers = with lib.maintainers; [ jvanbruegge ];
+  };
+  meta = {
+    maintainers = with lib.maintainers; [ jvanbruegge ];
+    doc = ./immich.md;
   };
 }

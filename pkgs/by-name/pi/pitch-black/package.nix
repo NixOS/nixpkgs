@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "pitch-black";
-  version = "unstable-2019-07-23";
+  version = "0-unstable-2019-07-23";
 
   src = fetchFromGitHub {
     repo = "pitch-black";

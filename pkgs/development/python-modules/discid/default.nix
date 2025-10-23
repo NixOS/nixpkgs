@@ -4,17 +4,22 @@
   libdiscid,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "discid";
-  version = "1.2.0";
-  format = "setuptools";
+  version = "1.3.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fc6kvnqwaz9lrs2qgsp8wh0nabf49010r0r53wnsmpmafy315nd";
+    sha256 = "sha256-cWChIRrD1qbYIT+4jdPXPjKr5eATNqWkyYWwgql9QzU=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   patchPhase =
     let

@@ -2,13 +2,13 @@
 rec {
 
   pname = "mobilizon";
-  version = "5.1.2";
+  version = "5.2.0";
 
   src = fetchFromGitLab {
     domain = "framagit.org";
-    owner = "framasoft";
+    owner = "kaihuri";
     repo = pname;
     tag = version;
-    sha256 = "sha256-5xHLk5/ogtRN3mfJPP1/gIVlALerT9KEUHjLA2Ou3aM=";
+    hash = "sha256-wsiu0f0M0SMjgskMJuA/wUx6IxT7bTzHrOnxX8eFq9g=";
   };
 }

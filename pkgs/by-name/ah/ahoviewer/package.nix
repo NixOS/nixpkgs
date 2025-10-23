@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
-    rev = version;
+    tag = version;
     sha256 = "1avdl4qcpznvf3s2id5qi1vnzy4wgh6vxpnrz777a1s4iydxpcd8";
   };
 
@@ -53,7 +53,8 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-libav
     gst_all_1.gst-plugins-base
-  ] ++ lib.optional useUnrar unrar;
+  ]
+  ++ lib.optional useUnrar unrar;
 
   NIX_LDFLAGS = "-lpthread";
 

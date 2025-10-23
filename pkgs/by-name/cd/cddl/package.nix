@@ -5,13 +5,13 @@
   makeBinaryWrapper,
 }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "cddl";
 
   gemfile = ./Gemfile;
   lockfile = ./Gemfile.lock;
 
-  gemset = lib.recursiveUpdate (import ./gemset.nix) ({
+  gemset = lib.recursiveUpdate (import ./gemset.nix) {
     "cddl" = {
       dontBuild = false;
       # setting env vars is not supported by patchShebangs
@@ -19,7 +19,7 @@ bundlerApp rec {
         sed -i 's\#!/usr/bin/env RUBY_THREAD_VM_STACK_SIZE=5000000\#!/usr/bin/env\' bin/cddl
       '';
     };
-  });
+  };
 
   exes = [ "cddl" ];
 

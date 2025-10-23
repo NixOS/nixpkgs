@@ -63,16 +63,15 @@ python3Packages.buildPythonPackage rec {
   # Tests are not included in releases
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Open source chat-ops bot framework";
     homepage = "https://opsdroid.dev";
     changelog = "https://github.com/opsdroid/opsdroid/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       globin
-      willibutz
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "opsdroid";
   };
 }

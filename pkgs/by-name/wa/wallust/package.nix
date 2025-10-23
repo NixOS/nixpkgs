@@ -7,23 +7,19 @@
   makeWrapper,
   installShellFiles,
 }:
-let
-  version = "3.2.0";
-in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "wallust";
-  inherit version;
+  version = "3.4.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "explosion-mental";
     repo = "wallust";
-    rev = version;
-    hash = "sha256-71vLHuzLcNTvwE7j6iIQZJWD18IQnA0OwF/cOAZCLL8=";
+    rev = finalAttrs.version;
+    hash = "sha256-tNlSRdldzAXpM3x4XGVZeidwhplYu7xR7h7qPELaasE=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TxlGzfupx9661T8nGvSxurz9cxc9C3udOnoU3PXVCdQ=";
+  cargoHash = "sha256-7x217i1htwHoIc+uvYNwpefIRnPRV7RI0f4c4R2k8tU=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -53,7 +49,7 @@ rustPlatform.buildRustPackage {
       onemoresuza
       iynaix
     ];
-    downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${version}";
+    downloadPage = "https://codeberg.org/explosion-mental/wallust/releases/tag/${finalAttrs.version}";
     mainProgram = "wallust";
   };
-}
+})

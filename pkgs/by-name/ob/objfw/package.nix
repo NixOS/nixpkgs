@@ -11,12 +11,12 @@
 
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "objfw";
-  version = "1.2.4";
+  version = "1.3.2";
 
   src = fetchfossil {
     url = "https://objfw.nil.im/home";
     rev = "${finalAttrs.version}-release";
-    hash = "sha256-IsYXg3rZ539c+mOmIAOUHtTMDZtPKuTshzlw/dOi/lg=";
+    hash = "sha256-cFYsiNG60FyDXAeiuBZn/u/1dEawVAxF7EDFBZRYt7w=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ clangStdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    description = "A portable framework for the Objective-C language";
+    description = "Portable framework for the Objective-C language";
     homepage = "https://objfw.nil.im";
     license = lib.licenses.lgpl3;
     maintainers = [ lib.maintainers.steeleduncan ];

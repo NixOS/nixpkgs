@@ -9,7 +9,7 @@
   fetchFromGitLab,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "hcs-utils";
   version = "2.1.0";
   pyproject = true;
@@ -34,6 +34,7 @@ buildPythonPackage rec {
 
   disabledTests = [
     "test_expand" # It depends on FHS
+    "test_blocking" # flaky, depends on comparing running time w/ magic value
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

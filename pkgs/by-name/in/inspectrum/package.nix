@@ -1,12 +1,13 @@
-{ lib
-, gnuradioMinimal
-, thrift
-, fetchFromGitHub
-, pkg-config
-, cmake
-, fftwFloat
-, qt5
-, liquid-dsp
+{
+  lib,
+  gnuradioMinimal,
+  thrift,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  fftwFloat,
+  qt5,
+  liquid-dsp,
 }:
 
 gnuradioMinimal.pkgs.mkDerivation rec {
@@ -29,7 +30,8 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     fftwFloat
     liquid-dsp
     qt5.qtbase
-  ] ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
+  ]
+  ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
     thrift
     gnuradioMinimal.unwrapped.python.pkgs.thrift
   ];

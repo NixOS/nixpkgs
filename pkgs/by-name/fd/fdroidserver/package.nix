@@ -10,7 +10,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "fdroidserver";
-  version = "2.3.5";
+  version = "2.4.2";
 
   pyproject = true;
 
@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
     owner = "fdroid";
     repo = "fdroidserver";
     tag = version;
-    hash = "sha256-ESSjC44tdWpmtB+VhEDnUTQz+ZJVQ4jLBjj+0hMSAQA=";
+    hash = "sha256-26D+nnytLOsEAWNj2XvKM2O00epGtvJaJhUw+yoBl9Y=";
   };
 
   pythonRelaxDeps = [

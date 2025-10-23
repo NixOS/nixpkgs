@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-m17n";
-  version = "1.4.35";
+  version = "1.4.36";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus-m17n";
     rev = version;
-    sha256 = "sha256-+pNECooSLFqTRkijJiU4a3NpTnDNL9qzhkMp6gSq4XY=";
+    sha256 = "sha256-K7grmYROFRwdmYWiWNRv8TnEUpOie1W8Glx9BP6Orzc=";
   };
 
   nativeBuildInputs = [
@@ -52,6 +52,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/ibus/ibus-m17n";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = [ ];
   };
 }

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
   cmake,
   libtool,
   libxml2,
@@ -9,21 +9,21 @@
   pcsclite,
   opensc,
   openssl,
-  xercesc,
   pkg-config,
-  xsd,
   zlib,
   xmlsec,
   xxd,
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.1.0";
+  version = "4.2.1";
   pname = "libdigidocpp";
 
-  src = fetchurl {
-    url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";
-    hash = "sha256-lY7UVAhdWadLUKR21ezUfWc1Xdv/MWhfI/by4btcvr8=";
+  src = fetchFromGitHub {
+    owner = "open-eid";
+    repo = "libdigidocpp";
+    tag = "v${version}";
+    hash = "sha256-YWpehK/Gkb4c81KGbXzZoagTdcE94tSKWLh+BBZ3rKY=";
   };
 
   nativeBuildInputs = [
@@ -38,8 +38,6 @@ stdenv.mkDerivation rec {
     pcsclite
     opensc
     openssl
-    xercesc
-    xsd
     zlib
     xmlsec
   ];
@@ -51,17 +49,21 @@ stdenv.mkDerivation rec {
     "bin"
   ];
 
+  cmakeFlags = [
+    (lib.cmakeFeature "PKCS11_MODULE" "${lib.getLib opensc}/lib/opensc-pkcs11.so")
+  ];
+
   # This wants to link to ${CMAKE_DL_LIBS} (ltdl), and there doesn't seem to be
   # a way to tell CMake where this should be pulled from.
   # A cleaner fix would probably be to patch cmake to use
   # `-L${libtool.lib}/lib -ltdl` for `CMAKE_DL_LIBS`, but that's a world rebuild.
   env.NIX_LDFLAGS = "-L${libtool.lib}/lib";
 
-  # libdigidocpp.so's `PKCS11Signer::PKCS11Signer()` dlopen()s "opensc-pkcs11.so"
-  # itself, so add OpenSC to its DT_RUNPATH after the fixupPhase shrinked it.
-  # https://github.com/open-eid/cmake/pull/35 might be an alternative.
+  # Prevent cmake from creating a file that sets INTERFACE_INCLUDE_DIRECTORIES to the wrong location,
+  # causing downstream build failures.
   postFixup = ''
-    patchelf --add-rpath ${opensc}/lib/pkcs11 $lib/lib/libdigidocpp.so
+    sed '/^  INTERFACE_INCLUDE_DIRECTORIES/s|"[^"]*/include"|"${placeholder "dev"}/include"|' \
+      -i "$dev"/lib/cmake/libdigidocpp/libdigidocpp-config.cmake
   '';
 
   meta = with lib; {
@@ -70,6 +72,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = [ maintainers.jagajaga ];
+    maintainers = [
+      maintainers.flokli
+      maintainers.jagajaga
+    ];
   };
 }

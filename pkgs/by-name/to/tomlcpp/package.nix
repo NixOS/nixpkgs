@@ -5,7 +5,7 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tomlcpp";
   version = "0.pre+date=2022-06-25";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/cktan/tomlcpp";
     description = "No fanfare TOML C++ Library";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = with lib.platforms; unix;
   };
 }

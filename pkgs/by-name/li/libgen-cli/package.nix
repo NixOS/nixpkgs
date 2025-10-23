@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -11,7 +12,7 @@ buildGoModule rec {
 
   src = fetchFromGitHub {
     owner = "ciehanski";
-    repo = pname;
+    repo = "libgen-cli";
     rev = "v${version}";
     sha256 = "sha256-EicXsxAvVe/umpcOn4dVlTexaAol1qYPg/h5MU5dysM=";
   };
@@ -29,7 +30,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd libgen-cli \
       --bash <($out/bin/libgen-cli completion bash) \
       --fish <($out/bin/libgen-cli completion fish) \
@@ -38,7 +39,7 @@ buildGoModule rec {
 
   meta = with lib; {
     homepage = "https://github.com/ciehanski/libgen-cli";
-    description = "A CLI tool used to access the Library Genesis dataset; written in Go";
+    description = "CLI tool used to access the Library Genesis dataset; written in Go";
     longDescription = ''
       libgen-cli is a command line interface application which allows users to
       quickly query the Library Genesis dataset and download any of its

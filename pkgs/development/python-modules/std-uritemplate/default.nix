@@ -8,7 +8,7 @@
 
 buildPythonPackage rec {
   pname = "std-uritemplate";
-  version = "2.0.1";
+  version = "2.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "std_uritemplate";
     inherit version;
-    hash = "sha256-9GhK4FAWfiN+1YGUIxOYk+C1t/CNxrdGe7o/3WRgi+g=";
+    hash = "sha256-E4zv8sW/7ximUDcqXoyC/n94DIcjVRPebDQvtffhg0c=";
   };
 
   build-system = [ poetry-core ];

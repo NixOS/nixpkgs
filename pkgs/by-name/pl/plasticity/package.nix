@@ -16,7 +16,6 @@
   libdrm,
   libglvnd,
   libnotify,
-  libsForQt5,
   libxkbcommon,
   libgbm,
   nspr,
@@ -34,11 +33,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "24.2.6";
+  version = "25.2.11";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-MEw7pmaDPOxhjeIHWumCxwESZri3gdXULIc7kRh9/BM=";
+    hash = "sha256-aqc6CDR3yBOGaRr+VjXQrTXZKvr9kqzaqcu5y30clCA=";
   };
 
   passthru.updateScript = ./update.sh;
@@ -64,7 +63,6 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
     libdrm
     libnotify
-    libsForQt5.kde-cli-tools
     libxkbcommon
     nspr
     nss
@@ -112,6 +110,7 @@ stdenv.mkDerivation rec {
     rpmextract $src
     mv $out/usr/* $out
     rm -r $out/usr
+    rm -r $out/lib/.build-id
 
     runHook postInstall
   '';

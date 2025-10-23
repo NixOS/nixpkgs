@@ -7,12 +7,12 @@
 }:
 let
   pname = "clickup";
-  version = "3.3.79";
+  version = "3.5.120";
 
   src = fetchurl {
     # Using archive.org because the website doesn't store older versions of the software.
-    url = "https://web.archive.org/web/20240601173958/https%3A%2F%2Fdesktop.clickup.com%2Flinux";
-    hash = "sha256-jAOYDX9j+ZTqWsSg0rEckKZnErgsIV6+CtUv3M3wNqM=";
+    url = "https://web.archive.org/web/20250802083833/https://desktop.clickup.com/linux";
+    hash = "sha256-LVHgXqTxDTsnVJ3zx74TzaSrEs2OD0wl0eioPd4+484=";
   };
 
   appimage = appimageTools.wrapType2 {

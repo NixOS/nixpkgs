@@ -15,12 +15,12 @@
 }:
 
 let
-  version = "0.14.0";
+  version = "0.14.7";
   src = fetchFromGitHub {
     owner = "openobserve";
     repo = "openobserve";
     tag = "v${version}";
-    hash = "sha256-rTp+DkADqYkJg1zJog1yURE082V5kCqgid/oUd81SN8=";
+    hash = "sha256-+YcVTn/jcEbaqTycMCYn6B0z2HsvgrCY1gHnkRajwSs=";
   };
   web = buildNpmPackage {
     inherit src version;
@@ -28,7 +28,7 @@ let
 
     sourceRoot = "${src.name}/web";
 
-    npmDepsHash = "sha256-awfQR1wZBX3ggmD0uJE9Fur4voPydeygrviRijKnBTE=";
+    npmDepsHash = "sha256-1MUmAWkeYUEL6WZGq1Jg5W2uKa2xj0oZbGlIbvZWT1E=";
 
     preBuild = ''
       # Patch vite config to not open the browser to visualize plugin composition
@@ -63,8 +63,7 @@ rustPlatform.buildRustPackage {
     cp -r ${web}/share/openobserve-ui web/dist
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-FWMUPghx9CxuzP7jFZYSIwZsylApWzQsfx8DuwS4GTo=";
+  cargoHash = "sha256-vfc6B+Uc8RXQD8vGC1yV9w5YAefkYJMpCH2frqjrSWk=";
 
   nativeBuildInputs = [
     pkg-config
@@ -96,6 +95,10 @@ rustPlatform.buildRustPackage {
   checkFlags = [
     "--skip=handler::http::router::tests::test_get_proxy_routes"
     "--skip=tests::e2e_test"
+    # test_export_operator unit test panics when run on the 0.14.7 release
+    # see this issue for more details : https://github.com/NixOS/nixpkgs/issues/447106
+    "--skip=tests::test_export_operator"
+    "--skip=service::organization::tests::test_organization"
   ];
 
   passthru.updateScript = gitUpdater {

@@ -23,9 +23,9 @@ with lib;
 
       wantedBy = [
         "multi-user.target"
-        "sshd.service"
+        "sshd-keygen.service"
       ];
-      before = [ "sshd.service" ];
+      before = [ "sshd-keygen.service" ];
       after = [ "fetch-ec2-metadata.service" ];
 
       path = [ pkgs.iproute2 ];
@@ -34,7 +34,7 @@ with lib;
         ${optionalString (config.networking.hostName == "") ''
           echo "setting host name..."
           if [ -s /etc/ec2-metadata/hostname ]; then
-              ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
+              ${lib.getExe pkgs.hostname-debian} -F /etc/ec2-metadata/hostname
           fi
         ''}
 
@@ -80,14 +80,14 @@ with lib;
     systemd.services.print-host-key = {
       description = "Print SSH Host Key";
       wantedBy = [ "multi-user.target" ];
-      after = [ "sshd.service" ];
+      after = [ "sshd-keygen.service" ];
       script = ''
         # Print the host public key on the console so that the user
         # can obtain it securely by parsing the output of
         # ec2-get-console-output.
         echo "-----BEGIN SSH HOST KEY FINGERPRINTS-----" > /dev/console
         for i in /etc/ssh/ssh_host_*_key.pub; do
-            ${config.programs.ssh.package}/bin/ssh-keygen -l -f "$i" || true > /dev/console
+            ${config.programs.ssh.package}/bin/ssh-keygen -l -f "$i" > /dev/console || true
         done
         echo "-----END SSH HOST KEY FINGERPRINTS-----" > /dev/console
       '';

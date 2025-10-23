@@ -2,8 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  elixir,
-  erlang,
+  beamPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,8 +16,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-hD4lpP8GPkNXuMMDOOTEmy+rOwOSCxQwR0Mjq8i4oDM=";
   };
 
-  nativeBuildInputs = [ elixir ];
-  buildInputs = [ erlang ];
+  nativeBuildInputs = [ beamPackages.elixir ];
+  buildInputs = [ beamPackages.erlang ];
 
   buildPhase = "mix escript.build";
   installPhase = "install -Dt $out/bin mix2nix";
@@ -27,6 +26,7 @@ stdenv.mkDerivation rec {
     description = "Generate nix expressions from mix.lock file";
     mainProgram = "mix2nix";
     license = licenses.mit;
-    maintainers = with maintainers; [ ydlr ] ++ teams.beam.members;
+    maintainers = with maintainers; [ ydlr ];
+    teams = [ teams.beam ];
   };
 }

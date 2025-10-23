@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyvo";
-  version = "1.6.1";
+  version = "1.7.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8"; # according to setup.cfg
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-+JZxfKmCWtBtNFWNjxPEROJJuMLSpHVQekY17M3SzUE=";
+    hash = "sha256-Qd2PEZHdC9rTw1t25twOUDGYIcv3CQBThiZffxnfIf8=";
   };
 
   build-system = [

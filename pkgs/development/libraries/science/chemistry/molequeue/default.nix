@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
-    repo = pname;
+    repo = "molequeue";
     rev = version;
     hash = "sha256-+NoY8YVseFyBbxc3ttFWiQuHQyy1GN8zvV1jGFjmvLg=";
   };
@@ -25,9 +25,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qttools ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.3 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
-    substituteInPlace $out/lib/cmake/${pname}/MoleQueueConfig.cmake \
+    substituteInPlace $out/lib/cmake/molequeue/MoleQueueConfig.cmake \
       --replace "$out/" ""
   '';
 

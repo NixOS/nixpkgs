@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
-    repo = pname;
+    repo = "GameNetworkingSockets";
     rev = "v${version}";
     sha256 = "12741wmpvy7mcvqqmjg4a7ph75rwliwgclhk4imjijqf2qkvsphd";
   };

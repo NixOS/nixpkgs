@@ -24,7 +24,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libwnck";
-  version = "43.2";
+  version = "43.3";
 
   outputs = [
     "out"
@@ -35,23 +35,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libwnck/${lib.versions.major version}/libwnck-${version}.tar.xz";
-    sha256 = "VadETsH7uVwIbUCWc4jyMbXAu8jP+qCGv5KQrkSeUdU=";
+    sha256 = "avisQajwZ63h08qu0lSoNCO19hrT96Rg/Ky6wuGSvfc=";
   };
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      pkg-config
-      gettext
-      gobject-introspection
-      gtk-doc
-      docbook_xsl
-      docbook_xml_dtd_412
-    ]
-    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-      mesonEmulatorHook
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_412
+  ]
+  ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+    mesonEmulatorHook
+  ];
 
   buildInputs = [
     libX11

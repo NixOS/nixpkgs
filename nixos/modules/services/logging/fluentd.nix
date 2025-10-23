@@ -39,7 +39,7 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    systemd.services.fluentd = with pkgs; {
+    systemd.services.fluentd = {
       description = "Fluentd Daemon";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

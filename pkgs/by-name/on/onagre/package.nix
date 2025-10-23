@@ -15,7 +15,7 @@
   libGL,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "onagre";
   version = "1.1.1";
 
@@ -26,7 +26,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-yVkK3B7/ul0sOxPE3z2qkY/CnsZPQYqTpd64Wo/GXZI=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-JsTBzkznFYiSOq41aptNa5akXTdkqJj3FwoHuvUlgpE=";
 
   nativeBuildInputs = [

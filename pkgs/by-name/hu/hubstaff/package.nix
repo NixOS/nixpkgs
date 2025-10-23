@@ -1,17 +1,60 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, libX11, zlib, libSM, libICE
-, libXext , freetype, libXrender, fontconfig, libXft, libXinerama
-, libXfixes, libXScrnSaver, libnotify, glib , gtk3, libappindicator-gtk3
-, curl, writeShellScript, common-updater-scripts, xmlstarlet }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  libX11,
+  zlib,
+  libSM,
+  libICE,
+  libXext,
+  freetype,
+  libXrender,
+  fontconfig,
+  libXft,
+  libXinerama,
+  libXcursor,
+  cairo,
+  libXfixes,
+  libXScrnSaver,
+  libnotify,
+  glib,
+  gtk3,
+  libappindicator-gtk3,
+  curl,
+  writeShellScript,
+  common-updater-scripts,
+  xmlstarlet,
+}:
 
 let
-  url = "https://app.hubstaff.com/download/8792-standard-linux-1-6-29-release/sh";
-  version = "1.6.29-7f771670";
-  sha256 = "sha256:09vdpsmaj26bmnbsyxp76g3677lzi8p86gz66qbdvxly6a4x1hq9";
+  url = "https://app.hubstaff.com/download/10606-standard-linux-1-7-5-release/sh";
+  version = "1.7.5-a68a2738";
+  sha256 = "sha256:19rp5xldhfx48v8hdbvxbvv1j2n3wn5rymm82gryz620kfiandfb";
 
-  rpath = lib.makeLibraryPath
-    [ libX11 zlib libSM libICE libXext freetype libXrender fontconfig libXft
-      libXinerama stdenv.cc.cc libnotify glib gtk3 libappindicator-gtk3
-      curl libXfixes libXScrnSaver ];
+  rpath = lib.makeLibraryPath [
+    libX11
+    zlib
+    libSM
+    libICE
+    libXext
+    freetype
+    libXrender
+    fontconfig
+    libXft
+    libXinerama
+    stdenv.cc.cc
+    libnotify
+    glib
+    gtk3
+    libappindicator-gtk3
+    curl
+    libXfixes
+    libXScrnSaver
+    libXcursor
+    cairo
+  ];
 
 in
 
@@ -21,7 +64,10 @@ stdenv.mkDerivation {
 
   src = fetchurl { inherit sha256 url; };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   unpackCmd = ''
     # MojoSetups have a ZIP file at the end. ZIP’s magic string is
@@ -83,6 +129,8 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ michalrus srghma ];
+    maintainers = with maintainers; [
+      michalrus
+    ];
   };
 }

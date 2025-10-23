@@ -4,9 +4,9 @@
   lib,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "sqlboiler-crbd";
-  version = "unstable-2022-06-12";
+  version = "0-unstable-2022-06-12";
 
   src = fetchFromGitHub {
     owner = "glerchundi";

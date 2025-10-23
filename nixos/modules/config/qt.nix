@@ -4,7 +4,6 @@
   pkgs,
   ...
 }:
-
 let
   cfg = config.qt;
 
@@ -18,9 +17,9 @@ let
       qt6Packages.qt6gtk2
     ];
     kde = [
-      libsForQt5.kio
-      libsForQt5.plasma-integration
-      libsForQt5.systemsettings
+      kdePackages.kio
+      kdePackages.plasma-integration
+      kdePackages.systemsettings
     ];
     lxqt = [
       lxqt.lxqt-qtplugin
@@ -61,7 +60,10 @@ let
       adwaita-qt6
     ];
 
-    breeze = [ libsForQt5.breeze-qt5 ];
+    breeze = [
+      kdePackages.breeze
+      kdePackages.breeze.qt5
+    ];
 
     kvantum = [
       libsForQt5.qtstyleplugin-kvantum
@@ -101,10 +103,6 @@ in
           "qgnomeplatform-qt6"
           [
             "libsForQt5"
-            "plasma-integration"
-          ]
-          [
-            "libsForQt5"
             "qt5ct"
           ]
           [
@@ -112,7 +110,11 @@ in
             "qtstyleplugins"
           ]
           [
-            "libsForQt5"
+            "kdePackages"
+            "plasma-integration"
+          ]
+          [
+            "kdePackages"
             "systemsettings"
           ]
           [
@@ -153,10 +155,6 @@ in
         relatedPackages = [
           "adwaita-qt"
           "adwaita-qt6"
-          [
-            "libsForQt5"
-            "breeze-qt5"
-          ]
           [
             "libsForQt5"
             "qtstyleplugin-kvantum"

@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchurl, zlib
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  testers,
 }:
 
 assert stdenv.hostPlatform == stdenv.buildPlatform -> zlib != null;
@@ -17,7 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace pngconf.h --replace-fail '<fp.h>' '<math.h>'
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   propagatedBuildInputs = [ zlib ];
 
@@ -37,7 +45,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.libpng;
     maintainers = [ ];
     branch = "1.2";
-    pkgConfigModules = [ "libpng" "libpng12" ];
+    pkgConfigModules = [
+      "libpng"
+      "libpng12"
+    ];
     platforms = platforms.unix;
   };
 })

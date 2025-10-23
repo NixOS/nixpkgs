@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gettext,
   gtk-layer-shell,
@@ -26,6 +27,15 @@ stdenv.mkDerivation rec {
     sha256 = "HjAUzhRVgX7C73TQnv37aDXYo3LtmhbvtZGe97ghlXo=";
   };
 
+  patches = [
+    # wayland: ensure windows can be moved if compositor is using CSD
+    # https://github.com/mate-desktop/caja/pull/1787
+    (fetchpatch {
+      url = "https://github.com/mate-desktop/caja/commit/b0fb727c62ef9f45865d5d7974df7b79bcf0d133.patch";
+      hash = "sha256-2QAXveJnrPPyFSBST6wQcXz9PRsJVdt4iSYy0gubDAs=";
+    })
+  ];
+
   nativeBuildInputs = [
     pkg-config
     gettext
@@ -46,12 +56,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-update-mimedb" ];
 
-  # FIXME: ugly hack for https://github.com/NixOS/nixpkgs/pull/389009
-  postConfigure = ''
-    substituteInPlace libtool \
-      --replace 'for search_ext in .la $std_shrext .so .a' 'for search_ext in $std_shrext .so .a'
-  '';
-
   enableParallelBuilding = true;
 
   passthru.updateScript = mateUpdateScript { inherit pname; };
@@ -64,6 +68,6 @@ stdenv.mkDerivation rec {
       lgpl2Plus
     ];
     platforms = platforms.unix;
-    maintainers = teams.mate.members;
+    teams = [ teams.mate ];
   };
 }

@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "xkcd-font";
-  version = "unstable-2017-08-24";
+  version = "0-unstable-2017-08-24";
 
   src = fetchFromGitHub {
     owner = "ipython";

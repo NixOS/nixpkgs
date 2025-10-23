@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -28,7 +29,7 @@ buildGoModule rec {
     "-X=github.com/plumber-cd/terraform-backend-git/cmd.Version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd terraform-backend-git \
       --bash <($out/bin/terraform-backend-git completion bash) \
       --fish <($out/bin/terraform-backend-git completion fish) \
@@ -41,6 +42,6 @@ buildGoModule rec {
     homepage = "https://github.com/plumber-cd/terraform-backend-git";
     changelog = "https://github.com/plumber-cd/terraform-backend-git/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

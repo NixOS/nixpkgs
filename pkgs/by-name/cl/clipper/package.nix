@@ -17,6 +17,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "cpp";
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6.0)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10.0)"
+  '';
+
   nativeBuildInputs = [
     cmake
     ninja

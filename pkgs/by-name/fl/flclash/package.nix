@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   keybinder3,
   libayatana-appindicator,
   buildGoModule,
@@ -12,14 +12,14 @@
 
 let
   pname = "flclash";
-  version = "0.8.76";
+  version = "0.8.87";
 
   src =
     (fetchFromGitHub {
       owner = "chen08209";
       repo = "FlClash";
       tag = "v${version}";
-      hash = "sha256-LNHaleqh3eAQcfYSz7xIaWeNUtmlFXOyG2S7zz2+XeI=";
+      hash = "sha256-vGRq9Kc6XU6r3huIGAKoh5x46fFS8jmXgus9WgpvG3A=";
       fetchSubmodules = true;
     }).overrideAttrs
       (_: {
@@ -32,7 +32,7 @@ let
     description = "Multi-platform proxy client based on ClashMeta, simple and easy to use, open-source and ad-free";
     homepage = "https://github.com/chen08209/FlClash";
     license = with lib.licenses; [ gpl3Plus ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 
   libclash = buildGoModule {
@@ -41,7 +41,7 @@ let
 
     modRoot = "core";
 
-    vendorHash = "sha256-p6GE97n5/ZCIjgmfL//2doRW/PGpUtjeKxhRs/aveus=";
+    vendorHash = "sha256-Uc+RvpW3vndPFnM7yhqrNTEexAPaolCk8YK8u/+55RQ=";
 
     env.CGO_ENABLED = 0;
 
@@ -57,10 +57,15 @@ let
     meta = metaCommon;
   };
 in
-flutter327.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
+
+  gitHashes = {
+    flutter_js = "sha256-4PgiUL7aBnWVOmz2bcSxKt81BRVMnopabj5LDbtPYk4=";
+    re_editor = "sha256-PuaXoByTmkov2Dsz0kBHBHr/o63+jgPrnY9gpK7AOhA=";
+  };
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -72,6 +77,8 @@ flutter327.buildFlutterApplication {
     libayatana-appindicator
   ];
 
+  flutterBuildFlags = [ "--dart-define=APP_ENV=stable" ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "flclash";
@@ -79,9 +86,7 @@ flutter327.buildFlutterApplication {
       icon = "flclash";
       genericName = "FlClash";
       desktopName = "FlClash";
-      categories = [
-        "Network"
-      ];
+      categories = [ "Network" ];
       keywords = [
         "FlClash"
         "Clash"

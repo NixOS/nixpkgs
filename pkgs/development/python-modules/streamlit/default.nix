@@ -28,19 +28,21 @@
 
 buildPythonPackage rec {
   pname = "streamlit";
-  version = "1.42.2";
+  version = "1.50.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-YgJtvctIJ5CTP2WLCW191Y+nDaicHwb7w2WLkdzU2rI=";
+    hash = "sha256-hyIdVoqsWFJ0oF7xijeLA98zK5PggQP//PPNhNhSr0Y=";
   };
 
   build-system = [
     setuptools
   ];
+
+  pythonRelaxDeps = [ "packaging" ];
 
   dependencies = [
     altair
@@ -61,7 +63,8 @@ buildPythonPackage rec {
     gitpython
     pydeck
     tornado
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ watchdog ];
 
   # pypi package does not include the tests, but cannot be built with fetchFromGitHub
   doCheck = false;

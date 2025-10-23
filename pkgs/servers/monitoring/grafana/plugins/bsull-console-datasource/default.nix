@@ -1,11 +1,11 @@
 { grafanaPlugin, lib }:
 
-grafanaPlugin rec {
+grafanaPlugin {
   pname = "bsull-console-datasource";
   version = "1.0.1";
   zipHash = "sha256-V6D/VIdwwQvG21nVMXD/xF86Uy8WRecL2RjyDTZr1wQ=";
   meta = with lib; {
-    description = "This is a streaming Grafana data source which can connect to the Tokio console subscriber.";
+    description = "Grafana data source which can connect to the Tokio console subscriber";
     license = licenses.asl20;
     maintainers = with maintainers; [ nagisa ];
     platforms = platforms.unix;

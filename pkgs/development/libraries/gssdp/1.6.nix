@@ -7,7 +7,6 @@
   pkg-config,
   gobject-introspection,
   vala,
-  pandoc,
   gi-docgen,
   python3,
   libsoup_3,
@@ -16,9 +15,9 @@
   gssdp-tools,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gssdp";
-  version = "1.6.3";
+  version = "1.6.4";
 
   outputs = [
     "out"
@@ -27,8 +26,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "L+21r9sizxTVSYo5p3PKiXiKJQ/PcBGHg9+CHh8/NEY=";
+    url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor finalAttrs.version}/gssdp-${finalAttrs.version}.tar.xz";
+    hash = "sha256-/5f9+39WHT5oE7T2ohRSWefC7/Q8wOY/P9Ax0LYmYDI=";
   };
 
   depsBuildBuild = [
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     pkg-config
     gobject-introspection
     vala
-    pandoc
     gi-docgen
     python3
   ];
@@ -57,9 +55,12 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dgtk_doc=true"
     "-Dsniffer=false"
+    # This packages only has manpages for gssdp-device-sniffer, which we disabled above.
+    "-Dmanpages=false"
   ];
 
-  doCheck = true;
+  # On Darwin: Failed to bind socket, Operation not permitted
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   postFixup = ''
     # Move developer documentation to devdoc output.
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome.updateScript {
       attrPath = "gssdp_1_6";
-      packageName = pname;
+      packageName = "gssdp";
     };
 
     tests = {
@@ -82,11 +83,10 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
     platforms = platforms.all;
   };
-}
+})

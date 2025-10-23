@@ -222,13 +222,12 @@ in
         Type = "forking";
       };
     };
-
-    meta.maintainers = with lib.maintainers; [
-      # Server side
-      lschuermann
-      # Client side
-      das_j
-    ];
   };
+
+  meta.maintainers = with lib.maintainers; [
+    # Server side: maintainers wanted
+    # Client side
+    das_j
+  ];
 
 }

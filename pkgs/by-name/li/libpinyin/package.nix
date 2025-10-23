@@ -5,8 +5,9 @@
   fetchFromGitHub,
   autoreconfHook,
   glib,
-  db,
+  kyotocabinet,
   pkg-config,
+  nix-update-script,
 }:
 
 let
@@ -15,15 +16,15 @@ let
     hash = "sha256-WcaOidQ/+F9aMJSJSZy83igtKwS9kYiHNIhLfe/LEVU=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libpinyin";
-  version = "2.10.0";
+  version = "2.10.3";
 
   src = fetchFromGitHub {
     owner = "libpinyin";
     repo = "libpinyin";
-    tag = version;
-    hash = "sha256-WUC1l+8q4TYDVbKwwk9lG5Wc5DM52BaZefcre0WQoBE=";
+    tag = finalAttrs.version;
+    hash = "sha256-g3DgRYmLrXqAGxbyiI96UKT1gsJxLlx14K+2HzWR7nI=";
   };
 
   postUnpack = ''
@@ -39,8 +40,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    db
+    kyotocabinet
   ];
+
+  configureFlags = [
+    "--with-dbm=KyotoCabinet"
+  ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Library for intelligent sentence-based Chinese pinyin input method";
@@ -48,8 +55,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       linsui
-      ericsagnes
     ];
     platforms = lib.platforms.linux;
   };
-}
+})

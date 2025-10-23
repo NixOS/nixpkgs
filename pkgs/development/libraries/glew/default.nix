@@ -8,7 +8,6 @@
   libXmu,
   libXi,
   libXext,
-  OpenGL,
   enableEGL ? (!stdenv.hostPlatform.isDarwin),
   testers,
   mesa,
@@ -42,6 +41,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.archlinux.org/archlinux/packaging/packages/glew/-/raw/ca08ff5d4cd3548a593eb1118d0a84b0c3670349/egl+glx.patch?inline=false";
       hash = "sha256-IG3FPhhaor1kshEH3Kr8yzIHqBhczRwCqH7ZeDwlzGE=";
     })
+
+    # cmake 4 compatibility
+    (fetchpatch {
+      url = "https://github.com/nigels-com/glew/commit/a4d8b2a2a30576eb1b984ba5d573702acfc5b92e.diff";
+      hash = "sha256-S6Om0A4y5po2rHl8OXcue2zOcBpCmBZYvf10LfKEYfI=";
+    })
   ];
 
   nativeBuildInputs = [ cmake ];
@@ -50,12 +55,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXi
     libXext
   ];
-  propagatedBuildInputs = if stdenv.hostPlatform.isDarwin then [ OpenGL ] else [ libGLU ]; # GL/glew.h includes GL/glu.h
+  propagatedBuildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libGLU ]; # GL/glew.h includes GL/glu.h
 
   cmakeDir = "cmake";
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-  ] ++ lib.optional enableEGL "-DGLEW_EGL=ON";
+  ]
+  ++ lib.optional enableEGL "-DGLEW_EGL=ON";
 
   postInstall = ''
     moveToOutput lib/cmake "''${!outputDev}"

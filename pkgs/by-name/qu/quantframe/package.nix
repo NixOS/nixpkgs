@@ -2,68 +2,69 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  cargo-tauri_1,
+  cargo-tauri,
   nodejs,
   pnpm_9,
   pkg-config,
   glib-networking,
   openssl,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
-  libsoup_2_4,
+  libsoup_3,
   libayatana-appindicator,
   gtk3,
+  nix-update-script,
 }:
-
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "quantframe";
-  version = "1.3.4";
+  version = "1.5.3";
 
   src = fetchFromGitHub {
     owner = "Kenya-DK";
     repo = "quantframe-react";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/cjlYQHb23DY4RSjc2HosTar6p1epsqlWQX6TlrzSe8=";
+    hash = "sha256-afTiQzHat6k+BF8EhYhd0o0FzYjq7GpnOnjRhjXASG8=";
   };
 
   postPatch = ''
     substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
       --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+    substituteInPlace src-tauri/tauri.conf.json \
+      --replace-fail '"createUpdaterArtifacts": "v1Compatible"' '"createUpdaterArtifacts": false'
   '';
 
-  patches = [
-    ./0001-disable-telemetry.patch
-  ];
+  patches = [ ./0001-disable-telemetry.patch ];
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-4uyjvwvrMDe+86wcB7MBBWWc4NGKzqBsgG3TScf7BMk=";
+    fetcherVersion = 1;
+    hash = "sha256-ncoxliXnLxWEXL1Z7ixOULI/uYkxmfLiDWu1tDSRsrM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mtHbWTNrWh4hq4IAncE9TCWr7sozIy2zf3DK3WN7wqI=";
+  cargoHash = "sha256-0IgQK0jMVN6u5i4lBKK8njbMyRQCLguTdDcSBnFnyso=";
 
   nativeBuildInputs = [
-    cargo-tauri_1.hook
-
+    cargo-tauri.hook
     pkg-config
     wrapGAppsHook3
-
     nodejs
     pnpm_9.configHook
   ];
 
   buildInputs = [
     openssl
-    libsoup_2_4
+    libsoup_3
     glib-networking
     gtk3
     libayatana-appindicator
-    webkitgtk_4_0
+    webkitgtk_4_1
   ];
 
   cargoRoot = "src-tauri";
   buildAndTestSubdir = finalAttrs.cargoRoot;
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Warframe Market listings and transactions manager";
@@ -71,6 +72,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://quantframe.app/";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ nyukuru ];
+    maintainers = with lib.maintainers; [
+      nyukuru
+      enkarterisi
+    ];
   };
 })

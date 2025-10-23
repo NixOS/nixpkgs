@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   installShellFiles,
   fetchFromGitHub,
@@ -30,7 +31,7 @@ buildGoModule rec {
     "-X=main.Version=${version}"
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/pop man > pop.1
     installManPage pop.1
     installShellCompletion --cmd pop \
@@ -39,12 +40,12 @@ buildGoModule rec {
       --zsh <($out/bin/pop completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Send emails from your terminal";
     homepage = "https://github.com/charmbracelet/pop";
     changelog = "https://github.com/charmbracelet/pop/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       caarlos0
       maaslalani
     ];

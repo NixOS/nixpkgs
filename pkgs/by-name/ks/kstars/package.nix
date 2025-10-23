@@ -2,12 +2,10 @@
   lib,
   stdenv,
   fetchurl,
-  fetchFromGitLab,
-  fetchpatch,
   cfitsio,
   cmake,
   curl,
-  eigen,
+  eigen_3_4_0,
   gsl,
   indi-full,
   kdePackages,
@@ -22,42 +20,13 @@
   zlib,
 }:
 
-let
-  # reverts 'eigen: 3.4.0 -> 3.4.0-unstable-2022-05-19'
-  # https://github.com/nixos/nixpkgs/commit/d298f046edabc84b56bd788e11eaf7ed72f8171c
-  eigen' = eigen.overrideAttrs (old: rec {
-    version = "3.4.0";
-    src = fetchFromGitLab {
-      owner = "libeigen";
-      repo = "eigen";
-      rev = version;
-      hash = "sha256-1/4xMetKMDOgZgzz3WMxfHUEpmdAm52RqZvz6i0mLEw=";
-    };
-    patches = (old.patches or [ ]) ++ [
-      # Fixes e.g. onnxruntime on aarch64-darwin:
-      # https://hydra.nixos.org/build/248915128/nixlog/1,
-      # originally suggested in https://github.com/NixOS/nixpkgs/pull/258392.
-      #
-      # The patch is from
-      # ["Fix vectorized reductions for Eigen::half"](https://gitlab.com/libeigen/eigen/-/merge_requests/699)
-      # which is two years old,
-      # but Eigen hasn't had a release in two years either:
-      # https://gitlab.com/libeigen/eigen/-/issues/2699.
-      (fetchpatch {
-        url = "https://gitlab.com/libeigen/eigen/-/commit/d0e3791b1a0e2db9edd5f1d1befdb2ac5a40efe0.patch";
-        hash = "sha256-8qiNpuYehnoiGiqy0c3Mcb45pwrmc6W4rzCxoLDSvj0=";
-      })
-    ];
-  });
-in
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.5";
+  version = "3.7.8";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-L9hyVfdgFlFfM6MyjR4bUa86FHPbVg7xBWPY8YSHUXw=";
+    hash = "sha256-VbOu8p7Bq6UJBr05PVZein4LWzpdLo4838G1jXGNLAw=";
   };
 
   nativeBuildInputs = with kdePackages; [
@@ -70,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     breeze-icons
     cfitsio
     curl
-    eigen'
+    eigen_3_4_0
     gsl
     indi-full
     kconfig
@@ -104,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     (cmakeBool "BUILD_QT5" false)
     (cmakeFeature "INDI_PREFIX" "${indi-full}")
     (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
-    (cmakeFeature "DATA_INSTALL_DIR" "$out/share/kstars/")
+    (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")
   ];
 
   meta = with lib; {
@@ -120,7 +89,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     maintainers = with maintainers; [
       timput
-      hjones2199
       returntoreality
     ];
   };

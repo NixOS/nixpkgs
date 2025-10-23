@@ -16,10 +16,10 @@
   nixpkgs ? null,
 }:
 let
-  inherit (import ./ci { inherit nixpkgs system; }) pkgs;
+  inherit (import ./ci { inherit nixpkgs system; }) pkgs fmt;
 
   # For `nix-shell -A hello`
-  curPkgs = builtins.removeAttrs (import ./. { inherit system; }) [
+  curPkgs = removeAttrs (import ./. { inherit system; }) [
     # Although this is what anyone may expect from a `_type = "pkgs"`,
     # this file is intended to produce a shell in the first place,
     # and a `_type` tag could confuse some code.
@@ -28,12 +28,15 @@ let
 in
 curPkgs
 // pkgs.mkShellNoCC {
+  inputsFrom = [
+    fmt.shell
+  ];
   packages = with pkgs; [
-    # The default formatter for Nix code
-    # See https://github.com/NixOS/nixfmt
-    nixfmt-rfc-style
     # Helper to review Nixpkgs PRs
     # See CONTRIBUTING.md
     nixpkgs-review
+    # Command-line utility for working with GitHub
+    # Used by nixpkgs-review to fetch eval results
+    gh
   ];
 }

@@ -20,10 +20,10 @@
   rdma-core,
   libbpf,
   xdp-tools,
+  writeText,
   enableDpdk ? true,
   enableRdma ? true,
-  # FIXME: broken: af_xdp plugins - no working libbpf found - af_xdp plugin disabled
-  enableAfXdp ? false,
+  enableAfXdp ? true,
 }:
 
 let
@@ -38,27 +38,26 @@ let
     ];
   });
 
-  xdp-tools' = xdp-tools.overrideAttrs (old: {
-    postInstall = "";
-    dontDisableStatic = true;
-  });
+  # in 25.02 only ID seems to be of interest, so keep it simple
+  os-release-fake = writeText "os-release-fake" ''
+    ID=nixos
+  '';
 in
 stdenv.mkDerivation rec {
   pname = "vpp";
-  version = "24.10";
+  version = "25.06";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
     rev = "v${version}";
-    hash = "sha256-GcmblIAu/BDbqZRycmnBsHkvzJe07qB2lSfDnO7ZYtg=";
+    hash = "sha256-BuHKPQA4qHoADqBg2IztlzUMpbvYKK5uH7ktChSW5vk=";
   };
 
   postPatch = ''
     patchShebangs scripts/
-    substituteInPlace CMakeLists.txt \
-      --replace "plugins tools/vppapigen tools/g2 tools/perftool cmake pkg" \
-      "plugins tools/vppapigen tools/g2 tools/perftool cmake"
+    substituteInPlace pkg/CMakeLists.txt \
+      --replace-fail "/etc/os-release" "${os-release-fake}"
   '';
 
   preConfigure = ''
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
     patchShebangs ../vpp-api/
   '';
 
-  sourceRoot = "source/src";
+  sourceRoot = "${src.name}/src";
 
   enableParallelBuilding = true;
   env.NIX_CFLAGS_COMPILE = "-Wno-error -Wno-array-bounds -Wno-maybe-uninitialized";
@@ -79,39 +78,46 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVPP_PLATFORM=default"
     "-DVPP_LIBRARY_DIR=lib"
-  ] ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
+  ]
+  ++ lib.optional enableDpdk "-DVPP_USE_SYSTEM_DPDK=ON";
 
   nativeBuildInputs = [
     cmake
     pkg-config
-  ] ++ lib.optional enableDpdk dpdk' ++ lib.optional enableRdma rdma-core'.dev;
+  ]
+  ++ lib.optional enableDpdk dpdk'
+  ++ lib.optional enableRdma rdma-core'.dev;
 
-  buildInputs =
-    [
-      check
-      openssl
-      (python3.withPackages (ps: [ ps.ply ]))
+  buildInputs = [
+    check
+    openssl
+    (python3.withPackages (ps: [ ps.ply ]))
 
-      subunit # vapi tests
-      mbedtls_2 # tlsmbed plugin
-      libpcap # bpf_trace_filter plugin
+    subunit # vapi tests
+    mbedtls_2 # tlsmbed plugin
+    libpcap # bpf_trace_filter plugin
 
-      # linux-cp plugin
-      libnl
-      libmnl
-    ]
-    ++ lib.optionals enableDpdk [
-      # dpdk plugin
-      libelf
-      jansson
-      zlib
-    ]
-    ++ lib.optionals enableAfXdp [
-      # af_xdp plugin
-      libelf
-      libbpf
-      xdp-tools'
-    ];
+    # linux-cp plugin
+    libnl
+    libmnl
+  ]
+  ++ lib.optionals enableDpdk [
+    # dpdk plugin
+    libelf
+    jansson
+    zlib
+  ]
+  ++ lib.optionals enableAfXdp [
+    # af_xdp plugin
+    libelf
+    libbpf
+    xdp-tools
+    zlib
+  ];
+
+  patches = lib.optionals enableAfXdp [
+    ./use-dynamic-libxdp-libbpf.patch
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -119,7 +125,7 @@ stdenv.mkDerivation rec {
     description = "Fast, scalable layer 2-4 multi-platform network stack running in user space";
     homepage = "https://s3-docs.fd.io/vpp/${version}/";
     license = [ lib.licenses.asl20 ];
-    maintainers = with lib.maintainers; [ romner-set ];
+    maintainers = with lib.maintainers; [ azey7f ];
     mainProgram = "vpp";
     platforms = lib.platforms.linux;
   };

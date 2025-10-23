@@ -1,28 +1,35 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, python3
-, gstreamer
-, gst-plugins-base
-, gettext
-, ffmpeg-headless
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  gstreamer,
+  gst-plugins-base,
+  gettext,
+  ffmpeg-headless,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform,
+  hotdoc,
+  directoryListingUpdater,
+  apple-sdk_gstreamer,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "gst-libav";
-  version = "1.24.10";
+  version = "1.26.5";
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
-    url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-TPLi2CBOVLqK+VGai5t/+m6VGnCHr6Df6DwSXUm7tfs=";
+    url = "https://gstreamer.freedesktop.org/src/gst-libav/gst-libav-${finalAttrs.version}.tar.xz";
+    hash = "sha256-1t4FiE70I3bdjN6JlA97UM7Zb09vUoiOdkzYIz508FI=";
   };
-
-  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [
     meson
@@ -30,7 +37,8 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     python3
-  ] ++ lib.optionals enableDocumentation [
+  ]
+  ++ lib.optionals enableDocumentation [
     hotdoc
   ];
 
@@ -38,6 +46,9 @@ stdenv.mkDerivation rec {
     gstreamer
     gst-plugins-base
     ffmpeg-headless
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_gstreamer
   ];
 
   mesonFlags = [
@@ -49,6 +60,10 @@ stdenv.mkDerivation rec {
       scripts/extract-release-date-from-doap-file.py
   '';
 
+  passthru = {
+    updateScript = directoryListingUpdater { };
+  };
+
   meta = with lib; {
     description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
@@ -56,4 +71,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = [ ];
   };
-}
+})

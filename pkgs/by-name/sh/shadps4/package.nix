@@ -18,6 +18,7 @@
   libusb1,
   magic-enum,
   libgbm,
+  pipewire,
   pkg-config,
   pugixml,
   qt6,
@@ -27,24 +28,27 @@
   sdl3,
   sndio,
   stb,
+  toml11,
   vulkan-headers,
   vulkan-loader,
   vulkan-memory-allocator,
+  xbyak,
   xorg,
   xxHash,
   zlib-ng,
-  unstableGitUpdater,
+  zydis,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.6.0-unstable-2025-03-10";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "ba1eb298dec48f88431068390232e3978ae07bda";
-    hash = "sha256-LUo8IOwjlnk3jUeEAbGVmafO8XJuCGzHaZig2HAmNI0=";
+    tag = "v.${finalAttrs.version}";
+    hash = "sha256-ZHgwFWSoEaWILTafet5iQvaLwLtXy3HuCxjkQMt4PBA=";
     fetchSubmodules = true;
   };
 
@@ -65,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXext
     magic-enum
     libgbm
+    pipewire
     pugixml
     qt6.qtbase
     qt6.qtdeclarative
@@ -77,11 +82,14 @@ stdenv.mkDerivation (finalAttrs: {
     sdl3
     sndio
     stb
+    toml11
     vulkan-headers
     vulkan-loader
     vulkan-memory-allocator
+    xbyak
     xxHash
     zlib-ng
+    zydis
   ];
 
   nativeBuildInputs = [
@@ -117,9 +125,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
-    updateScript = unstableGitUpdater {
-      tagFormat = "v.*";
-      tagPrefix = "v.";
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v\\.(.*)"
+      ];
     };
   };
 

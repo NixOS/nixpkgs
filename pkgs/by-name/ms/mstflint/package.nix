@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, rdma-core
-, openssl
-, zlib
-, xz
-, expat
-, boost
-, curl
-, pkg-config
-, libxml2
-, pciutils
-, busybox
-, python3
-, automake
-, autoconf
-, libtool
-, git
-# use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
-, onlyFirmwareUpdater ? false
-# contains binary-only libraries
-, enableDPA ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  rdma-core,
+  openssl,
+  zlib,
+  xz,
+  expat,
+  boost,
+  curl,
+  pkg-config,
+  libxml2,
+  pciutils,
+  busybox,
+  python3,
+  automake,
+  autoconf,
+  libtool,
+  git,
+  # use this to shrink the package's footprint if necessary (e.g. for hardened appliances)
+  onlyFirmwareUpdater ? false,
+  # contains binary-only libraries
+  enableDPA ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +58,8 @@ stdenv.mkDerivation rec {
     zlib
     libxml2
     openssl
-  ] ++ lib.optionals (!onlyFirmwareUpdater) [
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
     boost
     curl
     expat
@@ -82,34 +84,42 @@ stdenv.mkDerivation rec {
   # Remove patch for regex check, after https://github.com/Mellanox/mstflint/pull/871
   # got merged.
   prePatch = [
-  ''
-    patchShebangs eval_git_sha.sh
-    substituteInPlace configure.ac \
-        --replace "build_cpu" "host_cpu"
-    substituteInPlace common/compatibility.h \
-        --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
-    substituteInPlace configure.ac \
-        --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
-  ''
-  (lib.optionals (!onlyFirmwareUpdater) ''
-    substituteInPlace common/python_wrapper.sh \
-      --replace \
-      'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
-      'export PATH=$PATH:${lib.makeBinPath [ (placeholder "out") pciutils busybox]}; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
-  '')
+    ''
+      patchShebangs eval_git_sha.sh
+      substituteInPlace configure.ac \
+          --replace "build_cpu" "host_cpu"
+      substituteInPlace common/compatibility.h \
+          --replace "#define ROOT_PATH \"/\"" "#define ROOT_PATH \"$out/\""
+      substituteInPlace configure.ac \
+          --replace 'Whether to use GNU C regex])' 'Whether to use GNU C regex])],[AC_MSG_RESULT([yes])'
+    ''
+    (lib.optionals (!onlyFirmwareUpdater) ''
+      substituteInPlace common/python_wrapper.sh \
+        --replace \
+        'exec $PYTHON_EXEC $SCRIPT_PATH "$@"' \
+        'export PATH=$PATH:${
+          lib.makeBinPath [
+            (placeholder "out")
+            pciutils
+            busybox
+          ]
+        }; exec ${python3}/bin/python3 $SCRIPT_PATH "$@"'
+    '')
   ];
 
   configureFlags = [
     "--enable-xml2"
     "--datarootdir=${placeholder "out"}/share"
-  ] ++ lib.optionals (!onlyFirmwareUpdater) [
+  ]
+  ++ lib.optionals (!onlyFirmwareUpdater) [
     "--enable-adb-generic-tools"
     "--enable-cs"
     "--enable-dc"
     "--enable-fw-mgr"
     "--enable-inband"
     "--enable-rdmem"
-  ] ++ lib.optionals enableDPA [
+  ]
+  ++ lib.optionals enableDPA [
     "--enable-dpa"
   ];
 
@@ -117,12 +127,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  dontDisableStatic = true;  # the build fails without this. should probably be reported upstream
+  dontDisableStatic = true; # the build fails without this. should probably be reported upstream
 
   meta = with lib; {
     description = "Open source version of Mellanox Firmware Tools (MFT)";
     homepage = "https://github.com/Mellanox/mstflint";
-    license = with licenses; [ gpl2Only bsd2 ];
+    license = with licenses; [
+      gpl2Only
+      bsd2
+    ];
     maintainers = with maintainers; [ thillux ];
     platforms = platforms.linux;
   };

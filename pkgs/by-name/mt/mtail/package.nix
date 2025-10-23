@@ -3,20 +3,25 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  gotools,
 }:
 
 buildGoModule rec {
   pname = "mtail";
-  version = "3.0.9";
+  version = "3.2.21";
 
   src = fetchFromGitHub {
-    owner = "google";
+    owner = "jaqx0r";
     repo = "mtail";
     rev = "v${version}";
-    hash = "sha256-ZyQpTxWBCU+pmulEXi/Y2PimbNMsUlbEFj8r+gTOTA0=";
+    hash = "sha256-i5c9e7b7PmvFdNddngsCIx4GKYqPPwTZSUoNAIL8RZ4=";
   };
 
-  vendorHash = "sha256-96r2UWM5HUF69BOGW6buV6juJEDYoiBPmR5iGNmI5WA=";
+  vendorHash = "sha256-hVguLf/EkTz7Z8lTT9tCQ8iGO5asSkrsW+u8D1ND+dw=";
+
+  nativeBuildInputs = [
+    gotools # goyacc
+  ];
 
   ldflags = [
     "-X=main.Branch=main"
@@ -27,11 +32,20 @@ buildGoModule rec {
   # fails on darwin with: write unixgram -> <tmpdir>/rsyncd.log: write: message too long
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  meta = with lib; {
+  checkFlags = [
+    # can only be executed under bazel
+    "-skip=TestExecMtail"
+  ];
+
+  preBuild = ''
+    GOOS= GOARCH= go generate ./...
+  '';
+
+  meta = {
     description = "Tool for extracting metrics from application logs";
-    homepage = "https://github.com/google/mtail";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ nickcao ];
+    homepage = "https://github.com/jaqx0r/mtail";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ nickcao ];
     mainProgram = "mtail";
   };
 }

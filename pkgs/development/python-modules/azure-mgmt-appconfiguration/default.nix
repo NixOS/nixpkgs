@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-appconfiguration";
-  version = "4.0.0";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "azure_mgmt_appconfiguration";
     inherit version;
-    hash = "sha256-x9ItR8hiQrj311Lx3BgojaSsQcL2l0C5fe6AI58PDO4=";
+    hash = "sha256-+PD4G3kNHtd7vAUuzc97EwkfrYixDB8/RxAA29nCCXc=";
   };
 
   build-system = [ setuptools ];

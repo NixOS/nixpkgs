@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "hercules-team";
     repo = "augeas";
-    rev = "release-${version}";
+    tag = "release-${version}";
     fetchSubmodules = true;
     hash = "sha256-U5tm3LDUeI/idHtL2Zy33BigkyvHunXPjToDC59G9VE=";
   };
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
-  enableParallelBuilding = true;
+  # Makefile doesn't specify dependencies on parser.h correctly
+  enableParallelBuilding = false;
 
   doCheck = true;
 
@@ -61,13 +62,13 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Configuration editing tool";
-    license = licenses.lgpl21Only;
+    license = lib.licenses.lgpl21Only;
     homepage = "https://augeas.net/";
     changelog = "https://github.com/hercules-team/augeas/releases/tag/release-${version}";
     mainProgram = "augtool";
-    maintainers = with maintainers; [ offline ];
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [ offline ];
+    platforms = lib.platforms.unix;
   };
 }

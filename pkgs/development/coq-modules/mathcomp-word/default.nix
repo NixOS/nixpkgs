@@ -56,24 +56,21 @@ mkCoqDerivation {
 
   inherit version;
   defaultVersion =
+    let
+      case = coq: mc: out: {
+        cases = [
+          coq
+          mc
+        ];
+        inherit out;
+      };
+    in
     with lib.versions;
     lib.switch
-      [ coq.version mathcomp.version ]
+      [ coq.coq-version mathcomp.version ]
       [
-        {
-          cases = [
-            (range "8.16" "9.0")
-            (isGe "2.0")
-          ];
-          out = "3.2";
-        }
-        {
-          cases = [
-            (range "8.12" "8.20")
-            (range "1.12" "1.19")
-          ];
-          out = "2.4";
-        }
+        (case (range "8.16" "9.1") (isGe "2.0") "3.2")
+        (case (range "8.12" "8.20") (range "1.12" "1.19") "2.4")
       ]
       null;
 

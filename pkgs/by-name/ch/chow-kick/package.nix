@@ -33,7 +33,6 @@
   sqlite,
   stdenv,
   util-linuxMinimal,
-  webkitgtk_4_0,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -43,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Chowdhury-DSP";
     repo = "ChowKick";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-YYcNiJGGw21aVY03tyQLu3wHCJhxYiDNJZ+LWNbQdj4=";
     fetchSubmodules = true;
   };
@@ -82,13 +81,18 @@ stdenv.mkDerivation (finalAttrs: {
     python3
     sqlite
     util-linuxMinimal
-    webkitgtk_4_0
   ];
 
   cmakeFlags = [
     "-DCMAKE_AR=${stdenv.cc.cc}/bin/gcc-ar"
     "-DCMAKE_RANLIB=${stdenv.cc.cc}/bin/gcc-ranlib"
   ];
+
+  postPatch = ''
+    substituteInPlace modules/chowdsp_wdf/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 3.1)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
 
   installPhase = ''
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/bin

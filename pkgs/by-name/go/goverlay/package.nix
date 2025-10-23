@@ -13,8 +13,8 @@
   libGLU,
   libnotify,
   libX11,
-  lsb-release,
   nix-update-script,
+  pciutils,
   polkit,
   procps,
   qt6Packages,
@@ -26,13 +26,13 @@
 
 stdenv.mkDerivation rec {
   pname = "goverlay";
-  version = "1.2";
+  version = "1.3-2";
 
   src = fetchFromGitHub {
     owner = "benjamimgois";
     repo = "goverlay";
     rev = version;
-    sha256 = "sha256-tSpM+XLlFQLfL750LTNWbWFg1O+0fSfsPRXuRCm/KlY=";
+    sha256 = "sha256-Vxmmsf/l3OK1Q6UKdhCWvU4WPJkdQG2Hn+s9tS+D5KM=";
   };
 
   outputs = [
@@ -48,8 +48,10 @@ stdenv.mkDerivation rec {
       --replace-fail '/usr/share/icons/hicolor/128x128/apps/goverlay.png' "$out/share/icons/hicolor/128x128/apps/goverlay.png" \
       --replace-fail '/sbin/ip' "${lib.getExe' iproute2 "ip"}" \
       --replace-fail '/bin/bash' "${lib.getExe' bash "bash"}" \
-      --replace-fail '/usr/lib/os-release' '/etc/os-release' \
-      --replace-fail 'lsb_release' "${lib.getExe' lsb-release "lsb_release"} 2> /dev/null"
+      --replace-fail '/bin/uname' "${lib.getExe' coreutils "uname"}" \
+      --replace-fail '/usr/bin/lspci' "${lib.getExe' pciutils "lspci"}" \
+      --replace-fail "FONTFOLDER := '/usr/share/fonts/'" "FONTFOLDER := GetEnvironmentVariable('HOME') + '/.local/share/fonts/'" \
+      --replace-fail "'/usr/share/fonts/'" 'FONTFOLDER'
   '';
 
   nativeBuildInputs = [

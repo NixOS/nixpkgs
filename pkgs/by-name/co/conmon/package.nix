@@ -22,16 +22,15 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs =
-    [
-      glib
-      libseccomp
-      systemd
-    ]
-    ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
-      glibc
-      glibc.static
-    ];
+  buildInputs = [
+    glib
+    libseccomp
+    systemd
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isMusl) [
+    glibc
+    glibc.static
+  ];
 
   # manpage requires building the vendored go-md2man
   makeFlags = [
@@ -55,7 +54,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/containers/conmon";
     description = "OCI container runtime monitor";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ] ++ teams.podman.members;
+    teams = [ teams.podman ];
     platforms = platforms.linux;
     mainProgram = "conmon";
   };

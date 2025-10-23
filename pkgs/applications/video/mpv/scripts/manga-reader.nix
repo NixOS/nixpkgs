@@ -5,15 +5,15 @@
   buildLua,
 }:
 
-buildLua rec {
+buildLua {
   pname = "manga-reader";
 
-  version = "0-unstable-2025-02-16";
+  version = "0-unstable-2025-07-15";
   src = fetchFromGitHub {
     owner = "Dudemanguy";
     repo = "mpv-manga-reader";
-    rev = "68824666b669ec101835f6d7aa510896e82ec30f";
-    hash = "sha256-9PGJ2OrAcbJIBLI/XGT2HQpC3KuoYnn1ws9oB9AnHQA=";
+    rev = "bb4ec1208feb440ce430f0963373ab2db5b7d743";
+    hash = "sha256-Zz2rPnnQHz2BqCM3jEJD/FuFLKtiNGWvAZpiH7jyLmo=";
   };
   passthru.updateScript = unstableGitUpdater { };
 

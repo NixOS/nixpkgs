@@ -1,37 +1,37 @@
-{ lib
-, stdenv
-, cmake
-, fetchurl
-, gnumake
-, makeWrapper
-, pkg-config
-, autopanosiftc
-, boost
-, cairo
-, enblend-enfuse
-, exiv2
-, fftw
-, flann
-, gettext
-, glew
-, lcms2
-, lensfun
-, libjpeg
-, libpng
-, libtiff
-, libX11
-, libXi
-, libXmu
-, libGLU
-, libGL
-, openexr
-, panotools
-, perlPackages
-, sqlite
-, vigra
-, wrapGAppsHook3
-, wxGTK
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  gnumake,
+  makeWrapper,
+  pkg-config,
+  boost,
+  cairo,
+  enblend-enfuse,
+  exiv2,
+  fftw,
+  flann,
+  gettext,
+  glew,
+  lcms2,
+  lensfun,
+  libjpeg,
+  libpng,
+  libtiff,
+  libX11,
+  libXi,
+  libXmu,
+  libGLU,
+  libGL,
+  openexr,
+  panotools,
+  perlPackages,
+  sqlite,
+  vigra,
+  wrapGAppsHook3,
+  wxGTK,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,7 +69,13 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 wxGTK ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+    wrapGAppsHook3
+    wxGTK
+  ];
 
   strictDeps = true;
 
@@ -79,7 +85,6 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for p in $out/bin/*; do
       wrapProgram "$p" \
-        --suffix PATH : ${autopanosiftc}/bin \
         --suffix PATH : ${enblend-enfuse}/bin \
         --suffix PATH : ${gnumake}/bin \
         --suffix PATH : ${perlPackages.ImageExifTool}/bin

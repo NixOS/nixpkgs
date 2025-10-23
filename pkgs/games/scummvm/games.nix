@@ -48,7 +48,7 @@ let
       ...
     }@attrs:
     let
-      attrs' = builtins.removeAttrs attrs [
+      attrs' = removeAttrs attrs [
         "plong"
         "pshort"
         "pcode"
@@ -118,7 +118,7 @@ in
     plong = "Broken Sword 2.5";
     pshort = "sword25";
     pcode = "sword25";
-    description = "A fan game of the Broken Sword series";
+    description = "Fan game of the Broken Sword series";
     version = "1.0";
     src = fetchurl {
       url = "mirror://sourceforge/scummvm/${pshort}-v${version}.zip";

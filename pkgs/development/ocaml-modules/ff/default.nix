@@ -6,7 +6,7 @@
   alcotest,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "ff";
   inherit (ff-sig) version src;
   duneVersion = "3";

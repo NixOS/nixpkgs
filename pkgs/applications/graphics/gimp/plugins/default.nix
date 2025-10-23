@@ -2,7 +2,11 @@
 # If you just want a subset of plug-ins, you can specify them explicitly:
 # `gimp-with-plugins.override { plugins = with gimpPlugins; [ gap ]; }`.
 
-{ lib, pkgs }:
+{
+  lib,
+  pkgs,
+  gimp,
+}:
 
 let
   inherit (pkgs)
@@ -16,6 +20,10 @@ let
     fetchFromGitHub
     fetchFromGitLab
     ;
+
+  # We cannot use gimp from the arguments directly, or it would be shadowed by the one
+  # from scope when initializing the scope with it, leading to infinite recursion.
+  gimpArg = gimp;
 in
 
 lib.makeScope pkgs.newScope (
@@ -29,6 +37,7 @@ lib.makeScope pkgs.newScope (
       attrs:
       let
         name = attrs.name or "${attrs.pname}-${attrs.version}";
+        pkgConfigMajorVersion = lib.versions.major gimp.version;
       in
       stdenv.mkDerivation (
         {
@@ -54,18 +63,23 @@ lib.makeScope pkgs.newScope (
             gimp
             gimp.gtk
             glib
-          ] ++ (attrs.buildInputs or [ ]);
+          ]
+          ++ (attrs.buildInputs or [ ]);
 
           nativeBuildInputs = [
             pkg-config
             intltool
-          ] ++ (attrs.nativeBuildInputs or [ ]);
+          ]
+          ++ (attrs.nativeBuildInputs or [ ]);
 
           # Override installation paths.
           env = {
-            PKG_CONFIG_GIMP_2_0_GIMPLIBDIR = "${placeholder "out"}/${gimp.targetLibDir}";
-            PKG_CONFIG_GIMP_2_0_GIMPDATADIR = "${placeholder "out"}/${gimp.targetDataDir}";
-          } // attrs.env or { };
+            "PKG_CONFIG_GIMP_${pkgConfigMajorVersion}_0_GIMPLIBDIR" =
+              "${placeholder "out"}/${gimp.targetLibDir}";
+            "PKG_CONFIG_GIMP_${pkgConfigMajorVersion}_0_GIMPDATADIR" =
+              "${placeholder "out"}/${gimp.targetDataDir}";
+          }
+          // attrs.env or { };
         }
       );
 
@@ -86,7 +100,7 @@ lib.makeScope pkgs.newScope (
   in
   {
     # Allow overriding GIMP package in the scope.
-    inherit (pkgs) gimp;
+    gimp = gimpArg;
 
     bimp = pluginDerivation rec {
       /*
@@ -130,6 +144,7 @@ lib.makeScope pkgs.newScope (
       installTargets = [ "install-admin" ];
 
       meta = with lib; {
+        broken = gimp.majorVersion != "2.0";
         description = "Batch Image Manipulation Plugin for GIMP";
         homepage = "https://github.com/alessandrofrancesconi/gimp-plugin-bimp";
         license = licenses.gpl2Plus;
@@ -153,6 +168,7 @@ lib.makeScope pkgs.newScope (
       '';
 
       meta = {
+        broken = gimp.majorVersion != "2.0";
         description = "Gimp plug-in for the farbfeld image format";
         homepage = "https://github.com/ids1024/gimp-farbfeld";
         license = lib.licenses.mit;
@@ -192,6 +208,7 @@ lib.makeScope pkgs.newScope (
       '';
 
       meta = with lib; {
+        broken = gimp.majorVersion != "2.0";
         description = "GIMP plug-in to do the fourier transform";
         homepage = "https://people.via.ecp.fr/~remi/soft/gimp/gimp_plugin_en.php3#fourier";
         license = with licenses; [ gpl3Plus ];
@@ -222,7 +239,7 @@ lib.makeScope pkgs.newScope (
       };
 
       meta = {
-        broken = !gimp.python2Support;
+        broken = gimp.majorVersion != "2.0";
       };
     };
 
@@ -240,6 +257,10 @@ lib.makeScope pkgs.newScope (
         ninja
         gettext
       ];
+
+      meta = {
+        broken = gimp.majorVersion != "2.0";
+      };
     };
 
     waveletSharpen = pluginDerivation {
@@ -264,6 +285,10 @@ lib.makeScope pkgs.newScope (
       };
 
       installPhase = "installPlugin src/wavelet-sharpen"; # TODO translations are not copied .. How to do this on nix?
+
+      meta = {
+        broken = gimp.majorVersion != "2.0";
+      };
     };
 
     lqrPlugin = pluginDerivation rec {
@@ -289,10 +314,15 @@ lib.makeScope pkgs.newScope (
           sha256 = "EdjZWM6U1bhUmsOnLA8iJ4SFKuAXHIfNPzxZqel+JrY=";
         })
       ];
+
+      meta = {
+        broken = gimp.majorVersion != "2.0";
+      };
     };
 
     gmic = pkgs.gmic-qt.override {
       variant = "gimp";
+      inherit (self) gimp;
     };
 
     gimplensfun = pluginDerivation {
@@ -320,6 +350,7 @@ lib.makeScope pkgs.newScope (
     ";
 
       meta = {
+        broken = gimp.majorVersion != "2.0";
         description = "GIMP plugin to correct lens distortion using the lensfun library and database";
 
         homepage = "http://lensfun.sebastiankraft.net/";
@@ -330,16 +361,6 @@ lib.makeScope pkgs.newScope (
     };
 
     # =============== simple script files ====================
-
-    # also have a look at enblend-enfuse in all-packages.nix
-    exposureBlend = scriptDerivation {
-      name = "exposure-blend";
-      src = fetchurl {
-        url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
-        sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
-      };
-      meta.broken = true;
-    };
 
     lightning = scriptDerivation {
       name = "Lightning";

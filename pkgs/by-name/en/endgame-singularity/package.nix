@@ -9,13 +9,13 @@
 
 let
   pname = "endgame-singularity";
-  version = "1.00";
+  version = "1.1";
 
   main_src = fetchFromGitHub {
     owner = "singularity";
     repo = "singularity";
-    rev = "v${version}";
-    sha256 = "0ndrnxwii8lag6vrjpwpf5n36hhv223bb46d431l9gsigbizv0hl";
+    tag = "v${version}";
+    hash = "sha256-wYXuhlGp7gisgN2iRXKTpe0Om2AA8u0eBwKHHIYuqbk=";
   };
 
   music_src = fetchurl {
@@ -24,14 +24,20 @@ let
   };
 in
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
+  format = "pyproject";
   inherit pname version;
 
   srcs = [ main_src ] ++ lib.optional enableDefaultMusicPack music_src;
   sourceRoot = main_src.name;
 
   nativeBuildInputs = [ unzip ]; # The music is zipped
-  propagatedBuildInputs = with python3.pkgs; [
+
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     pygame
     numpy
     polib

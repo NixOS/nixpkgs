@@ -33,7 +33,8 @@ buildGoModule {
   buildInputs = [
     gpgme
     btrfs-progs
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ xorg.libX11 ];
 
   ldflags = [
     "-s"
@@ -47,7 +48,7 @@ buildGoModule {
     versionCheckHook
   ];
 
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {

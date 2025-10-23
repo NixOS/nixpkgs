@@ -5,7 +5,7 @@
   coq,
   coquelicot,
   flocq,
-  mathcomp-ssreflect,
+  mathcomp-boot,
   mathcomp-fingroup,
   bignums ? null,
   gnuplot_qt,
@@ -18,45 +18,26 @@ mkCoqDerivation rec {
   domain = "gitlab.inria.fr";
   inherit version;
   defaultVersion =
+    let
+      case = case: out: { inherit case out; };
+    in
     with lib.versions;
     lib.switch coq.coq-version [
-      {
-        case = range "8.13" "8.20";
-        out = "4.11.0";
-      }
-      {
-        case = range "8.12" "8.19";
-        out = "4.10.0";
-      }
-      {
-        case = range "8.12" "8.18";
-        out = "4.9.0";
-      }
-      {
-        case = range "8.12" "8.17";
-        out = "4.8.0";
-      }
-      {
-        case = range "8.12" "8.16";
-        out = "4.6.0";
-      }
-      {
-        case = range "8.8" "8.16";
-        out = "4.5.2";
-      }
-      {
-        case = range "8.8" "8.12";
-        out = "4.0.0";
-      }
-      {
-        case = range "8.7" "8.11";
-        out = "3.4.2";
-      }
-      {
-        case = range "8.5" "8.6";
-        out = "3.3.0";
-      }
+      (case (range "8.13" "9.1") "4.11.3")
+      (case (range "8.13" "9.0") "4.11.2")
+      (case (range "8.13" "8.20") "4.11.1")
+      (case (range "8.12" "8.19") "4.10.0")
+      (case (range "8.12" "8.18") "4.9.0")
+      (case (range "8.12" "8.17") "4.8.0")
+      (case (range "8.12" "8.16") "4.6.0")
+      (case (range "8.8" "8.16") "4.5.2")
+      (case (range "8.8" "8.12") "4.0.0")
+      (case (range "8.7" "8.11") "3.4.2")
+      (case (range "8.5" "8.6") "3.3.0")
     ] null;
+  release."4.11.3".sha256 = "sha256-Cwovc3ln7ZEEDgMEh+pSUYqD/rtwFk4ED2hTRdy9YRg";
+  release."4.11.2".sha256 = "sha256-ouhjHtlxcqt06+Pt+UZAzwp83bVYPh3N+8jnsVvapSU=";
+  release."4.11.1".sha256 = "sha256-QWZvU468rOhK796xCCEawW6rhCRTPnE0iLll9ynKflo=";
   release."4.11.0".sha256 = "sha256-vPwa4zSjyvxHLGDoNaBnHV2pb77dnQFbC50BL80fcvE=";
   release."4.10.0".sha256 = "sha256-MZJVoKGLXjDabdv9BuUSK1L9z1cubzC9cqVuWevKIXQ=";
   release."4.9.0".sha256 = "sha256-+5NppyQahcc1idGu/U3B+EIWuZz2L3/oY7dIJR6pitE=";
@@ -81,7 +62,7 @@ mkCoqDerivation rec {
     ++ [
       coquelicot
       flocq
-      mathcomp-ssreflect
+      mathcomp-boot
       mathcomp-fingroup
     ]
     ++ lib.optionals (lib.versions.isGe "4.2.0" defaultVersion) [ gnuplot_qt ];

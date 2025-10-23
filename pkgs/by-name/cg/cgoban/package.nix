@@ -5,7 +5,7 @@
   fetchurl,
   makeWrapper,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cgoban";
   version = "3.5.144";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gokgs.com/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.free;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = [ ];
     platforms = temurin-jre-bin-17.meta.platforms;
   };
 }

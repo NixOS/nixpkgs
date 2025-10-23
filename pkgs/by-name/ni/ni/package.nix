@@ -3,28 +3,29 @@
   stdenv,
   fetchFromGitHub,
   nodejs,
-  pnpm_9,
+  pnpm_10,
   npmHooks,
   versionCheckHook,
   nix-update-script,
 }:
 let
-  pnpm = pnpm_9;
+  pnpm = pnpm_10;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ni";
-  version = "23.3.1";
+  version = "27.0.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "ni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-jkynuN7w0YaIYQLX0KsEQWqrXkhvh3qKSLK63A/7mx8=";
+    hash = "sha256-Yh159OpM4LPWJMO2Jv8xkzqRFurgK8EAQDyUIhWfHZ4=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-gDBjAwut217mdbWyk/dSU4JOkoRbOk4Czlb/lXhWqRU=";
+    fetcherVersion = 2;
+    hash = "sha256-pg2zFm84sqTRM/KaNxnvtZMZHhgdrThPoMV58KKbvHA=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontNpmPrune = true;
-  postInstall = ''
-    rm -rf $out/lib/node_modules/@antfu/ni/node_modules
-  '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };

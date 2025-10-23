@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ebusd";
-  version = "23.3";
+  version = "25.1";
 
   src = fetchFromGitHub {
     owner = "john30";
     repo = "ebusd";
     rev = version;
-    sha256 = "sha256-K3gZ5OudNA92S38U1+HndxjA7OVfh2ymYf8OetB646M=";
+    sha256 = "sha256-rj0Wkfk3Tpm58fbCUkgCdHt5MvW+tGgDyUd5COXfBc0=";
   };
 
   nativeBuildInputs = [
@@ -41,13 +41,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./patches/ebusd-cmake.patch
-    # Upstream patch for gcc-13 copmpatibility:
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/john30/ebusd/commit/3384f3780087bd6b94d46bf18cdad18201ad516c.patch";
-      hash = "sha256-+wZDHjGaIhBCqhy2zmIE8Ko3uAiw8kfKx64etCqRQjM=";
-    })
   ];
+
+  preInstall = ''
+    mkdir -p $out/usr/bin
+  '';
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
@@ -56,7 +54,7 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    mv $out/usr/bin $out
+    rmdir $out/usr/bin
     rmdir $out/usr
   '';
 

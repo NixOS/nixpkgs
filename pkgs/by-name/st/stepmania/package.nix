@@ -17,6 +17,7 @@
   libvorbis,
   udev,
   xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -41,6 +42,9 @@ stdenv.mkDerivation {
 
   postPatch = ''
     sed '1i#include <ctime>' -i src/arch/ArchHooks/ArchHooks.h # gcc12
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.12)' 'cmake_minimum_required(VERSION 3.10)'
   '';
 
   nativeBuildInputs = [
@@ -61,11 +65,13 @@ stdenv.mkDerivation {
     libvorbis
     udev
     xorg.libXtst
+    zlib
   ];
 
   cmakeFlags = [
     "-DWITH_SYSTEM_FFMPEG=1"
     "-DWITH_SYSTEM_PNG=on"
+    "-DWITH_SYSTEM_ZLIB=on"
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
     "-DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
   ];

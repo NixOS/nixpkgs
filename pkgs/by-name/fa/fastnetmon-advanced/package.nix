@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   pname = "fastnetmon-advanced";
-  version = "2.0.370";
+  version = "2.0.372";
 
   src = fetchurl {
     url = "https://repo.fastnetmon.com/fastnetmon_ubuntu_jammy/pool/fastnetmon/f/fastnetmon/fastnetmon_${version}_amd64.deb";
-    hash = "sha256-41tAGjZSNFDUSoworrKOps99/PRuCSagemFzxdrc6/U=";
+    hash = "sha256-FwYAbTBkk+AciDVxTIimswsB0M3gbzKX+03PD0fLMsY=";
   };
 
   nativeBuildInputs = [
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     tar xf data.tar.xz
 
     # unused libraries, which have additional dependencies
-    rm opt/fastnetmon/libraries/gcc1210/lib/libgccjit.so.0.0.1
+    rm opt/fastnetmon/libraries/gcc1210/lib/libgccjit.so*
   '';
 
   installPhase = ''
@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) fastnetmon-advanced; };
 
-  meta = with lib; {
+  meta = {
     description = "High performance DDoS detector / sensor - commercial edition";
     homepage = "https://fastnetmon.com";
     changelog = "https://github.com/FastNetMon/fastnetmon-advanced-releases/releases/tag/v${version}";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = teams.wdz.members;
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    teams = [ lib.teams.wdz ];
+    license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };
 }

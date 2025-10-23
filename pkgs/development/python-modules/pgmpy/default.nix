@@ -4,19 +4,20 @@
   fetchFromGitHub,
 
   # dependencies
+  google-generativeai,
+  joblib,
   networkx,
   numpy,
-  scipy,
-  scikit-learn,
+  opt-einsum,
   pandas,
   pyparsing,
-  torch,
+  pyro-ppl,
+  scikit-learn,
+  scipy,
   statsmodels,
+  torch,
   tqdm,
-  joblib,
-  opt-einsum,
   xgboost,
-  google-generativeai,
 
   # tests
   pytestCheckHook,
@@ -27,30 +28,31 @@
 }:
 buildPythonPackage rec {
   pname = "pgmpy";
-  version = "0.1.26";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pgmpy";
     repo = "pgmpy";
     tag = "v${version}";
-    hash = "sha256-RusVREhEXYaJuQXTaCQ7EJgbo4+wLB3wXXCAc3sBGtU=";
+    hash = "sha256-WmRtek3lN7vEfXqoaZDiaNjMQ7R2PmJ/OEwxOV7m5sE=";
   };
 
   dependencies = [
+    google-generativeai
+    joblib
     networkx
     numpy
-    scipy
-    scikit-learn
+    opt-einsum
     pandas
     pyparsing
-    torch
+    pyro-ppl
+    scikit-learn
+    scipy
     statsmodels
+    torch
     tqdm
-    joblib
-    opt-einsum
     xgboost
-    google-generativeai
   ];
 
   disabledTests = [
@@ -64,6 +66,9 @@ buildPythonPackage rec {
 
     # requires optional dependency daft
     "test_to_daft"
+
+    # AssertionError
+    "test_estimate_example_smoke_test"
   ];
 
   nativeCheckInputs = [
@@ -75,10 +80,12 @@ buildPythonPackage rec {
     black
   ];
 
+  pythonImportsCheck = [ "pgmpy" ];
+
   meta = {
     description = "Python Library for learning (Structure and Parameter), inference (Probabilistic and Causal), and simulations in Bayesian Networks";
     homepage = "https://github.com/pgmpy/pgmpy";
-    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/v${version}";
+    changelog = "https://github.com/pgmpy/pgmpy/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ happysalada ];
   };

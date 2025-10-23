@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, zlib
-, libusb1
-, libGL
-, qmake
-, wrapGAppsHook3
-, wrapQtAppsHook
-, mkDerivation
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+  libusb1,
+  libGL,
+  qmake,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  mkDerivation,
 
-, qttools
-, qtbase
-, qt3d
-, qtsvg
-, qtserialport
-, qtdeclarative
-, qtquickcontrols
-, qtquickcontrols2
-, qtgraphicaleffects
-, qtwayland
-, nix-update-script
+  qttools,
+  qtbase,
+  qt3d,
+  qtsvg,
+  qtserialport,
+  qtdeclarative,
+  qtquickcontrols,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  qtwayland,
+  nix-update-script,
 }:
 let
   pname = "qFlipper";
@@ -62,7 +63,8 @@ mkDerivation {
     qtquickcontrols
     qtquickcontrols2
     qtgraphicaleffects
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
     qtwayland
   ];
 
@@ -84,13 +86,15 @@ mkDerivation {
   postInstall = ''
     mkdir -p $out/bin
     ${lib.optionalString stdenv.hostPlatform.isDarwin ''
-    cp qFlipper.app/Contents/MacOS/qFlipper $out/bin
+      cp qFlipper.app/Contents/MacOS/qFlipper $out/bin
     ''}
     cp qFlipper-cli $out/bin
 
     mkdir -p $out/etc/udev/rules.d
     cp installer-assets/udev/42-flipperzero.rules $out/etc/udev/rules.d/
   '';
+
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
@@ -100,6 +104,10 @@ mkDerivation {
     homepage = "https://flipperzero.one/";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ cab404 ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]; # qtbase doesn't build yet on aarch64-darwin
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+    ]; # qtbase doesn't build yet on aarch64-darwin
   };
 }

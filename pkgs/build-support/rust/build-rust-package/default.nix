@@ -1,7 +1,6 @@
 {
   lib,
   importCargoLock,
-  fetchCargoTarball,
   fetchCargoVendor,
   stdenv,
   cargoBuildHook,
@@ -13,7 +12,6 @@
   cargo-auditable,
   buildPackages,
   rustc,
-  libiconv,
   windows,
 }:
 
@@ -24,6 +22,7 @@ lib.extendMkDerivation {
     "depsExtraArgs"
     "cargoUpdateHook"
     "cargoLock"
+    "useFetchCargoVendor"
   ];
 
   extendDrvArgs =
@@ -50,7 +49,7 @@ lib.extendMkDerivation {
       cargoDepsHook ? "",
       buildType ? "release",
       meta ? { },
-      useFetchCargoVendor ? false,
+      useFetchCargoVendor ? true,
       cargoDeps ? null,
       cargoLock ? null,
       cargoVendorDir ? null,
@@ -72,6 +71,13 @@ lib.extendMkDerivation {
       ...
     }@args:
 
+    assert lib.assertMsg useFetchCargoVendor
+      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it";
+
+    assert lib.warnIf (args ? useFetchCargoVendor)
+      "buildRustPackage: `useFetchCargoVendor` is non‐optional and enabled by default as of 25.05, remove it"
+      true;
+
     lib.optionalAttrs (stdenv.hostPlatform.isDarwin && buildType == "debug") {
       RUSTFLAGS = "-C split-debuginfo=packed " + (args.RUSTFLAGS or "");
     }
@@ -85,7 +91,7 @@ lib.extendMkDerivation {
           importCargoLock cargoLock
         else if args.cargoHash or null == null then
           throw "cargoHash, cargoVendorDir, cargoDeps, or cargoLock must be set"
-        else if useFetchCargoVendor then
+        else
           fetchCargoVendor (
             {
               inherit
@@ -100,25 +106,6 @@ lib.extendMkDerivation {
               name = cargoDepsName;
               patches = cargoPatches;
               hash = args.cargoHash;
-            }
-            // depsExtraArgs
-          )
-        else
-          fetchCargoTarball (
-            {
-              inherit
-                src
-                srcs
-                sourceRoot
-                cargoRoot
-                preUnpack
-                unpackPhase
-                postUnpack
-                cargoUpdateHook
-                ;
-              hash = args.cargoHash;
-              name = cargoDepsName;
-              patches = cargoPatches;
             }
             // depsExtraArgs
           );
@@ -152,22 +139,18 @@ lib.extendMkDerivation {
           cargo
         ];
 
-      buildInputs =
-        buildInputs
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ]
-        ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
+      buildInputs = buildInputs ++ lib.optionals stdenv.hostPlatform.isMinGW [ windows.pthreads ];
 
       patches = cargoPatches ++ patches;
 
       PKG_CONFIG_ALLOW_CROSS = if stdenv.buildPlatform != stdenv.hostPlatform then 1 else 0;
 
-      postUnpack =
-        ''
-          eval "$cargoDepsHook"
+      postUnpack = ''
+        eval "$cargoDepsHook"
 
-          export RUST_LOG=${logLevel}
-        ''
-        + (args.postUnpack or "");
+        export RUST_LOG=${logLevel}
+      ''
+      + (args.postUnpack or "");
 
       configurePhase =
         args.configurePhase or ''

@@ -5,13 +5,10 @@
   cmake,
   gtest,
   c-ares,
-  curlHTTP3,
+  curl,
   libev,
 }:
 
-let
-  curl' = curlHTTP3;
-in
 stdenv.mkDerivation rec {
   pname = "https-dns-proxy";
   # there are no stable releases (yet?)
@@ -38,7 +35,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     c-ares
-    curl'
+    curl
     libev
   ];
 

@@ -5,54 +5,51 @@
   numpy,
   scipy,
   pillow,
-  fetchpatch,
+  pywavelets,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyssim";
-  version = "0.6";
-  format = "setuptools";
-
-  propagatedBuildInputs = [
-    numpy
-    scipy
-    pillow
-  ];
+  version = "0.7.1";
+  pyproject = true;
 
   # PyPI tarball doesn't contain test images so let's use GitHub
   src = fetchFromGitHub {
     owner = "jterrace";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-VvxQTvDTDms6Ccyclbf9P0HEQksl5atPPzHuH8yXTmc=";
+    repo = "pyssim";
+    tag = "v${version}";
+    hash = "sha256-6393EATaXg12pYXPaHty+8LepUM6kgtZ0zSjZ1Izytg=";
   };
 
-  patches = [
-    # "Replace Image.ANTIALIAS with Image.LANCZOS"
-    # Image.ANTIALIAS has been removed in Pillow 10.0.0,
-    # the version currently in nixpkgs,
-    # and Image.LANCZOS is a drop-in since Pillow 2.7.0.
-    # https://github.com/jterrace/pyssim/pull/45
-    (fetchpatch {
-      url = "https://github.com/jterrace/pyssim/commit/db4296c12ca9c027eb9cd61b52195a78dfcc6711.patch";
-      hash = "sha256-wNp47EFtjXv6jIFX25IErXg83ksmGRNFKNeMFS+tP6s=";
-    })
+  build-system = [
+    setuptools
   ];
 
-  # Tests are copied from .travis.yml
+  dependencies = [
+    numpy
+    scipy
+    pillow
+    pywavelets
+  ];
+
+  # Tests are copied from .github/workflows/python-package.yml
   checkPhase = ''
+    runHook preCheck
     $out/bin/pyssim test-images/test1-1.png test-images/test1-1.png | grep 1
     $out/bin/pyssim test-images/test1-1.png test-images/test1-2.png | grep 0.998
     $out/bin/pyssim test-images/test1-1.png "test-images/*" | grep -E " 1| 0.998| 0.672| 0.648" | wc -l | grep 4
     $out/bin/pyssim --cw --width 128 --height 128 test-images/test1-1.png test-images/test1-1.png | grep 1
     $out/bin/pyssim --cw --width 128 --height 128 test-images/test3-orig.jpg test-images/test3-rot.jpg | grep 0.938
+    runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Module for computing Structured Similarity Image Metric (SSIM) in Python";
     mainProgram = "pyssim";
     homepage = "https://github.com/jterrace/pyssim";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jluttine ];
+    changelog = "https://github.com/jterrace/pyssim/blob/${src.tag}/CHANGES.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jluttine ];
   };
 }

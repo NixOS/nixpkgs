@@ -9,7 +9,7 @@
 }:
 
 buildPythonApplication rec {
-  version = "1.3.0";
+  version = "1.5.0";
   pname = "podman-compose";
   pyproject = true;
 
@@ -17,7 +17,7 @@ buildPythonApplication rec {
     repo = "podman-compose";
     owner = "containers";
     tag = "v${version}";
-    hash = "sha256-0k+vJwWYEXQ6zxkcvjxBv9cq8nIBS15F7ul5VwqYtys=";
+    hash = "sha256-AEnq0wsDHaCxefaEX4lB+pCAIKzN0oyaBNm7t7tK/yI=";
   };
 
   build-system = [
@@ -35,7 +35,8 @@ buildPythonApplication rec {
     homepage = "https://github.com/containers/podman-compose";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = [ lib.maintainers.sikmir ] ++ lib.teams.podman.members;
+    maintainers = [ lib.maintainers.sikmir ];
+    teams = [ lib.teams.podman ];
     mainProgram = "podman-compose";
   };
 }

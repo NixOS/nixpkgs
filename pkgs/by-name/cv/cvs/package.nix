@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, texinfo, nano, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  texinfo,
+  nano,
+  autoreconfHook,
+}:
 
 let
   version = "1.12.13";
@@ -23,28 +31,36 @@ stdenv.mkDerivation {
     # Debian Patchset,
     # contains patches for CVE-2017-12836 and CVE-2012-0804 among other things
     (fetchurl {
-        url = "http://deb.debian.org/debian/pool/main/c/cvs/cvs_1.12.13+${debianRevision}.diff.gz";
-        sha256 = "085124619dfdcd3e53c726e049235791b67dcb9f71619f1e27c5f1cbdef0063e";
-     })
+      url = "http://deb.debian.org/debian/pool/main/c/cvs/cvs_1.12.13+${debianRevision}.diff.gz";
+      sha256 = "085124619dfdcd3e53c726e049235791b67dcb9f71619f1e27c5f1cbdef0063e";
+    })
   ];
 
-  hardeningDisable = [ "fortify" "format" ];
+  hardeningDisable = [
+    "fortify"
+    "format"
+  ];
 
-  nativeBuildInputs = [ autoreconfHook texinfo ];
+  nativeBuildInputs = [
+    autoreconfHook
+    texinfo
+  ];
 
   configureFlags = [
     "--with-editor=${nano}/bin/nano"
 
     # Required for cross-compilation.
     "cvs_cv_func_printf_ptr=yes"
-  ] ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [
     # So that fputs_unlocked is defined
     "CFLAGS=-D_GNU_SOURCE"
   ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
-  ] ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
+  ]
+  ++ lib.optionals (!stdenv.cc.bintools.isGNU) [
     # Don't pass --as-needed to linkers that don't support it
     # (introduced in debian patchset)
     "cvs_LDFLAGS="

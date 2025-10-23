@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "GxPlugins.lv2";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-NvmFoOAQtAnKrZgzG1Shy1HuJEWgjJloQEx6jw59hag=";
     fetchSubmodules = true;
   };
@@ -32,9 +32,13 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_DIR=$(out)/lib/lv2" ];
 
   configurePhase = ''
+    runHook preConfigure
+
     for i in GxBoobTube GxValveCaster; do
       substituteInPlace $i.lv2/Makefile --replace "\$(shell which echo) -e" "echo -e"
     done
+
+    runHook postConfigure
   '';
 
   meta = with lib; {

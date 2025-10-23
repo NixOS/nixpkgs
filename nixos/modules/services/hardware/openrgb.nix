@@ -41,24 +41,34 @@ in
       description = "Set server port of openrgb.";
     };
 
+    startupProfile = lib.mkOption {
+      type = lib.types.nullOr (lib.types.str);
+      default = null;
+      description = "The profile file to load from \"/var/lib/OpenRGB\" at startup.";
+    };
   };
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
 
-    boot.kernelModules =
-      [ "i2c-dev" ]
-      ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
-      ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
+    boot.kernelModules = [
+      "i2c-dev"
+    ]
+    ++ lib.optionals (cfg.motherboard == "amd") [ "i2c-piix4" ]
+    ++ lib.optionals (cfg.motherboard == "intel") [ "i2c-i801" ];
 
     systemd.services.openrgb = {
       description = "OpenRGB server daemon";
+      after = [ "network.target" ];
+      wants = [ "dev-usb.device" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         StateDirectory = "OpenRGB";
         WorkingDirectory = "/var/lib/OpenRGB";
-        ExecStart = "${cfg.package}/bin/openrgb --server --server-port ${toString cfg.server.port}";
+        ExecStart =
+          "${cfg.package}/bin/openrgb --server --server-port ${toString cfg.server.port}"
+          + lib.optionalString (builtins.isString cfg.startupProfile) " --profile ${lib.escapeShellArg cfg.startupProfile}";
         Restart = "always";
       };
     };

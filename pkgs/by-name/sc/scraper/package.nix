@@ -1,16 +1,20 @@
-{ lib, rustPlatform, fetchCrate, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "scraper";
-  version = "0.22.0";
+  version = "0.24.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-YefezVG/p+nhdJu5YetR84yL9H7Iqz/k+Hnp8Bwv7gI=";
+    hash = "sha256-/WdzwqwxTZiWyLV/W0nsMgVJ+o3wJU6u0gOMZva+WSM=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-wIoToIbOSN1kKN3njkshZvN2FoHoY0kUMVv8RteD5uI=";
+  cargoHash = "sha256-0k8tYJbsWRAWn7stsodC8qkzzl3O8AZ1QrQ7i/n2YzY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -18,12 +22,12 @@ rustPlatform.buildRustPackage rec {
     installManPage scraper.1
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to query HTML files with CSS selectors";
     mainProgram = "scraper";
     homepage = "https://github.com/causal-agent/scraper";
     changelog = "https://github.com/causal-agent/scraper/releases/tag/v${version}";
-    license = licenses.isc;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ figsoda ];
   };
 }

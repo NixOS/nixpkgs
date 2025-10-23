@@ -69,7 +69,7 @@ stdenv.mkDerivation {
       "i686-linux"
     ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     license = licenses.gpl2Plus;
   };
 }

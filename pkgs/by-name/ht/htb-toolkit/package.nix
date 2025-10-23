@@ -5,7 +5,6 @@
   pkg-config,
   openssl,
   stdenv,
-  darwin,
   coreutils,
   gnome-keyring,
   libsecret,
@@ -16,18 +15,17 @@
 
 rustPlatform.buildRustPackage {
   pname = "htb-toolkit";
-  version = "0-unstable-2024-04-22";
+  version = "0-unstable-2025-03-15";
 
   src = fetchFromGitHub {
     owner = "D3vil0p3r";
     repo = "htb-toolkit";
     # https://github.com/D3vil0p3r/htb-toolkit/issues/3
-    rev = "921e4b352a9dd8b3bc8ac8774e13509abd179aef";
-    hash = "sha256-o91p/m06pm9qoYZZVh+qHulqHO2G7xVJQPpEvRsq+8Q=";
+    rev = "dd193c2974cd5fd1bbc6f7f616ebd597e28539ec";
+    hash = "sha256-NTZv0BPyIB32CNXbINYTy4n8tNVJ3pRLr1QDhI/tg2Y=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-TQsqZhgmbHqNFgUddtRRKYkob0L40dJiSq8FxKnpPEE=";
+  cargoHash = "sha256-ReEe8pyW66GXIPwAy6IKsFEAUjxHmzw5mj21i/h4quQ=";
 
   # Patch to disable prompt change of the shell when a target machine is run. Needed due to Nix declarative nature
   patches = [
@@ -38,17 +36,12 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [
-      gnome-keyring
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    gnome-keyring
+  ];
 
   postPatch = ''
     substituteInPlace src/manage.rs \

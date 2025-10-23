@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   poetry-dynamic-versioning,
-  pytest-asyncio,
+  pytest-asyncio_0,
   pytestCheckHook,
 }:
 
@@ -27,8 +27,13 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    pytest-asyncio
+    pytest-asyncio_0
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # async def functions are not natively supported.
+    "test_cancel_task"
   ];
 
   pythonImportsCheck = [ "pybalboa" ];

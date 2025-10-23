@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./drop-64-suffix.patch # necessary to prevent '64' from being appended to the names of the executables
+    # https://github.com/lastools/LAStools/pull/234
+    ./cmake.diff
   ];
 
   hardeningDisable = [
@@ -34,7 +36,8 @@ stdenv.mkDerivation rec {
     description = "Software for rapid LiDAR processing";
     homepage = "http://lastools.org/";
     license = licenses.unfree;
-    maintainers = with maintainers; teams.geospatial.members ++ [ stephenwithph ];
+    maintainers = with maintainers; [ stephenwithph ];
+    teams = [ teams.geospatial ];
     platforms = platforms.unix;
   };
 }

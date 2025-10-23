@@ -10,22 +10,21 @@
   pkg-config,
   sqlite,
   stdenv,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   wrapGAppsHook3,
 }:
-
 let
   inherit (luajitPackages) luafilesystem;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "luakit";
-  version = "2.3.3";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "luakit";
     repo = "luakit";
     rev = finalAttrs.version;
-    hash = "sha256-DtoixcLq+ddbacTAo+Qq6q4k1i6thirACw1zqUeOxXo=";
+    hash = "sha256-6OPcGwWQyP+xWVKGjwEfE8Xnf1gcwwbO+FbvA1x0c8M=";
   };
 
   nativeBuildInputs = [
@@ -35,22 +34,21 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs =
-    [
-      glib-networking # TLS support
-      gtk3
-      luafilesystem
-      sqlite
-      webkitgtk_4_0
-    ]
-    ++ (with gst_all_1; [
-      gst-libav
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-ugly
-      gstreamer
-    ]);
+  buildInputs = [
+    glib-networking # TLS support
+    gtk3
+    luafilesystem
+    sqlite
+    webkitgtk_4_1
+  ]
+  ++ (with gst_all_1; [
+    gst-libav
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gstreamer
+  ]);
 
   strictDeps = true;
 
@@ -65,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "DEVELOPMENT_PATHS=0"
     "USE_LUAJIT=1"
+    "LUA_BIN_NAME=luajit"
     "INSTALLDIR=${placeholder "out"}"
     "PREFIX=${placeholder "out"}"
     "USE_GTK3=1"
@@ -95,7 +94,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Only;
     mainProgram = "luakit";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = with lib.maintainers; [
+      griffi-gh
+    ];
     platforms = lib.platforms.unix;
   };
 })

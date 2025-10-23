@@ -20,16 +20,17 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "devtoolbox";
-  version = "1.2.2";
+  version = "1.3.0";
   pyproject = false; # uses meson
 
   src = fetchFromGitHub {
     owner = "aleiepure";
     repo = "devtoolbox";
     tag = "v${version}";
-    hash = "sha256-kgnCqPlLFVQ6kgfstQ59OeF28etMsfK4qvCn4P92ET4=";
+    hash = "sha256-ReF70pNMrMweEB4WAGQT++9TxTN4gV1olln7Y6YWCis=";
   };
 
+  # test after update
   postPatch = ''
     substituteInPlace src/views/reverse_cron.py \
       --replace-fail '"\D"' 'r"\D"'
@@ -80,6 +81,8 @@ python3Packages.buildPythonApplication rec {
     python-dateutil
     rcssmin
     rjsmin
+    cryptography
+    color-parser-py
   ];
 
   dontWrapGApps = true;

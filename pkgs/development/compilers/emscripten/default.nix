@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "emscripten";
-  version = "3.1.73";
+  version = "4.0.12";
 
   llvmEnv = symlinkJoin {
     name = "emscripten-llvm-${version}";
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     name = "emscripten-node-modules-${version}";
     inherit pname version src;
 
-    npmDepsHash = "sha256-bqxUlxpIH1IAx9RbnaMq4dZW8fy+M/Q02Q7VrW/AKNQ=";
+    npmDepsHash = "sha256-Pos7pSboTIpGKtlBm56hJPYb1lDydmUwW1urHetFfeQ=";
 
     dontBuild = true;
 
@@ -46,14 +46,18 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "emscripten-core";
     repo = "emscripten";
-    hash = "sha256-QlC2k2rhF3/Pz+knnrlBDV8AfHHBSlGr7b9Ae6TNsxY=";
+    hash = "sha256-MwCUilfyum1yJb6nHEViYiYWufXlz2+krHZmXw2NAck=";
     rev = version;
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  strictDeps = true;
+
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+  ];
   buildInputs = [
     nodejs
-    python3
   ];
 
   patches = [
@@ -67,8 +71,8 @@ stdenv.mkDerivation rec {
 
     patchShebangs .
 
-    # emscripten 3.1.67 requires LLVM tip-of-tree instead of LLVM 18
-    sed -i -e "s/EXPECTED_LLVM_VERSION = 20/EXPECTED_LLVM_VERSION = 19/g" tools/shared.py
+    # emscripten 4.0.12 requires LLVM tip-of-tree instead of LLVM 21
+    sed -i -e "s/EXPECTED_LLVM_VERSION = 22/EXPECTED_LLVM_VERSION = 21.1/g" tools/shared.py
 
     # fixes cmake support
     sed -i -e "s/print \('emcc (Emscript.*\)/sys.stderr.write(\1); sys.stderr.flush()/g" emcc.py
@@ -102,15 +106,22 @@ stdenv.mkDerivation rec {
     cp -r . $appdir
     chmod -R +w $appdir
 
-    mkdir -p $appdir/node_modules
+    mkdir -p $appdir/node_modules/.bin
     cp -r ${nodeModules}/* $appdir/node_modules
+    cp -r ${nodeModules}/* $appdir/node_modules/.bin
+
+    cp ${./locate_cache.sh} $appdir/locate_cache.sh
+    chmod +x $appdir/locate_cache.sh
+
+    export EM_CACHE=$out/share/emscripten/cache
 
     mkdir -p $out/bin
     for b in em++ em-config emar embuilder.py emcc emcmake emconfigure emmake emranlib emrun emscons emsize; do
       makeWrapper $appdir/$b $out/bin/$b \
         --set NODE_PATH ${nodeModules} \
         --set EM_EXCLUSIVE_CACHE_ACCESS 1 \
-        --set PYTHON ${python3}/bin/python
+        --set PYTHON ${python3}/bin/python \
+        --run "source $appdir/locate_cache.sh"
     done
 
     # precompile libc (etc.) in all variants:

@@ -5,7 +5,7 @@
   makeWrapper,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "muon";
   version = "2019-11-27";
 

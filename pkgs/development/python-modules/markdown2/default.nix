@@ -4,7 +4,7 @@
   fetchFromGitHub,
   latex2mathml,
   pygments,
-  pytestCheckHook,
+  pytest7CheckHook,
   pythonOlder,
   setuptools,
   wavedrom,
@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "markdown2";
-  version = "2.5.2";
+  version = "2.5.4";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     owner = "trentm";
     repo = "python-markdown2";
     tag = version;
-    hash = "sha256-SL93JEBBpiYqgCazRkPN5nFBidMpfnGLrHIe7EUwlAY=";
+    hash = "sha256-2w11vVzZUS6HzXmZT+Ag5rPqRnn/tlLnHL4xIDv0l+g=";
   };
 
   build-system = [ setuptools ];
 
   pythonImportsCheck = [ "markdown2" ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   optional-dependencies = {
     code_syntax_highlighting = [ pygments ];

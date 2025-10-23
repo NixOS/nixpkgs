@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "obs-move-transition";
-  version = "3.1.1";
+  version = "3.1.5";
 
   src = fetchFromGitHub {
     owner = "exeldro";
     repo = "obs-move-transition";
     rev = version;
-    sha256 = "sha256-kCiRgfpcFdxoK6e8jtrtzkBD4w5B/ilO1YyBHCG13gg=";
+    sha256 = "sha256-MelIMAy+9LiSlYwDdS8mbgttyZ6rvGFS5TKMas8LzCM=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -29,9 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/exeldro/obs-move-transition";
     maintainers = with maintainers; [ starcraft66 ];
     license = licenses.gpl2Plus;
-    platforms = [
-      "x86_64-linux"
-      "i686-linux"
-    ];
+    inherit (obs-studio.meta) platforms;
   };
 }

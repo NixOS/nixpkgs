@@ -22,14 +22,13 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "nate-xyz";
-    repo = pname;
+    repo = "paleta";
     rev = "v${version}";
     hash = "sha256-c+X49bMywstRg7cSAbbpG/vd8OUB7RhdQVRumTIBDDk=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit src;
-    name = "${pname}-${version}";
+    inherit pname version src;
     hash = "sha256-RuzqU06iyK+IN7aO+Lq/IaRLh2oFpWM1rz69Koiicgg=";
   };
 

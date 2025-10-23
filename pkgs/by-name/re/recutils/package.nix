@@ -41,20 +41,19 @@ stdenv.mkDerivation rec {
     "--with-bash-headers=${bash.dev}/include/bash"
   ];
 
-  buildInputs =
-    [
-      curl
-    ]
-    ++ lib.optionals withEncryption [
-      libgpg-error.dev
-      libgcrypt.dev
-    ]
-    ++ lib.optionals withUuid [
-      libuuid
-    ]
-    ++ lib.optionals withBashBuiltins [
-      bash.dev
-    ];
+  buildInputs = [
+    curl
+  ]
+  ++ lib.optionals withEncryption [
+    libgpg-error.dev
+    libgcrypt.dev
+  ]
+  ++ lib.optionals withUuid [
+    libuuid
+  ]
+  ++ lib.optionals withBashBuiltins [
+    bash.dev
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.cc.isClang [
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
       records, each record containing an arbitrary number of named fields.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

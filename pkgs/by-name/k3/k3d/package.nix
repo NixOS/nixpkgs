@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -16,13 +17,13 @@ let
 in
 buildGoModule rec {
   pname = "k3d";
-  version = "5.8.2";
+  version = "5.8.3";
 
   src = fetchFromGitHub {
     owner = "k3d-io";
     repo = "k3d";
     tag = "v${version}";
-    hash = "sha256-O/dAD49SACJBLSYr0tNtUv1NEQuNHRapdLbY/bb2C8o=";
+    hash = "sha256-UBiDDZf/UtgPGRV9WUnoC32wc64nthBpBheEYOTp6Hk=";
   };
 
   vendorHash = "sha256-lFmIRtkUiohva2Vtg4AqHaB5McVOWW5+SFShkNqYVZ8=";
@@ -52,7 +53,7 @@ buildGoModule rec {
       --replace-fail "TestGetK3sVersion" "SkipGetK3sVersion"
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd k3d \
       --bash <($out/bin/k3d completion bash) \
       --fish <($out/bin/k3d completion fish) \
@@ -69,7 +70,7 @@ buildGoModule rec {
 
   env.GOWORK = "off";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/k3d-io/k3d/";
     changelog = "https://github.com/k3d-io/k3d/blob/v${version}/CHANGELOG.md";
     description = "Helper to run k3s (Lightweight Kubernetes. 5 less than k8s) in a docker container";
@@ -80,14 +81,14 @@ buildGoModule rec {
       k3d creates containerized k3s clusters. This means, that you can spin up a
       multi-node k3s cluster on a single machine using docker.
     '';
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       kuznero
       jlesquembre
       ngerstle
       jk
       ricochet
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

@@ -17,13 +17,13 @@ let
         fontFile = "JoyPixels-SBIX.ttf";
       };
     }
-    .${kernel.name} or rec {
+    .${kernel.name} or {
       systemTag = "nixos";
       capitalized = "NixOS";
       fontFile = "joypixels-android.ttf";
     };
 
-  joypixels-free-license = with systemSpecific; {
+  joypixels-free-license = {
     spdxId = "LicenseRef-JoyPixels-Free";
     fullName = "JoyPixels Free License Agreement";
     url = "https://cdn.joypixels.com/free-license.pdf";

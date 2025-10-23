@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "great-expectations";
-  version = "1.3.2";
+  version = "1.5.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "great-expectations";
     repo = "great_expectations";
     tag = version;
-    hash = "sha256-MV6T8PyOyAQ2SfT8B38YdCtqj6oeZCW+z08koBR739A=";
+    hash = "sha256-pa44metr9KP2KF2ulq7kd84BVdBMvMhsWJeBsJ2AnG0=";
   };
 
   postPatch = ''
@@ -85,24 +85,23 @@ buildPythonPackage rec {
     "posthog"
   ];
 
-  nativeCheckInputs =
-    [
-      pytestCheckHook
-      pytest-mock
-      pytest-order
-      pytest-random-order
-      click
-      flaky
-      freezegun
-      invoke
-      moto
-      psycopg2
-      requirements-parser
-      responses
-      sqlalchemy
-    ]
-    ++ moto.optional-dependencies.s3
-    ++ moto.optional-dependencies.sns;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-mock
+    pytest-order
+    pytest-random-order
+    click
+    flaky
+    freezegun
+    invoke
+    moto
+    psycopg2
+    requirements-parser
+    responses
+    sqlalchemy
+  ]
+  ++ moto.optional-dependencies.s3
+  ++ moto.optional-dependencies.sns;
 
   disabledTestPaths = [
     # try to access external URLs:
@@ -121,6 +120,12 @@ buildPythonPackage rec {
     "tests/render"
   ];
 
+  disabledTestMarks = [
+    "postgresql"
+    "snowflake"
+    "spark"
+  ];
+
   disabledTests = [
     # tries to access network:
     "test_checkpoint_run_with_data_docs_and_slack_actions_emit_page_links"
@@ -128,7 +133,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "great_expectations" ];
-  pytestFlagsArray = [ "-m 'not spark and not postgresql and not snowflake'" ];
 
   meta = {
     broken = true; # 408 tests fail

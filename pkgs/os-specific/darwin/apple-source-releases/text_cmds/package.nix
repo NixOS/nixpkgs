@@ -49,31 +49,30 @@ mkAppleDerivation {
 
   xcodeHash = "sha256-dZ+yJyfflhmUyx3gitRXC115QxS87SGC4/HjMa199Ts=";
 
-  postPatch =
-    ''
-      # Improve compatiblity with libmd in nixpkgs.
-      substituteInPlace md5/md5.c \
-        --replace-fail '<sha224.h>' '<sha2.h>' \
-        --replace-fail SHA224_Init SHA224Init \
-        --replace-fail SHA224_Update SHA224Update \
-        --replace-fail SHA224_End SHA224End \
-        --replace-fail SHA224_Data SHA224Data \
-        --replace-fail SHA224_CTX SHA2_CTX \
-        --replace-fail '<sha384.h>' '<sha512.h>' \
-        --replace-fail 'const void *, unsigned int, char *' 'const uint8_t *, size_t, char *'
-    ''
-    + lib.optionalString (lib.versionOlder (lib.getVersion apple-sdk) "13.0") ''
-      # Backport vis APIs from the 13.3 SDK (needed by vis).
-      cp '${Libc_13}/gen/FreeBSD/vis.c' vis/vis-libc.c
-      # Backport errx APIs from the 13.3 SDK (needed by lots of things).
-      mkdir sys
-      cp '${Libc_13}/gen/FreeBSD/err.c' err-libc.c
-      cp '${Libc_13}/include/err.h' err.h
-      cp '${Libc_13}/fbsdcompat/sys/cdefs.h' sys/cdefs.h
-      substituteInPlace err.h \
-        --replace-fail '__cold' ""
-      touch namespace.h un-namespace.h libc_private.h
-    '';
+  postPatch = ''
+    # Improve compatiblity with libmd in nixpkgs.
+    substituteInPlace md5/md5.c \
+      --replace-fail '<sha224.h>' '<sha2.h>' \
+      --replace-fail SHA224_Init SHA224Init \
+      --replace-fail SHA224_Update SHA224Update \
+      --replace-fail SHA224_End SHA224End \
+      --replace-fail SHA224_Data SHA224Data \
+      --replace-fail SHA224_CTX SHA2_CTX \
+      --replace-fail '<sha384.h>' '<sha512.h>' \
+      --replace-fail 'const void *, unsigned int, char *' 'const uint8_t *, size_t, char *'
+  ''
+  + lib.optionalString (lib.versionOlder (lib.getVersion apple-sdk) "13.0") ''
+    # Backport vis APIs from the 13.3 SDK (needed by vis).
+    cp '${Libc_13}/gen/FreeBSD/vis.c' vis/vis-libc.c
+    # Backport errx APIs from the 13.3 SDK (needed by lots of things).
+    mkdir sys
+    cp '${Libc_13}/gen/FreeBSD/err.c' err-libc.c
+    cp '${Libc_13}/include/err.h' err.h
+    cp '${Libc_13}/fbsdcompat/sys/cdefs.h' sys/cdefs.h
+    substituteInPlace err.h \
+      --replace-fail '__cold' ""
+    touch namespace.h un-namespace.h libc_private.h
+  '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 

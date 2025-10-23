@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}.dmg";
-    hash = "sha256-JFzzOwZUhVy7DsD6xehKhhzIKe9j8IKseJTSWhYAkfM=";
+    hash = "sha256-DeiQbg8wMFHsJ/jlbGj3wdXrRsGLJ0tOyGRex2w43lU=";
   };
   sourceRoot = ".";
 

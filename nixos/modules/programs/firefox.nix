@@ -74,9 +74,7 @@ in
       defaultText = lib.literalExpression "pkgs.firefox";
       relatedPackages = [
         "firefox"
-        "firefox-beta-bin"
         "firefox-bin"
-        "firefox-devedition-bin"
         "firefox-esr"
       ];
     };
@@ -118,7 +116,14 @@ in
         Some of these might be able to be configured more ergonomically
         using policies.
 
+        See [here](https://mozilla.github.io/policy-templates/#preferences) for allowed preferences.
+
         ${organisationInfo}
+      '';
+      example = lib.literalExpression ''
+        {
+          "browser.tabs.tabmanager.enabled" = false;
+        }
       '';
     };
 
@@ -144,7 +149,7 @@ in
     languagePacks = lib.mkOption {
       # Available languages can be found in https://releases.mozilla.org/pub/firefox/releases/${cfg.package.version}/linux-x86_64/xpi/
       type = lib.types.listOf (
-        lib.types.enum ([
+        lib.types.enum [
           "ach"
           "af"
           "an"
@@ -248,7 +253,7 @@ in
           "xh"
           "zh-CN"
           "zh-TW"
-        ])
+        ]
       );
       default = [ ];
       description = ''
@@ -263,7 +268,7 @@ in
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
         change user preferences or prevent the end user from modifiying specific
-        preferences by locking them. More info can be found in https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig.
+        preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
       '';
     };
 
@@ -274,13 +279,13 @@ in
         AutoConfig files can be used to set and lock preferences that are not covered
         by the policies.json for Mac and Linux. This method can be used to automatically
         change user preferences or prevent the end user from modifiying specific
-        preferences by locking them. More info can be found in https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig.
+        preferences by locking them. More info can be found in <https://support.mozilla.org/en-US/kb/customizing-firefox-using-autoconfig>.
 
         Files are concated and autoConfig is appended.
       '';
     };
 
-    nativeMessagingHosts = ({
+    nativeMessagingHosts = {
       packages = lib.mkOption {
         type = lib.types.listOf lib.types.package;
         default = [ ];
@@ -288,7 +293,8 @@ in
           Additional packages containing native messaging hosts that should be made available to Firefox extensions.
         '';
       };
-    }) // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
+    }
+    // (builtins.mapAttrs (k: v: lib.mkEnableOption "${v.name} support") nmhOptions);
   };
 
   config =

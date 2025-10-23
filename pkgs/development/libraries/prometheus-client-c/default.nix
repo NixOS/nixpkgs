@@ -62,19 +62,10 @@ let
       };
     };
 in
-rec {
+{
   libprom = build {
     pname = "libprom";
     subdir = "prom";
     description = "Prometheus Client in C";
-  };
-  libpromhttp = build {
-    pname = "libpromhttp";
-    subdir = "promhttp";
-    buildInputs = [
-      libmicrohttpd
-      libprom
-    ];
-    description = "Prometheus HTTP Endpoint in C";
   };
 }

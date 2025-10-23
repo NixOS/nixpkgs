@@ -1,25 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, protobuf_26
-, git
-, testers
-, buf
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  protobuf,
+  git,
+  testers,
+  installShellFiles,
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "buf";
-  version = "1.50.1";
+  version = "1.58.0";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
-    rev = "v${version}";
-    hash = "sha256-n4X8Wgi/5z6fteR+uxr68R3kD7eorMzlAW8jacTZGHg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-RR5SjcMwU3Dcems7ovPlgH6Cp0sQ+Uqsztn6JATBfQo=";
   };
 
-  vendorHash = "sha256-HU4Di8ri2d93EUscCx8/gRiEJdLTcnKUaQ4kesKfZ+w=";
+  vendorHash = "sha256-5n4+wIvefYkrvkYQKw++GuWnsewLXEZYC0w40Lh9N6g=";
 
   patches = [
     # Skip a test that requires networking to be available to work.
@@ -28,11 +28,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeCheckInputs = [
     git # Required for TestGitCloner
-    protobuf_26 # Required for buftesting.GetProtocFilePaths
+    protobuf # Required for buftesting.GetProtocFilePaths
   ];
 
   checkFlags = [
@@ -77,14 +80,17 @@ buildGoModule rec {
     runHook postInstall
   '';
 
-  passthru.tests.version = testers.testVersion { package = buf; };
+  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
 
   meta = {
     homepage = "https://buf.build";
-    changelog = "https://github.com/bufbuild/buf/releases/tag/v${version}";
+    changelog = "https://github.com/bufbuild/buf/releases/tag/v${finalAttrs.version}";
     description = "Create consistent Protobuf APIs that preserve compatibility and comply with design best-practices";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ jk lrewega aaronjheng ];
+    maintainers = with lib.maintainers; [
+      jk
+      lrewega
+    ];
     mainProgram = "buf";
   };
-}
+})

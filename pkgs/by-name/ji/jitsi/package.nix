@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     categories = [ "Chat" ];
   };
 
-  libPath = lib.makeLibraryPath ([
+  libPath = lib.makeLibraryPath [
     stdenv.cc.cc # For libstdc++.
     alsa-lib
     dbus
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     xorg.libXext
     xorg.libXScrnSaver
     xorg.libXv
-  ]);
+  ];
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [
@@ -91,6 +91,6 @@ stdenv.mkDerivation rec {
     ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = teams.jitsi.members;
+    teams = [ teams.jitsi ];
   };
 }

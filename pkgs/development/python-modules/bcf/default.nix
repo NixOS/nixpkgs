@@ -15,14 +15,14 @@
 }:
 buildPythonPackage rec {
   pname = "bcf";
-  version = "1.9.0";
+  version = "1.9.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "hardwario";
     repo = "bch-firmware-tool";
     rev = "v${version}";
-    sha256 = "i28VewTB2XEZSfk0UeCuwB7Z2wz4qPBhzvxJIYkKwJ4=";
+    sha256 = "sha256-xKggVEN3O0umDEt358xc+79/SEVm2peMjfFHGTppTEo=";
   };
 
   postPatch = ''

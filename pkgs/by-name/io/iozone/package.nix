@@ -21,11 +21,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "iozone";
-  version = "3.506";
+  version = "3.507";
 
   src = fetchurl {
     url = "http://www.iozone.org/src/current/iozone${lib.replaceStrings [ "." ] [ "_" ] version}.tar";
-    hash = "sha256-EUzlwHGHO5ose6bnPQXV735mVkOSrL/NwLMmHbEPy+c=";
+    hash = "sha256-HoCHraBW9dgBjuC8dmhtQW/CJR7QMDgFXb0K940eXOM=";
   };
 
   license = fetchurl {
@@ -38,7 +38,10 @@ stdenv.mkDerivation rec {
 
   buildFlags = target;
 
-  enableParallelBuilding = true;
+  # The makefile doesn't define a rule for e.g. libbif.o
+  # Make will try to evaluate implicit built-in rules for these outputs if building in parallel
+  # Build in serial so that the main rule builds everything before the implicit ones are attempted
+  enableParallelBuilding = false;
 
   installPhase = ''
     mkdir -p $out/{bin,share/doc,libexec,share/man/man1}
@@ -60,7 +63,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "IOzone Filesystem Benchmark";
+    description = "Filesystem benchmark tool";
     homepage = "http://www.iozone.org/";
     license = lib.licenses.unfreeRedistributable;
     platforms = [

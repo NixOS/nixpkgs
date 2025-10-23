@@ -2,28 +2,26 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   stdenv,
   vimUtils,
   nix-update-script,
-  git,
+  gitMinimal,
 }:
 let
-  version = "0.13.1";
+  version = "1.7.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-eOlTkWMzQTZPPKPKUxg8Q2PwkOhfaQdrMZkg9Ew8t/g=";
+    hash = "sha256-eMUOjG2CtedCGVU1Pdp8PCCgGoFbjeVvK7lMS8E+ogg=";
   };
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
     inherit version src;
     pname = "blink-fuzzy-lib";
 
-    useFetchCargoVendor = true;
-    cargoHash = "sha256-F1wh/TjYoiIbDY3J/prVF367MKk3vwM7LqOpRobOs7I=";
+    cargoHash = "sha256-zWZHT+Y8ENN/nFEtJnkEUHXRuU6FUQ/ITHo+V4zJ6f8=";
 
-    nativeBuildInputs = [ git ];
+    nativeBuildInputs = [ gitMinimal ];
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
@@ -41,17 +39,7 @@ vimUtils.buildVimPlugin {
     ''
       mkdir -p target/release
       ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy${ext} target/release/libblink_cmp_fuzzy${ext}
-      echo -n "nix" > target/release/version
     '';
-
-  # TODO: Remove this patch when updating to next version
-  patches = [
-    (fetchpatch {
-      name = "blink-add-bypass-for-nix.patch";
-      url = "https://github.com/Saghen/blink.cmp/commit/6c83ef1ae34abd7ef9a32bfcd9595ac77b61037c.diff?full_index=1";
-      hash = "sha256-304F1gDDKVI1nXRvvQ0T1xBN+kHr3jdmwMMp8CNl+GU=";
-    })
-  ];
 
   passthru = {
     updateScript = nix-update-script {
@@ -69,10 +57,11 @@ vimUtils.buildVimPlugin {
     maintainers = with lib.maintainers; [
       balssh
       redxtech
+      llakala
     ];
   };
 
-  nvimSkipModule = [
+  nvimSkipModules = [
     # Module for reproducing issues
     "repro"
   ];

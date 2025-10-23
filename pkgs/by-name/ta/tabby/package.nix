@@ -32,7 +32,7 @@ let
   # https://github.com/NixOS/nixpkgs/blob/master/pkgs/tools/misc/ollama/default.nix
 
   pname = "tabby";
-  version = "0.24.0";
+  version = "0.28.0";
 
   availableAccelerations = flatten [
     (optional cudaSupport "cuda")
@@ -59,7 +59,7 @@ let
   # - metal if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
   # !! warn if multiple acceleration methods are enabled and default to the first one in the list
   featureDevice =
-    if (builtins.isNull acceleration) then
+    if (isNull acceleration) then
       (warnIfMultipleAccelerationMethods availableAccelerations)
     else
       acceleration;
@@ -103,11 +103,12 @@ let
   };
 
   # TODO(ghthor): some of this can be removed
-  darwinBuildInputs =
-    [ llamaccpPackage ]
-    ++ optionals stdenv.hostPlatform.isDarwin ([
-      apple-sdk_15
-    ]);
+  darwinBuildInputs = [
+    llamaccpPackage
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_15
+  ];
 
   cudaBuildInputs = [ llamaccpPackage ];
   rocmBuildInputs = [ llamaccpPackage ];
@@ -121,12 +122,11 @@ rustPlatform.buildRustPackage {
     owner = "TabbyML";
     repo = "tabby";
     tag = "v${version}";
-    hash = "sha256-poWUfPp/7w6dNjh6yoP5oTbaP4lL91hb1+zQG8tjUDE=";
+    hash = "sha256-cdY1/k7zZ4am6JP9ghnnJFHop/ZcnC/9alzd2MS8xqc=";
     fetchSubmodules = true;
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-CTn/b42FI+Y6qy3MKVESIbIlsXmIkZBlxUXnRtHWZcc=";
+  cargoHash = "sha256-yEns0QAARmuV697/na08K8uwJWZihY3pMyCZcERDlFM=";
 
   # Don't need to build llama-cpp-server (included in default build)
   # We also don't add CUDA features here since we're using the overridden llama-cpp package
@@ -141,25 +141,25 @@ rustPlatform.buildRustPackage {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  nativeBuildInputs =
-    [
-      git
-      pkg-config
-      protobuf
-      cmake
-    ]
-    ++ optionals enableCuda [
-      autoAddDriverRunpath
-    ];
+  nativeBuildInputs = [
+    git
+    pkg-config
+    protobuf
+    cmake
+  ]
+  ++ optionals enableCuda [
+    autoAddDriverRunpath
+  ];
 
-  buildInputs =
-    [ openssl ]
-    ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
-    ++ optionals enableCuda cudaBuildInputs
-    ++ optionals enableRocm rocmBuildInputs;
+  buildInputs = [
+    openssl
+  ]
+  ++ optionals stdenv.hostPlatform.isDarwin darwinBuildInputs
+  ++ optionals enableCuda cudaBuildInputs
+  ++ optionals enableRocm rocmBuildInputs;
 
   postInstall = ''
     # NOTE: Project contains a subproject for building llama-server

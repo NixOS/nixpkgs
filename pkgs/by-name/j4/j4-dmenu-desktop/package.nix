@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, dmenu, fmt, spdlog }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  dmenu,
+  fmt,
+  spdlog,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "j4-dmenu-desktop";
@@ -40,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/enkore/j4-dmenu-desktop";
     license = licenses.gpl3Only;
     mainProgram = "j4-dmenu-desktop";
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 })

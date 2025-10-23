@@ -4,16 +4,16 @@
   fetchurl,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "acpi";
-  version = "1.7";
+  version = "1.8";
 
   src = fetchurl {
-    url = "mirror://sourceforge/acpiclient/${version}/${pname}-${version}.tar.gz";
-    sha256 = "01ahldvf0gc29dmbd5zi4rrnrw2i1ajnf30sx2vyaski3jv099fp";
+    url = "mirror://sourceforge/acpiclient/${finalAttrs.version}/acpi-${finalAttrs.version}.tar.gz";
+    hash = "sha256-5kxuALU815dCfqMqFgUTQlsD7U8HdzP3Hx8J/zQPIws=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Show battery status and other ACPI information";
     mainProgram = "acpi";
     longDescription = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://sourceforge.net/projects/acpiclient/";
     license = lib.licenses.gpl2Plus;
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
-}
+})

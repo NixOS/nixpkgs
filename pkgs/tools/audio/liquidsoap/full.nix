@@ -3,7 +3,6 @@
   stdenv,
   makeWrapper,
   fetchFromGitHub,
-  fetchpatch,
   which,
   pkg-config,
   libjpeg,
@@ -24,7 +23,7 @@
 
 let
   pname = "liquidsoap";
-  version = "2.3.0";
+  version = "2.3.3";
 in
 stdenv.mkDerivation {
   inherit pname version;
@@ -33,17 +32,8 @@ stdenv.mkDerivation {
     owner = "savonet";
     repo = "liquidsoap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wNOENkIQw8LWfceI24aa8Ja3ZkePgTIGdIpGgqs/3Ss=";
+    hash = "sha256-EQFWFtgWvwsV+ZhO36Sd7mpxYOnd4Vv6Z+6xsgi335k=";
   };
-
-  patches = [
-    # Compatibility with saturn_lockfree 0.5.0
-    (fetchpatch {
-      url = "https://github.com/savonet/liquidsoap/commit/3d6d2d9cd1c7750f2e97449516235a692b28bf56.patch";
-      includes = [ "src/*" ];
-      hash = "sha256-pmC3gwmkv+Hat61aulNkTKS4xMz+4D94OCMtzhzNfT4=";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace src/lang/dune \
@@ -113,10 +103,10 @@ stdenv.mkDerivation {
     ocamlPackages.metadata
     ocamlPackages.dune-build-info
     ocamlPackages.re
-    ocamlPackages.saturn_lockfree # liquidsoap-lang
     ocamlPackages.sedlex # liquidsoap-lang
     ocamlPackages.ppx_hash # liquidsoap-lang
     ocamlPackages.ppx_string
+    ocamlPackages.xml-light # liquidsoap-lang
 
     # Recommended dependencies
     ocamlPackages.ffmpeg
@@ -133,7 +123,6 @@ stdenv.mkDerivation {
     ocamlPackages.frei0r
     ocamlPackages.gd
     ocamlPackages.graphics
-    # ocamlPackages.gstreamer # Broken but advertised feature
     ocamlPackages.imagelib
     ocamlPackages.inotify
     ocamlPackages.ladspa
@@ -170,7 +159,6 @@ stdenv.mkDerivation {
     changelog = "https://raw.githubusercontent.com/savonet/liquidsoap/main/CHANGES.md";
     maintainers = with lib.maintainers; [
       dandellion
-      ehmry
     ];
     license = lib.licenses.gpl2Plus;
     platforms = ocamlPackages.ocaml.meta.platforms or [ ];

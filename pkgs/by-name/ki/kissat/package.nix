@@ -4,23 +4,44 @@
   fetchFromGitHub,
   drat-trim,
   p7zip,
+  pkg-config,
 }:
 
+let
+  # Early meta to reference in pkgconfig generation
+  meta = with lib; {
+    description = "'keep it simple and clean bare metal SAT solver' written in C";
+    mainProgram = "kissat";
+    longDescription = ''
+      Kissat is a "keep it simple and clean bare metal SAT solver" written in C.
+      It is a port of CaDiCaL back to C with improved data structures,
+      better scheduling of inprocessing and optimized algorithms and implementation.
+    '';
+    maintainers = with maintainers; [ shnarazk ];
+    platforms = platforms.unix;
+    license = licenses.mit;
+    homepage = "https://fmv.jku.at/kissat";
+  };
+in
 stdenv.mkDerivation rec {
   pname = "kissat";
-  version = "4.0.2";
+  version = "4.0.4";
 
   src = fetchFromGitHub {
     owner = "arminbiere";
     repo = "kissat";
     rev = "rel-${version}";
-    sha256 = "sha256-XVaWO1zHMXM83Qih3HnmIsOvM1zpefF6u9lBP420/mQ=";
+    sha256 = "sha256-hgB1U2Pmh1hEyNA3ej3fXxxf0YjCRgtOuSddRl6s0eo=";
   };
 
   outputs = [
     "out"
     "dev"
     "lib"
+  ];
+
+  nativeBuildInputs = [
+    pkg-config
   ];
 
   nativeCheckInputs = [
@@ -37,6 +58,18 @@ stdenv.mkDerivation rec {
   dontAddPrefix = true;
   setOutputFlags = false;
 
+  configurePhase = ''
+    runHook preConfigure
+
+    ./configure
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    make -j$NIX_BUILD_CORES
+  '';
+
   installPhase = ''
     runHook preInstall
 
@@ -46,20 +79,23 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/share/doc/kissat/"
     install -Dm0644 {LICEN?E,README*,VERSION} "$out/share/doc/kissat/"
 
+    # Create pkgconfig
+    mkdir -p $dev/lib/pkgconfig
+    cat > $dev/lib/pkgconfig/kissat.pc <<EOF
+    prefix=${placeholder "dev"}
+    exec_prefix=\''${prefix}
+    libdir=${placeholder "lib"}/lib
+    includedir=\''${prefix}/include
+
+    Name: ${pname}
+    Description: ${meta.description}
+    Version: ${version}
+    Libs: -L\''${libdir} -lkissat
+    Cflags: -I\''${includedir}
+    EOF
+
     runHook postInstall
   '';
 
-  meta = with lib; {
-    description = "'keep it simple and clean bare metal SAT solver' written in C";
-    mainProgram = "kissat";
-    longDescription = ''
-      Kissat is a "keep it simple and clean bare metal SAT solver" written in C.
-      It is a port of CaDiCaL back to C with improved data structures,
-      better scheduling of inprocessing and optimized algorithms and implementation.
-    '';
-    maintainers = with maintainers; [ shnarazk ];
-    platforms = platforms.unix;
-    license = licenses.mit;
-    homepage = "https://fmv.jku.at/kissat";
-  };
+  inherit meta;
 }

@@ -4,43 +4,38 @@
   protobuf,
   rustPlatform,
   fetchFromGitHub,
-  darwin,
   pkgsBuildHost,
   openssl,
   pkg-config,
+  writableTmpDirAsHomeHook,
   versionCheckHook,
   nix-update-script,
   gurk-rs,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.6.2";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
     tag = "v${version}";
-    hash = "sha256-FSnKBSRhnHwjMzC8zGU/AHBuPX44EjMLS+3wHkf6IZw=";
+    hash = "sha256-1vnyzKissOciLopWzWN2kmraFevYW/w32KVmP8qgUM4=";
   };
 
   postPatch = ''
     rm .cargo/config.toml
   '';
 
-  useFetchCargoVendor = true;
-
-  cargoHash = "sha256-6+AFyQjbtxKHbMhYhfu9pUoz/cWGtl5o+IA6kFO4Zjk=";
+  cargoHash = "sha256-PCeiJYeIeMgKoQYiDI6DPwNgJcSxw4gw6Ra1YmqsNys=";
 
   nativeBuildInputs = [
     protobuf
     pkg-config
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
+  buildInputs = [ openssl ];
 
   NIX_LDFLAGS = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
     "-framework"
@@ -53,12 +48,14 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
+  nativeCheckInputs = [ writableTmpDirAsHomeHook ];
+
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
   doInstallCheck = true;
   versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

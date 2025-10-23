@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "nanosvg";
-  version = "0-unstable-2024-12-19";
+  version = "0-unstable-2025-09-28";
 
   src = fetchFromGitHub {
     owner = "memononen";
     repo = "nanosvg";
-    rev = "ea6a6aca009422bba0dbad4c80df6e6ba0c82183";
-    hash = "sha256-QCjfaSm1/hstVGzkJc0gFnYhnU5I3oHSCTkAVG5gTt8=";
+    rev = "66579081d84b613daa49a64f76357ce65925e13b";
+    hash = "sha256-wdT0FIGSlfjDK1k95t17NIF2mEWLkJVAZL9TImehIUE=";
   };
 
   nativeBuildInputs = [ cmake ];

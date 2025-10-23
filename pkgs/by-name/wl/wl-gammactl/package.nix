@@ -12,9 +12,9 @@
   glib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wl-gammactl";
-  version = "unstable-2021-09-13";
+  version = "0-unstable-2021-09-13";
 
   src = fetchFromGitHub {
     owner = "mischw";

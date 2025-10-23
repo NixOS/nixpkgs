@@ -4,6 +4,7 @@
   aioresponses,
   buildPythonPackage,
   fetchFromGitHub,
+  isodate,
   lib,
   pytest-asyncio,
   pytestCheckHook,
@@ -13,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "cookidoo-api";
-  version = "0.12.3";
+  version = "0.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "miaucl";
     repo = "cookidoo-api";
     tag = version;
-    hash = "sha256-hkKYIfnvDIT+eNEMfPxTzcSEs7VZLkHFoOqWms5Pt6w=";
+    hash = "sha256-oMosKW6MjeKPqSjF0+dc7CrNp4/5qlRoEY01HZ4sqog=";
   };
 
   build-system = [ setuptools ];
@@ -28,6 +29,7 @@ buildPythonPackage rec {
   dependencies = [
     aiofiles
     aiohttp
+    isodate
   ];
 
   pythonImportsCheck = [ "cookidoo_api" ];
@@ -40,7 +42,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/miaucl/cookidoo-api/blob/${src.tag}/CHANGELOG.md";
+    changelog = "https://github.com/miaucl/cookidoo-api/releases/tag/${src.tag}";
     description = "Unofficial package to access Cookidoo";
     homepage = "https://github.com/miaucl/cookidoo-api";
     license = lib.licenses.mit;

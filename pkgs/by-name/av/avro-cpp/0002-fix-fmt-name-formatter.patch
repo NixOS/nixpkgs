@@ -1,0 +1,11 @@
+diff --git a/include/avro/Node.hh b/include/avro/Node.hh
+--- a/include/avro/Node.hh
++++ b/include/avro/Node.hh
+@@ -219,7 +219,7 @@ template<>
+ struct fmt::formatter<avro::Name> : fmt::formatter<std::string> {
+     template<typename FormatContext>
+-    auto format(const avro::Name &n, FormatContext &ctx) {
++    auto format(const avro::Name &n, FormatContext &ctx) const {
+         return fmt::formatter<std::string>::format(n.fullname(), ctx);
+     }
+ };

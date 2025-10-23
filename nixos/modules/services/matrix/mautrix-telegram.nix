@@ -9,13 +9,16 @@ let
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
   settingsFormat = pkgs.formats.json { };
-  settingsFile = settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
+  settingsFileUnsubstituted = settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
+  settingsFile = "${dataDir}/config.json";
 
 in
 {
   options = {
     services.mautrix-telegram = {
       enable = lib.mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
+
+      package = lib.mkPackageOption pkgs "mautrix-telegram" { };
 
       settings = lib.mkOption rec {
         apply = lib.recursiveUpdate default;
@@ -132,10 +135,37 @@ in
           List of Systemd services to require and wait for when starting the application service.
         '';
       };
+
+      registerToSynapse = lib.mkOption {
+        type = lib.types.bool;
+        default = config.services.matrix-synapse.enable;
+        defaultText = lib.literalExpression "config.services.matrix-synapse.enable";
+        description = ''
+          Whether to add the bridge's app service registration file to
+          `services.matrix-synapse.settings.app_service_config_files`.
+        '';
+      };
     };
   };
 
   config = lib.mkIf cfg.enable {
+
+    users.users.mautrix-telegram = {
+      isSystemUser = true;
+      group = "mautrix-telegram";
+      home = dataDir;
+      description = "Mautrix-Telegram bridge user";
+    };
+
+    users.groups.mautrix-telegram = { };
+
+    services.matrix-synapse = lib.mkIf cfg.registerToSynapse {
+      settings.app_service_config_files = [ registrationFile ];
+    };
+    systemd.services.matrix-synapse = lib.mkIf cfg.registerToSynapse {
+      serviceConfig.SupplementaryGroups = [ "mautrix-telegram" ];
+    };
+
     systemd.services.mautrix-telegram = {
       description = "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge.";
 
@@ -159,22 +189,46 @@ in
       # RuntimeError: Could not determine home directory.
       environment.HOME = dataDir;
 
-      preStart =
-        ''
-          # generate the appservice's registration file if absent
-          if [ ! -f '${registrationFile}' ]; then
-            ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
-              --generate-registration \
-              --config='${settingsFile}' \
-              --registration='${registrationFile}'
-          fi
-        ''
-        + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
-          # run automatic database init and migration scripts
-          ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
-        '';
+      preStart = ''
+        # substitute the settings file by environment variables
+        # in this case read from EnvironmentFile
+        test -f '${settingsFile}' && rm -f '${settingsFile}'
+        old_umask=$(umask)
+        umask 0177
+        ${pkgs.envsubst}/bin/envsubst \
+          -o '${settingsFile}' \
+          -i '${settingsFileUnsubstituted}'
+        umask $old_umask
+
+        # generate the appservice's registration file if absent
+        if [ ! -f '${registrationFile}' ]; then
+          ${cfg.package}/bin/mautrix-telegram \
+            --generate-registration \
+            --config='${settingsFile}' \
+            --registration='${registrationFile}'
+        fi
+
+        old_umask=$(umask)
+        umask 0177
+        # 1. Overwrite registration tokens in config
+        #    is set, set it as the login shared secret value for the configured
+        #    homeserver domain.
+        ${pkgs.yq}/bin/yq -s '.[0].appservice.as_token = .[1].as_token
+          | .[0].appservice.hs_token = .[1].hs_token
+          | .[0]' \
+          '${settingsFile}' '${registrationFile}' > '${settingsFile}.tmp'
+        mv '${settingsFile}.tmp' '${settingsFile}'
+
+        umask $old_umask
+      ''
+      + lib.optionalString (cfg.package ? alembic) ''
+        # run automatic database init and migration scripts
+        ${cfg.package.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
+      '';
 
       serviceConfig = {
+        User = "mautrix-telegram";
+        Group = "mautrix-telegram";
         Type = "simple";
         Restart = "always";
 
@@ -184,15 +238,14 @@ in
         ProtectKernelModules = true;
         ProtectControlGroups = true;
 
-        DynamicUser = true;
         PrivateTmp = true;
-        WorkingDirectory = pkgs.mautrix-telegram; # necessary for the database migration scripts to be found
+        WorkingDirectory = cfg.package; # necessary for the database migration scripts to be found
         StateDirectory = baseNameOf dataDir;
         UMask = "0027";
         EnvironmentFile = cfg.environmentFile;
 
         ExecStart = ''
-          ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
+          ${cfg.package}/bin/mautrix-telegram \
             --config='${settingsFile}'
         '';
       };

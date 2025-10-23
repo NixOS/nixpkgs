@@ -28,17 +28,16 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies =
-    [
-      numba
-      numpy
-      pillow
-      scipy
-    ]
-    ++ lib.optionals cudaSupport [
-      cupy
-      pyopencl
-    ];
+  dependencies = [
+    numba
+    numpy
+    pillow
+    scipy
+  ]
+  ++ lib.optionals cudaSupport [
+    cupy
+    pyopencl
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -53,11 +52,14 @@ buildPythonPackage rec {
     "test_lkm"
   ];
 
+  # pyopencl._cl.LogicError: clGetPlatformIDs failed: PLATFORM_NOT_FOUND_KHR
+  disabledTestPaths = lib.optional cudaSupport "tests/test_foreground.py";
+
   meta = with lib; {
     description = "Python library for alpha matting";
     homepage = "https://github.com/pymatting/pymatting";
     changelog = "https://github.com/pymatting/pymatting/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "brummer10";
     repo = "XTuner";
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "1i5chfnf3hcivwzni9z6cn9pb68qmwsx8bf4z7d29a5vig8kbhrv";
     fetchSubmodules = true;
   };

@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-redis";
-  version = "2.18.0";
+  version = "2.18.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_redis";
     inherit version;
-    hash = "sha256-vszvtwbVxWXNmaz+6yy3XxNop7x/f42Wtg4CuOwFToo=";
+    hash = "sha256-o64V2KL/Gmeg2LOXR3XCsGypf4Tz8zyHYoIiGR7+rJw=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     pytestCheckHook

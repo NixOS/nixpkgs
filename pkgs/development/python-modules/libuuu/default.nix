@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "libuuu";
-  version = "1.5.182.post1";
+  version = "1.5.233";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Hf0GwhrzKQL5w+OXQ39yuG4xmbk/1HgCCdCulIORSU8=";
+    hash = "sha256-SbnQs+khNT1DwrctwHi0rsuO1WR/KgA7TUFARw9AHAU=";
   };
 
   build-system = [
@@ -25,12 +25,16 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     autoPatchelfHook
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     udev
+  ];
+
+  pythonRelaxDeps = [
+    "setuptools-scm"
   ];
 
   dependencies = [

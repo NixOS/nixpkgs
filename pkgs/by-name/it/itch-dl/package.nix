@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "itch-dl";
-  version = "0.5.2";
+  version = "0.6.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "DragoonAethis";
     repo = "itch-dl";
     tag = version;
-    hash = "sha256-MkhXM9CQXbVcnztMPnBscryXWSaSQUeoG6KtVuS8YEo=";
+    hash = "sha256-zwsiG38wOVi3pP0gQWkZqfAmdWKadjB65qiTg68tZWg=";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -21,21 +21,21 @@ python3Packages.buildPythonApplication rec {
   ];
 
   build-system = with python3Packages; [
-    poetry-core
+    hatchling
   ];
 
   dependencies = with python3Packages; [
     beautifulsoup4
     lxml
-    pydantic
     requests
     tqdm
     urllib3
   ];
 
   pythonRelaxDeps = [
-    "pydantic"
     "urllib3"
+    "beautifulsoup4"
+    "lxml"
   ];
 
   meta = {

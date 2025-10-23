@@ -11,7 +11,7 @@
   json-glib,
   desktop-file-utils,
   python3,
-  gtk,
+  gtk3,
   girara,
   gettext,
   gnome,
@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.11";
+  version = "0.5.13";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
+    hash = "sha256-YwIXO81G+JflIJyIOltRrR2rSUbC84YcujdKO4DY88E=";
   };
 
   outputs = [
@@ -73,26 +73,25 @@ stdenv.mkDerivation (finalAttrs: {
     appstream-glib
   ];
 
-  buildInputs =
-    [
-      gtk
-      girara
-      libintl
-      sqlite
-      glib
-      file
-      librsvg
-      check
-      json-glib
-      texlive.bin.core
-    ]
-    ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
-    ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
+  buildInputs = [
+    gtk3
+    girara
+    libintl
+    sqlite
+    glib
+    file
+    librsvg
+    check
+    json-glib
+    texlive.bin.core
+  ]
+  ++ lib.optional stdenv.hostPlatform.isLinux libseccomp
+  ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration;
 
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
     extraLoaders = [
-      libheif.out
+      libheif.lib
       libjxl
       librsvg
       webp-pixbuf-loader

@@ -3,15 +3,15 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch2,
   pytestCheckHook,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "fastjsonschema";
-  version = "2.19.1";
-  format = "setuptools";
+  version = "2.21.1";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -20,38 +20,35 @@ buildPythonPackage rec {
     repo = "python-fastjsonschema";
     rev = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-UxcxVB4ldnGAYJKWEccivon1CwZD588mNiVJOJPNeN8=";
+    hash = "sha256-H/jmvm5U4RB9KuD5EgCedbc499Fl8L2S9Y5SXy51JP0=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      name = "fastjsonschema-pytest8-compat.patch";
-      url = "https://github.com/horejsek/python-fastjsonschema/commit/efc04daf4124a598182dfcfd497615cd1e633d18.patch";
-      hash = "sha256-G1/PIpdN+KFfRP9pUFf/ANXLq3mzrocEHyBNWQMVOZM=";
-    })
-  ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  dontUseSetuptoolsCheck = true;
+  disabledTests = [
+    "benchmark"
+    # these tests require network access
+    "remote ref"
+    "definitions"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "test_compile_to_code_custom_format" # cannot import temporary module created during test
+  ];
 
-  disabledTests =
-    [
-      "benchmark"
-      # these tests require network access
-      "remote ref"
-      "definitions"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      "test_compile_to_code_custom_format" # cannot import temporary module created during test
-    ];
+  disabledTestPaths = [
+    # fastjsonschema.exceptions.JsonSchemaDefinitionException: Unknown format uuid/duration
+    "tests/json_schema/test_draft2019.py::test"
+  ];
 
   pythonImportsCheck = [ "fastjsonschema" ];
 
   meta = with lib; {
     description = "JSON schema validator for Python";
+    downloadPage = "https://github.com/horejsek/python-fastjsonschema";
     homepage = "https://horejsek.github.io/python-fastjsonschema/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

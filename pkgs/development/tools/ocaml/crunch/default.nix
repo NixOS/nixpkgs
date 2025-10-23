@@ -10,13 +10,13 @@
 buildDunePackage rec {
 
   pname = "crunch";
-  version = "3.3.1";
+  version = "4.0.0";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mirage/ocaml-crunch/releases/download/v${version}/crunch-${version}.tbz";
-    sha256 = "sha256-LFug1BELy7dzHLpOr7bESnSHw/iMGtR0AScbaf+o7Wo=";
+    sha256 = "sha256-k5uNESntbGNMsPnMxvbUSqFwPNBc5gkfLuKgFilEuJs=";
   };
 
   buildInputs = [ cmdliner ];

@@ -8,13 +8,13 @@
   stdenv,
 }:
 let
-  version = "0.22.0";
+  version = "0.24.2";
 
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
     tag = "v${version}";
-    hash = "sha256-iuTlKUmugRum0qZRhuw0FR13iE2qrQegTgwpAvgJSXk=";
+    hash = "sha256-gzQIgpouCsoMkQtjWubH7IGLiTUS6oX7oAboU8IuEOs=";
   };
 
   ui = stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +24,8 @@ let
 
     pnpmDeps = pnpm_9.fetchDeps {
       inherit (finalAttrs) pname src version;
-      hash = "sha256-MVNO24Oksy/qRUmEUoWoviQEo6Eimb18ZnDj5Z1vJkY=";
+      fetcherVersion = 1;
+      hash = "sha256-5cn3fAvOXCQyiqlA0trIi/hCIfgB6xNO1pc5ZMBfouc=";
     };
 
     nativeBuildInputs = [
@@ -56,7 +57,7 @@ buildGoModule rec {
   pname = "parca";
   src = parca-src;
 
-  vendorHash = "sha256-fErrbi3iSJlkguqzL6nH+fzmjxhoYVl1qH7tqRR1F1A=";
+  vendorHash = "sha256-uQuurwrrhs+JM72/Nd4xOLampIKwwpOehQ7dqMZi3v0=";
 
   ldflags = [
     "-X=main.version=${version}"
@@ -68,6 +69,11 @@ buildGoModule rec {
     cp -r ${ui}/share/parca/ui/* ui/packages/app/web/build
   '';
 
+  passthru = {
+    inherit ui;
+    updateScript = ./update.sh;
+  };
+
   meta = {
     mainProgram = "parca";
     description = "Continuous profiling for analysis of CPU and memory usage";
@@ -75,6 +81,9 @@ buildGoModule rec {
     changelog = "https://github.com/parca-dev/parca/releases/tag/v${version}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ jnsgruk ];
+    maintainers = with lib.maintainers; [
+      brancz
+      metalmatze
+    ];
   };
 }

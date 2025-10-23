@@ -10,17 +10,17 @@
 
 assert
   enableWasmEval && stdenv.hostPlatform.isDarwin
-  -> builtins.throw "building with wasm on darwin is failing in nixpkgs";
+  -> throw "building with wasm on darwin is failing in nixpkgs";
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "open-policy-agent";
-  version = "1.1.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "open-policy-agent";
     repo = "opa";
-    rev = "v${version}";
-    hash = "sha256-D1OTFc74I9CCGQzzMygbDhalpvFrTexz+JOGdU2rIR0=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-VeN62lULKA+4Krd0as2B7LxaA43jcevamYV6S3OxB2o=";
   };
 
   vendorHash = null;
@@ -31,8 +31,7 @@ buildGoModule rec {
 
   ldflags = [
     "-s"
-    "-w"
-    "-X github.com/open-policy-agent/opa/version.Version=${version}"
+    "-X github.com/open-policy-agent/opa/version.Version=${finalAttrs.version}"
   ];
 
   tags = lib.optional enableWasmEval (
@@ -43,26 +42,56 @@ buildGoModule rec {
     ) "opa_wasm"
   );
 
-  checkFlags = lib.optionals (!enableWasmEval) [
-    "-skip=TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
-  ];
+  checkFlags =
+    let
+      skippedTests = [
+        # Skip tests that require network, not available in the nix sandbox
+        "TestInterQueryCache_ClientError"
+        "TestIntraQueryCache_ClientError"
+        "TestSSOCredentialService"
+
+        # This test depends on the metrics available in go not changing. This is a bit
+        # too unstable for us updating go independently.
+        "TestJSONSerialization"
+
+        # Flaky
+        "TestGraphQLParseSchemaAlloc"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Skip tests that require network, not available in the darwin sandbox
+        "TestHTTPSClient"
+        "TestHTTPSNoClientCerts"
+        "TestSocketHTTPGetRequest"
+
+        # Flaky
+        "TestBenchMainWithBundleRegoVersion"
+        "TestClientTLSWithCustomCACert"
+        "TestECR"
+        "TestManagerWithOPATelemetryUpdateLoop"
+      ]
+      ++ lib.optionals (!enableWasmEval) [
+        "TestRegoTargetWasmAndTargetPluginDisablesIndexingTopdownStages"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   preCheck =
+    # Feed in all but the e2e tests for testing
+    # This is because subPackages above limits what is built to just what we
+    # want but also limits the tests
+    # Also avoid wasm tests on darwin due to wasmtime-go build issues
     ''
-      # Feed in all but the e2e tests for testing
-      # This is because subPackages above limits what is built to just what we
-      # want but also limits the tests
-      # Also avoid wasm tests on darwin due to wasmtime-go build issues
       getGoDirs() {
         go list ./... | grep -v -e e2e ${lib.optionalString stdenv.hostPlatform.isDarwin "-e wasm"}
       }
     ''
+    # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # remove tests that have "too many open files"/"no space left on device" issues on darwin in hydra
       rm v1/server/server_test.go
+      rm v1/server/server_bench_test.go
     '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd opa \
       --bash <($out/bin/opa completion bash) \
       --fish <($out/bin/opa completion fish) \
@@ -74,7 +103,7 @@ buildGoModule rec {
     runHook preInstallCheck
 
     $out/bin/opa --help
-    $out/bin/opa version | grep "Version: ${version}"
+    $out/bin/opa version | grep "Version: ${finalAttrs.version}"
 
     ${lib.optionalString enableWasmEval ''
       # If wasm is enabled verify it works
@@ -84,10 +113,13 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  # Required for tests that need networking
+  __darwinAllowLocalNetworking = true;
+
+  meta = {
     mainProgram = "opa";
     homepage = "https://www.openpolicyagent.org";
-    changelog = "https://github.com/open-policy-agent/opa/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/open-policy-agent/opa/blob/v${finalAttrs.version}/CHANGELOG.md";
     description = "General-purpose policy engine";
     longDescription = ''
       The Open Policy Agent (OPA, pronounced "oh-pa") is an open source, general-purpose policy engine that unifies
@@ -95,10 +127,10 @@ buildGoModule rec {
       as code and simple APIs to offload policy decision-making from your software. You can use OPA to enforce policies
       in microservices, Kubernetes, CI/CD pipelines, API gateways, and more.
     '';
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       lewo
       jk
     ];
   };
-}
+})

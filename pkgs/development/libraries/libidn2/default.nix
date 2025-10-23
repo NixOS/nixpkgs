@@ -16,11 +16,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libidn2";
-  version = "2.3.7";
+  version = "2.3.8";
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/libidn/${pname}-${version}.tar.gz";
-    hash = "sha256-TCGnkbYQuVGbnQ4SuAl78vNZsS+N2SZHYRqSnmv9fWQ=";
+    url = "https://ftp.gnu.org/gnu/libidn/libidn2-${version}.tar.gz";
+    hash = "sha256-9VeRG/YXFiHh9y/zX1sYJbs1tS7UUyXc3ukx5dPAeHo=";
   };
 
   strictDeps = true;

@@ -1,95 +1,99 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  buildNpmPackage,
+
+  fetchFromGitHub,
+  replaceVars,
+
   makeWrapper,
 
-  dpkg,
-  libGL,
-  systemd,
-  electron_32,
-
+  electron_36,
   commandLineArgs ? "",
 }:
 
 let
+  electron = electron_36;
+in
+buildNpmPackage rec {
   pname = "lx-music-desktop";
-  version = "2.10.0";
+  version = "2.11.0";
 
-  buildUrl =
-    version: arch:
-    "https://github.com/lyswhut/lx-music-desktop/releases/download/v${version}/lx-music-desktop_${version}_${arch}.deb";
-
-  srcs = {
-    x86_64-linux = fetchurl {
-      url = buildUrl version "amd64";
-      hash = "sha256-btNB8XFCJij1wUVZoWaa55vZn5n1gsKSMnEbQPTd9lg=";
-    };
-
-    aarch64-linux = fetchurl {
-      url = buildUrl version "arm64";
-      hash = "sha256-GVTzxTV7bM4AWZ+Xfb70fyedDMIa9eX/YwnGkm3WOsk=";
-    };
-
-    armv7l-linux = fetchurl {
-      url = buildUrl version "armv7l";
-      hash = "sha256-3zttIk+A4BpG0W196LzgTJ5WeqWvLjqPFz6e9RCGlJo=";
-    };
+  src = fetchFromGitHub {
+    owner = "lyswhut";
+    repo = "lx-music-desktop";
+    tag = "v${version}";
+    hash = "sha256-NMj8rb5PAejT1HCE5nxi2+SS9lFUVdLEqN0id23QjVc=";
   };
 
-  host = stdenv.hostPlatform.system;
-  src = srcs.${host} or (throw "Unsupported system: ${host}");
-
-  runtimeLibs = lib.makeLibraryPath [
-    libGL
-    stdenv.cc.cc
+  patches = [
+    # set electron version and dist dir
+    # disable before-pack: it would copy prebuilt libraries
+    (replaceVars ./electron-builder.patch {
+      electron_version = electron.version;
+    })
   ];
-in
-stdenv.mkDerivation {
-  inherit pname version src;
 
   nativeBuildInputs = [
-    dpkg
     makeWrapper
   ];
 
-  runtimeDependencies = map lib.getLib [
-    systemd
-  ];
+  npmDepsHash = "sha256-cA9NdHe3lEg8twMLWoeomWgobidZ34TKwdC5rDezZ5g=";
+
+  makeCacheWritable = true;
+
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+
+  # we haven't set up npm_config_nodedir at this point
+  # and electron-rebuild will rebuild the native libs later anyway
+  npmFlags = [ "--ignore-scripts" ];
+
+  preBuild = ''
+    # delete prebuilt libs
+    rm -r build-config/lib
+
+    # don't spam the build logs
+    substituteInPlace build-config/pack.js \
+      --replace-fail 'new Spinnies({' 'new Spinnies({disableSpins:true,'
+
+    # this directory is configured to be used in the patch
+    cp -r ${electron.dist} electron-dist
+    chmod -R u+w electron-dist
+
+    export npm_config_nodedir=${electron.headers}
+    export npm_config_build_from_source="true"
+
+    npm rebuild --no-progress --verbose
+  '';
+
+  npmBuildScript = "pack:dir";
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/bin $out/opt/lx-music-desktop
-    cp -r opt/lx-music-desktop/{resources,locales} $out/opt/lx-music-desktop
-    cp -r usr/share $out/share
-
-    substituteInPlace $out/share/applications/lx-music-desktop.desktop \
-        --replace-fail "/opt/lx-music-desktop/lx-music-desktop" "$out/bin/lx-music-desktop" \
+    mkdir -p "$out/opt/lx-music-desktop"
+    cp -r build/*-unpacked/{locales,resources{,.pak}} "$out/opt/lx-music-desktop"
+    rm "$out/opt/lx-music-desktop/resources/app-update.yml"
 
     runHook postInstall
   '';
 
   postFixup = ''
-    makeWrapper ${electron_32}/bin/electron $out/bin/lx-music-desktop \
+    makeWrapper ${lib.getExe electron} $out/bin/lx-music-desktop \
         --add-flags $out/opt/lx-music-desktop/resources/app.asar \
-        --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
-        --add-flags ${lib.escapeShellArg commandLineArgs} \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
   '';
 
-  meta = with lib; {
+  meta = {
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Music software based on Electron and Vue";
     homepage = "https://github.com/lyswhut/lx-music-desktop";
     changelog = "https://github.com/lyswhut/lx-music-desktop/releases/tag/v${version}";
-    license = licenses.asl20;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "armv7l-linux"
-    ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.asl20;
+    platforms = electron.meta.platforms;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     mainProgram = "lx-music-desktop";
-    maintainers = with maintainers; [ oosquare ];
+    maintainers = [ ];
   };
 }

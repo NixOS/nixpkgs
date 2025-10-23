@@ -15,6 +15,8 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-gel503e8DXjrMJK9lpAZ6GxQsrahKX+SjiyRwKbiJUY=";
   };
 
+  dependencies = [ python3Packages.standard-imghdr ];
+
   nativeBuildInputs = [ python3Packages.poetry-core ];
 
   pythonImportsCheck = [

@@ -2,23 +2,26 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  poetry-core,
   six,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "treelib";
-  version = "1.7.0";
-  format = "setuptools";
+  version = "1.8.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "caesar0301";
     repo = "treelib";
-    rev = "v${version}";
-    hash = "sha256-FIdJWpkOmUVZb+IkYocu1nn+oSPROrkcHeiw9wZupgM=";
+    tag = "v${version}";
+    hash = "sha256-jvaZVy+FUcCcIdvWK6zFL8IBVH+hMiPMmv5shFXLo0k=";
   };
 
-  propagatedBuildInputs = [ six ];
+  build-system = [ poetry-core ];
+
+  dependencies = [ six ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -27,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Efficient implementation of tree data structure in python 2/3";
     homepage = "https://github.com/caesar0301/treelib";
-    changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.rev}";
+    changelog = "https://github.com/caesar0301/treelib/releases/tag/${src.tag}";
     license = licenses.asl20;
     maintainers = with maintainers; [ mbalatsko ];
   };

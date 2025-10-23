@@ -22,7 +22,7 @@ buildPythonPackage rec {
       --replace "assert_equals" "assert_equal"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Mocking, stubbing and spying framework for python";
   };
 }

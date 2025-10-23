@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vul";
-  version = "unstable-2022-07-02";
+  version = "0-unstable-2022-07-02";
 
   src = fetchFromGitHub {
     owner = "LukeSmithxyz";

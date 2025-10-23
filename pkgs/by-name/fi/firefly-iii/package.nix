@@ -13,13 +13,13 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.2.9";
+  version = "6.4.2";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CF/Q7kLpNJuFxCvFuHdrobApjgnr4Fh991kgZLK0I5w=";
+    hash = "sha256-nGXFFGVw0TCXSBwMExk6wn0Es0HwCnY4P+nbJki+R6A=";
   };
 
   buildInputs = [ php84 ];
@@ -28,35 +28,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     nodejs
     nodejs.python
     buildPackages.npmHooks.npmConfigHook
-    php84.composerHooks.composerInstallHook
-    php84.packages.composer-local-repo-plugin
+    php84.composerHooks2.composerInstallHook
   ];
 
-  composerNoDev = true;
-  composerNoPlugins = true;
-  composerNoScripts = true;
-  composerStrictValidation = true;
-  strictDeps = true;
-
-  vendorHash = "sha256-AMJ5Adyrks7Yk8X4ypwz0OdOlCWx+I2jfJQsX7SPvzk=";
-
-  npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src;
-    name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-XBJz2ILQOFHfW940A4kS7115gVsUTM1oA/vcjw3NZ2A=";
-  };
-
-  composerRepository = php84.mkComposerRepository {
-    inherit (finalAttrs)
-      pname
-      src
-      vendorHash
-      version
-      ;
+  composerVendor = php84.mkComposerVendor {
+    inherit (finalAttrs) pname src version;
     composerNoDev = true;
     composerNoPlugins = true;
     composerNoScripts = true;
     composerStrictValidation = true;
+    strictDeps = true;
+    vendorHash = "sha256-siLLtF/B2eNsRaazq5zOXnFeFPlEeoSAIXYKEsrHv28=";
+  };
+
+  npmDeps = fetchNpmDeps {
+    inherit (finalAttrs) src;
+    name = "${finalAttrs.pname}-npm-deps";
+    hash = "sha256-WV1MsCbYxEHUEw0yYqD8b9jracyLVbpndWuHY0ZbaEM=";
   };
 
   preInstall = ''
@@ -67,10 +55,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru = {
     phpPackage = php84;
     tests = nixosTests.firefly-iii;
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "v(\\d+\\.\\d+\\.\\d+)"
+      ];
+    };
   };
 
   postInstall = ''
+    chmod -R u+w $out/share
     mv $out/share/php/firefly-iii/* $out/
     rm -R $out/share $out/storage $out/bootstrap/cache $out/node_modules
     ln -s ${dataDir}/storage $out/storage

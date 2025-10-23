@@ -32,21 +32,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-online-accounts";
-  version = "3.52.3.1";
+  version = "3.54.5";
 
-  outputs =
-    [
-      "out"
-      "dev"
-    ]
-    ++ lib.optionals enableBackend [
-      "man"
-      "devdoc"
-    ];
+  outputs = [
+    "out"
+    "dev"
+  ]
+  ++ lib.optionals enableBackend [
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-online-accounts/${lib.versions.majorMinor finalAttrs.version}/gnome-online-accounts-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Se1yfW/ElHSZb6ft8JGbIeT8hW6jfm4w8XtQsQOvlwE=";
+    hash = "sha256-6PEntTIpWimRLRwAc0kx35r/pOv8RK0N5cKWw9J9LJU=";
   };
 
   mesonFlags = [
@@ -70,25 +69,24 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      dbus
-      gcr_4
-      glib
-      glib-networking
-      gtk4
-      libadwaita
-      gvfs # OwnCloud, Google Drive
-      json-glib
-      libkrb5
-      librest_1_0
-      libxml2
-      libsecret
-      libsoup_3
-    ]
-    ++ lib.optionals enableBackend [
-      keyutils
-    ];
+  buildInputs = [
+    dbus
+    gcr_4
+    glib
+    glib-networking
+    gtk4
+    libadwaita
+    gvfs # OwnCloud, Google Drive
+    json-glib
+    libkrb5
+    librest_1_0
+    libxml2
+    libsecret
+    libsoup_3
+  ]
+  ++ lib.optionals enableBackend [
+    keyutils
+  ];
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
@@ -109,6 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Single sign-on framework for GNOME";
     platforms = platforms.unix;
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members;
+    teams = [ teams.gnome ];
   };
 })

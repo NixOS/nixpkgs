@@ -6,16 +6,15 @@
   ninja,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "frozen";
-  # pin to a newer release if frozen releases again, see cesanta/frozen#72
-  version = "unstable-2021-02-23";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner = "cesanta";
     repo = "frozen";
-    rev = "21f051e3abc2240d9a25b2add6629b38e963e102";
-    hash = "sha256-BpuYK9fbWSpeF8iPT8ImrV3CKKaA5RQ2W0ZQ03TciR0=";
+    tag = finalAttrs.version;
+    hash = "sha256-dOQb6wVufkqOSVZa2o8A1DLad0zvo2xQzmu09J2ZT7E=";
   };
 
   nativeBuildInputs = [
@@ -41,4 +40,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ thillux ];
     platforms = lib.platforms.unix;
   };
-}
+})

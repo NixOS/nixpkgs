@@ -8,6 +8,7 @@
 with lib;
 
 let
+
   cfg = config.services.jitsi-meet;
 
   # The configuration files are JS of format "var <<string>> = <<JSON>>;". In order to
@@ -187,6 +188,16 @@ in
         off if you want to configure it manually.
       '';
     };
+
+    prosody.allowners_muc = mkOption {
+      type = bool;
+      default = false;
+      description = ''
+        Add module allowners, any user in chat is able to
+        kick other. Usefull in jitsi-meet to kick ghosts.
+      '';
+    };
+
     prosody.lockdown = mkOption {
       type = bool;
       default = false;
@@ -221,6 +232,14 @@ in
 
   config = mkIf cfg.enable {
     services.prosody = mkIf cfg.prosody.enable {
+
+      # required for muc_breakout_rooms
+      package = lib.mkDefault (
+        pkgs.prosody.override {
+          withExtraLuaPackages = p: with p; [ cjson ];
+        }
+      );
+
       enable = mkDefault true;
       xmppComplianceSuite = mkDefault false;
       modules = {
@@ -240,6 +259,7 @@ in
         {
           domain = "conference.${cfg.hostName}";
           name = "Jitsi Meet MUC";
+          allowners_muc = cfg.prosody.allowners_muc;
           roomLocking = false;
           roomDefaultPublicJids = true;
           extraConfig = ''
@@ -287,7 +307,6 @@ in
         "speakerstats"
         "external_services"
         "conference_duration"
-        "end_conference"
         "muc_lobby_rooms"
         "muc_breakout_rooms"
         "av_moderation"
@@ -328,7 +347,9 @@ in
           ''
             muc_mapper_domain_base = "${cfg.hostName}"
 
-            cross_domain_websocket = true;
+            http_cors_override = {
+              websocket = { enabled = true }
+            }
             consider_websocket_secure = true;
 
             unlimited_jids = {
@@ -361,7 +382,6 @@ in
           conference_duration_component = "conferenceduration.${cfg.hostName}"
           end_conference_component = "endconference.${cfg.hostName}"
 
-          c2s_require_encryption = false
           lobby_muc = "lobby.${cfg.hostName}"
           breakout_rooms_muc = "breakout.${cfg.hostName}"
           room_metadata_component = "metadata.${cfg.hostName}"
@@ -408,6 +428,7 @@ in
               cfg.videobridge.passwordFile
             else
               "/var/lib/jitsi-meet/videobridge-secret";
+
         in
         ''
           ${config.services.prosody.package}/bin/prosodyctl register focus auth.${cfg.hostName} "$(cat /var/lib/jitsi-meet/jicofo-user-secret)"
@@ -434,13 +455,12 @@ in
 
     systemd.services.jitsi-meet-init-secrets = {
       wantedBy = [ "multi-user.target" ];
-      before =
-        [
-          "jicofo.service"
-          "jitsi-videobridge2.service"
-        ]
-        ++ (optional cfg.prosody.enable "prosody.service")
-        ++ (optional cfg.jigasi.enable "jigasi.service");
+      before = [
+        "jicofo.service"
+        "jitsi-videobridge2.service"
+      ]
+      ++ (optional cfg.prosody.enable "prosody.service")
+      ++ (optional cfg.jigasi.enable "jigasi.service");
       serviceConfig = {
         Type = "oneshot";
         UMask = "027";
@@ -451,18 +471,17 @@ in
 
       script =
         let
-          secrets =
-            [
-              "jicofo-component-secret"
-              "jicofo-user-secret"
-              "jibri-auth-secret"
-              "jibri-recorder-secret"
-            ]
-            ++ (optionals cfg.jigasi.enable [
-              "jigasi-user-secret"
-              "jigasi-component-secret"
-            ])
-            ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
+          secrets = [
+            "jicofo-component-secret"
+            "jicofo-user-secret"
+            "jibri-auth-secret"
+            "jibri-recorder-secret"
+          ]
+          ++ (optionals cfg.jigasi.enable [
+            "jigasi-user-secret"
+            "jigasi-component-secret"
+          ])
+          ++ (optional (cfg.videobridge.passwordFile == null) "videobridge-secret");
         in
         ''
           ${concatMapStringsSep "\n" (s: ''
@@ -509,7 +528,7 @@ in
         ProtectSystem = "strict";
         ProtectClock = true;
         ProtectHome = true;
-        ProtectProc = true;
+        ProtectProc = "noaccess";
         ProtectKernelLogs = true;
         PrivateTmp = true;
         PrivateDevices = true;

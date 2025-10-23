@@ -14,15 +14,15 @@
   unstableGitUpdater,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "vala-lint";
-  version = "0-unstable-2024-08-28";
+  version = "0-unstable-2025-08-03";
 
   src = fetchFromGitHub {
     owner = "vala-lang";
     repo = "vala-lint";
-    rev = "4ed1443c35a8a84445fb59292d539358365d8263";
-    sha256 = "sha256-NPadBrL2g5w95slwDpp7kNXBgLJ9na8Yd/J7zm28SSo=";
+    rev = "a1d1a7bc0f740920e592fd788a836c402fd9825c";
+    sha256 = "sha256-63T+wLdnGtVBxKkkkj7gJx0ebApam922Z+cmk2R7Ys0=";
   };
 
   nativeBuildInputs = [
@@ -38,12 +38,6 @@ stdenv.mkDerivation rec {
     glib
     json-glib
   ];
-
-  postPatch = ''
-    # https://github.com/vala-lang/vala-lint/issues/181
-    substituteInPlace test/meson.build \
-      --replace "test('auto-fix', auto_fix_test, env: test_envars)" ""
-  '';
 
   doCheck = true;
 
@@ -62,7 +56,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
     mainProgram = "io.elementary.vala-lint";
   };
 }

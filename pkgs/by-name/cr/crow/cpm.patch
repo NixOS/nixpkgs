@@ -1,0 +1,22 @@
+--- a/tests/CMakeLists.txt
++++ b/tests/CMakeLists.txt
+@@ -5,18 +5,9 @@
+ set(CMAKE_POLICY_WARNING_CMP0126 new)
+ 
+ include(${CMAKE_SOURCE_DIR}/cmake/compiler_options.cmake)
+-include(${CMAKE_SOURCE_DIR}/cmake/CPM.cmake)
+ 
++find_package(Catch2 REQUIRED)
+ 
+-CPMAddPackage(Catch2
+-  VERSION 3.7.0
+-  GITHUB_REPOSITORY catchorg/Catch2
+-  OPTIONS
+-  "CATCH_INSTALL_DOCS Off"
+-  "CATCH_INSTALL_EXTRAS Off"
+-  "CATCH_ENABLE_REPRODUCIBLE_BUILD Off"
+-)
+-  
+ enable_testing()
+ 
+ set(TEST_SRCS

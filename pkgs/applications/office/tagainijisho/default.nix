@@ -18,6 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-CTDMoYGbVE4W0SDerW//aAdUVsySWFQycSy0I3a9+94=";
   };
 
+  patches = [
+    ### Fix cmake minimum version
+    ./0000-fix-cmake-min.patch
+  ];
+
   nativeBuildInputs = [
     qttools
     cmake

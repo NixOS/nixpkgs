@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastcdr";
-  version = "2.2.6";
+  version = "2.3.3";
 
   src = fetchFromGitHub {
     owner = "eProsima";
     repo = "Fast-CDR";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-kraflUsnsUBCwCN8vEVaPExSBF0cMdser2UwXpAGhlw=";
+    hash = "sha256-2xaiyF3dK4BfSa7u5kwYGYaXY0c9/MLiV34jmvTzI4k=";
   };
 
   patches = [
@@ -32,14 +32,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" ] ++ lib.optional withDocs "doc";
 
-  nativeBuildInputs =
-    [
-      cmake
-    ]
-    ++ lib.optionals withDocs [
-      doxygen
-      graphviz-nox
-    ];
+  nativeBuildInputs = [
+    cmake
+  ]
+  ++ lib.optionals withDocs [
+    doxygen
+    graphviz-nox
+  ];
 
   doCheck = true;
 

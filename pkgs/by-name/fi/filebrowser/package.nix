@@ -1,18 +1,22 @@
 {
-  buildGo123Module,
-  buildNpmPackage,
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
+  buildGoModule,
+  buildNpmPackage,
+  pnpm_9,
+  nix-update-script,
+  nixosTests,
 }:
-
 let
-  version = "2.31.0";
+  version = "2.44.1";
+
+  pnpm = pnpm_9;
 
   src = fetchFromGitHub {
     owner = "filebrowser";
     repo = "filebrowser";
     rev = "v${version}";
-    hash = "sha256-zLM1fLrucIhzGdTTDu81ZnTIipK+iRnPhgfMiT1P+yg=";
+    hash = "sha256-ln7Dst+sN99c3snPU7DrIGpwKBz/e4Lz+uOknmm6sxg=";
   };
 
   frontend = buildNpmPackage rec {
@@ -21,9 +25,19 @@ let
 
     sourceRoot = "${src.name}/frontend";
 
-    npmDepsHash = "sha256-5/yEMWkNPAS8/PkaHlPBGFLiJu7xK2GHYo5dYqHAfCE=";
+    npmConfigHook = pnpm.configHook;
+    npmDeps = pnpmDeps;
 
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    pnpmDeps = pnpm.fetchDeps {
+      inherit
+        pname
+        version
+        src
+        sourceRoot
+        ;
+      fetcherVersion = 2;
+      hash = "sha256-3n44BGJLdQR6uBSF09oyUzJm35/S3/ZEyZh4Wxqlfiw=";
+    };
 
     installPhase = ''
       runHook preInstall
@@ -35,11 +49,11 @@ let
     '';
   };
 in
-buildGo123Module {
+buildGoModule {
   pname = "filebrowser";
   inherit version src;
 
-  vendorHash = "sha256-N5aUs8rgTYXeb0qJhPQBCa6lUDkT6lH1bh+1u4bixos=";
+  vendorHash = "sha256-aVtL64Cm+nqum/qHFvplpEawgMXM2S6l8QFrJBzLVtU=";
 
   excludedPackages = [ "tools" ];
 
@@ -47,12 +61,20 @@ buildGo123Module {
     cp -r ${frontend}/dist frontend/
   '';
 
+  ldflags = [
+    "-X github.com/filebrowser/filebrowser/v2/version.Version=v${version}"
+  ];
+
   passthru = {
+    updateScript = nix-update-script { };
     inherit frontend;
+    tests = {
+      inherit (nixosTests) filebrowser;
+    };
   };
 
   meta = with lib; {
-    description = "Filebrowser is a web application for managing files and directories";
+    description = "Web application for managing files and directories";
     homepage = "https://filebrowser.org";
     license = licenses.asl20;
     maintainers = with maintainers; [ oakenshield ];

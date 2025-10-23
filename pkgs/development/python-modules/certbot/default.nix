@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   python,
   runCommand,
@@ -12,25 +13,25 @@
   josepy,
   parsedatetime,
   pyrfc3339,
-  pytz,
   setuptools,
   dialog,
   gnureadline,
   pytest-xdist,
   pytestCheckHook,
   python-dateutil,
+  writeShellScriptBin,
 }:
 
 buildPythonPackage rec {
   pname = "certbot";
-  version = "3.1.0";
+  version = "5.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
     tag = "v${version}";
-    hash = "sha256-lYGJgUNDzX+bE64GJ+djdKR+DXmhpcNbFJrAEnP86yQ=";
+    hash = "sha256-jKhdclLBeWv6IxIZQtD8VWbSQ3SDZePA/kTxjiBXJ4o=";
   };
 
   postPatch = "cd certbot"; # using sourceRoot would interfere with patches
@@ -46,8 +47,6 @@ buildPythonPackage rec {
     josepy
     parsedatetime
     pyrfc3339
-    pytz
-    setuptools # for pkg_resources
   ];
 
   buildInputs = [
@@ -59,13 +58,24 @@ buildPythonPackage rec {
     python-dateutil
     pytestCheckHook
     pytest-xdist
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    (writeShellScriptBin "sw_vers" ''
+      echo 'ProductVersion: 13.0'
+    '')
   ];
 
-  pytestFlagsArray = [
-    "-p no:cacheprovider"
-    "-W"
-    "ignore::DeprecationWarning"
+  pytestFlags = [
+    "-pno:cacheprovider"
+    "-Wignore::DeprecationWarning"
   ];
+
+  disabledTests = [
+    # network access
+    "test_lock_order"
+  ];
+
+  __darwinAllowLocalNetworking = true;
 
   makeWrapperArgs = [ "--prefix PATH : ${dialog}/bin" ];
 
@@ -84,14 +94,12 @@ buildPythonPackage rec {
     '';
 
   meta = with lib; {
-    # AttributeError: module 'josepy' has no attribute 'ComparableX509'
-    broken = lib.versionAtLeast josepy.version "2";
     homepage = "https://github.com/certbot/certbot";
     changelog = "https://github.com/certbot/certbot/blob/${src.tag}/certbot/CHANGELOG.md";
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
     mainProgram = "certbot";
-    maintainers = with maintainers; [ domenkozar ];
+    maintainers = [ ];
     license = with licenses; [ asl20 ];
   };
 }

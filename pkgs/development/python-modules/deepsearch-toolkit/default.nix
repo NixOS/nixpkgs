@@ -57,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "certifi"
     "urllib3"
   ];
 
@@ -88,6 +89,6 @@ buildPythonPackage rec {
     description = "Interact with the Deep Search platform for new knowledge explorations and discoveries";
     homepage = "https://github.com/DS4SD/deepsearch-toolkit";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
   };
 }

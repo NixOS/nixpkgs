@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchFromGitea,
+  fetchpatch,
   cmake,
   python3,
   boost186,
@@ -12,7 +13,6 @@
   readline,
   unbound,
   zeromq,
-  darwin,
 }:
 
 let
@@ -55,24 +55,28 @@ stdenv.mkDerivation rec {
     "-Wno-error=int-conversion"
   ];
 
+  patches = [
+    # build: set cmake_minimum_required(VERSION 3.5) consistently
+    (fetchpatch {
+      url = "https://codeberg.org/wownero/wownero/commit/0d0a656618e396de7ff60368dde708ad9d45f866.patch";
+      hash = "sha256-xnpEZxWg5YzOhDIWZjNyXH8GBdK7c2rxL9DewPKghIg=";
+    })
+  ];
+
   nativeBuildInputs = [
     cmake
     python3
   ];
 
-  buildInputs =
-    [
-      boost186
-      libsodium
-      openssl
-      rapidjson
-      readline
-      unbound
-      zeromq
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.IOKit
-    ];
+  buildInputs = [
+    boost186
+    libsodium
+    openssl
+    rapidjson
+    readline
+    unbound
+    zeromq
+  ];
 
   postUnpack = ''
     rm -r $sourceRoot/external/miniupnp

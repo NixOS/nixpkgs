@@ -11,62 +11,62 @@
   libepoxy,
   wrapGAppsHook4,
   nix-update-script,
+  stdenv,
+  meson,
+  ninja,
+  rustc,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  versionCheckHook,
 }:
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "tsukimi";
-  version = "0.19.3";
+  version = "0.21.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     tag = "v${version}";
-    hash = "sha256-MNPg3qg9wRRWKofH4NSRIa76+nA3IFoMfOt6s5+4y8A=";
-    fetchSubmodules = true;
+    hash = "sha256-FmxNOMYHoQK//v4ZGvJ6vIHKYgMfQm7LTwQV9iEFo0A=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-mS5qKEm3oCHiFP5i/XHnIOBmXzvlgfE2i/f0lLl4TN4=";
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit src;
+    hash = "sha256-iH7vCZhCN2/gu2EC+YG/LUL9N/HMMnj7qHqXUdrlAh8=";
+  };
 
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook4
+    meson
+    ninja
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+    desktop-file-utils
   ];
 
-  buildInputs =
-    [
-      mpv-unwrapped
-      ffmpeg
-      libadwaita
-      openssl
-      libepoxy
-    ]
-    ++ (with gst_all_1; [
-      gstreamer
-      gst-plugins-base
-      gst-plugins-good
-      gst-plugins-bad
-      gst-plugins-ugly
-      gst-libav
-    ]);
+  buildInputs = [
+    mpv-unwrapped
+    ffmpeg
+    libadwaita
+    openssl
+    libepoxy
+    dbus
+  ]
+  ++ (with gst_all_1; [
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+  ]);
 
-  doCheck = false; # tests require networking
-
-  postPatch = ''
-    substituteInPlace build.rs \
-      --replace-fail 'i18n/locale' "$out/share/locale"
-
-    substituteInPlace src/lib.rs \
-      --replace-fail '/usr/share/locale' "$out/share/locale"
-  '';
-
-  postInstall = ''
-    install -Dm644 resources/moe.tsuna.tsukimi.gschema.xml -t $out/share/glib-2.0/schemas
-    glib-compile-schemas $out/share/glib-2.0/schemas
-
-    install -Dm644 resources/icons/tsukimi.png -t $out/share/pixmaps
-
-    install -Dm644 resources/moe.tsuna.tsukimi.desktop.in $out/share/applications/moe.tsuna.tsukimi.desktop
-  '';
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 

@@ -14,7 +14,7 @@
   findutils,
 }:
 
-resholve.mkDerivation rec {
+resholve.mkDerivation {
   pname = "pdf2odt";
   version = "20220827";
 

@@ -1,32 +1,30 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  postgresql,
   freetds,
-  unstableGitUpdater,
-  buildPostgresqlExtension,
+  lib,
+  postgresql,
+  postgresqlBuildExtension,
 }:
 
-buildPostgresqlExtension rec {
+postgresqlBuildExtension (finalAttrs: {
   pname = "tds_fdw";
-  version = "2.0.4";
+  version = "2.0.5";
 
   buildInputs = [ freetds ];
 
   src = fetchFromGitHub {
     owner = "tds-fdw";
     repo = "tds_fdw";
-    rev = "v${version}";
-    hash = "sha256-ruelOHueaHx1royLPvDM8Abd1rQD62R4KXgtHY9qqTw=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4ecdErksaZ7SyCKzvSY5sD7rrKljq7BMn+gI9Yz49r0=";
   };
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL foreign data wrapper to connect to TDS databases (Sybase and Microsoft SQL Server)";
     homepage = "https://github.com/tds-fdw/tds_fdw";
-    changelog = "https://github.com/tds-fdw/tds_fdw/releases/tag/v${version}";
-    maintainers = [ maintainers.steve-chavez ];
+    changelog = "https://github.com/tds-fdw/tds_fdw/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ steve-chavez ];
     platforms = postgresql.meta.platforms;
-    license = licenses.postgresql;
+    license = lib.licenses.postgresql;
   };
-}
+})

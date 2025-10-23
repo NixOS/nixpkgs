@@ -3,7 +3,7 @@
   stdenv,
   fetchpatch,
   fetchurl,
-  boost,
+  boost183,
   cmake,
   libuuid,
   python3,
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     python3
   ];
   buildInputs = [
-    boost
+    boost183
     libuuid
     ruby
   ];

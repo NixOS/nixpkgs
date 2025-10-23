@@ -24,13 +24,14 @@ stdenv.mkDerivation {
     cmake
     ninja
     swift
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
   buildInputs = [ Foundation ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # On Darwin only, Swift uses arm64 as cpu arch.
     substituteInPlace cmake/modules/SwiftSupport.cmake \
-      --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
+      --replace-fail '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
   '';
 
   preConfigure = ''
@@ -55,6 +56,6 @@ stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-xctest";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
+    teams = [ lib.teams.swift ];
   };
 }

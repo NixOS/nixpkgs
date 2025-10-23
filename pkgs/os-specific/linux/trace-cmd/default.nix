@@ -16,11 +16,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "trace-cmd";
-  version = "3.3.1";
+  version = "3.3.3";
 
   src = fetchzip {
     url = "https://git.kernel.org/pub/scm/utils/trace-cmd/trace-cmd.git/snapshot/trace-cmd-v${version}.tar.gz";
-    hash = "sha256-kEji3qDqQsSK0tL8Fx2ycSd2lTXBXOHHTvsb6XDNSa8=";
+    hash = "sha256-B3bwHV+f6IuoNESz5B4ij5KsIcCcpUPmoSnJeJj0J0Y=";
   };
 
   # Don't build and install html documentation
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
     "libdir=${placeholder "lib"}/lib"
     "pkgconfig_dir=${placeholder "dev"}/lib/pkgconfig"
     "includedir=${placeholder "dev"}/include"
-    "BASH_COMPLETE_DIR=${placeholder "out"}/share/bash-completion/completions"
+    "completion_dir=${placeholder "out"}/share/bash-completion/completions"
   ];
 
   passthru.updateScript = gitUpdater {

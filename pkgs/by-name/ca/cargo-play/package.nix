@@ -11,11 +11,10 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "fanzeyi";
     repo = "cargo-play";
-    rev = version;
+    tag = version;
     sha256 = "sha256-Z5zcLQYfQeGybsnt2U+4Z+peRHxNPbDriPMKWhJ+PeA=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-kgdg2GZmFGMua3eYo30tpDTFBKncbaiONJf+ocfMaBk=";
 
   # these tests require internet access

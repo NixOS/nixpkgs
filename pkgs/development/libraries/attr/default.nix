@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   version = "2.5.2";
 
   src = fetchurl {
-    url = "mirror://savannah/attr/${pname}-${version}.tar.gz";
+    url = "mirror://savannah/attr/attr-${version}.tar.gz";
     sha256 = "sha256-Ob9nRS+kHQlIwhl2AQU/SLPXigKTiXNDMqYwmmgMbIc=";
   };
 

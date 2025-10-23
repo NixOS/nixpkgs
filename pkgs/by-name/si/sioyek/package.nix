@@ -4,7 +4,7 @@
   installShellFiles,
   fetchFromGitHub,
   freetype,
-  nix-update-script,
+  unstableGitUpdater,
   gumbo,
   harfbuzz,
   jbig2dec,
@@ -15,29 +15,28 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sioyek";
-  version = "2.0.0-unstable-2025-02-20";
+  version = "2.0.0-unstable-2025-10-10";
 
   src = fetchFromGitHub {
     owner = "ahrm";
     repo = "sioyek";
-    rev = "a64ad82b2c14e1ef821c13ddf1291ebb6aaafca6";
-    hash = "sha256-aI8GqXAgyh5VkayEQbaXOK+JQKzqVqQs8RO3CdOsgX8=";
+    rev = "7150112e9690a6856b6c999e4f2da4e14ffff3d8";
+    hash = "sha256-BxBNTNSO9jiEwi7Yezkw/h2icMJVxvCdTgKEJJQoYOA=";
   };
 
-  buildInputs =
-    [
-      gumbo
-      harfbuzz
-      jbig2dec
-      mujs
-      mupdf
-      openjpeg
-      qt6.qt3d
-      qt6.qtbase
-      qt6.qtspeech
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
+  buildInputs = [
+    gumbo
+    harfbuzz
+    jbig2dec
+    mujs
+    mupdf
+    openjpeg
+    qt6.qt3d
+    qt6.qtbase
+    qt6.qtspeech
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ freetype ];
 
   nativeBuildInputs = [
     installShellFiles
@@ -74,11 +73,9 @@ stdenv.mkDerivation (finalAttrs: {
         installManPage resources/sioyek.1
       '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version"
-      "branch=development"
-    ];
+  passthru.updateScript = unstableGitUpdater {
+    branch = "development";
+    tagPrefix = "v";
   };
 
   meta = with lib; {

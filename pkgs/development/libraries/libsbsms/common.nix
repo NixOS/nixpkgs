@@ -10,7 +10,7 @@
   homepage,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit homepage;
     description = "Subband sinusoidal modeling library for time stretching and pitch scaling audio";
-    maintainers = with lib.maintainers; [ yuu ];
+    maintainers = [ ];
     license = lib.licenses.gpl2;
     platforms = lib.platforms.all;
   };

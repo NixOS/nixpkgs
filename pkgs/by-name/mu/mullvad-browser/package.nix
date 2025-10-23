@@ -97,7 +97,7 @@ let
     ++ lib.optionals mediaSupport [ ffmpeg ]
   );
 
-  version = "14.0.7";
+  version = "14.5.8";
 
   sources = {
     x86_64-linux = fetchurl {
@@ -109,7 +109,7 @@ let
         "https://tor.eff.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
         "https://tor.calyxinstitute.org/dist/mullvadbrowser/${version}/mullvad-browser-linux-x86_64-${version}.tar.xz"
       ];
-      hash = "sha256-PgNZR0Bh5l3y6Vwd8BPuz9Dm0MSp6T2io4Yjmy/cPH0=";
+      hash = "sha256-82Y1QpnvXFKEXQtgUHCGh+2KYytbA+B1YwF0OtfvtSA=";
     };
   };
 
@@ -249,7 +249,7 @@ stdenv.mkDerivation rec {
     # FONTCONFIG_FILE is required to make fontconfig read the MB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
-    FONTCONFIG_FILE=$MB_IN_STORE/fontconfig/fonts.conf
+    FONTCONFIG_FILE=$MB_IN_STORE/fonts/fonts.conf
     substituteInPlace "$FONTCONFIG_FILE" \
       --replace-fail '<dir prefix="cwd">fonts</dir>' "<dir>$MB_IN_STORE/fonts</dir>"
 
@@ -296,12 +296,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Privacy-focused browser made in a collaboration between The Tor Project and Mullvad";
     mainProgram = "mullvad-browser";
     homepage = "https://mullvad.net/en/browser";
-    platforms = attrNames sources;
-    maintainers = with maintainers; [
+    platforms = lib.attrNames sources;
+    maintainers = with lib.maintainers; [
       felschr
       panicgh
       sigmasquadron
@@ -309,12 +309,12 @@ stdenv.mkDerivation rec {
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain
     # restrictions on redistribution), it's free enough for our purposes.
-    license = with licenses; [
+    license = with lib.licenses; [
       mpl20
       lgpl21Plus
       lgpl3Plus
       free
     ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }

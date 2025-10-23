@@ -12,17 +12,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "svt-av1";
-  version = "2.3.0";
+  version = "3.1.2";
 
   src = fetchFromGitLab {
     owner = "AOMediaCodec";
     repo = "SVT-AV1";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JMOFWke/qO3cWHuhWJChzaH+sD5AVqYCTTz0Q0+r2AE=";
+    hash = "sha256-/CpcxdyC4qf9wdzzySMYw17FbjYpasT+QVykXSlx28U=";
   };
 
   nativeBuildInputs = [
     cmake
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isx86_64 [
     nasm
   ];
 
@@ -57,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
       aom
       bsd3
     ];
-    maintainers = with maintainers; [ Madouura ];
+    mainProgram = "SvtAv1EncApp";
     platforms = platforms.unix;
   };
 })

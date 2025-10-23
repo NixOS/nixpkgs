@@ -96,6 +96,10 @@ def fetchRepo() -> None:
             "outputDir": outputDir,
             "nixRepoAttrName": nixRepoAttrName,
         }:
+            if repo in args["pinnedGrammars"]:
+                log(f"Grammar {repo} is pinned, skipping upgrade...")
+                return
+
             token: str | None = os.environ.get("GITHUB_TOKEN", None)
             out = run_cmd(
                 curl_github_args(

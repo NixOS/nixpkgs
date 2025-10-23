@@ -10,20 +10,20 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "grocy";
-  version = "4.3.0";
+  version = "4.5.0";
 
   src = fetchFromGitHub {
     owner = "grocy";
     repo = "grocy";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9Lc3NUZ7Huiyt887kCHL6lshow3+Pqrq8h1NV+CFHGs=";
+    hash = "sha256-MnN6TIkNZWT+pAQf0+z5l3hj/7K/d3BfI7VAaUEKG8s=";
   };
 
-  vendorHash = "sha256-0Hn9dp5ASF0R2L0HTeQ9nSSN7dZgk1a4mv+ZkNMm+k8=";
+  vendorHash = "sha256-6vWV8+4tETUFBLeEoG7d8lHKILXvM7ezWbDiG11GA/s=";
 
   offlineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-l8uYMBMufbSHhxNxqqA0BqCLqUYubjIpgevaenzy5Ic=";
+    hash = "sha256-Q+9hUxIfNrfdok39h04rz5I63RxOJ0qk3XlwvD1TcqI=";
   };
 
   nativeBuildInputs = [
@@ -62,7 +62,7 @@ php.buildComposerProject2 (finalAttrs: {
 
   meta = with lib; {
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ diogotcorreia ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

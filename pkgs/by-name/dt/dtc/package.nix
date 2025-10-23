@@ -11,6 +11,7 @@
   which,
   pythonSupport ? false,
   python ? null,
+  replaceVars,
   swig,
   libyaml,
 }:
@@ -25,39 +26,52 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (fetchpatch2 {
-      # https://github.com/dgibson/dtc/pull/141
-      url = "https://github.com/dgibson/dtc/commit/56a7d0cb3be5f2f7604bc42299e24d13a39c72d8.patch";
-      hash = "sha256-GmAyk/K2OolH/Z8SsgwCcq3/GOlFuSpnVPr7jsy8Cs0=";
-    })
+    # backport of https://github.com/dgibson/dtc/pull/141
+    # to 1.7.2, to drop in 1.8.
+    ./static.patch
     # backport fix for SWIG 4.3
     (fetchpatch2 {
       url = "https://github.com/dgibson/dtc/commit/9a969f3b70b07bbf1c9df44a38d7f8d1d3a6e2a5.patch";
       hash = "sha256-YrRzc3ATNmU6LYNHEQeU8wtjt1Ap7/gNFvtRR14PQEE=";
     })
-  ];
+    # glibc-2.41 support
+    (fetchpatch2 {
+      url = "https://github.com/dgibson/dtc/commit/ce1d8588880aecd7af264e422a16a8b33617cef7.patch";
+      hash = "sha256-t1CxKnbCXUArtVcniAIdNvahOGXPbYhPCZiTynGLvfo=";
+    })
+  ]
+  ++
+    lib.optional pythonSupport
+      # Make Meson use our Python version, not the one it was built with itself
+      (
+        replaceVars ./python-path.patch {
+          python_bin = lib.getExe python;
+        }
+      );
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
 
-  nativeBuildInputs =
-    [
-      meson
-      ninja
-      flex
-      bison
-      pkg-config
-      which
-    ]
-    ++ lib.optionals pythonSupport [
-      python
-      python.pkgs.setuptools-scm
-      swig
-    ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    flex
+    bison
+    pkg-config
+    which
+  ]
+  ++ lib.optionals pythonSupport [
+    python
+    python.pkgs.setuptools-scm
+    swig
+  ];
 
   buildInputs = [ libyaml ];
 
   postPatch = ''
     patchShebangs setup.py
+
+    # Align the name with pypi
+    sed -i "s/name='libfdt',/name='pylibfdt',/" setup.py
   '';
 
   # Required for installation of Python library and is innocuous otherwise.
@@ -65,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   mesonAutoFeatures = "auto";
   mesonFlags = [
-    (lib.mesonBool "static-build" stdenv.hostPlatform.isStatic)
     (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 

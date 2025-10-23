@@ -7,9 +7,8 @@
 
 buildPecl {
   pname = "rdkafka";
-
-  version = "6.0.3";
-  sha256 = "sha256-Euqrl21JaX4x8WOLR4ietexhrbdYcIlBESsVf47H3Ug=";
+  version = "6.0.5";
+  hash = "sha256-Cva2ZcljyMfREJzsc4A0N42ciGPL9hLAvTI15RmnCPE=";
 
   buildInputs = [
     rdkafka
@@ -18,13 +17,13 @@ buildPecl {
 
   postPhpize = ''
     substituteInPlace configure \
-      --replace 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${rdkafka}'
+      --replace-fail 'SEARCH_PATH="/usr/local /usr"' 'SEARCH_PATH=${lib.getInclude rdkafka}'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Kafka client based on librdkafka";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://github.com/arnaud-lb/php-rdkafka";
-    maintainers = teams.php.members;
+    teams = [ lib.teams.php ];
   };
 }

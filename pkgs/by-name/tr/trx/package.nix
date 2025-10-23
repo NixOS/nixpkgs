@@ -4,8 +4,7 @@
   fetchurl,
   alsa-lib,
   libopus,
-  ortp,
-  bctoolbox,
+  linphonePackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,8 +25,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     libopus
-    ortp
-    bctoolbox
+    linphonePackages.ortp
+    linphonePackages.bctoolbox
   ];
   makeFlags = [ "PREFIX=$(out)" ];
 

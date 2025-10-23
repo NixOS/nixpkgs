@@ -13,7 +13,8 @@ postFixupHooks+=(noBrokenSymlinksInAllOutputs)
 
 # A symlink is "dangling" if it points to a non-existent target.
 # A symlink is "reflexive" if it points to itself.
-# A symlink is considered "broken" if it is either dangling or reflexive.
+# A symlink is "unreadable" if the readlink command fails, e.g. because of permission errors.
+# A symlink is considered "broken" if it is either dangling, reflexive or unreadable.
 noBrokenSymlinks() {
   local -r output="${1:?}"
   local path
@@ -21,6 +22,7 @@ noBrokenSymlinks() {
   local symlinkTarget
   local -i numDanglingSymlinks=0
   local -i numReflexiveSymlinks=0
+  local -i numUnreadableSymlinks=0
 
   # NOTE(@connorbaker): This hook doesn't check for cycles in symlinks.
 
@@ -33,7 +35,11 @@ noBrokenSymlinks() {
   # NOTE: path is absolute because we're running `find` against an absolute path (`output`).
   while IFS= read -r -d $'\0' path; do
     pathParent="$(dirname "$path")"
-    symlinkTarget="$(readlink "$path")"
+    if ! symlinkTarget="$(readlink "$path")"; then
+      nixErrorLog "the symlink $path is unreadable"
+      numUnreadableSymlinks+=1
+      continue
+    fi
 
     # Canonicalize symlinkTarget to an absolute path.
     if [[ $symlinkTarget == /* ]]; then
@@ -45,6 +51,12 @@ noBrokenSymlinks() {
       symlinkTarget="$(realpath --no-symlinks --canonicalize-missing "$pathParent/$symlinkTarget")"
     fi
 
+    # use $TMPDIR like audit-tmpdir.sh
+    if [[ $symlinkTarget = "$TMPDIR"/* ]]; then
+      nixErrorLog "the symlink $path points to $TMPDIR directory: $symlinkTarget"
+      numDanglingSymlinks+=1
+      continue
+    fi
     if [[ $symlinkTarget != "$NIX_STORE"/* ]]; then
       nixInfoLog "symlink $path points outside the Nix store; ignoring"
       continue
@@ -61,8 +73,8 @@ noBrokenSymlinks() {
     fi
   done < <(find "$output" -type l -print0)
 
-  if ((numDanglingSymlinks > 0 || numReflexiveSymlinks > 0)); then
-    nixErrorLog "found $numDanglingSymlinks dangling symlinks and $numReflexiveSymlinks reflexive symlinks"
+  if ((numDanglingSymlinks > 0 || numReflexiveSymlinks > 0 || numUnreadableSymlinks > 0)); then
+    nixErrorLog "found $numDanglingSymlinks dangling symlinks, $numReflexiveSymlinks reflexive symlinks and $numUnreadableSymlinks unreadable symlinks"
     exit 1
   fi
   return 0

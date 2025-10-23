@@ -63,7 +63,7 @@ in
       # find mistaken definitions
       builtins.seq cfg.config builtins.seq cfg.overlays builtins.seq cfg.hostPlatform builtins.seq
         cfg.buildPlatform
-        cfg.pkgs;
+        cfg.pkgs.__splicedPackages;
     nixpkgs.config = cfg.pkgs.config;
     nixpkgs.overlays = cfg.pkgs.overlays;
     nixpkgs.hostPlatform = cfg.pkgs.stdenv.hostPlatform;

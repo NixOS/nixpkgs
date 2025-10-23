@@ -7,7 +7,7 @@
   libnotify,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pell";
   version = "0.0.4";
 

@@ -3,13 +3,14 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "lcgit";
-  version = "2.0.0";
+  version = "2.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,17 +19,15 @@ buildPythonPackage rec {
     owner = "cisagov";
     repo = "lcgit";
     tag = "v${version}";
-    hash = "sha256-unw5xY5iZlVrV01hchHS3Ar+zpF7awTAutcqndKH0Ic=";
+    hash = "sha256-s77Pq5VjXFyycVYwaomhdNWXKU4vGRJT6+t89UvGdn4=";
   };
-
-  postPatch = ''
-    substituteInPlace pytest.ini \
-      --replace-fail " --cov" ""
-  '';
 
   build-system = [ setuptools ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ];
 
   pythonImportsCheck = [ "lcgit" ];
 

@@ -21,9 +21,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "tumbler";
-  version = "4.20.0";
+  version = "4.20.1";
 
-  sha256 = "sha256-GmEMdG8Ikd4Tq/1ntCHiN0S7ehUXqzMX7OtXsycLd6E=";
+  sha256 = "sha256-p4lAFNvCakqrsDa2FP0xbc/khx6eYqAlHwWkk8yEB7Y=";
 
   buildInputs = [
     libxfce4util
@@ -60,6 +60,6 @@ mkXfceDerivation {
 
   meta = with lib; {
     description = "D-Bus thumbnailer service";
-    maintainers = with maintainers; [ ] ++ teams.xfce.members;
+    teams = [ teams.xfce ];
   };
 }

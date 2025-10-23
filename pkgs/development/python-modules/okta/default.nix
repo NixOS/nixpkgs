@@ -6,7 +6,6 @@
   fetchPypi,
   flatdict,
   jwcrypto,
-  pycryptodome,
   pycryptodomex,
   pydash,
   pyfakefs,
@@ -15,7 +14,6 @@
   pytest-mock,
   pytest-recording,
   pytestCheckHook,
-  python-jose,
   pythonOlder,
   pyyaml,
   setuptools,
@@ -25,17 +23,15 @@
 
 buildPythonPackage rec {
   pname = "okta";
-  version = "2.9.10";
+  version = "2.9.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hLdq5AlTaCZ9x/x5VL4Q673th2HnE7haAaOp5zOQdjQ=";
+    hash = "sha256-jY6SZ1G3+NquF5TfLsGw6T9WO4smeBYT0gXLnRDoN+8=";
   };
-
-  pythonRelaxDeps = [ "aenum" ];
 
   build-system = [ setuptools ];
 
@@ -44,11 +40,9 @@ buildPythonPackage rec {
     aiohttp
     flatdict
     jwcrypto
-    pycryptodome
     pycryptodomex
     pydash
     pyjwt
-    python-jose
     pyyaml
     xmltodict
     yarl
@@ -62,7 +56,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "tests/" ];
+  enabledTestPaths = [ "tests/" ];
 
   disabledTests = [
     "test_client_raise_exception"

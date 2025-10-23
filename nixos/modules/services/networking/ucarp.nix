@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -26,7 +31,8 @@ let
     ++ (optional cfg.noMcast "--nomcast")
     ++ (optional (cfg.extraParam != null) "--xparam=${cfg.extraParam}")
   );
-in {
+in
+{
   options.networking.ucarp = {
     enable = mkEnableOption "ucarp, userspace implementation of CARP";
 

@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-jza6VQ3PZAQPku2hyo0KeO59r64Q9TpqLCI0dIX/URU=";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "setuptools_scm>=8.1.0,<8.2" setuptools_scm
+  '';
+
   env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   build-system = [

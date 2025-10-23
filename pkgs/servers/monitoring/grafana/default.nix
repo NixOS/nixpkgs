@@ -6,32 +6,20 @@
   removeReferencesTo,
   tzdata,
   wire,
-  yarn,
-  nodejs,
+  yarn-berry_4,
   python3,
-  cacert,
   jq,
   moreutils,
   nix-update-script,
   nixosTests,
   xcbuild,
   faketty,
-  git,
+  nodejs,
 }:
 
-let
-  # Grafana seems to just set it to the latest version available
-  # nowadays.
-  patchGoVersion = ''
-    substituteInPlace go.{mod,work} apps/alerting/notifications/go.mod pkg/storage/unified/apistore/go.mod pkg/storage/unified/resource/go.mod \
-      --replace-fail "go 1.23.5" "go 1.23.4"
-    substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.23.5" "GO_VERSION = 1.23.4"
-  '';
-in
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "grafana";
-  version = "11.5.2";
+  version = "12.2.1";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -42,71 +30,68 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
-    rev = "v${version}";
-    hash = "sha256-W0wn19SqqzxHm2fRtsEOru4khNqZziAfzWWc6H+Juew=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fOlf+NTV1DIotC0JyG+PCMe8uPr+mfe/CLQP7dmRtkg=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
   env = {
     CYPRESS_INSTALL_BINARY = 0;
+    PUPPETEER_SKIP_DOWNLOAD = 1;
+
+    # The build OOMs on memory constrained aarch64 without this
+    NODE_OPTIONS = "--max_old_space_size=4096";
   };
 
-  offlineCache = stdenv.mkDerivation {
-    name = "${pname}-${version}-yarn-offline-cache";
-    inherit src env;
-    nativeBuildInputs = [
-      yarn
-      nodejs
-      cacert
-      jq
-      moreutils
-      # required to run old node-gyp
-      (python3.withPackages (ps: [ ps.distutils ]))
-      git
-      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
-    buildPhase = ''
-      runHook preBuild
-      export HOME="$(mktemp -d)"
-      yarn config set enableTelemetry 0
-      yarn config set cacheFolder $out
-      yarn config set --json supportedArchitectures.os '[ "linux", "darwin" ]'
-      yarn config set --json supportedArchitectures.cpu '["arm", "arm64", "ia32", "x64"]'
-      yarn
-      runHook postBuild
-    '';
-    dontConfigure = true;
-    dontInstall = true;
-    dontFixup = true;
-    outputHashMode = "recursive";
-    outputHash =
-      rec {
-        x86_64-linux = "sha256-8KoSBzcEih9UKOkbcNTN1pZz/wVTedJ8qLRe+uXV/dE=";
-        aarch64-linux = x86_64-linux;
-        aarch64-darwin = "sha256-XW6AV0tzrEWizn4G0KEXegEcNmlTJl6mZ92ZRmz17HM=";
-        x86_64-darwin = aarch64-darwin;
-      }
-      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  missingHashes = ./missing-hashes.json;
+  offlineCache = yarn-berry_4.fetchYarnBerryDeps {
+    inherit (finalAttrs) src missingHashes;
+    hash = "sha256-aXWi2hriPHm1Gsmd6Zg8eTR//KuI6SrvJAYhTeRZTug=";
   };
 
-  disallowedRequisites = [ offlineCache ];
+  disallowedRequisites = [ finalAttrs.offlineCache ];
 
-  postPatch = patchGoVersion;
+  vendorHash = "sha256-TvKG/fUBure2wiZDVFD7dHGVDBl8gqWRkv2YBYNcIDQ=";
 
-  vendorHash = "sha256-Pt87hb0+EuGd62ld65jTszeTy7GZZbviH8X9qCGOaJQ=";
+  # Grafana seems to just set it to the latest version available
+  # nowadays.
+  # However, while `substituteInPlace --replace-fail` is desirable to keep
+  # the section up-to-date, this gets increasingly annoying since there's
+  # an inconsistent 1% with a different version. So we now blindly set all
+  # `go` directives to whatever nixpkgs provides and make it the maintainer's
+  # duty to ensure that the mandated
+  # Go version is compatible with what we provide.
+  # This is still better than maintaining some list of go.mod files (or exclusions of that)
+  # where to patch the go version (and where to not do that).
+  postPatch = ''
+    find . \( -name go.mod -or -name "go.work" \) -type f -exec sed -i -e 's/^go .*/go ${finalAttrs.passthru.go.version}/g' {} \;
+  '';
 
   proxyVendor = true;
 
   nativeBuildInputs = [
     wire
-    yarn
     jq
     moreutils
     removeReferencesTo
     # required to run old node-gyp
     (python3.withPackages (ps: [ ps.distutils ]))
     faketty
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+    nodejs
+    yarn-berry_4
+    yarn-berry_4.yarnBerryConfigHook
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild.xcbuild ];
+
+  # We have to remove this setupHook, otherwise it also runs in the `goModules`
+  # derivation and fails because `offlineCache` is missing there.
+  overrideModAttrs = (
+    old: {
+      nativeBuildInputs = lib.filter (
+        x: lib.getName x != (lib.getName yarn-berry_4.yarnBerryConfigHook)
+      ) old.nativeBuildInputs;
+    }
+  );
 
   postConfigure = ''
     # Generate DI code that's required to compile the package.
@@ -116,22 +101,7 @@ buildGoModule rec {
 
     GOARCH= CGO_ENABLED=0 go generate ./kinds/gen.go
     GOARCH= CGO_ENABLED=0 go generate ./public/app/plugins/gen.go
-    # Setup node_modules
-    export HOME="$(mktemp -d)"
 
-    # Help node-gyp find Node.js headers
-    # (see https://github.com/NixOS/nixpkgs/blob/master/doc/languages-frameworks/javascript.section.md#pitfalls-javascript-yarn2nix-pitfalls)
-    mkdir -p $HOME/.node-gyp/${nodejs.version}
-    echo 9 > $HOME/.node-gyp/${nodejs.version}/installVersion
-    ln -sfv ${nodejs}/include $HOME/.node-gyp/${nodejs.version}
-    export npm_config_nodedir=${nodejs}
-
-    yarn config set enableTelemetry 0
-    yarn config set cacheFolder $offlineCache
-    yarn install --immutable-cache
-
-    # The build OOMs on memory constrained aarch64 without this
-    export NODE_OPTIONS=--max_old_space_size=4096
   '';
 
   postBuild = ''
@@ -145,7 +115,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version}"
+    "-X main.version=${finalAttrs.version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -181,10 +151,10 @@ buildGoModule rec {
     maintainers = with maintainers; [
       offline
       fpletz
-      willibutz
       globin
       ma27
       Frostman
+      ryan4yin
     ];
     platforms = [
       "x86_64-linux"
@@ -194,4 +164,4 @@ buildGoModule rec {
     ];
     mainProgram = "grafana-server";
   };
-}
+})

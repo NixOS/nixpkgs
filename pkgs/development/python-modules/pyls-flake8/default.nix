@@ -7,7 +7,7 @@
   pythonOlder,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyls-flake8";
   version = "0.4.0";
   format = "setuptools";

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hashrat";
-  version = "1.23";
+  version = "1.25";
 
   src = fetchFromGitHub {
     owner = "ColumPaget";
     repo = "Hashrat";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-dDtn01eoODgRtsbEdtuXhib3fZLosP8ajJBGaG8Skss=";
+    hash = "sha256-nGaOVvy8caySohCGyGdnxXsv2DuqFPRi4JJLlZy+q8o=";
   };
 
   configureFlags = [ "--enable-xattr" ];

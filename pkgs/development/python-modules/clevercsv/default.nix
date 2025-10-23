@@ -65,7 +65,7 @@ buildPythonPackage rec {
   '';
 
   # their ci only runs unit tests, there are also integration and fuzzing tests
-  pytestFlagsArray = [ "./tests/test_unit" ];
+  enabledTestPaths = [ "./tests/test_unit" ];
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'wilderness'
@@ -73,7 +73,7 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "CleverCSV is a Python package for handling messy CSV files";
+    description = "Python package for handling messy CSV files";
     mainProgram = "clevercsv";
     longDescription = ''
       CleverCSV is a Python package for handling messy CSV files. It provides

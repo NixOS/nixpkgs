@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,16 +8,16 @@
 
 buildGoModule rec {
   pname = "glooctl";
-  version = "1.18.10";
+  version = "1.20.3";
 
   src = fetchFromGitHub {
     owner = "solo-io";
     repo = "gloo";
     rev = "v${version}";
-    hash = "sha256-q3/BU5KyC8V4osTsL6S9KRGXl4Sf41TuzyNdhxmsESE=";
+    hash = "sha256-i2+CEPHK2C34ulY4nRTVw0sNBsHzD1WlKiZRjwHJOVc=";
   };
 
-  vendorHash = "sha256-lcnsmeZ2XobBE95KqIhUZCKmevg2WEGuZC4qUVkdafM=";
+  vendorHash = "sha256-zJmp3UWzZSI7G54DTOEOEo2ZIKjM6GZ0Cf5/BukaB4o=";
 
   subPackages = [ "projects/gloo/cli/cmd" ];
 
@@ -35,6 +36,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cmd $out/bin/glooctl
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd glooctl \
       --bash <($out/bin/glooctl completion bash) \
       --zsh <($out/bin/glooctl completion zsh)

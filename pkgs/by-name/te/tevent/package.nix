@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tevent";
-  version = "0.16.1";
+  version = "0.17.1";
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Nilx4PMtwZBfb+RzYxnEuDSMItyFqmw/aQoo7+VIAp4=";
+    sha256 = "sha256-G+LepzfN4l/gZiH4SUXmPrcSWeDEPp+PXaSC2rGnvpI=";
   };
 
   nativeBuildInputs = [
@@ -52,15 +52,14 @@ stdenv.mkDerivation rec {
 
   wafPath = "buildtools/bin/waf";
 
-  wafConfigureFlags =
-    [
-      "--bundled-libraries=NONE"
-      "--builtin-libraries=replace"
-    ]
-    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-compile"
-      "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
-    ];
+  wafConfigureFlags = [
+    "--bundled-libraries=NONE"
+    "--builtin-libraries=replace"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "--cross-compile"
+    "--cross-execute=${stdenv.hostPlatform.emulator buildPackages}"
+  ];
 
   # python-config from build Python gives incorrect values when cross-compiling.
   # If python-config is not found, the build falls back to using the sysconfig

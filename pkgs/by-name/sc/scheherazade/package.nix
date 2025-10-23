@@ -13,6 +13,7 @@ let
       "3.300" = "sha256-LaaA6DWAE2dcwVVX4go9cJaiuwI6efYbPk82ym3W3IY=";
       "4.000" = "sha256-FhgHlHCfojIl3Y11EDYhNTmLYwQ60OrwnA9nbZbZGJE=";
       "4.300" = "sha256-djUZyBJaX6cFG4SYn+HIldNhRQ4Hg+Jt3uDfYzo9H5o=";
+      "4.400" = "sha256-76CQvy17lvzjVFICtrGU4DdT6u1nSPdSNkec2FcTwGw=";
     }
     ."${version}";
   pname = "scheherazade${lib.optionalString new "-new"}";

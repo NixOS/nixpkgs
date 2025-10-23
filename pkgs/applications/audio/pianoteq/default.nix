@@ -1,34 +1,45 @@
-{ lib
-, stdenv
-, alsa-lib
-, autoPatchelfHook
-, copyDesktopItems
-, curl
-, freetype
-, htmlq
-, jq
-, libglvnd
-, librsvg
-, makeDesktopItem
-, makeWrapper
-, p7zip
-, writeShellScript
+{
+  lib,
+  stdenv,
+  alsa-lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  curl,
+  freetype,
+  htmlq,
+  jq,
+  libglvnd,
+  librsvg,
+  makeDesktopItem,
+  makeWrapper,
+  p7zip,
+  writeShellScript,
 }:
 let
   versionForFile = v: builtins.replaceStrings [ "." ] [ "" ] v;
 
   archdirs =
-    if stdenv.hostPlatform.isx86_64 then ["x86-64bit" "amd64"]
-    else if stdenv.hostPlatform.isAarch64 then ["arm-64bit" "arm"]
-    else throw "unsupported platform";
+    if stdenv.hostPlatform.isx86_64 then
+      [
+        "x86-64bit"
+        "amd64"
+      ]
+    else if stdenv.hostPlatform.isAarch64 then
+      [
+        "arm-64bit"
+        "arm"
+      ]
+    else
+      throw "unsupported platform";
 
   mkPianoteq =
-    { name
-    , mainProgram
-    , startupWMClass
-    , src
-    , version
-    , ...
+    {
+      name,
+      mainProgram,
+      startupWMClass,
+      src,
+      version,
+      ...
     }:
     stdenv.mkDerivation rec {
       inherit src version;
@@ -60,7 +71,11 @@ let
           desktopName = mainProgram;
           icon = "pianoteq";
           comment = meta.description;
-          categories = [ "AudioVideo" "Audio"  "Recorder" ];
+          categories = [
+            "AudioVideo"
+            "Audio"
+            "Recorder"
+          ];
           startupNotify = false;
           inherit startupWMClass;
         })
@@ -69,7 +84,7 @@ let
       installPhase = ''
         runHook preInstall
         mkdir -p $out/bin
-        mv -t $out/bin ${builtins.concatStringsSep " " (builtins.map (dir: "Pianoteq*/${dir}/*") archdirs)}
+        mv -t $out/bin ${builtins.concatStringsSep " " (map (dir: "Pianoteq*/${dir}/*") archdirs)}
         install -Dm644 ${./pianoteq.svg} $out/share/icons/hicolor/scalable/apps/pianoteq.svg
         for size in 16 22 32 48 64 128 256; do
           dir=$out/share/icons/hicolor/"$size"x"$size"/apps
@@ -89,13 +104,25 @@ let
         description = "Software synthesizer that features real-time MIDI-control of digital physically modeled pianos and related instruments";
         license = licenses.unfree;
         inherit mainProgram;
-        platforms = [ "x86_64-linux" "aarch64-linux" ];
-        maintainers = with maintainers; [ mausch ners ];
+        platforms = [
+          "x86_64-linux"
+          "aarch64-linux"
+        ];
+        maintainers = with maintainers; [
+          mausch
+          ners
+        ];
         sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
       };
     };
 
-  fetchWithCurlScript = { name, hash, script, impureEnvVars ? [ ] }:
+  fetchWithCurlScript =
+    {
+      name,
+      hash,
+      script,
+      impureEnvVars ? [ ],
+    }:
     stdenv.mkDerivation {
       inherit name;
       builder = writeShellScript "builder.sh" ''
@@ -124,13 +151,17 @@ let
       outputHashAlgo = "sha256";
       outputHash = hash;
 
-      impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ impureEnvVars ++ [
-        # This variable allows the user to pass additional options to curl
-        "NIX_CURL_FLAGS"
-      ];
+      impureEnvVars =
+        lib.fetchers.proxyImpureEnvVars
+        ++ impureEnvVars
+        ++ [
+          # This variable allows the user to pass additional options to curl
+          "NIX_CURL_FLAGS"
+        ];
     };
 
-  fetchPianoteqTrial = { name, hash }:
+  fetchPianoteqTrial =
+    { name, hash }:
     fetchWithCurlScript {
       inherit name hash;
       script = ''
@@ -163,11 +194,15 @@ let
       '';
     };
 
-  fetchPianoteqWithLogin = { name, hash }:
+  fetchPianoteqWithLogin =
+    { name, hash }:
     fetchWithCurlScript {
       inherit name hash;
 
-      impureEnvVars = [ "NIX_MODARTT_USERNAME" "NIX_MODARTT_PASSWORD" ];
+      impureEnvVars = [
+        "NIX_MODARTT_USERNAME"
+        "NIX_MODARTT_PASSWORD"
+      ];
 
       script = ''
         if [ -z "''${NIX_MODARTT_USERNAME}" -o -z "''${NIX_MODARTT_PASSWORD}" ]; then
@@ -209,46 +244,54 @@ let
   version7 = "7.5.4";
   version8 = "8.4.0";
 
-  mkStandard = version: hash: mkPianoteq {
-    name = "standard";
-    mainProgram = "Pianoteq ${lib.versions.major version}";
-    startupWMClass = "Pianoteq";
-    inherit version;
-    src = fetchPianoteqWithLogin {
-      name = "pianoteq_linux_v${versionForFile version}.7z";
-      inherit hash;
+  mkStandard =
+    version: hash:
+    mkPianoteq {
+      name = "standard";
+      mainProgram = "Pianoteq ${lib.versions.major version}";
+      startupWMClass = "Pianoteq";
+      inherit version;
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_linux_v${versionForFile version}.7z";
+        inherit hash;
+      };
     };
-  };
-  mkStage = version: hash: mkPianoteq {
-    name = "stage";
-    mainProgram = "Pianoteq ${lib.versions.major version} STAGE";
-    startupWMClass = "Pianoteq STAGE";
-    inherit version;
-    src = fetchPianoteqWithLogin {
-      name = "pianoteq_stage_linux_v${versionForFile version}.7z";
-      inherit hash;
+  mkStage =
+    version: hash:
+    mkPianoteq {
+      name = "stage";
+      mainProgram = "Pianoteq ${lib.versions.major version} STAGE";
+      startupWMClass = "Pianoteq STAGE";
+      inherit version;
+      src = fetchPianoteqWithLogin {
+        name = "pianoteq_stage_linux_v${versionForFile version}.7z";
+        inherit hash;
+      };
     };
-  };
-  mkStandardTrial = version: hash: mkPianoteq {
-    name = "standard-trial";
-    mainProgram = "Pianoteq ${lib.versions.major version}";
-    startupWMClass = "Pianoteq Trial";
-    inherit version;
-    src = fetchPianoteqTrial {
-      name = "pianoteq_linux_trial_v${versionForFile version}.7z";
-      inherit hash;
+  mkStandardTrial =
+    version: hash:
+    mkPianoteq {
+      name = "standard-trial";
+      mainProgram = "Pianoteq ${lib.versions.major version}";
+      startupWMClass = "Pianoteq Trial";
+      inherit version;
+      src = fetchPianoteqTrial {
+        name = "pianoteq_linux_trial_v${versionForFile version}.7z";
+        inherit hash;
+      };
     };
-  };
-  mkStageTrial = version: hash: mkPianoteq {
-    name = "stage-trial";
-    mainProgram = "Pianoteq ${lib.versions.major version} STAGE";
-    startupWMClass = "Pianoteq STAGE Trial";
-    inherit version;
-    src = fetchPianoteqTrial {
-      name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
-      inherit hash;
+  mkStageTrial =
+    version: hash:
+    mkPianoteq {
+      name = "stage-trial";
+      mainProgram = "Pianoteq ${lib.versions.major version} STAGE";
+      startupWMClass = "Pianoteq STAGE Trial";
+      inherit version;
+      src = fetchPianoteqTrial {
+        name = "pianoteq_stage_linux_trial_v${versionForFile version}.7z";
+        inherit hash;
+      };
     };
-  };
 in
 {
   standard_8 = mkStandard version8 "sha256-ZDGB/SOOz+sWz7P+sNzyaipEH452n8zq5LleO3ztSXc=";

@@ -7,12 +7,12 @@
 }:
 
 let
-  version = "3.10";
+  version = "3.16";
   srcAll = fetchFromGitHub {
     owner = "WiringPi";
     repo = "WiringPi";
-    rev = version;
-    sha256 = "sha256-OWR+yo+SnYaMd8J+ku9ettZi+rDHcHlGZCoucCiRkCI=";
+    tag = version;
+    hash = "sha256-NBHmRA+6Os6/IpW8behbgpVjtN8QF9gkffXU2ZVC8ts=";
   };
   mkSubProject =
     {
@@ -78,11 +78,14 @@ symlinkJoin {
     passthru.wiringPiD
     passthru.gpio
   ];
-  meta = with lib; {
+  meta = {
     description = "Gordon's Arduino wiring-like WiringPi Library for the Raspberry Pi (Unofficial Mirror for WiringPi bindings)";
     homepage = "https://github.com/WiringPi/WiringPi";
-    license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ doronbehar ];
-    platforms = platforms.linux;
+    license = lib.licenses.lgpl3Plus;
+    maintainers = with lib.maintainers; [
+      doronbehar
+      ryand56
+    ];
+    platforms = lib.platforms.linux;
   };
 }

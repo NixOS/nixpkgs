@@ -10,21 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "obs-livesplit-one";
-  version = "0.3.4";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "LiveSplit";
-    repo = pname;
+    repo = "obs-livesplit-one";
     rev = "v${version}";
-    sha256 = "sha256-3B3P1PlzIlpVqHJMKWpEnWXGgD/IaiWM1FVKn0BtRj0=";
+    sha256 = "sha256-4Ar4ChSl226BVFyAnqpWDLxsZF63bxl++sWD+6aENW8=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "livesplit-auto-splitting-0.1.0" = "sha256-/xQEVJH6m6nH5Z1kuOPEElOcOqJmiG9Q8cOx0e6p3Wc=";
-    };
-  };
+  cargoHash = "sha256-e0FDa72vzRb5AMVmtkvAkiQ5GUXsq0LekqF+wDYDsr8=";
 
   nativeBuildInputs = [
     cmake
@@ -48,6 +43,6 @@ rustPlatform.buildRustPackage rec {
       mit
     ];
     maintainers = [ maintainers.Bauke ];
-    platforms = obs-studio.meta.platforms;
+    inherit (obs-studio.meta) platforms;
   };
 }

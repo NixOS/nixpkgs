@@ -20,21 +20,22 @@ assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
         `with dotnetCorePackages; combinePackages [
             sdk_9_0 aspnetcore_8_0
          ];`'';
-mkWrapper "sdk" (buildEnv {
-  name = "dotnet-combined";
-  paths = dotnetPackages;
-  pathsToLink = map (x: "/share/dotnet/${x}") [
-    "host"
-    "packs"
-    "sdk"
-    "sdk-manifests"
-    "shared"
-    "templates"
-  ];
-  ignoreCollisions = true;
-  nativeBuildInputs = [ makeWrapper ];
-  postBuild =
-    ''
+mkWrapper "sdk" (
+  (buildEnv {
+    name = "dotnet-combined";
+    paths = dotnetPackages;
+    pathsToLink = map (x: "/share/dotnet/${x}") [
+      "host"
+      "metadata"
+      "packs"
+      "sdk"
+      "sdk-manifests"
+      "shared"
+      "templates"
+    ];
+    ignoreCollisions = true;
+    nativeBuildInputs = [ makeWrapper ];
+    postBuild = ''
       mkdir -p "$out"/share/dotnet
       cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
@@ -44,26 +45,32 @@ mkWrapper "sdk" (buildEnv {
     + lib.optionalString (cli ? man) ''
       ln -s ${cli.man} $man
     '';
-  passthru = {
-    pname = "dotnet";
-    version = "combined";
-    inherit (cli) icu;
+    passthru = {
+      pname = "dotnet";
+      version = "combined";
+      inherit (cli) icu;
 
-    versions = lib.catAttrs "version" dotnetPackages;
-    packages = lib.concatLists (lib.catAttrs "packages" dotnetPackages);
-    targetPackages = lib.zipAttrsWith (_: lib.concatLists) (
-      lib.catAttrs "targetPackages" dotnetPackages
-    );
-  };
+      versions = lib.catAttrs "version" dotnetPackages;
+      packages = lib.concatLists (lib.catAttrs "packages" dotnetPackages);
+      targetPackages = lib.zipAttrsWith (_: lib.concatLists) (
+        lib.catAttrs "targetPackages" dotnetPackages
+      );
+    };
 
-  meta = {
-    description = "${cli.meta.description or "dotnet"} (combined)";
-    inherit (cli.meta)
-      homepage
-      license
-      mainProgram
-      maintainers
-      platforms
-      ;
-  };
-})
+    meta = {
+      description = "${cli.meta.description or "dotnet"} (combined)";
+      inherit (cli.meta)
+        homepage
+        license
+        mainProgram
+        maintainers
+        platforms
+        ;
+    };
+  }).overrideAttrs
+    {
+      propagatedSandboxProfile = toString (
+        lib.unique (lib.concatLists (lib.catAttrs "__propagatedSandboxProfile" dotnetPackages))
+      );
+    }
+)

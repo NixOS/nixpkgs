@@ -9,16 +9,16 @@
 
 buildPythonPackage rec {
   pname = "chirpstack-api";
-  version = "3.12.4";
+  version = "3.12.5";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "brocaar";
-    repo = pname;
+    repo = "chirpstack-api";
     rev = "v${version}";
-    hash = "sha256-69encHMk0eXE2Av87ysKvxoiXog5o68qCUlOx/lgHFU=";
+    hash = "sha256-TDwvUNnGAbt10lLg6U7q+JMg7uu8TLySYqNyt/uk8UY=";
   };
 
   sourceRoot = "${src.name}/python/src";

@@ -5,7 +5,7 @@
   fetchPypi,
   setuptools-scm,
   pyelftools,
-  importlib-metadata,
+  packaging,
   pretend,
   pytestCheckHook,
   # non-python dependencies
@@ -17,19 +17,22 @@
 
 buildPythonPackage rec {
   pname = "auditwheel";
-  version = "6.2.0";
+  version = "6.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-T8n3eM2B2sVoIOjN7phC3ES49DX4eDYG2r1JZNRjizA=";
+    hash = "sha256-t6Ya/JGDtrXGYd5ZylhvnHIARFpAnFjN8gSdb3FjbVE=";
   };
 
   build-system = [ setuptools-scm ];
 
-  dependencies = [ pyelftools ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  dependencies = [
+    packaging
+    pyelftools
+  ];
 
   nativeCheckInputs = [
     pretend

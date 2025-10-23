@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchzip
-, libX11
-, libXi
-, libGL
-, alsa-lib
-, SDL2
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libX11,
+  libXi,
+  libGL,
+  alsa-lib,
+  SDL2,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchzip {
     url = "https://warmplace.ru/soft/ans/virtual_ans-${version}.zip";
-    sha256 = "sha256-tqR7icgURUFOyLJ8+mS17JRf2gK53I2FW/2m8IJPtJE=";
+    hash = "sha256-QrYWTRYCh1YYJFtBukC2kUNoiRlsAJOD1NdB9rcx7yM=";
   };
 
   nativeBuildInputs = [
@@ -43,14 +45,22 @@ stdenv.mkDerivation rec {
     ln -s $out/${startScript} $out/bin/virtual-ans
   '';
 
-  startScript = if stdenv.hostPlatform.isx86_32 then "START_LINUX_X86"
-    else        if stdenv.hostPlatform.isx86_64 then "START_LINUX_X86_64"
+  startScript =
+    if stdenv.hostPlatform.isx86_32 then
+      "START_LINUX_X86"
+    else if stdenv.hostPlatform.isx86_64 then
+      "START_LINUX_X86_64"
     #else        if stdenv.hostPlatform.isDarwin then "START_MACOS.app" # disabled because I cannot test on Darwin
-    else throw "Unsupported platform: ${stdenv.hostPlatform.linuxArch}.";
+    else
+      throw "Unsupported platform: ${stdenv.hostPlatform.linuxArch}.";
 
-  linuxExecutable = if stdenv.hostPlatform.isx86_32 then "pixilang_linux_x86"
-    else            if stdenv.hostPlatform.isx86_64 then "pixilang_linux_x86_64"
-    else                                    "";
+  linuxExecutable =
+    if stdenv.hostPlatform.isx86_32 then
+      "pixilang_linux_x86"
+    else if stdenv.hostPlatform.isx86_64 then
+      "pixilang_linux_x86_64"
+    else
+      "";
 
   meta = with lib; {
     description = "Photoelectronic microtonal/spectral musical instrument";
@@ -78,12 +88,15 @@ stdenv.mkDerivation rec {
       + polyphonic synth mode with MIDI mapping;
       + supported file formats: WAV, AIFF, PNG, JPEG, GIF;
       + supported sound systems: ASIO, DirectSound, MME, ALSA, OSS, JACK, Audiobus, IAA.
-      '';
+    '';
     homepage = "https://warmplace.ru/soft/ans/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfreeRedistributable;
     # I cannot test the Darwin version, so I'll leave it disabled
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ jacg ];
   };
 

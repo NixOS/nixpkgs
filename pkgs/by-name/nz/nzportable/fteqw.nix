@@ -41,7 +41,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzp-fteqw";
-  version = "0-unstable-2024-09-11-20-07-31";
+  version = "0-unstable-2024-09-11";
 
   src = fetchFromGitHub {
     owner = "nzp-team";
@@ -59,32 +59,32 @@ stdenv.mkDerivation (finalAttrs: {
     gettext
   ];
 
-  buildInputs =
-    [
-      libGL
-      xorg.libX11
-      xorg.libXrandr
-      xorg.libXcursor
-      xorg.libXScrnSaver
-      dbus
-      fontconfig
-      libjpeg
-      libpng
-      alsa-lib
-      libogg
-      libvorbis
-      libopus
-      SDL2
-      gnutls
-      zlib
-      bullet
-    ]
-    ++ lib.optional enableEGL libglvnd
-    ++ lib.optionals enableWayland [
-      wayland
-      libxkbcommon
-    ]
-    ++ lib.optional enableVulkan vulkan-headers;
+  buildInputs = [
+    libGL
+    xorg.libxcb
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXcursor
+    xorg.libXScrnSaver
+    dbus
+    fontconfig
+    libjpeg
+    libpng
+    alsa-lib
+    libogg
+    libvorbis
+    libopus
+    SDL2
+    gnutls
+    zlib
+    bullet
+  ]
+  ++ lib.optional enableEGL libglvnd
+  ++ lib.optionals enableWayland [
+    wayland
+    libxkbcommon
+  ]
+  ++ lib.optional enableVulkan vulkan-headers;
 
   cmakeFlags = [
     (lib.cmakeFeature "FTE_BUILD_CONFIG" "${finalAttrs.src}/engine/common/config_nzportable.h")
@@ -130,7 +130,9 @@ stdenv.mkDerivation (finalAttrs: {
         openexr # client/image.c
 
         (placeholder "out")
-      ] ++ lib.optional enableWayland wayland ++ lib.optional enableVulkan vulkan-loader;
+      ]
+      ++ lib.optional enableWayland wayland
+      ++ lib.optional enableVulkan vulkan-loader;
     in
     ''
       wrapProgram $out/bin/fteqw \

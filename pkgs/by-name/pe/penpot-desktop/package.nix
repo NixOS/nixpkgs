@@ -2,42 +2,38 @@
   lib,
   buildNpmPackage,
   copyDesktopItems,
-  electron_33,
+  electron_37,
   fetchFromGitHub,
   jq,
   makeDesktopItem,
   makeWrapper,
-  nodejs_22,
+  nodejs_24,
   stdenv,
 }:
 
 let
   description = "Unofficial desktop application for the open-source design tool, Penpot";
   icon = "penpot";
-  nodejs = nodejs_22;
-  electron = electron_33;
+  nodejs = nodejs_24;
+  electron = electron_37;
 in
 buildNpmPackage rec {
   pname = "penpot-desktop";
-  version = "0.10.0";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "author-more";
     repo = "penpot-desktop";
     tag = "v${version}";
-    hash = "sha256-KlTE61k5rl13GPpOznpugSn1hmn55Cd/Z9vhwDjWhPo=";
+    hash = "sha256-MxkdGifPaakhX/tLHiD7Y6xCe3cZ7ELiAhD7GSmdtvk=";
   };
-
-  patches = [
-    ./electron-package-lock.diff # this downgrades electron version from 34 to 33 to match the latest available version in nixpkgs
-  ];
 
   makeCacheWritable = true;
   npmFlags = [
     "--engine-strict"
     "--legacy-peer-deps"
   ];
-  npmDepsHash = "sha256-DWZ1ih4i0vyYlShBWkJTCq0IKgT4CgEmvURnGoQiSy0=";
+  npmDepsHash = "sha256-zOoED2WKfiDgfWQDgRrr7Gf09GbSFK+8rOsNr8VQpgY=";
   # Do not run the default build script as it leads to errors caused by the electron-builder configuration
   dontNpmBuild = true;
 
@@ -81,11 +77,9 @@ buildNpmPackage rec {
       --inherit-argv0
 
     pushd build
-    for icon in icon.*; do
-      dir=$out/share/icons/hicolor/"''${icon%.*}"/apps
-      mkdir -p "$dir"
-      cp "$icon" "$dir"/${icon}.png
-    done
+    dir=$out/share/icons/hicolor/512x512/apps
+    mkdir -p "$dir"
+    cp icon.png "$dir"/${icon}.png
     popd
 
     runHook postInstall
@@ -105,10 +99,11 @@ buildNpmPackage rec {
   meta = {
     changelog = "https://github.com/author-more/penpot-desktop/releases/tag/v${version}";
     inherit description;
-    homepage = "https://github.com/author-more/penpot.desktop";
+    homepage = "https://github.com/author-more/penpot-desktop";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [ ntbbloodbath ];
     platforms = electron.meta.platforms;
+    badPlatforms = lib.platforms.darwin;
     mainProgram = "penpot-desktop";
   };
 }

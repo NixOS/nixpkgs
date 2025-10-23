@@ -14,8 +14,9 @@ in
       };
 
       dates = lib.mkOption {
-        default = ["03:45"];
-        type = with lib.types; listOf str;
+        default = [ "03:45" ];
+        apply = lib.toList;
+        type = with lib.types; either singleLineStr (listOf str);
         description = ''
           Specification (in the format described by
           {manpage}`systemd.time(7)`) of the time at
@@ -68,6 +69,8 @@ in
         unitConfig.ConditionPathIsReadWrite = "/nix/var/nix/daemon-socket";
         serviceConfig.ExecStart = "${config.nix.package}/bin/nix-store --optimise";
         startAt = lib.optionals cfg.automatic cfg.dates;
+        # do not start and delay when switching
+        restartIfChanged = false;
       };
 
       timers.nix-optimise = lib.mkIf cfg.automatic {

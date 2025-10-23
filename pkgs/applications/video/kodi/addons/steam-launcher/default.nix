@@ -45,6 +45,6 @@ buildKodiAddon {
       configured via the addon.
     '';
     license = licenses.gpl2Only;
-    maintainers = teams.kodi.members;
+    teams = [ teams.kodi ];
   };
 }

@@ -39,10 +39,10 @@ stdenv.mkDerivation rec {
   postFixup = ''
     wrapProgram $out/bin/redoflacs \
       --prefix PATH : ${
-        lib.makeBinPath ([
+        lib.makeBinPath [
           flac
           sox
-        ])
+        ]
       }
   '';
 

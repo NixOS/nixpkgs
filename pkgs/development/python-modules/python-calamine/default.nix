@@ -1,46 +1,32 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  rustPlatform,
-
-  # buildInputs
-  libiconv,
-
-  # build-system
   cargo,
-  poetry-core,
-  rustc,
-
-  # dependencies
+  fetchFromGitHub,
+  libiconv,
   packaging,
-
-  # tests
+  poetry-core,
   pytestCheckHook,
+  rustc,
+  rustPlatform,
 }:
 
 buildPythonPackage rec {
   pname = "python-calamine";
-  version = "0.3.1";
+  version = "0.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dimastbk";
     repo = "python-calamine";
     tag = "v${version}";
-    hash = "sha256-XR8KzLMQDXy9nt0Z/FRBFaWdOp8RcIIpJjDf5f9h1BE=";
+    hash = "sha256-qbme5P/oo7djoKbGFd+mVz6p4sHl1zejQI9wOarHzMA=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "pyo3-file-0.8.1" = "sha256-EqeXykP7CF8SU5LgT9+y/FDy79E/DAJT2fc1OrmlOZE=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    hash = "sha256-8X6TDCxeDLHObJ+q/bEYTonHe0bgXMnBrIz3rKalfyk=";
   };
-
-  postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
-  '';
 
   buildInputs = [ libiconv ];
 

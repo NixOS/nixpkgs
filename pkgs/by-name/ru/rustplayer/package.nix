@@ -24,12 +24,8 @@ rustPlatform.buildRustPackage {
     ./dynamic-lib.patch
   ];
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "ffmpeg-sys-next-6.0.1" = "sha256-/CcyWDPeVLVSV8NfWFJhj1tGmuqLPnnyvVosIXM27NI=";
-    };
-  };
+  cargoHash = "sha256-cfr5q44SzJ5iYm8cu/3+RkoPaoUklmOV/UbSdZZbu38=";
+
   nativeBuildInputs = [
     pkg-config
     rustPlatform.bindgenHook

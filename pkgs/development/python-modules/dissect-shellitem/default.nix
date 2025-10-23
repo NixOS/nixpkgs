@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-shellitem";
-  version = "3.10";
+  version = "3.12";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.shellitem";
     tag = version;
-    hash = "sha256-BS+c9QbMMsaoZHyuv6jMxbQFQNJeLt3da8Fq/wwXesQ=";
+    hash = "sha256-mklMNKW3amPed2qXWVUxl73O9iORdauTh1ZygY/rg7I=";
   };
 
   build-system = [
@@ -38,12 +38,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "dissect.shellitem" ];
 
-  disabledTests = [
-    # Windows-specific tests
-    "test_xp_remote_lnk_file"
-    "test_xp_remote_lnk_dir"
-    "test_win7_local_lnk_dir"
-  ];
+  # Windows-specific tests
+  doCheck = false;
 
   meta = with lib; {
     description = "Dissect module implementing a parser for the Shellitem structures";

@@ -27,14 +27,14 @@ let
 
   main_src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "mojave-gtk-theme";
     rev = version;
     hash = "sha256-uL4lO6aWiDfOQkhpTnr/iVx1fI7n/fx7WYr5jDWPfYM=";
   };
 
   wallpapers_src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = pname;
+    repo = "mojave-gtk-theme";
     rev = "1dc23c2b45d7e073e080cfb02f43aab0e59b6b2c";
     hash = "sha256-nkw8gXYx8fN1yn0A5M2fWwOvfUQ6izynxRw5JA61InM=";
     name = "wallpapers";
@@ -72,7 +72,7 @@ lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] butt
   themeVariants
 
   stdenvNoCC.mkDerivation
-  rec {
+  {
     inherit pname version;
 
     srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
@@ -137,13 +137,11 @@ lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] butt
       runHook preInstall
 
       name= ./install.sh \
-        ${
-          lib.optionalString (buttonSizeVariants != [ ]) "--small " + builtins.toString buttonSizeVariants
-        } \
-        ${lib.optionalString (buttonVariants != [ ]) "--alt " + builtins.toString buttonVariants} \
-        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
-        ${lib.optionalString (opacityVariants != [ ]) "--opacity " + builtins.toString opacityVariants} \
-        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+        ${lib.optionalString (buttonSizeVariants != [ ]) "--small " + toString buttonSizeVariants} \
+        ${lib.optionalString (buttonVariants != [ ]) "--alt " + toString buttonVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + toString colorVariants} \
+        ${lib.optionalString (opacityVariants != [ ]) "--opacity " + toString opacityVariants} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + toString themeVariants} \
         --icon nixos \
         --dest $out/share/themes
 

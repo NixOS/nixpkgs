@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://panthema.net/2013/sound-of-sorting/";
     license = lib.licenses.gpl3Plus;
     mainProgram = "sound-of-sorting";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (SDL2.meta) platforms;
   };
 })

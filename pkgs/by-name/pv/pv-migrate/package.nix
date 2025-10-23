@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -7,18 +8,18 @@
 
 buildGoModule rec {
   pname = "pv-migrate";
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "utkuozdemir";
-    repo = pname;
+    repo = "pv-migrate";
     tag = "v${version}";
-    sha256 = "sha256-yYY3UgqHdFXoGj6n4kY45J/2QujPboWucnmbbXjjhRM=";
+    sha256 = "sha256-ZCNOg2HZjcEEM+hsAOtRR6hYmoKLyThpIw3warnravc=";
   };
 
   subPackages = [ "cmd/pv-migrate" ];
 
-  vendorHash = "sha256-wMlwfWMrjvo+9VUt8ZUcYHrsa9NOZhCj6LArdqXVCI4=";
+  vendorHash = "sha256-V1IR9teiJeCqekKgTShOEZhtlBbtsnp6eZe6A7q6EAQ=";
 
   ldflags = [
     "-s"
@@ -32,7 +33,7 @@ buildGoModule rec {
     installShellFiles
   ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd pv-migrate \
       --bash <($out/bin/pv-migrate completion bash) \
       --fish <($out/bin/pv-migrate completion fish) \

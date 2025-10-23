@@ -1,38 +1,41 @@
 {
   lib,
-  platformdirs,
+  awesomeversion,
   buildPythonPackage,
   docutils,
   fetchFromGitHub,
   flaky,
   installShellFiles,
+  jq,
+  lxml,
+  nix-update-script,
+  packaging,
+  platformdirs,
   pycurl,
   pytest-asyncio,
-  pytest-httpbin,
   pytestCheckHook,
+  pytest-httpbin,
   pythonOlder,
   setuptools,
   structlog,
   tomli,
   tornado,
-  awesomeversion,
-  packaging,
-  lxml,
+  zstandard,
 }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "2.16";
+  version = "2.19";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lilydjwg";
     repo = "nvchecker";
     tag = "v${version}";
-    hash = "sha256-HdL3BnjQZzKXtjhQqDst6dJH82g3BONFsGUnwzDMRDA=";
+    hash = "sha256-C8g8uhuWOl3zPCjTaGs21yJ8k3tmvZE8U9LzSXoDSxE=";
   };
+
+  __darwinAllowLocalNetworking = true;
 
   build-system = [ setuptools ];
 
@@ -41,14 +44,22 @@ buildPythonPackage rec {
     installShellFiles
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     structlog
     platformdirs
     tornado
     pycurl
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  __darwinAllowLocalNetworking = true;
+  optional-dependencies = {
+    # vercmp = [ pyalpm ];
+    awesomeversion = [ awesomeversion ];
+    pypi = [ packaging ];
+    htmlparser = [ lxml ];
+    rpmrepo = [ lxml ] ++ lib.optionals (pythonOlder "3.14") [ zstandard ];
+    jq = [ jq ];
+  };
 
   nativeCheckInputs = [
     flaky
@@ -68,20 +79,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nvchecker" ];
 
-  pytestFlagsArray = [ "-m 'not needs_net'" ];
+  disabledTestMarks = [ "needs_net" ];
 
-  optional-dependencies = {
-    # vercmp = [ pyalpm ];
-    awesomeversion = [ awesomeversion ];
-    pypi = [ packaging ];
-    htmlparser = [ lxml ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "New version checker for software";
     homepage = "https://github.com/lilydjwg/nvchecker";
-    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/v${version}";
+    changelog = "https://github.com/lilydjwg/nvchecker/releases/tag/${src.tag}";
     license = lib.licenses.mit;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ mdaniels5757 ];
   };
 }

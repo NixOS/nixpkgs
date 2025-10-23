@@ -1,34 +1,34 @@
 {
   lib,
   buildGoModule,
-  gitUpdater,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
   pname = "uniex";
-  version = "0.1.6";
+  version = "0.1.19";
 
   src = fetchFromGitHub {
     owner = "paepckehh";
     repo = "uniex";
     tag = "v${version}";
-    hash = "sha256-LakiFi+4uYaDsLWAq4VXDoZMQU5MRLdFmsdBOglubzQ=";
+    hash = "sha256-6a/jVTDur0h1n+YtbaaZLyhgi1RDJDTTDLJrknHFUxY=";
   };
 
-  vendorHash = "sha256-QLjeMSdvFSxnmnsKwTg4SDkc7xqx4csxTWJKOsRzcBI=";
+  vendorHash = "sha256-s/oWtYziUtSKDQmvDxWznqynlKmWxwt5jAAT5xl+gqo=";
 
   ldflags = [
     "-s"
     "-w"
   ];
 
-  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/paepckehh/uniex/releases/tag/v${version}";
     homepage = "https://paepcke.de/uniex";
-    description = "Tool to export unifi network controller mongodb asset information [csv|json].";
+    description = "Unifi controller device inventory exporter, analyses all device and stat records for complete records";
     license = lib.licenses.bsd3;
     mainProgram = "uniex";
     maintainers = with lib.maintainers; [ paepcke ];

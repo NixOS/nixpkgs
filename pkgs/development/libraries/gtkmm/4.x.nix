@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "4.16.0";
+  version = "4.18.0";
 
   outputs = [
     "out"
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-OyP9Or+PsiOwDpmDtgEK8tuA44yJq2mUuLYjCqhdYPk=";
+    url = "mirror://gnome/sources/gtkmm/${lib.versions.majorMinor version}/gtkmm-${version}.tar.xz";
+    hash = "sha256-LuMcFUefxNjpWLA8i1+7yOF7wSLCovVESXtOBWGeM+w=";
   };
 
   nativeBuildInputs = [
@@ -72,8 +72,8 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = pname;
-      attrPath = "${pname}4";
+      packageName = "gtkmm";
+      attrPath = "gtkmm4";
       versionPolicy = "odd-unstable";
     };
   };
@@ -91,7 +91,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gtkmm.org/";
     license = licenses.lgpl2Plus;
-    maintainers = teams.gnome.members ++ (with maintainers; [ raskin ]);
+    maintainers = with maintainers; [ raskin ];
+    teams = [ teams.gnome ];
     platforms = platforms.unix;
   };
 }

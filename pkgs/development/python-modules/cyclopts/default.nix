@@ -4,59 +4,63 @@
   buildPythonPackage,
   docstring-parser,
   fetchFromGitHub,
-  importlib-metadata,
-  poetry-core,
-  poetry-dynamic-versioning,
+  hatchling,
+  hatch-vcs,
   pydantic,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   pyyaml,
-  rich,
   rich-rst,
-  typing-extensions,
+  rich,
+  trio,
 }:
 
 buildPythonPackage rec {
   pname = "cyclopts";
-  version = "3.9.2";
+  version = "4.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "BrianPugh";
     repo = "cyclopts";
     tag = "v${version}";
-    hash = "sha256-Juu9OeSygHzhny9leS250YhsP+/3/0Dor9SXFP+wMPA=";
+    hash = "sha256-efc3P5xOy6YTWoCNOjatjELOEUh6Obfkf8U94GO4+40=";
   };
 
   build-system = [
-    poetry-core
-    poetry-dynamic-versioning
+    hatchling
+    hatch-vcs
   ];
 
   dependencies = [
     attrs
     docstring-parser
-    importlib-metadata
     rich
     rich-rst
-    typing-extensions
   ];
+
+  optional-dependencies = {
+    trio = [ trio ];
+    yaml = [ pyyaml ];
+  };
 
   nativeCheckInputs = [
     pydantic
     pytest-mock
     pytestCheckHook
-    pyyaml
-  ];
+  ]
+  ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "cyclopts" ];
 
   disabledTests = [
-    # Assertion error
-    "test_pydantic_error_msg"
+    # Test requires bash
+    "test_positional_not_treated_as_command"
+  ];
+
+  disabledTestPaths = [
+    # Tests requires sphinx
+    "tests/test_sphinx_ext.py"
   ];
 
   meta = with lib; {

@@ -1,16 +1,22 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "stripe-cli";
-  version = "1.25.0";
+  version = "1.30.0";
 
   src = fetchFromGitHub {
     owner = "stripe";
     repo = "stripe-cli";
     rev = "v${version}";
-    hash = "sha256-DSJqP55Va0stqVrYSCVsysANTAeVd0UAlCH24gbihnU=";
+    hash = "sha256-qDrEDP3gDHggXxavMVuVitFN+OWz5WlamePS/1/zlq8=";
   };
-  vendorHash = "sha256-dWLrJ866R+yPEYs4vc8SRADZXC1xCO7sDosHbU1G63o=";
+  vendorHash = "sha256-EDdRgApJ7gv/4ma/IfaHi+jjpTPegsUfqHbvoFMn048=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,17 +39,22 @@ buildGoModule rec {
     rm pkg/login/client_login_test.go
     rm pkg/git/editor_test.go
     rm pkg/rpcservice/sample_create_test.go
-  '' + lib.optionalString (
-      # delete plugin tests on all platforms but exact matches
-      # https://github.com/stripe/stripe-cli/issues/850
-      ! lib.lists.any
-        (platform: lib.meta.platformMatch stdenv.hostPlatform platform)
-        [ "x86_64-linux" "x86_64-darwin" ]
-  ) ''
-    rm pkg/plugins/plugin_test.go
-  '';
+  ''
+  +
+    lib.optionalString
+      (
+        # delete plugin tests on all platforms but exact matches
+        # https://github.com/stripe/stripe-cli/issues/850
+        !lib.lists.any (platform: lib.meta.platformMatch stdenv.hostPlatform platform) [
+          "x86_64-linux"
+          "x86_64-darwin"
+        ]
+      )
+      ''
+        rm pkg/plugins/plugin_test.go
+      '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd stripe \
       --bash <($out/bin/stripe completion --write-to-stdout --shell bash) \
       --zsh <($out/bin/stripe completion --write-to-stdout --shell zsh)
@@ -57,7 +68,7 @@ buildGoModule rec {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://stripe.com/docs/stripe-cli";
     changelog = "https://github.com/stripe/stripe-cli/releases/tag/v${version}";
     description = "Command-line tool for Stripe";
@@ -71,8 +82,12 @@ buildGoModule rec {
       Tail your API request logs in real-time
       Create, retrieve, update, or delete API objects.
     '';
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ RaghavSood jk kashw2 ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [
+      RaghavSood
+      jk
+      kashw2
+    ];
     mainProgram = "stripe";
   };
 }

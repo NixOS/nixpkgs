@@ -2,10 +2,19 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  flit-core,
+
+  # dependencies
+  absl-py,
   chex,
+  jax,
   jaxlib,
   numpy,
   tensorflow-probability,
+
+  # tests
   dm-haiku,
   pytest-xdist,
   pytestCheckHook,
@@ -13,18 +22,24 @@
 
 buildPythonPackage rec {
   pname = "distrax";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "distrax";
     tag = "v${version}";
-    hash = "sha256-A1aCL/I89Blg9sNmIWQru4QJteUTN6+bhgrEJPmCrM0=";
+    hash = "sha256-R6rGGNzup3O6eZ2z4vygYWTjroE/Irt3aog8Op+0hco=";
   };
 
+  build-system = [
+    flit-core
+  ];
+
   dependencies = [
+    absl-py
     chex
+    jax
     jaxlib
     numpy
     tensorflow-probability
@@ -71,6 +86,10 @@ buildPythonPackage rec {
   ];
 
   disabledTestPaths = [
+    # Since jax 0.6.0:
+    # TypeError: <lambda>() got an unexpected keyword argument 'accuracy'
+    "distrax/_src/bijectors/lambda_bijector_test.py"
+
     # TypeErrors
     "distrax/_src/bijectors/tfp_compatible_bijector_test.py"
     "distrax/_src/distributions/distribution_from_tfp_test.py"

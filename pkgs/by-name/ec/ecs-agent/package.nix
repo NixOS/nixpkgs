@@ -1,14 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "amazon-ecs-agent";
-  version = "1.90.0";
+  version = "1.99.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "aws";
-    repo = pname;
-    hash = "sha256-XzcEmXW2JblclSFyZgejn802tiNpbNUw22493lhsiqc=";
+    repo = "amazon-ecs-agent";
+    hash = "sha256-aGmXu+ho5H6vPTBWR5OvqDcmFQN87BOl99HGIek24CE=";
   };
 
   vendorHash = null;
@@ -17,16 +21,18 @@ buildGoModule rec {
 
   excludedPackages = [ "./version/gen" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Agent that runs on AWS EC2 container instances and starts containers on behalf of Amazon ECS";
     homepage = "https://github.com/aws/amazon-ecs-agent";
     changelog = "https://github.com/aws/amazon-ecs-agent/raw/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ copumpkin ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
     mainProgram = "agent";
   };
 }
-

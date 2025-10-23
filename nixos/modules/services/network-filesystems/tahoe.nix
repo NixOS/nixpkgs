@@ -140,7 +140,7 @@ in
             sftpd.enable = lib.mkEnableOption "SFTP service";
             sftpd.port = lib.mkOption {
               default = null;
-              type = lib.types.nullOr lib.types.int;
+              type = lib.types.nullOr lib.types.port;
               description = ''
                 The port on which the SFTP server will listen.
 
@@ -218,6 +218,7 @@ in
         in
         lib.nameValuePair "tahoe.introducer-${node}" {
           description = "Tahoe LAFS node ${node}";
+          documentation = [ "info:tahoe-lafs" ];
           wantedBy = [ "multi-user.target" ];
           path = [ settings.package ];
           restartTriggers = [
@@ -329,6 +330,7 @@ in
         in
         lib.nameValuePair "tahoe.${node}" {
           description = "Tahoe LAFS node ${node}";
+          documentation = [ "info:tahoe-lafs" ];
           wantedBy = [ "multi-user.target" ];
           path = [ settings.package ];
           restartTriggers = [

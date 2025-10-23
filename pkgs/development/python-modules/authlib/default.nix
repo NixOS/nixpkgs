@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "authlib";
-  version = "1.5.0";
+  version = "1.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -29,7 +29,7 @@ buildPythonPackage rec {
     owner = "lepture";
     repo = "authlib";
     tag = "v${version}";
-    hash = "sha256-RrsQTrOV2v3SzdM7kqdFe1Uj7A+o/Yseq1j7CCG8qtg=";
+    hash = "sha256-AzIjfUH89tYZwVnOpdSwEzaGNpedfQ50k9diKUfH+Fg=";
   };
 
   build-system = [ setuptools ];
@@ -50,11 +50,6 @@ buildPythonPackage rec {
     starlette
     werkzeug
   ];
-
-  preCheck = ''
-    # httpx 0.28.0+ requires SSL_CERT_FILE or SSL_CERT_DIR
-    export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
 
   pythonImportsCheck = [ "authlib" ];
 

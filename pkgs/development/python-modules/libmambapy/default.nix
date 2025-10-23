@@ -1,6 +1,6 @@
 {
   lib,
-  pythonPackages,
+  python,
   buildPythonPackage,
   cmake,
   ninja,
@@ -21,7 +21,7 @@
   wheel,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "libmambapy";
   pyproject = true;
 
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    (libmamba.override { python3Packages = pythonPackages; })
+    (libmamba.override { python3 = python; })
     curl
     zstd
     bzip2

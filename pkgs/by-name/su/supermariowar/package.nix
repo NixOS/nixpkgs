@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "supermariowar";
-  version = "2024-unstable-2025-01-30";
+  version = "2024-unstable-2025-06-18";
 
   src = fetchFromGitHub {
     owner = "mmatyas";
     repo = "supermariowar";
-    rev = "8192bbda2eca807cfe1e2793018bd55ecdaac50a";
-    hash = "sha256-i/UdKXIOUViv+FJFyss3Xa4Z8+OwW2CQjJ3hROZVaRA=";
+    rev = "71383b07b99a52b57be79cf371ab718337365019";
+    hash = "sha256-PjweE8cGAp8V4LY0/6QzLekQ80Q1qbwDiiSzDirA29s=";
     fetchSubmodules = true;
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    description = "A fan-made multiplayer Super Mario Bros. style deathmatch game";
+    description = "Fan-made multiplayer Super Mario Bros. style deathmatch game";
     homepage = "https://github.com/mmatyas/supermariowar";
     changelog = "https://github.com/mmatyas/supermariowar/blob/${finalAttrs.src.rev}/CHANGELOG";
     license = lib.licenses.gpl2Plus;

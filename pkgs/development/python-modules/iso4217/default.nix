@@ -18,7 +18,7 @@ let
 in
 buildPythonPackage rec {
   pname = "iso4217";
-  version = "1.12";
+  version = "1.14";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "dahlia";
     repo = "iso4217";
     tag = version;
-    hash = "sha256-xOKfdk8Bn9f5oszS0IHUD6HgzL9VSa5GBZ28n4fvAck=";
+    hash = "sha256-lGXNSUBv/So3UgqXQ5AksqrCJVoyU8icDCfOda7Y5BE=";
   };
 
   build-system = [ setuptools ];
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     cp -r ${table} $out/${python.sitePackages}/iso4217/table.xml
   '';
 
-  pytestFlagsArray = [ "iso4217/test.py" ];
+  enabledTestPaths = [ "iso4217/test.py" ];
 
   pythonImportsCheck = [ "iso4217" ];
 

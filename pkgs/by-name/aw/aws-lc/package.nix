@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  overrideSDK,
   cmakeMinimal,
   fetchFromGitHub,
   ninja,
@@ -9,18 +8,15 @@
   aws-lc,
   useSharedLibraries ? !stdenv.hostPlatform.isStatic,
 }:
-let
-  awsStdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-awsStdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "aws-lc";
-  version = "1.46.1";
+  version = "1.56.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "aws-lc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-VuyPR7MVccKo/RROatKos8B3TyyBuNTIZBwgAUVbfgk=";
+    hash = "sha256-h7GrR86h/Z9pfJowABJFwBf/TlQzsMMG2x0/dsepbmQ=";
   };
 
   outputs = [
@@ -63,6 +59,8 @@ awsStdenv.mkDerivation (finalAttrs: {
         --replace-fail 'INTERFACE_INCLUDE_DIRECTORIES "''${_IMPORT_PREFIX}/include"' 'INTERFACE_INCLUDE_DIRECTORIES ""'
     done
   '';
+
+  __darwinAllowLocalNetworking = true;
 
   passthru.tests = {
     version = testers.testVersion {

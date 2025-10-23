@@ -7,15 +7,20 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pifpaf";
-  version = "3.3.0";
-  format = "setuptools";
+  version = "3.4.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-xXkMj1sP1xXf6Ad/71BFbq8SHz/uHcaSqv6RQN0Ca1o=";
+    hash = "sha256-f9nPb483tuvNk82wDtuB6553z18qY/x0tgz1NbVGUWE=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    setuptools
+    setuptools-scm
+  ];
+
+  dependencies = with python3Packages; [
     click
     daiquiri
     fixtures

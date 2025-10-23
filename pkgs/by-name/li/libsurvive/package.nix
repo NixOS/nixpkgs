@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cntools";
     repo = "libsurvive";
-    rev = "v${version}";
+    tag = "v${version}";
     # Fixes 'Unknown CMake command "cnkalman_generate_code"'
     fetchSubmodules = true;
     hash = "sha256-NcxdTKra+YkLt/iu9+1QCeQZLV3/qlhma2Ns/+ZYVsk=";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "Open Source Lighthouse Tracking System";
     homepage = "https://github.com/cntools/libsurvive";
     license = licenses.mit;
-    maintainers = with maintainers; [ prusnak ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

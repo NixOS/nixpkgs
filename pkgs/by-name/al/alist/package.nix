@@ -11,14 +11,14 @@
 }:
 buildGoModule rec {
   pname = "alist";
-  version = "3.42.0";
-  webVersion = "3.42.0";
+  version = "3.45.0";
+  webVersion = "3.45.0";
 
   src = fetchFromGitHub {
     owner = "AlistGo";
     repo = "alist";
     tag = "v${version}";
-    hash = "sha256-qUW9bA2TeAVve77i43+ITxClLaO3aqm5959itf+iFqs=";
+    hash = "sha256-h8oWeTX3z3xye5O4+s7LA7Wm36JOrsU+UdKGZXaDKXk=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -32,11 +32,11 @@ buildGoModule rec {
   };
   web = fetchzip {
     url = "https://github.com/AlistGo/alist-web/releases/download/${webVersion}/dist.tar.gz";
-    hash = "sha256-g2+qdLrxuyuqxlyVk32BKJCbMfXNs29KLEPxAkTQHjU=";
+    hash = "sha256-rNVa+dr/SX2aYHBzeV8QdD5XYCFyelhbqkTpvhF+S2g=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-uid+uT4eOtDsCNsKqGqPc4vMDnKUatG4V2n0Z7r6ccY=";
+  vendorHash = "sha256-IMoLVAgOaVM1xIFDe8BGOpzyBnDMfD9Q6VogFfOWFzU=";
 
   buildInputs = [ fuse ];
 
@@ -102,6 +102,10 @@ buildGoModule rec {
       agpl3Only
       # alist-web
       mit
+    ];
+    knownVulnerabilities = [
+      "Alist was acquired by Bugotech, a company distrusted by the community"
+      "Uses a questionable API server alist.nn.ci for account creation for certain drivers"
     ];
     maintainers = with lib.maintainers; [ moraxyc ];
     sourceProvenance = with lib.sourceTypes; [

@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "dploot";
-  version = "3.1.0";
+  version = "3.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-DlMaEkgbDHQb5BV0mI8qjTBGpmRX7bP67MZO4g+I1uI=";
+    hash = "sha256-xCw4mAP9CUtcTeQQ//4zI0BcQUmTai9hvYSZ9F9k4rc=";
   };
 
   pythonRelaxDeps = [
@@ -27,7 +27,6 @@ buildPythonPackage rec {
     "lxml"
     "pyasn1"
   ];
-
 
   build-system = [ poetry-core ];
 

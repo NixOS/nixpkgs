@@ -1,11 +1,12 @@
 {
   lib,
+  attrs,
+  authlib,
   avro,
   azure-identity,
   azure-keyvault-keys,
   boto3,
   buildPythonPackage,
-  cacert,
   cachetools,
   fastavro,
   fetchFromGitHub,
@@ -13,7 +14,9 @@
   google-api-core,
   google-cloud-kms,
   hvac,
+  httpx,
   jsonschema,
+  orjson,
   protobuf,
   pyflakes,
   pyrsistent,
@@ -29,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "confluent-kafka";
-  version = "2.8.0";
+  version = "2.11.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -38,7 +41,7 @@ buildPythonPackage rec {
     owner = "confluentinc";
     repo = "confluent-kafka-python";
     tag = "v${version}";
-    hash = "sha256-EDEp260G/t7s17RlbT+Bcl7FZlVQFagNijDNw53DFpY=";
+    hash = "sha256-WpvWv6UG7T0yJ1ZKZweHbWjh+C0PbEIYbbMAS4yyhzg=";
   };
 
   buildInputs = [ rdkafka ];
@@ -74,21 +77,24 @@ buildPythonPackage rec {
       pyyaml
       # TODO: tink
     ];
-    schema-registry = [ requests ];
+    schema-registry = [
+      attrs
+      authlib
+      cachetools
+      httpx
+      orjson
+    ];
   };
 
   nativeCheckInputs = [
     cachetools
+    orjson
     pyflakes
     pytestCheckHook
     requests-mock
     respx
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    # httpx since 0.28.0+ depends on SSL_CERT_FILE
-    SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
-  '';
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "confluent_kafka" ];
 
@@ -96,10 +102,17 @@ buildPythonPackage rec {
     "tests/integration/"
     "tests/test_Admin.py"
     "tests/test_misc.py"
+    # Failed: async def functions are not natively supported.
+    "tests/schema_registry/_async"
     # missing cel-python dependency
-    "tests/schema_registry/test_avro_serdes.py"
-    "tests/schema_registry/test_json_serdes.py"
-    "tests/schema_registry/test_proto_serdes.py"
+    "tests/schema_registry/_sync/test_avro_serdes.py"
+    "tests/schema_registry/_sync/test_json_serdes.py"
+    "tests/schema_registry/_sync/test_proto_serdes.py"
+    # missing tink dependency
+    "tests/schema_registry/_async/test_config.py"
+    "tests/schema_registry/_sync/test_config.py"
+    # crashes the test runner on shutdown
+    "tests/test_kafka_error.py"
   ];
 
   meta = with lib; {

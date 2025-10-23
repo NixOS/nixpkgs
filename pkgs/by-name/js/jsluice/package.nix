@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-buildGoModule rec {
+buildGoModule {
   pname = "jsluice";
-  version = "unstable-2023-06-23";
+  version = "0-unstable-2023-06-23";
 
   src = fetchFromGitHub {
     owner = "BishopFox";

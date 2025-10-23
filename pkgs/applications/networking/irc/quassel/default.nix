@@ -63,43 +63,41 @@ in
     cmake
     makeWrapper
   ];
-  buildInputs =
-    [
-      qtbase
-      boost
-      zlib
-    ]
-    ++ lib.optionals buildCore [
-      qtscript
-      qca-qt5
-      openldap
-    ]
-    ++ lib.optionals buildClient [
-      libdbusmenu
-      phonon
-    ]
-    ++ lib.optionals (buildClient && withKDE) [
-      extra-cmake-modules
-      kconfigwidgets
-      kcoreaddons
-      knotifications
-      knotifyconfig
-      ktextwidgets
-      kwidgetsaddons
-      kxmlgui
-    ];
+  buildInputs = [
+    qtbase
+    boost
+    zlib
+  ]
+  ++ lib.optionals buildCore [
+    qtscript
+    qca-qt5
+    openldap
+  ]
+  ++ lib.optionals buildClient [
+    libdbusmenu
+    phonon
+  ]
+  ++ lib.optionals (buildClient && withKDE) [
+    extra-cmake-modules
+    kconfigwidgets
+    kcoreaddons
+    knotifications
+    knotifyconfig
+    ktextwidgets
+    kwidgetsaddons
+    kxmlgui
+  ];
 
-  cmakeFlags =
-    [
-      "-DEMBED_DATA=OFF"
-      "-DUSE_QT5=ON"
-    ]
-    ++ edf static "STATIC"
-    ++ edf monolithic "WANT_MONO"
-    ++ edf enableDaemon "WANT_CORE"
-    ++ edf enableDaemon "WITH_LDAP"
-    ++ edf client "WANT_QTCLIENT"
-    ++ edf withKDE "WITH_KDE";
+  cmakeFlags = [
+    "-DEMBED_DATA=OFF"
+    "-DUSE_QT5=ON"
+  ]
+  ++ edf static "STATIC"
+  ++ edf monolithic "WANT_MONO"
+  ++ edf enableDaemon "WANT_CORE"
+  ++ edf enableDaemon "WITH_LDAP"
+  ++ edf client "WANT_QTCLIENT"
+  ++ edf withKDE "WITH_KDE";
 
   dontWrapQtApps = true;
 
@@ -124,6 +122,13 @@ in
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ ttuegel ];
+    mainProgram =
+      if monolithic then
+        "quassel"
+      else if buildClient then
+        "quasselclient"
+      else
+        "quasselcore";
     inherit (qtbase.meta) platforms;
   };
 }

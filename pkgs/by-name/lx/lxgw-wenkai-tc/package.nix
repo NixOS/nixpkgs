@@ -6,10 +6,10 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "lxgw-wenkai-tc";
-  version = "1.510";
+  version = "1.521";
   src = fetchurl {
     url = "https://github.com/lxgw/LxgwWenKaiTC/releases/download/v${version}/lxgw-wenkai-tc-v${version}.tar.gz";
-    hash = "sha256-gcPEGs1oawxRGcKZawxJsJ0q179Zd9iAFIplnF4oWY4=";
+    hash = "sha256-secUl91sR6AgHD1ac96ka4BtaMjdQYUPnzVM7jgv5n4=";
   };
 
   installPhase = ''

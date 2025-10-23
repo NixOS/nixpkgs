@@ -51,14 +51,14 @@ derivationWithMeta {
           ]
         );
       }
-      // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+      // (removeAttrs env [ "nativeBuildInputs" ])
     );
 
   meta = with lib; {
     description = "Minimal build tool for running scripts on systems that lack any shell";
     homepage = "https://github.com/oriansj/mescc-tools";
     license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
+    teams = [ teams.minimal-bootstrap ];
     inherit platforms;
   };
 }

@@ -3,23 +3,20 @@
   buildPythonPackage,
   cython,
   fetchFromGitHub,
-  pythonOlder,
   setuptools,
   wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyjson5";
-  version = "1.6.8";
+  version = "2.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "Kijewski";
     repo = "pyjson5";
     tag = "v${version}";
-    hash = "sha256-3Mj5Kjas+uArTEt0c6NxWgQBVWjPVKhQ+ET1npAlpt8=";
+    hash = "sha256-vHO354ZjaQirOWavfaDvenE+MLQLhWF3bCHa5Z1NNXg=";
     fetchSubmodules = true;
   };
 

@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "responses";
-  version = "0.25.6";
+  version = "0.25.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,9 +27,9 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "getsentry";
-    repo = pname;
+    repo = "responses";
     tag = version;
-    hash = "sha256-Y7q1tN4bQmGV9sryMJRXi1ztoACHdBb0Sa4c35E1Nps=";
+    hash = "sha256-eiJwu0sRtr3S4yAnbsIak7g03CNqOTS16rNXoXRQumA=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -47,7 +47,8 @@ buildPythonPackage rec {
     pytest-httpserver
     pytestCheckHook
     tomli-w
-  ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
+  ]
+  ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   pythonImportsCheck = [ "responses" ];
 

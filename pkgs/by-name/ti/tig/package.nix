@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.5.12";
+  version = "2.6.0";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = "tig";
     rev = "tig-${version}";
-    sha256 = "sha256-2kNogpzu8e/abjwo18s1G5ZcSZdG5c/Ydp6tfezumdk=";
+    sha256 = "sha256-LJVK4y4C/TyM7sD/AZeHyavZ66SoeSh1y+hXnAAKMws=";
   };
 
   nativeBuildInputs = [
@@ -48,7 +48,8 @@ stdenv.mkDerivation rec {
     ncurses
     readline
     git
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # those files are inherently impure, we'll handle the corresponding dependencies.
   postPatch = ''
@@ -81,7 +82,6 @@ stdenv.mkDerivation rec {
     description = "Text-mode interface for git";
     maintainers = with maintainers; [
       bjornfor
-      domenkozar
       qknight
       globin
       ma27

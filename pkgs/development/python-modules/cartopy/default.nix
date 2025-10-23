@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "cartopy";
-  version = "0.24.1";
+  version = "0.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-AckQ1WNMaafv3sRuChfUc9Iyh2fwAdTcC1xLSOWFyL0=";
+    hash = "sha256-VfGjkOXz8HWyIcfZH7ECWK2XjbeGx5MOugbrRdKHU/4=";
   };
 
   build-system = [ setuptools-scm ];
@@ -69,18 +69,22 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mpl
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  ]
+  ++ lib.flatten (lib.attrValues optional-dependencies);
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
     export HOME=$TMPDIR
   '';
 
-  pytestFlagsArray = [
+  pytestFlags = [
     "--pyargs"
     "cartopy"
-    "-m"
-    "'not network and not natural_earth'"
+  ];
+
+  disabledTestMarks = [
+    "network"
+    "natural_earth"
   ];
 
   disabledTests = [
@@ -93,7 +97,7 @@ buildPythonPackage rec {
     homepage = "https://scitools.org.uk/cartopy/docs/latest/";
     changelog = "https://github.com/SciTools/cartopy/releases/tag/v${version}";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "feature_download";
   };
 }

@@ -2,11 +2,12 @@
   stdenv,
   lib,
   fetchFromGitLab,
-  fetchpatch,
+  fetchpatch2,
   gitUpdater,
   testers,
   boost186,
   cmake,
+  ctestCheckHook,
   dbus,
   doxygen,
   graphviz,
@@ -20,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dbus-cpp";
-  version = "5.0.3";
+  version = "5.0.5";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/dbus-cpp";
-    rev = finalAttrs.version;
-    hash = "sha256-t8SzPRUuKeEchT8vAsITf8MwbgHA+mR5C9CnkdVyX7s=";
+    tag = finalAttrs.version;
+    hash = "sha256-+QqmZsBFmYRwaAFqRyMBxVFFrjZGBDdMaW4YD/7D2gU=";
   };
 
   outputs = [
@@ -37,39 +38,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    # Handle already-stolen dbus call better
-    # Remove when version > 5.0.3
-    (fetchpatch {
-      name = "0001-dbus-cpp-src-Dont-steal-a-pending-dbus-call-more-then-once.patch";
-      url = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/commit/9f3d1ff2b1c6c732285949c3dbb35e40cf55ea92.patch";
-      hash = "sha256-xzOCIJVsK2J+X9RsV930R9uw6h4UxqwSaNOgv8v4qQU=";
-    })
-
-    # Fix GCC13 compilation
-    # Remove when version > 5.0.3
-    (fetchpatch {
-      name = "0002-dbus-cpp-Add-missing-headers-for-GCC13.patch";
-      url = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/commit/c761b1eec084962dbe64d35d7f7b86dcbe57a3f7.patch";
-      hash = "sha256-/tKe3iHWxP9jWtpdgwwRynj8565u9LxCt4WXJDXzgX4=";
+    # Provide more information when there's an issue in AsyncExecutionLoadTest.RepeatedlyInvokingAnAsyncFunctionWorks
+    # Remove when version > 5.0.5
+    (fetchpatch2 {
+      name = "0001-dbus-cpp-tests-async_execution_load_test-Print-received-error-on-DBus-method-failure.name";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/commit/8390ce83153c2ae29f21afd2bf5e79e88c59e6d9.diff";
+      hash = "sha256-js2nXT7eG9dcX+yoFMNRVlamQxsbJclmKTX6/5RxxM4=";
     })
   ];
 
-  postPatch =
-    ''
-      substituteInPlace doc/CMakeLists.txt \
-        --replace 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
+  postPatch = ''
+    substituteInPlace doc/CMakeLists.txt \
+      --replace-fail 'DESTINATION share/''${CMAKE_PROJECT_NAME}/doc' 'DESTINATION ''${CMAKE_INSTALL_DOCDIR}'
 
-      # Warning on aarch64-linux breaks build due to -Werror
-      substituteInPlace CMakeLists.txt \
-        --replace '-Werror' ""
+    # Warning on aarch64-linux breaks build due to -Werror
+    substituteInPlace CMakeLists.txt \
+      --replace-fail '-Werror' ""
 
-      # pkg-config output patching hook expects prefix variable here
-      substituteInPlace data/dbus-cpp.pc.in \
-        --replace 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
-    ''
-    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-      sed -i -e '/add_subdirectory(tests)/d' CMakeLists.txt
-    '';
+    # pkg-config output patching hook expects prefix variable here
+    substituteInPlace data/dbus-cpp.pc.in \
+      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  ''
+  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'add_subdirectory(tests)' '# add_subdirectory(tests)'
+  '';
 
   strictDeps = true;
 
@@ -90,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    ctestCheckHook
     dbus
   ];
 
@@ -98,31 +92,42 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DDBUS_CPP_ENABLE_DOC_GENERATION=ON"
+    (lib.cmakeBool "DBUS_CPP_ENABLE_DOC_GENERATION" true)
   ];
 
-  # Too flaky on ARM CI & for some amd64 users
-  doCheck = false;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # DBus, parallelism messes with communication
   enableParallelChecking = false;
+
+  disabledTests = [
+    # Possible memory corruption in Executor.TimeoutsAreHandledCorrectly
+    # https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/10
+    "executor_test"
+  ];
 
   preFixup = ''
     moveToOutput libexec/examples $examples
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = finalAttrs.finalPackage;
+      # Not bumped for 5.0.5: https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/issues/9
+      # Try again on next bump.
+      versionCheck = finalAttrs.version != "5.0.5";
+    };
     updateScript = gitUpdater { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Dbus-binding leveraging C++-11";
     homepage = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp";
-    license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ OPNA2608 ];
+    changelog = "https://gitlab.com/ubports/development/core/lib-cpp/dbus-cpp/-/blob/${finalAttrs.version}/ChangeLog";
+    license = lib.licenses.lgpl3Only;
+    maintainers = with lib.maintainers; [ OPNA2608 ];
     mainProgram = "dbus-cppc";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     pkgConfigModules = [
       "dbus-cpp"
     ];

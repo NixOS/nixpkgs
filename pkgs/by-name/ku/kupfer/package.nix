@@ -20,13 +20,13 @@ with python3Packages;
 
 buildPythonApplication rec {
   pname = "kupfer";
-  version = "327";
+  version = "328";
 
   format = "other";
 
   src = fetchurl {
     url = "https://github.com/kupferlauncher/kupfer/releases/download/v${version}/kupfer-v${version}.tar.xz";
-    sha256 = "sha256-F5ScSfD/LwpSOAAqTN0WX5yFhoz23DYfeCC+KuvixYM=";
+    sha256 = "sha256-1oPvcho54uXCvov4eTZTjObL0EecimfxVOxl+bOU6do=";
   };
 
   nativeBuildInputs = [

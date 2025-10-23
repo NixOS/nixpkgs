@@ -13,16 +13,16 @@
 
 buildPythonPackage rec {
   pname = "aiolifx-themes";
-  version = "0.6.9";
+  version = "1.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "Djelibeybi";
     repo = "aiolifx-themes";
     tag = "v${version}";
-    hash = "sha256-cAPPYqUjXFnPu2h/Kc0SpF8MMjK+1KSEg0xe3Al2QeA=";
+    hash = "sha256-uJQWKgmlNwuvIXfK6fFHngaSncgaDJJ36vkOLGWB/lY=";
   };
 
   build-system = [ poetry-core ];

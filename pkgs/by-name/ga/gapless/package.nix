@@ -16,14 +16,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "gapless";
-  version = "4.3.1";
+  version = "4.5";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "neithern";
     repo = "g4music";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zLjpYGZR/o76onSjwfpHEx26vd8rUa/1PXL+DuC8C2o=";
+    hash = "sha256-P8hmywS/k+24KfFxpQdnBv0ArD+pKgUNcYk/Mnsx5jY=";
   };
 
   nativeBuildInputs = [
@@ -36,17 +36,16 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      libadwaita
-    ]
-    ++ (with gst_all_1; [
-      gst-plugins-bad
-      gst-plugins-base
-      gst-plugins-good
-      gstreamer
-    ]);
+  buildInputs = [
+    gtk4
+    libadwaita
+  ]
+  ++ (with gst_all_1; [
+    gst-plugins-bad
+    gst-plugins-base
+    gst-plugins-good
+    gstreamer
+  ]);
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

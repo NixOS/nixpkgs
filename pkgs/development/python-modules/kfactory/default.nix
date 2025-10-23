@@ -2,37 +2,45 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pytestCheckHook,
+
+  # build-system
   setuptools,
   setuptools-scm,
-  klayout,
+
+  # dependencies
   aenum,
   cachetools,
-  gitpython,
+  klayout,
   loguru,
-  pydantic,
+  numpy,
+  pydantic-extra-types,
   pydantic-settings,
+  pydantic,
+  pygit2,
+  rapidfuzz,
   rectangle-packer,
   requests,
   ruamel-yaml-string,
+  ruamel-yaml,
   scipy,
-  tomli,
+  semver,
   toolz,
   typer,
-  numpy,
-  ruamel-yaml,
+
+  # tests
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "kfactory";
-  version = "0.21.7";
+  version = "1.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gdsfactory";
     repo = "kfactory";
-    rev = "v${version}";
-    sha256 = "sha256-VLhAJ5rOBKEO1FDCnlaseA+SmrMSoyS+BaEzjdHm59Y=";
+    tag = "v${version}";
+    hash = "sha256-el3bGv57mAfxYG9tdLX5N6R76F+9GY9jdZaIUjMqcVU=";
   };
 
   build-system = [
@@ -43,18 +51,20 @@ buildPythonPackage rec {
   dependencies = [
     aenum
     cachetools
-    gitpython
     klayout
     loguru
     numpy
     pydantic
+    pydantic-extra-types
     pydantic-settings
+    pygit2
+    rapidfuzz
     rectangle-packer
     requests
     ruamel-yaml
     ruamel-yaml-string
     scipy
-    tomli
+    semver
     toolz
     typer
   ];
@@ -63,15 +73,18 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  # https://github.com/gdsfactory/kfactory/issues/511
   disabledTestPaths = [
+    # https://github.com/gdsfactory/kfactory/issues/511
     "tests/test_pdk.py"
+    # NameError
+    "tests/test_session.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "KLayout API implementation of gdsfactory";
     homepage = "https://github.com/gdsfactory/kfactory";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fbeffa ];
+    changelog = "https://github.com/gdsfactory/kfactory/blob/${src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fbeffa ];
   };
 }

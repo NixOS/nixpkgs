@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-bigquery-datatransfer";
-  version = "3.19.0";
+  version = "3.19.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_bigquery_datatransfer";
     inherit version;
-    hash = "sha256-qQ330hnnZyC4X+QvlrSF+Z/FGCsaETzP47CgzAHHS+0=";
+    hash = "sha256-l/9g7Sc6umoVdPf6kzE08gRmLH6co2dLJ8mdLPLXtN8=";
   };
 
   build-system = [ setuptools ];
@@ -35,7 +35,8 @@ buildPythonPackage rec {
     proto-plus
     protobuf
     pytz
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     mock

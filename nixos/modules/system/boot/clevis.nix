@@ -22,23 +22,18 @@ in
   options = {
     boot.initrd.clevis.enable = lib.mkEnableOption "Clevis in initrd";
 
-    boot.initrd.clevis.package = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.clevis;
-      defaultText = "pkgs.clevis";
-      description = "Clevis package";
-    };
+    boot.initrd.clevis.package = lib.mkPackageOption pkgs "clevis" { };
 
     boot.initrd.clevis.devices = lib.mkOption {
       description = "Encrypted devices that need to be unlocked at boot using Clevis";
       default = { };
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options.secretFile = lib.mkOption {
             description = "Clevis JWE file used to decrypt the device at boot, in concert with the chosen pin (one of TPM2, Tang server, or SSS).";
             type = lib.types.path;
           };
-        })
+        }
       );
     };
 
@@ -81,7 +76,7 @@ in
       extraUtilsCommands = lib.mkIf (!systemd.enable) ''
         copy_bin_and_libs ${pkgs.jose}/bin/jose
         copy_bin_and_libs ${pkgs.curl}/bin/curl
-        copy_bin_and_libs ${pkgs.bash}/bin/bash
+        copy_bin_and_libs ${pkgs.bashNonInteractive}/bin/bash
 
         copy_bin_and_libs ${pkgs.tpm2-tools}/bin/.tpm2-wrapped
         mv $out/bin/{.tpm2-wrapped,tpm2}
@@ -95,7 +90,7 @@ in
         done
 
         for BIN in $out/bin/clevis{,-decrypt{,-null,-tang,-tpm2}}; do
-          sed -i $BIN -e 's,${pkgs.bash},,' -e 's,${pkgs.coreutils},,'
+          sed -i $BIN -e 's,${pkgs.bashNonInteractive},,' -e 's,${pkgs.coreutils},,'
         done
 
         sed -i $out/bin/clevis-decrypt-tpm2 -e 's,tpm2_,tpm2 ,'

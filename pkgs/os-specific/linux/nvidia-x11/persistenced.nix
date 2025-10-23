@@ -5,10 +5,12 @@ nvidia_x11: sha256:
   lib,
   fetchFromGitHub,
   m4,
+  glibc,
   libtirpc,
+  pkg-config,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "nvidia-persistenced";
   version = nvidia_x11.persistencedVersion;
 
@@ -19,10 +21,23 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [ m4 ];
-  buildInputs = [ libtirpc ];
+  env = {
+    LIBRARY_PATH = "${glibc}/lib";
+    NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
+  };
+  NIX_LDFLAGS = [ "-ltirpc" ];
 
-  inherit (nvidia_x11) makeFlags;
+  nativeBuildInputs = [
+    m4
+    pkg-config
+  ];
+
+  buildInputs = [
+    libtirpc
+    stdenv.cc.cc.lib
+  ];
+
+  makeFlags = nvidia_x11.makeFlags ++ [ "DATE=true" ];
 
   installFlags = [ "PREFIX=$(out)" ];
 
@@ -36,15 +51,12 @@ stdenv.mkDerivation rec {
       $out/bin/nvidia-persistenced
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
-  NIX_LDFLAGS = [ "-ltirpc" ];
-
-  meta = with lib; {
-    homepage = "https://www.nvidia.com/object/unix.html";
-    description = "Settings application for NVIDIA graphics cards";
-    license = licenses.unfreeRedistributable;
+  meta = {
+    homepage = "https://github.com/NVIDIA/nvidia-persistenced";
+    description = "NVIDIA driver persistence daemon";
+    license = lib.licenses.mit;
     platforms = nvidia_x11.meta.platforms;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     mainProgram = "nvidia-persistenced";
   };
 }

@@ -57,13 +57,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "tali"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/tali";
     changelog = "https://gitlab.gnome.org/GNOME/tali/-/blob/${version}/NEWS?ref_type=tags";
     description = "Sort of poker with dice and less money";
     mainProgram = "tali";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
   };
 }

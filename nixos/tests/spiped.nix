@@ -4,8 +4,8 @@ let
 in
 {
   name = "spiped";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ tomfitzhenry ];
+  meta = {
+    maintainers = [ ];
   };
 
   nodes = {

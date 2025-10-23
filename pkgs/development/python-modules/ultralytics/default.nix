@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -7,19 +8,21 @@
   setuptools,
 
   # dependencies
-  scipy,
+  lap,
   matplotlib,
   opencv-python,
+  pandas,
   pillow,
+  polars,
+  psutil,
+  py-cpuinfo,
   pyyaml,
   requests,
+  scipy,
+  seaborn,
   torch,
   torchvision,
   tqdm,
-  psutil,
-  py-cpuinfo,
-  pandas,
-  seaborn,
   ultralytics-thop,
 
   # tests
@@ -30,38 +33,39 @@
 
 buildPythonPackage rec {
   pname = "ultralytics";
-  version = "8.3.86";
+  version = "8.3.217";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ultralytics";
     repo = "ultralytics";
     tag = "v${version}";
-    hash = "sha256-9z6f/48jQVCR744ojNH+T22+JDg31+WEKWi48k5/GoY=";
+    hash = "sha256-e/t+6sO9V+iwSxJUZ5VhP18DZSUOfm8jmlP9Pib/RyU=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=1.23.0,<=2.1.1" "numpy"
-  '';
 
   build-system = [ setuptools ];
 
+  pythonRelaxDeps = [
+    "numpy"
+  ];
+
   dependencies = [
-    scipy
+    lap
     matplotlib
     opencv-python
+    pandas
     pillow
+    polars
+    psutil
+    py-cpuinfo
     pyyaml
     requests
     scipy
+    scipy
+    seaborn
     torch
     torchvision
     tqdm
-    psutil
-    py-cpuinfo
-    pandas
-    seaborn
     ultralytics-thop
   ];
 
@@ -73,29 +77,47 @@ buildPythonPackage rec {
     onnxruntime
   ];
 
-  # rest of the tests require internet access
-  pytestFlagsArray = [ "tests/test_python.py" ];
+  enabledTestPaths = [
+    # rest of the tests require internet access
+    "tests/test_python.py"
+  ];
 
   disabledTests = [
     # also remove the individual tests that require internet
-    "test_model_methods"
-    "test_predict_txt"
-    "test_predict_img"
-    "test_predict_visualize"
-    "test_predict_grey_and_4ch"
-    "test_val"
-    "test_train_scratch"
-    "test_train_pretrained"
     "test_all_model_yamls"
-    "test_workflow"
-    "test_predict_callback_and_setup"
-    "test_results"
-    "test_labels_and_crops"
     "test_data_annotator"
+    "test_labels_and_crops"
     "test_model_embeddings"
-    "test_yolov10"
+    "test_model_methods"
+    "test_predict_callback_and_setup"
+    "test_predict_grey_and_4ch"
+    "test_predict_img"
+    "test_predict_txt"
+    "test_predict_visualize"
+    "test_results"
+    "test_train_pretrained"
+    "test_train_scratch"
     "test_utils_torchutils"
+    "test_val"
+    "test_workflow"
     "test_yolo_world"
+    "test_yolov10"
+    "test_yoloe"
+    "test_multichannel"
+    "test_grayscale"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+    # Fatal Python error: Aborted
+    # onnxruntime/capi/_pybind_state.py", line 32 in <module>
+    "test_utils_benchmarks"
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # Fatal Python error: Aborted
+    # ultralytics/utils/checks.py", line 598 in check_imshow
+    "test_utils_checks"
+
+    # RuntimeError: required keyword attribute 'value' has the wrong type
+    "test_utils_benchmarks"
   ];
 
   meta = {

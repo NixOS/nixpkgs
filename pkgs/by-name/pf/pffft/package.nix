@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pffft";
-  version = "unstable-2022-04-10";
+  version = "0-unstable-2025-06-09";
 
   src = fetchFromGitHub {
     owner = "marton78";
-    repo = pname;
-    rev = "08f5ed2618ac06d7dcc83d209d7253dc215274d5";
-    sha256 = "sha256-9LfLQ17IRsbEwGQJZzhW2Av4en1KuJVicLrS2AyjUZY=";
+    repo = "pffft";
+    rev = "9ae907aae7a39c08cea398778b9496ba7484423a";
+    sha256 = "sha256-+efWiBrJzC188tDSPHMARRDArzx/4E8GYPMfDHAND8k=";
   };
 
   nativeBuildInputs = [ cmake ];

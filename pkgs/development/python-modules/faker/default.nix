@@ -8,18 +8,19 @@
   python-dateutil,
   setuptools,
   typing-extensions,
+  tzdata,
   ukpostcodeparser,
   validators,
 }:
 
 buildPythonPackage rec {
   pname = "faker";
-  version = "33.3.1";
+  version = "37.5.3";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Sd3jsGpWAhd7wq0BMUm29gopC3FUU5GA03tvh2rnmyA=";
+    hash = "sha256-gxXY/01vT1iL1C/+Y6vVmYhseFBz4mpEcH4Q7rpXE9w=";
   };
 
   build-system = [ setuptools ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   dependencies = [
     python-dateutil
     typing-extensions
+    tzdata
   ];
 
   nativeCheckInputs = [
@@ -38,7 +40,7 @@ buildPythonPackage rec {
   ];
 
   # avoid tests which import random2, an abandoned library
-  pytestFlagsArray = [ "--ignore=tests/providers/test_ssn.py" ];
+  disabledTestPaths = [ "tests/providers/test_ssn.py" ];
   pythonImportsCheck = [ "faker" ];
 
   meta = with lib; {

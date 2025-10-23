@@ -8,21 +8,21 @@
 
 buildNpmPackage rec {
   pname = "httpyac";
-  version = "6.16.6";
+  version = "6.16.7";
 
   src = fetchFromGitHub {
     owner = "anweber";
     repo = "httpyac";
     tag = version;
-    hash = "sha256-JsrGoUZKo5/qjH+GKm5FBY19NE6KN7NhLpPvM8Cw97U=";
+    hash = "sha256-6qhKOb2AJrDhZLRU6vrDfuW9KED+5TLf4hHH/0iADeA=";
   };
 
-  npmDepsHash = "sha256-08RJ1lLIaTXi3JHGIFR44GbEqOGez7+VFQGlejZqgAI=";
+  npmDepsHash = "sha256-X3Yz+W7lijOLP+tEuO0JOpeOMOGdUYN6OpxPYHwFQEo=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
   passthru = {
     updateScript = nix-update-script { };
@@ -34,7 +34,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/anweber/httpyac";
     license = lib.licenses.mit;
     mainProgram = "httpyac";
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

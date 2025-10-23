@@ -7,7 +7,7 @@
   gst_all_1,
   cmake,
   libglvnd,
-  tbb,
+  onetbb,
   ninja,
   pkg-config,
 }:
@@ -16,13 +16,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "brickstore";
-  version = "2024.5.2";
+  version = "2024.12.3";
 
   src = fetchFromGitHub {
     owner = "rgriebl";
     repo = "brickstore";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-Bu9oNbZm3lx/CfYAReHyWe/kW+kaefDWeBtWLHOCORU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-4sxPplZ1t8sSfwTCeeBtfU4U0gcE9FROt6dKvkfyO6Q=";
     fetchSubmodules = true;
   };
 
@@ -42,19 +42,17 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qttools
     qt6.qtwayland
     qt6.wrapQtAppsHook
-    tbb
+    onetbb
   ];
 
-  preConfigure = ''
-    sed -i '/^)$/d' cmake/BuildQCoro.cmake
+  patches = [
+    ./qcoro-cmake.patch # Don't have CMake fetch qcoro from github, get it from nixpkgs
+    ./qjsonvalue-include.patch # Add a required '#include <QtCore/QJsonValue>'
+  ];
 
+  # Since we get qcoro from nixpkgs instead, change the CMake file to reflect the right directory
+  preConfigure = ''
     substituteInPlace cmake/BuildQCoro.cmake \
-      --replace-fail 'FetchContent_Declare(' ' ' \
-      --replace-fail '    qcoro' ' ' \
-      --replace-fail '    GIT_REPOSITORY https://github.com/danvratil/qcoro.git' ' ' \
-      --replace-fail '    GIT_TAG        v''${QCORO_VERSION}' ' ' \
-      --replace-fail 'FetchContent_GetProperties(qcoro)' ' ' \
-      --replace-fail 'FetchContent_Populate(qcoro)' ' ' \
       --replace-fail \
         'add_subdirectory(''${qcoro_SOURCE_DIR} ''${qcoro_BINARY_DIR} EXCLUDE_FROM_ALL)' \
         'add_subdirectory(${qcoro.src} ${qcoro}bin/qcoro)'

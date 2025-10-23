@@ -14,6 +14,7 @@ let
     postgresql_15 = ./15.nix;
     postgresql_16 = ./16.nix;
     postgresql_17 = ./17.nix;
+    postgresql_18 = ./18.nix;
   };
 
   mkAttributes =
@@ -22,12 +23,10 @@ let
       version: path:
       let
         attrName = if jitSupport then "${version}_jit" else version;
+        postgresql = import path { inherit self; };
+        attrValue = if jitSupport then postgresql.withJIT else postgresql.withoutJIT;
       in
-      self.lib.nameValuePair attrName (
-        import path {
-          inherit jitSupport self;
-        }
-      )
+      self.lib.nameValuePair attrName attrValue
     ) versions;
 
   libpq = self.callPackage ./libpq.nix { };
@@ -35,7 +34,8 @@ let
 in
 {
   # variations without and with JIT
-  postgresqlVersions = mkAttributes false // mkAttributes true;
+  postgresqlVersions = mkAttributes false;
+  postgresqlJitVersions = mkAttributes true;
 
   inherit libpq;
 }

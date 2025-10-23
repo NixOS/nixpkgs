@@ -1,46 +1,48 @@
 {
   lib,
+  stdenv,
   buildNpmPackage,
   fetchFromGitHub,
   pkg-config,
   libsecret,
-  python3,
-  testers,
-  vsce,
+  nodejs,
+  clang_20,
+  versionCheckHook,
   nix-update-script,
 }:
 
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "vsce";
-  version = "3.2.2";
+  version = "3.6.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "vscode-vsce";
-    rev = "v${version}";
-    hash = "sha256-zWs3DVb9BThCdjqQLfK4Z6wvph3oibVBdj+h3n33Lns=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-TcBzXDNpjJvI+0ir80d+HFp6mF/Ecle4vhOMcACvF7M=";
   };
 
-  npmDepsHash = "sha256-9tD2an6878XEXWbO5Jsplibd6lbzNBufdHJJ89mjMig=";
+  npmDepsHash = "sha256-G09pn6JX389GMbIzYmmLutH7qwiaDb8V9zCGAOFaDdk=";
 
   postPatch = ''
-    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${version}"'
+    substituteInPlace package.json --replace-fail '"version": "0.0.0"' '"version": "${finalAttrs.version}"'
   '';
 
   nativeBuildInputs = [
     pkg-config
-    python3
-  ];
+    nodejs.python
+  ]
+  ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks @vscode/vsce's optional dependency keytar
 
   buildInputs = [ libsecret ];
 
   makeCacheWritable = true;
-  npmFlags = [ "--legacy-peer-deps" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
-    tests.version = testers.testVersion {
-      package = vsce;
-    };
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
@@ -52,8 +54,10 @@ buildNpmPackage rec {
   meta = {
     homepage = "https://github.com/microsoft/vscode-vsce";
     description = "Visual Studio Code Extension Manager";
-    maintainers = with lib.maintainers; [ aaronjheng ];
+    maintainers = with lib.maintainers; [
+      xiaoxiangmoe
+    ];
     license = lib.licenses.mit;
     mainProgram = "vsce";
   };
-}
+})

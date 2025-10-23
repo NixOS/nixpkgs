@@ -26,6 +26,12 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "pybind11>=2.13.6, < 2.14" "pybind11" \
+      --replace-fail "scikit-build-core>=0.10.7, < 0.11" "scikit-build-core"
+  '';
+
   build-system = [
     setuptools
     scikit-build-core

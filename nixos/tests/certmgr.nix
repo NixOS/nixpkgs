@@ -1,11 +1,27 @@
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
+{ runTest, pkgs, ... }:
 
-with import ../lib/testing-python.nix { inherit system pkgs; };
 let
+  authKey = pkgs.writeText "auth-key" "1234ABCD";
+  cfsslConfig = pkgs.writeText "config.json" (
+    builtins.toJSON {
+      # also see `cfssl print-defaults config`
+      auth_keys = {
+        my_key = {
+          type = "standard";
+          key = "file:${authKey}";
+        };
+      };
+      signing = {
+        default = {
+          expiry = "168h";
+          auth_key = "my_key";
+          usages = [
+            "digital signature"
+          ];
+        };
+      };
+    }
+  );
   mkSpec =
     {
       host,
@@ -23,6 +39,7 @@ let
         label = "www_ca";
         profile = "three-month";
         remote = "localhost:8888";
+        auth_key_file = toString authKey;
       };
       certificate = {
         group = "nginx";
@@ -63,7 +80,7 @@ let
       specs,
       testScript,
     }:
-    makeTest {
+    runTest {
       name = "certmgr-" + svcManager;
       nodes = {
         machine =
@@ -80,7 +97,10 @@ let
             ];
             networking.extraHosts = "127.0.0.1 imp.example.org decl.example.org";
 
-            services.cfssl.enable = true;
+            services.cfssl = {
+              enable = true;
+              configFile = toString cfsslConfig;
+            };
             systemd.services.cfssl.after = [
               "cfssl-init.service"
               "networking.target"
@@ -95,6 +115,9 @@ let
                 User = "cfssl";
                 Type = "oneshot";
                 WorkingDirectory = config.services.cfssl.dataDir;
+                # matches systemd.services.cfssl to run setup transparently
+                StateDirectory = baseNameOf config.services.cfssl.dataDir;
+                StateDirectoryMode = 700;
               };
               script = ''
                 ${pkgs.cfssl}/bin/cfssl genkey -initca ${

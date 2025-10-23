@@ -33,21 +33,23 @@ let
   });
 
 in
-stdenv.mkDerivation rec {
-
-  version = "3.2.5";
+stdenv.mkDerivation (finalAttrs: {
   pname = "gnu-smalltalk";
+  version = "3.2.5";
 
   src = fetchurl {
-    url = "mirror://gnu/smalltalk/smalltalk-${version}.tar.xz";
-    sha256 = "1k2ssrapfzhngc7bg1zrnd9n2vyxp9c9m70byvsma6wapbvib6l1";
+    url = "mirror://gnu/smalltalk/smalltalk-${finalAttrs.version}.tar.xz";
+    hash = "sha256-gZoV97qKG1X19gucmli63W9hU7P5h7cOexZ+d1XWWsw=";
   };
 
   patches = [
     # The awk script incorrectly parsed `glib/glib.h` and was trying to find `glib/gwin32.h`,
     # that isn't included since we're building only for linux.
     ./0000-fix_mkorder.patch
+    ./0001-fix-compilation.patch
   ];
+
+  enableParallelBuilding = true;
 
   # The dependencies and their justification are explained at
   # http://smalltalk.gnu.org/download
@@ -64,19 +66,20 @@ stdenv.mkDerivation rec {
     cairo
     SDL
     sqlite
-  ] ++ lib.optional emacsSupport emacs;
+  ]
+  ++ lib.optional emacsSupport emacs;
 
   configureFlags = lib.optional (!emacsSupport) "--without-emacs";
 
   hardeningDisable = [ "format" ];
 
-  installFlags = lib.optional emacsSupport "lispdir=$(out)/share/emacs/site-lisp";
+  installFlags = lib.optional emacsSupport "lispdir=${placeholder "$out"}/share/emacs/site-lisp";
 
   # For some reason the tests fail if executated with nix-build, but pass if
   # executed within nix-shell --pure.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Free implementation of the Smalltalk-80 language";
     longDescription = ''
       GNU Smalltalk is a free implementation of the Smalltalk-80 language. It
@@ -85,11 +88,11 @@ stdenv.mkDerivation rec {
       language, well-versed to scripting tasks.
     '';
     homepage = "http://smalltalk.gnu.org/";
-    license = with licenses; [
+    license = with lib.licenses; [
       gpl2
       lgpl2
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    platforms = lib.platforms.linux;
+    maintainers = [ ];
   };
-}
+})

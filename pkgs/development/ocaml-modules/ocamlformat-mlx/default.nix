@@ -5,7 +5,7 @@
   ocamlformat-mlx-lib,
   re,
 }:
-buildDunePackage rec {
+buildDunePackage {
   pname = "ocamlformat-mlx";
   minimalOcamlVersion = "4.08";
 

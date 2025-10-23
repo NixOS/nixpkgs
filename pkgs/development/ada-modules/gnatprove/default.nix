@@ -1,37 +1,46 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnat
-, gnatcoll-core
-, gprbuild
-, python3
-, ocamlPackages
-, makeWrapper
-, gpr2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnat,
+  gnatcoll-core,
+  gprbuild,
+  python3,
+  ocamlPackages,
+  makeWrapper,
+  gpr2,
 }:
 let
   gnat_version = lib.versions.major gnat.version;
 
   # gnatprove fsf-14 requires gpr2 from a special branch
-  gpr2_24_2_next = (gpr2.override {
-    # pregenerated kb db is not included
-    gpr2kbdir = "${gprbuild}/share/gprconfig";
-  }).overrideAttrs(old: rec {
-    version = "24.2.0-next";
-    src = fetchFromGitHub {
-      owner = "AdaCore";
-      repo = "gpr";
-      rev = "v${version}";
-      hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
-    };
-  });
+  gpr2_24_2_next =
+    (gpr2.override {
+      # pregenerated kb db is not included
+      gpr2kbdir = "${gprbuild}/share/gprconfig";
+    }).overrideAttrs
+      (old: rec {
+        version = "24.2.0-next";
+        src = fetchFromGitHub {
+          owner = "AdaCore";
+          repo = "gpr";
+          rev = "v${version}";
+          hash = "sha256-Tp+N9VLKjVWs1VRPYE0mQY3rl4E5iGb8xDoNatEYBg4=";
+        };
+      });
 
-  fetchSpark2014 = { rev, hash } : fetchFromGitHub {
-    owner = "AdaCore";
-    repo = "spark2014";
-    fetchSubmodules = true;
-    inherit rev hash;
-  };
+  # TODO:
+  # Build why3 (github.com/AdaCore/why3) as separate package and not as submodule.
+  # The relevant tags on why3 may get changed without the submodule pointer being updated.
+
+  fetchSpark2014 =
+    { rev, hash }:
+    fetchFromGitHub {
+      owner = "AdaCore";
+      repo = "spark2014";
+      fetchSubmodules = true;
+      inherit rev hash;
+    };
 
   spark2014 = {
     "12" = {
@@ -47,6 +56,10 @@ let
         hash = "sha256-mZWP9yF1O4knCiXx8CqolnS+93bM+hTQy40cd0HZmwI=";
       };
       commit_date = "2023-01-05";
+      patches = [
+        # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
+        ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
+      ];
     };
     "14" = {
       src = fetchSpark2014 {
@@ -55,30 +68,49 @@ let
       };
       patches = [
         # Disable Coq related targets which are missing in the fsf-14 branch
-        ./0001-fix-install.patch
+        ./0001-fix-install-fsf-14.patch
+
+        # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
+        ./0002-mute-aarch64-warnings.patch
+
+        # Changes to the GNAT frontend: https://github.com/AdaCore/spark2014/issues/58
+        ./0003-Adjust-after-category-change-for-N_Formal_Package_De.patch
       ];
       commit_date = "2024-01-11";
     };
+    "15" = {
+      src = fetchSpark2014 {
+        rev = "22bf1510e0829ba74f9d8d686badb65c7365ee91";
+        hash = "sha256-KjAWMgMT3Tp/s/DQ20ZZajty9Zrv8aPFocwgv5LkjSw=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-15 branch
+        ./0001-fix-install-fsf-15.patch
+      ];
+      commit_date = "2025-06-10";
+    };
   };
 
-  thisSpark = spark2014.${gnat_version} or
-    (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+  thisSpark =
+    spark2014.${gnat_version}
+      or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "gnatprove";
   version = "fsf-${gnat_version}_${thisSpark.commit_date}";
 
   src = thisSpark.src;
 
-  patches = thisSpark.patches or [];
+  patches = thisSpark.patches or [ ];
 
   nativeBuildInputs = [
     gnat
     gprbuild
     python3
     makeWrapper
-  ] ++ (with ocamlPackages; [
+  ]
+  ++ (with ocamlPackages; [
     ocaml
     findlib
     menhir
@@ -86,7 +118,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnatcoll-core
-  ] ++ (with ocamlPackages; [
+  ]
+  ++ (with ocamlPackages; [
     ocamlgraph
     zarith
     ppx_deriving
@@ -97,8 +130,12 @@ stdenv.mkDerivation rec {
     re
     sexplib
     yojson
-  ]) ++ (lib.optionals (gnat_version == "14")[
+  ])
+  ++ (lib.optionals (gnat_version == "14") [
     gpr2_24_2_next
+  ])
+  ++ (lib.optionals (gnat_version == "15") [
+    gpr2
   ]);
 
   propagatedBuildInputs = [
@@ -107,8 +144,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # gnat2why/gnat_src points to the GNAT sources
-    tar xf ${gnat.cc.src} gcc-${gnat.cc.version}/gcc/ada
-    mv gcc-${gnat.cc.version}/gcc/ada gnat2why/gnat_src
+    tar xf ${gnat.cc.src} --wildcards 'gcc-*/gcc/ada'
+    mv gcc-*/gcc/ada gnat2why/gnat_src
   '';
 
   configurePhase = ''
@@ -134,4 +171,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

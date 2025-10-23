@@ -5,26 +5,28 @@
   distutils,
   fetchFromGitHub,
   python,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "setuptools";
-  version = "75.8.0";
-  format = "pyproject";
+  version = "80.9.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
     tag = "v${version}";
-    hash = "sha256-dSzsj0lnsc1Y+D/N0cnAPbS/ZYb+qC41b/KfPmL1zI4=";
+    hash = "sha256-wueVQsV0ja/iPFRK7OKV27FQ7hYKF8cP3WH5wJeIXnI=";
   };
 
   patches = [
     ./tag-date.patch
   ];
 
-  nativeBuildInputs = [ wheel ];
+  # Drop dependency on coherent.license, which in turn requires coherent.build
+  postPatch = ''
+    sed -i "/coherent.licensed/d" pyproject.toml
+  '';
 
   preBuild = lib.optionalString (!stdenv.hostPlatform.isWindows) ''
     export SETUPTOOLS_INSTALL_WINDOWS_SPECIFIC_FILES=0
@@ -45,6 +47,6 @@ buildPythonPackage rec {
     }";
     license = with licenses; [ mit ];
     platforms = python.meta.platforms;
-    maintainers = teams.python.members;
+    teams = [ teams.python ];
   };
 }

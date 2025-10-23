@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.25.0";
+  version = "2.31.1";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-XunvADSdLA6jFVjXTAtmYvC1i5ZE7WYaCTvlAd8C1ko=";
+    hash = "sha256-+Aexwj/iNIhriiUrMhtj2c9S3e5jGN7OvREXUzi/03s=";
   };
   patches = [ ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
-    hash = "sha256-HaOqhjDodn9z0XQMsxJAMKrs1s7l2cJCIzHECjwnA5A=";
+    hash = "sha256-bJTOTHlCYSrlhy6GewpK8qhBGRH49xNkFqOXZug5lNA=";
   };
 
   buildInputs = [
@@ -90,6 +90,8 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '${"$"}{SYSTEMD_UNIT_DIR}' "$out/lib/systemd/system"
 
     ln -s '${finalAttrs.netfilter.goModules}' linux/netfilter/vendor
+
+    patchShebangs scripts/utils/xlifftool.py
   '';
 
   cmakeFlags = [
@@ -97,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"

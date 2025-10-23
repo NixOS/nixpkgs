@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = "switchboard-plug-printers";
     rev = version;
     sha256 = "sha256-1znz8B4CGQGDiJC4Mt61XAh9wWAV8J0+K3AIpFcffXQ=";
   };
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/elementary/switchboard-plug-printers";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = teams.pantheon.members;
+    teams = [ teams.pantheon ];
   };
 
 }

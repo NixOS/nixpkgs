@@ -24,13 +24,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ShAT7rtQ9yj8YBvdgzsLKHAzPDs+WoFu66kh2VvsbxU=";
   };
 
-  buildInputs =
-    [
-      libmysqlclient
-    ]
-    ++ lib.optionals withGmp [
-      gmp
-    ];
+  buildInputs = [
+    libmysqlclient
+  ]
+  ++ lib.optionals withGmp [
+    gmp
+  ];
 
   configureFlags = lib.optionals withGmp [
     "--with-gmp"
@@ -76,7 +75,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/glpk/";
     license = licenses.gpl3Plus;
 
-    maintainers = with maintainers; [ ] ++ teams.sage.members;
+    teams = [ teams.sage ];
     mainProgram = "glpsol";
     platforms = platforms.all;
   };

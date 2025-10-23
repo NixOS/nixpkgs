@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "easyjson";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "mailru";
     repo = "easyjson";
     rev = "v${version}";
-    hash = "sha256-m2WZwi6TM6hiBlCQOe+rxF5z3vvnYqtHQX8d7y5NLgI=";
+    hash = "sha256-aKufvebodIy0UtecpjZ9+5MOUTWKFIqFI3SYgVPWdhQ=";
   };
   vendorHash = "sha256-BsksTYmfPQezbWfIWX0NhuMbH4VvktrEx06C2Nb/FYE=";
 
@@ -23,6 +23,5 @@ buildGoModule rec {
     description = "Fast JSON serializer for Go";
     mainProgram = "easyjson";
     license = licenses.mit;
-    maintainers = with maintainers; [ Madouura ];
   };
 }

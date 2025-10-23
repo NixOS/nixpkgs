@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
-  version = "2025.01";
+  version = "2025.06.1";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "rakudo";
     repo = "rakudo";
     rev = version;
-    hash = "sha256-NrbeB6/VnxlUt6glIvetK1o9huWaeVD6WLdpi4bb2FU=";
+    hash = "sha256-cofiX6VHHeki8GQcMamDyPYoVMUKiuhKVz8Gh8L9qu0=";
     fetchSubmodules = true;
   };
 
@@ -42,14 +42,15 @@ stdenv.mkDerivation rec {
     remove-references-to -t ${stdenv.cc.cc} "$(readlink -f $out/share/perl6/runtime/dynext/libperl6_ops_moar${stdenv.hostPlatform.extensions.sharedLibrary})"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Raku implementation on top of Moar virtual machine";
     homepage = "https://rakudo.org";
-    license = licenses.artistic2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.artistic2;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       thoughtpolice
       sgo
+      prince213
     ];
   };
 }

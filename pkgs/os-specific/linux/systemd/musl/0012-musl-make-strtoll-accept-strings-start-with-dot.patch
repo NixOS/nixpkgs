@@ -1,0 +1,69 @@
+From d97f38a2ffd0aca2a1d7b8a5bbbd1994e786c7bc Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Tue, 9 Sep 2025 09:10:44 +0900
+Subject: [PATCH 12/30] musl: make strtoll() accept strings start with dot
+
+glibc accepts strings start with '.' and returns 0, but musl refuses
+them. Let's accept them, as our code assumes the function accept such
+strings.
+---
+ src/include/musl/stdlib.h |  7 +++++++
+ src/libc/musl/meson.build |  1 +
+ src/libc/musl/stdlib.c    | 19 +++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100644 src/include/musl/stdlib.h
+ create mode 100644 src/libc/musl/stdlib.c
+
+diff --git a/src/include/musl/stdlib.h b/src/include/musl/stdlib.h
+new file mode 100644
+index 0000000000..ecfd6ccb43
+--- /dev/null
++++ b/src/include/musl/stdlib.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++#include_next <stdlib.h>
++
++long long strtoll_fallback(const char *nptr, char **endptr, int base);
++#define strtoll strtoll_fallback
+diff --git a/src/libc/musl/meson.build b/src/libc/musl/meson.build
+index 5fb590e868..ea09af9fa5 100644
+--- a/src/libc/musl/meson.build
++++ b/src/libc/musl/meson.build
+@@ -7,6 +7,7 @@ endif
+ libc_wrapper_sources += files(
+         'printf.c',
+         'stdio.c',
++        'stdlib.c',
+         'string.c',
+         'time.c',
+ )
+diff --git a/src/libc/musl/stdlib.c b/src/libc/musl/stdlib.c
+new file mode 100644
+index 0000000000..d4e2714217
+--- /dev/null
++++ b/src/libc/musl/stdlib.c
+@@ -0,0 +1,19 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++
++#include <stdlib.h>
++
++/* The header stdlib.h overrides strtoll with strtoll_fallback, hence we need to undef it here. */
++#undef strtoll
++
++long long strtoll_fallback(const char *nptr, char **endptr, int base) {
++        /* glibc returns 0 if the first character is '.' without error, but musl returns as an error.
++         * As our code assumes the glibc behavior, let's accept string starts with '.'. */
++        if (nptr && *nptr == '.') {
++                if (endptr)
++                        *endptr = (char*) nptr;
++                return 0;
++        }
++
++        /* Otherwise, use the native strtoll(). */
++        return strtoll(nptr, endptr, base);
++}
+-- 
+2.51.0
+

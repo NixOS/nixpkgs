@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "usacloud";
-  version = "1.14.1";
+  version = "1.18.0";
 
   src = fetchFromGitHub {
     owner = "sacloud";
     repo = "usacloud";
     tag = "v${version}";
-    hash = "sha256-bIVC0pa+54a/OpGKOM3LH7IMZnuYDvfGOMxcIwhHI7U=";
+    hash = "sha256-zYp5CRRjH4YjB6g9NZgC83F0xiz3Ntrpyql9d2/6K6U=";
   };
 
-  vendorHash = "sha256-m89iw5nk34KkCh8vlnKcwoPQXprUKzETYQNzi2CtX4c=";
+  vendorHash = "sha256-AxdazqJ1t1+azKJu1/scRmMxTqdILgWADbomlUKq2TE=";
 
   ldflags = [
     "-s"
@@ -27,7 +27,7 @@ buildGoModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
 
   passthru.updateScript = nix-update-script { };
 

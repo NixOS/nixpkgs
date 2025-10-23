@@ -5,7 +5,7 @@
   perlPackages,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "triehash";
   version = "0.3";
 
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/julian-klode/triehash";
     description = "Order-preserving minimal perfect hash function generator";
     license = with licenses; mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = perlPackages.perl.meta.platforms;
     mainProgram = "triehash";
   };

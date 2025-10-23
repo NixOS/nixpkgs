@@ -21,15 +21,17 @@
 
 buildPythonPackage rec {
   pname = "myfitnesspal";
-  version = "2.1.0";
+  version = "2.1.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-H9oKSio+2x4TDCB4YN5mmERUEeETLKahPlW3TDDFE/E=";
+    hash = "sha256-eE807M8qFDlSMAcE+GFJyve1YfmlWmB3ML9VJhMUeIE=";
   };
+
+  pythonRelaxDeps = [ "typing-extensions" ];
 
   nativeBuildInputs = [ setuptools ];
 

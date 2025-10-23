@@ -126,7 +126,7 @@ in
       type = lib.types.str;
       description = ''
         Password to use with notebook.
-        Can be generated following: https://jupyter-server.readthedocs.io/en/stable/operators/public-server.html#preparing-a-hashed-password
+        Can be generated following: <https://jupyter-server.readthedocs.io/en/stable/operators/public-server.html#preparing-a-hashed-password>
       '';
       example = "argon2:$argon2id$v=19$m=10240,t=10,p=8$48hF+vTUuy1LB83/GzNhUg$J1nx4jPWD7PwOJHs5OtDW8pjYK2s0c1R3rYGbSIKB54";
     };
@@ -202,7 +202,8 @@ in
 
         environment = {
           JUPYTER_PATH = toString kernels;
-        } // cfg.extraEnvironmentVariables;
+        }
+        // cfg.extraEnvironmentVariables;
 
         serviceConfig = {
           Restart = "always";

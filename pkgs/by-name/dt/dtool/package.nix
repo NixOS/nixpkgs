@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,12 +15,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-m4H+ANwEbK6vGW3oIVZqnqvMiAKxNJf2TLIGh/G6AU4=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-C0H5cIMMfUPJ2iJCUs1jEu3Ln8CdDgbgstMnH/f9FRY=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
   # FIXME: remove patch when upstream version of rustc-serialize is updated
   cargoPatches = [ ./rustc-serialize-fix.patch ];
 

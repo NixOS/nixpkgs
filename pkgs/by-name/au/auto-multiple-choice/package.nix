@@ -23,13 +23,13 @@
   pkg-config,
   poppler,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "auto-multiple-choice";
-  version = "1.6.0";
+  version = "1.7.0";
   src = fetchurl {
-    url = "https://download.auto-multiple-choice.net/${pname}_${version}_dist.tar.gz";
-    # before 1.6.0, the URL pattern used "precomp" instead of "dist".    ^^^^
-    sha256 = "sha256-I9Xw1BN8ZSQhi5F1R3axHBKE6tnaCNk8k5tts6LoMjY=";
+    url = "https://download.auto-multiple-choice.net/auto-multiple-choice_${finalAttrs.version}_dist.tar.gz";
+    # before 1.7.0, the URL pattern used "precomp" instead of "dist".
+    sha256 = "sha256-37kWqgdvZopvNSU6LA/FmY2wfSJz3rRSlaQF2HSbdmA=";
   };
 
   # There's only the Makefile
@@ -83,6 +83,7 @@ stdenv.mkDerivation (finalAttrs: rec {
         Glib
         GlibObjectIntrospection
         Gtk3
+        HashMerge
         LocaleGettext
         OpenOfficeOODoc
         PerlMagick
@@ -104,41 +105,40 @@ stdenv.mkDerivation (finalAttrs: rec {
     gobject-introspection
   ];
 
-  buildInputs =
-    [
-      cairo
-      cairo.dev
-      dblatex
-      gnumake
-      graphicsmagick
-      gsettings-desktop-schemas
-      gtk3
-      hicolor-icon-theme
-      libnotify
-      librsvg
-      libxslt
-      netpbm
-      opencv
-      pango
-      poppler
-    ]
-    ++ (with perlPackages; [
-      perl
-      ArchiveZip
-      Cairo
-      CairoGObject
-      DBDSQLite
-      DBI
-      Glib
-      GlibObjectIntrospection
-      Gtk3
-      LocaleGettext
-      PerlMagick
-      TextCSV
-      XMLParser
-      XMLSimple
-      XMLWriter
-    ]);
+  buildInputs = [
+    cairo
+    cairo.dev
+    dblatex
+    gnumake
+    graphicsmagick
+    gsettings-desktop-schemas
+    gtk3
+    hicolor-icon-theme
+    libnotify
+    librsvg
+    libxslt
+    netpbm
+    opencv
+    pango
+    poppler
+  ]
+  ++ (with perlPackages; [
+    perl
+    ArchiveZip
+    Cairo
+    CairoGObject
+    DBDSQLite
+    DBI
+    Glib
+    GlibObjectIntrospection
+    Gtk3
+    LocaleGettext
+    PerlMagick
+    TextCSV
+    XMLParser
+    XMLSimple
+    XMLWriter
+  ]);
 
   passthru = {
     tlType = "run";

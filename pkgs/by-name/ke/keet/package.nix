@@ -6,11 +6,11 @@
 
 let
   pname = "keet";
-  version = "2.2.0";
+  version = "2.5.2";
 
   src = fetchzip {
-    url = "https://keet.io/downloads/${version}/Keet-x64.tar.gz";
-    hash = "sha256-Sd2aCUvgxdbCb8MtWMcznX2efmL1h9wLT29GG7t3Gzc=";
+    url = "https://static.keet.io/downloads/${version}/Keet-x64.tar.gz";
+    hash = "sha256-wM5Z8zjha5uHmjBtjWRLQf8R/Xcz0O6myLrOMkeXBDM=";
   };
 
   appimageContents = appimageTools.extract {
@@ -26,6 +26,7 @@ appimageTools.wrapType2 {
   extraPkgs =
     pkgs: with pkgs; [
       gtk4
+      graphene
     ];
 
   extraInstallCommands = ''

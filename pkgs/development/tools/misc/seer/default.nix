@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seer";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "epasveer";
     repo = "seer";
     rev = "v${version}";
-    sha256 = "sha256-+3yghoK8fAM6UFomv1Ga05kxwsLcoL2CpuIDXkFfWHc=";
+    sha256 = "sha256-QXVsjTJYGE/7nTKldlOGN6AnW8OthrBJruVbb/HiPdg=";
   };
 
   preConfigure = ''

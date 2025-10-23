@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitLab {
     owner = "free-astro";
     repo = "siril";
-    tag = "${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-pSJp4Oj8x4pKuwPSaSyGbyGfpnanoWBxAdXtzGTP7uA=";
   };
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru = {
@@ -103,7 +103,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Astrophotographic image processing tool";
     license = lib.licenses.gpl3Plus;
     changelog = "https://gitlab.com/free-astro/siril/-/blob/HEAD/ChangeLog";
-    maintainers = with lib.maintainers; [ hjones2199 ];
+    maintainers = with lib.maintainers; [
+      returntoreality
+    ];
     platforms = lib.platforms.linux;
   };
 })

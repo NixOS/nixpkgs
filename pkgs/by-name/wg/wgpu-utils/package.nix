@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -9,22 +8,20 @@
   vulkan-loader,
   freetype,
   fontconfig,
-  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-utils";
-  version = "24.0.1";
+  version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu";
     tag = "wgpu-v${version}";
-    hash = "sha256-fhys0PYMFI23rvKcq9aJrXJrl7q9UQln9rmUybMJY1o=";
+    hash = "sha256-Na8UWMEzY0mvw8YERZ86PH79Z5YlXITPdOYha7Ahn7k=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-cufabcRNrLxMjejDydqR4zf4SajeWkX/fcXj96RakDQ=";
+  cargoHash = "sha256-9o1Tb0pVTc3iWPjNlAPBQX72djcx3EPJhxuUW6xZfCs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -32,19 +29,10 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs =
-    [
-      freetype
-      fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        CoreServices
-        QuartzCore
-        AppKit
-      ]
-    );
+  buildInputs = [
+    freetype
+    fontconfig
+  ];
 
   # Tests fail, as the Nix sandbox doesn't provide an appropriate adapter (e.g. Vulkan).
   doCheck = false;

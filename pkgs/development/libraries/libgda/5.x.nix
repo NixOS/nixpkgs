@@ -58,20 +58,20 @@ stdenv.mkDerivation rec {
     gtk-doc
     autoconf-archive
     yelp-tools
+    libpq.pg_config
   ];
 
-  buildInputs =
-    [
-      gtk3
-      openssl
-      libgee
-    ]
-    ++ lib.optionals mysqlSupport [
-      libmysqlclient
-    ]
-    ++ lib.optionals postgresSupport [
-      libpq
-    ];
+  buildInputs = [
+    gtk3
+    openssl
+    libgee
+  ]
+  ++ lib.optionals mysqlSupport [
+    libmysqlclient
+  ]
+  ++ lib.optionals postgresSupport [
+    libpq
+  ];
 
   propagatedBuildInputs = [
     libxml2

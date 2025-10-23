@@ -20,7 +20,7 @@
 stdenv.mkDerivation rec {
   pname = "aws-crt-cpp";
   # nixpkgs-update: no auto update
-  version = "0.29.4";
+  version = "0.34.3";
 
   outputs = [
     "out"
@@ -31,17 +31,13 @@ stdenv.mkDerivation rec {
     owner = "awslabs";
     repo = "aws-crt-cpp";
     rev = "v${version}";
-    sha256 = "sha256-Uv1BHM39f9soq7kziedqRhHqQ/xwnqcz++1UM5nuo8g=";
+    sha256 = "sha256-jKmIsWAzxnfsNgHavR6crhIQXVJq/PbQgaj4KVGrMP0=";
   };
 
-  patches = [
-    # Correct include path for split outputs.
-    # https://github.com/awslabs/aws-crt-cpp/pull/325
-    ./0001-build-Make-includedir-properly-overrideable.patch
-  ];
-
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace '-Werror' ""
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "$<INSTALL_INTERFACE:include>" "$<INSTALL_INTERFACE:$dev/include>" \
+      --replace-fail '-Werror' ""
   '';
 
   nativeBuildInputs = [

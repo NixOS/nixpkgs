@@ -7,7 +7,6 @@
   packaging,
   pandas,
   patsy,
-  pythonOlder,
   scipy,
   setuptools,
   setuptools-scm,
@@ -16,15 +15,18 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.4";
+  version = "0.14.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-XWng85Bg3HLAZ/m7boAzttzNsLrhAddqfvC8yU6Ji2c=";
+    hash = "sha256-3iYOWMzP0s7d+DW1WjVyM9bKhToapPkPdVOlLMccbd8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail 'setuptools_scm[toml]>=8,<9' 'setuptools_scm[toml]'
+  '';
 
   build-system = [
     cython

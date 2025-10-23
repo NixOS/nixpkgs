@@ -15,12 +15,12 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "borgmatic";
-  version = "1.9.14";
+  version = "2.0.7";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-w503lwXlKWlTsguzECUGmsbhvdJzTF4XK+Ib2KuD2DE=";
+    hash = "sha256-HunKXVuDGTdH+CzIQbtkN0oRMocQ7gVh6Mf6L7wlhAY=";
   };
 
   passthru.updateScript = nix-update-script { };
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     [
       flexmock
       pytestCheckHook
-      pytest-cov
+      pytest-cov-stub
     ]
     ++ optional-dependencies.apprise;
 
@@ -39,11 +39,6 @@ python3Packages.buildPythonApplication rec {
   disabledTests = [
     "test_borgmatic_version_matches_news_version"
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace '--cov-fail-under=100' ""
-  '';
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -62,7 +57,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   postInstall =
-    ''
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd borgmatic \
         --bash <($out/bin/borgmatic --bash-completion)
     ''

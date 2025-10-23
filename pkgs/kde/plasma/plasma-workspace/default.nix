@@ -2,12 +2,12 @@
   lib,
   mkKdeDerivation,
   replaceVars,
-  dbus,
   fontconfig,
   xorg,
   lsof,
   pkg-config,
   spirv-tools,
+  qtlocation,
   qtpositioning,
   qtsvg,
   qtwayland,
@@ -23,7 +23,6 @@ mkKdeDerivation {
 
   patches = [
     (replaceVars ./dependency-paths.patch {
-      dbusSend = lib.getExe' dbus "dbus-send";
       fcMatch = lib.getExe' fontconfig "fc-match";
       lsof = lib.getExe lsof;
       qdbus = lib.getExe' qttools "qdbus";
@@ -44,6 +43,7 @@ mkKdeDerivation {
     spirv-tools
   ];
   extraBuildInputs = [
+    qtlocation
     qtpositioning
     qtsvg
     qtwayland
@@ -61,6 +61,8 @@ mkKdeDerivation {
 
     gpsd
   ];
+
+  qtWrapperArgs = [ "--inherit-argv0" ];
 
   # Hardcoded as QStrings, which are UTF-16 so Nix can't pick these up automatically
   postFixup = ''

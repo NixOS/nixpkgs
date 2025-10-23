@@ -1,7 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
+  fetchpatch,
+  stdenv,
 }:
 let
   # This repository has numbered versions, but not Git tags.
@@ -17,6 +18,29 @@ stdenv.mkDerivation {
     repo = "agrep";
     hash = "sha256-2J4bw5BVZgTEcIn9IuD5Q8/L+8tldDbToDefuxDf85g=";
   };
+
+  patches = [
+    # Implicit declaration of functions & implicit int
+    # https://github.com/Wikinaut/agrep/pull/31
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Wikinaut/agrep/pull/31.patch";
+      hash = "sha256-9ik2RANq12T/1vCUYTBNomzw+aJVa/LU2RsZovu3r3E=";
+    })
+  ];
+
+  postPatch = ''
+    # agrep only doesn't includes <sys/stat.h> for Linux
+    # Starting from gcc14, this is a compiler error
+    substituteInPlace checkfil.c recursiv.c \
+      --replace-fail '#ifdef __APPLE__
+        #include <sys/stat.h>
+    #endif' '#include <sys/stat.h>'
+
+    substituteInPlace newmgrep.c \
+      --replace-fail '#if defined(_WIN32) || defined(__APPLE__)
+        #include <sys/stat.h>
+    #endif' '#include <sys/stat.h>'
+  '';
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 

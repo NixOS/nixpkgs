@@ -14,7 +14,7 @@ mkDerivation rec {
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "graphics";
-    repo = pname;
+    repo = "kdiagram";
     rev = "v${version}";
     sha256 = "sha256-Se131GZE12wqdfN/V4id1pphUvteSrmMaKZ0+lqg1z8=";
   };

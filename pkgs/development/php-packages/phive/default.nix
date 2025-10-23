@@ -6,16 +6,16 @@
 
 php.buildComposerProject2 (finalAttrs: {
   pname = "phive";
-  version = "0.15.3";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "phar-io";
     repo = "phive";
     tag = finalAttrs.version;
-    hash = "sha256-6vNhmIDE3kwZGMrDnGNGVV6/lb32Yb3ooWDYOC7SUcs=";
+    hash = "sha256-dv9v1KCLNheFmrRQ7cID5WFvoiH0OWVPWSrN023dEqA=";
   };
 
-  vendorHash = "sha256-wNqQfVRm4kEWpYfdo8HBESh0L4cXPrTlHnBI79b1Al0=";
+  vendorHash = "sha256-U6BHAd4tWQKm6uCJ5sM51PltXhF3J4ieTnbC060+8Jg=";
 
   meta = {
     changelog = "https://github.com/phar-io/phive/releases/tag/${finalAttrs.version}";
@@ -23,6 +23,6 @@ php.buildComposerProject2 (finalAttrs: {
     homepage = "https://github.com/phar-io/phive";
     license = lib.licenses.bsd3;
     mainProgram = "phive";
-    maintainers = lib.teams.php.members;
+    teams = [ lib.teams.php ];
   };
 })

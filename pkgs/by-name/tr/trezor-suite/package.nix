@@ -10,7 +10,7 @@
 
 let
   pname = "trezor-suite";
-  version = "25.2.2";
+  version = "25.10.1";
 
   suffix =
     {
@@ -24,8 +24,8 @@ let
     hash =
       {
         # curl -Lfs https://github.com/trezor/trezor-suite/releases/download/v${version}/latest-linux{-arm64,}.yml | grep ^sha512 | sed 's/: /-/'
-        aarch64-linux = "sha512-9EWbYju0e3DdS8bnuMiD4Cdodz/LxbLyCItNEWSIi/UADxtH7smAbpAu4Awcgbb3o39x94Mf8rbqcxmIktDDhQ==";
-        x86_64-linux = "sha512-j8TI46Jr/Tc99Ri3aFY0z73HFY5AWpeAv/yJy8xsV8rNGWEwKlCvJzkrEUpvpFUBMoHgGw3PTQ7CYUQ5bmB/CA==";
+        aarch64-linux = "sha512-dqtnWxybR+QTc1cvh72Nm7zkDh7zy6qbAh36b4IGGjARb8X/cEkGMIR2t9E/5pylW6z5gBC7ZpthvdjsiKi1dg==";
+        x86_64-linux = "sha512-NBja0kDi43DQ/nJKfAR5+vwbDG/JLr1NKi2OT8CQ5PNeV7Q+4vW5NjsQ9eZyaFwDwSxMPlSzYE3nKcjW0XSiWA==";
       }
       .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
@@ -64,12 +64,12 @@ appimageTools.wrapType2 rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with lib; {
+  meta = {
     description = "Trezor Suite - Desktop App for managing crypto";
     homepage = "https://suite.trezor.io";
     changelog = "https://github.com/trezor/trezor-suite/releases/tag/v${version}";
-    license = licenses.unfree;
-    maintainers = with maintainers; [ prusnak ];
+    license = lib.licenses.unfree;
+    maintainers = with lib.maintainers; [ prusnak ];
     platforms = [
       "aarch64-linux"
       "x86_64-linux"

@@ -2,45 +2,46 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  pnpm_9,
+  pnpm_10,
   nodejs,
   dart-sass,
   nix-update-script,
   nixosTests,
 }:
+
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "25.02.1";
+  version = "25.10.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-Fh6qV2eU7VRskbPun7OcJmqgjILVE8w5lV70xH6znmc=";
+    hash = "sha256-5OWfWey6pFn+XUv9cvGoXD6ExKKFHL7PMTqqce7C7Q8=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm_10.fetchDeps {
     inherit
       pname
       version
       src
-      patches
-      ;
-    hash = "sha256-qeMmPI2B5FW82qLVtbREDjQh76THMCOZRQCM0DgvCqI=";
-  };
 
-  # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.
-  patches = [ ./0001-build-enable-specifying-custom-sass-compiler-path-by.patch ];
+      ;
+    fetcherVersion = 2;
+    hash = "sha256-2cozIe70PGo1WRUeWrY8W1B6U2QYLbWYcwN5WllRwkg=";
+  };
 
   nativeBuildInputs = [
     nodejs
     dart-sass
-    pnpm_9.configHook
+    pnpm_10.configHook
   ];
 
   buildPhase = ''
     runHook preBuild
 
-    export SASS_EMBEDDED_BIN_PATH="${dart-sass}/bin/sass"
+    # force the sass npm dependency to use our own sass binary instead of the bundled one
+    substituteInPlace node_modules/sass-embedded/dist/lib/src/compiler-path.js \
+      --replace-fail 'compilerCommand = (() => {' 'compilerCommand = (() => { return ["${lib.getExe dart-sass}"];'
     pnpm build
 
     runHook postBuild
@@ -51,6 +52,10 @@ stdenvNoCC.mkDerivation rec {
 
     mkdir -p $out
     cp -R dist/* $out/
+
+    # Remove sample/demo files from output
+    rm -f $out/assets/*.yml.dist
+    rm -f $out/assets/*.css.sample
 
     runHook postInstall
   '';
@@ -63,8 +68,8 @@ stdenvNoCC.mkDerivation rec {
   };
 
   meta = with lib; {
-    description = "A very simple static homepage for your server.";
-    homepage = "https://homer-demo.netlify.app/";
+    description = "Very simple static homepage for your server";
+    homepage = "https://github.com/bastienwirtz/homer";
     changelog = "https://github.com/bastienwirtz/homer/releases";
     license = licenses.asl20;
     maintainers = with maintainers; [

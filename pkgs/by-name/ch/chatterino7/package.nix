@@ -2,28 +2,34 @@
   lib,
   chatterino2,
   fetchFromGitHub,
-  nix-update-script,
-  boost186,
+  gitUpdater,
 }:
 
 (chatterino2.buildChatterino {
   enableAvifSupport = true;
-  boost = boost186;
 }).overrideAttrs
   (
     finalAttrs: _: {
       pname = "chatterino7";
-      version = "7.5.2";
+      version = "7.5.4";
 
       src = fetchFromGitHub {
         owner = "SevenTV";
         repo = "chatterino7";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-kQeW9Qa8NPs47xUlqggS4Df4fxIoknG8O5IBdOeIo+4=";
+        hash = "sha256-zA198AIFIRx4qE5MZwrGOFFrpnVrZMVQx1SX0RJpDo4=";
         fetchSubmodules = true;
+        leaveDotGit = true;
+        postFetch = ''
+          git -C $out rev-parse --short HEAD > $out/GIT_HASH
+          find "$out" -name .git -print0 | xargs -0 rm -rf
+        '';
       };
 
-      passthru.updateScript = nix-update-script { };
+      passthru.updateScript = gitUpdater {
+        rev-prefix = "v";
+        ignoredVersions = "beta";
+      };
 
       meta = {
         description = "Chat client for Twitch chat";
@@ -38,7 +44,10 @@
         changelog = "https://github.com/SevenTV/chatterino7/blob/${finalAttrs.src.rev}/CHANGELOG.c7.md";
         license = lib.licenses.mit;
         platforms = lib.platforms.unix;
-        maintainers = with lib.maintainers; [ marie ];
+        maintainers = with lib.maintainers; [
+          marie
+          supa
+        ];
       };
     }
   )

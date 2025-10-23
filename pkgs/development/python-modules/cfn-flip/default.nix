@@ -3,6 +3,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -29,11 +30,10 @@ buildPythonPackage rec {
     six
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    sed -i "/--cov/d" tox.ini
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   disabledTests = [
     # TypeError: load() missing 1 required positional argument: 'Loader'

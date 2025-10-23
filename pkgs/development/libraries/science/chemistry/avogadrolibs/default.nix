@@ -12,7 +12,6 @@
   python3,
   libarchive,
   libmsym,
-  msgpack,
   qttools,
   wrapQtAppsHook,
 }:
@@ -20,7 +19,7 @@
 let
   pythonWP = python3.withPackages (
     p: with p; [
-      openbabel-bindings
+      openbabel
       numpy
     ]
   );
@@ -29,32 +28,32 @@ let
   moleculesRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "molecules";
-    rev = "1.0.0";
-    sha256 = "guY6osnpv7Oqt+HE1BpIqL10POp+x8GAci2kY0bLmqg=";
+    tag = "1.101.0";
+    hash = "sha256-hMLf0gYYnQpjSGKcPy4tihNbmpRR7UxnXF/hyhforgI=";
   };
   crystalsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "crystals";
-    rev = "1.0.1";
-    sha256 = "sH/WuvLaYu6akOc3ssAKhnxD8KNoDxuafDSozHqJZC4=";
+    tag = "1.101.0";
+    hash = "sha256-WhzFldaOt/wJy1kk+ypOkw1OYFT3hqD7j5qGdq9g+IY=";
   };
   fragmentsRepo = fetchFromGitHub {
     owner = "OpenChemistry";
     repo = "fragments";
-    rev = "8dc711a59d016604b3e9b6d59dec178b8e6ccd36";
-    hash = "sha256-Valc5zwlaZ//eDupFouCfWCeID7/4ObU1SDLFJ/mo/g=";
+    tag = "1.101.0";
+    hash = "sha256-x10jGl3lAEfm8OxUZJnjXRJCQg8RLQZTstjwnt5B2bw=";
   };
 
 in
 stdenv.mkDerivation rec {
   pname = "avogadrolibs";
-  version = "1.100.0";
+  version = "1.101.0";
 
   src = fetchFromGitHub {
     owner = "OpenChemistry";
-    repo = pname;
-    rev = version;
-    hash = "sha256-zDn5cgMBJYM27mfQHujxhIf4ZTljFxvFrKl7pNa4K9E=";
+    repo = "avogadrolibs";
+    tag = version;
+    hash = "sha256-0DJU40Etse90rdX8xByjQeUiBsJtEQozZQQsWsc4vxk=";
   };
 
   postUnpack = ''
@@ -78,16 +77,15 @@ stdenv.mkDerivation rec {
     glew
     libarchive
     libmsym
-    msgpack
     qttools
   ];
 
   # Fix the broken CMake files to use the correct paths
   postInstall = ''
-    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsConfig.cmake \
+    substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsConfig.cmake \
       --replace "$out/" ""
 
-    substituteInPlace $out/lib/cmake/${pname}/AvogadroLibsTargets.cmake \
+    substituteInPlace $out/lib/cmake/avogadrolibs/AvogadroLibsTargets.cmake \
       --replace "_IMPORT_PREFIX}/$out" "_IMPORT_PREFIX}/"
   '';
 

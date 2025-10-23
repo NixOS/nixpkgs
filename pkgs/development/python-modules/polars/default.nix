@@ -9,7 +9,7 @@
   pkgs, # zstd hidden by python3Packages.zstd
   pytestCheckHook,
   pytest-codspeed ? null, # Not in Nixpkgs
-  pytest-cov,
+  pytest-cov-stub,
   pytest-xdist,
   pytest-benchmark,
   rustc,
@@ -40,7 +40,7 @@
 }:
 
 let
-  version = "1.21.0";
+  version = "1.31.0";
 
   # Hide symbols to prevent accidental use
   rust-jemalloc-sys = throw "polars: use polarsMemoryAllocator over rust-jemalloc-sys";
@@ -50,13 +50,18 @@ in
 buildPythonPackage rec {
   pname = "polars";
   inherit version;
+  format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pola-rs";
     repo = "polars";
     tag = "py-${version}";
-    hash = "sha256-/MmuaQG8ozl2yAVBXIibbtKjCQbw98azBFSKiP2PE0A=";
+    hash = "sha256-OZ7guV/uxa3jGesAh+ubrFjQSNVp5ImfXfPAQxagTj0=";
   };
+
+  patches = [
+    ./avx512.patch
+  ];
 
   # Do not type-check assertions because some of them use unstable features (`is_none_or`)
   postPatch = ''
@@ -67,7 +72,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-CVKT3x8SkpL7VFw6yc4pGwd0EYwufXtBp4Xl2eD88sM=";
+    hash = "sha256-yGTXUW6IVa+nRpmnkEl20/RJ/mxTSAaokETT8QLE+Ns=";
   };
 
   requiredSystemFeatures = [ "big-parallel" ];
@@ -177,7 +182,7 @@ buildPythonPackage rec {
 
     requiredSystemFeatures = [ "big-parallel" ];
 
-    sourceRoot = "source/py-polars";
+    sourceRoot = "${src.name}/py-polars";
     postPatch = ''
       for f in * ; do
         [[ "$f" == "tests" ]] || \
@@ -229,15 +234,15 @@ buildPythonPackage rec {
     nativeCheckInputs = [
       pytestCheckHook
       pytest-codspeed
-      pytest-cov
+      pytest-cov-stub
       pytest-xdist
       pytest-benchmark
     ];
 
-    pytestFlagsArray = [
-      "-n auto"
-      "--dist loadgroup"
-      ''-m "slow or not slow"''
+    pytestFlags = [
+      "--benchmark-disable"
+      "-nauto"
+      "--dist=loadgroup"
     ];
     disabledTests = [
       "test_read_kuzu_graph_database" # kuzu

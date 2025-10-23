@@ -53,7 +53,8 @@
   useStaticLibuvc ? true,
   useStaticOpenAL ? true,
   useStaticSqlite ? true,
-  useTracy ? true,
+  # For debugging only, disabled by upstream
+  useTracy ? false,
   # Configurable options
   sources ? callPackage ./sources.nix { },
 }:
@@ -74,7 +75,8 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
     pkg-config
     wayland-scanner
-  ] ++ lib.optionals buildManPages [ ruby ];
+  ]
+  ++ lib.optionals buildManPages [ ruby ];
 
   buildInputs = [
     SDL2
@@ -114,7 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     xcbutil
     xcbutilwm
     xz
-  ] ++ lib.optionals useEspeak [ espeak-ng ];
+  ]
+  ++ lib.optionals useEspeak [ espeak-ng ];
 
   cmakeFlags = [
     # The upstream project recommends tagging the distribution
@@ -202,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
       gpl2Plus
       lgpl2Plus
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

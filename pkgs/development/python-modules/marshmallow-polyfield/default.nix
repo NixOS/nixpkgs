@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Extension to Marshmallow to allow for polymorphic fields";
     homepage = "https://github.com/Bachmann1234/marshmallow-polyfield";
     license = licenses.asl20;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

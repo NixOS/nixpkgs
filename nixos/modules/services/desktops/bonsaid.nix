@@ -143,7 +143,7 @@ in
       lib.mkDefault (json.generate "bonsai_tree.json" (filterNulls cfg.settings));
 
     # bonsaid is controlled by bonsaictl, so place the latter in the environment by default.
-    # bonsaictl is typically invoked by scripts or a DE so this isn't strictly necesssary,
+    # bonsaictl is typically invoked by scripts or a DE so this isn't strictly necessary,
     # but it's helpful while administering the service generally.
     environment.systemPackages = [ cfg.package ];
 

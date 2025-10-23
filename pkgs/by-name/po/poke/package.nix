@@ -22,23 +22,22 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "poke";
-  version = "4.2";
+  version = "4.3";
 
   src = fetchurl {
     url = "mirror://gnu/poke/poke-${finalAttrs.version}.tar.gz";
-    hash = "sha256-iq825h42elMUDqQOJVnp7FEud5xCvuNOesJLNLoRm94=";
+    hash = "sha256-qEy5F11Q1FpBHySB/QZiuDyzLOUXMWuInPtXCBlXk3M=";
   };
 
-  outputs =
-    [
-      "out"
-      "dev"
-      "info"
-      "lib"
-    ]
-    # help2man can't cross compile because it runs `poke --help` to
-    # generate the man page
-    ++ lib.optional (!isCross) "man";
+  outputs = [
+    "out"
+    "dev"
+    "info"
+    "lib"
+  ]
+  # help2man can't cross compile because it runs `poke --help` to
+  # generate the man page
+  ++ lib.optional (!isCross) "man";
 
   postPatch = ''
     patchShebangs .
@@ -46,23 +45,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      pkg-config
-      texinfo
-    ]
-    ++ lib.optionals (!isCross) [
-      help2man
-    ];
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+  ]
+  ++ lib.optionals (!isCross) [
+    help2man
+  ];
 
-  buildInputs =
-    [
-      boehmgc
-      readline
-    ]
-    ++ lib.optional nbdSupport libnbd
-    ++ lib.optional textStylingSupport gettext
-    ++ lib.optional finalAttrs.finalPackage.doCheck dejagnu;
+  buildInputs = [
+    boehmgc
+    readline
+  ]
+  ++ lib.optional nbdSupport libnbd
+  ++ lib.optional textStylingSupport gettext
+  ++ lib.optional finalAttrs.finalPackage.doCheck dejagnu;
 
   configureFlags = [
     # libpoke depends on $datadir/poke, so we specify the datadir in
@@ -97,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Interactive, extensible editor for binary data";
     homepage = "http://www.jemarch.net/poke";
-    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${finalAttrs.version}";
+    changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/NEWS?h=releases/poke-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ kira-bruneau ];
     platforms = lib.platforms.unix;

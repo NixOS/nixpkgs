@@ -10,7 +10,7 @@
   libimobiledevice,
   gperf,
   libtirpc,
-  openexr_3,
+  openexr,
   taglib,
   libappimage,
 }:
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     kguiaddons
     ki18n
     kio
-    libkexiv2
+    # libkexiv2
     phonon
     solid
     syntax-highlighting
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     libimobiledevice
     gperf
     libtirpc
-    openexr_3
+    openexr
     taglib
     libappimage
   ];

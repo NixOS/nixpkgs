@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "rep-grep";
   version = "0-unstable-2024-02-06";
 
@@ -15,7 +15,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-/dH+mNtNHaYFndVhoqmz4Sc3HeemoQt1HGD98mb9Qhw=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-t4tfQaFq4EV4ZWeU+IestSFiSAIeVQslTZhLbpKVoO4=";
 
   meta = with lib; {

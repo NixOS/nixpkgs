@@ -1,49 +1,53 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
+  llvm,
   cmake,
   lsb-release,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipcc";
-  version = "6.0.2";
+  # In-tree with ROCm LLVM
+  inherit (llvm.llvm) version;
+  src = llvm.llvm.monorepoSrc;
+  sourceRoot = "${finalAttrs.src.name}/amd/hipcc";
+  strictDeps = true;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "HIPCC";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-/LRQN+RSMBPk2jS/tdp3psUL/B0RJZQhRri7e67KsG4=";
-  };
+  nativeBuildInputs = [
+    llvm.rocm-toolchain
+    cmake
+  ];
 
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [
+    llvm.clang-unwrapped
+  ];
+
+  patches = [
+    # https://github.com/ROCm/llvm-project/pull/183
+    # Fixes always-invoked UB in hipcc
+    ./0001-hipcc-Remove-extra-definition-of-hipBinUtilPtr_-in-d.patch
+  ];
 
   postPatch = ''
     substituteInPlace src/hipBin_amd.h \
-      --replace "/usr/bin/lsb_release" "${lsb-release}/bin/lsb_release"
+      --replace-fail "/usr/bin/lsb_release" "${lsb-release}/bin/lsb_release"
   '';
 
+  cmakeFlags = [
+    "-DCMAKE_BUILD_TYPE=Release"
+  ];
   postInstall = ''
     rm -r $out/hip/bin
     ln -s $out/bin $out/hip/bin
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
-  };
-
   meta = with lib; {
     description = "Compiler driver utility that calls clang or nvcc";
     homepage = "https://github.com/ROCm/HIPCC";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
+    maintainers = with maintainers; [ lovesegfault ];
+    teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

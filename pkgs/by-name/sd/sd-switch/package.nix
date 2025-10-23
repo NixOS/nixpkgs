@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.5.3";
+  version = "0.6.2";
 in
 rustPlatform.buildRustPackage {
   pname = "sd-switch";
@@ -16,23 +16,22 @@ rustPlatform.buildRustPackage {
     owner = "~rycee";
     repo = "sd-switch";
     rev = version;
-    hash = "sha256-9aIu37mmf4ZnmZZrU0GA6z+bHKwtfkA5KnLRLY0c2r8=";
+    hash = "sha256-3+FGARca3xcCYKEAxtrhnSnpOP2JZurOPzKvNhAYjkg=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-2DpaO64EehlgG5zSzqERmenmEqUbhEwFmIQEmCKs4Wg=";
+  cargoHash = "sha256-jclRF05eUAW/ggCmfZfWE6c4q25d/WGX0dad4rsP8vk=";
 
   passthru = {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Systemd unit switcher for Home Manager";
     mainProgram = "sd-switch";
     homepage = "https://git.sr.ht/~rycee/sd-switch";
     changelog = "https://git.sr.ht/~rycee/sd-switch/refs/${version}";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rycee ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ rycee ];
+    platforms = lib.platforms.linux;
   };
 }

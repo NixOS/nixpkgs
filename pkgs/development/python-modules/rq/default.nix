@@ -1,8 +1,8 @@
 {
   lib,
+  stdenv,
   fetchFromGitHub,
   buildPythonPackage,
-  pythonOlder,
 
   # build-system
   hatchling,
@@ -12,24 +12,23 @@
   redis,
 
   # tests
+  addBinToPathHook,
   psutil,
   pytestCheckHook,
-  redis-server,
-  sentry-sdk,
+  redisTestHook,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "2.1";
+  version = "2.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
     tag = "v${version}";
-    hash = "sha256-J3ftABqm+5lH37LiBskEXOb6MszvDKO2271s+CEk0ls=";
+    hash = "sha256-CtxirZg6WNQpTMoXQRvB8i/KB3r58WlKh+wjBvyVMMs=";
   };
 
   build-system = [ hatchling ];
@@ -40,34 +39,32 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     psutil
     pytestCheckHook
-    sentry-sdk
+    redisTestHook
+    versionCheckHook
   ];
-
-  preCheck = ''
-    PATH=$out/bin:$PATH
-    ${redis-server}/bin/redis-server &
-  '';
-
-  postCheck = ''
-    kill %%
-  '';
+  versionCheckProgramArg = "--version";
 
   __darwinAllowLocalNetworking = true;
 
-  disabledTests = [
-    # https://github.com/rq/rq/commit/fd261d5d8fc0fe604fa396ee6b9c9b7a7bb4142f
-    "test_clean_large_registry"
+  # redisTestHook does not work on darwin-x86_64
+  doCheck = !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # PermissionError: [Errno 13] Permission denied: '/tmp/rq-tests.txt'
+    "test_deleted_jobs_arent_executed"
+    "test_suspend_worker_execution"
   ];
 
   pythonImportsCheck = [ "rq" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for creating background jobs and processing them";
     homepage = "https://github.com/nvie/rq/";
     changelog = "https://github.com/rq/rq/releases/tag/${src.tag}";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ mrmebelman ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ mrmebelman ];
   };
 }

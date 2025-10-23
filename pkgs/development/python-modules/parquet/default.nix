@@ -48,12 +48,17 @@ buildPythonPackage rec {
     "testFromExample"
   ];
 
-  pythonImportsCheck = [ "thriftpy2" ];
+  disabledTestPaths = [
+    # Test is outdated
+    "test/test_read_support.py"
+  ];
+
+  pythonImportsCheck = [ "parquet" ];
 
   meta = with lib; {
     description = "Python implementation of the parquet columnar file format";
     homepage = "https://github.com/jcrobak/parquet-python";
-    changelog = "https://github.com/jcrobak/parquet-python/releases/tag/v${version}";
+    changelog = "https://github.com/jcrobak/parquet-python/releases/tag/${src.tag}";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fab ];
     mainProgram = "parquet";

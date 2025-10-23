@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "angelscript";
-  version = "2.37.0";
+  version = "2.38.0";
 
   src = fetchurl {
     url = "https://www.angelcode.com/angelscript/sdk/files/angelscript_${version}.zip";
-    sha256 = "sha256-DFLRaIAWoLJITpylSUccTild8GB3DFeEAUTGSBX1TxA=";
+    sha256 = "sha256-sztdvNoQMX72fWKDU9gyRphM5vysEC1Nwq7RIeulLm8=";
   };
 
   nativeBuildInputs = [

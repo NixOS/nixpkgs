@@ -9,6 +9,7 @@
 buildPythonPackage rec {
   pname = "configparser";
   version = "4.0.2";
+  format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;

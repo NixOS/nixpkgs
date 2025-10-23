@@ -4,13 +4,17 @@
   fetchpatch,
   callPackage,
   runCommand,
-  python3,
+  python,
   encryptionSupport ? true,
   sqliteSupport ? true,
 }:
 
 let
-  python = python3.override {
+  # save for overriding it
+  python' = python;
+in
+let
+  python = python'.override {
     self = python;
     packageOverrides = final: prev: {
       # SQLAlchemy>=1,<1.4
@@ -19,6 +23,7 @@ let
       sqlalchemy = final.buildPythonPackage rec {
         pname = "SQLAlchemy";
         version = "1.3.24";
+        format = "setuptools";
 
         src = fetchPypi {
           inherit pname version;
@@ -38,6 +43,7 @@ let
   maubot = python.pkgs.buildPythonPackage rec {
     pname = "maubot";
     version = "0.5.1";
+    format = "setuptools";
     disabled = python.pythonOlder "3.10";
 
     src = fetchPypi {
@@ -92,9 +98,6 @@ let
     postInstall = ''
       rm $out/example-config.yaml
     '';
-
-    # Setuptools is trying to do python -m maubot test
-    dontUseSetuptoolsCheck = true;
 
     pythonImportsCheck = [
       "maubot"

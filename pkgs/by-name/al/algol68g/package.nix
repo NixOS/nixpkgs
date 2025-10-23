@@ -15,17 +15,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "algol68g";
-  version = "3.4.2";
+  version = "3.5.14";
 
   src = fetchurl {
     url = "https://jmvdveer.home.xs4all.nl/algol68g-${finalAttrs.version}.tar.gz";
-    hash = "sha256-hKiRMU98sZhGgHhjgtwUNSIv2iPgb4T+dgYw58IGK8Q=";
+    hash = "sha256-uIy8rIhUjohiQJ/K5EprsIISXMAx1w27I3cGo/9H9Wk=";
   };
 
   outputs = [
     "out"
     "man"
-  ] ++ lib.optionals withPDFDoc [ "doc" ];
+  ]
+  ++ lib.optionals withPDFDoc [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -68,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.gpl3Plus;
     mainProgram = "a68g";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.unix;
   };
 })

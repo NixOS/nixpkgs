@@ -1,18 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gumbo";
-  version = "0.13.0";
+  version = "0.13.2";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "gumbo-parser";
     repo = "gumbo-parser";
     rev = version;
-    hash = "sha256-QpGOBKNPBryCXZKKEQMv9TXJiNyXESBFiR4wM0lmjiI=";
+    hash = "sha256-8mri7mLZkuIZgzE6p0yc41bNNyzGTV9V90OiA/9TkkU=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

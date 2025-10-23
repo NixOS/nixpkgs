@@ -11,7 +11,7 @@
   libevent,
   libxml2,
   mariadb-connector-c,
-  pcre,
+  pcre2,
   gnugrep,
   gawk,
   coreutils,
@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kamailio";
-  version = "5.7.4";
+  version = "6.0.3";
 
   src = fetchurl {
     url = "https://www.kamailio.org/pub/kamailio/${finalAttrs.version}/src/kamailio-${finalAttrs.version}_src.tar.gz";
-    hash = "sha256-AP9zgGFuoM+gsVmoepfedFTwDOM3RpsRpO6gS/4AMfM=";
+    hash = "sha256-ljxwsspk8IAchUnMUbTi8bf05zrp1KcBRcXE1bTaEYQ=";
   };
 
   buildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     libevent
     libxml2
     mariadb-connector-c
-    pcre
+    pcre2
     openssl
   ];
 

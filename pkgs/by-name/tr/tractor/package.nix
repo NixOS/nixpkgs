@@ -17,7 +17,7 @@
 
 let
   # This package should be updated together with pkgs/by-name/ca/carburetor/package.nix
-  version = "5.0.0";
+  version = "5.1.0";
 in
 python3Packages.buildPythonApplication {
   pname = "tractor";
@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication {
     owner = "tractor";
     repo = "tractor";
     tag = version;
-    hash = "sha256-KyVL3dFofoi2TRtZo557X9P/RD16v94VuWdtdAskZk4=";
+    hash = "sha256-pyGDxHOpaZutUhXRwGAN77fGNn68EWIGgWu80avkuSI=";
   };
 
   patches = [ ./fix-gsettings-schema.patch ];
@@ -42,13 +42,12 @@ python3Packages.buildPythonApplication {
     wrapGAppsHook4
   ];
 
-  propagatedBuildInputs =
-    [
-      tor
-    ]
-    ++ lib.optional withObfs4 obfs4
-    ++ lib.optional withSnowflake snowflake
-    ++ lib.optional withConjure conjure-tor;
+  propagatedBuildInputs = [
+    tor
+  ]
+  ++ lib.optional withObfs4 obfs4
+  ++ lib.optional withSnowflake snowflake
+  ++ lib.optional withConjure conjure-tor;
 
   dependencies = [
     python3Packages.setuptools
@@ -58,23 +57,22 @@ python3Packages.buildPythonApplication {
     python3Packages.stem
   ];
 
-  postInstall =
-    ''
-      mkdir -p "$out/share/glib-2.0/schemas"
-      cp "$src/src/tractor/tractor.gschema.xml" "$out/share/glib-2.0/schemas"
-    ''
-    + lib.optionalString withObfs4 ''
-      substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/obfs4proxy' '${obfs4}/bin/lyrebird'
-    ''
-    + lib.optionalString withSnowflake ''
-      substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/snowflake-client' '${snowflake}/bin/client'
-    ''
-    + lib.optionalString withConjure ''
-      substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/conjure-client' '${conjure-tor}/bin/client'
-    ''
-    + ''
-      glib-compile-schemas "$out/share/glib-2.0/schemas"
-    '';
+  postInstall = ''
+    mkdir -p "$out/share/glib-2.0/schemas"
+    cp "$src/src/tractor/tractor.gschema.xml" "$out/share/glib-2.0/schemas"
+  ''
+  + lib.optionalString withObfs4 ''
+    substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/obfs4proxy' '${obfs4}/bin/lyrebird'
+  ''
+  + lib.optionalString withSnowflake ''
+    substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/snowflake-client' '${snowflake}/bin/client'
+  ''
+  + lib.optionalString withConjure ''
+    substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/conjure-client' '${conjure-tor}/bin/client'
+  ''
+  + ''
+    glib-compile-schemas "$out/share/glib-2.0/schemas"
+  '';
 
   dontWrapGApps = true;
 

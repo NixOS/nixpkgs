@@ -7,10 +7,10 @@
 
 let
   pname = "wootility";
-  version = "5.0.3";
+  version = "5.1.2";
   src = fetchurl {
     url = "https://wootility-updates.ams3.cdn.digitaloceanspaces.com/wootility-linux/Wootility-${version}.AppImage";
-    sha256 = "sha256-uDjxA8o/ZvWJzpwJFs2b6jXcaRBeNy04hkeZ3DGoXVs=";
+    sha256 = "sha256-JcVyuilhy1qjXyIeniXZ0s4qxXr/4wLXrXgTTxjCkBk=";
   };
 in
 
@@ -38,9 +38,9 @@ appimageTools.wrapType2 {
   '';
 
   extraPkgs =
-    pkgs: with pkgs; ([
+    pkgs: with pkgs; [
       xorg.libxkbfile
-    ]);
+    ];
 
   meta = {
     homepage = "https://wooting.io/wootility";
@@ -48,7 +48,6 @@ appimageTools.wrapType2 {
     platforms = lib.platforms.linux;
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [
-      davidtwco
       sodiboo
       returntoreality
     ];

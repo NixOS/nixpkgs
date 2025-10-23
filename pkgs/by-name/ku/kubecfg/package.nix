@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
@@ -26,19 +27,19 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd kubecfg \
       --bash <($out/bin/kubecfg completion --shell=bash) \
       --zsh  <($out/bin/kubecfg completion --shell=zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for managing Kubernetes resources as code";
     mainProgram = "kubecfg";
     homepage = "https://github.com/kubecfg/kubecfg";
     changelog = "https://github.com/kubecfg/kubecfg/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       benley
       qjoly
     ];

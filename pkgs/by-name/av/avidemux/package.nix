@@ -80,6 +80,21 @@ stdenv.mkDerivation rec {
         stripLen = 1;
       }
     } avidemux_core/ffmpeg_package/patches/
+
+    # Those CMake versions are deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace {avidemux_plugins,avidemux_core,avidemux/{cli,qt4}}/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.0)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace avidemux/gtk/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace avidemux/qt4/xdg_data/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.11)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace addons/fontGen/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8)" \
+      "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
@@ -87,39 +102,39 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
     makeWrapper
-  ] ++ lib.optional withQT libsForQt5.wrapQtAppsHook;
-  buildInputs =
+  ]
+  ++ lib.optional withQT libsForQt5.wrapQtAppsHook;
+  buildInputs = [
+    zlib
+    gettext
+    libvdpau
+    libva
+    libXv
+    sqlite
+    fribidi
+    fontconfig
+    freetype
+    alsa-lib
+    libXext
+    libGLU
+  ]
+  ++ lib.optional withX264 x264
+  ++ lib.optional withX265 x265
+  ++ lib.optional withXvid xvidcore
+  ++ lib.optional withLAME lame
+  ++ lib.optional withFAAC faac
+  ++ lib.optional withVorbis libvorbis
+  ++ lib.optional withPulse libpulseaudio
+  ++ lib.optional withFAAD faad2
+  ++ lib.optional withOpus libopus
+  ++ lib.optionals withQT (
+    with libsForQt5;
     [
-      zlib
-      gettext
-      libvdpau
-      libva
-      libXv
-      sqlite
-      fribidi
-      fontconfig
-      freetype
-      alsa-lib
-      libXext
-      libGLU
+      qttools
+      qtbase
     ]
-    ++ lib.optional withX264 x264
-    ++ lib.optional withX265 x265
-    ++ lib.optional withXvid xvidcore
-    ++ lib.optional withLAME lame
-    ++ lib.optional withFAAC faac
-    ++ lib.optional withVorbis libvorbis
-    ++ lib.optional withPulse libpulseaudio
-    ++ lib.optional withFAAD faad2
-    ++ lib.optional withOpus libopus
-    ++ lib.optionals withQT (
-      with libsForQt5;
-      [
-        qttools
-        qtbase
-      ]
-    )
-    ++ lib.optional withVPX libvpx;
+  )
+  ++ lib.optional withVPX libvpx;
 
   dontWrapQtApps = true;
 
@@ -165,7 +180,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "http://fixounet.free.fr/avidemux/";
     description = "Free video editor designed for simple video editing tasks";
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
     # "CPU not supported" errors on AArch64
     platforms = [
       "i686-linux"

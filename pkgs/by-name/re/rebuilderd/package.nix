@@ -12,7 +12,6 @@
   xz,
   zstd,
   stdenv,
-  darwin,
   buildPackages,
   versionCheckHook,
   nixosTests,
@@ -21,13 +20,13 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rebuilderd";
-  version = "0.22.1";
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
     repo = "rebuilderd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YMBq+Z9yMQRXOM3U679g2lnBZlH/h0VLjoxySxi4SCo=";
+    hash = "sha256-BuL9s3ewZ1NvR9GG51TVrAncB0PR78Wuw8by+loSP8Q=";
   };
 
   postPatch = ''
@@ -41,8 +40,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       --replace-fail '/bin/echo' 'echo'
   '';
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-MjFQ5d9VWHodjj+hIsKgAIUdaiarXIi5GCS+47n5MGU=";
+  cargoHash = "sha256-4M5uWgksYsV8PGe0zn9ADv06q3Ga/GVoQ8HjS7GCnwo=";
 
   nativeBuildInputs = [
     pkg-config
@@ -50,19 +48,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
     scdoc
   ];
 
-  buildInputs =
-    [
-      bzip2
-      openssl
-      shared-mime-info
-      sqlite
-      xz
-      zstd
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    bzip2
+    openssl
+    shared-mime-info
+    sqlite
+    xz
+    zstd
+  ];
 
   postInstall =
     let
@@ -107,7 +100,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
   passthru.tests = {
@@ -120,7 +113,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Independent verification of binary packages - reproducible builds";
     homepage = "https://github.com/kpcyrd/rebuilderd";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ drupol ];
+    maintainers = [ ];
     mainProgram = "rebuilderd";
   };
 })

@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  installFlags = [ "PREFIX=${builtins.placeholder "out"}" ];
+  installFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with lib; {
     homepage = "https://himitsustore.org/";

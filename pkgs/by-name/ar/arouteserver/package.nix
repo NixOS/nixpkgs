@@ -26,6 +26,8 @@ python3Packages.buildPythonPackage rec {
 
   build-system = with python3Packages; [ setuptools ];
 
+  pythonRelaxDeps = [ "packaging" ];
+
   dependencies = with python3Packages; [
     aggregate6
     jinja2
@@ -46,7 +48,7 @@ python3Packages.buildPythonPackage rec {
     "pierky.arouteserver"
   ];
 
-  pytestFlagsArray = [ "tests/static" ];
+  enabledTestPaths = [ "tests/static" ];
 
   disabledTests = [
     # disable copyright year check of files
@@ -59,6 +61,7 @@ python3Packages.buildPythonPackage rec {
     homepage = "https://github.com/pierky/arouteserver";
     changelog = "https://github.com/pierky/arouteserver/blob/v${version}/CHANGES.rst";
     license = with lib.licenses; [ gpl3Only ];
-    maintainers = lib.teams.wdz.members ++ (with lib.maintainers; [ marcel ]);
+    maintainers = with lib.maintainers; [ marcel ];
+    teams = [ lib.teams.wdz ];
   };
 }

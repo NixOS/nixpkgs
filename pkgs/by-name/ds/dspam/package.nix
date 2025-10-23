@@ -50,45 +50,47 @@ stdenv.mkDerivation rec {
     ./mariadb.patch
   ];
 
-  buildInputs =
-    [ perlPackages.perl ]
-    ++ lib.optionals withMySQL [
-      zlib
-      mariadb-connector-c.out
-    ]
-    ++ lib.optional withPgSQL libpq
-    ++ lib.optional withSQLite sqlite
-    ++ lib.optional withDB db;
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    perlPackages.perl
+  ]
+  ++ lib.optionals withMySQL [
+    zlib
+    mariadb-connector-c.out
+  ]
+  ++ lib.optional withPgSQL libpq
+  ++ lib.optional withSQLite sqlite
+  ++ lib.optional withDB db;
+  nativeBuildInputs = [
+    libpq.pg_config
+    makeWrapper
+  ];
   # patch out libmysql >= 5 check, since mariadb-connector is at 3.x
   postPatch = ''
     sed -i 's/atoi(m) >= 5/1/g' configure m4/mysql_drv.m4
   '';
 
-  configureFlags =
-    [
-      "--with-storage-driver=${drivers}"
-      "--sysconfdir=/etc/dspam"
-      "--localstatedir=/var"
-      "--with-dspam-home=/var/lib/dspam"
-      "--with-logdir=/var/log/dspam"
-      "--with-logfile=/var/log/dspam/dspam.log"
+  configureFlags = [
+    "--with-storage-driver=${drivers}"
+    "--sysconfdir=/etc/dspam"
+    "--localstatedir=/var"
+    "--with-dspam-home=/var/lib/dspam"
+    "--with-logdir=/var/log/dspam"
+    "--with-logfile=/var/log/dspam/dspam.log"
 
-      "--enable-daemon"
-      "--enable-clamav"
-      "--enable-syslog"
-      "--enable-large-scale"
-      "--enable-virtual-users"
-      "--enable-split-configuration"
-      "--enable-preferences-extension"
-      "--enable-long-usernames"
-      "--enable-external-lookup"
-    ]
-    ++ lib.optionals withMySQL [
-      "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
-      "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
-    ]
-    ++ lib.optional withPgSQL "--with-pgsql-libraries=${libpq}/lib";
+    "--enable-daemon"
+    "--enable-clamav"
+    "--enable-syslog"
+    "--enable-large-scale"
+    "--enable-virtual-users"
+    "--enable-split-configuration"
+    "--enable-preferences-extension"
+    "--enable-long-usernames"
+    "--enable-external-lookup"
+  ]
+  ++ lib.optionals withMySQL [
+    "--with-mysql-includes=${mariadb-connector-c.dev}/include/mysql"
+    "--with-mysql-libraries=${mariadb-connector-c.out}/lib/mysql"
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -147,6 +149,6 @@ stdenv.mkDerivation rec {
     description = "Community Driven Antispam Filter";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = [ ];
   };
 }

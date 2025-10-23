@@ -44,7 +44,7 @@ in
       default = "gancio";
     };
 
-    settings = mkOption rec {
+    settings = mkOption {
       type = types.submodule {
         freeformType = settingsFormat.type;
         options = {
@@ -57,7 +57,7 @@ in
             default = "http${
               lib.optionalString config.services.nginx.virtualHosts."${cfg.settings.hostname}".enableACME "s"
             }://${cfg.settings.hostname}";
-            defaultText = lib.literalExpression ''"https://''${cfg.settings.hostname}"'';
+            defaultText = lib.literalExpression ''"https://''${config.services.gancio.settings.hostname}"'';
             example = "https://demo.gancio.org/gancio";
             description = "The full URL under which the server is reachable.";
           };
@@ -89,9 +89,7 @@ in
               readOnly = true;
               type = types.nullOr types.str;
               default = if cfg.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null;
-              defaultText = ''
-                if cfg.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null
-              '';
+              defaultText = ''if config.services.gancio.settings.db.dialect == "sqlite" then "/var/lib/gancio/db.sqlite" else null'';
             };
             host = mkOption {
               description = ''
@@ -100,9 +98,7 @@ in
               readOnly = true;
               type = types.nullOr types.str;
               default = if cfg.settings.db.dialect == "postgres" then "/run/postgresql" else null;
-              defaultText = ''
-                if cfg.settings.db.dialect == "postgres" then "/run/postgresql" else null
-              '';
+              defaultText = ''if config.services.gancio.settings.db.dialect == "postgres" then "/run/postgresql" else null'';
             };
             database = mkOption {
               description = ''
@@ -111,9 +107,7 @@ in
               readOnly = true;
               type = types.nullOr types.str;
               default = if cfg.settings.db.dialect == "postgres" then cfg.user else null;
-              defaultText = ''
-                if cfg.settings.db.dialect == "postgres" then cfg.user else null
-              '';
+              defaultText = ''if config.services.gancio.settings.db.dialect == "postgres" then cfg.user else null'';
             };
           };
           log_level = mkOption {
@@ -171,7 +165,20 @@ in
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      (pkgs.runCommand "gancio" { } ''
+        mkdir -p $out/bin
+        echo '#!${pkgs.runtimeShell}
+        cd /var/lib/gancio/
+        sudo=exec
+        if [[ "$USER" != ${cfg.user} ]]; then
+          sudo="exec /run/wrappers/bin/sudo -u ${cfg.user}"
+        fi
+        $sudo ${lib.getExe cfg.package} "''${@:--help}"
+        ' > $out/bin/gancio
+        chmod +x $out/bin/gancio
+      '')
+    ];
 
     users.users.gancio = lib.mkIf (cfg.user == "gancio") {
       isSystemUser = true;
@@ -204,11 +211,17 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [
           "network.target"
-        ] ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.service";
+        ]
+        ++ optional (cfg.settings.db.dialect == "postgres") "postgresql.target";
 
         environment = {
           NODE_ENV = "production";
         };
+
+        path = [
+          # required for sendmail
+          "/run/wrappers"
+        ];
 
         preStart = ''
           # We need this so the gancio executable run by the user finds the right settings.

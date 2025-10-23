@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "mqtt_cpp";
-  version = "13.2.1";
+  version = "13.2.2";
 
   src = fetchFromGitHub {
     owner = "redboltz";
     repo = "mqtt_cpp";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-E5dMZ0uJ1AOwiGTxD4qhbO72blplmXHh1gTYGE34H+0=";
+    hash = "sha256-L1XscNriCBZF3PB2QXhA08s9aUqoQ1SwE9wnHHCUHvg=";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "ory";
@@ -27,6 +33,8 @@ buildGoModule rec {
 
   postInstall = ''
     mv $out/bin/cli $out/bin/ory
+  ''
+  + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd ory \
       --bash <($out/bin/ory completion bash) \
       --fish <($out/bin/ory completion fish) \
@@ -34,10 +42,13 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
+    description = "CLI for Ory";
     mainProgram = "ory";
-    description = "Ory CLI";
     homepage = "https://www.ory.sh/cli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ luleyleo nicolas-goudry ];
+    maintainers = with maintainers; [
+      luleyleo
+      nicolas-goudry
+    ];
   };
 }

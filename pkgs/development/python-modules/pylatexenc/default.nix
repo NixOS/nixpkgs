@@ -26,6 +26,6 @@ buildPythonPackage rec {
     downloadPage = "https://www.github.com/phfaist/pylatexenc/releases";
     changelog = "https://pylatexenc.readthedocs.io/en/latest/changes/";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

@@ -46,6 +46,10 @@ in
     users.groups.munge = { };
 
     systemd.services.munged = {
+      documentation = [
+        "man:munged(8)"
+        "man:mungekey(8)"
+      ];
       wantedBy = [ "multi-user.target" ];
       wants = [
         "network-online.target"

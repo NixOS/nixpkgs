@@ -90,6 +90,7 @@ in
         enum
         package
         port
+        listOf
         ;
 
       assertStringPath =
@@ -285,6 +286,25 @@ in
           different theme types: for example, `account`,
           `login` etc. After adding a theme to this option you
           can select it by its name in Keycloak administration console.
+        '';
+      };
+
+      realmFiles = mkOption {
+        type = listOf path;
+        example = lib.literalExpression ''
+          [
+            ./some/realm.json
+            ./another/realm.json
+          ]
+        '';
+        default = [ ];
+        description = ''
+          Realm files that the server is going to import during startup.
+          If a realm already exists in the server, the import operation is
+          skipped. Importing the master realm is not supported. All files are
+          expected to be in `json` format. See the
+          [documentation](https://www.keycloak.org/server/importExport) for
+          further information.
         '';
       };
 
@@ -582,9 +602,9 @@ in
         ];
 
       systemd.services.keycloakPostgreSQLInit = mkIf createLocalPostgreSQL {
-        after = [ "postgresql.service" ];
+        after = [ "postgresql.target" ];
         before = [ "keycloak.service" ];
-        bindsTo = [ "postgresql.service" ];
+        bindsTo = [ "postgresql.target" ];
         path = [ config.services.postgresql.package ];
         serviceConfig = {
           Type = "oneshot";
@@ -611,6 +631,7 @@ in
           psql -tAc "SELECT 1 FROM pg_roles WHERE rolname='keycloak'" | grep -q 1 || psql -tA --file="$create_role"
           psql -tAc "SELECT 1 FROM pg_database WHERE datname = 'keycloak'" | grep -q 1 || psql -tAc 'CREATE DATABASE "keycloak" OWNER "keycloak"'
         '';
+        enableStrictShellChecks = true;
       };
 
       systemd.services.keycloakMySQLInit = mkIf createLocalMySQL {
@@ -642,7 +663,26 @@ in
             echo "GRANT ALL PRIVILEGES ON keycloak.* TO 'keycloak'@'localhost';"
           ) | mysql -N
         '';
+        enableStrictShellChecks = true;
       };
+
+      systemd.tmpfiles.settings."10-keycloak" =
+        let
+          mkTarget =
+            file:
+            let
+              baseName = builtins.baseNameOf file;
+              name = if lib.hasSuffix ".json" baseName then baseName else "${baseName}.json";
+            in
+            "/run/keycloak/data/import/${name}";
+          settingsList = map (f: {
+            name = mkTarget f;
+            value = {
+              "L+".argument = "${f}";
+            };
+          }) cfg.realmFiles;
+        in
+        builtins.listToAttrs settingsList;
 
       systemd.services.keycloak =
         let
@@ -650,7 +690,7 @@ in
             if createLocalPostgreSQL then
               [
                 "keycloakPostgreSQLInit.service"
-                "postgresql.service"
+                "postgresql.target"
               ]
             else if createLocalMySQL then
               [
@@ -661,7 +701,7 @@ in
               [ ];
           secretPaths = catAttrs "_secret" (collect isSecret cfg.settings);
           mkSecretReplacement = file: ''
-            replace-secret ${hashString "sha256" file} $CREDENTIALS_DIRECTORY/${baseNameOf file} /run/keycloak/conf/keycloak.conf
+            replace-secret ${hashString "sha256" file} "$CREDENTIALS_DIRECTORY/${baseNameOf file}" /run/keycloak/conf/keycloak.conf
           '';
           secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
         in
@@ -674,15 +714,14 @@ in
             openssl
             replace-secret
           ];
-          environment =
-            {
-              KC_HOME_DIR = "/run/keycloak";
-              KC_CONF_DIR = "/run/keycloak/conf";
-            }
-            // lib.optionalAttrs (cfg.initialAdminPassword != null) {
-              KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
-              KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
-            };
+          environment = {
+            KC_HOME_DIR = "/run/keycloak";
+            KC_CONF_DIR = "/run/keycloak/conf";
+          }
+          // lib.optionalAttrs (cfg.initialAdminPassword != null) {
+            KC_BOOTSTRAP_ADMIN_USERNAME = "admin";
+            KC_BOOTSTRAP_ADMIN_PASSWORD = cfg.initialAdminPassword;
+          };
           serviceConfig = {
             LoadCredential =
               map (p: "${baseNameOf p}:${p}") secretPaths
@@ -699,34 +738,34 @@ in
             Type = "notify"; # Requires quarkus-systemd-notify plugin
             NotifyAccess = "all";
           };
-          script =
-            ''
-              set -o errexit -o pipefail -o nounset -o errtrace
-              shopt -s inherit_errexit
+          script = ''
+            set -o errexit -o pipefail -o nounset -o errtrace
+            shopt -s inherit_errexit
 
-              umask u=rwx,g=,o=
+            umask u=rwx,g=,o=
 
-              ln -s ${themesBundle} /run/keycloak/themes
-              ln -s ${keycloakBuild}/providers /run/keycloak/
-              ln -s ${keycloakBuild}/lib /run/keycloak/
+            ln -s ${themesBundle} /run/keycloak/themes
+            ln -s ${keycloakBuild}/providers /run/keycloak/
+            ln -s ${keycloakBuild}/lib /run/keycloak/
 
-              install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
+            install -D -m 0600 ${confFile} /run/keycloak/conf/keycloak.conf
 
-              ${secretReplacements}
+            ${secretReplacements}
 
-              # Escape any backslashes in the db parameters, since
-              # they're otherwise unexpectedly read as escape
-              # sequences.
-              sed -i '/db-/ s|\\|\\\\|g' /run/keycloak/conf/keycloak.conf
+            # Escape any backslashes in the db parameters, since
+            # they're otherwise unexpectedly read as escape
+            # sequences.
+            sed -i '/db-/ s|\\|\\\\|g' /run/keycloak/conf/keycloak.conf
 
-            ''
-            + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
-              mkdir -p /run/keycloak/ssl
-              cp $CREDENTIALS_DIRECTORY/ssl_{cert,key} /run/keycloak/ssl/
-            ''
-            + ''
-              kc.sh --verbose start --optimized
-            '';
+          ''
+          + optionalString (cfg.sslCertificate != null && cfg.sslCertificateKey != null) ''
+            mkdir -p /run/keycloak/ssl
+            cp "$CREDENTIALS_DIRECTORY"/ssl_{cert,key} /run/keycloak/ssl/
+          ''
+          + ''
+            kc.sh --verbose start --optimized ${lib.optionalString (cfg.realmFiles != [ ]) "--import-realm"}
+          '';
+          enableStrictShellChecks = true;
         };
 
       services.postgresql.enable = mkDefault createLocalPostgreSQL;

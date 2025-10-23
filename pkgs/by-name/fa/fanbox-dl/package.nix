@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "fanbox-dl";
-  version = "0.27.2";
+  version = "0.28.0";
 
   src = fetchFromGitHub {
     owner = "hareku";
     repo = "fanbox-dl";
     rev = "v${version}";
-    hash = "sha256-qsuYsAXlMuNvGxtrisqqr2E9OgiXsYneBx+CnVOyU2g=";
+    hash = "sha256-yrSA9CavQgu89hl+x578geC35KvamfAPOSg33woVI8w=";
   };
 
-  vendorHash = "sha256-l/mgjCqRzidJ1QxH8bKGa7ZnRZVOqkuNifgEyFVU7fA=";
+  vendorHash = "sha256-uhNitrJeFuFG2XyQrc1JBbExoU6Ln6AFRO2Bgb1+N5M=";
 
   # pings websites during testing
   doCheck = false;

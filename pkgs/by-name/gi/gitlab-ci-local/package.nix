@@ -5,25 +5,42 @@
   nix-update-script,
   gitlab-ci-local,
   testers,
+  makeBinaryWrapper,
+  rsync,
+  gitMinimal,
 }:
 
 buildNpmPackage rec {
   pname = "gitlab-ci-local";
-  version = "4.57.0";
+  version = "4.62.0";
 
   src = fetchFromGitHub {
     owner = "firecow";
     repo = "gitlab-ci-local";
     rev = version;
-    hash = "sha256-xr8loGmua8NiXA+YMzuVPUupnjqNsOxcWdyhxTZ7GhE=";
+    hash = "sha256-JcCfrrb/xAvILfHgnKoRxjWG4fvi4kVg0W+s+y25A6Y=";
   };
 
-  npmDepsHash = "sha256-M/kRs8yaOypbSr3MhUr2UJ5G+lz5OMdBCIs4yyrLX6I=";
+  npmDepsHash = "sha256-J/my72RPPwg1r1t4vO3CgMnGDP7H/Cc3apToypaK1YI=";
+
+  nativeBuildInputs = [
+    makeBinaryWrapper
+  ];
 
   postPatch = ''
     # remove cleanup which runs git commands
     substituteInPlace package.json \
       --replace-fail "npm run cleanup" "true"
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/gitlab-ci-local \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          rsync
+          gitMinimal
+        ]
+      }"
   '';
 
   passthru = {

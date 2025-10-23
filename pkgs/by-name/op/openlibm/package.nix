@@ -2,18 +2,23 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
   pname = "openlibm";
-  version = "0.8.5";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "JuliaLang";
     repo = "openlibm";
     rev = "v${version}";
-    sha256 = "sha256-z2PMovHk9M4Wb5K4EWOrp0b+3RLRHDVUKDzIxHsKrXg=";
+    sha256 = "sha256-fSEszCJ1PXkSydTLk8KAyu7zffUrKf+7a1ZDf3Wl/lE=";
   };
+
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    fixDarwinDylibNames
+  ];
 
   makeFlags = [
     "prefix=$(out)"

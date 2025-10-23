@@ -6,6 +6,7 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
+  fetchpatch2,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -38,8 +39,8 @@
   alsa-lib,
   pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
   libpulseaudio,
-  browserSupport ? false, # FIXME: broken
-  libcef,
+  browserSupport ? true,
+  cef-binary,
   pciutils,
   pipewireSupport ? stdenv.hostPlatform.isLinux,
   withFdk ? true,
@@ -59,101 +60,112 @@
   libdatachannel,
   libvpl,
   qrcodegencpp,
+  simde,
   nix-update-script,
+  extra-cmake-modules,
 }:
 
 let
   inherit (lib) optional optionals;
 
+  cef = cef-binary.overrideAttrs (oldAttrs: {
+    version = "138.0.17";
+    __intentionallyOverridingVersion = true; # `cef-binary` uses the overridden `srcHash` values in its source FOD
+    gitRevision = "ac9b751";
+    chromiumVersion = "138.0.7204.97";
+
+    srcHash =
+      {
+        aarch64-linux = "sha256-kdO7c9oUfv0HK8wTmvYzw9S6EapnSGEQNCGN9D1JSL0=";
+        x86_64-linux = "sha256-3qgIhen6l/kxttyw0z78nmwox62riVhlmFSGPkUot7g=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
+  });
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.0.2";
+  version = "32.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-I8VExGFr0thEaT8vHvdNwck7AYSpdpfLVPjij1Utt0E=";
+    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
   patches = [
-    # Lets obs-browser build against CEF 90.1.0+
-    ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
+    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
+    (fetchpatch2 {
+      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
+      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
+    })
   ];
 
-  nativeBuildInputs =
-    [
-      addDriverRunpath
-      cmake
-      ninja
-      pkg-config
-      wrapGAppsHook3
-      wrapQtAppsHook
-    ]
-    ++ optional scriptingSupport swig
-    ++ optional cudaSupport autoAddDriverRunpath;
+  nativeBuildInputs = [
+    addDriverRunpath
+    cmake
+    ninja
+    pkg-config
+    wrapGAppsHook3
+    wrapQtAppsHook
+    extra-cmake-modules
+  ]
+  ++ optional scriptingSupport swig
+  ++ optional cudaSupport autoAddDriverRunpath;
 
-  buildInputs =
-    [
-      curl
-      ffmpeg
-      jansson
-      libjack2
-      libv4l
-      libxkbcommon
-      libpthreadstubs
-      libXdmcp
-      qtbase
-      qtsvg
-      speex
-      wayland
-      x264
-      libvlc
-      mbedtls
-      pciutils
-      librist
-      cjson
-      libva
-      srt
-      qtwayland
-      nlohmann_json
-      websocketpp
-      asio
-      libdatachannel
-      libvpl
-      qrcodegencpp
-      uthash
-      nv-codec-headers-12
-    ]
-    ++ optionals scriptingSupport [
-      luajit
-      python3
-    ]
-    ++ optional alsaSupport alsa-lib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optionals pipewireSupport [
-      pipewire
-      libdrm
-    ]
-    ++ optional browserSupport libcef
-    ++ optional withFdk fdk_aac;
+  buildInputs = [
+    curl
+    ffmpeg
+    jansson
+    libjack2
+    libv4l
+    libxkbcommon
+    libpthreadstubs
+    libXdmcp
+    qtbase
+    qtsvg
+    speex
+    wayland
+    x264
+    libvlc
+    mbedtls
+    pciutils
+    librist
+    cjson
+    libva
+    srt
+    qtwayland
+    nlohmann_json
+    websocketpp
+    asio
+    libdatachannel
+    libvpl
+    qrcodegencpp
+    uthash
+    nv-codec-headers-12
+  ]
+  ++ optionals scriptingSupport [
+    luajit
+    python3
+  ]
+  ++ optional alsaSupport alsa-lib
+  ++ optional pulseaudioSupport libpulseaudio
+  ++ optionals pipewireSupport [
+    pipewire
+    libdrm
+  ]
+  ++ optional browserSupport cef
+  ++ optional withFdk fdk_aac;
+
+  propagatedBuildInputs = [ simde ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''
-    mkdir -p cef/Release cef/Resources cef/libcef_dll_wrapper/
-    for i in ${libcef}/share/cef/*; do
-      ln -s $i cef/Release/
-      ln -s $i cef/Resources/
-    done
-    ln -s ${libcef}/lib/*.so* cef/Release/
-    ln -s ${libcef}/libexec/cef/chrome-sandbox cef/Release/
-    ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
-    ln -s ${libcef}/include cef/
+    ln -s ${cef} cef
   '';
 
   postPatch = ''
@@ -174,7 +186,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
     (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
     (lib.cmakeBool "ENABLE_BROWSER" browserSupport)
-  ] ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
+  ]
+  ++ lib.optional browserSupport "-DCEF_ROOT_DIR=../../cef";
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=deprecated-declarations"
@@ -189,7 +202,8 @@ stdenv.mkDerivation (finalAttrs: {
         xorg.libX11
         libvlc
         libGL
-      ] ++ optionals decklinkSupport [ blackmagic-desktop-video ];
+      ]
+      ++ optionals decklinkSupport [ blackmagic-desktop-video ];
     in
     ''
       qtWrapperArgs+=(
@@ -215,8 +229,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     (lib.optionalString browserSupport ''
       # Link cef components again after patchelfing other libs
-      ln -s ${libcef}/lib/* $out/lib/obs-plugins/
-      ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
+      ln -sf ${cef}/${cef.buildType}/* $out/lib/obs-plugins/
     '')
   ];
 

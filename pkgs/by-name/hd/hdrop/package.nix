@@ -15,13 +15,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "hdrop";
-  version = "0.7.6";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "Schweber";
     repo = "hdrop";
     rev = "v${version}";
-    hash = "sha256-kJ+xjxd8MAuwzARCgN6qLeetwLxRzhmip1Z4U4IfqmY=";
+    hash = "sha256-JlfSGJBN3aJnZcN8aY464mmADP5boenGQzOxv2sswGc=";
   };
 
   nativeBuildInputs = [
@@ -47,13 +47,13 @@ stdenvNoCC.mkDerivation rec {
       }"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Emulate 'tdrop' in Hyprland (run, show and hide specific programs per keybind)";
     homepage = "https://github.com/Schweber/hdrop";
     changelog = "https://github.com/Schweber/hdrop/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ Schweber ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ Schweber ];
     mainProgram = "hdrop";
   };
 }

@@ -5,7 +5,7 @@
   bash,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   pname = "bfetch";
   version = "unstable-2021-05-21";
 

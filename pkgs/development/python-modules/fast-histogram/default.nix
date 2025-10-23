@@ -39,7 +39,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pytestFlagsArray = [ "${builtins.placeholder "out"}/${python.sitePackages}" ];
+  enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}" ];
 
   pythonImportsCheck = [ "fast_histogram" ];
 

@@ -12,24 +12,24 @@
 }:
 let
   pname = "netcoredbg";
-  build = "1031";
-  release = "3.1.0";
+  build = "1054";
+  release = "3.1.2";
   version = "${release}-${build}";
-  hash = "sha256-/ScV6NPGOun47D88e7BLisSOipeQWdUbYaEryrlPbHg=";
+  hash = "sha256-WORGZXbq6d3sxGqyG8oZSwcBoVaD3D56t9K6PJoKFsM=";
 
-  coreclr-version = "v8.0.7";
+  coreclr-version = "v8.0.16";
   coreclr-src = fetchFromGitHub {
     owner = "dotnet";
     repo = "runtime";
     rev = coreclr-version;
-    hash = "sha256-vxyhZ1Z5TB/2jpF4qiXTpUj1hKeqV7xPgG1BJYOLIko=";
+    hash = "sha256-/fSKCIugR3UhqxBxtQRw+Bw+UpaSjB4xj0iBiXJaiR4=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   src = fetchFromGitHub {
     owner = "Samsung";
-    repo = pname;
+    repo = "netcoredbg";
     rev = version;
     inherit hash;
   };
@@ -43,6 +43,15 @@ let
     ];
 
     hardeningDisable = [ "strictoverflow" ];
+
+    postPatch = ''
+      substituteInPlace CMakeLists.txt --replace-fail \
+        "cmake_minimum_required(VERSION 2.8.12.2)" \
+        "cmake_minimum_required(VERSION 3.10)"
+      substituteInPlace third_party/linenoise-ng/CMakeLists.txt --replace-fail \
+        "cmake_minimum_required(VERSION 2.6)" \
+        "cmake_minimum_required(VERSION 3.10)"
+    '';
 
     preConfigure = ''
       export DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=1

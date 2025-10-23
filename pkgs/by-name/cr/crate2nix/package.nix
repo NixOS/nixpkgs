@@ -1,12 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, nix
-, nix-prefetch-git
-, installShellFiles
-,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  nix,
+  nix-prefetch-git,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +22,6 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/crate2nix";
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-Du6RAe4Ax3KK90h6pQEtF75Wdniz+IqF2/TXHA9Ytbw=";
 
   nativeBuildInputs = [

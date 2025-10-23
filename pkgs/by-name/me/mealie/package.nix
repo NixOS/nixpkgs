@@ -1,48 +1,29 @@
 {
   lib,
-  stdenv,
   callPackage,
   fetchFromGitHub,
   makeWrapper,
   nixosTests,
   python3Packages,
+  nltk-data,
   writeShellScript,
   nix-update-script,
 }:
 
 let
-  version = "2.7.1";
+  version = "3.2.1";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     tag = "v${version}";
-    hash = "sha256-nN8AuSzxHjIDKc8rGN+O2/vlzkH/A5LAr4aoAlOTLlk=";
+    hash = "sha256-LIWubw+iO17giSvGCl5LzI429725sisp5u4Z4usJOGA=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
 
   pythonpkgs = python3Packages;
   python = pythonpkgs.python;
-
-  crfpp = stdenv.mkDerivation {
-    pname = "mealie-crfpp";
-    version = "unstable-2024-02-12";
-    src = fetchFromGitHub {
-      owner = "mealie-recipes";
-      repo = "crfpp";
-      rev = "c56dd9f29469c8a9f34456b8c0d6ae0476110516";
-      hash = "sha256-XNps3ZApU8m07bfPEnvip1w+3hLajdn9+L5+IpEaP0c=";
-    };
-
-    # Can remove once the `register` keyword is removed from source files
-    # Configure overwrites CXXFLAGS so patch it in the Makefile
-    postConfigure = lib.optionalString stdenv.cc.isClang ''
-      substituteInPlace Makefile \
-        --replace-fail "CXXFLAGS = " "CXXFLAGS = -std=c++14 "
-    '';
-  };
 in
-
 pythonpkgs.buildPythonApplication rec {
   pname = "mealie";
   inherit version src;
@@ -64,23 +45,22 @@ pythonpkgs.buildPythonApplication rec {
     apprise
     authlib
     bcrypt
-    extruct
     fastapi
-    gunicorn
     html2text
     httpx
+    ingredient-parser-nlp
     itsdangerous
     jinja2
     lxml
     openai
     orjson
     paho-mqtt
-    pillow
     pillow-heif
     psycopg2
     pydantic-settings
     pyhumps
     pyjwt
+    python-dateutil
     python-dotenv
     python-ldap
     python-multipart
@@ -106,7 +86,6 @@ pythonpkgs.buildPythonApplication rec {
         ${lib.getExe pythonpkgs.gunicorn} "$@" -k uvicorn.workers.UvicornWorker mealie.app:app;
       '';
       init_db = writeShellScript "init-mealie-db" ''
-        ${python.interpreter} $OUT/${python.sitePackages}/mealie/scripts/install_model.py
         ${python.interpreter} $OUT/${python.sitePackages}/mealie/db/init_db.py
       '';
     in
@@ -116,16 +95,22 @@ pythonpkgs.buildPythonApplication rec {
 
       makeWrapper ${start_script} $out/bin/mealie \
         --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
-        --set LD_LIBRARY_PATH "${crfpp}/lib" \
-        --set STATIC_FILES "${frontend}" \
-        --set PATH "${lib.makeBinPath [ crfpp ]}"
+        --set STATIC_FILES "${frontend}"
 
       makeWrapper ${init_db} $out/libexec/init_db \
         --set PYTHONPATH "$out/${python.sitePackages}:${pythonpkgs.makePythonPath dependencies}" \
         --set OUT "$out"
     '';
 
-  nativeCheckInputs = with pythonpkgs; [ pytestCheckHook ];
+  nativeCheckInputs = with pythonpkgs; [
+    pytestCheckHook
+    pytest-asyncio
+  ];
+
+  # Needed for tests
+  preCheck = ''
+    export NLTK_DATA=${nltk-data.averaged-perceptron-tagger-eng}
+  '';
 
   disabledTestPaths = [
     # KeyError: 'alembic_version'

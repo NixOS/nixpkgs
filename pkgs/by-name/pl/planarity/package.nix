@@ -3,21 +3,23 @@
   stdenv,
   fetchFromGitHub,
   autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "planarity";
-  version = "3.0.2.0";
+  version = "4.0.1.0";
 
   src = fetchFromGitHub {
     owner = "graph-algorithms";
     repo = "edge-addition-planarity-suite";
     rev = "Version_${version}";
-    sha256 = "sha256-cUAh2MXCSmtxFtV6iTHgSRgsq/26DjWwxhWJH1+367A=";
+    sha256 = "sha256-uSCQSn3LRi3eQynh71fs1xhVIrPcOqVyGzdHAK9xj7E=";
   };
 
   nativeBuildInputs = [
     autoreconfHook
+    pkg-config
   ];
 
   doCheck = true;
@@ -27,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "Library for implementing graph algorithms";
     mainProgram = "planarity";
     license = licenses.bsd3;
-    maintainers = teams.sage.members;
+    teams = [ teams.sage ];
     platforms = platforms.unix;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   fetchgit,
   php,
+  versionCheckHook,
 }:
 
 php.buildComposerProject2 (finalAttrs: {
@@ -15,14 +16,18 @@ php.buildComposerProject2 (finalAttrs: {
     hash = "sha256-UAofdc8mqSnJXhCTABSf9JZERqur86lzNDI66EHgEQE=";
   };
 
-  vendorHash = "sha256-bNeQEfwXly3LFuEKeSK6J6pRfQF6TNwUqu3SdTswmFI=";
+  vendorHash = "sha256-TlBrL4KyMVHaxqlfvnTkj3TkmU8h5/0BRC5e8yWrhCI=";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "CLI tool to check whether a specific composer package uses imported symbols that aren't part of its direct composer dependencies";
     homepage = "https://github.com/maglnet/ComposerRequireChecker/";
     changelog = "https://github.com/maglnet/ComposerRequireChecker/releases/tag/${finalAttrs.version}";
     license = with lib.licenses; [ mit ];
-    maintainers = with lib.maintainers; [ drupol ];
     mainProgram = "composer-require-checker";
+    maintainers = [ lib.maintainers.patka ];
   };
 })

@@ -5,6 +5,7 @@
   django,
   funcy,
   redis,
+  redisTestHook,
   six,
   pytestCheckHook,
   pytest-django,
@@ -13,14 +14,14 @@
   jinja2,
   before-after,
   pythonOlder,
-  nettools,
+  net-tools,
   pkgs,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "django-cacheops";
-  version = "7.1";
+  version = "7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "django_cacheops";
     inherit version;
-    hash = "sha256-7Aeau5aFVzIe4gjGJ0ggIxgg+YymN33alx8EmBvCq1I=";
+    hash = "sha256-y8EcwDISlaNkTie8smlA8Iy5wucdPuUGy8/wvdoanzM=";
   };
 
   pythonRelaxDeps = [ "funcy" ];
@@ -51,22 +52,10 @@ buildPythonPackage rec {
     dill
     jinja2
     before-after
-    nettools
-    pkgs.redis
+    net-tools
+    pkgs.valkey
+    redisTestHook
   ];
-
-  preCheck = ''
-    redis-server &
-    REDIS_PID=$!
-    while ! redis-cli --scan ; do
-      echo waiting for redis to be ready
-      sleep 1
-    done
-  '';
-
-  postCheck = ''
-    kill $REDIS_PID
-  '';
 
   DJANGO_SETTINGS_MODULE = "tests.settings";
 

@@ -366,7 +366,7 @@ in
     systemd.services.mobilizon-postgresql = mkIf isLocalPostgres {
       description = "Mobilizon PostgreSQL setup";
 
-      after = [ "postgresql.service" ];
+      after = [ "postgresql.target" ];
       before = [
         "mobilizon.service"
         "mobilizon-setup-secrets.service"
@@ -398,6 +398,7 @@ in
     };
 
     systemd.tmpfiles.rules = [
+      "d /var/lib/mobilizon/sitemap 700 mobilizon mobilizon - -"
       "d /var/lib/mobilizon/uploads/exports/csv 700 mobilizon mobilizon - -"
       "Z /var/lib/mobilizon 700 mobilizon mobilizon - -"
     ];

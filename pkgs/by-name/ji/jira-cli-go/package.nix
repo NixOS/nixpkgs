@@ -13,16 +13,16 @@
 
 buildGoModule rec {
   pname = "jira-cli-go";
-  version = "1.5.2";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "ankitpokhrel";
     repo = "jira-cli";
     tag = "v${version}";
-    hash = "sha256-Wp6uDvnTiNixn8GyEn8SeKPdXanUNN3b7yr9dT1D6uo=";
+    hash = "sha256-NJXLB2N8Kc8Ow6kb2EtPSG+iZ7O4yrhAMi3NFrUuocA=";
   };
 
-  vendorHash = "sha256-a11ZO/iV/Yhaq/cu504p2C/OkKJ04PeMMSoHrl7edvM=";
+  vendorHash = "sha256-cl+Sfi9WSPy8qOtB13rRiKtQdDC+HC0+FMKpsWbtU2w=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -60,12 +60,12 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich interactive Jira command line";
     homepage = "https://github.com/ankitpokhrel/jira-cli";
     changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       bryanasdev000
       anthonyroussel
     ];

@@ -31,7 +31,7 @@ let
   '';
 
 in
-resholve.mkDerivation rec {
+resholve.mkDerivation {
   # bashup.events doesn't version yet but it has two variants with
   # differing features/performance characteristics:
   # - branch master: a variant for bash 3.2+
@@ -63,7 +63,8 @@ resholve.mkDerivation rec {
       interpreter = "none";
       scripts = [ "bin/bashup.events" ];
       inherit keep;
-    } // lib.optionalAttrs (lib.isAttrs fake) { inherit fake; };
+    }
+    // lib.optionalAttrs (lib.isAttrs fake) { inherit fake; };
   };
 
   inherit doInstallCheck;

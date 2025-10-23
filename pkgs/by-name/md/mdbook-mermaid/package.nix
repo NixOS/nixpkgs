@@ -6,17 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-mermaid";
-  version = "0.14.1";
+  version = "0.16.2";
 
   src = fetchFromGitHub {
     owner = "badboy";
     repo = "mdbook-mermaid";
     tag = "v${version}";
-    hash = "sha256-hqz2zUdDZjbe3nq4YpL68XJ64qpbjANag9S2uAM5nXg=";
+    hash = "sha256-RbicO3TN7cnfm71OdsVbehgA5LJ1EHE26nXg0Gh1U6o=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = "sha256-yb4EWSl/mQp5q9fmYUq6UEdsknqfUx//BZ8IK/BVs7g=";
+  cargoHash = "sha256-WMPk/UPNfNXjJKUcczbQPOy9bwy2ZSR5DPmvwtcJ5ys=";
 
   meta = {
     description = "Preprocessor for mdbook to add mermaid.js support";

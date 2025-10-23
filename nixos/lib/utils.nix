@@ -219,14 +219,14 @@ let
               let
                 escapedName = ''"${replaceStrings [ ''"'' "\\" ] [ ''\"'' "\\\\" ] name}"'';
               in
-              recurse (prefix + "." + escapedName) item.${name}
+              recurse (prefix + (if prefix == "." then "" else ".") + escapedName) item.${name}
             ) (attrNames item)
           else if isList item then
             imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
           else
             [ ];
       in
-      listToAttrs (flatten (recurse "" item));
+      listToAttrs (flatten (recurse "." item));
 
     /*
       Takes an attrset and a file path and generates a bash snippet that

@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "diffoci";
-  version = "0.1.5";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "reproducible-containers";
     repo = "diffoci";
     rev = "v${version}";
-    hash = "sha256-ZVWnfg5uWYuqsNd4X6t1gWBGMfdcirSp7QZZDhqAfaI=";
+    hash = "sha256-RBMgcTUdPO12rFUY82JkubXfaGjfB4oR+UqKwumFWs0=";
   };
 
-  vendorHash = "sha256-qb4HvK4UbJbtP/ypeptV/MMbhOu5UZDaGartq/RGpDM=";
+  vendorHash = "sha256-NqYGehd+RcspQt5gQl9XH85Ds0dw+MU8W7xH/uzNjqU=";
 
   ldflags = [
     "-s"
@@ -37,7 +37,7 @@ buildGoModule rec {
           buildPackages.diffoci;
     in
     ''
-      installShellCompletion --cmd trivy \
+      installShellCompletion --cmd diffoci \
         --bash <(${diffoci}/bin/diffoci completion bash) \
         --fish <(${diffoci}/bin/diffoci completion fish) \
         --zsh <(${diffoci}/bin/diffoci completion zsh)

@@ -9,7 +9,7 @@
 let
   inherit (lib)
     mkRenamedOptionModule
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkEnableOption
     mkOption
     types
@@ -26,7 +26,6 @@ let
 
   cfg = config.services.transmission;
   opt = options.services.transmission;
-  inherit (config.environment) etc;
   apparmor = config.security.apparmor;
   rootDir = "/run/transmission";
   settingsDir = ".config/transmission-daemon";
@@ -51,7 +50,7 @@ in
         "rpc-port"
       ]
     )
-    (mkAliasOptionModuleMD
+    (mkAliasOptionModule
       [
         "services"
         "transmission"
@@ -339,20 +338,19 @@ in
     # when /home/foo is not owned by cfg.user.
     # Note also that using an ExecStartPre= wouldn't work either
     # because BindPaths= needs these directories before.
-    system.activationScripts.transmission-daemon =
-      ''
-        install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
-      ''
-      + optionalString (cfg.downloadDirPermissions != null) ''
-        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
+    system.activationScripts.transmission-daemon = ''
+      install -d -m 700 -o '${cfg.user}' -g '${cfg.group}' '${cfg.home}/${settingsDir}'
+    ''
+    + optionalString (cfg.downloadDirPermissions != null) ''
+      install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.download-dir}'
 
-        ${optionalString cfg.settings.incomplete-dir-enabled ''
-          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
-        ''}
-        ${optionalString cfg.settings.watch-dir-enabled ''
-          install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
-        ''}
-      '';
+      ${optionalString cfg.settings.incomplete-dir-enabled ''
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.incomplete-dir}'
+      ''}
+      ${optionalString cfg.settings.watch-dir-enabled ''
+        install -d -m '${cfg.downloadDirPermissions}' -o '${cfg.user}' -g '${cfg.group}' '${cfg.settings.watch-dir}'
+      ''}
+    '';
 
     systemd.services.transmission = {
       description = "Transmission BitTorrent Service";
@@ -366,6 +364,7 @@ in
       };
 
       serviceConfig = {
+        Type = "notify";
         # Use "+" because credentialsFile may not be accessible to User= or Group=.
         ExecStartPre = [
           (
@@ -400,31 +399,29 @@ in
         RootDirectory = rootDir;
         RootDirectoryStartOnly = true;
         MountAPIVFS = true;
-        BindPaths =
-          [
-            "${cfg.home}/${settingsDir}"
-            cfg.settings.download-dir
-            # Transmission may need to read in the host's /run (eg. /run/systemd/resolve)
-            # or write in its private /run (eg. /run/host).
-            "/run"
-          ]
-          ++ optional cfg.settings.incomplete-dir-enabled cfg.settings.incomplete-dir
-          ++ optional (
-            cfg.settings.watch-dir-enabled && cfg.settings.trash-original-torrent-files
-          ) cfg.settings.watch-dir;
-        BindReadOnlyPaths =
-          [
-            # No confinement done of /nix/store here like in systemd-confinement.nix,
-            # an AppArmor profile is provided to get a confinement based upon paths and rights.
-            builtins.storeDir
-            "/etc"
-          ]
-          ++ optional (
-            cfg.settings.script-torrent-done-enabled && cfg.settings.script-torrent-done-filename != null
-          ) cfg.settings.script-torrent-done-filename
-          ++ optional (
-            cfg.settings.watch-dir-enabled && !cfg.settings.trash-original-torrent-files
-          ) cfg.settings.watch-dir;
+        BindPaths = [
+          "${cfg.home}/${settingsDir}"
+          cfg.settings.download-dir
+          # Transmission may need to read in the host's /run (eg. /run/systemd/resolve)
+          # or write in its private /run (eg. /run/host).
+          "/run"
+        ]
+        ++ optional cfg.settings.incomplete-dir-enabled cfg.settings.incomplete-dir
+        ++ optional (
+          cfg.settings.watch-dir-enabled && cfg.settings.trash-original-torrent-files
+        ) cfg.settings.watch-dir;
+        BindReadOnlyPaths = [
+          # No confinement done of /nix/store here like in systemd-confinement.nix,
+          # an AppArmor profile is provided to get a confinement based upon paths and rights.
+          builtins.storeDir
+          "/etc"
+        ]
+        ++ optional (
+          cfg.settings.script-torrent-done-enabled && cfg.settings.script-torrent-done-filename != null
+        ) cfg.settings.script-torrent-done-filename
+        ++ optional (
+          cfg.settings.watch-dir-enabled && !cfg.settings.trash-original-torrent-files
+        ) cfg.settings.watch-dir;
         StateDirectory = [
           "transmission"
           "transmission/${settingsDir}"

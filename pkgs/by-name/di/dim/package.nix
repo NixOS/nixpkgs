@@ -4,7 +4,6 @@
   rustPlatform,
   fetchFromGitHub,
   buildNpmPackage,
-  darwin,
   makeWrapper,
   ffmpeg,
   git,
@@ -14,9 +13,11 @@
   libva,
   fetchpatch,
 }:
-rustPlatform.buildRustPackage rec {
+
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dim";
   version = "0-unstable-2023-12-29";
+
   src = fetchFromGitHub {
     owner = "Dusk-Labs";
     repo = "dim";
@@ -26,23 +27,25 @@ rustPlatform.buildRustPackage rec {
 
   frontend = buildNpmPackage {
     pname = "dim-ui";
-    inherit version;
-    src = "${src}/ui";
+    inherit (finalAttrs) version;
+    src = "${finalAttrs.src}/ui";
 
     postPatch = ''
       ln -s ${./package-lock.json} package-lock.json
     '';
 
-    npmDepsHash = "sha256-6oSm3H6RItHOrBIvP6uvR7sBboBRWFuP3VwU38GMfgQ=";
+    npmDepsHash = "sha256-yYTRoxKnTF9y3RA4fuDlVYxv9d37Fc905TYVc/gPIRw=";
 
     installPhase = ''
       runHook preInstall
+
       cp -r build $out
+
       runHook postInstall
     '';
   };
 
-  patches = [
+  cargoPatches = [
     # Upstream uses a 'ffpath' function to look for config directory and
     # (ffmpeg) binaries in the same directory as the binary. Patch it to use
     # the working dir and PATH instead.
@@ -51,6 +54,10 @@ rustPlatform.buildRustPackage rec {
     # Bump the first‐party nightfall dependency to the latest Git
     # revision for FFmpeg >= 6 support.
     ./bump-nightfall.patch
+
+    # Bump the time dependency to fix build failure with rust 1.80+
+    # https://github.com/Dusk-Labs/dim/pull/614
+    ./bump-time.patch
 
     # Upstream has some unused imports that prevent things from compiling...
     # Remove for next release.
@@ -61,8 +68,15 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
+  cargoHash = "sha256-T0v7pajg3UfRnVOx3ie6rOf+vJSW2l7yoCsJrtxIwcg=";
+
   postPatch = ''
-    ln -sf ${./Cargo.lock} Cargo.lock
+    substituteInPlace dim-core/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+    substituteInPlace dim-events/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
+    substituteInPlace dim-database/src/lib.rs \
+      --replace-fail "#![deny(warnings)]" "#![warn(warnings)]"
   '';
 
   postConfigure = ''
@@ -75,24 +89,9 @@ rustPlatform.buildRustPackage rec {
     git
   ];
 
-  buildInputs =
-    [ sqlite ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.CoreServices
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ]
-    ++ lib.optional libvaSupport libva;
+  buildInputs = [ sqlite ] ++ lib.optional libvaSupport libva;
 
   buildFeatures = lib.optional libvaSupport "vaapi";
-
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "mp4-0.8.2" = "sha256-OtVRtOTU/yoxxoRukpUghpfiEgkKoJZNflMQ3L26Cno=";
-      "nightfall-0.3.12-rc4" = "sha256-AbSuLe3ySOla3NB+mlfHRHqHuMqQbrThAaUZ747GErE=";
-    };
-  };
 
   checkFlags = [
     # Requires network
@@ -120,4 +119,4 @@ rustPlatform.buildRustPackage rec {
     maintainers = [ lib.maintainers.misterio77 ];
     platforms = lib.platforms.unix;
   };
-}
+})

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   pcre,
   pcre2,
   jemalloc,
@@ -40,21 +41,38 @@ let
         sphinx
         makeWrapper
       ];
-      buildInputs =
-        [
-          libxslt
-          groff
-          ncurses
-          readline
-          libedit
-          python3
-        ]
-        ++ lib.optional (lib.versionOlder version "7") pcre
-        ++ lib.optional (lib.versionAtLeast version "7") pcre2
-        ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
-        ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
+      buildInputs = [
+        libxslt
+        groff
+        ncurses
+        readline
+        libedit
+        python3
+      ]
+      ++ lib.optional (lib.versionOlder version "7") pcre
+      ++ lib.optional (lib.versionAtLeast version "7") pcre2
+      ++ lib.optional stdenv.hostPlatform.isDarwin libunwind
+      ++ lib.optional stdenv.hostPlatform.isLinux jemalloc;
 
       buildFlags = [ "localstatedir=/var/run" ];
+
+      patches =
+        lib.optionals (stdenv.isDarwin && lib.versionAtLeast version "7.7") [
+          # Fix VMOD section attribute on macOS
+          # Unreleased commit on master
+          (fetchpatch2 {
+            url = "https://github.com/varnishcache/varnish-cache/commit/a95399f5b9eda1bfdba6ee6406c30a1ed0720167.patch";
+            hash = "sha256-T7DIkmnq0O+Cr9DTJS4/rOtg3J6PloUo8jHMWoUZYYk=";
+          })
+          # Fix endian.h compatibility on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4339
+          ./patches/0001-fix-endian-h-compatibility-on-macos.patch
+        ]
+        ++ lib.optionals (stdenv.isDarwin && lib.versionOlder version "7.6") [
+          # Fix duplicate OS_CODE definitions on macOS
+          # PR: https://github.com/varnishcache/varnish-cache/pull/4347
+          ./patches/0002-fix-duplicate-os-code-definitions-on-macos.patch
+        ];
 
       postPatch = ''
         substituteInPlace bin/varnishtest/vtc_main.c --replace /bin/rm "${coreutils}/bin/rm"
@@ -83,7 +101,7 @@ let
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = "https://www.varnish-cache.org";
         license = licenses.bsd2;
-        maintainers = lib.teams.flyingcircus.members;
+        teams = [ lib.teams.flyingcircus ];
         platforms = platforms.unix;
       };
     };
@@ -91,17 +109,12 @@ in
 {
   # EOL (LTS) TBA
   varnish60 = common {
-    version = "6.0.13";
-    hash = "sha256-DcpilfnGnUenIIWYxBU4XFkMZoY+vUK/6wijZ7eIqbo=";
+    version = "6.0.16";
+    hash = "sha256-ZVJxDHp9LburwlJ1LCR5CKPRaSbNixiEch/l3ZP0QyQ=";
   };
-  # EOL 2025-03-15
-  varnish75 = common {
-    version = "7.5.0";
-    hash = "sha256-/KYbmDE54arGHEVG0SoaOrmAfbsdgxRXHjFIyT/3K10=";
-  };
-  # EOL 2025-09-15
-  varnish76 = common {
-    version = "7.6.1";
-    hash = "sha256-Wpu1oUn/J4Z7VKZs4W0qS5Pt/6VHPLh8nHH3aZz4Rbo=";
+  # EOL 2026-03-15
+  varnish77 = common {
+    version = "7.7.3";
+    hash = "sha256-6W7q/Ez+KlWO0vtU8eIr46PZlfRvjADaVF1YOq74AjY=";
   };
 }

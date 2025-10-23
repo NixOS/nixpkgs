@@ -65,6 +65,7 @@ let
 
   vaultwarden = cfg.package.override { inherit (cfg) dbBackend; };
 
+  useSendmail = configEnv.USE_SENDMAIL or null == "true";
 in
 {
   imports = [
@@ -171,11 +172,11 @@ in
     };
 
     environmentFile = lib.mkOption {
-      type = with lib.types; nullOr path;
-      default = null;
+      type = with lib.types; coercedTo path lib.singleton (listOf path);
+      default = [ ];
       example = "/var/lib/vaultwarden.env";
       description = ''
-        Additional environment file as defined in {manpage}`systemd.exec(5)`.
+        Additional environment file or files as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`ADMIN_TOKEN` and {env}`SMTP_PASSWORD`
         should be passed to the service without adding them to the world-readable Nix store.
@@ -196,12 +197,7 @@ in
 
     package = lib.mkPackageOption pkgs "vaultwarden" { };
 
-    webVaultPackage = lib.mkOption {
-      type = lib.types.package;
-      default = pkgs.vaultwarden.webvault;
-      defaultText = lib.literalExpression "pkgs.vaultwarden.webvault";
-      description = "Web vault package to use.";
-    };
+    webVaultPackage = lib.mkPackageOption pkgs [ "vaultwarden" "webvault" ] { };
   };
 
   config = lib.mkIf cfg.enable {
@@ -223,12 +219,13 @@ in
     users.groups.vaultwarden = { };
 
     systemd.services.vaultwarden = {
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
+      wants = [ "network-online.target" ];
       path = with pkgs; [ openssl ];
       serviceConfig = {
         User = user;
         Group = group;
-        EnvironmentFile = [ configFile ] ++ lib.optional (cfg.environmentFile != null) cfg.environmentFile;
+        EnvironmentFile = [ configFile ] ++ cfg.environmentFile;
         ExecStart = lib.getExe vaultwarden;
         LimitNOFILE = "1048576";
         CapabilityBoundingSet = [ "" ];
@@ -236,10 +233,10 @@ in
         DevicePolicy = "closed";
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
+        NoNewPrivileges = !useSendmail;
+        PrivateDevices = !useSendmail;
         PrivateTmp = true;
-        PrivateUsers = true;
+        PrivateUsers = !useSendmail;
         ProcSubset = "pid";
         ProtectClock = true;
         ProtectControlGroups = true;
@@ -264,6 +261,8 @@ in
         SystemCallArchitectures = "native";
         SystemCallFilter = [
           "@system-service"
+        ]
+        ++ lib.optionals (!useSendmail) [
           "~@privileged"
         ];
         Restart = "always";

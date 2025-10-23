@@ -1,5 +1,6 @@
 {
   lib,
+  aiohttp,
   asdf-standard,
   asdf-transform-schemas,
   attrs,
@@ -16,6 +17,7 @@
   pytestCheckHook,
   pythonOlder,
   pyyaml,
+  requests,
   semantic-version,
   setuptools,
   setuptools-scm,
@@ -23,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "asdf";
-  version = "4.0.0";
+  version = "4.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -32,7 +34,7 @@ buildPythonPackage rec {
     owner = "asdf-format";
     repo = "asdf";
     tag = version;
-    hash = "sha256-4fR9hc6Ez6uwi/QwOQwRyRfpbHsmGsJEtWZIj4k+9FY=";
+    hash = "sha256-sCjDZ/6KiFH9LbdDpco8z1xRgJe0dm0HVhpRbO51RDI=";
   };
 
   build-system = [
@@ -53,11 +55,18 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aiohttp
     fsspec
     lz4
     psutil
     pytest-remotedata
     pytestCheckHook
+    requests
+  ];
+
+  disabledTests = [
+    # AssertionError: assert 527033 >= 1048801
+    "test_update_add_array_at_end"
   ];
 
   pythonImportsCheck = [ "asdf" ];

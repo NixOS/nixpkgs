@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 
-mkDerivation (rec {
+mkDerivation rec {
   version = "1.5.0";
   pname = "iowa-stdlib";
 
@@ -35,4 +35,4 @@ mkDerivation (rec {
       turion
     ];
   };
-})
+}

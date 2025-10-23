@@ -17,17 +17,17 @@
 
 buildGoModule rec {
   pname = "grafana-alloy";
-  version = "1.7.1";
+  version = "1.11.2";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "alloy";
     tag = "v${version}";
-    hash = "sha256-t1YDYQ+0RKHYaL/oE9XGjV7/g28rHO9avL6/CTfMHeE=";
+    hash = "sha256-HWnldpmt5M2+2zuEcA4doySgRyCBl4OnCCuXqtcYGkA=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-d9uWbZ+5YSnB3yqL/YZ0ld+8soO3oGb8gttzj3Q7MXs=";
+  vendorHash = "sha256-8n1r2Wun5ZSvjsU2Vl/fSRoQnTfKbrcQI6a7YDX/HZA=";
 
   nativeBuildInputs = [
     fixup-yarn-lock
@@ -70,7 +70,7 @@ buildGoModule rec {
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/internal/web/ui/yarn.lock";
-    hash = "sha256-4vZr3mPvk5IXoqSPuqhzYobAuK2NDK0dceNZUIQILvI=";
+    hash = "sha256-oCDP2XJczLXgzEjyvFEIFBanlnzjrj0So09izG5vufs=";
   };
 
   preBuild = ''
@@ -112,7 +112,7 @@ buildGoModule rec {
       $out/bin/alloy
   '';
 
-  postInstall = ''
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd alloy \
       --bash <($out/bin/alloy completion bash) \
       --fish <($out/bin/alloy completion fish) \
@@ -146,7 +146,6 @@ buildGoModule rec {
     maintainers = with maintainers; [
       azahi
       flokli
-      emilylange
       hbjydev
     ];
     platforms = lib.platforms.unix;

@@ -8,20 +8,27 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "pop-wallpapers";
-  version = "1.0.5";
+  version = "1.0.5-unstable-2025-06-24";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "wallpapers";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-JST5Rt4Ec1lRu62PUt98S2G1vKthAyOSpyCpuCnkGmw=";
+    rev = "20a9fdd1ed86aadfbbfcd55dc3d2d9eb8ae28e15";
+    hash = "sha256-GUXxy+zRdBCsvWW9ytJZUHSw6rGc3uNTjNIsiK3l+zA=";
   };
+
+  # Future-proofs calls to imagemagick's convert feature
+  postPatch = ''
+    substituteInPlace Makefile --replace-fail "convert" "magick"
+  '';
 
   nativeBuildInputs = [ imagemagick ];
 
   makeFlags = [ "prefix=$(out)" ];
 
-  passthru.updateScript = nix-update-script { };
+  enableParallelBuilding = true;
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Wallpapers for Pop!_OS";
@@ -77,7 +84,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       # tony-webster-97532.jpg
       publicDomain
     ];
-    maintainers = with lib.maintainers; [ pandapip1 ];
+    maintainers = with lib.maintainers; [
+      normalcea
+      pandapip1
+    ];
     platforms = lib.platforms.all;
   };
 })

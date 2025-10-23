@@ -7,7 +7,7 @@
 }:
 
 let
-  version = "17.9.2";
+  version = "18.5.1";
   package_version = "v${lib.versions.major version}";
   gitaly_package = "gitlab.com/gitlab-org/gitaly/${package_version}";
 
@@ -21,10 +21,10 @@ let
       owner = "gitlab-org";
       repo = "gitaly";
       rev = "v${version}";
-      hash = "sha256-QoIM2I9dLFmN4dFbiFu1pWCGj4Yiel9HGUb7jYWc4Hg=";
+      hash = "sha256-719FC9+OBX9Li9gkIpusFoZrpMyeDwCsoWxt9pfhI1A=";
     };
 
-    vendorHash = "sha256-ZPxlv8jc3VWS1XzIyXs3W3aCxdTiDl8+Wx82exuYBDY=";
+    vendorHash = "sha256-I2YMn84wEAY+Z02bmkyP/b0eix7FW3hP/noyEKYsEaQ=";
 
     ldflags = [
       "-X ${gitaly_package}/internal/version.version=${version}"
@@ -32,6 +32,8 @@ let
     ];
 
     tags = [ "static" ];
+
+    nativeBuildInputs = [ pkg-config ];
 
     doCheck = false;
   };
@@ -41,6 +43,7 @@ let
       pname = "gitaly-aux";
 
       subPackages = [
+        # Can be determined by looking at the `go:embed` calls in https://gitlab.com/gitlab-org/gitaly/-/blob/master/packed_binaries.go
         "cmd/gitaly-hooks"
         "cmd/gitaly-ssh"
         "cmd/gitaly-lfs-smudge"
@@ -59,12 +62,31 @@ buildGoModule (
       "cmd/gitaly-backup"
     ];
 
+    dontStrip = true;
+
     preConfigure = ''
+      rm -r tools
+
       mkdir -p _build/bin
       cp -r ${auxBins}/bin/* _build/bin
-      for f in ${git}/bin/git-*; do
-        cp "$f" "_build/bin/gitaly-$(basename $f)";
+
+      # Add git that will be embedded
+      echo 'print-%:;@echo $($*)' >> Makefile
+      sed -i 's:/usr/bin/env ::g' Makefile
+      for bin in $(make print-GIT_PACKED_EXECUTABLES); do
+        from="$(basename "$bin")"
+        from="''${from#gitaly-}"
+        from="${git}/libexec/git-core/''${from%-*}"
+        cp "$from" "$bin"
       done
+
+    '';
+
+    doInstallCheck = true;
+    installCheckPhase = ''
+      runHook preInstallCheck
+      HOME=/build PAGER=cat ${git}/bin/git config -l
+      runHook postInstallCheck
     '';
 
     outputs = [ "out" ];
@@ -77,7 +99,7 @@ buildGoModule (
       homepage = "https://gitlab.com/gitlab-org/gitaly";
       description = "Git RPC service for handling all the git calls made by GitLab";
       platforms = platforms.linux ++ [ "x86_64-darwin" ];
-      maintainers = teams.gitlab.members;
+      teams = [ teams.gitlab ];
       license = licenses.mit;
     };
   }

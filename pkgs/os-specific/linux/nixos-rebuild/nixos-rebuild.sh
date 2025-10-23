@@ -32,7 +32,7 @@ specialisation=
 imageVariant=
 buildHost=
 targetHost=
-remoteSudo=
+useSudo=
 noSSHTTY=
 verboseScript=
 noFlake=
@@ -170,8 +170,8 @@ while [ "$#" -gt 0 ]; do
         targetHost="$1"
         shift 1
         ;;
-      --use-remote-sudo)
-        remoteSudo=1
+      --sudo | --use-remote-sudo)
+        useSudo=1
         ;;
       --no-ssh-tty)
         noSSHTTY=1
@@ -237,7 +237,7 @@ buildHostCmd() {
 
 targetHostCmd() {
     local c
-    if [[ "${useSudo:-x}" = 1 ]]; then
+    if [[ "${withSudo:-x}" = 1 ]]; then
         c=("sudo")
     else
         c=()
@@ -256,8 +256,8 @@ targetHostSudoCmd() {
         t="-t"
     fi
 
-    if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
+    if [[ -n "$useSudo" ]]; then
+        withSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
@@ -835,28 +835,52 @@ if [ -z "$rollback" ]; then
                 "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
-                in builtins.mapAttrs (n: v: v.passthru.filePath) set.${attr:+$attr.}config.system.build.images" \
+                in builtins.attrNames set.${attr:+$attr.}config.system.build.images" \
                 "${extraBuildFlags[@]}"
             )"
         elif [[ -z $flake ]]; then
             variants="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
-                "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
+                "with import <nixpkgs/nixos> {}; builtins.attrNames config.system.build.images" \
                 "${extraBuildFlags[@]}"
             )"
         else
             variants="$(
                 runCmd nix "${flakeFlags[@]}" eval --json \
                 "$flake#$flakeAttr.config.system.build.images" \
-                --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
+                --apply "builtins.attrNames" "${evalArgs[@]}" "${extraBuildFlags[@]}"
             )"
         fi
-        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" > /dev/null; then
+        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "any(. == \$variant)" > /dev/null; then
             echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
-            echo "$variants" | jq -r '. | keys | join ("\n")'
+            echo "$variants" | jq -r 'join ("\n")'
             exit 1
         fi
-        imageName="$(echo "$variants" | jq -r --arg variant "$imageVariant" ".[\$variant]")"
+
+        if [[ -z $buildingAttribute ]]; then
+            imageName="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "let
+                    value = import \"$(realpath $buildFile)\";
+                    set = if builtins.isFunction value then value {} else value;
+                in set.${attr:+$attr.}config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}" \
+                | jq -r .
+            )"
+        elif [[ -z $flake ]]; then
+            imageName="$(
+                runCmd nix-instantiate --eval --strict --json --expr \
+                "with import <nixpkgs/nixos> {}; config.system.build.images.$imageVariant.passthru.filePath" \
+                "${extraBuildFlags[@]}" \
+                | jq -r .
+            )"
+        else
+            imageName="$(
+                runCmd nix "${flakeFlags[@]}" eval --raw \
+                "$flake#$flakeAttr.config.system.build.images.$imageVariant.passthru.filePath" \
+                "${evalArgs[@]}" "${extraBuildFlags[@]}"
+            )"
+        fi
 
         if [[ -z $buildingAttribute ]]; then
             pathToConfig="$(nixBuild $buildFile -A "${attr:+$attr.}config.system.build.images.${imageVariant}" "${extraBuildFlags[@]}")"

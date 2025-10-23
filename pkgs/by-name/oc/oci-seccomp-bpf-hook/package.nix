@@ -11,12 +11,12 @@
 
 buildGoModule rec {
   pname = "oci-seccomp-bpf-hook";
-  version = "1.2.10";
+  version = "1.2.11";
   src = fetchFromGitHub {
     owner = "containers";
     repo = "oci-seccomp-bpf-hook";
     rev = "v${version}";
-    sha256 = "sha256-bWlm+JYNf7+faKSQfW5fhxoH/D2I8ujjakswH+1r49o=";
+    sha256 = "sha256-1LRwbKOLNBkY/TMTLlWq2lkFzCabXqwdaMRT9HNr6HE=";
   };
   vendorHash = null;
 

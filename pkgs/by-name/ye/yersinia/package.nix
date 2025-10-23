@@ -14,7 +14,7 @@
   enableAdmin ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "yersinia";
   version = "unstable-2022-11-20";
 
@@ -33,17 +33,17 @@ stdenv.mkDerivation rec {
     libpcap
     libnet
     ncurses
-  ] ++ lib.optional withGtk gtk2;
+  ]
+  ++ lib.optional withGtk gtk2;
 
   autoreconfPhase = "./autogen.sh";
 
-  configureFlags =
-    [
-      "--with-pcap-includes=${libpcap}/include"
-      "--with-libnet-includes=${libnet}/include"
-    ]
-    ++ lib.optional (!enableAdmin) "--disable-admin"
-    ++ lib.optional (!withGtk) "--disable-gtk";
+  configureFlags = [
+    "--with-pcap-includes=${libpcap}/include"
+    "--with-libnet-includes=${libnet}/include"
+  ]
+  ++ lib.optional (!enableAdmin) "--disable-admin"
+  ++ lib.optional (!withGtk) "--disable-gtk";
 
   makeFlags = [ "LDFLAGS=-lncurses" ];
 

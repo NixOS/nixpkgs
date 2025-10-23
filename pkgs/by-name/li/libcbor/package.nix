@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libcbor";
-  version = "0.11.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "PJK";
     repo = "libcbor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N1xYkZw/6lX/nX/TE6/pVuEFgSyDiUJ50msK42NrKwI=";
+    hash = "sha256-ePgVR7VHXWKqOShuAEQG3BJ08W2aZS/vfcPUCqTw7X4=";
   };
 
   outputs = [
@@ -34,6 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cmocka # cmake expects cmocka module
   ];
+
+  # BUILD file already exists in the source; this causes issues on
+  # case‐insensitive Darwin systems.
+  cmakeBuildDir = "build.dir";
 
   cmakeFlags =
     lib.optional finalAttrs.finalPackage.doCheck "-DWITH_TESTS=ON"

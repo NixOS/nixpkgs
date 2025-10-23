@@ -1,47 +1,67 @@
 {
-  buildPythonPackage,
   lib,
-  fetchPypi,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
   systemd,
   lxml,
   psutil,
-  pytest,
-  mock,
+  pytestCheckHook,
   pkg-config,
+  cython,
 }:
 
 buildPythonPackage rec {
   pname = "pystemd";
-  version = "0.13.2";
-  format = "setuptools";
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Tc+ksTpVaFxJ09F8EGMeyhjDN3D2Yxb47yM3uJUcwUQ=";
+  version = "0.13.4";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "systemd";
+    repo = "pystemd";
+    tag = "v${version}";
+    hash = "sha256-Ph0buiyH2cLRXyqgA8DmpE9crb/x8OaerIoZuv8hjMI=";
   };
 
   buildInputs = [ systemd ];
 
-  nativeBuildInputs = [ pkg-config ];
+  build-system = [
+    setuptools
+    cython
+  ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    pkg-config
+  ];
+
+  dependencies = [
     lxml
     psutil
   ];
 
   nativeCheckInputs = [
-    mock
-    pytest
+    pytestCheckHook
   ];
 
-  checkPhase = "pytest tests";
+  # Having the source root in `sys.path` causes import issues
+  preCheck = ''
+    cd tests
+  '';
 
-  meta = with lib; {
+  disabledTestPaths = [
+    "test_version.py" # Requires cstq which is not in nixpkgs
+  ];
+
+  pythonImportsCheck = [ "pystemd" ];
+
+  meta = {
     description = ''
       Thin Cython-based wrapper on top of libsystemd, focused on exposing the
       dbus API via sd-bus in an automated and easy to consume way
     '';
-    homepage = "https://github.com/facebookincubator/pystemd/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ flokli ];
+    homepage = "https://github.com/facebookincubator/pystemd";
+    changelog = "https://github.com/systemd/pystemd/releases/tag/${src.tag}";
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }

@@ -3,37 +3,47 @@
   stdenvNoCC,
   fetchFromGitHub,
   python3,
+  gnome-shell,
+  dconf,
+  writableTmpDirAsHomeHook,
   colors ? [ "all" ], # Default to install all available colors
   additionalInstallationTweaks ? [ ], # Additional installation tweaks
 }:
+
 assert lib.assertMsg (colors != [ ]) "The `colors` list can not be empty";
+
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "marble-shell-theme";
-  version = "46.2.3";
+  version = "48.3.2";
 
   src = fetchFromGitHub {
     owner = "imarkoff";
     repo = "Marble-shell-theme";
-    rev = "5971b15d8115c60c3a16b1d219ecffd2cfcdb323";
-    hash = "sha256-TX6BSS29EAi2PjL1fMvEKD12RjB9xrfqPSQsJJrUcJg=";
+    tag = finalAttrs.version;
+    hash = "sha256-EYQmtVq852YG4Pmk6Nj4RF+aZUJmIZwhegHIR+Xxu8A=";
   };
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [
+    python3
+    gnome-shell
+    dconf
+    writableTmpDirAsHomeHook
+  ];
 
-  patchPhase = ''
-    runHook prePatch
+  postPatch = ''
     substituteInPlace scripts/config.py \
       --replace-fail "~/.themes" ".themes"
-    runHook postPatch
   '';
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/share/themes
+
     python install.py ${
       lib.escapeShellArgs (map (color: "--${color}") colors)
     } ${lib.escapeShellArgs additionalInstallationTweaks}
-    cp -r .themes/* $out/share/themes/
+    mkdir -p $out/share
+    cp -r .themes $out/share/themes
+
     runHook postInstall
   '';
 
@@ -43,6 +53,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux;
     homepage = "https://github.com/imarkoff/Marble-shell-theme";
     changelog = "https://github.com/imarkoff/Marble-shell-theme/releases/tag/${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

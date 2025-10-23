@@ -63,13 +63,13 @@ stdenv.mkDerivation rec {
     updateScript = gnome.updateScript { packageName = "gnome-klotski"; };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/gnome-klotski";
     changelog = "https://gitlab.gnome.org/GNOME/gnome-klotski/-/blob/${version}/NEWS?ref_type=tags";
     description = "Slide blocks to solve the puzzle";
     mainProgram = "gnome-klotski";
-    maintainers = teams.gnome.members;
-    license = licenses.gpl2;
-    platforms = platforms.unix;
+    teams = [ lib.teams.gnome ];
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.unix;
   };
 }

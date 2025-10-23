@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-language";
-  version = "2.17.0";
+  version = "2.17.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_language";
     inherit version;
-    hash = "sha256-jOIWh7py71jOWHB67egWQlj53rR3kfJJzCqdT4yQdhs=";
+    hash = "sha256-OgXmZvH1uh/lM3UICsVRF8A7OfKm5j9BdetkKomGowQ=";
   };
 
   build-system = [ setuptools ];
@@ -30,7 +30,8 @@ buildPythonPackage rec {
     google-api-core
     proto-plus
     protobuf
-  ] ++ google-api-core.optional-dependencies.grpc;
+  ]
+  ++ google-api-core.optional-dependencies.grpc;
 
   nativeCheckInputs = [
     pytestCheckHook

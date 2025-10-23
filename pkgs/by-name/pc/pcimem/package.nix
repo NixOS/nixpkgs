@@ -4,9 +4,9 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "pcimem";
-  version = "unstable-2018-08-29";
+  version = "0-unstable-2018-08-29";
 
   src = fetchFromGitHub {
     owner = "billfarrow";

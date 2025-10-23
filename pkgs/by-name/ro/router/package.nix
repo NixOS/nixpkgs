@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, pkg-config
-, protobuf
-, elfutils
+{
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  pkg-config,
+  protobuf,
+  elfutils,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,6 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-4l9nTbtF8hy2x1fdRhmMKcYxTD6wWKXIfihLTWdtm7U=";
   };
 
-  useFetchCargoVendor = true;
   cargoHash = "sha256-1AKYOv7kT60H8x1qmtPqR4Wxq1DxSCDzt+Uv7MRUeaw=";
 
   nativeBuildInputs = [

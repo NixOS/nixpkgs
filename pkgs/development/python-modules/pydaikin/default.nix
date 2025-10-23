@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pydaikin";
-  version = "2.14.1";
+  version = "2.17.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "fredrike";
     repo = "pydaikin";
     tag = "v${version}";
-    hash = "sha256-AyW9hQC8fF5T+E1FXhLemVvWggeEpZok5OVhzcZh9G0=";
+    hash = "sha256-GSZJ7Upq43S8AC2U+8qRaPlcht/GndA2jm1mSVfEiaY=";
   };
 
   __darwinAllowLocalNetworking = true;
@@ -44,6 +44,12 @@ buildPythonPackage rec {
     freezegun
     pytest-asyncio
     pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Failed: async def functions are not natively supported.
+    "test_power_sensors"
+    "test_device_factory"
   ];
 
   pythonImportsCheck = [ "pydaikin" ];

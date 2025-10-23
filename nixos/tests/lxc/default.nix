@@ -9,8 +9,8 @@ import ../make-test-python.nix (
       };
     };
 
-    lxc-image-metadata = releases.lxdContainerMeta.${pkgs.stdenv.hostPlatform.system};
-    lxc-image-rootfs = releases.lxdContainerImage.${pkgs.stdenv.hostPlatform.system};
+    lxc-image-metadata = releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system};
+    lxc-image-rootfs = releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system};
 
   in
   {
@@ -57,7 +57,7 @@ import ../make-test-python.nix (
         };
 
         # Needed for lxc
-        environment.systemPackages = with pkgs; [
+        environment.systemPackages = [
           pkgs.wget
           pkgs.dnsmasq
         ];

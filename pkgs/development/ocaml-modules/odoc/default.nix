@@ -1,7 +1,6 @@
 {
   lib,
   buildDunePackage,
-  ocaml,
   ocaml-crunch,
   astring,
   cmdliner,
@@ -19,7 +18,7 @@
   fmt,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "odoc";
   inherit (odoc-parser) version src;
 
@@ -31,7 +30,6 @@ buildDunePackage rec {
     astring
     cmdliner
     fpath
-    result
     tyxml
     odoc-parser
     fmt
@@ -48,7 +46,7 @@ buildDunePackage rec {
     jq
     ppx_expect
   ];
-  doCheck = lib.versionAtLeast ocaml.version "4.08" && lib.versionOlder yojson.version "2.0";
+  doCheck = true;
 
   preCheck = ''
     # some run.t files check the content of patchShebangs-ed scripts, so patch
@@ -63,6 +61,6 @@ buildDunePackage rec {
     license = lib.licenses.isc;
     maintainers = [ lib.maintainers.vbgl ];
     homepage = "https://github.com/ocaml/odoc";
-    changelog = "https://github.com/ocaml/odoc/blob/${version}/CHANGES.md";
+    changelog = "https://github.com/ocaml/odoc/blob/${odoc-parser.version}/CHANGES.md";
   };
 }

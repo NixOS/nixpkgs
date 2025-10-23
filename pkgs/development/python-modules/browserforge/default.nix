@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "browserforge";
-  version = "1.1.0";
+  version = "1.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "daijro";
     repo = "browserforge";
     tag = "v${version}";
-    hash = "sha256-+uBKVugPScr0gggYaxAdelLKKrmXGY6rWTwhFqBMTcA=";
+    hash = "sha256-D5GlUZ4KT6kqPQVcpli8T++xoXl1YUVGZu8rePJQ44A=";
   };
 
   build-system = [ poetry-core ];

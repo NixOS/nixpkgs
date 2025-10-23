@@ -8,23 +8,20 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   pytz,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "bthome-ble";
-  version = "3.12.4";
+  version = "3.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bthome-ble";
     tag = "v${version}";
-    hash = "sha256-1Kr+KKL8o1qsu/ncwclsokPcO1QHYadul/f+/Nnv6SQ=";
+    hash = "sha256-AFALd5owqwaXPiMs0zHkGKpNqcpKG2O/JXXvuEF4d3s=";
   };
 
   build-system = [ poetry-core ];
@@ -47,7 +44,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Library for BThome BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/bthome-ble";
-    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/bluetooth-devices/bthome-ble/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

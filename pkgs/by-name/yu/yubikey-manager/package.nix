@@ -9,36 +9,35 @@
 
 python3Packages.buildPythonPackage rec {
   pname = "yubikey-manager";
-  version = "5.5.1";
+  version = "5.8.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Yubico";
     repo = "yubikey-manager";
-    rev = version;
-    hash = "sha256-m/B5G83XZROoCNq/ZT0U0MUth2IC99e3LWc8FcOq1ig=";
+    tag = version;
+    hash = "sha256-Z3krdKP6hhhIxN7nl/k5r30jFVC0kZK9Z6Aqllp/KrA=";
   };
 
   postPatch = ''
     substituteInPlace "ykman/pcsc/__init__.py" \
-      --replace 'pkill' '${if stdenv.hostPlatform.isLinux then procps else "/usr"}/bin/pkill'
+      --replace-fail 'pkill' '${if stdenv.hostPlatform.isLinux then procps else "/usr"}/bin/pkill'
   '';
 
-  nativeBuildInputs = with python3Packages; [
-    poetry-core
+  nativeBuildInputs = [
     installShellFiles
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
+    poetry-core
+  ];
+
+  dependencies = with python3Packages; [
     cryptography
     pyscard
     fido2
     click
     keyring
-  ];
-
-  pythonRelaxDeps = [
-    "keyring"
   ];
 
   postInstall = ''
@@ -57,7 +56,7 @@ python3Packages.buildPythonPackage rec {
 
   meta = {
     homepage = "https://developers.yubico.com/yubikey-manager";
-    changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${version}";
+    changelog = "https://github.com/Yubico/yubikey-manager/releases/tag/${src.tag}";
     description = "Command line tool for configuring any YubiKey over all USB transports";
 
     license = lib.licenses.bsd2;

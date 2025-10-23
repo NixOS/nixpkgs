@@ -12,7 +12,7 @@
   fakeredis,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (opentelemetry-instrumentation) version src;
   pname = "opentelemetry-instrumentation-redis";
   pyproject = true;

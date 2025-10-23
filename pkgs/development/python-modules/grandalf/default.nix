@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pyparsing,
-  future,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -17,14 +16,13 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bdcht";
-    repo = pname;
+    repo = "grandalf";
     rev = "v${version}";
     hash = "sha256-j2SvpQvDMfwoj2PAQSxzEIyIzzJ61Eb9wgetKyni6A4=";
   };
 
   propagatedBuildInputs = [
     pyparsing
-    future
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

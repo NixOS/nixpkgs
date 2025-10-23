@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "deconz";
-  version = "2.28.1";
+  version = "2.30.2";
 
   src = fetchurl {
     url = "https://deconz.dresden-elektronik.de/ubuntu/beta/deconz-${version}-qt5.deb";
-    sha256 = "sha256-uHbo0XerUx81o7gXK570iJKiotkQ0aCXUVcyYelMu4k=";
+    sha256 = "sha256-exkelou1xgFEtW3vUqMZFc4AqXruzMRD9n23WmUFr3k=";
   };
 
   nativeBuildInputs = [
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     description = "Manage Zigbee network with ConBee, ConBee II or RaspBee hardware";
     homepage = "https://www.dresden-elektronik.com/wireless/software/deconz.html";
     license = licenses.unfree;
-    platforms = with platforms; [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ bjornfor ];
     mainProgram = "deCONZ";

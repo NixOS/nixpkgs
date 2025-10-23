@@ -18,11 +18,14 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(9\\.11\\.[0-9]+)$";
-    version = "9.11.9";
-    srcHash = "sha256-sEu5s+yMCPYxvyc7kuiA9AE/qBi08iTqhYxwO7J9xiE=";
-    vendorHash = "sha256-h/hcdVImU3wFp7BGHS/TxYBEWGv9v06y8etaz9OrHTA=";
-    npmDepsHash = "sha256-B7pXMHwyf7dQ2x2VJu+mdZz03/9FyyYvFYOw8XguTH8=";
+    regex = "^v(10\\.5\\.[0-9]+)$";
+    version = "10.5.12";
+    srcHash = "sha256-VaW+rA0UeIZhGU9BlYZgyznAOtLN+JI7UPbMRPCwTww=";
+    vendorHash = "sha256-vxUxSkj1EwgMtPpCGJSA9jCDBeLrWhecdwq4KBThhj4=";
+    npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
+    lockfileOverlay = ''
+      unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
+    '';
   },
 }:
 
@@ -80,7 +83,7 @@ let
           tests.mattermostWithTests = withTests;
         };
     in
-    finalPassthru.withTests;
+    finalPassthru.withoutTests;
 in
 buildMattermost rec {
   pname = "mattermost";
@@ -189,15 +192,14 @@ buildMattermost rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs =
-        [
-          "--version-regex"
-          versionInfo.regex
-        ]
-        ++ lib.optionals (versionInfo.autoUpdate or null != null) [
-          "--override-filename"
-          versionInfo.autoUpdate
-        ];
+      extraArgs = [
+        "--version-regex"
+        versionInfo.regex
+      ]
+      ++ lib.optionals (versionInfo.autoUpdate or null != null) [
+        "--override-filename"
+        versionInfo.autoUpdate
+      ];
     };
     tests.mattermost = nixosTests.mattermost;
 
@@ -247,7 +249,7 @@ buildMattermost rec {
   };
 
   meta = {
-    description = "Mattermost is an open source platform for secure collaboration across the entire software development lifecycle";
+    description = "Open source platform for secure collaboration across the entire software development lifecycle";
     homepage = "https://www.mattermost.org";
     license = with lib.licenses; [
       agpl3Only
@@ -258,7 +260,6 @@ buildMattermost rec {
       numinit
       kranzes
       mgdelacroix
-      fsagbuya
     ];
     platforms = lib.platforms.linux;
     mainProgram = "mattermost";

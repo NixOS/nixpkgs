@@ -14,14 +14,13 @@ let
 
     src = fetchFromGitHub {
       owner = "rust-secure-code";
-      repo = pname;
+      repo = "cargo-auditable";
       rev = "v${version}";
       sha256 = "sha256-zjv2/qZM0vRyz45DeKRtPHaamv2iLtjpSedVTEXeDr8=";
     };
 
     cargoDeps = rustPlatform.fetchCargoVendor {
       inherit pname version src;
-      allowGitDependencies = false;
       hash = "sha256-oTPGmoGlNfPVZ6qha/oXyPJp94fT2cNlVggbIGHf2bc=";
     };
 

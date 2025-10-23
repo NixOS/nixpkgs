@@ -44,8 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Ultimaker/libArcus";
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [
-      abbradar
-    ];
+    maintainers = [ ];
   };
 }

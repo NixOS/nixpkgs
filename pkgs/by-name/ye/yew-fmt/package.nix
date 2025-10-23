@@ -8,19 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "yew-fmt";
-  version = "0.5.5";
+  version = "0.6.3";
 
   src = fetchFromGitHub {
     owner = "its-the-shrimp";
     repo = "yew-fmt";
     tag = "v${version}";
-    hash = "sha256-2sOw8wWfnEphYsruQyhZMW3KofcGkNHJB6Q1jhFP3oo=";
+    hash = "sha256-bhguDpLRn51NWL/N2CT9tsNS8+RbaL37liCBeUe0ZyY=";
   };
 
-  cargoHash = "sha256-o4oRVI3+Nz8fwdwlyVvXUuhCQr4Bbg5Kife/PJoJCJY=";
+  cargoHash = "sha256-QcqpAWsMhTKTBV4kCKhG/9b+l3Kh6gj/o78/w6it+K8=";
   nativeCheckInputs = [ rustfmt ];
   passthru.updateScript = nix-update-script { };
-  useFetchCargoVendor = true;
 
   meta = {
     description = "Code formatter for the Yew framework";

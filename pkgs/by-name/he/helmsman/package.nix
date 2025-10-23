@@ -2,23 +2,22 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  ...
 }:
 
-buildGoModule rec {
+buildGoModule (finalAttrs: {
   pname = "helmsman";
-  version = "3.17.1";
+  version = "4.0.1";
 
   src = fetchFromGitHub {
-    owner = "Praqma";
+    owner = "mkubaczyk";
     repo = "helmsman";
-    rev = "v${version}";
-    sha256 = "sha256-u/Fj3A81hH7i1yTg+kcqCPrwEkj0cyhZvNzRYURDoZU=";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-As0YjqMdPCgIzYWB1Wf3R11mwj6CglWZdvCRzlHDvkw=";
   };
 
   subPackages = [ "cmd/helmsman" ];
 
-  vendorHash = "sha256-3eIMMKMvRzOSMvufETR9H1PnPDeEc+su8UuvbQJZ7kI=";
+  vendorHash = "sha256-A5wFoOvBbjBv4F5Ul91GF9/l+8QXh9Xmmvhk5qNmems=";
 
   doCheck = false;
 
@@ -32,4 +31,4 @@ buildGoModule rec {
       sarcasticadmin
     ];
   };
-}
+})

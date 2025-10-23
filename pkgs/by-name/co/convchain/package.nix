@@ -4,7 +4,7 @@
   fetchFromGitHub,
   mono,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "convchain";
   version = "0.0pre20160901";
   src = fetchFromGitHub {

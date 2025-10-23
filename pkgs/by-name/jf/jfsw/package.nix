@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, SDL2
-, perl
-, pkg-config
-, wrapGAppsHook3
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  SDL2,
+  perl,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

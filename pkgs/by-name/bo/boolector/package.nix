@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "boolector";
     repo = "boolector";
-    rev = version;
+    tag = version;
     hash = "sha256-CdfpXUbU1+yEmrNyl+hvHlJfpzzzx356naim6vRafDg=";
   };
 
@@ -45,7 +45,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
     "-DUSE_LINGELING=YES"
     "-DBtor2Tools_INCLUDE_DIR=${btor2tools.dev}/include/btor2parser"
-  ] ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
+  ]
+  ++ (lib.optional (gmp != null) "-DUSE_GMP=YES");
 
   nativeCheckInputs = [ python3 ];
   doCheck = true;

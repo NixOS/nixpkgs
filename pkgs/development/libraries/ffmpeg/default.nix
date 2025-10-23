@@ -16,8 +16,8 @@ let
     );
 
   v4 = {
-    version = "4.4.5";
-    hash = "sha256-GrKNGYI8kO47Yoi82dMV30ymuXSjxo4gH+yB8jIUa2A=";
+    version = "4.4.6";
+    hash = "sha256-IM+1+WJWHuUNHZCVs+eKlmaEkfbvay4vQ2I/GbV1fqk=";
   };
 
   v6 = {
@@ -26,8 +26,12 @@ let
   };
 
   v7 = {
-    version = "7.1";
-    hash = "sha256-erTkv156VskhYEJWjpWFvHjmcr2hr6qgUi28Ho8NFYk=";
+    version = "7.1.1";
+    hash = "sha256-GyS8imOqfOUPxXrzCiQtzCQIIH6bvWmQAB0fKUcRsW4=";
+  };
+  v8 = {
+    version = "8.0";
+    hash = "sha256-okNZ1/m/thFAY3jK/GSV0+WZFnjrMr8uBPsOdH6Wq9E=";
   };
 in
 
@@ -46,6 +50,10 @@ rec {
   ffmpeg_7 = mkFFmpeg v7 "small";
   ffmpeg_7-headless = mkFFmpeg v7 "headless";
   ffmpeg_7-full = mkFFmpeg v7 "full";
+
+  ffmpeg_8 = mkFFmpeg v8 "small";
+  ffmpeg_8-headless = mkFFmpeg v8 "headless";
+  ffmpeg_8-full = mkFFmpeg v8 "full";
 
   # Please make sure this is updated to new major versions once they
   # build and work on all the major platforms. If absolutely necessary

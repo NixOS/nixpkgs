@@ -1,15 +1,9 @@
 # Checks that `security.pki` options are working in curl and the main browser
-# engines: Gecko (via Firefox), Chromium, QtWebEngine (via qutebrowser) and
-# WebKitGTK (via Midori). The test checks that certificates issued by a custom
+# engines: Gecko (via Firefox), Chromium, QtWebEngine (via qutebrowser).
+# The test checks that certificates issued by a custom
 # trusted CA are accepted but those from an unknown CA are rejected.
 
-{
-  system ? builtins.currentSystem,
-  config ? { },
-  pkgs ? import ../.. { inherit system config; },
-}:
-
-with import ../lib/testing-python.nix { inherit system pkgs; };
+{ runTest, pkgs }:
 
 let
   inherit (pkgs) lib;
@@ -104,7 +98,7 @@ let
     };
   };
 
-  curlTest = makeTest {
+  curlTest = runTest {
     name = "custom-ca-curl";
     meta.maintainers = with lib.maintainers; [ rnhmjoj ];
     nodes.machine = { ... }: webserverConfig;
@@ -121,7 +115,7 @@ let
 
   mkBrowserTest =
     browser: testParams:
-    makeTest {
+    runTest {
       name = "custom-ca-${browser}";
       meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
@@ -199,7 +193,7 @@ in
 {
   curl = curlTest;
 }
-// pkgs.lib.mapAttrs mkBrowserTest {
+// lib.mapAttrs mkBrowserTest {
   firefox = {
     error = "Security Risk";
   };
@@ -209,9 +203,5 @@ in
   qutebrowser = {
     args = "-T";
     error = "Certificate error";
-  };
-  midori = {
-    args = "-p";
-    error = "Security";
   };
 }

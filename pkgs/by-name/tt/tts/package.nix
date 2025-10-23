@@ -8,32 +8,23 @@
   writableTmpDirAsHomeHook,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      torch = super.torch-bin;
-      torchvision = super.torchvision-bin;
-      tensorflow = super.tensorflow-bin;
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "coqui-tts";
-  version = "0.25.1";
+  version = "0.26.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-TTS";
     tag = "v${version}";
-    hash = "sha256-5w1Y9wdoJ+EV/WBwK3nqyY60NEsMjQsfE4g+sJB7VwQ=";
+    hash = "sha256-U/U3aXFvqnaV/Msy5wyzAKCUw9XUNplugig6nv5nfZY=";
   };
 
   postPatch =
     let
       relaxedConstraints = [
         "bnunicodenormalizer"
+        "coqpit-config"
         "cython"
         "gruut"
         "inflect"
@@ -55,7 +46,7 @@ python.pkgs.buildPythonApplication rec {
       pyproject.toml
     '';
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     cython
     numpy
     packaging
@@ -63,7 +54,7 @@ python.pkgs.buildPythonApplication rec {
     hatchling
   ];
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python3.pkgs; [
     anyascii
     bangla
     bnnumerizer
@@ -92,8 +83,8 @@ python.pkgs.buildPythonApplication rec {
     scipy
     soundfile
     tensorflow
-    torch-bin
-    torchaudio-bin
+    torch
+    torchaudio
     tqdm
     trainer
     transformers
@@ -104,7 +95,7 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postInstall = ''
-    cp -r TTS/server/templates/ $out/${python.sitePackages}/TTS/server
+    cp -r TTS/server/templates/ $out/${python3.sitePackages}/TTS/server
   '';
 
   # tests get stuck when run in nixpkgs-review, tested in passthru
@@ -114,7 +105,7 @@ python.pkgs.buildPythonApplication rec {
   });
 
   nativeCheckInputs =
-    with python.pkgs;
+    with python3.pkgs;
     [
       espeak-ng
       pytestCheckHook
@@ -130,7 +121,7 @@ python.pkgs.buildPythonApplication rec {
 
     for file in $(grep -rl 'python TTS/bin' tests); do
       substituteInPlace "$file" \
-        --replace "python TTS/bin" "${python.interpreter} $out/${python.sitePackages}/TTS/bin"
+        --replace "python TTS/bin" "${python3.interpreter} $out/${python3.sitePackages}/TTS/bin"
     done
   '';
 
@@ -189,15 +180,14 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   passthru = {
-    inherit python;
+    inherit python3;
   };
 
   meta = with lib; {
     homepage = "https://github.com/idiap/coqui-ai-TTS";
-    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/v${version}";
+    changelog = "https://github.com/idiap/coqui-ai-TTS/releases/tag/${src.tag}";
     description = "Deep learning toolkit for Text-to-Speech, battle-tested in research and production";
     license = licenses.mpl20;
-    maintainers = teams.tts.members;
-    broken = false;
+    teams = [ teams.tts ];
   };
 }
