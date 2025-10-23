@@ -2,16 +2,21 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy3k,
+
+  # dependencies
   pyicu,
+
+  # build-system
+  setuptools,
+
+  # tests
   python,
 }:
 
 buildPythonPackage {
   pname = "slob";
   version = "unstable-2020-06-26";
-  format = "setuptools";
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "itkach";
@@ -20,8 +25,17 @@ buildPythonPackage {
     hash = "sha256-8JMi4ekSblRUESgHJnUpyRttgMuDBD7924xaCS8sKQQ=";
   };
 
-  propagatedBuildInputs = [ pyicu ];
+  build-system = [
+    setuptools
+  ];
 
+  dependencies = [
+    pyicu
+  ];
+
+  # The tests are part of the same slob.py file, so unittestCheckHook which
+  # runs python -m unittest with the `discover` argument which doesn't discover
+  # any tests.
   checkPhase = ''
     ${python.interpreter} -m unittest slob
   '';
