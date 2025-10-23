@@ -1,0 +1,29 @@
+From 75aa46c9399664d2a1cdabefcad2899ebfabc741 Mon Sep 17 00:00:00 2001
+From: Yu Watanabe <watanabe.yu+github@gmail.com>
+Date: Mon, 23 Jun 2025 16:00:21 +0900
+Subject: [PATCH 17/30] musl: replace sys/prctl.h with our own implementation
+
+To avoid conflicts between musl's sys/prctl.h and linux/prctl.h.
+---
+ src/include/musl/sys/prctl.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+ create mode 100644 src/include/musl/sys/prctl.h
+
+diff --git a/src/include/musl/sys/prctl.h b/src/include/musl/sys/prctl.h
+new file mode 100644
+index 0000000000..2c830d2649
+--- /dev/null
++++ b/src/include/musl/sys/prctl.h
+@@ -0,0 +1,9 @@
++/* SPDX-License-Identifier: LGPL-2.1-or-later */
++#pragma once
++
++/* This is for avoiding conflicts between musl's sys/prctl.h and linux/prctl.h. */
++
++#include <features.h>
++#include <linux/prctl.h>        /* IWYU pragma: export */
++
++int prctl(int, ...);
+-- 
+2.51.0
+

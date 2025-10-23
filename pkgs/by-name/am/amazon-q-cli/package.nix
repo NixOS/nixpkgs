@@ -3,24 +3,27 @@
   fetchFromGitHub,
   rustPlatform,
   versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "amazon-q-cli";
-  version = "1.17.1";
+  version = "1.18.1";
+
+  passthru.updateScript = nix-update-script { };
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "amazon-q-developer-cli";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-bRin4JKnBsWLvk+dIwHWAf4KKD1n6FOf2wICYNZpHd4=";
+    tag = finalAttrs.version;
+    hash = "sha256-wAcxXDEadPgyb3OpQXWxOEX3AMtf0ubx0J/H9Iff+rk=";
   };
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
   ];
 
-  cargoHash = "sha256-Isa7kxnov4D+Sd7b4LJW52TIR864CDFkAjAHJoVQRcA=";
+  cargoHash = "sha256-jjx9HBJQ5eTS8+0Wus8hfNPZ+eETKHjjX3BsEq2LRn0=";
 
   cargoBuildFlags = [
     "-p"

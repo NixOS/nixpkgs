@@ -1259,7 +1259,7 @@ with pkgs;
     python3Packages.callPackage ../applications/version-management/pass-git-helper
       { };
 
-  qgit = qt5.callPackage ../applications/version-management/qgit { };
+  qgit = qt6Packages.callPackage ../applications/version-management/qgit { };
 
   silver-platter = python3Packages.callPackage ../applications/version-management/silver-platter { };
 
@@ -2032,10 +2032,6 @@ with pkgs;
     inherit (darwin) libresolv;
   };
 
-  greg = callPackage ../applications/audio/greg {
-    pythonPackages = python3Packages;
-  };
-
   hocr-tools = with python3Packages; toPythonApplication hocr-tools;
 
   hopper = qt5.callPackage ../development/tools/analysis/hopper { };
@@ -2382,8 +2378,6 @@ with pkgs;
     ];
     protobuf = protobuf_21;
   };
-
-  mellowplayer = libsForQt5.callPackage ../applications/audio/mellowplayer { };
 
   circus = with python310Packages; toPythonApplication circus;
 
@@ -3062,8 +3056,6 @@ with pkgs;
 
   hpccm = with python3Packages; toPythonApplication hpccm;
 
-  hqplayer-desktop = qt6Packages.callPackage ../applications/audio/hqplayer-desktop { };
-
   html-proofer = callPackage ../tools/misc/html-proofer { };
 
   httpie = with python3Packages; toPythonApplication httpie;
@@ -3077,8 +3069,6 @@ with pkgs;
   hyphen = callPackage ../development/libraries/hyphen { };
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
-
-  iannix = libsForQt5.callPackage ../applications/audio/iannix { };
 
   iaito = libsForQt5.callPackage ../tools/security/iaito { };
 
@@ -3192,6 +3182,8 @@ with pkgs;
   keybase = callPackage ../tools/security/keybase { };
 
   kbfs = callPackage ../tools/security/keybase/kbfs.nix { };
+
+  kbdVlock = callPackage ../../pkgs/by-name/kb/kbd/package.nix { withVlock = true; };
 
   keybase-gui = callPackage ../tools/security/keybase/gui.nix { };
 
@@ -3747,8 +3739,6 @@ with pkgs;
 
   patch = gnupatch;
 
-  patchance = python3Packages.callPackage ../applications/audio/patchance { };
-
   pcscliteWithPolkit = pcsclite.override {
     pname = "pcsclite-with-polkit";
     polkitSupport = true;
@@ -3833,8 +3823,6 @@ with pkgs;
 
   polaris-web = callPackage ../servers/polaris/web.nix { };
 
-  projectm_3 = libsForQt5.callPackage ../applications/audio/projectm_3 { };
-
   proxmark3 = libsForQt5.callPackage ../tools/security/proxmark3/default.nix { };
 
   pycflow2dot = with python3.pkgs; toPythonApplication pycflow2dot;
@@ -3850,8 +3838,6 @@ with pkgs;
   pydeps = with python3Packages; toPythonApplication pydeps;
 
   pywal = with python3Packages; toPythonApplication pywal;
-
-  raysession = python3Packages.callPackage ../applications/audio/raysession { };
 
   remarshal = with python3Packages; toPythonApplication remarshal;
 
@@ -5046,8 +5032,6 @@ with pkgs;
 
   idris2Packages = recurseIntoAttrs (callPackage ../development/compilers/idris2 { });
 
-  inherit (idris2Packages) idris2;
-
   inherit (callPackage ../development/tools/database/indradb { })
     indradb-server
     indradb-client
@@ -5816,10 +5800,6 @@ with pkgs;
 
   luarocks = luaPackages.luarocks;
   luarocks-nix = luaPackages.luarocks-nix;
-
-  luarocks-packages-updater = callPackage ../by-name/lu/luarocks-packages-updater/package.nix {
-    pluginupdate = ../../maintainers/scripts/pluginupdate-py;
-  };
 
   toluapp = callPackage ../development/tools/toluapp {
     lua = lua5_1; # doesn't work with any other :(
@@ -8313,13 +8293,12 @@ with pkgs;
   zunclient = with python313Packages; toPythonApplication python-zunclient;
 
   inherit (callPackages ../by-name/li/libressl { })
-    libressl_3_9
     libressl_4_0
     libressl_4_1
     libressl_4_2
     ;
 
-  openssl = openssl_3_5;
+  openssl = openssl_3_6;
 
   openssl_legacy = openssl.override {
     conf = ../development/libraries/openssl/3.0/legacy.cnf;
@@ -8328,7 +8307,7 @@ with pkgs;
   inherit (callPackages ../development/libraries/openssl { })
     openssl_1_1
     openssl_3
-    openssl_3_5
+    openssl_3_6
     ;
 
   pcre = callPackage ../development/libraries/pcre { };
@@ -8478,7 +8457,6 @@ with pkgs;
   plasma5Packages = libsForQt5;
 
   qtEnv = qt5.env;
-  qt5Full = qt5.full;
 
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
@@ -10368,6 +10346,7 @@ with pkgs;
     ubootLibreTechCC
     ubootNanoPCT4
     ubootNanoPCT6
+    ubootNanoPiR5S
     ubootNovena
     ubootOdroidC2
     ubootOdroidXU3
@@ -10845,8 +10824,6 @@ with pkgs;
     confd-calico
     ;
 
-  carla = libsForQt5.callPackage ../applications/audio/carla { };
-
   cb2bib = libsForQt5.callPackage ../applications/office/cb2bib { };
 
   cbconvert-gui = cbconvert.gui;
@@ -10917,8 +10894,6 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  deadbeef = callPackage ../applications/audio/deadbeef { };
-
   deadbeefPlugins = {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
     lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
@@ -10934,8 +10909,6 @@ with pkgs;
   };
 
   inherit (callPackage ../development/tools/devpod { }) devpod devpod-desktop;
-
-  dfasma = libsForQt5.callPackage ../applications/audio/dfasma { };
 
   djv = callPackage ../by-name/dj/djv/package.nix { openexr = openexr_2; };
 
@@ -11018,8 +10991,7 @@ with pkgs;
 
   espeak-classic = callPackage ../applications/audio/espeak { };
 
-  espeak-ng = callPackage ../applications/audio/espeak-ng { };
-  espeak = res.espeak-ng;
+  espeak = espeak-ng;
 
   espeakedit = callPackage ../applications/audio/espeak/edit.nix { };
 
@@ -11293,8 +11265,6 @@ with pkgs;
 
   linssid = libsForQt5.callPackage ../applications/networking/linssid { };
 
-  linvstmanager = qt5.callPackage ../applications/audio/linvstmanager { };
-
   deadd-notification-center = haskell.lib.compose.justStaticExecutables (
     haskellPackages.callPackage ../applications/misc/deadd-notification-center { }
   );
@@ -11377,8 +11347,6 @@ with pkgs;
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
   };
-
-  mt32emu-qt = libsForQt5.callPackage ../applications/audio/munt/mt32emu-qt.nix { };
 
   pass2csv = python3Packages.callPackage ../tools/security/pass2csv { };
 
@@ -11585,7 +11553,6 @@ with pkgs;
     subproject = "reader";
   };
 
-  jackmix = libsForQt5.callPackage ../applications/audio/jackmix { };
   jackmix_jack1 = jackmix.override { jack = jack1; };
 
   js8call = qt5.callPackage ../applications/radio/js8call { };
@@ -11600,7 +11567,7 @@ with pkgs;
     k3s_1_33
     k3s_1_34
     ;
-  k3s = k3s_1_33;
+  k3s = k3s_1_34;
 
   kapow = libsForQt5.callPackage ../applications/misc/kapow { };
 
@@ -11671,13 +11638,9 @@ with pkgs;
 
   kvirc = libsForQt5.callPackage ../applications/networking/irc/kvirc { };
 
-  ladspaH = callPackage ../applications/audio/ladspa-sdk/ladspah.nix { };
-
   ladspaPlugins = callPackage ../applications/audio/ladspa-plugins {
     fftw = fftwSinglePrec;
   };
-
-  ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
@@ -11784,10 +11747,6 @@ with pkgs;
     python3Packages.callPackage ../applications/networking/instant-messengers/matrix-commander
       { };
 
-  mbrola = callPackage ../applications/audio/mbrola { };
-
-  mbrola-voices = callPackage ../applications/audio/mbrola/voices.nix { };
-
   mediaelch-qt5 = callPackage ../by-name/me/mediaelch/package.nix { qtVersion = 5; };
   mediaelch-qt6 = mediaelch;
 
@@ -11812,8 +11771,6 @@ with pkgs;
   michabo = libsForQt5.callPackage ../applications/misc/michabo { };
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
-
-  mixxx = qt6Packages.callPackage ../applications/audio/mixxx { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
@@ -11878,23 +11835,6 @@ with pkgs;
     withConplay = false;
   };
 
-  pragha = libsForQt5.callPackage ../applications/audio/pragha { };
-
-  rofi-emoji = (callPackage ../applications/misc/rofi-emoji { }).v3;
-
-  rofi-rbw = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    waylandSupport = false;
-    x11Support = false;
-  };
-
-  rofi-rbw-wayland = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    waylandSupport = true;
-  };
-
-  rofi-rbw-x11 = python3Packages.callPackage ../applications/misc/rofi-rbw {
-    x11Support = true;
-  };
-
   # a somewhat more maintained fork of ympd
   memento = qt6Packages.callPackage ../applications/video/memento { };
 
@@ -11942,8 +11882,6 @@ with pkgs;
   netmaker-full = callPackage ../applications/networking/netmaker { };
 
   ninja_1_11 = callPackage ../by-name/ni/ninja/package.nix { ninjaRelease = "1.11"; };
-
-  nootka = qt5.callPackage ../applications/audio/nootka { };
 
   opcua-client-gui = libsForQt5.callPackage ../misc/opcua-client-gui { };
 
@@ -12116,10 +12054,6 @@ with pkgs;
     sed = gnused;
   };
 
-  petrifoo = callPackage ../applications/audio/petrifoo {
-    inherit (gnome2) libgnomecanvas;
-  };
-
   pdfpc = callPackage ../applications/misc/pdfpc {
     inherit (gst_all_1)
       gstreamer
@@ -12140,10 +12074,6 @@ with pkgs;
   );
 
   inherit (pidginPackages) pidgin;
-
-  pithos = callPackage ../applications/audio/pithos {
-    pythonPackages = python3Packages;
-  };
 
   pineapple-pictures = qt6Packages.callPackage ../applications/graphics/pineapple-pictures { };
 
@@ -12174,9 +12104,8 @@ with pkgs;
 
   pulseview = libsForQt5.callPackage ../applications/science/electronics/pulseview { };
 
-  puredata = callPackage ../applications/audio/puredata { };
   puredata-with-plugins =
-    plugins: callPackage ../applications/audio/puredata/wrapper.nix { inherit plugins; };
+    plugins: callPackage ../by-name/pu/puredata/wrapper.nix { inherit plugins; };
 
   pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
 
@@ -12216,18 +12145,12 @@ with pkgs;
 
   wrapQemuBinfmtP = callPackage ../applications/virtualization/qemu/binfmt-p-wrapper.nix { };
 
-  qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
-
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
 
   qmplay2-qt5 = qmplay2.override { qtVersion = "5"; };
   qmplay2-qt6 = qmplay2.override { qtVersion = "6"; };
 
-  qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
-
   qnotero = libsForQt5.callPackage ../applications/office/qnotero { };
-
-  qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qsstv = qt5.callPackage ../applications/radio/qsstv { };
 
@@ -12360,13 +12283,9 @@ with pkgs;
 
   rusty-psn-gui = rusty-psn.override { withGui = true; };
 
-  sayonara = libsForQt5.callPackage ../applications/audio/sayonara { };
-
   scantailor-advanced = callPackage ../applications/graphics/scantailor/advanced.nix { };
 
   scantailor-universal = callPackage ../applications/graphics/scantailor/universal.nix { };
-
-  seq66 = qt5.callPackage ../applications/audio/seq66 { };
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
@@ -12636,8 +12555,6 @@ with pkgs;
   transmission_4-qt5 = transmission_4.override { enableQt5 = true; };
   transmission_4-qt6 = transmission_4.override { enableQt6 = true; };
   transmission_4-qt = transmission_4-qt5;
-
-  traverso = libsForQt5.callPackage ../applications/audio/traverso { };
 
   tinywl = callPackage ../applications/window-managers/tinywl {
     wlroots = wlroots_0_19;
@@ -12953,8 +12870,6 @@ with pkgs;
 
   xca = qt6Packages.callPackage ../applications/misc/xca { };
 
-  inherit (xorg) xcompmgr;
-
   xdg-desktop-portal = callPackage ../development/libraries/xdg-desktop-portal { };
 
   xdg-desktop-portal-hyprland =
@@ -13128,8 +13043,6 @@ with pkgs;
     stdenv = llvmPackages.stdenv;
   };
 
-  samplv1 = qt6.callPackage ../applications/audio/samplv1 { };
-
   beancount = with python3.pkgs; toPythonApplication beancount;
 
   beancount_2 = with python3.pkgs; toPythonApplication beancount_2;
@@ -13195,13 +13108,8 @@ with pkgs;
 
   qgo = libsForQt5.callPackage ../games/qgo { };
 
-  anki = callPackage ../games/anki {
-    protobuf = protobuf_31;
-  };
-  anki-utils = callPackage ../games/anki/addons/anki-utils.nix { };
-  ankiAddons = recurseIntoAttrs (callPackage ../games/anki/addons { });
-  anki-bin = callPackage ../games/anki/bin.nix { };
-  anki-sync-server = callPackage ../games/anki/sync-server.nix { };
+  anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
+  ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 
   art = callPackage ../by-name/ar/art/package.nix {
     fftw = fftwSinglePrec;
@@ -13312,8 +13220,6 @@ with pkgs;
   };
 
   factorio-utils = callPackage ../by-name/fa/factorio/utils.nix { };
-
-  flightgear = libsForQt5.callPackage ../games/flightgear { };
 
   freeciv = callPackage ../by-name/fr/freeciv/package.nix {
     sdl2Client = false;
@@ -13532,8 +13438,6 @@ with pkgs;
   protonup-ng = with python3Packages; toPythonApplication protonup-ng;
 
   stuntrally = callPackage ../games/stuntrally { boost = boost183; };
-
-  synthv1 = libsForQt5.callPackage ../applications/audio/synthv1 { };
 
   the-powder-toy = callPackage ../by-name/th/the-powder-toy/package.nix {
     lua = lua5_2;
@@ -14259,7 +14163,6 @@ with pkgs;
 
   libjack2 = jack2.override { prefix = "lib"; };
 
-  jack-autoconnect = libsForQt5.callPackage ../applications/audio/jack-autoconnect { };
   jack_autoconnect = jack-autoconnect;
 
   j2cli = with python311Packages; toPythonApplication j2cli;
@@ -14294,8 +14197,6 @@ with pkgs;
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
-
-  muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   nixDependencies = recurseIntoAttrs (
     callPackage ../tools/package-management/nix/dependencies-scope.nix { }

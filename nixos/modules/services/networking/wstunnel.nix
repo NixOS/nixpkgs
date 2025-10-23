@@ -26,7 +26,7 @@ let
         str
         (listOf str)
       ]);
-    generate = lib.cli.toGNUCommandLineShell { };
+    generate = lib.cli.toCommandLineShellGNU { };
   };
 
   hostPortToString = { host, port, ... }: "${host}:${toString port}";

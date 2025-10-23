@@ -37,7 +37,6 @@ with lib.maintainers;
       aanderse
       arianvp
       emily
-      flokli
       m1cr0man
     ];
     scope = "Maintain ACME-related packages and modules.";
@@ -309,6 +308,7 @@ with lib.maintainers;
       xanderio
       blitz
       snu
+      e1mo
     ];
     scope = "Team for Cyberus Technology employees who collectively maintain packages.";
     shortName = "Cyberus Technology employees";
@@ -992,7 +992,10 @@ with lib.maintainers;
   };
 
   ocaml = {
-    members = [ alizter ];
+    members = [
+      alizter
+      redianthus
+    ];
     github = "ocaml";
     scope = "Maintain the OCaml compiler and package set.";
     shortName = "OCaml";

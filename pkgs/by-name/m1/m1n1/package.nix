@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "m1n1";
-  version = "1.5.0";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "AsahiLinux";
     repo = "m1n1";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-J1PZVaEdI6gx/qzsoVW1ehRQ/ZDKzdC1NgIGgBqxQ+0=";
+    hash = "sha256-/TQpR/3OUM4OIrfv6cBgZigyLR0VKw6Rd1v9465wy3o=";
   };
 
   postPatch = lib.optionalString (customLogo != null) ''
