@@ -16,12 +16,12 @@ if $latest == $current {
 
 print $"Updating Ghostty: ($current) -> ($latest)"
 
-^update-source-version ghostty $latest --file=./pkgs/by-name/gh/ghostty/package.nix
+^update-source-version ghostty $latest --file=./pkgs/by-name/gh/ghostty-unwrapped/package.nix
 
 # Update deps.nix
 http get $"https://raw.githubusercontent.com/ghostty-org/ghostty/refs/tags/v($latest)/build.zig.zon.nix"
   | ^nixfmt
-  | save -f ./pkgs/by-name/gh/ghostty/deps.nix
+  | save -f ./pkgs/by-name/gh/ghostty-unwrapped/deps.nix
 
 # In extraordinary cases the DMG might take a while to be notarized by Apple
 # and so it's possible for a Git tag to have no corresponding notarized DMG download.
