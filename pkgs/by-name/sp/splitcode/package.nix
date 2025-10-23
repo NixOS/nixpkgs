@@ -7,18 +7,15 @@
   zlib,
   nix-update-script,
 }:
-let
-  version = "0.31.3";
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "splitcode";
-  inherit version;
+  version = "0.31.4";
 
   src = fetchFromGitHub {
     owner = "pachterlab";
     repo = "splitcode";
-    tag = "v${version}";
-    hash = "sha256-EEYjBo52jPCSnv5WSGsXhfZEjsBCHdGerVPOZfShXBU=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-jaZptrF5HSQSe2KQdBNPprhsVZ2FSudZFgWPn9zQq3A=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,6 +24,11 @@ stdenv.mkDerivation {
     libcxx
     zlib
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 2.8.12 3.10
+  '';
 
   doCheck = true;
   checkPhase = ''
@@ -49,4 +51,4 @@ stdenv.mkDerivation {
       "aarch64-linux"
     ];
   };
-}
+})
