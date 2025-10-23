@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We fetch the prebuilt font because building it takes 1.5 hours on hydra.
   # Relevant issue: https://github.com/NixOS/nixpkgs/issues/97871
   src = fetchzip {
-    url = "https://github.com/eosrei/twemoji-color-font/releases/download/v${finalAttrs.version}/TwitterColorEmoji-SVGinOT-Linux-${finalAttrs.version}.tar.gz";
+    url = "https://github.com/13rac1/twemoji-color-font/releases/download/v${finalAttrs.version}/TwitterColorEmoji-SVGinOT-Linux-${finalAttrs.version}.tar.gz";
     hash = "sha256-Xy6Lkm340ldm9ssQWn/eRFIJ5kyhYaXPNy/Y/9vUt40=";
   };
 
@@ -35,8 +35,8 @@ stdenv.mkDerivation (finalAttrs: {
       systems and applications. Regular B&W outline emoji are included for
       backwards/fallback compatibility.
     '';
-    homepage = "https://github.com/eosrei/twemoji-color-font";
-    downloadPage = "https://github.com/eosrei/twemoji-color-font/releases";
+    homepage = "https://github.com/13rac1/twemoji-color-font";
+    downloadPage = "https://github.com/13rac1/twemoji-color-font/releases";
     license = with lib.licenses; [
       cc-by-40
       mit
