@@ -38,27 +38,31 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "8.12.0";
+  version = "8.13.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-ZY7FXpJCWJ3495SPW3Px/oNt5CkffMzmCb8Qt12dluw=";
+    hash = "sha256-31CFoVkXXks1NdePNOvFklfJFT36kmLL4vsgDnTaXyQ=";
   };
 
-  patches = [
-    #  allow for plugin update check, but no calibre version check
-    (fetchpatch {
-      name = "0001-only-plugin-update.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/0001-only-plugin-update.patch";
-      hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
-    })
-    (fetchpatch {
-      name = "0007-Hardening-Qt-code.patch";
-      url = "https://raw.githubusercontent.com/debian-calibre/calibre/debian/${finalAttrs.version}+ds-1/debian/patches/hardening/0007-Hardening-Qt-code.patch";
-      hash = "sha256-V/ZUTH0l4QSfM0dHrgLGdJjF/CCQ0S/fnCP/ZKD563U=";
-    })
-  ]
-  ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
+  patches =
+    let
+      debian-source = "ds+_0.10.5-1";
+    in
+    [
+      #  allow for plugin update check, but no calibre version check
+      (fetchpatch {
+        name = "0001-only-plugin-update.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/0001-only-plugin-update.patch";
+        hash = "sha256-mHZkUoVcoVi9XBOSvM5jyvpOTCcM91g9+Pa/lY6L5p8=";
+      })
+      (fetchpatch {
+        name = "0007-Hardening-Qt-code.patch";
+        url = "https://github.com/debian-calibre/calibre/raw/refs/tags/debian/${finalAttrs.version}+${debian-source}/debian/patches/hardening/0007-Hardening-Qt-code.patch";
+        hash = "sha256-lKp/omNicSBiQUIK+6OOc8ysM6LImn5GxWhpXr4iX+U=";
+      })
+    ]
+    ++ lib.optional (!unrarSupport) ./dont_build_unrar_plugin.patch;
 
   prePatch = ''
     sed -i "s@\[tool.sip.project\]@[tool.sip.project]\nsip-include-dirs = [\"${python3Packages.pyqt6}/${python3Packages.python.sitePackages}/PyQt6/bindings\"]@g" \
