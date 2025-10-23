@@ -17,11 +17,10 @@ let
     cuda_cccl
     cuda_cudart
     cuda_nvcc
-    cudaAtLeast
     flags
     ;
-  version = "2.27.6-1";
-  hash = "sha256-/BiLSZaBbVIqOfd8nQlgUJub0YR3SR4B93x2vZpkeiU=";
+  version = "2.28.7-1";
+  hash = "sha256-NM19OiBBGmv3cGoVoRLKSh9Y59hiDoei9NIrRnTqWeA=";
 in
 backendStdenv.mkDerivation (finalAttrs: {
   pname = "nccl";
@@ -81,18 +80,18 @@ backendStdenv.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Multi-GPU and multi-node collective communication primitives for NVIDIA GPUs";
     homepage = "https://developer.nvidia.com/nccl";
-    license = licenses.bsd3;
-    platforms = platforms.linux;
+    license = lib.licenses.bsd3;
+    platforms = lib.platforms.linux;
     # NCCL is not supported on Jetson, because it does not use NVLink or PCI-e for inter-GPU communication.
     # https://forums.developer.nvidia.com/t/can-jetson-orin-support-nccl/232845/9
     badPlatforms = lib.optionals flags.isJetsonBuild [ "aarch64-linux" ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       mdaiter
       orivej
     ];
-    teams = [ teams.cuda ];
+    teams = [ lib.teams.cuda ];
   };
 })
