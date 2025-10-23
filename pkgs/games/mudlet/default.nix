@@ -104,6 +104,11 @@ in
     WITH_FONTS = "NO";
     WITH_UPDATER = "NO";
 
+    # Patch to CMake 3.25.1 as per https://github.com/NixOS/nixpkgs/issues/445447, this is the current build version upstream https://github.com/Mudlet/Mudlet/commit/933f2551fe3084f0fad6d8b971c6176fe154d8d7#diff-148715d6ea0c0ea0a346af3f6bd610d010d490eca35ac6a9b408748f7ca9e3f4
+    prePatch = ''
+      substituteInPlace CMakeLists.txt --replace-warn "cmake_minimum_required(VERSION 3.3)" "cmake_minimum_required(VERSION 3.25.1)"
+    '';
+
     installPhase =
       ''
         runHook preInstall
