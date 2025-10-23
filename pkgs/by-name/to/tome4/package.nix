@@ -15,12 +15,12 @@
   SDL2_ttf,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tome4";
   version = "1.7.6";
 
   src = fetchurl {
-    url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
+    url = "https://te4.org/dl/t-engine/t-engine4-src-${finalAttrs.version}.tar.bz2";
     sha256 = "sha256-mJ3qAIA/jNyt4CT0ZH1IC7GsDUN8JUKSwHVJwnKkaAw=";
   };
 
@@ -81,11 +81,11 @@ stdenv.mkDerivation rec {
     makeWrapper $dir/t-engine $out/bin/tome4 \
       --chdir "$dir"
 
-    install -Dm755 ${desktop}/share/applications/tome4.desktop $out/share/applications/tome4.desktop
+    install -Dm755 ${finalAttrs.desktop}/share/applications/tome4.desktop $out/share/applications/tome4.desktop
     substituteInPlace $out/share/applications/tome4.desktop \
       --subst-var out
 
-    unzip -oj -qq game/engines/te4-${version}.teae data/gfx/te4-icon.png
+    unzip -oj -qq game/engines/te4-${finalAttrs.version}.teae data/gfx/te4-icon.png
     install -Dm644 te4-icon.png $out/share/icons/hicolor/64x64/tome4.png
 
     install -Dm644 -t $out/share/doc/tome4 CONTRIBUTING COPYING COPYING-MEDIA CREDITS
@@ -104,4 +104,4 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
     ];
   };
-}
+})
