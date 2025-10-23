@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.9.1";
+  version = "0.9.5";
 
   outputs = [
     "out"
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "quotient-im";
     repo = "libQuotient";
-    rev = version;
-    hash = "sha256-R9ms3sYGdHaYKUMnZyBjw5KCik05k93vlvXMRtAXh5Y=";
+    tag = version;
+    hash = "sha256-wdIE5LI4l3WUvpGfoJBL8sjBl2k8NfZTh9CjfJc9FIA=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     olm
     openssl
     qtmultimedia
-  ];
-
-  cmakeFlags = [
-    "-DQuotient_ENABLE_E2EE=ON"
   ];
 
   # https://github.com/quotient-im/libQuotient/issues/551
