@@ -179,7 +179,10 @@ buildGoModule (finalAttrs: {
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
 
-  passthru.tests = { inherit (nixosTests) prometheus; };
+  passthru = {
+    tests = { inherit (nixosTests) prometheus; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Service monitoring system and time series database";
