@@ -9,9 +9,4 @@ in
 final: _:
 builtins.mapAttrs mkRenamed {
   # A comment to prevent empty { } from collapsing into a single line
-
-  cusparselt = {
-    path = "cudaPackages.libcusparse_lt";
-    package = final.libcusparse_lt;
-  };
 }
