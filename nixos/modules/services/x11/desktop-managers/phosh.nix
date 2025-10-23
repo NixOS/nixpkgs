@@ -183,8 +183,11 @@ in
 
   config = lib.mkIf cfg.enable {
     # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
+    # Parts taken from nixos/modules/services/wayland/cage.nix
     systemd.services.phosh = {
       wantedBy = [ "graphical.target" ];
+      after = [ "getty@tty1.service" ];
+      conflicts = [ "getty@tty1.service" ];
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/phosh-session";
         User = cfg.user;
@@ -193,7 +196,7 @@ in
         WorkingDirectory = "~";
         Restart = "always";
 
-        TTYPath = "/dev/tty7";
+        TTYPath = "/dev/tty1";
         TTYReset = "yes";
         TTYVHangup = "yes";
         TTYVTDisallocate = "yes";
@@ -204,7 +207,7 @@ in
         StandardError = "journal";
 
         # Log this user with utmp, letting it show up with commands 'w' and 'who'.
-        UtmpIdentifier = "tty7";
+        UtmpIdentifier = "tty1";
         UtmpMode = "user";
       };
       environment = {
