@@ -8,6 +8,7 @@
   cunit,
   ncurses,
   knot-dns,
+  curlWithGnuTls,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +39,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
   nativeCheckInputs = [ cunit ] ++ lib.optional stdenv.hostPlatform.isDarwin ncurses;
 
-  passthru.tests = knot-dns.passthru.tests; # the only consumer so far
+  passthru.tests = knot-dns.passthru.tests // {
+    inherit curlWithGnuTls;
+  };
 
   meta = with lib; {
     homepage = "https://github.com/ngtcp2/ngtcp2";
