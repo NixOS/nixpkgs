@@ -47,6 +47,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "click"
     "numpy"
     "pyarrow"
     "questionary"
@@ -104,6 +105,9 @@ pythonPackages.buildPythonApplication rec {
     # Tests require network access
     "test_connect_extensions"
     "test_connect_prql"
+    # CLI error message validation tests fail with Click 8.2.1
+    # Expected error keywords don't appear in stdout with newer Click version
+    "test_bad_adapter_opt"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64
