@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "zigpy-deconz";
-  version = "0.25.2";
+  version = "0.25.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zigpy-deconz";
     tag = version;
-    hash = "sha256-9wsdL2mtT6Q6+4Z6f+Aoae7d0x7EDqkZ5n2O3Ml4PbA=";
+    hash = "sha256-hFjp/QE7VGJrL84M/M5HfdNnGEXUBnjM2i7/0+Y6O0I=";
   };
 
   postPatch = ''
