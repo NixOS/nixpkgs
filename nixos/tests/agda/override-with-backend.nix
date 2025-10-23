@@ -2,34 +2,25 @@
 let
   mainProgram = "agda-trivial-backend";
 
-  hello-world = pkgs.writeText "hello-world" ''
-    {-# OPTIONS --guardedness #-}
-    open import IO
-    open import Level
+  hello-world = ./files/HelloWorld.agda;
 
-    main = run {0ℓ} (putStrLn "Hello World!")
-  '';
-  agda-trivial-backend =
-    pkgs.runCommand "trivial-backend"
-      {
-        version = "${pkgs.haskellPackages.Agda.version}";
-        meta.mainProgram = "${mainProgram}";
-        buildInputs = [ (pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.Agda ])) ];
-      }
-      ''
-        cat << EOF > Main.hs
-        module Main where
-
-        import Agda.Main ( runAgda )
-
-        main :: IO ()
-        main = runAgda []
-        EOF
-
-        ghc Main.hs -o ${mainProgram}
-        mkdir -p $out/bin
-        cp ${mainProgram} $out/bin
-      '';
+  agda-trivial-backend = pkgs.stdenvNoCC.mkDerivation {
+    name = "trivial-backend";
+    meta = { inherit mainProgram; };
+    version = "${pkgs.haskellPackages.Agda.version}";
+    src = ./files/TrivialBackend.hs;
+    buildInputs = [
+      (pkgs.haskellPackages.ghcWithPackages (pkgs: [ pkgs.Agda ]))
+    ];
+    dontUnpack = true;
+    buildPhase = ''
+      ghc $src -o ${mainProgram}
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp ${mainProgram} $out/bin
+    '';
+  };
 in
 {
   name = "agda-trivial-backend";
@@ -58,14 +49,16 @@ in
   testScript = ''
     # agda executable is not present
     machine.fail("agda --version")
+    # backend is present
+    text = machine.succeed("${mainProgram} --help")
+    assert "${mainProgram}" in text
     # Hello world
     machine.succeed(
         "cp ${hello-world} HelloWorld.agda"
     )
     machine.succeed("${mainProgram} -l standard-library -i . -c HelloWorld.agda")
     # Check execution
-    assert "Hello World!" in machine.succeed(
-        "./HelloWorld"
-    ), "HelloWorld does not run properly"
+    text = machine.succeed("./HelloWorld")
+    assert "Hello World!" in text, f"HelloWorld does not run properly: output was {text}"
   '';
 }
