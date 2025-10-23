@@ -1,5 +1,6 @@
 {
   buildRedist,
+  cudaAtLeast,
   lib,
   libcublas,
   libcusparse,
@@ -18,11 +19,13 @@ buildRedist {
     "stubs"
   ];
 
-  buildInputs = [
-    (lib.getLib libcublas)
-    (lib.getLib libcusparse)
-    libnvjitlink
-  ];
+  buildInputs =
+    # Always depends on this
+    [ (lib.getLib libcublas) ]
+    # Dependency from 12.0 and on
+    ++ lib.optionals (cudaAtLeast "12.0") [ libnvjitlink ]
+    # Dependency from 12.1 and on
+    ++ lib.optionals (cudaAtLeast "12.1") [ (lib.getLib libcusparse) ];
 
   meta = {
     description = "Collection of dense and sparse direct linear solvers and Eigen solvers";

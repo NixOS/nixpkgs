@@ -1,4 +1,9 @@
-{ buildRedist, libnvjitlink }:
+{
+  buildRedist,
+  cudaAtLeast,
+  lib,
+  libnvjitlink,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "libcusparse";
@@ -12,7 +17,9 @@ buildRedist {
     "stubs"
   ];
 
-  buildInputs = [ libnvjitlink ];
+  buildInputs =
+    # Dependency from 12.0 and on
+    lib.optionals (cudaAtLeast "12.0") [ libnvjitlink ];
 
   meta = {
     description = "GPU-accelerated basic linear algebra subroutines for sparse matrix computations for unstructured sparsity";

@@ -1,6 +1,7 @@
 {
   backendStdenv,
   buildRedist,
+  cudaMajorMinorVersion,
   lib,
 }:
 buildRedist {
@@ -17,6 +18,10 @@ buildRedist {
 
   autoPatchelfIgnoreMissingDeps = [
     "libnvcudla.so"
+  ]
+  ++ lib.optionals (cudaMajorMinorVersion == "11.8") [
+    "libcuda.so.1"
+    "libnvdla_runtime.so"
   ];
 
   platformAssertions = [

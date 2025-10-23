@@ -1,4 +1,8 @@
-{ buildRedist }:
+{
+  buildRedist,
+  cudaAtLeast,
+  lib,
+}:
 buildRedist {
   redistName = "cuda";
   pname = "cuda_nvrtc";
@@ -8,9 +12,9 @@ buildRedist {
     "dev"
     "include"
     "lib"
-    "static"
-    "stubs"
-  ];
+  ]
+  ++ lib.optionals (cudaAtLeast "11.5") [ "static" ]
+  ++ [ "stubs" ];
 
   allowFHSReferences = true;
 

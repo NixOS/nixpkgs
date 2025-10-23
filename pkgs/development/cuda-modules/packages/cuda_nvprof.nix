@@ -1,6 +1,9 @@
 {
+  backendStdenv,
   buildRedist,
   cuda_cupti,
+  cudaAtLeast,
+  lib,
 }:
 buildRedist {
   redistName = "cuda";
@@ -10,6 +13,9 @@ buildRedist {
 
   outputs = [
     "out"
+  ]
+  # The `bin` and `lib` output are only available on SBSA starting with CUDA 11.8.
+  ++ lib.optionals (backendStdenv.hostRedistSystem != "linux-sbsa" || cudaAtLeast "11.8") [
     "bin"
     "lib"
   ];

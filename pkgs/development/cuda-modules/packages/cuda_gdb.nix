@@ -23,17 +23,17 @@ buildRedist {
 
   allowFHSReferences = true;
 
-  buildInputs = [
-    gmp
-  ]
-  # aarch64, sbsa needs expat
-  ++ lib.optionals backendStdenv.hostPlatform.isAarch64 [ expat ]
-  # From 12.5, cuda-gdb comes with Python TUI wrappers
-  ++ lib.optionals (cudaAtLeast "12.5") [
-    libxcrypt-legacy
-    ncurses
-    python3
-  ];
+  buildInputs =
+    # only needs gmp from 12.0 and on
+    lib.optionals (cudaAtLeast "12.0") [ gmp ]
+    # aarch64, sbsa needs expat
+    ++ lib.optionals backendStdenv.hostPlatform.isAarch64 [ expat ]
+    # From 12.5, cuda-gdb comes with Python TUI wrappers
+    ++ lib.optionals (cudaAtLeast "12.5") [
+      libxcrypt-legacy
+      ncurses
+      python3
+    ];
 
   # Remove binaries requiring Python3 versions we do not have
   postInstall = lib.optionalString (cudaAtLeast "12.5") ''
