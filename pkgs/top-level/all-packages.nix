@@ -10865,8 +10865,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
-
   darcs = haskell.lib.compose.disableCabalFlag "library" (
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );
