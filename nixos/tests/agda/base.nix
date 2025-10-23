@@ -1,13 +1,7 @@
 { pkgs, ... }:
 
 let
-  hello-world = pkgs.writeText "hello-world" ''
-    {-# OPTIONS --guardedness #-}
-    open import IO
-    open import Level
-
-    main = run {0ℓ} (putStrLn "Hello World!")
-  '';
+  hello-world = ./files/HelloWorld.agda;
 in
 {
   name = "agda";
