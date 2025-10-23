@@ -44,11 +44,20 @@
       '';
     };
 
+    assertionsAndWarnings = lib.mkOption {
+      description = ''
+        A value that when evaluated, performs the assertions and warnings checks.
+        This option always has value `null`, but its evaluation triggers the side effects.
+      '';
+    };
+
   };
 
   config = {
 
-    assertAndWarn = val: lib.asserts.checkAssertWarn config.assertions config.warnings val;
+    assertAndWarn = val: builtins.seq config.assertionsAndWarnings val;
+
+    assertionsAndWarnings = lib.asserts.checkAssertWarn config.assertions config.warnings null;
 
   };
 
