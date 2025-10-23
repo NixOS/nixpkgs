@@ -518,7 +518,8 @@ in
 
         useEmbeddedBitmaps = lib.mkOption {
           type = lib.types.bool;
-          default = false;
+          default = lib.versionAtLeast config.system.stateVersion "25.11";
+          defaultText = lib.literalExpression "lib.versionAtLeast config.system.stateVersion \"25.11\"";
           description = "Use embedded bitmaps in fonts like Calibri.";
         };
 
