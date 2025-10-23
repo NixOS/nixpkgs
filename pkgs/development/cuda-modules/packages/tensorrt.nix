@@ -87,7 +87,7 @@ buildRedist (
         fi
       '';
 
-    autoPatchelfIgnoreMissingDeps = optionals hasJetsonCudaCapability [
+    autoPatchelfIgnoreMissingDeps = optionals libcudla.meta.available [
       "libnvdla_compiler.so"
     ];
 

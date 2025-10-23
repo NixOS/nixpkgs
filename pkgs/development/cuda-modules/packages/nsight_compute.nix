@@ -85,8 +85,8 @@ buildRedist {
   '';
 
   autoPatchelfIgnoreMissingDeps = [
-    "libnvidia-ml.so.1"
     "libcuda.so.1"
+    "libnvidia-ml.so.1"
   ];
 
   meta = {

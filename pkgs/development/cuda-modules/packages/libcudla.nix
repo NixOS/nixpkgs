@@ -15,7 +15,7 @@ buildRedist {
     "stubs"
   ];
 
-  autoPatchelfIgnoreMissingDeps = lib.optionals backendStdenv.hasJetsonCudaCapability [
+  autoPatchelfIgnoreMissingDeps = [
     "libnvcudla.so"
   ];
 

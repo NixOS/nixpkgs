@@ -1,8 +1,6 @@
 {
   _cuda,
   buildRedist,
-  cuda_cudart,
-  lib,
   libcublas,
   libnvshmem,
   nccl,
@@ -21,14 +19,13 @@ buildRedist {
   # TODO: Looks like the minimum supported capability is 7.0 as of the latest:
   # https://docs.nvidia.com/cuda/cublasmp/getting_started/index.html
   buildInputs = [
-    (lib.getOutput "stubs" cuda_cudart)
     libcublas
     libnvshmem
     nccl
   ];
 
-  extraAutoPatchelfLibs = [
-    "${lib.getOutput "stubs" cuda_cudart}/lib/stubs"
+  autoPatchelfIgnoreMissingDeps = [
+    "libcuda.so.1"
   ];
 
   meta = {

@@ -46,6 +46,12 @@ not straightforward to include. These packages are:
 - `cudnn`:
   - `cudnn_samples`: requires FreeImage, which is abandoned and not packaged.
 
+> [!NOTE]
+>
+> When packaging redistributables, prefer `autoPatchelfIgnoreMissingDeps` to providing
+> paths to stubs with `extraAutoPatchelfLibs`; the stubs are meant to be used for
+> projects where linking against libraries available only at runtime is unavoidable.
+
 ### CUDA Compatibility
 
 [CUDA Compatibility](https://docs.nvidia.com/deploy/cuda-compatibility/),

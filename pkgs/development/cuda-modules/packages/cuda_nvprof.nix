@@ -1,8 +1,6 @@
 {
   buildRedist,
-  cuda_cudart,
   cuda_cupti,
-  lib,
 }:
 buildRedist {
   redistName = "cuda";
@@ -17,12 +15,11 @@ buildRedist {
   ];
 
   buildInputs = [
-    (lib.getOutput "stubs" cuda_cudart)
     cuda_cupti
   ];
 
-  extraAutoPatchelfLibs = [
-    "${lib.getOutput "stubs" cuda_cudart}/lib/stubs"
+  autoPatchelfIgnoreMissingDeps = [
+    "libcuda.so.1"
   ];
 
   meta = {

@@ -1,8 +1,6 @@
 {
   buildRedist,
   cuda_cudart,
-  cuda_nvml_dev,
-  lib,
   libcublas,
   libcurand,
   libcusolver,
@@ -22,15 +20,14 @@ buildRedist {
 
   buildInputs = [
     cuda_cudart
-    (lib.getOutput "stubs" cuda_nvml_dev) # for libnvidia-ml.so
     libcublas
     libcurand
     libcusolver
     libcutensor
   ];
 
-  extraAutoPatchelfLibs = [
-    "${lib.getOutput "stubs" cuda_nvml_dev}/lib/stubs"
+  autoPatchelfIgnoreMissingDeps = [
+    "libnvidia-ml.so.1"
   ];
 
   meta = {

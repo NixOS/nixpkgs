@@ -8,9 +8,9 @@ buildRedist {
   outputs = [ "out" ];
 
   autoPatchelfIgnoreMissingDeps = [
+    "libnvdla_runtime.so"
     "libnvrm_gpu.so"
     "libnvrm_mem.so"
-    "libnvdla_runtime.so"
   ];
 
   meta = {

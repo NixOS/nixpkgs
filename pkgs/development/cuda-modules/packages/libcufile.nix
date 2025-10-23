@@ -1,7 +1,5 @@
 {
   buildRedist,
-  cuda_cudart,
-  lib,
   numactl,
   rdma-core,
 }:
@@ -20,13 +18,12 @@ buildRedist {
   allowFHSReferences = true;
 
   buildInputs = [
-    (lib.getOutput "stubs" cuda_cudart)
     numactl
     rdma-core
   ];
 
-  extraAutoPatchelfLibs = [
-    "${lib.getOutput "stubs" cuda_cudart}/lib/stubs"
+  autoPatchelfIgnoreMissingDeps = [
+    "libcuda.so.1"
   ];
 
   meta = {

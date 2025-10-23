@@ -2,8 +2,6 @@
   backendStdenv,
   boost178,
   buildRedist,
-  cuda_cudart,
-  cuda_nvml_dev,
   e2fsprogs,
   gst_all_1,
   lib,
@@ -97,8 +95,6 @@ buildRedist {
     qt6.qtwebengine
     qt6.qtwayland
     boost178
-    (lib.getOutput "stubs" cuda_cudart)
-    (lib.getOutput "stubs" cuda_nvml_dev)
     e2fsprogs
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
@@ -132,9 +128,9 @@ buildRedist {
     patchelf --replace-needed libtiff.so.5 libtiff.so "''${!outputBin}/${hostDir}/Plugins/imageformats/libqtiff.so"
   '';
 
-  extraAutoPatchelfLibs = [
-    "${lib.getOutput "stubs" cuda_cudart}/lib/stubs"
-    "${lib.getOutput "stubs" cuda_nvml_dev}/lib/stubs"
+  autoPatchelfIgnoreMissingDeps = [
+    "libcuda.so.1"
+    "libnvidia-ml.so.1"
   ];
 
   meta = {
