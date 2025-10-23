@@ -13989,6 +13989,12 @@
     name = "Tomas Krupka";
     matrix = "@krupkat:matrix.org";
   };
+  kruziikrel13 = {
+    github = "kruziikrel13";
+    name = "Michael Petersen";
+    email = "dev@michaelpetersen.io";
+    githubId = 72793125;
+  };
   krzaczek = {
     name = "Pawel Krzaczkowski";
     email = "pawel@printu.pl";
