@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     leaveDotGit = true;
     deepClone = true;
     fetchSubmodules = true;
-    hash = "sha256-HoqFBkxXlmbWaFPOVvO0zUhlDBVzz++T6Fgf0MAuyao=";
+    hash = "sha256-teoBN1EOFCQVk93oEvj2AAjMeQP7NQjDJKZiKy1kdi0";
   };
 
   nativeBuildInputs = [
