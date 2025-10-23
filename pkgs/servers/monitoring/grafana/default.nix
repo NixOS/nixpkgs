@@ -28,23 +28,23 @@ let
   patchGoVersion = ''
     find . -name go.mod -not -path "./.bingo/*" -and -not -path "./devenv/*" -and -not -path "./hack/*" -and -not -path "./scripts/*" -and -not -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.6" "go 1.24.0"
+        --replace-fail "go 1.25.3" "go 1.25.0"
     done
     find . -name go.mod -path "./.citools/*" -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.5" "go 1.24.0"
+        --replace-fail "go 1.25.3" "go 1.25.0"
     done
     find . -name go.work -print0 | while IFS= read -r -d ''' line; do
       substituteInPlace "$line" \
-        --replace-fail "go 1.24.6" "go 1.24.0"
+        --replace-fail "go 1.25.3" "go 1.25.0"
     done
     substituteInPlace Makefile \
-      --replace-fail "GO_VERSION = 1.24.6" "GO_VERSION = 1.24.0"
+      --replace-fail "GO_VERSION = 1.25.3" "GO_VERSION = 1.25.0"
   '';
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "12.0.5";
+  version = "12.0.6";
 
   subPackages = [
     "pkg/cmd/grafana"
@@ -56,7 +56,7 @@ buildGoModule rec {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-60E/YOW7jlwss0+lvP5twM5xTBW3NM2FzUAnxZcWTJY=";
+    hash = "sha256-VvySbS5c4jYsSEDRDlifOCNIDgoIQGGobDRHxAASXVY=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -70,14 +70,14 @@ buildGoModule rec {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry_4.fetchYarnBerryDeps {
     inherit src missingHashes;
-    hash = "sha256-qarRn9m12mthKiaTJGpQI4sLadqJm71X9tUfqRbLo2Y=";
+    hash = "sha256-60I2rAdl5KczfvGevkoP2ahmV9r1Hm30zM2mA9jVdl4=";
   };
 
   disallowedRequisites = [ offlineCache ];
 
   postPatch = patchGoVersion;
 
-  vendorHash = "sha256-BtXwPQThXShORrp7TkOfrvcq5ajrkaBxxUceJtjJSNo=";
+  vendorHash = "sha256-x9howXCPl/gSQSm1P5VmDbYzoPP2Nzx5WA0ERNqm4As=";
 
   proxyVendor = true;
 
