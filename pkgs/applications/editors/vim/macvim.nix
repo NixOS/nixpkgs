@@ -14,11 +14,12 @@
   darwin,
   libiconv,
   python3,
+  enablePython ? false,
   rcodesign,
 }:
 
 let
-  inherit (lib) optional optionalString;
+  inherit (lib) optional optionals optionalString;
 in
 
 # Try to match MacVim's documented script interface compatibility
@@ -64,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     tcl
     perl
-    python3
-  ];
+  ]
+  ++ optional enablePython python3;
 
   patches = [ ./macvim.patch ];
 
@@ -77,14 +78,22 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-multibyte"
     "--enable-nls"
     "--enable-luainterp=dynamic"
+  ]
+  ++ optionals enablePython [
     "--enable-python3interp=dynamic"
+  ]
+  ++ [
     "--enable-perlinterp=dynamic"
     "--enable-rubyinterp=dynamic"
     "--enable-tclinterp=yes"
     "--without-local-dir"
     "--with-luajit"
     "--with-lua-prefix=${luajit}"
+  ]
+  ++ optionals enablePython [
     "--with-python3-command=${python3}/bin/python3"
+  ]
+  ++ [
     "--with-ruby-command=${ruby}/bin/ruby"
     "--with-tclsh=${tcl}/bin/tclsh"
     "--with-tlib=ncurses"
@@ -204,7 +213,11 @@ stdenv.mkDerivation (finalAttrs: {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
+  ''
+  + optionalString enablePython ''
     install_name_tool -add_rpath ${python3}/lib $exe
+  ''
+  + ''
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
 
@@ -233,8 +246,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = platforms.darwin;
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
-    # Needs updating to a newer MacVim for Python and Ruby version support
-    broken = true;
     knownVulnerabilities = [
       "CVE-2023-46246"
       "CVE-2023-48231"
