@@ -102,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       PowerUser64
+      l1npengtul
     ];
     platforms = lib.platforms.unix;
     mainProgram = "sonobus";
