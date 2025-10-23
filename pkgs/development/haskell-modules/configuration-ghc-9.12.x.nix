@@ -66,6 +66,7 @@ with haskellLib;
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
 
   #
   # Hand pick versions that are compatible with ghc 9.12 and base 4.21

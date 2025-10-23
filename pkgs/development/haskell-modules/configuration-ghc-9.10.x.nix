@@ -63,6 +63,7 @@ in
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
 
   # “Unfortunately we are unable to support GHC 9.10.”
   apply-refact = dontDistribute (markBroken super.apply-refact);

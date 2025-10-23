@@ -36,4 +36,5 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
 }
