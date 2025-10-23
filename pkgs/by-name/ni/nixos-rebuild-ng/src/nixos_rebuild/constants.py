@@ -4,7 +4,6 @@ from typing import Final
 # out of the Nixpkgs repository directly.
 EXECUTABLE: Final[str] = "nixos-rebuild-ng"
 WITH_REEXEC: Final[bool] = True
-WITH_SHELL_FILES: Final[bool] = True
 
 # These names are replaced with absolute paths to Nix in the store.
 NIX: Final[str] = "nix"

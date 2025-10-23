@@ -1,11 +1,12 @@
 import argparse
 import logging
 import sys
-from subprocess import CalledProcessError, run
+from subprocess import CalledProcessError
 from typing import Final, assert_never
 
 from . import nix, services
-from .constants import EXECUTABLE, WITH_REEXEC, WITH_SHELL_FILES
+from .constants import WITH_REEXEC
+from .help import print_help
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
 from .utils import LogFormatter
@@ -204,12 +205,7 @@ def parse_args(
     }
 
     if args.help or args.action is None:
-        if WITH_SHELL_FILES:
-            r = run(["man", "8", EXECUTABLE], check=False)
-            parser.exit(r.returncode)
-        else:
-            parser.print_help()
-            parser.exit()
+        print_help(parser)
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)

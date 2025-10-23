@@ -49,7 +49,6 @@ buildPythonApplication {
     (replaceVars ./0001-replacements.patch {
       inherit executable version;
       withReexec = if withReexec then "True" else "False";
-      withShellFiles = if withShellFiles then "True" else "False";
 
       # Make sure that we use the Nix package we depend on, not the ambient Nix in the PATH.
       #
@@ -65,7 +64,8 @@ buildPythonApplication {
       nix-instantiate = lib.getExe' nix "nix-instantiate";
       nix-store = lib.getExe' nix "nix-store";
     })
-  ];
+  ]
+  ++ lib.optional withShellFiles ./0002-help-runs-man.patch;
 
   postInstall = lib.optionalString withShellFiles ''
     scdoc < ${./nixos-rebuild.8.scd} > ${executable}.8

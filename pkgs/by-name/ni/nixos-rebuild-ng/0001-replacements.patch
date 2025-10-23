@@ -5,24 +5,22 @@ Subject: [PATCH] nixos-rebuild-ng: patch out actual replacements
 
 Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src`
 ---
- nixos_rebuild/constants.py | 20 ++++++++++----------
+ nixos_rebuild/constants.py | 18 +++++++++---------
  pyproject.toml             |  6 +++---
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/nixos_rebuild/constants.py b/nixos_rebuild/constants.py
-index 16164bbcd60b..e4423988c98a 100644
+index 9b2c04d88354..6c472320900d 100644
 --- a/nixos_rebuild/constants.py
 +++ b/nixos_rebuild/constants.py
-@@ -2,15 +2,15 @@ from typing import Final
+@@ -2,14 +2,14 @@ from typing import Final
  
  # These are replaced in a patch for the actual derivation; what's below supports running the tool
  # out of the Nixpkgs repository directly.
 -EXECUTABLE: Final[str] = "nixos-rebuild-ng"
 -WITH_REEXEC: Final[bool] = True
--WITH_SHELL_FILES: Final[bool] = True
 +EXECUTABLE: Final[str] = "@executable@"
 +WITH_REEXEC: Final[bool] = @withReexec@
-+WITH_SHELL_FILES: Final[bool] = @withShellFiles@
  
  # These names are replaced with absolute paths to Nix in the store.
 -NIX: Final[str] = "nix"
