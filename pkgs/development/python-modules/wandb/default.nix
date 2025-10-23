@@ -44,7 +44,6 @@
   bokeh,
   boto3,
   cloudpickle,
-  coverage,
   flask,
   google-cloud-artifact-registry,
   google-cloud-compute,
@@ -228,7 +227,6 @@ buildPythonPackage rec {
     bokeh
     boto3
     cloudpickle
-    coverage
     flask
     google-cloud-artifact-registry
     google-cloud-compute
