@@ -1,16 +1,14 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
 
   cmake,
   pkg-config,
-  qtbase,
-  qttools,
-  qtx11extras,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "birdtray";
   version = "1.11.4";
 
@@ -24,8 +22,9 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     qtbase
     qttools
     qtx11extras
