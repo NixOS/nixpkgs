@@ -2,10 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+  copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
   premake4,
-  unzip,
   openal,
   libpng,
   libvorbis,
@@ -24,28 +24,14 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-mJ3qAIA/jNyt4CT0ZH1IC7GsDUN8JUKSwHVJwnKkaAw=";
   };
 
-  desktop = makeDesktopItem {
-    desktopName = "tome4";
-    name = "Tales of Maj'Eyal";
-    exec = "@out@/bin/tome4";
-    icon = "tome4";
-    comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
-    type = "Application";
-    categories = [
-      "Game"
-      "RolePlaying"
-    ];
-    genericName = "2D roguelike RPG";
-  };
-
   prePatch = ''
     # http://forums.te4.org/viewtopic.php?f=42&t=49478&view=next#p234354
     sed -i 's|#include <GL/glext.h>||' src/tgl.h
   '';
 
   nativeBuildInputs = [
+    copyDesktopItems
     makeWrapper
-    unzip
     premake4
   ];
 
@@ -68,6 +54,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   makeFlags = [ "config=release" ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      desktopName = "Tales of Maj'Eyal";
+      name = "tome4";
+      exec = "tome4";
+      icon = "te4-icon";
+      comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
+      type = "Application";
+      categories = [
+        "Game"
+        "RolePlaying"
+      ];
+      genericName = "2D roguelike RPG";
+    })
+  ];
+
   # The wrapper needs to cd into the correct directory as tome4's detection of
   # the game asset root directory is faulty.
 
@@ -81,12 +83,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper $dir/t-engine $out/bin/tome4 \
       --chdir "$dir"
 
-    install -Dm755 ${finalAttrs.desktop}/share/applications/tome4.desktop $out/share/applications/tome4.desktop
-    substituteInPlace $out/share/applications/tome4.desktop \
-      --subst-var out
-
-    unzip -oj -qq game/engines/te4-${finalAttrs.version}.teae data/gfx/te4-icon.png
-    install -Dm644 te4-icon.png $out/share/icons/hicolor/64x64/tome4.png
+    install -Dm644 game/engines/default/data/gfx/te4-icon.png -t $out/share/icons/hicolor/64x64
 
     install -Dm644 -t $out/share/doc/tome4 CONTRIBUTING COPYING COPYING-MEDIA CREDITS
 
