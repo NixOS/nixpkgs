@@ -26,7 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   prePatch = ''
     # http://forums.te4.org/viewtopic.php?f=42&t=49478&view=next#p234354
-    sed -i 's|#include <GL/glext.h>||' src/tgl.h
+    substituteInPlace src/tgl.h \
+      --replace-fail "#include <GL/glext.h>" ""
   '';
 
   nativeBuildInputs = [
