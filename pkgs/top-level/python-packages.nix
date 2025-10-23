@@ -16444,8 +16444,6 @@ self: super: with self; {
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
 
-  schemainspect = callPackage ../development/python-modules/schemainspect { };
-
   schemdraw = callPackage ../development/python-modules/schemdraw { };
 
   schiene = callPackage ../development/python-modules/schiene { };
@@ -17527,8 +17525,6 @@ self: super: with self; {
   sqlalchemy-views = callPackage ../development/python-modules/sqlalchemy-views { };
 
   sqlalchemy_1_4 = callPackage ../development/python-modules/sqlalchemy/1_4.nix { };
-
-  sqlbag = callPackage ../development/python-modules/sqlbag { };
 
   sqlcipher3 = callPackage ../development/python-modules/sqlcipher3 { };
 
