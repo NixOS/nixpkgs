@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "netutils";
-  version = "1.15.0";
+  version = "1.15.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "networktocode";
     repo = "netutils";
     tag = "v${version}";
-    hash = "sha256-BdxmzxnuccAb8BiE48KSYLXJzAaz7eSYMJA2bgSbWj4=";
+    hash = "sha256-bT/a6PhjNZ7vYXio7XOKNnzRfh7UqRn3+OYbhlYL3/I=";
   };
 
   build-system = [ poetry-core ];
