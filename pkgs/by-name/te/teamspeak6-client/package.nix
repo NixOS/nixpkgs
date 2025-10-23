@@ -119,6 +119,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.teamspeak;
     mainProgram = "TeamSpeak";
     maintainers = with lib.maintainers; [
+      drafolin
       gepbird
       jojosch
     ];
