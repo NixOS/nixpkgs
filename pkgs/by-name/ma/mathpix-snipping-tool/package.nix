@@ -5,11 +5,11 @@
 }:
 let
   pname = "mathpix-snipping-tool";
-  version = "03.00.0072";
+  version = "03.00.0138";
 
   src = fetchurl {
     url = "https://download.mathpix.com/linux/Mathpix_Snipping_Tool-x86_64.v${version}.AppImage";
-    sha256 = "1igg8wnshmg9f23qqw1gqb85h1aa3461c1n7dmgw6sn4lrrrh5ms";
+    sha256 = "sha256-29iLdrWxqLL7uRfHae8Mq+w9yaGtM9Y5vRLzYESgzBs=";
   };
 
   appimageContents = appimageTools.extract { inherit pname version src; };
