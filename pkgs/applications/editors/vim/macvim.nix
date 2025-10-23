@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       # ideally we'd recurse, but we don't need that right now
       inputs = [ ncurses ] ++ perl.propagatedBuildInputs;
-      ldflags = map (drv: "-L${lib.getLib drv}/lib") inputs;
+      ldflags = map (drv: "-L${lib.getLib drv}/lib") inputs ++ [ "-headerpad_max_install_names" ];
       cppflags = map (drv: "-isystem ${lib.getDev drv}/include") inputs;
     in
     ''
@@ -138,7 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     # as the scheme seems to have the wrong default.
     + ''
       configureFlagsArray+=(
-        XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
+        XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData LDFLAGS='\$(inherited) -headerpad_max_install_names' ENABLE_CODE_COVERAGE=NO"
         --with-xcodecfg="Release"
       )
     '';
