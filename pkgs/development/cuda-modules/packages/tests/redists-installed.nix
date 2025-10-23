@@ -10,7 +10,16 @@
 let
   # redists-unpacked has already found all the names of the redistributables
   availableRedistsForPlatform = lib.filterAttrs (
-    _: value: value.meta.available or false
+    _: value:
+    let
+      canInstantiate =
+        (builtins.tryEval (
+          builtins.deepSeq ((value.drvPath or null) != null) ((value.drvPath or null) != null)
+        )).value;
+    in
+    lib.warnIfNot canInstantiate
+      "Package ${value.name} is unavailable and will not be included in redists-installed"
+      canInstantiate
   ) tests.redists-unpacked.passthru.redistsForPlatform;
 
   mkOutputs =
