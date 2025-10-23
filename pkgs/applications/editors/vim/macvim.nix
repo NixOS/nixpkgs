@@ -92,6 +92,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
     sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
+  ''
+  # Xcode 26.0 sets *_DEPLOYMENT_TARGET env vars for all platforms in shell script build phases.
+  # This breaks invocations of clang in those phases, as they target the wrong platform.
+  # Note: The shell script build phase in question uses /bin/zsh.
+  + ''
+    substituteInPlace src/MacVim/MacVim.xcodeproj/project.pbxproj \
+      --replace-fail 'make \' $'for x in ''${(k)parameters}; do if [[ $x = *_DEPLOYMENT_TARGET ]]; then [[ $x = MACOSX_DEPLOYMENT_TARGET ]] || unset $x; fi; done\nmake \\'
   '';
 
   # This is unfortunate, but we need to use the same compiler as Xcode, but Xcode doesn't provide a
@@ -149,9 +156,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
-      --replace " -L${stdenv.cc.libc}/lib" "" \
-      --replace " -L${darwin.libunwind}/lib" "" \
-      --replace " -L${libiconv}/lib" ""
+      --replace-warn " -L${stdenv.cc.libc}/lib" "" \
+      --replace-warn " -L${darwin.libunwind}/lib" "" \
+      --replace-warn " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
     # Assert now that this pattern no longer appears in config.mk.
