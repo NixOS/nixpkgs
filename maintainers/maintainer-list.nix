@@ -22034,6 +22034,11 @@
     githubId = 99875823;
     name = "Michael Savedra";
   };
+  savtrip = {
+    github = "savtrip";
+    githubId = 42227195;
+    name = "Sav Tripodi";
+  };
   savyajha = {
     email = "savya.jha@hawkradius.com";
     github = "savyajha";
