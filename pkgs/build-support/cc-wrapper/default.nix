@@ -602,13 +602,18 @@ stdenvNoCC.mkDerivation {
       dontUnpack = true;
       installPhase =
         if targetPlatform.isCygwin then
-          ''
-            echo addToSearchPath "HOST_PATH" "${cc_solib}/bin" >> $out
-            # Work around build failure caused by the gnulib workaround for
-            # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after
-            # gnulib is updated in core packages (e.g. iconv, gnupatch, gnugrep)
-            echo appendToVar configureFlags gl_cv_clean_version_stddef=yes >> $out
-          ''
+          (
+            ''
+              echo addToSearchPath "_HOST_PATH" "${cc_solib}/bin" >> $out
+              # Work around build failure caused by the gnulib workaround for
+              # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114870. remove after
+              # gnulib is updated in core packages (e.g. iconv, gnupatch, gnugrep)
+              echo appendToVar configureFlags gl_cv_clean_version_stddef=yes >> $out
+            ''
+            + lib.optionalString (hostPlatform.canExecute targetPlatform) ''
+              echo addToSearchPath "_PATH" "${cc_solib}/bin" >> $out
+            ''
+          )
         else
           ''
             echo addToSearchPath "LINK_DLL_FOLDERS" "${cc_solib}/lib" > $out
