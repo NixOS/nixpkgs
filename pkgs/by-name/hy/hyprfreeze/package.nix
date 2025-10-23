@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Utility to suspend a game process (and other programs) in Hyprland";
     homepage = "https://github.com/Zerodya/hyprfreeze";
     license = licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ Zerodya ];
+    maintainers = with lib.maintainers; [ zerodya ];
     platforms = platforms.linux;
     mainProgram = "hyprfreeze";
   };
