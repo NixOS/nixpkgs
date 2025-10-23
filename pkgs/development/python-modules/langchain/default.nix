@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.72";
+  version = "0.3.27";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain==${version}";
+    hash = "";
   };
 
   sourceRoot = "${src.name}/libs/langchain";
@@ -150,8 +150,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain==";
+  passthru = {
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain==";
+    };
   };
 
   __darwinAllowLocalNetworking = true;
