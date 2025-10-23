@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
@@ -13,7 +14,16 @@
   SDL2,
   SDL2_image,
   SDL2_ttf,
+  xorg,
 }:
+
+let
+  sdlInputs = [
+    SDL2
+    SDL2_ttf
+    SDL2_image
+  ];
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tome4";
@@ -34,6 +44,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "#include <GL/glext.h>" ""
   '';
 
+  patches = [
+    # https://forums.te4.org/viewtopic.php?f=69&t=39859&p=168681&hilit=luaopen_shaders#p168681
+    (fetchpatch2 {
+      url = "https://gist.githubusercontent.com/hasufell/cb3b10f834e891d90f83/raw/cb4adda13868f6b94585575db4f8df70877ae45a/tome4-1.1.3-fix-implicit-declaration.patch";
+      hash = "sha256-g47N/bi2/DDKqaEkfTaGp9ItS57QVnObzMDWXqrCjWE=";
+    })
+    # unistd required for execv
+    ./0001-web-missing-include.patch
+    # unistd required for read and close
+    ./0002-zlib-missing-include.patch
+    ./0003-incompatible-pointer-types.patch
+  ];
+
   nativeBuildInputs = [
     copyDesktopItems
     makeWrapper
@@ -47,15 +70,22 @@ stdenv.mkDerivation (finalAttrs: {
     openal
     libpng
     libvorbis
-    SDL2
-    SDL2_ttf
-    SDL2_image
-  ];
+    xorg.libX11
+    xorg.xorgproto
+  ]
+  ++ sdlInputs;
 
   # disable parallel building as it caused sporadic build failures
   enableParallelBuilding = false;
 
-  env.NIX_CFLAGS_COMPILE = "-I${lib.getInclude SDL2}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_ttf}/include/SDL2";
+  env = {
+    NIX_CFLAGS_COMPILE =
+      lib.concatMapStringsSep " " (i: "-I${lib.getInclude i}/include/SDL2") sdlInputs
+      + " "
+      + lib.concatMapStringsSep " " (i: "-I${lib.getInclude i}") finalAttrs.buildInputs;
+
+    NIX_CFLAGS_LINK = lib.concatMapStringsSep " " (i: "-L${lib.getLib i}/lib") finalAttrs.buildInputs;
+  };
 
   makeFlags = [ "config=release" ];
 
