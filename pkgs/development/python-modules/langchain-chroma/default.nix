@@ -12,6 +12,7 @@
   numpy,
 
   # tests
+  langchain-openai,
   langchain-tests,
   pytestCheckHook,
   pytest-asyncio,
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_chroma" ];
 
   nativeCheckInputs = [
+    langchain-openai
     langchain-tests
     pytest-asyncio
     pytestCheckHook
