@@ -1,10 +1,8 @@
 {
-  boost,
   cmake,
   doxygen,
   fetchFromGitHub,
   fontconfig,
-  gepetto-viewer,
   lib,
   pkg-config,
   python3Packages,
