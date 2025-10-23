@@ -74,6 +74,7 @@ mapAliases {
   aioquic-mitmproxy = throw "aioquic-mitmproxy has been removed because mitmproxy no longer uses it"; # Added 2024-01-16
   ansiwrap = throw "ansiwrap has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   amazon_kclpy = amazon-kclpy; # added 2023-08-08
+  amazon-kclpy = throw "amazon-kclpy has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   ambiclimate = throw "ambiclimate has been removed, because the service has been terminated after 2024-03-31."; # Added 2024-06-07
   ambee = throw "ambee has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   amiibo-py = throw "amiibo-py has been removed because the upstream repository was removed"; # Added 2025-01-13
@@ -249,6 +250,7 @@ mapAliases {
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   enum-compat = throw "enum-compat is a virtual package providing enum34, which does not do anything since Python 3.4"; # added 2025-02-15
   enum34 = throw "enum34 is no longer needed since Python 3.4"; # added 2025-03-06
+  elegy = throw "elegy has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   et_xmlfile = et-xmlfile; # added 2023-10-16
   etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
@@ -710,6 +712,7 @@ mapAliases {
   pyvicare-neo = pyvicare; # Added 2024-11-06
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
+  pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
   pyzufall = throw "pyzufall was removed, because it is no longer maintained"; # added 2024-05-14
@@ -766,6 +769,7 @@ mapAliases {
   sabyenc = throw "sabyenc has been removed, due to no updates since June 2019 and being superseded by sabyenc3"; # added 2025-05-03
   sampledata = throw "sampledata has been removed, it was unmaintained since 2017"; # added 2024-07-27
   sapi-python-client = kbcstorage; # added 2022-04-20
+  schemainspect = throw "schemainspect has been removed because it has transitively been marked broken since May 2024, and is unmaintained upstream."; # Added 2025-10-11
   scikitimage = scikit-image; # added 2023-05-14
   scikitlearn = scikit-learn; # added 2021-07-21
   scikit-optimize = throw "scikit-optimize has been removed because it is abandoned"; # added 2024-09-30
@@ -842,6 +846,8 @@ mapAliases {
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
   transmissionrpc = throw "transmissionrpc has been removed because it no longer builds and is unmaintained"; # added 2024-10-12
+  treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
+  treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
@@ -885,6 +891,7 @@ mapAliases {
   webhelpers = throw "webhelpers has been removed because it is unmaintained and upstream is gone"; # added 2024-07-27
   websocket_client = websocket-client; # added 2021-06-15
   word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
+  worldengine = throw "worldengine has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   wsnsimpy = throw "wsnsimpy has been removed, it was unmaintained and no more compatible with Python 3.12"; # added 2025-04-01
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxpython instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxpython instead"; # added 2023-03-19
