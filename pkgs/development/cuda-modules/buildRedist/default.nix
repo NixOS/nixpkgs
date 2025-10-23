@@ -11,13 +11,13 @@
   cudaMajorVersion,
   cudaNamePrefix,
   fetchurl,
-  flags,
   lib,
   manifests,
   markForCudatoolkitRootHook,
   setupCudaHook,
   srcOnly,
   stdenv,
+  stdenvNoCC,
 }:
 let
   inherit (backendStdenv) hostRedistSystem;
@@ -244,7 +244,7 @@ extendMkDerivation {
         srcOnly {
           __structuredAttrs = true;
           strictDeps = true;
-          stdenv = backendStdenv;
+          stdenv = stdenvNoCC;
           inherit (finalAttrs) pname version;
           src = fetchurl {
             url = mkRedistUrl finalAttrs.passthru.redistName relative_path;

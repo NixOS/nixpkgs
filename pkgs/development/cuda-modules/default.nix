@@ -105,6 +105,7 @@ let
           lib
           srcOnly
           stdenv
+          stdenvNoCC
           ;
         inherit (finalCudaPackages)
           autoAddCudaCompatRunpath
@@ -112,7 +113,6 @@ let
           cudaMajorMinorVersion
           cudaMajorVersion
           cudaNamePrefix
-          flags
           manifests
           markForCudatoolkitRootHook
           setupCudaHook
