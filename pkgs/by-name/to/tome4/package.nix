@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitLab,
   copyDesktopItems,
   makeDesktopItem,
   makeWrapper,
@@ -19,9 +19,13 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "tome4";
   version = "1.7.6";
 
-  src = fetchurl {
-    url = "https://te4.org/dl/t-engine/t-engine4-src-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-mJ3qAIA/jNyt4CT0ZH1IC7GsDUN8JUKSwHVJwnKkaAw=";
+  # Official source according to https://te4.org/wiki/How_to_compile
+  src = fetchFromGitLab {
+    domain = "git.net-core.org";
+    owner = "tome";
+    repo = "t-engine4";
+    tag = "tome-${finalAttrs.version}";
+    hash = "sha256-v0YPbmaOqKYgFkOe/X0FCirucrMo2UGAyhZ7MFj+nsU=";
   };
 
   prePatch = ''
