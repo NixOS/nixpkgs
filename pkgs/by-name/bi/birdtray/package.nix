@@ -6,6 +6,8 @@
   cmake,
   pkg-config,
   libsForQt5,
+
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
   # Wayland support is broken.
   # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315
   qtWrapperArgs = [ "--set QT_QPA_PLATFORM xcb" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Mail system tray notification icon for Thunderbird";
