@@ -33,6 +33,7 @@
     getNixSystems
     getRedistSystem
     mkRedistUrl
+    selectManifests
     ;
 
   # See ./strings.nix for documentation.

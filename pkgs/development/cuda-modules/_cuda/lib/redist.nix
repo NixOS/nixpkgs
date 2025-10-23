@@ -237,4 +237,34 @@
       )
       ++ [ relativePath ]
     );
+
+  /**
+    Function which accepts an attribute set mapping redistributable name to version and retrieves the corresponding
+    collection of manifests from `_cuda.manifests`. Additionally, the version provided is used to populate the
+    `release_label` field in the corresponding manifest if it is missing.
+
+    It is an error to provide a redistributable name and version for which there is no corresponding manifest.
+
+    # Type
+
+    ```
+    selectManifests :: (versions :: AttrSet RedistName Version) -> AttrSet RedistName Manifest
+    ```
+
+    # Inputs
+
+    `versions`
+
+    : An attribute set mapping redistributable name to manifest version
+  */
+  selectManifests = lib.mapAttrs (
+    name: version:
+    let
+      manifest = _cuda.manifests.${name}.${version};
+    in
+    manifest
+    // {
+      release_label = manifest.release_label or version;
+    }
+  );
 }
