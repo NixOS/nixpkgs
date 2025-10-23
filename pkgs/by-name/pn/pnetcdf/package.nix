@@ -21,17 +21,24 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-nz40Ji9qh6UatlLOuChsWYvHwfVNacJI87usGBcYyFk=";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     perl
     autoreconfHook
     gfortran
+    mpi
   ];
-
-  buildInputs = [ mpi ];
 
   postPatch = ''
     patchShebangs src/binding/f77/buildiface test examples benchmarks
+
+    # do not use fullpath of mpi, remove reference to mpi^dev
+    substituteInPlace  m4/check_mpi.m4 \
+      --replace-fail ''\'''$1=''${ac_mpi_prog_''$1}' ''\'''$1=`basename ''${ac_mpi_prog_''$1}`'
   '';
+
+  enableParallelBuilding = true;
 
   __darwinAllowLocalNetworking = true;
 
@@ -50,8 +57,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # cannot do parallel check otherwise failed
   enableParallelChecking = false;
-
-  enableParallelBuilding = true;
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "checkpoint.";
