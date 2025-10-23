@@ -14,7 +14,12 @@
   darwin,
   libiconv,
   python3,
+  rcodesign,
 }:
+
+let
+  inherit (lib) optional optionalString;
+in
 
 # Try to match MacVim's documented script interface compatibility
 let
@@ -49,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     buildSymlinks
-  ];
+  ]
+  ++ optional stdenv.isAarch64 rcodesign;
   buildInputs = [
     gettext
     ncurses
@@ -205,6 +211,10 @@ stdenv.mkDerivation (finalAttrs: {
     # Remove manpages from tools we aren't providing
     find $out/Applications/MacVim.app/Contents/man \( -name evim.1 -or -name eview.1 \) -delete
     rm $out/Applications/MacVim.app/Contents/man/man1/mvim.1
+  ''
+  + optionalString stdenv.isAarch64 ''
+    # Resign the binary and set the linker-signed flag.
+    rcodesign sign --code-signature-flags linker-signed $exe
   '';
 
   # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
