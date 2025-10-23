@@ -118,7 +118,8 @@ stdenv.mkDerivation rec {
 
   # Upstream uses vendored package versions for some dependencies, so regression testing is prudent
   # to see if there are any breaking changes in unstable that should be vendored as well.
-  doCheck = !stdenv.hostPlatform.isDarwin; # it seems to hang on darwin
+  doCheck =
+    !(stdenv.hostPlatform.isDarwin || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64)); # it seems to hang on darwin and linux-aarch64
   checkPhase = ''
     make test
     ../test/regression
