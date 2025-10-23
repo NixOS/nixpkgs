@@ -17,7 +17,7 @@ buildPythonPackage {
     owner = "itkach";
     repo = "slob";
     rev = "018588b59999c5c0eb42d6517fdb84036f3880cb";
-    sha256 = "01195hphjnlcvgykw143rf06s6y955sjc1r825a58vhjx7hj54zh";
+    hash = "sha256-8JMi4ekSblRUESgHJnUpyRttgMuDBD7924xaCS8sKQQ=";
   };
 
   propagatedBuildInputs = [ pyicu ];
