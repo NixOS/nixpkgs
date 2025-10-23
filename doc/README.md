@@ -328,7 +328,7 @@ Example of how to use `buildImage` goes here.
 
 ### Function arguments
 
-Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nixos.org/manual/nix/stable/language/values).
+Use [definition lists](#definition-lists) to document function arguments, and the attributes of such arguments as well as their [types](https://nix.dev/manual/nix/stable/language/values).
 For example:
 
 ```markdown

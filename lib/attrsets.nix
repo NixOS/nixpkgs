@@ -41,7 +41,7 @@ rec {
   /**
     Returns an attribute from nested attribute sets.
 
-    Nix has an [attribute selection operator `.`](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has an [attribute selection operator `.`](https://nix.dev/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
     (x.a.b or 6) == attrByPath ["a" "b"] 6 x
@@ -108,7 +108,7 @@ rec {
   /**
     Returns if an attribute from nested attribute set exists.
 
-    Nix has a [has attribute operator `?`](https://nixos.org/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has a [has attribute operator `?`](https://nix.dev/manual/nix/stable/language/operators#has-attribute), which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
     (x?a.b) == hasAttrByPath ["a" "b"] x
@@ -294,7 +294,7 @@ rec {
     Like `attrByPath`, but without a default value. If it doesn't find the
     path it will throw an error.
 
-    Nix has an [attribute selection operator](https://nixos.org/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
+    Nix has an [attribute selection operator](https://nix.dev/manual/nix/stable/language/operators#attribute-selection) which is sufficient for such queries, as long as the number of attributes is static. For example:
 
     ```nix
     x.a.b == getAttrFromPath ["a" "b"] x
@@ -1085,7 +1085,7 @@ rec {
   mapAttrsToList = f: attrs: attrValues (mapAttrs f attrs);
 
   /**
-    Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
+    Deconstruct an attrset to a list of name-value pairs as expected by [`builtins.listToAttrs`](https://nix.dev/manual/nix/stable/language/builtins.html#builtins-listToAttrs).
     Each element of the resulting list is an attribute set with these attributes:
     - `name` (string): The name of the attribute
     - `value` (any): The value of the attribute

@@ -148,7 +148,7 @@ To add a package to Nixpkgs:
 
    - All other [`meta`](https://nixos.org/manual/nixpkgs/stable/#chap-meta) attributes are optional, but it’s still a good idea to provide at least the `description`, `homepage` and [`license`](https://nixos.org/manual/nixpkgs/stable/#sec-meta-license).
 
-   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nixos.org/manual/nix/stable/language/).
+   - The exact syntax and semantics of the Nix expression language, including the built-in functions, are [Nix language reference](https://nix.dev/manual/nix/stable/language/).
 
 5. To test whether the package builds, run the following command from the root of the nixpkgs source tree:
 
@@ -517,7 +517,7 @@ See the Nixpkgs manual for more details on [standard meta-attributes](https://ni
 
 ## Import From Derivation
 
-[Import From Derivation](https://nixos.org/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
+[Import From Derivation](https://nix.dev/manual/nix/unstable/language/import-from-derivation) (IFD) is disallowed in Nixpkgs for performance reasons:
 [Hydra](https://github.com/NixOS/hydra) evaluates the entire package set, and sequential builds during evaluation would increase evaluation times to become impractical.
 
 Import From Derivation can be worked around in some cases by committing generated intermediate files to version control and reading those instead.

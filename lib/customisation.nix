@@ -821,7 +821,7 @@ rec {
     to ensure that the overriding functionality of the result derivation
     work as expected.
     Modifications that breaks the overriding include
-    direct [attribute set update](https://nixos.org/manual/nix/stable/language/operators#update)
+    direct [attribute set update](https://nix.dev/manual/nix/stable/language/operators#update)
     and [`lib.extendDerivation`](#function-library-lib.customisation.extendDerivation).
     :::
   */

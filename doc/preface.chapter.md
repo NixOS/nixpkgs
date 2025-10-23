@@ -25,7 +25,7 @@ collection are Nix expressions for
 With these expressions the Nix package manager can build binary packages.
 
 Packages, including the Nix packages collection, are distributed through
-[channels](https://nixos.org/nix/manual/#sec-channels). The collection is
+[channels](https://nix.dev/manual/nix/stable/#sec-channels). The collection is
 distributed for users of Nix on non-NixOS distributions through the channel
 `nixpkgs-unstable`. Users of NixOS generally use one of the `nixos-*` channels,
 e.g. `nixos-22.11`, which includes all packages and modules for the stable NixOS

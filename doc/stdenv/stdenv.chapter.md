@@ -108,7 +108,7 @@ genericBuild
 
 ### Building a `stdenv` package in `nix-shell` {#sec-building-stdenv-package-in-nix-shell}
 
-To build a `stdenv` package in a [`nix-shell`](https://nixos.org/manual/nix/unstable/command-ref/nix-shell.html), enter a shell, find the [phases](#sec-stdenv-phases) you wish to build, then invoke `genericBuild` manually:
+To build a `stdenv` package in a [`nix-shell`](https://nix.dev/manual/nix/unstable/command-ref/nix-shell.html), enter a shell, find the [phases](#sec-stdenv-phases) you wish to build, then invoke `genericBuild` manually:
 
 Go to an empty directory, invoke `nix-shell` with the desired package, and from inside the shell, set the output variables to a writable directory:
 
@@ -158,7 +158,7 @@ type buildPhase
 then change it in a text editor, and paste it back to the terminal.
 
 ::: {.note}
-This method may have some inconsistencies in environment variables and behaviour compared to a normal build within the [Nix build sandbox](https://nixos.org/manual/nix/unstable/language/derivations#builder-execution).
+This method may have some inconsistencies in environment variables and behaviour compared to a normal build within the [Nix build sandbox](https://nix.dev/manual/nix/unstable/language/derivations#builder-execution).
 The following is a non-exhaustive list of such differences:
 
 - `TMP`, `TMPDIR`, and similar variables likely point to non-empty directories that the build might conflict with files in.
@@ -166,7 +166,7 @@ The following is a non-exhaustive list of such differences:
 - Other environment variables may be inconsistent with a `nix-build` either due to `nix-shell`'s initialization script or due to the use of `nix-shell` without the `--pure` option.
 
 If the build fails differently inside the shell than in the sandbox, consider using [`breakpointHook`](#breakpointhook) and invoking `nix-build` instead.
-The [`--keep-failed`](https://nixos.org/manual/nix/unstable/command-ref/conf-file#conf-keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
+The [`--keep-failed`](https://nix.dev/manual/nix/unstable/command-ref/conf-file#conf-keep-failed) option for `nix-build` may also be useful to examine the build directory of a failed build.
 :::
 
 ## Tools provided by `stdenv` {#sec-tools-of-stdenv}
@@ -558,7 +558,7 @@ See also the section about [`passthru.tests`](#var-passthru-tests).
 
 ## Phases {#sec-stdenv-phases}
 
-`stdenv.mkDerivation` sets the Nix [derivation](https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
+`stdenv.mkDerivation` sets the Nix [derivation](https://nix.dev/manual/nix/stable/expressions/derivations.html#derivations)'s builder to a script that loads the stdenv `setup.sh` bash library and calls `genericBuild`. Most packaging functions rely on this default builder.
 
 This generic command either invokes a script at *buildCommandPath*, or a *buildCommand*, or a number of *phases*. Package builds are split into phases to make it easier to override specific parts of the build (e.g., unpacking the sources or installing the binaries).
 
