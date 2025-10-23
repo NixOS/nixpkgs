@@ -48,7 +48,6 @@ buildPythonApplication {
   patches = [
     (replaceVars ./0001-replacements.patch {
       inherit executable version;
-      withReexec = if withReexec then "True" else "False";
 
       # Make sure that we use the Nix package we depend on, not the ambient Nix in the PATH.
       #
@@ -80,9 +79,9 @@ buildPythonApplication {
 
   pytestFlags = [ "-vv" ];
 
-  makeWrapperArgs = lib.optionals (withTmpdir != null) [
-    "--set TMPDIR ${withTmpdir}"
-  ];
+  makeWrapperArgs =
+    lib.optional (!withReexec) "--set NIXOS_REBUILD_REEXEC_ENV 1"
+    ++ lib.optional (withTmpdir != null) "--set TMPDIR ${withTmpdir}";
 
   passthru =
     let

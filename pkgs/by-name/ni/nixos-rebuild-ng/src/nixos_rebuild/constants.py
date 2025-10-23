@@ -1,11 +1,10 @@
 from typing import Final
 
-# These are replaced in a patch for the actual derivation; what's below supports running the tool
-# out of the Nixpkgs repository directly.
+# The name of this executable, for purposes of replacing `nixos-rebuild`.
+# The derivation replaces this using a patch file.
 EXECUTABLE: Final[str] = "nixos-rebuild-ng"
-WITH_REEXEC: Final[bool] = True
 
-# These names are replaced with absolute paths to Nix in the store.
+# These names are replaced with absolute paths to Nix in the store in the derivation.
 NIX: Final[str] = "nix"
 NIX_BUILD: Final[str] = "nix-build"
 NIX_CHANNEL: Final[str] = "nix-channel"

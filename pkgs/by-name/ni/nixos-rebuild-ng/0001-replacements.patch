@@ -3,26 +3,24 @@ From: Philip Taron <philip.taron@gmail.com>
 Date: Wed, 22 Oct 2025 17:02:15 -0700
 Subject: [PATCH] nixos-rebuild-ng: patch out actual replacements
 
-Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src`
+Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src HEAD^1`
 ---
- nixos_rebuild/constants.py | 18 +++++++++---------
+ nixos_rebuild/constants.py | 16 ++++++++--------
  pyproject.toml             |  6 +++---
- 2 files changed, 12 insertions(+), 12 deletions(-)
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
 diff --git a/nixos_rebuild/constants.py b/nixos_rebuild/constants.py
-index 9b2c04d88354..6c472320900d 100644
+index ae38b3ef297b..a33be661a17e 100644
 --- a/nixos_rebuild/constants.py
 +++ b/nixos_rebuild/constants.py
-@@ -2,14 +2,14 @@ from typing import Final
+@@ -2,13 +2,13 @@ from typing import Final
  
- # These are replaced in a patch for the actual derivation; what's below supports running the tool
- # out of the Nixpkgs repository directly.
+ # The name of this executable, for purposes of replacing `nixos-rebuild`.
+ # The derivation replaces this using a patch file.
 -EXECUTABLE: Final[str] = "nixos-rebuild-ng"
--WITH_REEXEC: Final[bool] = True
 +EXECUTABLE: Final[str] = "@executable@"
-+WITH_REEXEC: Final[bool] = @withReexec@
  
- # These names are replaced with absolute paths to Nix in the store.
+ # These names are replaced with absolute paths to Nix in the store in the derivation.
 -NIX: Final[str] = "nix"
 -NIX_BUILD: Final[str] = "nix-build"
 -NIX_CHANNEL: Final[str] = "nix-channel"

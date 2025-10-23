@@ -5,7 +5,6 @@ from subprocess import CalledProcessError
 from typing import Final, assert_never
 
 from . import nix, services
-from .constants import WITH_REEXEC
 from .help import print_help
 from .models import Action, BuildAttr, Flake, Profile
 from .process import Remote
@@ -276,16 +275,15 @@ def execute(argv: list[str]) -> None:
         nix.upgrade_channels(args.upgrade_all, args.sudo)
 
     action = Action(args.action)
-    # Only run shell scripts from the Nixpkgs tree if the action is
-    # "switch", "boot", or "test". With other actions (such as "build"),
-    # the user may reasonably expect that no code from the Nixpkgs tree is
-    # executed, so it's safe to run nixos-rebuild against a potentially
-    # untrusted tree.
+
+    # Only run shell scripts from the Nixpkgs tree if the action is "switch", "boot", or "test".
+    # With other actions (such as "build"), the user may reasonably expect that no code from the
+    # Nixpkgs tree is executed, so it's safe to run nixos-rebuild against a potentially untrusted
+    # tree.
     can_run = action in (Action.SWITCH, Action.BOOT, Action.TEST)
 
-    # Re-exec to a newer version of the script before building to ensure we get
-    # the latest fixes
-    if WITH_REEXEC and can_run and not args.no_reexec:
+    # Re-exec to a newer version of the script before building to ensure we get the latest fixes.
+    if can_run and not args.no_reexec:
         services.reexec(argv, args, build_flags, flake_build_flags)
 
     profile = Profile.from_arg(args.profile_name)
