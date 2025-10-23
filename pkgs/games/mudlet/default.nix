@@ -176,6 +176,7 @@ stdenv.mkDerivation rec {
       felixalbrigtsen
     ];
     platforms = platforms.linux ++ platforms.darwin;
+    broken = stdenv.hostPlatform.isDarwin;
     license = licenses.gpl2Plus;
     mainProgram = "mudlet";
   };
