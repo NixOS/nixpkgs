@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
+    "-DCMAKE_INSTALL_INCLUDEDIR=${placeholder "dev"}/include/lib3mf"
     "-DUSE_INCLUDED_ZLIB=OFF"
     "-DUSE_INCLUDED_LIBZIP=OFF"
     "-DUSE_INCLUDED_GTEST=OFF"
