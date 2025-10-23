@@ -86,6 +86,7 @@ let
     meta
     mod
     nameValuePair
+    optionalAttrs
     optionalDrvAttr
     optionAttrSetToDocList
     overrideExisting
@@ -4679,20 +4680,88 @@ runTests {
             directory = ./packages-from-directory/scope;
           });
       expected = lib.recurseIntoAttrs {
+        __overriders = [ "overrideScope" ];
         a = "a";
         b = "b";
         # Note: Other files/directories in `./test-data/c/` are ignored and can be
         # used by `package.nix`.
         c = "c";
         my-namespace = lib.recurseIntoAttrs {
+          __overriders = [ "overrideScope" ];
           d = "d";
           e = "e";
           f = "f";
           my-sub-namespace = lib.recurseIntoAttrs {
+            __overriders = [ "overrideScope" ];
             g = "g";
             h = "h";
           };
         };
+      };
+    };
+
+  # Test if `makeOverridable` correctly handles `result.ovrerrideScope`,
+  # so that `makeScope`-constructed, `callPackageWith`-called scope
+  # won't lose `<scope>.override` after `<scope>.overrideScope` overriding.
+  testMakeOverridableForCallPackageAndScope =
+    let
+      scope-orig = callPackageWith (lib // { a = 3; }) (
+        {
+          callPackagesWith,
+          makeScope,
+          a,
+        }:
+        makeScope callPackagesWith (final: {
+          inherit a;
+          b = 5;
+          c = final.a * final.b;
+        })
+      ) { };
+      scope-os = scope-orig.overrideScope (
+        final: previous: {
+          b = 7;
+        }
+      );
+      scope-os-ov = scope-os.override { a = 11; };
+    in
+    {
+      expr = {
+        scope-orig-a = scope-orig.a;
+        scope-orig-b = scope-orig.b;
+        scope-orig-c = scope-orig.c;
+        scope-orig-has-override = scope-orig ? override;
+        scope-orig-has-overrideScope = scope-orig ? overrideScope;
+      }
+      // optionalAttrs (scope-orig ? overrideScope) {
+        scope-os-a = scope-os.a;
+        scope-os-b = scope-os.b;
+        scope-os-c = scope-os.c;
+        scope-os-has-override = scope-os ? override;
+        scope-os-has-overrideScope = scope-os ? overrideScope;
+      }
+      // optionalAttrs (scope-os ? override) {
+        scope-os-ov-a = scope-os-ov.a;
+        scope-os-ov-b = scope-os-ov.b;
+        scope-os-ov-c = scope-os-ov.c;
+        scope-os-ov-has-override = scope-os-ov ? override;
+        scope-os-ov-has-overrideScope = scope-os-ov ? overrideScope;
+      };
+      expected = rec {
+        scope-orig-a = 3;
+        scope-orig-b = 5;
+        scope-orig-c = scope-orig-a * scope-orig-b;
+        scope-orig-has-override = true;
+        scope-orig-has-overrideScope = true;
+        scope-os-a = scope-orig-a;
+        scope-os-b = 7;
+        scope-os-c = scope-os-a * scope-os-b;
+        scope-os-has-override = true;
+        scope-os-has-overrideScope = true;
+        scope-os-ov-a = 11;
+        scope-os-ov-b = scope-os-b;
+        scope-os-ov-c = scope-os-ov-a * scope-os-ov-b;
+        scope-os-ov-has-override = true;
+        scope-os-ov-has-overrideScope = true;
       };
     };
 

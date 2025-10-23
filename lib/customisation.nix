@@ -638,6 +638,7 @@ rec {
         callPackage = self.newScope { };
         overrideScope = g: makeScope newScope (extends g f);
         packages = f;
+        __overriders = [ "overrideScope" ];
       };
     in
     self;
@@ -756,6 +757,7 @@ rec {
             f = extends g f;
           });
         packages = f;
+        __overriders = [ "overrideScope" ];
       };
     in
     self;
