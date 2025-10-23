@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   wrapGAppsHook3,
   pkg-config,
@@ -76,6 +77,16 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   dontWrapGApps = true;
+
+  patches = [
+    # Remove musescore > 4.6.3
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/musescore/MuseScore/pull/30667.patch";
+      hash = "sha256-FY2F3UqxXI5tNmKzMWJDxZ7gbXzxDcQzd8TTi2mGvrU=";
+    })
+  ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-interference-size";
 
   nativeBuildInputs = [
     kdePackages.wrapQtAppsHook
