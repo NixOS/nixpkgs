@@ -1,0 +1,86 @@
+{
+  "private": true,
+  "version": "1.12.6",
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --filter=@documenso/remix",
+    "dev:remix": "turbo run dev --filter=@documenso/remix",
+    "dev:docs": "turbo run dev --filter=@documenso/documentation",
+    "dev:openpage-api": "turbo run dev --filter=@documenso/openpage-api",
+    "start": "turbo run start --filter=@documenso/remix --filter=@documenso/documentation --filter=@documenso/openpage-api",
+    "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
+    "format": "prettier --write \"**/*.{js,jsx,cjs,mjs,ts,tsx,cts,mts,mdx}\"",
+    "prepare": "husky && husky install || true",
+    "commitlint": "commitlint --edit",
+    "clean": "turbo run clean && rimraf node_modules",
+    "d": "npm run dx && npm run translate:compile && npm run dev",
+    "dx": "npm i && npm run dx:up && npm run prisma:migrate-dev && npm run prisma:seed",
+    "dx:up": "docker compose -f docker/development/compose.yml up -d",
+    "dx:down": "docker compose -f docker/development/compose.yml down",
+    "ci": "turbo run build --filter=@documenso/remix && turbo run test:e2e",
+    "prisma:generate": "npm run with:env -- npm run prisma:generate -w @documenso/prisma",
+    "prisma:migrate-dev": "npm run with:env -- npm run prisma:migrate-dev -w @documenso/prisma",
+    "prisma:migrate-deploy": "npm run with:env -- npm run prisma:migrate-deploy -w @documenso/prisma",
+    "prisma:migrate-reset": "npm run with:env -- npm run prisma:migrate-reset -w @documenso/prisma",
+    "prisma:seed": "npm run with:env -- npm run prisma:seed -w @documenso/prisma",
+    "prisma:studio": "npm run with:env -- npm run prisma:studio -w @documenso/prisma",
+    "with:env": "dotenv -e .env -e .env.local --",
+    "reset:hard": "npm run clean && npm i && npm run prisma:generate",
+    "precommit": "npm install && git add package.json package-lock.json",
+    "trigger:dev": "npm run with:env -- npx trigger-cli dev --handler-path=\"/api/jobs\"",
+    "inngest:dev": "inngest dev -u http://localhost:3000/api/jobs",
+    "make:version": "npm version --workspace @documenso/remix --include-workspace-root --no-git-tag-version -m \"v%s\"",
+    "translate": "npm run translate:extract && npm run translate:compile",
+    "translate:extract": "lingui extract --clean",
+    "translate:compile": "lingui compile"
+  },
+  "packageManager": "npm@10.7.0",
+  "engines": {
+    "npm": ">=10.7.0",
+    "node": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.7.1",
+    "@commitlint/config-conventional": "^17.7.0",
+    "@lingui/cli": "^5.2.0",
+    "@prisma/client": "^6.8.2",
+    "dotenv": "^16.5.0",
+    "dotenv-cli": "^8.0.0",
+    "eslint": "^8.40.0",
+    "eslint-config-custom": "*",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "nodemailer": "^6.10.1",
+    "playwright": "1.52.0",
+    "prettier": "^3.3.3",
+    "prisma": "^6.8.2",
+    "prisma-extension-kysely": "^3.0.0",
+    "prisma-kysely": "^1.8.0",
+    "rimraf": "^5.0.1",
+    "turbo": "^2.5.8",
+    "vite": "^6.3.5"
+  },
+  "name": "@documenso/root",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "dependencies": {
+    "@documenso/pdf-sign": "^0.1.0",
+    "@documenso/prisma": "^0.0.0",
+    "@lingui/conf": "^5.2.0",
+    "@lingui/core": "^5.2.0",
+    "luxon": "^3.5.0",
+    "mupdf": "^1.0.0",
+    "react": "^18",
+    "typescript": "5.6.2",
+    "zod": "3.24.1"
+  },
+  "overrides": {
+    "zod": "3.24.1"
+  },
+  "trigger.dev": {
+    "endpointId": "documenso-app"
+  }
+}
