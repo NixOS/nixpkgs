@@ -434,8 +434,8 @@ in
       "sha256-obbn0FjZQDwFucsnH3N1+zfe1aWFE5PWHUWiLAeupqA=";
 
   mypy-boto3-dynamodb =
-    buildMypyBoto3Package "dynamodb" "1.40.44"
-      "sha256-WPo6Y4scrvVkS2D1iU4RgqKVH+swo9xt7bNOGwyd7Zk=";
+    buildMypyBoto3Package "dynamodb" "1.40.56"
+      "sha256-V23RL+ESV1QGbn+kgPksEjIglwqdafdmOlbXAfKXisU=";
 
   mypy-boto3-dynamodbstreams =
     buildMypyBoto3Package "dynamodbstreams" "1.40.40"
@@ -498,8 +498,8 @@ in
       "sha256-TGc78KsQ4y8QSFutN+/cj/gr2iJWi7fYh52OYFCFwho=";
 
   mypy-boto3-emr =
-    buildMypyBoto3Package "emr" "1.40.0"
-      "sha256-crNaa6bqSP7fCsFV5CnAHazDpXrFkkb46ria2LWTDvY=";
+    buildMypyBoto3Package "emr" "1.40.56"
+      "sha256-Khke6Z4btoZe5VlLDLJEmwxDD3o/uOYImj/bUy92Wdc=";
 
   mypy-boto3-emr-containers =
     buildMypyBoto3Package "emr-containers" "1.40.29"
@@ -861,8 +861,8 @@ in
       "sha256-18sD6lfs5Y9BBp3j8c/TVjI/3KZbO6pKuYPYKir1NQY=";
 
   mypy-boto3-mediaconvert =
-    buildMypyBoto3Package "mediaconvert" "1.40.17"
-      "sha256-L2/TEQbnd60RuCaqpNI/xyQ76AqbIUe5KWwZtSf+2I8=";
+    buildMypyBoto3Package "mediaconvert" "1.40.56"
+      "sha256-oxrbkvlpIII2Ib8hMF0UnZ6PNFYnDHceA6V9M1thF18=";
 
   mypy-boto3-medialive =
     buildMypyBoto3Package "medialive" "1.40.45"
@@ -901,8 +901,8 @@ in
       "sha256-f/tGLKRnpzMDLAzQH1W7sUjGljb04Ws5Tidh8lL0pWE=";
 
   mypy-boto3-meteringmarketplace =
-    buildMypyBoto3Package "meteringmarketplace" "1.40.0"
-      "sha256-wbPakhKKDtNY6y84jzqJQlP7IiG5QAKQTRsYP/tndV8=";
+    buildMypyBoto3Package "meteringmarketplace" "1.40.56"
+      "sha256-idAuSb9+u1KVh13BBNSgXYkqKHZHcSfQ3rVxiDBLdVU=";
 
   mypy-boto3-mgh =
     buildMypyBoto3Package "mgh" "1.40.18"

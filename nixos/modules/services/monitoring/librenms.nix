@@ -668,6 +668,9 @@ in
           ${artisanWrapper}/bin/librenms-artisan optimize
           echo "${package}" > ${cfg.dataDir}/package
         fi
+
+        # to make sure to not read an outdated .env file
+        ${artisanWrapper}/bin/librenms-artisan config:cache
       '';
     };
 

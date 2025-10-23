@@ -47,6 +47,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   pythonRelaxDeps = [
+    "click"
     "numpy"
     "pyarrow"
     "questionary"
@@ -104,6 +105,10 @@ pythonPackages.buildPythonApplication rec {
     # Tests require network access
     "test_connect_extensions"
     "test_connect_prql"
+
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # AssertionError
+    "test_bad_adapter_opt"
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isx86_64) [
     # Test incorrectly tries to load a dylib/so compiled for x86_64
