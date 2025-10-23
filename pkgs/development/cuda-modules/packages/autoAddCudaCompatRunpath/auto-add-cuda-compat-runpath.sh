@@ -3,6 +3,7 @@
 # coming from the cuda_compat package by adding it to the RUNPATH.
 echo "Sourcing auto-add-cuda-compat-runpath-hook"
 
+# shellcheck disable=SC2157
 if [[ -z "@libcudaPath@" ]]; then
   echo "auto-add-cuda-compat-runpath-hook: cuda_compat not available, skipping hook"
   return
@@ -18,7 +19,7 @@ addCudaCompatRunpath() {
   elif [[ $# -gt 1 ]]; then
     nixLog "too many arguments" >&2
     exit 1
-  elif [[ "$1" == "" ]]; then
+  elif [[ $1 == "" ]]; then
     nixLog "empty library path" >&2
     exit 1
   else
