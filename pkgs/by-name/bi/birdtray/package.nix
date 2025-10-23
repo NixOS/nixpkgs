@@ -1,31 +1,32 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   fetchFromGitHub,
 
   cmake,
   pkg-config,
-  qtbase,
-  qttools,
-  qtx11extras,
+  libsForQt5,
+
+  nix-update-script,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "birdtray";
   version = "1.11.4";
 
   src = fetchFromGitHub {
     owner = "gyunaev";
     repo = "birdtray";
-    rev = "v${version}";
-    sha256 = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rj8tPzZzgW0hXmq8c1LiunIX1tO/tGAaqDGJgCQda5M=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
-  buildInputs = [
+  buildInputs = with libsForQt5; [
     qtbase
     qttools
     qtx11extras
@@ -41,12 +42,14 @@ mkDerivation rec {
   # https://github.com/gyunaev/birdtray/issues/113#issuecomment-621742315
   qtWrapperArgs = [ "--set QT_QPA_PLATFORM xcb" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Mail system tray notification icon for Thunderbird";
     mainProgram = "birdtray";
     homepage = "https://github.com/gyunaev/birdtray";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Flakebi ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ Flakebi ];
+    platforms = lib.platforms.linux;
   };
-}
+})
