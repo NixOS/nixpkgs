@@ -7,11 +7,12 @@ buildRedist {
   redistName = "cuda";
   pname = "cuda_cccl";
 
-  outputs = [
-    "out"
-    "dev"
-    "include"
-  ];
+  # Restrict header-only packages to a single output.
+  # Also, when using multiple outputs (i.e., `out`, `dev`, and `include`), something isn't being patched correctly,
+  # so libnvshmem fails to build, complaining about being unable to find the thrust include directory. This is likely
+  # because the `dev` output contains the CMake configuration and is written to assume it will share a parent
+  # directory with the include directory rather than be in a separate output.
+  outputs = [ "out" ];
 
   prePatch = lib.optionalString (cudaAtLeast "13.0") ''
     nixLog "removing top-level $PWD/include/nv directory"
