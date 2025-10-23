@@ -20,7 +20,7 @@ looks like this:
 
 The attribute names within the `name` attribute path must be camel
 cased in general but should, as an exception, match the [ package
-attribute name](https://nixos.org/nixpkgs/manual/#sec-package-naming)
+attribute name](https://nixos.org/manual/nixpkgs/stable/#sec-package-naming)
 when referencing a Nixpkgs package. For example, the option
 `services.nix-serve.bindAddress` references the `nix-serve` Nixpkgs
 package.
@@ -48,7 +48,7 @@ The function `mkOption` accepts the following arguments.
     on other values or packages.
     Use `lib.literalExpression` for a Nix expression, `lib.literalMD` for
     a plain English description in [Nixpkgs-flavored Markdown](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format.
+    https://nixos.org/manual/nixpkgs/stable/#sec-contributing-markup) format.
 
 `example`
 
@@ -59,7 +59,7 @@ The function `mkOption` accepts the following arguments.
 `description`
 
 :   A textual description of the option in [Nixpkgs-flavored Markdown](
-    https://nixos.org/nixpkgs/manual/#sec-contributing-markup) format that will be
+    https://nixos.org/manual/nixpkgs/stable/#sec-contributing-markup) format that will be
     included in the NixOS manual.
 
 ## Utility functions for common option patterns {#sec-option-declarations-util}

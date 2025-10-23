@@ -167,7 +167,7 @@ Only check the platforms you tested the build on in this section.
 Packages with automated tests are likely merged quicker, because they don’t require as much manual testing.
 If there are existing tests for the package, they should be run.
 NixOS tests can only be run on linux.
-For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/nixos/manual/index.html#sec-nixos-tests).
+For more details on writing and running tests, see the [section in the NixOS manual](https://nixos.org/manual/nixos/stable#sec-nixos-tests).
 
 #### Tested compilation of all pkgs that depend on this change using `nixpkgs-review`
 

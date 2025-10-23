@@ -1993,7 +1993,7 @@ with pkgs;
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
-  # TeX Live; see https://nixos.org/nixpkgs/manual/#sec-language-texlive
+  # TeX Live; see https://nixos.org/manual/nixpkgs/stable/#sec-language-texlive
   texlive = callPackage ../tools/typesetting/tex/texlive { };
   inherit (texlive.schemes)
     texliveBasic
@@ -14285,7 +14285,7 @@ with pkgs;
     directly, even though it is possible to set config.nixpkgs.pkgs.
 
     For more information about writing NixOS modules, see
-    https://nixos.org/nixos/manual/index.html#sec-writing-modules
+    https://nixos.org/manual/nixos/stable#sec-writing-modules
 
     Note that you will need to have called Nixpkgs with the system
     parameter set to the right value for your deployment target.

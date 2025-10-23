@@ -21,7 +21,7 @@ trim_trailing_whitespace = unset
 [.version]
 insert_final_newline = false
 
-# see https://nixos.org/nixpkgs/manual/#chap-conventions
+# see https://nixos.org/manual/nixpkgs/stable/#chap-conventions
 
 [*.{bash,css,js,json,lock,md,nix,pl,pm,py,rb,sh,xml}]
 indent_style = space

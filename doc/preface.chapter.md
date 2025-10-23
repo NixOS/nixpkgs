@@ -21,7 +21,7 @@ To discover other kinds of documentation:
 Nix expressions describe how to build packages from source and are collected in
 the [Nixpkgs repository](https://github.com/NixOS/nixpkgs). Also included in the
 collection are Nix expressions for
-[NixOS modules](https://nixos.org/nixos/manual/index.html#sec-writing-modules).
+[NixOS modules](https://nixos.org/manual/nixos/stable#sec-writing-modules).
 With these expressions the Nix package manager can build binary packages.
 
 Packages, including the Nix packages collection, are distributed through

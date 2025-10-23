@@ -513,7 +513,7 @@ The `meta` attribute set should always be placed last in the derivativion and an
   * When in doubt, ask for reviewer input.
 * `meta.maintainers` must be set for new packages.
 
-See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes).
+See the Nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/manual/nixpkgs/stable/#sec-standard-meta-attributes).
 
 ## Import From Derivation
 

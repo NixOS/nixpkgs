@@ -301,7 +301,7 @@ let
     #
     # See also:
     #
-    # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+    # * https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
     #   Details on how to use this mkDerivation function
     #
     # * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
@@ -763,7 +763,7 @@ let
     #
     # See also:
     #
-    # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+    # * https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
     #   Details on how to use this mkDerivation function
     #
     # * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations

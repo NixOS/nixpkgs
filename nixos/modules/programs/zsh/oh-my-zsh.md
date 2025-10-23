@@ -61,7 +61,7 @@ it's also possible to generate this path from a list of Nix packages:
 ```
 Internally a single store path will be created using
 `buildEnv`. Please refer to the docs of
-[`buildEnv`](https://nixos.org/nixpkgs/manual/#sec-building-environment)
+[`buildEnv`](https://nixos.org/manual/nixpkgs/stable/#sec-building-environment)
 for further reference.
 
 *Please keep in mind that this is not compatible with

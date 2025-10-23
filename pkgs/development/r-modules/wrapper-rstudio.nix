@@ -26,7 +26,7 @@ runCommand (rstudio.name + "-wrapper")
     ++ packages;
 
     # rWrapper points R to a specific set of packages by using a wrapper
-    # (as in https://nixos.org/nixpkgs/manual/#r-packages) which sets
+    # (as in https://nixos.org/manual/nixpkgs/stable/#r-packages) which sets
     # R_LIBS_SITE.  Ordinarily, it would be possible to make RStudio use
     # this same set of packages by simply overriding its version of R
     # with the wrapped one, however, RStudio internally overrides

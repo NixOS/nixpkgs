@@ -421,13 +421,13 @@ import ../make-test-python.nix (
           set_config(
             mutable,
             '.SupportSettings.AboutLink = "https://mattermost.com"',
-            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"'
+            '.SupportSettings.HelpLink = "https://nixos.org/manual/nixos/stable"'
           )
           ensure_post(mutable)
           restart_mattermost(mutable)
 
           # AboutLink and HelpLink should be changed, and the post should exist
-          expect_config(mutable, esr, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"')
+          expect_config(mutable, esr, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/manual/nixos/stable"')
           ensure_post(mutable, fail_if_not_found=True)
 
           # Switch to the latest Mattermost version
@@ -435,7 +435,7 @@ import ../make-test-python.nix (
           wait_mattermost_up(mutable)
 
           # AboutLink and HelpLink should be changed, still, and the post should still exist
-          expect_config(mutable, latest, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/nixos/manual"')
+          expect_config(mutable, latest, '.AboutLink == "https://mattermost.com" and .HelpLink == "https://nixos.org/manual/nixos/stable"')
           ensure_post(mutable, fail_if_not_found=True)
           shutdown_queue.put(mutable)
 
@@ -453,14 +453,14 @@ import ../make-test-python.nix (
           set_config(
             mostlyMutable,
             '.SupportSettings.AboutLink = "https://mattermost.com"',
-            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"',
+            '.SupportSettings.HelpLink = "https://nixos.org/manual/nixos/stable"',
             nixos_version='24.11' # Default 'mostlyMutable' config is an old version
           )
           ensure_post(mostlyMutable)
           restart_mattermost(mostlyMutable)
 
           # HelpLink should be changed but AboutLink should not, and the post should exist
-          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/manual/nixos/stable"')
           ensure_post(mostlyMutable, fail_if_not_found=True)
 
           # Switch to the newer config and make sure the plugins directory is replaced with a directory,
@@ -471,21 +471,21 @@ import ../make-test-python.nix (
           wait_mattermost_up(mostlyMutable)
 
           # HelpLink should be changed, still, and the post should still exist
-          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual"')
+          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/manual/nixos/stable"')
           ensure_post(mostlyMutable, fail_if_not_found=True)
 
           # Edit the config and make a post
           set_config(
             mostlyMutable,
             '.SupportSettings.AboutLink = "https://mattermost.com/foo"',
-            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual/bar"',
+            '.SupportSettings.HelpLink = "https://nixos.org/manual/nixos/stable/bar"',
             '.PluginSettings.PluginStates."com.mattermost.plugin-todo".Enable = true'
           )
           ensure_post(mostlyMutable)
           restart_mattermost(mostlyMutable)
 
           # AboutLink should be overridden by NixOS configuration; HelpLink should be what we set above
-          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual/bar"')
+          expect_config(mostlyMutable, esr, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/manual/nixos/stable/bar"')
 
           # Single plugin that's now enabled.
           expect_plugins(mostlyMutable, 'length == 1')
@@ -498,7 +498,7 @@ import ../make-test-python.nix (
           wait_mattermost_up(mostlyMutable)
 
           # AboutLink should be overridden and the post should still exist
-          expect_config(mostlyMutable, latest, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/nixos/manual/bar"')
+          expect_config(mostlyMutable, latest, '.AboutLink == "https://nixos.org" and .HelpLink == "https://nixos.org/manual/nixos/stable/bar"')
           ensure_post(mostlyMutable, fail_if_not_found=True)
 
           shutdown_queue.put(mostlyMutable)
@@ -514,7 +514,7 @@ import ../make-test-python.nix (
           set_config(
             immutable,
             '.SupportSettings.AboutLink = "https://mattermost.com"',
-            '.SupportSettings.HelpLink = "https://nixos.org/nixos/manual"'
+            '.SupportSettings.HelpLink = "https://nixos.org/manual/nixos/stable"'
           )
           ensure_post(immutable)
           restart_mattermost(immutable, "Patched Mattermost")
