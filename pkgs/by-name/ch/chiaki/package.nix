@@ -6,18 +6,14 @@
   pkg-config,
   ffmpeg,
   libopus,
-  mkDerivation,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
+  libsForQt5,
   SDL2,
   libevdev,
   udev,
-  qtmacextras,
   nanopb,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "chiaki";
   version = "2.2.0";
 
@@ -28,17 +24,23 @@ mkDerivation rec {
     hash = "sha256-mLx2ygMlIuDJt9iT4nIj/dcLGjMvvmneKd49L7C3BQk=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "VERSION 3.2" "VERSION 3.10"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     ffmpeg
     libopus
-    qtbase
-    qtmultimedia
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qtsvg
     SDL2
     nanopb
   ]
@@ -47,7 +49,7 @@ mkDerivation rec {
     udev
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    qtmacextras
+    libsForQt5.qtmacextras
   ];
 
   doCheck = true;

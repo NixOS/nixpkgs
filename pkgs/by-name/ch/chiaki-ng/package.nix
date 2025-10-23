@@ -8,13 +8,7 @@
   python3,
   ffmpeg,
   libopus,
-  wrapQtAppsHook,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
-  qtwayland,
-  qtdeclarative,
-  qtwebengine,
+  kdePackages,
   SDL2,
   libevdev,
   udev,
@@ -34,6 +28,17 @@
   libdovi,
   xxHash,
 }:
+let
+  inherit (kdePackages)
+    qtbase
+    qtdeclarative
+    qtmultimedia
+    qtsvg
+    qtwayland
+    qtwebengine
+    wrapQtAppsHook
+    ;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki-ng";

@@ -13106,13 +13106,6 @@ with pkgs;
     fftw = fftwSinglePrec;
   };
 
-  arx-libertatis = libsForQt5.callPackage ../games/arx-libertatis { };
-
-  asc = callPackage ../games/asc {
-    lua = lua5_1;
-    physfs = physfs_2;
-  };
-
   beancount-ing-diba = callPackage ../applications/office/beancount/beancount-ing-diba.nix {
     inherit (python3Packages) beancount beangulp;
   };
@@ -13126,10 +13119,6 @@ with pkgs;
   cataclysm-dda = cataclysmDDA.stable.tiles;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
-
-  chiaki = libsForQt5.callPackage ../games/chiaki { };
-
-  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };
 
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf_21;
@@ -13278,12 +13267,6 @@ with pkgs;
 
   legendary-gl = python3Packages.callPackage ../games/legendary-gl { };
 
-  liquidwar = callPackage ../games/liquidwar {
-    guile = guile_2_0;
-  };
-
-  liquidwar5 = callPackage ../games/liquidwar/5.nix { };
-
   mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;
   };
@@ -13303,9 +13286,7 @@ with pkgs;
     lua = lua5_1;
   };
 
-  blightmud = callPackage ../games/blightmud { };
-
-  blightmud-tts = callPackage ../games/blightmud { withTTS = true; };
+  blightmud-tts = blightmud.override { withTTS = true; };
 
   npush = callPackage ../games/npush { };
   run-npush = callPackage ../games/npush/run.nix { };
@@ -13350,8 +13331,6 @@ with pkgs;
 
   path-of-building = qt6Packages.callPackage ../games/path-of-building { };
 
-  pentobi = libsForQt5.callPackage ../games/pentobi { };
-
   pokerth = libsForQt5.callPackage ../games/pokerth {
     protobuf = protobuf_21;
   };
@@ -13372,9 +13351,6 @@ with pkgs;
     quake3demo-hires
     quake3hires
     ;
-
-  quakespasm = callPackage ../games/quakespasm { };
-  vkquake = callPackage ../games/quakespasm/vulkan.nix { };
 
   rogue = callPackage ../games/rogue {
     ncurses = ncurses5;

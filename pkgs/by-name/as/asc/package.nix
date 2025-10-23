@@ -7,13 +7,13 @@
   SDL_mixer,
   SDL_sound,
   libsigcxx,
-  physfs,
+  physfs_2,
   boost,
   expat,
   freetype,
   libjpeg,
   wxGTK32,
-  lua,
+  lua5_1,
   perl,
   pkg-config,
   zlib,
@@ -46,13 +46,13 @@ stdenv.mkDerivation {
     SDL_image
     SDL_mixer
     SDL_sound
-    physfs
+    physfs_2
     boost
     expat
     freetype
     libjpeg
     wxGTK32
-    lua
+    lua5_1
     perl
     zlib
     zip
