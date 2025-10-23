@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "igraph";
-  version = "0.11.9";
+  version = "1.0.0";
 
   pyproject = true;
 
@@ -27,7 +27,7 @@ buildPythonPackage rec {
       # export-subst prevents reproducability
       rm $out/.git_archival.json
     '';
-    hash = "sha256-rmIICiIyEr5JCmkDAzcdisVaaKDraTQEquPHjK4d7oU=";
+    hash = "sha256-Y7ZQ1yNoD8A5b6c92OGz9Unietdg1uNt/Za6nxdCSP0=";
   };
 
   postPatch = ''
