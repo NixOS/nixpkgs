@@ -1,0 +1,26 @@
+version = "1.301"
+baseUrl = "https://github.com/githubnext/monaspace/releases/download"
+
+[[fonts]]
+hash = "sha256-H6J4InGyXabZuslywuzNYqw14zymzF90JKxa7CikOIM="
+pname = "monaspace-static"
+name = "static"
+destination = "opentype"
+
+[[fonts]]
+hash = "sha256-76YGCy9dL3cu20hxK1lUb/WaLac5bc/yCqIT7e1Z1rM="
+pname = "monaspace-frozen"
+name = "frozen"
+destination = "truetype"
+
+[[fonts]]
+hash = "sha256-VjRZ/IWScYuAilPgVecmT6ZpLVGOKDT61H5EvolbG+w="
+pname = "monaspace-variable"
+name = "variable"
+destination = "truetype"
+
+[[fonts]]
+hash = "sha256-okhtInxOcIjS3A2w2q6f4EloMF7I8nBuD5aSreQr9bI="
+pname = "monaspace-nerdfonts"
+name = "nerdfonts"
+destination = "opentype"
