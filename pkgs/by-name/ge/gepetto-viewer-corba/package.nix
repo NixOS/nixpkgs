@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gepetto-viewer-corba";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "gepetto";
     repo = "gepetto-viewer-corba";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-+rt6eDlNk3CEC5AsOBJgFEAIqKnM7wxRofyd44H6TUw=";
+    hash = "sha256-T/lpxELvQwSb4gVrzjL934QfdHWeAezbnF4Dp58c/vI=";
   };
 
   outputs = [
