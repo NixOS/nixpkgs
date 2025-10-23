@@ -4,8 +4,8 @@
   lib,
   go,
   buildGoModule,
+  buildNpmPackage,
   fetchFromGitHub,
-  fetchurl,
   nixosTests,
   enableAWS ? true,
   enableAzure ? true,
@@ -32,9 +32,54 @@
   enableZookeeper ? true,
 }:
 
-buildGoModule (finalAttrs: {
+let
   pname = "prometheus";
   version = "3.8.0";
+
+  src = fetchFromGitHub {
+    owner = "prometheus";
+    repo = "prometheus";
+    tag = "v${version}";
+    hash = "sha256-bitRDX1oymFfzvQVYL31BON6UBfQYnqjZefQKc+yXx0=";
+  };
+
+  assets = buildNpmPackage {
+    pname = "${pname}-assets";
+    inherit version;
+
+    src = "${src}/web/ui";
+
+    npmDepsHash = "sha256-Uq7vikiYLqhRQNCpB49aMJgAE/uK4Mst/Iz6W+hdxBw=";
+
+    patches = [
+      # Disable old React app as it depends on deprecated create-react-apps
+      # script
+      ./disable-react-app.diff
+    ];
+
+    env.CI = true;
+
+    doCheck = true;
+    checkPhase = ''
+      runHook preCheck
+
+      npm test
+
+      runHook postCheck
+    '';
+
+    postInstall = ''
+      mkdir -p $out/static
+      cp -r $out/lib/node_modules/prometheus-io/static/* $out/static
+      find $out/static -type f -exec gzip -f9 {} \;
+
+      # Remove node_modules
+      rm -rf $out/lib
+    '';
+  };
+in
+buildGoModule (finalAttrs: {
+  inherit pname version src;
 
   outputs = [
     "out"
@@ -42,21 +87,7 @@ buildGoModule (finalAttrs: {
     "cli"
   ];
 
-  src = fetchFromGitHub {
-    owner = "prometheus";
-    repo = "prometheus";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-hRuZxwPPDLxQvy5MPKEyfmanNabcSjLRO+XbNKugPtk=";
-  };
-
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-
-  vendorHash = "sha256-5wDaG01vcTtGzrS/S33U5XWXoSWM+N9z3dzXZlILxD8=";
-
-  webUiStatic = fetchurl {
-    url = "https://github.com/prometheus/prometheus/releases/download/v${finalAttrs.version}/prometheus-web-ui-${finalAttrs.version}.tar.gz";
-    hash = "sha256-oOEvNZFlYtTNBsn+B2pAWXi0A2oJ6IAo7V8bOLtjfCM=";
-  };
+  vendorHash = "sha256-V+qLxjqGOaT1veEwtklqcS7iO31ufvDHBA9DbZLzDiE=";
 
   excludedPackages = [
     "documentation/prometheus-mixin"
@@ -65,7 +96,7 @@ buildGoModule (finalAttrs: {
   ];
 
   postPatch = ''
-    tar -C web/ui -xzf ${finalAttrs.webUiStatic}
+    cp -r ${assets}/static web/ui/static/
 
     patchShebangs scripts
 
@@ -99,9 +130,18 @@ buildGoModule (finalAttrs: {
   '';
 
   preBuild = ''
-    if [[ -d vendor ]]; then
-      GOARCH= CC="$CC_FOR_BUILD" LD="$LD_FOR_BUILD" make -o assets assets-compress plugins
-    fi
+    if [[ -d vendor ]]; then GOARCH= make -o assets plugins; fi
+
+    # Recreate the `make assets-compress` target here - workaround permissions
+    # errors
+    cp web/ui/embed.go.tmpl web/ui/embed.go
+
+    find web/ui/static -type f -name '*.gz' -print0 | sort -z | xargs -0 echo //go:embed >> web/ui/embed.go
+
+    echo 'var EmbedFS embed.FS' >> web/ui/embed.go
+
+    # EmbedFS requires relative paths
+    substituteInPlace web/ui/embed.go --replace-fail "web/ui/" ""
   '';
 
   tags = [ "builtinassets" ];
