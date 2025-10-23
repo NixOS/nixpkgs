@@ -7,7 +7,7 @@
   gettext,
   pkg-config,
   cscope,
-  ruby,
+  ruby_3_4,
   tcl,
   perl,
   luajit,
@@ -24,9 +24,8 @@ in
 
 # Try to match MacVim's documented script interface compatibility
 let
-  #perl = perl540;
-  # Ruby 3.3
-  #ruby = ruby_3_3;
+  # Ruby 3.4
+  ruby = ruby_3_4;
 
   # Building requires a few system tools to be in PATH.
   # Some of these we could patch into the relevant source files (such as xcodebuild and
@@ -41,13 +40,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
-  version = "179";
+  version = "181";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-L9LVXyeA09aMtNf+b/Oo+eLpeVEKTD1/oNWCiFn5FbU=";
+    hash = "sha256-Wdq+eXSaGs+y+75ZbxoNAcyopRkWRHHRm05T0SHBrow=";
   };
 
   enableParallelBuilding = true;
@@ -247,27 +246,6 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.darwin;
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
     knownVulnerabilities = [
-      "CVE-2023-46246"
-      "CVE-2023-48231"
-      "CVE-2023-48232"
-      "CVE-2023-48233"
-      "CVE-2023-48234"
-      "CVE-2023-48235"
-      "CVE-2023-48236"
-      "CVE-2023-48237"
-      "CVE-2023-48706"
-      "CVE-2023-5344"
-      "CVE-2023-5441"
-      "CVE-2023-5535"
-      "CVE-2024-22667"
-      "CVE-2024-41957"
-      "CVE-2024-41965"
-      "CVE-2024-43374"
-      "CVE-2024-47814"
-      "CVE-2025-1215"
-      "CVE-2025-22134"
-      "CVE-2025-24014"
-      "CVE-2025-26603"
       "CVE-2025-29768"
       "CVE-2025-53905"
       "CVE-2025-53906"
