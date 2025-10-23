@@ -11,7 +11,7 @@ let
   pname = "beeper";
   version = "4.1.253";
   src = fetchurl {
-    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}.AppImage";
+    url = "https://beeper-desktop.download.beeper.com/builds/Beeper-${version}-x86_64.AppImage";
     hash = "sha256-/vjJmDP183M8B/g0IIcWytB5NUoteWMZlef0j8nZdOQ=";
   };
   appimageContents = appimageTools.extract {
