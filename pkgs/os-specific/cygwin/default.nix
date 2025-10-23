@@ -19,5 +19,7 @@ makeScopeWithSplicing' {
 
       newlib-cygwin = callPackage ./newlib-cygwin { };
       newlib-cygwin-headers = callPackage ./newlib-cygwin { headersOnly = true; };
+
+      tests = callPackage ./tests { };
     };
 }
