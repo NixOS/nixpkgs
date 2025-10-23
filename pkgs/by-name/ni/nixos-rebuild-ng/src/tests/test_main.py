@@ -16,6 +16,7 @@ from nixos_rebuild.constants import (
     NIX_COPY_CLOSURE,
     NIX_ENV,
     NIX_INSTANTIATE,
+    NIX_OR_NOM,
     NIX_STORE,
 )
 
@@ -286,16 +287,16 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == NIX and "eval" in args:
+        if args[0] not in (NIX, NIX_OR_NOM):
+            return CompletedProcess([], 0)
+        elif "eval" in args:
             return CompletedProcess(
                 [],
                 0,
                 '"nixos-image-azure-25.05.20250102.6df2492-x86_64-linux.vhd"',
             )
-        elif args[0] == NIX:
-            return CompletedProcess([], 0, str(config_path))
         else:
-            return CompletedProcess([], 0)
+            return CompletedProcess([], 0, str(config_path))
 
     mock_run.side_effect = run_side_effect
 
@@ -328,10 +329,10 @@ def test_execute_nix_build_image_flake(mock_run: Mock, tmp_path: Path) -> None:
             ),
             call(
                 [
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.images.azure',
                 ],
@@ -365,7 +366,7 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == NIX:
+        if args[0] in (NIX, NIX_OR_NOM):
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)
@@ -394,10 +395,10 @@ def test_execute_nix_switch_flake(mock_run: Mock, tmp_path: Path) -> None:
         [
             call(
                 [
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "-v",
@@ -681,7 +682,7 @@ def test_execute_nix_switch_flake_target_host(
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == NIX:
+        if args[0] in (NIX, NIX_OR_NOM):
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)
@@ -706,10 +707,10 @@ def test_execute_nix_switch_flake_target_host(
         [
             call(
                 [
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     '/path/to/config#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",
@@ -790,7 +791,7 @@ def test_execute_nix_switch_flake_build_host(
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == NIX and "eval" in args:
             return CompletedProcess([], 0, str(config_path))
-        elif args[0] == "ssh" and NIX in args:
+        elif args[0] == "ssh" and (NIX in args or NIX_OR_NOM in args):
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)
@@ -836,10 +837,10 @@ def test_execute_nix_switch_flake_build_host(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@localhost",
                     "--",
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "'nix-command flakes'",
-                    "build",
                     f"'{config_path}^*'",
                     "--print-out-paths",
                     "--no-link",
@@ -1045,10 +1046,10 @@ def test_execute_build_dry_run_build_and_target_remote(
                     *nr.process.SSH_DEFAULT_OPTS,
                     "user@build-host",
                     "--",
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "'nix-command flakes'",
-                    "build",
                     f"'{config_path}^*'",
                     "--print-out-paths",
                     "--dry-run",
@@ -1067,7 +1068,7 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
     config_path.touch()
 
     def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
-        if args[0] == NIX:
+        if args[0] in (NIX, NIX_OR_NOM):
             return CompletedProcess([], 0, str(config_path))
         elif args[0] == "test":
             return CompletedProcess([], 1)
@@ -1085,10 +1086,10 @@ def test_execute_test_flake(mock_run: Mock, tmp_path: Path) -> None:
         [
             call(
                 [
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "--print-out-paths",
                     'github:user/repo#nixosConfigurations."hostname".config.system.build.toplevel',
                     "--no-link",

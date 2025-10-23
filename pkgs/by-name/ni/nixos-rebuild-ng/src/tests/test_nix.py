@@ -18,6 +18,7 @@ from nixos_rebuild.constants import (
     NIX_COPY_CLOSURE,
     NIX_ENV,
     NIX_INSTANTIATE,
+    NIX_OR_NOM,
     NIX_STORE,
 )
 
@@ -72,10 +73,10 @@ def test_build_flake(mock_run: Mock, monkeypatch: MonkeyPatch, tmpdir: Path) -> 
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
-            NIX,
+            NIX_OR_NOM,
+            "build",
             "--extra-experimental-features",
             "nix-command flakes",
-            "build",
             "--print-out-paths",
             '/flake.nix#nixosConfigurations."hostname".config.system.build.toplevel',
             "--no-link",
@@ -222,10 +223,10 @@ def test_build_remote_flake(
             ),
             call(
                 [
-                    NIX,
+                    NIX_OR_NOM,
+                    "build",
                     "--extra-experimental-features",
                     "nix-command flakes",
-                    "build",
                     "/path/to/file^*",
                     "--print-out-paths",
                     "--build",

@@ -20,6 +20,7 @@ from .constants import (
     NIX_COPY_CLOSURE,
     NIX_ENV,
     NIX_INSTANTIATE,
+    NIX_OR_NOM,
     NIX_STORE,
 )
 from .models import (
@@ -86,9 +87,9 @@ def build_flake(
     Returns the built attribute as path.
     """
     run_args = [
-        NIX,
-        *FLAKE_FLAGS,
+        NIX_OR_NOM,
         "build",
+        *FLAKE_FLAGS,
         "--print-out-paths",
         flake.to_attr(attr),
         *dict_to_flags(flake_build_flags),
@@ -174,9 +175,9 @@ def build_remote_flake(
     copy_closure(drv, to_host=build_host, from_host=None, copy_flags=copy_flags)
     r = run_wrapper(
         [
-            NIX,
-            *FLAKE_FLAGS,
+            NIX_OR_NOM,
             "build",
+            *FLAKE_FLAGS,
             f"{drv}^*",
             "--print-out-paths",
             *dict_to_flags(flake_build_flags),

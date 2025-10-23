@@ -5,7 +5,9 @@ from typing import Final
 EXECUTABLE: Final[str] = "nixos-rebuild-ng"
 
 # These names are replaced with absolute paths to Nix in the store in the derivation.
+# Some of these names could be either `nix` or `nom`, and are called out as such.
 NIX: Final[str] = "nix"
+NIX_OR_NOM: Final[str] = "nix"
 NIX_BUILD: Final[str] = "nix-build"
 NIX_CHANNEL: Final[str] = "nix-channel"
 NIX_COPY_CLOSURE: Final[str] = "nix-copy-closure"

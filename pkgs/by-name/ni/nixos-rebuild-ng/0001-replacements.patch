@@ -5,15 +5,15 @@ Subject: [PATCH] nixos-rebuild-ng: patch out actual replacements
 
 Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src HEAD^1`
 ---
- nixos_rebuild/constants.py | 16 ++++++++--------
+ nixos_rebuild/constants.py | 18 +++++++++---------
  pyproject.toml             |  6 +++---
- 2 files changed, 11 insertions(+), 11 deletions(-)
+ 2 files changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/nixos_rebuild/constants.py b/nixos_rebuild/constants.py
-index ae38b3ef297b..a33be661a17e 100644
+index f79922ea5c87..ee4fc0c49373 100644
 --- a/nixos_rebuild/constants.py
 +++ b/nixos_rebuild/constants.py
-@@ -2,13 +2,13 @@ from typing import Final
+@@ -2,15 +2,15 @@ from typing import Final
  
  # The name of this executable, for purposes of replacing `nixos-rebuild`.
  # The derivation replaces this using a patch file.
@@ -21,7 +21,9 @@ index ae38b3ef297b..a33be661a17e 100644
 +EXECUTABLE: Final[str] = "@executable@"
  
  # These names are replaced with absolute paths to Nix in the store in the derivation.
+ # Some of these names could be either `nix` or `nom`, and are called out as such.
 -NIX: Final[str] = "nix"
+-NIX_OR_NOM: Final[str] = "nix"
 -NIX_BUILD: Final[str] = "nix-build"
 -NIX_CHANNEL: Final[str] = "nix-channel"
 -NIX_COPY_CLOSURE: Final[str] = "nix-copy-closure"
@@ -29,6 +31,7 @@ index ae38b3ef297b..a33be661a17e 100644
 -NIX_INSTANTIATE: Final[str] = "nix-instantiate"
 -NIX_STORE: Final[str] = "nix-store"
 +NIX: Final[str] = "@nix@"
++NIX_OR_NOM: Final[str] = "@nix-or-nom@"
 +NIX_BUILD: Final[str] = "@nix-build@"
 +NIX_CHANNEL: Final[str] = "@nix-channel@"
 +NIX_COPY_CLOSURE: Final[str] = "@nix-copy-closure@"

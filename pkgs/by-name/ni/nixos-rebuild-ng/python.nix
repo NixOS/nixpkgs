@@ -56,6 +56,7 @@ buildPythonApplication {
       # package in her PATH, then we would silently downgrade the whole system to be i686 NixOS on
       # the next reboot.
       nix = lib.getExe' nix "nix";
+      nix-or-nom = lib.getExe' nix "nix";
       nix-build = lib.getExe' nix "nix-build";
       nix-channel = lib.getExe' nix "nix-channel";
       nix-copy-closure = lib.getExe' nix "nix-copy-closure";
