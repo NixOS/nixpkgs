@@ -58,6 +58,8 @@ buildRedist {
     fi
 
     rm -rf host/${archDir}/Mesa/
+
+    patchShebangs .
   '';
 
   postInstall = ''
