@@ -1,5 +1,7 @@
 {
+  lib,
   stdenv,
+  makeBinaryWrapper,
   python3Packages,
 
   # These are required to be passed through.
@@ -7,12 +9,14 @@
   lixPackageSets,
   mkShell,
   nix,
+  nix-output-monitor,
   nixVersions,
   nixos-rebuild-ng,
   nixosTests,
   scdoc,
 
   withNgSuffix ? true,
+  withNom ? false,
   withReexec ? false,
   withShellFiles ? true,
   # Very long tmp dirs lead to "too long for Unix domain socket"
@@ -26,11 +30,13 @@ python3Packages.callPackage ./python.nix {
     lixPackageSets
     mkShell
     nix
+    nix-output-monitor
     nixVersions
     nixos-rebuild-ng
     nixosTests
     scdoc
     withNgSuffix
+    withNom
     withReexec
     withShellFiles
     withTmpdir

@@ -72,6 +72,7 @@ let
   nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
     nix = config.nix.package;
     withNgSuffix = false;
+    withNom = config.system.rebuild.enableNom;
     withReexec = true;
   };
 
@@ -284,6 +285,14 @@ in
     description = ''
       Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
       Python-based re-implementation of the original in Bash.
+    '';
+  };
+
+  options.system.rebuild.enableNom = lib.mkEnableOption "" // {
+    default = false;
+    description = ''
+      Whether to use ‘nix-output-monitor’ in place of ‘nix’ when rebuilding.
+      This produces a more aesthetically pleasing terminal experience.
     '';
   };
 

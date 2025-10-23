@@ -13,6 +13,7 @@
   lixPackageSets,
   mkShell,
   nix,
+  nix-output-monitor,
   nixVersions,
   nixos-rebuild-ng,
   nixosTests,
@@ -21,6 +22,7 @@
 
   # Override interface, required to be passed in from `./package.nix`.
   withNgSuffix,
+  withNom,
   withReexec,
   withShellFiles,
   withTmpdir,
@@ -28,6 +30,15 @@
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
   version = lib.trivial.release;
+
+  # If we're using `nix-output-monitor`, make sure it's pinned to the right version of Nix.
+  nix-output-monitor-pinned = nix-output-monitor.override {
+    withPinnedNix = true;
+    inherit nix;
+  };
+
+  maybeNom = if withNom then nix-output-monitor-pinned else nix;
+  nix-or-nom = if withNom then "nom" else "nix";
 in
 buildPythonApplication {
   pname = "nixos-rebuild-ng";
@@ -50,14 +61,15 @@ buildPythonApplication {
       inherit executable version;
 
       # Make sure that we use the Nix package we depend on, not the ambient Nix in the PATH.
+      # If we've requested to use `nom`, use that for `nix` and `nix-build` commands.
       #
       # This is important, because NixOS defaults the architecture of the rebuilt system to the
       # architecture of the nix-* binaries used. So if on an amd64 system the user has an i686 Nix
       # package in her PATH, then we would silently downgrade the whole system to be i686 NixOS on
       # the next reboot.
       nix = lib.getExe' nix "nix";
-      nix-or-nom = lib.getExe' nix "nix";
-      nix-build = lib.getExe' nix "nix-build";
+      nix-or-nom = lib.getExe' maybeNom "${nix-or-nom}";
+      nix-build = lib.getExe' maybeNom "${nix-or-nom}-build";
       nix-channel = lib.getExe' nix "nix-channel";
       nix-copy-closure = lib.getExe' nix "nix-copy-closure";
       nix-env = lib.getExe' nix "nix-env";
@@ -106,6 +118,10 @@ buildPythonApplication {
       };
 
       tests = {
+        with_nom = nixos-rebuild-ng.override {
+          withNom = true;
+        };
+
         with_reexec = nixos-rebuild-ng.override {
           withReexec = true;
           withNgSuffix = false;
