@@ -24924,6 +24924,12 @@
     githubId = 73298492;
     name = "Mikhail Kiselev";
   };
+  sunworms = {
+    email = "sunnybhowmick0310@gmail.com";
+    github = "sunworms";
+    githubId = 89862130;
+    name = "Sunny Bhowmick";
+  };
   suominen = {
     email = "kimmo@suominen.com";
     github = "suominen";
