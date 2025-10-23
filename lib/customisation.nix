@@ -34,6 +34,8 @@ let
     extends
     toFunction
     id
+    genAttrs
+    subtractLists
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
 
@@ -179,10 +181,19 @@ rec {
         );
         # Change the result of the function call by applying g to it
         overrideResult = g: makeOverridable (mirrorArgs (args: g (f args))) origArgs;
+        newOverriderNames =
+          filter (n: n != "override" && n != "overrideDerivation" && result ? ${n}) (
+            subtractLists (result.__overriders or [ ]) [ "overrideAttrs" ] ++ result.__overriders or [ ]
+          )
+          ++ [
+            "override"
+            "overrideDerivation"
+          ];
       in
       if isAttrs result then
         result
         // {
+          __overriders = newOverriderNames;
           override = overrideArgs;
           overrideDerivation = fdrv: overrideResult (x: overrideDerivation x fdrv);
           ${if result ? overrideAttrs then "overrideAttrs" else null} =
@@ -198,10 +209,16 @@ rec {
             #       design/tech debt issue: https://github.com/NixOS/nixpkgs/issues/273815
             fdrv: overrideResult (x: x.overrideAttrs fdrv);
         }
+        // optionalAttrs (result ? __overriders) (
+          genAttrs (filter (
+            x: x != "override" && x != "overrideAttrs" && x != "overrideDerivation" && result ? ${x}
+          ) result.__overriders) (name: fdrv: overrideResult (x: x.${name} fdrv))
+        )
       else if isFunction result then
         # Transform the result into a functor while propagating its arguments
         setFunctionArgs result (functionArgs result)
         // {
+          __overriders = newOverriderNames;
           override = overrideArgs;
         }
       else
