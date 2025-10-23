@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchzip,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
     install -Dm644 fontconfig/46-twemoji-color.conf $out/etc/fonts/conf.d/46-twemoji-color.conf
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Color emoji SVGinOT font using Twitter Unicode 10 emoji with diversity and country flags";
