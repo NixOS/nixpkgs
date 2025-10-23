@@ -34,5 +34,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.cc0;
     maintainers = with lib.maintainers; [ mvs ];
     platforms = lib.platforms.linux;
+    mainProgram = "integrity-scrub";
   };
 }
