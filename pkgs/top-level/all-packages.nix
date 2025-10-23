@@ -1765,8 +1765,6 @@ with pkgs;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
-  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
-
   charles = charles5;
   inherit (callPackages ../applications/networking/charles { })
     charles3
