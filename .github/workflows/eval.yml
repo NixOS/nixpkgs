@@ -116,7 +116,6 @@ jobs:
           # Note: Keep the same further down in sync!
 
       - name: Evaluate the ${{ matrix.system }} output paths at the target commit
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         # This is very quick, because it pulls the eval results from Cachix.
@@ -128,7 +127,6 @@ jobs:
             --out-link target
 
       - name: Compare outpaths against the target branch
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
@@ -139,7 +137,6 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        if: inputs.targetSha
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
@@ -148,7 +145,7 @@ jobs:
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: inputs.targetSha && !cancelled() && !failure()
+    if: "!cancelled() && !failure()"
     permissions:
       statuses: write
     timeout-minutes: 5
@@ -195,6 +192,8 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the comparison results
+        # Avoids name conflicts in the Test workflow with the same upload via Merge Group.
+        if: ${{ github.event_name == 'pull_request_target' }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: comparison
