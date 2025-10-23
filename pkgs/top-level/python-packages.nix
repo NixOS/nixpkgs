@@ -17580,6 +17580,8 @@ self: super: with self; {
 
   stable-baselines3 = callPackage ../development/python-modules/stable-baselines3 { };
 
+  stablehash = callPackage ../development/python-modules/stablehash { };
+
   stack-data = callPackage ../development/python-modules/stack-data { };
 
   stackprinter = callPackage ../development/python-modules/stackprinter { };
