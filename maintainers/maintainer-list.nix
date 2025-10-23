@@ -64,7 +64,6 @@
 */
 {
   # keep-sorted start case=no numeric=no block=yes
-
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
@@ -25903,6 +25902,12 @@
     name = "theverygaming";
     github = "theverygaming";
     githubId = 18639279;
+  };
+  TheWanderingCrow = {
+    name = "Crow";
+    email = "contact@wanderingcrow.net";
+    github = "TheWanderingCrow";
+    githubId = 13041965;
   };
   thiagokokada = {
     email = "thiagokokada@gmail.com";
