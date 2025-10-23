@@ -5,15 +5,15 @@ Subject: [PATCH] nixos-rebuild-ng: patch out actual replacements
 
 Produced with `git format-patch -1 --zero-commit --stdout --relative=pkgs/by-name/ni/nixos-rebuild-ng/src`
 ---
- nixos_rebuild/constants.py | 6 +++---
- pyproject.toml             | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ nixos_rebuild/constants.py | 20 ++++++++++----------
+ pyproject.toml             |  6 +++---
+ 2 files changed, 13 insertions(+), 13 deletions(-)
 
 diff --git a/nixos_rebuild/constants.py b/nixos_rebuild/constants.py
-index c567796c590b..daa856a11430 100644
+index 16164bbcd60b..e4423988c98a 100644
 --- a/nixos_rebuild/constants.py
 +++ b/nixos_rebuild/constants.py
-@@ -2,6 +2,6 @@ from typing import Final
+@@ -2,15 +2,15 @@ from typing import Final
  
  # These are replaced in a patch for the actual derivation; what's below supports running the tool
  # out of the Nixpkgs repository directly.
@@ -23,6 +23,22 @@ index c567796c590b..daa856a11430 100644
 +EXECUTABLE: Final[str] = "@executable@"
 +WITH_REEXEC: Final[bool] = @withReexec@
 +WITH_SHELL_FILES: Final[bool] = @withShellFiles@
+ 
+ # These names are replaced with absolute paths to Nix in the store.
+-NIX: Final[str] = "nix"
+-NIX_BUILD: Final[str] = "nix-build"
+-NIX_CHANNEL: Final[str] = "nix-channel"
+-NIX_COPY_CLOSURE: Final[str] = "nix-copy-closure"
+-NIX_ENV: Final[str] = "nix-env"
+-NIX_INSTANTIATE: Final[str] = "nix-instantiate"
+-NIX_STORE: Final[str] = "nix-store"
++NIX: Final[str] = "@nix@"
++NIX_BUILD: Final[str] = "@nix-build@"
++NIX_CHANNEL: Final[str] = "@nix-channel@"
++NIX_COPY_CLOSURE: Final[str] = "@nix-copy-closure@"
++NIX_ENV: Final[str] = "@nix-env@"
++NIX_INSTANTIATE: Final[str] = "@nix-instantiate@"
++NIX_STORE: Final[str] = "@nix-store@"
 diff --git a/pyproject.toml b/pyproject.toml
 index 757067db9f06..68dfa825a824 100644
 --- a/pyproject.toml

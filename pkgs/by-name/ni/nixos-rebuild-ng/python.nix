@@ -45,23 +45,25 @@ buildPythonApplication {
     scdoc
   ];
 
-  propagatedBuildInputs = [
-    # Make sure that we use the Nix package we depend on, not something
-    # else from the PATH for nix-{env,instantiate,build}. This is
-    # important, because NixOS defaults the architecture of the rebuilt
-    # system to the architecture of the nix-* binaries used. So if on an
-    # amd64 system the user has an i686 Nix package in her PATH, then we
-    # would silently downgrade the whole system to be i686 NixOS on the
-    # next reboot.
-    # The binary will be included in the wrapper for Python.
-    (lib.getBin nix)
-  ];
-
   patches = [
     (replaceVars ./0001-replacements.patch {
       inherit executable version;
       withReexec = if withReexec then "True" else "False";
       withShellFiles = if withShellFiles then "True" else "False";
+
+      # Make sure that we use the Nix package we depend on, not the ambient Nix in the PATH.
+      #
+      # This is important, because NixOS defaults the architecture of the rebuilt system to the
+      # architecture of the nix-* binaries used. So if on an amd64 system the user has an i686 Nix
+      # package in her PATH, then we would silently downgrade the whole system to be i686 NixOS on
+      # the next reboot.
+      nix = lib.getExe' nix "nix";
+      nix-build = lib.getExe' nix "nix-build";
+      nix-channel = lib.getExe' nix "nix-channel";
+      nix-copy-closure = lib.getExe' nix "nix-copy-closure";
+      nix-env = lib.getExe' nix "nix-env";
+      nix-instantiate = lib.getExe' nix "nix-instantiate";
+      nix-store = lib.getExe' nix "nix-store";
     })
   ];
 
