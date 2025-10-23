@@ -116,6 +116,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/scribusproject/scribus/commit/ff6c6abfa8683028e548a269dee6a859b6f63335.patch";
       hash = "sha256-N4jve5feehsX5H0RXdxR4ableKL+c/rTyqCwkEf37Dk=";
     })
+    (fetchpatch {
+      name = "fix-qt6.10-build.patch";
+      url = "https://github.com/scribusproject/scribus/commit/13fc4f874354511e05bf91a48703b57b4c489715.patch";
+      hash = "sha256-+pbQ77SaTh04QX55wmS6WeuZf3IGe5nq3pmrhk68tb8=";
+    })
   ];
 
   meta = {
