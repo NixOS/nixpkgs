@@ -23,14 +23,17 @@ jobs:
   prepare:
     runs-on: ubuntu-24.04-arm
     outputs:
+      baseBranch: ${{ steps.prepare.outputs.base }}
       mergedSha: ${{ steps.prepare.outputs.mergedSha }}
       targetSha: ${{ steps.prepare.outputs.targetSha }}
       systems: ${{ steps.prepare.outputs.systems }}
+      workflowRun: ${{ steps.prepare.outputs.workflowRun }}
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
           persist-credentials: false
           sparse-checkout: |
+            ci/supportedBranches.js
             ci/supportedSystems.json
 
       - id: prepare
@@ -40,6 +43,39 @@ jobs:
           TARGET_SHA: ${{ inputs.targetSha }}
         with:
           script: |
+            const { classify } = require('./ci/supportedBranches.js')
+            const baseBranch = (
+              context.payload.merge_group?.base_ref ??
+              context.payload.pull_request.base.ref
+            ).replace(/^refs\/heads\//, '')
+            const baseClassification = classify(baseBranch)
+            core.setOutput('base', baseClassification)
+            console.log('base classification:', baseClassification)
+
+            const merged = (
+              await github.rest.repos.getCommit({
+                ...context.repo,
+                ref:
+                  context.payload.merge_group?.head_sha ??
+                  process.env.MERGED_SHA,
+              })
+            ).data
+
+            const workflow_run = (
+              await github.rest.actions.listWorkflowRuns({
+                ...context.repo,
+                workflow_id: 'pr.yml',
+                event: 'pull_request_target',
+                exclude_pull_requests: true,
+                // Second parent is the HEAD of the PR.
+                // This works both in a pull request context and in the merge queue.
+                head_sha: merged.parents[1].sha,
+              })
+            ).data.workflow_runs[0]
+
+            core.setOutput('workflowRun', workflow_run.id)
+            core.info(`workflowRun: ${workflow_run.id}`)
+
             core.setOutput('mergedSha', context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA)
             core.info(`mergedSha: ${context.payload.merge_group?.head_sha ?? process.env.MERGED_SHA}`)
             core.setOutput('targetSha', context.payload.merge_group?.base_sha ?? process.env.TARGET_SHA)
@@ -70,7 +106,61 @@ jobs:
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ needs.prepare.outputs.mergedSha }}
+      targetSha: ${{ needs.prepare.outputs.targetSha }}
       systems: ${{ needs.prepare.outputs.systems }}
+
+  # Prevent eval drift from causing mass rebuilds on master
+  # TODO: This will only reliably prevent mass rebuilds from hitting master with the
+  # following additions:
+  # - Switch from HEADGREEN to ALLGREEN for the merge queue or implement something
+  #   similar in GHA.
+  # - Add a PR check to guard against auto-merging PRs with unknown mass rebuild
+  #   labels.
+  drift:
+    name: no drift
+    if: contains(fromJSON(needs.prepare.outputs.baseBranch).type, 'primary')
+    runs-on: ubuntu-24.04-arm
+    needs: [prepare, eval]
+    steps:
+      - name: Download comparison for PR
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          # pr-comparison for Test workflows, just comparison otherwise.
+          pattern: '{pr-,}comparison'
+          path: pr
+          run-id: ${{ needs.prepare.outputs.workflowRun }}
+
+      - name: Download comparison for queue
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        with:
+          pattern: ${{ inputs.artifact-prefix }}comparison
+          path: queue
+
+      - name: Prevent accidental mass rebuilds on master
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            const pr = require('./pr/changed-paths.json').rebuildCountByKernel
+            console.log('pr', pr)
+            const queue = require('./queue/changed-paths.json').rebuildCountByKernel
+            console.log('queue', queue)
+
+            const mass_rebuild = 1000
+
+            const darwin =
+              pr.darwin < mass_rebuild &&
+              queue.darwin >= mass_rebuild
+            console.log('darwin', darwin)
+
+            const linux =
+              pr.linux < mass_rebuild &&
+              queue.linux >= mass_rebuild
+            console.log('linux', linux)
+
+            if (darwin || linux)
+              core.setFailed(
+                'This PR was merged with few rebuilds, but has turned into a mass rebuild on the target branch.',
+              )
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
   # It "needs" all the jobs that should block the Merge Queue.

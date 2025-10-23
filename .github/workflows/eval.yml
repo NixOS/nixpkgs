@@ -122,7 +122,6 @@ jobs:
           # Note: Keep the same further down in sync!
 
       - name: Evaluate the ${{ matrix.system }} output paths at the target commit
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         # This is very quick, because it pulls the eval results from Cachix.
@@ -134,7 +133,6 @@ jobs:
             --out-link target
 
       - name: Compare outpaths against the target branch
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
@@ -145,7 +143,6 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        if: inputs.targetSha
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
@@ -154,7 +151,7 @@ jobs:
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: inputs.targetSha && !cancelled() && !failure()
+    if: "!cancelled() && !failure()"
     permissions:
       statuses: write
     timeout-minutes: 5
