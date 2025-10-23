@@ -26,6 +26,8 @@ buildGoModule rec {
     makeWrapper
   ];
 
+  env.CGO_ENABLED = "0";
+
   postInstall = ''
     # make xdg-open overrideable at runtime
     # aws-vault uses https://github.com/skratchdot/open-golang/blob/master/open/open.go to open links
