@@ -370,7 +370,6 @@ in
         Type = "simple";
         Restart = "always";
         Slice = "azure.slice";
-        CPUAccounting = true;
         MemoryAccounting = true;
       };
     };
