@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, jq
-, procps
-, psmisc
-, libnotify
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  jq,
+  procps,
+  psmisc,
+  libnotify,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,7 +37,14 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/hyprfreeze \
-      --prefix PATH : ${lib.makeBinPath [ jq procps psmisc libnotify ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          jq
+          procps
+          psmisc
+          libnotify
+        ]
+      }
   '';
 
   meta = with lib; {
