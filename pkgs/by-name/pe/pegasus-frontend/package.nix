@@ -3,15 +3,9 @@
   fetchFromGitHub,
   stdenv,
   cmake,
-  qtbase,
-  qtgraphicaleffects,
-  qtmultimedia,
-  qtsvg,
-  qttools,
-  qtx11extras,
   SDL2,
   sqlite,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation {
@@ -28,26 +22,29 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     cmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtmultimedia
-    qtsvg
-    qtgraphicaleffects
-    qtx11extras
-    sqlite
-    SDL2
-  ];
+  buildInputs =
+    (with libsForQt5; [
+      qtbase
+      qtmultimedia
+      qtsvg
+      qtgraphicaleffects
+      qtx11extras
+    ])
+    ++ [
+      sqlite
+      SDL2
+    ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform, customizable graphical frontend for launching emulators and managing your game collection";
     mainProgram = "pegasus-fe";
     homepage = "https://pegasus-frontend.org/";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tengkuizdihar ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ tengkuizdihar ];
+    platforms = lib.platforms.linux;
   };
 }
