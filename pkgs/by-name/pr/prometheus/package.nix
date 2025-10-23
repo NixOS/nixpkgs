@@ -179,12 +179,16 @@ buildGoModule (finalAttrs: {
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
 
-  passthru.tests = { inherit (nixosTests) prometheus; };
+  passthru = {
+    tests = { inherit (nixosTests) prometheus; };
+    updateScript = ./update.sh;
+  };
 
   meta = with lib; {
     description = "Service monitoring system and time series database";
     homepage = "https://prometheus.io";
     license = licenses.asl20;
+    changelog = "https://github.com/prometheus/prometheus/blob/v${version}/CHANGELOG.md";
     maintainers = with maintainers; [
       fpletz
       Frostman
