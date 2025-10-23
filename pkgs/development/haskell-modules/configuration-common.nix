@@ -2926,22 +2926,6 @@ with haskellLib;
 
   proto3-wire = appendPatches [
     (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/109
-      name = "bump-outdated-bounds.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/b32f3db6f8d36ea0708fb2f371f62d439ea45b42.patch";
-      hash = "sha256-EGFyk3XawU0+zk299WGwFKB2uW9eJrCDM6NgfIKWgRY=";
-    })
-    (fetchpatch {
-      # https://github.com/awakesecurity/proto3-wire/pull/110
-      name = "support-GHC-9.10.patch";
-      url = "https://github.com/awakesecurity/proto3-wire/commit/6fdf0eb93b2028ade0e3e011ce8429c94546839e.patch";
-      hash = "sha256-jK0ztjuhM7qRH5T7xo75aX7wqmZFymOgWDx6UrlcqWQ=";
-      includes = [
-        "*.cabal"
-        "*.hs"
-      ];
-    })
-    (fetchpatch {
       # https://github.com/awakesecurity/proto3-wire/pull/108
       name = "add-reverse-encoders-for-packed-repeated-fields.patch";
       url = "https://github.com/awakesecurity/proto3-wire/commit/d4376fb6f1c1ac03ee8ec5c5793700ca6508ea70.patch";
