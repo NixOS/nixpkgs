@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-CUGKbY+4P1ET9b2FbglwPfXTe64DCMZo0PNG49PwpW8=";
   };
 
-  patches = lib.optionals stdenv.hostPlatform.isMinGW [
+  patches = lib.optionals (stdenv.hostPlatform.isMinGW || stdenv.hostPlatform.isCygwin) [
     ./mingw-install-exe-file.patch
   ];
 
