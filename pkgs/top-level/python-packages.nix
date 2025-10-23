@@ -15881,6 +15881,8 @@ self: super: with self; {
 
   rencode = callPackage ../development/python-modules/rencode { };
 
+  rendercanvas = callPackage ../development/python-modules/rendercanvas { };
+
   rendercv-fonts = callPackage ../development/python-modules/rendercv-fonts { };
 
   reno = callPackage ../development/python-modules/reno { };
