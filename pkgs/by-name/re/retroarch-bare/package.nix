@@ -22,7 +22,7 @@
   libxml2,
   libXxf86vm,
   makeBinaryWrapper,
-  mbedtls_2,
+  mbedtls,
   libgbm,
   nixosTests,
   nvidia_cg_toolkit,
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     libGL
     libGLU
     libxml2
-    mbedtls_2
+    mbedtls
     python3
     qt5.qtbase
     SDL2
