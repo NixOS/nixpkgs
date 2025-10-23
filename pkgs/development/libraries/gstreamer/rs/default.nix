@@ -33,10 +33,8 @@
   # Checks meson.is_cross_build(), so even canExecute isn't enough.
   enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
   hotdoc,
-  mopidy,
   apple-sdk_gstreamer,
 }:
-
 let
   # populated from meson_options.txt (manually for now, but that might change in the future)
   validPlugins = {
@@ -134,10 +132,9 @@ assert lib.assertMsg (invalidPlugins == [ ])
   "Invalid gst-plugins-rs plugin${
     lib.optionalString (lib.length invalidPlugins > 1) "s"
   }: ${lib.concatStringsSep ", " invalidPlugins}";
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
-  version = "0.14.1";
+  version = "0.14.2";
 
   outputs = [
     "out"
@@ -149,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "gstreamer";
     repo = "gst-plugins-rs";
     rev = finalAttrs.version;
-    hash = "sha256-gCT/ZcXR9VePXYtEENXxgBNvA84KT1OYUR8kSyLBzrI=";
+    hash = "sha256-U7j/t7mJjpz1jPg0+gX6M//tGTUfGg+3+YKDlXfEVFY=";
     # TODO: temporary workaround for case-insensitivity problems with color-name crate - https://github.com/annymosse/color-name/pull/2
     postFetch = ''
       sedSearch="$(cat <<\EOF | sed -ze 's/\n/\\n/g'
@@ -174,17 +171,12 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src patches;
     name = "gst-plugins-rs-${finalAttrs.version}";
-    hash = "sha256-sX3P5qrG0M/vJkvzvJGzv4fcMn6FvrLPOUh++vKJ/gY=";
+    hash = "sha256-lRMUz8OuJZfAiaixlBt19efJBKataUK1fx9wsrmBsJI=";
   };
 
   patches = [
     # Related to https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/723
     ./ignore-tests.patch
-    (fetchpatch {
-      name = "x264enc-test-fix.patch";
-      url = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/commit/c0c9888d66e107f9e0b6d96cd3a85961c7e97d9a.diff";
-      hash = "sha256-/ILdPDjI20k5l9Qf/klglSuhawmFUs9mR+VhBnQqsWw=";
-    })
   ];
 
   strictDeps = true;
