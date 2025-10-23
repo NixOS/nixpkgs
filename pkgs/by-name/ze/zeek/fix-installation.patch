@@ -1,0 +1,82 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 4d3da0c90..d37931c1b 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -508,11 +508,6 @@ if (NOT MSVC)
+     set(HAVE_SUPERVISOR true)
+ endif ()
+ 
+-install(DIRECTORY DESTINATION ${ZEEK_ETC_INSTALL_DIR})
+-install(DIRECTORY DESTINATION ${ZEEK_STATE_DIR})
+-install(DIRECTORY DESTINATION ${ZEEK_SPOOL_DIR})
+-install(DIRECTORY DESTINATION ${ZEEK_LOG_DIR})
+-
+ configure_file(cmake_templates/zeek-path-dev.in ${CMAKE_CURRENT_BINARY_DIR}/zeek-path-dev)
+ 
+ file(
+@@ -1201,7 +1201,7 @@ if (INSTALL_ZKG)
+                    ${CMAKE_CURRENT_BINARY_DIR}/zkg-config @ONLY)
+ 
+     install(DIRECTORY DESTINATION var/lib/zkg)
+-    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zkg-config DESTINATION ${ZEEK_ZKG_CONFIG_DIR}
++    install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zkg-config DESTINATION ${CMAKE_INSTALL_PREFIX}/etc/zeek/zkg
+             RENAME config)
+ endif ()
+ 
+Submodule auxil/zeekctl contains modified content
+diff --git a/auxil/zeekctl/CMakeLists.txt b/auxil/zeekctl/CMakeLists.txt
+index 1ebe7c2..1435509 100644
+--- a/auxil/zeekctl/CMakeLists.txt
++++ b/auxil/zeekctl/CMakeLists.txt
+@@ -9,7 +9,7 @@
+ set(PREFIX "${CMAKE_INSTALL_PREFIX}")
+ set(LIBDIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+ set(ZEEKSCRIPTDIR "${ZEEK_SCRIPT_INSTALL_PATH}")
+-set(ETC "${ZEEK_ETC_INSTALL_DIR}")
++set(ETC "${CMAKE_INSTALL_SYSCONFDIR}")
+ 
+ ########################################################################
+ ## Dependency Configuration
+@@ -186,41 +186,9 @@
+     set(LOGS ${VAR}/logs)
+ endif ()
+ 
+-if ( BINARY_PACKAGING_MODE AND NOT APPLE )
+-    # Packaging for Apple-based systems does not need special logic
+-    # because many probably find it more convenient for uninstalling
+-    # when everything resides under a common prefix (since there's no
+-    # native package management system)
+-    set(perms OWNER_READ OWNER_WRITE OWNER_EXECUTE
+-              GROUP_READ GROUP_WRITE GROUP_EXECUTE
+-              WORLD_READ WORLD_WRITE WORLD_EXECUTE)
+-
+-    install(DIRECTORY DESTINATION ${SPOOL}
+-            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${SPOOL}/tmp
+-            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${SPOOL}/brokerstore
+-            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${SPOOL}/extract_files
+-            DIRECTORY_PERMISSIONS ${perms})
+-    install(DIRECTORY DESTINATION ${LOGS}
+-            DIRECTORY_PERMISSIONS ${perms})
+-    set(EMPTY_WORLD_DIRS
+-        "${EMPTY_WORLD_DIRS} ${SPOOL} ${SPOOL}/tmp ${LOGS}"
+-        CACHE STRING "" FORCE)
+-else ()
+-    install(DIRECTORY DESTINATION ${SPOOL})
+-    install(DIRECTORY DESTINATION ${SPOOL}/tmp)
+-    install(DIRECTORY DESTINATION ${SPOOL}/brokerstore)
+-    install(DIRECTORY DESTINATION ${SPOOL}/extract_files)
+-    install(DIRECTORY DESTINATION ${LOGS})
+-endif ()
+-
+ file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/zeekctl-config.sh
+      "# Automatically generated. Do not edit.\n")
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeekctl-config.sh DESTINATION ${SPOOL})
+-InstallSymlink(${SPOOL}/zeekctl-config.sh
+-               ${PREFIX}/share/zeekctl/scripts/zeekctl-config.sh)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/zeekctl-config.sh DESTINATION ${PREFIX}/share/zeekctl/scripts)
+ 
+ # A couple of configuration options that are needed are placed in here.
+ configure_file(etc/zeekctl.cfg.in

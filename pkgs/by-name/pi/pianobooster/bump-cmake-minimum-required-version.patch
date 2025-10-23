@@ -1,0 +1,33 @@
+From aba8b1570051e17e9568cfcc2a2b0ed316e90075 Mon Sep 17 00:00:00 2001
+From: Adrian Bunk <bunk@debian.org>
+Date: Sat, 11 Oct 2025 15:39:08 +0300
+Subject: [PATCH] Bump cmake_minimum_required to support CMake 4
+
+---
+ CMakeLists.txt     | 2 +-
+ src/CMakeLists.txt | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 8432a843..c4bbe56e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.4)
++cmake_minimum_required(VERSION 3.5)
+ if(COMMAND cmake_policy)
+     cmake_policy(SET CMP0003 NEW)
+ endif(COMMAND cmake_policy)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 02867c8f..23bc9eff 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -10,7 +10,7 @@ else()
+    option(USE_BUNDLED_RTMIDI "Build with bundled rtmidi" ON)
+ endif()
+ 
+-cmake_minimum_required(VERSION 2.4)
++cmake_minimum_required(VERSION 3.5)
+ if(COMMAND cmake_policy)
+     cmake_policy(SET CMP0003 NEW)
+ endif(COMMAND cmake_policy)

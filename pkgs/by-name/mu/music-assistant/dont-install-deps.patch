@@ -1,0 +1,48 @@
+diff --git a/music_assistant/helpers/util.py b/music_assistant/helpers/util.py
+index 74540dd3..14f8f864 100644
+--- a/music_assistant/helpers/util.py
++++ b/music_assistant/helpers/util.py
+@@ -434,30 +434,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
+             "ProviderModuleType", importlib.import_module(f".{domain}", "music_assistant.providers")
+         )
+ 
+-    # ensure module requirements are met
+-    for requirement in requirements:
+-        if "==" not in requirement:
+-            # we should really get rid of unpinned requirements
+-            continue
+-        package_name, version = requirement.split("==", 1)
+-        installed_version = await get_package_version(package_name)
+-        if installed_version == "0.0.0":
+-            # ignore editable installs
+-            continue
+-        if installed_version != version:
+-            await install_package(requirement)
+-
+     # try to load the module
+     try:
+         return await asyncio.to_thread(_get_provider_module, domain)
+     except ImportError:
+-        # (re)install ALL requirements
+-        for requirement in requirements:
+-            await install_package(requirement)
+-    # try loading the provider again to be safe
+-    # this will fail if something else is wrong (as it should)
+-    return await asyncio.to_thread(_get_provider_module, domain)
+-
++        raise RuntimeError(f"Configure {domain} in `services.music-assistant.providers` to install the required dependencies.")
+ 
+ async def has_tmpfs_mount() -> bool:
+     """Check if we have a tmpfs mount."""
+diff --git a/music_assistant/providers/ytmusic/__init__.py b/music_assistant/providers/ytmusic/__init__.py
+index 52a7544a..816d0425 100644
+--- a/music_assistant/providers/ytmusic/__init__.py
++++ b/music_assistant/providers/ytmusic/__init__.py
+@@ -197,7 +197,6 @@ class YoutubeMusicProvider(MusicProvider):
+     async def handle_async_init(self) -> None:
+         """Set up the YTMusic provider."""
+         logging.getLogger("yt_dlp").setLevel(self.logger.level + 10)
+-        await self._install_packages()
+         self._cookie = self.config.get_value(CONF_COOKIE)
+         self._po_token_server_url = (
+             self.config.get_value(CONF_PO_TOKEN_SERVER_URL) or DEFAULT_PO_TOKEN_SERVER_URL

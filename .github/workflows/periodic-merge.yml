@@ -1,0 +1,64 @@
+name: "Merge"
+
+on:
+  workflow_call:
+    inputs:
+      from:
+        description: Branch to merge into target branch. Can also be two branches separated by space to find the merge base between them.
+        required: true
+        type: string
+      into:
+        description: Target branch to merge into.
+        required: true
+        type: string
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  merge:
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 5
+    steps:
+      # Use a GitHub App to create the PR so that CI gets triggered
+      # The App is scoped to Repository > Contents and Pull Requests: write for Nixpkgs
+      - uses: actions/create-github-app-token@67018539274d69449ef7c02e8e71183d1719ab42 # v2.1.4
+        id: app-token
+        with:
+          app-id: ${{ vars.NIXPKGS_CI_APP_ID }}
+          private-key: ${{ secrets.NIXPKGS_CI_APP_PRIVATE_KEY }}
+          permission-contents: write
+          permission-pull-requests: write
+
+      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
+      - name: Find merge base between two branches
+        if: contains(inputs.from, ' ')
+        id: merge_base
+        env:
+          branches: ${{ inputs.from }}
+        run: |
+          # turn into bash array, split on space
+          read -ra branches <<< "$branches"
+          git fetch --shallow-since="1 month ago" origin "${branches[@]}"
+          merge_base="$(git merge-base "refs/remotes/origin/${branches[0]}" "refs/remotes/origin/${branches[1]}")"
+          echo "Found merge base: $merge_base" >&2
+          echo "merge_base=$merge_base" >> "$GITHUB_OUTPUT"
+
+      - name: ${{ inputs.from }} → ${{ inputs.into }}
+        uses: devmasx/merge-branch@854d3ac71ed1e9deb668e0074781b81fdd6e771f # 1.4.0
+        with:
+          type: now
+          from_branch: ${{ steps.merge_base.outputs.merge_base || inputs.from }}
+          target_branch: ${{ inputs.into }}
+          github_token: ${{ steps.app-token.outputs.token }}
+
+      - name: Comment on failure
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
+        if: ${{ failure() }}
+        with:
+          issue-number: 105153
+          body: |
+            Periodic merge from `${{ inputs.from }}` into `${{ inputs.into }}` has [failed](https://github.com/NixOS/nixpkgs/actions/runs/${{ github.run_id }}).
+          token: ${{ steps.app-token.outputs.token }}

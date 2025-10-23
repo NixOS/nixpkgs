@@ -1,0 +1,32 @@
+--- a/tools/build/cross-build/include/common/sys/_types.h
++++ b/tools/build/cross-build/include/common/sys/_types.h
+@@ -47,3 +47,6 @@
+  * Neither GLibc nor macOS define __va_list but many FreeBSD headers require it.
+  */
+ typedef __builtin_va_list __va_list;
++
++typedef __UINTPTR_TYPE__ __uintptr_t;
++typedef __INTPTR_TYPE__ __intptr_t;
+--- a/tools/build/cross-build/include/common/sys/types.h
++++ b/tools/build/cross-build/include/common/sys/types.h
+@@ -49,9 +49,6 @@
+ #include <sys/sysmacros.h>
+ #endif
+ 
+-typedef __UINTPTR_TYPE__ __uintptr_t;
+-typedef __INTPTR_TYPE__ __intptr_t;
+-
+ /* needed for gencat */
+ typedef int __nl_item;
+ 
+--- a/tools/build/cross-build/include/linux/sys/types.h
++++ b/tools/build/cross-build/include/linux/sys/types.h
+@@ -39,6 +39,8 @@
+ 
+ #include_next <sys/types.h>
+ 
++#include <sys/_types.h>
++
+ #ifndef __size_t
+ typedef __SIZE_TYPE__ __size_t;
+ #endif

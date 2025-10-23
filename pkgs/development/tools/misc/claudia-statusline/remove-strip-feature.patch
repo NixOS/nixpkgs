@@ -1,0 +1,12 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 1234567..abcdefg 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -70,7 +70,6 @@ required-features = ["turso-sync"]
+ opt-level = "z"  # Optimize for size
+ lto = true
+ codegen-units = 1
+-strip = true
+ panic = "abort"  # Smaller panic handler
+
+ [profile.dev]

@@ -1,0 +1,47 @@
+From 5592bfb58eb8d1c8a644e67c9bba795d1384a995 Mon Sep 17 00:00:00 2001
+From: Marc Lehmann <schmorp@schmorp.de>
+Date: Sat, 6 Sep 2025 11:31:36 +0200
+Subject: [PATCH 1/2] fix json_atof_scan1 overflows
+
+with fuzzed overlong numbers. CVE-2025-40928
+Really the comparisons were wrong.
+---
+ XS.xs | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/XS.xs b/XS.xs
+index 9b1ce2b..94ab0d6 100755
+--- a/XS.xs
++++ b/XS.xs
+@@ -710,16 +710,16 @@ json_atof_scan1 (const char *s, NV *accum, int *expo, int postdp, int maxdepth)
+   /* if we recurse too deep, skip all remaining digits */
+   /* to avoid a stack overflow attack */
+   if (UNLIKELY(--maxdepth <= 0))
+-    while (((U8)*s - '0') < 10)
++    while ((U8)(*s - '0') < 10)
+       ++s;
+ 
+   for (;;)
+     {
+-      U8 dig = (U8)*s - '0';
++      U8 dig = (U8)(*s - '0');
+ 
+       if (UNLIKELY(dig >= 10))
+         {
+-          if (dig == (U8)((U8)'.' - (U8)'0'))
++          if (dig == (U8)('.' - '0'))
+             {
+               ++s;
+               json_atof_scan1 (s, accum, expo, 1, maxdepth);
+@@ -739,7 +739,7 @@ json_atof_scan1 (const char *s, NV *accum, int *expo, int postdp, int maxdepth)
+               else if (*s == '+')
+                 ++s;
+ 
+-              while ((dig = (U8)*s - '0') < 10)
++              while ((dig = (U8)(*s - '0')) < 10)
+                 exp2 = exp2 * 10 + *s++ - '0';
+ 
+               *expo += neg ? -exp2 : exp2;
+-- 
+2.50.1
+

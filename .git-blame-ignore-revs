@@ -1,0 +1,302 @@
+# This file contains a list of commits that are not likely what you
+# are looking for in a blame, such as mass reformatting or renaming.
+#
+# If a commit's line ends with `# !autorebase <command>`,
+# where <command> is an idempotent bash command that reapplies the changes from the commit,
+# the `maintainers/scripts/auto-rebase/run.sh` script can be used to rebase
+# across that commit while automatically resolving merge conflicts caused by the commit.
+#
+# You can set this file as a default ignore file for blame by running
+# the following command.
+#
+# $ git config blame.ignoreRevsFile .git-blame-ignore-revs
+#
+# To temporarily not use this file add
+# --ignore-revs-file=""
+# to your blame command.
+#
+# The ignoreRevsFile can't be set globally due to blame failing if the file isn't present.
+# To not have to set the option in every repository it is needed in,
+# save the following script in your path with the name "git-bblame"
+# now you can run
+# $ git bblame $FILE
+# to use the .git-blame-ignore-revs file if it is present.
+#
+# #!/usr/bin/env bash
+# repo_root=$(git rev-parse --show-toplevel)
+# if [[ -e $repo_root/.git-blame-ignore-revs ]]; then
+#     git blame --ignore-revs-file="$repo_root/.git-blame-ignore-revs" $@
+# else
+#     git blame $@
+# fi
+
+
+# nixos/modules/rename: Sort alphabetically
+1f71224fe86605ef4cd23ed327b3da7882dad382
+
+# manual: fix typos
+feddd5e7f8c6f8167b48a077fa2a5394dc008999
+
+# nixos: fix module paths in rename.nix
+d08ede042b74b8199dc748323768227b88efcf7c
+
+# fix indentation in mk-python-derivation.nix
+d1c1a0c656ccd8bd3b25d3c4287f2d075faf3cf3
+
+# fix indentation in meteor default.nix
+a37a6de881ec4c6708e6b88fd16256bbc7f26bbd
+
+# pkgs/stdenv/make-derivation: Reindent
+b4cc2a2479a7ab0f6440b2e1319221920ef72699
+
+# treewide: automatically md-convert option descriptions
+2e751c0772b9d48ff6923569adfa661b030ab6a2
+
+# nixos/*: automatically convert option docs
+087472b1e5230ffc8ba642b1e4f9218adf4634a2
+
+# nixos/*: automatically convert option descriptions
+ef176dcf7e76c3639571d7c6051246c8fbadf12a
+
+# nixos/*: automatically convert option docs to MD
+61e93df1891972bae3e0c97a477bd44e8a477aa0
+
+# nixos/*: convert options with admonitions to MD
+722b99bc0eb57711c0498a86a3f55e6c69cdb05f
+
+# nixos/*: automatically convert option docs
+6039648c50c7c0858b5e506c6298773a98e0f066
+
+# nixos/*: md-convert options with unordered lists
+c915b915b5e466a0b0b2af2906cd4d2380b8a1de
+
+# nixos/*: convert options with listings
+f2ea09ecbe1fa1da32eaa6e036d64ac324a2986f
+
+# nixos/*: convert straggler options to MD
+1d41cff3dc4c8f37bb5841f51fcbff705e169178
+
+# nixos/*: normalize manpage references to single-line form
+423545fe4865d126e86721ba30da116e29c65004
+
+# nixos/documentation: split options doc build
+fc614c37c653637e5475a0b0a987489b4d1f351d
+
+# nixos/*: convert options with admonitions to MD
+722b99bc0eb57711c0498a86a3f55e6c69cdb05f
+
+# nixos/*: convert internal option descriptions to MD
+9547123258f69efd92b54763051d6dc7f3bfcaca
+
+# nixos/*: replace </para><para> with double linebreaks
+694d5b19d30bf66687b42fb77f43ea7cd1002a62
+
+# treewide: add defaultText for options with simple interpolation defaults
+fb0e5be84331188a69b3edd31679ca6576edb75a
+
+# nixos/*: mark pre-existing markdown descriptions as mdDoc
+7e7d68a250f75678451cd44f8c3d585bf750461e
+
+# nixos/*: normalize link format
+3aebb4a2be8821a6d8a695f0908d8567dc00de31
+
+# nixos/*: replace <code> in option docs with <literal>
+16102dce2fbad670bd47dd75c860a8daa5fe47ad
+
+# nixos/*: add trivial defaultText for options with simple defaults
+25124556397ba17bfd70297000270de1e6523b0a
+
+# systemd: rewrite comments
+92dfeb7b3dab820ae307c56c216d175c69ee93cd
+
+# systemd: break too long lines of Nix code
+67643f8ec84bef1482204709073e417c9f07eb87
+
+# {pkgs/development/cuda-modules,pkgs/test/cuda,pkgs/top-level/cuda-packages.nix}: reformat all CUDA files with nixfmt-rfc-style 2023-03-01
+802a1b4d3338f24cbc4efd704616654456d75a94
+
+# postgresql: move packages.nix to ext/default.nix
+719034f6f6749d624faa28dff259309fc0e3e730
+
+# php ecosystem: reformat with nixfmt-rfc-style
+75ae7621330ff8db944ce4dff4374e182d5d151f
+c759efa5e7f825913f9a69ef20f025f50f56dc4d
+
+# pkgs/os-specific/bsd: Reformat with nixfmt-rfc-style 2024-03-01
+3fe3b055adfc020e6a923c466b6bcd978a13069a
+
+# k3s: format with nixfmt-rfc-style
+6cfcd3c75428ede517bc6b15a353d704837a2830
+
+# python3Packages: format with nixfmt
+59b1aef59071cae6e87859dc65de973d2cc595c0
+
+# treewide description changes (#317959)
+bf995e3641950f4183c1dd9010349263dfa0123b
+755b915a158c9d588f08e9b08da9f7f3422070cc
+f8c4a98e8e138e21353a2c33b90db3359f539b37
+
+# vscode-extensions.*: format with nixfmt (RFC 166)
+7bf9febfa6271012b1ef86647a3a06f06875fdcf
+
+# remove uses of mdDoc (#303841)
+1a24330f792c8625746d07d842290e6fd95ae6f9
+acd0e3898feb321cb9a71a0fd376f1157d0f4553
+1b28414d2886c57343864326dbb745a634d3e37d
+6afb255d976f85f3359e4929abd6f5149c323a02
+
+# azure-cli: move to by-name, nixfmt #325950
+96cd538b68bd1d0a0a37979356d669abbba32ebc
+
+# poptracker: format with nixfmt-rfc-style (#326697)
+ff5c8f6cc3d1f2e017e86d50965c14b71f00567b
+
+# mangal: format with nixfmt-rfc-style #328284
+3bb5e993cac3a6e1c3056d2bc9bf43eb2c7a5951
+
+# pico-sdk: switch to finalAttrs (#329438)
+8946018b0391ae594d167f1e58497b18de068968
+
+# ollama: format with nixfmt-rfc-style (#329353)
+bdfde18037f8d9f9b641a4016c8ada4dc4cbf856
+
+# nixos/ollama: format with nixfmt-rfc-style (#329561)
+246d1ee533810ac1946d863bbd9de9b525818d56
+
+# steam: cleanup (#216972)
+ad815aebfbfe1415ff6436521d545029c803c3fb
+
+# nixos/nvidia: apply nixfmt-rfc-style (#313440)
+fbdcdde04a7caa007e825a8b822c75fab9adb2d6
+
+# treewide: reformat files which need reformatting after (#341407)
+e0464e47880a69896f0fb1810f00e0de469f770a
+
+# step-cli: format package.nix with nixfmt (#331629)
+fc7a83f8b62e90de5679e993d4d49ca014ea013d
+
+# ndn-cxx: format with nixfmt-rfc-style
+160b2b769c3b8a6d1ae9947afa77520fa2887db7
+
+# ndn-tools: format with nixfmt-rfc-style
+4882ef721ce3d7bb3b5e48ff80125255db515013
+
+# nfd: format with nixfmt-rfc-style
+548c2377fa81e2abfc192fbf4f521e601251c468
+
+# darwin.stdenv: format with nixfmt-rfc-style (#333962)
+93c10ac9e561c6594d3baaeaff2341907390d9b8
+
+# nrr: format with nixfmt-rfc-style (#334578)
+cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
+
+# nixos/kanidm: inherit lib, nixfmt
+8f18393d380079904d072007fb19dc64baef0a3a
+
+# fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
+34a5b1eb23129f8fb62c677e3760903f6d43228f
+
+# fetchurl: nixfmt-rfc-style
+ce21e97a1f20dee15da85c084f9d1148d84f853b
+
+# percona: apply nixfmt
+8d14fa2886fec877690c6d28cfcdba4503dbbcea
+
+# nixos/virtualisation: format image-related files
+# Original formatting commit that was reverted
+04fadac429ca7d6b92025188652376c230205730
+# Revert commit
+4cec81a9959ce612b653860dcca53101a36f328a
+# Final commit that does the formatting
+88b285c01d84de82c0b2b052fd28eaf6709c2d26
+
+# sqlc: format with nixfmt
+2bdec131b2bb2c8563f4556d741d34ccb77409e2
+
+# ant: format with nixfmt-rfc-style
+2538d58436b8d0b56d29780aeebf4bf720ddb9ea
+
+# treewide: migrate packages to pkgs/by-name, take 1
+571c71e6f73af34a229414f51585738894211408
+
+# format files with nixfmt (#347275)
+adb9714bd909df283c66bbd641bd631ff50a4260
+
+# treewide: incus packages
+9ab59bb5fb943ad6740f64f5a79eae9642fb8211
+
+# treewide nixfmt reformat pass 1, master, staging and staging-next
+4f0dadbf38ee4cf4cc38cbc232b7708fddf965bc
+667d42c00d566e091e6b9a19b365099315d0e611
+84d4f874c2bac9f3118cb6907d7113b3318dcb5e
+
+# tmuxPlugins sha-to-sri.py script
+516b1e74c358a9c4b06e5591f8c1a2897aad0c33
+
+# treewide: migrate comments in lib to rfc145 style
+ef85e0daa092c9eae0d32c7ce16b889728a5fbc0
+d89ad6c70e0e89aaae75e9f886878ea4e103965a
+e0fe216f4912dd88a021d12a44155fd2cfeb31c8
+80d5b411f6397d5c3e755a0635d95742f76f3c75
+
+# nixos/movim: format with nixfmt-rfc-style
+43c1654cae47cbf987cb63758c06245fa95c1e3b
+
+# nixos/iso-image.nix: nixfmt
+da9a092c34cef6947d7aee2b134f61df45171631
+
+# python-packages: format with nixfmt-rfc-style
+5f6f5e13ae0b6960cbf1be8aeb3d0048285a08d1
+
+# python-packages: sort with keep-sorted
+fd14c067813572afc03ddbf7cdedc3eab5a59954
+783add849cbca228a36ffdf407e5d380dc2fe6c4
+
+# treewide format of all Nix files
+374e6bcc403e02a35e07b650463c01a52b13a7c8 # !autorebase nix-shell --run treefmt
+
+# nix: nixfmt-rfc-style
+a4f7e161b380b35b2f7bc432659a95fd71254ad8
+0812c9a321003c924868051d2b2e1934e8880f3f
+34f269c14ac18d89ddee9a8f54b1ca92a85bbcc6
+062c34cdace499aa44f0fa6ca6f2ca71769f6c43
+
+# haskellPackages.hercules-ci-agent (cabal2nix -> nixfmt-rfc-style)
+9314da7ee8d2aedfb15193b8c489da51efe52bb5
+
+# haskell-updates: nixfmt-rfc-style
+9e296dcf846294e0aa94af7d3235e82eee7fe055
+
+# nix-builder-vm: nixfmt-rfc-style
+a034fb50f79816c6738fb48b48503b09ea3b0132
+
+# treewide: switch instances of lib.teams.*.members to the new meta.teams attribute
+05580f4b4433fda48fff30f60dfd303d6ee05d21
+
+# nixos/redmine: Get rid of global lib expansions
+d7f1102f04c58b2edfc74c9a1d577e3aebfca775
+
+# **/README.md: one sentence per line
+3d505c03610b6102af6d870ae3506a151cef1f68
+60e35e4ded6e91524364a74b3b4ec233ed9321f2
+99f2e655d9db009ee0b4ede3edced5f6c882c7f4
+b4532efe93882ae2e3fc579929a42a5a56544146
+
+# emacs: keep elpa/nongnu/melpa package overrides sorted
+9f2faf683ed48704aa17f693208a13aa64e22181
+
+# nixfmt 1.0.0
+62fe01651911043bd3db0add920af3d2935d9869 # !autorebase nix-shell --run treefmt
+5a0711127cd8b916c3d3128f473388c8c79df0da # !autorebase nix-shell --run treefmt
+
+# systemd: nixfmt
+b1c5cd3e794cdf89daa5e4f0086274a416a1cded
+
+#nixos/nextcloud: remove with lib usage
+b6088b0d8e13e8d18464d78935f0130052784658
+f7611cad5154a9096faa26d156a4079577bfae17
+
+# nixf-diagnose
+90e7159c559021ac4f4cc1222000f08a91feff69 # !autorebase nix-shell --run treefmt
+c283f32d296564fd649ef3ed268c1f1f7b199c49 # !autorebase nix-shell --run treefmt
+91a8fee3aaf79348aa2dc1552a29fc1b786c5133 # !autorebase nix-shell --run treefmt

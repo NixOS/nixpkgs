@@ -1,0 +1,77 @@
+From d2477ad5cfbdfff39f20c0659c4915a53019572a Mon Sep 17 00:00:00 2001
+From: Lionel Duboeuf <lduboeuf@ouvaton.org>
+Date: Tue, 7 Jan 2025 10:40:00 +0100
+Subject: [PATCH] Auto sync on first account creation
+
+---
+ src/qml/CalendarChoicePopup.qml  | 17 +++++++++++++++++
+ src/qml/OnlineAccountsHelper.qml | 11 +++++++++++
+ 2 files changed, 28 insertions(+)
+
+diff --git a/src/qml/CalendarChoicePopup.qml b/src/qml/CalendarChoicePopup.qml
+index 42bf6462..a0367138 100644
+--- a/src/qml/CalendarChoicePopup.qml
++++ b/src/qml/CalendarChoicePopup.qml
+@@ -67,6 +67,18 @@ Page {
+         flickable: flickable
+     }
+ 
++    Timer {
++        id: contactFirstSyncTimer
++
++        interval: 500
++        repeat: false
++        onTriggered: {
++            if (calendarChoicePage.canSynchronize) {
++                buteoSync.synchronize()
++            }
++        }
++    }
++
+     SyncManager {
+         id: buteoSync
+         filterDisabled: true
+@@ -399,6 +411,11 @@ Page {
+         anchors.fill: parent
+         asynchronous: true
+         source: sourceFile
++
++        Connections {
++            target: onlineAccountHelper.item ? onlineAccountHelper.item : null
++            onFinished: contactFirstSyncTimer.restart()
++        }
+     }
+ 
+     Component {
+diff --git a/src/qml/OnlineAccountsHelper.qml b/src/qml/OnlineAccountsHelper.qml
+index 3a6b4b16..6d07bad7 100644
+--- a/src/qml/OnlineAccountsHelper.qml
++++ b/src/qml/OnlineAccountsHelper.qml
+@@ -24,6 +24,8 @@ Item {
+     id: root
+ 
+     property var dialogInstance: null
++    signal finished()
++    signal canceled()
+ 
+     function run(){
+         if (!root.dialogInstance) {
+@@ -86,6 +88,15 @@ Item {
+         providerId: "google"
+         onFinished: {
+             PopupUtils.close(root.dialogInstance)
++            if (reply != null && reply.errorName !== undefined) {
++                if (reply.errorName === "com.lomiri.OnlineAccountsUi.UserCanceled") {
++                    root.canceled()
++                } else {
++                    root.finished()
++                }
++            } else {
++                root.finished()
++            }
+         }
+     }
+ }
+-- 
+GitLab
+

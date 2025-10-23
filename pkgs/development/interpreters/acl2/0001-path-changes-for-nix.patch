@@ -1,0 +1,56 @@
+From 2c7829aec41f6915bda2a23af57f0b39b075a70b Mon Sep 17 00:00:00 2001
+From: C4 Patino <c4patino@gmail.com>
+Date: Wed, 3 Sep 2025 22:43:05 -0500
+Subject: [PATCH] path changes for nix
+
+---
+ books/build/features.sh                                     | 1 +
+ books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp          | 6 +-----
+ .../bundle/software/cl+ssl-20231021-git/src/reload.lisp     | 2 ++
+ 3 files changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/books/build/features.sh b/books/build/features.sh
+index 20ef1f1cc7..e8a16396e3 100755
+--- a/books/build/features.sh
++++ b/books/build/features.sh
+@@ -125,6 +125,7 @@ EOF
+ fi
+ 
+ echo "Determining whether an ipasir shared library is installed" 1>&2
++IPASIR_SHARED_LIBRARY=${IPASIR_SHARED_LIBRARY:-@libipasir@}
+ if check_ipasir; then
+     cat >> Makefile-features <<EOF
+ export OS_HAS_IPASIR ?= 1
+diff --git a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
+index 762e4ad4c0..abc95d0ad8 100644
+--- a/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
++++ b/books/centaur/ipasir/load-ipasir-sharedlib-raw.lsp
+@@ -30,11 +30,7 @@
+ 
+ (er-let* ((libname (acl2::getenv$ "IPASIR_SHARED_LIBRARY" acl2::*the-live-state*)))
+   (handler-case
+-      (cffi::load-foreign-library
+-       (or libname
+-           (cw "WARNING: $IPASIR_SHARED_LIBRARY not specified, ~
+-                defaulting to \"libipasirglucose4.so\"")
+-           "libipasirglucose4.so"))
++(cffi::load-foreign-library (or libname "@libipasir@"))
+     (error () (er hard? 'load-ipasir-shardlib-raw
+                   "Couldn't load ipasir shared library from ~s0."
+                   libname))))
+diff --git a/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp b/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp
+index 05ab8837d0..fb60937580 100644
+--- a/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp
++++ b/books/quicklisp/bundle/software/cl+ssl-20231021-git/src/reload.lisp
+@@ -14,6 +14,8 @@
+ ;;;     put this directly into ffi.lisp
+ 
+ (in-package :cl+ssl)
++(cl+ssl/config:define-libssl-path "@libssl@")
++(cl+ssl/config:define-libcrypto-path "@libcrypto@")
+ 
+ ;; The default OS-X libssl seems have had insufficient crypto algos
+ ;; (missing TLSv1_[1,2]_XXX methods,
+-- 
+2.50.1
+
