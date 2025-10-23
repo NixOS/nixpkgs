@@ -6,6 +6,7 @@
   buildNpmPackage,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
   enableAWS ? true,
   enableAzure ? true,
   enableConsul ? true,
@@ -173,7 +174,10 @@ buildGoModule (finalAttrs: {
     "-skip=TestEvaluations/testdata/aggregators.test"
   ];
 
-  passthru.tests = { inherit (nixosTests) prometheus; };
+  passthru = {
+    tests = { inherit (nixosTests) prometheus; };
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Service monitoring system and time series database";
