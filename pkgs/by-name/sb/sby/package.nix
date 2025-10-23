@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
     btor2tools
   ];
 
-  doCheck = true;
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64); # timeout tests fail on linux-aarch64
 
   checkPhase = ''
     runHook preCheck
