@@ -127,13 +127,15 @@ buildPythonPackage {
   ];
 
   buildInputs = [
-    blas
-    lapack
     pybind11
     pooch
     xsimd
     boost188
     qhull
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    blas
+    lapack
   ];
 
   dependencies = [ numpy ];
@@ -183,13 +185,15 @@ buildPythonPackage {
   ));
 
   mesonFlags = [
-    "-Dblas=${blas.pname}"
-    "-Dlapack=${lapack.pname}"
+    "-Dblas=${if stdenv.hostPlatform.isDarwin then "accelerate" else blas.pname}"
     # We always run what's necessary for cross compilation, which is passing to
     # meson the proper cross compilation related arguments. See also:
     # https://docs.scipy.org/doc/scipy/building/cross_compilation.html
     "--cross-file=${crossFileScipy}"
     "-Duse-system-libraries=all"
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    "-Dlapack=${lapack.pname}"
   ];
 
   # disable stackprotector on aarch64-darwin for now
