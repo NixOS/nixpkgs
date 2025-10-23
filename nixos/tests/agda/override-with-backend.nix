@@ -24,9 +24,9 @@ let
 in
 {
   name = "agda-trivial-backend";
-  meta = {
+  meta = with pkgs.lib.maintainers; {
     maintainers = [
-      # FIXME
+      carlostome
     ];
   };
 
