@@ -98,7 +98,10 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.unfree; # https://vital.audio/eula/
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ PowerUser64 ];
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
+    ];
     mainProgram = "Vital";
   };
 })
