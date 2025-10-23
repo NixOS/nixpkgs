@@ -54,6 +54,14 @@ buildPythonPackage rec {
     export PATH="$PATH:$out/bin";
   '';
 
+  disabledTestPaths = [
+    # Tests fail due to Click API incompatibility with CliRunner(mix_stderr=False)
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    # The mix_stderr parameter was removed in newer Click versions
+    "tests/functional_tests/test_end_to_end.py"
+    "tests/unit_tests/test_cli.py"
+  ];
+
   pythonImportsCheck = [ "sqlfmt" ];
 
   meta = {
