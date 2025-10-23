@@ -15,14 +15,14 @@
 
 buildPythonPackage {
   pname = "slob";
-  version = "unstable-2020-06-26";
+  version = "unstable-2024-04-19";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "itkach";
     repo = "slob";
-    rev = "018588b59999c5c0eb42d6517fdb84036f3880cb";
-    hash = "sha256-8JMi4ekSblRUESgHJnUpyRttgMuDBD7924xaCS8sKQQ=";
+    rev = "c21d695707db7d2fe4ec7ec27a018bb7b0fcc209";
+    hash = "sha256-dy/EaRLx0LwMklk4h2eL8CsyvWN4swcJNs5cULmh46g=";
   };
 
   build-system = [
