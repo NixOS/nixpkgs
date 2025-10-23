@@ -45,7 +45,7 @@ let
     }:
     let
       libraryFile = mkLibraryFile pkgs;
-      pname = "${Agda.meta.mainProgram}" + "WithPackages";
+      pname = "${Agda.meta.mainProgram}WithPackages";
       version = Agda.version;
     in
     runCommand "${pname}-${version}"
