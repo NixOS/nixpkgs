@@ -203,7 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
     install_name_tool -add_rpath ${ruby}/lib $exe
 
     # Remove manpages from tools we aren't providing
-    find $out/Applications/MacVim.app/Contents/man -name evim.1 -delete
+    find $out/Applications/MacVim.app/Contents/man \( -name evim.1 -or -name eview.1 \) -delete
+    rm $out/Applications/MacVim.app/Contents/man/man1/mvim.1
   '';
 
   # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
