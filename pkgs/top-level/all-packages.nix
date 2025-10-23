@@ -1765,8 +1765,6 @@ with pkgs;
 
   biliass = with python3.pkgs; toPythonApplication biliass;
 
-  birdtray = libsForQt5.callPackage ../applications/misc/birdtray { };
-
   charles = charles5;
   inherit (callPackages ../applications/networking/charles { })
     charles3
@@ -2465,8 +2463,6 @@ with pkgs;
     chewing = callPackage ../tools/inputmethods/ibus-engines/ibus-chewing { };
 
     hangul = callPackage ../tools/inputmethods/ibus-engines/ibus-hangul { };
-
-    kkc = callPackage ../tools/inputmethods/ibus-engines/ibus-kkc { };
 
     libpinyin = callPackage ../tools/inputmethods/ibus-engines/ibus-libpinyin { };
 

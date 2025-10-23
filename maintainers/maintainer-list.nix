@@ -13989,6 +13989,12 @@
     name = "Tomas Krupka";
     matrix = "@krupkat:matrix.org";
   };
+  kruziikrel13 = {
+    github = "kruziikrel13";
+    name = "Michael Petersen";
+    email = "dev@michaelpetersen.io";
+    githubId = 72793125;
+  };
   krzaczek = {
     name = "Pawel Krzaczkowski";
     email = "pawel@printu.pl";
@@ -28958,6 +28964,11 @@
     github = "zh4ngx";
     githubId = 1329212;
     name = "Andy Zhang";
+  };
+  zhaithizaliel = {
+    name = "Zhaith Izaliel";
+    github = "Zhaith-Izaliel";
+    githubId = 39216756;
   };
   zhaofengli = {
     email = "hello@zhaofeng.li";
