@@ -45,7 +45,11 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [ "rich" ];
+  pythonRelaxDeps = [
+    "jiter"
+    "openai"
+    "rich"
+  ];
 
   dependencies = [
     aiohttp
