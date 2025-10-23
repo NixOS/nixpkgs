@@ -25,17 +25,17 @@ stdenv.mkDerivation rec {
   };
 
   desktop = makeDesktopItem {
-    desktopName = pname;
-    name = pname;
-    exec = "@out@/bin/${pname}";
-    icon = pname;
+    desktopName = "tome4";
+    name = "Tales of Maj'Eyal";
+    exec = "@out@/bin/tome4";
+    icon = "tome4";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
     categories = [
       "Game"
       "RolePlaying"
     ];
-    genericName = pname;
+    genericName = "2D roguelike RPG";
   };
 
   prePatch = ''
@@ -74,21 +74,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    dir=$out/share/${pname}
+    dir=$out/share/tome4
 
     install -Dm755 t-engine $dir/t-engine
     cp -r bootstrap game $dir
-    makeWrapper $dir/t-engine $out/bin/${pname} \
+    makeWrapper $dir/t-engine $out/bin/tome4 \
       --chdir "$dir"
 
-    install -Dm755 ${desktop}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop
-    substituteInPlace $out/share/applications/${pname}.desktop \
+    install -Dm755 ${desktop}/share/applications/tome4.desktop $out/share/applications/tome4.desktop
+    substituteInPlace $out/share/applications/tome4.desktop \
       --subst-var out
 
     unzip -oj -qq game/engines/te4-${version}.teae data/gfx/te4-icon.png
-    install -Dm644 te4-icon.png $out/share/icons/hicolor/64x64/${pname}.png
+    install -Dm644 te4-icon.png $out/share/icons/hicolor/64x64/tome4.png
 
-    install -Dm644 -t $out/share/doc/${pname} CONTRIBUTING COPYING COPYING-MEDIA CREDITS
+    install -Dm644 -t $out/share/doc/tome4 CONTRIBUTING COPYING COPYING-MEDIA CREDITS
 
     runHook postInstall
   '';
