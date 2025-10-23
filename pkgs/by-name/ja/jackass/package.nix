@@ -52,7 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
       applications. Set enableJackAssWine64 to true to enable this output.
     '';
     homepage = "https://github.com/falkTX/JackAss";
-    maintainers = with lib.maintainers; [PowerUser64 ];
+    maintainers = with lib.maintainers; [
+      PowerUser64
+      l1npengtul
+    ];
     license = [ lib.licenses.mit ];
     platforms = lib.platforms.linux;
   };
