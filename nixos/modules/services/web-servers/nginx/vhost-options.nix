@@ -170,12 +170,6 @@ with lib;
       '';
     };
 
-    enableSSL = mkOption {
-      type = types.bool;
-      visible = false;
-      default = false;
-    };
-
     forceSSL = mkOption {
       type = types.bool;
       default = false;
