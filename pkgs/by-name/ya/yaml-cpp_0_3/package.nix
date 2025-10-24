@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/jbeder/yaml-cpp";
     license = licenses.mit;
     platforms = platforms.all;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ iedame ];
   };
 }
