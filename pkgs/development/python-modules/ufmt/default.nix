@@ -37,6 +37,13 @@ buildPythonPackage rec {
     hash = "sha256-oEvvXUju7qne3pCwnrckplMs0kBJavB669qieXJZPKw=";
   };
 
+  # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+  # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+  postPatch = ''
+    substituteInPlace ufmt/tests/__init__.py \
+      --replace-fail "from .cli import CliTest" ""
+  '';
+
   build-system = [ flit-core ];
 
   dependencies = [
