@@ -26,6 +26,9 @@ let
       enrollConfig = cfg.enrollConfig;
       style = cfg.style;
       maxGenerations = if cfg.maxGenerations == null then 0 else cfg.maxGenerations;
+      enableDefaultSpecialisation = cfg.enableDefaultSpecialisation;
+      groupSpecialisations = cfg.groupSpecialisations;
+      createUnnecessarySubmenus = cfg.createUnnecessarySubmenus;
       hostArchitecture = pkgs.stdenv.hostPlatform.parsed.cpu;
       timeout = if config.boot.loader.timeout != null then config.boot.loader.timeout else 10;
       enableEditor = cfg.enableEditor;
@@ -71,6 +74,40 @@ in
         Useful to prevent boot partition of running out of disk space.
         `null` means no limit i.e. all generations that were not
         garbage collected yet.
+      '';
+    };
+
+    enableDefaultSpecialisation = lib.mkOption {
+      default = true;
+      example = false;
+      type = lib.types.bool;
+      description = ''
+        Whether to list the default specialisation in the boot
+        menu. Nice if you want all listed specialisations to be named.
+        If there are no non-default specialisations, the default will
+        show regardless of this setting.
+      '';
+    };
+
+    groupSpecialisations = lib.mkOption {
+      default = false;
+      example = true;
+      type = lib.types.bool;
+      description = ''
+        If enabled, groups all specialisations under a submenu in the
+        boot menu, separate from the default specialisation.
+        Doesn't change anything if `boot.loader.limine.enableDefaultSpecialisation = false`.
+        Good to keep menus compact with many specialisations.
+      '';
+    };
+
+    createUnnecessarySubmenus = lib.mkOption {
+      default = true;
+      example = false;
+      type = lib.types.bool;
+      description = ''
+        When enabled, submenus are created for profiles and generations even if there is only one profile/generation.
+        If there are multiples profiles, and multiple generations, there will be no difference to the boot menu with this enabled.
       '';
     };
 

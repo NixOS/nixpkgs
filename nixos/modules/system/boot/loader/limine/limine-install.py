@@ -311,13 +311,12 @@ def config_entry(levels: int, bootspec: BootSpec, label: str, time: str) -> str:
     return entry
 
 
-def generate_config_entry(profile: str, gen: str, special: bool) -> str:
+def generate_config_entry(depth: int, multiple_gens: bool, profile: str, gen: str, expanded: bool) -> str:
     time = datetime.datetime.fromtimestamp(os.stat(get_system_path(profile,gen), follow_symlinks=False).st_mtime).strftime("%F %H:%M:%S")
     boot_json = json.load(open(os.path.join(get_system_path(profile, gen), 'boot.json'), 'r'))
     boot_spec = bootjson_to_bootspec(boot_json)
 
     specialisation_list = boot_spec.specialisations.items()
-    depth = 2
     entry = ""
 
     # Xen, if configured, should be listed first for each generation
@@ -328,14 +327,21 @@ def generate_config_entry(profile: str, gen: str, special: bool) -> str:
         entry += xen_config_entry(2, boot_spec, xen_version, gen, time, False)
 
     if len(specialisation_list) > 0:
-        depth += 1
-        entry += '/' * (depth-1)
+        if multiple_gens:
+            depth += 1
+            entry += '/' * (depth-1)
 
-        if special:
-            entry += '+'
+            if expanded:
+                entry += '+'
 
-        entry += f'Generation {gen}' + '\n'
-        entry += config_entry(depth, boot_spec, f'Default', str(time))
+            entry += f'Generation {gen}' + '\n'
+
+        if config("enableDefaultSpecialisation"):
+            entry += config_entry(depth, boot_spec, f'Default', str(time))
+            if config("groupSpecialisations"):
+                depth += 1
+                entry += '/' * (depth-1)
+                entry += f'Specialisations' + '\n'
     else:
         entry += config_entry(depth, boot_spec, f'Generation {gen}', str(time))
 
@@ -480,14 +486,24 @@ def install_bootloader() -> None:
         # NixOS boot entries start here
     ''')
 
+    createUnnecessarySubmenus = config("createUnnecessarySubmenus")
+
+    depth = 0
+
+    if len(profiles) > 1 or createUnnecessarySubmenus:
+        depth += 1
+
     for (profile, gens) in profiles:
-        group_name = 'default profile' if profile == 'system' else f"profile '{profile}'"
-        config_file += f'/+NixOS {group_name}\n'
+        if len(profiles) > 1 or concreateUnnecessarySubmenus:
+            group_name = 'default profile' if profile == 'system' else f"profile '{profile}'"
+            config_file += f'/+NixOS {group_name}\n'
 
         isFirst = True
 
+        multiple_gens = len(gens) > 1 or createUnnecessarySubmenus
+
         for gen in sorted(gens, key=lambda x: x, reverse=True):
-            config_file += generate_config_entry(profile, gen, isFirst)
+            config_file += generate_config_entry(depth, multiple_gens, profile, gen, isFirst)
             isFirst = False
 
     config_file_path = os.path.join(limine_install_dir, 'limine.conf')
