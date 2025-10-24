@@ -44,7 +44,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty";
-  version = if !withGraphics then "0.15.1" else "0.15.0-graphics";
+  version = if !withGraphics then "0.16.1" else "0.15.0-graphics";
 
   src =
     # by default we want the official package
@@ -53,7 +53,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         owner = "alacritty";
         repo = "alacritty";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
+        hash = "sha256-IOPhnJ76kZ2djJjxJEUwWPvHDeeXbJAn1ClipTH7nWs=";
       }
     # optionally we want to build the sixels feature fork
     else
@@ -66,7 +66,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash =
     if !withGraphics then
-      "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M="
+      "sha256-OBhrd4q44LCUGnjDEedhrOuoSC2UFR90IKSQfEPY/Q4="
     else
       "sha256-UtxZFqU974N+YcHoEHifBjNSyaVuMvuc1clTDgUPuoQ=";
 
