@@ -1,0 +1,12 @@
+diff --git a/Makefile.in b/Makefile.in
+index daed8c3..9a45245 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -178,6 +178,7 @@ brotli-$(BROTLI_VERSION).tar.gz:
+ 
+ $(brotli_static_libs): brotli-$(BROTLI_VERSION).tar.gz
+ 	tar xf brotli-$(BROTLI_VERSION).tar.gz
++	patch -d brotli-$(BROTLI_VERSION) -p1 < $(BROTLI_CMAKE_PATCH)
+ 	cd brotli-$(BROTLI_VERSION)
+ 	mkdir -p out
+ 	cd out
