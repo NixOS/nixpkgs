@@ -1301,8 +1301,8 @@ in
       "sha256-OUZn5wWVxirqeyEIrPgIbBwG2ikudihKJo/WJItVkLM=";
 
   mypy-boto3-ssm-incidents =
-    buildMypyBoto3Package "ssm-incidents" "1.40.0"
-      "sha256-EX4a0R3N6pWZpybsRofvsZ7Z5eQCu7eczEOHyr2S+h4=";
+    buildMypyBoto3Package "ssm-incidents" "1.40.57"
+      "sha256-qk/18pIl23+NoiPHM39hFIhJx0sTxhR/JJmRf9ePpx4=";
 
   mypy-boto3-ssm-sap =
     buildMypyBoto3Package "ssm-sap" "1.40.20"
