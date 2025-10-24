@@ -13078,8 +13078,6 @@ with pkgs;
 
   cataclysm-dda-git = cataclysmDDA.git.tiles;
 
-  chiaki-ng = kdePackages.callPackage ../games/chiaki-ng { };
-
   cockatrice = libsForQt5.callPackage ../games/cockatrice {
     protobuf = protobuf_21;
   };
