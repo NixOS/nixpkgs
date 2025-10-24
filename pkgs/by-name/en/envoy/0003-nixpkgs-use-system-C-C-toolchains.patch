@@ -10,13 +10,13 @@ Signed-off-by: Luke Granger-Brown <git@lukegb.com>
  1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/bazel/dependency_imports.bzl b/bazel/dependency_imports.bzl
-index 10be4b0b3f65e486c1dc8419337a5cf823431774..b0badb3ccab3b112043bd8616770f8014238d396 100644
+index ce827807be8cae1833026aae632e01e91bfea40d..cc8431aa48c45433b0477841b0707ed9fc02b81d 100644
 --- a/bazel/dependency_imports.bzl
 +++ b/bazel/dependency_imports.bzl
-@@ -38,7 +38,11 @@ def envoy_dependency_imports(
-         yq_version = YQ_VERSION,
+@@ -40,7 +40,11 @@ def envoy_dependency_imports(
          buf_sha = BUF_SHA,
          buf_version = BUF_VERSION):
+     compatibility_proxy_repo()
 -    rules_foreign_cc_dependencies()
 +    rules_foreign_cc_dependencies(
 +        register_default_tools=False,  # no prebuilt toolchains

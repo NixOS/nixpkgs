@@ -39,9 +39,9 @@ let
     # However, the version string is more useful for end-users.
     # These are contained in a attrset of their own to make it obvious that
     # people should update both.
-    version = "1.35.2";
-    rev = "2c2cd7efd119a5c9028b68a97d88a540248f8d18";
-    hash = "sha256-HhjIewZMOr9hzcnFPIckfK5PIozqdypSdmYgvb7ccds=";
+    version = "1.36.2";
+    rev = "dc2d3098ae5641555f15c71d5bb5ce0060a8015c";
+    hash = "sha256-ll7gn3y2dUW3kMtbUTjfi7ZTviE87S30ptiRlCPec9Q=";
   };
 
   # these need to be updated for any changes to fetchAttrs
@@ -50,13 +50,14 @@ let
       depsHash
     else
       {
-        x86_64-linux = "sha256-xBSSDxvp6VjZt+Fc62/eP5Z2WWfpkAGl1Z+PupyDpg4=";
-        aarch64-linux = "sha256-2g8x12zkyZyjkv5NubG4bVmiLiN8uoEZ33e6Azd1guw=";
+        x86_64-linux = "sha256-5PEtdV4uJPtXNDOW4xq07APr7IMgwCC7B/Bu3EU8Kx4=";
+        aarch64-linux = "sha256-CdPewwfgA3X6lZLY99tMbyVC4RI/UxLdwDekUyOqVaE=";
       }
       .${stdenv.system} or (throw "unsupported system ${stdenv.system}");
 
   python3 = python312;
   jdk = openjdk11_headless;
+  go = go_1_24;
 
 in
 buildBazelPackage rec {
@@ -84,6 +85,9 @@ buildBazelPackage rec {
 
       # bump rules_rust to support newer Rust
       ./0004-nixpkgs-bump-rules_rust-to-0.60.0.patch
+
+      # configure libevent with newer CMake policy version
+      ./0005-nixpkgs-configure-libevent-with-newer-CMake-policy-v.patch
     ];
     postPatch = ''
       chmod -R +w .
@@ -124,7 +128,7 @@ buildBazelPackage rec {
     cmake
     python3
     gn
-    go_1_24
+    go
     jdk
     ninja
     patchelf
