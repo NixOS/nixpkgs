@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [
+    (lib.cmakeBool "DOCTEST_WITH_TESTS" false)
+  ];
+
   doCheck = true;
 
   # Fix the build with LLVM 21 / GCC 15.
