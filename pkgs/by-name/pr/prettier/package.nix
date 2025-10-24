@@ -153,10 +153,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn install --immutable
     yarn build --clean
 
-    cp --recursive dist/prettier "$out"
+    mkdir -p $out/lib/node_modules
+    cp --recursive dist/prettier "$out/lib/node_modules/prettier"
 
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
-      --add-flags "$out/bin/prettier.cjs"
+      --add-flags "$out/lib/node_modules/prettier/bin/prettier.cjs"
   ''
   + lib.optionalString (builtins.length plugins > 0) ''
     wrapProgram $out/bin/prettier --add-flags "${
