@@ -1344,6 +1344,14 @@ with pkgs;
 
   ### APPLICATIONS/TERMINAL-EMULATORS
 
+  cool-retro-term = libsForQt5.callPackage ../applications/terminal-emulators/cool-retro-term { };
+
+  kitty = callPackage ../by-name/ki/kitty/package.nix {
+    inherit (darwin) autoSignDarwinBinariesHook;
+  };
+
+  kitty-themes = recurseIntoAttrs (callPackage ../by-name/ki/kitty-themes/package.nix { });
+
   mlterm-wayland = mlterm.override {
     enableX11 = false;
   };
