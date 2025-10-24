@@ -47,7 +47,7 @@ buildPythonPackage rec {
   meta = {
     description = "Stream-based, asynchronous tarball processing";
     homepage = "https://github.com/rhelmot/aiotarfile";
-    changelog = "https://github.com/rhelmot/aiotarfile/commits/v{version}";
+    changelog = "https://github.com/rhelmot/aiotarfile/commits/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ nicoo ];
   };
