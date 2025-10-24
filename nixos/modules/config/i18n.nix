@@ -149,7 +149,7 @@ in
         (
           !(
             (lib.subtractLists config.i18n.supportedLocales aggregatedLocales) == [ ]
-            || lib.any (x: x == "all") config.i18n.supportedLocales
+            || lib.elem "all" config.i18n.supportedLocales
           )
         )
         ''
