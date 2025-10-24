@@ -61,6 +61,7 @@ in
   transformers = null;
   unix = null;
   xhtml = null;
+  Win32 = null;
 
   # Becomes a core package in GHC >= 9.10
   os-string = doDistribute self.os-string_2_0_8;
