@@ -344,7 +344,6 @@ let
         escapeRegex
         escapeURL
         escapeXML
-        replaceChars
         lowerChars
         upperChars
         toLower
@@ -377,7 +376,6 @@ let
         fixedWidthNumber
         toInt
         toIntBase10
-        readPathsFromFile
         fileContents
         ;
       inherit (self.stringsWithDeps)
@@ -495,7 +493,6 @@ let
         optionAttrSetToDocList'
         scrubOptionValue
         literalExpression
-        literalExample
         showOption
         showOptionWithDefLocs
         showFiles
