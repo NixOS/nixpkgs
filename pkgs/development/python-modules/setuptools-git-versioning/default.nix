@@ -54,6 +54,8 @@ buildPythonPackage (finalAttrs: {
     tomli-w
   ];
 
+  setupHook = ./setup-hook.sh;
+
   disabledTests = [
     # runs an isolated build that uses internet to download dependencies
     "test_config_not_used"
