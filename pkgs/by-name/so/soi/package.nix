@@ -5,27 +5,27 @@
   cmake,
   boost,
   eigen2,
-  lua,
+  lua5_1,
   luabind,
   libGLU,
   libGL,
   SDL,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "soi";
   version = "0.1.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/soi/Spheres%20of%20Influence-${version}-Source.tar.bz2";
-    name = "${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/project/soi/Spheres%20of%20Influence-${finalAttrs.version}-Source.tar.bz2";
+    name = "soi-${finalAttrs.version}.tar.bz2";
     sha256 = "03c3wnvhd42qh8mi68lybf8nv6wzlm1nx16d6pdcn2jzgx1j2lzd";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
     boost
-    lua
+    lua5_1
     luabind
     libGLU
     libGL
@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/445447
   patches = [ ./cmake-4-build.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Physics-based puzzle game";
     mainProgram = "soi";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
     downloadPage = "https://sourceforge.net/projects/soi/files/";
   };
-}
+})
