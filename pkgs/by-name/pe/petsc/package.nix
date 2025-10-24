@@ -118,9 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
-    })
+    ./custom-petsc4py-install-prefix.patch
   ];
 
   postPatch = ''
@@ -180,9 +178,12 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-cxx=${lib.getDev mpi}/bin/mpicxx"
     "--with-fc=${lib.getDev mpi}/bin/mpif90"
   ]
+  ++ lib.optionals pythonSupport [
+    "--with-petsc4py=1"
+    "--with-petsc4py-install-prefix=${placeholder "out"}/${python3Packages.python.sitePackages}"
+  ]
   ++ lib.optional (!debug) "--with-debugging=0"
   ++ lib.optional (!fortranSupport) "--with-fortran-bindings=0"
-  ++ lib.optional pythonSupport "--with-petsc4py=1"
   ++ lib.optional withMetis "--with-metis=1"
   ++ lib.optional withParmetis "--with-parmetis=1"
   ++ lib.optional withPtScotch "--with-ptscotch=1"
