@@ -17,7 +17,7 @@ buildPythonPackage rec {
     repo = "backports.zstd";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-MRtj40vjCPtV9/RDgun/APzva4lv+TnXeBKD9RNlkII=";
+    hash = "sha256-PNM/iaj4r2M1IYh6RDRVMm4gn/UMHqlxnI5Lh4DTRmQ=";
   };
 
   postPatch = ''
