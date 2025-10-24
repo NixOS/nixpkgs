@@ -422,6 +422,9 @@ in
         else
           ./3.5/use-etc-ssl-certs.patch
       )
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      ./3.5/fix-mingw-linking.patch
     ];
 
     withDocs = true;
