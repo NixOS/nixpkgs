@@ -13322,10 +13322,6 @@ with pkgs;
 
   vkquake = callPackage ../by-name/qu/quakespasm/vulkan.nix { };
 
-  rogue = callPackage ../games/rogue {
-    ncurses = ncurses5;
-  };
-
   rott-shareware = callPackage ../by-name/ro/rott/package.nix {
     buildShareware = true;
   };
