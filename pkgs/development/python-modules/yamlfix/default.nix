@@ -1,16 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  maison,
+
+  # build-system
   pdm-backend,
+  setuptools,
+
+  # dependencies
+  click,
+  maison,
   pydantic,
+  ruyaml,
+
+  # tests
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  ruyaml,
-  setuptools,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
 
@@ -27,8 +34,8 @@ buildPythonPackage rec {
   };
 
   build-system = [
-    setuptools
     pdm-backend
+    setuptools
   ];
 
   dependencies = [
@@ -43,7 +50,9 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "yamlfix" ];
 
