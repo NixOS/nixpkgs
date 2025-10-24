@@ -199,6 +199,7 @@ buildGoModule (finalAttrs: {
     maintainers = with lib.maintainers; [
       fpletz
       Frostman
+      jpds
     ];
     mainProgram = "prometheus";
   };
