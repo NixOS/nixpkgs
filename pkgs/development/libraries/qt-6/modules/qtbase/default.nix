@@ -79,7 +79,7 @@
   gtk3,
   withLibinput ? false,
   libinput,
-  withWayland ? lib.meta.availableOn stdenv.hostPlatform wayland,
+  withWayland ? stdenv.hostPlatform.isLinux,
   wayland,
   wayland-scanner,
   # options
