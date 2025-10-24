@@ -35,6 +35,7 @@ let
       timstott
       sebtm
       bdd
+      iedame
     ];
     platforms = [
       "x86_64-linux"
