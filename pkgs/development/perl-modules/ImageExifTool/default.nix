@@ -1,12 +1,11 @@
 {
   buildPerlPackage,
-  exiftool,
   fetchFromGitHub,
   gitUpdater,
   lib,
   shortenPerlShebang,
   stdenv,
-  testers,
+  versionCheckHook,
 }:
 
 buildPerlPackage rec {
@@ -30,12 +29,11 @@ buildPerlPackage rec {
     shortenPerlShebang $out/bin/exiftool
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "-ver";
+
   passthru = {
-    tests.version = testers.testVersion {
-      inherit version;
-      command = "${lib.getExe exiftool} -ver";
-      package = exiftool;
-    };
     updateScript = gitUpdater { };
   };
 
