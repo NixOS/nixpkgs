@@ -57,6 +57,13 @@ clangStdenv.mkDerivation rec {
 
   patches = [ ./test.diff ];
 
+  # fix use of our lib3mf cmake export instead of finder
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "Lib3MF" \
+      "lib3mf"
+  '';
+
   nativeBuildInputs = [
     (python3.withPackages (
       ps: with ps; [
