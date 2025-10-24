@@ -13341,10 +13341,6 @@ with pkgs;
   # get binaries without data built by Hydra
   simutrans_binaries = lowPrio simutrans.binaries;
 
-  soi = callPackage ../games/soi {
-    lua = lua5_1;
-  };
-
   steam-run = steam.run;
   steam-run-free = steam.run-free;
 
