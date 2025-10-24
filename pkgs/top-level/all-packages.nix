@@ -4204,8 +4204,6 @@ with pkgs;
     libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
   };
 
-  ufmt = with python3Packages; toPythonApplication ufmt;
-
   unbound-with-systemd = unbound.override {
     withSystemd = true;
   };
