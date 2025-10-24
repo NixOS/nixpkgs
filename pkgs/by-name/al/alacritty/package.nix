@@ -144,7 +144,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
-    homepage = "https://github.com/alacritty/alacritty";
+    homepage =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty"
+      else
+        "https://github.com/ayosec/alacritty";
     license = lib.licenses.asl20;
     mainProgram = "alacritty";
     maintainers = with lib.maintainers; [
@@ -152,6 +156,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
       rvdp
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md"
+      else
+        "https://github.com/ayosec/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
 })
