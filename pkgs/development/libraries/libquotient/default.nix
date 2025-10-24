@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-wdIE5LI4l3WUvpGfoJBL8sjBl2k8NfZTh9CjfJc9FIA=";
   };
 
+  patches = [
+    # <https://github.com/quotient-im/libQuotient/pull/932>
+    ./fix-cmake-dependencies.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   propagatedBuildInputs = [
