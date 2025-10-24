@@ -1,0 +1,57 @@
+From ddf4d7a5b90cb284e3e172346b41886907a2ed8a Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Fri, 24 Oct 2025 15:41:38 -0700
+Subject: [PATCH] [PATCH] bypass _libs_ok check
+
+---
+ choreographer/browsers/chromium.py | 37 +-----------------------------
+ 1 file changed, 1 insertion(+), 36 deletions(-)
+
+diff --git a/choreographer/browsers/chromium.py b/choreographer/browsers/chromium.py
+index 0ab43e5c..30862bdb 100644
+--- a/choreographer/browsers/chromium.py
++++ b/choreographer/browsers/chromium.py
+@@ -115,42 +115,7 @@ def logger_parser(
+ 
+     def _libs_ok(self) -> bool:
+         """Return true if libs ok."""
+-        if self.skip_local:
+-            _logger.debug(
+-                "If we HAVE to skip local.",
+-            )
+-            return True
+-        _logger.debug("Checking for libs needed.")
+-        if platform.system() != "Linux":
+-            _logger.debug("We're not in linux, so no need for check.")
+-            return True
+-        p = None
+-        try:
+-            _logger.debug(f"Trying ldd {self.path}")
+-            p = subprocess.run(  # noqa: S603, validating run with variables
+-                [  # noqa: S607 path is all we have
+-                    "ldd",
+-                    str(self.path),
+-                ],
+-                capture_output=True,
+-                timeout=5,
+-                check=True,
+-            )
+-        except Exception as e:  # noqa: BLE001
+-            msg = "ldd failed."
+-            stderr = p.stderr.decode() if p and p.stderr else None
+-            # Log failure as INFO rather than WARNING so that it's hidden by default,
+-            # since browser may succeed even if ldd fails
+-            _logger.info(
+-                msg  # noqa: G003 + in log
+-                + f" e: {e}, stderr: {stderr}",
+-            )
+-            return False
+-        if b"not found" in p.stdout:
+-            msg = "Found deps missing in chrome"
+-            _logger.debug2(msg + f" {p.stdout.decode()}")
+-            return False
+-        _logger.debug("No problems found with dependencies")
++        _logger.debug("(nixpkgs) bypassing broken _libs_ok check")
+         return True
+ 
+     def __init__(
