@@ -89,5 +89,6 @@ stdenv.mkDerivation (finalAtts: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ yzx9 ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
