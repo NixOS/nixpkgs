@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "0xtools";
-  version = "2.0.3";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "tanelpoder";
     repo = "0xtools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-QWH3sKYFiEWuexZkMlyWQPHmKJpcaiWI5szhdx5yKtM=";
+    hash = "sha256-mHd4NFp+QB+TTBLeuEeJVdgQ2r8CM4CfZC515t/3u94=";
   };
 
   postPatch = ''
