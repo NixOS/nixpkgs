@@ -233,6 +233,10 @@ stdenv.mkDerivation rec {
     ./qmlimportscanner-import-path.patch
     # don't pass qtbase's QML directory to qmlimportscanner if it's empty
     ./skip-missing-qml-directory.patch
+
+    # prefer Network.framework over libnetwork.tbd when searching for frameworks
+    # (partial patch of upstream: https://github.com/qt/qtbase/commit/b181132f742a0d212f8ffaf6f8fb48a099ac45dd)
+    ./prefer-frameworks.patch
   ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''

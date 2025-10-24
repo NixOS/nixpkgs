@@ -1,0 +1,15 @@
+CMake will find libnetwork.tbd before it finds Network.framework
+See https://github.com/qt/qtbase/commit/b181132f742a0d212f8ffaf6f8fb48a099ac45dd
+For us, QT_USE_VCPKG is OFF so applying that patch by itself doesn't solve the issue
+
+--- src/cmake/QtFrameworkHelpers.cmake
++++ src/cmake/QtFrameworkHelpers.cmake
+@@ -53,6 +53,8 @@
+     # hardcoded, like with Xcode11.app on the CI.
+     # We might revisit this later.
+     set(cache_var_name "${out_var}Internal")
++
++    set(CMAKE_FIND_FRAMEWORK FIRST)
+ 
+     find_library(${cache_var_name} "${framework_name}")
+ 
