@@ -96,7 +96,7 @@ buildNpmPackage {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
-    cp -r release/build/**/Feishin.app $out/Applications/
+    cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
