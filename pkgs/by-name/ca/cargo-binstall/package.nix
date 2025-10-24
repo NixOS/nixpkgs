@@ -1,5 +1,6 @@
 {
   lib,
+  fetchpatch2,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
@@ -19,7 +20,15 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-Veus7CAjnmBwHFL9/AS0EJe362HhenKBaETwwLNLn68=";
   };
 
-  cargoHash = "sha256-tMSqGjJbmLsYFCWrWn8DnXsPR+OxDCfKVSBr7KL2nCA=";
+  cargoPatches = [
+    (fetchpatch2 {
+      name = "CVE-2025-62518-fix";
+      url = "https://github.com/cargo-bins/cargo-binstall/commit/f79baa6f399256d19c79efb8e885ae5b3e2e6482.patch?full_index=1";
+      hash = "sha256-keXPZl2jOw6bKRL8Rjn97slcf4a3fIeUcQmbHIzHt/o=";
+    })
+  ];
+
+  cargoHash = "sha256-Z2EOuJNdXkTBJ2Vzux5TZrxdggVaOD23pqiUsnt3AbQ=";
 
   nativeBuildInputs = [
     pkg-config
