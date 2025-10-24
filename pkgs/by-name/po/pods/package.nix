@@ -18,6 +18,7 @@
   libadwaita,
   libpanel,
   vte-gtk4,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -65,6 +66,10 @@ stdenv.mkDerivation rec {
     libpanel
     vte-gtk4
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   passthru = {
     updateScript = nix-update-script { };
