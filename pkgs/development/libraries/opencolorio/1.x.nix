@@ -8,6 +8,7 @@
   lcms2,
   tinyxml,
   boost,
+  yaml-cpp_0_3,
 }:
 
 stdenv.mkDerivation (finalAtts: {
@@ -37,19 +38,28 @@ stdenv.mkDerivation (finalAtts: {
   buildInputs = [
     lcms2
     tinyxml
+    yaml-cpp_0_3
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin boost;
 
   postPatch = ''
     substituteInPlace src/core/CMakeLists.txt --replace "-Werror" ""
     substituteInPlace src/pyglue/CMakeLists.txt --replace "-Werror" ""
+
+    substituteInPlace src/core/CMakeLists.txt \
+      --replace-fail "add_dependencies(OpenColorIO_STATIC TINYXML_LIB YAML_CPP_LIB)" ""
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace share/cmake/ParseArguments.cmake \
+      --replace-fail "cmake_minimum_required(VERSION 2.4.7)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_LCMS=ON"
     "-DUSE_EXTERNAL_TINYXML=ON"
     # External yaml-cpp 0.6.* not compatible: https://github.com/imageworks/OpenColorIO/issues/517
-    "-DUSE_EXTERNAL_YAML=OFF"
+    "-DUSE_EXTERNAL_YAML=ON"
   ]
   ++ lib.optional stdenv.hostPlatform.isDarwin "-DOCIO_USE_BOOST_PTR=ON"
   ++ lib.optional (!stdenv.hostPlatform.isx86) "-DOCIO_USE_SSE=OFF"
