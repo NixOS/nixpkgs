@@ -911,9 +911,9 @@
     },
     "ProteinGymR": {
       "name": "ProteinGymR",
-      "version": "1.2.4",
-      "sha256": "0czlxm1z5bpb096alwb96a3gwpv9244h0b8isbbfdiy70rcd21rm",
-      "depends": ["AnnotationHub", "ComplexHeatmap", "ExperimentHub", "bio3d", "circlize", "dplyr", "forcats", "ggExtra", "ggdist", "gghalves", "ggplot2", "htmltools", "lifecycle", "pals", "purrr", "queryup", "r3dmol", "rlang", "spdl", "stringr", "tidyr", "tidyselect"]
+      "version": "1.2.8",
+      "sha256": "1aam99bg30fai26ndln296cy0df8r2vch26y3x8wr05jz1nkz6rc",
+      "depends": ["AnnotationHub", "ExperimentHub", "dplyr", "htmltools", "lifecycle", "purrr", "queryup", "rlang", "spdl", "stringr", "tidyr", "tidyselect"]
     },
     "PtH2O2lipids": {
       "name": "PtH2O2lipids",
@@ -2147,8 +2147,8 @@
     },
     "mtbls2": {
       "name": "mtbls2",
-      "version": "1.37.0",
-      "sha256": "17wrlvh14nxqvxgqljh7d01n1df6q8xj9p5pv5nr09r4bllmqhfk",
+      "version": "1.38.1",
+      "sha256": "1gydb9l87lg8d3wlm0wns3d2ijajijmxq91crl1qn16krb63kcak",
       "depends": []
     },
     "muSpaData": {
@@ -2351,8 +2351,8 @@
     },
     "scATAC_Explorer": {
       "name": "scATAC.Explorer",
-      "version": "1.14.0",
-      "sha256": "1yyrh5rvnk2zl7wf4myc1pf43daj9gvsygzbn70cbqyrj484rp2p",
+      "version": "1.14.1",
+      "sha256": "0255v3fvag42xy76kq8m0sw4ihmgdxg75hv8f5d7ns7xx9n2896m",
       "depends": ["BiocFileCache", "Matrix", "S4Vectors", "SingleCellExperiment", "data_table", "zellkonverter"]
     },
     "scMultiome": {
