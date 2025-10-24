@@ -520,7 +520,26 @@ let
               ghc948
               ;
           };
-        };
+        }
+        //
+          removePlatforms
+            [
+              # Testing cross from x86_64-linux
+              "aarch64-darwin"
+              "aarch64-linux"
+              "x86_64-darwin"
+            ]
+            {
+              haskell.packages.ghc912 = {
+                inherit (packagePlatforms pkgs.pkgsCross.aarch64-multiplatform.haskell.packages.ghc912)
+                  ghc
+                  hello
+                  microlens
+                  miso
+                  reflex-dom
+                  ;
+              };
+            };
       };
     })
     (versionedCompilerJobs {
