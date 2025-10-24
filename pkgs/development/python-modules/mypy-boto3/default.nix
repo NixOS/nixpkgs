@@ -653,8 +653,8 @@ in
       "sha256-LFuz5/nCZGpSfgqyswxn80VzxXsqzZlBFqPtPJ8bzgo=";
 
   mypy-boto3-iotanalytics =
-    buildMypyBoto3Package "iotanalytics" "1.40.16"
-      "sha256-kLN+S5x9XMO8TovR57hwXnqQvC6K+JwHncgmrLFOpFY=";
+    buildMypyBoto3Package "iotanalytics" "1.40.57"
+      "sha256-uMwtG8llpdxfUCF6Lro1Y7MnozX18kXacZJe91i5rjI=";
 
   mypy-boto3-iotdeviceadvisor =
     buildMypyBoto3Package "iotdeviceadvisor" "1.40.55"
