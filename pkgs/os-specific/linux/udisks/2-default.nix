@@ -36,6 +36,8 @@
   ntfs3g,
   nixosTests,
   udevCheckHook,
+  libiscsi,
+  libconfig,
 }:
 
 stdenv.mkDerivation rec {
@@ -114,6 +116,8 @@ stdenv.mkDerivation rec {
     libatasmart
     polkit
     util-linux
+    libiscsi
+    libconfig
   ];
 
   preConfigure = "NOCONFIGURE=1 ./autogen.sh";
@@ -125,6 +129,10 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
     "--with-tmpfilesdir=no"
+    "--enable-all-modules"
+    "--enable-btrfs"
+    "--enable-lvm2"
+    "--enable-smart"
   ];
 
   makeFlags = [
