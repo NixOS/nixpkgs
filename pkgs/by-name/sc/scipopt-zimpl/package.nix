@@ -14,13 +14,13 @@ stdenv.mkDerivation rec {
   version = "362";
 
   # To correlate scipVersion and version, check: https://scipopt.org/#news
-  scipVersion = "9.2.3";
+  scipVersion = "9.2.4";
 
   src = fetchFromGitHub {
     owner = "scipopt";
     repo = "zimpl";
     tag = "v${version}";
-    sha256 = "juqAwzqBArsFXmz7L7RQaE78EhQdP5P51wQFlCoo7/o=";
+    hash = "sha256-juqAwzqBArsFXmz7L7RQaE78EhQdP5P51wQFlCoo7/o=";
   };
 
   postPatch = ''
