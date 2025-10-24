@@ -18552,6 +18552,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-hy = buildVimPlugin {
+    pname = "vim-hy";
+    version = "2024-10-06";
+    src = fetchFromGitHub {
+      owner = "hylang";
+      repo = "vim-hy";
+      rev = "ab1699bfa636e7355ac0030189331251c49c7d61";
+      sha256 = "09v83a6ybj73043acpm2nps5s56sqg2pz456b4qgz2r7zjlgx5r9";
+    };
+    meta.homepage = "https://github.com/hylang/vim-hy/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-hybrid = buildVimPlugin {
     pname = "vim-hybrid";
     version = "2016-01-05";
