@@ -16,6 +16,7 @@
   libadwaita,
   libpanel,
   vte-gtk4,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,6 +55,10 @@ stdenv.mkDerivation rec {
     libpanel
     vte-gtk4
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Podman desktop application";
