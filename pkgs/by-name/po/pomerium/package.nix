@@ -12,8 +12,7 @@
 let
   inherit (lib)
     concatStringsSep
-    concatMap
-    id
+    concatLists
     mapAttrsToList
     ;
 in
@@ -78,7 +77,7 @@ buildGoModule rec {
         };
       };
       concatStringsSpace = list: concatStringsSep " " list;
-      mapAttrsToFlatList = fn: list: concatMap id (mapAttrsToList fn list);
+      mapAttrsToFlatList = fn: list: concatLists (mapAttrsToList fn list);
       varFlags = concatStringsSpace (
         mapAttrsToFlatList (
           package: packageVars:
