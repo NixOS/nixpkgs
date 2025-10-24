@@ -3,7 +3,7 @@
   lib,
   runCommand,
   patchelf,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   curl,
   runtimeShell,
@@ -12,6 +12,7 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,8 +29,9 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-CLeFXpCfaTTgbr6jmUmewArKfkOquNhjlIlwtoaJfZw=";
 
   nativeBuildInputs = [
+    makeBinaryWrapper
     pkg-config
-    makeWrapper
+    writableTmpDirAsHomeHook
   ];
 
   OPENSSL_NO_VENDOR = 1;
@@ -74,12 +76,39 @@ rustPlatform.buildRustPackage rec {
     popd
 
     # tries to create .elan
-    export HOME=$(mktemp -d)
     mkdir -p "$out/share/"{bash-completion/completions,fish/vendor_completions.d,zsh/site-functions}
     $out/bin/elan completions bash > "$out/share/bash-completion/completions/elan"
     $out/bin/elan completions fish > "$out/share/fish/vendor_completions.d/elan.fish"
     $out/bin/elan completions zsh >  "$out/share/zsh/site-functions/_elan"
+
+    # https://github.com/NixOS/nixpkgs/blob/cae2bb97b01c4c77849e46a41a22e0a62926fc0f/pkgs/development/tools/rust/rustup/default.nix#L131-L140
+    mkdir -p $out/nix-support
+    substituteAll ${../../../build-support/wrapper-common/utils.bash} $out/nix-support/utils.bash
+    substituteAll ${../../../build-support/wrapper-common/darwin-sdk-setup.bash} $out/nix-support/darwin-sdk-setup.bash
+    substituteAll ${../../../build-support/bintools-wrapper/add-flags.sh} $out/nix-support/add-flags.sh
+    substituteAll ${../../../build-support/bintools-wrapper/add-hardening.sh} $out/nix-support/add-hardening.sh
+    export prog='$PROG'
+    export use_response_file_by_default=0
+    substituteAll ${../../../build-support/bintools-wrapper/ld-wrapper.sh} $out/nix-support/ld-wrapper.sh
+    chmod +x $out/nix-support/ld-wrapper.sh
+
+    # Ensure that the ld.lld wrapper sets the interpreter path, not clang.
+    touch $out/nix-support/ld-set-dynamic-linker
+    cp ${stdenv.cc}/nix-support/dynamic-linker $out/nix-support/dynamic-linker
+    sed -i 's|extraBefore+=("-dynamic-linker"|extraAfter+=("-dynamic-linker"|' $out/nix-support/ld-wrapper.sh
   '';
+
+  # https://github.com/NixOS/nixpkgs/blob/cae2bb97b01c4c77849e46a41a22e0a62926fc0f/pkgs/development/tools/rust/rustup/default.nix#L143-L152
+  env = {
+    inherit (stdenv.cc.bintools)
+      expandResponseParams
+      shell
+      suffixSalt
+      wrapperName
+      coreutils_bin
+      ;
+    hardening_unsupported_flags = "";
+  };
 
   meta = {
     description = "Small tool to manage your installations of the Lean theorem prover";
