@@ -66,6 +66,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [
     "numpy"
     "pandas"
+    "pyyaml"
   ];
 
   dependencies = [
