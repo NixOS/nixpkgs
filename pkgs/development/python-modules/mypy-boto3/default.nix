@@ -745,8 +745,8 @@ in
       "sha256-3XwZsjSiQmed7Msz2HHP796iY9x2nSyd6aMglkv3Lfo=";
 
   mypy-boto3-kinesis-video-webrtc-storage =
-    buildMypyBoto3Package "kinesis-video-webrtc-storage" "1.40.0"
-      "sha256-cnUWkJfPyd7G9ClFFWNXHFwuSqmTcUHwluPBeF4qO8o=";
+    buildMypyBoto3Package "kinesis-video-webrtc-storage" "1.40.58"
+      "sha256-+nZT13/2ejl3kUvOyVdX0CWwxKqkGvhvXBAhhezhmXI=";
 
   mypy-boto3-kinesisanalytics =
     buildMypyBoto3Package "kinesisanalytics" "1.40.17"
