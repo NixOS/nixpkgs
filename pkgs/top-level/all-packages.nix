@@ -13066,8 +13066,6 @@ with pkgs;
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
-  qgo = libsForQt5.callPackage ../games/qgo { };
-
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
   ankiAddons = recurseIntoAttrs (callPackage ../by-name/an/anki/addons { });
 

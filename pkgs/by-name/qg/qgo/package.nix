@@ -1,18 +1,15 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
+  libsForQt5,
   fetchFromGitHub,
-  qmake,
-  qtbase,
-  qtmultimedia,
-  qttools,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "qgo";
   version = "unstable-2017-12-18";
 
-  meta = with lib; {
+  meta = {
     description = "Go client based on Qt5";
     mainProgram = "qgo";
     longDescription = ''
@@ -28,8 +25,8 @@ mkDerivation {
       Chinese, "囲碁(Yi Go)" in Japanese, "바둑(Baduk)" in Korean.
     '';
     homepage = "https://github.com/pzorin/qgo";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zalakain ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ zalakain ];
   };
 
   src = fetchFromGitHub {
@@ -44,11 +41,12 @@ mkDerivation {
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
   nativeBuildInputs = [
-    qmake
-    qttools
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
   buildInputs = [
-    qtbase
-    qtmultimedia
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
   ];
 }
