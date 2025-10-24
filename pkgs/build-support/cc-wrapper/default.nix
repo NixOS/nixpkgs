@@ -758,7 +758,7 @@ stdenvNoCC.mkDerivation {
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
     +
       optionalString
-        (libcxx == null && isClang && (cc.langCC or false) && (useGccForLibs && gccForLibs.langCC or false))
+        (libcxx == null && isClang && useGccForLibs && (cc.langCC or false))
         ''
           for dir in ${gccForLibs}/include/c++/*; do
             include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
