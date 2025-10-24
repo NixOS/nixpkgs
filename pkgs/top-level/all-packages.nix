@@ -611,7 +611,9 @@ with pkgs;
           # So turn gssSupport off there, and on Windows.
           # On other platforms, keep the previous value.
           gssSupport =
-            if stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWindows then
+            if
+              stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWindows || stdenv.hostPlatform.isCygwin
+            then
               false
             else
               old.gssSupport or true; # `? true` is the default
