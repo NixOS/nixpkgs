@@ -33,6 +33,12 @@ mkDerivation rec {
   ];
 
   prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 2.6 FATAL_ERROR)" \
+        "CMAKE_MINIMUM_REQUIRED(VERSION 3.10 FATAL_ERROR)" \
+      --replace-fail "CMAKE_POLICY(SET CMP0003 OLD)" "" \
+      --replace-fail "CMAKE_POLICY(SET CMP0015 OLD)" ""
+
     substituteInPlace cmake/HTTRAQTFindHttrack.cmake \
       --replace /usr/include/httrack/ ${httrack}/include/httrack/
 

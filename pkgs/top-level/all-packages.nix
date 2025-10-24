@@ -5136,17 +5136,19 @@ with pkgs;
     julia_19-bin
     julia_110-bin
     julia_111-bin
+    julia_112-bin
     julia_19
     julia_110
     julia_111
+    julia_112
     ;
 
   julia-lts = julia_110-bin;
-  julia-stable = julia_111;
+  julia-stable = julia_112;
   julia = julia-stable;
 
   julia-lts-bin = julia_110-bin;
-  julia-stable-bin = julia_111-bin;
+  julia-stable-bin = julia_112-bin;
   julia-bin = julia-stable-bin;
 
   kotlin = callPackage ../development/compilers/kotlin { };
@@ -7223,10 +7225,6 @@ with pkgs;
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
 
-  freeimage = callPackage ../by-name/fr/freeimage/package.nix {
-    openexr = openexr_2;
-  };
-
   freeipa = callPackage ../os-specific/linux/freeipa {
     # NOTE: freeipa and sssd need to be built with the same version of python
     kerberos = krb5.override {
@@ -8848,6 +8846,7 @@ with pkgs;
   apple-sdk_13 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "13"; };
   apple-sdk_14 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "14"; };
   apple-sdk_15 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "15"; };
+  apple-sdk_26 = callPackage ../by-name/ap/apple-sdk/package.nix { darwinSdkMajorVersion = "26"; };
 
   darwinMinVersionHook =
     deploymentTarget:
@@ -10866,8 +10865,6 @@ with pkgs;
     hamlib = hamlib_4;
   };
 
-  cutecom = libsForQt5.callPackage ../tools/misc/cutecom { };
-
   darcs = haskell.lib.compose.disableCabalFlag "library" (
     haskell.lib.compose.justStaticExecutables haskellPackages.darcs
   );
@@ -11340,6 +11337,8 @@ with pkgs;
   huggle = libsForQt5.callPackage ../applications/misc/huggle { };
 
   hyperion-ng = libsForQt5.callPackage ../applications/video/hyperion-ng { };
+
+  hyperglot = with python3Packages; toPythonApplication hyperglot;
 
   jackline = callPackage ../applications/networking/instant-messengers/jackline {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14;
