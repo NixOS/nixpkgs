@@ -68,14 +68,14 @@ clangStdenv.mkDerivation rec {
   # https://git.lix.systems/lix-project/lix/issues/551
   # outputs = [ "bin" "dev" "out" ];
 
+  # Take optimization flags from CXXFLAGS rather than cmake injecting them
+  cmakeBuildType = "None";
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" true)
     # merely requires setcontext/getcontext (libc), lix expects fibers to
     # be available, and we want to make sure that the build will fail if
     # it breaks
     (lib.cmakeBool "WITH_FIBERS" true)
-    # Take optimization flags from CXXFLAGS rather than cmake injecting them
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "None")
   ];
 
   env = {

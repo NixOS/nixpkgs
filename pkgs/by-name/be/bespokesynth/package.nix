@@ -65,8 +65,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'cmake_host_system_information(RESULT BESPOKE_BUILD_FQDN QUERY FQDN)' 'set(BESPOKE_BUILD_FQDN "localhost")'
   '';
 
-  cmakeBuildType = "Release";
-
   cmakeFlags = [
     (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
     (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
@@ -125,7 +123,9 @@ stdenv.mkDerivation (finalAttrs: {
     if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/{Applications,bin}
-        mv Source/BespokeSynth_artefacts/${finalAttrs.cmakeBuildType}/BespokeSynth.app $out/Applications/
+        mv Source/BespokeSynth_artefacts/${
+          finalAttrs.cmakeBuildType or "Release"
+        }/BespokeSynth.app $out/Applications/
         # Symlinking confuses the resource finding about the actual location of the binary
         # Resources are looked up relative to the executed file's location
         makeWrapper $out/{Applications/BespokeSynth.app/Contents/MacOS,bin}/BespokeSynth
