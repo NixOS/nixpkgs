@@ -406,8 +406,8 @@ in
       "sha256-tmPAUD/9Y/HxJHzYyiRd+U/0emjnaz8LGRy4y9VeIpk=";
 
   mypy-boto3-discovery =
-    buildMypyBoto3Package "discovery" "1.40.19"
-      "sha256-dq0rCFW8Cc9nQkRNNYaZs092nOjLqdob7rziv/WDNfo=";
+    buildMypyBoto3Package "discovery" "1.40.58"
+      "sha256-Agrg2tHTdQfvdDeTEE054rMzKKwEiFWdcLjMFrItn9U=";
 
   mypy-boto3-dlm =
     buildMypyBoto3Package "dlm" "1.40.54"
