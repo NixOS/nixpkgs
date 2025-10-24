@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   isPyPy,
   setuptools,
   gmp,
@@ -29,6 +30,14 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-wrMN3kqLnjItoybKYeo4Pp2M0uma7Kg0JEQM8lr6OI0=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "fix-to_bytes-tests.patch";
+      url = "https://github.com/aleaxit/gmpy/commit/1903841667e7a6842bdead90bd7798b99de5b7be.patch?full_index=1";
+      hash = "sha256-rlssUIkQ1RCRSu5eCXKJ2lNa/oIoLzf9sxJuNfDrVmk=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
