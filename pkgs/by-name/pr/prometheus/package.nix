@@ -186,6 +186,7 @@ buildGoModule (finalAttrs: {
     maintainers = with maintainers; [
       fpletz
       Frostman
+      jpds
     ];
   };
 })
