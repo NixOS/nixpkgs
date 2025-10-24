@@ -1017,8 +1017,8 @@ in
       "sha256-pn+Zpzpa5SBhnzzo1yVcQzFi3u3Wbf93AvOL4Xu+yqQ=";
 
   mypy-boto3-personalize-events =
-    buildMypyBoto3Package "personalize-events" "1.40.18"
-      "sha256-ot000kDzq6Dle+9d9EWXHM7kLIzA4Se7X1w24dEhLVg=";
+    buildMypyBoto3Package "personalize-events" "1.40.58"
+      "sha256-cSxcEUfHRBITijZot4XhvijEAfsPWlPu1ZGf6cF2tbQ=";
 
   mypy-boto3-personalize-runtime =
     buildMypyBoto3Package "personalize-runtime" "1.40.54"
