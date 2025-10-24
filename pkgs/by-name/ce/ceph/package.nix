@@ -31,6 +31,10 @@
   nixosTests,
 
   # Runtime dependencies
+
+  # Remove once Ceph supports arrow-cpp >= 20, see:
+  # * https://tracker.ceph.com/issues/71269
+  # * https://github.com/NixOS/nixpkgs/issues/406306
   ceph-arrow-cpp ? callPackage ./arrow-cpp-19.nix { },
   babeltrace,
   # Note when trying to upgrade boost:
@@ -373,7 +377,7 @@ let
     hash = "sha256-zlgp28C81SZbaFJ4yvQk4ZgYz4K/aZqtcISTO8LscSU=";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ceph";
   inherit src version;
 
