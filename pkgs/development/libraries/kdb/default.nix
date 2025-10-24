@@ -23,6 +23,8 @@ mkDerivation rec {
   };
 
   patches = [
+    # fix build with newer CMake versions
+    ./cmake-minimum-required.patch
     # fix build with newer QT versions
     (fetchpatch {
       url = "https://github.com/KDE/kdb/commit/b36d74f13a1421437a725fb74502c993c359392a.patch";
