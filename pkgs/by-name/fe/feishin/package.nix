@@ -4,31 +4,43 @@
   buildNpmPackage,
   fetchFromGitHub,
   electron_36,
+  dart-sass,
+  pnpm_10,
   darwin,
   copyDesktopItems,
   makeDesktopItem,
 }:
 let
   pname = "feishin";
-  version = "0.12.6";
+  version = "0.20.1";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
-    rev = "v${version}";
-    hash = "sha256-cnlPks/sJdcxHdIppHn8Q8d2tkwVlPMofQxjdAlBreg=";
+    tag = "v${version}";
+    hash = "sha256-WJMaLMrv6LSw/wxn7EZOSYqwAlgW3UkeYvxV4vEkCfM=";
   };
 
   electron = electron_36;
+  pnpm = pnpm_10;
 in
 buildNpmPackage {
   inherit pname version;
 
   inherit src;
-  npmDepsHash = "sha256-lThh29prT/cHRrp2mEtUW4eeVfCtkk+54EPNUyGHyq8=";
 
-  npmFlags = [ "--legacy-peer-deps" ];
-  makeCacheWritable = true;
+  npmConfigHook = pnpm.configHook;
+
+  npmDeps = null;
+  pnpmDeps = pnpm.fetchDeps {
+    inherit
+      pname
+      version
+      src
+      ;
+    fetcherVersion = 2;
+    hash = "sha256-8di4WZ30oE4q3l8Nthgihk6q+ob/Mz/UrofrtsLFzhc=";
+  };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
@@ -39,40 +51,26 @@ buildNpmPackage {
   postPatch = ''
     # release/app dependencies are installed on preConfigure
     substituteInPlace package.json \
-      --replace-fail "electron-builder install-app-deps &&" ""
+      --replace-fail '"postinstall": "electron-builder install-app-deps",' ""
 
     # Don't check for updates.
-    substituteInPlace src/main/main.ts \
+    substituteInPlace src/main/index.ts \
       --replace-fail "autoUpdater.checkForUpdatesAndNotify();" ""
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     # https://github.com/electron/electron/issues/31121
-    substituteInPlace src/main/main.ts \
+    substituteInPlace src/main/index.ts \
       --replace-fail "process.resourcesPath" "'$out/share/feishin/resources'"
   '';
 
-  preConfigure =
-    let
-      releaseAppDeps = buildNpmPackage {
-        pname = "${pname}-release-app";
-        inherit version;
+  preBuild = ''
+    rm -r node_modules/.pnpm/sass-embedded-*
 
-        src = "${src}/release/app";
-        npmDepsHash = "sha256-kEe5HH/oslH8vtAcJuWTOLc0ZQPxlDVMS4U0RpD8enE=";
-
-        npmFlags = [ "--ignore-scripts" ];
-        dontNpmBuild = true;
-
-        env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
-      };
-      releaseNodeModules = "${releaseAppDeps}/lib/node_modules/feishin/node_modules";
-    in
-    ''
-      for release_module_path in "${releaseNodeModules}"/*; do
-        rm -rf node_modules/"$(basename "$release_module_path")"
-        ln -s "$release_module_path" node_modules/
-      done
-    '';
+    test -d node_modules/.pnpm/sass-embedded@*
+    dir="$(echo node_modules/.pnpm/sass-embedded@*)/node_modules/sass-embedded/dist/lib/src/vendor/dart-sass"
+    mkdir -p "$dir"
+    ln -s ${dart-sass}/bin/dart-sass "$dir"/sass
+  '';
 
   postBuild =
     lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -103,7 +101,8 @@ buildNpmPackage {
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/share/feishin
-    pushd release/build/*/
+
+    pushd dist/*-unpacked/
     cp -r locales resources{,.pak} $out/share/feishin
     popd
 

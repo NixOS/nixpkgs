@@ -3834,6 +3834,11 @@
     githubId = 40476330;
     name = "brokenpip3";
   };
+  BronzeDeer = {
+    github = "BronzeDeer";
+    githubId = 74385045;
+    name = "Joël Pepper";
+  };
   brpaz = {
     email = "oss@brunopaz.dev";
     github = "brpaz";
