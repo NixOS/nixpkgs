@@ -1,26 +1,20 @@
 {
   stdenv,
+  lib,
   buildFHSEnv,
   writeShellScriptBin,
   fetchurl,
   callPackage,
   makeDesktopItem,
   copyDesktopItems,
-  ffmpeg,
-  glibc,
-  jq,
-  lib,
-  libmediainfo,
-  libsForQt5,
-  libusb1,
-  ocl-icd,
-  p7zip,
-  patchelf,
   socat,
+  jq,
+  kdePackages,
   vapoursynth,
-  xdg-utils,
   xorg,
-  zenity,
+  systemdLibs,
+  openssl,
+  p7zip,
 }:
 let
   mpvForSVP = callPackage ./mpv.nix { };
@@ -40,48 +34,39 @@ let
   '';
 
   libraries = [
-    fakeLsof
-    ffmpeg.bin
-    glibc
-    zenity
-    libmediainfo
-    libsForQt5.qtbase
-    libsForQt5.qtwayland
-    libsForQt5.qtdeclarative
-    libsForQt5.qtscript
-    libsForQt5.qtsvg
-    libusb1
     mpvForSVP
-    ocl-icd
+    fakeLsof
     (lib.getLib stdenv.cc.cc)
+    kdePackages.qtbase
+    kdePackages.qtdeclarative
     vapoursynth
-    xdg-utils
     xorg.libX11
+    systemdLibs
+    openssl
   ];
 
-  svp-dist = stdenv.mkDerivation rec {
+  svp-dist = stdenv.mkDerivation (finalAttrs: {
     pname = "svp-dist";
-    version = "4.6.263";
+    version = "4.7.305";
     src = fetchurl {
-      url = "https://www.svp-team.com/files/svp4-linux.${version}.tar.bz2";
-      sha256 = "sha256-HyRDVFHVmTan/Si3QjGQpC3za30way10d0Hk79oXG98=";
+      url = "https://www.svp-team.com/files/svp4-linux.${finalAttrs.version}.tar.bz2";
+      hash = "sha256-PWAcm/hIA4JH2QtJPP+gSJdJLRdfdbZXIVdWELazbxQ=";
     };
 
     nativeBuildInputs = [
       p7zip
-      patchelf
     ];
     dontFixup = true;
 
     unpackPhase = ''
-      tar xf ${src}
+      tar xf ${finalAttrs.src}
     '';
 
     buildPhase = ''
       mkdir installer
-      LANG=C grep --only-matching --byte-offset --binary --text  $'7z\xBC\xAF\x27\x1C' "svp4-linux-64.run" |
+      LANG=C grep --only-matching --byte-offset --binary --text  $'7z\xBC\xAF\x27\x1C' "svp4-linux.run" |
         cut -f1 -d: |
-        while read ofs; do dd if="svp4-linux-64.run" bs=1M iflag=skip_bytes status=none skip=$ofs of="installer/bin-$ofs.7z"; done
+        while read ofs; do dd if="svp4-linux.run" bs=1M iflag=skip_bytes status=none skip=$ofs of="installer/bin-$ofs.7z"; done
     '';
 
     installPhase = ''
@@ -96,7 +81,7 @@ let
       done
       rm -f $out/opt/{add,remove}-menuitem.sh
     '';
-  };
+  });
 
   fhs = buildFHSEnv {
     pname = "SVPManager";
@@ -158,6 +143,9 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with lib.maintainers; [ xddxdd ];
+    maintainers = with lib.maintainers; [
+      yuannan
+      xddxdd
+    ];
   };
 }
