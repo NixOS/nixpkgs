@@ -130,7 +130,7 @@ stdenv.mkDerivation {
 
       ...  then set something similar to following in `programs.vim.extraConfig`;
 
-          let g:ycm_server_python_interpreter = "${python3.interpreter}"
+          let g:ycm_server_python_interpreter = "''${python3.interpreter}"
     '';
     mainProgram = "ycmd";
     homepage = "https://github.com/ycm-core/ycmd";
