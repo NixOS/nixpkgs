@@ -1,7 +1,7 @@
 {
   buildPerlPackage,
   exiftool,
-  fetchurl,
+  fetchFromGitHub,
   gitUpdater,
   lib,
   shortenPerlShebang,
@@ -11,11 +11,13 @@
 
 buildPerlPackage rec {
   pname = "Image-ExifTool";
-  version = "13.25";
+  version = "13.39";
 
-  src = fetchurl {
-    url = "https://exiftool.org/Image-ExifTool-${version}.tar.gz";
-    hash = "sha256-HNVVFEhGooKYeDvr86tFIjUnPHg1hBCBPj1Ok8ZTsfo=";
+  src = fetchFromGitHub {
+    owner = "exiftool";
+    repo = "exiftool";
+    tag = version;
+    hash = "sha256-GPm3HOt7fNMbXRrV5V+ykJAfhww1O6NrD0l/7hA2i28=";
   };
 
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
@@ -34,7 +36,7 @@ buildPerlPackage rec {
       command = "${lib.getExe exiftool} -ver";
       package = exiftool;
     };
-    updateScript = gitUpdater { url = "https://github.com/exiftool/exiftool.git"; };
+    updateScript = gitUpdater { };
   };
 
   meta = {
