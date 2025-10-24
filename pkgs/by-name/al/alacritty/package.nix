@@ -44,7 +44,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty";
-  version = if !withGraphics then "0.16.1" else "0.15.0-graphics";
+  version = if !withGraphics then "0.16.1" else "0.16.0-graphics";
 
   src =
     # by default we want the official package
@@ -61,14 +61,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         owner = "ayosec";
         repo = "alacritty";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
+        hash = "sha256-JbsHozYMh7hFMAsu823IcVZTzvMEGQP+oKpUnlmM7Nk=";
       };
 
   cargoHash =
     if !withGraphics then
       "sha256-OBhrd4q44LCUGnjDEedhrOuoSC2UFR90IKSQfEPY/Q4="
     else
-      "sha256-UtxZFqU974N+YcHoEHifBjNSyaVuMvuc1clTDgUPuoQ=";
+      "sha256-fsTs37w4CvYvFN8ZgWxMA2hmgW0hJcIvhLiuhYxs4+Y=";
 
   nativeBuildInputs = [
     cmake
