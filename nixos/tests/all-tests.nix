@@ -1321,6 +1321,7 @@ in
   rss-bridge = handleTest ./web-apps/rss-bridge { };
   rss2email = handleTest ./rss2email.nix { };
   rstudio-server = runTest ./rstudio-server.nix;
+  rsync = runTest ./rsync.nix;
   rsyncd = runTest ./rsyncd.nix;
   rsyslogd = handleTest ./rsyslogd.nix { };
   rtkit = runTest ./rtkit.nix;
