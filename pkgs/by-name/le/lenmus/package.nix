@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  fetchpatch,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -30,6 +31,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "Release_${finalAttrs.version}";
     hash = "sha256-qegOAc6vs2+6VViDHVjv0q+qjLZyTT7yPF3hFpTt5zE=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bump-cmake-minimum-required-version.patch";
+      url = "https://github.com/lenmus/lenmus/commit/cc250ca4ce9a90d8dddb0fc359c5a80609cdafcb.patch";
+      hash = "sha256-aP+ooaSi6vHk+g1XftfjZ39zAgYts1vOCqZWWZhJ+G8=";
+    })
+  ];
 
   env = {
     NIX_CFLAGS_COMPILE = "-fpermissive";

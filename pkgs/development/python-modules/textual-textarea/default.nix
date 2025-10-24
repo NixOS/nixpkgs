@@ -20,21 +20,18 @@
 
 buildPythonPackage rec {
   pname = "textual-textarea";
-  version = "0.16.0";
+  version = "0.17.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
     tag = "v${version}";
-    hash = "sha256-AIt3UqfZbJBgAACxJHElhvAsJWk9I6zjdeRjBtI/FiA=";
+    hash = "sha256-E6Yw/NRjfrdCeERgM0jdjfmG9zL2GhY2qAWUB1XwFic=";
   };
 
   build-system = [ hatchling ];
 
-  pythonRelaxDeps = [
-    "tree-sitter-sql"
-  ];
   dependencies = [
     pyperclip
     textual

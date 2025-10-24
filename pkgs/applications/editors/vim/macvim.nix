@@ -7,20 +7,25 @@
   gettext,
   pkg-config,
   cscope,
-  ruby,
+  ruby_3_4,
   tcl,
   perl,
   luajit,
   darwin,
   libiconv,
   python3,
+  enablePython ? false,
+  rcodesign,
 }:
+
+let
+  inherit (lib) optional optionals optionalString;
+in
 
 # Try to match MacVim's documented script interface compatibility
 let
-  #perl = perl540;
-  # Ruby 3.3
-  #ruby = ruby_3_3;
+  # Ruby 3.4
+  ruby = ruby_3_4;
 
   # Building requires a few system tools to be in PATH.
   # Some of these we could patch into the relevant source files (such as xcodebuild and
@@ -35,13 +40,13 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
-  version = "179";
+  version = "181";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
     rev = "release-${finalAttrs.version}";
-    hash = "sha256-L9LVXyeA09aMtNf+b/Oo+eLpeVEKTD1/oNWCiFn5FbU=";
+    hash = "sha256-Wdq+eXSaGs+y+75ZbxoNAcyopRkWRHHRm05T0SHBrow=";
   };
 
   enableParallelBuilding = true;
@@ -49,7 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     pkg-config
     buildSymlinks
-  ];
+  ]
+  ++ optional stdenv.isAarch64 rcodesign;
   buildInputs = [
     gettext
     ncurses
@@ -58,8 +64,8 @@ stdenv.mkDerivation (finalAttrs: {
     ruby
     tcl
     perl
-    python3
-  ];
+  ]
+  ++ optional enablePython python3;
 
   patches = [ ./macvim.patch ];
 
@@ -71,14 +77,22 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-multibyte"
     "--enable-nls"
     "--enable-luainterp=dynamic"
+  ]
+  ++ optionals enablePython [
     "--enable-python3interp=dynamic"
+  ]
+  ++ [
     "--enable-perlinterp=dynamic"
     "--enable-rubyinterp=dynamic"
     "--enable-tclinterp=yes"
     "--without-local-dir"
     "--with-luajit"
     "--with-lua-prefix=${luajit}"
+  ]
+  ++ optionals enablePython [
     "--with-python3-command=${python3}/bin/python3"
+  ]
+  ++ [
     "--with-ruby-command=${ruby}/bin/ruby"
     "--with-tclsh=${tcl}/bin/tclsh"
     "--with-tlib=ncurses"
@@ -92,6 +106,13 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
     sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
+  ''
+  # Xcode 26.0 sets *_DEPLOYMENT_TARGET env vars for all platforms in shell script build phases.
+  # This breaks invocations of clang in those phases, as they target the wrong platform.
+  # Note: The shell script build phase in question uses /bin/zsh.
+  + ''
+    substituteInPlace src/MacVim/MacVim.xcodeproj/project.pbxproj \
+      --replace-fail 'make \' $'for x in ''${(k)parameters}; do if [[ $x = *_DEPLOYMENT_TARGET ]]; then [[ $x = MACOSX_DEPLOYMENT_TARGET ]] || unset $x; fi; done\nmake \\'
   '';
 
   # This is unfortunate, but we need to use the same compiler as Xcode, but Xcode doesn't provide a
@@ -101,7 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
     let
       # ideally we'd recurse, but we don't need that right now
       inputs = [ ncurses ] ++ perl.propagatedBuildInputs;
-      ldflags = map (drv: "-L${lib.getLib drv}/lib") inputs;
+      ldflags = map (drv: "-L${lib.getLib drv}/lib") inputs ++ [ "-headerpad_max_install_names" ];
       cppflags = map (drv: "-isystem ${lib.getDev drv}/include") inputs;
     in
     ''
@@ -131,7 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     # as the scheme seems to have the wrong default.
     + ''
       configureFlagsArray+=(
-        XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData"
+        XCODEFLAGS="-scheme MacVim -derivedDataPath $NIX_BUILD_TOP/derivedData LDFLAGS='\$(inherited) -headerpad_max_install_names' ENABLE_CODE_COVERAGE=NO"
         --with-xcodecfg="Release"
       )
     '';
@@ -149,9 +170,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Xcode project or pass it as a flag to xcodebuild as well.
   postConfigure = ''
     substituteInPlace src/auto/config.mk \
-      --replace " -L${stdenv.cc.libc}/lib" "" \
-      --replace " -L${darwin.libunwind}/lib" "" \
-      --replace " -L${libiconv}/lib" ""
+      --replace-warn " -L${stdenv.cc.libc}/lib" "" \
+      --replace-warn " -L${darwin.libunwind}/lib" "" \
+      --replace-warn " -L${libiconv}/lib" ""
 
     # All the libraries we stripped have -osx- in their name as of this time.
     # Assert now that this pattern no longer appears in config.mk.
@@ -191,12 +212,21 @@ stdenv.mkDerivation (finalAttrs: {
     libperl=$(dirname $(find ${perl} -name "libperl.dylib"))
     install_name_tool -add_rpath ${luajit}/lib $exe
     install_name_tool -add_rpath ${tcl}/lib $exe
+  ''
+  + optionalString enablePython ''
     install_name_tool -add_rpath ${python3}/lib $exe
+  ''
+  + ''
     install_name_tool -add_rpath $libperl $exe
     install_name_tool -add_rpath ${ruby}/lib $exe
 
     # Remove manpages from tools we aren't providing
-    find $out/Applications/MacVim.app/Contents/man -name evim.1 -delete
+    find $out/Applications/MacVim.app/Contents/man \( -name evim.1 -or -name eview.1 \) -delete
+    rm $out/Applications/MacVim.app/Contents/man/man1/mvim.1
+  ''
+  + optionalString stdenv.isAarch64 ''
+    # Resign the binary and set the linker-signed flag.
+    rcodesign sign --code-signature-flags linker-signed $exe
   '';
 
   # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
@@ -212,33 +242,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Vim - the text editor - for macOS";
     homepage = "https://macvim.org/";
     license = licenses.vim;
-    maintainers = [ ];
+    maintainers = with maintainers; [ lilyball ];
     platforms = platforms.darwin;
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
-    # Needs updating to a newer MacVim for Python and Ruby version support
-    broken = true;
     knownVulnerabilities = [
-      "CVE-2023-46246"
-      "CVE-2023-48231"
-      "CVE-2023-48232"
-      "CVE-2023-48233"
-      "CVE-2023-48234"
-      "CVE-2023-48235"
-      "CVE-2023-48236"
-      "CVE-2023-48237"
-      "CVE-2023-48706"
-      "CVE-2023-5344"
-      "CVE-2023-5441"
-      "CVE-2023-5535"
-      "CVE-2024-22667"
-      "CVE-2024-41957"
-      "CVE-2024-41965"
-      "CVE-2024-43374"
-      "CVE-2024-47814"
-      "CVE-2025-1215"
-      "CVE-2025-22134"
-      "CVE-2025-24014"
-      "CVE-2025-26603"
       "CVE-2025-29768"
       "CVE-2025-53905"
       "CVE-2025-53906"

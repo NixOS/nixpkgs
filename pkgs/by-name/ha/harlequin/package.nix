@@ -28,7 +28,7 @@ let
       });
 
       textual-textarea = super.textual-textarea.overridePythonAttrs (old: {
-        pythonRelaxDeps = old.pythonRelaxDeps ++ [ "textual" ];
+        pythonRelaxDeps = (old.pythonRelaxDeps or [ ]) ++ [ "textual" ];
       });
     };
   };
