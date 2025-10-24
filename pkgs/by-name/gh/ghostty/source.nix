@@ -155,11 +155,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [
-      jcollie
-      pluiedev
-      getchoo
-    ];
     outputsToInstall = [
       "out"
     ];

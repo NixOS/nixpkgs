@@ -42,6 +42,12 @@ package.overrideAttrs (
         builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
       }";
       license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        jcollie
+        pluiedev
+        getchoo
+        Enzime
+      ];
       mainProgram = "ghostty";
     } oldAttrs.meta or { };
   }
