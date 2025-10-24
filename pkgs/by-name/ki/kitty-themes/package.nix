@@ -6,13 +6,13 @@
   symlinkJoin,
 }:
 let
-  version = "0-unstable-2024-08-14";
+  version = "0-unstable-2025-10-24";
 
   src = fetchFromGitHub {
     owner = "kovidgoyal";
     repo = "kitty-themes";
-    rev = "cdf1ed4134815f58727f8070f997552f86b58892";
-    hash = "sha256-vt5y3Ai1KMgRhFrkfhA8G9Ve6BEFrgkCF3ssGlOdekw=";
+    rev = "6af4bcd7244a20ce4a0244c9128003473b97f319";
+    hash = "sha256-oxNdwv5q3aEC6kCEZzZawrIYq0gYSVMjB4xVPb5WiEE=";
   };
 
   convertAttrName =
@@ -20,21 +20,11 @@ let
 
   licenseMap = with lib.licenses; {
     "CC-BY-SA-4.0" = cc-by-nc-sa-40;
-    "CC0 1.0" = cc0;
-    "CC0 Public Domain" = cc0;
-    "GNU GPLv3" = gpl3Only;
-    "GNU General Public License v3.0" = gpl3Plus;
-    "GPL-3" = gpl3Only;
-    "GPLv3" = gpl3Only;
-    "GPLv3+" = gpl3Plus;
+    "CC0-1.0" = cc0;
+    "GPL-3.0" = gpl3Only;
+    "GPL-3.0-or-later" = gpl3Plus;
     "LGPL-3.0" = lgpl3;
-    "MIT license - https://www.mit.edu/~amini/LICENSE.md" = mit;
     "MIT" = mit;
-    "MIT, I prefer credit (and money) to none, but I won't sue" = mit;
-    "MIT/X11" = [
-      mit
-      x11
-    ];
     "UPL-1.0" = upl;
     "unfree" = unfree;
   };
