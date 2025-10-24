@@ -13267,8 +13267,6 @@ with pkgs;
   openttd-grfcodec = callPackage ../games/openttd/grfcodec.nix { };
   openttd-nml = callPackage ../games/openttd/nml.nix { };
 
-  openxcom = callPackage ../games/openxcom { SDL = SDL_compat; };
-
   openxray = callPackage ../games/openxray {
     # Builds with Clang, but hits an assertion failure unless GCC is used
     # https://github.com/OpenXRay/xray-16/issues/1224
