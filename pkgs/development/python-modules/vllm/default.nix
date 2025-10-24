@@ -72,6 +72,7 @@
   py-libnuma,
   setproctitle,
   openai-harmony,
+  anthropic,
 
   # internal dependency - for overriding in overlays
   vllm-flash-attn ? null,
@@ -100,8 +101,8 @@ let
   cutlass = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "cutlass";
-    tag = "v4.0.0";
-    hash = "sha256-HJY+Go1viPkSVZPEs/NyMtYJzas4mMLiIZF3kNX+WgA=";
+    tag = "v4.2.1";
+    hash = "sha256-iP560D5Vwuj6wX1otJhwbvqe/X4mYVeKTpK533Wr5gY=";
   };
 
   # FlashMLA's Blackwell (SM100) kernels were developed against CUTLASS v3.9.0
@@ -128,8 +129,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "FlashMLA";
-      rev = "5f65b85703c7ed75fda01e06495077caad207c3f";
-      hash = "sha256-DO9EFNSoAgyfRRc095v1UjT+Zdzk4cFY0+n28FVEwI0=";
+      rev = "46d64a8ebef03fa50b4ae74937276a5c940e3f95";
+      hash = "sha256-jtMzWB5hKz8mJGsdK6q4YpQbGp9IrQxbwmB3a64DIl0=";
     };
 
     dontConfigure = true;
@@ -138,6 +139,33 @@ let
     buildPhase = ''
       rm -rf csrc/cutlass
       ln -sf ${cutlass-flashmla} csrc/cutlass
+    '';
+
+    installPhase = ''
+      cp -rva . $out
+    '';
+  };
+
+  qutlass = stdenv.mkDerivation {
+    pname = "qutlass";
+    # https://github.com/IST-DASLab/qutlass/blob/${src.rev}/setup.py
+    version = "0.1.0";
+
+    # grep for GIT_TAG in the following file
+    # https://github.com/vllm-project/vllm/blob/v${version}/cmake/external_projects/qutlass.cmake
+    src = fetchFromGitHub {
+      owner = "iST-DASLab";
+      repo = "qutlass";
+      rev = "830d2c4537c7396e14a02a46fbddd18b5d107c65";
+      hash = "sha256-aG4qd0vlwP+8gudfvHwhtXCFmBOJKQQTvcwahpEqC84=";
+    };
+
+    dontConfigure = true;
+
+    # qutlass normally relies on `git submodule update` to fetch cutlass
+    buildPhase = ''
+      rm -rf third_party/cutlass
+      ln -sf ${cutlass} third_party/cutlass
     '';
 
     installPhase = ''
@@ -155,8 +183,8 @@ let
     src = fetchFromGitHub {
       owner = "vllm-project";
       repo = "flash-attention";
-      rev = "ee4d25bd84e0cbc7e0b9b9685085fd5db2dcb62a";
-      hash = "sha256-2r0Habd/kBpvM4/aQFIYyj+uQAa3M9gjk3DcBZHFNfA=";
+      rev = "a893712401d70362fbb299cd9c4b3476e8e9ed54";
+      hash = "sha256-ONuQWXF6UcUJZpElMX8Vduiv0Bfi3+xdIhSEuntC7S8=";
     };
 
     patches = [
@@ -284,7 +312,7 @@ in
 
 buildPythonPackage rec {
   pname = "vllm";
-  version = "0.11.0";
+  version = "0.11.1rc3";
   pyproject = true;
 
   stdenv = torch.stdenv;
@@ -293,30 +321,21 @@ buildPythonPackage rec {
     owner = "vllm-project";
     repo = "vllm";
     tag = "v${version}";
-    hash = "sha256-47TPvvPQvVbh6Gm2yvi+xhWZ8tSma91rp9hp/SBrEY8=";
+    hash = "sha256-C46YYNjj8TIFFVhvjqkaHMaFqhCyHJSSsTnYsq/8CvE=";
   };
 
   patches = [
     ./0002-setup.py-nix-support-respect-cmakeFlags.patch
     ./0003-propagate-pythonpath.patch
     ./0005-drop-intel-reqs.patch
-    # TODO: Remove the below patches when included in vLLM release
-    (fetchpatch {
-      url = "https://github.com/vllm-project/vllm/commit/9705fba7b727a3b9c275b012258608531e2223d1.patch";
-      hash = "sha256-DxRGLiwkegMlMjqFmFc0igpaVv06/Y2WjL+ISoIOET4=";
-    })
-    # patch above is previous commit needed to apply patch below
-    # oneDNN / CPU fix from https://github.com/vllm-project/vllm/pull/26401
-    (fetchpatch {
-      url = "https://github.com/vllm-project/vllm/commit/d7be1f2a480bdc62a6a1ec0126a401e3d42985fe.patch";
-      hash = "sha256-Zi1k5wiOPjsbWHFKpcLq9Ns43wIP37Mbvesi5K80zaQ=";
-    })
   ];
 
   postPatch = ''
     # pythonRelaxDeps does not cover build-system
+    # Pending torch 2.9.0 availability in Nixpkgs (see preliminary PR for binary packages https://github.com/NixOS/nixpkgs/pull/452357)
+    # Relax torch version constraint to allow torch 2.8.0 (upstream uses 2.8.0 for CPU backend)
     substituteInPlace pyproject.toml \
-      --replace-fail "torch ==" "torch >=" \
+      --replace-fail "torch == 2.9.0" "torch >= 2.8.0" \
       --replace-fail "setuptools>=77.0.3,<80.0.0" "setuptools"
 
     # Ignore the python version check because it hard-codes minor versions and
@@ -386,6 +405,7 @@ buildPythonPackage rec {
 
   dependencies = [
     aioprometheus
+    anthropic
     blake3
     cachetools
     cbor2
@@ -452,6 +472,7 @@ buildPythonPackage rec {
   ++ lib.optionals cudaSupport [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_CUTLASS" "${lib.getDev cutlass}")
     (lib.cmakeFeature "FLASH_MLA_SRC_DIR" "${lib.getDev flashmla}")
+    (lib.cmakeFeature "QUTLASS_SRC_DIR" "${lib.getDev qutlass}")
     (lib.cmakeFeature "VLLM_FLASH_ATTN_SRC_DIR" "${lib.getDev vllm-flash-attn'}")
     (lib.cmakeFeature "TORCH_CUDA_ARCH_LIST" "${gpuTargetString}")
     (lib.cmakeFeature "CUTLASS_NVCC_ARCHS_ENABLED" "${cudaPackages.flags.cmakeCudaArchitecturesString}")
