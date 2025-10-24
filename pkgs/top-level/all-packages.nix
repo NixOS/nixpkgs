@@ -4307,8 +4307,6 @@ with pkgs;
     fixup_yarn_lock
     ;
 
-  yamlfix = with python3Packages; toPythonApplication yamlfix;
-
   yamllint = with python3Packages; toPythonApplication yamllint;
 
   # To expose more packages for Yi, override the extraPackages arg.
