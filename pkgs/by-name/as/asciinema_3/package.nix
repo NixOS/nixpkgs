@@ -10,17 +10,17 @@
 let
   self = rustPlatform.buildRustPackage {
     pname = "asciinema";
-    version = "3.0.0";
+    version = "3.0.1";
 
     src = fetchFromGitHub {
       name = "asciinema-source-${self.version}";
       owner = "asciinema";
       repo = "asciinema";
       rev = "v${self.version}";
-      hash = "sha256-P92EZyg8f/mm66SmXAyPX9f4eMgOP6lyn3Uqhqh+D0I=";
+      hash = "sha256-jWRq/LeDdCETiOMkWr9EIWztb14IYGCSo05QPw5HZZk=";
     };
 
-    cargoHash = "sha256-2DQqtCcvSO43+RcMN2/BGqvf+cp/WvzUY4dxVpNcbGU=";
+    cargoHash = "sha256-bGhShwH4BxE3O4/B8KSK1o7IXNDBmGuVt4kx5s8W/go=";
 
     env.ASCIINEMA_GEN_DIR = "gendir";
 
