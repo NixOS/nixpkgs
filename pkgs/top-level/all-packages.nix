@@ -1133,6 +1133,8 @@ with pkgs;
 
   vprof = with python3Packages; toPythonApplication vprof;
 
+  waydroid-nftables = waydroid.override { withNftables = true; };
+
   winbox = winbox3;
   winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
