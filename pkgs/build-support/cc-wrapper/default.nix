@@ -574,7 +574,7 @@ stdenvNoCC.mkDerivation {
     ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     export named_fc=${targetPrefix}gfortran
       elif [ -e $ccPath/flang ]; then
-        wrap ${targetPrefix}flang $wrapper $ccPath/flang
+        wrap ${targetPrefix}flang $wrapper $ccPath/${targetPrefix}flang
         export named_fc=${targetPrefix}flang
       fi
   ''
