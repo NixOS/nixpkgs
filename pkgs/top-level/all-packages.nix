@@ -2345,11 +2345,9 @@ with pkgs;
 
   cemu-ti = qt5.callPackage ../applications/science/math/cemu-ti { };
 
+  ceph = callPackage ../tools/filesystems/ceph { };
   libceph = ceph.lib;
-  inherit (callPackages ../tools/filesystems/ceph { })
-    ceph
-    ceph-client
-    ;
+  ceph-client = ceph.client;
   ceph-dev = ceph;
 
   clementine = libsForQt5.callPackage ../applications/audio/clementine {
