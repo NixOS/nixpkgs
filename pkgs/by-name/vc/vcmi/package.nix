@@ -16,25 +16,23 @@
   ninja,
   pkg-config,
   python3,
-  qtbase,
-  qttools,
   onetbb,
   unshield,
-  wrapQtAppsHook,
   xz,
   zlib,
   testers,
   vcmi,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "vcmi";
   version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "vcmi";
     repo = "vcmi";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
     hash = "sha256-k6tkylNXEzU+zzYoFWtx+AkoHQzAwbBxPB2DVevsryw=";
   };
@@ -44,7 +42,7 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     python3
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -57,8 +55,8 @@ stdenv.mkDerivation rec {
     fuzzylite
     luajit
     minizip
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
     onetbb
     xz
     zlib
@@ -97,16 +95,16 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source engine for Heroes of Might and Magic III";
     homepage = "https://vcmi.eu";
-    changelog = "https://github.com/vcmi/vcmi/blob/${src.rev}/ChangeLog.md";
-    license = with licenses; [
+    changelog = "https://github.com/vcmi/vcmi/blob/${finalAttrs.src.rev}/ChangeLog.md";
+    license = with lib.licenses; [
       gpl2Plus
       cc-by-sa-40
     ];
-    maintainers = with maintainers; [ azahi ];
-    platforms = platforms.linux;
+    maintainers = with lib.maintainers; [ azahi ];
+    platforms = lib.platforms.linux;
     mainProgram = "vcmilauncher";
   };
-}
+})

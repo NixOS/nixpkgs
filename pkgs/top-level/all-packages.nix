@@ -4146,8 +4146,6 @@ with pkgs;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
 
-  vcmi = libsForQt5.callPackage ../games/vcmi { };
-
   video2midi = callPackage ../tools/audio/video2midi {
     pythonPackages = python3Packages;
   };
