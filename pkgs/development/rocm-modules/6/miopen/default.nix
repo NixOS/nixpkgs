@@ -218,7 +218,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DMIOPEN_USE_SQLITE_PERFDB=ON"
     "-DCMAKE_VERBOSE_MAKEFILE=ON"
     "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
-    "-DCMAKE_BUILD_TYPE=Release"
 
     # needs to stream to stdout so bzcat rather than bunzip2
     "-DUNZIPPER=${bzip2}/bin/bzcat"

@@ -44,7 +44,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_TESTING" false)
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "/") # relative to $out
   ];
 
