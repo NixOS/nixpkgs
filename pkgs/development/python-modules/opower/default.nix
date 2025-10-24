@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "opower";
-  version = "0.15.7";
+  version = "0.15.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tronikos";
     repo = "opower";
     tag = "v${version}";
-    hash = "sha256-NB3Hoieykkcf+EHjW77aOUdbJj5fSUTmJ5EPGlp4LXw=";
+    hash = "sha256-JauglgXrzfznyst0UdG8KyAXyzjnUkK7TJVdGhp0PVk=";
   };
 
   build-system = [ setuptools ];
