@@ -6,24 +6,20 @@
   pkg-config,
   ffmpeg,
   libopus,
-  mkDerivation,
-  qtbase,
-  qtmultimedia,
-  qtsvg,
   SDL2,
   libevdev,
   udev,
-  qtmacextras,
   nanopb,
+  libsForQt5,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "chiaki";
   version = "2.2.0";
 
   src = fetchgit {
     url = "https://git.sr.ht/~thestr4ng3r/chiaki";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
     hash = "sha256-mLx2ygMlIuDJt9iT4nIj/dcLGjMvvmneKd49L7C3BQk=";
   };
@@ -31,6 +27,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
+    libsForQt5.wrapQtAppsHook
   ];
 
   postPatch = ''
@@ -42,9 +39,9 @@ mkDerivation rec {
   buildInputs = [
     ffmpeg
     libopus
-    qtbase
-    qtmultimedia
-    qtsvg
+    libsForQt5.qtbase
+    libsForQt5.qtmultimedia
+    libsForQt5.qtsvg
     SDL2
     nanopb
   ]
@@ -53,19 +50,19 @@ mkDerivation rec {
     udev
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    qtmacextras
+    libsForQt5.qtmacextras
   ];
 
   doCheck = true;
 
   installCheckPhase = "$out/bin/chiaki --help";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~thestr4ng3r/chiaki";
     description = "Free and Open Source PlayStation Remote Play Client";
-    license = licenses.agpl3Only;
+    license = lib.licenses.agpl3Only;
     maintainers = [ ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
     mainProgram = "chiaki";
   };
-}
+})
