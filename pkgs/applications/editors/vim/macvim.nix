@@ -67,7 +67,13 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional enablePython python3;
 
-  patches = [ ./macvim.patch ];
+  patches = [
+    ./macvim.patch
+    # Xcode 26.0 sets *_DEPLOYMENT_TARGET env vars for all platforms in shell script build phases.
+    # This breaks invocations of clang in those phases, as they target the wrong platform.
+    # Note: The shell script build phase in question uses /bin/zsh.
+    ./macvim-xcode26.patch
+  ];
 
   configureFlags = [
     "--enable-cscope"
@@ -106,13 +112,6 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
     sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
-  ''
-  # Xcode 26.0 sets *_DEPLOYMENT_TARGET env vars for all platforms in shell script build phases.
-  # This breaks invocations of clang in those phases, as they target the wrong platform.
-  # Note: The shell script build phase in question uses /bin/zsh.
-  + ''
-    substituteInPlace src/MacVim/MacVim.xcodeproj/project.pbxproj \
-      --replace-fail 'make \' $'for x in ''${(k)parameters}; do if [[ $x = *_DEPLOYMENT_TARGET ]]; then [[ $x = MACOSX_DEPLOYMENT_TARGET ]] || unset $x; fi; done\nmake \\'
   '';
 
   # This is unfortunate, but we need to use the same compiler as Xcode, but Xcode doesn't provide a
