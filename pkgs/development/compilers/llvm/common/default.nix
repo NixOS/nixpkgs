@@ -108,14 +108,7 @@ let
 in
 makeScopeWithSplicing' {
   inherit otherSplices;
-  extra =
-    spliced0:
-    args
-    // metadata
-    // {
-      inherit buildLlvmPackages;
-      targetLlvm = spliced0.llvm.__spliced._targetTarget or llvm;
-    };
+  extra = _spliced0: args // metadata // { inherit buildLlvmPackages; };
   f =
     self:
     let

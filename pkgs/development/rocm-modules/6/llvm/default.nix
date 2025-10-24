@@ -501,7 +501,6 @@ overrideLlvmPackagesRocm (s: {
     with s.final;
     (llvmPackagesRocm.openmp.override {
       llvm = llvm;
-      targetLlvm = llvm;
       clang-unwrapped = clang-unwrapped;
     }).overrideAttrs
       (old: {
