@@ -1,3 +1,1 @@
-{ python3Packages }:
-
-python3Packages.toPythonApplication python3Packages.cairosvg
+{ python3Packages }: with python3Packages; toPythonApplication cairosvg

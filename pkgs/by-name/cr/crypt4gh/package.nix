@@ -1,3 +1,1 @@
-{ python3Packages }:
-
-python3Packages.toPythonApplication python3Packages.crypt4gh
+{ python3Packages }: with python3Packages; toPythonApplication crypt4gh
