@@ -6,6 +6,7 @@
   bzip2,
   xz,
   zstd,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,6 +57,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_no_such_release"
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "Tool for installing rust binaries as an alternative to building from source";
