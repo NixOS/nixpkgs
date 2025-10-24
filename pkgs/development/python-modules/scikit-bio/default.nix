@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -64,6 +65,10 @@ buildPythonPackage rec {
 
   # only the $out dir contains the built cython extensions, so we run the tests inside there
   enabledTestPaths = [ "${placeholder "out"}/${python.sitePackages}/skbio" ];
+
+  # The trick above makes test collection fail on darwin:
+  # PermissionError: [Errno 1] Operation not permitted: '/nix/.Trashes'
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   pythonImportsCheck = [ "skbio" ];
 
