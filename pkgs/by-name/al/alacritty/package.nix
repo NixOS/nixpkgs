@@ -42,9 +42,9 @@ let
     wayland
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty";
-  version = "0.15.1" + lib.optionalString withGraphics "-graphics";
+  version = if !withGraphics then "0.15.1" else "0.15.0-graphics";
 
   src =
     # by default we want the official package
@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
       fetchFromGitHub {
         owner = "alacritty";
         repo = "alacritty";
-        tag = "v${version}";
+        tag = "v${finalAttrs.version}";
         hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
       }
     # optionally we want to build the sixels feature fork
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
       fetchFromGitHub {
         owner = "ayosec";
         repo = "alacritty";
-        tag = "v${version}";
+        tag = "v${finalAttrs.version}";
         hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
       };
 
@@ -152,6 +152,6 @@ rustPlatform.buildRustPackage rec {
       rvdp
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})
