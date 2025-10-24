@@ -402,8 +402,8 @@ in
       "sha256-cDV8kPjBB3Mu5cqsAVsRjTk6KMozwEMHx/Fu0SRp5EQ=";
 
   mypy-boto3-directconnect =
-    buildMypyBoto3Package "directconnect" "1.40.10"
-      "sha256-ZM9nCSSzMmRjyxnypQcaORwYXiXMXz25Gw2dJlOVcc0=";
+    buildMypyBoto3Package "directconnect" "1.40.57"
+      "sha256-tmPAUD/9Y/HxJHzYyiRd+U/0emjnaz8LGRy4y9VeIpk=";
 
   mypy-boto3-discovery =
     buildMypyBoto3Package "discovery" "1.40.19"
