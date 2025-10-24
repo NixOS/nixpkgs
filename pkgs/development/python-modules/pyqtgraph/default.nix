@@ -3,15 +3,23 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   scipy,
   numpy,
-  pyqt6,
   pyopengl,
+
+  # buildInputs
+  pyqt6,
+
+  # tests
   qt6,
   pytestCheckHook,
   freefont_ttf,
   makeFontsConf,
-  setuptools,
 }:
 
 let
@@ -29,7 +37,9 @@ buildPythonPackage rec {
     hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     numpy
