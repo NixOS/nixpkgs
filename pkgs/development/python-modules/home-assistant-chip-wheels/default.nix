@@ -9,7 +9,6 @@
   click,
   colorama,
   coloredlogs,
-  coverage,
   cryptography,
   debugpy,
   diskcache,
@@ -217,7 +216,6 @@ stdenv.mkDerivation rec {
         build
         colorama
         coloredlogs
-        coverage
         click
         cryptography
         debugpy
