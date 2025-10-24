@@ -80,14 +80,10 @@ let
 
   checked =
     (throwIfNot (lib.isList overlays) "The overlays argument to nixpkgs must be a list.")
-      (lib.foldr (
-        x: throwIfNot (lib.isFunction x) "All overlays passed to nixpkgs must be functions."
-      ) lib.id overlays)
+      (throwIfNot (lib.all lib.isFunction overlays) "All overlays passed to nixpkgs must be functions.")
       (throwIfNot (lib.isList crossOverlays) "The crossOverlays argument to nixpkgs must be a list.")
       (
-        lib.foldr (
-          x: throwIfNot (lib.isFunction x) "All crossOverlays passed to nixpkgs must be functions."
-        ) lib.id crossOverlays
+        throwIfNot (lib.all lib.isFunction crossOverlays) "All crossOverlays passed to nixpkgs must be functions."
       );
 
   localSystem = lib.systems.elaborate args.localSystem;
