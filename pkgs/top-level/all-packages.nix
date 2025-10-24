@@ -13237,10 +13237,6 @@ with pkgs;
   luanti-client = luanti.override { buildServer = false; };
   luanti-server = luanti.override { buildClient = false; };
 
-  mudlet = libsForQt5.callPackage ../games/mudlet {
-    lua = lua5_1;
-  };
-
   blightmud-tts = callPackage ../by-name/bl/blightmud/package.nix { withTTS = true; };
 
   run-npush = callPackage ../by-name/np/npush/run.nix { };
