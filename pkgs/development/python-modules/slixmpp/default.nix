@@ -18,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "slixmpp";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-hQxfOxlkpQdCWlGSdotZY6eHkJr6M3xkkRv4bR0urPM=";
+    hash = "sha256-dGn23K9XQv1i4OZu5EfFM4p0UgwZgqcHhOe3kN7y/dU=";
   };
 
   patches = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname src;
-    hash = "sha256-z0X9s36n1p31boxoe6Er0Ieirinaehoucsi89oDAS0c=";
+    hash = "sha256-eKXQeZ2RLHsTZmYszws4fCHgeiSO9wsrRbPkVV1gqZY=";
   };
 
   dependencies = [
