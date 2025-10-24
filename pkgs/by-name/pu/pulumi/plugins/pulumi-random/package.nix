@@ -22,7 +22,6 @@ mkPulumiPackage rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       veehaitch
-      trundle
     ];
   };
 }

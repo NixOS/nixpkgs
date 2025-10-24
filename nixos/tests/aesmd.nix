@@ -3,7 +3,6 @@
   name = "aesmd";
   meta = {
     maintainers = with lib.maintainers; [
-      trundle
       veehaitch
     ];
   };
