@@ -6,13 +6,19 @@
   fetchFromGitHub,
   fetchPypi,
   fetchpatch2,
+  callPackage,
 
   # Build time
   autoconf,
   automake,
   cmake,
   ensureNewerSourcesHook,
-  fmt,
+  # To see which `fmt` version Ceph upstream recommends, check its `src/fmt` submodule.
+  #
+  # Ceph does not currently build with `fmt_10`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
+  # If we want to switch for that before upstream fixes it, use this patch:
+  # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
+  fmt_9,
   git,
   libtool,
   makeWrapper,
@@ -25,7 +31,7 @@
   nixosTests,
 
   # Runtime dependencies
-  arrow-cpp,
+  ceph-arrow-cpp ? callPackage ./arrow-cpp-19.nix { },
   babeltrace,
   # Note when trying to upgrade boost:
   # * When upgrading Ceph, it's recommended to check which boost version Ceph uses on Fedora,
@@ -55,7 +61,8 @@
   libxml2,
   lmdb,
   lttng-ust,
-  lua,
+  # Ceph currently requires >= 5.3
+  lua5_4,
   lvm2,
   lz4,
   oath-toolkit,
@@ -105,7 +112,6 @@
   libxfs ? null,
   liburing ? null,
   zfs ? null,
-  ...
 }:
 
 # We must have one crypto library
@@ -398,7 +404,7 @@ rec {
       autoconf # `autoreconf` is called, e.g. for `qatlib_ext`
       automake # `aclocal` is called, e.g. for `qatlib_ext`
       cmake
-      fmt
+      fmt_9
       git
       makeWrapper
       libtool # used e.g. for `qatlib_ext`
@@ -417,7 +423,7 @@ rec {
     buildInputs =
       cryptoLibsMap.${cryptoStr}
       ++ [
-        arrow-cpp
+        ceph-arrow-cpp
         babeltrace
         boost'
         bzip2
@@ -437,7 +443,7 @@ rec {
         libxml2
         lmdb
         lttng-ust
-        lua
+        lua5_4
         lvm2 # according to `debian/control` file, e.g. `pvs` command used by `src/ceph-volume/ceph_volume/api/lvm.py`
         lz4
         malloc
@@ -594,6 +600,7 @@ rec {
     passthru = {
       inherit version;
       inherit python; # to be able to test our overridden packages above individually with `nix-build -A`
+      arrow-cpp = ceph-arrow-cpp;
       tests = {
         inherit (nixosTests)
           ceph-multi-node
