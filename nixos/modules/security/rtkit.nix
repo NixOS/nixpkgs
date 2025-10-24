@@ -64,7 +64,7 @@ in
         ];
 
         # Needs to verify the user of the processes.
-        PrivateUsers = "full";
+        PrivateUsers = false;
         # Needs to access other processes to modify their scheduling modes.
         ProcSubset = "all";
         ProtectProc = "default";
