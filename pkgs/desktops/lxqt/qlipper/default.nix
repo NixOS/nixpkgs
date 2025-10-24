@@ -21,6 +21,13 @@ stdenv.mkDerivation {
     hash = "sha256-9V9s0oxWKqd9MHKlkZF3SetrAjHX4cAenAg7as4TLn0=";
   };
 
+  postPatch = ''
+    # https://github.com/pvanek/qlipper/pull/161
+    # Maybe upstream wants to remove the use of a private module instead,
+    # but meanwhile we can do this quick fix:
+    sed -i "59i find_package(Qt6 COMPONENTS GuiPrivate)" CMakeLists.txt
+  '';
+
   nativeBuildInputs = [
     cmake
     qttools
