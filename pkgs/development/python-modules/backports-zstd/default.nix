@@ -17,10 +17,16 @@ buildPythonPackage rec {
     repo = "backports.zstd";
     tag = "v${version}";
     fetchSubmodules = true;
-    hash = "sha256-MRtj40vjCPtV9/RDgun/APzva4lv+TnXeBKD9RNlkII=";
+    postFetch = ''
+      rm -r "$out/src/c/zstd"
+    '';
+    hash = "sha256-5t5ET8b65v4ArV9zrmu+kDXLG3QQRpMMZPSG+RRaCLk=";
   };
 
   postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail 'ROOT_PATH / "src" / "c" / "zstd"' 'Path("${zstd.src}")'
+
     # need to preserve $PYTHONPATH when calling sys.executable
     substituteInPlace tests/test/support/script_helper.py \
       --replace-fail "return __cached_interp_requires_environment" "return True"
