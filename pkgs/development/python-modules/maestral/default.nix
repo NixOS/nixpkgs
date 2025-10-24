@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "maestral";
-  version = "1.9.4";
+  version = "1.9.6.dev1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "SamSchott";
     repo = "maestral";
     tag = "v${version}";
-    hash = "sha256-akh0COltpUU4Z4kfubg6A7k6W8ICoqVYkmFpMkTC8H8=";
+    hash = "sha256-8Oi5UJXzo+Ld/TF0NzHSAMfPPBo2ZZ3JYkNi23WWueg=";
   };
 
   build-system = [ setuptools ];
