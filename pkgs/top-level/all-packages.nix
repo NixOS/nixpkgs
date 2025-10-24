@@ -2345,7 +2345,6 @@ with pkgs;
 
   cemu-ti = qt5.callPackage ../applications/science/math/cemu-ti { };
 
-  ceph = callPackage ../tools/filesystems/ceph { };
   libceph = ceph.lib;
   ceph-client = ceph.client;
   ceph-dev = ceph;
