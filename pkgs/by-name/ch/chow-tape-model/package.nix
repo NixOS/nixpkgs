@@ -95,8 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_NM=${stdenv.cc.cc}/bin/gcc-nm"
   ];
 
-  cmakeBuildType = "Release";
-
   postPatch = ''
     cd Plugin
     substituteInPlace modules/RTNeural/CMakeLists.txt --replace-fail \
@@ -106,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     mkdir -p $out/lib/lv2 $out/lib/vst3 $out/lib/clap $out/bin $out/share/doc/CHOWTapeModel/
-    cd CHOWTapeModel_artefacts/${finalAttrs.cmakeBuildType}
+    cd CHOWTapeModel_artefacts/${finalAttrs.cmakeBuildType or "Release"}
     cp -r LV2/CHOWTapeModel.lv2 $out/lib/lv2
     cp -r VST3/CHOWTapeModel.vst3 $out/lib/vst3
     cp -r CLAP/CHOWTapeModel.clap $out/lib/clap

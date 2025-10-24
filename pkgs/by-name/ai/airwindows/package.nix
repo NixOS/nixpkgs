@@ -33,10 +33,6 @@ stdenv.mkDerivation {
     cd plugins/LinuxVST
   '';
 
-  cmakeBuildType = "Release";
-
-  cmakeFlags = [ ];
-
   nativeBuildInputs = [
     cmake
   ];
