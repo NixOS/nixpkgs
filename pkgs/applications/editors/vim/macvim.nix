@@ -106,14 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
     "--disable-sparkle"
   ];
 
-  # Remove references to Sparkle.framework from the project.
-  # It's unused (we disabled it with --disable-sparkle) and this avoids
-  # copying the unnecessary several-megabyte framework into the result.
-  postPatch = ''
-    echo "Patching file src/MacVim/MacVim.xcodeproj/project.pbxproj"
-    sed -e '/Sparkle\.framework/d' -i src/MacVim/MacVim.xcodeproj/project.pbxproj
-  '';
-
   # This is unfortunate, but we need to use the same compiler as Xcode, but Xcode doesn't provide a
   # way to configure the compiler. We also need to pull in lib/include paths for some of our build
   # inputs since we don't have cc-wrapper to do that for us.
