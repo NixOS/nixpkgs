@@ -61,6 +61,7 @@ let
       pkgs.writeText "nfs.conf" nfsConfDeprecated;
 
   requestKeyConfFile = pkgs.writeText "request-key.conf" ''
+    create dns_resolver * * ${pkgs.keyutils}/bin/key.dns_resolver %k
     create id_resolver * * ${pkgs.nfs-utils}/bin/nfsidmap -t 600 %k %d
   '';
 
