@@ -240,7 +240,6 @@
   ./programs/iay.nix
   ./programs/iftop.nix
   ./programs/iio-hyprland.nix
-  ./programs/iio-niri.nix
   ./programs/immersed.nix
   ./programs/iotop.nix
   ./programs/java.nix
@@ -857,6 +856,7 @@
   ./services/misc/heisenbridge.nix
   ./services/misc/homepage-dashboard.nix
   ./services/misc/ihaskell.nix
+  ./services/misc/iio-niri.nix
   ./services/misc/input-remapper.nix
   ./services/misc/invidious-router.nix
   ./services/misc/irkerd.nix
