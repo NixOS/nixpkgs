@@ -49,6 +49,7 @@
   ./config/xdg/terminal-exec.nix
   ./config/zram.nix
   ./hardware/acpilight.nix
+  ./hardware/antec.nix
   ./hardware/all-firmware.nix
   ./hardware/all-hardware.nix
   ./hardware/apple-touchbar.nix
