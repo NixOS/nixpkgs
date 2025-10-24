@@ -81,7 +81,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ Enzime ];
     outputsToInstall = [
       "out"
       "man"
