@@ -10,11 +10,74 @@
   runCommandCC,
   ghcWithHoogle,
   ghcWithPackages,
+  haskellLib,
+  iserv-proxy,
   nodejs,
+  writeShellScriptBin,
 }:
 
 let
   isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+
+  crossSupport = rec {
+    emulator = stdenv.hostPlatform.emulator buildPackages;
+
+    hasBuiltinTH = stdenv.hostPlatform.isGhcjs;
+
+    canProxyTH =
+      lib.versionAtLeast ghc.version "9.6" && stdenv.hostPlatform.emulatorAvailable buildPackages;
+
+    # Many suites use Template Haskell for test discovery, including QuickCheck
+    canCheck = hasBuiltinTH || canProxyTH;
+
+    # stdenv.make-derivation sets `doCheck = false` when the build platform can't directly execute the host platform
+    # which means the `checkPhase` ends up disabled for cross and we need to sneak it back in somehow
+    # TODO: avoid this workaround - add some sort of doCheckEmulated?
+    checkPhaseSidecar =
+      drv: anchor:
+      lib.trim ''
+        ${anchor}
+        ${lib.optionalString (drv.doCheck && isCross) drv.checkPhase}
+      '';
+
+    iservWrapper =
+      let
+        buildProxy = iserv-proxy.build + "/bin/iserv-proxy";
+
+        wrapperScript =
+          enableProfiling:
+          let
+            overrides = haskellLib.overrideCabal {
+              enableLibraryProfiling = enableProfiling;
+              enableExecutableProfiling = enableProfiling;
+            };
+            hostProxy = overrides iserv-proxy.host + "/bin/iserv-proxy-interpreter";
+          in
+          buildPackages.writeShellScriptBin ("iserv-wrapper" + lib.optionalString enableProfiling "-prof") ''
+            set -euo pipefail
+            PORT=$((5000 + $RANDOM % 5000))
+            (>&2 echo "---> Starting interpreter on port $PORT")
+            ${emulator} ${hostProxy} tmp $PORT &
+            RISERV_PID="$!"
+            trap "kill $RISERV_PID" EXIT INT QUIT TERM # Needs cleanup when building without sandbox
+            ${buildProxy} $@ 127.0.0.1 "$PORT"
+            (>&2 echo "---> killing interpreter...")
+          '';
+
+        # GHC will add `-prof` to the external interpreter when doing a profiled build.
+        # Since a single derivation can build with both profiling and non-profiling versions
+        # we need both versions made available
+        both = buildPackages.symlinkJoin {
+          name = "iserv-wrapper-both";
+          paths = builtins.map wrapperScript [
+            false
+            true
+          ];
+        };
+
+      in
+      "${both}/bin/iserv-wrapper";
+  };
 
   # Pass the "wrong" C compiler rather than none at all so packages that just
   # use the C preproccessor still work, see
@@ -67,7 +130,7 @@ in
   buildFlags ? [ ],
   haddockFlags ? [ ],
   description ? null,
-  doCheck ? !isCross,
+  doCheck ? isCross -> crossSupport.canCheck,
   doBenchmark ? false,
   doHoogle ? true,
   doHaddockQuickjump ? doHoogle,
@@ -205,9 +268,14 @@ in
   # of `meta.pkgConfigModules`. This option defaults to false for now, since
   # this metadata is far from complete in nixpkgs.
   __onlyPropagateKnownPkgConfigModules ? false,
+
+  enableExternalInterpreter ? isCross && crossSupport.canProxyTH,
 }@args:
 
 assert editedCabalFile != null -> revision != null;
+
+# We only use iserv-proxy for the external interpreter
+assert enableExternalInterpreter -> crossSupport.canProxyTH;
 
 # --enable-static does not work on windows. This is a bug in GHC.
 # --enable-static will pass -staticlib to ghc, which only works for mach-o and elf.
@@ -298,7 +366,15 @@ let
     "--hsc2hs-option=--cross-compile"
     (optionalString enableHsc2hsViaAsm "--hsc2hs-option=--via-asm")
   ]
-  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config";
+  ++ optional (allPkgconfigDepends != [ ]) "--with-pkg-config=${pkg-config.targetPrefix}pkg-config"
+
+  ++ optionals enableExternalInterpreter (
+    map (opt: "--ghc-option=${opt}") [
+      "-fexternal-interpreter"
+      "-pgmi"
+      crossSupport.iservWrapper
+    ]
+  );
 
   makeGhcOptions = opts: lib.concatStringsSep " " (map (opt: "--ghc-option=${opt}") opts);
 
@@ -541,7 +617,16 @@ let
       export GHC_PACKAGE_PATH="''${NIX_GHC_PACKAGE_PATH_FOR_TEST}"
     fi
 
-    exec "$@"
+    ${
+      let
+        runner =
+          if (isCross && crossSupport.canCheck) then
+            (if stdenv.hostPlatform.isGhcjs then "node" else crossSupport.emulator)
+          else
+            "exec";
+      in
+      runner + " " + ''"$@"''
+    }
   '';
 
   testTargetsString =
@@ -776,7 +861,7 @@ lib.fix (
       ''
       + ''
         ${setupCommand} build ${buildTarget}${buildFlagsString}
-        runHook postBuild
+        ${crossSupport.checkPhaseSidecar drv "runHook postBuild"}
       '';
 
       inherit doCheck;
