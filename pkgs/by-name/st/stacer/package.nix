@@ -3,36 +3,40 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  qtcharts,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stacer";
   version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "oguzhaninan";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0qndzzkbq6abapvwq202kva8j619jdn9977sbqmmfs9zkjz4mbsd";
+    repo = "stacer";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-Ta9Kvpw/aVcrXvqclGyTKRiJ1J4CCMz3VUsZvOb/zWI=";
   };
+
+  cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=4.0"
+  ];
 
   postPatch = ''
     substituteInPlace stacer/Managers/app_manager.cpp \
-      --replace 'qApp->applicationDirPath() + "/translations"' \
+      --replace-fail 'qApp->applicationDirPath() + "/translations"' \
                 'QStandardPaths::locate(QStandardPaths::AppDataLocation, "translations", QStandardPaths::LocateDirectory)'
   '';
 
-  buildInputs = [
-    qtcharts
-    qttools
-  ];
+  strictDeps = true;
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
+  ];
+
+  buildInputs = [
+    libsForQt5.qtcharts
   ];
 
   preConfigure = ''
@@ -43,12 +47,12 @@ stdenv.mkDerivation rec {
     install -Dm644 ../translations/*.qm -t $out/share/stacer/translations
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux System Optimizer and Monitoring";
     homepage = "https://github.com/oguzhaninan/stacer";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dit7ya ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ dit7ya ];
+    platforms = lib.platforms.linux;
     mainProgram = "stacer";
   };
-}
+})
