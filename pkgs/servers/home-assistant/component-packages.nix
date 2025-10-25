@@ -1329,7 +1329,8 @@
       ];
     "droplet" =
       ps: with ps; [
-      ]; # missing inputs: pydroplet
+        pydroplet
+      ];
     "dsmr" =
       ps: with ps; [
         dsmr-parser
@@ -7174,6 +7175,7 @@
     "downloader"
     "dremel_3d_printer"
     "drop_connect"
+    "droplet"
     "dsmr"
     "dsmr_reader"
     "duckdns"
