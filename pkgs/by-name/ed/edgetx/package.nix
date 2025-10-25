@@ -15,6 +15,7 @@
   miniz,
   yaml-cpp,
   udevCheckHook,
+  applyPatches,
   # List of targets to build simulators for
   targetsToBuild ? import ./targets.nix,
 }:
@@ -36,6 +37,12 @@ let
       libclang
     ]
   );
+
+  # paches are needed to fix build with CMake 4
+  yaml-cppSrc = applyPatches {
+    inherit (yaml-cpp) src;
+    patches = yaml-cpp.patches or [ ];
+  };
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -93,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
     # Unvendoring these libraries is infeasible. At least lets reuse the same sources.
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_GOOGLETEST" "${gtest.src}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MINIZ" "${miniz.src}")
-    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-cpp.src}")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_YAML-CPP" "${yaml-cppSrc}")
     # Custom library https://github.com/edgetx/maxLibQt.
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_MAXLIBQT" "${maxlibqt}")
     (lib.cmakeFeature "DFU_UTIL_ROOT_DIR" "${lib.getBin dfu-util}/bin")
