@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gaWNvBLuUUy0o+HWCOyG6KmzxDrYCY6PV3WbA/jjH64=";
   };
 
+  patches = [
+    ./cmake4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -32,10 +36,6 @@ stdenv.mkDerivation rec {
     giflib
     libtiff
   ];
-
-  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
 
   doCheck = true;
 
