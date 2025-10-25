@@ -20,7 +20,6 @@
   dbus,
   gmobile,
   umockdev,
-  feedbackd-device-themes,
   udevCheckHook,
   nix-update-script,
 }:
