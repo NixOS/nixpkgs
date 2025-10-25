@@ -335,7 +335,7 @@ in
             set -u
             umask u=rw,g=,o=
             cd "$CREDENTIALS_DIRECTORY"
-            ${utils.genJqSecretsReplacementSnippet cfg.settings substitutedConfig}
+            ${(utils.genJqSecretsReplacementSnippet { } cfg.settings substitutedConfig).script}
           '';
 
           serviceConfig = {

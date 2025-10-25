@@ -103,7 +103,7 @@ in
       description = "Recyclarr Service";
 
       # YAML is a JSON super-set
-      preStart = utils.genJqSecretsReplacementSnippet cfg.configuration configPath;
+      preStart = (utils.genJqSecretsReplacementSnippet { } cfg.configuration configPath).script;
 
       serviceConfig = {
         Type = "oneshot";

@@ -63,7 +63,7 @@ in
         ExecStartPre = pkgs.writeShellScript "merge-nginx-sso-config" ''
           rm -f '${configPath}'
           # Relies on YAML being a superset of JSON
-          ${utils.genJqSecretsReplacementSnippet cfg.configuration configPath}
+          ${(utils.genJqSecretsReplacementSnippet { } cfg.configuration configPath).script}
         '';
         ExecStart = ''
           ${lib.getExe cfg.package} \

@@ -162,7 +162,7 @@ in
       script =
         let
           genConfigScript = pkgs.writeScript "engelsystem-gen-config.sh" (
-            utils.genJqSecretsReplacementSnippet cfg.settings "config.json"
+            (utils.genJqSecretsReplacementSnippet { } cfg.settings "config.json").script
           );
         in
         ''

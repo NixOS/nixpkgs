@@ -79,7 +79,7 @@ in
         ExecStartPre =
           let
             script = pkgs.writeShellScript "sing-box-pre-start" ''
-              ${utils.genJqSecretsReplacementSnippet cfg.settings "/run/sing-box/config.json"}
+              ${(utils.genJqSecretsReplacementSnippet { } cfg.settings "/run/sing-box/config.json").script}
               chown --reference=/run/sing-box /run/sing-box/config.json
             '';
           in
