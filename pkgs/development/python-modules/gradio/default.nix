@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
   writeShellScriptBin,
   gradio,
 
@@ -75,20 +76,20 @@
 
 buildPythonPackage rec {
   pname = "gradio";
-  version = "5.38.2";
+  version = "5.47.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gradio-app";
     repo = "gradio";
     tag = "gradio@${version}";
-    hash = "sha256-zKAH/tbF1S+LIi1i+BuKBUWDSI0+Ii5FhsZ3sQaFtto=";
+    hash = "sha256-J9W44wRs9byIok59OoZWfHvCTEFGOp50ia+kremLh2o=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit pname version src;
     fetcherVersion = 1;
-    hash = "sha256-sIEsolHffX3cpAJU79w+ndRY4vvmWLxp2efTryv+j38=";
+    hash = "sha256-XnCx34nbX+essVfXJlxvYB9/lnolAkF81Jp6dAOqr8E=";
   };
 
   pythonRelaxDeps = [
@@ -182,11 +183,6 @@ buildPythonPackage rec {
   preBuild = ''
     pnpm build
     pnpm package
-  '';
-
-  postBuild = ''
-    # SyntaxError: 'await' outside function
-    zip -d dist/gradio-*.whl gradio/_frontend_code/lite/examples/transformers_basic/run.py
   '';
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
@@ -347,27 +343,35 @@ buildPythonPackage rec {
 
   # Cyclic dependencies are fun!
   # This is gradio without gradio-client and gradio-pdf
-  passthru.sans-reverse-dependencies =
-    (gradio.override (old: {
-      gradio-client = null;
-      gradio-pdf = null;
-    })).overridePythonAttrs
-      (old: {
-        pname = old.pname + "-sans-reverse-dependencies";
-        pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
-        doInstallCheck = false;
-        doCheck = false;
-        preCheck = "";
-        postInstall = ''
-          shopt -s globstar
-          for f in $out/**/*.py; do
-            cp $f "$f"i
-          done
-          shopt -u globstar
-        '';
-        pythonImportsCheck = null;
-        dontCheckRuntimeDeps = true;
-      });
+  passthru = {
+    sans-reverse-dependencies =
+      (gradio.override (old: {
+        gradio-client = null;
+        gradio-pdf = null;
+      })).overridePythonAttrs
+        (old: {
+          pname = old.pname + "-sans-reverse-dependencies";
+          pythonRemoveDeps = (old.pythonRemoveDeps or [ ]) ++ [ "gradio-client" ];
+          doInstallCheck = false;
+          doCheck = false;
+          preCheck = "";
+          postInstall = ''
+            shopt -s globstar
+            for f in $out/**/*.py; do
+              cp $f "$f"i
+            done
+            shopt -u globstar
+          '';
+          pythonImportsCheck = null;
+          dontCheckRuntimeDeps = true;
+        });
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "gradio_client@(.*)"
+      ];
+    };
+  };
 
   meta = {
     homepage = "https://www.gradio.app/";
