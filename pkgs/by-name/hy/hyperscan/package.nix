@@ -23,6 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
   };
 
+  patches = [
+    # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    # upstream pr: https://github.com/intel/hyperscan/pull/452
+    ./bump_minimal_cmake_version.patch
+  ];
+
   outputs = [
     "out"
     "dev"
