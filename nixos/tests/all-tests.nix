@@ -166,6 +166,7 @@ in
           [[ 143 = $(cat $failed/testBuildFailure.exit) ]]
           touch $out
         '';
+    efivars = runTestOn [ "x86_64-linux" ] ./nixos-test-driver/efivars.nix;
   };
 
   # NixOS vm tests and non-vm unit tests
