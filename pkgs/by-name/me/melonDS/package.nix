@@ -29,16 +29,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";
-  version = "1.0-unstable-2025-10-13";
+  version = "1.0-unstable-2025-10-24";
 
   src = fetchFromGitHub {
     owner = "melonDS-emu";
     repo = "melonDS";
-    rev = "91ab68090c0aa588aabaeaa5e2c62564fd661ccc";
-    hash = "sha256-04Wr7xUwz6Q9JDiEfTQh6Vx5q71dFVI9rScIpt6ywGY=";
+    rev = "420a1fa7e75121d5f9de2a886b5c2742563d9a3d";
+    hash = "sha256-g0mTmv5eIrCIra2Bp/LV9ZOAmXUaDaOIFwc+Fufp7p8=";
   };
-
-  patches = [ ./fix-build-qt-6.10.patch ];
 
   nativeBuildInputs = [
     cmake
