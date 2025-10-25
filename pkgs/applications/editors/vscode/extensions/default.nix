@@ -443,6 +443,8 @@ let
         };
       };
 
+      augment.vscode-augment = callPackage ./augment.vscode-augment { };
+
       azdavis.millet = callPackage ./azdavis.millet { };
 
       b4dm4n.vscode-nixpkgs-fmt = callPackage ./b4dm4n.vscode-nixpkgs-fmt { };
