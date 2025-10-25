@@ -1,71 +1,81 @@
 {
-  lib,
-  stdenv,
-  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
-  ncurses,
-  sqlite,
-  testers,
+  lib,
   moonfire-nvr,
+  ncurses,
   nodejs,
-  pnpm_9,
+  pkg-config,
+  pnpm,
+  rustPlatform,
+  sqlite,
+  stdenv,
+  testers,
+  tzdata,
+  ...
 }:
 
 let
   pname = "moonfire-nvr";
-  version = "0.7.20";
+  version = "0.7.21";
+
   src = fetchFromGitHub {
     owner = "scottlamb";
     repo = "moonfire-nvr";
     tag = "v${version}";
-    hash = "sha256-0EaGqZUmYGxLHcJAhlbG2wZMDiVv8U1bcTQqMx0aTo0=";
+    hash = "sha256-fkWdMFQw414en3dLzq+JulebC5GSuKIUnYIw7a92/uI=";
   };
+
   ui = stdenv.mkDerivation (finalAttrs: {
-    inherit version src;
     pname = "${pname}-ui";
-    sourceRoot = "${src.name}/ui";
+    inherit version src;
+
+    sourceRoot = "${finalAttrs.src.name}/ui";
+
     nativeBuildInputs = [
       nodejs
-      pnpm_9.configHook
+      pnpm.configHook
     ];
-    pnpmDeps = pnpm_9.fetchDeps {
-      inherit (finalAttrs) pname version src;
-      sourceRoot = "${finalAttrs.src.name}/ui";
+
+    pnpmDeps = pnpm.fetchDeps {
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
+
       fetcherVersion = 1;
-      hash = "sha256-7fMhUFlV5lz+A9VG8IdWoc49C2CTdLYQlEgBSBqJvtw=";
+      hash = "sha256-vUrVRFa+24nsxOu6h87fgyUSe8ZX2gnvLakpndm4OnQ=";
+
     };
+
     installPhase = ''
       runHook preInstall
 
-      cp -r public $out
+      pnpm install
+      pnpm run build
+
+      mkdir $out
+      mv dist/* $out
 
       runHook postInstall
     '';
   });
 in
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage (finalAttrs: {
   inherit pname version src;
 
-  sourceRoot = "${src.name}/server";
+  sourceRoot = "${finalAttrs.src.name}/server";
+  cargoHash = "sha256-87iaOOMFpvWBP3Khjrey3pDBGnA7gY01et5xWGWoIlY=";
 
-  cargoHash = "sha256-+L4XofUFvhJDPGv4fAGYXFNpuNd01k/P63LH2tXXHE0=";
+  buildFeatures = [ "bundled-ui" ];
 
-  env.VERSION = "v${version}";
-
-  nativeBuildInputs = [
-    pkg-config
-  ];
-
+  nativeBuildsInputs = [ pkg-config ];
   buildInputs = [
     ncurses
     sqlite
+    tzdata
   ];
-
-  postInstall = ''
-    mkdir -p $out/lib/ui
-    ln -s ${ui} $out/lib/ui
-  '';
 
   doCheck = false;
 
@@ -78,12 +88,20 @@ rustPlatform.buildRustPackage {
     };
   };
 
+  env = {
+    UI_DIST_DIR = ui;
+    VERSION = version;
+  };
+
   meta = {
-    description = "Moonfire NVR, a security camera network video recorder";
+    description = "Security camera network video recorder";
     homepage = "https://github.com/scottlamb/moonfire-nvr";
     changelog = "https://github.com/scottlamb/moonfire-nvr/releases/tag/v${version}";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ gaelreyrol ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [
+      gaelreyrol
+      PopeRigby
+    ];
     mainProgram = "moonfire-nvr";
   };
-}
+})
