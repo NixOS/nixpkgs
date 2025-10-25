@@ -845,6 +845,10 @@ in
 
       environment.systemPackages = mkIf (grub != null) [ grub ];
 
+      boot.bootspec.extensions."org.nixos.grub" = {
+        devicetree = lib.mkIf config.boot.loader.loadDeviceTree "${config.hardware.deviceTree.package}/${config.hardware.deviceTree.name}";
+      };
+
       boot.loader.grub.extraPrepareConfig = concatStrings (
         mapAttrsToList (
           fileName: sourcePath:
