@@ -15,18 +15,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fish-lsp";
-  version = "1.0.10";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "ndonfris";
     repo = "fish-lsp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OZiqEef4jE1H47mweVCzhaRCSsFdpgUdCSuhWRz2n2M=";
+    hash = "sha256-4Cbqx2H4K1ZA6SNFOREj9njrz2ljiQ6FecM2SsGwR80=";
   };
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = finalAttrs.src + "/yarn.lock";
-    hash = "sha256-N9P2mmqAfbg/Kpqx+vZbb+fhaD1I/3UjiJaEqFPJyO0=";
+    hash = "sha256-dh2XlD6MW67donzLHSbdZPMNL5JhVH7Sb71IbbO+54c=";
   };
 
   nativeBuildInputs = [
@@ -39,25 +39,17 @@ stdenv.mkDerivation (finalAttrs: {
     fish
   ];
 
-  yarnBuildScript = "setup";
-
-  postBuild = ''
-    yarn --offline compile
-  '';
-
-  # We do it in postPatch, since it needs to be fixed before buildPhase
-  postPatch = ''
-    patchShebangs bin/fish-lsp
-  '';
-
   installPhase = ''
     runHook preInstall
+
+    yarn --offline build:npm
+    patchShebangs dist/fish-lsp
 
     mkdir -p $out/share/fish-lsp
     cp -r . $out/share/fish-lsp
 
     makeWrapper ${lib.getExe nodejs} "$out/bin/fish-lsp" \
-      --add-flags "$out/share/fish-lsp/out/cli.js" \
+      --add-flags "$out/share/fish-lsp/dist/fish-lsp" \
       --prefix PATH : "${
         lib.makeBinPath [
           fish
@@ -65,9 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       }"
 
+    # Rather than going through the build step for completions, we trigger it
+    # ourselves
     ${lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd fish-lsp \
-        --fish <($out/bin/fish-lsp complete --fish)
+        --fish <($out/bin/fish-lsp complete)
     ''}
 
     runHook postInstall
