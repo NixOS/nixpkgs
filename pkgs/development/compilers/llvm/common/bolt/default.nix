@@ -12,7 +12,7 @@
   libclang,
   version,
   python3,
-  buildLlvmTools,
+  buildLlvmPackages,
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
   fetchpatch,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
   ]
   ++ devExtraCmakeFlags;
 
