@@ -11,17 +11,6 @@
   stdenv,
   systemdMinimal,
 }:
-let
-  # We are waiting on some changes to be merged upstream: https://github.com/openSUSE/hwinfo/pulls
-  hwinfoOverride = hwinfo.overrideAttrs {
-    src = fetchFromGitHub {
-      owner = "numtide";
-      repo = "hwinfo";
-      rev = "c2259845d10694c099fb306a8cfc5a403e71c708";
-      hash = "sha256-RGIoJkYiNMRHwUclzdRMELxCgBU9Pfvaghvt3op0zM0=";
-    };
-  };
-in
 buildGoModule rec {
   pname = "nixos-facter";
   version = "0.4.1";
@@ -39,7 +28,7 @@ buildGoModule rec {
 
   buildInputs = [
     libusb1
-    hwinfoOverride
+    hwinfo
   ];
 
   nativeBuildInputs = [
