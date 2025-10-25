@@ -10,6 +10,7 @@ let
   lib = import ../../lib;
 
   inherit (builtins)
+    pathExists
     readDir
     ;
 
@@ -17,6 +18,11 @@ let
     mapAttrs
     mapAttrsToList
     mergeAttrsList
+    optionalAttrs
+    ;
+
+  inherit (lib.customisation)
+    makeCallPackageWithArgSelectors
     ;
 
   # Package files for a single shard
@@ -49,6 +55,13 @@ self: super:
   # and whether it's defined by this file here or `all-packages.nix`.
   # TODO: This can be removed once `pkgs/by-name` can handle custom `callPackage` arguments without `all-packages.nix` (or any other way of achieving the same result).
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
-  _internalCallByNamePackageFile = file: self.callPackage file { };
+  _internalCallByNamePackageFile =
+    file:
+    makeCallPackageWithArgSelectors self.callPackage file (
+      let
+        argSelectorsFile = "${toString (dirOf file)}/arg-selectors.nix";
+      in
+      optionalAttrs (pathExists argSelectorsFile) (import argSelectorsFile)
+    );
 }
 // mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
