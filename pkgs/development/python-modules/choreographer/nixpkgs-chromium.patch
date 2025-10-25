@@ -1,0 +1,125 @@
+From bbb3ec24903e6192414fb007a86283cacc3afd8b Mon Sep 17 00:00:00 2001
+From: Gavin John <gavinnjohn@gmail.com>
+Date: Fri, 24 Oct 2025 15:32:09 -0700
+Subject: [PATCH] [PATCH] Use nixpkgs-packaged chromium
+
+---
+ choreographer/cli/_cli_utils.py | 98 +--------------------------------
+ 1 file changed, 2 insertions(+), 96 deletions(-)
+
+diff --git a/choreographer/cli/_cli_utils.py b/choreographer/cli/_cli_utils.py
+index 8a1ce57e..086245f0 100644
+--- a/choreographer/cli/_cli_utils.py
++++ b/choreographer/cli/_cli_utils.py
+@@ -43,32 +43,7 @@ def get_google_supported_platform_string() -> tuple[str, str, str, str]:
+ 
+ 
+ def get_chrome_download_path() -> Path | None:
+-    _chrome_platform_detected, _, _, _ = get_google_supported_platform_string()
+-
+-    if not _chrome_platform_detected:
+-        return None
+-
+-    _default_exe_path = Path()
+-
+-    if platform.system().startswith("Linux"):
+-        _default_exe_path = (
+-            default_download_path / f"chrome-{_chrome_platform_detected}" / "chrome"
+-        )
+-    elif platform.system().startswith("Darwin"):
+-        _default_exe_path = (
+-            default_download_path
+-            / f"chrome-{_chrome_platform_detected}"
+-            / "Google Chrome for Testing.app"
+-            / "Contents"
+-            / "MacOS"
+-            / "Google Chrome for Testing"
+-        )
+-    elif platform.system().startswith("Win"):
+-        _default_exe_path = (
+-            default_download_path / f"chrome-{_chrome_platform_detected}" / "chrome.exe"
+-        )
+-
+-    return _default_exe_path
++    return Path("@chromium_bin@")
+ 
+ 
+ # https://stackoverflow.com/questions/39296101/python-zipfile-removes-execute-permissions-from-binaries
+@@ -92,76 +67,7 @@ def get_chrome_sync(  # noqa: PLR0912, C901
+     *,
+     verbose: bool = False,
+ ) -> Path | str:
+-    """Download chrome synchronously: see `get_chrome()`."""
+-    if not arch:
+-        arch, _, _, _ = get_google_supported_platform_string()
+-
+-    if not arch:
+-        raise RuntimeError(
+-            "You must specify an arch, one of: "
+-            f"{', '.join(supported_platform_strings)}. "
+-            f"Detected {arch} is not supported.",
+-        )
+-
+-    if isinstance(path, str):
+-        path = Path(path)
+-    if i:
+-        _logger.info("Loading chrome from list")
+-        browser_list = json.loads(
+-            urllib.request.urlopen(  # noqa: S310 audit url for schemes
+-                _chrome_for_testing_url,
+-            ).read(),
+-        )
+-        version_obj = browser_list["versions"][i]
+-    else:
+-        _logger.info("Using last known good version of chrome")
+-        with (
+-            Path(__file__).resolve().parent.parent
+-            / "resources"
+-            / "last_known_good_chrome.json"
+-        ).open() as f:
+-            version_obj = json.load(f)
+-    if verbose:
+-        print(version_obj["version"])  # noqa: T201 allow print in cli
+-        print(version_obj["revision"])  # noqa: T201 allow print in cli
+-    chromium_sources = version_obj["downloads"]["chrome"]
+-    url = ""
+-    for src in chromium_sources:
+-        if src["platform"] == arch:
+-            url = src["url"]
+-            break
+-    else:
+-        raise RuntimeError(
+-            "You must specify an arch, one of: "
+-            f"{', '.join(supported_platform_strings)}. "
+-            f"{arch} is not supported.",
+-        )
+-
+-    if not path.exists():
+-        path.mkdir(parents=True)
+-    filename = path / "chrome.zip"
+-    with urllib.request.urlopen(url) as response, filename.open("wb") as out_file:  # noqa: S310 audit url
+-        shutil.copyfileobj(response, out_file)
+-    with _ZipFilePermissions(filename, "r") as zip_ref:
+-        zip_ref.extractall(path)
+-    filename.unlink()
+-
+-    if arch.startswith("linux"):
+-        exe_name = path / f"chrome-{arch}" / "chrome"
+-    elif arch.startswith("mac"):
+-        exe_name = (
+-            path
+-            / f"chrome-{arch}"
+-            / "Google Chrome for Testing.app"
+-            / "Contents"
+-            / "MacOS"
+-            / "Google Chrome for Testing"
+-        )
+-    elif arch.startswith("win"):
+-        exe_name = path / f"chrome-{arch}" / "chrome.exe"
+-    else:
+-        raise RuntimeError("Couldn't calculate exe_name, unsupported architecture.")
+-    return exe_name
++    return Path("@chromium_bin@")
+ 
+ 
+ async def get_chrome(
