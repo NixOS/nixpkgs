@@ -1,12 +1,14 @@
 {
   lib,
+  callPackage,
   stdenv,
   fetchurl,
   pkg-config,
   fontconfig,
-  autoreconfHook,
+  meson,
+  ninja,
   withJava ? false,
-  jdk17,
+  jdk21_headless, # Newer JDK's depend on a release with a fix for https://code.videolan.org/videolan/libbluray/-/issues/46
   ant,
   stripJavaArchivesHook,
   withAACS ? false,
@@ -24,19 +26,20 @@
 
 stdenv.mkDerivation rec {
   pname = "libbluray";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = fetchurl {
-    url = "https://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-R4/9aKD13ejvbKmJt/A1taCiLFmRQuXNP/ewO76+Xys=";
+    url = "https://get.videolan.org/libbluray/${version}/${pname}-${version}.tar.xz";
+    hash = "sha256-d5N7rwfq3aSysxHPOvTFAmnS6jFlBB9YQ9lkdsTJJ3c=";
   };
 
   nativeBuildInputs = [
+    meson
+    ninja
     pkg-config
-    autoreconfHook
   ]
   ++ lib.optionals withJava [
-    jdk17
+    jdk21_headless
     ant
     stripJavaArchivesHook
   ];
@@ -49,15 +52,15 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional withAACS libaacs;
 
-  env.JAVA_HOME = lib.optionalString withJava jdk17.home; # Fails at runtime without this
+  env.JAVA_HOME = lib.optionalString withJava jdk21_headless.home; # Fails at runtime without this
   env.NIX_LDFLAGS =
     lib.optionalString withAACS "-L${libaacs}/lib -laacs"
     + lib.optionalString withBDplus " -L${libbdplus}/lib -lbdplus";
 
-  configureFlags =
-    lib.optional (!withJava) "--disable-bdjava-jar"
-    ++ lib.optional (!withMetadata) "--without-libxml2"
-    ++ lib.optional (!withFonts) "--without-freetype";
+  mesonFlags =
+    lib.optional (!withJava) "-Dbdj_jar=disabled"
+    ++ lib.optional (!withMetadata) "-dlibxml2=disabled"
+    ++ lib.optional (!withFonts) "-Dfreetype=disabled";
 
   meta = with lib; {
     homepage = "http://www.videolan.org/developers/libbluray.html";
@@ -65,5 +68,12 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ ];
     platforms = platforms.unix;
+  };
+
+  passthru = {
+    tests = {
+      # Verify the "full" package when verifying changes to this package
+      full = callPackage ../libbluray-full/package.nix { };
+    };
   };
 }
