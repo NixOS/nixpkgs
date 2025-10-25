@@ -405,7 +405,7 @@ let
       repo = "tree-sitter-prisma";
     };
     "tree-sitter-org-nvim" = {
-      orga = "milisims";
+      orga = "nvim-orgmode";
       repo = "tree-sitter-org";
     };
     "tree-sitter-hcl" = {
