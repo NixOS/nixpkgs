@@ -14690,4 +14690,8 @@ with pkgs;
   davis = callPackage ../by-name/da/davis/package.nix {
     php = php83; # https://github.com/tchapi/davis/issues/195
   };
+
+  kratix = callPackage ../by-name/kr/kratix/package.nix {
+    buildGoModule = buildGo125Module;
+  };
 }
