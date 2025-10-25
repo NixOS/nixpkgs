@@ -3,34 +3,9 @@
   stdenvNoCC,
   fetchzip,
 }:
-
-stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "monaspace";
-  version = "1.200";
-
-  src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
-    stripRoot = false;
-    hash = "sha256-j1xQYVxfTNDVuzCKvT5FbU29t8XsH4XqcZ477sjydts=";
-  };
-
-  outputs = [
-    "out"
-    "woff"
-  ];
-
-  installPhase = ''
-    runHook preInstall
-
-    pushd monaspace-v${finalAttrs.version}/fonts/
-    install -Dm644 frozen/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 otf/*.otf -t $out/share/fonts/opentype
-    install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 webfonts/*.woff -t $woff/share/fonts/woff
-    popd
-
-    runHook postInstall
-  '';
+let
+  fonts = lib.importTOML ./fonts.toml;
+  inherit (fonts) baseUrl;
 
   meta = {
     description = "Innovative superfamily of fonts for code";
@@ -58,4 +33,35 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     maintainers = [ ];
     platforms = lib.platforms.all;
   };
+  makeFont =
+    font:
+    stdenvNoCC.mkDerivation {
+      inherit (font) pname;
+      inherit (fonts) version;
+      src = fetchzip {
+        url = "${baseUrl}/v${fonts.version}/${font.pname}-v${fonts.version}.zip";
+        stripRoot = false;
+        inherit (font) hash;
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        # The result of unzipping the file is a folder containing a folder containing the font file/-s
+        install -Dm644 **/**/*.* -t $out/share/fonts/${font.destination}
+
+        runHook postInstall
+      '';
+      inherit meta;
+    };
+  makePackages = lib.pipe fonts.fonts [
+    (builtins.map (font: {
+      inherit (font) name;
+      value = makeFont font;
+    }))
+    lib.listToAttrs
+  ];
+in
+makePackages.static.overrideAttrs (old: {
+  passthru = makePackages;
 })
