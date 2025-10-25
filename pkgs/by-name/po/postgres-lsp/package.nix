@@ -3,22 +3,29 @@
   rustPlatform,
   fetchgit,
   rust-jemalloc-sys,
+  tree-sitter,
+  nodejs,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "postgres-lsp";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchgit {
     url = "https://github.com/supabase-community/postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-ZintjrSeNsYR6A8tlEfSetse7d79jgLdCpdu+sMe3Zk=";
+    hash = "sha256-nXW/jvsdVjUrbngio8pXs/qJuGrqqM1mZejl7UNeTIU=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-x/Wbx3noH6YOQIis1sN8ylQApjhSy4/mrxX6jvZFs6A=";
+  cargoHash = "sha256-psgo5/tDHaQd0dkiD/3uhrKuxlOBLi/xG4x3gVPLZbw=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+
+    # Required to build the custom tree-sitter grammar
+    # https://github.com/supabase-community/postgres-language-server/blob/main/crates/pgt_treesitter_grammar/grammar.js
+    tree-sitter
+    nodejs
   ];
 
   buildInputs = [
@@ -50,6 +57,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
       figsoda
       myypo
     ];
-    mainProgram = "postgrestools";
+    mainProgram = "postgres-language-server";
   };
 })
