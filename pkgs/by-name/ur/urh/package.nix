@@ -19,7 +19,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "urh";
-  version = "2.9.8-unstable-2025-07-31";
+  version = "2.9.8";
   pyproject = true;
 
   src = fetchFromGitHub {
