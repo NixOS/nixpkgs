@@ -49,6 +49,8 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     libpng
     zlib
+  ]
+  ++ lib.optionals stdenv.isLinux [
     libGL
   ]
   ++ lib.optionals enableNFD [
@@ -94,5 +96,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ liberodark ];
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # See: https://github.com/darbyjohnston/feather-tk/issues/1
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
