@@ -480,11 +480,12 @@ in
         ln -s --force ${cfg.qemu.package}/bin/qemu-pr-helper /run/${dirName}/nix-helpers/
 
         # Symlink to OVMF firmware code and variable template images distributed with QEMU
-        cp -sfv $(
+        readarray -t firmware_files < <(
           ${pkgs.jq}/bin/jq -rs \
             '[.[] | .mapping.executable.filename, .mapping."nvram-template".filename] | unique | .[]' \
-          ${cfg.qemu.package}/share/qemu/firmware/* \
-        ) /run/${dirName}/nix-ovmf
+          ${cfg.qemu.package}/share/qemu/firmware/*
+        )
+        cp -sfv "''${firmware_files[@]}" /run/${dirName}/nix-ovmf
 
         # Symlink hooks to /var/lib/libvirt
         ${concatStringsSep "\n" (
@@ -542,6 +543,8 @@ in
         OOMScoreAdjust = "-999";
       };
       restartIfChanged = false;
+
+      enableStrictShellChecks = true;
     };
 
     systemd.services.virtchd = {
