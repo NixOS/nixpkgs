@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   buildInputs = [
     stdenv.cc.cc
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     libGL
   ];
 
