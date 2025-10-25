@@ -23,6 +23,10 @@ cmakeConfigurePhase() {
         : ${cmakeDir:=.}
     fi
 
+    # https://cmake.org/cmake/help/latest/prop_tgt/COMPILE_WARNING_AS_ERROR.html
+    # Suppress COMPILE_WARNING_AS_ERROR target property which would pass Werror
+    prependToVar cmakeFlags "--compile-no-warning-as-error"
+
     if [ -z "${dontAddPrefix-}" ]; then
         prependToVar cmakeFlags "-DCMAKE_INSTALL_PREFIX=$prefix"
     fi
