@@ -12,11 +12,12 @@ self: super: {
   inherit
     (
       let
-        noExternalInterpreter = overrideCabal {
+        breakCycle = overrideCabal {
+          doCheck = false; # test packages themselves like to rely on TH for discovering test cases
           enableExternalInterpreter = false;
         };
       in
-      lib.mapAttrs (_: noExternalInterpreter) { inherit (super) iserv-proxy libiserv network; }
+      lib.mapAttrs (_: breakCycle) { inherit (super) iserv-proxy libiserv network; }
     )
     iserv-proxy
     libiserv
