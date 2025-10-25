@@ -23406,6 +23406,12 @@
     github = "SEIAROTg";
     githubId = 3611446;
   };
+  seike = {
+    name = "Stefan Eikenbusch";
+    email = "info@seike.xyz";
+    github = "seikeundso";
+    githubId = 131039334;
+  };
   seineeloquenz = {
     name = "Alexander Linder";
     github = "SeineEloquenz";
