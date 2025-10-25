@@ -11,13 +11,13 @@
   libGL,
   libpng,
   lunasvg,
+  nativefiledialog-extended,
   nlohmann_json,
   plutovg,
   xorg,
   zlib,
-  nativeFileDialog ? null,
   python3Packages ? null,
-  enableNFD ? false,
+  enableNFD ? true,
   enablePython ? false,
   enableTests ? false,
   enableExamples ? false,
@@ -51,8 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     libGL
   ]
-  ++ lib.optionals (enableNFD && nativeFileDialog != null) [
-    nativeFileDialog
+  ++ lib.optionals enableNFD [
+    nativefiledialog-extended
   ]
   ++ lib.optionals (enableNFD && stdenv.isLinux) [
     gtk3
