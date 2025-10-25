@@ -2453,6 +2453,14 @@
     githubId = 706854;
     name = "Etienne Laurin";
   };
+  atomicptr = {
+    name = "Christopher Kaster";
+    email = "me@atomicptr.de";
+    github = "atomicptr";
+    githubId = 674705;
+    matrix = "@atomicptr:matrix.org";
+    keys = [ { fingerprint = "C461 E985 FBF3 4215 A43B  25D0 7930 ECC1 7FA0 A9FC"; } ];
+  };
   atry = {
     name = "Bo Yang";
     email = "yang-bo@yang-bo.com";
