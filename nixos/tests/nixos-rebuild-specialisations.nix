@@ -5,7 +5,7 @@
   ...
 }:
 {
-  name = "nixos-rebuild-specialisations";
+  name = "nixos-rebuild-specialisations" + lib.optionalString withNg "-ng";
 
   # TODO: remove overlay from  nixos/modules/profiles/installation-device.nix
   #        make it a _small package instead, then remove pkgsReadOnly = false;.
