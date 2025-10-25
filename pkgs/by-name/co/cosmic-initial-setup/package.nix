@@ -14,7 +14,7 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
-  version = "1.0.0-beta.2";
+  version = "1.0.0-beta.3";
 
   src = fetchFromGitHub {
     owner = "pop-os";
