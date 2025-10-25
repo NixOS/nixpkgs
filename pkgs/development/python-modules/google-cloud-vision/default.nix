@@ -8,21 +8,18 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-vision";
-  version = "3.10.2";
+  version = "3.11.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_vision";
     inherit version;
-    hash = "sha256-ZJOA+quJM0QLYyv4gHLAw4KgjUmrArwLT7qCGIKuF2U=";
+    hash = "sha256-w8tX3yzxUuvmLrqumx1d7/Wiauxb1uHH9n5Ev29FGPQ=";
   };
 
   build-system = [ setuptools ];
