@@ -41,5 +41,6 @@ stdenv.mkDerivation rec {
     description = "Small C++ wrapper for the native C ODBC API";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.bzizou ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }
