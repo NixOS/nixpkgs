@@ -94,6 +94,9 @@ clangStdenv.mkDerivation rec {
       --replace-fail "simplisticCastAs" "castAs"
     substituteInPlace src/xmime_internal.hpp \
       --replace-fail "code.str()" "code.str().str()"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4.3)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   dontStrip = debug;
