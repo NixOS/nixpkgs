@@ -16,13 +16,13 @@ in
 
 swiftPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "xcodegen";
-  version = "2.42.0";
+  version = "2.44.1";
 
   src = fetchFromGitHub {
     owner = "yonaskolb";
     repo = "XcodeGen";
     tag = finalAttrs.version;
-    hash = "sha256-wcjmADG+XnS2kR8BHe6ijApomucS9Tx7ZRjWZmTCUiI=";
+    hash = "sha256-RQlmQfmrLZRrgIA09fE84JuqmYkkrz4KSw2dvYXw0Rs=";
   };
 
   # Including SwiftPM as a nativeBuildInput provides a buildPhase for you.
