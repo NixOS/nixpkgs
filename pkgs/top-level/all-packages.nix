@@ -8606,13 +8606,16 @@ with pkgs;
       limesuite
       soapyairspy
       soapyaudio
-      soapybladerf
       soapyhackrf
-      soapyplutosdr
       soapyremote
       soapyrtlsdr
+    ]
+    ++ (lib.optionals stdenv.hostPlatform.isLinux [
+      # Requires libiio, only available on Linux
+      soapybladerf
       soapyuhd
-    ];
+      soapyplutosdr
+    ]);
   };
 
   spandsp = callPackage ../development/libraries/spandsp { };
