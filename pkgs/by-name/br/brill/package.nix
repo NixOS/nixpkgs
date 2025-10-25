@@ -1,18 +1,26 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  requireFile,
+  unzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "brill";
   version = "4.000.073";
 
-  src = fetchzip {
+  nativeBuildInputs = [
+    unzip
+  ];
+
+  src = requireFile {
     url = "https://brill.com/fileasset/The_Brill_Typeface_Package_v_4_0.zip";
-    hash = "sha256-ugmEIkeBzD/4C9wkVfbctEtnzI8Kw+YD6KGcbk4BAf4=";
-    stripRoot = false;
+    hash = "sha256-VXX7yhLV+PULhhO/Aa43P0I3/LL99aN55zePR35UNS4=";
   };
+
+  unpackPhase = ''
+    unzip -q $src
+  '';
 
   installPhase = ''
     runHook preInstall
