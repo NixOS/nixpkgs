@@ -198,6 +198,7 @@ stdenv.mkDerivation rec {
     # Remove this once https://github.com/OpenMathLib/OpenBLAS/issues/5414 is
     # resolved.
     ./disable-sme-sgemm-kernel.patch
+    ./0001-Fix-cross-compilation-for-x86-targets-from-non-x86.patch
   ];
 
   postPatch = ''
