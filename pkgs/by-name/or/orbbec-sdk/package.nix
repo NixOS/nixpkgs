@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "orbbec";
     repo = "OrbbecSDK";
-    rev = "v1.10.27";
+    tag = "v${version}";
     sha256 = "sha256-e4dVlMkjQ5GNMO02RiIcV/IPhwqf5o9wTTPTds9qzL0=";
   };
 
