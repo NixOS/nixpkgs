@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     owner = "orbbec";
     repo = "OrbbecSDK";
     tag = "v${version}";
-    sha256 = "sha256-e4dVlMkjQ5GNMO02RiIcV/IPhwqf5o9wTTPTds9qzL0=";
+    hash = "sha256-e4dVlMkjQ5GNMO02RiIcV/IPhwqf5o9wTTPTds9qzL0=";
   };
 
   nativeBuildInputs = [ autoPatchelfHook ];
