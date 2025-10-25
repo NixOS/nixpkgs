@@ -162,6 +162,21 @@
               default = [ ];
             };
 
+            enableContainers = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Enable basic container (Docker) support for this runner.
+
+                When enabled, the service definition will be adjusted to allow
+                running container-based GitHub Actions steps.
+
+                This assumes you already have a working Docker daemon on the host
+                (e.g. `virtualisation.docker.enable = true`) and that the runner should
+                talk to it via `/var/run/docker.sock`.
+              '';
+            };
+
             extraEnvironment = lib.mkOption {
               type = lib.types.attrs;
               description = ''
