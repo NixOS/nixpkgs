@@ -1,11 +1,14 @@
 {
   lib,
   buildPythonPackage,
+  fetchFromGitHub,
   fetchPypi,
   pythonOlder,
 
   # build-system
+  setuptools,
   uv-build,
+  versioneer,
 
   # dependencies
   click,
@@ -14,6 +17,7 @@
   jedi,
   loro,
   markdown,
+  msgspec,
   narwhals,
   packaging,
   psutil,
@@ -31,15 +35,27 @@
   versionCheckHook,
 }:
 
+let
+  msgspec-m = msgspec.overridePythonAttrs (old: {
+    version = "0.19.2";
+    src = fetchFromGitHub {
+      owner = "marimo-team";
+      repo = "msgspec";
+      rev = "0.19.2";
+      hash = "sha256-rZv/6xZsE6NNbQnTXq5HKsAHm3yHpzlrgNOP2v8s0KI=";
+    };
+    build-system = [ setuptools versioneer ];
+  });
+in
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.15.2";
+  version = "0.17.0";
   pyproject = true;
 
   # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-cmkz/ZyVYfpz4yOxghsXPF4PhRluwqSXo1CcwvwkXFg=";
+    hash = "sha256-9jThrtwfTXhKHMkukWpHS3PK0C/UtyqrUCI3vPEEQ0o=";
   };
 
   build-system = [ uv-build ];
@@ -51,6 +67,7 @@ buildPythonPackage rec {
     jedi
     loro
     markdown
+    msgspec-m
     narwhals
     packaging
     psutil
