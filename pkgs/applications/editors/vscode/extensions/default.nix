@@ -3762,6 +3762,7 @@ let
         };
       };
 
+      pranaygp.vscode-css-peek = callPackage ./pranaygp.vscode-css-peek { };
       prince781.vala = callPackage ./prince781.vala { };
 
       prisma.prisma = buildVscodeMarketplaceExtension {
