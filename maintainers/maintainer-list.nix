@@ -24239,6 +24239,12 @@
     githubId = 12636891;
     name = "Akhil Indurti";
   };
+  smephite = {
+    email = "nix@kai.run";
+    github = "Smephite";
+    githubId = 2955065;
+    name = "Kai Berszin";
+  };
   smironov = {
     email = "grrwlf@gmail.com";
     github = "sergei-mironov";
