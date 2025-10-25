@@ -4840,6 +4840,12 @@
     githubId = 9336788;
     name = "Claes Hallström";
   };
+  clarkadamp = {
+    email = "clark.adam.p@gmail.com";
+    github = "clarkadamp";
+    githubId = 6720621;
+    name = "Adam Clark";
+  };
   clebs = {
     email = "borja.clemente@gmail.com";
     github = "clebs";
