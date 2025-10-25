@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     mainProgram = "phononsettings";
     license = lib.licenses.lgpl2;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 
   src = fetchurl {

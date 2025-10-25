@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "Repository of data files describing media player capabilities";
     homepage = "https://www.freedesktop.org/wiki/Software/media-player-info/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = with platforms; linux;
   };
 }

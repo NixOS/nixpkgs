@@ -115,7 +115,7 @@ effectiveStdenv.mkDerivation rec {
       gpl2Plus
       lgpl21Plus
     ];
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
     platforms = with platforms; unix;
   };
 }

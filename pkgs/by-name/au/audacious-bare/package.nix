@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
     mainProgram = "audacious";
     maintainers = with lib.maintainers; [
       ramkromberg
-      ttuegel
       thiagokokada
     ];
     platforms = lib.platforms.linux;

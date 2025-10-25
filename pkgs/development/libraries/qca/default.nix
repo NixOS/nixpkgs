@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Qt Cryptographic Architecture";
     homepage = "https://invent.kde.org/libraries/qca";
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
     license = licenses.lgpl21Plus;
     platforms = with platforms; unix;
   };

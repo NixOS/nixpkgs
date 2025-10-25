@@ -52,7 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.publicDomain;
     maintainers = with maintainers; [
       sjmackenzie
-      ttuegel
     ];
     platforms = platforms.all;
   };

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Hibou57/PostiATS-Utilities";
     license = licenses.bsd2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.ttuegel ];
+    maintainers = [ ];
   };
 
   buildInputs = [

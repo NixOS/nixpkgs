@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/caryll/otfcc";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
     # Build fails on all platforms with
     #        > configure flags: gmake
     #   > ** Warning: action 'xcode4' sets 'os' field, which is deprecated, use 'targetos' instead.

@@ -339,6 +339,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://github.com/OpenMathLib/OpenBLAS";
     platforms = attrNames configs;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
   };
 }

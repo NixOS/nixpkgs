@@ -555,7 +555,6 @@ stdenv.mkDerivation (
         ];
         maintainers = with maintainers; [
           qknight
-          ttuegel
           periklis
           bkchr
         ];

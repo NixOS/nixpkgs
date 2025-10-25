@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     homepage = "https://phonon.kde.org/";
     description = "GStreamer backend for Phonon";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ttuegel ];
+    maintainers = [ ];
     license = licenses.lgpl21;
   };
 }

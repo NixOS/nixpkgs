@@ -58,7 +58,6 @@ pypkgs.buildPythonApplication rec {
     license = licenses.gpl2Plus;
     homepage = "https://gitlab.com/latex-rubber/rubber";
     maintainers = with maintainers; [
-      ttuegel
       peterhoeg
     ];
     platforms = platforms.unix;
