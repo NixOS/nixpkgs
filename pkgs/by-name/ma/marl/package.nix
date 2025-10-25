@@ -21,6 +21,11 @@ stdenv.mkDerivation {
   # Turn on the flag to install after building the library.
   cmakeFlags = [ "-DMARL_INSTALL=ON" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/google/marl";
     description = "Hybrid thread / fiber task scheduler written in C++ 11";
