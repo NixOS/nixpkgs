@@ -3627,6 +3627,8 @@ let
         };
       };
 
+      nsd.vscode-epics = callPackage ./nsd.vscode-epics { };
+
       ocamllabs.ocaml-platform = buildVscodeMarketplaceExtension {
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ocamllabs.ocaml-platform/changelog";
