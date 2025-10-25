@@ -19,6 +19,7 @@
   fetchDebianPatch,
   fetchFromGitHub,
   fetchFromGitLab,
+  fetchFromGitea,
   perl,
   shortenPerlShebang,
   nixosTests,
@@ -30079,6 +30080,38 @@ with self;
         artistic1
         gpl1Plus
       ];
+    };
+  };
+
+  RevBank = buildPerlPackage rec {
+    pname = "RevBank";
+    version = "11.0.0";
+    src = fetchFromGitea {
+      domain = "codeberg.org";
+      owner = "revspace";
+      repo = "revbank";
+      rev = "v${version}";
+      hash = "sha256-bmExgSLsOYJGfw6Ywp8d0PAU6oJZ0gotu0Rioycjhbc=";
+    };
+    propagatedBuildInputs = [
+      CursesUI
+      JSON
+      LWP
+      TermReadLineGnu
+    ];
+    nativeBuildInputs = [ shortenPerlShebang ];
+    postInstall = ''
+      shortenPerlShebang $out/bin/revbank
+      cp -r plugins $out/bin/plugins
+      cp -r data $out/bin/data
+    '';
+    meta = {
+      description = "Prepaid bar tab payment system for hackerspaces";
+      license = with lib.licenses; [
+        artistic1
+        gpl1Plus
+      ];
+      maintainers = with maintainers; [ polyfloyd ];
     };
   };
 
