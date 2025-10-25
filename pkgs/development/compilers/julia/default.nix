@@ -1,4 +1,9 @@
-{ callPackage, fetchpatch2 }:
+{
+  callPackage,
+  fetchpatch2,
+  lib,
+  stdenv,
+}:
 
 let
   juliaWithPackages = callPackage ../../julia-modules { };
@@ -68,6 +73,26 @@ in
       hash = "sha256-YYQ7lkf9BtOymU8yd6ZN4ctaWlKX2TC4yOO8DpN0ACQ=";
       patches = [
         ./patches/1.9/0002-skip-failing-and-flaky-tests.patch
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        ./patches/1.9/0003-fix-zlib-clang-17.patch
+        ./patches/1.9/0004-fix-lbt-trampolines-clang-17.patch
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # Backport a fix to cli/trampolines/trampolines_aarch64.S
+        # https://github.com/JuliaLang/julia/pull/54634
+        (fetchpatch2 {
+          url = "https://github.com/JuliaLang/julia/commit/c954935b9050b462c2763e78327e75bf6d389d75.patch";
+          hash = "sha256-YXfVlq9H8H0GL2tv52e10KHoI9fIO3szK1zNe/zYqaQ=";
+        })
+        (fetchpatch2 {
+          name = "fix-libcurl-rpath.patch";
+          url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+          hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+        })
+
+        ./patches/1.9/0001-patch-options-for-codesign.patch
+        ./patches/1.9/0005-lbt-suffix-hint.patch
       ];
     }) { }
   );
@@ -85,6 +110,19 @@ in
           revert = true;
           hash = "sha256-gXC3LE3AuHMlSdA4dW+rbAhJpSB6ZMaz9X1qrHDPX7Y=";
         })
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        ./patches/1.10/0003-fix-zlib-clang-17.patch
+        ./patches/1.10/0004-fix-lbt-trampolines-clang-17.patch
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        ./patches/1.10/0005-lbt-suffix-hint.patch
+
+        (fetchpatch2 {
+          name = "fix-libcurl-rpath.patch";
+          url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+          hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+        })
       ];
     }) { }
   );
@@ -94,6 +132,19 @@ in
       hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
       patches = [
         ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
+      ]
+      ++ lib.optionals stdenv.cc.isClang [
+        ./patches/1.11/0003-fix-zlib-clang-17.patch
+        ./patches/1.11/0004-fix-lbt-trampolines-clang-17.patch
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        ./patches/1.11/0005-lbt-suffix-hint.patch
+
+        (fetchpatch2 {
+          name = "fix-libcurl-rpath.patch";
+          url = "https://github.com/JuliaLang/julia/commit/d10a0fbcfe7e339e5d9bab161ff64dd022b44418.patch";
+          hash = "sha256-qTlzxALNiMOvlgDDPjHsJiOAWifwGQwhF07Q5vmfp/A=";
+        })
       ];
     }) { }
   );

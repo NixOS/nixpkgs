@@ -1,0 +1,26 @@
+From 328058e37c94a544a15ee5686be46101ace6ade8 Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Fri, 19 Sep 2025 16:48:58 -0500
+Subject: [PATCH] stdlib/LinearAlgebra: use suffix_hint to identify BLAS as
+ ILP64
+
+---
+ stdlib/LinearAlgebra/src/LinearAlgebra.jl | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/stdlib/LinearAlgebra/src/LinearAlgebra.jl b/stdlib/LinearAlgebra/src/LinearAlgebra.jl
+index 624cca69b8..ea3b8e85fe 100644
+--- a/stdlib/LinearAlgebra/src/LinearAlgebra.jl
++++ b/stdlib/LinearAlgebra/src/LinearAlgebra.jl
+@@ -630,7 +630,7 @@ end
+ 
+ function __init__()
+     try
+-        BLAS.lbt_forward(OpenBLAS_jll.libopenblas_path; clear=true)
++        BLAS.lbt_forward(OpenBLAS_jll.libopenblas_path; clear=true, suffix_hint="64_")
+         BLAS.check()
+     catch ex
+         Base.showerror_nostdio(ex, "WARNING: Error during initialization of module LinearAlgebra")
+-- 
+2.50.1
+
