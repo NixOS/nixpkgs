@@ -2507,7 +2507,7 @@ with pkgs;
 
   cffconvert = python3Packages.toPythonApplication python3Packages.cffconvert;
 
-  ckb-next = libsForQt5.callPackage ../tools/misc/ckb-next { };
+  ckb-next = kdePackages.callPackage ../tools/misc/ckb-next { };
 
   clickhouse-lts = callPackage ../by-name/cl/clickhouse/lts.nix { };
 
