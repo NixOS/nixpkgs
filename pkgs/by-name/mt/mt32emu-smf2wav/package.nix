@@ -21,6 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i -e '/add_subdirectory(mt32emu)/d' CMakeLists.txt
+    # This directly resolves the 'The dependency target "mt32emu" ... does not exist' error.
+    sed -i -e '/add_dependencies(mt32emu-smf2wav mt32emu)/d' CMakeLists.txt
+
+    substituteInPlace {./,mt32emu_smf2wav/,mt32emu_smf2wav/libsmf/}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [
