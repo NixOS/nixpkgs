@@ -1,5 +1,8 @@
 {
+  stdenv,
   runCommand,
+  makeFontsConf,
+  dejavu_fonts,
   python,
   plotly,
   pandas,
@@ -13,4 +16,7 @@ runCommand "${kaleido.pname}-tests" {
     pandas
     kaleido
   ];
+  FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ dejavu_fonts ]; };
+  # Rendering launches a browser that can't run in the macOS sandbox.
+  __noChroot = stdenv.hostPlatform.isDarwin;
 } "python3 ${./tests.py}"
