@@ -807,6 +807,10 @@ checkConfigOutput '^true$' config.v2checkedPass ./add-check.nix
 checkConfigError 'A definition for option .* is not of type .attribute set of signed integer.*' config.v2checkedFail ./add-check.nix
 
 
+# Option name suggestions
+checkConfigError 'Did you mean .set\.enable.\?' config.set ./error-typo-nested.nix
+checkConfigError 'Did you mean .set.\?' config ./error-typo-outside-with-nested.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
