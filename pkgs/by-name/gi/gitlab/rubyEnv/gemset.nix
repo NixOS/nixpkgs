@@ -7528,10 +7528,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1bpsh5dbvybsa8qnv4dg11a6f2zn4sndarf7pk4iaayjgaspbrmm";
+      sha256 = "0syhyw1bp9nbb0fvcmm58y1c6iav6xw6b4bzjz1rz2j1d7c012br";
       type = "gem";
     };
-    version = "5.4.1";
+    version = "5.4.0";
   };
   redis-actionpack = {
     dependencies = [
@@ -7579,10 +7579,10 @@ src: {
     platforms = [ ];
     source = {
       remotes = [ "https://rubygems.org" ];
-      sha256 = "1sj4b3j7i3rb5a276g7yyd95kji4j9sl6wmqfgpz39gx06qlni47";
+      sha256 = "0fsnfi15xiy8sal6av11fqfjmdmjpy93amf790i0zwqcf1iq1qbw";
       type = "gem";
     };
-    version = "5.4.1";
+    version = "5.4.0";
   };
   redis-namespace = {
     dependencies = [ "redis" ];
