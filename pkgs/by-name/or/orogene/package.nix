@@ -57,5 +57,8 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "oro";
+    knownVulnerabilities = [
+      "'orogene' uses a wasm-specific fork of async-tar that is vulnerable to CVE-2025-62518, which is not supported by its upstream"
+    ];
   };
 }
