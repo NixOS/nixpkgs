@@ -134,10 +134,7 @@ let
           ;
       };
 
-      rocblas = self.callPackage ./rocblas {
-        buildTests = true;
-        buildBenchmarks = true;
-      };
+      rocblas = self.callPackage ./rocblas { };
 
       rocsolver = self.callPackage ./rocsolver { };
 
