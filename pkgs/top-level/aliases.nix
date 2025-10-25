@@ -307,7 +307,6 @@ let
       rocs
       sddm-kcm
       shelf
-      sierra-breeze-enhanced
       skanlite
       skanpage
       soundkonverter
@@ -2422,7 +2421,6 @@ mapAliases {
   shell-hist = throw "'shell-hist' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   shipyard = jumppad; # Added 2023-06-06
   siduck76-st = st-snazzy; # Added 2024-12-24
-  sierra-breeze-enhanced = throw "'sierra-breeze-enhanced' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   signald = throw "'signald' has been removed due to lack of upstream maintenance"; # Added 2025-05-17
   signaldctl = throw "'signaldctl' has been removed due to lack of upstream maintenance"; # Added 2025-05-17
   signal-desktop-beta = throw "signal-desktop-beta has been removed to make the signal-desktop package easier to maintain"; # Added 2024-11-20
