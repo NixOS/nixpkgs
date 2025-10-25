@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   pythonImportsCheck = [ "slepc4py" ];
 
-  shellHook = ./setup-hook.sh;
+  setupHook = ./setup-hook.sh;
 
   meta = {
     description = "Scalable Library for Eigenvalue Problem Computations";
