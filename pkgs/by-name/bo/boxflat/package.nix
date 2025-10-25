@@ -89,14 +89,14 @@ python3Packages.buildPythonPackage rec {
   '';
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "Boxflat";
-      desktopName = name;
+      desktopName = "Boxflat";
       genericName = "settings";
       comment = "Moza Racing settings app";
       exec = "boxflat";
       icon = "io.github.lawstorant.boxflat";
-      startupWMClass = icon;
+      startupWMClass = "io.github.lawstorant.boxflat";
       startupNotify = true;
       categories = [
         "Game"

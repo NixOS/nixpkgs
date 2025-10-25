@@ -87,11 +87,11 @@ mkDerivation rec {
   ++ lib.optionals withMPV [ mpv-unwrapped.dev ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "AniLibria";
-      desktopName = name;
+      desktopName = "AniLibria";
       icon = "anilibria";
-      comment = meta.description;
+      comment = "AniLibria cross platform desktop client";
       genericName = "AniLibria desktop client";
       categories = [
         "Qt"
@@ -99,7 +99,7 @@ mkDerivation rec {
         "Player"
       ];
       keywords = [ "anime" ];
-      exec = name;
+      exec = "AniLibria";
       terminal = false;
     })
   ];

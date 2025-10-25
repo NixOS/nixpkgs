@@ -71,13 +71,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "Sonic Robo Blast 2 Kart";
       exec = "srb2kart";
       icon = "srb2kart";
       comment = "Kart racing mod based on SRB2";
-      desktopName = name;
-      genericName = name;
+      desktopName = "Sonic Robo Blast 2 Kart";
+      genericName = "Sonic Robo Blast 2 Kart";
       startupWMClass = ".srb2kart-wrapped";
       categories = [ "Game" ];
     })

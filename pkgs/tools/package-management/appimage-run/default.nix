@@ -3,19 +3,15 @@
   appimageTools,
   buildFHSEnv,
   makeDesktopItem,
-  extraPkgs ? pkgs: [ ],
+  extraPkgs ? [ ],
   appimage-run-tests ? null,
 }:
 
 let
-  name = "appimage-run";
-
-  fhsArgs = appimageTools.defaultFhsEnvArgs;
-
   desktopItem = makeDesktopItem {
-    inherit name;
-    exec = name;
-    desktopName = name;
+    name = "appimage-run";
+    exec = "appimage-run";
+    desktopName = "appimage-run";
     genericName = "AppImage runner";
     noDisplay = true;
     mimeTypes = [
@@ -29,10 +25,13 @@ let
   };
 in
 buildFHSEnv (
-  lib.recursiveUpdate fhsArgs {
-    inherit name;
+  lib.recursiveUpdate appimageTools.defaultFhsEnvArgs {
+    name = "appimage-run";
 
-    targetPkgs = pkgs: [ appimageTools.appimage-exec ] ++ fhsArgs.targetPkgs pkgs ++ extraPkgs pkgs;
+    targetPkgs =
+      pkgs:
+      [ appimageTools.appimage-exec ] ++ appimageTools.defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs;
+
     runScript = "appimage-exec.sh";
 
     extraInstallCommands = ''

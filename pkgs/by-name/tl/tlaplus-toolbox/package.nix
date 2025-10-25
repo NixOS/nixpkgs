@@ -11,19 +11,6 @@
   wrapGAppsHook3,
 }:
 
-let
-  desktopItem = makeDesktopItem rec {
-    name = "TLA+Toolbox";
-    exec = "tla-toolbox";
-    icon = "tla-toolbox";
-    comment = "IDE for TLA+";
-    desktopName = name;
-    genericName = comment;
-    categories = [ "Development" ];
-    startupWMClass = "TLA+ Toolbox";
-  };
-
-in
 stdenv.mkDerivation rec {
   pname = "tla-toolbox";
   version = "1.7.1";
@@ -40,6 +27,17 @@ stdenv.mkDerivation rec {
   ];
 
   dontWrapGApps = true;
+
+  desktopItem = makeDesktopItem {
+    name = "TLA+Toolbox";
+    exec = "tla-toolbox";
+    icon = "tla-toolbox";
+    comment = "IDE for TLA+";
+    desktopName = "TLA+Toolbox";
+    genericName = "IDE for TLA+";
+    categories = [ "Development" ];
+    startupWMClass = "TLA+ Toolbox";
+  };
 
   installPhase = ''
     runHook preInstall

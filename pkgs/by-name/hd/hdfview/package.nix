@@ -55,11 +55,11 @@ stdenv.mkDerivation (finalAttrs: {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "HDFView";
-    desktopName = name;
-    exec = name;
-    icon = name;
+    desktopName = "HDFView";
+    exec = "HDFView";
+    icon = "HDFView";
     comment = finalAttrs.finalPackage.meta.description;
     categories = [
       "Science"

@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
       runHook postBuild
     '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "IPMIView";
     exec = "IPMIView";
-    desktopName = name;
+    desktopName = "IPMIView";
     genericName = "Supermicro BMC manager";
     categories = [ "Network" ];
   };

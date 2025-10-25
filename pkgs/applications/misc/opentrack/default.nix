@@ -87,14 +87,14 @@ mkDerivation {
   '';
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "opentrack";
       exec = "opentrack";
       icon = fetchurl {
         url = "https://github.com/opentrack/opentrack/raw/opentrack-${version}/gui/images/opentrack.png";
         hash = "sha256-9k3jToEpdW14ErbNGHM4c0x/LH7k14RmtvY4dOYnITQ=";
       };
-      desktopName = name;
+      desktopName = "opentrack";
       genericName = "Head tracking software";
       categories = [ "Utility" ];
     })

@@ -79,13 +79,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "Sonic Robo Blast 2";
       exec = "srb2";
       icon = "srb2";
-      comment = finalAttrs.meta.description;
-      desktopName = name;
-      genericName = name;
+      comment = "Sonic Robo Blast 2 is a 3D Sonic the Hedgehog fangame based on a modified version of Doom Legacy";
+      desktopName = "Sonic Robo Blast 2";
+      genericName = "Sonic Robo Blast 2";
       categories = [ "Game" ];
       startupWMClass = ".srb2-wrapped";
     })

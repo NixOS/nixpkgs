@@ -113,23 +113,23 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "FreeFileSync";
-      desktopName = name;
+      desktopName = "FreeFileSync";
       genericName = "Folder Comparison and Synchronization";
-      icon = name;
-      exec = name;
+      icon = "FreeFileSync";
+      exec = "FreeFileSync";
       categories = [
         "Utility"
         "FileTools"
       ];
     })
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "RealTimeSync";
-      desktopName = name;
+      desktopName = "RealTimeSync";
       genericName = "Automated Synchronization";
-      icon = name;
-      exec = name;
+      icon = "RealTimeSync";
+      exec = "RealTimeSync";
       categories = [
         "Utility"
         "FileTools"
