@@ -124,6 +124,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoPatches = [
     ./0002-fix-duplicate-reqwest.patch
+    # Upstream commit doesn't apply cleanly to 0.189.5 and we can't upgrade to newer
+    # releases on 25.05 as they require a newer version of the Rust compiler.
+    # https://github.com/zed-industries/zed/commit/4a93719b6b5666fd04cbe63fd90aba28c3547f0d
+    ./0003-cve-2025-62518.patch
   ];
 
   postPatch =
@@ -138,7 +142,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         --replace-fail "inner.redirect(policy)" "inner.redirect_policy(policy)"
     '';
 
-  cargoHash = "sha256-YhdwCNTbBphWugguoWQqrGf2fRB5Jv40MElW6hbcxtk=";
+  cargoHash = "sha256-86Y2fyeiCYPWdg2ygt7RbUFrHVIc53yDeqvT7Unmndo=";
 
   nativeBuildInputs = [
     cmake
