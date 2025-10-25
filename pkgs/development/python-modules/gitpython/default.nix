@@ -5,16 +5,13 @@
   fetchFromGitHub,
   gitdb,
   pkgs,
-  pythonOlder,
-  typing-extensions,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "gitpython";
   version = "3.1.45";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "gitpython-developers";
@@ -23,17 +20,18 @@ buildPythonPackage rec {
     hash = "sha256-VHnuHliZEc/jiSo/Zi9J/ipAykj7D6NttuzPZiE8svM=";
   };
 
-  propagatedBuildInputs = [
-    ddt
-    gitdb
-    pkgs.gitMinimal
-  ]
-  ++ lib.optionals (pythonOlder "3.10") [ typing-extensions ];
-
   postPatch = ''
     substituteInPlace git/cmd.py \
       --replace 'git_exec_name = "git"' 'git_exec_name = "${pkgs.gitMinimal}/bin/git"'
   '';
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    ddt
+    gitdb
+    pkgs.gitMinimal
+  ];
 
   # Tests require a git repo
   doCheck = false;
