@@ -14,7 +14,7 @@
 #   192.168.0.1         192.168.0.3  192.168.1.3           192.168.1.2
 #
 # See the NixOS manual for how to run this test:
-# https://nixos.org/nixos/manual/index.html#sec-running-nixos-tests-interactively
+# https://nixos.org/manual/nixos/stable#sec-running-nixos-tests-interactively
 
 { pkgs, ... }:
 

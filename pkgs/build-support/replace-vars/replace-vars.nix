@@ -16,7 +16,7 @@
 
   # Inputs
 
-  `src` ([Store Path](https://nixos.org/manual/nix/latest/store/store-path.html#store-path) String)
+  `src` ([Store Path](https://nix.dev/manual/nix/latest/store/store-path.html#store-path) String)
   : The file in which to replace variables.
 
   `replacements` (AttrsOf String)

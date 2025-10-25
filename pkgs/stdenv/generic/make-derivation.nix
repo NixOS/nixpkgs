@@ -60,7 +60,7 @@ let
     :::{.note}
     This is used as the fundamental building block of most other functions in Nixpkgs for creating derivations.
 
-    Most arguments are also passed through to the underlying call of [`derivation`](https://nixos.org/manual/nix/stable/language/derivations).
+    Most arguments are also passed through to the underlying call of [`derivation`](https://nix.dev/manual/nix/stable/language/derivations).
     :::
   */
   mkDerivation = fnOrAttrs: makeDerivationExtensible (toFunction fnOrAttrs);
@@ -301,10 +301,10 @@ let
     #
     # See also:
     #
-    # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+    # * https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
     #   Details on how to use this mkDerivation function
     #
-    # * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
+    # * https://nix.dev/manual/nix/stable/expressions/derivations.html#derivations
     #   Explanation about derivations in general
     {
 
@@ -763,13 +763,13 @@ let
     #
     # See also:
     #
-    # * https://nixos.org/nixpkgs/manual/#sec-using-stdenv
+    # * https://nixos.org/manual/nixpkgs/stable/#sec-using-stdenv
     #   Details on how to use this mkDerivation function
     #
-    # * https://nixos.org/manual/nix/stable/expressions/derivations.html#derivations
+    # * https://nix.dev/manual/nix/stable/expressions/derivations.html#derivations
     #   Explanation about derivations in general
     #
-    # * [package attributes]: https://nixos.org/manual/nix/stable/glossary#package-attribute-set
+    # * [package attributes]: https://nix.dev/manual/nix/stable/glossary#package-attribute-set
     {
 
       # Configure Phase

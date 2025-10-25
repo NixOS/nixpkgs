@@ -239,7 +239,7 @@ rec {
               <title>Temporarily unavailable</title>
               <para>
                 The NixOS manual is currently not available in EPUB format,
-                please use the <link xlink:href="https://nixos.org/nixos/manual">HTML manual</link>
+                please use the <link xlink:href="https://nixos.org/manual/nixos/stable">HTML manual</link>
                 instead.
               </para>
               <para>

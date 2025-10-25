@@ -79,7 +79,7 @@ python3Packages.buildPythonApplication rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  # See https://nixos.org/nixpkgs/manual/#ssec-gnome-common-issues-double-wrapped
+  # See https://nixos.org/manual/nixpkgs/stable/#ssec-gnome-common-issues-double-wrapped
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")

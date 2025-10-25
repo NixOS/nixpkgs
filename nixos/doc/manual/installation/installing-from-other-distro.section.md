@@ -26,7 +26,7 @@ The first steps to all these are the same:
     ```
 
     More details in the [ Nix
-    manual](https://nixos.org/nix/manual/#chap-quick-start)
+    manual](https://nix.dev/manual/nix/stable/#chap-quick-start)
 
 1.  Switch to the NixOS channel:
 

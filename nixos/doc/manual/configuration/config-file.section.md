@@ -108,7 +108,7 @@ Strings
     (disregarding the indentation of empty lines), and that characters
     like `"` and `\` are not special (making it more convenient for
     including things like shell code). See more info about this in the
-    Nix manual [here](https://nixos.org/nix/manual/#ssec-values).
+    Nix manual [here](https://nix.dev/manual/nix/stable/#ssec-values).
 
 Booleans
 
