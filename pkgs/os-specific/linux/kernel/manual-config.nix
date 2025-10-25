@@ -512,6 +512,14 @@ lib.makeOverridable (
           find -empty -type d -delete
         '';
 
+        # POWER usually uses an uncompressed kernel, due to better support with boot firmware & loaders
+        # QEMU emulation requires a kernel that is at most 128 MiB. We're somewhere ~ 340 MiB, so strip.
+        preFixup = lib.optionalString (stdenv.hostPlatform.isPower64 && kernelConf.target == "vmlinux") ''
+          stripDebugList+=(
+            vmlinux
+          )
+        '';
+
         requiredSystemFeatures = [ "big-parallel" ];
 
         meta = {
