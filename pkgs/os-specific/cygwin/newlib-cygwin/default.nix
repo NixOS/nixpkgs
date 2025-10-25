@@ -11,11 +11,29 @@
   perl,
   w32api,
   w32api-headers,
+  newlib-cygwin-headers,
 
   headersOnly ? false,
 }:
 
-(if headersOnly then stdenvNoCC else stdenvNoLibc).mkDerivation (
+let
+  stdenv =
+    let
+      bintools = stdenvNoLibc.cc.bintools.override {
+        libc = newlib-cygwin-headers;
+        noLibc = false;
+      };
+    in
+    stdenvNoLibc.override {
+      cc = stdenvNoLibc.cc.override {
+        libc = newlib-cygwin-headers;
+        noLibc = false;
+        inherit bintools;
+      };
+    };
+
+in
+(if headersOnly then stdenvNoCC else stdenv).mkDerivation (
   finalAttrs:
   {
     pname = "newlib-cygwin${lib.optionalString headersOnly "-headers"}";
