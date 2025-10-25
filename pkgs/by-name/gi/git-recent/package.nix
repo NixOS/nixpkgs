@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "git-recent";
-  version = "2.0.4";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-recent";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-b6AWLEXCOza+lIHlvyYs3M6yHGr2StYXzl7OsA9gv/k=";
+    hash = "sha256-qE6UNNuFfB2n3MuR+9gCRQCJKe0jOgW8ZwzlBZwvkrs=";
   };
 
   nativeBuildInputs = [ makeBinaryWrapper ];
