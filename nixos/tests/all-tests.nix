@@ -992,6 +992,7 @@ in
   };
   ndppd = runTest ./ndppd.nix;
   nebula = runTest ./nebula.nix;
+  nebula-lighthouse-service = runTest ./nebula-lighthouse-service.nix;
   neo4j = runTest ./neo4j.nix;
   netbird = runTest ./netbird.nix;
   netbox-upgrade = runTest ./web-apps/netbox-upgrade.nix;
