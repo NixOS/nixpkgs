@@ -10,7 +10,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -18,8 +17,6 @@ buildPythonPackage rec {
   pname = "google-cloud-workstations";
   version = "0.6.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "google_cloud_workstations";
