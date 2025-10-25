@@ -217,7 +217,6 @@ in
     };
 
     services = {
-      udev.packages = with pkgs; [ android-udev-rules ];
       avahi = {
         enable = true;
         publish = {

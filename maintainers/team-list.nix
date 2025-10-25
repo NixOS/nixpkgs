@@ -37,7 +37,6 @@ with lib.maintainers;
       aanderse
       arianvp
       emily
-      flokli
       m1cr0man
     ];
     scope = "Maintain ACME-related packages and modules.";
@@ -116,6 +115,7 @@ with lib.maintainers;
       happysalada
       minijackson
       yurrriq
+      savtrip
     ];
     github = "beam";
     scope = "Maintain BEAM-related packages and modules.";

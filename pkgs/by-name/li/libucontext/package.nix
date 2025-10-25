@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libucontext";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "kaniini";
     repo = "libucontext";
     rev = "libucontext-${version}";
-    hash = "sha256-aBmGt8O/HTWM9UJMKWz37uDLDkq1JEYTUb1SeGu9j9M=";
+    hash = "sha256-MQCRRyA64MEtPoUtf1tFVbhiMDc4DlepSjMEFcb/Kh4=";
   };
 
   nativeBuildInputs = [

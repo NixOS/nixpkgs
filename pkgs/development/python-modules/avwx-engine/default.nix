@@ -10,7 +10,6 @@
   pytest-cov-stub,
   pytestCheckHook,
   python-dateutil,
-  pythonOlder,
   rapidfuzz,
   scipy,
   shapely,
@@ -20,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "avwx-engine";
-  version = "1.9.5";
+  version = "1.9.6";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "avwx-rest";
     repo = "avwx-engine";
     tag = version;
-    hash = "sha256-zhXUzePbgwmBIP7yMT/FcPYdSZC3qJtwEwkHtlfmv3Q=";
+    hash = "sha256-RxQm1n+U2UTzg1QlPwmOaPUWUptAj30URHfs9Degf/c=";
   };
 
   build-system = [ hatchling ];
@@ -76,7 +73,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Aviation Weather parsing engine";
     homepage = "https://github.com/avwx-rest/avwx-engine";
-    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${version}/changelog.md";
+    changelog = "https://github.com/avwx-rest/avwx-engine/blob/${src.tag}/changelog.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -18,6 +18,7 @@
   nest-asyncio,
   numpy,
   protobuf,
+  psutil,
   pyyaml,
   simplejson,
   tensorstore,
@@ -36,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "orbax-checkpoint";
-  version = "0.11.25";
+  version = "0.11.26";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "orbax";
     tag = "v${version}";
-    hash = "sha256-myhPWKP2uI9NQKZki1Rr+B6Kusn0qNWREKHkiDrSheA=";
+    hash = "sha256-CY5Bs/o8fU57QJETYnyJVkP7Y+cahpqZftyIJNU+GvU=";
   };
 
   sourceRoot = "${src.name}/checkpoint";
@@ -65,6 +66,7 @@ buildPythonPackage rec {
     nest-asyncio
     numpy
     protobuf
+    psutil
     pyyaml
     simplejson
     tensorstore

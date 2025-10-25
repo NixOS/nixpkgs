@@ -1,0 +1,39 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 5128335..bacf495 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -536,16 +536,6 @@ if(UHDR_BUILD_TESTS)
+     set(GTEST_LIB_PREFIX ${GTEST_BINARY_DIR}/lib/)
+   endif()
+   set(GTEST_BOTH_LIBRARIES ${GTEST_LIB_PREFIX}${GTEST_LIB} ${GTEST_LIB_PREFIX}${GTEST_LIB_MAIN})
+-  ExternalProject_Add(${GTEST_TARGET_NAME}
+-      GIT_REPOSITORY https://github.com/google/googletest
+-      GIT_TAG v1.14.0
+-      PREFIX ${GTEST_PREFIX_DIR}
+-      SOURCE_DIR ${GTEST_SOURCE_DIR}
+-      BINARY_DIR ${GTEST_BINARY_DIR}
+-      CMAKE_ARGS ${UHDR_CMAKE_ARGS}
+-      BUILD_BYPRODUCTS ${GTEST_BOTH_LIBRARIES}
+-      INSTALL_COMMAND ""
+-  )
+ endif()
+ 
+ if(UHDR_BUILD_BENCHMARK)
+@@ -675,16 +665,15 @@ endif()
+ 
+ if(UHDR_BUILD_TESTS)
+   add_executable(ultrahdr_unit_test ${UHDR_TEST_SRCS_LIST})
+-  add_dependencies(ultrahdr_unit_test ${GTEST_TARGET_NAME} ${UHDR_CORE_LIB_NAME})
+   target_compile_options(ultrahdr_unit_test PRIVATE ${UHDR_WERROR_FLAGS})
+   target_include_directories(ultrahdr_unit_test PRIVATE
+     ${PRIVATE_INCLUDE_DIR}
+-    ${GTEST_INCLUDE_DIRS}
++    @GTEST_INCLUDE_DIRS@
+   )
+   if(UHDR_BUILD_FUZZERS)
+     target_link_options(ultrahdr_unit_test PRIVATE -fsanitize=fuzzer-no-link)
+   endif()
+-  target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} ${GTEST_BOTH_LIBRARIES})
++  target_link_libraries(ultrahdr_unit_test ${UHDR_CORE_LIB_NAME} -lgtest -lgtest_main)
+   add_test(NAME UHDRUnitTests, COMMAND ultrahdr_unit_test)
+ endif()

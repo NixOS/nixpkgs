@@ -1,0 +1,8 @@
+--- a/CMakeLists.txt	2025-10-23 07:12:12.766221736 +0100
++++ b/CMakeLists.txt	2025-10-23 07:14:58.069499300 +0100
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.6)
++cmake_minimum_required(VERSION 2.6...3.10)
+ 
+ include(GNUInstallDirs)
+ include(CheckCCompilerFlag)

@@ -124,6 +124,42 @@
   "inkscape-plugins": [
     "index.html#inkscape-plugins"
   ],
+  "julec-hook": [
+    "index.html#julec-hook"
+  ],
+  "julec-hook-example-code-snippet": [
+    "index.html#julec-hook-example-code-snippet"
+  ],
+  "julec-hook-variable-dontusejulecbuild": [
+    "index.html#julec-hook-variable-dontusejulecbuild"
+  ],
+  "julec-hook-variable-dontusejuleccheck": [
+    "index.html#julec-hook-variable-dontusejuleccheck"
+  ],
+  "julec-hook-variable-dontusejulecinstall": [
+    "index.html#julec-hook-variable-dontusejulecinstall"
+  ],
+  "julec-hook-variable-jule-out-dir": [
+    "index.html#julec-hook-variable-jule-out-dir"
+  ],
+  "julec-hook-variable-jule-out-name": [
+    "index.html#julec-hook-variable-jule-out-name"
+  ],
+  "julec-hook-variable-jule-src-dir": [
+    "index.html#julec-hook-variable-jule-src-dir"
+  ],
+  "julec-hook-variable-jule-test-dir": [
+    "index.html#julec-hook-variable-jule-test-dir"
+  ],
+  "julec-hook-variable-jule-test-out-dir": [
+    "index.html#julec-hook-variable-jule-test-out-dir"
+  ],
+  "julec-hook-variable-jule-test-out-name": [
+    "index.html#julec-hook-variable-jule-test-out-name"
+  ],
+  "julec-hook-variables": [
+    "index.html#julec-hook-variables"
+  ],
   "major-ghc-deprecation": [
     "index.html#major-ghc-deprecation"
   ],
@@ -3770,6 +3806,9 @@
   ],
   "buildpythonpackage-parameters": [
     "index.html#buildpythonpackage-parameters"
+  ],
+  "overriding-python-build-helpers": [
+    "index.html#overriding-python-build-helpers"
   ],
   "overriding-python-packages": [
     "index.html#overriding-python-packages"

@@ -48,6 +48,7 @@ buildPythonPackage rec {
     "clarifai-protocol"
     "click"
     "fsspec"
+    "psutil"
     "ruff"
     "schema"
     "uv"

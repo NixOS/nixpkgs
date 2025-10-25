@@ -4,6 +4,12 @@
   ...
 }:
 {
+  imports = [
+    ./disk.nix
+    ./keyboard.nix
+    ./system.nix
+  ];
+
   meta.maintainers = with lib.maintainers; [ mic92 ];
 
   options.hardware.facter = with lib; {
