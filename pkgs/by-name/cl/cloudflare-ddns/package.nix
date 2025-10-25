@@ -1,35 +1,70 @@
 {
   lib,
-  buildGoModule,
+  stdenvNoCC,
   fetchFromGitHub,
+  makeWrapper,
+  bashNonInteractive,
+  curl,
+  jq,
+  coreutils,
+  gawk,
+  gnugrep,
+  nix-update-script,
 }:
-buildGoModule (finalAttrs: {
+
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "cloudflare-ddns";
-  version = "1.15.1";
+  version = "2.0";
 
   src = fetchFromGitHub {
-    owner = "favonia";
-    repo = "cloudflare-ddns";
+    owner = "fernvenue";
+    repo = finalAttrs.pname;
     tag = "v${finalAttrs.version}";
-    hash = "sha256-/806eUsuWhiCnvO1DasPW2xVFYYxnmki3KIDre7gjrg=";
+    hash = "sha256-+0AQAa7j6nPaIy0gHEKM1WgPJ7661+NBB1j/dsb7X9Q=";
   };
 
-  vendorHash = "sha256-XIfPL1BNA8mcQH+w4AhThh80gh/1vUjKDtFN97O5zqw=";
+  strictDeps = true;
 
-  subPackages = [
-    "cmd/ddns"
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  meta = with lib; {
-    description = "Dynamic DNS (DDNS) client for Cloudflare";
+  postPatch = ''
+    substituteInPlace cloudflare-ddns.sh \
+      --replace-fail '#!/bin/bash' '#!${lib.getExe bashNonInteractive}'
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    install -D cloudflare-ddns.sh $out/bin/cloudflare-ddns
+
+    wrapProgram $out/bin/cloudflare-ddns \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          jq
+          coreutils
+          gawk
+          gnugrep
+        ]
+      }
+
+    runHook postInstall
+  '';
+
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    description = "Lightweight Cloudflare DDNS script";
     longDescription = ''
-      A feature-rich and robust Cloudflare DDNS updater with a small footprint.
-      The program will detect your machine’s public IP addresses and update DNS records using the Cloudflare API.
+      A lightweight script for updating Cloudflare DNS records automatically.
+      Supports IPv4 and IPv6, multiple records, smart monitoring, automatic caching,
+      multiple authentication methods, proxy support, systemd integration,
+      Telegram notifications, CSV logging, and hook commands.
     '';
-    homepage = "https://github.com/favonia/cloudflare-ddns";
-    mainProgram = "ddns";
-    license = licenses.asl20;
-    maintainers = [ ];
-    platforms = platforms.unix ++ platforms.darwin;
+    homepage = "https://github.com/fernvenue/cloudflare-ddns";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bdim404 ];
+    platforms = lib.platforms.unix;
+    mainProgram = "cloudflare-ddns";
   };
 })
