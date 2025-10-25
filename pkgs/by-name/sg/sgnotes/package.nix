@@ -1,35 +1,36 @@
+
 { stdenv, fetchFromGitea, lib, pkgs, }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "sglauncher";
+  pname = "sgnotes";
   version = "1.1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "ItsZariep";
-    repo = "SGLauncher";
+    repo = "SGNotes";
     rev = finalAttrs.version;
-    hash = "sha256-zIhutvtNA0UJ8+nMWv2t6hMpO9wkYI2sjSNT78ggn58=";
+    hash = "sha256-WpQOtjPICbVB3TLSKXLa/7uw8rsWhBz4pljhTxWxLkw=";
   };
 
   nativeBuildInputs = [ pkgs.pkg-config ];
-  buildInputs = [ pkgs.gtk3 ];
+  buildInputs = [ pkgs.gtk3 pkgs.gtksourceview4 ];
 
   buildPhase = ''
     cd src
-    ${pkgs.gnumake}/bin/make sglauncher SHELL=${pkgs.bash}/bin/bash
+    ${pkgs.gnumake}/bin/make SHELL=${pkgs.bash}/bin/bash
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp sglauncher $out/bin
+    cp sgnotes $out/bin
   '';
 
   meta = {
-    description = "Simple GTK Launcher";
-    homepage = "https://codeberg.org/ItsZariep/SGLauncher";
+    description = "Simple GTK Notes App";
+    homepage = "https://codeberg.org/ItsZariep/SGNotes";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ reylak ];
-    mainProgram = "sglauncher";
+    mainProgram = "sgnotes";
   };
 })
