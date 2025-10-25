@@ -31,7 +31,7 @@
   cctools,
   # Allow to independently override the jdks used to build and run respectively
   jdk_headless,
-  version ? "8.4.1",
+  version ? "8.4.2",
 }:
 
 let
@@ -45,7 +45,7 @@ let
 
   src = fetchzip {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    hash = "sha256-DqJqW7C1QODOS+vJrs/+ixsP3coZh80VdpPM4g0vxFI=";
+    hash = "sha256-5oNYKHPaDkpunl6oC104Rh1wAEMWfLfvCFdGHlXZn4o=";
     stripRoot = false;
   };
 
@@ -144,9 +144,7 @@ stdenv.mkDerivation rec {
     # Nixpkgs toolcahins do not support that (yet?) and get confused.
     # Also add an explicit /usr/bin prefix that will be patched below.
     (replaceVars ./patches/xcode.patch {
-      usrBinEnv = "${coreutils}/bin/env";
       clangDarwin = "${stdenv.cc}/bin/clang";
-      codesign = "${darwin.sigtool}/bin/codesign";
     })
 
     # Revert preference for apple_support over rules_cc toolchain for now
