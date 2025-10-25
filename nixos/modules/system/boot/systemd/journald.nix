@@ -86,13 +86,16 @@ in
       type = lib.types.lines;
       example = "Storage=volatile";
       description = ''
-        Extra config options for systemd-journald. See {manpage}`journald.conf(5)`
+        (Deprecated) Extra config options for systemd-journald. See {manpage}`journald.conf(5)`
         for available options.
       '';
     };
   };
 
   config = {
+    warnings = lib.optional (cfg.extraConfig != "") ''
+      `services.journald.extraConfig` is deprecated and will be removed in NixOS 26.05. Consider migrating to `services.journald.settings.Journal` instead.
+    '';
     systemd.additionalUpstreamSystemUnits = [
       "systemd-journald.socket"
       "systemd-journald@.socket"
