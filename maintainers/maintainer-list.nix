@@ -711,6 +711,11 @@
     githubId = 117295;
     name = "Aaron Lindsay";
   };
+  aescalera-defenseunicorns = {
+    name = "Antonio Escalera";
+    github = "aescalera-defenseunicorns";
+    githubId = 207777671;
+  };
   aespinosa = {
     email = "allan.espinosa@outlook.com";
     github = "aespinosa";
