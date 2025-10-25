@@ -59,6 +59,12 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix for CMake v4
+    # https://github.com/nanomq/nanomq/pull/2150
+    ./cmake-v4.patch
+  ];
+
   nativeBuildInputs = [
     cmake
     ninja
