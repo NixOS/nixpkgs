@@ -30,6 +30,16 @@ let
     # Many suites use Template Haskell for test discovery, including QuickCheck
     canCheck = hasBuiltinTH || canProxyTH;
 
+    # stdenv.make-derivation sets `doCheck = false` when the build platform can't directly execute the host platform
+    # which means the `checkPhase` ends up disabled for cross and we need to sneak it back in somehow
+    # TODO: avoid this workaround - add some sort of doCheckEmulated?
+    checkPhaseSidecar =
+      drv: anchor:
+      lib.trim ''
+        ${anchor}
+        ${lib.optionalString (drv.doCheck && isCross) drv.checkPhase}
+      '';
+
     iservWrapper =
       let
         buildProxy = iserv-proxy.build + "/bin/iserv-proxy";
@@ -851,7 +861,7 @@ lib.fix (
       ''
       + ''
         ${setupCommand} build ${buildTarget}${buildFlagsString}
-        runHook postBuild
+        ${crossSupport.checkPhaseSidecar drv "runHook postBuild"}
       '';
 
       inherit doCheck;
