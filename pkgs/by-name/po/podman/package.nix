@@ -13,6 +13,7 @@
   libselinux,
   systemd,
   go-md2man,
+  man,
   nixosTests,
   python3,
   makeWrapper,
@@ -106,6 +107,7 @@ buildGoModule rec {
   nativeBuildInputs = [
     pkg-config
     go-md2man
+    man
     installShellFiles
     makeWrapper
     python3
