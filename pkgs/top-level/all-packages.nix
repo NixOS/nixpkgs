@@ -2592,10 +2592,6 @@ with pkgs;
 
   deluge-2_x = deluge;
 
-  diffoscopeMinimal = diffoscope.override {
-    enableBloat = false;
-  };
-
   diffutils = callPackage ../tools/text/diffutils { };
 
   dotnetfx35 = callPackage ../development/libraries/dotnetfx35 { };
