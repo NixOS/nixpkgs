@@ -394,7 +394,7 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "main",
+        "ref": "f95c8d09e66a73dce5465770f6fb41e4a13fad44",
         "resolved-ref": "f95c8d09e66a73dce5465770f6fb41e4a13fad44",
         "url": "https://github.com/Predidit/linux_webview_window.git"
       },
@@ -969,8 +969,8 @@
       "dependency": "direct main",
       "description": {
         "path": "media_kit",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -980,8 +980,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/android/media_kit_libs_android_video",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -991,8 +991,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/ios/media_kit_libs_ios_video",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1002,8 +1002,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/linux/media_kit_libs_linux",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1013,8 +1013,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/macos/media_kit_libs_macos_video",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1024,8 +1024,8 @@
       "dependency": "direct main",
       "description": {
         "path": "libs/universal/media_kit_libs_video",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1035,8 +1035,8 @@
       "dependency": "direct overridden",
       "description": {
         "path": "libs/windows/media_kit_libs_windows_video",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -1046,8 +1046,8 @@
       "dependency": "direct main",
       "description": {
         "path": "media_kit_video",
-        "ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
-        "resolved-ref": "56469d210b66828d8e4c7938d0d9d864f1beeea4",
+        "ref": "8c4b795d373243d1d64fea932ba497696fd89925",
+        "resolved-ref": "8c4b795d373243d1d64fea932ba497696fd89925",
         "url": "https://github.com/Predidit/media-kit.git"
       },
       "source": "git",
@@ -2133,8 +2133,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "main",
-        "resolved-ref": "0ce605b21d2389b1d35d86d052b756aab2fdb9e7",
+        "ref": "4399f68beab25d51b277e37e3949f9fb2d6d8304",
+        "resolved-ref": "4399f68beab25d51b277e37e3949f9fb2d6d8304",
         "url": "https://github.com/Predidit/flutter-webview-windows.git"
       },
       "source": "git",
@@ -2223,6 +2223,6 @@
   },
   "sdks": {
     "dart": ">=3.8.0 <4.0.0",
-    "flutter": ">=3.35.5"
+    "flutter": ">=3.35.6"
   }
 }
