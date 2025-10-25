@@ -302,7 +302,7 @@ in
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
-      sickbeard = 265;
+      sickgear = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
       # gogs = 268; # unused, removed in 2024-10-12
@@ -629,7 +629,7 @@ in
       # stanchion = 262; # unused, removed 2020-10-14
       # riak-cs = 263; # unused, removed 2020-10-14
       infinoted = 264;
-      sickbeard = 265;
+      sickgear = 265;
       headphones = 266;
       # couchpotato = 267; # unused, removed 2022-01-01
       # gogs = 268; # unused, removed in 2024-10-12
