@@ -7117,6 +7117,12 @@
     githubId = 90563298;
     name = "Dovydas Kersys";
   };
+  dyegoaurelio = {
+    name = "Dyego Aurelio";
+    email = "d@dyego.email";
+    github = "dyegoaurelio";
+    githubId = 42411160;
+  };
   dylan-gonzalez = {
     email = "dylcg10@gmail.com";
     github = "dylan-gonzalez";
@@ -14809,6 +14815,12 @@
     github = "linuxissuper";
     githubId = 74221543;
     name = "Moritz Goltdammer";
+  };
+  linuxmobile = {
+    email = "bdiez19@gmail.com";
+    github = "linuxmobile";
+    githubId = 10554636;
+    name = "Braian A. Diez";
   };
   linuxwhata = {
     email = "linuxwhata@qq.com";
@@ -25774,6 +25786,11 @@
     matrix = "@thefossguy:matrix.org";
     github = "thefossguy";
     githubId = 44400303;
+  };
+  thegu5 = {
+    name = "Gus";
+    github = "thegu5";
+    githubId = 58223632;
   };
   thehans255 = {
     name = "Hans Jorgensen";

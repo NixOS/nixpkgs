@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "prek";
-  version = "0.2.4";
+  version = "0.2.11";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "prek";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XvNvVWEmJpsY2AxTYLT0/4IiJ2QTI4mWwDleMmZ2LgA=";
+    hash = "sha256-wzbvofNOAtqbjO5//ECu1FeZrS0FyDvFZPKxC0fOJnE=";
   };
 
-  cargoHash = "sha256-PDYCO1ggKwtMR9tnokY7JqVM03FWsO4c2L4GV+7TKu4=";
+  cargoHash = "sha256-KVGdAPyUlPCgcx1DpZbfNRNmALdJvzOcsv3WQy3Q7OI=";
 
   preBuild = ''
     version312_str=$(${python312}/bin/python -c 'import sys; print(sys.version_info[:3])')
@@ -38,6 +38,13 @@ rustPlatform.buildRustPackage (finalAttrs: {
     export TMP=$TEMP
     export TMPDIR=$TEMP
     export PREK_INTERNAL__TEST_DIR=$TEMP
+
+    export UV_PROJECT_ENVIRONMENT="$(mktemp -d)"
+    cleanup() {
+        rm -rf "$UV_PROJECT_ENVIRONMENT"
+        rm -rf "$TEMP"
+    }
+    trap cleanup EXIT
   '';
 
   __darwinAllowLocalNetworking = true;
@@ -58,6 +65,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "node"
     "script"
     "check_useless_excludes_remote"
+    "run_worktree"
     # "meta_hooks"
     "reuse_env"
     "docker::docker"
@@ -99,8 +107,28 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "builtin_hooks_workspace_mode"
     "fix_byte_order_marker_hook"
     "fix_byte_order_marker"
+    "check_merge_conflict_hook"
+    "check_merge_conflict_without_assume_flag"
+    "check_symlinks_hook_unix"
+    "check_xml_hook"
+    "check_xml_with_features"
+    "detect_private_key_hook"
+    "no_commit_to_branch_hook"
+    "no_commit_to_branch_hook_with_custom_branches"
+    "no_commit_to_branch_hook_with_patterns"
     # does not properly use TMP
     "hook_impl"
+    # problems with environment
+    "try_repo_specific_hook"
+    "try_repo_specific_rev"
+    # lua path is hardcoded
+    "lua::additional_dependencies"
+    "lua::health_check"
+    "lua::hook_stderr"
+    "lua::lua_environment"
+    "lua::remote_hook"
+    # error message differs
+    "run_in_non_git_repo"
   ];
 
   meta = {

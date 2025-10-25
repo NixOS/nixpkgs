@@ -16,7 +16,8 @@
 }:
 let
   luaMajorMinor = lib.take 2 (lib.splitVersion lua.version);
-  luaVersionDir = if isLuaJIT then "jit" else lib.concatStringsSep "." luaMajorMinor;
+  luxLuaVersionDir = if isLuaJIT then "jit" else lib.concatStringsSep "." luaMajorMinor;
+  luaVersionDir = if isLuaJIT then "5.1" else lib.concatStringsSep "." luaMajorMinor;
   luaFeature = if isLuaJIT then "luajit" else "lua${lib.concatStringsSep "" luaMajorMinor}";
 in
 toLuaModule (
@@ -75,7 +76,7 @@ toLuaModule (
       cp -r target/dist/share $out
       cp -r target/dist/lib $out
       mkdir -p $out/lib/lua
-      ln -s $out/share/lux-lua/${luaVersionDir} $out/lib/lua/${luaVersionDir}
+      ln -s $out/share/lux-lua/${luxLuaVersionDir} $out/lib/lua/${luaVersionDir}
       runHook postInstall
     '';
 
