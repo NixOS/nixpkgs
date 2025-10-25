@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libhv";
-  version = "1.3.3";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "ithewei";
     repo = "libhv";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-N2YD84eORA5nDpeeqy9jCvRx86PkRaKLzI6LF1AnHtU=";
+    hash = "sha256-YIWXdAZsWeSdtPtBaf/t9t68dFKw2nY0bvgMrzCEE5U=";
   };
 
   nativeBuildInputs = [ cmake ];
