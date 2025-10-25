@@ -4,16 +4,18 @@
   openssl,
   fetchFromGitHub,
 }:
-
+let
+  version = "0.85.1";
+in
 stdenv.mkDerivation {
-  pname = "pev";
-  version = "0-unstable-2020-05-23";
+  pname = "readpe";
+  inherit version;
 
   src = fetchFromGitHub {
-    owner = "merces";
-    repo = "pev";
-    rev = "beec2b4f09585fea919ed41ce466dee06be0b6bf";
-    hash = "sha256-HrMbk9YbuqkoBBM7+rfXpqVEnd1rDl2rMePdcfU1WDg=";
+    owner = "mentebinaria";
+    repo = "readpe";
+    rev = version;
+    hash = "sha256-e9omL/HSlzBkJSUnjw271hmXGhasZlWw9X8P8ohoRi0=";
     fetchSubmodules = true;
   };
 

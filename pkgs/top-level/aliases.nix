@@ -1167,6 +1167,7 @@ mapAliases {
   percona-xtrabackup_innovation = throw "'percona-xtrabackup_innovation' has been renamed to/replaced by 'percona-xtrabackup'"; # Converted to throw 2025-10-27
   percona-xtrabackup_lts = throw "'percona-xtrabackup_lts' has been renamed to/replaced by 'percona-xtrabackup'"; # Converted to throw 2025-10-27
   peruse = throw "'peruse' has been removed as it depends on KDE Gear 5, which has reached EOL"; # Added 2025-08-20
+  pev = lib.warnOnInstantiate "'pev' has been renamed to 'readpe' to reflect renaming of the upstream project" readpe; # Added 2025-10-25
   pg_cron = throw "'pg_cron' has been removed. Use 'postgresqlPackages.pg_cron' instead."; # Added 2025-07-19
   pg_hll = throw "'pg_hll' has been removed. Use 'postgresqlPackages.pg_hll' instead."; # Added 2025-07-19
   pg_repack = throw "'pg_repack' has been removed. Use 'postgresqlPackages.pg_repack' instead."; # Added 2025-07-19
