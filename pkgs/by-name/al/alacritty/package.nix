@@ -151,10 +151,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "https://github.com/ayosec/alacritty";
     license = lib.licenses.asl20;
     mainProgram = "alacritty";
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      rvdp
-    ];
+    maintainers =
+      with lib.maintainers;
+      if !withGraphics then
+        [
+          Br1ght0ne
+          rvdp
+        ]
+      else
+        [
+          afh
+        ];
     platforms = lib.platforms.unix;
     changelog =
       if !withGraphics then
