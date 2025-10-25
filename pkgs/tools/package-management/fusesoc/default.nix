@@ -12,15 +12,16 @@
   simplesat,
   ipyxact,
   setuptools-scm,
+  argcomplete,
 }:
 buildPythonPackage rec {
   pname = "fusesoc";
-  version = "2.2.1";
-  format = "setuptools";
+  version = "2.4.4";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-M36bXBgY8hR33AVDlHoH8PZJG2Bi0KOEI07IMns7R4w=";
+    hash = "sha256-SE28RM4AK2kBQ58Ah+eWN+VZTgX856IAApgCgZNSLgM=";
   };
 
   nativeBuildInputs = [ setuptools-scm ];
@@ -32,6 +33,7 @@ buildPythonPackage rec {
     pyyaml
     simplesat
     ipyxact
+    argcomplete
   ];
 
   pythonImportsCheck = [ "fusesoc" ];
