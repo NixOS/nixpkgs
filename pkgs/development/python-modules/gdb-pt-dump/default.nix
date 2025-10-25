@@ -7,7 +7,7 @@
 
 buildPythonPackage {
   pname = "gdb-pt-dump";
-  version = "0-unstable-2024-04-01";
+  version = "test_binary_images_v1";
   pyproject = true;
 
   src = fetchFromGitHub {
