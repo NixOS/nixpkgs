@@ -1,0 +1,14 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -832,6 +832,10 @@ IF(ENABLE_XLSX)
+                EXCLUDE_FROM_ALL ON
+                SOURCE_SUBDIR QXlsx)
+      ENDIF()
++
++     IF(Qt6Gui_VERSION VERSION_GREATER_EQUAL "6.10.0")
++         find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS GuiPrivate)
++     ENDIF()
+ ENDIF()
+ 
+ CPMFindPackage(NAME md4c
