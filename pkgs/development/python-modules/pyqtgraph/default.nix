@@ -3,15 +3,24 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
+
+  # build-system
+  setuptools,
+
+  # dependencies
   scipy,
   numpy,
-  pyqt6,
   pyopengl,
+
+  # buildInputs
+  pyqt6,
+
+  # tests
   qt6,
   pytestCheckHook,
   freefont_ttf,
   makeFontsConf,
-  setuptools,
 }:
 
 let
@@ -29,7 +38,20 @@ buildPythonPackage rec {
     hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    # Fixes a segmentation fault in tests with Qt 6.10. See:
+    # https://github.com/pyqtgraph/pyqtgraph/issues/3390
+    # The patch is the merge commit of:
+    # https://github.com/pyqtgraph/pyqtgraph/pull/3370
+    (fetchpatch {
+      url = "https://github.com/pyqtgraph/pyqtgraph/commit/bf38b8527e778c9c0bb653bc0df7bb36018dcbae.patch";
+      hash = "sha256-Tv4QK/OZvmDO3MOjswjch7DpF96U1uRN0dr8NIQ7+LY=";
+    })
+  ];
+
+  build-system = [
+    setuptools
+  ];
 
   dependencies = [
     numpy
@@ -68,11 +90,6 @@ buildPythonPackage rec {
       # https://github.com/pyqtgraph/pyqtgraph/issues/2645
       "test_rescaleData"
     ];
-
-  disabledTestPaths = [
-    # Segmentation fault
-    "tests/test_qpainterpathprivate.py"
-  ];
 
   meta = {
     description = "Scientific Graphics and GUI Library for Python";
