@@ -9,18 +9,21 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.6.2";
+  version = "1.14.0";
   pname = "vmmlib";
 
   src = fetchFromGitHub {
-    owner = "VMML";
+    owner = "Eyescale";
     repo = "vmmlib";
-    rev = "release-${version}";
-    sha256 = "0sn6jl1r5k6ka0vkjsdnn14hb95dqq8158dapby6jk72wqj9kdml";
+    tag = "${version}";
+    hash = "sha256-QEfeQcE66XbsFTN/Fojgldem5C+RhbOBmRyBX3sfUrg=";
+
+    fetchSubmodules = true;
   };
 
-  patches = [
-    ./disable-cpack.patch # disable the need of cpack/rpm
+  cmakeFlags = [
+    # Prevent -Werror=deprecated-copy from failing the build
+    "-DCMAKE_CXX_FLAGS=-Wno-error=deprecated-copy"
   ];
 
   nativeBuildInputs = [
@@ -31,6 +34,14 @@ stdenv.mkDerivation rec {
     boost
     lapack
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "include(CPackConfig)" ""
+    substituteInPlace CMake/common/Common.cmake \
+      --replace-fail "cmake_minimum_required(VERSION 3.1 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
