@@ -85,6 +85,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Eyjn3jPpo0d7XENg0Ea/3MN60lZBSUAMkz1UtTiIP80=";
   };
 
+  patches = [
+    # https://gitlab.com/OpenMW/openmw/-/merge_requests/4941
+    # FIXME: Remove after next release
+    ./0001-Do-not-implicitly-convert-QByteArray-to-const-char.patch
+  ];
+
   postPatch = ''
     sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
   ''
