@@ -5,6 +5,8 @@
   qtsvg,
   hunspell,
   pkg-config,
+  lib,
+  stdenv,
 }:
 
 qtModule {
@@ -16,4 +18,6 @@ qtModule {
     hunspell
   ];
   nativeBuildInputs = [ pkg-config ];
+
+  NIX_CFLAGS_LINK = lib.optionalString stdenv.hostPlatform.isLinux "-Wl,--build-id=none";
 }
