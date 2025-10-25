@@ -27063,6 +27063,11 @@
     githubId = 5155100;
     name = "Utkarsh Gupta";
   };
+  utopiatopia = {
+    github = "utopiatopia";
+    githubId = 98685984;
+    name = "utopiatopia";
+  };
   uvnikita = {
     email = "uv.nikita@gmail.com";
     github = "uvNikita";
