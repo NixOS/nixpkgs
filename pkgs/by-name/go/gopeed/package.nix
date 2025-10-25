@@ -1,24 +1,24 @@
 {
   lib,
   fetchFromGitHub,
-  flutter327,
+  flutter332,
   autoPatchelfHook,
   buildGoModule,
   libayatana-appindicator,
 }:
 
 let
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "GopeedLab";
     repo = "gopeed";
     tag = "v${version}";
-    hash = "sha256-GUCc6GK1yhVbk3Ss1XnT23wtz22uTgdSSDfEdr4mMpA=";
+    hash = "sha256-KezASQIqyu4GsKaGAhge7gEYMe57GMgzjXlAbmyDI3Y=";
   };
 
   metaCommon = {
-    description = "Modern download manager that supports all platforms";
+    description = "Modern download manager";
     homepage = "https://github.com/GopeedLab/gopeed";
     license = with lib.licenses; [ gpl3Plus ];
     maintainers = [ ];
@@ -29,7 +29,7 @@ let
     inherit version src;
     pname = "libgopeed";
 
-    vendorHash = "sha256-7SPTMeaHvqTZJQYPoGUGRudNRTcsEl/8AKgI6W/XCJQ=";
+    vendorHash = "sha256-x9M9zwS5FhsIyGGBi0szWHMfLXCFVgqv8bfSxhHZT2Y=";
 
     buildPhase = ''
       runHook preBuild
@@ -44,7 +44,7 @@ let
     meta = metaCommon;
   };
 in
-flutter327.buildFlutterApplication {
+flutter332.buildFlutterApplication {
   inherit version src;
   pname = "gopeed";
 
@@ -52,10 +52,7 @@ flutter327.buildFlutterApplication {
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  gitHashes = {
-    install_plugin = "sha256-3FM08D2pbtWmitf8R4pAylVqum7IfbWh6pOIEhJdySk=";
-    permission_handler_windows = "sha256-MRTmuH0MfhGaMEb9bRotimAPRlFyl3ovtJUJ2WK7+DA=";
-  };
+  gitHashes = lib.importJSON ./gitHashes.json;
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
