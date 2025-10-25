@@ -124,6 +124,16 @@ lib.makeOverridable (
               fetchLFS
               ;
             url = gitRepoUrl;
+            passthru = (args.passthru or { }) // {
+              inherit
+                gitRepoUrl
+                owner
+                repo
+                tag
+                ;
+              rev = revWithTag;
+            };
+            meta = newMeta;
           }
           // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
@@ -146,9 +156,16 @@ lib.makeOverridable (
                 "${baseUrl}/archive/${revWithTag}.tar.gz";
             extension = "tar.gz";
 
-            passthru = {
-              inherit gitRepoUrl;
+            passthru = (args.passthru or { }) // {
+              inherit
+                gitRepoUrl
+                owner
+                repo
+                tag
+                ;
+              rev = revWithTag;
             };
+            meta = newMeta;
           }
       )
       // privateAttrs

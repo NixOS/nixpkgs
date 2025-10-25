@@ -68,7 +68,11 @@ lib.makeOverridable (
       rootDir ? "",
       # GIT_CONFIG_GLOBAL (as a file)
       gitConfigFile ? config.gitConfigFile,
-    }:
+      # Passthrough attributes
+      passthru ? { },
+      # Allow other attributes to pass through
+      ...
+    }@args:
 
     /*
       NOTE:
@@ -195,7 +199,8 @@ lib.makeOverridable (
         passthru = {
           gitRepoUrl = url;
           inherit tag;
-        };
+        }
+        // passthru;
       }
   )
 )
