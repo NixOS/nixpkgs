@@ -18,6 +18,7 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
+  audit,
   zlib,
   openssl,
   softhsm,
@@ -36,7 +37,7 @@
   nixosTests,
   withSecurityKey ? !stdenv.hostPlatform.isStatic,
   withFIDO ? stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isMusl && withSecurityKey,
-  withPAM ? stdenv.hostPlatform.isLinux,
+  withPAM ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
   # Attempts to mlock the entire sshd process on startup to prevent swapping.
   # Currently disabled when PAM support is enabled due to crashes
   # See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1103418
@@ -87,7 +88,8 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withFIDO libfido2
   ++ lib.optional withKerberos krb5
   ++ lib.optional withLdns ldns
-  ++ lib.optional withPAM pam;
+  ++ lib.optional withPAM pam
+  ++ lib.optional stdenv.hostPlatform.isStatic audit;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker
@@ -164,9 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
       # invoked directly and those invoked by the "remote" session
       cat > ~/.ssh/environment.base <<EOF
       NIX_REDIRECTS=/etc/passwd=$DUMMY_PASSWD
-      ${lib.optionalString (
-        !stdenv.buildPlatform.isStatic
-      ) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
+      ${lib.optionalString (!stdenv.hostPlatform.isStatic) "LD_PRELOAD=${libredirect}/lib/libredirect.so"}
       EOF
 
       # use an ssh environment file to ensure environment is set
