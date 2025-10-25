@@ -4,6 +4,8 @@
   fetchFromGitHub,
   gradle_9,
   jdk25,
+  fetchurl,
+  unzip,
   wrapGAppsHook3,
   libXxf86vm,
   libXtst,
@@ -30,10 +32,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-TcRj+TZ4shY1UAE7TseRXZZJZtL8aaD79pBL9LeoMJA=";
   };
 
+  upstreamBuild = fetchurl {
+    url = "https://github.com/jixxed/ed-odyssey-materials-helper/releases/download/${version}/Elite.Dangerous.Odyssey.Materials.Helper-${version}.portable.linux.zip";
+    hash = "sha256-qjhQlZXg+u1YIshv1Skh4XWMjILBWE+N7vPVum7fHIg=";
+  };
+
   nativeBuildInputs = [
     gradle
     wrapGAppsHook3
     copyDesktopItems
+    unzip
   ];
 
   patches = [
@@ -54,6 +62,10 @@ stdenv.mkDerivation rec {
     substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/FXApplication.java \
       --replace-fail 'versionPopup();' ""
 
+    # telemetry doesn't work anyway, remove the option in the settings
+    substituteInPlace application/src/main/java/nl/jixxed/eliteodysseymaterials/templates/settings/sections/Tracking.java \
+      --replace-fail "trackingOptOutSetting, " ""
+
     for f in build.gradle */build.gradle; do
       substituteInPlace $f \
         --replace-fail 'vendor = JvmVendorSpec.AZUL' ""
@@ -72,12 +84,38 @@ stdenv.mkDerivation rec {
 
   gradleBuildTask = "application:jpackage";
 
-  env = {
-    EDDN_SOFTWARE_NAME = "EDO Materials Helper";
-  };
-
   preBuild = ''
-    # required to make EDDN_SOFTWARE_NAME work and for the program to know its own version
+    # We're going to extract some details from the upstream build which are not in the source.
+    # Note that there are more build secrets, but they're for telemetry, so we're not extracting those.
+    unzip -j $upstreamBuild lib/runtime/lib/modules
+
+    function testVar {
+      # if the variable was found and set, print it and continue, else abort the built
+      if test -n "''${!1}"; then
+        echo $1=''${!1}
+      else
+        echo $1" not set! (something has changed which requires the package definition to be updated)"
+        false
+      fi
+    }
+
+    export EDDN_SOFTWARE_NAME=`grep -a eddn.software.name= modules | cut -d= -f2`
+    testVar EDDN_SOFTWARE_NAME
+
+    export BROKER_HOST=`grep -a broker.host= modules | cut -d= -f2`
+    testVar BROKER_HOST
+
+    export CCID=`grep -a ccid= modules | cut -d= -f2`
+    testVar CCID
+
+    export MARKET_SERVICES_HOST=`grep -a market.services.host= modules | cut -d= -f2`
+    testVar MARKET_SERVICES_HOST
+
+    # due to this actually being a binary file this doesn't end with a newline and has other data after, we'll just assume it ends with .nl
+    export COMMODITY_HOST=`grep -a commodity.host= modules | cut -d= -f2 | sed 's/\.nl.*/.nl/'`
+    testVar COMMODITY_HOST
+
+    # Use the env variables we just set
     gradle $gradleFlags application:generateSecrets
   '';
 
@@ -136,6 +174,12 @@ stdenv.mkDerivation rec {
     #!nix-shell -i bash -p nix-update
 
     nix-update ed-odyssey-materials-helper # update version and hash
+
+    # update hash of upstreamBuild
+    oldHash=`nix-instantiate --eval --raw -A ed-odyssey-materials-helper.upstreamBuild.outputHash`
+    newHash=`nix-hash --type sha256 --to-sri $(nix-prefetch-url $(nix-instantiate --eval --raw -A ed-odyssey-materials-helper.upstreamBuild.url))`
+    sed -i "s|$oldHash|$newHash|" pkgs/by-name/ed/ed-odyssey-materials-helper/package.nix
+
     `nix-build --no-out-link -A ed-odyssey-materials-helper.mitmCache.updateScript` # update deps.json
   '';
 
