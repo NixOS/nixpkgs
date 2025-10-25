@@ -24,6 +24,7 @@
   enableDpdk ? true,
   enableRdma ? true,
   enableAfXdp ? true,
+  enableAfXdpSkbMode ? false,
 }:
 
 let
@@ -115,9 +116,14 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  patches = lib.optionals enableAfXdp [
-    ./use-dynamic-libxdp-libbpf.patch
-  ];
+  patches = lib.optionals enableAfXdp (
+    [
+      ./use-dynamic-libxdp-libbpf.patch
+    ]
+    ++ lib.optionals enableAfXdpSkbMode [
+      ./use-skb-mode.patch
+    ]
+  );
 
   passthru.updateScript = nix-update-script { };
 
