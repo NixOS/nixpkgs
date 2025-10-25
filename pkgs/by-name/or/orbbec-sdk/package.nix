@@ -7,7 +7,7 @@
   libGL,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "OrbbecSDK";
   version = "1.10.27";
 
