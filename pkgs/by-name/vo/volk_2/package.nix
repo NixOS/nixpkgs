@@ -58,6 +58,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = true;
 
+  postPatch = ''
+    substituteInPlace cpu_features/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     homepage = "http://libvolk.org/";
     description = "Vector Optimized Library of Kernels (version 2.5.0 - for GR 3.8)";
