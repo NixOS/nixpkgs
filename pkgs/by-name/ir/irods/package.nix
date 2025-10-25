@@ -22,13 +22,13 @@
 
 llvmPackages.stdenv.mkDerivation (finalAttrs: {
   pname = "irods";
-  version = "5.0.1";
+  version = "5.0.2";
 
   src = fetchFromGitHub {
     owner = "irods";
     repo = "irods";
     tag = finalAttrs.version;
-    hash = "sha256-/mcuqukgDoMc89FL/TfOhHWglsfdLmQbAnQYT8vTFsY=";
+    hash = "sha256-gYwuXWRf5MZv3CTUq/RDlU9Ekbw4jZJmSgWRBKqdKJo=";
   };
 
   nativeBuildInputs = [
