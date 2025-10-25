@@ -44,6 +44,7 @@ let
       parts = builtins.match ''git\+([^?]+)(\?(rev|tag|branch)=(.*))?#(.*)'' src;
       type = builtins.elemAt parts 2; # rev, tag or branch
       value = builtins.elemAt parts 3;
+      key = "__TYPE__:${type}__VALUE__:${value}";
     in
     if parts == null then
       null
@@ -52,7 +53,7 @@ let
         url = builtins.elemAt parts 0;
         sha = builtins.elemAt parts 4;
       }
-      // lib.optionalAttrs (type != null) { inherit type value; };
+      // lib.optionalAttrs (type != null) { inherit type value key; };
 
   # shadows args.lockFileContents
   lockFileContents = if lockFile != null then builtins.readFile lockFile else args.lockFileContents;
@@ -77,6 +78,8 @@ let
   # being evaluated otherwise, since there could be no git dependencies.
   depCrates = builtins.deepSeq gitShaOutputHash (map mkCrate depPackages);
 
+  gitDepPackages = builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages;
+
   # Map package name + version to git commit SHA for packages with a git source.
   namesGitShas = builtins.listToAttrs (
     map nameGitSha (builtins.filter (pkg: lib.hasPrefix "git+" pkg.source) depPackages)
@@ -90,6 +93,30 @@ let
     {
       name = "${pkg.name}-${pkg.version}";
       value = gitParts.sha;
+    };
+
+  # Build a mapping for all the individual git repos that need to be fetched
+  # in case allowBuiltinFetchGit is true.
+  # This works around an issue where evaluating builtins.fetchGit is quite expensive as
+  # nix does some checks on the git repository each time.
+  # This significantly improves evaluation performance, as nix otherwise
+  # encounters the same URLs many times and is not smart enough to deduplicate
+  # some of its work.
+  bultinGitFetched = builtins.listToAttrs (builtins.map builtinGitFetch gitDepPackages);
+
+  builtinGitFetch =
+    pkg:
+    let
+      gitParts = parseGit pkg.source;
+    in
+    {
+      name = "${pkg.source}";
+      value = builtins.fetchGit {
+        inherit (gitParts) url;
+        rev = gitParts.sha;
+        shallow = true;
+        submodules = true;
+      };
     };
 
   # Convert the attrset provided through the `outputHashes` argument to a
@@ -188,12 +215,7 @@ let
               sha256 = gitShaOutputHash.${gitParts.sha};
             }
           else if allowBuiltinFetchGit then
-            fetchGit {
-              inherit (gitParts) url;
-              rev = gitParts.sha;
-              allRefs = true;
-              submodules = true;
-            }
+            bultinGitFetched."${pkg.source}"
           else
             missingHash;
       in
