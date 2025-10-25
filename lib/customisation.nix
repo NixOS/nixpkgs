@@ -369,9 +369,25 @@ rec {
       f = if isFunction fn then fn else import fn;
       auto = intersectAttrs (functionArgs f) autoArgs;
       mirrorArgs = mirrorFunctionArgs f;
-      origArgs = auto // args;
+
+      argSelectors = f.argSelectors or { };
+      selectedArgs = mapAttrs (_: select: select autoArgs) argSelectors;
+
+      customArgs = selectedArgs // args;
+      origArgs = auto // customArgs;
       pkgs = f origArgs;
-      mkAttrOverridable = name: _: makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
+      mkAttrOverridable =
+        name: _:
+        let
+          result = makeOverridable (mirrorArgs (newArgs: (f newArgs).${name})) origArgs;
+        in
+        if isAttrs result then
+          result
+          // {
+            override = result.override // optionalAttrs (args == { }) { inherit argSelectors; };
+          }
+        else
+          result;
     in
     if isDerivation pkgs then
       throw (
