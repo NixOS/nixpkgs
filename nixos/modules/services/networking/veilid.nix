@@ -187,18 +187,6 @@ in
               };
             };
             network = {
-              routing_table = {
-                bootstrap = mkOption {
-                  type = types.listOf types.str;
-                  default = [ "bootstrap.veilid.net" ];
-                  description = "Host name of existing well-known Veilid bootstrap servers for the network to connect to.";
-                };
-                node_id = lib.mkOption {
-                  type = lib.types.nullOr lib.types.str;
-                  default = null;
-                  description = "Base64-encoded public key for the node, used as the node's ID.";
-                };
-              };
               dht = {
                 min_peer_count = mkOption {
                   type = types.number;
