@@ -27,6 +27,11 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/cmake" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED(VERSION 3.1)" "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)"
+  '';
+
   doCheck = false;
   # internal_volume_io.h: No such file or directory
 
