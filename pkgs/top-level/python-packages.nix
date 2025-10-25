@@ -1180,6 +1180,8 @@ self: super: with self; {
 
   autocommand = callPackage ../development/python-modules/autocommand { };
 
+  autodocsumm = callPackage ../development/python-modules/autodocsumm { };
+
   autofaiss = callPackage ../development/python-modules/autofaiss { };
 
   autoflake = callPackage ../development/python-modules/autoflake { };
