@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   fetchurl,
-  fetchpatch,
   cmake,
   gtest,
   lz4,
@@ -11,6 +10,7 @@
   snappy,
   zlib,
   zstd,
+  nix-update-script,
 }:
 
 let
@@ -45,7 +45,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
     (lib.cmakeBool "BUILD_JAVA" false)
     (lib.cmakeBool "STOP_BUILD_ON_WARNING" true)
     (lib.cmakeBool "INSTALL_VENDORED_LIBS" false)
@@ -67,6 +66,8 @@ stdenv.mkDerivation (finalAttrs: {
     ZLIB_ROOT = zlib.dev;
     ZSTD_ROOT = zstd.dev;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     changelog = "https://github.com/apache/orc/releases/tag/v${finalAttrs.version}";

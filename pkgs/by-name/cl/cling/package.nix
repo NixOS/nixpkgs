@@ -80,6 +80,7 @@ let
 
     strictDeps = true;
 
+    cmakeBuildType = if debug then "Debug" else "Release";
     cmakeFlags = [
       "-DLLVM_EXTERNAL_PROJECTS=cling"
       "-DLLVM_EXTERNAL_CLING_SOURCE_DIR=../../cling-source"
@@ -87,12 +88,6 @@ let
       "-DLLVM_TARGETS_TO_BUILD=host;NVPTX"
       "-DLLVM_INCLUDE_TESTS=OFF"
       "-DLLVM_ENABLE_RTTI=ON"
-    ]
-    ++ lib.optionals (!debug) [
-      "-DCMAKE_BUILD_TYPE=Release"
-    ]
-    ++ lib.optionals debug [
-      "-DCMAKE_BUILD_TYPE=Debug"
     ]
     ++ lib.optionals useLLVMLibcxx [
       "-DLLVM_ENABLE_LIBCXX=ON"

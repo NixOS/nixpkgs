@@ -75,7 +75,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DLLVM_USE_LINKER=lld"
     "-DLLVM_ENABLE_ZSTD=FORCE_ON"
     "-DLLVM_ENABLE_ZLIB=FORCE_ON"

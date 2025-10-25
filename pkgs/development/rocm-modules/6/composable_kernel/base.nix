@@ -88,7 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DCMAKE_POLICY_DEFAULT_CMP0069=NEW"
     # "-DDL_KERNELS=ON" # Not needed, slow to build
     # CK_USE_CODEGEN Required for migraphx which uses device_gemm_multiple_d.hpp

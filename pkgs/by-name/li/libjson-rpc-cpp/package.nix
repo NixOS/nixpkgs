@@ -65,8 +65,7 @@ stdenv.mkDerivation rec {
   # require write permission to absolute paths
   configurePhase = ''
     runHook preConfigure
-    cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install \
-             -DCMAKE_BUILD_TYPE=Release
+    cmake .. -DCMAKE_INSTALL_PREFIX=$(pwd)/Install
     runHook postConfigure
   '';
 

@@ -114,8 +114,6 @@ stdenv.mkDerivation {
     --replace-fail "port = client.createPort (portName, forInput, false);" "port = client.createPort (portName, forInput, true);"
   '';
 
-  cmakeBuildType = "Release";
-
   strictDeps = true;
 
   preBuild = ''

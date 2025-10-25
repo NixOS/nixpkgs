@@ -34,9 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/usr/bin/lsb_release" "${lsb-release}/bin/lsb_release"
   '';
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
   postInstall = ''
     rm -r $out/hip/bin
     ln -s $out/bin $out/hip/bin

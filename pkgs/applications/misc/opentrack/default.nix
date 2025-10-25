@@ -75,8 +75,6 @@ mkDerivation {
   dontWrapQtApps = true;
 
   cmakeFlags = [
-    "-GNinja"
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DSDK_ARUCO_LIBPATH=${aruco}/lib/libaruco.a"
     "-DSDK_XPLANE=${xplaneSdk}"
   ]
