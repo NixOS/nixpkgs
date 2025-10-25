@@ -1,59 +1,27 @@
 {
   lib,
   stdenv,
+  fetchFromGitLab,
   fetchurl,
-  fetchgit,
   autoreconfHook,
   dejagnu,
   elfutils,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ltrace";
-  version = "0.7.91";
+  version = "0.8.1";
 
-  src = fetchurl {
-    url = "https://src.fedoraproject.org/repo/pkgs/ltrace/ltrace-0.7.91.tar.bz2/9db3bdee7cf3e11c87d8cc7673d4d25b/ltrace-0.7.91.tar.bz2";
-    sha256 = "sha256-HqellbKh2ZDHxslXl7SSIXtpjV1sodtgVwh8hgTC3Dc=";
+  src = fetchFromGitLab {
+    owner = "cespedes";
+    repo = "ltrace";
+    tag = finalAttrs.version;
+    hash = "sha256-U4ZirTnS7X2GB4tMcHrrecvOOfY1xWp59sSqJga75uU=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ]; # Some patches impact ./configure.
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ elfutils ];
   nativeCheckInputs = [ dejagnu ];
-
-  # Import Fedora's (very) large patch series: bug fixes, architecture support,
-  # etc. RH/Fedora are currently working with upstream to merge all these
-  # patches for the next major branch.
-  prePatch =
-    let
-      fedora = fetchgit {
-        url = "https://src.fedoraproject.org/rpms/ltrace.git";
-        rev = "00f430ccbebdbd13bdd4d7ee6303b091cf005542";
-        sha256 = "sha256-FBGEgmaslu7xrJtZ2WsYwu9Cw1ZQrWRV1+Eu9qLXO4s=";
-      };
-    in
-    ''
-      # Order matters, read the patch list from the RPM spec. Our own patches
-      # are applied on top of the Fedora baseline.
-      fedorapatches=""
-      for p in $(grep '^Patch[0-9]\+:' ${fedora}/ltrace.spec | awk '{ print $2 }'); do
-        fedorapatches="$fedorapatches ${fedora}/$p"
-      done
-      patches="$fedorapatches $patches"
-    '';
-
-  # Cherry-pick extra patches for recent glibc support in the test suite.
-  patches = [
-    # https://gitlab.com/cespedes/ltrace/-/merge_requests/14
-    ./testsuite-newfstatat.patch
-    # https://gitlab.com/cespedes/ltrace/-/merge_requests/15
-    ./sysdeps-x86.patch
-    # print-instruction-pointer.exp doesn't expect ASLR
-    (fetchurl {
-      url = "https://github.com/gentoo/gentoo/raw/a2eb7e103ec985ff90f59e722e0a8a43373972a2/dev-debug/ltrace/files/ltrace-0.7.3-print-test-pie.patch";
-      hash = "sha256-QRsUoN3WLzfiY5GDPwVYXtJPFMJt6rcc6eE96SAtI6Q=";
-    })
-  ];
 
   doCheck = true;
   checkPhase = ''
@@ -68,12 +36,13 @@ stdenv.mkDerivation {
       make check
   '';
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://gitlab.com/cespedes/ltrace/-/blob/${finalAttrs.src.tag}/NEWS";
     description = "Library call tracer";
     mainProgram = "ltrace";
     homepage = "https://www.ltrace.org/";
-    platforms = platforms.linux;
-    license = licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
   };
-}
+})
