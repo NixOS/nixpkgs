@@ -55,7 +55,7 @@ let
   ]
   ++ lib.optionals cudaSupport [
     cudatoolkit
-    cudaPackages.cuda_cudart.static
+    (lib.getOutput "static" cudaPackages.cuda_cudart)
   ]
   ++ lib.optional stdenv'.cc.isClang llvmPackages.openmp;
 
@@ -129,7 +129,7 @@ stdenv'.mkDerivation {
     mainProgram = "colmap";
     homepage = "https://colmap.github.io/index.html";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = if cudaSupport then platforms.linux else platforms.unix;
     maintainers = with maintainers; [
       lebastr
       usertam
