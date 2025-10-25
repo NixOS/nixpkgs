@@ -1057,7 +1057,8 @@
       ];
     "cync" =
       ps: with ps; [
-      ]; # missing inputs: pycync
+        pycync
+      ];
     "dacia" =
       ps: with ps; [
       ];
@@ -7138,6 +7139,7 @@
     "cpuspeed"
     "crownstone"
     "cups"
+    "cync"
     "daikin"
     "datadog"
     "date"
