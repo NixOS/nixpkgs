@@ -1,0 +1,45 @@
+From fcac724ac3f0c77c0a35d10bcc51acf7f990c485 Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Sun, 1 Jun 2025 02:48:54 +0400
+Subject: [PATCH 1/8] Detect NixOS and build manpages on it
+
+---
+ configure.ac | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 27bb3e86f0..6d8229c4df 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -273,8 +273,16 @@ then
+     test -f /etc/gentoo-release && target_distro=gentoo
+     test -f /etc/mandriva-release && target_distro=mandriva
+     test -f /etc/arch-release && target_distro=arch
++    test -n "$NIX_STORE" && target_distro=nixos
+     export CFLAGS="-fPIC -fno-strict-aliasing -D_GNU_SOURCE"
+-    pcp_platform_paths='/usr/bin/X11:/usr/local/bin'
++
++    if test $target_distro = nixos
++    then
++        pcp_platform_paths='/run/current-system/sw/bin'
++    else
++        pcp_platform_paths='/usr/bin/X11:/usr/local/bin'
++    fi
++
+     pcp_ps_all_flags=-efw
+ elif test $target_os = darwin
+ then
+@@ -3540,6 +3548,10 @@ else
+ 	have_manpages=true
+ 	have_gzipped_manpages=true
+ 	need_old_tbl_header=true
++    elif test $target_distro = nixos
++    then
++	have_manpages=true
++	have_gzipped_manpages=true
+     fi
+ fi
+ 
+-- 
+2.50.0
+

@@ -1,0 +1,109 @@
+From 25bf3aefa3a0a82bc2ddcde10871f9e5d160252a Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Sun, 1 Jun 2025 02:51:31 +0400
+Subject: [PATCH 3/8] Install files under `/var` and `/etc` in $out
+
+---
+ install-sh | 36 ++++++++++++++++++++++++++----------
+ 1 file changed, 26 insertions(+), 10 deletions(-)
+
+diff --git a/install-sh b/install-sh
+index 245792c141..fb1bf81ff7 100755
+--- a/install-sh
++++ b/install-sh
+@@ -96,6 +96,7 @@ _symlink()
+     __target="$1"
+     __symlink="$2"
+ 
++    __symlink=`_varcheck "$__symlink"`
+     $RM -f "$__symlink"
+     __dir=`dirname "$__symlink" | sed -e 's;//*;/;g'`
+     [ ! -d "$__dir" ] && mkdir -p "$__dir"
+@@ -127,6 +128,13 @@ _tmpfiles()
+     __target=`echo "$1" | sed -e "s;^$DIST_ROOT;;" -e 's;//*;/;g'`
+     __symlink=`echo "$2" | sed -e "s;^$DIST_ROOT;;" -e 's;//*;/;g'`
+ 
++    # Skip linking things inside the store -- they are already linked
++    echo "$__target" | grep ^$out >/dev/null 2>&1
++    if [ $? -eq 0 -a $CHECK = "true" ]
++    then
++        return
++    fi
++
+     __rel=`echo "$__symlink" | sed -e 's;^/;;'`	# remove leading slash
+     __dlist=`dirname "$__target" | sed -e 's;/; ;g'`
+     __tpath=""
+@@ -139,14 +147,20 @@ _tmpfiles()
+ 
+ _varcheck()
+ {
+-    __target=`echo "$1" | sed -e "s;^$DIST_ROOT;;"`
+-
+-    echo "$__target" | grep ^/var >/dev/null 2>&1
+-    if [ $? -eq 0 -a $CHECK = "true" ]
++    # Rewrite installing things in `/var` and `/etc` to be in `$out` -- only
++    # during installation (not at runtime)
++    echo "$1" | grep ^/var >/dev/null 2>&1
++    if [ $? -eq 0 ]
+     then
+-	echo "ERROR: attempted /var install below $__target"
+-	_usage
+-	exit 1
++	echo "$1" | sed -e "s;^/var;$out/var;"
++    else
++        echo "$1" | grep ^/etc >/dev/null 2>&1
++        if [ $? -eq 0 ]
++        then
++            echo "$1" | sed -e "s;^/etc;$out/etc;"
++        else
++            echo "$1"
++        fi
+     fi
+ }
+ 
+@@ -241,6 +255,7 @@ then
+     # first usage
+     #
+     $tflag && _usage
++    dir=`_varcheck "$dir"`
+     $MKDIR -p "$dir"
+     status=$?
+     if [ $status -eq 0 ]
+@@ -265,7 +280,7 @@ then
+     else
+ 	target=`echo "$DIST_ROOT/$1" | sed -e 's;//*;/;g'`
+     fi
+-    _varcheck "$target"
++    target=`_varcheck "$target"`
+     _symlink "$symlink" "$target"
+ else
+     list=""
+@@ -296,7 +311,7 @@ else
+ 		destfile="$destfile.exe"
+ 	    fi
+ 	fi
+-	_varcheck "$dir"
++	dir=`_varcheck "$dir"`
+ 	[ ! -d "$dir" ] && mkdir -p "$dir"
+ 	if [ -d "$dir/$destfile" ]
+ 	then
+@@ -338,6 +353,7 @@ else
+ 		list="$list $1"
+ 	    else
+ 		dir=`echo "$DIST_ROOT/$1" | sed -e 's;//*;/;g'`
++		dir=`_varcheck "$dir"`
+ 	    fi
+ 	    shift
+ 	done
+@@ -363,7 +379,7 @@ else
+ 		fi
+ 	    fi
+ 
+-	    _varcheck "$dir"
++	    dir=`_varcheck "$dir"`
+ 	    [ ! -d "$dir" ] && mkdir -p "$dir"
+ 	    $RM -f "$dir/$f"
+ 	    $CP "$f" "$dir/$f"
+-- 
+2.50.0
+

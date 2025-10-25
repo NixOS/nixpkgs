@@ -1,0 +1,146 @@
+From ef522afab055211fbd0b8ab042f707071a088b1e Mon Sep 17 00:00:00 2001
+From: andre4ik3 <andre4ik3@fastmail.com>
+Date: Sun, 1 Jun 2025 02:49:52 +0400
+Subject: [PATCH 2/8] Move pmlogctl lockfile to /run/pcp
+
+---
+ src/pmlogctl/pmlogctl.sh | 46 ++++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
+
+diff --git a/src/pmlogctl/pmlogctl.sh b/src/pmlogctl/pmlogctl.sh
+index cc31e74848..441a50465a 100755
+--- a/src/pmlogctl/pmlogctl.sh
++++ b/src/pmlogctl/pmlogctl.sh
+@@ -93,30 +93,30 @@ _lock()
+ {
+     $SHOWME && return
+ 
+-    # can assume $__dir is writeable ... if we get this far we're running
++    # can assume $__lockfile is writeable ... if we get this far we're running
+     # as root ...
+     #
+-    __dir="$PCP_ETC_DIR/pcp/${IAM}"
++    __lockfile="$PCP_RUN_DIR/${IAM}.lock"
+     # demand mutual exclusion
+     #
+     rm -f $tmp/stamp $tmp/out
+     __delay=200		# 1/10 of a second, so max wait is 20 sec
+     while [ $__delay -gt 0 ]
+     do
+-	if pmlock -i "$$ $prog" -v "$__dir/lock" >>$tmp/out 2>&1
++	if pmlock -i "$$ $prog" -v "$__lockfile" >>$tmp/out 2>&1
+ 	then
+ 	    break
+ 	else
+ 	    [ -f $tmp/stamp ] || touch -t `pmdate -30M %Y%m%d%H%M` $tmp/stamp
+-	    find $tmp/stamp -newer "$__dir/lock" -print 2>/dev/null >$tmp/tmp
++	    find $tmp/stamp -newer "$__lockfile" -print 2>/dev/null >$tmp/tmp
+ 	    if [ -s $tmp/tmp ]
+ 	    then
+-		if [ -f "$__dir/lock" ]
++		if [ -f "$__lockfile" ]
+ 		then
+-		    _warning "removing lock file older than 30 minutes (PID `cat $__dir/lock`)"
+-		    LC_TIME=POSIX ls -l "$__dir/lock"
+-		    [ -s  "$__dir/lock" ] && cat "$__dir/lock"
+-		    rm -f "$__dir/lock"
++		    _warning "removing lock file older than 30 minutes (PID `cat $__lockfile`)"
++		    LC_TIME=POSIX ls -l "$__lockfile"
++		    [ -s  "$__lockfile" ] && cat "$__lockfile"
++		    rm -f "$__lockfile"
+ 		else
+ 		    # there is a small timing window here where pmlock
+ 		    # might fail, but the lock file has been removed by
+@@ -134,20 +134,20 @@ _lock()
+     then
+ 	# failed to gain mutex lock
+ 	#
+-	if [ -f "$__dir/lock" ]
++	if [ -f "$__lockfile" ]
+ 	then
+ 	    _warning "is another $prog job running concurrently?"
+-	    LC_TIME=POSIX ls -l "$__dir/lock"
+-	    [ -s "$__dir/lock" ] && cat "$__dir/lock"
++	    LC_TIME=POSIX ls -l "$__lockfile"
++	    [ -s "$__lockfile" ] && cat "$__lockfile"
+ 	else
+ 	    _error "`cat $tmp/out`"
+ 	fi
+-	_error "failed to acquire exclusive lock ($__dir/lock) ..."
++	_error "failed to acquire exclusive lock ($__lockfile) ..."
+ 	return 1
+     else
+ 	if $VERY_VERBOSE
+ 	then
+-	    echo >&2 "Lock acquired `cat $__dir/lock` `ls -l $__dir/lock`"
++	    echo >&2 "Lock acquired `cat $__lockfile` `ls -l $__lockfile`"
+ 	fi
+     fi
+ 
+@@ -157,10 +157,10 @@ _lock()
+ _unlock()
+ {
+     $SHOWME && return
+-    __dir="$PCP_ETC_DIR/pcp/${IAM}"
+-    if [ -f "$__dir/lock" ]
++    __lockfile="$PCP_RUN_DIR/${IAM}.lock"
++    if [ -f "$__lockfile" ]
+     then
+-	rm -f "$__dir/lock"
++	rm -f "$__lockfile"
+ 	$VERY_VERBOSE && echo >&2 "Lock released"
+     fi
+ }
+@@ -665,7 +665,7 @@ _get_pid()
+ 
+ # do what ${IAM}_check does to a control line in terms of variable
+ # expansion
+-# 
++#
+ _expand_control()
+ {
+     sed \
+@@ -1099,7 +1099,7 @@ found == 0 && $3 == "'"$host"'" && $6 == "'"$dir"'"	{ print NR >>"'$tmp/match'";
+ 		    printf >&2 "$fmt" "$host" "$archive" "$class" "$pid" "$state" "$ident"
+ 		    if [ "$state" = dead ]
+ 		    then
+-			_diagnose >&2 "$host" "$dir" 
++			_diagnose >&2 "$host" "$dir"
+ 		    fi
+ 		done
+ 	    else
+@@ -1112,7 +1112,7 @@ found == 0 && $3 == "'"$host"'" && $6 == "'"$dir"'"	{ print NR >>"'$tmp/match'";
+ 		    printf "$fmt" "$host" "$rules" "$evals" "$class" "$pid" "$state" "$ident"
+ 		    if [ "$state" = dead ]
+ 		    then
+-			_diagnose "$host" "$dir" 
++			_diagnose "$host" "$dir"
+ 		    fi
+ 		done
+ 	    fi
+@@ -1282,7 +1282,7 @@ _do_cond_create()
+ 	echo 0 >$tmp/condition-true
+ 	# if no -p, then we're going to use all the class policy files,
+ 	# unless none exist in which case we'll use the default policy.
+-	# 
++	#
+ 	# Need to ignore backup packaging files.
+ 	#
+ 	if [ "$__POLICY" = $tmp/policy ]
+@@ -1545,11 +1545,11 @@ _do_create()
+     do
+ 	if [ -n "$IDENT" ]
+ 	then
+-	    # -i from command line ... 
++	    # -i from command line ...
+ 	    #
+ 	    ident="$IDENT"
+ 	else
+-	    # -c from command line ... 
++	    # -c from command line ...
+ 	    #
+ 	    _get_policy_section "$POLICY" ident >$tmp/tmp
+ 	    if [ -s $tmp/tmp ]
+-- 
+2.50.0
+
