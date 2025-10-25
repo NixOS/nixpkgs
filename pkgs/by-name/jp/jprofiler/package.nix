@@ -10,12 +10,10 @@
 }:
 
 let
-  jdk = jdk11;
   pname = "jprofiler";
   version = "14.0.5";
-  nameApp = "JProfiler";
 
-  meta = {
+  baseMeta = {
     description = "Java profiler for deep JVM analysis";
     longDescription = ''
       JProfiler bridges high-level analytics and low-level JVM data,
@@ -46,11 +44,11 @@ let
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
-      comment = meta.description;
-      desktopName = nameApp;
+      name = "jprofiler";
+      exec = "jprofiler";
+      icon = "jprofiler";
+      comment = "Java profiler for deep JVM analysis";
+      desktopName = "JProfiler";
       genericName = "Java Profiler Tool";
       categories = [ "Development" ];
     })
@@ -80,7 +78,7 @@ let
       rm -rf $out/bin/linux-musl*
 
       for f in $(find $out/bin -type f -executable); do
-        wrapProgram $f --set JAVA_HOME "${jdk.home}"
+        wrapProgram $f --set JAVA_HOME "${jdk11.home}"
       done
 
       install -Dm644 "./.install4j/i4j_extf_7_1u09tly_16qtnph.png" \
@@ -89,7 +87,7 @@ let
       runHook postInstall
     '';
 
-    meta = meta // {
+    meta = baseMeta // {
       platforms = lib.platforms.linux;
     };
   };
@@ -110,19 +108,19 @@ let
       runHook postUnpack
     '';
 
-    sourceRoot = nameApp;
+    sourceRoot = "JProfiler";
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/{Applications,bin}
-      cp -R ${nameApp}.app $out/Applications/
-      makeWrapper $out/Applications/${nameApp}.app/Contents/MacOS/JavaApplicationStub $out/bin/${pname}
+      cp -R JProfiler.app $out/Applications/
+      makeWrapper $out/Applications/JProfiler.app/Contents/MacOS/JavaApplicationStub $out/bin/jprofiler
 
       runHook postInstall
     '';
 
-    meta = meta // {
+    meta = baseMeta // {
       platforms = lib.platforms.darwin;
     };
   };

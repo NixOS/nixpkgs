@@ -15,8 +15,6 @@
 }:
 
 let
-  description = "OpenGL and Vulkan Benchmark and Stress Test";
-
   versions = {
     "x86_64-linux" = "2.3.0.0";
     "aarch64-linux" = "2.3.0.0";
@@ -75,12 +73,12 @@ stdenv.mkDerivation (finalAttrs: {
   appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
 
   desktopItems = [
-    (makeDesktopItem rec {
+    (makeDesktopItem {
       name = "FurMark";
       exec = "FurMark_GUI";
-      comment = description;
-      desktopName = name;
-      genericName = name;
+      comment = "OpenGL and Vulkan Benchmark and Stress Test";
+      desktopName = "FurMark";
+      genericName = "FurMark";
       icon = fetchurl {
         url = "https://www.geeks3d.com/furmark/i/20240220-furmark-logo-02.png";
         hash = "sha256-EqhWQgTEmF/2AcqDxgGtr2m5SMYup28hPEhI6ssFw7g=";
@@ -110,6 +108,6 @@ stdenv.mkDerivation (finalAttrs: {
       "x86_64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    inherit description;
+    description = "OpenGL and Vulkan Benchmark and Stress Test";
   };
 })
