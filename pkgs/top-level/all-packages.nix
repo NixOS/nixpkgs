@@ -13902,6 +13902,8 @@ with pkgs;
   };
   isabelle-components = recurseIntoAttrs (callPackage ../by-name/is/isabelle/components { });
 
+  isabelle-emacs = isabelle.override { withEmacsIntegration = true; };
+
   lean3 = lean;
 
   leo2 = callPackage ../applications/science/logic/leo2 {
