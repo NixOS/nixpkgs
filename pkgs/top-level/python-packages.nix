@@ -3745,6 +3745,8 @@ self: super: with self; {
 
   dicomweb-client = callPackage ../development/python-modules/dicomweb-client { };
 
+  dict2css = callPackage ../development/python-modules/dict2css { };
+
   dict2xml = callPackage ../development/python-modules/dict2xml { };
 
   dictdiffer = callPackage ../development/python-modules/dictdiffer { };
