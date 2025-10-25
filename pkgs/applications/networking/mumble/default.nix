@@ -155,12 +155,6 @@ let
       patches = [
         ./disable-overlay-build.patch
         ./fix-plugin-copy.patch
-        # Can be removed before the next update of Mumble, as that fix was upstreamed
-        # fix version display in MacOS Finder
-        (fetchpatch {
-          url = "https://github.com/mumble-voip/mumble/commit/fbd21bd422367bed19f801bf278562f567cbb8b7.patch";
-          sha256 = "sha256-qFhC2j/cOWzAhs+KTccDIdcgFqfr4y4VLjHiK458Ucs=";
-        })
       ];
 
       postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -224,14 +218,14 @@ let
     } source;
 
   source = rec {
-    version = "1.5.735";
+    version = "1.5.857";
 
     # Needs submodules
     src = fetchFromGitHub {
       owner = "mumble-voip";
       repo = "mumble";
-      rev = "v${version}";
-      hash = "sha256-JRnGgxkf5ct6P71bYgLbCEUmotDLS2Evy6t8R7ac7D4=";
+      tag = "v${version}";
+      hash = "sha256-4ySak2nzT8p48waMgBc9kLrvFB8716e7p0G4trzuh1k=";
       fetchSubmodules = true;
     };
   };
