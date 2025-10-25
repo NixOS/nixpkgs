@@ -5,7 +5,7 @@ with pkgs;
 {
   inherit (pkgs) openjfx17 openjfx21 openjfx23;
 
-  compiler =
+  compiler = lib.recurseIntoAttrs (
     let
       # merge meta.platforms of both packages so that dependent packages and hydra build them
       mergeMetaPlatforms =
@@ -79,7 +79,8 @@ with pkgs;
         in
         lib.mapAttrs (name: drv: mkLinuxDarwin drv semeruDarwin.${name}) semeruLinux
       );
-    };
+    }
+  );
 }
 // lib.optionalAttrs config.allowAliases {
   jogl_2_4_0 = throw "'jogl_2_4_0' is renamed to/replaced by 'jogl'";

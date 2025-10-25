@@ -1069,7 +1069,6 @@ in
     _module.args.withNg = true;
   };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
-  nixseparatedebuginfod = runTest ./nixseparatedebuginfod.nix;
   nixseparatedebuginfod2 = runTest ./nixseparatedebuginfod2.nix;
   node-red = runTest ./node-red.nix;
   nomad = runTest ./nomad.nix;
@@ -1322,6 +1321,7 @@ in
   rss-bridge = handleTest ./web-apps/rss-bridge { };
   rss2email = handleTest ./rss2email.nix { };
   rstudio-server = runTest ./rstudio-server.nix;
+  rsync = runTest ./rsync.nix;
   rsyncd = runTest ./rsyncd.nix;
   rsyslogd = handleTest ./rsyslogd.nix { };
   rtkit = runTest ./rtkit.nix;
