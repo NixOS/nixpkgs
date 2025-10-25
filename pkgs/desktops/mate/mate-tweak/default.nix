@@ -51,8 +51,6 @@ python3Packages.buildPythonApplication rec {
     setproctitle
   ];
 
-  strictDeps = false;
-
   dontWrapGApps = true;
 
   postPatch = ''
