@@ -132,7 +132,6 @@ in
         ))
       ];
       wantedBy = [ "getty.target" ];
-      before = [ "getty.target" ];
     };
   };
 }
