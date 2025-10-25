@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnsdiag";
-  version = "2.7.0";
+  version = "2.8.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "farrokhi";
     repo = "dnsdiag";
     tag = "v${version}";
-    hash = "sha256-VTxIKqc7yFTLx7VLEjb4UwPKAmSD+4X+ZHrmriScVGA=";
+    hash = "sha256-hKtGJItz+Ipo5i7jNzD3EYHchGsy15IN/4w1a1gK1jM=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];
