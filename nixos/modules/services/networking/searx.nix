@@ -35,7 +35,9 @@ let
     # write NixOS settings as JSON
     (
       umask 077
-      ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
+      ${lib.getExe pkgs.envsubst} < ${settingsFile} > settings.yml
+      ln -sf ${faviconsSettingsFile} favicons.toml
+      ln -sf ${limiterSettingsFile} limiter.toml
     )
   '';
 in
@@ -234,17 +236,7 @@ in
   ];
 
   config = mkIf cfg.enable {
-    environment = {
-      etc = {
-        "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
-          source = faviconsSettingsFile;
-        };
-        "searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
-          source = limiterSettingsFile;
-        };
-      };
-      systemPackages = [ cfg.package ];
-    };
+    environment.systemPackages = [ cfg.package ];
 
     services = {
       nginx = lib.mkIf cfg.configureNginx {
@@ -306,7 +298,7 @@ in
           enable-threads = true;
           module = "searx.webapp";
           env = [
-            "SEARXNG_SETTINGS_PATH=${cfg.settingsFile}"
+            "SEARXNG_SETTINGS_PATH=${runDir}"
           ];
           buffer-size = 32768;
           pythonPackages = _: [ cfg.package ];
@@ -357,7 +349,7 @@ in
           EnvironmentFile = cfg.environmentFile;
         };
         environment = {
-          SEARXNG_SETTINGS_PATH = cfg.settingsFile;
+          SEARXNG_SETTINGS_PATH = runDir;
         };
       };
 
