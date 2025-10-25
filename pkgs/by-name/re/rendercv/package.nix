@@ -64,6 +64,10 @@ python3Packages.buildPythonApplication rec {
 
   doCheck = true;
 
+  patches = [
+    ./remove_pycache_copy.patch
+  ];
+
   meta = {
     description = "Typst-based CV/resume generator";
     homepage = "https://rendercv.com";
