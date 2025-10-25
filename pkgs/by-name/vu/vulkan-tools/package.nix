@@ -20,6 +20,7 @@
   wayland-protocols,
   wayland-scanner,
   moltenvk,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-QoqlHrhgaV1SRLAxmYUXaKxH1IdbnxqkcJklDy20ORg=";
   };
 
-  patches = [ ./wayland-scanner.patch ];
+  patches = [
+    ./wayland-scanner.patch
+    # Fixes build of vkcube
+    (fetchpatch {
+      name = "remove-pkg-config-lib-names.patch";
+      url = "https://patch-diff.githubusercontent.com/raw/KhronosGroup/Vulkan-Tools/pull/1134.patch";
+      hash = "sha256-MX9jaxs3KK2stWwotGkZLS1WCUg0XUGJPyi440ltlCg=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
