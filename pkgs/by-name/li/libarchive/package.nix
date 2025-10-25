@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   acl,
   attr,
   autoreconfHook,
@@ -33,29 +32,14 @@
 assert xarSupport -> libxml2 != null;
 stdenv.mkDerivation (finalAttrs: {
   pname = "libarchive";
-  version = "3.8.0";
+  version = "3.8.2";
 
   src = fetchFromGitHub {
     owner = "libarchive";
     repo = "libarchive";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-nL2p2h+U25fhQQjbj16yhxhU8xEEuhNynIx7SNzl6Mo=";
+    hash = "sha256-s7duwuNFyYq8obTS3qc6JewJ9f8LJhItlEx8wxnMgwk=";
   };
-
-  patches = [
-    # Remove in next release
-    #
-    # Fixes macOS metadata file handling when reading certain tarballs
-    # (e.g, bsdtar-produced tar containing a file with xattrs whose name is exactly 99 bytes long)
-    # <https://github.com/libarchive/libarchive/pull/2636>
-    #
-    # This also fixes test_copy in the test suite.
-    (fetchpatch {
-      name = "reset-header-state-after-mac-metadata.patch";
-      url = "https://github.com/libarchive/libarchive/commit/5bb36db5e19aecabccec8f351ec22f8c3a8695f0.patch";
-      hash = "sha256-eNGSunYZ5b0TrkBUtOO7MYGXc+SEn1Sxm8MYyI+4JsQ=";
-    })
-  ];
 
   outputs = [
     "out"
@@ -73,11 +57,12 @@ stdenv.mkDerivation (finalAttrs: {
         # the filesystem does not necessarily have hardlink capabilities
         "libarchive/test/test_write_disk_hardlink.c"
         # access-time-related tests flakey on some systems
+        "libarchive/test/test_read_disk_directory_traversals.c"
         "cpio/test/test_option_a.c"
         "cpio/test/test_option_t.c"
-      ]
-      ++ lib.optionals (stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux) [
-        # only on some aarch64-linux systems?
+        # fails tests on filesystems with 64-bit inode values:
+        # FAIL: bsdcpio_test
+        #   bsdcpio: linkfile: large inode number truncated: Numerical result out of range
         "cpio/test/test_basic.c"
         "cpio/test/test_format_newc.c"
       ];

@@ -13,6 +13,7 @@ buildPythonPackage {
   inherit (pkgs.uv)
     version
     src
+    patches
     cargoDeps
     cargoBuildFlags
     ;

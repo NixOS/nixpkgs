@@ -83,6 +83,14 @@ stdenv.mkDerivation (finalAttrs: {
     ./avr-size.patch
 
     ./windres-locate-gcc.patch
+
+    # Backported against CVE patched in the 2.45 series. See:
+    # https://nvd.nist.gov/vuln/detail/CVE-2025-5244
+    ./CVE-2025-5244.diff
+
+    # Backported against CVE patched in the 2.45 series. See:
+    # https://nvd.nist.gov/vuln/detail/CVE-2025-5245
+    ./CVE-2025-5245.diff
   ];
 
   outputs = [
