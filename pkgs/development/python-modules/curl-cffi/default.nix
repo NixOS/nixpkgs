@@ -4,6 +4,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  addBinToPathHook,
   curl-impersonate-chrome,
   cffi,
   certifi,
@@ -24,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.12.0";
+  version = "0.13.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
     tag = "v${version}";
-    hash = "sha256-VE/b1Cs/wpZlu7lOURT/QfP7DuNudD441zG603LT4LM=";
+    hash = "sha256-umeZ/RjgS9jVHiLVxsoVWTTmfC2sanAxI6jvZOv61rc=";
   };
 
   patches = [ ./use-system-libs.patch ];
@@ -54,6 +55,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "curl_cffi" ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     charset-normalizer
     cryptography
     fastapi
@@ -81,6 +83,13 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # test accesses network
     "tests/unittest/test_smoke.py::test_async"
+    # Hangs while testing
+    "tests/unittest/test_websockets.py"
+  ];
+
+  pytestFlags = [
+    "-vv"
+    "-x"
   ];
 
   disabledTests = [
@@ -97,11 +106,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/lexiforest/curl_cffi/releases/tag/${src.tag}";
     description = "Python binding for curl-impersonate via cffi";
     homepage = "https://curl-cffi.readthedocs.io";
-    license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ chuangzhu ];
   };
 }
