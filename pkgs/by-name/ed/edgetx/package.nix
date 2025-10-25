@@ -47,14 +47,14 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "edgetx";
-  version = "2.11.2";
+  version = "2.11.3";
 
   src = fetchFromGitHub {
     owner = "EdgeTX";
     repo = "edgetx";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-F3T1lX0FSSUIQxSlqLQHj7JrfF+20Ndv63zDA0sRzFQ=";
+    hash = "sha256-vlJsfebTWhdh6HDpUEA1QJJSVGMlcL49XFwIx4A9zHs=";
   };
 
   nativeBuildInputs = [
@@ -175,6 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     mainProgram = "companion" + lib.concatStrings (lib.take 2 (lib.splitVersion finalAttrs.version));
     homepage = "https://edgetx.org/";
+    changelog = "https://github.com/EdgeTX/edgetx/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.gpl2Only;
     platforms = [
       "i686-linux"
