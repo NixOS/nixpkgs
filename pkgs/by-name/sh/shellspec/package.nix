@@ -3,9 +3,14 @@
   stdenv,
   fetchFromGitHub,
   bash,
+
+  # Test-only
+  dash,
+  ksh,
+  zsh,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "shellspec";
   version = "0.28.1";
 
@@ -22,11 +27,29 @@ stdenv.mkDerivation rec {
 
   checkPhase = ''
     ./shellspec --no-banner --task fixture:stat:prepare
-    ./shellspec --no-banner spec --jobs "$(nproc)"
+    ./shellspec --no-banner spec --jobs "$(nproc)" ${finalAttrs.extraTestArgs or ""}
   '';
 
   # "Building" the script happens in Docker
   dontBuild = true;
+
+  passthru.tests =
+    let
+      # Tests are not enabled by default, so enable them.
+      enabled = finalAttrs.overrideAttrs { doCheck = true; };
+      # For adding variations. Use testWith (finalAttrs: prevAttrs: { }) if needed.
+      testWith = enabled.overrideAttrs;
+    in
+    {
+      # Enable tests in all variations
+      # Some of these may log failures, which are later treated as SKIPPED.
+      # This is normal. Look for "0 failures" and a successful derivation build.
+      with-bin-sh = enabled;
+      with-bash = testWith { extraTestArgs = "--shell ${lib.getExe bash}"; };
+      with-dash = testWith { extraTestArgs = "--shell ${lib.getExe dash}"; };
+      with-ksh = testWith { extraTestArgs = "--shell ${lib.getExe ksh}"; };
+      with-zsh = testWith { extraTestArgs = "--shell ${lib.getExe zsh}"; };
+    };
 
   meta = {
     description = "Full-featured BDD unit testing framework for bash, ksh, zsh, dash and all POSIX shells";
@@ -37,4 +60,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
     mainProgram = "shellspec";
   };
-}
+})
