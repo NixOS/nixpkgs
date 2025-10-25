@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "flask-login";
-  version = "0.7.0dev0-2024-06-18";
+  version = "0.6.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
