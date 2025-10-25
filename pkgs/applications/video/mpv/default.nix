@@ -9,6 +9,7 @@
   config,
   docutils,
   fetchFromGitHub,
+  fetchpatch,
   ffmpeg,
   freefont_ttf,
   freetype,
@@ -111,6 +112,16 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     hash = "sha256-x8cDczKIX4+KrvRxZ+72TGlEQHd4Kx7naq0CSoOZGHA=";
   };
+
+  patches = [
+    # ffmpeg-8 compat:
+    #   https://github.com/mpv-player/mpv/pull/16145
+    (fetchpatch {
+      name = "ffmpeg-8.patch";
+      url = "https://github.com/mpv-player/mpv/commit/26b29fba02a2782f68e2906f837d21201fc6f1b9.patch";
+      hash = "sha256-ANNoTtIJBARHbm5IgrE0eEZyzmNhOnbVgve7iqCBzQg=";
+    })
+  ];
 
   postPatch = lib.concatStringsSep "\n" [
     # Don't reference compile time dependencies or create a build outputs cycle
