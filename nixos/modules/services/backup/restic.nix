@@ -227,6 +227,18 @@ in
               ];
             };
 
+            extraOpts = lib.mkOption {
+              type = lib.types.listOf lib.types.str;
+              default = [ ];
+              description = ''
+                Extra global options to be passed to restic.
+              '';
+              example = [
+                "--retry-lock=15m"
+                "--option=sftp.command='ssh backup@192.168.1.100 -i /home/user/.ssh/id_rsa -s sftp'"
+              ];
+            };
+
             initialize = lib.mkOption {
               type = lib.types.bool;
               default = false;
@@ -335,8 +347,8 @@ in
         paths = [ "/home" ];
         repository = "sftp:backup@host:/backups/home";
         passwordFile = "/etc/nixos/secrets/restic-password";
-        extraOptions = [
-          "sftp.command='ssh backup@host -i /etc/nixos/secrets/backup-private-key -s sftp'"
+        extraOpts = [
+          "--option=sftp.command='ssh backup@host -i /etc/nixos/secrets/backup-private-key -s sftp'"
         ];
         timerConfig = {
           OnCalendar = "00:05";
@@ -387,18 +399,31 @@ in
         }
       ]) config.services.restic.backups
     );
+    warnings = lib.flatten (
+      lib.mapAttrsToList (
+        name: backup:
+        if builtins.length backup.extraOptions > 0 then
+          [
+            "services.restic.backups.${name}: the extraOptions option is deprecated. Pass extended options as arguments to --option in extraOpts instead."
+          ]
+        else
+          [ ]
+      ) config.services.restic.backups
+    );
     systemd.services = lib.mapAttrs' (
       name: backup:
       let
-        extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
+        extraOptions = lib.concatStringsSep " " (
+          (builtins.map (arg: " -o ${arg}") backup.extraOptions) ++ backup.extraOpts
+        );
         inhibitCmd = lib.concatStringsSep " " [
           "${pkgs.systemd}/bin/systemd-inhibit"
           "--mode='block'"
           "--who='restic'"
           "--what='sleep'"
-          "--why=${lib.escapeShellArg "Scheduled backup ${name}"} "
+          "--why=${lib.escapeShellArg "Scheduled backup ${name}"}"
         ];
-        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd}${lib.getExe backup.package}${extraOptions}";
+        resticCmd = "${lib.optionalString backup.inhibitsSleep inhibitCmd} ${lib.getExe backup.package} ${extraOptions}";
         excludeFlags = lib.optional (
           backup.exclude != [ ]
         ) "--exclude-file=${pkgs.writeText "exclude-patterns" (lib.concatStringsSep "\n" backup.exclude)}";
@@ -512,8 +537,10 @@ in
     environment.systemPackages = lib.mapAttrsToList (
       name: backup:
       let
-        extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
-        resticCmd = "${lib.getExe backup.package}${extraOptions}";
+        extraOptions = lib.concatStringsSep " " (
+          (builtins.map (arg: " -o ${arg}") backup.extraOptions) ++ backup.extraOpts
+        );
+        resticCmd = "${lib.getExe backup.package} ${extraOptions}";
       in
       pkgs.writeShellScriptBin "restic-${name}" ''
         set -a  # automatically export variables
