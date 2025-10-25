@@ -15,6 +15,11 @@
     "hash": "sha256-qCbqEwIB/j6HToEPpDEdQGGIPGQNmrULrCHnEGZSd5c="
   },
   {
+    "pname": "FCastSenderSDKDotnet",
+    "version": "0.0.3",
+    "hash": "sha256-5pca9ywSOTVbNsuHKT980hz5sfWe8QQ0HzXwedqfF7M="
+  },
+  {
     "pname": "Fizzler",
     "version": "1.2.0",
     "hash": "sha256-lHoNw1Ze197Tkhlpg4QjX5wC0Xmeu7TUKBTzEineE60="
