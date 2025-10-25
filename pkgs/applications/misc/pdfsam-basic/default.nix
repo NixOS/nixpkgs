@@ -11,11 +11,11 @@
 
 stdenv.mkDerivation rec {
   pname = "pdfsam-basic";
-  version = "5.3.2";
+  version = "5.4.1";
 
   src = fetchurl {
     url = "https://github.com/torakiki/pdfsam/releases/download/v${version}/pdfsam-basic_${version}-1_amd64.deb";
-    hash = "sha256-Y0Q9uT6cyxIYTX0JxoS0r3TamPT1iLXr94Zex30AeWo=";
+    hash = "sha256-iM0avC0YwxaB2prWbiKJZ9Fzd/HcdDWJg5IWRmNlVkM=";
   };
 
   unpackPhase = ''
