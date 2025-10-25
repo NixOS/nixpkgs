@@ -52,7 +52,8 @@ let
       wireguardConfig = removeNulls {
         PrivateKey = "@${privateKeyCredential name}";
         ListenPort = interface.listenPort;
-        FirewallMark = interface.fwMark;
+        FirewallMark =
+          if interface.fwMark == null then null else (builtins.fromTOML "v=${interface.fwMark}").v;
         RouteTable = if interface.allowedIPsAsRoutes then interface.table else null;
         RouteMetric = interface.metric;
       };
