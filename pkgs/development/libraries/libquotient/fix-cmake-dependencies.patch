@@ -1,0 +1,39 @@
+From ea83157eed37ff97ab275a5d14c971f0a5a70595 Mon Sep 17 00:00:00 2001
+From: Martin Joerg <martin.joerg@gmail.com>
+Date: Thu, 23 Oct 2025 08:18:33 +0000
+Subject: [PATCH] QuotientConfig.cmake: add missing find_dependency commands
+
+This adds all dependencies configured in CMakeLists.txt.
+
+In particular, for Qt >= 6.10, this avoids downstreams having to manually configure the component
+CorePrivate of dependency Qt6.  Otherwise, this might result in the following message:
+
+    The link interface of target "QuotientQt6" contains:
+
+      Qt6::CorePrivate
+
+    but the target was not found.  Possible reasons include:
+
+      * There is a typo in the target name.
+      * A find_package call is missing for an IMPORTED target.
+      * An ALIAS target is missing.
+
+See also 861f520092c9c915356234e85c0744097a155822, https://bugreports.qt.io/browse/QTBUG-87776.
+---
+ cmake/QuotientConfig.cmake.in | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/cmake/QuotientConfig.cmake.in b/cmake/QuotientConfig.cmake.in
+index 6f92d54ce..ac219576c 100644
+--- a/cmake/QuotientConfig.cmake.in
++++ b/cmake/QuotientConfig.cmake.in
+@@ -1,5 +1,9 @@
+ include(CMakeFindDependencyMacro)
+ 
++find_dependency(@Qt@Core)
++if (@Qt@Core_VERSION VERSION_GREATER_EQUAL 6.10)
++    find_dependency(@Qt@CorePrivate)
++endif()
+ find_dependency(@Qt@Gui)
+ find_dependency(@Qt@Network)
+ find_dependency(@Qt@Keychain)

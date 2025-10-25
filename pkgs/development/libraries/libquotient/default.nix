@@ -12,7 +12,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.9.1";
+  version = "0.9.5";
 
   outputs = [
     "out"
@@ -23,8 +23,13 @@ stdenv.mkDerivation rec {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-R9ms3sYGdHaYKUMnZyBjw5KCik05k93vlvXMRtAXh5Y=";
+    hash = "sha256-wdIE5LI4l3WUvpGfoJBL8sjBl2k8NfZTh9CjfJc9FIA=";
   };
+
+  patches = [
+    # <https://github.com/quotient-im/libQuotient/pull/932>
+    ./fix-cmake-dependencies.patch
+  ];
 
   nativeBuildInputs = [ cmake ];
 
