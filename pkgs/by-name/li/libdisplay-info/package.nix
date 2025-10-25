@@ -10,7 +10,7 @@
   v4l-utils,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "libdisplay-info";
   version = "0.3.0";
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "emersion";
     repo = "libdisplay-info";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-nXf2KGovNKvcchlHlzKBkAOeySMJXgxMpbi5z9gLrdc=";
   };
 
@@ -44,4 +44,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = with maintainers; [ pedrohlc ];
   };
-}
+})
