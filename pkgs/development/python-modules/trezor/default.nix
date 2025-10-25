@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
   click,
   construct,
   construct-classes,
@@ -10,26 +11,28 @@
   ecdsa,
   libusb1,
   mnemonic,
+  noiseprotocol,
+  pillow,
   requests,
-  setuptools,
   shamir-mnemonic,
   slip10,
   typing-extensions,
+  bleak,
   trezor-udev-rules,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.10";
+  version = "0.20.0.dev0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-egtq5GKN0MMaXOtRJYkY2bvdOthROIg3IlgmsijuUE8=";
+    hash = "sha256-hU2J5TORWU55zoxjfsFPjk4VtNoxmVsjceDVvTKXKxI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -39,12 +42,17 @@ buildPythonPackage rec {
     ecdsa
     libusb1
     mnemonic
+    noiseprotocol
+    pillow
     requests
     shamir-mnemonic
     slip10
     typing-extensions
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
+    bleak
+    trezor-udev-rules
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
