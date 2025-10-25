@@ -21,6 +21,7 @@
   enablePython ? false,
   enableTests ? false,
   enableExamples ? false,
+  enableShared ? !stdenv.hostPlatform.isStatic,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,7 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "darbyjohnston";
     repo = "feather-tk";
     tag = finalAttrs.version;
-    fetchSubmodules = true;
     hash = "sha256-hcV99y14o3YFUtKDLEKaR7MxBB3pBdd3sferrYvtvYw=";
   };
 
@@ -63,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "CMAKE_BUILD_TYPE" "Release")
+    (lib.cmakeBool "BUILD_SHARED_LIBS" enableShared)
     (lib.cmakeBool "feather_tk_UI_LIB" true)
     (lib.cmakeFeature "feather_tk_API" "GL_4_1")
     (lib.cmakeBool "feather_tk_nfd" enableNFD)
