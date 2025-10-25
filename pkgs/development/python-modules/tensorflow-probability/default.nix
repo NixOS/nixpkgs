@@ -1,48 +1,40 @@
-{
-  lib,
-  stdenv,
-  fetchpatch2,
+{ lib, stdenv, fetchpatch2,
 
-  # bazel wheel
-  buildBazelPackage,
-  fetchFromGitHub,
+# bazel wheel
+buildBazelPackage, fetchFromGitHub, fetchzip,
 
-  # nativeBuildInputs
-  python,
-  setuptools,
-  wheel,
-  absl-py,
+# nativeBuildInputs
+python, setuptools, wheel, absl-py,
 
-  #bazel_6,
-  bazel,
-  cctools,
+#bazel_6,
+bazel, cctools,
 
-  # python package
-  buildPythonPackage,
+# python package
+buildPythonPackage,
 
-  # dependencies
-  cloudpickle,
-  decorator,
-  dm-tree,
-  gast,
-  keras,
-  numpy,
-  six,
-  tensorflow,
+# dependencies
+cloudpickle, decorator, dm-tree, gast, keras, numpy, six, tensorflow,
 
-  # tests
-  hypothesis,
-  matplotlib,
-  mock,
-  mpmath,
-  pandas,
-  pytest,
-  scipy,
-}:
+# tests
+hypothesis, matplotlib, mock, mpmath, pandas, pytest, scipy, }:
 
 let
   version = "0.25.0";
   pname = "tensorflow-probability";
+
+  platforms = fetchzip {
+    url =
+      "https://github.com/bazelbuild/platforms/releases/download/0.0.9/platforms-0.0.9.tar.gz";
+    hash = "sha256-M4etUlrtIAmzGmWiJ9DCW9eJtWVp6gO1Z9eZGvNj5CA=";
+    stripRoot = false;
+  };
+
+  rules_cc = fetchzip {
+    url =
+      "https://github.com/bazelbuild/rules_cc/releases/download/0.0.9/rules_cc-0.0.9.tar.gz";
+    hash = "sha256-NmTeCXSO6VG90G+Z62dzz406vBqt33jan42UR56/Nps=";
+    stripRoot = true;
+  };
 
   # first build all binaries and generate setup.py using bazel
   bazel-wheel = buildBazelPackage {
@@ -60,7 +52,8 @@ let
       # TODO: remove when updating to the next release
       (fetchpatch2 {
         name = "future-proof-reference-to-deprecated-pytype_aval_mappings";
-        url = "https://github.com/tensorflow/probability/commit/135080b6b1ac5724fc1731b0a9ca6f2010b1aea5.patch";
+        url =
+          "https://github.com/tensorflow/probability/commit/135080b6b1ac5724fc1731b0a9ca6f2010b1aea5.patch";
         hash = "sha256-27yWIw5pI86KcUz0TsYwRFyLDoeiqmxgsRMBXaauzVw=";
       })
     ];
@@ -77,14 +70,29 @@ let
     #bazel = bazel_6;
     bazel = bazel;
 
+    bazelFlags = [
+      # tensorflow-probability does not have a MODULE.bzl file
+      # I think eventually this will not be supported by bazel
+      # but hopefully tensorflow-probability will have updated
+      # by then
+      "--enable_bzlmod=false"
+
+      # bazel tries to download platforms and rules_cc
+      # instead fetch using fetchzip and make available here
+      "--override_repository=platforms=${platforms}"
+      "--override_repository=rules_cc=${rules_cc}"
+    ];
+
     bazelTargets = [ ":pip_pkg" ];
-    LIBTOOL = lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
+    LIBTOOL =
+      lib.optionalString stdenv.hostPlatform.isDarwin "${cctools}/bin/libtool";
 
     fetchAttrs = {
-      sha256 = "sha256-TbWcWYidyXuAMgBnO2/k0NKCzc4wThf2uUeC3QxdBJY=";
+      sha256 = "sha256-sS+sa4i3sWAQVUTT81bTANqXpqC6SZ7fPqdojc/kfCE=";
     };
 
     buildAttrs = {
+
       preBuild = ''
         patchShebangs .
       '';
@@ -102,35 +110,18 @@ let
       '';
     };
   };
-in
-buildPythonPackage {
+in buildPythonPackage {
   inherit version pname;
   format = "wheel";
 
   src = bazel-wheel;
 
-  dependencies = [
-    cloudpickle
-    decorator
-    dm-tree
-    gast
-    keras
-    numpy
-    six
-    tensorflow
-  ];
+  dependencies =
+    [ cloudpickle decorator dm-tree gast keras numpy six tensorflow ];
 
   # Listed here:
   # https://github.com/tensorflow/probability/blob/f3777158691787d3658b5e80883fe1a933d48989/testing/dependency_install_lib.sh#L83
-  nativeCheckInputs = [
-    hypothesis
-    matplotlib
-    mock
-    mpmath
-    pandas
-    pytest
-    scipy
-  ];
+  nativeCheckInputs = [ hypothesis matplotlib mock mpmath pandas pytest scipy ];
 
   # Ideally, we run unit tests with pytest, but in checkPhase, only the Bazel-build wheel is available.
   # But it seems not guaranteed that running the tests with pytest will even work, see
@@ -141,12 +132,14 @@ buildPythonPackage {
   pythonImportsCheck = [ "tensorflow_probability" ];
 
   meta = {
-    description = "Library for probabilistic reasoning and statistical analysis";
+    description =
+      "Library for probabilistic reasoning and statistical analysis";
     homepage = "https://www.tensorflow.org/probability/";
-    changelog = "https://github.com/tensorflow/probability/releases/tag/v${version}";
+    changelog =
+      "https://github.com/tensorflow/probability/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
     # Needs update for Bazel 7.
-    broken = true;
+    broken = false;
   };
 }
