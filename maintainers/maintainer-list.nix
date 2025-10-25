@@ -8494,6 +8494,13 @@
       }
     ];
   };
+  Fireye04 = {
+    name = "Kai Koehler";
+    email = "kai@fireye.coffee";
+    matrix = "@fireye.coffee:matrix.org";
+    github = "Fireye04";
+    githubId = 45439844;
+  };
   FireyFly = {
     email = "nix@firefly.nu";
     github = "FireyFly";
