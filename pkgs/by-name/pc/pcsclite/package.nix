@@ -125,7 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://salsa.debian.org/rousseau/PCSC/-/blob/${finalAttrs.version}/ChangeLog";
     license = lib.licenses.bsd3;
     mainProgram = "pcscd";
-    maintainers = [ lib.maintainers.anthonyroussel ];
+    maintainers = [
+      lib.maintainers.anthonyroussel
+      lib.maintainers.parrot7483
+    ];
     pkgConfigModules = [ "libpcsclite" ];
     platforms = lib.platforms.unix;
     broken = !(polkitSupport -> dbusSupport) || !(systemdSupport -> dbusSupport);
