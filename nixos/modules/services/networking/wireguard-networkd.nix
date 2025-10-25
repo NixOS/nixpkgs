@@ -70,10 +70,12 @@ let
       PersistentKeepalive = peer.persistentKeepalive;
     };
 
-  generateNetwork = name: interface: {
-    matchConfig.Name = name;
-    address = interface.ips;
-  };
+  generateNetwork =
+    name: interface:
+    nameValuePair "40-${name}" {
+      matchConfig.Name = name;
+      address = interface.ips;
+    };
 
   cfg = config.networking.wireguard;
 
@@ -222,7 +224,7 @@ in
     systemd.network = {
       enable = true;
       netdevs = mapAttrs' generateNetdev cfg.interfaces;
-      networks = mapAttrs generateNetwork cfg.interfaces;
+      networks = mapAttrs' generateNetwork cfg.interfaces;
     };
 
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
