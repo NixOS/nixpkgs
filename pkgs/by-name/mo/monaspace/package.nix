@@ -1,17 +1,18 @@
 {
   lib,
   stdenvNoCC,
-  fetchzip,
+  fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "monaspace";
-  version = "1.200";
+  version = "1.301";
 
-  src = fetchzip {
-    url = "https://github.com/githubnext/monaspace/releases/download/v${finalAttrs.version}/monaspace-v${finalAttrs.version}.zip";
-    stripRoot = false;
-    hash = "sha256-j1xQYVxfTNDVuzCKvT5FbU29t8XsH4XqcZ477sjydts=";
+  src = fetchFromGitHub {
+    owner = "githubnext";
+    repo = "monaspace";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-8tPwm92ZtaXL9qeDL+ay9PdXLUBBsspdk7/0U8VO0Tg=";
   };
 
   outputs = [
@@ -22,11 +23,23 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    pushd monaspace-v${finalAttrs.version}/fonts/
-    install -Dm644 frozen/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 otf/*.otf -t $out/share/fonts/opentype
-    install -Dm644 variable/*.ttf -t $out/share/fonts/truetype
-    install -Dm644 webfonts/*.woff -t $woff/share/fonts/woff
+    pushd fonts
+
+    find "Frozen Fonts" -type f -name '*.ttf' \
+      -exec install -Dm644 {} -t $out/share/fonts/truetype \;
+    find "Static Fonts" -type f -name '*.otf' \
+      -exec install -Dm644 {} -t $out/share/fonts/opentype \;
+    find "Variable Fonts" -type f -name '*.ttf' \
+      -exec install -Dm644 {} -t $out/share/fonts/truetype \;
+
+    pushd "Web Fonts"
+
+    find "Static Web Fonts" -type f -name '*.woff' \
+      -exec install -Dm644 {} -t $woff/share/fonts/woff \;
+    find "Variable Web Fonts" -type f -name '*.woff' \
+      -exec install -Dm644 {} -t $woff/share/fonts/woff \;
+
+    popd
     popd
 
     runHook postInstall
