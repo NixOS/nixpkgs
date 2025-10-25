@@ -11922,9 +11922,7 @@ with pkgs;
     lua = lua5;
   };
 
-  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic {
-    jdk21 = openjdk21.override { enableJavaFX = true; };
-  };
+  pdfsam-basic = callPackage ../applications/misc/pdfsam-basic { };
 
   mupdf-headless = mupdf.override {
     enableX11 = false;
