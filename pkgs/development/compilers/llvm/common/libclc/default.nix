@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals (lib.versionAtLeast release_version "19") [
     clang-only
-    buildLlvmTools.llvm
+    llvm
     spirv-llvm-translator
   ];
   buildInputs = [ llvm ];

@@ -8,7 +8,6 @@
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
-  buildPackages,
   makeScopeWithSplicing',
   otherSplices,
   splicePackages,
@@ -23,6 +22,10 @@
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  cmake,
+  cmakeMinimal,
+  python3,
+  python3Minimal,
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -485,13 +488,8 @@ makeScopeWithSplicing' {
         # Use clang due to "gnu::naked" not working on aarch64.
         # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
         stdenv = overrideCC stdenv buildLlvmPackages.clangNoLibcNoRt;
-        cmake =
-          if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
-        python3 =
-          if stdenv.targetPlatform.libc == "llvm" then
-            buildPackages.python3Minimal
-          else
-            buildPackages.python3;
+        cmake = if stdenv.targetPlatform.libc == "llvm" then cmakeMinimal else cmake;
+        python3 = if stdenv.targetPlatform.libc == "llvm" then python3Minimal else python3;
       };
 
       libc = if stdenv.targetPlatform.libc == "llvm" then self.libc-full else self.libc-overlay;

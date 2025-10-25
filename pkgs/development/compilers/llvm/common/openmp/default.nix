@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python3.pythonOnBuildForHost
+    python3
     perl
     ninja
     pkg-config
