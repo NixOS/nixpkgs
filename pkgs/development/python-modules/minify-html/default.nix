@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "minify-html";
-  version = "0.16.4";
+  version = "0.18.0";
 
   pyproject = true;
 
@@ -15,12 +15,12 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "minify_html";
-    hash = "sha256-3UjI/5ZhoQNHYkAqdBGzFohnqXP4/Hiwn2foGCC2TSI=";
+    hash = "sha256-B6Tip6E+WXgHRmV1rY4GNXc2q7fX+80VO/Njk/7a48E=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-NLPei6ajR55mLyFhsjzUpXB/TsqqeDvP8yKE74t0ufk=";
+    hash = "sha256-oOhE55doSjCnGx1uyOP4FGjf6tPP3O20gPQSab7lBfM=";
   };
 
   nativeBuildInputs = with rustPlatform; [
