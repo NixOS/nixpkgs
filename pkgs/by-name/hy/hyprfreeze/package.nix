@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Zerodya";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-omwAWBEnb14ZBux7bvXSJyi7FI1LZ5GaZFn46/bWJA4=";
   };
 
@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
       }
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Utility to suspend a game process (and other programs) in Hyprland";
     homepage = "https://github.com/Zerodya/hyprfreeze";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ zerodya ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "hyprfreeze";
   };
 }
