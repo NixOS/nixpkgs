@@ -6,8 +6,8 @@
   },
   {
     "pname": "Azure.Storage.Blobs",
-    "version": "12.25.0",
-    "hash": "sha256-SjIwM1sIBd4I9ShAeaIAfPUzc3K7tbodW6y1vNAD+4U="
+    "version": "12.25.1",
+    "hash": "sha256-OJgmzE7+BJsrqGMErUwG4wmaguYL1zPbhtdQvvqFuHY="
   },
   {
     "pname": "Azure.Storage.Common",
