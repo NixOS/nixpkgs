@@ -23,7 +23,7 @@
   ddt,
   fixtures,
   pytest-timeout,
-  qiskit-terra,
+  qiskit,
   testtools,
 }:
 
@@ -123,7 +123,7 @@ buildPythonPackage rec {
     ddt
     fixtures
     pytest-timeout
-    qiskit-terra
+    qiskit
     testtools
   ];
 
