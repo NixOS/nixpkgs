@@ -79,7 +79,10 @@ buildPythonPackage rec {
     homepage = "https://copier.readthedocs.io";
     changelog = "https://github.com/copier-org/copier/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ greg ];
+    maintainers = with lib.maintainers; [
+      greg
+      savtrip
+    ];
     mainProgram = "copier";
   };
 }

@@ -78,11 +78,12 @@ symlinkJoin {
   ]
   ++ comps;
 
+  # Prevent Python from writing bytecode to ensure build determinism
+  PYTHONDONTWRITEBYTECODE = "1";
+
   postBuild = ''
     sed -i ';' $out/google-cloud-sdk/bin/.gcloud-wrapped
     sed -i -e "s#${google-cloud-sdk}#$out#" "$out/google-cloud-sdk/bin/gcloud"
-    # Prevent Python from writing bytecode to ensure build determinism
-    export PYTHONDONTWRITEBYTECODE=1
     ${installCheck}
   '';
 }

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   bash,
   cmake,
   cfitsio,
@@ -30,17 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0+ZC9NoanBDojYz/ufZUpUQB++vnMcUYtG1UmmVGbTg=";
+    hash = "sha256-WfVC5CLzwyO40Kpv/SZaYiPGDvWLUydQaA8FvTVhHqg=";
   };
-
-  # fixes version number. This commit is directly after the tagged commit in master
-  # should be removed with the next release
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/indilib/indi/commit/91e3e35250126887a856e90b6a0a30697fb01545.patch?full_index=1";
-      hash = "sha256-ho1S+A6gTQ9ELy/QE14S6daXyMN+vASFbXa2vMWdqR8=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

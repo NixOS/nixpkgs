@@ -19,6 +19,7 @@ stdenv.mkDerivation {
 
   prePatch = ''
     cd mjpg-streamer-experimental
+    substituteInPlace ./CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 2.8.3)" "cmake_minimum_required(VERSION 2.8.3...3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];

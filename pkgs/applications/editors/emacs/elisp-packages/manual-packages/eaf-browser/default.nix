@@ -60,6 +60,7 @@ melpaBuild (finalAttrs: {
     eafPythonDeps =
       ps: with ps; [
         pysocks
+        pycookiecheat
       ];
   };
 
