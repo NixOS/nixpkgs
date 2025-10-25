@@ -312,7 +312,7 @@ let
         "MOZ_ALLOW_DOWNGRADE"
         "1"
       ]
-      ++ lib.optionals (!isDarwin) [
+      ++ lib.optionals (gtk_modules != [ ]) [
         "--suffix"
         "GTK_PATH"
         ":"
