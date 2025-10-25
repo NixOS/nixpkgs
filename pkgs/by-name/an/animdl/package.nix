@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication {
   ];
 
   pythonRelaxDeps = [
+    "click"
     "cssselect"
     "httpx"
     "lxml"
@@ -37,7 +38,7 @@ python3Packages.buildPythonApplication {
   ];
 
   dependencies = with python3Packages; [
-    anchor-kr
+    anchor
     anitopy
     click
     cssselect
@@ -55,12 +56,12 @@ python3Packages.buildPythonApplication {
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     description = "Highly efficient, powerful and fast anime scraper";
     homepage = "https://github.com/justfoolingaround/animdl";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     mainProgram = "animdl";
-    maintainers = with maintainers; [ passivelemon ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with lib.maintainers; [ passivelemon ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

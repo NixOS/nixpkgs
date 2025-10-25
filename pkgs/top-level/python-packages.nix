@@ -662,7 +662,7 @@ self: super: with self; {
 
   amshan = callPackage ../development/python-modules/amshan { };
 
-  anchor-kr = callPackage ../development/python-modules/anchor-kr { };
+  anchor = callPackage ../development/python-modules/anchor { };
 
   ancp-bids = callPackage ../development/python-modules/ancp-bids { };
 
