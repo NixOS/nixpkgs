@@ -2,56 +2,67 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  nix-update-script,
+
   setuptools,
   pytestCheckHook,
-  colorlog,
-  smpp-pdu,
-  pyscard,
-  packaging,
-  gsm0338,
+
+  asn1tools,
   bidict,
-  jsonpath-ng,
-  termcolor,
-  pyyaml,
-  pycryptodomex,
+  cmd2,
+  colorlog,
   construct,
+  cryptography,
+  gsm0338,
+  jsonpath-ng,
+  packaging,
+  pycryptodomex,
+  pyosmocom,
+  pyscard,
   pyserial,
   pytlv,
-  cmd2,
+  pyyaml,
+  smpp-pdu,
+  smpp-twisted3,
+  termcolor,
 }:
 
 buildPythonPackage {
   pname = "pysim";
-  version = "unstable-2023-08-13";
+  version = "1.0-unstable-2025-09-04";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "pysim";
-    rev = "09ff0e2b433b7143d5b40b4494744569b805e554";
-    hash = "sha256-7IwIovGR0GcS1bidSqoytmombK6NkLSVAfKB2teW2JU=";
+    rev = "92841f2cd5f65aec0dfa3ad7a7643605c54abf3a";
+    hash = "sha256-gXnc8QsHsF5XQO14fOszBnFeo5Mh/w5TNpY6zBTZdrk=";
   };
 
   postPatch = ''
-    substituteInPlace setup.py --replace 'smpp.pdu @ git+https://github.com/hologram-io/smpp.pdu' 'smpp.pdu'
+    substituteInPlace setup.py --replace-fail 'smpp.pdu @ git+https://github.com/hologram-io/smpp.pdu' 'smpp.pdu'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    asn1tools
     bidict
     cmd2
     colorlog
     construct
+    cryptography
     gsm0338
     jsonpath-ng
     packaging
     pycryptodomex
+    pyosmocom
     pyscard
     pyserial
     pytlv
     pyyaml
     smpp-pdu
+    smpp-twisted3
     termcolor
   ];
 
@@ -59,10 +70,14 @@ buildPythonPackage {
 
   pythonImportsCheck = [ "pySim" ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
+
+  meta = {
     description = "Python tool to program SIMs / USIMs / ISIMs";
     homepage = "https://github.com/osmocom/pysim";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ flokli ];
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ flokli ];
   };
 }
