@@ -1,5 +1,7 @@
 {
   lib,
+  stdenv,
+  config,
   buildDotnetModule,
   dotnetCorePackages,
   fetchFromGitHub,
@@ -16,7 +18,6 @@
   libXrandr,
   fontconfig,
   glew,
-  SDL2,
   glfw,
   glibc,
   libGL,
@@ -30,13 +31,22 @@
   zlib,
   glib,
   gdk-pixbuf,
+  alsa-lib,
+  libjack2,
+  pipewire,
+  libpulseaudio,
+  alsaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  jackSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  pipewireSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
+  pulseaudioSupport ?
+    config.pulseaudio or stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   soundfont-fluid,
 
   # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
 let
-  version = "0.33.0";
+  version = "0.35.0";
   pname = "space-station-14-launcher";
 in
 buildDotnetModule rec {
@@ -50,7 +60,7 @@ buildDotnetModule rec {
     owner = "space-wizards";
     repo = "SS14.Launcher";
     tag = "v${version}";
-    hash = "sha256-mEockP4fcNFP0h1j30cV2Czq751xjjpdaqQ0Wxe0+7M=";
+    hash = "sha256-8YDlX5GwL5S/gdjIWOa48sEGA/sMEYZvy2FTWSPO+Ug=";
     fetchSubmodules = true;
   };
 
@@ -100,7 +110,6 @@ buildDotnetModule rec {
     libXrandr
 
     glfw
-    SDL2
     glibc
     libGL
     openal
@@ -111,7 +120,6 @@ buildDotnetModule rec {
   runtimeDeps = [
     # Required by the game.
     glfw
-    SDL2
     glibc
     libGL
     openal
@@ -139,7 +147,11 @@ buildDotnetModule rec {
     glew
 
     # TODO: Figure out dependencies for CEF support.
-  ];
+  ]
+  ++ lib.optional alsaSupport alsa-lib
+  ++ lib.optional jackSupport libjack2
+  ++ lib.optional pipewireSupport pipewire
+  ++ lib.optional pulseaudioSupport libpulseaudio;
 
   # ${soundfont-path} is escaped here:
   # https://github.com/NixOS/nixpkgs/blob/d29975d32b1dc7fe91d5cb275d20f8f8aba399ad/pkgs/build-support/setup-hooks/make-wrapper.sh#L126C35-L126C45
