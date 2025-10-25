@@ -316,7 +316,7 @@ let
         "--suffix"
         "GTK_PATH"
         ":"
-        "${lib.concatStringsSep ":" finalAttrs.gtk_modules}"
+        "${lib.concatStringsSep ":" (map (x: x + x.gtkModule) gtk_modules)}"
 
         "--suffix"
         "XDG_DATA_DIRS"
@@ -554,7 +554,6 @@ let
       preferLocalBuild = true;
 
       libs = lib.makeLibraryPath libs + ":" + lib.makeSearchPathOutput "lib" "lib64" libs;
-      gtk_modules = map (x: x + x.gtkModule) gtk_modules;
 
       passthru = {
         unwrapped = browser;
