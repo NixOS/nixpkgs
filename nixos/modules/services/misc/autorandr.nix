@@ -11,7 +11,7 @@ let
 
   matrixOf =
     n: m: elemType:
-    lib.mkOptionType rec {
+    lib.mkOptionType (self: {
       name = "matrixOf";
       description = "${toString n}×${toString m} matrix of ${elemType.description}s";
       check =
@@ -31,11 +31,11 @@ let
           ]
         );
       getSubModules = elemType.getSubModules;
-      substSubModules = mod: matrixOf n m (elemType.substSubModules mod);
-      functor = (lib.defaultFunctor name) // {
+      substSubModules = mod: self.__constructor__ n m (elemType.substSubModules mod);
+      functor = lib.defaultFunctor self // {
         wrapped = elemType;
       };
-    };
+    });
 
   profileModule = lib.types.submodule {
     options = {

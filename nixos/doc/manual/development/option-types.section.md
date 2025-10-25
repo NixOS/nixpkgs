@@ -643,9 +643,9 @@ Types are mainly characterized by their `check` and `merge` functions.
     {
       nixThings = mkOption {
         description = "words that start with 'nix'";
-        type = types.str // {
-          check = (x: lib.hasPrefix "nix" x);
-        };
+        type = types.str.extend (final: prev: {
+          check = x: prev.check x && lib.hasPrefix "nix" x;
+        });
       };
     }
     ```
@@ -661,9 +661,14 @@ Types are mainly characterized by their `check` and `merge` functions.
 ## Custom types {#sec-option-types-custom}
 
 Custom types can be created with the `mkOptionType` function. As type
-creation includes some more complex topics such as submodule handling,
+creation includes some advanced topics such as submodule handling,
 it is recommended to get familiar with `types.nix` code before creating
-a new type.
+a new type. If a type needs access to its own resolved attributes,
+accept `self` as the first parameter and place any additional parameters
+after it. For parameterised types, the unapplied form is available as
+`.__constructor__`, ensuring consistent behaviour for argument application
+and `.extend`.
+
 
 The only required parameter is `name`.
 
@@ -749,7 +754,7 @@ The only required parameter is `name`.
 
     `type`
 
-    :   The type function.
+    :   Function to initialize the type with passed values.
 
     `wrapped`
 

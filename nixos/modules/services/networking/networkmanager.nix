@@ -225,17 +225,17 @@ in
       plugins = mkOption {
         type =
           let
-            networkManagerPluginPackage = types.package // {
-              description = "NetworkManager plugin package";
-              check =
-                p:
-                lib.assertMsg
-                  (types.package.check p && p ? networkManagerPlugin && lib.isString p.networkManagerPlugin)
-                  ''
+            networkManagerPluginPackage = types.package.extend (
+              final: prev: {
+                description = "NetworkManager plugin package";
+                check =
+                  p:
+                  lib.assertMsg (prev.check p && p ? networkManagerPlugin && lib.isString p.networkManagerPlugin) ''
                     Package ‘${p.name}’, is not a NetworkManager plugin.
                     Those need to have a ‘networkManagerPlugin’ attribute.
                   '';
-            };
+              }
+            );
           in
           types.listOf networkManagerPluginPackage;
         default = [ ];

@@ -497,10 +497,12 @@ in
                       path = mkOption {
                         # TODO for release 23.05: allow relative paths again and set
                         # working directory to cfg.dataDir
-                        type = types.str // {
-                          check = x: types.str.check x && (substring 0 1 x == "/" || substring 0 2 x == "~/");
-                          description = types.str.description + " starting with / or ~/";
-                        };
+                        type = types.str.extend (
+                          final: prev: {
+                            check = x: prev.check x && (substring 0 1 x == "/" || substring 0 2 x == "~/");
+                            description = prev.description + " starting with / or ~/";
+                          }
+                        );
                         default = name;
                         description = ''
                           The path to the folder which should be shared.

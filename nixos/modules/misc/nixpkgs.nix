@@ -51,11 +51,13 @@ let
     merge = lib.mergeOneOption;
   };
 
-  pkgsType = lib.types.pkgs // {
-    # This type is only used by itself, so let's elaborate the description a bit
-    # for the purpose of documentation.
-    description = "An evaluation of Nixpkgs; the top level attribute set of packages";
-  };
+  pkgsType = lib.types.pkgs.extend (
+    final: prev: {
+      # This type is only used by itself, so let's elaborate the description a bit
+      # for the purpose of documentation.
+      description = "An evaluation of Nixpkgs; the top level attribute set of packages";
+    }
+  );
 
   hasBuildPlatform = opt.buildPlatform.highestPrio < (lib.mkOptionDefault { }).priority;
   hasHostPlatform = opt.hostPlatform.isDefined;

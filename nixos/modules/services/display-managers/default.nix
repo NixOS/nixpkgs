@@ -120,16 +120,20 @@ in
       };
 
       defaultSession = lib.mkOption {
-        type = lib.types.nullOr lib.types.str // {
-          description = "session name";
-          check =
-            d:
-            lib.assertMsg (d != null -> (lib.types.str.check d && lib.elem d cfg.sessionData.sessionNames)) ''
-              Default graphical session, '${d}', not found.
-              Valid names for 'services.displayManager.defaultSession' are:
-                ${lib.concatStringsSep "\n  " cfg.sessionData.sessionNames}
-            '';
-        };
+        type = lib.types.nullOr (
+          lib.types.str.extend (
+            final: prev: {
+              description = "session name";
+              check =
+                d:
+                lib.assertMsg (d != null -> (prev.check d && lib.elem d cfg.sessionData.sessionNames)) ''
+                  Default graphical session, '${d}', not found.
+                  Valid names for 'services.displayManager.defaultSession' are:
+                    ${lib.concatStringsSep "\n  " cfg.sessionData.sessionNames}
+                '';
+            }
+          )
+        );
         default = null;
         example = "gnome";
         description = ''
