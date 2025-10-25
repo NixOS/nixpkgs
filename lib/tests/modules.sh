@@ -265,6 +265,16 @@ checkConfigOutput '^42$' config.value ./declare-oneOf.nix ./define-value-int-pos
 checkConfigOutput '^\[\]$' config.value ./declare-oneOf.nix ./define-value-list.nix
 checkConfigOutput '^"24"$' config.value ./declare-oneOf.nix ./define-value-string.nix
 
+# Check arrayOf types
+# success case with correct size
+checkConfigOutput '^\[1,2,3\]$' config.simpleArray ./types-arrayOf.nix
+# success case with composite types
+checkConfigOutput '^\[\["a","b"\],\["c","d"\]\]$' config.compositeArray ./types-arrayOf.nix
+# error case with wrong size
+checkConfigError 'A definition for option .* is not of type .*fixed-length list of 2.*. Definition values:' config.wrongSize ./types-arrayOf.nix
+# error case with wrong element type
+checkConfigError 'A definition for option .wrongType\..* is not of type .signed integer..*Definition values:' config.wrongType ./types-arrayOf.nix
+
 # Check mkForce without submodules.
 set -- config.enable ./declare-enable.nix ./define-enable.nix
 checkConfigOutput '^true$' "$@"

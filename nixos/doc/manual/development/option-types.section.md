@@ -398,6 +398,12 @@ Composed types are types that take a type as parameter. `listOf
 :   A list of *`t`* type, e.g. `types.listOf
           int`. Multiple definitions are merged with list concatenation.
 
+`types.arrayOf` *`t`* *`size`*
+
+:   A fixed-length list of exactly *`size`* elements of *`t`* type, e.g.
+    `types.arrayOf types.int 3`. Multiple definitions are merged with list
+    concatenation, but the resulting list must have exactly *`size`* elements.
+
 `types.attrsOf` *`t`*
 
 :   An attribute set of where all the values are of *`t`* type. Multiple
