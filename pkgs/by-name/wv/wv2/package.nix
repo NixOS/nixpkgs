@@ -7,6 +7,7 @@
   libgsf,
   glib,
   libxml2,
+  libiconvReal,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,8 @@ stdenv.mkDerivation rec {
     libgsf
     glib
     libxml2
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin libiconvReal;
 
   env.NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
