@@ -1,12 +1,13 @@
 import functools
 import hashlib
 import json
-import multiprocessing as mp
+import os
 import re
 import shutil
 import subprocess
 import sys
 import tomllib
+from concurrent.futures import FIRST_EXCEPTION, ThreadPoolExecutor, wait
 from os.path import islink, realpath
 from pathlib import Path
 from typing import Any, TypedDict, cast
@@ -14,6 +15,14 @@ from urllib.parse import unquote
 
 import requests
 from requests.adapters import HTTPAdapter, Retry
+
+# Constants for controlling how the crates are downloaded from the registries via `requests`
+# These do not affect the fetching of git dependencies
+MAX_WORKERS = min(5, os.cpu_count() or 1)  # number of workers in the ThreadPoolExecutor
+CONNECT_TIMEOUT = 2  # max seconds for establishing initial connection
+READ_TIMEOUT = 10  # max seconds between receiving data packets
+RETRY_COUNT = 3  # number of retries for fetching an url
+BACKOFF_FACTOR = 0.5  # seconds to wait between retries (gets multiplied by 2 after every retry)
 
 eprint = functools.partial(print, file=sys.stderr)
 
@@ -34,8 +43,8 @@ def get_lockfile_version(cargo_lock_toml: dict[str, Any]) -> int:
 
 def create_http_session() -> requests.Session:
     retries = Retry(
-        total=5,
-        backoff_factor=0.5,
+        total=RETRY_COUNT,
+        backoff_factor=BACKOFF_FACTOR,
         status_forcelist=[500, 502, 503, 504]
     )
     session = requests.Session()
@@ -46,7 +55,7 @@ def create_http_session() -> requests.Session:
 
 def download_file_with_checksum(session: requests.Session, url: str, destination_path: Path) -> str:
     sha256_hash = hashlib.sha256()
-    with session.get(url, stream=True) as response:
+    with session.get(url, stream=True, timeout=(CONNECT_TIMEOUT, READ_TIMEOUT)) as response:
         if not response.ok:
             raise Exception(f"Failed to fetch file from {url}. Status code: {response.status_code}")
         with open(destination_path, "wb") as file:
@@ -157,13 +166,22 @@ def create_vendor_staging(lockfile_path: Path, out_dir: Path) -> None:
         for git_sha_rev, url in git_sha_rev_to_url.items():
             download_git_tree(url, git_sha_rev, out_dir)
 
-    # run tarball download jobs in parallel, with at most 5 concurrent download jobs
-    with mp.Pool(min(5, mp.cpu_count())) as pool:
-        if len(registry_packages) != 0:
+    if len(registry_packages) != 0:
+        # run tarball download jobs in parallel
+        with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
             (out_dir / "tarballs").mkdir()
             session = create_http_session()
-            tarball_args_gen = ((session, pkg, out_dir) for pkg in registry_packages)
-            pool.starmap(download_tarball, tarball_args_gen)
+            eprint(f"Downloading tarballs with {MAX_WORKERS} workers...")
+            futures = [executor.submit(download_tarball, session, pkg, out_dir) for pkg in registry_packages]
+            # fail early if a worker raises an exception
+            done, not_done = wait(futures, return_when=FIRST_EXCEPTION)
+            for f in done:
+                e = f.exception()
+                if not e:
+                    continue
+                for f2 in not_done:
+                    f2.cancel()
+                raise Exception(f"Failed to download tarball: {e}")
 
 
 def get_manifest_metadata(manifest_path: Path) -> dict[str, Any]:
