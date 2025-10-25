@@ -42,7 +42,7 @@ buildPythonPackage rec {
   # Remove liccheck dev dependency from runtime dependencies
   pythonRemoveDeps = [ "liccheck" ];
 
-  meta = ; {
+  meta = {
     description = "Descope Python SDK";
     homepage = "https://descope.com/";
     changelog = "https://github.com/descope/python-sdk/releases/tag/${version}";
