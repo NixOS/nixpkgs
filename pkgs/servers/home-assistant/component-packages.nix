@@ -6526,7 +6526,8 @@
       ];
     "victron_remote_monitoring" =
       ps: with ps; [
-      ]; # missing inputs: victron-vrm
+        victron-vrm
+      ];
     "vilfo" =
       ps: with ps; [
         vilfo-api-client
@@ -7935,6 +7936,7 @@
     "version"
     "vesync"
     "vicare"
+    "victron_remote_monitoring"
     "vilfo"
     "vizio"
     "vlc_telnet"
