@@ -20,6 +20,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     cp ${catch2}/include/catch2/catch.hpp test/catch/catch.hpp
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0.0)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
