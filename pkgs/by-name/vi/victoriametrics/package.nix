@@ -52,8 +52,8 @@ buildGoModule (finalAttrs: {
     rm -f app/vmui/packages/vmui/web/{go.mod,main.go}
 
     # Allow older go versions
-    substituteInPlace go.mod \
-      --replace-fail "go 1.25.3" "go ${finalAttrs.passthru.go.version}"
+    sed -i go.mod -e 's/^go .*/go ${finalAttrs.passthru.go.version}/'
+    sed -i vendor/modules.txt -e 's/## explicit; go .*/## explicit; go ${finalAttrs.passthru.go.version}/'
 
     # Increase timeouts in tests to prevent failure on heavily loaded builders
     substituteInPlace lib/storage/storage_test.go \
