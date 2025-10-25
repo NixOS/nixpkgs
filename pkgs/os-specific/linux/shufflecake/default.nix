@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "shufflecake";
-  version = "0.5.2";
+  version = "0.5.5";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "shufflecake";
     repo = "shufflecake-c";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EF9VKaqcNJt3hd/CUT+QeW17tc5ByStDanGGwi4uL4s=";
+    hash = "sha256-xVuI7tRARPFuETCCKYt507WpvZVZLaj9dhBkhJ03zc8=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
