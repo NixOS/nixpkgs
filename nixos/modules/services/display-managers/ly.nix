@@ -65,9 +65,7 @@ in
       package = mkPackageOption pkgs [ "ly" ] { };
 
       settings = mkOption {
-        type =
-          with lib.types;
-          attrsOf iniFmt.lib.types.atom;
+        type = with lib.types; attrsOf iniFmt.lib.types.atom;
         default = { };
         example = {
           load = false;
