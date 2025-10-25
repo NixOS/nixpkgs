@@ -1,25 +1,35 @@
 {
   lib,
+  fetchpatch2,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
   bzip2,
   xz,
   zstd,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.15.7";
+  version = "1.15.8";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
     rev = "v${version}";
-    hash = "sha256-EQhEI4MqYNwjqb8awROTLfxjGsoPKeT7VHt642uSgCc=";
+    hash = "sha256-Veus7CAjnmBwHFL9/AS0EJe362HhenKBaETwwLNLn68=";
   };
 
-  cargoHash = "sha256-a9X8L4AZWhlcQ5lVo0I1GL2wpCjOClNuZLy+GwHJDcA=";
+  cargoPatches = [
+    (fetchpatch2 {
+      name = "CVE-2025-62518-fix";
+      url = "https://github.com/cargo-bins/cargo-binstall/commit/f79baa6f399256d19c79efb8e885ae5b3e2e6482.patch?full_index=1";
+      hash = "sha256-keXPZl2jOw6bKRL8Rjn97slcf4a3fIeUcQmbHIzHt/o=";
+    })
+  ];
+
+  cargoHash = "sha256-Z2EOuJNdXkTBJ2Vzux5TZrxdggVaOD23pqiUsnt3AbQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,6 +66,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_no_such_release"
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "Tool for installing rust binaries as an alternative to building from source";
