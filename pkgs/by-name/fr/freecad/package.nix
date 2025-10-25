@@ -17,15 +17,14 @@
   libspnav,
   libXmu,
   medfile,
-  mpi,
   ninja,
   ode,
   opencascade-occt_7_6,
   opencascade-occt,
   pkg-config,
-  python311Packages,
+  python3Packages,
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
-  ifcSupport ? false,
+  ifcSupport ? false, # Now a no-op, retained on 25.05 branch for backport compat.
   stdenv,
   swig,
   vtk,
@@ -38,40 +37,49 @@
   qt5,
   qt6,
   nix-update-script,
+  gmsh,
+  which,
 }:
 let
-  inherit (python311Packages)
-    boost
-    gitpython
-    ifcopenshell
-    matplotlib
-    opencamlib
-    pivy
-    ply
-    py-slvs
-    pybind11
-    pycollada
-    pyside2
-    pyside2-tools
-    pyside6
-    python
-    pyyaml
-    scipy
-    shiboken2
-    shiboken6
-    ;
+  pythonDeps =
+    with python3Packages;
+    [
+      boost
+      gitpython # for addon manager
+      ifcopenshell
+      matplotlib
+      opencamlib
+      pivy
+      ply # for openSCAD file support
+      py-slvs
+      pybind11
+      pycollada
+      python
+      pyyaml # (at least for) PyrateWorkbench
+      scipy
+    ]
+    ++ lib.optionals (qtVersion == 5) [
+      pyside2
+      pyside2-tools
+      shiboken2
+    ]
+    ++ lib.optionals (qtVersion == 6) [
+      pyside6
+      shiboken6
+    ];
+
   freecad-utils = callPackage ./freecad-utils.nix { };
 in
 freecad-utils.makeCustomizable (
   stdenv.mkDerivation (finalAttrs: {
     pname = "freecad";
-    version = "1.0.1";
+    version = "1.0.2";
 
     src = fetchFromGitHub {
       owner = "FreeCAD";
       repo = "FreeCAD";
-      rev = finalAttrs.version;
-      hash = "sha256-VFTNawXxu2ofjj2Frg4OfVhiMKFywBhm7lZunP85ZEQ=";
+      tag = finalAttrs.version;
+      hash = "sha256-J//O/ABMFa3TFYwR0wc8d1UTA5iSFnEP2thOjuCN+uE=";
       fetchSubmodules = true;
     };
 
@@ -85,34 +93,21 @@ freecad-utils.makeCustomizable (
       wrapGAppsHook3
     ]
     ++ lib.optionals (qtVersion == 5) [
-      pyside2-tools
+      python3Packages.pyside2-tools
       qt5.wrapQtAppsHook
     ]
     ++ lib.optionals (qtVersion == 6) [ qt6.wrapQtAppsHook ];
 
     buildInputs = [
-      boost
       coin3d
       eigen
       fmt
-      gitpython # for addon manager
       gts
       hdf5
       libGLU
       libXmu
-      matplotlib
       medfile
-      mpi
       ode
-      opencamlib
-      pivy
-      ply # for openSCAD file support
-      py-slvs
-      pybind11
-      pycollada
-      python
-      pyyaml # (at least for) PyrateWorkbench
-      scipy
       vtk
       xercesc
       yaml-cpp
@@ -121,9 +116,6 @@ freecad-utils.makeCustomizable (
     ++ lib.optionals (qtVersion == 5) [
       libsForQt5.soqt
       opencascade-occt_7_6
-      pyside2
-      pyside2-tools
-      shiboken2
       qt5.qtbase
       qt5.qttools
       qt5.qtwayland
@@ -132,17 +124,13 @@ freecad-utils.makeCustomizable (
     ]
     ++ lib.optionals (qtVersion == 6) [
       opencascade-occt
-      pyside6
-      shiboken6
       qt6.qtbase
       qt6.qtsvg
       qt6.qttools
       qt6.qtwayland
       qt6.qtwebengine
     ]
-    ++ lib.optionals ifcSupport [
-      ifcopenshell
-    ]
+    ++ pythonDeps
     ++ lib.optionals spaceNavSupport (
       [ libspnav ] ++ lib.optionals (qtVersion == 5) [ libsForQt5.qtx11extras ]
     );
@@ -157,11 +145,21 @@ freecad-utils.makeCustomizable (
         url = "https://github.com/FreeCAD/FreeCAD/commit/8e04c0a3dd9435df0c2dec813b17d02f7b723b19.patch?full_index=1";
         hash = "sha256-H6WbJFTY5/IqEdoi5N+7D4A6pVAmZR4D+SqDglwS18c=";
       })
+      # Inform Coin to use EGL when on Wayland
+      # https://github.com/FreeCAD/FreeCAD/pull/21917
+      (fetchpatch {
+        url = "https://github.com/FreeCAD/FreeCAD/commit/60aa5ff3730d77037ffad0c77ba96b99ef0c7df3.patch?full_index=1";
+        hash = "sha256-K6PWQ1U+/fsjDuir7MiAKq71CAIHar3nKkO6TKYl32k=";
+      })
     ];
+
+    postPatch = ''
+      substituteInPlace src/Mod/Fem/femmesh/gmshtools.py \
+        --replace-fail 'self.gmsh_bin = "gmsh"' 'self.gmsh_bin = "${lib.getExe gmsh}"'
+    '';
 
     cmakeFlags = [
       "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
-      "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DBUILD_DRAWING=ON"
       "-DBUILD_FLAT_MESH:BOOL=ON"
       "-DINSTALL_TO_SITEPACKAGES=OFF"
@@ -169,26 +167,26 @@ freecad-utils.makeCustomizable (
     ]
     ++ lib.optionals (qtVersion == 5) [
       "-DBUILD_QT5=ON"
-      "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
+      "-DSHIBOKEN_INCLUDE_DIR=${python3Packages.shiboken2}/include"
       "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
       (
-        "-DPYSIDE_INCLUDE_DIR=${pyside2}/include"
-        + ";${pyside2}/include/PySide2/QtCore"
-        + ";${pyside2}/include/PySide2/QtWidgets"
-        + ";${pyside2}/include/PySide2/QtGui"
+        "-DPYSIDE_INCLUDE_DIR=${python3Packages.pyside2}/include"
+        + ";${python3Packages.pyside2}/include/PySide2/QtCore"
+        + ";${python3Packages.pyside2}/include/PySide2/QtWidgets"
+        + ";${python3Packages.pyside2}/include/PySide2/QtGui"
       )
       "-DPYSIDE_LIBRARY=PySide2::pyside2"
     ]
     ++ lib.optionals (qtVersion == 6) [
       "-DBUILD_QT5=OFF"
       "-DBUILD_QT6=ON"
-      "-DSHIBOKEN_INCLUDE_DIR=${shiboken6}/include"
+      "-DSHIBOKEN_INCLUDE_DIR=${python3Packages.shiboken6}/include"
       "-DSHIBOKEN_LIBRARY=Shiboken6::libshiboken"
       (
-        "-DPYSIDE_INCLUDE_DIR=${pyside6}/include"
-        + ";${pyside6}/include/PySide6/QtCore"
-        + ";${pyside6}/include/PySide6/QtWidgets"
-        + ";${pyside6}/include/PySide6/QtGui"
+        "-DPYSIDE_INCLUDE_DIR=${python3Packages.pyside6}/include"
+        + ";${python3Packages.pyside6}/include/PySide6/QtCore"
+        + ";${python3Packages.pyside6}/include/PySide6/QtWidgets"
+        + ";${python3Packages.pyside6}/include/PySide6/QtGui"
       )
       "-DPYSIDE_LIBRARY=PySide6::pyside6"
     ];
@@ -198,15 +196,22 @@ freecad-utils.makeCustomizable (
       export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
     '';
 
-    preConfigure = ''
-      qtWrapperArgs+=(--prefix PYTHONPATH : "$PYTHONPATH")
-    '';
+    dontWrapGApps = true;
 
-    qtWrapperArgs = [
-      "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
-      "--prefix PATH : ${libredwg}/bin"
-    ]
-    ++ lib.optionals (!withWayland) [ "--set QT_QPA_PLATFORM xcb" ];
+    qtWrapperArgs =
+      let
+        binPath = lib.makeBinPath [
+          libredwg
+          which # for locating tools
+        ];
+      in
+      [
+        "--set COIN_GL_NO_CURRENT_CONTEXT_CHECK 1"
+        "--prefix PATH : ${binPath}"
+        "--prefix PYTHONPATH : ${python3Packages.makePythonPath pythonDeps}"
+        "\${gappsWrapperArgs[@]}"
+      ]
+      ++ lib.optionals (!withWayland) [ "--set QT_QPA_PLATFORM xcb" ];
 
     postFixup = ''
       mv $out/share/doc $out
