@@ -10,13 +10,13 @@
 }:
 let
   pname = "fastcrc";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "overcat";
     repo = "fastcrc";
     tag = "v${version}";
-    hash = "sha256-yLrv/zqsjgygJAIJtztwxlm4s9o9EBVsCyx1jUXd7hA=";
+    hash = "sha256-NE2ZrrpVBxCb5xuRihdGYHctD1lUp9VUGaeOalwf4pQ=";
   };
 in
 buildPythonPackage {
@@ -32,7 +32,7 @@ buildPythonPackage {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-9Vap8E71TkBIf4eIB2lapUqcMukdsHX4LR7U8AD77SU=";
+    hash = "sha256-mImDrbPliz0LcmDSxQxNpTkCYIEFw2bzt2fHhQr27+0=";
   };
 
   pythonImportsCheck = [ "fastcrc" ];
