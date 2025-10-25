@@ -345,6 +345,17 @@ in
     } ./python-imports-check-hook.sh
   ) { };
 
+  pythonShebangsFixupHook = callPackage (
+    { makePythonHook, buildPackages }:
+    makePythonHook {
+      name = "python-shebangs-fixup-hook.sh";
+      substitutions = {
+        inherit pythonOnBuildForHost python;
+        inherit (buildPackages) gnugrep;
+      };
+    } ./python-shebangs-fixup-hook.sh
+  ) { };
+
   pythonNamespacesHook = callPackage (
     { makePythonHook, buildPackages }:
     makePythonHook {
