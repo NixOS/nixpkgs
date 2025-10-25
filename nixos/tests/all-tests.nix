@@ -515,6 +515,7 @@ in
   ergo = runTest ./ergo.nix;
   ergochat = runTest ./ergochat.nix;
   esphome = runTest ./esphome.nix;
+  esphome-dashboard = runTest ./esphome-dashboard.nix;
   etc = pkgs.callPackage ../modules/system/etc/test.nix { inherit evalMinimalConfig; };
   etcd = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./etcd/etcd.nix;
   etcd-cluster = runTestOn [ "aarch64-linux" "x86_64-linux" ] ./etcd/etcd-cluster.nix;
