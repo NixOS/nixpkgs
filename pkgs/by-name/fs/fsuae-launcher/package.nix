@@ -1,20 +1,23 @@
 {
   lib,
-  fetchurl,
+  fetchFromGitHub,
   fsuae,
   gettext,
   python3Packages,
   stdenv,
   libsForQt5,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fs-uae-launcher";
-  version = "3.1.70";
+  version = "3.2.20";
 
-  src = fetchurl {
-    url = "https://fs-uae.net/files/FS-UAE-Launcher/Stable/${finalAttrs.version}/fs-uae-launcher-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yvJ8sa44V13SEUJ6C9SgS+N2ZFH5+20TTL2ICY9A36c=";
+  src = fetchFromGitHub {
+    owner = "FrodeSolheim";
+    repo = "fs-uae-launcher";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-JuCwcVKuc0EzsKQiPXobH9tiIWEFD3tjcXneRXzjsH0=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +54,8 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s ${fsuae}/share/fs-uae $out/share/fs-uae
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     homepage = "https://fs-uae.net";
     description = "Graphical front-end for the FS-UAE emulator";
@@ -58,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fs-uae-launcher";
     maintainers = with lib.maintainers; [
       sander
+      c4patino
     ];
     platforms = with lib.systems.inspect; patternLogicalAnd patterns.isx86 patterns.isLinux;
   };
