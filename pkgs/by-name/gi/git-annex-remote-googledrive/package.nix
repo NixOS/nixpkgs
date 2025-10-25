@@ -1,17 +1,10 @@
 {
   lib,
-  annexremote,
-  buildPythonApplication,
-  drivelib,
+  python3Packages,
   fetchPypi,
-  gitpython,
-  humanfriendly,
-  tenacity,
-  setuptools,
-  distutils,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "git-annex-remote-googledrive";
   version = "1.3.2";
   pyproject = true;
@@ -21,9 +14,9 @@ buildPythonApplication rec {
     sha256 = "0rwjcdvfgzdlfgrn1rrqwwwiqqzyh114qddrbfwd46ld5spry6r1";
   };
 
-  build-system = [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = with python3Packages; [
     annexremote
     drivelib
     gitpython
