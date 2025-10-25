@@ -11,13 +11,13 @@
 }:
 let
   yarn-berry = yarn-berry_4;
-  version = "25.9.0";
+  version = "25.10.0";
   src = fetchFromGitHub {
     name = "actualbudget-actual-source";
     owner = "actualbudget";
     repo = "actual";
     tag = "v${version}";
-    hash = "sha256-TYvGavj0Ts1ahgseFhuOtmfOSgPkjBIr19SIGOgx++Q=";
+    hash = "sha256-VzILbBm1et5YVkbNPUtZT9ne+XuKSooOjk8rUybWkaM=";
   };
   translations = fetchFromGitHub {
     name = "actualbudget-translations-source";
@@ -25,8 +25,8 @@ let
     repo = "translations";
     # Note to updaters: this repo is not tagged, so just update this to the Git
     # tip at the time the update is performed.
-    rev = "3d88d15bf5125497de731f4e9dce19244bd4c7e0";
-    hash = "sha256-tOtDGNwR/DVEiOYilOLSJzNjBqvzxOF78ZJtmlz3fdg=";
+    rev = "b7f6b55536b02690ce08c4ae4523607de132e4f6";
+    hash = "sha256-Sa5lwN4lilEdh3geUeBb+ECOyrdGRcMP6LruvQ9aaMw=";
   };
 
 in
@@ -82,7 +82,7 @@ stdenv.mkDerivation (finalAttrs: {
   missingHashes = ./missing-hashes.json;
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-Vod0VfoZG2nwnu35XLAPqY5uuRLVD751D3ZysD0ypL0=";
+    hash = "sha256-yvlVZPsv9yW1sQp/wscor7nMnws376pERd1rGoJQQyU=";
   };
 
   pname = "actual-server";
@@ -93,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib,lib/actual/packages/sync-server,lib/actual/packages/desktop-client}
     cp -r ./packages/sync-server/build/{app.js,src,migrations,bin} $out/lib/actual/packages/sync-server
+    # sync-server uses package.json to determine version info
+    cp ./packages/sync-server/package.json $out/lib/actual/packages/sync-server
     # sync-server uses package.json to determine path to web ui.
     cp ./packages/desktop-client/package.json $out/lib/actual/packages/desktop-client
     cp -r packages/desktop-client/build $out/lib/actual/packages/desktop-client/build
