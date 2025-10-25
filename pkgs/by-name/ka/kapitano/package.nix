@@ -1,6 +1,6 @@
 {
   lib,
-  fetchFromGitea,
+  fetchFromGitHub,
   meson,
   ninja,
   pkg-config,
@@ -21,12 +21,11 @@ python3Packages.buildPythonApplication rec {
   version = "1.1.5";
   pyproject = false;
 
-  src = fetchFromGitea {
-    domain = "codeberg.org";
-    owner = "zynequ";
+  src = fetchFromGitHub {
+    owner = "lonerOrz";
     repo = "Kapitano";
-    tag = version;
-    hash = "sha256-eX35ZR2O56NwoFnqGNZi2lNUpoBvaYZqFh69dQ+Eng0=";
+    tag = "v${version}";
+    hash = "sha256-f+yTeJXA6enEYqQ9eIZa39vsWV+3Fado+kZjrtVU8nY=";
     fetchLFS = true;
   };
 
