@@ -27,10 +27,14 @@ stdenv.mkDerivation {
   ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/lib/udev/rules.d $out/include
     cp -r include/* $out/include
     cp -r lib/linux_x64/* $out/lib
     cp misc/scripts/99-obsensor-libusb.rules $out/lib/udev/rules.d/
+
+    runHook postInstall
   '';
 
   meta = {
