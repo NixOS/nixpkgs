@@ -10,6 +10,7 @@
   cvs,
   darcs,
   findutils,
+  fossil,
   gawk,
   gitMinimal,
   git-lfs,
@@ -70,6 +71,11 @@ rec {
     cacert
     jq
   ];
+  nix-prefetch-fossil =
+    mkPrefetchScript "fossil" ../../../build-support/fetchfossil/nix-prefetch-fossil
+      [
+        fossil
+      ];
   nix-prefetch-git = mkPrefetchScript "git" ../../../build-support/fetchgit/nix-prefetch-git [
     findutils
     gawk
@@ -95,6 +101,7 @@ rec {
       nix-prefetch-bzr
       nix-prefetch-cvs
       nix-prefetch-darcs
+      nix-prefetch-fossil
       nix-prefetch-git
       nix-prefetch-hg
       nix-prefetch-svn
