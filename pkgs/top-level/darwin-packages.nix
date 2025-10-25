@@ -95,6 +95,8 @@ makeScopeWithSplicing' {
 
         DarwinTools = callPackage ../os-specific/darwin/DarwinTools { };
 
+        installBinaryPackage = callPackage ../os-specific/darwin/install-binary-package { };
+
         libunwind = callPackage ../os-specific/darwin/libunwind { };
 
         libcxx = callPackage ../os-specific/darwin/libcxx { };
