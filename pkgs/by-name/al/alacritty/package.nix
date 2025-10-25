@@ -44,7 +44,7 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty";
-  version = if !withGraphics then "0.16.1" else "0.16.0-graphics";
+  version = if !withGraphics then "0.16.1" else "0.16.1-graphics";
 
   src =
     # by default we want the official package
@@ -61,14 +61,14 @@ rustPlatform.buildRustPackage (finalAttrs: {
         owner = "ayosec";
         repo = "alacritty";
         tag = "v${finalAttrs.version}";
-        hash = "sha256-JbsHozYMh7hFMAsu823IcVZTzvMEGQP+oKpUnlmM7Nk=";
+        hash = "sha256-e+o0GLy05qXEY4T57dCuqhukTKBSm1WIHzPUV8uswRI=";
       };
 
   cargoHash =
     if !withGraphics then
       "sha256-OBhrd4q44LCUGnjDEedhrOuoSC2UFR90IKSQfEPY/Q4="
     else
-      "sha256-fsTs37w4CvYvFN8ZgWxMA2hmgW0hJcIvhLiuhYxs4+Y=";
+      "sha256-VR+URXqsB9zCOSow/f/aWXUlrp6j2XeK0zKESQGzMek=";
 
   nativeBuildInputs = [
     cmake
@@ -151,10 +151,17 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "https://github.com/ayosec/alacritty";
     license = lib.licenses.asl20;
     mainProgram = "alacritty";
-    maintainers = with lib.maintainers; [
-      Br1ght0ne
-      rvdp
-    ];
+    maintainers =
+      with lib.maintainers;
+      if !withGraphics then
+        [
+          Br1ght0ne
+          rvdp
+        ]
+      else
+        [
+          afh
+        ];
     platforms = lib.platforms.unix;
     changelog =
       if !withGraphics then
