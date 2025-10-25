@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libminc";
-  version = "2.4.06";
+  version = "2.4.07";
 
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "libminc";
     tag = "release-${finalAttrs.version}";
-    hash = "sha256-HTt3y0AFM9pkEkWPb9cDmvUz4iBQWfpX7wLF9Vlg8hc=";
+    hash = "sha256-F5c0S4fybkrdpDJQ0nz6MvTdjq1qM1nJVxXuxXbCeSI=";
   };
 
   postPatch = ''
