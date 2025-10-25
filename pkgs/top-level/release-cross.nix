@@ -255,6 +255,10 @@ in
   i686-musl = mapTestOnCross systems.examples.musl32 linuxCommon;
   i686-gnu = mapTestOnCross systems.examples.gnu32 linuxCommon;
 
+  # Linux on POWER
+  ppc64-elfv1 = mapTestOnCross systems.examples.ppc64-elfv1 linuxCommon;
+  ppc64-elfv2 = mapTestOnCross systems.examples.ppc64-elfv2 linuxCommon;
+  ppc64-musl = mapTestOnCross systems.examples.ppc64-musl linuxCommon;
   ppc64le = mapTestOnCross systems.examples.powernv linuxCommon;
   ppc64le-musl = mapTestOnCross systems.examples.musl-power linuxCommon;
 
