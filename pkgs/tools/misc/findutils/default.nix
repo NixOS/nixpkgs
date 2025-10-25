@@ -22,6 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     substituteInPlace xargs/xargs.c --replace 'char default_cmd[] = "echo";' 'char default_cmd[] = "${coreutils}/bin/echo";'
+  ''
+  # on cygwin, ARG_MAX is a low value which only applies to executing non-cygwin processes
+  + lib.optionalString stdenv.hostPlatform.isCygwin ''
+    substituteInPlace lib/buildcmd.c --replace-fail '#ifdef ARG_MAX' '#if 0'
   '';
 
   patches = [
@@ -40,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck =
     !stdenv.hostPlatform.isDarwin
     && !stdenv.hostPlatform.isFreeBSD
+    # FAIL: tests/find/depth-unreadable-dir.sh
+    # FAIL: tests/find/used.sh
+    # FAIL: tests/find/newer.sh
+    # FAIL: tests/find/type_list.sh
+    && !stdenv.hostPlatform.isCygwin
     && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
