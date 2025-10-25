@@ -4094,7 +4094,13 @@ with pkgs;
 
   tpmmanager = libsForQt5.callPackage ../applications/misc/tpmmanager { };
 
-  trezorctl = with python3Packages; toPythonApplication trezor;
+  trezorctl =
+    with python3Packages;
+    toPythonApplication (
+      trezor.overridePythonAttrs (oldAttrs: {
+        dependencies = oldAttrs.dependencies ++ oldAttrs.optional-dependencies.full;
+      })
+    );
 
   trezor-agent = with python3Packages; toPythonApplication trezor-agent;
 

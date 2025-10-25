@@ -3,6 +3,9 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  hatchling,
+  pytestCheckHook,
+  # dependencies
   click,
   construct,
   construct-classes,
@@ -10,26 +13,30 @@
   ecdsa,
   libusb1,
   mnemonic,
+  noiseprotocol,
   requests,
-  setuptools,
   shamir-mnemonic,
   slip10,
   typing-extensions,
-  trezor-udev-rules,
-  pytestCheckHook,
+  # optional-dependencies
+  bleak,
+  pillow,
+  hidapi,
+  web3,
+  pyqt5,
 }:
 
 buildPythonPackage rec {
   pname = "trezor";
-  version = "0.13.10";
+  version = "0.20.0.dev0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-egtq5GKN0MMaXOtRJYkY2bvdOthROIg3IlgmsijuUE8=";
+    hash = "sha256-hU2J5TORWU55zoxjfsFPjk4VtNoxmVsjceDVvTKXKxI=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
     click
@@ -39,12 +46,24 @@ buildPythonPackage rec {
     ecdsa
     libusb1
     mnemonic
+    noiseprotocol
     requests
     shamir-mnemonic
     slip10
     typing-extensions
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ trezor-udev-rules ];
+  ];
+
+  optional-dependencies = {
+    # bleak is missing on darwin
+    # https://github.com/NixOS/nixpkgs/issues/456469
+    ble = lib.optionals stdenv.hostPlatform.isLinux [ bleak ];
+    extra = [ pillow ];
+    hidapi = [ hidapi ];
+    ethereum = [ web3 ];
+    qt-widgets = [ pyqt5 ];
+    # stellar = [ stellar-sdk ]; # missing in nixpkgs
+    full = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "full" ]));
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 
