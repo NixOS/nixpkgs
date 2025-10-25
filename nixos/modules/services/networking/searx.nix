@@ -31,10 +31,22 @@ let
   generateConfig = ''
     cd ${runDir}
 
-    # write NixOS settings as JSON
+    # write NixOS settings
     (
       umask 077
-      ${pkgs.envsubst}/bin/envsubst < ${settingsFile} > settings.yml
+      ${lib.getExe pkgs.envsubst} < ${settingsFile} > settings.yml
+      ${
+        if (cfg.faviconsSettings != { }) then
+          "ln -sf ${faviconsSettingsFile} favicons.toml"
+        else
+          "rm -f favicons.toml"
+      }
+      ${
+        if (cfg.limiterSettings != { }) then
+          "ln -sf ${limiterSettingsFile} limiter.toml"
+        else
+          "rm -f limiter.toml"
+      }
     )
   '';
 in
@@ -263,17 +275,7 @@ in
       }
     ];
 
-    environment = {
-      etc = {
-        "searxng/favicons.toml" = lib.mkIf (cfg.faviconsSettings != { }) {
-          source = faviconsSettingsFile;
-        };
-        "searxng/limiter.toml" = lib.mkIf (cfg.limiterSettings != { }) {
-          source = limiterSettingsFile;
-        };
-      };
-      systemPackages = [ cfg.package ];
-    };
+    environment.systemPackages = [ cfg.package ];
 
     services = {
       nginx = lib.mkIf cfg.configureNginx {
