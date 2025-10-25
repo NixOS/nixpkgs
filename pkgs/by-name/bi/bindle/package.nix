@@ -42,5 +42,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.asl20;
     maintainers = [ ];
     platforms = platforms.unix;
+
+    knownVulnerabilities = [
+      "'bindle' is vulnerable to CVE-2025-62518 and upstream has been archived"
+    ];
   };
 }
