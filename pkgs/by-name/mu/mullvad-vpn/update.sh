@@ -1,24 +1,19 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl gnused gawk jq nix-prefetch
+#!nix-shell -i bash -p curl gnused gawk jq nix-prefetch-scripts
 
 set -euo pipefail
 
 ROOT="$(dirname "$(readlink -f "$0")")"
-NIX_DRV="$ROOT/default.nix"
+NIX_DRV="$ROOT/package.nix"
 if [ ! -f "$NIX_DRV" ]; then
-  echo "ERROR: cannot find default.nix in $ROOT"
+  echo "ERROR: cannot find package.nix in $ROOT"
   exit 1
 fi
 
 fetch_arch() {
   VER="$1"; ARCH="$2"
   URL="https://github.com/mullvad/mullvadvpn-app/releases/download/${VER}/MullvadVPN-${VER}_${ARCH}.deb"
-  nix-prefetch "{ stdenv, fetchzip }:
-stdenv.mkDerivation rec {
-  pname = \"mullvad-vpn\"; version = \"${VER}\";
-  src = fetchurl { url = \"$URL\"; };
-}
-"
+  nix-prefetch-url --type sha256 "$URL"
 }
 
 replace_sha() {
@@ -30,7 +25,10 @@ MULLVAD_VER=$(curl -s https://api.mullvad.net/app/v1/releases/linux/2022.5 | jq 
 MULLVAD_LINUX_X64_SHA256=$(fetch_arch "$MULLVAD_VER" "amd64")
 MULLVAD_LINUX_AARCH64_SHA256=$(fetch_arch "$MULLVAD_VER" "arm64")
 
+# update version in package.nix
 sed -i "s/version = \".*\"/version = \"$MULLVAD_VER\"/" "$NIX_DRV"
 
+# update hashes
 replace_sha "x86_64-linux" "$MULLVAD_LINUX_X64_SHA256"
+replace_sha "aarch64-linux" "$MULLVAD_LINUX_AARCH64_SHA256"
 replace_sha "aarch64-linux" "$MULLVAD_LINUX_AARCH64_SHA256"
