@@ -64,6 +64,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs test-scripts/
     cp ${catch2}/include/catch2/catch.hpp tests/catch.hpp
+
+    # disable test until upstream fixes it
+    # https://github.com/dns-stats/compactor/issues/92
+    substituteInPlace Makefile.am \
+      --replace-fail "test-scripts/same-tshark-output.sh" ""
   '';
 
   preConfigure = ''
