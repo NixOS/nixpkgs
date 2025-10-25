@@ -3,7 +3,6 @@
   lib,
   callPackage,
   fetchFromGitHub,
-  fetchpatch,
   fetchurl,
   makeWrapper,
   writeText,
@@ -43,24 +42,23 @@
   libjpeg,
   libtiff,
   libpng,
-  patchRcPathCsh,
-  patchRcPathFish,
-  patchRcPathPosix,
   onetbb,
   xrootd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.36.04";
+  version = "6.38.00";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
   };
 
-  src = fetchurl {
-    url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-zGNn2PVjxtSco0wJ0LU8sPQaUo22+GrxEf12dEzaRZY=";
+  src = fetchFromGitHub {
+    owner = "root-project";
+    repo = "root";
+    rev = "0f34653cdd8a5f3125931d8df51be18a73bcabf8";
+    hash = "sha256-sbUh8Q8MA203mCtQ9xRRNJed0qbyYV05pgNfrs6CsoE=";
   };
 
   clad_src = fetchFromGitHub {
@@ -68,8 +66,8 @@ stdenv.mkDerivation rec {
     repo = "clad";
     # Make sure that this is the same tag as in the ROOT build files!
     # https://github.com/root-project/root/blob/master/interpreter/cling/tools/plugins/clad/CMakeLists.txt#L76
-    rev = "refs/tags/v1.9";
-    hash = "sha256-TKCRAfwdTp/uDH7rk9EE4z2hwqBybklHhhYH6hQFYpg=";
+    rev = "refs/tags/v2.1";
+    hash = "sha256-z0EjlCNJ1kkwKzS3MDVuXOch9ibrYegRH1PUyRiDRhw=";
   };
 
   # ROOT requires a patched version of clang
@@ -101,9 +99,6 @@ stdenv.mkDerivation rec {
     llvm_18
     lz4
     openssl
-    patchRcPathCsh
-    patchRcPathFish
-    patchRcPathPosix
     pcre2
     python3
     onetbb
@@ -121,20 +116,6 @@ stdenv.mkDerivation rec {
     xorg.libXpm
     xorg.libXft
     xorg.libXext
-  ];
-
-  patches = [
-    # Backport that can be removed once ROOT is updated to 6.38.00
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/8f21acb893977bc651a4c4fe5c4fa020a48d31de.patch";
-      hash = "sha256-xo3BbaJRyW4Wy2eVuX1bY3FFH7Jm3vN2ZojMsVNIK2I=";
-    })
-    # Revert because it introduces usage of the xcrun executable from xcode:
-    (fetchpatch {
-      url = "https://github.com/root-project/root/commit/6bd0dbad38bb524491c5109bc408942246db8b50.patch";
-      hash = "sha256-D7LZWJnGF9DtKcM8EF3KILU81cqTcZolW+HMe3fmXTw=";
-      revert = true;
-    })
   ];
 
   preConfigure = ''
@@ -162,6 +143,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCLAD_SOURCE_DIR=${clad_src}"
+    "-DCMAKE_INSTALL_PYTHONDIR=${python3.sitePackages}"
     "-DClang_DIR=${clang}/lib/cmake/clang"
     "-Dbuiltin_clang=OFF"
     "-Dbuiltin_llvm=OFF"
@@ -170,7 +152,7 @@ stdenv.mkDerivation rec {
     "-Dfitsio=OFF"
     "-Dmathmore=ON"
     "-Dsqlite=OFF"
-    "-Dtmva-pymva=OFF"
+    "-Dthisroot_scripts=OFF"
     "-Dvdt=OFF"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
@@ -194,41 +176,6 @@ stdenv.mkDerivation rec {
           stdenv.cc.libc # ldd
         ]
       }"
-
-    # Patch thisroot.{sh,csh,fish}
-
-    # The main target of `thisroot.sh` is "bash-like shells",
-    # but it also need to support Bash-less POSIX shell like dash,
-    # as they are mentioned in `thisroot.sh`.
-
-    patchRcPathPosix "$out/bin/thisroot.sh" "${
-      lib.makeBinPath [
-        coreutils # dirname tail
-        gnugrep # grep
-        gnused # sed
-        lsof # lsof
-        man # manpath
-        procps # ps
-        which # which
-      ]
-    }"
-    patchRcPathCsh "$out/bin/thisroot.csh" "${
-      lib.makeBinPath [
-        coreutils
-        gnugrep
-        gnused
-        lsof # lsof
-        man
-        which
-      ]
-    }"
-    patchRcPathFish "$out/bin/thisroot.fish" "${
-      lib.makeBinPath [
-        coreutils
-        man
-        which
-      ]
-    }"
   '';
 
   # workaround for

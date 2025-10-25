@@ -27,7 +27,7 @@ buildPythonPackage {
   installPhase = ''
     mkdir -p $out/${python.sitePackages}
     rmdir $out/${python.sitePackages}
-    ln -s ${unwrapped}/lib $out/${python.sitePackages}
+    ln -s ${unwrapped}/${python.sitePackages} $out/${python.sitePackages}
   '';
 
   # Those namespaces are looked up dynamically via ROOTs CPython extension, so
