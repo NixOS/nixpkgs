@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   libbtbb,
@@ -23,6 +24,21 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "${src.name}/host";
+
+  patches = [
+    # Fix cmake
+    # https://github.com/greatscottgadgets/ubertooth/pull/546
+    (fetchpatch {
+      url = "https://github.com/greatscottgadgets/ubertooth/commit/2bf91e80b276814ab42a6025ed5d3f1e4e7a005a.patch";
+      relative = "host";
+      hash = "sha256-p/u67f3szrylbNaHXBDEvJPyp24teSNrwqLngLNRTAA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/greatscottgadgets/ubertooth/commit/5f60e90d5b836ee9d55fd101bc00025bf537d8ea.patch";
+      relative = "host";
+      hash = "sha256-yEtiy8J6Tm2zJisFgq6bUKnkgYkDbLd1L+VSaptxdiI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
