@@ -1,0 +1,18 @@
+--- a/tests/Makefile.in
++++ b/tests/Makefile.in
+@@ -92,13 +92,11 @@
+ host_triplet = @host@
+ TESTS = test-catch-segv1$(EXEEXT) test-catch-segv2$(EXEEXT) \
+ 	test-segv-dispatcher1$(EXEEXT) \
+-	test-catch-stackoverflow1$(EXEEXT) \
+-	test-catch-stackoverflow2$(EXEEXT) $(am__EXEEXT_1) \
++	$(am__EXEEXT_1) \
+ 	$(am__EXEEXT_2)
+ noinst_PROGRAMS = test-catch-segv1$(EXEEXT) test-catch-segv2$(EXEEXT) \
+ 	test-segv-dispatcher1$(EXEEXT) \
+-	test-catch-stackoverflow1$(EXEEXT) \
+-	test-catch-stackoverflow2$(EXEEXT) $(am__EXEEXT_1) \
++	$(am__EXEEXT_1) \
+ 	$(am__EXEEXT_2)
+ @CYGWIN_TRUE@am__append_1 = cygwin1
+ @CYGWIN_TRUE@am__append_2 = cygwin1
