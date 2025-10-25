@@ -7,6 +7,7 @@
   rake,
   curl,
   fetchFromGitHub,
+  kubazip,
   libGL,
   libGLU,
   libX11,
@@ -37,7 +38,7 @@ stdenv.mkDerivation {
     hash = "sha256-UjBnXxYZ5gfk58sI1qek5fkKpJ7LzOVmrxdjVgONcXc=";
     # TIC-80 vendors its dependencies as submodules. For the following dependencies,
     # there are no (or no compatible) packages in nixpkgs yet, so we use the vendored
-    # ones as a fill-in: kubazip, wasm, squirrel, pocketpy, argparse, naett,
+    # ones as a fill-in: wasm, squirrel, pocketpy, argparse, naett,
     # sdlgpu, mruby.
     fetchSubmodules = true;
   };
@@ -90,6 +91,7 @@ stdenv.mkDerivation {
     rake
   ];
   buildInputs = [
+    kubazip
     libGL
     libGLU
     libX11
