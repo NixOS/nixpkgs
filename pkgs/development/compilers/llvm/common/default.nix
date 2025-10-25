@@ -396,8 +396,18 @@ let
       };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
-      flang = callPackage ./flang {
+      flang-unwrapped = callPackage ./flang {
         mlir = tools.mlir;
+      };
+      flang = wrapCCWith rec {
+        inherit (buildLlvmTools.clang) libcxx;
+        cc = tools.flang-unwrapped;
+        bintools = bintools';
+        extraPackages = [ targetLlvmLibraries.flang-rt ];
+        extraBuildCommands = mkExtraBuildCommands0 cc + ''
+          ln -s "${targetLlvmLibraries.flang-rt}/lib/clang/${clangVersion}/lib/${stdenv.targetPlatform.config}" "$rsrc"/lib
+          echo -L"$rsrc"/lib >> $out/nix-support/cc-ldflags
+        '';
       };
     }
   );
@@ -496,6 +506,9 @@ let
         libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
       }
     )
+    // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
+      flang-rt = callPackage ./flang-rt { };
+    }
   );
 
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];

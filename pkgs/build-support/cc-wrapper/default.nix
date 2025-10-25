@@ -568,10 +568,15 @@ stdenvNoCC.mkDerivation {
   ''
 
   + optionalString cc.langFortran or false ''
+      if [ -e $ccPath/${targetPrefix}gfortran ]; then
     wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
     ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
     ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     export named_fc=${targetPrefix}gfortran
+      elif [ -e $ccPath/flang ]; then
+        wrap ${targetPrefix}flang $wrapper $ccPath/${targetPrefix}flang
+        export named_fc=${targetPrefix}flang
+      fi
   ''
 
   + optionalString cc.langGo or false ''
@@ -751,14 +756,17 @@ stdenvNoCC.mkDerivation {
     # already knows how to find its own libstdc++, and adding
     # additional -isystem flags will confuse gfortran (see
     # https://github.com/NixOS/nixpkgs/pull/209870#issuecomment-1500550903)
-    + optionalString (libcxx == null && isClang && (useGccForLibs && gccForLibs.langCC or false)) ''
-      for dir in ${gccForLibs}/include/c++/*; do
-        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
-      done
-      for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
-        include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
-      done
-    ''
+    +
+      optionalString
+        (libcxx == null && isClang && useGccForLibs && (cc.langCC or false))
+        ''
+          for dir in ${gccForLibs}/include/c++/*; do
+            include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+          done
+          for dir in ${gccForLibs}/include/c++/*/${targetPlatform.config}; do
+            include -isystem "$dir" >> $out/nix-support/libcxx-cxxflags
+          done
+        ''
     + optionalString (libcxx.isLLVM or false) ''
       include -isystem "${getDev libcxx}/include/c++/v1" >> $out/nix-support/libcxx-cxxflags
       echo "-stdlib=libc++" >> $out/nix-support/libcxx-ldflags
@@ -819,6 +827,7 @@ stdenvNoCC.mkDerivation {
           && !(cc.isROCm or false)
           && !targetPlatform.isDarwin
           && !targetPlatform.isAndroid
+          && ((cc.langC or false) || (cc.langCC or false))
         )
         ''
           echo " -nostdlibinc" >> $out/nix-support/cc-cflags
