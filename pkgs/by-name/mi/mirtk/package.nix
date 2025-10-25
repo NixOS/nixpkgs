@@ -46,6 +46,15 @@ stdenv.mkDerivation {
     rm CMake/Modules/FindTBB.cmake
     substituteInPlace CMake/Modules/CMakeLists.txt \
       --replace-fail '"FindTBB.cmake"' ""
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace CMake/Basis/{BasisSettings.cmake,ProjectTools.cmake,configure_script.cmake.in} \
+      --replace-fail "cmake_minimum_required (VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace {ThirdParty/LBFGS,Packages/Deformable,Packages/Mapping,Packages/Scripting,Packages/Viewer}/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   postInstall = ''
