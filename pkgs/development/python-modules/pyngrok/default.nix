@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchPypi,
   setuptools,
   pyyaml,
@@ -11,8 +10,6 @@ buildPythonPackage rec {
   pname = "pyngrok";
   version = "7.4.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
