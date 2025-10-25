@@ -5,7 +5,7 @@
   pythonOlder,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # buildInputs
   bash,
@@ -15,6 +15,7 @@
   async-timeout,
   langchain-core,
   langchain-text-splitters,
+  langgraph,
   langsmith,
   numpy,
   pydantic,
@@ -44,19 +45,19 @@
 
 buildPythonPackage rec {
   pname = "langchain";
-  version = "0.3.72";
+  version = "1.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
-    tag = "langchain-core==${version}";
-    hash = "sha256-Q2uGMiODUtwkPdOyuSqp8vqjlLjiXk75QjXp7rr20tc=";
+    tag = "langchain==${version}";
+    hash = "sha256-NQra/L7OfnVyFTbGkSDcG30r8W733eAs9abII53wy4g=";
   };
 
-  sourceRoot = "${src.name}/libs/langchain";
+  sourceRoot = "${src.name}/libs/langchain_v1";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   buildInputs = [ bash ];
 
@@ -72,6 +73,7 @@ buildPythonPackage rec {
     aiohttp
     langchain-core
     langchain-text-splitters
+    langgraph
     langsmith
     numpy
     pydantic
@@ -111,47 +113,20 @@ buildPythonPackage rec {
     "tests/unit_tests"
   ];
 
-  disabledTests = [
-    # These tests have database access
-    "test_table_info"
-    "test_sql_database_run"
-    # These tests have network access
-    "test_socket_disabled"
-    "test_openai_agent_with_streaming"
-    "test_openai_agent_tools_agent"
-    # This test may require a specific version of langchain-community
-    "test_compatible_vectorstore_documentation"
-    # AssertionErrors
-    "test_callback_handlers"
-    "test_generic_fake_chat_model"
-    # Test is outdated
-    "test_serializable_mapping"
-    "test_person"
-    "test_aliases_hidden"
-    # AssertionError: (failed string match due to terminal control chars in output)
-    # https://github.com/langchain-ai/langchain/issues/32150
-    "test_filecallback"
-  ];
-
   disabledTestPaths = [
-    # pydantic.errors.PydanticUserError: `ConversationSummaryMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryMemory.model_rebuild()`.
-    "tests/unit_tests/chains/test_conversation.py"
-    # pydantic.errors.PydanticUserError: `ConversationSummaryMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryMemory.model_rebuild()`.
-    "tests/unit_tests/chains/test_memory.py"
-    # pydantic.errors.PydanticUserError: `ConversationSummaryBufferMemory` is not fully defined; you should define `BaseCache`, then call `ConversationSummaryBufferMemory.model_rebuild()`.
-    "tests/unit_tests/chains/test_summary_buffer_memory.py"
-    "tests/unit_tests/output_parsers/test_fix.py"
-    "tests/unit_tests/chains/test_llm_checker.py"
-    # TypeError: Can't instantiate abstract class RunnableSerializable[RetryOutputParserRetryChainInput, str] without an implementation for abstract method 'invoke'
-    "tests/unit_tests/output_parsers/test_retry.py"
-    # pydantic.errors.PydanticUserError: `LLMSummarizationCheckerChain` is not fully defined; you should define `BaseCache`, then call `LLMSummarizationCheckerChain.model_rebuild()`.
-    "tests/unit_tests/chains/test_llm_summarization_checker.py"
+    # Their configuration tests don't place nicely with nixpkgs
+    "tests/unit_tests/test_pytest_config.py"
+    # Need to be run as passthru tests (depend on shell access)
+    "tests/unit_tests/agents/middleware/test_shell_tool.py"
   ];
 
   pythonImportsCheck = [ "langchain" ];
 
-  passthru.updateScript = gitUpdater {
-    rev-prefix = "langchain==";
+  passthru = {
+    skipBulkUpdate = true;
+    updateScript = gitUpdater {
+      rev-prefix = "langchain==";
+    };
   };
 
   __darwinAllowLocalNetworking = true;
@@ -165,6 +140,5 @@ buildPythonPackage rec {
       natsukium
       sarahec
     ];
-    mainProgram = "langchain-server";
   };
 }

@@ -4,7 +4,7 @@
   fetchFromGitHub,
 
   # build-system
-  pdm-backend,
+  hatchling,
 
   # dependencies
   langchain-core,
@@ -24,19 +24,19 @@
 
 buildPythonPackage rec {
   pname = "langchain-mistralai";
-  version = "0.2.12";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     tag = "langchain-mistralai==${version}";
-    hash = "sha256-eZyoveKn4S0nkK/2q8+HK0bpFAQEez4PyRETQeZItMo=";
+    hash = "sha256-khpZY6kttbgacnY1EKCyIPBR2ZiZHC3OA+0NpIBXg9s=";
   };
 
   sourceRoot = "${src.name}/libs/partners/mistralai";
 
-  build-system = [ pdm-backend ];
+  build-system = [ hatchling ];
 
   dependencies = [
     langchain-core
