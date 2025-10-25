@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "types-regex";
-  version = "2025.9.18.20250921";
+  version = "2025.10.23.20251023";
   pyproject = true;
 
   src = fetchPypi {
     pname = "types_regex";
     inherit version;
-    hash = "sha256-4XAMIbHDEpDkpt1iWE7R8dadcE7RZ2toqO2i0dJCDD8=";
+    hash = "sha256-dfAjvwrwV+AVennpnmZpBTe+uzXZA9uPKbTlwtO+54I=";
   };
 
   build-system = [
