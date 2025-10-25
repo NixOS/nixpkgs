@@ -16146,6 +16146,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  venv-selector-nvim = buildVimPlugin {
+    pname = "venv-selector.nvim";
+    version = "2025-10-21";
+    src = fetchFromGitHub {
+      owner = "linux-cultist";
+      repo = "venv-selector.nvim";
+      rev = "9d528643ab17795c69dc42ce018120c397a36f8b";
+      sha256 = "03jag019p5kfwghff0f1w0xk3sfkpza71pprpm7gnwxi49y77pvi";
+    };
+    meta.homepage = "https://github.com/linux-cultist/venv-selector.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   verilog_systemverilog-vim = buildVimPlugin {
     pname = "verilog_systemverilog.vim";
     version = "2024-10-13";

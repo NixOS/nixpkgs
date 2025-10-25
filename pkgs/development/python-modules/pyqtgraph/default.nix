@@ -20,7 +20,7 @@ in
 buildPythonPackage rec {
   pname = "pyqtgraph";
   version = "0.13.7";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pyqtgraph";
@@ -29,9 +29,9 @@ buildPythonPackage rec {
     hash = "sha256-MUwg1v6oH2TGmJ14Hp9i6KYierJbzPggK59QaHSXHVA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     scipy
     pyopengl
@@ -69,10 +69,15 @@ buildPythonPackage rec {
       "test_rescaleData"
     ];
 
+  disabledTestPaths = [
+    # Segmentation fault
+    "tests/test_qpainterpathprivate.py"
+  ];
+
   meta = {
     description = "Scientific Graphics and GUI Library for Python";
     homepage = "https://www.pyqtgraph.org/";
-    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/master/CHANGELOG";
+    changelog = "https://github.com/pyqtgraph/pyqtgraph/blob/${src.tag}/CHANGELOG";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

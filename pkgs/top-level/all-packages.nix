@@ -1459,9 +1459,11 @@ with pkgs;
     rxvt-unicode-unwrapped = rxvt-unicode-unwrapped-emoji;
   };
 
-  rxvt-unicode-plugins = import ../applications/terminal-emulators/rxvt-unicode-plugins {
-    inherit callPackage;
-  };
+  rxvt-unicode-plugins = recurseIntoAttrs (
+    import ../applications/terminal-emulators/rxvt-unicode-plugins {
+      inherit callPackage;
+    }
+  );
 
   rxvt-unicode-unwrapped = callPackage ../applications/terminal-emulators/rxvt-unicode { };
 
@@ -1616,7 +1618,7 @@ with pkgs;
     withDriver = false;
   };
 
-  fedora-backgrounds = callPackage ../data/misc/fedora-backgrounds { };
+  fedora-backgrounds = recurseIntoAttrs (callPackage ../data/misc/fedora-backgrounds { });
 
   coconut = with python312Packages; toPythonApplication coconut;
 
@@ -2346,25 +2348,7 @@ with pkgs;
   cemu-ti = qt5.callPackage ../applications/science/math/cemu-ti { };
 
   libceph = ceph.lib;
-  inherit
-    (callPackages ../tools/filesystems/ceph {
-      lua = lua5_4; # Ceph currently requires >= 5.3
-
-      # To see which `fmt` version Ceph upstream recommends, check its `src/fmt` submodule.
-      #
-      # Ceph does not currently build with `fmt_11`; see https://github.com/NixOS/nixpkgs/issues/281027#issuecomment-1899128557
-      # If we want to switch for that before upstream fixes it, use this patch:
-      # https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899648638
-      fmt = fmt_9;
-
-      # Remove once Ceph supports arrow-cpp >= 20, see:
-      # * https://tracker.ceph.com/issues/71269
-      # * https://github.com/NixOS/nixpkgs/issues/406306
-      arrow-cpp = callPackage ../tools/filesystems/ceph/arrow-cpp-19.nix { };
-    })
-    ceph
-    ceph-client
-    ;
+  ceph-client = ceph.client;
   ceph-dev = ceph;
 
   clementine = libsForQt5.callPackage ../applications/audio/clementine {
@@ -2449,7 +2433,7 @@ with pkgs;
 
   libotf = callPackage ../tools/inputmethods/m17n-lib/otf.nix { };
 
-  skkDictionaries = callPackages ../tools/inputmethods/skk/skk-dicts { };
+  skkDictionaries = recurseIntoAttrs (callPackages ../tools/inputmethods/skk/skk-dicts { });
 
   ibus = callPackage ../tools/inputmethods/ibus { };
 
@@ -3302,7 +3286,7 @@ with pkgs;
 
   buildNpmPackage = callPackage ../build-support/node/build-npm-package { };
 
-  npmHooks = callPackage ../build-support/node/build-npm-package/hooks { };
+  npmHooks = recurseIntoAttrs (callPackage ../build-support/node/build-npm-package/hooks { });
 
   inherit (callPackages ../build-support/node/fetch-npm-deps { })
     fetchNpmDeps
@@ -4223,8 +4207,6 @@ with pkgs;
     libjpeg_turbo = libjpeg_turbo.override { enableJava = true; };
   };
 
-  ufmt = with python3Packages; toPythonApplication ufmt;
-
   unbound-with-systemd = unbound.override {
     withSystemd = true;
   };
@@ -4325,8 +4307,6 @@ with pkgs;
     mkYarnModules
     fixup_yarn_lock
     ;
-
-  yamlfix = with python3Packages; toPythonApplication yamlfix;
 
   yamllint = with python3Packages; toPythonApplication yamllint;
 
@@ -5825,7 +5805,7 @@ with pkgs;
     enableQt = true;
   };
 
-  octave-kernel = callPackage ../applications/editors/jupyter-kernels/octave { };
+  octave-kernel = recurseIntoAttrs (callPackage ../applications/editors/jupyter-kernels/octave { });
 
   octavePackages = recurseIntoAttrs octave.pkgs;
 
@@ -5833,8 +5813,8 @@ with pkgs;
   #
   # Set default PHP interpreter, extensions and packages
   php = php84;
-  phpExtensions = php.extensions;
-  phpPackages = php.packages;
+  phpExtensions = recurseIntoAttrs php.extensions;
+  phpPackages = recurseIntoAttrs php.packages;
 
   # Import PHP84 interpreter, extensions and packages
   php84 = callPackage ../development/interpreters/php/8.4.nix {
@@ -8202,7 +8182,9 @@ with pkgs;
   nv-codec-headers-11 = nv-codec-headers.override { majorVersion = "11"; };
   nv-codec-headers-12 = nv-codec-headers.override { majorVersion = "12"; };
 
-  nvidiaCtkPackages = callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { };
+  nvidiaCtkPackages = recurseIntoAttrs (
+    callPackage ../by-name/nv/nvidia-container-toolkit/packages.nix { }
+  );
   inherit (nvidiaCtkPackages)
     nvidia-docker
     ;
@@ -9317,7 +9299,7 @@ with pkgs;
   icingaweb2-ipl = callPackage ../servers/icingaweb2/ipl.nix { };
   icingaweb2-thirdparty = callPackage ../servers/icingaweb2/thirdparty.nix { };
   icingaweb2 = callPackage ../servers/icingaweb2 { };
-  icingaweb2Modules = {
+  icingaweb2Modules = recurseIntoAttrs {
     theme-april = callPackage ../servers/icingaweb2/theme-april { };
     theme-lsd = callPackage ../servers/icingaweb2/theme-lsd { };
     theme-particles = callPackage ../servers/icingaweb2/theme-particles { };
@@ -9970,7 +9952,7 @@ with pkgs;
 
   elegant-sddm = libsForQt5.callPackage ../data/themes/elegant-sddm { };
 
-  error-inject = callPackages ../os-specific/linux/error-inject { };
+  error-inject = recurseIntoAttrs (callPackages ../os-specific/linux/error-inject { });
 
   ffado = callPackage ../os-specific/linux/ffado { };
   ffado-mixer = callPackage ../os-specific/linux/ffado { withMixer = true; };
@@ -10678,9 +10660,9 @@ with pkgs;
 
   themes = name: callPackage (../data/misc/themes + ("/" + name + ".nix")) { };
 
-  tex-gyre = callPackages ../data/fonts/tex-gyre { };
+  tex-gyre = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre { });
 
-  tex-gyre-math = callPackages ../data/fonts/tex-gyre-math { };
+  tex-gyre-math = recurseIntoAttrs (callPackages ../data/fonts/tex-gyre-math { });
 
   xkeyboard_config = xkeyboard-config;
 
@@ -10891,7 +10873,7 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
-  deadbeefPlugins = {
+  deadbeefPlugins = recurseIntoAttrs {
     headerbar-gtk3 = callPackage ../applications/audio/deadbeef/plugins/headerbar-gtk3.nix { };
     lyricbar = callPackage ../applications/audio/deadbeef/plugins/lyricbar.nix { };
     mpris2 = callPackage ../applications/audio/deadbeef/plugins/mpris2.nix { };
@@ -11791,13 +11773,11 @@ with pkgs;
 
   moolticute = libsForQt5.callPackage ../applications/misc/moolticute { };
 
-  mopidyPackages =
-    (callPackages ../applications/audio/mopidy {
+  mopidyPackages = recurseIntoAttrs (
+    callPackages ../applications/audio/mopidy {
       python = python3;
-    })
-    // {
-      __attrsFailEvaluation = true;
-    };
+    }
+  );
 
   inherit (mopidyPackages)
     mopidy
@@ -12338,7 +12318,7 @@ with pkgs;
 
   cura = libsForQt5.callPackage ../applications/misc/cura { };
 
-  curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
+  curaPlugins = recurseIntoAttrs (callPackage ../applications/misc/cura/plugins.nix { });
 
   prusa-slicer = callPackage ../applications/misc/prusa-slicer {
     # Build with clang even on Linux, because GCC uses absolutely obscene amounts of memory
@@ -12828,7 +12808,7 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  inherit (windowmaker) dockapps;
+  dockapps = recurseIntoAttrs windowmaker.dockapps;
 
   wofi-pass = callPackage ../../pkgs/tools/security/pass/wofi-pass.nix { };
 
@@ -12936,7 +12916,7 @@ with pkgs;
 
   youtube-viewer = perlPackages.WWWYoutubeViewer;
 
-  zathuraPkgs = callPackage ../applications/misc/zathura { };
+  zathuraPkgs = recurseIntoAttrs (callPackage ../applications/misc/zathura { });
   zathura = zathuraPkgs.zathuraWrapper;
 
   zeroc-ice-cpp11 = zeroc-ice.override { cpp11 = true; };
@@ -14187,7 +14167,7 @@ with pkgs;
 
   lilypond-with-fonts = callPackage ../misc/lilypond/with-fonts.nix { };
 
-  openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
+  openlilylib-fonts = recurseIntoAttrs (callPackage ../misc/lilypond/fonts.nix { });
 
   nixDependencies = recurseIntoAttrs (
     callPackage ../tools/package-management/nix/dependencies-scope.nix { }
@@ -14364,7 +14344,7 @@ with pkgs;
 
   nixpkgs-manual = callPackage ../../doc/doc-support/package.nix { };
 
-  nixos-artwork = callPackage ../data/misc/nixos-artwork { };
+  nixos-artwork = recurseIntoAttrs (callPackage ../data/misc/nixos-artwork { });
 
   nixos-rebuild = callPackage ../os-specific/linux/nixos-rebuild { };
 
@@ -14563,7 +14543,7 @@ with pkgs;
 
   buildDartApplication = callPackage ../build-support/dart/build-dart-application { };
 
-  dartHooks = callPackage ../build-support/dart/build-dart-application/hooks { };
+  dartHooks = recurseIntoAttrs (callPackage ../build-support/dart/build-dart-application/hooks { });
 
   httraqt = libsForQt5.callPackage ../tools/backup/httrack/qt.nix { };
 
