@@ -50,8 +50,8 @@ let
       </DataHandleRanges>
 
       <StorageHints>
-      TroveSyncMeta ${if fs.troveSyncMeta then "yes" else "no"}
-      TroveSyncData ${if fs.troveSyncData then "yes" else "no"}
+      TroveSyncMeta ${lib.boolToYesNo fs.troveSyncMeta}
+      TroveSyncData ${lib.boolToYesNo fs.troveSyncData}
       ${fs.extraStorageHints}
       </StorageHints>
 
