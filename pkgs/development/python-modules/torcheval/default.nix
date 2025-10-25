@@ -11,7 +11,7 @@
 }:
 let
   pname = "torcheval";
-  version = "0.0.7";
+  version = "0.0.6";
 in
 buildPythonPackage {
   inherit pname version;
