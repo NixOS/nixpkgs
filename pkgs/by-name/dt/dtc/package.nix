@@ -1,5 +1,6 @@
 {
   stdenv,
+  pkgsBuildBuild,
   lib,
   fetchpatch2,
   fetchzip,
@@ -8,13 +9,16 @@
   flex,
   bison,
   pkg-config,
-  which,
-  pythonSupport ? false,
-  python ? null,
-  replaceVars,
   swig,
   libyaml,
+  bash,
+  testers,
+  pythonSupport ? false,
+  python3,
+  setuptools-scm ? null,
 }:
+
+assert pythonSupport -> setuptools-scm != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dtc";
@@ -39,43 +43,46 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dgibson/dtc/commit/ce1d8588880aecd7af264e422a16a8b33617cef7.patch";
       hash = "sha256-t1CxKnbCXUArtVcniAIdNvahOGXPbYhPCZiTynGLvfo=";
     })
-  ]
-  ++
-    lib.optional pythonSupport
-      # Make Meson use our Python version, not the one it was built with itself
-      (
-        replaceVars ./python-path.patch {
-          python_bin = lib.getExe python;
-        }
-      );
+  ];
 
-  env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
+  postPatch = ''
+    patchShebangs --build setup.py
 
+    # Tell meson to get the build platform python
+    substituteInPlace meson.build \
+      --replace-fail "installation(required" "installation('${lib.getExe pkgsBuildBuild.python3}', required"
+
+    # Align the name with pypi
+    substituteInPlace setup.py \
+      --replace-fail "name='libfdt'," "name='pylibfdt',"
+  '';
+
+  env = {
+    SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;
+    # Required for installation of Python library and is innocuous otherwise.
+    DESTDIR = "/";
+  };
+
+  strictDeps = true;
+
+  depsBuildBuild = [ python3 ];
   nativeBuildInputs = [
     meson
     ninja
     flex
     bison
     pkg-config
-    which
   ]
   ++ lib.optionals pythonSupport [
-    python
-    python.pkgs.setuptools-scm
+    python3
+    setuptools-scm
     swig
   ];
 
-  buildInputs = [ libyaml ];
-
-  postPatch = ''
-    patchShebangs setup.py
-
-    # Align the name with pypi
-    sed -i "s/name='libfdt',/name='pylibfdt',/" setup.py
-  '';
-
-  # Required for installation of Python library and is innocuous otherwise.
-  env.DESTDIR = "/";
+  buildInputs = [
+    libyaml
+    bash
+  ];
 
   mesonAutoFeatures = "auto";
   mesonFlags = [
@@ -99,12 +106,15 @@ stdenv.mkDerivation (finalAttrs: {
       # hostPlatform binaries during the configurePhase.
       (with stdenv; buildPlatform.canExecute hostPlatform);
 
-  meta = with lib; {
+  passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+
+  meta = {
     description = "Device Tree Compiler";
     homepage = "https://git.kernel.org/pub/scm/utils/dtc/dtc.git";
-    license = licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
-    maintainers = [ maintainers.dezgeg ];
-    platforms = platforms.unix;
+    pkgConfigModules = [ "libfdt" ];
+    license = lib.licenses.gpl2Plus; # dtc itself is GPLv2, libfdt is dual GPL/BSD
+    maintainers = [ lib.maintainers.dezgeg ];
+    platforms = lib.platforms.unix;
     mainProgram = "dtc";
   };
 })
