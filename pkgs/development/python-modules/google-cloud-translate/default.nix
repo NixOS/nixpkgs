@@ -11,7 +11,6 @@
   protobuf,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
 }:
 
@@ -19,8 +18,6 @@ buildPythonPackage rec {
   pname = "google-cloud-translate";
   version = "3.22.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     pname = "google_cloud_translate";
