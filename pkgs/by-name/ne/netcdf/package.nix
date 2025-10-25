@@ -9,6 +9,7 @@
   zstd,
   szipSupport ? false,
   szip,
+  pnetcdf,
   libxml2,
   m4,
   curl, # for DAP
@@ -44,7 +45,8 @@ stdenv.mkDerivation rec {
     m4
     removeReferencesTo
     libxml2 # xml2-config
-  ];
+  ]
+  ++ lib.optional mpiSupport mpi;
 
   buildInputs = [
     curl
@@ -55,7 +57,10 @@ stdenv.mkDerivation rec {
     zstd
   ]
   ++ lib.optional szipSupport szip
-  ++ lib.optional mpiSupport mpi;
+  ++ lib.optionals mpiSupport [
+    mpi
+    pnetcdf
+  ];
 
   strictDeps = true;
 
@@ -76,8 +81,9 @@ stdenv.mkDerivation rec {
     "--with-plugin-dir=${placeholder "out"}/lib/hdf5-plugins"
   ]
   ++ (lib.optionals mpiSupport [
+    "--enable-pnetcdf"
     "--enable-parallel-tests"
-    "CC=${lib.getDev mpi}/bin/mpicc"
+    "CC=mpicc"
   ]);
 
   enableParallelBuilding = true;
@@ -85,7 +91,9 @@ stdenv.mkDerivation rec {
   disallowedReferences = [ stdenv.cc ];
 
   postFixup = ''
-    remove-references-to -t ${stdenv.cc} "$(readlink -f $out/lib/libnetcdf.settings)"
+    remove-references-to -t ${
+      if mpiSupport then lib.getDev mpi else stdenv.cc
+    } "$(readlink -f $out/lib/libnetcdf.settings)"
   '';
 
   doCheck = !mpiSupport;
