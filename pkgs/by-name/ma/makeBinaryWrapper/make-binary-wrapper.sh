@@ -17,9 +17,10 @@ assertExecutable() {
 # ARGS:
 # --argv0        NAME    : set the name of the executed process to NAME
 #                          (if unset or empty, defaults to EXECUTABLE)
-# --inherit-argv0        : the executable inherits argv0 from the wrapper.
+# --inherit-argv0        : the executable inherits argv0 from the wrapper
 #                          (use instead of --argv0 '$0')
-# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH
+# --resolve-argv0        : if argv0 doesn't include a / character, resolve it against PATH; then
+#                          always replace its directory with the canonical real path
 # --set          VAR VAL : add VAR with value VAL to the executable's environment
 # --set-default  VAR VAL : like --set, but only adds VAR if not already set in
 #                          the environment
@@ -189,6 +190,9 @@ makeCWrapper() {
                 # this gets processed after other argv0 flags
                 uses_stdio=1
                 uses_string=1
+                uses_libgen=1
+                uses_limits=1
+                uses_unistd=1
                 resolve_argv0=1
             ;;
             *) # Using an error macro, we will make sure the compiler gives an understandable error message
@@ -207,6 +211,9 @@ makeCWrapper() {
     [ -z "$uses_assert" ]   || printf '%s\n' "#include <assert.h>"
     [ -z "$uses_stdio" ]    || printf '%s\n' "#include <stdio.h>"
     [ -z "$uses_string" ]   || printf '%s\n' "#include <string.h>"
+    [ -z "$uses_libgen" ]   || printf '%s\n' "#include <libgen.h>"
+    [ -z "$uses_limits" ]   || printf '%s\n' "#include <limits.h>"
+    [ -z "$uses_unistd" ]   || printf '%s\n' "#include <unistd.h>"
     [ -z "$uses_assert_success" ] || printf '\n%s\n' "#define assert_success(e) do { if ((e) < 0) { perror(#e); abort(); } } while (0)"
     [ -z "$uses_prefix" ] || printf '\n%s\n' "$(setEnvPrefixFn)"
     [ -z "$uses_suffix" ] || printf '\n%s\n' "$(setEnvSuffixFn)"
@@ -352,35 +359,64 @@ void set_env_suffix(char *env, char *sep, char *suffix) {
 
 resolveArgv0Fn() {
   printf '%s' "\
+char *canonicalize_path(char *path)
+{
+  char *tmp1 = strdup(path);
+  char *tmp2 = strdup(path);
+  if (tmp1 == NULL || tmp2 == NULL) {
+    free(tmp1);
+    free(tmp2);
+    return path;
+  }
+
+  char *base = basename(tmp1);
+  char *dir  = dirname(tmp2);
+
+  char realdir[PATH_MAX];
+  const char *dir_final = realpath(dir, realdir) ? realdir : dir;
+
+  char *res = malloc(strlen(dir_final) + strlen(base) + 2);
+  if (res == NULL) {
+    free(tmp1);
+    free(tmp2);
+    return path;
+  }
+  sprintf(res, \"%s/%s\", dir_final, base);
+
+  free(tmp1);
+  free(tmp2);
+  return res;
+}
+
 char *resolve_argv0(char *argv0) {
   if (strchr(argv0, '/') != NULL) {
-    return argv0;
+    return canonicalize_path(argv0);
   }
   char *path = getenv(\"PATH\");
   if (path == NULL) {
-    return argv0;
+    return canonicalize_path(argv0);
   }
   char *path_copy = strdup(path);
   if (path_copy == NULL) {
-    return argv0;
+    return canonicalize_path(argv0);
   }
   char *dir = strtok(path_copy, \":\");
   while (dir != NULL) {
     char *candidate = malloc(strlen(dir) + strlen(argv0) + 2);
     if (candidate == NULL) {
       free(path_copy);
-      return argv0;
+      return canonicalize_path(argv0);
     }
     sprintf(candidate, \"%s/%s\", dir, argv0);
     if (access(candidate, X_OK) == 0) {
       free(path_copy);
-      return candidate;
+      return canonicalize_path(candidate);
     }
     free(candidate);
     dir = strtok(NULL, \":\");
   }
   free(path_copy);
-  return argv0;
+  return canonicalize_path(argv0);
 }
 "
 }
