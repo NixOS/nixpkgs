@@ -9,15 +9,26 @@
   makeWrapper,
   versionCheckHook,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "urserver";
   version = "3.14.0.2574";
 
-  src = fetchurl {
-    url = "https://www.unifiedremote.com/static/builds/server/linux-x64/${builtins.elemAt (builtins.splitVersion finalAttrs.version) 3}/urserver-${finalAttrs.version}.tar.gz";
-    hash = "sha256-4wA2VPb5QN30TWa72pUVTYfvsxlGTO8Vngh7wDHXhDE=";
-  };
+  src =
+    let
+      sources = {
+        "x86_64-linux" = {
+          url = "https://www.unifiedremote.com/static/builds/server/linux-x64/${builtins.elemAt (builtins.splitVersion finalAttrs.version) 3}/urserver-${finalAttrs.version}.tar.gz";
+          hash = "sha256-4wA2VPb5QN30TWa72pUVTYfvsxlGTO8Vngh7wDHXhDE=";
+        };
+        "aarch64-linux" = {
+          url = "https://www.unifiedremote.com/static/builds/server/linux-arm64/${builtins.elemAt (builtins.splitVersion finalAttrs.version) 3}/urserver-${finalAttrs.version}.tar.gz";
+          hash = "sha256-GmYekCGb64GdFdABEJl9CgqycnsBX95W9/b0xZJntEs=";
+        };
+      };
+    in
+    fetchurl {
+      inherit (sources."${stdenv.hostPlatform.system}") url hash;
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -48,7 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ sfrijters ];
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "urserver";
   };
 })
