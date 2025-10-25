@@ -59,18 +59,6 @@ buildPythonPackage rec {
     mpmath
   ];
 
-  disabledTests =
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
-      # issue with some overflow logic
-      "test_mpz_to_bytes"
-      "test_mpz_from_bytes"
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # TypeError: mpq() requires numeric or string argument
-      # not sure why it only fails on Darwin
-      "test_mpq_from_Decimal"
-    ];
-
   pythonImportsCheck = [ "gmpy2" ];
 
   passthru.tests = {
