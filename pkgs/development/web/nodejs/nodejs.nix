@@ -409,6 +409,14 @@ let
 
               # This is failing on newer macOS versions, no fix has yet been provided upstream:
               "test-cluster-dgram-1"
+
+              # httpGet may misbehave (ETIMEDOUT, ECONNRESET...) on MacOS
+              # depending on network setup (dns, dualstack, etc.).
+              # See: https://github.com/NixOS/nixpkgs/issues/350410
+              #
+              # Others reported issues with the method outside Nix too:
+              # https://github.com/nodejs/help/issues/4352
+              "test-inspector-ip-detection"
             ]
             ++ lib.optionals stdenv.hostPlatform.isMusl [
               # Doesn't work in sandbox on x86_64.
