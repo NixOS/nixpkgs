@@ -12922,6 +12922,8 @@ self: super: with self; {
 
   pydroid-ipcam = callPackage ../development/python-modules/pydroid-ipcam { };
 
+  pydroplet = callPackage ../development/python-modules/pydroplet { };
+
   pydruid = callPackage ../development/python-modules/pydruid { };
 
   pydsdl = callPackage ../development/python-modules/pydsdl { };
