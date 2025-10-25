@@ -51,13 +51,14 @@ rec {
 
       src = octave.src;
 
-      buildInputs = [ imagemagick ];
+      nativeBuildInputs = [ imagemagick ];
+      strictDeps = true;
 
       dontConfigure = true;
       dontInstall = true;
 
       buildPhase = ''
-        convert ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
+        magick ./libgui/src/icons/octave/128x128/logo.png -resize ${size}x${size} $out
       '';
     };
 
