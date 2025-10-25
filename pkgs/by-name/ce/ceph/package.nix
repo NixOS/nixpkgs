@@ -52,6 +52,7 @@
   cunit,
   e2fsprogs,
   doxygen,
+  getopt,
   gperf,
   graphviz,
   gnugrep,
@@ -518,6 +519,10 @@ stdenv.mkDerivation {
     substituteInPlace src/client/fuse_ll.cc \
       --replace-fail "mount -i -o remount" "${util-linux}/bin/mount -i -o remount"
 
+    substituteInPlace src/{ceph-osd-prestart.sh,ceph-post-file.in,init-ceph.in} \
+       --replace-fail "GETOPT=/usr/local/bin/getopt" "GETOPT=${getopt}/bin/getopt" \
+       --replace-fail "GETOPT=getopt" "GETOPT=${getopt}/bin/getopt"
+
     # The install target needs to be in PYTHONPATH for "*.pth support" check to succeed
     export PYTHONPATH=$PYTHONPATH:$lib/${sitePackages}:$out/${sitePackages}
     patchShebangs src/
@@ -583,6 +588,10 @@ stdenv.mkDerivation {
     # Test that ceph-volume exists since the build system has a tendency to
     # silently drop it with misconfigurations.
     test -f $out/bin/ceph-volume
+
+    # Assert that getopt patch from preConfigure covered all instances
+    ! grep -F -r 'GETOPT=getopt' $out
+    ! grep -F -r 'GETOPT=/usr/local/bin/getopt' $out
 
     mkdir -p $client/{bin,etc,${sitePackages},share/bash-completion/completions}
     cp -r $out/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $client/bin
