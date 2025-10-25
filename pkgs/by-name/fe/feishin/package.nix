@@ -12,13 +12,13 @@
 }:
 let
   pname = "feishin";
-  version = "0.20.1";
+  version = "0.21.2";
 
   src = fetchFromGitHub {
     owner = "jeffvli";
     repo = "feishin";
     tag = "v${version}";
-    hash = "sha256-WJMaLMrv6LSw/wxn7EZOSYqwAlgW3UkeYvxV4vEkCfM=";
+    hash = "sha256-F5m0hsN1BLfiUcl2Go54bpFnN8ktn6Rqa/df1xxoCA4=";
   };
 
   electron = electron_36;
@@ -39,7 +39,7 @@ buildNpmPackage {
       src
       ;
     fetcherVersion = 2;
-    hash = "sha256-8di4WZ30oE4q3l8Nthgihk6q+ob/Mz/UrofrtsLFzhc=";
+    hash = "sha256-5jEXdQMZ6a0JuhjPS1eZOIGsIGQHd6nKPI02eeR35pg=";
   };
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
@@ -96,7 +96,7 @@ buildNpmPackage {
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}
-    cp -r release/build/**/Feishin.app $out/Applications/
+    cp -r dist/**/Feishin.app $out/Applications/
     makeWrapper $out/Applications/Feishin.app/Contents/MacOS/Feishin $out/bin/feishin
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''

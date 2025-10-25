@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   installShellFiles,
 
   # build-system
@@ -32,8 +31,9 @@
   # tests
   net-tools,
   unixtools,
-  magic-wormhole-transit-relay,
+  hypothesis,
   magic-wormhole-mailbox-server,
+  magic-wormhole-transit-relay,
   pytestCheckHook,
   pytest-twisted,
 
@@ -42,24 +42,15 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.20.0";
+  version = "0.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
     tag = version;
-    hash = "sha256-YjzdznZZ/0YTU83f3jlOr6+yOWQ++R1wU9IZDrfAMpo=";
+    hash = "sha256-gsNdV6JvxsdlyPOSn07nTrvU4ju+3si3SQhyN8ZX/ac=";
   };
-
-  patches = [
-    # TODO: drop when updating beyond version 0.20.0
-    (fetchpatch {
-      name = "SubchannelDemultiplex._pending_opens-fix-type.patch";
-      url = "https://github.com/magic-wormhole/magic-wormhole/commit/6d7f48786b5506df5b6a254bc4e37f6bf5d75593.patch";
-      hash = "sha256-28YH3enyQ9rTT56OU7FfFonb9l8beJ9QRgPoItzrgu4=";
-    })
-  ];
 
   postPatch =
     # enable tests by fixing the location of the wormhole binary
@@ -106,6 +97,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    hypothesis
     magic-wormhole-mailbox-server
     magic-wormhole-transit-relay
     pytestCheckHook

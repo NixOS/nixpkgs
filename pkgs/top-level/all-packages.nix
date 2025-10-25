@@ -1133,6 +1133,8 @@ with pkgs;
 
   vprof = with python3Packages; toPythonApplication vprof;
 
+  waydroid-nftables = waydroid.override { withNftables = true; };
+
   winbox = winbox3;
   winbox3 = callPackage ../tools/admin/winbox {
     wine = wineWowPackages.stable;
@@ -9214,9 +9216,9 @@ with pkgs;
     asterisk
     asterisk-stable
     asterisk-lts
-    asterisk_18
     asterisk_20
     asterisk_22
+    asterisk_23
     ;
 
   asterisk-ldap = lowPrio (asterisk.override { ldapSupport = true; });
