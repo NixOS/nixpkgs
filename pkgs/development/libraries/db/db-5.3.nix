@@ -15,6 +15,7 @@ import ./generic.nix (
       ./clang-5.3.patch
       ./CVE-2017-10140-cwd-db_config.patch
       ./darwin-mutexes.patch
+      ./fix-gcc-15-build-5.3.patch
     ];
   }
 )
