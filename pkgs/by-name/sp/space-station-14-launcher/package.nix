@@ -35,15 +35,13 @@
   # Path to set ROBUST_SOUNDFONT_OVERRIDE to, essentially the default soundfont used.
   soundfont-path ? "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2",
 }:
-let
+
+buildDotnetModule rec {
   version = "0.33.0";
   pname = "space-station-14-launcher";
-in
-buildDotnetModule rec {
-  inherit pname;
 
   # Workaround to prevent buildDotnetModule from overriding assembly versions.
-  name = "${pname}-${version}";
+  name = "space-station-14-launcher-${version}";
 
   # A bit redundant but I don't trust this package to be maintained by anyone else.
   src = fetchFromGitHub {
@@ -150,9 +148,9 @@ buildDotnetModule rec {
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
+      name = "space-station-14-launcher";
       exec = meta.mainProgram;
-      icon = pname;
+      icon = "space-station-14-launcher";
       desktopName = "Space Station 14 Launcher";
       comment = meta.description;
       categories = [ "Game" ];
