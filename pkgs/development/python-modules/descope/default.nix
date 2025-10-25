@@ -16,8 +16,6 @@ buildPythonPackage rec {
   version = "1.7.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.8.1";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-x4JsBweG7d6htBqDUfAMfgatOD+a03F5Pxa9y/BEFjA=";
@@ -41,14 +39,14 @@ buildPythonPackage rec {
   # Package does not include tests in distribution
   doCheck = false;
 
-  # Skip runtime dependency check - liccheck is a dev dependency
-  dontCheckRuntimeDeps = true;
+  # Remove liccheck dev dependency from runtime dependencies
+  pythonRemoveDeps = [ "liccheck" ];
 
-  meta = with lib; {
+  meta = ; {
     description = "Descope Python SDK";
     homepage = "https://descope.com/";
     changelog = "https://github.com/descope/python-sdk/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ pid1 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ pid1 ];
   };
 }
