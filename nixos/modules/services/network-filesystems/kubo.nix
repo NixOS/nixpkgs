@@ -167,7 +167,7 @@ in
       autoMigrate = lib.mkOption {
         type = lib.types.bool;
         default = true;
-        description = "Whether Kubo should try to run the fs-repo-migration at startup.";
+        description = "Whether Kubo should try to migrate its filesystem repository automatically.";
       };
 
       enableGC = lib.mkOption {
@@ -330,8 +330,8 @@ in
     environment.variables.IPFS_PATH = fakeKuboRepo;
 
     # https://github.com/quic-go/quic-go/wiki/UDP-Buffer-Sizes
-    boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 2500000;
-    boot.kernel.sysctl."net.core.wmem_max" = lib.mkDefault 2500000;
+    boot.kernel.sysctl."net.core.rmem_max" = lib.mkDefault 7500000;
+    boot.kernel.sysctl."net.core.wmem_max" = lib.mkDefault 7500000;
 
     programs.fuse = lib.mkIf cfg.autoMount {
       userAllowOther = true;
@@ -344,9 +344,6 @@ in
         createHome = false;
         uid = config.ids.uids.ipfs;
         description = "IPFS daemon user";
-        packages = [
-          pkgs.kubo-migrator
-        ];
       };
     };
 
@@ -377,6 +374,7 @@ in
       path = [
         "/run/wrappers"
         cfg.package
+        pkgs.kubo-fs-repo-migrations # Used by 'ipfs repo migrate --to=...'
       ];
       environment.IPFS_PATH = cfg.dataDir;
 
@@ -388,7 +386,7 @@ in
           rm -vf "$IPFS_PATH/api"
       ''
       + lib.optionalString cfg.autoMigrate ''
-        '${lib.getExe pkgs.kubo-migrator}' -to '${cfg.package.repoVersion}' -y
+        '${lib.getExe cfg.package}' repo migrate '--to=${cfg.package.repoVersion}' --allow-downgrade
       ''
       + ''
         fi
@@ -412,7 +410,7 @@ in
       serviceConfig = {
         ExecStart = [
           ""
-          "${cfg.package}/bin/ipfs daemon ${kuboFlags}"
+          "${lib.getExe cfg.package} daemon ${kuboFlags}"
         ];
         User = cfg.user;
         Group = cfg.group;
