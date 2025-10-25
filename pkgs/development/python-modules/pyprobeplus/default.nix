@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "pyprobeplus";
-  version = "1.1.1";
+  version = "1.1.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pantherale0";
     repo = "pyprobeplus";
     tag = version;
-    hash = "sha256-pD8o+Wb9X1yTMPh1eY1PwOc5KR2W5KoxDDQ/otHz6zI=";
+    hash = "sha256-CJbQs0xZHdXNPX71G1KrrHHV58gXaQsUHGcX9P8E+iY=";
   };
 
   build-system = [ setuptools ];
