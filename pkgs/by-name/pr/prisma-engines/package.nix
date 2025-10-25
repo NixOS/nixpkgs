@@ -13,16 +13,16 @@
 # function correctly.
 rustPlatform.buildRustPackage rec {
   pname = "prisma-engines";
-  version = "6.7.0";
+  version = "6.17.1";
 
   src = fetchFromGitHub {
     owner = "prisma";
     repo = "prisma-engines";
     rev = version;
-    hash = "sha256-Ty8BqWjZluU6a5xhSAVb2VoTVY91UUj6zoVXMKeLO4o=";
+    hash = "sha256-6iLPJUe9RMGn1sf6EsU7Ainbe8Reo8eMufdOIb0j54A=";
   };
 
-  cargoHash = "sha256-HjDoWa/JE6izUd+hmWVI1Yy3cTBlMcvD9ANsvqAoHBI=";
+  cargoHash = "sha256-1c15l1ZkE/NLAAaFZEEP4WUACc1IcLJ5tDJfMgmtogQ=";
 
   # Use system openssl.
   OPENSSL_NO_VENDOR = 1;
