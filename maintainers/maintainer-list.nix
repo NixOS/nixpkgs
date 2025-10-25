@@ -26166,6 +26166,11 @@
     githubId = 174156;
     name = "timor";
   };
+  timow = {
+    name = "Timo Warns";
+    github = "timow";
+    githubId = 3381811;
+  };
   timput = {
     email = "tim@timput.com";
     github = "TimPut";
