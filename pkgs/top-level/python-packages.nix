@@ -3334,6 +3334,8 @@ self: super: with self; {
 
   dash = callPackage ../development/python-modules/dash { };
 
+  dash-ag-grid = callPackage ../development/python-modules/dash-ag-grid { };
+
   dash-bootstrap-components = callPackage ../development/python-modules/dash-bootstrap-components { };
 
   dash-bootstrap-templates = callPackage ../development/python-modules/dash-bootstrap-templates { };
@@ -5202,6 +5204,8 @@ self: super: with self; {
   findpython = callPackage ../development/python-modules/findpython { };
 
   findspark = callPackage ../development/python-modules/findspark { };
+
+  findus = callPackage ../development/python-modules/findus { };
 
   finetuning-scheduler = callPackage ../development/python-modules/finetuning-scheduler { };
 
