@@ -5,6 +5,7 @@
   nixosTests,
   fetchPypi,
   python3,
+  szurubooru,
 }:
 
 let
@@ -52,7 +53,6 @@ python.pkgs.buildPythonApplication {
 
   nativeBuildInputs = with python.pkgs; [ setuptools ];
   propagatedBuildInputs = with python.pkgs; [
-    alembic
     certifi
     coloredlogs
     legacy-cgi
@@ -74,6 +74,20 @@ python.pkgs.buildPythonApplication {
   '';
 
   passthru.tests.szurubooru = nixosTests.szurubooru;
+
+  # Database migration. Needs the szurubooru server in its environment for the
+  # migration to complete successfully.
+  passthru.alembic = python.pkgs.alembic.overrideAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      szurubooru.server
+    ];
+  });
+  # Waitress is used to run the serer.
+  passthru.waitress = python.pkgs.waitress.overrideAttrs (old: {
+    propagatedBuildInputs = old.propagatedBuildInputs ++ [
+      szurubooru.server
+    ];
+  });
 
   meta = with lib; {
     description = "Server of szurubooru, an image board engine for small and medium communities";
