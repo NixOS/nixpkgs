@@ -139,11 +139,13 @@ in
     };
 
     systemd.services.selfoss-config = {
-      serviceConfig.Type = "oneshot";
+      serviceConfig = {
+        Type = "oneshot";
+        StateDirectory = [ (baseNameOf dataDir) ];
+        StateDirectoryMode = "0755";
+        WorkingDirectory = dataDir;
+      };
       script = ''
-        mkdir -m 755 -p ${dataDir}
-        cd ${dataDir}
-
         # Delete all but the "data" folder
         ls | grep -v data | while read line; do rm -rf $line; done || true
 
