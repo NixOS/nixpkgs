@@ -9790,6 +9790,11 @@
     githubId = 76840985;
     name = "GueLaKais";
   };
+  guhou = {
+    github = "guhou";
+    githubId = 6924529;
+    name = "Angus Houston";
+  };
   guibert = {
     email = "david.guibert@gmail.com";
     github = "dguibert";
