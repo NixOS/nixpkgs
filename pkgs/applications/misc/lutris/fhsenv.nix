@@ -103,7 +103,7 @@ buildFHSEnv {
       gettext
       portaudio
       miniupnpc
-      mbedtls_2
+      mbedtls
       lzo
       sfml
       gsm
