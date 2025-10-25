@@ -1,6 +1,8 @@
 {
   lib,
+  AvailabilityVersions,
   apple-sdk,
+  apple-sdk_15,
   libutil,
   mkAppleDerivation,
   ncurses,
@@ -18,12 +20,15 @@ let
   OpenDirectory = apple-sdk.sourceRelease "OpenDirectory";
 
   libplatform = apple-sdk.sourceRelease "libplatform";
-  xnu = apple-sdk.sourceRelease "xnu";
+  xnu = apple-sdk_15.sourceRelease "xnu"; # Needed for `posix_spawn_secflag_options`
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "system_cmds-deps-private-headers";
 
     buildCommand = ''
+      mkdir -p "$out/include/sys"
+      '${lib.getExe AvailabilityVersions}' ${lib.getVersion apple-sdk} "$out"
+
       install -D -t "$out/include/CFOpenDirectory" \
         '${OpenDirectory}/Core/CFOpenDirectoryPriv.h' \
         '${OpenDirectory}/Core/CFODTrigger.h'
@@ -104,6 +109,12 @@ mkAppleDerivation {
   releaseName = "system_cmds";
 
   xcodeHash = "sha256-gdtn3zNIneZKy6+X0mQ51CFVLNM6JQYLbd/lotG5/Tw=";
+
+  patches = [
+    # `posix_spawnattr_set_use_sec_transition_shims_np` is only available on macOS 15.2 or newer.
+    # Disable the feature that requires it when running on older systems.
+    ./patches/conditionalize-security-transition-shims.patch
+  ];
 
   postPatch = ''
     # Replace hard-coded, impure system paths with the output path in the store.

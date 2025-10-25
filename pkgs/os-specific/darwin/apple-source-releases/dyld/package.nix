@@ -44,7 +44,8 @@ let
       install -D -m644 -t "$out/include/System" \
         '${Libc}/stdlib/FreeBSD/atexit.h'
 
-      mkdir -p "$out/include/System/sys"
+      install -D -m644 -t "$out/include/System/sys" \
+        '${xnu}/bsd/sys/csr.h'
       substitute '${xnu}/bsd/sys/fsgetpath.h' "$out/include/System/sys/fsgetpath.h" \
         --replace-fail '#ifdef __APPLE_API_PRIVATE' '#if 1'
 
@@ -92,13 +93,11 @@ mkAppleDerivation {
 
   propagatedBuildOutputs = [ ];
 
-  xcodeHash = "sha256-NfaENSF699xjc+eKtOm1RyXUCMD6xTaJ5+9arLllqyw=";
+  xcodeHash = "sha256-4yOJouk9AjEt7W3+0cQRMUDDqBhU+J9c16ZQSzUF5go=";
 
   patches = [
     # Disable use of private kdebug API
     ./patches/0001-Disable-kdebug-trace.patch
-    # dyld_info requires `startsWith`, but it’s not normally built for `dyld_info`.
-    ./patches/0002-Provide-startsWith-for-dyld_info.patch
     # dyld_info tries to weakly link against libLTO using this macro.
     ./patches/0003-Add-weaklinking_h.patch
     # The LLVMOpInfoCallback args comment out one of the args. Fix that for compatibility with nixpkgs LLVM.
@@ -109,6 +108,9 @@ mkAppleDerivation {
     # `dsc_extractor` builds a dylib, but it includes a program that can perform cache extraction.
     # This extracts just the driver into a file to make building the actual program easier.
     ./patches/0006-Add-dsc_extractor_bin_cpp.patch
+    # Fix missing symbol for `mach_o::ChainedFixups::PointerFormat::writeChainEntry`,
+    # which isn’t actually needed by `dyld_info` or `dsc_extractor`.
+    ./patches/0007-Fix-missing-writeChainEntry.patch
   ];
 
   postPatch = ''
@@ -143,6 +145,9 @@ mkAppleDerivation {
 
     substituteInPlace dyld/Loader.h \
       --replace-fail 'dyld_priv.h' 'mach-o/dyld_priv.h'
+
+    substituteInPlace common/DyldSharedCache.h \
+      --replace-fail 'dyld_cache_format.h' 'mach-o/dyld_cache_format.h'
 
     # Remove unused header include (since the compat shims don’t provide it).
     substituteInPlace other-tools/dsc_extractor.cpp \

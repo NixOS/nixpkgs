@@ -26,8 +26,8 @@ libresolv = library(
         'dns_async.c',
         'dns_util.c',
         'dst_api.c',
-        'dst_hmac_link.c',
-        'dst_support.c',
+        'hmac_link.c',
+        'mtctxres.c',
         'ns_date.c',
         'ns_name.c',
         'ns_netint.c',
@@ -47,7 +47,9 @@ libresolv = library(
         'res_query.c',
         'res_send.c',
         'res_sendsigned.c',
+        'res_state.c',
         'res_update.c',
+        'support.c',
     ],
     soversion : '9'
 )

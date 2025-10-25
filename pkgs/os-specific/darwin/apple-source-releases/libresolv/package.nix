@@ -38,12 +38,14 @@ mkAppleDerivation {
   ];
 
   postPatch = ''
-    mkdir arpa
     cp ${Libc}/include/arpa/nameser_compat.h arpa/nameser_compat.h
-    cp nameser.h arpa
+
+    # Use CommonCrypto’s implementation of MD5. The upstream build appears to use corecrypto, which we can’t use.
+    substituteInPlace hmac_link.c \
+      --replace-fail '<md5.h>' '<CommonCrypto/CommonDigest.h>'
   '';
 
-  xcodeHash = "sha256-yHNa6cpI3T4R/iakeHmL6S/c9p+VpYR4fudv2UXUpnY=";
+  xcodeHash = "sha256-Q5jHee9rxge6HJtf9/sFK15FsS02GQmx7L0BBDiyGIs=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include -I${configd}/dnsinfo -I${Libinfo}/lookup.subproj -I${Libnotify}";
 

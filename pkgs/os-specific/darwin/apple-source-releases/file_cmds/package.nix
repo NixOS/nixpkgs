@@ -91,7 +91,7 @@ mkAppleDerivation {
     "xattr"
   ];
 
-  xcodeHash = "sha256-u23AoLa7J0eFtf4dXKkVO59eYL2I3kRsHcWPfT03MCU=";
+  xcodeHash = "sha256-KEZYuaDxLdprF+wGiszUdTXPQBfLNj0xP9Y0uarNjSs=";
 
   patches = [
     # Fixes build of ls

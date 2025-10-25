@@ -37,7 +37,7 @@ mkAppleDerivation {
     "man"
   ];
 
-  xcodeHash = "sha256-pE92mVI0KTHOVKBA4T5R1rHy5//uipOimas7DaTVe0U=";
+  xcodeHash = "sha256-7dNq0nE2MmFM9U+epTrkCoM1lrswm98m3RWuLDsAuDk=";
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
 
