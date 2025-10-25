@@ -12932,6 +12932,10 @@ with pkgs;
     SDL_image = SDL_image.override { SDL = SDL_sixel; };
   };
 
+  zotero-beta = pkgs.zotero.override {
+    channel = "beta";
+  };
+
   zotero_7 = pkgs.zotero;
 
   zynaddsubfx = callPackage ../applications/audio/zynaddsubfx {
