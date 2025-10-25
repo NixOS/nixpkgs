@@ -53,6 +53,15 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ bluez ];
 
+  postPatch = ''
+    substituteInPlace external/pybind11_2.11_dev1/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace external/QtFindReplaceDialog/dialogs/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace manual/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Qt based source measure unit GUI for sigrok";
     mainProgram = "smuview";
