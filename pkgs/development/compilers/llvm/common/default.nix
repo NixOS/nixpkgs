@@ -212,7 +212,7 @@ makeScopeWithSplicing' {
           self.systemLibcxxClang
         else if stdenv.targetPlatform.useLLVM or false then
           self.clangUseLLVM
-        else if (pkgs.targetPackages.stdenv or args.stdenv).cc.isGNU then
+        else if (targetPackages.stdenv or stdenv).cc.isGNU then
           self.libstdcxxClang
         else
           self.libcxxClang;
