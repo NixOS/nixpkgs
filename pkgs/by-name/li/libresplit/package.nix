@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "libresplit";
-  version = "0-unstable-2025-10-15";
+  version = "0-unstable-2025-10-21";
 
   src = fetchFromGitHub {
-    owner = "wins1ey";
+    owner = "LibreSplitDev";
     repo = "LibreSplit";
-    rev = "7628922ba2c6b6a9e6d6d144b55d20479d7ceeb3";
-    hash = "sha256-3UXDHmcW6lxXGno5ijG6OlQ58F1z/J2O8S1y2O+7+p4=";
+    rev = "f59160cb35c8f34c424dc6741408a031c7469e9a";
+    hash = "sha256-4mahq8KEP0hTc5NRJYsBmuOJrFSs3utcthvG2zuTF/s=";
   };
 
   nativeBuildInputs = [
@@ -39,7 +39,7 @@ stdenv.mkDerivation {
   passthru.updateScript = unstableGitUpdater { };
 
   meta = {
-    homepage = "https://github.com/wins1ey/LibreSplit";
+    homepage = "https://github.com/LibreSplitDev/LibreSplit";
     description = "Speedrun timer with auto splitting and load removal for Linux";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [ fgaz ];
