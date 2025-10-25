@@ -19,6 +19,7 @@ from pathlib import Path
 from queue import Queue
 from typing import Any
 
+from test_driver.efi import EfiVariable, EfiVars
 from test_driver.errors import MachineError, RequestedAssertionFailed
 from test_driver.logger import AbstractLogger
 
@@ -160,6 +161,7 @@ class StartCommand:
     def build_environment(
         state_dir: Path,
         shared_dir: Path,
+        efi_vars_path: Path,
     ) -> dict:
         # We make a copy to not update the current environment
         env = dict(os.environ)
@@ -168,6 +170,7 @@ class StartCommand:
                 "TMPDIR": str(state_dir),
                 "SHARED_DIR": str(shared_dir),
                 "USE_TMPDIR": "1",
+                "NIX_EFI_VARS": str(efi_vars_path),
             }
         )
         return env
@@ -180,6 +183,7 @@ class StartCommand:
         qmp_socket_path: Path,
         shell_socket_path: Path,
         allow_reboot: bool,
+        efi_vars_path: Path,
     ) -> subprocess.Popen:
         return subprocess.Popen(
             self.cmd(
@@ -189,7 +193,7 @@ class StartCommand:
             stdout=subprocess.PIPE,
             shell=True,
             cwd=state_dir,
-            env=self.build_environment(state_dir, shared_dir),
+            env=self.build_environment(state_dir, shared_dir, efi_vars_path),
         )
 
 
@@ -245,6 +249,9 @@ class Machine:
     full_console_log: list[str]
     callbacks: list[Callable]
 
+    efi_vars_path: Path
+    efi_vars: EfiVars
+
     def __repr__(self) -> str:
         return f"<Machine '{self.name}'>"
 
@@ -288,6 +295,9 @@ class Machine:
 
         self.booted = False
         self.connected = False
+
+        self.efi_vars_path = self.state_dir / f"{self.name}-efi-vars.fd"
+        self.efi_vars = EfiVars(self.efi_vars_path, self)
 
     def is_up(self) -> bool:
         return self.booted and self.connected
@@ -1089,6 +1099,7 @@ class Machine:
             self.qmp_path,
             self.shell_path,
             allow_reboot,
+            self.efi_vars_path,
         )
         self.monitor, _ = monitor_socket.accept()
         self.shell, _ = shell_socket.accept()
@@ -1263,3 +1274,18 @@ class Machine:
         )
         self.connected = False
         self.connect()
+
+    def dump_efi_vars(self) -> None:
+        config = self.efi_vars.read_content()
+        if not config:
+            return
+
+        for vendor, variables in config.items():
+            for name, v in variables.items():
+                v.print()
+
+    def create_efi_vars(self) -> None:
+        self.efi_vars.create_empty()
+
+    def write_efi_vars(self, add: list[EfiVariable]) -> None:
+        self.efi_vars.write(add)
