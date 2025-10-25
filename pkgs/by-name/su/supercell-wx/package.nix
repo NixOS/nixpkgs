@@ -1,33 +1,36 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  aws-sdk-cpp,
-  bzip2,
+  replaceVars,
+  tracy,
+
+  # nativeBuildInputs
   cmake,
+  gitMinimal,
   ninja,
-  zlib,
-  openssl,
-  curl,
-  glew,
-  geos,
+  qt6,
+
+  # buildInputs
+  aws-sdk-cpp,
   boost,
-  spdlog,
-  stb,
+  bzip2,
+  geos,
+  geographiclib,
+  glew,
+  glm,
+  gtest,
+  howard-hinnant-date,
+  libSM,
   libcpr,
   libpng,
-  libSM,
-  geographiclib,
-  howard-hinnant-date,
-  re2,
-  gtest,
-  glm,
-  qt6,
   onetbb,
-  tracy,
-  replaceVars,
+  openssl,
   python3,
+  re2,
+  spdlog,
+  stb,
+  zlib,
 }:
 let
   gtestSkip = [
@@ -50,46 +53,15 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "supercell-wx";
-  version = "0.4.9";
+  version = "0.5.2";
+
   src = fetchFromGitHub {
     owner = "dpaulat";
     repo = "supercell-wx";
-    rev = "refs/tags/v${finalAttrs.version}-release";
-    sha256 = "sha256-3fVUxbGosN4Y4h8BJXUV7DNv7VZTma+IsV94+Zt8DCA=";
+    tag = "v${finalAttrs.version}-release";
     fetchSubmodules = true;
+    hash = "sha256-1cSdJW0CsS5sXfZg0sSnRqNN0UiVCmoUhnJivlG0LRw=";
   };
-
-  meta = {
-    homepage = "https://supercell-wx.rtfd.io";
-    downloadPage = "https://github.com/dpaulat/supercell-wx/releases";
-    description = "Live visualization of NEXRAD weather data and alerts";
-    longDescription = ''
-      Supercell Wx is a free, open source application to visualize live and
-      archive NEXRAD Level 2 and Level 3 data, and severe weather alerts.
-      It displays continuously updating weather data on top of a responsive
-      map, providing the capability to monitor weather events using
-      reflectivity, velocity, and other products.
-    '';
-    license = lib.licenses.mit;
-    mainProgram = "supercell-wx";
-    platforms = [
-      "x86_64-linux"
-      #     "aarch64-linux"
-    ];
-    maintainers = with lib.maintainers; [ aware70 ];
-  };
-
-  env.CXXFLAGS = "-Wno-error=restrict -Wno-error=maybe-uninitialized -Wno-error=deprecated-declarations -Wno-error=stringop-overflow";
-  env.GTEST_FILTER = "-${lib.concatStringsSep ":" gtestSkip}";
-
-  doCheck = true;
-
-  # These tests aren't built by 'all', but ctest still tries to run them.
-  cmakeFlags = [
-    "-DCMAKE_CTEST_ARGUMENTS=-E;'test_mln_core|test_mln_widgets'"
-    "-DSTB_INCLUDE_DIR=${stb}/include/stb"
-    "-DFETCHCONTENT_SOURCE_DIR_TRACY=${tracy.src}"
-  ];
 
   patches = [
     # These are for Nix compatibility {{{
@@ -113,43 +85,55 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "CMAKE_SOURCE_DIR" "PROJECT_SOURCE_DIR"
   '';
 
+  env = {
+    CXXFLAGS = "-Wno-error=restrict -Wno-error=maybe-uninitialized -Wno-error=deprecated-declarations -Wno-error=stringop-overflow";
+    GTEST_FILTER = "-${lib.concatStringsSep ":" gtestSkip}";
+  };
+
+  # These tests aren't built by 'all', but ctest still tries to run them.
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" "-E;'test_mln_core|test_mln_widgets'")
+    (lib.cmakeFeature "STB_INCLUDE_DIR" "${stb}/include/stb")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_TRACY" "${tracy.src}")
+  ];
+
   nativeBuildInputs = [
     cmake
+    gitMinimal
     ninja
     qt6.wrapQtAppsHook
   ];
 
   buildInputs = [
-    zlib
-    openssl
-    qt6.qtbase
-    qt6.qttools
-    qt6.qtmultimedia
-    qt6.qtpositioning
-    qt6.qtimageformats
     aws-sdk-cpp
-    howard-hinnant-date
     boost
-    onetbb
-    glew
+    bzip2
     geos
-    spdlog
-    stb
-    libcpr
-    libpng
-    libSM
-    re2
-    openssl
     # FIXME: split outputs aren't working with find_package. Possibly related to nixpkgs/issues/144170 ?
     (geographiclib.overrideAttrs {
       outputs = [ "out" ];
     })
-    gtest
+    glew
     glm
-    bzip2
+    gtest
+    howard-hinnant-date
+    libSM
+    libcpr
+    libpng
+    onetbb
+    openssl
     (python3.withPackages (ps: [
       ps.geopandas
     ]))
+    qt6.qtbase
+    qt6.qtimageformats
+    qt6.qtmultimedia
+    qt6.qtpositioning
+    qt6.qttools
+    re2
+    spdlog
+    stb
+    zlib
   ];
 
   # Currently crashes on wayland; must force X11
@@ -157,10 +141,33 @@ stdenv.mkDerivation (finalAttrs: {
     "--set QT_QPA_PLATFORM xcb"
   ];
 
+  doCheck = true;
+
   # Install .desktop file and icons
   postInstall = ''
     install -m0644 -D "$src/scwx-qt/res/linux/supercell-wx.desktop" "$out/share/applications/supercell-wx.desktop"
     install -m0644 -D "$src/scwx-qt/res/icons/scwx-256.png"  "$out/share/icons/hicolor/256x256/apps/supercell-wx.png"
     install -m0644 -D "$src/scwx-qt/res/icons/scwx-64.png"  "$out/share/icons/hicolor/64x64/apps/supercell-wx.png"
   '';
+
+  meta = {
+    homepage = "https://supercell-wx.rtfd.io";
+    downloadPage = "https://github.com/dpaulat/supercell-wx/releases";
+    description = "Live visualization of NEXRAD weather data and alerts";
+    changelog = "https://github.com/dpaulat/supercell-wx/releases/tag/${finalAttrs.src.tag}";
+    longDescription = ''
+      Supercell Wx is a free, open source application to visualize live and
+      archive NEXRAD Level 2 and Level 3 data, and severe weather alerts.
+      It displays continuously updating weather data on top of a responsive
+      map, providing the capability to monitor weather events using
+      reflectivity, velocity, and other products.
+    '';
+    license = lib.licenses.mit;
+    mainProgram = "supercell-wx";
+    platforms = [
+      "x86_64-linux"
+      #     "aarch64-linux"
+    ];
+    maintainers = with lib.maintainers; [ aware70 ];
+  };
 })
