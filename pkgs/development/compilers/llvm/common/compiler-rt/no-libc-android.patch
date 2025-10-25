@@ -1,0 +1,42 @@
+diff --git a/lib/builtins/CMakeLists.txt b/lib/builtins/CMakeLists.txt
+index 3ab9240..d6f2f48 100644
+--- a/lib/builtins/CMakeLists.txt
++++ b/lib/builtins/CMakeLists.txt
+@@ -160,7 +160,6 @@ set(GENERIC_SOURCES
+   negvdi2.c
+   negvsi2.c
+   negvti2.c
+-  os_version_check.c
+   paritydi2.c
+   paritysi2.c
+   parityti2.c
+@@ -242,6 +241,7 @@ if(NOT FUCHSIA AND NOT COMPILER_RT_BAREMETAL_BUILD AND NOT COMPILER_RT_GPU_BUILD
+     emutls.c
+     enable_execute_stack.c
+     eprintf.c
++    os_version_check.c
+   )
+ endif()
+ 
+diff --git a/lib/builtins/cpu_model/aarch64.c b/lib/builtins/cpu_model/aarch64.c
+index be002dd..5af475e 100644
+--- a/lib/builtins/cpu_model/aarch64.c
++++ b/lib/builtins/cpu_model/aarch64.c
+@@ -43,7 +43,7 @@ _Bool __aarch64_have_lse_atomics
+ #elif defined(__Fuchsia__)
+ #include "aarch64/hwcap.inc"
+ #include "aarch64/lse_atomics/fuchsia.inc"
+-#elif defined(__ANDROID__)
++#elif defined(__ANDROID__) && __has_include(<sys/system_properties.h>)
+ #include "aarch64/hwcap.inc"
+ #include "aarch64/lse_atomics/android.inc"
+ #elif defined(__linux__) && __has_include(<sys/auxv.h>)
+@@ -73,7 +73,7 @@ struct {
+ #include "aarch64/fmv/freebsd.inc"
+ #elif defined(__Fuchsia__)
+ #include "aarch64/fmv/fuchsia.inc"
+-#elif defined(__ANDROID__)
++#elif defined(__ANDROID__) && __has_include(<sys/system_properties.h>)
+ #include "aarch64/fmv/mrs.inc"
+ #include "aarch64/fmv/android.inc"
+ #elif defined(__linux__) && __has_include(<sys/auxv.h>)
