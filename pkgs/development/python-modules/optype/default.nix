@@ -49,6 +49,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
+    broken = true;
     description = "Opinionated typing package for precise type hints in Python";
     homepage = "https://github.com/jorenham/optype";
     license = lib.licenses.bsd3;

@@ -58,6 +58,7 @@ buildGoModule rec {
   '';
 
   meta = {
+    broken = true;
     description = "Media manager and transcoding server";
     homepage = "https://gitlab.com/olaris/olaris-server";
     changelog = "https://gitlab.com/olaris/olaris-server/-/releases/v${version}";

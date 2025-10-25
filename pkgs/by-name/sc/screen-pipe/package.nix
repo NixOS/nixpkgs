@@ -65,6 +65,7 @@ rustPlatform.buildRustPackage rec {
   doCheck = false; # Tests fail to build
 
   meta = with lib; {
+    broken = true;
     description = "Personalized AI powered by what you've seen, said, or heard";
     homepage = "https://github.com/louis030195/screen-pipe";
     license = licenses.mit;

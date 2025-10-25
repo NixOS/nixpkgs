@@ -23,6 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
+    broken = true;
     description = "C++ library providing linear algebra and various utility functions";
     longDescription = ''
       A C++ library implementing linear algebra, text and file IO, UTF-N conversions,

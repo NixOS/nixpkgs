@@ -153,6 +153,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "3D point cloud and mesh processing software";
     homepage = "https://cloudcompare.org";
     license = licenses.gpl2Plus;

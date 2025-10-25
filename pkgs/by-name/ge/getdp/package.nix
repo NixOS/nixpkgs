@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = lib.optional mpiSupport "-DENABLE_MPI=1";
 
   meta = with lib; {
+    broken = true;
     description = "General Environment for the Treatment of Discrete Problems";
     mainProgram = "getdp";
     longDescription = ''

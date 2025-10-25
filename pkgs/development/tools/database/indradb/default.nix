@@ -15,6 +15,7 @@ let
   };
 
   meta = with lib; {
+    broken = true;
     description = "Graph database written in rust";
     homepage = "https://github.com/indradb/indradb";
     license = licenses.mpl20;

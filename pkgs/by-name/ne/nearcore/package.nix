@@ -54,6 +54,7 @@ rustPlatform.buildRustPackage rec {
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
+    broken = true;
     description = "Reference client for NEAR Protocol";
     homepage = "https://github.com/near/nearcore";
     license = licenses.gpl3;

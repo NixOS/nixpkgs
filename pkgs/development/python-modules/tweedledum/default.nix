@@ -39,6 +39,7 @@ buildPythonPackage rec {
   enabledTestPaths = [ "python/test" ];
 
   meta = with lib; {
+    broken = true;
     description = "Library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
     license = licenses.mit;

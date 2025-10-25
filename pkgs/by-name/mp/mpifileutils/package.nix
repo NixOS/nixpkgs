@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
+    broken = true;
     description = "Suite of MPI-based tools to manage large datasets";
     homepage = "https://hpc.github.io/mpifileutils";
     platforms = platforms.linux;

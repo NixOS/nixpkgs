@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
   '';
   doCheck = true;
   meta = {
+    broken = true;
     maintainers = with lib.maintainers; [ fettgoenner ];
     changelog = "https://scipopt.org/doc-${scipVersion}/html/RN${lib.versions.major scipVersion}.php";
     description = "Branch-and-Price & Column Generation for Everyone";

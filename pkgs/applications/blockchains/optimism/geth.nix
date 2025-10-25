@@ -39,6 +39,7 @@ buildGoModule rec {
   ];
 
   meta = with lib; {
+    broken = true;
     description = "";
     homepage = "https://github.com/ethereum-optimism/op-geth";
     license = licenses.gpl3Only;

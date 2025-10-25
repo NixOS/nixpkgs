@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
+    broken = true;
     description = "GPU Accelerated Library for Analysing Radio Interferometer Observations";
     longDescription = ''
       Galario is a library that exploits the computing power of modern
