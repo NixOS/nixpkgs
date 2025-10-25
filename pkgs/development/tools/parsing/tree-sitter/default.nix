@@ -15,8 +15,11 @@
   substitute,
   installShellFiles,
   buildPackages,
+  cmake,
+  wasmtime_29,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
+  wasmSupport ? true,
   webUISupport ? false,
   extraGrammars ? { },
 
@@ -165,7 +168,6 @@ let
     );
 
   allGrammars = builtins.attrValues builtGrammars;
-
 in
 rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -173,14 +175,22 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-4R5Y9yancbg/w3PhACtsWq0+gieUd2j8YnmEj/5eqkg=";
 
+  cargoBuildFeatures = lib.optionals wasmSupport [ "wasm" ];
+
   buildInputs = [
     installShellFiles
+  ]
+  ++ lib.optionals wasmSupport [
+    wasmtime_29
   ]
   ++ lib.optionals webUISupport [
     openssl
   ];
   nativeBuildInputs = [
     which
+  ]
+  ++ lib.optionals wasmSupport [
+    cmake
   ]
   ++ lib.optionals webUISupport [
     emscripten
@@ -198,6 +208,20 @@ rustPlatform.buildRustPackage {
         --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
   '';
 
+  cmakeDir = lib.optionalString wasmSupport "../lib";
+  cmakeFlags = lib.optionals wasmSupport [
+    (lib.cmakeBool "TREE_SITTER_FEATURE_WASM" true)
+    # these are needed so we don't need to patch https://github.com/tree-sitter/tree-sitter/blob/v0.25.3/lib/tree-sitter.pc.in#L1-L3
+    (lib.cmakeFeature "CMAKE_INSTALL_INCLUDEDIR" "include")
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+  ];
+
+  # cmakeConfigurePhase already runs preConfigure & postConfigure
+  configurePhase = lib.optionalString wasmSupport ''
+    runHook cmakeConfigurePhase
+    cd ..
+  '';
+
   # Compile web assembly with emscripten. The --debug flag prevents us from
   # minifying the JavaScript; passing it allows us to side-step more Node
   # JS dependencies for installation.
@@ -207,8 +231,13 @@ rustPlatform.buildRustPackage {
     cargo run --package xtask -- build-wasm --debug
   '';
 
+  postBuild = lib.optionalString wasmSupport ''
+    cmake --build $cmakeBuildDir
+  '';
+
   postInstall = ''
     PREFIX=$out make install
+    ${lib.optionalString wasmSupport "cmake --install $cmakeBuildDir"}
     ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
   ''
