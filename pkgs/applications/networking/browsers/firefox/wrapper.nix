@@ -115,7 +115,7 @@ let
         ++ lib.optional jackSupport libjack2
         ++ lib.optional smartcardSupport opensc
         ++ pkcs11Modules
-        ++ lib.optionals (!isDarwin) gtk_modules;
+        ++ gtk_modules;
       gtk_modules = lib.optionals (!isDarwin) [ libcanberra-gtk3 ];
 
       # Darwin does not rename bundled binaries
