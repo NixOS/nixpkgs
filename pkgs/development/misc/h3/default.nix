@@ -36,6 +36,8 @@ let
         (lib.cmakeBool "ENABLE_FORMAT" false)
         (lib.cmakeBool "ENABLE_LINTING" false)
         (lib.cmakeBool "BUILD_FILTERS" withFilters)
+        # Fix the build with CMake 4.
+        "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
       ];
 
       meta = {
