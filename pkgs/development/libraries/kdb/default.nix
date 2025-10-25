@@ -55,6 +55,7 @@ mkDerivation rec {
     mainProgram = "kdb3_sqlite3_dump";
     license = licenses.lgpl2;
     platforms = platforms.linux;
+    broken = true;
     maintainers = with maintainers; [ zraexy ];
   };
 }
