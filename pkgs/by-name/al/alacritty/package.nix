@@ -42,9 +42,9 @@ let
     wayland
   ];
 in
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "alacritty";
-  version = "0.15.1" + lib.optionalString withGraphics "-graphics";
+  version = if !withGraphics then "0.16.1" else "0.16.0-graphics";
 
   src =
     # by default we want the official package
@@ -52,23 +52,23 @@ rustPlatform.buildRustPackage rec {
       fetchFromGitHub {
         owner = "alacritty";
         repo = "alacritty";
-        tag = "v${version}";
-        hash = "sha256-/yERMNfCFLPb1S17Y9OacVH8UobDIIZDhM2qPzf5Vds=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-IOPhnJ76kZ2djJjxJEUwWPvHDeeXbJAn1ClipTH7nWs=";
       }
     # optionally we want to build the sixels feature fork
     else
       fetchFromGitHub {
         owner = "ayosec";
         repo = "alacritty";
-        tag = "v${version}";
-        hash = "sha256-n8vO6Q4bzWLaOqg8YhZ+aLOtBBTQ9plKIEJHXq+hhnM=";
+        tag = "v${finalAttrs.version}";
+        hash = "sha256-JbsHozYMh7hFMAsu823IcVZTzvMEGQP+oKpUnlmM7Nk=";
       };
 
   cargoHash =
     if !withGraphics then
-      "sha256-uXwefUV1NAKqwwPIWj4Slkx0c5b+RfLR3caTb42fc4M="
+      "sha256-OBhrd4q44LCUGnjDEedhrOuoSC2UFR90IKSQfEPY/Q4="
     else
-      "sha256-UtxZFqU974N+YcHoEHifBjNSyaVuMvuc1clTDgUPuoQ=";
+      "sha256-fsTs37w4CvYvFN8ZgWxMA2hmgW0hJcIvhLiuhYxs4+Y=";
 
   nativeBuildInputs = [
     cmake
@@ -144,7 +144,11 @@ rustPlatform.buildRustPackage rec {
 
   meta = {
     description = "Cross-platform, GPU-accelerated terminal emulator";
-    homepage = "https://github.com/alacritty/alacritty";
+    homepage =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty"
+      else
+        "https://github.com/ayosec/alacritty";
     license = lib.licenses.asl20;
     mainProgram = "alacritty";
     maintainers = with lib.maintainers; [
@@ -152,6 +156,10 @@ rustPlatform.buildRustPackage rec {
       rvdp
     ];
     platforms = lib.platforms.unix;
-    changelog = "https://github.com/alacritty/alacritty/blob/v${version}/CHANGELOG.md";
+    changelog =
+      if !withGraphics then
+        "https://github.com/alacritty/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md"
+      else
+        "https://github.com/ayosec/alacritty/blob/v${finalAttrs.version}/CHANGELOG.md";
   };
-}
+})
