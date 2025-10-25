@@ -304,6 +304,23 @@ let
           src = emptyDirectory;
         }
       ) { };
+
+      package-stub-gcc = package-stub.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.gccStdenv;
+        };
+      });
+      package-stub-clang = package-stub-gcc.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.clangStdenv;
+        };
+      });
+      package-stub-libcxx = package-stub-clang.override (previousArgs: {
+        buildPythonPackage = previousArgs.buildPythonPackage.override {
+          stdenv = pkgs.libcxxStdenv;
+        };
+      });
+
       applyOverridePythonAttrs =
         p:
         p.overridePythonAttrs (previousAttrs: {
@@ -319,6 +336,19 @@ let
         );
     in
     {
+      buildPythonPackage-override-gccStdenv = {
+        expr = package-stub-gcc.stdenv;
+        expected = pkgs.gccStdenv;
+      };
+      buildPythonPackage-override-clangStdenv = {
+        expr = package-stub-clang.stdenv;
+        expected = pkgs.clangStdenv;
+      };
+      buildPythonPackage-override-libcxxStdenv = {
+        expr = package-stub-libcxx.stdenv;
+        expected = pkgs.libcxxStdenv;
+      };
+
       overridePythonAttrs = {
         expr = (applyOverridePythonAttrs package-stub).overridePythonAttrsFlag;
         expected = 1;
