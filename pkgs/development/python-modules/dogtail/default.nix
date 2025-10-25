@@ -13,27 +13,24 @@
   dbus,
   xvfb-run,
   wrapGAppsHook3,
-# , fetchPypi
+  fetchPypi,
+  setuptools,
+  ponytail,
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "dogtail";
-  version = "0.9.11";
-  format = "setuptools";
+  version = "1.0.7";
+  pyproject = true;
 
   outputs = [
     "out"
     "dev"
   ];
 
-  # https://gitlab.com/dogtail/dogtail/issues/1
-  # src = fetchPypi {
-  #   inherit pname version;
-  #   sha256 = "0p5wfssvzr9w0bvhllzbbd8fnp4cca2qxcpcsc33dchrmh5n552x";
-  # };
-  src = fetchurl {
-    url = "https://gitlab.com/dogtail/dogtail/raw/released/dogtail-0.9.10.tar.gz";
-    sha256 = "EGyxYopupfXPYtTL9mm9ujZorvh8AGaNXVKBPWsGy3c=";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "sha256-VURwc8li710YRdEZcuIayVeSQEkN6CtON3C5qMOk+zs=";
   };
 
   patches = [ ./nix-support.patch ];
@@ -43,13 +40,16 @@ buildPythonPackage {
     dbus
     xvfb-run
     wrapGAppsHook3
-  ]; # for setup hooks
+    setuptools
+  ];
+
   propagatedBuildInputs = [
     at-spi2-core
     gtk3
     pygobject3
     pyatspi
     pycairo
+    ponytail
   ];
 
   checkPhase = ''
