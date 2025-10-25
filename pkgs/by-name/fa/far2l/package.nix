@@ -23,7 +23,6 @@
   wxGTK32,
   withUCD ? true,
   libuchardet,
-
   # Plugins
   withColorer ? true,
   spdlog,
@@ -40,7 +39,6 @@
   withPython ? false,
   python3Packages,
 }:
-
 stdenv.mkDerivation rec {
   pname = "far2l";
   version = "2.6.5";
@@ -107,7 +105,8 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withPython [
     (lib.cmakeFeature "VIRTUAL_PYTHON" "python")
     (lib.cmakeFeature "VIRTUAL_PYTHON_VERSION" "python")
-  ];
+  ]
+  ++ [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.5" ];
 
   runtimeDeps = [
     unzip
