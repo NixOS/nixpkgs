@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.5.11";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XJFqoluI3ZwmqxhKpJANqOxkYP3Va7pXXyWOHSLopwc=";
+    hash = "sha256-9oEMnGaloY3tFY/qpjTlYbO7n1ORIK49s3N9SGSMvHE=";
   };
 
   postPatch = ''
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-k23HzIN8QAkV/IREM5fHHeaMjO+cIthpLNrLKn4g7tY=";
+    hash = "sha256-LstTTVKXVL6hIC5TiUKeBIcDFaRPdmEjO2LmvVXB7dQ=";
   };
 
   nativeBuildInputs = [
