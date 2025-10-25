@@ -7,24 +7,21 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "oscar64";
-  version = "1.32.263";
+  version = "1.32.265";
 
   src = fetchFromGitHub {
     owner = "drmortalwombat";
     repo = "oscar64";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g8HUJcoI7fBmypPO79QYiOdhIYh1/sctSaEC8RLaM+s=";
+    hash = "sha256-nPwebydRFHoIWp2sbfPaudKj/sPZRKamYdIuSVZ9dcc=";
   };
 
-  # FIXME: can be removed whenever the version is bumped.
   patches = [
+    # broke 'make install'
     (fetchpatch {
-      url = "https://github.com/drmortalwombat/oscar64/commit/3b0f954144e36903fd396c099714722f9fa2430a.patch";
-      hash = "sha256-6S7Gx9pZSNBHxX9uyS0zApe263dUo5DGviEczpP1FpQ=";
-    })
-    (fetchpatch {
-      url = "https://github.com/drmortalwombat/oscar64/commit/744f496f0f71fae098063a1f3ed71722d31f7b1a.patch";
-      hash = "sha256-84UBgVuKN7HMdkQfWUXMCfQSNqAe2QQ2yiifEN1JuOU=";
+      url = "https://github.com/drmortalwombat/oscar64/commit/edde3a0076067b961189361c26b9ead9b7e61a4a.patch";
+      hash = "sha256-tCW4vA4mcNZ3GBPmgSer5Ix7xyzZslieB+zl1ohtMXU=";
+      revert = true;
     })
   ];
 
@@ -55,7 +52,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ lib.maintainers.nekowinston ];
     mainProgram = "oscar64";
     platforms = lib.platforms.unix;
-    # FIXME: enable aarch64-linux for the next version.
-    broken = stdenv.hostPlatform.isAarch64 && stdenv.hostPlatform.isLinux;
   };
 })
