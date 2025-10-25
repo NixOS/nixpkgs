@@ -64,6 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm")
+    # TODO: Needs patches and the `lit` package like other LLVM builds?
     (lib.cmakeFeature "LLVM_TOOLS_BINARY_DIR" "${buildLlvmPackages.tblgen}/bin/")
     (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${buildLlvmPackages.tblgen}/bin/llvm-lit")
     (lib.cmakeFeature "CLANG_DIR" "${libclang.dev}/lib/cmake/clang")

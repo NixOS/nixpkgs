@@ -319,6 +319,9 @@ makeScopeWithSplicing' {
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
         cc = self.clang-unwrapped;
         # This is used to build compiler-rt. Make sure to use the system libc++ on Darwin.
+        #
+        # FIXME: This should almost certainly use
+        # `stdenv.targetPlatform` and `targetPackages.darwin.libcxx`.
         libcxx = if stdenv.hostPlatform.isDarwin then darwin.libcxx else targetLlvmPackages.libcxx;
         bintools = bintools';
         extraPackages = [
@@ -488,10 +491,13 @@ makeScopeWithSplicing' {
         # Use clang due to "gnu::naked" not working on aarch64.
         # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
         stdenv = overrideCC stdenv buildLlvmPackages.clangNoLibcNoRt;
+        # FIXME: This should almost certainly be `stdenv.hostPlatform`.
         cmake = if stdenv.targetPlatform.libc == "llvm" then cmakeMinimal else cmake;
         python3 = if stdenv.targetPlatform.libc == "llvm" then python3Minimal else python3;
       };
 
-      libc = if stdenv.targetPlatform.libc == "llvm" then self.libc-full else self.libc-overlay;
+      libc =
+        # FIXME: This should almost certainly be `stdenv.hostPlatform`.
+        if stdenv.targetPlatform.libc == "llvm" then self.libc-full else self.libc-overlay;
     };
 }
