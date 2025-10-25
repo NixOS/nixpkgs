@@ -24,6 +24,7 @@ let
 
   memos-protobuf-gen = stdenvNoCC.mkDerivation {
     name = "memos-protobuf-gen";
+    pname = "memos-protobuf-gen";
     inherit src;
 
     nativeBuildInputs = [
@@ -101,13 +102,16 @@ buildGoModule {
     cp -r {${memos-protobuf-gen},.}/proto/gen
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--subpackage"
-      "memos-web"
-      "--subpackage"
-      "memos-protobuf-gen"
-    ];
+  passthru = {
+    inherit memos-web memos-protobuf-gen;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "memos-web"
+        "--subpackage"
+        "memos-protobuf-gen"
+      ];
+    };
   };
 
   meta = {
