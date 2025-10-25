@@ -21,6 +21,7 @@
   pycairo,
   dolphinIntegration ? false,
   kdePackages,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -93,6 +94,9 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = "--version";
 
   meta = {
     description = "Handy tool to trash your metadata";
