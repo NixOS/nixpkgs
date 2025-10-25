@@ -398,6 +398,19 @@ rec {
     else
       mapAttrs mkAttrOverridable pkgs;
 
+  makeCallPackageWithArgSelectors =
+    callPackage: fn: extraArgSelectors:
+    let
+      f = if isFunction fn then fn else import fn;
+      f' = if isAttrs f then f else mirrorFunctionArgs f f;
+    in
+    callPackage (
+      f'
+      // {
+        argSelectors = f.argSelectors or { } // extraArgSelectors;
+      }
+    ) { };
+
   /**
     Add attributes to each output of a derivation without changing
     the derivation itself and check a given condition when evaluating.
