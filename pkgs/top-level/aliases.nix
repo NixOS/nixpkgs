@@ -2129,6 +2129,14 @@ mapAliases {
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
   pn = throw "'pn' has been removed as upstream was archived in 2020"; # Added 2025-10-17
   plots = throw "'plots' has been replaced by 'gnome-graphs'"; # Added 2025-02-05
+
+  plover.dev =
+    if lib.versionOlder "25.05" lib.version then
+      throw "plover.dev was renamed. Use python3Packages.plover-dev instead." # Added 2025-06-05
+    else
+      python3Packages.plover-dev;
+  plover.stable = throw "plover.stable was renamed. Use python3Packages.plover instead."; # Added 2022-06-05; Updated 2025-06-27
+
   pltScheme = racket; # Added 2013-02-24
   poac = cabinpkg; # Added 2025-01-22
   podofo010 = podofo_0_10; # Added 2025-06-01
