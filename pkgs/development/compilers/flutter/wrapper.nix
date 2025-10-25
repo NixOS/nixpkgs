@@ -24,7 +24,7 @@
   makeWrapper,
   writeShellScript,
   wrapGAppsHook3,
-  git,
+  gitMinimal,
   which,
   pkg-config,
   atk,
@@ -64,8 +64,8 @@ let
     name = "flutter-cache-dir";
     paths = builtins.attrValues flutterPlatformArtifacts;
     postBuild = ''
-      mkdir -p "$out/bin/cache"
-      ln -s '${flutter}/bin/cache/dart-sdk' "$out/bin/cache"
+      mkdir --parents "$out/bin/cache"
+      ln --symbolic '${flutter}/bin/cache/dart-sdk' "$out/bin/cache"
     '';
     passthru.flutterPlatform = flutterPlatformArtifacts;
   };
@@ -79,7 +79,7 @@ let
 
   # Tools that the Flutter tool depends on.
   tools = [
-    git
+    gitMinimal
     which
   ];
 
@@ -184,7 +184,7 @@ in
         addToSearchPath FLUTTER_PKG_CONFIG_PATH "$path"
       done
 
-      mkdir -p $out/bin
+      mkdir --parents $out/bin
       makeWrapper '${immutableFlutter}' $out/bin/flutter \
         --set-default ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
     ''
