@@ -54,6 +54,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       luz
       thoughtpolice
+      iedame
     ];
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

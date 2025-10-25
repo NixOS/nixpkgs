@@ -94,6 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [
       raskin
       tomfitzhenry
+      iedame
     ];
     platforms = lib.platforms.linux;
     homepage = "https://www.chiark.greenend.org.uk/~sgtatham/puzzles/";

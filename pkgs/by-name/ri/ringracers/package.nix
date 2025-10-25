@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [
       donovanglover
       thehans255
+      iedame
     ];
     mainProgram = "ringracers";
   };
