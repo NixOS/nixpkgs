@@ -111,6 +111,7 @@ let
       runHook preInstall
 
       makeWrapper "$out/opt/pt/bin/PacketTracer" "$out/bin/packettracer8" \
+        --set QT_QPA_PLATFORM xcb \
         --prefix LD_LIBRARY_PATH : "$out/opt/pt/bin"
 
       runHook postInstall
