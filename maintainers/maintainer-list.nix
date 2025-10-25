@@ -3397,6 +3397,11 @@
     githubId = 10164833;
     name = "Birk Bohne";
   };
+  bitbloxhub = {
+    name = "bitbloxhub";
+    github = "bitbloxhub";
+    githubId = 45184892;
+  };
   bizmyth = {
     email = "andrew.p.council@gmail.com";
     github = "bizmythy";
