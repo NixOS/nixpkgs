@@ -368,7 +368,14 @@ rec {
     libc = "ucrt"; # This distinguishes the mingw (non posix) toolchain
   };
 
-  # LLVM-based mingw-w64 for ARM
+  # LLVM-based urct64s
+  ucrtLLVM64 = {
+    config = "x86_64-w64-mingw32";
+    libc = "ucrt";
+    rust.rustcTarget = "x86_64-pc-windows-gnullvm";
+    useLLVM = true;
+  };
+
   ucrtAarch64 = {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
