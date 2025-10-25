@@ -121,6 +121,16 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/scribusproject/scribus/commit/13fc4f874354511e05bf91a48703b57b4c489715.patch";
       hash = "sha256-+pbQ77SaTh04QX55wmS6WeuZf3IGe5nq3pmrhk68tb8=";
     })
+    (fetchpatch {
+      name = "fix-build-poppler-25.09.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/f0cfe30019a514bdaf38b78590451e2c5b9b5420.patch";
+      hash = "sha256-ONQ3BzGhouO+0zqYUObuJC3NUCFi1PWq6qoRvuSZJws=";
+    })
+    (fetchpatch {
+      name = "fix-build-poppler-25.10.0.patch";
+      url = "https://github.com/scribusproject/scribus/commit/3c1fc34fae1aa26fceb65b6bdf631a7f00b03c3c.patch";
+      hash = "sha256-xTwzbT3h4+5hb6Y/sNmzkfDN2LJGOLP1v/WBVsmZXkk=";
+    })
   ];
 
   meta = {
