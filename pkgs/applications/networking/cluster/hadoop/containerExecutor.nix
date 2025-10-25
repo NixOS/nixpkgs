@@ -21,13 +21,16 @@ stdenv.mkDerivation (finalAttrs: {
     "hadoop-${finalAttrs.version}-src/hadoop-yarn-project/hadoop-yarn/"
     + "hadoop-yarn-server/hadoop-yarn-server-nodemanager/src";
 
+  postPatch = ''
+    sed -i -r 's/(cmake_minimum_required\(VERSION) [0-9.]+/\1 3.10/' CMakeLists.txt
+  '';
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl ];
   cmakeFlags = [ "-DHADOOP_CONF_DIR=/run/wrappers/yarn-nodemanager/etc/hadoop" ];
 
   installPhase = ''
     mkdir $out
-    mv target/var/empty/local/bin $out/
+    mv target/usr/local/bin $out/
   '';
 
   meta = with lib; {
