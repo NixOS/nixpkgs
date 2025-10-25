@@ -1217,7 +1217,6 @@ mapAliases {
   hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability"; # Added 2024-08-03
   hyenae = throw "hyenae has been removed because it fails to build and was unmaintained for 15 years"; # Added 2025-04-04
   hyprgui = throw "hyprgui has been removed as the repository is deleted"; # Added 2024-12-27
-  hyprlauncher = throw "hyprlauncher has been removed as the repository is deleted"; # Added 2024-12-27
   hyprswitch = throw "hyprswitch has been renamed to hyprshell"; # Added 2025-06-01
   hyprwall = throw "hyprwall has been removed as the repository is deleted"; # Added 2024-12-27
 
