@@ -287,6 +287,7 @@
   ./programs/obs-studio.nix
   ./programs/oddjobd.nix
   ./programs/opengamepadui.nix
+  ./programs/openlinkhub.nix
   ./programs/openvpn3.nix
   ./programs/partition-manager.nix
   ./programs/pay-respects.nix
