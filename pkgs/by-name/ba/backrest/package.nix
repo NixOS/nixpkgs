@@ -11,6 +11,8 @@
   stdenv,
   util-linux,
   makeBinaryWrapper,
+  nix-update-script,
+  _experimental-update-script-combinators,
 }:
 let
   pname = "backrest";
@@ -54,8 +56,13 @@ let
     '';
   });
 in
-buildGoModule {
-  inherit pname src version;
+buildGoModule (finalAttrs: {
+  inherit
+    pname
+    src
+    version
+    frontend
+    ;
 
   postPatch = ''
     sed -i -e \
@@ -73,7 +80,7 @@ buildGoModule {
 
   preBuild = ''
     mkdir -p ./webui/dist
-    cp -r ${frontend}/* ./webui/dist
+    cp -r ${finalAttrs.frontend}/* ./webui/dist
 
     go generate -skip="npm" ./...
   '';
@@ -82,6 +89,15 @@ buildGoModule {
     util-linux
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ libredirect.hook ];
+
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "frontend"
+      ];
+    })
+  ];
 
   checkFlags =
     let
@@ -118,8 +134,11 @@ buildGoModule {
     homepage = "https://github.com/garethgeorge/backrest";
     changelog = "https://github.com/garethgeorge/backrest/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ iedame ];
+    maintainers = with lib.maintainers; [
+      iedame
+      alexandru0-dev
+    ];
     mainProgram = "backrest";
     platforms = lib.platforms.unix;
   };
-}
+})
