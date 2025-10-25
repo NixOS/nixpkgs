@@ -16,8 +16,6 @@ buildDartApplication {
   pname = "melos";
   inherit version src;
 
-  sourceRoot = "${src.name}/packages/melos";
-
   patches = [
     # This patch (created a melos 6.1.0) modify the method melos use to find path to the root of the projects.
     # It is needed because when melos is in the nixstore, it break it and fail to find the projects root with melos.yaml
@@ -28,12 +26,12 @@ buildDartApplication {
 
   # hard code the path to the melos templates
   preBuild = ''
-    substituteInPlace lib/src/common/utils.dart \
+    substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "final melosPackageFileUri = await Isolate.resolvePackageUri(melosPackageUri);" "return \"$out\";"
-    substituteInPlace lib/src/common/utils.dart \
+    substituteInPlace packages/melos/lib/src/common/utils.dart \
       --replace-fail "return p.normalize('\''${melosPackageFileUri!.toFilePath()}/../..');" " "
     mkdir --parents $out
-    cp --recursive templates $out/
+    cp --recursive packages/melos/templates $out/
   '';
 
   meta = {
