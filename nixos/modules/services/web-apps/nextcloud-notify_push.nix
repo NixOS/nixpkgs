@@ -173,9 +173,7 @@ in
       };
       nextcloud = {
         extraApps = {
-          inherit (config.services.nextcloud.package.packages.apps)
-            notify_push
-            ;
+          notify_push = lib.mkDefault config.services.nextcloud.package.packages.apps.notify_push;
         };
         settings.trusted_proxies = lib.mkIf cfg.bendDomainToLocalhost [
           "127.0.0.1"
