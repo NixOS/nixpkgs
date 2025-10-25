@@ -6,6 +6,7 @@
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
   flutter_vodozemac = callPackage ./flutter_vodozemac { };
   flutter_volume_controller = callPackage ./flutter_volume_controller { };
+  hotkey_manager_linux = callPackage ./hotkey-manager-linux { };
   handy_window = callPackage ./handy-window { };
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };

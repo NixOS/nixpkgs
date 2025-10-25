@@ -1,0 +1,34 @@
+From 1b31e3ca4ab017ee72f54a7065b2073a88403d61 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Gutyina=20Gerg=C5=91?= <gutyina.gergo.2@gmail.com>
+Date: Tue, 21 Oct 2025 11:19:13 +0200
+Subject: [PATCH] fix: build failure with Clang 21
+
+---
+ .../hotkey_manager_linux/linux/hotkey_manager_linux_plugin.cc | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/packages/hotkey_manager_linux/linux/hotkey_manager_linux_plugin.cc b/packages/hotkey_manager_linux/linux/hotkey_manager_linux_plugin.cc
+index 74fabe2..72b962b 100644
+--- a/packages/hotkey_manager_linux/linux/hotkey_manager_linux_plugin.cc
++++ b/packages/hotkey_manager_linux/linux/hotkey_manager_linux_plugin.cc
+@@ -32,7 +32,7 @@ G_DEFINE_TYPE(HotkeyManagerLinuxPlugin,
+               g_object_get_type())
+ 
+ void handle_key_down(const char* keystring, void* user_data) {
+-  const char* identifier;
++  const char* identifier = "";
+ 
+   std::string val = keystring;
+   auto result = std::find_if(hotkey_id_map.begin(), hotkey_id_map.end(),
+@@ -103,7 +103,7 @@ static FlMethodResponse* hkm_unregister(_HotkeyManagerLinuxPlugin* self,
+                                         FlValue* args) {
+   const char* identifier =
+       fl_value_get_string(fl_value_lookup_string(args, "identifier"));
+-  const char* keystring;
++  const char* keystring = "";
+ 
+   std::string val = identifier;
+   auto result = std::find_if(hotkey_id_map.begin(), hotkey_id_map.end(),
+-- 
+2.51.0
+
