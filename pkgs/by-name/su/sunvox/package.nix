@@ -72,13 +72,27 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
-      mv $binary $out/bin/$(basename $binary)
-    done
+      for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
+        mv $binary $out/bin/$(basename $binary)
+      done
 
-    # Cleanup, make sure we didn't miss anything
-    find $out/share/sunvox/sunvox -type f -name readme.txt -delete
-    rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+      # Install desktop entry for application launchers
+      mkdir -p "$out/share/applications"
+      cat > "$out/share/applications/sunvox.desktop" <<EOF
+    [Desktop Entry]
+    Type=Application
+    Name=SunVox
+    GenericName=Modular Synthesizer
+    Comment=Small, fast and powerful modular synthesizer with pattern-based sequencer
+    Exec=sunvox
+    Categories=AudioVideo;Audio;Midi;
+    Terminal=false
+    StartupNotify=false
+    EOF
+
+      # Cleanup, make sure we didn't miss anything
+      find $out/share/sunvox/sunvox -type f -name readme.txt -delete
+      rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
   ''
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir $out/Applications
