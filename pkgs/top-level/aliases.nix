@@ -2762,6 +2762,7 @@ mapAliases {
   vmware-horizon-client = throw "'vmware-horizon-client' has been renamed to 'omnissa-horizon-client'"; # Added 2025-04-24
   vocal = throw "'vocal' has been archived upstream. Consider using 'gnome-podcasts' or 'kasts' instead."; # Added 2025-04-12
   void = throw "'void' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
+  volk_2 = throw "'volk_2' has been removed after not being used by any package for a long time"; # Added 2025-10-25
   volnoti = throw "'volnoti' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   voxelands = throw "'voxelands' has been removed due to lack of upstream maintenance"; # Added 2025-08-30
   vtk_9 = lib.warnOnInstantiate "'vtk_9' has been renamed to 'vtk_9_5'" vtk_9_5; # Added 2025-07-18
