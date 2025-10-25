@@ -480,6 +480,7 @@ mapAliases {
   armcord = throw "ArmCord was renamed to legcord by the upstream developers. Action is required to migrate configurations between the two applications. Please see this PR for more details: https://github.com/NixOS/nixpkgs/pull/347971"; # Added 2024-10-11
   arrayfire = throw "arrayfire was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   aseprite-unfree = aseprite; # Added 2023-08-26
+  asio_1_10 = throw "'asio_1_10' has been removed because no other packages depend on this old version of asio. Use 'asio' instead."; # Added 2025-06-06
   asitop = macpm; # 'macpm' is a better-maintained downstream; keep 'asitop' for backwards-compatibility
   asterisk_18 = throw "asterisk_18: Asterisk 18 is end of life and has been removed"; # Added 2025-10-19
   async = throw "'async' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
