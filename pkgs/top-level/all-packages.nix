@@ -1451,6 +1451,8 @@ with pkgs;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
 
+  kitty-themes = recurseIntoAttrs (callPackage ../data/themes/kitty-themes { });
+
   mlterm-wayland = mlterm.override {
     enableX11 = false;
   };
