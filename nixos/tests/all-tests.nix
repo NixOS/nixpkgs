@@ -735,13 +735,14 @@ in
   immich-vectorchord-migration = runTest ./web-apps/immich-vectorchord-migration.nix;
   immich-vectorchord-reindex = runTest ./web-apps/immich-vectorchord-reindex.nix;
   incron = runTest ./incron.nix;
-  incus = pkgs.recurseIntoAttrs (
-    handleTest ./incus {
-      lts = false;
-      inherit system pkgs;
-    }
-  );
-  incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { inherit system pkgs; });
+  incus = import ./incus {
+    inherit runTest;
+    package = pkgs.incus;
+  };
+  incus-lts = import ./incus {
+    inherit runTest;
+    package = pkgs.incus-lts;
+  };
   influxdb = runTest ./influxdb.nix;
   influxdb2 = runTest ./influxdb2.nix;
   initrd-luks-empty-passphrase = runTest ./initrd-luks-empty-passphrase.nix;
