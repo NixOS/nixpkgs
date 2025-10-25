@@ -31,8 +31,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   cargoHash = "sha256-pjmAIC7g8SbMxZvTgaXH8GrRPhITDjC5psJpfT+vV6M=";
 
-  nativeBuildInputs = [
+  depsBuildBuild = [
     pkg-config
+    zstd
+  ];
+
+  nativeBuildInputs = [
     protobuf
     rustPlatform.bindgenHook
   ];
