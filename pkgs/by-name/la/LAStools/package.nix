@@ -7,19 +7,17 @@
 
 stdenv.mkDerivation rec {
   pname = "LAStools";
-  version = "2.0.3";
+  version = "2.0.4";
 
   src = fetchFromGitHub {
     owner = "LAStools";
     repo = "LAStools";
     rev = "v${version}";
-    sha256 = "sha256-IyZjM8YvIVB0VPNuEhmHHw7EuKw5RanB2qhCnBD1fRY=";
+    sha256 = "sha256-ow7zcvkenJ2j+tj2TxuEtK0dQEwzUtJ9f0wzt5/qimM=";
   };
 
   patches = [
     ./drop-64-suffix.patch # necessary to prevent '64' from being appended to the names of the executables
-    # https://github.com/lastools/LAStools/pull/234
-    ./cmake.diff
   ];
 
   hardeningDisable = [
