@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "py-aosmith";
-  version = "1.0.14";
+  version = "1.0.15";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "bdr99";
     repo = "py-aosmith";
     tag = version;
-    hash = "sha256-73kiSrjPDuvSMK8pZMCPns6vm2NhE+9F7GpWEPKR7Ec=";
+    hash = "sha256-sh0UYa4POpcwRKBNAliidFzMUI4VxektT27YLXmTwfY=";
   };
 
   build-system = [ poetry-core ];
