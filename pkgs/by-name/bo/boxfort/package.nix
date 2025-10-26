@@ -2,25 +2,29 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  pkg-config,
   meson,
   ninja,
   python3Packages,
+  gitMinimal,
 }:
 
 stdenv.mkDerivation rec {
   pname = "boxfort";
-  version = "0.1.4";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
     rev = "v${version}";
-    sha256 = "jmtWTOkOlqVZ7tFya3IrQjr714Y8TzAVY5Cq+RzDuRs=";
+    hash = "sha256-fgX2Ilb01qa9myuz6yiC67WKeai2m/csncS6u5and3o=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
+    pkg-config
+    gitMinimal
   ];
 
   preConfigure = ''
