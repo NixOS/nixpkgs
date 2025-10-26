@@ -71,9 +71,16 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
+    variants = {
+      full = callPackage ./package.nix {
+        withAACS = true;
+        withBDplus = true;
+        withJava = true;
+      };
+    };
     tests = {
       # Verify the "full" package when verifying changes to this package
-      full = callPackage ../libbluray-full/package.nix { };
+      full = passthru.variants.full;
     };
   };
 }
