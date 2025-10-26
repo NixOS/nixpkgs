@@ -45,20 +45,23 @@ let
 
   overrideStdenvCompat =
     f:
-    lib.mirrorFunctionArgs f (
-      args:
-      if !(lib.isFunction args) && (args ? stdenv) then
-        lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
-          Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
-            buildPythonPackage.override { stdenv = customStdenv; } { }
-        '' (f.override { inherit (args) stdenv; } (removeAttrs args [ "stdenv" ]))
-      else
-        f args
-    )
-    // {
-      # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
-      inherit (f) override;
-    };
+    lib.fix (
+      f':
+      lib.mirrorFunctionArgs f (
+        args:
+        if !(lib.isFunction args) && (args ? stdenv) then
+          lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+            Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+              buildPythonPackage.override { stdenv = customStdenv; } { }
+          '' (f'.override { inherit (args) stdenv; } (removeAttrs args [ "stdenv" ]))
+        else
+          f args
+      )
+      // {
+        # Preserve the effect of overrideStdenvCompat when calling `buildPython*.override`.
+        override = lib.mirrorFunctionArgs f.override (newArgs: overrideStdenvCompat (f.override newArgs));
+      }
+    );
 
   mkPythonDerivation =
     if python.isPy3k then ./mk-python-derivation.nix else ./python2/mk-python-derivation.nix;
