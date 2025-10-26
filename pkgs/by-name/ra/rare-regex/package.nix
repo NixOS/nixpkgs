@@ -48,6 +48,6 @@ buildGoModule rec {
     homepage = "https://rare.zdyn.net";
     changelog = "https://github.com/zix99/rare/releases/tag/${src.rev}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

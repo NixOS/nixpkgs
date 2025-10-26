@@ -26,7 +26,7 @@ buildGoModule {
     description = "Find good image crops for arbitrary crop sizes";
     homepage = "https://github.com/muesli/smartcrop";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "smartcrop";
   };
 }

@@ -50,7 +50,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/DeterminateSystems/fh";
     changelog = "https://github.com/DeterminateSystems/fh/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "fh";
   };
 }

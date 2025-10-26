@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage {
     description = "Curses-based mediawiki browser";
     homepage = "https://github.com/oppiliappan/taizen";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "taizen";
   };
 }

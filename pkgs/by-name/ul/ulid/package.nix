@@ -32,7 +32,7 @@ buildGoModule rec {
     homepage = "https://github.com/oklog/ulid";
     changelog = "https://github.com/oklog/ulid/blob/${src.rev}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "ulid";
   };
 }
