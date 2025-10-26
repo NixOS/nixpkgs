@@ -1057,7 +1057,8 @@
       ];
     "cync" =
       ps: with ps; [
-      ]; # missing inputs: pycync
+        pycync
+      ];
     "dacia" =
       ps: with ps; [
       ];
@@ -1329,7 +1330,8 @@
       ];
     "droplet" =
       ps: with ps; [
-      ]; # missing inputs: pydroplet
+        pydroplet
+      ];
     "dsmr" =
       ps: with ps; [
         dsmr-parser
@@ -6525,7 +6527,8 @@
       ];
     "victron_remote_monitoring" =
       ps: with ps; [
-      ]; # missing inputs: victron-vrm
+        victron-vrm
+      ];
     "vilfo" =
       ps: with ps; [
         vilfo-api-client
@@ -7138,6 +7141,7 @@
     "cpuspeed"
     "crownstone"
     "cups"
+    "cync"
     "daikin"
     "datadog"
     "date"
@@ -7174,6 +7178,7 @@
     "downloader"
     "dremel_3d_printer"
     "drop_connect"
+    "droplet"
     "dsmr"
     "dsmr_reader"
     "duckdns"
@@ -7933,6 +7938,7 @@
     "version"
     "vesync"
     "vicare"
+    "victron_remote_monitoring"
     "vilfo"
     "vizio"
     "vlc_telnet"

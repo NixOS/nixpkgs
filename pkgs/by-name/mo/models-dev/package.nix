@@ -8,12 +8,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "models-dev";
-  version = "0-unstable-2025-10-08";
+  version = "0-unstable-2025-10-24";
   src = fetchFromGitHub {
     owner = "sst";
     repo = "models.dev";
-    rev = "8d397086d8971c91b27919b8a3945f5ac21bc61f";
-    hash = "sha256-r0k6b9vaAeKZl1mknQc1wyRiJcPB3/OWlqspOgqw/Us=";
+    rev = "1548a725f07c2c6113379a8c5566c2e4c4dfc91f";
+    hash = "sha256-SgZFdjoSlmRS+eMbAIVPsDnwDEmzA/YFhgdHij3Qq38=";
   };
 
   node_modules = stdenvNoCC.mkDerivation {
@@ -37,9 +37,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
        export BUN_INSTALL_CACHE_DIR=$(mktemp -d)
 
+       # NOTE: Starting with Bun 1.3.0, isolated builds became the default
+       # behavior. In isolated builds, each package receives its own
+       # `.node_modules` subdirectory containing only the dependencies
+       # explicitly declared in that package's `package.json`. Since our build
+       # process copies only the root-level `.node_modules` directory, we must
+       # use `--linker=hoisted` to consolidate all dependencies there. Without
+       # this flag, we would need to copy every individual `.node_modules`
+       # subdirectory from each package.
        bun install \
          --force \
          --frozen-lockfile \
+         --linker=hoisted \
          --no-progress \
          --production
 
@@ -71,13 +80,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ bun ];
-
-  patches = [
-    # In bun 1.2.13 (release-25.05) HTML entrypoints get content hashes
-    # appended → index.html becomes index-pq8vj7za.html in ./dist. So, we
-    # rename the index file back to index.html
-    ./post-build-rename-index-file.patch
-  ];
 
   configurePhase = ''
     runHook preConfigure

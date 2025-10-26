@@ -72,10 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./cargo_lock_deps_version.patch
   ];
 
-  passthru = {
-    updateScript = lib.updateScript { };
-  };
-
   meta = with lib; {
     description = "A backend implementation for xdg-desktop-portal that is using GTK/GNOME/Phosh to provide interfaces that aren't provided by the GTK portal";
     homepage = "https://gitlab.gnome.org/guidog/xdg-desktop-portal-phosh";
