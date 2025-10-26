@@ -23,6 +23,21 @@ let
 in
 
 lib.makeOverridable (
+  lib.extendMkDerivation {
+    constructDrv = stdenvNoCC.mkDerivation;
+
+    excludeDrvArgNames = [
+      # Passed via `passthru`
+      "tag"
+
+      # Hashes, handled by `lib.fetchers.withNormalizedHash`
+      # whose outputs contain outputHash* attributes.
+      "hash"
+      "sha256"
+    ];
+
+    extendDrvArgs =
+      finalAttrs:
   lib.fetchers.withNormalizedHash { } (
     # NOTE Please document parameter additions or changes in
     #   ../../../doc/build-helpers/fetchers.chapter.md
@@ -120,7 +135,7 @@ lib.makeOverridable (
       throw
         "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
     else
-      stdenvNoCC.mkDerivation {
+      {
         inherit name;
 
         builder = ./builder.sh;
@@ -199,5 +214,9 @@ lib.makeOverridable (
         }
         // passthru;
       }
-  )
+  );
+
+    # No ellipsis.
+    inheritFunctionArgs = false;
+  }
 )
