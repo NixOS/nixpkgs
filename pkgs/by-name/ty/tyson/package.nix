@@ -41,6 +41,6 @@ buildGoModule rec {
     homepage = "https://github.com/jetify-com/tyson";
     changelog = "https://github.com/jetify-com/tyson/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

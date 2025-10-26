@@ -26,7 +26,7 @@ buildGoModule rec {
     description = "Top for /proc/pressure";
     homepage = "https://github.com/jamespwilliams/psitop";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "psitop";
   };
 }

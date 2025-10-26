@@ -52,6 +52,6 @@ buildGoModule rec {
     homepage = "https://github.com/maaslalani/gambit";
     changelog = "https://github.com/maaslalani/gambit/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

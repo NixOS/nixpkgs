@@ -32,6 +32,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "fundoc";
     homepage = "https://github.com/daynin/fundoc";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

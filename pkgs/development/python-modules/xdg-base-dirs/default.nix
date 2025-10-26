@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/srstevenson/xdg-base-dirs";
     changelog = "https://github.com/srstevenson/xdg-base-dirs/releases/tag/${version}";
     license = licenses.isc;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

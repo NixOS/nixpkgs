@@ -27,7 +27,7 @@ buildGoModule rec {
     description = "Live-updating version of the UNIX wc command";
     homepage = "https://github.com/timdp/lwc";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "lwc";
   };
 }

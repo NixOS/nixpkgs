@@ -37,6 +37,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kellyjonbrazil/jello";
     changelog = "https://github.com/kellyjonbrazil/jello/blob/${src.tag}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

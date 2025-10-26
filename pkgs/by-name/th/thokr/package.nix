@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Typing tui with visualized results and historical logging";
     homepage = "https://github.com/thatvegandev/thokr";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "thokr";
   };
 }

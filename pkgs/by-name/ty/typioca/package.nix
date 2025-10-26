@@ -36,7 +36,7 @@ buildGoModule rec {
     homepage = "https://github.com/bloznelis/typioca";
     changelog = "https://github.com/bloznelis/typioca/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "typioca";
   };
 }

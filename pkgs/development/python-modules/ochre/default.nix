@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/getcuia/ochre";
     changelog = "https://github.com/getcuia/ochre/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

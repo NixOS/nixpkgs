@@ -22,6 +22,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "anewer";
     homepage = "https://github.com/ysf/anewer";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

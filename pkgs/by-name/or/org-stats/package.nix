@@ -60,7 +60,7 @@ buildGoModule rec {
     homepage = "https://github.com/caarlos0/org-stats";
     changelog = "https://github.com/caarlos0/org-stats/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "org-stats";
   };
 }

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/asciinema/agg";
     changelog = "https://github.com/asciinema/agg/releases/tag/${src.rev}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "agg";
   };
 }

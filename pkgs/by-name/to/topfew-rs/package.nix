@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     description = "Rust implementation of Tim Bray's topfew tool";
     homepage = "https://github.com/djc/topfew-rs";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "tf";
   };
 }

@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     description = "Unzip implementation, support for parallel decompression, automatic detection encoding";
     homepage = "https://github.com/quininer/unzrip";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "unzrip";
   };
 }

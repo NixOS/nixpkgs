@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     description = "Change the start of your git commit hashes to whatever you want";
     homepage = "https://github.com/not-an-aardvark/lucky-commit";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "lucky_commit";
   };
 }

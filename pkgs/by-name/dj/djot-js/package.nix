@@ -31,7 +31,7 @@ buildNpmPackage rec {
     homepage = "https://github.com/jgm/djot.js";
     changelog = "https://github.com/jgm/djot.js/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "djot";
   };
 }

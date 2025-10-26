@@ -29,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "jen";
     homepage = "https://github.com/whitfin/jen";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }
