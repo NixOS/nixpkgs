@@ -207,6 +207,9 @@ let
       itinerary # added 2025-07-04
       libquotient # added 2025-07-04
       ;
+
+    kalendar = throw ""; # Added 2023-08-24
+    kexi = throw ""; # Added 2025-08-21
   };
 
   makePlasma5Throw =
@@ -1132,7 +1135,6 @@ mapAliases {
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   kafkacat = throw "'kafkacat' has been renamed to/replaced by 'kcat'"; # Converted to throw 2024-10-17
   kak-lsp = kakoune-lsp; # Added 2024-04-01
-  kalendar = merkuro; # Added 2023-08-24
   kanidm = lib.warnOnInstantiate "'kanidm' will be removed before 26.05. You must use a versioned package, e.g. 'kanidm_1_x'." kanidm_1_7; # Added 2025-09-01
   kanidm_1_3 = throw "'kanidm_1_3' has been removed as it has reached end of life"; # Added 2025-03-10
   kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
@@ -1145,7 +1147,6 @@ mapAliases {
   keepkey_agent = keepkey-agent; # added 2024-01-06
   kerberos = throw "'kerberos' has been renamed to/replaced by 'krb5'"; # Converted to throw 2024-10-17
   kexectools = throw "'kexectools' has been renamed to/replaced by 'kexec-tools'"; # Converted to throw 2024-10-17
-  kexi = makePlasma5Throw "kexi";
   keyfinger = throw "keyfinder has been removed as it was abandoned upstream and did not build; consider using mixxx or keyfinder-cli"; # Addd 2024-08-25
   keysmith = throw "'keysmith' has been renamed to/replaced by 'libsForQt5.kdeGear.keysmith'"; # Converted to throw 2024-10-17
   kfloppy = throw "kfloppy has been removed upstream in KDE Gear 23.08"; # Added 2023-08-24
