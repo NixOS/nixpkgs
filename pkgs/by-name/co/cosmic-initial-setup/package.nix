@@ -16,6 +16,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-initial-setup";
   version = "1.0.0-beta.3";
 
+  # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-initial-setup";
