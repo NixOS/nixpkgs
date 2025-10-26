@@ -286,19 +286,26 @@ stdenv.mkDerivation (self: {
     ''
   );
 
-  meta = with lib; {
+  meta = {
     description = "Common Lisp compiler";
     homepage = "https://sbcl.org";
-    license = licenses.publicDomain; # and FreeBSD
+    license = lib.licenses.publicDomain; # and FreeBSD
     mainProgram = "sbcl";
     teams = [ lib.teams.lisp ];
-    platforms = attrNames bootstrapBinaries ++ [
+    platforms = lib.attrNames bootstrapBinaries ++ [
       # These aren’t bootstrapped using the binary distribution but compiled
       # using a separate (lisp) host
       "x86_64-darwin"
       "x86_64-linux"
       "aarch64-darwin"
       "aarch64-linux"
+    ];
+    badPlatforms = [
+      # Several tests fail:
+      # Invalid exit status: run-program.test.sh
+      # (71 tests skipped for this combination of platform and features)
+      # test failed, expected 104 return code, got 1
+      lib.systems.inspect.patterns.isDarwin
     ];
   };
 })
