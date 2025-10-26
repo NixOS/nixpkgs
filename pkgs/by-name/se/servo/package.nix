@@ -27,6 +27,7 @@
   apple-sdk_14,
   fontconfig,
   freetype,
+  gnutar,
   gst_all_1,
   harfbuzz,
   libGL,
@@ -146,6 +147,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   ]
   ++ lib.optionals clangStdenv.hostPlatform.isDarwin [
     apple-sdk_14
+    gnutar
   ];
 
   # Builds with additional features for aarch64, see https://github.com/servo/servo/issues/36819
