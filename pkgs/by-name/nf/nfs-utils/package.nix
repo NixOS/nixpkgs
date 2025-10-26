@@ -25,6 +25,8 @@
   cyrus_sasl,
   libxml2,
   udevCheckHook,
+  libnl,
+  readline,
   enablePython ? true,
   enableLdap ? true,
 }:
@@ -39,11 +41,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "nfs-utils";
-  version = "2.7.1";
+  version = "2.8.4";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
-    hash = "sha256-iFyUioSli8pBSPRZWI+ac2nbtA3MRm8E5FXGsQ/Qqkg=";
+    hash = "sha256-EcTMWYpDTX00C60+Byo3O6HcwsSfhV1EsgIiK3js2/U=";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
@@ -73,6 +75,8 @@ stdenv.mkDerivation rec {
     libkrb5
     tcp_wrappers
     libxml2
+    libnl
+    readline
   ]
   ++ lib.optional enablePython python3
   ++ lib.optionals enableLdap [
@@ -84,8 +88,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace configure \
-      --replace '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
-      --replace '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
+      --replace-fail '$dir/include/gssapi' ${lib.getDev libkrb5}/include/gssapi \
+      --replace-fail '$dir/bin/krb5-config' ${lib.getDev libkrb5}/bin/krb5-config
   '';
 
   configureFlags = [
@@ -128,15 +132,13 @@ stdenv.mkDerivation rec {
     sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
     substituteInPlace systemd/nfs-utils.service \
-      --replace "/bin/true" "${coreutils}/bin/true"
+      --replace-fail "/bin/true" "${coreutils}/bin/true"
 
     substituteInPlace tools/nfsrahead/Makefile.in systemd/Makefile.in \
-      --replace "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
+      --replace-fail "/usr/lib/udev/rules.d/" "$out/lib/udev/rules.d/"
 
     substituteInPlace utils/mount/Makefile.in \
-      --replace "chmod 4511" "chmod 0511"
-
-    sed '1i#include <stdint.h>' -i support/nsm/rpc.c
+      --replace-fail "chmod 4711" "chmod 0711"
   '';
 
   makeFlags = [
