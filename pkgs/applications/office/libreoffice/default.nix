@@ -321,6 +321,11 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "sdext/*" ];
       hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
     })
+    # Fix build with Poppler 25.10
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
+    })
   ]
   ++ lib.optionals (lib.versionAtLeast version "25.8.2.2") [
     # Fix build with Poppler 25.10
