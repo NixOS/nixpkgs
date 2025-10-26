@@ -90,6 +90,10 @@ python3Packages.buildPythonApplication rec {
            default.config
   '';
 
+  postBuild = ''
+    make help/C/index.html
+  '';
+
   dontWrapGApps = true;
 
   preFixup = ''
