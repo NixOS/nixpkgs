@@ -88,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://qpdf.sourceforge.io/";
     description = "C++ library and set of programs that inspect and manipulate the structure of PDF files";
     license = lib.licenses.asl20; # as of 7.0.0, people may stay at artistic2
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.dotlambda ];
     mainProgram = "qpdf";
     platforms = lib.platforms.all;
     changelog = "https://qpdf.readthedocs.io/en/${lib.versions.majorMinor finalAttrs.version}/release-notes.html";
