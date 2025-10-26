@@ -182,7 +182,7 @@ let
 
   mkBindSockets =
     enabled: socks:
-    concatStringsSep "\n  " (flatten (map (each: "bind_socket = \"${each.rawEntry}\";") socks));
+    concatStringsSep "\n  " (concatMap (each: "bind_socket = \"${each.rawEntry}\";") socks);
 
   rspamdConfFile = pkgs.writeText "rspamd.conf" ''
     .include "$CONFDIR/common.conf"
