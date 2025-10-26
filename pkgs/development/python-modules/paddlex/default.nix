@@ -51,21 +51,27 @@ let
 in
 buildPythonPackage rec {
   pname = "paddlex";
-  version = "3.1.4";
+  version = "3.3.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "PaddlePaddle";
     repo = "PaddleX";
     tag = "v${version}";
-    hash = "sha256-Oc8fgAv8T/9PjxW8yU31t3m3CUxFuAXdVS71BGhtlJo=";
+    hash = "sha256-rxVfkvi/uOetMbR3pHN+apjqtvgTq5rwLc0gkhI6OvU=";
   };
 
   build-system = [ setuptools ];
 
+  pythonRemoveDeps = [
+    # unpackaged
+    "aistudio-sdk"
+    "modelscope"
+  ];
   pythonRelaxDeps = [
     "numpy"
     "pandas"
+    "pyyaml"
   ];
 
   dependencies = [

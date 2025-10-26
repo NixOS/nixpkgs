@@ -25,14 +25,14 @@ in
 
 py.pkgs.buildPythonApplication rec {
   pname = "oci-cli";
-  version = "3.68.0";
+  version = "3.68.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "oci-cli";
     tag = "v${version}";
-    hash = "sha256-gkMTfF77yfjx4CxhJ+mpNA1HsDjXMBMwDaI67dJF/8I=";
+    hash = "sha256-BvVVCK4vh3RT6ypvlhNk1oiY607cVFHaG/Ttu8ws5hA=";
   };
 
   nativeBuildInputs = [ installShellFiles ];

@@ -30,16 +30,16 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "caesura";
-  version = "0.25.2";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     owner = "RogueOneEcho";
     repo = "caesura";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-rpaOFmD/0/c5F6TIS7vGn7G3+rLOoBZKMW/HuzroUxM=";
+    hash = "sha256-atB7IrG9KchFOc1EXChlsqlrZs7mQ9tiXmdw1SptLI0=";
   };
 
-  cargoHash = "sha256-agdhYEhhw3gMdZmYiQZVeLARkMsYQ/AWLTrpiaH0mtA=";
+  cargoHash = "sha256-Iz/RYmuCc5XuyktYIN/zDrbyPpRU2eps0yqExPu+5J8=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

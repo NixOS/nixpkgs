@@ -228,7 +228,7 @@ let
 in
 rec {
 
-  tests =
+  tests = lib.recurseIntoAttrs (
     let
       cases = rec {
         libPath = {
@@ -910,13 +910,14 @@ rec {
                 test -x '${pkg}/bin/rcgen' && touch $out
               ''
           );
-    };
+    }
+  );
   test = releaseTools.aggregate {
     name = "buildRustCrate-tests";
     meta = {
       description = "Test cases for buildRustCrate";
       maintainers = [ ];
     };
-    constituents = builtins.attrValues tests;
+    constituents = builtins.attrValues (lib.filterAttrs (_: v: lib.isDerivation v) tests);
   };
 }

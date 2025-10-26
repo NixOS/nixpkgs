@@ -7,13 +7,13 @@
 buildHomeAssistantComponent rec {
   owner = "pnbruckner";
   domain = "sun2";
-  version = "3.4.2b0";
+  version = "3.4.2b1";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-sun2";
     tag = version;
-    hash = "sha256-M+ClqFOeZUw5Rk5vaNnyRBeXU+yTSYTk70TJqcqtehU=";
+    hash = "sha256-UjJWJX8Upkhu85QNj89ozLDuTFXbrXsFWo/6uRkIFjM=";
   };
 
   meta = rec {

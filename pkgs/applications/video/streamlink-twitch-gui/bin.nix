@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.mit;
     mainProgram = "streamlink-twitch-gui";
-    maintainers = with maintainers; [ rileyinman ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

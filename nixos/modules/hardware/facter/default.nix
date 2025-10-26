@@ -5,6 +5,8 @@
 }:
 {
   imports = [
+    ./disk.nix
+    ./keyboard.nix
     ./system.nix
   ];
 

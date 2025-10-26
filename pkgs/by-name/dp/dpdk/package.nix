@@ -11,6 +11,7 @@
   libbpf,
   zlib,
   elfutils,
+  intel-ipsec-mb,
   jansson,
   openssl,
   libpcap,
@@ -54,6 +55,7 @@ stdenv.mkDerivation rec {
     jansson
     libbpf
     elfutils
+    intel-ipsec-mb
     libpcap
     numactl
     openssl.dev

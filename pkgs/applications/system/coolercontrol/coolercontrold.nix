@@ -4,6 +4,7 @@
   libdrm,
   coolercontrol,
   runtimeShell,
+  addDriverRunpath,
 }:
 
 {
@@ -20,6 +21,7 @@ rustPlatform.buildRustPackage {
   cargoHash = "sha256-ZyYyQcaYd3VZ7FL0Hki33JO3LscPfBT5gl+nw2cXvUs=";
 
   buildInputs = [ libdrm ];
+  nativeBuildInputs = [ addDriverRunpath ];
 
   postPatch = ''
     # copy the frontend static resources to a directory for embedding
@@ -35,6 +37,10 @@ rustPlatform.buildRustPackage {
     install -Dm444 "${src}/packaging/systemd/coolercontrold.service" -t "$out/lib/systemd/system"
     substituteInPlace "$out/lib/systemd/system/coolercontrold.service" \
       --replace-fail '/usr/bin' "$out/bin"
+  '';
+
+  postFixup = ''
+    addDriverRunpath "$out/bin/coolercontrold"
   '';
 
   passthru.tests.version = testers.testVersion {
