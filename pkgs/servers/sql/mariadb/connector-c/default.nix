@@ -85,8 +85,7 @@ stdenv.mkDerivation {
     # The dynamically loaded library must be found directly inside /lib
     # This is necessary for nix-ld to work properly
     # https://github.com/nix-community/nix-ld
-    ln -sv $out/lib/mysql/*.so $out/lib
-    ln -sv $out/lib/mysql/*.so.3 $out/lib
+    ln -sv $out/lib/mysql/*.so* $out/lib
     ln -sv $out/lib/mysql/*.a $out/lib
   '';
 
