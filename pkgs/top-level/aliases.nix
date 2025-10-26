@@ -361,7 +361,7 @@ mapAliases {
   arrayfire = throw "arrayfire was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   artim-dark = aritim-dark; # Added 2025-07-27
   aseprite-unfree = aseprite; # Added 2023-08-26
-  asitop = macpm; # 'macpm' is a better-maintained downstream; keep 'asitop' for backwards-compatibility
+  asitop = macpm; # Added 2025-04-14
   asterisk_18 = throw "asterisk_18: Asterisk 18 is end of life and has been removed"; # Added 2025-10-19
   async = throw "'async' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   atlassian-bamboo = throw "Atlassian software has been removed, as support for the Atlassian Server products ended in February 2024 and there was insufficient interest in maintaining the Atlassian Data Center replacements"; # Added 2024-11-02
@@ -389,7 +389,7 @@ mapAliases {
   aws-google-auth = throw "aws-google-auth has been removed as the upstream project was unmaintained"; # Added 2024-07-31
   axmldec = throw "'axmldec' has been removed as it was broken and unmaintained for 8 years"; # Added 2025-05-17
   backlight-auto = throw "'backlight-auto' has been removed as it relies on Zig 0.12 which has been dropped."; # Added 2025-08-22
-  badtouch = authoscope; # Project was renamed, added 20210626
+  badtouch = authoscope; # Added 2021-06-26
   badwolf = throw "'badwolf' has been removed due to being unmaintained"; # Added 2025-04-15
   baget = throw "'baget' has been removed due to being unmaintained"; # Added 2023-03-19
   bandwidth = throw "'bandwidth' has been removed due to lack of maintenance"; # Added 2025-09-01
@@ -471,7 +471,7 @@ mapAliases {
   calcium = throw "'calcium' has been removed as it has been merged into 'flint3'"; # Added 2025-03-28
   calculix = calculix-ccx; # Added 2024-12-18
   calligra = kdePackages.calligra; # Added 2024-09-27
-  callPackage_i686 = pkgsi686Linux.callPackage;
+  callPackage_i686 = pkgsi686Linux.callPackage; # Added 2018-07-26
   canonicalize-jars-hook = stripJavaArchivesHook; # Added 2024-03-17
   cardboard = throw "cardboard has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   cargo-asm = throw "'cargo-asm' has been removed due to lack of upstream maintenance. Consider 'cargo-show-asm' as an alternative."; # Added 2025-01-29
@@ -647,7 +647,7 @@ mapAliases {
   dbus-sharp-glib-1_0 = throw "'dbus-sharp-glib-1_0' has been removed as it was unmaintained and had no dependents"; # Added 2025-08-25
   dbus-sharp-glib-2_0 = throw "'dbus-sharp-glib-2_0' has been removed as it was unmaintained and had no dependents"; # Added 2025-08-25
   dclib = throw "'dclib' has been removed as it is unmaintained for 16 years and broken"; # Added 2025-05-25
-  deadpixi-sam = deadpixi-sam-unstable;
+  deadpixi-sam = deadpixi-sam-unstable; # Added 2018-05-01
   debugedit-unstable = throw "'debugedit-unstable' has been renamed to/replaced by 'debugedit'"; # Converted to throw 2024-10-17
   deepin = throw "the Deepin desktop environment and associated tools have been removed from nixpkgs due to lack of maintenance"; # Added 2025-08-21
   deepsea = throw "deepsea has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
@@ -997,7 +997,7 @@ mapAliases {
   goldwarden = throw "'goldwarden' has been removed, as it no longer works with new Bitwarden versions and is abandoned upstream"; # Added 2025-09-16
   googler = throw "'googler' has been removed, as it no longer works and is abandoned upstream"; # Added 2025-04-01
   gpicview = throw "'gpicview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'loupe', 'gthumb' or 'image-roll' instead"; # Added 2024-09-15
-  gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
+  gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25
   gpxsee-qt5 = throw "gpxsee-qt5 was removed, use gpxsee instead"; # added 2025-09-09
   gpxsee-qt6 = gpxsee; # added 2025-09-09
   gqview = throw "'gqview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gthumb' instead"; # Added 2024-09-14
@@ -1167,7 +1167,7 @@ mapAliases {
   krun = throw "'krun' has been renamed to/replaced by 'muvm'"; # Added 2025-05-01
   krunner-pass = throw "'krunner-pass' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
   krunner-translator = throw "'krunner-translator' has been removed, as it only works on Plasma 5"; # Added 2025-08-30
-  # k3d was a 3d editing software k-3d - "k3d has been removed because it was broken and has seen no release since 2016" Added 2022-01-04
+  # k3d was a 3d editing software k-3d - "k3d has been removed because it was broken and has seen no release since 2016"
   # now kube3d/k3d will take its place
   kube3d = k3d; # Added 2022-07-05
   kubei = kubeclarity; # Added 2023-05-20
@@ -1822,9 +1822,9 @@ mapAliases {
   pgtap = throw "'pgtap' has been removed. Use 'postgresqlPackages.pgtap' instead."; # Added 2025-07-19
   pharo-spur64 = pharo; # Added 2022-08-03
   phlare = throw "'phlare' has been removed as the upstream project was archived."; # Added 2025-03-27
-  php81 = throw "php81 is EOL";
-  php81Extensions = php81;
-  php81Packages = php81;
+  php81 = throw "php81 is EOL"; # Added 2025-10-04
+  php81Extensions = throw "php81 is EOL"; # Added 2025-10-04
+  php81Packages = throw "php81 is EOL"; # Added 2025-10-04
   picom-next = picom; # Added 2024-02-13
   pict-rs_0_3 = throw "pict-rs_0_3 has been removed, as it was an outdated version and no longer compiled"; # Added 2024-08-20
   pidgin-carbons = pidginPackages.pidgin-carbons; # Added 2023-07-17
@@ -1942,12 +1942,12 @@ mapAliases {
   pypolicyd-spf = spf-engine; # Added 2022-10-09
   pypy39 = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-03
   pypy39Packages = throw "pypy 3.9 has been removed, use pypy 3.10 instead"; # Added 2025-01-07
-  python3Full = throw "python3Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
-  python310Full = throw "python310Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
-  python311Full = throw "python311Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
-  python312Full = throw "python312Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
-  python313Full = throw "python313Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
-  python314Full = throw "python314Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set.";
+  python3Full = throw "python3Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
+  python310Full = throw "python310Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
+  python311Full = throw "python311Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
+  python312Full = throw "python312Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
+  python313Full = throw "python313Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
+  python314Full = throw "python314Full has been removed. Bluetooth support is now enabled by default. The tkinter package is available within the package set."; # Added 2025-08-30
   python = python2; # Added 2022-01-11
   python-swiftclient = throw "'python-swiftclient' has been renamed to/replaced by 'swiftclient'"; # Converted to throw 2024-10-17
   pythonFull = python2Full; # Added 2022-01-11
@@ -2110,9 +2110,9 @@ mapAliases {
   slimerjs = throw "slimerjs does not work with any version of Firefox newer than 59; upstream ended the project in 2021. <https://slimerjs.org/faq.html#end-of-development>"; # added 2025-01-06
   sloccount = throw "'sloccount' has been removed because it is unmaintained. Consider migrating to 'loccount'"; # added 2025-05-17
   slrn = throw "'slrn' has been removed because it is unmaintained upstream and broken."; # Added 2025-06-11
-  slurm-llnl = slurm; # renamed July 2017
+  slurm-llnl = slurm; # Added 2017-07-31
   sm64ex-coop = throw "'sm64ex-coop' was removed as it was archived upstream. Consider migrating to 'sm64coopdx'"; # added 2024-11-23
-  smartgithg = smartgit; # renamed March 2025
+  smartgithg = smartgit; # Added 2025-03-31
   snapcraft = throw "snapcraft was removed in Sep 25 following removal of LXD from nixpkgs"; # added 2025-09-18
   snapTools = throw "snapTools was removed because makeSnap produced broken snaps and it was the only function in snapTools. See https://github.com/NixOS/nixpkgs/issues/100618 for more details."; # Added 2024-03-04
   snort2 = throw "snort2 has been removed as it is deprecated and unmaintained by upstream. Consider using snort (snort3) package instead."; # 2025-05-21
@@ -2273,8 +2273,8 @@ mapAliases {
   theLoungePlugins = throw "'theLoungePlugins' has been removed due to only containing throws"; # Added 2025-09-25
   thiefmd = throw "'thiefmd' has been removed due to lack of maintenance upstream and incompatible with newer Pandoc. Please use 'apostrophe' or 'folio' instead"; # Added 2025-02-20
   thrust = throw "'thrust' has been removed due to lack of maintenance"; # Added 2025-08-21
-  thunderbird-128 = throw "Thunderbird 128 support ended in August 2025";
-  thunderbird-128-unwrapped = throw "Thunderbird 128 support ended in August 2025";
+  thunderbird-128 = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
+  thunderbird-128-unwrapped = throw "Thunderbird 128 support ended in August 2025"; # Added 2025-09-30
   ticpp = throw "'ticpp' has been removed due to being unmaintained"; # Added 2025-09-10
   tightvnc = throw "'tightvnc' has been removed as the version 1.3 is not maintained upstream anymore and is insecure"; # Added 2024-08-22
   tijolo = throw "'tijolo' has been removed due to being unmaintained"; # Added 2024-12-27
@@ -2383,7 +2383,7 @@ mapAliases {
   vaultwarden-vault = vaultwarden.webvault; # Added 2022-12-13
   vbetool = throw "'vbetool' has been removed as it is broken and not maintained upstream."; # Added 2025-06-11
   vc_0_7 = throw "'vc_0_7' has been removed as it was broken, unused in nixpkgs and unmaintained"; # Added 2025-10-20
-  vdirsyncerStable = vdirsyncer; # Added 2020-11-08, see https://github.com/NixOS/nixpkgs/issues/103026#issuecomment-723428168
+  vdirsyncerStable = vdirsyncer; # Added 2020-11-08
   ventoy-bin = ventoy; # Added 2023-04-12
   ventoy-bin-full = ventoy-full; # Added 2023-04-12
   verilog = iverilog; # Added 2024-07-12
@@ -2439,7 +2439,7 @@ mapAliases {
   wifi-password = throw "'wifi-password' has been removed as it was unmaintained upstream"; # Added 2025-08-29
   win-pvdrivers = throw "'win-pvdrivers' has been removed as it was subject to the Xen build machine compromise (XSN-01) and has open security vulnerabilities (XSA-468)"; # Added 2025-08-29
   win-virtio = virtio-win; # Added 2023-10-17
-  wineWayland = wine-wayland;
+  wineWayland = wine-wayland; # Added 2022-01-03
   winhelpcgi = throw "'winhelpcgi' has been removed as it was unmaintained upstream and broken with GCC 14"; # Added 2025-06-14
   wireguard-vanity-address = throw "'wireguard-vanity-address' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   wkhtmltopdf-bin = wkhtmltopdf; # Added 2024-07-17
@@ -2452,7 +2452,7 @@ mapAliases {
   wordpress_6_5 = throw "'wordpress_6_5' has been removed in favor of the latest version"; # Added 2024-11-11
   wordpress_6_6 = throw "'wordpress_6_6' has been removed in favor of the latest version"; # Added 2024-11-17
   worldengine-cli = throw "'worldengine-cli' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
-  wpa_supplicant_ro_ssids = lib.warnOnInstantiate "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!" wpa_supplicant;
+  wpa_supplicant_ro_ssids = lib.warnOnInstantiate "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!" wpa_supplicant; # Added 2024-07-28
   wrapGAppsHook = wrapGAppsHook3; # Added 2024-03-26
   wrapLisp_old = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   write_stylus = styluslabs-write-bin; # Added 2024-10-09
