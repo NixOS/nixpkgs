@@ -10,7 +10,6 @@
   runCommand,
   symlinkJoin,
   rdfind,
-  wrapBintoolsWith,
   zstd,
   zlib,
   gcc-unwrapped,
@@ -32,7 +31,7 @@
   withLto ? true,
   # whether rocm stdenv uses libcxx (clang c++ stdlib) instead of gcc stdlibc++
   withLibcxx ? false,
-}@args:
+}:
 
 let
   version = "6.4.3";
@@ -142,6 +141,28 @@ let
     stdenv.cc.cc
     stdenv.cc.bintools
   ];
+  # Hacky way to avoid nixfmt indenting the entire scope body suggested by @emilazy
+  overrideLlvmPackagesRocm =
+    f:
+    let
+      overridenScope = llvmPackagesRocm.overrideScope (final: prev: f { inherit final prev; });
+    in
+    {
+      inherit (overridenScope)
+        # Expose only a limited set of packages that we care about for ROCm
+        bintools
+        compiler-rt
+        compiler-rt-libc
+        clang
+        clang-unwrapped
+        libcxx
+        lld
+        llvm
+        rocm-toolchain
+        rocmClangStdenv
+        openmp
+        ;
+    };
   sysrootCompiler =
     {
       cc,
@@ -258,13 +279,8 @@ let
     ]
   );
 in
-rec {
-  inherit (llvmPackagesRocm) libcxx;
-  inherit args;
-  # Pass through original attrs for debugging where non-overridden llvm/clang is getting used
-  # llvm-orig = llvmPackagesRocm.llvm; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.llvm-orig
-  # clang-orig = llvmPackagesRocm.clang; # nix why-depends --derivation .#rocmPackages.clr .#rocmPackages.llvm.clang-orig
-  llvm = llvmPackagesRocm.llvm.overrideAttrs (old: {
+overrideLlvmPackagesRocm (s: {
+  libllvm = (s.prev.libllvm.override { }).overrideAttrs (old: {
     patches = old.patches ++ [
       (fetchpatch {
         # fix compile error in tools/gold/gold-plugin.cpp
@@ -310,8 +326,7 @@ rec {
     meta = old.meta // llvmMeta;
   });
   lld =
-    (llvmPackagesRocm.lld.override {
-      libllvm = llvm;
+    (s.prev.lld.override {
     }).overrideAttrs
       (old: {
         dontStrip = profilableStdenv;
@@ -336,8 +351,7 @@ rec {
         meta = old.meta // llvmMeta;
       });
   clang-unwrapped = (
-    (llvmPackagesRocm.clang-unwrapped.override {
-      libllvm = llvm;
+    (s.prev.clang-unwrapped.override {
       enableClangToolsExtra = false;
     }).overrideAttrs
       (
@@ -373,10 +387,10 @@ rec {
               url = "https://github.com/GZGavinZhao/rocm-llvm-project/commit/6d296f879b0fed830c54b2a9d26240da86c8bb3a.patch";
               relative = "clang";
             })
-            # FIXME: Needed due to https://github.com/NixOS/nixpkgs/issues/375431
-            # Once we can switch to overrideScope this can be removed
+            # FIXME: Temporarily kept for rebuild avoidance
+            # Should be dropped in followup and we no longer need to filter out the original application
             (replaceVars ./../../../compilers/llvm/common/clang/clang-at-least-16-LLVMgold-path.patch {
-              libllvmLibdir = "${llvm.lib}/lib";
+              libllvmLibdir = "${s.final.libllvm.lib}/lib";
             })
           ];
           hardeningDisable = [ "all" ];
@@ -397,6 +411,7 @@ rec {
           __structuredAttrs = true;
           # https://github.com/llvm/llvm-project/blob/6976deebafa8e7de993ce159aa6b82c0e7089313/clang/cmake/caches/DistributionExample-stage2.cmake#L9-L11
           cmakeFlags =
+            # TODO: Remove in followup, tblgen now works correctly but would rebuild
             (builtins.filter tablegenUsage old.cmakeFlags)
             ++ commonCmakeFlags
             ++ lib.optionals (!withLibcxx) [
@@ -426,6 +441,7 @@ rec {
   # in the right order
   # and expects its libc to be in the sysroot
   rocm-toolchain =
+    with s.final;
     (sysrootCompiler {
       cc = clang-unwrapped;
       name = "rocm-toolchain";
@@ -458,45 +474,33 @@ rec {
       isClang = true;
       isGNU = false;
     };
-  compiler-rt-libc =
-    (llvmPackagesRocm.compiler-rt-libc.override {
-      libllvm = llvm;
-    }).overrideAttrs
-      (old: {
-        patches = old.patches ++ [
-          (fetchpatch {
-            name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
-            url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
-            hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
-            relative = "compiler-rt";
-          })
-          (fetchpatch {
-            # Fixes fortify hardening compile error related to openat usage
-            hash = "sha256-pgpN1q1vIQrPXHPxNSZ6zfgV2EflHO5Amzl+2BDjXbs=";
-            url = "https://github.com/llvm/llvm-project/commit/155b7a12820ec45095988b6aa6e057afaf2bc892.patch";
-            relative = "compiler-rt";
-          })
-        ];
-        meta = old.meta // llvmMeta;
-      });
-  compiler-rt = compiler-rt-libc;
-  bintools = wrapBintoolsWith {
-    bintools = llvmPackagesRocm.bintools-unwrapped.override {
-      inherit lld llvm;
-    };
-  };
+  compiler-rt-libc = s.prev.compiler-rt-libc.overrideAttrs (old: {
+    patches = old.patches ++ [
+      (fetchpatch {
+        name = "Fix-missing-main-function-in-float16-bfloat16-support-checks.patch";
+        url = "https://github.com/ROCm/llvm-project/commit/68d8b3846ab1e6550910f2a9a685690eee558af2.patch";
+        hash = "sha256-Db+L1HFMWVj4CrofsGbn5lnMoCzEcU+7q12KKFb17/g=";
+        relative = "compiler-rt";
+      })
+      (fetchpatch {
+        # Fixes fortify hardening compile error related to openat usage
+        hash = "sha256-pgpN1q1vIQrPXHPxNSZ6zfgV2EflHO5Amzl+2BDjXbs=";
+        url = "https://github.com/llvm/llvm-project/commit/155b7a12820ec45095988b6aa6e057afaf2bc892.patch";
+        relative = "compiler-rt";
+      })
+    ];
+    meta = old.meta // llvmMeta;
+  });
+  compiler-rt = s.final.compiler-rt-libc;
+  clang = s.final.rocm-toolchain;
 
-  clang = rocm-toolchain;
-
-  rocmClangStdenv = overrideCC (
-    if withLibcxx then llvmPackagesRocm.libcxxStdenv else llvmPackagesRocm.stdenv
-  ) clang;
+  rocmClangStdenv = with s.final; overrideCC (if withLibcxx then libcxxStdenv else stdenv) clang;
 
   # Projects
   openmp =
+    with s.final;
     (llvmPackagesRocm.openmp.override {
       llvm = llvm;
-      targetLlvm = llvm;
       clang-unwrapped = clang-unwrapped;
     }).overrideAttrs
       (old: {
@@ -521,4 +525,7 @@ rec {
           libffi
         ];
       });
-}
+  # AMD has a separate MLIR impl which we package under rocmPackages.rocmlir
+  # It would be an error to rely on the original mlir package from this scope
+  mlir = null;
+})
