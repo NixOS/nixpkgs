@@ -143,7 +143,7 @@ in
           type = lib.types.lines;
           default = "";
           description = ''
-            Extra configuration for `slurmdbd.conf` See also:
+            Extra configuration for {file}`slurmdbd.conf` See also:
             {manpage}`slurmdbd.conf(8)`.
           '';
         };
@@ -196,7 +196,7 @@ in
         type = lib.types.bool;
         default = false;
         description = ''
-          Whether to provide a slurm.conf file.
+          Whether to provide a {file}`slurm.conf` file.
           Enable this option if you do not run a slurm daemon on this host
           (i.e. `server.enable` and `client.enable` are `false`)
           but you still want to run slurm commands from this host.
@@ -332,7 +332,7 @@ in
           default = "";
           type = lib.types.lines;
           description = ''
-            Extra configuration for that will be added to `mpi.conf`.
+            Extra configuration for that will be added to {file}`mpi.conf`.
           '';
         };
       };
@@ -341,7 +341,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Extra configuration that will be added to the end of `plugstack.conf`.
+          Extra configuration that will be added to the end of {file}`plugstack.conf`.
         '';
       };
 
@@ -349,7 +349,7 @@ in
         default = "";
         type = lib.types.lines;
         description = ''
-          Extra configuration for `cgroup.conf`. This file is
+          Extra configuration for {file}`cgroup.conf`. This file is
           used when `procTrackType=proctrack/cgroup`.
         '';
       };
@@ -359,9 +359,9 @@ in
         default = [ ];
         description = ''
           Slurm expects config files for plugins in the same path
-          as `slurm.conf`. Add extra nix store
+          as {file}`slurm.conf`. Add extra nix store
           paths that should be merged into same directory as
-          `slurm.conf`.
+          {file}`slurm.conf`.
         '';
       };
 

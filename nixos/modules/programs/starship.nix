@@ -60,7 +60,7 @@ in
       inherit (settingsFormat) type;
       default = { };
       description = ''
-        Configuration included in `starship.toml`.
+        Configuration included in {file}`starship.toml`.
 
         See <https://starship.rs/config/#prompt> for documentation.
       '';

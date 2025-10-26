@@ -464,7 +464,7 @@ let
             Whether to enable or disable lingering for this user.  Without
             lingering, user units will not be started until the user logs in,
             and may be stopped on logout depending on the settings in
-            `logind.conf`.
+            {file}`logind.conf`.
 
             By default, NixOS will not manage lingering, new users will default
             to not lingering, and lingering can be configured imperatively using
