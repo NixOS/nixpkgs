@@ -24,6 +24,9 @@ stdenv.mkDerivation rec {
       src/integration/malt.sh.in
     sed -i -e 's,^NODE=""$,NODE=${nodejs}/bin/node,' -e s,^detectNodeJS$,, \
       src/integration/malt-{webview,passwd}.sh.in
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.12)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
