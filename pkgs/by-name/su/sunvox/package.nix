@@ -4,14 +4,15 @@
   fetchzip,
   alsa-lib,
   autoPatchelfHook,
+  copyDesktopItems,
   libglvnd,
   libjack2,
   libX11,
   libXi,
+  makeDesktopItem,
   makeWrapper,
   SDL2,
 }:
-
 let
   platforms = {
     "x86_64-linux" = "linux_x86_64";
@@ -41,6 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       autoPatchelfHook
+      copyDesktopItems
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       makeWrapper
@@ -56,6 +58,21 @@ stdenv.mkDerivation (finalAttrs: {
 
   runtimeDependencies = lib.optionals stdenv.hostPlatform.isLinux [
     libjack2
+  ];
+
+  desktopItems = lib.optionals stdenv.hostPlatform.isLinux [
+    (makeDesktopItem {
+      name = "sunvox";
+      exec = "sunvox";
+      desktopName = "SunVox";
+      genericName = "Modular Synthesizer";
+      comment = "Modular synthesizer with pattern-based sequencer";
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "Midi"
+      ];
+    })
   ];
 
   dontConfigure = true;

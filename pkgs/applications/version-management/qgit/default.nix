@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qgit";
-  version = "2.12";
+  version = "2.13";
 
   src = fetchFromGitHub {
     owner = "tibirna";
     repo = "qgit";
     rev = "qgit-${finalAttrs.version}";
-    hash = "sha256-q81nY9D/8riMTFP8gDRbY2PjVo+NwRu/XEN1Yn0P/pk=";
+    hash = "sha256-hOx6FYccutycp+F3iesj48STFeBM/2r5cw2f5FkBIjY=";
   };
 
   nativeBuildInputs = [
