@@ -1,28 +1,30 @@
-diff --git a/doc/manual/rl-next/toml-number-overflow.md b/doc/manual/rl-next/toml-number-overflow.md
-deleted file mode 100644
-index 1522213cb4..0000000000
---- a/doc/manual/rl-next/toml-number-overflow.md
-+++ /dev/null
-@@ -1,14 +0,0 @@
-----
--synopsis: Reject overflowing TOML integer literals
--issues: []
--cls: [3916]
--category: "Breaking Changes"
--credits: [emilazy]
-----
+diff --git a/doc/manual/src/release-notes/rl-2.94.md b/doc/manual/src/release-notes/rl-2.94.md
+index c82b585737..a77ab00475 100644
+--- a/doc/manual/src/release-notes/rl-2.94.md
++++ b/doc/manual/src/release-notes/rl-2.94.md
+@@ -301,17 +301,6 @@
+ 
+   Many thanks to [Emily](https://git.lix.systems/emilazy) for this.
+ 
+-- Reject overflowing TOML integer literals [cl/3916](https://gerrit.lix.systems/c/lix/+/3916)
 -
--The toml11 library used by Lix was updated. The new
--version aligns with the [TOML v1.0.0 specification’s
--requirement](https://toml.io/en/v1.0.0#integer) to reject integer
--literals that cannot be losslessly parsed. This means that code like
--`builtins.fromTOML "v=0x8000000000000000"` will now produce an error
--rather than silently saturating the integer result.
+-  The toml11 library used by Lix was updated. The new
+-  version aligns with the [TOML v1.0.0 specification’s
+-  requirement](https://toml.io/en/v1.0.0#integer) to reject integer
+-  literals that cannot be losslessly parsed. This means that code like
+-  `builtins.fromTOML "v=0x8000000000000000"` will now produce an error
+-  rather than silently saturating the integer result.
+-
+-  Many thanks to [Emily](https://git.lix.systems/emilazy) for this.
+-
+ - uid-range depends on cgroups [cl/3230](https://gerrit.lix.systems/c/lix/+/3230)
+ 
+   `uid-range` builds now depends on `cgroups`, an experimental feature.
 diff --git a/lix/libexpr/primops/fromTOML.cc b/lix/libexpr/primops/fromTOML.cc
-index 9d4b5e6abf..3e26773eac 100644
+index 9e2ecce588..7da2825fed 100644
 --- a/lix/libexpr/primops/fromTOML.cc
 +++ b/lix/libexpr/primops/fromTOML.cc
-@@ -65,10 +65,13 @@
+@@ -67,10 +67,13 @@
              val,
              toml::parse(
                  tomlStream,
@@ -54,7 +56,7 @@ index bede78a647..a72016522e 100644
  pegtl = dependency(
    'pegtl',
 diff --git a/package.nix b/package.nix
-index eb0e5c602a..9357b8ebd1 100644
+index fb86ce8446..2dc7d511c0 100644
 --- a/package.nix
 +++ b/package.nix
 @@ -57,7 +57,6 @@
@@ -65,7 +67,7 @@ index eb0e5c602a..9357b8ebd1 100644
    util-linuxMinimal ? utillinuxMinimal,
    utillinuxMinimal ? null,
    xz,
-@@ -118,8 +117,7 @@
+@@ -132,8 +131,7 @@
  
      passt-lix = callPackage ./misc/passt.nix { };
  
@@ -75,10 +77,10 @@ index eb0e5c602a..9357b8ebd1 100644
    },
  }:
  
-diff --git a/tests/functional2/lang/fromTOML-overflowing/eval-fail-overflow.err.exp b/tests/functional2/lang/fromTOML-overflowing/eval-fail-overflow.err.exp
+diff --git a/tests/functional2/lang/builtins.fromTOML/eval-fail-overflow.err.exp b/tests/functional2/lang/builtins.fromTOML/eval-fail-overflow.err.exp
 deleted file mode 100644
 index 0c90e85edf..0000000000
---- a/tests/functional2/lang/fromTOML-overflowing/eval-fail-overflow.err.exp
+--- a/tests/functional2/lang/builtins.fromTOML/eval-fail-overflow.err.exp
 +++ /dev/null
 @@ -1,13 +0,0 @@
 -error:
@@ -94,10 +96,10 @@ index 0c90e85edf..0000000000
 -        1 | attr = 9223372036854775808
 -          |                           ^-- must be < 2^63
 -       
-diff --git a/tests/functional2/lang/fromTOML-overflowing/eval-fail-underflow.err.exp b/tests/functional2/lang/fromTOML-overflowing/eval-fail-underflow.err.exp
+diff --git a/tests/functional2/lang/builtins.fromTOML/eval-fail-underflow.err.exp b/tests/functional2/lang/builtins.fromTOML/eval-fail-underflow.err.exp
 deleted file mode 100644
 index a287e18655..0000000000
---- a/tests/functional2/lang/fromTOML-overflowing/eval-fail-underflow.err.exp
+--- a/tests/functional2/lang/builtins.fromTOML/eval-fail-underflow.err.exp
 +++ /dev/null
 @@ -1,13 +0,0 @@
 -error:
@@ -113,17 +115,17 @@ index a287e18655..0000000000
 -        1 | attr = -9223372036854775809
 -          |                            ^-- must be < 2^63
 -       
-diff --git a/tests/functional2/lang/fromTOML-overflowing/in-overflow.nix b/tests/functional2/lang/fromTOML-overflowing/in-overflow.nix
+diff --git a/tests/functional2/lang/builtins.fromTOML/in-overflow.nix b/tests/functional2/lang/builtins.fromTOML/in-overflow.nix
 deleted file mode 100644
 index 17f0448b3d..0000000000
---- a/tests/functional2/lang/fromTOML-overflowing/in-overflow.nix
+--- a/tests/functional2/lang/builtins.fromTOML/in-overflow.nix
 +++ /dev/null
 @@ -1,1 +0,0 @@
 -builtins.fromTOML ''attr = 9223372036854775808''
-diff --git a/tests/functional2/lang/fromTOML-overflowing/in-underflow.nix b/tests/functional2/lang/fromTOML-overflowing/in-underflow.nix
+diff --git a/tests/functional2/lang/builtins.fromTOML/in-underflow.nix b/tests/functional2/lang/builtins.fromTOML/in-underflow.nix
 deleted file mode 100644
 index 923fdf3545..0000000000
---- a/tests/functional2/lang/fromTOML-overflowing/in-underflow.nix
+--- a/tests/functional2/lang/builtins.fromTOML/in-underflow.nix
 +++ /dev/null
 @@ -1,1 +0,0 @@
 -builtins.fromTOML ''attr = -9223372036854775809''
