@@ -333,7 +333,7 @@ let
           n: v:
           nameValuePair "${n}-netdev" (
             let
-              deps = concatLists (map deviceDependency v.interfaces);
+              deps = concatMap deviceDependency v.interfaces;
             in
             {
               description = "Bridge Interface ${n}";
@@ -432,8 +432,8 @@ let
           n: v:
           nameValuePair "${n}-netdev" (
             let
-              deps = concatLists (
-                map deviceDependency (attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces))
+              deps = concatMap deviceDependency (
+                attrNames (filterAttrs (_: config: config.type != "internal") v.interfaces)
               );
               internalConfigs = map (i: "network-addresses-${i}.service") (
                 attrNames (filterAttrs (_: config: config.type == "internal") v.interfaces)
@@ -511,7 +511,7 @@ let
           n: v:
           nameValuePair "${n}-netdev" (
             let
-              deps = concatLists (map deviceDependency v.interfaces);
+              deps = concatMap deviceDependency v.interfaces;
             in
             {
               description = "Bond Interface ${n}";
