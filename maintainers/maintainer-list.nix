@@ -10841,6 +10841,12 @@
     email = "astrid@astrid.tech";
     name = "ifd3f";
   };
+  Freikugel = {
+    name = "Freikugel";
+    github = "bingbongboink";
+    githubId = 87834830;
+    email = "lmsmallidge@hotmail.com";
+  };
   iFreilicht = {
     github = "iFreilicht";
     githubId = 9742635;
