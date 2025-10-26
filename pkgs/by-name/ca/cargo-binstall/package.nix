@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_89,
   fetchFromGitHub,
   pkg-config,
   bzip2,
@@ -8,7 +8,10 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+# error: rustc 1.86.0 is not supported by the following packages:
+#   fs-lock@0.1.11 requires rustc 1.89.0
+#   home@0.5.12 requires rustc 1.88
+rustPackages_1_89.rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
   version = "1.15.9";
 
