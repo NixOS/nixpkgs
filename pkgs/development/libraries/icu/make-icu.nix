@@ -144,7 +144,13 @@ let
           substituteInPlace "$dev/bin/icu-config" \
             ${lib.concatMapStringsSep " " (r: "--replace '${r.from}' '${r.to}'") replacements}
         ''
-      );
+      )
+      # TODO: use MINGW_MOVEDLLSTOBINDIR?
+      + lib.optionalString stdenv.hostPlatform.isCygwin ''
+        mkdir -p "$out"/bin
+        set -x
+        mv "$out"/lib/cyg*.dll "$out"/bin/
+      '';
 
     postFixup = ''moveToOutput lib/icu "$dev" '';
   };
