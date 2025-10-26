@@ -1061,13 +1061,7 @@ mapAliases {
   git-codeowners = throw "'git-codeowners' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   git-credential-1password = throw "'git-credential-1password' has been removed, as the upstream project is deleted."; # Added 2024-05-20
   git-stree = throw "'git-stree' has been deprecated by upstream. Upstream recommends using 'git-subrepo' as a replacement."; # Added 2025-05-05
-  gitAndTools.darcsToGit = darcs-to-git; # Added 2021-01-14
-  gitAndTools.gitAnnex = git-annex; # Added 2021-01-14
-  gitAndTools.gitBrunch = git-brunch; # Added 2021-01-14
-  gitAndTools.gitFastExport = git-fast-export; # Added 2021-01-14
-  gitAndTools.gitRemoteGcrypt = git-remote-gcrypt; # Added 2021-01-14
-  gitAndTools.svn_all_fast_export = svn-all-fast-export; # Added 2021-01-14
-  gitAndTools.topGit = top-git; # Added 2021-01-14
+  gitAndTools = throw "gitAndTools has been removed, as the packages are now available at the top level"; # Converted to throw 2025-10-26
   gitversion = throw "'gitversion' has been removed because it produced a broken build and was unmaintained"; # Added 2025-08-30
   givaro_3 = throw "'givaro_3' has been removed as it is end-of-life. Consider using the up-to-date 'givaro' instead"; # Added 2025-05-07
   givaro_3_7 = throw "'givaro_3_7' has been removed as it is end-of-life. Consider using the up-to-date 'givaro' instead"; # Added 2025-05-07
