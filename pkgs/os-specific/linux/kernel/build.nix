@@ -90,6 +90,8 @@ lib.makeOverridable (
     # Provide defaults. Note that we support `null` so that callers don't need to use optionalAttrs,
     # which can lead to unnecessary strictness and infinite recursions.
     modDirVersion_ = if modDirVersion == null then lib.versions.pad 3 version else modDirVersion;
+
+    config_ = config;
   in
   let
     # Shadow the un-defaulted parameter; don't want null.
@@ -139,29 +141,29 @@ lib.makeOverridable (
     ];
     needsUbootTools = lib.elem stdenv.hostPlatform.linuxArch linuxPlatformsUsingUImage;
 
-    configHelpers =
+    config =
       let
         attrName = attr: "CONFIG_" + attr;
       in
       {
         isSet = attr: hasAttr (attrName attr) config;
 
-        getValue = attr: if configHelpers.isSet attr then getAttr (attrName attr) config else null;
+        getValue = attr: if config.isSet attr then getAttr (attrName attr) config else null;
 
-        isYes = attr: (configHelpers.getValue attr) == "y";
+        isYes = attr: (config.getValue attr) == "y";
 
-        isNo = attr: (configHelpers.getValue attr) == "n";
+        isNo = attr: (config.getValue attr) == "n";
 
-        isModule = attr: (configHelpers.getValue attr) == "m";
+        isModule = attr: (config.getValue attr) == "m";
 
-        isEnabled = attr: (configHelpers.isModule attr) || (configHelpers.isYes attr);
+        isEnabled = attr: (config.isModule attr) || (config.isYes attr);
 
-        isDisabled = attr: (!(configHelpers.isSet attr)) || (configHelpers.isNo attr);
+        isDisabled = attr: (!(config.isSet attr)) || (config.isNo attr);
       }
-      // config;
+      // config_;
 
-    isModular = configHelpers.isYes "MODULES";
-    withRust = configHelpers.isYes "RUST";
+    isModular = config.isYes "MODULES";
+    withRust = config.isYes "RUST";
 
     target = stdenv.hostPlatform.linux-kernel.target or "vmlinux";
 
