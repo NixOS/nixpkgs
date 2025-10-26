@@ -121,6 +121,8 @@ makeScopeWithSplicing' {
 
         openwith = callPackage ../os-specific/darwin/openwith { };
 
+        sleepwatcher = callPackage ../os-specific/darwin/sleepwatcher { };
+
         trash = callPackage ../os-specific/darwin/trash { };
 
         inherit (self.file_cmds) xattr;
