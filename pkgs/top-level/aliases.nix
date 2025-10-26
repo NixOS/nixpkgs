@@ -431,12 +431,7 @@ mapAliases {
   bitwarden_rs-sqlite = vaultwarden-sqlite; # Added 2021-07-01
   bitwarden_rs-vault = vaultwarden-vault; # Added 2021-07-01
   blas-reference = throw "blas-reference has been removed since it has been discontinued as free-standing package. It is now contained within lapack-reference."; # Added 2025-10-21
-  blender-with-packages =
-    args:
-    lib.warnOnInstantiate
-      "blender-with-packages is deprecated in favor of blender.withPackages, e.g. `blender.withPackages(ps: [ ps.foobar ])`"
-      (blender.withPackages (_: args.packages)).overrideAttrs
-      (lib.optionalAttrs (args ? name) { pname = "blender-" + args.name; }); # Added 2023-10-30
+  blender-with-packages = throw "blender-with-packages is deprecated in in favor of blender.withPackages, e.g. `blender.withPackages(ps: [ ps.foobar ])`"; # Converted to throw 2025-10-26
   bless = throw "'bless' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'imhex' or 'ghex' instead"; # Added 2024-09-15
   blockbench-electron = blockbench; # Added 2024-03-16
   bloom = throw "'bloom' has been removed because it was unmaintained upstream."; # Added 2024-11-02
@@ -1484,7 +1479,7 @@ mapAliases {
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
   manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
   mapmap = throw "'mapmap' has been removed as it has been unmaintained since 2021"; # Added 2025-05-17
-  mariadb-client = hiPrio mariadb.client; # added 2019.07.28
+  mariadb-client = throw "mariadb-client has been renamed to mariadb.client"; # Converted to throw 2025-10-26
   mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'."; # Added 2025-04-26
   mariadb_110 = throw "mariadb_110 has been removed from nixpkgs, please switch to another version like mariadb_114"; # Added 2024-08-15
   markets = throw "'markets' has been removed as it was archived upstream in 2023"; # Added 2025-04-17
@@ -1589,7 +1584,7 @@ mapAliases {
   mutter43 = throw "'mutter43' has been removed since it is no longer used by Pantheon."; # Added 2024-09-22
   mx-puppet-discord = throw "mx-puppet-discord was removed since the packaging was unmaintained and was the sole user of sha1 hashes in nixpkgs"; # Added 2025-07-24
   mysql = throw "'mysql' has been renamed to/replaced by 'mariadb'"; # Converted to throw 2024-10-17
-  mysql-client = hiPrio mariadb.client;
+  mysql-client = throw "mysql-client has been replaced by mariadb.client"; # Converted to throw 2025-10-26
   n98-magerun = throw "n98-magerun doesn't support new PHP newer than 8.1"; # Added 2025-10-03
   nagiosPluginsOfficial = monitoring-plugins; # Added 2017-08-07
   namazu = throw "namazu has been removed, as it was broken"; # Added 2025-08-25
@@ -1844,24 +1839,7 @@ mapAliases {
   pidgin-window-merge = pidginPackages.pidgin-window-merge; # Added 2023-07-17
   pidgin-xmpp-receipts = pidginPackages.pidgin-xmpp-receipts; # Added 2023-07-17
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
-  # pinentry was using multiple outputs, this emulates the old interface for i.e. home-manager
-  # soon: throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'";
-  pinentry = pinentry-all // {
-    curses = pinentry-curses;
-    emacs = pinentry-emacs;
-    gnome3 = pinentry-gnome3;
-    gtk2 = pinentry-gtk2;
-    qt = pinentry-qt;
-    tty = pinentry-tty;
-    flavors = [
-      "curses"
-      "emacs"
-      "gnome3"
-      "gtk2"
-      "qt"
-      "tty"
-    ];
-  }; # added 2024-01-15
+  pinentry = throw "'pinentry' has been removed. Pick an appropriate variant like 'pinentry-curses' or 'pinentry-gnome3'"; # Converted to throw 2025-10-26
   pinentry_qt5 = throw "'pinentry_qt5' has been renamed to/replaced by 'pinentry-qt'"; # Converted to throw 2024-10-17
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   piper-train = throw "piper-train is now part of the piper package using the `withTrain` override"; # Added 2025-09-03
@@ -1933,9 +1911,7 @@ mapAliases {
   protobuf_28 = throw "'protobuf_28' has been removed from nixpkgs. Consider using a more recent version of the protobuf library"; # Added 2025-06-14
   protoc-gen-connect-es = throw "'protoc-gen-connect-es' has been removed because it is deprecated upstream. Functionality has been integrated into 'protoc-gen-es' v2."; # Added 2025-02-18
   proton-caller = throw "'proton-caller' has been removed from nixpkgs due to being unmaintained and lack of upstream maintenance."; # Added 2025-09-25
-  proton-vpn-local-agent = lib.warnOnInstantiate "'proton-vpn-local-agent' has been renamed to 'python3Packages.proton-vpn-local-agent'" (
-    python3Packages.toPythonApplication python3Packages.proton-vpn-local-agent
-  ); # Added 2025-04-23
+  proton-vpn-local-agent = throw "'proton-vpn-local-agent' has been renamed to 'python3Packages.proton-vpn-local-agent'"; # Converted to throw 2025-10-26
   protonup = protonup-ng; # Added 2022-11-06
   protonvpn-cli = throw "protonvpn-cli source code was removed from upstream. Use protonvpn-gui instead."; # Added 2025-10-16
   protonvpn-cli_2 = throw "protonvpn-cli_2 has been removed due to being deprecated. Use protonvpn-gui instead."; # Added 2025-10-16
@@ -2574,11 +2550,7 @@ mapAliases {
   zombietrackergps = throw "'zombietrackergps' has been dropped, as it depends on KDE Gear 5 and is unmaintained"; # Added 2025-08-20
   zotify = throw "zotify has been removed due to lack of upstream maintenance"; # Added 2025-09-26
   zplugin = throw "'zplugin' has been renamed to/replaced by 'zinit'"; # Converted to throw 2024-10-17
-  zq = zed.overrideAttrs (old: {
-    meta = old.meta // {
-      mainProgram = "zq";
-    };
-  }); # Added 2023-02-06
+  zq = throw "zq has been replaced by zed"; # Converted to throw 2025-10-26
   zsh-git-prompt = throw "zsh-git-prompt was removed as it is unmaintained upstream"; # Added 2025-08-28
   zsh-history = throw "'zsh-history' has been removed as it was unmaintained"; # Added 2025-04-17
   zyn-fusion = zynaddsubfx; # Added 2022-08-05
