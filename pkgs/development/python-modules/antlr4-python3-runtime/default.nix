@@ -41,5 +41,6 @@ buildPythonPackage rec {
     mainProgram = "pygrun";
     homepage = "https://www.antlr.org/";
     license = licenses.bsd3;
+    maintainers = with maintainers; [ sarahec ];
   };
 }
