@@ -362,9 +362,11 @@ buildStdenv.mkDerivation {
     rustc
     unzip
     which
+  ]
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    pkg-config
     wrapGAppsHook3
   ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ pkg-config ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ rsync ]
   ++ lib.optionals stdenv.hostPlatform.isx86 [ nasm ]
   ++ lib.optionals crashreporterSupport [
