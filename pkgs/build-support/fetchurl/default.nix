@@ -53,6 +53,28 @@ let
 
 in
 
+lib.extendMkDerivation {
+  constructDrv = stdenvNoCC.mkDerivation;
+
+  excludeDrvArgNames = [
+    # Passed via passthru
+    "url"
+
+    # Name-related attributes
+    # TODO(@ShamrockLee): Pass them.
+    "name"
+    "pname"
+    "version"
+
+    # Hash attributes will be map to the corresponding outputHash*
+    "hash"
+    "sha1"
+    "sha256"
+    "sha512"
+  ];
+
+  extendDrvArgs =
+    finalAttrs:
 {
   # URL to fetch.
   url ? "",
@@ -212,7 +234,6 @@ let
       "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
 in
 
-stdenvNoCC.mkDerivation (
   (
     if (pname != "" && version != "") then
       { inherit pname version; }
@@ -307,5 +328,8 @@ stdenvNoCC.mkDerivation (
       inherit url resolvedUrl;
     }
     // passthru;
-  }
-)
+  };
+
+  # No ellipsis
+  inheritFunctionArgs = false;
+}
