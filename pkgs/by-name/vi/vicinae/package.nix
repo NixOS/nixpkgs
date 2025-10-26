@@ -94,7 +94,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "A focused launcher for your desktop — native, fast, extensible";
     homepage = "https://github.com/vicinaehq/vicinae";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ zstg ];
+    maintainers = with lib.maintainers; [
+      dawnofmidnight
+      zstg
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "vicinae";
   };
