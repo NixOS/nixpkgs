@@ -42,11 +42,9 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "christofmuc";
     repo = "knobkraft-orm";
-    rev = version;
-    leaveDotGit = true;
-    deepClone = true;
+    tag = version;
     fetchSubmodules = true;
-    hash = "sha256-teoBN1EOFCQVk93oEvj2AAjMeQP7NQjDJKZiKy1kdi0";
+    hash = "sha256-dOgPq4r2IvKDPhhV/LWRfGeeFckN5ZUeee/T6QNfCtw=";
   };
 
   nativeBuildInputs = [
@@ -98,14 +96,14 @@ stdenv.mkDerivation rec {
     "package"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/christofmuc/KnobKraft-orm";
     description = "Modern FOSS MIDI Sysex Librarian";
     mainProgram = "KnobKraftOrm";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
       backtail
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }
