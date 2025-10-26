@@ -65,6 +65,17 @@ buildGoModule rec {
   ]
   ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "tools/genman" ];
 
+  excludedPackages = [
+    "test/e2e"
+    "initrd"
+    "tools"
+  ];
+
+  preCheck = ''
+    # Run all tests.
+    unset subPackages
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     $out/bin/genman generate ./docs/man/
     rm $out/bin/genman
