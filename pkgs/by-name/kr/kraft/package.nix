@@ -3,6 +3,8 @@
   stdenv,
   buildGoModule,
   fetchFromGitHub,
+  installShellFiles,
+  writableTmpDirAsHomeHook,
   pkg-config,
   btrfs-progs,
   gpgme,
@@ -22,6 +24,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     pkg-config
+    installShellFiles
+    writableTmpDirAsHomeHook
   ];
 
   buildInputs = [
@@ -39,7 +43,21 @@ buildGoModule rec {
     "-X kraftkit.sh/internal/version.version=${version}"
   ];
 
-  subPackages = [ "cmd/kraft" ];
+  subPackages = [
+    "cmd/kraft"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [ "tools/genman" ];
+
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    $out/bin/genman generate ./docs/man/
+    rm $out/bin/genman
+    installManPage ./docs/man/*
+
+    installShellCompletion --cmd kraft \
+      --bash <($out/bin/kraft completion bash) \
+      --fish <($out/bin/kraft completion fish) \
+      --zsh <($out/bin/kraft completion zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script {
