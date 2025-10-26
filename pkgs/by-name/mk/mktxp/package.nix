@@ -49,7 +49,10 @@ python3Packages.buildPythonApplication {
     description = "Prometheus Exporter for Mikrotik RouterOS devices";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
-    maintainers = [ lib.maintainers.BonusPlay ];
+    maintainers = [
+      lib.maintainers.BonusPlay
+      lib.maintainers.tsandrini
+    ];
     mainProgram = "mktxp";
   };
 }
