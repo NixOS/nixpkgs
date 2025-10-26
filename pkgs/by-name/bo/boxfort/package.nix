@@ -9,14 +9,14 @@
   gitMinimal,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "boxfort";
   version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "Snaipe";
     repo = "BoxFort";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-fgX2Ilb01qa9myuz6yiC67WKeai2m/csncS6u5and3o=";
   };
 
@@ -51,4 +51,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = lib.platforms.unix;
   };
-}
+})
