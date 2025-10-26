@@ -237,10 +237,10 @@ mapAliases {
   forceSystem = system: _: (import self.path { localSystem = { inherit system; }; }); # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
 
   # TODO: Remove from Nixpkgs and eventually turn into throws.
-  system = throw "'system' has been renamed to/replaced by 'stdenv.hostPlatform.system'"; # Converted to throw 2025-10-27
-  buildPlatform = throw "'buildPlatform' has been renamed to/replaced by 'stdenv.buildPlatform'"; # Converted to throw 2025-10-27
-  hostPlatform = throw "'hostPlatform' has been renamed to/replaced by 'stdenv.hostPlatform'"; # Converted to throw 2025-10-27
-  targetPlatform = throw "'targetPlatform' has been renamed to/replaced by 'stdenv.targetPlatform'"; # Converted to throw 2025-10-27
+  system = stdenv.hostPlatform.system; # Added 2021-10-22
+  buildPlatform = stdenv.buildPlatform; # Added 2023-01-09
+  hostPlatform = stdenv.hostPlatform; # Added 2023-01-09
+  targetPlatform = stdenv.targetPlatform; # Added 2023-01-09
 
   # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
   llvmPackages_latest = llvmPackages_21;
@@ -564,7 +564,7 @@ mapAliases {
   flut-renamer = throw "flut-renamer is unmaintained and has been removed"; # Added 2025-08-26
   flutter326 = throw "flutter326 has been removed because it isn't updated anymore, and no packages in nixpkgs use it. If you still need it, use flutter.mkFlutter to get a custom version"; # Added 2025-06-08
   fmsynth = throw "'fmsynth' has been removed as it was broken and unmaintained both upstream and in nixpkgs."; # Added 2025-09-01
-  follow = throw "'follow' has been renamed to/replaced by 'folo'"; # Converted to throw 2025-10-27
+  follow = lib.warnOnInstantiate "follow has been renamed to folo" folo; # Added 2025-05-18
   forge = throw "forge was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   forgejo-actions-runner = throw "'forgejo-actions-runner' has been renamed to/replaced by 'forgejo-runner'"; # Converted to throw 2025-10-27
   fractal-next = throw "'fractal-next' has been renamed to/replaced by 'fractal'"; # Converted to throw 2025-10-27
@@ -817,7 +817,7 @@ mapAliases {
   lightly-boehs = throw "'lightly-boehs' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   lightly-qt = throw "'lightly-qt' has been removed, as it is only compatible with Plasma 5, which is EOL"; # Added 2025-08-20
   ligo = throw "ligo has been removed from nixpkgs for lack of maintainance"; # Added 2025-06-03
-  lima-bin = throw "'lima-bin' has been renamed to/replaced by 'lima'"; # Converted to throw 2025-10-27
+  lima-bin = lib.warnOnInstantiate "lima-bin has been replaced by lima" lima; # Added 2025-05-13
   lincity_ng = lib.warnOnInstantiate "lincity_ng has been renamed to lincity-ng" lincity-ng; # Added 2025-10-09
   linphone = linphonePackages.linphone-desktop; # Added 2025-09-20
   linux-libre = throw "linux_libre has been removed due to lack of maintenance"; # Added 2025-10-01
