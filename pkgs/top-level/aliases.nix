@@ -543,7 +543,7 @@ mapAliases {
   BeatSaberModManager = beatsabermodmanager; # Added 2024-06-12
   beam_nox = throw "beam_nox has been removed in favor of beam_minimal or beamMinimalPackages"; # Added 2025-04-01
   beatsabermodmanager = throw "'beatsabermodmanager' has been removed due to lack of upstream maintainenance. Consider using 'bs-manager' instead"; # Added 2025-03-18
-  inherit (beetsPackages) beets-unstable;
+  beets-unstable = beetsPackages.beets-unstable; # Added 2025-09-24
   belcard = throw "'belcard' has been moved to 'linphonePackages.belcard'"; # Added 2025-09-20
   belle-sip = throw "'belle-sip' has been moved to 'linphonePackages.belle-sip'"; # Added 2025-09-20
   belr = throw "'belr' has been moved to 'linphonePackages.belr'"; # Added 2025-09-20
@@ -915,7 +915,7 @@ mapAliases {
   fbjni = throw "fbjni has been removed, as it was broken"; # Added 2025-08-25
   fcitx5-catppuccin = catppuccin-fcitx5; # Added 2024-06-19
   fdr = throw "fdr has been removed, as it cannot be built from source and depends on Python 2.x"; # Added 2025-03-19
-  inherit (luaPackages) fennel; # Added 2022-09-24
+  fennel = luaPackages.fennel; # Added 2022-09-24
   ferdi = throw "'ferdi' has been removed, upstream does not exist anymore and the package is insecure"; # Added 2024-08-22
   fetchbower = throw "fetchbower has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
   ffmpeg_5 = throw "ffmpeg_5 has been removed, please use another version"; # Added 2024-07-12
@@ -1075,15 +1075,13 @@ mapAliases {
   git-credential-1password = throw "'git-credential-1password' has been removed, as the upstream project is deleted."; # Added 2024-05-20
   git-stree = throw "'git-stree' has been deprecated by upstream. Upstream recommends using 'git-subrepo' as a replacement."; # Added 2025-05-05
 
-  gitAndTools = self // {
-    darcsToGit = darcs-to-git; # Added 2021-01-14
-    gitAnnex = git-annex; # Added 2021-01-14
-    gitBrunch = git-brunch; # Added 2021-01-14
-    gitFastExport = git-fast-export; # Added 2021-01-14
-    gitRemoteGcrypt = git-remote-gcrypt; # Added 2021-01-14
-    svn_all_fast_export = svn-all-fast-export; # Added 2021-01-14
-    topGit = top-git; # Added 2021-01-14
-  };
+  gitAndTools.darcsToGit = darcs-to-git; # Added 2021-01-14
+  gitAndTools.gitAnnex = git-annex; # Added 2021-01-14
+  gitAndTools.gitBrunch = git-brunch; # Added 2021-01-14
+  gitAndTools.gitFastExport = git-fast-export; # Added 2021-01-14
+  gitAndTools.gitRemoteGcrypt = git-remote-gcrypt; # Added 2021-01-14
+  gitAndTools.svn_all_fast_export = svn-all-fast-export; # Added 2021-01-14
+  gitAndTools.topGit = top-git; # Added 2021-01-14
   gitversion = throw "'gitversion' has been removed because it produced a broken build and was unmaintained"; # Added 2025-08-30
   givaro_3 = throw "'givaro_3' has been removed as it is end-of-life. Consider using the up-to-date 'givaro' instead"; # Added 2025-05-07
   givaro_3_7 = throw "'givaro_3_7' has been removed as it is end-of-life. Consider using the up-to-date 'givaro' instead"; # Added 2025-05-07
@@ -2049,7 +2047,7 @@ mapAliases {
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
   paco = throw "'paco' has been removed as it has been abandoned"; # Added 2025-04-30
-  inherit (perlPackages) pacup;
+  pacup = perlPackages.pacup; # Added 2025-01-21
   pal = throw "pal has been removed, as it was broken"; # Added 2025-08-25
   panopticon = throw "'panopticon' has been removed because it is unmaintained upstream"; # Added 2025-01-25
   paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
@@ -2111,12 +2109,8 @@ mapAliases {
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
   pipewire-media-session = throw "pipewire-media-session is no longer maintained and has been removed. Please use Wireplumber instead."; # Added 2023-03-09
-  platformioPackages = {
-    inherit
-      platformio-core
-      platformio-chrootenv
-      ;
-  }; # Added 2025-09-04
+  platformioPackages.platformio-core = platformio-core; # Added 2025-09-04
+  platformioPackages.platformio-chrootenv = platformio-chrootenv; # Added 2025-09-04
   platypus = throw "platypus is unmaintained and has not merged Python3 support"; # Added 2025-03-20
   pleroma-otp = throw "'pleroma-otp' has been renamed to/replaced by 'pleroma'"; # Converted to throw 2024-10-17
   plex-media-player = throw "'plex-media-player' has been discontinued, the new official client is available as 'plex-desktop'"; # Added 2025-05-28
