@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://oidentd.janikrabe.com/";
     changelog = "https://github.com/janikrabe/oidentd/blob/${version}/NEWS";
     license = licenses.gpl2Only;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ freebsd ++ openbsd ++ netbsd;
     maintainers = with maintainers; [ h7x4 ];
   };
 }
