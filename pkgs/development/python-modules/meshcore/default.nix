@@ -14,12 +14,12 @@
 
 buildPythonPackage rec {
   pname = "meshcore";
-  version = "2.1.10";
+  version = "2.1.16";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-mnr5WqH/uKzONI8lcm1GQCSlnhx6WQyqsAr12gsMKEI=";
+    sha256 = "sha256-CiPirGMkOtzKtLz2ctfPr/B+MKrl0dtu337I29SkSKc=";
   };
 
   build-system = [ hatchling ];
