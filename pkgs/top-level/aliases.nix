@@ -1065,12 +1065,12 @@ mapAliases {
   gnupg22 = throw "'gnupg22' is end-of-life. Consider using 'gnupg24' instead"; # Added 2025-01-05
   go_1_22 = throw "Go 1.22 is end-of-life and 'go_1_22' has been removed. Please use a newer Go toolchain."; # Added 2024-03-28
   go_1_23 = throw "Go 1.23 is end-of-life and 'go_1_23' has been removed. Please use a newer Go toolchain."; # Added 2025-08-13
-  gogs = throw ''
+  gogs = throw "
     Gogs development has stalled. Also, it has several unpatched, critical vulnerabilities that
     weren't addressed within a year: https://github.com/gogs/gogs/issues/7777
 
     Consider migrating to forgejo or gitea.
-  ''; # Added 2024-10-12
+  "; # Added 2024-10-12
   git-backup = throw "git-backup has been removed, as it has been abandoned upstream. Consider using git-backup-go instead."; # Added 2024-07-16
   git-credential-1password = throw "'git-credential-1password' has been removed, as the upstream project is deleted."; # Added 2024-05-20
   git-stree = throw "'git-stree' has been deprecated by upstream. Upstream recommends using 'git-subrepo' as a replacement."; # Added 2025-05-05
@@ -1511,7 +1511,7 @@ mapAliases {
   linux_6_13_hardened = linuxKernel.kernels.linux_6_13_hardened; # Added 2021-08-16
   linuxPackages_6_14_hardened = linuxKernel.packages.linux_6_14_hardened; # Added 2021-08-16
   linux_6_14_hardened = linuxKernel.kernels.linux_6_14_hardened; # Added 2021-08-16
-  linuxPackages_latest_hardened = throw ''
+  linuxPackages_latest_hardened = throw "
     The attribute `linuxPackages_hardened_latest' was dropped because the hardened patches
     frequently lag behind the upstream kernel. In some cases this meant that this attribute
     had to refer to an older kernel[1] because the latest hardened kernel was EOL and
@@ -1521,7 +1521,7 @@ mapAliases {
     and use a versioned attribute, e.g. `linuxPackages_5_10_hardened'.
 
     [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
-  ''; # Added 2021-08-16
+  "; # Added 2021-08-16
   linux_latest_hardened = linuxPackages_latest_hardened; # Added 2021-08-16
 
   linuxPackages_hardened = linuxKernel.packages.linux_hardened; # Added 2025-08-10
@@ -1621,31 +1621,31 @@ mapAliases {
   luci-go = throw "luci-go has been removed since it was unused and failing to build for 5 months"; # Added 2025-08-27
   lumail = throw "'lumail' has been removed since its upstream is unavailable"; # Added 2025-05-07
   lv_img_conv = throw "'lv_img_conv' has been removed from nixpkgs as it is broken"; # Added 2024-06-18
-  lxd = throw ''
+  lxd = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
     https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-  ''; # Added 2025-09-05
-  lxd-lts = throw ''
+  "; # Added 2025-09-05
+  lxd-lts = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
     https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-  ''; # Added 2025-09-05
-  lxd-ui = throw ''
+  "; # Added 2025-09-05
+  lxd-ui = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
     https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-  ''; # Added 2025-09-05
-  lxd-unwrapped = throw ''
+  "; # Added 2025-09-05
+  lxd-unwrapped = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
     https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-  ''; # Added 2025-09-05
-  lxd-unwrapped-lts = throw ''
+  "; # Added 2025-09-05
+  lxd-unwrapped-lts = throw "
     LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
     Consider migrating or switching to Incus, or remove from your configuration.
     https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
-  ''; # Added 2025-09-05
+  "; # Added 2025-09-05
 
   lxde = {
     gtk2-x11 = throw "'lxde.gtk2-x11' has been removed. Use 'gtk2-x11' directly."; # added 2025-08-31
@@ -1682,31 +1682,31 @@ mapAliases {
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
   manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
 
-  maple-mono-NF = throw ''
+  maple-mono-NF = throw "
     maple-mono-NF had been moved to maple-mono.NF.
     for installing all maple-mono:
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-16
-  maple-mono-otf = throw ''
+  "; # Added 2025-03-16
+  maple-mono-otf = throw "
     maple-mono-otf had been moved to maple-mono.opentype.
     for installing all maple-mono:
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-16
-  maple-mono-woff2 = throw ''
+  "; # Added 2025-03-16
+  maple-mono-woff2 = throw "
     maple-mono-woff2 had been moved to maple-mono.woff2.
     for installing all maple-mono:
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-16
-  maple-mono-SC-NF = throw ''
+  "; # Added 2025-03-16
+  maple-mono-SC-NF = throw "
     mono-SC-NF had been superseded by maple-mono.NF-CN.
     for installing all maple-mono:
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-16
-  maple-mono-autohint = throw ''
+  "; # Added 2025-03-16
+  maple-mono-autohint = throw "
     maple-mono-autohint had been moved to maple-mono.truetype-autohint.
     for installing all maple-mono:
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  ''; # Added 2025-03-16
+  "; # Added 2025-03-16
 
   mapmap = throw "'mapmap' has been removed as it has been unmaintained since 2021"; # Added 2025-05-17
   markets = throw "'markets' has been removed as it was archived upstream in 2023"; # Added 2025-04-17
@@ -1847,7 +1847,7 @@ mapAliases {
   newt-go = fosrl-newt; # Added 2025-06-24
   notes-up = throw "'notes-up' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   notify-sharp = throw "'notify-sharp' has been removed as it was unmaintained and depends on deprecated dbus-sharp versions"; # Added 2025-08-25
-  nextcloud30 = throw ''
+  nextcloud30 = throw "
     Nextcloud v30 has been removed from `nixpkgs` as the support for is dropped
     by upstream in 2025-09. Please upgrade to at least Nextcloud v31 by declaring
 
@@ -1857,13 +1857,13 @@ mapAliases {
 
     WARNING: if you were on Nextcloud 29 you have to upgrade to Nextcloud 30
     first on 25.05 because Nextcloud doesn't support upgrades across multiple major versions!
-  ''; # Added 2025-09-25
+  "; # Added 2025-09-25
   nextcloud30Packages = throw "Nextcloud 30 is EOL!"; # Added 2025-09-25
   nextcloud-news-updater = throw "nextcloud-news-updater has been removed because the project is unmaintained"; # Added 2025-03-28
   nixForLinking = throw "nixForLinking has been removed, use `nixVersions.nixComponents_<version>` instead"; # Added 2025-08-14
   nagiosPluginsOfficial = monitoring-plugins; # Added 2017-08-07
   neochat = makePlasma5Throw "neochat"; # added 2022-05-10
-  nerdfonts = throw ''
+  nerdfonts = throw "
     nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
     For example change:
       fonts.packages = [
@@ -1878,7 +1878,7 @@ mapAliases {
       ]
     or for all fonts
       fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
-  ''; # Added 2024-11-09
+  "; # Added 2024-11-09
   networkmanager_strongswan = networkmanager-strongswan; # added 2025-06-29
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
@@ -2031,14 +2031,14 @@ mapAliases {
   overrideLibcxx = "overrideLibcxx has beeen removed, as it was no longer used and Darwin now uses libc++ from the latest SDK; see the Nixpkgs 25.11 release notes for details"; # Added 2025-09-15
   overrideSDK = "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
   ovn-lts = throw "ovn-lts has been removed. Please use the latest version available under ovn"; # Added 2024-08-24
-  oxygen-icons5 = throw ''
+  oxygen-icons5 = throw "
     The top-level oxygen-icons5 alias has been removed.
 
     Please explicitly use kdePackages.oxygen-icons for the latest Qt 6-based version,
     or libsForQt5.oxygen-icons5 for the deprecated Qt 5 version.
 
     Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
-  ''; # Added 2025-03-15;
+  "; # Added 2025-03-15;
   oysttyer = throw "oysttyer has been removed; it is no longer maintained because of Twitter disabling free API access"; # Added 2024-09-23
 
   pax-rs = throw "'pax-rs' has been removed because upstream has disappeared"; # Added 2025-01-25
@@ -2119,14 +2119,14 @@ mapAliases {
   pltScheme = racket; # Added 2013-02-24
   poac = cabinpkg; # Added 2025-01-22
   podofo010 = podofo_0_10; # Added 2025-06-01
-  polkit-kde-agent = throw ''
+  polkit-kde-agent = throw "
     The top-level polkit-kde-agent alias has been removed.
 
     Please explicitly use kdePackages.polkit-kde-agent-1 for the latest Qt 6-based version,
     or libsForQt5.polkit-kde-agent for the deprecated Qt 5 version.
 
     Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
-  ''; # Added 2025-03-07
+  "; # Added 2025-03-07
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
   posix_man_pages = throw "'posix_man_pages' has been renamed to/replaced by 'man-pages-posix'"; # Converted to throw 2024-10-17
@@ -2379,11 +2379,11 @@ mapAliases {
   sane-backends-git = throw "'sane-backends-git' has been renamed to/replaced by 'sane-backends'"; # Converted to throw 2024-10-17
   samtools_0_1_19 = throw "'samtools_0_1_19' has been removed because it is unmaintained. Consider using 'samtools' instead"; # Added 2025-05-10
   scantailor = scantailor-advanced; # Added 2022-05-26
-  schildichat-web = throw ''
+  schildichat-web = throw "
     schildichat has been removed as it is severely lacking behind the Element upstream and does not receive regular security fixes.
     Please participate in upstream discussion on getting out new releases:
     https://github.com/SchildiChat/schildichat-desktop/issues/212
-    https://github.com/SchildiChat/schildichat-desktop/issues/215''; # Added 2023-12-05
+    https://github.com/SchildiChat/schildichat-desktop/issues/215"; # Added 2023-12-05
   schildichat-desktop = schildichat-web; # Added 2023-12-07
   schildichat-desktop-wayland = schildichat-web; # Added 2023-12-07
   scitoken-cpp = scitokens-cpp; # Added 2024-02-12
@@ -2761,12 +2761,12 @@ mapAliases {
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wasm-bindgen-cli = wasm-bindgen-cli_0_2_104;
   watershot = throw "'watershot' has been removed as it is unmaintained upstream and no longer works"; # Added 2025-06-01
-  wayfireApplications-unwrapped = throw ''
+  wayfireApplications-unwrapped = throw "
     'wayfireApplications-unwrapped.wayfire' has been renamed to/replaced by 'wayfire'
     'wayfireApplications-unwrapped.wayfirePlugins' has been renamed to/replaced by 'wayfirePlugins'
     'wayfireApplications-unwrapped.wcm' has been renamed to/replaced by 'wayfirePlugins.wcm'
     'wayfireApplications-unwrapped.wlroots' has been removed
-  ''; # Add 2023-07-29
+  "; # Add 2023-07-29
   waypoint = throw "waypoint has been removed from nixpkgs as the upstream project was archived"; # Added 2024-04-24
   wcurl = throw "'wcurl' has been removed due to being bundled with 'curl'"; # Added 2025-07-04
   webfontkitgenerator = webfont-bundler; # Added 2025-07-27
