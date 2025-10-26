@@ -10427,7 +10427,9 @@ with pkgs;
 
   glabels-qt = callPackage ../applications/graphics/glabels-qt { };
 
-  grafana = callPackage ../servers/monitoring/grafana { };
+  grafana = callPackage ../servers/monitoring/grafana {
+    buildGoModule = buildGo125Module;
+  };
   grafanaPlugins = callPackages ../servers/monitoring/grafana/plugins { };
 
   hasura-cli = callPackage ../servers/hasura/cli.nix { };

@@ -37,6 +37,7 @@ let
   pname = "qq";
   inherit (source) version src;
   passthru = {
+    # nixpkgs-update: no auto update
     updateScript = ./update.sh;
   };
   meta = {

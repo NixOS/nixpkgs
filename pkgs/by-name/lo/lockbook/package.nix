@@ -4,7 +4,12 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  nfs-utils ? null, # macOS doesn't need this
+  makeBinaryWrapper,
 }:
+let
+  inherit (stdenv.hostPlatform) isLinux;
+in
 rustPlatform.buildRustPackage rec {
   pname = "lockbook";
   version = "25.10.13";
@@ -24,7 +29,16 @@ rustPlatform.buildRustPackage rec {
     "lockbook"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+  ]
+  ++ lib.optionals isLinux [ makeBinaryWrapper ];
+
+  postFixup = lib.optionalString isLinux ''
+    wrapProgram $out/bin/lockbook \
+      --prefix PATH : "${lib.makeBinPath [ nfs-utils ]}"
+  '';
+
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --bash --name lockbook.bash <($out/bin/lockbook completions bash)
     installShellCompletion --zsh --name _lockbook <($out/bin/lockbook completions zsh)

@@ -73,7 +73,7 @@ let
           (lib.unsafeGetAttrPos "pname" drv)
           (lib.unsafeGetAttrPos "version" drv)
         ]
-        ++ lib.optionals (drv.meta.position or null != null) [
+        ++ lib.optionals (drv ? meta.position) [
           # Use ".meta.position" for cases when most of the package is
           # defined in a "common" section and the only place where
           # reference to the file with a derivation the "pos"
