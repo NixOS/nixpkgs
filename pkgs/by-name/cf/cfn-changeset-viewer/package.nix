@@ -1,8 +1,8 @@
 {
   buildNpmPackage,
   fetchFromGitHub,
-  gitUpdater,
   lib,
+  nix-update-script,
   versionCheckHook,
 }:
 
@@ -27,7 +27,7 @@ buildNpmPackage rec {
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI to view the changes calculated in a CloudFormation ChangeSet in a more human-friendly way";
