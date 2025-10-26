@@ -2367,7 +2367,7 @@ mapAliases {
   ut2004demo = throw "UT2004 requires libstdc++5 which is not supported by nixpkgs anymore"; # Added 2024-11-24
   ut2004Packages = throw "UT2004 requires libstdc++5 which is not supported by nixpkgs anymore"; # Added 2024-11-24
   util-linuxCurses = util-linux; # Added 2022-04-12
-  utillinux = util-linux; # Added 2020-11-24, keep until node2nix is phased out, see https://github.com/NixOS/nixpkgs/issues/229475
+  utillinux = util-linux; # Added 2020-11-24
   v8 = throw "`v8` has been removed as it's unmaintained for several years and has vulnerabilites. Please migrate to `nodejs.libv8`"; # Added 2024-12-21
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
   vaapiVdpau = libva-vdpau-driver; # Added 2024-06-05
