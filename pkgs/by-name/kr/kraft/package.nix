@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "kraftkit";
-  version = "0.11.6";
+  version = "0.12.5";
 
   src = fetchFromGitHub {
     owner = "unikraft";
     repo = "kraftkit";
     rev = "v${version}";
-    hash = "sha256-a6c7g2cxrawE7BRpcrsefCQ7xQ56wVOGjFexdkOKnv0=";
+    hash = "sha256-/ReHXxvn/6dDJVxk5BOvxSZrlkDkZEfr+qM5raf2a3A=";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ buildGoModule rec {
     btrfs-progs
   ];
 
-  vendorHash = "sha256-lwgxedKLcuV6RucbU26sDO+9j+8uWkignJDomFHaSXU=";
+  vendorHash = "sha256-1rdpyOJVeyzYT0WHJbeqO3aH15FN1/9iQ9bEsjWwn4c=";
 
   ldflags = [
     "-s"
