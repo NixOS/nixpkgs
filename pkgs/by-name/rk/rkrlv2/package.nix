@@ -38,6 +38,15 @@ stdenv.mkDerivation rec {
     libsndfile
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6)' \
+      'cmake_minimum_required(VERSION 4.0)'
+    substituteInPlace lv2/CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6)' \
+      'cmake_minimum_required(VERSION 4.0)'
+  '';
+
   meta = with lib; {
     description = "Rakarrak effects ported to LV2";
     homepage = "https://github.com/ssj71/rkrlv2";
