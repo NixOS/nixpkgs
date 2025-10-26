@@ -9,19 +9,19 @@
 
 buildPythonPackage rec {
   pname = "zope-testing";
-  version = "5.1";
+  version = "6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "zopefoundation";
     repo = "zope.testing";
     tag = version;
-    hash = "sha256-G9RfRsXSzQ92HeBF5dRTI+1XEz1HM3DuB0ypZ61uHfw=";
+    hash = "sha256-px1+lS1U0lmmQrXJuxFTsX3N8e2mj5Yhckfis5++EX8=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools <= 75.6.0" setuptools
+      --replace-fail "setuptools ==" "setuptools >="
   '';
 
   build-system = [ setuptools ];
