@@ -27,16 +27,16 @@ let
 in
 phpPackage.buildComposerProject2 rec {
   pname = "librenms";
-  version = "25.9.1";
+  version = "25.10.0";
 
   src = fetchFromGitHub {
     owner = "librenms";
     repo = "librenms";
     tag = version;
-    sha256 = "sha256-EDdXPhPi5gJXIMniMloLWDuW3BmajxEKJM2Tkgxn36Q=";
+    hash = "sha256-SzDSeWTnsXy274H2mkGIHOsW26EoL7aony7Xcb+e+h4=";
   };
 
-  vendorHash = "sha256-Tc4pW7UNY7Tvu0UJLifV24UW06xQSQG1W3+jkzvm0iw=";
+  vendorHash = "sha256-OYQsgwbxsXsOM+sn0mJcABtyXVQAKBa6/ghfbZR1jX4=";
 
   php = phpPackage;
 
@@ -103,7 +103,7 @@ phpPackage.buildComposerProject2 rec {
     substituteInPlace $out/LibreNMS/__init__.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
     substituteInPlace $out/snmp-scan.py --replace-fail '"/usr/bin/env", "php"' '"${phpPackage}/bin/php"'
 
-    substituteInPlace $out/lnms --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
+    substituteInPlace $out/app/Listeners/CommandStartingListener.php --replace-fail '\App\Checks::runningUser();' '//\App\Checks::runningUser(); //removed as nix forces ownership to root'
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 
