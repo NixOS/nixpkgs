@@ -1,0 +1,13 @@
+diff --git a/src/plugins/shortcuts/mpris.ts b/src/plugins/shortcuts/mpris.ts
+index 93cb40f9..ad0bede3 100644
+--- a/src/plugins/shortcuts/mpris.ts
++++ b/src/plugins/shortcuts/mpris.ts
+@@ -79,7 +79,7 @@ function setupMPRIS() {
+   instance.canQuit = false;
+   instance.canUsePlayerControls = true;
+   instance.supportedUriSchemes = ['http', 'https'];
+-  instance.desktopEntry = 'youtube-music';
++  instance.desktopEntry = 'com.github.th_ch.youtube_music';
+   return instance;
+ }
+ 

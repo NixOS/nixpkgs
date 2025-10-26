@@ -1,0 +1,79 @@
+{
+  buildPackages,
+  fetchurl,
+  lib,
+  stdenv,
+  argp-standalone,
+  libgcrypt,
+  readline,
+  libgpg-error,
+}:
+
+stdenv.mkDerivation (finalAttrs: {
+  version = "1.6.16";
+  pname = "freeipmi";
+
+  src = fetchurl {
+    url = "mirror://gnu/freeipmi/freeipmi-${finalAttrs.version}.tar.gz";
+    sha256 = "sha256-W872u562gOSbSjYjV5kwrOeJn1OSWyBF/p+RrWkEER0=";
+  };
+
+  postPatch = lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace man/Makefile.in \
+      --replace-fail \
+        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man $@.pre $@' \
+        '$(CPP_FOR_BUILD) -nostdinc -w -C -P -I. -I$(top_srcdir)/man -o $@ $@.pre'
+  '';
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
+  buildInputs = [
+    libgcrypt
+    readline
+    libgpg-error
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    argp-standalone
+  ];
+
+  configureFlags = [
+    # Device permissions are set by udev/kernel, so don't restrict them unnecessarily
+    "--with-dont-check-for-root"
+  ]
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_file__dev_urandom=true"
+    "ac_cv_file__dev_random=true"
+  ];
+
+  # Fix GCC 14 build.
+  # https://savannah.gnu.org/bugs/?65203
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
+  doCheck = true;
+
+  meta = {
+    description = "Implementation of the Intelligent Platform Management Interface";
+
+    longDescription = ''
+      GNU FreeIPMI provides in-band and out-of-band IPMI software based on
+      the IPMI v1.5/2.0 specification.  The IPMI specification defines a
+      set of interfaces for platform management and is implemented by a
+      number vendors for system management.  The features of IPMI that
+      most users will be interested in are sensor monitoring, system event
+      monitoring, power control, and serial-over-LAN (SOL).  The FreeIPMI
+      tools and libraries listed below should provide users with the
+      ability to access and utilize these and many other features.  A
+      number of useful features for large HPC or cluster environments have
+      also been implemented into FreeIPMI. See the README or FAQ for more
+      info.
+    '';
+
+    homepage = "https://www.gnu.org/software/freeipmi/";
+    downloadPage = "https://www.gnu.org/software/freeipmi/download.html";
+
+    license = lib.licenses.gpl3Plus;
+
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.gnu ++ lib.platforms.unix;
+  };
+})

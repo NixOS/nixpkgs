@@ -1,0 +1,16 @@
+{
+  "private": true,
+  "//": [
+    "Keep `@actions/core` and `@actions/github` in sync with",
+    "https://github.com/actions/github-script/blob/main/package.json.",
+    "Keep `@actions/artifact` and `bottleneck` in sync with",
+    "`.github/workflows/bot.yml`."
+  ],
+  "dependencies": {
+    "@actions/artifact": "5.0.3",
+    "@actions/core": "1.11.1",
+    "@actions/github": "6.0.1",
+    "bottleneck": "2.19.5",
+    "commander": "14.0.3"
+  }
+}

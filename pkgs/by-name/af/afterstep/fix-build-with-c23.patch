@@ -1,0 +1,81 @@
+From 081d9c3284075c65b70837079bd67621c3b64da7 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Sun, 28 Dec 2025 00:39:49 +0800
+Subject: [PATCH] fix build with c23
+
+---
+ libAfterBase/fs.c       | 2 +-
+ src/ASDocGen/ASDocGen.c | 2 +-
+ src/Ident/Ident.c       | 2 +-
+ src/afterstep/dirtree.c | 2 +-
+ src/afterstep/menus.h   | 2 +-
+ 5 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/libAfterBase/fs.c b/libAfterBase/fs.c
+index 731bfd3..954bfd6 100644
+--- a/libAfterBase/fs.c
++++ b/libAfterBase/fs.c
+@@ -818,7 +818,7 @@ my_scandir (char *dirname, struct direntry *(*namelist[]),
+ 	}
+ 	/* Optionally sort the list */
+ 	if (dcomp)
+-		qsort (*namelist, n, sizeof (struct direntry *), (int (*)())dcomp);
++		qsort (*namelist, n, sizeof (struct direntry *), (int (*)(const void *, const void *))dcomp);
+ 
+ 	/* Return the count of the entries */
+ 	return n;
+diff --git a/src/ASDocGen/ASDocGen.c b/src/ASDocGen/ASDocGen.c
+index 31d7a70..9a86219 100644
+--- a/src/ASDocGen/ASDocGen.c
++++ b/src/ASDocGen/ASDocGen.c
+@@ -667,7 +667,7 @@ write_options_keywords(const char *source_dir, const char *syntax_dir, SyntaxDef
+ 	sorted_list = safecalloc( max_i, sizeof(TermDef*));
+ 	for (i = 0; i < max_i; i++)
+ 		sorted_list[i] = &(syntax->terms[i]) ; 
+-	qsort(sorted_list, max_i, sizeof(TermDef*), (int (*)())sort_terms_by_alpha );
++	qsort(sorted_list, max_i, sizeof(TermDef*), (int (*)(const void *, const void *))sort_terms_by_alpha );
+ 	for (i = 0; i < max_i; i++)
+ 	{	
+ 		SyntaxDef *sub_syntax = sorted_list[i]->sub_syntax ; 
+diff --git a/src/Ident/Ident.c b/src/Ident/Ident.c
+index 1497d06..d6ddad6 100644
+--- a/src/Ident/Ident.c
++++ b/src/Ident/Ident.c
+@@ -89,7 +89,7 @@ void HandleEvents();
+ void DispatchEvent (ASEvent * event);
+ void process_message (send_data_type type, send_data_type *body);
+ 
+-Window make_ident_window();
++Window make_ident_window(int width, int height);
+ void fill_window_data();
+ void display_window_data();
+ void add_property( const char *name, const char *value, unsigned long value_encoding, Bool span_cols );
+diff --git a/src/afterstep/dirtree.c b/src/afterstep/dirtree.c
+index 46ce782..48f7e30 100644
+--- a/src/afterstep/dirtree.c
++++ b/src/afterstep/dirtree.c
+@@ -675,7 +675,7 @@ void dirtree_sort (dirtree_t * tree)
+ 	list = (dirtree_t **) safemalloc (n * sizeof (dirtree_t *));
+ 	for (n = 0, t = tree->child; t != NULL; t = t->next, n++)
+ 		list[n] = t;
+-	qsort (list, n, sizeof (dirtree_t *), (int (*)())dirtree_compar);
++	qsort (list, n, sizeof (dirtree_t *), (int (*)(const void *, const void *))dirtree_compar);
+ 	tree->child = list[0];
+ 	for (i = 1; i < n; i++)
+ 		list[i - 1]->next = list[i];
+diff --git a/src/afterstep/menus.h b/src/afterstep/menus.h
+index 98b2ad3..bb2a5b1 100644
+--- a/src/afterstep/menus.h
++++ b/src/afterstep/menus.h
+@@ -95,7 +95,7 @@ MenuData* FindPopup( const char* name, int quiet );
+ 
+ void DeleteMenuItem( MenuDataItem* item );
+ 
+-MenuData *CreateMenuData();
++MenuData *CreateMenuData(char *name);
+ MenuData *NewMenuData (char *name);
+ void DeleteMenuData (MenuData * menu);
+ 
+-- 
+2.51.2
+

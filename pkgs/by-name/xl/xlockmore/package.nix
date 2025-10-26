@@ -1,0 +1,63 @@
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pam ? null,
+  libx11,
+  libxext,
+  libxinerama,
+  libxdmcp,
+  libxt,
+  autoreconfHook,
+}:
+
+stdenv.mkDerivation rec {
+  pname = "xlockmore";
+  version = "5.87";
+
+  src = fetchurl {
+    url = "http://sillycycle.com/xlock/xlockmore-${version}.tar.xz";
+    sha256 = "sha256-Pzu/xN3jCMqA05MHj1FTiSHaKzx11cKmBkIOEpVga3s=";
+    curlOpts = "--user-agent 'Mozilla/5.0'";
+  };
+
+  # Optionally, it can use GTK.
+  buildInputs = [
+    pam
+    libx11
+    libxext.dev
+    libxinerama
+    libxdmcp
+    libxt
+  ];
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # Don't try to install `xlock' setuid. Password authentication works
+  # fine via PAM without super user privileges.
+  configureFlags = [
+    "--disable-setuid"
+    "--enable-appdefaultdir=${placeholder "out"}/share/X11/app-defaults"
+  ]
+  ++ (lib.optional (pam != null) "--enable-pam");
+
+  postPatch =
+    let
+      makePath = p: lib.concatMapStringsSep " " (x: x + "/" + p) buildInputs;
+      inputs = "${makePath "lib"} ${makePath "include"}";
+    in
+    ''
+      sed -i 's,\(for ac_dir in\),\1 ${inputs},' configure.ac
+      sed -i 's,/usr/,/no-such-dir/,g' configure.ac
+    '';
+
+  hardeningDisable = [ "format" ]; # no build output otherwise
+
+  meta = {
+    description = "Screen locker for the X Window System";
+    homepage = "http://sillycycle.com/xlockmore.html";
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ pSub ];
+    platforms = lib.platforms.linux;
+    mainProgram = "xlock";
+  };
+}
