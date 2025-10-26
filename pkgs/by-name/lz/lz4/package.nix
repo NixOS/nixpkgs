@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   valgrind,
   testers,
@@ -17,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-/dG1n59SKBaEBg72pAWltAtVmJ2cXxlFFhP+klrkTos=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2025-62813.patch";
+      url = "https://github.com/lz4/lz4/commit/f64efec011c058bd70348576438abac222fe6c82.patch";
+      hash = "sha256-qOvK0A3MGX14WdhThV7m4G6s+ZMP6eA/07A2BY5nesY=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
