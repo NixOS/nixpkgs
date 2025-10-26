@@ -385,7 +385,7 @@ stdenv.mkDerivation {
   inherit src version;
 
   patches = [
-    ./boost-1.85.patch
+    ./patches/boost-1.85.patch
 
     (fetchpatch2 {
       name = "ceph-boost-1.86-uuid.patch";
@@ -397,7 +397,7 @@ stdenv.mkDerivation {
     # * <https://github.com/boostorg/python/issues/394>
     # * <https://aur.archlinux.org/cgit/aur.git/commit/?h=ceph&id=8c5cc7d8deec002f7596b6d0860859a0a718f12b>
     # * <https://github.com/ceph/ceph/pull/60999>
-    ./boost-1.86-PyModule.patch
+    ./patches/boost-1.86-PyModule.patch
 
     (fetchpatch2 {
       name = "ceph-cmake-4.patch";
