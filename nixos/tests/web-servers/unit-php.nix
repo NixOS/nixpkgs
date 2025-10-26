@@ -18,15 +18,15 @@ in
       services.unit = {
         enable = true;
         config = pkgs.lib.strings.toJSON {
-          listeners."*:9081".application = "php_81";
-          applications.php_81 = {
-            type = "php 8.1";
+          listeners."*:9081".application = "php_82";
+          applications.php_82 = {
+            type = "php 8.2";
             processes = 1;
             user = "testuser";
             group = "testgroup";
             root = "${testdir}/www";
             index = "info.php";
-            options.file = "${pkgs.unit.usedPhp81}/lib/php.ini";
+            options.file = "${pkgs.unit.usedPhp82}/lib/php.ini";
           };
         };
       };
@@ -49,7 +49,7 @@ in
 
     # Check so we get an evaluated PHP back
     response = machine.succeed("curl -f -vvv -s http://127.0.0.1:9081/")
-    assert "PHP Version ${pkgs.unit.usedPhp81.version}" in response, "PHP version not detected"
+    assert "PHP Version ${pkgs.unit.usedPhp82.version}" in response, "PHP version not detected"
 
     # Check so we have database and some other extensions loaded
     for ext in ["json", "opcache", "pdo_mysql", "pdo_pgsql", "pdo_sqlite"]:

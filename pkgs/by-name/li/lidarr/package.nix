@@ -2,11 +2,9 @@
   lib,
   stdenv,
   fetchurl,
-  mono,
   libmediainfo,
   sqlite,
   curl,
-  chromaprint,
   makeWrapper,
   icu,
   dotnet-runtime,
@@ -27,20 +25,21 @@ let
     ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   hash =
     {
-      x64-linux_hash = "sha256-24bNK4iHgaobxYpy+OJAocGugV0CwF3q1ND6maEaYSY=";
-      arm64-linux_hash = "sha256-ck2AspRkKm8hdzO70acTGUUd8WTOevIJF50YwQf/R20=";
-      x64-osx_hash = "sha256-ut/4154i/yKlm2JacgW9jvevDniedzLudfeuUXV9XzM=";
-      arm64-osx_hash = "sha256-/aIusVUmsqLCNNhosCAVbR5oN6oLROEuJKnH22cRXfo=";
+      x64-linux_hash = "sha256-LeJBed6Zo2+r6ZdgBTkcg+3ORoohvDpx37gOOorg9wY=";
+      arm64-linux_hash = "sha256-eS4MccKhISJBc68lhrYwbESV0FcqtAI/b4ojfQO/9m8=";
+      x64-osx_hash = "sha256-l3hi+X91DQNmGZKNJ4Y/DkB7ohu0/HTTnhSInIBiPlo=";
+      arm64-osx_hash = "sha256-ehZJZKxEiupLyBZCgz2subtD7BICXjAqIdnOnh+OMe4=";
     }
     ."${arch}-${os}_hash";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lidarr";
-  version = "2.13.3.4711";
+  version = "2.14.5.4836";
 
   src = fetchurl {
-    url = "https://github.com/lidarr/Lidarr/releases/download/v${version}/Lidarr.master.${version}.${os}-core-${arch}.tar.gz";
-    sha256 = hash;
+    inherit hash;
+
+    url = "https://github.com/lidarr/Lidarr/releases/download/v${finalAttrs.version}/Lidarr.master.${finalAttrs.version}.${os}-core-${arch}.tar.gz";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -48,10 +47,10 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share/${pname}-${version}}
-    cp -r * $out/share/${pname}-${version}/.
+    mkdir -p $out/{bin,share/${finalAttrs.pname}-${finalAttrs.version}}
+    cp -r * $out/share/${finalAttrs.pname}-${finalAttrs.version}/.
     makeWrapper "${dotnet-runtime}/bin/dotnet" $out/bin/Lidarr \
-      --add-flags "$out/share/${pname}-${version}/Lidarr.dll" \
+      --add-flags "$out/share/${finalAttrs.pname}-${finalAttrs.version}/Lidarr.dll" \
       --prefix LD_LIBRARY_PATH : ${
         lib.makeLibraryPath [
           curl
@@ -71,11 +70,11 @@ stdenv.mkDerivation rec {
     tests.smoke-test = nixosTests.lidarr;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Usenet/BitTorrent music downloader";
     homepage = "https://lidarr.audio/";
-    license = licenses.gpl3;
-    maintainers = [ ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ ramonacat ];
     mainProgram = "Lidarr";
     platforms = [
       "x86_64-linux"
@@ -84,4 +83,4 @@ stdenv.mkDerivation rec {
       "aarch64-darwin"
     ];
   };
-}
+})

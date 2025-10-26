@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/music-assistant/client";
     changelog = "https://github.com/music-assistant/client/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

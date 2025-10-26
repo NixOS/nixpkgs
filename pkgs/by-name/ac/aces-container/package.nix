@@ -16,6 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-luMqXqlJ6UzoawEDmbK38lm3GHosaZm/mFJntBF54Y4=";
   };
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required (VERSION 2.6)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
   ];

@@ -31,7 +31,7 @@ in
 
 ### Deprecated aliases - for backward compatibility
 
-mapAliases ({
+mapAliases {
   # Prevent incorrect Python packaging attempts.
   # Note: `{ python3, python3Packages, ... }: with python3Packages; [ ... python3 ]` still works, since `with` has lower priority.
   pythonPackages = throw "do not use pythonPackages when building Python packages, specify each used package as a separate argument"; # do not remove
@@ -72,7 +72,9 @@ mapAliases ({
   aionotify = throw "aionotify has been removed because is unmaintained and incompatible with python3.11."; # Added 2023-10-27
   aiosenseme = throw "aiosenseme has been removed, because it does no longer work with the latest firmware and has become unmaintained"; # Added 2023-07-05
   aioquic-mitmproxy = throw "aioquic-mitmproxy has been removed because mitmproxy no longer uses it"; # Added 2024-01-16
+  ansiwrap = throw "ansiwrap has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   amazon_kclpy = amazon-kclpy; # added 2023-08-08
+  amazon-kclpy = throw "amazon-kclpy has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   ambiclimate = throw "ambiclimate has been removed, because the service has been terminated after 2024-03-31."; # Added 2024-06-07
   ambee = throw "ambee has been removed because the upstream repository was archived in 2022"; # Added 2024-10-04
   amiibo-py = throw "amiibo-py has been removed because the upstream repository was removed"; # Added 2025-01-13
@@ -86,6 +88,7 @@ mapAliases ({
   argon2_cffi = argon2-cffi; # added 2022-05-09
   arnparse = throw "arnparse has been removed because the upstream repository was archived in 2023"; # Added 2024-10-04
   APScheduler = apscheduler; # added 2023-02-19
+  astropy-extension-helpers = extension-helpers; # Added 2025-10-15
   async_generator = async-generator; # added 2023-08-08
   async_stagger = async-stagger; # added 2023-08-08
   asyncio-mqtt = throw "asyncio-mqtt has been replaced by aiomqtt, which is not API compatible."; # added 2024-07-07
@@ -236,15 +239,18 @@ mapAliases ({
   doctest-ignore-unicode = throw "doctest-ignore-unicode has been removed since it has been unmaintained for 11 years"; # added 2024-05-20
   dogpile_cache = dogpile-cache; # added 2021-10-28
   dogpile-core = throw "dogpile-core is no longer maintained, use dogpile-cache instead"; # added 2021-11-20
+  duckduckgo-search = throw "duckduckgo-search was renamed to ddgs, use ddgs instead"; # added 2025-10-20
   dugong = throw "dugong is unmaintained since 2022 and has therefore been removed"; # added 2024-12-12
   editdistance-s = throw "editdistance-s has been removed since it was added solely for the identity package, which has moved on to ukkonen"; # added 2025-08-04
   easyeda2ato = throw "easyeda2ato as been removed in favor of atopile-easyda2kicad"; # added 2025-06-08
   eebrightbox = throw "eebrightbox is unmaintained upstream and has therefore been removed"; # added 2022-02-03
   EasyProcess = easyprocess; # added 2023-02-19
   email_validator = email-validator; # added 2022-06-22
+  embreex = throw "embreex has been removed, as it required embree2"; # added 2025-09-14
   enhancements = throw "enhancements is unmaintained upstream and has therefore been removed"; # added 2023-10-27
   enum-compat = throw "enum-compat is a virtual package providing enum34, which does not do anything since Python 3.4"; # added 2025-02-15
   enum34 = throw "enum34 is no longer needed since Python 3.4"; # added 2025-03-06
+  elegy = throw "elegy has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   eris = throw "eris has been removed due to a hostile upstream moving tags and breaking src FODs"; # Added 2025-09-01
   et_xmlfile = et-xmlfile; # added 2023-10-16
   etebase-server = throw "pkgs.python3.etebase-server has been removed, use pkgs.etebase-server"; # added 2024-07-16
@@ -394,6 +400,7 @@ mapAliases ({
   keras-applications = throw "keras-applications has been removed because it's abandoned since 2022"; # added 2025-01-12
   keras-preprocessing = throw "keras-preprocessing has been removed because it's abandoned since 2024"; # added 2025-01-12
   keyring_24 = throw "keyring_24 has been removed, use keyring instead"; # added 2025-01-01
+  keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2505-05-25
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
@@ -427,6 +434,7 @@ mapAliases ({
   markdownsuperscript = throw "markdownsuperscript is unmaintained, use pymdown-extensions"; # added 2023-06-10
   mask-rcnn = throw "mask-rcnn has been removed as it is unmaintained and its dependency imgaug no longer builds"; # added 2023-07-10
   mac_alias = mac-alias; # added 2024-01-07
+  macropy = throw "macropy has been removed as it was broken since 2020"; # added 2025-10-04
   MDP = mdp; # added 2023-02-19
   mdp = throw "mdp has been removed as it is unmaintained and broken"; # added 2024-11-23
   MechanicalSoup = mechanicalsoup; # added 2021-06-01
@@ -441,6 +449,7 @@ mapAliases ({
   mathlibtools = throw "mathlibtools has been removed because the upstream repository was archived in 2023"; # added 2025-07-09
   matrix-api-async = throw "matrix-api-async has been removed as it is an old wrapper and no longer in use"; # added 2025-01-01
   memory_profiler = memory-profiler; # added 2023-10-09
+  mesa = throw "python3Packages.mesa has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
   mir_eval = mir-eval; # added 2024-01-07
   mistune_0_8 = throw "mistune_0_8 was removed because it was outdated and insecure"; # added 2022-08-12
   mistune_2_0 = mistune; # added 2022-08-12
@@ -491,6 +500,7 @@ mapAliases ({
   ntlm-auth = throw "ntlm-auth has been removed, because it relies on the md4 implementation provided by openssl. Use pyspnego instead.";
   oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
   oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
+  objax = throw "objax has been removed because the upstream project was archived."; # Added 2025-10-04
   openai-triton = triton; # added 2024-07-18
   openai-triton-bin = triton-bin; # added 2024-07-18
   openai-triton-cuda = triton-cuda; # added 2024-07-18
@@ -504,6 +514,7 @@ mapAliases ({
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
   opentracing = throw "The opentracing Python module was removed due to being unmaintained upstream. Use OpenTelemetry instead."; # Added 2024-12-09
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
+  orderedset = throw "orderedset has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   orm = throw "orm has been removed as it is unmaintained"; # added 2025-08-27
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   paho-mqtt_1 = throw "paho-mqtt_1 was removed because no package depends on it anymore"; # added 2025-03-05
@@ -533,6 +544,7 @@ mapAliases ({
   powerlineMemSegment = powerline-mem-segment; # added 2021-10-08
   prayer-times-calculator = prayer-times-calculator-offline; # added 2024-08-11
   premailer = throw "premailer was removed, as it is not compatible with lxml>4.9.4.";
+  primp = throw "primp was removed as it required a very outdated version of boringssl"; # added 2025-10-20
   privacyidea-ldap-proxy = throw "privacyidea-ldap-proxy has been removed from nixpkgs"; # added 2023-10-31
   proboscis = throw "proboscis has been removed since it has not been maintained for 11 years"; # added 2024-05-20
   prometheus_client = prometheus-client; # added 2021-06-10
@@ -556,6 +568,7 @@ mapAliases ({
   pwndbg = throw "'pwndbg' has been removed due to dependency version incompatibilities that are infeasible to maintain in nixpkgs. Use the downstream flake that pwndbg provides instead: https://github.com/pwndbg/pwndbg"; # Added 2025-02-09
   pxml = throw "pxml was removed, because it was disabled on all python version since 3.8 and last updated in 2020."; # added 2024-05-13
   py3to2 = throw "py3to2 is unmaintained and source is no longer available"; # added 2024-10-23
+  py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pytedee-async = aiotedee; # added 2025-07-06
   pytricia = throw "pytricia has been removed, since it is unmaintained"; # added 2025-05-25
@@ -605,6 +618,7 @@ mapAliases ({
   PyMVGLive = pymvglive; # added 2023-02-19
   pymyq = python-myq; # added 2023-10-20
   pynose = throw "pynose was removed, because it violates the license of nose, by redistributing modified LGPL code under MIT.";
+  python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
   python-ethtool = ethtool; # added 2024-07-23
   python-myq = throw "python-myq has been removed, as the service provider has decided to block its API requests"; # added 2023-12-07
   python-picnic-api = throw "python-picnic-api was removed because Home Assistant switched to python-picnic-api2"; # added 2025-03-05
@@ -698,6 +712,7 @@ mapAliases ({
   pyvicare-neo = pyvicare; # Added 2024-11-06
   pyvcf = throw "pyvcf has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2023-05-19
   PyVirtualDisplay = pyvirtualdisplay; # added 2023-02-19
+  pyvoro = throw "pyvoro has been removed because it is unmaintained upstream and has been marked as broken since 2023."; # Added 2025-10-11
   pywick = throw "pywick has been removed, since it is no longer maintained"; # added 2023-07-01
   pyxb = throw "pyxb has been removed, its last release was in 2017 and it has finally been archived in April 2023."; # added 2024-01-05
   pyzufall = throw "pyzufall was removed, because it is no longer maintained"; # added 2024-05-14
@@ -714,6 +729,7 @@ mapAliases ({
   radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
   radicale_infcloud = radicale-infcloud; # added 2024-01-07
   radio_beam = radio-beam; # added 2023-11-04
+  random-user-agent = throw "random-user-agent has been removed as it was abandoned upstream in 2018; use fake-useragent instead"; # Added 2025-10-17
   ratelimiter = throw "ratelimiter has been removed, since it is unmaintained and broken"; # added 2023-10-21
   rauth = throw "rauth has beed removed, since it is unmaintained upstream"; # added 2024-07-27
   rdflib-jsonld = throw "rdflib-jsonld is not compatible with rdflib 6"; # added 2021-11-05
@@ -753,6 +769,7 @@ mapAliases ({
   sabyenc = throw "sabyenc has been removed, due to no updates since June 2019 and being superseded by sabyenc3"; # added 2025-05-03
   sampledata = throw "sampledata has been removed, it was unmaintained since 2017"; # added 2024-07-27
   sapi-python-client = kbcstorage; # added 2022-04-20
+  schemainspect = throw "schemainspect has been removed because it has transitively been marked broken since May 2024, and is unmaintained upstream."; # Added 2025-10-11
   scikitimage = scikit-image; # added 2023-05-14
   scikitlearn = scikit-learn; # added 2021-07-21
   scikit-optimize = throw "scikit-optimize has been removed because it is abandoned"; # added 2024-09-30
@@ -829,6 +846,8 @@ mapAliases ({
   transip = throw "transip has been removed because it is no longer maintained. TransIP SOAP V5 API was marked as deprecated"; # added 2023-02-27
   py-tree-sitter = throw "Was merged with tree-sitter."; # added 2024-03-20
   transmissionrpc = throw "transmissionrpc has been removed because it no longer builds and is unmaintained"; # added 2024-10-12
+  treeo = throw "treeo has been removed because it has been marked as broken since 2023."; # Added 2025-10-11
+  treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = trezor-agent; # Added 2024-01-07
   tumpa = throw "tumpa was promoted to a top-level attribute"; # added 2022-11-19
   tvdb_api = tvdb-api; # added 2023-10-20
@@ -848,6 +867,7 @@ mapAliases ({
   ufoLib2 = ufolib2; # added 2024-01-07
   ukrainealarm = throw "ukrainealarm has been removed, as it has been replaced as a home-assistant dependency by uasiren."; # added 2024-01-05
   unblob-native = throw "unblob-native has been removed because its functionality is merged into unblob 25.4.14."; # Added 2025-05-02
+  unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
   unifi = throw "'unifi' has been removed as upstream was archived in 2017"; # Added 2025-08-25
   unittest2 = throw "unittest2 has been removed as it's a backport of unittest that's unmaintained and not needed beyond Python 3.4."; # added 2022-12-01
   update_checker = update-checker; # added 2024-01-07
@@ -871,6 +891,7 @@ mapAliases ({
   webhelpers = throw "webhelpers has been removed because it is unmaintained and upstream is gone"; # added 2024-07-27
   websocket_client = websocket-client; # added 2021-06-15
   word2vec = throw "word2vec has been removed because it is abandoned"; # added 2023-05-22
+  worldengine = throw "worldengine has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   wsnsimpy = throw "wsnsimpy has been removed, it was unmaintained and no more compatible with Python 3.12"; # added 2025-04-01
   wxPython_4_0 = throw "wxPython_4_0 has been removed, use wxpython instead"; # added 2023-03-19
   wxPython_4_1 = throw "wxPython_4_1 has been removed, use wxpython instead"; # added 2023-03-19
@@ -913,4 +934,4 @@ mapAliases ({
   zope_testing = zope-testing; # added 2023-11-12
   zope_testrunner = zope-testrunner; # added 2024-01-06
   zxing_cpp = zxing-cpp; # added 2023-11-05
-})
+}

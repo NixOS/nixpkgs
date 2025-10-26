@@ -13,7 +13,7 @@
 
   # buildInputs
   apple-sdk_14,
-  fmt_11,
+  fmt,
   nanobind,
   nlohmann_json,
   pybind11,
@@ -96,7 +96,7 @@ let
 
     buildInputs = [
       apple-sdk_14
-      fmt_11
+      fmt
       gguf-tools
       nanobind
       nlohmann_json

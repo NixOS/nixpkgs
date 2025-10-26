@@ -17,12 +17,12 @@ stdenv.mkDerivation {
   pname = "sleek-grub-theme";
   version = "unstable-2024-08-11";
 
-  src = fetchFromGitHub ({
+  src = fetchFromGitHub {
     owner = "sandesh236";
     repo = "sleek--themes";
     rev = "0c47e645ccc2d72aa165e9d994f9d09f58de9f6d";
     hash = "sha256-H4s4CSR8DaH8RT9w40hkguNNcC0U8gHKS2FLt+FApeA=";
-  });
+  };
 
   installPhase = ''
     runHook preInstall

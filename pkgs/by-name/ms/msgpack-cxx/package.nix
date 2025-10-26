@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     cmake
   ];
 
-  buildInputs = [
+  propagatedBuildInputs = [
     boost
   ];
 

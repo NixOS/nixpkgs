@@ -22,6 +22,8 @@ in
       package = lib.mkPackageOption pkgs "linyaps" { };
 
       boxPackage = lib.mkPackageOption pkgs "linyaps-box" { };
+
+      webStoreInstallerPackage = lib.mkPackageOption pkgs "linyaps-web-store-installer" { };
     };
   };
 
@@ -33,6 +35,7 @@ in
       systemPackages = [
         cfg.package
         cfg.boxPackage
+        cfg.webStoreInstallerPackage
       ];
     };
 

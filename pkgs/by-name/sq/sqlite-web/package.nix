@@ -6,12 +6,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sqlite-web";
-  version = "0.6.4";
+  version = "0.6.5";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5Bdd1C9M3HjvfDKdVvGSQ+/I0Iimvf1MZwPonRiqwqU=";
+    hash = "sha256-/Asqu2XEVCS5sFW2GB/W/int1gCZIIgZq8yrevoQ7Yo=";
   };
 
   build-system = with python3Packages; [ setuptools ];

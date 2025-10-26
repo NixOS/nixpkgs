@@ -140,6 +140,9 @@ buildPythonPackage rec {
 
     # AssertionError
     "test/test_server.py::TestTFHttpServerLoadAndUnLoad::test_unload"
+
+    # Race condition when called concurrently between two instances of the same model (i.e. in nixpkgs-review)
+    "test/test_dataplane.py::TestDataPlane::test_model_metadata[TEST_RAY_SERVE_MODEL]"
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # RuntimeError: Failed to start GCS

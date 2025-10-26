@@ -33,8 +33,8 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    "--with-cupsfilterdir=${builtins.placeholder "out"}/lib/cups/filter"
-    "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"
+    "--with-cupsfilterdir=${placeholder "out"}/lib/cups/filter"
+    "--with-cupsppddir=${placeholder "out"}/share/cups/model"
   ];
 
   meta = {

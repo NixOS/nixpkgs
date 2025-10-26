@@ -68,6 +68,7 @@ lib:
   socat,
   sqlite,
   stdenv,
+  su,
   systemdMinimal,
   util-linuxMinimal,
   yq-go,
@@ -129,11 +130,11 @@ let
   # bundled into the k3s binary
   traefik = {
     chart = fetchurl chartVersions.traefik;
-    name = builtins.baseNameOf chartVersions.traefik.url;
+    name = baseNameOf chartVersions.traefik.url;
   };
   traefik-crd = {
     chart = fetchurl chartVersions.traefik-crd;
-    name = builtins.baseNameOf chartVersions.traefik-crd.url;
+    name = baseNameOf chartVersions.traefik-crd.url;
   };
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
@@ -202,8 +203,9 @@ let
 
     # Let killall expect "containerd-shim" in the Nix store
     substituteInPlace install.sh \
+      --replace-fail '"''${K3S_DATA_DIR}"' "" \
       --replace-fail '/data/[^/]*/bin/containerd-shim' \
-        '/nix/store/.*k3s-containerd.*/bin/containerd-shim'
+        '/nix/store/[^/]*k3s-containerd[^/]*/bin/containerd-shim'
 
     remove_matching_line() {
       line_to_delete=$(grep -n "$1" install.sh | cut -d : -f 1 || true)
@@ -371,6 +373,7 @@ buildGoModule (finalAttrs: {
     conntrack-tools
     runc
     bash
+    su
   ];
 
   k3sKillallDeps = [
@@ -476,5 +479,7 @@ buildGoModule (finalAttrs: {
   }
   // (lib.mapAttrs (_: value: fetchurl value) imagesVersions);
 
-  meta = baseMeta;
+  meta = baseMeta // {
+    mainProgram = "k3s";
+  };
 })

@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = with licenses; [ asl20 ];
     mainProgram = "spin";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

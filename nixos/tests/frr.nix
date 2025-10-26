@@ -32,7 +32,7 @@ in
 {
   name = "frr";
 
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

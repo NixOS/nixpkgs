@@ -6,14 +6,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-license";
-  version = "0.6.1";
+  version = "0.7.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-qwyWj0vPWQOZYib2ZZutX25a4wwnG1kFAiRCWqGyVms=";
+    hash = "sha256-bOBrjChkQM6POZZn53JmJcIn1x+ygF5mthZihMskxIk=";
   };
 
-  cargoHash = "sha256-6UMmYbLgMg+wLDsL63f5OvWbtHtDXo0mByz6OZp1lsw=";
+  cargoHash = "sha256-VQ8320yxMo102UZ9iO9n7ujq7d6wUuqOnQB02hxHZas=";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";

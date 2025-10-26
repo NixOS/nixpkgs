@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-cmake";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-cmake";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-U4vGkH2iUlNJkqiNmVuFianD4WR9yuGvZsYG58smg0k=";
+    hash = "sha256-wAipNWAB66YNf7exLSNPAzg3NgkGD9LPKfKiulL5yak=";
   };
 
   nativeBuildInputs = [ cmake ];

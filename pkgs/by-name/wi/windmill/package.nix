@@ -239,8 +239,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "web-ui"
       ];
     })
-    (./update-librusty.sh)
-    (./update-ui_builder.sh)
+    ./update-librusty.sh
+    ./update-ui_builder.sh
   ];
 
   meta = {

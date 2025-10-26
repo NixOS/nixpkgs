@@ -822,9 +822,8 @@ class Machine:
 
             while True:
                 chunk = self.shell.recv(1024)
-                # No need to print empty strings, it means we are waiting.
                 if len(chunk) == 0:
-                    continue
+                    raise RuntimeError("Shell disconnected")
                 self.log(f"Guest shell says: {chunk!r}")
                 # NOTE: for this to work, nothing must be printed after this line!
                 if b"Spawning backdoor root shell..." in chunk:

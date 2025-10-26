@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Forth implementation of the GNU project (outdated version used to bootstrap)";
     homepage = "https://www.gnu.org/software/gforth/";
-    license = lib.licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.all;
   };
 }

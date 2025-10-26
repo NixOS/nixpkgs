@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       R5RS-derived document syntax.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

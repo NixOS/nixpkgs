@@ -362,16 +362,6 @@ lib.makeScope pkgs.newScope (
 
     # =============== simple script files ====================
 
-    # also have a look at enblend-enfuse in all-packages.nix
-    exposureBlend = scriptDerivation {
-      name = "exposure-blend";
-      src = fetchurl {
-        url = "http://tir.astro.utoledo.edu/jdsmith/code/eb/exposure-blend.scm";
-        sha256 = "1b6c9wzpklqras4wwsyw3y3jp6fjmhnnskqiwm5sabs8djknfxla";
-      };
-      meta.broken = true;
-    };
-
     lightning = scriptDerivation {
       name = "Lightning";
       src = fetchurl {

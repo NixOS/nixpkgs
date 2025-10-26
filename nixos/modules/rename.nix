@@ -2,7 +2,7 @@
 
 let
   inherit (lib)
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkRemovedOptionModule
     ;
 in
@@ -18,7 +18,7 @@ in
 
     # This alias module can't be where _module.check is defined because it would
     # be added to submodules as well there
-    (mkAliasOptionModuleMD [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
+    (mkAliasOptionModule [ "environment" "checkConfigurationOptions" ] [ "_module" "check" ])
 
     # Completely removed modules
     (mkRemovedOptionModule [ "boot" "loader" "raspberryPi" ]
@@ -228,6 +228,9 @@ in
       "services.morty has been removed from NixOS. As the morty package was unmaintained and removed and searxng, its main consumer, dropped support for it."
     )
     (mkRemovedOptionModule [ "services" "mwlib" ] "The corresponding package was removed from nixpkgs.")
+    (mkRemovedOptionModule [ "services" "nixseparatedebuginfod" ]
+      "Use `services.nixseparatedebuginfod2.enable = true;` instead. If you only use the official binary cache, no additional configuration should be needed."
+    )
     (mkRemovedOptionModule [ "services" "pantheon" "files" ] ''
       This module was removed, please add pkgs.pantheon.elementary-files to environment.systemPackages directly.
     '')
@@ -265,6 +268,9 @@ in
     '')
     (mkRemovedOptionModule [ "services" "sourcehut" ] ''
       The sourcehut packages and the corresponding module have been removed due to being broken and unmaintained.
+    '')
+    (mkRemovedOptionModule [ "services" "tt-rss" ] ''
+      The tt-rss package and module have been removed, since upstream development ceased 2025-11-01 and the source is no longer available officially.
     '')
     (mkRemovedOptionModule [ "services" "tvheadend" ]
       "The tvheadend package and the corresponding module have been removed as nobody was willing to maintain them and they were stuck on an unmaintained version that required FFmpeg 4; please see https://github.com/NixOS/nixpkgs/pull/332259 if you are interested in maintaining a newer version."
@@ -393,6 +399,26 @@ in
       LXD has been removed from NixOS due to lack of Nixpkgs maintenance.
       Consider migrating or switching to Incus, or remove from your configuration.
       https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
+    '')
+    (mkRemovedOptionModule [ "services" "invoiceplane" ] ''
+      services.invoiceplane has been removed since the service only supported PHP 8.1 which is EOL
+      and removed from nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "services" "filesender" ] ''
+      services.filesender has been removed since it depends on simplesamlphp which was severely unmaintained.
+    '')
+    (mkRemovedOptionModule [ "services" "postfixadmin" ] ''
+      services.postfixadmin has been removed since it was unmaintained in nixpkgs and the version
+      available only supported PHP 8.1 which is EOL.
+    '')
+    (mkRemovedOptionModule [ "services" "simplesamlphp" ] ''
+      services.simplesamlphp has been vulnerable and unmaintained in nixpkgs.
+    '')
+    (mkRemovedOptionModule [ "security" "rngd" ] ''
+      rngd is not necessary for any device that the kernel recognises
+      as an hardware RNG, as it will automatically run the krngd task
+      to periodically collect random data from the device and mix it
+      into the kernel's RNG.
     '')
     # Do NOT add any option renames here, see top of the file
   ];

@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HiSGtRsSbW03R6aKoMVVFOLrwP5aXtpeXUC/bE5M/qo=";
   };
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.0)" \
+      "cmake_minimum_required(VERSION 3.13)"
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   doCheck = true;

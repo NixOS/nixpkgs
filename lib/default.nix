@@ -232,12 +232,9 @@ let
         getInclude
         getMan
         chooseDevOutputs
-        zipWithNames
-        zip
         recurseIntoAttrs
         dontRecurseIntoAttrs
         cartesianProduct
-        cartesianProductOfSets
         mapCartesianProduct
         updateManyAttrsByPath
         listToAttrs
@@ -347,7 +344,6 @@ let
         escapeRegex
         escapeURL
         escapeXML
-        replaceChars
         lowerChars
         upperChars
         toLower
@@ -380,7 +376,6 @@ let
         fixedWidthNumber
         toInt
         toIntBase10
-        readPathsFromFile
         fileContents
         ;
       inherit (self.stringsWithDeps)
@@ -498,14 +493,12 @@ let
         optionAttrSetToDocList'
         scrubOptionValue
         literalExpression
-        literalExample
         showOption
         showOptionWithDefLocs
         showFiles
         unknownModule
         mkOption
         mkPackageOption
-        mkPackageOptionMD
         literalMD
         ;
       inherit (self.types)
@@ -553,7 +546,6 @@ let
         modifySumArgs
         innerClosePropagation
         closePropagation
-        mapAttrsFlatten
         nvs
         setAttr
         setAttrMerge

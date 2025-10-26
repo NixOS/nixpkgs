@@ -6,13 +6,20 @@
   ...
 }:
 
-with lib;
-
 let
-
-  plymouth = pkgs.plymouth.override {
-    systemd = config.boot.initrd.systemd.package;
-  };
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    optional
+    mkIf
+    mkBefore
+    mkAfter
+    literalExpression
+    types
+    literalMD
+    getExe'
+    escapeShellArg
+    ;
 
   cfg = config.boot.plymouth;
   opt = options.boot.plymouth;
@@ -53,7 +60,7 @@ let
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
     paths = [
-      plymouth
+      cfg.package
       plymouthLogos
     ]
     ++ cfg.themePackages;
@@ -85,7 +92,7 @@ let
   preStartQuitFixup = {
     serviceConfig.ExecStartPre = [
       ""
-      "${plymouth}/bin/plymouth quit --wait"
+      "${getExe' cfg.package "plymouth"} quit --wait"
     ];
   };
 
@@ -99,6 +106,19 @@ in
 
       enable = mkEnableOption "Plymouth boot splash screen";
 
+      package = mkOption {
+        description = "The plymouth package to use.";
+        type = types.package;
+        default = pkgs.plymouth.override {
+          systemd = config.boot.initrd.systemd.package;
+        };
+        defaultText = literalExpression ''
+          pkgs.plymouth.override {
+            systemd = config.boot.initrd.systemd.package;
+          }
+        '';
+      };
+
       font = mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
         defaultText = literalExpression ''"''${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf"'';
@@ -109,7 +129,7 @@ in
       };
 
       themePackages = mkOption {
-        default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
+        default = optional (cfg.theme == "breeze") nixosBreezePlymouth;
         defaultText = literalMD ''
           A NixOS branded variant of the breeze theme when
           `config.${opt.theme} == "breeze"`, otherwise
@@ -164,15 +184,15 @@ in
     boot.kernelParams = [ "splash" ];
 
     # To be discoverable by systemd.
-    environment.systemPackages = [ plymouth ];
+    environment.systemPackages = [ cfg.package ];
 
     environment.etc."plymouth/plymouthd.conf".source = configFile;
     environment.etc."plymouth/plymouthd.defaults".source =
-      "${plymouth}/share/plymouth/plymouthd.defaults";
+      "${cfg.package}/share/plymouth/plymouthd.defaults";
     environment.etc."plymouth/logo.png".source = cfg.logo;
     environment.etc."plymouth/themes".source = "${themesEnv}/share/plymouth/themes";
     # XXX: Needed because we supply a different set of plugins in initrd.
-    environment.etc."plymouth/plugins".source = "${plymouth}/lib/plymouth";
+    environment.etc."plymouth/plugins".source = "${cfg.package}/lib/plymouth";
 
     systemd.tmpfiles.rules = [
       "d /run/plymouth 0755 root root 0 -"
@@ -181,7 +201,7 @@ in
       "L+ /run/plymouth/plugins - - - - /etc/plymouth/plugins"
     ];
 
-    systemd.packages = [ plymouth ];
+    systemd.packages = [ cfg.package ];
 
     systemd.services.plymouth-kexec.wantedBy = [ "kexec.target" ];
     systemd.services.plymouth-halt.wantedBy = [ "halt.target" ];
@@ -200,13 +220,13 @@ in
     systemd.services.emergency = preStartQuitFixup;
 
     boot.initrd.systemd = {
-      extraBin.plymouth = "${plymouth}/bin/plymouth"; # for the recovery shell
+      extraBin.plymouth = getExe' cfg.package "plymouth"; # for the recovery shell
       storePaths = [
-        "${lib.getBin config.boot.initrd.systemd.package}/bin/systemd-tty-ask-password-agent"
-        "${plymouth}/bin/plymouthd"
-        "${plymouth}/sbin/plymouthd"
+        (getExe' config.boot.initrd.systemd.package "systemd-tty-ask-password-agent")
+        (getExe' cfg.package "plymouthd")
+        "${cfg.package}/sbin/plymouthd"
       ];
-      packages = [ plymouth ]; # systemd units
+      packages = [ cfg.package ]; # systemd units
 
       services.rescue = preStartQuitFixup;
       services.emergency = preStartQuitFixup;
@@ -215,7 +235,7 @@ in
         # Files
         "/etc/plymouth/plymouthd.conf".source = configFile;
         "/etc/plymouth/logo.png".source = cfg.logo;
-        "/etc/plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
+        "/etc/plymouth/plymouthd.defaults".source = "${cfg.package}/share/plymouth/plymouthd.defaults";
         # Directories
         "/etc/plymouth/plugins".source = pkgs.runCommand "plymouth-initrd-plugins" { } (
           checkIfThemeExists
@@ -225,7 +245,7 @@ in
             mkdir -p $out/renderers
             # module might come from a theme
             cp ${themesEnv}/lib/plymouth/*.so $out
-            cp ${plymouth}/lib/plymouth/renderers/*.so $out/renderers
+            cp ${cfg.package}/lib/plymouth/renderers/*.so $out/renderers
             # useless in the initrd, and adds several megabytes to the closure
             rm $out/renderers/x11.so
           ''
@@ -306,10 +326,10 @@ in
       '')
     ];
 
-    boot.initrd.extraUtilsCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (
+    boot.initrd.extraUtilsCommands = mkIf (!config.boot.initrd.systemd.enable) (
       ''
-        copy_bin_and_libs ${plymouth}/bin/plymouth
-        copy_bin_and_libs ${plymouth}/bin/plymouthd
+        copy_bin_and_libs ${getExe' cfg.package "plymouth"}
+        copy_bin_and_libs ${getExe' cfg.package "plymouthd"}
 
       ''
       + checkIfThemeExists
@@ -320,12 +340,12 @@ in
         mkdir -p $out/lib/plymouth/renderers
         # module might come from a theme
         cp ${themesEnv}/lib/plymouth/*.so $out/lib/plymouth
-        cp ${plymouth}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
+        cp ${cfg.package}/lib/plymouth/renderers/*.so $out/lib/plymouth/renderers
         # useless in the initrd, and adds several megabytes to the closure
         rm $out/lib/plymouth/renderers/x11.so
 
         mkdir -p $out/share/plymouth/themes
-        cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
+        cp ${cfg.package}/share/plymouth/plymouthd.defaults $out/share/plymouth
 
         # Copy themes into working directory for patching
         mkdir themes

@@ -48,7 +48,6 @@ python3Packages.buildPythonApplication {
     mainProgram = "nile";
     homepage = "https://github.com/imLinguin/nile";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers; [ aidalgol ];
   };
 
   passthru.updateScript = gitUpdater {

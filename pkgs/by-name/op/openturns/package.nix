@@ -17,7 +17,7 @@
   spectra,
   stdenv,
   swig,
-  tbb,
+  onetbb,
   # Boolean flags
   runTests ? false, # tests take an hour to build on a 48-core machine
   enablePython ? false,
@@ -53,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     pagmo2
     spectra
     swig
-    tbb
+    onetbb
   ]
   ++ lib.optionals enablePython [
     python3Packages.dill

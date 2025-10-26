@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
     "dev"
   ];
   postPatch = ''
-    substituteInPlace ntirpc/netconfig.h --replace "/etc/netconfig" "$out/etc/netconfig"
-    sed '1i#include <assert.h>' -i src/work_pool.c
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6.3)" \
+      "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace ntirpc/netconfig.h --replace-fail \
+      "/etc/netconfig" "$out/etc/netconfig"
   '';
 
   nativeBuildInputs = [ cmake ];

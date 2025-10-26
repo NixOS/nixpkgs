@@ -22,6 +22,7 @@
   libxkbcommon,
   libgbm,
   nss,
+  pipewire,
   udev,
   libGL,
   xorg,
@@ -29,11 +30,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "teamspeak6-client";
-  version = "6.0.0-beta2";
+  version = "6.0.0-beta3.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/pre_releases/client/${finalAttrs.version}/teamspeak-client.tar.gz";
-    hash = "sha256-3jNPv3uQ2RztR1p4XQNLUg5IVrvW/dcdtqXdiGJKVSs=";
+    hash = "sha256-CWKyn49DSWgrkJyYcPwKUz2PBykvFQc1f7G/yvrHbWU=";
   };
 
   sourceRoot = ".";
@@ -55,6 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libxkbcommon
     libgbm
     nss
+    pipewire
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXdamage
@@ -102,6 +104,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           udev
           libGL
           libpulseaudio
+          pipewire
         ]
       }"
 

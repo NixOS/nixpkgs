@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       --replace "qe_git_submodule_update(external/d3q)" "" \
       --replace "qe_git_submodule_update(external/qe-gipaw)" ""
 
-    ${builtins.toString (
+    ${toString (
       builtins.attrValues (
         builtins.mapAttrs (name: val: ''
           cp -r ${val}/* external/${name}/.

@@ -38,7 +38,7 @@ let
 
   src' =
     if monorepoSrc != null then
-      runCommand "${pname}-src-${version}" { } (''
+      runCommand "${pname}-src-${version}" { } ''
         mkdir -p "$out"
         cp -r ${monorepoSrc}/cmake "$out"
         cp -r ${monorepoSrc}/third-party "$out"
@@ -46,7 +46,7 @@ let
         cp -r ${monorepoSrc}/clang "$out"
         cp -r ${monorepoSrc}/clang-tools-extra "$out"
         cp -r ${monorepoSrc}/mlir "$out"
-      '')
+      ''
     else
       src;
 

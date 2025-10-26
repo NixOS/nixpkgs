@@ -12,13 +12,13 @@
 }:
 
 let
-  version = "1.0.1256";
+  version = "1.0.1270";
 
   src = fetchFromGitHub {
     owner = "lollipopkit";
     repo = "flutter_server_box";
     tag = "v${version}";
-    hash = "sha256-V4Y4JoUsca2MmPJd1t+IWrNiIj5oslaj6736rPUT9hM=";
+    hash = "sha256-3erwb2e9iINe4MVuOQKzBuBdUJyBgW2zIImZwVyll6Q=";
   };
 in
 flutter335.buildFlutterApplication {
@@ -33,6 +33,9 @@ flutter335.buildFlutterApplication {
     copyDesktopItems
     autoPatchelfHook
   ];
+
+  # https://github.com/juliansteenbakker/flutter_secure_storage/issues/965
+  CXXFLAGS = [ "-Wno-deprecated-literal-operator" ];
 
   desktopItems = [
     (makeDesktopItem {

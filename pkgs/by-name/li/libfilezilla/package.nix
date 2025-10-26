@@ -13,12 +13,12 @@
 
 stdenv.mkDerivation {
   pname = "libfilezilla";
-  version = "0.49.0";
+  version = "0.51.1";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/libfilezilla/trunk";
-    rev = "11192";
-    hash = "sha256-fm1cenGwYcPz0TtMzbPXrZA7nAzwo8toBNA9cW2Gnh0=";
+    rev = "11305";
+    hash = "sha256-s+KeMlKJMz88lQ6d3dpcgZhCkcPW0cHNHALteMWLhpk=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,10 @@ stdenv.mkDerivation {
     homepage = "https://lib.filezilla-project.org/";
     description = "Modern C++ library, offering some basic functionality to build high-performing, platform-independent programs";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [
+      pSub
+      iedame
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };

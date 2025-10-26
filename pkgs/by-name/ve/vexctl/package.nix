@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "vexctl";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "openvex";
     repo = "vexctl";
     tag = "v${version}";
-    hash = "sha256-LAl56aB7bFXrXK8wSAmQleWTy8q9Gx1+fxpmSTMp2Cg=";
+    hash = "sha256-ZPQsWTnVZ0B06QNQohUIvQN3/Wfk+LnYi/TOwDIKXug=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;

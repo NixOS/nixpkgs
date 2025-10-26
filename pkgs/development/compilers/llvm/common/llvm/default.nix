@@ -85,9 +85,6 @@ stdenv.mkDerivation (
     pname = "llvm";
     inherit version;
 
-    # TODO: Remove on `staging`.
-    shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
-
     src =
       if monorepoSrc != null then
         runCommand "llvm-src-${version}" { inherit (monorepoSrc) passthru; } (
@@ -272,7 +269,7 @@ stdenv.mkDerivation (
           # and thus fails under the sandbox:
           ''
             substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
+              --replace-fail '/usr/bin/sw_vers' "${(toString darwin.DarwinTools) + "/bin/sw_vers"}"
           ''
         +
           # This test tries to call the intrinsics `@llvm.roundeven.f32` and
@@ -299,7 +296,7 @@ stdenv.mkDerivation (
       )
       +
         # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
           # fails when run in sandbox
           (
             ''
@@ -346,7 +343,7 @@ stdenv.mkDerivation (
                 rm test/tools/dsymutil/ARM/obfuscated.test
               ''
           )
-        )
+
       +
         # FileSystem permissions tests fail with various special bits
         ''

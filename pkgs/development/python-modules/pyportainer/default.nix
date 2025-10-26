@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "pyportainer";
-  version = "1.0.1";
+  version = "1.0.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "erwindouna";
     repo = "pyportainer";
     tag = "v${version}";
-    hash = "sha256-SAHcIP6M4WjWnrRwz4FlsV6rel1vHzH+cGHT8D/PcQk=";
+    hash = "sha256-jEUVAbNwBil5k6eNtuzspMvXDhFXktopwl/YCvnK2ko=";
   };
 
   build-system = [ poetry-core ];

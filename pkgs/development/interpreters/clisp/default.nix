@@ -113,7 +113,7 @@ stdenv.mkDerivation {
   ++ lib.optional (ffcallAvailable && (libffi != null)) "--with-dynamic-ffi"
   ++ lib.optional ffcallAvailable "--with-ffcall"
   ++ lib.optional (!ffcallAvailable) "--without-ffcall"
-  ++ builtins.map (x: " --with-module=" + x) withModules
+  ++ map (x: " --with-module=" + x) withModules
   ++ lib.optional threadSupport "--with-threads=POSIX_THREADS";
 
   preBuild = ''

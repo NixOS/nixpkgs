@@ -117,7 +117,7 @@ python3Packages.buildPythonApplication {
     homepage = "https://github.com/ayasa520/waydroid-helper";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "waydroid-helper";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

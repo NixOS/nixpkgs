@@ -1005,4 +1005,79 @@ runBuildTests {
       </root>
     '';
   };
+
+  PlistGenerate = shouldPass {
+    format = formats.plist { };
+    input = {
+      null = null;
+      false = false;
+      true = true;
+      int = 10;
+      float = 3.141;
+      str = "foo";
+      attrs.foo = 0;
+      list = [
+        1
+        "hello"
+        {
+          attrs = {
+            key = {
+              value = [
+                [
+                  1
+                  2
+                  3
+                ]
+                "test"
+              ];
+            };
+          };
+        }
+      ];
+    };
+    expected = ''
+      <?xml version="1.0" encoding="UTF-8"?>
+      <!DOCTYPE plist PUBLIC "-//Apple Computer//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+      <plist version="1.0">
+      <dict>
+      ''\t<key>attrs</key>
+      ''\t<dict>
+      ''\t''\t<key>foo</key>
+      ''\t''\t<integer>0</integer>
+      ''\t</dict>
+      ''\t<key>false</key>
+      ''\t<false/>
+      ''\t<key>float</key>
+      ''\t<real>3.141000</real>
+      ''\t<key>int</key>
+      ''\t<integer>10</integer>
+      ''\t<key>list</key>
+      ''\t<array>
+      ''\t''\t<integer>1</integer>
+      ''\t''\t<string>hello</string>
+      ''\t''\t<dict>
+      ''\t''\t''\t<key>attrs</key>
+      ''\t''\t''\t<dict>
+      ''\t''\t''\t''\t<key>key</key>
+      ''\t''\t''\t''\t<dict>
+      ''\t''\t''\t''\t''\t<key>value</key>
+      ''\t''\t''\t''\t''\t<array>
+      ''\t''\t''\t''\t''\t''\t<array>
+      ''\t''\t''\t''\t''\t''\t''\t<integer>1</integer>
+      ''\t''\t''\t''\t''\t''\t''\t<integer>2</integer>
+      ''\t''\t''\t''\t''\t''\t''\t<integer>3</integer>
+      ''\t''\t''\t''\t''\t''\t</array>
+      ''\t''\t''\t''\t''\t''\t<string>test</string>
+      ''\t''\t''\t''\t''\t</array>
+      ''\t''\t''\t''\t</dict>
+      ''\t''\t''\t</dict>
+      ''\t''\t</dict>
+      ''\t</array>
+      ''\t<key>str</key>
+      ''\t<string>foo</string>
+      ''\t<key>true</key>
+      ''\t<true/>
+      </dict>
+      </plist>'';
+  };
 }

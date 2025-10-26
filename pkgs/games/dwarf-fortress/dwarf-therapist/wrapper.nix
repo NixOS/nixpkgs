@@ -20,7 +20,7 @@ let
       base = if stdenv.hostPlatform.is32bit then "linux32" else "linux64";
     in
     prefix + base;
-  inifile = "linux/v0.${builtins.toString dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}${platformSlug}.ini";
+  inifile = "linux/v0.${toString dwarf-fortress.baseVersion}.${dwarf-fortress.patchVersion}${platformSlug}.ini";
   unsupportedVersion = lib.versionOlder dwarf-therapist.maxDfVersion dwarf-fortress.dfVersion;
 
   # Used to run dfhack to produce a Therapist ini file for the current memory map.

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  meta = with lib; {
+  meta = {
     description = "Accelerated BLAST compatible local sequence aligner";
     mainProgram = "diamond";
     longDescription = ''
@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/bbuchfink/diamond";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

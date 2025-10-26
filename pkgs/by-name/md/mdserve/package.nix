@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "mdserve";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "jfernandez";
     repo = "mdserve";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OCdWoQzmCvKo8EfLAczBud1FfY3vRMk7mivjhsqE840=";
+    hash = "sha256-dYB49+vLcokCnJ8yH0ab+Ns/RPLzdxTN/PmkaKc+THs=";
   };
 
-  cargoHash = "sha256-7J+a3Yt5sLtZb6xfWLS/eZXZtZRmeXmTqUcPKXqtOLY=";
+  cargoHash = "sha256-KszPB5xpfLw7DA/yMl5o6yRn5lHLF+6EAXnEdhD0qFE=";
 
   __darwinAllowLocalNetworking = true;
 
@@ -36,7 +36,10 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/jfernandez/mdserve";
     changelog = "https://github.com/jfernandez/mdserve/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ vinnymeller ];
+    maintainers = with lib.maintainers; [
+      vinnymeller
+      matthiasbeyer
+    ];
     mainProgram = "mdserve";
   };
 })

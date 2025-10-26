@@ -26,7 +26,6 @@ assert lib.assertMsg (
   boehmgc,
   boost,
   brotli,
-  busybox,
   busybox-sandbox-shell,
   bzip2,
   callPackage,
@@ -55,6 +54,7 @@ assert lib.assertMsg (
   nlohmann_json,
   ninja,
   openssl,
+  pkgsStatic,
   rustc,
   toml11,
   pegtl,
@@ -295,7 +295,7 @@ stdenv.mkDerivation (finalAttrs: {
     lib.optionals
       (stdenv.hostPlatform.isLinux && finalAttrs.doInstallCheck && lib.versionAtLeast version "2.94")
       [
-        (lib.mesonOption "build-test-shell" "${busybox}/bin")
+        (lib.mesonOption "build-test-shell" "${pkgsStatic.busybox}/bin")
       ];
 
   ninjaFlags = [ "-v" ];

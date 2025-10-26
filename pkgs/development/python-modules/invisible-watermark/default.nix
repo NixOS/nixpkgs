@@ -86,7 +86,7 @@ buildPythonPackage rec {
               ;
           };
         };
-      allTests = builtins.map createTest testCases;
+      allTests = map createTest testCases;
     in
     (lib.attrsets.mergeAttrsList allTests)
     // {

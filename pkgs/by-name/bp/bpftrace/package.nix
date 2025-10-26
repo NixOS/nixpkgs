@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   llvmPackages,
   elfutils,
   bcc,
@@ -16,19 +17,29 @@
   flex,
   bison,
   util-linux,
+  xxd,
   nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bpftrace";
-  version = "0.23.5";
+  version = "0.24.1";
 
   src = fetchFromGitHub {
     owner = "bpftrace";
     repo = "bpftrace";
     rev = "v${version}";
-    hash = "sha256-Shtf4PSXxUV0Bd7ORYyP06lbWf3LE6BQi7WfTIGDOfk=";
+    hash = "sha256-Wt1MXKOg48477HMszq1GAjs+ZELbfAfp+P2AYa+dg+Q=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "attach_tracepoint_with_enums.patch";
+      url = "https://github.com/bpftrace/bpftrace/pull/4714.patch";
+      includes = [ "src/ast/passes/clang_parser.cpp" ];
+      hash = "sha256-xk+/eBNJJJSUqNTs0HFr0BAaqRB5B7CNWRSmnoBMTs0=";
+    })
+  ];
 
   buildInputs = with llvmPackages; [
     llvm
@@ -49,11 +60,12 @@ stdenv.mkDerivation rec {
     bison
     llvmPackages.llvm.dev
     util-linux
+    xxd
   ];
 
   cmakeFlags = [
     "-DLIBBCC_INCLUDE_DIRS=${bcc}/include"
-    "-DINSTALL_TOOL_DOCS=OFF"
+    "-DUSE_SYSTEM_LIBBPF=ON"
     "-DSYSTEM_INCLUDE_PATHS=${glibc.dev}/include"
   ];
 
@@ -72,7 +84,7 @@ stdenv.mkDerivation rec {
   ];
 
   passthru.tests = {
-    bpf = nixosTests.bpf;
+    inherit (nixosTests) bpf;
   };
 
   meta = {

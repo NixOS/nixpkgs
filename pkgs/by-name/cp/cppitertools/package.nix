@@ -47,8 +47,8 @@ stdenv.mkDerivation (finalAttrs: {
   # files that are also in that repo.
   cmakeBuildDir = "cmake-build";
 
-  includeInstallDir = "${builtins.placeholder "out"}/include/cppitertools";
-  cmakeInstallDir = "${builtins.placeholder "out"}/share/cmake";
+  includeInstallDir = "${placeholder "out"}/include/cppitertools";
+  cmakeInstallDir = "${placeholder "out"}/share/cmake";
 
   # This version of cppitertools considers itself as having used the default value,
   # and issues warning, unless -Dcppitertools_INSTALL_CMAKE_DIR is present as an

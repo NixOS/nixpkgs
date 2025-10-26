@@ -2,7 +2,6 @@
   lib,
   beamPackages,
   fetchFromGitHub,
-  elixir,
   nix-update-script,
   versionCheckHook,
 }:
@@ -34,7 +33,7 @@ beamPackages.mixRelease rec {
 
   postInstall = ''
     substituteInPlace "$out/bin/start_lexical.sh" \
-      --replace-fail 'elixir_command=' 'elixir_command="${elixir}/bin/"'
+      --replace-fail 'elixir_command=' 'elixir_command="${beamPackages.elixir}/bin/"'
 
     mv "$out/bin" "$out/libexec"
     makeWrapper "$out/libexec/start_lexical.sh" "$out/bin/lexical" \

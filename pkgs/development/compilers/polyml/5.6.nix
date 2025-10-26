@@ -50,7 +50,6 @@ stdenv.mkDerivation {
     platforms = with lib.platforms; linux;
     maintainers = [
       # Add your name here!
-      lib.maintainers.maggesi
     ];
   };
 }

@@ -25,6 +25,7 @@
   withWayland ? false,
   # Affects final license
   withAngrylionRdpPlus ? false,
+  withDiscordRpc ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,7 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    discord-rpc
     freetype
     hidapi
     libpng
@@ -62,6 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     xdg-user-dirs
     zlib
   ]
+  ++ lib.optional withDiscordRpc discord-rpc
   ++ (
     with qt6Packages;
     [
@@ -78,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     # everything else.
     (lib.cmakeBool "NO_RUST" true)
     (lib.cmakeBool "USE_ANGRYLION" withAngrylionRdpPlus)
+    (lib.cmakeBool "DISCORD_RPC" withDiscordRpc) # Remove with 0.8.4 update
   ];
 
   qtWrapperArgs =

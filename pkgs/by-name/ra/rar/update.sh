@@ -42,12 +42,12 @@ updateHash() {
     hash=$(nix store prefetch-file --json "$url" | jq -r .hash)
     currentHash=$(cd "$DIRNAME" && nix "${NIX_FLAGS[@]}" eval --raw "$NIXPKGS_ROOT#legacyPackages.$nix_arch.rar.src.outputHash")
 
-    sed -i "s|$currentHash|$hash|g" "$DIRNAME/default.nix"
+    sed -i "s|$currentHash|$hash|g" "$DIRNAME/package.nix"
 }
 
 updateVersion() {
     local -r version="$1"
-    sed -i "s|version = \"[0-9.]*\";|version = \"$version\";|g" "$DIRNAME/default.nix"
+    sed -i "s|version = \"[0-9.]*\";|version = \"$version\";|g" "$DIRNAME/package.nix"
 }
 
 latestVersion="${1:-}"
@@ -70,7 +70,6 @@ if [[ "$currentVersion" == "$latestVersion" ]]; then
     exit 0
 fi
 
-updateHash "$latestVersion" x32 linux i686-linux
 updateHash "$latestVersion" x64 linux x86_64-linux
 updateHash "$latestVersion" arm macos aarch64-darwin
 updateHash "$latestVersion" x64 macos x86_64-darwin

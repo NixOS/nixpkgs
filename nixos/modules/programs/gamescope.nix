@@ -78,5 +78,5 @@ in
     environment.systemPackages = lib.mkIf (!cfg.capSysNice) [ gamescope ];
   };
 
-  meta.maintainers = with lib.maintainers; [ ];
+  meta.maintainers = [ ];
 }

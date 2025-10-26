@@ -212,7 +212,7 @@ buildPythonPackage rec {
 
   pytestFlags = [
     # ResourceWarning: unclosed database in <sqlite3.Connection object at 0x7ffe7c6f4220>
-    "-Wignore::pytest.PytestUnraisableExceptionWarning"
+    "-Wignore::ResourceWarning"
   ];
 
   disabledTestPaths = [

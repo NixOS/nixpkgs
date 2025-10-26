@@ -99,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
     "-DQT_LUPDATE_EXECUTABLE=${qt6.qttools.dev}/bin/lupdate"
     "-DQT_LRELEASE_EXECUTABLE=${qt6.qttools.dev}/bin/lrelease"
   ];
-  dontFixCmake = true;
 
   qtWrapperArgs = [
     "--prefix"

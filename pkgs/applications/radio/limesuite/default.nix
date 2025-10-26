@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   sqlite,
   wxGTK32,
@@ -24,6 +25,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-f1cXrkVCIc1MqTvlCUBFqzHLhIVueybVxipNZRlF2gE=";
   };
+
+  patches = [
+    # CMake < 3.5 fix. Remove upon next version bump
+    (fetchpatch {
+      url = "https://github.com/myriadrf/LimeSuite/commit/4e5ad459d50c922267a008e5cecb3efdbff31f09.patch";
+      hash = "sha256-OASki3bISJvV7wjMz0pBT3kO5RvJ5BnymiF6ruHkCJ8=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

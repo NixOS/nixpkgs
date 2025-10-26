@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl-impersonate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tAQdTRGAOD2rpLZvoLQ2YL0wrohXEcmChMZBvYjsMhE=";
   };
 
@@ -193,6 +193,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://github.com/lexiforest/curl-impersonate/releases/tag/${src.tag}";
     description = "Special build of curl that can impersonate Chrome & Firefox";
     homepage = "https://github.com/lexiforest/curl-impersonate";
     license = with lib.licenses; [

@@ -7,7 +7,7 @@
   zita-resampler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "tamgamp.lv2";
   version = "unstable-2020-06-14";
 

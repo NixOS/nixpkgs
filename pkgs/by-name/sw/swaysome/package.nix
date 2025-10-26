@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "swaysome";
-  version = "2.3.1";
+  version = "2.3.2";
 
   src = fetchFromGitLab {
     owner = "hyask";
     repo = "swaysome";
     tag = finalAttrs.version;
-    hash = "sha256-/GJXZFa4HX98qJZw1CNM6PsP06EO8inIWDY6BWzQb8U=";
+    hash = "sha256-YD+OYoUz4ydOGZTB5qPnqamV4xO6QoJiyf27qx1SuoU=";
   };
 
-  cargoHash = "sha256-+KjT5bako7l7lg2LW7Kxes7fIEnYQKUGGOMC56moO5g=";
+  cargoHash = "sha256-cg8fCy2naqibuS5rGfgpFDBAr0EqOldQbejq4ctXJ/0=";
 
   # failed to execute sway: Os { code: 2, kind: NotFound, message: "No such file or directory" }
   doCheck = false;

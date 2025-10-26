@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
     "-DUSE_ASM=OFF"
   ];
 
-  postPatch = lib.optionalString (!enableStatic) ''
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace "VERSION 2.8" "VERSION 3.10"
+  ''
+  + lib.optionalString (!enableStatic) ''
     substituteInPlace libff/CMakeLists.txt --replace "STATIC" "SHARED"
   '';
 

@@ -62,7 +62,7 @@ let
   # TODO: migrate to redist packages
   inherit (cudaPackages) cudatoolkit;
 in
-stdenv'.mkDerivation rec {
+stdenv'.mkDerivation {
   version = "unstable-3.12.5-openimageio";
   pname = "colmap";
   src = fetchFromGitHub {

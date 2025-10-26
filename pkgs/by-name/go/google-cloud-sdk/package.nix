@@ -52,8 +52,8 @@ let
       crcmod
       grpcio
     ]
-    ++ lib.optional (with-gce) google-compute-engine
-    ++ lib.optional (with-numpy) numpy
+    ++ lib.optional with-gce google-compute-engine
+    ++ lib.optional with-numpy numpy
   );
 
   data = import ./data.nix { };
@@ -86,6 +86,9 @@ stdenv.mkDerivation rec {
     # Disable checking for updates for the package
     ./gsutil-disable-updates.patch
   ];
+
+  # Prevent Python from writing bytecode to ensure build determinism
+  PYTHONDONTWRITEBYTECODE = "1";
 
   installPhase = ''
     runHook preInstall

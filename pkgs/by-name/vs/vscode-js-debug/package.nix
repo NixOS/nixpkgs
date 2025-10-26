@@ -11,8 +11,8 @@
   runCommand,
   vscode-js-debug,
   nix-update-script,
+  clang_20,
 }:
-
 buildNpmPackage rec {
   pname = "vscode-js-debug";
   version = "1.104.0";
@@ -30,7 +30,10 @@ buildNpmPackage rec {
     pkg-config
     node-gyp
   ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    clang_20
+  ]; # clang_21 breaks it
 
   buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 

@@ -18,7 +18,6 @@
   enableHttp3 ? false,
   ngtcp2,
   nghttp3,
-  quictls,
   enableJemalloc ? false,
   jemalloc,
   enablePython ? false,
@@ -46,11 +45,11 @@ assert enableJemalloc -> enableApp;
 
 stdenv.mkDerivation rec {
   pname = "nghttp2";
-  version = "1.66.0";
+  version = "1.67.1";
 
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    hash = "sha256-HUhK03NU35/KuXCBTpOl3KkaUyVug/T1jdcxGcYyEBc=";
+    hash = "sha256-37cg1CQ6eVBYn6JjI3i+te6a1ELpS3lLO44soowdfio=";
   };
 
   outputs = [
@@ -61,24 +60,23 @@ stdenv.mkDerivation rec {
     "man"
   ];
 
-  nativeBuildInputs = [ pkg-config ] ++ lib.optionals (enableApp) [ installShellFiles ];
+  nativeBuildInputs = [ pkg-config ] ++ lib.optionals enableApp [ installShellFiles ];
 
   buildInputs =
     lib.optionals enableApp [
       c-aresMinimal
       libev
       zlib
+      openssl
     ]
-    ++ lib.optionals (enableApp && !enableHttp3) [ openssl ]
-    ++ lib.optionals (enableGetAssets) [ libxml2 ]
-    ++ lib.optionals (enableHpack) [ jansson ]
-    ++ lib.optionals (enableJemalloc) [ jemalloc ]
-    ++ lib.optionals (enableHttp3) [
+    ++ lib.optionals enableGetAssets [ libxml2 ]
+    ++ lib.optionals enableHpack [ jansson ]
+    ++ lib.optionals enableJemalloc [ jemalloc ]
+    ++ lib.optionals enableHttp3 [
       ngtcp2
       nghttp3
-      quictls
     ]
-    ++ lib.optionals (enablePython) [ python3 ];
+    ++ lib.optionals enablePython [ python3 ];
 
   enableParallelBuilding = true;
 
@@ -90,11 +88,11 @@ stdenv.mkDerivation rec {
 
   # Unit tests require CUnit and setting TZDIR environment variable
   doCheck = enableTests;
-  nativeCheckInputs = lib.optionals (enableTests) [
+  nativeCheckInputs = lib.optionals enableTests [
     cunit
     tzdata
   ];
-  preCheck = lib.optionalString (enableTests) ''
+  preCheck = lib.optionalString enableTests ''
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
@@ -105,13 +103,13 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    lib.optionalString (enableApp) ''
+    lib.optionalString enableApp ''
       installShellCompletion --bash doc/bash_completion/{h2load,nghttp,nghttpd,nghttpx}
     ''
     + lib.optionalString (!enableApp) ''
       rm -r $out/bin
     ''
-    + lib.optionalString (enablePython) ''
+    + lib.optionalString enablePython ''
       patchShebangs $out/share/nghttp2
     '';
 

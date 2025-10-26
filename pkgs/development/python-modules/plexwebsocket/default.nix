@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/jjlawren/python-plexwebsocket/";
     changelog = "https://github.com/jjlawren/python-plexwebsocket/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

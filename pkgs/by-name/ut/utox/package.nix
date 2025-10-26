@@ -61,6 +61,11 @@ stdenv.mkDerivation rec {
     "-DENABLE_TESTS=${if doCheck then "ON" else "OFF"}"
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
   nativeCheckInputs = [ check ];
 

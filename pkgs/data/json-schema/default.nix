@@ -24,5 +24,5 @@ let
 in
 {
   # Exported to `pkgs`
-  inherit jsonSchemaCatalogs;
+  jsonSchemaCatalogs = lib.recurseIntoAttrs jsonSchemaCatalogs;
 }

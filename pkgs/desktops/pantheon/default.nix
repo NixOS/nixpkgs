@@ -29,6 +29,7 @@ lib.makeScope pkgs.newScope (
     ];
 
     wingpanelIndicators = [
+      elementary-monitor
       wingpanel-applications-menu
       wingpanel-indicator-bluetooth
       wingpanel-indicator-datetime
@@ -76,6 +77,8 @@ lib.makeScope pkgs.newScope (
 
     elementary-maps = callPackage ./apps/elementary-maps { };
 
+    elementary-monitor = callPackage ./apps/elementary-monitor { };
+
     elementary-music = callPackage ./apps/elementary-music { };
 
     elementary-photos = callPackage ./apps/elementary-photos { };
@@ -121,6 +124,8 @@ lib.makeScope pkgs.newScope (
     granite = callPackage ./libraries/granite { };
 
     granite7 = callPackage ./libraries/granite/7 { };
+
+    live-chart = callPackage ./libraries/live-chart { };
 
     pantheon-wayland = callPackage ./libraries/pantheon-wayland { };
 

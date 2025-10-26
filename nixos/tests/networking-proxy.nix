@@ -14,7 +14,7 @@ in
 { pkgs, ... }:
 {
   name = "networking-proxy";
-  meta = with pkgs.lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

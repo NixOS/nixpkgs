@@ -87,7 +87,15 @@ let
         substituteInPlace Configurations/unix-Makefile.tmpl \
           --replace 'ENGINESDIR=$(libdir)/engines-{- $sover_dirname -}' \
                     'ENGINESDIR=$(OPENSSLDIR)/engines-{- $sover_dirname -}'
-      '';
+      ''
+      # This test will fail if the error strings between the build libc and host
+      # libc mismatch, e.g. when cross-compiling from glibc to musl
+      +
+        lib.optionalString
+          (finalAttrs.finalPackage.doCheck && stdenv.hostPlatform.libc != stdenv.buildPlatform.libc)
+          ''
+            rm test/recipes/02-test_errstr.t
+          '';
 
       outputs = [
         "bin"
@@ -193,9 +201,7 @@ let
       # starting with 3.5 its nice to speed things up for free
       ++ lib.optional stdenv.hostPlatform.isx86_64 "enable-ec_nistp_64_gcc_128"
       # useful to set e.g. 256 bit security level with setting this to 5
-      ++ lib.optional (
-        securityLevel != null
-      ) "-DOPENSSL_TLS_SECURITY_LEVEL=${builtins.toString securityLevel}"
+      ++ lib.optional (securityLevel != null) "-DOPENSSL_TLS_SECURITY_LEVEL=${toString securityLevel}"
       ++ lib.optional enableMD2 "enable-md2"
       ++ lib.optional enableSSL2 "enable-ssl2"
       ++ lib.optional enableSSL3 "enable-ssl3"
@@ -245,6 +251,11 @@ let
       ];
 
       enableParallelBuilding = true;
+
+      doCheck = true;
+      preCheck = ''
+        patchShebangs util
+      '';
 
       postInstall =
         (
@@ -366,16 +377,19 @@ in
   };
 
   openssl_3 = common {
-    version = "3.0.17";
-    hash = "sha256-39135OobV/86bb3msL3D8x21rJnn/dTq+eH7tuwtuM4=";
+    version = "3.0.18";
+    hash = "sha256-2Aw09c+QLczx8bXfXruG0DkuNwSeXXPfGzq65y5P/os=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then ./use-etc-ssl-certs-darwin.patch else ./use-etc-ssl-certs.patch
       )
@@ -388,17 +402,20 @@ in
     };
   };
 
-  openssl_3_5 = common {
-    version = "3.5.1";
-    hash = "sha256-UpBDsVz/pfNgd6TQr4Pz3jmYBxgdYHRB1zQZbYibZB8=";
+  openssl_3_6 = common {
+    version = "3.6.0";
+    hash = "sha256-tqX0S362nj+jXb8VUkQFtEg3pIHUPYHa3d4/8h/LuOk=";
 
     patches = [
+      # Support for NIX_SSL_CERT_FILE, motivation:
+      # https://github.com/NixOS/nixpkgs/commit/942dbf89c6120cb5b52fb2ab456855d1fbf2994e
       ./3.0/nix-ssl-cert-file.patch
 
       # openssl will only compile in KTLS if the current kernel supports it.
       # This patch disables build-time detection.
       ./3.0/openssl-disable-kernel-detection.patch
 
+      # Look up SSL certificates in /etc rather than the immutable installation directory
       (
         if stdenv.hostPlatform.isDarwin then
           ./3.5/use-etc-ssl-certs-darwin.patch

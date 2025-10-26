@@ -79,6 +79,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     echo "find_package(Threads)" >> cmake/options.cmake
+
+    substituteInPlace src/libs/ec/abstracts/CMakeLists.txt \
+      --replace-fail "CMAKE_MINIMUM_REQUIRED (VERSION 2.8)" "CMAKE_MINIMUM_REQUIRED (VERSION 3.10)"
   '';
 
   # aMule will try to `dlopen' libupnp and libixml, so help it

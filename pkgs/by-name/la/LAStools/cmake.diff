@@ -1,0 +1,57 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 6a0ea6e..70de632 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.1 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ set(CMAKE_SUPPRESS_REGENERATION true)
+ set(CMAKE_CXX_STANDARD 17)
+ project("LAStools" CXX C)
+diff --git i/LASlib/CMakeLists.txt w/LASlib/CMakeLists.txt
+index 5efb193..907b381 100644
+--- i/LASlib/CMakeLists.txt
++++ w/LASlib/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
++cmake_minimum_required(VERSION 3.10 FATAL_ERROR)
+ set(CMAKE_SUPPRESS_REGENERATION true)
+ project("LASlib")
+ 
+diff --git i/LASlib/src/CMakeLists.txt w/LASlib/src/CMakeLists.txt
+index 51dca48..28242e6 100644
+--- i/LASlib/src/CMakeLists.txt
++++ w/LASlib/src/CMakeLists.txt
+@@ -70,7 +70,7 @@ file(GLOB_RECURSE LAS_INCLUDES
+ 
+ add_library(LASlib ${LAS_SRC} ${LAZ_SRC_FULL})
+ set_property(TARGET LASlib PROPERTY POSITION_INDEPENDENT_CODE ON)
+-set_property(TARGET LASlib PROPERTY CXX_STANDARD 11)
++set_property(TARGET LASlib PROPERTY CXX_STANDARD 14)
+ 
+ if (BUILD_SHARED_LIBS)
+ 	target_compile_definitions(LASlib PRIVATE "COMPILE_AS_DLL")
+diff --git i/src/CMakeLists.txt w/src/CMakeLists.txt
+index ebdf98a..3b66b82 100644
+--- i/src/CMakeLists.txt
++++ w/src/CMakeLists.txt
+@@ -5,6 +5,7 @@ add_definitions(-DNDEBUG )
+ 
+ include_directories(../LASzip/src)
+ include_directories(../LASlib/inc)
++include_directories(.)
+ 
+ set(GEOPROJECTION_TARGETS
+ 	laszip
+diff --git i/src/geoprojectionconverter.cpp w/src/geoprojectionconverter.cpp
+index 1e3298d..5306c32 100644
+--- i/src/geoprojectionconverter.cpp
++++ w/src/geoprojectionconverter.cpp
+@@ -33,6 +33,7 @@
+ */
+ #include "geoprojectionconverter.hpp"
+ 
++#include <algorithm>
+ #include <math.h>
+ #include <stdio.h>
+ #include <stdlib.h>

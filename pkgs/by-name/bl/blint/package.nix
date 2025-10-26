@@ -2,20 +2,20 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  versionCheckHook,
+  writableTmpDirAsHomeHook,
   nixosTests,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "blint";
-  version = "2.4.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "owasp-dep-scan";
     repo = "blint";
     tag = "v${version}";
-    hash = "sha256-mGeC7+YzQWSlT3sW2la/f21fN8V+YoFd4fwj/PBPCMI=";
+    hash = "sha256-ell0/opQso7/qD6d6i18vU55TfTgdcZwVFXD+yZg9/g=";
   };
 
   build-system = [
@@ -51,6 +51,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     pytest-cov-stub
+    writableTmpDirAsHomeHook
   ];
 
   # only runs on windows and fails, obviously

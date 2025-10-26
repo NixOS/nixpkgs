@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchurl,
-  fetchpatch,
   buildPackages,
   bison,
   flex,
@@ -19,24 +18,14 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "6.16.0";
+  version = "6.17.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-WQDMwV+aw797fq6B3rWTcSPfNemTR6fxGiKBhILwqNA=";
+    hash = "sha256-l4HllBCrfeqOn3m7EP8UiOY9EPy7cFA7lEJronqOLew=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "color-assume-background-is-dark-if-unknown.patch";
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/patch/?id=cc0f1109d2864686180ba2ce6fba5fcb3bf437bf";
-      hash = "sha256-BGD70cXKnDvk7IEU5RQA+pn1dErWjgr74GeSkYtFXoI=";
-    })
-    (fetchpatch {
-      name = "color-do-not-use-dark-blue-in-dark-background-palette.patch";
-      url = "https://git.kernel.org/pub/scm/network/iproute2/iproute2-next.git/patch/?id=46a4659313c2610427a088d8f03b731819f2b87a";
-      hash = "sha256-TXrmGZNsYWdYLsLoBXZEr3cd8HT4EhRg+jACRrC0gKE=";
-    })
     (fetchurl {
       name = "musl-endian.patch";
       url = "https://lore.kernel.org/netdev/20240712191209.31324-1-contact@hacktivis.me/raw";
@@ -46,6 +35,15 @@ stdenv.mkDerivation rec {
       name = "musl-basename.patch";
       url = "https://lore.kernel.org/netdev/20240804161054.942439-1-dilfridge@gentoo.org/raw";
       hash = "sha256-47obv6mIn/HO47lt47slpTAFDxiQ3U/voHKzIiIGCTM=";
+    })
+  ]
+  # Temporarily gated to keep rebuild counts under control.
+  # The proper fix (targeted to staging) is done in https://github.com/NixOS/nixpkgs/pull/451397
+  ++ lib.optionals stdenv.hostPlatform.isMusl [
+    (fetchurl {
+      name = "musl-redefinition.patch";
+      url = "https://lore.kernel.org/netdev/20251012124002.296018-1-yureka@cyberchaos.dev/raw";
+      hash = "sha256-8gSpZb/B5sMd2OilUQqg0FqM9y3GZd5Ch5AXV5wrCZQ=";
     })
   ];
 
@@ -57,6 +55,7 @@ stdenv.mkDerivation rec {
   outputs = [
     "out"
     "dev"
+    "scripts"
   ];
 
   configureFlags = [
@@ -86,6 +85,10 @@ stdenv.mkDerivation rec {
   installFlags = [
     "CONFDIR=$(out)/etc/iproute2"
   ];
+
+  postInstall = ''
+    moveToOutput sbin/routel "$scripts"
+  '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
   nativeBuildInputs = [

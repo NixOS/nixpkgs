@@ -4,7 +4,6 @@
   fetchFromGitHub,
   boxfort,
   meson,
-  libcsptr,
   pkg-config,
   gettext,
   cmake,
@@ -61,7 +60,6 @@ stdenv.mkDerivation rec {
     (lib.getDev boxfort)
     dyncall
     gettext
-    libcsptr
     nanomsg
     nanopbMalloc
     libgit2

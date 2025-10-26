@@ -29,7 +29,6 @@ buildPythonPackage rec {
   pname = "atproto";
   version = "0.0.62";
   format = "pyproject";
-  disabled = pythonOlder "3.8";
 
   # use GitHub, pypi does not include tests
   src = fetchFromGitHub {
@@ -58,6 +57,7 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [
+    "cryptography"
     "websockets"
   ];
 

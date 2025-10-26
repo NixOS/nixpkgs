@@ -91,7 +91,7 @@ let
         libiconv
         libintl
       ]
-      ++ lib.optional (withGraphviz) graphviz
+      ++ lib.optional withGraphviz graphviz
       ++ extraBuildInputs;
 
       enableParallelBuilding = true;
@@ -104,7 +104,7 @@ let
             let
               roundUpToEven = num: num + lib.mod num 2;
             in
-            "vala_${lib.versions.major version}_${builtins.toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
+            "vala_${lib.versions.major version}_${toString (roundUpToEven (lib.toInt (lib.versions.minor version)))}";
           packageName = "vala";
           freeze = true;
         };

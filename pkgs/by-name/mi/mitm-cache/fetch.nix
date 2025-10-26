@@ -13,7 +13,7 @@
 }@attrs:
 
 let
-  data' = builtins.removeAttrs (if builtins.isPath data then lib.importJSON data else data) [
+  data' = removeAttrs (if builtins.isPath data then lib.importJSON data else data) [
     "!version"
   ];
 
@@ -59,7 +59,7 @@ let
   );
 in
 runCommand name (
-  builtins.removeAttrs attrs [
+  removeAttrs attrs [
     "name"
     "data"
   ]

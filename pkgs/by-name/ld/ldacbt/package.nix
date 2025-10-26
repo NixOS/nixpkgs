@@ -31,6 +31,16 @@ stdenv.mkDerivation rec {
     "-DINSTALL_INCLUDEDIR=${placeholder "dev"}/include"
   ];
 
+  # Fix the build with CMake 4.
+  #
+  # See: <https://github.com/EHfive/ldacBT/pull/1>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.0)' \
+        'cmake_minimum_required(VERSION 3.0...3.10)'
+  '';
+
   meta = with lib; {
     description = "AOSP libldac dispatcher";
     homepage = "https://github.com/EHfive/ldacBT";

@@ -150,7 +150,6 @@ let
                 else
                   ''
                     # Deliberately failing since username/token was not provided, so we can't fetch.
-                    # We can't use builtins.throw since we want the result to be used if the tar is in the store already.
                     exit 1
                   '';
               failureHook = ''

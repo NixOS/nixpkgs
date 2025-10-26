@@ -8,7 +8,7 @@
   boost,
   fuse3,
   lib45d,
-  tbb_2022,
+  onetbb,
   liburing,
   installShellFiles,
 }:
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     fuse3
     lib45d
-    tbb_2022
+    onetbb
     liburing
   ];
 

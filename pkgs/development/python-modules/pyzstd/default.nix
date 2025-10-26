@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "pyzstd";
-  version = "0.17.0";
+  version = "0.18.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Rogdham";
     repo = "pyzstd";
     tag = version;
-    hash = "sha256-PICYdB/xu/q2wjbkF2nziZt8z8PmzJ5eM+Yq0rpLfEU=";
+    hash = "sha256-15+GqJ/AMYs1R9ywo+muNVVbPkkzTMj//Zn/PPI+MCI=";
   };
 
   postPatch = ''
@@ -26,6 +26,9 @@ buildPythonPackage rec {
     # required for Python 3.9 under Windows
     substituteInPlace pyproject.toml \
         --replace-fail '"setuptools>=64,<74"' '"setuptools"'
+
+    # pyzst needs a copy of upstream zstd's license
+    ln -s ${zstd-c.src}/LICENSE zstd
   '';
 
   nativeBuildInputs = [

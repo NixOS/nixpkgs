@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
+  fetchFromGitHub,
   cmake,
   pkg-config,
   gtkmm3,
@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation {
   pname = "jstest-gtk";
-  version = "2018-07-10";
+  version = "0.1.1-unstable-2025-04-03";
 
-  src = fetchFromGitLab {
-    owner = "jstest-gtk";
+  src = fetchFromGitHub {
+    owner = "Grumbel";
     repo = "jstest-gtk";
-    rev = "62f6e2d7d44620e503149510c428df9e004c9f3b";
-    sha256 = "0icbbhrj5aqljhiavdy3hic60vp0zzfzyg0d6vpjaqkbzd5pv9d8";
+    rev = "92bdf8e945a6d14fdd0aa6fa961f6da34f5ac810";
+    sha256 = "sha256-ypGMxN0k+Y72Hjk5OKJMdc4mci38xg3DJYkboOpa/fs=";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       buttons and axis are pressed, a way to remap axis and buttons and a way
       to calibrate your joystick.
     '';
-    homepage = "https://jstest-gtk.gitlab.io/";
+    homepage = "https://github.com/Grumbel/jstest-gtk";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ wucke13 ];
     platforms = platforms.linux;

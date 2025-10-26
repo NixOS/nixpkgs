@@ -18,7 +18,7 @@ in
         virtualHosts.${name} = {
           enableACME = false;
           forceSSL = false;
-          enableSSL = false;
+          onlySSL = false;
 
           locations."/_matrix" = {
             proxyPass = "http://[::1]:6167";

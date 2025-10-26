@@ -45,13 +45,17 @@ stdenv.mkDerivation rec {
     # Fix build with lv2 1.18: https://sourceforge.net/p/eq10q/bugs/23/
     find . -type f -exec fgrep -q LV2UI_Descriptor {} \; \
       -exec sed -i {} -e 's/const _\?LV2UI_Descriptor/const LV2UI_Descriptor/' \;
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" "cmake_minimum_required(VERSION 3.10)"
   '';
 
   installFlags = [ "DESTDIR=$(out)" ];
 
   fixupPhase = ''
-    cp -r $out/var/empty/local/lib $out
-    rm -R $out/var
+    mkdir -p $out/lib
+    mv $out/usr/local/lib/* $out/lib/
+    rm -R $out/usr
   '';
 
   meta = {

@@ -6,14 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.1";
+  version = "1.0.2";
   pname = "glm";
 
   src = fetchFromGitHub {
     owner = "g-truc";
     repo = "glm";
     rev = version;
-    sha256 = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
+    sha256 = "sha256-2xKv1nO+OdwA0r+I9OZ+OCL9dJFg/LJsQfIvIF76vc0=";
   };
 
   outputs = [

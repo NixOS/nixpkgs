@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/annotated-types/annotated-types";
     changelog = "https://github.com/annotated-types/annotated-types/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

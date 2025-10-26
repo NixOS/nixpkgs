@@ -17,6 +17,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2YJDADh/WCksAEIjngAdji98YGmwjpvxSBZkxAwFc7k=";
   };
 
+  patches = [
+    # CMake 4 dropped support of versions lower than 3.5
+    ./tslib-1.23-cmake4.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   passthru.updateScript = nix-update-script { };

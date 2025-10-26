@@ -103,6 +103,6 @@ buildPythonPackage rec {
     description = "HTML and XML parser";
     homepage = "http://crummy.com/software/BeautifulSoup/bs4/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

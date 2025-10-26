@@ -1,32 +1,22 @@
 {
-  config,
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  erlang,
-  makeWrapper,
-  nix-update-script,
-  coreutils,
-  curl,
-  bash,
-  debugInfo ? false,
-}@inputs:
-
-{
-  baseName ? "elixir",
   version,
-  erlang ? inputs.erlang,
+  hash,
   minimumOTPVersion,
   maximumOTPVersion ? null,
-  sha256 ? null,
-  rev ? "v${version}",
-  src ? fetchFromGitHub {
-    inherit rev sha256;
-    owner = "elixir-lang";
-    repo = "elixir";
-  },
-  escriptPath ? "lib/elixir/generate_app.escript",
-}@args:
+}:
+{
+  bash,
+  config,
+  coreutils,
+  curl,
+  debugInfo ? false,
+  erlang,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  nix-update-script,
+  stdenv,
+}:
 
 let
   inherit (lib)
@@ -52,7 +42,7 @@ let
     See https://hexdocs.pm/elixir/${version}/compatibility-and-deprecations.html
   '';
 
-  maxShiftMajor = builtins.toString ((toInt (versions.major maximumOTPVersion)) + 1);
+  maxShiftMajor = toString ((toInt (versions.major maximumOTPVersion)) + 1);
   maxAssert =
     if (maximumOTPVersion == null) then
       true
@@ -79,9 +69,16 @@ if !config.allowAliases && !bothAssert then
 else
   assert assertMsg bothAssert compatibilityMsg;
   stdenv.mkDerivation {
-    pname = "${baseName}";
+    pname = "elixir";
 
-    inherit src version debugInfo;
+    src = fetchFromGitHub {
+      owner = "elixir-lang";
+      repo = "elixir";
+      rev = "v${version}";
+      inherit hash;
+    };
+
+    inherit version debugInfo;
 
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = [ erlang ];
@@ -95,7 +92,7 @@ else
     };
 
     preBuild = ''
-      patchShebangs ${escriptPath} || true
+      patchShebangs lib/elixir/scripts/generate_app.escript || true
     '';
 
     # copy stdlib source files for LSP access
@@ -136,10 +133,10 @@ else
       ];
     };
 
-    pos = builtins.unsafeGetAttrPos "sha256" args;
-    meta = with lib; {
+    meta = {
       homepage = "https://elixir-lang.org/";
       description = "Functional, meta-programming aware language built on top of the Erlang VM";
+      changelog = "https://github.com/elixir-lang/elixir/releases/tag/v${version}";
 
       longDescription = ''
         Elixir is a functional, meta-programming aware language built on
@@ -149,8 +146,8 @@ else
         with hot code upgrades.
       '';
 
-      license = licenses.asl20;
-      platforms = platforms.unix;
-      teams = [ teams.beam ];
+      license = lib.licenses.asl20;
+      platforms = lib.platforms.unix;
+      teams = [ lib.teams.beam ];
     };
   }

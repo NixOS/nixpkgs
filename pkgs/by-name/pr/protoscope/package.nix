@@ -27,6 +27,6 @@ buildGoModule {
     mainProgram = "protoscope";
     homepage = "https://github.com/protocolbuffers/protoscope";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       mkdir -pv "$out/bin"
       wrapProgram "$out/share/ganttproject/ganttproject" \
         --set JAVA_HOME "${jre}" \
-        --prefix _JAVA_OPTIONS " " "${builtins.toString javaOptions}"
+        --prefix _JAVA_OPTIONS " " "${toString javaOptions}"
 
       mv -v "$out/share/ganttproject/ganttproject" "$out/bin"
 

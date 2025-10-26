@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     rev = "refs/tags/v${version}";
   };
 
-  nativeBuildInputs = with python3Packages; [ wrapQtAppsHook ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   build-system = with python3Packages; [ setuptools ];
 

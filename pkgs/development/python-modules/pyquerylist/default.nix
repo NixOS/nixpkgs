@@ -11,7 +11,7 @@
   pytestCheckHook,
   fetchpatch,
 }:
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pyquerylist";
   version = "0-unstable-2025-03-03";
   pyproject = true;

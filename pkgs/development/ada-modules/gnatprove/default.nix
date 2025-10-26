@@ -29,6 +29,10 @@ let
         };
       });
 
+  # TODO:
+  # Build why3 (github.com/AdaCore/why3) as separate package and not as submodule.
+  # The relevant tags on why3 may get changed without the submodule pointer being updated.
+
   fetchSpark2014 =
     { rev, hash }:
     fetchFromGitHub {
@@ -64,7 +68,7 @@ let
       };
       patches = [
         # Disable Coq related targets which are missing in the fsf-14 branch
-        ./0001-fix-install.patch
+        ./0001-fix-install-fsf-14.patch
 
         # Suppress warnings on aarch64: https://github.com/AdaCore/spark2014/issues/54
         ./0002-mute-aarch64-warnings.patch
@@ -74,11 +78,22 @@ let
       ];
       commit_date = "2024-01-11";
     };
+    "15" = {
+      src = fetchSpark2014 {
+        rev = "22bf1510e0829ba74f9d8d686badb65c7365ee91";
+        hash = "sha256-KjAWMgMT3Tp/s/DQ20ZZajty9Zrv8aPFocwgv5LkjSw=";
+      };
+      patches = [
+        # Disable Coq related targets which are missing in the fsf-15 branch
+        ./0001-fix-install-fsf-15.patch
+      ];
+      commit_date = "2025-06-10";
+    };
   };
 
   thisSpark =
     spark2014.${gnat_version}
-      or (builtins.throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
+      or (throw "GNATprove depends on a specific GNAT version and can't be built using GNAT ${gnat_version}.");
 
 in
 stdenv.mkDerivation {
@@ -118,6 +133,9 @@ stdenv.mkDerivation {
   ])
   ++ (lib.optionals (gnat_version == "14") [
     gpr2_24_2_next
+  ])
+  ++ (lib.optionals (gnat_version == "15") [
+    gpr2
   ]);
 
   propagatedBuildInputs = [

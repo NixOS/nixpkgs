@@ -85,6 +85,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace src/acs/vm/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     description = "Kart racing video game based on Sonic Robo Blast 2 (SRB2), itself based on a modified version of Doom Legacy";
     homepage = "https://kartkrew.org";

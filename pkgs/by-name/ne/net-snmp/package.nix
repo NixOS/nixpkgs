@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Clients and server for the SNMP network monitoring protocol";
-    homepage = "http://www.net-snmp.org/";
+    homepage = "https://www.net-snmp.org/";
     license = licenses.bsd3;
     platforms = platforms.unix;
   };

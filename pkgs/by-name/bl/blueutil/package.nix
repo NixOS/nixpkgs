@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blueutil";
-  version = "2.12.0";
+  version = "2.13.0";
 
   src = fetchFromGitHub {
     owner = "toy";
     repo = "blueutil";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-JwX3NHXbGgEj+ZCyu9gWp2TCihokaAw5oHCrlmpy6HA=";
+    hash = "sha256-Qw5c9dp7wpuOcQSLsg1pfJ+NbrEtme2o6nKD3Ba3A3M=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wall -Wextra -Werror -mmacosx-version-min=10.9 -framework Foundation -framework IOBluetooth";

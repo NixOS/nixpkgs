@@ -88,13 +88,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "RStudio";
-  version = "2025.09.0+387";
+  version = "2025.09.1+401";
 
   src = fetchFromGitHub {
     owner = "rstudio";
     repo = "rstudio";
     tag = "v${version}";
-    hash = "sha256-je2nfWIToGGizWyH/YbhtD4XhtP39qUIhatzDOUnsSc=";
+    hash = "sha256-FVK/1trMVFEv17HbUpaISC9gyE2HBKtdZWjxbgdXALc=";
   };
 
   # sources fetched into _deps via cmake's FetchContent

@@ -25,6 +25,9 @@ buildPythonPackage rec {
     hash = "sha256-P41jEs1ShpiuSenreE4ykesY2wgBaR7TUKuv3tcD5J0=";
   };
 
+  # The latest setuptools has deprecated `setup_requires` and will attempt to automatically invoke `pip` to install dependencies during the build.
+  patches = [ ./0001-remove-setup_requires.patch ];
+
   buildInputs = [ pybind11 ];
 
   nativeCheckInputs = [
@@ -58,6 +61,6 @@ buildPythonPackage rec {
     description = "Python wrapper for tomlplusplus";
     homepage = "https://github.com/bobfang1992/pytomlpp";
     license = licenses.mit;
-    maintainers = with maintainers; [ evils ];
+    maintainers = [ ];
   };
 }

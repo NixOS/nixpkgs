@@ -44,7 +44,14 @@ let
         baseName == ".git"
         ||
           type == "directory"
-          && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg" || baseName == ".jj")
+          && (
+            baseName == ".svn"
+            || baseName == "CVS"
+            || baseName == ".hg"
+            || baseName == ".jj"
+            || baseName == ".pijul"
+            || baseName == "_darcs"
+          )
       )
       ||
         # Filter out editor backup / swap files.
@@ -502,22 +509,6 @@ let
 
 in
 {
-
-  pathType =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathType has been moved to lib.filesystem.pathType."
-      lib.filesystem.pathType;
-
-  pathIsDirectory =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsDirectory has been moved to lib.filesystem.pathIsDirectory."
-      lib.filesystem.pathIsDirectory;
-
-  pathIsRegularFile =
-    lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2305)
-      "lib.sources.pathIsRegularFile has been moved to lib.filesystem.pathIsRegularFile."
-      lib.filesystem.pathIsRegularFile;
-
   inherit
     pathIsGitRepo
     commitIdFromGitRepo

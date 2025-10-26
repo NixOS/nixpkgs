@@ -12,7 +12,7 @@
 
   rocmSupport ? config.rocmSupport,
   rocmPackages ? { },
-  rocmGpuTargets ? builtins.concatStringsSep ";" rocmPackages.clr.gpuTargets,
+  rocmGpuTargets ? rocmPackages.clr.localGpuTargets or rocmPackages.clr.gpuTargets,
 
   openclSupport ? false,
   clblast,
@@ -75,34 +75,19 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "llama-cpp";
-  version = "6670";
+  version = "6821";
 
   src = fetchFromGitHub {
     owner = "ggml-org";
     repo = "llama.cpp";
     tag = "b${finalAttrs.version}";
-    hash = "sha256-B4Qog7RLcre8KB9N+aVUZSJwlkHIIcCxR8jySoxbXoQ=";
+    hash = "sha256-HqrX7xOYsF0UUF12c8KgIM2HMeTm1XxiFPuz/PaToI0=";
     leaveDotGit = true;
     postFetch = ''
       git -C "$out" rev-parse --short HEAD > $out/COMMIT
       find "$out" -name .git -print0 | xargs -0 rm -rf
     '';
   };
-
-  patches = lib.optionals vulkanSupport [ ./disable_bfloat16.patch ];
-
-  postPatch = ''
-    # Workaround for local-ai package which overrides this package to an older llama-cpp
-    if [ -f ./ggml/src/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
-
-    if [ -f ./ggml/src/ggml-metal/ggml-metal.m ]; then
-      substituteInPlace ./ggml/src/ggml-metal/ggml-metal.m \
-        --replace-fail '[bundle pathForResource:@"ggml-metal" ofType:@"metal"];' "@\"$out/bin/ggml-metal.metal\";"
-    fi
-  '';
 
   nativeBuildInputs = [
     cmake
@@ -150,7 +135,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals rocmSupport [
     (cmakeFeature "CMAKE_HIP_COMPILER" "${rocmPackages.clr.hipClangPath}/clang++")
-    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" rocmGpuTargets)
+    (cmakeFeature "CMAKE_HIP_ARCHITECTURES" (builtins.concatStringsSep ";" rocmGpuTargets))
   ]
   ++ optionals metalSupport [
     (cmakeFeature "CMAKE_C_FLAGS" "-D__ARM_FEATURE_DOTPROD=1")

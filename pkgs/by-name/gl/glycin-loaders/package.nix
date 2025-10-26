@@ -2,8 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  replaceVars,
-  bubblewrap,
   cairo,
   cargo,
   gettext,
@@ -31,14 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
     hash = "sha256-OAqv4r+07KDEW0JmDr/0SWANAKQ7YJ1bHIP3lfXI+zw=";
   };
-
-  patches = [
-    # Fix paths in glycin library.
-    # Not actually needed for this package since we are only building loaders
-    # and this patch is relevant just to apps that use the loaders
-    # but apply it here to ensure the patch continues to apply.
-    finalAttrs.passthru.glycinPathsPatch
-  ];
 
   cargoVendorDir = "vendor";
 
@@ -83,10 +73,6 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = gnome.updateScript {
       attrPath = "glycin-loaders";
       packageName = "glycin";
-    };
-
-    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
-      bwrap = "${bubblewrap}/bin/bwrap";
     };
   };
 

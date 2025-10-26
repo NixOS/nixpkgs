@@ -11,26 +11,26 @@ vscode-utils.buildVscodeMarketplaceExtension {
       sources = {
         "x86_64-linux" = {
           arch = "linux-x64";
-          hash = "sha256-jhzV5mDEwnHPcCaH/ZF/nLPTYZJlOEJkoaPcTg4+uU8=";
+          hash = "sha256-NuJK5BjEsGeNQ2lBOHc5zPVzblwaS51hMUiYNtpQVlw=";
         };
         "x86_64-darwin" = {
           arch = "darwin-x64";
-          hash = "sha256-nmT7hWHqmukyomTHIVM6k+bw0qgeeaehDNngiQgKid8=";
+          hash = "sha256-6+X7h6AHmCwTmH0gOoB9Mb8yEsmmyJEQ58sSVrqSTeA=";
         };
         "aarch64-linux" = {
           arch = "linux-arm64";
-          hash = "sha256-suJ/my6dovvxN2BdQKEbw8HeBi6o9WjPe/y9Uttq1QI=";
+          hash = "sha256-mvYWAEKoQODGgZ4CaJ5xlGnwEBatMU2oecSM2hVmRog=";
         };
         "aarch64-darwin" = {
           arch = "darwin-arm64";
-          hash = "sha256-9+bCE3d6bNeVHnXNrJkWpK3UeVhy7cQrwYvSJ66Oufw=";
+          hash = "sha256-5EsFUBJie2zNtlwJYIcFndkNPDDsZlUAggLwF1QESug=";
         };
       };
     in
     {
       name = "continue";
       publisher = "Continue";
-      version = "1.2.6";
+      version = "1.2.10";
     }
     // sources.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
@@ -41,10 +41,7 @@ vscode-utils.buildVscodeMarketplaceExtension {
     downloadPage = "https://marketplace.visualstudio.com/items?itemName=Continue.continue";
     homepage = "https://github.com/continuedev/continue";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [
-      raroh73
-      flacks
-    ];
+    maintainers = with lib.maintainers; [ flacks ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"

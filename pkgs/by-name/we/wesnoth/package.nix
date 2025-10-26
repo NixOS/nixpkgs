@@ -23,10 +23,12 @@
   lua5_4,
   curl,
   nix-update-script,
+  enableDevel ? false,
 }:
 
 let
   boost = boost186;
+  suffix = lib.optionalString enableDevel "-devel";
   # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
   lua = lua5_4.override {
     postConfigure = ''
@@ -36,14 +38,18 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "wesnoth";
-  version = "1.18.5";
+  pname = "wesnoth${suffix}";
+  version = if enableDevel then "1.19.17" else "1.18.5";
 
   src = fetchFromGitHub {
     owner = "wesnoth";
     repo = "wesnoth";
     tag = finalAttrs.version;
-    hash = "sha256-0VZJAmaCg12x4S07H1kl5s2NGMEo/NSVnzMniREmPJk=";
+    hash =
+      if enableDevel then
+        "sha256-8JFJR4ghL2uSI5zG63MPX5NwlvIc3/xR0SQ2FjG5JCw="
+      else
+        "sha256-0VZJAmaCg12x4S07H1kl5s2NGMEo/NSVnzMniREmPJk=";
   };
 
   nativeBuildInputs = [
@@ -73,10 +79,31 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DENABLE_SYSTEM_LUA=ON"
+    "-DBINARY_SUFFIX=${suffix}"
   ];
 
+  postPatch = lib.optionalString (suffix != "") ''
+    mv packaging/org.wesnoth.Wesnoth.desktop packaging/org.wesnoth.Wesnoth${suffix}.desktop
+    mv packaging/org.wesnoth.Wesnoth.appdata.xml packaging/org.wesnoth.Wesnoth${suffix}.appdata.xml
+
+    substituteInPlace packaging/org.wesnoth.Wesnoth${suffix}.desktop \
+      --replace-fail "Name=Battle for Wesnoth" "Name=Battle for Wesnoth${suffix}" \
+      --replace-fail "Exec=sh -c \"wesnoth >/dev/null 2>&1\"" "Exec=sh -c \"wesnoth${suffix} >/dev/null 2>&1\"" \
+      --replace-fail "Exec=sh -c \"wesnoth -e  >/dev/null 2>&1\"" "Exec=sh -c \"wesnoth${suffix} -e  >/dev/null 2>&1\""
+
+    substituteInPlace packaging/org.wesnoth.Wesnoth${suffix}.appdata.xml \
+      --replace-fail "<name>Battle for Wesnoth</name>" "<name>Battle for Wesnoth${suffix}</name>" \
+      --replace-fail "org.wesnoth.Wesnoth" "org.wesnoth.Wesnoth${suffix}" \
+      --replace-fail "<binary>wesnoth</binary>" "<binary>wesnoth${suffix}</binary>" \
+      --replace-fail "<binary>wesnothd</binary>" "<binary>wesnothd${suffix}</binary>"
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "org.wesnoth.Wesnoth.desktop" "org.wesnoth.Wesnoth${suffix}.desktop" \
+      --replace-fail "org.wesnoth.Wesnoth.appdata.xml" "org.wesnoth.Wesnoth${suffix}.appdata.xml"
+  '';
+
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    app_name="The Battle for Wesnoth"
+    app_name="The Battle for Wesnoth${suffix}"
     app_bundle="$out/Applications/$app_name.app"
     app_contents="$app_bundle/Contents"
     mkdir -p "$app_contents"
@@ -85,8 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
     mv $out/share/wesnoth "$app_contents/Resources"
     pushd ../projectfiles/Xcode
     substitute Info.plist "$app_contents/Info.plist" \
-      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth \
-      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth \
+      --replace-fail ''\'''${EXECUTABLE_NAME}' wesnoth${suffix} \
+      --replace-fail '$(PRODUCT_BUNDLE_IDENTIFIER)' org.wesnoth.Wesnoth${suffix} \
       --replace-fail ''\'''${PRODUCT_NAME}' "$app_name"
     cp -r Resources/SDLMain.nib "$app_contents/Resources/"
     install -m0644 Resources/{container-migration.plist,icon.icns} "$app_contents/Resources"
@@ -94,22 +121,27 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Make the game and dedicated server binary available for shell users
     mkdir -p "$out/bin"
-    ln -s "$app_contents/MacOS/wesnothd" "$out/bin/wesnothd"
+    ln -s "$app_contents/MacOS/wesnothd${suffix}" "$out/bin/wesnothd${suffix}"
     # Symlinking the game binary is unsifficient as it would be unable to
     # find the bundle resources
-    cat << EOF > "$out/bin/wesnoth"
+    cat << EOF > "$out/bin/wesnoth${suffix}"
     #!${stdenvNoCC.shell}
     open -na "$app_bundle" --args "\$@"
     EOF
-    chmod +x "$out/bin/wesnoth"
+    chmod +x "$out/bin/wesnoth${suffix}"
   '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      # the minor release number also denotes if this is a beta release:
-      # even is stable, odd is beta
-      "^(\\d+\\.\\d*[02468]\\.\\d+)$"
+      (
+        if enableDevel then
+          # Devel matches odd minor release numbers
+          "^(\\d+\\.\\d*[13579]\\.\\d+.*)$"
+        else
+          # Stable matches even minor release numbers
+          "^(\\d+\\.\\d*[02468]\\.\\d+)$"
+      )
     ];
   };
 
@@ -131,6 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
       iedame
     ];
     platforms = lib.platforms.unix;
-    mainProgram = "wesnoth";
+    mainProgram = "wesnoth${suffix}";
   };
 })

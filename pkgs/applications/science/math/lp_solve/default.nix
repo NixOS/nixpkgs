@@ -19,16 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bUq/9cxqqpM66ObBeiJt8PwLZxxDj2lxXUHQn+gfkC8=";
   };
 
-  nativeBuildInputs = [
-    binutils
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    fixDarwinDylibNames
-  ]
-  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoSignDarwinBinariesHook
-  ];
+  nativeBuildInputs =
+    lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      binutils
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      fixDarwinDylibNames
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ];
 
   env = {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";

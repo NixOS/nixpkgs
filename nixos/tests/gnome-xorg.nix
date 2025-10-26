@@ -83,7 +83,8 @@
           machine.wait_for_file("${xauthority}")
           machine.succeed("xauth merge ${xauthority}")
           # Check that logging in has given the user ownership of devices
-          assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
+          # Change back to /dev/snd/timer after systemd-258.1
+          assert "alice" in machine.succeed("getfacl -p /dev/dri/card0")
 
       with subtest("Wait for GNOME Shell"):
           # correct output should be (true, 'false')

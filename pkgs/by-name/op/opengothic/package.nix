@@ -54,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "-Werror" ""
   '';
 
+  cmakeFlags = [
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   postFixup = ''
     wrapProgram $out/bin/Gothic2Notr \
       --set LD_PRELOAD "${lib.getLib alsa-lib}/lib/libasound.so.2"

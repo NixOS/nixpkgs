@@ -114,9 +114,9 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optionals (firewallType == "iptables") [ iptables ]
   ++ optionals (firewallType == "nftables") [ libnftnl ]
-  ++ optionals (enableOpenconnect) [ openconnect ]
-  ++ optionals (enablePolkit) [ polkit ]
-  ++ optionals (enablePptp) [
+  ++ optionals enableOpenconnect [ openconnect ]
+  ++ optionals enablePolkit [ polkit ]
+  ++ optionals enablePptp [
     pptp
     ppp
   ];
@@ -192,7 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://git.kernel.org/pub/scm/network/connman/connman.git/about/";
     license = lib.licenses.gpl2Only;
     mainProgram = "connmanctl";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

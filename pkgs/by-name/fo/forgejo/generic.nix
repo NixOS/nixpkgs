@@ -12,6 +12,7 @@
   bash,
   brotli,
   buildGoModule,
+  fetchpatch,
   forgejo,
   git,
   gzip,
@@ -26,6 +27,7 @@
   stdenv,
   fetchFromGitea,
   buildNpmPackage,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -77,10 +79,19 @@ buildGoModule rec {
   nativeCheckInputs = [
     git
     openssh
+    writableTmpDirAsHomeHook
   ];
 
   patches = [
     ./static-root-path.patch
+  ]
+  ++ lib.optionals lts [
+    (fetchpatch {
+      # fix for go 1.25.2 stricter ipv6 parsing, remove for LTS > 11.0.6
+      name = "fix-test-ipv6-go125.patch";
+      url = "https://codeberg.org/forgejo/forgejo/commit/0d9a8e3fa2cf9228290ed1a9a5767e6ba204edd7.patch";
+      hash = "sha256-AM4/kgCXSU5Bj8aOObm6qyeL1SEpeFhmlT42lMJ2o08=";
+    })
   ];
 
   postPatch = ''
@@ -103,14 +114,12 @@ buildGoModule rec {
     export ldflags+=" -X main.ForgejoVersion=$(GITEA_VERSION=${version} make show-version-api)"
   '';
 
+  # expose and use the GO_TEST_PACKAGES var from the Makefile
+  # instead of manually copying over the entire list:
+  # https://codeberg.org/forgejo/forgejo/src/tag/v11.0.6/Makefile#L128
+  # https://codeberg.org/forgejo/forgejo/src/tag/v13.0.0/Makefile#L290
   preCheck = ''
-    # $HOME is required for ~/.ssh/authorized_keys and such
-    export HOME="$TMPDIR/home"
-
-    # expose and use the GO_TEST_PACKAGES var from the Makefile
-    # instead of manually copying over the entire list:
-    # https://codeberg.org/forgejo/forgejo/src/tag/v7.0.4/Makefile#L124
-    echo -e 'show-backend-tests:\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
+    echo -e 'show-backend-tests:${lib.optionalString (lib.versionAtLeast version "13") " | compute-go-test-packages"}\n\t@echo ''${GO_TEST_PACKAGES}' >> Makefile
     getGoDirs() {
       make show-backend-tests
     }

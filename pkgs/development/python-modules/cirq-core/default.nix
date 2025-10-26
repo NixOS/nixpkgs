@@ -108,7 +108,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/quantumlib/Cirq/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
-      drewrisinger
       fab
     ];
   };

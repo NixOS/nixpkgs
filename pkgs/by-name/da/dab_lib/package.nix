@@ -22,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/library";
 
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10") ];
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -36,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "DAB/DAB+ decoding library";
     homepage = "https://github.com/JvanKatwijk/dab-cmdline";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ alexwinter ];
+    maintainers = with maintainers; [
+      aciceri
+      alexwinter
+    ];
     platforms = platforms.unix;
   };
 })

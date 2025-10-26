@@ -37,6 +37,23 @@ stdenv.mkDerivation rec {
       url = "https://github.com/AppImageCommunity/libappimage/commit/1e0515b23b90588ce406669134feca56ddcbbe43.patch";
       hash = "sha256-WIMvXNqC1stgPiBTRpXHWq3edIRnQomtRSW2qO52TRo=";
     })
+
+    # we really just want this for cmake 4 compatibility
+    (fetchpatch {
+      name = "libappimage-use-system-gtest.patch";
+      url = "https://github.com/AppImageCommunity/libappimage/commit/7b83b7247fd2d86c330e09f534c9cec1b03f649f.patch";
+      excludes = [
+        "ci/*"
+        "lib/gtest"
+        "tests/*"
+      ];
+      hash = "sha256-H+ph5TfKJPFcAzw2c7pzmqvB9R50HtZP/DbroOxLTVU=";
+    })
+    (fetchpatch {
+      name = "libappimage-fix-cmake-4.patch";
+      url = "https://github.com/AppImageCommunity/libappimage/commit/e5f6ea562611d534dc8e899a12ddf15c50e820be.patch";
+      hash = "sha256-P6fPoiqVX3TrKGrU2EXIMBpQLGl7xNcy41Iq7vRM+n8=";
+    })
   ];
 
   postPatch = ''

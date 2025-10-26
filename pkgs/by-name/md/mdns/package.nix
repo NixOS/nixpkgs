@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
+  cmakeFlags = [
+    # Fix configure with cmake4
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
+
   meta = with lib; {
     description = "Public domain mDNS/DNS-SD library in C";
     homepage = "https://github.com/mjansson/mdns";

@@ -1,7 +1,12 @@
 {
   lib,
   stdenv,
-  pkgs,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  libuecc,
 }:
 
 let
@@ -11,19 +16,26 @@ in
 stdenv.mkDerivation {
   inherit pname version;
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "freifunk-gluon";
     repo = "ecdsautils";
     rev = "v${version}";
     sha256 = "sha256-vGHLAX/XOtePvdT/rljCOdlILHVO20mCt6p+MUi13dg=";
   };
 
-  nativeBuildInputs = with pkgs; [
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/freifunk-gluon/ecdsautils/commit/19f096f9c10264f4efe4b926fe83126e85642cba.patch";
+      hash = "sha256-oJv47NckFHFONPcG3WfHwgaHRqrz2eWXzbr5SQr+kX4=";
+    })
+  ];
+
+  nativeBuildInputs = [
     cmake
     pkg-config
     doxygen
   ];
-  buildInputs = with pkgs; [ libuecc ];
+  buildInputs = [ libuecc ];
 
   meta = with lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";

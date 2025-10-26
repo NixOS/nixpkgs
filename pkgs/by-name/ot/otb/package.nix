@@ -33,7 +33,7 @@
   enableMiscellaneous ? true,
   enableOpenMP ? false,
   enablePython ? true,
-  extraPythonPackages ? ps: with ps; [ ],
+  extraPythonPackages ? ps: [ ],
   enableRemote ? true,
   enableShark ? true,
   enableSAR ? true,
@@ -94,6 +94,11 @@ let
         hash = "sha256-dDyqYOzo91afR8W7k2N64X6l7t6Ws1C9iuRkWHUe0fg=";
       })
     ];
+
+    postPatch = ''
+      substituteInPlace Modules/ThirdParty/KWSys/src/KWSys/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.1 FATAL_ERROR)' 'cmake_minimum_required(VERSION 3.10)'
+    '';
 
     # fix the CMake config files for ITK which contains double slashes
     postInstall = (oldArgs.postInstall or "") + ''

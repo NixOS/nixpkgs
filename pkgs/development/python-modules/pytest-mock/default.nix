@@ -11,17 +11,17 @@
 
 buildPythonPackage rec {
   pname = "pytest-mock";
-  version = "3.14.1";
+  version = "3.15.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytest-dev";
     repo = "pytest-mock";
     tag = "v${version}";
-    hash = "sha256-aOa/MQAgQePX/NivQ6G37r70sZnqBA+y+GXvPVBxmvs=";
+    hash = "sha256-a9Mu0FfU8rTbMeA1YoM/Kb5R2IUO8FyzQfscBVuBFfo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];

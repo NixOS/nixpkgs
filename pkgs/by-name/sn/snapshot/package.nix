@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  libglycin,
   glycin-loaders,
   cargo,
   desktop-file-utils,
@@ -34,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix paths in glycin library
-    glycin-loaders.passthru.glycinPathsPatch
+    libglycin.passthru.glycinPathsPatch
   ];
 
   cargoVendorDir = "vendor";

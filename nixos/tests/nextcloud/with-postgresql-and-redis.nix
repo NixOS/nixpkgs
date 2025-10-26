@@ -39,7 +39,7 @@ runTest (
             };
             extraAppsEnable = true;
             extraApps = with config.services.nextcloud.package.packages.apps; {
-              inherit notify_push notes;
+              inherit notes;
             };
             settings.trusted_proxies = [ "::1" ];
           };

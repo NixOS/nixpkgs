@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DVGL_SYSTEMFLTK=1"
     "-DTJPEG_LIBRARY=${libjpeg_turbo.out}/lib/libturbojpeg.so"
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "4.0")
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

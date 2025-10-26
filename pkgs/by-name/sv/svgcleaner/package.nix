@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/RazrFalcon/SVGCleaner";
     changelog = "https://github.com/RazrFalcon/svgcleaner/releases";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "svgcleaner";
   };
 }

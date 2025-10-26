@@ -34,6 +34,13 @@ maven.buildMavenPackage rec {
     ./fix-default-maven-plugin-versions.patch
   ];
 
+  # use non-absolute paths for Exec and Icon fields in the desktop item
+  postPatch = ''
+    substituteInPlace "bin/packaging/debian/Juggling Lab.desktop" \
+      --replace-fail "/opt/juggling-lab/bin/Juggling\ Lab" "jugglinglab" \
+      --replace-fail "/opt/juggling-lab/lib/Juggling_Lab.png" "jugglinglab"
+  '';
+
   mvnHash = "sha256-1Uzo9nRw+YR/sd7CC9MTPe/lttkRX6BtmcsHaagP1Do=";
 
   # fix jar timestamps for reproducibility
@@ -53,6 +60,14 @@ maven.buildMavenPackage rec {
     ${lib.optionalString (platformName != null) ''
       install -Dm755 bin/ortools-lib/ortools-${platformName}/* -t $out/lib/ortools-lib
     ''}
+
+    install -Dm644 \
+      "bin/packaging/debian/Juggling Lab.png" \
+      "$out/share/icons/hicolor/256x256/apps/jugglinglab.png"
+
+    install -Dm644 \
+      "bin/packaging/debian/Juggling Lab.desktop" \
+      "$out/share/applications/jugglinglab.desktop"
 
     runHook postInstall
   '';

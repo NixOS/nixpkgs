@@ -16,6 +16,7 @@
 
   # buildInputs
   dolfinx,
+  darwinMinVersionHook,
 
   # dependency
   numpy,
@@ -63,7 +64,6 @@ buildPythonPackage rec {
   pyproject = true;
 
   pythonRelaxDeps = [
-    "cffi"
     "fenics-ufl"
   ];
 
@@ -87,7 +87,8 @@ buildPythonPackage rec {
 
   buildInputs = [
     fenicsPackages.dolfinx
-  ];
+  ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3");
 
   dependencies = [
     numpy
@@ -102,8 +103,6 @@ buildPythonPackage rec {
     (mpi4py.override { inherit (fenicsPackages) mpi; })
   ];
 
-  doCheck = true;
-
   nativeCheckInputs = [
     scipy
     matplotlib
@@ -113,19 +112,11 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    rm -rf dolfinx
+    cd test
   '';
 
   pythonImportsCheck = [
     "dolfinx"
-  ];
-
-  disabledTests = [
-    # require cffi<1.17
-    "test_cffi_expression"
-    "test_hexahedron_mesh"
-    # https://github.com/FEniCS/dolfinx/issues/1104
-    "test_cube_distance"
   ];
 
   passthru = {

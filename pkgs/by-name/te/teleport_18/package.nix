@@ -6,7 +6,7 @@
   extPatches ? [ ],
 }:
 
-buildTeleport rec {
+buildTeleport {
   version = "18.2.0";
   hash = "sha256-JWgGRv9pK76u7IxwqnBcuAI93XIKfIVvme7l+a/3J7c=";
   vendorHash = "sha256-oPi/rIuwze2ZlyHfZ2MdDHHvdIaF2IZ2aklEVNRgoLo=";

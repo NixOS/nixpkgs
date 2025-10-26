@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "Language independent, scalable, open extension to CGI";
     homepage = "https://fastcgi-archives.github.io/"; # Formerly http://www.fastcgi.com/
-    license = "FastCGI, see LICENSE.TERMS";
+    license = lib.licenses.oml;
     mainProgram = "cgi-fcgi";
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jtbx ];

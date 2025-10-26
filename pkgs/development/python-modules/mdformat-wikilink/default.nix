@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "mdformat-wikilink";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmr232";
     repo = "mdformat-wikilink";
     tag = "v${version}";
-    hash = "sha256-KOPh9iZfb3GCvslQeYBgqNaOyqtWi2llkaiWE7nmcJo=";
+    hash = "sha256-tYUF5gNmXjzlf0jQg0tL2ayFGCSFFeYJHkWA6cYLpvI=";
   };
 
   build-system = [ poetry-core ];

@@ -8,6 +8,7 @@ const typeConfig = {
   release: ['development', 'primary'],
   staging: ['development', 'secondary'],
   'staging-next': ['development', 'secondary'],
+  'staging-nixos': ['development', 'secondary'],
   'haskell-updates': ['development', 'secondary'],
   nixos: ['channel'],
   nixpkgs: ['channel'],
@@ -19,6 +20,7 @@ const orderConfig = {
   master: 0,
   release: 1,
   staging: 2,
+  'staging-nixos': 2,
   'haskell-updates': 3,
   'staging-next': 4,
 }

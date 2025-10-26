@@ -72,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
               (previousAttrs.buildInputs or [ ]) ++ lib.lists.concatMap (drv: drv.buildInputs) selectedExtensions
             );
             postInstall = (previousAttrs.postInstall or "") + ''
-              for extension in ${builtins.toString selectedExtensions} ; do
+              for extension in ${toString selectedExtensions} ; do
                 cp -r $extension/* $out
                 # Some files are the same for all/several extensions. We allow overwriting them again.
                 chmod -R +w $out

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchPypi,
+  fetchFromGitHub,
   python,
   numpy_2,
   pythonAtLeast,
@@ -59,15 +59,17 @@ let
 in
 buildPythonPackage rec {
   pname = "numpy";
-  version = "2.3.2";
+  version = "2.3.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
-  src = fetchPypi {
-    inherit pname version;
-    extension = "tar.gz";
-    hash = "sha256-4EhqEewwzey1PxhNSW0caiB4bIHlXkFkAnATAFb47kg=";
+  src = fetchFromGitHub {
+    owner = "numpy";
+    repo = "numpy";
+    tag = "v${version}";
+    fetchSubmodules = true;
+    hash = "sha256-6RMzF5vOWSX7gL3mps9ECClJF3mNqL1mexM6j8/yfdc=";
   };
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -176,7 +178,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/numpy/numpy/releases/tag/v${version}";
+    changelog = "https://github.com/numpy/numpy/releases/tag/${src.tag}";
     description = "Scientific tools for Python";
     homepage = "https://numpy.org/";
     license = lib.licenses.bsd3;

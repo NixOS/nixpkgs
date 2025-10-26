@@ -41,12 +41,12 @@ llscheck,,,,,,mrcjkb
 lmathx,,,,,5.3,alexshpilkin
 lmpfrlib,,,,,5.3,alexshpilkin
 loadkit,,,,,,alerque
-lpeg,,,,,,vyp
+lpeg,,,,,,
 lpeg_patterns,,,,,,
 lpeglabel,,,,1.6.0,,
 lrexlib-gnu,,,,,,
 lrexlib-oniguruma,,,,,,junestepp
-lrexlib-pcre,,,,,,vyp
+lrexlib-pcre,,,,,,
 lrexlib-posix,,,,,,
 lsp-progress.nvim,,,,,,gepbird
 lua-cjson,,,,,,
@@ -86,7 +86,7 @@ lualdap,,,,,,aanderse
 lualine.nvim,,,http://luarocks.org/dev,,,
 lualogging,,,,,,
 luaossl,,,,,5.1,
-luaposix,,,,34.1.1-1,,vyp lblasc
+luaposix,,,,34.1.1-1,,lblasc
 luaprompt,,,,,,Freed-Wu
 luarepl,,,,,,
 luarocks,,,,,,mrcjkb teto
@@ -96,7 +96,7 @@ luarocks-build-treesitter-parser-cpp,,,,,,mrcjkb
 luasec,,,,,,flosse
 luasnip,,,,,,
 luasocket,,,,,,
-luasql-sqlite3,,,,,,vyp
+luasql-sqlite3,,,,,,
 luassert,,,,,,
 luasystem,,,,,,
 luatext,,,,,,
@@ -148,7 +148,7 @@ sofa,,,,,,f4z3r
 sqlite,,,,,,
 std._debug,,,,,,
 std.normalize,,,,,,
-stdlib,,,,41.2.2,,vyp
+stdlib,,,,41.2.2,,
 teal-language-server,,,,,,
 telescope-manix,,,,,,
 telescope.nvim,,,,,5.1,

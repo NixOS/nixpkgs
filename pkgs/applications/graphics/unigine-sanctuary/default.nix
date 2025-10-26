@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
     homepage = "https://benchmark.unigine.com/sanctuary";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
-    maintainers = [ lib.maintainers.BarinovMaxim ];
+    maintainers = [ ];
     platforms = [
       "x86_64-linux"
       "i686-linux"

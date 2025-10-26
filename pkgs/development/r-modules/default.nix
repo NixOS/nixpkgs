@@ -522,7 +522,7 @@ let
         xorg.libXdmcp
       ];
     GeneralizedWendland = [ pkgs.gsl ];
-    ggiraph = with pkgs; [ pkgs.libpng.dev ];
+    ggiraph = [ pkgs.libpng.dev ];
     git2r = with pkgs; [
       zlib.dev
       openssl.dev

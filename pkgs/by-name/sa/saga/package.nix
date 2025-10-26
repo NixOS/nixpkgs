@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "saga";
-  version = "9.9.2";
+  version = "9.10.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/saga-gis/saga-${version}.tar.gz";
-    hash = "sha256-fBnHootXNwdnB+TnBMS7U7oPWhs3p7cFvPVbAIwQCBE=";
+    hash = "sha256-xsXOB4WCzkZhH/mIYEUQNiQ9NnX+0CF2IcWkmwEJBUA=";
   };
 
   sourceRoot = "saga-${version}/saga-gis";
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "System for Automated Geoscientific Analyses";
     homepage = "https://saga-gis.sourceforge.io";
-    changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog ${version}/";
+    changelog = "https://sourceforge.net/p/saga-gis/wiki/Changelog%20${version}/";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       michelk

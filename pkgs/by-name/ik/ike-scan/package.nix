@@ -7,7 +7,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "ike-scan";
   version = "1.9.5-unstable-2024-09-15";
 

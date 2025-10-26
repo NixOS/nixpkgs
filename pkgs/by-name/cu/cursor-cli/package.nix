@@ -9,26 +9,26 @@ let
   inherit (stdenv) hostPlatform;
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://downloads.cursor.com/lab/2025.09.18-39624ef/linux/x64/agent-cli-package.tar.gz";
-      hash = "sha256-LbckJixgsrxCUKxy06Llfurd4h52fcQ8MTRfY3YUxHk=";
+      url = "https://downloads.cursor.com/lab/2025.10.20-f1b214f/linux/x64/agent-cli-package.tar.gz";
+      hash = "sha256-v6wGVuKrK4JFFaJN55le5+wZV7LI9Bc70Osc05F0PeQ=";
     };
     aarch64-linux = fetchurl {
-      url = "https://downloads.cursor.com/lab/2025.09.18-39624ef/linux/arm64/agent-cli-package.tar.gz";
-      hash = "sha256-9XvRwPnW6fezjAzsvxUINRppQIDwCq5nESpbYWojt5U=";
+      url = "https://downloads.cursor.com/lab/2025.10.20-f1b214f/linux/arm64/agent-cli-package.tar.gz";
+      hash = "sha256-j3z3K2tt2wl54OjLMPudGnCP2+9U2dOspM0G0Ob68Ds=";
     };
     x86_64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/lab/2025.09.18-39624ef/darwin/x64/agent-cli-package.tar.gz";
-      hash = "sha256-7cW29+jLfcm+tx1EmIeI+FWZXO8L4UdArJ7wvmMSCoM=";
+      url = "https://downloads.cursor.com/lab/2025.10.20-f1b214f/darwin/x64/agent-cli-package.tar.gz";
+      hash = "sha256-KRECUSqYohrCiF3YySZeJ0MaRhb7h+O+KyqCfpCbV8w=";
     };
     aarch64-darwin = fetchurl {
-      url = "https://downloads.cursor.com/lab/2025.09.18-39624ef/darwin/arm64/agent-cli-package.tar.gz";
-      hash = "sha256-LxuEMzROif0LO1bjS203lB8QBaXnVdmHHN+I3UXl578=";
+      url = "https://downloads.cursor.com/lab/2025.10.20-f1b214f/darwin/arm64/agent-cli-package.tar.gz";
+      hash = "sha256-4S1HMPielrUwP5pyA/tp1FuByge9dcRx2XndTFnBKbY=";
     };
   };
 in
 stdenv.mkDerivation {
   pname = "cursor-cli";
-  version = "0-unstable-2025-09-18";
+  version = "0-unstable-2025-10-20";
 
   src = sources.${hostPlatform.system};
 

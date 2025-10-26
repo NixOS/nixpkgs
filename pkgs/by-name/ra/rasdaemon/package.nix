@@ -130,6 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
     changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
-    maintainers = with lib.maintainers; [ evils ];
+    maintainers = [ ];
   };
 })

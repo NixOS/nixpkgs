@@ -20,6 +20,15 @@
   postgresql,
   buildPackages,
 
+  # Curl
+  curlSupport ?
+    lib.meta.availableOn stdenv.hostPlatform curl
+    # Building statically fails with:
+    # configure: error: library 'curl' does not provide curl_multi_init
+    # https://www.postgresql.org/message-id/487dacec-6d8d-46c0-a36f-d5b8c81a56f1%40technowledgy.de
+    && !stdenv.hostPlatform.isStatic,
+  curl,
+
   # GSSAPI
   gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
   libkrb5,
@@ -31,14 +40,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libpq";
-  version = "17.6";
+  version = "18.0";
 
   src = fetchFromGitHub {
     owner = "postgres";
     repo = "postgres";
     # rev, not tag, on purpose: see generic.nix.
-    rev = "refs/tags/REL_17_6";
-    hash = "sha256-/7C+bjmiJ0/CvoAc8vzTC50vP7OsrM6o0w+lmmHvKvU=";
+    rev = "refs/tags/REL_18_0";
+    hash = "sha256-xA6gbJe4tIV9bYRFrdI4Rfy20ZwTkvyyjt7ZxvCFEec=";
   };
 
   __structuredAttrs = true;
@@ -61,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     zlib
     openssl
   ]
+  ++ lib.optionals curlSupport [ curl ]
   ++ lib.optionals gssSupport [ libkrb5 ]
   ++ lib.optionals nlsSupport [ gettext ];
 
@@ -109,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     "--without-perl"
     "--without-readline"
   ]
+  ++ lib.optionals curlSupport [ "--with-libcurl" ]
   ++ lib.optionals gssSupport [ "--with-gssapi" ]
   ++ lib.optionals nlsSupport [ "--enable-nls" ];
 
@@ -134,6 +145,11 @@ stdenv.mkDerivation (finalAttrs: {
     make -C src/common install pg_config.env
     make -C src/include install
     make -C src/interfaces/libpq install
+  ''
+  + lib.optionalString curlSupport ''
+    make -C src/interfaces/libpq-oauth install
+  ''
+  + ''
     make -C src/port install
 
     substituteInPlace src/common/pg_config.env \

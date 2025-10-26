@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   NIX_LDFLAGS = "-lm";
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DCMAKE_INSTALL_LIBDIR=lib"
   ];

@@ -33,7 +33,7 @@ buildGoModule rec {
 
   # Move binaries to separate outputs and symlink them back to $out
   postInstall = lib.concatStringsSep "\n" (
-    builtins.map (
+    map (
       bin:
       "mkdir -p \$${bin}/bin && mv $out/bin/${bin} \$${bin}/bin/ && ln -s \$${bin}/bin/${bin} $out/bin/"
     ) bins

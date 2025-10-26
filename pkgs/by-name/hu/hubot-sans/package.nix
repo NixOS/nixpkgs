@@ -37,7 +37,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       of a typeface to be incorporated into one single file, and are supported
       by all major browsers.
     '';
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

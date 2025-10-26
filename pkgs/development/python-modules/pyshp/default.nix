@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "pyshp";
-  version = "3.0.1";
+  version = "3.0.2.post1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GeospatialPython";
     repo = "pyshp";
     tag = version;
-    hash = "sha256-/ziHRjMwzQe3rnMZW9FTT0fyFDPWSv+Tm+tNG67t4gE=";
+    hash = "sha256-iW8zE/ZRDzSD+uzcHhxey7MxRvWDML3t0/mevz/cvXQ=";
   };
 
   build-system = [ hatchling ];

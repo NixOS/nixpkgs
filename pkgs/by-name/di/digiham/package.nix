@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/dmr_decoder";
+  versionCheckProgram = "${placeholder "out"}/bin/dmr_decoder";
   doInstallCheck = true;
 
   meta = {

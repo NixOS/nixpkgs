@@ -7,13 +7,17 @@
 }:
 
 let
-  mkDerivation =
-    if builtins.isNull buildPythonPackage then stdenv.mkDerivation else buildPythonPackage;
+  mkDerivation = if isNull buildPythonPackage then stdenv.mkDerivation else buildPythonPackage;
 in
 mkDerivation rec {
   pname = "pigpio";
   version = "79";
   format = if buildPythonPackage == null then null else "setuptools";
+
+  cmakeFlags = [
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
 
   src = fetchFromGitHub {
     owner = "joan2937";

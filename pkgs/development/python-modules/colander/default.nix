@@ -37,6 +37,6 @@ buildPythonPackage rec {
     description = "Simple schema-based serialization and deserialization library";
     homepage = "https://github.com/Pylons/colander";
     license = licenses.free; # http://repoze.org/LICENSE.txt
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

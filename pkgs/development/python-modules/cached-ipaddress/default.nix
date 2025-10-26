@@ -4,25 +4,23 @@
   cython,
   fetchFromGitHub,
   poetry-core,
+  pytest-codspeed,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   propcache,
 }:
 
 buildPythonPackage rec {
   pname = "cached-ipaddress";
-  version = "0.10.0";
+  version = "1.0.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "cached-ipaddress";
     tag = "v${version}";
-    hash = "sha256-g6ffp08SXckCJthGICeuEqZ71XeLklKmz6Ziz/AHBOg=";
+    hash = "sha256-/bq9RZcC6VDK5JxT1QcAJpWNmioNqOearYc34KsCvHs=";
   };
 
   build-system = [
@@ -34,6 +32,7 @@ buildPythonPackage rec {
   dependencies = [ propcache ];
 
   nativeCheckInputs = [
+    pytest-codspeed
     pytest-cov-stub
     pytestCheckHook
   ];

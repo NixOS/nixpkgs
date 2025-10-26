@@ -110,12 +110,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
-  version = "3.23.7";
+  version = "3.24.0";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6jP1EEYGMkttmEh0Fvtm0Fgp0NwHQlG21fY7cnLmXTI=";
+    hash = "sha256-5jqYTo5sfwLNByOlpry0zpI+q3u7ErwJJ97h7w5bvNQ=";
   };
+
+  patches = [
+    (replaceVars ./fix-petsc4py-install-prefix.patch {
+      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs ./lib/petsc/bin
+
+    substituteInPlace config/example_template.py \
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+  '';
 
   strictDeps = true;
 
@@ -150,19 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
-
-  patches = [
-    (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
-    })
-  ];
-
-  postPatch = ''
-    patchShebangs ./lib/petsc/bin
-
-    substituteInPlace config/example_template.py \
-      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
-  '';
 
   configureFlags = [
     "--with-blaslapack=1"

@@ -11,12 +11,12 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
 buildGoModule (finalAttrs: {
   pname = "boringssl";
-  version = "0.20250818.0";
+  version = "0.20251002.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-lykIlC0tvjtjjS/rQTeX4vK9PgI+A8EnasEC+HYspvg=";
+    hash = "sha256-/78GCbyB37lada0fA8MsOYXVJSUCM7CuC2pHCpy9qto=";
   };
 
   patches = [
@@ -46,6 +46,9 @@ buildGoModule (finalAttrs: {
     lib.optionals stdenv.cc.isGNU [
       # Needed with GCC 12 but breaks on darwin (with clang)
       "-Wno-error=stringop-overflow"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=character-conversion"
     ]
   );
 

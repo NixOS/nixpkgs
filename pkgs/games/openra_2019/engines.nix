@@ -27,6 +27,7 @@ let
         repo = "OpenRA";
         inherit rev sha256 postFetch;
       };
+      pos = __curPos;
     } name).overrideAttrs
       (origAttrs: {
         postInstall = ''

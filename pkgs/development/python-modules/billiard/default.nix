@@ -5,21 +5,18 @@
   setuptools,
   pytestCheckHook,
   psutil,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "billiard";
-  version = "4.2.1";
+  version = "4.2.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "celery";
     repo = "billiard";
     tag = "v${version}";
-    hash = "sha256-9LuAlIn6hNiZGvWuaaDQxx9g0aBVF6Z2krxEOrssqRs=";
+    hash = "sha256-KUA1ydRoDIALhapDPG4c0C4q0Z72MReHeFCqqGviCNw=";
   };
 
   build-system = [ setuptools ];
@@ -39,7 +36,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python multiprocessing fork with improvements and bugfixes";
     homepage = "https://github.com/celery/billiard";
-    changelog = "https://github.com/celery/billiard/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/celery/billiard/blob/${src.tag}/CHANGES.txt";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nickcao ];
   };

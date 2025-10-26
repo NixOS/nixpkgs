@@ -23,7 +23,7 @@ let
   # NOTE: when updating this to a new non-patch version, please also try to
   # update the plugins. Plugins only work if they are compiled for the same
   # major/minor version.
-  version = "0.106.1";
+  version = "0.108.0";
 in
 rustPlatform.buildRustPackage {
   pname = "nushell";
@@ -33,10 +33,10 @@ rustPlatform.buildRustPackage {
     owner = "nushell";
     repo = "nushell";
     tag = version;
-    hash = "sha256-VrGsdO7RiTlf8JK3MBMcgj0z4cWUklDwikMN5Pu6JQI=";
+    hash = "sha256-8OMTscMObV+IOSgOoTSzJvZTz6q/l2AjrOb9y3p2tZY=";
   };
 
-  cargoHash = "sha256-GSpR54QGiY9Yrs/A8neoKK6hMvSr3ORtNnwoz4GGprY=";
+  cargoHash = "sha256-M2wkhhaS3bVhwaa3O0CUK5hL757qFObr7EDtBFXXwxg=";
 
   nativeBuildInputs = [
     pkg-config

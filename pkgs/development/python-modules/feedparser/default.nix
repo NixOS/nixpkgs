@@ -40,6 +40,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/kurtmckee/feedparser";
     changelog = "https://feedparser.readthedocs.io/en/latest/changelog.html";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

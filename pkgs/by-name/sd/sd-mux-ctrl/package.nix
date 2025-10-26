@@ -19,6 +19,13 @@ stdenv.mkDerivation {
     hash = "sha256-b0uoxVPfSrqNt0wJoQho9jlpQQUjofgFm93P+UNFtDs=";
   };
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config

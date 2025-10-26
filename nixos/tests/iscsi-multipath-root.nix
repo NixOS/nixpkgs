@@ -150,12 +150,12 @@ in
         boot.initrd.network.enable = true;
         boot.loader.grub.enable = false;
 
-        boot.kernelParams = lib.mkOverride 5 ([
+        boot.kernelParams = lib.mkOverride 5 [
           "boot.shell_on_fail"
           "console=tty1"
           "ip=192.168.1.1:::255.255.255.0::ens9:none"
           "ip=192.168.2.1:::255.255.255.0::ens10:none"
-        ]);
+        ];
 
         # defaults to true, puts some code in the initrd that tries to mount an overlayfs on /nix/store
         virtualisation.writableStore = false;

@@ -4,7 +4,6 @@ import logging
 import os
 import sys
 from pathlib import Path
-from subprocess import CalledProcessError
 from typing import Final
 
 from . import nix, tmpdir
@@ -14,6 +13,7 @@ from .process import Remote, cleanup_ssh
 from .utils import Args, tabulate
 
 NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
+NIXOS_REBUILD_REEXEC_ENV: Final = "_NIXOS_REBUILD_REEXEC"
 
 logger: Final = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
@@ -25,27 +25,26 @@ def reexec(
     build_flags: Args,
     flake_build_flags: Args,
 ) -> None:
+    if os.environ.get(NIXOS_REBUILD_REEXEC_ENV):
+        return
+
     drv = None
-    try:
-        # Parsing the args here but ignore ask_sudo_password since it is not
-        # needed and we would end up asking sudo password twice
-        if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
-            drv = nix.build_flake(
-                NIXOS_REBUILD_ATTR,
-                flake,
-                flake_build_flags | {"no_link": True},
-            )
-        else:
-            build_attr = BuildAttr.from_arg(args.attr, args.file)
-            drv = nix.build(
-                NIXOS_REBUILD_ATTR,
-                build_attr,
-                build_flags | {"no_out_link": True},
-            )
-    except CalledProcessError:
-        logger.warning(
-            "could not build a newer version of nixos-rebuild, using current version",
-            exc_info=logger.isEnabledFor(logging.DEBUG),
+    # Parsing the args here but ignore ask_sudo_password since it is not
+    # needed and we would end up asking sudo password twice
+    if flake := Flake.from_arg(
+        args.flake, Remote.from_arg(args.target_host, ask_sudo_password=None)
+    ):
+        drv = nix.build_flake(
+            NIXOS_REBUILD_ATTR,
+            flake,
+            flake_build_flags | {"no_link": True},
+        )
+    else:
+        build_attr = BuildAttr.from_arg(args.attr, args.file)
+        drv = nix.build(
+            NIXOS_REBUILD_ATTR,
+            build_attr,
+            build_flags | {"no_out_link": True},
         )
 
     if drv:
@@ -62,7 +61,7 @@ def reexec(
             cleanup_ssh()
             tmpdir.TMPDIR.cleanup()
             try:
-                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+                os.execve(new, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
             except Exception:
                 # Possible errors that we can have here:
                 # - Missing the binary
@@ -74,7 +73,7 @@ def reexec(
                 )
                 # We already run clean-up, let's re-exec in the current version
                 # to avoid issues
-                os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+                os.execve(current, argv, os.environ | {NIXOS_REBUILD_REEXEC_ENV: "1"})
 
 
 def _validate_image_variant(image_variant: str, variants: ImageVariants) -> None:

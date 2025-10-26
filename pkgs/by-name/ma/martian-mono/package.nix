@@ -33,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/evilmartians/mono";
     changelog = "https://github.com/evilmartians/mono/raw/v${version}/Changelog.md";
     license = lib.licenses.ofl;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

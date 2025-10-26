@@ -15,6 +15,7 @@
   gtksourceview5,
   lcms2,
   libadwaita,
+  libglycin,
   gst_all_1,
   desktop-file-utils,
   appstream-glib,
@@ -62,7 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   # We should eventually use a cargo vendor patch hook instead
   preConfigure = ''
     pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
+      patch -p3 < ${libglycin.passthru.glycinPathsPatch}
     popd
   '';
 

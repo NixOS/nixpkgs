@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/m3scluster/mesos-dns/releases/tag/v${finalAttrs.version}";
     description = "DNS-based service discovery for Mesos";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mesos-dns";
   };
 })

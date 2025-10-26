@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Layout generator for the river Wayland compositor";
     license = with lib.licenses; [ gpl3Plus ];
     mainProgram = "stacktile";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

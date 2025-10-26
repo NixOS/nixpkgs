@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Jupyter widgets base for Vue libraries";
     homepage = "https://github.com/mariobuikhuizen/ipyvue";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

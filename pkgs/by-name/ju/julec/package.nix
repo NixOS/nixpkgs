@@ -1,6 +1,7 @@
 {
   lib,
   clangStdenv,
+  callPackage,
   fetchFromGitHub,
 }:
 
@@ -92,6 +93,12 @@ clangStdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru = {
+    # see doc/hooks/julec.section.md
+    hook = callPackage ./hook.nix { julec = finalAttrs.finalPackage; };
+    tests.hello-jule = callPackage ./test { julec = finalAttrs.finalPackage; };
+  };
 
   meta = {
     description = "Jule Programming Language Compiler";

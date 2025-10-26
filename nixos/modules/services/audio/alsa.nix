@@ -157,7 +157,7 @@ in
 
     controls = lib.mkOption {
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options.name = lib.mkOption {
             type = lib.types.nullOr lib.types.str;
             default = null;
@@ -187,7 +187,7 @@ in
               The maximum volume in dB.
             '';
           };
-        })
+        }
       );
       default = { };
       example = lib.literalExpression ''
@@ -206,7 +206,7 @@ in
 
     cardAliases = lib.mkOption {
       type = lib.types.attrsOf (
-        lib.types.submodule ({
+        lib.types.submodule {
           options.driver = lib.mkOption {
             type = lib.types.str;
             description = ''
@@ -220,7 +220,7 @@ in
               The ID of the sound card
             '';
           };
-        })
+        }
       );
       default = { };
       example = lib.literalExpression ''

@@ -5,7 +5,7 @@
   runCommand,
 }:
 assert version == "2.8.0";
-(rec {
+rec {
   src_asmjit = fetchFromGitHub {
     owner = "asmjit";
     repo = "asmjit";
@@ -716,5 +716,6 @@ assert version == "2.8.0";
   src_vcpkg_recursive = src_vcpkg;
   src_VulkanMemoryAllocator_recursive = src_VulkanMemoryAllocator;
   src_XNNPACK_recursive = src_XNNPACK;
-}).src_pytorch_recursive
+}
+.src_pytorch_recursive
 # Update using: unroll-src [version]

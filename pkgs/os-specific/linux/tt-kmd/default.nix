@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "tt-kmd";
-  version = "2.3.0";
+  version = "2.4.1";
 
   src = fetchFromGitHub {
     owner = "tenstorrent";
     repo = "tt-kmd";
     tag = "ttkmd-${finalAttrs.version}";
-    hash = "sha256-o9F6WsiNQGD/0VraBVO2oEwPTc2Yjh3aitvITp/M2+4=";
+    hash = "sha256-m4XZdgOHQOWNoZlV2VqN6yhLcQuZxam22JKpOGXbjwI=";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

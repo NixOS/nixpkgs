@@ -149,7 +149,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
         "-vr"
         "v(${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\.[0-9]*)"
         "--override-filename"
-        "pkgs/by-name/ka/kanidm/${versionUnderscored finalAttrs}.nix"
+        "pkgs/servers/kanidm/${versionUnderscored finalAttrs}.nix"
       ];
     });
 

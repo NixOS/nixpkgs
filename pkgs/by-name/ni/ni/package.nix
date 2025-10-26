@@ -13,19 +13,19 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "ni";
-  version = "26.1.0";
+  version = "27.0.0";
 
   src = fetchFromGitHub {
     owner = "antfu-collective";
     repo = "ni";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vde0NUOWVfdrJUgYBLP4C3I+lFv3YJVtcqUgB7Nx2b0=";
+    hash = "sha256-Yh159OpM4LPWJMO2Jv8xkzqRFurgK8EAQDyUIhWfHZ4=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 2;
-    hash = "sha256-aNRWBnlZ72OmU619L99aVqL317w4gSaJNtoO25u+s40=";
+    hash = "sha256-pg2zFm84sqTRM/KaNxnvtZMZHhgdrThPoMV58KKbvHA=";
   };
 
   nativeBuildInputs = [

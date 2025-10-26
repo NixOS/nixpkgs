@@ -1,6 +1,7 @@
 {
   callPackage,
   lib,
+  config,
   stdenv,
   makeWrapper,
   fetchurl,
@@ -112,16 +113,6 @@ self: super:
       )
   ) { };
 
-  appres = super.appres.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      meson
-      ninja
-    ];
-    meta = attrs.meta // {
-      mainProgram = "appres";
-    };
-  });
-
   bitmap = addMainProgram super.bitmap { };
 
   editres = super.editres.overrideAttrs (attrs: {
@@ -149,28 +140,6 @@ self: super:
   iceauth = addMainProgram super.iceauth { };
 
   mkfontdir = xorg.mkfontscale;
-
-  libXtst = super.libXtst.overrideAttrs (attrs: {
-    meta = attrs.meta // {
-      pkgConfigModules = [ "xtst" ];
-    };
-  });
-
-  libXfont = super.libXfont.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ freetype ]; # propagate link reqs. like bzip2
-    # prevents "misaligned_stack_error_entering_dyld_stub_binder"
-    configureFlags = lib.optional isDarwin "CFLAGS=-O0";
-  });
-
-  libWindowsWM = super.libWindowsWM.overrideAttrs (attrs: {
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  listres = addMainProgram super.listres { };
 
   xdpyinfo = super.xdpyinfo.overrideAttrs (attrs: {
     configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
@@ -204,113 +173,6 @@ self: super:
     };
   });
 
-  libXcomposite = super.libXcomposite.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
-  libXdamage = super.libXdamage.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXft = super.libXft.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXrender
-      freetype
-      fontconfig
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-
-    # the include files need ft2build.h, and Requires.private isn't enough for us
-    postInstall = ''
-      sed "/^Requires:/s/$/, freetype2/" -i "$dev/lib/pkgconfig/xft.pc"
-    '';
-    passthru = attrs.passthru // {
-      inherit freetype fontconfig;
-    };
-  });
-
-  libXi = super.libXi.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "man"
-      "doc"
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [
-      xorg.libXfixes
-      xorg.libXext
-    ];
-    configureFlags =
-      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-        "xorg_cv_malloc0_returns_null=no"
-      ]
-      ++ lib.optional stdenv.hostPlatform.isStatic "--disable-shared";
-  });
-
-  libXinerama = super.libXinerama.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXres = super.libXres.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-      "devdoc"
-    ];
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [ xorg.utilmacros ];
-    configureFlags = attrs.configureFlags or [ ] ++ malloc0ReturnsNullCrossFlag;
-  });
-
-  libXp = super.libXp.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-  });
-
-  libXpresent = super.libXpresent.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXrandr
-    ];
-    propagatedBuildInputs = attrs.propagatedBuildInputs or [ ] ++ [ xorg.libXfixes ];
-  });
-
-  libxkbfile = super.libxkbfile.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
-  libxshmfence = super.libxshmfence.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ]; # mainly to avoid propagation
-  });
-
   setxkbmap = super.setxkbmap.overrideAttrs (attrs: {
     postInstall = ''
       mkdir -p $out/share/man/man7
@@ -323,31 +185,6 @@ self: super:
   });
 
   oclock = addMainProgram super.oclock { };
-  smproxy = addMainProgram super.smproxy { };
-
-  viewres = addMainProgram super.viewres { };
-
-  x11perf = super.x11perf.overrideAttrs (attrs: {
-    buildInputs = attrs.buildInputs ++ [
-      freetype
-      fontconfig
-    ];
-    meta = attrs.meta // {
-      mainProgram = "x11perf";
-    };
-  });
-
-  xcalc = addMainProgram super.xcalc { };
-
-  xcbutilcursor = super.xcbutilcursor.overrideAttrs (attrs: {
-    outputs = [
-      "out"
-      "dev"
-    ];
-    meta = attrs.meta // {
-      maintainers = [ lib.maintainers.lovek323 ];
-    };
-  });
 
   xf86inputevdev = super.xf86inputevdev.overrideAttrs (attrs: {
     outputs = [
@@ -542,8 +379,6 @@ self: super:
       ];
     };
   });
-
-  xeyes = addMainProgram super.xeyes { };
 
   xkbcomp = super.xkbcomp.overrideAttrs (attrs: {
     configureFlags = [ "--with-xkb-config-root=${xorg.xkeyboardconfig}/share/X11/xkb" ];
@@ -851,33 +686,7 @@ self: super:
     ];
   });
 
-  twm = super.twm.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [
-      bison
-      flex
-    ];
-    meta = attrs.meta // {
-      mainProgram = "twm";
-    };
-  });
-
-  xauth = super.xauth.overrideAttrs (attrs: {
-    doCheck = false; # fails
-    preConfigure =
-      attrs.preConfigure or ""
-      # missing transitive dependencies
-      + lib.optionalString stdenv.hostPlatform.isStatic ''
-        export NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK -lxcb -lXau -lXdmcp"
-      '';
-    meta = attrs.meta // {
-      mainProgram = "xauth";
-    };
-  });
-
-  xbacklight = addMainProgram super.xbacklight { };
   xclock = addMainProgram super.xclock { };
-  xcompmgr = addMainProgram super.xcompmgr { };
-  xconsole = addMainProgram super.xconsole { };
 
   xinit =
     (super.xinit.override {
@@ -963,15 +772,11 @@ self: super:
   });
 
   xfd = addMainProgram super.xfd { };
-  xfontsel = addMainProgram super.xfontsel { };
   xfs = addMainProgram super.xfs { };
   xinput = addMainProgram super.xinput { };
   xkbevd = addMainProgram super.xkbevd { };
   xkbprint = addMainProgram super.xkbprint { };
   xload = addMainProgram super.xload { };
-  xmag = addMainProgram super.xmag { };
-  xmessage = addMainProgram super.xmessage { };
-  xmore = addMainProgram super.xmore { };
 
   xpr = addMainProgram super.xpr { };
 
@@ -982,32 +787,7 @@ self: super:
     };
   });
 
-  xset = addMainProgram super.xset { };
-  xsetroot = addMainProgram super.xsetroot { };
-  xsm = addMainProgram super.xsm { };
-  xstdcmap = addMainProgram super.xstdcmap { };
   xwd = addMainProgram super.xwd { };
-
-  # convert Type1 vector fonts to OpenType fonts
-  fontbitstreamtype1 = super.fontbitstreamtype1.overrideAttrs (attrs: {
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [ fontforge ];
-
-    postBuild = ''
-      # convert Postscript (Type 1) font to otf
-      for i in $(find -type f -name '*.pfa' -o -name '*.pfb'); do
-          name=$(basename $i | cut -d. -f1)
-          fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$name.otf\")"
-      done
-    '';
-
-    postInstall = ''
-      # install the otf fonts
-      fontDir="$out/lib/X11/fonts/misc/"
-      install -D -m 644 -t "$fontDir" *.otf
-      mkfontscale "$fontDir"
-    '';
-  });
-
 }
 
 # mark some packages as unfree
@@ -1016,13 +796,6 @@ self: super:
     # unfree but redistributable
     redist = [
       "fontibmtype1"
-      "fontbh100dpi"
-      "fontbh75dpi"
-
-      # Bigelow & Holmes fonts
-      # https://www.x.org/releases/current/doc/xorg-docs/License.html#Bigelow_Holmes_Inc_and_URW_GmbH_Luxi_font_license
-      "fontbhlucidatypewriter100dpi"
-      "fontbhlucidatypewriter75dpi"
     ];
 
     # unfree, possibly not redistributable
@@ -1048,3 +821,8 @@ self: super:
   mapNamesToAttrs (setLicense lib.licenses.unfreeRedistributable) redist
   // mapNamesToAttrs (setLicense lib.licenses.unfree) unfree
 )
+
+# deprecate some packages
+// lib.optionalAttrs config.allowAliases {
+  fontbitstreamspeedo = throw "Bitstream Speedo is an obsolete font format that hasn't been supported by Xorg since 2005"; # added 2025-09-24
+}

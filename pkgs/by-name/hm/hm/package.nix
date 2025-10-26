@@ -44,6 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.cc.isClang [
       "-Wno-error=bitwise-instead-of-logical"
       "-Wno-error=missing-braces"
+      "-Wno-error=nontrivial-memcall"
     ]
   );
 

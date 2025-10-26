@@ -104,7 +104,7 @@ in
         MemoryDenyWriteExecute = true;
         PrivateUsers = true;
 
-        SupplementaryGroups = lib.optional (allowSystemdJournal) "systemd-journal";
+        SupplementaryGroups = lib.optional allowSystemdJournal "systemd-journal";
       }
       // (optionalAttrs (!pkgs.stdenv.hostPlatform.isAarch64) {
         # FIXME: figure out why this breaks on aarch64

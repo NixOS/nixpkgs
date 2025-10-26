@@ -11,12 +11,12 @@
   libXrandr,
   libsndfile,
   lv2,
-  php82,
+  php84,
   pkg-config,
 }:
 
 let
-  php = php82;
+  php = php84;
 in
 
 stdenv.mkDerivation (finalAttrs: {

@@ -12,7 +12,7 @@ let
   pyVersion = "${lib.versions.major python.version}${lib.versions.minor python.version}";
   buildVersion = lib.optionalString (cudaPackages ? tensorrt) cudaPackages.tensorrt.version;
 in
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "tensorrt";
   version = buildVersion;
 
@@ -48,7 +48,6 @@ buildPythonPackage rec {
     homepage = "https://developer.nvidia.com/tensorrt";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ aidalgol ];
     broken = !(cudaPackages ? tensorrt) || !(cudaPackages ? cudnn);
   };
 }

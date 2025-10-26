@@ -39,6 +39,10 @@ jobs:
   update:
     runs-on: ubuntu-24.04-arm
     if: github.event_name != 'schedule' || github.repository_owner == 'NixOS'
+    env:
+      # TODO: Remove after 2026-03-04, when Node 24 becomes the default.
+      # https://github.blog/changelog/2025-09-19-deprecation-of-node-20-on-github-actions-runners/
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:

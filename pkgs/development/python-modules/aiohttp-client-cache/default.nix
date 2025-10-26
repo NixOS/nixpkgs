@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-client-cache";
-  version = "0.14.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchPypi {
     pname = "aiohttp_client_cache";
     inherit version;
-    hash = "sha256-onEcLEhhTLljQ57No49shj5Jv6bqF1t9/7z1yCRfzxk=";
+    hash = "sha256-r1VW9xmBSsoC22OEJxBpzsame+Maa32UN+CmqZgKSU8=";
   };
 
   build-system = [ poetry-core ];

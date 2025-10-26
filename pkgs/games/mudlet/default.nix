@@ -22,6 +22,7 @@
   qtmultimedia,
   discord-rpc,
   yajl,
+  withDiscordRpc ? false,
 }:
 
 let
@@ -98,8 +99,8 @@ stdenv.mkDerivation rec {
     qtbase
     qtmultimedia
     yajl
-    discord-rpc
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/... contains a forbidden reference to /build/
@@ -131,10 +132,12 @@ stdenv.mkDerivation rec {
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix DYLD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libsForQt5.qtkeychain
-          discord-rpc
-        ]
+        lib.makeLibraryPath (
+          [
+            libsForQt5.qtkeychain
+          ]
+          ++ lib.optional withDiscordRpc discord-rpc
+        )
       }:$out/lib" \
       --chdir "$out";
 
@@ -146,10 +149,12 @@ stdenv.mkDerivation rec {
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
       --prefix LD_LIBRARY_PATH : "${
-        lib.makeLibraryPath [
-          libsForQt5.qtkeychain
-          discord-rpc
-        ]
+        lib.makeLibraryPath (
+          [
+            libsForQt5.qtkeychain
+          ]
+          ++ lib.optional withDiscordRpc discord-rpc
+        )
       }" \
       --chdir "$out";
 

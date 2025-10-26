@@ -1,4 +1,5 @@
 {
+  clang_20,
   pkgsBuildBuild,
   lib,
   fetchFromGitHub,
@@ -9,7 +10,7 @@
   moreutils,
   esbuild,
   pkg-config,
-  libsecret,
+  stdenv,
   setDefaultServerPath ? true,
 }:
 
@@ -43,7 +44,9 @@ let
       esbuild
       # Required by `keytar`, which is a dependency of `vsce`.
       pkg-config
-    ];
+
+    ]
+    ++ lib.optionals stdenv.isDarwin [ clang_20 ]; # clang_21 breaks keytar
 
     # Follows https://github.com/rust-lang/rust-analyzer/blob/41949748a6123fd6061eb984a47f4fe780525e63/xtask/src/dist.rs#L39-L65
     installPhase = ''
@@ -73,9 +76,15 @@ vscode-utils.buildVscodeExtension {
   ];
 
   preInstall = lib.optionalString setDefaultServerPath ''
-    jq '(.contributes.configuration[] | select(.title == "server") | .properties."rust-analyzer.server.path".default) = $s' \
+    jq '(.contributes.configuration[] | select(.title == "Server") | .properties."rust-analyzer.server.path".default) = $s' \
       --arg s "${rust-analyzer}/bin/rust-analyzer" \
       package.json | sponge package.json
+
+    # Ensure that the previous modification worked, by searching for the binary path
+    grep -Fq ${rust-analyzer}/bin/rust-analyzer package.json || {
+      echo "Modifying 'rust-analyzer.server.path' in 'package.json' failed."
+      exit 1
+    }
   '';
 
   meta = {

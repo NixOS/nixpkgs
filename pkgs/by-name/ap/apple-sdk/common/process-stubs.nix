@@ -36,21 +36,5 @@ self: super: {
       llvm-readtapi --filetype=tbd-v4 usr/lib/$libSystem~ -o usr/lib/$libSystem
       rm usr/lib/$libSystem~
     done
-
-    # Strip weak C++ symbols to work around `libc++` leakage in system
-    # frameworks for now. These are only present on `x86_64-darwin`, so
-    # it should hopefully be harmless.
-    #
-    # TODO FIXME: This is kind of horrible.
-    while read -r -d "" stub; do
-      printf 'Stripping weak C++ symbols from %s\n' "$stub"
-      llvm-readtapi --filetype=tbd-v5 "$stub" \
-      | jq '
-        (.main_library, .libraries[]?).exported_symbols[]?.data.weak[]? |=
-          select(startswith("__Z") | not)
-      ' > $stub~
-      llvm-readtapi --filetype=tbd-v4 $stub~ -o $stub
-      rm $stub~
-    done < <(find . -name '*.tbd' -print0)
   '';
 }

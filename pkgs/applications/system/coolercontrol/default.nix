@@ -27,7 +27,7 @@ let
 
   applySharedDetails = drv: drv { inherit version src meta; };
 in
-rec {
+{
   coolercontrol-ui-data = applySharedDetails (callPackage ./coolercontrol-ui-data.nix { });
 
   coolercontrold = applySharedDetails (callPackage ./coolercontrold.nix { });

@@ -5,7 +5,7 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  rocm-merged-llvm,
+  llvm,
   clr,
   rocminfo,
   python3,
@@ -32,6 +32,10 @@
   ),
 }:
 
+# TODO: in 7.x CK is likely to gain support for
+# a) miopen kernel only build (MIOPEN_REQ_LIBS_ONLY)
+# b) header only build (useful for torch) https://github.com/ROCm/composable_kernel/issues/2030
+# that will likely allow us to get rid of this complicated split part build!
 stdenv.mkDerivation (finalAttrs: {
   preBuild = ''
     echo "This derivation isn't intended to be built directly and only exists to be overridden and built in chunks";
@@ -39,9 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   pname = "composable_kernel_base";
-  # Picked this version over 6.3 because much easier to get to build
-  # and it matches the version torch 2.6 wants
-  version = "6.4.0-unstable-2024-12-20";
+  version = "6.4-unstable-2025-05-22";
 
   outputs = [
     "out"
@@ -56,8 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "composable_kernel";
-    rev = "07339c738396ebeae57374771ded4dcf11bddf1e";
-    hash = "sha256-EvEBxlOpQ71BF57VW79WBo/cdxAwTKFXFMiYKyGyyEs=";
+    # Using a dev snapshot, trying to get MIOpen to work
+    rev = "bc2551ac3b27edc31f20863e3a873508fb73aad2";
+    hash = "sha256-bfmwbgR1ya+zkME3wOyaZX/e+1+ie0sSlugK/kozLsI=";
   };
 
   nativeBuildInputs = [
@@ -82,7 +85,6 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
   enableParallelBuilding = true;
   env.ROCM_PATH = clr;
-  env.HIP_CLANG_PATH = "${rocm-merged-llvm}/bin";
 
   cmakeFlags = [
     "-DCMAKE_MODULE_PATH=${clr}/hip/cmake"
@@ -100,7 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
     "-DBUILD_DEV=OFF"
+    "-DBUILD_MHA_LIB=ON"
     "-DROCM_PATH=${clr}"
+    "-DENABLE_CLANG_CPP_CHECKS=OFF"
     "-DCMAKE_HIP_COMPILER_ROCM_ROOT=${clr}"
 
     # FP8 can build for 908/90a but very slow build
@@ -118,6 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DGOOGLETEST_DIR=${gtest.src}" # Custom linker names
   ];
 
+  patches = [
+    # Significant build performance improvement
+    ./avoid-extra-host-compile.patch
+  ];
+
   # No flags to build selectively it seems...
   postPatch =
     # Reduce configure time by preventing thousands of clang-tidy targets being added
@@ -128,6 +137,14 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail clang_tidy_check '#clang_tidy_check'
       substituteInPlace CMakeLists.txt \
         --replace-fail "add_subdirectory(profiler)" ""
+      substituteInPlace cmake/EnableCompilerWarnings.cmake \
+        --replace-fail "-Werror" ""
+
+      # Apply equivalent change to https://github.com/ROCm/composable_kernel/pull/2564
+      # TODO: Remove after ROCm 7.1
+      find include/ck/tensor_operation/ -type f -name "*.hpp" -exec sed -i \
+        -e 's/!defined(__HIP_DEVICE_COMPILE__)/false/g' \
+        {} +
     ''
     # Optionally remove tests
     + lib.optionalString (!buildTests) ''
@@ -152,13 +169,22 @@ stdenv.mkDerivation (finalAttrs: {
       mv $out/bin/example_* $example/bin
     '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+  passthru = {
+    inherit gpuTargets;
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
+    };
+    anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
+    anyMfmaTarget =
+      (lib.lists.intersectLists gpuTargets [
+        "gfx908"
+        "gfx90a"
+        "gfx942"
+        "gfx950"
+      ]) != [ ];
   };
-
-  passthru.anyGfx9Target = lib.lists.any (lib.strings.hasPrefix "gfx9") gpuTargets;
 
   meta = with lib; {
     description = "Performance portable programming model for machine learning tensor operators";
@@ -166,6 +192,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     teams = [ teams.rocm ];
     platforms = platforms.linux;
-    broken = true;
+    broken = true; # this base package shouldn't be built directly
   };
 })

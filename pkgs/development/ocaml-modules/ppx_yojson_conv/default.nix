@@ -5,18 +5,22 @@
   ppx_js_style,
   ppx_yojson_conv_lib,
   ppxlib,
+  version ? if lib.versionAtLeast ppxlib.version "0.36.0" then "0.17.1" else "0.15.1",
 }:
-buildDunePackage rec {
+buildDunePackage {
   pname = "ppx_yojson_conv";
-  version = "0.15.1";
-  duneVersion = "3";
-  minimalOCamlVersion = "4.08.0";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "janestreet";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-lSOUSMVgsRiArEhFTKpAj2yFBPbtaIc/SxdPA+24xXs=";
+    repo = "ppx_yojson_conv";
+    tag = "v${version}";
+    hash =
+      {
+        "0.15.1" = "sha256-lSOUSMVgsRiArEhFTKpAj2yFBPbtaIc/SxdPA+24xXs=";
+        "0.17.1" = "sha256-QI2uN1/KeyDxdk6oxPt48lDir55Kkgx2BX6wKCY59LI=";
+      }
+      ."${version}";
   };
 
   propagatedBuildInputs = [

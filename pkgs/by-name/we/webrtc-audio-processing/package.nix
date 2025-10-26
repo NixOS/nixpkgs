@@ -28,6 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/commit/e9c78dc4712fa6362b0c839ad57b6b46dce1ba83.diff";
       hash = "sha256-QXOtya7RA0UTV9VK4qpql5D8QcOKAn6qURZvPpWT+vg=";
     })
+
+    # fix build with abseil 202508
+    # upstream PR: https://gitlab.freedesktop.org/pulseaudio/webrtc-audio-processing/-/merge_requests/60
+    ./abseil-202508.patch
   ];
 
   outputs = [

@@ -75,6 +75,10 @@ stdenv.mkDerivation (finalAttrs: {
         "-Wno-unsafe-buffer-usage"
         "-Wno-cast-function-type-strict"
       ])
+      # These three probably started to appear with clang 20 or 21:
+      "-Wno-c++-keyword"
+      "-Wno-implicit-void-ptr-cast"
+      "-Wno-nrvo"
     ]
   );
 

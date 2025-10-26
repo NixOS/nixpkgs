@@ -289,7 +289,7 @@ let
     # `optionType`: The option type to parenthesize or not.
     #   The option whose description we're returning.
     #
-    # Return value
+    # Returns value
     #
     # The description of the `optionType`, with parentheses if there may be an
     # ambiguity.
@@ -559,11 +559,7 @@ let
         sep:
         mkOptionType rec {
           name = "separatedString";
-          description =
-            if sep == "" then
-              "Concatenated string" # for types.string.
-            else
-              "strings concatenated with ${builtins.toJSON sep}";
+          description = "strings concatenated with ${builtins.toJSON sep}";
           descriptionClass = "noun";
           check = isString;
           merge = loc: defs: concatStringsSep sep (getValues defs);
@@ -577,19 +573,6 @@ let
       lines = separatedString "\n";
       commas = separatedString ",";
       envVar = separatedString ":";
-
-      # Deprecated; should not be used because it quietly concatenates
-      # strings, which is usually not what you want.
-      # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
-      string =
-        lib.warn
-          "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
-          (
-            separatedString ""
-            // {
-              name = "string";
-            }
-          );
 
       passwdEntry =
         entryType:
@@ -1464,7 +1447,7 @@ let
                         One or more definitions did not pass the type-check of the 'either' type.
                         ${headError.message}
                         If `either`, `oneOf` or similar is used in freeformType, ensure that it is preceded by an 'attrsOf' such as: `freeformType = types.attrsOf (types.either t1 t2)`.
-                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.06.
+                        Otherwise consider using the correct type for the option `${showOption loc}`.  This will be an error in Nixpkgs 26.05.
                       '' (mergeOneOption loc defs);
                     };
               in

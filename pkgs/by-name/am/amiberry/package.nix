@@ -103,7 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Optimized Amiga emulator for Linux/macOS";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "amiberry";
   };
 })

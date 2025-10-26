@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "scanpy";
-  version = "1.11.4";
+  version = "1.11.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scverse";
     repo = "scanpy";
     tag = version;
-    hash = "sha256-EvNelorfLOpYLGGZ1RSq4+jk6emuCWCKBdUop24iLf4=";
+    hash = "sha256-GnZ1qJ4SaTLDzfLAH6IHrYeuMBo8PglKUlj4f3ljeR0=";
   };
 
   build-system = [

@@ -43,6 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-y8aiS6h5CSJYBdsAH4jYhAyrFug7aH2H8L6rBfULnQQ=";
     })
     ./fix-darwin-build.patch
+    # Fix for Qt 6.10
+    (fetchpatch {
+      url = "https://github.com/Nheko-Reborn/nheko/commit/af2ca72030deb14a920a888e807dc732d93e3714.patch";
+      hash = "sha256-tlYrfEoUkdJoVzvfF34IhXdn1AxLO0MOlp9rzuFivws=";
+    })
   ];
 
   nativeBuildInputs = [

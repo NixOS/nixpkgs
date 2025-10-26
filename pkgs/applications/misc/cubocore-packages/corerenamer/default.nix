@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "corerenamer";
     homepage = "https://gitlab.com/cubocore/coreapps/corerenamer";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

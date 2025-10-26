@@ -34,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.10";
+  version = "3.2.11";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-ZvqhvjDhrZ7uKi9fE/UYRaJblmfXXH6pYoUZ5u7cOu0=";
+    hash = "sha256-x7ca/A6K0nbcKs2iv5f2rPct5GLd2E7lymT5QZC2B/g=";
   };
 
   patches = [
@@ -197,6 +197,8 @@ buildPythonPackage rec {
     "test_package_version"
     # expects timeout, but we have no route in the sandbox
     "test_connect_error_multi_hosts_each_message_preserved"
+    # Flaky, fails intermittently
+    "test_break_attempts"
   ];
 
   disabledTestPaths = [

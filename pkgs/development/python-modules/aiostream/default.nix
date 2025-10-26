@@ -5,23 +5,20 @@
   pytest-asyncio,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "aiostream";
-  version = "0.7.0";
+  version = "0.7.1";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "vxgmichel";
     repo = "aiostream";
     tag = "v${version}";
-    hash = "sha256-oOx1LG3UyMJRm/HvmrHT00jTp3+XzmvS2XRH4BJNyPE=";
+    hash = "sha256-AxisfmFZMEFJ/zfYCTfelvUGIoz56w6dKoZAMDKOZzk=";
   };
 
   build-system = [ setuptools ];

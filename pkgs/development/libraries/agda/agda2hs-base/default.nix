@@ -9,7 +9,9 @@ mkDerivation {
 
   inherit (haskellPackages.agda2hs) src version;
 
-  sourceRoot = "source/lib/base";
+  postUnpack = ''
+    sourceRoot="$sourceRoot/lib/base"
+  '';
 
   libraryFile = "base.agda-lib";
 

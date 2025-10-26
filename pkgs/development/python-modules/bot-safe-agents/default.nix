@@ -26,6 +26,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ivan-sincek/bot-safe-agents";
     changelog = "https://github.com/ivan-sincek/bot-safe-agents/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

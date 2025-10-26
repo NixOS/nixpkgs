@@ -13,20 +13,29 @@
   installShellFiles,
   texinfo,
   gnused,
+  versionCheckHook,
+  nix-update-script,
   usePython ? false,
   gpgmeSupport ? false,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ledger";
   version = "3.3.2";
 
   src = fetchFromGitHub {
     owner = "ledger";
     repo = "ledger";
-    rev = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Uym4s8EyzXHlISZqThcb6P1H5bdgD9vmdIOLkk5ikG0=";
   };
+
+  # by default, it will query the python interpreter for it's sitepackages location
+  # however, that would write to a different nixstore path, pass our own sitePackages location
+  prePatch = lib.optionalString usePython ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-fail 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
+  '';
 
   patches = [
     (fetchpatch2 {
@@ -86,18 +95,15 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DCMAKE_INSTALL_LIBDIR=lib"
-    "-DBUILD_DOCS:BOOL=ON"
-    "-DUSE_PYTHON:BOOL=${if usePython then "ON" else "OFF"}"
-    "-DUSE_GPGME:BOOL=${if gpgmeSupport then "ON" else "OFF"}"
-  ];
+    (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
+    (lib.cmakeBool "BUILD_DOCS" true)
+    (lib.cmakeBool "USE_PYTHON" usePython)
+    (lib.cmakeBool "USE_GPGME" gpgmeSupport)
 
-  # by default, it will query the python interpreter for it's sitepackages location
-  # however, that would write to a different nixstore path, pass our own sitePackages location
-  prePatch = lib.optionalString usePython ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace 'DESTINATION ''${Python_SITEARCH}' 'DESTINATION "${placeholder "py"}/${python3.sitePackages}"'
-  '';
+    # CMake 4 dropped support of versions lower than 3.5, and versions
+    # lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
+  ];
 
   installTargets = [
     "doc"
@@ -108,11 +114,19 @@ stdenv.mkDerivation rec {
     installShellCompletion --cmd ledger --bash $src/contrib/ledger-completion.bash
   '';
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = "--version";
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script { };
+
   meta = {
     description = "Double-entry accounting system with a command-line reporting interface";
     mainProgram = "ledger";
     homepage = "https://www.ledger-cli.org/";
-    changelog = "https://github.com/ledger/ledger/raw/v${version}/NEWS.md";
+    changelog = "https://github.com/ledger/ledger/raw/v${finalAttrs.version}/NEWS.md";
     license = lib.licenses.bsd3;
     longDescription = ''
       Ledger is a powerful, double-entry accounting system that is accessed
@@ -123,4 +137,4 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ jwiegley ];
   };
-}
+})

@@ -26,7 +26,7 @@
 # Bionic libc part doesn't compile with GCC
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "mcpelauncher-client";
-  version = "1.4.0-qt6";
+  version = "1.5.3-qt6";
 
   # NOTE: check mcpelauncher-ui-qt when updating
   src = fetchFromGitHub {
@@ -34,12 +34,15 @@ clangStdenv.mkDerivation (finalAttrs: {
     repo = "mcpelauncher-manifest";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-2YmsxcR4EipnBIBqoM8g6hOCCh1WKooukqXhP/1X6tU=";
+    hash = "sha256-uVtvPeGfiCpXIN1aQzF0nw8qNddIeIjFeoKXJUInqwg=";
   };
 
-  patches = [ ./dont_download_glfw_client.patch ];
+  patches = [
+    ./dont_download_glfw_client.patch
+    ./fix-cmake4-build.patch
+  ];
 
-  # Path hard-coded paths.
+  # Patch hard-coded paths.
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace mcpelauncher-client/src/jni/main_activity.cpp \
       --replace-fail /usr/bin/xdg-open ${xdg-utils}/bin/xdg-open \
