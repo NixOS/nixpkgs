@@ -288,21 +288,23 @@ in
                     dataset:
                     "+"
                     + pkgs.writeShellScript "zfs-unallow-unused-dynamic-users" ''
-                      set -eu
-                      zfs allow "$1" |
-                      sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
-                      {
-                        declare -A uids
-                        while read -r role id; do
-                          if [ "$id" -ge 61184 ] && [ "$id" -le 65519 ]; then
-                            case "$role" in
-                              (user) uids["$id"]=1;;
-                            esac
-                          fi
-                        done
-                        unset uids["$USER"]
-                        zfs unallow -r -u "$(printf %s, "''${!uids[@]}")" "$1"
-                      }
+                      set -eux
+                      if zpool status "$1" 2>/dev/null; then
+                        zfs allow "$1" |
+                        sed -ne 's/^\t\(user\|group\) (unknown: \([0-9]\+\)).*/\1 \2/p' |
+                        {
+                          declare -A uids
+                          while read -r role id; do
+                            if [ "$id" -ge 61184 ] && [ "$id" -le 65519 ]; then
+                              case "$role" in
+                                (user) uids["$id"]=1;;
+                              esac
+                            fi
+                          done
+                          unset uids["$USER"]
+                          zfs unallow -r -u "$(printf %s, "''${!uids[@]}")" "$1"
+                        }
+                      fi
                     ''
                     + " "
                     + lib.escapeShellArg dataset
