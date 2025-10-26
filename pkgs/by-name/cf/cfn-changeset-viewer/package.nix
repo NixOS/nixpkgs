@@ -8,16 +8,16 @@
 
 buildNpmPackage rec {
   pname = "cfn-changeset-viewer";
-  version = "0.2.1";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "trek10inc";
     repo = "cfn-changeset-viewer";
     tag = version;
-    hash = "sha256-PPMmU5GMxxzBiTNAv/Rbtvkl5QK1BZjW4TJLT7xlpw4=";
+    hash = "sha256-hz1woGmJYOVGuu52DPPwkfbA49F/0hsxoAU6tiTvJx0=";
   };
 
-  npmDepsHash = "sha256-ICaGtofENMaAjk/KGRn8RgpMAICSttx4AIcbi1HsW8Q=";
+  npmDepsHash = "sha256-NyWZ+8ArlUCsuBN5wZA9vnuX/3HFtuI42/V1+RIKom0=";
 
   dontNpmBuild = true;
 
