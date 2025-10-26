@@ -920,7 +920,7 @@ in
         '';
         errors = [
           {
-            assertion = (builtins.length cfg.muc > 0) || !cfg.xmppComplianceSuite;
+            assertion = (cfg.muc != [ ]) || !cfg.xmppComplianceSuite;
             message = ''
               You need to setup at least a MUC domain to comply with
               XEP-0423.

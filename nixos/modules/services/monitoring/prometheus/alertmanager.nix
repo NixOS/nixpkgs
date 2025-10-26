@@ -207,9 +207,7 @@ in
         serviceConfig = {
           ExecStart =
             "${cfg.package}/bin/alertmanager"
-            + lib.optionalString (lib.length cmdlineArgs != 0) (
-              " \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs
-            );
+            + lib.optionalString (cmdlineArgs != [ ]) (" \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs);
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
 
           EnvironmentFile = lib.mkIf (cfg.environmentFile != null) cfg.environmentFile;

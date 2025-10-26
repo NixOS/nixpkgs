@@ -62,7 +62,7 @@ let
     destination = "/share/gnome-background-properties/nixos.xml";
   };
 
-  flashbackEnabled = cfg.flashback.enableMetacity || lib.length cfg.flashback.customSessions > 0;
+  flashbackEnabled = cfg.flashback.enableMetacity || cfg.flashback.customSessions != [ ];
   flashbackWms =
     lib.optional cfg.flashback.enableMetacity {
       wmName = "metacity";

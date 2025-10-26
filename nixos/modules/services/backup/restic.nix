@@ -254,8 +254,8 @@ in
 
             runCheck = lib.mkOption {
               type = lib.types.bool;
-              default = builtins.length config.services.restic.backups.${name}.checkOpts > 0;
-              defaultText = lib.literalExpression ''builtins.length config.services.backups.${name}.checkOpts > 0'';
+              default = config.services.restic.backups.${name}.checkOpts != [ ];
+              defaultText = lib.literalExpression ''config.services.backups.${name}.checkOpts != [ ]'';
               description = "Whether to run the `check` command with the provided `checkOpts` options.";
               example = true;
             };
@@ -406,7 +406,7 @@ in
         fileBackup = (backup.dynamicFilesFrom != null) || (backup.paths != null && backup.paths != [ ]);
         commandBackup = backup.command != [ ];
         doBackup = fileBackup || commandBackup;
-        pruneCmd = lib.optionals (builtins.length backup.pruneOpts > 0) [
+        pruneCmd = lib.optionals (backup.pruneOpts != [ ]) [
           (resticCmd + " unlock")
           (resticCmd + " forget --prune " + (lib.concatStringsSep " " backup.pruneOpts))
         ];

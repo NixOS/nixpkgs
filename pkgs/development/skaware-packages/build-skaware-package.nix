@@ -87,7 +87,7 @@ stdenv.mkDerivation {
           "If you pass `manpages` to `skawarePackages.buildPackage`, you cannot have a `man` output already!"
       );
       # insert as early as possible, but keep the first element
-      if lib.length outputs > 0 then
+      if outputs != [ ] then
         [
           (lib.head outputs)
           "man"

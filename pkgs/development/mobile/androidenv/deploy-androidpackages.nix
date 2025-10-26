@@ -44,7 +44,7 @@ let
       tag = builtins.head (builtins.match "([^:]+).*" name);
       hasXmlAttrs = builtins.hasAttr "element-attributes" doc;
       xmlValues = removeAttrs doc [ "element-attributes" ];
-      hasXmlValues = builtins.length (builtins.attrNames xmlValues) > 0;
+      hasXmlValues = xmlValues != { };
     in
     if hasXmlAttrs && hasXmlValues then
       "<${tag}${mkXmlAttrs doc.element-attributes}>${mkXmlValues xmlValues}</${tag}>"

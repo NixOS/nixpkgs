@@ -176,7 +176,7 @@
         }
         {
           assertion =
-            ((builtins.length config.hardware.nvidia-container-toolkit.csv-files) > 0)
+            (config.hardware.nvidia-container-toolkit.csv-files != [ ])
             -> config.hardware.nvidia-container-toolkit.discovery-mode == "csv";
           message = ''When CSV files are provided, `config.hardware.nvidia-container-toolkit.discovery-mode` has to be set to `csv`.'';
         }

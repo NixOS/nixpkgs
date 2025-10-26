@@ -85,10 +85,7 @@ rec {
           let
             args = builtins.attrNames derivationArgs;
           in
-          if builtins.length args > 0 then
-            builtins.unsafeGetAttrPos (builtins.head args) derivationArgs
-          else
-            null;
+          if args != [ ] then builtins.unsafeGetAttrPos (builtins.head args) derivationArgs else null;
       }
       // (lib.optionalAttrs runLocal {
         preferLocalBuild = true;

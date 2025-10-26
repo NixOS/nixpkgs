@@ -12,7 +12,7 @@ let
   mods = if lib.isFunction pkgsSpec then pkgsSpec unwrapped.pkgs else pkgsSpec;
 in
 
-if builtins.length mods == 0 then
+if mods == [ ] then
   unwrapped
 else
   symlinkJoin {

@@ -88,7 +88,7 @@ in
 
 
 
-  ${lib.optionalString (lib.length crateBin > 0) (
+  ${lib.optionalString (crateBin != [ ]) (
     lib.concatMapStringsSep "\n" (
       bin:
       let
@@ -145,7 +145,7 @@ in
 
   # If crateBin is empty and hasCrateBin is not set then we must try to
   # detect some kind of bin target based on some files that might exist.
-  ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
+  ${lib.optionalString (crateBin == [ ] && !hasCrateBin) ''
     if [[ -e src/main.rs ]]; then
       mkdir -p target/bin
       ${build_bin} ${crateName} src/main.rs

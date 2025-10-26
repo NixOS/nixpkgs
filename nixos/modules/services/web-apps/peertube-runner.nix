@@ -166,7 +166,7 @@ in
         config_file=$config_dir/config.toml
         cp -f --no-preserve=mode,ownership ${configFile} $config_file
 
-        ${lib.optionalString ((lib.length (lib.attrNames cfg.instancesToRegister)) > 0) ''
+        ${lib.optionalString (cfg.instancesToRegister != { }) ''
           # Temp config directory for registration commands
           temp_dir=$(mktemp --directory)
           temp_config_dir=$temp_dir/peertube-runner-nodejs/default

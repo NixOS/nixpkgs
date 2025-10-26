@@ -43,7 +43,7 @@ in
 
   ###### implementation
 
-  config = lib.mkIf (builtins.length (builtins.attrNames cfg) > 0) {
+  config = lib.mkIf (cfg != { }) {
 
     environment.variables.FREETDSCONF = "/etc/freetds.conf";
     environment.variables.FREETDS = "/etc/freetds.conf";

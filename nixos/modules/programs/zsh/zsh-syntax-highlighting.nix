@@ -98,8 +98,7 @@ in
 
     assertions = [
       {
-        assertion =
-          builtins.length (builtins.attrNames cfg.patterns) > 0 -> builtins.elem "pattern" cfg.highlighters;
+        assertion = cfg.patterns != { } -> builtins.elem "pattern" cfg.highlighters;
         message = ''
           When highlighting patterns, "pattern" needs to be included in the list of highlighters.
         '';
@@ -112,14 +111,14 @@ in
           "source ${pkgs.zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
         ]
         ++ lib.optional (
-          builtins.length (cfg.highlighters) > 0
+          cfg.highlighters != [ ]
         ) "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${builtins.concatStringsSep " " cfg.highlighters})"
-        ++ lib.optionals (builtins.length (builtins.attrNames cfg.patterns) > 0) (
+        ++ lib.optionals (cfg.patterns != { }) (
           lib.mapAttrsToList (
             pattern: design: "ZSH_HIGHLIGHT_PATTERNS+=('${pattern}' '${design}')"
           ) cfg.patterns
         )
-        ++ lib.optionals (builtins.length (builtins.attrNames cfg.styles) > 0) (
+        ++ lib.optionals (cfg.styles != { }) (
           lib.mapAttrsToList (styles: design: "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'") cfg.styles
         )
       )

@@ -160,9 +160,7 @@ in
       serviceConfig = {
         ExecStart =
           "${cfg.package}/bin/pushgateway"
-          + lib.optionalString (lib.length cmdlineArgs != 0) (
-            " \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs
-          );
+          + lib.optionalString (cmdlineArgs != [ ]) (" \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs);
 
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];

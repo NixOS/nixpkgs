@@ -66,7 +66,7 @@ let
         ${optionalString i.vmacXmitBase "vmac_xmit_base"}
 
         ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
-        ${optionalString (builtins.length i.unicastPeers > 0) ''
+        ${optionalString (i.unicastPeers != [ ]) ''
           unicast_peer {
             ${concatStringsSep "\n" i.unicastPeers}
           }
@@ -76,13 +76,13 @@ let
           ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
         }
 
-        ${optionalString (builtins.length i.trackScripts > 0) ''
+        ${optionalString (i.trackScripts != [ ]) ''
           track_script {
             ${concatStringsSep "\n" i.trackScripts}
           }
         ''}
 
-        ${optionalString (builtins.length i.trackInterfaces > 0) ''
+        ${optionalString (i.trackInterfaces != [ ]) ''
           track_interface {
             ${concatStringsSep "\n" i.trackInterfaces}
           }
