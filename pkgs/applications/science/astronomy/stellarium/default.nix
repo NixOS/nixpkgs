@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   perl,
   wrapGAppsHook3,
@@ -36,6 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-9uQ6u1+dSszmKG8eY6kSXhqsCPRGw6tulCTCrLByIxc=";
   };
+
+  # patch from fedora to allow building with Qt 6.10
+  patches = [
+    (fetchpatch2 {
+      url = "https://src.fedoraproject.org/rpms/stellarium/raw/27b05de4be4fa44630c38ffed7f19fe6297e0236/f/stellarium-fix-build-against-qt-6-10.patch";
+      hash = "sha256-VYGaXdokTGOK4pa6WBncdJiVmNQFCaFyRa9r3qXHvY0=";
+    })
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
