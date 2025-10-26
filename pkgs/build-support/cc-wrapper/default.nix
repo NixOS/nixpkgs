@@ -15,10 +15,7 @@
   bintools,
   coreutils ? null,
   apple-sdk ? null,
-  nativeTools,
   noLibc ? false,
-  nativeLibc,
-  nativePrefix ? "",
   propagateDoc ? cc != null && cc ? man,
   extraTools ? [ ],
   extraPackages ? [ ],
@@ -76,10 +73,7 @@
   includeFortifyHeaders ? null,
 }:
 
-assert nativeTools -> !propagateDoc && nativePrefix != "";
-assert !nativeTools -> cc != null && coreutils != null && gnugrep != null;
-assert !(nativeLibc && noLibc);
-assert (noLibc || nativeLibc) == (libc == null);
+assert noLibc == (libc == null);
 
 let
   inherit (lib)
@@ -129,7 +123,7 @@ let
   cc_bin = getBin cc + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
 
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
-  coreutils_bin = optionalString (!nativeTools) (getBin coreutils);
+  coreutils_bin = getBin coreutils;
 
   # The "suffix salt" is a arbitrary string added in the end of env vars
   # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
@@ -389,9 +383,6 @@ assert includeFortifyHeaders' -> fortify-headers != null;
 assert libc_bin == bintools.libc_bin;
 assert libc_dev == bintools.libc_dev;
 assert libc_lib == bintools.libc_lib;
-assert nativeTools == bintools.nativeTools;
-assert nativeLibc == bintools.nativeLibc;
-assert nativePrefix == bintools.nativePrefix;
 
 stdenvNoCC.mkDerivation {
   pname = targetPrefix + (if name != "" then name else "${ccName}-wrapper");
@@ -421,9 +412,6 @@ stdenvNoCC.mkDerivation {
       cc
       libc
       libcxx
-      nativeTools
-      nativeLibc
-      nativePrefix
       isGNU
       isClang
       isZig
@@ -490,20 +478,11 @@ stdenvNoCC.mkDerivation {
     }
   ''
 
-  + (
-    if nativeTools then
-      ''
-        echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
+  + ''
+    echo $cc > $out/nix-support/orig-cc
 
-        ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
-      ''
-    else
-      ''
-        echo $cc > $out/nix-support/orig-cc
-
-        ccPath="${cc}/bin"
-      ''
-  )
+    ccPath="${cc}/bin"
+  ''
 
   # Create symlinks to everything in the bintools wrapper.
   + ''
@@ -776,7 +755,7 @@ stdenvNoCC.mkDerivation {
     # ${cc_solib}/lib64 (even though it does actually search there...)..
     # This confuses libtool.  So add it to the compiler tool search
     # path explicitly.
-    + optionalString (!nativeTools && !isArocc) ''
+    + optionalString (!isArocc) ''
       if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
         ccLDFlags+=" -L${cc_solib}/lib64"
         ccCFlags+=" -B${cc_solib}/lib64"
@@ -970,12 +949,10 @@ stdenvNoCC.mkDerivation {
     );
     # TODO(@sternenseemann): rename env var via stdenv rebuild
     shell = getBin runtimeShell + runtimeShell.shellPath or "";
-    gnugrep_bin = optionalString (!nativeTools) gnugrep;
-    rm = if nativeTools then "rm" else lib.getExe' coreutils "rm";
-    mktemp = if nativeTools then "mktemp" else lib.getExe' coreutils "mktemp";
-    # stdenv.cc.cc should not be null and we have nothing better for now.
-    # if the native impure bootstrap is gotten rid of this can become `inherit cc;` again.
-    cc = optionalString (!nativeTools) cc;
+    gnugrep_bin = gnugrep;
+    rm = lib.getExe' coreutils "rm";
+    mktemp = lib.getExe' coreutils "mktemp";
+    inherit cc;
     wrapperName = "CC_WRAPPER";
     inherit suffixSalt coreutils_bin bintools;
     inherit libc_bin libc_dev libc_lib;

@@ -97,9 +97,6 @@ let
           prevStage.wrapCCWith {
             name = "${name}-clang-wrapper";
 
-            nativeTools = false;
-            nativeLibc = false;
-
             expand-response-params = lib.optionalString (
               prevStage.stdenv.hasCC or false && prevStage.stdenv.cc != "/dev/null"
             ) prevStage.expand-response-params;
@@ -431,9 +428,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           selfDarwin: superDarwin: {
             binutils = super.wrapBintoolsWith {
               name = "bootstrap-stage0-binutils-wrapper";
-
-              nativeTools = false;
-              nativeLibc = false;
 
               expand-response-params = "";
               libc = selfDarwin.libSystem;
@@ -995,9 +989,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 // llvmLibrariesPackages prevStage
                 // {
                   systemLibcxxClang = super.wrapCCWith rec {
-                    nativeTools = false;
-                    nativeLibc = false;
-
                     inherit (prevStage) expand-response-params;
 
                     extraPackages = [ self.llvmPackages.compiler-rt ];
