@@ -28,6 +28,28 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
+  postPatch = ''
+    sed -i '/examples/d' CMakeLists.txt
+    substituteInPlace libhs.pc.in \
+      --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
+      --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
+
+    substituteInPlace cmake/pcre.cmake --replace-fail 'CHECK_C_SOURCE_COMPILES("#include <pcre.h.generic>
+        #if PCRE_MAJOR != ''${PCRE_REQUIRED_MAJOR_VERSION} || PCRE_MINOR < ''${PCRE_REQUIRED_MINOR_VERSION}
+        #error Incorrect pcre version
+        #endif
+        main() {}" CORRECT_PCRE_VERSION)' 'set(CORRECT_PCRE_VERSION TRUE)'
+  ''
+  # CMake 4 dropped support of versions lower than 3.5,
+  # versions lower than 3.10 are deprecated.
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  + ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        "cmake_minimum_required (VERSION 2.8.11)" \
+        "cmake_minimum_required (VERSION 3.10)" \
+  '';
+
   buildInputs = [ boost ];
   nativeBuildInputs = [
     cmake
@@ -53,23 +75,21 @@ stdenv.mkDerivation (finalAttrs: {
   # hyperscan CMake is completely broken for chimera builds when pcre is compiled
   # the only option to make it build - building from source
   # In case pcre is built from source, chimera build is turned on by default
-  preConfigure = lib.optionalString withStatic ''
-    mkdir -p pcre
-    tar xvf ${pcre.src} --strip-components 1 -C pcre
-  '';
-
-  postPatch = ''
-    sed -i '/examples/d' CMakeLists.txt
-    substituteInPlace libhs.pc.in \
-      --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
-      --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
-
-    substituteInPlace cmake/pcre.cmake --replace-fail 'CHECK_C_SOURCE_COMPILES("#include <pcre.h.generic>
-        #if PCRE_MAJOR != ''${PCRE_REQUIRED_MAJOR_VERSION} || PCRE_MINOR < ''${PCRE_REQUIRED_MINOR_VERSION}
-        #error Incorrect pcre version
-        #endif
-        main() {}" CORRECT_PCRE_VERSION)' 'set(CORRECT_PCRE_VERSION TRUE)'
-  '';
+  preConfigure = lib.optionalString withStatic (
+    ''
+      mkdir -p pcre
+      tar xvf ${pcre.src} --strip-components 1 -C pcre
+    ''
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    + ''
+      substituteInPlace pcre/CMakeLists.txt \
+        --replace-fail \
+          "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)" \
+          "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)" \
+    ''
+  );
 
   doCheck = true;
   checkPhase = ''
