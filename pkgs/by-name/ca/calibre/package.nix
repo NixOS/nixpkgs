@@ -238,6 +238,12 @@ stdenv.mkDerivation (finalAttrs: {
       ++ lib.optionals stdenv.hostPlatform.isAarch64 [
         # https://github.com/microsoft/onnxruntime/issues/10038
         "test_piper"
+
+        # terminate called after throwing an instance of 'onnxruntime::OnnxRuntimeException'
+        #  what():  /build/source/include/onnxruntime/core/common/logging/logging.h:371
+        # static const onnxruntime::logging::Logger& onnxruntime::logging::LoggingManager::DefaultLogger()
+        # Attempt to use DefaultLogger but none has been registered.
+        "test_plugins"
       ]
       ++ lib.optionals (!unrarSupport) [
         "test_unrar"
