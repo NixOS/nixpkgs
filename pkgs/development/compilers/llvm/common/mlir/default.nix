@@ -3,7 +3,7 @@
   stdenv,
   llvm_meta,
   release_version,
-  buildLlvmTools,
+  buildLlvmPackages,
   monorepoSrc,
   runCommand,
   cmake,
@@ -63,8 +63,8 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "LLVM_HOST_TRIPLE" stdenv.hostPlatform.config)
     (lib.cmakeFeature "LLVM_DEFAULT_TARGET_TRIPLE" stdenv.hostPlatform.config)
     (lib.cmakeBool "LLVM_ENABLE_DUMP" true)
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/mlir-tblgen")
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
     (lib.cmakeBool "LLVM_BUILD_LLVM_DYLIB" (!stdenv.hostPlatform.isStatic))
   ]
   ++ lib.optionals stdenv.hostPlatform.isStatic [

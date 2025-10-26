@@ -5960,6 +5960,12 @@
     githubId = 49904992;
     name = "Dawid Sowa";
   };
+  dawnofmidnight = {
+    email = "dawnofmidnight@duck.com";
+    github = "dawnofmidnight";
+    githubId = 78233879;
+    name = "whispers";
+  };
   dawoox = {
     email = "contact@antoinebellanger.fr";
     github = "Dawoox";
@@ -29154,6 +29160,12 @@
     github = "zshipko";
     githubId = 332534;
     name = "Zach Shipko";
+  };
+  zstg = {
+    email = "zestig@duck.com";
+    github = "zstg";
+    githubId = 69384921;
+    name = "ZeStig";
   };
   ztzg = {
     email = "dd@crosstwine.com";

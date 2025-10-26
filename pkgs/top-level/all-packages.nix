@@ -12060,9 +12060,6 @@ with pkgs;
     // (config.profanity or { })
   );
 
-  protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
-  protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
-
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
@@ -13060,8 +13057,6 @@ with pkgs;
   };
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
-
-  pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
 
   qgo = libsForQt5.callPackage ../games/qgo { };
 
