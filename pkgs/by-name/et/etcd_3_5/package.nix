@@ -101,11 +101,7 @@ symlinkJoin {
     deps = {
       inherit etcdserver etcdutl etcdctl;
     };
-
-    tests = {
-      inherit (nixosTests) etcd etcd-cluster;
-      k3s = k3s.passthru.tests.etcd;
-    };
+    tests = nixosTests.etcd."3_5";
     updateScript = ./update.sh;
   };
 

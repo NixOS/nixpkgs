@@ -1,11 +1,13 @@
-# This test runs simple etcd node
-{ lib, ... }:
+{ etcd, ... }:
+
 {
-  name = "etcd";
-  meta.maintainers = with lib.maintainers; [ offline ];
+  name = "etcd-single-node";
 
   nodes.node = {
-    services.etcd.enable = true;
+    services.etcd = {
+      enable = true;
+      package = etcd;
+    };
   };
 
   testScript = ''
@@ -19,4 +21,5 @@
         node.succeed("etcdctl put /foo/bar 'Hello world'")
         node.succeed("etcdctl get /foo/bar | grep 'Hello world'")
   '';
+
 }

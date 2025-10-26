@@ -9241,9 +9241,6 @@ with pkgs;
 
   dodgy = with python3Packages; toPythonApplication dodgy;
 
-  etcd = etcd_3_5;
-  etcd_3_5 = callPackage ../servers/etcd/3_5 { };
-
   prosody = callPackage ../servers/xmpp/prosody {
     withExtraLibs = [ ];
     withExtraLuaPackages = _: [ ];
