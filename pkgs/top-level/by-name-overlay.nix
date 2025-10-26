@@ -15,6 +15,7 @@ let
     ;
 
   inherit (lib.attrsets)
+    getAttrFromPath
     mapAttrs
     mapAttrsToList
     mergeAttrsList
@@ -57,11 +58,29 @@ self: super:
   # Because at that point the code in ./stage.nix can be changed to not allow definitions in `all-packages.nix` to override ones from `pkgs/by-name` anymore and throw an error if that happens instead.
   _internalCallByNamePackageFile =
     file:
-    makeCallPackageWithArgSelectors self.callPackage file (
-      let
-        argSelectorsFile = "${toString (dirOf file)}/arg-selectors.nix";
-      in
-      optionalAttrs (pathExists argSelectorsFile) (import argSelectorsFile)
-    );
+    let
+      fArg = import file;
+      isSibling = fArg.type or null == "sibling";
+      fArg' =
+        if isSibling then
+          (
+            if fArg ? package then
+              self.${fArg.package}
+            else if fArg ? packagePath then
+              getAttrFromPath fArg.packagePath self
+            else
+              throw "${baseNameOf (dirOf file)}: expect `package' or `packagePath' in sibling metadata."
+          ).override
+        else
+          fArg;
+      transform = if isSibling && (fArg ? transform) then fArg.transform else { package, ... }: package;
+      package = makeCallPackageWithArgSelectors self.callPackage fArg' (
+        let
+          argSelectorsFile = "${toString (dirOf file)}/arg-selectors.nix";
+        in
+        optionalAttrs (pathExists argSelectorsFile) (import argSelectorsFile)
+      );
+    in
+    transform { inherit lib package; };
 }
 // mapAttrs (name: self._internalCallByNamePackageFile) packageFiles
