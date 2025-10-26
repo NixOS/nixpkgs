@@ -14703,8 +14703,6 @@ with pkgs;
 
   duden = python3Packages.toPythonApplication python3Packages.duden;
 
-  knobkraft-orm = callPackage ../applications/audio/knobkraft-orm/default.nix { };
-
   yaziPlugins = recurseIntoAttrs (callPackage ../by-name/ya/yazi/plugins { });
 
   dillo = callPackage ../by-name/di/dillo/package.nix {
