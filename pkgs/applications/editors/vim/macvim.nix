@@ -27,13 +27,17 @@ in
 stdenv.mkDerivation (finalAttrs: {
   pname = "macvim";
 
-  version = "181";
+  version = "182";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "release-${finalAttrs.version}";
-    hash = "sha256-Wdq+eXSaGs+y+75ZbxoNAcyopRkWRHHRm05T0SHBrow=";
+    tag =
+      let
+        releaseType = if lib.hasInfix "." finalAttrs.version then "prerelease" else "release";
+      in
+      "${releaseType}-${finalAttrs.version}";
+    hash = "sha256-JEb71wZcvFsz94vb3+gC83BhlEccjlPrpr9RCXDUEIo=";
   };
 
   enableParallelBuilding = true;
@@ -198,10 +202,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ lilyball ];
     platforms = platforms.darwin;
     hydraPlatforms = [ ]; # hydra can't build this as long as we rely on Xcode and sandboxProfile
-    knownVulnerabilities = [
-      "CVE-2025-29768"
-      "CVE-2025-53905"
-      "CVE-2025-53906"
-    ];
   };
 })
