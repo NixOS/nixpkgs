@@ -7,7 +7,7 @@
   flit-core,
   typing-extensions,
   pytestCheckHook,
-  pytest-asyncio,
+  pytest-asyncio_0,
 }:
 
 buildPythonPackage rec {
@@ -34,7 +34,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio
+    # event_loop was removed in pytest-asyncio 1.x
+    pytest-asyncio_0
   ];
 
   pythonImportsCheck = [
