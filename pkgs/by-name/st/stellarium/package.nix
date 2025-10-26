@@ -6,19 +6,11 @@
   cmake,
   perl,
   wrapGAppsHook3,
-  wrapQtAppsHook,
-  qtbase,
-  qtcharts,
-  qtpositioning,
-  qtmultimedia,
-  qtserialport,
-  qtwayland,
-  qtwebengine,
+  qt6,
+  qt6Packages,
   calcmysky,
-  qxlsx,
   indilib,
   libnova,
-  qttools,
   exiv2,
   nlopt,
   testers,
@@ -50,26 +42,26 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
+      --replace-fail "\''${_qt_bin_dir}/../" "${qt6.qtmultimedia}/lib/qt-6/"
   '';
 
   nativeBuildInputs = [
     cmake
     perl
     wrapGAppsHook3
-    wrapQtAppsHook
-    qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
   buildInputs = [
-    qtbase
-    qtcharts
-    qtpositioning
-    qtmultimedia
-    qtserialport
-    qtwebengine
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtpositioning
+    qt6.qtmultimedia
+    qt6.qtserialport
+    qt6.qtwebengine
     calcmysky
-    qxlsx
+    qt6Packages.qxlsx
     indilib
     libnova
     exiv2
@@ -77,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlopt
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
+    qt6.qtwayland
   ];
 
   preConfigure = ''
@@ -88,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # fatal error: 'QtSerialPort/QSerialPortInfo' file not found
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qtserialport}/lib";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qt6.qtserialport}/lib";
 
   dontWrapGApps = true;
 
