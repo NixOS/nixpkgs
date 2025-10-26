@@ -4,6 +4,7 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule (finalAttrs: {
@@ -36,7 +37,10 @@ buildGoModule (finalAttrs: {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-version";
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.service = nixosTests.go-csp-collector;
+  };
 
   meta = {
     description = "A content security policy violation collector written in Golang";
