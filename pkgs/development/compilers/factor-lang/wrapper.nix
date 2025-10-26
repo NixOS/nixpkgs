@@ -53,7 +53,7 @@ let
     defaultLibs
     ++ extraLibs
     ++ binPackages
-    ++ (lib.flatten (map (v: v.extraLibs or [ ]) extraVocabs))
+    ++ (lib.concatMap (v: v.extraLibs or [ ]) extraVocabs)
     ++ optionals guiSupport [
       cairo
       freealut
@@ -65,7 +65,7 @@ let
       libGLU
       pango
     ];
-  bins = binPackages ++ defaultBins ++ (lib.flatten (map (v: v.extraPaths or [ ]) extraVocabs));
+  bins = binPackages ++ defaultBins ++ (lib.concatMap (v: v.extraPaths or [ ]) extraVocabs);
   vocabTree = buildEnv {
     name = "${factor-unwrapped.pname}-vocabs";
     ignoreCollisions = true;
