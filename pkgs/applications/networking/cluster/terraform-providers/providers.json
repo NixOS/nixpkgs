@@ -949,11 +949,11 @@
     "vendorHash": "sha256-OAd8SeTqTrH0kMoM2LsK3vM2PI23b3gl57FaJYM9hM0="
   },
   "newrelic_newrelic": {
-    "hash": "sha256-6hBzwp9FG/eL7SPWuEkMvZ/phHabmnJ+oTF/lUn02fQ=",
+    "hash": "sha256-/vHE+Eys773WyYMDe7xG3p0pgKvRc9U73s4jSDijNxY=",
     "homepage": "https://registry.terraform.io/providers/newrelic/newrelic",
     "owner": "newrelic",
     "repo": "terraform-provider-newrelic",
-    "rev": "v3.72.3",
+    "rev": "v3.73.0",
     "spdx": "MPL-2.0",
     "vendorHash": "sha256-45psSf69IetY0o8LjBDEv2GnOxaOzaQcPCnV2YHPXGs="
   },
