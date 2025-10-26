@@ -279,7 +279,7 @@ in
               # `environment.etc."doas.conf"`.
 
               # extraRules
-              ${lib.concatStringsSep "\n" (lib.lists.flatten (map mkRule cfg.extraRules))}
+              ${lib.concatStringsSep "\n" (lib.lists.concatMap mkRule cfg.extraRules)}
 
               # extraConfig
               ${cfg.extraConfig}
