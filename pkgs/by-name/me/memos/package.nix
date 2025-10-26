@@ -23,8 +23,8 @@ let
   };
 
   memos-protobuf-gen = stdenvNoCC.mkDerivation {
-    name = "memos-protobuf-gen";
-    inherit src;
+    pname = "memos-protobuf-gen";
+    inherit version src;
 
     nativeBuildInputs = [
       buf
