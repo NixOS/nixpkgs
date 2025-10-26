@@ -4128,6 +4128,11 @@ with pkgs;
 
   unrpa = with python3Packages; toPythonApplication unrpa;
 
+  inherit (callPackages ../by-name/up/uptime-kuma { })
+    uptime-kuma_1
+    uptime-kuma_2
+    ;
+
   usort = with python3Packages; toPythonApplication usort;
 
   vacuum = libsForQt5.callPackage ../applications/networking/instant-messengers/vacuum { };
