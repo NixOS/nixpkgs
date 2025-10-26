@@ -13039,8 +13039,6 @@ with pkgs;
   cri-o = callPackage ../applications/virtualization/cri-o/wrapper.nix { };
   cri-o-unwrapped = callPackage ../applications/virtualization/cri-o { };
 
-  phonemizer = with python3Packages; toPythonApplication phonemizer;
-
   ### GAMES
 
   inherit (callPackages ../games/fteqw { })

@@ -14,16 +14,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stasis";
-  version = "0.5.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "saltnpepper97";
     repo = "stasis";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-gJB/y6jSBJZjBTQB9sxbVpllSfF6jwKOEeLqlgIStMA=";
+    hash = "sha256-tRw5sHj3nEwcEviEKKcfSUyY16MjsFzLcmnb0/AtAME=";
   };
 
-  cargoHash = "sha256-JX0imd+FuuBq8d3FAYEQ+LLZQV39f8Iu9ftLASs00Fc=";
+  cargoHash = "sha256-qfS/AR4XjFUeYpz7tNJ31B5fkVsxvXlwFpNe8U3J94o=";
 
   nativeBuildInputs = [
     pkg-config
