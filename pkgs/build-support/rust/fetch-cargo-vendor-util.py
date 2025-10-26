@@ -271,6 +271,27 @@ def create_vendor(vendor_staging_dir: Path, out_dir: Path) -> None:
         'replace-with = "vendored-sources"',
     ]
 
+    # Scan for duplicated entries
+    used_packages = {}
+    for pkg in cargo_lock_toml["package"]:
+
+        # ignore local dependenices
+        if "source" not in pkg.keys():
+            continue
+
+        this_pkg = (pkg["name"], pkg["version"])
+        if this_pkg not in used_packages:
+            used_packages[this_pkg] = []
+        used_packages[this_pkg].append(pkg["source"])
+    failed_too_many_options = False
+    for pkg in used_packages:
+        if len(used_packages[pkg]) > 1:
+            failed_too_many_options = True
+            eprint(f"Failed! Package {pkg[0]} version {pkg[1]} has multiple sources:\n - {"\n - ".join(used_packages[pkg])}")
+    if failed_too_many_options:
+        raise Exception("Can't process sources. Patch upstream to remove duplicate Cargo lock entries!")
+
+    # Fetch the dependencies
     seen_source_keys = set()
     for pkg in cargo_lock_toml["package"]:
 
