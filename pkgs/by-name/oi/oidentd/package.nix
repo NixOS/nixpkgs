@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://oidentd.janikrabe.com/";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
+    maintainers = with maintainers; [ h7x4 ];
   };
 }
