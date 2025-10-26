@@ -45,16 +45,16 @@ let
 
   overrideStdenvCompat =
     f:
-    lib.setFunctionArgs (
+    lib.mirrorFunctionArgs f (
       args:
       if !(lib.isFunction args) && (args ? stdenv) then
         lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
           Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
             buildPythonPackage.override { stdenv = customStdenv; } { }
-        '' (f.override { stdenv = args.stdenv; } args)
+        '' (f.override { inherit (args) stdenv; } args)
       else
         f args
-    ) (removeAttrs (lib.functionArgs f) [ "stdenv" ])
+    )
     // {
       # Intentionally drop the effect of overrideStdenvCompat when calling `buildPython*.override`.
       inherit (f) override;
