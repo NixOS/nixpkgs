@@ -176,6 +176,11 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
       --prefix LD_LIBRARY_PATH : ${runtimePaths}
   '';
 
+  cargoTestFlags = lib.optionals clangStdenv.hostPlatform.isDarwin [
+    "--config"
+    ''profile.production.lto="off"''
+  ];
+
   passthru = {
     updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
     tests = { inherit (nixosTests) servo; };
