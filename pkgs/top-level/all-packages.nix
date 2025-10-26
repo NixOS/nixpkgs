@@ -11865,8 +11865,6 @@ with pkgs;
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
-  pdfmixtool = callPackage ../applications/office/pdfmixtool { };
-
   pijuice = with python3Packages; toPythonApplication pijuice;
 
   pinegrow6 = callPackage ../applications/editors/pinegrow { pinegrowVersion = "6"; };
