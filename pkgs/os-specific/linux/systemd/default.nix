@@ -754,7 +754,7 @@ stdenv.mkDerivation (finalAttrs: {
       mesonFlagsArray+=(-Dntp-servers="0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
       export LC_ALL="en_US.UTF-8";
 
-      ${lib.concatStringsSep "\n" (lib.flatten (map mkSubstitute binaryReplacements))}
+      ${lib.concatStringsSep "\n" (lib.concatMap mkSubstitute binaryReplacements)}
       ${lib.concatMapStringsSep "\n" mkEnsureSubstituted binaryReplacements}
 
       substituteInPlace src/libsystemd/sd-journal/catalog.c \
