@@ -78,11 +78,7 @@ let
 
   prometheusYml =
     let
-      yml =
-        if cfg.configText != null then
-          pkgs.writeText "prometheus.yml" cfg.configText
-        else
-          generatedPrometheusYml;
+      yml = if cfg.config != null then cfg.config.source else generatedPrometheusYml;
     in
     promtoolCheck "check config ${
       lib.optionalString (cfg.checkConfig == "syntax-only") "--syntax-only"
@@ -1744,6 +1740,14 @@ in
       "prometheus"
       "alertmanagerTimeout"
     ] "Deprecated upstream and no longer had any effect")
+    (mkRenamedOptionModule
+      [
+        "services"
+        "prometheus"
+        "configText"
+      ]
+      [ "services" "prometheus" "config" "text" ]
+    )
   ];
 
   options.services.prometheus = {
@@ -1800,13 +1804,36 @@ in
 
     enableAgentMode = mkEnableOption "agent mode";
 
-    configText = mkOption {
-      type = types.nullOr types.lines;
+    config = mkOption {
+      type = types.nullOr (
+        types.submodule (
+          { config, options, ... }:
+          {
+            options = {
+              source = mkOption {
+                type = types.path;
+                description = "Path to `prometheus.yml`";
+              };
+
+              text = mkOption {
+                type = types.nullOr types.lines;
+                default = null;
+                description = "Text contents of `prometheus.yml`";
+              };
+            };
+            config = {
+              source = mkIf (config.text != null) (
+                mkDerivedConfig options.text (pkgs.writeText "prometheus.yml")
+              );
+            };
+          }
+        )
+      );
       default = null;
       description = ''
-        If non-null, this option defines the text that is written to
-        prometheus.yml. If null, the contents of prometheus.yml is generated
-        from the structured config options.
+        If non-null, this option defines the contents of prometheus.yml. If
+        null, the contents of prometheus.yml is generated from the structured
+        config options.
       '';
     };
 
