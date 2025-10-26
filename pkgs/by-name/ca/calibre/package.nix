@@ -221,29 +221,39 @@ stdenv.mkDerivation (finalAttrs: {
   installCheckInputs = with python3Packages; [
     psutil
   ];
-  installCheckPhase = ''
-    runHook preInstallCheck
+  installCheckPhase =
+    let
+      excludedTestNames = [
+        "test_7z" # we don't include 7z support
+        "test_zstd" # we don't include zstd support
+        "test_qt" # we don't include svg or webp support
+        "test_import_of_all_python_modules" # explores actual file paths, gets confused
+        "test_websocket_basic" # flaky
 
-    ETN='--exclude-test-name'
-    EXCLUDED_FLAGS=(
-      $ETN 'test_7z'  # we don't include 7z support
-      $ETN 'test_zstd'  # we don't include zstd support
-      $ETN 'test_qt'  # we don't include svg or webp support
-      $ETN 'test_import_of_all_python_modules'  # explores actual file paths, gets confused
-      $ETN 'test_websocket_basic'  # flakey
-      # hangs with cuda enabled, also:
-      # eglInitialize: Failed to get system egl display
-      # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
-      $ETN 'test_recipe_browser_webengine'
+        # hangs with cuda enabled, also:
+        # eglInitialize: Failed to get system egl display
+        # Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+        "test_recipe_browser_webengine"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+        # https://github.com/microsoft/onnxruntime/issues/10038
+        "test_piper"
+      ]
+      ++ lib.optionals (!unrarSupport) [
+        "test_unrar"
+      ];
 
-      ${lib.optionalString stdenv.hostPlatform.isAarch64 "$ETN 'test_piper'"} # https://github.com/microsoft/onnxruntime/issues/10038
-      ${lib.optionalString (!unrarSupport) "$ETN 'test_unrar'"}
-    )
+      testFlags = lib.concatStringsSep " " (
+        lib.map (testName: "--exclude-test-name ${testName}") excludedTestNames
+      );
+    in
+    ''
+      runHook preInstallCheck
 
-    python setup.py test ''${EXCLUDED_FLAGS[@]}
+      python setup.py test ${testFlags}
 
-    runHook postInstallCheck
-  '';
+      runHook postInstallCheck
+    '';
 
   passthru.updateScript = nix-update-script {
     extraArgs = [ "--url=https://github.com/kovidgoyal/calibre" ];
