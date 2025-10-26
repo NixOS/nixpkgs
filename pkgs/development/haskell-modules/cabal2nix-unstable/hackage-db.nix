@@ -17,10 +17,10 @@
 }:
 mkDerivation {
   pname = "hackage-db";
-  version = "2.1.3-unstable-2025-10-19";
+  version = "2.1.3-unstable-2025-10-25";
   src = fetchzip {
-    url = "https://github.com/NixOS/cabal2nix/archive/26e5dba9259791d1e80ce68a07f6d20adb26c7eb.tar.gz";
-    sha256 = "19y5smq0aji45zak6sxlimzw7ww33zbcmbbrvi2rq40i26mw6kxj";
+    url = "https://github.com/NixOS/cabal2nix/archive/19800f3819e099dba344001d0d0f5c15698bc793.tar.gz";
+    sha256 = "02zxw06d5c9zh63kra9sx3rfcgb8xqaz77b5za0jxvkjxjl9ysyn";
   };
   postUnpack = "sourceRoot+=/hackage-db; echo source root reset to $sourceRoot";
   isLibrary = true;
