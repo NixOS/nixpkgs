@@ -165,6 +165,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
       "-I${lib.getInclude clangStdenv.cc.libcxx}/include/c++/v1"
     ]
   );
+  env.NIX_LDFLAGS = lib.optionalString clangStdenv.hostPlatform.isDarwin "-L${lib.getLib clangStdenv.cc.libcxx}/lib";
 
   # copy resources into `$out` to be used during runtime
   # link runtime libraries
