@@ -8,13 +8,13 @@
 
 postgresqlBuildExtension (finalAttrs: {
   pname = "rum";
-  version = "1.3.14";
+  version = "1.3.15";
 
   src = fetchFromGitHub {
     owner = "postgrespro";
     repo = "rum";
     tag = finalAttrs.version;
-    hash = "sha256-VsfpxQqRBu9bIAP+TfMRXd+B3hSjuhU2NsutocNiCt8=";
+    hash = "sha256-iOx7u0JURBUUFerRlg3DuidFeBmGFOXz8mu20mQeopo=";
   };
 
   makeFlags = [ "USE_PGXS=1" ];
