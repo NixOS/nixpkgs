@@ -147,12 +147,12 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "Free 3D kart racing game";
+    description = "3D open-source arcade racer";
     mainProgram = "supertuxkart";
     longDescription = ''
-      SuperTuxKart is a Free 3D kart racing game, with many tracks,
-      characters and items for you to try, similar in spirit to Mario
-      Kart.
+      Karts. Nitro. Action! SuperTuxKart is a 3D open-source arcade racer
+      with a variety of characters, tracks, and modes to play.
+      It aims to be more fun than realistic, and provides an enjoyable experience for all ages.
     '';
     homepage = "https://supertuxkart.net/";
     license = lib.licenses.gpl3Plus;
