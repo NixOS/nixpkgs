@@ -464,7 +464,7 @@ let
             `loginctl enable-linger` for this user.
 
             If false, user units will not be started until the user logs in, and
-            may be stopped on logout depending on the settings in `logind.conf`.
+            may be stopped on logout depending on the settings in {file}`logind.conf`.
           '';
         };
       };
