@@ -52,6 +52,11 @@ stdenv.mkDerivation {
     gst_all_1.gst-plugins-ugly
   ];
 
+  postPatch = ''
+    substituteInPlace {lib/playfair/,lib/llhttp/,lib/,renderers/,./}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     broken = stdenv.hostPlatform.isDarwin;
     homepage = "https://github.com/FD-/RPiPlay";

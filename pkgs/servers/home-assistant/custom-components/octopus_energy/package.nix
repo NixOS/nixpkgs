@@ -11,13 +11,13 @@
 buildHomeAssistantComponent rec {
   owner = "BottlecapDave";
   domain = "octopus_energy";
-  version = "17.0.2";
+  version = "17.0.3";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = "HomeAssistant-OctopusEnergy";
     tag = "v${version}";
-    hash = "sha256-K6Jb1fu76wx4v0HLsC8FxX+F/+UlCmUBKSFtUlLTPNc=";
+    hash = "sha256-mogPWl+3BqGSURH7jnbJYB/68ijc1lkfSAc6HfwZWFw=";
   };
 
   dependencies = [ pydantic ];

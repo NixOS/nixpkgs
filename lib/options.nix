@@ -684,8 +684,6 @@ rec {
         inherit text;
       };
 
-  literalExample = lib.warn "lib.literalExample is deprecated, use lib.literalExpression instead, or use lib.literalMD for a non-Nix description." literalExpression;
-
   /**
     For use in the `defaultText` and `example` option attributes. Causes the
     given MD text to be inserted verbatim in the documentation, for when
