@@ -43,7 +43,6 @@ let
 
   deprecatedPlasma5Packages = {
     inherit (plasma5Packages)
-      akonadi
       akonadi-calendar
       akonadi-calendar-tools
       akonadi-contacts
@@ -52,75 +51,40 @@ let
       akonadi-notes
       akonadi-search
       akonadiconsole
-      akregator
       alligator
       analitza
       angelfish
       applet-window-appmenu
       applet-window-buttons
-      arianna
-      ark
       audiotube
       aura-browser
       baloo-widgets
       bismuth
-      bluedevil
-      bomber
       booth
-      bovo
-      breeze-grub
-      breeze-gtk
-      breeze-plymouth
-      breeze-qt5
       buho
       calendarsupport
       calindori
       cantor
       clip
-      colord-kde
       communicator
-      dolphin
       dolphin-plugins
-      dragon
-      elisa
       eventviews
-      falkon
-      ffmpegthumbs
-      filelight
       flatpak-kcm
       ghostwriter
-      granatier
       grantleetheme
-      gwenview
       incidenceeditor
       index
       juk
       kaccounts-integration
       kaccounts-providers
-      kactivitymanagerd
-      kaddressbook
       kalarm
       kalgebra
       kalk
-      kalzium
       kamoso
-      kapman
-      kapptemplate
       kasts
-      kate
-      katomic
-      kblackbox
-      kblocks
-      kbounce
       kbreakout
-      kcachegrind
-      kcalc
       kcalutils
-      kcharselect
       kclock
-      kcolorchooser
-      kde-cli-tools
-      kde-gtk-config
       kde-inotify-survey
       kde2-decoration
       kdebugsettings
@@ -129,107 +93,50 @@ let
       kdegraphics-mobipocket
       kdegraphics-thumbnailers
       kdenetwork-filesharing
-      kdenlive
       kdepim-runtime
-      kdeplasma-addons
-      kdev-php
-      kdev-python
-      kdevelop
-      kdevelop-pg-qt
-      kdevelop-unwrapped
-      kdf
-      kdialog
-      kdiamond
-      keditbookmarks
       keysmith
-      kfind
-      kgamma5
       kgeography
-      kget
-      kgpg
-      khelpcenter
       khotkeys
       kidentitymanagement
-      kig
-      kigo
-      killbots
       kimap
-      kinfocenter
       kio-admin
       kio-extras
       kio-gdrive
       kipi-plugins
       kirigami-gallery
       kldap
-      kleopatra
-      klettres
-      klines
-      kmag
       kmahjongg
       kmail-account-wizard
       kmailtransport
       kmbox
-      kmenuedit
       kmime
-      kmines
-      kmix
       kmousetool
-      kmplot
-      knavalbattle
-      knetwalk
-      knights
       knotes
       koko
       kolf
-      kollision
-      kolourpaint
-      kompare
       kongress
       konqueror
       konquest
-      konsole
       kontactinterface
-      konversation
       kopeninghours
-      korganizer
       kosmindoormap
       kpat
       kpimtextedit
       kpipewire
-      kpkpass
       kpmcore
       kpublictransport
       kqtquickcharts
-      krdc
       krecorder
       kreport
-      kreversi
-      krfb
       kruler
       ksanecore
-      kscreen
-      kscreenlocker
-      kshisen
       ksmtp
       kspaceduel
-      ksquares
-      ksshaskpass
       ksudoku
-      ksystemlog
       ksystemstats
-      kteatime
-      ktimer
       ktnef
-      ktorrent
       ktrip
-      kturtle
-      kwallet-pam
-      kwalletmanager
-      kwave
-      kwayland-integration
       kweather
-      kwin
-      kwrited
       kzones
       layer-shell-qt
       libgravatar
@@ -251,7 +158,6 @@ let
       lightly
       mailcommon
       mailimporter
-      marble
       mauikit
       mauikit-accounts
       mauikit-calendar
@@ -262,80 +168,41 @@ let
       mauikit-texteditor
       mauiman
       mbox-importer
-      merkuro
       messagelib
-      milou
-      minuet
-      okular
-      oxygen
       oxygen-sounds
       palapeli
       parachute
       partitionmanager
-      picmi
       pim-data-exporter
       pim-sieve-editor
       pimcommon
       plank-player
       plasma-bigscreen
-      plasma-browser-integration
-      plasma-desktop
       plasma-dialer
       plasma-disks
       plasma-firewall
-      plasma-integration
-      plasma-mobile
-      plasma-nano
-      plasma-nm
-      plasma-pa
       plasma-phonebook
       plasma-remotecontrollers
       plasma-sdk
       plasma-settings
-      plasma-systemmonitor
-      plasma-thunderbolt
-      plasma-vault
       plasma-welcome
-      plasma-workspace
-      plasma-workspace-wallpapers
       plasmatube
       polkit-kde-agent
-      powerdevil
       print-manager
       qmlkonsole
-      qqc2-breeze-style
       rocs
-      sddm-kcm
       shelf
       sierra-breeze-enhanced
-      skanlite
-      skanpage
       soundkonverter
-      spectacle
       station
-      systemsettings
       telly-skout
       tokodon
       umbrello
       vvave
-      xdg-desktop-portal-kde
       xwaylandvideobridge
-      yakuake
-      zanshin
-      ;
-
-    inherit (plasma5Packages.thirdParty)
-      krohnkite
-      krunner-ssh
-      krunner-symbols
-      kwin-dynamic-workspaces
-      kwin-tiling
-      plasma-applet-caffeine-plus
-      plasma-applet-virtual-desktop-bar
       ;
 
     inherit (libsForQt5)
-      sddm
       neochat # added 2025-07-04
       itinerary # added 2025-07-04
       libquotient # added 2025-07-04
@@ -390,8 +257,6 @@ mapAliases {
 
   # keep-sorted start case=no numeric=yes block=yes
 
-  "7z2hashcat" =
-    throw "'7z2hashcat' has been renamed to '_7z2hashcat' as the former isn't a valid variable name."; # Added 2024-11-27
   _0verkill = throw "'_0verkill' has been removed due to lack of maintenance"; # Added 2025-08-27
   _1password = lib.warnOnInstantiate "_1password has been renamed to _1password-cli to better follow upstream name usage" _1password-cli; # Added 2024-10-24
   _5etools = throw "'_5etools' has been removed, as upstream is in a questionable legal position and the build was broken."; # Added 2025-05-05
@@ -1048,7 +913,6 @@ mapAliases {
   gfortran49 = throw "'gfortran49' has been removed from nixpkgs"; # Added 2024-09-11
   gg = go-graft; # Added 2025-03-07
   ggobi = throw "'ggobi' has been removed from Nixpkgs, as it is unmaintained and broken"; # Added 2025-05-18
-  ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
   gimp3 = gimp; # added 2025-10-03
   gimp3-with-plugins = gimp-with-plugins; # added 2025-10-03
   gimp3Plugins = gimpPlugins; # added 2025-10-03
@@ -1132,12 +996,6 @@ mapAliases {
   godot_4-export-templates = lib.warnOnInstantiate "godot_4-export-templates has been renamed to godot_4-export-templates-bin" godot_4-export-templates-bin; # Added 2025-03-27
   godot_4_3-export-templates = lib.warnOnInstantiate "godot_4_3-export-templates has been renamed to godot_4_3-export-templates-bin" godot_4_3-export-templates-bin; # Added 2025-03-27
   godot_4_4-export-templates = lib.warnOnInstantiate "godot_4_4-export-templates has been renamed to godot_4_4-export-templates-bin" godot_4_4-export-templates-bin; # Added 2025-03-27
-  gogs = throw "
-    Gogs development has stalled. Also, it has several unpatched, critical vulnerabilities that
-    weren't addressed within a year: https://github.com/gogs/gogs/issues/7777
-
-    Consider migrating to forgejo or gitea.
-  "; # Added 2024-10-12
   goldwarden = throw "'goldwarden' has been removed, as it no longer works with new Bitwarden versions and is abandoned upstream"; # Added 2025-09-16
   googler = throw "'googler' has been removed, as it no longer works and is abandoned upstream"; # Added 2025-04-01
   gpicview = throw "'gpicview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'loupe', 'gthumb' or 'image-roll' instead"; # Added 2024-09-15
@@ -1300,7 +1158,6 @@ mapAliases {
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   kibana7 = throw "Kibana 7.x has been removed from nixpkgs as it depends on an end of life Node.js version and received no maintenance in time."; # Added 2023-10-30
   kibana = throw "Kibana 7.x has been removed from nixpkgs as it depends on an end of life Node.js version and received no maintenance in time."; # Added 2023-10-30
-  kio-admin = makePlasma5Throw "kio-admin"; # Added 2023-03-18
   kiwitalk = throw "KiwiTalk has been removed because the upstream has been deprecated at the request of Kakao and it's now obsolete."; # Added 2024-10-10
   kmplayer = throw "'kmplayer' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   kodiGBM = kodi-gbm; # Added 2021-03-09
@@ -1475,7 +1332,6 @@ mapAliases {
   linux_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linux_hardened = linuxPackages_hardened.kernel; # Added 2025-08-10
   linux_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
-  linux_latest_hardened = linuxPackages_latest_hardened; # Added 2021-08-16
   linux_rpi0 = linuxKernel.kernels.linux_rpi1;
   linux_rpi1 = linuxKernel.kernels.linux_rpi1;
   linux_rpi2 = linuxKernel.kernels.linux_rpi2;
@@ -1510,19 +1366,7 @@ mapAliases {
   linuxPackages_ham = throw "linux_ham has been removed in favour of the standard kernel packages"; # Added 2025-06-24
   linuxPackages_hardened = linuxKernel.packages.linux_hardened; # Added 2025-08-10
   linuxPackages_latest-libre = throw "linux_latest_libre has been removed due to lack of maintenance"; # Added 2025-10-01
-  linuxPackages_latest_hardened = throw "
-    The attribute `linuxPackages_hardened_latest' was dropped because the hardened patches
-    frequently lag behind the upstream kernel. In some cases this meant that this attribute
-    had to refer to an older kernel[1] because the latest hardened kernel was EOL and
-    the latest supported kernel didn't have patches.
-
-    If you want to use a hardened kernel, please check which kernel minors are supported
-    and use a versioned attribute, e.g. `linuxPackages_5_10_hardened'.
-
-    [1] for more context: https://github.com/NixOS/nixpkgs/pull/133587
-  "; # Added 2021-08-16
   linuxPackages_latest_xen_dom0 = linuxPackages_latest; # Added 2021-04-04
-  linuxPackages_latest_xen_dom0_hardened = linuxPackages_latest_hardened; # Added 2021-04-04
   linuxPackages_rpi0 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi1 = linuxKernel.packages.linux_rpi1;
   linuxPackages_rpi2 = linuxKernel.packages.linux_rpi2;
@@ -1639,31 +1483,6 @@ mapAliases {
   manicode = throw "manicode has been renamed to codebuff"; # Added 2024-12-10
   manta = throw "manta does not support python3, and development has been abandoned upstream"; # Added 2025-03-17
   manticore = throw "manticore is no longer maintained since 2020, and doesn't build since smlnj-110.99.7.1"; # Added 2025-05-17
-  maple-mono-autohint = throw "
-    maple-mono-autohint had been moved to maple-mono.truetype-autohint.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  "; # Added 2025-03-16
-  maple-mono-NF = throw "
-    maple-mono-NF had been moved to maple-mono.NF.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  "; # Added 2025-03-16
-  maple-mono-otf = throw "
-    maple-mono-otf had been moved to maple-mono.opentype.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  "; # Added 2025-03-16
-  maple-mono-SC-NF = throw "
-    mono-SC-NF had been superseded by maple-mono.NF-CN.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  "; # Added 2025-03-16
-  maple-mono-woff2 = throw "
-    maple-mono-woff2 had been moved to maple-mono.woff2.
-    for installing all maple-mono:
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.maple-mono)
-  "; # Added 2025-03-16
   mapmap = throw "'mapmap' has been removed as it has been unmaintained since 2021"; # Added 2025-05-17
   mariadb-client = hiPrio mariadb.client; # added 2019.07.28
   mariadb_105 = throw "'mariadb_105' has been removed because it reached its End of Life. Consider upgrading to 'mariadb_106'."; # Added 2025-04-26
@@ -1779,7 +1598,6 @@ mapAliases {
   nats-streaming-server = throw "'nats-streaming-server' has been removed as critical bug fixes and security fixes will no longer be performed as of June of 2023"; # added 2025-10-13
   ncdu_2 = ncdu; # Added 2022-07-22
   neardal = throw "neardal has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-29
-  neochat = makePlasma5Throw "neochat"; # added 2022-05-10
   neocities-cli = neocities; # Added 2024-07-31
   neocomp = throw "neocomp has been remove because it fails to build and was unmaintained upstream"; # Added 2025-04-28
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
@@ -1959,14 +1777,6 @@ mapAliases {
   overrideLibcxx = throw "overrideLibcxx has been removed, as it was no longer used and Darwin now uses libc++ from the latest SDK; see the Nixpkgs 25.11 release notes for details"; # Added 2025-09-15
   overrideSDK = throw "overrideSDK has been removed as it was a legacy compatibility stub. See <https://nixos.org/manual/nixpkgs/stable/#sec-darwin-legacy-frameworks-overrides> for migration instructions"; # Added 2025-08-04
   ovn-lts = throw "ovn-lts has been removed. Please use the latest version available under ovn"; # Added 2024-08-24
-  oxygen-icons5 = throw "
-    The top-level oxygen-icons5 alias has been removed.
-
-    Please explicitly use kdePackages.oxygen-icons for the latest Qt 6-based version,
-    or libsForQt5.oxygen-icons5 for the deprecated Qt 5 version.
-
-    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
-  "; # Added 2025-03-15;
   oysttyer = throw "oysttyer has been removed; it is no longer maintained because of Twitter disabling free API access"; # Added 2024-09-23
   p2pvc = throw "p2pvc has been removed as it is unmaintained upstream and depends on OpenCV 2"; # Added 2024-08-20
   packet-cli = throw "'packet-cli' has been renamed to/replaced by 'metal-cli'"; # Converted to throw 2024-10-17
@@ -1978,7 +1788,6 @@ mapAliases {
   paperless = throw "'paperless' has been renamed to/replaced by 'paperless-ngx'"; # Converted to throw 2024-10-17
   paperless-ng = paperless-ngx; # Added 2022-04-11
   paperoni = throw "paperoni has been removed, because it is unmaintained"; # Added 2024-07-14
-  partition-manager = makePlasma5Throw "partitionmanager"; # Added 2024-01-08
   passky-desktop = throw "passky-desktop has been removed, as it was unmaintained and blocking the Electron 29 removal."; # Added 2025-02-24
   patchelfStable = patchelf; # Added 2024-01-25
   pathsFromGraph = throw "pathsFromGraph has been removed, use closureInfo instead"; # Added 2025-01-23
@@ -2077,14 +1886,6 @@ mapAliases {
   pocket-updater-utility = pupdate; # Added 2024-01-25
   podofo010 = podofo_0_10; # Added 2025-06-01
   polipo = throw "'polipo' has been removed as it is unmaintained upstream"; # Added 2025-05-18
-  polkit-kde-agent = throw "
-    The top-level polkit-kde-agent alias has been removed.
-
-    Please explicitly use kdePackages.polkit-kde-agent-1 for the latest Qt 6-based version,
-    or libsForQt5.polkit-kde-agent for the deprecated Qt 5 version.
-
-    Note that Qt 5 versions of most KDE software will be removed in NixOS 25.11.
-  "; # Added 2025-03-07
   polypane = throw "'polypane' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-25
   poppler_utils = poppler-utils; # Added 2025-02-27
   poretools = throw "poretools has been removed from nixpkgs, as it was broken and unmaintained"; # Added 2024-06-03
@@ -2279,13 +2080,6 @@ mapAliases {
   sandboxfs = throw "'sandboxfs' has been removed due to being unmaintained, consider using linux namespaces for sandboxing instead"; # Added 2024-06-06
   sane-backends-git = throw "'sane-backends-git' has been renamed to/replaced by 'sane-backends'"; # Converted to throw 2024-10-17
   scantailor = scantailor-advanced; # Added 2022-05-26
-  schildichat-desktop = schildichat-web; # Added 2023-12-07
-  schildichat-desktop-wayland = schildichat-web; # Added 2023-12-07
-  schildichat-web = throw "
-    schildichat has been removed as it is severely lacking behind the Element upstream and does not receive regular security fixes.
-    Please participate in upstream discussion on getting out new releases:
-    https://github.com/SchildiChat/schildichat-desktop/issues/212
-    https://github.com/SchildiChat/schildichat-desktop/issues/215"; # Added 2023-12-05
   scitoken-cpp = scitokens-cpp; # Added 2024-02-12
   scry = throw "'scry' has been removed as it was archived upstream. Use 'crystalline' instead"; # Added 2025-02-12
   scudcloud = throw "'scudcloud' has been removed as it was archived by upstream"; # Added 2025-07-24
@@ -2656,12 +2450,6 @@ mapAliases {
   watershot = throw "'watershot' has been removed as it is unmaintained upstream and no longer works"; # Added 2025-06-01
   wavebox = throw "'wavebox' has been removed due to lack of maintenance in nixpkgs"; # Added 2025-06-24
   wavm = throw "wavm has been removed, as it does not build with supported LLVM versions"; # Added 2025-08-10
-  wayfireApplications-unwrapped = throw "
-    'wayfireApplications-unwrapped.wayfire' has been renamed to/replaced by 'wayfire'
-    'wayfireApplications-unwrapped.wayfirePlugins' has been renamed to/replaced by 'wayfirePlugins'
-    'wayfireApplications-unwrapped.wcm' has been renamed to/replaced by 'wayfirePlugins.wcm'
-    'wayfireApplications-unwrapped.wlroots' has been removed
-  "; # Add 2023-07-29
   waypoint = throw "waypoint has been removed from nixpkgs as the upstream project was archived"; # Added 2024-04-24
   wcurl = throw "'wcurl' has been removed due to being bundled with 'curl'"; # Added 2025-07-04
   wdomirror = throw "'wdomirror' has been removed as it is unmaintained upstream, Consider using 'wl-mirror' instead"; # Added 2025-09-04
@@ -2731,7 +2519,6 @@ mapAliases {
   xtrlock-pam = throw "xtrlock-pam has been removed because it is unmaintained for 10 years and doesn't support Python 3.10 or newer"; # Added 2025-01-25
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = throw "'xvfb_run' has been renamed to/replaced by 'xvfb-run'"; # Converted to throw 2024-10-17
-  xwaylandvideobridge = makePlasma5Throw "xwaylandvideobridge"; # Added 2024-09-27
   xxv = throw "'xxv' has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   yabar = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
   yabar-unstable = throw "'yabar' has been removed as the upstream project was archived"; # Added 2025-06-10
