@@ -107,6 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
       their data, there really is no alternative.
     '';
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ jwiegley ];
+    maintainers = with lib.maintainers; [
+      jwiegley
+      afh
+    ];
   };
 })
