@@ -112,7 +112,8 @@ lib.makeOverridable (
     revWithTag = if tag != null then "refs/tags/${tag}" else rev;
 
     fetcherArgs =
-      (
+      passthruAttrs
+      // (
         if useFetchGit then
           {
             inherit
@@ -152,7 +153,6 @@ lib.makeOverridable (
           }
       )
       // privateAttrs
-      // passthruAttrs
       // {
         inherit name;
       };
