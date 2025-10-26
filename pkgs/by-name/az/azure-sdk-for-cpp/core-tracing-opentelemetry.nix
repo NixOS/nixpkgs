@@ -1,19 +1,26 @@
 {
   stdenv,
+  fetchFromGitHub,
   azure-sdk-for-cpp,
   cmake,
   ninja,
   opentelemetry-cpp,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-core-tracing-opentelemetry";
-  version = "1.0.0-beta.5-unreleased-2025-05-21";
+  version = "1.0.0-beta.4";
   outputs = [
     "out"
     "dev"
   ];
 
-  inherit (azure-sdk-for-cpp) src;
+  src = fetchFromGitHub {
+    owner = "Azure";
+    repo = "azure-sdk-for-cpp";
+    tag = "azure-core-tracing-opentelemetry_1.0.0-beta.4";
+    hash = "sha256-3PqHpoi7zlTUYJ4A4APKp2yPg9nVwgGiyOZ+bng4Crk=";
+  };
   sourceRoot = "source/sdk/core/azure-core-tracing-opentelemetry";
 
   postPatch = ''
@@ -45,5 +52,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  meta = azure-sdk-for-cpp.meta;
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "azure-core-tracing-opentelemetry_(.*)"
+    ];
+  };
+
+  meta = (
+    azure-sdk-for-cpp.meta
+    // {
+      description = "Azure SDK Core Tracing Library for C++";
+      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/core/azure-core-tracing-opentelemetry/CHANGELOG.md";
+    }
+  );
 })

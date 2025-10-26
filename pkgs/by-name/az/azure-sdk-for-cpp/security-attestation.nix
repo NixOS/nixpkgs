@@ -1,9 +1,11 @@
 {
   stdenv,
+  fetchFromGitHub,
   azure-sdk-for-cpp,
   cmake,
   ninja,
   openssl,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-security-attestation";
@@ -13,7 +15,12 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  inherit (azure-sdk-for-cpp) meta src;
+  src = fetchFromGitHub {
+    owner = "Azure";
+    repo = "azure-sdk-for-cpp";
+    tag = "azure-security-attestation_1.1.0";
+    hash = "sha256-RXCMB7MMIe5x5YgMAqAf306E/1vuRXweAlN5uDHumjA=";
+  };
   sourceRoot = "source/sdk/attestation/azure-security-attestation";
 
   postPatch = ''
@@ -45,5 +52,20 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share" $dev
   '';
 
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "azure-security-attestation_(.*)"
+    ];
+  };
+
   doCheck = false;
+
+  meta = (
+    azure-sdk-for-cpp.meta
+    // {
+      description = "Azure Attestation Package client library for C++";
+      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/attestation/azure-security-attestation/CHANGELOG.md";
+    }
+  );
 })

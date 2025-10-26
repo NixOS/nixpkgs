@@ -4,11 +4,13 @@
   azure-sdk-for-cpp,
   cmake,
   ninja,
+  openssl,
+  libxml2,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "azure-sdk-for-cpp-messaging-eventhubs-checkpointstore-blob";
-  version = "1.0.0-beta.1";
+  pname = "azure-sdk-for-cpp-data-tables";
+  version = "1.0.0-beta.6";
   outputs = [
     "out"
     "dev"
@@ -17,10 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-cpp";
-    tag = "azure-messaging-eventhubs-checkpointstore-blob_1.0.0-beta.1";
-    hash = "sha256-487IwzlxnKd09ztf9NQESbp/kZzsT18JXKgMwsG5W/Y=";
+    tag = "azure-data-tables_1.0.0-beta.6";
+    hash = "sha256-gfkjoA16UP6ToIueYPfhQFh+LEhlVtvTk3qRJoHR5OY=";
   };
-  sourceRoot = "source/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob";
+  sourceRoot = "source/sdk/tables/azure-data-tables";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt
@@ -33,11 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  propagatedBuildInputs = [
-    azure-sdk-for-cpp.core
-    azure-sdk-for-cpp.messaging-eventhubs
-    azure-sdk-for-cpp.storage-blobs
+  buildInputs = [
+    openssl
+    libxml2
   ];
+  propagatedBuildInputs = [ azure-sdk-for-cpp.core ];
 
   env = {
     AZURE_SDK_DISABLE_AUTO_VCPKG = 1;
@@ -57,15 +59,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "azure-messaging-eventhubs-checkpointstore-blob_(.*)"
+      "azure-data-tables_(.*)"
     ];
   };
 
   meta = (
     azure-sdk-for-cpp.meta
     // {
-      description = "Azure Event Hubs Blob Storage Checkpoint Store for C++";
-      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob/CHANGELOG.md";
+      description = "Azure Tables client library for C++";
+      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/tables/azure-data-tables/CHANGELOG.md";
     }
   );
 })

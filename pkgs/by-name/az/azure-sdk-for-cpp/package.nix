@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  runCommand,
   fetchFromGitHub,
   newScope,
   cmake,
@@ -145,100 +146,87 @@ let
         apple-sdk
         openssl
         ;
-      attestation = callPackage ./attestation.nix { };
       core = callPackage ./core.nix { };
       core-amqp = callPackage ./core-amqp.nix { };
       core-tracing-opentelemetry = callPackage ./core-tracing-opentelemetry.nix { };
+      data-tables = callPackage ./data-tables.nix { };
+      identity = callPackage ./identity.nix { };
       messaging-eventhubs = callPackage ./messaging-eventhubs.nix { };
       messaging-eventhubs-checkpointstore-blob =
         callPackage ./messaging-eventhubs-checkpointstore-blob.nix
           { };
-      identity = callPackage ./identity.nix { };
-      keyvault-administration = callPackage ./keyvault-administration.nix { };
-      keyvault-certificates = callPackage ./keyvault-certificates.nix { };
-      keyvault-keys = callPackage ./keyvault-keys.nix { };
-      keyvault-secrets = callPackage ./keyvault-secrets.nix { };
+      security-attestation = callPackage ./security-attestation.nix { };
+      security-keyvault-administration = callPackage ./security-keyvault-administration.nix { };
+      security-keyvault-certificates = callPackage ./security-keyvault-certificates.nix { };
+      security-keyvault-keys = callPackage ./security-keyvault-keys.nix { };
+      security-keyvault-secrets = callPackage ./security-keyvault-secrets.nix { };
       storage-blobs = callPackage ./storage-blobs.nix { };
       storage-common = callPackage ./storage-common.nix { };
       storage-files-datalake = callPackage ./storage-files-datalake.nix { };
       storage-files-shares = callPackage ./storage-files-shares.nix { };
       storage-queues = callPackage ./storage-queues.nix { };
-      tables = callPackage ./tables.nix { };
     }
   );
 in
-stdenv.mkDerivation (finalAttrs: {
-  pname = "azure-sdk-for-cpp";
-  version = "1.16.0";
+runCommand "azure-sdk-for-cpp"
+  {
+    propagatedBuildInputs = [
+      scope.core
+      scope.core-amqp
+      scope.core-tracing-opentelemetry
+      scope.data-tables
+      scope.identity
+      scope.messaging-eventhubs
+      scope.messaging-eventhubs-checkpointstore-blob
+      scope.security-attestation
+      scope.security-keyvault-administration
+      scope.security-keyvault-certificates
+      scope.security-keyvault-keys
+      scope.security-keyvault-secrets
+      scope.storage-blobs
+      scope.storage-common
+      scope.storage-files-datalake
+      scope.storage-files-shares
+      scope.storage-queues
+    ];
 
-  src = fetchFromGitHub {
-    owner = "Azure";
-    repo = "azure-sdk-for-cpp";
-    tag = "azure-core_1.16.0";
-    hash = "sha256-qk1gvPw3bKH5jzpd9eXHGngnBxmsE37KAW226t6hQIA=";
-  };
+    passthru = {
+      inherit
+        c-shared-utility
+        macro-utils-c
+        umock-c
+        ;
+      inherit (scope)
+        core
+        core-amqp
+        core-tracing-opentelemetry
+        data-tables
+        identity
+        messaging-eventhubs
+        messaging-eventhubs-checkpointstore-blob
+        security-attestation
+        security-keyvault-administration
+        security-keyvault-certificates
+        security-keyvault-keys
+        security-keyvault-secrets
+        storage-blobs
+        storage-common
+        storage-files-datalake
+        storage-files-shares
+        storage-queues
+        ;
+    };
 
-  propagatedBuildInputs = [
-    scope.attestation
-    scope.core
-    scope.core-amqp
-    # Currently broken, see comment in ./core-tracing-opentelemetry.nix.
-    scope.core-tracing-opentelemetry
-    scope.messaging-eventhubs
-    scope.messaging-eventhubs-checkpointstore-blob
-    scope.identity
-    scope.keyvault-administration
-    scope.keyvault-certificates
-    scope.keyvault-keys
-    scope.keyvault-secrets
-    scope.storage-blobs
-    scope.storage-common
-    scope.storage-files-datalake
-    scope.storage-files-shares
-    scope.storage-queues
-    scope.tables
-  ];
+    meta = {
+      homepage = "https://azure.github.io/azure-sdk-for-cpp";
+      description = "Azure SDK for C++";
+      sourceProvenance = [ lib.sourceTypes.fromSource ];
+      license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.tobim ];
+      platforms = lib.platforms.all;
+    };
+  }
 
-  dontBuild = true;
-  installPhase = ''
-    runHook preInstall
+  ''
     mkdir $out
-    runHook postInstall
-  '';
-
-  passthru = {
-    inherit
-      c-shared-utility
-      macro-utils-c
-      umock-c
-      ;
-    inherit (scope)
-      attestation
-      core
-      core-amqp
-      core-tracing-opentelemetry
-      messaging-eventhubs
-      messaging-eventhubs-checkpointstore-blob
-      identity
-      keyvault-administration
-      keyvault-certificates
-      keyvault-keys
-      keyvault-secrets
-      storage-blobs
-      storage-common
-      storage-files-datalake
-      storage-files-shares
-      storage-queues
-      tables
-      ;
-  };
-
-  meta = {
-    homepage = "https://azure.github.io/azure-sdk-for-cpp";
-    description = "Collection of C++ APIs for interacting with Azure services";
-    sourceProvenance = [ lib.sourceTypes.fromSource ];
-    license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.tobim ];
-    platforms = lib.platforms.unix;
-  };
-})
+  ''
