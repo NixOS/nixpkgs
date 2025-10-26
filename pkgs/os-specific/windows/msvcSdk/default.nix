@@ -34,15 +34,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash =
-    if !config.microsoftVisualStudioLicenseAccepted then
-      throw ''
-        Microsoft Software License Terms are not accepted with config.microsoftVisualStudioLicenseAccepted.
-        Please read https://visualstudio.microsoft.com/license-terms/mt644918/ and if you agree, change your
-        config to indicate so.
-      ''
-    else
-      hashes.${arch};
+  outputHash = hashes.${arch};
 
   __structuredAttrs = true;
   xwinArgs = [
