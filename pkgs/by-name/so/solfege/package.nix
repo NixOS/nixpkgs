@@ -4,16 +4,21 @@
   autoconf,
   automake,
   csound,
+  docbook-xsl-ns,
   fetchurl,
   gdk-pixbuf,
   gettext,
+  ghostscript,
+  gnome-doc-utils,
   gobject-introspection,
   gtk3,
   librsvg,
+  libxslt,
   lilypond,
   mpg123,
   pkg-config,
   python3Packages,
+  swig,
   texinfo,
   timidity,
   txt2man,
@@ -46,10 +51,16 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     autoconf
     automake
+    docbook-xsl-ns
     gdk-pixbuf
     gettext
+    ghostscript
+    gnome-doc-utils
     gobject-introspection
+    libxslt
+    lilypond
     pkg-config
+    swig
     texinfo
     txt2man
     wrapGAppsHook3
@@ -63,6 +74,10 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs = with python3Packages; [
     pycairo
     pygobject3
+  ];
+
+  configureFlags = [
+    "--enable-docbook-stylesheet=${docbook-xsl-ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
   ];
 
   preBuild = ''
