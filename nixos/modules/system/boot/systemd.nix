@@ -488,8 +488,7 @@ in
           ) "${name}.${typeStr} is ordered after 'network-online.target' but doesn't depend on it";
         mkNetOnlineWarns =
           typeStr: defs: lib.concatLists (lib.mapAttrsToList (mkOneNetOnlineWarn typeStr) defs);
-        mkMountNetOnlineWarns =
-          typeStr: defs: lib.concatLists (map (m: mkOneNetOnlineWarn typeStr m.what m) defs);
+        mkMountNetOnlineWarns = typeStr: defs: lib.concatMap (m: mkOneNetOnlineWarn typeStr m.what m) defs;
       in
       concatLists (
         mapAttrsToList (
