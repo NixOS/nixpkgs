@@ -231,8 +231,6 @@ buildPythonPackage rec {
       "test/plugins/test_art.py::AlbumArtPerformOperationTest::test_resize"
     ];
   disabledTests = extraDisabledTests ++ [
-    # https://github.com/beetbox/beets/issues/5880
-    "test_reject_different_art"
     # touches network
     "test_merge_duplicate_album"
     # The existence of the dependency reflink (see comment above), causes this
