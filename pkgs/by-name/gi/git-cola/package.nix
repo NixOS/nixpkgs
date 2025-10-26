@@ -5,7 +5,7 @@
   python3Packages,
   gettext,
   git,
-  qt5,
+  qt6,
   versionCheckHook,
   copyDesktopItems,
   imagemagick,
@@ -14,33 +14,36 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "git-cola";
-  version = "4.15.0";
+  version = "4.16.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "git-cola";
     repo = "git-cola";
     tag = "v${version}";
-    hash = "sha256-h3W7CsdJK1hid8Nmp1bvFwiHVS4UV/gziwtyZuxSxHY=";
+    hash = "sha256-gBqMwqmpu0+gMeffiFdwy/kBdCUQRpJr+3vzUkBCRSk=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ qt5.qtwayland ];
+  build-system = with python3Packages; [
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  buildInputs = [
     git
+    qt6.qtbase
   ]
-  ++ (with python3Packages; [
-    setuptools
-    pyqt5
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6.qtwayland ];
+
+  dependencies = with python3Packages; [
+    polib
+    pyqt6
     qtpy
     send2trash
-    polib
-  ]);
+  ];
 
   nativeBuildInputs = [
     gettext
-    qt5.wrapQtAppsHook
-    python3Packages.setuptools-scm
+    qt6.wrapQtAppsHook
     imagemagick
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
