@@ -15540,6 +15540,12 @@
     githubId = 60079945;
     keys = [ { fingerprint = "7590 C9DD E19D 4497 9EE9  0B14 CE96 9670 FB4B 4A56"; } ];
   };
+  madebydamo = {
+    email = "damian.d.moser@gmail.com";
+    github = "madebydamo";
+    githubId = 94169482;
+    name = "Damian Moser";
+  };
   madeddie = {
     email = "edwin@madtech.cx";
     github = "madeddie";
