@@ -143,8 +143,8 @@ let
         message = "services.keepalived.vrrpInstances.${i.name}.vmacXmitBase has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
       }
     ]
-    ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
-    ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
+    ++ concatMap (virtualIpAssertions i.name) i.virtualIps
+    ++ concatMap (vrrpScriptAssertion i.name) i.trackScripts;
 
   virtualIpAssertions = vrrpName: ip: [
     {
@@ -323,7 +323,7 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = flatten (map vrrpInstanceAssertions vrrpInstances);
+    assertions = concatMap vrrpInstanceAssertions vrrpInstances;
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       extraCommands = ''
