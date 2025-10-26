@@ -365,8 +365,28 @@ let
 in
 
 mapAliases {
-  # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
-  forceSystem = system: _: (import self.path { localSystem = { inherit system; }; });
+  forceSystem = system: _: (import self.path { localSystem = { inherit system; }; }); # Added 2018-07-16 preserve, reason: forceSystem should not be used directly in Nixpkgs.
+
+  # TODO: Remove from Nixpkgs and eventually turn into throws.
+  system = stdenv.hostPlatform.system; # Added 2021-10-22
+  buildPlatform = stdenv.buildPlatform; # Added 2023-01-09
+  hostPlatform = stdenv.hostPlatform; # Added 2023-01-09
+  targetPlatform = stdenv.targetPlatform; # Added 2023-01-09
+
+  # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
+  llvmPackages_latest = llvmPackages_21;
+  llvmPackages_git = (callPackages ../development/compilers/llvm { }).git;
+  # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
+  clang18Stdenv = lowPrio llvmPackages_18.stdenv;
+  clang19Stdenv = lowPrio llvmPackages_19.stdenv;
+
+  # Various to preserve
+  autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
+  elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
+  fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve, reason: common typo
+  fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
+  wlroots = wlroots_0_19; # preserve, reason: wlroots is unstable, we must keep depending on 'wlroots_0_*', convert to package after a stable(1.x) release
+  wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
 
   _0verkill = throw "'_0verkill' has been removed due to lack of maintenance"; # Added 2025-08-27
   _1password = lib.warnOnInstantiate "_1password has been renamed to _1password-cli to better follow upstream name usage" _1password-cli; # Added 2024-10-24
@@ -490,7 +510,6 @@ mapAliases {
   autoconf264 = throw "'autoconf264' has been removed in favor of 'autoconf'"; # Added 2025-07-21
   automake111x = throw "'automake111x' has been removed in favor of 'automake'"; # Added 2025-07-21
   autopanosiftc = throw "'autopanosiftc' has been removed, as it is unmaintained upstream"; # Added 2025-10-07
-  autoReconfHook = throw "You meant 'autoreconfHook', with a lowercase 'r'."; # preserve, reason: common typo
   autoreconfHook264 = throw "'autoreconfHook264' has been removed in favor of 'autoreconfHook'"; # Added 2025-07-21
   aumix = throw "'aumix' has been removed due to lack of maintenance upstream. Consider using 'pamixer' for CLI or 'pavucontrol' for GUI"; # Added 2024-09-14
   authy = throw "'authy' has been removed since it reached end of life"; # Added 2024-04-19
@@ -728,10 +747,6 @@ mapAliases {
   cvs_fast_export = throw "'cvs_fast_export' has been renamed to/replaced by 'cvs-fast-export'"; # Converted to throw 2024-10-17
   cyber = throw "cyber has been removed, as it does not build with supported Zig versions"; # Added 2025-08-09
 
-  # these are for convenience, not for backward compat., and shouldn't expire until the package is deprecated.
-  clang18Stdenv = lowPrio llvmPackages_18.stdenv; # preserve, reason: see above
-  clang19Stdenv = lowPrio llvmPackages_19.stdenv; # preserve, reason: see above
-
   clang-tools_18 = llvmPackages_18.clang-tools; # Added 2024-04-22
   clang-tools_19 = llvmPackages_19.clang-tools; # Added 2024-08-21
 
@@ -828,7 +843,6 @@ mapAliases {
   edid-decode = v4l-utils; # Added 2025-06-20
   eidolon = throw "eidolon was removed as it is unmaintained upstream."; # Added 2025-05-28
   eintopf = lauti; # Project was renamed, added 2025-05-01
-  elasticsearch7Plugins = elasticsearchPlugins; # preserve, reason: until v8
   electronplayer = throw "'electronplayer' has been removed as it had been discontinued upstream since October 2024"; # Added 2024-12-17
   elm-github-install = throw "'elm-github-install' has been removed as it is abandoned upstream and only supports Elm 0.18.0"; # Added 2025-08-25
   element-desktop-wayland = throw "element-desktop-wayland has been removed. Consider setting NIXOS_OZONE_WL=1 via 'environment.sessionVariables' instead"; # Added 2024-12-17
@@ -904,7 +918,6 @@ mapAliases {
   inherit (luaPackages) fennel; # Added 2022-09-24
   ferdi = throw "'ferdi' has been removed, upstream does not exist anymore and the package is insecure"; # Added 2024-08-22
   fetchbower = throw "fetchbower has been removed as bower was removed. It is recommended to migrate to yarn."; # Added 2025-09-17
-  fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H"; # preserve, reason: common typo
   ffmpeg_5 = throw "ffmpeg_5 has been removed, please use another version"; # Added 2024-07-12
   ffmpeg_5-headless = throw "ffmpeg_5-headless has been removed, please use another version"; # Added 2024-07-12
   ffmpeg_5-full = throw "ffmpeg_5-full has been removed, please use another version"; # Added 2024-07-12
@@ -955,6 +968,7 @@ mapAliases {
   fractal-next = fractal; # added 2023-11-25
   framework-system-tools = framework-tool; # added 2023-12-09
   francis = kdePackages.francis; # added 2024-07-13
+  freebsdCross = freebsd; # Added 2024-09-06
   freecad-qt6 = freecad; # added 2025-06-14
   freecad-wayland = freecad; # added 2025-06-14
   freeimage = throw "freeimage was removed due to numerous vulnerabilities"; # Added 2025-10-23
@@ -962,7 +976,6 @@ mapAliases {
   freerdpUnstable = freerdp; # added 2025-03-25
   frostwire = throw "frostwire was removed, as it was broken due to reproducibility issues, use `frostwire-bin` package instead."; # added 2024-05-17
   ftjam = throw "ftjam was removed, as it hasn't been updated since 2007 and fails to build"; # added 2025-01-02
-  fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
   fuse-common = throw "fuse-common was removed, because the udev rule was early included by systemd-udevd and the config is done by NixOS module `programs.fuse`"; # added 2024-09-29
   fusee-launcher = throw "'fusee-launcher' was removed as upstream removed the original source repository fearing legal repercussions"; # added 2025-07-05
   futuresql = libsForQt5.futuresql; # added 2023-11-11
@@ -1275,6 +1288,7 @@ mapAliases {
   kanidm_1_3 = throw "'kanidm_1_3' has been removed as it has reached end of life"; # Added 2025-03-10
   kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
   kanidmWithSecretProvisioning_1_4 = throw "'kanidmWithSecretProvisioning_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
+  kalendar = merkuro; # Added 2023-08-24
   kbibtex = throw "'kbibtex' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   kcli = throw "kcli has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   kdbplus = throw "'kdbplus' has been removed from nixpkgs"; # Added 2024-05-06
@@ -1285,6 +1299,7 @@ mapAliases {
   kexi = makePlasma5Throw "kexi";
   keyfinger = throw "keyfinder has been removed as it was abandoned upstream and did not build; consider using mixxx or keyfinder-cli"; # Addd 2024-08-25
   keysmith = throw "'keysmith' has been renamed to/replaced by 'libsForQt5.kdeGear.keysmith'"; # Converted to throw 2024-10-17
+  kfloppy = throw "kfloppy has been removed upstream in KDE Gear 23.08"; # Added 2023-08-24
   kgx = gnome-console; # Added 2022-02-19
   khoj = throw "khoj has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-11
   kibana7 = throw "Kibana 7.x has been removed from nixpkgs as it depends on an end of life Node.js version and received no maintenance in time."; # Added 2023-10-30
@@ -1539,8 +1554,6 @@ mapAliases {
   lixVersions = lixPackageSets.renamedDeprecatedLixVersions; # Added 2025-03-20, warning in ../tools/package-management/lix/default.nix
 
   lizardfs = throw "lizardfs has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
-
-  llvmPackages_git = (callPackages ../development/compilers/llvm { }).git; # Added 2024-08-02
 
   llvmPackages_9 = throw "llvmPackages_9 has been removed from nixpkgs"; # Added 2024-04-08
   llvm_9 = throw "llvm_9 has been removed from nixpkgs"; # Added 2024-04-08
@@ -1813,6 +1826,7 @@ mapAliases {
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
   netbox_3_7 = throw "netbox 3.7 series has been removed as it was EOL"; # Added 2025-04-23
   netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
+  netbsdCross = netbsd; # Added 2024-09-06
   netsurf = recurseIntoAttrs {
     browser = lib.warnOnInstantiate "'netsurf.browser' has been renamed to 'netsurf-browser'" netsurf-browser; # Added 2025-03-26
     buildsystem = lib.warnOnInstantiate "'netsurf.buildsystem' has been renamed to 'netsurf-buildsystem'" netsurf-buildsystem; # Added 2025-03-26
@@ -1944,6 +1958,7 @@ mapAliases {
   openai-whisper-cpp = whisper-cpp; # Added 2024-12-13
   openbabel2 = throw "openbabel2 has been removed, as it was unused and unmaintained upstream; please use openbabel"; # Added 2025-09-17
   openbabel3 = openbabel; # Added 2025-09-17
+  openbsdCross = openbsd; # Added 2024-09-06
   opencv2 = throw "opencv2 has been removed as it is obsolete and was not used by any other package; please migrate to OpenCV 4"; # Added 2024-08-20
   opencv3 = throw "opencv3 has been removed as it is obsolete and was not used by any other package; please migrate to OpenCV 4"; # Added 2024-08-20
   openafs_1_8 = openafs; # Added 2022-08-22
@@ -2077,6 +2092,21 @@ mapAliases {
   pidgin-msn-pecan = throw "'pidgin-msn-pecan' has been removed as it's unmaintained upstream and doesn't work with escargot"; # Added 2025-09-17
   pidgin-opensteamworks = throw "'pidgin-opensteamworks' has been removed as it is unmaintained and no longer works with Steam."; # Added 2025-09-17
   pidgin-skypeweb = throw "'pidgin-skypeweb' has been removed since Skype was shut down in May 2025"; # Added 2025-09-15
+  pidgin-indicator = pidginPackages.pidgin-indicator; # Added 2023-07-17
+  pidgin-latex = pidginPackages.pidgin-latex; # Added 2023-07-17
+  pidgin-carbons = pidginPackages.pidgin-carbons; # Added 2023-07-17
+  pidgin-xmpp-receipts = pidginPackages.pidgin-xmpp-receipts; # Added 2023-07-17
+  pidgin-otr = pidginPackages.pidgin-otr; # Added 2023-07-17
+  pidgin-osd = pidginPackages.pidgin-osd; # Added 2023-07-17
+  pidgin-sipe = pidginPackages.pidgin-sipe; # Added 2023-07-17
+  pidgin-window-merge = pidginPackages.pidgin-window-merge; # Added 2023-07-17
+  purple-discord = pidginPackages.purple-discord; # Added 2023-07-17
+  purple-googlechat = pidginPackages.purple-googlechat; # Added 2023-07-17
+  purple-lurch = pidginPackages.purple-lurch; # Added 2023-07-17
+  purple-mm-sms = pidginPackages.purple-mm-sms; # Added 2023-07-17
+  purple-plugin-pack = pidginPackages.purple-plugin-pack; # Added 2023-07-17
+  purple-slack = pidginPackages.purple-slack; # Added 2023-07-17
+  purple-xmpp-http-upload = pidginPackages.purple-xmpp-http-upload; # Added 2023-07-17
   pilipalax = throw "'pilipalax' has been removed from nixpkgs due to it not being maintained"; # Added 2025-07-25
   pio = throw "pio has been removed due to lack of upstream maintenance"; # Added 2025-01-25
   pipewire_0_2 = throw "pipewire_0_2 has been removed as it is outdated and no longer used"; # Added 2024-07-28
@@ -2539,6 +2569,7 @@ mapAliases {
   tclx = tclPackages.tclx; # Added 2024-10-02
   tcp-cutter = throw "tcp-cutter has been removed because it fails to compile and the source url is dead"; # Added 2025-05-25
   tdesktop = telegram-desktop; # Added 2023-04-07
+  tdlib-purple = pidginPackages.tdlib-purple; # Added 2023-07-17
   tdom = tclPackages.tdom; # Added 2024-10-02
   teamspeak_client = teamspeak3; # Added 2024-11-07
   teamspeak5_client = teamspeak6-client; # Added 2025-01-29
@@ -2758,7 +2789,6 @@ mapAliases {
   wireguard-vanity-address = throw "'wireguard-vanity-address' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
   wkhtmltopdf-bin = wkhtmltopdf; # Added 2024-07-17
   wlroots_0_16 = throw "'wlroots_0_16' has been removed in favor of newer versions"; # Added 2024-07-14
-  wlroots = wlroots_0_19; # preserve, reason: wlroots is unstable, we must keep depending on 'wlroots_0_*', convert to package after a stable(1.x) release
   woof = throw "'woof' has been removed as it is broken and unmaintained upstream"; # Added 2025-09-04
   wdomirror = throw "'wdomirror' has been removed as it is unmaintained upstream, Consider using 'wl-mirror' instead"; # Added 2025-09-04
   wordpress6_3 = throw "'wordpress6_3' has been removed in favor of the latest version"; # Added 2024-08-03
@@ -2767,7 +2797,6 @@ mapAliases {
   wordpress_6_5 = throw "'wordpress_6_5' has been removed in favor of the latest version"; # Added 2024-11-11
   wordpress_6_6 = throw "'wordpress_6_6' has been removed in favor of the latest version"; # Added 2024-11-17
   worldengine-cli = throw "'worldengine-cli' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
-  wormhole-rs = magic-wormhole-rs; # Added 2022-05-30. preserve, reason: Arch package name, main binary name
   wpa_supplicant_ro_ssids = lib.warnOnInstantiate "Deprecated package: Please use wpa_supplicant instead. Read-only SSID patches are now upstream!" wpa_supplicant;
   wrapLisp_old = throw "Lisp packages have been redesigned. See 'lisp-modules' in the nixpkgs manual."; # Added 2024-05-07
   wmii_hg = wmii; # Added 2022-04-26
@@ -2883,46 +2912,5 @@ mapAliases {
   }); # Added 2023-02-06
   zyn-fusion = zynaddsubfx; # Added 2022-08-05
   zz = throw "'zz' has been removed because it was archived in 2022 and had no maintainer"; # added 2024-05-10
-
-  ### UNSORTED ###
-
-  inherit (stdenv.hostPlatform) system; # Added 2021-10-22
-  inherit (stdenv) buildPlatform hostPlatform targetPlatform; # Added 2023-01-09
-
-  freebsdCross = freebsd; # Added 2024-09-06
-  netbsdCross = netbsd; # Added 2024-09-06
-  openbsdCross = openbsd; # Added 2024-09-06
-
-  # LLVM packages for (integration) testing that should not be used inside Nixpkgs:
-  llvmPackages_latest = llvmPackages_21;
-
-  /*
-    If these are in the scope of all-packages.nix, they cause collisions
-      between mixed versions of qt. See:
-    https://github.com/NixOS/nixpkgs/pull/101369
-  */
-
-  kalendar = merkuro; # Renamed in 23.08
-  kfloppy = throw "kfloppy has been removed upstream in KDE Gear 23.08"; # Added 2023-08-24
-
-  inherit (pidginPackages)
-    pidgin-indicator
-    pidgin-latex
-    pidgin-carbons
-    pidgin-xmpp-receipts
-    pidgin-otr
-    pidgin-osd
-    pidgin-sipe
-    pidgin-window-merge
-    purple-discord
-    purple-googlechat
-    purple-lurch
-    purple-mm-sms
-    purple-plugin-pack
-    purple-slack
-    purple-xmpp-http-upload
-    tdlib-purple
-    ;
-
 }
 // plasma5Throws
