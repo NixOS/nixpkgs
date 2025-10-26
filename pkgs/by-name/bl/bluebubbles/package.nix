@@ -1,6 +1,6 @@
 {
   lib,
-  flutter327,
+  flutter329,
   fetchFromGitHub,
   autoPatchelfHook,
   webkitgtk_4_1,
@@ -10,7 +10,7 @@
   mpv,
 }:
 
-flutter327.buildFlutterApplication rec {
+flutter329.buildFlutterApplication rec {
   pname = "bluebubbles";
   version = "1.15.4";
 
