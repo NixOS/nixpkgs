@@ -212,17 +212,6 @@ let
       "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
 in
 
-assert
-  (lib.isList curlOpts)
-  -> lib.warn ''
-    fetchurl for ${toString (builtins.head urls_)}: curlOpts is a list (${
-      lib.generators.toPretty { multiline = false; } curlOpts
-    }), which is not supported anymore.
-    - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
-      curlOpts = ${lib.strings.escapeNixString (toString curlOpts)};
-    - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
-      curlOptsList = [ ${lib.concatMapStringsSep " " lib.strings.escapeNixString curlOpts} ];'' true;
-
 stdenvNoCC.mkDerivation (
   (
     if (pname != "" && version != "") then
@@ -270,8 +259,26 @@ stdenvNoCC.mkDerivation (
 
     outputHashMode = if (recursiveHash || executable) then "recursive" else "flat";
 
-    inherit curlOpts;
+    curlOpts = lib.warnIf (lib.isList curlOpts) (
+      let
+        url = toString (builtins.head urls_);
+        curlOptsRepresentation = lib.generators.toPretty { multiline = false; } curlOpts;
+        curlOptsAsStringRepresentation = lib.strings.escapeNixString (toString curlOpts);
+        curlOptsListElementsRepresentation =
+          lib.concatMapStringsSep " " lib.strings.escapeNixString
+            curlOpts;
+      in
+      ''
+        fetchurl for ${url}: curlOpts is a list (${curlOptsRepresentation}), which is not supported anymore.
+        - If you wish to get the same effect as before, for elements with spaces (even if escaped) to expand to multiple curl arguments, use a string argument instead:
+          curlOpts = ${curlOptsAsStringRepresentation};
+        - If you wish for each list element to be passed as a separate curl argument, allowing arguments to contain spaces, use curlOptsList instead:
+          curlOptsList = [ ${curlOptsListElementsRepresentation} ];
+      ''
+    ) curlOpts;
+
     curlOptsList = lib.escapeShellArgs curlOptsList;
+
     inherit
       showURLs
       mirrorsFile
