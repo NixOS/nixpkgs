@@ -11865,7 +11865,7 @@ with pkgs;
 
   pcmanfm-qt = lxqt.pcmanfm-qt;
 
-  pdfmixtool = libsForQt5.callPackage ../applications/office/pdfmixtool { };
+  pdfmixtool = callPackage ../applications/office/pdfmixtool { };
 
   pijuice = with python3Packages; toPythonApplication pijuice;
 
