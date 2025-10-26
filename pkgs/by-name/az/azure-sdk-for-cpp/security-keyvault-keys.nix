@@ -1,16 +1,14 @@
 {
   stdenv,
   azure-sdk-for-cpp,
-  fetchFromGitHub,
   cmake,
   ninja,
-  curl,
-  libxml2,
+  fetchFromGitHub,
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "azure-sdk-for-cpp-core";
-  version = "1.16.1";
+  pname = "azure-sdk-for-cpp-keyvault-keys";
+  version = "4.5.0-beta.3";
   outputs = [
     "out"
     "dev"
@@ -19,10 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-cpp";
-    tag = "azure-core_1.16.1";
-    hash = "sha256-gMINz3bH80l0QYX3iKJlL962WIMujR1wuN+t4t7g7qg=";
+    tag = "azure-security-keyvault-keys_4.5.0-beta.3";
+    hash = "sha256-NSstk0cpgWBOhi50eiFSHDYiJjel2a4l8xxgfIPKSsU=";
   };
-  sourceRoot = "source/sdk/core/azure-core";
+  sourceRoot = "source/sdk/keyvault/azure-security-keyvault-keys";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt
@@ -35,10 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  propagatedBuildInputs = [
-    curl
-    libxml2
-  ];
+  propagatedBuildInputs = [ azure-sdk-for-cpp.core ];
 
   env = {
     AZURE_SDK_DISABLE_AUTO_VCPKG = 1;
@@ -46,7 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_TRANSPORT_CURL=ON"
     "-DWARNINGS_AS_ERRORS=OFF"
   ];
 
@@ -54,20 +48,20 @@ stdenv.mkDerivation (finalAttrs: {
     moveToOutput "share" $dev
   '';
 
+  doCheck = false;
+
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "azure-core_(.*)"
+      "azure-keyvault-keys_(.*)"
     ];
   };
-
-  doCheck = false;
 
   meta = (
     azure-sdk-for-cpp.meta
     // {
-      description = "Azure SDK Core Library for C++";
-      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/core/azure-core/CHANGELOG.md";
+      description = "Azure Key Vault Key client library for C++";
+      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/keyvault/azure-security-keyvault-keys/CHANGELOG.md";
     }
   );
 })

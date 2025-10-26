@@ -7,8 +7,8 @@
   nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  pname = "azure-sdk-for-cpp-messaging-eventhubs-checkpointstore-blob";
-  version = "1.0.0-beta.1";
+  pname = "azure-sdk-for-cpp-security-keyvault-secrets";
+  version = "4.3.0-beta.4";
   outputs = [
     "out"
     "dev"
@@ -17,10 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-sdk-for-cpp";
-    tag = "azure-messaging-eventhubs-checkpointstore-blob_1.0.0-beta.1";
-    hash = "sha256-487IwzlxnKd09ztf9NQESbp/kZzsT18JXKgMwsG5W/Y=";
+    tag = "azure-security-keyvault-secrets_4.3.0-beta.4";
+    hash = "sha256-NSstk0cpgWBOhi50eiFSHDYiJjel2a4l8xxgfIPKSsU=";
   };
-  sourceRoot = "source/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob";
+  sourceRoot = "source/sdk/keyvault/azure-security-keyvault-secrets";
 
   postPatch = ''
     sed -i '/CMAKE_CXX_STANDARD/d' CMakeLists.txt
@@ -33,11 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
   ];
 
-  propagatedBuildInputs = [
-    azure-sdk-for-cpp.core
-    azure-sdk-for-cpp.messaging-eventhubs
-    azure-sdk-for-cpp.storage-blobs
-  ];
+  propagatedBuildInputs = [ azure-sdk-for-cpp.core ];
 
   env = {
     AZURE_SDK_DISABLE_AUTO_VCPKG = 1;
@@ -57,15 +53,15 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "azure-messaging-eventhubs-checkpointstore-blob_(.*)"
+      "azure-security-keyvault-secrets_(.*)"
     ];
   };
 
   meta = (
     azure-sdk-for-cpp.meta
     // {
-      description = "Azure Event Hubs Blob Storage Checkpoint Store for C++";
-      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/eventhubs/azure-messaging-eventhubs-checkpointstore-blob/CHANGELOG.md";
+      description = "Azure Security Keyvault Secrets Package client library for C++";
+      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/keyvault/azure-security-keyvault-secrets/CHANGELOG.md";
     }
   );
 })

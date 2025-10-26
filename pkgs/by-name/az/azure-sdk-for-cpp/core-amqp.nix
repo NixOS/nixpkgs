@@ -1,18 +1,25 @@
 {
   stdenv,
+  fetchFromGitHub,
   azure-sdk-for-cpp,
   cmake,
   ninja,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "azure-sdk-for-cpp-core-amqp";
-  version = "1.0.0-beta.12-unreleased-2025-06-25";
+  version = "1.0.0-beta.11";
   outputs = [
     "out"
     "dev"
   ];
 
-  inherit (azure-sdk-for-cpp) meta src;
+  src = fetchFromGitHub {
+    owner = "Azure";
+    repo = "azure-sdk-for-cpp";
+    tag = "azure-core-amqp_1.0.0-beta.11";
+    hash = "sha256-MQsz5Dmv1BwfUaN1VXMC3hPdMHihlgOBaukp5wgTNJc=";
+  };
   sourceRoot = "source/sdk/core/azure-core-amqp";
 
   postPatch = ''
@@ -49,4 +56,19 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = false;
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "azure-core-amqp_(.*)"
+    ];
+  };
+
+  meta = (
+    azure-sdk-for-cpp.meta
+    // {
+      description = "Azure SDK AMQP Library for C++";
+      changelog = "https://github.com/Azure/azure-sdk-for-cpp/blob/main/sdk/core/azure-core-amqp/CHANGELOG.md";
+    }
+  );
 })
