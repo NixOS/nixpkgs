@@ -101,18 +101,10 @@ index d4ead96..299988f 100755
 -		  vi_cv_path_python_plibs="-F${python_PYTHONFRAMEWORKPREFIX} -framework Python"
 -	      fi
 -	    else
-+
++	    if true; then
  	      vi_cv_path_python_plibs="-L${PYTHON_CONFDIR} -lpython${vi_cv_var_python_version}"
  	      	      	      	      if test -n "${python_LINKFORSHARED}" && test -n "${python_PYTHONFRAMEWORKPREFIX}"; then
  	        python_link_symbol=`echo ${python_LINKFORSHARED} | sed 's/\([^ \t][^ \t]*[ \t][ \t]*[^ \t][^ \t]*\)[ \t].*/\1/'`
-@@ -6997,7 +6971,6 @@ eof
- 	      fi
- 	      vi_cv_path_python_plibs="${vi_cv_path_python_plibs} ${python_BASEMODLIBS} ${python_LIBS} ${python_SYSLIBS} ${python_LINKFORSHARED}"
- 	      	      vi_cv_path_python_plibs=`echo $vi_cv_path_python_plibs | sed s/-ltermcap//`
--	    fi
- 
- fi
- 
 @@ -7078,13 +7051,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.beam \
  printf "%s\n" "no" >&6; }
  	fi
