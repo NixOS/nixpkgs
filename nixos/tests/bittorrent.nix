@@ -23,7 +23,6 @@ let
   transmissionConfig =
     { pkgs, ... }:
     {
-      environment.systemPackages = [ pkgs.transmission_3 ];
       services.transmission = {
         enable = true;
         settings = {
