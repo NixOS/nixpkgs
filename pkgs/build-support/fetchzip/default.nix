@@ -33,10 +33,6 @@
   ...
 }@args:
 
-assert
-  (extraPostFetch != "")
-  -> lib.warn "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'." true;
-
 let
   tmpFilename =
     if extension != null then
@@ -93,7 +89,10 @@ fetchurl (
     )
     + ''
       ${postFetch}
-      ${extraPostFetch}
+      ${lib.warnIf (extraPostFetch != "")
+        "use 'postFetch' instead of 'extraPostFetch' with 'fetchzip' and 'fetchFromGitHub' or 'fetchFromGitLab'."
+        extraPostFetch
+      }
       chmod 755 "$out"
     '';
     # ^ Remove non-owner write permissions
