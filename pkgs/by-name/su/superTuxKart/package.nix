@@ -158,6 +158,7 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
+      SchweGELBin
     ];
     platforms = with lib.platforms; unix;
     changelog = "https://github.com/supertuxkart/stk-code/blob/${version}/CHANGELOG.md";
