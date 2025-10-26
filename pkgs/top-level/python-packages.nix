@@ -2811,6 +2811,8 @@ self: super: with self; {
 
   colcon-cargo = callPackage ../development/python-modules/colcon-cargo { };
 
+  colcon-cd = callPackage ../development/python-modules/colcon-cd { };
+
   colcon-defaults = callPackage ../development/python-modules/colcon-defaults { };
 
   colcon-installed-package-information =
