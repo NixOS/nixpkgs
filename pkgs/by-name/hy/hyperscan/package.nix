@@ -19,8 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "hyperscan";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-tzmVc6kJPzkFQLUM1MttQRLpgs0uckbV6rCxEZwk1yk=";
-    rev = "v${finalAttrs.version}";
   };
 
   outputs = [
@@ -38,16 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    "-DBUILD_AVX512=ON"
+    (lib.cmakeBool "BUILD_AVX512" true)
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) "-DFAT_RUNTIME=ON"
-  ++ lib.optional withStatic "-DBUILD_STATIC_AND_SHARED=ON"
-  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+    (lib.cmakeBool "FAT_RUNTIME" true)
+  ]
+  ++ lib.optionals withStatic [
+    (lib.cmakeBool "BUILD_STATIC_AND_SHARED" true)
+  ]
+  ++ lib.optionals (!withStatic) [
+    (lib.cmakeBool "BUILD_SHARED_LIBS" true)
+  ];
 
   # hyperscan CMake is completely broken for chimera builds when pcre is compiled
   # the only option to make it build - building from source
   # In case pcre is built from source, chimera build is turned on by default
-  preConfigure = lib.optional withStatic ''
+  preConfigure = lib.optionalString withStatic ''
     mkdir -p pcre
     tar xvf ${pcre.src} --strip-components 1 -C pcre
   '';
@@ -75,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "High-performance multiple regex matching library";
     longDescription = ''
       Hyperscan is a high-performance multiple regex matching library.
@@ -91,11 +97,11 @@ stdenv.mkDerivation (finalAttrs: {
     '';
 
     homepage = "https://www.hyperscan.io/";
-    maintainers = with maintainers; [ avnik ];
+    maintainers = with lib.maintainers; [ avnik ];
     platforms = [
       "x86_64-linux"
       "x86_64-darwin"
     ];
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
   };
 })
