@@ -435,13 +435,9 @@ mapAliases {
   afpfs-ng = throw "'afpfs-ng' has been removed as it was broken and unmaintained for 10 years"; # Added 2025-05-17
   agda-pkg = throw "agda-pkg has been removed due to being unmaintained"; # Added 2024-09-10
   ajour = throw "ajour has been removed, the project was archived upstream on 2024-09-17."; # Added 2025-03-12
-  akkoma-emoji = recurseIntoAttrs {
-    blobs_gg = lib.warnOnInstantiate "'akkoma-emoji.blobs_gg' has been renamed to 'blobs_gg'" blobs_gg; # Added 2025-03-14
-  };
-  akkoma-frontends = recurseIntoAttrs {
-    admin-fe = lib.warnOnInstantiate "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'" akkoma-admin-fe; # Added 2025-03-14
-    akkoma-fe = lib.warnOnInstantiate "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'" akkoma-fe; # Added 2025-03-14
-  };
+  akkoma-emoji = lib.warnOnInstantiate "'akkoma-emoji.blobs_gg' has been renamed to 'blobs_gg'" blobs_gg; # Added 2025-03-14
+  akkoma-frontends.admin-fe = lib.warnOnInstantiate "'akkoma-frontends.admin-fe' has been renamed to 'akkoma-admin-fe'" akkoma-admin-fe; # Added 2025-03-14
+  akkoma-frontends.akkoma-fe = lib.warnOnInstantiate "'akkoma-frontends.akkoma-fe' has been renamed to 'akkoma-fe'" akkoma-fe; # Added 2025-03-14
   alass = throw "'alass' has been removed due to being unmaintained upstream"; # Added 2025-01-25
   alsaLib = throw "'alsaLib' has been renamed to/replaced by 'alsa-lib'"; # Converted to throw 2024-10-17
   alsaOss = throw "'alsaOss' has been renamed to/replaced by 'alsa-oss'"; # Converted to throw 2024-10-17
@@ -1324,18 +1320,16 @@ mapAliases {
   kubei = kubeclarity; # Added 2023-05-20
   kubo-migrator-all-fs-repo-migrations = kubo-fs-repo-migrations; # Added 2024-09-24
   l3afpad = throw "'l3afpad' has been removed due to lack of maintenance upstream. Consider using 'xfce.mousepad' instead"; # Added 2024-09-14
-  languageMachines = {
-    ticcutils = ticcutils;
-    libfolia = libfolia;
-    ucto = ucto;
-    uctodata = uctodata;
-    timbl = timbl;
-    timblserver = timblserver;
-    mbt = mbt;
-    frog = frog;
-    frogdata = frogdata;
-    test = frog.tests.simple;
-  }; # Added 2025-10-07
+  languageMachines.frog = frog; # Added 2025-10-7
+  languageMachines.frogdata = frogdata; # Added 2025-10-7
+  languageMachines.libfolia = libfolia; # Added 2025-10-7
+  languageMachines.mbt = mbt; # Added 2025-10-7
+  languageMachines.test = frog.tests.simple; # Added 2025-10-7
+  languageMachines.ticcutils = ticcutils; # Added 2025-10-7
+  languageMachines.timbl = timbl; # Added 2025-10-7
+  languageMachines.timblserver = timblserver; # Added 2025-10-7
+  languageMachines.ucto = ucto; # Added 2025-10-7
+  languageMachines.uctodata = uctodata; # Added 2025-10-7
   lanzaboote-tool = throw "lanzaboote-tool has been removed due to lack of integration maintenance with nixpkgs. Consider using the Nix expressions provided by https://github.com/nix-community/lanzaboote"; # Added 2025-07-23
   larynx = piper-tts; # Added 2023-05-09
   LASzip2 = laszip_2; # Added 2024-06-12
@@ -1619,16 +1613,14 @@ mapAliases {
     Consider migrating or switching to Incus, or remove from your configuration.
     https://linuxcontainers.org/incus/docs/main/howto/server_migrate_lxd/
   "; # Added 2025-09-05
-  lxde = {
-    gtk2-x11 = throw "'lxde.gtk2-x11' has been removed. Use 'gtk2-x11' directly."; # added 2025-08-31
-    lxappearance = throw "'lxappearance' has been moved to top-level. Use 'lxappearance' directly"; # added 2025-08-31
-    lxappearance-gtk2 = throw "'lxappearance-gtk2' has been moved to top-level. Use 'lxappearance-gtk2' directly"; # added 2025-08-31
-    lxmenu-data = throw "'lxmenu-data' has been moved to top-level. Use 'lxmenu-data' directly"; # added 2025-08-31
-    lxpanel = throw "'lxpanel' has been moved to top-level. Use 'lxpanel' directly"; # added 2025-08-31
-    lxrandr = throw "'lxrandr' has been moved to top-level. Use 'lxrandr' directly"; # added 2025-08-31
-    lxsession = throw "'lxsession' has been moved to top-level. Use 'lxsession' directly"; # added 2025-08-31
-    lxtask = throw "'lxtask' has been moved to top-level. Use 'lxtask' directly"; # added 2025-08-31
-  };
+  lxde.gtk2-x11 = throw "'lxde.gtk2-x11' has been removed. Use 'gtk2-x11' directly."; # added 2025-08-31
+  lxde.lxappearance = throw "'lxappearance' has been moved to top-level. Use 'lxappearance' directly"; # added 2025-08-31
+  lxde.lxappearance-gtk2 = throw "'lxappearance-gtk2' has been moved to top-level. Use 'lxappearance-gtk2' directly"; # added 2025-08-31
+  lxde.lxmenu-data = throw "'lxmenu-data' has been moved to top-level. Use 'lxmenu-data' directly"; # added 2025-08-31
+  lxde.lxpanel = throw "'lxpanel' has been moved to top-level. Use 'lxpanel' directly"; # added 2025-08-31
+  lxde.lxrandr = throw "'lxrandr' has been moved to top-level. Use 'lxrandr' directly"; # added 2025-08-31
+  lxde.lxsession = throw "'lxsession' has been moved to top-level. Use 'lxsession' directly"; # added 2025-08-31
+  lxde.lxtask = throw "'lxtask' has been moved to top-level. Use 'lxtask' directly"; # added 2025-08-31
   lxdvdrip = throw "'lxdvdrip' has been removed due to lack of upstream maintenance."; # Added 2025-06-09
   lzma = throw "'lzma' has been renamed to/replaced by 'xz'"; # Converted to throw 2024-10-17
   lzwolf = throw "'lzwolf' has been removed because it's no longer maintained upstream. Consider using 'ecwolf'"; # Added 2025-03-02
@@ -1691,10 +1683,8 @@ mapAliases {
   matomo_5 = matomo; # Added 2024-12-12
   matrique = throw "'matrique' has been renamed to/replaced by 'spectral'"; # Converted to throw 2024-10-17
   matrix-sliding-sync = throw "matrix-sliding-sync has been removed as matrix-synapse 114.0 and later covers its functionality"; # Added 2024-10-20
-  matrix-synapse-tools = recurseIntoAttrs {
-    rust-synapse-compress-state = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-compress-state; # Added 2025-03-04
-    synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm; # Added 2025-02-20
-  }; # Added 2025-02-20
+  matrix-synapse-tools.rust-synapse-compress-state = lib.warnOnInstantiate "`matrix-synapse-tools.rust-synapse-compress-state` has been renamed to `rust-synapse-compress-state`" rust-synapse-compress-state; # Added 2025-03-04
+  matrix-synapse-tools.synadm = lib.warnOnInstantiate "`matrix-synapse-tools.synadm` has been renamed to `synadm`" synadm; # Added 2025-02-20
   mcomix3 = mcomix; # Added 2022-06-05
   mdt = md-tui; # Added 2024-09-03
   mediastreamer = throw "'mediastreamer' has been moved to 'linphonePackages.mediastreamer2'"; # Added 2025-09-20
@@ -1797,24 +1787,22 @@ mapAliases {
   netbox_3_7 = throw "netbox 3.7 series has been removed as it was EOL"; # Added 2025-04-23
   netbox_4_1 = throw "netbox 4.1 series has been removed as it was EOL"; # Added 2025-10-14
   netbsdCross = netbsd; # Added 2024-09-06
-  netsurf = recurseIntoAttrs {
-    browser = lib.warnOnInstantiate "'netsurf.browser' has been renamed to 'netsurf-browser'" netsurf-browser; # Added 2025-03-26
-    buildsystem = lib.warnOnInstantiate "'netsurf.buildsystem' has been renamed to 'netsurf-buildsystem'" netsurf-buildsystem; # Added 2025-03-26
-    libcss = lib.warnOnInstantiate "'netsurf.libcss' has been renamed to 'libcss'" libcss; # Added 2025-03-26
-    libdom = lib.warnOnInstantiate "'netsurf.libdom' has been renamed to 'libdom'" libdom; # Added 2025-03-26
-    libhubbub = lib.warnOnInstantiate "'netsurf.libhubbub' has been renamed to 'libhubbub'" libhubbub; # Added 2025-03-26
-    libnsbmp = lib.warnOnInstantiate "'netsurf.libnsbmp' has been renamed to 'libnsbmp'" libnsbmp; # Added 2025-03-26
-    libnsfb = lib.warnOnInstantiate "'netsurf.libnsfb' has been renamed to 'libnsfb'" libnsfb; # Added 2025-03-26
-    libnsgif = lib.warnOnInstantiate "'netsurf.libnsgif' has been renamed to 'libnsgif'" libnsgif; # Added 2025-03-26
-    libnslog = lib.warnOnInstantiate "'netsurf.libnslog' has been renamed to 'libnslog'" libnslog; # Added 2025-03-26
-    libnspsl = lib.warnOnInstantiate "'netsurf.libnspsl' has been renamed to 'libnspsl'" libnspsl; # Added 2025-03-26
-    libnsutils = lib.warnOnInstantiate "'netsurf.libnsutils' has been renamed to 'libnsutils'" libnsutils; # Added 2025-03-26
-    libparserutils = lib.warnOnInstantiate "'netsurf.libparserutils' has been renamed to 'libparserutils'" libparserutils; # Added 2025-03-26
-    libsvgtiny = lib.warnOnInstantiate "'netsurf.libsvgtiny' has been renamed to 'libsvgtiny'" libsvgtiny; # Added 2025-03-26
-    libutf8proc = lib.warnOnInstantiate "'netsurf.libutf8proc' has been renamed to 'libutf8proc'" libutf8proc; # Added 2025-03-26
-    libwapcaplet = lib.warnOnInstantiate "'netsurf.libwapcaplet' has been renamed to 'libwapcaplet'" libwapcaplet; # Added 2025-03-26
-    nsgenbind = lib.warnOnInstantiate "'netsurf.nsgenbind' has been renamed to 'nsgenbind'" nsgenbind; # Added 2025-03-26
-  };
+  netsurf.browser = lib.warnOnInstantiate "'netsurf.browser' has been renamed to 'netsurf-browser'" netsurf-browser; # Added 2025-03-26
+  netsurf.buildsystem = lib.warnOnInstantiate "'netsurf.buildsystem' has been renamed to 'netsurf-buildsystem'" netsurf-buildsystem; # Added 2025-03-26
+  netsurf.libcss = lib.warnOnInstantiate "'netsurf.libcss' has been renamed to 'libcss'" libcss; # Added 2025-03-26
+  netsurf.libdom = lib.warnOnInstantiate "'netsurf.libdom' has been renamed to 'libdom'" libdom; # Added 2025-03-26
+  netsurf.libhubbub = lib.warnOnInstantiate "'netsurf.libhubbub' has been renamed to 'libhubbub'" libhubbub; # Added 2025-03-26
+  netsurf.libnsbmp = lib.warnOnInstantiate "'netsurf.libnsbmp' has been renamed to 'libnsbmp'" libnsbmp; # Added 2025-03-26
+  netsurf.libnsfb = lib.warnOnInstantiate "'netsurf.libnsfb' has been renamed to 'libnsfb'" libnsfb; # Added 2025-03-26
+  netsurf.libnsgif = lib.warnOnInstantiate "'netsurf.libnsgif' has been renamed to 'libnsgif'" libnsgif; # Added 2025-03-26
+  netsurf.libnslog = lib.warnOnInstantiate "'netsurf.libnslog' has been renamed to 'libnslog'" libnslog; # Added 2025-03-26
+  netsurf.libnspsl = lib.warnOnInstantiate "'netsurf.libnspsl' has been renamed to 'libnspsl'" libnspsl; # Added 2025-03-26
+  netsurf.libnsutils = lib.warnOnInstantiate "'netsurf.libnsutils' has been renamed to 'libnsutils'" libnsutils; # Added 2025-03-26
+  netsurf.libparserutils = lib.warnOnInstantiate "'netsurf.libparserutils' has been renamed to 'libparserutils'" libparserutils; # Added 2025-03-26
+  netsurf.libsvgtiny = lib.warnOnInstantiate "'netsurf.libsvgtiny' has been renamed to 'libsvgtiny'" libsvgtiny; # Added 2025-03-26
+  netsurf.libutf8proc = lib.warnOnInstantiate "'netsurf.libutf8proc' has been renamed to 'libutf8proc'" libutf8proc; # Added 2025-03-26
+  netsurf.libwapcaplet = lib.warnOnInstantiate "'netsurf.libwapcaplet' has been renamed to 'libwapcaplet'" libwapcaplet; # Added 2025-03-26
+  netsurf.nsgenbind = lib.warnOnInstantiate "'netsurf.nsgenbind' has been renamed to 'nsgenbind'" nsgenbind; # Added 2025-03-26
   nettools = net-tools; # Added 2025-06-11
   networkmanager_strongswan = networkmanager-strongswan; # added 2025-06-29
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
@@ -2373,18 +2361,14 @@ mapAliases {
   source-han-serif-korean = source-han-serif; # Added 2020-02-10
   source-han-serif-simplified-chinese = source-han-serif; # Added 2020-02-10
   source-han-serif-traditional-chinese = source-han-serif; # Added 2020-02-10
-  sourceHanSansPackages = {
-    japanese = source-han-sans; # Added 2020-02-10
-    korean = source-han-sans; # Added 2020-02-10
-    simplified-chinese = source-han-sans; # Added 2020-02-10
-    traditional-chinese = source-han-sans; # Added 2020-02-10
-  };
-  sourceHanSerifPackages = {
-    japanese = source-han-serif; # Added 2020-02-10
-    korean = source-han-serif; # Added 2020-02-10
-    simplified-chinese = source-han-serif; # Added 2020-02-10
-    traditional-chinese = source-han-serif; # Added 2020-02-10
-  };
+  sourceHanSansPackages.japanese = source-han-sans; # Added 2020-02-10
+  sourceHanSansPackages.korean = source-han-sans; # Added 2020-02-10
+  sourceHanSansPackages.simplified-chinese = source-han-sans; # Added 2020-02-10
+  sourceHanSansPackages.traditional-chinese = source-han-sans; # Added 2020-02-10
+  sourceHanSerifPackages.japanese = source-han-serif; # Added 2020-02-10
+  sourceHanSerifPackages.korean = source-han-serif; # Added 2020-02-10
+  sourceHanSerifPackages.simplified-chinese = source-han-serif; # Added 2020-02-10
+  sourceHanSerifPackages.traditional-chinese = source-han-serif; # Added 2020-02-10
   sourcehut = throw "'sourcehut.*' has been removed due to being broken and unmaintained"; # Added 2025-06-15
   SP800-90B_EntropyAssessment = sp800-90b-entropyassessment; # Added on 2024-06-12
   space-orbit = throw "'space-orbit' has been removed because it is unmaintained; Debian upstream stopped tracking it in 2011."; # Added 2025-06-08
@@ -2413,15 +2397,13 @@ mapAliases {
   steam-run-native = steam-run; # added 2022-02-21
   steam-small = steam; # Added 2024-09-12
   steamcontroller = throw "'steamcontroller' has been removed due to lack of upstream maintenance. Consider using 'sc-controller' instead."; # Added 2025-09-20
-  steamPackages = {
-    steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable"; # Added 2024-10-16
-    steam = lib.warnOnInstantiate "`steamPackages.steam` has been moved to top level as `steam-unwrapped`" steam-unwrapped; # Added 2024-10-16
-    steam-fhsenv = lib.warnOnInstantiate "`steamPackages.steam-fhsenv` has been moved to top level as `steam`" steam; # Added 2024-10-16
-    steam-fhsenv-small = lib.warnOnInstantiate "`steamPackages.steam-fhsenv-small` has been moved to top level as `steam`; there is no longer a -small variant" steam; # Added 2024-10-16
-    steam-runtime = throw "`steamPackages.steam-runtime` has been removed, as it's no longer supported or necessary"; # Added 2024-10-16
-    steam-runtime-wrapped = throw "`steamPackages.steam-runtime-wrapped` has been removed, as it's no longer supported or necessary"; # Added 2024-10-16
-    steamcmd = lib.warnOnInstantiate "`steamPackages.steamcmd` has been moved to top level as `steamcmd`" steamcmd; # Added 2024-10-16
-  };
+  steamPackages.steam = lib.warnOnInstantiate "`steamPackages.steam` has been moved to top level as `steam-unwrapped`" steam-unwrapped; # Added 2024-10-16
+  steamPackages.steam-fhsenv = lib.warnOnInstantiate "`steamPackages.steam-fhsenv` has been moved to top level as `steam`" steam; # Added 2024-10-16
+  steamPackages.steam-fhsenv-small = lib.warnOnInstantiate "`steamPackages.steam-fhsenv-small` has been moved to top level as `steam`; there is no longer a -small variant" steam; # Added 2024-10-16
+  steamPackages.steam-runtime = throw "`steamPackages.steam-runtime` has been removed, as it's no longer supported or necessary"; # Added 2024-10-16
+  steamPackages.steam-runtime-wrapped = throw "`steamPackages.steam-runtime-wrapped` has been removed, as it's no longer supported or necessary"; # Added 2024-10-16
+  steamPackages.steamArch = throw "`steamPackages.steamArch` has been removed as it's no longer applicable"; # Added 2024-10-16
+  steamPackages.steamcmd = lib.warnOnInstantiate "`steamPackages.steamcmd` has been moved to top level as `steamcmd`" steamcmd; # Added 2024-10-16
   StormLib = stormlib; # Added 2024-01-21
   strawberry-qt5 = throw "strawberry-qt5 has been replaced by strawberry"; # Added 2024-11-22 and updated 2025-07-19
   strawberry-qt6 = throw "strawberry-qt6 has been replaced by strawberry"; # Added 2025-07-19
@@ -2620,9 +2602,7 @@ mapAliases {
   vaapiVdpau = libva-vdpau-driver; # Added 2024-06-05
   validphys2 = throw "validphys2 has been removed, since it has a broken dependency that was removed"; # Added 2024-08-21
   valum = throw "'valum' has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-01
-  vamp = {
-    vampSDK = vamp-plugin-sdk; # Added 2020-03-26
-  };
+  vamp.vampSDK = vamp-plugin-sdk; # Added 2020-03-26
   varnish74 = throw "varnish 7.4 is EOL. Either use the LTS or upgrade."; # Added 2024-10-31
   varnish74Packages = throw "varnish 7.4 is EOL. Either use the LTS or upgrade."; # Added 2024-10-31
   varnish75 = throw "varnish 7.5 is EOL. Either use the LTS or upgrade."; # Added 2025-03-29
@@ -2786,11 +2766,9 @@ mapAliases {
   zbackup = throw "'zbackup' has been removed due to being unmaintained upstream"; # Added 2025-08-22
   zeal-qt5 = lib.warnOnInstantiate "'zeal-qt5' has been removed from nixpkgs. Please use 'zeal' instead" zeal; # Added 2025-08-31
   zeal-qt6 = lib.warnOnInstantiate "'zeal-qt6' has been renamed to 'zeal'" zeal; # Added 2025-08-31
-  zeroadPackages = recurseIntoAttrs {
-    zeroad = lib.warnOnInstantiate "'zeroadPackages.zeroad' has been renamed to 'zeroad'" zeroad; # Added 2025-03-22
-    zeroad-data = lib.warnOnInstantiate "'zeroadPackages.zeroad-data' has been renamed to 'zeroad-data'" zeroad-data; # Added 2025-03-22
-    zeroad-unwrapped = lib.warnOnInstantiate "'zeroadPackages.zeroad-unwrapped' has been renamed to 'zeroad-unwrapped'" zeroad-unwrapped; # Added 2025-03-22
-  };
+  zeroadPackages.zeroad = lib.warnOnInstantiate "'zeroadPackages.zeroad' has been renamed to 'zeroad'" zeroad; # Added 2025-03-22
+  zeroadPackages.zeroad-data = lib.warnOnInstantiate "'zeroadPackages.zeroad-data' has been renamed to 'zeroad-data'" zeroad-data; # Added 2025-03-22
+  zeroadPackages.zeroad-unwrapped = lib.warnOnInstantiate "'zeroadPackages.zeroad-unwrapped' has been renamed to 'zeroad-unwrapped'" zeroad-unwrapped; # Added 2025-03-22
   zeromq4 = zeromq; # Added 2024-11-03
   zfs_2_1 = throw "zfs 2.1 has been removed as it is EOL. Please upgrade to a newer version"; # Added 2024-12-25
   zfsStable = zfs; # Added 2024-02-26
