@@ -8,12 +8,12 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sacad";
-  version = "2.8.1";
+  version = "2.8.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WHxZZrKPTsTaIJGxD7ZUYQNz9ua024MXoflEVGNE9Jc=";
+    hash = "sha256-6bKxFOP4hPbU5d1J/wro1BM/Bh9W//QzcZ4YbfaaqYY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
