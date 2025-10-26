@@ -434,7 +434,7 @@ in
     systemd.services.h2o = {
       description = "H2O HTTP server";
       wantedBy = [ "multi-user.target" ];
-      wants = lib.concatLists (map (certName: [ "acme-${certName}.service" ]) acmeCertNames.all);
+      wants = lib.concatMap (certName: [ "acme-${certName}.service" ]) acmeCertNames.all;
       # Since H2O will be hosting the challenges, H2O must be started
       before = builtins.map (certName: "acme-order-renew-${certName}.service") acmeCertNames.all;
       after = [
