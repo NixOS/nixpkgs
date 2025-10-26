@@ -130,7 +130,21 @@ let
   optLibxfs = shouldUsePkg libxfs;
   optZfs = shouldUsePkg zfs;
 
-  # Downgrade rocksdb, 7.10 breaks ceph
+  # Downgrade RocksDB to the version that Ceph pins
+  # in its `src/rocksdb` submodule.
+  # RocksDB is integral to Ceph's default BlueStore storage,
+  # so we don't risk using any other version than the one
+  # pinned by Ceph.
+  # (As of writing, rocksdb 7.10 also breaks Ceph's build.)
+  # If nixpkgs doesn't have that version because it's too
+  # old, we revive it here, e.g. by copying the package
+  # definition from an older nixpkgs, and pinning the RocksDB
+  # commit as `src` that is chosen by the `src/rocksdb`
+  # submodule in Ceph.
+  # Examples of why this can be necessary:
+  # * https://github.com/ceph/rocksdb/commit/473534bffa129e8f49e25c75020b0190d528572d
+  #   Which introduces additional forward compat for RocksDB in a Ceph upgrade:
+  #   * http://tracker.ceph.com/issues/25146
   rocksdb = callPackage ./rocksdb_7_9 { };
 
   hasRadosgw = optExpat != null && optCurl != null && optLibedit != null;
@@ -183,6 +197,8 @@ let
 
   python = python312;
 
+  # If you change this, make sure to update:
+  # * The pinned RocksDB version commit, see comment on `rocksdb` in this file.
   version = "19.2.3";
 
   src = fetchurl {

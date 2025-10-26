@@ -22,10 +22,12 @@ stdenv.mkDerivation (finalAttrs: {
   version = "7.9.2";
 
   src = fetchFromGitHub {
-    owner = "facebook";
+    owner = "ceph"; # note this is a fork, not the upstream `facebook`
     repo = finalAttrs.pname;
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-5P7IqJ14EZzDkbjaBvbix04ceGGdlWBuVFH/5dpD5VM=";
+    # Version pinned by Ceph `src/rocksdb` submodule, last update from:
+    #     https://github.com/ceph/ceph/tree/v19.2.3/src
+    rev = "9fa4990159853479a222244574ca41202e4c95c1";
+    sha256 = "sha256-JJXtN8mk8fRsGzyimw4e7tN2/c1RJ4Ei6YioVIMhvl0=";
     fetchSubmodules = true;
   };
 
