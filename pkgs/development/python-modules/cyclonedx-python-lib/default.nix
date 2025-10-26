@@ -3,8 +3,8 @@
   buildPythonPackage,
   ddt,
   fetchFromGitHub,
-  importlib-metadata,
   jsonschema,
+  referencing,
   license-expression,
   lxml,
   packageurl-python,
@@ -12,12 +12,8 @@
   poetry-core,
   pytestCheckHook,
   pythonOlder,
-  requirements-parser,
   sortedcontainers,
-  setuptools,
-  toml,
-  types-setuptools,
-  types-toml,
+  typing-extensions,
   xmldiff,
 }:
 
@@ -40,25 +36,25 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
-    importlib-metadata
-    license-expression
     packageurl-python
-    requirements-parser
-    setuptools
-    sortedcontainers
-    toml
     py-serializable
-    types-setuptools
-    types-toml
+    sortedcontainers
+    license-expression
+  ]
+  ++ lib.optionals (pythonOlder "3.13") [
+    typing-extensions
   ];
 
   optional-dependencies = {
     validation = [
       jsonschema
+      referencing
       lxml
-    ];
+    ]
+    ++ jsonschema.optional-dependencies.format-nongpl;
     json-validation = [
       jsonschema
+      referencing
     ];
     xml-validation = [
       lxml
@@ -84,20 +80,13 @@ buildPythonPackage rec {
     # These tests require network access
     "test_bom_v1_3_with_metadata_component"
     "test_bom_v1_4_with_metadata_component"
-    # AssertionError: <ValidationError: "{'algorithm': 'ES256', ...
-    "TestJson"
   ];
 
-  disabledTestPaths = [
-    # Test failures seem py-serializable related
-    "tests/test_output_xml.py"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Python library for generating CycloneDX SBOMs";
     homepage = "https://github.com/CycloneDX/cyclonedx-python-lib";
     changelog = "https://github.com/CycloneDX/cyclonedx-python-lib/releases/tag/${src.tag}";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
