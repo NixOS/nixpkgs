@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     mainProgram = "typstfmt";
     maintainers = with lib.maintainers; [
-      figsoda
       geri1701
     ];
   };

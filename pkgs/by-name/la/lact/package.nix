@@ -128,7 +128,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/ilya-zlobintsev/LACT";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       atemu
       cything
       johnrtitor
