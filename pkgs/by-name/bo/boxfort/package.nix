@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Snaipe/BoxFort";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
+      sigmanificient
       thesola10
       Yumasi
     ];
