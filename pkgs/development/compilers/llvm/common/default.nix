@@ -1,34 +1,31 @@
 {
   lowPrio,
-  newScope,
   pkgs,
   targetPackages,
   lib,
   stdenv,
-  libxcrypt,
-  substitute,
-  replaceVars,
   fetchFromGitHub,
-  fetchpatch,
-  fetchpatch2,
   overrideCC,
   wrapCCWith,
   wrapBintoolsWith,
-  buildPackages,
-  buildLlvmTools, # tools, but from the previous stage, for cross
-  targetLlvmLibraries, # libraries, but from the next stage, for cross
-  targetLlvm,
+  makeScopeWithSplicing',
+  otherSplices,
+  splicePackages,
   # This is the default binutils, but with *this* version of LLD rather
   # than the default LLVM version's, if LLD is the choice. We use these for
   # the `useLLVM` bootstrapping below.
-  bootBintoolsNoLibc ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintoolsNoLibc,
-  bootBintools ? if stdenv.targetPlatform.linker == "lld" then null else pkgs.bintools,
+  bootBintoolsNoLibc,
+  bootBintools,
   darwin,
   gitRelease ? null,
   officialRelease ? null,
   monorepoSrc ? null,
   version ? null,
   patchesFn ? lib.id,
+  cmake,
+  cmakeMinimal,
+  python3,
+  python3Minimal,
   # Allows passthrough to packages via newScope. This makes it possible to
   # do `(llvmPackages.override { <someLlvmDependency> = bar; }).clang` and get
   # an llvmPackages whose packages are overridden in an internally consistent way.
@@ -110,11 +107,24 @@ let
       };
   };
 
-  tools = lib.makeExtensible (
-    tools:
+  buildLlvmPackages = otherSplices.selfBuildHost;
+in
+makeScopeWithSplicing' {
+  inherit otherSplices;
+  extra = _spliced0: args // metadata // { inherit buildLlvmPackages; };
+  f =
+    self:
     let
-      callPackage = newScope (tools // args // metadata);
+      targetLlvmPackages =
+        if otherSplices.selfTargetTarget == { } then self else otherSplices.selfTargetTarget;
+
+      # FIXME: This is a tragic and unprincipled hack, but I don’t
+      # know what would actually be good instead.
+      newScope = scope: self.newScope ({ inherit (args) stdenv; } // scope);
+      callPackage = newScope { };
+
       clangVersion = lib.versions.major metadata.release_version;
+
       mkExtraBuildCommands0 =
         cc:
         ''
@@ -134,37 +144,40 @@ let
               ln -s "${lib.getLib cc}/lib/clang/${clangVersion}/include" "$rsrc"
             ''
         );
+
       mkExtraBuildCommandsBasicRt =
         cc:
         mkExtraBuildCommands0 cc
         + ''
-          ln -s "${targetLlvmLibraries.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
+          ln -s "${targetLlvmPackages.compiler-rt-no-libc.out}/lib" "$rsrc/lib"
         '';
+
       mkExtraBuildCommands =
         cc:
         mkExtraBuildCommands0 cc
         + ''
-          ln -s "${targetLlvmLibraries.compiler-rt.out}/lib" "$rsrc/lib"
-          ln -s "${targetLlvmLibraries.compiler-rt.out}/share" "$rsrc/share"
+          ln -s "${targetLlvmPackages.compiler-rt.out}/lib" "$rsrc/lib"
+          ln -s "${targetLlvmPackages.compiler-rt.out}/share" "$rsrc/share"
         '';
 
-      bintoolsNoLibc' = if bootBintoolsNoLibc == null then tools.bintoolsNoLibc else bootBintoolsNoLibc;
-      bintools' = if bootBintools == null then tools.bintools else bootBintools;
+      bintoolsNoLibc' = if bootBintoolsNoLibc == null then self.bintoolsNoLibc else bootBintoolsNoLibc;
+      bintools' = if bootBintools == null then self.bintools else bootBintools;
     in
     {
-      libllvm = callPackage ./llvm {
-      };
+      inherit (metadata) release_version;
+
+      libllvm = callPackage ./llvm { };
 
       # `llvm` historically had the binaries.  When choosing an output explicitly,
       # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
-      llvm = tools.libllvm;
+      llvm = self.libllvm;
 
       tblgen = callPackage ./tblgen.nix {
         patches =
           builtins.filter
             # Crude method to drop polly patches if present, they're not needed for tblgen.
             (p: (!lib.hasInfix "-polly" p))
-            tools.libllvm.patches;
+            self.libllvm.patches;
         clangPatches = [
           # Would take tools.libclang.patches, but this introduces a cycle due
           # to replacements depending on the llvm outpath (e.g. the LLVMgold patch).
@@ -173,20 +186,19 @@ let
         ];
       };
 
-      libclang = callPackage ./clang {
-      };
+      libclang = callPackage ./clang { };
 
-      clang-unwrapped = tools.libclang;
+      clang-unwrapped = self.libclang;
 
       llvm-manpages = lowPrio (
-        tools.libllvm.override {
+        self.libllvm.override {
           enableManpages = true;
           python3 = pkgs.python3; # don't use python-boot
         }
       );
 
       clang-manpages = lowPrio (
-        tools.libclang.override {
+        self.libclang.override {
           enableManpages = true;
           python3 = pkgs.python3; # don't use python-boot
         }
@@ -198,55 +210,59 @@ let
       # pick clang appropriate for package set we are targeting
       clang =
         if stdenv.targetPlatform.libc == null then
-          tools.clangNoLibc
+          self.clangNoLibc
         else if stdenv.targetPlatform.isDarwin then
-          tools.systemLibcxxClang
+          self.systemLibcxxClang
         else if stdenv.targetPlatform.useLLVM or false then
-          tools.clangUseLLVM
-        else if (pkgs.targetPackages.stdenv or args.stdenv).cc.isGNU then
-          tools.libstdcxxClang
+          self.clangUseLLVM
+        else if (targetPackages.stdenv or stdenv).cc.isGNU then
+          self.libstdcxxClang
         else
-          tools.libcxxClang;
+          self.libcxxClang;
 
       libstdcxxClang = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         # libstdcxx is taken from gcc in an ad-hoc way in cc-wrapper.
         libcxx = null;
-        extraPackages = [ targetLlvmLibraries.compiler-rt ];
+        extraPackages = [ targetLlvmPackages.compiler-rt ];
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
       libcxxClang = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
-        libcxx = targetLlvmLibraries.libcxx;
-        extraPackages = [ targetLlvmLibraries.compiler-rt ];
+        cc = self.clang-unwrapped;
+        libcxx = targetLlvmPackages.libcxx;
+        extraPackages = [ targetLlvmPackages.compiler-rt ];
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
       # Darwin uses the system libc++ by default. It is set up as its own clang definition so that `libcxxClang`
       # continues to use the libc++ from LLVM.
       systemLibcxxClang = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         libcxx = darwin.libcxx;
-        extraPackages = [ targetLlvmLibraries.compiler-rt ];
+        extraPackages = [ targetLlvmPackages.compiler-rt ];
         extraBuildCommands = mkExtraBuildCommands cc;
       };
 
-      lld = callPackage ./lld {
-      };
+      lld = callPackage ./lld { };
 
-      lldbPlugins = lib.makeExtensible (
-        lldbPlugins:
-        let
-          callPackage = newScope (lldbPlugins // tools // args // metadata);
-        in
-        lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
+      lldbPlugins = lib.recurseIntoAttrs (
+        lib.makeScopeWithSplicing'
+          {
+            inherit splicePackages newScope;
+          }
+          {
+            otherSplices = lib.mapAttrs (_: selfSplice: selfSplice.lldbPlugins or { }) otherSplices;
+            f = selfLldbPlugins: {
+              llef = selfLldbPlugins.callPackage ./lldb-plugins/llef.nix { };
+            };
+          }
       );
 
       lldb = callPackage ./lldb { };
 
       lldb-manpages = lowPrio (
-        tools.lldb.override {
+        self.lldb.override {
           enableManpages = true;
           python3 = pkgs.python3; # don't use python-boot
         }
@@ -262,27 +278,29 @@ let
       bintools-unwrapped = callPackage ./bintools.nix { };
 
       bintoolsNoLibc = wrapBintoolsWith {
-        bintools = tools.bintools-unwrapped;
+        bintools = self.bintools-unwrapped;
         libc = targetPackages.preLibcHeaders;
       };
 
-      bintools = wrapBintoolsWith { bintools = tools.bintools-unwrapped; };
+      bintools = wrapBintoolsWith {
+        bintools = self.bintools-unwrapped;
+      };
 
       clangUseLLVM = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
-        libcxx = targetLlvmLibraries.libcxx;
+        cc = self.clang-unwrapped;
+        libcxx = targetLlvmPackages.libcxx;
         bintools = bintools';
         extraPackages = [
-          targetLlvmLibraries.compiler-rt
+          targetLlvmPackages.compiler-rt
         ]
         ++ lib.optionals (!stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD) [
-          targetLlvmLibraries.libunwind
+          targetLlvmPackages.libunwind
         ];
         extraBuildCommands = mkExtraBuildCommands cc;
         nixSupport.cc-cflags = [
           "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
-          "-B${targetLlvmLibraries.compiler-rt}/lib"
+          "-B${targetLlvmPackages.compiler-rt}/lib"
         ]
         ++ lib.optional (
           !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
@@ -295,16 +313,19 @@ let
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
         nixSupport.cc-ldflags = lib.optionals (
           !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD
-        ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+        ) [ "-L${targetLlvmPackages.libunwind}/lib" ];
       };
 
       clangWithLibcAndBasicRtAndLibcxx = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         # This is used to build compiler-rt. Make sure to use the system libc++ on Darwin.
-        libcxx = if stdenv.hostPlatform.isDarwin then darwin.libcxx else targetLlvmLibraries.libcxx;
+        #
+        # FIXME: This should almost certainly use
+        # `stdenv.targetPlatform` and `targetPackages.darwin.libcxx`.
+        libcxx = if stdenv.hostPlatform.isDarwin then darwin.libcxx else targetLlvmPackages.libcxx;
         bintools = bintools';
         extraPackages = [
-          targetLlvmLibraries.compiler-rt-no-libc
+          targetLlvmPackages.compiler-rt-no-libc
         ]
         ++
           lib.optionals
@@ -312,13 +333,13 @@ let
               !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
             )
             [
-              targetLlvmLibraries.libunwind
+              targetLlvmPackages.libunwind
             ];
         extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
         nixSupport.cc-cflags = [
           "-rtlib=compiler-rt"
           "-Wno-unused-command-line-argument"
-          "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          "-B${targetLlvmPackages.compiler-rt-no-libc}/lib"
         ]
         ++ lib.optional (
           !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
@@ -331,50 +352,50 @@ let
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
         nixSupport.cc-ldflags = lib.optionals (
           !stdenv.targetPlatform.isWasm && !stdenv.targetPlatform.isFreeBSD && !stdenv.targetPlatform.isDarwin
-        ) [ "-L${targetLlvmLibraries.libunwind}/lib" ];
+        ) [ "-L${targetLlvmPackages.libunwind}/lib" ];
       };
 
       clangWithLibcAndBasicRt = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         libcxx = null;
         bintools = bintools';
-        extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
+        extraPackages = [ targetLlvmPackages.compiler-rt-no-libc ];
         extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
         nixSupport.cc-cflags = [
           "-rtlib=compiler-rt"
-          "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          "-B${targetLlvmPackages.compiler-rt-no-libc}/lib"
           "-nostdlib++"
         ]
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
       };
 
       clangNoLibcWithBasicRt = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         libcxx = null;
         bintools = bintoolsNoLibc';
-        extraPackages = [ targetLlvmLibraries.compiler-rt-no-libc ];
+        extraPackages = [ targetLlvmPackages.compiler-rt-no-libc ];
         extraBuildCommands = mkExtraBuildCommandsBasicRt cc;
         nixSupport.cc-cflags = [
           "-rtlib=compiler-rt"
-          "-B${targetLlvmLibraries.compiler-rt-no-libc}/lib"
+          "-B${targetLlvmPackages.compiler-rt-no-libc}/lib"
         ]
         ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
       };
 
       clangNoLibcNoRt = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         libcxx = null;
         bintools = bintoolsNoLibc';
         extraPackages = [ ];
-        # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
         extraBuildCommands = mkExtraBuildCommands0 cc;
+        # "-nostartfiles" used to be needed for pkgsLLVM, causes problems so don't include it.
         nixSupport.cc-cflags = lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
       };
 
       # This is an "oddly ordered" bootstrap just for Darwin. Probably
       # don't want it otherwise.
       clangNoCompilerRtWithLibc = wrapCCWith rec {
-        cc = tools.clang-unwrapped;
+        cc = self.clang-unwrapped;
         libcxx = null;
         bintools = bintools';
         extraPackages = [ ];
@@ -383,126 +404,100 @@ let
       };
 
       # Aliases
-      clangNoCompilerRt = tools.clangNoLibcNoRt;
-      clangNoLibc = tools.clangNoLibcWithBasicRt;
-      clangNoLibcxx = tools.clangWithLibcAndBasicRt;
+      clangNoCompilerRt = self.clangNoLibcNoRt;
+      clangNoLibc = self.clangNoLibcWithBasicRt;
+      clangNoLibcxx = self.clangWithLibcAndBasicRt;
+
+      compiler-rt-libc = callPackage ./compiler-rt (
+        let
+          # temp rename to avoid infinite recursion
+          stdenv =
+            # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+            if args.stdenv.hostPlatform.isDarwin then
+              overrideCC darwin.bootstrapStdenv buildLlvmPackages.clangWithLibcAndBasicRtAndLibcxx
+            else if args.stdenv.hostPlatform.useLLVM or false then
+              overrideCC args.stdenv buildLlvmPackages.clangWithLibcAndBasicRtAndLibcxx
+            else
+              args.stdenv;
+        in
+        {
+          inherit stdenv;
+        }
+      );
+
+      compiler-rt-no-libc = callPackage ./compiler-rt {
+        doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
+        stdenv =
+          # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
+          if stdenv.hostPlatform.isDarwin then
+            overrideCC darwin.bootstrapStdenv buildLlvmPackages.clangNoLibcNoRt
+          else
+            overrideCC stdenv buildLlvmPackages.clangNoLibcNoRt;
+      };
+
+      compiler-rt =
+        if
+          stdenv.hostPlatform.libc == null
+          # Building the with-libc compiler-rt and WASM doesn't yet work,
+          # because wasilibc doesn't provide some expected things. See
+          # compiler-rt's file for further details.
+          || stdenv.hostPlatform.isWasm
+          # Failing `#include <term.h>` in
+          # `lib/sanitizer_common/sanitizer_platform_limits_freebsd.cpp`
+          # sanitizers, not sure where to get it.
+          || stdenv.hostPlatform.isFreeBSD
+        then
+          self.compiler-rt-no-libc
+        else
+          self.compiler-rt-libc;
+
+      stdenv = overrideCC stdenv buildLlvmPackages.clang;
+
+      libcxxStdenv = overrideCC stdenv buildLlvmPackages.libcxxClang;
+
+      libcxx = callPackage ./libcxx {
+        stdenv =
+          if stdenv.hostPlatform.isDarwin then
+            overrideCC darwin.bootstrapStdenv buildLlvmPackages.clangWithLibcAndBasicRt
+          else
+            overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
+      };
+
+      libunwind = callPackage ./libunwind {
+        stdenv = overrideCC stdenv buildLlvmPackages.clangWithLibcAndBasicRt;
+      };
+
+      openmp = callPackage ./openmp { };
 
       mlir = callPackage ./mlir { };
 
       libclc = callPackage ./libclc { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "19") {
-      bolt = callPackage ./bolt {
-      };
+      bolt = callPackage ./bolt { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
-      flang = callPackage ./flang {
-        mlir = tools.mlir;
+      flang = callPackage ./flang { };
+
+      libc-overlay = callPackage ./libc {
+        isFullBuild = false;
+        # Use clang due to "gnu::naked" not working on aarch64.
+        # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+        stdenv = overrideCC stdenv buildLlvmPackages.clang;
       };
-    }
-  );
 
-  libraries = lib.makeExtensible (
-    libraries:
-    let
-      callPackage = newScope (libraries // buildLlvmTools // args // metadata);
-    in
-    (
-      {
-        compiler-rt-libc = callPackage ./compiler-rt (
-          let
-            # temp rename to avoid infinite recursion
-            stdenv =
-              # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
-              if args.stdenv.hostPlatform.isDarwin then
-                overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-              else if args.stdenv.hostPlatform.useLLVM or false then
-                overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-              else
-                args.stdenv;
-          in
-          {
-            inherit stdenv;
-          }
-        );
+      libc-full = callPackage ./libc {
+        isFullBuild = true;
+        # Use clang due to "gnu::naked" not working on aarch64.
+        # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
+        stdenv = overrideCC stdenv buildLlvmPackages.clangNoLibcNoRt;
+        # FIXME: This should almost certainly be `stdenv.hostPlatform`.
+        cmake = if stdenv.targetPlatform.libc == "llvm" then cmakeMinimal else cmake;
+        python3 = if stdenv.targetPlatform.libc == "llvm" then python3Minimal else python3;
+      };
 
-        compiler-rt-no-libc = callPackage ./compiler-rt {
-          doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
-          stdenv =
-            # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
-            if stdenv.hostPlatform.isDarwin then
-              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangNoLibcNoRt
-            else
-              overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
-        };
-
-        compiler-rt =
-          if
-            stdenv.hostPlatform.libc == null
-            # Building the with-libc compiler-rt and WASM doesn't yet work,
-            # because wasilibc doesn't provide some expected things. See
-            # compiler-rt's file for further details.
-            || stdenv.hostPlatform.isWasm
-            # Failing `#include <term.h>` in
-            # `lib/sanitizer_common/sanitizer_platform_limits_freebsd.cpp`
-            # sanitizers, not sure where to get it.
-            || stdenv.hostPlatform.isFreeBSD
-          then
-            libraries.compiler-rt-no-libc
-          else
-            libraries.compiler-rt-libc;
-
-        stdenv = overrideCC stdenv buildLlvmTools.clang;
-
-        libcxxStdenv = overrideCC stdenv buildLlvmTools.libcxxClang;
-
-        libcxx = callPackage ./libcxx {
-          stdenv =
-            if stdenv.hostPlatform.isDarwin then
-              overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRt
-            else
-              overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-        };
-
-        libunwind = callPackage ./libunwind {
-          stdenv = overrideCC stdenv buildLlvmTools.clangWithLibcAndBasicRt;
-        };
-
-        openmp = callPackage ./openmp {
-        };
-      }
-      // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
-        libc-overlay = callPackage ./libc {
-          isFullBuild = false;
-          # Use clang due to "gnu::naked" not working on aarch64.
-          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
-          stdenv = overrideCC stdenv buildLlvmTools.clang;
-        };
-
-        libc-full = callPackage ./libc {
-          isFullBuild = true;
-          # Use clang due to "gnu::naked" not working on aarch64.
-          # Issue: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=77882
-          stdenv = overrideCC stdenv buildLlvmTools.clangNoLibcNoRt;
-          cmake =
-            if stdenv.targetPlatform.libc == "llvm" then buildPackages.cmakeMinimal else buildPackages.cmake;
-          python3 =
-            if stdenv.targetPlatform.libc == "llvm" then
-              buildPackages.python3Minimal
-            else
-              buildPackages.python3;
-        };
-
-        libc = if stdenv.targetPlatform.libc == "llvm" then libraries.libc-full else libraries.libc-overlay;
-      }
-    )
-  );
-
-  noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
-in
-{
-  inherit tools libraries;
-  inherit (metadata) release_version;
+      libc =
+        # FIXME: This should almost certainly be `stdenv.hostPlatform`.
+        if stdenv.targetPlatform.libc == "llvm" then self.libc-full else self.libc-overlay;
+    };
 }
-// (noExtend libraries)
-// (noExtend tools)

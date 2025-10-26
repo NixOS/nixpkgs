@@ -30,25 +30,32 @@
   fixDarwinDylibNames,
   applyPatches,
   shipwright,
+  libopus,
+  opusfile,
+  libogg,
+  libvorbis,
+  bzip2,
+  libX11,
+  sdl_gamecontrollerdb,
 }:
 
 let
 
   # The following would normally get fetched at build time, or a specific version is required
 
-  gamecontrollerdb = fetchFromGitHub {
-    owner = "mdqinc";
-    repo = "SDL_GameControllerDB";
-    rev = "a74711e1e87733ccdf02d7020d8fa9e4fa67176e";
-    hash = "sha256-rXC4akz9BaKzr/C2CryZC6RGk6+fGVG7RsQryUFUUk0=";
+  dr_libs = fetchFromGitHub {
+    owner = "mackron";
+    repo = "dr_libs";
+    rev = "da35f9d6c7374a95353fd1df1d394d44ab66cf01";
+    hash = "sha256-ydFhQ8LTYDBnRTuETtfWwIHZpRciWfqGsZC6SuViEn0=";
   };
 
   imgui' = applyPatches {
     src = fetchFromGitHub {
       owner = "ocornut";
       repo = "imgui";
-      tag = "v1.91.6-docking";
-      hash = "sha256-28wyzzwXE02W5vbEdRCw2iOF8ONkb3M3Al8XlYBvz1A=";
+      tag = "v1.91.9b-docking";
+      hash = "sha256-mQOJ6jCN+7VopgZ61yzaCnt4R1QLrW7+47xxMhFRHLQ=";
     };
     patches = [
       "${shipwright.src}/libultraship/cmake/dependencies/patches/imgui-fixes-and-config.patch"
@@ -65,8 +72,8 @@ let
   prism = fetchFromGitHub {
     owner = "KiritoDv";
     repo = "prism-processor";
-    rev = "fb3f8b4a2d14dfcbae654d0f0e59a73b6f6ca850";
-    hash = "sha256-gGdQSpX/TgCNZ0uyIDdnazgVHpAQhl30e+V0aVvTFMM=";
+    rev = "bbcbc7e3f890a5806b579361e7aa0336acd547e7";
+    hash = "sha256-jRPwO1Vub0cH12YMlME6kd8zGzKmcfIrIJZYpQJeOks=";
   };
 
   stb_impl = writeTextFile {
@@ -111,12 +118,12 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "shipwright";
-  version = "9.0.5";
+  version = "9.1.0";
   src = fetchFromGitHub {
     owner = "harbourmasters";
     repo = "shipwright";
     tag = finalAttrs.version;
-    hash = "sha256-F5d4u3Nq/+yYiOgkH/bwWPhZDxgBpJ5ktee0Hc5UmEo=";
+    hash = "sha256-sRUg6wa0KOG+hoR+6QEVyPe/9O9yEefNB69BMO+H+iU=";
     fetchSubmodules = true;
     deepClone = true;
     postFetch = ''
@@ -161,6 +168,12 @@ stdenv.mkDerivation (finalAttrs: {
     nlohmann_json
     tinyxml-2
     spdlog
+    (lib.getDev libopus)
+    (lib.getDev opusfile)
+    libogg
+    libvorbis
+    bzip2
+    libX11
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     libpulseaudio
@@ -175,11 +188,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "BUILD_REMOTE_CONTROL" true)
     (lib.cmakeBool "NON_PORTABLE" true)
     (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "${placeholder "out"}/lib")
+    (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_DR_LIBS" "${dr_libs}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_IMGUI" "${imgui'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_LIBGFXD" "${libgfxd}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_PRISM" "${prism}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_STORMLIB" "${stormlib'}")
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_THREADPOOL" "${thread_pool}")
+    (lib.cmakeFeature "OPUS_INCLUDE_DIR" "${lib.getDev libopus}/include/opus")
+    (lib.cmakeFeature "OPUSFILE_INCLUDE_DIR" "${lib.getDev opusfile}/include/opus")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeFeature "FETCHCONTENT_SOURCE_DIR_METALCPP" "${metalcpp}")
@@ -187,6 +203,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-Wno-int-conversion -Wno-implicit-int -Wno-elaborated-enum-base";
+
+  strictDeps = true;
 
   dontAddPrefix = true;
 
@@ -210,16 +228,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   postBuild = ''
     port_ver=$(grep CMAKE_PROJECT_VERSION: "$PWD/CMakeCache.txt" | cut -d= -f2)
-    cp ${gamecontrollerdb}/gamecontrollerdb.txt gamecontrollerdb.txt
-    mv ../libultraship/src/graphic/Fast3D/shaders ../soh/assets/custom
+    cp ${sdl_gamecontrollerdb}/share/gamecontrollerdb.txt gamecontrollerdb.txt
+    mv ../libultraship/src/fast/shaders ../soh/assets/custom
     pushd ../OTRExporter
-    python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.otr --port-ver $port_ver
+    python3 ./extract_assets.py -z ../build/ZAPD/ZAPD.out --norom --xml-root ../soh/assets/xml --custom-assets-path ../soh/assets/custom --custom-otr-file soh.o2r --port-ver $port_ver
     popd
   '';
 
   preInstall = ''
     # Cmake likes it here for its install paths
-    cp ../OTRExporter/soh.otr soh/soh.otr
+    cp ../OTRExporter/soh.o2r soh/soh.o2r
   '';
 
   postInstall =

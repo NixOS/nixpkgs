@@ -119,6 +119,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
+    # error: in-class initializer for static data member is not a constant expression
+    broken = stdenv.hostPlatform.isDarwin;
     changelog = "https://gitlab.isc.org/isc-projects/kea/-/wikis/Release-Notes/release-notes-${finalAttrs.version}";
     homepage = "https://kea.isc.org/";
     description = "High-performance, extensible DHCP server by ISC";
