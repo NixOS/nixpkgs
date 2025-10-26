@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchCrate,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,6 +15,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-SVJ3vXa2yNhdayUsYNpXSqLrMzi4JzjKuh0VTteIOLs=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Even formats macros";
