@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qpdf";
-  version = "11.10.1";
+  version = "12.2.0";
 
   src = fetchFromGitHub {
     owner = "qpdf";
     repo = "qpdf";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-MkJpbAIoPZmsYupOjQKOwZomh/rUF+r/kKTdHfT5Dc8=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-tzOZVQ/XO2mWNtz3mFTdrpdD2PvvCwje5nbEyiIkcZw=";
   };
 
   outputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = [ ];
     mainProgram = "qpdf";
     platforms = lib.platforms.all;
-    changelog = "https://github.com/qpdf/qpdf/blob/v${finalAttrs.version}/ChangeLog";
+    changelog = "https://qpdf.readthedocs.io/en/${lib.versions.majorMinor finalAttrs.version}/release-notes.html";
     pkgConfigModules = [ "libqpdf" ];
   };
 })
