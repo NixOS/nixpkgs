@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     homepage = "https://github.com/pkolaczk/fclones-gui";
     changelog = "https://github.com/pkolaczk/fclones-gui/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
-    maintainers = builtins.attrValues { inherit (lib.maintainers) figsoda; };
+    maintainers = [ ];
   };
 })
