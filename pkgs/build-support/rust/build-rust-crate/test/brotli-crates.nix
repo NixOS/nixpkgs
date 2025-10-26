@@ -25,12 +25,7 @@ let
       lib.lists.foldl' (features: fun: fun features) (lib.attrsets.recursiveUpdate f up) functions
     );
   mapFeatures = features: map (fun: fun { features = features; });
-  mkFeatures =
-    feat:
-    lib.lists.foldl (
-      features: featureName:
-      if feat.${featureName} or false then [ featureName ] ++ features else features
-    ) [ ] (builtins.attrNames feat);
+  mkFeatures = feat: lib.filter (featureName: feat.${featureName}) (lib.attrNames feat);
 in
 rec {
   alloc_no_stdlib_1_3_0_ =
