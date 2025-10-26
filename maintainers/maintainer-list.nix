@@ -29220,7 +29220,7 @@
     name = "El Reylak";
     email = "ANGULO18112008@gmail.com";
     github = "Reylak-dev";
-    githubId = "178049808";
+    githubId = 178049808;
   };
   # keep-sorted end
 }
