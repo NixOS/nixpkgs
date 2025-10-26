@@ -14,6 +14,19 @@
   glibcLocalesUtf8,
 }:
 
+lib.extendMkDerivation {
+  constructDrv = fetchurl;
+
+  excludeDrvArgNames = [
+    "extraPostFetch"
+
+    # TODO(@ShamrockLee): Move these arguments to derivationArgs when available.
+    "extension"
+    "stripRoot"
+  ];
+
+  extendDrvArgs =
+    finalAttrs:
 {
   url ? "",
   urls ? [ ],
@@ -41,7 +54,6 @@ let
       baseNameOf (if url != "" then url else builtins.head urls);
 in
 
-fetchurl (
   {
     inherit name;
     recursiveHash = true;
@@ -97,12 +109,5 @@ fetchurl (
     '';
     # ^ Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
-  }
-  // removeAttrs args [
-    "stripRoot"
-    "extraPostFetch"
-    "postFetch"
-    "extension"
-    "nativeBuildInputs"
-  ]
-)
+  };
+}
