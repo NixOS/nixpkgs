@@ -52,7 +52,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/regexident/cargo-modules/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [
-      figsoda
       rvarago
       matthiasbeyer
     ];

@@ -39,7 +39,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       ethancedwards8
-      figsoda
       matthiasbeyer
       defelo
     ];

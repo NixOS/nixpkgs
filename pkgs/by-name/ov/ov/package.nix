@@ -75,7 +75,6 @@ buildGoModule rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       farcaller
-      figsoda
     ];
     mainProgram = "ov";
   };

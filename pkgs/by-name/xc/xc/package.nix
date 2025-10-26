@@ -50,7 +50,6 @@ buildGoModule (finalAttrs: {
     changelog = "https://github.com/joerdav/xc/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      figsoda
       joerdav
     ];
   };

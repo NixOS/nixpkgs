@@ -31,7 +31,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [
       doronbehar
-      figsoda
     ];
     mainProgram = "svg2pdf";
   };

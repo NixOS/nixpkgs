@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Keruspe/cargo-duplicates";
     license = licenses.mit;
     maintainers = with maintainers; [
-      figsoda
       matthiasbeyer
     ];
   };

@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       astro
-      figsoda
     ];
     platforms = lib.platforms.linux;
     mainProgram = "pw-volume";

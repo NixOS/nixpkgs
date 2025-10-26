@@ -95,7 +95,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "ruff";
     maintainers = with lib.maintainers; [
       bengsparks
-      figsoda
       GaetanLepage
     ];
   };

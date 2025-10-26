@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with lib.maintainers; [
       evanjs
-      figsoda
       matthiasbeyer
     ];
     mainProgram = "cargo-about";

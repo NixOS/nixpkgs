@@ -24,7 +24,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/kivikakk/comrak/blob/v${version}/changelog.txt";
     license = lib.licenses.bsd2;
     maintainers = with lib.maintainers; [
-      figsoda
       kivikakk
     ];
   };

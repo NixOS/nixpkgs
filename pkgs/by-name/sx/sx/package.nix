@@ -56,7 +56,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "sx";
     maintainers = with lib.maintainers; [
-      figsoda
       thiagokokada
     ];
     platforms = lib.platforms.linux;

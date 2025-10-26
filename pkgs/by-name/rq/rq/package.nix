@@ -50,7 +50,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     maintainers = with lib.maintainers; [
       aristid
       Br1ght0ne
-      figsoda
     ];
   };
 })

@@ -40,7 +40,6 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [
       ekleog
-      figsoda
       matthiasbeyer
     ];
   };

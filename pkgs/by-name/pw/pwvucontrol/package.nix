@@ -94,7 +94,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/saivert/pwvucontrol";
     license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
-      figsoda
       Guanran928
       johnrtitor
     ];

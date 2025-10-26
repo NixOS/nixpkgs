@@ -91,7 +91,6 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "oculante";
     maintainers = with lib.maintainers; [
       dit7ya
-      figsoda
     ];
   };
 }

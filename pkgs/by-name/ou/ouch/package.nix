@@ -71,7 +71,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/ouch-org/ouch/blob/${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ] ++ lib.optionals enableUnfree [ unfreeRedistributable ];
     maintainers = with lib.maintainers; [
-      figsoda
       psibi
       krovuxdev
     ];

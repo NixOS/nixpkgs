@@ -46,7 +46,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Byron/dua-cli/blob/v${version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
-      figsoda
       killercup
     ];
     mainProgram = "dua";
