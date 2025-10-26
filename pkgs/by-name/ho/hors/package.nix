@@ -26,6 +26,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/windsoilder/hors";
     changelog = "https://github.com/WindSoilder/hors/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

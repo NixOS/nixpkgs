@@ -38,7 +38,7 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/nat-n/poethepoet";
     changelog = "https://github.com/nat-n/poethepoet/releases/tag/v${version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "poe";
   };
 }

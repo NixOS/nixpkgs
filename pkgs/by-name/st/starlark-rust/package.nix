@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/facebook/starlark-rust";
     changelog = "https://github.com/facebook/starlark-rust/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "starlark";
   };
 }

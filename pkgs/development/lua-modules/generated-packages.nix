@@ -5281,7 +5281,7 @@ final: prev: {
       meta = {
         homepage = "https://github.com/notomo/vusted";
         description = "`busted` wrapper for testing neovim plugin";
-        maintainers = with lib.maintainers; [ figsoda ];
+        maintainers = [ ];
         license.fullName = "MIT <http://opensource.org/licenses/MIT>";
       };
     }

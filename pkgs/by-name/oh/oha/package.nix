@@ -38,7 +38,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/hatoo/oha";
     changelog = "https://github.com/hatoo/oha/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "oha";
   };
 }

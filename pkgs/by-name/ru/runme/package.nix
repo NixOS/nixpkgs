@@ -76,6 +76,6 @@ buildGoModule rec {
     homepage = "https://runme.dev";
     changelog = "https://github.com/runmedev/runme/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

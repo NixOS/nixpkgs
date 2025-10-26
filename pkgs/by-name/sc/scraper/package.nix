@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/causal-agent/scraper";
     changelog = "https://github.com/causal-agent/scraper/releases/tag/v${version}";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
   };
 }

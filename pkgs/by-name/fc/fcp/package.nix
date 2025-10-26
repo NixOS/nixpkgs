@@ -47,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/svetlitski/fcp/releases/tag/v${version}";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ figsoda ];
+    maintainers = [ ];
     mainProgram = "fcp";
   };
 }
