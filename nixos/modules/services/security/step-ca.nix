@@ -108,7 +108,7 @@ in
 
           ExecStart = [
             "" # override upstream
-            "${cfg.package}/bin/step-ca /etc/smallstep/ca.json --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
+            "${lib.getExe cfg.package} /etc/smallstep/ca.json --password-file \${CREDENTIALS_DIRECTORY}/intermediate_password"
           ];
 
           # ProtectProc = "invisible"; # not supported by upstream yet
