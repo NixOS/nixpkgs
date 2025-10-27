@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waymore";
-  version = "6.4";
+  version = "6.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xnl-h4ck3r";
     repo = "waymore";
     tag = "v${version}";
-    hash = "sha256-XIzUT9OYdtiBAdGYxeCSv89gxYqlvE7wAijt+WJqk2k=";
+    hash = "sha256-3nvdbQydtnk/tod2WyJLAGKKjwTv6Z6JA7+qwqgp2o4=";
   };
 
   preBuild = ''
