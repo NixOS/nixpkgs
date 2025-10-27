@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "plus42";
-  version = "1.3.10";
+  version = "1.3.11";
 
   src = fetchurl {
     url = "https://thomasokken.com/plus42/upstream/plus42-upstream-${version}.tgz";
-    hash = "sha256-hXcw3s4Oi8WK1v14PWBIrKZSsAyCOTNa13WhN/3PiLA=";
+    hash = "sha256-A2jh1HPfSPJUek6h4oh9Mlu6snaopd6cpgz89t4Nbd4=";
   };
 
   nativeBuildInputs = [
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
     install -m755 gtk/plus42dec gtk/plus42bin $out/bin
     install -m644 README $out/share/doc/plus42/README
 
-    install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps/plus42.xpm
-    install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps/plus42.xpm
+    install -m644 gtk/icon-48x48.png $out/share/icons/hicolor/48x48/apps/plus42.png
+    install -m644 gtk/icon-128x128.png $out/share/icons/hicolor/128x128/apps/plus42.png
     install -m644 skins/* $out/share/plus42/skins
 
     runHook postInstall
