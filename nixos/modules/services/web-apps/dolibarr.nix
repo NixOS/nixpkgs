@@ -6,9 +6,9 @@
 }:
 let
   inherit (lib)
-    any
     boolToString
     concatStringsSep
+    elem
     isBool
     isString
     mapAttrsToList
@@ -46,7 +46,7 @@ let
 
       toStr =
         k: v:
-        if (any (str: k == str) secretKeys) then
+        if (elem k secretKeys) then
           v
         else if isString v then
           "'${v}'"
