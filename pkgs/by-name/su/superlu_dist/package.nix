@@ -24,7 +24,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu_dist";
-  version = "9.1.0";
+  version = "9.2.0";
 
   __structuredAttrs = true;
 
@@ -34,15 +34,11 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "v${finalAttrs.version}";
     # Remove non‐free files.
     postFetch = "rm $out/SRC/prec-independent/mc64ad_dist.c";
-    hash = "sha256-NMAEtTmTY189p8BlmsTugwMuxKZh+Bs1GyuwUHkLA1U=";
+    hash = "sha256-i/Gg+9oMNNRlviwXUSRkWNaLRZLPWZRtA1fGYqh2X0k=";
   };
 
   patches = [
     ./mc64ad_dist-stub.patch
-    (fetchurl {
-      url = "https://github.com/xiaoyeli/superlu_dist/commit/8ef3f7fda091529d7e7f16087864fee66c4834c9.patch";
-      hash = "sha256-kCSqojYKpk75m+FwhS0hXHSybm+GZzOYikePcf2U3Fw=";
-    })
   ];
 
   postPatch = ''
@@ -58,24 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     gfortran
   ];
 
-  buildInputs =
-    lib.optionals (enableOpenMP && stdenv.cc.isClang) [
-      # cmake can not find mpi if openmp is placed after mpi
-      llvmPackages.openmp
-    ]
-    ++ [
-      mpi
-      lapack
-    ]
-    ++ lib.optionals withParmetis [
-      metis
-      parmetis
-    ]
-    ++ lib.optionals stdenv.cc.isClang [
-      gfortran.cc.lib
-    ];
-
-  propagatedBuildInputs = [ blas ];
+  buildInputs = [
+    mpi
+    blas
+    lapack
+  ]
+  ++ lib.optionals withParmetis [
+    metis
+    parmetis
+  ]
+  ++ lib.optionals stdenv.cc.isClang [
+    gfortran.cc.lib
+  ]
+  ++ lib.optionals (enableOpenMP && stdenv.cc.isClang) [
+    llvmPackages.openmp
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "enable_examples" withExamples)
@@ -94,6 +87,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [ mpiCheckPhaseHook ];
 
