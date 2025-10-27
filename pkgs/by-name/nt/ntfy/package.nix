@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   fetchpatch,
   withXmpp ? false, # sleekxmpp doesn't support python 3.10, see https://github.com/dschep/ntfy/issues/266
@@ -12,16 +12,7 @@
   withDbus ? stdenv.hostPlatform.isLinux,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      # databases, on which slack-sdk depends, is incompatible with SQLAlchemy 2.0
-      sqlalchemy = super.sqlalchemy_1_4;
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "ntfy";
   version = "2.7.0";
 
@@ -74,10 +65,10 @@ python.pkgs.buildPythonApplication rec {
       --replace-fail "':sys_platform == \"darwin\"'" "'darwin'"
   '';
 
-  build-system = with python.pkgs; [ setuptools ];
+  build-system = with python3Packages; [ setuptools ];
 
   dependencies =
-    with python.pkgs;
+    with python3Packages;
     (
       [
         requests
@@ -106,7 +97,7 @@ python.pkgs.buildPythonApplication rec {
       ]
     );
 
-  nativeCheckInputs = with python.pkgs; [
+  nativeCheckInputs = with python3Packages; [
     mock
     pytestCheckHook
   ];
