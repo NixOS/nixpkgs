@@ -12061,9 +12061,6 @@ with pkgs;
     // (config.profanity or { })
   );
 
-  protonvpn-cli = python3Packages.callPackage ../applications/networking/protonvpn-cli { };
-  protonvpn-cli_2 = python3Packages.callPackage ../applications/networking/protonvpn-cli/2.nix { };
-
   protonvpn-gui = python3Packages.callPackage ../applications/networking/protonvpn-gui { };
 
   psi = libsForQt5.callPackage ../applications/networking/instant-messengers/psi { };
@@ -13062,8 +13059,6 @@ with pkgs;
 
   fmodex = callPackage ../games/doom-ports/zandronum/fmod.nix { };
 
-  pro-office-calculator = libsForQt5.callPackage ../games/pro-office-calculator { };
-
   qgo = libsForQt5.callPackage ../games/qgo { };
 
   anki-utils = callPackage ../by-name/an/anki/addons/anki-utils.nix { };
@@ -14031,8 +14026,6 @@ with pkgs;
   };
 
   spyder = with python3.pkgs; toPythonApplication spyder;
-
-  stellarium = qt6Packages.callPackage ../applications/science/astronomy/stellarium { };
 
   tulip = libsForQt5.callPackage ../applications/science/misc/tulip {
     python3 = python312; # fails to build otherwise
