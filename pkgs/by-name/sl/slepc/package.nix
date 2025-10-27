@@ -3,16 +3,22 @@
   stdenv,
   fetchFromGitLab,
   python3Packages,
-  arpack-mpi,
+  arpack,
   petsc,
-  mpi,
   mpiCheckPhaseHook,
   pythonSupport ? false,
   withExamples ? false,
   withArpack ? stdenv.hostPlatform.isLinux,
 }:
-assert petsc.mpiSupport;
-assert pythonSupport -> petsc.pythonSupport;
+let
+  slepcPackages = petsc.petscPackages.overrideScope (
+    final: prev: {
+      inherit pythonSupport;
+      mpiSupport = true;
+      arpack = final.callPackage arpack.override { useMpi = true; };
+    }
+  );
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "slepc";
   version = "3.24.0";
@@ -50,10 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   buildInputs = [
-    mpi
+    slepcPackages.mpi
   ]
   ++ lib.optionals withArpack [
-    arpack-mpi
+    slepcPackages.arpack
   ];
 
   propagatedBuildInputs = [
