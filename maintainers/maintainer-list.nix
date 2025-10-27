@@ -5108,6 +5108,13 @@
     githubId = 244239;
     name = "Mauricio Collares";
   };
+  colm = {
+    email = "colmmurphy016@gmail.com";
+    github = "colmmurphyxyz";
+    githubId = 65133392;
+    name = "Colm Murphy";
+    keys = [ { fingerprint = "F644 8CF5 DE55 10D3 8885 8B26 C9C3 B039 526E 280C"; } ];
+  };
   coloquinte = {
     email = "gabriel.gouvine_nix@m4x.org";
     github = "Coloquinte";
