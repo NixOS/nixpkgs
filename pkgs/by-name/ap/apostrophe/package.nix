@@ -20,14 +20,14 @@
 }:
 
 let
-  version = "3.2";
+  version = "3.4";
 
   src = fetchFromGitLab {
     owner = "World";
     repo = "apostrophe";
     domain = "gitlab.gnome.org";
     rev = "refs/tags/v${version}";
-    hash = "sha256-NPpBu6Wmd8z99vzVQ394CyHRV2RQBtkbuqcaFqKqlkQ=";
+    hash = "sha256-Sj5Y4QPMYavdXbU+iVv76qOFNhgBjAeX9+/TvQHZzeI=";
   };
 
   reveal-js = fetchFromGitHub {
@@ -87,6 +87,7 @@ python312Packages.buildPythonApplication {
     pypandoc
     chardet
     levenshtein
+    regex
   ];
 
   dontWrapGApps = true;
