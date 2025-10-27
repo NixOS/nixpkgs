@@ -2,22 +2,15 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   perl,
   wrapGAppsHook3,
-  wrapQtAppsHook,
-  qtbase,
-  qtcharts,
-  qtpositioning,
-  qtmultimedia,
-  qtserialport,
-  qtwayland,
-  qtwebengine,
+  qt6,
+  qt6Packages,
   calcmysky,
-  qxlsx,
   indilib,
   libnova,
-  qttools,
   exiv2,
   nlopt,
   testers,
@@ -37,31 +30,38 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9uQ6u1+dSszmKG8eY6kSXhqsCPRGw6tulCTCrLByIxc=";
   };
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/stellarium/-/raw/ab559b6e9349569278f83c2dfc83990e971a8cb2/qt-6.10.patch";
+      hash = "sha256-a7zC9IQOj93VnPy8Bj/fLe4oJux7I4Edgj5OaKI4TZU=";
+    })
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'SET(CMAKE_INSTALL_PREFIX "''${PROJECT_BINARY_DIR}/Stellarium.app/Contents")' \
                 'SET(CMAKE_INSTALL_PREFIX "${placeholder "out"}/Applications/Stellarium.app/Contents")'
     substituteInPlace src/CMakeLists.txt \
-      --replace-fail "\''${_qt_bin_dir}/../" "${qtmultimedia}/lib/qt-6/"
+      --replace-fail "\''${_qt_bin_dir}/../" "${qt6.qtmultimedia}/lib/qt-6/"
   '';
 
   nativeBuildInputs = [
     cmake
     perl
     wrapGAppsHook3
-    wrapQtAppsHook
-    qttools
+    qt6.wrapQtAppsHook
+    qt6.qttools
   ];
 
   buildInputs = [
-    qtbase
-    qtcharts
-    qtpositioning
-    qtmultimedia
-    qtserialport
-    qtwebengine
+    qt6.qtbase
+    qt6.qtcharts
+    qt6.qtpositioning
+    qt6.qtmultimedia
+    qt6.qtserialport
+    qt6.qtwebengine
     calcmysky
-    qxlsx
+    qt6Packages.qxlsx
     indilib
     libnova
     exiv2
@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
     nlopt
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
+    qt6.qtwayland
   ];
 
   preConfigure = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # fatal error: 'QtSerialPort/QSerialPortInfo' file not found
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qtserialport}/lib";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-F${qt6.qtserialport}/lib";
 
   dontWrapGApps = true;
 

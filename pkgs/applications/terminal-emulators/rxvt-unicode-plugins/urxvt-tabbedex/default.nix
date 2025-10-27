@@ -25,5 +25,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/mina86/urxvt-tabbedex";
     maintainers = [ ];
     platforms = with platforms; unix;
+    license = lib.licenses.gpl3Plus;
   };
 }
