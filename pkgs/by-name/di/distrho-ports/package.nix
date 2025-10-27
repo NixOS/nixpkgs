@@ -52,7 +52,7 @@ stdenv.mkDerivation {
 
   env.NIX_CFLAGS_COMPILE = toString [ "-fpermissive" ];
 
-  postFixup = lib.optionalString (lib.any (x: x == "vitalium") plugins || plugins == [ ]) ''
+  postFixup = lib.optionalString (lib.elem "vitalium" plugins || plugins == [ ]) ''
     for file in \
       $out/lib/lv2/vitalium.lv2/vitalium.so \
       $out/lib/vst/vitalium.so \

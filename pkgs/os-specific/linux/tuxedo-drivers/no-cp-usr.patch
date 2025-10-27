@@ -6,7 +6,7 @@ index 75a6bc1..6021d42 100644
  
  install: all
  	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) modules_install
--	cp -r etc usr /
+-	cp -r usr /
  
  clean:
  	make -C $(KDIR) M=$(PWD) $(MAKEFLAGS) clean

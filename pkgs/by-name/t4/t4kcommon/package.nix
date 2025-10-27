@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
       url = "https://salsa.debian.org/tux4kids-pkg-team/t4kcommon/raw/f7073fa384f5a725139f54844e59b57338b69dc7/debian/patches/libpng16.patch";
       hash = "sha256-auQ8VvOyvLE1PD2dfeHZJV+MzIt1OtUa7OcOqsXTAYI=";
     })
+    # Fix "Cannot specify link libraries for target "linebreak" which is not built by this project."
+    ./linebreak-fix.patch
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream
@@ -54,6 +56,11 @@ stdenv.mkDerivation rec {
     librsvg
     libxml2
   ];
+
+  postPatch = ''
+    substituteInPlace {src/,./}CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.6)" "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   meta = with lib; {
     description = "Library of code shared between tuxmath and tuxtype";
