@@ -80,14 +80,23 @@ stdenv.mkDerivation (finalAttrs: {
       mkdir -p pcre
       tar xvf ${pcre.src} --strip-components 1 -C pcre
     ''
-    # CMake 4 dropped support of versions lower than 3.5,
-    # versions lower than 3.10 are deprecated.
-    # https://github.com/NixOS/nixpkgs/issues/445447
+    # - CMake 4 dropped support of versions lower than 3.5, versions lower than 3.10 are deprecated.
+    #   https://github.com/NixOS/nixpkgs/issues/445447
+    # - CMake Error at pcre/CMakeLists.txt:843 (GET_TARGET_PROPERTY):
+    #   The LOCATION property may not be read from target "pcretest".  Use the
+    #   target name directly with add_custom_command, or use the generator
+    #   expression $<TARGET_FILE>, as appropriate.
     + ''
       substituteInPlace pcre/CMakeLists.txt \
         --replace-fail \
           "CMAKE_MINIMUM_REQUIRED(VERSION 2.8.5)" \
           "CMAKE_MINIMUM_REQUIRED(VERSION 3.10)" \
+        --replace-fail \
+          "CMAKE_POLICY(SET CMP0026 OLD)" \
+          "CMAKE_POLICY(SET CMP0026 NEW)" \
+        --replace-fail \
+          "GET_TARGET_PROPERTY(PCRETEST_EXE pcretest DEBUG_LOCATION)" \
+          "set(PCRETEST_EXE $<TARGET_FILE:pcretest>)"
     ''
   );
 
