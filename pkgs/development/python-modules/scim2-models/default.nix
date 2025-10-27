@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  hatchling,
+  uv-build,
   pydantic,
   pytestCheckHook,
 }:
 
 buildPythonPackage (finalAttrs: {
   pname = "scim2-models";
-  version = "0.4.1";
+  version = "0.5.2";
 
   pyproject = true;
 
@@ -17,19 +17,19 @@ buildPythonPackage (finalAttrs: {
     owner = "python-scim";
     repo = "scim2-models";
     tag = finalAttrs.version;
-    hash = "sha256-cc9nSqED+gfBHC3QpeHnQ6lBnmvdHa6edp/WGiuiDfc=";
+    hash = "sha256-7COvjyYyFsG7C/ImQo6aHC7o83wPJREV/adWzNo61kk=";
   };
 
-  build-system = [ hatchling ];
+  # pythonRelaxDeps doesn't seem to work for the build-system
+  postPatch = ''
+    sed -ie 's/requires = \["uv_build[^"]*"]/requires = ["uv_build"]/' pyproject.toml
+  '';
+
+  build-system = [ uv-build ];
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    substituteInPlace doc/tutorial.rst \
-      --replace-fail "TzInfo(UTC)" "TzInfo(0)"
-  '';
 
   pythonImportsCheck = [ "scim2_models" ];
 
