@@ -11,7 +11,6 @@
   py-serializable,
   poetry-core,
   pytestCheckHook,
-  pythonOlder,
   requirements-parser,
   sortedcontainers,
   setuptools,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   pname = "cyclonedx-python-lib";
   version = "11.4.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
