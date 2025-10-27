@@ -23,6 +23,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     mainProgram = "lspmux";
     homepage = "https://codeberg.org/p2502/lspmux";
     license = with licenses; [ eupl12 ];
-    maintainers = with maintainers; [ norfair ];
+    maintainers = [ ];
   };
 })
