@@ -15,9 +15,11 @@
   parmetis,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
-}:
+  isILP64 ? false,
 
-assert (!blas.isILP64) && (!lapack.isILP64);
+  # passthru.tests
+  superlu_dist,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "superlu_dist";
@@ -38,11 +40,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./mc64ad_dist-stub.patch
   ];
 
-  postPatch = ''
-    substituteInPlace SRC/prec-independent/util.c \
-      --replace-fail "LargeDiag_MC64" "NOROWPERM"
-  '';
-
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -51,8 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     mpi
-    blas
-    lapack
+    # always build with lp64 BLAS/LAPACK.
+    # see https://github.com/xiaoyeli/superlu_dist/issues/132#issuecomment-2323093701
+    (blas.override { isILP64 = false; })
+    (lapack.override { isILP64 = false; })
   ]
   ++ lib.optionals withParmetis [
     metis
@@ -73,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
     (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
     (lib.cmakeBool "TPL_ENABLE_PARMETISLIB" withParmetis)
+    (lib.cmakeFeature "XSDK_INDEX_SIZE" (if isILP64 then "64" else "32"))
   ]
   ++ lib.optionals withParmetis [
     (lib.cmakeFeature "TPL_PARMETIS_LIBRARIES" "-lmetis -lparmetis")
@@ -84,6 +84,13 @@ stdenv.mkDerivation (finalAttrs: {
   __darwinAllowLocalNetworking = true;
 
   nativeCheckInputs = [ mpiCheckPhaseHook ];
+
+  passthru = {
+    inherit isILP64;
+    tests = {
+      ilp64 = superlu_dist.override { isILP64 = true; };
+    };
+  };
 
   meta = {
     homepage = "https://portal.nersc.gov/project/sparse/superlu/";
