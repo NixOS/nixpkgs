@@ -59,7 +59,7 @@ let
     # https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2454#note_112821
     "fftw"
   ];
-  itkIsInDepsToRemove = dep: builtins.any (d: d == dep.name) itkDepsToRemove;
+  itkIsInDepsToRemove = dep: builtins.elem dep.name itkDepsToRemove;
 
   # remove after https://gitlab.orfeo-toolbox.org/orfeotoolbox/otb/-/issues/2451
   otbSwig = swig.overrideAttrs (oldArgs: {

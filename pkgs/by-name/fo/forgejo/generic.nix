@@ -12,7 +12,6 @@
   bash,
   brotli,
   buildGoModule,
-  fetchpatch,
   forgejo,
   git,
   gzip,
@@ -84,14 +83,6 @@ buildGoModule rec {
 
   patches = [
     ./static-root-path.patch
-  ]
-  ++ lib.optionals lts [
-    (fetchpatch {
-      # fix for go 1.25.2 stricter ipv6 parsing, remove for LTS > 11.0.6
-      name = "fix-test-ipv6-go125.patch";
-      url = "https://codeberg.org/forgejo/forgejo/commit/0d9a8e3fa2cf9228290ed1a9a5767e6ba204edd7.patch";
-      hash = "sha256-AM4/kgCXSU5Bj8aOObm6qyeL1SEpeFhmlT42lMJ2o08=";
-    })
   ];
 
   postPatch = ''

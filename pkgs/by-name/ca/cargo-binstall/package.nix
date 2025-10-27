@@ -6,20 +6,21 @@
   bzip2,
   xz,
   zstd,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.15.7";
+  version = "1.15.9";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
-    rev = "v${version}";
-    hash = "sha256-EQhEI4MqYNwjqb8awROTLfxjGsoPKeT7VHt642uSgCc=";
+    tag = "v${version}";
+    hash = "sha256-v/tilaoDLZDV0VbMTT/DfqSNO4Ezyu3AWGzMftMubqc=";
   };
 
-  cargoHash = "sha256-a9X8L4AZWhlcQ5lVo0I1GL2wpCjOClNuZLy+GwHJDcA=";
+  cargoHash = "sha256-itYqZi1tSWVwqGfNFSBh4/+PoLrQZQTnla4lOCjoX8Q=";
 
   nativeBuildInputs = [
     pkg-config
@@ -56,6 +57,10 @@ rustPlatform.buildRustPackage rec {
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_no_such_release"
     "--skip=gh_api_client::test::test_gh_api_client_cargo_binstall_v0_20_1"
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = "-V";
 
   meta = {
     description = "Tool for installing rust binaries as an alternative to building from source";

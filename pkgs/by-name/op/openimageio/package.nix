@@ -11,6 +11,7 @@
   libwebp,
   libjxl,
   libheif,
+  libultrahdr,
   opencolorio,
   openexr,
   openjph,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
     libtiff
     libwebp
+    libultrahdr
     opencolorio
     openexr
     openjph

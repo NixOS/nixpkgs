@@ -57,6 +57,11 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
+  postPatch = lib.optionals (version == "3.12.0") ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.updateScript = gitUpdater { };
 
   meta = {

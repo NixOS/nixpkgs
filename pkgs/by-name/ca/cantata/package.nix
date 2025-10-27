@@ -6,6 +6,7 @@
   pkg-config,
   qt6,
   perl,
+  fetchpatch2,
 
   # Cantata doesn't build with cdparanoia enabled so we disable that
   # default for now until I (or someone else) figure it out.
@@ -176,6 +177,18 @@ stdenv.mkDerivation (finalAttrs: {
     # patchShebangs the playlists scripts, making that unnecessary (perl will
     # always be available because it's a dependency)
     ./dont-check-for-perl-in-PATH.diff
+
+    # remove following patches in next release
+    (fetchpatch2 {
+      name = "fix-build-with-qt-610-qfile-open.patch";
+      url = "https://github.com/nullobsi/cantata/pull/89.patch";
+      hash = "sha256-c7hdecX2oo9jTlLc6zd7LVjgZj4w89zN+eEw7ol/hmI=";
+    })
+    (fetchpatch2 {
+      name = "fix-build-with-qt-610-invalidateFilter-deprecated.patch";
+      url = "https://github.com/nullobsi/cantata/pull/90.patch";
+      hash = "sha256-dMxbC/p5mD/TQZEXORbvNON7Zzbvq0khaIR89lU5cO4=";
+    })
   ];
 
   postPatch = ''

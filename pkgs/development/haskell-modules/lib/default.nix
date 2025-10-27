@@ -339,12 +339,6 @@ rec {
   # packagesFromDirectory : { directory : Directory, ... } -> HaskellPackageOverrideSet
   packagesFromDirectory = compose.packagesFromDirectory;
 
-  addOptparseApplicativeCompletionScripts =
-    exeName: pkg:
-    lib.warn "addOptparseApplicativeCompletionScripts is deprecated in favor of haskellPackages.generateOptparseApplicativeCompletions. Please change ${pkg.name} to use the latter and make sure it uses its matching haskell.packages set!" (
-      compose.__generateOptparseApplicativeCompletion exeName pkg
-    );
-
   /*
     Modify a Haskell package to add shell completion scripts for the
     given executable produced by it. These completion scripts will be

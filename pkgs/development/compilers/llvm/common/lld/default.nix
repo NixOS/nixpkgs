@@ -3,7 +3,7 @@
   stdenv,
   llvm_meta,
   release_version,
-  buildLlvmTools,
+  buildLlvmPackages,
   monorepoSrc ? null,
   src ? null,
   runCommand,
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeFeature "LLD_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/lld")
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
   ]
   ++ devExtraCmakeFlags;
 

@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "1.0.1-20495154";
+  version = "1.0.1-20510020";
   urlVersion = lib.replaceStrings [ "." ] [ "-" ] version;
 
 in
@@ -16,7 +16,7 @@ stdenvNoCC.mkDerivation {
 
   src = fetchzip {
     url = "https://necessegame.com/content/server/${urlVersion}/necesse-server-linux64-${urlVersion}.zip";
-    hash = "sha256-1k+4ywYjVddAb4yyGx1Fi/RXMyJzPIiQIyUzA0VhpAI=";
+    hash = "sha256-e2pnyexvl0mbhlX2Y+4NKJz1VqR1LoV9VlSfqOgXy7E=";
   };
 
   # removing packaged jre since we use our own

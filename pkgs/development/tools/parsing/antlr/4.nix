@@ -86,6 +86,7 @@ let
           sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
           license = lib.licenses.bsd3;
           platforms = lib.platforms.unix;
+          maintainers = with lib.maintainers; [ sarahec ];
         };
       };
 
@@ -119,6 +120,7 @@ let
             homepage = "https://www.antlr.org/";
             license = lib.licenses.bsd3;
             platforms = lib.platforms.unix;
+            maintainers = with lib.maintainers; [ sarahec ];
           };
         };
       };

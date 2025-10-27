@@ -10,6 +10,7 @@
   python3,
   which,
   boost,
+  curl,
   ftgl,
   freetype,
   glew,
@@ -70,11 +71,11 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/trunk/?ref_type=heads
       ${unstableVersionMajor} =
         let
-          rev = "813b684ab0de8ee9737c9fc1f9b90ba0543dd418";
-          hash = "sha256-01jWE9rSBJn+JS8p8LTFqIGquOY1avXsAZnfYfo5pPk=";
+          rev = "3675f21cd5be4932a7a168b321576e0b09e64aaf";
+          hash = "sha256-d2vPFAyx6LhEIxtEUdhrlqqYeCY0NnETlq7TVvX5vVo=";
         in
         dedicatedServer: {
-          version = "${unstableVersionMajor}-${builtins.substring 0 8 rev}";
+          version = "${unstableVersionMajor}-${lib.substring 0 8 rev}";
           src = fetchArmagetron rev hash;
           extraBuildInputs = [
             protobuf
@@ -97,11 +98,11 @@ let
       # https://gitlab.com/armagetronad/armagetronad/-/commits/hack-0.2.8-sty+ct+ap/?ref_type=heads
       "${latestVersionMajor}-sty+ct+ap" =
         let
-          rev = "5a17cc9fb6e1e27a358711afbd745ae54d4a8c60";
-          hash = "sha256-111C1j/hSaASGcvYy3//TyHs4Z+3fuiOvCmtcWLdFd4=";
+          rev = "c907ee3efd76f3b1e6eb41257cf7127f3eab280c";
+          hash = "sha256-d5uWBSz07OinbGHoxUQ64go3eOugLu/tWNjeihobQdo=";
         in
         dedicatedServer: {
-          version = "${latestVersionMajor}-sty+ct+ap-${builtins.substring 0 8 rev}";
+          version = "${latestVersionMajor}-sty+ct+ap-${lib.substring 0 8 rev}";
           src = fetchArmagetron rev hash;
           extraBuildInputs = lib.optionals (!dedicatedServer) [
             libGL
@@ -127,13 +128,13 @@ let
 
       # Split the version into the major and minor parts
       versionParts = lib.splitString "-" resolvedParams.version;
-      splitVersion = lib.splitVersion (builtins.elemAt versionParts 0);
-      majorVersion = builtins.concatStringsSep "." (lib.lists.take 2 splitVersion);
+      splitVersion = lib.splitVersion (lib.elemAt versionParts 0);
+      majorVersion = lib.concatStringsSep "." (lib.lists.take 2 splitVersion);
 
       minorVersionPart =
         parts: sep: expectedSize:
-        if builtins.length parts > expectedSize then
-          sep + (builtins.concatStringsSep sep (lib.lists.drop expectedSize parts))
+        if lib.length parts > expectedSize then
+          sep + (lib.concatStringsSep sep (lib.lists.drop expectedSize parts))
         else
           "";
 
@@ -172,8 +173,11 @@ let
       ++ lib.optional dedicatedServer "--enable-dedicated"
       ++ lib.optional (!dedicatedServer) "--enable-music";
 
-      buildInputs =
-        lib.singleton (libxml2.override { enableHttp = true; }) ++ (resolvedParams.extraBuildInputs or [ ]);
+      buildInputs = [
+        (libxml2.override { enableHttp = true; })
+        curl
+      ]
+      ++ (resolvedParams.extraBuildInputs or [ ]);
 
       nativeBuildInputs = [
         autoconf

@@ -559,11 +559,7 @@ let
         sep:
         mkOptionType rec {
           name = "separatedString";
-          description =
-            if sep == "" then
-              "Concatenated string" # for types.string.
-            else
-              "strings concatenated with ${builtins.toJSON sep}";
+          description = "strings concatenated with ${builtins.toJSON sep}";
           descriptionClass = "noun";
           check = isString;
           merge = loc: defs: concatStringsSep sep (getValues defs);
@@ -577,19 +573,6 @@ let
       lines = separatedString "\n";
       commas = separatedString ",";
       envVar = separatedString ":";
-
-      # Deprecated; should not be used because it quietly concatenates
-      # strings, which is usually not what you want.
-      # We use a lib.warn because `deprecationMessage` doesn't trigger in nested types such as `attrsOf string`
-      string =
-        lib.warn
-          "The type `types.string` is deprecated. See https://github.com/NixOS/nixpkgs/pull/66346 for better alternative types."
-          (
-            separatedString ""
-            // {
-              name = "string";
-            }
-          );
 
       passwdEntry =
         entryType:

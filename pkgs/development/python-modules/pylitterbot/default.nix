@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "pylitterbot";
-  version = "2024.2.6";
+  version = "2024.2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "natekspencer";
     repo = "pylitterbot";
     tag = "v${version}";
-    hash = "sha256-oQuEo0np+e+HfsQoWbv84BNpxNJQO3ZjocaCfllqkts=";
+    hash = "sha256-gBY9+cd0DKqzHKyB86NzfKkULjVXn3oBSHxyRhmMAno=";
   };
 
   pythonRelaxDeps = [ "deepdiff" ];

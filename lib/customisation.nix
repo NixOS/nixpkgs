@@ -22,7 +22,6 @@ let
     filterAttrs
     optionalString
     flip
-    pathIsDirectory
     head
     pipe
     isDerivation

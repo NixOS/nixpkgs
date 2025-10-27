@@ -12,7 +12,7 @@
   release_version,
   version,
   python3,
-  buildLlvmTools,
+  buildLlvmPackages,
   fixDarwinDylibNames,
   enableManpages ? false,
   enableClangToolsExtra ? true,
@@ -96,9 +96,9 @@ stdenv.mkDerivation (
       (lib.cmakeBool "CLANGD_BUILD_XPC" false)
       (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
       (lib.cmakeBool "LLVM_INCLUDE_TESTS" false)
-      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
-      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmTools.tblgen}/bin/clang-tblgen")
-      (lib.cmakeFeature "CLANG_TIDY_CONFUSABLE_CHARS_GEN" "${buildLlvmTools.tblgen}/bin/clang-tidy-confusable-chars-gen")
+      (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
+      (lib.cmakeFeature "CLANG_TABLEGEN" "${buildLlvmPackages.tblgen}/bin/clang-tblgen")
+      (lib.cmakeFeature "CLANG_TIDY_CONFUSABLE_CHARS_GEN" "${buildLlvmPackages.tblgen}/bin/clang-tidy-confusable-chars-gen")
     ]
     ++ lib.optional (lib.versionAtLeast release_version "20") (
       lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm"
@@ -115,7 +115,7 @@ stdenv.mkDerivation (
     ]
     ++ lib.optionals (lib.versionOlder release_version "20") [
       # clang-pseudo removed in LLVM20: https://github.com/llvm/llvm-project/commit/ed8f78827895050442f544edef2933a60d4a7935
-      (lib.cmakeFeature "CLANG_PSEUDO_GEN" "${buildLlvmTools.tblgen}/bin/clang-pseudo-gen")
+      (lib.cmakeFeature "CLANG_PSEUDO_GEN" "${buildLlvmPackages.tblgen}/bin/clang-pseudo-gen")
     ]
     ++ devExtraCmakeFlags;
 

@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "python-toolbox";
-  version = "1.0.11";
+  version = "1.2.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "cool-RR";
     repo = "python_toolbox";
     tag = version;
-    hash = "sha256-Y9RmVndgsBESrUCEORUwAdaFYBiunY3kWArhB9d7bw4=";
+    hash = "sha256-jP7umFVyt7myF9SwV8b+shh6ZDwVDCZKlF+6zMkR3+M=";
   };
 
   build-system = [ setuptools ];

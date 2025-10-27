@@ -9,6 +9,7 @@
   libX11,
   libv4l,
   qtbase,
+  qtwayland,
   qtx11extras,
   wrapQtAppsHook,
   wrapGAppsHook3,
@@ -92,6 +93,7 @@ stdenv.mkDerivation rec {
     libv4l
     gtk3
     qtbase
+    qtwayland
     qtx11extras
   ];
 

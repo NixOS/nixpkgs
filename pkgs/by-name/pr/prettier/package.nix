@@ -98,12 +98,12 @@ let
     # Arguments
 
     plugin
-    : Attribute set with `.packageName` and `.outPath` defined
+    : Attribute set with `.pname` and `.outPath` defined
   */
   nodeEntryPointOf =
     plugin:
     let
-      pluginDir = "${plugin.outPath}/lib/node_modules/${plugin.packageName}";
+      pluginDir = "${plugin.outPath}/lib/node_modules/${plugin.pname}";
 
       packageJsonAttrs = builtins.fromJSON (builtins.readFile "${pluginDir}/package.json");
 
@@ -118,10 +118,10 @@ let
       pathAbsoluteFallback
     else
       lib.warn ''
-        ${plugin.packageName}: error context, tried finding entry point under;
+        ${plugin.pname}: error context, tried finding entry point under;
         pathAbsoluteNaive -> ${pathAbsoluteNaive}
         pathAbsoluteFallback -> ${pathAbsoluteFallback}
-      '' throw ''${plugin.packageName}: does not provide parse-able entry point'';
+      '' throw ''${plugin.pname}: does not provide parse-able entry point'';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prettier";
@@ -153,10 +153,11 @@ stdenv.mkDerivation (finalAttrs: {
     yarn install --immutable
     yarn build --clean
 
-    cp --recursive dist/prettier "$out"
+    mkdir -p $out/lib/node_modules
+    cp --recursive dist/prettier "$out/lib/node_modules/prettier"
 
     makeBinaryWrapper "${lib.getExe nodejs}" "$out/bin/prettier" \
-      --add-flags "$out/bin/prettier.cjs"
+      --add-flags "$out/lib/node_modules/prettier/bin/prettier.cjs"
   ''
   + lib.optionalString (builtins.length plugins > 0) ''
     wrapProgram $out/bin/prettier --add-flags "${

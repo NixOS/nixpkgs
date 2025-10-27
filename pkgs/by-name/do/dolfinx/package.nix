@@ -12,6 +12,7 @@
   kahip,
   adios2,
   python3Packages,
+  darwinMinVersionHook,
   catch2_3,
   withParmetis ? false,
 }:
@@ -25,14 +26,14 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "0.9.0.post1";
+  version = "0.10.0.post1";
   pname = "dolfinx";
 
   src = fetchFromGitHub {
     owner = "fenics";
     repo = "dolfinx";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-4IIx7vUZeDwOGVdyC2PBvfhVjrmGZeVQKAwgDYScbY0=";
+    hash = "sha256-ZsaEcJdvsf3dxJ739/CU20+drjbAvuc/HkIGCfh9U5A=";
   };
 
   preConfigure = ''
@@ -48,6 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     dolfinxPackages.kahip
     dolfinxPackages.scotch
   ]
+  ++ lib.optional stdenv.hostPlatform.isDarwin (darwinMinVersionHook "13.3")
   ++ lib.optional withParmetis dolfinxPackages.parmetis;
 
   propagatedBuildInputs = [

@@ -88,5 +88,8 @@ buildPythonPackage rec {
     changelog = "https://github.com/dask-contrib/dask-awkward/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ veprbl ];
+    # dask-awkward is incompatible with recent dask versions.
+    # See https://github.com/dask-contrib/dask-awkward/pull/582 for context.
+    broken = lib.versionAtLeast dask.version "2025.4.0";
   };
 }

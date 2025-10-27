@@ -19,11 +19,12 @@ buildGoModule rec {
 
   meta = {
     description = "Prometheus exporter for Hetzner storage boxes";
-    homepage = "https://github.com/fleaz/prometheus-storage-exporter";
+    homepage = "https://github.com/fleaz/prometheus-storagebox-exporter";
     license = lib.licenses.mit;
     mainProgram = "prometheus-storagebox-exporter";
     maintainers = with lib.maintainers; [
       erethon
+      fleaz
     ];
   };
 }

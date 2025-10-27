@@ -7,13 +7,13 @@
 
 buildGoModule rec {
   pname = "gatus";
-  version = "5.27.0";
+  version = "5.28.0";
 
   src = fetchFromGitHub {
     owner = "TwiN";
     repo = "gatus";
     rev = "v${version}";
-    hash = "sha256-fyubtcmAuH6ayHvfj0bYNrYu1Xs0q7mDO+G9SklWc7o=";
+    hash = "sha256-p60iqMzTch3dX+REaiKuLflIHLunGFI2JWx/TGo30g0=";
   };
 
   vendorHash = "sha256-vvYnNFRpDTaNBX30btvSrwmhimPobio/zAs7zQnZ7b8=";

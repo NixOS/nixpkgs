@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9tlo7+namWNWrWVQNqaOvtK4NQIdb0p8qvFrrbUamOo=";
   };
 
+  patches = [ ./qt6_10.patch ];
+
   nativeBuildInputs = [
     cmake
     extra-cmake-modules

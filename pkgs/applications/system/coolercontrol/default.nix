@@ -5,20 +5,23 @@
 }:
 
 let
-  version = "2.1.0";
+  version = "3.0.1";
 
   src = fetchFromGitLab {
     owner = "coolercontrol";
     repo = "coolercontrol";
     rev = version;
-    hash = "sha256-xIc0ZecQGyjMQWVaucKomu7SbaHy+ymg5dkOjHjtJ9c=";
+    hash = "sha256-PvEj3xYJVpHNfd5p7kyw+eW9S/g1FB/YiFgWEJDDbus=";
   };
 
   meta = {
     description = "Monitor and control your cooling devices";
     homepage = "https://gitlab.com/coolercontrol/coolercontrol";
     license = lib.licenses.gpl3Plus;
-    platforms = [ "x86_64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = with lib.maintainers; [
       codifryed
       OPNA2608
@@ -33,6 +36,4 @@ in
   coolercontrold = applySharedDetails (callPackage ./coolercontrold.nix { });
 
   coolercontrol-gui = applySharedDetails (callPackage ./coolercontrol-gui.nix { });
-
-  coolercontrol-liqctld = applySharedDetails (callPackage ./coolercontrol-liqctld.nix { });
 }

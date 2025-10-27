@@ -4,6 +4,7 @@
   callPackage,
   lib,
   dbus,
+  kmod,
   xorg,
   zlib,
   patchelf,
@@ -81,6 +82,7 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
+    kmod
   ]
   ++ kernel.moduleBuildDependencies;
 
@@ -139,6 +141,11 @@ stdenv.mkDerivation {
     # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
+
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
 
     runHook postInstall
   '';

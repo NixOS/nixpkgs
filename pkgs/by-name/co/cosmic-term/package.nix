@@ -15,14 +15,14 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-term";
-  version = "1.0.0-beta.2";
+  version = "1.0.0-beta.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-term";
     tag = "epoch-${finalAttrs.version}";
-    hash = "sha256-Gf5C135I3MBxyYBvgbOcY4USa75BeD7sPhFjq5BIM1s=";
+    hash = "sha256-BdWyKRoBZybRrtyBfJlRJxVPIIJWY3F8Ei8UgMfVPJo=";
   };
 
   cargoHash = "sha256-qXAgmVsjhr3aqEQRGjsK2JM8YwpkRK5Y+XYJRSZ8Swc=";

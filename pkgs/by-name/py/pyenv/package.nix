@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "pyenv";
-  version = "2.6.8";
+  version = "2.6.11";
 
   src = fetchFromGitHub {
     owner = "pyenv";
     repo = "pyenv";
     tag = "v${version}";
-    hash = "sha256-/rIuFjClGqpZUm91G2fCe05KamlTEHqPs7BUgC+Fgbk=";
+    hash = "sha256-8k4R7Ctxa+9tb2fcfls4mqrTUR4wmP4zxJJInr0Q+oo=";
   };
 
   nativeBuildInputs = [

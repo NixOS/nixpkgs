@@ -1003,8 +1003,8 @@ let
 
       # Enable CDEV and NOIOMMU support for VFIO, which is useful for
       # passthrough.
-      VFIO_DEVICE_CDEV = yes;
-      VFIO_NOIOMMU = yes;
+      VFIO_DEVICE_CDEV = whenAtLeast "6.6" yes;
+      VFIO_NOIOMMU = whenAtLeast "6.6" yes;
     };
 
     media = {
