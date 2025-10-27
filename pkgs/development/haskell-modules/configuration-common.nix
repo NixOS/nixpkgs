@@ -242,6 +242,8 @@ with haskellLib;
                 lib.id
             )
           ];
+          hls-plugin-api = doJailbreak super.hls-plugin-api; # HLS 2.11: Too strict bound on Diff 1.0.
+          ghcide = doJailbreak super.ghcide; # HLS 2.11: Too strict bound on Diff 1.0.
         }
       )
     )
@@ -249,15 +251,15 @@ with haskellLib;
     fourmolu
     ormolu
     haskell-language-server
+    hls-plugin-api
+    ghcide
+    lsp-types
     ;
 
   # For -f-auto see cabal.project in haskell-language-server.
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser (
     disableCabalFlag "auto" super.ghc-lib-parser-ex
   );
-
-  hls-plugin-api = doJailbreak super.hls-plugin-api; # HLS 2.11: Too strict bound on Diff 1.0.
-  ghcide = doJailbreak super.ghcide; # HLS 2.11: Too strict bound on Diff 1.0.
 
   ###########################################
   ### END HASKELL-LANGUAGE-SERVER SECTION ###
