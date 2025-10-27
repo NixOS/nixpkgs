@@ -2153,7 +2153,6 @@ broken-packages:
   - ghc-time-alloc-prof # failure in job https://hydra.nixos.org/build/233242289 at 2023-09-02
   - ghc-typelits-presburger # failure in job https://hydra.nixos.org/build/307518587 at 2025-09-19
   - ghc-usage # failure in job https://hydra.nixos.org/build/233199565 at 2023-09-02
-  - ghci-dap # failure in job https://hydra.nixos.org/build/307518603 at 2025-09-19
   - ghci-diagrams # failure in job https://hydra.nixos.org/build/233194407 at 2023-09-02
   - ghci-haskeline # failure in job https://hydra.nixos.org/build/233216940 at 2023-09-02
   - ghci-history-parser # failure in job https://hydra.nixos.org/build/233204448 at 2023-09-02
