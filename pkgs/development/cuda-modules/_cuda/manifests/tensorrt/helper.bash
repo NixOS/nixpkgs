@@ -1,6 +1,7 @@
-#!/usr/bin/env bash
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p nix jq
 
-# Requires nix and jq
+# shellcheck shell=bash
 
 set -euo pipefail
 

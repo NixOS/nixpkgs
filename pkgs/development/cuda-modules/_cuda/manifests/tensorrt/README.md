@@ -8,12 +8,12 @@ Only available from 10.0.0 and onwards, which is when NVIDIA stopped putting the
 
 You can find them at: <https://github.com/NVIDIA/TensorRT?tab=readme-ov-file#optional---if-not-using-tensorrt-container-specify-the-tensorrt-ga-release-build-path>.
 
-Construct entries using the provider `helper.sh` script.
+Construct entries using the provider `helper.bash` script.
 
 As an example:
 
 ```console
-$ ./tensorrt/helper.sh 12.5 10.2.0.19 windows-x86_64
+$ ./tensorrt/helper.bash 12.5 10.2.0.19 windows-x86_64
 main: storePath: /nix/store/l2hq83ihj3bcm4z836cz2dw3ilkhwrpy-TensorRT-10.2.0.19.Windows.win10.cuda-12.5.zip
 {
   "windows-x86_64": {
