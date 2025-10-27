@@ -1795,29 +1795,6 @@ mapAliases {
   neochat = makePlasma5Throw "neochat"; # added 2022-05-10
   neocities-cli = neocities; # Added 2024-07-31
   neocomp = throw "neocomp has been remove because it fails to build and was unmaintained upstream"; # Added 2025-04-28
-  nerdfonts =
-    throw
-      "
-    nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
-    For example change:
-      fonts.packages = [
-        ...
-        (pkgs.nerdfonts.override { fonts = [ "
-      0
-      xproto
-      " "
-      DroidSansMono
-      " ]; })
-      ]
-    to
-      fonts.packages = [
-        ...
-        pkgs.nerd-fonts._0xproto
-        pkgs.nerd-fonts.droid-sans-mono
-      ]
-    or for all fonts
-      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
-  "; # Added 2024-11-09
   netbox_3_3 = throw "netbox 3.3 series has been removed as it was EOL"; # Added 2023-09-02
   netbox_3_5 = throw "netbox 3.5 series has been removed as it was EOL"; # Added 2024-01-22
   netbox_3_7 = throw "netbox 3.7 series has been removed as it was EOL"; # Added 2025-04-23
