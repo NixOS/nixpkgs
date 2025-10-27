@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_88,
   fetchFromGitHub,
   openssl,
   pkg-config,
@@ -8,18 +8,18 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage (finalAttrs: {
+rustPackages_1_88.rustPlatform.buildRustPackage (finalAttrs: {
   pname = "pixi-pack";
-  version = "0.6.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "Quantco";
     repo = "pixi-pack";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ccKJtGKhfYiJm8/2yOlCZtRECvax1dTgtNOtabzfhI4=";
+    hash = "sha256-R+JydhsYha4bQu7KBMEyV5IijnPtJZphbSib9JpchrI=";
   };
 
-  cargoHash = "sha256-+rwG9lPK0Ec7CCtVccwGrFOqfZqeXNA3WsN1QivABQA=";
+  cargoHash = "sha256-U2Ty8ZzNkhDc2O3I3ceFcZRk3fu0aSzwsdIuo6Edcx0=";
 
   buildInputs = [ openssl ];
 
