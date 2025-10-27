@@ -7,16 +7,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "procfd";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "deshaw";
     repo = "procfd";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-M2VFy7WqvoxgzEpS0qd7nGLRt2pKGZlfU9uUHlwDC7Y=";
+    hash = "sha256-KhnSHtPT9H9CWotwQIA9gFvwgm0PKsmDjQS817PxMw0=";
   };
 
-  cargoHash = "sha256-YmUzcJ8SM3iwjeDZXWBrDcT793ZyF6QdwxuYDh69xZw=";
+  cargoHash = "sha256-srFXs+h+ZMXeWRwGQUAqMACJG4ZUgztWr2ff6sRfkU8=";
 
   nativeInstallCheckInputs = [
     versionCheckHook
