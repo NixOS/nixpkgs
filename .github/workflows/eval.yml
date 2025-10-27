@@ -3,6 +3,9 @@ name: Eval
 on:
   workflow_call:
     inputs:
+      artifact-prefix:
+        required: true
+        type: string
       mergedSha:
         required: true
         type: string
@@ -145,7 +148,7 @@ jobs:
         if: inputs.targetSha
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
-          name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
+          name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
 
   compare:
@@ -169,7 +172,7 @@ jobs:
       - name: Download output paths and eval stats for all systems
         uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
-          pattern: diff-*
+          pattern: ${{ inputs.artifact-prefix }}diff-*
           path: diff
           merge-multiple: true
 
@@ -202,7 +205,7 @@ jobs:
       - name: Upload the comparison results
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
-          name: comparison
+          name: ${{ inputs.artifact-prefix }}comparison
           path: comparison/*
 
       - name: Add eval summary to commit statuses
@@ -250,6 +253,7 @@ jobs:
       - name: Add version comparison table to job summary
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         env:
+          ARTIFACT_PREFIX: ${{ inputs.artifact-prefix }}
           SYSTEMS: ${{ inputs.systems }}
           VERSIONS: ${{ needs.versions.outputs.versions }}
         with:
@@ -257,6 +261,7 @@ jobs:
             const { readFileSync } = require('node:fs')
             const path = require('node:path')
 
+            const prefix = process.env.ARTIFACT_PREFIX
             const systems = JSON.parse(process.env.SYSTEMS)
             const versions = JSON.parse(process.env.VERSIONS)
 
@@ -272,7 +277,7 @@ jobs:
                   [{ data: version }].concat(
                     systems.map((system) => {
                       try {
-                        const artifact = path.join('versions', `${version}-diff-${system}`)
+                        const artifact = path.join('versions', `${prefix}${version}-diff-${system}`)
                         const time = Math.round(
                           parseFloat(
                             readFileSync(
