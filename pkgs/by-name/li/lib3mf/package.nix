@@ -104,6 +104,10 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace cmake/lib3mfConfig.cmake \
       --replace-fail "$""{LIB3MF_ROOT_DIR}/include" "$""{LIB3MF_ROOT_DIR}/include/lib3mf" \
       --replace-fail "$""{LIB3MF_ROOT_DIR}/lib" "$out/lib"
+
+    # Use absolute CMAKE_INSTALL_INCLUDEDIR
+    substituteInPlace lib3mf.pc.in \
+      --replace-fail "includedir=$""{prefix}/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
   '';
 
   doCheck = true;
