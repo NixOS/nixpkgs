@@ -70,9 +70,7 @@ lib.makeOverridable (
       gitConfigFile ? config.gitConfigFile,
       # Passthrough attributes
       passthru ? { },
-      # Allow other attributes to pass through
-      ...
-    }@args:
+    }:
 
     /*
       NOTE:
