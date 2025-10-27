@@ -731,7 +731,10 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           (disallowedPackages prevStage)
           # Only cctools and ld64 are rebuilt from `bintoolsPackages` to avoid rebuilding their dependencies
           # again in this stage after building them in stage 1.
-          (lib.filterAttrs (name: _: name != "ld64" && name != "cctools") (bintoolsPackages prevStage))
+          (lib.removeAttrs (bintoolsPackages prevStage) [
+            "ld64"
+            "cctools"
+          ])
           (llvmToolsDeps prevStage)
           (sdkPackages prevStage)
           (sdkPackagesNoCC prevStage)

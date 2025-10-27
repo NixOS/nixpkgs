@@ -28,8 +28,12 @@ lib.makeScope newScope (
         buildPackages.gccWithoutTargetLibc.override (old: {
           bintools = old.bintools.override {
             libc = pkgs.libc;
+            noLibc = pkgs.libc == null;
+            nativeLibc = false;
           };
           libc = pkgs.libc;
+          noLibc = pkgs.libc == null;
+          nativeLibc = false;
         })
     );
 
