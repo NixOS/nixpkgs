@@ -42,11 +42,11 @@ stdenv.mkDerivation rec {
   desktopItems = [
     (makeDesktopItem {
       desktopName = "GNU Backgammon";
-      name = pname;
+      name = "gnubg";
       genericName = "Backgammon";
-      comment = meta.description;
-      exec = pname;
-      icon = pname;
+      comment = "World class backgammon application";
+      exec = "gnubg";
+      icon = "gnubg";
       categories = [
         "Game"
         "GTK"

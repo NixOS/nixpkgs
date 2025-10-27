@@ -32,19 +32,19 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    mkdir -p $out/bin $out/share/${pname}
+    mkdir -p $out/bin $out/share/emuflight-configurator
 
-    cp -r . $out/share/${pname}/
-    install -m 444 -D icon/emu_icon_128.png $out/share/icons/hicolor/128x128/apps/${pname}.png
+    cp -r . $out/share/emuflight-configurator/
+    install -m 444 -D icon/emu_icon_128.png $out/share/icons/hicolor/128x128/apps/emuflight-configurator.png
 
-    makeWrapper ${nwjs}/bin/nw $out/bin/${pname} --add-flags $out/share/${pname}
+    makeWrapper ${nwjs}/bin/nw $out/bin/emuflight-configurator --add-flags $out/share/emuflight-configurator
   '';
 
   desktopItems = [
     (makeDesktopItem {
-      name = pname;
-      exec = pname;
-      icon = pname;
+      name = "emuflight-configurator";
+      exec = "emuflight-configurator";
+      icon = "emuflight-configurator";
       comment = "Emuflight configuration tool";
       desktopName = "Emuflight Configurator";
       genericName = "Flight controller configuration tool";

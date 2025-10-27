@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ++ lib.optional withDocs "devdoc";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "mirror://gnome/sources/dconf/${lib.versions.majorMinor version}/dconf-${version}.tar.xz";
     sha256 = "0cs5nayg080y8pb9b7qccm1ni8wkicdmqp1jsgc22110r6j24zyg";
   };
 
