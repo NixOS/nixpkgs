@@ -12101,10 +12101,6 @@ with pkgs;
 
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
-  qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin) sigtool;
-  };
-
   qemu-python-utils = python3Packages.toPythonApplication (
     python3Packages.qemu.override {
       fuseSupport = true;
