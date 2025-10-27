@@ -13,9 +13,6 @@
   mpiCheckPhaseHook,
   metis,
   parmetis,
-  withExamples ? false,
-  fortranSupport ? true,
-  enableOpenMP ? true,
   # Todo: ask for permission of unfree parmetis
   withParmetis ? false,
 }:
@@ -49,8 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     pkg-config
-  ]
-  ++ lib.optionals fortranSupport [
     gfortran
   ];
 
@@ -65,17 +60,15 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals stdenv.cc.isClang [
     gfortran.cc.lib
-  ]
-  ++ lib.optionals (enableOpenMP && stdenv.cc.isClang) [
     llvmPackages.openmp
   ];
 
   cmakeFlags = [
-    (lib.cmakeBool "enable_examples" withExamples)
-    (lib.cmakeBool "enable_openmp" enableOpenMP)
+    (lib.cmakeBool "enable_examples" false)
+    (lib.cmakeBool "enable_openmp" true)
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
     (lib.cmakeBool "BUILD_STATIC_LIBS" stdenv.hostPlatform.isStatic)
-    (lib.cmakeBool "XSDK_ENABLE_Fortran" fortranSupport)
+    (lib.cmakeBool "XSDK_ENABLE_Fortran" true)
     (lib.cmakeBool "BLA_PREFER_PKGCONFIG" true)
     (lib.cmakeBool "TPL_ENABLE_INTERNAL_BLASLIB" false)
     (lib.cmakeBool "TPL_ENABLE_LAPACKLIB" true)
