@@ -69,7 +69,7 @@
       #testName: ${testName}
     ''
     + (
-      if (enableAutologin) then
+      if enableAutologin then
         ''
           with subtest("cosmic-greeter initialisation"):
               machine.wait_for_unit("graphical.target", timeout=120)

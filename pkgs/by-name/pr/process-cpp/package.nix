@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  fetchpatch2,
   testers,
   gitUpdater,
   cmake,
@@ -28,6 +29,16 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [
     "out"
     "dev"
+  ];
+
+  patches = [
+    # Fix compat with CMake 4
+    # Remove when version > 3.0.2
+    (fetchpatch2 {
+      name = "0001-process-cpp-Bump-cmake_minimum_required-to-version-3.10.patch";
+      url = "https://gitlab.com/ubports/development/core/lib-cpp/process-cpp/-/commit/c374b62cb79d668505c1c8dc55edddc938a573ba.diff";
+      hash = "sha256-2H6f+EAR7p4mb0ReNl8LaosPVF/CNRm+PiYV7tkOQ/w=";
+    })
   ];
 
   postPatch = ''

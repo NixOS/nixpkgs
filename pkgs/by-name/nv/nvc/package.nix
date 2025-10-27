@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   autoreconfHook,
   check,
   flex,
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nvc";
-  version = "1.18.0";
+  version = "1.18.1";
 
   src = fetchFromGitHub {
     owner = "nickg";
     repo = "nvc";
     tag = "r${version}";
-    hash = "sha256-PpSoqDCjvROkfXSuOlGxqa9ChdBItu/PQztdsXvVC60=";
+    hash = "sha256-mf6CMUdpIk8O+soKXpbI94h8RUf1MrbOVDwBIJyKitA=";
   };
 
   nativeBuildInputs = [

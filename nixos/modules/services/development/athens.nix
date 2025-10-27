@@ -7,7 +7,7 @@
 let
   cfg = config.services.athens;
 
-  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig ({
+  athensConfig = lib.flip lib.recursiveUpdate cfg.extraConfig {
     GoBinary = "${cfg.goBinary}/bin/go";
     GoEnv = cfg.goEnv;
     GoBinaryEnvVars = lib.mapAttrsToList (k: v: "${k}=${v}") cfg.goBinaryEnvVars;
@@ -141,7 +141,7 @@ let
         };
       };
     };
-  });
+  };
 
   configFile = lib.pipe athensConfig [
     (lib.filterAttrsRecursive (_k: v: v != null))

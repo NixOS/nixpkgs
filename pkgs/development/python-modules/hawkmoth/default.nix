@@ -3,13 +3,18 @@
   buildPythonPackage,
   fetchFromGitHub,
   hatchling,
+  llvmPackages_20,
   libclang,
   sphinx,
-  clang,
   pytestCheckHook,
   strictyaml,
 }:
+let
+  libclang_20 = libclang.override {
+    llvmPackages = llvmPackages_20;
+  };
 
+in
 buildPythonPackage rec {
   pname = "hawkmoth";
   version = "0.21.0";
@@ -25,13 +30,13 @@ buildPythonPackage rec {
   build-system = [ hatchling ];
 
   dependencies = [
-    libclang
+    libclang_20
     sphinx
   ];
-  propagatedBuildInputs = [ clang ];
+  propagatedBuildInputs = [ llvmPackages_20.clang ];
 
   nativeCheckInputs = [
-    clang
+    llvmPackages_20.clang
     pytestCheckHook
     strictyaml
   ];

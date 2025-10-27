@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       offload the choice of the main loop to the application.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 })

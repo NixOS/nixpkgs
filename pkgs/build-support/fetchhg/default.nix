@@ -18,7 +18,7 @@ lib.extendMkDerivation {
       fetchSubrepos ? false,
       preferLocalBuild ? true,
     }:
-    # TODO: statically check if mercurial as the https support if the url starts with https.
+    # TODO: statically check if mercurial has https support if the url starts with https.
     {
       name = "hg-archive" + (lib.optionalString (name != null) "-${name}");
       builder = ./builder.sh;

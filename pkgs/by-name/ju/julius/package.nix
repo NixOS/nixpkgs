@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # This fixes the build with cmake 4
+    ./cmake4.patch
     # This fixes the darwin bundle generation, sets min. deployment version
     # and patches SDL2_mixer include
     ./darwin-fixes.patch

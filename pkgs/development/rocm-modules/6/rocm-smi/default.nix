@@ -3,26 +3,35 @@
   stdenv,
   fetchFromGitHub,
   rocmUpdateScript,
+  pkg-config,
+  libdrm,
   cmake,
   wrapPython,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-smi";
-  version = "6.3.3";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm_smi_lib";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-j9pkyUt+p6IkhawIhiTymqDBydxXZunxmdyCyRN0RxE=";
+    hash = "sha256-yJ3Bf+tM39JWbY+A0NlpHNkvythdAdz6ZVp1AvLcXhk=";
   };
 
-  patches = [ ./cmake.patch ];
+  patches = [
+    ./cmake.patch
+  ];
+
+  propagatedBuildInputs = [
+    libdrm
+  ];
 
   nativeBuildInputs = [
     cmake
     wrapPython
+    pkg-config
   ];
 
   cmakeFlags = [
@@ -33,11 +42,21 @@ stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  postInstall = ''
-    wrapPythonProgramsIn $out
-    mv $out/libexec/rocm_smi/.rsmiBindingsInit.py-wrapped $out/libexec/rocm_smi/rsmiBindingsInit.py
-    mv $out/libexec/rocm_smi/.rsmiBindings.py-wrapped $out/libexec/rocm_smi/rsmiBindings.py
-  '';
+  postInstall =
+    # wrap python programs, but undo two that need to be importable at that path
+    ''
+      wrapPythonProgramsIn $out
+      mv $out/libexec/rocm_smi/.rsmiBindingsInit.py-wrapped $out/libexec/rocm_smi/rsmiBindingsInit.py
+      mv $out/libexec/rocm_smi/.rsmiBindings.py-wrapped $out/libexec/rocm_smi/rsmiBindings.py
+    ''
+    # workaround: propagate libdrm/ manually
+    # rocm-toolchain doesn't automatically add buildInputs to isystem include path like
+    # wrapper based toolchains, cmake files often don't find_package(rocm-smi) so
+    # can't rely on cmake propagated interface
+    # upstream have been shipping libdrm copied into /opt/rocm
+    + ''
+      ln -s ${libdrm.dev}/include/libdrm/ $out/include/
+    '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;

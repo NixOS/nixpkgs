@@ -345,6 +345,17 @@ stdenv.mkDerivation (
       })
     ]
 
+    # Fix build with gcc15
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/25662
+    # https://gitlab.haskell.org/ghc/ghc/-/merge_requests/13863
+    ++ lib.optionals (lib.versions.majorMinor version == "9.4") [
+      (fetchpatch {
+        name = "ghc-hp2ps-c-gnu17.patch";
+        url = "https://src.fedoraproject.org/rpms/ghc/raw/9c26d7c3c3de73509a25806e5663b37bcf2e0b4e/f/hp2ps-C-gnu17.patch";
+        hash = "sha256-Vr5wkiSE1S5e+cJ8pWUvG9KFpxtmvQ8wAy08ElGNp5E=";
+      })
+    ]
+
     ++ [
       # Don't generate code that doesn't compile when --enable-relocatable is passed to Setup.hs
       # Can be removed if the Cabal library included with ghc backports the linked fix
@@ -380,9 +391,6 @@ stdenv.mkDerivation (
     ];
 
     postPatch = "patchShebangs .";
-
-    # GHC needs the locale configured during the Haddock phase.
-    LANG = "en_US.UTF-8";
 
     # GHC is a bit confused on its cross terminology.
     # TODO(@sternenseemann): investigate coreutils dependencies and pass absolute paths
@@ -438,9 +446,15 @@ stdenv.mkDerivation (
       echo -n "${buildMK}" > mk/build.mk
       sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
     ''
-    + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
-      export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
-    ''
+    # Haddock and sphinx need a working locale
+    + lib.optionalString (enableDocs || enableHaddockProgram) (
+      ''
+        export LANG="en_US.UTF-8"
+      ''
+      + lib.optionalString (stdenv.buildPlatform.libc == "glibc") ''
+        export LOCALE_ARCHIVE="${buildPackages.glibcLocales}/lib/locale/locale-archive"
+      ''
+    )
     + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
     ''
@@ -514,7 +528,7 @@ stdenv.mkDerivation (
       "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
       "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
     ]
-    ++ lib.optionals (disableLargeAddressSpace) [
+    ++ lib.optionals disableLargeAddressSpace [
       "--disable-large-address-space"
     ]
     ++ lib.optionals enableNuma [

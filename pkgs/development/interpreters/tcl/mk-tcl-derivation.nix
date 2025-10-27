@@ -41,7 +41,7 @@ let
 
   self = (
     stdenv.mkDerivation (
-      (builtins.removeAttrs attrs [
+      (removeAttrs attrs [
         "addTclConfigureFlags"
         "checkPhase"
         "checkInputs"

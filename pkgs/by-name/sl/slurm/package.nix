@@ -22,7 +22,7 @@
   numactl,
   readline,
   freeipmi,
-  xorg,
+  xauth,
   lz4,
   rdma-core,
   nixosTests,
@@ -33,13 +33,11 @@
   http-parser,
   # enable internal X11 support via libssh2
   enableX11 ? true,
-  enableGtk2 ? false,
-  gtk2,
   enableNVML ? config.cudaSupport,
   nvml,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "slurm";
   version = "25.05.3.1";
 
@@ -49,7 +47,7 @@ stdenv.mkDerivation rec {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
+    rev = "slurm-${builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version}";
     hash = "sha256-W/q9eN4Ov3pxp2qyr3b7G4ayDaNtFUPQeAcOHCB23Q8=";
   };
 
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace src/common/env.c \
-        --replace "/bin/echo" "${coreutils}/bin/echo"
+        --replace "/bin/echo" "${lib.getExe' coreutils "echo"}"
 
     # Autoconf does not support split packages for pmix (libs and headers).
     # Fix the path to the pmix libraries, so dlopen can find it.
@@ -71,7 +69,7 @@ stdenv.mkDerivation rec {
   ''
   + (lib.optionalString enableX11 ''
     substituteInPlace src/common/x11_util.c \
-        --replace '"/usr/bin/xauth"' '"${xorg.xauth}/bin/xauth"'
+        --replace '"/usr/bin/xauth"' '"${lib.getExe xauth}"'
   '');
 
   # nixos test fails to start slurmd with 'undefined symbol: slurm_job_preempt_mode'
@@ -108,13 +106,12 @@ stdenv.mkDerivation rec {
     libbpf
     http-parser
   ]
-  ++ lib.optionals enableX11 [ xorg.xauth ]
-  ++ lib.optionals enableGtk2 [ gtk2 ]
+  ++ lib.optionals enableX11 [ xauth ]
   ++ lib.optionals enableNVML [
     (runCommand "collect-nvml" { } ''
       mkdir $out
-      ln -s ${nvml.dev}/include $out/include
-      ln -s ${nvml.lib}/lib/stubs $out/lib
+      ln -s ${lib.getDev nvml}/include $out/include
+      ln -s ${lib.getLib nvml}/lib/stubs $out/lib
     '')
   ];
 
@@ -133,9 +130,8 @@ stdenv.mkDerivation rec {
     "--with-bpf=${libbpf}"
     "--without-rpath" # Required for configure to pick up the right dlopen path
   ]
-  ++ (lib.optional enableGtk2 "--disable-gtktest")
   ++ (lib.optional (!enableX11) "--disable-x11")
-  ++ (lib.optional (enableNVML) "--with-nvml");
+  ++ (lib.optional enableNVML "--with-nvml");
 
   preConfigure = ''
     patchShebangs ./doc/html/shtml2html.py
@@ -150,14 +146,14 @@ stdenv.mkDerivation rec {
 
   passthru.tests.slurm = nixosTests.slurm;
 
-  meta = with lib; {
+  meta = {
     homepage = "http://www.schedmd.com/";
     description = "Simple Linux Utility for Resource Management";
-    platforms = platforms.linux;
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       jagajaga
       markuskowa
     ];
   };
-}
+})

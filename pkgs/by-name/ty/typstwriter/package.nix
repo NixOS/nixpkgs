@@ -41,6 +41,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Bzero/typstwriter";
     license = lib.licenses.mit;
     mainProgram = "typstwriter";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

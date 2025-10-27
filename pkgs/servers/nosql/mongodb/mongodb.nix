@@ -5,8 +5,6 @@
   buildPackages,
   boost,
   gperftools,
-  pcre2,
-  pcre-cpp,
   snappy,
   zlib,
   yaml-cpp,
@@ -49,6 +47,7 @@ let
 
   system-libraries = [
     "boost"
+    #pcre2 -- breaks on pcre2-10.46 with at least version 7.0.24
     "snappy"
     "yaml"
     "zlib"
@@ -57,13 +56,7 @@ let
     #"valgrind" -- mongodb only requires valgrind.h, which is vendored in the source.
     #"wiredtiger"
   ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ]
-  ++ lib.optionals (lib.versionOlder version "7.0") [
-    "pcre"
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "7.0") [
-    "pcre2"
-  ];
+  ++ lib.optionals stdenv.hostPlatform.isLinux [ "tcmalloc" ];
   inherit (lib) systems subtractLists;
 
 in
@@ -92,8 +85,6 @@ stdenv.mkDerivation rec {
     yaml-cpp
     openssl
     openldap
-    pcre2
-    pcre-cpp
     sasl
     snappy
     zlib

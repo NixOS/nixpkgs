@@ -10,7 +10,7 @@
   opencv4,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "qimgv";
   version = "1.0.3-unstable-2024-10-11";
 

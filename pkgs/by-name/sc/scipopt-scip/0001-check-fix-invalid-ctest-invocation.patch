@@ -1,0 +1,40 @@
+From 7772c64ee2face1c1099c23ecbfd20ff663cffc3 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Tue, 7 Oct 2025 16:19:31 +0300
+Subject: [PATCH] check: fix invalid ctest invocation
+
+ctest doesn't like `-R "-default"`. CMake 4.0 fails with the following
+error message:
+
+> CMake Error: Invalid value used with -R
+
+`-R` normally specifies the regex that needs to match. If none is
+specified, all are selected:
+
+https://cmake.org/cmake/help/latest/manual/ctest.1.html#cmdoption-ctest-R
+
+This maybe never worked, but got silently ignored until
+https://cmake.org/cmake/help/latest/policy/CMP0175.html
+
+Removing that regex should only cause *more* tests to get selected, not
+less - and the build now succeeds with it.
+---
+ check/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/check/CMakeLists.txt b/check/CMakeLists.txt
+index 0d667d5..c26b978 100644
+--- a/check/CMakeLists.txt
++++ b/check/CMakeLists.txt
+@@ -4,7 +4,7 @@ include(CTest)
+ # add a custom SCIP check target 'scip_check'
+ #
+ add_custom_target(scip_check
+-                COMMAND ${CMAKE_CTEST_COMMAND} -R "-default" -E "applications" --output-on-failure
++                COMMAND ${CMAKE_CTEST_COMMAND} -E "applications" --output-on-failure
+                 DEPENDS scip
+                 )
+ 
+-- 
+2.51.0
+

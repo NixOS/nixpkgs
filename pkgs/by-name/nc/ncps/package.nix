@@ -8,20 +8,20 @@
 let
   finalAttrs = {
     pname = "ncps";
-    version = "0.3.0";
+    version = "0.4.0";
 
     src = fetchFromGitHub {
       owner = "kalbasit";
       repo = "ncps";
       tag = "v${finalAttrs.version}";
-      hash = "sha256-mBiasGQgwP8dRQqtn7z+tLKECDd1p0JE2nvCYLru0Ts=";
+      hash = "sha256-A2HLbob9MHHCUNIC1OBwyFeE6KuEIdXW75hPSZMgicI=";
     };
 
     ldflags = [
       "-X github.com/kalbasit/ncps/cmd.Version=v${finalAttrs.version}"
     ];
 
-    vendorHash = "sha256-5QpzU+cy14cdR5Oi2vwA+BbMSTPMXlhyq9RpzbMsRZQ=";
+    vendorHash = "sha256-Plc1L23qOYj1evVIG+O3OxVAKVeEIA+Z6sP4Z/T1SxU=";
 
     doCheck = true;
     checkFlags = [ "-race" ];
@@ -40,7 +40,10 @@ let
       homepage = "https://github.com/kalbasit/ncps";
       license = lib.licenses.mit;
       mainProgram = "ncps";
-      maintainers = [ lib.maintainers.kalbasit ];
+      maintainers = with lib.maintainers; [
+        kalbasit
+        aciceri
+      ];
     };
   };
 in

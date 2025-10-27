@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
         }
       ];
     in
-    builtins.map (
+    map (
       entry:
       fetchpatch {
         url = "https://github.com/structurizr/cli/commit/${entry.rev}.patch";

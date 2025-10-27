@@ -36,7 +36,6 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/nushell/nufmt";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
-      iogamaster
       khaneliman
     ];
     mainProgram = "nufmt";

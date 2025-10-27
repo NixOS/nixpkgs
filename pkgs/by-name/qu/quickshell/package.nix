@@ -22,7 +22,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "quickshell";
-  version = "0.2.0";
+  version = "0.2.1";
 
   # github mirror: https://github.com/quickshell-mirror/quickshell
   src = fetchFromGitea {
@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "quickshell";
     repo = "quickshell";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-vqkSDvh7hWhPvNjMjEDV4KbSCv2jyl2Arh73ZXe274k=";
+    hash = "sha256-e++Ogy91Sv7gGLMdAqZaBzbH/UmPWZ4GAt7VDCA66aU=";
   };
 
   nativeBuildInputs = [

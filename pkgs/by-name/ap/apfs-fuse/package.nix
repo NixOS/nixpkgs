@@ -22,6 +22,12 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # fix for CMake v4
+    # https://github.com/sgan81/apfs-fuse/pull/211
+    ./cmake-v4.patch
+  ];
+
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace CMakeLists.txt \
       --replace "/usr/local/lib/libosxfuse.dylib" "fuse"

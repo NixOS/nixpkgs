@@ -34,14 +34,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2025.8.4";
+  version = "2025.10.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "esphome";
     tag = version;
-    hash = "sha256-L3CKfZGPEaMv9nmKX0S9qRXtZrfleQqgN3KHJjIEZew=";
+    hash = "sha256-k/wqS5koXQ/hGhDNhxuv/t496+f0YPHZibkUjRyCjwo=";
   };
 
   patches = [
@@ -166,6 +166,19 @@ python.pkgs.buildPythonApplication rec {
     '';
 
   doInstallCheck = true;
+
+  disabledTests = [
+    # tries to import platformio, which is wrapped in an fhsenv
+    "test_clean_build"
+    "test_clean_build_empty_cache_dir"
+    "test_clean_all"
+    "test_clean_all_partial_exists"
+    # tries to use esptool, which is wrapped in an fhsenv
+    "test_upload_using_esptool_path_conversion"
+    "test_upload_using_esptool_with_file_path"
+    # AssertionError: Expected 'run_external_command' to have been called once. Called 0 times.
+    "test_run_platformio_cli_sets_environment_variables"
+  ];
 
   versionCheckProgramArg = "--version";
 

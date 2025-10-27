@@ -34,13 +34,13 @@
 
 let
   pname = "psycopg";
-  version = "3.2.9";
+  version = "3.2.12";
 
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = "psycopg";
     tag = version;
-    hash = "sha256-mMhfULdvqphwdEqynLNq+7XCNmqmf+zi1SGumC/6qAc=";
+    hash = "sha256-g1mms12EqRiln5dK/BmBa9dd9duSPRgRIiZkVmSRaYI=";
   };
 
   patches = [
@@ -68,9 +68,6 @@ let
     # move into source root after patching
     postPatch = ''
       cd psycopg_c
-
-      substituteInPlace pyproject.toml \
-        --replace-fail "Cython >= 3.0.0, < 3.1.0" "Cython"
     '';
 
     nativeBuildInputs = [
@@ -200,6 +197,8 @@ buildPythonPackage rec {
     "test_package_version"
     # expects timeout, but we have no route in the sandbox
     "test_connect_error_multi_hosts_each_message_preserved"
+    # Flaky, fails intermittently
+    "test_break_attempts"
   ];
 
   disabledTestPaths = [

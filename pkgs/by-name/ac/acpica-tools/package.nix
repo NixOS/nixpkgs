@@ -34,9 +34,9 @@ stdenv.mkDerivation (finalAttrs: {
     "iasl"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
+  env.NIX_CFLAGS_COMPILE = toString [
     "-O3"
-  ]);
+  ];
 
   enableParallelBuilding = true;
 

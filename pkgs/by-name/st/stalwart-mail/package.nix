@@ -20,19 +20,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "stalwart-mail" + (lib.optionalString stalwartEnterprise "-enterprise");
-  version = "0.13.2";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "stalwart";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-VdeHb1HVGXA5RPenhhK4r/kkQiLG8/4qhdxoJ3xIqR4=";
+    hash = "sha256-KH68lFF1eqYZiI5AjzDRX6Z21MQ9At4jH6x9jsQzejE=";
   };
 
-  cargoHash = "sha256-Wu6skjs3Stux5nCX++yoQPeA33Qln67GoKcob++Ldng=";
+  cargoHash = "sha256-pjmAIC7g8SbMxZvTgaXH8GrRPhITDjC5psJpfT+vV6M=";
+
+  depsBuildBuild = [
+    pkg-config
+    zstd
+  ];
 
   nativeBuildInputs = [
-    pkg-config
     protobuf
     rustPlatform.bindgenHook
   ];

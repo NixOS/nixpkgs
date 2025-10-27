@@ -12,8 +12,8 @@ index e0ddc1f..a4e8523 100644
              eio
 diff --git a/bin/ui_base.ml b/bin/ui_base.ml
 index f56ee8d..8d8ed70 100644
---- a/bin/ui_base.ml
-+++ b/bin/ui_base.ml
+--- a/bin/UI_base.ml
++++ b/bin/UI_base.ml
 @@ -587,7 +587,7 @@ let ui_loop ~quit ~term root =
        if term_width <> prev_term_width || term_height <> prev_term_height then (
          Lwd.set Vars.term_width_height (term_width, term_height)

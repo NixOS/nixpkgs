@@ -89,8 +89,6 @@ in
   nasm,
   nspr,
   nss_esr,
-  nss_3_114,
-  nss_3_115,
   nss_latest,
   onnxruntime,
   pango,
@@ -573,16 +571,7 @@ buildStdenv.mkDerivation {
       xorg.pixman
       xorg.xorgproto
       zlib
-      (
-        if (lib.versionAtLeast version "144") then
-          nss_latest
-        else if (lib.versionAtLeast version "143") then
-          nss_3_115
-        else if (lib.versionAtLeast version "141") then
-          nss_3_114
-        else
-          nss_esr
-      )
+      (if (lib.versionAtLeast version "144") then nss_latest else nss_esr)
     ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional jackSupport libjack2

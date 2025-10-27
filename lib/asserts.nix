@@ -47,7 +47,7 @@ rec {
     :::
   */
   # TODO(Profpatsch): add tests that check stderr
-  assertMsg = pred: msg: pred || builtins.throw msg;
+  assertMsg = pred: msg: pred || throw msg;
 
   /**
     Specialized `assertMsg` for checking if `val` is one of the elements

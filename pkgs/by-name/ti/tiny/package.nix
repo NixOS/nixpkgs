@@ -37,7 +37,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       Br1ght0ne
-      vyp
     ];
     mainProgram = "tiny";
   };

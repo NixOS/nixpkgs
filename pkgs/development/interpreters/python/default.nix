@@ -20,10 +20,10 @@
         sourceVersion = {
           major = "3";
           minor = "13";
-          patch = "7";
+          patch = "8";
           suffix = "";
         };
-        hash = "sha256-VGL5CZ39MOI43vg8cdkYl9jKpf9uvHpQ8U1IAs2qp5o=";
+        hash = "sha256-uZEHMFJrKYKZtGs1WVztkFVyLfYMBq1jAfak4scoolI=";
       };
     };
 
@@ -36,9 +36,9 @@
         major = "2";
         minor = "7";
         patch = "18";
-        suffix = ".8"; # ActiveState's Python 2 extended support
+        suffix = ".12"; # ActiveState's Python 2 extended support
       };
-      hash = "sha256-HUOzu3uJbtd+3GbmGD35KOk/CDlwL4S7hi9jJGRFiqI=";
+      hash = "sha256-RuEgfpags9wJm9Xe0daotqUx4knABEUc7DvtgnQXEfE=";
       inherit passthruFun;
     };
 
@@ -47,10 +47,10 @@
       sourceVersion = {
         major = "3";
         minor = "10";
-        patch = "18";
+        patch = "19";
         suffix = "";
       };
-      hash = "sha256-rmZbxnir2atqbhVz0kgWJaU3GbxRfppjTtK5/vrjgX8=";
+      hash = "sha256-yPSlllciAdgd19+R9w4XfhmnDx1ImWi1S1+78pqXwHY=";
       inherit passthruFun;
     };
 
@@ -59,10 +59,10 @@
       sourceVersion = {
         major = "3";
         minor = "11";
-        patch = "13";
+        patch = "14";
         suffix = "";
       };
-      hash = "sha256-j7X5+8dgn6giyzFUmIRXXbf9llfL/7iVELXXl1ljqDo=";
+      hash = "sha256-jT7Y7FyIwclfXlWGEqclRQ0kUoE92tXlj9saU7Egm3g=";
       inherit passthruFun;
     };
 
@@ -92,11 +92,24 @@
         major = "3";
         minor = "14";
         patch = "0";
-        suffix = "rc3";
+        suffix = "";
       };
-      hash = "sha256-ZG3JReScc6FBiW3toS1D8/KT/WlCZ3TBb8Q0lhgOj80=";
+      hash = "sha256-Ipna5ULTlc44g6ygDTyRAwfNaOCy9zNgmMjnt+7p8+k=";
       inherit passthruFun;
     };
+
+    python315 = callPackage ./cpython {
+      self = __splicedPackages.python315;
+      sourceVersion = {
+        major = "3";
+        minor = "15";
+        patch = "0";
+        suffix = "a1";
+      };
+      hash = "sha256-MZSTnUiO6u79z5kNNVQtmtHOeIeJxOIwWiBg63BY5aQ=";
+      inherit passthruFun;
+    };
+
     # Minimal versions of Python (built without optional dependencies)
     python3Minimal =
       (callPackage ./cpython (

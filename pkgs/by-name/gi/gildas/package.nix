@@ -24,8 +24,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "sep25a";
-  version = "20250901_a";
+  srcVersion = "oct25c";
+  version = "20251001_c";
   pname = "gildas";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz"
     ];
-    hash = "sha256-W2l2n6W8L5Gr7taw9ZUvVVp9sZvjne56sjtUU91U0oE=";
+    hash = "sha256-uMDIsjvq7hiEw2VVosDBjJgUrS6/KUQ/KSOUNlTcJck=";
   };
 
   nativeBuildInputs = [

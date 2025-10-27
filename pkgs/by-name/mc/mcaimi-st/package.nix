@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation {
   pname = "mcaimi-st";
-  version = "0-unstable-2025-03-12";
+  version = "0-unstable-2025-09-22";
 
   src = fetchFromGitHub {
     owner = "mcaimi";
     repo = "st";
-    rev = "f1ae5cdafadceaf622e1c0ff56da04803bf658b3";
-    hash = "sha256-rGru0LqbuJQ4QOts6xYDztAST0K5HCys2gUPZg2w4SE=";
+    rev = "667ded8e13457b0ba9d84b98545885e5a3e9dcc7";
+    hash = "sha256-LbMxZhNs0sfgTm0R+BqxZpUPjs0Y3a2H40BYdMzO2CU=";
   };
 
   nativeBuildInputs = [
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
     description = "Suckless Terminal fork";
     mainProgram = "st";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

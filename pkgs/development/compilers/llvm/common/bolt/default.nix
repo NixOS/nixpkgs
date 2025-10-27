@@ -12,7 +12,7 @@
   libclang,
   version,
   python3,
-  buildLlvmTools,
+  buildLlvmPackages,
   patches ? [ ],
   devExtraCmakeFlags ? [ ],
   fetchpatch,
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (''
+  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } ''
     mkdir $out
     cp -r ${monorepoSrc}/cmake "$out"
     cp -r ${monorepoSrc}/${finalAttrs.pname} "$out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     # BOLT re-runs tablegen against LLVM sources, so needs them available.
     cp -r ${monorepoSrc}/llvm/ "$out"
     chmod -R +w $out/llvm
-  '');
+  '';
 
   sourceRoot = "${finalAttrs.src.name}/bolt";
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+    (lib.cmakeFeature "LLVM_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
   ]
   ++ devExtraCmakeFlags;
 

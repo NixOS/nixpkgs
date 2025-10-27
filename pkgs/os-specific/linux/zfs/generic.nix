@@ -57,7 +57,7 @@ let
 
     let
       inherit (lib)
-        any
+        elem
         optionalString
         optionals
         optional
@@ -66,11 +66,11 @@ let
 
       smartmon = smartmontools.override { inherit enableMail; };
 
-      buildKernel = any (n: n == configFile) [
+      buildKernel = elem configFile [
         "kernel"
         "all"
       ];
-      buildUser = any (n: n == configFile) [
+      buildUser = elem configFile [
         "user"
         "all"
       ];
@@ -155,8 +155,12 @@ let
           substituteInPlace ./config/zfs-build.m4 \
             --replace-fail "bashcompletiondir=/etc/bash_completion.d" \
               "bashcompletiondir=$out/share/bash-completion/completions"
-
+        ''
+        + lib.optionalString (lib.versionOlder version "2.4.0") ''
           substituteInPlace ./cmd/arc_summary --replace-fail "/sbin/modinfo" "modinfo"
+        ''
+        + lib.optionalString (lib.versionAtLeast version "2.4.0") ''
+          substituteInPlace ./cmd/zarcsummary --replace-fail "/sbin/modinfo" "modinfo"
         ''
         + ''
           echo 'Supported Kernel versions:'
@@ -342,7 +346,7 @@ let
         # https://github.com/openzfs/zfs/blob/077269bfeddf2d35eb20f98289ac9d017b4a32ff/lib/libspl/include/sys/isa_defs.h#L267-L270
         platforms =
           with lib.systems.inspect.patterns;
-          map (p: p // isLinux) ([
+          map (p: p // isLinux) [
             isx86
             isAarch
             isPower
@@ -351,7 +355,7 @@ let
             isMips
             isRiscV64
             isLoongArch64
-          ]);
+          ];
 
         inherit maintainers;
         mainProgram = "zfs";

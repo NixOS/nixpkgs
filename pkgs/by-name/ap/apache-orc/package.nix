@@ -73,7 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Smallest, fastest columnar storage for Hadoop workloads";
     homepage = "https://github.com/apache/orc/";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 })

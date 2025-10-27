@@ -24,7 +24,6 @@ buildPythonPackage rec {
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [
-      evils
       Luflosi
     ];
   };

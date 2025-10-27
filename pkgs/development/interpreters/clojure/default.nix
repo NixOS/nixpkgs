@@ -4,23 +4,19 @@
   bashNonInteractive,
   fetchurl,
   installShellFiles,
-  jdk21,
+  jdk,
   rlwrap,
   makeWrapper,
   writeScript,
 }:
-let
-  # set this to an LTS version of java
-  jdk = jdk21;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "clojure";
-  version = "1.12.2.1565";
+  version = "1.12.3.1577";
 
   src = fetchurl {
     # https://github.com/clojure/brew-install/releases
     url = "https://github.com/clojure/brew-install/releases/download/${finalAttrs.version}/clojure-tools-${finalAttrs.version}.tar.gz";
-    hash = "sha256-qj0RqgIL+pgbqdMnG+vCfHirazBVA8ro2zCKOlDzYXk=";
+    hash = "sha256-u/hROuiLmHPpeBroaty1YLgSCcZv6Uy+ckKK85seusw=";
   };
 
   nativeBuildInputs = [

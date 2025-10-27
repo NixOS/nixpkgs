@@ -36,6 +36,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/iwalton3/python-mpv-jsonipc";
     description = "Python API to MPV using JSON IPC";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

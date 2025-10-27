@@ -1249,7 +1249,7 @@ in
         devicesWithClevis = filterAttrs (device: _: (hasAttr device clevis.devices)) luks.devices;
       in
       mkIf (clevis.enable && systemd.enable) (
-        (mapAttrs' (
+        mapAttrs' (
           name: _:
           nameValuePair "cryptsetup-clevis-${name}" {
             wantedBy = [ "systemd-cryptsetup@${utils.escapeSystemdPath name}.service" ];
@@ -1281,7 +1281,7 @@ in
               ExecStop = "${config.boot.initrd.systemd.package.util-linux}/bin/umount /clevis-${name}";
             };
           }
-        ) devicesWithClevis)
+        ) devicesWithClevis
       );
 
     environment.systemPackages = [ pkgs.cryptsetup ];

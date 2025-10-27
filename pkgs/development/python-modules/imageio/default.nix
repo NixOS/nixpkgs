@@ -24,9 +24,10 @@
   tifffile,
 
   # tests
-  pytestCheckHook,
-  gitMinimal,
   fsspec,
+  gitMinimal,
+  pytestCheckHook,
+  writableTmpDirAsHomeHook,
 }:
 
 let
@@ -42,14 +43,14 @@ in
 
 buildPythonPackage rec {
   pname = "imageio";
-  version = "2.37.0";
+  version = "2.37.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "imageio";
     repo = "imageio";
     tag = "v${version}";
-    hash = "sha256-/nxJxZrTYX7F2grafIWwx9SyfR47ZXyaUwPHMEOdKkI=";
+    hash = "sha256-eNS++8pD+m51IxRR23E98K0f3rwNez/UiByA+PSfUH8=";
   };
 
   postPatch = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -90,19 +91,12 @@ buildPythonPackage rec {
     gitMinimal
     psutil
     pytestCheckHook
+    writableTmpDirAsHomeHook
   ]
   ++ fsspec.optional-dependencies.github
   ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pytestFlags = [ "--test-images=file://${test_images}" ];
-
-  # These should have had `needs_internet` mark applied but don't so far.
-  # See https://github.com/imageio/imageio/pull/1142
-  disabledTests = [
-    "test_read_stream"
-    "test_uri_reading"
-    "test_trim_filter"
-  ];
 
   disabledTestMarks = [ "needs_internet" ];
 
@@ -111,7 +105,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export IMAGEIO_USERDIR=$(mktemp -d)
-    export HOME=$(mktemp -d)
   '';
 
   meta = {

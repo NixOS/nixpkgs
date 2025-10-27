@@ -8,7 +8,7 @@
 let
   cfg = config.services.journald.gateway;
 
-  cliArgs = lib.cli.toGNUCommandLineShell { } {
+  cliArgs = lib.cli.toCommandLineShellGNU { } {
     # If either of these are null / false, they are not passed in the command-line
     inherit (cfg)
       cert

@@ -27,7 +27,7 @@
   pytest-xdist,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "dbt-common";
   version = "1.28.0-unstable-2025-08-14";
   pyproject = true;

@@ -32,6 +32,9 @@ buildPythonPackage rec {
   # no pytest tests exist
   doCheck = false;
 
+  # Default-added updateScript doesn't handle Mercurial sources
+  passthru.updateScript = null;
+
   meta = {
     description = "SàT extension widgets for Urwid";
     homepage = "https://libervia.org";

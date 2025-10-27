@@ -9,7 +9,8 @@
   gettext,
   fuse,
   openssl,
-  tinyxml2,
+  tinyxml-2,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     fuse
     openssl
-    tinyxml2
+    tinyxml-2
+    gtest
   ];
   nativeBuildInputs = [
     cmake
@@ -49,6 +51,12 @@ stdenv.mkDerivation rec {
     "-DUSE_INTERNAL_TINYXML=OFF"
     "-DBUILD_SHARED_LIBS=ON"
     "-DINSTALL_LIBENCFS=ON"
+
+    # Fix the build with CMake 4.
+    #
+    # Upstream is deprecated, so it won’t be fixed there. We should
+    # probably phase this package out.
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
   ];
 
   meta = with lib; {

@@ -109,7 +109,7 @@ update_patch() {
                 fi
             fi
         fi
-    done < <(find "$source_dir" -name "pom.xml" -print0)
+    done < <(find "$source_dir" -name "pom.xml" -print0 | sort -z)
 
     if [[ "$plugin_found" == "true" && -n "$patch_content" ]]; then
         echo "Updating $patch_file..."

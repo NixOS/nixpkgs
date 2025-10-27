@@ -32,7 +32,7 @@ in
     ++ [
       qtwayland
       qtwebview
-      (qt6.qtwebengine or qt6.full)
+      qt6.qtwebengine
       rdma-core
     ]
     ++ lib.optionals (cudaOlder "12.7") [

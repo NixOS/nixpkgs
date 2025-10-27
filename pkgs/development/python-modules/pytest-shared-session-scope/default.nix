@@ -44,6 +44,6 @@ buildPythonPackage rec {
     description = "Pytest session-scoped fixture that works with xdist";
     homepage = "https://pypi.org/project/pytest-shared-session-scope/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -8,8 +8,8 @@
 
   # `ps` with systemd support is able to properly report different
   # attributes like unit name, so we want to have it on linux.
-  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
-  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+  systemdLibs,
 
   # procps is mostly Linux-only. Most commands require a running Linux
   # system (or very similar like that found in Cygwin). The one
@@ -21,17 +21,17 @@
   procps,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "procps";
   version = "4.0.4";
 
   # The project's releases are on SF, but git repo on gitlab.
   src = fetchurl {
-    url = "mirror://sourceforge/procps-ng/procps-ng-${version}.tar.xz";
+    url = "mirror://sourceforge/procps-ng/procps-ng-${finalAttrs.version}.tar.xz";
     hash = "sha256-IocNb+skeK22F85PCaeHrdry0mDFqKp7F9iJqWLF5C4=";
   };
 
-  buildInputs = [ ncurses ] ++ lib.optional withSystemd systemd;
+  buildInputs = [ ncurses ] ++ lib.optionals withSystemd [ systemdLibs ];
   nativeBuildInputs = [
     pkg-config
     autoreconfHook
@@ -46,16 +46,20 @@ stdenv.mkDerivation rec {
     "--disable-modern-top"
     "--enable-watch8bit"
   ]
-  ++ lib.optional withSystemd "--with-systemd"
-  ++ lib.optional stdenv.hostPlatform.isMusl "--disable-w"
+  ++ lib.optionals withSystemd [ "--with-systemd" ]
+  ++ lib.optionals stdenv.hostPlatform.isMusl [ "--disable-w" ]
   ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "ac_cv_func_malloc_0_nonnull=yes"
     "ac_cv_func_realloc_0_nonnull=yes"
   ];
 
   installPhase = lib.optionalString watchOnly ''
+    runHook preInstall
+
     install -m 0755 -D src/watch $out/bin/watch
     install -m 0644 -D man/watch.1 $out/share/man/man1/watch.1
+
+    runHook postInstall
   '';
 
   # no obvious exec in documented arguments; haven't trawled source
@@ -64,12 +68,12 @@ stdenv.mkDerivation rec {
     execer cannot bin/{ps,top,free}
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.com/procps-ng/procps";
     description = "Utilities that give information about processes using the /proc filesystem";
     priority = 11; # less than coreutils, which also provides "kill" and "uptime"
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
-}
+})

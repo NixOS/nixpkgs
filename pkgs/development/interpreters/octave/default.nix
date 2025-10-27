@@ -7,6 +7,7 @@
   ncurses,
   perl,
   flex,
+  testers,
   texinfo,
   qhull,
   libsndfile,
@@ -97,12 +98,12 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "10.2.0";
+  version = "10.3.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-B/ttkznS81BzXJFnG+jodNFgAYzGtoj579nVWNI39p8=";
+    sha256 = "sha256-L8s43AYuRA8eBsBpu8qEDtRtzI+YPkc+FVj8w4OE7ms=";
   };
 
   postPatch = ''
@@ -143,7 +144,7 @@ stdenv.mkDerivation (finalAttrs: {
     libsForQt5.qtsvg
     libsForQt5.qscintilla
   ]
-  ++ lib.optionals (enableJava) [
+  ++ lib.optionals enableJava [
     jdk
   ]
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
@@ -226,6 +227,12 @@ stdenv.mkDerivation (finalAttrs: {
     withPackages = import ./with-packages.nix { inherit buildEnv octavePackages; };
     pkgs = octavePackages;
     interpreter = "${finalAttrs.finalPackage}/bin/octave";
+    tests = {
+      wrapper = testers.testVersion {
+        package = finalAttrs.finalPackage.withPackages (ps: [ ps.doctest ]);
+        command = "octave --version";
+      };
+    };
   };
 
   meta = {

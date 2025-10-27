@@ -113,8 +113,6 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail "/etc/bash_completion.d" "$out/etc/bash_completion.d"
   '';
 
-  dontFixCmake = true;
-
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
   preVersionCheck = ''

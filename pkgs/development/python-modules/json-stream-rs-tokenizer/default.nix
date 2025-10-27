@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "json-stream-rs-tokenizer";
-  version = "0.4.29";
+  version = "0.4.30";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "smheidrich";
     repo = "py-json-stream-rs-tokenizer";
     tag = "v${version}";
-    hash = "sha256-eXlxbZRiUdp28taLxsuQ4wh1rPO/zUAC0Owt7yc0bzc=";
+    hash = "sha256-kzeEG42KcmczIC69aJe1dkqeBpMYn5uBBj1Ni+/+sTM=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "robotframework-seleniumlibrary";
-  version = "6.7.1";
+  version = "6.8.0";
   pyproject = true;
 
   # no tests included in PyPI tarball
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "robotframework";
     repo = "SeleniumLibrary";
     tag = "v${version}";
-    hash = "sha256-pKAOVycckUCe93wMk9kql1lY6WeUTiS4lk/skDAfKCY=";
+    hash = "sha256-TyYlcmoV5q3mfV4II/7P/SApfSNd3yC1EFYcuHllcyQ=";
   };
 
   build-system = [ setuptools ];

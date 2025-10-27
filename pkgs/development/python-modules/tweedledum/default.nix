@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Library for synthesizing and manipulating quantum circuits";
     homepage = "https://github.com/boschmitt/tweedledum";
     license = licenses.mit;
-    maintainers = with maintainers; [ drewrisinger ];
+    maintainers = [ ];
   };
 }

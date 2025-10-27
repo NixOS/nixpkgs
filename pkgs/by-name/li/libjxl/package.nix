@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   brotli,
   cmake,
   giflib,
@@ -138,6 +139,17 @@ stdenv.mkDerivation rec {
     shopt -s extglob
     rm -rf third_party/!(sjpeg)/
     shopt -u extglob
+
+    # Fix the build with CMake 4.
+    #
+    # See:
+    #
+    # * <https://github.com/webmproject/sjpeg/commit/9990bdceb22612a62f1492462ef7423f48154072>
+    # * <https://github.com/webmproject/sjpeg/commit/94e0df6d0f8b44228de5be0ff35efb9f946a13c9>
+    substituteInPlace third_party/sjpeg/CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 2.8.7)' \
+        'cmake_minimum_required(VERSION 3.5...3.10)'
 
     substituteInPlace plugins/gdk-pixbuf/jxl.thumbnailer \
       --replace '/usr/bin/gdk-pixbuf-thumbnailer' "$out/libexec/gdk-pixbuf-thumbnailer-jxl"

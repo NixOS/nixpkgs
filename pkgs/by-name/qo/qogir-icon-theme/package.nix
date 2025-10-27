@@ -55,8 +55,8 @@ lib.checkListOfEnum "${pname}: color variants" [ "standard" "dark" "all" ] color
       mkdir -p $out/share/icons
 
       name= ./install.sh \
-        ${lib.optionalString (themeVariants != [ ]) ("--theme " + builtins.toString themeVariants)} \
-        ${lib.optionalString (colorVariants != [ ]) ("--color " + builtins.toString colorVariants)} \
+        ${lib.optionalString (themeVariants != [ ]) ("--theme " + toString themeVariants)} \
+        ${lib.optionalString (colorVariants != [ ]) ("--color " + toString colorVariants)} \
         --dest $out/share/icons
 
       jdupes --quiet --link-soft --recurse $out/share

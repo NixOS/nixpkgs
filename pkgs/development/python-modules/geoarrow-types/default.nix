@@ -9,7 +9,7 @@
 }:
 buildPythonPackage rec {
   pname = "geoarrow-types";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     repo = "geoarrow-python";
     owner = "geoarrow";
     tag = "geoarrow-types-${version}";
-    hash = "sha256-LySb4AsRuSirDJ73MAPpnMwPM2WFfG6X82areR4Y4lI=";
+    hash = "sha256-ciElwh94ukFyFdOBuQWyOUVpn4jBM1RKfxiBCcM+nmE=";
   };
 
   sourceRoot = "${src.name}/geoarrow-types";
@@ -29,6 +29,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+  ];
+
+  checkInputs = [
     pyarrow
   ];
 

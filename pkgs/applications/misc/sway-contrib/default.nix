@@ -83,14 +83,11 @@ in
       fi
     '';
 
-    meta =
-      with lib;
-      meta
-      // {
-        description = "Helper for screenshots within sway";
-        maintainers = with maintainers; [ evils ];
-        mainProgram = "grimshot";
-      };
+    meta = meta // {
+      description = "Helper for screenshots within sway";
+      maintainers = [ ];
+      mainProgram = "grimshot";
+    };
   };
 
   inactive-windows-transparency =
@@ -114,14 +111,11 @@ in
       '';
 
       meta =
-        with lib;
-        meta
-        // {
+
+        meta // {
           description = "It makes inactive sway windows transparent";
           mainProgram = "${lname}.py";
-          maintainers = with maintainers; [
-            evils # packaged this as a side-effect of grimshot but doesn't use it
-          ];
+          maintainers = [ ];
         };
     };
 

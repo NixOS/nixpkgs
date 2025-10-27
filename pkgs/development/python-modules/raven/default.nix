@@ -35,6 +35,6 @@ buildPythonPackage rec {
     mainProgram = "raven";
     homepage = "https://github.com/getsentry/raven-python";
     license = [ lib.licenses.bsd3 ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

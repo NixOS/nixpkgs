@@ -53,6 +53,6 @@ buildPythonPackage {
     description = "Easily benchmark machine learning models in PyTorch";
     homepage = "https://github.com/paperswithcode/torchbench";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

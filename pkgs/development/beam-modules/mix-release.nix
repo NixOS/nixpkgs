@@ -86,7 +86,7 @@
 }@attrs:
 let
   # Remove non standard attributes that cannot be coerced to strings
-  overridable = builtins.removeAttrs attrs [
+  overridable = removeAttrs attrs [
     "compileFlags"
     "erlangCompilerOptions"
     "mixNixDeps"

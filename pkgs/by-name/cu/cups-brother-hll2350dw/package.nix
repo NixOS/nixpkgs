@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     description = "Brother HL-L2350DW printer driver";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = builtins.map (arch: "${arch}-linux") arches;
+    platforms = map (arch: "${arch}-linux") arches;
     downloadPage = "https://support.brother.com/g/b/downloadlist.aspx?c=us_ot&lang=en&prod=hll2350dw_us_eu_as&os=128";
     maintainers = [ maintainers.sternenseemann ];
   };

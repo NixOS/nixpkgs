@@ -4,12 +4,12 @@
   name = "jellyfin";
   meta.maintainers = with lib.maintainers; [ minijackson ];
 
-  nodes.machine =
-    { ... }:
-    {
-      services.jellyfin.enable = true;
-      environment.systemPackages = with pkgs; [ ffmpeg ];
-    };
+  nodes.machine = {
+    services.jellyfin.enable = true;
+    environment.systemPackages = with pkgs; [ ffmpeg ];
+    # Jellyfin fails to start if the data dir doesn't have at least 2GiB of free space
+    virtualisation.diskSize = 3 * 1024;
+  };
 
   # Documentation of the Jellyfin API: https://api.jellyfin.org/
   # Beware, this link can be resource intensive
@@ -30,6 +30,7 @@
 
       machine.wait_for_unit("jellyfin.service")
       machine.wait_for_open_port(8096)
+      machine.wait_until_succeeds("journalctl --since -1m --unit jellyfin --grep 'Startup complete'")
       machine.succeed("curl --fail http://localhost:8096/")
 
       machine.wait_until_succeeds("curl --fail http://localhost:8096/health | grep Healthy")
@@ -105,7 +106,7 @@
           folders_str = machine.succeed(api_get("/Library/VirtualFolders"))
           folders = json.loads(folders_str)
           print(folders)
-          return all(folder["RefreshStatus"] == "Idle" for folder in folders)
+          return all(folder.get("RefreshStatus") == "Idle" for folder in folders)
 
 
       retry(is_refreshed)

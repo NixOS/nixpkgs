@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
 
   # nativeBuildInputs
   cmake,
@@ -17,7 +18,7 @@
   curl,
   enet,
   ffmpeg,
-  fmt_10,
+  fmt,
   gtest,
   hidapi,
   libXdmcp,
@@ -26,7 +27,7 @@
   libusb1,
   lz4,
   lzo,
-  mbedtls_2,
+  mbedtls,
   miniupnpc,
   minizip-ng,
   openal,
@@ -71,6 +72,13 @@ stdenv.mkDerivation (finalAttrs: {
     '';
   };
 
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/dolphin-emu/dolphin/commit/8edef722ce1aae65d5a39faf58753044de48b6e0.patch?full_index=1";
+      hash = "sha256-QEG0p+AzrExWrOxL0qRPa+60GlL0DlLyVBrbG6pGuog=";
+    })
+  ];
+
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -89,7 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
     curl
     enet
     ffmpeg
-    fmt_10
+    fmt
     gtest
     hidapi
     libXdmcp
@@ -98,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     libusb1
     lz4
     lzo
-    mbedtls_2
+    mbedtls
     miniupnpc
     minizip-ng
     openal
@@ -132,6 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "DISTRIBUTOR" "NixOS")
     (lib.cmakeFeature "DOLPHIN_WC_DESCRIBE" finalAttrs.version)
     (lib.cmakeFeature "DOLPHIN_WC_BRANCH" "master")
+    # CMake 4 dropped support of versions lower than 3.5,
+    # versions lower than 3.10 are deprecated.
+    (lib.cmakeFeature "CMAKE_POLICY_VERSION_MINIMUM" "3.10")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "OSX_USE_DEFAULT_SEARCH_PATH" true)

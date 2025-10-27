@@ -4,7 +4,7 @@
   python3,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication {
   pname = "certmitm";
   version = "0-unstable-2025-05-14";
   pyproject = false;

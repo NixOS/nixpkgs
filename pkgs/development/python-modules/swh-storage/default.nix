@@ -96,6 +96,6 @@ buildPythonPackage rec {
     description = "Abstraction layer over the archive, allowing to access all stored source code artifacts as well as their metadata";
     homepage = "https://gitlab.softwareheritage.org/swh/devel/swh-storage";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

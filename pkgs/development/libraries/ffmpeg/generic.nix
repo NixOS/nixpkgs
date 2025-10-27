@@ -79,6 +79,7 @@
       && !isAarch32
       && !hostPlatform.isLoongArch64
       && !hostPlatform.isRiscV
+      && !(hostPlatform.isPower && hostPlatform.isBigEndian)
       && hostPlatform == buildPlatform
     ), # dynamically linked Nvidia code
   withFlite ? withFullDeps, # Voice Synthesis
@@ -514,6 +515,11 @@ stdenv.mkDerivation (
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/ffmpeg/-/raw/a02c1a15706ea832c0d52a4d66be8fb29499801a/add-av_stream_get_first_dts-for-chromium.patch";
           hash = "sha256-DbH6ieJwDwTjKOdQ04xvRcSLeeLP2Z2qEmqeo8HsPr4=";
         })
+        (fetchpatch2 {
+          name = "lcevcdec-4.0.0-compat.patch";
+          url = "https://code.ffmpeg.org/FFmpeg/FFmpeg/commit/fa23202cc7baab899894e8d22d82851a84967848.patch";
+          hash = "sha256-Ixkf1xzuDGk5t8J/apXKtghY0X9cfqSj/q987zrUuLQ=";
+        })
       ]
       ++ optionals (lib.versionOlder version "7.2") [
         (fetchpatch2 {
@@ -793,6 +799,25 @@ stdenv.mkDerivation (
       (enableFeature withOptimisations "optimizations")
       (enableFeature withExtraWarnings "extra-warnings")
       (enableFeature withStripping "stripping")
+    ]
+    ++ optionals (stdenv.hostPlatform.isPower) [
+      # FFmpeg expects us to pass `--cpu=` to pick a specific feature set to compile for. If unset, it defaults to `generic`.
+      # For POWER, the default doesn't produce baseline-compliant settings. Passing a baseline-like CPU as a target doesn't
+      # produce entirely correct settings either - POWER4 leaves AltiVec enabled, but that's only guaranteed with POWER6.
+      # Just configure together everything on our own.
+
+      # Easy: Only ppc64le's baseline is recent enough to guarantee all of these.
+      (enableFeature (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian) "altivec")
+      (enableFeature (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian) "vsx")
+      (enableFeature (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian) "power8")
+      (enableFeature (stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isLittleEndian) "ldbrx")
+
+      # Instructions that are highly specific to that series of 32-bit embedded CPUs. Never try to enable them.
+      (enableFeature false "ppc4xx")
+
+      # I *think* enabling this on 64-bit POWER is correct? Struggling to find much info on when/where this was introduced.
+      # Definitely present on the Apple G5, and likely Freescale e5500/e6500 as well.
+      (enableFeature (stdenv.hostPlatform.isPower64) "dcbzl")
     ]
     ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"

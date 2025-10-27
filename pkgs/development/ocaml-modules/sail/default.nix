@@ -16,7 +16,7 @@
   lem,
   linksem,
   yojson,
-  version ? "0.19.1",
+  version ? "0.20",
 }:
 
 buildDunePackage {
@@ -25,7 +25,7 @@ buildDunePackage {
 
   src = fetchurl {
     url = "https://github.com/rems-project/sail/releases/download/${version}/sail-${version}.tbz";
-    hash = "sha256-Xplpi2NnwBgTPJCq7Szv8XPeINtuYcM+KxlZSh1IKjI=";
+    hash = "sha256-WTmYltCrNkt/OeST79Z1xMC2YDgN2HxLJ3PrE7k+R9M=";
   };
 
   minimalOCamlVersion = "4.08";

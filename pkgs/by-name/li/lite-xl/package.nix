@@ -39,6 +39,12 @@ stdenv.mkDerivation {
     sdl3
   ];
 
+  # Fix SDL3 static linking issue
+  postPatch = ''
+    substituteInPlace src/meson.build \
+      --replace-fail "dependency('sdl3', static: true)" "dependency('sdl3', static: false)"
+  '';
+
   mesonFlags = [
     "-Duse_system_lua=true"
   ];

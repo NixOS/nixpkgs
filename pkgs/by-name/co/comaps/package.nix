@@ -15,28 +15,35 @@
   nix-update-script,
 }:
 let
-  mapRev = 250822;
+  # https://codeberg.org/comaps/comaps/src/branch/main/data/countries.txt
+  mapRev = 250906;
 
   worldMap = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/World.mwm";
-    hash = "sha256-OksUAix8yw0WQiJUwfMrjOCd/OwuRjdCOUjjGpnG2S8=";
+    hash = "sha256-0LjCDVk3vShmn+yHc/SvfJzrj170pO52CqbdKWqTsI4=";
   };
 
   worldCoasts = fetchurl {
     url = "https://cdn-fi-1.comaps.app/maps/${toString mapRev}/WorldCoasts.mwm";
-    hash = "sha256-1OvKZJ3T/YJu6t/qTYliIVkwsT8toBSqGHUpDEk9i2k=";
+    hash = "sha256-2BP6ET8DM3v0KMlzYx+lS0l26WSONQpb4fCMri8Aj2o=";
   };
+
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      protobuf
+    ]
+  );
 in
 organicmaps.overrideAttrs (oldAttrs: rec {
   pname = "comaps";
-  version = "2025.08.31-15";
+  version = "2025.10.20-1";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "comaps";
     repo = "comaps";
     tag = "v${version}";
-    hash = "sha256-uRShcyMevNb/UE5+l8UabiGSr9TccVWp5xVoqI7+Oh8=";
+    hash = "sha256-9L7wyIXieKkKSrudnmPyiLPu4Jfp10xWi5o5lGslLWc=";
     fetchSubmodules = true;
   };
 
@@ -50,14 +57,16 @@ organicmaps.overrideAttrs (oldAttrs: rec {
 
   postPatch = (oldAttrs.postPatch or "") + ''
     rm -f 3party/boost/b2
+    substituteInPlace configure.sh \
+      --replace-fail "git submodule update --init --recursive --depth 1" ""
+
+    patchShebangs tools/unix/generate_categories.sh
+    substituteInPlace tools/python/categories/json_to_txt.py \
+      --replace-fail "/usr/bin/env python3" "${pythonEnv.interpreter}"
   '';
 
   nativeBuildInputs = (builtins.filter (x: x != python3) oldAttrs.nativeBuildInputs or [ ]) ++ [
-    (python3.withPackages (
-      ps: with ps; [
-        protobuf
-      ]
-    ))
+    pythonEnv
     optipng
   ];
 

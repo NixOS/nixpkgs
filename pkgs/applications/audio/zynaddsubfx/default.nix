@@ -48,7 +48,7 @@
   ctestCheckHook,
 }:
 
-assert builtins.any (g: guiModule == g) [
+assert builtins.elem guiModule [
   "fltk"
   "ntk"
   "zest"
@@ -134,6 +134,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DGuiModule=${guiModule}"
     "-DZYN_DATADIR=${placeholder "out"}/share/zynaddsubfx"
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
   ]
   # OSS library is included in glibc.
   # Must explicitly disable if support is not wanted.

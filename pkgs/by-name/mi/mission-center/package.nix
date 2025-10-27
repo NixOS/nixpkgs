@@ -169,7 +169,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
-  versionCheckProgram = "${builtins.placeholder "out"}/bin/missioncenter";
+  versionCheckProgram = "${placeholder "out"}/bin/missioncenter";
   doInstallCheck = true;
 
   postFixup = ''

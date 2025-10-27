@@ -12,6 +12,9 @@ If it does, you’re done; skip the rest of this.
 - Darwin uses Clang by default instead of GCC. Packages that refer to `$CC` or `cc` should just work in most cases.
   Some packages may hardcode `gcc` or `g++`. You can usually fix that by setting `makeFlags = [ "CC=cc" "CXX=C++" ]`.
   If that does not work, you will have to patch the build scripts yourself to use the correct compiler for Darwin.
+- Darwin uses the system libc++ by default to avoid ODR violations and potential compatibility issues from mixing LLVM libc++ with the system libc++.
+  While mixing the two usually worked, the two implementations are not guaranteed to be ABI compatible and are considered distinct by upstream.
+  See the troubleshooting guide below if you need to use newer C++ library features than those supported by the default deployment target.
 - Darwin needs an SDK to build software.
   The SDK provides a default set of frameworks and libraries to build software, most of which are specific to Darwin.
   There are multiple versions of the SDK packages in Nixpkgs, but one is included by default in the `stdenv`.
@@ -29,6 +32,20 @@ Start with writing your derivation as if everything is already set up for you (b
 If you run into issues or failures, continue reading below for how to deal with the most common issues you may encounter.
 
 ### Darwin Issue Troubleshooting {#sec-darwin-troubleshooting}
+
+#### Building a C++ package or library says that certain APIs are unavailable {#sec-darwin-libcxx-versions}
+
+While some newer APIs may be available via headers only, some require using a system libc++ with the required API support.
+When that happens, your build will fail because libc++ makes failure to use the correct deployment target an error.
+To make the newer API available, increase the deployment target to the required version.
+Note that it is possible to use libc++ from LLVM instead of increasing the deployment target, but it is not recommended.
+Doing so can cause problems when multiple libc++ implementations are linked into a binary (e.g., from dependencies).
+
+##### Using a newer deployment target {#sec-darwin-libcxx-deployment-targets}
+
+See below for how to use a newer deployment target.
+For example, `std::print` depends on features that are only available on macOS 13.3 or newer.
+To make them available, set the deployment target to 13.3 using `darwinMinVersionHook`.
 
 #### Package requires a non-default SDK or fails to build due to missing frameworks or symbols {#sec-darwin-troubleshooting-using-sdks}
 

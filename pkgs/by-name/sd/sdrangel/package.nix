@@ -43,13 +43,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sdrangel";
-  version = "7.22.8";
+  version = "7.22.9";
 
   src = fetchFromGitHub {
     owner = "f4exb";
     repo = "sdrangel";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Uj6BzMUhhi/0Jz8jKe/MCiXinoKcyXy4DqC/USdkcpA=";
+    hash = "sha256-VYSM9ldzx/8tWKQb++qGROSXdeEXIDhGqnnHUmkW4+k=";
   };
 
   nativeBuildInputs = [
@@ -122,6 +122,7 @@ stdenv.mkDerivation (finalAttrs: {
       SDRangel is an Open Source Qt6 / OpenGL 3.0+ SDR and signal analyzer frontend to various hardware.
     '';
     maintainers = with lib.maintainers; [
+      aciceri
       alkeryn
       Tungsten842
     ];

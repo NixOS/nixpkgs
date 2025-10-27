@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustc-demangle";
-  version = "0.1.20";
+  version = "0.1.26";
 
   src = fetchFromGitHub {
-    owner = "alexcrichton";
+    owner = "rust-lang";
     repo = "rustc-demangle";
-    rev = version;
-    sha256 = "sha256-elxclyuLmr3N66s+pR4/6OU98k1oXI2wKVJtzWPY8FI=";
+    tag = "rustc-demangle-v${version}";
+    hash = "sha256-4/x3kUIKi3xnDRznr+6xmPeWHmhlpbuwSNH3Ej6+Ifc=";
   };
 
   cargoLock = {
@@ -32,19 +32,18 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     mkdir -p $out/lib
-    cp target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc_demangle.so $out/lib
+    cp target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release/librustc_demangle${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
     cp -R crates/capi/include $out
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rust symbol demangling";
-    homepage = "https://github.com/alexcrichton/rustc-demangle";
-    license = with licenses; [
+    homepage = "https://github.com/rust-lang/rustc-demangle";
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    # upstream supports other platforms, but maintainer can only test on linux
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ _1000teslas ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ _1000teslas ];
   };
 }

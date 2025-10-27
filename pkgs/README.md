@@ -58,7 +58,7 @@ Because entries in the Nix store are inert and do nothing by themselves, package
   For example:
   * Any package which does not follow upstream security policies should be considered vulnerable.
     In particular, packages that vendor or fork web engines like Blink, Gecko or Webkit need to keep up with the frequent updates of those projects.
-  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one active committer among the maintainers.
+  * Any security-critical fast-moving package such as Chrome or Firefox (or their forks) must have at least one committer among the maintainers, who actively reviews, merges and backports updates.
     This ensures no critical fixes are delayed unnecessarily, endangering unsuspecting users.
   * Services which typically work on web traffic are working on untrusted input.
   * Data (such as archives or rich documents) commonly shared over untrusted channels (e.g. email) is untrusted.
@@ -501,6 +501,8 @@ The `meta` attribute set should always be placed last in the derivativion and an
 * `meta.license` must be set and match the upstream license.
   * If there is no upstream license, `meta.license` should default to `lib.licenses.unfree`.
   * If in doubt, try to contact the upstream developers for clarification.
+* `meta.sourceProvenance` must be set if the package is not built from source.
+  * If you are repackaging a `.deb`, `.rpm`, `.whl`, or any other format provided by your upstream, this should almost always be set to `lib.sourceTypes.binaryNativeCode`.
 * `meta.mainProgram` must be set to the name of the executable which facilitates the primary function or purpose of the package, if there is such an executable in `$bin/bin/` (or `$out/bin/`, if there is no `"bin"` output).
   * Packages that only have a single executable in the applicable directory above should set `meta.mainProgram`.
     For example, the package `ripgrep` only has a single executable `rg` under `$out/bin/`, so `ripgrep.meta.mainProgram` is set to `"rg"`.

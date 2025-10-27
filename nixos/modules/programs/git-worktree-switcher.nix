@@ -12,17 +12,18 @@ let
     shell:
     if (shell == "fish") then
       ''
-        ${lib.getExe pkgs.git-worktree-switcher} init ${shell} | source
+        ${lib.getExe cfg.package} init ${shell} | source
       ''
     else
       ''
-        eval "$(${lib.getExe pkgs.git-worktree-switcher} init ${shell})"
+        eval "$(${lib.getExe cfg.package} init ${shell})"
       '';
 in
 {
   options = {
     programs.git-worktree-switcher = {
       enable = lib.mkEnableOption "git-worktree-switcher, switch between git worktrees with speed.";
+      package = lib.mkPackageOption pkgs "git-worktree-switcher" { };
     };
   };
 

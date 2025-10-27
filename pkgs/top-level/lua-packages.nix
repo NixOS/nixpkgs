@@ -118,7 +118,7 @@ rec {
       linux-pam,
       openpam,
     }:
-    buildLuaPackage rec {
+    buildLuaPackage {
       pname = "lua-pam";
       version = "unstable-2015-07-03";
 

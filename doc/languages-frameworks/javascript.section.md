@@ -316,7 +316,7 @@ buildNpmPackage {
 `importNpmLock` uses the following fetchers:
 
 - `pkgs.fetchurl` for `http(s)` dependencies
-- `builtins.fetchGit` for `git` dependencies
+- `fetchGit` for `git` dependencies
 
 It is possible to provide additional arguments to individual fetchers as needed:
 
@@ -542,7 +542,7 @@ set `prePnpmInstall` to the right commands to run. For example:
 ```nix
 {
   prePnpmInstall = ''
-    pnpm config set dedupe-peer-dependants false
+    pnpm config set dedupe-peer-dependents false
   '';
   pnpmDeps = pnpm.fetchDeps {
     inherit (finalAttrs) prePnpmInstall;

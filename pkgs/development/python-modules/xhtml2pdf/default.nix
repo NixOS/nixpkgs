@@ -65,6 +65,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/xhtml2pdf/xhtml2pdf";
     license = lib.licenses.asl20;
     mainProgram = "xhtml2pdf";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

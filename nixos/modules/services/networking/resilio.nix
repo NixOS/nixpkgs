@@ -297,7 +297,7 @@ in
 
     users.groups.rslsync.gid = config.ids.gids.rslsync;
 
-    systemd.services.resilio = with pkgs; {
+    systemd.services.resilio = {
       description = "Resilio Sync Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];

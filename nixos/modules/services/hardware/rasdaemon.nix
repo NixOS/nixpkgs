@@ -176,7 +176,4 @@ in
       };
     };
   };
-
-  meta.maintainers = [ lib.maintainers.evils ];
-
 }

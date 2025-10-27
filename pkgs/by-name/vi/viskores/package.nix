@@ -6,7 +6,7 @@
   cmake,
   ninja,
   llvmPackages,
-  tbb,
+  onetbb,
   mpi,
   mpiSupport ? true,
   testers,
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   propagatedBuildInputs = [
-    tbb
+    onetbb
   ]
   ++ lib.optional mpiSupport mpi
   ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;

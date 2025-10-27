@@ -19,6 +19,7 @@ stdenv.mkDerivation {
 
   prePatch = ''
     cd mjpg-streamer-experimental
+    substituteInPlace ./CMakeLists.txt --replace-fail "cmake_minimum_required(VERSION 2.8.3)" "cmake_minimum_required(VERSION 2.8.3...3.10)"
   '';
 
   nativeBuildInputs = [ cmake ];
@@ -33,7 +34,7 @@ stdenv.mkDerivation {
     description = "Takes JPGs from Linux-UVC compatible webcams, filesystem or other input plugins and streams them as M-JPEG via HTTP to webbrowsers, VLC and other software";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "mjpg_streamer";
   };
 }

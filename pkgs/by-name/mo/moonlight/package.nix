@@ -5,16 +5,20 @@
   nodejs_22,
   fetchFromGitHub,
   nix-update-script,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "moonlight";
-  version = "1.3.28";
+  version = "1.3.32";
 
   src = fetchFromGitHub {
     owner = "moonlight-mod";
     repo = "moonlight";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-aLjHKVWkb9XHyoMmDBxLG2Ycg4CJFeieLdEg3CWeIwk=";
+    hash = "sha256-aXap/wUjjJTCy2eq7p7BL6ZYOVZEBVY4/YkrDtbIj2Q=";
   };
 
   nativeBuildInputs = [
@@ -28,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     buildInputs = [ nodejs_22 ];
 
     fetcherVersion = 2;
-    hash = "sha256-DvSBiUkIQbDkdgfHBw9h1odo3ApZq+emBDkbcQnx6NA=";
+    hash = "sha256-gv+PHGbo0IiPgcxi0RAvsNmGLHWZar3SB4eW7NbJRJY=";
   };
 
   env = {
@@ -57,7 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withMoonlight
+    );
+  };
 
   meta = with lib; {
     description = "Discord client modification, focused on enhancing user and developer experience";

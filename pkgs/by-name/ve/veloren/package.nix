@@ -52,6 +52,8 @@ rustPlatform.buildRustPackage {
       println!("cargo:rustc-cfg=nightly");
     }
     EOF
+    # Fix assets path
+    substituteAllInPlace common/assets/src/lib.rs
   '';
 
   nativeBuildInputs = [

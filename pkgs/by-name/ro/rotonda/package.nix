@@ -10,18 +10,23 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "rotonda";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "rotonda";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-B2sdQr9PctWZBpDuatJkUApW5T98BQa4HiqL8+HHevY=";
+    hash = "sha256-7SVhxUpQq1CCDYNc0xza/2ixjKF8kHBSobt4S+azLQU=";
   };
 
-  cargoHash = "sha256-XbBlA7QYUtD4uBz4t5ZR70o9bMgVLeSzq6Lexe0jzME=";
+  cargoHash = "sha256-4wldyvg0VOFTlM0FN/BSsyDNp5HbRumw4Lv4VEJlPfI=";
 
-  checkFlags =
+  checkFlags = [
+    # Broken in sandbox:
+    "--skip=http_api_responses_multiple_gets"
+    "--skip=representation::genoutput_json"
+  ]
+  ++
     lib.optionals
       (stdenv.hostPlatform.system == "aarch64-darwin" || stdenv.hostPlatform.system == "x86_64-darwin")
       [
@@ -36,10 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   passthru = {
     updateScript = nix-update-script { };
     tests.version = testers.testVersion {
-      package = rotonda;
-      command = "rotonda --version";
-      # tag/release with this version string, please revert to `inherit (finalAttrs) version;` on next release
-      version = "0.4.3-dev";
+      package = finalAttrs.finalPackage;
     };
   };
 

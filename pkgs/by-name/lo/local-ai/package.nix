@@ -112,7 +112,7 @@ let
           hash = "sha256-b9B5I3EbBFrkWc6RLXMWcCRKayyWjlGuQrogUcrISrc=";
           fetchSubmodules = true;
         };
-        postPatch = prev.postPatch + ''
+        postPatch = ''
           cd examples
           cp -r --no-preserve=mode ${src}/backend/cpp/llama grpc-server
           cp llava/clip* llava/llava.* grpc-server

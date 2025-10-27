@@ -6,6 +6,7 @@
   ninja,
   nv-codec-headers-12,
   fetchFromGitHub,
+  fetchpatch2,
   addDriverRunpath,
   autoAddDriverRunpath,
   cudaSupport ? config.cudaSupport,
@@ -59,6 +60,7 @@
   libdatachannel,
   libvpl,
   qrcodegencpp,
+  simde,
   nix-update-script,
   extra-cmake-modules,
 }:
@@ -82,22 +84,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "31.1.2";
+  version = "32.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-QZoIyjliVruDPZj8hzTABaDn+nCTVs5qQCdBLtSOKvI=";
+    hash = "sha256-99VAVV3hEMDI2R30OrX/in/9KtesUxMGOPg6yT5e4oM=";
     fetchSubmodules = true;
   };
 
   separateDebugInfo = true;
 
   patches = [
-    # Lets obs-browser build against CEF 90.1.0+
-    ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
+    # Fix build with Qt 6.10 https://github.com/obsproject/obs-studio/pull/12328
+    (fetchpatch2 {
+      url = "https://github.com/obsproject/obs-studio/commit/26dfacbd4f5217258a2f1c5472a544c65a182d10.patch?full_index=1";
+      hash = "sha256-gEWDzZ+GPCR+rmytXcbiBcvzLg8VwZCveMKkvho3COI=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -155,6 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ optional browserSupport cef
   ++ optional withFdk fdk_aac;
+
+  propagatedBuildInputs = [ simde ];
 
   # Copied from the obs-linuxbrowser
   postUnpack = lib.optionalString browserSupport ''

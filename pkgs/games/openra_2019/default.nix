@@ -76,6 +76,7 @@ pkgs.recurseIntoAttrs rec {
       homepage,
       mods,
       src,
+      pos,
     }@engine:
     # Allow specifying the name at a later point if no name has been given.
     let
@@ -101,6 +102,7 @@ pkgs.recurseIntoAttrs rec {
       description,
       homepage,
       src,
+      pos,
       engine,
       assetsError ? "",
     }@mod:

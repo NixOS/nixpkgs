@@ -117,7 +117,7 @@ let
       );
     in
     stdenv.mkDerivation (
-      builtins.removeAttrs args [ "bundlerEnvArgs" ]
+      removeAttrs args [ "bundlerEnvArgs" ]
       // {
         pluginName = if name != null then name else "${pname}-${version}";
         dontConfigure = true;

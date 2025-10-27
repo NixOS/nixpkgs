@@ -7,19 +7,18 @@
   pkg-config,
   sail,
   ninja,
-  zlib,
   z3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sail-riscv";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "riscv";
     repo = "sail-riscv";
     rev = version;
-    hash = "sha256-Keu96+yHWUEFO3rRLvF7rzcJmF3y/V/uyK7TIFj0Xw0=";
+    hash = "sha256-50ATe3DQcdyNOqP85mEMyEwxzpBOplzRN9ulaJNo9zo=";
   };
 
   nativeBuildInputs = [
@@ -30,22 +29,12 @@ stdenv.mkDerivation rec {
     sail
   ];
   buildInputs = [
-    zlib
     gmp
   ];
   strictDeps = true;
 
-  preBuild = ''
-    ninja \
-      riscv_sim_rv32d      \
-      riscv_sim_rv32d_rvfi \
-      riscv_sim_rv32f      \
-      riscv_sim_rv32f_rvfi \
-      riscv_sim_rv64d      \
-      riscv_sim_rv64d_rvfi \
-      riscv_sim_rv64f      \
-      riscv_sim_rv64f_rvfi
-  '';
+  # sail-riscv 0.8 fails to install without compressed_changelog
+  ninjaFlags = [ "compressed_changelog" ];
 
   meta = with lib; {
     homepage = "https://github.com/riscv/sail-riscv";

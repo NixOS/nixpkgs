@@ -5,7 +5,7 @@
   nautilus-python,
   python3,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "code-nautilus";
   version = "0-unstable-2024-09-11";
 

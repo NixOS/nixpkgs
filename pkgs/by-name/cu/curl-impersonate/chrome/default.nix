@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl-impersonate";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-tAQdTRGAOD2rpLZvoLQ2YL0wrohXEcmChMZBvYjsMhE=";
   };
 
@@ -175,9 +175,7 @@ stdenv.mkDerivation rec {
 
     # Find the correct boringssl source file
     boringssl-source = builtins.head (
-      lib.mapAttrsToList (_: file: file) (
-        lib.filterAttrs (name: _: lib.strings.hasPrefix "boringssl-" name) passthru.deps
-      )
+      lib.attrValues (lib.filterAttrs (name: _: lib.strings.hasPrefix "boringssl-" name) passthru.deps)
     );
     boringssl-go-modules =
       (buildGoModule {
@@ -193,6 +191,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
+    changelog = "https://github.com/lexiforest/curl-impersonate/releases/tag/${src.tag}";
     description = "Special build of curl that can impersonate Chrome & Firefox";
     homepage = "https://github.com/lexiforest/curl-impersonate";
     license = with lib.licenses; [

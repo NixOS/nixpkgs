@@ -9,7 +9,6 @@
 
   # dependencies
   aiohttp,
-  async-timeout,
   defusedxml,
   python-didl-lite,
   voluptuous,
@@ -33,15 +32,18 @@ buildPythonPackage rec {
   };
 
   pythonRelaxDeps = [
-    "async-timeout"
     "defusedxml"
+  ];
+
+  pythonRemoveDeps = [
+    # https://github.com/StevenLooman/async_upnp_client/pull/278
+    "async-timeout"
   ];
 
   build-system = [ setuptools ];
 
   dependencies = [
     aiohttp
-    async-timeout
     defusedxml
     python-didl-lite
     voluptuous

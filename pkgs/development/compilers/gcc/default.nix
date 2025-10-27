@@ -19,6 +19,7 @@
   cargo,
   staticCompiler ? false,
   enableShared ? stdenv.targetPlatform.hasSharedLibraries,
+  enableDefaultPie ? true,
   enableLTO ? stdenv.hostPlatform.hasSharedLibraries,
   texinfo ? null,
   perl ? null, # optional, for texi2pod (then pod2man)
@@ -137,6 +138,7 @@ let
       darwin
       disableBootstrap
       disableGdbPlugin
+      enableDefaultPie
       enableLTO
       enableMultilib
       enablePlugin
@@ -289,12 +291,12 @@ pipe
           )
         )
       )
-      + optionalString targetPlatform.isAvr (''
+      + optionalString targetPlatform.isAvr ''
         makeFlagsArray+=(
            '-s' # workaround for hitting hydra log limit
            'LIMITS_H_TEST=false'
         )
-      '');
+      '';
 
       inherit
         noSysDirs
@@ -333,7 +335,7 @@ pipe
         assert profiledCompiler -> !disableBootstrap;
         let
           target =
-            optionalString (profiledCompiler) "profiled"
+            optionalString profiledCompiler "profiled"
             + optionalString (
               (lib.systems.equals targetPlatform hostPlatform)
               && (lib.systems.equals hostPlatform buildPlatform)
@@ -401,7 +403,7 @@ pipe
             !(targetPlatform.isLinux && targetPlatform.isx86_64 && targetPlatform.libc == "glibc")
           ) "shadowstack"
           ++ optional (!(targetPlatform.isLinux && targetPlatform.isAarch64)) "pacret"
-          ++ optionals (langFortran) [
+          ++ optionals langFortran [
             "fortify"
             "format"
           ];
@@ -427,7 +429,7 @@ pipe
       dontMoveLib64 = true;
     }
   ))
-  ([
+  [
     (callPackage ./common/libgcc.nix {
       inherit
         version
@@ -442,4 +444,4 @@ pipe
         ;
     })
     (callPackage ./common/checksum.nix { inherit langC langCC; })
-  ])
+  ]

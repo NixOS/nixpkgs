@@ -43,7 +43,7 @@ let
 
       postInstall = "find $out -type f -exec remove-references-to -t ${varnish.dev} '{}' +"; # varnish.dev captured only as __FILE__ in assert messages
 
-      meta = with lib; {
+      meta = {
         description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
         homepage = "https://github.com/varnish/varnish-modules";
         inherit (varnish.meta) license platforms teams;

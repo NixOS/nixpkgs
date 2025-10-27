@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
         ];
         runtimeEnv = {
           PNAME = pname;
-          PKG_FILE = builtins.toString ./package.nix;
+          PKG_FILE = toString ./package.nix;
           NNUE_BIG_FILE = nnueBigFile;
           NNUE_BIG_HASH = nnueBigHash;
           NNUE_SMALL_FILE = nnueSmallFile;

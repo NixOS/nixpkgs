@@ -1452,7 +1452,7 @@ let
   };
 
   /**
-    Return a definition with file location information.
+    Returns a definition with file location information.
   */
   mkDefinition = args@{ file, value, ... }: args // { _type = "definition"; };
 
@@ -1467,11 +1467,6 @@ let
   mkImageMediaOverride = mkOverride 60; # image media profiles can be derived by inclusion into host config, hence needing to override host config, but do allow user to mkForce
   mkForce = mkOverride 50;
   mkVMOverride = mkOverride 10; # used by ‘nixos-rebuild build-vm’
-
-  defaultPriority =
-    warnIf (oldestSupportedReleaseIsAtLeast 2305)
-      "lib.modules.defaultPriority is deprecated, please use lib.modules.defaultOverridePriority instead."
-      defaultOverridePriority;
 
   mkFixStrictness = warn "lib.mkFixStrictness has no effect and will be removed. It returns its argument unmodified, so you can just remove any calls." id;
 
@@ -1541,7 +1536,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if the
+    Returns a module that causes a warning to be shown if the
     specified option is defined. For example,
 
       mkRemovedOptionModule [ "boot" "loader" "grub" "bootDevice" ] "<replacement instructions>"
@@ -1589,7 +1584,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if the
+    Returns a module that causes a warning to be shown if the
     specified "from" option is defined; the defined value is however
     forwarded to the "to" option. This can be used to rename options
     while providing backward compatibility. For example,
@@ -1645,7 +1640,7 @@ let
     };
 
   /**
-    Return a module that causes a warning to be shown if any of the "from"
+    Returns a module that causes a warning to be shown if any of the "from"
     option is defined; the defined values can be used in the "mergeFn" to set
     the "to" value.
     This function can be used to merge multiple options into one that has a
@@ -1724,7 +1719,7 @@ let
 
   /**
     Single "from" version of mkMergedOptionModule.
-    Return a module that causes a warning to be shown if the "from" option is
+    Returns a module that causes a warning to be shown if the "from" option is
     defined; the defined value can be used in the "mergeFn" to set the "to"
     value.
     This function can be used to change an option into another that has a
@@ -1787,11 +1782,10 @@ let
     };
 
   /**
-    Transitional version of mkAliasOptionModule that uses MD docs.
-
-    This function is no longer necessary and merely an alias of `mkAliasOptionModule`.
+    Deprecated alias of mkAliasOptionModule that uses MD docs.
+    This function is no longer necessary will be removed in 26.05`.
   */
-  mkAliasOptionModuleMD = mkAliasOptionModule;
+  mkAliasOptionModuleMD = lib.warn "mkAliasOptionModuleMD is deprecated and will be removed in 26.05; please use mkAliasOptionModule." mkAliasOptionModule;
 
   /**
     mkDerivedConfig : Option a -> (a -> Definition b) -> Definition b
@@ -1822,7 +1816,7 @@ let
   mkDerivedConfig = opt: f: mkOverride (opt.highestPrio or defaultOverridePriority) (f opt.value);
 
   /**
-    Return a module that help declares an option that has been renamed.
+    Returns a module that help declares an option that has been renamed.
     When a value is defined for the old option, it is forwarded to the `to` option.
   */
   doRename =
@@ -2163,7 +2157,6 @@ private
   inherit
     defaultOrderPriority
     defaultOverridePriority
-    defaultPriority
     doRename
     evalModules
     evalOptionValue # for use by lib.types

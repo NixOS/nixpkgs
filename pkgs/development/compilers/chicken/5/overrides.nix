@@ -31,7 +31,7 @@ in
   breadline = addToBuildInputs pkgs.readline;
   blas = addToBuildInputsWithPkgConfig pkgs.blas;
   blosc = addToBuildInputs pkgs.c-blosc;
-  botan = addToBuildInputsWithPkgConfig pkgs.botan2;
+  botan = broken;
   cairo =
     old:
     (addToBuildInputsWithPkgConfig pkgs.cairo old)
@@ -119,13 +119,13 @@ in
     };
   # missing dependency in upstream egg
   mistie = addToPropagatedBuildInputs (with chickenEggs; [ srfi-1 ]);
-  mosquitto = addToPropagatedBuildInputs ([ pkgs.mosquitto ]);
+  mosquitto = addToPropagatedBuildInputs [ pkgs.mosquitto ];
   nanomsg = addToBuildInputs pkgs.nanomsg;
   ncurses = addToBuildInputsWithPkgConfig [ pkgs.ncurses ];
-  opencl = addToBuildInputs ([
+  opencl = addToBuildInputs [
     pkgs.opencl-headers
     pkgs.ocl-icd
-  ]);
+  ];
   openssl = addToBuildInputs pkgs.openssl;
   plot = addToBuildInputs pkgs.plotutils;
   postgresql = addToBuildInputsWithPkgConfig pkgs.libpq;
@@ -193,7 +193,6 @@ in
       addToNativeBuildInputs pkgs.taglib_1 old
     );
   uuid-lib = addToBuildInputs pkgs.libuuid;
-  webview = addToBuildInputsWithPkgConfig pkgs.webkitgtk_4_0;
   ws-client = addToBuildInputs pkgs.zlib;
   xlib = addToPropagatedBuildInputs pkgs.xorg.libX11;
   yaml = addToBuildInputs pkgs.libyaml;
@@ -302,6 +301,8 @@ in
   sundials = broken;
   svn-client = broken;
   tokyocabinet = broken;
+  # webkitgtk_4_0 was removed
+  webview = broken;
 
   # mark broken darwin
 

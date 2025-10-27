@@ -24,7 +24,7 @@
   gtest,
   glm,
   qt6,
-  tbb_2022,
+  onetbb,
   tracy,
   replaceVars,
   python3,
@@ -130,7 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     aws-sdk-cpp
     howard-hinnant-date
     boost
-    tbb_2022
+    onetbb
     glew
     geos
     spdlog

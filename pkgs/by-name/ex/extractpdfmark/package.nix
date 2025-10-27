@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
     ./gettext-0.25.patch
   ];
 
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NIX_LDFLAGS = "-liconv";
+  };
+
   strictDeps = true;
 
   nativeBuildInputs = [

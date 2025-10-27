@@ -7,13 +7,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "lazyssh";
-  version = "0.2.1";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Adembc";
     repo = "lazyssh";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-g+arg/fB8YUmMtgVv5dmaYvj0uI1OeFngrHJAcKJkLU=";
+    hash = "sha256-6halWoLu9Vp6XU57wAQXaWBwKzqpnyoxJORzCbyeU5Q=";
   };
 
   vendorHash = "sha256-OMlpqe7FJDqgppxt4t8lJ1KnXICOh6MXVXoKkYJ74Ks=";

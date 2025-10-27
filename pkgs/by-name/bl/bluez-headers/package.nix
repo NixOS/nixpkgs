@@ -38,7 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
       mit
     ];
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

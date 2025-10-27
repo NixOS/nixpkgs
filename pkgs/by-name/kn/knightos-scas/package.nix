@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DSCAS_LIBRARY=1" ];
   postPatch = ''
     substituteInPlace CMakeLists.txt \
-      --replace "TARGETS scas scdump scwrap" "TARGETS scas scdump scwrap generate_tables"
+      --replace-fail "TARGETS scas scdump scwrap" "TARGETS scas scdump scwrap generate_tables" \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
   '';
   strictDeps = true;
 

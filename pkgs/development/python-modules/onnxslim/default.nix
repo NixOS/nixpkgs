@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "onnxslim";
-  version = "0.1.69";
+  version = "0.1.70";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "inisis";
     repo = "OnnxSlim";
     tag = "v${version}";
-    hash = "sha256-UwuZDAPTwIVJTseu8iIO2Q8OOaFcwiwLS/auWOpIpnQ=";
+    hash = "sha256-xShmJR0GWuGmuM0LZ0nBLDoC0m7c0iSWolUGUscVotA=";
   };
 
   build-system = [

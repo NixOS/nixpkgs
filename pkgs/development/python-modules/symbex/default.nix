@@ -35,6 +35,15 @@ buildPythonPackage rec {
     writableTmpDirAsHomeHook
   ];
 
+  disabledTests = [
+    # Broken due to click 8.2.0 update
+    # https://github.com/simonw/symbex/issues/48
+    "test_output"
+    "test_replace"
+    "test_replace_errors"
+    "test_errors"
+  ];
+
   meta = {
     description = "Find the Python code for specified symbols";
     homepage = "https://github.com/simonw/symbex";

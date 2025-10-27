@@ -85,7 +85,7 @@ let
 
   llvm = symlinkJoin {
     name = "llvm";
-    paths = with llvmPackages; [
+    paths = [
       clang
       llvmPackages.llvm
     ];

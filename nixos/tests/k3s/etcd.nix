@@ -50,6 +50,7 @@ import ../make-test-python.nix (
           services.k3s = {
             enable = true;
             role = "server";
+            package = k3s;
             extraFlags = [
               "--datastore-endpoint=\"http://192.168.1.1:2379\""
               "--disable coredns"

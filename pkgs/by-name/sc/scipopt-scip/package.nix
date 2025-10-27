@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchzip,
   fetchFromGitHub,
   cmake,
   zlib,
@@ -11,7 +10,7 @@
   scipopt-papilo,
   scipopt-zimpl,
   ipopt,
-  tbb_2022,
+  onetbb,
   boost,
   gfortran,
   criterion,
@@ -29,6 +28,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Zc1AXNpHQXXFO8jkMaJj6xYkmkQxAM8G+SiPiH9xCAw=";
   };
 
+  patches = [
+    # https://github.com/scipopt/scip/pull/169
+    ./0001-check-fix-invalid-ctest-invocation.patch
+  ];
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
@@ -39,14 +43,12 @@ stdenv.mkDerivation rec {
     gmp
     readline
     zlib
-    tbb_2022
+    onetbb
     boost
     gfortran
     criterion
     mpfr # if not included, throws fatal error: mpfr.h not found
   ];
-
-  cmakeFlags = [ ];
 
   doCheck = true;
 

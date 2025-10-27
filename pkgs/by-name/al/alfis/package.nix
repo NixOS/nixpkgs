@@ -5,7 +5,7 @@
   fetchFromGitHub,
   pkg-config,
   makeWrapper,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   zenity,
   withGui ? true,
 }:
@@ -27,7 +27,8 @@ rustPlatform.buildRustPackage rec {
     pkg-config
     makeWrapper
   ];
-  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_0;
+
+  buildInputs = lib.optional (withGui && stdenv.hostPlatform.isLinux) webkitgtk_4_1;
 
   buildNoDefaultFeatures = true;
   buildFeatures = [ "doh" ] ++ lib.optional withGui "webgui";
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
-    broken = withGui && stdenv.hostPlatform.isDarwin;
+    # needs libsoup-2.4, which is soon going to be removed
+    # https://github.com/NixOS/nixpkgs/pull/450065
+    broken = withGui;
   };
 }

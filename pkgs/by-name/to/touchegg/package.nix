@@ -26,7 +26,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7LJ5gD2e6e4edKDabqmsiXTdNKJ39557Q4sEGWF8H1U=";
   };
 
-  patches = lib.optionals withPantheon [
+  patches = [
+    (fetchpatch {
+      name = "cmake-4-support.patch";
+      url = "https://github.com/JoseExposito/touchegg/commit/953c4227253d91c73f5ce46f89947262ebf45b18.patch";
+      hash = "sha256-q/rKXLN8wqisw3QfqEtu1ZaJonOYzkYLFRECNYB620g=";
+    })
+  ]
+  ++ lib.optionals withPantheon [
     # Required for the next patch to apply
     # Reverts https://github.com/JoseExposito/touchegg/pull/603
     (fetchpatch {

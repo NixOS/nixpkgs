@@ -11,12 +11,12 @@
 # reference: https://boringssl.googlesource.com/boringssl/+/refs/tags/0.20250818.0/BUILDING.md
 buildGoModule (finalAttrs: {
   pname = "boringssl";
-  version = "0.20250818.0";
+  version = "0.20251002.0";
 
   src = fetchgit {
     url = "https://boringssl.googlesource.com/boringssl";
     tag = finalAttrs.version;
-    hash = "sha256-lykIlC0tvjtjjS/rQTeX4vK9PgI+A8EnasEC+HYspvg=";
+    hash = "sha256-/78GCbyB37lada0fA8MsOYXVJSUCM7CuC2pHCpy9qto=";
   };
 
   patches = [
@@ -47,6 +47,9 @@ buildGoModule (finalAttrs: {
       # Needed with GCC 12 but breaks on darwin (with clang)
       "-Wno-error=stringop-overflow"
     ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=character-conversion"
+    ]
   );
 
   buildPhase = ''
@@ -65,7 +68,7 @@ buildGoModule (finalAttrs: {
     mkdir -p $bin/bin $dev $out/lib
 
     install -Dm755 bssl -t $bin/bin
-    install -Dm644 {libboringssl_gtest,libcrypto,libdecrepit,libpki,libssl,libtest_support_lib}.a -t $out/lib
+    install -Dm644 {libcrypto,libdecrepit,libpki,libssl}.a -t $out/lib
 
     cp -r ../include $dev
 

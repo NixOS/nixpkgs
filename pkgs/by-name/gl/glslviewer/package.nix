@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     ffmpeg
   ];
 
+  cmakeFlags = [ "-DCMAKE_POLICY_VERSION_MINIMUM=3.20" ];
   meta = with lib; {
     description = "Live GLSL coding renderer";
     homepage = "https://patriciogonzalezvivo.com/2015/glslViewer/";

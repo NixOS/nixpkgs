@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "kimocoder";
     repo = "bully";
-    rev = version;
+    tag = version;
     sha256 = "1n2754a5z44g414a0hj3cmi9q5lwnzyvmvzskrj2nci8c8m2kgnf";
   };
 

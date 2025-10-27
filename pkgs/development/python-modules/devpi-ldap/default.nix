@@ -14,7 +14,7 @@
   webtest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "devpi-ldap";
   version = "2.1.1-unstable-2023-11-28";
   pyproject = true;

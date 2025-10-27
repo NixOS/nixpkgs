@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "tree-sitter-language-pack";
-  version = "0.9.1";
+  version = "0.10.0";
   pyproject = true;
 
   # Using the GitHub sources necessitates fetching the treesitter grammar parsers by using a vendored script.
@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "tree_sitter_language_pack";
     inherit version;
-    hash = "sha256-LaU5dR7MULnmu/yji1dQGjxV5nGGqTnVvxSdnLciCXQ=";
+    hash = "sha256-oWGLKYKLZEIu1rKhEYdZnFUheBNI/t2EIPAfb1A5ofw=";
   };
 
   # Upstream bumped dependencies aggressively, but we can still use older

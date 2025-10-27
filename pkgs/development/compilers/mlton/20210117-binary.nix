@@ -84,5 +84,5 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  meta = import ./meta.nix;
+  meta = import ./meta.nix { inherit lib; };
 }

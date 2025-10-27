@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "exifread";
-  version = "3.4.0";
+  version = "3.5.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3H+Np3OWcJykFKDu4cJikC9xOvycBDuqi4IzfXYwb/w=";
+    hash = "sha256-n5mPgNMGJ0HJdt/E/QM0JLxAkyk3mU5NIYHrcMS2rt0=";
   };
 
   build-system = [ setuptools ];

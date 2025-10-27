@@ -23,7 +23,6 @@ rec {
 
   ppc64-elfv1 = {
     config = "powerpc64-unknown-linux-gnuabielfv1";
-    rust.rustcTarget = "powerpc64-unknown-linux-gnu";
   };
   ppc64-elfv2 = {
     config = "powerpc64-unknown-linux-gnuabielfv2";
@@ -386,6 +385,10 @@ rec {
   aarch64-windows = {
     config = "aarch64-pc-windows-msvc";
     useLLVM = true;
+  };
+
+  x86_64-cygwin = {
+    config = "x86_64-pc-cygwin";
   };
 
   # BSDs

@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "fountains";
-  version = "3.0.0";
+  version = "3.0.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kRu+jCKRfkH0URNuYvTF3TF1WslyfeE2EHE1VLCMyys=";
+    hash = "sha256-gGYmHvlD9cmivPtM/2sKW36FvUzk5FxYBgZfLUX2lIg=";
   };
 
   build-system = [ setuptools ];

@@ -10,16 +10,16 @@
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "clash-rs";
-  version = "0.9.0";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-OwoDvcGpuU2x6O3+rBJSXGS2VoeFt/oVgFWUaCUyC8E=";
+    hash = "sha256-asD7veAYdIF5biCbSXYvAyW/qBra3tvON9TQYCw6nB8=";
   };
 
-  cargoHash = "sha256-HKW6bOkHkBINwA2tgaKHEozKzT4n54roj6W989JUoAQ=";
+  cargoHash = "sha256-9zCQKxkjiskkBGxfnq2ANpqWobs+UJ5qCsbME2Z7GY4=";
 
   cargoPatches = [ ./Cargo.patch ];
 
@@ -46,13 +46,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   env = {
     # requires features: sync_unsafe_cell, unbounded_shifts, let_chains, ip
     RUSTC_BOOTSTRAP = 1;
+    RUSTFLAGS = "--cfg tokio_unstable";
+    NIX_CFLAGS_COMPILE = "-Wno-error";
   };
 
-  buildFeatures = [
-    "shadowsocks"
-    "tuic"
-    "onion"
-  ];
+  buildFeatures = [ "plus" ];
 
   doCheck = false; # test failed
 

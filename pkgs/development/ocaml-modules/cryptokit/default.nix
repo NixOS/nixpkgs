@@ -38,8 +38,5 @@ buildDunePackage rec {
     homepage = "http://pauillac.inria.fr/~xleroy/software.html";
     description = "Library of cryptographic primitives for OCaml";
     license = lib.licenses.lgpl2Only;
-    maintainers = [
-      lib.maintainers.maggesi
-    ];
   };
 }

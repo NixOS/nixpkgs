@@ -8,11 +8,9 @@
   nodes.machine =
     { modulesPath, ... }:
     {
-      imports = [
-        "${modulesPath}/profiles/perlless.nix"
-      ];
-      virtualisation.mountHostNixStore = false;
-      virtualisation.useNixStoreImage = true;
+      boot.initrd.systemd.enable = true;
+      system.etc.overlay.enable = true;
+      services.userborn.enable = true;
 
       system.nixos-init.enable = true;
       # Forcibly set this to only these specific values.

@@ -110,7 +110,9 @@ in
             1
           else
             coerceInt (parseVersion repo "platforms" minPlatformVersion);
-        latestPlatformVersionInt = lib.max minPlatformVersionInt (coerceInt repo.latest.platforms);
+        latestPlatformVersionInt = lib.max minPlatformVersionInt (
+          coerceInt (lib.versions.major repo.latest.platforms)
+        );
         firstPlatformVersionInt = lib.max minPlatformVersionInt (
           latestPlatformVersionInt - (lib.max 1 numLatestPlatformVersions) + 1
         );
@@ -255,16 +257,14 @@ let
   mkLicenseTexts =
     licenseNames:
     lib.lists.flatten (
-      builtins.map (
-        licenseName:
-        builtins.map (licenseText: "--- ${licenseName} ---\n${licenseText}") (mkLicenses licenseName)
+      map (
+        licenseName: map (licenseText: "--- ${licenseName} ---\n${licenseText}") (mkLicenses licenseName)
       ) licenseNames
     );
 
   # Converts a license name to a list of license hashes.
   mkLicenseHashes =
-    licenseName:
-    builtins.map (licenseText: builtins.hashString "sha1" licenseText) (mkLicenses licenseName);
+    licenseName: map (licenseText: builtins.hashString "sha1" licenseText) (mkLicenses licenseName);
 
   # The list of all license names we're accepting. Put android-sdk-license there
   # by default.

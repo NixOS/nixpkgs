@@ -17,22 +17,27 @@
   fftw,
   gtest,
   udevCheckHook,
+  versionCheckHook,
   indi-full,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "indilib";
-  version = "2.1.5.1";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "indilib";
     repo = "indi";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-mbY3iDLRcQ+pis26u6pHzB43ureaKH7KYPkV0CwHU/E=";
+    hash = "sha256-WfVC5CLzwyO40Kpv/SZaYiPGDvWLUydQaA8FvTVhHqg=";
   };
 
   nativeBuildInputs = [
     cmake
+  ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
     udevCheckHook
   ];
 
@@ -86,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Implementation of the INDI protocol for POSIX operating systems";
     changelog = "https://github.com/indilib/indi/releases/tag/v${finalAttrs.version}";
     license = licenses.lgpl2Plus;
+    mainProgram = "indiserver";
     maintainers = with maintainers; [
       sheepforce
       returntoreality

@@ -167,6 +167,16 @@ lib.mapAttrs mkLicense (
       fullName = "Apache License 2.0";
     };
 
+    baekmuk = {
+      spdxId = "Baekmuk";
+      fullName = "Baekmuk License";
+    };
+
+    bitstreamCharter = {
+      spdxId = "Bitstream-Charter";
+      fullName = "Bitstream Charter Font License";
+    };
+
     bitstreamVera = {
       spdxId = "Bitstream-Vera";
       fullName = "Bitstream Vera Font License";
@@ -180,6 +190,11 @@ lib.mapAttrs mkLicense (
     bitTorrent11 = {
       spdxId = "BitTorrent-1.1";
       fullName = " BitTorrent Open Source License v1.1";
+    };
+
+    boehmGC = {
+      spdxId = "Boehm-GC";
+      fullName = "Boehm-Demers-Weiser GC License";
     };
 
     bola11 = {
@@ -471,6 +486,11 @@ lib.mapAttrs mkLicense (
       fullName = "Common Public License 1.0";
     };
 
+    cnri-python = {
+      spdxId = "CNRI-Python";
+      fullName = "CNRI Python License";
+    };
+
     cronyx = {
       spdxId = "Cronyx";
       fullName = "Cronyx License";
@@ -584,6 +604,11 @@ lib.mapAttrs mkLicense (
       fullName = "Floodgap Free Software License";
       url = "https://www.floodgap.com/software/ffsl/license.html";
       free = false;
+    };
+
+    fontException = {
+      spdxId = "Font-exception-2.0";
+      fullName = "Font exception 2.0";
     };
 
     fraunhofer-fdk = {
@@ -764,6 +789,17 @@ lib.mapAttrs mkLicense (
       fullName = "INRIA Non-Commercial License Agreement for the Zélus compiler";
       url = "https://github.com/INRIA/zelus/raw/829f2b97cba93b0543a9ca0272269e6b8fdad356/LICENSE";
       free = false;
+    };
+
+    intel-eula = {
+      fullName = "Intel End User License Agreement for Developer Tools";
+      url = "https://software.intel.com/sites/manageability/AMT_Implementation_and_Reference_Guide/WordDocuments/intelamtsdklicense.htm";
+      free = false;
+    };
+
+    interbase = {
+      spdxId = "Interbase-1.0";
+      fullName = "Interbase Public License v1.0";
     };
 
     ipa = {
@@ -1042,6 +1078,11 @@ lib.mapAttrs mkLicense (
       redistributable = true; # Only if used in Netdata products.
     };
 
+    ngpl = {
+      spdxId = "NGPL";
+      fullName = "Nethack General Public License";
+    };
+
     nistSoftware = {
       spdxId = "NIST-Software";
       fullName = "NIST Software License";
@@ -1132,6 +1173,11 @@ lib.mapAttrs mkLicense (
     osl3 = {
       spdxId = "OSL-3.0";
       fullName = "Open Software License 3.0";
+    };
+
+    paratype = {
+      fullName = "ParaType Free Font Licensing Agreement";
+      url = "https://web.archive.org/web/20161209023955/http://www.paratype.ru/public/pt_openlicense_eng.asp";
     };
 
     parity70 = {
@@ -1262,6 +1308,11 @@ lib.mapAttrs mkLicense (
       redistributable = false; # only free to redistribute "for non-commercial purposes"
     };
 
+    tcpWrappers = {
+      spdxId = "TCP-wrappers";
+      fullName = "TCP Wrappers License";
+    };
+
     teamspeak = {
       fullName = "Teamspeak client license";
       url = "https://www.teamspeak.com/en/privacy-and-terms/";
@@ -1307,6 +1358,11 @@ lib.mapAttrs mkLicense (
       # TODO: add spdxId when it gets accepted to spdx
       # https://tools.spdx.org/app/license_requests/458
       # https://github.com/spdx/license-list-XML/issues/2757
+    };
+
+    torque11 = {
+      spdxId = "TORQUE-1.1";
+      fullName = "TORQUE v2.5+ Software License v1.1";
     };
 
     tsl = {
@@ -1447,6 +1503,11 @@ lib.mapAttrs mkLicense (
     x11 = {
       spdxId = "X11";
       fullName = "X11 License";
+    };
+
+    xerox = {
+      spdxId = "Xerox";
+      fullName = "Xerox License";
     };
 
     xfig = {

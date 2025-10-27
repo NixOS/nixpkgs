@@ -60,7 +60,7 @@ lib.checkListOfEnum "${pname}: available color variants"
 
       ./install.sh --dest $out/share/icons \
         --name Fluent \
-        ${builtins.toString colorVariants} \
+        ${toString colorVariants} \
         ${lib.optionalString allColorVariants "--all"} \
         ${lib.optionalString roundedIcons "--round"} \
         ${lib.optionalString blackPanelIcons "--black"}

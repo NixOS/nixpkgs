@@ -12,21 +12,19 @@
   # any issues they run into.
   withGoolm ? false,
 }:
-let
-  version = "0.2.3";
-in
-buildGoModule {
+buildGoModule rec {
   pname = "mautrix-slack";
-  inherit version;
+  version = "25.10";
+  tag = "v0.2510.0";
 
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "slack";
-    tag = "v${version}";
-    hash = "sha256-gR5D2uCNS+LiP0KXup/iIiOThWohzeBe4CD/oWak1BM=";
+    tag = tag;
+    hash = "sha256-PeSE7WKFSSxZyyG9TJmYeCzHY3bPvkHZ5l+mLzr8tS8=";
   };
 
-  vendorHash = "sha256-aukL6RThtWcznz/x25btTTvloYkRZ/vhAQj1hOdI1U4=";
+  vendorHash = "sha256-9MsHRU2EqMTWEMVraJ/6/084X5yx3zzSdxP8zSYFJ1E=";
 
   buildInputs = lib.optional (!withGoolm) olm;
   tags = lib.optional withGoolm "goolm";
@@ -34,6 +32,13 @@ buildGoModule {
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X"
+    "main.Tag=${tag}"
+  ];
 
   passthru.updateScript = nix-update-script { };
 

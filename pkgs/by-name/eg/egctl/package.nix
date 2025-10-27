@@ -9,13 +9,13 @@
 
 buildGoModule (finalAttrs: {
   pname = "egctl";
-  version = "1.5.1";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "envoyproxy";
     repo = "gateway";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-glOnAnNuefdTq4BOd1NKpsadrWEqVOOc18jPx7lEwEQ=";
+    hash = "sha256-H+YjDWAm6ft1JewuUFpqYyCYxZMn7elPFRoDU+AzBUU=";
   };
 
   vendorHash = "sha256-SNXnEutsDQwoGKiJN3uXxVrCl4gFcd62ZuX8GPyGliI=";

@@ -20,6 +20,49 @@ module.exports = async ({ github, context, core, dry }) => {
       })
     ).data
 
+    // When the same change has already been merged to the target branch, a PR will still be
+    // open and display the same changes - but will not actually have any effect. This causes
+    // strange CI behavior, because the diff of the merge-commit is empty, no rebuilds will
+    // be detected, no maintainers pinged.
+    // We can just check the temporary merge commit, and if it's empty the PR can safely be
+    // closed - there are no further changes.
+    // We only do this for PRs, which are non-empty to start with. This avoids closing PRs
+    // which have been created with an empty commit for notification purposes, for example
+    // the yearly election notification for voters.
+    if (pull_request.merge_commit_sha && pull_request.changed_files > 0) {
+      const commit = (
+        await github.rest.repos.getCommit({
+          ...context.repo,
+          ref: pull_request.merge_commit_sha,
+        })
+      ).data
+
+      if (commit.files.length === 0) {
+        const body = [
+          `The diff for the temporary merge commit ${pull_request.merge_commit_sha} is empty.`,
+          'The changes in this PR have almost certainly already been merged to the target branch.',
+        ].join('\n')
+
+        core.info(`PR #${item.number}: closed`)
+
+        if (!dry) {
+          await github.rest.issues.createComment({
+            ...context.repo,
+            issue_number: pull_number,
+            body,
+          })
+
+          await github.rest.pulls.update({
+            ...context.repo,
+            pull_number,
+            state: 'closed',
+          })
+        }
+
+        return {}
+      }
+    }
+
     const reviews = await github.paginate(github.rest.pulls.listReviews, {
       ...context.repo,
       pull_number,
@@ -72,20 +115,7 @@ module.exports = async ({ github, context, core, dry }) => {
           exclude_pull_requests: true,
           head_sha: pull_request.head.sha,
         })
-      ).data.workflow_runs[0] ??
-      // TODO: Remove this after 2025-09-17, at which point all eval.yml artifacts will have expired.
-      (
-        await github.rest.actions.listWorkflowRuns({
-          ...context.repo,
-          // In older PRs, we need eval.yml instead of pr.yml.
-          workflow_id: 'eval.yml',
-          event: 'pull_request_target',
-          status: 'success',
-          exclude_pull_requests: true,
-          head_sha: pull_request.head.sha,
-        })
-      ).data.workflow_runs[0] ??
-      {}
+      ).data.workflow_runs[0] ?? {}
 
     // Newer PRs might not have run Eval to completion, yet.
     // Older PRs might not have an eval.yml workflow, yet.
@@ -159,20 +189,10 @@ module.exports = async ({ github, context, core, dry }) => {
         await readFile(`${pull_number}/changed-paths.json`, 'utf-8'),
       ).labels
 
-      Object.assign(
-        prLabels,
-        // Ignore `evalLabels` if it's an array.
-        // This can happen for older eval runs, before we switched to objects.
-        // The old eval labels would have been set by the eval run,
-        // so now they'll be present in `before`.
-        // TODO: Simplify once old eval results have expired (~2025-10)
-        Array.isArray(evalLabels) ? undefined : evalLabels,
-        {
-          '12.approved-by: package-maintainer': Array.from(maintainers).some(
-            (m) => approvals.has(m),
-          ),
-        },
-      )
+      Object.assign(prLabels, evalLabels, {
+        '12.approved-by: package-maintainer':
+          maintainers.intersection(approvals).size > 0,
+      })
     }
 
     return prLabels
@@ -372,7 +392,7 @@ module.exports = async ({ github, context, core, dry }) => {
             `updated:>=${cutoff.toISOString()}`,
           ].join(' AND '),
           per_page: 100,
-          // TODO: Remove in 2025-10, when it becomes the default.
+          // TODO: Remove after 2025-11-04, when it becomes the default.
           advanced_search: true,
         },
       )

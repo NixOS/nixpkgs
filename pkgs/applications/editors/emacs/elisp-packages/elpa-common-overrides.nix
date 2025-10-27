@@ -116,7 +116,7 @@ in
             })
           ]
         else
-          previousAttrs.patches or null;
+          previousAttrs.patches or [ ];
       preBuild =
         if applyOrgRoamMissingPatch then
           previousAttrs.preBuild or ""
@@ -129,7 +129,7 @@ in
             popd
           ''
         else
-          previousAttrs.preBuild or null;
+          previousAttrs.preBuild or "";
     }
   );
 

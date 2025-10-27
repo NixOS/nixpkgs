@@ -7,6 +7,7 @@
   gcc,
   pkg-config,
   makeWrapper,
+  nixosTests,
   stdenv,
   systemdMinimal,
 }:
@@ -60,6 +61,10 @@ buildGoModule rec {
     "-X git.numtide.com/numtide/nixos-facter/build.Version=v${version}"
     "-X github.com/numtide/nixos-facter/pkg/build.System=${stdenv.hostPlatform.system}"
   ];
+
+  passthru.tests = {
+    inherit (nixosTests) facter;
+  };
 
   meta = {
     description = "Declarative hardware configuration for NixOS";

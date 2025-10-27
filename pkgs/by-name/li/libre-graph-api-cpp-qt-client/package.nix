@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${src.name}/client";
 
+  # cmake 4 compatibility
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ qt6.qtbase ];
   dontWrapQtApps = true;

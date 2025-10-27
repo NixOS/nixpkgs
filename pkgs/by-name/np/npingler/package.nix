@@ -1,22 +1,48 @@
 {
   lib,
+  stdenv,
+  buildPackages,
   rustPlatform,
   fetchFromGitHub,
+  installShellFiles,
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage {
+let
+  emulatorAvailable = stdenv.hostPlatform.emulatorAvailable buildPackages;
+  emulator = stdenv.hostPlatform.emulator buildPackages;
+in
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "npingler";
-  version = "unstable-2025-08-24";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "9999years";
     repo = "npingler";
-    rev = "b897098be1df890b669dc734edcb10bf8fc798cb";
-    hash = "sha256-mMwfonIP8fnJDNdl9ANhLmYlM8tPLtBCWNIPSRBT/D4=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-d34IGZ+Xdzknkmz+JemEEEYde+8zowuGOlGKlm7F3Jk=";
   };
 
-  cargoHash = "sha256-VhMpgrNy0NauwBSCR+5vjod9H216HPC+rdQUIFVjnRg=";
+  cargoHash = "sha256-Fs5LPy9dX2hRyMo/YASQesXQoklqYDV78eXnlecet0E=";
+
+  buildFeatures = [ "clap_mangen" ];
+
+  nativeBuildInputs = [
+    installShellFiles
+  ];
+
+  postInstall = lib.optionalString emulatorAvailable ''
+    manpages=$(mktemp -d)
+    ${emulator} $out/bin/npingler util generate-man-pages "$manpages"
+    for manpage in "$manpages"/*; do
+      installManPage "$manpage"
+    done
+
+    installShellCompletion --cmd npingler \
+      --bash <(${emulator} $out/bin/npingler util generate-completions bash) \
+      --fish <(${emulator} $out/bin/npingler util generate-completions fish) \
+      --zsh  <(${emulator} $out/bin/npingler util generate-completions zsh)
+  '';
 
   meta = {
     description = "Nix profile manager for use with npins";
@@ -29,4 +55,4 @@ rustPlatform.buildRustPackage {
   };
 
   passthru.updateScript = nix-update-script { };
-}
+})

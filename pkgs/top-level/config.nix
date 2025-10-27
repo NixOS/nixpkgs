@@ -20,7 +20,7 @@ let
   mkMassRebuild =
     args:
     mkOption (
-      builtins.removeAttrs args [ "feature" ]
+      removeAttrs args [ "feature" ]
       // {
         type = args.type or (types.uniq types.bool);
         default = args.default or false;
@@ -103,6 +103,40 @@ let
 
         Changing the default will cause a mass rebuild.
       '';
+    };
+
+    gitConfig = mkOption {
+      type = types.attrsOf (types.attrsOf types.anything);
+      description = ''
+        The default [git configuration](https://git-scm.com/docs/git-config#_variables) for all [`pkgs.fetchgit`](#fetchgit) calls.
+
+        Among many other potential uses, this can be used to override URLs to point to local mirrors.
+
+        Changing this will not cause any rebuilds because `pkgs.fetchgit` produces a [fixed-output derivation](https://nix.dev/manual/nix/stable/glossary.html?highlight=fixed-output%20derivation#gloss-fixed-output-derivation).
+
+        To set the configuration file directly, use the [`gitConfigFile`](#opt-gitConfigFile) option instead.
+
+        To set the configuration file for individual calls, use `fetchgit { gitConfigFile = "..."; }`.
+      '';
+      default = { };
+      example = {
+        url."https://my-github-mirror.local".insteadOf = [ "https://github.com" ];
+      };
+    };
+
+    # A rendered version of gitConfig that can be reused by all pkgs.fetchgit calls
+    gitConfigFile = mkOption {
+      type = types.nullOr types.path;
+      description = ''
+        A path to a [git configuration](https://git-scm.com/docs/git-config#_variables) file, to be used for all [`pkgs.fetchgit`](#fetchgit) calls.
+
+        This overrides the [`gitConfig`](#opt-gitConfig) option, see its documentation for more details.
+      '';
+      default =
+        if config.gitConfig != { } then
+          builtins.toFile "gitconfig" (lib.generators.toGitINI config.gitConfig)
+        else
+          null;
     };
 
     doCheckByDefault = mkMassRebuild {
@@ -251,6 +285,19 @@ let
       default = false;
       description = ''
         Whether to check that the `meta` attribute of derivations are correct during evaluation time.
+      '';
+    };
+
+    hashedMirrors = mkOption {
+      type = types.listOf types.str;
+      default = [ "https://tarballs.nixos.org" ];
+      description = ''
+        The set of content-addressed/hashed mirror URLs used by [`pkgs.fetchurl`](#sec-pkgs-fetchers-fetchurl).
+        In case `pkgs.fetchurl` can't download from the given URLs,
+        it will try the hashed mirrors based on the expected output hash.
+
+        See [`copy-tarballs.pl`](https://github.com/NixOS/nixpkgs/blob/a2d829eaa7a455eaa3013c45f6431e705702dd46/maintainers/scripts/copy-tarballs.pl)
+        for more details on how hashed mirrors are constructed.
       '';
     };
 

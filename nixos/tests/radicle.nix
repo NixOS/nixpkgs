@@ -203,7 +203,7 @@ in
       with subtest("alice can receive the patch"):
         alice.wait_until_succeeds("test 1 = \"$(rad stats | jq .local.patches)\"")
         alice.succeed(
-          f"cd /tmp/repo && rad patch show {bob_repo_patch1_pid} | grep 'opened by bob'",
+          f"cd /tmp/repo && rad patch show {bob_repo_patch1_pid} | grep -E '{bob_repo_patch1_pid[:7]} @ .+ by bob'",
           f"cd /tmp/repo && rad patch checkout {bob_repo_patch1_pid}"
         )
         assert alice.succeed("cat /tmp/repo/testfile") == "hello alice\n"

@@ -12,8 +12,6 @@ buildPythonPackage rec {
   version = "3.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "ha-ffmpeg";
@@ -23,7 +21,13 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ async-timeout ];
+  pythonRemoveDeps = [
+    "async_timeout"
+  ];
+
+  dependencies = lib.optionals (pythonOlder "3.11") [
+    async-timeout
+  ];
 
   # only manual tests
   doCheck = false;

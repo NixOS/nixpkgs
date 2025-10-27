@@ -4,12 +4,12 @@
   aiohttp,
   aiomqtt,
   aioresponses,
-  async-timeout,
   buildPythonPackage,
   click,
   construct,
   dacite,
   fetchFromGitHub,
+  fetchpatch,
   freezegun,
   paho-mqtt,
   poetry-core,
@@ -28,7 +28,7 @@
 
 buildPythonPackage rec {
   pname = "python-roborock";
-  version = "2.47.1";
+  version = "2.50.2";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -37,8 +37,18 @@ buildPythonPackage rec {
     owner = "Python-roborock";
     repo = "python-roborock";
     tag = "v${version}";
-    hash = "sha256-bA7KPLVh3Jo6xdDdJS8czUaEyOilmbzHYoQJG8/soT4=";
+    hash = "sha256-66kSNkivq6BHnqIqx1INtdoysBJfCqV76yIAJiHmfxQ=";
   };
+
+  patches = [
+    # https://github.com/Python-roborock/python-roborock/pull/527
+    (fetchpatch {
+      name = "replace async-timeout with asyncio.timeout.patch";
+      url = "https://github.com/Python-roborock/python-roborock/commit/f376027f5933e163441cf1815b820056731a3632.patch";
+      excludes = [ "poetry.lock" ];
+      hash = "sha256-53xsQ3yxh9CilC9hNS31rDXZVFG+mMhe7ffOb4L6bUE=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \
@@ -52,7 +62,6 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     aiomqtt
-    async-timeout
     click
     construct
     dacite

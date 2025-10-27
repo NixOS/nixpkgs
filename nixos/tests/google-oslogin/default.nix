@@ -19,7 +19,7 @@ let
 in
 {
   name = "google-oslogin";
-  meta = with lib.maintainers; {
+  meta = {
     maintainers = [ ];
   };
 

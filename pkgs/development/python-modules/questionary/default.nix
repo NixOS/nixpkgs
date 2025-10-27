@@ -35,15 +35,19 @@ buildPythonPackage rec {
   disabledTests = [
     # RuntimeError: no running event loop
     "test_blank_line_fix"
+
+    # TypeError: Attrs.__new__() missing 1 required positional argument: 'dim'
+    # https://github.com/tmbo/questionary/issues/461
+    "test_print_with_style"
   ];
 
   pythonImportsCheck = [ "questionary" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python library to build command line user prompts";
     homepage = "https://github.com/tmbo/questionary";
     changelog = "https://github.com/tmbo/questionary/blob/${src.rev}/docs/pages/changelog.rst";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

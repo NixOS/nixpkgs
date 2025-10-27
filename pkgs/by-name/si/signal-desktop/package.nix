@@ -3,7 +3,7 @@
   lib,
   nodejs_22,
   pnpm_10,
-  electron_37,
+  electron_38,
   python3,
   makeWrapper,
   callPackage,
@@ -23,7 +23,7 @@
 let
   nodejs = nodejs_22;
   pnpm = pnpm_10.override { inherit nodejs; };
-  electron = electron_37;
+  electron = electron_38;
 
   libsignal-node = callPackage ./libsignal-node.nix { inherit nodejs; };
   signal-sqlcipher = callPackage ./signal-sqlcipher.nix { inherit pnpm nodejs; };
@@ -52,13 +52,13 @@ let
     '';
   });
 
-  version = "7.70.0";
+  version = "7.76.0";
 
   src = fetchFromGitHub {
     owner = "signalapp";
     repo = "Signal-Desktop";
     tag = "v${version}";
-    hash = "sha256-y9i9YQPsLt3SLqROyEZsyIkVy/os3hy+1UMUSFMZJTY=";
+    hash = "sha256-zwywpQ/1LYSofXPMLtYt7c0PLlzgNedRGqslPJur61g=";
   };
 
   sticker-creator = stdenv.mkDerivation (finalAttrs: {
@@ -69,7 +69,7 @@ let
     pnpmDeps = pnpm.fetchDeps {
       inherit (finalAttrs) pname src version;
       fetcherVersion = 1;
-      hash = "sha256-cT7Ixl/V/mesPHvJUsG63Y/wXwKjbjkjdjP3S7uEOa0=";
+      hash = "sha256-WUwclz7dJl+s5zRjWu/HTJ5eZroAFA6vR8mZzwib6Po=";
     };
 
     strictDeps = true;
@@ -134,15 +134,15 @@ stdenv.mkDerivation (finalAttrs: {
     fetcherVersion = 1;
     hash =
       if withAppleEmojis then
-        "sha256-uVVUHvYhBCplKPyuS2+PKCxox8uWU2E/2EXLCG1ot54="
+        "sha256-b13di3TdaS6CT8gAZfBqlu4WheIHL+X8LvAo148H8kI="
       else
-        "sha256-tbfk/tIgqpjDtDiULbTVUOJf5i9eLX9xY7vUPrrjmu0=";
+        "sha256-/Yy9R+MRN5e5vGU0XgwJa7oFpHn8bi8B0y89aaT2LQI=";
   };
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
     SIGNAL_ENV = "production";
-    SOURCE_DATE_EPOCH = 1757542492;
+    SOURCE_DATE_EPOCH = 1761172657;
   };
 
   preBuild = ''
@@ -221,7 +221,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper '${lib.getExe electron}' "$out/bin/signal-desktop" \
       --add-flags "$out/share/signal-desktop/app.asar" \
       --set-default ELECTRON_FORCE_IS_PACKAGED 1 \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
 
     runHook postInstall

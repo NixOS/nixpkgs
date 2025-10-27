@@ -6,16 +6,22 @@
   zlib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "minisat";
   version = "2.2.1";
 
   src = fetchFromGitHub {
     owner = "stp";
     repo = "minisat";
-    rev = "releases/${version}";
-    sha256 = "14vcbjnlia00lpyv2fhbmw3wbc9bk9h7bln9zpyc3nwiz5cbjz4a";
+    tag = "releases/${finalAttrs.version}";
+    hash = "sha256-iny5WPmR28H8/cnSdWCaK7HFB68LOrH9pQCoSK1cbJM=";
   };
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt --replace-fail \
+      'cmake_minimum_required(VERSION 2.6 FATAL_ERROR)' \
+      'cmake_minimum_required(VERSION 4.1)'
+  '';
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
@@ -29,4 +35,4 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = "http://minisat.se/";
   };
-}
+})

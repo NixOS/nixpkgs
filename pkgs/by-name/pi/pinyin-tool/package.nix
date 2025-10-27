@@ -22,6 +22,5 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "pinyin-tool";
     homepage = "https://github.com/briankung/pinyin-tool";
     license = licenses.mit;
-    maintainers = with maintainers; [ neonfuz ];
   };
 }

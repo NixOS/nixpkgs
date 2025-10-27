@@ -6,26 +6,19 @@
   pytest-repeat,
   pytestCheckHook,
   setuptools,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "4.0.14";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-kEo5lNCdC9676ZrBNIkav+9wT9qjzZHbauKuVnrXxK8=";
+    hash = "sha256-J1k8gYPStnnXHFvbHG6nHuQMQy1+XSiS5ERk/reL/Z4=";
   };
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # error: unsupported option '-mfloat-abi=' for target 'aarch64-apple-darwin'
-    substituteInPlace setup.py \
-      --replace-fail '"-mfloat-abi=hard",' ""
-  '';
 
   build-system = [
     setuptools
@@ -46,6 +39,9 @@ buildPythonPackage rec {
     description = "SIMD-accelerated string search, sort, hashes, fingerprints, & edit distances";
     homepage = "https://github.com/ashvardanian/stringzilla";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      dotlambda
+    ];
   };
 }

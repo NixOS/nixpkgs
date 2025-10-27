@@ -1,11 +1,11 @@
 {
   _7zz,
-  avalonia,
   buildDotnetModule,
   callPackage,
   desktop-file-utils,
   dotnetCorePackages,
-  fetchgit,
+  fetchFromGitHub,
+  fetchpatch2,
   imagemagick,
   lib,
   xdg-utils,
@@ -23,12 +23,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.16.4";
+  version = "0.19.4";
 
-  src = fetchgit {
-    url = "https://github.com/Nexus-Mods/NexusMods.App.git";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-9Xy5SWwjVWYlbt33meVGFDF96Cx66DXOyECEF47/kSo=";
+  src = fetchFromGitHub {
+    owner = "Nexus-Mods";
+    repo = "NexusMods.App";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-WKfv5y6UmO3dmzkXrqZ+VtIbXf0FszRdsa5Rmp95rYg=";
     fetchSubmodules = true;
   };
 
@@ -44,11 +45,6 @@ buildDotnetModule (finalAttrs: {
   projectFile = "src/NexusMods.App/NexusMods.App.csproj";
   testProjectFile = "NexusMods.App.sln";
 
-  buildInputs = [
-    # TODO: bump avalonia to 11.1.3
-    # avalonia
-  ];
-
   nativeCheckInputs = [ _7zz ];
 
   nativeBuildInputs = [
@@ -61,10 +57,15 @@ buildDotnetModule (finalAttrs: {
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 
-  postPatch = ''
-    # for some reason these tests fail (intermittently?) with a zero timestamp
-    touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+  patches = [
+    (fetchpatch2 {
+      name = "Fix-SMAPI-installation.patch";
+      url = "https://github.com/Nexus-Mods/NexusMods.App/pull/4026.patch?full_index=1";
+      hash = "sha256-1LgFTi63fVhGUZXZtS6iD2yqd0RxhdpiXKtWMFNEoD4=";
+    })
+  ];
 
+  postPatch = ''
     # Specify a fixed date to improve build reproducibility
     echo "1970-01-01T00:00:00Z" >buildDate.txt
     substituteInPlace src/NexusMods.Sdk/NexusMods.Sdk.csproj \
@@ -77,6 +78,16 @@ buildDotnetModule (finalAttrs: {
     # Use a vendored version of the nexus API's games.json data
     substituteInPlace src/NexusMods.Networking.NexusWebApi/NexusMods.Networking.NexusWebApi.csproj \
       --replace-fail '$(BaseIntermediateOutputPath)games.json' ${./vendored/games.json}
+
+    ${lib.optionalString finalAttrs.doCheck ''
+      # For some reason these tests fail (intermittently?) with a zero timestamp
+      touch tests/NexusMods.UI.Tests/WorkspaceSystem/*.verified.png
+
+      # Fix expected version number in text fixture
+      # https://github.com/Nexus-Mods/NexusMods.App/issues/4030
+      substituteInPlace tests/NexusMods.Backend.Tests/EventTrackerTests.Test_PrepareRequest.verified.txt \
+        --replace-fail 0.0.1 ${finalAttrs.version}
+    ''}
   '';
 
   makeWrapperArgs = [
@@ -106,8 +117,8 @@ buildDotnetModule (finalAttrs: {
 
     # Bitmap icons
     for i in 16 24 48 64 96 128 256 512; do
-      size=''${i}x''${i}
-      dir=$out/share/icons/hicolor/$size/apps
+      size="$i"x"$i"
+      dir="$out/share/icons/hicolor/$size/apps"
       mkdir -p $dir
       magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
@@ -196,7 +207,7 @@ buildDotnetModule (finalAttrs: {
   meta = {
     mainProgram = "NexusMods.App";
     homepage = "https://github.com/Nexus-Mods/NexusMods.App";
-    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/v${finalAttrs.version}";
+    changelog = "https://github.com/Nexus-Mods/NexusMods.App/releases/tag/${finalAttrs.src.tag}";
     license = [ lib.licenses.gpl3Plus ];
     maintainers = with lib.maintainers; [
       l0b0

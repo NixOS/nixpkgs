@@ -43,7 +43,6 @@ let
     opencamlib
     pivy
     ply # for openSCAD file support
-    py-slvs
     pybind11
     pycollada
     pyside6

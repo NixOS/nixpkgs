@@ -56,5 +56,7 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/adammillerio/beets-copyartifacts/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     inherit (beets.meta) platforms;
+    # Isn't compatible with beets >= 2.3
+    broken = true;
   };
 }

@@ -1,5 +1,6 @@
 {
   lib,
+  ocaml,
   buildDunePackage,
   fetchFromGitHub,
   menhir,
@@ -9,34 +10,36 @@
   yojson,
 }:
 
-buildDunePackage rec {
-  pname = "morbig";
-  version = "0.11.0";
+lib.throwIf (lib.versionAtLeast ocaml.version "5.4")
+  "morbig is not available for OCaml ${ocaml.version}"
 
-  src = fetchFromGitHub {
-    owner = "colis-anr";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-fOBaJHHP/Imi9UDLflI52OdKDcmMxpl+NH3pfofmv/o=";
-  };
+  buildDunePackage
+  rec {
+    pname = "morbig";
+    version = "0.11.0";
 
-  duneVersion = "3";
+    src = fetchFromGitHub {
+      owner = "colis-anr";
+      repo = pname;
+      rev = "v${version}";
+      hash = "sha256-fOBaJHHP/Imi9UDLflI52OdKDcmMxpl+NH3pfofmv/o=";
+    };
 
-  nativeBuildInputs = [
-    menhir
-  ];
+    nativeBuildInputs = [
+      menhir
+    ];
 
-  propagatedBuildInputs = [
-    menhirLib
-    ppx_deriving_yojson
-    visitors
-    yojson
-  ];
+    propagatedBuildInputs = [
+      menhirLib
+      ppx_deriving_yojson
+      visitors
+      yojson
+    ];
 
-  meta = with lib; {
-    homepage = "https://github.com/colis-anr/${pname}";
-    description = "Static parser for POSIX Shell";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ niols ];
-  };
-}
+    meta = with lib; {
+      homepage = "https://github.com/colis-anr/${pname}";
+      description = "Static parser for POSIX Shell";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ niols ];
+    };
+  }

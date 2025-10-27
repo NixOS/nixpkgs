@@ -31,6 +31,7 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Fix absolute install paths
     ./install.patch
+    ./cmake4.patch
   ];
 
   # /build/source/libsigrok4DSL/strutil.c:343:19: error: implicit declaration of function 'strcasecmp'; did you mean 'g_strcasecmp'? []

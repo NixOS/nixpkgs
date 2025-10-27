@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "temporal";
-  version = "1.28.1";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "temporalio";
     repo = "temporal";
     rev = "v${version}";
-    hash = "sha256-I1Xh9F9c/h6GZxyE75Q3WN7BPN79QuKlB0XKR30vuwg=";
+    hash = "sha256-oxn/78nQCvlEkSqabVV47siWSSnz32tpDOweqScPYvY=";
   };
 
-  vendorHash = "sha256-T90mj+EVqlHJVGaUOGwD8acHTbYH6g8NEzKGFwjKu4M=";
+  vendorHash = "sha256-HW2j8swbaWwU1i3udqlT8VyFreML6ZH14zWxF8L5NTQ=";
 
   excludedPackages = [ "./build" ];
 

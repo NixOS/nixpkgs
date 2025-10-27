@@ -8,13 +8,13 @@
   zita-resampler,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "zita-ajbridge";
   version = "0.8.4";
 
   src = fetchurl {
-    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0g5v0l0zmqh049mhv62n8s5bpm0yrlby7mkxxhs5qwadp8v4w9mw";
+    url = "https://kokkinizita.linuxaudio.org/linuxaudio/downloads/zita-ajbridge-${finalAttrs.version}.tar.bz2";
+    hash = "sha256-vCZONrpNcVw07H3W4xfNHtS7ikZWmA1rIgDi+gEFuzw=";
   };
 
   buildInputs = [
@@ -35,11 +35,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     description = "Connect additional ALSA devices to JACK";
     homepage = "http://kokkinizita.linuxaudio.org/linuxaudio/index.html";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
-}
+})

@@ -59,7 +59,7 @@ let
 
   packages =
     self:
-    with self;
+
     # SUPPORT
     let
 

@@ -5,14 +5,14 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "lcrq";
-  version = "0.2.4";
+  version = "0.3.0";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "librecast";
     repo = "lcrq";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Vij0aV4BIVrpRSzVneyP7MjlsdJSz1mbMCShEOOYVbQ=";
+    hash = "sha256-l8/mgcckc90FjcbAjGGUnXAN/GyOTQjjGvsA++VSen4=";
   };
 
   installFlags = [ "PREFIX=$(out)" ];

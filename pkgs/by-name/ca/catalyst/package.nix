@@ -75,10 +75,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [ ctestCheckHook ] ++ lib.optional mpiSupport mpiCheckPhaseHook;
 
-  disabledTests = lib.optionals fortranSupport [
-    # unexpected fortran binding symbol *__iso_c_binding_C_ptr
-    "catalyst-abi-nm"
-  ];
+  disabledTests =
+    lib.optionals (fortranSupport || stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64)
+      [
+        # unexpected fortran binding symbol *__iso_c_binding_C_ptr
+        # unexpected symbol in libc++ from darwin sdk
+        "catalyst-abi-nm"
+      ];
 
   pythonImportsCheck = [ "catalyst" ];
 

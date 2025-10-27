@@ -33,7 +33,7 @@ A very basic configuration may look like this:
 
 This will start the oCIS server and make it available at `https://localhost:9200`
 
-However to make this configuration work you will need generate a configuration.
+However, to make this configuration work, you will need to generate a configuration.
 You can do this with:
 
 ```console

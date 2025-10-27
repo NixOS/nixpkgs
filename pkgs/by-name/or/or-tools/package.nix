@@ -20,6 +20,9 @@
   swig,
   unzip,
   zlib,
+
+  scipopt-scip,
+  withScip ? true,
 }:
 
 let
@@ -87,8 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "CMAKE_INSTALL_LIBDIR" "lib")
     (lib.cmakeBool "FETCH_PYTHON_DEPS" false)
     (lib.cmakeBool "USE_GLPK" true)
-    (lib.cmakeBool "USE_SCIP" false)
+    (lib.cmakeBool "USE_SCIP" withScip)
     (lib.cmakeFeature "Python3_EXECUTABLE" "${python3.pythonOnBuildForHost.interpreter}")
+  ]
+  ++ lib.optionals withScip [
+    # scip code parts require setting this unfortunately…
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-error=format-security")
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     (lib.cmakeBool "CMAKE_MACOSX_RPATH" false)
@@ -137,7 +144,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.immutabledict
     python3.pkgs.numpy
     python3.pkgs.pandas
+  ]
+  ++ lib.optionals withScip [
+    # Needed for downstream cmake consumers to not need to set SCIP_ROOT explicitly
+    scipopt-scip
   ];
+
   nativeCheckInputs = [
     python3.pkgs.matplotlib
     python3.pkgs.pandas

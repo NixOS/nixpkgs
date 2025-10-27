@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "openstep-parser";
-  version = "2.0.1";
+  version = "2.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "kronenthaler";
     repo = "openstep-parser";
     tag = version;
-    hash = "sha256-gvfzBLLaal0Vad3C4m4wIKwJpmlhewsK4A5yeN8l6qU=";
+    hash = "sha256-ivPvkvVWXw5ftaGvwBR+JxBIlisI0p6k3i/8V2HlaqQ=";
   };
 
   build-system = [ setuptools ];

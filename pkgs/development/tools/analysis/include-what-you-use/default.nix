@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   pname = "include-what-you-use";
   # Make sure to bump `llvmPackages` in "pkgs/top-level/all-packages.nix" to the supported version:
   # https://github.com/include-what-you-use/include-what-you-use?tab=readme-ov-file#clang-compatibility
-  version = "0.24";
+  version = "0.25";
 
   src = fetchurl {
     url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
-    hash = "sha256-ojQhzv9gHT6iFej6kpK/qMo56xrCCY277fxs/mVUHBA=";
+    hash = "sha256-voH51UmIgUYkZQYN3Ci1h8ASVCVccG05fRpJTWnrXv0=";
   };
 
   postPatch = ''
@@ -63,6 +63,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://include-what-you-use.org";
     license = licenses.bsd3;
+    maintainers = [
+      maintainers.ja1den
+    ];
     platforms = platforms.unix;
   };
 }

@@ -65,9 +65,12 @@ stdenv.mkDerivation (final: {
       --set-default QUARTO_DART_SASS ${lib.getExe dart-sass} \
       --set-default QUARTO_TYPST ${lib.getExe typst} \
       ${lib.optionalString (rWrapper != null) "--set-default QUARTO_R ${rWithPackages}/bin/R"} \
+      ${
+        lib.optionalString (python3 != null) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"
+      } \
       ${lib.optionalString (
-        python3 != null
-      ) "--set-default QUARTO_PYTHON ${pythonWithPackages}/bin/python3"}
+        rWrapper != null
+      ) "--set-default RETICULATE_PYTHON ${pythonWithPackages.interpreter}"}
   '';
 
   installPhase = ''

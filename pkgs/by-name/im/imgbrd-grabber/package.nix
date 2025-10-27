@@ -59,10 +59,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-for-qt6.patch
+    ./cmake4-compat.patch
   ];
 
   postPatch = ''
-
     # ensure the script uses the rsync package from nixpkgs
     substituteInPlace ../scripts/package.sh --replace-fail "rsync" "${lib.getExe rsync}"
 

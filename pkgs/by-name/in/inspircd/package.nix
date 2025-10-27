@@ -24,7 +24,7 @@ let
   # libcs in nixpkgs (musl and glibc).
   compatible =
     lib: drv:
-    lib.any (lic: lic == (drv.meta.license or { })) [
+    lib.elem (drv.meta.license or { }) [
       lib.licenses.mit # musl
       lib.licenses.lgpl2Plus # glibc
     ];
@@ -123,9 +123,7 @@ let
   };
 
   # buildInputs necessary for the enabled extraModules
-  extraInputs = lib.concatMap (
-    m: extras."${m}" or (builtins.throw "Unknown extra module ${m}")
-  ) extraModules;
+  extraInputs = lib.concatMap (m: extras."${m}" or (throw "Unknown extra module ${m}")) extraModules;
 
   # if true, we can't provide a binary version of this
   # package without violating the GPL 2

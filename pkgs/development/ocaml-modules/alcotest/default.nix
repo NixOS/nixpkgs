@@ -13,11 +13,11 @@
 
 buildDunePackage rec {
   pname = "alcotest";
-  version = "1.9.0";
+  version = "1.9.1";
 
   src = fetchurl {
     url = "https://github.com/mirage/alcotest/releases/download/${version}/alcotest-${version}.tbz";
-    hash = "sha256-4jhxNsqFTfK0FSE53U1LOVOmRugElIBz3t/gojLwihU=";
+    hash = "sha256-HinDtB1DKQYhBbcj39o6/4a4zvXnx1ANDkkfxf145II=";
   };
 
   nativeBuildInputs = [ ocaml-syntax-shims ];

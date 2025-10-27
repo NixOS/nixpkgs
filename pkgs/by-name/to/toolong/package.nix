@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication {
   pname = "toolong";
-  version = "1.4.0";
+  version = "1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {

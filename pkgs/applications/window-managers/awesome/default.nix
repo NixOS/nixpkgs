@@ -70,7 +70,23 @@ stdenv.mkDerivation rec {
       url = "https://github.com/awesomeWM/awesome/commit/d256d9055095f27a33696e0aeda4ee20ed4fb1a0.patch";
       sha256 = "1n3y4wnjra8blss7642jgpxnm9n92zhhjj541bb9i60m4b7bgfzz";
     })
+
+    # lib, tests: use GioUnix to use platform-specific Gio classes
+    # https://github.com/awesomeWM/awesome/pull/4022
+    (fetchpatch {
+      name = "glib-2.86.0.patch";
+      url = "https://github.com/void-linux/void-packages/raw/933b305b313a2c7d971d746835deb9f49b652204/srcpkgs/awesome/patches/glib-2.86.0.patch";
+      hash = "sha256-qVzD8O34sULcV6S4daDUBPnxVDd8T6ZyLOE+gYxCmf0=";
+    })
   ];
+
+  # Fix build with CMake 4
+  # https://github.com/awesomeWM/awesome/pull/4030#issuecomment-3370822668
+  postPatch = ''
+    substituteInPlace {,tests/examples/}CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0.0)' 'cmake_minimum_required(VERSION 3.10)' \
+      --replace-warn 'cmake_policy(VERSION 2.6)' 'cmake_policy(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake

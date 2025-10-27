@@ -6,22 +6,16 @@
 
 buildNpmPackage (finalAttrs: {
   pname = "promptfoo";
-  version = "0.117.4";
+  version = "0.118.14";
 
   src = fetchFromGitHub {
     owner = "promptfoo";
     repo = "promptfoo";
     tag = finalAttrs.version;
-    hash = "sha256-0QF6sJ0SI6NA0yBdB7a4+ae8CcD0IiWYuFJNteZxvN8=";
+    hash = "sha256-MyK533JOVCuO613XWFc2tHLdc4v4IEF8H1xCpS/XxUE=";
   };
 
-  # npm error code ENOTCACHED
-  # npm error request to https://registry.npmjs.org/undici-types failed: cache mode is 'only-if-cached' but no cached response is available
-  # deleted package-lock.json and ran `npm update` to get a new lock file
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
-  '';
-  npmDepsHash = "sha256-sRTnIZqXbtiwk/jSTLIWLYwsNbR5nOL2d8Qsa3iF/Sg=";
+  npmDepsHash = "sha256-mpe00J5iRwaH7hJIDP3fDuJSUOKk01COpOOvF1YJMyg=";
 
   # don't fetch playwright binary
   env.PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";

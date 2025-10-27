@@ -53,6 +53,18 @@ stdenv.mkDerivation (finalAttrs: {
     # submodules were fetched and will throw an error if it's not there.
     # Avoid using leaveDotGit in the fetchFromGitHub options as it is non-deterministic.
     mkdir -p src/qhexview/.git lib/gdtoa-desktop/.git
+
+    # CMake 3.1 is deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace CMakeLists.txt src/CMakeLists.txt src/test/CMakeLists.txt plugins/CMakeLists.txt plugins/*/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.1)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace lib/CMakeLists.txt lib/libELF/CMakeLists.txt lib/libPE/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.1)" \
+      "cmake_minimum_required(VERSION 3.10)"
+    substituteInPlace lib/gdtoa-desktop/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required (VERSION 3.0)" \
+      "cmake_minimum_required (VERSION 3.10)"
   '';
 
   passthru = {

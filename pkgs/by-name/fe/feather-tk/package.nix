@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "feather-tk";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "darbyjohnston";
     repo = "feather-tk";
     tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-776V1nMsAatGkYNBq7QFRX28cI3/NU/2YRSbhfezr0g=";
+    hash = "sha256-hcV99y14o3YFUtKDLEKaR7MxBB3pBdd3sferrYvtvYw=";
   };
 
   nativeBuildInputs = [

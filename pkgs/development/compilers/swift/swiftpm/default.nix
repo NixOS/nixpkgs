@@ -2,7 +2,7 @@
   lib,
   stdenv,
   callPackage,
-  fetchpatch,
+  fetchFromGitHub,
   cmake,
   ninja,
   git,
@@ -23,7 +23,11 @@
 
 let
 
-  inherit (swift) swiftOs swiftModuleSubdir swiftStaticModuleSubdir;
+  inherit (swift)
+    swiftOs
+    swiftModuleSubdir
+    swiftStaticModuleSubdir
+    ;
   sharedLibraryExt = stdenv.hostPlatform.extensions.sharedLibrary;
 
   sources = callPackage ../sources.nix { };
@@ -39,7 +43,6 @@ let
     propagatedBuildInputs = [ Foundation ];
     patches = [
       ./patches/cmake-disable-rpath.patch
-      ./patches/cmake-fix-quoting.patch
       ./patches/disable-index-store.patch
       ./patches/disable-sandbox.patch
       ./patches/disable-xctest.patch
@@ -56,24 +59,9 @@ let
 
       # Patch the location where swiftpm looks for its API modules.
       substituteInPlace Sources/PackageModel/UserToolchain.swift \
-        --replace \
+        --replace-fail \
           'librariesPath = applicationPath.parentDirectory' \
-          "librariesPath = AbsolutePath(\"$out\")"
-
-      # Fix case-sensitivity issues.
-      # Upstream PR: https://github.com/apple/swift-package-manager/pull/6500
-      substituteInPlace Sources/CMakeLists.txt \
-        --replace \
-          'packageCollectionsSigning' \
-          'PackageCollectionsSigning'
-      substituteInPlace Sources/PackageCollectionsSigning/CMakeLists.txt \
-        --replace \
-          'SubjectPublickeyInfo' \
-          'SubjectPublicKeyInfo'
-      substituteInPlace Sources/PackageCollections/CMakeLists.txt \
-        --replace \
-          'FilepackageCollectionsSourcesStorage' \
-          'FilePackageCollectionsSourcesStorage'
+          "librariesPath = try AbsolutePath(validating: \"$out\")"
     '';
   };
 
@@ -117,6 +105,8 @@ let
           + lib.optionalString stdenv.hostPlatform.isDarwin ''
             # On Darwin only, Swift uses arm64 as cpu arch.
             if [ -e cmake/modules/SwiftSupport.cmake ]; then
+              # At least in swift-asn1, this has been removed and the module uses the full target triple as the name
+              # (https://github.com/apple/swift-asn1/pull/103)
               substituteInPlace cmake/modules/SwiftSupport.cmake \
                 --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
             fi
@@ -201,23 +191,9 @@ let
       '';
   };
 
-  # Part of this patch fixes for glibc 2.39: glibc patch 64b1a44183a3094672ed304532bedb9acc707554
-  # marks the `FILE*` argument to a few functions including `ferror` & `fread` as non-null. However
-  # the code passes an `Optional<T>` to these functions.
-  # This patch uses a `guard` which effectively unwraps the type (or throws an exception).
-  swift-tools-support-core-glibc-fix = fetchpatch {
-    url = "https://github.com/apple/swift-tools-support-core/commit/990afca47e75cce136d2f59e464577e68a164035.patch";
-    hash = "sha256-PLzWsp+syiUBHhEFS8+WyUcSae5p0Lhk7SSRdNvfouE=";
-    includes = [ "Sources/TSCBasic/FileSystem.swift" ];
-  };
-
   swift-tools-support-core = mkBootstrapDerivation {
     name = "swift-tools-support-core";
     src = generated.sources.swift-tools-support-core;
-
-    patches = [
-      swift-tools-support-core-glibc-fix
-    ];
 
     buildInputs = [
       swift-system
@@ -293,12 +269,12 @@ let
       substituteInPlace \
         products/libllbuild/CMakeLists.txt \
         products/llbuildSwift/CMakeLists.txt \
-        --replace '@rpath' "$out/lib"
+        --replace-fail '@rpath' "$out/lib"
 
       # This subdirectory is enabled for Darwin only, but requires ObjC XCTest
       # (and only Swift XCTest is open source).
       substituteInPlace perftests/CMakeLists.txt \
-        --replace 'add_subdirectory(Xcode/' '#add_subdirectory(Xcode/'
+        --replace-fail 'add_subdirectory(Xcode/' '#add_subdirectory(Xcode/'
     '';
 
     cmakeFlags = [
@@ -330,7 +306,7 @@ let
     postPatch = ''
       # Tries to link against CYaml, but that's private.
       substituteInPlace Sources/SwiftDriver/CMakeLists.txt \
-        --replace CYaml ""
+        --replace-fail CYaml ""
     '';
 
     postInstall = cmakeGlue.SwiftDriver + ''
@@ -342,14 +318,28 @@ let
 
   swift-crypto = mkBootstrapDerivation {
     name = "swift-crypto";
-    src = generated.sources.swift-crypto;
+    src = fetchFromGitHub {
+      owner = "apple";
+      repo = "swift-crypto";
+      rev = "95ba0316a9b733e92bb6b071255ff46263bbe7dc"; # 3.15.1, as opposed to the pinned version of 3.0.0
+      sha256 = "sha256-RzoUBx4l12v0ZamSIAEpHHCRQXxJkXJCwVBEj7Qwg9I=";
+      fetchSubmodules = true;
+    };
+
+    buildInputs = [
+      swift-asn1
+    ];
+
+    patches = [
+      ./patches/install-crypto-extras.patch
+    ];
 
     postPatch = ''
       # Fix use of hardcoded tool paths on Darwin.
       substituteInPlace CMakeLists.txt \
-        --replace /usr/bin/ar $NIX_CC/bin/ar
+        --replace-fail /usr/bin/ar $NIX_CC/bin/ar
       substituteInPlace CMakeLists.txt \
-        --replace /usr/bin/ranlib $NIX_CC/bin/ranlib
+        --replace-fail /usr/bin/ranlib $NIX_CC/bin/ranlib
     '';
 
     postInstall = cmakeGlue.SwiftCrypto + ''
@@ -358,7 +348,39 @@ let
 
       # Headers are not installed.
       cp -r ../Sources/CCryptoBoringSSL/include $out/include
+
+      # Swift modules are put in the wrong place by default (and not all are linked)
+      mkdir -p $out/${swiftModuleSubdir}
+      rm -rf $out/${swiftModuleSubdir}/*.swift{module,doc}
+      # I assume we don't care about .swiftsourceinfo
+      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
     '';
+  };
+
+  swift-asn1 = mkBootstrapDerivation {
+    name = "swift-asn1";
+    src = generated.sources.swift-asn1;
+
+    postInstall =
+      cmakeGlue.SwiftASN1
+      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+        # SwiftASN1 uses the full target triple as the name of the swiftmodule
+        # (https://github.com/apple/swift-asn1/pull/103)
+        mkdir -p $out/${swiftModuleSubdir}
+        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+      '';
+  };
+
+  swift-certificates = mkBootstrapDerivation {
+    name = "swift-certificates";
+    src = generated.sources.swift-certificates;
+
+    buildInputs = [
+      swift-asn1
+      swift-crypto
+    ];
+
+    postInstall = cmakeGlue.SwiftCertificates;
   };
 
   # Build a bootrapping swiftpm using CMake.
@@ -371,6 +393,8 @@ let
         llbuild
         sqlite
         swift-argument-parser
+        swift-asn1
+        swift-certificates
         swift-collections
         swift-crypto
         swift-driver
@@ -413,8 +437,7 @@ stdenv.mkDerivation (
       # swift-corelibs-xctest.
       swiftpmMakeMutable swift-tools-support-core
       substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
-        --replace 'canImport(Darwin)' 'false'
-      patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
+        --replace-fail 'canImport(Darwin)' 'false'
 
       # Prevent a warning about SDK directories we don't have.
       swiftpmMakeMutable swift-driver

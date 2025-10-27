@@ -186,6 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
 
     (replaceVars ./0002-scripts-external-executable-calls.patch scriptDeps)
 
+    # patch `libxl` to search for `qemu-system-i386` properly. (Before 4.21)
+    (fetchpatch {
+      url = "https://github.com/xen-project/xen/commit/f6281291704aa356489f4bd927cc7348a920bd01.diff?full_index=1";
+      hash = "sha256-LH+68kxH/gxdyh45kYCPxKwk+9cztLrScpC2pCNQV2M=";
+    })
+
     # XSA 472
     (fetchpatch {
       url = "https://xenbits.xen.org/xsa/xsa472-1.patch";
@@ -208,6 +214,22 @@ stdenv.mkDerivation (finalAttrs: {
     (fetchpatch {
       url = "https://xenbits.xen.org/xsa/xsa473-2.patch";
       hash = "sha256-tGuIGxJFBXbckIruSUeTyrM6GabdIj6Pr3cVxeDvNNY=";
+    })
+
+    # XSA 475
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa475-1.patch";
+      hash = "sha256-Bzvtr12g+7+M9jY9Nt2jd41CwYTL+h2fuwzJFsxroio=";
+    })
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa475-2.patch";
+      hash = "sha256-7MKtDAJpihpfcBK+hyBFGCP6gHWs2cdgTks8B439b2s=";
+    })
+
+    # XSA 476
+    (fetchpatch {
+      url = "https://xenbits.xen.org/xsa/xsa476-4.20.patch";
+      hash = "sha256-nZUHcMr9RpQqrazG+RtTw+/s1gzqN1D565RuQjuALTQ=";
     })
   ];
 

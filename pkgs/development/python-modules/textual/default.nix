@@ -11,6 +11,7 @@
   platformdirs,
   rich,
   typing-extensions,
+  mdit-py-plugins,
 
   # optional-dependencies
   tree-sitter,
@@ -29,20 +30,24 @@
 
 buildPythonPackage rec {
   pname = "textual";
-  version = "6.1.0";
+  version = "6.4.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "textual";
     tag = "v${version}";
-    hash = "sha256-awieNrdyORLxQU52rmon/jftzt/A4+HMbMpa6V0HaG8=";
+    hash = "sha256-lwtgPJK62SntL0ThoIpmEq0Ngjf8wl73Q8PXjvut3ps=";
   };
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "rich"
+  ];
   dependencies = [
     markdown-it-py
+    mdit-py-plugins
     platformdirs
     rich
     typing-extensions
@@ -77,6 +82,9 @@ buildPythonPackage rec {
   disabledTests = [
     # Assertion issues
     "test_textual_env_var"
+
+    # fixture 'snap_compare' not found
+    "test_progress_bar_width_1fr"
   ];
 
   pytestFlags = [

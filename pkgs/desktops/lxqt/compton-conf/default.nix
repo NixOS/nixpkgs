@@ -43,6 +43,11 @@ stdenv.mkDerivation rec {
       --replace-fail "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
   '';
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0 FATAL_ERROR)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {

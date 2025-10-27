@@ -23,6 +23,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/contour-terminal/reflection-cpp";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 })

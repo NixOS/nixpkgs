@@ -2,25 +2,30 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
+  setuptools,
+  unittestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "heapdict";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   src = fetchPypi {
     pname = "HeapDict";
     inherit version;
-    sha256 = "8495f57b3e03d8e46d5f1b2cc62ca881aca392fd5cc048dc0aa2e1a6d23ecdb6";
+    hash = "sha256-hJX1ez4D2ORtXxssxiyogayjkv1cwEjcCqLhptI+zbY=";
   };
 
-  doCheck = !isPy3k;
+  build-system = [ setuptools ];
+
+  nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "heapdict" ];
 
   meta = with lib; {
     description = "Heap with decrease-key and increase-key operations";
-    homepage = "http://stutzbachenterprises.com";
+    homepage = "https://github.com/DanielStutzbach/heapdict";
     license = licenses.bsd3;
     maintainers = with maintainers; [ teh ];
   };

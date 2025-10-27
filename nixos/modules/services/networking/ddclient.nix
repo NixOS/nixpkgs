@@ -268,8 +268,8 @@ in
         message = "You cannot use both services.ddclient.passwordFile and services.ddclient.secretsFile at the same time.";
       }
       {
-        assertion = !(cfg.protocol == "nsupdate") || (cfg.passwordFile == null && cfg.secretsFile == null);
-        message = "You cannot use services.ddclient.passwordFile and or services.ddclient.secretsFile when services.ddclient.protocol is \"nsupdate\".";
+        assertion = (cfg.protocol != "nsupdate") || (cfg.secretsFile == null);
+        message = "You cannot use services.ddclient.secretsFile when services.ddclient.protocol is \"nsupdate\". Use services.ddclient.passwordFile instead.";
       }
     ];
 

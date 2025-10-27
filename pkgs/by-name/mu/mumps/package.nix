@@ -20,6 +20,7 @@
 assert withParmetis -> mpiSupport;
 assert withPtScotch -> mpiSupport;
 let
+  scotch' = scotch.override { inherit withPtScotch; };
   profile = if mpiSupport then "debian.PAR" else "debian.SEQ";
   LMETIS = toString ([ "-lmetis" ] ++ lib.optional withParmetis "-lparmetis");
   LSCOTCH = toString (
@@ -47,7 +48,7 @@ let
   );
 in
 stdenv.mkDerivation (finalAttrs: {
-  name = "mumps";
+  pname = "mumps";
   version = "5.8.1";
   # makeFlags contain space and one should use makeFlagsArray+
   # Setting this magic var is an optional solution
@@ -78,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
       "LIBEXT_SHARED=.dylib"
     ]
     ++ [
-      "ISCOTCH=-I${lib.getDev scotch}/include"
+      "ISCOTCH=-I${lib.getDev scotch'}/include"
       "LMETIS=${LMETIS}"
       "LSCOTCH=${LSCOTCH}"
       "ORDERINGSF=${ORDERINGSF}"
@@ -107,16 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional mpiSupport mpi
   ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
-  # Parmetis should be placed before scotch to avoid conflict of header file "parmetis.h"
-  buildInputs =
-    lib.optional withParmetis parmetis
-    ++ lib.optional mpiSupport scalapack
-    ++ [
-      blas
-      lapack
-      metis
-      scotch
-    ];
+  buildInputs = [
+    blas
+    lapack
+    metis
+    scotch'
+  ]
+  ++ lib.optional mpiSupport scalapack
+  ++ lib.optional withParmetis parmetis;
 
   doInstallCheck = true;
 

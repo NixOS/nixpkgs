@@ -3,29 +3,14 @@
   python,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchurl,
+  fetchpatch,
   setuptools,
   cython,
-  bash,
+  gmp,
+  pari,
   perl,
-  gnum4,
-  texliveBasic,
 }:
 
-let
-  pariVersion = "2.15.4";
-  gmpVersion = "6.3.0";
-
-  pariSrc = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/OLD/${lib.versions.majorMinor pariVersion}/pari-${pariVersion}.tar.gz";
-    hash = "sha256-w1Rb/uDG37QLd/tLurr5mdguYAabn20ovLbPAEyMXA8=";
-  };
-
-  gmpSrc = fetchurl {
-    url = "https://ftp.gnu.org/gnu/gmp/gmp-${gmpVersion}.tar.bz2";
-    hash = "sha256-rCghGnz7YJuuLiyNYFjWbI/pZDT3QM9v4uR7AA0cIMs=";
-  };
-in
 buildPythonPackage rec {
   pname = "cypari";
   version = "2.5.5";
@@ -38,14 +23,23 @@ buildPythonPackage rec {
     hash = "sha256-RJ9O1KsDHmMkTCIFUrcSUkA5ijTsxmoI939QCsCib0Y=";
   };
 
-  postPatch = ''
-    substituteInPlace ./setup.py \
-      --replace-fail "/bin/bash" "${lib.getExe bash}"
-    # final character is stripped from PARI error messages for some reason
-    substituteInPlace ./cypari/handle_error.pyx \
-      --replace-fail "not a function in function call" "not a function in function cal"
-    ln -s ${pariSrc} ${pariSrc.name}
-    ln -s ${gmpSrc} ${gmpSrc.name}
+  patches = [
+    (fetchpatch {
+      name = "support-aarch64-linux.patch";
+      url = "https://github.com/3-manifolds/CyPari/commit/6197171b52ee4f44a4954ddd0e2e36769b189dee.patch";
+      hash = "sha256-j2P7DEGD2B8q9Hh4G2mQng76fQdUpeAdFYoTD7Ui/Dk=";
+    })
+    (fetchpatch {
+      name = "fix-build-with-cython-3_1.patch";
+      url = "https://github.com/3-manifolds/CyPari/compare/622e112ffcf0383e2110954ff3ac3c42c006ebe1...50bcbd2b39177f5e4c5a3551a8a14f75ab05a5d6.patch";
+      hash = "sha256-6ayvtHMS3YtzzklHaaLzl9d4zHJhm0lVZQZFS9ykFY4=";
+    })
+  ];
+
+  preBuild = ''
+    mkdir libcache
+    ln -s ${gmp} libcache/gmp
+    ln -s ${pari} libcache/pari
   '';
 
   build-system = [
@@ -53,20 +47,15 @@ buildPythonPackage rec {
     cython
   ];
 
-  NIX_LDFLAGS = "-lc";
-
   nativeBuildInputs = [
-    gnum4
     perl
-    texliveBasic
   ];
 
   pythonImportsCheck = [ "cypari" ];
 
   checkPhase = ''
     runHook preCheck
-    rm -r cypari
-    ${python.interpreter} -m cypari.test
+    ${python.interpreter} -P -m cypari.test
     runHook postCheck
   '';
 
@@ -74,7 +63,10 @@ buildPythonPackage rec {
     description = "Sage's PARI extension, modified to stand alone";
     homepage = "https://github.com/3-manifolds/CyPari";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ noiioiu ];
+    maintainers = with lib.maintainers; [
+      noiioiu
+      alejo7797
+    ];
     changelog = "https://github.com/3-manifolds/CyPari/releases/tag/${src.tag}";
   };
 }

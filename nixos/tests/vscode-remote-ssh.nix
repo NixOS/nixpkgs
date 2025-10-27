@@ -27,6 +27,8 @@ import ./make-test-python.nix (
     meta = {
       maintainers = [ ];
       timeout = 600;
+      # https://hydra.nixos.org/build/309924543/nixlog/1
+      broken = true;
     };
 
     nodes =

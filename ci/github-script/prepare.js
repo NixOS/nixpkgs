@@ -221,7 +221,6 @@ module.exports = async ({ github, context, core, dry }) => {
 
     const touched = []
     if (files.includes('ci/pinned.json')) touched.push('pinned')
-    if (files.includes('ci/OWNERS')) touched.push('owners')
     core.setOutput('touched', touched)
 
     return

@@ -62,8 +62,17 @@ self: super: {
   # their existence to callPackages, but their is no shim for lower GHC versions.
   system-cxx-std-lib = null;
 
+  # Becomes a core package in GHC >= 9.10, no release compatible with GHC < 9.10 is available
+  ghc-internal = null;
+  # Become core packages in GHC >= 9.10, but aren't uploaded to Hackage
+  ghc-toolchain = null;
+  ghc-platform = null;
+
   # Becomes a core package in GHC >= 9.8
   semaphore-compat = doDistribute self.semaphore-compat_1_0_0;
+
+  # Becomes a core package in GHC >= 9.10
+  os-string = doDistribute self.os-string_2_0_8;
 
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
@@ -81,8 +90,10 @@ self: super: {
       "haskell-language-server has dropped support for ghc 9.2 in version 2.10.0.0, please use a newer ghc version or an older nixpkgs version"
       (markBroken super.haskell-language-server);
 
+  # hashable >= 1.5 doesn't support base < 4.18
+  hashable = self.hashable_1_4_7_0;
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
-  hashable = addBuildDepends [ self.data-array-byte ] super.hashable;
+  hashable_1_4_7_0 = addBuildDepends [ self.data-array-byte ] super.hashable_1_4_7_0;
   primitive = addBuildDepends [ self.data-array-byte ] super.primitive;
   primitive-unlifted = super.primitive-unlifted_0_1_3_1;
   # Too strict lower bound on base

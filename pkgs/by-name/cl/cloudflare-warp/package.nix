@@ -24,19 +24,19 @@
 }:
 
 let
-  version = "2025.6.1335";
+  version = "2025.8.779";
   sources = {
     x86_64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_amd64.deb";
-      hash = "sha256-zb+DrBKUOsNBaUE+2CNtocsDs3bcYpG0nHCnjcnH2Mo=";
+      hash = "sha256-488sXR0CqZAkeXSMawYVXHszK9NXsTCQc5RAd87Hj9k=";
     };
     aarch64-linux = fetchurl {
       url = "https://pkg.cloudflareclient.com/pool/noble/main/c/cloudflare-warp/cloudflare-warp_${version}.0_arm64.deb";
-      hash = "sha256-5DuJKyyr8AUkvuSVrcJYmrc+HAG19wmvrWNN8jrm+wY=";
+      hash = "sha256-rLDGY8kmYU/B0wks20oE1sQ7luaX6teTNfWZ6atJzhU=";
     };
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit version;
 
   pname = "cloudflare-warp" + lib.optionalString headless "-headless";
@@ -130,7 +130,6 @@ stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = true;
-  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
   versionCheckProgramArg = "--version";
 
   passthru = {
@@ -156,22 +155,23 @@ stdenv.mkDerivation rec {
             rg '([^/]+)\.0\.yaml\b' --only-matching --replace '$1'
         )"
 
-        for platform in ${lib.escapeShellArgs meta.platforms}; do
-          update-source-version "${pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
+        for platform in ${lib.escapeShellArgs finalAttrs.meta.platforms}; do
+          update-source-version "${finalAttrs.pname}" "$new_version" --ignore-same-version --source-key="sources.$platform"
         done
       '';
     });
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/cloudflare/cloudflare-docs/blob/production/src/content/warp-releases/linux/ga/${finalAttrs.version}.0.yaml";
     description =
       "Replaces the connection between your device and the Internet with a modern, optimized, protocol"
       + lib.optionalString headless " (headless version)";
     homepage = "https://pkg.cloudflareclient.com/";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.unfree;
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.unfree;
     mainProgram = "warp-cli";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       marcusramberg
     ];
     platforms = [
@@ -179,4 +179,4 @@ stdenv.mkDerivation rec {
       "aarch64-linux"
     ];
   };
-}
+})

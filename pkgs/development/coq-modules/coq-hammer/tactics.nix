@@ -9,32 +9,20 @@
 let
   owner = "lukaszcz";
   repo = "coqhammer";
+  case = case: out: { inherit case out; };
   defaultVersion =
-    with lib.versions;
+
     lib.switch coq.coq-version [
-      {
-        case = "8.20";
-        out = "1.3.2+8.20";
-      }
-      {
-        case = "8.19";
-        out = "1.3.2+8.19";
-      }
-      {
-        case = "8.18";
-        out = "1.3.2+8.18";
-      }
-      {
-        case = "8.17";
-        out = "1.3.2+8.17";
-      }
-      {
-        case = "8.16";
-        out = "1.3.2+8.16";
-      }
+      (case "9.0" "1.3.2+9.0")
+      (case "8.20" "1.3.2+8.20")
+      (case "8.19" "1.3.2+8.19")
+      (case "8.18" "1.3.2+8.18")
+      (case "8.17" "1.3.2+8.17")
+      (case "8.16" "1.3.2+8.16")
     ] null;
 
   release = {
+    "1.3.2+9.0".sha256 = "sha256-/UHtK9fjpHTbra4/Cnsjt8fg1fvxx7U6kGjQPm15NwM=";
     "1.3.2+8.20".sha256 = "sha256-RuX2aInSjwebs/aEOoisNxqcIPqDA2kWehN9tFYqOx4=";
     "1.3.2+8.19".sha256 = "sha256-Zd7piAWlKPAZKEz7HVWxhnzOLbA/eR9C/E0T298MJVY=";
     "1.3.2+8.18".sha256 = "sha256-D+tQ+1YrSbbqc54U5UlxW1Hhly49TB2pu1LEPL2Eo64=";

@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "dynaconf";
-  version = "3.2.11";
+  version = "3.2.12";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dynaconf";
     repo = "dynaconf";
     tag = version;
-    hash = "sha256-9E9us6niUtPJkZ89uKXz6wByoEERwxS/xW5qvkIXIhQ=";
+    hash = "sha256-DtZ4rJ425a7ootpWtMXbezyH215dJwW4HTzvGgAUnsc=";
   };
 
   build-system = [ setuptools ];
@@ -102,6 +102,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/dynaconf/dynaconf/blob/${src.tag}/CHANGELOG.md";
     mainProgram = "dynaconf";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

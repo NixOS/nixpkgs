@@ -16,7 +16,7 @@ let
 
     # Ignore custom stdenvs when cross compiling for compatibility
     # Use replaceCrossStdenv instead.
-    config = builtins.removeAttrs config [ "replaceStdenv" ];
+    config = removeAttrs config [ "replaceStdenv" ];
   };
 
 in
@@ -117,7 +117,7 @@ lib.init bootStages
               then
                 throw "no C compiler provided for this platform"
               else if crossSystem.isDarwin then
-                buildPackages.llvmPackages.libcxxClang
+                buildPackages.llvmPackages.systemLibcxxClang
               else if crossSystem.useLLVM or false then
                 buildPackages.llvmPackages.clang
               else if crossSystem.useZig or false then

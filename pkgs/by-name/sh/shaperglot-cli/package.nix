@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "shaperglot-cli";
-  version = "1.1.2";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "shaperglot";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-YbAitVNBSPvYg2wsBmvNS/NA6M7ZDY7w/lYgDNs3i4Y=";
+    hash = "sha256-Jh2/Rr7bIPFiblUZFS8KiQtMwmtMuOGCSV2w7LMCbq8=";
   };
 
-  cargoHash = "sha256-miGaE2SntBi4tHrK2bz4A77gnUX0zIBvnvDDZIVeveo=";
+  cargoHash = "sha256-3cHUSRvrvywfiYA/WpUrCIJV+hEQQwRNTPvSmCN50ho=";
 
   cargoBuildFlags = [
     "--package=shaperglot-cli"

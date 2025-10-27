@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
     curl
     fcgi
   ]
-  ++ lib.optional (jpipLibSupport) jdk;
+  ++ lib.optional jpipLibSupport jdk;
 
   # tests did fail on powerpc64
   doCheck = !stdenv.hostPlatform.isPower64 && stdenv.buildPlatform.canExecute stdenv.hostPlatform;

@@ -19,7 +19,7 @@ nixbuildscript() {
 
 findpath() {
     path="$(nix --extra-experimental-features nix-command eval --json --impure -f "$nixpkgs" "$1.meta.position" | jq -r . | cut -d: -f1)"
-    outpath="$(nix --extra-experimental-features nix-command eval --json --impure --expr "builtins.fetchGit \"$nixpkgs\"")"
+    outpath="$(nix --extra-experimental-features nix-command eval --json --impure --expr "fetchGit \"$nixpkgs\"")"
 
     if [ -n "$outpath" ]; then
         path="${path/$(echo "$outpath" | jq -r .)/$nixpkgs}"

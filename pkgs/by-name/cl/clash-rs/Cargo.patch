@@ -1,6 +1,6 @@
 --- a/Cargo.lock
 +++ b/Cargo.lock
-@@ -1462,7 +1462,7 @@
+@@ -1250,7 +1250,7 @@
   "sha2",
   "shadowquic",
   "shadowsocks",
@@ -8,8 +8,8 @@
 + "smoltcp 0.12.0",
   "socket2 0.6.0",
   "tempfile",
-  "thiserror 2.0.15",
-@@ -4439,7 +4439,7 @@
+  "thiserror 2.0.17",
+@@ -4096,7 +4096,7 @@
   "etherparse 0.16.0",
   "futures",
   "rand 0.8.5",
@@ -18,9 +18,9 @@
   "spin 0.9.8",
   "tokio",
   "tokio-util",
-@@ -6892,20 +6892,6 @@
+@@ -6487,20 +6487,6 @@
  ]
-
+ 
  [[package]]
 -name = "smoltcp"
 -version = "0.12.0"
@@ -39,7 +39,7 @@
  name = "socket2"
  version = "0.4.10"
  source = "registry+https://github.com/rust-lang/crates.io-index"
-@@ -9231,7 +9217,7 @@
+@@ -8792,7 +8778,7 @@
   "netstack-lwip",
   "netstack-smoltcp",
   "rand 0.9.2",

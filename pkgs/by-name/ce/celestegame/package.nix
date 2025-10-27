@@ -7,10 +7,11 @@
   writeShellScript,
   autoPatchelfHook,
   runtimeShell,
+  # Override this to everest-bin if you want to use steam-run.
+  everest,
 
+  withEverest ? false,
   overrideSrc ? null,
-  # A package. Omit to build without Everest.
-  everest ? null,
   # If build with Everest, must set writableDir to the path of a writable dir
   # so that the mods can be installed there.
   # It must be an absolute path.
@@ -29,8 +30,8 @@
 
 # For those who would like to use steam-run or alike to launch Celeste
 # (useful when using the `olympus` package with its `celesteWrapper` argument overridden),
-# install `celestegame.passthru.celeste-unwrapped` instead of `celestegame`, and if you want Everest,
-# override `everest` to `celestegame.passthru.everest-bin` instead of `celestegame.passthru.everest`
+# install `celestegame.passthru.celeste-unwrapped` instead of `celestegame`,
+# and if you want Everest, override `everest` to `everest-bin`
 # (steam-run cannot launch the latter for some currently unclear reason).
 # For those who would like to launch Celeste without the need of any additional wrapper like steam-run,
 # install `celestegame` with the `writableDir` argument overridden.
@@ -41,7 +42,7 @@ let
   executableName = "Celeste";
 
   writableDir' =
-    if writableDir == null && everest != null then
+    if writableDir == null && withEverest then
       lib.warn "writableDir is not set, so mods will not work." "/tmp"
     else
       writableDir;
@@ -49,10 +50,11 @@ let
 
   everestLogFilename = "everest-log.txt";
 
-  celeste = callPackage ./celeste {
+  celeste = callPackage ./celeste.nix {
     inherit
       executableName
       everest
+      withEverest
       overrideSrc
       launchFlags
       launchEnv
@@ -77,7 +79,7 @@ let
 in
 buildFHSEnv {
   inherit pname executableName;
-  version = celeste.version + (lib.optionalString (everest != null) "+everest.${everest.version}");
+  version = celeste.version + (lib.optionalString withEverest "+everest.${everest.version}");
 
   multiPkgs =
     pkgs:
@@ -175,7 +177,7 @@ buildFHSEnv {
       exec $NIX_CELESTE_LAUNCHER"' "$@"' > "${writableDir'}/Celeste"
       chmod +x "${writableDir'}/Celeste"
     ''
-    + lib.optionalString (everest != null) ''
+    + lib.optionalString withEverest ''
       mkdir -p "${writableDir'}"/{LogHistory,Mods,CrashLogs}
       touch "${writableDir'}/${everestLogFilename}"
 
@@ -203,10 +205,6 @@ buildFHSEnv {
   );
 
   passthru.celeste-unwrapped = celeste;
-  passthru.everest = callPackage ./everest { };
-  passthru.everest-bin = callPackage ./everest-bin { };
-
-  passthru.updateScript = ./update.sh;
 
   meta = {
     inherit (celeste.meta)

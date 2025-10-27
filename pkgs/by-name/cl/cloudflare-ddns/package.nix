@@ -29,7 +29,7 @@ buildGoModule (finalAttrs: {
     homepage = "https://github.com/favonia/cloudflare-ddns";
     mainProgram = "ddns";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix ++ platforms.darwin;
   };
 })

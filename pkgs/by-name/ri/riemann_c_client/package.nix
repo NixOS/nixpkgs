@@ -33,10 +33,13 @@ stdenv.mkDerivation rec {
     "out"
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     check
     pkg-config
+    protobufc
   ];
   buildInputs = [
     file

@@ -141,7 +141,7 @@ let
 
   splicedPackagesWithXorg =
     splicedPackages
-    // builtins.removeAttrs splicedPackages.xorg [
+    // removeAttrs splicedPackages.xorg [
       "callPackage"
       "newScope"
       "overrideScope"
@@ -150,7 +150,7 @@ let
 
   packagesWithXorg =
     pkgs
-    // builtins.removeAttrs pkgs.xorg [
+    // removeAttrs pkgs.xorg [
       "callPackage"
       "newScope"
       "overrideScope"

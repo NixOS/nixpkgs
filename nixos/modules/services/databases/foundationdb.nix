@@ -230,7 +230,7 @@ in
       '';
 
       type = lib.types.nullOr (
-        lib.types.submodule ({
+        lib.types.submodule {
           options = {
             certificate = lib.mkOption {
               type = lib.types.str;
@@ -258,7 +258,7 @@ in
               '';
             };
           };
-        })
+        }
       );
     };
 
@@ -274,7 +274,7 @@ in
         FoundationDB locality settings.
       '';
 
-      type = lib.types.submodule ({
+      type = lib.types.submodule {
         options = {
           machineId = lib.mkOption {
             default = null;
@@ -316,7 +316,7 @@ in
             '';
           };
         };
-      });
+      };
     };
 
     extraReadWritePaths = lib.mkOption {

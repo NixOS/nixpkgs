@@ -80,6 +80,8 @@ buildPythonPackage rec {
     "tests/test_base.py::TestBaseUV.test_call_at"
     # Pointless and flaky (at least on darwin, depending on the sandbox perhaps)
     "tests/test_dns.py"
+    # Asserts on exact wording of error message
+    "tests/test_tcp.py::Test_AIO_TCP::test_create_connection_open_con_addr"
   ]
   ++ lib.optionals (pythonOlder "3.11") [
     "tests/test_tcp.py::Test_UV_TCPSSL::test_create_connection_ssl_failed_certificat"

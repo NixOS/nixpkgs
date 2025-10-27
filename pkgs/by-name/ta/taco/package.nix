@@ -37,6 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf python_bindings/pybind11/*
     cp -r ${finalAttrs.src-new-pybind11}/* python_bindings/pybind11
     find python_bindings/pybind11 -exec chmod +w {} \;
+
+    # CMake4 no longer support version < 3.5
+    substituteInPlace CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.4.0 FATAL_ERROR)" \
+      "cmake_minimum_required(VERSION 3.5)"
+    substituteInPlace apps/tensor_times_vector/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.8.12)" \
+      "cmake_minimum_required(VERSION 3.5)"
   '';
 
   # Remove test cases from cmake build as they violate modern C++ expectations

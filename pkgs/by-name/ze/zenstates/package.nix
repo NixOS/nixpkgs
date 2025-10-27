@@ -52,7 +52,7 @@ stdenv.mkDerivation {
     mainProgram = "zenstates";
     homepage = "https://github.com/r4m0n/ZenStates-Linux";
     license = licenses.mit;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pyhive-integration";
-  version = "1.0.3";
+  version = "1.0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Pyhass";
     repo = "Pyhiveapi";
     tag = "v${version}";
-    hash = "sha256-g3dEB41bYT2XygAIRqXpdCeYuh7IH9O3ZG1zr5Sm7+8=";
+    hash = "sha256-chAIFBd51a4QHVhAm5jsQvDhe7huSMyv8oARZKEc2Qw=";
   };
 
   pythonRemoveDeps = [ "pre-commit" ];

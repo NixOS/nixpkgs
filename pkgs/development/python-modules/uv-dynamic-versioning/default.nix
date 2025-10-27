@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "uv-dynamic-versioning";
-  version = "0.11.1";
+  version = "0.11.2";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ buildPythonPackage rec {
     tag = "v${version}";
     # Tests perform mock operations on the local repo
     leaveDotGit = true;
-    hash = "sha256-lnEi1supRlVGgMGpjG2DcWtX/bga9mE5jMDE0o26XM0=";
+    hash = "sha256-KB5EhXXQfaxAWM3DpkRxpBbelJc25btTtTppSn38b3o=";
   };
 
   build-system = [

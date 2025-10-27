@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "k0sctl";
-  version = "0.25.1";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "k0sproject";
     repo = "k0sctl";
     tag = "v${version}";
-    hash = "sha256-mdmmvFCZMaTKMPjaVSgGvADcJ/MdDXyUBtvck638+Ss=";
+    hash = "sha256-4Oo5WYDlnZmrjYq5sA3IhkxXZV1eNOAbydMeZpL2Pa4=";
   };
 
-  vendorHash = "sha256-B1pmdv2dkP9Kin38Kc2DllP7BpHjesX8AAD4TgYYu/I=";
+  vendorHash = "sha256-Tzs7PYOulszUFK4PLHPzxxmkpHVo2+h/hG83aHG8Bm0=";
 
   ldflags = [
     "-s"

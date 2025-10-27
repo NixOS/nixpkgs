@@ -130,7 +130,7 @@ let
 
   baseDerivation = stdenv.mkDerivation (
     finalAttrs:
-    (builtins.removeAttrs args [
+    (removeAttrs args [
       "gitHashes"
       "sdkSourceBuilders"
       "pubspecLock"

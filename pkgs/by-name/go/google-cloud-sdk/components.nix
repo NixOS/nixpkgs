@@ -69,7 +69,7 @@ let
     lib.fix (
       self:
       builtins.listToAttrs (
-        builtins.map (component: {
+        map (component: {
           name = component.id;
           value = componentFromSnapshot self {
             inherit
@@ -96,7 +96,7 @@ let
       version,
     }@attrs:
     let
-      baseUrl = builtins.dirOf schema_version.url;
+      baseUrl = dirOf schema_version.url;
       # Architectures supported by this component.  Defaults to all available
       # architectures.
       architectures = builtins.filter (arch: builtins.elem arch (builtins.attrNames arches)) (
@@ -115,12 +115,12 @@ let
         "source"
       ] component) "${baseUrl}/${component.data.source}";
       sha256 = lib.attrByPath [ "data" "checksum" ] "" component;
-      dependencies = builtins.map (dep: builtins.getAttr dep components) component.dependencies;
+      dependencies = map (dep: builtins.getAttr dep components) component.dependencies;
       platforms =
         if component.platform == { } then
           lib.platforms.all
         else
-          builtins.concatMap (arch: builtins.map (os: toNixPlatform arch os) operating_systems) architectures;
+          builtins.concatMap (arch: map (os: toNixPlatform arch os) operating_systems) architectures;
       snapshot = snapshotFromComponent attrs;
     };
 

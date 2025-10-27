@@ -57,11 +57,10 @@ let
     }:
     let
       ver = version;
-      atLeast31 = lib.versionAtLeast ver.majMin "3.1";
-      atLeast32 = lib.versionAtLeast ver.majMin "3.2";
+      isCross = stdenv.buildPlatform != stdenv.hostPlatform;
       # https://github.com/ruby/ruby/blob/v3_2_2/yjit.h#L21
       yjitSupported =
-        atLeast32
+        !isCross
         && (
           stdenv.hostPlatform.isx86_64 || (!stdenv.hostPlatform.isWindows && stdenv.hostPlatform.isAarch64)
         );
@@ -189,23 +188,34 @@ let
           enableParallelInstalling = false;
 
           patches =
-            op (lib.versionOlder ver.majMin "3.1") ./do-not-regenerate-revision.h.patch
-            ++ op useBaseRuby (
-              if atLeast32 then ./do-not-update-gems-baseruby-3.2.patch else ./do-not-update-gems-baseruby.patch
-            )
-            ++ ops (ver.majMin == "3.0") [
-              # Ruby 3.0 adds `-fdeclspec` to $CC instead of $CFLAGS. Fixed in later versions.
-              (fetchpatch {
-                url = "https://github.com/ruby/ruby/commit/0acc05caf7518cd0d63ab02bfa036455add02346.patch";
-                hash = "sha256-43hI9L6bXfeujgmgKFVmiWhg7OXvshPCCtQ4TxqK1zk=";
-              })
-            ]
-            ++ ops atLeast31 [
+            op useBaseRuby ./do-not-update-gems-baseruby-3.2.patch
+            ++ [
               # When using a baseruby, ruby always sets "libdir" to the build
               # directory, which nix rejects due to a reference in to /build/ in
               # the final product. Removing this reference doesn't seem to break
               # anything and fixes cross compilation.
               ./dont-refer-to-build-dir.patch
+            ]
+            # TODO: drop the isClang condition
+            ++ ops (lib.versionOlder ver.majMin "3.4" && stdenv.cc.isClang) [
+              (fetchpatch {
+                name = "ruby-3.3-fix-llvm-21.patch";
+                url = "https://github.com/ruby/ruby/commit/5a8d7642168f4ea0d9331fded3033c225bbc36c5.patch";
+                excludes = [ "version.h" ];
+                hash = "sha256-dV98gXXTSKM2ZezTvhVXNaKaXJxiWKEeUbqqL360cWw=";
+              })
+            ]
+            ++ ops (lib.versionAtLeast ver.majMin "3.4" && lib.versionOlder ver.majMin "3.5") [
+              (fetchpatch {
+                name = "ruby-3.4-fix-gcc-15-llvm-21-1.patch";
+                url = "https://github.com/ruby/ruby/commit/846bb760756a3bf1ab12d56d8909e104f16e6940.patch";
+                hash = "sha256-+f0mzHsGAe9FT9NWE345BxzaB6vmWzMTvEfWF84uFOs=";
+              })
+              (fetchpatch {
+                name = "ruby-3.4-fix-gcc-15-llvm-21-2.patch";
+                url = "https://github.com/ruby/ruby/commit/18e176659e8afe402cab7d39972f2d56f2cf378f.patch";
+                hash = "sha256-TKPG1hcC1G2WmUkvNV6QSnvUpTEDqrYKrIk/4fAS8QE=";
+              })
             ];
 
           cargoRoot = opString yjitSupport "yjit";
@@ -410,17 +420,6 @@ in
   mkRubyVersion = rubyVersion;
   mkRuby = generic;
 
-  ruby_3_1 = generic {
-    version = rubyVersion "3" "1" "7" "";
-    hash = "sha256-BVas1p8UHdrOA/pd2NdufqDY9SMu3wEkKVebzaqzDns=";
-  };
-
-  ruby_3_2 = generic {
-    version = rubyVersion "3" "2" "9" "";
-    hash = "sha256-q7rZjbmusVJ3Ow01ho5QADuMRn89BhUld8Tf7Z2I7So=";
-    cargoHash = "sha256-CMVx5/+ugDNEuLAvyPN0nGHwQw6RXyfRsMO9I+kyZpk=";
-  };
-
   ruby_3_3 = generic {
     version = rubyVersion "3" "3" "9" "";
     hash = "sha256-0ZkWkKThcjPsazx4RMHhJFwK3OPgDXE1UdBFhGe3J7E=";
@@ -428,8 +427,15 @@ in
   };
 
   ruby_3_4 = generic {
-    version = rubyVersion "3" "4" "5" "";
-    hash = "sha256-HYjYontEL93kqgbcmehrC78LKIlj2EMxEt1frHmP1e4=";
+    version = rubyVersion "3" "4" "7" "";
+    hash = "sha256-I4FabQlWlveRkJD9w+L5RZssg9VyJLLkRs4fX3Mz7zY=";
     cargoHash = "sha256-5Tp8Kth0yO89/LIcU8K01z6DdZRr8MAA0DPKqDEjIt0=";
   };
+
+  ruby_3_5 = generic {
+    version = rubyVersion "3" "5" "0" "preview1";
+    hash = "sha256-7PCcfrkC6Rza+cxVPNAMypuEiz/A4UKXhQ+asIzdRvA=";
+    cargoHash = "sha256-z7NwWc4TaR042hNx0xgRkh/BQEpEJtE53cfrN0qNiE0=";
+  };
+
 }

@@ -26,10 +26,10 @@
   # External libraries options
   withHdf5 ? withCommonDeps,
   withMetis ? withCommonDeps,
-  withZlib ? (withP4est || withPtscotch),
+  withZlib ? (withP4est || withPtScotch),
   withScalapack ? withCommonDeps && mpiSupport,
   withParmetis ? withFullDeps, # parmetis is unfree
-  withPtscotch ? withCommonDeps && mpiSupport,
+  withPtScotch ? withCommonDeps && mpiSupport,
   withMumps ? withCommonDeps,
   withP4est ? withFullDeps,
   withHypre ? withCommonDeps && mpiSupport,
@@ -67,7 +67,7 @@ assert withP4est -> (mpiSupport && withZlib);
 # Package parmetis depend on metis and mpi support
 assert withParmetis -> (withMetis && mpiSupport);
 
-assert withPtscotch -> (mpiSupport && withZlib);
+assert withPtScotch -> (mpiSupport && withZlib);
 assert withScalapack -> mpiSupport;
 assert (withMumps && mpiSupport) -> withScalapack;
 assert withHypre -> mpiSupport;
@@ -83,6 +83,7 @@ let
       fortranSupport
       pythonSupport
       precision
+      withPtScotch
       ;
     enableMpi = self.mpiSupport;
 
@@ -109,12 +110,25 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "petsc";
-  version = "3.23.6";
+  version = "3.24.0";
 
   src = fetchzip {
     url = "https://web.cels.anl.gov/projects/petsc/download/release-snapshots/petsc-${finalAttrs.version}.tar.gz";
-    hash = "sha256-sKXLYtOw6xom7c7ARpOY4dcsV5zR5KgbYrt1bnHF/Io=";
+    hash = "sha256-5jqYTo5sfwLNByOlpry0zpI+q3u7ErwJJ97h7w5bvNQ=";
   };
+
+  patches = [
+    (replaceVars ./fix-petsc4py-install-prefix.patch {
+      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs ./lib/petsc/bin
+
+    substituteInPlace config/example_template.py \
+      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
+  '';
 
   strictDeps = true;
 
@@ -139,7 +153,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withP4est petscPackages.p4est
   ++ lib.optional withMetis petscPackages.metis
   ++ lib.optional withParmetis petscPackages.parmetis
-  ++ lib.optional withPtscotch petscPackages.scotch
+  ++ lib.optional withPtScotch petscPackages.scotch
   ++ lib.optional withScalapack petscPackages.scalapack
   ++ lib.optional withMumps petscPackages.mumps
   ++ lib.optional withHypre petscPackages.hypre
@@ -149,19 +163,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSuitesparse petscPackages.suitesparse;
 
   propagatedBuildInputs = lib.optional pythonSupport python3Packages.numpy;
-
-  patches = [
-    (replaceVars ./fix-petsc4py-install-prefix.patch {
-      PYTHON_SITEPACKAGES = python3Packages.python.sitePackages;
-    })
-  ];
-
-  postPatch = ''
-    patchShebangs ./lib/petsc/bin
-
-    substituteInPlace config/example_template.py \
-      --replace-fail "/usr/bin/env bash" "${bash}/bin/bash"
-  '';
 
   configureFlags = [
     "--with-blaslapack=1"
@@ -184,7 +185,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional pythonSupport "--with-petsc4py=1"
   ++ lib.optional withMetis "--with-metis=1"
   ++ lib.optional withParmetis "--with-parmetis=1"
-  ++ lib.optional withPtscotch "--with-ptscotch=1"
+  ++ lib.optional withPtScotch "--with-ptscotch=1"
   ++ lib.optional withScalapack "--with-scalapack=1"
   ++ lib.optional withMumps "--with-mumps=1"
   ++ lib.optional (withMumps && !mpiSupport) "--with-mumps-serial=1"
@@ -196,11 +197,6 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optional withSuperLuDist "--with-superlu_dist=1"
   ++ lib.optional withFftw "--with-fftw=1"
   ++ lib.optional withSuitesparse "--with-suitesparse=1";
-
-  hardeningDisable = lib.optionals debug [
-    "fortify"
-    "fortify3"
-  ];
 
   installTargets = [ (if withExamples then "install" else "install-lib") ];
 

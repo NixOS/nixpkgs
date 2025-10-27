@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "certinfo";
-  version = "1.0.37";
+  version = "1.0.38";
 
   src = fetchFromGitHub {
     owner = "pete911";
     repo = "certinfo";
     rev = "v${version}";
-    sha256 = "sha256-0nJGIEqS3Dz0qmlX2k6POGK8cs05ENMDJsvoIhpPKpM=";
+    sha256 = "sha256-3CAl/Kf20JMcq7aLOviwxpHkYXnOd2WXqC8o2TLEXGY=";
   };
 
   # clipboard functionality not working on Darwin

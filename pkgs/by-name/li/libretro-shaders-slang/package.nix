@@ -7,13 +7,13 @@
 
 stdenvNoCC.mkDerivation {
   pname = "libretro-shaders-slang";
-  version = "0-unstable-2025-09-14";
+  version = "0-unstable-2025-10-20";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "slang-shaders";
-    rev = "39ca959b131e75dcd0cb4016e545b4e91b7081ae";
-    hash = "sha256-8G54UuuuZpi/sqEWfK/XNXEjjL9LGmffNAnQ+g/XQPM=";
+    rev = "422e59878b7e0b4d5d677e6163cc560767398d20";
+    hash = "sha256-PdurVN86deGS1pNvFY1IZblBklc/CEFrB7jKbB8JrG4=";
   };
 
   dontConfigure = true;

@@ -77,7 +77,7 @@ let
   rewritePatch =
     { from, to }:
     patch:
-    runCommandLocal (builtins.baseNameOf patch)
+    runCommandLocal (baseNameOf patch)
       {
         inherit patch;
         nativeBuildInputs = [ patchutils ];
@@ -215,6 +215,9 @@ stdenv.mkDerivation (finalAttrs: {
       "SYSSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/source"
       "SYSOUT=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
     ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "C_INCLUDE_PATH=${lib.getLib stdenv.cc.cc}/lib/clang/${lib.versions.major stdenv.cc.cc.version}/include"
+    ]
   );
 
   hardeningDisable = [
@@ -249,7 +252,7 @@ stdenv.mkDerivation (finalAttrs: {
           ...
         }@args:
         let
-          args' = builtins.removeAttrs args [
+          args' = removeAttrs args [
             "owner"
             "repo"
             "rev"
@@ -276,7 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
           inherit hash;
           nvidia_x11 = finalAttrs.finalPackage;
           patches =
-            (builtins.map (rewritePatch {
+            (map (rewritePatch {
               from = "kernel";
               to = "kernel-open";
             }) patches)

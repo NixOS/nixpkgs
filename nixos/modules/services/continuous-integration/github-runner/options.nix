@@ -26,7 +26,7 @@
     default = { };
     type = lib.types.attrsOf (
       lib.types.submodule (
-        { name, ... }:
+        { name, config, ... }:
         {
           options = {
             enable = lib.mkOption {
@@ -186,7 +186,9 @@
               default = { };
             };
 
-            package = lib.mkPackageOption pkgs "github-runner" { };
+            package = lib.mkPackageOption pkgs "github-runner" { } // {
+              apply = pkg: pkg.override { inherit (config) nodeRuntimes; };
+            };
 
             ephemeral = lib.mkOption {
               type = lib.types.bool;

@@ -105,6 +105,15 @@ stdenv.mkDerivation (finalAttrs: {
       "-Dnautilus=false"
     ];
 
+  # For https://gitlab.gnome.org/GNOME/papers/-/blob/5efed8638dd4a2d5c36f59eb9a22158d69632e0b/shell/src/meson.build#L36
+  env.CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
+
+  postPatch = ''
+    substituteInPlace shell/src/meson.build --replace-fail \
+      "meson.current_build_dir() / rust_target / meson.project_name()" \
+      "meson.current_build_dir() / '${stdenv.hostPlatform.rust.cargoShortTarget}' / rust_target / meson.project_name()"
+  '';
+
   postInstall = ''
     substituteInPlace $out/share/thumbnailers/papers.thumbnailer \
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"

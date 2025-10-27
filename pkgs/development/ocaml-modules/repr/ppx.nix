@@ -14,10 +14,16 @@ buildDunePackage {
 
   inherit (repr) src version;
 
-  patches = lib.optional (lib.versionAtLeast ppxlib.version "0.36") (fetchpatch {
-    url = "https://github.com/mirage/repr/commit/9dcaeaa7e5f45998f76e1eab68f8fd18edc980cc.patch";
-    hash = "sha256-MKuZ4f8m/nNlgZpomGgqr80s5btynKcb1b4khpIIOY4=";
-  });
+  patches = lib.optionals (lib.versionAtLeast ppxlib.version "0.36") [
+    (fetchpatch {
+      url = "https://github.com/mirage/repr/commit/460fc85a2804e3301bfc0e79413f5df472d95374.patch";
+      hash = "sha256-8nEPyeZ1s9Q/6+BKtdMb9kVhTfCdMmRrU3xpvizVZHA=";
+    })
+    (fetchpatch {
+      url = "https://github.com/mirage/repr/commit/c939a7317e126589bd6d6bd1d9e38cff749bcdb1.patch";
+      hash = "sha256-Srf5fZoc0iiJEZiW8PnIM5VdHOGofbdkhfnjQvFcTq0=";
+    })
+  ];
 
   propagatedBuildInputs = [
     ppx_deriving
