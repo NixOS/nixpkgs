@@ -10,7 +10,6 @@
   marshmallow,
   marshmallow-sqlalchemy,
   openpyxl,
-  pythonOlder,
   roadlib,
   setuptools,
   sqlalchemy,
@@ -21,8 +20,6 @@ buildPythonPackage rec {
   version = "1.7.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
-
   src = fetchPypi {
     inherit pname version;
     hash = "sha256-v8IUnJlREtKMnhJtdKtChcxM/IKNKRuHA79V38zxLGY=";
@@ -30,11 +27,9 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "flask" ];
 
-  nativeBuildInputs = [
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     flask
     flask-cors
@@ -46,6 +41,9 @@ buildPythonPackage rec {
     roadlib
     sqlalchemy
   ];
+
+  # Module has no tests
+  doCheck = false;
 
   pythonImportsCheck = [ "roadtools.roadrecon" ];
 
