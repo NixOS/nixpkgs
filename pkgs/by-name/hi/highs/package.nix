@@ -40,6 +40,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     platforms = platforms.all;
     mainProgram = "highs";
-    maintainers = with maintainers; [ galabovaa silky ];
+    maintainers = with maintainers; [
+      galabovaa
+      silky
+    ];
   };
 })
