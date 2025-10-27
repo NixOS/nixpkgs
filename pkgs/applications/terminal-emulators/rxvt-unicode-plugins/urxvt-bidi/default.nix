@@ -32,5 +32,8 @@ perlPackages.buildPerlPackage rec {
     homepage = "https://github.com/mkamensky/Text-Bidi";
     maintainers = with maintainers; [ doronbehar ];
     platforms = with platforms; unix;
+    # Quote from the README:
+    # same terms as the Perl 5 programming language system itself
+    license = perlPackages.perl.meta.license;
   };
 }
