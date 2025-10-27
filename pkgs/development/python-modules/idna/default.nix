@@ -29,5 +29,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/kjd/idna/releases/tag/${src.tag}";
     description = "Internationalized Domain Names in Applications (IDNA)";
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.dotlambda ];
   };
 }
