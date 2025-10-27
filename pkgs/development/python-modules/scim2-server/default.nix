@@ -1,7 +1,7 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   hatchling,
   scim2-filter-parser,
   scim2-models,
@@ -17,10 +17,11 @@ buildPythonPackage rec {
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "scim2_server";
-    hash = "sha256-nMS6vjMZ/Lyu0kiVH+IlmxZsuu7McY7AZS/xamfZSlk=";
+  src = fetchFromGitHub {
+    owner = "python-scim";
+    repo = "scim2-server";
+    tag = version;
+    hash = "sha256-85YwnKUrK514v1l1bfeNw90WZZuFdc+apSxnBOhefcw=";
   };
 
   build-system = [ hatchling ];
