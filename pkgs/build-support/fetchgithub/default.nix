@@ -4,22 +4,65 @@
   fetchgit,
   fetchzip,
 }:
+let
+  # Here defines fetchFromGitHub arguments that determines useFetchGit,
+  # The attribute value is their default values.
+  # As fetchFromGitHub prefers fetchzip for hash stability,
+  # `getDefaultUseFetchGitArgs { }` attributes should lead to `useFetchGit = false`.
+  getDefaultUseFetchGitArgs =
+    args:
+    let
+      argsWithDefault = defaults // args;
+      defaults = {
+        fetchSubmodules = false; # This differs from fetchgit's default
+        leaveDotGit = null;
+        deepClone = false;
+        forceFetchGit = false;
+        fetchLFS = false;
+        rootDir = "";
+        sparseCheckout = lib.optional (argsWithDefault.rootDir != "") argsWithDefault.rootDir;
+      };
+    in
+    defaults;
 
-lib.makeOverridable (
+  defaultUseFetchGitArgsNeg = getDefaultUseFetchGitArgs { };
+
+  # useFetchGitArgsWD to exclude from automatic passing.
+  # Other useFetchGitArgsWD will pass down to fetchgit.
+  excludeUseFetchGitArgNames = [
+    "forceFetchGit"
+    "leaveDotGit"
+  ];
+
+  faUseFetchGit = lib.mapAttrs (_: _: true) defaultUseFetchGitArgsNeg;
+
+  faFetchGit = lib.functionArgs fetchgit;
+  faFetchZip = lib.functionArgs fetchzip;
+
+  adjustFunctionArgs =
+    let
+      faAdding =
+        removeAttrs (faFetchGit // faFetchZip // removeAttrs faUseFetchGit excludeUseFetchGitArgNames)
+          [
+            "outputHashAlgo"
+            "outputHash"
+            "sha1"
+            "sha256"
+            "sha512"
+          ];
+    in
+    f: lib.setFunctionArgs f (faAdding // lib.functionArgs f);
+
+  decorate = f: lib.makeOverridable (adjustFunctionArgs f);
+in
+decorate (
   {
     owner,
     repo,
     tag ? null,
     rev ? null,
     name ? repoRevToNameMaybe repo (lib.revOrTag rev tag) "github",
-    fetchSubmodules ? false,
-    leaveDotGit ? null,
-    deepClone ? false,
     private ? false,
-    forceFetchGit ? false,
-    fetchLFS ? false,
-    rootDir ? "",
-    sparseCheckout ? lib.optional (rootDir != "") rootDir,
     githubBase ? "github.com",
     varPrefix ? null,
     passthru ? { },
@@ -34,6 +77,23 @@ lib.makeOverridable (
   );
 
   let
+    useFetchGit =
+      let
+      in
+      useFetchGitArgsWD.forceFetchGit
+      || useFetchGitArgsWD.leaveDotGit == true
+      || useFetchGitArgs != lib.intersectAttrs useFetchGitArgs defaultUseFetchGitArgsNeg;
+
+    useFetchGitArgs = lib.intersectAttrs faUseFetchGit args;
+    useFetchGitArgsDefault = getDefaultUseFetchGitArgs args;
+    useFetchGitArgsWD = useFetchGitArgsDefault // useFetchGitArgs;
+    useFetchGitArgsWDAutoPassing = removeAttrs useFetchGitArgsWD excludeUseFetchGitArgNames;
+
+    useFetchGitArgsWDPassing =
+      useFetchGitArgsWDAutoPassing
+      // lib.optionalAttrs (useFetchGitArgsWD.leaveDotGit != null) {
+        inherit (useFetchGitArgsWD) leaveDotGit;
+      };
 
     position = (
       if args.meta.description or null != null then
@@ -53,26 +113,19 @@ lib.makeOverridable (
         # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
         position = "${position.file}:${toString position.line}";
       };
-    passthruAttrs = removeAttrs args [
-      "owner"
-      "repo"
-      "tag"
-      "rev"
-      "fetchSubmodules"
-      "forceFetchGit"
-      "private"
-      "githubBase"
-      "varPrefix"
-    ];
+    passthruAttrs = removeAttrs args (
+      [
+        "owner"
+        "repo"
+        "tag"
+        "rev"
+        "private"
+        "githubBase"
+        "varPrefix"
+      ]
+      ++ (if useFetchGit then excludeUseFetchGitArgNames else lib.attrNames faUseFetchGit)
+    );
     varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
-    useFetchGit =
-      fetchSubmodules
-      || (leaveDotGit == true)
-      || deepClone
-      || forceFetchGit
-      || fetchLFS
-      || (rootDir != "")
-      || (sparseCheckout != [ ]);
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
     fetcher =
@@ -116,19 +169,12 @@ lib.makeOverridable (
       passthruAttrs
       // (
         if useFetchGit then
-          {
-            inherit
-              tag
-              rev
-              deepClone
-              fetchSubmodules
-              sparseCheckout
-              fetchLFS
-              ;
+          useFetchGitArgsWDPassing
+          // {
+            inherit tag rev;
             url = gitRepoUrl;
             inherit passthru;
           }
-          // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
           {
             # Use the API endpoint for private repos, as the archive URI doesn't
