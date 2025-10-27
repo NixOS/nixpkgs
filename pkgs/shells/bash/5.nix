@@ -278,7 +278,7 @@ lib.warnIf (withDocs != null)
       mainProgram = "bash";
       identifiers.cpeParts =
         let
-          versionSplit = lib.split "p" version;
+          versionSplit = lib.split "p" fa.version;
         in
         {
           vendor = "gnu";
