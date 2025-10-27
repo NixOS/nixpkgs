@@ -1,6 +1,7 @@
 {
   lib,
   fetchFromGitHub,
+  applyPatches,
   rustPlatform,
   cmake,
   libGL,
@@ -18,18 +19,20 @@ rustPlatform.buildRustPackage {
   pname = "stardust-xr-non-spatial-input";
   version = "0-unstable-2024-06-01";
 
-  src = fetchFromGitHub {
-    owner = "stardustxr";
-    repo = "non-spatial-input";
-    rev = "42a23ba87322cf93602a81025f3ba1710d26dc1e";
-    hash = "sha256-W5oAv9R8GsSPna1B/7LsUnDy74dtqZlR0gvme4CFapU=";
+  # applyPatches needed so that the rust build system pulls the correct lockfile
+  src = applyPatches {
+    src = fetchFromGitHub {
+      owner = "stardustxr";
+      repo = "non-spatial-input";
+      rev = "5ac7f04f6876097aa8c3cf9af033d609a8a49944";
+      hash = "sha256-W2wujTlj3URCq85Li0iJtSPfTf3dn8kRJueGWZPsks8=";
+    };
+    patches = [
+      ./fix-cargo-lock.patch
+    ];
   };
 
-  patches = [
-    ./fix-cargo-lock.patch
-  ];
-
-  cargoHash = "sha256-AAe5WMqvne2WujZuGottWuZi9MORl/LiG2IYwB9XhHE=";
+  cargoHash = "sha256-uAJZx/WrkQG7UDCfn/OaYvRrT3EGsbjWX+BOJir6tDs=";
 
   nativeBuildInputs = [
     cmake
