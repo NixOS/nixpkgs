@@ -180,5 +180,7 @@
   _typing = {
     testPaths = [ ];
   };
-  _utils = { };
+  _utils = {
+    testPaths = [ "test/plugins/utils" ];
+  };
 }
