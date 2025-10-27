@@ -10333,8 +10333,6 @@ with pkgs;
     userOnly = true;
   };
 
-  canokey-qemu = callPackage ../applications/virtualization/qemu/canokey-qemu.nix { };
-
   wrapQemuBinfmtP = callPackage ../by-name/qe/qemu/binfmt-p-wrapper.nix { };
 
   qmediathekview = libsForQt5.callPackage ../applications/video/qmediathekview { };
