@@ -20,6 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NM9SspeMXu1q3tfpcFk4OuLapu/clbotJLu2u4nmAlY=";
   };
 
+  patches = [
+    # Fix QML plugin metadata generation for Qt 6.
+    # Fixed upstream for 3.0.0
+    ./fix-qml-plugin.patch
+  ];
+
   buildInputs = [
     kdePackages.extra-cmake-modules
     qt6.qtbase
