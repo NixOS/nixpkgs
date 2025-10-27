@@ -29,7 +29,7 @@ buildLinux (
 
     src = fetchurl {
       url = "mirror://kernel/linux/kernel/v6.x/linux-${kversion}.tar.xz";
-      sha256 = "13i2l04pmba7dksz2p5kwxgr5bydc5lp7284d4wfsnjf425i9fyl";
+      hash = "sha256-1LsUiyBOWu04aQSJc2lhza+SX+ezXPH1bEetegmgIo4=";
     };
 
     kernelPatches =
@@ -38,7 +38,7 @@ buildLinux (
           name = "rt";
           patch = fetchurl {
             url = "mirror://kernel/linux/kernel/projects/rt/${branch}/older/patch-${version}.patch.xz";
-            sha256 = "1smah5wa4lrgb13li025lpj80yxay4g13m7c4i09whxcgxhc294k";
+            hash = "sha256-kyTBYH+sQ55AJOzUER7xqnuA5KVFgEhHWC9ToniBquo=";
           };
         };
       in
