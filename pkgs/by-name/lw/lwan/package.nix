@@ -12,21 +12,14 @@
 
 stdenv.mkDerivation rec {
   pname = "lwan";
-  version = "0.5";
+  version = "0.7";
 
   src = fetchFromGitHub {
     owner = "lpereira";
     repo = "lwan";
     rev = "v${version}";
-    sha256 = "sha256-otiPH+e+auMCyeOTq4LJYaBNv+I91kOCww7DCepQTAQ=";
+    sha256 = "sha256-kH4pZXLcVqGtiGF9IXsybWc+iG8bGASmxcaCKTAB40g=";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/lpereira/lwan/commit/9b94ff5eecec1e925103b25a43dacc226a634878.patch";
-      hash = "sha256-g1ZwmEodtF1fkbIBaLT4YvH8EG8DGafHydPSYJra+c0=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake

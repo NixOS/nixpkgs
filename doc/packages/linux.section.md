@@ -5,7 +5,7 @@ The Nix expressions to build the Linux kernel are in [`pkgs/os-specific/linux/ke
 The function [`pkgs.buildLinux`](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/generic.nix) builds a kernel with [common configuration values](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/common-config.nix).
 This is the preferred option unless you have a very specific use case.
 Most kernels packaged in Nixpkgs are built that way, and it will also generate kernels suitable for NixOS.
-[`pkgs.linuxManualConfig`](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/manual-config.nix) requires a complete configuration to be passed.
+[`pkgs.linuxManualConfig`](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/build.nix) requires a complete configuration to be passed.
 It has fewer additional features than `pkgs.buildLinux`, which provides common configuration values and exposes the `features` attribute, as explained below.
 
 Both functions have an argument `kernelPatches` which should be a list of `{name, patch, extraConfig}` attribute sets, where `name` is the name of the patch (which is included in the kernel’s `meta.description` attribute), `patch` is the patch itself (possibly compressed), and `extraConfig` (optional) is a string specifying extra options to be concatenated to the kernel configuration file (`.config`).
@@ -75,7 +75,7 @@ pkgs.linuxPackages_custom {
 
 :::
 
-Additional attributes can be used with `linuxManualConfig` for further customisation instead of `linuxPackages_custom`. You're encouraged to read [the `pkgs.linuxManualConfig` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/manual-config.nix) to understand how to use them.
+Additional attributes can be used with `linuxManualConfig` for further customisation instead of `linuxPackages_custom`. You're encouraged to read [the `pkgs.linuxManualConfig` source code](https://github.com/NixOS/nixpkgs/blob/d77bda728d5041c1294a68fb25c79e2d161f62b9/pkgs/os-specific/linux/kernel/build.nix) to understand how to use them.
 
 To edit the `.config` file for Linux X.Y from within Nix, proceed as follows:
 

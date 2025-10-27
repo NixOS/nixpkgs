@@ -798,7 +798,7 @@ in
           extraBin = {
             zpool = "${cfgZfs.package}/sbin/zpool";
             zfs = "${cfgZfs.package}/sbin/zfs";
-            mount.zfs = "${cfgZfs.package}/sbin/mount.zfs";
+            "mount.zfs" = "${cfgZfs.package}/sbin/mount.zfs";
             awk = "${pkgs.gawk}/bin/awk";
           };
           storePaths = [

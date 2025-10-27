@@ -60,15 +60,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trilinos";
-  # Xyce 7.4 requires version 12.12.1
-  # nixpkgs-update: no auto update
-  version = "12.12.1";
+  version = "16.1.0";
 
   src = fetchFromGitHub {
     owner = "trilinos";
     repo = "Trilinos";
     tag = "trilinos-release-${lib.replaceStrings [ "." ] [ "-" ] version}";
-    sha256 = "sha256-Nqjr7RAlUHm6vs87a1P84Y7BIZEL0Vs/A1Z6dykfv+o=";
+    hash = "sha256-9Yn79kt7JHS30lc+qImSbLOU3Cdb87S3xmlm3v9G1uo=";
   };
 
   nativeBuildInputs = [
@@ -94,11 +92,6 @@ stdenv.mkDerivation rec {
       ''
         cmakeFlagsArray+=(${flagsBase})
       '';
-
-  postInstall = ''
-    # remove dangling symlink
-    rm $out/lib/cmake/tribits/doc/developers_guide/TribitsBuildReference.html
-  '';
 
   passthru = {
     inherit withMPI;
