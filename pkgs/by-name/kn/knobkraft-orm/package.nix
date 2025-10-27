@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   patches = [ ./temporary.patch ];
 
   cmakeFlags = [
-    "-D PYTHON_VERSION_TO_EMBED=3.12"
+    "-D PYTHON_VERSION_TO_EMBED=${python312.pythonVersion}"
     "-D CMAKE_INTERPROCEDURAL_OPTIMIZATION=off"
   ];
 
