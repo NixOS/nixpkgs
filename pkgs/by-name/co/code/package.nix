@@ -3,6 +3,7 @@
   fetchFromGitHub,
   gitMinimal,
   lib,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -69,6 +70,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
   postInstall = ''
     ln -s $out/bin/code $out/bin/coder
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, effective, mind-blowing, coding CLI";
