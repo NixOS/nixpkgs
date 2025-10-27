@@ -14,9 +14,8 @@ stdenv.mkDerivation rec {
     owner = "orocos";
     repo = "orocos_kinematics_dynamics";
     tag = "${version}";
-    # Needed to build Python bindings
     hash = "sha256-4pPU+6uMMYLGq2V46wmg6lHFVhwFXrEg7PfnWGAI2is=";
-    fetchSubmodules = true;
+    fetchSubmodules = true; # Needed to build Python bindings
   };
 
   sourceRoot = "${src.name}/orocos_kdl";
