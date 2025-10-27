@@ -197,7 +197,6 @@ lib.makeOverridable (
       "fortify"
       "stackprotector"
       "pic"
-      "pie"
     ];
 
     ${if isModular then "outputs" else null} = [
