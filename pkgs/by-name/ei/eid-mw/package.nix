@@ -20,7 +20,7 @@
   wrapGAppsHook3,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "eid-mw";
   # NOTE: Don't just blindly update to the latest version/tag. Releases are always for a specific OS.
   version = "5.1.25";
@@ -28,12 +28,12 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Fedict";
     repo = "eid-mw";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-LdOfwgRGyNK+a4SByClPgH9SrDeCdnhI9sLO7agsNsA=";
   };
 
   postPatch = ''
-    sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
+    sed 's@m4_esyscmd_s(.*,@[${finalAttrs.version}],@' -i configure.ac
     substituteInPlace configure.ac \
       --replace-fail 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
   '';
@@ -127,4 +127,4 @@ stdenv.mkDerivation rec {
       chvp
     ];
   };
-}
+})
