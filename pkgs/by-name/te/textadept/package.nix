@@ -36,9 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   ''
   + lib.concatStringsSep "\n" (
-    lib.mapAttrsToList (
-      name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}"
-    ) (import ./deps.nix)
+    lib.mapAttrsToList (name: params: "ln -s ${fetchurl params} $PWD/build/_deps/${name}") (
+      import ./deps.nix
+    )
   );
 
   meta = {
