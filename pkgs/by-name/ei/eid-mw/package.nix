@@ -4,7 +4,7 @@
   fetchFromGitHub,
   autoconf-archive,
   autoreconfHook,
-  makeWrapper,
+  makeBinaryWrapper,
   pkg-config,
   replaceVarsWith,
   curl,
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     autoconf-archive
     pkg-config
-    makeWrapper
+    makeBinaryWrapper
   ];
   buildInputs = [
     curl
