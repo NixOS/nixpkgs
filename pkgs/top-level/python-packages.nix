@@ -2557,6 +2557,8 @@ self: super: with self; {
 
   chispa = callPackage ../development/python-modules/chispa { };
 
+  choreographer = callPackage ../development/python-modules/choreographer { };
+
   chroma-hnswlib = callPackage ../development/python-modules/chroma-hnswlib { };
 
   chromadb = callPackage ../development/python-modules/chromadb { zstd-c = pkgs.zstd; };
@@ -7771,7 +7773,18 @@ self: super: with self; {
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
-  kaleido = callPackage ../development/python-modules/kaleido { };
+  kaleido = callPackage ../development/python-modules/kaleido {
+    plotly = plotly-bootstrap;
+  };
+
+  kaleido-bootstrap =
+    (callPackage ../development/python-modules/kaleido {
+      plotly = null;
+      withPlotly = false;
+    }).overrideAttrs
+      (oldAttrs: {
+        pname = oldAttrs.pname + "-bootstrap";
+      });
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python { };
 
@@ -8819,6 +8832,8 @@ self: super: with self; {
   };
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix { };
+
+  logistro = callPackage ../development/python-modules/logistro { };
 
   logmatic-python = callPackage ../development/python-modules/logmatic-python { };
 
@@ -11974,6 +11989,14 @@ self: super: with self; {
   plotille = callPackage ../development/python-modules/plotille { };
 
   plotly = callPackage ../development/python-modules/plotly { };
+
+  plotly-bootstrap =
+    (callPackage ../development/python-modules/plotly {
+      kaleido = kaleido-bootstrap;
+    }).overrideAttrs
+      (oldAttrs: {
+        pname = oldAttrs.pname + "-bootstrap";
+      });
 
   plotnine = callPackage ../development/python-modules/plotnine { };
 
