@@ -5,15 +5,15 @@
   cmake,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "corto";
-  version = "0-unstable-2024-04-05";
+  version = "2025.07";
 
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "corto";
-    rev = "d880519c490c88a39d12c31a914b6a687a7019c3";
-    hash = "sha256-0OUijrf+0ZNv3oYko2r8Kp9zgtg8b9RPL7DXHf15Ryc=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wfIZQdypBTfUZJgPE4DetSt1SUNSyZihmL1Uzapqh1o=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -24,4 +24,4 @@ stdenv.mkDerivation {
     license = licenses.mit;
     maintainers = with maintainers; [ nim65s ];
   };
-}
+})
