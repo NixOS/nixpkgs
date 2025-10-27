@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed 's@m4_esyscmd_s(.*,@[${version}],@' -i configure.ac
-    substituteInPlace configure.ac --replace 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
+    substituteInPlace configure.ac \
+      --replace-fail 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
   '';
 
   nativeBuildInputs = [
@@ -44,6 +45,7 @@ stdenv.mkDerivation rec {
     pkg-config
     makeBinaryWrapper
   ];
+
   buildInputs = [
     curl
     gtk3
@@ -62,9 +64,8 @@ stdenv.mkDerivation rec {
     ln -s ${openssl.bin}/bin openssl
     ln -s ${openssl.dev}/include openssl
     export SSL_PREFIX=$(realpath openssl)
-    substituteInPlace plugins_tools/eid-viewer/Makefile.in \
-      --replace "c_rehash" "openssl rehash"
   '';
+
   # pinentry uses hardcoded `/usr/bin/pinentry`, so use the built-in (uglier) dialogs for pinentry.
   configureFlags = [ "--disable-pinentry" ];
 
@@ -81,10 +82,11 @@ stdenv.mkDerivation rec {
     ''
       install -D ${eid-nssdb-in} $out/bin/eid-nssdb
       substituteInPlace $out/bin/eid-nssdb \
-        --replace "modutil" "${nssTools}/bin/modutil"
+        --replace-fail "modutil" "${lib.getExe' nssTools "modutil"}"
 
       rm $out/bin/about-eid-mw
-      wrapProgram $out/bin/eid-viewer --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
+      wrapProgram $out/bin/eid-viewer \
+        --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/$name"
     '';
 
   enableParallelBuilding = true;
