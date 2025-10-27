@@ -1,6 +1,7 @@
 {
   fetchFromGitHub,
   lib,
+  nix-update-script,
   openssl,
   pkg-config,
   rustPlatform,
@@ -51,6 +52,8 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Fast, effective, mind-blowing, coding CLI";
