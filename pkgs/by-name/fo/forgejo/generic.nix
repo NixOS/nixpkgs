@@ -11,7 +11,7 @@
 {
   bash,
   brotli,
-  buildGoModule,
+  buildGo125Module,
   forgejo,
   git,
   gzip,
@@ -52,7 +52,7 @@ let
     '';
   };
 in
-buildGoModule rec {
+buildGo125Module rec {
   pname = "forgejo" + lib.optionalString lts "-lts";
 
   inherit
