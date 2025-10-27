@@ -24,7 +24,25 @@ let
       in
       result
       // {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (extendArgs newArgs);
+        overridePythonAttrs =
+          newArgs:
+          let
+            f' =
+              if !lib.isFunction newArgs && newArgs ? stdenv then
+                lib.warnIf (lib.oldestSupportedReleaseIsAtLeast 2511) ''
+                  Passing `stdenv` to `overridePythonAttrs` is deprecated. You should override the package's `buildPythonPackage` or `buildPythonApplication` function instead, e.g:
+                    <package>.override (prev: {
+                      buildPythonPackage = prev.buildPythonPackage.override {
+                        stdenv = customStdenv;
+                      };
+                    })
+                '' (f.override { inherit (newArgs) stdenv; })
+              else
+                f;
+            newArgs' =
+              if !lib.isFunction newArgs && newArgs ? stdenv then removeAttrs newArgs [ "stdenv" ] else newArgs;
+          in
+          makeOverridablePythonPackage f' (extendArgs newArgs');
         overrideAttrs =
           newArgs: makeOverridablePythonPackage (args: (f args).overrideAttrs newArgs) origArgs;
       }
