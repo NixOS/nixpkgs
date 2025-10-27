@@ -22,13 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-uBlKbg1oKeUPcWzM9WxisGtpBu69eZyTetaANYpTG5E=";
   };
 
-  build-system = [
-    setuptools
-  ];
+  build-system = [ flit-core ];
 
   dependencies = [
     cloudpickle
-    flit-core
+    setuptools
     typing-extensions
   ];
 
