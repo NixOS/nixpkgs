@@ -4,16 +4,21 @@
   autoconf,
   automake,
   csound,
+  docbook-xsl-ns,
   fetchurl,
   gdk-pixbuf,
   gettext,
+  ghostscript,
+  gnome-doc-utils,
   gobject-introspection,
   gtk3,
   librsvg,
+  libxslt,
   lilypond,
   mpg123,
   pkg-config,
   python3Packages,
+  swig,
   texinfo,
   timidity,
   txt2man,
@@ -46,10 +51,16 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     autoconf
     automake
+    docbook-xsl-ns
     gdk-pixbuf
     gettext
+    ghostscript
+    gnome-doc-utils
     gobject-introspection
+    libxslt
+    lilypond
     pkg-config
+    swig
     texinfo
     txt2man
     wrapGAppsHook3
@@ -65,6 +76,10 @@ python3Packages.buildPythonApplication rec {
     pygobject3
   ];
 
+  configureFlags = [
+    "--enable-docbook-stylesheet=${docbook-xsl-ns}/share/xml/docbook-xsl-ns/html/chunk.xsl"
+  ];
+
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsa-utils}/bin/aplay|' \
            -e 's|midi_player=.*|midi_player=${timidity}/bin/timidity|' \
@@ -73,6 +88,10 @@ python3Packages.buildPythonApplication rec {
            -e 's|csound=.*|csound=${csound}/bin/csound|' \
            -e 's|lilypond-book=.*|lilypond-book=${lilypond}/bin/lilypond-book|' \
            default.config
+  '';
+
+  postBuild = ''
+    make help/C/index.html
   '';
 
   dontWrapGApps = true;

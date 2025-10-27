@@ -1,5 +1,9 @@
 import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+  {
+    pkgs,
+    lib,
+    ...
+  }:
   let
     secret-key = "key-name:/COlMSRbehSh6YSruJWjL+R0JXQUKuPEn96fIb+pLokEJUjcK/2Gv8Ai96D7JGay5gDeUTx5wdpPgNvum9YtwA==";
     public-key = "key-name:BCVI3Cv9hr/AIveg+yRmsuYA3lE8ecHaT4Db7pvWLcA=";
@@ -16,8 +20,9 @@ import ./make-test-python.nix (
           openFirewall = true;
         };
         system.extraDependencies = [
-          pkgs.nix.debug
-          pkgs.nix.src
+          pkgs.gnumake.debug
+          pkgs.gnumake.src
+          pkgs.gnumake
           pkgs.sl
         ];
       };
@@ -32,11 +37,12 @@ import ./make-test-python.nix (
         trusted-public-keys = [ public-key ];
       };
       environment.systemPackages = [
+        pkgs.gnumake
         pkgs.valgrind
         pkgs.gdb
         (pkgs.writeShellScriptBin "wait_for_indexation" ''
           set -x
-          while debuginfod-find debuginfo /run/current-system/sw/bin/nix |& grep 'File too large'; do
+          while debuginfod-find debuginfo /run/current-system/sw/bin/make |& grep 'File too large'; do
             sleep 1;
           done
         '')
@@ -57,28 +63,26 @@ import ./make-test-python.nix (
 
       # nixseparatedebuginfod needs .drv to associate executable -> source
       # on regular systems this would be provided by nixos-rebuild
-      machine.succeed("nix-instantiate '<nixpkgs>' -A nix")
+      machine.succeed("nix-instantiate ${pkgs.path} -A gnumake")
 
       machine.succeed("timeout 600 wait_for_indexation")
 
       # test debuginfod-find
-      machine.succeed("debuginfod-find debuginfo /run/current-system/sw/bin/nix")
+      machine.succeed("debuginfod-find debuginfo /run/current-system/sw/bin/make")
 
       # test that gdb can fetch source
-      out = machine.succeed("gdb /run/current-system/sw/bin/nix --batch -x ${builtins.toFile "commands" ''
+      out = machine.succeed("gdb /run/current-system/sw/bin/make --batch -x ${builtins.toFile "commands" ''
         start
         l
       ''}")
       print(out)
-      assert 'int main(' in out
+      assert 'main (int argc, char **argv, char **envp)' in out
 
       # test that valgrind can display location information
-      # this relies on the fact that valgrind complains about nix
-      # libgc helps in this regard, and we also ask valgrind to show leak kinds
-      # which are usually false positives.
-      out = machine.succeed("valgrind --leak-check=full --show-leak-kinds=all nix-env --version 2>&1")
+      # we ask valgrind to show leak kinds which are usually false positives, so taht we get a source file report.
+      out = machine.succeed("valgrind --leak-check=full --show-leak-kinds=all make --version 2>&1")
       print(out)
-      assert 'main.cc' in out
+      assert 'main.c' in out
     '';
   }
 )

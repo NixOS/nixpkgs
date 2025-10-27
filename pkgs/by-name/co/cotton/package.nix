@@ -26,5 +26,9 @@ rustPlatform.buildRustPackage rec {
       dit7ya
       figsoda
     ];
+
+    knownVulnerabilities = [
+      "'cotton' is vulnerable to CVE-2025-62518"
+    ];
   };
 }
