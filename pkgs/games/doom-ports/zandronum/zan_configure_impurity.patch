@@ -2,8 +2,6 @@ diff -r 4178904d7698 sqlite/CMakeLists.txt
 --- a/sqlite/CMakeLists.txt	Sat Dec 11 16:35:55 2021 -0500
 +++ b/sqlite/CMakeLists.txt	Fri Dec 01 12:57:55 2023 -0300
 @@ -1,65 +1,5 @@
- cmake_minimum_required( VERSION 2.4 )
- 
 -# [BB/EP] Download SQLite archive and extract the sources if necessary.
 -set( ZAN_SQLITE_VERSION 3360000 ) # SQL version 3.36.0
 -set( ZAN_SQLITE_YEAR 2021 )
