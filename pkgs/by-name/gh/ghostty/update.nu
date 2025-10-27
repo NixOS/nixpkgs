@@ -16,7 +16,7 @@ if $latest == $current {
 
 print $"Updating Ghostty: ($current) -> ($latest)"
 
-^update-source-version ghostty $latest --file=./pkgs/by-name/gh/ghostty/package.nix
+^update-source-version ghostty $latest --file=./pkgs/by-name/gh/ghostty/source.nix
 
 # Update deps.nix
 http get $"https://raw.githubusercontent.com/ghostty-org/ghostty/refs/tags/v($latest)/build.zig.zon.nix"
@@ -27,8 +27,8 @@ http get $"https://raw.githubusercontent.com/ghostty-org/ghostty/refs/tags/v($la
 # and so it's possible for a Git tag to have no corresponding notarized DMG download.
 # Don't fail here if that happens.
 try {
-  ^update-source-version ghostty-bin $latest --file=./pkgs/by-name/gh/ghostty-bin/package.nix
+  ^update-source-version ghostty $latest --file=./pkgs/by-name/gh/ghostty/dmg.nix
 } catch {
-  print "Failed to update bin package (is the DMG file uploaded yet?)"
+  print "Failed to update DMG package (is the DMG file uploaded yet?)"
 }
 

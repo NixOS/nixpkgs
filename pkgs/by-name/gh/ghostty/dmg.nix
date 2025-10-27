@@ -7,7 +7,7 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  pname = "ghostty-bin";
+  pname = "ghostty-dmg";
   version = "1.2.3";
 
   src = fetchurl {
@@ -80,30 +80,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp -r $resourceDir/man $man/share/man
   '';
 
-  outputs = [
-    "out"
-    "man"
-    "shell_integration"
-    "terminfo"
-    "vim"
-  ];
-
   meta = {
-    description = "Fast, native, feature-rich terminal emulator pushing modern features";
-    longDescription = ''
-      Ghostty is a terminal emulator that differentiates itself by being
-      fast, feature-rich, and native. While there are many excellent terminal
-      emulators available, they all force you to choose between speed,
-      features, or native UIs. Ghostty provides all three.
-    '';
-    homepage = "https://ghostty.org/";
-    downloadPage = "https://ghostty.org/download";
-    changelog = "https://ghostty.org/docs/install/release-notes/${
-      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
-    }";
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Enzime ];
-    mainProgram = "ghostty";
     outputsToInstall = [
       "out"
       "man"

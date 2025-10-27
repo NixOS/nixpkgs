@@ -1051,6 +1051,7 @@ mapAliases {
   gfortran49 = throw "'gfortran49' has been removed from nixpkgs"; # Added 2024-09-11
   gg = go-graft; # Added 2025-03-07
   ggobi = throw "'ggobi' has been removed from Nixpkgs, as it is unmaintained and broken"; # Added 2025-05-18
+  ghostty-bin = lib.warnOnInstantiate "'ghostty-bin' has been merged with and renamed to 'ghostty'" ghostty; # Added 2025-10-24
   ghostwriter = makePlasma5Throw "ghostwriter"; # Added 2023-03-18
   gimp3 = gimp; # added 2025-10-03
   gimp3-with-plugins = gimp-with-plugins; # added 2025-10-03
