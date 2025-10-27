@@ -170,7 +170,7 @@ stdenv.mkDerivation rec {
       Kart.
     '';
     homepage = "https://supertuxkart.net/";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.gpl3Plus;
     maintainers = with lib.maintainers; [
       peterhoeg
     ];
