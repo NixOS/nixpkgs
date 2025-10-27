@@ -44,6 +44,19 @@ let
   # Dependencies in dependency sets should be mutually exclusive.
   mergeDisjointAttrs = lib.foldl' lib.attrsets.unionOfDisjoint { };
 
+  # Temporary way to overrideScope llvmPackages while preserving a .override that composes
+  # TODO: Remove after https://github.com/NixOS/nixpkgs/issues/447012 is resolved
+  overrideLlvmPackages =
+    self: super: override:
+    let
+      base = super.llvmPackages;
+      overridden = base.overrideScope override;
+      newOverride = lib.mirrorFunctionArgs base.override (
+        args: (base.override args).overrideScope override
+      );
+    in
+    overridden // { override = newOverride; };
+
   commonPreHook = ''
     export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
     export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
@@ -466,8 +479,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           }
         );
 
-        llvmPackages =
-          (super.llvmPackages.overrideScope (
+        llvmPackages = (
+          overrideLlvmPackages self super (
             selfLlvmPackages: _: {
               libclang = self.stdenv.mkDerivation {
                 name = "bootstrap-stage0-clang";
@@ -547,10 +560,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                 };
               };
             }
-          ))
-          // {
-            inherit (super.llvmPackages) override;
-          };
+          )
+        );
       };
 
       extraPreHook = ''
@@ -675,13 +686,11 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
           }
         );
 
-        llvmPackages =
-          (super.llvmPackages.overrideScope (
+        llvmPackages = (
+          overrideLlvmPackages self super (
             _: _: llvmToolsPackages prevStage // llvmLibrariesPackages prevStage
-          ))
-          // {
-            inherit (super.llvmPackages) override;
-          };
+          )
+        );
       };
 
       extraNativeBuildInputs = lib.optionals localSystem.isAarch64 [
@@ -827,18 +836,16 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               }
             );
 
-            llvmPackages =
-              (super.llvmPackages.overrideScope (
+            llvmPackages = (
+              overrideLlvmPackages self super (
                 _: _:
                 llvmToolsPackages prevStage
                 // llvmLibrariesPackages prevStage
                 // {
                   inherit (prevStage.llvmPackages) clangNoCompilerRtWithLibc;
                 }
-              ))
-              // {
-                inherit (super.llvmPackages) override;
-              };
+              )
+            );
           }
         ];
 
@@ -913,9 +920,7 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               }
             );
 
-            llvmPackages = (super.llvmPackages.overrideScope (_: _: llvmLibrariesPackages prevStage)) // {
-              inherit (super.llvmPackages) override;
-            };
+            llvmPackages = (overrideLlvmPackages self super (_: _: llvmLibrariesPackages prevStage));
           }
         ];
 
@@ -985,8 +990,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               }
             );
 
-            llvmPackages =
-              (super.llvmPackages.overrideScope (
+            llvmPackages = (
+              overrideLlvmPackages self super (
                 _: _:
                 llvmToolsPackages prevStage
                 // llvmLibrariesPackages prevStage
@@ -1024,10 +1029,8 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
                       ;
                   };
                 }
-              ))
-              // {
-                inherit (super.llvmPackages) override;
-              };
+              )
+            );
           }
         ];
 
