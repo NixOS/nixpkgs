@@ -2,7 +2,10 @@
   lib,
   fetchFromGitHub,
   buildHomeAssistantComponent,
+  fetchNpmDeps,
   nix-update-script,
+  nodejs,
+  npmHooks,
 }:
 
 buildHomeAssistantComponent rec {
@@ -17,7 +20,21 @@ buildHomeAssistantComponent rec {
     hash = "sha256-ESu7+65IeXYZLLqlkRlJA7+Ggo+X+YoWcpmMQiNzOTM=";
   };
 
+  npmDeps = fetchNpmDeps {
+    inherit src;
+    hash = "sha256-whBM/Z6ib8YNP3BgpJgU2O9ruxovUI84E5/ZbpHK26Y=";
+  };
+
+  nativeBuildInputs = [
+    nodejs
+    npmHooks.npmConfigHook
+    npmHooks.npmBuildHook
+  ];
+
+  npmBuildScript = "build";
+
   postInstall = ''
+    # Create custom presets directory to satisfy Python set-up code
     mkdir -p "$out/custom_components/scene_presets/userdata/custom/assets"
   '';
 

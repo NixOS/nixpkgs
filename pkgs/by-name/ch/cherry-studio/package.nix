@@ -4,8 +4,8 @@
   fetchFromGitHub,
   yarn-berry_4,
   nodejs,
-  python3,
   electron_37,
+  autoPatchelfHook,
   makeWrapper,
   writableTmpDirAsHomeHook,
   makeDesktopItem,
@@ -19,13 +19,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "cherry-studio";
-  version = "1.5.11";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "CherryHQ";
     repo = "cherry-studio";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-XJFqoluI3ZwmqxhKpJANqOxkYP3Va7pXXyWOHSLopwc=";
+    hash = "sha256-9oEMnGaloY3tFY/qpjTlYbO7n1ORIK49s3N9SGSMvHE=";
   };
 
   postPatch = ''
@@ -42,17 +42,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   offlineCache = yarn-berry.fetchYarnBerryDeps {
     inherit (finalAttrs) src missingHashes;
-    hash = "sha256-k23HzIN8QAkV/IREM5fHHeaMjO+cIthpLNrLKn4g7tY=";
+    hash = "sha256-LstTTVKXVL6hIC5TiUKeBIcDFaRPdmEjO2LmvVXB7dQ=";
   };
 
   nativeBuildInputs = [
     yarn-berry.yarnBerryConfigHook
     yarn-berry
+    autoPatchelfHook
     makeWrapper
     writableTmpDirAsHomeHook
     copyDesktopItems
-    (python3.withPackages (ps: with ps; [ setuptools ]))
     nodejs
+    (nodejs.python.withPackages (ps: with ps; [ setuptools ]))
   ];
 
   env = {
@@ -63,11 +64,15 @@ stdenv.mkDerivation (finalAttrs: {
   buildPhase = ''
     runHook preBuild
 
+    cp -r "${electron.dist}" $HOME/.electron-dist
+    chmod -R u+w $HOME/.electron-dist
+
     yarn run electron-vite build
-    yarn run electron-builder --linux --dir \
-      --config electron-builder.yml \
-      -c.electronDist="${electron}/libexec/electron" \
-      -c.electronVersion=${electron.version}
+    yarn run electron-builder --dir \
+      --config=electron-builder.yml \
+      --config.mac.identity=null \
+      --config.electronDist="$HOME/.electron-dist" \
+      --config.electronVersion=${electron.version}
 
     runHook postBuild
   '';
@@ -88,7 +93,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-
+  ''
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/Applications
+    mv "dist/mac-${stdenv.hostPlatform.darwinArch}/Cherry Studio.app" "$out/Applications/Cherry Studio.app"
+  ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/opt/cherry-studio
     ${
       if stdenv.hostPlatform.isAarch64 then
@@ -102,7 +112,8 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags $out/opt/cherry-studio/resources/app.asar \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true --wayland-text-input-version=3}}" \
       --add-flags ${lib.escapeShellArg commandLineArgs}
-
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -113,8 +124,8 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/CherryHQ/cherry-studio";
     changelog = "https://github.com/CherryHQ/cherry-studio/releases/tag/v${finalAttrs.version}";
     mainProgram = "cherry-studio";
-    platforms = lib.platforms.linux;
-    maintainers = [ ];
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [ xiaoxiangmoe ];
     license = with lib.licenses; [ agpl3Only ];
   };
 })
