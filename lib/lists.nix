@@ -204,7 +204,7 @@ rec {
     Before each application of the operator, the accumulator value is evaluated.
     This behavior makes this function stricter than [`foldl`](#function-library-lib.lists.foldl).
 
-    Unlike [`builtins.foldl'`](https://nixos.org/manual/nix/unstable/language/builtins.html#builtins-foldl'),
+    Unlike [`builtins.foldl'`](https://nix.dev/manual/nix/unstable/language/builtins.html#builtins-foldl'),
     the initial accumulator argument is evaluated before the first iteration.
 
     A call like
@@ -351,7 +351,7 @@ rec {
     This function is strict in the result of the predicate function for each element.
     This function has O(n) complexity.
 
-    Also see [`builtins.filter`](https://nixos.org/manual/nix/stable/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
+    Also see [`builtins.filter`](https://nix.dev/manual/nix/stable/language/builtins.html#builtins-filter) (available as `lib.lists.filter`),
     which can be used instead when the index isn't needed.
 
     # Inputs

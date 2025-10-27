@@ -198,13 +198,13 @@ care of adding your {command}`emacs` to the {var}`PATH`
 environment variable (see [](#sec-changing-config)).
 
 <!-- fixme: i think the following is better done with config.nix
-https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides
+https://nixos.org/manual/nixpkgs/stable/#sec-modify-via-packageOverrides
 -->
 
 If you are not on NixOS or want to install this particular Emacs only for
 yourself, you can do so by putting `emacs.nix` in `~/.config/nixpkgs` and
 adding it to your {file}`~/.config/nixpkgs/config.nix` (see
-[Nixpkgs manual](https://nixos.org/nixpkgs/manual/#sec-modify-via-packageOverrides)):
+[Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable/#sec-modify-via-packageOverrides)):
 ::: {.example #module-services-emacs-config-nix}
 ### Custom Emacs in `~/.config/nixpkgs/config.nix`
 

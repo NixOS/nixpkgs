@@ -57,7 +57,7 @@ $ nix run -f . nim_lk ./result | jq --sort-keys > pkgs/by-name/tt/ttop/lock.json
 ## buildNimSbom {#buildNimSbom}
 
 An alternative to `buildNimPackage` is `buildNimSbom` which builds packages from [CycloneDX SBOM](https://cyclonedx.org/) files.
-`buildNimSbom` resolves Nim dependencies to [fixed-output derivations](https://nixos.org/manual/nix/stable/glossary#gloss-fixed-output-derivation) using the [nix:fod namespace](#sec-interop.cylonedx-fod).
+`buildNimSbom` resolves Nim dependencies to [fixed-output derivations](https://nix.dev/manual/nix/stable/glossary#gloss-fixed-output-derivation) using the [nix:fod namespace](#sec-interop.cylonedx-fod).
 
 In the following minimal example only the source code checkout and a `buildInput` are specified.
 The SBOM file provides metadata such as `pname` and `version` as well as the sources to Nim dependencies.

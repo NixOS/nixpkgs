@@ -26,7 +26,7 @@ runCommand "manual.epub"
           <title>Temporarily unavailable</title>
           <para>
             The Nixpkgs manual is currently not available in EPUB format,
-            please use the <link xlink:href="https://nixos.org/nixpkgs/manual">HTML manual</link>
+            please use the <link xlink:href="https://nixos.org/manual/nixpkgs/stable">HTML manual</link>
             instead.
           </para>
           <para>

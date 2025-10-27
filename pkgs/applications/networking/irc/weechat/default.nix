@@ -199,7 +199,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       You can find more documentation as to how to customize this package
       (e.g. adding python modules for scripts that would require them, etc.)
-      on https://nixos.org/nixpkgs/manual/#sec-weechat .
+      on https://nixos.org/manual/nixpkgs/stable/#sec-weechat .
     '';
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ ncfavier ];

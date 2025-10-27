@@ -12,7 +12,7 @@ This can be done either in-tree or out-of-tree. For an in-tree build, you can
 clone the Nixpkgs repository, add the package to your clone, and (optionally)
 submit a patch or pull request to have it accepted into the main Nixpkgs
 repository. This is described in detail in the [Nixpkgs
-manual](https://nixos.org/nixpkgs/manual). In short, you clone Nixpkgs:
+manual](https://nixos.org/manual/nixpkgs/stable). In short, you clone Nixpkgs:
 
 ```ShellSession
 $ git clone https://github.com/NixOS/nixpkgs
@@ -115,5 +115,5 @@ If there are shared libraries missing add them with
 
 To make other pre-built executables work on NixOS, you need to package them
 with Nix and special helpers like `autoPatchelfHook` or `buildFHSEnv`. See
-the [Nixpkgs manual](https://nixos.org/nixpkgs/manual) for details. This
+the [Nixpkgs manual](https://nixos.org/manual/nixpkgs/stable) for details. This
 is complex and often doing a source build is easier.

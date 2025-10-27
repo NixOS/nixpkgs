@@ -130,7 +130,7 @@ let
       # The function will be combined with the && operator such
       # that src.filter is called lazily.
       # For implementing a filter, see
-      # https://nixos.org/nix/manual/#builtin-filterSource
+      # https://nix.dev/manual/nix/stable/#builtin-filterSource
       # Type: A function (path -> type -> bool)
       filter ? _path: _type: true,
       # Optional name to use as part of the store path.

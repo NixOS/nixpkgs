@@ -110,7 +110,7 @@ jd-cli.overrideMavenAttrs (old: rec {
 By default, `buildMavenPackage` does the following:
 
 1. Run `mvn package -Dmaven.repo.local=$out/.m2 ${mvnParameters}` in the
-   `fetchedMavenDeps` [fixed-output derivation](https://nixos.org/manual/nix/stable/glossary.html#gloss-fixed-output-derivation).
+   `fetchedMavenDeps` [fixed-output derivation](https://nix.dev/manual/nix/stable/glossary.html#gloss-fixed-output-derivation).
 2. Run `mvn package -o -nsu "-Dmaven.repo.local=$mvnDeps/.m2"
    ${mvnParameters}` again in the main derivation.
 

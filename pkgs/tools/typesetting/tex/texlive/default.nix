@@ -1,7 +1,7 @@
 /*
   TeX Live user docs
   - source: ../../../../../doc/languages-frameworks/texlive.xml
-  - current html: https://nixos.org/nixpkgs/manual/#sec-language-texlive
+  - current html: https://nixos.org/manual/nixpkgs/stable/#sec-language-texlive
 */
 {
   lib,

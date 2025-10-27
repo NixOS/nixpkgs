@@ -57,7 +57,7 @@ lib.makeOverridable (
       fetchLFS ? false,
       # Shell code to build a netrc file for BASIC auth
       netrcPhase ? null,
-      # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
+      # Impure env vars (https://nix.dev/manual/nix/stable/#sec-advanced-attributes)
       # needed for netrcPhase
       netrcImpureEnvVars ? [ ],
       meta ? { },

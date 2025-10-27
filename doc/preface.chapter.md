@@ -21,11 +21,11 @@ To discover other kinds of documentation:
 Nix expressions describe how to build packages from source and are collected in
 the [Nixpkgs repository](https://github.com/NixOS/nixpkgs). Also included in the
 collection are Nix expressions for
-[NixOS modules](https://nixos.org/nixos/manual/index.html#sec-writing-modules).
+[NixOS modules](https://nixos.org/manual/nixos/stable#sec-writing-modules).
 With these expressions the Nix package manager can build binary packages.
 
 Packages, including the Nix packages collection, are distributed through
-[channels](https://nixos.org/nix/manual/#sec-channels). The collection is
+[channels](https://nix.dev/manual/nix/stable/#sec-channels). The collection is
 distributed for users of Nix on non-NixOS distributions through the channel
 `nixpkgs-unstable`. Users of NixOS generally use one of the `nixos-*` channels,
 e.g. `nixos-22.11`, which includes all packages and modules for the stable NixOS
