@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "cnr-isti-vclab";
     repo = "pymeshlab";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-IOlRdXoUPOJt67g3HqsLchV5aL+JUEks2y1Sy+wpwsg=";
     fetchSubmodules = true;
   };
@@ -79,6 +79,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   preConfigure = ''
+    substituteInPlace src/pymeshlab/pybind11/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
     substituteInPlace src/meshlab/src/external/libigl.cmake \
       --replace-fail '$'{MESHLAB_EXTERNAL_DOWNLOAD_DIR}/libigl-2.4.0 ${libigl}
     substituteInPlace src/meshlab/src/external/nexus.cmake \
