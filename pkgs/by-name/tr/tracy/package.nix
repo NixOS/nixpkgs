@@ -28,13 +28,13 @@ assert withGtkFileSelector -> stdenv.hostPlatform.isLinux;
 
 stdenv.mkDerivation rec {
   pname = if withWayland then "tracy-wayland" else "tracy-glfw";
-  version = "0.11.1";
+  version = "0.12.2";
 
   src = fetchFromGitHub {
     owner = "wolfpld";
     repo = "tracy";
     rev = "v${version}";
-    hash = "sha256-HofqYJT1srDJ6Y1f18h7xtAbI/Gvvz0t9f0wBNnOZK8=";
+    hash = "sha256-CWF3Zbpf8aptoSjZujxggWbF7wWsKOK7d/eRJp1ESVI=";
   };
 
   patches = lib.optional (
