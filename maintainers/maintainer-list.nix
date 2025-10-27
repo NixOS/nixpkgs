@@ -18716,6 +18716,11 @@
     github = "noahgitsham";
     githubId = 73707948;
   };
+  noahpro99 = {
+    name = "Noah Provenzano";
+    github = "noahpro99";
+    githubId = 22966838;
+  };
   nobbz = {
     name = "Norbert Melzer";
     email = "timmelzer+nixpkgs@gmail.com";
