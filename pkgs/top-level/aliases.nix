@@ -231,6 +231,31 @@ let
     aliases: lib.mapAttrs (n: alias: removeRecurseForDerivations (checkInPkgs n alias)) aliases;
 
   plasma5Throws = mapAliases (lib.mapAttrs (k: _: makePlasma5Throw k) deprecatedPlasma5Packages);
+
+  warnAlias =
+    msg: v:
+    if lib.isDerivation v then
+      lib.warnOnInstantiate msg v
+    else if lib.isAttrs v then
+      lib.mapAttrs (lib.warn msg) v
+    else if lib.isFunction v then
+      arg: lib.warn msg (v arg)
+    else if lib.isList v then
+      map (lib.warn msg) v
+    else if lib.isString v then
+      # Unlike the other cases, this changes the type of the value and
+      # is therefore a breaking change for some code, but it’s the best
+      # we can do.
+      { __toString = lib.warn msg (lib.const v); }
+    else
+      # Can’t do better than this, and a `throw` would be more
+      # disruptive for users…
+      #
+      # `nix search` flags up warnings already, so hopefully this won’t
+      # make things much worse until we have proper CI for aliases,
+      # especially since aliases of paths and numbers are presumably
+      # not common.
+      lib.warn msg v;
 in
 
 mapAliases {
