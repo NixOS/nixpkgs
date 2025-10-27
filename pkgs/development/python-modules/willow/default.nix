@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "willow";
-  version = "1.11.0";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -25,7 +25,7 @@ buildPythonPackage rec {
     owner = "wagtail";
     repo = "Willow";
     tag = "v${version}";
-    hash = "sha256-7aVLPSspwQRWQ+aNYbKkOBzwc7uoVzQvAG8vezp8QZY=";
+    hash = "sha256-vboQwOEDRdbwmLT2EW1iF98ZuyzEzlrP2k2ZcvVKjFE=";
   };
 
   build-system = [ flit-core ];
