@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/dragonflylee/switchfin/blob/${src.rev}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.k900 ];
-    mainProgram = "switchfin";
+    mainProgram = "Switchfin";
     platforms = lib.platforms.all;
   };
 }
