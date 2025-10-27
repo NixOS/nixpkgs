@@ -38,22 +38,24 @@ stdenv.mkDerivation rec {
       --replace-fail 'p11kitcfdir=""' 'p11kitcfdir="'$out/share/p11-kit/modules'"'
   '';
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    wrapGAppsHook3
-    autoreconfHook
     autoconf-archive
-    pkg-config
+    autoreconfHook
+    libassuan
     makeBinaryWrapper
+    openssl
+    pkg-config
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     curl
     gtk3
-    libassuan
     libbsd
     libproxy
     libxml2
-    openssl
     p11-kit
     pcsclite
   ];
