@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  installShellFiles,
   texinfo,
   versionCheckHook,
 }:
@@ -26,6 +27,7 @@ python3Packages.buildPythonApplication rec {
     "out"
     "doc"
     "info"
+    "man"
   ];
 
   # Remove broken and expensive tests.
@@ -46,13 +48,16 @@ python3Packages.buildPythonApplication rec {
     hatchling
   ];
 
-  nativeBuildInputs = with python3Packages; [
-    # docs
+  nativeBuildInputs = # docs
+  [
+    installShellFiles
+    texinfo
+  ]
+  ++ (with python3Packages; [
     recommonmark
     sphinx
     sphinx-rtd-theme
-    texinfo
-  ];
+  ]);
 
   dependencies =
     with python3Packages;
@@ -99,6 +104,8 @@ python3Packages.buildPythonApplication rec {
       make info
       mkdir -p "$info/share/info"
       cp -rv _build/texinfo/*.info "$info/share/info"
+
+      installManPage man/man*/*
     )
   '';
 
