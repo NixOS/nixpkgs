@@ -23,7 +23,7 @@
   darwinMinVersionHook,
   pythonSupport ? true,
   cudaSupport ? config.cudaSupport,
-  ncclSupport ? config.cudaSupport,
+  ncclSupport ? cudaSupport && cudaPackages.nccl.meta.available,
   withFullProtobuf ? false,
   cudaPackages ? { },
 }@inputs:
@@ -154,12 +154,7 @@ effectiveStdenv.mkDerivation rec {
       cudnn # cudnn.h
       cuda_cudart
     ]
-    ++ lib.optionals (cudaSupport && ncclSupport) (
-      with cudaPackages;
-      [
-        nccl
-      ]
-    )
+    ++ lib.optionals ncclSupport [ nccl ]
   )
   ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [
     (darwinMinVersionHook "13.3")
@@ -270,7 +265,7 @@ effectiveStdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit cudaSupport cudaPackages; # for the python module
+    inherit cudaSupport cudaPackages ncclSupport; # for the python module
     inherit protobuf;
     tests = lib.optionalAttrs pythonSupport {
       python = python3Packages.onnxruntime;
