@@ -291,7 +291,11 @@ lib.extendMkDerivation {
             filename
           ];
       }
-      // passthru;
+      // passthru
+      // lib.optionalAttrs (attrs ? stdenv) {
+        # Preserve requested stdenv for backwards compatibility
+        __stdenv = attrs.stdenv;
+      };
     }
     // lib.optionalAttrs (attrs ? checkPhase) {
       # If given use the specified checkPhase, otherwise use the setup hook.

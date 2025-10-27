@@ -420,7 +420,11 @@ lib.extendMkDerivation {
       // {
         updateScript = nix-update-script { };
       }
-      // attrs.passthru or { };
+      // attrs.passthru or { }
+      // lib.optionalAttrs (attrs ? stdenv) {
+        # Preserve requested stdenv for backwards compatibility
+        __stdenv = attrs.stdenv;
+      };
 
       meta = {
         # default to python's platforms

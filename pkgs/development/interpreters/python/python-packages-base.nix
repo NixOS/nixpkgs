@@ -20,9 +20,23 @@ let
       origArgs:
       let
         result = f origArgs;
+        # If a stdenv is requested using the deprecated method of e.g., `buildPythonPackage { stdenv }`
+        # we need to override and reapply with that stdenv
+        result' =
+          lib.warnIf (result ? __stdenv && lib.oldestSupportedReleaseIsAtLeast 2511)
+            ''
+              Passing `stdenv` directly to `buildPythonPackage` or `buildPythonApplication` is deprecated. You should use their `.override` function instead, e.g:
+                buildPythonPackage.override { stdenv = customStdenv; } { }
+            ''
+            (
+              if result ? __stdenv && result.__stdenv != result.stdenv then
+                f.override { stdenv = result.__stdenv; } origArgs
+              else
+                result
+            );
         extendArgs = newArgs: lib.extends (lib.toExtension newArgs) (lib.toFunction origArgs);
       in
-      result
+      result'
       // {
         overridePythonAttrs =
           newArgs:
