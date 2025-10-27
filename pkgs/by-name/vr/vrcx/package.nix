@@ -4,30 +4,30 @@
   buildDotnetModule,
   dotnetCorePackages,
   buildNpmPackage,
-  electron_37,
+  electron_38,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
   stdenv,
 }:
 let
-  electron = electron_37;
+  electron = electron_38;
   dotnet = dotnetCorePackages.dotnet_9;
 in
 buildNpmPackage (finalAttrs: {
   pname = "vrcx";
-  version = "2025.10.11";
+  version = "2025.10.27";
 
   src = fetchFromGitHub {
     repo = "VRCX";
     owner = "vrcx-team";
-    rev = "cb6bc979d9371b89b289b6cb0bb8b6f60b350bc7";
-    hash = "sha256-0LnFXSLyby5b2gSIse7Qld4cQlwNAFHSuGGqk6B9TZY=";
+    rev = "5c3d076e10f7edb09831fba0d5ad44036a43a401";
+    hash = "sha256-XLzUfOXqikJOb8cmnpMI/SLeF6Jnuo4Xvmi8jfgt71Q=";
   };
 
   makeCacheWritable = true;
   npmFlags = [ "--ignore-scripts" ];
-  npmDepsHash = "sha256-giWeXrsiFaZOh5zs7L4L0w3wcnD/F3TyrMM/POfOTvE=";
+  npmDepsHash = "sha256-pghoOI/lotorjCAFGoFjhEx3H7h9J8LhctCMfk6ZTYI=";
 
   nativeBuildInputs = [
     makeWrapper

@@ -96,8 +96,8 @@
   },
   {
     "pname": "Microsoft.Win32.SystemEvents",
-    "version": "9.0.8",
-    "hash": "sha256-c5gFYcyAO7OgG3K+QPh0HrKJ4GKLIR0R9E69zf0TImk="
+    "version": "9.0.9",
+    "hash": "sha256-5p9c8PwLC5whnkDnk7BvMLIln2RuaKdzdLjpUZDHU98="
   },
   {
     "pname": "Newtonsoft.Json",
@@ -106,13 +106,13 @@
   },
   {
     "pname": "Newtonsoft.Json",
-    "version": "13.0.3",
-    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+    "version": "13.0.4",
+    "hash": "sha256-8JCB1FdAW681qXP6DFDWvycu1oPyVoxaYgpJ2pUvZSk="
   },
   {
     "pname": "NLog",
-    "version": "6.0.3",
-    "hash": "sha256-lrF4+wTsVr7/hD9sJVAMk3+zwH7JMoOEw/pCZm3ki4g="
+    "version": "6.0.5",
+    "hash": "sha256-aP7PsAkzjlZF6m1Tr87dX+5X0YIGov7DrTrIdsqhLUY="
   },
   {
     "pname": "runtime.any.System.Runtime",
@@ -181,8 +181,8 @@
   },
   {
     "pname": "System.CodeDom",
-    "version": "9.0.8",
-    "hash": "sha256-gDsK8Vc4RQvg1erKCpP4GH2OzV6icGD3UHymANiQ1n4="
+    "version": "9.0.9",
+    "hash": "sha256-ajVuEZIA63vQBPPw/SgoTDSA+gGAU7V+QCcBts1LiTE="
   },
   {
     "pname": "System.Collections.Immutable",
@@ -231,13 +231,13 @@
   },
   {
     "pname": "System.Drawing.Common",
-    "version": "9.0.8",
-    "hash": "sha256-D+mrysKnc/zxYLt3tvTBKGO5HXGJTSZU5oOJ5X5EHDs="
+    "version": "9.0.9",
+    "hash": "sha256-gupTW+JBaIaifxULV5m2Q8fccXIboeGd3FI33cn4MFs="
   },
   {
     "pname": "System.Management",
-    "version": "9.0.8",
-    "hash": "sha256-n6lutagH+MqKDTL0fc0yK1YgreGR4IlP/O0y1fjOqIg="
+    "version": "9.0.9",
+    "hash": "sha256-BjnQqiA2z8SkicxP+71lR+WGrBHz9np7MlCUE3oO8IM="
   },
   {
     "pname": "System.Memory",
@@ -316,18 +316,13 @@
   },
   {
     "pname": "System.Text.Json",
-    "version": "9.0.8",
-    "hash": "sha256-CEoLOj0KeuctK2jXd6yZ+/5yx4apsEh7+xsJH95h/1c="
+    "version": "9.0.9",
+    "hash": "sha256-I+GCgXZZUtgAta94BIBqy72HnZJ3egzNBOTxnVy2Ur8="
   },
   {
     "pname": "System.Text.RegularExpressions",
     "version": "4.3.1",
     "hash": "sha256-DxsEZ0nnPozyC1W164yrMUXwnAdHShS9En7ImD/GJMM="
-  },
-  {
-    "pname": "System.Threading.Channels",
-    "version": "8.0.0",
-    "hash": "sha256-c5TYoLNXDLroLIPnlfyMHk7nZ70QAckc/c7V199YChg="
   },
   {
     "pname": "System.Threading.Tasks.Extensions",
@@ -341,7 +336,7 @@
   },
   {
     "pname": "Websocket.Client",
-    "version": "5.2.0",
-    "hash": "sha256-5sVfK1iHclxunfm0ioSFFyo5tG8lPfchClBi4YgeJT4="
+    "version": "5.3.0",
+    "hash": "sha256-FgrtCEVMspgLx5jRwJobE1oiK+dWCl4cXoIfH2/kSGk="
   }
 ]
