@@ -19,7 +19,7 @@ in
 stdenv.mkDerivation {
   name = "androidenv-test-suite";
   version = lib.substring 0 8 (builtins.hashFile "sha256" ./repo.json);
-  buildInputs = lib.mapAttrsToList (name: value: value) all-tests;
+  buildInputs = lib.attrValues all-tests;
 
   buildCommand = ''
     touch $out

@@ -3872,6 +3872,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  dart-nvim = buildVimPlugin {
+    pname = "dart.nvim";
+    version = "2025-10-23";
+    src = fetchFromGitHub {
+      owner = "iofq";
+      repo = "dart.nvim";
+      rev = "71421e7ef5aee8267e24dc562fdd07a83bda192e";
+      sha256 = "1jny6xq5ami3msa8b22hp7yrraljwg7vfkwj7rps8j7whrdxkfjh";
+    };
+    meta.homepage = "https://github.com/iofq/dart.nvim/";
+    meta.hydraPlatforms = [ ];
+  };
+
   dart-vim-plugin = buildVimPlugin {
     pname = "dart-vim-plugin";
     version = "2024-07-02";
