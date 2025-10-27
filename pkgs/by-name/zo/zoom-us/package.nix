@@ -175,6 +175,7 @@ let
       pkgs.glib.dev
       pkgs.gtk3
       pkgs.libGL
+      pkgs.libGLU
       pkgs.libdrm
       pkgs.libgbm
       pkgs.libkrb5
