@@ -16,8 +16,14 @@ let
     ;
 
   cfg = config.services.actual;
-  configFile = formatType.generate "config.json" cfg.settings;
+  sanitizedSettings = removeAttrs cfg.settings [
+    "user"
+    "group"
+  ];
+  configFile = formatType.generate "config.json" sanitizedSettings;
+
   dataDir = "/var/lib/actual";
+  defaultUserAndGroup = "actual";
 
   formatType = pkgs.formats.json { };
 in
@@ -50,6 +56,19 @@ in
             description = "The port to listen on";
             default = 3000;
           };
+
+          user = mkOption {
+            type = types.str;
+            description = "The user to execute the systemd unit";
+            default = defaultUserAndGroup;
+          };
+
+          group = mkOption {
+            type = types.str;
+            description = "The group to execute the systemd unit";
+            default = defaultUserAndGroup;
+          };
+
         };
 
         config = {
@@ -71,11 +90,8 @@ in
       environment.ACTUAL_CONFIG_PATH = configFile;
       serviceConfig = {
         ExecStart = getExe cfg.package;
-        DynamicUser = true;
-        User = "actual";
-        Group = "actual";
         StateDirectory = "actual";
-        WorkingDirectory = dataDir;
+        WorkingDirectory = cfg.settings.dataDir;
         LimitNOFILE = "1048576";
         PrivateTmp = true;
         PrivateDevices = true;
@@ -89,7 +105,6 @@ in
         PrivateUsers = true;
         ProtectClock = true;
         ProtectControlGroups = true;
-        ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
@@ -110,6 +125,18 @@ in
           "@pkey"
         ];
         UMask = "0077";
+
+        # If we've changed the default user, group and dirs (dataDir, serverFiles, etc.) We must adapt the hardening
+        User = cfg.settings.user;
+        Group = cfg.settings.group;
+        DynamicUser = cfg.settings.user == defaultUserAndGroup && cfg.settings.group == defaultUserAndGroup;
+        # Only if dataDir or serverFiles or userFiles isn't inside a /home dir...
+        ProtectHome =
+          !(lib.any (dir: lib.hasPrefix "/home/" dir) [
+            cfg.settings.dataDir
+            cfg.settings.serverFiles
+            cfg.settings.userFiles
+          ]);
       };
     };
   };
