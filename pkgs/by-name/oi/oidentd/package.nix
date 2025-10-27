@@ -4,6 +4,7 @@
   fetchurl,
   bison,
   flex,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
         '#define CONFFILE${"\t\t"}SYSCONFDIR "/oidentd.conf"' \
         '#define CONFFILE${"\t\t"}"/etc/oidentd/oidentd.conf"'
   '';
+
+  passthru.tests.nixos = nixosTests.oidentd;
 
   meta = {
     description = "Configurable Ident protocol server";
