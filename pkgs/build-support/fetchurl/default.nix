@@ -60,12 +60,6 @@ lib.extendMkDerivation {
     # Passed via passthru
     "url"
 
-    # Name-related attributes
-    # TODO(@ShamrockLee): Pass them.
-    "name"
-    "pname"
-    "version"
-
     # Hash attributes will be map to the corresponding outputHash*
     "hash"
     "sha1"
@@ -91,13 +85,13 @@ lib.extendMkDerivation {
       # Additional curl options needed for the download to succeed.
       curlOptsList ? [ ],
 
-      # Name of the file.  If empty, use the basename of `url' (or of the
-      # first element of `urls').
-      name ? "",
+      # Name of the file when pname + version is unspecified.
+      # Default to the basename of `url' (or of the first element of `urls').
+      name ? null,
 
       # for versioned downloads optionally take pname + version.
-      pname ? "",
-      version ? "",
+      pname ? null,
+      version ? null,
 
       # SRI hash.
       hash ? "",
@@ -234,21 +228,17 @@ lib.extendMkDerivation {
           "${lib.head mirrorList}${lib.elemAt mirrorSplit 1}";
     in
 
-    (
-      if (pname != "" && version != "") then
-        { inherit pname version; }
-      else
-        {
-          name =
-            if showURLs then
-              "urls"
-            else if name != "" then
-              name
-            else
-              baseNameOf (toString (builtins.head urls_));
-        }
-    )
-    // {
+    {
+      name =
+        if pname != null && version != null then
+          "${finalAttrs.pname}-${finalAttrs.version}"
+        else if showURLs then
+          "urls"
+        else if name != null then
+          name
+        else
+          baseNameOf (toString (lib.head urls_));
+
       builder = ./builder.sh;
 
       nativeBuildInputs = [ curl ] ++ nativeBuildInputs;
