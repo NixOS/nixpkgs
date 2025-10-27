@@ -10,11 +10,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "free42";
-  version = "3.3.8";
+  version = "3.3.9";
 
   src = fetchurl {
     url = "https://thomasokken.com/free42/upstream/free42-nologo-${version}.tgz";
-    hash = "sha256-4Wj2UYxwrvUE7RPuCaru48cWwQjdyusKCfqbx27UJEs=";
+    hash = "sha256-taHkR47YmO9WWjbEMeNHIcj3PQXOjbHhxUoWE2E0BDI=";
   };
 
   nativeBuildInputs = [
@@ -83,8 +83,8 @@ stdenv.mkDerivation rec {
     install -m755 gtk/free42dec gtk/free42bin $out/bin
     install -m644 README $out/share/doc/free42/README
 
-    install -m644 gtk/icon-48x48.xpm $out/share/icons/hicolor/48x48/apps/free42.xpm
-    install -m644 gtk/icon-128x128.xpm $out/share/icons/hicolor/128x128/apps/free42.xpm
+    install -m644 gtk/icon-48x48.png $out/share/icons/hicolor/48x48/apps/free42.png
+    install -m644 gtk/icon-128x128.png $out/share/icons/hicolor/128x128/apps/free42.png
     install -m644 skins/* $out/share/free42/skins
 
     runHook postInstall
