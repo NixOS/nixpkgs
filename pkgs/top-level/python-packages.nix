@@ -13241,6 +13241,8 @@ self: super: with self; {
 
   pydal = callPackage ../development/python-modules/pydal { };
 
+  pydanclick = callPackage ../development/python-modules/pydanclick { };
+
   pydanfossair = callPackage ../development/python-modules/pydanfossair { };
 
   pydantic = callPackage ../development/python-modules/pydantic { };
