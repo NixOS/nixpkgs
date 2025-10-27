@@ -4545,6 +4545,12 @@
     githubId = 18648043;
     name = "Daniel Cartwright";
   };
+  chetanjangir0 = {
+    email = "chetanrjj2002@gmail.com";
+    github = "chetanjangir0";
+    githubId = 69336404;
+    name = "Chetan Jangir";
+  };
   chewblacka = {
     github = "chewblacka";
     githubId = 18430320;
