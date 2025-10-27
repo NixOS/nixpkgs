@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dschep";
     repo = "ntfy-webpush";
-    rev = "v${version}";
-    sha256 = "1dxlvq3glf8yjkn1hdk89rx1s4fi9ygg46yn866a9v7a5a83zx2n";
+    tag = "v${version}";
+    hash = "sha256-VvQ/kCrq7KSMQdYb8p5P0REdek5oNhjslB45+gbetLc=";
   };
 
   postPatch = ''
@@ -35,10 +35,10 @@ buildPythonPackage rec {
   # no tests, just a script
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Cloudbell webpush notification support for ntfy";
     homepage = "https://dschep.github.io/ntfy-webpush/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

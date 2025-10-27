@@ -16,8 +16,6 @@ let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      ntfy-webpush = self.callPackage ./webpush.nix { };
-
       # databases, on which slack-sdk depends, is incompatible with SQLAlchemy 2.0
       sqlalchemy = super.sqlalchemy_1_4;
     };
