@@ -7,23 +7,23 @@
 }:
 buildGoModule (finalAttrs: {
   pname = "scion";
-
-  version = "0.12.0";
+  version = "0.12.0-unstable-2025-10-13";
 
   src = fetchFromGitHub {
     owner = "scionproto";
     repo = "scion";
-    tag = "v${finalAttrs.version}";
-    hash = "sha256-J51GIQQhS623wFUU5dI/TwT2rkDH69518lpdCLZ/iM0=";
+    rev = "6787965828cd69474da8b8da0473ffe975846bde";
+    hash = "sha256-d9pfTIO/7lN6A6UN4zR8uX4kNjDRc4MMzXJKv82d584=";
   };
 
-  vendorHash = "sha256-Ew/hQM8uhaM89sCcPKUBbiGukDq3h5x+KID3w/8BDHg=";
+  vendorHash = "sha256-vD06FX1H2PyjzJ+2WydPiVSXKlP8ylWE4z1DMoiW8SY=";
 
   excludedPackages = [
     "acceptance"
     "demo"
     "tools"
     "pkg/private/xtest/graphupdater"
+    "private/underlay/ebpf"
   ];
 
   postInstall = ''
@@ -36,7 +36,17 @@ buildGoModule (finalAttrs: {
     set -e
   '';
 
+  preCheck = ''
+    # Otherwise checks fail with `panic: open /etc/protocols: operation not permitted` when sandboxing is enabled on Darwin
+    # https://github.com/NixOS/nixpkgs/pull/381645#issuecomment-2656211797
+    substituteInPlace vendor/modernc.org/libc/honnef.co/go/netdb/netdb.go \
+      --replace-fail '!os.IsNotExist(err)' '!os.IsNotExist(err) && !os.IsPermission(err)'
+  '';
+
   doCheck = true;
+
+  # Allow network access during tests on Darwin/macOS
+  __darwinAllowLocalNetworking = true;
 
   tags = [ "sqlite_mattn" ];
 
@@ -44,7 +54,7 @@ buildGoModule (finalAttrs: {
     tests = {
       inherit (nixosTests) scion-freestanding-deployment;
     };
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   };
 
   meta = {
