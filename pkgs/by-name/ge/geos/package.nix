@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "geos";
-  version = "3.14.0";
+  version = "3.14.1";
 
   src = fetchFromGitHub {
     owner = "libgeos";
     repo = "geos";
     tag = finalAttrs.version;
-    hash = "sha256-tPuAYNi2Gfc/2hj8SFqnvuDztXkSAEoGPcvXVULrLKg=";
+    hash = "sha256-lOf14Qva/bbbiywbSE7GbkDQftjY0RudTOaqjllnsj4=";
   };
 
   nativeBuildInputs = [ cmake ];
