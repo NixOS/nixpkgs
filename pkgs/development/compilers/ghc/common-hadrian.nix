@@ -859,6 +859,12 @@ stdenv.mkDerivation (
       ghc-settings-edit "$settingsFile" \
       "windres command" "${toolPath "windres" installCC}"
     ''
+    + lib.optionalString stdenv.targetPlatform.isGhcjs ''
+      ghc-settings-edit "$settingsFile" \
+        "JavaScript CPP command" "${toolPath "cc" installCC}"
+      ghc-settings-edit "$settingsFile" \
+        "JavaScript CPP flags" "-E"
+    ''
     + ''
 
       # Install the bash completion file.
