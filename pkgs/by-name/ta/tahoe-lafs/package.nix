@@ -1,47 +1,25 @@
 {
   lib,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   texinfo,
   versionCheckHook,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      # tahoe-lafs is incompatible with magic-wormhole >= 0.19.0
-      # TODO: unpin, when https://tahoe-lafs.org/trac/tahoe-lafs/ticket/4180 is fixed
-      magic-wormhole = super.magic-wormhole.overridePythonAttrs (oldAttrs: rec {
-        version = "0.18.0";
-
-        src = fetchFromGitHub {
-          owner = "magic-wormhole";
-          repo = "magic-wormhole";
-          tag = version;
-          hash = "sha256-FQ7m6hkJcFZaE+ptDALq/gijn/RcAM1Zvzi2+xpoXBU=";
-        };
-
-        nativeCheckInputs = lib.filter (
-          input: (input.pname or null) != "pytest-twisted"
-        ) oldAttrs.nativeCheckInputs;
-
-        doCheck = false;
-      });
-    };
-  };
-  python3Packages = python.pkgs;
-in
 python3Packages.buildPythonApplication rec {
   pname = "tahoe-lafs";
-  version = "1.20.0";
+  version = "1.20.0-unstable-2025-10-12";
   pyproject = true;
+
+  # workaround required to build an unstable version
+  # TODO: when moving to a tagged version, remove this and the workaround for versionCheckHook
+  env.SETUPTOOLS_SCM_PRETEND_VERSION = builtins.elemAt (builtins.split "-" version) 0;
 
   src = fetchFromGitHub {
     owner = "tahoe-lafs";
     repo = "tahoe-lafs";
-    tag = "tahoe-lafs-${version}";
-    hash = "sha256-9qaL4GmdjClviKTnwAxaTywvJChQ5cVVgWs1IkFxhIY=";
+    rev = "7b96d16aba511fd34dcc0c14c9db754229e19531";
+    hash = "sha256-7qMeyL0j0D6Yos7qDhhplinKPV87Vu72dbE4eWql/g4=";
   };
 
   outputs = [
@@ -89,8 +67,8 @@ python3Packages.buildPythonApplication rec {
       eliot
       filelock
       foolscap
-      future
       klein
+      legacy-cgi
       magic-wormhole
       netifaces
       psutil
@@ -139,13 +117,13 @@ python3Packages.buildPythonApplication rec {
     ++ [
       versionCheckHook
     ];
-  versionCheckProgram = "${placeholder "out"}/bin/tahoe";
+
   versionCheckProgramArg = "--version";
 
   checkPhase = ''
     runHook preCheck
 
-    runHook versionCheckHook
+    version=$SETUPTOOLS_SCM_PRETEND_VERSION runHook versionCheckHook
     trial --rterrors allmydata
 
     runHook postCheck
