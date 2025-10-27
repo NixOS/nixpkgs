@@ -16,7 +16,6 @@ NIXOS_REBUILD_ATTR: Final = "config.system.build.nixos-rebuild"
 NIXOS_REBUILD_REEXEC_ENV: Final = "_NIXOS_REBUILD_REEXEC"
 
 logger: Final = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
 
 
 def reexec(
