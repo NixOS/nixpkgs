@@ -372,4 +372,10 @@ def write_version_suffix(build_flags: Args) -> None:
     nixpkgs_path = nix.find_file("nixpkgs", build_flags)
     rev = nix.get_nixpkgs_rev(nixpkgs_path)
     if nixpkgs_path and rev:
-        (nixpkgs_path / ".version-suffix").write_text(rev)
+        try:
+            (nixpkgs_path / ".version-suffix").write_text(rev)
+        except OSError as error:
+            logger.debug(
+                "ignoring error while writing '.version-suffix' to nixpkgs: %s",
+                error,
+            )
