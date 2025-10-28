@@ -34,6 +34,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           path: trusted
           sparse-checkout: |
             ci/supportedVersions.nix
@@ -41,6 +42,7 @@ jobs:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           ref: ${{ inputs.mergedSha }}
           path: untrusted
           sparse-checkout: |
@@ -84,6 +86,7 @@ jobs:
 
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout: .github/actions
       - name: Check out the PR at merged and target commits
         uses: ./.github/actions/checkout
@@ -140,7 +143,7 @@ jobs:
 
       - name: Upload outpaths diff and stats
         if: inputs.targetSha
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: ${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
           path: diff/*
@@ -155,6 +158,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout: .github/actions
       - name: Check out the PR at the target commit
         uses: ./.github/actions/checkout
@@ -163,7 +167,7 @@ jobs:
           target-as-trusted-at: ${{ inputs.targetSha }}
 
       - name: Download output paths and eval stats for all systems
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           pattern: diff-*
           path: diff
@@ -181,8 +185,9 @@ jobs:
       - name: Compare against the target branch
         env:
           AUTHOR_ID: ${{ github.event.pull_request.user.id }}
+          TARGET_SHA: ${{ inputs.mergedSha }}
         run: |
-          git -C nixpkgs/trusted diff --name-only ${{ inputs.mergedSha }} \
+          git -C nixpkgs/trusted diff --name-only "$TARGET_SHA" \
             | jq --raw-input --slurp 'split("\n")[:-1]' > touched-files.json
 
           # Use the target branch to get accurate maintainer info
@@ -195,7 +200,7 @@ jobs:
           cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the comparison results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: comparison
           path: comparison/*
@@ -237,7 +242,7 @@ jobs:
     needs: [versions, eval]
     steps:
       - name: Download output paths and eval stats for all versions
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           pattern: "*-diff-*"
           path: versions
@@ -318,6 +323,7 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout: .github/actions
       - name: Checkout the merge commit
         uses: ./.github/actions/checkout
