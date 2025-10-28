@@ -1511,6 +1511,8 @@ let
 
         ocolor = callPackage ../development/ocaml-modules/ocolor { };
 
+        ocp-browser = callPackage ../development/tools/ocaml/ocp-browser { };
+
         ocp-build = callPackage ../development/tools/ocaml/ocp-build { };
 
         ocp-indent = callPackage ../development/tools/ocaml/ocp-indent { };
