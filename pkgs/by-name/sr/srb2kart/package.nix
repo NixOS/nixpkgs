@@ -27,6 +27,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-5sIHdeenWZjczyYM2q+F8Y1SyLqL+y77yxYDUM3dVA0=";
   };
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   assets = stdenv.mkDerivation {
     pname = "srb2kart-data";
     version = finalAttrs.version;
