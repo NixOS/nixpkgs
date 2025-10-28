@@ -142,8 +142,8 @@ in
       "sha256-as/i/8ByPLcr91nEwv+Qaq/Y8Rpi1qaVyMyDU7SMbc4=";
 
   mypy-boto3-athena =
-    buildMypyBoto3Package "athena" "1.40.0"
-      "sha256-2oQp9Va82Feyyf7ZEz7wv+y4mOK3TpZ586qvzCZwK/E=";
+    buildMypyBoto3Package "athena" "1.40.60"
+      "sha256-hBkW8prNkpdP+7ZEY5YIs540fPDZX1sqbHzEHDWcZgw=";
 
   mypy-boto3-auditmanager =
     buildMypyBoto3Package "auditmanager" "1.40.1"
