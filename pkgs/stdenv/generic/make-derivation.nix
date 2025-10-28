@@ -17,11 +17,11 @@ let
     elemAt
     extendDerivation
     filter
-    filterAttrs
     findFirst
     getDev
     head
     imap1
+    intersectAttrs
     isAttrs
     isBool
     isDerivation
@@ -812,13 +812,13 @@ let
 
       derivationArg =
         let
-          preserveMetaFields = [
-            "identifiers"
-            "license"
-            "mainProgram"
-            "vendor"
-          ];
-          nixMeta = filterAttrs (n: _: (elem n preserveMetaFields)) meta;
+          preserveMetaFields = {
+            identifiers = null;
+            license = null;
+            mainProgram = null;
+            vendor = null;
+          };
+          nixMeta = intersectAttrs preserveMetaFields meta;
           nixMetaJSON = builtins.toJSON nixMeta;
           nixMetaJSONContext = builtins.getContext nixMetaJSON;
         in
@@ -851,7 +851,7 @@ let
 
       checkedEnv =
         let
-          overlappingNames = attrNames (builtins.intersectAttrs env' derivationArg);
+          overlappingNames = attrNames (intersectAttrs env' derivationArg);
           prettyPrint = lib.generators.toPretty { };
           makeError =
             name:
