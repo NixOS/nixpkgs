@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = writeShellScript "karabiner-dk" ''
     NEW_VERSION=$(${lib.getExe curl} --silent https://api.github.com/repos/pqrs-org/Karabiner-DriverKit-VirtualHIDDevice/releases/latest $${GITHUB_TOKEN:+" -u \":$GITHUB_TOKEN\""} | ${lib.getExe jq} '.tag_name | ltrimstr("v")' --raw-output)
-    ${lib.getExe' common-updater-scripts "update-source-version"} "karabiner-dk" "$NEW_VERSION" --ignore-same-version --version-key="sourceVersion";
+    ${lib.getExe' common-updater-scripts "update-source-version"} "karabiner-dk" "$NEW_VERSION" --system=aarch64-darwin --ignore-same-version --version-key="sourceVersion";
   '';
 
   meta = {
