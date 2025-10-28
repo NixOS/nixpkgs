@@ -397,7 +397,6 @@ let
         ];
       sourceProvenance = listOf attrs;
       maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
-      nonTeamMaintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
       teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
@@ -670,10 +669,6 @@ let
       # if you add a new maintainer or team attribute please ensure that this expectation is still met.
       maintainers =
         attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
-
-      # Needed for CI to be able to avoid requesting reviews from individual
-      # team members
-      nonTeamMaintainers = attrs.meta.maintainers or [ ];
 
       identifiers =
         let
