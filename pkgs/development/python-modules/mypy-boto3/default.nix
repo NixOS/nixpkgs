@@ -162,8 +162,8 @@ in
       "sha256-bo+tgMbUCf1uL8fNB/5UBgUtIiYMMQpd/uaj/LUuZ6U=";
 
   mypy-boto3-backup-gateway =
-    buildMypyBoto3Package "backup-gateway" "1.40.15"
-      "sha256-BZXrWhqf5gFrTW0fAsiyiydzc0cTv2lPj5DTRLrv+pI=";
+    buildMypyBoto3Package "backup-gateway" "1.40.60"
+      "sha256-VhY/EqSIDSN6u2D87oA8HtTEZqkUzcJPlE+hHIg68Sw=";
 
   mypy-boto3-batch =
     buildMypyBoto3Package "batch" "1.40.54"
