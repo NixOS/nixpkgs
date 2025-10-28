@@ -146,19 +146,14 @@ jobs:
       - name: Requesting maintainer reviews
         if: ${{ steps.app-token.outputs.token }}
         env:
-          GH_TOKEN: ${{ github.token }}
-          APP_GH_TOKEN: ${{ steps.app-token.outputs.token }}
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
+          ORG_ID: ${{ github.repository_owner_id }}
           NUMBER: ${{ github.event.number }}
           AUTHOR: ${{ github.event.pull_request.user.login }}
           # Don't request reviewers on draft PRs
           DRY_MODE: ${{ github.event.pull_request.draft && '1' || '' }}
-        run: |
-          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
-          # There appears to be no API to request reviews based on GitHub IDs
-          jq -r 'keys[]' comparison/maintainers.json \
-            | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN="$APP_GH_TOKEN" result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+        run: result/bin/request-maintainers-reviews.sh "$ORG_ID" "$REPOSITORY" "$NUMBER" "$AUTHOR" comparison
 
       - name: Log current API rate limits (app-token)
         if: ${{ steps.app-token.outputs.token }}
