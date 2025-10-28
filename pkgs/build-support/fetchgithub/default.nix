@@ -27,7 +27,7 @@ lib.makeOverridable (
     varPrefix ? null,
     passthru ? { },
     meta ? { },
-    ... # For hash agility
+    ... # For hash agility and additional fetchgit arguments
   }@args:
 
   assert (
