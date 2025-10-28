@@ -254,6 +254,10 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  darwin-maintainers = {
+    github = "darwin-maintainers";
+  };
+
   deshaw = {
     # Verify additions to this team with at least one already existing member of the team.
     members = [
