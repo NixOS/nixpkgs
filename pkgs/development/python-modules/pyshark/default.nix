@@ -35,6 +35,12 @@ buildPythonPackage rec {
       url = "https://github.com/KimiNewt/pyshark/commit/7142c5bf88abcd4c65c81052a00226d6155dda42.patch";
       hash = "sha256-Ti7cwRyYSbF4a4pEEV9FntNevkV/JVXNqACQWzoma7g=";
     })
+    # fixes tests that failed related to elastic-mapping
+    # remove fix if this is ever merged upstream
+    (fetchpatch {
+      url = "https://github.com/KimiNewt/pyshark/commit/0e1d8d0e06108f2887c3147c93049de63b475f8a.patch";
+      hash = "sha256-fpgiBHcfS/TGYIB65ioZJrWUuDIrLxxXqGVJ9y18b2w=";
+    })
     (replaceVars ./hardcode-tshark-path.patch {
       tshark = lib.getExe' wireshark-cli "tshark";
     })

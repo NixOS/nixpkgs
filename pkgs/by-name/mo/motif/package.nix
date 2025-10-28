@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
 
   # provide correct configure answers for cross builds
   configureFlags = [
-    "ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}"
+    "ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}"
   ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {

@@ -23530,6 +23530,14 @@
     githubId = 5791019;
     name = "Jiuyang Liu";
   };
+  Sereja313 = {
+    name = "Sergey Gulin";
+    github = "Sereja313";
+    githubId = 112060595;
+    email = "sergeygulin96@gmail.com";
+    matrix = "@sereja:sereja.xyz";
+    keys = [ { fingerprint = "AEF0 79C6 7618 8929 4124  22DB 3AB4 2DF3 F50E 3420"; } ];
+  };
   serge = {
     email = "sb@canva.com";
     github = "serge-belov";
@@ -27086,6 +27094,11 @@
     github = "utkarshgupta137";
     githubId = 5155100;
     name = "Utkarsh Gupta";
+  };
+  utopiatopia = {
+    github = "utopiatopia";
+    githubId = 98685984;
+    name = "utopiatopia";
   };
   uvnikita = {
     email = "uv.nikita@gmail.com";
