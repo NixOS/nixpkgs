@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Usage:
+#   ./fetch-language-hashes <tessdataRev> [<language code>…]
+#
+#   Fetches all languages if no language codes are given.
+#
+# Example:
+#   ./fetch-language-hashes 4.0.0 eng spa
+#
+#   Output:
+#     eng = "0iy0...";
+#     spa = "15kw...";
+
+set -e
+
+(( $# >= 1 )) || exit 1
+tessdataRev=$1
+shift
+
+if (( $# > 0 )); then
+    langCodes="$@"
+else
+    repoPage=$(curl -fs https://github.com/tesseract-ocr/tessdata/tree/$tessdataRev || {
+                   >&2 echo "Invalid tessdataRev: $tessdataRev"
+                   exit 1
+               })
+    langCodes=$(echo $(echo "$repoPage" | grep -ohP "(?<=/)[^/ ]+?(?=\.traineddata)" | sort -u))
+fi
+
+for lang in $langCodes; do
+    url=https://github.com/tesseract-ocr/tessdata/raw/$tessdataRev/$lang.traineddata
+    hash=$(nix --extra-experimental-features nix-command hash to-sri --type sha256 $(nix-prefetch-url $url 2>/dev/null))
+    echo "$lang = \"$hash\";"
+done

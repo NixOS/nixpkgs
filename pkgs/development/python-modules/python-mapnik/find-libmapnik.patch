@@ -1,0 +1,31 @@
+diff --git i/build.py w/build.py
+index 0f94826b6..5e91793f2 100644
+--- i/build.py
++++ w/build.py
+@@ -109,9 +109,8 @@ py_env.AppendUnique(LIBS='mapnik-wkt')
+ 
+ _mapnik = py_env.LoadableModule('mapnik/_mapnik', sources, LDMODULEPREFIX='', LDMODULESUFFIX='.so')
+ 
+-Depends(_mapnik, env.subst('../../src/%s' % env['MAPNIK_LIB_NAME']))
+-Depends(_mapnik, env.subst('../../src/json/libmapnik-json${LIBSUFFIX}'))
+-Depends(_mapnik, env.subst('../../src/wkt/libmapnik-wkt${LIBSUFFIX}'))
++Depends(_mapnik, env.subst('@libmapnik@/libmapnikjson${LIBSUFFIX}'))
++Depends(_mapnik, env.subst('@libmapnik@/libmapnikwkt${LIBSUFFIX}'))
+ 
+ if 'uninstall' not in COMMAND_LINE_TARGETS:
+     pymapniklib = env.Install(target_path,_mapnik)
+diff --git i/setup.py w/setup.py
+index 24ca0ec5e..bc2b1e0e0 100755
+--- i/setup.py
++++ w/setup.py
+@@ -19,8 +19,8 @@ linkflags.extend(check_output([mapnik_config, '--libs']).split(' '))
+ linkflags.extend(check_output([mapnik_config, '--ldflags']).split(' '))
+ linkflags.extend(check_output([mapnik_config, '--dep-libs']).split(' '))
+ linkflags.extend([
+-    '-lmapnik-wkt',
+-    '-lmapnik-json',
++    '-lmapnikwkt',
++    '-lmapnikjson',
+ ])
+ 
+ # Remove symlinks

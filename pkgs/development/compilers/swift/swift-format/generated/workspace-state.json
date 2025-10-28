@@ -1,0 +1,76 @@
+{
+  "object": {
+    "artifacts": [],
+    "dependencies": [
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-argument-parser",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-argument-parser.git",
+          "name": "swift-argument-parser"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "309a47b2b1d9b5e991f36961c983ecec72275be3",
+            "version": "1.6.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-argument-parser"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-cmark",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/swiftlang/swift-cmark.git",
+          "name": "cmark-gfm"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "b97d09472e847a416629f026eceae0e2afcfad65",
+            "version": "0.7.0"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-cmark"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-markdown",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-markdown.git",
+          "name": "swift-markdown"
+        },
+        "state": {
+          "checkoutState": {
+            "revision": "d8cf111c276ed18cff82d3cad563d2ca5903b982",
+            "version": "0.7.1"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-markdown"
+      },
+      {
+        "basedOn": null,
+        "packageRef": {
+          "identity": "swift-syntax",
+          "kind": "remoteSourceControl",
+          "location": "https://github.com/apple/swift-syntax.git",
+          "name": "swift-syntax"
+        },
+        "state": {
+          "checkoutState": {
+            "branch": "release/5.10",
+            "revision": "cdd571f366a4298bb863a9dcfe1295bb595041d5"
+          },
+          "name": "sourceControlCheckout"
+        },
+        "subpath": "swift-syntax"
+      }
+    ]
+  },
+  "version": 6
+}

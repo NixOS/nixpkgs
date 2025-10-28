@@ -1,0 +1,15 @@
+diff --git a/setup.py b/setup.py
+index 0470622..d574ceb 100755
+--- a/setup.py
++++ b/setup.py
+@@ -75,8 +75,8 @@ setup(
+     # your project is installed. For an analysis of "install_requires" vs pip's
+     # requirements files see:
+     # https://packaging.python.org/en/latest/requirements.html
+-    setup_requires=['pytest-runner',],
+-    tests_require=['pytest',],
++    setup_requires=[],
++    tests_require=['pytest','pytest-runner',],
+ 
+     install_requires=['pyparsing','future'],
+ 

@@ -1,0 +1,13 @@
+diff --git a/src/kcm/kcmkrdpserver.cpp b/src/kcm/kcmkrdpserver.cpp
+index 2d2c5e8..289c6f1 100644
+--- a/src/kcm/kcmkrdpserver.cpp
++++ b/src/kcm/kcmkrdpserver.cpp
+@@ -293,7 +293,7 @@ void KRDPServerConfig::generateCertificate()
+     QString certificateKeyPath(QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation) + u"/krdpserver/krdp.key"_s);
+     qDebug(KRDPKCM) << "Generating certificate files to: " << certificatePath << " and " << certificateKeyPath;
+     QProcess sslProcess;
+-    sslProcess.start(u"openssl"_s,
++    sslProcess.start(u"@openssl@"_s,
+                      {
+                          u"req"_s,
+                          u"-nodes"_s,

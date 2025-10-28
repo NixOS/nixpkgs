@@ -1,0 +1,14 @@
+{
+  "url": "https://github.com/hubro/tree-sitter-yang",
+  "rev": "2c0e6be8dd4dcb961c345fa35c309ad4f5bd3502",
+  "date": "2022-11-21T21:25:21+01:00",
+  "path": "/nix/store/ypd2cggg44l0sx0snvkgjbspkfcyscmf-tree-sitter-yang",
+  "sha256": "1vwcsp20dhccr2ag5s09j3jz9cnlkndb2hdn0h3va7md8ka0lhp8",
+  "hash": "sha256-6EIK1EStHrUHBLZBsZqd1LL05ZAJ6PKUyIzBBsTVjO8=",
+  "fetchLFS": false,
+  "fetchSubmodules": false,
+  "deepClone": false,
+  "fetchTags": false,
+  "leaveDotGit": false,
+  "rootDir": ""
+}

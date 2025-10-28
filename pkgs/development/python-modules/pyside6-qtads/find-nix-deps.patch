@@ -1,0 +1,43 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 0c0568a..f12d50e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -105,15 +105,17 @@ macro(pyside_config option output_var)
+ endmacro()
+ 
+ # Query for the shiboken generator path, Python path, include paths and linker flags.
++find_package(Shiboken6 REQUIRED)
++find_package(PySide6 REQUIRED)
+ pyside_config(--shiboken-module-path shiboken_module_path)
+-pyside_config(--shiboken-generator-path shiboken_generator_path)
+-pyside_config(--pyside-path pyside_path)
+-pyside_config(--pyside-include-path pyside_include_dir 1)
++set(shiboken_generator_path "" CACHE PATH "Path where shiboken6 executable can be found")
++set(pyside_path "" CACHE PATH "pyside share path, where typesystems dir can be found")
++get_target_property(pyside_include_dir PySide6::pyside6 INTERFACE_INCLUDE_DIRECTORIES)
+ pyside_config(--python-include-path python_include_dir)
+-pyside_config(--shiboken-generator-include-path shiboken_include_dir 1)
+-pyside_config(--shiboken-module-shared-libraries-cmake shiboken_shared_libraries 0)
++get_target_property(shiboken_include_dir Shiboken6::libshiboken INTERFACE_INCLUDE_DIRECTORIES)
++get_target_property(shiboken_shared_libraries Shiboken6::libshiboken IMPORTED_LOCATION_RELEASE)
+ pyside_config(--python-link-flags-cmake python_linking_data 0)
+-pyside_config(--pyside-shared-libraries-cmake pyside_shared_libraries 0)
++get_target_property(pyside_shared_libraries PySide6::pyside6 IMPORTED_LOCATION_RELEASE)
+ 
+ set(shiboken_path "${shiboken_generator_path}/shiboken6${CMAKE_EXECUTABLE_SUFFIX}")
+ if(NOT EXISTS ${shiboken_path})
+diff --git a/setup.py b/setup.py
+index 802821b..f522818 100644
+--- a/setup.py
++++ b/setup.py
+@@ -88,7 +88,9 @@ setuptools.setup(
+                 "-DBUILD_STATIC:BOOL=ON",
+                 "-DADS_VERSION=4.3.0",
+                 f"-DPython3_ROOT_DIR={Path(sys.prefix)}",
+-                f"-DPython_EXECUTABLE={Path(sys.executable)}"
++                f"-DPython_EXECUTABLE={Path(sys.executable)}",
++                "-Dshiboken_generator_path=@shiboken6@/bin",
++                "-Dpyside_path=@pyside6@/share/PySide6"
+             ],
+             py_limited_api=True
+         ),

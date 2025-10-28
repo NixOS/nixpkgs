@@ -1,0 +1,31 @@
+https://github.com/scheme/scsh/pull/51.patch
+
+From b2934abb68d6adab448f24787192c047e46cf17c Mon Sep 17 00:00:00 2001
+From: Sergei Trofimovich <slyich@gmail.com>
+Date: Mon, 28 Apr 2025 22:39:55 +0100
+Subject: [PATCH] configure.ac: add detection of `pty.h`
+
+Without the change the build on modern autoconf fails as:
+
+    c/tty.c: In function 'allocate_master':
+    c/tty.c:398:14: error: implicit declaration of function 'openpty'; did you mean 'openat'? [-Wimplicit-function-declaration]
+      398 |         rc = openpty (&master_fd, &slave_fd, NULL, NULL, NULL);
+          |              ^~~~~~~
+          |              openat
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 99779dc..1cd8b22 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -32,7 +32,7 @@ CPPFLAGS="$CPPFLAGS -I$S48DIR/include"
+ # Checks for libraries.
+ 
+ # Checks for header files.
+-AC_CHECK_HEADERS([fcntl.h limits.h netdb.h sgtty.h stdlib.h string.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utime.h])
++AC_CHECK_HEADERS([fcntl.h limits.h netdb.h pty.h sgtty.h stdlib.h string.h sys/ioctl.h sys/param.h sys/time.h termios.h unistd.h utime.h])
+ 
+ dnl  We need the scheme48.h headers, so bomb out if we can't find them.
+ AC_CHECK_HEADERS([scheme48.h], [],

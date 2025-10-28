@@ -1,0 +1,43 @@
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pytestCheckHook,
+  docopt,
+  openstep-parser,
+  setuptools,
+}:
+
+buildPythonPackage rec {
+  pname = "pbxproj";
+  version = "4.3.2";
+  pyproject = true;
+
+  src = fetchFromGitHub {
+    owner = "kronenthaler";
+    repo = "mod-pbxproj";
+    tag = version;
+    hash = "sha256-Kwt/ellGOZBenYBCCW13pSMsPVdJyiEklIPMtw/UDvI=";
+  };
+
+  build-system = [ setuptools ];
+
+  dependencies = [
+    docopt
+    openstep-parser
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pythonImportsCheck = [
+    "pbxproj"
+    "openstep_parser"
+  ];
+
+  meta = {
+    description = "Python module to manipulate XCode projects ";
+    homepage = "https://github.com/kronenthaler/mod-pbxproj";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ ilaumjd ];
+  };
+}

@@ -1,0 +1,26 @@
+From 5f144d5d26ea0dd1754ed25a583ebafa01ecbb4b Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Sun, 3 Aug 2025 20:06:49 +0200
+Subject: [PATCH] src/common/logger.h: Add missing methods under NDEBUG
+
+---
+ src/common/logger.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/src/common/logger.h b/src/common/logger.h
+index 0901205..259f058 100644
+--- a/src/common/logger.h
++++ b/src/common/logger.h
+@@ -81,6 +81,9 @@ public:
+ 	LoggerStream& getStream(int level) { return stream; }
+ 
+ 	void debug(...) {}
++	void warn(...) {}
++
++	bool isDebugEnabled() { return false; }
+ };
+ 
+ // Bogus level numbers; I don't know if these are compatible with
+-- 
+2.50.1
+

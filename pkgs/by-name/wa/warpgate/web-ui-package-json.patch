@@ -1,0 +1,15 @@
+diff --git a/package.json b/package.json
+index 54125c3..6942dfb 100644
+--- a/package.json
++++ b/package.json
+@@ -12,8 +12,8 @@
+     "postinstall": "npm run openapi:client:gateway && npm run openapi:client:admin",
+     "openapi:schema:gateway": "cargo run -p warpgate-protocol-http > src/gateway/lib/openapi-schema.json",
+     "openapi:schema:admin": "cargo run -p warpgate-admin > src/admin/lib/openapi-schema.json",
+-    "openapi:client:gateway": "openapi-generator-cli generate -g typescript-fetch -i src/gateway/lib/openapi-schema.json -o src/gateway/lib/api-client -p npmName=warpgate-gateway-api-client -p useSingleRequestParameter=true && cd src/gateway/lib/api-client && npm i typescript@5 && npm i && npx tsc --target esnext --module esnext && rm -rf src tsconfig.json",
+-    "openapi:client:admin": "openapi-generator-cli generate -g typescript-fetch -i src/admin/lib/openapi-schema.json -o src/admin/lib/api-client -p npmName=warpgate-admin-api-client -p useSingleRequestParameter=true && cd src/admin/lib/api-client && npm i typescript@5 && npm i && npx tsc --target esnext --module esnext && rm -rf src tsconfig.json",
++    "openapi:client:gateway": "openapi-generator-cli generate -g typescript-fetch -i src/gateway/lib/openapi-schema.json -o src/gateway/lib/api-client -p npmName=warpgate-gateway-api-client -p useSingleRequestParameter=true && ln -sr node_modules src/gateway/lib/api-client/node_modules && cd src/gateway/lib/api-client && npx tsc --target esnext --module esnext && rm -rf src tsconfig.json",
++    "openapi:client:admin": "openapi-generator-cli generate -g typescript-fetch -i src/admin/lib/openapi-schema.json -o src/admin/lib/api-client -p npmName=warpgate-admin-api-client -p useSingleRequestParameter=true && ln -sr node_modules src/admin/lib/api-client/node_modules && cd src/admin/lib/api-client && npx tsc --target esnext --module esnext && rm -rf src tsconfig.json",
+     "openapi:tests-sdk": "openapi-generator-cli generate -g python -i src/admin/lib/openapi-schema.json -o ../tests/api_sdk",
+     "openapi": "npm run openapi:schema:admin && npm run openapi:schema:gateway && npm run openapi:client:admin && npm run openapi:client:gateway"
+   },

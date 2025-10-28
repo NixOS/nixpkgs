@@ -1,0 +1,13 @@
+diff --git a/repl.k b/repl.k
+index dc89832c..7a6e0dcf 100755
+--- a/repl.k
++++ b/repl.k
+@@ -21,7 +21,7 @@ tbl:{[w;u;x]h:`k'!x;d:`k''.x;W:(#'h)|/'#''d
+  r,par'dd[w-2]'sem/'+@[W;&~^`i`d?_@'.x;-:]$'d}
+ cell:{$[|/`i`d=@y;-x;x]$z}
+ par:{opn,x,cls}
+-cmds:(,"a")!{`1:1:joinpath[dirname`argv 0]"LICENSE";}
++cmds:(,"a")!{`1:1:joinpath[dirname`argv 0]"../share/ngn-k/LICENSE";}
+ basename:{*|"/"\x}
+ dirname:{$[#x:"/"/-1_"/"\x;x;,"."]}
+ joinpath:{$[x~,".";y;"/"~*|x;x,y;x,"/",y]}
