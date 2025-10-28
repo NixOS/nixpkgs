@@ -47,8 +47,9 @@ in
     };
 
   testScript = ''
-    # agda executable is not present
+    # agda and agda-mode are not in path
     machine.fail("agda --version")
+    machine.fail("agda-mode")
     # backend is present
     text = machine.succeed("${mainProgram} --help")
     assert "${mainProgram}" in text

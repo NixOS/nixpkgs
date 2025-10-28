@@ -24,6 +24,10 @@ in
     };
 
   testScript = ''
+    # agda and agda-mode are in path
+    machine.succeed("agda --version")
+    machine.succeed("agda-mode")
+
     # Minimal script that typechecks
     machine.succeed("touch TestEmpty.agda")
     machine.succeed("agda TestEmpty.agda")
