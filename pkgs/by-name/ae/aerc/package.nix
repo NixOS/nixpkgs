@@ -11,6 +11,7 @@
   dante,
   gawk,
   versionCheckHook,
+  bashNonInteractive,
   nix-update-script,
 }:
 
@@ -52,6 +53,7 @@ buildGoModule (finalAttrs: {
   buildInputs = [
     python3Packages.python
     gawk
+    bashNonInteractive
   ]
   ++ lib.optional withNotmuch notmuch;
 
