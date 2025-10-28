@@ -48,14 +48,7 @@ with lib.maintainers;
   };
 
   agda = {
-    members = [
-      alexarice
-      ncfavier
-      phijor
-      turion
-    ];
-    scope = "Maintain Agda-related packages and modules.";
-    shortName = "Agda";
+    github = "agda";
   };
 
   android = {
@@ -373,9 +366,7 @@ with lib.maintainers;
   };
 
   freedesktop = {
-    members = [ jtojnar ];
-    scope = "Maintain Freedesktop.org packages for graphical desktop.";
-    shortName = "freedesktop.org packaging";
+    github = "freedesktop";
   };
 
   fslabs = {
@@ -551,14 +542,7 @@ with lib.maintainers;
   };
 
   kubernetes = {
-    members = [
-      johanot
-      offline
-      saschagrunert
-      srhb
-    ];
-    scope = "Maintain the Kubernetes package and module";
-    shortName = "Kubernetes";
+    github = "kubernetes";
   };
 
   libretro = {
@@ -573,15 +557,7 @@ with lib.maintainers;
   };
 
   linux-kernel = {
-    members = [
-      TredwellGit
-      k900
-      ma27
-      nequissimus
-      qyliss
-    ];
-    scope = "Maintain the Linux kernel.";
-    shortName = "Linux Kernel";
+    github = "linux-kernel";
   };
 
   lisp = {
@@ -590,15 +566,7 @@ with lib.maintainers;
   };
 
   lix = {
-    members = [
-      raitobezarius
-      qyriad
-      _9999years
-      lf-
-      alois31
-    ];
-    scope = "Maintain the Lix package manager inside of Nixpkgs.";
-    shortName = "Lix ecosystem";
+    github = "lix-maintainers";
     enableFeatureFreezePing = true;
   };
 
@@ -835,13 +803,7 @@ with lib.maintainers;
   };
 
   postgres = {
-    members = [
-      thoughtpolice
-      ma27
-      wolfgangwalther
-    ];
-    scope = "Maintain the PostgreSQL package and plugins along with the NixOS module.";
-    shortName = "PostgreSQL";
+    github = "postgres";
     enableFeatureFreezePing = true;
   };
 
