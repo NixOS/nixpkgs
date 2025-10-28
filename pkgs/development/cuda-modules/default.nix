@@ -1,6 +1,5 @@
 {
   _cuda,
-  config,
   lib,
   pkgs,
   # Manually provided arguments
@@ -10,7 +9,6 @@ let
   inherit (lib.customisation) callPackagesWith;
   inherit (lib.filesystem) packagesFromDirectoryRecursive;
   inherit (lib.fixedPoints) composeManyExtensions extends;
-  inherit (lib.lists) optionals;
   inherit (lib.strings) versionAtLeast versionOlder;
   inherit (lib.versions) major majorMinor;
   inherit (_cuda.lib)
@@ -139,12 +137,7 @@ let
       directory = ./packages;
     };
 
-  composedExtensions = composeManyExtensions (
-    optionals config.allowAliases [
-      (import ./aliases.nix { inherit lib; })
-    ]
-    ++ _cuda.extensions
-  );
+  composedExtensions = composeManyExtensions (_cuda.extensions);
 in
 pkgs'.makeScopeWithSplicing' {
   otherSplices = pkgs'.generateSplicesForMkScope [ cudaPackagesMajorMinorVersionedName ];
