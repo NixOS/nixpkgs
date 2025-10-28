@@ -52,8 +52,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
-    # needs libsoup-2.4, which is soon going to be removed
-    # https://github.com/NixOS/nixpkgs/pull/450065
-    broken = withGui;
   };
 }
