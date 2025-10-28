@@ -80,7 +80,6 @@ buildGoModule (finalAttrs: {
           dante
         ]
       }
-    patchShebangs $out/libexec/aerc/filters
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
