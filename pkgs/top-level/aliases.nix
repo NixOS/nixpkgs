@@ -719,6 +719,14 @@ mapAliases {
   k2pdfopt = throw "'k2pdfopt' has been removed from nixpkgs as it was broken"; # Added 2025-09-27
   k3s_1_30 = throw "'k3s_1_30' has been removed from nixpkgs as it has reached end of life"; # Added 2025-09-01
   kak-lsp = throw "'kak-lsp' has been renamed to/replaced by 'kakoune-lsp'"; # Converted to throw 2025-10-27
+  kakounePlugins.kak-auto-pairs = kakounePlugins.auto-pairs-kak; # added 2021-01-04
+  kakounePlugins.kak-buffers = kakounePlugins.kakoune-buffers; # added 2021-01-04
+  kakounePlugins.kak-byline = kakounePlugins.byline-kak; # added 2023-10-22
+  kakounePlugins.kak-fzf = kakounePlugins.fzf-kak; # added 2021-01-04
+  kakounePlugins.kak-lsp = kakounePlugins.kakoune-lsp; # added 2024-04-01
+  kakounePlugins.kak-powerline = kakounePlugins.powerline-kak; # added 2021-01-04
+  kakounePlugins.kak-prelude = kakounePlugins.prelude-kak; # added 2021-01-04
+  kakounePlugins.kak-vertical-selection = kakounePlugins.kakoune-vertical-selection; # added 2021-01-04
   kanidm = lib.warnOnInstantiate "'kanidm' will be removed before 26.05. You must use a versioned package, e.g. 'kanidm_1_x'." kanidm_1_7; # Added 2025-09-01
   kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
   kanidmWithSecretProvisioning = lib.warnOnInstantiate "'kanidmWithSecretProvisioning' will be removed before 26.05. You must use a versioned package, e.g. 'kanidmWithSecretProvisioning_1_x'." kanidmWithSecretProvisioning_1_7; # Added 2025-09-01
