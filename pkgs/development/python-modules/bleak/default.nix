@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   async-timeout,
   bluez,
   buildPythonPackage,
@@ -10,6 +11,9 @@
   pytestCheckHook,
   pythonOlder,
   typing-extensions,
+  pyobjc-core,
+  pyobjc-framework-CoreBluetooth,
+  pyobjc-framework-libdispatch,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +30,7 @@ buildPythonPackage rec {
     hash = "sha256-z0Mxr1pUQWNEK01PKMV/CzpW+GeCRcv/+9BADts1FuU=";
   };
 
-  postPatch = ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     # bleak checks BlueZ's version with a call to `bluetoothctl --version`
     substituteInPlace bleak/backends/bluezdbus/version.py \
       --replace-fail \"bluetoothctl\" \"${bluez}/bin/bluetoothctl\"
@@ -35,7 +39,16 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   dependencies = [
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus-fast
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    pyobjc-core
+    pyobjc-framework-CoreBluetooth
+    pyobjc-framework-libdispatch
+  ]
+  ++ lib.optionals (pythonOlder "3.12") [
     typing-extensions
   ]
   ++ lib.optionals (pythonOlder "3.11") [
@@ -54,7 +67,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/hbldh/bleak";
     changelog = "https://github.com/hbldh/bleak/blob/${src.tag}/CHANGELOG.rst";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ oxzi ];
   };
 }
