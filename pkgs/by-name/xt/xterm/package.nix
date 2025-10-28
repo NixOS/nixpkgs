@@ -14,14 +14,14 @@
   enableDecLocator ? true,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "xterm";
   version = "404";
 
   src = fetchurl {
     urls = [
-      "https://invisible-island.net/archives/xterm/${pname}-${version}.tgz"
-      "https://invisible-mirror.net/archives/xterm/${pname}-${version}.tgz"
+      "https://invisible-island.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
+      "https://invisible-mirror.net/archives/xterm/${finalAttrs.pname}-${finalAttrs.version}.tgz"
     ];
     hash = "sha256-YzMvkhwie6WeWJ+gff2tFZnBCshZ6ibHKsHdSkG1ZaQ=";
   };
@@ -117,4 +117,4 @@ stdenv.mkDerivation rec {
     changelog = "https://invisible-island.net/xterm/xterm.log.html";
     mainProgram = "xterm";
   };
-}
+})
