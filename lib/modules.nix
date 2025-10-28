@@ -313,35 +313,38 @@ let
                     "while evaluating the error message for definitions for `${optText}', which is an option that does not exist"
                     (addErrorContext "while evaluating a definition from `${firstDef.file}'" (showDefs [ firstDef ]));
 
-                prefix' = init (prefix ++ firstDef.prefix);
-                # In submodules, prefix is absolute, but options and most variables are relative to the submodule prefix.
-                lookupPath = init firstDef.prefix;
-                adj = attrNames (attrByPath lookupPath { } options);
-                adj' = if lookupPath == [ ] then remove "_module" adj else adj;
-                invalidOptName = last firstDef.prefix;
+                # absInvalidOptionParent is absolute; other variables are relative to the submodule prefix
+                absInvalidOptionParent = init (prefix ++ firstDef.prefix);
+                invalidOptionParent = init firstDef.prefix;
+                siblingOptionNames = attrNames (attrByPath invalidOptionParent { } options);
+                candidateNames =
+                  if invalidOptionParent == [ ] then remove "_module" siblingOptionNames else siblingOptionNames;
+                invalidOptionName = last firstDef.prefix;
                 # For small option sets, check all; for large sets, only check distance ≤ 2
                 suggestions =
-                  if length adj' < 100 then
-                    pipe adj' [
-                      (sortOn (levenshtein invalidOptName))
+                  if length candidateNames < 100 then
+                    pipe candidateNames [
+                      (sortOn (levenshtein invalidOptionName))
                       (take 3)
                     ]
                   else
-                    pipe adj' [
+                    pipe candidateNames [
                       # levenshteinAtMost is only fast for distance ≤ 2
-                      (filter (levenshteinAtMost 2 invalidOptName))
-                      (sortOn (levenshtein invalidOptName))
+                      (filter (levenshteinAtMost 2 invalidOptionName))
+                      (sortOn (levenshtein invalidOptionName))
                       (take 3)
                     ];
                 suggestion =
                   if suggestions == [ ] then
                     ""
                   else if length suggestions == 1 then
-                    "\n\nDid you mean `${showOption (prefix' ++ [ (head suggestions) ])}'?"
+                    "\n\nDid you mean `${showOption (absInvalidOptionParent ++ [ (head suggestions) ])}'?"
                   else
                     "\n\nDid you mean ${
-                      concatStringsSep ", " (map (s: "`${showOption (prefix' ++ [ s ])}'") (init suggestions))
-                    } or `${showOption (prefix' ++ [ (last suggestions) ])}'?";
+                      concatStringsSep ", " (
+                        map (s: "`${showOption (absInvalidOptionParent ++ [ s ])}'") (init suggestions)
+                      )
+                    } or `${showOption (absInvalidOptionParent ++ [ (last suggestions) ])}'?";
               in
               "The option `${optText}' does not exist. Definition values:${defText}${suggestion}";
           in
