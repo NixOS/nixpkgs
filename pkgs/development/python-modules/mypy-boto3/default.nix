@@ -1005,8 +1005,8 @@ in
       "sha256-7B7yO41CKkQPBxY4hDwVt5LmkbweyLZtCkeO+B0OLmc=";
 
   mypy-boto3-payment-cryptography-data =
-    buildMypyBoto3Package "payment-cryptography-data" "1.40.45"
-      "sha256-/mlrjDkzD9szPLpV+69UBhYXpzt8vwPXIoAMGt+LZxc=";
+    buildMypyBoto3Package "payment-cryptography-data" "1.40.59"
+      "sha256-llgYHZUfQTOy5E4BmmA3gAvYi4Q3RjrCtfFm68ECEGY=";
 
   mypy-boto3-pca-connector-ad =
     buildMypyBoto3Package "pca-connector-ad" "1.40.0"
