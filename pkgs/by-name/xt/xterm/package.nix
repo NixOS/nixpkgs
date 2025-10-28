@@ -52,6 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
     freetype
     xorg.libXft
     xorg.luit
+    # for the sake of `patchShebangs`
+    bashNonInteractive
   ];
 
   configureFlags = [
