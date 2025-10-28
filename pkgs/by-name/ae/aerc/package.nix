@@ -75,13 +75,6 @@ buildGoModule (finalAttrs: {
           dante
         ]
       }
-    wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH : ${
-        lib.makeBinPath [
-          w3m
-          dante
-        ]
-      }
   '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
