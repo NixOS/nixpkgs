@@ -24,6 +24,12 @@ buildGoModule rec {
 
   subPackages = "cmd/thanos";
 
+  # Verify in sync with https://github.com/thanos-io/thanos/blob/main/.promu.yml
+  tags = [
+    "netgo"
+    "slicelabels"
+  ];
+
   ldflags =
     let
       t = "github.com/prometheus/common/version";
