@@ -9,6 +9,7 @@
   gpgme,
   gtk3,
   stdenv,
+  writableTmpDirAsHomeHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,6 +30,11 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
     pkg-config
     python3
+  ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # fix following error on darwin sandbox mode:
+    # objc/notify.h:1:9: fatal error: could not build module 'Cocoa'
+    writableTmpDirAsHomeHook
   ];
 
   cargoBuildFlags = [
