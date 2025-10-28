@@ -70,7 +70,7 @@ let
     name = "Celeste";
     desktopName = "Celeste";
     genericName = "Celeste";
-    comment = celeste.meta.description;
+    comment = "2D platformer game about climbing a mountain";
     exec = executableName;
     icon = "Celeste";
     categories = [ "Game" ];

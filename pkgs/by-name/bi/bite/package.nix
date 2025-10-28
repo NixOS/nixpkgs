@@ -78,7 +78,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
       exec = finalAttrs.meta.mainProgram;
       icon = "bite";
       desktopName = "BiTE";
-      comment = finalAttrs.meta.description;
+      comment = "Disassembler focused on comprehensive rust support";
       categories = [
         "Development"
         "Utility"
