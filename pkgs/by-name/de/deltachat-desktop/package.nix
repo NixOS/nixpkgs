@@ -123,7 +123,7 @@ stdenv.mkDerivation (finalAttrs: {
     icon = "deltachat";
     desktopName = "Delta Chat";
     genericName = "Delta Chat";
-    comment = finalAttrs.meta.description;
+    comment = "Email-based instant messaging for Desktop";
     categories = [
       "Network"
       "InstantMessaging"

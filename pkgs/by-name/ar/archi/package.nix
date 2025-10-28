@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
       desktopName = "Archi";
       exec = "Archi";
       type = "Application";
-      comment = meta.description;
+      comment = "ArchiMate modelling toolkit";
       icon = "archi";
       categories = [
         "Development"

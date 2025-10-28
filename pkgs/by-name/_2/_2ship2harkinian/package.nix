@@ -190,7 +190,7 @@ stdenv.mkDerivation (finalAttrs: {
       name = "2s2h";
       icon = "2s2h";
       exec = "2s2h";
-      comment = finalAttrs.meta.description;
+      comment = "PC port of Majora's Mask with modern controls, widescreen, high-resolution, and more";
       genericName = "2 Ship 2 Harkinian";
       desktopName = "2s2h";
       categories = [ "Game" ];

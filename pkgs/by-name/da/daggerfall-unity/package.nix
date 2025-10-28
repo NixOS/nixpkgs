@@ -90,7 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
     (makeDesktopItem {
       name = "daggerfall-unity";
       desktopName = "Daggerfall Unity";
-      comment = finalAttrs.meta.description;
+      comment = "Open source recreation of Daggerfall in the Unity engine";
       icon = "UnityPlayer";
       exec = finalAttrs.meta.mainProgram;
       categories = [ "Game" ];

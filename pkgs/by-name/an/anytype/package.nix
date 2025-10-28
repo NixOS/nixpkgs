@@ -102,7 +102,7 @@ buildNpmPackage (finalAttrs: {
       exec = "anytype %U";
       icon = "anytype";
       desktopName = "Anytype";
-      comment = finalAttrs.meta.description;
+      comment = "P2P note-taking tool";
       mimeTypes = [ "x-scheme-handler/anytype" ];
       categories = [
         "Utility"

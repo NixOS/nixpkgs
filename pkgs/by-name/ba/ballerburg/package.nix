@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       name = "Ballerburg";
       desktopName = "Ballerburg SDL";
       exec = "_NET_WM_ICON=ballerburg ballerburg";
-      comment = finalAttrs.meta.description;
+      comment = "Classic cannon combat game";
       icon = "ballerburg";
       categories = [ "Game" ];
     })

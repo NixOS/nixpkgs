@@ -49,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     includedir=''\\''${prefix}/include
 
     Name: libblst
-    Description: ${finalAttrs.meta.description}
+    Description: Multilingual BLS12-381 signature library
     URL: ${finalAttrs.meta.homepage}
     Version: ${finalAttrs.version}
 
