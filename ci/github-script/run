@@ -83,4 +83,15 @@ program
     }
   })
 
+program
+  .command('get-teams')
+  .description('Fetch the list of teams with GitHub and output it to a file')
+  .argument('<owner>', 'Owner of the GitHub repository to label (Example: NixOS)')
+  .argument('<repo>', 'Name of the GitHub repository to label (Example: nixpkgs)')
+  .argument('[outFile]', 'Path to the output file (Example: github-teams.json). If not set, prints to stdout')
+  .action(async (owner, repo, outFile, options) => {
+    const getTeams = (await import('./get-teams.js')).default
+    await run(getTeams, owner, repo, undefined, { ...options, outFile })
+  })
+
 await program.parse()
