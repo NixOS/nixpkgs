@@ -7,7 +7,7 @@
 
 let
   vanillaVersion = "7.6.q";
-  patchLevel = "33";
+  patchLevel = "36";
 in
 stdenv.mkDerivation rec {
   pname = "tcp-wrappers";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   debian = fetchurl {
     url = "mirror://debian/pool/main/t/tcp-wrappers/tcp-wrappers_${version}.debian.tar.xz";
-    hash = "sha256-Lykjyu4hKDS/DqQ8JAFhKDffHrbJ9W1gjBKNpdaNRew=";
+    hash = "sha256-t5W+9XKwNR1ecH49fop3ses4Ga2bUIiV/x/JqCa2z6Q=";
   };
 
   prePatch = ''
