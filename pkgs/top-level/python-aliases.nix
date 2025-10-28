@@ -686,6 +686,7 @@ mapAliases {
   python-igraph = igraph; # added 2021-11-11
   python_openzwave = python-openzwave; # added 2024-01-07
   python-openzwave-mqtt = throw "python-openzwave was removed, as it was packaged as a dependency of home-assistant, which it is no longer."; # added 2024-01-05
+  python-owasp-zap-v2-4 = throw "python-owasp-zap-v2-4 has been removed, use zaproxy instead"; # added 2025-08-28
   python_docs_theme = python-docs-theme; # added 2023-11-04
   python_fedora = python-fedora; # added 2023-11-15
   python_keyczar = throw "python_keyczar has been removed because it's been archived upstream and deprecated"; # added 2023-05-16
