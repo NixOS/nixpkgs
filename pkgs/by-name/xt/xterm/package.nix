@@ -115,7 +115,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ nequissimus ];
     platforms = with lib.platforms; linux ++ darwin;
-    changelog = "https://invisible-island.net/xterm/xterm.log.html";
+    changelog = "https://invisible-island.net/xterm/xterm.log.html#xterm_${finalAttrs.version}";
     mainProgram = "xterm";
   };
 })
