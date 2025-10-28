@@ -2,6 +2,7 @@
   lib,
   stdenvNoCC,
   callPackages,
+  nixosTests,
   cacert,
   fetchFromGitHub,
   buildGoModule,
@@ -500,6 +501,7 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     inherit proxy;
+    tests = nixosTests.authentik;
     outposts = callPackages ./outposts.nix {
       inherit (proxy) vendorHash;
     };
