@@ -1,0 +1,14 @@
+diff --git a/src/caffe/layers/hdf5_data_layer.cpp b/src/caffe/layers/hdf5_data_layer.cpp
+index 01213691..f42e7bea 100644
+--- a/src/caffe/layers/hdf5_data_layer.cpp
++++ b/src/caffe/layers/hdf5_data_layer.cpp
+@@ -6,7 +6,9 @@ TODO:
+   :: don't forget to update hdf5_daa_layer.cu accordingly
+ - add ability to shuffle filenames if flag is set
+ */
++#include <algorithm>
+ #include <fstream>  // NOLINT(readability/streams)
++#include <random>
+ #include <string>
+ #include <vector>
+ 

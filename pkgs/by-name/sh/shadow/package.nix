@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   # `AC_FUNC_SETPGRP' is not cross-compilation capable.
   preConfigure = ''
-    export ac_cv_func_setpgrp_void=${if stdenv.hostPlatform.isBSD then "no" else "yes"}
+    export ac_cv_func_setpgrp_void=${lib.boolToYesNo (!stdenv.hostPlatform.isBSD)}
     export shadow_cv_logdir=/var/log
   '';
 

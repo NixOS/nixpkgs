@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--enable-tools=${if enable-tools then "yes" else "no"}"
+    "--enable-tools=${lib.boolToYesNo enable-tools}"
     "--enable-bindings-cxx"
     "--prefix=${placeholder "out"}"
   ]
