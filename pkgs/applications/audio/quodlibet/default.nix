@@ -193,7 +193,6 @@ python3.pkgs.buildPythonApplication rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
       coroa
-      pbogdan
     ];
   };
 }
