@@ -3626,10 +3626,6 @@ with pkgs;
     etcDir = "/etc/ssh";
   };
 
-  openssh_10_2 = opensshPackages.openssh_10_2.override {
-    etcDir = "/etc/ssh";
-  };
-
   opensshTest = openssh.tests.openssh;
 
   opensshWithKerberos = openssh.override {
