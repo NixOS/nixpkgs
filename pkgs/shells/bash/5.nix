@@ -103,7 +103,7 @@ lib.warnIf (withDocs != null)
       # default is fine for static linking on Linux (weak symbols?) but
       # not with BSDs, when it does clash with the regular `getenv`.
       "bash_cv_getenv_redef=${
-        if !(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)) then "yes" else "no"
+        lib.boolToYesNo (!(with stdenv.hostPlatform; isStatic && (isOpenBSD || isFreeBSD)))
       }"
     ]
     ++ lib.optionals stdenv.hostPlatform.isCygwin [
