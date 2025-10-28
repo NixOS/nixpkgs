@@ -94,7 +94,7 @@ mapAliases {
   asyncio-mqtt = throw "asyncio-mqtt has been replaced by aiomqtt, which is not API compatible."; # added 2024-07-07
   asyncio-nats-client = nats-py; # added 2022-02-08
   atsim_potentials = atsim-potentials; # added 2023-10-08
-  inherit (super.pkgs) autotrash; # added 2024-09-23
+  autotrash = super.pkgs.autotrash; # added 2024-09-23
   awkward0 = throw "awkward0 has been removed, use awkward instead"; # added 2022-12-13
   azure-functions-devops-build = throw "azure-functions-devops-build has been removed, because it is abandoned"; # added 2024-10-04
   Babel = babel; # added 2022-05-06
@@ -271,7 +271,7 @@ mapAliases {
   fastnlo_toolkit = fastnlo-toolkit; # added 2024-01-03
   fastpair = throw "fastpair is unmaintained upstream and has therefore been removed"; # added 2024-05-01
   faulthandler = throw "faulthandler is built into ${python.executable}"; # added 2021-07-12
-  inherit (super.pkgs) fetchPypi; # added 2023-05-25
+  fetchPypi = super.pkgs.fetchPypi; # added 2023-05-25
   fenics = throw "fenics has been removed, use fenics-dolfinx instead"; # added 2025-08-07
   filebrowser_safe = filebrowser-safe; # added 2024-01-03
   filemagic = throw "inactive since 2014, so use python-magic instead"; # added 2022-11-19
@@ -337,7 +337,7 @@ mapAliases {
   grappelli_safe = grappelli-safe; # added 2023-10-08
   groestlcoin_hash = groestlcoin-hash; # added 2024-01-06
   grpc_google_iam_v1 = grpc-google-iam-v1; # added 2021-08-21
-  inherit (pkgs) gtimelog;
+  gtimelog = pkgs.gtimelog; # added 2023-10-06
   guzzle_sphinx_theme = guzzle-sphinx-theme; # added 2023-10-16
   ha-av = throw "ha-av was removed, because it is no longer maintained"; # added 2022-04-06
   HAP-python = hap-python; # added 2021-06-01
