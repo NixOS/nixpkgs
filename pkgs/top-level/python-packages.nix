@@ -11872,6 +11872,8 @@ self: super: with self; {
 
   ping3 = callPackage ../development/python-modules/ping3 { };
 
+  pingouin = callPackage ../development/python-modules/pingouin { };
+
   pinocchio = callPackage ../development/python-modules/pinocchio { inherit (pkgs) pinocchio; };
 
   pins = callPackage ../development/python-modules/pins { };
