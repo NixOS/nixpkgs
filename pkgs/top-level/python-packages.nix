@@ -13944,6 +13944,10 @@ self: super: with self; {
 
   pyobjc-framework-Cocoa = callPackage ../development/python-modules/pyobjc-framework-Cocoa { };
 
+  pyobjc-framework-CoreBluetooth =
+    callPackage ../development/python-modules/pyobjc-framework-CoreBluetooth
+      { };
+
   pyobjc-framework-Quartz = callPackage ../development/python-modules/pyobjc-framework-Quartz { };
 
   pyobjc-framework-Security = callPackage ../development/python-modules/pyobjc-framework-Security { };
