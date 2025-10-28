@@ -17,6 +17,7 @@ stdenvNoCC.mkDerivation {
       ./get-code-owners.sh
       ./request-reviewers.sh
       ./request-code-owner-reviews.sh
+      ./request-maintainers-reviews.sh
     ];
   };
   nativeBuildInputs = [ makeWrapper ];
@@ -26,6 +27,7 @@ stdenvNoCC.mkDerivation {
     for bin in *.sh; do
       mv "$bin" "$out/bin"
       wrapProgram "$out/bin/$bin" \
+        --set PAGER cat \
         --set PATH ${
           lib.makeBinPath [
             coreutils
