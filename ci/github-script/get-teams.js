@@ -7,9 +7,13 @@ const excludeTeams = [
 module.exports = async ({ github, context, core, outFile }) => {
   const withRateLimit = require('./withRateLimit.js')
   const { writeFileSync } = require('node:fs')
+
+  const org = context.repo.owner
+
   const result = {}
-  await withRateLimit({ github, core }, async (_stats) => {
-    /// Turn an Array of users into an Object, mapping user.login -> user.id
+
+  await withRateLimit({ github, core }, async () => {
+    // Turn an Array of users into an Object, mapping user.login -> user.id
     function makeUserSet(users) {
       // Sort in-place and build result by mutation
       users.sort((a, b) => (a.login > b.login ? 1 : -1))
@@ -20,21 +24,21 @@ module.exports = async ({ github, context, core, outFile }) => {
       }, {})
     }
 
-    /// Process a list of teams and append to the result variable
+    // Process a list of teams and append to the result variable
     async function processTeams(teams) {
       for (const team of teams) {
         core.notice(`Processing team ${team.slug}`)
         if (!excludeTeams.some((regex) => team.slug.match(regex))) {
           const members = makeUserSet(
             await github.paginate(github.rest.teams.listMembersInOrg, {
-              org: context.repo.owner,
+              org,
               team_slug: team.slug,
               role: 'member',
             }),
           )
           const maintainers = makeUserSet(
             await github.paginate(github.rest.teams.listMembersInOrg, {
-              org: context.repo.owner,
+              org,
               team_slug: team.slug,
               role: 'maintainer',
             }),
@@ -49,7 +53,7 @@ module.exports = async ({ github, context, core, outFile }) => {
         }
         await processTeams(
           await github.paginate(github.rest.teams.listChildInOrg, {
-            org: context.repo.owner,
+            org,
             team_slug: team.slug,
           }),
         )
@@ -57,8 +61,7 @@ module.exports = async ({ github, context, core, outFile }) => {
     }
 
     const teams = await github.paginate(github.rest.repos.listTeams, {
-      owner: context.repo.owner,
-      repo: context.repo.repo,
+      ...context.repo,
     })
 
     await processTeams(teams)
