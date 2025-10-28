@@ -60,6 +60,7 @@ lib.makeOverridable (
       # Impure env vars (https://nixos.org/nix/manual/#sec-advanced-attributes)
       # needed for netrcPhase
       netrcImpureEnvVars ? [ ],
+      passthru ? { },
       meta ? { },
       allowedRequisites ? null,
       # fetch all tags after tree (useful for git describe)
@@ -195,7 +196,8 @@ lib.makeOverridable (
         passthru = {
           gitRepoUrl = url;
           inherit tag;
-        };
+        }
+        // passthru;
       }
   )
 )

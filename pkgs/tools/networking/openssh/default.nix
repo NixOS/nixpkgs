@@ -48,6 +48,31 @@ in
     };
   };
 
+  openssh_10_2 = common rec {
+    pname = "openssh";
+    version = "10.2p1";
+
+    src = fetchurl {
+      url = urlFor version;
+      hash = "sha256-zMQsBBmTeVkmP6Hb0W2vwYxWuYTANWLSk3zlamD3mLI=";
+    };
+
+    extraPatches = [
+      # Use ssh-keysign from PATH
+      # ssh-keysign is used for host-based authentication, and is designed to be used
+      # as SUID-root program. OpenSSH defaults to referencing it from libexec, which
+      # cannot be made SUID in Nix.
+      ./ssh-keysign-8.5.patch
+    ];
+    extraMeta = {
+      maintainers = with lib.maintainers; [
+        philiptaron
+        numinit
+      ];
+      teams = [ lib.teams.helsinki-systems ];
+    };
+  };
+
   openssh_hpn = common rec {
     pname = "openssh-with-hpn";
     version = "10.2p1";

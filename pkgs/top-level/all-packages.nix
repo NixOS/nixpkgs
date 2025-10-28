@@ -2539,10 +2539,24 @@ with pkgs;
   # Top-level fix-point used in `cudaPackages`' internals
   _cuda = import ../development/cuda-modules/_cuda;
 
-  cudaPackages_12_6 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.6"; };
-  cudaPackages_12_8 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.8"; };
-  cudaPackages_12_9 = callPackage ./cuda-packages.nix { cudaMajorMinorVersion = "12.9"; };
-  cudaPackages_12 = cudaPackages_12_8; # Latest supported by cudnn
+  inherit
+    (import ./cuda-packages.nix {
+      inherit
+        _cuda
+        callPackage
+        config
+        lib
+        ;
+    })
+    cudaPackages_12_6
+    cudaPackages_12_8
+    cudaPackages_12_9
+    cudaPackages_13_0
+    ;
+
+  cudaPackages_12 = cudaPackages_12_8;
+
+  cudaPackages_13 = cudaPackages_13_0;
 
   cudaPackages = recurseIntoAttrs cudaPackages_12;
 
@@ -3611,6 +3625,10 @@ with pkgs;
   opensshPackages = dontRecurseIntoAttrs (callPackage ../tools/networking/openssh { });
 
   openssh = opensshPackages.openssh.override {
+    etcDir = "/etc/ssh";
+  };
+
+  openssh_10_2 = opensshPackages.openssh_10_2.override {
     etcDir = "/etc/ssh";
   };
 
@@ -6831,10 +6849,6 @@ with pkgs;
   shellcheck-minimal = haskell.lib.compose.justStaticExecutables shellcheck.unwrapped;
 
   sloc = nodePackages.sloc;
-
-  slurm = callPackage ../by-name/sl/slurm/package.nix {
-    nvml = cudaPackages.cuda_nvml_dev;
-  };
 
   speedtest-cli = with python3Packages; toPythonApplication speedtest-cli;
 

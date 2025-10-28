@@ -7,13 +7,13 @@
 
 buildGo125Module (finalAttrs: {
   pname = "chezmoi";
-  version = "2.66.1";
+  version = "2.66.2";
 
   src = fetchFromGitHub {
     owner = "twpayne";
     repo = "chezmoi";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-DwMkfS+D9o10Dk3jEzgkDcSoblbpoimN6RPV2iZTLcg=";
+    hash = "sha256-TYEVMxebA4dvWMmgx4bMv1UKO2YGH+D+lZuiAu8ZmI4=";
   };
 
   vendorHash = "sha256-g9bzsmLKJ7pCmTnO8N9Um1FDBvQA0mqw14fwGYMb/K0=";
