@@ -21343,6 +21343,11 @@
     matrix = "@qyriad:katesiria.org";
     name = "Qyriad";
   };
+  qzylinra = {
+    github = "qzylinra";
+    githubId = 225773816;
+    name = "qzylinra";
+  };
   r-aizawa = {
     github = "Xantibody";
     githubId = 109563705;

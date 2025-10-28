@@ -21,6 +21,7 @@
   libpulseaudio,
   libxkbcommon,
   libgbm,
+  libvdpau,
   nss,
   pipewire,
   udev,
@@ -55,6 +56,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     libpulseaudio
     libxkbcommon
     libgbm
+    libvdpau
     nss
     pipewire
     xorg.libX11
@@ -104,6 +106,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           udev
           libGL
           libpulseaudio
+          libvdpau
           pipewire
         ]
       }"
