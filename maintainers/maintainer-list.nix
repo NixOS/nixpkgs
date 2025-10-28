@@ -20006,6 +20006,13 @@
     githubId = 16345849;
     name = "Parthiv Seetharaman";
   };
+  padowyt2 = {
+    email = "me@padow.ru";
+    github = "PadowYT2";
+    githubId = 71085027;
+    name = "PadowYT2";
+    keys = [ { fingerprint = "33CE CABF 3B6C DCC0 C41B 0B28 E93B C488 C3B2 13FF"; } ];
+  };
   paepcke = {
     email = "git@paepcke.de";
     github = "paepckehh";
