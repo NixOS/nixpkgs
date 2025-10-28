@@ -1,0 +1,21 @@
+diff --git a/macosx/copyInfoPlist.sh b/macosx/copyInfoPlist.sh
+index f366665153..dfd9511e79 100755
+--- a/macosx/copyInfoPlist.sh
++++ b/macosx/copyInfoPlist.sh
+@@ -20,9 +20,10 @@
+ cp "$1" "$dest" || exit 1
+ 
+ 
+-/usr/libexec/PlistBuddy \
+-	-c "Set CommitHash '${COMMIT_HASH:--}'" \
+-	-c "Set BuildNumber '${BUILD_NUMBER:-0}'" \
+-	-c "Set CFBundleVersion '${BUILD_VERSION:-0n}'" \
+-	-c "Set CFBundleShortVersionString '$VERSION'" \
+-	"$dest" || exit 1
++PlistBuddy "$dest" <<EOF || exit 1
++    Set CommitHash "${COMMIT_HASH:--}"
++    Set BuildNumber "${BUILD_NUMBER:-0}"
++    Set CFBundleVersion "${BUILD_VERSION:-0n}"
++    Set CFBundleShortVersionString "$VERSION"
++    Save
++EOF

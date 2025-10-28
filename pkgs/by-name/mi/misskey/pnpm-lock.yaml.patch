@@ -1,0 +1,270 @@
+--- a/pnpm-lock.yaml
++++ b/pnpm-lock.yaml
+@@ -11,7 +11,7 @@
+ 
+ patchedDependencies:
+   typeorm:
+-    hash: 2677b97a423e157945c154e64183d3ae2eb44dfa9cb0e5ce731a7612f507bb56
++    hash: i7ls76affxbomopkwkccq5jvsu
+     path: patches/typeorm.patch
+ 
+ importers:
+@@ -51,6 +51,10 @@
+       typescript:
+         specifier: 5.8.3
+         version: 5.8.3
++    optionalDependencies:
++      '@tensorflow/tfjs-core':
++        specifier: 4.22.0
++        version: 4.22.0(encoding@0.1.13)
+     devDependencies:
+       '@misskey-dev/eslint-plugin':
+         specifier: 2.1.0
+@@ -85,10 +89,6 @@
+       start-server-and-test:
+         specifier: 2.0.12
+         version: 2.0.12
+-    optionalDependencies:
+-      '@tensorflow/tfjs-core':
+-        specifier: 4.22.0
+-        version: 4.22.0(encoding@0.1.13)
+ 
+   packages/backend:
+     dependencies:
+@@ -427,7 +427,7 @@
+         version: 4.2.0
+       typeorm:
+         specifier: 0.3.24
+-        version: 0.3.24(patch_hash=2677b97a423e157945c154e64183d3ae2eb44dfa9cb0e5ce731a7612f507bb56)(ioredis@5.6.1)(pg@8.16.0)(reflect-metadata@0.2.2)
++        version: 0.3.24(patch_hash=i7ls76affxbomopkwkccq5jvsu)(ioredis@5.6.1)(pg@8.16.0)(reflect-metadata@0.2.2)
+       typescript:
+         specifier: 5.8.3
+         version: 5.8.3
+@@ -446,6 +446,94 @@
+       xev:
+         specifier: 3.0.2
+         version: 3.0.2
++    optionalDependencies:
++      '@swc/core-android-arm64':
++        specifier: 1.3.11
++        version: 1.3.11
++      '@swc/core-darwin-arm64':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-darwin-x64':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-freebsd-x64':
++        specifier: 1.3.11
++        version: 1.3.11
++      '@swc/core-linux-arm-gnueabihf':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-linux-arm64-gnu':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-linux-arm64-musl':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-linux-x64-gnu':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-linux-x64-musl':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-win32-arm64-msvc':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-win32-ia32-msvc':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@swc/core-win32-x64-msvc':
++        specifier: 1.12.0
++        version: 1.12.0
++      '@tensorflow/tfjs':
++        specifier: 4.22.0
++        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
++      '@tensorflow/tfjs-node':
++        specifier: 4.22.0
++        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
++      bufferutil:
++        specifier: 4.0.9
++        version: 4.0.9
++      slacc-android-arm-eabi:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-android-arm64:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-darwin-arm64:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-darwin-universal:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-darwin-x64:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-freebsd-x64:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-linux-arm-gnueabihf:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-linux-arm64-gnu:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-linux-arm64-musl:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-linux-x64-gnu:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-linux-x64-musl:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-win32-arm64-msvc:
++        specifier: 0.0.10
++        version: 0.0.10
++      slacc-win32-x64-msvc:
++        specifier: 0.0.10
++        version: 0.0.10
++      utf-8-validate:
++        specifier: 6.0.5
++        version: 6.0.5
+     devDependencies:
+       '@jest/globals':
+         specifier: 29.7.0
+@@ -612,94 +700,6 @@
+       supertest:
+         specifier: 7.1.1
+         version: 7.1.1
+-    optionalDependencies:
+-      '@swc/core-android-arm64':
+-        specifier: 1.3.11
+-        version: 1.3.11
+-      '@swc/core-darwin-arm64':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-darwin-x64':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-freebsd-x64':
+-        specifier: 1.3.11
+-        version: 1.3.11
+-      '@swc/core-linux-arm-gnueabihf':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-linux-arm64-gnu':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-linux-arm64-musl':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-linux-x64-gnu':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-linux-x64-musl':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-win32-arm64-msvc':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-win32-ia32-msvc':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@swc/core-win32-x64-msvc':
+-        specifier: 1.12.0
+-        version: 1.12.0
+-      '@tensorflow/tfjs':
+-        specifier: 4.22.0
+-        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+-      '@tensorflow/tfjs-node':
+-        specifier: 4.22.0
+-        version: 4.22.0(encoding@0.1.13)(seedrandom@3.0.5)
+-      bufferutil:
+-        specifier: 4.0.9
+-        version: 4.0.9
+-      slacc-android-arm-eabi:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-android-arm64:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-darwin-arm64:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-darwin-universal:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-darwin-x64:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-freebsd-x64:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-linux-arm-gnueabihf:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-linux-arm64-gnu:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-linux-arm64-musl:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-linux-x64-gnu:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-linux-x64-musl:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-win32-arm64-msvc:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      slacc-win32-x64-msvc:
+-        specifier: 0.0.10
+-        version: 0.0.10
+-      utf-8-validate:
+-        specifier: 6.0.5
+-        version: 6.0.5
+ 
+   packages/frontend:
+     dependencies:
+@@ -11221,8 +11221,8 @@
+   vue-component-type-helpers@2.2.12:
+     resolution: {integrity: sha512-YbGqHZ5/eW4SnkPNR44mKVc6ZKQoRs/Rux1sxC6rdwXb4qpbOSYfDr9DsTHolOTGmIKgM9j141mZbBeg05R1pw==}
+ 
+-  vue-component-type-helpers@3.0.1:
+-    resolution: {integrity: sha512-j23mCB5iEbGsyIhnVdXdWUOg+UdwmVxpKnYYf2j+4ppCt5VSFXKjwu9YFt0QYxUaf5G99PuHsVfRScjHCRSsGQ==}
++  vue-component-type-helpers@3.0.3:
++    resolution: {integrity: sha512-koiBu7lO8e6w/UlbZAAIW11qcFQocYIl7Nh/SVwGZ804ej5KrncU32bRxi2zfU2Kyf6HWuk1CeeVP2rhIL+vyQ==}
+ 
+   vue-demi@0.14.7:
+     resolution: {integrity: sha512-EOG8KXDQNwkJILkx/gPcoL/7vH+hORoBaKgGe+6W7VFMvCYJfmF2dGbvgDroVnI8LU7/kTu8mbjRZGBU1z9NTA==}
+@@ -14955,7 +14955,7 @@
+       ts-dedent: 2.2.0
+       type-fest: 2.19.0
+       vue: 3.5.17(typescript@5.8.3)
+-      vue-component-type-helpers: 3.0.1
++      vue-component-type-helpers: 3.0.3
+ 
+   '@stylistic/eslint-plugin@2.13.0(eslint@9.31.0)(typescript@5.8.3)':
+     dependencies:
+@@ -23034,7 +23034,7 @@
+ 
+   typedarray@0.0.6: {}
+ 
+-  typeorm@0.3.24(patch_hash=2677b97a423e157945c154e64183d3ae2eb44dfa9cb0e5ce731a7612f507bb56)(ioredis@5.6.1)(pg@8.16.0)(reflect-metadata@0.2.2):
++  typeorm@0.3.24(patch_hash=i7ls76affxbomopkwkccq5jvsu)(ioredis@5.6.1)(pg@8.16.0)(reflect-metadata@0.2.2):
+     dependencies:
+       '@sqltools/formatter': 1.2.5
+       ansis: 3.17.0
+@@ -23371,7 +23371,7 @@
+ 
+   vue-component-type-helpers@2.2.12: {}
+ 
+-  vue-component-type-helpers@3.0.1: {}
++  vue-component-type-helpers@3.0.3: {}
+ 
+   vue-demi@0.14.7(vue@3.5.17(typescript@5.8.3)):
+     dependencies:

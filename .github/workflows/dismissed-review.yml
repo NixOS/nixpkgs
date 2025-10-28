@@ -1,0 +1,66 @@
+name: Dismissed review
+
+on:
+  workflow_run:
+    workflows:
+      - Review dismissed
+    types: [completed]
+
+concurrency:
+  group: dismissed-review-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+permissions:
+  pull-requests: write
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # The `check-cherry-picks` workflow creates review comments which reviewers
+  # are encouraged to manually dismiss if they're not relevant.
+  # When a CI-generated review is dismissed, this job automatically minimizes
+  # it, preventing it from cluttering the PR.
+  minimize:
+    name: Minimize as resolved
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 2
+    steps:
+      - uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
+        with:
+          script: |
+            // PRs from forks don't have any PRs associated by default.
+            // Thus, we request the PR number with an API call *to* the fork's repo.
+            // Multiple pull requests can be open from the same head commit, either via
+            // different base branches or head branches.
+            const { head_repository, head_sha, repository } = context.payload.workflow_run
+            await Promise.all(
+              (await github.paginate(github.rest.repos.listPullRequestsAssociatedWithCommit, {
+                owner: head_repository.owner.login,
+                repo: head_repository.name,
+                commit_sha: head_sha
+              }))
+              .filter(pull_request => pull_request.base.repo.id == repository.id)
+              .map(async (pull_request) =>
+                Promise.all(
+                  (await github.paginate(github.rest.pulls.listReviews, {
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    pull_number: pull_request.number
+                  })).filter(review =>
+                    review.user?.login == 'github-actions[bot]' &&
+                    review.state == 'DISMISSED'
+                  ).map(review => github.graphql(`
+                    mutation($node_id:ID!) {
+                      minimizeComment(input: {
+                        classifier: RESOLVED,
+                        subjectId: $node_id
+                      })
+                      { clientMutationId }
+                    }`,
+                    { node_id: review.node_id }
+                  ))
+                )
+              )
+            )

@@ -1,0 +1,14 @@
+diff --git a/libgweather/meson.build b/libgweather/meson.build
+index b5d0b4d4..10010d70 100644
+--- a/libgweather/meson.build
++++ b/libgweather/meson.build
+@@ -269,6 +269,9 @@ pkgconfig.generate(
+   description: 'Gather weather information from online services',
+   version: meson.project_version(),
+   subdirs: libgweather_full_version,
++  requires: [
++    'glib-2.0',
++  ],
+   variables: [
+     'soupapiversion=' + libsoup_api_version,
+   ]
