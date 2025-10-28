@@ -34,6 +34,13 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
+  # TODO(@connorbaker):
+  # When strictDeps is enabled, `cuda_nvcc` is required as the argument to `--with-cuda` in `configureFlags` or else
+  # configurePhase fails with `checking for cuda_runtime.h... no`.
+  # This is odd, especially given `cuda_runtime.h` is provided by `cuda_cudart.dev`, which is already in `buildInputs`.
+  strictDeps = true;
+
   pname = "ucx";
   version = "1.19.0";
 
@@ -75,10 +82,17 @@ stdenv.mkDerivation (finalAttrs: {
   ]
   ++ lib.optionals enableRocm rocmList;
 
-  LDFLAGS = lib.optionals enableCuda [
-    # Fake libnvidia-ml.so (the real one is deployed impurely)
-    "-L${lib.getLib cudaPackages.cuda_nvml_dev}/lib/stubs"
-  ];
+  # NOTE: With `__structuredAttrs` enabled, `LDFLAGS` must be set under `env` so it is assured to be a string;
+  # otherwise, we might have forgotten to convert it to a string and Nix would make LDFLAGS a shell variable
+  # referring to an array!
+  env.LDFLAGS = toString (
+    lib.optionals enableCuda [
+      # Fake libcuda.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_cudart}/lib/stubs"
+      # Fake libnvidia-ml.so (the real one is deployed impurely)
+      "-L${lib.getOutput "stubs" cudaPackages.cuda_nvml_dev}/lib/stubs"
+    ]
+  );
 
   configureFlags = [
     "--with-rdmacm=${lib.getDev rdma-core}"

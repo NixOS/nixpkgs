@@ -32,6 +32,8 @@
 /lib/asserts.nix            @infinisil @hsjobeki @Profpatsch
 /lib/path/*                 @infinisil @hsjobeki
 /lib/fileset                @infinisil @hsjobeki
+/maintainers/github-teams.json @infinisil
+/maintainers/computed-team-list.nix @infinisil
 ## Standard environment–related libraries
 /lib/customisation.nix      @alyssais @NixOS/stdenv
 /lib/derivations.nix        @alyssais @NixOS/stdenv
