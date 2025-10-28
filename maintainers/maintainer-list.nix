@@ -21711,6 +21711,12 @@
     githubId = 1973389;
     name = "Reuben D'Netto";
   };
+  readf0x = {
+    name = "Jean";
+    email = "readf0x@duck.com";
+    github = "readf0x";
+    githubId = 57838054;
+  };
   rebmit = {
     name = "Lu Wang";
     email = "rebmit@rebmit.moe";
