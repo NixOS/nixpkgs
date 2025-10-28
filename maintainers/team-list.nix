@@ -920,7 +920,6 @@ with lib.maintainers;
       samasaur
       stephank
       trepetti
-      trundle
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";
