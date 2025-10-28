@@ -290,8 +290,8 @@ in
       "sha256-LT2Fi8LHrgRgYz6HnKyRB14Vl+PjCjTx/EF8s5D2hhw=";
 
   mypy-boto3-codeguruprofiler =
-    buildMypyBoto3Package "codeguruprofiler" "1.40.19"
-      "sha256-hQ2gveiEQoG4pVqOGDs7eOFCuVaPbyACErsmQxfWo3I=";
+    buildMypyBoto3Package "codeguruprofiler" "1.40.60"
+      "sha256-5KmJ2LCWn0Fc7AGfKe4bB60r5Yvlu+aEYLk37kh4xyc=";
 
   mypy-boto3-codepipeline =
     buildMypyBoto3Package "codepipeline" "1.40.0"
