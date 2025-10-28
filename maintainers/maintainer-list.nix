@@ -5239,12 +5239,6 @@
     githubId = 3077118;
     name = "David McFarland";
   };
-  coroa = {
-    email = "jonas@chaoflow.net";
-    github = "coroa";
-    githubId = 2552981;
-    name = "Jonas Hörsch";
-  };
   costrouc = {
     email = "chris.ostrouchov@gmail.com";
     github = "costrouc";
