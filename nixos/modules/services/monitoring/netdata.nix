@@ -11,13 +11,14 @@ let
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
     ln -s /run/wrappers/bin/cgroup-network $out/libexec/netdata/plugins.d/cgroup-network
-    ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
-    ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
+    ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
-    ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
     ln -s /run/wrappers/bin/logs-management.plugin $out/libexec/netdata/plugins.d/logs-management.plugin
     ln -s /run/wrappers/bin/network-viewer.plugin $out/libexec/netdata/plugins.d/network-viewer.plugin
-    ln -s /run/wrappers/bin/debugfs.plugin $out/libexec/netdata/plugins.d/debugfs.plugin
+    ln -s /run/wrappers/bin/otel-plugin $out/libexec/netdata/plugins.d/otel-plugin
+    ln -s /run/wrappers/bin/perf.plugin $out/libexec/netdata/plugins.d/perf.plugin
+    ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
+    ln -s /run/wrappers/bin/systemd-journal.plugin $out/libexec/netdata/plugins.d/systemd-journal.plugin
   '';
 
   plugins = [
@@ -452,7 +453,6 @@ in
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
       };
-
     }
     // lib.optionalAttrs (cfg.package.withIpmi) {
       "freeipmi.plugin" = {
@@ -475,6 +475,15 @@ in
     // lib.optionalAttrs (cfg.package.withNdsudo) {
       "ndsudo" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/ndsudo.org";
+        setuid = true;
+        owner = "root";
+        group = cfg.group;
+        permissions = "u+rx,g+x,o-rwx";
+      };
+    }
+    // lib.optionalAttrs (cfg.package.withOtel) {
+      "otel-plugin" = {
+        source = "${cfg.package}/libexec/netdata/plugins.d/otel-plugin.org";
         setuid = true;
         owner = "root";
         group = cfg.group;
