@@ -45,6 +45,11 @@ stdenv.mkDerivation (finalAttrs: {
     "-DENABLE_PULSEAUDIO=ON"
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Application for practicing playing musical scores and ear training";
     mainProgram = "nootka";
