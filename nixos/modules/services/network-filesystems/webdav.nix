@@ -45,7 +45,7 @@ in
           {
               address = "0.0.0.0";
               port = 8080;
-              scope = "/srv/public";
+              path = "/srv/public";
               modify = true;
               auth = true;
               users = [
