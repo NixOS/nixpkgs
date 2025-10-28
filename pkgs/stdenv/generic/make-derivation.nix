@@ -818,20 +818,12 @@ let
             "mainProgram"
             "vendor"
           ];
-          # For convenience, include some useful attributes (if present) plus existing meta attrSet.
-          nixMetaJSON = builtins.toJSON (
-            filterAttrs (n: _: (elem n preserveMetaFields)) meta
-            // {
-              # If the name is set via `baseNameOf`, string context may be present.
-              name = builtins.unsafeDiscardStringContext (attrs.pname or attrs.name);
-              version = attrs.version or null;
-            }
-          );
+          nixMeta = filterAttrs (n: _: (elem n preserveMetaFields)) meta;
+          nixMetaJSON = builtins.toJSON nixMeta;
           nixMetaJSONContext = builtins.getContext nixMetaJSON;
         in
-        assert assertMsg (
-          nixMetaJSONContext == { }
-        ) "String context not allowed in nixMeta of ${attrs.pname or attrs.name}-${attrs.version or "none"}: ${builtins.toJSON nixMetaJSONContext}";
+        assert assertMsg (nixMetaJSONContext == { })
+          "String context not allowed in nixMeta of ${attrs.name or (attrs.pname + "-" + attrs.version or "none")}: ${builtins.toJSON nixMetaJSONContext}";
         makeDerivationArgument (
           removeAttrs attrs [
             "meta"
@@ -841,7 +833,7 @@ let
           ]
           // optionalAttrs __structuredAttrs { env = checkedEnv; }
           // {
-            inherit nixMetaJSON;
+            nixMeta = if __structuredAttrs then nixMeta else nixMetaJSON;
             cmakeFlags = makeCMakeFlags attrs;
             mesonFlags = makeMesonFlags attrs;
           }
