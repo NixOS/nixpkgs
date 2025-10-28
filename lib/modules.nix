@@ -314,8 +314,10 @@ let
                     (addErrorContext "while evaluating a definition from `${firstDef.file}'" (showDefs [ firstDef ]));
 
                 prefix' = init (prefix ++ firstDef.prefix);
-                adj = attrNames (attrByPath prefix' { } options);
-                adj' = if prefix' == [ ] then remove "_module" adj else adj;
+                # In submodules, prefix is absolute, but options and most variables are relative to the submodule prefix.
+                lookupPath = init firstDef.prefix;
+                adj = attrNames (attrByPath lookupPath { } options);
+                adj' = if lookupPath == [ ] then remove "_module" adj else adj;
                 invalidOptName = last firstDef.prefix;
                 # For small option sets, check all; for large sets, only check distance ≤ 2
                 suggestions =
