@@ -9,7 +9,7 @@
 let
   inherit (lib)
     mkRenamedOptionModule
-    mkAliasOptionModuleMD
+    mkAliasOptionModule
     mkEnableOption
     mkOption
     types
@@ -26,7 +26,6 @@ let
 
   cfg = config.services.transmission;
   opt = options.services.transmission;
-  inherit (config.environment) etc;
   apparmor = config.security.apparmor;
   rootDir = "/run/transmission";
   settingsDir = ".config/transmission-daemon";
@@ -51,7 +50,7 @@ in
         "rpc-port"
       ]
     )
-    (mkAliasOptionModuleMD
+    (mkAliasOptionModule
       [
         "services"
         "transmission"

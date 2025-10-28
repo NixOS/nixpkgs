@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "BUILD_INFO=nix"
-    "DESTDIR=${builtins.placeholder "out"}"
+    "DESTDIR=${placeholder "out"}"
   ];
 
   postPatch = ''

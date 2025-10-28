@@ -1,21 +1,20 @@
 diff --git a/spyder/app/start.py b/spyder/app/start.py
-index ad9f2b8d0..442b4fc46 100644
+index 3f225a164..10e6017b1 100644
 --- a/spyder/app/start.py
 +++ b/spyder/app/start.py
-@@ -6,16 +6,8 @@
- # (see spyder/__init__.py for details)
- # -----------------------------------------------------------------------------
+@@ -9,15 +9,6 @@
+ import os
+ import sys
  
 -# Remove PYTHONPATH paths from sys.path before other imports to protect against
 -# shadowed standard libraries.
- import os
- import sys
 -if os.environ.get('PYTHONPATH'):
 -    for path in os.environ['PYTHONPATH'].split(os.pathsep):
 -        try:
 -            sys.path.remove(path.rstrip(os.sep))
 -        except ValueError:
 -            pass
+-
+ # Remove PYTHONEXECUTABLE. See spyder-ide/spyder#24743
+ os.environ.pop("PYTHONEXECUTABLE", None)
  
- # Standard library imports
- import ctypes

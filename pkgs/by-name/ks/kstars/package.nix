@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   cfitsio,
   cmake,
   curl,
@@ -22,12 +23,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.8";
+  version = "3.7.9";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-VbOu8p7Bq6UJBr05PVZein4LWzpdLo4838G1jXGNLAw=";
+    hash = "sha256-aE2gtAGzLBcUk+Heg+ZOMLd1wX6VEbrSpxkWETmlEZc=";
   };
+
+  # Qt 6.10 build patch from master
+  # can be removed with next release
+  patches = [
+    (fetchpatch2 {
+      url = "https://invent.kde.org/education/kstars/-/commit/ce53888e6dbaeb1b9239fca55288b5ead969b5a7.diff";
+      hash = "sha256-awZeOLlG1vlCWC+QfypqHIIYexpywRmNT1ACdkqqLt4=";
+    })
+  ];
 
   nativeBuildInputs = with kdePackages; [
     extra-cmake-modules
@@ -35,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     cmake
   ];
+
   buildInputs = with kdePackages; [
     breeze-icons
     cfitsio
@@ -70,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = with lib.strings; [
-    (cmakeBool "BUILD_QT5" false)
+    (cmakeBool "BUILD_WITH_QT6" true)
     (cmakeFeature "INDI_PREFIX" "${indi-full}")
     (cmakeFeature "XPLANET_PREFIX" "${xplanet}")
     (cmakeFeature "DATA_INSTALL_DIR" (placeholder "out") + "/share/kstars/")

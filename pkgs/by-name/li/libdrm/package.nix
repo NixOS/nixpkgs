@@ -9,18 +9,18 @@
   libpthreadstubs,
   withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
   libpciaccess,
-  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light && !stdenv.cc.isClang,
   valgrind-light,
   gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdrm";
-  version = "2.4.125";
+  version = "2.4.126";
 
   src = fetchurl {
     url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-1LrpJ5elD4GpNSR2LgQQpJzYTPoPmXeVvAFyrI+x2Wo=";
+    hash = "sha256-bKsW1NJZtqvJ9IUjOGNFQRSjwwfsqAZnmq0+2+lnv0I=";
   };
 
   outputs = [
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     platforms = lib.subtractLists platforms.darwin platforms.unix;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

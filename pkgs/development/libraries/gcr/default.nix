@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     libsecret
     openssh
   ]
-  ++ lib.optionals (systemdSupport) [
+  ++ lib.optionals systemdSupport [
     systemd
   ];
 

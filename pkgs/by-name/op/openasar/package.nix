@@ -6,6 +6,10 @@
   nodejs,
   asar,
   unzip,
+  discord,
+  discord-ptb,
+  discord-canary,
+  discord-development,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -48,9 +52,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   doCheck = false;
 
-  passthru.updateScript = unstableGitUpdater {
-    # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
-    hardcodeZeroVersion = true;
+  passthru = {
+    updateScript = unstableGitUpdater {
+      # Only has a "nightly" tag (untaged version 0.2 is latest) see https://github.com/GooseMod/OpenAsar/commit/8f79dcef9b1f7732421235a392f06e5bd7382659
+      hardcodeZeroVersion = true;
+    };
+    tests = lib.genAttrs' [ discord discord-ptb discord-canary discord-development ] (
+      p: lib.nameValuePair p.pname p.tests.withOpenASAR
+    );
   };
 
   meta = with lib; {

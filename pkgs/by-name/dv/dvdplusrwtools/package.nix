@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ]
   # Patches from Gentoo
   ++
-    builtins.map
+    map
       (
         { pfile, sha256 }:
         fetchpatch {

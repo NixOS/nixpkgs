@@ -10,7 +10,7 @@
   copyDesktopItems,
 }:
 let
-  version = "2.64.1";
+  version = "2.64.2";
 in
 python3Packages.buildPythonApplication rec {
   inherit version;
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     owner = "pyfa-org";
     repo = "Pyfa";
     tag = "v${version}";
-    hash = "sha256-qqfJ8nYI1y74sGJDbwrq0mT03em62BmU+y6GPmUUIIo=";
+    hash = "sha256-82zXMcIQPXTjMnKwhfpkm2apwDXLwKpbyglah6yHz/E=";
   };
 
   desktopItems = [

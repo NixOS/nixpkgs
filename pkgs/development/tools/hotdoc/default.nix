@@ -2,6 +2,7 @@
   lib,
   stdenv,
   buildPythonApplication,
+  fetchpatch,
   fetchPypi,
   replaceVars,
   clang,
@@ -44,6 +45,13 @@ buildPythonApplication rec {
     (replaceVars ./clang.patch {
       clang = lib.getExe clang;
       libclang = "${lib.getLib libclang}/lib/libclang${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+
+    # Fix build with gcc15
+    (fetchpatch {
+      name = "hotdoc-fix-c_comment_scanner-function-prototypes-gcc15.patch";
+      url = "https://github.com/hotdoc/hotdoc/commit/adf8518431fafb78c9b47862a0a9a58824b6a421.patch";
+      hash = "sha256-5y50Yk+AjV3aSk8H3k9od/Yvy09FyQQOcVOAcstQnw8=";
     })
   ];
 
@@ -112,14 +120,19 @@ buildPythonApplication rec {
     "test_index"
   ];
 
-  # Hardcode libclang paths
-  postPatch = ''
-    substituteInPlace hotdoc/extensions/c/c_extension.py \
-      --replace "shutil.which('llvm-config')" 'True' \
-      --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
-      --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
-      --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
-  '';
+  postPatch =
+    # Hardcode libclang paths
+    ''
+      substituteInPlace hotdoc/extensions/c/c_extension.py \
+        --replace "shutil.which('llvm-config')" 'True' \
+        --replace "subprocess.check_output(['llvm-config', '--version']).strip().decode()" '"${lib.versions.major llvmPackages.libclang.version}"' \
+        --replace "subprocess.check_output(['llvm-config', '--prefix']).strip().decode()" '"${lib.getLib llvmPackages.libclang}"' \
+        --replace "subprocess.check_output(['llvm-config', '--libdir']).strip().decode()" '"${lib.getLib llvmPackages.libclang}/lib"'
+    ''
+    # <https://github.com/MathieuDuponchelle/cmark/pull/2>
+    + ''
+      patch -p1 -d cmark -i ${./fix-cmake-4.patch}
+    '';
 
   # Make pytest run from a temp dir to have it pick up installed package for cmark
   preCheck = ''

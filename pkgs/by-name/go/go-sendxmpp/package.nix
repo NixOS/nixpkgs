@@ -8,17 +8,17 @@
 
 buildGoModule (finalAttrs: {
   pname = "go-sendxmpp";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "mdosch";
     repo = "go-sendxmpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-S4KoCMlW+uUJcQTYkEtlRT4IAALfRFSj2UDZk4A5e5g=";
+    hash = "sha256-dXSja3k7Gb9fzP3TrQqB9KRVO90i967eVaLldwhBnvQ=";
   };
 
-  vendorHash = "sha256-Qe95u+M9X45cVO9MNLPxoyMyoWOAYYQ2n/GorD/PMIA=";
+  vendorHash = "sha256-fnaOgc8RPDQnxTWOLQx1kw0+qj1iaff+UkjnoJYdEG4=";
 
   passthru = {
     tests.version = testers.testVersion {

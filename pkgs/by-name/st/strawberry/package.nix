@@ -86,6 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
+    gst-plugins-rs
     gstreamer
   ]);
 

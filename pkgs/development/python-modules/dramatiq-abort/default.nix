@@ -29,7 +29,7 @@ buildPythonPackage rec {
   ];
 
   optional-dependencies = {
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
     gevent = [ gevent ];
     redis = [ redis ];
   };

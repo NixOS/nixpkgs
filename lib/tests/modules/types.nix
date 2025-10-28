@@ -380,7 +380,7 @@ in
       assert (pathWith { absolute = null; }).description == "path";
       assert (pathWith { inStore = false; }).description == "path not in the Nix store";
       assert (pathWith { inStore = null; }).description == "path";
-      assert (separatedString "").description == "Concatenated string";
+      assert (separatedString "").description == "strings concatenated with \"\"";
       assert (separatedString ",").description == "strings concatenated with \",\"";
       assert (separatedString "\n").description == ''strings concatenated with "\n"'';
       assert (separatedString ":").description == "strings concatenated with \":\"";

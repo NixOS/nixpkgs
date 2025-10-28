@@ -4,10 +4,13 @@
   fetchFromGitHub,
   makeWrapper,
   libaio,
+  pkg-config,
   python3,
   zlib,
   withGnuplot ? false,
-  gnuplot ? null,
+  gnuplot,
+  withLibnbd ? true,
+  libnbd,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,16 +28,20 @@ stdenv.mkDerivation rec {
     python3
     zlib
   ]
-  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio;
+  ++ lib.optional (!stdenv.hostPlatform.isDarwin) libaio
+  ++ lib.optional withLibnbd libnbd;
 
   # ./configure does not support autoconf-style --build=/--host=.
   # We use $CC instead.
   configurePlatforms = [ ];
 
+  configureFlags = lib.optional withLibnbd "--enable-libnbd";
+
   dontAddStaticConfigureFlags = true;
 
   nativeBuildInputs = [
     makeWrapper
+    pkg-config
     python3.pkgs.wrapPython
   ];
 

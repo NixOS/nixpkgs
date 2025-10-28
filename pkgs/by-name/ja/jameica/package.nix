@@ -9,14 +9,14 @@
   ant,
   jdk,
   jre,
-  gtk2,
+  gtk3,
   glib,
   libXtst,
 }:
 
 let
-  _version = "2.10.4";
-  _build = "487";
+  _version = "2.10.5";
+  _build = "488";
   version = "${_version}-${_build}";
 
   swtSystem =
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     owner = "willuhn";
     repo = "jameica";
     rev = "V_${builtins.replaceStrings [ "." ] [ "_" ] _version}_BUILD_${_build}";
-    hash = "sha256-MSVSd5DyVL+dcfTDv1M99hxickPwT2Pt6QGNsu6DGZI=";
+    hash = "sha256-xzSyq5Cse/TCzyb/eQNZyQS/I3mcPsvzWk3VjZg95gE=";
   };
 
   nativeBuildInputs = [
@@ -61,8 +61,9 @@ stdenv.mkDerivation rec {
     makeWrapper
     stripJavaArchivesHook
   ];
+
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    gtk2
+    gtk3
     glib
     libXtst
   ];
@@ -112,20 +113,20 @@ stdenv.mkDerivation rec {
       "''${gappsWrapperArgs[@]}"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://www.willuhn.de/products/jameica/";
     description = "Free Runtime Environment for Java Applications";
     longDescription = ''
       Runtime Environment for plugins like Hibiscus (HBCI Online Banking),
       SynTAX (accounting) and JVerein (club management).
     '';
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryBytecode # source bundles dependencies as jars
     ];
-    license = licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       flokli
       r3dl3g
     ];

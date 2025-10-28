@@ -6,23 +6,20 @@
   hatch-vcs,
   hatchling,
   httpx,
-  importlib-metadata,
+  pytest-random-order,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pylast";
-  version = "5.5.0";
+  version = "6.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pylast";
     repo = "pylast";
     tag = version;
-    hash = "sha256-mPdFG3wqdAyluD37cy2q6oO/x9NgXpOb57s4nU05EzQ=";
+    hash = "sha256-mwPiHTLFvaCFPZGqi0+T223Ickbm5JP2MJj4gqaj/qo=";
   };
 
   build-system = [
@@ -30,9 +27,10 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [ httpx ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  dependencies = [ httpx ];
 
   nativeCheckInputs = [
+    pytest-random-order
     pytestCheckHook
     flaky
   ];

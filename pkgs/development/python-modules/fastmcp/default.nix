@@ -37,14 +37,14 @@
 
 buildPythonPackage rec {
   pname = "fastmcp";
-  version = "2.12.4";
+  version = "2.12.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jlowin";
     repo = "fastmcp";
     tag = "v${version}";
-    hash = "sha256-d8DOdyoyYDxZOpiUSxsYXnGrgFYN9CjdmAeHmJiDBP0=";
+    hash = "sha256-F8NCp1Ku1EeI/YjbHuHcDYytTgqOFyLp+sZGBqayv6s=";
   };
 
   build-system = [

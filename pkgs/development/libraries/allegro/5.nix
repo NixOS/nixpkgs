@@ -4,9 +4,11 @@
   cmake,
   enet,
   fetchFromGitHub,
+  fetchpatch2,
   fixDarwinDylibNames,
   flac,
   freetype,
+  gitUpdater,
   gtk3,
   libGL,
   libGLU,
@@ -52,6 +54,14 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "sha256-agE3K+6VhhG/LO52fiesCsOq1fNYVRhdW7aKdPCbTOo=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "Bump-CMake-minimum-version-to-3.5";
+      url = "https://github.com/liballeg/allegro5/commit/6e93fcaabaafd81701f4cd1b74f4b69dd598bc9b.patch?full_index=1";
+      hash = "sha256-IEnn66bS2m6MVFCNf341yLtd7jTl2gflL5EFJFmbEt4=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -116,6 +126,10 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
   ];
+
+  strictDeps = true;
+
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Game programming library";

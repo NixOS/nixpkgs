@@ -34,15 +34,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  # To allow overriding last-session-type.
-  # nixpkgs-update: no auto update
-  version = "8.0.1-unstable-2025-09-14";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "greeter";
-    rev = "2461ad1be4a4d0e541879abe869cf8911f505215";
-    hash = "sha256-rDlaL2KCm0tz73cwHLgNAD7Ddbn1QFJVa+Syh5eTfWo=";
+    tag = version;
+    hash = "sha256-lOk5H1uuaf2Q+z+hRLyhtKAHq+3ibtBzWI7r87KpKgQ=";
   };
 
   patches = [

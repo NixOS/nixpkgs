@@ -4,7 +4,7 @@
   cmake,
   fetchFromGitHub,
   fetchpatch,
-  tbb_2022,
+  onetbb,
 
   useTBB ? true,
 }:
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   propagatedBuildInputs = lib.optionals useTBB [
-    tbb_2022
+    onetbb
   ];
 
   cmakeFlags = [

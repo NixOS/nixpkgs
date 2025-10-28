@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     homepage = "https://www.gokgs.com/";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.free;
-    maintainers = with maintainers; [ savannidgerinel ];
+    maintainers = [ ];
     platforms = temurin-jre-bin-17.meta.platforms;
   };
 }

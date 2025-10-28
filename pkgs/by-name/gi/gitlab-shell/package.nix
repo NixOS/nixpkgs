@@ -8,14 +8,14 @@
 
 buildGoModule rec {
   pname = "gitlab-shell";
-  version = "14.45.2";
+  version = "14.45.3";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    hash = "sha256-FxtqTRCa1sYSeTR+V2UKEsb480llU6cHWVwNiNFtUmE=";
+    hash = "sha256-S8LtWQgzyDKr4Jnk7Qn/pfLzZYYnVfZNVqNBFyqr5cM=";
   };
 
   buildInputs = [

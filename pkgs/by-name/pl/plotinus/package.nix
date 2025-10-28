@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
     sha256 = "19k6f6ivg4ab57m62g6fkg85q9sv049snmzq1fyqnqijggwshxfz";
   };
 
+  postPatch = ''
+    # CMake 2.8 is deprecated and is no longer supported by CMake > 4
+    # https://github.com/NixOS/nixpkgs/issues/445447
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8)" \
+        "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   nativeBuildInputs = [
     pkg-config
     wrapGAppsHook3

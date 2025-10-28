@@ -8,7 +8,7 @@
   flac,
 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "flac";
   inherit (ogg) version src;
 

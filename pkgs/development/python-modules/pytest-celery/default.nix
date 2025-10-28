@@ -11,7 +11,6 @@
   pytest-docker-tools,
   pytest,
   pythonOlder,
-  setuptools,
   tenacity,
 }:
 
@@ -37,21 +36,23 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [
     "debugpy"
-    "setuptools"
+  ];
+
+  pythonRemoveDeps = [
+    "celery" # cyclic dependency
+    "setuptools" # https://github.com/celery/pytest-celery/pull/464
   ];
 
   build-system = [ poetry-core ];
 
-  buildInput = [ pytest ];
+  buildInputs = [ pytest ];
 
   dependencies = [
-    (celery.overridePythonAttrs { doCheck = false; })
     debugpy
     docker
     kombu
     psutil
     pytest-docker-tools
-    setuptools
     tenacity
   ];
 

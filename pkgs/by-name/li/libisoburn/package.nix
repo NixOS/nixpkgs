@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://dev.lovelyhq.com/libburnia/libisoburn/src/tag/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.gpl2Plus;
     mainProgram = "osirrox";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     inherit (libisofs.meta) platforms;
   };
 })

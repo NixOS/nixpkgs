@@ -18,9 +18,11 @@ lib.makeOverridable (
     private ? false,
     forceFetchGit ? false,
     fetchLFS ? false,
-    sparseCheckout ? [ ],
+    rootDir ? "",
+    sparseCheckout ? lib.optional (rootDir != "") rootDir,
     githubBase ? "github.com",
     varPrefix ? null,
+    passthru ? { },
     meta ? { },
     ... # For hash agility
   }@args:
@@ -69,6 +71,7 @@ lib.makeOverridable (
       || deepClone
       || forceFetchGit
       || fetchLFS
+      || (rootDir != "")
       || (sparseCheckout != [ ]);
     # We prefer fetchzip in cases we don't need submodules as the hash
     # is more stable in that case.
@@ -110,7 +113,8 @@ lib.makeOverridable (
     revWithTag = if tag != null then "refs/tags/${tag}" else rev;
 
     fetcherArgs =
-      (
+      passthruAttrs
+      // (
         if useFetchGit then
           {
             inherit
@@ -122,6 +126,7 @@ lib.makeOverridable (
               fetchLFS
               ;
             url = gitRepoUrl;
+            inherit passthru;
           }
           // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
@@ -146,11 +151,11 @@ lib.makeOverridable (
 
             passthru = {
               inherit gitRepoUrl;
-            };
+            }
+            // passthru;
           }
       )
       // privateAttrs
-      // passthruAttrs
       // {
         inherit name;
       };

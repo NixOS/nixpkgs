@@ -40,6 +40,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/76cc1ed3032e9a4158a4513c9047c3746b269f04.patch";
       hash = "sha256-kmllLa9GUeTrHRYeS0yIk9I8LwaIoEytdyQGRuinn3A=";
     })
+
+    (fetchpatch {
+      name = "scalapack-fix-cmake-4.patch";
+      url = "https://github.com/Reference-ScaLAPACK/scalapack/commit/c3d6b22b0032fd2b8772d99c2239c18473e197a7.patch";
+      hash = "sha256-935KtaqPO2cghbD9Z8YMxGGOQJo1D1LqTje6/IL4bGI=";
+    })
   ];
 
   # Required to activate ILP64.

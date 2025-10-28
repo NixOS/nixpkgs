@@ -96,7 +96,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/input-leap/input-leap";
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [
-      kovirobi
       phryneas
       twey
       shymega

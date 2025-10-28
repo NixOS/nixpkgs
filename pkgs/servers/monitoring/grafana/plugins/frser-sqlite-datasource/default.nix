@@ -2,8 +2,8 @@
 
 grafanaPlugin {
   pname = "frser-sqlite-datasource";
-  version = "3.8.0";
-  zipHash = "sha256-wk0zEGQjDdz8bIc7e5aiaqg7AaTS6u8zp+WJy5YlWlQ=";
+  version = "3.8.2";
+  zipHash = "sha256-TJMKHB1loDiBrTWKpIUNfcMTBXhorxqvLrdBEuUspto=";
   meta = with lib; {
     description = "Use a SQLite database as a data source in Grafana";
     license = licenses.asl20;

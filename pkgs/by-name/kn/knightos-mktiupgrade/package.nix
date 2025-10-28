@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 2.8.5)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     homepage = "https://knightos.org/";
     description = "Makes TI calculator upgrade files from ROM dumps";

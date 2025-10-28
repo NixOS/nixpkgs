@@ -12,7 +12,7 @@ let
   ]
   ++ lib.pipe config.i18n.extraLocaleSettings [
     # See description of extraLocaleSettings for why is this ignored here.
-    (lib.filterAttrs (n: v: n != "LANGUAGE"))
+    (x: lib.removeAttrs x [ "LANGUAGE" ])
     (lib.mapAttrs (n: v: (sanitizeUTF8Capitalization v)))
     (lib.mapAttrsToList (LCRole: lang: lang + "/" + (config.i18n.localeCharsets.${LCRole} or "UTF-8")))
   ]
@@ -30,12 +30,12 @@ in
       glibcLocales = lib.mkOption {
         type = lib.types.path;
         default = pkgs.glibcLocales.override {
-          allLocales = lib.any (x: x == "all") config.i18n.supportedLocales;
+          allLocales = lib.elem "all" config.i18n.supportedLocales;
           locales = config.i18n.supportedLocales;
         };
         defaultText = lib.literalExpression ''
           pkgs.glibcLocales.override {
-            allLocales = lib.any (x: x == "all") config.i18n.supportedLocales;
+            allLocales = lib.elem "all" config.i18n.supportedLocales;
             locales = config.i18n.supportedLocales;
           }
         '';
@@ -149,7 +149,7 @@ in
         (
           !(
             (lib.subtractLists config.i18n.supportedLocales aggregatedLocales) == [ ]
-            || lib.any (x: x == "all") config.i18n.supportedLocales
+            || lib.elem "all" config.i18n.supportedLocales
           )
         )
         ''

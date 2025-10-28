@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  llvmPackages,
+  llvmPackages_19,
   rapidjson,
   runtimeShell,
 }:
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    llvmPackages.llvm.dev
+    llvmPackages_19.llvm.dev
   ];
-  buildInputs = with llvmPackages; [
+  buildInputs = with llvmPackages_19; [
     libclang
     llvm
     rapidjson
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
   '';
 
-  clang = llvmPackages.clang;
+  clang = llvmPackages_19.clang;
   shell = runtimeShell;
 
   postFixup = ''

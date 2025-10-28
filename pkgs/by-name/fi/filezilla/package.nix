@@ -22,12 +22,12 @@
 
 stdenv.mkDerivation {
   pname = "filezilla";
-  version = "3.68.1";
+  version = "3.69.3";
 
   src = fetchsvn {
     url = "https://svn.filezilla-project.org/svn/FileZilla3/trunk";
-    rev = "11205";
-    hash = "sha256-izaNfagJYUcPRPihZ1yXwLUTHunzVXuiMITW69KPSFE=";
+    rev = "11309";
+    hash = "sha256-+wvdQnsYUsLS4pHoa3JVzkgTVxbeck/c7IaDt0VqU+8=";
   };
 
   configureFlags = [
@@ -70,6 +70,9 @@ stdenv.mkDerivation {
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [
+      pSub
+      iedame
+    ];
   };
 }

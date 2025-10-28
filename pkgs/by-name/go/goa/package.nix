@@ -6,15 +6,15 @@
 
 buildGoModule rec {
   pname = "goa";
-  version = "3.21.5";
+  version = "3.22.6";
 
   src = fetchFromGitHub {
     owner = "goadesign";
     repo = "goa";
     rev = "v${version}";
-    hash = "sha256-3MRxiZK6rLc0Drn3Ha7YOZO3IGNkQNEpzppZwYcZLwg=";
+    hash = "sha256-gDcdk5xRb/CeX5PlfgxTOLru1GHcU3fbFzISPhqe/u4=";
   };
-  vendorHash = "sha256-5XKAfUA3dh1Vgh72h1GeiheoL7E7jij3nAlncV5FjF8=";
+  vendorHash = "sha256-k1tKdU7QWgei8X+mhAYAZwRDkwInPFNyvKZcISjUGIg=";
 
   subPackages = [ "cmd/goa" ];
 

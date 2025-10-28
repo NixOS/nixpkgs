@@ -20,6 +20,7 @@
   # Allow overrides for the RetroArch core and declarative settings
   parallel-n64-core ? parallel-launcher.passthru.parallel-n64-core,
   extraRetroArchSettings ? { },
+  withDiscordRpc ? false,
 }:
 let
   # Converts a version string like x.y.z to vx.y-z
@@ -88,12 +89,12 @@ stdenv.mkDerivation (
 
     buildInputs = [
       SDL2
-      discord-rpc
       libgcrypt
       sqlite
       qt5.qtbase
       qt5.qtsvg
-    ];
+    ]
+    ++ lib.optional withDiscordRpc discord-rpc;
 
     qtWrapperArgs = [
       "--prefix PATH : ${

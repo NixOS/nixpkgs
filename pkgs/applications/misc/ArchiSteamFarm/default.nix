@@ -6,6 +6,7 @@
   libkrb5,
   zlib,
   openssl,
+  stdenv,
   callPackage,
 }:
 
@@ -20,13 +21,13 @@ in
 buildDotnetModule rec {
   pname = "ArchiSteamFarm";
   # nixpkgs-update: no auto update
-  version = "6.2.0.5";
+  version = "6.2.2.3";
 
   src = fetchFromGitHub {
     owner = "JustArchiNET";
     repo = "ArchiSteamFarm";
     rev = version;
-    hash = "sha256-CNnSsFBeO3BHUbom0eytfz02Q7QBv8JEmHbgPSL7I3Y=";
+    hash = "sha256-FV9dYp3E8MHra5pyrh8dqZ/85TDwNbdiLV/XdAWiJsg=";
   };
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_9_0;
@@ -61,9 +62,10 @@ buildDotnetModule rec {
     openssl
   ];
 
-  doCheck = true;
+  # times out when trying to connect to something even with relaxed sandbox
+  doCheck = stdenv.hostPlatform.isLinux;
 
-  installPhase = ''
+  preInstall = ''
     dotnetProjectFiles=(ArchiSteamFarm)
 
     # A mutable path, with this directory tree must be set. By default, this would point at the nix store causing errors.
@@ -71,14 +73,15 @@ buildDotnetModule rec {
       --run 'mkdir -p ~/.config/archisteamfarm/{config,logs,plugins}'
       --set "ASF_PATH" "~/.config/archisteamfarm"
     )
+  '';
 
-    dotnetInstallPhase
-
+  postInstall = ''
     buildPlugin() {
       echo "Publishing plugin $1"
-      dotnetProjectFiles=("$1")
-      dotnetInstallPath="$out/lib/ArchiSteamFarm/plugins/$1"
-      dotnetInstallPhase
+      dotnet publish $1 -p:ContinuousIntegrationBuild=true -p:Deterministic=true \
+        --output $out/lib/ArchiSteamFarm/plugins/$1 --configuration Release \
+        --no-restore --no-build --runtime $dotnetRuntimeIds \
+        $dotnetFlags $dotnetInstallFlags
     }
 
   ''

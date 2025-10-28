@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     "-DLUABIND_LIBRARY=${luabind}/lib/libluabind09.a"
   ];
 
+  # CMake 2.6 is deprecated and is no longer supported by CMake > 4
+  # https://github.com/NixOS/nixpkgs/issues/445447
+  patches = [ ./cmake-4-build.patch ];
+
   meta = with lib; {
     description = "Physics-based puzzle game";
     mainProgram = "soi";

@@ -35,7 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for managing drive and getting system resource information in real time";
     homepage = "https://gitlab.com/cubocore/libcsys";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 })

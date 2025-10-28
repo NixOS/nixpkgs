@@ -9,14 +9,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "waypaper";
-  version = "2.6";
+  version = "2.7";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "anufrievroman";
     repo = "waypaper";
     tag = version;
-    hash = "sha256-MGfTuQcVChI4g7RONiTZZ4a5uX5SDjfLeMxbLIZ7VH4=";
+    hash = "sha256-wtYF9H56IARkrFbChtuhWtOietA88khQJSOpfDtGQro=";
   };
 
   nativeBuildInputs = [

@@ -4,25 +4,15 @@
   stdenv,
   lib,
   isPyPy,
-  pycrypto,
-  ecdsa, # TODO
   mock,
   python-can,
   brotli,
-  withOptionalDeps ? true,
-  tcpdump,
   ipython,
-  withCryptography ? true,
   cryptography,
   withVoipSupport ? true,
   sox,
-  withPlottingSupport ? true,
   matplotlib,
-  withGraphicsSupport ? false,
   pyx,
-  texliveBasic,
-  graphviz,
-  imagemagick,
   withManufDb ? false,
   wireshark,
   libpcap,
@@ -63,22 +53,15 @@ buildPythonPackage rec {
 
   buildInputs = lib.optional withVoipSupport sox;
 
-  propagatedBuildInputs = [
-    pycrypto
-    ecdsa
-  ]
-  ++ lib.optionals withOptionalDeps [
-    tcpdump
-    ipython
-  ]
-  ++ lib.optional withCryptography cryptography
-  ++ lib.optional withPlottingSupport matplotlib
-  ++ lib.optionals withGraphicsSupport [
-    pyx
-    texliveBasic
-    graphviz
-    imagemagick
-  ];
+  optional-dependencies = {
+    all = [
+      cryptography
+      ipython
+      matplotlib
+      pyx
+    ];
+    cli = [ ipython ];
+  };
 
   # Running the tests seems too complicated:
   doCheck = false;

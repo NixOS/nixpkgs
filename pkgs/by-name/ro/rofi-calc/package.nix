@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-calc";
-  version = "2.4.0";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "rofi-calc";
     rev = "v${version}";
-    sha256 = "sha256-iTLi76GinRASawPSWAqmxSwLZPGvHesarHNoqO4m4dM=";
+    sha256 = "sha256-/UKOyJfCsV/+kZDndHZmrPdE2MjVlQWSiWQRIUPGz/I=";
   };
 
   nativeBuildInputs = [

@@ -4,7 +4,10 @@
   fetchFromGitHub,
   setuptools,
   requests,
+  amazon-ion,
+  python-dateutil,
   pytestCheckHook,
+  pytest-mock,
   requests-mock,
 }:
 buildPythonPackage rec {
@@ -25,14 +28,10 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  preBuild = ''
-    # Required for building the library (https://github.com/kestra-io/libs/blob/v0.20.0/python/setup.py#L20)
-    # The path resolve to CWD, so README.md isn't picked in the parent folder
-    ln -s ../README.md README.md
-  '';
-
   dependencies = [
     requests
+    amazon-ion
+    python-dateutil
   ];
 
   pythonImportsCheck = [
@@ -42,6 +41,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
+    pytest-mock
   ];
 
   meta = {

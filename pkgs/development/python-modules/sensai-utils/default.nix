@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sensai-utils";
-  version = "1.5.0";
+  version = "1.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "opcode81";
     repo = "sensAI-utils";
     tag = "v${version}";
-    hash = "sha256-bAbgamJjB+NpPnZHqYOrOhatGGgjzy558BrF3GwHOHE=";
+    hash = "sha256-E/9pCkSvKeGW1wlO6+YD0glbPrt4aJ7NZ0Kss2VbGdE=";
   };
 
   build-system = [ setuptools ];

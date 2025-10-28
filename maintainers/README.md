@@ -8,7 +8,7 @@ This more fluid approach is one reason why we scale to so many packages.
 The main responsibility of a maintainer is to keep the packages they maintain in a functioning state, and keep up with updates.
 In order to do that, they are empowered to make decisions over the packages they maintain.
 
-That being said, the maintainer is not alone proposing changes to the packages.
+That being said, the maintainer is not alone in proposing changes to the packages.
 Anybody (both bots and humans) can send PRs to bump or tweak the package.
 
 We also allow other non-maintainer committers to merge changes to the package, provided enough time and priority has been given to the maintainer.
@@ -143,7 +143,7 @@ When adding users to [`maintainer-list.nix`](./maintainer-list.nix), the followi
 ### Maintainer teams
 
 Feel free to create a new maintainer team in [`team-list.nix`](./team-list.nix) when a group is collectively responsible for a collection of packages.
-Use taste and personal judgement when deciding if a team is warranted.
+Use taste and personal judgment when deciding if a team is warranted.
 
 Teams are allowed to define their own rules about membership.
 
@@ -158,12 +158,16 @@ If the team lists no specific membership policy, feel free to merge changes to t
 > [!IMPORTANT]
 > If a team says it is a closed group, do not merge additions to the team without an approval by at least one existing member.
 
-A corresponding GitHub team can be created by any org member.
+#### Synced GitHub teams
+
+As an alternative to tracking team members in `team-list.nix`, a corresponding GitHub team can be created by any org member and its members subsequently managed directly on GitHub.
 When creating the team it should be created with the `nixpkgs-maintainers` team as parent.
 Once approved, the team will have the right privileges to be pinged and requested for review in Nixpkgs.
 
 > [!TIP]
 > The team name should be as short as possible; because it is nested under the maintainers group, no -maintainers suffix is needed.
+
+After the first [weekly team sync](../.github/workflows/team-sync.yml) with the new team, it's then also possible to link it to the entry in `team-list.nix` by setting its `github` field to the GitHub team name.
 
 # Maintainer scripts
 

@@ -33,7 +33,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/HoloArchivists/twspace-dl";
     changelog = "https://github.com/HoloArchivists/twspace-dl/releases/tag/${version}";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "twspace_dl";
   };
 }

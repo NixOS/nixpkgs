@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchpatch,
   cmake,
+  libpng,
+  stb,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,10 +27,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/MCredstoner2004/ImageLOL/commit/013fb1f901d88f5fd21a896bfab47c7fff0737d7.patch";
       hash = "sha256-RVaG2xbUqE4CxqI2lhvug2qihT6A8vN+pIfK58CXLDw=";
       includes = [ "imagelol/ImageLOL.inl" ];
-      # change lib/ for imagelol
       stripLen = 2;
       extraPrefix = "imagelol/";
     })
+    # use system libraries instead of bundled versions
+    ./use-system-libs.patch
   ];
 
   # fix for case-sensitive filesystems
@@ -36,22 +39,28 @@ stdenv.mkDerivation rec {
   postPatch = ''
     mv imagelol src
     substituteInPlace CMakeLists.txt \
-      --replace 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+      --replace-fail 'add_subdirectory("imagelol")' 'add_subdirectory("src")'
+
+    # use system stb headers
+    substituteInPlace External/stb_image-cmake/CMakeLists.txt \
+      --replace-fail '"''${CMAKE_CURRENT_SOURCE_DIR}/../stb"' '"${stb}/include/stb"'
+
+    # remove bundled libraries
+    rm -r External/zlib External/zlib-no-examples External/libpng External/stb
   '';
 
   nativeBuildInputs = [ cmake ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ./ImageLOL $out/bin
-  '';
+  buildInputs = [
+    libpng
+    stb
+  ];
 
-  cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_C_FLAGS" "-std=gnu90")
-  ]
-  ++ lib.optional (
-    stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64
-  ) "-DPNG_ARM_NEON=off";
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 ImageLOL -t $out/bin
+    runHook postInstall
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/MCredstoner2004/ImageLOL";

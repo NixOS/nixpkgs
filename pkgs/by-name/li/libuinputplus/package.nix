@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = with lib; {
     inherit (src.meta) homepage;
     description = "Easy-to-use uinput library in C++";

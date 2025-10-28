@@ -47,6 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postPatch = ''
+    substituteInPlace lib/chillbuff/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.1)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Minimal, OpenSSL-less and super lightweight JWT library written in C";
     homepage = "https://codeberg.org/GlitchedPolygons/l8w8jwt";
@@ -54,5 +59,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jherland ];
     platforms = lib.platforms.unix;
+    broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;
   };
 })

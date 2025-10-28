@@ -30,7 +30,7 @@ let
 in
 stdenv.mkDerivation (
   finalAttrs:
-  builtins.removeAttrs pinData [ "hashes" ]
+  removeAttrs pinData [ "hashes" ]
   // {
     pname = "element-desktop";
     name = "${finalAttrs.pname}-${finalAttrs.version}";

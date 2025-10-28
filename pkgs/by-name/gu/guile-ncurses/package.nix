@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       panel, and menu.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ vyp ];
+    maintainers = [ ];
     platforms = guile.meta.platforms;
   };
 }

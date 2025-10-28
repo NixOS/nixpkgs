@@ -7,13 +7,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "hyprland-protocols";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland-protocols";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-yt8F7NhMFCFHUHy/lNjH/pjZyIDFNk52Q4tivQ31WFo=";
+    hash = "sha256-+KEVnKBe8wz+a6dTLq8YDcF3UrhQElwsYJaVaHXJtoI=";
   };
 
   nativeBuildInputs = [

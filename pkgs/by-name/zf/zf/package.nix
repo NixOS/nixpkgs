@@ -4,29 +4,42 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
-  zig_0_13,
+  zig_0_15,
   callPackage,
 }:
 
+let
+  zig = zig_0_15;
+  zig_hook = zig.hook.overrideAttrs {
+    zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseFast --color off";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  version = "0.10.2";
+  upstreamVersion = "0.10.3";
+  version = "${finalAttrs.upstreamVersion}-unstable-2025-10-14";
+  rev = "3c52637b7e937c5ae61fd679717da3e276765b23";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
-    tag = finalAttrs.version;
-    hash = "sha256-Rsl8gAfVMeF5CLyPSrtzdgSCvEwPnBwHT4BOF9JQYYo=";
+    rev = finalAttrs.rev;
+    hash = "sha256-BfAZILill3I/nBf1oWwol77N34Jcpm4hudC+XSeMgZY=";
   };
 
   nativeBuildInputs = [
     installShellFiles
-    zig_0_13.hook
+    zig_hook
   ];
 
-  postPatch = ''
-    cp -a ${callPackage ./deps.nix { }}/. $ZIG_GLOBAL_CACHE_DIR/p
-  '';
+  deps = callPackage ./deps.nix {
+    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
+  };
+
+  zigBuildFlags = [
+    "--system"
+    "${finalAttrs.deps}"
+  ];
 
   postInstall = ''
     installManPage doc/zf.1
@@ -36,7 +49,14 @@ stdenv.mkDerivation (finalAttrs: {
       --zsh complete/_zf
   '';
 
-  passthru.tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
+  zigCheckFlags = finalAttrs.zigBuildFlags;
+  doCheck = true;
+  doInstallCheck = true;
+
+  passthru.tests.version = testers.testVersion {
+    package = finalAttrs.finalPackage;
+    version = finalAttrs.upstreamVersion;
+  };
 
   meta = {
     homepage = "https://github.com/natecraddock/zf";

@@ -49,7 +49,6 @@ in
   combinedDir,
   touchedFilesJson,
   githubAuthorId,
-  byName ? false,
 }:
 let
   # Usually we expect a derivation, but when evaluating in multiple separate steps, we pass
@@ -171,7 +170,6 @@ let
     changedattrs = lib.attrNames (lib.groupBy (a: a.name) changedPackagePlatformAttrs);
     changedpathsjson = touchedFilesJson;
     removedattrs = lib.attrNames (lib.groupBy (a: a.name) removedPackagePlatformAttrs);
-    inherit byName;
   };
 in
 runCommand "compare"
@@ -181,8 +179,12 @@ runCommand "compare"
       jq
       cmp-stats
     ];
-    maintainers = builtins.toJSON maintainers;
-    passAsFile = [ "maintainers" ];
+    maintainers = builtins.toJSON maintainers.users;
+    teams = builtins.toJSON maintainers.teams;
+    passAsFile = [
+      "maintainers"
+      "teams"
+    ];
   }
   ''
     mkdir $out
@@ -225,4 +227,5 @@ runCommand "compare"
     fi
 
     cp "$maintainersPath" "$out/maintainers.json"
+    cp "$teamsPath" "$out/teams.json"
   ''

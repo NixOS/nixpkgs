@@ -642,7 +642,7 @@ rec {
     if index == null then default else elemAt list index;
 
   /**
-    Return true if function `pred` returns true for at least one
+    Returns true if function `pred` returns true for at least one
     element of `list`.
 
     # Inputs
@@ -677,7 +677,7 @@ rec {
   any = builtins.any;
 
   /**
-    Return true if function `pred` returns true for all elements of
+    Returns true if function `pred` returns true for all elements of
     `list`.
 
     # Inputs
@@ -777,7 +777,7 @@ rec {
   optional = cond: elem: if cond then [ elem ] else [ ];
 
   /**
-    Return a list or an empty list, depending on a boolean value.
+    Returns a list or an empty list, depending on a boolean value.
 
     # Inputs
 
@@ -837,7 +837,7 @@ rec {
   toList = x: if isList x then x else [ x ];
 
   /**
-    Return a list of integers from `first` up to and including `last`.
+    Returns a list of integers from `first` up to and including `last`.
 
     # Inputs
 
@@ -871,7 +871,7 @@ rec {
   range = first: last: if first > last then [ ] else genList (n: first + n) (last - first + 1);
 
   /**
-    Return a list with `n` copies of an element.
+    Returns a list with `n` copies of an element.
 
     # Inputs
 
@@ -1429,7 +1429,7 @@ rec {
     map (x: elemAt x 1) (sort less prepared);
 
   /**
-    Return the first (at most) N elements of a list.
+    Returns the first (at most) N elements of a list.
 
     # Inputs
 
@@ -1463,7 +1463,7 @@ rec {
   take = count: sublist 0 count;
 
   /**
-    Return the last (at most) N elements of a list.
+    Returns the last (at most) N elements of a list.
 
     # Inputs
 
@@ -1639,7 +1639,7 @@ rec {
       throw "lib.lists.removePrefix: First argument is not a list prefix of the second argument";
 
   /**
-    Return a list consisting of at most `count` elements of `list`,
+    Returns a list consisting of at most `count` elements of `list`,
     starting at index `start`.
 
     # Inputs
@@ -1737,7 +1737,7 @@ rec {
     take commonPrefixLength list1;
 
   /**
-    Return the last element of a list.
+    Returns the last element of a list.
 
     This function throws an error if the list is empty.
 
@@ -1770,7 +1770,7 @@ rec {
     elemAt list (length list - 1);
 
   /**
-    Return all elements but the last.
+    Returns all elements but the last.
 
     This function throws an error if the list is empty.
 
@@ -1803,7 +1803,7 @@ rec {
     take (length list - 1) list;
 
   /**
-    Return the image of the cross product of some lists by a function.
+    Returns the image of the cross product of some lists by a function.
 
     # Examples
     :::{.example}
@@ -1814,7 +1814,7 @@ rec {
     => [ "13" "14" "23" "24" ]
     ```
 
-    The following function call is equivalent to the one deprecated above:
+    If you have an attrset already, consider mapCartesianProduct:
 
     ```nix
     mapCartesianProduct (x: "${toString x.a}${toString x.b}") { a = [1 2]; b = [3 4]; }
@@ -1822,19 +1822,7 @@ rec {
     ```
     :::
   */
-  crossLists = warn ''
-    lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
-
-    For example, the following function call:
-
-    nix-repl> lib.crossLists (x: y: x+y) [[1 2] [3 4]]
-    [ 4 5 5 6 ]
-
-    Can now be replaced by the following one:
-
-    nix-repl> lib.mapCartesianProduct ({x,y}: x+y) { x = [1 2]; y = [3 4]; }
-    [ 4 5 5 6 ]
-  '' (f: foldl (fs: args: concatMap (f: map f args) fs) [ f ]);
+  crossLists = f: foldl (fs: args: concatMap (f: map f args) fs) [ f ];
 
   /**
     Remove duplicate elements from the `list`. O(n^2) complexity.

@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
+    "-DCMAKE_POLICY_VERSION_MINIMUM=3.5"
     "-DENABLE_FORTRAN=ON"
     "-DBUILD_SHARED_LIBS=ON"
     "-DENABLE_XHOST=OFF"

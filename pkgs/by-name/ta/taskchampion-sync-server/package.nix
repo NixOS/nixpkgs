@@ -7,15 +7,15 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "taskchampion-sync-server";
-  version = "0.7.0";
+  version = "0.7.1";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskchampion-sync-server";
     tag = "v${version}";
-    hash = "sha256-DNGugytc4dMjj8je4BpEjNjdrnTBnWc1MNeMqcdTr4s=";
+    hash = "sha256-ywBmVid70ZKUkTwxORrwXPV0zur0RdHToTLTx9ynjqU=";
   };
 
-  cargoHash = "sha256-A0alSDqsqlAL0XW0rJ35rYcoyx2ndX/Xft9Qff/rr9I=";
+  cargoHash = "sha256-1bqZAFKQGTCGUs7EXLwAgUxQU+KmhVGFIATIOb5uOlA=";
 
   env = {
     # Use system openssl.

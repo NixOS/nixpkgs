@@ -1,19 +1,19 @@
 {
-  "version": "5.5.0",
+  "version": "5.6.0",
   "darwin-amd64": {
-    "hash": "sha256-aLBaRBahtAcf9KArjrfuhPHNnUTko+kxhoaY5QeKB5E=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.5.0/upsun_5.5.0_darwin_all.tar.gz"
+    "hash": "sha256-y9DQkHLvD6bUz0tfptdyN1qcsR34RWr7YxYB7NWKH9s=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.6.0/upsun_5.6.0_darwin_all.tar.gz"
   },
   "darwin-arm64": {
-    "hash": "sha256-aLBaRBahtAcf9KArjrfuhPHNnUTko+kxhoaY5QeKB5E=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.5.0/upsun_5.5.0_darwin_all.tar.gz"
+    "hash": "sha256-y9DQkHLvD6bUz0tfptdyN1qcsR34RWr7YxYB7NWKH9s=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.6.0/upsun_5.6.0_darwin_all.tar.gz"
   },
   "linux-amd64": {
-    "hash": "sha256-RJuOddfXtT3yyphDSJ8sN8ibX30ALL9kRohGaw9jaeg=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.5.0/upsun_5.5.0_linux_amd64.tar.gz"
+    "hash": "sha256-6cxwFnOULBVGIJJ1dQQn302NDooIytibay8OksfZT4g=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.6.0/upsun_5.6.0_linux_amd64.tar.gz"
   },
   "linux-arm64": {
-    "hash": "sha256-GbfYckZ91ki1D8e50fF3HRJ6NtTXgqkZe2PrbODAfcw=",
-    "url": "https://github.com/platformsh/cli/releases/download/5.5.0/upsun_5.5.0_linux_arm64.tar.gz"
+    "hash": "sha256-RhJmC7rCY5VZOXUcQKHm98TxbMC/uej5YN5KlwHsm08=",
+    "url": "https://github.com/platformsh/cli/releases/download/5.6.0/upsun_5.6.0_linux_arm64.tar.gz"
   }
 }

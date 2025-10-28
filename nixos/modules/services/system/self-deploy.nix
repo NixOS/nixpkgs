@@ -179,7 +179,7 @@ in
         ${gitWithRepo} checkout FETCH_HEAD
 
         nix-build${renderNixArgs cfg.nixArgs} ${
-          lib.cli.toGNUCommandLineShell { } {
+          lib.cli.toCommandLineShellGNU { } {
             attr = cfg.nixAttribute;
             out-link = outPath;
           }

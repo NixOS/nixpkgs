@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   pkg-config,
   bzip2,
@@ -22,6 +23,14 @@ stdenv.mkDerivation rec {
     rev = "uuu_${version}";
     sha256 = "sha256-t5usUGbcdLQlqPpZkNDeGncka9VfkpO7U933Kw/Sm7U=";
   };
+
+  patches = [
+    # build: support cmake 4.0
+    (fetchpatch {
+      url = "https://github.com/nxp-imx/mfgtools/commit/311ee9b3cca0275fbb5eb5228c56edbb518afd67.patch?full_index=1";
+      hash = "sha256-o4cPfXsPxk88zy5lARX8rcmQncsAkZegOxlAIyoFUpQ=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

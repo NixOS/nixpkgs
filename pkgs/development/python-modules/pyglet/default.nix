@@ -18,7 +18,6 @@
   openal,
   libpulseaudio,
   harfbuzz,
-  mesa,
   apple-sdk,
 }:
 

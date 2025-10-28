@@ -6,18 +6,18 @@
 
 buildGoModule rec {
   pname = "setup-envtest";
-  version = "0.19.0";
+  version = "0.22.3";
 
   src =
     fetchFromGitHub {
       owner = "kubernetes-sigs";
       repo = "controller-runtime";
       rev = "v${version}";
-      hash = "sha256-9AqZMiA+OIJD+inmeUc/lq57kV7L85jk1I4ywiSKirg=";
+      hash = "sha256-Al1MILraagj5b2AatweT3uGv/xpFYgLN/vEXCE/w630=";
     }
     + "/tools/setup-envtest";
 
-  vendorHash = "sha256-sn3HiKTpQzjrFTOVOGFJwoNpxU+XWgkWD2EOcPilePY=";
+  vendorHash = "sha256-1WxRIvzVUg+6XUWTAs6SVR12vGihUFkuwH1jH10Oa50=";
 
   ldflags = [
     "-s"

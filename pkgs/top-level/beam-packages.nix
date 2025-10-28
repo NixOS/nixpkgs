@@ -2,22 +2,28 @@
   lib,
   beam,
   callPackage,
-  wxGTK32,
   stdenv,
   wxSupport ? true,
   systemd,
   systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  __splicedPackages,
 }:
 
 let
   self = beam;
 
+  pkgs = __splicedPackages;
+  callErlang =
+    drv: args:
+    let
+      genericBuilder =
+        versionArgs: import ../development/interpreters/erlang/generic-builder.nix (versionArgs // args);
+    in
+    pkgs.callPackage (import drv genericBuilder) { };
 in
 
 {
-  beamLib = callPackage ../development/beam-modules/lib.nix { };
-
-  latestVersion = "erlang_27";
+  latestVersion = "erlang_28";
 
   # Each
   interpreters = {
@@ -28,21 +34,15 @@ in
     #
     # Three versions are supported according to https://github.com/erlang/otp/security
 
-    erlang_28 = self.beamLib.callErlang ../development/interpreters/erlang/28.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
+    erlang_28 = callErlang ../development/interpreters/erlang/28.nix {
       inherit wxSupport systemdSupport;
     };
 
-    erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
+    erlang_27 = callErlang ../development/interpreters/erlang/27.nix {
       inherit wxSupport systemdSupport;
     };
 
-    erlang_26 = self.beamLib.callErlang ../development/interpreters/erlang/26.nix {
-      wxGTK = wxGTK32;
-      parallelBuild = true;
+    erlang_26 = callErlang ../development/interpreters/erlang/26.nix {
       inherit wxSupport systemdSupport;
     };
 
@@ -56,10 +56,8 @@ in
       elixir_1_17
       elixir_1_16
       elixir_1_15
-      elixir_1_14
       elixir-ls
       lfe
-      lfe_2_1
       ;
   };
 

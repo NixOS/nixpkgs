@@ -14,7 +14,6 @@
   gtkmm3,
   iniparser,
   jsoncpp,
-  libcava,
   libdbusmenu-gtk3,
   libevdev,
   libinotify-kqueue,
@@ -81,9 +80,16 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mGiBZjfvtZZkSHrha4UF2l1Ogbij8J//r2h4gcZAJ6w=";
   };
 
+  libcavaSrc = fetchFromGitHub {
+    owner = "LukashonakV";
+    repo = "cava";
+    tag = "0.10.4";
+    hash = "sha256-9eTDqM+O1tA/3bEfd1apm8LbEcR9CVgELTIspSVPMKM=";
+  };
+
   postUnpack = lib.optional cavaSupport ''
     pushd "$sourceRoot"
-    cp -R --no-preserve=mode,ownership ${libcava.src} subprojects/cava-0.10.4
+    cp -R --no-preserve=mode,ownership ${finalAttrs.libcavaSrc} subprojects/cava-0.10.4
     patchShebangs .
     popd
   '';

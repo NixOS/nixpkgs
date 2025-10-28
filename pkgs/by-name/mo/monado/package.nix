@@ -41,7 +41,6 @@
   orc,
   pcre2,
   pkg-config,
-  protobuf_21,
   python3,
   SDL2,
   shaderc,
@@ -64,14 +63,7 @@
   serviceSupport ? true,
   tracingSupport ? false,
 }:
-let
-  # For some reason protobuf 32 causes a segfault during startup
-  # Pin to last (known) working version
-  # See https://github.com/NixOS/nixpkgs/issues/439075
-  opencv4' = opencv4.override {
-    protobuf = protobuf_21;
-  };
-in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "monado";
   version = "25.0.0";
@@ -133,7 +125,7 @@ stdenv.mkDerivation (finalAttrs: {
     libXext
     libXrandr
     onnxruntime
-    opencv4'
+    opencv4
     openhmd
     openvr
     orc

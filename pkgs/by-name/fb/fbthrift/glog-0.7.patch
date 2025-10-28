@@ -1,17 +1,17 @@
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index c6b2b2a810..1813c88e42 100644
+index 492bcccd9a..9c907a87a8 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -106,7 +106,7 @@ endif ()
+@@ -108,7 +108,7 @@
  # Find required dependencies for thrift/lib
  if (THRIFT_LIB_ONLY OR build_all)
    find_package(Gflags REQUIRED)
 -  find_package(Glog REQUIRED)
 +  find_package(Glog CONFIG REQUIRED)
-   find_package(folly CONFIG REQUIRED)
    find_package(fizz CONFIG REQUIRED)
    find_package(wangle CONFIG REQUIRED)
-@@ -119,7 +119,6 @@ if (THRIFT_LIB_ONLY OR build_all)
+   find_package(ZLIB REQUIRED)
+@@ -120,7 +120,6 @@
    find_package(Threads)
    include_directories(
      ${LIBGFLAGS_INCLUDE_DIR}
@@ -23,7 +23,7 @@ diff --git a/thrift/example/cpp2/CMakeLists.txt b/thrift/example/cpp2/CMakeLists
 index afa28dad61..318860b3d6 100644
 --- a/thrift/example/cpp2/CMakeLists.txt
 +++ b/thrift/example/cpp2/CMakeLists.txt
-@@ -28,7 +28,7 @@ target_link_libraries(
+@@ -28,7 +28,7 @@
    thriftcpp2
    chatroom-cpp2
    ${LIBGFLAGS_LIBRARY}
@@ -33,10 +33,10 @@ index afa28dad61..318860b3d6 100644
  install(
    TARGETS example_server
 diff --git a/thrift/lib/cpp/CMakeLists.txt b/thrift/lib/cpp/CMakeLists.txt
-index 6461588a86..8b6ed1b030 100644
+index 2c65e1f0a8..1e80060100 100644
 --- a/thrift/lib/cpp/CMakeLists.txt
 +++ b/thrift/lib/cpp/CMakeLists.txt
-@@ -45,7 +45,7 @@ target_link_libraries(
+@@ -43,7 +43,7 @@
    PUBLIC
      Folly::folly
      ${LIBGFLAGS_LIBRARY}
@@ -45,7 +45,7 @@ index 6461588a86..8b6ed1b030 100644
  )
  
  add_library(
-@@ -121,7 +121,7 @@ target_link_libraries(
+@@ -121,7 +121,7 @@
      Boost::boost
      Folly::folly
      wangle::wangle
@@ -54,7 +54,7 @@ index 6461588a86..8b6ed1b030 100644
      ${OPENSSL_LIBRARIES}
  )
  
-@@ -137,7 +137,7 @@ target_link_libraries(
+@@ -137,7 +137,7 @@
      thriftprotocol
      transport
      Folly::folly
@@ -64,10 +64,10 @@ index 6461588a86..8b6ed1b030 100644
  
  set(THRIFT1_HEADER_DIRS
 diff --git a/thrift/lib/cpp2/CMakeLists.txt b/thrift/lib/cpp2/CMakeLists.txt
-index f941688ab0..b3609bbc62 100644
+index 03216f5d6f..5f31fc0c64 100644
 --- a/thrift/lib/cpp2/CMakeLists.txt
 +++ b/thrift/lib/cpp2/CMakeLists.txt
-@@ -75,7 +75,7 @@ target_link_libraries(
+@@ -75,7 +75,7 @@
      Folly::folly
      thriftmetadata
      thriftprotocol
@@ -76,7 +76,7 @@ index f941688ab0..b3609bbc62 100644
      ${LIBGFLAGS_LIBRARY}
  )
  
-@@ -206,7 +206,7 @@ target_link_libraries(
+@@ -207,7 +207,7 @@
      thrift
      Folly::folly
      wangle::wangle

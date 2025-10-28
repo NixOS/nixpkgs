@@ -15,7 +15,7 @@
   mlir,
   version,
   python3,
-  buildLlvmTools,
+  buildLlvmPackages,
   devExtraCmakeFlags ? [ ],
 }:
 
@@ -64,11 +64,12 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_VERBOSE_MAKEFILE" true)
     (lib.cmakeFeature "LLVM_DIR" "${libllvm.dev}/lib/cmake/llvm")
-    (lib.cmakeFeature "LLVM_TOOLS_BINARY_DIR" "${buildLlvmTools.tblgen}/bin/")
-    (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${buildLlvmTools.tblgen}/bin/llvm-lit")
+    # TODO: Needs patches and the `lit` package like other LLVM builds?
+    (lib.cmakeFeature "LLVM_TOOLS_BINARY_DIR" "${buildLlvmPackages.tblgen}/bin/")
+    (lib.cmakeFeature "LLVM_EXTERNAL_LIT" "${buildLlvmPackages.tblgen}/bin/llvm-lit")
     (lib.cmakeFeature "CLANG_DIR" "${libclang.dev}/lib/cmake/clang")
     (lib.cmakeFeature "MLIR_DIR" "${mlir.dev}/lib/cmake/mlir")
-    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmTools.tblgen}/bin/mlir-tblgen")
+    (lib.cmakeFeature "MLIR_TABLEGEN_EXE" "${buildLlvmPackages.tblgen}/bin/mlir-tblgen")
     (lib.cmakeFeature "MLIR_TABLEGEN_TARGET" "MLIR-TBLGen")
     (lib.cmakeBool "LLVM_BUILD_EXAMPLES" false)
     (lib.cmakeBool "LLVM_ENABLE_PLUGINS" false)

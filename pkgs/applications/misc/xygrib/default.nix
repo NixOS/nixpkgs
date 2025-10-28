@@ -42,6 +42,11 @@ stdenv.mkDerivation {
   ]
   ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DLIBNOVA_LIBRARY=${libnova}/lib/libnova.dylib" ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required (VERSION 3.1.0)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   postInstall =
     if stdenv.hostPlatform.isDarwin then
       ''

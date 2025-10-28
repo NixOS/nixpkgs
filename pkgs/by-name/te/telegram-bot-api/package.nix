@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation {
   pname = "telegram-bot-api";
-  version = "8.2";
+  version = "9.2";
 
   src = fetchFromGitHub {
     owner = "tdlib";
     repo = "telegram-bot-api";
-    rev = "fa6706fc8f6e22b3c25b512ede6474613f32b32b";
-    hash = "sha256-0ra1sL121ksUIhpV738tL3y1gu1csMf0rK95G8ElMuo=";
+    # https://github.com/tdlib/telegram-bot-api/issues/783
+    rev = "3b6a0b769c4a7fbe064087a4ad9fe6b1dbda498f";
+    hash = "sha256-EpDO1ulIT/RIUjc06BtGRpqdQIMpma5+DRy7i8YVhiU=";
     fetchSubmodules = true;
   };
 

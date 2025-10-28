@@ -16,6 +16,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-WrzdpE9t7vWpc8QFoFs+S/HgHwsidRNmfcHp7ltSWQw=";
   };
 
+  configureFlags = [
+    "--localstatedir=/var"
+    "--sysconfdir=/etc"
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
 
   outputs = [
@@ -35,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
       lgpl21Plus
     ];
     mainProgram = "crond";
-    maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.all;
+    maintainers = [ ];
+    platforms = lib.platforms.linux;
   };
 })

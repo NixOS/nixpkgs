@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -25,14 +26,14 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "41.11.0";
+  version = "42.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "esphome";
     repo = "aioesphomeapi";
     tag = "v${version}";
-    hash = "sha256-xJUQyCa4ETroi5ncbPajdfJV4Ekzz23rXRBX08J8Q54=";
+    hash = "sha256-3ao0RM+NFzbsj0Ws+A19S+OGwinZI+syU8PFgqcIYMU=";
   };
 
   build-system = [
@@ -58,6 +59,10 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
   ];
+
+  # Lack of network sandboxing leads to conflicting listeners when testing
+  # this package e.g. in nixpkgs-review on the two suppoted python package sets.
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   disabledTestPaths = [
     # benchmarking requires pytest-codespeed

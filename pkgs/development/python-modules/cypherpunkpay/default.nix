@@ -79,6 +79,7 @@ buildPythonPackage rec {
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
+    "-Wignore::UserWarning"
   ];
 
   disabledTestPaths = [

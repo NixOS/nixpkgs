@@ -14,7 +14,6 @@
   pytest-cov-stub,
   pytest-mock,
   pytestCheckHook,
-  pythonOlder,
   yarl,
 }:
 
@@ -22,8 +21,6 @@ buildPythonPackage rec {
   pname = "python-bsblan";
   version = "2.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "liudger";
@@ -33,10 +30,9 @@ buildPythonPackage rec {
   };
 
   postPatch = ''
-    sed -i "/ruff/d" pyproject.toml
+    substituteInPlace pyproject.toml \
+      --replace-fail 'version = "0.0.0"' 'version = "${version}"'
   '';
-
-  env.PACKAGE_VERSION = version;
 
   build-system = [ hatchling ];
 
@@ -44,7 +40,6 @@ buildPythonPackage rec {
 
   dependencies = [
     aiohttp
-    async-timeout
     backoff
     mashumaro
     orjson
@@ -59,6 +54,8 @@ buildPythonPackage rec {
     pytest-mock
     pytestCheckHook
   ];
+
+  __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "bsblan" ];
 

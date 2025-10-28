@@ -50,6 +50,10 @@ stdenv.mkDerivation rec {
     done
 
     sed -i -re 's#MATCHES "jsoncpp"#MATCHES ".*/jsoncpp/json$"#g' cmake/FindJsoncpp.cmake
+
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0)" "cmake_minimum_required(VERSION 3.10)" \
+      --replace-fail "cmake_policy(SET CMP0042 OLD)" ""
   '';
 
   preConfigure = ''

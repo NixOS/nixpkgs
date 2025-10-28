@@ -134,21 +134,6 @@
     };
     version = "0.5.1";
   };
-  asciidoctor-mathematical = {
-    dependencies = [
-      "asciidoctor"
-      "asciimath"
-      "mathematical"
-    ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1lxfq7qn3ql642pva6jh3h1abm9j9daxg5icfn1h73k6cjsmcisp";
-      type = "gem";
-    };
-    version = "0.3.5";
-  };
   asciidoctor-multipage = {
     dependencies = [ "asciidoctor" ];
     groups = [ "default" ];
@@ -203,16 +188,6 @@
       type = "gem";
     };
     version = "5.1.0";
-  };
-  asciimath = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1ny2qql3lgh7gx54psji2lm4mmbwyiwy00a17w26rjyh6cy55491";
-      type = "gem";
-    };
-    version = "2.0.5";
   };
   bibtex-ruby = {
     dependencies = [
@@ -362,17 +337,6 @@
       type = "gem";
     };
     version = "1.6.1";
-  };
-  mathematical = {
-    dependencies = [ "ruby-enum" ];
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "0y103dvfjswm5r0xafyjrw6ybvz1qrqfa4lvpk9gdhbzwpaiwy4r";
-      type = "gem";
-    };
-    version = "1.6.20";
   };
   matrix = {
     groups = [ "default" ];
@@ -616,16 +580,6 @@
       type = "gem";
     };
     version = "4.4.0";
-  };
-  ruby-enum = {
-    groups = [ "default" ];
-    platforms = [ ];
-    source = {
-      remotes = [ "https://rubygems.org" ];
-      sha256 = "1ry6ha94a5jqbj5y3x9k0szyy3jgnsfyxvva98nivg6yx1dfyrz7";
-      type = "gem";
-    };
-    version = "1.0.0";
   };
   ruby-rc4 = {
     groups = [ "default" ];

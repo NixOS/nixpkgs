@@ -52,9 +52,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  # Source has a path "session/usr/local/...", don't break references to that
-  dontFixCmake = true;
-
   nativeBuildInputs = [
     cmake
     makeWrapper

@@ -26,7 +26,7 @@
   which,
   openssl,
   gperf,
-  tinyxml2,
+  tinyxml,
   tinyxml-2,
   taglib,
   libssh,
@@ -35,7 +35,6 @@
   ncurses,
   spdlog,
   libxml2,
-  systemd,
   alsa-lib,
   libGLU,
   libGL,
@@ -263,6 +262,12 @@ stdenv.mkDerivation (
         url = "https://github.com/xbmc/xbmc/commit/269053ebbfd3cc4a3156a511f54ab7f08a09a730.patch";
         hash = "sha256-JzzrMJvAufrxTxtWnzknUS9JLJEed+qdtVnIYYe9LCw=";
       })
+      # Backport to fix build with cURL 8.16
+      # FIXME: remove in the next update
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/957b4faa0b765bc91e64c6d33f07e853decae0d0.patch";
+        hash = "sha256-zsqcZSjsApcgs/oEdFFlcwldGCVZxCsDG02ogs+q2uw=";
+      })
     ];
 
     # make  derivations declared in the let binding available here, so
@@ -294,7 +299,7 @@ stdenv.mkDerivation (
       libdrm
       openssl
       gperf
-      tinyxml2
+      tinyxml
       tinyxml-2
       taglib
       libssh
@@ -317,7 +322,6 @@ stdenv.mkDerivation (
       libvorbis
       flac
       libxslt
-      systemd
       lzo
       libcdio
       libmodplug
@@ -483,7 +487,6 @@ stdenv.mkDerivation (
             lib.makeLibraryPath (
               [
                 curl
-                systemd
                 libmad
                 libcec
                 libcec_platform

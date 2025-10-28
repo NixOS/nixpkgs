@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
-    rev = version;
+    tag = version;
     hash = "sha256-sDPipSIT2MJMdsOjOQSB+uOe6KXzVnyAqcQxPPr2NsU=";
   };
 

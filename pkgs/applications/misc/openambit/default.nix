@@ -11,7 +11,6 @@
   udev,
   zlib,
 }:
-
 mkDerivation rec {
   pname = "openambit";
   version = "0.5";
@@ -32,6 +31,20 @@ mkDerivation rec {
       sha256 = "1p0dg902mlcfjvs01dxl9wv2b50ayp4330p38d14q87mn0c2xl5d";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 3.0)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/libambit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required (VERSION 3.1.3)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/movescount/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.5)' 'cmake_minimum_required(VERSION 3.10)'
+
+    substituteInPlace src/openambit/CMakeLists.txt \
+      --replace-fail 'cmake_minimum_required(VERSION 2.8.5)' 'cmake_minimum_required(VERSION 3.10)'
+  '';
 
   nativeBuildInputs = [
     cmake

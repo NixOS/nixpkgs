@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.9.0";
+  version = "1.10.0";
   pname = "pyperclip";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-t94BQt3IG/xcdQfuoZ2pILkiUrVIuWGGyvlKXiUn0xA=";
+    hash = "sha256-GAyDRrEYaSHHXf0U2QSKa11Gv8SZd4gRlSxt1uscpr4=";
   };
 
   build-system = [ setuptools ];

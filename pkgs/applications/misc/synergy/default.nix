@@ -48,11 +48,14 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/gui/src/SslCertificate.cpp \
-      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+      --replace-fail 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+
+    substituteInPlace CMakeLists.txt cmake/Version.cmake src/gui/CMakeLists.txt \
+    --replace-fail "cmake_minimum_required (VERSION 3.4)" "cmake_minimum_required(VERSION 3.10)"
   ''
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
-      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+      --replace-fail "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
   '';
 
   nativeBuildInputs = [

@@ -8,8 +8,8 @@ vscode-utils.buildVscodeMarketplaceExtension {
   mktplcRef = {
     name = "basedpyright";
     publisher = "detachhead";
-    version = "1.31.4";
-    hash = "sha256-KpX268CYGHtBJdDVMzjn5vLYupplikgAHvi5i+FhbHo=";
+    version = "1.32.0";
+    hash = "sha256-Lf7sg67i0FFvHSZ9Cw6RT+ECzFF+lNYH2hxzrss1+fg=";
   };
   meta = {
     changelog = "https://github.com/detachhead/basedpyright/releases";

@@ -30,6 +30,7 @@
   pkg-config,
   speexdsp,
   zlib,
+  withDiscordRpc ? false,
 }:
 
 let
@@ -79,7 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     SDL2
     curl
-    discord-rpc
     duktape
     expat
     flac
@@ -100,13 +100,15 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     speexdsp
     zlib
-  ];
+  ]
+  ++ lib.optional withDiscordRpc discord-rpc;
 
   cmakeFlags = [
     (lib.cmakeBool "DOWNLOAD_OBJECTS" false)
     (lib.cmakeBool "DOWNLOAD_OPENMSX" false)
     (lib.cmakeBool "DOWNLOAD_OPENSFX" false)
     (lib.cmakeBool "DOWNLOAD_TITLE_SEQUENCES" false)
+    (lib.cmakeBool "DISABLE_DISCORD_RPC" (!withDiscordRpc))
   ];
 
   postUnpack = ''

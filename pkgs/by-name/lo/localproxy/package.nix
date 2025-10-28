@@ -51,6 +51,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   postPatch = ''
     sed -i '/set(OPENSSL_USE_STATIC_LIBS TRUE)/d' CMakeLists.txt
+    substituteInPlace ./CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 3.2 FATAL_ERROR)" \
+      "cmake_minimum_required(VERSION 4.0)"
   '';
 
   # causes redefinition of _FORTIFY_SOURCE

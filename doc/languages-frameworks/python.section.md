@@ -55,6 +55,7 @@ sets are
 * `pkgs.python312Packages`
 * `pkgs.python313Packages`
 * `pkgs.python314Packages`
+* `pkgs.python315Packages`
 * `pkgs.pypy27Packages`
 * `pkgs.pypy310Packages`
 
@@ -556,6 +557,19 @@ are used in [`buildPythonPackage`](#buildpythonpackage-function).
   with the `pipInstallHook`.
 - `unittestCheckHook` will run tests with `python -m unittest discover`. See [example usage](#using-unittestcheckhook).
 
+#### Overriding build helpers {#overriding-python-build-helpers}
+
+Like many of the build helpers provided by Nixpkgs, Python build helpers typically provide a `<function>.override` attribute.
+It works like [`<pkg>.override`](#sec-pkg-override), and can be used to override the dependencies of each build helper.
+
+This allows specifying the stdenv to be used by `buildPythonPackage` or `buildPythonApplication`. The default (`python.stdenv`) can be overridden as follows:
+
+```nix
+buildPythonPackage.override { stdenv = customStdenv; } {
+  # package attrs...
+}
+```
+
 ## User Guide {#user-guide}
 
 ### Using Python {#using-python}
@@ -1018,7 +1032,7 @@ that we introduced with the `let` expression.
 #### Handling dependencies {#handling-dependencies}
 
 Our example, `toolz`, does not have any dependencies on other Python packages or system libraries.
-[`buildPythonPackage`](#buildpythonpackage-function) uses the the following arguments in the following circumstances:
+[`buildPythonPackage`](#buildpythonpackage-function) uses the following arguments in the following circumstances:
 
 - `dependencies` - For Python runtime dependencies.
 - `build-system` - For Python build-time requirements.

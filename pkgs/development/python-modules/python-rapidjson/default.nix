@@ -10,7 +10,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.21";
+  version = "1.22";
   pname = "python-rapidjson";
   pyproject = true;
 
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "python-rapidjson";
     repo = "python-rapidjson";
     tag = "v${version}";
-    hash = "sha256-qpq7gNdWDSNTVTqV1rnRffap0VrlHOr4soAY/SXqd1k=";
+    hash = "sha256-q+qIuFD3TboevD88iaBQxwOoOdb6I+yyCsNXIqMcR3g=";
   };
 
   patches = [

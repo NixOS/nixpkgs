@@ -7,6 +7,7 @@
   sphinx,
   krb5,
   xfsprogs,
+  btrfs-progs,
   jemalloc,
   libcap,
   ntirpc,
@@ -77,6 +78,7 @@ stdenv.mkDerivation rec {
     acl
     krb5
     xfsprogs
+    btrfs-progs
     jemalloc
     dbus.lib
     libcap
@@ -87,7 +89,11 @@ stdenv.mkDerivation rec {
   ++ lib.optional useCeph ceph;
 
   postPatch = ''
-    substituteInPlace src/tools/mount.9P --replace "/bin/mount" "/usr/bin/env mount"
+    substituteInPlace src/CMakeLists.txt --replace-fail \
+      "cmake_minimum_required(VERSION 2.6.3)" \
+      "cmake_minimum_required(VERSION 3.10)"
+
+    substituteInPlace src/tools/mount.9P --replace-fail "/bin/mount" "/usr/bin/env mount"
   '';
 
   postFixup = ''
@@ -101,7 +107,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    install -Dm755 $src/src/tools/mount.9P $tools/bin/mount.9P
+    install -Dm755 ../tools/mount.9P $tools/bin/mount.9P
   ''
   + lib.optionalString useDbus ''
     # Policy for D-Bus statistics interface

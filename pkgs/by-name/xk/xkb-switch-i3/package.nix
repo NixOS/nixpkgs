@@ -9,6 +9,7 @@
   libX11,
   libxkbfile,
   pkg-config,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-5d1DdRtz0QCWISSsWQt9xgTOekYUCkhfMsjG+/kyQK4=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    (fetchpatch {
+      name = "bump-cmake-required-version.patch";
+      url = "https://github.com/Zebradil/xkb-switch-i3/commit/95f6ff96c77fc17891d57332f6d3a014500396eb.patch?full_index=1";
+      hash = "sha256-J8EITYxi5EpYwROmFrAXgqFgbnFh8/fy9nxEKNhBvek=";
+    })
+  ];
+
+  postPatch = ''
+    substituteInPlace i3ipc++/CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.0 FATAL_ERROR)" \
+        "cmake_minimum_required(VERSION 3.10)"
+  '';
 
   nativeBuildInputs = [
     cmake

@@ -22,7 +22,7 @@
   zlib,
   which,
   sysctl,
-  buildLlvmTools,
+  buildLlvmPackages,
   updateAutotoolsGnuConfigScriptsHook,
   enableManpages ? false,
   enableSharedLibraries ? !stdenv.hostPlatform.isStatic,
@@ -84,9 +84,6 @@ stdenv.mkDerivation (
   {
     pname = "llvm";
     inherit version;
-
-    # TODO: Remove on `staging`.
-    shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
     src =
       if monorepoSrc != null then
@@ -272,7 +269,7 @@ stdenv.mkDerivation (
           # and thus fails under the sandbox:
           ''
             substituteInPlace unittests/TargetParser/Host.cpp \
-              --replace-fail '/usr/bin/sw_vers' "${(builtins.toString darwin.DarwinTools) + "/bin/sw_vers"}"
+              --replace-fail '/usr/bin/sw_vers' "${(toString darwin.DarwinTools) + "/bin/sw_vers"}"
           ''
         +
           # This test tries to call the intrinsics `@llvm.roundeven.f32` and
@@ -299,7 +296,7 @@ stdenv.mkDerivation (
       )
       +
         # dup of above patch with different conditions
-        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86) (
+        optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86)
           # fails when run in sandbox
           (
             ''
@@ -346,7 +343,7 @@ stdenv.mkDerivation (
                 rm test/tools/dsymutil/ARM/obfuscated.test
               ''
           )
-        )
+
       +
         # FileSystem permissions tests fail with various special bits
         ''
@@ -471,7 +468,7 @@ stdenv.mkDerivation (
           (lib.cmakeFeature "LLVM_INSTALL_PACKAGE_DIR" "${placeholder "dev"}/lib/cmake/llvm")
           (lib.cmakeBool "LLVM_ENABLE_RTTI" true)
           (lib.cmakeBool "LLVM_LINK_LLVM_DYLIB" enableSharedLibraries)
-          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmTools.tblgen}/bin/llvm-tblgen")
+          (lib.cmakeFeature "LLVM_TABLEGEN" "${buildLlvmPackages.tblgen}/bin/llvm-tblgen")
         ];
       in
       flagsForLlvmConfig

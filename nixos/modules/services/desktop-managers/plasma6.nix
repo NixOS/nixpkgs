@@ -20,7 +20,7 @@ let
 
   activationScript = ''
     # will be rebuilt automatically
-    rm -fv "$HOME/.cache/ksycoca"*
+    rm -fv "''${XDG_CACHE_HOME:-$HOME/.cache}/ksycoca"*
   '';
 in
 {
@@ -91,6 +91,7 @@ in
           kio-admin # managing files as admin
           kio-extras # stuff for MTP, AFC, etc
           kio-fuse # fuse interface for KIO
+          knighttime # night mode switching daemon
           kpackage # provides kpackagetool tool
           kservice # provides kbuildsycoca6 tool
           kunifiedpush # provides a background service and a KCM
@@ -166,7 +167,6 @@ in
           spectacle
           ffmpegthumbs
           krdp
-          xwaylandvideobridge # exposes Wayland windows to X11 screen capture
         ]
         ++ lib.optionals config.hardware.sensor.iio.enable [
           # This is required for autorotation in Plasma 6
@@ -267,6 +267,7 @@ in
     services.udisks2.enable = true;
     services.upower.enable = config.powerManagement.enable;
     services.libinput.enable = mkDefault true;
+    services.geoclue2.enable = mkDefault true;
 
     # Extra UDEV rules used by Solid
     services.udev.packages = [

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   fmt,
   catch2_3,
@@ -15,14 +16,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "spdlog";
-  version = "1.15.2";
+  version = "1.15.3";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-9RhB4GdFjZbCIfMOWWriLAUf9DE/i/+FTXczr0pD0Vg=";
+    hash = "sha256-0rOR9G2Y4Z4OBZtUHxID0s1aXN9ejodHrurlVCA0pIo=";
   };
+
+  patches = [
+    # https://github.com/gabime/spdlog/pull/3451
+    (fetchpatch {
+      name = "catch2-3.9.0-compat.patch";
+      url = "https://github.com/gabime/spdlog/commit/3edc8036dbf3c7cdf0e460a913ae294c87ae90dc.patch";
+      hash = "sha256-0XtNaAvDGpSTtQZjxmLbHOoY4OMZDJfLDzBh7gNQh2c=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   # Required to build tests, even if they aren't executed

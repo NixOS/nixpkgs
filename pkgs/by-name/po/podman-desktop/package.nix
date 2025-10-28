@@ -4,7 +4,7 @@
   fetchFromGitHub,
   makeWrapper,
   copyDesktopItems,
-  electron_37,
+  electron_38,
   nodejs,
   pnpm_10,
   makeDesktopItem,
@@ -19,12 +19,12 @@
 }:
 
 let
-  electron = electron_37;
+  electron = electron_38;
   appName = "Podman Desktop";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "podman-desktop";
-  version = "1.21.0";
+  version = "1.22.1";
 
   passthru.updateScript = _experimental-update-script-combinators.sequence [
     (nix-update-script { })
@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
       runtimeEnv = {
         PNAME = "podman-desktop";
-        PKG_FILE = builtins.toString ./package.nix;
+        PKG_FILE = toString ./package.nix;
       };
       text = ''
         new_src="$(nix-build --attr "pkgs.$PNAME.src" --no-out-link)"
@@ -57,13 +57,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "containers";
     repo = "podman-desktop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-Wio+lETdsDhcZvluKV6gUqjT0lTE9nYL5TqPLCR4Kr0=";
+    hash = "sha256-+YM1fiY2bH5nY1L/xWjMbWe5lH1LfyKW47OzCROB3nE=";
   };
 
   pnpmDeps = pnpm_10.fetchDeps {
     inherit (finalAttrs) pname version src;
     fetcherVersion = 1;
-    hash = "sha256-yteFC4/raBdL4gjBtsGL/lVRpo11BuhS7Xm0mFgz3t4=";
+    hash = "sha256-2Cja6CQxjOlxjhsjGQ5C9a/C/2RfzKdvtRCKO7VztwQ=";
   };
 
   patches = [

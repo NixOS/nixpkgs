@@ -2,15 +2,28 @@
   lib,
   stdenvNoCC,
   xcodePlatform,
+  sdkVersion,
 }:
 
 let
   inherit (lib.generators) toPlist;
 
-  Info = {
-    CFBundleIdentifier = "com.apple.platform.${lib.toLower xcodePlatform}";
-    Type = "Platform";
+  Info = rec {
+    CFBundleIdentifier = "com.apple.platform.${Name}";
+    DefaultProperties = {
+      COMPRESS_PNG_FILES = "NO";
+      DEPLOYMENT_TARGET_SETTING_NAME = stdenvNoCC.hostPlatform.darwinMinVersionVariable;
+      STRIP_PNG_TEXT = "NO";
+    };
+    Description = if stdenvNoCC.hostPlatform.isMacOS then "macOS" else "iOS";
+    FamilyDisplayName = Description;
+    FamilyIdentifier = lib.toLower xcodePlatform;
+    FamilyName = Description;
+    Identifier = CFBundleIdentifier;
+    MinimumSDKVersion = stdenvNoCC.hostPlatform.darwinMinVersion;
     Name = lib.toLower xcodePlatform;
+    Type = "Platform";
+    Version = sdkVersion;
   };
 
   # These files are all based off of Xcode spec files found in

@@ -2,6 +2,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
+  texinfo,
   bpp-core,
   bpp-seq,
   bpp-phyl,
@@ -11,7 +12,7 @@
 stdenv.mkDerivation rec {
   pname = "bppsuite";
 
-  inherit (bpp-core) version;
+  inherit (bpp-core) version postPatch;
 
   src = fetchFromGitHub {
     owner = "BioPP";
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "1wdwcgczqbc3m116vakvi0129wm3acln3cfc7ivqnalwvi6lrpds";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    texinfo
+  ];
   buildInputs = [
     bpp-core
     bpp-seq

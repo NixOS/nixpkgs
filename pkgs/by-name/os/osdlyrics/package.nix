@@ -4,8 +4,10 @@
   fetchFromGitHub,
 
   autoreconfHook,
-  pkg-config,
+  gobject-introspection,
   intltool,
+  pkg-config,
+  wrapGAppsNoGuiHook,
 
   glib,
   gtk2,
@@ -29,8 +31,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook
-    pkg-config
+    gobject-introspection
     intltool
+    pkg-config
+    wrapGAppsNoGuiHook
   ];
 
   buildInputs = [
@@ -49,6 +53,8 @@ stdenv.mkDerivation rec {
       ]
     ))
   ];
+
+  dontWrapGApps = true;
 
   postFixup = ''
     extractExecLine() {
@@ -75,6 +81,7 @@ stdenv.mkDerivation rec {
 
     for p in "$out/bin/osdlyrics-create-lyricsource" "$out/bin/osdlyrics-daemon" "$out/libexec/osdlyrics"/*; do
       wrapProgram "$p" \
+        ''${gappsWrapperArgs[@]} \
         --prefix PYTHONPATH : "$out/${python3.sitePackages}"
     done
   '';

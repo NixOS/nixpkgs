@@ -1,0 +1,155 @@
+diff --git a/tests/test_capture.py b/tests/test_capture.py
+index ba37be8..8f70c9e 100644
+--- a/tests/test_capture.py
++++ b/tests/test_capture.py
+@@ -87,7 +87,7 @@ def test_show_capture_with_build(tmp_path, show_capture):
+     """
+     tmp_path.joinpath("workflow.py").write_text(textwrap.dedent(source))
+ 
+-    result = run_in_subprocess(("uv", "run", "python", "workflow.py"), cwd=tmp_path)
++    result = run_in_subprocess(("python", "workflow.py"), cwd=tmp_path)
+ 
+     assert result.exit_code == ExitCode.FAILED
+ 
+@@ -128,7 +128,7 @@ def test_wrong_capture_method(tmp_path):
+     """
+     tmp_path.joinpath("workflow.py").write_text(textwrap.dedent(source))
+ 
+-    result = run_in_subprocess(("uv", "run", "python", "workflow.py"), cwd=tmp_path)
++    result = run_in_subprocess(("python", "workflow.py"), cwd=tmp_path)
+     assert result.exit_code == ExitCode.CONFIGURATION_FAILED
+     assert "Value 'a' is not a valid" in result.stdout
+     assert "Traceback" not in result.stdout
+@@ -255,7 +255,7 @@ def test_capturing_unicode_with_build(tmp_path, method):
+     tmp_path.joinpath("workflow.py").write_text(
+         textwrap.dedent(source), encoding="utf-8"
+     )
+-    result = run_in_subprocess(("uv", "run", "python", "workflow.py"), cwd=tmp_path)
++    result = run_in_subprocess(("python", "workflow.py"), cwd=tmp_path)
+     assert result.exit_code == ExitCode.OK
+     assert "1  Succeeded" in result.stdout
+ 
+diff --git a/tests/test_config.py b/tests/test_config.py
+index c46f5ed..eaa0934 100644
+--- a/tests/test_config.py
++++ b/tests/test_config.py
+@@ -114,7 +114,7 @@ def test_paths_are_relative_to_configuration_file(tmp_path):
+     session = build(paths=[Path("src")])
+     """
+     tmp_path.joinpath("script.py").write_text(textwrap.dedent(source))
+-    result = run_in_subprocess(("uv", "run", "python", "script.py"), cwd=tmp_path)
++    result = run_in_subprocess(("python", "script.py"), cwd=tmp_path)
+     assert result.exit_code == ExitCode.OK
+     assert "1  Succeeded" in result.stdout
+ 
+diff --git a/tests/test_dag_command.py b/tests/test_dag_command.py
+index 3ca41ba..7c0c4fc 100644
+--- a/tests/test_dag_command.py
++++ b/tests/test_dag_command.py
+@@ -92,7 +92,7 @@ def test_create_graph_via_task(tmp_path, format_, layout, rankdir):
+     tmp_path.joinpath("input.txt").touch()
+ 
+     result = subprocess.run(
+-        ("uv", "run", "python", "task_example.py"),
++        ("python", "task_example.py"),
+         cwd=tmp_path,
+         check=True,
+         capture_output=True,
+diff --git a/tests/test_execute.py b/tests/test_execute.py
+index 1a23316..6532b48 100644
+--- a/tests/test_execute.py
++++ b/tests/test_execute.py
+@@ -26,7 +26,7 @@ from tests.conftest import run_in_subprocess
+ def test_python_m_pytask(tmp_path):
+     tmp_path.joinpath("task_module.py").write_text("def task_example(): pass")
+     result = run_in_subprocess(
+-        ("uv", "run", "python", "-m", "pytask", tmp_path.as_posix())
++        ("python", "-m", "pytask", tmp_path.as_posix())
+     )
+     assert result.exit_code == ExitCode.OK
+ 
+@@ -602,7 +602,7 @@ def test_execute_tasks_via_functional_api(tmp_path):
+     """
+     tmp_path.joinpath("task_module.py").write_text(textwrap.dedent(source))
+     result = subprocess.run(
+-        ("uv", "run", "python", tmp_path.joinpath("task_module.py").as_posix()),
++        ("python", tmp_path.joinpath("task_module.py").as_posix()),
+         check=False,
+     )
+     assert result.returncode == ExitCode.OK
+@@ -632,7 +632,7 @@ def test_execute_tasks_multiple_times_via_api(tmp_path):
+     """
+     tmp_path.joinpath("task_module.py").write_text(textwrap.dedent(source))
+     result = run_in_subprocess(
+-        ("uv", "run", "python", tmp_path.joinpath("task_module.py").as_posix())
++        ("python", tmp_path.joinpath("task_module.py").as_posix())
+     )
+     assert result.exit_code == ExitCode.OK
+ 
+diff --git a/tests/test_hook_module.py b/tests/test_hook_module.py
+index eba4868..e26288a 100644
+--- a/tests/test_hook_module.py
++++ b/tests/test_hook_module.py
+@@ -25,8 +25,6 @@ def test_add_new_hook_via_cli(tmp_path, module_name):
+ 
+     if module_name:
+         args = (
+-            "uv",
+-            "run",
+             "python",
+             "-m",
+             "pytask",
+@@ -37,8 +35,6 @@ def test_add_new_hook_via_cli(tmp_path, module_name):
+         )
+     else:
+         args = (
+-            "uv",
+-            "run",
+             "pytask",
+             "build",
+             "--hook-module",
+@@ -70,9 +66,6 @@ def test_add_new_hook_via_config(tmp_path, module_name):
+ 
+     if module_name:
+         args = (
+-            "uv",
+-            "run",
+-            "--no-project",
+             "python",
+             "-m",
+             "pytask",
+@@ -80,7 +73,7 @@ def test_add_new_hook_via_config(tmp_path, module_name):
+             "--help",
+         )
+     else:
+-        args = ("uv", "run", "--no-project", "pytask", "build", "--help")
++        args = ("pytask", "build", "--help")
+ 
+     result = run_in_subprocess(args, cwd=tmp_path)
+     assert result.exit_code == ExitCode.OK
+diff --git a/tests/test_task.py b/tests/test_task.py
+index a2f70ad..510619e 100644
+--- a/tests/test_task.py
++++ b/tests/test_task.py
+@@ -667,7 +667,7 @@ def test_task_will_be_executed_after_another_one_with_function_session(
+     tmp_path.joinpath("task_example.py").write_text(textwrap.dedent(source))
+ 
+     result = subprocess.run(
+-        ("uv", "run", "python", "task_example.py"),
++        ("python", "task_example.py"),
+         cwd=tmp_path,
+         capture_output=True,
+         check=False,
+diff --git a/tests/test_warnings.py b/tests/test_warnings.py
+index 8811018..5aae724 100644
+--- a/tests/test_warnings.py
++++ b/tests/test_warnings.py
+@@ -148,7 +148,7 @@ def test_deprecation_warnings_are_not_captured(tmp_path, warning):
+     path_to_warn_module.write_text(textwrap.dedent(warn_module))
+ 
+     # Cannot use runner since then warnings are not ignored by default.
+-    result = run_in_subprocess(("uv", "run", "pytask"), cwd=tmp_path)
++    result = run_in_subprocess(("pytask"), cwd=tmp_path)
+     assert result.exit_code == ExitCode.OK
+     assert "Warnings" not in result.stdout
+     assert "warning!!!" not in result.stdout

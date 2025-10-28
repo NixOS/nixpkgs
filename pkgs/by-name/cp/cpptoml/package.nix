@@ -34,6 +34,19 @@ stdenv.mkDerivation {
     "-DCPPTOML_BUILD_EXAMPLES=OFF"
   ];
 
+  # Fix the build with CMake 4.
+  #
+  # See:
+  #
+  # * <https://github.com/skystrife/cpptoml/pull/132>
+  # * <https://github.com/facebook/watchman/issues/1286>
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 3.1.0)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   meta = with lib; {
     description = "C++ TOML configuration library";
     homepage = "https://github.com/skystrife/cpptoml";

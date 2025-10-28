@@ -32,11 +32,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.12";
+  version = "0.5.13";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
-    hash = "sha256-6Ehw+/lrdmuCJKPzps58z6Nu+jtpGcyKL792XqTf5HY=";
+    hash = "sha256-YwIXO81G+JflIJyIOltRrR2rSUbC84YcujdKO4DY88E=";
   };
 
   outputs = [
@@ -91,7 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   # add support for more image formats
   env.GDK_PIXBUF_MODULE_FILE = gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
     extraLoaders = [
-      libheif.out
+      libheif.lib
       libjxl
       librsvg
       webp-pixbuf-loader

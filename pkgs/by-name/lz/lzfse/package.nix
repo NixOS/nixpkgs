@@ -18,6 +18,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'cmake_minimum_required(VERSION 2.8.6)' \
+        'cmake_minimum_required(VERSION 3.10)'
+  '';
+
   meta = {
     homepage = "https://github.com/lzfse/lzfse";
     description = "Reference C implementation of the LZFSE compressor";

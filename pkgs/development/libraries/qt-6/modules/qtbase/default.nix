@@ -29,6 +29,7 @@
   vulkan-loader,
   libthai,
   libdrm,
+  libgbm,
   libdatrie,
   lttng-ust,
   libepoxy,
@@ -78,6 +79,9 @@
   gtk3,
   withLibinput ? false,
   libinput,
+  withWayland ? lib.meta.availableOn stdenv.hostPlatform wayland,
+  wayland,
+  wayland-scanner,
   # options
   qttranslations ? null,
 }:
@@ -133,6 +137,7 @@ stdenv.mkDerivation rec {
     lttng-ust
     libthai
     libdrm
+    libgbm
     libdatrie
     udev
     # Text rendering
@@ -156,7 +161,11 @@ stdenv.mkDerivation rec {
     xorg.xcbutilcursor
     libepoxy
   ]
-  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups;
+  ++ lib.optional (cups != null && lib.meta.availableOn stdenv.hostPlatform cups) cups
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ];
 
   buildInputs =
     lib.optionals (lib.meta.availableOn stdenv.hostPlatform at-spi2-core) [
@@ -186,7 +195,14 @@ stdenv.mkDerivation rec {
   ]
   # I’m not sure if this is necessary, but the macOS mkspecs stuff
   # tries to call `xcrun xcodebuild`, so better safe than sorry.
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ]
+  # wayland-scanner needs to be propagated as both build
+  # (for the wayland-scanner binary) and host (for the
+  # actual wayland.xml protocol definition)
+  ++ lib.optionals withWayland [
+    wayland
+    wayland-scanner
+  ];
 
   strictDeps = true;
 
@@ -251,6 +267,9 @@ stdenv.mkDerivation rec {
   qtQmlPrefix = "lib/qt-6/qml";
 
   cmakeFlags = [
+    # makes Qt print the configure summary
+    "--log-level=STATUS"
+
     "-DQT_EMBED_TOOLCHAIN_COMPILER=OFF"
     "-DINSTALL_PLUGINSDIR=${qtPluginPrefix}"
     "-DINSTALL_QMLDIR=${qtQmlPrefix}"
@@ -273,6 +292,9 @@ stdenv.mkDerivation rec {
     # When this variable is not set, cmake tries to execute xcodebuild
     # to query the version.
     "-DQT_INTERNAL_XCODE_VERSION=0.1"
+    # This should be removed once https://github.com/NixOS/nixpkgs/pull/455592 makes it to master
+    # as it will become redundant.
+    "-DCMAKE_FIND_FRAMEWORK=FIRST"
   ]
   ++ lib.optionals isCrossBuild [
     "-DQT_HOST_PATH=${pkgsBuildBuild.qt6.qtbase}"

@@ -145,7 +145,7 @@ let
     });
 
 in
-rec {
+{
   wlroots_0_17 = generic {
     version = "0.17.4";
     hash = "sha256-AzmXf+HMX/6VAr0LpfHwfmDB9dRrrLQHt7l35K98MVo=";
@@ -161,16 +161,16 @@ rec {
   };
 
   wlroots_0_18 = generic {
-    version = "0.18.2";
-    hash = "sha256-vKvMWRPPJ4PRKWVjmKKCdNSiqsQm+uQBoBnBUFElLNA=";
+    version = "0.18.3";
+    hash = "sha256-D8RapSeH+5JpTtq+OU8PyVZubLhjcebbCBPuSO5Q7kU=";
     extraBuildInputs = [
       lcms2
     ];
   };
 
   wlroots_0_19 = generic {
-    version = "0.19.1";
-    hash = "sha256-Q4x6obwzYYncgoUzqFVzn/scjxsiUeAIlEWY43emdvA=";
+    version = "0.19.2";
+    hash = "sha256-8VOhSaH9D0GkqyIP42W3uGcDT5ixPVDMT/OLlMXBNXA=";
     extraBuildInputs = [
       lcms2
     ];

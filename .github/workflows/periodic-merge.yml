@@ -11,6 +11,9 @@ on:
         description: Target branch to merge into.
         required: true
         type: string
+    secrets:
+      NIXPKGS_CI_APP_PRIVATE_KEY:
+        required: true
 
 defaults:
   run:
@@ -32,6 +35,8 @@ jobs:
           permission-pull-requests: write
 
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+        with:
+          persist-credentials: false
 
       - name: Find merge base between two branches
         if: contains(inputs.from, ' ')
@@ -55,7 +60,7 @@ jobs:
           github_token: ${{ steps.app-token.outputs.token }}
 
       - name: Comment on failure
-        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4.0.0
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
         if: ${{ failure() }}
         with:
           issue-number: 105153

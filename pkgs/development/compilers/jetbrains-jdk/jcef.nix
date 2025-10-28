@@ -99,14 +99,29 @@ let
     .${platform};
   inherit (arches) depsArch projectArch targetArch;
 
+  thrift20 = thrift.overrideAttrs (old: {
+    version = "0.20.0";
+
+    src = fetchFromGitHub {
+      owner = "apache";
+      repo = "thrift";
+      tag = "v0.20.0";
+      hash = "sha256-cwFTcaNHq8/JJcQxWSelwAGOLvZHoMmjGV3HBumgcWo=";
+    };
+
+    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
+      "-DCMAKE_POLICY_VERSION_MINIMUM=3.10"
+    ];
+  });
+
 in
 stdenv.mkDerivation rec {
   pname = "jcef-jetbrains";
-  rev = "7a7b9383b3bf39c850feb0d103c6b829e2f48a6b";
+  rev = "bb9fb310ed7f3abf858faf248c53bbb707be21f7";
   # This is the commit number
   # Currently from the branch: https://github.com/JetBrains/jcef/tree/251
   # Run `git rev-list --count HEAD`
-  version = "1014";
+  version = "1083";
 
   nativeBuildInputs = [
     cmake
@@ -125,23 +140,23 @@ stdenv.mkDerivation rec {
     libXdamage
     nss
     nspr
-    thrift
+    thrift20
   ];
 
   src = fetchFromGitHub {
     owner = "jetbrains";
     repo = "jcef";
     inherit rev;
-    hash = "sha256-ZMxx5mwmsBiUneULHFUDOrJQ8yKuK9bfPz89vN31ql4=";
+    hash = "sha256-BHmGEhfkrUWDfrUFR8d5AgIq8qkAr+blX9n7ZVg8mtc=";
   };
   cef-bin =
     let
       # `cef_binary_${CEF_VERSION}_linux64_minimal`, where CEF_VERSION is from $src/CMakeLists.txt
-      name = "cef_binary_122.1.9+gd14e051+chromium-122.0.6261.94_${platform}_minimal";
+      name = "cef_binary_137.0.17+gf354b0e+chromium-137.0.7151.104_${platform}_minimal";
       hash =
         {
-          "linuxarm64" = "sha256-wABtvz0JHitlkkB748I7yr02Oxs5lXvqDfrBAQiKWHU=";
-          "linux64" = "sha256-qlutM0IsE1emcMe/3p7kwMIK7ou1rZGvpUkrSMVPnCc=";
+          "linuxarm64" = "sha256-QKkJwLtYS3o7lf4T31jIww2LGuAJT3sNTeI3Jq0VEYQ=";
+          "linux64" = "sha256-qE5SOi0/6dPsewyemarTbWG9MbWCQUlng8TgqU+4Tak=";
         }
         .${platform};
       urlName = builtins.replaceStrings [ "+" ] [ "%2B" ] name;
@@ -184,7 +199,7 @@ stdenv.mkDerivation rec {
       -e 's|vcpkg_install_package(boost-filesystem boost-interprocess thrift)||' \
       -i CMakeLists.txt
 
-    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${thrift}/bin/thrift)|' -i remote/CMakeLists.txt
+    sed -e 's|vcpkg_bring_host_thrift()|set(THRIFT_COMPILER_HOST ${lib.getExe thrift20})|' -i remote/CMakeLists.txt
 
     mkdir jcef_build
     cd jcef_build

@@ -8,7 +8,7 @@
   fetchFromGitHub,
   hatchling,
   pyopenssl,
-  pytest-asyncio_0_21,
+  pytest-asyncio,
   pytest-mock,
   pytestCheckHook,
   python-dateutil,
@@ -56,7 +56,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-asyncio_0_21
+    pytest-asyncio
     pytest-mock
   ];
 

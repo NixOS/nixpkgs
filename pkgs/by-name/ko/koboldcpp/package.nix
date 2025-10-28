@@ -7,7 +7,7 @@
   tk,
   addDriverRunpath,
 
-  apple-sdk_12,
+  apple-sdk_13,
 
   koboldLiteSupport ? true,
 
@@ -41,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.98.1";
+  version = "1.100.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-CJM97DRSIq2d3X6aR096+9QwBeI4kQNzxufdSoEydco=";
+    hash = "sha256-Z3yPsC7WDFHwXVInnu96ZVWAjn6XyN0aVviwGkvoe1A=";
   };
 
   enableParallelBuilding = true;
@@ -57,13 +57,21 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     python3Packages.wrapPython
   ];
 
+  postPatch = ''
+    nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
+    substituteInPlace "$PWD/Makefile" \
+      --replace-fail \
+        'CUBLASLD_FLAGS = -lcuda ' \
+        'CUBLASLD_FLAGS = '
+  '';
+
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
   buildInputs = [
     tk
   ]
   ++ finalAttrs.pythonInputs
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_13 ]
   ++ lib.optionals cublasSupport [
     cudaPackages.libcublas
     cudaPackages.cuda_nvcc
@@ -96,7 +104,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp *.embd "$out/bin"
+    cp embd_res/*.embd "$out/bin"
 
     ${lib.optionalString metalSupport ''
       cp *.metal "$out/bin"

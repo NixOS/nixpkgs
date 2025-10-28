@@ -6,14 +6,16 @@
 
 callPackage ./generic.nix rec {
   pname = "shattered-pixel-dungeon";
-  version = "3.1.1";
+  version = "3.2.5";
 
   src = fetchFromGitHub {
     owner = "00-Evan";
     repo = "shattered-pixel-dungeon";
-    rev = "v${version}";
-    hash = "sha256-MUpQdH8RMzZtI6e2duSRWHK1gPJDhMRKsm5kIKDcFuk=";
+    tag = "v${version}";
+    hash = "sha256-ltCKM46nzZZVJqHzo3V0Igyd4q+uD95fuLMWCi18jbQ=";
   };
+
+  patches = [ ];
 
   depsPath = ./deps.json;
 

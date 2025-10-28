@@ -3,6 +3,7 @@
   stdenv,
 
   fetchFromGitHub,
+  fetchpatch,
   nix-update-script,
 
   cmake,
@@ -20,6 +21,14 @@ stdenv.mkDerivation (finalAttrs: {
     tag = "releases/${finalAttrs.version}";
     hash = "sha256-L6uBRXaPJZinIRTm+x+wnXmlVkSlWm4XMB5yX/wxg2A=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "qpoases-fix-cmake-4.patch";
+      url = "https://github.com/coin-or/qpOASES/commit/35b762ba3fee2e009d9e99650c68514da05585c5.patch";
+      hash = "sha256-I6l+ah1j45VEMokZqX6DYVmE55uWlVi0rx2B+HQv5Ik=";
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
 

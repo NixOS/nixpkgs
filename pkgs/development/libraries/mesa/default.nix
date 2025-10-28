@@ -120,8 +120,8 @@ let
   toCommand = dep: "ln -s ${dep} $out/${dep.pname}-${dep.version}.tar.gz";
 
   packageCacheCommand = lib.pipe rustDeps [
-    (builtins.map fetchDep)
-    (builtins.map toCommand)
+    (map fetchDep)
+    (map toCommand)
     (lib.concatStringsSep "\n")
   ];
 

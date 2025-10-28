@@ -137,7 +137,7 @@ let
 
           mkdir -p "$out/nix-support"
           ${lib.concatMapStrings (file: ''
-            echo "file binary-dist ${installDir}/${builtins.baseNameOf file}" >> "$out/nix-support/hydra-build-products"
+            echo "file binary-dist ${installDir}/${baseNameOf file}" >> "$out/nix-support/hydra-build-products"
           '') (filesToInstall ++ builtins.attrNames pythonScriptsToInstall)}
 
           runHook postInstall
@@ -392,6 +392,17 @@ in
       "idbloader.img"
       "u-boot-rockchip.bin"
       "u-boot-rockchip-spi.bin"
+    ];
+  };
+
+  ubootNanoPiR5S = buildUBoot {
+    defconfig = "nanopi-r5s-rk3568_defconfig";
+    extraMeta.platforms = [ "aarch64-linux" ];
+    BL31 = rkbin.BL31_RK3568;
+    ROCKCHIP_TPL = rkbin.TPL_RK3568;
+    filesToInstall = [
+      "idbloader.img"
+      "u-boot.itb"
     ];
   };
 

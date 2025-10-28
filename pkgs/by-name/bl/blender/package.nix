@@ -74,7 +74,7 @@
   spaceNavSupport ? stdenv.hostPlatform.isLinux,
   sse2neon,
   stdenv,
-  tbb_2022,
+  onetbb,
   vulkan-headers,
   vulkan-loader,
   wayland,
@@ -112,8 +112,6 @@ let
     tag = "v8.0.0";
     hash = "sha256-SXkXZHzQH8JOkXypjjxNvT/lUlWZkCuhh6hNCHE7FkY=";
   };
-
-  tbb = tbb_2022;
 in
 
 stdenv'.mkDerivation (finalAttrs: {
@@ -262,20 +260,20 @@ stdenv'.mkDerivation (finalAttrs: {
     openexr
     openimageio
     openjpeg
-    (openpgl.override { inherit tbb; })
+    openpgl
     (opensubdiv.override { inherit cudaSupport; })
-    (openvdb.override { inherit tbb; })
+    openvdb
     potrace
     pugixml
     python3
     python3Packages.materialx
-    tbb
+    onetbb
     zlib
     zstd
   ]
   ++ lib.optional embreeSupport embree
   ++ lib.optional hipSupport rocmPackages.clr
-  ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport tbb; })
+  ++ lib.optional openImageDenoiseSupport (openimagedenoise.override { inherit cudaSupport; })
   ++ (
     if (!stdenv.hostPlatform.isDarwin) then
       [
@@ -436,9 +434,7 @@ stdenv'.mkDerivation (finalAttrs: {
     # They comment two licenses: GPLv2 and Blender License, but they
     # say: "We've decided to cancel the BL offering for an indefinite period."
     # OptiX, enabled with cudaSupport, is non-free.
-    license =
-      with lib.licenses;
-      [ gpl2Plus ] ++ lib.optional cudaSupport (unfree // { shortName = "NVidia OptiX EULA"; });
+    license = with lib.licenses; [ gpl2Plus ] ++ lib.optional cudaSupport nvidiaCudaRedist;
 
     platforms = [
       "aarch64-linux"

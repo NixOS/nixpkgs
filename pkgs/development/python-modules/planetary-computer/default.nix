@@ -55,7 +55,7 @@ buildPythonPackage rec {
   optional-dependencies = {
     adlfs = [ adlfs ];
     azure = [ azure-storage-blob ];
-    all = lib.flatten (lib.attrValues (lib.filterAttrs (n: v: n != "all") optional-dependencies));
+    all = lib.flatten (lib.attrValues (lib.removeAttrs optional-dependencies [ "all" ]));
   };
 
   pythonImportsCheck = [

@@ -34,12 +34,14 @@ jobs:
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           sparse-checkout-cone-mode: true # default, for clarity
           sparse-checkout: |
             ci/github-script
       - id: prepare
         uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
+          retries: 3
           script: |
             require('./ci/github-script/prepare.js')({
               github,

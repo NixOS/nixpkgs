@@ -22,7 +22,7 @@
 }@attrs:
 
 let
-  cleanAttrs = builtins.removeAttrs attrs [
+  cleanAttrs = removeAttrs attrs [
     "lib"
     "stdenv"
     "makeWrapper"

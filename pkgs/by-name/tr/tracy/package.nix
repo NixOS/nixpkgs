@@ -12,7 +12,7 @@
   dbus,
   freetype,
   glfw,
-  tbb,
+  onetbb,
 
   withGtkFileSelector ? false,
   gtk3,
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     capstone
     freetype
-    tbb
+    onetbb
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && withGtkFileSelector) [ gtk3 ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && !withGtkFileSelector) [ dbus ]

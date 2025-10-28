@@ -23,6 +23,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DSHARED=ON" ];
 
+  # Fix the build with CMake 4.
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 2.4)' \
+        'CMAKE_MINIMUM_REQUIRED(VERSION 3.10)'
+  '';
+
   meta = {
     description = "Audio encoder which generates compressed audio streams based on ATSC A/52 specification";
     homepage = "https://aften.sourceforge.net/";

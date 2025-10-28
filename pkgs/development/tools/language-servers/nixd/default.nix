@@ -36,6 +36,7 @@ let
       ninja
       python3
       pkg-config
+      llvmPackages.llvm # workaround for a meson bug, where llvm-config is not found, making the build fail
     ];
 
     mesonBuildType = "release";

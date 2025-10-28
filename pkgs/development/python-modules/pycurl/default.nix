@@ -4,6 +4,7 @@
   buildPythonPackage,
   isPyPy,
   fetchFromGitHub,
+  fetchpatch,
   curl,
   openssl,
   bottle,
@@ -26,6 +27,14 @@ buildPythonPackage rec {
     tag = "REL_${lib.replaceStrings [ "." ] [ "_" ] version}";
     hash = "sha256-M4rO0CaI2SmjdJVS7hWnJZrL72WvayB4aKn707KoNiQ=";
   };
+
+  patches = [
+    # curl 8.16 compatibility
+    (fetchpatch {
+      url = "https://github.com/pycurl/pycurl/commit/eb7f52eeef85feb6c117678d52803050bbdd7bc8.patch";
+      hash = "sha256-hdwazS7R9duuMd/7S3SNAxVcToo3GhtyWu/1Q6qTMYc=";
+    })
+  ];
 
   preConfigure = ''
     substituteInPlace setup.py \

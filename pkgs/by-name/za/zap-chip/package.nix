@@ -11,16 +11,16 @@
 
 buildNpmPackage rec {
   pname = "zap-chip";
-  version = "2025.02.26";
+  version = "2025.07.24";
 
   src = fetchFromGitHub {
     owner = "project-chip";
     repo = "zap";
     rev = "v${version}";
-    hash = "sha256-oYw1CxeCr4dUpw7hhXjtB+QwTfBI7rG9jgfxWKZYsSc=";
+    hash = "sha256-MGu4qr+iXqI+GTpThI8yCcjt0KAcEwgJJa7wSnbryco=";
   };
 
-  npmDepsHash = "sha256-dcnJfxgF1S2gyR+wPnBD4AFzix5Sdq2ZqDlXvWAFb8s=";
+  npmDepsHash = "sha256-2AWqqMm91Ql9JA5oqon7H1YUuzJG+Z9c3LpsbQ9HE90=";
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
   env.CYPRESS_INSTALL_BINARY = "0";
@@ -84,6 +84,7 @@ buildNpmPackage rec {
   meta = {
     description = "Generic generation engine and user interface for applications and libraries based on Zigbee Cluster Library (ZCL)";
     changelog = "https://github.com/project-chip/zap/releases/tag/v${version}";
+    homepage = "https://github.com/project-chip/zap";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ symphorien ];
     mainProgram = "zap" + lib.optionalString (!withGui) "-cli";

@@ -16,7 +16,6 @@
   json5,
   jsonref,
   litellm,
-  onnxruntime,
   openai,
   opentelemetry-api,
   opentelemetry-exporter-otlp-proto-http,
@@ -25,6 +24,7 @@
   pdfplumber,
   portalocker,
   pydantic,
+  pydantic-settings,
   pyjwt,
   python-dotenv,
   pyvis,
@@ -44,14 +44,14 @@
 
 buildPythonPackage rec {
   pname = "crewai";
-  version = "0.186.1";
+  version = "0.203.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "crewAIInc";
     repo = "crewAI";
     tag = version;
-    hash = "sha256-rSVIbRATMq0cfMdgR/+/tNjij0Sk/ErWipy0m8hKvr4=";
+    hash = "sha256-vy3JdJjuiFbi66IDNo+dQ7MZqlHqvHt/zUb6eblPT7A=";
   };
 
   build-system = [ hatchling ];
@@ -60,8 +60,8 @@ buildPythonPackage rec {
     "chromadb"
     "json-repair"
     "litellm"
-    "onnxruntime"
     "portalocker"
+    "pydantic"
     "pyvis"
   ];
 
@@ -75,7 +75,6 @@ buildPythonPackage rec {
     json5
     jsonref
     litellm
-    onnxruntime
     openai
     opentelemetry-api
     opentelemetry-exporter-otlp-proto-http
@@ -84,6 +83,7 @@ buildPythonPackage rec {
     pdfplumber
     portalocker
     pydantic
+    pydantic-settings
     pyjwt
     python-dotenv
     pyvis
@@ -108,58 +108,66 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    # AssertionError - json-repair behaves differently since 0.52.0
+    "test_safe_repair_json_unrepairable"
+    "test_valid_action_parsing_with_curly_braces"
+
     # Tests parser
     "test_valid_action_parsing_with_special_characters"
 
     # Tests agent - require API keys (OpenAI, Anthropic, etc)
-    "test_agent_execution_with_tools"
-    "test_llm_call"
-    "test_agent_repeated_tool_usage"
-    "test_agent_execute_task_basic"
-    "test_agent_execution"
-    "test_ensure_first_task_allow_crewai_trigger_context_is_false_does_not_inject"
-    "test_agent_use_specific_tasks_output_as_context"
-    "test_task_allow_crewai_trigger_context"
-    "test_agent_with_only_crewai_knowledge"
-    "test_logging_tool_usage"
-    "test_agent_execute_task_with_context"
-    "test_agent_repeated_tool_usage_check_even_with_disabled_cache"
-    "test_agent_step_callback"
-    "test_handle_context_length_exceeds_limit_cli_no"
-    "test_task_without_allow_crewai_trigger_context"
-    "test_cache_hitting"
-    "test_agent_knowledege_with_crewai_knowledge"
-    "test_agent_execute_task_with_tool"
-    "test_agent_moved_on_after_max_iterations"
-    "test_agent_function_calling_llm"
-    "test_task_allow_crewai_trigger_context_no_payload"
-    "test_disabling_cache_for_agent"
-    "test_do_not_allow_crewai_trigger_context_for_first_task_hierarchical"
-    "test_tool_result_as_answer_is_the_final_answer_for_the_agent"
-    "test_agent_execute_task_with_ollama"
-    "test_agent_with_knowledge_sources"
-    "test_agent_respect_the_max_rpm_set"
-    "test_agent_execution_with_specific_tools"
-    "test_llm_call_with_ollama_llama3"
-    "test_first_task_auto_inject_trigger"
-    "test_agent_respect_the_max_rpm_set_over_crew_rpm"
-    "test_agent_powered_by_new_o_model_family_that_allows_skipping_tool"
-    "test_agent_with_knowledge_with_no_crewai_knowledge"
-    "test_tool_usage_information_is_appended_to_agent"
-    "test_agent_without_max_rpm_respects_crew_rpm"
-    "test_agent_powered_by_new_o_model_family_that_uses_tool"
-    "test_agent_error_on_parsing_tool"
     "test_agent_custom_max_iterations"
-    "test_agent_remembers_output_format_after_using_tools_too_many_times"
-    "test_llm_call_with_all_attributes"
+    "test_agent_error_on_parsing_tool"
+    "test_agent_execute_task_basic"
+    "test_agent_execute_task_with_context"
     "test_agent_execute_task_with_custom_llm"
-    "test_agent_with_ollama_llama3"
-    "test_custom_llm_with_langchain"
-    "test_custom_llm_temperature_preservation"
+    "test_agent_execute_task_with_ollama"
+    "test_agent_execute_task_with_tool"
+    "test_agent_execution"
+    "test_agent_execution_with_specific_tools"
+    "test_agent_execution_with_tools"
+    "test_agent_from_repository"
     "test_agent_from_repository_override_attributes"
     "test_agent_from_repository_with_invalid_tools"
+    "test_agent_function_calling_llm"
+    "test_agent_knowledege_with_crewai_knowledge"
+    "test_agent_moved_on_after_max_iterations"
+    "test_agent_powered_by_new_o_model_family_that_allows_skipping_tool"
+    "test_agent_powered_by_new_o_model_family_that_uses_tool"
+    "test_agent_remembers_output_format_after_using_tools_too_many_times"
+    "test_agent_repeated_tool_usage"
+    "test_agent_repeated_tool_usage_check_even_with_disabled_cache"
+    "test_agent_respect_the_max_rpm_set"
+    "test_agent_respect_the_max_rpm_set_over_crew_rpm"
+    "test_agent_step_callback"
+    "test_agent_use_specific_tasks_output_as_context"
+    "test_agent_with_knowledge_sources"
+    "test_agent_with_knowledge_with_no_crewai_knowledge"
+    "test_agent_with_ollama_llama3"
+    "test_agent_with_only_crewai_knowledge"
+    "test_agent_without_max_rpm_respects_crew_rpm"
+    "test_cache_hitting"
+    "test_custom_llm_temperature_preservation"
+    "test_custom_llm_with_langchain"
+    "test_disabling_cache_for_agent"
+    "test_do_not_allow_crewai_trigger_context_for_first_task_hierarchical"
+    "test_ensure_first_task_allow_crewai_trigger_context_is_false_does_not_inject"
+    "test_first_task_auto_inject_trigger"
+    "test_first_time_user_trace_collection_user_accepts"
+    "test_first_time_user_trace_collection_with_timeout"
+    "test_first_time_user_trace_consolidation_logic"
     "test_get_knowledge_search_query"
-    "test_agent_from_repository"
+    "test_handle_context_length_exceeds_limit_cli_no"
+    "test_llm_call"
+    "test_llm_call_with_all_attributes"
+    "test_llm_call_with_ollama_llama3"
+    "test_logging_tool_usage"
+    "test_task_allow_crewai_trigger_context"
+    "test_task_allow_crewai_trigger_context_no_payload"
+    "test_task_without_allow_crewai_trigger_context"
+    "test_tool_result_as_answer_is_the_final_answer_for_the_agent"
+    "test_tool_usage_information_is_appended_to_agent"
+    "test_trace_batch_marked_as_failed_on_finalize_error"
 
     # Tests lite agent - require API keys
     "test_guardrail_is_called_using_callable"

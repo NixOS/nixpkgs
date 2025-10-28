@@ -65,6 +65,13 @@ let
       ./qtdeclarative-default-disable-qmlcache.patch
       # add version specific QML import path
       ./qtdeclarative-qml-paths.patch
+      # Fix an undefined behavior, and fix random-seeming build error with Clang. See:
+      # - https://codereview.qt-project.org/c/qt/qtdeclarative/+/354847
+      # - https://github.com/llvm/llvm-project/issues/74070
+      (fetchpatch {
+        url = "https://github.com/qt/qtdeclarative/commit/636481a31110f1819efaf6500b25fbc395854311.patch";
+        hash = "sha256-ACOG3IjR0SIlLYioODGdhkNTGNvnKu6iOihsVdzyvgo=";
+      })
     ];
     qtlocation = lib.optionals stdenv.cc.isClang [
       # Fix build with Clang 16
@@ -342,42 +349,6 @@ let
       qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix { };
 
       env = callPackage ../qt-env.nix { };
-      full =
-        callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
-          # `with self` is ok to use here because having these spliced is unnecessary
-          (
-            with self;
-            [
-              qt3d
-              qtcharts
-              qtconnectivity
-              qtdeclarative
-              qtdoc
-              qtgraphicaleffects
-              qtimageformats
-              qtlocation
-              qtmultimedia
-              qtquickcontrols
-              qtquickcontrols2
-              qtscript
-              qtsensors
-              qtserialport
-              qtsvg
-              qttools
-              qttranslations
-              qtvirtualkeyboard
-              qtwebchannel
-              qtwebengine
-              qtwebsockets
-              qtwebview
-              qtx11extras
-              qtxmlpatterns
-              qtlottie
-              qtdatavis3d
-            ]
-            ++ lib.optional (!stdenv.hostPlatform.isDarwin) qtwayland
-            ++ lib.optional (stdenv.hostPlatform.isDarwin) qtmacextras
-          );
 
       qmake = callPackage (
         { qtbase }:
@@ -412,6 +383,9 @@ let
           ++ lib.optional stdenv.hostPlatform.isLinux qtwayland.dev;
         } ../hooks/wrap-qt-apps-hook.sh
       ) { };
+    }
+    // lib.optionalAttrs config.allowAliases {
+      full = throw "libsForQt5.full has been removed. Please use individual packages instead."; # Added 2025-10-18
     };
 
   baseScope = makeScopeWithSplicing' {

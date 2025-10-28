@@ -11,7 +11,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "cordova-cli";
-    rev = version;
+    tag = version;
     hash = "sha256-fEV7NlRcRpyeRplsdXHI2U4/89DsvKQpVwHD5juiNPo=";
   };
 

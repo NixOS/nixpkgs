@@ -5,16 +5,16 @@
 }:
 buildGoModule rec {
   pname = "tfswitch";
-  version = "1.6.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "warrensbox";
     repo = "terraform-switcher";
     rev = "v${version}";
-    sha256 = "sha256-mkS53Bqw59F7Q8QyyMjQVm0uBR/HUUnzjCHNT/GiIEg=";
+    sha256 = "sha256-9N6C2y+lGyWSJgDiPsMKo03ji6lhq+0OI1idi1VcrAA=";
   };
 
-  vendorHash = "sha256-cc1ZvVCcjFlJcHs0DH4atyWISrrDfyXPK6j2dSgWD0k=";
+  vendorHash = "sha256-4qZ5egtNN0O+ESkvavprNd6Xtxh/eyD5INolqKXo674=";
 
   # Disable tests since it requires network access and relies on the
   # presence of release.hashicorp.com

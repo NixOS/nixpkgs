@@ -38,10 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
     pciutils
   ]
-  ++ lib.optionals (withJlink) [
+  ++ lib.optionals withJlink [
     libjaylink
   ]
-  ++ lib.optionals (withGpio) [
+  ++ lib.optionals withGpio [
     libgpiod
   ];
 

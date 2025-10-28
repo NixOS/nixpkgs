@@ -2,7 +2,6 @@
   lib,
   vscode-utils,
   gemini-cli,
-  vsce,
 }:
 vscode-utils.buildVscodeExtension (finalAttrs: {
   pname = "gemini-cli-vscode-ide-companion";
@@ -14,8 +13,6 @@ vscode-utils.buildVscodeExtension (finalAttrs: {
 
   src = gemini-cli.overrideAttrs (oldAttrs: {
     pname = "gemini-cli-vscode-ide-companion-vsix";
-
-    nativeBuildInputs = gemini-cli.nativeBuildInputs ++ [ vsce ];
 
     installPhase = ''
       runHook preInstall

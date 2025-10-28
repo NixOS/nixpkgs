@@ -13,12 +13,11 @@ payload=$(curl -s "https://www.wps.cn/product/wpslinux")
 version=$(echo "$payload" | grep -oP '(?<=banner_txt">)[^<]+')
 
 amd64_url=$(echo "$payload" | grep -oP "downLoad\('[^']*'" | head -1 | sed "s/downLoad('//;s/'$//")
-amd64_uri="${amd64_url#$prefix}"
 
 timestamp10=$(date '+%s')
-md5hash=($(printf '%s' "$SECURITY_KEY$amd64_uri$timestamp10" | md5sum))
+amd64_md5hash=($(printf '%s' "$SECURITY_KEY${amd64_url#$prefix}$timestamp10" | md5sum))
 
-amd64_hash=$(nix-prefetch-url --name "wpsoffice-cn-$version.deb" "$amd64_url?t=$timestamp10&k=$md5hash")
+amd64_hash=$(nix-prefetch-url --name "wpsoffice-cn-$version.deb" "$amd64_url?t=$timestamp10&k=$amd64_md5hash")
 
 amd64_hash=$(nix --extra-experimental-features nix-command hash convert --to sri --hash-algo sha256 "$amd64_hash")
 
@@ -29,7 +28,6 @@ cat > sources.nix << EOF
   version = "$version";
   x86_64 = {
     url = "$amd64_url";
-    uri = "$amd64_uri";
     hash = "$amd64_hash";
   };
 }

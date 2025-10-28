@@ -69,7 +69,7 @@ lib.flip builtins.mapAttrs json (
             );
           in
           spdxLicenses.${spdx};
-        broken = builtins.any (x: x == null) reqDeps;
+        broken = builtins.elem null reqDeps;
       };
     }
     // lib.optionalAttrs (entry.isPoetry or false) {

@@ -61,6 +61,7 @@ stdenv.mkDerivation (
       )}
     '';
 
+    inherit (engine) pos;
     meta = {
       inherit (engine) description homepage;
     };

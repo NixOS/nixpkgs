@@ -4,7 +4,7 @@
   eudev,
   fetchFromGitHub,
   installShellFiles,
-  libdisplay-info,
+  libdisplay-info_0_2,
   libglvnd,
   libinput,
   libxkbcommon,
@@ -58,7 +58,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   ];
 
   buildInputs = [
-    libdisplay-info
+    libdisplay-info_0_2
     libglvnd # For libEGL
     libinput
     libxkbcommon
@@ -138,7 +138,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     changelog = "https://github.com/YaLTeR/niri/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      iogamaster
       foo-dogsquared
       sodiboo
       getchoo

@@ -29,11 +29,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bind";
-  version = "9.20.13";
+  version = "9.20.15";
 
   src = fetchurl {
     url = "https://downloads.isc.org/isc/bind9/${finalAttrs.version}/bind-${finalAttrs.version}.tar.xz";
-    hash = "sha256-FR+TdurTF+ZGpdDJ8BwGA4bYkRGNdDen+Cm7lyfHs0w=";
+    hash = "sha256-1is4+uSLqD/KYYERLQxxAY2LDyzihdx53GoDZ3Isyrs=";
   };
 
   outputs = [
@@ -166,7 +166,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://downloads.isc.org/isc/bind9/cur/${lib.versions.majorMinor finalAttrs.version}/doc/arm/html/notes.html#notes-for-bind-${
       lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
     }";
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = platforms.unix;
 
     outputsToInstall = [

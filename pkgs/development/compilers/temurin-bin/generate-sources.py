@@ -6,7 +6,7 @@ import re
 import requests
 import sys
 
-feature_versions = (8, 11, 17, 21, 23, 24, 25)
+feature_versions = (8, 11, 17, 21, 23, 25)
 oses = ("mac", "linux", "alpine-linux")
 types = ("jre", "jdk")
 impls = ("hotspot",)
@@ -59,7 +59,7 @@ def generate_sources(assets, feature_version, out):
 
 out = {}
 for feature_version in feature_versions:
-    # Default user-agenet is blocked by Azure WAF.
+    # Default user-agent is blocked by Azure WAF.
     headers = {'user-agent': 'nixpkgs-temurin-generate-sources/1.0.0'}
     resp = requests.get(f"https://api.adoptium.net/v3/assets/latest/{feature_version}/hotspot", headers=headers)
 

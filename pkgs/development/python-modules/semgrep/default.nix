@@ -22,6 +22,7 @@
   opentelemetry-exporter-otlp-proto-http,
   opentelemetry-instrumentation-requests,
   opentelemetry-sdk,
+  mcp,
   packaging,
   peewee,
   pytest-freezegun,
@@ -97,6 +98,7 @@ buildPythonPackage rec {
     packaging
     jsonschema
     wcmatch
+    mcp
     peewee
     defusedxml
     urllib3
@@ -125,6 +127,7 @@ buildPythonPackage rec {
     "tests/default/e2e"
     "tests/default/e2e-pysemgrep"
     "tests/default/e2e-other"
+    "tests/default/mcp"
   ];
 
   disabledTests = [

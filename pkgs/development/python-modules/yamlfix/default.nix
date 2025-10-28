@@ -1,76 +1,78 @@
 {
   lib,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  maison,
+
+  # build-system
   pdm-backend,
+  setuptools,
+
+  # dependencies
+  click,
+  maison,
+  pydantic,
+  ruyaml,
+
+  # tests
   pytest-freezegun,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  ruyaml,
-  setuptools,
+  versionCheckHook,
   writableTmpDirAsHomeHook,
 }:
-let
-  maison143 = maison.overridePythonAttrs (old: rec {
-    version = "1.4.3";
-    src = fetchFromGitHub {
-      owner = "dbatten5";
-      repo = "maison";
-      tag = "v${version}";
-      hash = "sha256-2hUmk91wr5o2cV3un2nMoXDG+3GT7SaIOKY+QaZY3nw=";
-    };
-  });
-in
 
 buildPythonPackage rec {
   pname = "yamlfix";
-  version = "1.16.1";
+  version = "1.18.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "lyz-code";
     repo = "yamlfix";
     tag = version;
-    hash = "sha256-RRpU6cxb3a3g6RrJbUCxY7YC87HHbGkhOFtE3hf8HdA=";
+    hash = "sha256-g2X9fBUS5wbQJbP29V5pWwrQ1+P/Y8euK4Rv7C6r3WM=";
   };
 
   build-system = [
-    setuptools
     pdm-backend
+    setuptools
   ];
 
   dependencies = [
     click
-    maison143
+    maison
+    pydantic
     ruyaml
   ];
-
-  pythonRelaxDeps = [ "maison" ];
 
   nativeCheckInputs = [
     pytest-freezegun
     pytest-xdist
     pytestCheckHook
     writableTmpDirAsHomeHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = "--version";
 
   pythonImportsCheck = [ "yamlfix" ];
 
   pytestFlags = [
     "-Wignore::DeprecationWarning"
+    "-Wignore::ResourceWarning"
+  ];
+
+  disabledTestPaths = [
+    # Broken since click was updated to 8.2.1 in https://github.com/NixOS/nixpkgs/pull/448189
+    # TypeError: CliRunner.__init__() got an unexpected keyword argument 'mix_stderr'
+    "tests/e2e/test_cli.py"
   ];
 
   meta = {
     description = "Python YAML formatter that keeps your comments";
     homepage = "https://github.com/lyz-code/yamlfix";
-    changelog = "https://github.com/lyz-code/yamlfix/blob/${version}/CHANGELOG.md";
-    mainProgram = "yamlfix";
+    changelog = "https://github.com/lyz-code/yamlfix/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ koozz ];
+    mainProgram = "yamlfix";
   };
 }

@@ -64,6 +64,8 @@ buildPythonPackage rec {
     "test_wantWriteError"
     # https://github.com/pyca/pyopenssl/issues/1043
     "test_alpn_call_failure"
+    # https://github.com/pyca/pyopenssl/issues/1455
+    "test_client_receives_servers_data"
   ]
   ++ lib.optionals (lib.hasPrefix "libressl" openssl.meta.name) [
     # https://github.com/pyca/pyopenssl/issues/791

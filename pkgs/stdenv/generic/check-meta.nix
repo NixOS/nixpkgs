@@ -54,7 +54,7 @@ let
   showWarnings = config.showDerivationWarnings;
 
   getNameWithVersion =
-    attrs: attrs.name or ("${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}");
+    attrs: attrs.name or "${attrs.pname or "«name-missing»"}-${attrs.version or "«version-missing»"}";
 
   allowUnfree = config.allowUnfree || builtins.getEnv "NIXPKGS_ALLOW_UNFREE" == "1";
 
@@ -64,8 +64,8 @@ let
     in
     if envVar != "" then envVar != "0" else config.allowNonSource or true;
 
-  allowlist = config.allowlistedLicenses or config.whitelistedLicenses or [ ];
-  blocklist = config.blocklistedLicenses or config.blacklistedLicenses or [ ];
+  allowlist = config.allowlistedLicenses;
+  blocklist = config.blocklistedLicenses;
 
   areLicenseListsValid =
     if mutuallyExclusive allowlist blocklist then
@@ -308,7 +308,7 @@ let
 
       and is missing the following outputs:
 
-      ${concatStrings (builtins.map (output: "  - ${output}\n") missingOutputs)}
+      ${concatStrings (map (output: "  - ${output}\n") missingOutputs)}
     '';
 
   handleEvalIssue =
@@ -397,6 +397,7 @@ let
         ];
       sourceProvenance = listOf attrs;
       maintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
+      nonTeamMaintainers = listOf (attrsOf any); # TODO use the maintainer type from lib/tests/maintainer-module.nix
       teams = listOf (attrsOf any); # TODO similar to maintainers, use a teams type
       priority = int;
       pkgConfigModules = listOf str;
@@ -669,6 +670,10 @@ let
       # if you add a new maintainer or team attribute please ensure that this expectation is still met.
       maintainers =
         attrs.meta.maintainers or [ ] ++ concatMap (team: team.members or [ ]) attrs.meta.teams or [ ];
+
+      # Needed for CI to be able to avoid requesting reviews from individual
+      # team members
+      nonTeamMaintainers = attrs.meta.maintainers or [ ];
 
       identifiers =
         let

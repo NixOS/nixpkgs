@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail "cmake_minimum_required(VERSION 3.2)" "cmake_minimum_required(VERSION 3.10)"
+  '';
+
   meta = {
     description = "Modbus TCP to Modbus RTU (RS-232/485) gateway";
     homepage = "https://github.com/3cky/mbusd";

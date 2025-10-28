@@ -16,13 +16,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "halftone";
-  version = "0.7.0";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "tfuxu";
     repo = "halftone";
     tag = version;
-    hash = "sha256-UpYdOYQa98syDI353+c/JN9/68PraQ8bg05GES46C+A=";
+    hash = "sha256-5hT6ulmUlOrFVL4nV0tfvgkKdYGusp+1rBINQy3ZvpI=";
   };
 
   format = "other";

@@ -1,4 +1,5 @@
 {
+  _cuda,
   autoAddDriverRunpath,
   buildPythonPackage,
   config,
@@ -35,7 +36,7 @@
 assert libmathdxSupport -> cudaSupport;
 let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
-  stdenv = builtins.throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
+  stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
   version = "1.9.0";
 
@@ -107,12 +108,7 @@ let
         # By downloading and using the software, you agree to fully
         # comply with the terms and conditions of the NVIDIA Software
         # License Agreement.
-        (
-          nvidiaCudaRedist
-          // {
-            url = "https://developer.download.nvidia.cn/compute/mathdx/License.txt";
-          }
-        )
+        _cuda.lib.licenses.math_sdk_sla
 
         # Some of the libmathdx routines were written by or derived
         # from code written by Meta Platforms, Inc. and affiliates and

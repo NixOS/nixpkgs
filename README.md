@@ -1,9 +1,9 @@
 <p align="center">
   <a href="https://nixos.org">
     <picture>
-      <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos.svg">
-      <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos-white.svg">
-      <img src="https://raw.githubusercontent.com/NixOS/nixos-artwork/master/logo/nixos.svg" width="500px" alt="NixOS logo">
+      <source media="(prefers-color-scheme: light)" srcset="https://brand.nixos.org/logos/nixos-logo-default-gradient-black-regular-horizontal-minimal.svg">
+      <source media="(prefers-color-scheme: dark)" srcset="https://brand.nixos.org/logos/nixos-logo-default-gradient-white-regular-horizontal-minimal.svg">
+      <img src="https://brand.nixos.org/logos/nixos-logo-default-gradient-black-regular-horizontal-minimal.svg" width="500px" alt="NixOS logo">
     </picture>
   </a>
 </p>
@@ -57,7 +57,7 @@ When successful build and test criteria are met, the Nixpkgs expressions are dis
 # Contributing
 
 Nixpkgs is among the most active projects on GitHub.
-While thousands of open issues and pull requests might seem a lot at first, it helps consider it in the context of the scope of the project.
+While thousands of open issues and pull requests might seem like a lot at first, it helps to consider it in the context of the scope of the project.
 Nixpkgs describes how to build tens of thousands of pieces of software and implements a Linux distribution.
 The [GitHub Insights](https://github.com/NixOS/nixpkgs/pulse) page gives a sense of the project activity.
 

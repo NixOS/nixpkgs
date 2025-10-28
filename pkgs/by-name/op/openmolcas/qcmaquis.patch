@@ -2,16 +2,17 @@ diff --git a/cmake/custom/nevpt2.cmake b/cmake/custom/nevpt2.cmake
 index 789739ec8..6c86a7b8c 100644
 --- a/cmake/custom/nevpt2.cmake
 +++ b/cmake/custom/nevpt2.cmake
-@@ -67,6 +67,7 @@ list(APPEND NEVPT2CMakeArgs
+@@ -67,6 +67,8 @@ list(APPEND NEVPT2CMakeArgs
    "-DMOLCAS_BUILD_DIR=${PROJECT_BINARY_DIR}"
    "-DCMAKE_Fortran_MODULE_DIRECTORY=${mod_dir}"
    "-DDMRG_INCLUDE=${HDF5_QCM_INCLUDE}"
 +  "-DCMAKE_SKIP_BUILD_RPATH=ON"
++      -DCMAKE_POLICY_VERSION_MINIMUM=3.5
    )
- 
+
  if(HDF5_ROOT)
 @@ -118,9 +119,7 @@ endif ()
- 
+
  ExternalProject_Add(${EP_PROJECT}
                      PREFIX ${CUSTOM_NEVPT2_LOCATION}
 -                    GIT_REPOSITORY ${reference_git_repo}
@@ -25,16 +26,17 @@ diff --git a/cmake/custom/qcmaquis.cmake b/cmake/custom/qcmaquis.cmake
 index 5fd1ef207..8d2957c6e 100644
 --- a/cmake/custom/qcmaquis.cmake
 +++ b/cmake/custom/qcmaquis.cmake
-@@ -77,6 +77,7 @@ list (APPEND QCMaquisCMakeArgs
+@@ -77,6 +77,8 @@ list (APPEND QCMaquisCMakeArgs
        -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}
        -DCMAKE_CXX_FLAGS=${QCM_CMake_CXX_FLAGS}
        -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR>
 +      -DCMAKE_SKIP_BUILD_RPATH=ON
++      -DCMAKE_POLICY_VERSION_MINIMUM=3.5
  )
  if (HDF5_ROOT)
    list (APPEND QCMaquisCMakeArgs
 @@ -274,10 +275,7 @@ if (NOT MAQUIS_DMRG_FOUND) # Does the opposite work?
- 
+
    ExternalProject_Add (${EP_PROJECT}
                         PREFIX ${extprojpath}
 -                       GIT_REPOSITORY ${reference_git_repo}

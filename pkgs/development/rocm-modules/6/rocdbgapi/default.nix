@@ -5,13 +5,13 @@
   rocmUpdateScript,
   cmake,
   rocm-cmake,
-  git,
   rocm-comgr,
   rocm-runtime,
   hwdata,
   texliveSmall,
   doxygen,
   graphviz,
+  writableTmpDirAsHomeHook,
   buildDocs ? true,
 }:
 
@@ -52,7 +52,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "6.3.3";
+  version = "6.4.3";
 
   outputs = [
     "out"
@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "ROCdbgapi";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6itfBrWVspobU47aiJAOQoxT8chwrq9scRn0or3bXto=";
+    hash = "sha256-Rr8+SNeFps0rjk4Jn2+rFmtRJfL42l0tNOz13oZQy+I=";
   };
 
   # FIXME: remove once https://github.com/doxygen/doxygen/issues/11634 is resolved
@@ -81,9 +81,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    git
   ]
   ++ lib.optionals buildDocs [
+    writableTmpDirAsHomeHook
     latex
     doxygen
     graphviz
@@ -106,7 +106,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Unfortunately, it seems like we have to call make on this manually
   postBuild = lib.optionalString buildDocs ''
-    export HOME=$(mktemp -d)
     make -j$NIX_BUILD_CORES doc
   '';
 

@@ -3,9 +3,17 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  replaceVars,
 
   # build-system
   setuptools,
+
+  # nativeBuildInputs
+  cmake,
+
+  # buildInputs
+  cpuinfo,
+  llvmPackages,
 
   # dependencies
   torch,
@@ -24,18 +32,41 @@
 
 buildPythonPackage rec {
   pname = "ao";
-  version = "0.13.0";
+  version = "0.14.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "ao";
     tag = "v${version}";
-    hash = "sha256-R9H4+KkKuOzsunM3A5LT8upH1TfkHrD+BZerToCHwjo=";
+    hash = "sha256-L9Eoul7Nar/+gS44+hA8JbfxCgkMH5xAMCleggAZn7c=";
   };
+
+  patches = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    ./use-system-cpuinfo.patch
+    (replaceVars ./use-llvm-openmp.patch {
+      inherit (llvmPackages) openmp;
+    })
+  ];
 
   build-system = [
     setuptools
+  ];
+
+  nativeBuildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    cmake
+  ];
+  dontUseCmakeConfigure = true;
+
+  buildInputs = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    cpuinfo
+  ];
+
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    # Otherwise, torch will fail to include `omp.h`:
+    # torch._inductor.exc.InductorError: CppCompileError: C++ compile error
+    # OpenMP support not found.
+    llvmPackages.openmp
   ];
 
   dependencies = [
@@ -90,6 +121,36 @@ buildPythonPackage rec {
     "test_save_load_int4woqtensors_2_cpu"
     "test_save_load_int8woqtensors_0_cpu"
     "test_save_load_int8woqtensors_1_cpu"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    # AssertionError: Scalars are not equal!
+    "test_comm"
+    "test_fsdp2"
+    "test_fsdp2_correctness"
+    "test_precompute_bitnet_scale"
+    "test_qlora_fsdp2"
+    "test_uneven_shard"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # RuntimeError: No packed_weights_format was selected
+    "TestIntxOpaqueTensor"
+    "test_accuracy_kleidiai"
+  ]
+  ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+    # Flaky: [gw0] node down: keyboard-interrupt
+    "test_int8_weight_only_quant_with_freeze_0_cpu"
+    "test_int8_weight_only_quant_with_freeze_1_cpu"
+    "test_int8_weight_only_quant_with_freeze_2_cpu"
+  ];
+
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+    # Require unpackaged 'coremltools'
+    "test/prototype/test_groupwise_lowbit_weight_lut_quantizer.py"
+
+    # AttributeError: '_OpNamespace' 'mkldnn' object has no attribute '_is_mkldnn_acl_supported'
+    "test/quantization/pt2e/test_arm_inductor_quantizer.py"
+    "test/quantization/pt2e/test_x86inductor_fusion.py"
+    "test/quantization/pt2e/test_x86inductor_quantizer.py"
   ];
 
   meta = {

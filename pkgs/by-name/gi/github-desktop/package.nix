@@ -100,7 +100,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://desktop.github.com/";
     license = lib.licenses.mit;
     mainProgram = "github-desktop";
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

@@ -92,13 +92,7 @@ index 6d77784..49762d3 100644
    }
  
    if (moduleLoaded == -1) {
-@@ -586,13 +586,14 @@ ncclResult_t ncclIbGdrSupport() {
-     // or created under a different path like `/sys/kernel/` or `/sys/` (depending on your ib_peer_mem module)
-     const char* memory_peers_paths[] = {"/sys/kernel/mm/memory_peers/amdkfd/version",
-                                   "/sys/kernel/memory_peers/amdkfd/version",
--                                  "/sys/memory_peers/amdkfd/version"};
-+                                  "/sys/memory_peers/amdkfd/version",
-+                                  NULL};
+@@ -586,9 +586,9 @@ ncclResult_t ncclIbGdrSupport() {
      int i = 0;
  
      while (memory_peers_paths[i]) {

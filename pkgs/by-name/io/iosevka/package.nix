@@ -47,25 +47,27 @@
   #   sequence = "+>"
   # '';
   extraParameters ? null,
-  # Custom font set name. Required if any custom settings above.
-  set ? null,
+  # Custom font set name. Required if `extraParameters` is used and/or
+  # if `privateBuildPlan` is a TOML string.
+  set ? privateBuildPlan.family or null,
 }:
 
+assert (builtins.isAttrs privateBuildPlan) -> builtins.hasAttr "family" privateBuildPlan;
 assert (privateBuildPlan != null) -> set != null;
 assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "33.3.0";
+  version = "33.3.3";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-6Ys9OzZ9/k8VOD9rbU7QBbJumJMWKq/GFHtPWJGqJ+M=";
+    hash = "sha256-/e65hFA8GabDrHjQ+9MthSTxUku9af0LT4W1ENI+LYc=";
   };
 
-  npmDepsHash = "sha256-UGEl+RFNPZ+3Cnp6vtxbcuZbs86T3VDgDAF0J++83/w=";
+  npmDepsHash = "sha256-QJ3h8NdhCG+lkZ5392akKk+pVHiqmnt+DsC3imixNnw=";
 
   nativeBuildInputs = [
     remarshal
@@ -148,7 +150,6 @@ buildNpmPackage rec {
     platforms = platforms.all;
     maintainers = with maintainers; [
       ttuegel
-      rileyinman
       lunik1
     ];
   };

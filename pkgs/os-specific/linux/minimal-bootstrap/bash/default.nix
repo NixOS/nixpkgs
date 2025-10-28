@@ -83,7 +83,7 @@ bootBash.runCommand "${pname}-${version}"
             ]
           );
         }
-        // (builtins.removeAttrs env [ "nativeBuildInputs" ])
+        // (removeAttrs env [ "nativeBuildInputs" ])
       );
 
     passthru.tests.get-version =

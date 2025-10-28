@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch2,
   cmake,
   pkg-config,
   gtk3,
@@ -29,6 +30,13 @@ stdenv.mkDerivation (finalAttrs: {
     tag = finalAttrs.version;
     hash = "sha256-jHw4V2ZvfpT3PUihe/O+9BPsv+udFg5seMbYmxOz8Yk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      url = "https://github.com/bk138/gromit-mpx/commit/e3b501d497374da083b97d0b3bbd40c5c766d2d1.patch?full_index=1";
+      hash = "sha256-MJFwwYuvIZeLJBi4p/JQ6qJo6fntj2Q7y+ufap/MGdY=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake

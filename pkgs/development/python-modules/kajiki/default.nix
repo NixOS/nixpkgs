@@ -6,12 +6,13 @@
   linetable,
   pytestCheckHook,
   pythonOlder,
+  hatchling,
 }:
 
 buildPythonPackage rec {
   pname = "kajiki";
   version = "1.0.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -23,6 +24,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ linetable ];
+
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     babel

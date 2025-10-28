@@ -108,9 +108,7 @@ let
       };
     };
 
-  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (
-    mapAttrsToList (n: v: v) cfg.taints
-  );
+  taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (attrValues cfg.taints);
 in
 {
   imports = [

@@ -388,11 +388,6 @@
         "libjack2"
       ]
     },
-    "javascriptcoregtk-4.0": {
-      "attrPath": [
-        "webkitgtk_4_0"
-      ]
-    },
     "lapack": {
       "attrPath": [
         "liblapack"
@@ -746,11 +741,6 @@
         "python3"
       ]
     },
-    "ruby-3.1": {
-      "attrPath": [
-        "ruby_3_1"
-      ]
-    },
     "sdl2": {
       "attrPath": [
         "SDL2"
@@ -824,16 +814,6 @@
       "supportedWhenPlatformAttrsEqual": {
         "isDarwin": false
       }
-    },
-    "webkit2gtk-4.0": {
-      "attrPath": [
-        "webkitgtk_4_0"
-      ]
-    },
-    "webkit2gtk-web-extension-4.0": {
-      "attrPath": [
-        "webkitgtk_4_0"
-      ]
     },
     "x11": {
       "attrPath": [

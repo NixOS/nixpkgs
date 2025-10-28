@@ -4,17 +4,18 @@
   fetchFromGitHub,
   writeText,
   nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "6.10.2+250127";
+  version = "6.15.14+250924";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
-    rev = version;
-    hash = "sha256-2ZRN2zbrrGWTXgsPeRWsQbg1qw2vVIAwzUI0LWgCL9g=";
+    tag = version;
+    hash = "sha256-xxK6JEgeBVIj8CGb0qSzwfO1Se9+jMtGB9V3rsc9bBU=";
   };
 
   phpConfig = writeText "config.php" ''
@@ -33,8 +34,9 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.limesurvey;
+  passthru = {
+    tests = { inherit (nixosTests) limesurvey; };
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

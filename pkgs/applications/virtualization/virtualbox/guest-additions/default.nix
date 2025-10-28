@@ -4,6 +4,7 @@
   callPackage,
   lib,
   dbus,
+  kmod,
   xorg,
   zlib,
   patchelf,
@@ -12,9 +13,9 @@
   libX11,
 }:
 let
-  virtualboxVersion = "7.2.0";
+  virtualboxVersion = "7.2.2";
   virtualboxSubVersion = "";
-  virtualboxSha256 = "4f2804ff27848ea772aee6b637bb1e10ee74ec2da117c257413e2d2c4f670ba0";
+  virtualboxSha256 = "sha256-sOY7+4VTJ67PESLNozOQwzc05f/tcvEj9e33hqjOE5M=";
 
   platform =
     if stdenv.hostPlatform.isAarch64 then
@@ -81,6 +82,7 @@ stdenv.mkDerivation {
     patchelf
     makeWrapper
     virtualBoxNixGuestAdditionsBuilder
+    kmod
   ]
   ++ kernel.moduleBuildDependencies;
 
@@ -139,6 +141,11 @@ stdenv.mkDerivation {
     # Additionally, 3d support seems to rely on VBoxOGL.so being symlinked from
     # libGL.so (which we can't), and Oracle doesn't plan on supporting libglvnd
     # either. (#18457)
+
+    mkdir -p $out/etc/depmod.d
+    for mod in $out/lib/modules/*/misc/*; do
+      echo "override $(modinfo -F name "$mod") * misc" >> $out/etc/depmod.d/vbox.conf
+    done
 
     runHook postInstall
   '';

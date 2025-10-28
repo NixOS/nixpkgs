@@ -109,6 +109,36 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
+  preConfigure =
+    let
+      cmakeFiles = [
+        "CMakeLists.txt"
+        "src/CMakeLists.txt"
+        "src/core/CMakeLists.txt"
+        "src/core/transfer/CMakeLists.txt"
+        "src/plugins/CMakeLists.txt"
+        "src/plugins/dcap/CMakeLists.txt"
+        "src/plugins/file/CMakeLists.txt"
+        "src/plugins/gridftp/CMakeLists.txt"
+        "src/plugins/http/CMakeLists.txt"
+        "src/plugins/lfc/CMakeLists.txt"
+        "src/plugins/mock/CMakeLists.txt"
+        "src/plugins/rfio/CMakeLists.txt"
+        "src/plugins/sftp/CMakeLists.txt"
+        "src/plugins/srm/CMakeLists.txt"
+        "src/plugins/xrootd/CMakeLists.txt"
+        "src/utils/CMakeLists.txt"
+        "src/version/CMakeLists.txt"
+      ];
+    in
+    ''
+      for f in ${lib.escapeShellArgs cmakeFiles}; do
+        substituteInPlace "$f" \
+          --replace-fail 'cmake_minimum_required (VERSION 2.6)' \
+                         'cmake_minimum_required (VERSION 3.10)'
+      done
+    '';
+
   cmakeFlags =
     (map (
       pluginName:

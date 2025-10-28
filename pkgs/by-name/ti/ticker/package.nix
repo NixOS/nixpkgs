@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "ticker";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchFromGitHub {
     owner = "achannarasappa";
     repo = "ticker";
     tag = "v${version}";
-    hash = "sha256-sm/57kOiFI+mAH3VNAklXeTaZqfuJSZmLYXvj8cZQso=";
+    hash = "sha256-Dmr2PNphea2WnLBhNlkRPxvDYvxW5gOaslqzsNE1SMs=";
   };
 
   vendorHash = "sha256-EKc9QRDSOD4WetCXORjMUlaFqh0+B3Aa3m5SR1WiKN4=";

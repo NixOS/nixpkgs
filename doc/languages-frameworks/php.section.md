@@ -9,7 +9,7 @@ wide variety of extensions and libraries available.
 
 The different versions of PHP that nixpkgs provides are located under
 attributes named based on major and minor version number; e.g.,
-`php81` is PHP 8.1.
+`php84` is PHP 8.4.
 
 Only versions of PHP that are supported by upstream for the entirety
 of a given NixOS release will be included in that release of
@@ -22,8 +22,8 @@ NixOS - not necessarily the latest major release from upstream.
 
 All available PHP attributes are wrappers around their respective
 binary PHP package and provide commonly used extensions this way. The
-real PHP 8.1 package, i.e. the unwrapped one, is available as
-`php81.unwrapped`; see the next section for more details.
+real PHP 8.4 package, i.e. the unwrapped one, is available as
+`php84.unwrapped`; see the next section for more details.
 
 Interactive tools built on PHP are put in `php.packages`; composer is
 for example available at `php.packages.composer`.
@@ -213,6 +213,12 @@ Composer-based projects opt to include this `composer.lock` file in their source
 code, while others choose not to.
 
 In Nix, there are multiple approaches to building a Composer-based project.
+
+::: {.warning}
+`buildComposerProject2` has a [known bug](https://github.com/NixOS/nixpkgs/issues/451395)
+where the `vendorHash` changes every time a Composer release happens that changes the
+`autoload.php` or vendored composer code.
+:::
 
 One such method is the `php.buildComposerProject2` helper function, which serves
 as a wrapper around `mkDerivation`.

@@ -4,13 +4,11 @@
   fetchFromGitHub,
   gpiozero,
   mock,
-  pyserial,
-  pyserial-asyncio,
   pyusb,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
   setuptools,
+  voluptuous,
   zigpy,
 }:
 
@@ -18,8 +16,6 @@ buildPythonPackage rec {
   pname = "zigpy-zigate";
   version = "0.13.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "zigpy";
@@ -30,22 +26,20 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace ', "setuptools-git-versioning<2"' "" \
-      --replace 'dynamic = ["version"]' 'version = "${version}"'
+      --replace-fail ', "setuptools-git-versioning<2"' "" \
+      --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gpiozero
-    pyserial
-    pyserial-asyncio
     pyusb
+    voluptuous
     zigpy
   ];
 
   nativeCheckInputs = [
-    mock
     pytest-asyncio
     pytestCheckHook
   ];

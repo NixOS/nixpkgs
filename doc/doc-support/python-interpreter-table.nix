@@ -61,7 +61,7 @@ let
 
 in
 writeText "python-interpreter-table.md" ''
-  | Package | Aliases | Interpeter |
-  |---------|---------|------------|
+  | Package | Aliases | Interpreter |
+  |---------|---------|-------------|
   ${toMarkdown result}
 ''

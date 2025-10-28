@@ -24,8 +24,8 @@ buildPythonApplication {
   ];
 
   pythonPath = [
-    python3Packages.gitpython
     python3Packages.requests
+    python3Packages.nixpkgs-plugin-update
   ];
 
   dontUnpack = true;
@@ -43,12 +43,12 @@ buildPythonApplication {
         neovim-unwrapped
         nurl
       ]
-    }" --prefix PYTHONPATH : "${./.}:${../../../../../../maintainers/scripts/pluginupdate-py}" )
+    }" --prefix PYTHONPATH : "${./.}" )
     wrapPythonPrograms
   '';
 
   shellHook = ''
-    export PYTHONPATH=pkgs/applications/editors/vim/plugins:maintainers/scripts/pluginupdate-py:$PYTHONPATH
+    export PYTHONPATH=pkgs/applications/editors/vim/plugins:$PYTHONPATH
   '';
 
   passthru.updateScript = writeShellScript "updateScript" ''

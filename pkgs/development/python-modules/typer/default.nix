@@ -28,14 +28,14 @@
 
 buildPythonPackage rec {
   pname = package;
-  version = "0.16.0";
+  version = "0.19.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fastapi";
     repo = "typer";
     tag = version;
-    hash = "sha256-WB9PIxagTHutfk3J+mNTVK8bC7TMDJquu3GLBQgaras=";
+    hash = "sha256-mMsOEI4FpLkLkpjxjnUdmKdWD65Zx3Z1+L+XsS79k44=";
   };
 
   env.TIANGOLO_BUILD_PACKAGE = package;
@@ -78,12 +78,6 @@ buildPythonPackage rec {
   ]
   ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
     "test_install_completion"
-  ];
-
-  disabledTestPaths = [
-    # likely click 8.2 compat issue
-    "tests/test_tutorial/test_parameter_types/test_bool/test_tutorial002_an.py"
-    "tests/test_tutorial/test_parameter_types/test_bool/test_tutorial002.py"
   ];
 
   pythonImportsCheck = [ "typer" ];

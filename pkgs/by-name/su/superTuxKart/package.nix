@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchsvn,
+  fetchpatch,
   cmake,
   pkg-config,
   makeWrapper,
@@ -75,6 +76,20 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-gqdaVvgNfCN40ZO/9y8+vTeIJPSq6udKxYZ/MAi4ZMM=";
   };
+
+  patches = [
+    # upstreamed patches required to build against cmake 4.0; remove with next release update.
+    (fetchpatch {
+      name = "Require-Cmake-3.6-or-higher";
+      url = "https://github.com/supertuxkart/stk-code/commit/7d4e8433c124c08c62f5335e2a884aeea71cf184.patch?full_index=1";
+      hash = "sha256-5q/Gf1I/maFPQ83NDIa7Sn6gtLfErwxP16fup4SZ+gc=";
+    })
+    (fetchpatch {
+      name = "Fixed-cmake-4.0-warnings";
+      url = "https://github.com/supertuxkart/stk-code/commit/184c80138faf5232c33ff99ffe7706e821be70c2.patch?full_index=1";
+      hash = "sha256-5zoDmKBRBC2rAUjgpmyc0ZCObGofjuImqk07Tr5K7Og=";
+    })
+  ];
 
   postPatch = ''
     # Deletes all bundled libs in stk-code/lib except those

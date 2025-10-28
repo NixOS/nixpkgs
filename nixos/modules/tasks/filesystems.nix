@@ -545,6 +545,30 @@ in
 
     # Sync mount options with systemd's src/core/mount-setup.c: mount_table.
     boot.specialFileSystems = {
+      # To hold secrets that shouldn't be written to disk
+      "/run/keys" = {
+        fsType = "ramfs";
+        options = [
+          "nosuid"
+          "nodev"
+          "mode=750"
+        ];
+      };
+    }
+    // optionalAttrs (!config.boot.isContainer) {
+      # systemd-nspawn populates /sys by itself, and remounting it causes all
+      # kinds of weird issues (most noticeably, waiting for host disk device
+      # nodes).
+      "/sys" = {
+        fsType = "sysfs";
+        options = [
+          "nosuid"
+          "noexec"
+          "nodev"
+        ];
+      };
+    }
+    // optionalAttrs (!config.boot.isNspawnContainer) {
       "/proc" = {
         fsType = "proc";
         options = [
@@ -590,29 +614,6 @@ in
           "mode=620"
           "ptmxmode=0666"
           "gid=${toString config.ids.gids.tty}"
-        ];
-      };
-
-      # To hold secrets that shouldn't be written to disk
-      "/run/keys" = {
-        fsType = "ramfs";
-        options = [
-          "nosuid"
-          "nodev"
-          "mode=750"
-        ];
-      };
-    }
-    // optionalAttrs (!config.boot.isContainer) {
-      # systemd-nspawn populates /sys by itself, and remounting it causes all
-      # kinds of weird issues (most noticeably, waiting for host disk device
-      # nodes).
-      "/sys" = {
-        fsType = "sysfs";
-        options = [
-          "nosuid"
-          "noexec"
-          "nodev"
         ];
       };
     };

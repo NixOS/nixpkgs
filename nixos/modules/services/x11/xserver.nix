@@ -177,7 +177,7 @@ let
     {
       postInstall = ''
         alias='cursor -xfree86-cursor-medium-r-normal--0-${sizeString}-0-0-p-0-adobe-fontspecific'
-        echo "$alias" > $out/lib/X11/fonts/Type1/fonts.alias
+        echo "$alias" > $out/share/fonts/X11/Type1/fonts.alias
       '';
     }
   );
@@ -770,7 +770,7 @@ in
             || config.services.displayManager.lemurs.enable
           );
       in
-      mkIf (default) (mkDefault true);
+      mkIf default (mkDefault true);
 
     services.xserver.videoDrivers = mkIf (cfg.videoDriver != null) [ cfg.videoDriver ];
 

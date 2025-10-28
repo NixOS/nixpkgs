@@ -14,11 +14,11 @@
   python3Packages,
 
   boost,
-  fmt_11,
+  fmt,
   gtest,
   icu,
   spdlog,
-  tbb_2022,
+  onetbb,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -65,11 +65,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
-    fmt_11
+    fmt
     gtest
     icu
-    (spdlog.override { fmt = fmt_11; })
-    tbb_2022
+    spdlog
+    onetbb
 
     finalAttrs.passthru.libloadorder
     finalAttrs.passthru.esplugin

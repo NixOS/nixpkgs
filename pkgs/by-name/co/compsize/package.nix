@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     mainProgram = "compsize";
     homepage = "https://github.com/kilobyte/compsize";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ CrazedProgrammer ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

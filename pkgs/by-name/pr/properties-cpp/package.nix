@@ -14,24 +14,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "properties-cpp";
-  version = "0.0.3";
+  version = "0.0.4";
 
   src = fetchFromGitLab {
     owner = "ubports";
     repo = "development/core/lib-cpp/properties-cpp";
     rev = finalAttrs.version;
-    hash = "sha256-C/BDEuKNMQHOjATO5aWBptjIlgfv6ykzjFAsHb6uP3Q=";
+    hash = "sha256-rxv2SPTXubaIBlDZixBZ88wqM7pxY03dVhRVImcDZtA=";
   };
-
-  postPatch = ''
-    # GTest needs C++17
-    # Remove when https://gitlab.com/ubports/development/core/lib-cpp/properties-cpp/-/merge_requests/3 merged & in release
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'std=c++14' 'std=c++17'
-  ''
-  + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i "/add_subdirectory(tests)/d" CMakeLists.txt
-  '';
 
   strictDeps = true;
 

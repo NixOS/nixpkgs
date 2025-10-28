@@ -157,9 +157,7 @@ lib.runTests (
       "x86_64-genode"
     ];
     testredox = mseteq redox [ "x86_64-redox" ];
-    testgnu = mseteq gnu (
-      linux # ++ kfreebsd ++ ...
-    );
+    testgnu = mseteq gnu linux; # ++ kfreebsd ++ ...
     testillumos = mseteq illumos [ "x86_64-solaris" ];
     testlinux = mseteq linux [
       "aarch64-linux"

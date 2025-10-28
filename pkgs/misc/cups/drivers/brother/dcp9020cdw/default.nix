@@ -19,7 +19,7 @@ let
   version = "1.1.2";
   model = "dcp9020cdw";
 in
-rec {
+{
   driver = stdenv.mkDerivation {
     pname = "${model}-lpr";
     inherit version;

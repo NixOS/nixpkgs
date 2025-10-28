@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "mcp-nixos";
-  version = "1.0.1";
+  version = "1.0.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "utensils";
     repo = "mcp-nixos";
     tag = "v${version}";
-    hash = "sha256-NFy38FrU4N+bk4qGyRnrpf2AaBrlQyC9SyRbCLm/d9Y=";
+    hash = "sha256-UCsJ8eDuHL14u2GFIYEY/drtZ6jht5zN/G/6QNlEy2g=";
   };
 
   patches = [

@@ -8,7 +8,7 @@
   gzip,
   libXt,
   openusd,
-  tbb,
+  onetbb,
   vtk,
   autoPatchelfHook,
   python3Packages,
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
   ++ lib.optionals withUsd [
     libXt
     openusd
-    tbb
+    onetbb
   ];
 
   cmakeFlags = [

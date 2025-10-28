@@ -1,0 +1,34 @@
+From 798fc5e7e87c1b985a383b7b92a7e55c82e41efa Mon Sep 17 00:00:00 2001
+From: 06kellyjac <dev@j-k.io>
+Date: Fri, 3 Oct 2025 14:20:53 +0100
+Subject: [PATCH] test: leverage `Deno.execPath()` matching other tests
+
+Currently most TS tests use `Deno.execPath()` to identify where `deno` lives
+In the event deno is not on the `$PATH` these tests will fail.
+If deno is on the `$PATH` you can end up testing the wrong instance of `deno`.
+---
+ tests/unit/process_test.ts | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tests/unit/process_test.ts b/tests/unit/process_test.ts
+index 7b82fe5ba782f5..1c26a6f990d1b0 100644
+--- a/tests/unit/process_test.ts
++++ b/tests/unit/process_test.ts
+@@ -623,7 +623,7 @@ Deno.test(
+ 
+     // @ts-ignore `Deno.run()` was soft-removed in Deno 2.
+     const p = Deno.run({
+-      cmd: ["deno", "run", "--watch", tempFile],
++      cmd: [Deno.execPath(), "run", "--watch", tempFile],
+       stdout: "piped",
+       stderr: "null",
+     });
+@@ -661,7 +661,7 @@ Deno.serve({ signal: ac.signal }, () => new Response("Hello World"));
+ 
+     // @ts-ignore `Deno.run()` was soft-removed in Deno 2.
+     const p = Deno.run({
+-      cmd: ["deno", "run", "--watch", tempFile],
++      cmd: [Deno.execPath(), "run", "--watch", tempFile],
+       stdout: "piped",
+       stderr: "null",
+     });

@@ -107,7 +107,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
             sdk = finalAttrs.finalPackage;
             built = stdenv.mkDerivation {
               name = "${sdk.name}-test-${name}";
-              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional (usePackageSource) sdk.packages;
+              buildInputs = [ sdk ] ++ buildInputs ++ lib.optional usePackageSource sdk.packages;
               # make sure ICU works in a sandbox
               propagatedSandboxProfile = toString sdk.__propagatedSandboxProfile;
               unpackPhase =
@@ -281,7 +281,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           command = "HOME=$(mktemp -d) dotnet " + (if type == "sdk" then "--version" else "--info");
         };
       }
-      // lib.optionalAttrs (type == "sdk") ({
+      // lib.optionalAttrs (type == "sdk") {
         buildDotnetModule = recurseIntoAttrs (
           (pkgs.appendOverlays [
             (self: super: {
@@ -304,6 +304,6 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           cs = mkWebTest "C#" "cs";
           fs = mkWebTest "F#" "fs";
         };
-      });
+      };
   };
 })

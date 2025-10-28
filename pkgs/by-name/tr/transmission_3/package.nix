@@ -51,6 +51,15 @@ stdenv.mkDerivation (finalAttrs: {
     ./transmission-3.00-miniupnpc-2.2.8.patch
   ];
 
+  # Compatibility with CMake < 3.5 has been removed from CMake.
+  postPatch = ''
+    substituteInPlace \
+      CMakeLists.txt \
+      --replace-fail \
+        "cmake_minimum_required(VERSION 2.8.12 FATAL_ERROR)" \
+        "cmake_minimum_required(VERSION 3.5)"
+  '';
+
   outputs = [
     "out"
     "apparmor"

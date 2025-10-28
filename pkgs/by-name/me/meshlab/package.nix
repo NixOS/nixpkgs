@@ -18,7 +18,7 @@
   boost,
   mpfr,
   xercesc,
-  tbb,
+  onetbb,
   embree,
   vcg,
   libigl,
@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     mpfr
     xercesc
-    tbb
+    onetbb
     embree
     libigl
     corto

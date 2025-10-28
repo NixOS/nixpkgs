@@ -34,6 +34,7 @@ buildPythonPackage rec {
   postPatch = ''
     cd ../$sourceRoot
     cp --no-preserve=ownership,mode ../../Cargo.lock .
+    sed -i '0,/version = /{s/version = "*.*.*"/version = "${version}"/g}' Cargo.toml
   '';
 
   nativeBuildInputs = with rustPlatform; [

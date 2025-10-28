@@ -7,7 +7,7 @@
 let
   cfg = config.services.orangefs.server;
 
-  aliases = lib.mapAttrsToList (alias: url: alias) cfg.servers;
+  aliases = lib.attrNames cfg.servers;
 
   # Maximum handle number is 2^63
   maxHandle = 9223372036854775806;

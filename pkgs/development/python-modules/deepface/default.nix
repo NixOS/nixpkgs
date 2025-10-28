@@ -12,7 +12,6 @@
   opencv4,
   pandas,
   pillow,
-  pythonOlder,
   requests,
   retinaface,
   setuptools,
@@ -22,16 +21,14 @@
 
 buildPythonPackage rec {
   pname = "deepface";
-  version = "0.0.94";
+  version = "0.0.95";
   pyproject = true;
-
-  disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";
     tag = "v${version}";
-    hash = "sha256-jtDj1j2STjoEW6MdQai6ZuRYVmLo0Ga+VPJ01105Byc=";
+    hash = "sha256-BLbDW/NBeLKFcijMSeYfYxSFmqfG8WYHbVQpFyvMEZY=";
   };
 
   postPatch = ''

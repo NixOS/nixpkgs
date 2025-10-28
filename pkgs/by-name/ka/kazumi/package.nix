@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "1.7.8";
+  version = "1.8.6";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-EHrTI+jy8ryvGwLUJNVbYlinKsBxh12zboHqpiGuRk0=";
+    hash = "sha256-/CtWN9E9O0PS9uzRfywO3QECkZvS8qy0CJfb3oellw4=";
   };
 in
 flutter335.buildFlutterApplication {
@@ -65,10 +65,11 @@ flutter335.buildFlutterApplication {
         inherit (src) passthru;
 
         postPatch = ''
-          sed -i '/set(LIBMPV_ZIP_URL/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{//!d; /set(LIBMPV_ZIP_URL/d}' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_PATH "${mpv-unwrapped}/lib")' media_kit_video/linux/CMakeLists.txt
-          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(ARCH_NAME STREQUAL "x86_64")/,/if(MEDIA_KIT_LIBS_AVAILABLE)/{ /if(MEDIA_KIT_LIBS_AVAILABLE)/!d; /set(LIBMPV_ZIP_URL/d }' media_kit_video/linux/CMakeLists.txt
+          sed -i '/if(MEDIA_KIT_LIBS_AVAILABLE)/i \
+            set(LIBMPV_UNZIP_DIR "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_PATH "${mpv-unwrapped}/lib")\n\
+            set(LIBMPV_HEADER_UNZIP_DIR "${mpv-unwrapped.dev}/include/mpv")' media_kit_video/linux/CMakeLists.txt
         '';
 
         installPhase = ''
@@ -127,7 +128,7 @@ flutter335.buildFlutterApplication {
     homepage = "https://github.com/Predidit/Kazumi";
     mainProgram = "kazumi";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ lonerOrz ];
     platforms = lib.platforms.linux;
   };
 }

@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   cryptography,
-  flit-core,
+  uv-build,
 }:
 
 buildPythonPackage rec {
@@ -15,10 +15,10 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "cryptography_vectors";
     inherit version;
-    hash = "sha256-+7BAjfj/LSs9vSkovFt/7r/dNvsJL6h5DVd4qbmh+e8=";
+    hash = "sha256-B40Sh84rRdJGtCxs+545Dh96+hdsGZsL1t6p1s6Jou4=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ uv-build ];
 
   # No tests included
   doCheck = false;
@@ -33,6 +33,6 @@ buildPythonPackage rec {
       asl20
       bsd3
     ];
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    maintainers = with maintainers; [ mdaniels5757 ];
   };
 }

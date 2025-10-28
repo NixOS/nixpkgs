@@ -6,20 +6,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kubetui";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "sarub0b0";
     repo = "kubetui";
     tag = "v${version}";
-    hash = "sha256-3n4XxbdCA9TrtFdOQWsp3f/JIUlepzMRpo9J4eNcsvA=";
+    hash = "sha256-/gKz83IygwDcfE7AQbQCTfNT1vSRVvxyCz4JVAEcYoY=";
   };
 
   checkFlags = [
     "--skip=workers::kube::store::tests::kubeconfigからstateを生成"
   ];
 
-  cargoHash = "sha256-RdwDojQodlT7iq75WvFXgh1avpLogybZhYnVRfcC7SI=";
+  cargoHash = "sha256-W5EDeeK8oaubxgRnnuR7ef8XRvORGyv5xfSkSHZKIPc=";
 
   meta = {
     homepage = "https://github.com/sarub0b0/kubetui";

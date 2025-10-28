@@ -50,6 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./fix-host-path.patch
+    # Fix for Qt 6.10
+    (fetchpatch {
+      url = "https://github.com/OpenAtom-Linyaps/linyaps/commit/c49e6cfab304ffa2b5b1657da247a6eda6f46c3a.patch";
+      hash = "sha256-lFyPb8YiaXJl2yzPElUR1jYwdOxA0h+db4sv/N70N4E=";
+    })
   ];
 
   postPatch = ''
