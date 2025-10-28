@@ -11,6 +11,7 @@ buildMozillaMach rec {
   pname = "firefox";
   version = "140.4.0esr";
   applicationName = "Firefox ESR";
+  requireSigning = false;
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
     sha512 = "cfce0bdcf6d4599c7b96bccd9fd1390bfb3645db9276a369a30760ce6819850aaa4251869e6bd3c5d8582ea3728b920762c5f16f7ce12ce151c3e74327b8c811";
