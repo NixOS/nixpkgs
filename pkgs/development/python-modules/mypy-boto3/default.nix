@@ -262,8 +262,8 @@ in
       "sha256-JCKTfyeEvYsw8b2EOGJVh+Y6lgpzMFecj2y35o3K9Mo=";
 
   mypy-boto3-codeartifact =
-    buildMypyBoto3Package "codeartifact" "1.40.17"
-      "sha256-XqaCY0uawL5BKmcTl1D3uz1EgsKn3wtph036TX07/Fg=";
+    buildMypyBoto3Package "codeartifact" "1.40.60"
+      "sha256-mVqTF57DFNmD5JVbc0WUeJMV+rHfQG8uVorQ/vd/RkU=";
 
   mypy-boto3-codebuild =
     buildMypyBoto3Package "codebuild" "1.40.58"
