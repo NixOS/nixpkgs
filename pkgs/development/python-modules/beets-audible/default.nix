@@ -1,11 +1,24 @@
 {
-  beets,
-  fetchFromGitHub,
   lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+
+  # build-system
+  hatchling,
+
+  # native
+  beets,
+
+  # dependencies
+  markdownify,
+  natsort,
+  tldextract,
+
+  # passthru
   nix-update-script,
-  python3Packages,
 }:
-python3Packages.buildPythonApplication rec {
+
+buildPythonPackage rec {
   pname = "beets-audible";
   version = "1.0.2";
   pyproject = true;
@@ -17,17 +30,17 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-6rf8U63SW+gwfT7ZdN/ymYKHRs0HSMDTP2ZBfULLsJs=";
   };
 
+  build-system = [
+    hatchling
+  ];
+
   nativeBuildInputs = [
     beets
   ];
 
   pythonRelaxDeps = true;
 
-  build-system = with python3Packages; [
-    hatchling
-  ];
-
-  dependencies = with python3Packages; [
+  dependencies = [
     markdownify
     natsort
     tldextract

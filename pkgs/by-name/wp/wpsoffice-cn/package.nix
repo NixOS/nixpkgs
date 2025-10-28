@@ -23,6 +23,7 @@
   xorg,
   # wpsoffice runtime dependencies
   cups,
+  dbus,
   pango,
 }:
 
@@ -51,10 +52,9 @@ let
       }
       ''
         readonly SECURITY_KEY="7f8faaaa468174dc1c9cd62e5f218a5b"
-        prefix="https://wps-linux-personal.wpscdn.cn"
 
         timestamp10=$(date '+%s')
-        md5hash=($(printf '%s' "$SECURITY_KEY''${${url}#$prefix}$timestamp10" | md5sum))
+        md5hash=($(printf '%s' "$SECURITY_KEY${lib.removePrefix "https://wps-linux-personal.wpscdn.cn" url}$timestamp10" | md5sum))
 
         curl --retry 3 --retry-delay 3 "${url}?t=$timestamp10&k=$md5hash" > $out
       '';
@@ -96,6 +96,7 @@ stdenv.mkDerivation {
 
   runtimeDependencies = map lib.getLib [
     cups
+    dbus
     pango
   ];
 
