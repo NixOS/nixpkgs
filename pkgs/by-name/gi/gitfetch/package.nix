@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gitfetch";
-  version = "1.2.1";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Matars";
     repo = "gitfetch";
     tag = "v${version}";
-    hash = "sha256-2cOfVv/snhluazyjwDuHEbbMq3cK+bsKYnnRmby0JDo=";
+    hash = "sha256-HAZUdGCITr4in0K/LOSZaMHZpPjrHxcg7kAF1J0vl1I=";
   };
 
   build-system = with python3Packages; [ setuptools ];
