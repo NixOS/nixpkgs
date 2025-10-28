@@ -2756,22 +2756,26 @@ with haskellLib;
         (addBuildDepends [
           self.cache
           self.extra
+          self.focus
           self.fuzzyset_0_2_4
+          self.http-client
           self.jose-jwt
           self.neat-interpolation
           self.prometheus-client
+          self.some
+          self.stm-hamt
           self.timeit
         ])
         # 2022-12-02: Too strict bounds.
         doJailbreak
         # 2022-12-02: Hackage release lags behind actual releases: https://github.com/PostgREST/postgrest/issues/2275
         (overrideSrc rec {
-          version = "13.0.7";
+          version = "14.0";
           src = pkgs.fetchFromGitHub {
             owner = "PostgREST";
             repo = "postgrest";
             rev = "v${version}";
-            hash = "sha256-5bWemChm2MpogtGuiBuuep4lhRBhnKOOeBqm+Sqcgl4=";
+            hash = "sha256-GokYeVDuVdIbowU6xE3l8iaGbH4jnpqQFy/E+sb/Unw=";
           };
         })
       ];
