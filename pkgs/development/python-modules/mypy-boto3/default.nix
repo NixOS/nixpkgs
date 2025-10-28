@@ -1377,8 +1377,8 @@ in
       "sha256-JDhOF/W9hClZoQDlnYIfAKsU14jyCEillCfq2kqnhSM=";
 
   mypy-boto3-verifiedpermissions =
-    buildMypyBoto3Package "verifiedpermissions" "1.40.24"
-      "sha256-AhS/FxuTPVNoi6cys6LS9wKqUKlkUZ9G3boVxJPTcNU=";
+    buildMypyBoto3Package "verifiedpermissions" "1.40.59"
+      "sha256-FLFeiaXU/dnFKdoHrgP/ST1zijX8k3Ws/pBU7DMU27M=";
 
   mypy-boto3-voice-id =
     buildMypyBoto3Package "voice-id" "1.40.54"
