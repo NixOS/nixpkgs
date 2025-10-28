@@ -18,11 +18,11 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "enpass-mac";
-  version = "6.11.8.1861";
+  version = "6.11.15.2115";
 
   src = fetchurl {
     url = "https://dl.enpass.io/stable/mac/package/${finalAttrs.version}/Enpass.pkg";
-    hash = "sha256-n0ClsyGTS52ms161CJihIzBI5GjiMIF6HEJ59+jciq8=";
+    hash = "sha256-6YDY4wIZ8d+AUdE1V3PgJwFBILeQgkq6OVPSn1yd99I=";
   };
 
   dontPatch = true;
@@ -40,7 +40,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook preUnpack
 
     xar -xf $src
-    gunzip -dc Enpass_temp.pkg/Payload | cpio -i
+    gunzip -dc Enpass_temp.pkg/Payload > decompressed.out
+    cat decompressed.out | cpio -it | grep -v '/._' > file-list-no-resource-forks.txt
+    cat decompressed.out | cpio -i -E file-list-no-resource-forks.txt
 
     runHook postUnpack
   '';
