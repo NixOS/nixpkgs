@@ -6,7 +6,6 @@
   pydantic,
   pytest-vcr,
   pytestCheckHook,
-  pythonOlder,
   requests,
   requests-oauthlib,
 }:
@@ -15,8 +14,6 @@ buildPythonPackage rec {
   pname = "garth";
   version = "0.5.18";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
