@@ -2,7 +2,9 @@
   bash,
   bison,
   buildGoModule,
+  cargo,
   cmake,
+  corrosion,
   cups,
   curl,
   dlib,
@@ -35,6 +37,8 @@
   pkg-config,
   protobuf,
   replaceVars,
+  rustc,
+  rustPlatform,
   snappy,
   stdenv,
   systemd,
@@ -53,19 +57,20 @@
   withNdsudo ? false,
   withNetfilter ? stdenv.hostPlatform.isLinux,
   withNetworkViewer ? stdenv.hostPlatform.isLinux,
+  withOtel ? true,
   withSsl ? true,
   withSystemdJournal ? stdenv.hostPlatform.isLinux,
   withSystemdUnits ? stdenv.hostPlatform.isLinux,
 }:
 stdenv.mkDerivation (finalAttrs: {
-  version = "2.6.3";
   pname = "netdata";
+  version = "2.8.0";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-J6QHeukhtHHLx92NGtoOmPwq6gvL9eyVYBQiDD1cEDk=";
+    hash = "sha256-QV9h+TMAuRCkYFr8KMOPhWq5fEnKpmA/HxQ8fV/jKBI=";
     fetchSubmodules = true;
   };
 
@@ -80,7 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
   ]
-  ++ lib.optionals withCups [ cups.dev ];
+  ++ lib.optionals withCups [ cups.dev ]
+  ++ lib.optionals (withOtel || withSystemdJournal) [
+    cargo
+    corrosion
+    rustc
+    rustPlatform.cargoSetupHook
+  ];
 
   # bash is only used to rewrite shebangs
   buildInputs = [
@@ -97,8 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     libossp_uuid
   ]
-
-  ++ lib.optionals (stdenv.hostPlatform.isLinux) [
+  ++ lib.optionals stdenv.hostPlatform.isLinux [
     libcap
     libuuid
     lm_sensors
@@ -120,8 +130,7 @@ stdenv.mkDerivation (finalAttrs: {
     libnetfilter_acct
   ]
   ++ lib.optionals withSsl [ openssl ]
-  ++ lib.optionals withSystemdJournal [ systemd ]
-  ++ lib.optionals withSystemdUnits [ systemd ];
+  ++ lib.optionals (withSystemdJournal || withSystemdUnits) [ systemd ];
 
   patches = [
     # Allow ndsudo to use non-hardcoded `PATH`
@@ -129,6 +138,7 @@ stdenv.mkDerivation (finalAttrs: {
     #     https://github.com/netdata/netdata/security/advisories/GHSA-pmhq-4cxq-wj93
     ./ndsudo-fix-path.patch
 
+    ./use-local-corrosion.patch
     ./use-local-libbacktrace.patch
   ]
   ++ lib.optional withCloudUi (
@@ -156,21 +166,21 @@ stdenv.mkDerivation (finalAttrs: {
     # Relocate one folder above.
     mv $out/usr/* $out/
   ''
-  + lib.optionalString (stdenv.hostPlatform.isLinux) ''
+  + lib.optionalString stdenv.hostPlatform.isLinux ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
-       $out/libexec/netdata/plugins.d/apps.plugin.org
+      $out/libexec/netdata/plugins.d/apps.plugin.org
     mv $out/libexec/netdata/plugins.d/cgroup-network \
-       $out/libexec/netdata/plugins.d/cgroup-network.org
+      $out/libexec/netdata/plugins.d/cgroup-network.org
     mv $out/libexec/netdata/plugins.d/perf.plugin \
-       $out/libexec/netdata/plugins.d/perf.plugin.org
+      $out/libexec/netdata/plugins.d/perf.plugin.org
     mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
-       $out/libexec/netdata/plugins.d/slabinfo.plugin.org
+      $out/libexec/netdata/plugins.d/slabinfo.plugin.org
     mv $out/libexec/netdata/plugins.d/debugfs.plugin \
-       $out/libexec/netdata/plugins.d/debugfs.plugin.org
+      $out/libexec/netdata/plugins.d/debugfs.plugin.org
     ${lib.optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
-         $out/libexec/netdata/plugins.d/freeipmi.plugin.org
+        $out/libexec/netdata/plugins.d/freeipmi.plugin.org
     ''}
     ${lib.optionalString withNdsudo ''
       mv $out/libexec/netdata/plugins.d/ndsudo \
@@ -180,19 +190,27 @@ stdenv.mkDerivation (finalAttrs: {
     ''}
     ${lib.optionalString withNetworkViewer ''
       mv $out/libexec/netdata/plugins.d/network-viewer.plugin \
-          $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+        $out/libexec/netdata/plugins.d/network-viewer.plugin.org
+    ''}
+    ${lib.optionalString withOtel ''
+      mv $out/libexec/netdata/plugins.d/otel-plugin \
+        $out/libexec/netdata/plugins.d/otel-plugin.org
     ''}
     ${lib.optionalString withSystemdJournal ''
       mv $out/libexec/netdata/plugins.d/systemd-journal.plugin \
-          $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
+        $out/libexec/netdata/plugins.d/systemd-journal.plugin.org
     ''}
     ${lib.optionalString withSystemdUnits ''
       mv $out/libexec/netdata/plugins.d/systemd-units.plugin \
-          $out/libexec/netdata/plugins.d/systemd-units.plugin.org
+        $out/libexec/netdata/plugins.d/systemd-units.plugin.org
     ''}
   '';
 
   preConfigure = ''
+    ${lib.optionalString (withOtel || withSystemdJournal) ''
+      export CMAKE_PREFIX_PATH="${corrosion}:$CMAKE_PREFIX_PATH"
+    ''}
+
     export GOCACHE=$TMPDIR/go-cache
     export GOPATH=$TMPDIR/go
     export GOSUMDB=off
@@ -212,12 +230,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'set(VARLIB_DIR "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(VARLIB_DIR "/var/lib/netdata")' \
       --replace-fail 'set(pkglibexecdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/libexec/netdata")' 'set(pkglibexecdir_POST "${placeholder "out"}/libexec/netdata")' \
       --replace-fail 'set(localstatedir_POST "''${NETDATA_RUNTIME_PREFIX}/var")' 'set(localstatedir_POST "/var")' \
-      --replace-fail 'set(sbindir_POST "''${NETDATA_RUNTIME_PREFIX}/''${BINDIR}")' 'set(sbindir_POST "${placeholder "out"}/bin")' \
-      --replace-fail 'set(configdir_POST "''${NETDATA_RUNTIME_PREFIX}/etc/netdata")' 'set(configdir_POST "/etc/netdata")' \
-      --replace-fail 'set(libconfigdir_POST "''${NETDATA_RUNTIME_PREFIX}/usr/lib/netdata/conf.d")' 'set(libconfigdir_POST "${placeholder "out"}/share/netdata/conf.d")' \
-      --replace-fail 'set(cachedir_POST "''${NETDATA_RUNTIME_PREFIX}/var/cache/netdata")' 'set(libconfigdir_POST "/var/cache/netdata")' \
-      --replace-fail 'set(registrydir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata/registry")' 'set(registrydir_POST "/var/lib/netdata/registry")' \
-      --replace-fail 'set(varlibdir_POST "''${NETDATA_RUNTIME_PREFIX}/var/lib/netdata")' 'set(varlibdir_POST "/var/lib/netdata")' \
+      --replace-fail 'set(BINDIR usr/sbin)' 'set(BINDIR "${placeholder "out"}/sbin")' \
       --replace-fail 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "usr/share/netdata")' 'set(BUILD_INFO_CMAKE_CACHE_ARCHIVE_PATH "${placeholder "out"}/share/netdata")'
   '';
 
@@ -233,6 +246,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_PLUGIN_EBPF" withEbpf)
     (lib.cmakeBool "ENABLE_PLUGIN_FREEIPMI" withIpmi)
     (lib.cmakeBool "ENABLE_PLUGIN_NETWORK_VIEWER" withNetworkViewer)
+    (lib.cmakeBool "ENABLE_PLUGIN_OTEL" withOtel)
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_JOURNAL" withSystemdJournal)
     (lib.cmakeBool "ENABLE_PLUGIN_SYSTEMD_UNITS" withSystemdUnits)
     (lib.cmakeBool "ENABLE_PLUGIN_XENSTAT" false)
@@ -245,7 +259,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapProgram $out/bin/netdata-claim.sh --prefix PATH : ${lib.makeBinPath [ openssl ]}
     wrapProgram $out/libexec/netdata/plugins.d/cgroup-network-helper.sh --prefix PATH : ${lib.makeBinPath [ bash ]}
     wrapProgram $out/bin/netdatacli --set NETDATA_PIPENAME /run/netdata/ipc
-    ${lib.optionalString (stdenv.hostPlatform.isLinux) ''
+    ${lib.optionalString stdenv.hostPlatform.isLinux ''
       substituteInPlace $out/lib/netdata/conf.d/go.d/sensors.conf --replace-fail '/usr/bin/sensors' '${lm_sensors}/bin/sensors'
     ''}
 
@@ -258,17 +272,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  passthru = rec {
+  passthru = {
     nd-mcp =
       (buildGoModule {
-        pname = "nd-mcp";
-        version = finalAttrs.version;
-        inherit (finalAttrs) src;
+        pname = "${finalAttrs.pname}-nd-mcp";
+        inherit (finalAttrs) version src;
 
         sourceRoot = "${finalAttrs.src.name}/src/web/mcp/bridges/stdio-golang";
 
-        vendorHash = "sha256-6JfHrBloJQ5wHyogIPTVDZjlITWZXbsv2m2lMlQmBUY=";
-
+        vendorHash = "sha256-jyCTp52Dc2IuRwzGT+sHFljO30oqAMfe3xVdEpV+R2c=";
         proxyVendor = true;
         doCheck = false;
 
@@ -279,7 +291,7 @@ stdenv.mkDerivation (finalAttrs: {
           "-w"
         ];
 
-        meta = {
+        meta = finalAttrs.meta // {
           description = "Netdata Model Context Protocol (MCP) Integration";
           license = lib.licenses.gpl3Only;
         };
@@ -287,14 +299,14 @@ stdenv.mkDerivation (finalAttrs: {
 
     netdata-go-modules =
       (buildGoModule {
-        pname = "netdata-go-plugins";
+        pname = "${finalAttrs.pname}-go-plugins";
         inherit (finalAttrs) version src;
 
         sourceRoot = "${finalAttrs.src.name}/src/go/plugin/go.d";
 
-        vendorHash = "sha256-aOFmfBcBjnTfFHfMNemSJHbnMnhBojYrGe21zDxPxME=";
-        doCheck = false;
+        vendorHash = "sha256-AVNUbKCvO+Z3eKE+bJ/VFDo1tS9DdlmMw6M3OSdHiIU=";
         proxyVendor = true;
+        doCheck = false;
 
         ldflags = [
           "-s"
@@ -302,19 +314,21 @@ stdenv.mkDerivation (finalAttrs: {
           "-X main.version=${finalAttrs.version}"
         ];
 
-        passthru.tests = tests;
         meta = finalAttrs.meta // {
           description = "Netdata orchestrator for data collection modules written in Go";
           mainProgram = "godplugin";
           license = lib.licenses.gpl3Only;
         };
       }).goModules;
+
     inherit
       withIpmi
       withNdsudo
       withNetworkViewer
+      withOtel
       withSystemdJournal
       ;
+
     tests.netdata = nixosTests.netdata;
   };
 
@@ -331,4 +345,11 @@ stdenv.mkDerivation (finalAttrs: {
       rhoriguchi
     ];
   };
+} // lib.optionalAttrs (withOtel || withSystemdJournal) {
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    pname = "${finalAttrs.pname}-nd-jf";
+    inherit (finalAttrs) version src cargoRoot;
+    hash = "sha256-HY6OtKHP75mO9X+F2a6H6e+3M0pgZBOIIaxAI9OhgkQ=";
+  };
+  cargoRoot = "src/crates/jf";
 })
