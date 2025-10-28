@@ -1,12 +1,23 @@
 {
+  channel ? "release",
+
   lib,
-  stdenv,
+  stdenvNoCC,
+  fetchurl,
   callPackage,
 }:
 
 let
+  inherit (stdenvNoCC.hostPlatform) system;
+
   pname = "zotero";
-  version = "7.0.20";
+  sources = import ./sources-${channel}.nix { inherit fetchurl; };
+  passthru = {
+    updateScript = [
+      ./update.sh
+      channel
+    ];
+  };
   meta = {
     homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
@@ -14,17 +25,23 @@ let
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
     license = lib.licenses.agpl3Only;
     platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
       "aarch64-darwin"
-    ];
+      "x86_64-darwin"
+      "x86_64-linux"
+    ]
+    ++ lib.optional (channel == "beta") "aarch64-linux";
     maintainers = with lib.maintainers; [
       atila
       justanotherariel
     ];
   };
 in
-if stdenv.hostPlatform.isDarwin then
-  callPackage ./darwin.nix { inherit pname version meta; }
-else
-  callPackage ./linux.nix { inherit pname version meta; }
+callPackage (if stdenvNoCC.hostPlatform.isDarwin then ./darwin.nix else ./linux.nix) {
+  inherit
+    channel
+    pname
+    meta
+    passthru
+    ;
+  inherit (sources.${system} or (throw "Unsupported system: ${system}")) version src;
+}
