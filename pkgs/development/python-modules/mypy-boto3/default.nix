@@ -1305,8 +1305,8 @@ in
       "sha256-qk/18pIl23+NoiPHM39hFIhJx0sTxhR/JJmRf9ePpx4=";
 
   mypy-boto3-ssm-sap =
-    buildMypyBoto3Package "ssm-sap" "1.40.20"
-      "sha256-IHBV71mK16u4EEiQddrEOEWIB4mIAjo6wyZronw8+2w=";
+    buildMypyBoto3Package "ssm-sap" "1.40.60"
+      "sha256-KPj/5+bRGnfGct08/e50UhrR14xm+HDYVxoM+U6ugec=";
 
   mypy-boto3-sso =
     buildMypyBoto3Package "sso" "1.40.20"
