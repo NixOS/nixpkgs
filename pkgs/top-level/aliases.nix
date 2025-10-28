@@ -497,6 +497,7 @@ mapAliases {
   arrayfire = throw "arrayfire was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   artim-dark = aritim-dark; # Added 2025-07-27
   aseprite-unfree = aseprite; # Added 2023-08-26
+  asio_1_10 = throw "'asio_1_10' has been removed because no other packages depend on this old version of asio. Use 'asio' instead."; # Added 2025-06-06
   asitop = macpm; # 'macpm' is a better-maintained downstream; keep 'asitop' for backwards-compatibility
   asterisk_18 = throw "asterisk_18: Asterisk 18 is end of life and has been removed"; # Added 2025-10-19
   async = throw "'async' has been removed due to lack of upstream maintenance"; # Added 2025-01-26
