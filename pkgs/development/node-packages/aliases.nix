@@ -53,7 +53,6 @@ mapAliases {
   "@vue/language-server" = pkgs.vue-language-server; # added 2024-06-15
   "@withgraphite/graphite-cli" = pkgs.graphite-cli; # added 2024-01-25
   "@zwave-js/server" = pkgs.zwave-js-server; # Added 2023-09-09
-  antennas = pkgs.antennas; # added 2023-07-30
   inherit (pkgs) autoprefixer; # added 2024-06-25
   inherit (pkgs) asar; # added 2023-08-26
   inherit (pkgs) auto-changelog; # added 2024-06-25
@@ -70,7 +69,6 @@ mapAliases {
   castnow = pkgs.castnow; # added 2023-07-30
   inherit (pkgs) cdktf-cli; # added 2025-10-02
   inherit (pkgs) clean-css-cli; # added 2023-08-18
-  inherit (pkgs) clubhouse-cli; # added 2023-08-18
   inherit (pkgs) coc-clangd; # added 2024-06-29
   inherit (pkgs) coc-css; # added 2024-06-29
   inherit (pkgs) coc-diagnostic; # added 2024-06-29
@@ -94,7 +92,6 @@ mapAliases {
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
   copy-webpack-plugin = throw "copy-webpack-plugin was removed because it is a JS library, so your project should lock it with a JS package manager instead."; # Added 2024-12-16
   inherit (pkgs) cordova; # added 2023-08-18
-  inherit (pkgs) create-react-app; # added 2023-09-25
   create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
   inherit (pkgs) cspell;
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
