@@ -31,13 +31,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hmcl";
-  version = "3.6.18";
+  version = "3.7.6";
 
   src = fetchurl {
     # HMCL has built-in keys, such as the Microsoft OAuth secret and the CurseForge API key.
     # See https://github.com/HMCL-dev/HMCL/blob/refs/tags/release-3.6.12/.github/workflows/gradle.yml#L26-L28
-    url = "https://github.com/HMCL-dev/HMCL/releases/download/release-${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
-    hash = "sha256-x8UcHdBYXdnTabJh2hxsknYipYNBJW2vKxJKHhryMLQ=";
+    url = "https://github.com/HMCL-dev/HMCL/releases/download/v${finalAttrs.version}/HMCL-${finalAttrs.version}.jar";
+    hash = "sha256-bgZsQ/5CUeOkbahIV0hQSPHrYfK+EaAIV6uMZzpLOVM=";
   };
 
   icon = fetchurl {
@@ -106,11 +106,14 @@ stdenv.mkDerivation (finalAttrs: {
           alsa-lib
         ]
       );
+      hmclJdk' = hmclJdk.override {
+        enableJavaFX = true; # Necessary for hardware acceleration.
+      };
     in
     ''
       runHook preFixup
 
-      makeBinaryWrapper ${hmclJdk}/bin/java $out/bin/hmcl \
+      makeBinaryWrapper ${hmclJdk'}/bin/java $out/bin/hmcl \
         --add-flags "-jar $out/lib/hmcl/hmcl.jar" \
         --set LD_LIBRARY_PATH ${libpath} \
         --prefix PATH : "${lib.makeBinPath minecraftJdks}"\
@@ -128,6 +131,14 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "hmcl";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
     license = lib.licenses.gpl3Only;
+    longDescription = ''
+      Hello Minecraft! Launcher (HMCL) is a free, open-source, and cross-platform Minecraft launcher.
+      It provides comprehensive support for managing multiple game versions and mod loaders,
+      including Forge, NeoForge, Fabric, Quilt, LiteLoader, and OptiFine.
+
+      Note: HMCL manages the Terracotta binary internally. On NixOS, Terracotta-related features
+      require `programs.nix-ld` to be enabled, as the runtime-downloaded binary is not patched.
+    '';
     maintainers = with lib.maintainers; [
       daru-san
       moraxyc
