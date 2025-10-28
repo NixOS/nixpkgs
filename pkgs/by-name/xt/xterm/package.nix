@@ -60,6 +60,8 @@ stdenv.mkDerivation rec {
     freetype
     libxft
     luit
+    # for `patchShebangs`
+    bashNonInteractive
   ];
 
   configureFlags = [
