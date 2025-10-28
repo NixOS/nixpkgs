@@ -20,6 +20,10 @@
   pkgsCross,
   gitUpdater,
   enableDecLocator ? true,
+  gnused,
+  gawk,
+  glibc,
+  bashNonInteractive,
 }:
 
 stdenv.mkDerivation rec {
@@ -95,7 +99,18 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     for bin in $out/bin/*; do
-      wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
+      wrapProgramArgs=(--set XAPPLRESDIR $out/lib/X11/app-defaults/)
+      if [[ $bin =~ (u|koi8r)xterm ]]; then
+        wrapProgramArgs+=(--prefix PATH : $out/bin:${
+          lib.makeBinPath [
+            gnused
+            gawk
+            glibc
+            bashNonInteractive
+          ]
+        })
+      fi
+      wrapProgram $bin "''${wrapProgramArgs[@]}"
     done
 
     install -D -t $out/share/applications xterm.desktop
