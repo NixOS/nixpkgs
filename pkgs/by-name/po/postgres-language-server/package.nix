@@ -7,7 +7,7 @@
   nodejs,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "postgres-lsp";
+  pname = "postgres-language-server";
   version = "0.16.1";
 
   src = fetchgit {
