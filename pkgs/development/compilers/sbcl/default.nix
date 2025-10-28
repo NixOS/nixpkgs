@@ -154,6 +154,10 @@ stdenv.mkDerivation (self: {
       # Fail intermittently
       "gc.impure.lisp"
       "threads.pure.lisp"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fails in sandbox
+      "sb-posix.impure.lisp"
     ];
 
   patches =
@@ -287,6 +291,8 @@ stdenv.mkDerivation (self: {
       }
     ''
   );
+
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "Common Lisp compiler";
