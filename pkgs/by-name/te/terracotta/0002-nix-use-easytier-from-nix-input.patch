@@ -1,0 +1,80 @@
+From 8c8ef3bcdbebb11999a6a229de2d537c9a0110a9 Mon Sep 17 00:00:00 2001
+From: Moraxyc <i@qaq.li>
+Date: Tue, 28 Oct 2025 17:01:29 +0800
+Subject: [PATCH 2/2] nix: use easytier from nix input
+
+---
+ build.rs        |  3 ++-
+ src/easytier.rs | 31 +++----------------------------
+ 2 files changed, 5 insertions(+), 29 deletions(-)
+
+diff --git a/build.rs b/build.rs
+index dc6e117..df454d9 100644
+--- a/build.rs
++++ b/build.rs
+@@ -12,7 +12,8 @@ fn main() {
+     println!("cargo::rerun-if-changed=Cargo.toml");
+ 
+     println!("cargo::rerun-if-changed=.easytier");
+-    download_easytier();
++    // Use easytier from nix
++    // download_easytier();
+ 
+     sevenz_rust2::compress_to_path(
+         "web",
+diff --git a/src/easytier.rs b/src/easytier.rs
+index c657a08..38e6abd 100644
+--- a/src/easytier.rs
++++ b/src/easytier.rs
+@@ -14,12 +14,6 @@ use std::{
+     time::Duration,
+ };
+ 
+-static EASYTIER_ARCHIVE: (&str, &str, &[u8]) = (
+-    include_str!(env!("TERRACOTTA_ET_ENTRY_CONF")),
+-    include_str!(env!("TERRACOTTA_ET_CLI_CONF")),
+-    include_bytes!(env!("TERRACOTTA_ET_ARCHIVE")),
+-);
+-
+ lazy_static::lazy_static! {
+     pub static ref FACTORY: EasytierFactory = create();
+ }
+@@ -36,32 +30,13 @@ pub struct Easytier {
+ }
+ 
+ fn create() -> EasytierFactory {
+-    let _ = fs::create_dir_all(&*EASYTIER_DIR);
+-
+     logging!(
+         "Easytier",
+-        "Releasing easytier to {}",
+-        &*EASYTIER_DIR.to_string_lossy()
++        "Using path @TERRACOTTA_ET_PATH@ (Nix)."
+     );
+ 
+-    sevenz_rust2::decompress(Cursor::new(EASYTIER_ARCHIVE.2.to_vec()), &*EASYTIER_DIR)
+-        .map_err(|e| Error::other(e.to_string()))
+-        .unwrap();
+-
+-    let exe: PathBuf = Path::join(&EASYTIER_DIR, EASYTIER_ARCHIVE.0);
+-    let cli: PathBuf = Path::join(&EASYTIER_DIR, EASYTIER_ARCHIVE.1);
+-    #[cfg(target_family = "unix")]
+-    {
+-        use std::os::unix::fs::PermissionsExt;
+-
+-        let mut permissions = fs::metadata(exe.clone()).unwrap().permissions();
+-        permissions.set_mode(permissions.mode() | 0o100);
+-        fs::set_permissions(exe.clone(), permissions).unwrap();
+-
+-        let mut permissions = fs::metadata(cli.clone()).unwrap().permissions();
+-        permissions.set_mode(permissions.mode() | 0o100);
+-        fs::set_permissions(cli.clone(), permissions).unwrap();
+-    }
++    let exe: PathBuf = PathBuf::from("@TERRACOTTA_ET_EXE@");
++    let cli: PathBuf = PathBuf::from("@TERRACOTTA_ET_CLI@");
+     EasytierFactory { exe, cli }
+ }
+ 
+-- 
+2.51.0
+
