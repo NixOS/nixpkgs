@@ -12,6 +12,7 @@ let
     concatMap
     concatStringsSep
     elem
+    elemAt
     filter
     foldl'
     functionArgs
@@ -36,13 +37,16 @@ let
     optional
     optionalAttrs
     optionalString
+    pipe
     recursiveUpdate
     remove
     reverseList
     sort
+    sortOn
     seq
     setAttrByPath
     substring
+    take
     throwIfNot
     trace
     typeOf
@@ -64,6 +68,7 @@ let
   inherit (lib.strings)
     isConvertibleWithToString
     levenshtein
+    levenshteinAtMost
     ;
 
   showDeclPrefix =
@@ -311,11 +316,30 @@ let
                 prefix' = init (prefix ++ firstDef.prefix);
                 adj = attrNames (attrByPath prefix' { } options);
                 adj' = if prefix' == [ ] then remove "_module" adj else adj;
-                lev = levenshtein (last firstDef.prefix);
-                closest = if adj' == [ ] then null else head (sort (p: q: lev p < lev q) adj');
+                invalidOptName = last firstDef.prefix;
+                # For small option sets, check all; for large sets, only check distance ≤ 2
+                suggestions =
+                  if length adj' < 100 then
+                    pipe adj' [
+                      (sortOn (levenshtein invalidOptName))
+                      (take 3)
+                    ]
+                  else
+                    pipe adj' [
+                      # levenshteinAtMost is only fast for distance ≤ 2
+                      (filter (levenshteinAtMost 2 invalidOptName))
+                      (sortOn (levenshtein invalidOptName))
+                      (take 3)
+                    ];
                 suggestion =
-                  optionalString (closest != null)
-                    "\n\nDid you mean `${showOption (prefix' ++ [ closest ])}'?";
+                  if suggestions == [ ] then
+                    ""
+                  else if length suggestions == 1 then
+                    "\n\nDid you mean `${showOption (prefix' ++ [ (head suggestions) ])}'?"
+                  else
+                    "\n\nDid you mean ${
+                      concatStringsSep ", " (map (s: "`${showOption (prefix' ++ [ s ])}'") (init suggestions))
+                    } or `${showOption (prefix' ++ [ (last suggestions) ])}'?";
               in
               "The option `${optText}' does not exist. Definition values:${defText}${suggestion}";
           in

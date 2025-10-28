@@ -744,6 +744,8 @@ checkConfigOutput '"foo"' config.sub.conditionalImportAsDarwin.bar ./specialArgs
 # Option name suggestions
 checkConfigError 'Did you mean .set\.enable.\?' config.set ./error-typo-nested.nix
 checkConfigError 'Did you mean .set.\?' config ./error-typo-outside-with-nested.nix
+checkConfigError 'Did you mean .bar., .baz. or .foo.\?' config ./error-typo-multiple-suggestions.nix
+checkConfigError 'Did you mean .enable., .ebe. or .enabled.\?' config ./error-typo-large-attrset.nix
 
 cat <<EOF
 ====== module tests ======
