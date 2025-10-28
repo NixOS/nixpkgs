@@ -351,17 +351,7 @@ with lib.maintainers;
   };
 
   formatter = {
-    members = [
-      piegames
-      infinisil
-      das_j
-      _0x4A6F
-      MattSturgeon
-      jfly
-      Sereja313
-    ];
-    scope = "Nix formatting team: https://nixos.org/community/teams/formatting/";
-    shortName = "Nix formatting team";
+    github = "nix-formatting";
   };
 
   freedesktop = {
