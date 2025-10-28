@@ -36,6 +36,7 @@ buildPythonPackage rec {
   cargoBuildType = "release";
   nativeBuildInputs = [
     cargo
+    python.pkgs.pip
     rustPlatform.cargoSetupHook
     rustPlatform.cargoBuildHook
   ];
@@ -45,13 +46,16 @@ buildPythonPackage rec {
     rustPlatform.cargoCheckHook
   ];
 
+  buildPhase = ''
+    runHook preBuild
+    cargoBuildHook
+    ${python.interpreter} scripts/build_wheel.py
+    runHook postBuild
+  '';
+
   installPhase = ''
     runHook preInstall
-
-    # manually install the python binding
-    mkdir -p $out/${python.sitePackages}/proton/vpn/
-    cp ./target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/libpython_proton_vpn_local_agent.so $out/${python.sitePackages}/proton/vpn/local_agent.so
-
+    ${python.interpreter} -m pip install --no-deps --prefix=$out ./target/*.whl
     runHook postInstall
   '';
 
