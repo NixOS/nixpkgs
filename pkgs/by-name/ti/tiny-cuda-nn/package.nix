@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "tiny-cuda-nn";
-  version = "1.6";
+  version = "2.0";
   strictDeps = true;
 
   format = strings.optionalString pythonSupport "setuptools";
@@ -57,7 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "tiny-cuda-nn";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-qW6Fk2GB71fvZSsfu+mykabSxEKvaikZ/pQQZUycOy0=";
+    hash = "sha256-m73lnXufFQOoYHko8x/gIT2UAuHADAGRxVqDSbW+KlY=";
   };
 
   # Remove this once a release is made with
