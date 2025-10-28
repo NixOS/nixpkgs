@@ -6,14 +6,14 @@
   nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage (finalAttrs: {
   pname = "dua";
   version = "2.32.0";
 
   src = fetchFromGitHub {
     owner = "Byron";
     repo = "dua-cli";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-u8g7X/70ZsZF6vUiVnisItwSMiNXgiAdOXqGUT34EaY=";
     # Remove unicode file names which leads to different checksums on HFS+
     # vs. other filesystems because of unicode normalisation.
@@ -32,9 +32,7 @@ rustPlatform.buildRustPackage rec {
     "--skip=interactive::app::tests::unit::it_can_handle_ending_traversal_without_reaching_the_top"
   ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
   doInstallCheck = true;
 
@@ -43,7 +41,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Tool to conveniently learn about the disk usage of directories";
     homepage = "https://github.com/Byron/dua-cli";
-    changelog = "https://github.com/Byron/dua-cli/blob/v${version}/CHANGELOG.md";
+    changelog = "https://github.com/Byron/dua-cli/blob/v${finalAttrs.version}/CHANGELOG.md";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [
       figsoda
@@ -51,4 +49,4 @@ rustPlatform.buildRustPackage rec {
     ];
     mainProgram = "dua";
   };
-}
+})
