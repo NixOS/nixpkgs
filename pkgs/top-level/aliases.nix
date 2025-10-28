@@ -2223,6 +2223,7 @@ mapAliases {
   quicksynergy = throw "'quicksynergy' has been removed due to lack of maintenance upstream. Consider using 'deskflow' instead."; # Added 2025-06-18
   qv2ray = throw "'qv2ray' has been removed as it was unmaintained"; # Added 2025-06-03
   qxw = throw "'qxw' has been removed due to lack of maintenance upstream. Consider using 'crosswords' instead"; # Added 2024-10-19
+  ra-multiplex = lib.warnOnInstantiate "'ra-multiplex' has been renamed to/replaced by 'lspmux'" lspmux; # Added 2025-10-27
   rabbitmq-java-client = throw "rabbitmq-java-client has been removed due to its dependency on Python2 and a lack of maintenance within the nixpkgs tree"; # Added 2025-03-29
   rabbitvcs = throw "rabbitvcs has been removed from nixpkgs, because it was broken"; # Added 2024-07-15
   racket_7_9 = throw "Racket 7.9 has been removed because it is insecure. Consider using 'racket' instead."; # Added 2024-12-06
