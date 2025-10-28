@@ -6169,6 +6169,7 @@ with pkgs;
     electron-chromedriver_36
     electron-chromedriver_37
     electron-chromedriver_38
+    electron-chromedriver_39
     ;
 
   electron_35 = electron_35-bin;
