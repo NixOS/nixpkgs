@@ -211,7 +211,6 @@
       "domenkozar": 126339,
       "donn": 12652988,
       "dwt": 57199,
-      "eliandoran": 21236836,
       "emilazy": 18535642,
       "ethancedwards8": 60861925,
       "fiddlerwoaroof": 808745,
@@ -502,7 +501,7 @@
     "name": "kodi"
   },
   "kubernetes": {
-    "description": "",
+    "description": "Maintain the Kubernetes package and module",
     "id": 5536808,
     "maintainers": {
       "johanot": 998763,
@@ -514,7 +513,7 @@
     "name": "kubernetes"
   },
   "linux-kernel": {
-    "description": "",
+    "description": "Maintain the Linux kernel",
     "id": 13371617,
     "maintainers": {
       "alyssais": 2768870
@@ -911,17 +910,6 @@
       "marcin-serwin": 12128106
     },
     "name": "SDL"
-  },
-  "security": {
-    "description": "Private reports: security@nixos.org",
-    "id": 2197543,
-    "maintainers": {
-      "LeSuisse": 737767,
-      "mweinelt": 131599,
-      "risicle": 807447
-    },
-    "members": {},
-    "name": "Security"
   },
   "static": {
     "description": "People interested in static builds (creation of `.a` files, fully static executables, etc.) and keeping them working",
