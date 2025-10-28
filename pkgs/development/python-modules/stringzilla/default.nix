@@ -6,30 +6,19 @@
   pytest-repeat,
   pytestCheckHook,
   setuptools,
-  stdenv,
 }:
 
 buildPythonPackage rec {
   pname = "stringzilla";
-  version = "4.2.1";
+  version = "4.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ashvardanian";
     repo = "stringzilla";
     tag = "v${version}";
-    hash = "sha256-0CIekVxChvH912vFnBF2FR1YyIpxi3SD7KhBlh7yFGA=";
+    hash = "sha256-J1k8gYPStnnXHFvbHG6nHuQMQy1+XSiS5ERk/reL/Z4=";
   };
-
-  # Define _POSIX_C_SOURCE to enable POSIX signal handling for ARM capability detection
-  # See: https://github.com/ashvardanian/StringZilla/pull/263
-  env.NIX_CFLAGS_COMPILE = "-D_POSIX_C_SOURCE=200809L";
-
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # error: unsupported option '-mfloat-abi=' for target 'aarch64-apple-darwin'
-    substituteInPlace setup.py \
-      --replace-fail '"-mfloat-abi=hard",' ""
-  '';
 
   build-system = [
     setuptools

@@ -1,28 +1,41 @@
 {
   lib,
-  buildNpmPackage,
+  stdenv,
   fetchzip,
+  nodejs,
+  makeBinaryWrapper,
+  versionCheckHook,
   nix-update-script,
 }:
 
-buildNpmPackage (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "github-copilot-cli";
-  version = "0.0.328";
+  version = "0.0.351";
 
   src = fetchzip {
     url = "https://registry.npmjs.org/@github/copilot/-/copilot-${finalAttrs.version}.tgz";
-    hash = "sha256-9oTaVjvwyS8KY8N5kUEiAs+l6vEd/BZ0AGJI0p9Jie0=";
+    hash = "sha256-pv2/VTrAOtb2wlOCVbs6qmlb0jbCVl4KpwhlEnVxvP8=";
   };
 
-  npmDepsHash = "sha256-WK6t3IW4uF+MDu7Y5GRinbm8iDcYB8RhJ15GE9VBcjQ=";
+  nativeBuildInputs = [ makeBinaryWrapper ];
 
-  postPatch = ''
-    cp ${./package-lock.json} package-lock.json
+  installPhase = ''
+    runHook preInstall
+
+    mkdir -p $out/lib/node_modules/@github/copilot
+    cp -r . $out/lib/node_modules/@github/copilot
+
+    mkdir -p $out/bin
+    makeBinaryWrapper ${nodejs}/bin/node $out/bin/copilot \
+      --add-flags "$out/lib/node_modules/@github/copilot/index.js"
+
+    runHook postInstall
   '';
 
-  dontNpmBuild = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { extraArgs = [ "--generate-lockfile" ]; };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GitHub Copilot CLI brings the power of Copilot coding agent directly to your terminal";

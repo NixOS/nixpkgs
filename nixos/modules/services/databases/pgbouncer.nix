@@ -420,7 +420,7 @@ in
         User = cfg.user;
         Group = cfg.group;
         ExecStart = utils.escapeSystemdExecArgs [
-          (lib.getExe pkgs.pgbouncer)
+          (lib.getExe cfg.package)
           "/etc/${configPath}"
         ];
         RuntimeDirectory = "pgbouncer";

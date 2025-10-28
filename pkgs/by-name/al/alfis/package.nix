@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alfis";
-  version = "0.8.5";
+  version = "0.8.7";
 
   src = fetchFromGitHub {
     owner = "Revertron";
     repo = "Alfis";
     tag = "v${version}";
-    hash = "sha256-ettStNktSDZnYNN/IWqTB1Ou1g1QEGFabS4EatnDLaE=";
+    hash = "sha256-u5luVJRNIuGqqNyh+C7nMSkZgoq/S7gpmsEiz8ntmC4=";
   };
 
-  cargoHash = "sha256-xe0YQCKnDV6M6IKWgljsuJ5ZevkdpxZDnNHAHKJyUec=";
+  cargoHash = "sha256-ittJ/iKcmvd5r8oaBoGhi/E2osq245OWxSC+VH+bme4=";
 
   nativeBuildInputs = [
     pkg-config
@@ -52,8 +52,5 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ misuzu ];
     platforms = lib.platforms.unix;
     mainProgram = "alfis";
-    # needs libsoup-2.4, which is soon going to be removed
-    # https://github.com/NixOS/nixpkgs/pull/450065
-    broken = withGui;
   };
 }

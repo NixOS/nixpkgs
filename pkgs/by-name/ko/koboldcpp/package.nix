@@ -41,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.99.4";
+  version = "1.100.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-ilBrTMtY6bhns2GcwDckGq4+RqzgzBCg0HJJ4QUx8Co=";
+    hash = "sha256-Z3yPsC7WDFHwXVInnu96ZVWAjn6XyN0aVviwGkvoe1A=";
   };
 
   enableParallelBuilding = true;
@@ -56,6 +56,14 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     makeWrapper
     python3Packages.wrapPython
   ];
+
+  postPatch = ''
+    nixLog "patching $PWD/Makefile to remove explicit linking against CUDA driver"
+    substituteInPlace "$PWD/Makefile" \
+      --replace-fail \
+        'CUBLASLD_FLAGS = -lcuda ' \
+        'CUBLASLD_FLAGS = '
+  '';
 
   pythonInputs = builtins.attrValues { inherit (python3Packages) tkinter customtkinter packaging; };
 
@@ -96,7 +104,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 koboldcpp.py "$out/bin/koboldcpp.unwrapped"
     cp *.so "$out/bin"
-    cp *.embd "$out/bin"
+    cp embd_res/*.embd "$out/bin"
 
     ${lib.optionalString metalSupport ''
       cp *.metal "$out/bin"

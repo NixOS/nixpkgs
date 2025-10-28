@@ -34,7 +34,7 @@ assert lib.assertOneOf "policy" policy [
 ];
 
 let
-  stdenv' = if static then buildPackages.libxccStdenv else stdenv;
+  stdenv' = if static then buildPackages.libcxxStdenv else stdenv;
 in
 stdenv'.mkDerivation (finalAttrs: {
   version = "3.9.0";

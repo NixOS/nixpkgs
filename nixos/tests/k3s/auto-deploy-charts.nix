@@ -82,15 +82,16 @@ import ../make-test-python.nix (
             values-file = testChart // {
               # Remove unsafeDiscardStringContext workaround when Nix can convert a string to a path
               # https://github.com/NixOS/nix/issues/12407
-              values = /.
-              + builtins.unsafeDiscardStringContext (
-                builtins.toFile "k3s-test-chart-values.yaml" ''
-                  runCommand: "echo 'Hello, file!'"
-                  image:
-                    repository: test.local/test
-                    tag: local
-                ''
-              );
+              values =
+                /.
+                + builtins.unsafeDiscardStringContext (
+                  builtins.toFile "k3s-test-chart-values.yaml" ''
+                    runCommand: "echo 'Hello, file!'"
+                    image:
+                      repository: test.local/test
+                      tag: local
+                  ''
+                );
             };
             # advanced chart that should get installed in the "test" namespace with a custom
             # timeout and overridden values

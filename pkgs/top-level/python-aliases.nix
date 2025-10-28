@@ -110,6 +110,9 @@ mapAliases {
   backports_weakref = throw "backports_weakref has been removed, since we no longer need to backport to python3.3"; # added 2023-07-28
   bash_kernel = bash-kernel; # added 2023-11-10
   beancount_docverif = beancount-docverif; # added 2023-10-08
+  beets-unstable = lib.warn "beets-unstable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16;
+  beets-stable = lib.warn "beets-stable was aliased to beets, since upstream releases are frequent nowadays" self.beets; # added 2025-10-16;
+  beets-extrafiles = throw "beets-extrafiles is unmaintained since 2020 and broken since beets 2.0.0";
   bedup = throw "bedup was removed because it was broken and abandoned upstream"; # added 2023-02-04
   bip_utils = bip-utils; # 2023-10-08
   bitcoin-price-api = throw "bitcoin-price-api has been removed, it was using setuptools 2to3 translation feautre, which has been removed in setuptools 58"; # added 2022-02-15
@@ -550,6 +553,7 @@ mapAliases {
   prometheus_client = prometheus-client; # added 2021-06-10
   prompt_toolkit = prompt-toolkit; # added 2021-07-22
   protonup = protonup-ng; # Added 2022-11-06
+  protonvpn-nm-lib = throw "protonvpn-nm-lib source code was removed from upstream"; # Added 2025-10-16
   proton-keyring-linux-secretservice = throw "proton-keyring-linux-secretservice functionality was integrated in the proton-keyring-linux module"; # added 2024-10-16
   proton-vpn-connection = throw "proton-vpn-connection functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16
   proton-vpn-killswitch = throw "proton-vpn-killswitch functionality was integrated in the proton-vpn-api-core module"; # added 2024-10-16

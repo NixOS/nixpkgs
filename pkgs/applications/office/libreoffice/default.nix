@@ -313,18 +313,24 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Revert part of https://github.com/LibreOffice/core/commit/6f60670877208612b5ea320b3677480ef6508abb that broke zlib linking
     ./readd-explicit-zlib-link.patch
-
+  ]
+  ++ lib.optionals (lib.versionOlder version "25.8.2.1") [
     # Backport patch to fix build with Poppler 25.09
     (fetchpatch2 {
       url = "https://github.com/LibreOffice/core/commit/7848e02819c007026952a3fdc9da0961333dc079.patch";
       includes = [ "sdext/*" ];
       hash = "sha256-Nw6GFmkFy13w/ktCxw5s7SHL34auP1BQ9JvQnQ65aVU=";
     })
-  ]
-  ++ lib.optionals (lib.versionAtLeast version "25.8") [
     # Fix build with Poppler 25.10
     (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/41e58e117c356af2be83993595caf61f9f30cc89/poppler-25.10.patch";
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
+    })
+  ]
+  ++ lib.optionals (lib.versionAtLeast version "25.8.2.2") [
+    # Fix build with Poppler 25.10
+    (fetchpatch2 {
+      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-fresh/-/raw/f7b0e4385108b95c134599502a7bccf0a41925c8/poppler-25.10.patch";
       hash = "sha256-KMsjDtRRH8Vy/FXaVwxUo0Ww10PCE0sK8+ZL0Ja2kJQ=";
     })
   ]
@@ -335,11 +341,14 @@ stdenv.mkDerivation (finalAttrs: {
       includes = [ "sdext/*" ];
       hash = "sha256-8yipl5ln1yCNfVM8SuWowsw1Iy/SXIwbdT1ZfNw4cJA=";
     })
-    # Fix build with Poppler 25.10
-    (fetchpatch2 {
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
-      hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
-    })
+    # Currently included in the condition above
+    # Uncomment if Collabora is again the only version needing it
+    # Remove if Collabora is updated far enough not to need it anymore
+    ## Fix build with Poppler 25.10
+    #(fetchpatch2 {
+    #  url = "https://gitlab.archlinux.org/archlinux/packaging/packages/libreoffice-still/-/raw/f5241554e4a0f6fd95ac4e5cc398a30243407e6a/fix_build_with_poppler_25.10.patch";
+    #  hash = "sha256-lbPOkc1HeT5Qsp6XfVyVJtmvSL68qTrmbd3q9lvKSu8=";
+    #})
   ]
   ++ lib.optionals (variant == "collabora") [
     ./fix-unpack-collabora.patch

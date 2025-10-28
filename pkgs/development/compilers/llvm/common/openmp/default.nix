@@ -9,7 +9,6 @@
   cmake,
   ninja,
   llvm,
-  targetLlvm,
   lit,
   clang-unwrapped,
   perl,
@@ -54,7 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     cmake
-    python3.pythonOnBuildForHost
+    python3
     perl
     ninja
     pkg-config
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    (if stdenv.buildPlatform == stdenv.hostPlatform then llvm else targetLlvm)
+    llvm
   ]
   ++ lib.optionals (ompdSupport && ompdGdbSupport) [
     python3

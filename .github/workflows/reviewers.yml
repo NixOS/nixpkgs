@@ -29,6 +29,7 @@ jobs:
       - name: Check out the PR at the base commit
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
+          persist-credentials: false
           path: trusted
           sparse-checkout: ci
 
@@ -123,7 +124,7 @@ jobs:
         run: gh api /rate_limit | jq
 
       - name: Download the comparison results
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
+        uses: actions/download-artifact@018cc2cf5baa6db3ef3c5f8a56943fffe632ef53 # v6.0.0
         with:
           run-id: ${{ steps.eval.outputs.run-id }}
           github-token: ${{ github.token }}
@@ -146,6 +147,7 @@ jobs:
         if: ${{ steps.app-token.outputs.token }}
         env:
           GH_TOKEN: ${{ github.token }}
+          APP_GH_TOKEN: ${{ steps.app-token.outputs.token }}
           REPOSITORY: ${{ github.repository }}
           NUMBER: ${{ github.event.number }}
           AUTHOR: ${{ github.event.pull_request.user.login }}
@@ -156,7 +158,7 @@ jobs:
           # There appears to be no API to request reviews based on GitHub IDs
           jq -r 'keys[]' comparison/maintainers.json \
             | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
+            | GH_TOKEN="$APP_GH_TOKEN" result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
 
       - name: Log current API rate limits (app-token)
         if: ${{ steps.app-token.outputs.token }}

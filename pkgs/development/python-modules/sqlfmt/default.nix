@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "sqlfmt";
-  version = "0.28.1";
+  version = "0.28.2";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "tconbeer";
     repo = "sqlfmt";
     tag = "v${version}";
-    hash = "sha256-H896Ey4iJFuvcLLvLilN/6nN4gxpvv3VJKIjivEDwMU=";
+    hash = "sha256-9SO3G8SQOkxxSyro9dwSI6oH6BT8Rd66WqM5bvdVQkg=";
   };
 
   build-system = [ hatchling ];
