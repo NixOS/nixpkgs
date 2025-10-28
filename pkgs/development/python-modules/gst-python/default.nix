@@ -82,9 +82,10 @@ buildPythonPackage rec {
     "-Dpython-exe=${python.pythonOnBuildForHost.interpreter}"
   ];
 
-  # TODO: Meson setup hook does not like buildPythonPackage
-  # https://github.com/NixOS/nixpkgs/issues/47390
-  installCheckPhase = "meson test --print-errorlogs";
+  # `buildPythonPackage` uses `installCheckPhase` and leaves `checkPhase`
+  # empty. It renames `doCheck` from its arguments, but not `checkPhase`.
+  # See: https://github.com/NixOS/nixpkgs/issues/47390
+  installCheckPhase = "mesonCheckPhase";
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"
