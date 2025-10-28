@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "ha-silabs-firmware-client";
-  version = "0.2.0";
+  version = "0.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.13";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "ha-silabs-firmware-client";
     tag = "v${version}";
-    hash = "sha256-Kip9JL9tuF7OI22elN0w2Z7Xjdaayboo8LThp4FAets=";
+    hash = "sha256-OCDMJtcgBfVKATJQgqH/YuEU8112tSBjqT81jDUu4b8=";
   };
 
   postPatch = ''
