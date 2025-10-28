@@ -1,8 +1,16 @@
 #!/usr/bin/env bash
 
-# Request reviewers for a PR, reading line-separated usernames on stdin,
+# Request reviewers for a PR, reading line-separated usernames/teams on stdin,
 # filtering for valid reviewers before using the API endpoint to request reviews:
 # https://docs.github.com/en/rest/pulls/review-requests?apiVersion=2022-11-28#request-reviewers-for-a-pull-request
+#
+# Example:
+#   $ request-reviewers.sh NixOS/nixpkgs 123456 someUser <<-EOF
+#   someUser
+#   anotherUser
+#   NixOS/someTeam
+#   NixOS/anotherTeam
+#   EOF
 
 set -euo pipefail
 
@@ -30,59 +38,133 @@ baseRepo=$1
 prNumber=$2
 prAuthor=$3
 
+org="${baseRepo%/*}"
+repo="${baseRepo#*/}"
+
 tmp=$(mktemp -d)
 trap 'rm -rf "$tmp"' exit
 
-declare -A users=()
+declare -A users=() teams=()
+
 while read -r handle && [[ -n "$handle" ]]; do
-    users[${handle,,}]=
+    if [[ "$handle" =~ (.*)/(.*) ]]; then
+        if [[ "${BASH_REMATCH[1]}" != "$org" ]]; then
+            log "Team $handle is not part of the $org org, ignoring"
+        else
+            teams[${BASH_REMATCH[2],,}]=
+        fi
+    else
+        users[${handle,,}]=
+    fi
 done
+
+log "Checking users: ${!users[*]}"
+log "Checking teams: ${!teams[*]}"
 
 # Cannot request a review from the author
 if [[ -v users[${prAuthor,,}] ]]; then
-    log "One or more files are owned by the PR author, ignoring"
+    log "Avoiding review request for PR author $prAuthor"
     unset 'users[${prAuthor,,}]'
 fi
 
-gh api \
+# And we don't want to rerequest reviews from people or teams who already reviewed
+log -e "Checking if users/teams have already reviewed the PR"
+
+# shellcheck disable=SC2016
+# A graphql query to get all reviewers of a PR, including both users and teams
+# on behalf of which a review was done.
+# The REST API doesn't have an end-point for figuring out the on-behalfness of reviews
+all_reviewers_query='
+query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) {
+  repository(owner: $owner, name: $repo) {
+    pullRequest(number: $pr) {
+      reviews(first: 100, after: $endCursor) {
+        nodes {
+          author {
+            login
+          }
+          onBehalfOf(first: 100) {
+            nodes {
+              slug
+            }
+          }
+        }
+        pageInfo {
+          hasNextPage
+          endCursor
+        }
+      }
+    }
+  }
+}
+'
+
+gh api graphql \
     -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    "/repos/$baseRepo/pulls/$prNumber/reviews" \
-    --jq '.[].user.login' > "$tmp/already-reviewed-by"
+    --paginate \
+    -f query="$all_reviewers_query" \
+    -F owner="$org" \
+    -F repo="$repo" \
+    -F pr="$prNumber" \
+    > "$tmp/already-reviewed-by-response"
 
-# And we don't want to rerequest reviews from people who already reviewed
-while read -r user; do
+readarray -t userReviewers < <(jq -r '.data.repository.pullRequest.reviews.nodes[].author.login' "$tmp/already-reviewed-by-response")
+log "PR is already reviewed by these users: ${userReviewers[*]}"
+for user in "${userReviewers[@]}"; do
     if [[ -v users[${user,,}] ]]; then
-        log "User $user is a potential reviewer, but has already left a review, ignoring"
+        log "Avoiding review request for user $user, who has already left a review"
         unset 'users[${user,,}]'
-    fi
-done < "$tmp/already-reviewed-by"
-
-for user in "${!users[@]}"; do
-    if ! gh api \
-        -H "Accept: application/vnd.github+json" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-        "/repos/$baseRepo/collaborators/$user" >&2; then
-        log "User $user is not a repository collaborator, probably missed the automated invite to the maintainers team (see <https://github.com/NixOS/nixpkgs/issues/234293>), ignoring"
-        unset 'users[$user]'
     fi
 done
 
-if [[ "${#users[@]}" -gt 10 ]]; then
-    log "Too many reviewers (${!users[*]}), skipping review requests"
+readarray -t teamReviewers < <(jq -r '.data.repository.pullRequest.reviews.nodes[].onBehalfOf.nodes[].slug' "$tmp/already-reviewed-by-response")
+log "PR is already reviewed by these teams: ${teamReviewers[*]}"
+for team in "${teamReviewers[@]}"; do
+    if [[ -v teams[${team,,}] ]]; then
+        log "Avoiding review request for team $team, who has already left a review"
+        unset 'teams[${team,,}]'
+    fi
+done
+
+log -e "Checking that all users/teams can be requested for review"
+
+for user in "${!users[@]}"; do
+    if ! gh api "/repos/$baseRepo/collaborators/$user" >&2; then
+        log "User $user cannot be requested for review because they don't exist or are not a repository collaborator, ignoring. Probably missed the automated invite to the maintainers team (see <https://github.com/NixOS/nixpkgs/issues/234293>)"
+        unset 'users[$user]'
+    fi
+done
+for team in "${!teams[@]}"; do
+    if ! gh api "/orgs/$org/teams/$team/repos/$baseRepo" >&2; then
+        log "Team $team cannot be requested for review because it doesn't exist or has no repository permissions, ignoring. Probably wasn't added to the nixpkgs-maintainers team (see https://github.com/NixOS/nixpkgs/tree/master/maintainers#maintainer-teams)"
+        unset 'teams[$team]'
+    fi
+done
+
+log "Would request reviews from users: ${!users[*]}"
+log "Would request reviews from teams: ${!teams[*]}"
+
+if (( ${#users[@]} + ${#teams[@]} > 10 )); then
+    log "Too many reviewers (users: ${!users[*]}, teams: ${!teams[*]}), skipping review requests"
     exit 0
 fi
 
 for user in "${!users[@]}"; do
-    log "Requesting review from: $user"
-
-    if ! response=$(jq -n --arg user "$user" '{ reviewers: [ $user ] }' | \
-        effect gh api \
+    log "Requesting review from user $user"
+    if ! response=$(effect gh api \
             --method POST \
-            -H "Accept: application/vnd.github+json" \
-            -H "X-GitHub-Api-Version: 2022-11-28" \
             "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
-            --input -); then
-        log "Failed to request review from $user: $response"
+            -f "reviewers[]=$user"); then
+        log "Failed to request review from user $user: $response"
+    fi
+done
+
+for team in "${!teams[@]}"; do
+    log "Requesting review from team $team"
+    if ! response=$(effect gh api \
+            --method POST \
+            "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
+            -f "team_reviewers[]=$team"); then
+        log "Failed to request review from team $team: $response"
     fi
 done
