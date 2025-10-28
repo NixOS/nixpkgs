@@ -205,11 +205,6 @@ with haskellLib;
           Cabal = lself.Cabal_3_14_2_0;
           # Jailbreaking cabal-install-parsers to make it pick Cabal 3.14 instead of 3.12.
           cabal-install-parsers = doJailbreak lsuper.cabal-install-parsers;
-          # hls 2.11 needs older cabal-add than in stackage. Also copying over test fix override from configuration-nix.nix
-          cabal-add = overrideCabal (drv: {
-            # tests depend on executable
-            preCheck = ''export PATH="$PWD/dist/build/cabal-add:$PATH"'';
-          }) lself.cabal-add_0_1;
           # Need a newer version of extensions to be compatible with the newer Cabal
           extensions = doJailbreak lself.extensions_0_1_1_0;
           # For most ghc versions, we overrideScope Cabal in the configuration-ghc-???.nix,
@@ -230,7 +225,6 @@ with haskellLib;
           # HLS 2.11: Too strict bound on Diff 1.0.
           haskell-language-server = lib.pipe super.haskell-language-server [
             dontCheck
-            doJailbreak
             (
               if versionOlder self.ghc.version "9.10" || versionOlder "9.11" self.ghc.version then
                 addBuildDepends [
@@ -242,8 +236,6 @@ with haskellLib;
                 lib.id
             )
           ];
-          hls-plugin-api = doJailbreak super.hls-plugin-api; # HLS 2.11: Too strict bound on Diff 1.0.
-          ghcide = doJailbreak super.ghcide; # HLS 2.11: Too strict bound on Diff 1.0.
         }
       )
     )

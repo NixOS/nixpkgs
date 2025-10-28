@@ -27,8 +27,6 @@
 default-package-overrides:
   - chs-cabal == 0.1.1.2 # matches Cabal 3.12 (GHC 9.10)
   - extensions == 0.1.0.2 # matches Cabal 3.12 (GHC 9.10)
-  # 2025-07-26: HLS doesn't support hiedb >= 0.7 yet
-  - hiedb < 0.7
   # 2025-09-13: hnix 0.17.0 doesn't support hnix-store-core >= 0.8
   # https://github.com/haskell-nix/hnix/pull/1112
   - hnix-store-core < 0.7
