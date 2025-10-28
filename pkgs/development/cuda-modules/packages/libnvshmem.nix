@@ -1,4 +1,5 @@
 {
+  _cuda,
   backendStdenv,
   buildPackages,
   cmake,
@@ -8,6 +9,7 @@
   cuda_nvml_dev,
   cuda_nvtx,
   cudaAtLeast,
+  cudaMajorMinorVersion,
   cudaNamePrefix,
   fetchFromGitHub,
   flags,
@@ -70,7 +72,7 @@ backendStdenv.mkDerivation (finalAttrs: {
   ];
 
   # NOTE: Hardcoded standard versions mean CMake doesn't respect values we provide, so we need to patch the files.
-  postPatch = lib.optionalString (cudaAtLeast "12.8") ''
+  postPatch = ''
     for standardName in {CXX,CUDA}_STANDARD
     do
       while IFS= read -r cmakeFileToPatch
@@ -164,11 +166,20 @@ backendStdenv.mkDerivation (finalAttrs: {
       inherit (finalAttrs) pname version;
       rev-prefix = "v";
     };
+
+    brokenAssertions = [
+      # CUDA pre-11.7 yeilds macro/type errors in src/include/internal/host_transport/cudawrap.h.
+      {
+        message = "NVSHMEM does not support CUDA releases earlier than 11.7 (found ${cudaMajorMinorVersion})";
+        assertion = cudaAtLeast "11.7";
+      }
+    ];
   };
 
   meta = {
     description = "Parallel programming interface for NVIDIA GPUs based on OpenSHMEM";
     homepage = "https://github.com/NVIDIA/nvshmem";
+    broken = _cuda.lib._mkMetaBroken finalAttrs;
     # NOTE: There are many licenses:
     # https://github.com/NVIDIA/nvshmem/blob/7dd48c9fd7aa2134264400802881269b7822bd2f/License.txt
     license = licenses.nvidiaCudaRedist;
