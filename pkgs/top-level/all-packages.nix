@@ -3131,6 +3131,8 @@ with pkgs;
 
   jl = haskellPackages.jl;
 
+  jkqtplotter = libsForQt5.callPackage ../development/libraries/jkqtplotter { };
+
   joplin = nodePackages.joplin;
 
   jpylyzer = with python3Packages; toPythonApplication jpylyzer;
