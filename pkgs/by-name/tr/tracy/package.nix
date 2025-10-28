@@ -67,6 +67,11 @@ stdenv.mkDerivation rec {
     mkdir -p $sourceRoot/cpm_source_cache
     cp -r --no-preserve=mode ${cpmSourceCache}/. $sourceRoot/cpm_source_cache
 
+    # Darwin's sandbox requires explicit write permissions for CPM to manage the cache
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      chmod -R u+w $sourceRoot/cpm_source_cache
+    ''}
+
     # Manually apply the patches, that would have been applied to the downloaded source
     # We need to do that here, because in the cpmSourceCache we don't know about these patches yet
     patch -d $sourceRoot/cpm_source_cache/imgui/NIX_ORIGIN_HASH_STUB/ -p1 < $sourceRoot/cmake/imgui-emscripten.patch
