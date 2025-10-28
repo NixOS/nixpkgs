@@ -32,6 +32,9 @@ let
     description = "Security protocol verification in the symbolic model";
     maintainers = [ lib.maintainers.thoughtpolice ];
     hydraPlatforms = lib.platforms.linux; # maude is broken on darwin
+    # Has been broken for a while now:
+    # https://hydra.nixos.org/job/nixpkgs/trunk/tamarin-prover.x86_64-linux
+    broken = true;
   };
 
   # tamarin use symlinks to the LICENSE and Setup.hs files, so for these sublibraries

@@ -1,0 +1,12 @@
+diff --git a/lib/utils/update.dart b/lib/utils/update.dart
+index cb35c3bd..52e01d53 100644
+--- a/lib/utils/update.dart
++++ b/lib/utils/update.dart
+@@ -19,7 +19,6 @@ import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+ abstract class Update {
+   // 检查更新
+   static Future<void> checkUpdate([bool isAuto = true]) async {
+-    if (kDebugMode) return;
+     SmartDialog.dismiss();
+     try {
+       final res = await Request().get(
