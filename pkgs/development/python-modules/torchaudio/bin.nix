@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "torchaudio";
-  version = "2.8.0";
+  version = "2.9.0";
   format = "wheel";
 
   src =
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     in
     fetchurl srcs;
 
-  disabled = (pythonOlder "3.9") || (pythonAtLeast "3.14");
+  disabled = (pythonOlder "3.10") || (pythonAtLeast "3.15");
 
   buildInputs = [
     # We need to patch lib/torio/_torio_ffmpeg6
@@ -62,12 +62,6 @@ buildPythonPackage rec {
 
   preInstall = lib.optionals stdenv.hostPlatform.isLinux ''
     addAutoPatchelfSearchPath "${torch-bin}/${python.sitePackages}/torch"
-  '';
-
-  preFixup = ''
-    # TorchAudio loads the newest FFmpeg that works, so get rid of the
-    # old ones.
-    rm $out/${python.sitePackages}/torio/lib/{lib,_}torio_ffmpeg{4,5}.*
   '';
 
   # The wheel-binary is not stripped to avoid the error of `ImportError: libtorch_cuda_cpp.so: ELF load command address/offset not properly aligned.`.
