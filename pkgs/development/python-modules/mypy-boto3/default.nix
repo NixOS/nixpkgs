@@ -54,8 +54,8 @@ in
       "sha256-ZZe7b7krR5JrDWUS+YZcZGbFrRemvX7Ohz8xWPtVGDQ=";
 
   mypy-boto3-acm =
-    buildMypyBoto3Package "acm" "1.40.0"
-      "sha256-E2wUtUSMX4Lyj+HioQD6km3sGGETjgzujJbEewOHc5M=";
+    buildMypyBoto3Package "acm" "1.40.59"
+      "sha256-n8PwLnwMQXKZc5+euUBj6CBPO8H5iajC8Y0nQUO100I=";
 
   mypy-boto3-acm-pca =
     buildMypyBoto3Package "acm-pca" "1.40.54"
