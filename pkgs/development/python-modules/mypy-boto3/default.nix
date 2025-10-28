@@ -1265,8 +1265,8 @@ in
       "sha256-B60F/Q2FlLuNCGZuxSZ3A9QSAMFMgFOO0AFLzmTdyoU=";
 
   mypy-boto3-simspaceweaver =
-    buildMypyBoto3Package "simspaceweaver" "1.40.16"
-      "sha256-RfRroS8x3KiY5OvyRpOT8WCi37cI5YUbZj2BEOskgKk=";
+    buildMypyBoto3Package "simspaceweaver" "1.40.60"
+      "sha256-FMOmmPRoZJHz2/U6U5IkMRmDd7XztoqKQKTVm3CAfeE=";
 
   mypy-boto3-sms =
     buildMypyBoto3Package "sms" "1.40.0"
