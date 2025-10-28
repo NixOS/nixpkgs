@@ -17004,6 +17004,19 @@ final: prev: {
     meta.hydraPlatforms = [ ];
   };
 
+  vim-buftabline = buildVimPlugin {
+    pname = "vim-buftabline";
+    version = "2020-12-13";
+    src = fetchFromGitHub {
+      owner = "ap";
+      repo = "vim-buftabline";
+      rev = "73b9ef5dcb6cdf6488bc88adb382f20bc3e3262a";
+      sha256 = "1vs4km7fb3di02p0771x42y2bsn1hi4q6iwlbrj0imacd9affv5y";
+    };
+    meta.homepage = "https://github.com/ap/vim-buftabline/";
+    meta.hydraPlatforms = [ ];
+  };
+
   vim-caddyfile = buildVimPlugin {
     pname = "vim-caddyfile";
     version = "2025-07-22";
