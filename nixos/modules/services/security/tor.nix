@@ -795,7 +795,7 @@ in
                     };
                     options.HiddenServiceMaxStreams = lib.mkOption {
                       description = (descriptionGeneric "HiddenServiceMaxStreams");
-                      type = with lib.types; nullOr port;
+                      type = with lib.types; nullOr ints.u16;
                       default = null;
                     };
                     options.HiddenServiceMaxStreamsCloseCircuit = optionBool "HiddenServiceMaxStreamsCloseCircuit";
