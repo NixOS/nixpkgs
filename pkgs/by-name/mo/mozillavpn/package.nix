@@ -4,6 +4,7 @@
   cargo,
   cmake,
   fetchFromGitHub,
+  fetchpatch,
   go,
   lib,
   libcap,
@@ -22,15 +23,21 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.31.1";
+  version = "2.32.0";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-+Aexwj/iNIhriiUrMhtj2c9S3e5jGN7OvREXUzi/03s=";
+    hash = "sha256-STp/BCh3gELF0UgkMF2uUV9U5JgTNsqoh+Cog8fQy2c=";
   };
-  patches = [ ];
+  patches = [
+    # VPN-7309: Qt 6.10 QML loading fixes (#10832)
+    (fetchpatch {
+      url = "https://github.com/mozilla-mobile/mozilla-vpn-client/commit/5e7a26efd5acc3cdeeda8d1954459bff1a7e373e.patch";
+      hash = "sha256-CdvEuASPNYzQwyCMKXWZObOHH55WRFsxGYlEP8b20Mc=";
+    })
+  ];
 
   netfilter = buildGoModule {
     pname = "${finalAttrs.pname}-netfilter";
