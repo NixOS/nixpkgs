@@ -482,8 +482,8 @@ in
       "sha256-YaNGVCO/MGDn/9YQBquhqqg1YHmJK3grdk/wVdF4erQ=";
 
   mypy-boto3-elasticbeanstalk =
-    buildMypyBoto3Package "elasticbeanstalk" "1.40.15"
-      "sha256-TMfQt3rK4aT7DnlJCbJj7sFrDL9NqQc4kQS8sdTdDS0=";
+    buildMypyBoto3Package "elasticbeanstalk" "1.40.60"
+      "sha256-V5RG19bh6X/6Q72i5Zk0QO04uxbQdwo7PO6yNL1Stmk=";
 
   mypy-boto3-elastictranscoder =
     buildMypyBoto3Package "elastictranscoder" "1.40.18"
