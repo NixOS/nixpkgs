@@ -193,6 +193,10 @@ cffc27daf06c77c0d76bc35d24b929cb9d68c3c9
 # nixos/kanidm: inherit lib, nixfmt
 8f18393d380079904d072007fb19dc64baef0a3a
 
+# fetchgit, fetchurl, fetchzip:
+# format after refactoring with lib.extendMkDerivation (#455994)
+aeddd850c6d3485fc1af2edfb111e58141d18dc1
+
 # fetchhg: format after refactoring with lib.extendMkDerivation and make overridable (#423539)
 34a5b1eb23129f8fb62c677e3760903f6d43228f
 

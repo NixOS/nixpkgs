@@ -87,7 +87,7 @@ chosenStdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature finalAttrs.doCheck "integration")
 
     # Strangely, it uses --with-fapi=yes|no instead of a normal configure flag.
-    "--with-fapi=${if fapiSupport then "yes" else "no"}"
+    "--with-fapi=${lib.boolToYesNo fapiSupport}"
   ]
   ++ lib.optionals enableFuzzing [
     "--enable-fuzzing"

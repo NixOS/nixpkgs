@@ -18,7 +18,7 @@ let
 
   interfaceRoutes = i: i.ipv4.routes ++ optionals cfg.enableIPv6 i.ipv6.routes;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
+  dhcpStr = useDHCP: boolToYesNo (useDHCP == true || useDHCP == null);
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))

@@ -75,7 +75,7 @@ jobs:
           author: ${{ steps.user.outputs.git-string }}
           committer: ${{ steps.user.outputs.git-string }}
           commit-message: "maintainers/github-teams.json: Automated sync"
-          branch: github-team-sync
+          branch: pr/github-team-sync
           title: "maintainers/github-teams.json: Automated sync"
           body: |
             This is an automated PR to sync the GitHub teams with access to this repository to the `lib.teams` list.

@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
           substituteInPlace configure \
             --replace-fail \
               ompi_cv_op_avx_check_${option}=yes \
-              ompi_cv_op_avx_check_${option}=${if val then "yes" else "no"}
+              ompi_cv_op_avx_check_${option}=${lib.boolToYesNo val}
         ''
       ))
       (lib.concatStringsSep "\n")

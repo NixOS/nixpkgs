@@ -2,7 +2,7 @@
   lib,
   file,
   hare,
-  runCommandNoCC,
+  runCommand,
   writeText,
 }:
 let
@@ -13,7 +13,7 @@ let
     export fn main() void = void;
   '';
 in
-runCommandNoCC "${hare.pname}-cross-compilation-test"
+runCommand "${hare.pname}-cross-compilation-test"
   {
     nativeBuildInputs = [
       hare

@@ -1218,6 +1218,7 @@ mapAliases {
   posterazor = throw "posterazor was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   postfixadmin = throw "'postfixadmin' has been removed due to lack of maintenance and missing support for PHP >8.1"; # Added 2025-10-03
   postgis = throw "'postgis' has been removed. Use 'postgresqlPackages.postgis' instead."; # Added 2025-07-19
+  postgres-lsp = lib.warnOnInstantiate "'postgres-lsp' has been renamed to 'postgres-language-server'" postgres-language-server; # Added 2025-10-28
   postgresql13JitPackages = throw "'postgresql13JitPackages' has been renamed to/replaced by 'postgresql13Packages'"; # Converted to throw 2025-10-27
   postgresql14JitPackages = throw "'postgresql14JitPackages' has been renamed to/replaced by 'postgresql14Packages'"; # Converted to throw 2025-10-27
   postgresql15JitPackages = throw "'postgresql15JitPackages' has been renamed to/replaced by 'postgresql15Packages'"; # Converted to throw 2025-10-27
