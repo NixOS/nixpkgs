@@ -1,0 +1,83 @@
+{
+  lib,
+  attrs,
+  boto3,
+  buildPythonPackage,
+  click-completion,
+  click-didyoumean,
+  click-help-colors,
+  colorama,
+  fetchPypi,
+  gradient-statsd,
+  gradient-utils,
+  gql,
+  halo,
+  marshmallow,
+  progressbar2,
+  pyopenssl,
+  pyyaml,
+  requests,
+  requests-toolbelt,
+  terminaltables,
+  websocket-client,
+}:
+
+buildPythonPackage rec {
+  pname = "gradient";
+  version = "2.99.3";
+  format = "setuptools";
+
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-Ep3Qh9Q1xWt2JveCf/A/KInQ3cnGE7D1YNdavDS0ZE8=";
+  };
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace 'attrs<=' 'attrs>=' \
+      --replace 'colorama==' 'colorama>=' \
+      --replace 'gql[requests]==3.0.0a6' 'gql' \
+      --replace 'PyYAML==5.*' 'PyYAML' \
+      --replace 'marshmallow<' 'marshmallow>=' \
+      --replace 'websocket-client==0.57.*' 'websocket-client'
+  '';
+
+  propagatedBuildInputs = [
+    attrs
+    boto3
+    click-completion
+    click-didyoumean
+    click-help-colors
+    colorama
+    gql
+    gradient-statsd
+    gradient-utils
+    halo
+    marshmallow
+    progressbar2
+    pyopenssl
+    pyyaml
+    requests
+    requests-toolbelt
+    terminaltables
+    websocket-client
+  ];
+
+  # Tries to use /homeless-shelter to mimic container usage, etc
+  doCheck = false;
+
+  # marshmallow.exceptions.StringNotCollectionError: "only" should be a collection of strings.
+  # Support for marshmallow > 3
+  # pythonImportsCheck = [
+  #   "gradient"
+  # ];
+
+  meta = with lib; {
+    description = "Command line interface for Gradient";
+    mainProgram = "gradient";
+    homepage = "https://github.com/Paperspace/gradient-cli";
+    license = licenses.isc;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ thoughtpolice ];
+  };
+}

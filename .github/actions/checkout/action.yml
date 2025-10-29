@@ -1,0 +1,96 @@
+name: Checkout
+
+description: 'Checkout into trusted / untrusted / pinned folders consistently.'
+
+inputs:
+  merged-as-untrusted-at:
+    description: "Whether and which SHA to checkout for the merge commit in the ./nixpkgs/untrusted folder."
+  target-as-trusted-at:
+    description: "Whether and which SHA to checkout for the target commit in the ./nixpkgs/trusted folder."
+
+runs:
+  using: composite
+  steps:
+    - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
+      env:
+        MERGED_SHA: ${{ inputs.merged-as-untrusted-at }}
+        TARGET_SHA: ${{ inputs.target-as-trusted-at }}
+      with:
+        script: |
+          const { spawn } = require('node:child_process')
+          const { join } = require('node:path')
+
+          async function run(cmd, ...args) {
+            return new Promise((resolve, reject) => {
+              const proc = spawn(cmd, args, {
+                stdio: 'inherit'
+              })
+              proc.on('close', (code) => {
+                if (code === 0) resolve()
+                else reject(code)
+              })
+            })
+          }
+
+          // These are set automatically by the spare checkout for .github/actions.
+          // Undo them, otherwise git fetch below will not do anything.
+          await run('git', 'config', 'unset', 'remote.origin.promisor')
+          await run('git', 'config', 'unset', 'remote.origin.partialclonefilter')
+
+          // Getting the pinned SHA via API allows us to do one single fetch call for all commits.
+          // Otherwise we would have to fetch merged/target first, read pinned, fetch again.
+          // A single fetch call comes with a lot less overhead. The fetch takes essentially the
+          // same time no matter whether its 1, 2 or 3 commits at once.
+          async function getPinnedSha(ref) {
+            if (!ref) return undefined
+            const { content, encoding } = (await github.rest.repos.getContent({
+              ...context.repo,
+              path: 'ci/pinned.json',
+              ref,
+            })).data
+            const pinned = JSON.parse(Buffer.from(content, encoding).toString())
+            return pinned.pins.nixpkgs.revision
+          }
+
+          const commits = [
+            {
+              sha: process.env.MERGED_SHA,
+              path: 'untrusted',
+            },
+            {
+              sha: await getPinnedSha(process.env.MERGED_SHA),
+              path: 'untrusted-pinned'
+            },
+            {
+              sha: process.env.TARGET_SHA,
+              path: 'trusted',
+            },
+            {
+              sha: await getPinnedSha(process.env.TARGET_SHA),
+              path: 'trusted-pinned'
+            }
+          ].filter(({ sha }) => Boolean(sha))
+
+          console.log('Checking out the following commits:', commits)
+
+          // Fetching all commits at once is much faster than doing multiple checkouts.
+          // This would fail without --refetch, because the we had a partial clone before, but changed it above.
+          await run('git', 'fetch', '--depth=1', '--refetch', 'origin', ...(commits.map(({ sha }) => sha)))
+
+          // Checking out onto tmpfs takes 1s and is faster by at least factor 10x.
+          await run('mkdir', 'nixpkgs')
+          switch (process.env.RUNNER_OS) {
+            case 'macOS':
+              await run('sudo', 'mount_tmpfs', 'nixpkgs')
+              break
+            case 'Linux':
+              await run('sudo', 'mount', '-t', 'tmpfs', 'tmpfs', 'nixpkgs')
+              break
+          }
+
+          // Create all worktrees in parallel.
+          await Promise.all(commits.map(async ({ sha, path }) => {
+            await run('git', 'worktree', 'add', join('nixpkgs', path), sha, '--no-checkout')
+            await run('git', '-C', join('nixpkgs', path), 'sparse-checkout', 'disable')
+            await run('git', '-C', join('nixpkgs', path), 'checkout', '--progress')
+          }))

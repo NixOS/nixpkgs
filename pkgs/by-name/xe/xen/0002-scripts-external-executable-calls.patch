@@ -1,0 +1,1390 @@
+From 4893cc08acc81bfc2f8730ea108574aedae909aa Mon Sep 17 00:00:00 2001
+From: Fernando Rodrigues <alpha@sigmasquadron.net>
+Date: Fri, 4 Jul 2025 20:09:06 +0000
+Subject: [PATCH 2/2] xen/tools/hotplug/Linux: patch external binary calls
+
+This patch replaces all instances of executable calls and static FHS
+paths in the hotplug scripts with at-padded variables that can be
+replaced by replaceVars during a Nix build.
+
+Signed-off-by: Fernando Rodrigues <alpha@sigmasquadron.net>
+
+diff --git a/tools/hotplug/Linux/block b/tools/hotplug/Linux/block
+index 2691b56951..bd41313bf8 100644
+--- a/tools/hotplug/Linux/block
++++ b/tools/hotplug/Linux/block
+@@ -1,5 +1,5 @@
+ #!/bin/bash
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/block-common.sh"
+
+@@ -32,5 +32,5 @@ find_free_loopback_helper() {
+ find_free_loopback_dev() {
+   local loopdev
+-  loopdev=$(losetup -a | sed -e 's+^/dev/loop++' -e 's/:.*//' | find_free_loopback_helper)
++  loopdev=$(@losetup@  -a | @sed@ -e 's+^/dev/loop++' -e 's/:.*//' | find_free_loopback_helper)
+   if [ -n "$loopdev" ] && [ -b "$loopdev" ]; then
+     echo "$loopdev"
+@@ -67,6 +67,6 @@ check_sharing()
+     local inode="$4"
+
+-    shared_list=$(losetup -a |
+-          sed -n -e "s@^\([^:]\+\)\(:[[:blank:]]\[0*${dev}\]:${inode}[[:blank:]](.*)\)@\1@p" )
++    shared_list=$(@losetup@  -a |
++          @sed@ -n -e "s@^\([^:]\+\)\(:[[:blank:]]\[0*${dev}\]:${inode}[[:blank:]](.*)\)@\1@p" )
+     for dev in $shared_list
+     do
+@@ -95,5 +95,5 @@ check_sharing()
+   fi
+
+-  for file in $(cat /proc/mounts | grep -v "$toskip" | cut -f 1 -d ' ')
++  for file in $(@cat@ /proc/mounts | @grep@ -v "$toskip" | @cut@ -f 1 -d ' ')
+   do
+     if [ -e "$file" ]
+@@ -268,5 +268,5 @@ case "$command" in
+         if [ -L "$dev" ]
+         then
+-          dev=$(readlink -f "$dev") || fatal "$dev link does not exist."
++          dev=$(@readlink@ -f "$dev") || fatal "$dev link does not exist."
+         fi
+         test -e "$dev" || fatal "$dev does not exist."
+@@ -283,5 +283,5 @@ case "$command" in
+         # Canonicalise the file, for sharing check comparison, and the mode
+         # for ease of use here.
+-        file=$(readlink -f "$p") || fatal "$p does not exist."
++        file=$(@readlink@ -f "$p") || fatal "$p does not exist."
+         test -f "$file" || fatal "$file does not exist."
+         mode=$(canonicalise_mode "$mode")
+@@ -298,5 +298,5 @@ case "$command" in
+         fi
+
+-        if [ "$mode" = 'w' ] && ! stat "$file" -c %A | grep -q w
++        if [ "$mode" = 'w' ] && ! @stat@ "$file" -c %A | @grep@ -q w
+         then
+           release_lock "block"
+@@ -308,6 +308,6 @@ mount it read-write in a guest domain."
+         if [ "x$mode" != 'x!' ]
+         then
+-          inode=$(stat -c '%i' "$file")
+-          dev=$(stat -c '%D' "$file")
++          inode=$(@stat@ -c '%i' "$file")
++          dev=$(@stat@ -c '%D' "$file")
+           if [ -z "$inode" ] || [ -z "$dev" ]
+           then
+@@ -318,5 +318,5 @@ mount it read-write in a guest domain."
+         fi
+
+-        loopdev=$(losetup -f 2>/dev/null || find_free_loopback_dev)
++        loopdev=$(@losetup@  -f 2>/dev/null || find_free_loopback_dev)
+         if [ "$loopdev" = '' ]
+         then
+@@ -325,5 +325,5 @@ mount it read-write in a guest domain."
+         fi
+
+-        if LANG=C losetup -h 2>&1 | grep read-only >/dev/null
++        if LANG=C @losetup@  -h 2>&1 | @grep@ read-only >/dev/null
+         then
+           roflag="-$mode"; roflag="${roflag#-w}"; roflag="${roflag#-!}"
+@@ -331,5 +331,5 @@ mount it read-write in a guest domain."
+           roflag=''
+         fi
+-        do_or_die losetup $roflag "$loopdev" "$file"
++        do_or_die @losetup@  $roflag "$loopdev" "$file"
+         xenstore_write "$XENBUS_PATH/node" "$loopdev"
+         write_dev "$loopdev"
+@@ -355,5 +355,5 @@ mount it read-write in a guest domain."
+         claim_lock "block"
+         node=$(xenstore_read "$XENBUS_PATH/node")
+-	losetup -d "$node"
++	@losetup@  -d "$node"
+         release_lock "block"
+ 	exit 0
+diff --git a/tools/hotplug/Linux/block-common.sh b/tools/hotplug/Linux/block-common.sh
+index 5c80237d99..5e1c350555 100644
+--- a/tools/hotplug/Linux/block-common.sh
++++ b/tools/hotplug/Linux/block-common.sh
+@@ -16,5 +16,5 @@
+
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/xen-hotplug-common.sh"
+
+@@ -46,5 +46,5 @@ ebusy()
+ device_major_minor()
+ {
+-  stat -L -c %t:%T "$1"
++  @stat@ -L -c %t:%T "$1"
+ }
+
+diff --git a/tools/hotplug/Linux/block-drbd-probe b/tools/hotplug/Linux/block-drbd-probe
+index 7b2968b6d9..ba246cd132 100755
+--- a/tools/hotplug/Linux/block-drbd-probe
++++ b/tools/hotplug/Linux/block-drbd-probe
+@@ -32,6 +32,6 @@ function get_res_name()
+ {
+     local drbd_dev=$1
+-    local drbd_dev_list=($(drbdadm sh-dev all))
+-    local drbd_res_list=($(drbdadm sh-resource all))
++    local drbd_dev_list=($(@drbdadm@ sh-dev all))
++    local drbd_res_list=($(@drbdadm@ sh-resource all))
+     local temp_drbd_dev temp_drbd_res
+     local found=0
+@@ -49,5 +49,5 @@ function get_res_name()
+
+     for temp_drbd_res in ${drbd_res_list[@]}; do
+-        temp_drbd_dev=$(drbdadm sh-dev $temp_drbd_res)
++        temp_drbd_dev=$(@drbdadm@ sh-dev $temp_drbd_res)
+         if [[ "$temp_drbd_dev" == "$drbd_dev" ]]; then
+             drbd_res="$temp_drbd_res"
+@@ -67,5 +67,5 @@ fi
+
+ # check protocol
+-drbdsetup $1 show | grep -q "protocol D;"
++@drbdsetup@ $1 show | @grep@ -q "protocol D;"
+ if [[ $? -ne 0 ]]; then
+     exit 3
+@@ -73,5 +73,5 @@ fi
+
+ # check connect status
+-state=$(drbdadm cstate "$drbd_res")
++state=$(@drbdadm@ cstate "$drbd_res")
+ if [[ "$state" != "Connected" ]]; then
+     exit 4
+@@ -79,5 +79,5 @@ fi
+
+ # check role
+-role=$(drbdadm role "$drbd_res")
++role=$(@drbdadm@ role "$drbd_res")
+ if [[ "$role" != "Primary/Secondary" ]]; then
+     exit 4
+diff --git a/tools/hotplug/Linux/block-dummy b/tools/hotplug/Linux/block-dummy
+index 57d40b5fce..50bbf09bb6 100644
+--- a/tools/hotplug/Linux/block-dummy
++++ b/tools/hotplug/Linux/block-dummy
+@@ -23,10 +23,10 @@
+ # script=block-dummy,vdev=xvda,target=dummy:<file>
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/block-common.sh"
+
+ check_tools()
+ {
+-    if ! command -v losetup > /dev/null 2>&1; then
++    if ! command -v @losetup@  > /dev/null 2>&1; then
+         fatal "Unable to find losetup"
+     fi
+@@ -56,5 +56,5 @@ add()
+     test -f "$file" || fatal "$file does not exist."
+
+-    loopdev=$(losetup -f 2>/dev/null || find_free_loopback_dev)
++    loopdev=$(@losetup@  -f 2>/dev/null || find_free_loopback_dev)
+     if [ "$loopdev" = '' ]
+     then
+@@ -62,5 +62,5 @@ add()
+     fi
+     
+-    if LANG=C losetup -h 2>&1 | grep read-only >/dev/null
++    if LANG=C @losetup@  -h 2>&1 | @grep@ read-only >/dev/null
+     then
+         roflag="-$mode"; roflag="${roflag#-w}"; roflag="${roflag#-!}"
+@@ -69,5 +69,5 @@ add()
+     fi
+
+-    do_or_die losetup $roflag "$loopdev" "$file"
++    do_or_die @losetup@  $roflag "$loopdev" "$file"
+     # FIXME Is this OK?
+     xenstore_write "$XENBUS_PATH/node" "$loopdev"
+@@ -79,5 +79,5 @@ remove()
+ {
+     node=$(xenstore_read "$XENBUS_PATH/node")
+-    losetup -d "$node"
++    @losetup@  -d "$node"
+ }
+
+diff --git a/tools/hotplug/Linux/block-enbd b/tools/hotplug/Linux/block-enbd
+index 67faa84268..77599ff6df 100644
+--- a/tools/hotplug/Linux/block-enbd
++++ b/tools/hotplug/Linux/block-enbd
+@@ -8,5 +8,5 @@
+ # This assumes you're running a correctly configured server at the other end!
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/block-common.sh"
+
+@@ -14,5 +14,5 @@ case "$command" in
+   add)
+     for dev in /dev/nd*; do
+-      if nbd-client $2:$3 $dev; then
++      if @nbd-client@ $2:$3 $dev; then
+         write_dev $dev
+         exit 0
+@@ -22,5 +22,5 @@ case "$command" in
+     ;;
+   remove)
+-    nbd-client -d $2
++    @nbd-client@ -d $2
+     exit 0
+     ;;
+diff --git a/tools/hotplug/Linux/block-iscsi b/tools/hotplug/Linux/block-iscsi
+index 3615905252..ad45a3685b 100644
+--- a/tools/hotplug/Linux/block-iscsi
++++ b/tools/hotplug/Linux/block-iscsi
+@@ -24,18 +24,18 @@
+ #
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/block-common.sh"
+
+ remove_label()
+ {
+-    echo $1 | sed "s/^\("$2"\)//"
++    echo $1 | @sed@ "s/^\("$2"\)//"
+ }
+
+ check_tools()
+ {
+-    if ! command -v iscsiadm > /dev/null 2>&1; then
++    if ! command -v @iscsiadm@ > /dev/null 2>&1; then
+         fatal "Unable to find iscsiadm tool"
+     fi
+-    if [ "$multipath" = "y" ] && ! command -v multipath > /dev/null 2>&1; then
++    if [ "$multipath" = "y" ] && ! command -v @multipath@ > /dev/null 2>&1; then
+         fatal "Unable to find multipath"
+     fi
+@@ -75,5 +75,5 @@ find_device()
+     count=0
+     while [ ! -e /dev/disk/by-path/*"$iqn"-lun-0 ]; do
+-        sleep 1
++        @sleep@ 1
+         count=`expr $count + 1`
+         if [ count = 100 ]; then
+@@ -82,10 +82,10 @@ find_device()
+         fi
+     done
+-    sddev=$(readlink -f /dev/disk/by-path/*"$iqn"-lun-0 || true)
++    sddev=$(@readlink@ -f /dev/disk/by-path/*"$iqn"-lun-0 || true)
+     if [ ! -b "$sddev" ]; then
+         fatal "Unable to find attached device path"
+     fi
+     if [ "$multipath" = "y" ]; then
+-        mdev=$(multipath -ll "$sddev" | head -1 | awk '{ print $1}')
++        mdev=$(@multipath@ -ll "$sddev" | @head@ -1 | @awk@ '{ print $1}')
+         if [ ! -b /dev/mapper/"$mdev" ]; then
+             fatal "Unable to find attached device multipath"
+@@ -101,5 +101,5 @@ find_device()
+ attach()
+ {
+-    do_or_die iscsiadm -m node --targetname "$iqn" -p "$portal" --login > /dev/null
++    do_or_die @iscsiadm@ -m node --targetname "$iqn" -p "$portal" --login > /dev/null
+     find_device
+ }
+@@ -110,7 +110,7 @@ prepare()
+ {
+     # Check if target is already opened
+-    iscsiadm -m session 2>&1 | grep -q "$iqn" && fatal "Device already opened"
++    @iscsiadm@ -m session 2>&1 | @grep@ -q "$iqn" && fatal "Device already opened"
+     # Discover portal targets
+-    iscsiadm -m discovery -t st -p $portal 2>&1 | grep -q "$iqn" || \
++    @iscsiadm@ -m discovery -t st -p $portal 2>&1 | @grep@ -q "$iqn" || \
+         fatal "No matching target iqn found"
+ }
+@@ -128,5 +128,5 @@ remove()
+ {
+     find_device
+-    do_or_die iscsiadm -m node --targetname "$iqn" -p "$portal" --logout > /dev/null
++    do_or_die @iscsiadm@ -m node --targetname "$iqn" -p "$portal" --logout > /dev/null
+ }
+
+diff --git a/tools/hotplug/Linux/block-nbd b/tools/hotplug/Linux/block-nbd
+index b29b31564a..a98350b121 100644
+--- a/tools/hotplug/Linux/block-nbd
++++ b/tools/hotplug/Linux/block-nbd
+@@ -8,5 +8,5 @@
+ # This assumes you're running a correctly configured server at the other end!
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/block-common.sh"
+
+@@ -14,5 +14,5 @@ case "$command" in
+   add)
+     for dev in /dev/nbd*; do
+-      if nbd-client $2 $3 $dev; then
++      if @nbd-client@ $2 $3 $dev; then
+         write_dev $dev
+         exit 0
+@@ -22,5 +22,5 @@ case "$command" in
+     ;;
+   remove)
+-    nbd-client -d $2
++    @nbd-client@ -d $2
+     exit 0
+     ;;
+diff --git a/tools/hotplug/Linux/block-tap b/tools/hotplug/Linux/block-tap
+index 95970a61f6..a03a36f8b6 100755
+--- a/tools/hotplug/Linux/block-tap
++++ b/tools/hotplug/Linux/block-tap
+@@ -29,10 +29,10 @@
+ # format/<type> is either "aio" (for raw files), or "vhd"
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/block-common.sh"
+
+ remove_label()
+ {
+-    echo $1 | sed "s/^\("$2"\)//"
++    echo $1 | @sed@ "s/^\("$2"\)//"
+ }
+
+@@ -102,5 +102,5 @@ count_using()
+         do
+             f=$(xenstore_read_default "$base_path/$dom/$dev/params" "")
+-            f=$(echo "$f" | cut -d ":" -f 2)
++            f=$(echo "$f" | @cut@ -d ":" -f 2)
+
+             if [ -n "$f" ] && [ "$file" = $f ] ; then
+@@ -131,5 +131,5 @@ check_tap_sharing()
+         for dev in $(xenstore-list "$base_path/$dom") ; do
+             local f=$(xenstore_read_default "$base_path/$dom/$dev/params" "")
+-            f=$(echo "$f" | cut -d ":" -f 2)
++            f=$(echo "$f" | @cut@ -d ":" -f 2)
+
+             if [ -n "$f" ] && [ "$file" = "$f" ] ; then
+diff --git a/tools/hotplug/Linux/colo-proxy-setup b/tools/hotplug/Linux/colo-proxy-setup
+index d709146c47..e0f44364cc 100755
+--- a/tools/hotplug/Linux/colo-proxy-setup
++++ b/tools/hotplug/Linux/colo-proxy-setup
+@@ -1,5 +1,5 @@
+ #! /bin/bash
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/xen-hotplug-common.sh"
+ . "$dir/hotplugpath.sh"
+@@ -38,60 +38,60 @@ fi
+ function setup_primary()
+ {
+-    do_without_error tc qdisc add dev $vifname root handle 1: prio
+-    do_without_error tc filter add dev $vifname parent 1: protocol ip prio 10 \
++    do_without_error @tc@ qdisc add dev $vifname root handle 1: prio
++    do_without_error @tc@ filter add dev $vifname parent 1: protocol ip prio 10 \
+         u32 match u32 0 0 flowid 1:2 action mirred egress mirror dev $forwarddev
+-    do_without_error tc filter add dev $vifname parent 1: protocol arp prio 11 \
++    do_without_error @tc@ filter add dev $vifname parent 1: protocol arp prio 11 \
+         u32 match u32 0 0 flowid 1:2 action mirred egress mirror dev $forwarddev
+-    do_without_error tc filter add dev $vifname parent 1: protocol ipv6 prio \
++    do_without_error @tc@ filter add dev $vifname parent 1: protocol ipv6 prio \
+         12 u32 match u32 0 0 flowid 1:2 action mirred egress mirror \
+         dev $forwarddev
+
+-    do_without_error modprobe nf_conntrack_ipv4
+-    do_without_error modprobe xt_PMYCOLO sec_dev=$forwarddev
++    do_without_error @modprobe@ nf_conntrack_ipv4
++    do_without_error @modprobe@ xt_PMYCOLO sec_dev=$forwarddev
+
+-    iptables -t mangle -I PREROUTING -m physdev --physdev-in \
++    @iptables@ -t mangle -I PREROUTING -m physdev --physdev-in \
+         $vifname -j PMYCOLO --index $index
+-    ip6tables -t mangle -I PREROUTING -m physdev --physdev-in \
++    @ip6tables@ -t mangle -I PREROUTING -m physdev --physdev-in \
+         $vifname -j PMYCOLO --index $index
+-    do_without_error arptables -I INPUT -i $forwarddev -j MARK --set-mark $index
++    do_without_error @arptables@ -I INPUT -i $forwarddev -j MARK --set-mark $index
+ }
+
+ function teardown_primary()
+ {
+-    do_without_error tc filter del dev $vifname parent 1: protocol ip prio 10 u32 match u32 \
++    do_without_error @tc@ filter del dev $vifname parent 1: protocol ip prio 10 u32 match u32 \
+         0 0 flowid 1:2 action mirred egress mirror dev $forwarddev
+-    do_without_error tc filter del dev $vifname parent 1: protocol arp prio 11 u32 match u32 \
++    do_without_error @tc@ filter del dev $vifname parent 1: protocol arp prio 11 u32 match u32 \
+         0 0 flowid 1:2 action mirred egress mirror dev $forwarddev
+-    do_without_error tc filter del dev $vifname parent 1: protocol ipv6 prio 12 u32 match u32 \
++    do_without_error @tc@ filter del dev $vifname parent 1: protocol ipv6 prio 12 u32 match u32 \
+         0 0 flowid 1:2 action mirred egress mirror dev $forwarddev
+-    do_without_error tc qdisc del dev $vifname root handle 1: prio
++    do_without_error @tc@ qdisc del dev $vifname root handle 1: prio
+
+-    do_without_error iptables -t mangle -D PREROUTING -m physdev --physdev-in \
++    do_without_error @iptables@ -t mangle -D PREROUTING -m physdev --physdev-in \
+         $vifname -j PMYCOLO --index $index
+-    do_without_error ip6tables -t mangle -D PREROUTING -m physdev --physdev-in \
++    do_without_error @ip6tables@ -t mangle -D PREROUTING -m physdev --physdev-in \
+         $vifname -j PMYCOLO --index $index
+-    do_without_error arptables -F
+-    do_without_error rmmod xt_PMYCOLO
++    do_without_error @arptables@ -F
++    do_without_error @rmmod@ xt_PMYCOLO
+ }
+
+ function setup_secondary()
+ {
+-    if which brctl >&/dev/null; then
+-        do_without_error brctl delif $bridge $vifname
+-        do_without_error brctl addbr $forwardbr
+-        do_without_error brctl addif $forwardbr $vifname
+-        do_without_error brctl addif $forwardbr $forwarddev
++    if @which@ @brctl@ >&/dev/null; then
++        do_without_error @brctl@ delif $bridge $vifname
++        do_without_error @brctl@ addbr $forwardbr
++        do_without_error @brctl@ addif $forwardbr $vifname
++        do_without_error @brctl@ addif $forwardbr $forwarddev
+     else
+-        do_without_error ip link set $vifname nomaster
+-        do_without_error ip link add name $forwardbr type bridge
+-        do_without_error ip link set $vifname master $forwardbr
+-        do_without_error ip link set $forwarddev master $forwardbr
++        do_without_error @ip@ link set $vifname nomaster
++        do_without_error @ip@ link add name $forwardbr type bridge
++        do_without_error @ip@ link set $vifname master $forwardbr
++        do_without_error @ip@ link set $forwarddev master $forwardbr
+     fi
+-    do_without_error ip link set dev $forwardbr up
+-    do_without_error modprobe xt_SECCOLO
++    do_without_error @ip@ link set dev $forwardbr up
++    do_without_error @modprobe@ xt_SECCOLO
+
+-    iptables -t mangle -I PREROUTING -m physdev --physdev-in \
++    @iptables@ -t mangle -I PREROUTING -m physdev --physdev-in \
+         $vifname -j SECCOLO --index $index
+-    ip6tables -t mangle -I PREROUTING -m physdev --physdev-in \
++    @ip6tables@ -t mangle -I PREROUTING -m physdev --physdev-in \
+         $vifname -j SECCOLO --index $index
+ }
+@@ -99,21 +99,21 @@ function setup_secondary()
+ function teardown_secondary()
+ {
+-    if which brctl >&/dev/null; then
+-        do_without_error brctl delif $forwardbr $forwarddev
+-        do_without_error brctl delif $forwardbr $vifname
+-        do_without_error brctl delbr $forwardbr
+-        do_without_error brctl addif $bridge $vifname
++    if @which@ @brctl@ >&/dev/null; then
++        do_without_error @brctl@ delif $forwardbr $forwarddev
++        do_without_error @brctl@ delif $forwardbr $vifname
++        do_without_error @brctl@ delbr $forwardbr
++        do_without_error @brctl@ addif $bridge $vifname
+     else
+-        do_without_error ip link set $forwarddev nomaster
+-        do_without_error ip link set $vifname nomaster
+-        do_without_error ip link delete $forwardbr type bridge
+-        do_without_error ip link set $vifname master $bridge
++        do_without_error @ip@ link set $forwarddev nomaster
++        do_without_error @ip@ link set $vifname nomaster
++        do_without_error @ip@ link delete $forwardbr type bridge
++        do_without_error @ip@ link set $vifname master $bridge
+     fi
+
+-    do_without_error iptables -t mangle -D PREROUTING -m physdev --physdev-in \
++    do_without_error @iptables@ -t mangle -D PREROUTING -m physdev --physdev-in \
+         $vifname -j SECCOLO --index $index
+-    do_without_error ip6tables -t mangle -D PREROUTING -m physdev --physdev-in \
++    do_without_error @ip6tables@ -t mangle -D PREROUTING -m physdev --physdev-in \
+         $vifname -j SECCOLO --index $index
+-    do_without_error rmmod xt_SECCOLO
++    do_without_error @rmmod@ xt_SECCOLO
+ }
+
+diff --git a/tools/hotplug/Linux/external-device-migrate b/tools/hotplug/Linux/external-device-migrate
+index f5942a6a95..228917b784 100644
+--- a/tools/hotplug/Linux/external-device-migrate
++++ b/tools/hotplug/Linux/external-device-migrate
+@@ -24,10 +24,10 @@ set -x
+ # synchronization
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/logging.sh"
+
+
+ function ext_dev_migrate_usage() {
+-cat <<EOF
++@cat@ <<EOF
+ Pass the following command line parameters to the script:
+
+diff --git a/tools/hotplug/Linux/init.d/xen-watchdog.in b/tools/hotplug/Linux/init.d/xen-watchdog.in
+index a0bde199c4..cefa3b81f8 100644
+--- a/tools/hotplug/Linux/init.d/xen-watchdog.in
++++ b/tools/hotplug/Linux/init.d/xen-watchdog.in
+@@ -26,5 +26,5 @@ test -f $xencommons_config/xencommons && . $xencommons_config/xencommons
+ test -n "$XENWATCHDOGD_ARGS" || XENWATCHDOGD_ARGS='30 15'
+ DAEMON=${sbindir}/xenwatchdogd
+-base=$(basename $DAEMON)
++base=$(@basename@ $DAEMON)
+
+ # Source function library.
+@@ -64,5 +64,5 @@ stop() {
+ 	echo -n $"Stopping domain watchdog daemon: "
+
+-	killall -USR1 $base 2>/dev/null
++	@killall@ -USR1 $base 2>/dev/null
+ 	r=$?
+ 	[ "$r" -eq 0 ] && success $"$base stop" || failure $"$base stop"
+diff --git a/tools/hotplug/Linux/init.d/xencommons.in b/tools/hotplug/Linux/init.d/xencommons.in
+index 7fd6903b98..dcc8de631b 100644
+--- a/tools/hotplug/Linux/init.d/xencommons.in
++++ b/tools/hotplug/Linux/init.d/xencommons.in
+@@ -39,5 +39,5 @@ fi
+ if test "x$1" = xstart && \
+    ! test -f /proc/xen/capabilities && \
+-   ! grep '^xenfs ' /proc/mounts >/dev/null;
++   ! @grep@ '^xenfs ' /proc/mounts >/dev/null;
+ then
+ 	mount -t xenfs xenfs /proc/xen
+@@ -48,5 +48,5 @@ fi
+ # empty capabilities file in pv_ops domU kernel
+ if test -f /proc/xen/capabilities && \
+-   ! grep -q "control_d" /proc/xen/capabilities ; then
++   ! @grep@ -q "control_d" /proc/xen/capabilities ; then
+ 	exit 0
+ fi
+@@ -55,9 +55,9 @@ do_start () {
+ 	local mod
+
+-	for mod in $BACKEND_MODULES ; do modprobe "$mod" &>/dev/null ; done
++	for mod in $BACKEND_MODULES ; do @modprobe@ "$mod" &>/dev/null ; done
+
+-	mkdir -m700 -p ${XEN_RUN_DIR}
+-	mkdir -m700 -p ${XEN_LOCK_DIR}
+-	mkdir -p ${XEN_LOG_DIR}
++	@mkdir@ -m700 -p ${XEN_RUN_DIR}
++	@mkdir@ -m700 -p ${XEN_LOCK_DIR}
++	@mkdir@ -p ${XEN_LOG_DIR}
+
+ 	@XEN_SCRIPT_DIR@/launch-xenstore || exit 1
+@@ -79,6 +79,6 @@ do_stop () {
+ 	if read 2>/dev/null <$XENCONSOLED_PIDFILE pid; then
+ 		kill $pid
+-		while kill -9 $pid >/dev/null 2>&1; do sleep 1; done
+-		rm -f $XENCONSOLED_PIDFILE
++		while kill -9 $pid >/dev/null 2>&1; do @sleep@ 1; done
++		@rm@ -f $XENCONSOLED_PIDFILE
+ 	fi
+
+@@ -86,6 +86,6 @@ do_stop () {
+ 	if read 2>/dev/null <$QEMU_PIDFILE pid; then
+ 		kill $pid
+-		while kill -9 $pid >/dev/null 2>&1; do sleep 1; done
+-		rm -f $QEMU_PIDFILE
++		while kill -9 $pid >/dev/null 2>&1; do @sleep@ 1; done
++		@rm@ -f $QEMU_PIDFILE
+ 	fi
+
+diff --git a/tools/hotplug/Linux/init.d/xendriverdomain.in b/tools/hotplug/Linux/init.d/xendriverdomain.in
+index 17b381c3dc..064906f027 100644
+--- a/tools/hotplug/Linux/init.d/xendriverdomain.in
++++ b/tools/hotplug/Linux/init.d/xendriverdomain.in
+@@ -35,5 +35,5 @@ fi
+ if test "x$1" = xstart && \
+    ! test -f /proc/xen/capabilities && \
+-   ! grep '^xenfs ' /proc/mounts >/dev/null;
++   ! @grep@ '^xenfs ' /proc/mounts >/dev/null;
+ then
+ 	mount -t xenfs xenfs /proc/xen
+@@ -44,5 +44,5 @@ fi
+ # empty capabilities file in pv_ops domU kernel
+ if ! test -f /proc/xen/capabilities || \
+-   grep -q "control_d" /proc/xen/capabilities ; then
++   @grep@ -q "control_d" /proc/xen/capabilities ; then
+ 	exit 0
+ fi
+@@ -50,5 +50,5 @@ fi
+ do_start () {
+ 	echo Starting xl devd...
+-	mkdir -p "${XEN_RUN_DIR}"
++	@mkdir@ -p "${XEN_RUN_DIR}"
+ 	${sbindir}/xl devd --pidfile=$XLDEVD_PIDFILE $XLDEVD_ARGS
+ }
+@@ -57,6 +57,6 @@ do_stop () {
+ 	if read 2>/dev/null <$XLDEVD_PIDFILE pid; then
+ 		kill $pid
+-		while kill -9 $pid >/dev/null 2>&1; do sleep 1; done
+-		rm -f $XLDEVD_PIDFILE
++		while kill -9 $pid >/dev/null 2>&1; do @sleep@ 1; done
++		@rm@ -f $XLDEVD_PIDFILE
+ 	fi
+ }
+diff --git a/tools/hotplug/Linux/launch-xenstore.in b/tools/hotplug/Linux/launch-xenstore.in
+index da4eeca7c5..059036d899 100644
+--- a/tools/hotplug/Linux/launch-xenstore.in
++++ b/tools/hotplug/Linux/launch-xenstore.in
+@@ -32,5 +32,5 @@ timeout_xenstore () {
+ 		echo -n .
+ 		time=$(($time+1))
+-		sleep 1
++		@sleep@ 1
+ 	done
+ 	echo
+@@ -51,5 +51,5 @@ test -f @CONFIG_DIR@/@CONFIG_LEAF_DIR@/xencommons && . @CONFIG_DIR@/@CONFIG_LEAF
+ [ "$XENSTORETYPE" = "" ] && XENSTORETYPE=daemon
+
+-/bin/mkdir -p @XEN_RUN_DIR@
++@mkdir@ -p @XEN_RUN_DIR@
+
+ [ "$XENSTORETYPE" = "daemon" ] && {
+@@ -72,5 +72,5 @@ test -f @CONFIG_DIR@/@CONFIG_LEAF_DIR@/xencommons && . @CONFIG_DIR@/@CONFIG_LEAF
+ 	}
+ 	[ -r /proc/sys/fs/nr_open ] && {
+-		MAX_FDS=`cat /proc/sys/fs/nr_open`
++		MAX_FDS=`@cat@ /proc/sys/fs/nr_open`
+ 		[ "$XENSTORED_MAX_OPEN_FDS" = "unlimited" ] && XENSTORED_MAX_OPEN_FDS=$MAX_FDS
+ 		[ $XENSTORED_MAX_OPEN_FDS -gt $MAX_FDS ] && {
+@@ -81,11 +81,11 @@ test -f @CONFIG_DIR@/@CONFIG_LEAF_DIR@/xencommons && . @CONFIG_DIR@/@CONFIG_LEAF
+ 	}
+
+-	rm -f @XEN_RUN_DIR@/xenstored.pid
++	@rm@ -f @XEN_RUN_DIR@/xenstored.pid
+
+ 	echo -n Starting $XENSTORED...
+-	prlimit --nofile=$XENSTORED_MAX_OPEN_FDS $XENSTORED --pid-file @XEN_RUN_DIR@/xenstored.pid $XENSTORED_ARGS
++	@prlimit@ --nofile=$XENSTORED_MAX_OPEN_FDS $XENSTORED --pid-file @XEN_RUN_DIR@/xenstored.pid $XENSTORED_ARGS
+
+-	systemd-notify --booted 2>/dev/null || timeout_xenstore $XENSTORED || exit 1
+-	XS_PID=`cat @XEN_RUN_DIR@/xenstored.pid`
++	@systemd-notify@ --booted 2>/dev/null || timeout_xenstore $XENSTORED || exit 1
++	XS_PID=`@cat@ @XEN_RUN_DIR@/xenstored.pid`
+ 	echo $XS_OOM_SCORE >/proc/$XS_PID/oom_score_adj
+
+@@ -103,5 +103,5 @@ test -f @CONFIG_DIR@/@CONFIG_LEAF_DIR@/xencommons && . @CONFIG_DIR@/@CONFIG_LEAF
+ 	echo -n Starting $XENSTORE_DOMAIN_KERNEL...
+ 	${LIBEXEC_BIN}/init-xenstore-domain $XENSTORE_DOMAIN_ARGS || exit 1
+-	systemd-notify --ready 2>/dev/null
++	@systemd-notify@ --ready 2>/dev/null
+
+ 	exit 0
+diff --git a/tools/hotplug/Linux/locking.sh b/tools/hotplug/Linux/locking.sh
+index 2e6fb35f02..5860157657 100644
+--- a/tools/hotplug/Linux/locking.sh
++++ b/tools/hotplug/Linux/locking.sh
+@@ -36,5 +36,5 @@ _setlockfd()
+ claim_lock()
+ {
+-    mkdir -p "$LOCK_BASEDIR"
++    @mkdir@ -p "$LOCK_BASEDIR"
+     _setlockfd $1
+     # The locking strategy is identical to that from with-lock-ex(1)
+@@ -45,5 +45,5 @@ claim_lock()
+     while true; do
+         eval "exec $_lockfd<>$_lockfile"
+-        flock -x $_lockfd || return $?
++        @flock@ -x $_lockfd || return $?
+         # Although /dev/stdin (i.e. /proc/self/fd/0) looks like a symlink,
+         # stat(2) bypasses the synthetic symlink and directly accesses the
+@@ -53,5 +53,5 @@ claim_lock()
+         # YY.ZZZ
+         # which need to be separated and compared.
+-        if stat=$( stat -L -c '%D.%i' /dev/stdin $_lockfile 0<&$_lockfd 2>/dev/null )
++        if stat=$( @stat@ -L -c '%D.%i' /dev/stdin $_lockfile 0<&$_lockfd 2>/dev/null )
+         then
+             local file_stat
+@@ -75,5 +75,5 @@ release_lock()
+ {
+     _setlockfd $1
+-    rm "$_lockfile"
++    @rm@ "$_lockfile"
+ }
+
+diff --git a/tools/hotplug/Linux/logging.sh b/tools/hotplug/Linux/logging.sh
+index 3e94df1a9e..fa99d8c4c7 100644
+--- a/tools/hotplug/Linux/logging.sh
++++ b/tools/hotplug/Linux/logging.sh
+@@ -18,4 +18,4 @@ log() {
+   local level="$1"
+   shift
+-  logger -p "daemon.$level" -- "$0:" "$@" || echo "$0 $@" >&2
++  @logger@ -p "daemon.$level" -- "$0:" "$@" || echo "$0 $@" >&2
+ }
+diff --git a/tools/hotplug/Linux/remus-netbuf-setup b/tools/hotplug/Linux/remus-netbuf-setup
+index 87dfa69778..fe4f7b6e36 100644
+--- a/tools/hotplug/Linux/remus-netbuf-setup
++++ b/tools/hotplug/Linux/remus-netbuf-setup
+@@ -75,5 +75,5 @@
+ # Unlike other vif scripts, vif-common is not needed here as it executes vif
+ #specific setup code such as renaming.
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/xen-hotplug-common.sh"
+
+@@ -93,11 +93,11 @@ evalVariables "$@"
+
+ check_libnl_tools() {
+-    if ! command -v nl-qdisc-list > /dev/null 2>&1; then
++    if ! command -v @nl-qdisc-list@ > /dev/null 2>&1; then
+         fatal "Unable to find nl-qdisc-list tool"
+     fi
+-    if ! command -v nl-qdisc-add > /dev/null 2>&1; then
++    if ! command -v @nl-qdisc-add@ > /dev/null 2>&1; then
+         fatal "Unable to find nl-qdisc-add tool"
+     fi
+-    if ! command -v nl-qdisc-delete > /dev/null 2>&1; then
++    if ! command -v @nl-qdisc-delete@ > /dev/null 2>&1; then
+         fatal "Unable to find nl-qdisc-delete tool"
+     fi
+@@ -111,5 +111,5 @@ check_modules() {
+     for m in ifb sch_plug sch_ingress act_mirred cls_u32
+     do
+-        if ! modinfo $m > /dev/null 2>&1; then
++        if ! @modinfo@ $m > /dev/null 2>&1; then
+             fatal "Unable to find $m kernel module"
+         fi
+@@ -119,5 +119,5 @@ check_modules() {
+ #return 0 if the ifb is free
+ check_ifb() {
+-    local installed=`nl-qdisc-list -d $1`
++    local installed=`@nl-qdisc-list@ -d $1`
+     [ -n "$installed" ] && return 1
+
+@@ -140,5 +140,5 @@ check_ifb() {
+ setup_ifb() {
+
+-    for ifb in `ifconfig -a -s|egrep ^ifb|cut -d ' ' -f1`
++    for ifb in `@ifconfig@ -a -s|@egrep@ ^ifb|@cut@ -d ' ' -f1`
+     do
+         check_ifb "$ifb" || continue
+@@ -155,5 +155,5 @@ setup_ifb() {
+     #because we need to cleanup
+     xenstore_write "$XENBUS_PATH/ifb" "$REMUS_IFB"
+-    do_or_die ip link set dev "$REMUS_IFB" up
++    do_or_die @ip@ link set dev "$REMUS_IFB" up
+ }
+
+@@ -162,12 +162,12 @@ redirect_vif_traffic() {
+     local ifb=$2
+
+-    do_or_die tc qdisc add dev "$vif" ingress
++    do_or_die @tc@ qdisc add dev "$vif" ingress
+
+-    tc filter add dev "$vif" parent ffff: proto ip prio 10 \
++    @tc@ filter add dev "$vif" parent ffff: proto ip prio 10 \
+         u32 match u32 0 0 action mirred egress redirect dev "$ifb" >/dev/null 2>&1
+
+     if [ $? -ne 0 ]
+     then
+-        do_without_error tc qdisc del dev "$vif" ingress
++        do_without_error @tc@ qdisc del dev "$vif" ingress
+         fatal "Failed to redirect traffic from $vif to $ifb"
+     fi
+@@ -178,13 +178,13 @@ add_plug_qdisc() {
+     local ifb=$2
+
+-    nl-qdisc-add --dev="$ifb" --parent root plug >/dev/null 2>&1
++    @nl-qdisc-add@ --dev="$ifb" --parent root plug >/dev/null 2>&1
+     if [ $? -ne 0 ]
+     then
+-        do_without_error tc qdisc del dev "$vif" ingress
++        do_without_error @tc@ qdisc del dev "$vif" ingress
+         fatal "Failed to add plug qdisc to $ifb"
+     fi
+
+     #set ifb buffering limit in bytes. Its okay if this command fails
+-    nl-qdisc-add --dev="$ifb" --parent root \
++    @nl-qdisc-add@ --dev="$ifb" --parent root \
+         --update plug --limit=10000000 >/dev/null 2>&1 || true
+ }
+@@ -201,9 +201,9 @@ teardown_netbuf() {
+
+     if [[ "$ifb2" && "$ifb2" == "$ifb" ]]; then
+-        do_without_error ip link set dev "$ifb" down
+-        do_without_error nl-qdisc-delete --dev="$ifb" --parent root plug >/dev/null 2>&1
++        do_without_error @ip@ link set dev "$ifb" down
++        do_without_error @nl-qdisc-delete@ --dev="$ifb" --parent root plug >/dev/null 2>&1
+         xenstore-rm -t "$XENBUS_PATH/ifb" 2>/dev/null || true
+     fi
+-    do_without_error tc qdisc del dev "$vif" ingress
++    do_without_error @tc@ qdisc del dev "$vif" ingress
+     xenstore-rm -t "$XENBUS_PATH/hotplug-status" 2>/dev/null || true
+     xenstore-rm -t "$XENBUS_PATH/hotplug-error" 2>/dev/null || true
+diff --git a/tools/hotplug/Linux/systemd/xen-init-dom0.service.in b/tools/hotplug/Linux/systemd/xen-init-dom0.service.in
+index 98779b8507..cc75339377 100644
+--- a/tools/hotplug/Linux/systemd/xen-init-dom0.service.in
++++ b/tools/hotplug/Linux/systemd/xen-init-dom0.service.in
+@@ -9,5 +9,5 @@ Type=oneshot
+ RemainAfterExit=true
+ EnvironmentFile=-@CONFIG_DIR@/@CONFIG_LEAF_DIR@/xencommons
+-ExecStartPre=/bin/grep -q control_d /proc/xen/capabilities
++ExecStartPre=@grep@ -q control_d /proc/xen/capabilities
+ ExecStart=@LIBEXEC_BIN@/xen-init-dom0 $XEN_DOM0_UUID
+
+diff --git a/tools/hotplug/Linux/systemd/xen-qemu-dom0-disk-backend.service.in b/tools/hotplug/Linux/systemd/xen-qemu-dom0-disk-backend.service.in
+index f56775bc87..a9091047da 100644
+--- a/tools/hotplug/Linux/systemd/xen-qemu-dom0-disk-backend.service.in
++++ b/tools/hotplug/Linux/systemd/xen-qemu-dom0-disk-backend.service.in
+@@ -10,6 +10,6 @@ ConditionPathExists=/proc/xen/capabilities
+ Type=simple
+ PIDFile=@XEN_RUN_DIR@/qemu-dom0.pid
+-ExecStartPre=/bin/grep -q control_d /proc/xen/capabilities
+-ExecStartPre=/bin/mkdir -p @XEN_RUN_DIR@
++ExecStartPre=@grep@ -q control_d /proc/xen/capabilities
++ExecStartPre=@mkdir@ -p @XEN_RUN_DIR@
+ ExecStart=@qemu_xen_systemd@ -xen-domid 0 \
+ 	-xen-attach -name dom0 -nographic -M xenpv -daemonize \
+diff --git a/tools/hotplug/Linux/systemd/xenconsoled.service.in b/tools/hotplug/Linux/systemd/xenconsoled.service.in
+index d84c09aa9c..68317246ae 100644
+--- a/tools/hotplug/Linux/systemd/xenconsoled.service.in
++++ b/tools/hotplug/Linux/systemd/xenconsoled.service.in
+@@ -11,6 +11,6 @@ Environment=XENCONSOLED_TRACE=none
+ Environment=XENCONSOLED_LOG_DIR=@XEN_LOG_DIR@/console
+ EnvironmentFile=-@CONFIG_DIR@/@CONFIG_LEAF_DIR@/xencommons
+-ExecStartPre=/bin/grep -q control_d /proc/xen/capabilities
+-ExecStartPre=/bin/mkdir -p ${XENCONSOLED_LOG_DIR} @XEN_RUN_DIR@
++ExecStartPre=@grep@ -q control_d /proc/xen/capabilities
++ExecStartPre=@mkdir@ -p ${XENCONSOLED_LOG_DIR} @XEN_RUN_DIR@
+ ExecStart=@sbindir@/xenconsoled -i --log=${XENCONSOLED_TRACE} --log-dir=${XENCONSOLED_LOG_DIR} $XENCONSOLED_ARGS
+
+diff --git a/tools/hotplug/Linux/systemd/xendomains.service.in b/tools/hotplug/Linux/systemd/xendomains.service.in
+index c7bfb61eb4..314ed9e91a 100644
+--- a/tools/hotplug/Linux/systemd/xendomains.service.in
++++ b/tools/hotplug/Linux/systemd/xendomains.service.in
+@@ -11,5 +11,5 @@ Conflicts=libvirtd.service
+ Type=oneshot
+ RemainAfterExit=true
+-ExecStartPre=/bin/grep -q control_d /proc/xen/capabilities
++ExecStartPre=@grep@ -q control_d /proc/xen/capabilities
+ ExecStart=-@LIBEXEC_BIN@/xendomains start
+ ExecStop=@LIBEXEC_BIN@/xendomains stop
+diff --git a/tools/hotplug/Linux/systemd/xenstored.service.in b/tools/hotplug/Linux/systemd/xenstored.service.in
+index 261077dc92..7daf7369b8 100644
+--- a/tools/hotplug/Linux/systemd/xenstored.service.in
++++ b/tools/hotplug/Linux/systemd/xenstored.service.in
+@@ -11,5 +11,5 @@ Type=notify
+ NotifyAccess=all
+ RemainAfterExit=true
+-ExecStartPre=/bin/grep -q control_d /proc/xen/capabilities
++ExecStartPre=@grep@ -q control_d /proc/xen/capabilities
+ ExecStart=@XEN_SCRIPT_DIR@/launch-xenstore
+
+diff --git a/tools/hotplug/Linux/vif-bridge b/tools/hotplug/Linux/vif-bridge
+index 906047e82f..e110013b14 100644
+--- a/tools/hotplug/Linux/vif-bridge
++++ b/tools/hotplug/Linux/vif-bridge
+@@ -26,5 +26,5 @@
+ #============================================================================
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/vif-common.sh"
+
+@@ -33,8 +33,8 @@ bridge=$(xenstore_read_default "$XENBUS_PATH/bridge" "$bridge")
+
+ if [ -z "$bridge" ]; then
+-    if which brctl >&/dev/null; then
+-        bridge=$(brctl show | awk 'NR==2{print$1}')
++    if @which@ @brctl@ >&/dev/null; then
++        bridge=$(@brctl@ show | @awk@ 'NR==2{print$1}')
+     else
+-        bridge=$(bridge link | cut -d" " -f7)
++        bridge=$(@bridge@ link | @cut@ -d" " -f7)
+     fi
+   if [ -z "$bridge" ]
+@@ -71,5 +71,5 @@ fi
+
+ RET=0
+-ip link show dev "$bridge" 1>/dev/null 2>&1 || RET=1
++@ip@ link show dev "$bridge" 1>/dev/null 2>&1 || RET=1
+ if [ "$RET" -eq 1 ]
+ then
+diff --git a/tools/hotplug/Linux/vif-common.sh b/tools/hotplug/Linux/vif-common.sh
+index a8e65178f9..28eb851f94 100644
+--- a/tools/hotplug/Linux/vif-common.sh
++++ b/tools/hotplug/Linux/vif-common.sh
+@@ -16,5 +16,5 @@
+
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/xen-hotplug-common.sh"
+ . "$dir/xen-network-common.sh"
+@@ -73,9 +73,9 @@ rename_vif() {
+     # that interface (e.g. another running domU) because it's likely a
+     # configuration error
+-    if ip link show "$vifname" >&/dev/null
++    if @ip@ link show "$vifname" >&/dev/null
+     then
+         fatal "Cannot rename interface $dev. An interface with name $vifname already exists."
+     fi
+-    do_or_die ip link set "$dev" name "$vifname"
++    do_or_die @ip@ link set "$dev" name "$vifname"
+ }
+
+@@ -135,10 +135,10 @@ iptables_w()
+ {
+     if ! $IPTABLES_WAIT_RUNE_CHECKED ; then
+-	iptables $IPTABLES_WAIT_RUNE -L -n >& /dev/null
++	@iptables@ $IPTABLES_WAIT_RUNE -L -n >& /dev/null
+ 	if [[ $? == 0 ]] ; then
+ 	    # If we succeed, then -w is supported; don't check again
+ 	    IPTABLES_WAIT_RUNE_CHECKED=true
+ 	elif [[ $? == 2 ]] ; then
+-	    iptables -L -n >& /dev/null
++	    @iptables@ -L -n >& /dev/null
+ 	    if [[ $? != 2 ]] ; then
+ 		# If we fail with PARAMETER_PROBLEM (2) with -w and
+@@ -150,5 +150,5 @@ iptables_w()
+ 	fi
+     fi
+-    iptables $IPTABLES_WAIT_RUNE "$@"
++    @iptables@ $IPTABLES_WAIT_RUNE "$@"
+ }
+
+@@ -221,5 +221,5 @@ handle_iptable()
+ ip_of()
+ {
+-  ip -4 -o addr show primary dev "$1" | awk '$3 == "inet" {split($4,i,"/"); print i[1]; exit}'
++  @ip@ -4 -o addr show primary dev "$1" | @awk@ '$3 == "inet" {split($4,i,"/"); print i[1]; exit}'
+ }
+
+diff --git a/tools/hotplug/Linux/vif-nat b/tools/hotplug/Linux/vif-nat
+index fd34afbb96..8921de58f3 100644
+--- a/tools/hotplug/Linux/vif-nat
++++ b/tools/hotplug/Linux/vif-nat
+@@ -22,5 +22,5 @@
+
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/vif-common.sh"
+
+@@ -62,5 +62,5 @@ ip_from_dom()
+ routing_ip()
+ {
+-  echo $(echo $1 | awk -F. '{print $1"."$2"."$3"."$4 + 127}')
++  echo $(echo $1 | @awk@ -F. '{print $1"."$2"."$3"."$4 + 127}')
+ }
+
+@@ -84,5 +84,5 @@ router_ip=$(routing_ip "$ip")
+
+ # Split the given IP/bits pair.
+-vif_ip=`echo ${ip} | awk -F/ '{print $1}'`
++vif_ip=`echo ${ip} | @awk@ -F/ '{print $1}'`
+
+ hostname=dom$domid
+@@ -94,11 +94,11 @@ fi
+ dhcparg_remove_entry()
+ {
+-  local tmpfile=$(mktemp)
+-  sed -e "s/${dev} //" "$dhcpd_arg_file" >"$tmpfile"
+-  if ! diff "$tmpfile" "$dhcpd_arg_file" >/dev/null
++  local tmpfile=$(@mktemp@)
++  @sed@ -e "s/${dev} //" "$dhcpd_arg_file" >"$tmpfile"
++  if ! @diff@ "$tmpfile" "$dhcpd_arg_file" >/dev/null
+   then
+-    cp "$tmpfile" "$dhcpd_arg_file"
++    @cp@ "$tmpfile" "$dhcpd_arg_file"
+   fi
+-  rm "$tmpfile"
++  @rm@ "$tmpfile"
+ }
+
+@@ -106,24 +106,24 @@ dhcparg_add_entry()
+ {
+   dhcparg_remove_entry
+-  local tmpfile=$(mktemp)
++  local tmpfile=$(@mktemp@)
+   # handle Red Hat, SUSE, and Debian styles, with or without quotes
+-  sed -e 's/^DHCPDARGS="*\([^"]*\)"*/DHCPDARGS="\1'"${dev} "'"/' \
+-     "$dhcpd_arg_file" >"$tmpfile" && cp "$tmpfile" "$dhcpd_arg_file"
+-  sed -e 's/^DHCPD_INTERFACE="*\([^"]*\)"*/DHCPD_INTERFACE="\1'"${dev} "'"/' \
+-     "$dhcpd_arg_file" >"$tmpfile" && cp "$tmpfile" "$dhcpd_arg_file"
+-  sed -e 's/^INTERFACES="*\([^"]*\)"*/INTERFACES="\1'"${dev} "'"/' \
+-     "$dhcpd_arg_file" >"$tmpfile" && cp "$tmpfile" "$dhcpd_arg_file"
+-  rm -f "$tmpfile"
++  @sed@ -e 's/^DHCPDARGS="*\([^"]*\)"*/DHCPDARGS="\1'"${dev} "'"/' \
++     "$dhcpd_arg_file" >"$tmpfile" && @cp@ "$tmpfile" "$dhcpd_arg_file"
++  @sed@ -e 's/^DHCPD_INTERFACE="*\([^"]*\)"*/DHCPD_INTERFACE="\1'"${dev} "'"/' \
++     "$dhcpd_arg_file" >"$tmpfile" && @cp@ "$tmpfile" "$dhcpd_arg_file"
++  @sed@ -e 's/^INTERFACES="*\([^"]*\)"*/INTERFACES="\1'"${dev} "'"/' \
++     "$dhcpd_arg_file" >"$tmpfile" && @cp@ "$tmpfile" "$dhcpd_arg_file"
++  @rm@ -f "$tmpfile"
+ }
+
+ dhcp_remove_entry()
+ {
+-  local tmpfile=$(mktemp)
+-  grep -v "host $hostname" "$dhcpd_conf_file" >"$tmpfile"
+-  if ! diff "$tmpfile" "$dhcpd_conf_file" >/dev/null
++  local tmpfile=$(@mktemp@)
++  @grep@ -v "host $hostname" "$dhcpd_conf_file" >"$tmpfile"
++  if ! @diff@ "$tmpfile" "$dhcpd_conf_file" >/dev/null
+   then
+-    cp "$tmpfile" "$dhcpd_conf_file"
++    @cp@ "$tmpfile" "$dhcpd_conf_file"
+   fi
+-  rm "$tmpfile"
++  @rm@ "$tmpfile"
+   dhcparg_remove_entry
+ }
+@@ -159,5 +159,5 @@ dhcp_down()
+ case "$command" in
+     online)
+-        if ip route | grep -q "dev ${dev}"
++        if @ip@  route | @grep@ -q "dev ${dev}"
+         then
+           log debug "${dev} already up"
+@@ -165,7 +165,7 @@ case "$command" in
+         fi
+
+-        do_or_die ip link set dev "${dev}" up arp on
+-        do_or_die ip addr add "$router_ip" dev "${dev}"
+-        do_or_die ip route add "$vif_ip" dev "${dev}" src "$router_ip"
++        do_or_die @ip@ link set dev "${dev}" up arp on
++        do_or_die @ip@ addr add "$router_ip" dev "${dev}"
++        do_or_die @ip@ route add "$vif_ip" dev "${dev}" src "$router_ip"
+         echo 1 >/proc/sys/net/ipv4/conf/${dev}/proxy_arp
+         [ "$dhcp" != 'no' ] && dhcp_up
+@@ -173,5 +173,5 @@ case "$command" in
+     offline)
+         [ "$dhcp" != 'no' ] && dhcp_down
+-        do_without_error ifconfig "${dev}" down
++        do_without_error @ifconfig@ "${dev}" down
+         ;;
+ esac
+diff --git a/tools/hotplug/Linux/vif-openvswitch b/tools/hotplug/Linux/vif-openvswitch
+index 18bfb6cefb..ea983481a3 100644
+--- a/tools/hotplug/Linux/vif-openvswitch
++++ b/tools/hotplug/Linux/vif-openvswitch
+@@ -25,13 +25,13 @@
+ #============================================================================
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/vif-common.sh"
+
+ check_tools()
+ {
+-    if ! command -v ovs-vsctl > /dev/null 2>&1; then
++    if ! command -v @ovs-vsctl@ > /dev/null 2>&1; then
+         fatal "Unable to find ovs-vsctl tool"
+     fi
+-    if ! command -v ip > /dev/null 2>&1; then
++    if ! command -v @ip@ > /dev/null 2>&1; then
+         fatal "Unable to find ip tool"
+     fi
+@@ -80,8 +80,8 @@ add_to_openvswitch () {
+     local vif_details="$(openvswitch_external_id_all $dev)"
+
+-    do_or_die ovs-vsctl --timeout=30 \
++    do_or_die @ovs-vsctl@ --timeout=30 \
+         -- --if-exists del-port $dev \
+         -- add-port "$bridge" $dev $tag_arg $trunk_arg $vif_details
+-    do_or_die ip link set $dev up
++    do_or_die @ip@ link set $dev up
+ }
+
+@@ -94,7 +94,7 @@ case "$command" in
+
+     remove|offline)
+-        do_without_error ovs-vsctl --timeout=30 \
++        do_without_error @ovs-vsctl@ --timeout=30 \
+             -- --if-exists del-port $dev
+-        do_without_error ip link set $dev down
++        do_without_error @ip@ link set $dev down
+         ;;
+ esac
+diff --git a/tools/hotplug/Linux/vif-route b/tools/hotplug/Linux/vif-route
+index 9cd417a005..98d67a8659 100755
+--- a/tools/hotplug/Linux/vif-route
++++ b/tools/hotplug/Linux/vif-route
+@@ -17,5 +17,5 @@
+ #============================================================================
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "${dir}/vif-common.sh"
+
+@@ -24,5 +24,5 @@ main_ip=$(dom0_ip)
+ case "${command}" in
+     add|online)
+-        ifconfig ${dev} ${main_ip} netmask 255.255.255.255 up
++        @ifconfig@ ${dev} ${main_ip} netmask 255.255.255.255 up
+         echo 1 >/proc/sys/net/ipv4/conf/${dev}/proxy_arp
+         ipcmd='add'
+@@ -51,5 +51,5 @@ esac
+ # the guest using those addresses.
+ for addr in ${ip} ; do
+-    ${cmdprefix} ip route ${ipcmd} ${addr} dev ${dev} src ${main_ip} metric ${metric}
++    ${cmdprefix} @ip@ route ${ipcmd} ${addr} dev ${dev} src ${main_ip} metric ${metric}
+ done
+
+diff --git a/tools/hotplug/Linux/vscsi b/tools/hotplug/Linux/vscsi
+index 5ac26147ec..8f297e05df 100644
+--- a/tools/hotplug/Linux/vscsi
++++ b/tools/hotplug/Linux/vscsi
+@@ -5,5 +5,5 @@
+ #
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/xen-hotplug-common.sh"
+
+diff --git a/tools/hotplug/Linux/xen-hotplug-common.sh.in b/tools/hotplug/Linux/xen-hotplug-common.sh.in
+index 8c2cb9e25a..e9c64efcb0 100644
+--- a/tools/hotplug/Linux/xen-hotplug-common.sh.in
++++ b/tools/hotplug/Linux/xen-hotplug-common.sh.in
+@@ -15,5 +15,5 @@
+ #
+
+-dir=$(dirname "$0")
++dir=$(@dirname@ "$0")
+ . "$dir/hotplugpath.sh"
+ . "$dir/logging.sh"
+@@ -26,5 +26,5 @@ export PATH="${bindir}:${sbindir}:${LIBEXEC_BIN}:/sbin:/bin:/usr/bin:/usr/sbin:$
+ export LD_LIBRARY_PATH="${libdir}${LD_LIBRARY_PATH+:}$LD_LIBRARY_PATH"
+ export LANG="POSIX"
+-unset $(set | grep ^LC_ | cut -d= -f1)
++unset $(set | @grep@ ^LC_ | @cut@ -d= -f1)
+
+ fatal() {
+diff --git a/tools/hotplug/Linux/xen-network-common.sh b/tools/hotplug/Linux/xen-network-common.sh
+index 42fa704e8d..f6cf1b11c0 100644
+--- a/tools/hotplug/Linux/xen-network-common.sh
++++ b/tools/hotplug/Linux/xen-network-common.sh
+@@ -27,5 +27,5 @@
+ #           been renamed.
+
+-if ! which ifup >/dev/null 2>/dev/null
++if ! @which@ ifup >/dev/null 2>/dev/null
+ then
+   preiftransfer()
+@@ -85,5 +85,5 @@ _setup_bridge_port() {
+
+     # take interface down ...
+-    ip link set dev ${dev} down
++    @ip@ link set dev ${dev} down
+
+     if [ $virtual -ne 0 ] ; then
+@@ -92,9 +92,9 @@ _setup_bridge_port() {
+         # stolen by an Ethernet bridge for STP purposes.
+         # (FE:FF:FF:FF:FF:FF)
+-        ip link set dev ${dev} address fe:ff:ff:ff:ff:ff || true
++        @ip@ link set dev ${dev} address fe:ff:ff:ff:ff:ff || true
+     fi
+
+     # ... and configure it
+-    ip address flush dev ${dev}
++    @ip@ address flush dev ${dev}
+ }
+
+@@ -112,10 +112,10 @@ create_bridge () {
+     # Don't create the bridge if it already exists.
+     if [ ! -e "/sys/class/net/${bridge}/bridge" ]; then
+-        if which brctl >&/dev/null; then
+-            brctl addbr ${bridge}
+-            brctl stp ${bridge} off
+-            brctl setfd ${bridge} 0
++        if @which@ @brctl@ >&/dev/null; then
++            @brctl@ addbr ${bridge}
++            @brctl@ stp ${bridge} off
++            @brctl@ setfd ${bridge} 0
+         else
+-            ip link add name ${bridge} type bridge stp_state 0 forward_delay 0
++            @ip@ link add name ${bridge} type bridge stp_state 0 forward_delay 0
+         fi
+     fi
+@@ -130,8 +130,8 @@ add_to_bridge () {
+     if [ ! -e "/sys/class/net/${bridge}/brif/${dev}" ]; then
+         log debug "adding $dev to bridge $bridge"
+-        if which brctl >&/dev/null; then
+-            brctl addif ${bridge} ${dev}
++        if @which@ @brctl@ >&/dev/null; then
++            @brctl@ addif ${bridge} ${dev}
+         else
+-            ip link set ${dev} master ${bridge}
++            @ip@ link set ${dev} master ${bridge}
+         fi
+     else
+@@ -139,5 +139,5 @@ add_to_bridge () {
+     fi
+
+-    ip link set dev ${dev} up
++    @ip@ link set dev ${dev} up
+ }
+
+@@ -146,13 +146,13 @@ remove_from_bridge () {
+     local dev=$2
+
+-    do_without_error ip link set dev ${dev} down
++    do_without_error @ip@ link set dev ${dev} down
+
+     # Don't remove $dev from $bridge if it's not on the bridge.
+     if [ -e "/sys/class/net/${bridge}/brif/${dev}" ]; then
+         log debug "removing $dev from bridge $bridge"
+-        if which brctl >&/dev/null; then
+-            do_without_error brctl delif ${bridge} ${dev}
++        if @which@ @brctl@ >&/dev/null; then
++            do_without_error @brctl@ delif ${bridge} ${dev}
+         else
+-            do_without_error ip link set ${dev} nomaster
++            do_without_error @ip@ link set ${dev} nomaster
+         fi
+     else
+@@ -172,5 +172,5 @@ set_mtu () {
+     if [ -z "$mtu" ]
+     then
+-        mtu="`ip link show dev ${bridge}| awk '/mtu/ { print $5 }'`"
++        mtu="`@ip@ link show dev ${bridge}| @awk@ '/mtu/ { print $5 }'`"
+         if [ -n "$mtu" ]
+         then
+@@ -181,5 +181,5 @@ set_mtu () {
+     then
+         log debug "setting $dev MTU to $mtu"
+-        ip link set dev ${dev} mtu ${mtu} || :
++        @ip@ link set dev ${dev} mtu ${mtu} || :
+
+         if [ ${type_if} = vif ]
+diff --git a/tools/hotplug/Linux/xendomains.in b/tools/hotplug/Linux/xendomains.in
+index 70f4129ef4..b066404b0d 100644
+--- a/tools/hotplug/Linux/xendomains.in
++++ b/tools/hotplug/Linux/xendomains.in
+@@ -151,5 +151,5 @@ else
+ fi
+
+-if ! which usleep >&/dev/null
++if ! @which@ usleep >&/dev/null
+ then
+   usleep()
+@@ -157,5 +157,5 @@ then
+     if [ -n "$1" ]
+     then
+-      sleep $(( $1 / 1000000 ))
++      @sleep@ $(( $1 / 1000000 ))
+     fi
+   }
+@@ -171,5 +171,5 @@ rc_reset
+ contains_something()
+ {
+-  if [ -d "$1" ] && [ `/bin/ls $1 | wc -l` -gt 0 ]
++  if [ -d "$1" ] && [ `@ls@ $1 | wc -l` -gt 0 ]
+   then
+     return 0
+@@ -183,5 +183,5 @@ rdname()
+ {
+     NM=$($CMD create --quiet --dryrun --defconfig "$1" |
+-         sed -n 's/^.*(name \(.*\))$/\1/p;s/^.*"name": "\(.*\)",$/\1/p')
++         @sed@ -n 's/^.*(name \(.*\))$/\1/p;s/^.*"name": "\(.*\)",$/\1/p')
+ }
+
+@@ -218,11 +218,11 @@ parseln()
+         name=;id=
+     elif [[ "$1" =~ '(name' ]]; then
+-        name=$(echo $1 | sed -e 's/^.*(name \(.*\))$/\1/')
++        name=$(echo $1 | @sed@ -e 's/^.*(name \(.*\))$/\1/')
+     elif [[ "$1" =~ '(domid' ]]; then
+-        id=$(echo $1 | sed -e 's/^.*(domid \(.*\))$/\1/')
++        id=$(echo $1 | @sed@ -e 's/^.*(domid \(.*\))$/\1/')
+     elif [[ "$1" =~ '"name":' ]]; then
+-        name=$(echo $1 | sed -e 's/^.*"name": "\(.*\)",$/\1/')
++        name=$(echo $1 | @sed@ -e 's/^.*"name": "\(.*\)",$/\1/')
+     elif [[ "$1" =~ '"domid":' ]]; then
+-        id=$(echo $1 | sed -e 's/^.*"domid": \(.*\),$/\1/')
++        id=$(echo $1 | @sed@ -e 's/^.*"domid": \(.*\),$/\1/')
+     fi
+
+@@ -245,5 +245,5 @@ is_running()
+ 		;;
+ 	esac
+-    done < <($CMD list -l | grep "$LIST_GREP")
++    done < <($CMD list -l | @grep@ "$LIST_GREP")
+     return $RC
+ }
+@@ -256,5 +256,5 @@ start()
+     fi
+
+-    mkdir -p $(dirname "$LOCKFILE")
++    @mkdir@ -p $(@dirname@ "$LOCKFILE")
+     touch $LOCKFILE
+
+@@ -267,5 +267,5 @@ start()
+         for dom in $XENDOMAINS_SAVE/*; do
+             if [ -f $dom ] ; then
+-                HEADER=`head -c 16 $dom | head -n 1 2> /dev/null`
++                HEADER=`@head@ -c 16 $dom | @head@ -n 1 2> /dev/null`
+                 if [ "$HEADER" = "$HEADCOMP" ]; then
+                     echo -n " ${dom##*/}"
+@@ -278,5 +278,5 @@ start()
+                     else
+                         # mv $dom ${dom%/*}/.${dom##*/}
+-                        rm $dom
++                        @rm@ $dom
+                     fi
+                 fi
+@@ -300,6 +300,6 @@ start()
+ 	for dom in $XENDOMAINS_AUTO/*; do
+ 	    echo -n " ${dom##*/}"
+-	    shortdom=$(echo $dom | sed -n 's/^.*\/\(.*\)$/\1/p')
+-	    echo $saved_domains | grep -w $shortdom > /dev/null
++	    shortdom=$(echo $dom | @sed@ -n 's/^.*\/\(.*\)$/\1/p')
++	    echo $saved_domains | @grep@ -w $shortdom > /dev/null
+ 	    if [ $? -eq 0 ] || is_running $dom; then
+ 		echo -n "(skip)"
+@@ -329,5 +329,5 @@ all_zombies()
+ 	    return 1;
+ 	fi
+-    done < <($CMD list -l | grep "$LIST_GREP")
++    done < <($CMD list -l | @grep@ "$LIST_GREP")
+     return 0
+ }
+@@ -346,14 +346,14 @@ watchdog_xencmd()
+
+     usleep 20000
+-    for no in `seq 0 $XENDOMAINS_STOP_MAXWAIT`; do
++    for no in `@seq@  0 $XENDOMAINS_STOP_MAXWAIT`; do
+ 	# exit if $CMD save/migrate/shutdown is finished
+-	PSAX=`ps axlw | grep "$CMD $1" | grep -v grep`
++	PSAX=`ps axlw | @grep@ "$CMD $1" | @grep@ -v grep`
+ 	if test -z "$PSAX"; then exit; fi
+ 	if ! test -n "$3"; then echo -n '.'; fi
+-	sleep 1
++	@sleep@ 1
+ 	# go to kill immediately if there's only zombies left
+ 	if all_zombies && test -n "$2"; then break; fi
+     done
+-    sleep 1
++    @sleep@ 1
+     read PSF PSUID PSPID PSPPID < <(echo "$PSAX")
+     # kill $CMD $1
+@@ -435,5 +435,5 @@ stop()
+ 	    watchdog_xencmd save &
+ 	    WDOG_PID=$!
+-	    mkdir -p "$XENDOMAINS_SAVE"
++	    @mkdir@ -p "$XENDOMAINS_SAVE"
+ 	    XMR=`$CMD save $id $XENDOMAINS_SAVE/$name 2>&1 1>/dev/null`
+ 	    if test $? -ne 0; then
+@@ -462,5 +462,5 @@ stop()
+ 	    kill $WDOG_PID >/dev/null 2>&1
+ 	fi
+-    done < <($CMD list -l | grep "$LIST_GREP")
++    done < <($CMD list -l | @grep@ "$LIST_GREP")
+
+     # NB. this shuts down ALL Xen domains (politely), not just the ones in
+@@ -483,5 +483,5 @@ stop()
+
+     # Unconditionally delete lock file
+-    rm -f $LOCKFILE
++    @rm@ -f $LOCKFILE
+
+     exec 2>&3
+@@ -499,5 +499,5 @@ check_domain_up()
+ 		;;
+ 	esac
+-    done < <($CMD list -l | grep "$LIST_GREP")
++    done < <($CMD list -l | @grep@ "$LIST_GREP")
+     return 1
+ }
+@@ -532,5 +532,5 @@ check_all_saved_domains_up()
+       return 0
+     fi
+-    missing=`/bin/ls $XENDOMAINS_SAVE`
++    missing=`@ls@ $XENDOMAINS_SAVE`
+     echo -n " MISS SAVED: " $missing
+     return 1
+--
+2.49.0
+

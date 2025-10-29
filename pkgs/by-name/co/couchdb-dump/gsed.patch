@@ -1,0 +1,19 @@
+--- a/couchdb-dump.sh	1970-01-01 01:00:01.000000000 +0100
++++ b/couchdb-dump.sh	2025-05-21 10:08:22.092922719 +0200
+@@ -182,15 +182,8 @@
+ fi
+ file_name_orig=$file_name
+ 
+-# Get OS TYPE (Linux for Linux, Darwin for MacOSX)
+-os_type=`uname -s`
++sed_cmd="@sed_cmd@";
+ 
+-# Pick sed or gsed
+-if [ "$os_type" = "FreeBSD" ]||[ "$os_type" = "Darwin" ]; then
+-    sed_cmd="gsed";
+-else
+-    sed_cmd="sed";
+-fi
+ ## Make sure it's installed
+ echo | $sed_cmd 's/a//' >/dev/null 2>&1 
+ if [ ! $? = 0 ]; then

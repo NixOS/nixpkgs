@@ -1,0 +1,25 @@
+From dca9c03930d669233258c114e914a01f7c0aeb05 Mon Sep 17 00:00:00 2001
+From: jbr79 <jbr79@ef0d8562-5c19-0410-972e-841db63a069c>
+Date: Wed, 24 Sep 2008 22:02:59 +0000
+Subject: [PATCH] add fallback function for apply_simd_restrictions() on
+ non-x86/ppc
+
+git-svn-id: https://aften.svn.sourceforge.net/svnroot/aften@766 ef0d8562-5c19-0410-972e-841db63a069c
+---
+ libaften/cpu_caps.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libaften/cpu_caps.h b/libaften/cpu_caps.h
+index b7c6159..4db11f7 100644
+--- a/libaften/cpu_caps.h
++++ b/libaften/cpu_caps.h
+@@ -26,6 +26,7 @@
+ #include "ppc_cpu_caps.h"
+ #else
+ static inline void cpu_caps_detect(void){}
++static inline void apply_simd_restrictions(AftenSimdInstructions *simd_instructions){}
+ #endif
+
+ #endif /* CPU_CAPS_H */
+--
+2.24.3 (Apple Git-128)

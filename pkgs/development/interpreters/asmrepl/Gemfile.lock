@@ -1,0 +1,18 @@
+GEM
+  specs:
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    asmrepl (1.0.3)
+      fisk (~> 2)
+    fisk (2.3.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  asmrepl!
+
+BUNDLED WITH
+   2.2.24

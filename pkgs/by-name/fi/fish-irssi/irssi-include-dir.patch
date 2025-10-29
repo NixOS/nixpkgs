@@ -1,0 +1,33 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 601b92b..b440f83 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -36,27 +36,10 @@ if(OPENSSL_FOUND)
+     MESSAGE(STATUS "Using OpenSSL ${OPENSSL_VERSION}")
+ ENDIF()
+ 
+-# Sets a variable that the user can set with 
+-# cmake -DIRSSI_INCLUDE_DIR:PATH=/path/to/irssi/includes .
+-SET(IRSSI_INCLUDE_DIR "" CACHE PATH "Path to irssi include files")
+-
+-# Tries to find the irssi include files in the most common places,
+-# and in the user defined directory
+-FIND_PATH(IRSSI_INCLUDE_PATH
+-    NAMES irssi-config.h src/common.h
+-    PATHS /usr/include/irssi /usr/local/include/irssi ${IRSSI_INCLUDE_DIR}
+-)
+-
+-# Bail out if the required irssi files werent found
+-IF(NOT IRSSI_INCLUDE_PATH)
+-    MESSAGE(SEND_ERROR "Could not detect the irssi include files. Please run:\n# cmake -DIRSSI_INCLUDE_DIR:PATH=/path/to/irssi/includes .")
+-    RETURN()
+-ENDIF()
+-
+ MESSAGE(STATUS "irssi includes were found on ${IRSSI_INCLUDE_PATH}")
+ 
+ # Add the weirdo irssi includes directories
+-INCLUDE_DIRECTORIES(${IRSSI_INCLUDE_PATH} ${IRSSI_INCLUDE_PATH}/src ${IRSSI_INCLUDE_PATH}/src/fe-common/core ${IRSSI_INCLUDE_PATH}/src/core)
++INCLUDE_DIRECTORIES(${IRSSI_INCLUDE_PATH} ${IRSSI_INCLUDE_PATH}/irssi ${IRSSI_INCLUDE_PATH}/irssi/src ${IRSSI_INCLUDE_PATH}/irssi/src/fe-common/core ${IRSSI_INCLUDE_PATH}/irssi/src/core)
+ 
+ MESSAGE(STATUS "The module will be installed by default to ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}/irssi/modules")
+ MESSAGE(STATUS "You can change it with 'cmake -DCMAKE_INSTALL_PREFIX:PATH=/usr .'")

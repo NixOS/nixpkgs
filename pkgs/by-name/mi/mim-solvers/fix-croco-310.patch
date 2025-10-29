@@ -1,0 +1,52 @@
+From 1cb7fe38e3ec43117c646cae521eb8347145965a Mon Sep 17 00:00:00 2001
+From: Guilhem Saurel <guilhem.saurel@laas.fr>
+Date: Tue, 14 Oct 2025 19:37:16 +0200
+Subject: [PATCH] fix for crocoddyl v3.1.0 explicit template instanciation
+
+ref. https://github.com/loco-3d/crocoddyl/pull/1367
+
+Yes, that was a breaking change
+---
+ tests/factory/point-mass.hpp | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/tests/factory/point-mass.hpp b/tests/factory/point-mass.hpp
+index e82c977..c2e93af 100644
+--- a/tests/factory/point-mass.hpp
++++ b/tests/factory/point-mass.hpp
+@@ -60,6 +60,17 @@ class DAMPointMass1D : public crocoddyl::DifferentialActionModelAbstract {
+   // Destructor
+   virtual ~DAMPointMass1D();
+ 
++  // Explicit template instanciation
++  std::shared_ptr<crocoddyl::DifferentialActionModelBase> cloneAsDouble()
++      const override {
++    return std::make_shared<DAMPointMass1D>(*this);
++  }
++
++  std::shared_ptr<crocoddyl::DifferentialActionModelBase> cloneAsFloat()
++      const override {
++    return std::make_shared<DAMPointMass1D>(*this);
++  }
++
+   // Cost & dynamics
+   void calc(const std::shared_ptr<DifferentialActionDataAbstract>& data,
+             const Eigen::Ref<const VectorXd>& x,
+@@ -135,6 +146,17 @@ class DAMPointMass2D : public crocoddyl::DifferentialActionModelAbstract {
+   // Destructor
+   virtual ~DAMPointMass2D();
+ 
++  // Explicit template instanciation
++  std::shared_ptr<crocoddyl::DifferentialActionModelBase> cloneAsDouble()
++      const override {
++    return std::make_shared<DAMPointMass2D>(*this);
++  }
++
++  std::shared_ptr<crocoddyl::DifferentialActionModelBase> cloneAsFloat()
++      const override {
++    return std::make_shared<DAMPointMass2D>(*this);
++  }
++
+   // Cost & dynamics
+   void calc(const std::shared_ptr<DifferentialActionDataAbstract>& data,
+             const Eigen::Ref<const VectorXd>& x,

@@ -1,0 +1,100 @@
+diff -ru pilot-link-0.12.4/src/pilot-read-notepad.c pilot-link-0.12.4.png14/src/pilot-read-notepad.c
+--- pilot-link-0.12.4/src/pilot-read-notepad.c	2007-02-05 00:06:02.000000000 +0100
++++ pilot-link-0.12.4.png14/src/pilot-read-notepad.c	2010-01-17 15:04:33.000000000 +0100
+@@ -39,10 +39,6 @@
+ 
+ #ifdef HAVE_PNG
+ #include "png.h"
+-#if (PNG_LIBPNG_VER < 10201)
+- #define png_voidp_NULL (png_voidp)NULL
+- #define png_error_ptr_NULL (png_error_ptr)NULL
+-#endif
+ #endif
+ 
+ const char *progname;
+@@ -166,8 +162,8 @@
+    width = n->body.width + 8;
+ 
+    png_ptr = png_create_write_struct
+-     ( PNG_LIBPNG_VER_STRING, png_voidp_NULL,
+-       png_error_ptr_NULL, png_error_ptr_NULL);
++     ( PNG_LIBPNG_VER_STRING, NULL,
++       NULL, NULL);
+ 
+    if(!png_ptr)
+      return;
+diff -ru pilot-link-0.12.4/src/pilot-read-palmpix.c pilot-link-0.12.4.png14/src/pilot-read-palmpix.c
+--- pilot-link-0.12.4/src/pilot-read-palmpix.c	2007-02-05 00:06:03.000000000 +0100
++++ pilot-link-0.12.4.png14/src/pilot-read-palmpix.c	2010-01-17 15:03:20.000000000 +0100
+@@ -42,10 +42,6 @@
+ 
+ #ifdef HAVE_PNG
+ #include "png.h"
+-#if (PNG_LIBPNG_VER < 10201)
+- #define png_voidp_NULL (png_voidp)NULL
+- #define png_error_ptr_NULL (png_error_ptr)NULL
+-#endif
+ #endif
+ 
+ const char *progname;
+@@ -223,8 +219,8 @@
+ 	png_infop info_ptr;
+ 
+ 	png_ptr = png_create_write_struct
+-		( PNG_LIBPNG_VER_STRING, png_voidp_NULL,
+-		png_error_ptr_NULL, png_error_ptr_NULL);
++		( PNG_LIBPNG_VER_STRING, NULL,
++		NULL, NULL);
+ 
+ 	if(!png_ptr)
+ 		return;
+diff -ru pilot-link-0.12.4/src/pilot-read-screenshot.c pilot-link-0.12.4.png14/src/pilot-read-screenshot.c
+--- pilot-link-0.12.4/src/pilot-read-screenshot.c	2006-11-02 15:54:31.000000000 +0100
++++ pilot-link-0.12.4.png14/src/pilot-read-screenshot.c	2010-01-17 15:03:52.000000000 +0100
+@@ -40,10 +40,6 @@
+ 
+ #ifdef HAVE_PNG
+ # include "png.h"
+-# if (PNG_LIBPNG_VER < 10201)
+-#  define png_voidp_NULL (png_voidp)NULL
+-#  define png_error_ptr_NULL (png_error_ptr)NULL
+-# endif
+ #endif
+ 
+ #define pi_mktag(c1,c2,c3,c4) (((c1)<<24)|((c2)<<16)|((c3)<<8)|(c4))
+@@ -87,8 +83,8 @@
+ 		gray_buf = malloc( state->w );
+ 
+ 	png_ptr = png_create_write_struct
+-		(PNG_LIBPNG_VER_STRING, png_voidp_NULL,
+-		png_error_ptr_NULL, png_error_ptr_NULL);
++		(PNG_LIBPNG_VER_STRING, NULL,
++		NULL, NULL);
+ 
+ 	if (!png_ptr)
+ 		return;
+diff -ru pilot-link-0.12.4/src/pilot-read-veo.c pilot-link-0.12.4.png14/src/pilot-read-veo.c
+--- pilot-link-0.12.4/src/pilot-read-veo.c	2007-02-05 00:06:03.000000000 +0100
++++ pilot-link-0.12.4.png14/src/pilot-read-veo.c	2010-01-17 15:04:14.000000000 +0100
+@@ -41,10 +41,6 @@
+ 
+ #ifdef HAVE_PNG
+ # include "png.h"
+-# if (PNG_LIBPNG_VER < 10201)
+-#  define png_voidp_NULL (png_voidp)NULL
+-#  define png_error_ptr_NULL (png_error_ptr)NULL
+-# endif
+ #endif
+ 
+ #define pi_mktag(c1,c2,c3,c4) (((c1)<<24)|((c2)<<16)|((c3)<<8)|(c4))
+@@ -856,8 +852,8 @@
+    png_infop info_ptr;
+ 
+    png_ptr = png_create_write_struct
+-	 (PNG_LIBPNG_VER_STRING, png_voidp_NULL,
+-	  png_error_ptr_NULL, png_error_ptr_NULL);
++	 (PNG_LIBPNG_VER_STRING, NULL,
++	  NULL, NULL);
+ 
+    if (!png_ptr)
+ 	 return;

@@ -1,0 +1,13 @@
+diff --git a/compressed_archive/unarr/unarr-wrapper.pri b/compressed_archive/unarr/unarr-wrapper.pri
+index 0115267..5d3d6f5 100644
+--- a/compressed_archive/unarr/unarr-wrapper.pri
++++ b/compressed_archive/unarr/unarr-wrapper.pri
+@@ -6,7 +6,7 @@ HEADERS += $$PWD/extract_delegate.h \
+ 
+ SOURCES += $$PWD/compressed_archive.cpp
+ 
+-if(mingw|unix):!macx:!contains(QT_CONFIG, no-pkg-config):packagesExist(libunarr) {
++if(mingw|unix):!contains(QT_CONFIG, no-pkg-config):packagesExist(libunarr) {
+   message(Using system provided unarr installation found by pkg-config.)
+   CONFIG += link_pkgconfig
+   PKGCONFIG += libunarr

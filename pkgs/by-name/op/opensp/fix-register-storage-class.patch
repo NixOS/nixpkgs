@@ -1,0 +1,11 @@
+--- a/lib/Recognizer.cxx	2005-11-05 04:05:20.000000000 -0500
++++ b/lib/Recognizer.cxx	2023-06-03 11:45:04.497116217 -0400
+@@ -39,7 +39,7 @@
+   }
+   else
+     in->startTokenNoMulticode();
+-  register const Trie *pos = trie_.pointer();
++  const Trie *pos = trie_.pointer();
+   do {
+     pos = pos->next(map_[in->tokenChar(mgr)]);
+   } while (pos->hasNext());

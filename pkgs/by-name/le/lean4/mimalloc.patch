@@ -1,0 +1,16 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -77,12 +77,8 @@
+ if (USE_MIMALLOC)
+   ExternalProject_add(mimalloc
+     PREFIX mimalloc
+-    GIT_REPOSITORY https://github.com/microsoft/mimalloc
+-    GIT_TAG v2.2.3
+-    # just download, we compile it as part of each stage as it is small
+-    CONFIGURE_COMMAND ""
+-    BUILD_COMMAND ""
++    SOURCE_DIR "MIMALLOC-SRC"
+     INSTALL_COMMAND "")
+   list(APPEND EXTRA_DEPENDS mimalloc)
+ endif()
+ 

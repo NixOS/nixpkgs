@@ -1,0 +1,12 @@
+{
+    "6.12": {
+        "patch": {
+            "extra": "-hardened1",
+            "name": "linux-hardened-v6.12.50-hardened1.patch",
+            "sha256": "0bzq364d6i7wis9sdljjkzmbvjnv45hmyqikmxagps2rdh57916p",
+            "url": "https://github.com/anthraxx/linux-hardened/releases/download/v6.12.50-hardened1/linux-hardened-v6.12.50-hardened1.patch"
+        },
+        "sha256": "19bjzhxasj4r6m1lhsa486a96axfigbm06kqa2lwa7y2s5sbsdf4",
+        "version": "6.12.50"
+    }
+}

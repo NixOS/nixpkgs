@@ -1,0 +1,44 @@
+From: Bruno Haible <bruno@clisp.org>
+Date: Mon, 7 Jul 2025 07:02:41 +0000 (+0200)
+Subject: xgettext: Perl: Fix bug with comment lines longer than 1024 (regr. 2024-09-26).
+X-Git-Url: https://gitweb.git.savannah.gnu.org/gitweb/?p=gettext.git;a=commitdiff_plain;h=f98de965a08d1883a46ba5411922b54cc5125f14
+
+xgettext: Perl: Fix bug with comment lines longer than 1024 (regr. 2024-09-26).
+
+Reported by Alyssa Ross <hi@alyssa.is> in
+<https://lists.gnu.org/archive/html/bug-gettext/2025-07/msg00009.html>.
+
+* gettext-tools/src/x-perl.c (phase2_getc): Move the sb_free call until after
+the savable_comment_add call.
+---
+
+diff --git a/gettext-tools/src/x-perl.c b/gettext-tools/src/x-perl.c
+index d3aa50476..312fef371 100644
+--- a/gettext-tools/src/x-perl.c
++++ b/gettext-tools/src/x-perl.c
+@@ -558,7 +558,6 @@ phase2_getc (struct perl_extractor *xp)
+ {
+   int lineno;
+   int c;
+-  char *utf8_string;
+ 
+   c = phase1_getc (xp);
+   if (c == '#')
+@@ -587,12 +586,13 @@ phase2_getc (struct perl_extractor *xp)
+           sb_xappend1 (&buffer, c);
+         }
+       /* Convert it to UTF-8.  */
+-      utf8_string =
+-        from_current_source_encoding (sb_xcontents_c (&buffer), lc_comment,
++      const char *contents = sb_xcontents_c (&buffer);
++      char *utf8_contents =
++        from_current_source_encoding (contents, lc_comment,
+                                       logical_file_name, lineno);
+-      sb_free (&buffer);
+       /* Save it until we encounter the corresponding string.  */
+-      savable_comment_add (utf8_string);
++      savable_comment_add (utf8_contents);
++      sb_free (&buffer);
+       xp->last_comment_line = lineno;
+     }
+   return c;

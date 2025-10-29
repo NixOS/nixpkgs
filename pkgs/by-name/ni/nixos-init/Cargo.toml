@@ -1,0 +1,27 @@
+[package]
+name = "nixos-init"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anyhow = "1.0.98"
+log = "0.4.27"
+env_logger = { version = "0.11.8", default-features = false }
+
+[dev-dependencies]
+tempfile = "3.20.0"
+indoc = "2.0.6"
+
+[profile.release]
+opt-level = "z"
+panic = "abort"
+lto = true
+strip = true
+
+[lints.rust]
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = { level = "deny" }
+pedantic = { level = "deny" }
+missing_errors_doc = { level = "allow", priority = 1 }

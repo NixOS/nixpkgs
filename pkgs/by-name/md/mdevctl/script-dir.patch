@@ -1,0 +1,13 @@
+diff --git a/src/environment.rs b/src/environment.rs
+index 3db5933..f6da56c 100644
+--- a/src/environment.rs
++++ b/src/environment.rs
+@@ -35,7 +35,7 @@ pub trait Environment {
+     }
+ 
+     fn scripts_base(&self) -> PathBuf {
+-        self.root().join("usr/lib/mdevctl/scripts.d")
++        self.root().join("etc/mdevctl/scripts.d")
+     }
+ 
+     fn callout_dir(&self) -> PathBuf {

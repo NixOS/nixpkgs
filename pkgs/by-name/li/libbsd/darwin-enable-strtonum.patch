@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index 2a15d720f9...186ab24978 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -254,7 +254,7 @@
+     abi_strl=no
+     abi_strmode=no
+     abi_strnstr=no
+-    abi_strtonum=no
++    abi_strtonum=yes
+     abi_strtox=yes
+     abi_timeconv=no
+     # On libmd.

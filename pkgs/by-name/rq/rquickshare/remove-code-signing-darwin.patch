@@ -1,0 +1,12 @@
+diff --git a/app/main/src-tauri/tauri.conf.json b/app/main/src-tauri/tauri.conf.json
+index 1114b19..c4cc8f4 100644
+--- a/app/main/src-tauri/tauri.conf.json
++++ b/app/main/src-tauri/tauri.conf.json
+@@ -23,7 +23,6 @@
+     "macOS": {
+       "frameworks": [],
+       "exceptionDomain": "",
+-      "signingIdentity": "-",
+       "providerShortName": null,
+       "entitlements": null
+     },

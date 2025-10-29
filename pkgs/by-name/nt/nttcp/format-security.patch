@@ -1,0 +1,12 @@
+diff -Nur -x '*.orig' -x '*~' nttcp-1.47/nttcp.c nttcp-1.47.new/nttcp.c
+--- nttcp-1.47/nttcp.c	2000-12-18 05:16:54.000000000 -0500
++++ nttcp-1.47.new/nttcp.c	2012-01-30 23:44:02.260501225 -0500
+@@ -372,7 +372,7 @@
+ #define Message(x)	fMessage(stdout, x)
+ 
+ void Exit(char *s, int ret) {
+-    syslog(LOG_DEBUG, s);
++    syslog(LOG_DEBUG, "%s", s);
+     fMessage(stderr,s);
+     exit(ret);
+ }

@@ -1,0 +1,13 @@
+diff --git a/_scripts/ebuilder.config.js b/_scripts/ebuilder.config.js
+index 5b79d961..9f5945d2 100644
+--- a/_scripts/ebuilder.config.js
++++ b/_scripts/ebuilder.config.js
+@@ -1,6 +1,8 @@
+ const { name, productName } = require('../package.json')
+ 
+ const config = {
++  electronVersion: "@electron-version@",
++  electronDist: "electron-dist",
+   appId: `io.freetubeapp.${name}`,
+   copyright: 'Copyleft © 2020-2024 freetubeapp@protonmail.com',
+   // asar: false,

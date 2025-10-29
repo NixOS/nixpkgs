@@ -1,0 +1,47 @@
+From db0ed6267f1a85f0785c81b8ee396f74795c77c0 Mon Sep 17 00:00:00 2001
+From: Thomas Gerbet <thomas@gerbet.me>
+Date: Sat, 27 Nov 2021 10:24:07 +0100
+Subject: [PATCH] Do not rely on Git during the build
+
+---
+ build.xml | 6 ------
+ build.xsl | 6 ------
+ 2 files changed, 12 deletions(-)
+
+diff --git a/build.xml b/build.xml
+index e8ebaed8..2d26c72f 100644
+--- a/build.xml
++++ b/build.xml
+@@ -431,12 +431,6 @@
+ <target name="clean" 
+ 	description="Remove almost all files created during the build process">
+   <delete dir="${build.dir}"/>
+-  <exec executable="git">
+-    <arg value="clean"/>
+-    <arg value="-d"/>
+-    <arg value="--force"/>
+-    <arg value="${doc.dir}"/>
+-  </exec>
+ </target>
+ 
+ <target name="realclean" depends="clean"
+diff --git a/build.xsl b/build.xsl
+index fb9f3fef..fa384a27 100644
+--- a/build.xsl
++++ b/build.xsl
+@@ -23,12 +23,6 @@
+     <target name="dummy"/>
+     <target name="init">
+       <mkdir dir="{$build}"/>
+-      <exec executable="git">
+-        <arg value="submodule"/>
+-        <arg value="update"/>
+-        <arg value="--init"/>
+-        <arg value="--recursive"/>
+-      </exec>
+       <copy todir="{$doc}">
+         <fileset dir="relaxng.org/jclark" includes="**"/>
+       </copy>
+-- 
+2.34.1
+
