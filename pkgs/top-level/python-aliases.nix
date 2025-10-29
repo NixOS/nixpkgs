@@ -82,6 +82,7 @@ mapAliases {
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
   bugzilla = python-bugzilla; # added 2024-10-17
+  bunch = throw "bunch has been removed as it is unmaintained since inception"; # added 2025-05-31
   btsmarthub_devicelist = btsmarthub-devicelist; # added 2024-01-03
   bt_proximity = bt-proximity; # added 2021-07-02
   bz2file = throw "'bz2file' has beem removed, as it was not longed maintained upstream since 2020"; # added 2025-08-26
@@ -109,6 +110,7 @@ mapAliases {
   dj-stripe = throw "dj-stripe has been removed because it is unused and broken"; # added 2025-07-21
   djangorestframework-guardian2 = throw "djangorestframework-guardian2 has been removed because djangorestframework-guardian is active again and the upstream project was archived"; # added 2025-08-22
   djangorestframework-jwt = drf-jwt; # added 2021-07-20
+  django_3 = throw "Django 3 has reached it#s EOL in 2024-04 and has therefore been removed."; # added 2025-01-25
   django_appconf = django-appconf; # added 2022-03-03
   django_classytags = django-classy-tags; # added 2023-07-25
   django_colorful = django-colorful; # added 2023-07-25
@@ -167,6 +169,7 @@ mapAliases {
   flask_sqlalchemy = flask-sqlalchemy; # added 2022-07-20
   flask_testing = flask-testing; # added 2022-04-25
   flask_wtf = flask-wtf; # added 2022-05-24
+  flask-silk = throw "flask-silk was removed, as it is unmaintained since 2018."; # added 2025-05-25
   flowlogs_reader = flowlogs-reader; # added 2024-01-03
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
@@ -221,6 +224,7 @@ mapAliases {
   keepkey_agent = keepkey-agent; # added 2024-01-06
   Keras = keras; # added 2021-11-25
   keyrings-passwordstore = throw "keyrings-passwordstore has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-03
+  kivy-garden-modernmenu = throw "kivy-garden-modernmenu has been removed as it's abandoned since 2019"; # added 2025-05-25
   ldap = python-ldap; # added 2022-09-16
   langchain-standard-tests = langchain-tests; # added 2025-01-22
   langchainplus-sdk = langsmith; # added 2023-08-01
@@ -253,11 +257,14 @@ mapAliases {
   mkdocs-minify = mkdocs-minify-plugin; # added 2023-11-28
   mne-python = mne; # added 2025-05-02
   multi_key_dict = multi-key-dict; # added 2023-11-05
+  mutag = throw "mutag has been removed because it is unmaintained since 2018"; # added 2025-05-25
   net2grid = gridnet; # add 2022-04-22
   nitpick = throw "'nitpick' has been removed because it was unmaintained upstream since 2017 and using python2"; # added 2025-08-25
   ninja-python = ninja; # add 2022-08-03
   nixpkgs = throw "nixpkgs has been removed as its dependency pythonix was removed"; # added 2025-07-24
   Nuitka = nuitka; # added 2023-02-19
+  oauth = throw "oauth has been removed as it is unmaintained"; # added 2025-05-16
+  oauth2 = throw "oauth2 has been removed as it is unmaintained"; # added 2025-05-16
   objax = throw "objax has been removed because the upstream project was archived."; # Added 2025-10-04
   openai-triton = triton; # added 2024-07-18
   openai-triton-bin = triton-bin; # added 2024-07-18
@@ -274,6 +281,7 @@ mapAliases {
   pcbnew-transition = pcbnewtransition; # added 2024-03-21
   pdfminer = pdfminer-six; # added 2022-05-25
   pep257 = pydocstyle; # added 2022-04-12
+  percol = throw "percol has been removed because it hasn't been updated since 2019"; # added 2025-05-25
   Polygon3 = polygon3; # Added 2023-08-08
   posix_ipc = posix-ipc; # added 2024-01-07
   postgrest-py = postgrest; # added 2025-08-29
@@ -285,11 +293,14 @@ mapAliases {
   protonup = protonup-ng; # Added 2022-11-06
   protonvpn-nm-lib = throw "protonvpn-nm-lib source code was removed from upstream"; # Added 2025-10-16
   proxy_tools = proxy-tools; # added 2023-11-05
+  ptable = throw "ptable has been removed, as it is unmaintained and broken"; # added 2025-05-25
   pushbullet = pushbullet-py; # Added 2022-10-15
+  push-receiver = throw "push-receiver has been removed since it is unmaintained for 3 years"; # added 2025-05-17
   Pweave = pweave; # added 2023-02-19
   py-eth-sig-utils = throw "py-eth-sig-utils has been removed because it has been marked as broken since at least November 2024."; # Added 2025-10-04
   pypcap = throw "pypcap has been removed because it is broken and unmaintained upstream."; # added 2025-06-18
   pytedee-async = aiotedee; # added 2025-07-06
+  pytricia = throw "pytricia has been removed, since it is unmaintained"; # added 2025-05-25
   py_stringmatching = py-stringmatching; # added 2023-11-12
   pydns = py3dns; # added 2024-10-25
   pyechonest = throw "pyechonest was removed because it was broken and unmaintained"; # added 2025-08-26
@@ -298,6 +309,7 @@ mapAliases {
   PyGithub = pygithub; # added 2023-02-19
   pyheif = throw "pyheif has been removed due to lack of upstream maintenance and breakage. Use `pillow-heif` instead."; # added 2025-09-17
   PyChromecast = pychromecast; # added 2023-02-19
+  pyfantom = throw "pyfantom has been removed because it does not work with python3 and has not been updated for 12 years"; # added 2025-03-25
   pyflunearyou = pyoutbreaksnearme; # added 2023-02-11
   pyialarmxr = pyialarmxr-homeassistant; # added 2022-06-07
   PyICU = pyicu; # Added 2022-12-22
@@ -310,6 +322,7 @@ mapAliases {
   pymyq = python-myq; # added 2023-10-20
   python-bring-api = throw "python-bring-api was removed because Home Assistant switched to bring-api"; # added 2025-10-03
   python-ethtool = ethtool; # added 2024-07-23
+  python-unshare = throw "python-unshare was removed as unmaintained since 2016"; # added 2025-05-25
   pythonix = throw "pythonix was removed as it was unmaintained since 2022"; # added 2025-07-24
   pyqldb = throw "pyqldb has been removed, because the underlying service is reaching end of support"; # added 2025-07-30
   pyqt5_sip = pyqt5-sip; # added 2024-01-07
@@ -364,6 +377,7 @@ mapAliases {
   qds_sdk = qds-sdk; # added 2023-10-21
   Quandl = quandl; # added 2023-02-19
   querystring_parser = querystring-parser; # added 2024-01-07
+  radian = throw "radian has been promoted to a top-level attribute name: `pkgs.radian`"; # added 2025-05-02
   radicale_infcloud = radicale-infcloud; # added 2024-01-07
   radio_beam = radio-beam; # added 2023-11-04
   random-user-agent = throw "random-user-agent has been removed as it was abandoned upstream in 2018; use fake-useragent instead"; # Added 2025-10-17
@@ -424,6 +438,7 @@ mapAliases {
   tensorflow-estimator_2 = tensorflow-estimator; # added 2021-11-25
   tensorflow-tensorboard = tensorboard; # added 2022-03-06
   tensorflow-tensorboard_2 = tensorflow-tensorboard; # added 2021-11-25
+  testing-postgresql = throw "testing-postgresql has been removed, since it is unmaintained since 2017"; # added 2025-05-25
   Theano = theano; # added 2023-02-19
   TheanoWithCuda = theanoWithCuda; # added 2023-02-19
   TheanoWithoutCuda = theanoWithoutCuda; # added 2023-02-19
@@ -432,6 +447,8 @@ mapAliases {
   treex = throw "treex has been removed because it has transitively been marked as broken since 2023."; # Added 2025-10-11
   trezor_agent = trezor-agent; # Added 2024-01-07
   tvdb_api = tvdb-api; # added 2023-10-20
+  typed-ast = throw "typed-ast was removed because it went end of life in July 2023"; # added 2025-05-24
+  types-typed-ast = throw "types-typed-ast was removed because so was typed-ast"; # added 2025-05-24
   uamqp = throw "'uamqp' has been removed because it is broken and unmaintained."; # added 2025-06-11
   ufoLib2 = ufolib2; # added 2024-01-07
   unicode-slugify = throw "'unicode-slugify' has been removed becaues it was broken and unmaintained. Consider using 'python-slugify' instead."; # added 2025-10-05
