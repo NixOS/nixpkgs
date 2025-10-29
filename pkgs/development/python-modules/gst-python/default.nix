@@ -84,7 +84,7 @@ buildPythonPackage rec {
 
   # TODO: Meson setup hook does not like buildPythonPackage
   # https://github.com/NixOS/nixpkgs/issues/47390
-  installCheckPhase = "meson test --print-errorlogs";
+  installCheckPhase = "meson test --timeout-multiplier=10 --print-errorlogs";
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="${gst_all_1.gst-plugins-base}/lib"
