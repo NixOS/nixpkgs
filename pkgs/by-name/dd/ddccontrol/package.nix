@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ddccontrol/ddccontrol";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ pakhfn ];
+    maintainers = with lib.maintainers; [
+      pakhfn
+      doronbehar
+    ];
   };
 })
