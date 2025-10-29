@@ -8,42 +8,34 @@
   pkg-config,
   ninja,
   copyDesktopItems,
-  qt5,
+  qt6,
   opencv4,
   procps,
   eigen,
   libXdmcp,
   libevdev,
   makeDesktopItem,
-  fetchpatch,
   wineWowPackages,
   onnxruntime,
+  nix-update-script,
   withWine ? stdenv.targetPlatform.isx86_64,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "opentrack";
-  version = "2023.3.0";
+  version = "2024.1.1-unstable-2025-10-29";
 
   src = fetchFromGitHub {
     owner = "opentrack";
     repo = "opentrack";
-    tag = "opentrack-${finalAttrs.version}";
-    hash = "sha256-C0jLS55DcLJh/e5yM8kLG7fhhKvBNllv5HkfCWRIfc4=";
+    rev = "766808196cf63ddf9ceb102fba193582daceb9de";
+    hash = "sha256-xS87LFAbnRg7uBbN7ARoGts3bNYkcpOm3xhojBepgIo=";
   };
-
-  patches = [
-    # https://github.com/opentrack/opentrack/pull/1754
-    (fetchpatch {
-      url = "https://github.com/opentrack/opentrack/commit/d501d7e0b237ed0c305525788b423d842ffa356d.patch";
-      hash = "sha256-XMGHV78vt/Xn3hS+4V//pqtsdBQCfJPjIXxfwtdXX+Q=";
-    })
-  ];
 
   aruco = callPackage ./aruco.nix { };
 
   xplaneSdk = fetchzip {
-    url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sdk_zip_files/XPSDK401.zip";
-    hash = "sha256-tUT9yV1949QVr5VebU/7esg7wwWkyak2TSA/kQSrbeo=";
+    url = "https://developer.x-plane.com/wp-content/plugins/code-sample-generation/sdk_zip_files/XPSDK411.zip";
+    hash = "sha256-zay5QrHJctllVFl+JhlyTDzH68h5UoxncEt+TpW3UgI=";
     # see license.txt inside the zip file
     meta.license = lib.licenses.free;
   };
@@ -55,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     copyDesktopItems
     ninja
     pkg-config
-    qt5.wrapQtAppsHook
+    qt6.wrapQtAppsHook
   ]
   ++ lib.optionals withWine [ wineWowPackages.stable ];
 
@@ -67,8 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     onnxruntime
     opencv4
     procps
-    qt5.qtbase
-    qt5.qttools
+    qt6.qtbase
+    qt6.qttools
   ];
 
   cmakeFlags = [
@@ -97,6 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
       categories = [ "Utility" ];
     })
   ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version=branch"
+      "--version-regex"
+      "^opentrack-(.+)"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/opentrack/opentrack";
