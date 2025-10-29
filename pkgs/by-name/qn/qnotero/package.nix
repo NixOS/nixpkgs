@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -21,7 +21,7 @@ python3Packages.buildPythonPackage rec {
 
   propagatedBuildInputs = [
     python3Packages.pyqt5
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   patchPhase = ''
