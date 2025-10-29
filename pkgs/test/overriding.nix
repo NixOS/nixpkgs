@@ -309,14 +309,35 @@ let
 
 in
 
-stdenvNoCC.mkDerivation {
+stdenvNoCC.mkDerivation (finalAttrs: {
+  __structuredAttrs = true;
   name = "test-overriding";
-  passthru = { inherit tests; };
+  passthru = {
+    inherit tests;
+    failures = lib.runTests (finalAttrs.passthru.tests // { tests = lib.attrNames tests; });
+  };
+  testResults = lib.mapAttrs (testName: test: test.expr == test.expected) finalAttrs.passthru.tests;
   buildCommand = ''
     touch $out
+    for testName in "''${!testResults[@]}"; do
+      if [[ -n "''${testResults[$testName]}" ]]; then
+        echo "$testName success"
+      else
+        echo "$testName fail"
+      fi
+    done
   ''
-  + lib.concatMapAttrsStringSep "\n" (
-    name: t:
-    "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)"
-  ) tests;
-}
+  + lib.optionalString (lib.any (v: !v) (lib.attrValues finalAttrs.testResults)) ''
+    {
+      echo "ERROR: tests.overriding: Encountering failed tests."
+      for testName in "''${!testResults[@]}"; do
+        if [[ -z "''${testResults[$testName]}" ]]; then
+          echo "- $testName"
+        fi
+      done
+      echo "To inspect the expected and actual result, "
+      echo '  evaluate `tests.overriding.tests.''${testName}`.'
+    } >&2
+    exit 1
+  '';
+})
