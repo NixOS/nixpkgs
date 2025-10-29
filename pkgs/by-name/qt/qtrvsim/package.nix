@@ -3,8 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cmake,
-  wrapQtAppsHook,
-  qtbase,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ libsForQt5.qtbase ];
 
   meta = with lib; {
     description = "RISC-V CPU simulator for education purposes";
