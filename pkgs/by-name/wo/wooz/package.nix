@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/negrel/wooz";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ samuela ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "wooz";
   };
 }
