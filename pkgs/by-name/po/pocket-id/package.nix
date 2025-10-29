@@ -11,13 +11,13 @@
 
 buildGo125Module (finalAttrs: {
   pname = "pocket-id";
-  version = "1.14.1";
+  version = "1.14.2";
 
   src = fetchFromGitHub {
     owner = "pocket-id";
     repo = "pocket-id";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-PnZKlJ6smwpgijqQM5xTcopyGJfO2pebiEJhEIdAOFk=";
+    hash = "sha256-0x80oykzMTEsuGUBtXXdKgWJld8mrDPUssYpAznqKnc=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/backend";
