@@ -15,6 +15,7 @@
   desktopToDarwinBundle,
   imagemagick,
   callPackage,
+  runtimeShell,
 
   jdk,
   jdk17,
@@ -79,6 +80,8 @@ stdenv.mkDerivation (finalAttrs: {
     ./0001-nix-do-not-output-timestamp.patch
     # Do not download binary file
     (replaceVars ./0002-nix-use-terracotta-from-nix.patch { TERRACOTTA_BIN = lib.getExe terracotta; })
+    # Skip terracotta existence check on darwin
+    ./0003-nix-skip-terracotta-existence-check-on-darwin.patch
   ];
 
   postPatch = ''
@@ -99,6 +102,9 @@ stdenv.mkDerivation (finalAttrs: {
       comment = finalAttrs.meta.description;
       desktopName = "HMCL";
       categories = [ "Game" ];
+      extraConfig = {
+        X-macOS-Exec = "hmcl-start.sh";
+      };
     })
   ];
 
@@ -137,15 +143,33 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/{bin,lib/hmcl}
     cp HMCL/build/libs/HMCL-${finalAttrs.version}.jar $out/lib/hmcl/hmcl.jar
 
-    for n in 16 32 48 64 96 128 256
-    do
-      size=$n"x"$n
-      mkdir -p $out/share/icons/hicolor/$size/apps
-      magick HMCL/src/main/resources/assets/img/icon@8x.png -resize $size $out/share/icons/hicolor/$size/apps/hmcl.png
-    done
-
     runHook postInstall
   '';
+
+  preFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      for n in 16 32 48 64 96 128 256
+      do
+        size=$n"x"$n
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        magick HMCL/src/main/resources/assets/img/icon@8x.png -resize $size $out/share/icons/hicolor/$size/apps/hmcl.png
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/share/icons/hicolor/512x512/apps/ -p
+      cp HMCL/src/main/resources/assets/img/icon-mac.png $out/share/icons/hicolor/512x512/apps/hmcl.png
+
+      cat >> $out/bin/hmcl-start.sh << 'EOF'
+      #!${runtimeShell}
+      if [[ $PWD = "/" ]]; then
+        cd $HOME
+      fi
+      exec ${placeholder "out"}/bin/hmcl "$@"
+      EOF
+      chmod +x $out/bin/hmcl-start.sh
+
+      convertDesktopFile $out/share/applications/HMCL.desktop
+    '';
 
   fixupPhase =
     let
