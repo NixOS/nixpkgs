@@ -80,6 +80,29 @@ in
         '';
       };
 
+      user = lib.mkOption {
+        type = lib.types.str;
+        default = name;
+        description = "User account under which MPD runs.";
+      };
+
+      group = lib.mkOption {
+        type = lib.types.str;
+        default = name;
+        description = "Group account under which MPD runs.";
+      };
+
+      dataDir = lib.mkOption {
+        type = lib.types.path;
+        default = "/var/lib/${name}";
+        description = ''
+          The directory where MPD stores its state, tag cache, playlists etc. If
+          left as the default value this directory will automatically be created
+          before the MPD server starts, otherwise the sysadmin is responsible for
+          ensuring the directory exists with appropriate ownership and permissions.
+        '';
+      };
+
       musicDirectory = lib.mkOption {
         type = with lib.types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
@@ -113,29 +136,6 @@ in
           is added automatically to the beginning of the file. For available
           options see {manpage}`mpd.conf(5)`.
         '';
-      };
-
-      dataDir = lib.mkOption {
-        type = lib.types.path;
-        default = "/var/lib/${name}";
-        description = ''
-          The directory where MPD stores its state, tag cache, playlists etc. If
-          left as the default value this directory will automatically be created
-          before the MPD server starts, otherwise the sysadmin is responsible for
-          ensuring the directory exists with appropriate ownership and permissions.
-        '';
-      };
-
-      user = lib.mkOption {
-        type = lib.types.str;
-        default = name;
-        description = "User account under which MPD runs.";
-      };
-
-      group = lib.mkOption {
-        type = lib.types.str;
-        default = name;
-        description = "Group account under which MPD runs.";
       };
 
       network = {
