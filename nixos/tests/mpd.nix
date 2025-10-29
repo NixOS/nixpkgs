@@ -61,14 +61,17 @@ in
       lib.mkMerge [
         (mkServer {
           mpd = defaultMpdCfg // {
-            bind_to_address = "any";
-            extraConfig = ''
-              audio_output {
-                type "alsa"
-                name "ALSA"
-                mixer_type "null"
+            settings = {
+              bind_to_address = "any";
+            };
+            blocks = [
+              {
+                mpd_key = "audio_output";
+                type = "alsa";
+                name = "ALSA";
+                mixer_type = "null";
               }
-            '';
+            ];
           };
           musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
         })
@@ -79,12 +82,13 @@ in
       lib.mkMerge [
         (mkServer {
           mpd = defaultMpdCfg // {
-            extraConfig = ''
-              audio_output {
-                type "pulse"
-                name "The Pulse"
+            blocks = [
+              {
+                mpd_key = "audio_output";
+                type = "pulse";
+                name = "The Pulse";
               }
-            '';
+            ];
           };
 
           musicService = musicService { inherit (defaultMpdCfg) user group dataDir; };
