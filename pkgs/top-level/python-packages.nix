@@ -124,6 +124,8 @@ self: super: with self; {
 
   affine-gaps = callPackage ../development/python-modules/affine-gaps { };
 
+  affinegap = callPackage ../development/python-modules/affinegap { };
+
   afsapi = callPackage ../development/python-modules/afsapi { };
 
   agate = callPackage ../development/python-modules/agate { };
@@ -2409,6 +2411,8 @@ self: super: with self; {
     };
   };
 
+  categorical-distance = callPackage ../development/python-modules/categorical-distance { };
+
   catkin-pkg = callPackage ../development/python-modules/catkin-pkg { };
 
   catppuccin = callPackage ../development/python-modules/catppuccin { };
@@ -3552,6 +3556,12 @@ self: super: with self; {
 
   decorator = callPackage ../development/python-modules/decorator { };
 
+  dedupe = callPackage ../development/python-modules/dedupe { };
+
+  dedupe-levenshtein-search = callPackage ../development/python-modules/dedupe-levenshtein-search { };
+
+  dedupe-pylbfgs = callPackage ../development/python-modules/dedupe-pylbfgs { };
+
   deebot-client = callPackage ../development/python-modules/deebot-client { };
 
   deemix = callPackage ../development/python-modules/deemix { };
@@ -4390,6 +4400,8 @@ self: super: with self; {
   dotty-dict = callPackage ../development/python-modules/dotty-dict { };
 
   dotwiz = callPackage ../development/python-modules/dotwiz { };
+
+  doublemetaphone = callPackage ../development/python-modules/doublemetaphone { };
 
   doubleratchet = callPackage ../development/python-modules/doubleratchet { };
 
@@ -6669,6 +6681,8 @@ self: super: with self; {
   highctidh = callPackage ../development/python-modules/highctidh { };
 
   highdicom = callPackage ../development/python-modules/highdicom { };
+
+  highered = callPackage ../development/python-modules/highered { };
 
   highspy = callPackage ../development/python-modules/highspy { };
 
@@ -13203,6 +13217,8 @@ self: super: with self; {
 
   pygtrie = callPackage ../development/python-modules/pygtrie { };
 
+  pyhacrf-datamade = callPackage ../development/python-modules/pyhacrf-datamade { };
+
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
 
   pyhanko = callPackage ../development/python-modules/pyhanko { };
@@ -16860,6 +16876,8 @@ self: super: with self; {
 
   simplebayes = callPackage ../development/python-modules/simplebayes { };
 
+  simplecosine = callPackage ../development/python-modules/simplecosine { };
+
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
   simplefin4py = callPackage ../development/python-modules/simplefin4py { };
@@ -18106,7 +18124,12 @@ self: super: with self; {
   tblib = callPackage ../development/python-modules/tblib { };
 
   tblite = callPackage ../development/libraries/science/chemistry/tblite/python.nix {
-    inherit (pkgs) tblite meson simple-dftd3;
+    inherit (pkgs)
+      tblite
+      meson
+      simple-dftd3
+      dftd4
+      ;
   };
 
   tbm-utils = callPackage ../development/python-modules/tbm-utils { };
@@ -20669,6 +20692,8 @@ self: super: with self; {
   zope-hookable = callPackage ../development/python-modules/zope-hookable { };
 
   zope-i18nmessageid = callPackage ../development/python-modules/zope-i18nmessageid { };
+
+  zope-index = callPackage ../development/python-modules/zope-index { };
 
   zope-interface = callPackage ../development/python-modules/zope-interface { };
 

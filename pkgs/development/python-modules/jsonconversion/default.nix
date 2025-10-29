@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jsonconversion";
-  version = "1.1.2";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "DLR-RM";
     repo = "python-jsonconversion";
     tag = version;
-    hash = "sha256-tWR4JElZVnNQml/av+r9olBusRqyzMrL4/o7Fei7dlY=";
+    hash = "sha256-OOp5oHAb00AN+5tlLeUzily1MKHDIbn0qg3jzkZ0vAo=";
   };
 
   build-system = [ pdm-backend ];

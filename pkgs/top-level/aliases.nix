@@ -724,6 +724,7 @@ mapAliases {
   kanidm_1_4 = throw "'kanidm_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
   kanidmWithSecretProvisioning = lib.warnOnInstantiate "'kanidmWithSecretProvisioning' will be removed before 26.05. You must use a versioned package, e.g. 'kanidmWithSecretProvisioning_1_x'." kanidmWithSecretProvisioning_1_7; # Added 2025-09-01
   kanidmWithSecretProvisioning_1_4 = throw "'kanidmWithSecretProvisioning_1_4' has been removed as it has reached end of life"; # Added 2025-06-18
+  kapitano = throw "'kapitano' has been removed, as it is unmaintained upstream"; # Added 2025-10-29
   kbibtex = throw "'kbibtex' has been removed, as it is unmaintained upstream"; # Added 2025-08-30
   kcli = throw "kcli has been removed because it has been marked as broken since at least November 2024."; # Added 2025-09-28
   keepkey_agent = throw "'keepkey_agent' has been renamed to/replaced by 'keepkey-agent'"; # Converted to throw 2025-10-27
@@ -980,6 +981,7 @@ mapAliases {
   mediastreamer-openh264 = throw "'mediastreamer-openh264' has been moved to 'linphonePackages.msopenh264'"; # Added 2025-09-20
   meilisearch_1_11 = throw "'meilisearch_1_11' has been removed, as it is no longer supported"; # Added 2025-10-03
   melmatcheq.lv2 = melmatcheq-lv2; # Added 2025-09-27
+  meshlab-unstable = throw "meshlab-unstable has been removed, as it was behind meshlab"; # Added 2025-09-21
   meteo = throw "'meteo' has been removed as it was unmaintained and depends on deprecated webkitgtk_4_0"; # Added 2025-10-09
   microcodeAmd = throw "'microcodeAmd' has been renamed to/replaced by 'microcode-amd'"; # Converted to throw 2025-10-27
   microcodeIntel = throw "'microcodeIntel' has been renamed to/replaced by 'microcode-intel'"; # Converted to throw 2025-10-27
@@ -1215,6 +1217,7 @@ mapAliases {
   posterazor = throw "posterazor was removed due to numerous vulnerabilities in freeimage"; # Added 2025-10-23
   postfixadmin = throw "'postfixadmin' has been removed due to lack of maintenance and missing support for PHP >8.1"; # Added 2025-10-03
   postgis = throw "'postgis' has been removed. Use 'postgresqlPackages.postgis' instead."; # Added 2025-07-19
+  postgres-lsp = lib.warnOnInstantiate "'postgres-lsp' has been renamed to 'postgres-language-server'" postgres-language-server; # Added 2025-10-28
   postgresql13JitPackages = throw "'postgresql13JitPackages' has been renamed to/replaced by 'postgresql13Packages'"; # Converted to throw 2025-10-27
   postgresql14JitPackages = throw "'postgresql14JitPackages' has been renamed to/replaced by 'postgresql14Packages'"; # Converted to throw 2025-10-27
   postgresql15JitPackages = throw "'postgresql15JitPackages' has been renamed to/replaced by 'postgresql15Packages'"; # Converted to throw 2025-10-27

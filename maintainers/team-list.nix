@@ -351,18 +351,7 @@ with lib.maintainers;
   };
 
   formatter = {
-    members = [
-      piegames
-      infinisil
-      das_j
-      _0x4A6F
-      MattSturgeon
-      jfly
-      # Not in the maintainer list
-      # Sereja313
-    ];
-    scope = "Nix formatting team: https://nixos.org/community/teams/formatting/";
-    shortName = "Nix formatting team";
+    github = "nix-formatting";
   };
 
   freedesktop = {
@@ -920,7 +909,6 @@ with lib.maintainers;
       samasaur
       stephank
       trepetti
-      trundle
     ];
     scope = "Maintain Swift compiler suite for NixOS.";
     shortName = "Swift";

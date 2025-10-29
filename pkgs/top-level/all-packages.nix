@@ -3063,8 +3063,6 @@ with pkgs;
 
   hyphenDicts = recurseIntoAttrs (callPackages ../development/libraries/hyphen/dictionaries.nix { });
 
-  iaito = libsForQt5.callPackage ../tools/security/iaito { };
-
   icemon = libsForQt5.callPackage ../applications/networking/icemon { };
 
   icepeak = haskell.lib.compose.justStaticExecutables haskellPackages.icepeak;
@@ -11737,16 +11735,6 @@ with pkgs;
   };
 
   mercurialFull = mercurial.override { fullBuild = true; };
-
-  meshlab = callPackage ../by-name/me/meshlab/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-    llvmPackages = llvmPackages_18;
-  };
-
-  meshlab-unstable = callPackage ../by-name/me/meshlab-unstable/package.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then llvmPackages_18.stdenv else stdenv;
-    llvmPackages = llvmPackages_18;
-  };
 
   meshcentral = callPackage ../tools/admin/meshcentral { };
 

@@ -11,7 +11,7 @@
 
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "cosmic-session";
-  version = "1.0.0-beta.3";
+  version = "1.0.0-beta.4";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {

@@ -91,7 +91,6 @@ program
   .argument('[outFile]', 'Path to the output file (Example: github-teams.json). If not set, prints to stdout')
   .action(async (owner, repo, outFile, options) => {
     const getTeams = (await import('./get-teams.js')).default
-    // TODO: Refactor this file so we don't need to pass a PR
     await run(getTeams, owner, repo, undefined, { ...options, outFile })
   })
 

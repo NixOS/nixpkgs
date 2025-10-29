@@ -59,6 +59,7 @@ let
         homepage = "https://thunderbird.net/";
         mainProgram = "thunderbird";
         maintainers = with lib.maintainers; [
+          booxter # darwin
           lovesegfault
           pierron
           vcunat

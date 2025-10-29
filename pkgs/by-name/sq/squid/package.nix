@@ -16,6 +16,7 @@
   cppunit,
   ipv6 ? true,
   nixosTests,
+  fetchpatch,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "squid";
@@ -27,6 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     }/squid-${finalAttrs.version}.tar.xz";
     hash = "sha256-Xgd74dg6nmls6NDZ5yOxJzFSIHoJFAS+aKS5qeGMcAM=";
   };
+
+  patches = lib.optional (lib.versionOlder finalAttrs.version "7.2.0") (fetchpatch {
+    # Merged upstream PR; fixes the issue of rejecting domain names starting with digits
+    # To remove when 7.3 is released (or 7.2.1, but that doesn't seem likely)
+    url = "https://patch-diff.githubusercontent.com/raw/squid-cache/squid/pull/2283.patch";
+    hash = "sha256-HLGmzrAH5y1sFfFnVeeegRihyn+N7csGX9lVqmCDIHc=";
+  });
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [

@@ -3,22 +3,29 @@
   rustPlatform,
   fetchgit,
   rust-jemalloc-sys,
+  tree-sitter,
+  nodejs,
 }:
 rustPlatform.buildRustPackage (finalAttrs: {
-  pname = "postgres-lsp";
-  version = "0.15.0";
+  pname = "postgres-language-server";
+  version = "0.16.1";
 
   src = fetchgit {
     url = "https://github.com/supabase-community/postgres-language-server";
     tag = finalAttrs.version;
-    hash = "sha256-ZintjrSeNsYR6A8tlEfSetse7d79jgLdCpdu+sMe3Zk=";
+    hash = "sha256-zdFgfZ9GtZObn839kkAIT71bBt7YHs28qkAWlp3k7kw=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-x/Wbx3noH6YOQIis1sN8ylQApjhSy4/mrxX6jvZFs6A=";
+  cargoHash = "sha256-psgo5/tDHaQd0dkiD/3uhrKuxlOBLi/xG4x3gVPLZbw=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
+
+    # Required to build the custom tree-sitter grammar
+    # https://github.com/supabase-community/postgres-language-server/blob/main/crates/pgt_treesitter_grammar/grammar.js
+    tree-sitter
+    nodejs
   ];
 
   buildInputs = [
@@ -44,12 +51,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   meta = {
     description = "Tools and language server for Postgres";
-    homepage = "https://pgtools.dev";
+    homepage = "https://pg-language-server.com";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       figsoda
       myypo
     ];
-    mainProgram = "postgrestools";
+    mainProgram = "postgres-language-server";
   };
 })
