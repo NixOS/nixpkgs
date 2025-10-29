@@ -41,6 +41,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
   meta = {
     description = "OpenTelemetry tool for dealing with semantic conventions and application telemetry schemas";
     homepage = "https://github.com/open-telemetry/weaver";
+    changelog = "https://github.com/open-telemetry/weaver/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "weaver";
