@@ -452,6 +452,7 @@ in
   devpi-server = runTest ./devpi-server.nix;
   dex-oidc = runTest ./dex-oidc.nix;
   dhparams = runTest ./dhparams.nix;
+  dictd = runTest ./dictd.nix;
   disable-installer-tools = runTest ./disable-installer-tools.nix;
   discourse = runTest {
     imports = [ ./discourse.nix ];
@@ -857,6 +858,7 @@ in
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
+  logkeys = runTest ./logkeys.nix;
   logrotate = runTest ./logrotate.nix;
   loki = runTest ./loki.nix;
   #logstash = handleTest ./logstash.nix {};
@@ -957,6 +959,7 @@ in
   mtp = runTest ./mtp.nix;
   multipass = runTest ./multipass.nix;
   mumble = runTest ./mumble.nix;
+  munge = runTest ./munge.nix;
   munin = runTest ./munin.nix;
   # Fails on aarch64-linux at the PDF creation step - need to debug this on an
   # aarch64 machine..
@@ -1362,6 +1365,7 @@ in
   silverbullet = runTest ./silverbullet.nix;
   simple = runTest ./simple.nix;
   sing-box = runTest ./sing-box.nix;
+  sks = runTest ./sks.nix;
   slimserver = runTest ./slimserver.nix;
   slipshow = runTest ./slipshow.nix;
   slurm = runTest ./slurm.nix;
@@ -1387,8 +1391,8 @@ in
   ssh-audit = runTest ./ssh-audit.nix;
   sshwifty = runTest ./web-apps/sshwifty/default.nix;
   sslh = handleTest ./sslh.nix { };
-  sssd = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd.nix { };
   sssd-ldap = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-ldap.nix { };
+  sssd-legacy-config = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./sssd-legacy-config.nix { };
   stalwart-mail = runTest ./stalwart/stalwart-mail.nix;
   stargazer = runTest ./web-servers/stargazer.nix;
   starship = runTest ./starship.nix;
@@ -1408,6 +1412,7 @@ in
     inherit runTest;
     lib = pkgs.lib;
   };
+  svnserve = runTest ./svnserve.nix;
   swap-file-btrfs = runTest ./swap-file-btrfs.nix;
   swap-partition = runTest ./swap-partition.nix;
   swap-random-encryption = runTest ./swap-random-encryption.nix;
