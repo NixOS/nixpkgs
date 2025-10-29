@@ -20,7 +20,7 @@ lib.extendMkDerivation {
   excludeDrvArgNames = [
     "extraPostFetch"
 
-    # TODO(@ShamrockLee): Move these arguments to derivationArgs when available.
+    # Pass via derivationArgs
     "extension"
     "stripRoot"
   ];
@@ -48,8 +48,8 @@ lib.extendMkDerivation {
 
     let
       tmpFilename =
-        if extension != null then
-          "download.${extension}"
+        if finalAttrs.extension != null then
+          "download.${finalAttrs.extension}"
         else
           baseNameOf (if url != "" then url else builtins.head urls);
     in
@@ -81,7 +81,7 @@ lib.extendMkDerivation {
         chmod -R +w "$unpackDir"
       ''
       + (
-        if stripRoot then
+        if finalAttrs.stripRoot then
           ''
             if [ $(ls -A "$unpackDir" | wc -l) != 1 ]; then
               echo "error: zip file must contain a single file or directory."
@@ -109,5 +109,12 @@ lib.extendMkDerivation {
       '';
       # ^ Remove non-owner write permissions
       # Fixes https://github.com/NixOS/nixpkgs/issues/38649
+
+      derivationArgs = {
+        inherit
+          extension
+          stripRoot
+          ;
+      };
     };
 }
