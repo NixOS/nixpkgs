@@ -3857,8 +3857,6 @@ with pkgs;
 
   qlcplus = libsForQt5.callPackage ../applications/misc/qlcplus { };
 
-  qjournalctl = libsForQt5.callPackage ../applications/system/qjournalctl { };
-
   qjoypad = libsForQt5.callPackage ../tools/misc/qjoypad { };
 
   qmarkdowntextedit = libsForQt5.callPackage ../development/libraries/qmarkdowntextedit { };
