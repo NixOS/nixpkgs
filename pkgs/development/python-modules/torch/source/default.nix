@@ -282,7 +282,7 @@ in
 buildPythonPackage.override { inherit stdenv; } rec {
   pname = "torch";
   # Don't forget to update torch-bin to the same version.
-  version = "2.8.0";
+  version = "2.9.0";
   pyproject = true;
 
   outputs = [
@@ -304,19 +304,6 @@ buildPythonPackage.override { inherit stdenv; } rec {
 
   patches = [
     ./clang19-template-warning.patch
-
-    # Do not override PYTHONPATH, otherwise, the build fails with:
-    # ModuleNotFoundError: No module named 'typing_extensions'
-    (fetchpatch {
-      name = "cmake-build-preserve-PYTHONPATH";
-      url = "https://github.com/pytorch/pytorch/commit/231c72240d80091f099c95e326d3600cba866eee.patch";
-      hash = "sha256-BBCjxzz2TUkx4nXRyRILA82kMwyb/4+C3eOtYqf5dhk=";
-    })
-
-    # Fixes GCC-14 compatibility on ARM
-    # Adapted from https://github.com/pytorch/pytorch/pull/157867
-    # TODO: remove at the next release
-    ./gcc-14-arm-compat.path
   ]
   ++ lib.optionals cudaSupport [
     ./fix-cmake-cuda-toolkit.patch
@@ -336,7 +323,7 @@ buildPythonPackage.override { inherit stdenv; } rec {
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools>=62.3.0,<80.0" "setuptools"
+      --replace-fail "setuptools>=70.1.0,<80.0" "setuptools"
   ''
   # Provide path to openssl binary for inductor code cache hash
   # InductorError: FileNotFoundError: [Errno 2] No such file or directory: 'openssl'
