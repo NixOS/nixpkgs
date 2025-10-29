@@ -3,14 +3,14 @@
   buildNpmPackage,
   fetchFromGitHub,
 }:
-buildNpmPackage rec {
+buildNpmPackage (finalAttrs: {
   pname = "transmissionic";
-  version = "v1.8.0";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "6c65726f79";
     repo = "Transmissionic";
-    rev = version;
+    tag = "v${finalAttrs.version}";
     hash = "sha256-ROJljJuNqViNs2axQppxpbDByDL82yhbGIDDV9UQeZ8=";
   };
 
@@ -26,13 +26,11 @@ buildNpmPackage rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Remote for Transmission Daemon";
     homepage = "https://github.com/6c65726f79/Transmissionic";
-    license = licenses.mit;
-    maintainers = with maintainers; [
-      stackptr
-    ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.stackptr ];
+    platforms = lib.platforms.all;
   };
-}
+})
