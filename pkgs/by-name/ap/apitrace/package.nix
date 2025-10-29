@@ -8,12 +8,11 @@
   procps,
   python3,
   libdwarf,
-  qtbase,
-  wrapQtAppsHook,
   libglvnd,
   gtest,
   brotli,
   enableGui ? true,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
     brotli
   ]
   ++ lib.optionals enableGui [
-    qtbase
+    libsForQt5.qtbase
   ];
 
   nativeBuildInputs = [
@@ -47,7 +46,7 @@ stdenv.mkDerivation rec {
     python3
   ]
   ++ lib.optionals enableGui [
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   cmakeFlags = [
