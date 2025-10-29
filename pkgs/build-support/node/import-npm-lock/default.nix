@@ -31,12 +31,15 @@ let
       if module ? "resolved" && module.resolved != null then
         (
           let
-            # Parse scheme from URL
-            mUrl = match "(.+)://(.+)" module.resolved;
-            scheme = elemAt mUrl 0;
+            # Parse scheme, URL, and optional fragment from URL (e.g., "git+ssh://...#hash")
+            urlParts = match "(.+)://([^#]+)#?(.*)" module.resolved;
+            scheme = elemAt urlParts 0;
+            urlWithoutFragment = elemAt urlParts 1;
+            fragment = elemAt urlParts 2;
+            isGit = lib.hasPrefix "git" scheme;
           in
           (
-            if mUrl == null then
+            if urlParts == null then
               (
                 assert npmRoot != null;
                 {
@@ -51,13 +54,30 @@ let
                 }
                 // fetcherOpts
               ))
-            else if lib.hasPrefix "git" module.resolved then
-              (fetchGit (
-                {
-                  url = module.resolved;
-                }
-                // fetcherOpts
-              ))
+            else if isGit then
+              (
+                let
+                  url = "${scheme}://${urlWithoutFragment}";
+                  hasRev = fragment != "";
+
+                  gitSrc = fetchGit (
+                    {
+                      inherit url;
+                    }
+                    // lib.optionalAttrs hasRev { rev = fragment; }
+                    // fetcherOpts
+                  );
+
+                  # Wrap the source in a tarball because directories have different semantics
+                  # (transitive dependencies aren't installed)
+                  pname = module.name or "package";
+                  version = module.version or "0.0.0";
+                in
+                # Prepend package/ to the files to match the format expected by npm
+                runCommand "${pname}-${version}.tgz" { } ''
+                  tar czf $out --transform 's,^,package/,' -C ${gitSrc} .
+                ''
+              )
             else
               throw "Unsupported URL scheme: ${scheme}"
           )
