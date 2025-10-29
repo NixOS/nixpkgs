@@ -2225,8 +2225,6 @@ with pkgs;
 
   renpy = callPackage ../by-name/re/renpy/package.nix { python3 = python312; };
 
-  rmview = libsForQt5.callPackage ../applications/misc/remarkable/rmview { };
-
   remarkable-mouse = python3Packages.callPackage ../applications/misc/remarkable/remarkable-mouse { };
 
   ropgadget = with python3Packages; toPythonApplication ropgadget;

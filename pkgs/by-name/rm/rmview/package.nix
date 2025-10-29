@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -20,7 +20,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = with python3Packages; [
     pyqt5
     setuptools
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
   propagatedBuildInputs = with python3Packages; [
     pyqt5
