@@ -1,8 +1,3 @@
-#nixpkgs ❯ result/bin/packettracer9
-#Path override failed for key base::DIR_APP_DICTIONARIES and path '/nix/store/kf4h10c3r2sv20fjg5wx99x8b9163kl2-ciscoPacketTracer9-9.0.0-beta/opt/pt/bin/qtwebengine_dictionaries'
-#Path override failed for key base::DIR_APP_DICTIONARIES and path '/nix/store/kf4h10c3r2sv20fjg5wx99x8b9163kl2-ciscoPacketTracer9-9.0.0-beta/opt/pt/bin/qtwebengine_dictionaries'
-#zsh: trace trap  result/bin/packettracer9
-
 {
   lib,
   stdenv,
@@ -31,6 +26,8 @@
   version ? "9.0.0-beta",
 }:
 
+let
+unwrapped =
 stdenv.mkDerivation {
   pname = "ciscoPacketTracer9";
   inherit version;
@@ -150,4 +147,12 @@ stdenv.mkDerivation {
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
-}
+};
+
+  fhs-env = buildFHSEnv {
+    name = "ciscoPacketTracer9-fhs-env";
+    runScript = lib.getExe' unwrapped "packettracer9";
+    targetPkgs = _: [ libudev0-shim ];
+  };
+in
+fhs-env
