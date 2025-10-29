@@ -157,6 +157,10 @@ stdenv.mkDerivation {
   patches = [
     ./opencl.patch
     ./musl.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/38151
+    ./vc4-fix-format-mismatches.patch
+    # https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/39119
+    ./rocket-fix-format-mismatches.patch
   ];
 
   postPatch = ''

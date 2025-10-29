@@ -1,0 +1,26 @@
+From 28d1cea2ae039f526a1fbe969e22ed0d9989c814 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Thu, 1 Jan 2026 16:23:24 +0100
+Subject: [PATCH] rocket: Fix printing of rknpu_mem_create.dma_addr
+
+The Linux kernel's __u64 isn't always implemented as a long long, and there's no nice define for printing it like with uint64_t.
+---
+ src/gallium/drivers/rocket/intercept.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/gallium/drivers/rocket/intercept.c b/src/gallium/drivers/rocket/intercept.c
+index 7388b252ed2..23b165a33b5 100644
+--- a/src/gallium/drivers/rocket/intercept.c
++++ b/src/gallium/drivers/rocket/intercept.c
+@@ -261,7 +261,7 @@ handle_mem_create(struct rknpu_mem_create *args)
+    context.bos[context.next_handle_id].obj_addr = args->obj_addr;
+    context.bos[context.next_handle_id].dma_addr = args->dma_addr;
+ 
+-   fprintf(stderr, "%s: dma_addr %llx\n", __func__, args->dma_addr);
++   fprintf(stderr, "%s: dma_addr %llx\n", __func__, (long long)args->dma_addr);
+    context.next_handle_id++;
+ 
+    return ret;
+-- 
+2.51.2
+
