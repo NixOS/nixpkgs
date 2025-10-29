@@ -8,22 +8,19 @@
   poetry-core,
   pytest-cov-stub,
   pytestCheckHook,
-  pythonOlder,
   sensor-state-data,
 }:
 
 buildPythonPackage rec {
   pname = "govee-ble";
-  version = "0.45.0";
+  version = "1.0.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "govee-ble";
     tag = "v${version}";
-    hash = "sha256-SUxK4H0Vo8C4GykIv8duFhhiGBA860QofVQDO37Ubdw=";
+    hash = "sha256-CYxPb5v7T+sp+2HJojGEVPIIaC0ySobiSK8qtHeuv7s=";
   };
 
   build-system = [ poetry-core ];
@@ -42,11 +39,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "govee_ble" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for Govee BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/govee-ble";
     changelog = "https://github.com/bluetooth-devices/govee-ble/blob/${src.tag}/CHANGELOG.md";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }
