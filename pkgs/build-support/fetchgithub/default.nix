@@ -129,6 +129,7 @@ lib.makeOverridable (
             inherit passthru;
             derivationArgs = {
               inherit
+                githubBase
                 owner
                 repo
                 ;
@@ -159,6 +160,7 @@ lib.makeOverridable (
             extension = "tar.gz";
             derivationArgs = {
               inherit
+                githubBase
                 owner
                 repo
                 tag
