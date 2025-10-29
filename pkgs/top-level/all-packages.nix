@@ -11279,8 +11279,6 @@ with pkgs;
 
   googleearth-pro = libsForQt5.callPackage ../applications/misc/googleearth-pro { };
 
-  gpsbabel = libsForQt5.callPackage ../applications/misc/gpsbabel { };
-
   gpsbabel-gui = gpsbabel.override {
     withGUI = true;
     withDoc = true;
