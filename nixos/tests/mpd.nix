@@ -58,7 +58,7 @@ in
       lib.mkMerge [
         (mkServer {
           mpd = defaultMpdCfg // {
-            network.listenAddress = "any";
+            bind_to_address = "any";
             extraConfig = ''
               audio_output {
                 type "alsa"
