@@ -857,6 +857,7 @@ in
   localsend = runTest ./localsend.nix;
   locate = runTest ./locate.nix;
   login = runTest ./login.nix;
+  logkeys = runTest ./logkeys.nix;
   logrotate = runTest ./logrotate.nix;
   loki = runTest ./loki.nix;
   #logstash = handleTest ./logstash.nix {};
