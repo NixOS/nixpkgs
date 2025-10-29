@@ -356,6 +356,18 @@ let
       {
         attr ? "_secret",
         loadCredential ? false,
+        secretsEnvGen ?
+          attr: secrets:
+          concatStringsSep "\n" (
+            imap1 (
+              index: name:
+              # We keep variable assignment and export separated to avoid masking the return code of the file access.
+              # With `set -e` this will now fail if a file doesn't exist.
+              ''
+                secret${toString index}=$(<'${secrets.${name}.${attr}}')
+                export secret${toString index}
+              '') (attrNames secrets)
+          ),
       }:
       set: output:
       let
@@ -394,16 +406,7 @@ let
           shopt -pq inherit_errexit && inherit_errexit_enabled=1
           shopt -s inherit_errexit
         ''
-        + concatStringsSep "\n" (
-          imap1 (
-            index: name:
-            # We keep variable assignment and export separated to avoid masking the return code of the file access.
-            # With `set -e` this will now fail if a file doesn't exist.
-            ''
-              secret${toString index}=$(<${credentialPath index name})
-              export secret${toString index}
-            '') (attrNames secrets)
-        )
+        + secretsEnvGen attr secrets
         + "\n"
         + "${pkgs.jq}/bin/jq >'${output}' "
         + escapeShellArg (
@@ -478,6 +481,22 @@ let
         as a JSON file.
     */
     genJqSecretsReplacementSnippet = set: output: (genJqSecretsReplacement { } set output).script;
+
+    # Like genJqSecretsReplacementSnippet, but inserts dummy secrets values.
+    # This can be useful to validate configuration files at build-time.
+    # NOTE: This can result in non-valid configuration files if secrets with `quote = false` are used.
+    genJqSecretsReplacementSnippetDummy =
+      set: output:
+      (genJqSecretsReplacement {
+        secretsEnvGen =
+          _attr: secrets:
+          concatStringsSep "\n" (
+            imap1 (index: name: ''
+              secret${toString index}=${if secrets.${name}.quote then "\"DUMMY\"" else "DUMMY"}
+              export secret${toString index}
+            '') (attrNames secrets)
+          );
+      } set output).script;
 
     /*
       Remove packages of packagesToRemove from packages, based on their names.

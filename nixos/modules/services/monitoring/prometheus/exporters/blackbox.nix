@@ -1,5 +1,6 @@
 {
   lib,
+  utils,
   options,
   config,
   pkgs,
@@ -9,15 +10,14 @@
 let
   cfg = config.services.prometheus.exporters.blackbox;
   settingsFormat = pkgs.formats.yaml { };
-
-  configFile =
+  dummyConfigFile =
     pkgs.runCommand "checked-blackbox-exporter.conf"
       {
         preferLocalBuild = true;
         nativeBuildInputs = [ pkgs.buildPackages.prometheus-blackbox-exporter ];
       }
       ''
-        ln -s ${settingsFormat.generate "blackbox-exporter-unchecked.conf" cfg.settings} $out
+        ${utils.genJqSecretsReplacementSnippetDummy cfg.settings "${placeholder "out"}"}
         blackbox_exporter --config.check --config.file $out
       '';
 in
@@ -51,14 +51,22 @@ in
     };
   };
 
-  serviceOpts.serviceConfig = {
-    AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
-    ExecStart = ''
-      ${lib.getExe pkgs.prometheus-blackbox-exporter} \
-        --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-        --config.file ${configFile} \
-        ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
-    '';
-    ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+  serviceOpts = {
+    preStart = utils.genJqSecretsReplacementSnippet cfg.settings "/run/prometheus-blackbox-exporter/blackbox-exporter.conf";
+
+    # just add it somewhere to it actually get build and the configuration gets validated at build time
+    restartTriggers = [ dummyConfigFile ];
+
+    serviceConfig = {
+      AmbientCapabilities = [ "CAP_NET_RAW" ]; # for ping probes
+      ExecStart = ''
+        ${lib.getExe pkgs.prometheus-blackbox-exporter} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --config.file /run/prometheus-blackbox-exporter/blackbox-exporter.conf \
+          ${lib.concatStringsSep " \\\n  " cfg.extraFlags}
+      '';
+      ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+      RuntimeDirectory = "prometheus-blackbox-exporter";
+    };
   };
 }
