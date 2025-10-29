@@ -45,10 +45,7 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/StardustXR/server/releases";
     license = lib.licenses.gpl2Plus;
     mainProgram = "stardust-xr-server";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
+    maintainers = lib.teams.stardust-xr.members;
     platforms = lib.platforms.linux;
   };
 }

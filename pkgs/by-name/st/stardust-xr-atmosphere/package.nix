@@ -36,10 +36,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "atmosphere";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
+    maintainers = lib.teams.stardust-xr.members;
     platforms = lib.platforms.linux;
   };
 }
