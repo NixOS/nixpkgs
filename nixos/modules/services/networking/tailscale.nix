@@ -240,10 +240,8 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "oneshot";
+        ExecStart = "${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}";
       };
-      script = ''
-        ${lib.getExe cfg.package} set ${escapeShellArgs cfg.extraSetFlags}
-      '';
     };
 
     boot.kernel.sysctl = mkIf (cfg.useRoutingFeatures == "server" || cfg.useRoutingFeatures == "both") {

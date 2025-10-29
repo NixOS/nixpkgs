@@ -142,9 +142,8 @@ in
         fi
       '';
 
-      script = "${cfg.package}/bin/nexus run";
-
       serviceConfig = {
+        ExecStart = "${cfg.package}/bin/nexus run";
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
