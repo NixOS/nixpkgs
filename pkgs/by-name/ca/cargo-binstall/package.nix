@@ -1,6 +1,6 @@
 {
   lib,
-  rustPlatform,
+  rustPackages_1_89,
   fetchFromGitHub,
   pkg-config,
   bzip2,
@@ -8,18 +8,21 @@
   zstd,
 }:
 
-rustPlatform.buildRustPackage rec {
+# error: rustc 1.86.0 is not supported by the following packages:
+#   fs-lock@0.1.11 requires rustc 1.89.0
+#   home@0.5.12 requires rustc 1.88
+rustPackages_1_89.rustPlatform.buildRustPackage rec {
   pname = "cargo-binstall";
-  version = "1.12.4";
+  version = "1.15.9";
 
   src = fetchFromGitHub {
     owner = "cargo-bins";
     repo = "cargo-binstall";
-    rev = "v${version}";
-    hash = "sha256-rojiGrWUG0zk506HzwHLB1L5oJCHNUscdl6ogzFE5gk=";
+    tag = "v${version}";
+    hash = "sha256-v/tilaoDLZDV0VbMTT/DfqSNO4Ezyu3AWGzMftMubqc=";
   };
 
-  cargoHash = "sha256-+G9L5eMLQsgO5GIRU1BQkr5OwEOYPXCtSAah8l9wwr8=";
+  cargoHash = "sha256-itYqZi1tSWVwqGfNFSBh4/+PoLrQZQTnla4lOCjoX8Q=";
 
   nativeBuildInputs = [
     pkg-config

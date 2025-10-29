@@ -16780,6 +16780,13 @@
     githubId = 30654959;
     name = "Michele Sciabarra";
   };
+  msgilligan = {
+    email = "sean@msgilligan.com";
+    github = "msgilligan";
+    githubId = 61612;
+    name = "Sean Gilligan";
+    keys = [ { fingerprint = "3B66 ACFA D10F 02AA B1D5  2CB1 8DD0 D81D 7D1F C61A"; } ];
+  };
   msiedlarek = {
     email = "mikolaj@siedlarek.pl";
     github = "msiedlarek";
@@ -20729,6 +20736,11 @@
     githubId = 77415970;
     name = "Redhawk";
   };
+  redianthus = {
+    github = "redianthus";
+    githubId = 16472988;
+    name = "redianthus";
+  };
   redlonghead = {
     email = "git@beardit.net";
     github = "Redlonghead";
@@ -22033,6 +22045,11 @@
     github = "savedra1";
     githubId = 99875823;
     name = "Michael Savedra";
+  };
+  savtrip = {
+    github = "savtrip";
+    githubId = 42227195;
+    name = "Sav Tripodi";
   };
   savyajha = {
     email = "savya.jha@hawkradius.com";
