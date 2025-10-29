@@ -18,11 +18,11 @@
     # the version regex here as well.
     #
     # Ensure you also check ../mattermostLatest/package.nix.
-    regex = "^v(10\\.5\\.[0-9]+)$";
-    version = "10.5.12";
-    srcHash = "sha256-VaW+rA0UeIZhGU9BlYZgyznAOtLN+JI7UPbMRPCwTww=";
-    vendorHash = "sha256-vxUxSkj1EwgMtPpCGJSA9jCDBeLrWhecdwq4KBThhj4=";
-    npmDepsHash = "sha256-tIeuDUZbqgqooDm5TRfViiTT5OIyN0BPwvJdI+wf7p0=";
+    regex = "^v(10\\.11\\.[0-9]+)$";
+    version = "10.11.4";
+    srcHash = "sha256-gSVoO0paAwvxEeZkcCP81oxMcSu/H8n3Tr+2OEXuFyM=";
+    vendorHash = "sha256-DS4OC3eQffD/8yLE01gnTJXwV77G7rWk4kqA/rTCtJw=";
+    npmDepsHash = "sha256-p9dq31qw0EZDQIl2ysKE38JgDyLA6XvSv+VtHuRh+8A=";
     lockfileOverlay = ''
       unlock(.; "@floating-ui/react"; "channels/node_modules/@floating-ui/react")
     '';
