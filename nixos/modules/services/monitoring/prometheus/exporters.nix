@@ -110,6 +110,7 @@ let
         "process"
         "pve"
         "py-air-control"
+        "qbittorrent"
         "rasdaemon"
         "redis"
         "restic"
