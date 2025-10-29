@@ -29,18 +29,18 @@ let
     # via NixOS' configuration.nix, as this file will be rewritten upon mpd's
     # restart.
 
-    music_directory     "${cfg.musicDirectory}"
-    playlist_directory  "${cfg.playlistDirectory}"
-    ${lib.optionalString (cfg.dbFile != null) ''
-      db_file             "${cfg.dbFile}"
+    music_directory     "${cfg.music_directory}"
+    playlist_directory  "${cfg.playlist_directory}"
+    ${lib.optionalString (cfg.db_file != null) ''
+      db_file             "${cfg.db_file}"
     ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
 
     ${lib.optionalString (
-      cfg.network.listenAddress != "any"
-    ) ''bind_to_address "${cfg.network.listenAddress}"''}
-    ${lib.optionalString (cfg.network.port != 6600) ''port "${toString cfg.network.port}"''}
+      cfg.bind_to_address != "any"
+    ) ''bind_to_address "${cfg.bind_to_address}"''}
+    ${lib.optionalString (cfg.port != 6600) ''port "${toString cfg.port}"''}
     ${lib.optionalString (cfg.fluidsynth) ''
       decoder {
               plugin "fluidsynth"
@@ -103,7 +103,7 @@ in
         '';
       };
 
-      musicDirectory = lib.mkOption {
+      music_directory = lib.mkOption {
         type = with lib.types; either path (strMatching "(http|https|nfs|smb)://.+");
         default = "${cfg.dataDir}/music";
         defaultText = lib.literalExpression ''"''${dataDir}/music"'';
@@ -115,7 +115,7 @@ in
         '';
       };
 
-      playlistDirectory = lib.mkOption {
+      playlist_directory = lib.mkOption {
         type = lib.types.path;
         default = "${cfg.dataDir}/playlists";
         defaultText = lib.literalExpression ''"''${dataDir}/playlists"'';
@@ -138,9 +138,7 @@ in
         '';
       };
 
-      network = {
-
-        listenAddress = lib.mkOption {
+        bind_to_address = lib.mkOption {
           type = lib.types.str;
           default = "127.0.0.1";
           example = "any";
@@ -159,9 +157,7 @@ in
           '';
         };
 
-      };
-
-      dbFile = lib.mkOption {
+      db_file = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = "${cfg.dataDir}/tag_cache";
         defaultText = lib.literalExpression ''"''${dataDir}/tag_cache"'';
@@ -235,6 +231,26 @@ in
 
   ###### implementation
 
+  imports = [
+    (lib.mkRenamedOptionModule
+      [ "services" "mpd" "musicDirectory" ]
+      [ "services" "mpd" "music_directory" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "mpd" "playlistDirectory" ]
+      [ "services" "mpd" "playlist_directory" ]
+    )
+    (lib.mkRenamedOptionModule [ "services" "mpd" "dbFile" ] [ "services" "mpd" "db_file" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "mpd" "network" "listenAddress" ]
+      [ "services" "mpd" "bind_to_address" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "mpd" "network" "port" ]
+      [ "services" "mpd" "port" ]
+    )
+  ];
+
   config = lib.mkIf cfg.enable {
 
     # install mpd units
@@ -245,12 +261,12 @@ in
       listenStreams = [
         "" # Note: this is needed to override the upstream unit
         (
-          if pkgs.lib.hasPrefix "/" cfg.network.listenAddress then
-            cfg.network.listenAddress
+          if pkgs.lib.hasPrefix "/" cfg.bind_to_address then
+            cfg.bind_to_address
           else
             "${
-              lib.optionalString (cfg.network.listenAddress != "any") "${cfg.network.listenAddress}:"
-            }${toString cfg.network.port}"
+              lib.optionalString (cfg.bind_to_address != "any") "${cfg.bind_to_address}:"
+            }${toString cfg.port}"
         )
       ];
     };
@@ -282,11 +298,11 @@ in
         StateDirectory =
           [ ]
           ++ lib.optionals (cfg.dataDir == "/var/lib/${name}") [ name ]
-          ++ lib.optionals (cfg.playlistDirectory == "/var/lib/${name}/playlists") [
+          ++ lib.optionals (cfg.playlist_directory == "/var/lib/${name}/playlists") [
             name
             "${name}/playlists"
           ]
-          ++ lib.optionals (cfg.musicDirectory == "/var/lib/${name}/music") [
+          ++ lib.optionals (cfg.music_directory == "/var/lib/${name}/music") [
             name
             "${name}/music"
           ];
