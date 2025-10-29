@@ -203,7 +203,9 @@ in
   adguardhome = runTest ./adguardhome.nix;
   aesmd = runTestOn [ "x86_64-linux" ] ./aesmd.nix;
   agate = runTest ./web-servers/agate.nix;
-  agda = runTest ./agda.nix;
+  agda = import ./agda {
+    inherit runTest;
+  };
   age-plugin-tpm-decrypt = runTest ./age-plugin-tpm-decrypt.nix;
   agnos = discoverTests (import ./agnos.nix);
   agorakit = runTest ./web-apps/agorakit.nix;

@@ -9,13 +9,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "vue-language-server";
-  version = "3.1.1";
+  version = "3.1.2";
 
   src = fetchFromGitHub {
     owner = "vuejs";
     repo = "language-tools";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-/dTNfQdgDFJ8m7t8QnTghE5CGgVm0eGSriocFiEgoCw=";
+    hash = "sha256-IW7lNvUA2y85nl+xu7vZXtIYNrVdsz5/0o7r+S0kEig=";
   };
 
   pnpmDeps = pnpm.fetchDeps {

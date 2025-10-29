@@ -132,6 +132,7 @@ buildNpmPackage rec {
       qjoly
       chvp
       khaneliman
+      HarisDotParis
     ];
     platforms = with lib.platforms; darwin ++ linux;
   };
