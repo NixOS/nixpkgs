@@ -1337,8 +1337,8 @@ in
       "sha256-Ngqg/OaZCigXIPORzWl8CMv64KPmu8axXSgnBzBWnII=";
 
   mypy-boto3-support-app =
-    buildMypyBoto3Package "support-app" "1.40.17"
-      "sha256-PKD1uLbQHrySwD8nMt/OHqkGbu1qWyEYM2KzMMM+VR4=";
+    buildMypyBoto3Package "support-app" "1.40.61"
+      "sha256-JRCWcVeatM6XvNH/Rdi4Ny2Clpt5L2aAQjVRRcyT69E=";
 
   mypy-boto3-swf =
     buildMypyBoto3Package "swf" "1.40.55"
