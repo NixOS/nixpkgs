@@ -3640,8 +3640,6 @@ with pkgs;
 
   sshd-openpgp-auth = callPackage ../by-name/ss/ssh-openpgp-auth/daemon.nix { };
 
-  opentrack = libsForQt5.callPackage ../applications/misc/opentrack { };
-
   openvpn = callPackage ../tools/networking/openvpn { };
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
