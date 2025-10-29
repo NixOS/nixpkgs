@@ -1246,8 +1246,6 @@ with pkgs;
 
   gitRepo = git-repo;
 
-  gittyup = libsForQt5.callPackage ../applications/version-management/gittyup { };
-
   merge-fmt = callPackage ../applications/version-management/merge-fmt {
     inherit (ocamlPackages)
       buildDunePackage

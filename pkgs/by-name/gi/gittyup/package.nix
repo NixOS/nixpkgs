@@ -11,9 +11,7 @@
   ninja,
   openssl,
   pkg-config,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +54,7 @@ stdenv.mkDerivation rec {
     cmark
     ninja
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -66,8 +64,8 @@ stdenv.mkDerivation rec {
     libssh2
     lua5_4
     openssl
-    qtbase
-    qttools
+    libsForQt5.qtbase
+    libsForQt5.qttools
   ];
 
   postInstall = ''
