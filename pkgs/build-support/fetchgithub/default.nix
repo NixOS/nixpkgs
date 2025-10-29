@@ -158,12 +158,12 @@ lib.makeOverridable (
       // privateAttrs
       // {
         inherit name;
+        meta = newMeta;
       };
   in
 
   fetcher fetcherArgs
   // {
-    meta = newMeta;
     inherit owner repo tag;
     rev = revWithTag;
   }
