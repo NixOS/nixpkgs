@@ -20,6 +20,21 @@ let
       appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${shortRev}";
     in
     "${lib.sources.urlToName url}${if append == "" then appendShort else append}";
+
+  getRevWithTag =
+    {
+      rev ? null,
+      tag ? null,
+    }:
+    if tag != null && rev != null then
+      throw "fetchgit requires one of either `rev` or `tag` to be provided (not both)."
+    else if tag != null then
+      "refs/tags/${tag}"
+    else if rev != null then
+      rev
+    else
+      # FIXME fetching HEAD if no rev or tag is provided is problematic at best
+      "HEAD";
 in
 
 lib.makeOverridable (
@@ -120,23 +135,6 @@ lib.makeOverridable (
         assert fetchTags -> leaveDotGit;
         assert rootDir != "" -> !leaveDotGit;
 
-        let
-          revWithTag =
-            let
-              warningMsg = "fetchgit requires one of either `rev` or `tag` to be provided (not both).";
-              otherIsNull = other: lib.assertMsg (other == null) warningMsg;
-            in
-            if tag != null then
-              assert (otherIsNull rev);
-              "refs/tags/${tag}"
-            else if rev != null then
-              assert (otherIsNull tag);
-              rev
-            else
-              # FIXME fetching HEAD if no rev or tag is provided is problematic at best
-              "HEAD";
-        in
-
         if builtins.isString sparseCheckout then
           # Changed to throw on 2023-06-04
           throw
@@ -178,7 +176,7 @@ lib.makeOverridable (
               rootDir
               gitConfigFile
               ;
-            rev = revWithTag;
+            rev = getRevWithTag { inherit tag rev; };
 
             postHook =
               if netrcPhase == null then
