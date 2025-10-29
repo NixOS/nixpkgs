@@ -27,10 +27,7 @@ rustPlatform.buildRustPackage {
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "gravity";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
+    teams = with lib.teams; [ stardust-xr ];
     platforms = lib.platforms.linux;
   };
 }

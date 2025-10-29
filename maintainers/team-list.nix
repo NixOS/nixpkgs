@@ -717,6 +717,15 @@ with lib.maintainers;
     github = "security-review";
   };
 
+  stardust-xr = {
+    members = [
+      pandapip1
+      technobaboo
+    ];
+    scope = "Maintain Stardust XR packages";
+    shortName = "StardustXR";
+  };
+
   stdenv = {
     enableFeatureFreezePing = true;
     github = "stdenv";
