@@ -1,18 +1,17 @@
 {
   lib,
   stdenv,
+  callPackage,
   fetchFromGitHub,
-  replaceVars,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
-  equicord,
   electron,
   libicns,
   pipewire,
   libpulseaudio,
   autoPatchelfHook,
-  pnpm_10,
+  bun,
   nodejs,
   nix-update-script,
   withTTS ? true,
@@ -20,29 +19,29 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "equibop";
-  version = "2.1.7";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "Equicord";
     repo = "Equibop";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-wvg06YSQOZvP/NHl3WPfnI9F0+KN0cJ2CBwaZD8Xpfk=";
+    hash = "sha256-VWDbGe0IItINSka0WhwDOhAwcuJa49a035FPX5CtKJY=";
   };
 
-  pnpmDeps = pnpm_10.fetchDeps {
-    inherit (finalAttrs)
-      pname
-      version
-      src
-      patches
-      ;
-    fetcherVersion = 1;
-    hash = "sha256-HQxQIMbj2xsxD1jwj/itfAW6KHxX81Eu60ouzxQDu44=";
-  };
+  postPatch = ''
+    substituteInPlace scripts/build/build.mts \
+      --replace-fail 'const gitHash = execSync("git rev-parse HEAD", { encoding: "utf-8" }).trim();' 'const gitHash = "${lib.fakeHash}"'
+
+    # disable auto updates
+    substituteInPlace src/main/updater.ts \
+      --replace-fail 'const isOutdated = autoUpdater.checkForUpdates().then(res => Boolean(res?.isUpdateAvailable));' 'const isOutdated = false;'
+  '';
+
+  node-modules = callPackage ./node-modules.nix { };
 
   nativeBuildInputs = [
+    bun
     nodejs
-    pnpm_10.configHook
     # XXX: Equibop *does not* ship venmic as a prebuilt node module. The package
     # seems to build with or without this hook, but I (NotAShelf) don't have the
     # time to test the consequences of removing this hook. Please open a pull
@@ -60,23 +59,21 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.getLib stdenv.cc.cc)
   ];
 
-  patches = [
-    ./disable_update_checking.patch
-  ];
-
-  env = {
-    ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
-  };
+  preBuild = ''
+    cp -R ${finalAttrs.node-modules} node_modules
+  '';
 
   buildPhase = ''
     runHook preBuild
 
-    pnpm build
-    pnpm exec electron-builder \
+    bun run build
+
+    # can't run it via bunx / npx since fixupPhase was skipped for node_modules
+    node node_modules/electron-builder/out/cli/cli.js \
       --dir \
-      -c.asarUnpack="**/*.node" \
       -c.electronDist=${electron.dist} \
-      -c.electronVersion=${electron.version}
+      -c.electronVersion=${electron.version} \
+      -c.npmRebuild=false
 
     runHook postBuild
   '';
@@ -129,8 +126,13 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru = {
-    inherit (finalAttrs) pnpmDeps;
-    updateScript = nix-update-script { };
+    inherit (finalAttrs) node-modules;
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--subpackage"
+        "node-modules"
+      ];
+    };
   };
 
   meta = {
@@ -138,8 +140,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Equicord/Equibop";
     changelog = "https://github.com/Equicord/Equibop/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
-    maintainers = [
-      lib.maintainers.NotAShelf
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      rexies
     ];
     mainProgram = "equibop";
     # I am not confident in my ability to support Darwin, please PR if this is important to you
