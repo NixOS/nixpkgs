@@ -110,8 +110,6 @@ lib.makeOverridable (
 
     gitRepoUrl = "${baseUrl}.git";
 
-    revWithTag = if tag != null then "refs/tags/${tag}" else rev;
-
     fetcherArgs =
       finalAttrs:
       passthruAttrs
@@ -137,6 +135,9 @@ lib.makeOverridable (
           }
           // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
         else
+          let
+            revWithTag = finalAttrs.rev;
+          in
           {
             # Use the API endpoint for private repos, as the archive URI doesn't
             # support access with GitHub's fine-grained access tokens.
@@ -161,6 +162,11 @@ lib.makeOverridable (
                 repo
                 tag
                 ;
+              rev = fetchgit.getRevWithTag {
+                inherit (finalAttrs) tag;
+                rev = finalAttrs.revCustom;
+              };
+              revCustom = rev;
             };
             passthru = {
               inherit gitRepoUrl;
@@ -176,7 +182,4 @@ lib.makeOverridable (
   in
 
   fetcher fetcherArgs
-  // {
-    rev = revWithTag;
-  }
 )
