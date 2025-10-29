@@ -122,9 +122,12 @@ let
       );
     in
     stdenv.mkDerivation (
-      removeAttrs args [ "bundlerEnvArgs" ]
-      // {
+      # Allow overriding the plugin name
+      {
         pluginName = if name != null then name else "${pname}-${version}";
+      }
+      // removeAttrs args [ "bundlerEnvArgs" ]
+      // {
         dontConfigure = true;
         dontBuild = true;
         installPhase = ''
