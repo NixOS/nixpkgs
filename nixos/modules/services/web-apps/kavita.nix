@@ -37,6 +37,12 @@ in
       description = "User account under which Kavita runs.";
     };
 
+    group = lib.mkOption {
+      type = lib.types.str;
+      default = "kavita";
+      description = "Group under which Kavita runs.";
+    };
+
     package = lib.mkPackageOption pkgs "kavita" { };
 
     dataDir = lib.mkOption {
@@ -97,23 +103,24 @@ in
         ExecStart = lib.getExe cfg.package;
         Restart = "always";
         User = cfg.user;
+        Group = cfg.group;
       };
     };
 
     systemd.tmpfiles.rules = [
-      "d '${cfg.dataDir}'        0750 ${cfg.user} ${cfg.user} - -"
-      "d '${cfg.dataDir}/config' 0750 ${cfg.user} ${cfg.user} - -"
+      "d '${cfg.dataDir}'        0750 ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.dataDir}/config' 0750 ${cfg.user} ${cfg.group} - -"
     ];
 
-    users = {
-      users.${cfg.user} = {
-        description = "kavita service user";
+    users.users = lib.mkIf (cfg.user == "kavita") {
+      kavita = {
+        inherit (cfg) group;
         isSystemUser = true;
-        group = cfg.user;
         home = cfg.dataDir;
       };
-      groups.${cfg.user} = { };
     };
+
+    users.groups = lib.mkIf (cfg.group == "kavita") { kavita = { }; };
   };
 
   meta.maintainers = with lib.maintainers; [ misterio77 ];
