@@ -86,8 +86,8 @@ in
       "sha256-/818ZgAE2Pqwcr914QvY86R5joOZ8kjM6StO4EpobdM=";
 
   mypy-boto3-apigatewayv2 =
-    buildMypyBoto3Package "apigatewayv2" "1.40.0"
-      "sha256-gfnF5uJodhhdWWdmTcD3N4GEwUZh/LsOZ9C99MPCHWQ=";
+    buildMypyBoto3Package "apigatewayv2" "1.40.61"
+      "sha256-C0MDOmvUXvJN3FuDsDm8fZQZUFFzACdw+0EpWCIpjEc=";
 
   mypy-boto3-appconfig =
     buildMypyBoto3Package "appconfig" "1.40.0"
