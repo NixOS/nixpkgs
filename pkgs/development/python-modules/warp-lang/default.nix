@@ -38,7 +38,7 @@ let
   effectiveStdenv = if cudaSupport then cudaPackages.backendStdenv else args.stdenv;
   stdenv = throw "Use effectiveStdenv instead of stdenv directly, as it may be replaced by cudaPackages.backendStdenv";
 
-  version = "1.9.0";
+  version = "1.9.1";
 
   libmathdx = effectiveStdenv.mkDerivation (finalAttrs: {
     # NOTE: The version used should match the version Warp requires:
@@ -144,7 +144,7 @@ buildPythonPackage {
     owner = "NVIDIA";
     repo = "warp";
     tag = "v${version}";
-    hash = "sha256-OEg2mUsEdRKhgx0fIraqme4moKNh1RSdN7/yCT1V5+g=";
+    hash = "sha256-Atp3WyxQ7GYwWLmQIUgoPULyVlNjduh4/9CBixNWFwc=";
   };
 
   patches =
