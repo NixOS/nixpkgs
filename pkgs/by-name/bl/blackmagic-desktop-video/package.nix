@@ -7,11 +7,28 @@
   jq,
   lib,
   libGL,
+
+  desktopVideoFull ? false,
+
+  # whether to include firmware update tool
+  desktopVideoUpdater ? desktopVideoFull,
+  libusb1,
+
+  # whether to include gui applications as well
+  desktopVideoGUI ? desktopVideoFull,
+  dbus,
+  fontconfig,
+  freetype,
+  glib,
+  libICE,
+  libXrender,
+  qt5,
   libcxx,
   runCommandLocal,
   stdenv,
   writeShellApplication,
 }:
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video";
   version = "15.1";
@@ -21,7 +38,20 @@ stdenv.mkDerivation (finalAttrs: {
     libcxx
     libGL
     gcc.cc.lib
+  ]
+  ++ lib.optionals desktopVideoUpdater [
+    libusb1
+  ]
+  ++ lib.optionals desktopVideoGUI [
+    dbus
+    fontconfig
+    freetype
+    glib
+    libICE
+    libXrender
+    qt5.qtbase
   ];
+  nativeBuildInputs = lib.optionals desktopVideoGUI [ qt5.wrapQtAppsHook ];
 
   # yes, the below download function is an absolute mess.
   # blame blackmagicdesign.
@@ -118,13 +148,37 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/{bin,share/doc,lib/systemd/system}
+    mkdir -p $out/{bin,share/doc,share/man/man1,lib/systemd/system}
     cp -r $unpacked/usr/share/doc/desktopvideo $out/share/doc
+    cp $unpacked/usr/share/man/man1/DesktopVideoHelper.1 $out/share/man/man1
     cp $unpacked/usr/lib/*.so $out/lib
     cp $unpacked/usr/lib/systemd/system/DesktopVideoHelper.service $out/lib/systemd/system
     cp $unpacked/usr/lib/blackmagic/DesktopVideo/DesktopVideoHelper $out/bin/
     substituteInPlace $out/lib/systemd/system/DesktopVideoHelper.service \
       --replace-fail "/usr/lib/blackmagic/DesktopVideo/DesktopVideoHelper" "$out/bin/DesktopVideoHelper"
+  ''
+  + lib.optionalString desktopVideoUpdater ''
+    mkdir -p $out/{opt/blackmagic/DesktopVideo/{,Firmware},share/icons,share/applications}
+    cp $unpacked/usr/share/man/man1/DesktopVideo{UpdateTool,Updater}.1 $out/share/man/man1
+    cp -r $unpacked/usr/share/icons/* $out/share/icons
+    cp $unpacked/usr/share/applications/DesktopVideoUpdater.desktop $out/share/applications
+    cp -r $unpacked/usr/lib/blackmagic/DesktopVideo/Firmware $out/opt/blackmagic/DesktopVideo/Firmware  # UpdateTool expects Firmware dir next to it
+    cp $unpacked/usr/lib/blackmagic/DesktopVideo/libDVUpdate.so $out/lib
+    cp $unpacked/usr/lib/blackmagic/DesktopVideo/DesktopVideo{UpdateTool,Updater} $out/opt/blackmagic/DesktopVideo
+    ln -s $out/opt/blackmagic/DesktopVideo/DesktopVideo{UpdateTool,Updater} $out/bin
+  ''
+  + lib.optionalString desktopVideoGUI ''
+    mkdir -p $out/{share/{icons,applications},opt/blackmagic/DesktopVideo/{,plugins}}
+    cp -r $unpacked/usr/share/doc/desktopvideo-gui $out/share/doc
+    cp $unpacked/usr/share/man/man1/BlackmagicDesktopVideoSetup.1 $out/share/man/man1
+    cp -r $unpacked/usr/share/icons/* $out/share/icons
+    cp $unpacked/usr/share/applications/BlackmagicDesktopVideoSetup.desktop $out/share/applications
+    cp -r $unpacked/usr/lib/blackmagic/DesktopVideo/plugins $out/opt/blackmagic/DesktopVideo/plugins
+    cp $unpacked/usr/lib/blackmagic/DesktopVideo/qt.conf $out/opt/blackmagic/DesktopVideo
+    cp $unpacked/usr/lib/blackmagic/DesktopVideo/BlackmagicDesktopVideoSetup $out/opt/blackmagic/DesktopVideo
+    ln -s $out/opt/blackmagic/DesktopVideo/BlackmagicDesktopVideoSetup $out/bin
+  ''
+  + ''
     runHook postInstall
   '';
 
@@ -135,7 +189,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.blackmagicdesign.com/support/family/capture-and-playback";
     maintainers = [ maintainers.naxdy ];
     license = licenses.unfree;
-    description = "Supporting applications for Blackmagic Decklink. Doesn't include the desktop applications, only the helper required to make the driver work";
+    description = "Supporting applications for Blackmagic Decklink. Doesn't include the desktop applications or firmware updater by default, only the helper required to make the driver work";
     platforms = platforms.linux;
   };
 })
