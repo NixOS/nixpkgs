@@ -31,16 +31,12 @@ let
 
     music_directory     "${cfg.music_directory}"
     playlist_directory  "${cfg.playlist_directory}"
-    ${lib.optionalString (cfg.db_file != null) ''
-      db_file             "${cfg.db_file}"
-    ''}
+    db_file             "${cfg.db_file}"
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
 
-    ${lib.optionalString (
-      cfg.bind_to_address != "any"
-    ) ''bind_to_address "${cfg.bind_to_address}"''}
-    ${lib.optionalString (cfg.port != 6600) ''port "${toString cfg.port}"''}
+    bind_to_address "${cfg.bind_to_address}"
+    port "${toString cfg.port}"
     ${lib.optionalString (cfg.fluidsynth) ''
       decoder {
               plugin "fluidsynth"
@@ -158,12 +154,11 @@ in
       };
 
       db_file = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+        type = lib.types.path;
         default = "${cfg.dataDir}/tag_cache";
         defaultText = lib.literalExpression ''"''${dataDir}/tag_cache"'';
         description = ''
-          The path to MPD's database. If set to `null` the
-          parameter is omitted from the configuration.
+          The path to MPD's database.
         '';
       };
 
