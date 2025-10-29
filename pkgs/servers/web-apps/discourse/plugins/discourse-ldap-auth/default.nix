@@ -7,6 +7,7 @@
 mkDiscoursePlugin {
   name = "discourse-ldap-auth";
   bundlerEnvArgs.gemdir = ./.;
+  pluginName = "ldap";
   src = fetchFromGitHub {
     owner = "jonmbake";
     repo = "discourse-ldap-auth";
