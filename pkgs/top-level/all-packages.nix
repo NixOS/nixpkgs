@@ -14001,8 +14001,6 @@ with pkgs;
     };
   };
 
-  yacas = libsForQt5.callPackage ../applications/science/math/yacas { };
-
   yacas-gui = yacas.override {
     enableGui = true;
     enableJupyter = false;

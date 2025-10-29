@@ -6,9 +6,6 @@
   cmake,
   perl,
   enableGui ? false,
-  qtbase,
-  wrapQtAppsHook,
-  qtwebengine,
   enableJupyter ? true,
   boost,
   jsoncpp,
@@ -17,6 +14,7 @@
   enableJava ? false,
   openjdk,
   gtest,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,9 +67,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
   ]
   ++ lib.optionals enableGui [
-    qtbase
-    wrapQtAppsHook
-    qtwebengine
+    libsForQt5.qtbase
+    libsForQt5.wrapQtAppsHook
+    libsForQt5.qtwebengine
   ]
   ++ lib.optionals enableJupyter [
     boost
