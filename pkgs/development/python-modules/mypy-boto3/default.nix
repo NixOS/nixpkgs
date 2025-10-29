@@ -390,8 +390,8 @@ in
       "sha256-7D+DnOkoDtXXrLx9orqg9WXtlnpSyQFAqgBlV3hJu1Q=";
 
   mypy-boto3-detective =
-    buildMypyBoto3Package "detective" "1.40.14"
-      "sha256-QDNLIgNekgueP8XNyBbRpT1NbD+ZwxQ2OzWU4aF9/GM=";
+    buildMypyBoto3Package "detective" "1.40.61"
+      "sha256-jF4evznD25FHYGxNEyS7x4RAbElEWMyv8Fk2uEqRxwg=";
 
   mypy-boto3-devicefarm =
     buildMypyBoto3Package "devicefarm" "1.40.57"
