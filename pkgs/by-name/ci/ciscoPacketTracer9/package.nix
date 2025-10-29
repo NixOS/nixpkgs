@@ -25,6 +25,7 @@
   libxml2_13,
   libxslt,
   nss,
+  openssl,
   rigsofrods-bin,
   wayland,
   version ? "9.0.0-beta",
@@ -57,6 +58,7 @@ stdenv.mkDerivation {
     makeWrapper
   ];
 
+  # TODO: replace vendored libraries
   buildInputs = [
     alsa-lib
     expat
@@ -71,6 +73,8 @@ stdenv.mkDerivation {
     libxml2_13
     libxslt
     nss
+    #openssl.out
+    #openssl
     wayland
   ]
   ++ (with xorg; [
@@ -90,8 +94,14 @@ stdenv.mkDerivation {
     xcbutilwm
   ])
   ++ (with kdePackages; [
-    # TODO: replace vendored qt6 libraries
     qttools
+    #qt5compat
+    #qtmultimedia
+    #qtnetworkauth
+    #qtpositioning
+    #qtspeech
+    #qtwebchannel
+    #qtwebengine
   ]);
 
   unpackPhase = ''
@@ -105,6 +115,15 @@ stdenv.mkDerivation {
 
   installPhase = ''
     runHook preInstall
+
+    #rm -r $out/opt/pt/bin/libQt6*
+    # creates errors:
+    #/nix/store/sv8a90gmyh7mgymdhb3i3g4z25q8dkpv-ciscoPacketTracer9-9.0.0-beta/opt/pt/bin/PacketTracer: /nix/store/sv8a90gmyh7mgymdhb3i3g4z25q8dkpv-ciscoPacketTracer9-9.0.0-beta/opt/pt/bin/libssl.so.3: version `OPENSSL_3.2.0' not found (required by /nix/store/8np9zvwqmwsnbkbrwm8x7jq4ygdkjz5g-curl-8.16.0/lib/libcurl.so.4)
+    #/nix/store/sv8a90gmyh7mgymdhb3i3g4z25q8dkpv-ciscoPacketTracer9-9.0.0-beta/opt/pt/bin/PacketTracer: /nix/store/sv8a90gmyh7mgymdhb3i3g4z25q8dkpv-ciscoPacketTracer9-9.0.0-beta/opt/pt/bin/libssl.so.3: version `OPENSSL_3.5.0' not found (required by /nix/store/lnykqqapknvsnm36ysviyd5hp1fy4add-ngtcp2-1.15.1/lib/libngtcp2_crypto_ossl.so.0)
+
+    #rm -r $out/opt/pt/bin/libssl*
+    # creates error:
+    # tTracer: undefined symbol: _ZN16QWebSocketServer19handleTCPConnectionEP10QTcpSocketRK7QString, version Qt_6
 
     # TODO: package libtiff and use that
     cp ${rigsofrods-bin}/share/rigsofrods/lib/libtiff.so.5 $out/opt/pt/bin/
