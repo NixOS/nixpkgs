@@ -52,7 +52,6 @@ in
       version = "1.10.10";
       hash = "sha256-/NTIGLlcNu4sI1rICa+PS/Jn+YnWi37zFBcbfMnv3Ys=";
       patches = [
-        ./patches/1.10/0002-skip-failing-and-flaky-tests.patch
         # Revert https://github.com/JuliaLang/julia/pull/55354
         # [build] Some improvements to the LLVM build system
         # Related: https://github.com/JuliaLang/julia/issues/55617
@@ -68,18 +67,12 @@ in
     callPackage (import ./generic.nix {
       version = "1.11.7";
       hash = "sha256-puluy9YAV8kdx6mfwbN1F7Nhot+P0cRv/a0dm86Jln0=";
-      patches = [
-        ./patches/1.11/0002-skip-failing-and-flaky-tests.patch
-      ];
     }) { }
   );
   julia_112 = wrapJulia (
     callPackage (import ./generic.nix {
       version = "1.12.1";
       hash = "sha256-iR0Wu5HIqU1aY1WoLBf6PCRY64kWDUKEQ6CyobhB6lI=";
-      patches = [
-        ./patches/1.12/0001-skip-failing-and-flaky-tests.patch
-      ];
     }) { }
   );
 }
