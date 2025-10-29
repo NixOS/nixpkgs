@@ -29,10 +29,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
     mainProgram = "flatland";
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
+    maintainers = lib.teams.stardust-xr.members;
     platforms = lib.platforms.linux;
   };
 }
