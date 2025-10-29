@@ -119,15 +119,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [
-      {
-        assertion = lib.all (job: job.sources != [ ]) (lib.attrValues cfg.jobs);
-        message = ''
-          At least one source directory must be provided to rsync.
-        '';
-      }
-    ];
-
     systemd = lib.mkMerge (
       lib.mapAttrsToList (
         jobName: job:
