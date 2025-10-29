@@ -26,10 +26,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nanotime" ];
 
-  meta = with lib; {
+  meta = {
     description = "Provides a time object that keeps time as the number of nanoseconds since the UNIX epoch";
     homepage = "https://github.com/jbenet/nanotime/tree/master/python";
-    license = licenses.mit;
-    maintainers = with maintainers; [ cmcdragonkai ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ cmcdragonkai ];
   };
 }

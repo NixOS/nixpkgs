@@ -97,11 +97,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "saml2" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python implementation of SAML Version 2 Standard";
     homepage = "https://github.com/IdentityPython/pysaml2";
     changelog = "https://github.com/IdentityPython/pysaml2/blob/v${version}/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -38,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "joserfc" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/authlib/joserfc/blob/${src.tag}/docs/changelog.rst";
     description = "Implementations of JOSE RFCs in Python";
     homepage = "https://github.com/authlib/joserfc";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }

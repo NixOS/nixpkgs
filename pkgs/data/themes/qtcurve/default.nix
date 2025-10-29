@@ -102,11 +102,11 @@ mkDerivation rec {
     "-DENABLE_QT4=OFF"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/QtCurve/qtcurve";
     description = "Widget styles for Qt5/Plasma 5 and gtk2";
-    platforms = platforms.linux;
-    license = licenses.lgpl21Plus;
+    platforms = lib.platforms.linux;
+    license = lib.licenses.lgpl21Plus;
     maintainers = [ ];
   };
 }

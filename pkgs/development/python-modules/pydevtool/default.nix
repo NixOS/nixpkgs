@@ -22,10 +22,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pydevtool" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/pydoit/pydevtool";
     description = "CLI dev tools powered by pydoit";
-    license = licenses.mit;
-    maintainers = with maintainers; [ doronbehar ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ doronbehar ];
   };
 }

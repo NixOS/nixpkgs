@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "This package provides a collection of SRFI libraries for Chez Scheme";
     homepage = "https://github.com/fedeinthemix/chez-srfi/";
-    maintainers = [ maintainers.jitwit ];
-    license = licenses.x11;
+    maintainers = [ lib.maintainers.jitwit ];
+    license = lib.licenses.x11;
   };
 
 }

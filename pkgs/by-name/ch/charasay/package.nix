@@ -32,11 +32,11 @@ rustPlatform.buildRustPackage rec {
       --zsh <($out/bin/chara completions --shell zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Future of cowsay - Colorful characters saying something";
     homepage = "https://github.com/latipun7/charasay";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hmajid2301 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hmajid2301 ];
     mainProgram = "chara";
   };
 }

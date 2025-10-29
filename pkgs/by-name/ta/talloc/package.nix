@@ -79,11 +79,11 @@ stdenv.mkDerivation rec {
     ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc.c.[0-9]*.o
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Hierarchical pool based memory allocator with destructors";
     homepage = "https://tdb.samba.org/";
-    license = licenses.gpl3;
-    platforms = platforms.all;
-    maintainers = [ maintainers.matthiasbeyer ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.all;
+    maintainers = [ lib.maintainers.matthiasbeyer ];
   };
 }

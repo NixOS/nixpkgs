@@ -26,11 +26,11 @@ buildGoModule rec {
     "PREFIX=\${out}"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Utility to export messages, attachments and other data from Signal Desktop";
     mainProgram = "sigtop";
-    license = licenses.isc;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ fricklerhandwerk ];
+    license = lib.licenses.isc;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ fricklerhandwerk ];
   };
 }

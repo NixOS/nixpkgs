@@ -84,16 +84,16 @@ let
       url = "${baseUrl}/${data.path}";
     };
 
-    meta = with lib; {
+    meta = {
       description = "Well known password manager";
       homepage = "https://www.enpass.io/";
-      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-      license = licenses.unfree;
+      sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+      license = lib.licenses.unfree;
       platforms = [
         "x86_64-linux"
         "i686-linux"
       ];
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         ewok
         dritter
       ];

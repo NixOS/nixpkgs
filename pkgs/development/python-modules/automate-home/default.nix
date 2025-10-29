@@ -49,11 +49,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "home" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module to automate (home) devices";
     homepage = "https://github.com/majamassarini/automate-home";
     changelog = "https://github.com/majamassarini/automate-home/releases/tag/${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

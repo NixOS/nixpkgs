@@ -146,14 +146,14 @@ stdenv.mkDerivation rec {
     lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF"
     ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
-  meta = with lib; {
+  meta = {
     description = "3D graphics toolkit";
     homepage = "http://www.openscenegraph.org/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       aanderse
       raskin
     ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = with lib.platforms; linux ++ darwin;
     license = with lib.licenses; [
       lgpl21Only
       wxWindowsException31

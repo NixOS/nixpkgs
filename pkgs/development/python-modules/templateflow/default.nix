@@ -47,11 +47,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "templateflow" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://templateflow.org/python-client";
     description = "Python API to query TemplateFlow via pyBIDS";
     changelog = "https://github.com/templateflow/python-client/releases/tag/${src.tag}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ bcdarwin ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ bcdarwin ];
   };
 }

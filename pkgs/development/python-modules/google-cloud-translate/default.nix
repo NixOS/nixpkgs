@@ -60,11 +60,11 @@ buildPythonPackage rec {
     "test_list_glossaries"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Google Cloud Translation API client library";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/main/packages/google-cloud-translate";
     changelog = "https://github.com/googleapis/google-cloud-python/blob/google-cloud-translate-v${version}/packages/google-cloud-translate/CHANGELOG.md";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

@@ -30,11 +30,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "localzone" ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple DNS library for managing zone files";
     homepage = "https://localzone.iomaestro.com";
     changelog = "https://github.com/ags-slc/localzone/blob/v${version}/CHANGELOG.rst";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ flyfloh ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ flyfloh ];
   };
 }

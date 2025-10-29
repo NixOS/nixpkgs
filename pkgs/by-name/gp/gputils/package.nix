@@ -13,11 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-j7iCCzHXwffHdhQcyzxPBvQK+RXaY3QSjXUtHu463fI=";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gputils.sourceforge.io";
     description = "Collection of tools for the Microchip (TM) PIC microcontrollers. It includes gpasm, gplink, and gplib";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ yorickvp ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [ yorickvp ];
+    platforms = lib.platforms.linux;
   };
 }

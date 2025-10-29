@@ -57,11 +57,11 @@ buildPythonPackage rec {
     "test_decompress_infile_outfile_error"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Drop-in replacement for Python's zlib and gzip modules using zlib-ng";
     homepage = "https://github.com/pycompression/python-zlib-ng";
     changelog = "https://github.com/pycompression/python-zlib-ng/blob/${src.rev}/CHANGELOG.rst";
-    license = licenses.psfl;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

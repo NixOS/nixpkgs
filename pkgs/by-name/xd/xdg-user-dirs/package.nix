@@ -46,15 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix XDG_CONFIG_DIRS : "$out/etc/xdg"
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "http://freedesktop.org/wiki/Software/xdg-user-dirs";
     description = "Tool to help manage well known user directories like the desktop folder and the music folder";
-    license = licenses.gpl2;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2;
+    maintainers = with lib.maintainers; [
       donovanglover
       iFreilicht
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "xdg-user-dirs-update";
   };
 })

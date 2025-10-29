@@ -41,12 +41,12 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Zero dependency WebAssembly runtime for Go developers";
     homepage = "https://github.com/tetratelabs/wazero";
     changelog = "https://github.com/tetratelabs/wazero/releases/tag/${src.rev}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ figsoda ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ figsoda ];
     mainProgram = "wazero";
   };
 }

@@ -25,11 +25,11 @@ stdenv.mkDerivation rec {
     cp -a trimal readal statal $out/bin
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool for the automated removal of spurious sequences or poorly aligned regions from a multiple sequence alignment";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
     homepage = "http://trimal.cgenomics.org";
-    maintainers = [ maintainers.bzizou ];
+    maintainers = [ lib.maintainers.bzizou ];
   };
 }

@@ -94,12 +94,12 @@ mkDerivation rec {
     qtWrapperArgs+=(--prefix PYTHONPATH : "$program_PYTHONPATH")
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform Developer GUI for Redis";
     mainProgram = "resp";
     homepage = "https://resp.app/";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

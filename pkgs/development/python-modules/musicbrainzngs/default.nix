@@ -24,10 +24,10 @@ buildPythonPackage rec {
     rm test/test_submit.py
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-musicbrainzngs.readthedocs.org/";
     description = "Python bindings for musicbrainz NGS webservice";
-    license = licenses.bsd2;
+    license = lib.licenses.bsd2;
     maintainers = [ ];
   };
 }

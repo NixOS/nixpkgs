@@ -54,11 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ufoLib2" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/fonttools/ufoLib2/releases/tag/${src.tag}";
     description = "Library to deal with UFO font sources";
     homepage = "https://github.com/fonttools/ufoLib2";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

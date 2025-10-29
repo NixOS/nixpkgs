@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     install -m644 -D -t "$doc/share/doc/blahtexml" Documentation/manual.pdf
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gva.noekeon.org/blahtexml/";
     description = "TeX to MathML converter";
     longDescription = ''
@@ -73,8 +73,8 @@ stdenv.mkDerivation rec {
       document. Instead of converting only one formula at a time, blahtexml can
       convert all the formulas of the given XML file into MathML.
     '';
-    license = licenses.bsd3;
-    maintainers = [ maintainers.xworld21 ];
-    platforms = platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.xworld21 ];
+    platforms = lib.platforms.all;
   };
 }

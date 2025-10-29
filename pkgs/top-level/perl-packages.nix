@@ -12322,11 +12322,11 @@ with self;
       hash = "sha256-VaUsIz4troYRP58Zs09hftz8hBb5vs5nEme9GBGxIRE=";
     };
     outputs = [ "out" ];
-    meta = with lib; {
+    meta = {
       description = "Simplified safe evaluation of Perl code";
       homepage = "https://github.com/mkende/perl-eval-safe";
-      license = licenses.mit;
-      maintainers = with maintainers; [ figsoda ];
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [ figsoda ];
     };
   };
 
@@ -24770,14 +24770,14 @@ with self;
       TestPod
       TestPodCoverage
     ];
-    meta = with lib; {
+    meta = {
       description = "Perl bindings to the msgpack C library";
       homepage = "https://github.com/jacquesg/p5-MsgPack-Raw";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl1Plus # or
         artistic1
       ];
-      maintainers = with maintainers; [ figsoda ];
+      maintainers = with lib.maintainers; [ figsoda ];
     };
   };
 
@@ -24927,14 +24927,14 @@ with self;
     ];
     # TODO: fix tests
     doCheck = false;
-    meta = with lib; {
+    meta = {
       description = "Perl bindings for Neovim";
       homepage = "https://github.com/jacquesg/p5-Neovim-Ext";
-      license = with licenses; [
+      license = with lib.licenses; [
         gpl1Plus # or
         artistic1
       ];
-      maintainers = with maintainers; [ figsoda ];
+      maintainers = with lib.maintainers; [ figsoda ];
     };
   };
 
@@ -27268,9 +27268,9 @@ with self;
       url = "mirror://cpan/authors/id/J/JM/JMACFARLA/Parse-Win32Registry-1.1.tar.gz";
       hash = "sha256-wWOyAr5q17WPSEZJT/crjJqXloPKmU5DgOmsZWTcBbo=";
     };
-    meta = with lib; {
+    meta = {
       description = "Module for parsing Windows Registry files";
-      license = with licenses; [
+      license = with lib.licenses; [
         artistic1
         gpl1Only
       ];

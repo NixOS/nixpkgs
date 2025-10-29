@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
     "NOLDCONFIG=y"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "User space software for Intel(R) Resource Director Technology";
     homepage = "https://github.com/intel/intel-cmt-cat";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ arkivm ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ arkivm ];
     platforms = [ "x86_64-linux" ];
   };
 }

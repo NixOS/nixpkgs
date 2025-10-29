@@ -47,11 +47,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs.src) repo;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Library that provides some debugging functionality for ROCr";
     homepage = "https://github.com/ROCm/rocr_debug_agent";
-    license = with licenses; [ ncsa ];
-    teams = [ teams.rocm ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [ ncsa ];
+    teams = [ lib.teams.rocm ];
+    platforms = lib.platforms.linux;
   };
 })

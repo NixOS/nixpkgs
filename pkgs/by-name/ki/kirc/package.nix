@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "PREFIX=$(out)" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://mcpcpc.github.io/kirc/";
     description = "Tiny IRC client written in C99";
     mainProgram = "kirc";
@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
       - Full support for all RFC 2812 commands.
       - Easy customized color scheme definition.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

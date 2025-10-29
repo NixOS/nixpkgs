@@ -27,12 +27,12 @@ buildKodiBinaryAddon rec {
     libretro
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kodi-game/game.libretro.2048";
     description = "2048 GameClient for Kodi";
-    platforms = platforms.all;
-    license = licenses.publicDomain;
-    maintainers = with maintainers; [ kazenyuk ];
-    teams = [ teams.kodi ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.publicDomain;
+    maintainers = with lib.maintainers; [ kazenyuk ];
+    teams = [ lib.teams.kodi ];
   };
 }

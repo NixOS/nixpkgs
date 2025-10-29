@@ -24,10 +24,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "volatile" ];
 
-  meta = with lib; {
+  meta = {
     description = "Small extension for the tempfile module";
     homepage = "https://github.com/mbr/volatile";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

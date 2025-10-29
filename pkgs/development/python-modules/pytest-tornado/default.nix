@@ -23,9 +23,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ tornado ];
 
-  meta = with lib; {
+  meta = {
     description = "Py.test plugin providing fixtures and markers to simplify testing of asynchronous tornado applications";
     homepage = "https://github.com/eugeniy/pytest-tornado";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
   };
 }

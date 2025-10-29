@@ -39,7 +39,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
 
     inherit (topkg) buildPhase installPhase;
 
-    meta = with lib; {
+    meta = {
       description = "Basic types for computer graphics in OCaml";
       longDescription = ''
         Gg is an OCaml module providing basic types for computer graphics. It
@@ -49,7 +49,7 @@ lib.throwIfNot (lib.versionAtLeast ocaml.version "4.08")
       '';
       inherit homepage;
       inherit (ocaml.meta) platforms;
-      license = licenses.bsd3;
-      maintainers = [ maintainers.jirkamarsik ];
+      license = lib.licenses.bsd3;
+      maintainers = [ lib.maintainers.jirkamarsik ];
     };
   }

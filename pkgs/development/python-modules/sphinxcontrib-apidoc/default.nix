@@ -32,10 +32,10 @@ buildPythonPackage rec {
 
   pythonNamespaces = [ "sphinxcontrib" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sphinx extension for running sphinx-apidoc on each build";
     homepage = "https://github.com/sphinx-contrib/apidoc";
-    license = licenses.bsd2;
-    teams = [ teams.openstack ];
+    license = lib.licenses.bsd2;
+    teams = [ lib.teams.openstack ];
   };
 }

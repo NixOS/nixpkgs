@@ -17,11 +17,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-0N2JLENHG6QUcEtw237Oe/fwdgo87DVJ+Gx6wtpP9BU=";
 
-  meta = with lib; {
+  meta = {
     description = "Cross compile Cargo project to Windows MSVC target with ease";
     mainProgram = "cargo-xwin";
     homepage = "https://github.com/rust-cross/cargo-xwin";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ shivaraj-bh ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ shivaraj-bh ];
   };
 }

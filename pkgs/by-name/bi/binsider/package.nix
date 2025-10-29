@@ -25,14 +25,14 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_init"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Analyzer of executables using a terminal user interface";
     homepage = "https://github.com/orhun/binsider";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20 # or
       mit
     ];
-    maintainers = with maintainers; [ samueltardieu ];
+    maintainers = with lib.maintainers; [ samueltardieu ];
     mainProgram = "binsider";
   };
 }

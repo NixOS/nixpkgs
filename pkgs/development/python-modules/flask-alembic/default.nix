@@ -41,12 +41,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "flask_alembic" ];
 
-  meta = with lib; {
+  meta = {
     # https://github.com/pallets-eco/flask-alembic/issues/47
     broken = pythonAtLeast "3.13";
     homepage = "https://github.com/pallets-eco/flask-alembic";
     changelog = "https://github.com/pallets-eco/flask-alembic/blob/${src.tag}/CHANGES.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 }

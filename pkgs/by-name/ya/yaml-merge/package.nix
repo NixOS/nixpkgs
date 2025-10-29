@@ -29,12 +29,12 @@ stdenv.mkDerivation {
     wrapPythonPrograms
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Merge YAML data files";
     mainProgram = "yaml-merge";
     homepage = "https://github.com/abbradar/yaml-merge";
-    license = licenses.bsd2;
-    platforms = platforms.unix;
+    license = lib.licenses.bsd2;
+    platforms = lib.platforms.unix;
     maintainers = [ ];
   };
 }

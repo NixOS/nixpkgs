@@ -53,12 +53,12 @@ buildGoModule rec {
   versionCheckProgramArg = "--version";
   versionCheckKeepEnvironment = [ "HOME" ];
 
-  meta = with lib; {
+  meta = {
     description = "Docker-based local PHP+Node.js web development environments";
     homepage = "https://ddev.com/";
-    license = licenses.asl20;
-    platforms = platforms.unix;
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
     mainProgram = "ddev";
-    maintainers = with maintainers; [ remyvv ];
+    maintainers = with lib.maintainers; [ remyvv ];
   };
 }

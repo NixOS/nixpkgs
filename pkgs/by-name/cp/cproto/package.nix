@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
     [ "$("$out/bin/cproto" -V 2>&1)" = '${version}' ]
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tool to generate C function prototypes from C source code";
     mainProgram = "cproto";
     homepage = "https://invisible-island.net/cproto/";
-    license = licenses.publicDomain;
-    platforms = platforms.all;
+    license = lib.licenses.publicDomain;
+    platforms = lib.platforms.all;
   };
 }

@@ -289,7 +289,7 @@ let
       passthru.wrapped = callPackage wrapGradle { } (gen' genArgs);
 
       meta =
-        with lib;
+
         {
           inherit platforms;
           description = "Enterprise-grade build system";
@@ -304,12 +304,12 @@ let
           homepage = "https://www.gradle.org/";
           changelog = "https://docs.gradle.org/${version}/release-notes.html";
           downloadPage = "https://gradle.org/next-steps/?version=${version}";
-          sourceProvenance = with sourceTypes; [
+          sourceProvenance = with lib.sourceTypes; [
             binaryBytecode
             binaryNativeCode
           ];
-          license = licenses.asl20;
-          maintainers = with maintainers; [
+          license = lib.licenses.asl20;
+          maintainers = with lib.maintainers; [
             britter
             liff
             lorenzleutgeb

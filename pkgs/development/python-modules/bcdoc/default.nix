@@ -24,9 +24,9 @@ buildPythonPackage rec {
   # Tests fail due to nix file timestamp normalization.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/boto/bcdoc";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "ReST document generation tools for botocore";
   };
 }

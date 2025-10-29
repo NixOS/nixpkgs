@@ -25,14 +25,14 @@ stdenv.mkDerivation {
         -i libnl-tiny.pc.in
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Tiny OpenWrt fork of libnl";
     homepage = "https://git.openwrt.org/?p=project/libnl-tiny.git;a=summary";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [
       mkg20001
       dvn0
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

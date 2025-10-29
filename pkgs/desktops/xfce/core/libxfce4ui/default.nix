@@ -54,13 +54,13 @@ mkXfceDerivation {
     "--with-vendor-info=NixOS"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Widgets library for Xfce";
     mainProgram = "xfce4-about";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl2Plus
       lgpl21Plus
     ];
-    teams = [ teams.xfce ];
+    teams = [ lib.teams.xfce ];
   };
 }

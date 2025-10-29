@@ -57,10 +57,10 @@ stdenv.mkDerivation rec {
     qt5.wrapQtAppsHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Autoclicker application, which enables you to automatically click the left mousebutton";
     homepage = "https://github.com/qarkai/xautoclick";
-    license = licenses.gpl2;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
   };
 }

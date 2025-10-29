@@ -62,12 +62,12 @@ stdenv.mkDerivation rec {
   # --define-variable=prefix=$prefix
   PKG_CONFIG_LIBXFCE4PANEL_1_0_LIBDIR = "$(out)/lib";
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/kalj/xmonad-log-applet";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     broken = desktopSupport == "gnomeflashback" || desktopSupport == "xfce4";
     description = "Applet that will display XMonad log information (${desktopSupport} version)";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

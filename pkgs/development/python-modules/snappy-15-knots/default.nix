@@ -28,8 +28,8 @@ buildPythonPackage rec {
     description = "Database of snappy manifolds";
     homepage = "https://snappy.computop.org";
     changelog = "https://github.com/3-manifolds/snappy_15_knots/releases/tag/${src.tag}";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       noiioiu
       alejo7797
     ];

@@ -95,11 +95,11 @@ buildGoModule rec {
     inherit (nixosTests) influxdb;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source distributed time series database";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     homepage = "https://influxdata.com/";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       offline
       zimbatm
     ];

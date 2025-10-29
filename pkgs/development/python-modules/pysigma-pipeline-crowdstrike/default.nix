@@ -35,11 +35,11 @@ buildPythonPackage rec {
     "test_crowdstrike_pipeline_parentimage"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to support CrowdStrike pipeline for pySigma";
     homepage = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike";
     changelog = "https://github.com/SigmaHQ/pySigma-pipeline-crowdstrike/releases/tag/v${version}";
-    license = with licenses; [ lgpl21Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ lgpl21Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

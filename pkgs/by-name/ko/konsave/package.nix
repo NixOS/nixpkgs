@@ -27,12 +27,12 @@ python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "konsave" ];
 
-  meta = with lib; {
+  meta = {
     description = "Save Linux Customization";
     mainProgram = "konsave";
-    maintainers = with maintainers; [ MoritzBoehme ];
+    maintainers = with lib.maintainers; [ MoritzBoehme ];
     homepage = "https://github.com/Prayag2/konsave";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

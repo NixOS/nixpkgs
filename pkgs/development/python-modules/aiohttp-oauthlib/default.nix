@@ -30,10 +30,10 @@ buildPythonPackage rec {
   # Package has no tests.
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://git.sr.ht/~whynothugo/aiohttp-oauthlib";
     description = "oauthlib integration for aiohttp clients";
-    license = licenses.isc;
-    maintainers = with maintainers; [ sumnerevans ];
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ sumnerevans ];
   };
 }

@@ -20,11 +20,11 @@ buildPythonPackage {
 
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/Anorov/cloudflare-scrape";
     description = "Python module to bypass Cloudflare's anti-bot page";
-    license = licenses.mit;
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = [ ];
   };
 }

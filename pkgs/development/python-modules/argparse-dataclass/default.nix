@@ -27,11 +27,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "argparse_dataclass" ];
 
-  meta = with lib; {
+  meta = {
     description = "Declarative CLIs with argparse and dataclasses";
     homepage = "https://github.com/mivade/argparse_dataclass";
     changelog = "https://github.com/mivade/argparse_dataclass/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ tm-drtina ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ tm-drtina ];
   };
 }

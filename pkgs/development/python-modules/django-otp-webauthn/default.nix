@@ -33,12 +33,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "django_otp_webauthn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Passkey support for Django";
     homepage = "https://github.com/Stormbase/django-otp-webauthn";
     changelog = "https://github.com/Stormbase/django-otp-webauthn/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ erictapen ];
   };
 
 }

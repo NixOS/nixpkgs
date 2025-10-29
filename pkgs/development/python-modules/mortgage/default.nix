@@ -27,10 +27,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "mortgage" ];
 
-  meta = with lib; {
+  meta = {
     description = "Mortgage calculator";
     homepage = "https://github.com/jlumbroso/mortgage";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

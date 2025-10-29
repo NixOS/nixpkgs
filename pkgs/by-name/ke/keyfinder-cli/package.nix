@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with lib; {
+  meta = {
     inherit (src.meta) homepage;
     description = "Musical key detection for digital audio (command-line tool)";
     longDescription = ''
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
       use of Ibrahim Sha'ath's high quality libKeyFinder library, it can be
       used to estimate the musical key of many different audio formats.
     '';
-    license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.unix;
     mainProgram = "keyfinder-cli";
   };
 }

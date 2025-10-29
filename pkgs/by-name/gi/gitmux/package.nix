@@ -36,11 +36,11 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Git in your tmux status bar";
     homepage = "https://github.com/arl/gitmux";
-    license = licenses.mit;
-    maintainers = with maintainers; [ nialov ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ nialov ];
     mainProgram = "gitmux";
   };
 })

@@ -49,11 +49,11 @@ let
 
     cmakeFlags = [ "-DBUILD_CPP_CL=OFF" ];
 
-    meta = with lib; {
+    meta = {
       description = "Samples from the AMD APP SDK (with OpenCRun support)";
       homepage = "https://github.com/OpenCL/AMD_APP_samples";
-      license = licenses.bsd2;
-      platforms = platforms.linux;
+      license = lib.licenses.bsd2;
+      platforms = lib.platforms.linux;
       teams = [ lib.teams.rocm ];
     };
   };
@@ -82,7 +82,7 @@ makeImpureTest {
     HelloWorld | grep HelloWorld
   '';
 
-  meta = with lib; {
-    teams = [ teams.rocm ];
+  meta = {
+    teams = [ lib.teams.rocm ];
   };
 }

@@ -38,11 +38,11 @@ buildGoModule rec {
       --zsh <($out/bin/devbox completion zsh)
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Instant, easy, predictable shells and containers";
     homepage = "https://www.jetify.com/devbox";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       urandom
       lagoja
       madeddie

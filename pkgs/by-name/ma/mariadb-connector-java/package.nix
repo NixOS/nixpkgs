@@ -28,12 +28,12 @@ maven.buildMavenPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "MariaDB Connector/J is used to connect applications developed in Java to MariaDB and MySQL databases";
     homepage = "https://mariadb.com/kb/en/about-mariadb-connector-j/";
     changelog = "https://mariadb.com/kb/en/mariadb-connector-j-release-notes/";
-    license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ anthonyroussel ];
-    platforms = platforms.all;
+    license = lib.licenses.lgpl21Plus;
+    maintainers = with lib.maintainers; [ anthonyroussel ];
+    platforms = lib.platforms.all;
   };
 }

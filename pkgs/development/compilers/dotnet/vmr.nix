@@ -500,11 +500,11 @@ stdenv.mkDerivation rec {
     hasILCompiler = lib.versionAtLeast version "9";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Core functionality needed to create .NET Core projects, that is shared between Visual Studio and CLI";
     homepage = "https://dotnet.github.io/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ corngood ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ corngood ];
     mainProgram = "dotnet";
     platforms = [
       "x86_64-linux"

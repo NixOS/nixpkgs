@@ -47,10 +47,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "roadtools.roadrecon" ];
 
-  meta = with lib; {
+  meta = {
     description = "Azure AD recon";
     homepage = "https://pypi.org/project/roadrecon/";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

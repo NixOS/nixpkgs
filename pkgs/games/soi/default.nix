@@ -41,12 +41,12 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/issues/445447
   patches = [ ./cmake-4-build.patch ];
 
-  meta = with lib; {
+  meta = {
     description = "Physics-based puzzle game";
     mainProgram = "soi";
-    maintainers = with maintainers; [ raskin ];
-    platforms = platforms.linux;
-    license = licenses.free;
+    maintainers = with lib.maintainers; [ raskin ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.free;
     downloadPage = "https://sourceforge.net/projects/soi/files/";
   };
 }

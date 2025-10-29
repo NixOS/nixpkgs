@@ -36,9 +36,9 @@ buildDotnetModule rec {
     '';
     homepage = "https://www.inklestudios.com/ink/";
     downloadPage = "https://github.com/inkle/ink/";
-    license = licenses.mit;
-    platforms = platforms.unix;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
     badPlatforms = platforms.aarch64;
-    maintainers = with maintainers; [ shreerammodi ];
+    maintainers = with lib.maintainers; [ shreerammodi ];
   };
 }

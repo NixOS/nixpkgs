@@ -45,11 +45,11 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonImportsCheck = [ "quark" ];
 
-  meta = with lib; {
+  meta = {
     description = "Android malware (analysis and scoring) system";
     homepage = "https://quark-engine.readthedocs.io/";
     changelog = "https://github.com/quark-engine/quark-engine/releases/tag/${src.tag}";
-    license = with licenses; [ gpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ gpl3Only ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -53,13 +53,13 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Edit the Pantheon desktop application menu";
     homepage = "https://github.com/donadigo/appeditor";
-    maintainers = with maintainers; [ xiorcale ];
-    teams = [ teams.pantheon ];
-    platforms = platforms.linux;
-    license = licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ xiorcale ];
+    teams = [ lib.teams.pantheon ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.donadigo.appeditor";
   };
 }

@@ -26,13 +26,13 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ pkg-config ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://libwpg.sourceforge.net";
     description = "C++ library to parse WPG";
-    license = with licenses; [
+    license = with lib.licenses; [
       lgpl21
       mpl20
     ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }
