@@ -89,19 +89,24 @@ let
           ${cfg.postInit}
         fi
       ''
-      + ''
-        (
-          set -o pipefail
-          ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
-          borgWrapper create "''${extraArgs[@]}" \
-            --compression ${cfg.compression} \
-            --exclude-from ${mkExcludeFile cfg} \
-            --patterns-from ${mkPatternsFile cfg} \
-            "''${extraCreateArgs[@]}" \
-            "::$archiveName$archiveSuffix" \
-            ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
-        )
-      ''
+      + (
+        let
+          import-tar = cfg.dumpCommand != null && cfg.dumpCommandProducesTar;
+        in
+        ''
+          (
+            set -o pipefail
+            ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
+            borgWrapper ${if import-tar then "import-tar" else "create"} "''${extraArgs[@]}" \
+              --compression ${cfg.compression} \
+              ${lib.optionalString (!import-tar) "--exclude-from ${mkExcludeFile cfg}"} \
+              ${lib.optionalString (!import-tar) "--patterns-from ${mkPatternsFile cfg}"} \
+              "''${extraCreateArgs[@]}" \
+              "::$archiveName$archiveSuffix" \
+              ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
+          )
+        ''
+      )
       + lib.optionalString cfg.appendFailedSuffix ''
         borgWrapper rename "''${extraArgs[@]}" \
           "::$archiveName$archiveSuffix" "$archiveName"
@@ -310,6 +315,18 @@ let
     '';
   };
 
+  mkCreateCommandAssertions = name: cfg: {
+    assertion =
+      (cfg.exclude == [ ] && cfg.patterns == [ ])
+      || cfg.dumpCommand == null
+      || !cfg.dumpCommandProducesTar;
+    message = ''
+      Options borgbackup.jobs.${name}.exclude and borgbackup.jobs.${name}.patterns
+      have no effect when dumpCommand is specified and dumpCommandProducesTar is
+      true, as they are not supported by "borg import-tar".
+    '';
+  };
+
   mkRemovableDeviceAssertions = name: cfg: {
     assertion = !(isLocalPath cfg.repo) -> !cfg.removableDevice;
     message = ''
@@ -396,6 +413,17 @@ in
                 Mutually exclusive with {option}`paths`.
               '';
               example = "/path/to/createZFSsend.sh";
+            };
+
+            dumpCommandProducesTar = lib.mkOption {
+              type = lib.types.bool;
+              default = false;
+              description = ''
+                Set to `true` to use {command}`borg import-tar` instead of
+                {command}`borg create` when creating an archive. Has no effect
+                when {option}`dumpCommand` is unset.
+              '';
+              example = true;
             };
 
             repo = lib.mkOption {
@@ -556,6 +584,8 @@ in
               description = ''
                 Exclude paths matching any of the given patterns. See
                 {command}`borg help patterns` for pattern syntax.
+
+                Conflicts with {option}`dumpCommandProducesTar`.
               '';
               default = [ ];
               example = [
@@ -571,6 +601,8 @@ in
                 matching patterns is used, so if an include pattern (prefix `+`)
                 matches before an exclude pattern (prefix `-`), the file is
                 backed up. See [{command}`borg help patterns`](https://borgbackup.readthedocs.io/en/stable/usage/help.html#borg-patterns) for pattern syntax.
+
+                Conflicts with {option}`dumpCommandProducesTar`.
               '';
               default = [ ];
               example = [
@@ -888,6 +920,7 @@ in
         lib.mapAttrsToList mkPassAssertion jobs
         ++ lib.mapAttrsToList mkKeysAssertion repos
         ++ lib.mapAttrsToList mkSourceAssertions jobs
+        ++ lib.mapAttrsToList mkCreateCommandAssertions jobs
         ++ lib.mapAttrsToList mkRemovableDeviceAssertions jobs;
 
       systemd.tmpfiles.settings = lib.mapAttrs' mkTmpfiles jobs;
