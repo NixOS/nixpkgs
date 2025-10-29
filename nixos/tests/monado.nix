@@ -3,47 +3,57 @@
   name = "monado";
 
   nodes.machine =
-    { pkgs, ... }:
+    {
+      lib,
+      pkgs,
+      config,
+      ...
+    }:
 
     {
-      hardware.graphics.enable = true;
-      users.users.alice = {
-        isNormalUser = true;
-        uid = 1000;
+      imports = [ ./common/openxr.nix ];
+
+      systemd.user.services.print-openxr-info = {
+        wantedBy = [ "xdg-desktop-autostart.target" ];
+        requires = [ "monado.service" ];
+        script = lib.getExe' pkgs.openxr-loader "openxr_runtime_list";
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
       };
 
-      services.monado = {
-        enable = true;
-        defaultRuntime = true;
-
-        forceDefaultRuntime = true;
+      systemd.user.services.xrgears = {
+        wantedBy = [ "xdg-desktop-autostart.target" ];
+        requires = [ "monado.service" ];
+        script = lib.getExe pkgs.xrgears;
       };
-      # Stop Monado from probing for any hardware
-      systemd.user.services.monado.environment.SIMULATED_ENABLE = "1";
-
-      environment.systemPackages = with pkgs; [ openxr-loader ];
     };
 
   testScript =
     { nodes, ... }:
-    let
-      userId = toString nodes.machine.users.users.alice.uid;
-      runtimePath = "/run/user/${userId}";
-    in
     ''
-      # for defaultRuntime
-      machine.succeed("stat /etc/xdg/openxr/1/active_runtime.json")
+      with subtest("Ensure X11 starts"):
+        start_all()
+        machine.succeed("loginctl enable-linger alice")
+        machine.wait_for_x()
 
-      machine.succeed("loginctl enable-linger alice")
-      machine.wait_for_unit("user@${userId}.service")
+      with subtest("Ensure default runtime present"):
+        machine.succeed("stat /etc/xdg/openxr/1/active_runtime.json")
 
-      machine.wait_for_unit("monado.socket", "alice")
-      machine.systemctl("start monado.service", "alice")
-      machine.wait_for_unit("monado.service", "alice")
+      with subtest("Ensure forced runtime present"):
+        # Monado needs to be started to create the forced runtime file
+        machine.systemctl("start monado.service", "alice")
+        machine.wait_for_unit("monado.service", "alice")
+        machine.succeed("stat /home/alice/.config/openxr/1/active_runtime.json")
 
-      # for forceDefaultRuntime
-      machine.succeed("stat /home/alice/.config/openxr/1/active_runtime.json")
+      with subtest("Ensure openxr_runtime_list can find runtime"):
+        machine.wait_for_unit("print-openxr-info.service", "alice")
 
-      machine.succeed("su -- alice -c env XDG_RUNTIME_DIR=${runtimePath} openxr_runtime_list")
+      with subtest("Ensure xrgears launches"):
+        machine.wait_for_unit("xrgears.service", "alice")
+        # TODO: 10 seconds should be long enough for anything, but this is theoretically flaky
+        machine.sleep(10)
+        machine.screenshot("screen")
     '';
 }
