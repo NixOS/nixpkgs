@@ -42,9 +42,6 @@ lib.makeOverridable (
     constructDrv = stdenvNoCC.mkDerivation;
 
     excludeDrvArgNames = [
-      # Passed via `passthru`
-      "tag"
-
       # Additional stdenv.mkDerivation arguments from derived fetchers.
       "derivationArgs"
 
@@ -65,7 +62,7 @@ lib.makeOverridable (
           rev ? null,
           name ? urlToName {
             inherit url;
-            rev = lib.revOrTag rev tag;
+            rev = lib.revOrTag rev finalAttrs.tag;
             # when rootDir is specified, avoid invalidating the result when rev changes
             append = if rootDir != "" then "-${lib.strings.sanitizeDerivationName rootDir}" else "";
           },
@@ -176,7 +173,11 @@ lib.makeOverridable (
               rootDir
               gitConfigFile
               ;
-            rev = getRevWithTag { inherit tag rev; };
+            inherit tag;
+            rev = getRevWithTag {
+              inherit (finalAttrs) tag;
+              inherit rev;
+            };
 
             postHook =
               if netrcPhase == null then
@@ -216,7 +217,6 @@ lib.makeOverridable (
 
             passthru = {
               gitRepoUrl = url;
-              inherit tag;
             }
             // passthru;
           }
