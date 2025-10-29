@@ -159,6 +159,7 @@ lib.makeOverridable (
               inherit
                 owner
                 repo
+                tag
                 ;
             };
             passthru = {
@@ -176,7 +177,6 @@ lib.makeOverridable (
 
   fetcher fetcherArgs
   // {
-    inherit owner repo tag;
     rev = revWithTag;
   }
 )
