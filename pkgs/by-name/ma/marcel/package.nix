@@ -39,11 +39,11 @@ python3Packages.buildPythonApplication rec {
       --prefix PYTHONPATH : "$program_PYTHONPATH"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Modern shell";
     homepage = "https://github.com/geophile/marcel";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ kud ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ kud ];
     mainProgram = "marcel";
   };
 }

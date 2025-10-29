@@ -23,10 +23,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "luhn" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for generate and verify Luhn check digits";
     homepage = "https://github.com/mmcloughlin/luhn";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

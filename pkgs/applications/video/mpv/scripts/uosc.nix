@@ -40,10 +40,10 @@ buildLua (finalAttrs: {
     (lib.getExe' finalAttrs.tools "ziggy")
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Feature-rich minimalist proximity-based UI for MPV player";
     homepage = "https://github.com/tomasklaen/uosc";
-    license = licenses.gpl3Only;
+    license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ apfelkuchen6 ];
   };
 })

@@ -61,10 +61,10 @@ buildPythonPackage rec {
     stestr run -E "tests.test_plugins.(PluginsTestScenarios.test_plugin_version_comparison|PluginsTestScenarios.test_plugin_version_object_comparison|PluginsTest.test_plugin_equal|PluginsTest.test_plugin_not_equal)"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Python bindings for the remote Jenkins API";
     homepage = "https://pypi.python.org/pypi/python-jenkins";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ gador ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ gador ];
   };
 }

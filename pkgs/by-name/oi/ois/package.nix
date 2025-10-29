@@ -31,10 +31,10 @@ stdenv.mkDerivation rec {
     ./cmake4.patch
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Object-oriented C++ input system";
-    maintainers = [ maintainers.raskin ];
-    platforms = platforms.unix;
-    license = licenses.zlib;
+    maintainers = [ lib.maintainers.raskin ];
+    platforms = lib.platforms.unix;
+    license = lib.licenses.zlib;
   };
 }

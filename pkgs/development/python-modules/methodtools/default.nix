@@ -31,11 +31,11 @@ buildPythonPackage rec {
     pytest-cov-stub
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Expands the functools lru_cache to classes";
     homepage = "https://github.com/youknowone/methodtools";
     changelog = "https://github.com/youknowone/methodtools/releases/tag/${version}";
-    license = licenses.bsd2WithViews;
-    maintainers = with maintainers; [ pbsds ];
+    license = lib.licenses.bsd2WithViews;
+    maintainers = with lib.maintainers; [ pbsds ];
   };
 }

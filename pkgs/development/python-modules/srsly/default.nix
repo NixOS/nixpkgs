@@ -44,10 +44,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "srsly" ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/explosion/srsly/releases/tag/v${version}";
     description = "Modern high-performance serialization utilities for Python";
     homepage = "https://github.com/explosion/srsly";
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

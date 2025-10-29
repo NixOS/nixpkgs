@@ -17,11 +17,11 @@ buildGoModule {
 
   vendorHash = "sha256-+7ctAm2wnjmfMd6CHXlcAUwiUMS7cH4koDAvlEUAXEg=";
 
-  meta = with lib; {
+  meta = {
     description = "Send files using peer authenticated WebRTC";
     homepage = "https://github.com/saljam/webwormhole";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bbigras ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bbigras ];
     mainProgram = "ww";
   };
 }

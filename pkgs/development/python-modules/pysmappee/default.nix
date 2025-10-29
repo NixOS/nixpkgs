@@ -39,10 +39,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pysmappee" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python Library for the Smappee dev API";
     homepage = "https://github.com/smappee/pysmappee";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

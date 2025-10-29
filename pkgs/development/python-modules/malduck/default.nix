@@ -48,12 +48,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "malduck" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper for malware analysis";
     homepage = "https://github.com/CERT-Polska/malduck";
     changelog = "https://github.com/CERT-Polska/malduck/releases/tag/v${version}";
-    license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "malduck";
   };
 }

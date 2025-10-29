@@ -24,10 +24,10 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Python SQL query builder";
     homepage = "https://github.com/kayak/pypika";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ ];
   };
 }

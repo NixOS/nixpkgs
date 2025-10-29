@@ -35,11 +35,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "aioasuswrt" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for Asuswrt";
     homepage = "https://github.com/kennedyshead/aioasuswrt";
     changelog = "https://github.com/kennedyshead/aioasuswrt/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

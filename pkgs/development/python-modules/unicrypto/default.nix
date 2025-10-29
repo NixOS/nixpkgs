@@ -31,11 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "unicrypto" ];
 
-  meta = with lib; {
+  meta = {
     description = "Unified interface for cryptographic libraries";
     homepage = "https://github.com/skelsec/unicrypto";
     changelog = "https://github.com/skelsec/unicrypto/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

@@ -30,11 +30,11 @@ appimageTools.wrapType2 {
       --replace 'Exec=AppRun' 'Exec=raven-reader'
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Open source desktop news reader with flexible settings to optimize your experience";
     mainProgram = "raven-reader";
     homepage = "https://ravenreader.app/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
     platforms = [ "x86_64-linux" ];
   };

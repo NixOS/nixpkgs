@@ -56,10 +56,10 @@ buildPythonPackage rec {
   # tests require docker-compose and vagrant
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Multi-purpose brute-forcer";
     homepage = "https://github.com/lanjelot/patator";
-    license = licenses.gpl2Only;
+    license = lib.licenses.gpl2Only;
     # Still uses cx-oracle which is broken and was replaced by oracledb
     # https://github.com/lanjelot/patator/issues/234
     broken = true;

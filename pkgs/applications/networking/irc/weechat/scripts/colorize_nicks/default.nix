@@ -25,10 +25,10 @@ stdenv.mkDerivation {
     scripts = [ "colorize_nicks.py" ];
   };
 
-  meta = with lib; {
+  meta = {
     inherit (weechat.meta) platforms;
     description = "Use the weechat nick colors in the chat area";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ qyliss ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ qyliss ];
   };
 }

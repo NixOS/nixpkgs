@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "environs" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python modle for environment variable parsing";
     homepage = "https://github.com/sloria/environs";
     changelog = "https://github.com/sloria/environs/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

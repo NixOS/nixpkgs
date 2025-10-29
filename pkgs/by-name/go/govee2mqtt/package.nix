@@ -46,12 +46,12 @@ rustPlatform.buildRustPackage rec {
     cp -r assets $out/share/govee2mqtt/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Connect Govee lights and devices to Home Assistant";
     homepage = "https://github.com/wez/govee2mqtt";
     changelog = "https://github.com/wez/govee2mqtt/blob/${src.rev}/addon/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ SuperSandro2000 ];
     mainProgram = "govee";
   };
 }

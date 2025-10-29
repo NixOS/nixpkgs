@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pypck" ];
 
-  meta = with lib; {
+  meta = {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
     changelog = "https://github.com/alengwenus/pypck/releases/tag/${src.tag}";
-    license = licenses.epl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.epl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

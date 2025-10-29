@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     install -Dm444 tailord/com.tux.Tailor.conf -t $out/share/dbus-1/system.d
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Rust utilities for interacting with hardware from TUXEDO Computers";
     longDescription = ''
       An alternative to the TUXEDO Control Center daemon.
@@ -42,12 +42,12 @@ rustPlatform.buildRustPackage (finalAttrs: {
       - tailor: CLI
     '';
     homepage = "https://github.com/AaronErhardt/tuxedo-rs";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       mrcjkb
       xaverdh
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "tailor";
   };
 })

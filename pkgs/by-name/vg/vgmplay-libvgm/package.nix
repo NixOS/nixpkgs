@@ -40,12 +40,12 @@ stdenv.mkDerivation {
     url = "https://github.com/ValleyBell/vgmplay-libvgm.git";
   };
 
-  meta = with lib; {
+  meta = {
     mainProgram = "vgmplay";
     homepage = "https://github.com/ValleyBell/vgmplay-libvgm";
     description = "New VGMPlay, based on libvgm";
-    license = licenses.unfree; # no licensing text anywhere yet
-    maintainers = with maintainers; [ OPNA2608 ];
-    platforms = platforms.all;
+    license = lib.licenses.unfree; # no licensing text anywhere yet
+    maintainers = with lib.maintainers; [ OPNA2608 ];
+    platforms = lib.platforms.all;
   };
 }

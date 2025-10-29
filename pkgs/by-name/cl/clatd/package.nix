@@ -60,12 +60,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests.clatd = nixosTests.clatd;
 
-  meta = with lib; {
+  meta = {
     description = "464XLAT CLAT implementation for Linux";
     homepage = "https://github.com/toreanderson/clatd";
-    license = licenses.mit;
-    maintainers = with maintainers; [ jmbaur ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ jmbaur ];
     mainProgram = "clatd";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })

@@ -25,11 +25,11 @@ buildGoModule rec {
     "-w"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/busser/tfautomv";
     description = "When refactoring a Terraform codebase, you often need to write moved blocks. This can be tedious. Let tfautomv do it for you";
     mainProgram = "tfautomv";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ qjoly ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ qjoly ];
   };
 }

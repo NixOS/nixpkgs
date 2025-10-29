@@ -30,10 +30,10 @@ buildDunePackage rec {
     core_kernel
   ];
 
-  meta = with lib; {
+  meta = {
     description = "DBF format parsing";
     homepage = "https://github.com/pveber/dbf";
-    license = licenses.isc;
-    maintainers = [ maintainers.deltadelta ];
+    license = lib.licenses.isc;
+    maintainers = [ lib.maintainers.deltadelta ];
   };
 }

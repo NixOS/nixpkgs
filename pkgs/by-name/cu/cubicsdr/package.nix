@@ -64,12 +64,12 @@ stdenv.mkDerivation rec {
     install_name_tool -change libliquid.dylib ${lib.getLib liquid-dsp}/lib/libliquid.dylib ''${out}/bin/CubicSDR
   '';
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cubicsdr.com";
     description = "Software Defined Radio application";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lasandell ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ lasandell ];
+    platforms = lib.platforms.unix;
     mainProgram = "CubicSDR";
   };
 }

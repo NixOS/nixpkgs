@@ -45,11 +45,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "frozenlist" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python module for list-like structure";
     homepage = "https://github.com/aio-libs/frozenlist";
     changelog = "https://github.com/aio-libs/frozenlist/blob/${src.tag}/CHANGES.rst";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

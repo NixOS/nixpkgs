@@ -72,11 +72,11 @@ buildPythonPackage rec {
     "test_invalid_href"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Inline CSS into style attributes";
     homepage = "https://github.com/Stranger6667/css-inline";
     changelog = "https://github.com/Stranger6667/css-inline/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

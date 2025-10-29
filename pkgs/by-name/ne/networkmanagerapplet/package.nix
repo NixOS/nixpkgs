@@ -87,12 +87,12 @@ stdenv.mkDerivation rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://gitlab.gnome.org/GNOME/network-manager-applet/";
     description = "NetworkManager control applet for GNOME";
-    license = licenses.gpl2Plus;
+    license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     mainProgram = "nm-applet";
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 }

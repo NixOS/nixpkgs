@@ -88,10 +88,10 @@ lib.makeOverridable (
 
       strictDeps = true;
 
-      meta = with lib; {
-        maintainers = with maintainers; [ ericson2314 ];
-        platforms = platforms.openbsd;
-        license = licenses.bsd2;
+      meta = {
+        maintainers = with lib.maintainers; [ ericson2314 ];
+        platforms = lib.platforms.openbsd;
+        license = lib.licenses.bsd2;
       };
     }
     // lib.optionalAttrs stdenv'.hasCC {

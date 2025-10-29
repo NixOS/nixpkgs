@@ -26,12 +26,12 @@ python3Packages.buildPythonApplication {
     cp i3-wk-switch.py "$out/bin/i3-wk-switch"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "XMonad-like workspace switching for i3 and sway";
     mainProgram = "i3-wk-switch";
-    maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.linux;
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ synthetica ];
+    platforms = lib.platforms.linux;
+    license = lib.licenses.mit;
     homepage = "https://travisf.net/i3-wk-switcher";
   };
 }

@@ -44,11 +44,11 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.u2f_server;
 
-  meta = with lib; {
+  meta = {
     description = "Python based U2F server library";
     homepage = "https://github.com/Yubico/python-u2flib-server";
     changelog = "https://github.com/Yubico/python-u2flib-server/blob/${src.rev}/NEWS";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ hexa ];
   };
 }

@@ -40,11 +40,11 @@ stdenv.mkDerivation {
     gst-plugins-base
   ]);
 
-  meta = with lib; {
+  meta = {
     description = "Example OpenGL app using KMS/GBM";
     homepage = "https://gitlab.freedesktop.org/mesa/kmscube";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dezgeg ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dezgeg ];
+    platforms = lib.platforms.linux;
   };
 }

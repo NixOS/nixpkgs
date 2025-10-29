@@ -21,11 +21,11 @@ buildHomeAssistantComponent rec {
     ulid-transform
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/basnijholt/adaptive-lighting/releases/tag/${version}";
     description = "Home Assistant Adaptive Lighting Plugin - Sun Synchronized Lighting";
     homepage = "https://github.com/basnijholt/adaptive-lighting";
-    maintainers = with maintainers; [ mindstorms6 ];
-    license = licenses.asl20;
+    maintainers = with lib.maintainers; [ mindstorms6 ];
+    license = lib.licenses.asl20;
   };
 }

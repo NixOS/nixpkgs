@@ -52,11 +52,11 @@
     "proofs"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Jasmin language & verified compiler";
     homepage = "https://github.com/jasmin-lang/jasmin/";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       proux01
       vbgl
     ];

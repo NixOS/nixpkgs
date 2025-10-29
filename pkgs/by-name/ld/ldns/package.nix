@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/ldns-config" "$dev"
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Library with the aim of simplifying DNS programming in C";
     homepage = "https://www.nlnetlabs.nl/projects/ldns/";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ dtzWill ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ dtzWill ];
     mainProgram = "drill";
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

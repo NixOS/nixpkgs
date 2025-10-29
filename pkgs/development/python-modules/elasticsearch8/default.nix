@@ -41,11 +41,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "elasticsearch8" ];
 
-  meta = with lib; {
+  meta = {
     description = "Official low-level client for Elasticsearch";
     homepage = "https://github.com/elasticsearch/elasticsearch-py";
     changelog = "https://github.com/elastic/elasticsearch-py/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

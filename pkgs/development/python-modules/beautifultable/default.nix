@@ -29,10 +29,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "beautifultable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python package for printing visually appealing tables";
     homepage = "https://github.com/pri22296/beautifultable";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ fab ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

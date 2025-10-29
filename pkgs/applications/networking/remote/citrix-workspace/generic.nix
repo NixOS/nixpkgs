@@ -315,11 +315,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     # webkitgtk_4_0 was removed
     broken = true;
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     description = "Citrix Workspace";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ] ++ optional (versionOlder version "24") "i686-linux";
-    maintainers = with maintainers; [ flacks ];
+    maintainers = with lib.maintainers; [ flacks ];
     inherit homepage;
   };
 }

@@ -78,12 +78,12 @@ python3.pkgs.buildPythonApplication rec {
     };
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://peering-manager.net/";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     description = "BGP sessions management tool";
     mainProgram = "peering-manager";
-    teams = [ teams.wdz ];
-    platforms = platforms.linux;
+    teams = [ lib.teams.wdz ];
+    platforms = lib.platforms.linux;
   };
 }

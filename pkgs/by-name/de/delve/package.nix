@@ -44,11 +44,11 @@ buildGoModule rec {
     ln $out/bin/dlv $out/bin/dlv-dap
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Debugger for the Go programming language";
     homepage = "https://github.com/go-delve/delve";
-    maintainers = with maintainers; [ vdemeester ];
-    license = licenses.mit;
+    maintainers = with lib.maintainers; [ vdemeester ];
+    license = lib.licenses.mit;
     mainProgram = "dlv";
   };
 }

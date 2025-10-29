@@ -98,11 +98,11 @@ stdenvNoCC.mkDerivation {
     cp -r build/. $out/
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Assets needed for Tilt";
     homepage = "https://tilt.dev/";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ anton-dessiatov ];
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
 }

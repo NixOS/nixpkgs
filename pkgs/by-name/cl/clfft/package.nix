@@ -48,15 +48,15 @@ stdenv.mkDerivation rec {
   # https://github.com/clMathLibraries/clFFT/issues/237
   CXXFLAGS = "-std=c++98";
 
-  meta = with lib; {
+  meta = {
     description = "Library containing FFT functions written in OpenCL";
     longDescription = ''
       clFFT is a software library containing FFT functions written in OpenCL.
       In addition to GPU devices, the library also supports running on CPU devices to facilitate debugging and heterogeneous programming.
     '';
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "http://clmathlibraries.github.io/clFFT/";
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ chessai ];
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ chessai ];
   };
 }

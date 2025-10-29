@@ -28,12 +28,12 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Auto toggle keyboard back-lighting on Thinkpads (and maybe other laptops) for Linux";
     homepage = "https://github.com/saibotd/tp-auto-kbbl";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "tp-auto-kbbl";
   };
 }

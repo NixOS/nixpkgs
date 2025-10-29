@@ -88,12 +88,12 @@ let
         };
     };
 
-    meta = with lib; {
+    meta = {
       description = "Free and Open Source Reverse Engineering Platform powered by rizin";
       homepage = src.meta.homepage;
-      license = licenses.gpl3;
+      license = lib.licenses.gpl3;
       mainProgram = "cutter";
-      maintainers = with maintainers; [
+      maintainers = with lib.maintainers; [
         mic92
         dtzWill
       ];

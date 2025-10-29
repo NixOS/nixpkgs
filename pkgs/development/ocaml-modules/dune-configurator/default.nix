@@ -21,9 +21,9 @@ buildDunePackage {
 
   propagatedBuildInputs = [ csexp ];
 
-  meta = with lib; {
+  meta = {
     description = "Helper library for gathering system configuration";
     maintainers = [ ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
   };
 }

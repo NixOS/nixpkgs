@@ -64,10 +64,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "torchinfo" ];
 
-  meta = with lib; {
+  meta = {
     description = "API to visualize pytorch models";
     homepage = "https://github.com/TylerYep/torchinfo";
-    license = licenses.mit;
-    maintainers = with maintainers; [ petterstorvik ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ petterstorvik ];
   };
 }

@@ -29,12 +29,12 @@ buildGoModule rec {
     "-X main.BuildDate=unknown"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/securego/gosec";
     description = "Golang security checker";
     mainProgram = "gosec";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       kalbasit
       nilp0inter
     ];

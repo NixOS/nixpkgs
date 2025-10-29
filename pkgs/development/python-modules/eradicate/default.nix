@@ -26,12 +26,12 @@ buildPythonPackage rec {
 
   enabledTestPaths = [ "test_eradicate.py" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to remove commented-out code from Python files";
     mainProgram = "eradicate";
     homepage = "https://github.com/myint/eradicate";
     changelog = "https://github.com/wemake-services/eradicate/releases/tag/${src.tag}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ mmlb ];
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ mmlb ];
   };
 }

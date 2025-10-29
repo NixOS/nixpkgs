@@ -274,12 +274,12 @@ buildPythonPackage rec {
     grpcio
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";
     mainProgram = "unstructured-ingest";
     homepage = "https://github.com/Unstructured-IO/unstructured";
     changelog = "https://github.com/Unstructured-IO/unstructured/blob/${src.tag}/CHANGELOG.md";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ happysalada ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ happysalada ];
   };
 }

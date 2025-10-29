@@ -42,11 +42,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "polyswarm_api" ];
 
-  meta = with lib; {
+  meta = {
     description = "Library to interface with the PolySwarm consumer APIs";
     homepage = "https://github.com/polyswarm/polyswarm-api";
     changelog = "https://github.com/polyswarm/polyswarm-api/releases/tag/${src.tag}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

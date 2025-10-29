@@ -17,11 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-h1iIkd2cxhqYwFJLIJgexjLwKj1IwR8oYWPpbKGZTXw=";
 
-  meta = with lib; {
+  meta = {
     description = "command-line tool to perform health-checks for gRPC applications";
     homepage = "https://github.com/grpc-ecosystem/grpc-health-probe";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ jpds ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jpds ];
     mainProgram = "grpc-health-probe";
   };
 }
