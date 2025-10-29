@@ -25,6 +25,9 @@ flutter332.buildFlutterApplication rec {
       --replace-fail "} on DioException catch (_) {
           return _.response!.statusCode ?? 400;" "} on DioException catch (e) {
           return e.response!.statusCode ?? 400;"
+
+    substituteInPlace linux/CMakeLists.txt \
+      --replace-fail "-Werror" ""
   '';
 
   postInstall = ''
