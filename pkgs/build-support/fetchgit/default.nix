@@ -30,6 +30,9 @@ lib.makeOverridable (
       # Passed via `passthru`
       "tag"
 
+      # Additional stdenv.mkDerivation arguments from derived fetchers.
+      "derivationArgs"
+
       # Hashes, handled by `lib.fetchers.withNormalizedHash`
       # whose outputs contain outputHash* attributes.
       "hash"
@@ -84,6 +87,10 @@ lib.makeOverridable (
           rootDir ? "",
           # GIT_CONFIG_GLOBAL (as a file)
           gitConfigFile ? config.gitConfigFile,
+          # Additional stdenvNoCC.mkDerivation arguments.
+          # It is typically for derived fetchers to pass down additional arguments,
+          # and the specified arguments have lower precedence than other mkDerivation arguments.
+          derivationArgs ? { },
         }:
 
         /*
@@ -135,7 +142,8 @@ lib.makeOverridable (
           throw
             "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
         else
-          {
+          derivationArgs
+          // {
             inherit name;
 
             builder = ./builder.sh;
