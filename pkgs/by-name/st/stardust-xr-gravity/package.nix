@@ -28,6 +28,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     mainProgram = "gravity";
     teams = with lib.teams; [ stardust-xr ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

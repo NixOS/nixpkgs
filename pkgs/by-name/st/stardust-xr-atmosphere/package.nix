@@ -37,6 +37,6 @@ rustPlatform.buildRustPackage {
     license = lib.licenses.mit;
     mainProgram = "atmosphere";
     teams = with lib.teams; [ stardust-xr ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

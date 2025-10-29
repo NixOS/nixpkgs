@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     license = lib.licenses.mit;
     mainProgram = "flatland";
     teams = with lib.teams; [ stardust-xr ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 })
