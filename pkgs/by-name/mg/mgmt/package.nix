@@ -52,11 +52,14 @@ buildGoModule (finalAttrs: {
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = {
     description = "Next generation distributed, event-driven, parallel config management";
     homepage = "https://mgmtconfig.com";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ urandom ];
+    maintainers = with lib.maintainers; [
+      urandom
+      karpfediem
+    ];
     mainProgram = "mgmt";
   };
 })
