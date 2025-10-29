@@ -58,6 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.x86_64;
     mainProgram = "edmarketconnector";
-    maintainers = with lib.maintainers; [ jiriks74 ];
+    maintainers = with lib.maintainers; [
+      jiriks74
+      toasteruwu
+    ];
   };
 })
