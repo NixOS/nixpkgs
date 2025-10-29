@@ -40,6 +40,7 @@ mapAliases {
     throw "@commitlint/config-conventional has been dropped, as it is a library and your JS project should lock it instead."; # added 2024-12-16
   "@emacs-eask/cli" = pkgs.eask; # added 2023-08-17
   "@forge/cli" = throw "@forge/cli was removed because it was broken"; # added 2023-09-20
+  "@gitbeaker/cli" = pkgs.gitbeaker-cli; # Added 2025-10-29
   "@google/clasp" = pkgs.google-clasp; # Added 2023-05-07
   "@maizzle/cli" = pkgs.maizzle; # added 2023-08-17
   "@medable/mdctl-cli" = throw "@medable/mdctl-cli was removed because it was broken"; # added 2023-08-21
