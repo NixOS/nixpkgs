@@ -3,15 +3,12 @@
   buildPythonPackage,
   fetchFromGitHub,
   flit-core,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "stdlibs";
   version = "2025.10.28";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "omnilib";
@@ -30,7 +27,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Overview of the Python stdlib";
     homepage = "https://github.com/omnilib/stdlibs";
-    changelog = "https://github.com/omnilib/stdlibs/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/omnilib/stdlibs/blob/${src.tag}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
