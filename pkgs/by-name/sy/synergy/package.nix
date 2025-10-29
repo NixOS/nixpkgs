@@ -3,7 +3,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  wrapQtAppsHook,
 
   cmake,
   openssl,
@@ -14,7 +13,6 @@
   pkg-config,
   gdk-pixbuf,
   libnotify,
-  qttools,
   libICE,
   libSM,
   libX11,
@@ -26,7 +24,7 @@
   xkeyboardconfig,
   xinput,
   avahi-compat,
-
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,10 +60,10 @@ stdenv.mkDerivation rec {
     cmake
     pkg-config
   ]
-  ++ lib.optional withGUI wrapQtAppsHook;
+  ++ lib.optional withGUI libsForQt5.wrapQtAppsHook;
 
   buildInputs = [
-    qttools # Used for translations even when not building the GUI
+    libsForQt5.qttools # Used for translations even when not building the GUI
     openssl
     pcre
   ]

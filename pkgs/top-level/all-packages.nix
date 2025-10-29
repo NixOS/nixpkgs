@@ -12404,8 +12404,6 @@ with pkgs;
     systemdSupport = true;
   };
 
-  synergy = libsForQt5.callPackage ../applications/misc/synergy { };
-
   synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
