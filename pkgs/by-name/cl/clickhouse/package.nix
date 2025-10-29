@@ -1,6 +1,6 @@
 import ./generic.nix {
-  version = "25.9.4.58-stable";
-  hash = "sha256-HRbqVSyDuvhkv0+PSgps9AXKdLlukrLA65OLx5gZ3c0=";
+  version = "25.8.11.66-lts";
+  hash = "sha256-VUdT5STQqcWevYJjtuLdTeDGZHNl3JkkDSgcckjSZbw=";
   lts = false;
   nixUpdateExtraArgs = [
     "--version-regex"
