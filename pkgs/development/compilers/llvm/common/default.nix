@@ -477,7 +477,18 @@ makeScopeWithSplicing' {
       bolt = callPackage ./bolt { };
     }
     // lib.optionalAttrs (lib.versionAtLeast metadata.release_version "20") {
-      flang = callPackage ./flang { };
+      flang-unwrapped = callPackage ./flang { };
+      flang-rt = callPackage ./flang-rt { };
+
+      flang = wrapCCWith rec {
+        cc = self.flang-unwrapped;
+        bintools = bintools';
+        extraPackages = [ targetLlvmPackages.flang-rt ];
+        extraBuildCommands = mkExtraBuildCommands0 cc + ''
+          ln -s "${targetLlvmPackages.flang-rt}/lib/clang/${clangVersion}/lib/${stdenv.targetPlatform.config}" "$rsrc"/lib
+          echo -L"$rsrc"/lib >> $out/nix-support/cc-ldflags
+        '';
+      };
 
       libc-overlay = callPackage ./libc {
         isFullBuild = false;
