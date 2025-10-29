@@ -11552,8 +11552,6 @@ with pkgs;
     ;
   k3s = k3s_1_34;
 
-  kapow = libsForQt5.callPackage ../applications/misc/kapow { };
-
   okteta = libsForQt5.callPackage ../applications/editors/okteta { };
 
   k4dirstat = libsForQt5.callPackage ../applications/misc/k4dirstat { };

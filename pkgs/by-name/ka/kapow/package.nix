@@ -1,11 +1,8 @@
 {
   lib,
   stdenv,
-  qmake,
   fetchFromGitHub,
-  qtbase,
-  qttools,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,12 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    qmake
-    qttools
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.qttools
+    libsForQt5.wrapQtAppsHook
   ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ libsForQt5.qtbase ];
 
   meta = with lib; {
     description = "Punch clock to track time spent on projects";
