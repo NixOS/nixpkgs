@@ -158,9 +158,7 @@ stdenv.mkDerivation (final: {
     # libgoogleurl and libcurl.
     #
     # FIXME: Replace libgoogleurl? Possibly from Chromium?
-    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS. As of ovftool
-    # v4.6.3 ovftool uses openssl-1.0.2zj which in seems to be the extended
-    # support LTS release: https://www.openssl.org/support/contracts.html
+    # FIXME: Tell VMware to use a modern version of OpenSSL on macOS.
 
     # Install all libs that are not patched in preFixup.
     # Darwin dylibs are under `lib` in the zip.
@@ -174,7 +172,7 @@ stdenv.mkDerivation (final: {
     libvmacore.so \
     libvmomi.so
   ''
-  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3, but Linux is in the clear
+  # macOS still relies on OpenSSL 1.0.2 as of v4.6.3 and later, but Linux is in the clear
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
     lib/libcrypto.1.0.2.dylib \
     lib/libgoogleurl.59.0.30.45.2.dylib \
