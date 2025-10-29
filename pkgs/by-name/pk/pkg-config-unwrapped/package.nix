@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
     # Silence "incompatible integer to pointer conversion passing 'gsize'" when building with Clang.
     lib.optionals stdenv.cc.isClang [ "-Wno-int-conversion" ]
     # Silence fprintf format errors when building for Windows.
-    ++ lib.optionals stdenv.hostPlatform.isWindows [ "-Wno-error=format" ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      "-Wno-incompatible-pointer-types"
+      "-Wno-int-conversion"
+      "-Wno-error=format"
+    ]
   );
 
   enableParallelBuilding = true;
