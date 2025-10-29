@@ -33,9 +33,11 @@ buildPythonPackage rec {
     mpi
   ];
 
-  dependencies = [
-    # Use toPythonModule so that also the mpi executables will be propagated to
-    # generated Python environment.
+  propagatedBuildInputs = [
+    # MPI is a propagated dependency of mpi4py because the header mpi4py.h
+    # includes mpi.h. Otherwise, downstream packages that use Cython might
+    # fail to find mpi.h. Use toPythonModule so that MPI executables are also
+    # propagated into the generated Python environment.
     (toPythonModule mpi)
   ];
 
