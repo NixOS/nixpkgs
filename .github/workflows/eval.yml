@@ -113,7 +113,7 @@ jobs:
           MATRIX_SYSTEM: ${{ matrix.system }}
           MATRIX_VERSION: ${{ matrix.version || 'nixVersions.latest' }}
         run: |
-          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned  -A eval.singleSystem \
+          nix-build nixpkgs/untrusted/ci --arg nixpkgs ./nixpkgs/untrusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
             --argstr nixPath "$MATRIX_VERSION" \
@@ -122,19 +122,29 @@ jobs:
           # Note: Keep the same further down in sync!
 
       - name: Evaluate the ${{ matrix.system }} output paths at the target commit
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
-        # This is very quick, because it pulls the eval results from Cachix.
         run: |
-          nix-build nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
+          TARGET_DRV=$(nix-instantiate nixpkgs/trusted/ci --arg nixpkgs ./nixpkgs/trusted-pinned -A eval.singleSystem \
             --argstr evalSystem "$MATRIX_SYSTEM" \
             --arg chunkSize 8000 \
-            --argstr nixPath "nixVersions.latest" \
-            --out-link target
+            --argstr nixPath "nixVersions.latest")
+
+          # Try to fetch this from Cachix a few times, for up to 30 seconds. This avoids running Eval
+          # twice in the Merge Queue, when a later item finishes Eval at the merge commit earlier.
+          for _i in {1..6}; do
+            # Using --max-jobs 0 will cause nix-build to fail if this can't be substituted from cachix.
+            if nix-build "$TARGET_DRV" --max-jobs 0; then
+              break
+            fi
+            sleep 5
+          done
+
+          # Either fetches from Cachix or runs Eval itself. The fallback is required
+          # for pull requests into wip-branches without merge queue.
+          nix-build "$TARGET_DRV" --out-link target
 
       - name: Compare outpaths against the target branch
-        if: inputs.targetSha
         env:
           MATRIX_SYSTEM: ${{ matrix.system }}
         run: |
@@ -145,7 +155,6 @@ jobs:
             --out-link diff
 
       - name: Upload outpaths diff and stats
-        if: inputs.targetSha
         uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
         with:
           name: ${{ inputs.artifact-prefix }}${{ matrix.version && format('{0}-', matrix.version) || '' }}diff-${{ matrix.system }}
@@ -154,7 +163,7 @@ jobs:
   compare:
     runs-on: ubuntu-24.04-arm
     needs: [eval]
-    if: inputs.targetSha && !cancelled() && !failure()
+    if: ${{ !cancelled() && !failure() }}
     permissions:
       statuses: write
     timeout-minutes: 5

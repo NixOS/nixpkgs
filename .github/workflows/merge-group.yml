@@ -59,6 +59,7 @@ jobs:
     with:
       artifact-prefix: ${{ inputs.artifact-prefix }}
       mergedSha: ${{ inputs.mergedSha || github.event.merge_group.head_sha }}
+      targetSha: ${{ inputs.targetSha || github.event.merge_group.base_sha }}
       systems: ${{ needs.prepare.outputs.systems }}
 
   # This job's only purpose is to create the target for the "Required Status Checks" branch ruleset.
