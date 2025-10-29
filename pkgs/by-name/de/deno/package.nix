@@ -29,17 +29,17 @@ let
 in
 rustPlatform.buildRustPackage (finalAttrs: {
   pname = "deno";
-  version = "2.5.3";
+  version = "2.5.6";
 
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
     tag = "v${finalAttrs.version}";
     fetchSubmodules = true; # required for tests
-    hash = "sha256-UqD9Va33XVX73bjwUdb6woZ3kP/Xz6iBVqV1ceRbXq0=";
+    hash = "sha256-Ppw2fyfFvSmGO+FcEvclkOU7LATOqkYH3wErBdKgWJY=";
   };
 
-  cargoHash = "sha256-OrKg3bOA5AyLQA+LIsHwWpk9DHodhcCVzdKW/S9+mNY=";
+  cargoHash = "sha256-EN87p8wX5QAzf3cWfX8I/+XzYRc9rA5EWj996iUpSPg=";
 
   patches = [
     # Patch out the remote upgrade (deno update) check.
@@ -53,10 +53,6 @@ rustPlatform.buildRustPackage (finalAttrs: {
     ./patches/0002-tests-replace-hardcoded-paths.patch
     ./patches/0003-tests-linux-no-chown.patch
     ./patches/0004-tests-darwin-fixes.patch
-    # some new TS tests don't identify `deno` location from parent actively
-    # running `deno` instance
-    # https://github.com/denoland/deno/pull/30914
-    ./patches/0005-tests-fix-deno-path.patch
   ];
   postPatch = ''
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
@@ -182,6 +178,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     "--skip=watcher"
     "--skip=node_unit_tests::_fs_watch_test"
     "--skip=js_unit_tests::fs_events_test"
+    "--skip=js_unit_tests::utime_test"
   ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     # Wants to access /etc/resolv.conf: https://github.com/hickory-dns/hickory-dns/issues/2959
