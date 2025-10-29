@@ -466,6 +466,11 @@ let
           echo "If you see this message, your EFI system doesn't support this feature."
           echo ""
         }
+        ${lib.optionalString config.boot.loader.grub.memtest86.enable ''
+          menuentry 'Memtest86+' {
+            linux (\$root)/boot/memtest.bin ${toString config.boot.loader.grub.memtest86.params}
+          }
+        ''}
         menuentry 'Shutdown' --class shutdown {
           halt
         }
