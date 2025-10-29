@@ -174,7 +174,7 @@ in
       serviceConfig.Group = "minetest";
       serviceConfig.StateDirectory = "minetest";
       serviceConfig.WorkingDirectory = "/var/lib/minetest";
-      serviceConfig.ExecStart = "${pkgs.minetest}/bin/minetest ${lib.escapeShellArgs flags}";
+      serviceConfig.ExecStart = "${pkgs.luanti}/bin/luanti ${lib.escapeShellArgs flags}";
     };
   };
 }
