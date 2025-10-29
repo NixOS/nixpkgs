@@ -2,11 +2,10 @@
   lib,
   stdenv,
   libGLU,
-  qtbase,
   fetchurl,
   dpkg,
   autoPatchelfHook,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,11 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     dpkg
     autoPatchelfHook
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
-    qtbase
+    libsForQt5.qtbase
     libGLU
   ];
 
