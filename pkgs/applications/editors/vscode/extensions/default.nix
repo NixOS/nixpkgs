@@ -1617,7 +1617,7 @@ let
         };
       };
 
-      ethersync.ethersync = callPackage ./ethersync.ethersync { };
+      teamtype.teamtype = callPackage ./teamtype.teamtype { };
 
       eugleo.magic-racket = callPackage ./eugleo.magic-racket { };
 
