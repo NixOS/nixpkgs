@@ -8,14 +8,14 @@
   fetchFromGitHub,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ddccontrol-db";
   version = "20251102";
 
   src = fetchFromGitHub {
     owner = "ddccontrol";
     repo = "ddccontrol-db";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "sha256-r87zucuHnWbvaqg++xI3s3Tghz80auQBgUxJzu7nmqU=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
       doronbehar
     ];
   };
-}
+})
