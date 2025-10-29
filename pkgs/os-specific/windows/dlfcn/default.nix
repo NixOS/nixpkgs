@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dlfcn";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner = "dlfcn-win32";
     repo = "dlfcn-win32";
     tag = "v${version}";
-    hash = "sha256-ljVTMBiGp8TPufrQcK4zQtcVH1To4zcfBAbUOb+v910=";
+    hash = "sha256-kLY8vvHTT02gENPlVvyDyR0ULC8NA+E/P6mWtU6MbBY=";
   };
 
   nativeBuildInputs = [ cmake ];
