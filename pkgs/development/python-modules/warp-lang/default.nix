@@ -8,7 +8,7 @@
   fetchurl,
   jax,
   lib,
-  llvmPackages,
+  llvmPackages, # TODO: use llvm 21 in 1.10, see python-packages.nix
   numpy,
   pkgsBuildHost,
   python,
