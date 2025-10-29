@@ -227,3 +227,6 @@ lib.makeOverridable (
     inheritFunctionArgs = false;
   }
 )
+// {
+  inherit getRevWithTag;
+}
