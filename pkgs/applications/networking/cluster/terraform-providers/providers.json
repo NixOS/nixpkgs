@@ -489,13 +489,13 @@
     "vendorHash": "sha256-MYVkNvJ+rbwGw0htClIbmxk3YX2OK/ZO/QOTyMRFiug="
   },
   "hashicorp_aws": {
-    "hash": "sha256-paVJc2HHtdAoc1KoYj0P5/t990/9nZedqBnjJNvmoOM=",
+    "hash": "sha256-5W5v4j4oBXIfqW75ClXkBtAahgEW6oMiTmILL6++fEc=",
     "homepage": "https://registry.terraform.io/providers/hashicorp/aws",
     "owner": "hashicorp",
     "repo": "terraform-provider-aws",
-    "rev": "v6.17.0",
+    "rev": "v6.18.0",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-93DyqAPi6hirke0KyR6gggC7cgAZOOByUIIA6C+6LZU="
+    "vendorHash": "sha256-Nxw5C4li2kH6MAlyaqHAUL+XYyuVPZYSkQ6PnmL3sV8="
   },
   "hashicorp_awscc": {
     "hash": "sha256-SrJQG1F9V/HThL6TDduT/qEA2x3tzII56+JMVDFpqEk=",
@@ -741,11 +741,11 @@
     "vendorHash": null
   },
   "integrations_github": {
-    "hash": "sha256-OexDIuEHRSOeHq0lRZcaaezdQpm5tgINGcka6jk+bK0=",
+    "hash": "sha256-FVDx8KH7foy1rZigDVEWMEalQ9nJnLkRjkJsFi0aEuM=",
     "homepage": "https://registry.terraform.io/providers/integrations/github",
     "owner": "integrations",
     "repo": "terraform-provider-github",
-    "rev": "v6.7.0",
+    "rev": "v6.7.1",
     "spdx": "MIT",
     "vendorHash": null
   },
