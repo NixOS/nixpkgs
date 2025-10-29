@@ -47,10 +47,7 @@ rustPlatform.buildRustPackage (finalAttrs: {
     description = "Prototype application launchers for Stardust XR";
     homepage = "https://stardustxr.org";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [
-      pandapip1
-      technobaboo
-    ];
+    teams = with lib.teams; [ stardust-xr ];
     platforms = lib.platforms.linux;
   };
 })
