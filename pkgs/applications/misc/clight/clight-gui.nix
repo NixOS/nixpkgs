@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     hash = "sha256-U4vaMwnVDZnYLc+K3/yD81Q1vyBL8uSrrhOHbjbox5U=";
   };
 
+  CMAKE_POLICY_VERSION_MINIMUM = 3.5;
+
   buildInputs = [
     qtbase
     qtcharts
