@@ -99,6 +99,12 @@ in
         '';
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = false;
+        description = "Open ports in the firewall for mpd.";
+      };
+
       music_directory = lib.mkOption {
         type = with lib.types; either path (strMatching "([a-z]+)://.+");
         default = "${cfg.dataDir}/music";
@@ -248,6 +254,17 @@ in
 
   config = lib.mkIf cfg.enable {
 
+    warnings =
+      lib.optional
+        (
+          !(builtins.elem cfg.bind_to_address [
+            "localhost"
+            "127.0.0.1"
+          ])
+          && !cfg.openFirewall
+        )
+        "Using '${cfg.bind_to_address}' as services.mpd.bind_to_address without enabling services.mpd.openFirewall, might prevent you from accessing MPD from other clients.";
+
     # install mpd units
     systemd.packages = [ pkgs.mpd ];
 
@@ -303,6 +320,8 @@ in
           ];
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.port ];
 
     users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
