@@ -9,7 +9,7 @@
   wayland-protocols,
   wayland-scanner,
 }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "wooz";
 
   # Using latest master, until at least https://github.com/negrel/wooz/issues/11 is resolved in some release after 0.1.0
