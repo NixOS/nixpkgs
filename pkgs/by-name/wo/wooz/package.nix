@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "Zoom / magnifier utility for wayland compositors";
     homepage = "https://github.com/negrel/wooz";
     license = lib.licenses.mit;
-    maintainers = with maintainers; [ samuela ];
+    maintainers = with lib.maintainers; [ samuela ];
     platforms = platforms.linux;
     mainProgram = "wooz";
   };
