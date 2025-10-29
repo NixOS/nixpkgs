@@ -99,6 +99,18 @@ in
         '';
       };
 
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
+        default = builtins.elem cfg.bind_to_address [
+          "any"
+          "0.0.0.0"
+        ];
+        defaultText = lib.literalExpression ''
+          builtins.elem config.services.mpd.bind_to_address ["any" "0.0.0.0"]
+        '';
+        description = "Open ports in the firewall for mpd.";
+      };
+
       music_directory = lib.mkOption {
         type = with lib.types; either path (strMatching "([a-z]+)://.+");
         default = "${cfg.dataDir}/music";
@@ -141,6 +153,9 @@ in
         description = ''
           The address for the daemon to listen on.
           Use `any` to listen on all addresses.
+
+          NOTE: Using `any` or `0.0.0.0` will result in the configured port to
+          be open in the firewall.
         '';
       };
 
@@ -303,6 +318,8 @@ in
           ];
       };
     };
+
+    networking.firewall.allowedTCPPorts = lib.optionals cfg.openFirewall [ cfg.port ];
 
     users.users = lib.optionalAttrs (cfg.user == name) {
       ${name} = {
