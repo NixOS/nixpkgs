@@ -25,8 +25,8 @@
   rocm-smi,
   pkg-config,
   buildTensile ? true,
-  buildTests ? true,
-  buildBenchmarks ? true,
+  buildTests ? false,
+  buildBenchmarks ? false,
   tensileSepArch ? true,
   tensileLazyLib ? true,
   withHipBlasLt ? true,
@@ -130,8 +130,6 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "Tensile_LAZY_LIBRARY_LOADING" tensileLazyLib)
   ];
 
-  passthru.amdgpu_targets = gpuTargets';
-
   patches = [
     (fetchpatch {
       name = "Extend-rocBLAS-HIP-ISA-compatibility.patch";
@@ -150,10 +148,17 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '0.10' '1.0'
   '';
 
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    inherit (finalAttrs.src) owner;
-    inherit (finalAttrs.src) repo;
+  passthru = {
+    amdgpu_targets = gpuTargets';
+    tests.rocblas-tests = finalAttrs.finalPackage.override {
+      buildBenchmarks = true;
+      buildTests = true;
+    };
+    updateScript = rocmUpdateScript {
+      name = finalAttrs.pname;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
+    };
   };
 
   enableParallelBuilding = true;
