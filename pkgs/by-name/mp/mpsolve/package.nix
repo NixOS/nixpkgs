@@ -9,8 +9,7 @@
   gmp,
   gtk3,
   pkg-config,
-  qtbase,
-  wrapQtAppsHook,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,13 +28,13 @@ stdenv.mkDerivation (finalAttrs: {
     bison
     flex
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     gmp
     gtk3
-    qtbase
+    libsForQt5.qtbase
   ];
 
   passthru.updateScript = gitUpdater { };
