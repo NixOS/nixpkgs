@@ -2,6 +2,7 @@
   appimageTools,
   lib,
   fetchurl,
+  makeWrapper,
 }:
 let
   pname = "mathpix-snipping-tool";
@@ -17,17 +18,24 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/${pname}.desktop -t $out/share/applications
 
     cp -r ${appimageContents}/usr/share/icons $out/share
+
+    wrapProgram $out/bin/${pname} --set QT_QPA_PLATFORM xcb
   '';
 
   meta = with lib; {
     description = "OCR tool to convert pictures to LaTeX";
     homepage = "https://mathpix.com/";
     license = licenses.unfree;
-    maintainers = [ maintainers.hiro98 ];
+    maintainers = [
+      maintainers.hiro98
+      maintainers.axodentally
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "mathpix-snipping-tool";
   };
