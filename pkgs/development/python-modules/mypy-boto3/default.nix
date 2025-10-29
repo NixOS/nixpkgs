@@ -1289,8 +1289,8 @@ in
       "sha256-O+SB0ntnaEzGUHq/GJAE8tCPLcIaTcuWIJ850rv0Vz8=";
 
   mypy-boto3-sqs =
-    buildMypyBoto3Package "sqs" "1.40.35"
-      "sha256-wR+V7nK924T3/s8wADcuAVR/NnNwZLeF8c80GRuH4D8=";
+    buildMypyBoto3Package "sqs" "1.40.61"
+      "sha256-FtNNtlPc8oYYtOQirjLrLTTz+Tfc7l7dTKTePducOFc=";
 
   mypy-boto3-ssm =
     buildMypyBoto3Package "ssm" "1.40.54"
