@@ -100,6 +100,12 @@ stdenv.mkDerivation (finalAttrs: {
     python3.pkgs.requests
   ];
 
+  # workaround for building with Qt >= 6.10 -- remove when updating past 1.99
+  postPatch = ''
+    substituteInPlace gui/CMakeLists.txt \
+      --replace-fail 'find_package(Qt6 REQUIRED COMPONENTS Core Gui Concurrent Svg Qml Quick Widgets)' 'find_package(Qt6 REQUIRED COMPONENTS Core Gui GuiPrivate Concurrent Svg Qml Quick Widgets)'
+  '';
+
   postInstall = ''
     install -Dm755 $src/scripts/psn-account-id.py $out/bin/psn-account-id
   '';
