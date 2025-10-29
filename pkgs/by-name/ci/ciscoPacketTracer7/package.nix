@@ -6,6 +6,7 @@
   dpkg,
   lndir,
   makeDesktopItem,
+  libsForQt5,
   makeWrapper,
   requireFile,
 }:
@@ -98,5 +99,12 @@ stdenv.mkDerivation {
       gepbird
     ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      ''
+        Cisco Packet Tracer 7 ships with qt5 qtwebengine.
+
+        ${lib.head libsForQt5.qtwebengine.meta.knownVulnerabilities}
+      ''
+    ];
   };
 }
