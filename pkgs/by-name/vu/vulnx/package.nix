@@ -5,7 +5,7 @@
 }:
 
 buildGoModule rec {
-  pname = "cvemap";
+  pname = "vulnx";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -27,11 +27,11 @@ buildGoModule rec {
   ];
 
   meta = {
-    description = "Tool to work with CVEs";
+    description = "Modern CLI for exploring vulnerability data with powerful search, filtering, and analysis capabilities.";
     homepage = "https://github.com/projectdiscovery/cvemap";
     changelog = "https://github.com/projectdiscovery/cvemap/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
-    mainProgram = "cvemap";
+    mainProgram = "vulnx";
   };
 }
