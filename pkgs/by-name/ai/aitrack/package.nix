@@ -3,12 +3,10 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  qmake,
-  wrapQtAppsHook,
   opencv,
   spdlog,
   onnxruntime,
-  qtx11extras,
+  libsForQt5,
 }:
 stdenv.mkDerivation {
   pname = "aitrack";
@@ -23,14 +21,14 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkg-config
-    qmake
-    wrapQtAppsHook
+    libsForQt5.qmake
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     opencv
     spdlog
-    qtx11extras
+    libsForQt5.qtx11extras
     onnxruntime
   ];
 
